@@ -36,22 +36,7 @@
 
    <name>GateIn Portal</name>
 
-   <distributionManagement>
-      <repository>
-         <id>repository.exoplatform.org</id>
-         <url>${gatein.releases.repo.url}</url>
-      </repository>
-      <snapshotRepository>
-         <id>repository.exoplatform.org</id>
-         <url>${gatein.snapshots.repo.url}</url>
-      </snapshotRepository>
-   </distributionManagement>
-
    <properties>
-      <!-- Repositories URLs -->
-      <gatein.releases.repo.url>http://repository.exoplatform.org/content/repositories/exo-releases/</gatein.releases.repo.url>
-      <gatein.snapshots.repo.url>http://repository.exoplatform.org/content/repositories/exo-snapshots/</gatein.snapshots.repo.url>
-
       <org.exoplatform.kernel.version>2.2.0-Beta02</org.exoplatform.kernel.version>
       <org.exoplatform.core.version>2.3.0-Beta02</org.exoplatform.core.version>
       <org.exoplatform.ws.version>2.1.0-Beta02</org.exoplatform.ws.version>
@@ -244,26 +229,6 @@
          </snapshots>
       </repository>
       <repository>
-         <id>repository.jboss.org</id>
-         <url>http://repository.jboss.org/maven2</url>
-         <releases>
-            <enabled>true</enabled>
-         </releases>
-         <snapshots>
-            <enabled>false</enabled>
-         </snapshots>
-      </repository>
-      <repository>
-         <id>snapshots.jboss.org</id>
-         <url>http://snapshots.jboss.org/maven2</url>
-         <releases>
-            <enabled>false</enabled>
-         </releases>
-         <snapshots>
-            <enabled>true</enabled>
-         </snapshots>
-      </repository>
-      <repository>
          <id>caja</id>
          <url>http://google-caja.googlecode.com/svn/maven</url>
          <releases>
@@ -293,26 +258,6 @@
          </releases>
          <snapshots>
             <enabled>false</enabled>
-         </snapshots>
-      </pluginRepository>
-      <pluginRepository>
-         <id>repository.jboss.org</id>
-         <url>http://repository.jboss.org/maven2</url>
-         <releases>
-            <enabled>true</enabled>
-         </releases>
-         <snapshots>
-            <enabled>false</enabled>
-         </snapshots>
-      </pluginRepository>
-      <pluginRepository>
-         <id>snapshots.jboss.org</id>
-         <url>http://snapshots.jboss.org/maven2</url>
-         <releases>
-            <enabled>false</enabled>
-         </releases>
-         <snapshots>
-            <enabled>true</enabled>
          </snapshots>
       </pluginRepository>
    </pluginRepositories>
