@@ -1,0 +1,44 @@
+<!--
+
+    Copyright (C) 2009 eXo Platform SAS.
+    
+    This is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Lesser General Public License as
+    published by the Free Software Foundation; either version 2.1 of
+    the License, or (at your option) any later version.
+    
+    This software is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+    Lesser General Public License for more details.
+    
+    You should have received a copy of the GNU Lesser General Public
+    License along with this software; if not, write to the Free
+    Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+    02110-1301 USA, or see the FSF site: http://www.fsf.org.
+
+-->
+
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook V4.4//EN" "http://www.oasis-open.org/docbook/sgml/4.4/docbookx.dtd">
+<chapter>
+<title>Configuration</title>
+
+<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="configuration/Default_Portal_Configuration.xml" />
+
+<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="configuration/Portal_Navigation_Configuration.xml" />
+<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="configuration/Predefined_User_Configuration.xml" />
+
+<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="configuration/User_Workspace_Configuration.xml" />
+<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="configuration/Portal_Default_Permission_Configuration.xml" />
+<!-- Kernel/Service_Configuration_for_Beginners  -->
+<!-- Kernel/Service_Configuration_in_Detail -->
+<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="configuration/Database_Configuration.xml" />
+<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="configuration/Data_Injector_Configuration.xml" />
+<!--  Core/LDAP_Configuration -->
+<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="configuration/Skin_Configuration.xml" />
+<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="configuration/JavaScript_Configuration.xml" />
+<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="configuration/Dashboard_Configuration.xml" />
+<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="configuration/Authentication_Token_Configuration.xml" />
+<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="configuration/Varnish_Configuration.xml" />
+
+</chapter>

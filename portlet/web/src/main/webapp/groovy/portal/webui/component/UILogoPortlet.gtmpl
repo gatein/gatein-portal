@@ -1,0 +1,33 @@
+<%
+	import javax.portlet.PortletMode ;
+	import org.exoplatform.portal.application.PortalRequestContext;
+	import org.exoplatform.portal.webui.util.Util;
+	
+	def prContext = _ctx.getRequestContext().getParentAppRequestContext();	
+	String signInAction = "if(document.getElementById('UIMaskWorkspace')) ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'ShowLoginForm', true));" ;
+	String changeLanguageAction = "if(document.getElementById('UIMaskWorkspace')) ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'ChangeLanguage', true));" ;
+	String portletId = uicomponent.getId() ;	
+	String accountSetting = "javascript:if(document.getElementById('UIMaskWorkspace')) ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'AccountSettings', true));"
+	String registerURI = Util.getPortalRequestContext().getPortalURI() + "register";
+	String navTitle = uicomponent.getNavigationTitle();
+%>
+
+<div class="UILogoPortlet ClearFix" id="$uicomponent.id" >
+	<%if( _ctx.getRequestContext().getApplicationMode() == PortletMode.VIEW) {%>
+		<!-- LOGO IMAGE -->
+		<a href="#" class="Img"><image src="<%=uicomponent.getURL()%>" alt="" /></a>
+		<div class="BannerTitle">$navTitle</div>	
+		<!-- ACTIONs -->	
+		<% if(prContext.getRemoteUser() == null) { %>
+		<div class="Signin ClearFix">
+			<a onclick="$changeLanguageAction"><%=_ctx.appRes("UILogoPortlet.action.changeLanguage")%></a>
+			<a href="$registerURI"><%=_ctx.appRes("UILogoPortlet.action.Register")%></a>	
+			<a onclick="$signInAction"><%=_ctx.appRes("UILogoPortlet.action.signin")%></a>
+		</div>
+		<% } %>
+	
+	<%} else {
+			uicomponent.renderChildren();
+		}
+	%>
+</div>

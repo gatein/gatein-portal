@@ -1,0 +1,40 @@
+<% 
+  import org.exoplatform.web.application.JavascriptManager;
+  import org.exoplatform.dashboard.webui.component.DashboardParent ;
+  import org.exoplatform.portal.webui.application.UIGadget;
+  
+  def uiDashboard = uicomponent.getParent();
+  def rcontext = _ctx.getRequestContext() ;
+  JavascriptManager jsmanager = rcontext.getJavascriptManager(); 
+  jsmanager.addCustomizedOnLoadScript("eXo.gadget.UIGadget.SaveTitle='" + _ctx.appRes("UIDashboardContainer.label.SaveTitle") + "';");
+  jsmanager.addCustomizedOnLoadScript("eXo.gadget.UIGadget.CancelTitle='" + _ctx.appRes("UIDashboardContainer.label.CancelTitle") + "';");
+  jsmanager.addCustomizedOnLoadScript("eXo.gadget.UIGadget.Cache='" + _ctx.appRes("UIDashboardContainer.label.Cache") + "';");
+  jsmanager.addCustomizedOnLoadScript("eXo.gadget.UIGadget.Debug='" + _ctx.appRes("UIDashboardContainer.label.Debug") + "';");
+  String windowId = uicomponent.getWindowId() ;
+  DashboardParent parent = (DashboardParent)uicomponent.getParent().getParent();
+  jsmanager.addCustomizedOnLoadScript("eXo.webui.UIDashboard.onLoad('" + windowId + "'," + parent.canEdit() + ");") ;
+%>
+<div id="$uicomponent.id" class="UIDashboardContainer">
+	<div class="GadgetContainer UIResizableBlock" id="GadgetContainer">
+		<%if (uiDashboard.canEdit()) { %>
+		<div class="ContainerControlBarL" style="visibility: <%= uiDashboard.isShowSelectPopup()? "hidden" : "visible"; %>;">
+			<div class="ContainerControlBarR">
+				<div class="ContainerControlBarM">
+					<div class="AddIcon">
+						<a href="#" onclick="eXo.webui.UIDashboard.showHideSelectContainer(event);return false;"><%=_ctx.appRes("UIDashboardContainer.label.openWorkspace");%></a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<%
+			}
+			if (uicomponent.findFirstComponentOfType(UIGadget.class) == null) {
+		%>
+		<div class="NoGadget"><%= _ctx.appRes("UIDashboard.msg.addGadget"); %></div>
+		<%
+			}
+			uicomponent.renderChildren() ;
+		%>
+		
+	</div>
+</div>

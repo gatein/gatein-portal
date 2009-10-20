@@ -1,0 +1,42 @@
+<!--
+
+    Copyright (C) 2009 eXo Platform SAS.
+    
+    This is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Lesser General Public License as
+    published by the Free Software Foundation; either version 2.1 of
+    the License, or (at your option) any later version.
+    
+    This software is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+    Lesser General Public License for more details.
+    
+    You should have received a copy of the GNU Lesser General Public
+    License along with this software; if not, write to the Free
+    Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+    02110-1301 USA, or see the FSF site: http://www.fsf.org.
+
+-->
+
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook V4.4//EN" "http://www.oasis-open.org/docbook/sgml/4.4/docbookx.dtd">
+<section>
+	<title>Public mode and private mode</title>
+	<para>GateIn Portal has two modes:</para>
+	<itemizedlist>
+		<listitem>
+			<emphasis role="bold">Public mode</emphasis>
+			: this mode is for guest users (visitors) who have not registered yet
+			and it doesn't require to sign in so they can only visit the public
+			pages in a portal. Visitors can also register in order to get an
+			account. After being registered, they can use the private mode and
+			have to contact the administrator to get more rights or a group
+			manager in order to become a member of that group.
+		</listitem>
+		<listitem>
+			<emphasis role="bold">Private mode</emphasis>
+			: this mode is for registered users, users have to use username and
+			password to sign in. This mode supports users take many actions such
+			as :manage private resources (create private pages, edit or delete
+			them), &quot;borrow&quot; pages from others by creating hyperlinks to existing pages, change the language for individual needs, manage private information.</listitem></itemizedlist>
+</section>

@@ -1,0 +1,117 @@
+<!--
+
+    Copyright (C) 2009 eXo Platform SAS.
+    
+    This is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Lesser General Public License as
+    published by the Free Software Foundation; either version 2.1 of
+    the License, or (at your option) any later version.
+    
+    This software is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+    Lesser General Public License for more details.
+    
+    You should have received a copy of the GNU Lesser General Public
+    License along with this software; if not, write to the Free
+    Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+    02110-1301 USA, or see the FSF site: http://www.fsf.org.
+
+-->
+
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook V4.4//EN" "http://www.oasis-open.org/docbook/sgml/4.4/docbookx.dtd">
+<section>
+	<title>AJAX in GateIn Framework</title>
+	<section>
+		<title>Overview</title>
+	</section>
+	<para>It is very easy to create and manage Ajax calls in our
+		framework. Just a few lines to write in your template file and your
+		java class. For simple Ajax update of a component, you don't even have
+		to write any line of JavaScript.</para>
+	<section>
+		<title>Portlet Preparation</title>
+	</section>
+	<para>Our portlets can use specific &lt;code&gt;ActionListener&lt;/code&gt;s to receive and process Ajax calls. To do that, you must create an inner static class named following this convention : action name followed by ActionListener</para><para>Example : &lt;code&gt;ParentClass&lt;/code&gt; is the class in which you are writing.</para><programlisting>static public class SaveActionListener extends EventListener&lt;ParentClass&gt;
+</programlisting><para>Don't forget to declare this listener in the configuration of your portlet, with this :</para><programlisting>listeners = ParentClass.SaveActionListener.class{code}
+</programlisting><para>in the correct annotation &lt;code&gt;ComponentConfig&lt;/code&gt;, &lt;code&gt;EventConfig&lt;/code&gt;, etc.,</para><para>For example, the configuration of &lt;code&gt;&lt;strong&gt;UIAccountForm&lt;/strong&gt;&lt;/code&gt;:</para><programlisting>...
+@ComponentConfig(
+        lifecycle = UIFormLifecycle.class,
+        template =  &quot;system:/groovy/webui/form/UIFormTabPane.gtmpl&quot;,
+        initParams = {   
+          @ParamConfig(
+              name = &quot;AccountTemplateConfigOption&quot;, 
+              value = &quot;app:/WEB-INF/conf/uiconf/account/webui/component/model/AccountTemplateConfigOption.groovy&quot;
+          ),
+          @ParamConfig(
+              name = &quot;help.UIAccountFormQuickHelp&quot;,
+              value = &quot;app:/WEB-INF/conf/uiconf/account/webui/component/model/UIAccountFormQuickHelp.xhtml&quot;
+          )
+        },
+        events = {
+          @EventConfig(listeners = UIAccountForm.SaveActionListener.class ),
+          @EventConfig(listeners = UIAccountForm.ResetActionListener.class, phase = Phase.DECODE),
+          @EventConfig(listeners = UIAccountForm.SearchUserActionListener.class, phase = Phase.DECODE)
+        }
+    )
+...
+</programlisting><para>Inside this class, you will have to create an &lt;code&gt;execute&lt;/code&gt; method like this :</para><programlisting>public void execute(Event&lt;ParentClass&gt; event) throws Exception
+</programlisting><para>This method is called every time the listener gets an event from the client, hence you can process this event in it, using the {style:type=span|font-family=courier new,courier}event {style}attibute. Use it to get parameters from a form in your client, to modify the status of your portlet, etc.,</para><para>Possible ways to use the event attribute : {code}</para><itemizedlist><listitem>String value = event.getRequestContext().getRequestParameter(&quot;name&quot;); // to get a value from a form</listitem><listitem>ParentClass parent = event.getSource(); // to get the parent object (the portlet that threw and caugth the event)</listitem><listitem>UIMyComponent portal = parent.getAncestorOfType(UIMyComponent.class); // to get any node in the hierarchy of UIComponents {code}</listitem></itemizedlist><para>If your action has to update an element on your client's interface, you must call <emphasis role="bold">addUIComponentToUpdateByAjax()</emphasis> at the end of the &lt;code&gt;execute&lt;/code&gt; method:</para><programlisting>event.getRequestContext().addUIComponentToUpdateByAjax(uicomponent) ;
+</programlisting><para>The target component must be provided as parameter (the component that will be updated). We will come back on this later.</para><para>You must create one inner action listener class for each Ajax call you want to handle on this portlet. All these classes must be declared in the configuration annotations of the main class, otherwise you will get an error.</para><para>It's done, your portlet is ready to accept Ajax calls from your client.</para>
+<section><title>AJAX in the Groovy template</title></section>
+<para>Your server being configured to receive Ajax calls, you must configure the client interface to make these calls.</para><para>In the groovy template file associated with your portlet class (&lt;code&gt;ParentClass&lt;/code&gt; here), you just have to add :</para><programlisting>uicomponent.event(&quot;YourOperation&quot;); // YourOperation is the same as in the ActionListener class (Save in our example above)
+</programlisting><para>in a groovy code block. The event function will create an url starting with {style:type=span|font-family=courier new,courier}javascript:{style} so you have to make sure this code can be executed in your environment.</para><para>If your operation must update the content of a component, you have to make sure that the target component is well rendered. Basically, just type this :</para><programlisting>uicomponent.renderChild(UITargetComponent.class) ;
+</programlisting><para>in a groovy code block. &lt;code&gt;UITargetComponent&lt;/code&gt; is the class of the component that will be updated when</para><programlisting>event.getRequestContext().addUIComponentToUpdateByAjax(uicomponent) ;
+</programlisting><para>is called. Hence, &lt;code&gt;uicomponent&lt;/code&gt; must be of type &lt;code&gt;UITargetComponent&lt;/code&gt;. If this component is not rendered by default, when the portlet loads, don't forget to set its &lt;code&gt;rendered&lt;/code&gt; attribute to false :</para><programlisting>mycomponent.setRendered(false);
+</programlisting><para>in the constructor of your portlet.</para>
+<section><title>How JavaScript works</title></section>
+<para>All the javascript is managed by the file GateIn.portal.PortalHttpRequest.js in the portal project.</para><para>In this class, you will find 4 functions/classes (detailed below):</para><programlisting>* PortletResponse
+* PortalResponse
+* AjaxRequest
+* HttpResponseHandler
+</programlisting><para>and 6 functions : {code}</para><itemizedlist><listitem>ajaxGet // Calls doRequest with an url in GET mode</listitem><listitem>ajaxPost // Calls doRequest with an url in POST mode</listitem><listitem>doRequest // Creates the AjaxRequest and HttpResponseHandler objects, and lauches the request process</listitem><listitem>ajaxAbort // Cancels the current request</listitem><listitem>ajaxAsyncGetRequest // Allows to create and execute a sync or async GET request</listitem><listitem>ajaxRedirect // A simple javascript redirection with window.location.href {code} that are the entry points of these classes. You shouldn't have to call explicitly these functions, since the template file and the portlet class manage everything.</listitem></itemizedlist>
+<section><title>PortletResponse</title></section>
+<para>This class doesn't contain any method. On creation, it just gets the response elements from the xml returned by Ajax, and store them in the corresponding attributes : {code}</para><itemizedlist><listitem>portletId</listitem><listitem>portletTitle</listitem><listitem>portletMode // View, Edit, Help or Config</listitem><listitem>portletState // Decode, Render</listitem><listitem>portletData // The updated data to put in the component</listitem><listitem>script //The javascript code to update the component</listitem><listitem>blocksToUpdate // An array containing the containers to update with this script {code}</listitem></itemizedlist><para>You can access these attributes just by calling them from your &lt;code&gt;PortletResponse&lt;/code&gt; instance.</para>
+<section><title>PortalResponse</title></section>
+<para>Contains an array of &lt;code&gt;PortletResponse&lt;/code&gt;s (&lt;code&gt;portletResponses&lt;/code&gt;) and two other attributes : {code}</para><itemizedlist><listitem>data // Data to update</listitem><listitem>script // Javascript code to update {code}</listitem></itemizedlist>
+<section><title>AjaxRequest</title></section>
+<para>By far the most important class of this file. Wraps the XMLHttpRequest object with some functions and attributes, to make it easier to use. You can find the complete documentation here : http://www.ajaxtoolbox.com/request/documentation.php</para>
+<section><title>HttpResponseHandler</title></section>
+<para>This class provides methods to handle the Ajax response. {code}</para><itemizedlist><listitem>executeScript // execute some javascript</listitem><listitem>updateBlocks // update some html components</listitem><listitem>ajaxTimeout // a function called when the timeout of the ajax call exceeds. Just cancel the request</listitem><listitem>ajaxResponse // creates a PortalResponse object from the data from the Ajax request</listitem><listitem>ajaxLoading  // shows the loading popup and mask layer {code}</listitem></itemizedlist>
+<section><title>Portal Ajax Response Data Structure</title></section>
+<programlisting>{PortalResponse}
+  |
+  |---&gt;{PortletResponse}
+  |
+  |---&gt;{PortletResponse}
+  |          |--&gt;{portletId}
+  |          |--&gt;{portletTitle}
+  |          |--&gt;{portletMode}
+  |          |--&gt;{portletState}
+  |          |
+  |          |--&gt;{Data}
+  |          |      |
+  |          |      |---&gt;{BlockToUpdate}
+  |          |      |         |--&gt;{blockId}
+  |          |      |         |--&gt;{data}
+  |          |      |
+  |          |      |---&gt;{BlockToUpdate}
+  |          |---&gt;{Script}
+  |
+  |---&gt;{Data}
+  |      |
+  |      |---&gt;{BlockToUpdate}
+  |      |         |--&gt;{blockId}
+  |      |         |--&gt;{data}
+  |      |
+  |      |---&gt;{BlockToUpdate}
+  |---&gt;{Script} 
+</programlisting>
+<section><title>Manage Several Popups</title></section>
+<para>If you have several actions that need to appear in a popup, you can use this technique to manage the different popup windows easily:</para><itemizedlist><listitem>Create a &lt;code&gt;UIPopupAction&lt;/code&gt; in your main portlet class:</listitem></itemizedlist><programlisting>addChild(UIPopupAction.class, null, null);
+</programlisting><para>and render it in your template file:</para><programlisting>uicomponent.renderChild(UIPopupAction.class) ;
+</programlisting><para>By default, this just create an empty container (popup) that will receive the new content by Ajax.</para><itemizedlist><listitem>Get this component in your action listener class, and update its content:</listitem></itemizedlist><programlisting>UIPopupAction uiPopupAction = uiMainPortlet.getChild(UIPopupAction.class) ;
+uiPopupAction.activate(UIReferencesList.class, 600) ;
+</programlisting><para>UIReferenceList is the component that will appear in the popup. You don't have to declare it in the main portlet class. The activate method takes care of the creation of the component, and its rendering in the popup window. See the javadoc for more information on this class.</para><itemizedlist><listitem>Make this component updatable by Ajax:</listitem></itemizedlist><programlisting>event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+</programlisting><para>For each component that you want that component to appear in a popup window, add a action listener class and repeat the steps above with the appropriate component type.</para>
+</section>

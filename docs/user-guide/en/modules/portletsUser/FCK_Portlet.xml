@@ -1,0 +1,84 @@
+<!--
+
+    Copyright (C) 2009 eXo Platform SAS.
+    
+    This is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Lesser General Public License as
+    published by the Free Software Foundation; either version 2.1 of
+    the License, or (at your option) any later version.
+    
+    This software is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+    Lesser General Public License for more details.
+    
+    You should have received a copy of the GNU Lesser General Public
+    License along with this software; if not, write to the Free
+    Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+    02110-1301 USA, or see the FSF site: http://www.fsf.org.
+
+-->
+
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook V4.4//EN" "http://www.oasis-open.org/docbook/sgml/4.4/docbookx.dtd">
+<section>
+	<title>FCK Portlet</title>
+	<section>
+		<title>Overview</title>
+	</section>
+	<para>GateIn Portal provides users with FCK portlet used as a
+		lightweight text editor in the web pages. All its common used
+		functions (like Word editor) such as writing, formatting text,
+		creating tables, inserting links or picture, etc.</para>
+	<mediaobject>
+		<imageobject>
+			<imagedata fileref="images/FCK1.png" format="PNG"></imagedata>
+		</imageobject>
+	</mediaobject>
+	<para>FCK portlet also consists of some main elements:</para>
+	<section>
+		<title>Toolbar</title>
+	</section>
+	<para>The area at the top of the editor which contains many
+		different buttons. You will use these buttons to activate the program
+		functions.</para>
+	<mediaobject>
+		<imageobject>
+			<imagedata fileref="images/ToolBar1.png" format="PNG"></imagedata>
+		</imageobject>
+	</mediaobject>
+	<section>
+		<title>Editing Area</title>
+	</section>
+	<para>This area is under the toolbar. This area allows typing your
+		text and format document.</para>
+	<mediaobject>
+		<imageobject>
+			<imagedata fileref="images/EditingArea1.png" format="PNG"></imagedata>
+		</imageobject>
+	</mediaobject>
+	<section>
+		<title>Context menu</title>
+	</section>
+	<para>It is a menu with the functions that will appear when you right
+		click anywhere in the space of editing area or an existing object.</para>
+	<mediaobject>
+		<imageobject>
+			<imagedata fileref="images/ContextMenu1.png" format="PNG"></imagedata>
+		</imageobject>
+	</mediaobject>
+	<section>
+		<title>Dialogs</title>
+	</section>
+	<para>
+		Small windows appear when some of the functions are activated, it is
+		used to provide the necessary information to accomplish that
+		functions. For an example: To insert a link, you need to open
+		<emphasis role="bold">Link</emphasis>
+		dialog by clicking!images/LinkIcon.png! icon on the Tool bar :
+	</para>
+	<mediaobject>
+		<imageobject>
+			<imagedata fileref="images/Link.png" format="PNG"></imagedata>
+		</imageobject>
+	</mediaobject>
+</section>

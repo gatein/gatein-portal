@@ -1,0 +1,94 @@
+<!--
+
+    Copyright (C) 2009 eXo Platform SAS.
+    
+    This is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Lesser General Public License as
+    published by the Free Software Foundation; either version 2.1 of
+    the License, or (at your option) any later version.
+    
+    This software is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+    Lesser General Public License for more details.
+    
+    You should have received a copy of the GNU Lesser General Public
+    License along with this software; if not, write to the Free
+    Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+    02110-1301 USA, or see the FSF site: http://www.fsf.org.
+
+-->
+
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook V4.4//EN" "http://www.oasis-open.org/docbook/sgml/4.4/docbookx.dtd">
+<section>
+	<title>Gadget concept</title>
+	<para>
+		A gadget is a mini web application running on a platform
+		and an user
+		can put it in a web page. GateIn Portal provides some useful
+		gadgets
+		such as:
+		<itemizedlist>
+			<listitem>
+				<para>
+					<emphasis role="bold">Calculator gadget</emphasis>
+					: This is the coolest calculator for your page. This
+					mini-application lets you perform most of the basic arithmetic
+					operations
+					and also offers cool skins to make your page more alive.
+					<mediaobject>
+						<imageobject>
+							<imagedata fileref="images/Calculator.png" format="PNG"></imagedata>
+						</imageobject>
+					</mediaobject>
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					<emphasis role="bold">Calendar gadget</emphasis>
+					: A cool calendar help users keep track of date. You also can
+					switch
+					easily between daily, monthly and yearly view and change skin
+					that
+					you like.
+					<mediaobject>
+						<imageobject>
+							<imagedata fileref="images/Calendar.png" format="PNG"></imagedata>
+						</imageobject>
+					</mediaobject>
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					<emphasis role="bold">Todo gadget</emphasis>
+					: This mini-application helps you organize your day and work
+					group.
+					It is designed to keep track of your tasks in a convenient
+					and
+					transparent way. You can highlight tasks by coloring tasks with
+					different colors.
+					<mediaobject>
+						<imageobject>
+							<imagedata fileref="images/Todo.png" format="PNG"></imagedata>
+						</imageobject>
+					</mediaobject>
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					<emphasis role="bold">RSS Reader</emphasis>
+					: This gadget lets you get a sneak preview of your favorite feeds
+					from the web. You can get the latest news, the latest posts from
+					your
+					favorite blogs, the latest email...all in one gadget. This
+					gadget is
+					a web based for receiving and viewing RSS feeds.
+				</para>
+			<!--
+				<mediaobject> <imageobject> <imagedata fileref="images/RSS.png"
+				format="PNG"></imagedata> </imageobject> </mediaobject>
+			-->
+		</listitem>
+		</itemizedlist>
+	</para>
+</section>

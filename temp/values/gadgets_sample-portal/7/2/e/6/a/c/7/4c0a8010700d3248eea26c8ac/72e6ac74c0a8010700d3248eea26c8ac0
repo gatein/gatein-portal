@@ -1,0 +1,96 @@
+/**
+ * Copyright (C) 2009 eXo Platform SAS.
+ * 
+ * This is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2.1 of
+ * the License, or (at your option) any later version.
+ * 
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this software; if not, write to the Free
+ * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ */
+
+a {
+	color: #0158c9;
+	text-decoration: none;
+}
+
+a:visited {
+	color: #0158c9;
+}
+
+p {
+	margin: 0px;
+}
+
+.descriptionHighlight .title {
+	background: #ffffff;
+	margin: 0px;
+	color: #0158c9;
+	font-size: 12px;
+}
+
+.descriptionHighlight .title a {
+	color: #000000;
+	font-size: 12px;
+	margin-bottom: 2px;
+}
+
+.title {
+	padding: 3px 10px;
+	font-weight: bold;
+	font-size: 12px;
+}
+
+.item {
+	background: #fbfbfb;
+	border-bottom: 1px solid #E3E3E3;
+	margin: 0 9px 2px;
+}
+
+.item .more {
+	background: #ffffff;
+	color:#000000;
+	display:block;
+	font-size: 11px;
+	width:100%;
+	padding: 0px;
+}
+
+.item .date {
+	margin-bottom: 2px;
+	padding: 2px 20px 0px;
+	color: #c3c3c3;
+	font-size: 10px;
+}
+
+.item .more .desc {
+	padding: 4px 20px 10px;
+	color: #5c5c5c;
+	text-align: justify;
+}
+
+.item .more .link {
+	margin-top: 2px; 
+	padding: 0px 5px 0px 0px;
+	color: #fe7000;
+	font-weight: bold;
+	text-align: right;
+}
+
+.item .more .link a {
+	color: #fe7000;
+}
+
+.descriptionHighlight {
+	border:none;
+	margin: 3px 0px;
+	padding:0px;
+}

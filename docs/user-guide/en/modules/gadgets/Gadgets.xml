@@ -1,0 +1,109 @@
+<!--
+
+    Copyright (C) 2009 eXo Platform SAS.
+    
+    This is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Lesser General Public License as
+    published by the Free Software Foundation; either version 2.1 of
+    the License, or (at your option) any later version.
+    
+    This software is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+    Lesser General Public License for more details.
+    
+    You should have received a copy of the GNU Lesser General Public
+    License along with this software; if not, write to the Free
+    Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+    02110-1301 USA, or see the FSF site: http://www.fsf.org.
+
+-->
+
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook V4.4//EN" "http://www.oasis-open.org/docbook/sgml/4.4/docbookx.dtd">
+<section>
+	<title>Gadgets</title>
+	<section>
+		<title>Overview</title>
+	</section>
+	<para>An gadget is a mini web application running on a platform and
+		you can put it in a web page. This is a small application that helps
+		users to do some private actions.</para>
+	<para>GateIn Portal supports some gadgets such as: Todo gadget,
+		Calendar gadget, Calculator gadget, Weather Forecasts, RSS Reader
+		gadget.</para>
+	<itemizedlist>
+		<listitem>Todo: This mini - application helps you to organize
+			your day and work group.</listitem>
+		<listitem>Calendar: A cool calendar to keep track of date in
+			style.</listitem>
+		<listitem>Calculator: This is the coolest calculator for
+			your page.</listitem>
+		<listitem>RSS Reader: This gadget lets you het a sneak preview of
+			your favourite feeds around web</listitem>
+		<listitem>Weather Forecasts: This gadget notifies you of
+			current weather condition and gives tomorrow's forecast.</listitem>
+	</itemizedlist>
+	<section>
+		<title>Existing Gadgets</title>
+	</section>
+	<mediaobject>
+		<imageobject>
+			<imagedata fileref="images/Liste.png" format="PNG"></imagedata>
+		</imageobject>
+	</mediaobject>
+	<section>
+		<title>Create a new Gadget</title>
+	</section>
+	<mediaobject>
+		<imageobject>
+			<imagedata fileref="images/New.png" format="PNG"></imagedata>
+		</imageobject>
+	</mediaobject>
+	<section>
+		<title>Remote Gadget</title>
+	</section>
+	<para>This is the reference to a remote gadget (stock one).</para>
+	<mediaobject>
+		<imageobject>
+			<imagedata fileref="images/Import.png" format="PNG"></imagedata>
+		</imageobject>
+	</mediaobject>
+	<section>
+		<title>Gadget Importing</title>
+	</section>
+	<para>After referencing the gadget successfully, then import it
+		into the local repository.</para>
+	<mediaobject>
+		<imageobject>
+			<imagedata fileref="images/Imported.png" format="PNG"></imagedata>
+		</imageobject>
+	</mediaobject>
+	<section>
+		<title>Gadget Web Editing</title>
+	</section>
+	<para>Edit it from the Web the imported Gadget to modify it:</para>
+	<mediaobject>
+		<imageobject>
+			<imagedata fileref="images/EditImportedOnline.png" format="PNG"></imagedata>
+		</imageobject>
+	</mediaobject>
+	<section>
+		<title>Gadget IDE Editing</title>
+	</section>
+	<para>Edit it from your IDE thanks to the WebDAV protocol:</para>
+	<mediaobject>
+		<imageobject>
+			<imagedata fileref="images/EditImportedWebDAV.png" format="PNG"></imagedata>
+		</imageobject>
+	</mediaobject>
+	<section>
+		<title>Dashboard Viewing</title>
+	</section>
+	<para>View it from the Dashboard when you drag and drop the Gadget
+		from listing to the dashboard.</para>
+	<mediaobject>
+		<imageobject>
+			<imagedata fileref="images/Dashboard.png" format="PNG"></imagedata>
+		</imageobject>
+	</mediaobject>
+</section>

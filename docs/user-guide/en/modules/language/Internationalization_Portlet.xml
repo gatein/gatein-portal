@@ -1,0 +1,143 @@
+<!--
+
+    Copyright (C) 2009 eXo Platform SAS.
+    
+    This is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Lesser General Public License as
+    published by the Free Software Foundation; either version 2.1 of
+    the License, or (at your option) any later version.
+    
+    This software is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+    Lesser General Public License for more details.
+    
+    You should have received a copy of the GNU Lesser General Public
+    License along with this software; if not, write to the Free
+    Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+    02110-1301 USA, or see the FSF site: http://www.fsf.org.
+
+-->
+
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook V4.4//EN" "http://www.oasis-open.org/docbook/sgml/4.4/docbookx.dtd">
+<section>
+	<title>Internationalization Portlet</title>
+	<para>This portlet is used to define a word or a phrase of the
+		current language to an expected language. The form of this portlet is
+		like:</para>
+	<mediaobject>
+		<imageobject>
+			<imagedata fileref="images/Inter2.png" format="PNG"></imagedata>
+		</imageobject>
+	</mediaobject>
+	<para>Each resource supports a language. So, you can define a word
+		or a phrase according to the supported language.</para>
+	<section>
+		<title>Add a new Resource</title>
+	</section>
+	<para>
+		1. Select the
+		<emphasis role="bold">New Resource</emphasis>
+		button in the
+		<emphasis role="bold">Internationalization
+			Portlet</emphasis>
+		form. The
+		<emphasis role="bold">Resource Data</emphasis>
+		form will appear:
+	</para>
+	<mediaobject>
+		<imageobject>
+			<imagedata fileref="images/ResourceData1.png" format="PNG"></imagedata>
+		</imageobject>
+	</mediaobject>
+	<informaltable frame="none" rowsep="0" colsep="0">
+		<tgroup cols="2">
+			<colspec align="center"></colspec>
+			<colspec align="center"></colspec>
+			<tbody>
+				<row>
+					<entry>
+						<emphasis role="bold"> Name </emphasis>
+					</entry>
+					<entry>
+						<emphasis role="bold"> Description </emphasis>
+					</entry>
+				</row>
+				<row>
+					<entry> Name </entry>
+					<entry> The name of Resource. This field is required. </entry>
+				</row>
+				<row>
+					<entry> Language </entry>
+					<entry> The language that this resource 'll support. This field is
+						required. </entry>
+				</row>
+				<row>
+					<entry> Resource </entry>
+					<entry> The word or the phrase which you want to define.  </entry>
+				</row>
+			</tbody>
+		</tgroup>
+	</informaltable>
+	<para>2. Enter values into required fields.</para>
+	<para>
+		3. Click the
+		<emphasis role="bold">Save</emphasis>
+		button to accept adding a new resource or the
+		<emphasis role="bold">Cancel</emphasis>
+		button to quit.
+	</para>
+	<section>
+		<title>View and Edit a Resource</title>
+	</section>
+	<para>
+		Click the magnifying icon !images/GlassIcon.png! corresponding to
+		resource which you want to view. On the view form, you also can edit
+		information again by clicking the
+		<emphasis role="bold">Edit</emphasis>
+		button. You only can change
+		<emphasis role="bold">Resource</emphasis>
+		field, then click the
+		<emphasis role="bold">Save</emphasis>
+		button to accept changes or click the
+		<emphasis role="bold">Cancel</emphasis>
+		button to quit without saving any changes.
+	</para>
+	<mediaobject>
+		<imageobject>
+			<imagedata fileref="images/Resource2.png" format="PNG"></imagedata>
+		</imageobject>
+	</mediaobject>
+	<section>
+		<title>Delete a Resource</title>
+	</section>
+	<para>
+		Click the trash can icon!images/DeleIcon.png! corresponding to the
+		resource which you want to delete. There 'll be a confirmation
+		message, click the
+		<emphasis role="bold">OK</emphasis>
+		button to confirm deleting and the
+		<emphasis role="bold">Cancel</emphasis>
+		button to quit.
+	</para>
+	<section>
+		<title>Search a Resource</title>
+	</section>
+	<para>
+		The
+		<emphasis role="bold">Search Resource</emphasis>
+		form displays directly on the portlet:
+	</para>
+	<mediaobject>
+		<imageobject>
+			<imagedata fileref="images/Resource3.png" format="PNG"></imagedata>
+		</imageobject>
+	</mediaobject>
+	<para>
+		Enter the name of the resource which you want to search and select the
+		supported language. Click the
+		<emphasis role="bold">Search</emphasis>
+		button to perform searching and displaying a list of the expected
+		Resource.
+	</para>
+</section>

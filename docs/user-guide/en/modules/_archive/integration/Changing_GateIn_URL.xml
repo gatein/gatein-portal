@@ -1,0 +1,161 @@
+<!--
+
+    Copyright (C) 2009 eXo Platform SAS.
+    
+    This is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Lesser General Public License as
+    published by the Free Software Foundation; either version 2.1 of
+    the License, or (at your option) any later version.
+    
+    This software is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+    Lesser General Public License for more details.
+    
+    You should have received a copy of the GNU Lesser General Public
+    License along with this software; if not, write to the Free
+    Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+    02110-1301 USA, or see the FSF site: http://www.fsf.org.
+
+-->
+
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook V4.4//EN" "http://www.oasis-open.org/docbook/sgml/4.4/docbookx.dtd">
+<section>
+	<title>Changing GateIn URL</title>
+	<para>How do I change GateIn base URL so that it does not point to
+		the root context ?</para>
+	<variablelist>
+		<listitem>
+			This article is a translation of an orginal French article</link>
+			kindly contributed by Gaetan Beltzung.
+		</listitem>
+	</variablelist>
+	<section>
+		<title>Requirement</title>
+	</section>
+	<para>
+		If you want to install multiple instances of GateIn on a single
+		machine, the only way to access to an instance is through an URL of
+		the form :
+		<literal>http://myserver:port/portal</literal>
+		with different
+		<literal>port</literal>
+		values for each instance.
+	</para>
+	<para>
+		In some cases, it is preferable not to access directly to an GateIn
+		instance by specifying the http port. For security reasons but also
+		for the end user for who this represents nothing. It would be
+		interesting to access to GateIn with an URL of the form
+		<literal>http://mypublicserver/myservice/portal</literal>
+		where
+		<literal>myservice</literal>
+		has a distinctive meaning to the end user.
+	</para>
+	<para>This article will show you the mechanisms to setup in order
+		to find a solution for this goal.</para>
+	<section>
+		<title>Method</title>
+	</section>
+	<para>Access to GateIn will be done through an Apache Front-End
+		server that will be used as a proxy. This approach has several
+		advantages :</para>
+	<itemizedlist>
+		<listitem>it allows to increase the security level to access to the
+			GateIn host machine by not exposing it directly to the internet.</listitem>
+		<listitem>it is possible to define any URL to access to GateIn.</listitem>
+	</itemizedlist>
+	<para>+Prerequisites+ : this solution is based on of
+		Apache at minimum (also works with 2.2.9)</para>
+	<section>
+		<title>Apache frontend install</title>
+	</section>
+	<mediaobject>
+		<imageobject>
+			<imagedata fileref="images/archisolutionapache.jpg" format="PNG"></imagedata>
+		</imageobject>
+	</mediaobject>
+	<para>We consider that apache installation and configuration is
+		mastered and we will focus on describing the modules to configure for
+		our case.</para>
+	<para>Necessary Apache modules are :</para>
+	<itemizedlist>
+		<listitem>modsubstitute</listitem>
+		<listitem>modproxy</listitem>
+		<listitem>modheaders</listitem>
+		<listitem>
+			mod
+			<emphasis>proxy</emphasis>
+			ajp (for cluster use, mod
+			<emphasis>proxy</emphasis>
+			balancer is required)
+		</listitem>
+		<listitem>mod, after that an GateIn JSP takes the relay to
+			redirect to the default portal)</listitem>
+	</itemizedlist>
+	<para>The example URL decomposes as follows
+		(http://mypublicserver/myservice/portal):</para>
+	<itemizedlist>
+		<listitem>
+			<emphasis role="bold">mypublicserver</emphasis>
+			is the name of the apache server as seen from outside.
+		</listitem>
+		<listitem>
+			<emphasis role="bold">myservice</emphasis>
+			is the name of the location of GateIn in Apache server
+		</listitem>
+		<listitem>
+			<emphasis role="bold">portal</emphasis>
+			is the name of the GateIn web context
+		</listitem>
+	</itemizedlist>
+	<programlisting>ProxyRequests off
+		ProxyPass /myservice ajp://myservice:8009
+&lt;Location /myservice&gt;
+	RedirectMatch ^/myservice/?$ /myservice/portal
+	## modifies the location value in the header to redirect to the correct URL during 302 responses
+	Header edit Location ^(.*)/portal/(.*)  $1/myservice/portal/$2
+	################ Start section Mod_Proxy    ###################
+	ProxyPassReverse ajp://myservice:8009
+	## change le cookie path
+	## DO NOT FORGET THIS LINE OTHERWISE THE COOKIE WILL NOT BE SET PROPERLY AND THE WEBAPP WILL NOT WORK
+	ProxyPassReverseCookiepath /portal /myservice/portal
+	Allow from all
+	################   End section Mod_Proxy   ###################
+	################ Start  section Mod_Substitute  ###################
+	AddOutputFilterByType SUBSTITUTE text/html
+	Substitute &quot;s|'/portal|'/myservice/portal|inq&quot;
+	Substitute &quot;s|\&quot;/portal|\&quot;/myservice/portal|inq&quot;
+	AddOutputFilterByType SUBSTITUTE text/html text/plain text/javascript application/x-www-form-urlencoded application/x-javascript application/*
+	Substitute &quot;s|'/GateInResources/|'/myservice/GateInResources/|inq&quot;
+	Substitute &quot;s|'/GateInWidgetWeb/|'/myservice/GateInWidgetWeb/|inq&quot;
+	Substitute &quot;s|'/web/|'/myservice/web/|inq&quot;
+	Substitute &quot;s|'/ecm/|'/myservice/ecm/|inq&quot;
+	Substitute &quot;s|'/exoadmin/|'/myservice/exoadmin/|inq&quot;
+	Substitute &quot;s|'/cometd/|'/myservice/comted/|inq&quot;
+	Substitute &quot;s|'/workflow/|'/myservice/workflow/|inq&quot;
+	Substitute &quot;s|\&quot;/GateInResources/|\&quot;/myservice/GateInResources/|inq&quot;
+	Substitute &quot;s|\&quot;/GateInWidgetWeb/|\&quot;/myservice/GateInWidgetWeb/|inq&quot;
+	Substitute &quot;s|\&quot;/web/|\&quot;/myservice/web/|inq&quot;
+	Substitute &quot;s|\&quot;/ecm/|\&quot;/myservice/ecm/|inq&quot;
+	Substitute &quot;s|\&quot;/exoadmin/|\&quot;/myservice/exoadmin/|inq&quot;
+	Substitute &quot;s|\&quot;/cometd/|\&quot;/myservice/comted/|inq&quot;
+	Substitute &quot;s|\&quot;/workflow/|\&quot;/myservice/workflow/|inq&quot;
+	Substitute &quot;s|'/\&quot;+portalName|'/myservice/\&quot;+portalName|inq&quot;
+	AddOutputFilterByType SUBSTITUTE  text/css
+	Substitute &quot;s|url('/web/|url('/myservice/web/|inq&quot;
+	Substitute &quot;s|url('/ecm/|url('/myservice/ecm/|inq&quot;
+	Substitute &quot;s|url('/GateInResources/|url('/myservice/GateInResources/|inq&quot;
+	Substitute &quot;s|url('/GateInSkinMac/|url('/myservice/GateInSkinMac/|inq&quot;
+	Substitute &quot;s|url('/GateInSkinVista/|url('/myservice/GateInSkinVista/|inq&quot;
+	Substitute &quot;s|url('/GateInECMResources/|url('/myservice/GateInECMResources/|inq&quot;
+	Substitute &quot;s|url(/web|url(/myservice/web/inq&quot;
+	Substitute &quot;s|url(/GateInResources/|url(/myservice/GateInResources/|inq&quot;
+	Substitute &quot;s|url(/GateInSkinMac|url(/myservice/GateInSkinMac/|inq&quot;
+	Substitute &quot;s|url(/GateInSkinVista|url(/myservice/GateInSkinVista/|inq&quot;
+	Substitute &quot;s|url(/ecm/|url(/myservice/ecm/|inq&quot;
+	Substitute &quot;s|url(/GateInECMResources|url(/myservice/GateInECMResources/|inq&quot;
+	################  End section Mod_Substitute  ###################
+&lt;/Location&gt;
+</programlisting><itemizedlist><listitem><emphasis role="bold">ProxyRequests off</emphasis> :  allows to deactivate the forward proxy (it's the mode that allows to setup Apache as a normal proxy. Which in our case is a security flaw. Because by typing the target machine address directly and specifying apache machine as proxy in the browser, Apache would only do forwarding which is not what we want).</listitem><listitem><emphasis role="bold">ProxyPass</emphasis> : allows to tell Apache to do a reverse proxy on the <literal>myservice</literal> location and redirect to the URL <literal>ajp://internalserver.mydomain.com:20002</literal>. To let Apache proxy and the GateIn AS, we use the AJP protocol. It has better performance and also allows to secure AS access by closing HTTP port on the AS. Only the AJP port can remain open (here it is 20002).</listitem><listitem><emphasis role="bold">ProxyPassReverse</emphasis> : it allows Apache to retransform URLs coming from the target machine in order to let the client think that it is the source by rewriting URLs in the header. Hence, the response comes from <literal>http://mypublicserver/myservice/portal/</literal> instead of &lt;tt&gt;http://internalserver.mydomain.com/portal/&lt;tt&gt;.</listitem></itemizedlist><variablelist><listitem>+<emphasis role="bold">Beware :</emphasis>+ this script works only for Apache 2.2.9. For 2.2.8, it is necessary to change the options of Substitute : lines. Replace 'inq' options by 'in'. q option being the default mode for 2.2.8 and does not exist but in 2.2.9, the default mode is f(flatten) so you must set the contrary : 'q'.</listitem></variablelist>
+</section>

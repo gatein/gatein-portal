@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+<!--
+
+    Copyright (C) 2009 eXo Platform SAS.
+    
+    This is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Lesser General Public License as
+    published by the Free Software Foundation; either version 2.1 of
+    the License, or (at your option) any later version.
+    
+    This software is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+    Lesser General Public License for more details.
+    
+    You should have received a copy of the GNU Lesser General Public
+    License along with this software; if not, write to the Free
+    Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+    02110-1301 USA, or see the FSF site: http://www.fsf.org.
+
+-->
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.w3schools.com"
+	xmlns="http://www.w3schools.com"
+	elementFormDefault="qualified">
+
+	<xs:element name="gatein-resources">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="portal-skin" type="portal-skin" />
+				<xs:element name="portlet-skin" type="portlet-skin" />
+				<xs:element name="window-style" type="window-style" />
+				<xs:element name="script" type="script" />
+				<xs:element name="resource-bundle" type="resource-bundle" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:complexType name="portal-skin">
+		<xs:sequence>
+			<xs:element name="skin-name" type="xs:string" />
+			<xs:element name="css-path" type="xs:string" />
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="portlet-skin">
+		<xs:sequence>
+			<xs:element name="application-name" type="xs:string" />
+			<xs:element name="portlet-name" type="xs:string" />
+			<xs:element name="skin-name" type="xs:string" />
+			<xs:element name="css-path" type="xs:string" />
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="window-style" mixed="true">
+		<xs:sequence>
+			<xs:element name="style-name" type="xs:string" />
+			<xs:element name="style-theme" type="style-theme" />
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="style-theme">
+		<xs:sequence>
+			<xs:element name="theme-name" type="xs:string" />
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="script">
+	</xs:complexType>
+	
+	<xs:complexType name="resource-bundle">
+	</xs:complexType>
+</xs:schema>

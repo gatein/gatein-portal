@@ -1,0 +1,353 @@
+<!--
+
+    Copyright (C) 2009 eXo Platform SAS.
+    
+    This is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Lesser General Public License as
+    published by the Free Software Foundation; either version 2.1 of
+    the License, or (at your option) any later version.
+    
+    This software is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+    Lesser General Public License for more details.
+    
+    You should have received a copy of the GNU Lesser General Public
+    License along with this software; if not, write to the Free
+    Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+    02110-1301 USA, or see the FSF site: http://www.fsf.org.
+
+-->
+
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook V4.4//EN" "http://www.oasis-open.org/docbook/sgml/4.4/docbookx.dtd">
+<section>
+	<title>Skin Configuration</title>
+	<section>
+		<title>Overview</title>
+	</section>
+	<para>GateIn provides support for skinning the entire portal User
+		Interface (UI) including your own portlets. Skins are designed to help
+		you pack and reuse common graphic resources.</para>
+	<section>
+		<title>Skin Switching</title>
+	</section>
+	<para>
+		Skins can be switched dynamically at runtime by the
+		<emphasis>Skin Settings</emphasis>
+		action in
+		<link linkend="User Workspace">User Workspace</link>
+		.
+	</para>
+	<mediaobject>
+		<imageobject>
+			<imagedata fileref="images/portal-change-skin.png" format="PNG"></imagedata>
+		</imageobject>
+	</mediaobject>
+	<para>When you switch, the whole portal will be repainted and new
+		styles will be applied to the UI.</para>
+	<section>
+		<title>Skins in Page Markups</title>
+	</section>
+	<para>
+		An GateIn skin contains css styles for GateIn portal's components but
+		also shares components that may be reused in portlets. When GateIn
+		generates a portal page markup, it inserts stylesheet links in the
+		page's
+		<literal>head</literal>
+		tag.
+	</para>
+	<programlisting>&lt;head&gt;
+...   
+&lt;link id=&quot;CoreSkin&quot; rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;/GateInResources/skin/Stylesheet.css&quot; /&gt;
+&lt;link id=&quot;web_FooterPortlet&quot; rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href= &quot;/web/skin/portal/webui/component/UIFooterPortlet/DefaultStylesheet.css&quot; /&gt;
+&lt;link id=&quot;web_NavigationPortlet&quot; rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href= &quot;/web/skin/portal/webui/component/UINavigationPortlet/DefaultStylesheet.css&quot; /&gt;
+&lt;link id=&quot;web_HomePagePortlet&quot; rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href= &quot;/portal/templates/skin/webui/component/UIHomePagePortlet/DefaultStylesheet.css&quot; /&gt;
+&lt;link id=&quot;web_BannerPortlet&quot; rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href= &quot;/web/skin/portal/webui/component/UIBannerPortlet/DefaultStylesheet.css&quot; /&gt;
+...
+&lt;/head&gt;
+</programlisting><para>In the snipped code above, you can see two types of links :</para><itemizedlist><listitem>Portal skin stylesheet (<literal>id=&quot;CoreSkin&quot;</literal>).</listitem><listitem>Portlets skin stylesheets (all others) : each portlet within the page may contribute its own styles.</listitem></itemizedlist>
+<section><title>Types of Styles</title></section>
+<orderedlist numeration="arabic"><listitem>portal skin is typically made of 3 types of styles:</listitem><listitem>Portlet themes : decorations for portlet windows.</listitem><listitem>Portal styles : default styles for html tags (ex div,th,td...) + the portal UI including the sidebar and portal admin screens.</listitem><listitem>Shared styles : GateIn WebUI components styles are reused among different GateIn portlets.</listitem></orderedlist><para>This is revealed easily by the main portal skin stylesheets. For example <emphasis role="bold">/GateInVistaSkin/skin/Stylesheet.css</emphasis> {code} @import url(/GateInResources/skin/PortletThemes/Stylesheet.css) ; @import url(VistaSkin/portal/webui/component/UIPortalApplicationSkin.css) ; @import url(VistaSkin/webui/component/Stylesheet.css) ; {code}</para>
+<section><title>Portlet Styles</title></section>
+<para>Portlets often require additionnal styles that may not be defined by the portal skin. GateIn allows portlets to define additional stylesheets for each portlet and will append the corresponding <literal>link</literal> tags to the <literal>head</literal>.</para><para>The link ID will be of the form {portletAppName}{}<literal>$$<literal>PortletName</literal>. For example: <literal>ContentPortlet</literal> in <literal>content.war</literal>, will give <emphasis>id=&quot;content</emphasis>ContentPortlet&quot;</literal></para><variablelist><listitem>TODO: give some rules to follow in order to avoid overriding portal styles</listitem></variablelist>
+<section><title>How to Configure a Portal Skin</title></section>
+
+<section><title>SkinService</title></section>
+<para>The <ulink url="http://fisheye.exoplatform.org/browse/projects/portal/trunk/webui/portal/src/main/java/org/exoplatform/portal/webui/skin/SkinService.java">SkinService</ulink> is an GateIn service that manages portal skin, portlet styles and portlet themes (windows borders). The code snippet below is an excerpt of the API offered by this service.</para><programlisting>  /**
+   * Register the stylesheet for a portal Skin.
+   * @param module skin module identifier
+   * @param skinName skin name
+   * @param cssPath path uri to the css file. This is relative to the root context, use leading '/'
+   * @param scontext the webapp's {@link ServletContext}
+   */
+  public void addPortalSkin(String module, String skinName, String cssPath, ServletContext scontext) {
+    [...]
+  }
+  /**
+   * Register a portlet stylesheet for a Skin.
+   * @param module skin module. Typically of the form 'portletAppName/portletName' .
+   * @param skinName Name of the skin
+   * @param cssPath path uri to the css file. This is relative to the root context, use leading '/'
+   * @param scontext the webapp's {@link ServletContext}
+   */
+  public void addSkin(String module, String skinName, String cssPath, ServletContext scontext) {
+    [...]
+  }
+  /**
+   * Get a skin configuration for a given Skin
+   * @param module skin module such as registered in {@link #addSkin(String, String, String, ServletContext)}
+   * @param skinName skin name
+   * @return the skin configuration or, if not found try to find the default skin
+   */
+  public SkinConfig getSkin(String module, String skinName) {
+    [...]
+  }
+  /**
+   * Register multiple portlet themes
+   * @param categoryName portlet theme category
+   * @param themesName names of the themes
+   */
+  public void addTheme(String categoryName, List&lt;String&gt; themesName) {
+    [...]
+  }
+</programlisting><para>Use the skin service to register your own portal skins, portlet styles and portlet themes.</para>
+<section><title>SkinConfigListener</title></section>
+<para>GateIn provides a servlet listener that allows you to register your own skins and styles when your webapp starts up. Your first step is to add the listener to your portlet app <literal>web.xml</literal>.</para><programlisting>  &lt;web-app&gt;
+    [::]
+    &lt;listener&gt;
+      &lt;listener-class&gt;org.exoplatform.portal.webui.skin.SkinConfigListener&lt;/listener-class&gt;
+    &lt;/listener&gt;
+    [::]
+  &lt;/web-app&gt;
+</programlisting><para>1.1 SkinConfigScript.groovy</para><para>The &lt;tt&gt;SkinListener&lt;/tt&gt; looks for the groovy script file located in your war under :</para><itemizedlist><listitem>/WEB-INF/conf/script/groovy/SkinConfigScript.groovy</listitem></itemizedlist><para>In this script, you have full access to the &lt;tt&gt;SkinService&lt;/tt&gt; and &lt;tt&gt;ServletContext&lt;/tt&gt; which are bound as scripting variables under the same name. As an example, take a look at the following script. It  can  be found in the &lt;tt&gt;GateInResources.war&lt;/tt&gt; and is used by GateIn to register the &lt;tt&gt;Default&lt;/tt&gt; portal skin and some portlet themes.</para><programlisting>SkinService.addPortalSkin(&quot;CoreSkin&quot;,&quot;Default&quot;, &quot;/GateInResources/skin/Stylesheet.css&quot;, ServletContext);
+SkinService.addTheme(&quot;Simple&quot;, [&quot;SimpleBlue&quot;,&quot;SimpleViolet&quot;,&quot;SimpleOrange&quot;,&quot;SimplePink&quot;,&quot;SimpleGreen&quot;]);
+SkinService.addTheme(&quot;RoundConer&quot;, [&quot;RoundConerBlue&quot;,&quot;RoundConerViolet&quot;,&quot;RoundConerOrange&quot;,&quot;RoundConerPink&quot;,&quot;RoundConerGreen&quot;]);
+SkinService.addTheme(&quot;Shadow&quot;, [&quot;ShadowBlue&quot;,&quot;ShadowViolet&quot;,&quot;ShadowOrange&quot;,&quot;ShadowPink&quot;,&quot;ShadowGreen&quot;]);
+SkinService.addTheme(&quot;MacStyle&quot;, [&quot;MacTheme&quot;,&quot;MacGray&quot;,&quot;MacGreenSteel&quot;,&quot;MacBlack&quot;]);
+SkinService.addTheme(&quot;VistaStyle&quot;, [&quot;VistaTheme&quot;,&quot;VistaBlue&quot;]);
+</programlisting><para>The syntax of addTheme() is:<!-- LB --> &lt;tt&gt;addTheme(String categoryName, List&lt;String&gt; themesName)&lt;/tt&gt;</para><para>So, to provide your own skin you could use the following: {code} SkinService.addSkin(&quot;mywebapp/MyPortlet&quot;, &quot;MyPortalSkin&quot;, &quot;/mywebapp/skin/Stylesheet.css&quot;, ServletContext); {code}</para><para>This simple line would register a styleesheet for a portlet named &lt;tt&gt;MyPortlet&lt;/tt&gt; in a portlet app named &lt;tt&gt;mywebapp&lt;/tt&gt;. The stylesheet would be used when a skin named &lt;tt&gt;MyPortalSkin&lt;/tt&gt; is selected in portal.</para><para>The syntax of addSkin() is:<!-- LB --> &lt;tt&gt;addSkin(String module, String skinName, String cssPath, ServletContext scontext, boolean overwrite)&lt;/tt&gt;</para><itemizedlist><listitem>~~overwrite~~ is optional, its default value is &quot;false&quot;. If its value is true, the later call of addSkin() for the same skin key (combination of module + skinName) replaces the skin of the previous call.</listitem></itemizedlist><para>Similarly, to configure a particular portal you can use the following : {code} SkinService.addSkin(&quot;myportalname&quot;, &quot;skin&quot;, &quot;/path/to/skin/Stylesheet.css&quot;, ServletContext); {code}</para><para>The syntax of addPortalSkin() is:<!-- LB --> &lt;tt&gt;addPortalSkin(String module, String skinName, String cssPath, ServletContext scontext, boolean overwrite)&lt;/tt&gt;</para><para>1 Tips and Tricks</para><para>1.1 Easier css debugging</para><para>By default, CSS files are cached and their imports are merged, at the server side, into a single CSS file to reduce the number of HTTP requests from the browser to the server.</para><para>The &lt;tt&gt;ServletContext&lt;/tt&gt; parameter is there to allow the direct access to the CSS files from the &lt;tt&gt;SkinService&lt;/tt&gt;. The optimization code is quite simple as all the CSS files are parsed at the server startup time and all the @import and url(...) references are rewritten to support a single flat file. The result is stored in a cache directly used from the &lt;tt&gt;ResourceRequestFilter&lt;/tt&gt;.</para><para>Although the optimization is useful for a production environments, you may find it easier to deactivate this optimization while debugging your stylesheets. For that, you simply need to set the java system property &lt;tt&gt;exo.product.developing&lt;/tt&gt; to &lt;tt&gt;true&lt;/tt&gt;.</para><para>For example, you can pass the property as a JVM parameter with the &lt;tt&gt;-D&lt;/tt&gt; option in your &lt;tt&gt;GateIn.sh&lt;/tt&gt; startup script: {code} EXO{code}</para><orderedlist numeration="arabic"><listitem>warning(&quot;This is option may cause display bugs with certain browsers like Internet Explorer&quot;)</listitem></orderedlist><para>1.1 Change portlet icons</para><para>Each portlet is represented by an icon that you can see in the portlet registry, or the webos dock. You can change this icon by adding an image in the directory :</para><itemizedlist><listitem>$project/portlet/myportlets/src/main/webapp/skin/DefaultSkin/portletIcons/<emphasis role="bold">and by naming the icon after the portlet, eg:</emphasis>ExoPortlet.png</listitem></itemizedlist><para>For example, in portal we have an account portlet named AccountPortlet, the icon is located in :</para><itemizedlist><listitem>portal/tags/2.1.1/portlet/exoadmin/src/main/webapp/skin/DefaultSkin/portletIcons/AccountPortlet.png</listitem></itemizedlist><para>1.1 Set the default skin for Portal</para><para>When not configured, the default skin of portal is Default. If you want to change this value (to Mac skin, Vista skin, or your own), add a skin tag in the &lt;tt&gt;portal.xml&lt;/tt&gt; that defines your portal:</para><programlisting>&lt;portal-config&gt;
+  &lt;portal-name&gt;classic&lt;/portal-name&gt;
+  &lt;locale&gt;en&lt;/locale&gt;
+  &lt;factory-id&gt;office&lt;/factory-id&gt;
+  &lt;access-permissions&gt;Everyone&lt;/access-permissions&gt;
+  &lt;edit-permission&gt;*:/platform/administrators&lt;/edit-permission&gt;
+  &lt;skin&gt;Mac&lt;/skin&gt;
+  &lt;creator&gt;root&lt;/creator&gt;
+...
+</programlisting><variablelist><listitem>factory-id was removed since Portal 2.5</listitem></variablelist><variablelist><listitem>Portal 2.6 and after will not take the order of the tags into account. Before 2.6, the order must be the same as in the example.</listitem></variablelist>
+<section><title>Some CSS techniques</title></section>
+<variablelist><listitem>Before studying GateIn CSS, make sure you already have some experience  with css and read the css spec at http://www.w3.org/TR/REC-CSS2/selector.html</listitem></variablelist><para>GateIn relies heavily on CSS to create the layout and special effects for the UI. Below we explain some common techniques you may find often inside GateIn's markup. We explain them here to help you better understand GateIn generated markup, ease css issues fixing or get inspration for styling your own apps.</para>
+<section><title>Decorator pattern</title></section>
+<para>The decorator is a pattern to create a contour or a curve around an area. In order to achieve this effect you need to create 9 cells. The BODY is the central area that you want to decorate. The other 8 cells are distributed around the BODY cell. You can use the width, height and background image properties to achieve any decoration effect that you want.</para><programlisting>
+~UWC_TOKEN_START~1255420331338~UWC_TOKEN_END~
+|            |                                          |             |
+| TopLeft    |               TopCenter                  |    TopRight |
+|            |                                          |             |
+----
+|            |                                          |             |
+|            |                                          |             |
+| CenterLeft |                 BODY                     | CenterRight |
+|            |                                          |             |
+|            |                                          |             |
+~UWC_TOKEN_START~1255420331340~UWC_TOKEN_END~
+|            |                                          |             |
+| BottomLeft |              BottomCenter                | BottomRight |
+|            |                                          |             |
+~UWC_TOKEN_START~1255420331341~UWC_TOKEN_END~
+&lt;div class=&quot;Parent&quot;&gt;
+  &lt;div class=&quot;TopLeft&quot;&gt;
+    &lt;div class=&quot;TopRight&quot;&gt;
+      &lt;div class=&quot;TopCenter&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;CenterLeft&quot;&gt;
+    &lt;div class=&quot;CenterRight&quot;&gt;
+      &lt;div class=&quot;CenterCenter&quot;&gt;BODY&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;BottomLeft&quot;&gt;
+    &lt;div class=&quot;BottomRight&quot;&gt;
+      &lt;div class=&quot;BottomCenter&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;div&gt;
+&lt;/div&gt;
+</programlisting>
+<section><title>Left margin left pattern</title></section>
+<para>Left margin left pattern is a technique to create 2 blocks side by side. The left block will have a fixed size and the right block will take the rest of the available space. When the user resizes the browser the added or removed space will be taken from the right block.</para><programlisting>~UWC_TOKEN_START~1255420331342~UWC_TOKEN_END~
+|                         |                                                |      
+|                         |                                                |      
+| |&lt;--- fixed width ---&gt;| |                   will expand to right ----&gt; |      
+|                         |                                                |      
+|                         |                                                |      
+|                         |                                                |      
+----
+&lt;div class=&quot;Parent&quot;&gt;
+  &lt;div style=&quot;float: left; width: 100px&quot;&gt;
+  &lt;/div&gt;
+  &lt;div style=&quot;margin-left: 105px;&quot;&gt;
+  &lt;div&gt;
+  &lt;div style=&quot;clear: left&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;/div&gt;
+&lt;/div&gt;
+</programlisting>
+<section><title>How to create a new skin</title></section>
+<orderedlist numeration="arabic"><listitem>new skin can be created by the configuration. Firstly, you have to definy the new skin in <literal>WEB-INF/conf/script/groovy/SkinConfigScript.groovy</literal> in your <literal>Ressource</literal> (for example, in the project MyPortal, you can put it in <literal>GateInResourcesMyPortal</literal>).</listitem></orderedlist><programlisting>
+SkinService.addPortalSkin(&quot;MyPortalSkin&quot;,&quot;MyPortal&quot;,&quot;/GateInResourcesMyPortal/skin/Stylesheet.css&quot;,ServletContext);
+</programlisting><para>Secondly, you put all your new skin into <literal>folder skinyourSkin</literal> and create new file <literal>Stylesheet.css</literal> here. In this file, you will import all links to your CSS. For example in MyPortal project.</para><programlisting>
+@import url(MyPortalSkin/portal/webui/component/UIPortalApplicationSkin.css) ;
+@import url(MyPortalSkin/webui/component/Stylesheet.css) ;
+</programlisting><para>Finally, you have to definy the name of new skin and the image preview for the <emphasis>Skin Settings</emphasis> action in <link linkend="User Workspace">User Workspace</link>.</para><para>By default, if you don not set new name for skin, its name is &lt;t&gt;label&gt;&lt;/tt&gt;. Looking in the file  and add yout new name here.</para><programlisting>
+#############################################################################
+#                              Change Skin                                  #
+#############################################################################
+  
+UIChangeSkin.action.save=Appliquer
+UIChangeSkin.action.close=Fermer
+UIChangeSkin.title.SkinSetting=Configuration des styles
+UIChangeSkin.MyPortal.label=Style MyPortal
+UIChangeSkin.Default.label=Style par d?faut
+UIChangeSkin.Mac.label=Style Mac
+UIChangeSkin.Vista.label=Style Vista
+Skin.title=Liste des styles
+Skin.left.title=Voir et s?lectionner un style
+</programlisting><para>The image peeview can be set in file <literal>ressource/skin/DefaultSkin/portal/webui/component/customization/UIChangeSkinForm/Stylesheet.css</literal> of Portal.</para><programlisting>
+.UIChangeSkinForm .UIItemSelector .TemplateContainer .MyPortalImage {
+	margin: auto;
+	width: 329px; height:204px;
+	background: url('background/MyPortal.jpg') no-repeat top;
+	cursor: pointer ;
+}
+</programlisting><para>And now, you copy your image <literal>MyPortal.jpg</literal> (that you definy above) to the folder <literal>ressource/skin/DefaultSkin/portal/webui/component/customization/UIChangeSkinForm/background</literal> and test your new skin.</para>
+<section><title>How to create new themes</title></section>
+<para>Firstly, you have to definy the new theme in <literal>WEB-INF/conf/script/groovy/SkinConfigScript.groovy</literal> in your <literal>Ressource</literal> (for example, in the project MyPortal, you can put it in <literal>GateInResourcesCp060508</literal>).</para><programlisting>
+SkinService.addTheme(&quot;MyPortal-MacTheme&quot;, [&quot;MacGray&quot;,&quot;MacBlue&quot;,&quot;MacBlack&quot;]);
+</programlisting><para>Secondly, you put all your new theme into <literal>folder skinyourSkin</literal> and create new file <literal>Stylesheet.css</literal> here. In this file, you will import all links to your CSS. For example in MyPortal project.</para><programlisting>
+@import url(MyPortalSkin/PortletThemes/Stylesheet.css) ;
+</programlisting><para>You can see here, in the <literal>GateInResourcesCp060508/skin/MyPortalSkin/PortletThemes/Stylesheet.css</literal>, you put all your CSS of new theme.</para><programlisting>
+/*---- MyPortalTheme ----*/
+.MyPortalTheme .WindowBarCenter .WindowPortletInfo {
+	margin-right: 80px; /* orientation=lt */
+	margin-left: 80px; /* orientation=rt */
+}
+.MyPortalTheme .WindowBarCenter .ControlIcon {
+	float: right;/* orientation=lt */
+	float: left;/* orientation=rt */
+	width: 24px; 
+	height: 17px;
+	cursor: pointer;
+	background-image: url('background/MyPortalTheme.png');
+}
+.MyPortalTheme .ArrowDownIcon {
+	background-position: center 20px;
+}
+.MyPortalTheme .OverArrowDownIcon {
+	background-position: center 116px;
+}
+.MyPortalTheme .MinimizedIcon {
+	background-position: center 44px;
+}
+.MyPortalTheme .OverMinimizedIcon {
+	background-position: center 140px;
+}
+.MyPortalTheme .MaximizedIcon {
+	background-position: center 68px;
+}
+.MyPortalTheme .OverMaximizedIcon {
+	background-position: center 164px;
+}
+.MyPortalTheme .RestoreIcon {
+	background-position: center 92px;
+}
+.MyPortalTheme .OverRestoreIcon {
+	background-position: center 188px;
+}
+.MyPortalTheme .NormalIcon {
+	background-position: center 92px;
+}
+.MyPortalTheme .OverNormalIcon {
+	background-position: center 188px;
+}
+.UIPageDesktop .MyPortalTheme .ResizeArea {
+	float: right;/* orientation=lt */
+	float: left;/* orientation=rt */
+	width: 18px; height: 18px;
+	cursor: nw-resize;
+	background: url('background/ResizeArea18x18.gif') no-repeat left top; /* orientation=lt */
+	background: url('background/ResizeArea18x18-rt.gif') no-repeat right top; /* orientation=rt */
+}
+.MyPortalTheme .Information {
+	height: 18px; line-height: 18px;
+	vertical-align: middle; font-size: 10px;
+	padding-left: 5px;/* orientation=lt */
+	padding-right: 5px;/* orientation=rt */
+	margin-right: 18px;/* orientation=lt */
+	margin-left: 18px;/* orientation=rt */
+}
+.MyPortalTheme .WindowBarCenter .WindowPortletIcon {
+  background-position: left top; /* orientation=lt */
+  background-position: right top; /* orientation=rt */
+	padding-left: 20px; /* orientation=lt */
+	padding-right: 20px; /* orientation=rt */
+	height: 16px;
+	line-height: 16px;
+}
+.MyPortalTheme .WindowBarCenter .PortletName {
+	font-weight: bold;
+	color: #333333;
+	overflow: hidden;
+	white-space: nowrap;
+	width: 100%;
+}
+.MyPortalTheme .WindowBarLeft {
+	padding-left: 12px;
+	background-image: url('background/MyPortalTheme.png');
+	background-repeat: no-repeat;
+	background-position: left -148px;
+}
+.MyPortalTheme .WindowBarRight {
+	padding-right: 11px;
+	background-image: url('background/MyPortalTheme.png');
+	background-repeat: no-repeat;
+	background-position: right -119px;
+}
+.MyPortalTheme .WindowBarCenter {
+	background-image: url('background/MyPortalTheme.png');
+	background-repeat: repeat-x;
+	background-position: left -90px;
+}
+.MyPortalTheme .WindowBarCenter .FixHeight {
+	height: 21px;
+	padding-top: 8px;
+}
+.MyPortalTheme .MiddleDecoratorLeft {
+	padding-left: 12px;
+	background: url('background/MMyPortalTheme.png') repeat-y left;
+}
+.MyPortalTheme .MiddleDecoratorRight {
+	padding-right: 11px;
+	background: url('background/MMyPortalTheme.png') repeat-y right;
+}
+.MyPortalTheme .MiddleDecoratorCenter {
+	background: #ffffff;
+}
+.MyPortalTheme .BottomDecoratorLeft {
+	padding-left: 12px;
+	background-image: url('background/MyPortalTheme.png');
+	background-repeat: no-repeat;
+	background-position: left -60px;
+}
+.MyPortalTheme .BottomDecoratorRight {
+	padding-right: 11px;
+	background-image: url('background/MyPortalTheme.png');
+	background-repeat: no-repeat;
+	background-position: right -30px;
+}
+.MyPortalTheme .BottomDecoratorCenter {
+	background-image: url('background/MyPortalTheme.png');
+	background-repeat: repeat-x;
+	background-position: left top;
+}
+.MyPortalTheme .BottomDecoratorCenter .FixHeight {
+	height: 30px;
+}
+</programlisting>
+</section>

@@ -1,0 +1,96 @@
+/**
+ * Copyright (C) 2009 eXo Platform SAS.
+ * 
+ * This is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2.1 of
+ * the License, or (at your option) any later version.
+ * 
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this software; if not, write to the Free
+ * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ */
+
+.NoMouseEvent64x58 {
+	width: 64px;
+	height: 58px;
+	line-height: 58px;
+	vertical-align: middle;
+	margin: auto;
+}
+
+.Over64x58 {
+	width: 64px;
+	height: 58px;
+	line-height: 58px;
+	vertical-align: middle;
+	margin: auto;
+	background: url('background/MouseAction.gif') no-repeat top;
+}
+
+.Selected64x58 {
+	width: 64px;
+	height: 58px;
+	line-height: 58px;
+	vertical-align: middle;
+	margin: auto;
+	background: url('background/MouseAction.gif') no-repeat left -58px;
+}
+
+.NoMouseEvent32x32 {
+	width: 32px;
+	height: 32px;
+	line-height: 32px;
+	vertical-align: middle;
+	margin: auto;
+}
+
+.Over32x32 {
+	width: 32px;
+	height: 32px;
+	line-height: 32px;
+	vertical-align: middle;
+	margin: auto;
+	background: url('background/MouseAction.gif') no-repeat left -116px;
+}
+
+.Selected32x32 {
+	width: 32px;
+	height: 32px;
+	line-height: 32px;
+	vertical-align: middle;
+	margin: auto;
+	background: url('background/MouseAction.gif') no-repeat right -116px;
+}
+
+.NoMouseEvent32x28 {
+	width: 32px;
+	height: 28px;
+	line-height: 22px;
+	vertical-align: middle;
+	margin: auto;
+}
+
+.Over32x28 {
+	width: 32px;
+	height: 28px;
+	line-height: 28px;
+	vertical-align: middle;
+	margin: auto;
+	background: url('background/MouseAction.gif') no-repeat left -148px;
+}
+
+.Selected32x28 {
+	width: 32px;
+	height: 28px;
+	line-height: 28px;
+	vertical-align: middle;
+	margin: auto;
+	background: url('background/MouseAction.gif') no-repeat right -148px;
+}

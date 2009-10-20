@@ -1,0 +1,66 @@
+<!--
+
+    Copyright (C) 2009 eXo Platform SAS.
+    
+    This is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Lesser General Public License as
+    published by the Free Software Foundation; either version 2.1 of
+    the License, or (at your option) any later version.
+    
+    This software is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+    Lesser General Public License for more details.
+    
+    You should have received a copy of the GNU Lesser General Public
+    License along with this software; if not, write to the Free
+    Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+    02110-1301 USA, or see the FSF site: http://www.fsf.org.
+
+-->
+
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook V4.4//EN" "http://www.oasis-open.org/docbook/sgml/4.4/docbookx.dtd">
+<section>
+	<title>Manage Page Navigation</title>
+	<section>
+		<title>Overview</title>
+	</section>
+	<para>
+		In order to understand clearly about what the navigation is and
+		navigation types that GateIn Portal supports, please refer the
+		<link linkend="Navigation concept">Navigation concept</link>
+		page.
+	</para>
+	<section>
+		<title>Portal's page navigation</title>
+	</section>
+
+	<section>
+		<title>Creating a portal's navigation</title>
+	</section>
+	<para>The page navigation of a portal is created automatically when
+		a portal is created.</para>
+	<section>
+		<title>Editing a portal's navigation</title>
+	</section>
+	<para>Only users who have the edit right on a portal can perform
+		this action.</para>
+	<para>Follows these below guides to edit a portal 's navigation:</para>
+	<para>
+		1. Go to
+		<emphasis role="bold">GateIn Start</emphasis>-&gt; <emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Advanced</emphasis>--&gt; <emphasis role="bold">Edit Page and Navigation</emphasis>.</para><para>2. Select Portal navigation in list on the left pane (eg: portal: classic's Nav).</para><para>3. Right click the blank space on the left pane and select <emphasis role="bold">Edit Navigation</emphasis> in the menu:</para><mediaobject><imageobject><imagedata fileref="images/EditPortalNavigation.png" format="PNG"></imagedata></imageobject></mediaobject><para>The form for editing the portal navigation will be opened:</para><mediaobject><imageobject><imagedata fileref="images/EditPortalNavigation2.png" format="PNG"></imagedata></imageobject></mediaobject><para><emphasis><emphasis role="bold">Notice</emphasis></emphasis>: The number that users select in the <emphasis role="bold">Priority</emphasis> field is the priority of a page navigation on the Navigation bar.</para><para>4. Make changes to fields in this form: <emphasis role="bold">Description</emphasis>, <emphasis role="bold">Priority</emphasis>.</para><para>5. Click the <emphasis role="bold">Save</emphasis> button to accept changes.</para><para>6. Click the!images/OKIcon.png!  to take effect of new changes.</para><para>Or click the <emphasis role="bold">Cancel</emphasis> button to quit without saving any change.</para>
+<section><title>Deleting a portal's navigation</title></section>
+<para>No one can create the portal's page navigation so no one can delete it. A navigation is deleted automatically after you delete its portal.</para>
+<section><title>Group's page navigation</title></section>
+<para>Each group has only one page navigation. Only users of that group have the &quot;manager&quot; membership can create/edit/delete navigation for that group</para>
+<section><title>Editing a group's navigation</title></section>
+<para>1. Go to <emphasis role="bold">GateIn Start</emphasis> -&gt; <emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Advanced</emphasis> --&gt; <emphasis role="bold">Edit Page and Navigation</emphasis>.</para><para>2. Select a Group navigation in the list on the left pane (eg: group:platform/administrator's Nav). All pages of this group will be listed underneath.</para><para>3. Right click the blank space on the left pane and select <emphasis role="bold">Edit Navigation</emphasis> in the context menu:</para><mediaobject><imageobject><imagedata fileref="images/EditGroupNavigation.png" format="PNG"></imagedata></imageobject></mediaobject><para>The form for editing the group navigation will be opened:</para><mediaobject><imageobject><imagedata fileref="images/EditGroupNavigation2.png" format="PNG"></imagedata></imageobject></mediaobject><para>4. Make changes for two fields: <emphasis role="bold">Description</emphasis> and <emphasis role="bold">Priority</emphasis>.</para><para><emphasis><emphasis role="bold">Notice</emphasis></emphasis>: The number that users select in the <emphasis role="bold">Priority</emphasis> field is the priority of a page navigation on the Navigation bar.</para><para>5. Click the <emphasis role="bold">Save</emphasis> button to accept any changes.</para><para>6. Click the!images/OKIcon.png! to take effect new changes on the Navigation bar.</para><para>Or click the <emphasis role="bold">Cancel</emphasis> button to quit without saving any change.</para>
+<section><title>User's page navigation</title></section>
+
+<section><title>Creating a user's navigation</title></section>
+<para>The page navigation of a user is created automatically when a user is created (registered). So an administrator don't have to create it.</para>
+<section><title>Editing a user's navigation</title></section>
+<para>Only the user who is the owner of the user page navigation can edit it.</para>
+<section><title>Deleting a user's navigation</title></section>
+<para>No one can create user's page navigation so that no one can delete it. A user's navigation is deleted automatically when its user is deleted.</para>
+</section>

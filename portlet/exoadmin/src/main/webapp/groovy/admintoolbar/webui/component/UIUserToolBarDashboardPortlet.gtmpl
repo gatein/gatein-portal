@@ -1,0 +1,124 @@
+<%
+	import org.exoplatform.portal.config.model.PageNavigation;
+	import org.exoplatform.portal.config.model.PageNode;
+	import org.exoplatform.web.application.JavascriptManager;
+	import org.exoplatform.portal.webui.util.Util ;
+	import org.exoplatform.webui.organization.OrganizationUtils;
+	
+	def rcontext = _ctx.getRequestContext() ;
+	JavascriptManager jsmanager = rcontext.getJavascriptManager();
+	jsmanager.importJavascript('eXo.portal.UIPortalNavigation');
+	jsmanager.importJavascript('eXo.portal.UIAdminToolbar');
+	jsmanager.addCustomizedOnLoadScript('eXo.portal.UIAdminToolbar.onLoad("' + uicomponent.id + '");');
+	
+	def currentUserNavigation = uicomponent.getCurrentUserNavigation();
+	def portalURI = Util.getPortalRequestContext().getPortalURI();
+	void renderDashboards(){
+		PageNavigation userNavigation = uicomponent.getCurrentUserNavigation();
+		if(userNavigation == null){
+			return;
+		}
+		
+		nodes = userNavigation.getNodes();
+		int size = nodes.size();
+		if(size < 1){
+			return;
+		}
+		String clazz = "";
+		
+		print """
+			<div style="position: absolute; display:none" class="MenuItemContainer">
+				<div class="SubBlock">
+		""";
+					for(int i = 0; i < size; i++) {
+						renderPageNode( nodes.get(i), i%2 == 0);
+					}
+		print """
+				</div>
+			</div>
+		""" ;
+	}
+	
+	void renderPageNode(PageNode node, boolean flag) {
+		PageNode selectedNode = uicomponent.getSelectedPageNode();
+		String tabStyleNavigation = "";
+		if(selectedNode != null && node.getUri() == selectedNode.getUri()) {			 
+				tabStyleNavigation = "SelectedItem";
+		}
+		
+		boolean hasChild = (node.getChildren() != null && node.getChildren().size() > 0);
+		String clazz = "";
+		if(hasChild) clazz = "ArrowIcon";
+		String	href = Util.getPortalRequestContext().getPortalURI() + node.getUri();
+		String icon = node.getIcon();
+		if(icon == null) icon = "DefaultPageIcon";
+		boolean toolong = (node.resolvedLabel.length() > 60);
+		String label = ( toolong ? node.resolvedLabel.substring(0, 57) + "..." : node.resolvedLabel);
+		String title = "";
+		if(toolong) title = "title='$node.resolvedLabel'";
+		else title = "";
+		print """
+			<div class="MenuItem $tabStyleNavigation">
+				<div class="$clazz">
+		""";
+						if(node.pageReference != null) {
+								print """<a class="ItemIcon $icon" href="$href" $title>$label</a>""";
+						} else {
+								print """<a class="ItemIcon $icon" href="#" $title>$label</a>""";
+						}
+		print """
+				</div>
+		""" ;
+		if(hasChild) {
+			print """
+				<div class="MenuItemContainer" style="position: absolute; display:none">			
+					<div class="SubBlock">
+			""" ;
+				for(int j = 0; j < node.getChildren().size(); j++) {
+					renderPageNode(node.getChildren().get(j), j%2 == 0);
+				}
+			print """
+					</div>
+				</div>
+			""" ;
+			
+		}
+		print """
+			</div>
+		""" ;			
+	}	
+%>
+
+<% 
+	String defaultDashboardPage;				
+	if(currentUserNavigation.getNodes() ==null || currentUserNavigation.getNodes().size() < 1){ 
+		defaultDashboardPage = org.exoplatform.toolbar.webui.component.UIUserToolBarDashboardPortlet.DEFAULT_TAB_NAME;
+%>
+	<div class="UIUserToolBarDashboardPortlet" id="$uicomponent.id">	
+		<div class="UIHorizontalTabs">
+			<div class="TabsContainer" style="position: relative">
+				<div class="UITab NormalToolbarTab">
+					<div class="">
+						<a class="DashboardIcon TBIcon" href="<%= uicomponent.url("AddDefaultDashboard", defaultDashboardPage); %>">Dashboard</a>
+					</div>
+				</div>
+			</div>
+		</div>	
+	</div>	
+<% 
+	}else{
+		defaultDashboardPage = currentUserNavigation.getNodes().get(0).getName();	
+%>
+	<div class="UIUserToolBarDashboardPortlet" id="$uicomponent.id">	
+		<div class="UIHorizontalTabs">
+			<div class="TabsContainer" style="position: relative">
+				<div class="UITab NormalToolbarTab">
+						<div class="">
+								<a class="DashboardIcon TBIcon" href="<%= portalURI + defaultDashboardPage %>">Dashboard</a>
+						</div>
+						<% renderDashboards(); %>
+				</div>
+			</div>
+		</div>	
+	</div>		
+<% } %>

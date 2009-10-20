@@ -1,0 +1,47 @@
+<%
+	import org.exoplatform.portal.application.PortalRequestContext;
+	import org.exoplatform.portal.webui.util.Util;
+	
+	def prContext = _ctx.getRequestContext().getParentAppRequestContext();	
+	String signInAction = "if(document.getElementById('UIMaskWorkspace')) ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'ShowLoginForm', true));" ;
+	String changeLanguageAction = "if(document.getElementById('UIMaskWorkspace')) ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'ChangeLanguage', true));" ;
+	String portletId = uicomponent.getId() ;	
+	String accountSetting = "javascript:if(document.getElementById('UIMaskWorkspace')) ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'AccountSettings', true));"
+%>	
+<div id="$portletId" class="UIBannerPortlet UIApplication">
+	<div class="ApplicationMinWidth">
+		<div class="InlineContainer">
+			<div class="LeftBanner">
+				<div class="RightBanner">				
+					<%if(prContext.getRemoteUser() != null) {%>
+					<div class="MiddleBanner">
+						<div class="BannerTitle"><span></span></div>
+					<%} else {
+						String registerURI = Util.getPortalRequestContext().getPortalURI() + "register";
+					%>
+					<div class="MiddleBanner MiddleBannerSignin">
+						<div class="BannerTitle"><span></span></div>
+						<div class="LeftLoginContainer">
+							<div class="RightLoginContainer">
+								<div class="MiddleLoginContainer Signin">
+									<a class="Login" onclick="$signInAction"><%=_ctx.appRes("UILoginForm.label.Signin")%></a>
+									<a class="Register" href="$registerURI">
+										<%=_ctx.appRes("UIBannerPortlet.action.Register")%>
+									</a>						
+									<a class="Language" onclick="$changeLanguageAction">
+										<%=_ctx.appRes("UIBannerPortlet.action.changeLanguage")%>
+									</a>		
+									<div class="ClearBoth"><span></span></div>
+								</div>
+							</div>
+							<div class="ClearBoth"><span></span></div>
+						</div>
+					<%}%>	 
+						<div class="ClearBoth"><span></span></div>
+					</div>									
+				</div>	 
+			</div>
+		</div>
+	</div>
+</div>
+

@@ -1,0 +1,16 @@
+<%	
+	import org.exoplatform.services.organization.User;
+		
+	def rcontext = _ctx.getRequestContext();
+	
+	String accountSetting = "javascript:if(document.getElementById('UIMaskWorkspace')) ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'AccountSettings', true));"
+%>
+<div class="UIUserInfoPortlet" id="$uicomponent.id">
+	<div class="Name">
+	<% if(rcontext.getRemoteUser() != null) { %>
+		<a href="$accountSetting"><%=uicomponent.getUser().getFullName()%></a>
+	<%} else {%>
+		<span></span>
+	<%}%>
+	</div>
+</div>

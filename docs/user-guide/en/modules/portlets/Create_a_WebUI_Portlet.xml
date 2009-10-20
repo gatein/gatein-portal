@@ -1,0 +1,182 @@
+<!--
+
+    Copyright (C) 2009 eXo Platform SAS.
+    
+    This is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Lesser General Public License as
+    published by the Free Software Foundation; either version 2.1 of
+    the License, or (at your option) any later version.
+    
+    This software is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+    Lesser General Public License for more details.
+    
+    You should have received a copy of the GNU Lesser General Public
+    License along with this software; if not, write to the Free
+    Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+    02110-1301 USA, or see the FSF site: http://www.fsf.org.
+
+-->
+
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook V4.4//EN" "http://www.oasis-open.org/docbook/sgml/4.4/docbookx.dtd">
+<section>
+	<title>Create a WebUI Portlet</title>
+	<section>
+		<title>Overview</title>
+	</section>
+	<para>This example is based on the testPortlet in
+		portal/trunk/portlet/test.</para>
+	<section>
+		<title>Configure the portlet</title>
+	</section>
+
+	<section>
+		<title>Folder tree</title>
+	</section>
+	<para>On Eclipse, create a new Java Project, and create this folder
+		tree :</para>
+	<para>&lt;pre&gt; src |  main |   |-  java |   |-  resources |   |-  webapp &lt;/pre&gt;</para>
+<section><title>pom.xml</title></section>
+<para>Create the pom.xml, at root level of the project, like this :</para><programlisting>&lt;project&gt;
+  &lt;parent&gt;
+    &lt;groupId&gt;org.exoplatform.portal&lt;/groupId&gt;
+    &lt;artifactId&gt;config&lt;/artifactId&gt;
+    &lt;version&gt;trunk&lt;/version&gt;
+  &lt;/parent&gt;
+  &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+  &lt;artifactId&gt;exo.portal.portlet.testRomain&lt;/artifactId&gt;
+  &lt;packaging&gt;war&lt;/packaging&gt;
+  &lt;version&gt;${org.exoplatform.portal.version}&lt;/version&gt;
+  &lt;name&gt;exo-portal.portlets.test Romain&lt;/name&gt;
+  &lt;url&gt;http://www.exoplatform.org&lt;/url&gt;
+  &lt;description&gt;Romain Test Portlet&lt;/description&gt;
+  &lt;dependencies&gt;
+    &lt;dependency&gt;
+      &lt;groupId&gt;org.exoplatform.portal&lt;/groupId&gt;
+      &lt;artifactId&gt;exo.portal.webui.portal&lt;/artifactId&gt;
+      &lt;version&gt;${org.exoplatform.portal.version}&lt;/version&gt;
+      &lt;scope&gt;provided&lt;/scope&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+      &lt;groupId&gt;org.exoplatform.portal&lt;/groupId&gt;
+      &lt;artifactId&gt;exo.portal.webui.GateIn&lt;/artifactId&gt;
+      &lt;version&gt;${org.exoplatform.portal.version}&lt;/version&gt;
+      &lt;scope&gt;provided&lt;/scope&gt;
+    &lt;/dependency&gt;
+  &lt;/dependencies&gt;
+  &lt;build&gt;
+    &lt;finalName&gt;testRomain&lt;/finalName&gt;
+  &lt;/build&gt;
+&lt;/project&gt;
+</programlisting><para>1.1 UITestRomainPortlet.java</para><para>In java/testRomain/portlet/component/, we will create the UITestRomainPortlet.java file of the portlet :</para><programlisting>package testRomain.portlet.component;
+import org.exoplatform.webui.config.annotation.ComponentConfig;
+import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
+import org.exoplatform.webui.core.UIPortletApplication;
+//this part is configuration of the portlet, we set the path to the template groovy.
+ @ComponentConfig(
+    lifecycle = UIApplicationLifecycle.class,
+    template = &quot;app:/groovy/testRomain/portlet/UITestRomainPortlet.gtmpl&quot;
+  )
+public class UITestRomainPortlet extends UIPortletApplication {
+ 
+  public UITestRomainPortlet() throws Exception {   
+  }
+}
+</programlisting>
+<section><title>testRomain.xml</title></section>
+<para>In src/main/resources/tomcat/, create a testRomain.xml file : {code} &lt;Context path=&quot;/test&quot; docBase=&quot;../../../GateInProjects/portal/trunk/portlet/testPortletRomain/src/main/webapp&quot; debug=&quot;0&quot; reloadable=&quot;true&quot; /&gt; {code}</para><para>docBase must be set to webapp path of the portlet when you are in the tomcat bin directory.</para>
+<section><title>Portlet Groovy Template</title></section>
+<para>In src/main/webapp, create the groovy template for the portlet. The path to this file must match the path you set in the java file, in our case :   groovy/testRomain/portlet/UITestRomainPortlet.gtmpl</para><programlisting>&lt;div id=&quot;&lt;%=uicomponent.getId();%&gt;&quot;&gt;
+	HelloWorld!images/!!
+&lt;/div&gt;
+</programlisting>
+<section><title>Skin Folder</title></section>
+<para>Create the folder skin in src/main/webapp. We don't fill it now, but in this folder, you can put css stylesheet and images.</para>
+<section><title>Locale Folder</title></section>
+<para>Create the folder WEB-INF/classes/locale in src/main/webapp. We don't fill it now, but in this folder, you can put language properties files. See <link linkend="Internationalization Configuration">Internationalization Configuration</link>.</para>
+<section><title>configuration.xml</title></section>
+<para>Create the file configuration.xml in WEB-INF/conf/portlet/testPortletRomain/. Content of tag &lt;ui-component-root&gt; must match your package organization.</para><programlisting>&lt;webui-configuration&gt;   
+  &lt;application&gt;     
+    &lt;ui-component-root&gt;testRomain.portlet.component.UITestRomainPortlet&lt;/ui-component-root&gt;
+    &lt;state-manager&gt;org.exoplatform.webui.application.portlet.ParentAppStateManager&lt;/state-manager&gt;
+  &lt;/application&gt;
+&lt;/webui-configuration&gt;
+</programlisting><para>1.1 portlet.xml</para><para>In WEB-INF, create file portlet.xml :</para><programlisting>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;portlet-app version=&quot;1.0&quot; xmlns=&quot;http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd&quot;
+             xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+             xsi:schemaLocation=&quot;http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd&quot;&gt; 
+  &lt;portlet&gt;
+    &lt;description xml:lang=&quot;EN&quot;&gt;Test Portlet Romain&lt;/description&gt;
+    &lt;portlet-name&gt;TestRomain&lt;/portlet-name&gt;
+    &lt;display-name xml:lang=&quot;EN&quot;&gt;Test Portlet Romain&lt;/display-name&gt;
+    &lt;portlet-class&gt;org.exoplatform.webui.application.portlet.PortletApplicationController&lt;/portlet-class&gt;
+    &lt;init-param&gt;
+      &lt;name&gt;webui.configuration&lt;/name&gt;
+      &lt;!-- must match the path to configuration file --&gt;
+      &lt;value&gt;/WEB-INF/conf/portlet/testPortletRomain/configuration.xml&lt;/value&gt;
+    &lt;/init-param&gt;    
+    &lt;expiration-cache&gt;0&lt;/expiration-cache&gt;
+    &lt;supports&gt;
+      &lt;mime-type&gt;text/html&lt;/mime-type&gt;
+      &lt;portlet-mode&gt;help&lt;/portlet-mode&gt;
+    &lt;/supports&gt;
+    &lt;supported-locale&gt;en&lt;/supported-locale&gt;
+    &lt;resource-bundle&gt;locale.testRomainPortlet&lt;/resource-bundle&gt;     
+    &lt;portlet-info&gt;
+      &lt;title&gt;TestPortletRomain&lt;/title&gt;
+      &lt;short-title&gt;TestPortlet&lt;/short-title&gt;
+      &lt;keywords&gt;test&lt;/keywords&gt;
+    &lt;/portlet-info&gt;     
+  &lt;/portlet&gt;
+&lt;/portlet-app&gt;
+</programlisting>
+<section><title>web.xml</title></section>
+<para>In WEB-INF, create file web.xml :</para><programlisting>&lt;?xml version=&quot;1.0&quot; encoding=&quot;ISO-8859-1&quot;?&gt;
+&lt;!DOCTYPE web-app PUBLIC &quot;-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN&quot; &quot;http://java.sun.com/dtd/web-app_2_3.dtd&quot;&gt;
+&lt;web-app&gt; 
+  &lt;!-If define the Portlet Application name MUST end with .par-&gt; 
+  &lt;display-name&gt;test&lt;/display-name&gt;
+  &lt;description&gt; This application is a portlet. It can not be used outside a portal. 
+  This web.xml file is mandatory in each .par archive file. &lt;/description&gt;
+  &lt;listener&gt; 
+    &lt;listener-class&gt;org.exoplatform.services.portletcontainer.impl.servlet.PortletApplicationListener&lt;/listener-class&gt;
+  &lt;/listener&gt;
+  &lt;servlet&gt;
+    &lt;servlet-name&gt;PortletWrapper&lt;/servlet-name&gt;
+	&lt;servlet-class&gt;org.exoplatform.services.portletcontainer.impl.servlet.ServletWrapper&lt;/servlet-class&gt;
+  &lt;/servlet&gt;
+  &lt;servlet-mapping&gt;
+    &lt;servlet-name&gt;PortletWrapper&lt;/servlet-name&gt;
+	&lt;url-pattern&gt;/PortletWrapper&lt;/url-pattern&gt;
+  &lt;/servlet-mapping&gt;
+&lt;/web-app&gt; 
+</programlisting><para>1 Use the Portlet</para><para>Compile your portlet, deploy it, and add it to the portal.</para><para>Now, we will add a button in the portlet. This button will open a popup with a message inside.</para><para>1.1 Add a button In the groovy template, add this code :</para><programlisting>&lt;div class=&quot;UIAction&quot;&gt; 
+  &lt;div class=&quot;ActionContainer&quot;&gt;
+    &lt;div class=&quot;ActionButton&quot;&gt; 
+      &lt;div class=&quot;LightBlueStyle&quot;&gt;
+        &lt;div class=&quot;ButtonLeft&quot;&gt;
+          &lt;div class=&quot;ButtonRight&quot;&gt;
+            &lt;div class=&quot;ButtonMiddle&quot;&gt;
+              &lt;a href=&quot;&lt;%=uicomponent.event(&quot;OpenPopup&quot;, &quot;&quot;)%&gt;&quot;&gt;Open Popup&lt;/a&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt; 
+&lt;/div&gt; 
+</programlisting><para>1.1 Add a listener In the java file, in @ComponentConfig, add this code :</para><programlisting>events = {
+	@EventConfig(listeners = UITestRomainPortlet.OpenPopupActionListener.class)
+}
+</programlisting><para>Remark : XXXActionLister.class XXX must match the name you set for the event in the groovy.</para><programlisting>static public class OpenPopupActionListener extends EventListener&lt;UITestRomainPortlet&gt; {
+    public void execute(Event&lt;UITestRomainPortlet&gt; event) throws Exception {
+        System.out.println(&quot;HelloWorld&quot;);
+    }
+}
+</programlisting><para>1.1 Redeploy</para><para>Redeploy the portlet and click on the button. You will see &quot;HelloWorld&quot; in your console. If you don't change in the portlet, try to redeploy and reboot the tomcat server.</para><para>1 Add a &quot;HelloWorld&quot; popup</para><para>Now, we will add a popup which say &quot;HelloWorld&quot; when you click on the button.</para><itemizedlist><listitem>First, create the groovy template of the popup : in webapp/groovy/testRomain/portlet, create UIHelloWorldPopupContent.gtmpl :</listitem></itemizedlist><programlisting>&lt;div id=&quot;&lt;%=uicomponent.getId();%&gt;&quot;&gt;
+	HelloWorld in a popup!images/!!
+&lt;/div&gt;
+</programlisting><itemizedlist><listitem>In java/testRomain/portlet/component, create the java file for the popup look like : {code} package testRomain.portlet.component;</listitem></itemizedlist><para>import org.exoplatform.webui.config.annotation.ComponentConfig; import org.exoplatform.webui.core.UIComponent; import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;</para><para>@ComponentConfig( lifecycle = UIApplicationLifecycle.class, template = &quot;app:/groovy/testRomain/portlet/UIHelloWorldPopupContent.gtmpl&quot; )</para><para>public class UIHelloWorldPopupContent extends UIComponent </para><para>public UIHelloWorldPopupContent() throws Exception { }{ } {code}</para><itemizedlist><listitem>In UITestRomainPortlet.java, we will create the popup at the portlet creation (in the constructor) : {code} public UITestRomainPortlet() throws Exception  UIPopupWindow popup = addChild(UIPopupWindow.class, null, null); popup.setWindowSize(400, 300);</listitem></itemizedlist><para>{UIHelloWorldPopupContent popupContent = createUIComponent(UIHelloWorldPopupContent.class, null, null); popup.setUIComponent(popupContent); popup.setRendered(false); } {code}</para><para>At the beginning, we set the popup not visible. As you see, we add a children to the Portlet. So, if we want to see the content of it, we must add this in UITestPortletRomain.gtmpl :</para><programlisting>&lt;% uicomponent.renderChildren(); %&gt;
+</programlisting><para>This makes the portlet generate the content of all child components.</para><itemizedlist><listitem>Change the treatment of the event, replace the println by : {code} public static class OpenPopupActionListener extends EventListener&lt;UITestRomainPortlet&gt;  public void execute(Event&lt;UITestRomainPortlet&gt; event) throws Exception { UITestRomainPortlet portlet = event.getSource(); UIPopupWindow popup = portlet.getChild(UIPopupWindow.class); popup.setRendered(true); popup.setShow(true); }{ } {code}</listitem></itemizedlist><para>When user clicks on the button, the popup is shown.</para><itemizedlist><listitem>Redeploy the portlet and click on the button. You will see &quot;HelloWorld in a popup&quot; in a popup. If you don't change in the portlet, try to redeploy and reboot the tomcat server.</listitem></itemizedlist>
+</section>

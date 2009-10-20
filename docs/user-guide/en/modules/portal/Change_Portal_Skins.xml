@@ -1,0 +1,47 @@
+<!--
+
+    Copyright (C) 2009 eXo Platform SAS.
+    
+    This is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Lesser General Public License as
+    published by the Free Software Foundation; either version 2.1 of
+    the License, or (at your option) any later version.
+    
+    This software is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+    Lesser General Public License for more details.
+    
+    You should have received a copy of the GNU Lesser General Public
+    License along with this software; if not, write to the Free
+    Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+    02110-1301 USA, or see the FSF site: http://www.fsf.org.
+
+-->
+
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook V4.4//EN" "http://www.oasis-open.org/docbook/sgml/4.4/docbookx.dtd">
+<section>
+	<title>Change Portal Skins</title>
+	<section>
+		<title>Overview</title>
+	</section>
+	<para>GateIn Portal skins are graphic styles that help users display an
+		attractive user interface. Each skin has its own characteristics with
+		different backgrounds, icons, etc. In order to be user-friendly and
+		flexible in use, users are allowed to change their skins without
+		having edit rights on the portal.</para>
+	<orderedlist numeration="arabic">
+		<listitem>skin switch that takes only effect on the user's current
+			session until he signs out. You can change the skin permanently or
+			temporarily.</listitem>
+	</orderedlist>
+	<section>
+		<title>Change the skin permanently</title>
+	</section>
+	<para>
+		1. Go to
+		<emphasis role="bold">GateIn Start</emphasis>
+		-&gt; <emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Advanced</emphasis> --&gt; <emphasis role="bold">Edit Current portal</emphasis></para><para>2. Click the edit icon!images/EditIcon.png! to edit portal properties.</para><para>3. In the <emphasis role="bold">Portal Setting</emphasis> tab: select one skin type in the <emphasis role="bold">Skin</emphasis> list field to change and display a skin.</para><mediaobject><imageobject><imagedata fileref="images/Skin1.png" format="PNG"></imagedata></imageobject></mediaobject><para>4. Click <emphasis role="bold">Save</emphasis> and <emphasis role="bold">Finish</emphasis> icon  !images/Finish1.png!   so that the modification can take effect.</para><variablelist><listitem>For Portal 2.6</listitem></variablelist><para>1. Click <emphasis role="bold">Edit Inline</emphasis> on the Toolbar. The <emphasis role="bold">Edit Inline Composer</emphasis> will appear.</para><para>2. Click <emphasis role="bold">Portal Properties</emphasis> to edit portal's properties.</para><para>3. In the <emphasis role="bold">Portal Setting</emphasis> tab: select one skin type in the <emphasis role="bold">Skin</emphasis> list field to change and display a skin.</para><mediaobject><imageobject><imagedata fileref="images/PortalSet.png" format="PNG"></imagedata></imageobject></mediaobject><para>4. Click <emphasis role="bold">Save</emphasis> and the !images/DiskIcon.png!  icon so that the modification can take effect.</para>
+<section><title>Change the skin temporarily</title></section>
+<para>1. Go to  <emphasis role="bold">GateIn Start</emphasis> -&gt; <emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Skin Settings</emphasis>.</para><variablelist><listitem>For GateIn Portal 2.6</listitem></variablelist><para>1. Go to <emphasis role="bold">GateIn</emphasis> on the Toolbar --&gt; click <emphasis role="bold">Change Skin</emphasis>.</para><para>The <emphasis role="bold">Skin Setting</emphasis> form is displayed with a list of all supported skins. The left pane contains the skin list and the right pane is used to display the template of the selected skin.</para><para>2. Select one by clicking on the skin's name.</para><para>3. Click the <emphasis role="bold">Apply</emphasis> button and wait for few seconds to take effect.</para><mediaobject><imageobject><imagedata fileref="images/SkinSet1.png" format="PNG"></imagedata></imageobject></mediaobject>
+</section>

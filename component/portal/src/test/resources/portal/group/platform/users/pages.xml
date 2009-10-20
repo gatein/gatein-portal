@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+
+    Copyright (C) 2009 eXo Platform SAS.
+    
+    This is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Lesser General Public License as
+    published by the Free Software Foundation; either version 2.1 of
+    the License, or (at your option) any later version.
+    
+    This software is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+    Lesser General Public License for more details.
+    
+    You should have received a copy of the GNU Lesser General Public
+    License along with this software; if not, write to the Free
+    Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+    02110-1301 USA, or see the FSF site: http://www.fsf.org.
+
+-->
+
+<page-set>
+  
+  <page>
+  	<page-id>group::/platform/users::dashboard</page-id>
+  	<owner-type>group</owner-type>
+    <owner-id>/platform/users</owner-id>
+    <name>dashboard</name>
+    <title>Dashboard</title>
+    <access-permissions>*:/platform/users</access-permissions>
+    <edit-permission>*:/platform/administrators</edit-permission>
+    <application>
+      <instance-id>group#/platform/users:/dashboard/DashboardPortlet/Dashboard</instance-id>
+      <title>Dashboard</title>
+      <show-info-bar>false</show-info-bar>
+    </application>   
+  </page>
+  
+  <page>
+  	<page-id>group::/platform/users::webexplorer</page-id>
+  	<owner-type>group</owner-type>
+    <owner-id>/platform/users</owner-id>
+    <name>webexplorer</name>
+    <title>Web Explorer</title>
+    <access-permissions>*:/platform/users</access-permissions>
+    <edit-permission>*:/platform/administrators</edit-permission>
+    <application>
+      <instance-id>group#/platform/users:/web/BrowserPortlet/WebExplorer</instance-id>
+      <title>Web Explorer</title>
+      <show-info-bar>false</show-info-bar>
+    </application>  
+  </page>               
+       
+  <page>
+  	<page-id>group::/platform/users::mylink-blog</page-id>
+  	<owner-type>group</owner-type>
+    <owner-id>/platform/users</owner-id>
+    <name>mylink-blog</name>
+    <title>Blog</title>
+    <access-permissions>*:/platform/users</access-permissions>
+    <edit-permission>*:/platform/administrators</edit-permission>
+    <application>
+      <instance-id>group#/platform/users:/web/IFramePortlet/blog</instance-id>
+      <title>Blog</title>
+      <show-info-bar>true</show-info-bar>
+      <show-application-state>true</show-application-state>
+      <show-application-mode>true</show-application-mode>
+    </application>  
+  </page>
+  
+  <page>
+  	<page-id>group::/platform/users::mylink-google</page-id>
+  	<owner-type>group</owner-type>
+    <owner-id>/platform/users</owner-id>
+    <name>mylink-google</name>
+    <title>Google</title>
+    <access-permissions>*:/platform/users</access-permissions>
+    <edit-permission>*:/platform/administrators</edit-permission>
+    <application>
+      <instance-id>group#/platform/users:/web/IFramePortlet/google</instance-id>
+      <title>Google</title>
+      <show-info-bar>false</show-info-bar>
+      <show-application-state>true</show-application-state>
+      <show-application-mode>true</show-application-mode>
+    </application>  
+  </page>
+  
+  <page>
+  	<page-id>group::/platform/users::mylink-facebook</page-id>
+  	<owner-type>group</owner-type>
+    <owner-id>/platform/users</owner-id>
+    <name>mylink-facebook</name>
+    <title>FaceBook</title>
+    <access-permissions>*:/platform/users</access-permissions>
+    <edit-permission>*:/platform/administrators</edit-permission>
+    <application>
+      <instance-id>group#/platform/users:/web/IFramePortlet/facebook</instance-id>
+      <title>FaceBook</title>
+      <show-info-bar>false</show-info-bar>
+      <show-application-state>true</show-application-state>
+      <show-application-mode>true</show-application-mode>
+    </application>  
+  </page>
+  
+  <page>
+  	<page-id>group::/platform/users::sitemap</page-id>
+    <owner-type>group</owner-type>
+    <owner-id>/platform/users</owner-id>
+    <name>sitemap</name>
+    <title>Site Map</title>
+	  <access-permissions>*:/platform/users</access-permissions>
+	  <edit-permission>*:/platform/administrators</edit-permission>
+	  <application>
+      <instance-id>group#/platform/users:/web/SiteMapPortlet/sitemapportlet</instance-id>
+      <title>SiteMap</title>
+      <show-info-bar>false</show-info-bar>      
+    </application>          
+  </page>
+</page-set>
+

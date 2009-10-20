@@ -1,0 +1,47 @@
+<!--
+
+    Copyright (C) 2009 eXo Platform SAS.
+    
+    This is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Lesser General Public License as
+    published by the Free Software Foundation; either version 2.1 of
+    the License, or (at your option) any later version.
+    
+    This software is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+    Lesser General Public License for more details.
+    
+    You should have received a copy of the GNU Lesser General Public
+    License along with this software; if not, write to the Free
+    Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+    02110-1301 USA, or see the FSF site: http://www.fsf.org.
+
+-->
+
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook V4.4//EN" "http://www.oasis-open.org/docbook/sgml/4.4/docbookx.dtd">
+<section>
+	<title>Setup a Gadget Server</title>
+	<section>
+		<title>Setup virtual servers for the gadget rendering</title>
+	</section>
+	<para>GateIn recommend you to setup 2 different virtual hosts
+		because it's the basis of the security model of gadgets. Having the
+		gadget running on a different domain than the container (the website
+		that 'contains' the app), the gadget can't read / modify / do anything
+		nasty to GateIn Portal (like adding spam messages, stealing your
+		cookies, whatever).</para>
+	<para>
+		For example you can server the portal from
+		<emphasis role="bold">http://www.sample.com</emphasis>
+		and the gadgets from
+		<emphasis role="bold">http://www.samplemodules.com</emphasis>
+	</para>
+	<para>
+		To do this, we need to configure a parameter with the name is
+		<emphasis>gadgets.hostName</emphasis>
+		, the value is the
+		<emphasis>path/to/gadgetServer</emphasis>
+		in GadgetRegisteryService service like following : {code:xml} &lt;component&gt; &lt;key&gt;org.exoplatform.application.gadget.GadgetRegistryService&lt;/key&gt; &lt;type&gt;org.exoplatform.application.gadget.jcr.GadgetRegistryServiceImpl&lt;/type&gt; &lt;init-params&gt; &lt;value-param&gt; &lt;name&gt;gadgets.hostName&lt;/name&gt; &lt;description&gt;Gadget server url&lt;/description&gt; &lt;value&gt;http://localhost:8080/GateInGadgetServer/gadgets/&lt;/value&gt; &lt;/value-param&gt; &lt;/init-params&gt; &lt;/component&gt; {code}</para><orderedlist numeration="arabic"><listitem>warning(&quot;it is only possible since Portal 2.6&quot;)</listitem></orderedlist><para>It's possible to have multiple rendering servers. That would help to balance the load across multiple servers.</para><para>If you still want to deploy it on the same server, make sure that it starts before anything that use the gadgets (for example the webapp GateInGadgets that use org.exoplatform.application.gadget.GadgetRegister)</para><para>1 Config 1.1 Security key A file <emphasis role="bold">key.txt</emphasis> has to be generated <emphasis role="bold">for every installation of GateIn to be secure</emphasis>. This file contains a secret key used to crypt the security token used for authenticating the user. in Tomcat this file is in nix command line will create an excellent key:</para><programlisting>dd if=/dev/random bs=32 count=1  | openssl base64 &gt; /tmp/key.txt
+</programlisting><para>1.1 Gadget proxy and concat configuration These servers have to be on the same domain as the gadget server. you can configure it in {code}<link linkend="&quot;link&quot;, &quot;script&quot;, &quot;embed&quot;, &quot;img&quot;, &quot;style&quot;">&quot;link&quot;, &quot;script&quot;, &quot;embed&quot;, &quot;img&quot;, &quot;style&quot;</link>{, &quot;expires&quot;: &quot;86400&quot;, &quot;proxy-url&quot;: &quot;http://localhost:8080/GateInGadgetServer/gadgets/proxy?url=&quot;, &quot;concat-url&quot;: &quot;http://localhost:8080/GateInGadgetServer/gadgets/concat?&quot; }{code}</para><para>1.1 Proxy if your server is behind a proxy and you want to allow external gadgets, you should configure the proxy of your JVM adding this code at the begining. {code}-Dhttp.proxyHost=proxyhostURL -Dhttp.proxyPort=proxyPortNumber -Dhttp.proxyUser=someUserName -Dhttp.proxyPassword=somePassword {code}</para>
+</section>

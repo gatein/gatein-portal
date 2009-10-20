@@ -1,0 +1,43 @@
+<!--
+
+    Copyright (C) 2009 eXo Platform SAS.
+    
+    This is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Lesser General Public License as
+    published by the Free Software Foundation; either version 2.1 of
+    the License, or (at your option) any later version.
+    
+    This software is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+    Lesser General Public License for more details.
+    
+    You should have received a copy of the GNU Lesser General Public
+    License along with this software; if not, write to the Free
+    Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+    02110-1301 USA, or see the FSF site: http://www.fsf.org.
+
+-->
+
+<?xml version="1.0" encoding="utf-8" ?> 
+<rss version="0.91">
+ <channel>
+  <title>cookiecrook: James Craig</title> 
+  <link>http://www.cookiecrook.com/</link> 
+  <description>Cookiecrook is James Craig, a graphic design, web, video, music, and technology junkie living in Austin, Texas. The site contains personal and professional information regarding his life and interests.</description> 
+  <language>en-us</language> 
+  <item>
+	  <title>This year I will...</title> 
+	  <link>http://cookiecrook.com/</link> 
+	  <description>A call to action... for myself.</description> 
+	  <pubDate>Sun, 01 Jan 2006 21:00:00 CST</pubDate> 
+  </item>
+  <item>
+	  <title>SXSW 2005 Panel Transcription… plus.</title> 
+	  <link>http://cookiecrook.com/2005/12/#cc112555374365313065</link> 
+	  <description>Finally, we finished the transcription (plus) for our SXSW 2005 panel, Accessibility, why can’t we all just get along? Whew… Glenda is a rock star for transcribing all that.</description> 
+	  <pubDate>Thu, 01 Sep 2005 00:38:00 CST</pubDate> 
+  </item>
+  <copyright>Copyright 2006, James Craig</copyright> 
+  </channel>
+</rss>

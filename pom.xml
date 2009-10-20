@@ -1,0 +1,320 @@
+<!--
+
+    Copyright (C) 2009 eXo Platform SAS.
+
+    This is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Lesser General Public License as
+    published by the Free Software Foundation; either version 2.1 of
+    the License, or (at your option) any later version.
+
+    This software is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+    Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public
+    License along with this software; if not, write to the Free
+    Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+    02110-1301 USA, or see the FSF site: http://www.fsf.org.
+
+-->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+   <modelVersion>4.0.0</modelVersion>
+
+   <parent>
+      <groupId>org.gatein</groupId>
+      <artifactId>gatein-parent</artifactId>
+      <version>1.0.0-Beta03</version>
+   </parent>
+
+   <groupId>org.exoplatform.portal</groupId>
+   <artifactId>exo.portal.parent</artifactId>
+   <version>3.0.0-Beta02</version>
+   <packaging>pom</packaging>
+
+   <name>GateIn Portal</name>
+
+   <distributionManagement>
+      <repository>
+         <id>repository.exoplatform.org</id>
+         <url>${gatein.releases.repo.url}</url>
+      </repository>
+      <snapshotRepository>
+         <id>repository.exoplatform.org</id>
+         <url>${gatein.snapshots.repo.url}</url>
+      </snapshotRepository>
+   </distributionManagement>
+
+   <properties>
+      <!-- Repositories URLs -->
+      <gatein.releases.repo.url>http://repository.exoplatform.org/content/repositories/exo-releases/</gatein.releases.repo.url>
+      <gatein.snapshots.repo.url>http://repository.exoplatform.org/content/repositories/exo-snapshots/</gatein.snapshots.repo.url>
+
+      <org.exoplatform.kernel.version>2.2.0-Beta02</org.exoplatform.kernel.version>
+      <org.exoplatform.core.version>2.3.0-Beta02</org.exoplatform.core.version>
+      <org.exoplatform.ws.version>2.1.0-Beta02</org.exoplatform.ws.version>
+      <org.exoplatform.jcr.version>1.12.0-Beta02</org.exoplatform.jcr.version>
+      <org.jibx.version>1.2.1</org.jibx.version>
+      <org.shindig.version>SNAPSHOT-r790473</org.shindig.version>
+      <org.gatein.common.version>2.0.0-Beta03</org.gatein.common.version>
+      <org.gatein.wci.version>2.0.0-Beta02</org.gatein.wci.version>
+      <org.gatein.pc.version>2.1.0-Beta02</org.gatein.pc.version>
+      <org.jboss.identity.idm>1.0.0.Beta3</org.jboss.identity.idm>
+      <org.gatein.wsrp.version>1.0.0-Beta01</org.gatein.wsrp.version>
+      <org.gatein.mop.version>1.0.0-Beta09</org.gatein.mop.version>
+      <version.chromattic>1.0.0-beta5</version.chromattic>
+      <version.reflect>1.0.0-beta3</version.reflect>
+   
+      <!-- ************** -->
+      <!-- Build settings -->
+      <!-- ************** -->
+   
+      <!-- maven-enforcer-plugin -->
+      <jdk.min.version>1.6</jdk.min.version>
+
+      <!-- maven-release-plugin -->
+      <arguments>-Prelease,pkg-tomcat,pkg-jbossas -Dexo.test.skip=true</arguments>       
+        
+  </properties>
+  
+   <scm>
+      <connection>scm:svn:http://svn.exoplatform.org/projects/gatein/portal/trunk</connection>
+      <developerConnection>scm:svn:http://svn.exoplatform.org/projects/gatein/portal/trunk</developerConnection>
+      <url>http://fisheye.exoplatform.org/browse/projects/gatein/portal/trunk</url>
+   </scm>
+
+   <modules>
+      <module>component</module>
+      <module>gadgets</module>
+      <module>webui</module>
+      <module>portlet</module>
+      <module>web</module>
+      <module>server</module>
+      <module>sample</module>
+      <module>starter</module>
+      <module>packaging</module>
+   </modules>
+
+   <dependencies>
+      <dependency>
+         <groupId>org.slf4j</groupId>
+         <artifactId>slf4j-simple</artifactId>
+         <version>1.5.6</version>
+         <scope>test</scope>
+      </dependency>
+   </dependencies>
+   
+   <build>
+      <resources>
+         <resource>
+            <directory>src/main/java</directory>
+            <includes>
+               <include>**/*.properties</include>
+               <include>**/*.xml</include>
+            </includes>
+         </resource>
+      </resources>
+      <testResources>
+         <testResource>
+            <directory>src/test/java</directory>
+            <includes>
+               <include>**/*.properties</include>
+               <include>**/*.xml</include>
+               <include>**/*.jstmpl</include>
+            </includes>
+         </testResource>
+         <testResource>
+            <directory>src/test/resources</directory>
+         </testResource>
+      </testResources>
+      <pluginManagement>
+         <plugins>
+            <plugin>
+                 <groupId>org.codehaus.mojo</groupId>
+                 <artifactId>exec-maven-plugin</artifactId>
+                 <version>1.1.1</version>
+            </plugin>
+            <plugin>
+               <groupId>org.apache.maven.plugins</groupId>
+               <artifactId>maven-surefire-plugin</artifactId>
+               <configuration>
+                  <skip>${exo.test.skip}</skip>
+                  <forkMode>pertest</forkMode>
+                  <!--once , pertest -->
+                  <testFailureIgnore>${exo.test.failure.ignore}</testFailureIgnore>
+                  <includes>
+                     <include>**/${exo.test.includes}.java</include>
+                  </includes>
+                  <systemProperties>
+                     <property>
+                        <name>maven.exoplatform.dir</name>
+                        <value>${exo.directory.base}/projects/exo-platform</value>
+                     </property>
+                     <property>
+                        <name>mock.portal.dir</name>
+                        <value>${exo.projects.directory.src}/gatein/portal/trunk/web/portal/src/main/webapp</value>
+                     </property>
+                     <property>
+                        <name>org.apache.commons.logging.Log</name>
+                        <value>org.apache.commons.logging.impl.SimpleLog</value>
+                     </property>
+                     <property>
+                        <name>org.apache.commons.logging.simplelog.defaultlog</name>
+                        <value>info</value>
+                     </property>
+                     <property>
+                        <name>org.apache.commons.logging.simplelog.log.[eXo]</name>
+                        <value>debug</value>
+                     </property>
+                     <property>
+                        <name>org.apache.commons.logging.simplelog.log.net.hibernate</name>
+                        <value>warn</value>
+                     </property>
+                     <property>
+                        <name>java.naming.factory.initial</name>
+                        <value>org.exoplatform.services.naming.SimpleContextFactory</value>
+                     </property>
+                  </systemProperties>
+               </configuration>
+            </plugin>
+         </plugins>
+      </pluginManagement>
+      <plugins>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <executions>
+               <execution>
+                  <id>compile</id>
+                  <phase>compile</phase>
+                  <configuration>
+                     <tasks>
+                        <copy failonerror="false" todir="${project.build.directory}/${project.build.finalName}/WEB-INF/classes">
+                           <fileset dir="${basedir}/src/main/webapp/WEB-INF/classes">
+                              <include name="**/*_en.properties" />
+                           </fileset>
+                           <globmapper from="*_en.properties" to="*.properties" />
+                        </copy>
+                     </tasks>
+                  </configuration>
+                  <goals>
+                     <goal>run</goal>
+                  </goals>
+               </execution>
+            </executions>
+         </plugin>
+      </plugins>
+   </build>
+
+   <profiles>
+      <profile>
+         <id>bypass-failing-tests</id>
+         <build>
+            <plugins>
+               <plugin>
+                  <groupId>org.apache.maven.plugins</groupId>
+                  <artifactId>maven-surefire-plugin</artifactId>
+                  <configuration>
+                     <!-- Remove temporarly tests which are failing -->
+                     <excludes>
+                        <!-- /component/resources/ -->
+                        <!--<exclude>org/exoplatform/services/resources/test/TestResourceBundleService.java</exclude>-->
+                        <!-- /component/portal/ -->
+                        <exclude>org/exoplatform/portal/config/security/TestUserPageACL.java</exclude>
+                     </excludes>
+                  </configuration>
+               </plugin>
+            </plugins>
+         </build>
+      </profile>
+   </profiles>
+
+   <!-- To be removed and replaced by settings in user config -->
+   <repositories>
+      <repository>
+         <id>exo-int</id>
+         <url>http://maven2.exoplatform.org/rest/maven2</url>
+         <releases>
+            <enabled>true</enabled>
+         </releases>
+         <snapshots>
+            <enabled>false</enabled>
+         </snapshots>
+      </repository>
+      <repository>
+         <id>repository.jboss.org</id>
+         <url>http://repository.jboss.org/maven2</url>
+         <releases>
+            <enabled>true</enabled>
+         </releases>
+         <snapshots>
+            <enabled>false</enabled>
+         </snapshots>
+      </repository>
+      <repository>
+         <id>snapshots.jboss.org</id>
+         <url>http://snapshots.jboss.org/maven2</url>
+         <releases>
+            <enabled>false</enabled>
+         </releases>
+         <snapshots>
+            <enabled>true</enabled>
+         </snapshots>
+      </repository>
+      <repository>
+         <id>caja</id>
+         <url>http://google-caja.googlecode.com/svn/maven</url>
+         <releases>
+            <enabled>true</enabled>
+         </releases>
+         <snapshots>
+            <enabled>false</enabled>
+         </snapshots>
+      </repository>
+      <repository>
+         <id>oauth</id>
+         <url>http://oauth.googlecode.com/svn/code/maven</url>
+         <releases>
+            <enabled>true</enabled>
+         </releases>
+         <snapshots>
+            <enabled>false</enabled>
+         </snapshots>
+      </repository>
+   </repositories>
+   <pluginRepositories>
+      <pluginRepository>
+         <id>exo-int</id>
+         <url>http://maven2.exoplatform.org/rest/maven2</url>
+         <releases>
+            <enabled>true</enabled>
+         </releases>
+         <snapshots>
+            <enabled>false</enabled>
+         </snapshots>
+      </pluginRepository>
+      <pluginRepository>
+         <id>repository.jboss.org</id>
+         <url>http://repository.jboss.org/maven2</url>
+         <releases>
+            <enabled>true</enabled>
+         </releases>
+         <snapshots>
+            <enabled>false</enabled>
+         </snapshots>
+      </pluginRepository>
+      <pluginRepository>
+         <id>snapshots.jboss.org</id>
+         <url>http://snapshots.jboss.org/maven2</url>
+         <releases>
+            <enabled>false</enabled>
+         </releases>
+         <snapshots>
+            <enabled>true</enabled>
+         </snapshots>
+      </pluginRepository>
+   </pluginRepositories>
+
+</project>

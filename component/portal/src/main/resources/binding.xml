@@ -1,0 +1,221 @@
+<!--
+
+    Copyright (C) 2009 eXo Platform SAS.
+    
+    This is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Lesser General Public License as
+    published by the Free Software Foundation; either version 2.1 of
+    the License, or (at your option) any later version.
+    
+    This software is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+    Lesser General Public License for more details.
+    
+    You should have received a copy of the GNU Lesser General Public
+    License along with this software; if not, write to the Free
+    Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+    02110-1301 USA, or see the FSF site: http://www.fsf.org.
+
+-->
+
+<binding>  
+  <format type="java.lang.String[]" 
+          serializer="org.exoplatform.portal.config.serialize.JibxArraySerialize.serializeStringArray"
+          deserializer="org.exoplatform.portal.config.serialize.JibxArraySerialize.deserializeStringArray"/>
+          
+  <mapping class="org.exoplatform.portal.config.model.Properties" name="properties" 
+           marshaller="org.exoplatform.portal.config.serialize.JibxPropertiesMapper" 
+           unmarshaller="org.exoplatform.portal.config.serialize.JibxPropertiesMapper"/>           
+  
+  <mapping
+      name="application"
+      label="application"
+      class="org.exoplatform.portal.config.model.Application"
+      marshaller="org.exoplatform.portal.config.serialize.ApplicationHandler"
+      unmarshaller="org.exoplatform.portal.config.serialize.ApplicationHandler">
+<!--
+    <value name="instance-id"
+           field="instanceState"
+           deserializer="org.exoplatform.portal.config.serialize.JiBX.unserializePortletState"
+           serializer="org.exoplatform.portal.config.serialize.JiBX.serializePortletState"
+           usage="optional"/>
+-->
+<!--
+    <value name="id" usage="optional" field="id" style="attribute"/>
+    <structure name="application-type" usage="optional"/>
+    <value name="theme" usage="optional" field="theme"/>
+    <value name="title" usage="optional" field="title"/>
+    <value name="access-permissions" field="accessPermissions" usage="optional"/>
+    <value name="show-info-bar" field="showInfoBar" usage="optional" />
+    <value name="show-application-state" field="showApplicationState" usage="optional" />
+    <value name="show-application-mode" field="showApplicationMode" usage="optional" />
+    <value name="description" field="description" usage="optional"/>
+    <value name="icon" field="icon" usage="optional"/>
+    <value name="width" usage="optional" field="width"  />
+    <value name="height" usage="optional" field="height" />
+    <structure field="properties" usage="optional"/>
+-->
+  </mapping>
+
+  <mapping name="portlet-application"
+           label="portlet-application"
+           class="org.exoplatform.portal.config.model.portlet.PortletApplication"
+           marshaller="org.exoplatform.portal.config.serialize.PortletApplicationHandler"
+           unmarshaller="org.exoplatform.portal.config.serialize.PortletApplicationHandler">
+<!--
+    <structure
+        get-method="getInstanceState"
+        set-method="setInstanceState">
+    </structure>
+    <value name="theme" usage="optional" get-method="getTheme" set-method="setTheme"/>
+    <value name="title" usage="optional" get-method="getTitle" set-method="setTitle"/>
+    <value name="access-permissions" get-method="getAccessPermissions" set-method="setAccessPermissions" usage="optional"/>
+    <value name="show-info-bar" get-method="getShowInfoBar" set-method="setShowInfoBar" usage="optional"/>
+    <value name="show-application-state" get-method="getShowApplicationState" set-method="setShowApplicationState" usage="optional"/>
+    <value name="show-application-mode" get-method="getShowApplicationMode" set-method="setShowApplicationMode" usage="optional" />
+    <value name="description" get-method="getDescription" set-method="setDescription" usage="optional"/>
+    <value name="icon" get-method="getIcon" set-method="setIcon" usage="optional"/>
+    <value name="width" get-method="getWidth"  set-method="setWidth" usage="optional"/>
+    <value name="height" get-method="getHeight" set-method="setHeight" usage="optional"/>
+    <structure get-method="getProperties" set-method="setProperties" usage="optional"/>
+-->
+  </mapping>
+
+<!--
+  <mapping
+      abstract="true"
+      class="org.exoplatform.portal.config.model.ApplicationState">
+    <value name="application-ref" get-method="getApplicationName" set-method="setApplicationName"/>
+    <value name="portlet-ref" get-method="getPortletName" set-method="setPortletName"/>
+  </mapping>
+
+  <mapping
+      name="portlet"
+      class="org.exoplatform.portal.config.model.TransientApplicationState"
+      extends="org.exoplatform.portal.config.model.ApplicationState"
+      factory="org.exoplatform.portal.config.serialize.JiBX.createTransientApplicationState">
+    <structure map-as="org.exoplatform.portal.config.model.ApplicationState"/>
+    <structure
+        name="preferences"
+        get-method="getState"
+        set-method="setState"
+        marshaller="org.exoplatform.portal.config.serialize.PreferencesHandler"
+        unmarshaller="org.exoplatform.portal.config.serialize.PreferencesHandler"
+        usage="optional"/>
+  </mapping>
+-->
+
+  <mapping name="page-body" label="pageBody" class="org.exoplatform.portal.config.model.PageBody">
+  </mapping>
+	
+  <mapping name="site-body" label="siteBody" class="org.exoplatform.portal.config.model.SiteBody">
+  </mapping>
+  
+  <mapping name="container" label="container" class="org.exoplatform.portal.config.model.Container">
+    <value name="id" usage="optional" field="id" style="attribute"/>
+    <value name="name" usage="optional" field="name"/>
+    <value name="title" field="title" usage="optional"/>
+    <value name="icon" field="icon" usage="optional"/>
+    <value name="template" field="template" usage="optional" style="attribute"/>
+    <value name="access-permissions" field="accessPermissions" usage="optional"/>
+    <value name="factory-id" field="factoryId" usage="optional"/>
+    <value name="decorator" field="decorator" usage="optional" style="attribute"/>
+    <value name="description" field="description" usage="optional"/>
+    <value name="width" usage="optional" field="width" style="attribute" />
+    <value name="height" usage="optional" field="height" style="attribute"/>
+    <collection field="children" ordered="false">
+      <structure map-as="org.exoplatform.portal.config.model.Container" usage="optional"/>
+      <structure map-as="org.exoplatform.portal.config.model.Application" usage="optional"/>
+      <structure map-as="org.exoplatform.portal.config.model.PageBody" usage="optional"/>
+			<structure map-as="org.exoplatform.portal.config.model.SiteBody" usage="optional"/>
+			<structure map-as="org.exoplatform.portal.config.model.portlet.PortletApplication" usage="optional"/>
+    </collection>
+  </mapping>
+  
+  <mapping name="page" label="page" class="org.exoplatform.portal.config.model.Page">
+    <structure name="page-id" usage="optional"/>
+    <structure name="owner-type" usage="optional"/>
+    <structure name="owner-id" usage="optional"/>
+    <value name="name" field="name"/>
+    <value name="title" field="title" usage="optional"/>
+    <value name="factory-id" field="factoryId" usage="optional"/>
+    <value name="access-permissions" field="accessPermissions" usage="optional"/>
+    <value name="edit-permission" field="editPermission" usage="optional"/>
+    <value name="show-max-window" field="showMaxWindow" usage="optional"/>
+    <value name="creator" field="creator" usage="optional"/>
+    <value name="modifier" field="modifier" usage="optional"/> 
+    <collection field="children" ordered="false">
+      <structure map-as="org.exoplatform.portal.config.model.Container" usage="optional"/>
+      <structure map-as="org.exoplatform.portal.config.model.Application" usage="optional"/>
+      <structure map-as="org.exoplatform.portal.config.model.PageBody" usage="optional"/>
+      <structure map-as="org.exoplatform.portal.config.model.portlet.PortletApplication" usage="optional"/>
+    </collection>
+  </mapping>
+  
+   <mapping name="node" label="node" class="org.exoplatform.portal.config.model.PageNode">
+    <value name="uri" field="uri"/>
+    <value name="name" field="name"/>
+    <value name="label" field="label" usage="optional" set-method="setLabel"/>
+    <value name="icon" field="icon" usage="optional"/>
+    <value name="start-publication-date" field="startPublicationDate" usage="optional"/>
+    <value name="end-publication-date" field="endPublicationDate" usage="optional"/>
+    <value name="show-publication-date" field="showPublicationDate" usage="optional"/>    
+    <value name="visible" field="visible" usage="optional" default="true"/>
+    <value name="page-reference" field="pageReference" usage="optional"/>
+    <collection field="children" usage="optional" item-type="org.exoplatform.portal.config.model.PageNode"/>
+  </mapping>
+  
+  <mapping name="portal-config" class="org.exoplatform.portal.config.model.PortalConfig" ordered="false">
+    <value name="portal-name" field="name"/>
+    <value name="locale" field="locale"/>    
+    <value name="access-permissions" field="accessPermissions" usage="optional"/>
+    <value name="edit-permission" field="editPermission" usage="optional"/>
+    <value name="skin" field="skin" usage="optional"/>
+    <value name="title" field="title" usage="optional"/>
+    <value name="creator" field="creator" usage="optional"/>
+    <value name="modifier" field="modifier" usage="optional"/>
+    <structure field="properties" usage="optional"/>
+    <structure name="portal-layout" using="container" field="portalLayout" usage="optional"/>
+  </mapping>
+
+  <mapping name="page-set" class="org.exoplatform.portal.config.model.Page$PageSet">
+    <collection field="pages" item-type="org.exoplatform.portal.config.model.Page"/>
+  </mapping>
+
+  <mapping name="node-navigation" class="org.exoplatform.portal.config.model.PageNavigation">
+    <structure name="owner-type" usage="optional"/>
+    <structure name="owner-id" usage="optional"/>
+    <value name="priority" field="priority" usage="optional"/>
+    <value name="creator" field="creator" usage="optional"/>
+    <value name="modifier" field="modifier" usage="optional"/>
+    <value name="description" field="description" usage="optional"/>
+    <collection name="page-nodes" field="pageNodes" usage="optional"
+                item-type="org.exoplatform.portal.config.model.PageNode"/>
+  </mapping>
+  
+  
+  <mapping name="portlet-preferences-set"
+          class="org.exoplatform.portal.application.PortletPreferences$PortletPreferencesSet">
+    <collection field="portlets" 
+                item-type="org.exoplatform.portal.application.PortletPreferences"/>
+  </mapping>  
+  
+  <mapping class="org.exoplatform.portal.application.Preference"  name="preference" label="preference">
+    <value name="name"  field="name"/>
+    <collection field="values" item-type="java.lang.String" factory="org.jibx.runtime.Utility.arrayListFactory">
+      <value name="value" style="element"/>
+    </collection>
+    <value name="read-only" field="readOnly" usage="optional"/>
+  </mapping>
+
+  <mapping class="org.exoplatform.portal.application.PortletPreferences" 
+           name="portlet-preferences" label="portlet-preferences">
+    <structure name="owner-type" usage="optional"/>
+    <structure name="owner-id" usage="optional"/>
+    <value name="window-id" field="windowId"/>
+    <collection field="preferences"
+                item-type="org.exoplatform.portal.application.Preference"/>    
+    <structure name="preferences-validator" usage="optional"/>
+  </mapping>  
+</binding>

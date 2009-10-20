@@ -1,0 +1,72 @@
+<!--
+
+    Copyright (C) 2009 eXo Platform SAS.
+    
+    This is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Lesser General Public License as
+    published by the Free Software Foundation; either version 2.1 of
+    the License, or (at your option) any later version.
+    
+    This software is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+    Lesser General Public License for more details.
+    
+    You should have received a copy of the GNU Lesser General Public
+    License along with this software; if not, write to the Free
+    Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+    02110-1301 USA, or see the FSF site: http://www.fsf.org.
+
+-->
+
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook V4.4//EN" "http://www.oasis-open.org/docbook/sgml/4.4/docbookx.dtd">
+<section>
+	<title>Multi-Language Navigation Nodes</title>
+	<section>
+		<title>Overview</title>
+	</section>
+	<para>Exo Portal supports a multi-language environment for your
+		portal. You can internationalize any menu entry on the navigation. As
+		the navigation bar is composed by nodes so you have to modify the
+		display names of the nodes. Instead of entering the display name in
+		English you have to use a so called resource key. This resource key is
+		used to define the label that is shown on the navigation bar, the
+		menu, and the breadcrumb.</para>
+	<section>
+		<title>Key Format</title>
+	</section>
+	<para>
+		The resource key format is:
+		<emphasis role="bold">#{key}</emphasis>
+	</para>
+	<para>The resource key is the can contain any text that you consider
+		to be fine. It should be human-readable and must not contain spaces.</para>
+	<section>
+		<title>Creating Keys</title>
+	</section>
+	<para>
+		There are three ways to create a key for a node: using the
+		<emphasis role="bold">Create Page Wizard</emphasis>
+		or using the
+		<emphasis role="bold">Edit Page Wizard</emphasis>
+		or the
+		<emphasis role="bold">Edit Page and Navigation</emphasis>
+		dialog.
+	</para>
+	<section>
+		<title>Creating Keys using the *Create Page Wizard*</title>
+	</section>
+	<para>You can follow these steps:</para>
+	<para>
+		1. Go to
+		<emphasis role="bold">GateIn Start</emphasis>
+		-&gt; <emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Basic</emphasis> --&gt; <emphasis role="bold">Create Page Wizard</emphasis></para><para>2. Click <emphasis role="bold">Next</emphasis> to move to step 1</para><para>3. At step 1, continue as usual, but enter a resource key in the <emphasis role="bold">Display Name</emphasis> field.</para><mediaobject><imageobject><imagedata fileref="images/PageWizard.png" format="PNG"></imagedata></imageobject></mediaobject><para>4. Click on the <emphasis role="bold">Next</emphasis> button and continue and  click on the <emphasis role="bold">Save</emphasis> button. For example, create a key named &quot;AAA&quot;.</para>
+<section><title>Creating/Editing Keys by *Edit Page Wizard*</title></section>
+<para>1. Go to <emphasis role="bold">GateIn Start</emphasis> -&gt; <emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Basic</emphasis> --&gt; <emphasis role="bold">Edit Page Wizard</emphasis></para><para>2. Click on the <emphasis role="bold">Next</emphasis> button to move to step 1</para><para>3. At step 1, continue as usual, but enter a resource key in the <emphasis role="bold">Display Name</emphasis> field.</para>
+<section><title>Creating/Editing Keys using the  *Edit Page and Navigation*</title></section>
+<para>1. Go to <emphasis role="bold">GateIn Start</emphasis>  -&gt; <emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Advanced</emphasis> --&gt; <emphasis role="bold">Edit Page and Navigation</emphasis>.</para><para>2. There are two alternatives:</para><itemizedlist><listitem>Create a new node:   Select the parent path, right click and click on <emphasis role="bold">Add new node</emphasis> option .</listitem><listitem>Edit an existing node: Right click on the node you want to create/edit key and click on <emphasis role="bold">Edit this node</emphasis> in the pop-up menu.</listitem></itemizedlist><para>3. A Create/Edit node dialog appears, enter a resource key in the <emphasis role="bold">Label</emphasis> field</para><para>+Note:+ You can reuse the same resource key in several nodes.</para>
+<section><title>Internationalize Resource Keys</title></section>
+<para>Exo Portal organizes resource keys in resource files. Each file contains a list of keys and their meanings (translations) in one specific language. Normally one resource file has one language supported by Portal. This helps to structure the resource keys. Each resource file has a name and a language attribute. One resource file only can contain translations for one single language.</para><para>Do as follows: 1. Go to <emphasis role="bold">GateIn Start</emphasis> -&gt; <emphasis role="bold">Page Navigation</emphasis> -&gt; <emphasis role="bold">Administration</emphasis> --&gt; <emphasis role="bold">Internationalization</emphasis></para><mediaobject><imageobject><imagedata fileref="images/Internal2.png" format="PNG"></imagedata></imageobject></mediaobject><para>2. Select a data resource that you want to internationalize. You also may search the desired resource name with a specific language:</para><itemizedlist><listitem>Enter a resource name in the <emphasis role="bold">Name</emphasis> field in the <emphasis role="bold">Search Resource</emphasis> form</listitem><listitem>Select a corresponding language of the resource.</listitem><listitem>Click on the <emphasis role="bold">Search</emphasis> button to match all data resource and display the result on the table above.</listitem><listitem>If you want to define a key for a node which belongs to a specific portal, search for a resource like:locale.navigation.portal.portal name]</listitem></itemizedlist><para>+Example:+ if you want to define a key of a node of portal &quot;classic&quot; in language French, search resource: locale.navigation.portal.classic with value in the <emphasis role="bold">Language</emphasis> field is &quot;fr&quot;</para><itemizedlist><listitem>If you want to define a key for the node that belongs to a specific group, search resource like:  locale.navigation.group.group path]</listitem></itemizedlist><para>+Example:+ if you want to define a key for a node on navigation of  &quot;administrators&quot; group that is the sub one of the &quot;platform&quot; group in language French, search resource: locale.navigation.group.platform.administrators with the value in the <emphasis role="bold">Language</emphasis> field is &quot;fr&quot;</para><para>3. Click the magnifying glass!images/MagnifyIcon.png! icon corresponding to a data resource to see details of the resource file. Click the <emphasis role="bold">Edit</emphasis> button in order to modify the content.</para><para>4. Enter the resource key  with the string that will be displayed as node name on the navigation bar .</para><para>5. Click on the <emphasis role="bold">Save</emphasis> button.</para>
+<section><title>Example</title></section>
+<itemizedlist><listitem>The current language is English</listitem><listitem>Go to <emphasis role="bold">Create Page Wizard</emphasis>, at step 1, select navigation and enter values like in the figure below:</listitem></itemizedlist><mediaobject><imageobject><imagedata fileref="images/PageWizard.png" format="PNG"></imagedata></imageobject></mediaobject><itemizedlist><listitem>Click <emphasis role="bold">Next</emphasis>, at step 2 and 3, set layout for page Test button.</listitem><listitem>After creating page with that key, the node on the navigation bar will be displayed with name #{AAA}</listitem></itemizedlist><mediaobject><imageobject><imagedata fileref="images/AAANavi.png" format="PNG"></imagedata></imageobject></mediaobject><itemizedlist><listitem>And now you have to define what to display instead of displaying the key. Go to <emphasis role="bold">GateIn Start</emphasis> -&gt; <emphasis role="bold">Page Navigation</emphasis> -&gt; <emphasis role="bold">Administration</emphasis> --&gt; <emphasis role="bold">Internationalization</emphasis>.</listitem><listitem>Search resource locale.navigation.portal.classic with language French (fr)</listitem></itemizedlist><mediaobject><imageobject><imagedata fileref="images/Search.png" format="PNG"></imagedata></imageobject></mediaobject><itemizedlist><listitem>Click the magnifying icon!images/MagnifyIcon.png! to see the content.</listitem></itemizedlist><mediaobject><imageobject><imagedata fileref="images/ResourceData1.png" format="PNG"></imagedata></imageobject></mediaobject><itemizedlist><listitem>Click on the <emphasis role="bold">Edit</emphasis> button to modify. In the <emphasis role="bold">Resource</emphasis> field, enter the key and assign the string to display.</listitem></itemizedlist><mediaobject><imageobject><imagedata fileref="images/AfterEdit1.png" format="PNG"></imagedata></imageobject></mediaobject><itemizedlist><listitem>Click on the <emphasis role="bold">Save</emphasis> button.</listitem><listitem>Go to GateIn <emphasis role="bold">Start</emphasis> -&gt; <emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Language Settings</emphasis>: select French --&gt; Apply.</listitem><listitem>The French translation of your new resource key appears on the menu.</listitem></itemizedlist><mediaobject><imageobject><imagedata fileref="images/Nouvel.png" format="PNG"></imagedata></imageobject></mediaobject>
+</section>

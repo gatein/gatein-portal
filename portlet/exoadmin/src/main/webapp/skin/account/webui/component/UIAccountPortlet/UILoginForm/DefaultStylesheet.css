@@ -1,0 +1,60 @@
+/**
+ * Copyright (C) 2009 eXo Platform SAS.
+ * 
+ * This is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2.1 of
+ * the License, or (at your option) any later version.
+ * 
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this software; if not, write to the Free
+ * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ */
+
+.UIAccountPortlet .UILoginForm {
+  border: solid 1px #b7b7b7 ;
+  background: #ffffff;
+  margin: 0px 0px 5px 0px;
+  padding: 6px 5px 4px 5px;
+}
+	
+.UIAccountPortlet .UILoginForm .SignIn {
+	float: left;
+	color: #fb9f00; 
+	font-weight: bold; 	font-size: 16px;
+}
+.UIAccountPortlet .UILoginForm .UserName {
+	float: left;
+	padding-right: 15px;
+	font-weight: bold;
+} 
+
+.UIAccountPortlet .ButtonLogin {
+	float: left;
+	width: 24px ; height: 24px;
+	background: url('DefaultSkin/background/BlueLoginIcon.gif') no-repeat center;
+	margin: 0px 20px 0px 5px;
+	cursor: pointer;
+}
+
+.UIAccountPortlet .UILoginForm .PasswordLogin {
+	float: left;
+	font-weight: bold;
+	padding-right: 5px;
+}
+
+.UIAccountPortlet .UILoginForm .label {
+	color: white;
+	margin-left: 2px;
+	width: auto;
+}
+	
+.UIAccountPortlet .UILoginForm .UIForm input {
+	width: 100px;
+}

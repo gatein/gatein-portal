@@ -1,0 +1,65 @@
+/**
+ * Copyright (C) 2009 eXo Platform SAS.
+ * 
+ * This is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2.1 of
+ * the License, or (at your option) any later version.
+ * 
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this software; if not, write to the Free
+ * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ */
+
+
+.UIWorkingWorkspace {
+	margin: 0px;
+	
+/*
+ * minh.js.exo
+ * bug : right click with IE7 in ECM
+ */
+}
+
+.UIWorkingWorkspace {
+	width: 980px;
+	margin: auto;
+	background: #b5b6b6;
+}
+
+.UIWorkingWorkspace .UIPageBody {
+
+}
+
+.MaskLayer {
+	background: black;
+	text-align: center;
+	position: absolute;
+	overflow: auto; /* Fix for FF2 */
+}
+
+.WarningLayer {
+	width: 300px;	height: 100px;
+	line-height: 100px;	
+	text-align: center;
+	position: absolute;
+	opacity: 0.5 !important;
+	filter: alpha(opacity=50);
+}
+
+.PreviewMode {
+	width: 160px;	height: 160px;
+	background: url("background/PreviewModeImage146x156.png") no-repeat top right; /* orientation=lt */
+	background: url("background/PreviewModeImageRTL146x156.png") no-repeat top left; /* orientation=rt */
+	position: absolute;
+	cursor: pointer;
+	right: 0px; /* orientation=lt */
+	left: 0px; /* orientation=rt */
+	top: 0px;
+}

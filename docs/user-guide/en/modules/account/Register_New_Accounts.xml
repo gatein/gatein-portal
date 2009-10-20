@@ -1,0 +1,174 @@
+<!--
+
+    Copyright (C) 2009 eXo Platform SAS.
+    
+    This is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Lesser General Public License as
+    published by the Free Software Foundation; either version 2.1 of
+    the License, or (at your option) any later version.
+    
+    This software is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+    Lesser General Public License for more details.
+    
+    You should have received a copy of the GNU Lesser General Public
+    License along with this software; if not, write to the Free
+    Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+    02110-1301 USA, or see the FSF site: http://www.fsf.org.
+
+-->
+
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook V4.4//EN" "http://www.oasis-open.org/docbook/sgml/4.4/docbookx.dtd">
+<section>
+	<title>Register New Accounts</title>
+	<para>If you are a visitor of GateIn Portal, you only may read news
+		or
+		take some normal actions. Thus to access and get more actions, you
+		should register and contact with administrators to get more
+		permissions!</para>
+	<para>GateIn Portal supports users to register a new account by
+		themselves quickly and easily. Just by completing the steps below, you
+		will have a new account that helps you access more pages and take more
+		actions in GateIn Portal:</para>
+	<orderedlist>
+		<listitem>
+			<para>
+				Go to a portal by typing the URL in the address bar (e.g:
+				http://localhost:8080/portal).
+				<mediaobject>
+					<imageobject>
+						<imagedata fileref="images/Frontpage.png" format="PNG"></imagedata>
+					</imageobject>
+				</mediaobject>
+			</para>
+		</listitem>
+		<listitem>
+			<para>Click
+				<emphasis role="bold">Register</emphasis>
+				on the Navigation bar. The Register page will appear:
+				<mediaobject>
+					<imageobject>
+						<imagedata fileref="images/AccountSetting.png" format="PNG"></imagedata>
+					</imageobject>
+				</mediaobject>
+			</para>
+			<para>
+				The
+				<emphasis role="bold">Account Setting</emphasis>
+				information includes:
+			</para>
+			<informaltable frame="none" rowsep="0" colsep="0">
+				<tgroup cols="2">
+					<colspec align="center"></colspec>
+					<colspec align="center"></colspec>
+					<tbody>
+						<row>
+							<entry>
+								<emphasis role="bold"> Name </emphasis>
+							</entry>
+							<entry>
+								<emphasis role="bold"> Description </emphasis>
+							</entry>
+						</row>
+						<row>
+							<entry> User Name  </entry>
+							<entry> the name that the user uses to login. This field must be
+								unique and start with a character </entry>
+						</row>
+						<row>
+							<entry> Password </entry>
+							<entry> The *Password* must be between 6 and 30 characters and
+								can
+								contain space characters. Since Portal 2.6, space characters are
+								either at the beginning or in the end can be counted. </entry>
+						</row>
+						<row>
+							<entry> Confirm Password </entry>
+							<entry> re-type the password above. *Password* and *Confirm
+								Password* must be the same.  </entry>
+						</row>
+						<row>
+							<entry> First Name </entry>
+							<entry> the first name of a user. </entry>
+						</row>
+						<row>
+							<entry> Last Name </entry>
+							<entry> the last name of a user. </entry>
+						</row>
+						<row>
+							<entry> Email Address </entry>
+							<entry> the email of a user. It must be in the right format likes
+								username@abc.com </entry>
+						</row>
+					</tbody>
+				</tgroup>
+			</informaltable>
+		</listitem>
+		<listitem>
+			<para>Fill in the form.</para>
+		</listitem>
+		<listitem>
+			<para>Click the magnifying glass icon !images/magnifyIcon.png!
+				to
+				search and check if the chosen username is available.</para>
+		</listitem>
+		<listitem>
+			<para>Input values in the
+				<emphasis role="bold">User Profile</emphasis>
+				tab, include: Profile information, Home information, Business
+				information. These fields are not required.
+			</para>
+			<para>
+				GateIn Portal facilitates users with 4 commonly used languagues:
+				English,
+				French, Vietnamese and Arabic in the
+				<emphasis role="bold">Language</emphasis>
+				field. You can select one of these languages to work with.
+			</para>
+			<mediaobject>
+				<imageobject>
+					<imagedata fileref="images/UserProfile.png" format="PNG"></imagedata>
+				</imageobject>
+			</mediaobject>
+		</listitem>
+		<listitem>
+			<para>Click
+				<emphasis role="bold">Save</emphasis>
+				to register a new account or
+				<emphasis role="bold">Reset</emphasis>
+				to refresh all entered values. There will be an alert message and
+				you
+				can not add a new account if one of these cases occurs:
+			</para>
+			<itemizedlist>
+				<listitem>
+					<emphasis role="bold">User name</emphasis>
+					already exists or user name is invalid.
+				</listitem>
+				<listitem>
+					<emphasis role="bold">Password</emphasis>
+					has less than 6 characters or more than 30 characters.
+				</listitem>
+				<listitem>
+					<emphasis role="bold">Password</emphasis>
+					and
+					<emphasis role="bold">Confirm Password</emphasis>
+					are not the same.
+				</listitem>
+				<listitem>
+					<emphasis role="bold">Email Address</emphasis>
+					format is not valid
+				</listitem>
+				<listitem>Required fields are blank (empty).</listitem>
+			</itemizedlist>
+		</listitem>
+	</orderedlist>
+	<para>
+		After adding a new account, you should either contact the
+		administrator to get more permissions or you are only a visitor user.
+		<note>You should enter your email address carefully because
+			when you forget your user name or password, you can recover it by
+			using this email address.</note>
+	</para>
+</section>

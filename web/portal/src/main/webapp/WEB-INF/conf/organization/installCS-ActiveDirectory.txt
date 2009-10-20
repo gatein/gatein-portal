@@ -1,0 +1,39 @@
+====
+    Copyright (C) 2009 eXo Platform SAS.
+    
+    This is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Lesser General Public License as
+    published by the Free Software Foundation; either version 2.1 of
+    the License, or (at your option) any later version.
+    
+    This software is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+    Lesser General Public License for more details.
+    
+    You should have received a copy of the GNU Lesser General Public
+    License along with this software; if not, write to the Free
+    Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+    02110-1301 USA, or see the FSF site: http://www.fsf.org.
+====
+
+Install CA Certificate
+
+- Installed an Enterprise CA , with the distinguished name of cn=portal,dc=exoplatform,dc=org"
+
+- By default, domain controllers automatically enroll for domain controller certificates once an Enterprise CA has been installed. The root certificate can be found in the root of the system drive (Eg. if the operating system has been installed in c:\windows, the cert will be found in c:\)
+  By default the certificate file is named <dns name of ca>_<name of cert>.crt
+
+
+- Copy <dns name of ca>_<name of cert>.crt (example : Win2k3vm.exoplatform.org_portal.crt) to java.home/jre/lib/security
+
+- Goto java.home/jre/lib/security/
+
+- Run: keytool -import -file <Win2k3vm.exoplatform.org_portal.crt> -keystore cacerts
+
+- Enter password : changeit
+
+- To delete CA Certificate : keytool -delete -alias mykey -keystore cacerts
+
+
+

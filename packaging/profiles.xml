@@ -1,0 +1,48 @@
+<!--
+
+    Copyright (C) 2009 eXo Platform SAS.
+    
+    This is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Lesser General Public License as
+    published by the Free Software Foundation; either version 2.1 of
+    the License, or (at your option) any later version.
+    
+    This software is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+    Lesser General Public License for more details.
+    
+    You should have received a copy of the GNU Lesser General Public
+    License along with this software; if not, write to the Free
+    Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+    02110-1301 USA, or see the FSF site: http://www.fsf.org.
+
+-->
+
+<profilesXml>
+  <profiles>
+    <profile>
+      <id>exo-projects</id>
+      <properties>
+        <!-- 
+             Replace with the directory where uncompressed Tomcat 6 and/or JBoss 5.1 can be found
+             ex: On Windows 'c:/AS'
+             ex: On Linux '/home/user/AS'
+        -->
+        <exo.projects.directory.dependencies>REPLACE_WITH_YOUR_OWN_DIRECTORY</exo.projects.directory.dependencies>
+        <!--
+             Replace with the name of the directory containing Tomcat 6
+        -->        
+        <exo.projects.app.tomcat.version>apache-tomcat-6.0.20</exo.projects.app.tomcat.version>
+        <!--
+             Replace with the name of the directory containing JBoss AS 5.1
+        -->
+        <exo.projects.app.jboss.version>jboss-5.1.0.GA</exo.projects.app.jboss.version>
+      </properties>
+    </profile>
+  </profiles>
+
+  <activeProfiles>
+    <activeProfile>exo-projects</activeProfile>
+  </activeProfiles>
+</profilesXml>

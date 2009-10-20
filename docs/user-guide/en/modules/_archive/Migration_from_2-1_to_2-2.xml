@@ -1,0 +1,33 @@
+<!--
+
+    Copyright (C) 2009 eXo Platform SAS.
+    
+    This is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Lesser General Public License as
+    published by the Free Software Foundation; either version 2.1 of
+    the License, or (at your option) any later version.
+    
+    This software is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+    Lesser General Public License for more details.
+    
+    You should have received a copy of the GNU Lesser General Public
+    License along with this software; if not, write to the Free
+    Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+    02110-1301 USA, or see the FSF site: http://www.fsf.org.
+
+-->
+
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook V4.4//EN" "http://www.oasis-open.org/docbook/sgml/4.4/docbookx.dtd">
+<chapter>
+<title>Migration from 2.1 to 2.2</title>
+<section><title>Change the userClassNames and roleClassNames in the context files</title></section>
+<para>+To avoid the following error:+ {code} Class org.exoplatform.services.organization.auth.UserPrincipal not found! Class org.exoplatform.services.organization.auth.RolePrincipal not found! {code}</para><para>+You must modify all the context files using jaas as follow:+</para><para><emphasis>e.g. for Tomcat:</emphasis> Replace in the tomcat context file cf. ${tomcat-home}/conf/Catalina/localhost/portal.xml:</para><itemizedlist><listitem>+userClassNames+ whose value was <emphasis>org.exoplatform.services.organization.auth.UserPrincipal</emphasis> with <emphasis role="bold">org.exoplatform.services.security.jaas.UserPrincipal</emphasis></listitem><listitem>+roleClassNames+ whose value was <emphasis>org.exoplatform.services.organization.auth.RolePrincipal</emphasis> with <emphasis role="bold">org.exoplatform.services.security.jaas.RolePrincipal</emphasis></listitem></itemizedlist>
+<section><title>Change the SkinListener in the web.xml</title></section>
+<para>Replace {code:xml} &lt;listener&gt; &lt;listener-class&gt;org.exoplatform.portal.webui.skin.SkinListener&lt;/listener-class&gt; &lt;/listener&gt; {code} with {code:xml} &lt;listener&gt; &lt;listener-class&gt;org.exoplatform.portal.webui.skin.SkinConfigListener&lt;/listener-class&gt; &lt;/listener&gt; {code}</para>
+<section><title>Migrate the war:/conf/jcr/repository-configuration.xml to be compatible with jcr 1.9</title></section>
+<para>Click <link linkend="JCR:Configuration">here</link> for more details</para>
+<section><title>Use a different lucene index directory for each workspace</title></section>
+<para>+To avoid the following error:+ {code} Caused by: java.io.IOException: Directory was previously created with a different LockFactory instance; please pass null as the lockFactory instance and use setLockFactory to change it at org.apache.lucene.store.FSDirectory.getDirectory(FSDirectory.java:192) at org.exoplatform.services.jcr.impl.core.query.lucene.PersistentIndex.&lt;init&gt;(PersistentIndex.java:63) at org.exoplatform.services.jcr.impl.core.query.lucene.MultiIndex.getOrCreateIndex(MultiIndex.java:570) ... {code}</para><para>Replace for each workspace <emphasis>e.g. for system workspace</emphasis> {code} &lt;query-handler class=&quot;org.exoplatform.services.jcr.impl.core.query.lucene.SearchIndex&quot;&gt; &lt;properties&gt; &lt;property name=&quot;indexDir&quot; value=&quot;../temp/jcrlucenedb/index&quot;/&gt; &lt;/properties&gt; &lt;/query-handler&gt; {code} with {code} &lt;query-handler class=&quot;org.exoplatform.services.jcr.impl.core.query.lucene.SearchIndex&quot;&gt; &lt;properties&gt; &lt;property name=&quot;indexDir&quot; value=&quot;../temp/jcrlucenedb/system&quot;/&gt; &lt;/properties&gt; &lt;/query-handler&gt; {code}</para>
+</chapter>

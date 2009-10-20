@@ -1,0 +1,53 @@
+<!--
+
+    Copyright (C) 2009 eXo Platform SAS.
+    
+    This is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Lesser General Public License as
+    published by the Free Software Foundation; either version 2.1 of
+    the License, or (at your option) any later version.
+    
+    This software is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+    Lesser General Public License for more details.
+    
+    You should have received a copy of the GNU Lesser General Public
+    License along with this software; if not, write to the Free
+    Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+    02110-1301 USA, or see the FSF site: http://www.fsf.org.
+
+-->
+
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook V4.4//EN" "http://www.oasis-open.org/docbook/sgml/4.4/docbookx.dtd">
+<section>
+	<title>Internationalization Guidelines</title>
+	<section>
+		<title>Overview</title>
+	</section>
+	<para>This articles focuses on developers. It helps to avoid the
+		most common pitfalls. Using these guidelines will accelerate the
+		localization process and reduce maintenance of properties files.</para>
+	<section>
+		<title>Technical Aspects</title>
+	</section>
+
+	<section>
+		<title>Always use internationalization</title>
+	</section>
+	<para>Don't be lazy and write the English text hard-coded in your
+		java/jsp/groovy/javascript code.</para>
+	<para>Example: &quot;The topic has &lt;%=tags.size();%&gt; tags!&quot; This is easy and fast to do, nevertheless this is the wrong way.</para><para>Nobody can translate it when this message remains in the java code. Your task is only finished when all messages are prepared in a resource file for translation.</para>
+<section><title>Use unique keys</title></section>
+<para>Do not use key structures where one key is identical to the beginning of an other key. Look at the following: {code:none} platform.users.collaboration=Collaboration Suite platform.users.collaboration.forum=Forum Application platform.users.collaboration.contact=Contact Application {code}</para><para>The main reason you should avoid this that sometimes resource files must be transformed from .properties files to xml files <link linkend=" Portal.XML Resource Bundles"> Portal.XML Resource Bundles</link>. In xml &quot;platform.users.collaboration&quot; and &quot;platform.users.collaboration.forum&quot; cannot co-exist.</para><para>Solution:<!-- LB --> &quot;platform.users.collaboration&quot; should be renamed to something else like &quot;platform.users.collaboration.heading&quot;.</para><para>1.1 Only use alphanumerical characters in keys</para><itemizedlist><listitem>Keep it simple.</listitem><listitem>Do not use slashes '/' in the keys. That is bad style and cannot transformed in the xml structure.</listitem><listitem>Avoid non-alphanumerical characters.</listitem></itemizedlist><para>1.1 Always use arguments</para><para>Always use arguments when necessary Do not split your sentence into two entries. That can create problems and bugs when the resource file is translated to other languages.</para><itemizedlist><listitem>Example 1:<!-- LB -->{code:none}{code}</listitem></itemizedlist><para>The sentence is split in two keys because of a poor implementation for locale Strings. The number of &quot;topics&quot; is put between the two keys. This causes problems for translations of the properties file as the context of the properties is not visible for translators.</para><para>Instead you should use: {code:none} UITopicsTag.confirm.YouWantToRemove=Are you sure you want to remove the tag from {0} topics? {code}</para><itemizedlist><listitem>Example 2:<!-- LB -->{code:none}{code} In English language the argument is put behind. But this is different in other languages. The key-value pair cannot be translated to other languages.</listitem></itemizedlist><para>The solution is to use: {code:none} UIQuestionForm.msg.DeleteQuestionInLanguage=Are you sure you want delete question in {0}? {code}</para><itemizedlist><listitem>Example 3:<!-- LB -->{code:none}{code}</listitem></itemizedlist><para>This is very bad style, because the translator has to see the context of several keys in order to understand. Depending on the language he or she also must rearrange the value (translation) of each key.</para><para>The solution is to use (even if there is some repetition): {code:none} UITopicContainer.confirm.SetDeleteTopic=Are you sure you want to delete these topics? UITopicContainer.confirm.SetDeletePost=Are you sure you want to delete these posts? UITopicContainer.confirm.SetDeleteForum=Are you sure you want to delete these forums? {code}</para>
+<section><title>Language Aspects</title></section>
+
+<section><title>General</title></section>
+<para>The messages is the only thing the user can read. They are the most important part for the ergonomics of the application.</para><para>The objective of the user interface should be that there is no need to read the documentation because the application messages explain the necessary detail. The messages make the user to understand and guide him to use the application depending on his needs.</para><para>Don't forget tat the user has not programmed the application. He doesn't need to understand how it works internally, just what happens and what's next.</para><para>Be brief, and also precise. Give good messages.</para>
+<section><title>Explain</title></section>
+<para>Explain why something is not possible. Guide the user. If something fails, explain why in non technical terms.</para><para>BAD Example message: &quot;<emphasis>Import failed. Try again.</emphasis>&quot;</para><para>The user tries again, but he won't succeed because he doesn't know why the the import fails.</para><para>GOOD Example message: &quot;<emphasis>The import failed because the import file contains an item that already exists in the forum</emphasis>.&quot;</para><para>It would be even better to say which item already exists so that the user can correct the problem without a deep analysis: &quot;{0}<emphasis>The import failed because the import file contains the item that already exists in the forum.</emphasis>&quot;</para>
+<section><title>Avoid</title></section>
+<itemizedlist><listitem>Avoid the use of exclamation marks &quot;!&quot;.</listitem><listitem>Avoid the use of &quot;please&quot;.</listitem><listitem>Put a period &quot;.&quot; at the end of a sentence.</listitem></itemizedlist>
+<section><title>Use a spell-checker</title></section>
+<para>Use a spell checker. Copy the file to your preferred text processor and switch to American English. You will always find some typos.</para>
+</section>

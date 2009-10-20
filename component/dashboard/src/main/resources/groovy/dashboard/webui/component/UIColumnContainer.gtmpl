@@ -1,0 +1,15 @@
+<div class="UIColumns" id="$uicomponent.id">
+
+<%
+  int childrenNbs = uicomponent.getChildren().size() == 0 ? 1 : uicomponent.getChildren().size();
+  float childWidth = (100 / childrenNbs) - 1;
+		for(uichild in uicomponent.getChildren()){ 
+%>	
+	<div class="UIColumn" id="$uichild.id" style="width:$childWidth%" >		
+		<%
+			uicomponent.renderUIComponent(uichild) ;
+		%>
+	</div>	
+<% } %>
+	<div class="ClearLeft"><span></span></div>
+</div>

@@ -1,0 +1,54 @@
+<!--
+
+    Copyright (C) 2009 eXo Platform SAS.
+    
+    This is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Lesser General Public License as
+    published by the Free Software Foundation; either version 2.1 of
+    the License, or (at your option) any later version.
+    
+    This software is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+    Lesser General Public License for more details.
+    
+    You should have received a copy of the GNU Lesser General Public
+    License along with this software; if not, write to the Free
+    Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+    02110-1301 USA, or see the FSF site: http://www.fsf.org.
+
+-->
+
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook V4.4//EN" "http://www.oasis-open.org/docbook/sgml/4.4/docbookx.dtd">
+<section>
+	<title>Deactivation of the Ajax Loading Mask Layer</title>
+	<section>
+		<title>Overview</title>
+	</section>
+	<para>In this article, you will learn:</para>
+	<itemizedlist>
+		<listitem>Purpose of ajax-loading mask.</listitem>
+		<listitem>How to deactivate ajax-loading mask.</listitem>
+		<listitem>Synchronous / Asynchronous issue.</listitem>
+	</itemizedlist>
+	<section>
+		<title>Purpose of requirement</title>
+	</section>
+	<itemizedlist>
+		<listitem>Loading mask layer is displayed after ajax-call for
+			blocking GUI to prevent user's action until the the ajax-request is
+			completed.</listitem>
+		<listitem>Sometimes portal needs to be ready for user
+			instructions without waiting previous instructions completed. So mask
+			layer may need to be deactivated.</listitem>
+	</itemizedlist>
+	<section>
+		<title>How to deactivate ajax-loading mask in your code</title>
+	</section>
+	<para>To generate script to make an asynchronous ajax-call, we use
+		uicomponent.doAsync() method instead of uicomponent.event() method.</para>
+	<para>Here is an example:</para>
+	<para>&lt;a href=&quot;&lt;%=uicomponent.doAsync(action, beanId, params)%&gt;&quot; alt=&quot;&quot;&gt;Asynchronous&lt;/a&gt;</para><para>Method doAsync() automatically adds a parameter into parameters list. Parameter async<emphasis>param = new Parameter(AJAX</emphasis>ASYNC,&quot;true&quot;); (AJAX<emphasis>ASYNC == &quot;ajax</emphasis>async&quot;)</para><para>After all, its call method event() to generate script that make Ajax Request. This request is asynchronous and ajax-loading mask will not displayed.</para><para>Note:</para><para>1. You still also make an asynchronous request by using method uicomponent.event(). By this way, you must add asyncparam manually.</para><para>2. GUI is blocked so that user can do only one action at a time (Request seems to be synchronous). But in fact ajax request always be asynchronous. See Synchronous issue section.</para>
+<section><title>Synchronous issue</title></section>
+<para>Almost web browser such as (IE, Chrome, Safari .. )  told that ajax request may used in two modes: Synchronous / Asynchronous with boolean value of bAsyn parameter.  View reference.</para><para>var bAsync = false; // Synchronous</para><para>request.open(instance.method, instance.url, bAsync);</para><para>But Mozilla say no. They doesn't support synchronous request. var bAsync = false; // Synchronous</para><para>request.open(instance.method, instance.url, bAsync); // Firefox will not execute</para><para>So we decide to set bAsync always true (Ajax request always be asynchronous).</para><para>// Asynchronous request</para><para>request.open(instance.method, instance.url, true);</para><para>It is cause that Ajax Request always be asynchronous.</para>
+</section>

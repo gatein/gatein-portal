@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+
+    Copyright (C) 2009 eXo Platform SAS.
+    
+    This is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Lesser General Public License as
+    published by the Free Software Foundation; either version 2.1 of
+    the License, or (at your option) any later version.
+    
+    This software is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+    Lesser General Public License for more details.
+    
+    You should have received a copy of the GNU Lesser General Public
+    License along with this software; if not, write to the Free
+    Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+    02110-1301 USA, or see the FSF site: http://www.fsf.org.
+
+-->
+
+<Module>
+<ModulePrefs title="RSS Reader" title_url="http://www.exoplatform.com" directory_title="RSS Reader" 
+	description="RSS Reader"
+	thumbnail="/eXoGadgets/skin/DefaultSkin/portletIcons/rssAggregator.png">
+<Require feature="dynamic-height" />
+<Require feature="setprefs"/>
+<Require feature="settitle"/>
+<Locale lang="ar" language_direction="rtl"/>
+</ModulePrefs>
+	<UserPref name="rssurl" display_name="FEED URL" default_value="http://feeds.feedburner.com/gatein" required="true" />
+	<UserPref name="num_entries" display_name="# of Items (1-100)" default_value="10"/>
+<Content type="html"><![CDATA[
+<link rel="stylesheet" type="text/css" href="style.css"></link>
+
+<script type="text/javascript" src="script.js"></script>
+<div id="feedContainer" style="height:229px;overflow:auto;"></div>
+
+<script type="text/javascript">
+// Get userprefs
+    var prefs = new _IG_Prefs(__MODULE_ID__);
+    var entries = prefs.getInt("num_entries");
+    var feedurl = prefs.getString("rssurl");
+
+    if (isNaN(entries)) {
+      entries = 10;
+    }
+    else {
+      if (entries < 1) { entries = 1; }
+      if (entries > 100) { entries = 100; }
+    }
+
+    var rssAggregator = new RssAggregator();
+    gadgets.util.registerOnLoadHandler(rssAggregator.refreshFeed);
+</script>
+
+]]>
+</Content>
+</Module>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) 2009 eXo Platform SAS.
+    
+    This is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Lesser General Public License as
+    published by the Free Software Foundation; either version 2.1 of
+    the License, or (at your option) any later version.
+    
+    This software is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+    Lesser General Public License for more details.
+    
+    You should have received a copy of the GNU Lesser General Public
+    License along with this software; if not, write to the Free
+    Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+    02110-1301 USA, or see the FSF site: http://www.fsf.org.
+
+-->
+
+<bundle>
+  <UIForm>
+    <title>Search Resource</title>
+    <action>
+      <Search>Search</Search>
+      <NewResource>New Resource</NewResource>
+    </action>
+  </UIForm>
+  <UISearchI18n>
+    <label>
+      <name>Name</name>
+      <language>Language</language>
+      <option>
+      	<All>All</All>
+      </option>
+    </label>
+  </UISearchI18n>
+  <UII18nPortlet>
+    <header>
+      <name>Name</name>
+      <language>Language</language>
+      <action>Action</action>
+    </header>
+    <action>
+      <title>
+        <View>View</View>
+        <Delete>Delete</Delete>
+      </title>
+    </action>
+  </UII18nPortlet>
+  <UIEditResource>
+    <title>Resource Data</title>
+    <label>
+      <resource>Resource</resource>
+      <name>Name</name>
+      <language>Language</language>
+    </label>
+    <action>
+      <Save>Save</Save>
+      <Cancel>Cancel</Cancel>
+      <Edit>Edit</Edit>
+    </action>
+    <add>
+      <exist>This resource is existing, please enter another one!</exist>
+    </add>
+  </UIEditResource>
+  <UII18n>
+    <deleteResource>Are you sure you want to delete this resource?</deleteResource>
+  </UII18n>
+</bundle>
+

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+
+    Copyright (C) 2009 eXo Platform SAS.
+    
+    This is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Lesser General Public License as
+    published by the Free Software Foundation; either version 2.1 of
+    the License, or (at your option) any later version.
+    
+    This software is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+    Lesser General Public License for more details.
+    
+    You should have received a copy of the GNU Lesser General Public
+    License along with this software; if not, write to the Free
+    Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+    02110-1301 USA, or see the FSF site: http://www.fsf.org.
+
+-->
+
+<page-set>
+		 		
+  <page>
+  	<page-id>group::platform/guests::register</page-id>
+    <owner-type>group</owner-type>
+    <owner-id>platform/guests</owner-id>
+    <name>register</name>
+    <title>Register</title>
+	  <access-permissions>*:/platform/guests</access-permissions>
+	  <edit-permission>*:/platform/administrators</edit-permission>    
+    <application>
+      <instance-id>group#platform/guests:/exoadmin/AccountPortlet/Account</instance-id>
+      <title>New Account</title>
+      <show-info-bar>false</show-info-bar>      
+    </application>  
+  </page>          
+    
+  <page>
+  	<page-id>group::platform/guests::sitemap</page-id>
+    <owner-type>group</owner-type>
+    <owner-id>platform/guests</owner-id>
+    <name>sitemap</name>
+    <title>Site Map</title>
+	  <access-permissions>*:/platform/guests</access-permissions>
+	  <edit-permission>*:/platform/administrators</edit-permission>
+	  <application>
+      <instance-id>group#platform/guests:/web/SiteMapPortlet/sitemapportlet</instance-id>
+      <title>SiteMap</title>
+      <show-info-bar>false</show-info-bar>      
+    </application>          
+  </page>
+  
+  <page>
+  	<page-id>group::platform/guests::link</page-id>
+  	<owner-type>group</owner-type>
+    <owner-id>platform/guests</owner-id>
+    <name>link</name>
+    <title>Link</title>
+    <access-permissions>*:/platform/guests</access-permissions>
+    <edit-permission>*:/platform/administrators</edit-permission>
+    <application>
+      <instance-id>group#platform/guests:/web/IFramePortlet/blog</instance-id>
+      <title>Blog</title>
+      <show-info-bar>false</show-info-bar>
+      <show-application-state>true</show-application-state>
+      <show-application-mode>true</show-application-mode>
+    </application>  
+  </page>
+      
+</page-set>
+

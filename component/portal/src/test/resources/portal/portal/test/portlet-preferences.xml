@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+
+    Copyright (C) 2009 eXo Platform SAS.
+    
+    This is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Lesser General Public License as
+    published by the Free Software Foundation; either version 2.1 of
+    the License, or (at your option) any later version.
+    
+    This software is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+    Lesser General Public License for more details.
+    
+    You should have received a copy of the GNU Lesser General Public
+    License along with this software; if not, write to the Free
+    Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+    02110-1301 USA, or see the FSF site: http://www.fsf.org.
+
+-->
+
+<portlet-preferences-set>
+
+  <portlet-preferences>
+    <owner-type>portal</owner-type>
+    <owner-id>test</owner-id>
+    <window-id>portal#test:/web/BannerPortlet/banner</window-id>
+    <preference>
+      <name>template</name>
+      <value>par:/groovy/groovy/webui/component/UIBannerPortlet.gtmpl</value>
+      <read-only>false</read-only>
+    </preference>
+  </portlet-preferences>
+
+  <portlet-preferences>
+    <owner-type>portal</owner-type>
+    <owner-id>test</owner-id>
+    <window-id>portal#test:/web/FooterPortlet/footer</window-id>
+    <preference>
+      <name>template</name>
+      <value>par:/groovy/groovy/webui/component/UIFooterPortlet.gtmpl</value>
+      <read-only>false</read-only>
+    </preference>
+  </portlet-preferences>
+  
+  <portlet-preferences>
+    <owner-type>portal</owner-type>
+    <owner-id>test</owner-id>
+    <window-id>portal#test:/web/GroovyPortlet/groovyportlet</window-id>
+    <preference>
+      <name>template</name>
+      <value>par:/groovy/groovy/webui/component/UIGroovyPortlet.gtmpl</value>
+      <read-only>false</read-only>
+    </preference>
+  </portlet-preferences>
+  
+  <portlet-preferences>
+    <owner-type>portal</owner-type>
+    <owner-id>test</owner-id>
+    <window-id>portal#test:/web/HomePagePortlet/homepageportlet</window-id>
+    <preference>
+      <name>template</name>
+      <value>system:/templates/groovy/webui/component/UIHomePagePortlet.gtmpl</value>
+      <read-only>false</read-only>
+    </preference>
+  </portlet-preferences>
+  
+</portlet-preferences-set>

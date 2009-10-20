@@ -1,0 +1,175 @@
+<!--
+
+    Copyright (C) 2009 eXo Platform SAS.
+    
+    This is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Lesser General Public License as
+    published by the Free Software Foundation; either version 2.1 of
+    the License, or (at your option) any later version.
+    
+    This software is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+    Lesser General Public License for more details.
+    
+    You should have received a copy of the GNU Lesser General Public
+    License along with this software; if not, write to the Free
+    Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+    02110-1301 USA, or see the FSF site: http://www.fsf.org.
+
+-->
+
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook V4.4//EN" "http://www.oasis-open.org/docbook/sgml/4.4/docbookx.dtd">
+<section>
+	<title>Dashboard Portlet</title>
+	<section>
+		<title>Overview</title>
+	</section>
+	<para>The Dashboard portlet is used for hosting mini applications
+		known as gadgets. The Dashboard uses a variety of graphical effects
+		for displaying, opening and using gadgets. Gadgets can be moved
+		around, rearranged, deleted and created. More than one instance of the
+		same gadget can be opened at the same time, each instance of the very
+		same gadget can have different settings. The gadgets instances are as
+		independent as different portlets instances.</para>
+	<mediaobject>
+		<imageobject>
+			<imagedata fileref="images/Dashboard1.png" format="PNG"></imagedata>
+		</imageobject>
+	</mediaobject>
+	<section>
+		<title>Open the Dashboard Workspace</title>
+	</section>
+	<para>
+		Click on
+		<emphasis role="bold">Add Gadgets</emphasis>
+		to open the Dashboard Workspace.
+	</para>
+	<mediaobject>
+		<imageobject>
+			<imagedata fileref="images/Dash2.png" format="PNG"></imagedata>
+		</imageobject>
+	</mediaobject>
+	<para>This portlet includes two parts :</para>
+	<figure>
+		<title>A popup window that lists all gadgets. By default, there are
+			four gadgets but
+			you can add more.</title>
+	</figure>
+	<itemizedlist>
+		<listitem>
+			<emphasis role="bold">Calculator</emphasis>
+			: This is a cool calculator for your page. This mini application lets
+			you perform most of the basic arithmetic operations. This gadget also
+			offers cool skins to make your page more alive.
+		</listitem>
+		<listitem>
+			<emphasis role="bold">Calendar</emphasis>
+			: A cool calendar to keep track of date. You also can switch easily
+			between daily, monthly and yearly view and change the skin as you
+			like.
+		</listitem>
+		<listitem>
+			<emphasis role="bold">Todo</emphasis>
+			: This mini application helps you to organize your everyday work. It
+			is designed to keep track of your tasks in a convenient and
+			transparent way. You can highlight tasks by using different colors.
+		</listitem>
+		<listitem>
+			<emphasis role="bold">RSS Reader</emphasis>
+			: This gadget lets you get a sneak preview of your favorite feeds
+			around the web. You can have the latest news, the latest posts from
+			your favorite blogs, latest email... all in one gadget.
+		</listitem>
+	</itemizedlist>
+	<para>A space used to contain and organize gadgets by
+		dragging from the
+		popup window and drop them into this space.</para>
+	<section>
+		<title>Display Gadgets</title>
+	</section>
+	<para>Moreover, you can change the number of columns 
+		to create in this space.</para>
+	<para>
+		<orderedlist>
+			<listitem>
+				<para>
+					Click on
+					<emphasis role="bold">Group Editor</emphasis>
+					:
+					<emphasis role="bold">Edit Page</emphasis>
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					Click on
+					<emphasis role="bold">Edit Portlet</emphasis>
+					. It will show a dialog to change the number of columns to display
+					gadgets.
+				</para>
+				<mediaobject>
+					<imageobject>
+						<imagedata fileref="images/Column.png" format="PNG"></imagedata>
+					</imageobject>
+				</mediaobject>
+			</listitem>
+			<listitem>
+				<para>
+					Change the number of columns and click the
+					<emphasis role="bold">Save</emphasis>
+					button to accept changing.
+				</para>
+			</listitem>
+		</orderedlist>
+	</para>
+	<section>
+		<title>Add Gadgets</title>
+		<para>You can also add more gadgets, do as follows:</para>
+		<para>Open the popup to add gadges</para>
+		<para>
+			<orderedlist>
+				<listitem>
+					<para>
+						Click the
+						<emphasis role="bold">Add Gadgets</emphasis>
+						link
+						<mediaobject>
+							<imageobject>
+								<imagedata fileref="images/Dashboard1.png" format="PNG"></imagedata>
+							</imageobject>
+						</mediaobject>
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						dialog to add a new gadget will appear :
+						<mediaobject>
+							<imageobject>
+								<imagedata fileref="images/EnterLink.png" format="PNG"></imagedata>
+							</imageobject>
+						</mediaobject>
+					</para>
+				</listitem>
+				<listitem>
+					<para>Enter a link (a .xml or .rss) in a text box on the left
+						pane.</para>
+					<note>If you enter a .rss file or a link that
+						generate rss format
+						(for example:
+						http://feeds.feedburner.com/gatein), a new rss gadget
+						reader will be
+						created in the dashboard.</note>
+					<para>
+						Remote gadgets can be only created using the .xml file format
+						which
+						s the standard gadget format.</para>
+				</listitem>
+				<listitem>
+					<para>Click on the + icon to add a new gadget
+						to the gadget
+						list beneath.</para>
+				</listitem>
+			</orderedlist>
+		</para>
+	</section>
+</section>

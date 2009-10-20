@@ -1,0 +1,311 @@
+/**
+ * Copyright (C) 2009 eXo Platform SAS.
+ * 
+ * This is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2.1 of
+ * the License, or (at your option) any later version.
+ * 
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this software; if not, write to the Free
+ * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ */
+
+package org.exoplatform.applicationregistry.webui.component;
+
+import org.exoplatform.application.gadget.Gadget;
+import org.exoplatform.application.gadget.GadgetRegistryService;
+import org.exoplatform.application.registry.Application;
+import org.exoplatform.application.registry.ApplicationCategory;
+import org.exoplatform.application.registry.ApplicationRegistryService;
+import org.exoplatform.applicationregistry.webui.Util;
+import org.exoplatform.commons.utils.LazyPageList;
+import org.exoplatform.container.ExoContainer;
+import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.web.application.gadget.GadgetApplication;
+import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.config.annotation.ComponentConfig;
+import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIApplication;
+import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
+import org.exoplatform.webui.core.model.SelectItemOption;
+import org.exoplatform.webui.event.Event;
+import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.event.Event.Phase;
+import org.exoplatform.webui.form.UIForm;
+import org.exoplatform.webui.form.UIFormInputInfo;
+import org.exoplatform.webui.form.UIFormInputSet;
+import org.exoplatform.webui.form.UIFormPageIterator;
+import org.exoplatform.webui.form.UIFormRadioBoxInput;
+import org.exoplatform.webui.form.UIFormSelectBox;
+import org.exoplatform.webui.form.UIFormStringInput;
+import org.exoplatform.webui.form.UIFormTableInputSet;
+import org.exoplatform.webui.form.validator.StringLengthValidator;
+import org.gatein.common.i18n.LocalizedString;
+import org.gatein.pc.api.Portlet;
+import org.gatein.pc.api.PortletInvoker;
+import org.gatein.pc.api.PortletInvokerException;
+import org.gatein.pc.api.info.MetaInfo;
+import org.gatein.pc.api.info.PortletInfo;
+import org.gatein.pc.federation.FederatingPortletInvoker;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.ResourceBundle;
+import java.util.Set;
+
+/**
+ * Created by The eXo Platform SAS
+ * Author : Pham Thanh Tung
+ *          thanhtungty@gmail.com
+ * Jul 10, 2008  
+ */
+@ComponentConfig(template = "system:/groovy/webui/form/UIForm.gtmpl", lifecycle = UIFormLifecycle.class, events = {
+   @EventConfig(listeners = UIAddApplicationForm.ChangeTypeActionListener.class, phase = Phase.DECODE),
+   @EventConfig(listeners = UIAddApplicationForm.AddActionListener.class),
+   @EventConfig(listeners = UIAddApplicationForm.CancelActionListener.class, phase = Phase.DECODE)})
+public class UIAddApplicationForm extends UIForm
+{
+
+   final static public String FIELD_NAME = "displayName";
+
+   final static public String FIELD_TYPE = "type";
+
+   final static public String FIELD_APPLICATION = "application";
+
+   final static String[] TABLE_COLUMNS = {"input", "label", "description"};
+
+   private List<Application> applications_ = new ArrayList<Application>();
+
+   public UIAddApplicationForm() throws Exception
+   {
+
+      WebuiRequestContext contextres = WebuiRequestContext.getCurrentInstance();
+      ResourceBundle res = contextres.getApplicationResourceBundle();
+
+      addUIFormInput(new UIFormStringInput(FIELD_NAME, null, null).addValidator(StringLengthValidator.class, 3, 30));
+      List<SelectItemOption<String>> types = new ArrayList<SelectItemOption<String>>(2);
+      types.add(new SelectItemOption<String>(org.exoplatform.web.application.Application.EXO_PORTLET_TYPE));
+      types.add(new SelectItemOption<String>(org.exoplatform.web.application.Application.EXO_GADGET_TYPE));
+      UIFormSelectBox uiSelectBox = new UIFormSelectBox(FIELD_TYPE, null, types);
+      uiSelectBox.setOnChange("ChangeType");
+      addUIFormInput(uiSelectBox);
+      String tableName = getClass().getSimpleName();
+      UIFormTableIteratorInputSet uiTableInputSet = createUIComponent(UIFormTableIteratorInputSet.class, null, null);
+      uiTableInputSet.setName(tableName);
+      uiTableInputSet.setId(tableName);
+      uiTableInputSet.setColumns(TABLE_COLUMNS);
+      addChild(uiTableInputSet);
+      setApplicationList(org.exoplatform.web.application.Application.EXO_PORTLET_TYPE);
+      setActions(new String[]{"Add", "Cancel"});
+   }
+
+   public List<Application> getApplications()
+   {
+      return applications_;
+   }
+
+   public void setApplicationList(String type) throws Exception
+   {
+      applications_.clear();
+      applications_ = getApplicationByType(type);
+      setup();
+   }
+
+   private void setup() throws Exception
+   {
+      List<UIFormInputSet> uiInputSetList = new ArrayList<UIFormInputSet>();
+      UIFormTableInputSet uiTableInputSet = getChild(UIFormTableInputSet.class);
+      int i = 0;
+      for (Application app : applications_)
+      {
+         UIFormInputSet uiInputSet = new UIFormInputSet(app.getId());
+         ArrayList<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>(5);
+         options.add(new SelectItemOption<String>("", String.valueOf(i)));
+         UIFormRadioBoxInput uiRadioInput = new UIFormRadioBoxInput(FIELD_APPLICATION, "", options);
+         //TODO review
+         if (i == 0)
+         {
+            uiRadioInput.setValue(options.get(0).getValue());
+         }
+         //----------------------------------------------
+         uiInputSet.addChild(uiRadioInput);
+         UIFormInputInfo uiInfo = new UIFormInputInfo("label", null, app.getDisplayName());
+         uiInputSet.addChild(uiInfo);
+         uiInfo = new UIFormInputInfo("description", null, app.getDescription());
+         uiInputSet.addChild(uiInfo);
+         uiTableInputSet.addChild(uiInputSet);
+         uiInputSetList.add(uiInputSet);
+         i++;
+      }
+      UIFormPageIterator uiIterator = uiTableInputSet.getChild(UIFormPageIterator.class);
+      LazyPageList<UIFormInputSet> pageList =
+         new LazyPageList<UIFormInputSet>(new FormInputSetListAccess(uiInputSetList), 10);
+      uiIterator.setPageList(pageList);
+   }
+
+   private List<Application> getApplicationByType(String type) throws Exception
+   {
+      if (org.exoplatform.web.application.Application.EXO_PORTLET_TYPE.equals(type))
+      {
+         return createApplicationsFromPortlets(false);
+      }
+      else if (org.exoplatform.web.application.Application.WSRP_TYPE.equals(type))
+      {
+         return createApplicationsFromPortlets(true);
+      }
+      else if (org.exoplatform.web.application.Application.EXO_GADGET_TYPE.equals(type))
+      {
+         GadgetRegistryService gadgetService = getApplicationComponent(GadgetRegistryService.class);
+         List<Gadget> gadgets = gadgetService.getAllGadgets();
+         List<Application> applications = new ArrayList<Application>(gadgets.size());
+         for (Gadget gadget : gadgets)
+         {
+            Application app = new Application();
+            app.setApplicationName(gadget.getName());
+            app.setApplicationGroup(GadgetApplication.EXO_GADGET_GROUP);
+            app.setApplicationType(org.exoplatform.web.application.Application.EXO_GADGET_TYPE);
+            app.setDisplayName(gadget.getTitle());
+            app.setUri(gadget.getUrl());
+            String description =
+               (gadget.getDescription() == null || gadget.getDescription().length() < 1) ? gadget.getName() : gadget
+                  .getDescription();
+            app.setDescription(description);
+            app.setAccessPermissions(new ArrayList<String>());
+            applications.add(app);
+         }
+         return applications;
+      }
+
+      return Collections.emptyList();
+   }
+
+   private List<Application> createApplicationsFromPortlets(boolean remote) throws PortletInvokerException
+   {
+      ExoContainer manager = ExoContainerContext.getCurrentContainer();
+
+      FederatingPortletInvoker portletInvoker =
+         (FederatingPortletInvoker)manager.getComponentInstance(PortletInvoker.class);
+      Set<Portlet> portlets = remote ? portletInvoker.getRemotePortlets() : portletInvoker.getLocalPortlets();
+      List<Application> applications = new ArrayList<Application>(portlets.size());
+      for (Portlet portlet : portlets)
+      {
+         PortletInfo info = portlet.getInfo();
+
+         LocalizedString descriptionLS = info.getMeta().getMetaValue(MetaInfo.DESCRIPTION);
+         LocalizedString displayNameLS = info.getMeta().getMetaValue(MetaInfo.DISPLAY_NAME);
+
+         String portletName = info.getName();
+         Application app = new Application();
+         app.setApplicationName(portletName);
+         app.setApplicationGroup(info.getApplicationName());
+         String appType = org.exoplatform.web.application.Application.EXO_PORTLET_TYPE;
+         if (remote)
+         {
+            appType = org.exoplatform.web.application.Application.WSRP_TYPE;
+         }
+         app.setApplicationType(appType);
+         app.setDisplayName(Util.getLocalizedStringValue(displayNameLS, portletName));
+         app.setDescription(Util.getLocalizedStringValue(descriptionLS, portletName));
+         app.setAccessPermissions(new ArrayList<String>());
+         app.setUri(portlet.getContext().getId());
+         applications.add(app);
+      }
+
+      return applications;
+   }
+
+   public static class ChangeTypeActionListener extends EventListener<UIAddApplicationForm>
+   {
+
+      public void execute(Event<UIAddApplicationForm> event) throws Exception
+      {
+         UIAddApplicationForm uiForm = event.getSource();
+         String type = uiForm.getUIFormSelectBox(UIAddApplicationForm.FIELD_TYPE).getValue();
+         uiForm.setApplicationList(type);
+         event.getRequestContext().addUIComponentToUpdateByAjax(uiForm);
+      }
+
+   }
+
+   public static class AddActionListener extends EventListener<UIAddApplicationForm>
+   {
+
+      public void execute(Event<UIAddApplicationForm> event) throws Exception
+      {
+         UIAddApplicationForm uiForm = event.getSource();
+         UIApplicationOrganizer uiOrganizer = uiForm.getParent();
+         WebuiRequestContext ctx = event.getRequestContext();
+         ApplicationRegistryService appRegService = uiForm.getApplicationComponent(ApplicationRegistryService.class);
+         ApplicationCategory selectedCate = uiOrganizer.getSelectedCategory();
+         if (appRegService.getApplicationCategory(selectedCate.getName()) == null)
+         {
+            uiOrganizer.reload();
+            UIApplication uiApp = ctx.getUIApplication();
+            uiApp.addMessage(new ApplicationMessage("category.msg.changeNotExist", null));
+            ctx.addUIComponentToUpdateByAjax(uiOrganizer);
+            return;
+         }
+
+         UIFormRadioBoxInput uiRadio = uiForm.getUIInput("application");
+         String displayName = uiForm.getUIStringInput(FIELD_NAME).getValue();
+         Application tmp = uiForm.getApplications().get(Integer.parseInt(uiRadio.getValue()));
+
+         // check portet name is exist
+         if (appRegService.getApplication(selectedCate.getName(), tmp.getApplicationName()) != null)
+         {
+            WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
+            UIApplication uiApp = context.getUIApplication();
+            uiApp.addMessage(new ApplicationMessage("UIAddApplicationForm.msg.PortletExist", null));
+            return;
+         }
+
+         Application app = cloneApplication(tmp);
+         if (displayName != null && displayName.trim().length() > 0)
+         {
+            app.setDisplayName(displayName);
+         }
+
+         appRegService.save(selectedCate, app);
+         uiOrganizer.setSelectedCategory(selectedCate);
+         uiOrganizer.selectApplication(app.getApplicationName());
+         ctx.addUIComponentToUpdateByAjax(uiOrganizer);
+      }
+
+      private Application cloneApplication(Application app)
+      {
+         Application newApp = new Application();
+         newApp.setApplicationName(app.getApplicationName());
+         newApp.setDisplayName(app.getDisplayName());
+         newApp.setApplicationType(app.getApplicationType());
+         newApp.setApplicationGroup(app.getApplicationGroup());
+         newApp.setDescription(app.getDescription());
+         newApp.setAccessPermissions(app.getAccessPermissions());
+         newApp.setUri(app.getUri());
+         return newApp;
+      }
+
+   }
+
+   public static class CancelActionListener extends EventListener<UIAddApplicationForm>
+   {
+
+      public void execute(Event<UIAddApplicationForm> event) throws Exception
+      {
+         UIApplicationOrganizer uiOrganizer = event.getSource().getParent();
+         uiOrganizer.setSelectedApplication(uiOrganizer.getSelectedApplication());
+         event.getRequestContext().addUIComponentToUpdateByAjax(uiOrganizer);
+
+      }
+
+   }
+
+}

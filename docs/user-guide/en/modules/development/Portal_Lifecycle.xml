@@ -1,0 +1,746 @@
+<!--
+
+    Copyright (C) 2009 eXo Platform SAS.
+    
+    This is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Lesser General Public License as
+    published by the Free Software Foundation; either version 2.1 of
+    the License, or (at your option) any later version.
+    
+    This software is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+    Lesser General Public License for more details.
+    
+    You should have received a copy of the GNU Lesser General Public
+    License along with this software; if not, write to the Free
+    Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+    02110-1301 USA, or see the FSF site: http://www.fsf.org.
+
+-->
+
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook V4.4//EN" "http://www.oasis-open.org/docbook/sgml/4.4/docbookx.dtd">
+<section>
+	<title>Portal Lifecycle</title>
+	<section>
+		<title>Overview</title>
+	</section>
+	<para>This chapter describes the portal lifecycle from the
+		application server start to its stop as well as how requests are
+		handled.</para>
+	<section>
+		<title>Application Server start and stop</title>
+	</section>
+	<para>An GateIn Portal instance is simply a web application deployed
+		as a WAR in an application server. Each portlet is also part of an
+		enhanced WAR that we call a portlet application. Hence, the portal
+		web.xml file is the main entry point to grab information about how
+		does the portal start.</para>
+	<para>The web.xml file contains several information such as a
+		listener, a servlet as well as some security information.</para>
+	<section>
+		<title>The Listener</title>
+	</section>
+	<para>In the web.xml we can find servlet listener:</para>
+	<programlisting>  &lt;!- ================================================================== -&gt;
+  &lt;!-           LISTENER                                                 -&gt;
+  &lt;!- ================================================================== -&gt;
+  &lt;listener&gt;
+    &lt;listener-class&gt;org.exoplatform.portal.application.PortalSessionListener&lt;/listener-class&gt;
+  &lt;/listener&gt;
+</programlisting><para>That listener implements the HttpSessionListener which means it is called each time a session is created or destroyed; in other words, a session is created each time a user send a first request to the portal.  That session is destroyed when he has not sent request to the portal for a long time or when he closes his browser.</para><programlisting>public class PortalSessionListener implements HttpSessionListener
+</programlisting><para>Only the destroy method of the Listener object is implemented and it is used to flush resources when a user portal session expires. Here is the code:</para><programlisting>  /**
+   * This method is called when a HTTP session of a Portal instance is destroyed. 
+   * By default the session time is 30 minutes.
+   * 
+   * In this method, we:
+   * 1) first get the portal instance name from where the session is removed.
+   * 2) Get the correct instance object from the Root container
+   * 3) Put the portal instance in the Portal ThreadLocal
+   * 4) Get the main entry point (WebAppController) from the current portal container 
+   * 5) Extract from the WebAppController the PortalApplication object which is the entry point to
+   *    the StateManager object
+   * 6) Expire the portal session stored in the StateManager
+   * 7) Finally, removes the WindowInfos object from the WindowInfosContainer container
+   * 8) Flush the threadlocal for the PortalContainer
+   * 
+   */
+  public void sessionDestroyed(HttpSessionEvent event) {
+    try {
+      String portalContainerName = event.getSession().getServletContext().getServletContextName() ;
+      log.warn(&quot;Destroy session from &quot; + portalContainerName + &quot; portal&quot;);
+      RootContainer rootContainer = RootContainer.getInstance() ;
+      PortalContainer portalContainer = rootContainer.getPortalContainer(portalContainerName) ;
+      PortalContainer.setInstance(portalContainer); 
+      WebAppController controller = 
+        (WebAppController)portalContainer.getComponentInstanceOfType(WebAppController.class) ;
+      PortalApplication portalApp =  controller.getApplication(PortalApplication.PORTAL_APPLICATION_ID) ;
+      portalApp.getStateManager().expire(event.getSession().getId(), portalApp) ;
+      
+      WindowInfosContainer.removeInstance(portalContainer, event.getSession().getId());
+    } catch(Exception ex) {
+      log.error(&quot;Error while destroying a portal session&quot;,ex);
+    } finally {
+      PortalContainer.setInstance(null) ;
+    }
+  }
+</programlisting><para>1.1 The Servlet</para><para>The servlet is the main entry point for incoming requests, it also includes some interesting init code when the portal is launched.</para><para>Here is its definition in the web.xml file:</para><programlisting>  &lt;!-- ================================================================== --&gt;
+  &lt;!--           SERVLET                                                  --&gt;
+  &lt;!-- ================================================================== --&gt;
+  &lt;servlet&gt;
+    &lt;servlet-name&gt;portal&lt;/servlet-name&gt;
+    &lt;servlet-class&gt;org.exoplatform.portal.application.PortalController&lt;/servlet-class&gt;
+    &lt;init-param&gt;
+      &lt;param-name&gt;webui.configuration&lt;/param-name&gt;
+      &lt;param-value&gt;app:/WEB-INF/webui-configuration.xml&lt;/param-value&gt;
+    &lt;/init-param&gt;
+    &lt;load-on-startup&gt;1&lt;/load-on-startup&gt;
+  &lt;/servlet&gt;
+</programlisting><para>The load-on-startup tag tells that the init method of the servlet is called when the application server starts. We also define some configuration for the portal at the path WEB-INF/webui-configuration.xml inside the portal WAR.</para><programlisting>/**
+ * The PortalContainer servlet is the main entry point for the GateIn Portal product.
+ * 
+ * Both the init() and service() methods are implemented. The first one is used to configure all the
+ * portal resources to prepare the platform to receive requests. The second one is used to handle them.
+ * 
+ * Basically, this class is just dispatcher as the real business logic is implemented inside 
+ * the WebAppController class.
+ */
+@SuppressWarnings(&quot;serial&quot;)
+public class PortalController  extends HttpServlet {
+  
+  protected static Log log = ExoLogger.getLogger(&quot;portal:PortalController&quot;);  
+  
+  /**
+   * The init() method is used to prepare the portal to receive requests. 
+   * 
+   *  1) Create the PortalContainer and store it inside the ThreadLocal object. The PortalContainer is
+   *     a child of the RootContainer
+   *  2) Get the WebAppController component from the container
+   *  3) Create a new PortalApplication, init it with the ServletConfig object (which contains init params)
+   *  4) Register that PortalApplication inside WebAppController
+   *  5) Create a new PortalRequestHandler object and register it in the WebAppController
+   *  6) Release the PortalContainer ThreadLocal 
+   */
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public void init(ServletConfig config) throws ServletException {
+    super.init(config) ;
+    try {
+      RootContainer rootContainer = RootContainer.getInstance() ;
+      PortalContainer portalContainer = 
+        rootContainer.getPortalContainer(config.getServletContext().getServletContextName()) ;
+      portalContainer = rootContainer.createPortalContainer(config.getServletContext()) ;
+      PortalContainer.setInstance(portalContainer) ;
+      WebAppController controller = 
+        (WebAppController)portalContainer.getComponentInstanceOfType(WebAppController.class) ;
+      PortalApplication application = new PortalApplication(config);
+      application.onInit() ;
+      controller.addApplication(application) ;
+      controller.register(new PortalRequestHandler()) ;
+    } catch (Throwable t){
+      throw new ServletException(t) ;
+    } finally {
+      try {
+        PortalContainer.setInstance(null) ;
+      } catch (Exception e) {
+        log.warn(&quot;An error occured while cleaning the ThreadLocal&quot;, e);
+      }      
+    }
+    log.info(&quot;Init of PortalController Servlet successful&quot;);
+  }
+...
+</programlisting><para>We see that a PortalApplication class is instantiated, initialized and then referenced inside the WebAppController. Note that the WebAppController is a component located inside GateIn IoC service container (and hence registered in one of our service configuration XML file).</para><para>The &lt;code&gt;&lt;strong&gt;PortalApplication&lt;/strong&gt;&lt;/code&gt; extends the &lt;code&gt;&lt;strong&gt;WebuiApplication&lt;/strong&gt;&lt;/code&gt; which itself extends the &lt;code&gt;&lt;strong&gt;Application&lt;/strong&gt;&lt;/code&gt; abstract class.</para><programlisting>public class PortalApplication extends WebuiApplication {
+  
+  protected static Log log = ExoLogger.getLogger(&quot;portal:PortalApplication&quot;);  
+  
+  final static public String PORTAL_APPLICATION_ID = &quot;PortalApplication&quot; ;
+  
+  private ServletConfig sconfig_ ;
+  private String[] applicationResourceBundleNames_ ;
+  
+  /**
+   * The constructor references resource resolvers that allows the ApplicationResourceResolver to
+   * extract files from different locations such as the current war or external one such as the resource 
+   * one where several static files are shared among all portal instances.
+   * 
+   * 
+   * @param config, the servlet config that contains init params such as the path location of
+   * the XML configuration file for the WebUI framework
+   */
+  public PortalApplication(ServletConfig config) throws Exception {
+    sconfig_ = config ;
+    ApplicationResourceResolver resolver = new ApplicationResourceResolver() ;
+    resolver.addResourceResolver(new ServletResourceResolver(config.getServletContext(), &quot;war:&quot;)) ;
+    resolver.addResourceResolver(new ServletResourceResolver(config.getServletContext(), &quot;app:&quot;)) ;
+    resolver.addResourceResolver(new ServletResourceResolver(config.getServletContext(), &quot;system:&quot;)) ;
+    resolver.addResourceResolver(new ServletResourceResolver(config.getServletContext().getContext(&quot;/GateInResources&quot;), &quot;resources:&quot;)) ;
+    setResourceResolver(resolver) ;
+  }
+...
+</programlisting><para>The main goal of this constructor is to fill an &lt;code&gt;&lt;strong&gt;ApplicationResourceResolver&lt;/strong&gt;&lt;/code&gt; with several &lt;code&gt;&lt;strong&gt;ResourceResolver&lt;/strong&gt;&lt;/code&gt; object that will allow the application to check for files such as groovy templates into different locations. Here the goal of the &lt;code&gt;&lt;strong&gt;ResourceResolver&lt;/strong&gt;&lt;/code&gt; is to abstract the different mechanisms to extract files from different location. In the previous code sample the &lt;code&gt;&lt;strong&gt;ServletResourceResolver&lt;/strong&gt;&lt;/code&gt; is used and hence methods based on the servlet context object are defined. Note that the &lt;code&gt;&lt;strong&gt;ApplicationResourceResolver&lt;/strong&gt;&lt;/code&gt; is also a class of type &lt;code&gt;&lt;strong&gt;ResourceResolver&lt;/strong&gt;&lt;/code&gt; but a special one as it can also contains several &lt;code&gt;&lt;strong&gt;ResourceResolver&lt;/strong&gt;&lt;/code&gt; itself.</para><para>Then the &lt;code&gt;&lt;strong&gt;onInit()&lt;/strong&gt;&lt;/code&gt; method of the &lt;code&gt;&lt;strong&gt;PortalApplication&lt;/strong&gt;&lt;/code&gt; is called.</para><programlisting>/**
+   * This method first calls the super.onInit() of the WebuiApplication. That super method parse the XML
+   * file and stores its content in the ConfigurationManager object. It also set up he StateManager and 
+   * init the application lifecycle phases.
+   * 
+   * Then we get all the properties file that will be used to create ResourceBundles
+   */
+  public void onInit() throws Exception {
+    super.onInit() ;
+    applicationResourceBundleNames_ =
+      getConfigurationManager().getApplication().getInitParams().
+      getParam(&quot;application.resource.bundle&quot;).getValue().split(&quot;,&quot;);
+    for(int i = 0; i &lt; applicationResourceBundleNames_.length; i++)  {
+      applicationResourceBundleNames_[i] = applicationResourceBundleNames_[i].trim() ;
+    }
+  }
+</programlisting><para>The &lt;code&gt;&lt;strong&gt;ConfigurationManager&lt;/strong&gt;&lt;/code&gt; object parses the XML configuration file. The idea of the framework, once again, is to abstract the type of &lt;code&gt;&lt;strong&gt;webapplication&lt;/strong&gt;&lt;/code&gt; in used. Hence the &lt;code&gt;&lt;strong&gt;webui-configuration.xml&lt;/strong&gt;&lt;/code&gt; file is used by both the portal and portlet applications.</para><para>Here is the &lt;code&gt;&lt;strong&gt;webui-configuration&lt;/strong&gt;&lt;/code&gt;:</para><programlisting>&lt;webui-configuration&gt;  
+  &lt;application&gt;     
+    &lt;init-params&gt;
+      &lt;param&gt;
+        &lt;name&gt;application.resource.bundle&lt;/name&gt;
+        &lt;value&gt;locale.portal.expression, locale.portal.services, locale.portal.webui&lt;/value&gt;
+      &lt;/param&gt;
+    &lt;/init-params&gt;
+    &lt;ui-component-root&gt;org.exoplatform.portal.webui.workspace.UIPortalApplication&lt;/ui-component-root&gt;    
+    &lt;state-manager&gt;org.exoplatform.portal.application.PortalStateManager&lt;/state-manager&gt;
+    
+    &lt;application-lifecycle-listeners&gt;       
+      &lt;listener&gt;org.exoplatform.portal.application.PortalStatisticLifecycle&lt;/listener&gt;       
+      &lt;listener&gt;org.exoplatform.portal.application.PortalApplicationLifecycle&lt;/listener&gt;
+      &lt;listener&gt;org.exoplatform.webui.application.MonitorApplicationLifecycle&lt;/listener&gt;       
+    &lt;/application-lifecycle-listeners&gt;     
+    &lt;events&gt;
+      &lt;event&gt;
+        &lt;event-name&gt;portal.application.lifecycle.event&lt;/event-name&gt;
+        &lt;listener&gt;org.exoplatform.webui.event.ConsoleEventMonitorListener&lt;/listener&gt;
+      &lt;/event&gt;
+      &lt;event&gt;
+        &lt;event-name&gt;portal.execution.lifecycle.event&lt;/event-name&gt;
+        &lt;listener&gt;org.exoplatform.webui.event.ConsoleEventMonitorListener&lt;/listener&gt;
+      &lt;/event&gt;
+    &lt;/events&gt;
+  &lt;/application&gt;
+&lt;/webui-configuration&gt;
+</programlisting><para>In the previous XML file we see that we define several tags such as:</para><para>1.1.1 The ui-component-root</para><para>Here it is the class &lt;code&gt;&lt;strong&gt;org.exoplatform.portal.webui.workspace.UIPortalApplication&lt;/strong&gt;&lt;/code&gt; which is a class that extends the &lt;code&gt;&lt;strong&gt;UIApplication&lt;/strong&gt;&lt;/code&gt; and hence is a sibling of &lt;code&gt;&lt;strong&gt;UIPortletApplication&lt;/strong&gt;&lt;/code&gt; (used by any GateIn Portlets as the Parent class to build the portlet component tree).</para><para>The &lt;code&gt;&lt;strong&gt;UIPortalApplication&lt;/strong&gt;&lt;/code&gt; is responsible for building its subtrees - at request time according to some configuration parameters. If all components are displayed it is composed of 3 UI components:</para><itemizedlist><listitem>&lt;code&gt;&lt;strong&gt;UIControlWorkSpace&lt;/strong&gt;&lt;/code&gt; : the left expandable column that can contains gadget containers and the start menu</listitem><listitem>&lt;code&gt;&lt;strong&gt;UIWorkingWorkSpace&lt;/strong&gt;&lt;/code&gt;: the right part that can display the normal or webos portal layouts.</listitem><listitem>&lt;code&gt;&lt;strong&gt;UIPopupWindow&lt;/strong&gt;&lt;/code&gt;: a popup window that display or not.</listitem></itemizedlist><para>The &lt;code&gt;&lt;strong&gt;UIPortalApplication&lt;/strong&gt;&lt;code&gt; constructor is shown next and is the starting point to build the UI Component tree to which Pages and Portlets will also be mounted. We will not describe that behavior here.</para><programlisting>/**
+   * The constructor of this class is used to build the tree of UI components that will be aggregated
+   * in the portal page. 
+   * 
+   * 1) The component is stored in the current PortalRequestContext ThreadLocal 
+   * 2) The configuration for the portal associated with the current user request is extracted from the 
+   *    PortalRequestContext
+   * 3) Then according to the context path, either a public or private portal is initiated. Usually a public
+   *    portal does not contain the left column and only the private one has it.
+   * 4) The skin to use is setup
+   * 5) Finally, the current component is associated with the current portal owner      
+   * 
+   * @throws Exception
+   */
+  public UIPortalApplication() throws Exception {
+    log = ExoLogger.getLogger(&quot;portal:UIPortalApplication&quot;); 
+    PortalRequestContext  context = PortalRequestContext.getCurrentInstance() ;
+    userPortalConfig_ = (UserPortalConfig)context.getAttribute(UserPortalConfig.class);
+    if(userPortalConfig_ == null) throw new Exception(&quot;Can't load user portal config&quot;);
+    
+    //  dang.tung - set portal language by user preference -&gt; browser -&gt; default
+    //----
+    String portalLanguage = null ;
+    LocaleConfigService localeConfigService  = getApplicationComponent(LocaleConfigService.class) ;
+    OrganizationService orgService = getApplicationComponent(OrganizationService.class) ;
+    LocaleConfig localeConfig = localeConfigService.getLocaleConfig(userPortalConfig_.getPortalConfig().getLocale());
+    String user = context.getRemoteUser();
+    if(user!images/= null) {
+      UserProfile userProfile = orgService.getUserProfileHandler().findUserProfileByName(user) ;
+      if(userProfile!images/= null) {
+        portalLanguage = userProfile.getUserInfoMap().get(&quot;user.language&quot;) ;
+       } else {
+         if (log.isWarnEnabled()) log.warn(&quot;Could not load user profile for &quot; + user + &quot;. Using default portal locale.&quot;);
+       }
+    }
+    localeConfig = localeConfigService.getLocaleConfig(portalLanguage) ;
+    if(portalLanguage == null ||!images/portalLanguage.equals(localeConfig.getLanguage())) {
+      // if user language no support by portal -&gt; get browser language if no -&gt; get portal
+      portalLanguage = context.getRequest().getLocale().getLanguage() ;
+      localeConfig = localeConfigService.getLocaleConfig(portalLanguage) ;
+      if(!portalLanguage.equals(localeConfig.getLanguage())) {
+        localeConfig = localeConfigService.getLocaleConfig(userPortalConfig_.getPortalConfig().getLocale()) ;
+      }
+    }
+    setLocale(localeConfig.getLocale()) ;
+    setOrientation(localeConfig.getOrientation());
+    //----
+    context.setUIApplication(this);
+    UserACL acl = getApplicationComponent(UserACL.class);
+    if(acl.hasAccessControlWorkspacePermission(context.getRemoteUser()))
+      addChild(UIControlWorkspace.class, UIPortalApplication.UI_CONTROL_WS_ID, null) ;
+    addWorkingWorkspace() ;
+    String currentSkin = userPortalConfig_.getPortalConfig().getSkin();
+    if(currentSkin!images/= null &amp;&amp; currentSkin.trim().length() &gt; 0) skin_ = currentSkin;
+    setOwner(context.getPortalOwner());
+  }
+...
+</programlisting><para>1.1.1 The StateManager</para><para>The &lt;code&gt;&lt;strong&gt;StateManager&lt;/strong&gt;&lt;/code&gt; here is in the &lt;code&gt;&lt;strong&gt;org.exoplatform.portal.application&lt;/strong&gt;&lt;/code&gt; package which is an abstract class.</para><programlisting>abstract public class StateManager {
+  abstract public UIApplication restoreUIRootComponent(WebuiRequestContext context) throws Exception ;
+  abstract public void storeUIRootComponent(WebuiRequestContext context) throws Exception ;
+  abstract public void expire(String sessionId, WebuiApplication app) throws Exception ;
+}
+</programlisting><para>The goal of the &lt;code&gt;&lt;strong&gt;StateManager&lt;/strong&gt;&lt;/code&gt; is to abstract the way &lt;code&gt;&lt;strong&gt;UIApplication&lt;/strong&gt;&lt;/code&gt; are stored and restored for all the user session lifetime. The expire method is called from the listener we have introduced before in this chapter.</para><para>1.1.1 The application-lifecycle-listeners</para><para>There are 2 lifecycle listeners in the Portal, one for the real business logic (&lt;code&gt;&lt;strong&gt;PortalApplicationLifecycle&lt;/strong&gt;&lt;/code&gt;), the other one for some monitoring issues. They both implement the interface &lt;code&gt;&lt;strong&gt;ApplicationLifecycle&lt;E extends RequestContext&gt;&lt;/strong&gt;&lt;/code&gt;.</para><programlisting>public interface ApplicationLifecycle&lt;E extends RequestContext&gt; {
+  
+  public void onInit(Application app) throws Exception  ;
+  public void onStartRequest(Application app, E context) throws Exception  ;
+  public void onEndRequest(Application app, E context) throws Exception  ;
+  public void onDestroy(Application app) throws Exception  ;
+  
+}
+</programlisting><para>Each registered lifecycle listener will then be able to get events when several states of the portal lifecycle are reached.</para><para>1.1 The Request Handler</para><para>Once started and fully configured, the portal application WAR can handle HTTP requests.</para><para>The entry point is for sure the PortalController servlet we have already seen in the current chapter and defined in the &lt;code&gt;&lt;strong&gt;web.xml&lt;/strong&gt;&lt;/code&gt; of the portal context.</para><programlisting>...
+ /**
+   * This method simply delegates the incoming call to the WebAppController stored in the Portal Container object
+   */
+  public void service(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+    try {
+      ServletConfig config =  getServletConfig() ;
+      RootContainer rootContainer = RootContainer.getInstance() ;
+      PortalContainer portalContainer = 
+        rootContainer.getPortalContainer(config.getServletContext().getServletContextName()) ;
+      PortalContainer.setInstance(portalContainer) ;
+      WebAppController controller = 
+        (WebAppController)portalContainer.getComponentInstanceOfType(WebAppController.class) ;
+      controller.service(req, res) ;
+    } catch (Throwable t){
+      throw new ServletException(t) ;
+    } finally {
+      try {
+        PortalContainer.setInstance(null) ;
+      } catch (Exception e) {
+        log.warn(&quot;An error occured while cleaning the ThreadLocal&quot;, e);
+      }      
+    }
+...
+</programlisting><para>The &lt;code&gt;&lt;strong&gt;WebAppController&lt;/strong&gt;&lt;/code&gt; is also a simple class on which several handlers can be bound. We have already seen that the &lt;code&gt;&lt;strong&gt;PortalRequestHandler&lt;/strong&gt;&lt;/code&gt; was already added in the init method of the servlet.</para><programlisting>...
+/**
+   * The WebAppControler along with the PortalRequestHandler defined in the init() method of the
+   * PortalController servlet (controller.register(new PortalRequestHandler())) also add the
+   * CommandHandler object that will listen for the incoming /command path in the URL
+   * 
+   * @throws Exception
+   */
+  public WebAppController() throws Exception {
+    applications_ = new HashMap&lt;String, Application&gt;() ;
+    attributes_ = new HashMap&lt;String, Object&gt;() ;
+    handlers_ = new HashMap&lt;String, WebRequestHandler&gt;() ;
+    register(new CommandHandler()) ;
+  }
+...
+</programlisting><para>Then the service method - modelled according to the servlet specification is called:</para><programlisting>...
+ /**
+   * This is the first method - in the GateIn web framework - reached by incoming HTTP request, it acts like a
+   * servlet service() method
+   * 
+   * According to the servlet path used the correct handler is selected and then executed.
+   * 
+   * The event &quot;exo.application.portal.start-http-request&quot; and &quot;exo.application.portal.end-http-request&quot; are also sent 
+   * through the ListenerService and several listeners may listen to it.
+   * 
+   * Finally a WindowsInfosContainer object using a ThreadLocal (from the portlet-container product) is created 
+   */
+  public void service(HttpServletRequest req, HttpServletResponse res) throws Exception {
+    WebRequestHandler handler = handlers_.get(req.getServletPath()) ;
+    if(log.isDebugEnabled()) {
+      log.debug(&quot;Servlet Path: &quot; + req.getServletPath());    
+      log.debug(&quot;Handler used for this path: &quot; + handler);
+    }
+    if(handler!images/= null) {
+      ExoContainer portalContainer = ExoContainerContext.getCurrentContainer();
+      List&lt;ComponentRequestLifecycle&gt; components = 
+        portalContainer.getComponentInstancesOfType(ComponentRequestLifecycle.class) ;
+      try {
+        for(ComponentRequestLifecycle component : components) {
+          component.startRequest(portalContainer);
+        }
+        WindowInfosContainer.createInstance(portalContainer, req.getSession().getId(), req.getRemoteUser());
+        
+        handler.execute(this, req, res) ;
+      } finally {
+        WindowInfosContainer.setInstance(null);
+        for(ComponentRequestLifecycle component : components) {
+          try {
+            component.endRequest(portalContainer);
+          } catch (Exception e) {
+            log.warn(&quot;An error occured while calling the endRequest method&quot;, e);
+          }
+        }
+      }      
+    }
+...
+</programlisting><para>The handler in the portal case is the &lt;code&gt;&lt;strong&gt;PortalRequestHandler&lt;/strong&gt;&lt;/code&gt; which extends &lt;code&gt;&lt;strong&gt;WebRequestHandler&lt;/strong&gt;&lt;/code&gt; and that implement the abstract methods, mainly the execute() one.</para><programlisting>/**
+ * Created by The GateIn Platform SAS
+ * Mar 21, 2007  
+ * 
+ * Abstract class that one must implement if it want to provide a dedicated handler for a custom servlet path
+ * 
+ * In case of portal the path is /portal but you could return your own from the getPath() method and hence the 
+ * WebAppController would use your own handler
+ * 
+ * The execute method is to be overideen and the buisness logic should be handled here
+ */
+abstract public class WebRequestHandler {
+  
+  public void onInit(WebAppController controller) throws Exception{
+    
+  }
+  
+  abstract public String[] getPath() ;
+  abstract public void execute(WebAppController app,  HttpServletRequest req, HttpServletResponse res) throws Exception ;
+  
+  public void onDestroy(WebAppController controler) throws Exception {
+    
+  }
+}
+</programlisting><para>Here is the main class and the entire algorithm is described in the javadoc:</para><programlisting>/**
+ * Created by The GateIn Platform SAS
+ * Dec 9, 2006  
+ * 
+ * This class handle the request that target the portal paths /public and /private
+ * 
+ */
+public class PortalRequestHandler extends WebRequestHandler {
+  
+  protected static Log log = ExoLogger.getLogger(&quot;portal:PortalRequestHandler&quot;);  
+  static String[]  PATHS = {&quot;/public&quot;, &quot;/private&quot;} ;
+  public String[] getPath() { return PATHS ; }
+  /**
+   * This method will handle incoming portal request. It gets a reference to the WebAppController
+   * 
+   * Here are the steps done in the method:
+   * 
+   *   1) set the header Cache-Control to no-cache
+   *   2) Get the PortalApplication reference from the controller
+   *   3) Create a PortalRequestContext object that is a convenient wrapper on all the request information
+   *   4) Set that context in a ThreadLocal to easily access it
+   *   5) Get the collection of ApplicationLifecycle referenced in the PortalApplication and defined in the 
+   *      webui-configuration.xml of the portal application
+   *   6) Call onStartRequest() on each ApplicationLifecycle object
+   *   7) Get the StateManager object from the PortalApplication (also referenced in the XML file) 
+   *   8) Use the StateManager to get a reference on the root UI component: UIApplication; the method used is
+   *      restoreUIRootComponent(context)
+   *   9) If the UI component is not the current one in used in the PortalContextRequest, then replace it
+   *   10) Process decode on the PortalApplication
+   *   11) Process Action on the PortalApplication
+   *   12) Process Render on the UIApplication UI component        
+   *   11) call onEndRequest on all the ApplicationLifecycle 
+   *   12) Release the context from the thread
+   * 
+   */
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public void execute(WebAppController controller,  HttpServletRequest req, HttpServletResponse res) throws Exception {
+    log.debug(&quot;Session ID = &quot; + req.getSession().getId());
+    res.setHeader(&quot;Cache-Control&quot;, &quot;no-cache&quot;);
+    
+    PortalApplication app =  controller.getApplication(PortalApplication.PORTAL_APPLICATION_ID) ;
+    WebuiRequestContext context = new  PortalRequestContext(app, req, res) ;  ;
+    WebuiRequestContext.setCurrentInstance(context) ;
+    List&lt;ApplicationLifecycle&gt; lifecycles = app.getApplicationLifecycle();
+    try {
+      for(ApplicationLifecycle lifecycle :  lifecycles) lifecycle.onStartRequest(app, context) ;
+      UIApplication uiApp = app.getStateManager().restoreUIRootComponent(context) ;
+      if(context.getUIApplication()!images/= uiApp) context.setUIApplication(uiApp) ;
+      
+      if(uiApp!images/= null) app.processDecode(uiApp, context) ;
+      
+      if(!images/context.isResponseComplete() &amp;&amp;!images/ context.getProcessRender()) {
+        app.processAction(uiApp, context) ;
+      }
+      
+      if(!context.isResponseComplete()) uiApp.processRender(context) ;
+      
+      if(uiApp!images/= null) uiApp.setLastAccessApplication(System.currentTimeMillis()) ;
+    } catch(Exception ex){
+      log.error(&quot;Error while handling request&quot;,ex);
+    } finally {
+      try {
+        for(ApplicationLifecycle lifecycle :  lifecycles) lifecycle.onEndRequest(app, context) ;
+      } catch (Exception exception){
+    	log.error(&quot;Error while ending request on all ApplicationLifecycle&quot;,exception);
+      }
+      WebuiRequestContext.setCurrentInstance(null) ;
+    }
+  }
+</programlisting><para>The PortalRequestContext class is an important one as it is used in many places. The PortalRequestContext class wraps most of the request information. Accessing it from everywhere is quite simple as the object is stored in a ThreadLocal one, which means it bound to the current request thread. Hence a single call to WebuiRequestContext.getCurrentContext() will return the correct PortalRequestContext.</para><para>As you can see, the PortalRequestContext extends the WebuiRequestContext one which also extends the abstract class RequestContext. Once again this hierarchy is to abstract the type of context in use , would it be a portal or portlet one.</para><programlisting>/**
+ * Created by The GateIn Platform SAS
+ * May 7, 2006
+ * 
+ * This abstract class is a wrapper on top of the request information such as the Locale in use,
+ * the application (for instance PortalApplication, PortletApplication...), an access to the JavascriptManager
+ * as well as a reference to the URLBuilder in use.
+ * 
+ * It also contains a ThreadLocal object for an easy access.
+ * 
+ *  Context can be nested and hence a getParentAppRequestContext() is also available
+ * 
+ */
+abstract public class RequestContext {
+  
+  final static public String ACTION   = &quot;op&quot;; 
+  private  static ThreadLocal&lt;RequestContext&gt; tlocal_ = new ThreadLocal&lt;RequestContext&gt;()  ;
+  
+  private Application app_ ;
+  protected RequestContext parentAppRequestContext_ ;
+  private Map&lt;String, Object&gt; attributes ;
+  
+  protected URLBuilder urlBuilder;
+  
+  public RequestContext(Application app) {
+    app_ =  app ;
+  }
+  
+  public Application getApplication() { return  app_ ; }
+  
+  public Locale getLocale() { return parentAppRequestContext_.getLocale() ; }
+  
+  public ResourceBundle getApplicationResourceBundle() { return null; }
+  
+  abstract  public String getRequestParameter(String name)  ;
+  abstract  public String[] getRequestParameterValues(String name)  ;
+  
+  public  JavascriptManager getJavascriptManager() { 
+    return getParentAppRequestContext().getJavascriptManager() ;
+  }
+  
+  abstract public URLBuilder getURLBuilder() ;
+  
+  public String getRemoteUser() { return parentAppRequestContext_.getRemoteUser() ; }
+  public boolean isUserInRole(String roleUser) { return parentAppRequestContext_.isUserInRole(roleUser) ; }
+  
+  
+  abstract public  boolean useAjax() ;
+  public boolean getFullRender() { return true; }
+  
+  public ApplicationSession getApplicationSession()  {
+    throw  new RuntimeException(&quot;This method is not supported&quot;);
+  }
+  
+  public Writer getWriter() throws Exception { return parentAppRequestContext_.getWriter() ; }
+  
+  final public Object  getAttribute(String name) { 
+    if(attributes == null) return null ;
+    return attributes.get(name) ; 
+  }
+  
+  final public void setAttribute(String name, Object value) {
+    if(attributes == null) attributes = new HashMap&lt;String, Object&gt;() ;
+    attributes.put(name, value) ; 
+  }
+  
+  final public Object  getAttribute(Class type) { return getAttribute(type.getName()) ; }
+  final public void    setAttribute(Class type, Object value) { setAttribute(type.getName(), value) ; }
+ 
+  public RequestContext getParentAppRequestContext() { return parentAppRequestContext_ ; }
+  public void setParentAppRequestContext(RequestContext context) { parentAppRequestContext_ = context ; }
+  
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public static &lt;T extends RequestContext&gt; T getCurrentInstance()  { return (T)tlocal_.get() ; }
+  public static void setCurrentInstance(RequestContext ctx) { tlocal_.set(ctx) ; }
+}
+</programlisting><para>The WebuiRequestContext abstract class extends the RequestContext one and adds method for a Web environment such as accesses to the request and response objects or a list of components to update when using an Ajax call. More in the following header of the class:</para><programlisting>/**
+ * Created by The GateIn Platform SAS
+ * May 7, 2006
+ * 
+ * The main class to manage the request context in a webui environment
+ * 
+ * It adds:
+ * - some access to the root UI component (UIApplication)
+ * - access to the request and response objects
+ * - information about the current state of the request
+ * - the list of object to be updated in an AJAX way
+ * - an access to the ResourceResolver bound to an uri scheme
+ * - the reference on the StateManager object
+ */
+abstract public class WebuiRequestContext extends RequestContext {
+  
+  protected UIApplication  uiApplication_ ;
+  protected String sessionId_ ;
+  protected ResourceBundle appRes_ ;
+  private StateManager stateManager_ ;
+  private boolean  responseComplete_ = false ;
+  private boolean  processRender_ =  false ;
+  private Throwable executionError_ ;
+  private ArrayList&lt;UIComponent&gt;  uicomponentToUpdateByAjax ;
+  
+  public WebuiRequestContext(Application app) {
+    super(app) ;
+  }
+  
+  public String getSessionId() {  return sessionId_  ; }  
+  protected void setSessionId(String id) { sessionId_ = id ;}
+  
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public UIApplication getUIApplication() { return uiApplication_ ; }  
+  
+  public void  setUIApplication(UIApplication uiApplication) throws Exception { 
+    uiApplication_ = uiApplication ;
+    appRes_ = getApplication().getResourceBundle(uiApplication.getLocale()) ;   
+  }
+  
+  public Locale getLocale() {  return uiApplication_.getLocale() ;} 
+  
+  public ResourceBundle getApplicationResourceBundle() {  return appRes_ ; }
+  
+  public  String getActionParameterName() {  return WebuiRequestContext.ACTION ; }
+  
+  public  String getUIComponentIdParameterName() {  return UIComponent.UICOMPONENT; }
+  
+  abstract public String getRequestContextPath() ;
+  
+  abstract  public &lt;T&gt; T getRequest() throws Exception ;
+  
+  abstract  public &lt;T&gt; T getResponse() throws Exception ;
+  
+  public Throwable  getExecutionError()  { return executionError_ ; }
+  
+  public List&lt;UIComponent&gt;  getUIComponentToUpdateByAjax() {  return uicomponentToUpdateByAjax ; }
+  
+  public boolean isResponseComplete() { return responseComplete_ ;}
+  
+  public void    setResponseComplete(boolean b) { responseComplete_ = b ; }
+  
+  public boolean getProcessRender() { return processRender_ ;}
+  
+  public void    setProcessRender(boolean b) { processRender_ = b; }
+  
+  public void addUIComponentToUpdateByAjax(UIComponent uicomponent) {   
+    if(uicomponentToUpdateByAjax == null) {
+      uicomponentToUpdateByAjax =  new ArrayList&lt;UIComponent&gt;() ;
+    }
+    uicomponentToUpdateByAjax.add(uicomponent) ;
+  }
+ 
+  public ResourceResolver getResourceResolver(String uri) {
+    Application app = getApplication() ;
+    while(app!images/= null) {
+      ApplicationResourceResolver appResolver = app.getResourceResolver() ;
+      ResourceResolver resolver =  appResolver.getResourceResolver(uri) ;
+      if(resolver !images/= null)  return resolver ;  
+      RequestContext pcontext = getParentAppRequestContext() ;
+      if(pcontext!images/= null) app = pcontext.getApplication() ;
+      else app =null ;
+    }
+    return null ;
+  }
+  
+  public StateManager  getStateManager() { return stateManager_; }
+  public void  setStateManager(StateManager manager) { stateManager_ =  manager ; }
+}
+</programlisting><para>The PortalRequestContext mainly implements the abstract method already shown and only add few ones such as a reference to the portal owner or some information on the current navigation node path and the state of the portal (PUBLIC or PRIVATE ones)</para><para>The PortalRequestHandler then tries to restore the UI component tree by calling the method restoreUIRootComponent(). The first time, there is nothing to restore and in that case the following part of code in the method is used:</para><programlisting>    if(state == null) {
+      synchronized(uiApplications) {
+        ConfigurationManager cmanager = app.getConfigurationManager() ;
+        String uirootClass = cmanager.getApplication().getUIRootComponent() ;
+        Class type = Thread.currentThread().getContextClassLoader().loadClass(uirootClass) ;
+        UserPortalConfig config = getUserPortalConfig(pcontext) ;
+        if(config == null) {
+          HttpServletResponse response = pcontext.getResponse();
+          response.sendRedirect(&quot;/portal/portal-warning.html&quot;);
+          pcontext.setResponseComplete(true);
+          return null;
+        }
+        pcontext.setAttribute(UserPortalConfig.class, config);
+        UIPortalApplication uiApplication = 
+          (UIPortalApplication)app.createUIComponent(type, config.getPortalConfig().getFactoryId(), null, context) ;
+        state = new PortalApplicationState(uiApplication, pcontext.getAccessPath()) ;
+        uiApplications.put(context.getSessionId(), state) ;
+        PortalContainer pcontainer = (PortalContainer) app.getApplicationServiceContainer() ;
+        pcontainer.createSessionContainer(context.getSessionId(), uiApplication.getOwner()) ;
+      }
+    }
+</programlisting><para>The configuration manager object bound to the PortalApplication one is used to get the type for the root component which is then instanciated. the UserPortalConfig object - which is  wrapper around the portal information for a given user - is also used and stored as an attribute in the PortalRequestContext. The UIPortalApplication is then created using the method createUIComponent() that is responsible of instanciating the component but also to configure it.</para><programlisting>  public &lt;T extends UIComponent&gt; T createUIComponent(Class&lt;T&gt; type, String configId, String id, WebuiRequestContext context)  throws Exception{
+    Component config = configManager_.getComponentConfig(type, configId) ;
+    if(config == null) {
+      throw new Exception(&quot;Cannot find the configuration for the component &quot; + type.getName() + &quot;, configId &quot; +configId) ;  
+    }
+    T uicomponent =   Util.createObject(type, config.getInitParams());
+    uicomponent.setComponentConfig(id, config) ;
+    config.getUIComponentLifecycle().init(uicomponent, context) ;
+    return type.cast(uicomponent) ;
+  }
+</programlisting><para>The ConfigurationManager method getComponentConfig() returns the Component object filled, it is a wrapper that contains all the information on the parameters for the class. Annotations are used to configure the instance as shown here:</para><programlisting>@ComponentConfigs({
+  @ComponentConfig (
+    lifecycle = UIPortalApplicationLifecycle.class,
+    template = &quot;system:/groovy/portal/webui/workspace/UIPortalApplication.gtmpl&quot;,
+    initParams = @ParamConfig(name = &quot;public.showControlWorkspace&quot;, value = &quot;true&quot; )
+  ),
+  @ComponentConfig (
+    id = &quot;office&quot; ,
+    lifecycle = UIPortalApplicationLifecycle.class,
+    template = &quot;system:/groovy/portal/webui/workspace/UIPortalApplication.gtmpl&quot;,
+    initParams = @ParamConfig( name = &quot;public.showControlWorkspace&quot;, value = &quot;false&quot; )    
+  )
+})
+</programlisting><para>The processDecode() method of the UIPortalApplication is doing 3 actions:</para><itemizedlist><listitem>if the nodePath is null (case of the first request) a call to super.processDecode(context) is made and we end the method here</listitem><listitem>if the nodePath exist but is equals to the current one then we also call super and stops here</listitem><listitem>if the requested nodePath is not equals to the current one , then an event of type PageNodeEvent.CHANGE<emphasis>PAGE</emphasis>NODE is sent to the asociated EventListener; a call to super is then done</listitem></itemizedlist><para>The first case it simply does nothing. Note that the super.processDecode() goes up to the UIComponent which also calls the processDecode() method on the Lifecycle object that can be associated with the UIComponent</para><para>The processAction() method of the UIPortalApplication is then called, as there is no method in the object itself it will call the processAction() of the UIPortalApplicationLifecycle bound to the UI component:</para><programlisting>  public void processAction(UIComponent uicomponent, WebuiRequestContext context) throws Exception {
+    UIPortalApplication uiApp = (UIPortalApplication) uicomponent ;
+    String componentId =  context.getRequestParameter(context.getUIComponentIdParameterName()) ;
+    if(componentId == null)  return;
+    UIComponent uiTarget =  uiApp.findComponentById(componentId);  
+    if(uiTarget == null)  return ;
+    if(uiTarget == uicomponent)  super.processAction(uicomponent, context) ;
+    uiTarget.processAction(context) ;
+  }
+</programlisting><para>If no uicomponent object is targeted, which is the case the first time (unless a bookmarked link is used) then nothing is done. Otherwise, the targeted component is extracted and a call of its processAction() method is executed.</para><para>Then it is time to render the content and this is done inside the processRender() method. The method of the UIPortalApplication is shown here and it is the one that handles either full portal generation or AJAX request:</para><programlisting>  /**
+   * The processrender() method handles the creation of the returned HTML either for a full
+   * page render or in the case of an AJAX call
+   * 
+   * The first request, Ajax is not enabled (means no ajaxRequest parameter in the request) and 
+   * hence the super.processRender() method is called. This will hence call the processrender() of 
+   * the Lifecycle object as this method is not overidden in UIPortalApplicationLifecycle. There we 
+   * simply render the bounded template (groovy usually). Note that bounded template are also defined
+   * in component annotations, so for the current class it is UIPortalApplication.gtmpl
+   * 
+   * On second calls, request have the &quot;ajaxRequest&quot; parameter set to true in the URL. In that case 
+   * the algorithm is a bit more complex:
+   * 
+   *    a) The list of components that should be updated is extracted using the 
+   *       context.getUIComponentToUpdateByAjax() method. That list was setup during the process action
+   *       phase
+   *    b) Portlets and other UI components to update are split in 2 different lists
+   *    c) Portlets full content are returned and set with the tag &lt;div class=&quot;PortalResponse&quot;&gt;
+   *    d) Block to updates (which are UI components) are set within 
+   *       the &lt;div class=&quot;PortalResponseData&quot;&gt; tag
+   *    e) Then the scripts and the skins to reload are set in the &lt;div class=&quot;PortalResponseScript&quot;&gt;
+   * 
+   */
+  public void  processRender(WebuiRequestContext context) throws Exception {
+    Writer w =  context.getWriter() ;
+    if(!context.useAjax()) {
+      super.processRender(context) ;
+    } else {
+      PortalRequestContext pcontext = (PortalRequestContext)context;
+      List&lt;UIComponent&gt; list = context.getUIComponentToUpdateByAjax() ;
+      List&lt;UIPortlet&gt; uiPortlets = new ArrayList&lt;UIPortlet&gt;(3);
+      List&lt;UIComponent&gt; uiDataComponents = new ArrayList&lt;UIComponent&gt;(5);
+      if(list!images/= null) {
+        for(UIComponent uicomponent : list) {
+          if(uicomponent instanceof UIPortlet) uiPortlets.add((UIPortlet)uicomponent) ;
+          else uiDataComponents.add(uicomponent) ;
+        }
+      }
+      w.write(&quot;&lt;div class=\&quot;PortalResponse\&quot;&gt;&quot;) ;
+      if(!context.getFullRender()) {
+        for(UIPortlet uiPortlet : uiPortlets) {
+          uiPortlet.processRender(context) ;
+        }
+      }
+      w.  write(&quot;&lt;div class=\&quot;PortalResponseData\&quot;&gt;&quot;);
+      for(UIComponent uicomponent : uiDataComponents) {
+        renderBlockToUpdate(uicomponent, context, w) ;
+      }
+      String skin  = getAddSkinScript(list);
+      w.  write(&quot;&lt;/div&gt;&quot;);
+      w.  write(&quot;&lt;div class=\&quot;PortalResponseScript\&quot;&gt;&quot;); 
+      w.    write(pcontext.getJavascriptManager().getJavascript());
+      w.    write(&quot;GateIn.core.Browser.onLoad();\n&quot;); 
+      w.    write(pcontext.getJavascriptManager().getCustomizedOnLoadScript()) ;
+      if(skin!images/= null){
+        w.  write(skin) ;
+      }
+      w.  write(&quot;&lt;/div&gt;&quot;) ;
+      w.write(&quot;&lt;/div&gt;&quot;) ;
+    }
+  }
+</programlisting>
+</section>

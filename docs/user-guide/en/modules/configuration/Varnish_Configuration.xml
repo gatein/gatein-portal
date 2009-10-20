@@ -1,0 +1,319 @@
+<!--
+
+    Copyright (C) 2009 eXo Platform SAS.
+    
+    This is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Lesser General Public License as
+    published by the Free Software Foundation; either version 2.1 of
+    the License, or (at your option) any later version.
+    
+    This software is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+    Lesser General Public License for more details.
+    
+    You should have received a copy of the GNU Lesser General Public
+    License along with this software; if not, write to the Free
+    Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+    02110-1301 USA, or see the FSF site: http://www.fsf.org.
+
+-->
+
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook V4.4//EN" "http://www.oasis-open.org/docbook/sgml/4.4/docbookx.dtd">
+<section>
+	<title>Varnish Configuration</title>
+	<section>
+		<title>Introduction</title>
+	</section>
+	<para>This document is an overview of Varnish configuration for
+		GateIn SEA Portal. It is organized as follows:</para>
+	<itemizedlist>
+		<listitem>Section one gives an introduction to Varnish software
+			(version 1.1.2)</listitem>
+		<listitem>Section two explains how to install it, we are using
+			Linux kernel version 2.6.27.</listitem>
+		<listitem>The third section gives a brief description of Varnish
+			configuration files for GateIn Portal</listitem>
+		<listitem>Whereas the last one discusses some of the practical
+			issues encountered during the deployment of Varnish, the last section
+			analyzes the speed gain by Varnish.</listitem>
+	</itemizedlist>
+	<variablelist>
+		<listitem>
+			The configuration given below is more convenient for static content
+			such as images, css ,javascript and html files. By this way after
+			modifying an object belonging to static content you must refresh the
+			varnish cache. To do this, first off all, connect to varnish
+			administration port, it can easily be done this way:
+			<emphasis>telnet localhost 6083</emphasis>
+			(
+			<emphasis role="bold">Note:</emphasis>
+			<emphasis>this command should be typed on the machine where
+				Varnish is installed</emphasis>
+			). And then write the following in the command line.
+			<emphasis>url.purge ^/$</emphasis>
+			This purge your
+			<emphasis>/</emphasis>
+			document. As you can see that
+			<emphasis>url.purge</emphasis>
+			takes an regular expression as its argument. Hence the
+			<emphasis>^</emphasis>
+			and
+			<emphasis>$</emphasis>
+			at the front and end. If the
+			<emphasis>^</emphasis>
+			is omitted, all the documents ending in a
+			<emphasis>/</emphasis>
+			in the cache would be deleted. So to delete all the documents in the
+			cache, type in the command line.
+		</listitem>
+	</variablelist>
+	<section>
+		<title>Overview</title>
+	</section>
+	<para>Varnish is a HTTP/web accelerator, it was written from the
+		beginning to be a high-performance open source reverse proxy caching
+		implementation. Varnish, like other caching reverse HTTP proxy
+		implementations, is most frequently used to alleviate/reduce origin
+		web servers of undue load, giving you the ability to handle a higher
+		number of concurrent hits.</para>
+	<para>Nowadays, more and more web sites present dynamic web
+		pages consisting of a number of different elements. Combining these
+		elements is both time consuming and CPU intensive. The bad news is
+		that the same process is repeated for every individual user, even when
+		the content is identical. Fortunately in such a case a solution like
+		Varnish can help to improve web server performance. How can Varnish
+		accomplish this? Varnish temporarily stores the most frequently
+		requested pages in its cache. It is more effective to present these
+		pages from the Varnish cache. Therefore, users are offered an improved
+		service, and Content/Document Management System server requirements
+		are reduced.</para>
+	<itemizedlist>
+		<listitem>Why are we using Varnish? In contrast with other HTTP
+			accelerators, many of which began life as client-side proxies or
+			origin servers, Varnish was designed from the scratch as an
+			accelerator for incoming traffic. In addition, Varnish via his DSL
+			(Domain Specific Language) is very flexible. In fact, this way, it
+			provides users not only with a means of modifying and rewriting
+			client requests or in certain cases server responses. But Varnish
+			also enable the user to load multiple configurations concurrently. So
+			users can instantaneously switch from one VCL (Varnish Configuration
+			Language) to another. It is not all, Varnish TTL (Time to Live)
+			parameter enables users to decide how long an object should be
+			cached.</listitem>
+	</itemizedlist>
+	<section>
+		<title>Installation of Varnish</title>
+	</section>
+	<section>
+		<title>Prerequisite</title>
+	</section>
+	<para>Before building Varnish, make sure that the following tools
+		are installed :</para>
+	<itemizedlist>
+		<listitem>GCC compiler</listitem>
+		<listitem>A POSIX-compatible make</listitem>
+		<listitem>GNU autotools (automake, autoconf, libtool, ncurses)</listitem>
+	</itemizedlist>
+	<section>
+		<title>Installation</title>
+	</section>
+	<para>If you are using a system with a graphical user interface,
+		installation of Varnish 1.1.2 is quite easy via synaptic package
+		manager. If not, you can run in a terminal by the following command to
+		install Varnish on your computer:</para>
+	<itemizedlist>
+		<listitem>sudo apt-get install varnish.</listitem>
+	</itemizedlist>
+	<para>You can also install Varnish from source, see the following
+		web site for more information:</para>
+	<para>http://varnish.projects.linpro.no.</para>
+	<section>
+		<title>Varnish configuration for GateIn Portal</title>
+	</section>
+	<para>Varnish uses Varnish Configuration Language (VCL). The VCL
+		language is a small domain-specific language designed to be used to
+		define request handling and document caching policies for the Varnish
+		HTTP accelerator. When a new configuration is loaded, the varnished
+		management process translates the VCL code to C and compiles it to a
+		shared object which is then dynamically linked into the server
+		process.</para>
+	<para>
+		Installation of Varnish automatically create two files named
+		default.vcl and varnish in the repositories
+		<emphasis>/etc/varnish/</emphasis>
+		and
+		<emphasis>/etc/default</emphasis>
+		respectively. One is VCL and another one contains values that will be
+		passed as parameters to
+		<emphasis>varnished</emphasis>
+		. We will not make use of the first one, that is default.vcl. Create a
+		new file named vcl.conf in /etc/varnish with the following contents:
+	</para>
+	<para>Backend declaration, here we need to specify the web
+		server host name and the listening http port.</para>
+	<programlisting>backend default {
+		set backend.host = &quot;127.0.0.1&quot;;
+        set backend.port = &quot;8080&quot;;
+}
+#
+## Called when a client request is received
+#
+sub vcl_recv {
+        if (req.url ~ &quot;^/$&quot;) {
+        set req.url = regsub(req.url,&quot;^/$&quot;,&quot;/portal&quot;);
+        set req.http.Accept-Language = &quot;vi&quot;;
+        }
+        if (req.url ~ &quot;.*vnwebsite.*&quot;){
+                set req.http.Accept-Language = &quot;vi&quot;;
+        } else {
+                set req.http.Accept-Language = &quot;en&quot;;
+        }
+        if (req.request!images/= &quot;GET&quot; &amp;&amp; req.request!images/ = &quot;HEAD&quot;) {
+                pipe;
+        }
+        if (req.http.Expect) {
+                pipe;
+        }
+        if (req.request == &quot;GET&quot; &amp;&amp; req.url ~ &quot;\.(jpg|jpeg|gif|ico|tiff|tif|svg|css|js|html)$&quot;) {
+            set req.url = regsub(req.url, &quot;\?.*&quot;, &quot;&quot;);
+             remove req.http.cookie;
+	  remove req.http.authenticate;
+             lookup;
+        }
+       if (req.http.Authenticate || req.http.Authorization) {
+             pass;
+        }
+        if (req.http.Cache-Control ~ &quot;no-cache&quot;) {
+               set req.http.Cache-Control = regsub(req.http.Cache-Control, &quot;no-cache&quot;, &quot;set-cookie2&quot;);
+        }
+        # force lookup even when cookies are present
+        if (req.request == &quot;GET&quot; &amp;&amp; req.http.cookie) {
+                lookup;
+        }
+        lookup;
+}
+</programlisting><para>In order to specify the default language for each web site, that is Vietnamese (vi) for vnwebsite and English (en) for enwebsite; the following statement <emphasis>set req.http.Accept-Language = &quot;language code&quot;</emphasis> is useful.</para><programlisting>#
+## Called when entering pipe mode
+#
+sub vcl_pipe {
+        pipe;
+}
+#
+## Called when entering pass mode
+#
+sub vcl_pass {
+        pass;
+}
+#
+## Called when the requested object was found in the cache
+#
+sub vcl_hit {
+        if (req.url ~ &quot;.*vnwebsite.*&quot;){
+                set req.http.Accept-Language = &quot;vi&quot;;
+        } else {
+                set req.http.Accept-Language = &quot;en&quot;;
+        }
+        deliver;
+}
+## Called when the requested object has been retrieved from the
+## backend, or the request to the backend has failed
+sub vcl_fetch {
+        if (!obj.valid) {
+                error;
+        }
+        if (req.url ~ &quot;.*vnwebsite.*&quot;){
+                set req.http.Accept-Language = &quot;vi&quot;;
+        } else {
+                set req.http.Accept-Language = &quot;en&quot;;
+        }
+        if (req.http.Cache-Control ~ &quot;no-cache&quot;) {
+               set req.http.Cache-Control = regsub(req.http.Cache-Control, &quot;no-cache&quot;, &quot;set-cookie2&quot;);
+        }
+        if(obj.cacheable){
+                remove req.http.Set-Cookie;
+	     set obj.http.Cache-Control = &quot;no-cache&quot;;
+                remove obj.http.Etag;
+                if(obj.ttl &lt; 7d){
+                        set obj.ttl = 7d;
+                }
+                insert;
+        }
+        insert;
+}
+</programlisting><para>If the cookie is intended for use by a single user, the Set-Cookie2 header <emphasis>should not</emphasis> be cached. A Set-Cookie2 header that is intended to be shared by multiple users <emphasis role="bold">may</emphasis> be cached.</para><itemizedlist><listitem>Remark:<emphasis role="bold">Since</emphasis>Etag (entity tag) in an HTTP response header that may be returned by an HTTP/1.1 compliant web server is used by the user-agent to determine change in content at a given URL. It is removed in order to instruct the user-agent that there is no change in content of cacheable objects. In fact, when a new HTTP response contains the same ETag as an older HTTP response, the client can conclude that the content is the same without further downloading.</listitem></itemizedlist><programlisting>## Called before a cached object is delivered to the client
+sub vcl_deliver {
+        deliver;
+}
+## Called when an object nears its expiry time
+sub vcl_timeout {
+        discard;
+}
+## Called when an object is about to be discarded
+sub vcl_discard {
+    discard;
+}
+</programlisting><para>This configuration tells Varnish to always cache all cacheable objects and don't invalidate them for at least one week.</para><para>Then modify the file <emphasis>/etc/default/varnish</emphasis> and make yourself sure that its content is not too different to this one, particularly the DAEMONOPTS  part. Note that we are using the advanced configuration, that is alternative 3.</para><programlisting># Configuration file for varnish
+#
+# /etc/init.d/varnish expects the variable $DAEMON_OPTS to be set from this
+# shell script fragment.
+#
+# Maximum number of open files (for ulimit -n)
+NFILES=131072
+# Default varnish instance name is the local nodename.  Can be overridden with
+# the -n switch, to have more instances on a single server.
+INSTANCE=$(uname -n)
+## Alternative 3, Advanced configuration
+## We choose advance configuration
+#
+# See varnishd(1) for more information.
+#
+# # Main configuration file. You probably want to change it :)
+VARNISH_VCL_CONF=/etc/varnish/default.vcl
+#
+# # Default address and port to bind to
+# # Blank address means all IPv4 and IPv6 interfaces, otherwise specify
+# # a host name, an IPv4 dotted quad, or an IPv6 address in brackets.
+VARNISH_LISTEN_ADDRESS=0.0.0.0
+VARNISH_LISTEN_PORT=80
+#
+# # Telnet admin interface listen address and port
+VARNISH_ADMIN_LISTEN_ADDRESS=127.0.0.1
+VARNISH_ADMIN_LISTEN_PORT=6082
+#
+# # The minimum number of worker threads to start
+VARNISH_MIN_THREADS=1
+#
+# # The Maximum number of worker threads to start
+VARNISH_MAX_THREADS=2048
+#
+# # Idle timeout for worker threads
+VARNISH_THREAD_TIMEOUT=120
+#
+# # Cache file location
+VARNISH_STORAGE_FILE=/var/lib/varnish/$INSTANCE/varnish_storage.bin
+#
+# # Cache file size: in bytes, optionally using k / M / G / T suffix,
+# # or in percentage of available disk space using the % suffix.
+VARNISH_STORAGE_SIZE=5G
+#
+# # Backend storage specification
+VARNISH_STORAGE=&quot;file,${VARNISH_STORAGE_FILE},${VARNISH_STORAGE_SIZE}&quot;
+#
+# # Default TTL used when the backend does not specify one
+VARNISH_TTL=7d
+#
+# # DAEMON_OPTS is used by the init script.  If you add or remove options, make
+# # sure you update this section, too.
+DAEMON_OPTS=&quot;-a ${VARNISH_LISTEN_ADDRESS}:${VARNISH_LISTEN_PORT} \
+              -f ${VARNISH_VCL_CONF} \
+              -T ${VARNISH_ADMIN_LISTEN_ADDRESS}:${VARNISH_ADMIN_LISTEN_PORT} \
+              -t ${VARNISH_TTL} \
+	-w ${VARNISH_MIN_THREADS},${VARNISH_MAX_THREADS},${VARNISH_THREAD_TIMEOUT} \
+              -s ${VARNISH_STORAGE}&quot;
+</programlisting><section><title>How fast is Varnish?</title></section>
+<para>When using an HTTP accelerator, it is important to know whether our web server performance has improved or not. Thus, this section shows the performance gained by the use of Varnish.</para><section><title>Varnish testbed configuration</title></section>
+<para>Our Varnish testbed consists of a desktop PC acting as a web server (WS), and 10 PC-based Linux acting as clients stations. The system hardware configuration is summarized in the following table. All machines except the WS use a Linux 2.6.27 kernel. The user-agent used on client stations is <emphasis role="bold">wget</emphasis></para><para>The following table is the testbed summary:</para><informaltable frame="none" rowsep="0" colsep="0"><tgroup cols="3"><colspec align="center"></colspec><colspec align="center"></colspec><colspec align="center"></colspec><tbody><row><entry><emphasis role="bold"> Hardware </emphasis></entry><entry><emphasis role="bold"> Processor </emphasis></entry><entry><emphasis role="bold"> Frequency </emphasis></entry></row><row><entry> One x (WS)   </entry><entry>  Intel(R) Pentium(R) 4  </entry><entry>   3.00GHz  </entry></row><row><entry> Two x (PC)     </entry><entry>Intel(R) Core(TM)2 Duo   </entry><entry>   2.00GHz  </entry></row></tbody></tgroup></informaltable><para>It is well known that performance of a software like varnish depends on part on the communication link between server host and client stations. So, without loss of generality, we assume that our wireless connection is fair.</para><section><title>Varnish analyzes method</title></section>
+<para>In other to evaluate Vanish performance, we first access all pages of our web site through Varnish to ensure that all cacheable objects can be found in Varnish cache. It takes in average 6.9s. Then we simultaneously send 100 download requests from each of our 2 client stations to the web server using wget user-agent through Varnish. After this operation, we evaluate the average time required by each client station to perform a download request. The same  process is done without using Varnish. We then compare the obtained results.</para><section><title>Varnish performance analyzes</title></section>
+<para>This part discuss about Varnish performance in term of time of response. That is the time that a given client should wait to get the requested object (or the server response). In this case the requested object is our entire web site.  The collected measurements are summarized in the below table:</para><informaltable frame="none" rowsep="0" colsep="0"><tgroup cols="5"><colspec align="center"></colspec><colspec align="center"></colspec><colspec align="center"></colspec><colspec align="center"></colspec><colspec align="center"></colspec><tbody><row><entry><emphasis role="bold"> Host      </emphasis></entry><entry><emphasis role="bold">   Average waiting time using Varnish as reverse proxy   </emphasis></entry><entry><emphasis role="bold">  Average waiting time without use of Varnish  </emphasis></entry><entry><emphasis role="bold">Number of trials    </emphasis></entry><entry><emphasis role="bold">     Data size </emphasis></entry></row><row><entry> First  </entry><entry>   02. 791070   </entry><entry>  26.889563   </entry><entry>    100   </entry><entry>      104 files, 1.4M </entry></row><row><entry> Second   </entry><entry>    02.708190    </entry><entry>   26. 378669   </entry><entry>    100   </entry><entry>    104 files, 1.4M </entry></row></tbody></tgroup></informaltable><itemizedlist><listitem>Remark: All times above are in second, these times include the time needed by the client to connect to the server.</listitem></itemizedlist><para>Measurements listed above obviously shows that our web server performance are considerably improved by the use of Varnish software. In average per user request, we gain from Varnish 24 (twenty-four) seconds. That is using Varnish, user requests are at least 10 times faster than previously (without Varnish).</para>
+</section>

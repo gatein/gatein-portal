@@ -1,0 +1,50 @@
+<!--
+
+    Copyright (C) 2009 eXo Platform SAS.
+    
+    This is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Lesser General Public License as
+    published by the Free Software Foundation; either version 2.1 of
+    the License, or (at your option) any later version.
+    
+    This software is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+    Lesser General Public License for more details.
+    
+    You should have received a copy of the GNU Lesser General Public
+    License along with this software; if not, write to the Free
+    Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+    02110-1301 USA, or see the FSF site: http://www.fsf.org.
+
+-->
+
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook V4.4//EN" "http://www.oasis-open.org/docbook/sgml/4.4/docbookx.dtd">
+<section>
+	<title>Navigation concept</title>
+	<para>A  navigation is a menu that helps users to
+			visualize the structure of a site and provides hyper links to quickly
+			move from page to page. There is a bar which contains navigations
+			called Navigation bar. There are three navigation types:</para>
+	<itemizedlist>
+		<listitem>
+			<emphasis role="bold">Portal navigation</emphasis>
+			: This navigation type is used to keep the links to pages of Portal.
+			Each portal has only one navigation and it is automatically created
+			when a portal is created.
+		</listitem>
+		<listitem>
+			<emphasis role="bold">Group navigation</emphasis>
+			: All registered users are organized in groups. There is a navigation
+			keeping the links to all pages of each group, called group
+			navigation.
+		</listitem>
+		<listitem>
+			<emphasis role="bold">User navigation</emphasis>
+			: Each user has own navigation that keeps the links to pages. User's
+			navigation is created automatically like Navigation of Portal when
+			user is created (registered). This navigation only can be deleted
+			when the user is deleted.
+		</listitem>
+	</itemizedlist>
+</section>

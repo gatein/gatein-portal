@@ -1,0 +1,77 @@
+<%
+	import java.util.ArrayList; 
+	import org.exoplatform.portal.config.model.PageNavigation;
+	import org.exoplatform.portal.config.model.PageNode;
+	import org.exoplatform.portal.webui.util.Util;
+	import org.exoplatform.portal.webui.portal.UIPortal;
+	import org.exoplatform.portal.application.PortalRequestContext;
+	import org.exoplatform.web.application.JavascriptManager;
+	
+	PageNavigation pageNavigation = uicomponent.getPageNavigation();
+	ArrayList<PageNode> nodes = pageNavigation.getNodes();
+	def tabNbs = nodes.size();
+
+	PortalRequestContext pcontext = Util.getPortalRequestContext();	
+	def String portalURI = pcontext.getPortalURI();
+
+	PageNode selectedNode = Util.getUIPortal().getSelectedNode();
+	PageNode node; 
+	
+	JavascriptManager jsManager = pcontext.getJavascriptManager();
+	jsManager.importJavascript("eXo.webui.UITabbedDashboard");
+%>
+
+<div id="$uicomponent.id" class="UITabPaneDashboard">
+	<div class="LtTabDashboard">
+		<div class="RtTabDashboard">
+			<div class="CtTabDashboard">
+				<div class="UIHorizontalTabs">
+					<div class="TabsContainer">
+						<% for(int i = 0;i < tabNbs;i++){ 
+							 		node = nodes.get(i);
+							 		String tabLabel = node.getResolvedLabel();
+									String param = "" + i;
+									if(node.getUri().equals(selectedNode.getUri())){ 
+		  						%>
+								<div class="UITab GrayTabStyle">
+										<div class="SelectedTab">
+												<div class="LeftTab">
+														<div class="RightTab">
+																<div class="MiddleTab">
+																		<% 
+																			String ondblclick = "eXo.webui.UITabbedDashboard.showEditLabelInput(this," + i + ",\"" + node.getResolvedLabel() + "\")"; 
+																		%>
+																		<span ondblclick='$ondblclick'>$tabLabel</span>
+																		<a  href="<%= uicomponent.url("DeleteTab",param); %>">
+																			<img class="CloseIcon" src="/eXoResources/skin/sharedImages/Blank.gif" alt="DEL" />
+																		</a>	
+																</div>
+														</div>
+												</div>
+										</div>
+								</div>
+							<%}else{ %>
+								<div class="UITab GrayTabStyle">
+									<div class="NormalTab">
+										<div class="LeftTab">
+											<div class="RightTab">
+												<div class="MiddleTab">
+													<a	href="<%= portalURI + node.getName(); %>"><span>$tabLabel</span></a>
+													<a  href="<%= uicomponent.url("DeleteTab",param); %>">
+														<img class="CloseIcon" src="/eXoResources/skin/sharedImages/Blank.gif" alt="DEL" />
+													</a>	
+												</div>
+											</div>		
+										</div>
+									</div>
+								</div>
+							<%} %>	
+						<% } %>
+						<div class="AddDashboard" onclick="eXo.webui.UITabbedDashboard.createTabDashboard(this)"><span></span></div>				
+					</div>
+				</div>
+				
+			</div>
+		</div>
+	</div>						
+</div>

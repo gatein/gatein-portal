@@ -1,0 +1,24 @@
+<%  
+    import org.exoplatform.webui.core.UIComponent;
+    import org.exoplatform.webui.bean.UIDataFeed;
+    
+    boolean hasNext = uicomponent.getDataFeed().hasNext();
+    def rcontext = _ctx.getRequestContext();
+    
+    rcontext.getJavascriptManager().importJavascript('eXo.core.DOMUtil');
+    rcontext.getJavascriptManager().importJavascript('eXo.core.Browser');
+    rcontext.getJavascriptManager().importJavascript('eXo.webui.UIVirtualList');
+    
+    String url = uicomponent.url("LoadNext") + "&ajaxRequest=true"; 
+%>
+<div id="$uicomponent.id" style="overflow:auto;" 
+  onscroll="eXo.webui.UIVirtualList.scrollMove(this,'$url');">    
+  <% uicomponent.renderChildren();%>
+  <% 
+    if (!hasNext) {
+      rcontext.getJavascriptManager().addJavascript("eXo.webui.UIVirtualList.loadFinished('$uicomponent.id');");
+    }
+    rcontext.getJavascriptManager().addJavascript("eXo.webui.UIVirtualList.init('$uicomponent.id');");
+       
+  %>
+</div>

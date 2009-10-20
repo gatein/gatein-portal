@@ -1,0 +1,93 @@
+<!--
+
+    Copyright (C) 2009 eXo Platform SAS.
+    
+    This is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Lesser General Public License as
+    published by the Free Software Foundation; either version 2.1 of
+    the License, or (at your option) any later version.
+    
+    This software is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+    Lesser General Public License for more details.
+    
+    You should have received a copy of the GNU Lesser General Public
+    License along with this software; if not, write to the Free
+    Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+    02110-1301 USA, or see the FSF site: http://www.fsf.org.
+
+-->
+
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook V4.4//EN" "http://www.oasis-open.org/docbook/sgml/4.4/docbookx.dtd">
+<section>
+	<title>Toolbar</title>
+	<para>The convenient Toolbar helps users
+		and administrators to manipulate all actions quickly.</para>
+	<section>
+		<title>User Actions in the Toolbar</title>
+	</section>
+
+	<section>
+		<title></title>
+	</section>
+	<mediaobject>
+		<imageobject>
+			<imagedata fileref="images/exo2.6.png" format="PNG"></imagedata>
+		</imageobject>
+	</mediaobject>
+	<para>You can change language, change skin and sign out from GateIn Portal.</para>
+	<section>
+		<title>Dashboard</title>
+	</section>
+
+	<section>
+		<title>Site</title>
+	</section>
+	<mediaobject>
+		<imageobject>
+			<imagedata fileref="images/Site2.6.png" format="PNG"></imagedata>
+		</imageobject>
+	</mediaobject>
+	<para>It shows all different sites available in GateIn Portal allows
+		users to directly edit the navigation tree.</para>
+	<section>
+		<title>Group</title>
+	</section>
+	<mediaobject>
+		<imageobject>
+			<imagedata fileref="images/GroupPortal2.6.png" format="PNG"></imagedata>
+		</imageobject>
+	</mediaobject>
+	<para>Users can easily see and access pages in GateIn Portal.</para>
+	<section>
+		<title>Administration Actions in the Toolbar</title>
+	</section>
+
+	<section>
+		<title>Editor</title>
+	</section>
+	<mediaobject>
+		<imageobject>
+			<imagedata fileref="images/Edit.png" format="PNG"></imagedata>
+		</imageobject>
+	</mediaobject>
+	<para>You easily edit a page or add a new page</para>
+	<section>
+		<title>Administrator</title>
+	</section>
+	<mediaobject>
+		<imageobject>
+			<imagedata fileref="images/Admin2.6.png" format="PNG"></imagedata>
+		</imageobject>
+	</mediaobject>
+	<section>
+		<title>Edit Inline</title>
+	</section>
+	<para>With the Edit Inline Composer popup that consists of two
+		tabs: Applications and Containers, it is convenient for a user to
+		select the component that he wants and to drag and drop it to the
+		page.</para>
+	<para>You also quickly edit, delete portlets in a page, change
+		portal's properties or switch the view mode.</para>
+</section>

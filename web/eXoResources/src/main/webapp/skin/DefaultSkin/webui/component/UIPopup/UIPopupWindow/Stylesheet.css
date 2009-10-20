@@ -1,0 +1,284 @@
+/**
+ * Copyright (C) 2009 eXo Platform SAS.
+ * 
+ * This is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2.1 of
+ * the License, or (at your option) any later version.
+ * 
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this software; if not, write to the Free
+ * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ */
+
+.UIPopupWindow {	
+	position: absolute;
+	visibility: hidden;
+}
+
+.UIPopupWindow .PopupTitleIcon {
+	float: left; /* orientation=lt */
+	float: right; /* orientation=rt */
+	margin: 5px 0px 0px 3px; /* orientation=lt */
+	margin: 5px 3px 0px 0px; /* orientation=rt */
+	width: 16px; height: 16px;
+	background: url('background/PopupWindow.gif') no-repeat left bottom;
+}
+
+.UIPopupWindow .PopupTitleIconRight {
+	float: right;
+	margin: 5px 3px 0px 0px;
+	width: 19px; height: 16px;
+	background: url('background/PopupWindow.gif') no-repeat left bottom; 
+}
+
+.UIPopupWindow .PopupTitle {
+	margin: 4px 26px 0px 26px;
+	line-height: 16px; 
+	vertical-align: middle;
+	cursor: move;
+	color: #000;
+}
+
+.UIPopupWindow .CloseButton {
+	float: right; /* orientation=lt */
+	float: left; /* orientation=rt */
+	margin: 5px 3px 0px 0px; /* orientation=lt */
+	margin: 5px 0px 0px 3px; /* orientation=rt */
+	cursor: pointer;
+	width: 18px; height: 18px;
+	background: url('background/TopExitBtn.gif') no-repeat right bottom;
+}
+
+.UIPopupWindow .TopLeftCornerDecorator {
+	background: url('background/TopPopup.png') no-repeat left top;
+	padding-left: 8px;
+}
+
+.UIPopupWindow .TopCenterDecorator {
+	background: url('background/TopPopup.png') repeat-x left -66px;
+	height: 28px;
+	padding-top: 5px;
+}
+
+.UIPopupWindow .TopRightCornerDecorator {
+	background: url('background/TopPopup.png') no-repeat right -33px;
+	padding-right: 8px;
+}
+
+.UIPopupWindow .MiddleLeftSideDecorator {
+	background: url('background/MiddlePopup.png') repeat-y left top;
+	padding-left: 8px;	
+}
+
+.UIPopupWindow .MiddleCenterDecorator {
+	background: #e1e1e1;
+	padding: 0px 3px 5px 3px;
+}
+
+.UIPopupWindow .MiddleRightSideDecorator {
+	background: url('background/MiddlePopup.png') repeat-y right top;
+	padding-right: 8px;
+	}
+
+.UIPopupWindow .UIWindowContent {
+	border: 1px solid #bdbcbd;
+}
+
+.UIPopupWindow .PopupContent {
+	width: 100%;
+	background: #f7f7f7;
+	overflow: auto;
+}
+
+.UIPopupWindow .ResizeButton {
+  background: url('background/ResizeBtn.gif') no-repeat right top; /* orientation=lt */
+  background: url('background/ResizeBtn-rt.gif') no-repeat left top; /* orientation=rt */
+  display: block;
+  float: right; /* orientation=lt */
+  float: left; /* orientation=rt */
+  cursor: nw-resize; /* orientation=lt */
+  cursor: ne-resize; /* orientation=rt */
+}
+
+.UIPopupWindow .BottomLeftCornerDecorator {
+	background:  url('background/BottomPopup.png') no-repeat left top;
+	padding-left: 7px;
+}
+
+.UIPopupWindow .BottomCenterDecorator {
+	background:  url('background/BottomPopup.png') repeat-x left -14px;
+	height: 7px;
+}
+
+.UIPopupWindow .BottomRightCornerDecorator {
+	background:  url('background/BottomPopup.png') no-repeat right -7px;
+	padding-right: 7px;	
+}
+
+.UIPopupWindow .Content .UIPageBrowser {
+	padding: 7px 4px 0px 8px;
+	width: 96%;
+	margin: auto;
+}
+
+/************************** UIPortalComposer **************************/
+
+.UIPortalComposer {
+}
+
+.UIPortalComposer .TLPortalComposer {
+	background: transparent url(background/PortalComposer.gif) no-repeat left top;
+	padding-left: 7px;
+}
+
+.UIPortalComposer .TRPortalComposer {
+	background: transparent url(background/PortalComposer.gif) no-repeat right top;
+	padding-right: 7px;
+}
+
+.UIPortalComposer .TCPortalComposer {
+	background: transparent url(background/PortalComposer.gif) repeat-x left -34px;
+	height: 34px;
+}
+
+.UIPortalComposer .CollapseIcon {
+	background: url(background/ExpandIcon.gif) no-repeat left; /* orientation=lt */
+	background: url(background/ExpandIcon-rt.gif) no-repeat right; /* orientation=rt */
+	width: 16px; 
+	height: 14px;
+	float: left;  /* orientation=lt */
+	float: right;  /* orientation=rt */
+	margin: 8px 5px;
+	cursor: pointer;
+}
+
+.UIPortalComposer .ExpandIcon {
+	background: url(background/GrayDownIcon.gif) no-repeat left; /* orientation=lt */
+	background: url(background/GrayDownIcon.gif) no-repeat right; /* orientation=rt */
+	width: 16px; 
+	height: 14px;
+	float: left;  /* orientation=lt */
+	float: right;  /* orientation=rt */
+	margin: 8px 5px;
+	cursor: pointer;
+}
+
+.UIPortalComposer .CloseButton {
+	background: transparent url(background/CloseIcon.gif) no-repeat scroll right bottom; /* orientation=lt */
+	background: transparent url(background/CloseIcon-rt.gif) no-repeat scroll left bottom; /* orientation=rt */
+	width: 25px;
+	height: 17px;
+	margin: 6px 0px 0px 0px;
+}
+
+.UIPortalComposer .SaveButton {
+	background: transparent url(background/SaveIcon.gif) no-repeat scroll right bottom; /* orientation=lt */
+	background: transparent url(background/SaveIcon-rt.gif) no-repeat scroll left bottom; /* orientation=rt */
+	cursor: pointer;
+	float: right; /* orientation=lt */
+	float: left; /* orientation=rt */
+	height: 17px;
+	margin-top: 6px;
+	width: 25px;
+}
+
+.UIPortalComposer .EdittedSaveButton {
+	background: transparent url(background/UnSaveIcon.gif) no-repeat scroll right bottom; /* orientation=lt */
+	background: transparent url(background/UnSaveIcon-rt.gif) no-repeat scroll left bottom; /* orientation=rt */
+	cursor: pointer;
+	float: right; /* orientation=lt */
+	float: left; /* orientation=rt */
+	height: 17px;
+	margin-top: 6px;
+	width: 25px;
+}
+
+.UIPortalComposer .PopupTitle {
+	background: none;
+	margin: 0px 42px 0px 26px; /* orientation=lt */
+	margin: 0px 26px 0px 42px; /* orientation=rt */
+	text-align: left; /* orientation=lt */
+	text-align: right; /* orientation=rt */
+	color: #000;
+	font-size: 12px;
+	font-family: arial;
+	cursor: move;
+	line-height: 30px;
+	height: 30px;
+}
+
+.UIPortalComposer .MLPortalComposer {
+	background: url(background/MiddlePortalComposer.gif) repeat-y left top;
+	padding-left: 3px;
+}
+
+.UIPortalComposer .MRPortalComposer {
+	background: url(background/MiddlePortalComposer.gif) repeat-y right top;
+	padding-right: 3px;
+}
+
+.UIPortalComposer .MCPortalComposer {
+	background: #d8dae1 url(background/CenterMiddleWindow.gif) repeat-x left top;
+	padding: 4px;
+	padding-bottom: 0px;
+}
+
+.UIPortalComposer .BLPortalComposer {
+	border: 1px solid #a2a3a9;
+	border-top: none;
+	background: #d8dae1;
+}
+
+.UIPortalComposer .BRPortalComposer {
+	padding: 0px 6px 6px 6px;
+}
+
+.UIPortalComposer .BCPortalComposer {
+	background: #ececec;
+	border: 1px solid #bbbcc2;
+	height: 50px;
+}
+
+.UIPortalComposer .Bottom {
+	border-bottom: 1px solid #a2a3a9;
+}
+
+.UIPortalComposer .UIWindowContent	{
+	border: none;
+}
+
+.UIPortalComposer .PopupContent {
+	background: none;
+}
+
+.UIPortalComposer .UITabPane {
+	height: auto;
+}
+
+.UIPortalComposer .UITabPane .TabPaneContent {
+	padding: 0px;
+}
+
+.UIPortalComposer .UIHorizontalTabs .TabsContainer {
+	background: url(background/CenterHorizontalTabs.gif) repeat-x left bottom;
+	height: 25px;
+}
+
+.UIPortalComposer .UITabPane .UITabContentContainer {
+}
+
+.UIPortalComposer .UITabPane .UITabContentContainer .UITabContent {
+	background: none;
+	border: none;
+}
+
+.UIPortalComposer .ResizeButton {
+	width: 13px; height: 13px;
+}

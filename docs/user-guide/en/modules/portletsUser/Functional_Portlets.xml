@@ -1,0 +1,108 @@
+<!--
+
+    Copyright (C) 2009 eXo Platform SAS.
+    
+    This is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Lesser General Public License as
+    published by the Free Software Foundation; either version 2.1 of
+    the License, or (at your option) any later version.
+    
+    This software is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+    Lesser General Public License for more details.
+    
+    You should have received a copy of the GNU Lesser General Public
+    License along with this software; if not, write to the Free
+    Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+    02110-1301 USA, or see the FSF site: http://www.fsf.org.
+
+-->
+
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook V4.4//EN" "http://www.oasis-open.org/docbook/sgml/4.4/docbookx.dtd">
+<section>
+	<title>Functional Portlets</title>
+	<section>
+		<title>Overview</title>
+	</section>
+	<para>Portlets are pluggable user interface components that are
+		managed and displayed in a portal. Functional Portlets support all
+		functions of a Portal. GateIn Portal provides users with the following
+		portlets:</para>
+	<section>
+		<title>Account Portlet</title>
+	</section>
+	<para>This Portlet allows users to register a new account.
+		Moreover, it also used to support users to choose a preferred language
+		for displaying the Portal interface.</para>
+	<mediaobject>
+		<imageobject>
+			<imagedata fileref="images/Account.png" format="PNG"></imagedata>
+		</imageobject>
+	</mediaobject>
+	<section>
+		<title>Organization Portlet</title>
+	</section>
+	<para>This Portlet is used to manage user information, groups of
+		users and memberships.</para>
+	<mediaobject>
+		<imageobject>
+			<imagedata fileref="images/OrganizationPortlet1.png"
+				format="PNG"></imagedata>
+		</imageobject>
+	</mediaobject>
+	<section>
+		<title>Application Registry Portlet</title>
+	</section>
+	<para>This Portlet is used to manage different application
+		categories. You can add, edit, set permissions, delete a category and
+		its applications.</para>
+	<mediaobject>
+		<imageobject>
+			<imagedata fileref="images/ApplicationRegistry.png" format="PNG"></imagedata>
+		</imageobject>
+	</mediaobject>
+	<section>
+		<title>Internationalization Portlet</title>
+	</section>
+	<para>This Portlet is used to define a word or a phrase of a
+		current language to an expected language.</para>
+	<mediaobject>
+		<imageobject>
+			<imagedata fileref="images/InternationalizationPortlet1.png"
+				format="PNG"></imagedata>
+		</imageobject>
+	</mediaobject>
+	<section>
+		<title>Administration Toolbar Portlet</title>
+	</section>
+	<para>This Portlet supports administration actions in GateIn Portal.</para>
+	<mediaobject>
+		<imageobject>
+			<imagedata fileref="images/Administration.png" format="PNG"></imagedata>
+		</imageobject>
+	</mediaobject>
+	<section>
+		<title>Star Toolbar Portlet</title>
+	</section>
+	<para>The Star Toolbar Portlet helps users to change language,
+		change skin or sign out GateIn Portal.</para>
+		<!-- 
+	<mediaobject>
+		<imageobject>
+			<imagedata fileref="images/StarPortlet.png" format="PNG"></imagedata>
+		</imageobject>
+	</mediaobject>
+	 -->
+	 <!-- 
+	<section>
+		<title>User Toolbar Portlet</title>
+	</section>
+	<para>This Portlet supports all user actions in GateIn Portal.</para>
+	<mediaobject>
+		<imageobject>
+			<imagedata fileref="images/UserToolbar.png" format="PNG"></imagedata>
+		</imageobject>
+	</mediaobject>
+	 -->
+</section>

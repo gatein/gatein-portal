@@ -1,0 +1,13 @@
+<%
+	import org.exoplatform.web.application.JavascriptManager;
+
+  def rcontext = _ctx.getRequestContext() ;
+  JavascriptManager jsmanager = rcontext.getJavascriptManager();
+  
+  jsmanager.importJavascript('eXo.portal.UIWorkspace');
+  jsmanager.addOnLoadJavascript('eXo.portal.UIWorkingWorkspace.onResize') ;
+  jsmanager.addOnResizeJavascript('eXo.portal.UIWorkingWorkspace.onResize') ;
+%>
+<div id="UIWorkingWorkspace" class="UIWorkingWorkspace" style="z-index: 0; position: relative;">
+  <%uicomponent.renderChildren()%>
+</div>
