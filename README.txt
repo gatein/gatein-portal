@@ -1,22 +1,3 @@
-====
-    Copyright (C) 2009 eXo Platform SAS.
-    
-    This is free software; you can redistribute it and/or modify it
-    under the terms of the GNU Lesser General Public License as
-    published by the Free Software Foundation; either version 2.1 of
-    the License, or (at your option) any later version.
-    
-    This software is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-    Lesser General Public License for more details.
-    
-    You should have received a copy of the GNU Lesser General Public
-    License along with this software; if not, write to the Free
-    Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
-    02110-1301 USA, or see the FSF site: http://www.fsf.org.
-====
-
 Welcome to gatein codebase:
 ===========================
 
@@ -32,7 +13,7 @@ This will explain you how to build a package of GateIn with Tomcat or JBoss.
 * MAVEN CONFIGURATION:
 **********************
 
-* edit ${basedir}/profiles.xml and replace the values mentionned so that:
+* edit packaging/profiles.xml and replace the values mentioned so that:
   * ${exo.projects.directory.dependencies} directory contains :
   ** ${exo.projects.app.tomcat.version}/ a clean Tomcat installation, to be used as packaging template
   ** ${exo.projects.app.jboss.version}/ a clean JBoss installation, to be used as packaging template
@@ -47,16 +28,18 @@ provided in profiles.xml. It will override what's in the provided file.
 *****************
 
 * mvn install -Ppkg-tomcat
-** Create a Tomcat delivery in pkg/target/tomcat/ and archives are stored in target
+** Creates a Tomcat delivery in packaging/pkg/target/tomcat/ 
+** Creates compressed archives in packaging/pkg/target/target
 
 * mvn install -Ppkg-jbossas
-** Create a JBossAS delivery in pkg/target/jboss/ and archives are stored in target
+** Creates a JBossAS delivery in packaging/pkg/target/jboss/
+** Creates compressed archives in packaging/pkg/target/target
 
 *****************
 * STARTING:
 *****************
 * On Tomcat: go to the tomcat directory (or unzip the archive in your favorite location) and execute 'bin/gatein.sh start' ('bin/gatein.bat start' on Windows)
-* On JBoss: go to the jboss directory (or unzip the archive in your favorite location) and execute 'bin/run.sh start' ('bin/grun.bat start' on Windows)
+* On JBoss: go to the jboss directory (or unzip the archive in your favorite location) and execute 'bin/run.sh start' ('bin/run.bat start' on Windows)
 
 * Go to http://localhost:8080/portal to see the homepage of the portal. That's it. 
 
