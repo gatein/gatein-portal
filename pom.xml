@@ -65,9 +65,9 @@
   </properties>
   
    <scm>
-      <connection>scm:svn:http://svn.exoplatform.org/projects/gatein/portal/trunk</connection>
-      <developerConnection>scm:svn:http://svn.exoplatform.org/projects/gatein/portal/trunk</developerConnection>
-      <url>http://fisheye.exoplatform.org/browse/projects/gatein/portal/trunk</url>
+      <connection>scm:svn:http://anonsvn.jboss.org/repos/gatein/portal/tags/3.0.0-Beta02</connection>
+      <developerConnection>scm:svn:http://svn.jboss.org/repos/gatein/portal/tags/3.0.0-Beta02</developerConnection>
+      <url>http://fisheye.jboss.org/browse/gatein/portal/tags/3.0.0-Beta02</url>
    </scm>
 
    <modules>
@@ -218,6 +218,16 @@
 
    <!-- To be removed and replaced by settings in user config -->
    <repositories>
+      <repository>
+         <id>repository.jboss.org</id>
+         <url>http://repository.jboss.org/maven2</url>
+         <releases>
+            <enabled>true</enabled>
+         </releases>
+         <snapshots>
+            <enabled>false</enabled>
+         </snapshots>
+      </repository>
       <repository>
          <id>exo-int</id>
          <url>http://maven2.exoplatform.org/rest/maven2</url>
