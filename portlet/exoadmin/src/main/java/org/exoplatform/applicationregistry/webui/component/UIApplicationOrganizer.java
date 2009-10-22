@@ -362,7 +362,7 @@ public class UIApplicationOrganizer extends UIContainer
             service.remove(app);
          }
          String cateName = uiOrganizer.getSelectedCategory().getName();
-         uiOrganizer.initApplicationCategories();
+         uiOrganizer.reload();
          uiOrganizer.setSelectedCategory(cateName);
          event.getRequestContext().addUIComponentToUpdateByAjax(uiOrganizer);
       }

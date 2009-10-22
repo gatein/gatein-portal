@@ -275,6 +275,7 @@ public class UIAddApplicationForm extends UIForm
          }
 
          appRegService.save(selectedCate, app);
+         uiOrganizer.reload();
          uiOrganizer.setSelectedCategory(selectedCate);
          uiOrganizer.selectApplication(app.getApplicationName());
          ctx.addUIComponentToUpdateByAjax(uiOrganizer);
