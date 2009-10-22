@@ -1,6 +1,13 @@
+<% def maxiGadget = uicomponent.getMaximizedGadget(); %>
 <div id="$uicomponent.id" class="UIDashboard">
-	<div class="DashboardContainer">
-		<% uicomponent.renderChildren(); %>
-		<div class="ClearLeft"><span></span></div>
+	<div class="DashboardContainer <%=maxiGadget == null ? "" : "Maximized"%>">
+	<%
+		if(maxiGadget == null) {
+			uicomponent.renderChildren(); 
+	%>
+			<div class="ClearLeft"><span></span></div>
+	<%} else {
+			uicomponent.renderUIComponent(maxiGadget);	
+		}%>
 	</div>
 </div>

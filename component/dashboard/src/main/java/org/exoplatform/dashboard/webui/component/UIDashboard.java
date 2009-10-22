@@ -19,6 +19,8 @@
 
 package org.exoplatform.dashboard.webui.component;
 
+import org.exoplatform.portal.webui.application.UIGadget;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.ComponentConfigs;
@@ -32,7 +34,9 @@ import org.exoplatform.webui.event.EventListener;
    @EventConfig(listeners = UIDashboardContainer.MoveGadgetActionListener.class),
    @EventConfig(listeners = UIDashboardContainer.AddNewGadgetActionListener.class),
    @EventConfig(listeners = UIDashboard.SetShowSelectContainerActionListener.class),
-   @EventConfig(listeners = UIDashboardContainer.DeleteGadgetActionListener.class)})})
+   @EventConfig(listeners = UIDashboardContainer.DeleteGadgetActionListener.class),
+   @EventConfig(listeners = UIDashboard.MinimizeGadgetActionListener.class),
+   @EventConfig(listeners = UIDashboard.MaximizeGadgetActionListener.class)})})
 public class UIDashboard extends UIContainer
 {
 
@@ -41,6 +45,8 @@ public class UIDashboard extends UIContainer
    private boolean isShowSelectPopup = false;
 
    private String aggregatorId;
+
+   private UIGadget maximizedGadget;
 
    public UIDashboard() throws Exception
    {
@@ -86,10 +92,19 @@ public class UIDashboard extends UIContainer
       this.aggregatorId = aggregatorId;
    }
 
-   public static class SetShowSelectContainerActionListener extends
-      EventListener<org.exoplatform.webui.core.UIContainer>
+   public UIGadget getMaximizedGadget()
    {
-      public final void execute(final Event<org.exoplatform.webui.core.UIContainer> event) throws Exception
+      return maximizedGadget;
+   }
+
+   public void setMaximizedGadget(UIGadget gadget)
+   {
+      maximizedGadget = gadget;
+   }
+
+   public static class SetShowSelectContainerActionListener extends EventListener<UIDashboard>
+   {
+      public final void execute(final Event<UIDashboard> event) throws Exception
       {
          UIDashboard uiDashboard = (UIDashboard)event.getSource();
          if (!uiDashboard.canEdit())
@@ -103,6 +118,45 @@ public class UIDashboard extends UIContainer
          {
             event.getRequestContext().getJavascriptManager().addCustomizedOnLoadScript(
                "eXo.webui.UIDashboard.onLoad('" + windowId + "'," + uiDashboard.canEdit() + ");");
+         }
+      }
+   }
+
+   public static class MinimizeGadgetActionListener extends EventListener<UIDashboard>
+   {
+      public final void execute(final Event<UIDashboard> event) throws Exception
+      {
+         WebuiRequestContext context = event.getRequestContext();
+         UIDashboard uiDashboard = event.getSource();
+         String objectId = context.getRequestParameter(OBJECTID);
+         String minimized = context.getRequestParameter("minimized");
+
+         UIGadget uiGadget = uiDashboard.getChild(UIDashboardContainer.class).getUIGadget(objectId);
+         uiGadget.getProperties().setProperty("minimized", minimized);
+         uiDashboard.getChild(UIDashboardContainer.class).save();
+         context.addUIComponentToUpdateByAjax(uiGadget);
+      }
+   }
+
+   public static class MaximizeGadgetActionListener extends EventListener<UIDashboard>
+   {
+      public final void execute(final Event<UIDashboard> event) throws Exception
+      {
+         WebuiRequestContext context = event.getRequestContext();
+         UIDashboard uiDashboard = event.getSource();
+         String objectId = context.getRequestParameter(OBJECTID);
+         String maximize = context.getRequestParameter("maximize");
+         UIDashboardContainer uiDashboardCont = uiDashboard.getChild(UIDashboardContainer.class);
+         UIGadget uiGadget = uiDashboardCont.getUIGadget(objectId);
+         if (maximize.equals("maximize"))
+         {
+            uiGadget.setView(UIGadget.CANVAS_VIEW);
+            uiDashboard.setMaximizedGadget(uiGadget);
+         }
+         else
+         {
+            uiGadget.setView(UIGadget.HOME_VIEW);
+            uiDashboard.setMaximizedGadget(null);
          }
       }
    }

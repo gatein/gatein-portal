@@ -204,9 +204,9 @@ eXo.gadget.UIGadget = {
         }
 
         var compId = portletFrag.parentNode.id;
-        var uicomp = DOMUtil.getChildrenByTagName(portletFrag, "div")[0].className ;
+        var uicomp = DOMUtil.findAncestorByClass(uiGadget, "UIDashboard") ;
         var href = eXo.env.server.portalBaseURL + "?portal:componentId=" + compId ;
-        href += "&portal:type=action&uicomponent=" + uicomp;
+        href += "&portal:type=action&uicomponent=" + uicomp.id;
         href += "&op=MinimizeGadget";
         href += "&minimized=" + minimized;
         href += "&objectId=" + uiGadget.id + "&ajaxRequest=true";
@@ -219,11 +219,10 @@ eXo.gadget.UIGadget = {
         var uiGadget = DOMUtil.findAncestorByClass(selectedElement, "UIGadget") ;
         var portletFrag = DOMUtil.findAncestorByClass(uiGadget, "PORTLET-FRAGMENT") ;
         if (!portletFrag) return;
-        var maximize = "maximize";
         var compId = portletFrag.parentNode.id;
-        var uicomp = DOMUtil.getChildrenByTagName(portletFrag, "div")[0];
-        var compDisplay = DOMUtil.findFirstChildByClass(uicomp,"div","UIDashboardMask");
-        if(compDisplay != null) maximize = "unmaximize"
+        var uicomp = DOMUtil.findAncestorByClass(uiGadget, "UIDashboard");
+        var compDisplay = DOMUtil.findAncestorByClass(uiGadget, "UIDashboardContainer");
+        var maximize = compDisplay ? "maximize" : "unmaximize";
         var href = eXo.env.server.portalBaseURL + "?portal:componentId=" + compId ;
         href += "&portal:type=action&uicomponent=" + uicomp.id;
         href += "&op=MaximizeGadget";
@@ -242,19 +241,28 @@ eXo.gadget.UIGadget = {
 
         if (portletFragment != null) {
             var compId = portletFragment.parentNode.id;
-            var uicomp = "";
-            if (DOMUtil.findChildrenByClass(portletFragment, "div", "UIDashboard")) {
-                uicomp = "UIDashboard";
-            }
-            else
-                uicomp = DOMUtil.getChildrenByTagName(portletFragment, "div")[0].className;
+            var uicomp = DOMUtil.findAncestorByClass(uiGadget, "UIDashboard").id;
+//            if (DOMUtil.findChildrenByClass(portletFragment, "div", "UIDashboard"))
+//                uicomp = "UIDashboard";
+//            else
+//                uicomp = DOMUtil.getChildrenByTagName(portletFragment, "div")[0].className;
             if (confirm(this.confirmDeleteGadget)) {
                 var href = eXo.env.server.portalBaseURL + "?portal:componentId=" + compId;
                 href += "&portal:type=action&uicomponent=" + uicomp;
                 href += "&op=DeleteGadget";
                 href += "&objectId=" + uiGadget.id + "&ajaxRequest=true";
-                DOMUtil.removeElement(uiGadget);
-                ajaxAsyncGetRequest(href);
+                
+                var uiDashboardCont = DOMUtil.findAncestorByClass(uiGadget, "UIDashboardContainer"); 
+                if(uiDashboardCont) {
+                	ajaxAsyncGetRequest(href);
+	                DOMUtil.removeElement(uiGadget);
+	                if(!DOMUtil.findFirstDescendantByClass(uiDashboardCont, "div", "UIGadget")) {
+	                	DOMUtil.findFirstDescendantByClass(uiDashboardCont, "div", "NoGadget").style.display = "block";
+	                }
+                }else {
+//                Case: delete gadget in dashboard when maximized gadget
+                	ajaxGet(href);
+                }
             }
 
         } else {

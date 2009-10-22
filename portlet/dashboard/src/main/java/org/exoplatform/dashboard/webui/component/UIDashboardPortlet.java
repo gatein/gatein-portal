@@ -19,16 +19,12 @@
 
 package org.exoplatform.dashboard.webui.component;
 
-import org.exoplatform.portal.webui.application.UIGadget;
 import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
-import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
-import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.EventListener;
 
 import javax.portlet.PortletPreferences;
 
@@ -38,9 +34,7 @@ import javax.portlet.PortletPreferences;
 /**
  * @author exo
  */
-@ComponentConfig(lifecycle = UIApplicationLifecycle.class, template = "app:/groovy/dashboard/webui/component/UIDashboardPortlet.gtmpl", events = {
-   @EventConfig(listeners = UIDashboardPortlet.MinimizeGadgetActionListener.class),
-   @EventConfig(listeners = UIDashboardPortlet.MaximizeGadgetActionListener.class)})
+@ComponentConfig(lifecycle = UIApplicationLifecycle.class, template = "app:/groovy/dashboard/webui/component/UIDashboardPortlet.gtmpl", events = {})
 /**
  * Dashboard portlet that display google gadgets
  */
@@ -55,7 +49,6 @@ public class UIDashboardPortlet extends UIPortletApplication implements Dashboar
       PortletRequestContext context = (PortletRequestContext)WebuiRequestContext.getCurrentInstance();
 
       UIDashboard dashboard = addChild(UIDashboard.class, null, null);
-      addChild(UIDashboardMask.class, null, null).setRendered(false);
       addChild(UIDashboardEditForm.class, null, null);
 
       PortletPreferences pref = context.getRequest().getPreferences();
@@ -103,50 +96,4 @@ public class UIDashboardPortlet extends UIPortletApplication implements Dashboar
       return owner;
    }
 
-   public static class MinimizeGadgetActionListener extends EventListener<UIDashboardPortlet>
-   {
-      public final void execute(final Event<UIDashboardPortlet> event) throws Exception
-      {
-         WebuiRequestContext context = event.getRequestContext();
-         UIDashboardPortlet uiPortlet = event.getSource();
-         String objectId = context.getRequestParameter(OBJECTID);
-         String minimized = context.getRequestParameter("minimized");
-
-         UIDashboard uiDashboard = uiPortlet.getChild(UIDashboard.class);
-         UIGadget uiGadget = uiDashboard.getChild(UIDashboardContainer.class).getUIGadget(objectId);
-         uiGadget.getProperties().setProperty("minimized", minimized);
-         uiDashboard.getChild(UIDashboardContainer.class).save();
-         context.addUIComponentToUpdateByAjax(uiGadget);
-      }
-   }
-
-   public static class MaximizeGadgetActionListener extends EventListener<UIDashboardPortlet>
-   {
-      public final void execute(final Event<UIDashboardPortlet> event) throws Exception
-      {
-         WebuiRequestContext context = event.getRequestContext();
-         UIDashboardPortlet uiPortlet = event.getSource();
-         String objectId = context.getRequestParameter(OBJECTID);
-         String maximize = context.getRequestParameter("maximize");
-         UIDashboard uiDashboard = uiPortlet.getChild(UIDashboard.class);
-         UIDashboardContainer uiDashboardContainer = uiDashboard.getChild(UIDashboardContainer.class);
-         UIDashboardMask uiDashboardMask = uiPortlet.getChild(UIDashboardMask.class);
-         UIGadget uiGadget = uiDashboardContainer.getUIGadget(objectId);
-         if (maximize.equals("maximize"))
-         {
-            uiGadget.setView(UIGadget.CANVAS_VIEW);
-            uiDashboardMask.setUIComponent(uiGadget);
-            uiDashboardMask.setRendered(true);
-            uiDashboard.setRendered(false);
-         }
-         else
-         {
-            uiGadget.setView(UIGadget.HOME_VIEW);
-            uiDashboardMask.setUIComponent(null);
-            uiDashboardMask.setRendered(false);
-            uiDashboard.setRendered(true);
-         }
-         //context.addUIComponentToUpdateByAjax(uiPortlet) ;
-      }
-   }
 }

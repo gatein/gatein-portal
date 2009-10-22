@@ -459,7 +459,6 @@ Browser.prototype.findMouseYInPage = function(e) {
 Browser.prototype.findMouseRelativeX = function(object, e) {
   var posx = -1 ;
   var posXObject = eXo.core.Browser.findPosX(object) ;
-  document.title = "test" + posXObject;
   
   /*
    * posXObject is added more 3px on IE6

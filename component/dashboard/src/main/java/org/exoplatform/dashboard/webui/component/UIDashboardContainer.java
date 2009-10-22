@@ -30,6 +30,7 @@ import org.exoplatform.portal.webui.application.UIGadget;
 import org.exoplatform.portal.webui.application.UIPortlet;
 import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.portal.webui.util.PortalDataMapper;
+import org.exoplatform.web.application.RequestContext;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.InitParams;
@@ -107,7 +108,7 @@ public class UIDashboardContainer extends org.exoplatform.webui.core.UIContainer
       {
          return;
       }
-      WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
+      WebuiRequestContext context = RequestContext.getCurrentInstance();
       windowId = ((PortletRequestContext)context).getRequest().getWindowID();
 
       Param param = initParams.getParam("ContainerConfigs");
@@ -120,6 +121,7 @@ public class UIDashboardContainer extends org.exoplatform.webui.core.UIContainer
       addChild(UIContainer.class, null, null);
    }
 
+   @Override
    public void processRender(WebuiRequestContext context) throws Exception
    {
       DataStorage service = getApplicationComponent(DataStorage.class);
@@ -288,13 +290,8 @@ public class UIDashboardContainer extends org.exoplatform.webui.core.UIContainer
     */
    public boolean hasUIGadget()
    {
-      boolean flag = false;
       UIGadget gadget = findFirstComponentOfType(UIGadget.class);
-      if (gadget != null)
-      {
-         flag = true;
-      }
-      return flag;
+      return (gadget != null);
    }
 
    /**
@@ -462,13 +459,14 @@ public class UIDashboardContainer extends org.exoplatform.webui.core.UIContainer
       service.execute(new DashboardTask.Save(dashboard));
    }
 
-   public static class AddNewGadgetActionListener extends EventListener<org.exoplatform.webui.core.UIContainer>
+   public static class AddNewGadgetActionListener extends EventListener<UIDashboard>
    {
-      public final void execute(final Event<org.exoplatform.webui.core.UIContainer> event) throws Exception
+      @Override
+      public final void execute(final Event<UIDashboard> event) throws Exception
       {
          WebuiRequestContext context = event.getRequestContext();
-         org.exoplatform.webui.core.UIContainer uiDashboard = event.getSource();
-         if (!((UIDashboard)uiDashboard).canEdit())
+         UIDashboard uiDashboard = event.getSource();
+         if (!uiDashboard.canEdit())
             return;
          int col = Integer.parseInt(context.getRequestParameter(COLINDEX));
          int row = Integer.parseInt(context.getRequestParameter(ROWINDEX));
@@ -489,13 +487,14 @@ public class UIDashboardContainer extends org.exoplatform.webui.core.UIContainer
       }
    }
 
-   public static class MoveGadgetActionListener extends EventListener<org.exoplatform.webui.core.UIContainer>
+   public static class MoveGadgetActionListener extends EventListener<UIDashboard>
    {
-      public final void execute(final Event<org.exoplatform.webui.core.UIContainer> event) throws Exception
+      @Override
+      public final void execute(final Event<UIDashboard> event) throws Exception
       {
          WebuiRequestContext context = event.getRequestContext();
-         org.exoplatform.webui.core.UIContainer uiDashboard = event.getSource();
-         if (!((UIDashboard)uiDashboard).canEdit())
+         UIDashboard uiDashboard = event.getSource();
+         if (!uiDashboard.canEdit())
             return;
          UIDashboardContainer uiDashboardContainer = uiDashboard.getChild(UIDashboardContainer.class);
          int col = Integer.parseInt(context.getRequestParameter(COLINDEX));
@@ -508,21 +507,28 @@ public class UIDashboardContainer extends org.exoplatform.webui.core.UIContainer
       }
    }
 
-   public static class DeleteGadgetActionListener extends EventListener<org.exoplatform.webui.core.UIContainer>
+   public static class DeleteGadgetActionListener extends EventListener<UIDashboard>
    {
-      public final void execute(final Event<org.exoplatform.webui.core.UIContainer> event) throws Exception
+      @Override
+      public final void execute(final Event<UIDashboard> event) throws Exception
       {
-         WebuiRequestContext context = event.getRequestContext();
-         org.exoplatform.webui.core.UIContainer uiDashboard = event.getSource();
-         if (!((UIDashboard)uiDashboard).canEdit())
+         UIDashboard uiDashboard = event.getSource();
+         if (!uiDashboard.canEdit())
             return;
 
+         WebuiRequestContext context = event.getRequestContext();
          String objectId = context.getRequestParameter(OBJECTID);
          UIDashboardContainer uiDashboardContainer = uiDashboard.getChild(UIDashboardContainer.class);
          uiDashboardContainer.removeUIGadget(objectId);
+         boolean isMaximized = false;
+         if (uiDashboard.getMaximizedGadget() != null && uiDashboard.getMaximizedGadget().getId().equals(objectId))
+         {
+            uiDashboard.setMaximizedGadget(null);
+            isMaximized = true;
+         }
          uiDashboardContainer.save();
-//         context.addUIComponentToUpdateByAjax(uiDashboardContainer);
-         context.setResponseComplete(true);
+         if (!isMaximized)
+            context.setResponseComplete(true);
       }
    }
 

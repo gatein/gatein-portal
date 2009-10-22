@@ -26,15 +26,8 @@
 				</div>
 			</div>
 		</div>
-		<%
-			}
-			if (uicomponent.findFirstComponentOfType(UIGadget.class) == null) {
-		%>
-		<div class="NoGadget"><%= _ctx.appRes("UIDashboard.msg.addGadget"); %></div>
-		<%
-			}
-			uicomponent.renderChildren() ;
-		%>
-		
+		<%}%>
+		<div class="NoGadget" style="display: <%=uicomponent.hasUIGadget() ? "none" : "block"%>"><%= _ctx.appRes("UIDashboard.msg.addGadget"); %></div>
+		<% uicomponent.renderChildren() ;%>
 	</div>
 </div>

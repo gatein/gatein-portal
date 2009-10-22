@@ -35,7 +35,6 @@
 
 .UIDashboard {
 	height: 100%;
-	background: url('background/BgRepeat.gif') repeat-y left bottom;
 }
 
 .UIDashboard .DashboardContainer {
@@ -514,30 +513,30 @@
 #UIAddGadgetPopup .PopupTitle {
 	margin-left: 22px;
 }
-/*----------------------UIDashboardMask-------------------*/
+/*----------------------Maximized-------------------*/
 
-.UIDashboardMask .UIGadget {
+.Maximized .UIGadget {
 	padding: 5px;
 	margin: 0px;
 }
 
-.UIDashboardMask .UIGadget .GadgetControl {
+.Maximized .UIGadget .GadgetControl {
 	float: none;
 	padding: 0px;
 	height: auto; width: auto;
 }
 
-.UIDashboardMask .UIGadget .GadgetControl .LeftControlBar {
+.Maximized .UIGadget .GadgetControl .LeftControlBar {
 	background: none;
 	padding: 0px;
 }
 
-.UIDashboardMask .UIGadget .GadgetControl .RightControlBar {
+.Maximized .UIGadget .GadgetControl .RightControlBar {
 	background: none;
 	padding: 0px;
 }
 
-.UIDashboardMask .UIGadget .GadgetControl .CenterControlBar {
+.Maximized .UIGadget .GadgetControl .CenterControlBar {
 	background: url('background/BgTitleGadget.gif') repeat-x left top;
 	height: 23px;
 	line-height: 23px;
@@ -546,31 +545,31 @@
 	border-top: none;
 }
 
-.UIDashboardMask .UIGadget .GadgetControl .GadgetDragHandleArea {
+.Maximized .UIGadget .GadgetControl .GadgetDragHandleArea {
 	display: none;
 }	
 
-.UIDashboardMask .UIGadget .TLGadget {
+.Maximized .UIGadget .TLGadget {
 	display: none;
 }
 
-.UIDashboardMask .UIGadget .MLGadget {
+.Maximized .UIGadget .MLGadget {
 	background: #f2f2f3;
 	border: 1px solid #c3c3c3;
 	border-top: none;
 	padding: 3px;
 }
 
-.UIDashboardMask .UIGadget .MRGadget {
+.Maximized .UIGadget .MRGadget {
 	background: white;
 	padding: 0 0 1px;
 }
 
-.UIDashboardMask .UIGadget .BLGadget {
+.Maximized .UIGadget .BLGadget {
 	display: none;
 }
 
-.UIDashboardMask .GadgetTitle {
+.Maximized .GadgetTitle {
 	float: left; /* orientation=lt */
 	float: right; /* orientation=rt */
 	padding: 0px 5px;
@@ -581,6 +580,6 @@
 	white-space: nowrap;
 }
 
-.UIDashboardMask iframe {
+.Maximized iframe {
 	width: 100%;
 }
