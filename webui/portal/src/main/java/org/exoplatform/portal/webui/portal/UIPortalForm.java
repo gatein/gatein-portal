@@ -27,6 +27,7 @@ import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.PortalProperties;
 import org.exoplatform.portal.skin.SkinService;
+import org.exoplatform.portal.webui.util.PortalDataMapper;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIMaskWorkspace;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
@@ -236,6 +237,9 @@ public class UIPortalForm extends UIFormTabPane
          UIPortal uiPortal = Util.getUIPortal();
          uiForm.invokeSetBindingBean(uiPortal);
          //      uiPortal.refreshNavigation(localeConfigService.getLocaleConfig(uiPortal.getLocale()).getLocale()) ;
+         PortalConfig portalConfig = (PortalConfig)PortalDataMapper.buildModelObject(uiPortal);
+         UserPortalConfigService configService = uiForm.getApplicationComponent(UserPortalConfigService.class);
+         configService.update(portalConfig);
          UIMaskWorkspace uiMaskWorkspace = uiForm.getParent();
          uiMaskWorkspace.setUIComponent(null);
          event.getRequestContext().addUIComponentToUpdateByAjax(uiMaskWorkspace);

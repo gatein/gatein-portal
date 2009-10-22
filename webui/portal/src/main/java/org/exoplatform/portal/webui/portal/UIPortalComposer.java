@@ -147,7 +147,7 @@ public class UIPortalComposer extends UIContainer
 
       PortalConfig portalConfig = (PortalConfig)PortalDataMapper.buildModelObject(editPortal);
       UserPortalConfigService configService = getApplicationComponent(UserPortalConfigService.class);
-      configService.update(portalConfig);
+      //configService.update(portalConfig);
       uiPortalApp.getUserPortalConfig().setPortal(portalConfig);
       String remoteUser = prContext.getRemoteUser();
       String ownerUser = prContext.getPortalOwner();
