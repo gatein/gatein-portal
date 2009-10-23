@@ -226,6 +226,7 @@ public class UIGroupNavigationManagement extends UIContainer
          selector.removeChild(UIRightClickPopupMenu.class);
          popUp.setUIComponent(pageManager);
          popUp.setWindowSize(400, 400);
+         popUp.setShowMask(true);
          popUp.setShow(true);
          // prContext.addUIComponentToUpdateByAjax(workingWS);
       }
@@ -256,6 +257,7 @@ public class UIGroupNavigationManagement extends UIContainer
          pageNavigation.setPageNav(navigation);
          popUp.setUIComponent(pageNavigation);
          popUp.setWindowSize(600, 400);
+         popUp.setShowMask(true);
          popUp.setShow(true);
       }
    }

@@ -319,6 +319,7 @@ public class UISiteManagement extends UIContainer
          selector.initNavigations(list);
          selector.removeChild(UIRightClickPopupMenu.class);
          popUp.setUIComponent(naviManager);
+         popUp.setShowMask(true);
          popUp.setShow(true);
 
       }
