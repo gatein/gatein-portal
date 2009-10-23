@@ -57,6 +57,7 @@ function DragDrop() {
 } ;
 
 DragDrop.prototype.init = function(dropableTargets, clickObject, dragObject, evt) {
+	if(evt && evt.preventDefault) evt.preventDefault();
   eXo.core.Mouse.init(evt) ;
   this.dropableTargets = dropableTargets ;
   

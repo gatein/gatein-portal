@@ -332,8 +332,10 @@ PortalDragDrop.prototype.findDropableTargets = function() {
 };
 
 PortalDragDrop.prototype.scrollOnDrag = function(dragObject, dndEvent) {
-  var dragObjectTop = eXo.core.Browser.findPosY(dragObject) ;
+	var workspaceHeight = document.getElementById("UIWorkingWorkspace").offsetHeight;
   var browserHeight = eXo.core.Browser.getBrowserHeight() ;
+  if(workspaceHeight <= browserHeight) return;
+  var dragObjectTop = eXo.core.Browser.findPosY(dragObject) ;
   var mouseY = eXo.core.Browser.findMouseYInClient(dndEvent.backupMouseEvent) ;
   var deltaTopMouse = eXo.core.Browser.findMouseYInPage(dndEvent.backupMouseEvent) - mouseY ;
   var deltaTop = mouseY - (Math.round(browserHeight * 5/6)) ;
