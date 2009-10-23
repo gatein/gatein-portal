@@ -362,9 +362,8 @@ public class UINavigationNodeSelector extends UIContainer
          uiNodeForm.setSelectedParent(parent);
 
          // set navigation owner, navigation type
-         UINavigationManagement nodeManager = uiNodeSelector.getParent();
-         uiNodeForm.setOwner(nodeManager.getOwner());
-         uiNodeForm.setOwnerType(nodeManager.getOwnerType());
+         uiNodeForm.setOwner(uiNodeSelector.getSelectedNavigation().getOwnerId());
+         uiNodeForm.setOwnerType(uiNodeSelector.getSelectedNavigation().getOwnerType());
 
          uiManagementPopup.setWindowSize(800, 500);
          event.getRequestContext().addUIComponentToUpdateByAjax(uiManagementPopup.getParent());
@@ -469,6 +468,11 @@ public class UINavigationNodeSelector extends UIContainer
          UIPopupWindow uiManagementPopup = uiNodeSelector.getAncestorOfType(UIPopupWindow.class);
          UIPageNodeForm2 uiNodeForm = uiApp.createUIComponent(UIPageNodeForm2.class, null, null);
          uiManagementPopup.setUIComponent(uiNodeForm);
+         
+         // set navigation owner, navigation type
+         uiNodeForm.setOwner(uiNodeSelector.getSelectedNavigation().getOwnerId());
+         uiNodeForm.setOwnerType(uiNodeSelector.getSelectedNavigation().getOwnerType());
+         
          uiNodeForm.setValues(selectedNode);
          uiNodeForm.setSelectedParent(obj);
          uiManagementPopup.setWindowSize(800, 500);
