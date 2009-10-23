@@ -69,6 +69,8 @@ public class UIFormLifecycle extends Lifecycle<UIForm>
       }
       UIComponent uiSubComponent = uicomponent.findComponentById(subComponentId);
       Event<UIComponent> event = uiSubComponent.createEvent(action, Event.Phase.DECODE, context);
+      if (event == null)
+        event = uicomponent.createEvent(action, Event.Phase.DECODE, context);
       if (event != null)
          event.broadcast();
    }

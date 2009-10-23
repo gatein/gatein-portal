@@ -54,8 +54,7 @@ import java.util.ResourceBundle;
  *          ha.pham@exoplatform.com
  * May 7, 2007
  */
-@ComponentConfig(template = "system:/groovy/organization/webui/component/UIListPermissionSelector.gtmpl", events = {
-   @EventConfig(phase = Phase.DECODE, listeners = UIListPermissionSelector.CloseActionListener.class),
+@ComponentConfig(template = "system:/groovy/organization/webui/component/UIListPermissionSelector.gtmpl", events = {   
    @EventConfig(phase = Phase.DECODE, listeners = UIListPermissionSelector.DeleteActionListener.class, confirm = "UIAccessGroup.deleteAccessGroup"),
    @EventConfig(phase = Phase.DECODE, listeners = UIPermissionSelector.SelectMembershipActionListener.class),
    @EventConfig(phase = Phase.DECODE, listeners = UIListPermissionSelector.ChangePublicModeActionListener.class)})
@@ -278,19 +277,6 @@ public class UIListPermissionSelector extends UISelector<String[]>
          }
       }
 
-   }
-   
-   static public class CloseActionListener extends EventListener<UIListPermissionSelector>
-   {
-      public void execute(Event<UIListPermissionSelector> event) throws Exception
-      {
-         UIListPermissionSelector uicom = event.getSource();
-         UIForm uiForm = uicom.getAncestorOfType(UIForm.class);         
-         if (uiForm != null)
-         {
-            uiForm.broadcast(event, event.getExecutionPhase());
-         }
-      }
    }
 
    static public class EmptyIteratorValidator implements Validator

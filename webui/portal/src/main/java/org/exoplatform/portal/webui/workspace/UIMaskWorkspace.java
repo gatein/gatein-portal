@@ -25,12 +25,14 @@ import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIComponentDecorator;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.event.Event.Phase;
 
 /**
  * Created by The eXo Platform SAS
  * Mar 13, 2007  
  */
-@ComponentConfig(id = "UIMaskWorkspace", template = "system:/groovy/portal/webui/workspace/UIMaskWorkspace.gtmpl", events = @EventConfig(listeners = UIMaskWorkspace.CloseActionListener.class))
+@ComponentConfig(id = "UIMaskWorkspace", template = "system:/groovy/portal/webui/workspace/UIMaskWorkspace.gtmpl", 
+                 events = @EventConfig(phase = Phase.DECODE, listeners = UIMaskWorkspace.CloseActionListener.class))
 public class UIMaskWorkspace extends UIComponentDecorator
 {
 
