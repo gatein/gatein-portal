@@ -19,6 +19,11 @@
 
 package org.exoplatform.webui.organization;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
+
 import org.exoplatform.commons.utils.LazyPageList;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.UserACL.Permission;
@@ -43,16 +48,11 @@ import org.exoplatform.webui.form.UIFormPageIterator;
 import org.exoplatform.webui.form.UIFormPopupWindow;
 import org.exoplatform.webui.form.validator.Validator;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
-
 /**
  * Created by The eXo Platform SARL
  * Author : Pham Dung Ha
  *          ha.pham@exoplatform.com
- * May 7, 2007
+ * May 7, 2007o
  */
 @ComponentConfig(template = "system:/groovy/organization/webui/component/UIListPermissionSelector.gtmpl", events = {   
    @EventConfig(phase = Phase.DECODE, listeners = UIListPermissionSelector.DeleteActionListener.class, confirm = "UIAccessGroup.deleteAccessGroup"),

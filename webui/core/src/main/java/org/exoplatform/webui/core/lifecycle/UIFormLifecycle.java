@@ -19,6 +19,9 @@
 
 package org.exoplatform.webui.core.lifecycle;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIApplication;
@@ -32,9 +35,6 @@ import org.exoplatform.webui.form.UIFormInputContainer;
 import org.exoplatform.webui.form.UIFormInputSet;
 import org.exoplatform.webui.form.UIFormMultiValueInputSet;
 import org.exoplatform.webui.form.validator.Validator;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Author : Nhu Dinh Thuan
