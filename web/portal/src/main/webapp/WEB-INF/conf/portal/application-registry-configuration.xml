@@ -182,27 +182,12 @@
 						          </field>                 
 		                </object>
 	                </value>
-					        <value>                 
+					<value>                 
 		                <object type="org.exoplatform.application.registry.Application">                     
 		                  <field  name="categoryName"><string>web</string></field>
 		                  <field name="applicationName"><string>SiteMapPortlet</string></field>
 						          <field name="displayName"><string>SiteMap</string></field>
 						          <field name="description"><string>SiteMap</string></field>
-		                  <field name="applicationType"><string>portlet</string></field>
-		                  <field name="applicationGroup"><string>web</string></field>
-		                  <field name="accessPermissions">
-								        <collection type="java.util.ArrayList" item-type="java.lang.String">													
-													<value><string>*:/platform/users</string></value>													
-								        </collection>
-						          </field>                                 
-		                </object>
-	                </value>
-	                <value>                 
-		                <object type="org.exoplatform.application.registry.Application">                     
-		                  <field  name="categoryName"><string>web</string></field>
-		                  <field name="applicationName"><string>BrowserPortlet</string></field>
-						          <field name="displayName"><string>Web Explorer</string></field>
-						          <field name="description"><string>Web Explorer</string></field>
 		                  <field name="applicationType"><string>portlet</string></field>
 		                  <field name="applicationGroup"><string>web</string></field>
 		                  <field name="accessPermissions">
