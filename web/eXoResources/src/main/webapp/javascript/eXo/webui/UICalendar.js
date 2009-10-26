@@ -69,7 +69,6 @@ UICalendar.prototype.create = function() {
 
 UICalendar.prototype.show = function() {
 	document.onmousedown = new Function('eXo.webui.UICalendar.hide()') ;
-	
 	var re = /^(\d{1,2}\/\d{1,2}\/\d{1,4})\s*(\s+\d{1,2}:\d{1,2}:\d{1,2})?$/i ;
   this.selectedDate = new Date() ;
 
@@ -109,6 +108,10 @@ UICalendar.prototype.show = function() {
 		var secondIndex = this.datePattern.indexOf("ss");
 		var secondValue = parseInt(dateFieldValue.substring(secondIndex,secondIndex+2),10);
 		
+		if(isNaN(secondValue)) { secondValue = "00"; }
+		if(isNaN(minutesValue)) { minutesValue = "00"; }
+		if(isNaN(hoursValue)) { hoursValue = "00"; }
+
 		var testDate = "MM/dd/yyyy HH:mm:ss";
 		testDate = testDate.replace("dd",dateValue);
 		testDate = testDate.replace("MM",monthValue+1);
@@ -116,6 +119,7 @@ UICalendar.prototype.show = function() {
 		testDate = testDate.replace("HH",hoursValue);
 		testDate = testDate.replace("mm",minutesValue);
 		testDate = testDate.replace("ss",secondValue);
+		
 		if (re.test(testDate)) {
 			this.selectedDate.setDate(dateValue) ; 
 			this.selectedDate.setMonth(monthValue) ;
