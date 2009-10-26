@@ -70,7 +70,7 @@ public class UIPageActionListener
          {
             UserPortalConfigService configService = uiPortalApp.getApplicationComponent(UserPortalConfigService.class);
             String remoteUser = Util.getPortalRequestContext().getRemoteUser();
-            UserPortalConfig portalConfig = configService.getUserPortalConfig(uiPortal.getOwner(), remoteUser);
+            UserPortalConfig portalConfig = configService.getUserPortalConfig(Util.getPortalRequestContext().getPortalOwner(), remoteUser);
             uiPortal.getChildren().clear();
             PortalDataMapper.toUIPortal(uiPortal, portalConfig);
             uiPortalApp.setModeState(UIPortalApplication.NORMAL_MODE);
