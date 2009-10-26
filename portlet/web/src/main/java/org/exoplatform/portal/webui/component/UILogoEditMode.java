@@ -19,8 +19,12 @@
 
 package org.exoplatform.portal.webui.component;
 
+import javax.portlet.PortletMode;
+import javax.portlet.PortletPreferences;
+
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -28,12 +32,11 @@ import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.exception.MessageException;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
-
-import javax.portlet.PortletMode;
-import javax.portlet.PortletPreferences;
+import org.exoplatform.webui.form.validator.URLValidator;
 
 /**
  * Created by The eXo Platform SAS Author : eXoPlatform October 2, 2009
@@ -58,6 +61,12 @@ public class UILogoEditMode extends UIForm
       {
          UILogoEditMode uiForm = event.getSource();
          String url = uiForm.getUIStringInput(FIELD_URL).getValue();
+         if (url != null && !url.trim().matches(URLValidator.URL_REGEX)) {
+           UILogoPortlet uiPortlet = uiForm.getParent();
+           uiForm.getUIStringInput(FIELD_URL).setValue(uiPortlet.getURL());
+           Object[] args = {FIELD_URL, "URL"};
+           throw new MessageException(new ApplicationMessage("ExpressionValidator.msg.value-invalid", args));
+         }
          PortletRequestContext pcontext = (PortletRequestContext)WebuiRequestContext.getCurrentInstance();
          PortletPreferences pref = pcontext.getRequest().getPreferences();
          pref.setValue("url", uiForm.getUIStringInput(FIELD_URL).getValue());
