@@ -86,21 +86,21 @@
 				text-align: center;
 			}
 			
-			.Display p {
+			.Display input {
 				background: url(/eXoGadgets/skin/image/Display.png) no-repeat top left;
 				width: 164px;
 				height: 23px;
-				text-align: __BIDI_END_EDGE__;
 				margin: 0 auto;
 				font-size: 15px;
 				line-height: auto;
 				color: #333333;
 				font-weight: bold;
-				padding: 11px 3px 0 0;
+				padding: 3px 3px 0 0;
+				direction: __BIDI_REVERSE_DIR__;
 			}
 			
 			.Number {
-                                padding-top: 8px;
+        padding-top: 8px;
 				padding-__BIDI_START_EDGE__: 9px;
 			}
 		
@@ -115,13 +115,13 @@
 				display: block;
 				float: __BIDI_START_EDGE__;
 				margin-top: 4px;
-                                margin-__BIDI_START_EDGE__: 3px;
+        margin-__BIDI_START_EDGE__: 3px;
 				cursor: pointer;
 				padding-top: 3px;
 			}
 			
 			.ClearLeft {
-				clear: __BIDI_START_EDGE__
+				clear: __BIDI_START_EDGE__;
 			}
 			
 			.Row a sup {
@@ -159,7 +159,7 @@
 			var NewNumber = "blank";
 			var opvalue = "";
 			function Display(displaynumber) {
-				document.getElementById("calculator").innerHTML = displaynumber;
+				document.getElementById("calculator").value = displaynumber;
 			}
 			function ClearCalc() {
 				Number1 = "";
@@ -169,7 +169,7 @@
 			}
 			function CheckNumber(answer) {
 				if(answer == ".") {
-					Number = document.getElementById("calculator").innerHTML;;
+					Number = document.getElementById("calculator").value;
 					if(Number.indexOf(".") != -1) {
 						answer = "";
 				  }
@@ -257,7 +257,7 @@
 				<div class="RightCalculator">
 					<div class="CenterCalculator">
 						<div class="Display">
-							<p id="calculator">0</p>
+							<input id="calculator" value="0" disabled />
 						</div>
 						<div class="Number">
 							<div class="Row">
