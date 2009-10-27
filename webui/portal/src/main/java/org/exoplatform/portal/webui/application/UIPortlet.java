@@ -601,6 +601,7 @@ public class UIPortlet<S, C extends Serializable, I> extends UIApplication
       HttpServletRequest servletRequest = prc.getRequest();
       HashMap<String, String[]> allParams = new HashMap<String, String[]>();
       allParams.putAll(servletRequest.getParameterMap());
+      allParams.putAll(this.getPublicParameters());
       if (type.equals(ActionInvocation.class))
       {
          ActionInvocation actionInvocation = new ActionInvocation(pic);
@@ -667,8 +668,7 @@ public class UIPortlet<S, C extends Serializable, I> extends UIApplication
       invocation.setWindowState(org.gatein.pc.api.WindowState.create(getCurrentWindowState().toString()));
 
       // Public navigational state
-      invocation.setPublicNavigationalState(allParams);
-
+      invocation.setPublicNavigationalState(this.getPublicParameters());
       //
       StatefulPortletContext<C> preferencesPortletContext = getPortletContext();
 

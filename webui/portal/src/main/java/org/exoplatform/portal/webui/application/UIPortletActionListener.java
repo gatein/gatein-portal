@@ -150,9 +150,7 @@ public class UIPortletActionListener
           */
 
          //
-         Map<String, String[]> map =
-            StateString.decodeOpaqueValue((navStateResponse.getNavigationalState()).getStringValue());
-         uiPortlet.setRenderParametersMap(map);
+         uiPortlet.setRenderParametersMap(navStateResponse.getPublicNavigationalStateUpdates());
          //
 
          /*
