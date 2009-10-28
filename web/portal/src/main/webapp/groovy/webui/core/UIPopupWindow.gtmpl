@@ -7,15 +7,19 @@
 	 * version: $Id$
 	 */
 %>
-<%
+<%		
 	component = uicomponent.getUIComponent();
 	boolean showCloseButton =	uicomponent.isShowCloseButton()
 	String popupId = uicomponent.getId();
+	String rsId = popupId;
+	if(popupId.indexOf('-')>0){
+		rsId = popupId.substring(0,popupId.lastIndexOf('-'));
+	} 
 	def rcontext = _ctx.getRequestContext();
 	rcontext.getJavascriptManager().importJavascript('eXo.webui.UIPopupWindow');
 	rcontext.getJavascriptManager().addJavascript("eXo.webui.UIPopupWindow.init('$popupId', $uicomponent.show, $uicomponent.resizable, true, $uicomponent.showMask);");
 		
-	String title = popupId;
+	String title = rsId;
 	if(component != null)	title = component.getId();
 	
 	int width = uicomponent.getWindowWidth();
@@ -41,7 +45,7 @@
 						<% } else { %>
 							<div class="PopupTitleIconRight"><span></span></div>
 						<% } %>
-						<div class="PopupTitle"><%=_ctx.appRes(popupId + ".title."+ title)%></div>
+						<div class="PopupTitle"><%=_ctx.appRes(rsId + ".title."+ title)%></div>
 					</div>
 				</div>
 			</div>

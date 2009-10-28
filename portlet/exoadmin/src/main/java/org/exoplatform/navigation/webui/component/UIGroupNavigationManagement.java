@@ -56,6 +56,7 @@ import org.exoplatform.webui.event.Event.Phase;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.UUID;
 
 /*
  * Created by The eXo Platform SAS
@@ -90,6 +91,7 @@ public class UIGroupNavigationManagement extends UIContainer
       UIRepeater repeater = createUIComponent(UIRepeater.class, "UIGroupNavigationGrid", null);
       virtualList.setUIComponent(repeater);
       UIPopupWindow editNavigation = addChild(UIPopupWindow.class, null, null);
+      editNavigation.setId(editNavigation.getId() + "-" + UUID.randomUUID().toString().replaceAll("-", ""));
    }
 
    public void loadNavigations() throws Exception

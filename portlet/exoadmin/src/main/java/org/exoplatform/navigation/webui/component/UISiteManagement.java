@@ -60,6 +60,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -88,6 +89,7 @@ public class UISiteManagement extends UIContainer
    {
       UIPopupWindow editNavigation = addChild(UIPopupWindow.class, null, null);
       editNavigation.setWindowSize(400, 400);
+      editNavigation.setId(editNavigation.getId()+ "-" + UUID.randomUUID().toString().replaceAll("-", ""));
       //loadPortalConfigs();
    }
 
