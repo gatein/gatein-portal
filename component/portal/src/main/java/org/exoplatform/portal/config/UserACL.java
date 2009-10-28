@@ -373,10 +373,12 @@ public class UserACL
       }
       page.setModifiable(false);
       String[] accessPerms = page.getAccessPermissions();
-      for (String per : accessPerms)
-      {
-         if (hasPermission(identity, per))
-            return true;
+      if (accessPerms != null) {
+	      for (String per : accessPerms)
+	      {
+	         if (hasPermission(identity, per))
+	            return true;
+	      }
       }
       return false;
    }
