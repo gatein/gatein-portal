@@ -47,8 +47,9 @@ public class PortalStateManager extends StateManager
 
    protected static Log log = ExoLogger.getLogger("portal:PortalStateManager");
 
-   private ConcurrentMap<String, PortalApplicationState> uiApplications =
-      new ConcurrentHashMap<String, PortalApplicationState>();
+   /** ConcurrentMap<SessionId, HashMap<PortalName, PortalApplicationState>> **/
+   private ConcurrentMap<String, HashMap<String, PortalApplicationState>> uiApplications =
+      new ConcurrentHashMap<String, HashMap<String, PortalApplicationState>>();
 
    /**
     * This method is used to restore the UI component tree either the current request targets a portlet 
@@ -66,14 +67,14 @@ public class PortalStateManager extends StateManager
       /*
        * If the request context is of type PortletRequestContext, we extract the parent context which will
        * allow to get access to the PortalApplicationState object thanks to the session id used as the key for the
-       * syncronised Map uiApplications
+       * synchronize Map uiApplications
        */
       if (context instanceof PortletRequestContext)
       {
-         WebuiRequestContext preqContext = (WebuiRequestContext)context.getParentAppRequestContext();
-         PortalApplicationState state = uiApplications.get(preqContext.getSessionId());
+         WebuiRequestContext preqContext = (WebuiRequestContext)context.getParentAppRequestContext();         
          PortletRequestContext pcontext = (PortletRequestContext)context;
          String key = pcontext.getApplication().getApplicationId() + "/" + pcontext.getWindowId();
+         PortalApplicationState state = getApplicationState(preqContext);
          UIApplication uiApplication = state.get(key);
          if (uiApplication != null)
             return uiApplication;
@@ -86,11 +87,10 @@ public class PortalStateManager extends StateManager
       }
 
       PortalRequestContext pcontext = (PortalRequestContext)context;
-      PortalApplicationState state = uiApplications.get(pcontext.getSessionId());
+      PortalApplicationState state = getApplicationState(pcontext);
       if (state != null)
       {
-         if ((!(Safe.equals(pcontext.getRemoteUser(), state.getUserName())))
-            || (!pcontext.getPortalOwner().equals(state.getUIPortalApplication().getOwner())))
+         if (!Safe.equals(pcontext.getRemoteUser(), state.getUserName()))
          {
             clearSession(pcontext.getRequest().getSession());
             state = null;
@@ -119,7 +119,7 @@ public class PortalStateManager extends StateManager
          pcontext.setAttribute(UserPortalConfig.class, config);
          UIPortalApplication uiApplication = (UIPortalApplication)app.createUIComponent(type, null, null, context);
          state = new PortalApplicationState(uiApplication, pcontext.getRemoteUser());
-         uiApplications.put(context.getSessionId(), state);
+         cacheApplicationState(pcontext.getSessionId(), pcontext.getPortalOwner(),state);
          SessionManagerContainer pcontainer = (SessionManagerContainer)app.getApplicationServiceContainer();
          pcontainer.createSessionContainer(context.getSessionId(), uiApplication.getOwner());
       }
@@ -133,13 +133,31 @@ public class PortalStateManager extends StateManager
 
    public void expire(String sessionId, WebuiApplication app)
    {
-      PortalApplicationState state = uiApplications.remove(sessionId);
-      if (state != null)
-      {
-         log.warn("Session expires, remove application: " + state.getUIPortalApplication());
-      }
+      uiApplications.remove(sessionId);
       SessionManagerContainer pcontainer = (SessionManagerContainer)app.getApplicationServiceContainer();
       pcontainer.removeSessionContainer(sessionId);
+   }
+   
+   private PortalApplicationState getApplicationState(WebuiRequestContext context) {
+     PortalRequestContext portalContext = null;
+     if (context instanceof PortalRequestContext)
+       portalContext = (PortalRequestContext)context;
+     else 
+       portalContext = (PortalRequestContext)context.getParentAppRequestContext();
+     String portalName = portalContext.getPortalOwner();
+     String sessionId = portalContext.getSessionId();
+     
+     HashMap<String, PortalApplicationState> appStates = uiApplications.get(sessionId);
+     return (appStates == null) ? null : appStates.get(portalName);
+   }
+   
+   private void cacheApplicationState(String sessionId, String portalName, PortalApplicationState state) {
+      HashMap<String, PortalApplicationState> appStates = uiApplications.get(sessionId);
+      if (appStates == null) {
+          appStates = new HashMap<String, PortalApplicationState>();
+          uiApplications.put(sessionId, appStates);
+      }
+      appStates.put(portalName, state);
    }
 
    private UserPortalConfig getUserPortalConfig(PortalRequestContext context) throws Exception
