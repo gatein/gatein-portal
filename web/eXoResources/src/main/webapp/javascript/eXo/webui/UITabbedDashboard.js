@@ -23,7 +23,7 @@ eXo.webui.UITabbedDashboard = {
 	
 	renameTabLabel : function(e){
 		if(!e){
-			e = windwow.event;
+			e = window.event;
 		}
 		var keyNum = e.keyCode;
 		
