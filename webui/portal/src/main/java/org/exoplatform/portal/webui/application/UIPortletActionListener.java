@@ -140,7 +140,7 @@ public class UIPortletActionListener
 
          // set the public params
          HttpServletRequest request = prcontext.getRequest();
-         setupPublicRenderParams(uiPortlet, request.getParameterMap());
+         setupPublicRenderParams(uiPortlet, navStateResponse.getPublicNavigationalStateUpdates());
 
          /*
           * Cache the render parameters in the UI portlet component to handle the
