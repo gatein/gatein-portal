@@ -26,7 +26,7 @@ import org.exoplatform.portal.config.model.ModelChange;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.PortalProperties;
-import org.exoplatform.portal.skin.SkinService;
+import org.exoplatform.portal.resource.SkinService;
 import org.exoplatform.portal.webui.application.UIApplicationList;
 import org.exoplatform.portal.webui.application.UIPortlet;
 import org.exoplatform.portal.webui.container.UIContainerList;

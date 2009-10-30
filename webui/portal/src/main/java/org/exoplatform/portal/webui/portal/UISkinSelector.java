@@ -19,7 +19,7 @@
 
 package org.exoplatform.portal.webui.portal;
 
-import org.exoplatform.portal.skin.SkinService;
+import org.exoplatform.portal.resource.SkinService;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIMaskWorkspace;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;

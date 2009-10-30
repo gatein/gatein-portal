@@ -25,7 +25,7 @@ import org.exoplatform.portal.pc.ExoPortletState;
 import org.exoplatform.portal.pom.spi.portlet.Preference;
 import org.exoplatform.portal.pom.spi.portlet.Preferences;
 import org.exoplatform.portal.portlet.PortletExceptionHandleService;
-import org.exoplatform.portal.skin.SkinService;
+import org.exoplatform.portal.resource.SkinService;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIMaskWorkspace;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
