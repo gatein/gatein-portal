@@ -182,7 +182,7 @@ public class PortalDataMapper
       return model;
    }
 
-   static private Page toPageModel(UIPage uiPage)
+   static public Page toPageModel(UIPage uiPage)
    {
       Page model = new Page(uiPage.getStorageId());
       toContainer(model, uiPage);

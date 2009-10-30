@@ -21,7 +21,9 @@ package org.exoplatform.portal.webui.workspace;
 
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.UserACL;
+import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.webui.page.UIPage;
 import org.exoplatform.portal.webui.page.UIPageBody;
 import org.exoplatform.portal.webui.page.UIPageCreationWizard;
 import org.exoplatform.portal.webui.page.UISiteBody;
@@ -29,8 +31,10 @@ import org.exoplatform.portal.webui.page.UIWizardPageSetInfo;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.portal.UIPortalComposer;
 import org.exoplatform.portal.webui.portal.UIPortalForm;
+import org.exoplatform.portal.webui.util.PortalDataMapper;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
@@ -64,6 +68,18 @@ public class UIMainActionListener
          UIPortalToolPanel uiToolPanel = uiWorkingWS.findFirstComponentOfType(UIPortalToolPanel.class);
          uiToolPanel.setShowMaskLayer(false);
          UIPageBody pageBody = uiWorkingWS.findFirstComponentOfType(UIPageBody.class);
+         
+         // check edit permission for page
+         UIPage uiPage = (UIPage) pageBody.getUIComponent();
+         Page page = PortalDataMapper.toPageModel(uiPage);
+         
+         UserACL userACL = uiApp.getApplicationComponent(UserACL.class);
+         if (!userACL.hasEditPermission(page))
+         {
+            uiApp.addMessage(new ApplicationMessage("UIPortalManagement.msg.Invalid-editPermission", null));
+            return;
+         }
+         
          uiToolPanel.setWorkingComponent(pageBody.getUIComponent());
          event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingWS);
          Util.getPortalRequestContext().setFullRender(true);
