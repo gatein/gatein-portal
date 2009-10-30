@@ -45,6 +45,8 @@ import javax.servlet.ServletContext;
 public class JavascriptDeployer implements WebAppListener, Startable
 {
 
+   private static final String GATEIN_CONFIG_RESOURCE = "/WEB-INF/gatein-resources.xml";
+   
    /**
     * Logger
     */
@@ -87,6 +89,7 @@ public class JavascriptDeployer implements WebAppListener, Startable
                scontext = event.getWebApp().getServletContext();
 
                InputStream is = scontext.getResourceAsStream("/WEB-INF/conf/script/groovy/JavascriptScript.groovy");
+               //InputStream is = scontext.getResourceAsStream(GATEIN_CONFIG_RESOURCE);
                if (is == null)
                   return;
                try
@@ -122,6 +125,7 @@ public class JavascriptDeployer implements WebAppListener, Startable
       try
       {
          is = scontext.getResourceAsStream("/WEB-INF/conf/script/groovy/JavascriptScript.groovy");
+         //is = scontext.getResourceAsStream(GATEIN_CONFIG_RESOURCE);
          Binding binding = new Binding();
          binding.setVariable("JavascriptService", javascriptService);
          binding.setVariable("ServletContext", scontext);

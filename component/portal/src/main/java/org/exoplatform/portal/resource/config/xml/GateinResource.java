@@ -51,4 +51,12 @@ public interface GateinResource
    final public static String STYLE_THEME_TAG = "style-theme";
 
    final public static String THEME_NAME_TAG = "theme-name";
+   
+   final public static String JAVA_SCRIPT_TAG = "javascript";
+   
+   final public static String JAVA_SCRIPT_PARAM = "param";
+   
+   final public static String JAVA_SCRIPT_MODULE = "js-module";
+   
+   final public static String JAVA_SCRIPT_PATH = "js-path";
 }
