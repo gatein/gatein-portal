@@ -39,7 +39,7 @@ import javax.servlet.ServletContext;
  * Jan 19, 2007
  */
 
-public class SkinConfigDeployer extends AbstractSkinConfigDeployer
+public class SkinConfigDeployer extends AbstractResourceHandler
 {
 
    /**

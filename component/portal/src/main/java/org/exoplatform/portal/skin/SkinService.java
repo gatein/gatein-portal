@@ -96,7 +96,7 @@ public class SkinService implements Startable
    private static final int ONE_HOUR = 3600;
 
    /** The deployer. */
-   private final AbstractSkinConfigDeployer deployer;
+   private final AbstractResourceHandler deployer;
 
    private final Map<SkinKey, SkinConfig> portalSkins_;
 

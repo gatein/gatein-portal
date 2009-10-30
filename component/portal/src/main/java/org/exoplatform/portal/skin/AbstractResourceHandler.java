@@ -30,7 +30,7 @@ import org.gatein.wci.WebAppListener;
  *
  *      Sep 16, 2009
  */
-public abstract class AbstractSkinConfigDeployer implements WebAppListener
+public abstract class AbstractResourceHandler implements WebAppListener
 {
 
    abstract public void onEvent(WebAppEvent event);
