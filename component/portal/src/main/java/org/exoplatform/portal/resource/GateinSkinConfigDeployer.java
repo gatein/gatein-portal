@@ -17,11 +17,11 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.skin;
+package org.exoplatform.portal.resource;
 
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.RootContainer.PortalContainerPostInitTask;
-import org.exoplatform.portal.skin.config.xml.SkinConfigParser;
+import org.exoplatform.portal.resource.config.xml.SkinConfigParser;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.gatein.wci.WebAppEvent;

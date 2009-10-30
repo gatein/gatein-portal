@@ -17,30 +17,23 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.skin;
-
-import org.exoplatform.services.resources.Orientation;
+package org.exoplatform.portal.resource;
 
 /**
- * The URL of a skin.
+ * A resource resolver for char based resources.
  *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public interface SkinURL
+public interface ResourceResolver
 {
 
    /**
-    * Sets the orientation on the skin URL.
+    * Returns a reader for the provided path or null if the resource cannot be resolved.
     *
-    * @param orientation the orientation
+    * @param path the path
+    * @return a reader 
     */
-   void setOrientation(Orientation orientation);
+   Resource resolve(String path);
 
-   /**
-   * This method is used to compute the path of a CSS.
-   *
-   * @return the CSS path, containing the orientation suffix.
-   */
-   String toString();
 }

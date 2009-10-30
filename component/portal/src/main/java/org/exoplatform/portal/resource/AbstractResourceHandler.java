@@ -17,31 +17,22 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.skin;
+package org.exoplatform.portal.resource;
+
+import org.gatein.wci.WebAppEvent;
+import org.gatein.wci.WebAppListener;
 
 /**
- * An interface defining the renderer contract for a resource.
+ * 
+ * Created by eXoPlatform SAS
  *
- * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
- * @version $Revision$
+ * Author: Minh Hoang TO - hoang281283@gmail.com
+ *
+ *      Sep 16, 2009
  */
-public interface ResourceRenderer
+public abstract class AbstractResourceHandler implements WebAppListener
 {
 
-   /**
-    * Returns an appendable for the performing the rendering of the resource.
-    *
-    * @return the appendable
-    */
-   Appendable getAppendable();
-
-   /**
-    * Instruct the renderer about the expiration time in seconds. A non positive value
-    * means that no caching should be performed. The expiration value is relative to the
-    * date of the request.
-    *
-    * @param seconds the value in seconds
-    */
-   void setExpiration(long seconds);
+   abstract public void onEvent(WebAppEvent event);
 
 }

@@ -17,33 +17,36 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.skin;
+package org.exoplatform.portal.resource;
 
 /**
- * Signal an exception during rendering.
+ * Extends a skin with additional information.
  *
- * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
- * @version $Revision$
+ * Created by The eXo Platform SAS
+ * Jan 19, 2007  
  */
-public class RenderingException extends Exception
+public interface SkinConfig extends Skin
 {
 
-   public RenderingException()
-   {
-   }
+   /**
+    * Returns the skin name
+    *
+    * @return the skin name
+    */
+   String getName();
 
-   public RenderingException(String message)
-   {
-      super(message);
-   }
+   /**
+    * Returns the skin module.
+    *
+    * @return the module
+    */
+   String getModule();
 
-   public RenderingException(String message, Throwable cause)
-   {
-      super(message, cause);
-   }
+   /**
+    * Returns the css path.
+    *
+    * @return the css path
+    */
+   String getCSSPath();
 
-   public RenderingException(Throwable cause)
-   {
-      super(cause);
-   }
 }

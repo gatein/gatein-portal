@@ -17,10 +17,10 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.skin.config.xml;
+package org.exoplatform.portal.resource.config.xml;
 
+import org.exoplatform.portal.resource.SkinService;
 import org.exoplatform.portal.resource.config.tasks.AbstractSkinTask;
-import org.exoplatform.portal.skin.SkinService;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;

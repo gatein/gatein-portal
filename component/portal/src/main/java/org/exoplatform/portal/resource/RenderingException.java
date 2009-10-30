@@ -17,29 +17,33 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.skin;
+package org.exoplatform.portal.resource;
 
 /**
- * A skin.
+ * Signal an exception during rendering.
  *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public interface Skin
+public class RenderingException extends Exception
 {
 
-   /**
-    * Returns the skin id.
-    *
-    * @return the skin id
-    */
-   String getId();
+   public RenderingException()
+   {
+   }
 
-   /**
-    * Creates and return a skin URL.
-    *
-    * @return the skin URL
-    */
-   SkinURL createURL();
+   public RenderingException(String message)
+   {
+      super(message);
+   }
 
+   public RenderingException(String message, Throwable cause)
+   {
+      super(message, cause);
+   }
+
+   public RenderingException(Throwable cause)
+   {
+      super(cause);
+   }
 }

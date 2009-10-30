@@ -17,7 +17,7 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.skin;
+package org.exoplatform.portal.resource;
 
 import org.exoplatform.commons.utils.CharEncoder;
 import org.exoplatform.commons.utils.CharsetCharEncoder;

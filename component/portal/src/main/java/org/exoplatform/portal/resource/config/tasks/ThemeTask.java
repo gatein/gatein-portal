@@ -19,7 +19,7 @@
 
 package org.exoplatform.portal.resource.config.tasks;
 
-import org.exoplatform.portal.skin.SkinService;
+import org.exoplatform.portal.resource.SkinService;
 
 import java.util.ArrayList;
 import java.util.List;
