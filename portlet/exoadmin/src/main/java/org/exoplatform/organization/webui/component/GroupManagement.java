@@ -146,6 +146,8 @@ public class GroupManagement
    {
       if (username == null)
          username = org.exoplatform.portal.webui.util.Util.getPortalRequestContext().getRemoteUser();
+      if (username.equals(getUserACL().getSuperUser())) 
+         return true;
       return isMemberOfGroup(username, getUserACL().getAdminGroups());
    }
 
