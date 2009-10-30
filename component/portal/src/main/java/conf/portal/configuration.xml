@@ -90,7 +90,7 @@
   </component>
   
 	<component>
-		<type>org.exoplatform.portal.skin.SkinService</type>
+		<type>org.exoplatform.portal.resource.SkinService</type>
 	</component>
 
   <external-component-plugins>
