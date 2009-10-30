@@ -37,7 +37,6 @@
 						<div class="id"><%=uicomponent.getId();%></div>
 						<div class="title"><%=_ctx.appRes("UIPortlet.label.title");%></div>
 						<div class="description">
-						
 							<%if(uicomponent.getDescription() != null) {%>
 								<%=uicomponent.getDescription();%>
 							<%} else {%>
@@ -67,22 +66,12 @@
 									<div class="CenterBackground">
 										<div class="GardientBackground">
 										<%
-										String displayName = uicomponent.getDisplayName();
-										if(displayName != null) {
-												String htmlDisplayName = ""; int count = 1;
-												for(c in displayName){
-													if(c=="\n"){
-														c="<br/>";
-														count++;
-													}
-													htmlDisplayName+=c;
-													if(count>5) break;
-												}
-										%>
-                    <%=htmlDisplayName;%>
-										<%} else {%>
-												 <%= _ctx.appRes("UIPortlet.label.portletContent"); %>									 
-										<%}%>
+										try {
+											String portletName = uicomponent.getProducedOfferedPortlet().getInfo().getName();
+											print _ctx.getRequestContext().getApplicationResourceBundle().getString("UIPortlet.description." + portletName);
+										} catch(Exception e){
+											print uicomponent.getDisplayName();
+										}%>
 										</div>
 									</div>
 								</div>

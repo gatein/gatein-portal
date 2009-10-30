@@ -51,7 +51,7 @@ eXo.webui.UITabbedDashboard = {
 			href += "&uicomponent=UITabPaneDashboard";
 			href += "&op=RenameTabLabel";
 			href += "&objectId=" + nodeIndex;
-			href += "&newTabLabel=" + newTabLabel;
+			href += "&newTabLabel=" + encodeURIComponent(newTabLabel);
 			window.location = href;
 			return;			
 		}
@@ -83,6 +83,7 @@ eXo.webui.UITabbedDashboard = {
 		inputElement.style.border = "1px solid #b7b7b7";
 		inputElement.style.width = "95px";
 		inputElement.onkeypress = eXo.webui.UITabbedDashboard.renameTabLabel;
+		inputElement.setAttribute('maxLength', 50);
 		inputElement.onblur = function() {
 			prNode.replaceChild(eXo.webui.UITabbedDashboard.backupElement, inputElement);
 		};

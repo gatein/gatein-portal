@@ -38,6 +38,7 @@ import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.exception.MessageException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -209,6 +210,25 @@ public class UITabPaneDashboard extends UIContainer
       }
    }
 
+   private boolean validateName(String label)
+   {
+      label = label.trim();
+      if (Character.isDigit(label.charAt(0)) || label.charAt(0) == '-')
+      {
+         return false;
+      }
+      for (int i = 0; i < label.length(); i++)
+      {
+         char c = label.charAt(i);
+         if (Character.isLetter(c) || Character.isDigit(c) || c == '_' || c == '-' || Character.isSpaceChar(c))
+         {
+            continue;
+         }
+         return false;
+      }
+      return true;
+   }
+
    private boolean nameExisted(String nodeName)
    {
       for (PageNode node : pageNavigation.getNodes())
@@ -313,6 +333,11 @@ public class UITabPaneDashboard extends UIContainer
          UITabPaneDashboard tabPane = event.getSource();
          WebuiRequestContext context = event.getRequestContext();
          String newTabLabel = context.getRequestParameter(UIComponent.OBJECTID);
+         if (!tabPane.validateName(newTabLabel))
+         {
+            context.getUIApplication().addMessage(new ApplicationMessage("UITabPaneDashboard.msg.wrongTabName", null));
+            return;
+         }
          String newNodeName = tabPane.createNewPageNode(newTabLabel);
 
          //If new node is created with success, then redirect to it
@@ -342,6 +367,11 @@ public class UITabPaneDashboard extends UIContainer
          WebuiRequestContext context = event.getRequestContext();
          int nodeIndex = Integer.parseInt(context.getRequestParameter(UIComponent.OBJECTID));
          String newTabLabel = context.getRequestParameter(RENAMED_TAB_LABEL_PARAMETER);
+         if (!tabPane.validateName(newTabLabel))
+         {
+            context.getUIApplication().addMessage(new ApplicationMessage("UITabPaneDashboard.msg.wrongTabName", null));
+            return;
+         }
          String newNodeName = tabPane.renamePageNode(nodeIndex, newTabLabel);
 
          //If page node is renamed with success, then redirect to new URL
