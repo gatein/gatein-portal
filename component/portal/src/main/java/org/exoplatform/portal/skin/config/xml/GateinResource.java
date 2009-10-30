@@ -27,7 +27,7 @@ package org.exoplatform.portal.skin.config.xml;
  *
  *      Sep 17, 2009
  */
-public interface GateinSkinning
+public interface GateinResource
 {
 
    final public static String SKIN_DEF_TAG = "skin-def";

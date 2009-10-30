@@ -46,7 +46,7 @@ public abstract class AbstractTaskXMLBinding
       @Override
       public AbstractSkinTask xmlToTask(Element element)
       {
-         if (!element.getTagName().equals(GateinSkinning.PORTAl_SKIN_TAG))
+         if (!element.getTagName().equals(GateinResource.PORTAl_SKIN_TAG))
          {
             return null;
          }
@@ -59,7 +59,7 @@ public abstract class AbstractTaskXMLBinding
 
       private void bindingCSSPath(PortalSkinTask task, Element element)
       {
-         NodeList nodes = element.getElementsByTagName(GateinSkinning.CSS_PATH_TAG);
+         NodeList nodes = element.getElementsByTagName(GateinResource.CSS_PATH_TAG);
          if (nodes == null || nodes.getLength() < 1)
          {
             return;
@@ -70,7 +70,7 @@ public abstract class AbstractTaskXMLBinding
 
       private void bindingSkinName(PortalSkinTask task, Element element)
       {
-         NodeList nodes = element.getElementsByTagName(GateinSkinning.SKIN_NAME_TAG);
+         NodeList nodes = element.getElementsByTagName(GateinResource.SKIN_NAME_TAG);
          if (nodes == null || nodes.getLength() < 1)
          {
             return;
@@ -86,7 +86,7 @@ public abstract class AbstractTaskXMLBinding
       @Override
       public AbstractSkinTask xmlToTask(Element element)
       {
-         if (!element.getTagName().equals(GateinSkinning.WINDOW_STYLE_TAG))
+         if (!element.getTagName().equals(GateinResource.WINDOW_STYLE_TAG))
          {
             return null;
          }
@@ -100,7 +100,7 @@ public abstract class AbstractTaskXMLBinding
 
       private void bindingStyleName(ThemeTask task, Element element)
       {
-         NodeList nodes = element.getElementsByTagName(GateinSkinning.STYLE_NAME_TAG);
+         NodeList nodes = element.getElementsByTagName(GateinResource.STYLE_NAME_TAG);
          if (nodes == null || nodes.getLength() < 1)
          {
             return;
@@ -111,7 +111,7 @@ public abstract class AbstractTaskXMLBinding
 
       private void bindingThemeNames(ThemeTask task, Element element)
       {
-         NodeList nodes = element.getElementsByTagName(GateinSkinning.THEME_NAME_TAG);
+         NodeList nodes = element.getElementsByTagName(GateinResource.THEME_NAME_TAG);
          if (nodes == null)
          {
             return;
@@ -128,7 +128,7 @@ public abstract class AbstractTaskXMLBinding
       @Override
       public AbstractSkinTask xmlToTask(Element element)
       {
-         if (!element.getTagName().equals(GateinSkinning.PORTLET_SKIN_TAG))
+         if (!element.getTagName().equals(GateinResource.PORTLET_SKIN_TAG))
          {
             return null;
          }
@@ -142,7 +142,7 @@ public abstract class AbstractTaskXMLBinding
 
       private void bindingApplicationName(PortletSkinTask task, Element element)
       {
-         NodeList nodes = element.getElementsByTagName(GateinSkinning.APPLICATION_NAME_TAG);
+         NodeList nodes = element.getElementsByTagName(GateinResource.APPLICATION_NAME_TAG);
          if (nodes == null || nodes.getLength() < 1)
          {
             return;
@@ -153,7 +153,7 @@ public abstract class AbstractTaskXMLBinding
 
       private void bindingPortletName(PortletSkinTask task, Element element)
       {
-         NodeList nodes = element.getElementsByTagName(GateinSkinning.PORTLET_NAME_TAG);
+         NodeList nodes = element.getElementsByTagName(GateinResource.PORTLET_NAME_TAG);
          if (nodes == null || nodes.getLength() < 1)
          {
             return;
@@ -164,7 +164,7 @@ public abstract class AbstractTaskXMLBinding
 
       private void bindingCSSPath(PortletSkinTask task, Element element)
       {
-         NodeList nodes = element.getElementsByTagName(GateinSkinning.CSS_PATH_TAG);
+         NodeList nodes = element.getElementsByTagName(GateinResource.CSS_PATH_TAG);
          if (nodes == null || nodes.getLength() < 1)
          {
             return;
@@ -175,7 +175,7 @@ public abstract class AbstractTaskXMLBinding
 
       private void bindingSkinName(PortletSkinTask task, Element element)
       {
-         NodeList nodes = element.getElementsByTagName(GateinSkinning.SKIN_NAME_TAG);
+         NodeList nodes = element.getElementsByTagName(GateinResource.SKIN_NAME_TAG);
          if (nodes == null || nodes.getLength() < 1)
          {
             return;

@@ -50,9 +50,9 @@ public class SkinConfigParser
 
    static
    {
-      allBindings.put(GateinSkinning.PORTAl_SKIN_TAG, new AbstractTaskXMLBinding.PortalSkinTaskXMLBinding());
-      allBindings.put(GateinSkinning.PORTLET_SKIN_TAG, new AbstractTaskXMLBinding.PortletSkinTaskXMLBinding());
-      allBindings.put(GateinSkinning.WINDOW_STYLE_TAG, new AbstractTaskXMLBinding.ThemeTaskXMLBinding());
+      allBindings.put(GateinResource.PORTAl_SKIN_TAG, new AbstractTaskXMLBinding.PortalSkinTaskXMLBinding());
+      allBindings.put(GateinResource.PORTLET_SKIN_TAG, new AbstractTaskXMLBinding.PortletSkinTaskXMLBinding());
+      allBindings.put(GateinResource.WINDOW_STYLE_TAG, new AbstractTaskXMLBinding.ThemeTaskXMLBinding());
    }
 
    public static void processConfigResource(InputStream is, SkinService skinService, ServletContext scontext)
@@ -86,9 +86,9 @@ public class SkinConfigParser
       List<AbstractSkinTask> tasks = new ArrayList<AbstractSkinTask>();
       Element docElement = document.getDocumentElement();
 
-      fetchTasksByTagName(GateinSkinning.PORTAl_SKIN_TAG, docElement, tasks);
-      fetchTasksByTagName(GateinSkinning.PORTLET_SKIN_TAG, docElement, tasks);
-      fetchTasksByTagName(GateinSkinning.WINDOW_STYLE_TAG, docElement, tasks);
+      fetchTasksByTagName(GateinResource.PORTAl_SKIN_TAG, docElement, tasks);
+      fetchTasksByTagName(GateinResource.PORTLET_SKIN_TAG, docElement, tasks);
+      fetchTasksByTagName(GateinResource.WINDOW_STYLE_TAG, docElement, tasks);
 
       return tasks;
    }
