@@ -17,7 +17,7 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.skin.config.tasks;
+package org.exoplatform.portal.resource.config.tasks;
 
 import org.exoplatform.portal.skin.SkinService;
 
@@ -31,7 +31,19 @@ import javax.servlet.ServletContext;
  *
  *      Sep 16, 2009
  */
-abstract public class AbstractSkinTask
+public class I18nTask extends AbstractSkinTask
 {
-   abstract public void execute(SkinService skinService, ServletContext scontext);
+
+   public I18nTask()
+   {
+
+   }
+
+   @Override
+   public void execute(SkinService skinService, ServletContext scontext)
+   {
+      // TODO Auto-generated method stub
+
+   }
+
 }

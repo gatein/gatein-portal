@@ -19,10 +19,10 @@
 
 package org.exoplatform.portal.skin.config.xml;
 
-import org.exoplatform.portal.skin.config.tasks.AbstractSkinTask;
-import org.exoplatform.portal.skin.config.tasks.PortalSkinTask;
-import org.exoplatform.portal.skin.config.tasks.PortletSkinTask;
-import org.exoplatform.portal.skin.config.tasks.ThemeTask;
+import org.exoplatform.portal.resource.config.tasks.AbstractSkinTask;
+import org.exoplatform.portal.resource.config.tasks.PortalSkinTask;
+import org.exoplatform.portal.resource.config.tasks.PortletSkinTask;
+import org.exoplatform.portal.resource.config.tasks.ThemeTask;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 

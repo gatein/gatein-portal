@@ -19,8 +19,8 @@
 
 package org.exoplatform.portal.skin.config.xml;
 
+import org.exoplatform.portal.resource.config.tasks.AbstractSkinTask;
 import org.exoplatform.portal.skin.SkinService;
-import org.exoplatform.portal.skin.config.tasks.AbstractSkinTask;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;

@@ -17,7 +17,7 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.skin.config.tasks;
+package org.exoplatform.portal.resource.config.tasks;
 
 import org.exoplatform.portal.skin.SkinService;
 
@@ -31,12 +31,14 @@ import javax.servlet.ServletContext;
  *
  *      Sep 16, 2009
  */
-public class PortletSkinTask extends AbstractSkinTask
+public class PortalSkinTask extends AbstractSkinTask
 {
 
-   private String applicationName;
+   private static final String DEFAULT_MODULE_NAME = "CoreSkin";
 
-   private String portletName;
+   private static final String DEFAULT_SKIN_NAME = "Default";
+
+   private String moduleName;
 
    private String skinName;
 
@@ -44,20 +46,16 @@ public class PortletSkinTask extends AbstractSkinTask
 
    private boolean overwrite;
 
-   public PortletSkinTask()
+   public PortalSkinTask()
    {
-      this.skinName = "Default";
       this.overwrite = true;
+      this.moduleName = DEFAULT_MODULE_NAME;
+      this.skinName = DEFAULT_SKIN_NAME;
    }
 
-   public void setApplicationName(String _applicationName)
+   public void setModuleName(String _moduleName)
    {
-      this.applicationName = _applicationName;
-   }
-
-   public void setPortletName(String _portletName)
-   {
-      this.portletName = _portletName;
+      this.moduleName = _moduleName;
    }
 
    public void setSkinName(String _skinName)
@@ -78,17 +76,12 @@ public class PortletSkinTask extends AbstractSkinTask
    @Override
    public void execute(SkinService skinService, ServletContext scontext)
    {
-      if (portletName == null || skinName == null || cssPath == null)
+      if (moduleName == null || skinName == null || cssPath == null)
       {
          return;
       }
-      if (applicationName == null)
-      {
-         applicationName = scontext.getContextPath();
-      }
-      String moduleName = applicationName + "/" + portletName;
       String fullCSSPath = scontext.getContextPath() + cssPath;
-      skinService.addSkin(moduleName, skinName, fullCSSPath, scontext, overwrite);
+      skinService.addPortalSkin(moduleName, skinName, fullCSSPath, scontext, overwrite);
    }
 
 }

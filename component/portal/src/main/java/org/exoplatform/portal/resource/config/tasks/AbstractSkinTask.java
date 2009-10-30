@@ -17,12 +17,9 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.skin.config.tasks;
+package org.exoplatform.portal.resource.config.tasks;
 
 import org.exoplatform.portal.skin.SkinService;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.servlet.ServletContext;
 
@@ -34,37 +31,7 @@ import javax.servlet.ServletContext;
  *
  *      Sep 16, 2009
  */
-public class ThemeTask extends AbstractSkinTask
+abstract public class AbstractSkinTask
 {
-
-   private String styleName;
-
-   private List<String> themeNames;
-
-   public ThemeTask()
-   {
-      this.themeNames = new ArrayList<String>();
-   }
-
-   public void addThemeName(String _themeName)
-   {
-      //TODO: Check duplicated theme name
-      this.themeNames.add(_themeName);
-   }
-
-   public void setStyleName(String _styleName)
-   {
-      this.styleName = _styleName;
-   }
-
-   @Override
-   public void execute(SkinService skinService, ServletContext scontext)
-   {
-      if (styleName == null || themeNames.size() < 1)
-      {
-         return;
-      }
-      skinService.addTheme(styleName, themeNames);
-   }
-
+   abstract public void execute(SkinService skinService, ServletContext scontext);
 }

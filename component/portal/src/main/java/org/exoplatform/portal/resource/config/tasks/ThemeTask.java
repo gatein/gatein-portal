@@ -17,9 +17,12 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.skin.config.tasks;
+package org.exoplatform.portal.resource.config.tasks;
 
 import org.exoplatform.portal.skin.SkinService;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletContext;
 
@@ -31,57 +34,37 @@ import javax.servlet.ServletContext;
  *
  *      Sep 16, 2009
  */
-public class PortalSkinTask extends AbstractSkinTask
+public class ThemeTask extends AbstractSkinTask
 {
 
-   private static final String DEFAULT_MODULE_NAME = "CoreSkin";
+   private String styleName;
 
-   private static final String DEFAULT_SKIN_NAME = "Default";
+   private List<String> themeNames;
 
-   private String moduleName;
-
-   private String skinName;
-
-   private String cssPath;
-
-   private boolean overwrite;
-
-   public PortalSkinTask()
+   public ThemeTask()
    {
-      this.overwrite = true;
-      this.moduleName = DEFAULT_MODULE_NAME;
-      this.skinName = DEFAULT_SKIN_NAME;
+      this.themeNames = new ArrayList<String>();
    }
 
-   public void setModuleName(String _moduleName)
+   public void addThemeName(String _themeName)
    {
-      this.moduleName = _moduleName;
+      //TODO: Check duplicated theme name
+      this.themeNames.add(_themeName);
    }
 
-   public void setSkinName(String _skinName)
+   public void setStyleName(String _styleName)
    {
-      this.skinName = _skinName;
-   }
-
-   public void setCSSPath(String _cssPath)
-   {
-      this.cssPath = _cssPath;
-   }
-
-   public void setOverwrite(boolean _overwrite)
-   {
-      this.overwrite = _overwrite;
+      this.styleName = _styleName;
    }
 
    @Override
    public void execute(SkinService skinService, ServletContext scontext)
    {
-      if (moduleName == null || skinName == null || cssPath == null)
+      if (styleName == null || themeNames.size() < 1)
       {
          return;
       }
-      String fullCSSPath = scontext.getContextPath() + cssPath;
-      skinService.addPortalSkin(moduleName, skinName, fullCSSPath, scontext, overwrite);
+      skinService.addTheme(styleName, themeNames);
    }
 
 }
