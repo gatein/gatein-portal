@@ -138,6 +138,10 @@
      </plugins>
    </build>
 
+   <properties>
+   		<gatein.working.dir>${basedir}/target</gatein.working.dir><!-- Default value for server installation dir -->
+   </properties>
+
    <profiles>
       <profile>
          <id>pkg-tomcat</id>
@@ -192,7 +196,7 @@
                               <argument>-Dexo.current.dir=${basedir}</argument>
                               <argument>-Dexo.base.dir=${exo.projects.directory.base}</argument>
                               <argument>-Dexo.conf.dir=${basedir}/target/exopackage-conf</argument>
-                              <argument>-Dexo.working.dir=${basedir}/target</argument>
+                              <argument>-Dexo.working.dir=${gatein.working.dir}/</argument>
                               <!--argument>-Dexo.src.dir=NONE</argument-->
                               <argument>-Dexo.dep.dir=${exo.projects.directory.dependencies}</argument><!-- to get the server ref install -->
                               <argument>-Dexo.m2.repos=file:${settings.localRepository}</argument>
@@ -216,6 +220,7 @@
                      </execution>
                   </executions>
                </plugin>
+<!--
                <plugin>
                   <artifactId>maven-assembly-plugin</artifactId>
                   <executions>
@@ -234,6 +239,7 @@
                      </execution>
                   </executions>
                </plugin>
+-->
             </plugins>
          </build>
       </profile>
@@ -291,7 +297,7 @@
                               <argument>-Dexo.current.dir=${basedir}</argument>
                               <argument>-Dexo.base.dir=${exo.projects.directory.base}</argument>
                               <argument>-Dexo.conf.dir=${basedir}/target/exopackage-conf</argument>
-                              <argument>-Dexo.working.dir=${basedir}/target</argument>
+                              <argument>-Dexo.working.dir=${gatein.working.dir}</argument>
                               <!--argument>-Dexo.src.dir=NONE</argument-->
                               <argument>-Dexo.dep.dir=${exo.projects.directory.dependencies}</argument><!-- to get the server ref install -->
                               <argument>-Dexo.m2.repos=file:${settings.localRepository},http://maven2.exoplatform.org/rest/maven2,http://repository.jboss.org/maven2</argument>
@@ -315,6 +321,7 @@
                      </execution>
                   </executions>
                </plugin>
+<!--
                <plugin>
                   <artifactId>maven-assembly-plugin</artifactId>
                   <executions>
@@ -333,6 +340,7 @@
                      </execution>
                   </executions>
                </plugin>
+-->
             </plugins>
          </build>
       </profile>

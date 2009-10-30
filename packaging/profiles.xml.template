@@ -29,13 +29,20 @@
              ex: On Windows 'c:/AS'
              ex: On Linux '/home/user/AS'
         -->
-        <exo.projects.directory.dependencies>c:/ExoPlatform/src/exo-dependencies</exo.projects.directory.dependencies> 
-        
-        <gatein.working.dir>c:/ExoPlatform/src/exo-working</gatein.working.dir>
+        <exo.projects.directory.dependencies>REPLACE_WITH_YOUR_OWN_DIRECTORY</exo.projects.directory.dependencies>
+
+        <!-- 
+             If you want that the server is deployed always at the same place (not in packaging/pkg/target/<server> dir)
+             Uncomment and Replace with the directory you prefer
+        -->
+        <!-- 
+            <gatein.working.dir>REPLACE_WITH_SERVER_DIR</gatein.working.dir>
+        -->
+
         <!--
              Replace with the name of the directory containing Tomcat 6
         -->        
-        <exo.projects.app.tomcat.version>tomcat-6.0.20</exo.projects.app.tomcat.version>
+        <exo.projects.app.tomcat.version>apache-tomcat-6.0.20</exo.projects.app.tomcat.version>
         <!--
              Replace with the name of the directory containing JBoss AS 5.1
         -->
