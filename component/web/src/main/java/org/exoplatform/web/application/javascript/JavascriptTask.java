@@ -16,14 +16,13 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.exoplatform.portal.resource.config.tasks;
+package org.exoplatform.web.application.javascript;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletContext;
 
-import org.exoplatform.web.application.javascript.JavascriptConfigService;
 
 /**
  * @author <a href="mailto:hoang281283@gmail.com">Minh Hoang TO</a>

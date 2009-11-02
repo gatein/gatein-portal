@@ -88,8 +88,8 @@ public class JavascriptDeployer implements WebAppListener, Startable
             {
                scontext = event.getWebApp().getServletContext();
 
-               InputStream is = scontext.getResourceAsStream("/WEB-INF/conf/script/groovy/JavascriptScript.groovy");
-               //InputStream is = scontext.getResourceAsStream(GATEIN_CONFIG_RESOURCE);
+               //InputStream is = scontext.getResourceAsStream("/WEB-INF/conf/script/groovy/JavascriptScript.groovy");
+               InputStream is = scontext.getResourceAsStream(GATEIN_CONFIG_RESOURCE);
                if (is == null)
                   return;
                try
@@ -124,15 +124,16 @@ public class JavascriptDeployer implements WebAppListener, Startable
       InputStream is = null;
       try
       {
-         is = scontext.getResourceAsStream("/WEB-INF/conf/script/groovy/JavascriptScript.groovy");
-         //is = scontext.getResourceAsStream(GATEIN_CONFIG_RESOURCE);
-         Binding binding = new Binding();
+         //is = scontext.getResourceAsStream("/WEB-INF/conf/script/groovy/JavascriptScript.groovy");
+         is = scontext.getResourceAsStream(GATEIN_CONFIG_RESOURCE);
+         /*Binding binding = new Binding();
          binding.setVariable("JavascriptService", javascriptService);
          binding.setVariable("ServletContext", scontext);
          binding.setVariable("ServletContextName", scontext.getServletContextName());
          binding.setVariable("PortalContainerName", container.getName());
          GroovyShell shell = new GroovyShell(binding);
-         shell.evaluate(is);
+         shell.evaluate(is);*/
+         JavascriptConfigParser.processConfigResource(is, javascriptService, scontext);
       }
       catch (Exception ex)
       {

@@ -32,5 +32,12 @@
 		<css-path>/templates/skin/webui/component/UIHomePagePortlet/DefaultStylesheet.css</css-path>
 	</portlet-skin>
 	
+	<!-- External libraries -->
+	<javascript>
+		<param>
+			<js-module>FCKEditor</js-module>
+			<js-path>/fckeditor/fckeditor.js</js-path>
+		</param>
+	</javascript>
 </gatein-resources>
 

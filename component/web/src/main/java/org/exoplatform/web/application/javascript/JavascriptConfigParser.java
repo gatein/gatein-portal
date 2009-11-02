@@ -16,7 +16,7 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.exoplatform.portal.resource.config.xml;
+package org.exoplatform.web.application.javascript;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -26,8 +26,6 @@ import javax.servlet.ServletContext;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.exoplatform.portal.resource.config.tasks.JavascriptTask;
-import org.exoplatform.web.application.javascript.JavascriptConfigService;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -66,9 +64,10 @@ public class JavascriptConfigParser
    private static List<JavascriptTask> fetchTasksFromXMLConfig(Document document){
       List<JavascriptTask> tasks = new ArrayList<JavascriptTask>();
       Element element = document.getDocumentElement();
-      NodeList nodes = element.getElementsByTagName(GateinResource.JAVA_SCRIPT_TAG);
-      
-      for(int i = nodes.getLength() - 1 ; i >= 0; i--){
+      //NodeList nodes = element.getElementsByTagName(GateinResource.JAVA_SCRIPT_TAG);
+      NodeList nodes = element.getElementsByTagName("javascript");
+      int length = nodes.getLength();
+      for(int i = 0; i < length; i++){
          JavascriptTask task = xmlToTask((Element)nodes.item(i));
          if(task != null){
             tasks.add(task);
@@ -78,18 +77,25 @@ public class JavascriptConfigParser
    }
    
    private static JavascriptTask xmlToTask(Element element){
+      //if(!GateinResource.JAVA_SCRIPT_TAG.equals(element.getTagName())){
+      if(!"javascript".equals(element.getTagName())){
+         return null;
+      }
       try{
          JavascriptTask task = new JavascriptTask();
-         NodeList nodes = element.getElementsByTagName(GateinResource.JAVA_SCRIPT_PARAM);
-         for(int i = nodes.getLength() - 1 ; i >= 0; i--){
+         //NodeList nodes = element.getElementsByTagName(GateinResource.JAVA_SCRIPT_PARAM);
+         NodeList nodes = element.getElementsByTagName("param");
+         int length = nodes.getLength();
+         for(int i = 0; i < length ; i++){
             Element param_ele = (Element)nodes.item(i);
-            task.addParam(param_ele.getFirstChild().getNodeValue(), param_ele.getLastChild().getNodeValue());
+            String js_module = param_ele.getElementsByTagName("js-module").item(0).getFirstChild().getNodeValue();
+            String js_path = param_ele.getElementsByTagName("js-path").item(0).getFirstChild().getNodeValue();
+            task.addParam(js_module, js_path);
          }
          return task;
       }catch(Exception ex){
+         ex.printStackTrace();
          return null;
       }
-   }
-   
-   
+   }   
 }
