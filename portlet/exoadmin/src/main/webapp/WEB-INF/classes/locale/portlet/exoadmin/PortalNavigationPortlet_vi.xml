@@ -28,7 +28,7 @@
   	<label>
   		<editLayout>Edit Layout</editLayout>
   		<editNav>Edit Navigation</editNav>
-  		<editPortalProp>Edit Portal's Properties</editNavProp>
+  		<editPortalProp>Edit Portal's Properties</editPortalProp>
   		<deletePortal>Delete Portal</deletePortal>
   	</label>
   </UISiteManagement>
