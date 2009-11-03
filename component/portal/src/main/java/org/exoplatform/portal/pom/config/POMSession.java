@@ -20,6 +20,7 @@
 package org.exoplatform.portal.pom.config;
 
 import org.chromattic.api.ChromatticSession;
+import org.chromattic.api.UndeclaredRepositoryException;
 import org.exoplatform.portal.application.PortletPreferences;
 import org.exoplatform.portal.pom.data.Mapper;
 import org.gatein.mop.api.Model;
@@ -33,6 +34,7 @@ import org.gatein.mop.core.api.ModelImpl;
 import org.gatein.mop.core.api.workspace.NavigationImpl;
 import org.gatein.mop.core.api.workspace.PageImpl;
 
+import javax.jcr.RepositoryException;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -78,19 +80,30 @@ public class POMSession
       return model;
    }
 
-   /*
-     public ChromatticSession getSession() {
-       try {
-         Model model = getModel();
-         Field f = model.getClass().getDeclaredField("session");
-         f.setAccessible(true);
-         return (ChromatticSession)f.get(model);
-       }
-       catch (Exception e) {
-         throw new Error(e);
-       }
-     }
-   */
+   // julien todo : investigate how expensive is the call to hasPendingChanges method
+   public boolean isModified()
+   {
+      try
+      {
+         return getSession().getJCRSession().hasPendingChanges();
+      }
+      catch (RepositoryException e)
+      {
+         throw new UndeclaredRepositoryException(e);
+      }
+   }
+
+  private ChromatticSession getSession() {
+    try {
+      Model model = getModel();
+      Field f = model.getClass().getDeclaredField("session");
+      f.setAccessible(true);
+      return (ChromatticSession)f.get(model);
+    }
+    catch (Exception e) {
+      throw new Error(e);
+    }
+  }
 
    public Workspace getWorkspace()
    {

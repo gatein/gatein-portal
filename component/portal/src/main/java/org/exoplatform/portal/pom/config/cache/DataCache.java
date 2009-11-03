@@ -18,6 +18,7 @@
  */
 package org.exoplatform.portal.pom.config.cache;
 
+import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.POMTask;
 import org.exoplatform.portal.pom.config.TaskExecutor;
 import org.exoplatform.services.cache.CacheService;
@@ -44,53 +45,59 @@ public class DataCache implements TaskExecutor
       this.cache = cacheService.getCacheInstance(DataCache.class.getSimpleName());
    }
 
-   public <T extends POMTask> T execute(T task) throws Exception
+   public void execute(POMSession session, POMTask task) throws Exception
    {
       if (task instanceof CacheableDataTask)
       {
-         CacheableDataTask<?, ?> loadTask = (CacheableDataTask<?,?>)task;
-         switch (loadTask.getAccessMode())
+         if (!session.isModified())
          {
-            case READ:
-               return (T)read(loadTask);
-            case CREATE:
-               return (T)create(loadTask);
-            case WRITE:
-               return (T)write(loadTask);
-            case DESTROY:
-               return (T)remove(loadTask);
-            default:
-               throw new UnsupportedOperationException();
-
+            CacheableDataTask<?, ?> loadTask = (CacheableDataTask<?,?>)task;
+            switch (loadTask.getAccessMode())
+            {
+               case READ:
+                  read(session, loadTask);
+                  break;
+               case CREATE:
+                  create(session, loadTask);
+                  break;
+               case WRITE:
+                  write(session, loadTask);
+                  break;
+               case DESTROY:
+                  remove(session, loadTask);
+                  break;
+               default:
+                  throw new UnsupportedOperationException();
+            }
          }
       }
       else
       {
-         return next.execute(task);
+         next.execute(session, task);
       }
    }
 
-   private <K extends Serializable, V, T extends CacheableDataTask<K, V>> T remove(T task) throws Exception
+   private <K extends Serializable, V> void remove(POMSession session, CacheableDataTask<K, V> task) throws Exception
    {
       K key = task.getKey();
       cache.remove(key);
-      return next.execute(task);
+      next.execute(session, task);
    }
 
-   private <K extends Serializable, V, T extends CacheableDataTask<K, V>> T write(T task) throws Exception
+   private <K extends Serializable, V> void write(POMSession session, CacheableDataTask<K, V> task) throws Exception
    {
       K key = task.getKey();
       cache.remove(key);
-      return next.execute(task);
+      next.execute(session, task);
    }
 
-   private <K extends Serializable, V, T extends CacheableDataTask<K, V>> T create(T task) throws Exception
+   private <K extends Serializable, V> void create(POMSession session, CacheableDataTask<K, V> task) throws Exception
    {
       // Nothing to do for now
-      return next.execute(task);
+      next.execute(session, task);
    }
 
-   private <K extends Serializable, V, T extends CacheableDataTask<K, V>> T read(T task) throws Exception
+   private <K extends Serializable, V> void read(POMSession session, CacheableDataTask<K, V> task) throws Exception
    {
       K key = task.getKey();
       Object o = cache.get(key);
@@ -112,7 +119,7 @@ public class DataCache implements TaskExecutor
       else
       {
          //
-         next.execute(task);
+         next.execute(session, task);
 
          //
          v = task.getValue();
@@ -121,8 +128,5 @@ public class DataCache implements TaskExecutor
             cache.put(key, v);
          }
       }
-
-      //
-      return task;
    }
 }

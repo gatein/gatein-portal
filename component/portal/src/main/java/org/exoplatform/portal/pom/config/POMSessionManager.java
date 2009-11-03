@@ -287,32 +287,4 @@ public class POMSessionManager
          return true;
       }
    }
-
-   /**
-    * <p>Execute the task with a session. The method attempts first to get a current session and if no such session
-    * is found then a session will be created for the scope of the method.</p>
-    *
-    * @param task the task to execute
-    * @throws Exception any exception thrown by the task
-    */
-   public void execute(POMTask task) throws Exception
-   {
-      POMSession session = getSession();
-      if (session == null)
-      {
-         session = openSession();
-         try
-         {
-            session.execute(task);
-         }
-         finally
-         {
-            closeSession(true);
-         }
-      }
-      else
-      {
-         session.execute(task);
-      }
-   }
 }

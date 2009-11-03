@@ -25,6 +25,6 @@ package org.exoplatform.portal.pom.config;
 public interface TaskExecutor
 {
 
-   <T extends POMTask> T execute(T task) throws Exception;
+   void execute(POMSession session, POMTask task) throws Exception;
 
 }

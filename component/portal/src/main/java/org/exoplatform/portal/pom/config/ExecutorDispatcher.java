@@ -29,35 +29,26 @@ public class ExecutorDispatcher implements TaskExecutor
 {
 
    /** . */
-   private final POMSessionManager pomMgr;
-
-   /** . */
    private final Log log = ExoLogger.getLogger(getClass());
 
    /** . */
    private static final String[] padding = {"    ", "   ", "  ", " "};
 
-   public ExecutorDispatcher(POMSessionManager pomMgr)
-   {
-      this.pomMgr = pomMgr;
-   }
-
-   public <T extends POMTask> T execute(T task) throws Exception
+   public void execute(POMSession session, POMTask task) throws Exception
    {
       String s = task.toString();
       long t0 = System.currentTimeMillis();
-      pomMgr.execute(task);
+      session.execute(task);
       long t1 = System.currentTimeMillis();
       String t = "" + (t1 - t0);
       if (t.length() < 4)
       {
          t = padding[t.length()] + t;
-         log.info("Executed [" + t + "] " + s + "");
+         log.debug("Executed [" + t + "] " + s + "");
       }
       else
       {
-         log.info("Executed in " + t + " " + s + "");
+         log.debug("Executed in " + t + " " + s + "");
       }
-      return task;
    }
 }
