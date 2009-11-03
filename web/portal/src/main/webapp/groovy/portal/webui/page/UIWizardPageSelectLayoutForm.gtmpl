@@ -21,7 +21,20 @@
 				for(category in categories){
 					templates = category.getSelectItemOptions();
 					String display = "none";	
-					if(category.isSelected()) display = "block"; else templates.get(0).setSelected(true);	 
+					if(category.isSelected()) display = "block"; else 
+					{
+						boolean isSelected = false;
+						
+						for(template in templates) {
+							if(template.isSelected()) {
+								isSelected = true;
+								break;
+							}	
+						}
+						
+						if(!isSelected)
+							templates.get(0).setSelected(true);
+					}	 
 			%>
 					<div class="ItemList ItemListBackground"	style="display: $display;">
 						<%								
