@@ -103,7 +103,7 @@ public abstract class Text
          }
          if (s == null)
          {
-            s = new String(bytes, charset);
+            s = new String(bytes, charset.name());
          }
          writer.append(s);
       }
