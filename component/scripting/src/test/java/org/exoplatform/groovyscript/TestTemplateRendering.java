@@ -40,9 +40,8 @@ public class TestTemplateRendering extends TestCase
       GroovyTemplate template = new GroovyTemplate("a<%='b'%>c<%out.print('d');%>e");
       ByteArrayOutputStream  baos = new ByteArrayOutputStream();
       OutputStreamPrinter writer = new OutputStreamPrinter(CharsetTextEncoder.getUTF8(), baos);
-      OutputStreamWriterGroovyPrinter printer = new OutputStreamWriterGroovyPrinter(writer);
-      template.render(printer);
-      printer.close();
+      template.render(writer);
+      writer.close();
       assertEquals("abcde", baos.toString("UTF-8"));
    }
 

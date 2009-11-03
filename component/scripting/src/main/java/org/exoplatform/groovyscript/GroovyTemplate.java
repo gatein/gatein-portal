@@ -16,8 +16,6 @@
  */
 package org.exoplatform.groovyscript;
 
-import org.exoplatform.commons.utils.OutputStreamPrinter;
-
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringWriter;
@@ -111,16 +109,7 @@ public class GroovyTemplate
 
    public void render(Writer writer, Map binding) throws IOException, TemplateRuntimeException
    {
-      GroovyPrinter printer;
-      if (writer instanceof OutputStreamPrinter)
-      {
-         printer = new OutputStreamWriterGroovyPrinter((OutputStreamPrinter)writer);
-      }
-      else
-      {
-         printer = new WriterGroovyPrinter(writer);
-      }
-      script.render(binding, printer);
+      script.render(binding, writer);
    }
 
    public String render() throws IOException, TemplateRuntimeException
@@ -131,9 +120,8 @@ public class GroovyTemplate
    public String render(Map binding) throws IOException, TemplateRuntimeException
    {
       StringWriter buffer = new StringWriter();
-      WriterGroovyPrinter printer = new WriterGroovyPrinter(buffer);
-      render(printer, binding);
-      printer.close();
+      render(buffer, binding);
+      buffer.close();
       return buffer.toString();
    }
 }

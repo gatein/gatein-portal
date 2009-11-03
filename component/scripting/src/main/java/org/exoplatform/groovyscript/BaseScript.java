@@ -42,6 +42,19 @@ public abstract class BaseScript extends Script
    }
 
    @Override
+   public Object getProperty(String property)
+   {
+      if ("out".equals(property))
+      {
+         return printer;
+      }
+      else
+      {
+         return super.getProperty(property);
+      }
+   }
+
+   @Override
    public void println(Object o)
    {
       printer.println(o);

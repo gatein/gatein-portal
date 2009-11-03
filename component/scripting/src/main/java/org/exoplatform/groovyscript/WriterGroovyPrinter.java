@@ -16,6 +16,8 @@
  */
 package org.exoplatform.groovyscript;
 
+import org.exoplatform.commons.utils.Text;
+
 import java.io.IOException;
 import java.io.Writer;
 
@@ -39,20 +41,32 @@ public class WriterGroovyPrinter extends GroovyPrinter
    }
 
    @Override
-   public void write(char[] cbuf, int off, int len) throws IOException
+   protected void write(char c) throws IOException
    {
-      writer.write(cbuf, off, len);
+      writer.write(c);
    }
 
    @Override
-   public void close() throws IOException
+   protected void write(String s) throws IOException
    {
-      writer.close();
+      writer.write(s);
+   }
+
+   @Override
+   protected void write(Text text) throws IOException
+   {
+      text.writeTo(writer);
    }
 
    @Override
    public void flush() throws IOException
    {
       writer.flush();
+   }
+
+   @Override
+   public void close() throws IOException 
+   {
+      writer.close();
    }
 }

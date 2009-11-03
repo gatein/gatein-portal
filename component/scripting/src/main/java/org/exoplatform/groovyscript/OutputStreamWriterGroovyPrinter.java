@@ -18,6 +18,7 @@ package org.exoplatform.groovyscript;
 
 import org.exoplatform.commons.utils.BinaryOutput;
 import org.exoplatform.commons.utils.OutputStreamPrinter;
+import org.exoplatform.commons.utils.Text;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -41,6 +42,36 @@ public class OutputStreamWriterGroovyPrinter extends GroovyPrinter implements Bi
       this.out = out;
    }
 
+   @Override
+   protected void write(char c) throws IOException
+   {
+      out.write(c);
+   }
+
+   @Override
+   protected void write(String s) throws IOException
+   {
+      out.write(s);
+   }
+
+   @Override
+   protected void write(Text text) throws IOException
+   {
+      text.writeTo(out);
+   }
+
+   @Override
+   public void flush() throws IOException
+   {
+      out.flush();
+   }
+
+   @Override
+   public void close() throws IOException
+   {
+      out.close();
+   }
+
    public Charset getCharset()
    {
       return out.getCharset();
@@ -59,23 +90,5 @@ public class OutputStreamWriterGroovyPrinter extends GroovyPrinter implements Bi
    public void write(byte b) throws IOException
    {
       out.write(b);
-   }
-
-   @Override
-   public void write(char[] cbuf, int off, int len) throws IOException
-   {
-      out.write(cbuf, off, len);
-   }
-
-   @Override
-   public void flush() throws IOException
-   {
-      out.flush();
-   }
-
-   @Override
-   public void close() throws IOException
-   {
-      out.close();
    }
 }

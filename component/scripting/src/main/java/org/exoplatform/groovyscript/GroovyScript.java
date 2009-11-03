@@ -18,8 +18,10 @@ package org.exoplatform.groovyscript;
 
 import groovy.lang.Binding;
 import org.codehaus.groovy.runtime.InvokerHelper;
+import org.exoplatform.commons.utils.OutputStreamPrinter;
 
 import java.io.IOException;
+import java.io.Writer;
 import java.util.Map;
 
 /**
@@ -57,19 +59,24 @@ public class GroovyScript
       return scriptClass;
    }
 
-   public Map<Integer, TextItem> getLineTable()
-   {
-      return lineTable;
-   }
-
-   public void render(Map context, GroovyPrinter writer) throws IOException, TemplateRuntimeException
+   public void render(Map context, Writer writer) throws IOException, TemplateRuntimeException
    {
       Binding binding = context != null ? new Binding(context) : new Binding();
 
       //
+      GroovyPrinter printer;
+      if (writer instanceof OutputStreamPrinter)
+      {
+         printer = new OutputStreamWriterGroovyPrinter((OutputStreamPrinter)writer);
+      }
+      else
+      {
+         printer = new WriterGroovyPrinter(writer);
+      }
+
+      //
       BaseScript script = (BaseScript)InvokerHelper.createScript(scriptClass, binding);
-      script.printer = writer;
-      script.setProperty("out", script.printer);
+      script.printer = printer;
 
       //
       try
