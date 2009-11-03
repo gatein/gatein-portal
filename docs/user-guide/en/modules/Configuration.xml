@@ -23,6 +23,7 @@
 <chapter>
 <title>Configuration</title>
 
+<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="configuration/IDM_Configuration.xml" />
 <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="configuration/Default_Portal_Configuration.xml" />
 
 <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="configuration/Portal_Navigation_Configuration.xml" />
