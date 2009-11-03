@@ -22,6 +22,7 @@ package org.exoplatform.portal.webui.application;
 import org.exoplatform.Constants;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.portal.application.PortalRequestContext;
+import org.exoplatform.portal.application.UserProfileLifecycle;
 import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.config.model.portlet.PortletId;
 import org.exoplatform.portal.pom.spi.portlet.Preferences;
@@ -672,15 +673,9 @@ public class UIPortlet<S, C extends Serializable, I> extends UIApplication
       //
       StatefulPortletContext<C> preferencesPortletContext = getPortletContext();
 
-      // 
-      OrganizationService service = getApplicationComponent(OrganizationService.class);
-      String user = prc.getRemoteUser();
-      UserProfile userProfile = null;
-      if (user != null)
-      {
-         userProfile = service.getUserProfileHandler().findUserProfileByName(user);
-      }
-
+      // get the user profile cached in the prc during the start of the request
+      UserProfile userProfile = (UserProfile) prc.getAttribute(UserProfileLifecycle.USER_PROFILE_ATTRIBUTE_NAME);
+      
       // client context
       AbstractClientContext clientContext;
       Cookie[] cookies = servletRequest.getCookies();
