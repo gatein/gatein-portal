@@ -35,7 +35,7 @@
 				<label>#{administration.application-registry}</label>
 				<page-reference>group::/platform/administrators::registry</page-reference>
 			</node>
-	    
+	    <!-- 
 	    <node>
 		    <uri>administration/newAccount</uri>
 		    <name>newAccount</name>
@@ -49,7 +49,8 @@
 		    <label>#{administration.community-management}</label>
 		    <page-reference>group::/platform/administrators::communityManagement</page-reference>
 	    </node>
-	    
+	     -->
+	     
 	    <node>
 		    <uri>administration/i18n</uri>
 		    <name>i18n</name>
