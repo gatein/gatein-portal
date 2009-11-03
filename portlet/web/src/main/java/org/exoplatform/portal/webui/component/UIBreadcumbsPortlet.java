@@ -47,7 +47,7 @@ import javax.portlet.PortletRequest;
  * May 30, 2006
  * @version:: $Id$
  */
-@ComponentConfig(lifecycle = UIApplicationLifecycle.class, events = @EventConfig(listeners = UIBreadcumbsPortlet.SelectPathActionListener.class))
+@ComponentConfig(lifecycle = UIApplicationLifecycle.class, events = @EventConfig(listeners = SelectPathActionListener.class))
 public class UIBreadcumbsPortlet extends UIPortletApplication
 {
 

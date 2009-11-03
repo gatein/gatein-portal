@@ -20,6 +20,7 @@
 package org.exoplatform.portal.config.model.portlet;
 
 import org.exoplatform.portal.config.model.Application;
+import org.exoplatform.portal.pom.data.ApplicationData;
 import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.pom.spi.portlet.Preferences;
 
@@ -29,6 +30,11 @@ import org.exoplatform.portal.pom.spi.portlet.Preferences;
  */
 public class PortletApplication extends Application<Preferences, PortletId>
 {
+
+   public PortletApplication(ApplicationData<Preferences, PortletId> data)
+   {
+      super(data);
+   }
 
    public PortletApplication(String storageId, String applicationName, String portletName)
    {

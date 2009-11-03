@@ -265,17 +265,11 @@ public class PortalRequestContext extends WebuiRequestContext
       return request_.isUserInRole(roleUser);
    }
 
-   /** The optimized encoder. */
-   private static final TextEncoder encoder =
-      new CharsetTextEncoder(new TableCharEncoder(CharsetCharEncoder.getUTF8()));
-
    final public Writer getWriter() throws Exception
    {
       if (writer_ == null)
       {
-
-         //
-         PortalPrinter printer = new PortalPrinter(encoder, response_.getOutputStream());
+         PortalPrinter printer = new PortalPrinter(response_.getOutputStream(), true, 30000);
 
          //
          if (HtmlValidator.DEBUG_MODE)

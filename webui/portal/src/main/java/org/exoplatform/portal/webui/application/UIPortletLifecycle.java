@@ -42,6 +42,7 @@ import org.gatein.pc.api.invocation.response.FragmentResponse;
 import org.gatein.pc.api.invocation.response.PortletInvocationResponse;
 
 import java.io.Serializable;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -175,7 +176,18 @@ public class UIPortletLifecycle<S, C extends Serializable, I> extends Lifecycle<
                   if (response instanceof FragmentResponse)
                   {
                      FragmentResponse fragmentResponse = (FragmentResponse)response;
-                     markup = Text.create(fragmentResponse.getContent());
+                     switch (fragmentResponse.getType())
+                     {
+                        case FragmentResponse.TYPE_CHARS:
+                           markup = Text.create(fragmentResponse.getContent());
+                           break;
+                        case FragmentResponse.TYPE_BYTES:
+                           markup = Text.create(fragmentResponse.getBytes(), Charset.forName("UTF-8"));
+                           break;
+                        case FragmentResponse.TYPE_EMPTY:
+                           markup = Text.create("");
+                           break;
+                     }
                      portletTitle = fragmentResponse.getTitle();
                      if (fragmentResponse.getProperties() != null
                         && fragmentResponse.getProperties().getTransportHeaders() != null)
@@ -262,14 +274,8 @@ public class UIPortletLifecycle<S, C extends Serializable, I> extends Lifecycle<
          }
          catch (Throwable ex)
          {
+            ex.printStackTrace();
          }
-      }
-      try
-      {
-         prcontext.getResponse().flushBuffer();
-      }
-      catch (Throwable ex)
-      {
       }
    }
 }

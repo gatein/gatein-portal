@@ -24,6 +24,8 @@ import groovy.text.Template;
 
 import org.exoplatform.commons.utils.IOUtil;
 import org.exoplatform.container.xml.InitParams;
+import org.exoplatform.groovyscript.GroovyTemplate;
+import org.exoplatform.groovyscript.GroovyTemplateEngine;
 import org.exoplatform.management.annotations.Managed;
 import org.exoplatform.management.annotations.ManagedDescription;
 import org.exoplatform.management.annotations.ManagedName;
@@ -45,9 +47,9 @@ import java.io.InputStream;
 public class TemplateService
 {
 
-   private SimpleTemplateEngine engine_;
+   private GroovyTemplateEngine engine_;
 
-   private ExoCache<String, Template> templatesCache_;
+   private ExoCache<String, GroovyTemplate> templatesCache_;
 
    private TemplateStatisticService statisticService;
 
@@ -56,7 +58,7 @@ public class TemplateService
    public TemplateService(InitParams params, TemplateStatisticService statisticService, CacheService cservice)
       throws Exception
    {
-      engine_ = new SimpleTemplateEngine();
+      engine_ = new GroovyTemplateEngine();
       this.statisticService = statisticService;
       templatesCache_ = cservice.getCacheInstance(TemplateService.class.getName());
       getTemplatesCache().setLiveTime(10000);
@@ -66,11 +68,10 @@ public class TemplateService
    {
       long startTime = System.currentTimeMillis();
 
-      Template template = getTemplate(name, context.getResourceResolver());
+      GroovyTemplate template = getTemplate(name, context.getResourceResolver());
       context.put("_ctx", context);
       context.setGroovyTemplateService(this);
-      Writable writable = template.make(context);
-      writable.writeTo(context.getWriter());
+      template.render(context.getWriter(), context);
 
       long endTime = System.currentTimeMillis();
 
@@ -93,24 +94,22 @@ public class TemplateService
       if (context == null)
          throw new Exception("Binding cannot be null");
       context.put("_ctx", context);
-      Template template = getTemplate(name, context.getResourceResolver());
-      Writable writable = template.make(context);
-      writable.writeTo(context.getWriter());
-
+      GroovyTemplate template = getTemplate(name, context.getResourceResolver());
+      template.render(context.getWriter(), context);
    }
 
-   final public Template getTemplate(String name, ResourceResolver resolver) throws Exception
+   final public GroovyTemplate getTemplate(String name, ResourceResolver resolver) throws Exception
    {
       return getTemplate(name, resolver, cacheTemplate_);
    }
 
-   final public Template getTemplate(String url, ResourceResolver resolver, boolean cacheable) throws Exception
+   final public GroovyTemplate getTemplate(String url, ResourceResolver resolver, boolean cacheable) throws Exception
    {
-      Template template = null;
+      GroovyTemplate template = null;
       if (cacheable)
       {
          String resourceId = resolver.createResourceId(url);
-         template = (Template)getTemplatesCache().get(resourceId);
+         template = getTemplatesCache().get(resourceId);
       }
       if (template != null)
          return template;
@@ -138,12 +137,7 @@ public class TemplateService
       getTemplatesCache().remove(resourceId);
    }
 
-   public void setTemplatesCache(ExoCache<String, Template> templatesCache_)
-   {
-      this.templatesCache_ = templatesCache_;
-   }
-
-   public ExoCache<String, Template> getTemplatesCache()
+   public ExoCache<String, GroovyTemplate> getTemplatesCache()
    {
       return templatesCache_;
    }

@@ -19,6 +19,8 @@
 
 package org.exoplatform.webui.application.portlet;
 
+import org.exoplatform.commons.utils.PortalPrinter;
+import org.exoplatform.commons.utils.Safe;
 import org.exoplatform.resolver.ApplicationResourceResolver;
 import org.exoplatform.resolver.PortletResourceResolver;
 import org.exoplatform.services.log.ExoLogger;
@@ -245,6 +247,11 @@ public class PortletApplication extends WebuiApplication
       }
       finally
       {
+
+         // Close the writer
+         Safe.close(context.getWriter());
+
+         //
          try
          {
             for (ApplicationLifecycle<RequestContext> lifecycle : getApplicationLifecycle())
@@ -275,12 +282,12 @@ public class PortletApplication extends WebuiApplication
    {
       String attributeName = getApplicationId() + "$PortletRequest";
       PortletRequestContext context = (PortletRequestContext)parentAppRequestContext.getAttribute(attributeName);
-      Writer w = null;
+      PortalPrinter w = null;
       if (res instanceof RenderResponse)
       {
          RenderResponse renderRes = (RenderResponse)res;
          renderRes.setContentType("text/html; charset=UTF-8");
-         w = renderRes.getWriter();
+         w = new PortalPrinter(renderRes.getPortletOutputStream(), true, 0);
       }
       if (context != null)
       {

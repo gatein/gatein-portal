@@ -19,6 +19,21 @@
 
 package org.exoplatform.portal.config.model;
 
+import org.exoplatform.portal.config.model.gadget.GadgetApplication;
+import org.exoplatform.portal.config.model.gadget.GadgetId;
+import org.exoplatform.portal.config.model.portlet.PortletApplication;
+import org.exoplatform.portal.config.model.portlet.PortletId;
+import org.exoplatform.portal.config.model.wsrp.WSRPApplication;
+import org.exoplatform.portal.config.model.wsrp.WSRPId;
+import org.exoplatform.portal.pom.data.ApplicationData;
+import org.exoplatform.portal.pom.data.BodyData;
+import org.exoplatform.portal.pom.data.ContainerData;
+import org.exoplatform.portal.pom.data.ModelData;
+import org.exoplatform.portal.pom.data.PageData;
+import org.exoplatform.portal.pom.spi.gadget.Gadget;
+import org.exoplatform.portal.pom.spi.portlet.Preferences;
+import org.exoplatform.portal.pom.spi.wsrp.WSRPState;
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
@@ -62,4 +77,55 @@ public abstract class ModelObject
       this.storageName = storageName;
    }
 
+   public abstract ModelData build();
+
+   public static ModelObject build(ModelData data)
+   {
+      if (data instanceof ContainerData)
+      {
+         return new Container((ContainerData)data);
+      }
+      else if (data instanceof PageData)
+      {
+         return new Page((PageData)data);
+      }
+      else if (data instanceof BodyData)
+      {
+         BodyData bodyData = (BodyData)data;
+         switch (bodyData.getType())
+         {
+            case PAGE:
+               return new PageBody(data.getStorageId());
+            case SITE:
+               return new SiteBody(data.getStorageId());
+            default:
+               throw new AssertionError();
+         }
+      }
+      else if (data instanceof ApplicationData)
+      {
+         ApplicationData applicationData = (ApplicationData)data;
+         ApplicationType type = applicationData.getType();
+         if (ApplicationType.PORTLET == type)
+         {
+            return new PortletApplication((ApplicationData<Preferences, PortletId>)applicationData);
+         }
+         else if (ApplicationType.GADGET == type)
+         {
+            return new GadgetApplication((ApplicationData<Gadget, GadgetId>)applicationData);
+         }
+         else if (ApplicationType.WSRP_PORTLET == type)
+         {
+            return new WSRPApplication((ApplicationData<WSRPState, WSRPId>)applicationData);
+         }
+         else
+         {
+            throw new AssertionError();
+         }
+      }
+      else
+      {
+         throw new UnsupportedOperationException("todo " + data);
+      }
+   }
 }

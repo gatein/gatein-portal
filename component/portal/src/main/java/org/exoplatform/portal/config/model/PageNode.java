@@ -20,6 +20,7 @@
 package org.exoplatform.portal.config.model;
 
 import org.exoplatform.commons.utils.ExpressionUtil;
+import org.exoplatform.portal.pom.data.NavigationNodeData;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -29,7 +30,7 @@ import java.util.ResourceBundle;
 public class PageNode extends PageNodeContainer
 {
 
-   private ArrayList<PageNode> children = new ArrayList<PageNode>(5);
+   private ArrayList<PageNode> children;
 
    private String uri;
 
@@ -53,14 +54,43 @@ public class PageNode extends PageNodeContainer
 
    private transient boolean modifiable;
 
+   public PageNode(NavigationNodeData nav)
+   {
+      super(nav.getStorageId());
+
+      //
+      ArrayList<PageNode> children = new ArrayList<PageNode>(nav.getNodes().size());
+      for (NavigationNodeData child : nav.getNodes())
+      {
+         PageNode node = new PageNode(child);
+         children.add(node);
+      }
+
+      //
+      this.uri = nav.getURI();
+      this.label = nav.getLabel();
+      this.resolvedLabel = nav.getLabel();
+      this.icon = nav.getIcon();
+      this.name = nav.getName();
+      this.startPublicationDate = nav.getStartPublicationDate();
+      this.endPublicationDate = nav.getEndPublicationDate();
+      this.showPublicationDate = nav.getShowPublicationDate();
+      this.visible = nav.isVisible();
+      this.pageReference = nav.getPageReference();
+      this.children = children;
+   }
+
    public PageNode(String storageId)
    {
       super(storageId);
+
+      //
+      this.children = new ArrayList<PageNode>();
    }
 
    public PageNode()
    {
-      super();
+      this((String)null);
    }
 
    public String getUri()
@@ -258,4 +288,22 @@ public class PageNode extends PageNodeContainer
       return newNode;
    }
 
+   @Override
+   public NavigationNodeData build()
+   {
+      List<NavigationNodeData> children = buildNavigationChildren();
+      return new NavigationNodeData(
+         storageId,
+         uri,
+         label,
+         icon,
+         name,
+         startPublicationDate,
+         endPublicationDate,
+         showPublicationDate,
+         visible,
+         pageReference,
+         children
+      );
+   }
 }

@@ -19,6 +19,7 @@
 
 package org.exoplatform.portal.config;
 
+import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.container.component.ComponentPlugin;
 import org.exoplatform.portal.config.model.Application;
 import org.exoplatform.portal.config.model.Container;
@@ -29,7 +30,7 @@ import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.TransientApplicationState;
-import org.exoplatform.portal.pom.config.POMDataStorage;
+import org.exoplatform.portal.pom.config.ModelDemarcation;
 import org.exoplatform.services.cache.CacheService;
 import org.exoplatform.services.cache.ExoCache;
 import org.exoplatform.services.cache.ExpireKeyStartWithSelector;
@@ -44,7 +45,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by The eXo Platform SAS Apr 19, 2007 This service is used to load the
@@ -505,6 +508,75 @@ public class UserPortalConfigService implements Startable
    }
 
    /**
+    * Load all navigation that user has edit permission.
+    *
+    * @return the navigation the user can edit
+    * @throws Exception any exception
+    */
+   public List<PageNavigation> loadEditableNavigations() throws Exception
+   {
+      Query<PageNavigation> query = new Query<PageNavigation>(PortalConfig.GROUP_TYPE, null, PageNavigation.class);
+      List<PageNavigation> navis = storage_.find(query, new Comparator<PageNavigation>()
+      {
+         public int compare(PageNavigation pconfig1, PageNavigation pconfig2)
+         {
+            return pconfig1.getOwnerId().compareTo(pconfig2.getOwnerId());
+         }
+      }).getAll();
+
+      //
+      List<PageNavigation> navigations = new ArrayList<PageNavigation>();
+      for (PageNavigation ele : navis)
+      {
+         if (userACL_.hasEditPermission(ele))
+         {
+            navigations.add(ele);
+         }
+      }
+      return navigations;
+   }
+
+   /**
+    * Returns the list of group ids that do not have an existing navigation.
+    *
+    * @return the group id with no navigation
+    * @throws Exception any exception
+    */
+   public Set<String> findGroupWithoutNavigation() throws Exception
+   {
+      Query<PageNavigation> query = new Query<PageNavigation>(PortalConfig.GROUP_TYPE, null, PageNavigation.class);
+      Set<String> groupIds = new HashSet<String>();
+      List<PageNavigation> navis = storage_.find(query).getAll();
+      for (PageNavigation ele : navis)
+      {
+         groupIds.add(ele.getOwnerId());
+      }
+      return groupIds;
+   }
+
+   /**
+    * Returns the list of all portal names.
+    *
+    * @return the list of all portal names
+    * @throws Exception any exception
+    */
+   public List<String> getAllPortalNames() throws Exception
+   {
+      List<String> list = new ArrayList<String>();
+      Query<PortalConfig> query = new Query<PortalConfig>("portal", null, null, null, PortalConfig.class);
+      PageList<PortalConfig> pageList = storage_.find(query);
+      List<PortalConfig> configs = pageList.getAll();
+      for (PortalConfig ele : configs)
+      {
+         if (userACL_.hasPermission(ele))
+         {
+            list.add(ele.getName());
+         }
+      }
+      return list;
+   }
+
+   /**
     * Update the ownership recursively on the model graph.
     *
     * @param object the model object graph root
@@ -566,22 +638,28 @@ public class UserPortalConfigService implements Startable
             return;
 
          //
-         if (storage_ instanceof POMDataStorage)
+         if (storage_ instanceof ModelDemarcation)
          {
-            ((POMDataStorage)storage_).getPOMSessionManager().openSession();
+            ((ModelDemarcation)storage_).begin();
          }
 
          newPortalConfigListener_.run();
       }
       catch (Exception e)
       {
-         log.error("", e);
+         log.error("Could not import initial data", e);
+
+         //
+         if (storage_ instanceof ModelDemarcation)
+         {
+            ((ModelDemarcation)storage_).end(false);
+         }
       }
       finally
       {
-         if (storage_ instanceof POMDataStorage)
+         if (storage_ instanceof ModelDemarcation)
          {
-            ((POMDataStorage)storage_).getPOMSessionManager().closeSession(true);
+            ((ModelDemarcation)storage_).end(true);
          }
       }
    }

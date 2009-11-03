@@ -24,6 +24,7 @@ import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.Query;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.pom.data.PortalData;
 import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.portal.webui.workspace.UIMaskWorkspace;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -58,21 +59,21 @@ public class UIPortalSelector extends UIContainer
       addChild(uiGrid.getUIPageIterator());
       uiGrid.getUIPageIterator().setRendered(false);
       DataStorage dataService = getApplicationComponent(DataStorage.class);
-      Query<PortalConfig> query = new Query<PortalConfig>(null, null, null, null, PortalConfig.class);
-      LazyPageList pageList = dataService.find(query);
+      Query<PortalData> query = new Query<PortalData>(null, null, null, null, PortalData.class);
+      LazyPageList<PortalData> pageList = dataService.find(query);
       pageList.setPageSize(10);
       pageList = extractPermissedPortal(pageList);
       uiGrid.getUIPageIterator().setPageList(pageList);
    }
 
-   private LazyPageList extractPermissedPortal(LazyPageList pageList) throws Exception
+   private LazyPageList<PortalData> extractPermissedPortal(LazyPageList<PortalData> pageList) throws Exception
    {
       UserACL userACL = getApplicationComponent(UserACL.class);
-      Iterator<?> itr = pageList.getAll().iterator();
+      Iterator<PortalData> itr = pageList.getAll().iterator();
       while (itr.hasNext())
       {
-         PortalConfig pConfig = (PortalConfig)itr.next();
-         if (!userACL.hasPermission(pConfig))
+         PortalData pConfig = itr.next();
+         if (!userACL.hasPermission(new PortalConfig(pConfig)))
             itr.remove();
       }
       return pageList;

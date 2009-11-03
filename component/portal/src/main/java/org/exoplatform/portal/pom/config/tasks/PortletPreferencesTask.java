@@ -21,7 +21,7 @@ package org.exoplatform.portal.pom.config.tasks;
 
 import org.exoplatform.portal.application.PortletPreferences;
 import org.exoplatform.portal.application.Preference;
-import org.exoplatform.portal.config.model.Mapper;
+import org.exoplatform.portal.pom.data.Mapper;
 import org.exoplatform.portal.pom.config.AbstractPOMTask;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.spi.portlet.Preferences;

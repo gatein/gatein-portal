@@ -22,6 +22,8 @@ package org.exoplatform.portal.pom.config.tasks;
 import org.exoplatform.portal.config.model.PersistentApplicationState;
 import org.exoplatform.portal.pom.config.AbstractPOMTask;
 import org.exoplatform.portal.pom.config.POMSession;
+import org.exoplatform.portal.pom.config.cache.CacheableDataTask;
+import org.exoplatform.portal.pom.config.cache.DataAccessMode;
 import org.gatein.mop.api.content.Customization;
 
 /**
@@ -31,7 +33,10 @@ import org.gatein.mop.api.content.Customization;
 public abstract class PreferencesTask<S> extends AbstractPOMTask
 {
 
-   public static class Load<S> extends PreferencesTask<S>
+   /** . */
+   private static final Object NULL_PREFS = new Object();
+
+   public static class Load<S> extends PreferencesTask<S> implements CacheableDataTask<PersistentApplicationState<S>, Object>
    {
 
       /** . */
@@ -40,9 +45,37 @@ public abstract class PreferencesTask<S> extends AbstractPOMTask
       /** . */
       private S prefs;
 
-      public Load(PersistentApplicationState state)
+      public Load(PersistentApplicationState<S> state)
       {
          this.state = state;
+      }
+
+      public DataAccessMode getAccessMode()
+      {
+         return DataAccessMode.READ;
+      }
+
+      public void setValue(Object value)
+      {
+         if (value != NULL_PREFS)
+         {
+            prefs = (S)value;
+         }
+      }
+
+      public Class<Object> getValueType()
+      {
+         return Object.class;
+      }
+
+      public Object getValue()
+      {
+         return prefs == null ? NULL_PREFS : prefs;
+      }
+
+      public PersistentApplicationState<S> getKey()
+      {
+         return state;
       }
 
       public void run(POMSession session) throws Exception
@@ -56,9 +89,15 @@ public abstract class PreferencesTask<S> extends AbstractPOMTask
       {
          return prefs;
       }
+
+      @Override
+      public String toString()
+      {
+         return "PreferencesTask.Load[state=" + state.getStorageId() + "]";
+      }
    }
 
-   public static class Save<S> extends PreferencesTask<S>
+   public static class Save<S> extends PreferencesTask<S> implements CacheableDataTask<PersistentApplicationState<S>, Object>
    {
 
       /** . */
@@ -71,6 +110,31 @@ public abstract class PreferencesTask<S> extends AbstractPOMTask
       {
          this.state = state;
          this.prefs = prefs;
+      }
+
+      public DataAccessMode getAccessMode()
+      {
+         return DataAccessMode.WRITE;
+      }
+
+      public void setValue(Object value)
+      {
+         throw new UnsupportedOperationException();
+      }
+
+      public Class<Object> getValueType()
+      {
+         return Object.class;
+      }
+
+      public Object getValue()
+      {
+         return prefs == null ? NULL_PREFS : prefs ;
+      }
+
+      public PersistentApplicationState<S> getKey()
+      {
+         return state;
       }
 
       public void run(POMSession session) throws Exception
@@ -88,6 +152,12 @@ public abstract class PreferencesTask<S> extends AbstractPOMTask
          {
             customization.setState(null);
          }
+      }
+
+      @Override
+      public String toString()
+      {
+         return "PreferencesTask.Save[state=" + state.getStorageId() + "]";
       }
    }
 }

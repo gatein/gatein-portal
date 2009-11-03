@@ -19,6 +19,10 @@
 
 package org.exoplatform.portal.config.model;
 
+import org.exoplatform.portal.pom.data.BodyData;
+import org.exoplatform.portal.pom.data.BodyType;
+import org.exoplatform.portal.pom.data.ModelData;
+
 /**
  * Created by The eXo Platform SAS
  * Apr 25, 2007  
@@ -33,5 +37,11 @@ public class PageBody extends ModelObject
 
    public PageBody()
    {
+   }
+
+   @Override
+   public ModelData build()
+   {
+      return new BodyData(storageId, BodyType.PAGE);
    }
 }

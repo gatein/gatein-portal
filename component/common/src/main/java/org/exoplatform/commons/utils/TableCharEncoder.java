@@ -19,6 +19,8 @@
 
 package org.exoplatform.commons.utils;
 
+import java.nio.charset.Charset;
+
 /**
  * A char encoder that use a table to cache the result produced by a delegate char encoder. This encoder
  * is stateless and should only be composed with stateless char encoder otherwise an unexpected result
@@ -45,6 +47,11 @@ public class TableCharEncoder implements CharEncoder
    {
       this.charEncoder = charEncoder;
       this.table = new byte[MAX + 1][];
+   }
+
+   public Charset getCharset()
+   {
+      return charEncoder.getCharset();
    }
 
    public byte[] encode(char c)

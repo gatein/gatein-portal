@@ -90,7 +90,7 @@ function getModule(params)
    new Project("org.exoplatform.portal", "exo.portal.component.scripting", "jar", module.version).
       addDependency(module.component.xmlParser).
       addDependency(new Project("rhino", "js", "jar", "1.6R5")).
-      addDependency(new Project("org.codehaus.groovy", "groovy-all", "jar", "1.5.7"));
+      addDependency(new Project("org.codehaus.groovy", "groovy-all", "jar", "1.6.5"));
 
    module.component.web =
    new Project("org.exoplatform.portal", "exo.portal.component.web", "jar", module.version).

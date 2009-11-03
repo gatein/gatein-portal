@@ -672,11 +672,14 @@ public class UIPortlet<S, C extends Serializable, I> extends UIApplication
       //
       StatefulPortletContext<C> preferencesPortletContext = getPortletContext();
 
-      // todo : wire user profile
-      // Create an ExoUserContext in component.pc package
+      // 
       OrganizationService service = getApplicationComponent(OrganizationService.class);
-      UIPortalApplication uiPortalApp = getAncestorOfType(UIPortalApplication.class);
-      UserProfile userProfile = service.getUserProfileHandler().findUserProfileByName(uiPortalApp.getOwner());
+      String user = prc.getRemoteUser();
+      UserProfile userProfile = null;
+      if (user != null)
+      {
+         userProfile = service.getUserProfileHandler().findUserProfileByName(user);
+      }
 
       // client context
       AbstractClientContext clientContext;

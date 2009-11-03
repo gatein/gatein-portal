@@ -19,7 +19,14 @@
 
 package org.exoplatform.portal.config.model;
 
+import org.exoplatform.portal.pom.config.Utils;
+import org.exoplatform.portal.pom.data.ComponentData;
+import org.exoplatform.portal.pom.data.ContainerData;
+import org.exoplatform.portal.pom.data.ModelData;
+
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * May 13, 2004
@@ -50,7 +57,7 @@ public class Container extends ModelObject
 
    protected String height;
 
-   private String[] accessPermissions;
+   protected String[] accessPermissions;
 
    protected ArrayList<ModelObject> children;
 
@@ -65,6 +72,32 @@ public class Container extends ModelObject
 
       //
       this.children = new ArrayList<ModelObject>();
+   }
+
+   public Container(ContainerData data)
+   {
+      super(data.getStorageId());
+
+      //
+      ArrayList<ModelObject> children = new ArrayList<ModelObject>();
+      for (ComponentData child : data.getChildren())
+      {
+         children.add(ModelObject.build(child));
+      }
+
+      //
+      this.id = data.getId();
+      this.name = data.getName();
+      this.icon = data.getIcon();
+      this.decorator = data.getDecorator();
+      this.template = data.getTemplate();
+      this.factoryId = data.getFactoryId();
+      this.title = data.getTitle();
+      this.description = data.getDescription();
+      this.width = data.getWidth();
+      this.height = data.getHeight();
+      this.accessPermissions = data.getAccessPermissions().toArray(new String[data.getAccessPermissions().size()]);
+      this.children = children;
    }
 
    public String getId()
@@ -187,4 +220,43 @@ public class Container extends ModelObject
       this.accessPermissions = accessPermissions;
    }
 
+   @Override
+   public ContainerData build()
+   {
+      List<ComponentData> children = buildChildren();
+      return new ContainerData(
+         storageId,
+         id,
+         name,
+         icon,
+         decorator,
+         template,
+         factoryId,
+         title,
+         description,
+         width,
+         height,
+         Utils.safeImmutableList(accessPermissions),
+         children
+      );
+   }
+
+   protected List<ComponentData> buildChildren()
+   {
+      if (children != null && children.size() > 0)
+      {
+         ArrayList<ComponentData> dataChildren = new ArrayList<ComponentData>(children.size());
+         for (int i = 0;i < children.size();i++)
+         {
+            ModelObject node = children.get(i);
+            ModelData data = node.build();
+            dataChildren.add((ComponentData)data);
+         }
+         return Collections.unmodifiableList(dataChildren);
+      }
+      else
+      {
+         return Collections.emptyList();
+      }
+   }
 }

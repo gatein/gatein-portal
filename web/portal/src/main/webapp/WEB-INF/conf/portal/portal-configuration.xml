@@ -25,21 +25,19 @@
    xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd http://www.exoplaform.org/xml/ns/kernel_1_0.xsd"
    xmlns="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd">
 				  
-<!--
-  <component>
-    <key>org.exoplatform.portal.config.DataStorage</key>
-    <type>org.exoplatform.portal.config.jcr.DataStorageImpl</type>     
-  </component>
--->
-
   <component>
     <key>org.exoplatform.portal.pom.config.POMSessionManager</key>
     <type>org.exoplatform.portal.pom.config.POMSessionManager</type>
   </component>
 
   <component>
-    <key>org.exoplatform.portal.config.DataStorage</key>
+    <key>org.exoplatform.portal.pom.data.ModelDataStorage</key>
     <type>org.exoplatform.portal.pom.config.POMDataStorage</type>
+  </component>
+
+  <component>
+    <key>org.exoplatform.portal.config.DataStorage</key>
+    <type>org.exoplatform.portal.config.DataStorageImpl</type>
   </component>
 
   <component>

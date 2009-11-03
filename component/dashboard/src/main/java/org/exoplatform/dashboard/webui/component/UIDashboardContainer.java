@@ -25,7 +25,6 @@ import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.model.Container;
 import org.exoplatform.portal.config.model.Dashboard;
 import org.exoplatform.portal.config.model.gadget.GadgetId;
-import org.exoplatform.portal.pom.config.tasks.DashboardTask;
 import org.exoplatform.portal.webui.application.UIGadget;
 import org.exoplatform.portal.webui.application.UIPortlet;
 import org.exoplatform.portal.webui.container.UIContainer;
@@ -133,7 +132,7 @@ public class UIDashboardContainer extends org.exoplatform.webui.core.UIContainer
       Container dashboard;
       if (currentUIPortlet.getStorageId() != null)
       {
-         dashboard = service.execute(new DashboardTask.Load(currentUIPortlet.getStorageId())).getDashboard();
+         dashboard = service.loadDashboard(currentUIPortlet.getStorageId());
       }
       else
          dashboard = createContainer(COLUMN_CONTAINER, null);
@@ -456,7 +455,7 @@ public class UIDashboardContainer extends org.exoplatform.webui.core.UIContainer
       PortalDataMapper.toContainer(dashboard, uiRoot);
 
       // Get dashboard for merging
-      service.execute(new DashboardTask.Save(dashboard));
+      service.saveDashboard(dashboard);
    }
 
    public static class AddNewGadgetActionListener extends EventListener<UIDashboard>

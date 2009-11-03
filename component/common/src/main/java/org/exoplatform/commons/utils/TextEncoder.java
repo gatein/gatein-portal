@@ -21,6 +21,7 @@ package org.exoplatform.commons.utils;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.charset.Charset;
 
 /**
  * A text encoder that encodes text to an output stream. No assumptions must be made about the
@@ -31,6 +32,13 @@ import java.io.OutputStream;
  */
 public interface TextEncoder
 {
+
+   /**
+    * Returns the charset that will perform the encoding.
+    *
+    * @return the charset for encoding
+    */
+   Charset getCharset();
 
    void encode(char c, OutputStream out) throws IOException;
 

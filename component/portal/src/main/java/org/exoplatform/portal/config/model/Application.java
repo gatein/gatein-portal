@@ -19,6 +19,10 @@
 
 package org.exoplatform.portal.config.model;
 
+import org.exoplatform.portal.pom.config.Utils;
+import org.exoplatform.portal.pom.data.ApplicationData;
+import org.exoplatform.portal.pom.data.ModelData;
+
 /**
  * May 13, 2004
  * @author: Tuan Nguyen
@@ -59,6 +63,31 @@ public abstract class Application<S, I> extends ModelObject
    private String[] accessPermissions;
 
    private boolean isModifiable;
+
+   public Application(ApplicationData<S, I> data)
+   {
+      super(data.getStorageId());
+
+      // For now here, need to make a real NAME and
+      // remove disturbing storage name
+      this.storageName = data.getStorageName();
+
+      //
+      this.state = data.getState();
+      this.ref = data.getRef();
+      this.id = data.getId();
+      this.title = data.getTitle();
+      this.icon = data.getIcon();
+      this.description = data.getDescription();
+      this.showInfoBar = data.isShowInfoBar();
+      this.showApplicationState = data.isShowApplicationState();
+      this.showApplicationMode = data.isShowApplicationMode();
+      this.theme = data.getTheme();
+      this.width = data.getWidth();
+      this.height = data.getHeight();
+      this.properties = new Properties(data.getProperties());
+      this.accessPermissions = data.getAccessPermissions().toArray(new String[data.getAccessPermissions().size()]);
+   }
 
    public Application(String storageId, I ref)
    {
@@ -224,4 +253,27 @@ public abstract class Application<S, I> extends ModelObject
       this.theme = theme;
    }
 
+   @Override
+   public ModelData build()
+   {
+      return new ApplicationData<S,I>(
+         storageId,
+         storageName,
+         getType(),
+         state,
+         ref,
+         id,
+         title,
+         icon,
+         description,
+         showInfoBar,
+         showApplicationState,
+         showApplicationMode,
+         theme,
+         width,
+         height,
+         Utils.safeImmutableMap(properties),
+         Utils.safeImmutableList(accessPermissions)
+      );
+   }
 }

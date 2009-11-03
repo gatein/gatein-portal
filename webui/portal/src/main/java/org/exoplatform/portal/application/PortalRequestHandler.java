@@ -19,6 +19,7 @@
 
 package org.exoplatform.portal.application;
 
+import org.exoplatform.commons.utils.Safe;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.web.WebAppController;
@@ -112,6 +113,11 @@ public class PortalRequestHandler extends WebRequestHandler
       }
       finally
       {
+
+         // We close the writer here once and for all
+         Safe.close(context.getWriter());
+
+         //
          try
          {
             for (ApplicationLifecycle lifecycle : lifecycles)

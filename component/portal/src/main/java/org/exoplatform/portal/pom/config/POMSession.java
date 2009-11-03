@@ -21,7 +21,7 @@ package org.exoplatform.portal.pom.config;
 
 import org.chromattic.api.ChromatticSession;
 import org.exoplatform.portal.application.PortletPreferences;
-import org.exoplatform.portal.config.model.Mapper;
+import org.exoplatform.portal.pom.data.Mapper;
 import org.gatein.mop.api.Model;
 import org.gatein.mop.api.content.Customization;
 import org.gatein.mop.api.workspace.ObjectType;

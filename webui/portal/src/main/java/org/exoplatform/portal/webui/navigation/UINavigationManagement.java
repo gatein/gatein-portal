@@ -19,9 +19,6 @@
 
 package org.exoplatform.portal.webui.navigation;
 
-import org.exoplatform.commons.utils.LazyPageList;
-import org.exoplatform.portal.config.DataStorage;
-import org.exoplatform.portal.config.Query;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.webui.page.UIPageNodeForm2;
@@ -54,14 +51,6 @@ public class UINavigationManagement extends UIContainer
    public UINavigationManagement() throws Exception
    {
       addChild(UINavigationNodeSelector.class, null, null);
-   }
-
-   public void loadNavigation(Query<PageNavigation> query) throws Exception
-   {
-      DataStorage service = getApplicationComponent(DataStorage.class);
-      LazyPageList navis = service.find(query);
-      UINavigationNodeSelector nodeSelector = getChild(UINavigationNodeSelector.class);
-      nodeSelector.initNavigations(navis.getAll());
    }
 
    public void setOwner(String owner)

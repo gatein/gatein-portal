@@ -19,7 +19,12 @@
 
 package org.exoplatform.portal.config.model;
 
+import org.exoplatform.portal.pom.config.Utils;
+import org.exoplatform.portal.pom.data.ComponentData;
+import org.exoplatform.portal.pom.data.PageData;
+
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * May 13, 2004
@@ -35,8 +40,6 @@ public class Page extends Container
 
    private String ownerId;
 
-   private String[] accessPermissions;
-
    private String editPermission;
 
    private boolean showMaxWindow = false;
@@ -49,6 +52,19 @@ public class Page extends Container
 
    public Page()
    {
+   }
+
+   public Page(PageData data)
+   {
+      super(data);
+
+      //
+      this.ownerType = data.getOwnerType();
+      this.ownerId = data.getOwnerId();
+      this.editPermission = data.getEditPermission();
+      this.showMaxWindow = data.isShowMaxWindow();
+      this.creator = data.getCreator();
+      this.modifier = data.getModifier();
    }
 
    public Page(String storageId)
@@ -74,16 +90,6 @@ public class Page extends Container
    public void setOwnerType(String ownerType)
    {
       this.ownerType = ownerType;
-   }
-
-   public String[] getAccessPermissions()
-   {
-      return accessPermissions;
-   }
-
-   public void setAccessPermissions(String[] s)
-   {
-      accessPermissions = s;
    }
 
    public String getEditPermission()
@@ -167,6 +173,32 @@ public class Page extends Container
    public void setModifier(String s)
    {
       modifier = s;
+   }
+
+   @Override
+   public PageData build()
+   {
+      List<ComponentData> children = buildChildren();
+      return new PageData(
+         storageId,
+         id,
+         name,
+         icon,
+         decorator,
+         template,
+         factoryId,
+         title,
+         description,
+         width,
+         height,
+         Utils.safeImmutableList(accessPermissions),
+         children,
+         ownerType,
+         ownerId,
+         editPermission,
+         showMaxWindow,
+         creator,
+         modifier);
    }
 
    static public class PageSet

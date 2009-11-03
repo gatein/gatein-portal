@@ -19,6 +19,8 @@
 
 package org.exoplatform.commons.utils;
 
+import java.nio.charset.Charset;
+
 /**
  * A char encoder that encodes chars to a suite of bytes. No assumptions must be made about the
  * statefullness nature of an encoder as some encoder may be statefull and some encoder may be stateless.
@@ -36,4 +38,11 @@ public interface CharEncoder
     * @return the serie of bytes corresponding to the encoded char
     */
    byte[] encode(char c);
+
+   /**
+    * Returns the charset that will perform the encoding.
+    *
+    * @return the charset for encoding
+    */
+   Charset getCharset();
 }

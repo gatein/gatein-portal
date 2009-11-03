@@ -19,10 +19,7 @@
 
 package org.exoplatform.toolbar.webui.component;
 
-import org.exoplatform.commons.utils.PageList;
-import org.exoplatform.portal.config.DataStorage;
-import org.exoplatform.portal.config.Query;
-import org.exoplatform.portal.config.UserACL;
+import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
@@ -32,7 +29,6 @@ import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -53,20 +49,8 @@ public class UIUserToolBarSitePortlet extends UIPortletApplication
 
    public List<String> getAllPortalNames() throws Exception
    {
-      List<String> list = new ArrayList<String>();
-      DataStorage dataStorage = getApplicationComponent(DataStorage.class);
-      Query<PortalConfig> query = new Query<PortalConfig>(null, null, null, null, PortalConfig.class);
-      PageList pageList = dataStorage.find(query);
-      UserACL userACL = getApplicationComponent(UserACL.class);
-      List<PortalConfig> configs = pageList.getAll();
-      for (PortalConfig ele : configs)
-      {
-         if (userACL.hasPermission(ele))
-         {
-            list.add(ele.getName());
-         }
-      }
-      return list;
+      UserPortalConfigService dataStorage = getApplicationComponent(UserPortalConfigService.class);
+      return dataStorage.getAllPortalNames();
    }
 
    public String getCurrentPortal()

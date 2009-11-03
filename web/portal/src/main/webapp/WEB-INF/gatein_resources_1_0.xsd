@@ -31,7 +31,7 @@
 				<xs:element name="portal-skin" type="portal-skin" />
 				<xs:element name="portlet-skin" type="portlet-skin" />
 				<xs:element name="window-style" type="window-style" />
-				<xs:element name="javascript" type="javascript" />
+				<xs:element name="script" type="script" />
 				<xs:element name="resource-bundle" type="resource-bundle" />
 			</xs:sequence>
 		</xs:complexType>
@@ -66,17 +66,7 @@
 		</xs:sequence>
 	</xs:complexType>
 	
-	<xs:complexType name="javascript">
-		<xs:sequence>
-			<xs:element name="param" type="xs:param" />
-		</xs:sequence>
-	</xs:complexType>
-	
-	<xs:complexType name="param">
-		<xs:sequence>
-			<xs:element name="js-module" type="xs:string" />
-			<xs:element name="js-path" type="xs:string" />
-		</xs:sequence>
+	<xs:complexType name="script">
 	</xs:complexType>
 	
 	<xs:complexType name="resource-bundle">

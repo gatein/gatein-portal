@@ -19,12 +19,14 @@
 
 package org.exoplatform.portal.pom.config.tasks;
 
-import static org.exoplatform.portal.pom.config.Utils.split;
+import org.exoplatform.portal.pom.config.cache.DataAccessMode;
+import org.exoplatform.portal.pom.config.cache.CacheableDataTask;
+import org.exoplatform.portal.pom.data.Mapper;
 
-import org.exoplatform.portal.config.model.Mapper;
-import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.pom.config.AbstractPOMTask;
 import org.exoplatform.portal.pom.config.POMSession;
+import org.exoplatform.portal.pom.data.NavigationData;
+import org.exoplatform.portal.pom.data.NavigationKey;
 import org.gatein.mop.api.workspace.Navigation;
 import org.gatein.mop.api.workspace.ObjectType;
 import org.gatein.mop.api.workspace.Site;
@@ -38,52 +40,62 @@ public abstract class PageNavigationTask extends AbstractPOMTask
 {
 
    /** . */
-   protected final String owner;
-
-   /** . */
-   protected final String ownerType;
-
-   /** . */
-   protected final String ownerId;
-
-   /** . */
    protected final ObjectType<? extends Site> siteType;
 
-   protected PageNavigationTask(String owner)
-   {
-      String[] chunks = split("::", owner);
-      if (chunks.length != 2)
-      {
-         throw new IllegalArgumentException("Wrong owner format should be ownerType::ownerId was " + owner);
-      }
+   /** . */
+   protected final NavigationKey key;
 
-      //
-      this.ownerType = chunks[0];
-      this.ownerId = chunks[1];
-      this.siteType = Mapper.parseSiteType(ownerType);
-      this.owner = owner;
+   protected PageNavigationTask(NavigationKey key)
+   {
+      this.key = key;
+      this.siteType = Mapper.parseSiteType(key.getType());
    }
 
-   public static class Load extends PageNavigationTask
+   public static class Load extends PageNavigationTask implements CacheableDataTask<NavigationKey, NavigationData>
    {
 
       /** . */
-      private PageNavigation pageNav;
+      private NavigationData pageNav;
 
-      public Load(String owner)
+      public Load(NavigationKey key)
       {
-         super(owner);
+         super(key);
       }
 
-      public PageNavigation getPageNavigation()
+      public NavigationData getPageNavigation()
       {
          return pageNav;
+      }
+
+      public DataAccessMode getAccessMode()
+      {
+         return DataAccessMode.READ;
+      }
+
+      public NavigationKey getKey()
+      {
+         return key;
+      }
+
+      public NavigationData getValue()
+      {
+         return pageNav;
+      }
+
+      public void setValue(NavigationData value)
+      {
+         this.pageNav = value;
+      }
+
+      public Class<NavigationData> getValueType()
+      {
+         return NavigationData.class;
       }
 
       public void run(POMSession session) throws Exception
       {
          Workspace workspace = session.getWorkspace();
-         Site site = workspace.getSite(siteType, ownerId);
+         Site site = workspace.getSite(siteType, key.getId());
          if (site != null)
          {
             Navigation nav = site.getRootNavigation();
@@ -95,38 +107,69 @@ public abstract class PageNavigationTask extends AbstractPOMTask
          }
          else
          {
-            System.out.println("Cannot load page navigation " + owner + " as the corresponding portal " + ownerId
+            System.out.println("Cannot load page navigation as the corresponding portal " + key.getId()
                + " with type " + siteType + " does not exist");
          }
       }
+
+      @Override
+      public String toString()
+      {
+         return "PageNavigation.Load[ownerType=" + key.getType() + ",ownerId=" + key.getId() + "]";
+      }
    }
 
-   public static class Save extends PageNavigationTask
+   public static class Save extends PageNavigationTask implements CacheableDataTask<NavigationKey, NavigationData>
    {
 
       /** . */
-      private final PageNavigation pageNav;
+      private final NavigationData pageNav;
 
       /** . */
       private final boolean overwrite;
 
-      public Save(PageNavigation pageNav, boolean overwrite)
+      public Save(NavigationData pageNav, boolean overwrite)
       {
-         super(pageNav.getOwner());
+         super(pageNav.getKey());
 
          //
          this.pageNav = pageNav;
          this.overwrite = overwrite;
       }
 
+      public DataAccessMode getAccessMode()
+      {
+         return pageNav.getStorageId() != null ? DataAccessMode.WRITE : DataAccessMode.CREATE;
+      }
+
+      public void setValue(NavigationData value)
+      {
+         throw new UnsupportedOperationException();
+      }
+
+      public Class<NavigationData> getValueType()
+      {
+         return NavigationData.class;
+      }
+
+      public NavigationData getValue()
+      {
+         return pageNav;
+      }
+
+      public NavigationKey getKey()
+      {
+         return key;
+      }
+
       public void run(POMSession session) throws Exception
       {
          Workspace workspace = session.getWorkspace();
-         Site site = workspace.getSite(siteType, ownerId);
+         Site site = workspace.getSite(siteType, key.getId());
          if (site == null)
          {
-            throw new IllegalArgumentException("Cannot insert page navigation " + owner
-               + " as the corresponding portal " + ownerId + " with type " + siteType + " does not exist");
+            throw new IllegalArgumentException("Cannot insert page navigation "
+               + " as the corresponding portal " + key.getId() + " with type " + siteType + " does not exist");
          }
 
          // Delete node descendants first
@@ -143,24 +186,54 @@ public abstract class PageNavigationTask extends AbstractPOMTask
          new Mapper(session).save(pageNav, defaultNav);
       }
 
+      @Override
+      public String toString()
+      {
+         return "PageNavigation.Save[ownerType=" + key.getType() + ",ownerId=" + key.getId() + "]";
+      }
    }
 
-   public static class Remove extends PageNavigationTask
+   public static class Remove extends PageNavigationTask implements CacheableDataTask<NavigationKey, NavigationData>
    {
 
-      public Remove(PageNavigation pageNav)
+      public Remove(NavigationData pageNav)
       {
-         super(pageNav.getOwner());
+         super(pageNav.getKey());
+      }
+
+      public DataAccessMode getAccessMode()
+      {
+         return DataAccessMode.DESTROY;
+      }
+
+      public void setValue(NavigationData value)
+      {
+         throw new UnsupportedOperationException();
+      }
+
+      public Class<NavigationData> getValueType()
+      {
+         return NavigationData.class;
+      }
+
+      public NavigationData getValue()
+      {
+         return null;
+      }
+
+      public NavigationKey getKey()
+      {
+         return key;
       }
 
       public void run(POMSession session) throws Exception
       {
          Workspace workspace = session.getWorkspace();
-         Site site = workspace.getSite(siteType, ownerId);
+         Site site = workspace.getSite(siteType, key.getId());
          if (site == null)
          {
-            throw new IllegalArgumentException("Cannot insert page navigation " + owner
-               + " as the corresponding portal " + ownerId + " with type " + siteType + " does not exist");
+            throw new IllegalArgumentException("Cannot insert page navigation "
+               + " as the corresponding portal " + key.getId() + " with type " + siteType + " does not exist");
          }
 
          // Delete descendants
@@ -172,6 +245,12 @@ public abstract class PageNavigationTask extends AbstractPOMTask
          {
             defaultNav.destroy();
          }
+      }
+
+      @Override
+      public String toString()
+      {
+         return "PageNavigation.Remove[ownerType=" + key.getType() + ",ownerId=" + key.getId() + "]";
       }
    }
 }

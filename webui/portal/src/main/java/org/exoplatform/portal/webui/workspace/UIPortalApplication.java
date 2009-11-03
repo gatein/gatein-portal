@@ -423,6 +423,8 @@ public class UIPortalApplication extends UIApplication
    public void processRender(WebuiRequestContext context) throws Exception
    {
       Writer w = context.getWriter();
+
+      //
       if (!context.useAjax())
       {
          super.processRender(context);

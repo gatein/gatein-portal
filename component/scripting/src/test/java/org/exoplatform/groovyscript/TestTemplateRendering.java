@@ -1,0 +1,272 @@
+/*
+ * Copyright (C) 2003-2007 eXo Platform SAS.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation; either version 3
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, see<http://www.gnu.org/licenses/>.
+ */
+package org.exoplatform.groovyscript;
+
+import junit.framework.TestCase;
+import org.exoplatform.commons.utils.CharsetTextEncoder;
+import org.exoplatform.commons.utils.OutputStreamPrinter;
+
+import java.awt.*;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.EmptyStackException;
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
+ * @version $Revision$
+ */
+public class TestTemplateRendering extends TestCase
+{
+
+   public void testOutputStreamWriter() throws Exception
+   {
+      GroovyTemplate template = new GroovyTemplate("a<%='b'%>c<%out.print('d');%>e");
+      ByteArrayOutputStream  baos = new ByteArrayOutputStream();
+      OutputStreamPrinter writer = new OutputStreamPrinter(CharsetTextEncoder.getUTF8(), baos);
+      OutputStreamWriterGroovyPrinter printer = new OutputStreamWriterGroovyPrinter(writer);
+      template.render(printer);
+      printer.close();
+      assertEquals("abcde", baos.toString("UTF-8"));
+   }
+
+   public void testFoo() throws Exception
+   {
+      GroovyTemplate template = new GroovyTemplate("a");
+      String render = template.render();
+      assertEquals("a", render);
+   }
+
+   public void testBar() throws Exception
+   {
+      GroovyTemplate template = new GroovyTemplate("<%='a'%>");
+      String render = template.render();
+      assertEquals("a", render);
+   }
+
+   public void testFooBar() throws Exception
+   {
+      GroovyTemplate template = new GroovyTemplate("a<%='b'%>c");
+      String render = template.render();
+      assertEquals("abc", render);
+   }
+
+   public void testJuu() throws Exception
+   {
+      GroovyTemplate template = new GroovyTemplate("<% out.print(\"a\"); %>");
+      String render = template.render();
+      assertEquals("a", render);
+   }
+
+   public void testLineBreak() throws Exception
+   {
+      GroovyTemplate template = new GroovyTemplate("\n");
+      String render = template.render();
+      assertEquals("\n", render);
+   }
+
+   public void testMultiLine() throws Exception
+   {
+      GroovyTemplate template = new GroovyTemplate(
+         "a\n" +
+         "b\n" +
+         "<%= 'c' %>\n" +
+         "d"
+      );
+      String render = template.render();
+      assertEquals("a\nb\nc\nd", render);
+   }
+
+   public void testIf() throws Exception
+   {
+      GroovyTemplate template = new GroovyTemplate(
+         "a\n" +
+         "<% if (true) {\n %>" +
+         "b\n" +
+         "<% } %>");
+      String s = template.render();
+      assertEquals("a\nb\n", s);
+   }
+
+   public void testLineComment() throws Exception
+   {
+      GroovyTemplate template = new GroovyTemplate("<% // foo %>a\nb");
+      String s = template.render();
+      assertEquals("a\nb", s);
+   }
+
+   public void testContextResolution() throws Exception
+   {
+      GroovyTemplate template = new GroovyTemplate("<%= foo %>");
+      Map<String, String> context = new HashMap<String, String>();
+      context.put("foo", "bar");
+      String s = template.render(context);
+      assertEquals("bar", s);
+   }
+
+   public void testGString() throws Exception
+   {
+      GroovyTemplate template = new GroovyTemplate("$foo");
+      Map<String, String> context = new HashMap<String, String>();
+      context.put("foo", "bar");
+      String s = template.render(context);
+      assertEquals("bar", s);
+   }
+
+   public void testGString2() throws Exception
+   {
+      GroovyTemplate template = new GroovyTemplate("$foo\"");
+      Map<String, String> context = new HashMap<String, String>();
+      context.put("foo", "bar");
+      String s = template.render(context);
+      assertEquals("bar\"", s);
+   }
+
+   public void testQuote() throws Exception
+   {
+      GroovyTemplate template = new GroovyTemplate("\"");
+      String s = template.render();
+      assertEquals("\"", s);
+   }
+
+   public void testFooFoo() throws Exception
+   {
+      InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream("UIPortalApplication.gtmpl");
+      ByteArrayOutputStream baos = new ByteArrayOutputStream();
+      byte[] buffer = new byte[256];
+      for (int l = in.read(buffer);l != -1;l = in.read(buffer))
+      {
+         baos.write(buffer, 0, l);
+      }
+      String gtmpl = baos.toString("UTF-8");
+      GroovyTemplate template = new GroovyTemplate(gtmpl);
+   }
+
+   public void testException() throws Exception
+   {
+      GroovyTemplate template = new GroovyTemplate("<% throw new java.awt.AWTException(); %>");
+      try
+      {
+         template.render();
+         fail();
+      }
+      catch (TemplateRuntimeException e)
+      {
+         assertTrue(e.getCause() instanceof AWTException);
+      }
+   }
+
+   public void testRuntimeException() throws Exception
+   {
+      GroovyTemplate template = new GroovyTemplate("<% throw new java.util.EmptyStackException(); %>");
+      try
+      {
+         template.render();
+         fail();
+      }
+      catch (TemplateRuntimeException e)
+      {
+         assertTrue(e.getCause() instanceof EmptyStackException);
+      }
+   }
+
+   public void testIOException() throws Exception
+   {
+      GroovyTemplate template = new GroovyTemplate("<% throw new java.io.IOException(); %>");
+      try
+      {
+         template.render();
+         fail();
+      }
+      catch (IOException e)
+      {
+      }
+   }
+
+   public void testError() throws Exception
+   {
+      GroovyTemplate template = new GroovyTemplate("<% throw new java.awt.AWTError(); %>");
+      try
+      {
+         template.render();
+         fail();
+      }
+      catch (AWTError e)
+      {
+      }
+   }
+
+   public void testThrowable() throws Exception
+   {
+      GroovyTemplate template = new GroovyTemplate("<% throw new Throwable(); %>");
+      try
+      {
+         template.render();
+         fail();
+      }
+      catch (Throwable t)
+      {
+      }
+   }
+
+   public void testScriptLineNumber() throws Exception
+   {
+      testLineNumber("<%");
+      assertLineNumber(2, "throw new Exception('e')", "<%\nthrow new Exception('e')%>");
+   }
+
+   public void testExpressionLineNumber() throws Exception
+   {
+      testLineNumber("<%=");
+   }
+
+   private void testLineNumber(String prolog) throws Exception
+   {
+      assertLineNumber(1, "throw new Exception('a')", prolog + "throw new Exception('a')%>");
+      assertLineNumber(1, "throw new Exception('b')", "foo" + prolog + "throw new Exception('b')%>");
+      assertLineNumber(2, "throw new Exception('c')", "foo\n" + prolog + "throw new Exception('c')%>");
+      assertLineNumber(1, "throw new Exception('d')", "<%;%>foo" + prolog + "throw new Exception('d')%>");
+   }
+
+   private void assertLineNumber(int expectedLineNumber, String expectedText, String script) throws TemplateCompilationException, IOException
+   {
+      GroovyTemplate template = new GroovyTemplate(script);
+      try
+      {
+         template.render();
+         fail();
+      }
+      catch (TemplateRuntimeException t)
+      {
+         assertEquals(expectedText, t.getText());
+         assertEquals(expectedLineNumber, (Object)t.getLineNumber());
+         StackTraceElement scriptElt = null;
+         for (StackTraceElement elt : t.getCause().getStackTrace())
+         {
+            if (elt.getClassName().equals(template.getClassName()))
+            {
+               scriptElt = elt;
+               break;
+            }
+         }
+         assertEquals(expectedLineNumber, scriptElt.getLineNumber());
+      }
+   }
+
+}

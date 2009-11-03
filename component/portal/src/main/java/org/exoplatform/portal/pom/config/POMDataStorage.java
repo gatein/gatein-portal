@@ -23,17 +23,24 @@ import org.exoplatform.commons.utils.IOUtil;
 import org.exoplatform.commons.utils.LazyPageList;
 import org.exoplatform.container.configuration.ConfigurationManager;
 import org.exoplatform.portal.application.PortletPreferences;
-import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.Query;
 import org.exoplatform.portal.config.model.Application;
 import org.exoplatform.portal.config.model.ApplicationState;
 import org.exoplatform.portal.config.model.Container;
 import org.exoplatform.portal.config.model.ModelChange;
 import org.exoplatform.portal.config.model.ModelObject;
-import org.exoplatform.portal.config.model.Page;
-import org.exoplatform.portal.config.model.PageNavigation;
+import org.exoplatform.portal.pom.config.cache.DataCache;
+import org.exoplatform.portal.pom.config.TaskExecutor;
+import org.exoplatform.portal.pom.config.tasks.DashboardTask;
+import org.exoplatform.portal.pom.data.DashboardData;
+import org.exoplatform.portal.pom.data.ModelDataStorage;
+import org.exoplatform.portal.pom.data.NavigationData;
+import org.exoplatform.portal.pom.data.NavigationKey;
+import org.exoplatform.portal.pom.data.PageData;
 import org.exoplatform.portal.config.model.PersistentApplicationState;
-import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.pom.data.PageKey;
+import org.exoplatform.portal.pom.data.PortalData;
+import org.exoplatform.portal.pom.data.PortalKey;
 import org.exoplatform.portal.config.model.TransientApplicationState;
 import org.exoplatform.portal.pom.config.tasks.PageNavigationTask;
 import org.exoplatform.portal.pom.config.tasks.PageTask;
@@ -41,6 +48,9 @@ import org.exoplatform.portal.pom.config.tasks.PortalConfigTask;
 import org.exoplatform.portal.pom.config.tasks.PortletPreferencesTask;
 import org.exoplatform.portal.pom.config.tasks.PreferencesTask;
 import org.exoplatform.portal.pom.config.tasks.SearchTask;
+import org.exoplatform.services.cache.CacheService;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.jibx.runtime.BindingDirectory;
 import org.jibx.runtime.IBindingFactory;
 import org.jibx.runtime.IUnmarshallingContext;
@@ -54,24 +64,26 @@ import java.util.UUID;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class POMDataStorage implements DataStorage
+public class POMDataStorage implements ModelDataStorage, ModelDemarcation
 {
 
    /** . */
    private final POMSessionManager pomMgr;
 
+   /** . */
    private ConfigurationManager confManager_;
 
-   public POMDataStorage(POMSessionManager pomMgr, ConfigurationManager confManager)
+   /** . */
+   private final Log log = ExoLogger.getLogger(getClass());
+   
+   /** . */
+   private final TaskExecutor executor;
+
+   public POMDataStorage(CacheService cacheService, POMSessionManager pomMgr, ConfigurationManager confManager)
    {
       this.pomMgr = pomMgr;
-      confManager_ = confManager;
-   }
-
-   public <T extends POMTask> T execute(T task) throws Exception
-   {
-      pomMgr.execute(task);
-      return task;
+      this.confManager_ = confManager;
+      this.executor = new DataCache(cacheService, new ExecutorDispatcher(pomMgr));
    }
 
    public POMSessionManager getPOMSessionManager()
@@ -79,85 +91,75 @@ public class POMDataStorage implements DataStorage
       return pomMgr;
    }
 
-   public PortalConfig getPortalConfig(String portalName) throws Exception
+   public PortalData getPortalConfig(PortalKey key) throws Exception
    {
-      return execute(new PortalConfigTask.Load(PortalConfig.PORTAL_TYPE, portalName)).getConfig();
+      return executor.execute(new PortalConfigTask.Load(key)).getConfig();
    }
 
-   public PortalConfig getPortalConfig(String ownerType, String portalName) throws Exception
+   public void create(PortalData config) throws Exception
    {
-      return execute(new PortalConfigTask.Load(ownerType, portalName)).getConfig();
+      executor.execute(new PortalConfigTask.Save(config, true));
    }
 
-   public void create(PortalConfig config) throws Exception
+   public void save(PortalData config) throws Exception
    {
-      execute(new PortalConfigTask.Save(config, true));
+      executor.execute(new PortalConfigTask.Save(config, true));
    }
 
-   public void save(PortalConfig config) throws Exception
+   public void remove(PortalData config) throws Exception
    {
-      execute(new PortalConfigTask.Save(config, true));
+      executor.execute(new PortalConfigTask.Remove(config.getKey()));
    }
 
-   public void remove(PortalConfig config) throws Exception
+   public PageData getPage(PageKey key) throws Exception
    {
-      execute(new PortalConfigTask.Remove(config.getType(), config.getName()));
+      return executor.execute(new PageTask.Load(key)).getPage();
    }
 
-   public Page getPage(String pageId) throws Exception
-   {
-      return execute(new PageTask.Load(pageId)).getPage();
-   }
-
-   public Page clonePage(String pageId, String clonedOwnerType, String clonedOwnerId, String clonedName)
+   public PageData clonePage(PageKey key, PageKey cloneKey)
       throws Exception
    {
-      return execute(new PageTask.Clone(pageId, clonedOwnerType, clonedOwnerId, clonedName, true)).getPage();
+      return executor.execute(new PageTask.Clone(key, cloneKey, true)).getPage();
    }
 
-   public void remove(Page page) throws Exception
+   public void remove(PageData page) throws Exception
    {
-      execute(new PageTask.Remove(page));
+      executor.execute(new PageTask.Remove(page));
    }
 
-   public void create(Page page) throws Exception
+   public void create(PageData page) throws Exception
    {
-      execute(new PageTask.Save(page));
+      executor.execute(new PageTask.Save(page));
    }
 
-   public List<ModelChange> save(Page page) throws Exception
+   public List<ModelChange> save(PageData page) throws Exception
    {
-      return execute(new PageTask.Save(page)).getChanges();
+      return executor.execute(new PageTask.Save(page)).getChanges();
    }
 
-   public PageNavigation getPageNavigation(String fullId) throws Exception
+   public NavigationData getPageNavigation(NavigationKey key) throws Exception
    {
-      return execute(new PageNavigationTask.Load(fullId)).getPageNavigation();
+      return executor.execute(new PageNavigationTask.Load(key)).getPageNavigation();
    }
 
-   public PageNavigation getPageNavigation(String ownerType, String id) throws Exception
+   public void save(NavigationData navigation) throws Exception
    {
-      return execute(new PageNavigationTask.Load(ownerType + "::" + id)).getPageNavigation();
+      executor.execute(new PageNavigationTask.Save(navigation, true));
    }
 
-   public void save(PageNavigation navigation) throws Exception
+   public void create(NavigationData navigation) throws Exception
    {
-      execute(new PageNavigationTask.Save(navigation, true));
+      executor.execute(new PageNavigationTask.Save(navigation, false));
    }
 
-   public void create(PageNavigation navigation) throws Exception
+   public void remove(NavigationData navigation) throws Exception
    {
-      execute(new PageNavigationTask.Save(navigation, false));
-   }
-
-   public void remove(PageNavigation navigation) throws Exception
-   {
-      execute(new PageNavigationTask.Remove(navigation));
+      executor.execute(new PageNavigationTask.Remove(navigation));
    }
 
    public void save(PortletPreferences portletPreferences) throws Exception
    {
-      execute(new PortletPreferencesTask.Save(portletPreferences));
+      executor.execute(new PortletPreferencesTask.Save(portletPreferences));
    }
 
    public <S> S load(ApplicationState<S> state) throws Exception
@@ -171,7 +173,7 @@ public class POMDataStorage implements DataStorage
       else
       {
          PreferencesTask.Load<S> load = new PreferencesTask.Load<S>((PersistentApplicationState<S>)state);
-         execute(load);
+         executor.execute(load);
          return load.getState();
       }
    }
@@ -185,14 +187,14 @@ public class POMDataStorage implements DataStorage
       else
       {
          PreferencesTask.Save<S> save = new PreferencesTask.Save<S>((PersistentApplicationState<S>)state, preferences);
-         execute(save);
+         executor.execute(save);
          return state;
       }
    }
 
    public PortletPreferences getPortletPreferences(String windowID) throws Exception
    {
-      return execute(new PortletPreferencesTask.Load(windowID)).getPreferences();
+      return executor.execute(new PortletPreferencesTask.Load(windowID)).getPreferences();
    }
 
    public <T> LazyPageList<T> find(Query<T> q) throws Exception
@@ -202,26 +204,30 @@ public class POMDataStorage implements DataStorage
 
    public <T> LazyPageList<T> find(Query<T> q, Comparator<T> sortComparator) throws Exception
    {
-      if (Page.class.equals(q.getClassType()))
+      Class<T> type = q.getClassType();
+      if (PageData.class.equals(type))
       {
-         return (LazyPageList<T>)execute(new SearchTask.FindPage((Query<Page>)q)).getResult();
+         return (LazyPageList<T>)executor.execute(new SearchTask.FindPage((Query<PageData>)q)).getResult();
       }
-      else if (PageNavigation.class.equals(q.getClassType()))
+      else if (NavigationData.class.equals(type))
       {
-         return (LazyPageList<T>)execute(new SearchTask.FindNavigation((Query<PageNavigation>)q)).getResult();
+         return (LazyPageList<T>)executor.execute(new SearchTask.FindNavigation((Query<NavigationData>)q)).getResult();
       }
-      else if (PortletPreferences.class.equals(q.getClassType()))
+      else if (PortletPreferences.class.equals(type))
       {
-         return (LazyPageList<T>)execute(new SearchTask.FindPortletPreferences((Query<PortletPreferences>)q))
-            .getResult();
+         return (LazyPageList<T>)executor.execute(new SearchTask.FindPortletPreferences((Query<PortletPreferences>)q)).getResult();
       }
-      else if (PortalConfig.class.equals(q.getClassType()))
+      else if (PortalData.class.equals(type))
       {
-         return (LazyPageList<T>)execute(new SearchTask.FindSite((Query<PortalConfig>)q)).getResult();
+         return (LazyPageList<T>)executor.execute(new SearchTask.FindSite((Query<PortalData>)q)).getResult();
+      }
+      else if (PortalKey.class.equals(type) && "portal".equals(q.getOwnerType()))
+      {
+         return (LazyPageList<T>)executor.execute(new SearchTask.FindSiteKey((Query<PortalKey>)q)).getResult();
       }
       else
       {
-         throw new UnsupportedOperationException();
+         throw new UnsupportedOperationException("Could not perform search on query " + q);
       }
    }
 
@@ -244,6 +250,16 @@ public class POMDataStorage implements DataStorage
       }
    }
 
+   public DashboardData loadDashboard(String dashboardId) throws Exception
+   {
+      return executor.execute(new DashboardTask.Load(dashboardId)).getDashboard();
+   }
+
+   public void saveDashboard(DashboardData dashboard) throws Exception
+   {
+      executor.execute(new DashboardTask.Save(dashboard));
+   }
+
    public Container getSharedLayout() throws Exception
    {
       String path = "war:/conf/portal/portal/sharedlayout.xml";
@@ -254,5 +270,15 @@ public class POMDataStorage implements DataStorage
       Container container = Container.class.cast(uctx.unmarshalDocument(is, null));
       generateStorageName(container);
       return container;
+   }
+
+   public void begin()
+   {
+      getPOMSessionManager().openSession();
+   }
+
+   public void end(boolean save)
+   {
+      getPOMSessionManager().closeSession(save);
    }
 }

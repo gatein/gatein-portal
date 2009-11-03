@@ -19,13 +19,15 @@
 
 package org.exoplatform.portal.pom.config.tasks;
 
-import static org.exoplatform.portal.pom.config.Utils.split;
+import org.exoplatform.portal.pom.config.cache.DataAccessMode;
+import org.exoplatform.portal.pom.config.cache.CacheableDataTask;
+import org.exoplatform.portal.pom.data.Mapper;
+import org.exoplatform.portal.pom.data.PageData;
 
-import org.exoplatform.portal.config.model.Mapper;
 import org.exoplatform.portal.config.model.ModelChange;
-import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.pom.config.AbstractPOMTask;
 import org.exoplatform.portal.pom.config.POMSession;
+import org.exoplatform.portal.pom.data.PageKey;
 import org.gatein.mop.api.Attributes;
 import org.gatein.mop.api.content.ContentType;
 import org.gatein.mop.api.content.Customization;
@@ -47,9 +49,6 @@ public abstract class PageTask extends AbstractPOMTask
 {
 
    /** . */
-   protected final String pageId;
-
-   /** . */
    protected final String ownerType;
 
    /** . */
@@ -59,28 +58,17 @@ public abstract class PageTask extends AbstractPOMTask
    protected final String name;
 
    /** . */
+   protected final PageKey key;
+
+   /** . */
    protected final ObjectType<? extends Site> siteType;
 
-   protected PageTask(String pageId)
+   protected PageTask(PageKey key)
    {
-      String[] chunks = split("::", pageId);
-
-      //
-      if (chunks.length != 3)
-      {
-         throw new IllegalArgumentException("Wrong pageId format should be ownerType::ownerId:name was " + pageId);
-      }
-
-      //
-      String ownerType = chunks[0];
-      String ownerId = chunks[1];
-      String name = chunks[2];
-
-      //
-      this.pageId = pageId;
-      this.ownerType = ownerType;
-      this.ownerId = ownerId;
-      this.name = name;
+      this.key = key;
+      this.ownerType = key.getType();
+      this.ownerId = key.getId();
+      this.name = key.getName();
       this.siteType = Mapper.parseSiteType(ownerType);
    }
 
@@ -100,19 +88,19 @@ public abstract class PageTask extends AbstractPOMTask
       private final String cloneName;
 
       /** . */
-      private Page page;
+      private PageData page;
 
       /** . */
       private boolean deep;
 
-      public Clone(String pageId, String cloneOwnerType, String cloneOwnerId, String cloneName, boolean deep)
+      public Clone(PageKey key, PageKey cloneKey, boolean deep)
       {
-         super(pageId);
+         super(key);
 
          //
-         this.cloneOwnerType = cloneOwnerType;
-         this.cloneOwnerId = cloneOwnerId;
-         this.cloneName = cloneName;
+         this.cloneOwnerType = cloneKey.getType();
+         this.cloneOwnerId = cloneKey.getId();
+         this.cloneName = cloneKey.getName();
          this.deep = deep;
          this.cloneSiteType = Mapper.parseSiteType(cloneOwnerType);
       }
@@ -235,18 +223,50 @@ public abstract class PageTask extends AbstractPOMTask
          }
       }
 
-      public Page getPage()
+      public PageData getPage()
       {
          return page;
       }
+
+      @Override
+      public String toString()
+      {
+         return "PageTask.Clone[srcOwnerType=" + ownerType + ",srcOwnerId=" + ownerId + "srcName," + name +
+            "dstOwnerType=" + cloneOwnerType + ",dstOwnerId=" + cloneOwnerId + "dstName," + cloneName + "]";
+      }
    }
 
-   public static class Remove extends PageTask
+   public static class Remove extends PageTask implements CacheableDataTask<PageKey, PageData>
    {
 
-      public Remove(Page page)
+      public Remove(PageData page)
       {
-         super(page.getPageId());
+         super(page.getKey());
+      }
+
+      public DataAccessMode getAccessMode()
+      {
+         return DataAccessMode.DESTROY;
+      }
+
+      public void setValue(PageData value)
+      {
+         throw new UnsupportedOperationException();
+      }
+
+      public Class<PageData> getValueType()
+      {
+         return PageData.class;
+      }
+
+      public PageData getValue()
+      {
+         return null;
+      }
+
+      public PageKey getKey()
+      {
+         return key;
       }
 
       public void run(POMSession session)
@@ -271,23 +291,54 @@ public abstract class PageTask extends AbstractPOMTask
             page.destroy();
          }
       }
+
+      @Override
+      public String toString()
+      {
+         return "PageTask.Remove[ownerType=" + ownerType + ",ownerId=" + ownerId + "name," + name + "]";
+      }
    }
 
-   public static class Save extends PageTask
+   public static class Save extends PageTask implements CacheableDataTask<PageKey, PageData>
    {
 
       /** . */
-      private final Page page;
+      private final PageData page;
 
       /** . */
       private List<ModelChange> changes;
 
-      public Save(Page page)
+      public Save(PageData page)
       {
-         super(page.getPageId());
+         super(page.getKey());
 
          //
          this.page = page;
+      }
+
+      public DataAccessMode getAccessMode()
+      {
+         return page.getStorageId() != null ? DataAccessMode.WRITE : DataAccessMode.CREATE;
+      }
+
+      public void setValue(PageData value)
+      {
+         throw new UnsupportedOperationException();
+      }
+
+      public Class<PageData> getValueType()
+      {
+         return PageData.class;
+      }
+
+      public PageData getValue()
+      {
+         return page;
+      }
+
+      public PageKey getKey()
+      {
+         return key;
       }
 
       public void run(POMSession session) throws Exception
@@ -296,7 +347,7 @@ public abstract class PageTask extends AbstractPOMTask
          Site site = workspace.getSite(siteType, ownerId);
          if (site == null)
          {
-            throw new IllegalArgumentException("Cannot insert page " + pageId + " as the corresponding portal "
+            throw new IllegalArgumentException("Cannot insert page " + page + " as the corresponding portal "
                + ownerId + " with type " + siteType + " does not exist");
          }
 
@@ -309,20 +360,51 @@ public abstract class PageTask extends AbstractPOMTask
       {
          return changes;
       }
+
+      @Override
+      public String toString()
+      {
+         return "PageTask.Save[ownerType=" + ownerType + ",ownerId=" + ownerId + "name," + name + "]";
+      }
    }
 
-   public static class Load extends PageTask
+   public static class Load extends PageTask implements CacheableDataTask<PageKey, PageData>
    {
 
       /** . */
-      private Page page;
+      private PageData page;
 
-      public Load(String pageId)
+      public Load(PageKey key)
       {
-         super(pageId);
+         super(key);
       }
 
-      public Page getPage()
+      public PageData getPage()
+      {
+         return page;
+      }
+
+      public DataAccessMode getAccessMode()
+      {
+         return DataAccessMode.READ;
+      }
+
+      public PageKey getKey()
+      {
+         return key;
+      }
+
+      public Class<PageData> getValueType()
+      {
+         return PageData.class;
+      }
+
+      public void setValue(PageData value)
+      {
+         page = value;
+      }
+
+      public PageData getValue()
       {
          return page;
       }
@@ -341,6 +423,12 @@ public abstract class PageTask extends AbstractPOMTask
                this.page = new Mapper(session).load(page);
             }
          }
+      }
+
+      @Override
+      public String toString()
+      {
+         return "PageTask.Load[ownerType=" + ownerType + ",ownerId=" + ownerId + "name," + name + "]";
       }
    }
 }

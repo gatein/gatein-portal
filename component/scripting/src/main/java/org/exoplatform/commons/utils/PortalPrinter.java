@@ -19,51 +19,22 @@
 
 package org.exoplatform.commons.utils;
 
-import java.io.IOException;
 import java.io.OutputStream;
 
 /**
+ * The portal printer convert char to bytes based on a charset encoder.
+ *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
 public class PortalPrinter extends OutputStreamPrinter
 {
 
-   public PortalPrinter(TextEncoder encoder, OutputStream out) throws IllegalArgumentException
-   {
-      super(encoder, out);
-   }
+   /** The optimized encoder. */
+   private static final TextEncoder encoder = new CharsetTextEncoder(new TableCharEncoder(CharsetCharEncoder.getUTF8()));
 
-   public void println()
+   public PortalPrinter(OutputStream out, boolean flushOnClose, int bufferSize) throws IllegalArgumentException
    {
-      try
-      {
-         write('\n');
-      }
-      catch (IOException e)
-      {
-      }
-   }
-
-   public void print(Object o)
-   {
-      try
-      {
-         if (o == null)
-         {
-            write("null");
-         }
-         else if (o instanceof Text)
-         {
-            ((Text)o).writeTo(this);
-         }
-         else
-         {
-            write(String.valueOf(o));
-         }
-      }
-      catch (IOException e)
-      {
-      }
+      super(encoder, out, flushOnClose, bufferSize);
    }
 }

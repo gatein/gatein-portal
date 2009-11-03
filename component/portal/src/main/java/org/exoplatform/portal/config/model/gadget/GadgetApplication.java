@@ -20,6 +20,7 @@
 package org.exoplatform.portal.config.model.gadget;
 
 import org.exoplatform.portal.config.model.Application;
+import org.exoplatform.portal.pom.data.ApplicationData;
 import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.pom.spi.gadget.Gadget;
 
@@ -29,6 +30,11 @@ import org.exoplatform.portal.pom.spi.gadget.Gadget;
  */
 public class GadgetApplication extends Application<Gadget, GadgetId>
 {
+
+   public GadgetApplication(ApplicationData<Gadget, GadgetId> data)
+   {
+      super(data);
+   }
 
    public GadgetApplication(String storageId, String gadgetName)
    {

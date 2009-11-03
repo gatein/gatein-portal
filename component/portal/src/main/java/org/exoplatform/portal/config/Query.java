@@ -55,6 +55,15 @@ public class Query<T>
       title_ = title;
    }
 
+   public Query(Query<?> that, Class<T> clazz)
+   {
+      ownerType_ = that.ownerType_;
+      ownerId_ = that.ownerId_;
+      classType_ = clazz;
+      name_ = that.name_;
+      title_ = that.title_;
+   }
+
    public String getOwnerType()
    {
       return ownerType_;
@@ -105,4 +114,35 @@ public class Query<T>
       this.title_ = title_;
    }
 
+   @Override
+   public String toString()
+   {
+      StringBuilder builder = new StringBuilder("Query[");
+      if (classType_ != null)
+      {
+         builder.append("class=").append(classType_.getSimpleName()).append(",");
+      }
+      if (ownerType_ != null)
+      {
+         builder.append("ownerType=").append(ownerType_).append(",");
+      }
+      if (ownerId_ != null)
+      {
+         builder.append("ownerId=").append(ownerId_).append(",");
+      }
+      if (name_ != null)
+      {
+         builder.append("name=").append(name_).append(",");
+      }
+      if (title_ != null)
+      {
+         builder.append("title=").append(title_).append(",");
+      }
+      if (builder.charAt(builder.length() - 1) == ',')
+      {
+         builder.setLength(builder.length() - 1);
+      }
+      builder.append(']');
+      return builder.toString();
+   }
 }

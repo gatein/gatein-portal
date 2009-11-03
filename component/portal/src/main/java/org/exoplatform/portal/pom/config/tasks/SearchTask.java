@@ -23,10 +23,11 @@ import org.exoplatform.commons.utils.LazyPageList;
 import org.exoplatform.commons.utils.ListAccess;
 import org.exoplatform.portal.application.PortletPreferences;
 import org.exoplatform.portal.config.Query;
-import org.exoplatform.portal.config.model.Mapper;
-import org.exoplatform.portal.config.model.Page;
-import org.exoplatform.portal.config.model.PageNavigation;
-import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.pom.data.Mapper;
+import org.exoplatform.portal.pom.data.NavigationData;
+import org.exoplatform.portal.pom.data.PageData;
+import org.exoplatform.portal.pom.data.PortalData;
+import org.exoplatform.portal.pom.data.PortalKey;
 import org.exoplatform.portal.pom.config.AbstractPOMTask;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.gatein.mop.api.workspace.Navigation;
@@ -46,29 +47,6 @@ import java.util.Iterator;
  */
 public abstract class SearchTask<T> extends AbstractPOMTask
 {
-
-   /*
-   new Query<Page>(PortalConfig.GROUP_TYPE, groupId,  Page.class);
-   new Query<Page>(PortalConfig.GROUP_TYPE, groupId,  Page.class);
-   new Query<Page>(PortalConfig.USER_TYPE, userName, Page.class);
-   new Query<Page>(PortalConfig.USER_TYPE, userName, Page.class);
-   new Query<Page>(PortalConfig.PORTAL_TYPE, portalName, null, null, Page.class);
-   new Query<Page>(null, null, null, null, Page.class);
-
-   new Query<PortletPreferences>(PortalConfig.GROUP_TYPE, groupId, PortletPreferences.class);
-   new Query<PortletPreferences>(PortalConfig.GROUP_TYPE, groupId, PortletPreferences.class);
-   new Query<PortletPreferences>(PortalConfig.USER_TYPE, userName, PortletPreferences.class);
-   new Query<PortletPreferences>(PortalConfig.PORTAL_TYPE, portalName, null, null, PortletPreferences.class);
-
-   new Query<PageNavigation>(PortalConfig.GROUP_TYPE, null, PageNavigation.class);
-   new Query<PageNavigation>(PortalConfig.GROUP_TYPE, null, PageNavigation.class);
-   new Query<PageNavigation>(PortalConfig.GROUP_TYPE, null, PageNavigation.class);
-
-   new Query<PortalConfig>(null, null, null, null, PortalConfig.class);
-   new Query<PortalConfig>(null, null, null, null, PortalConfig.class);
-   new Query<PortalConfig>(null, null, null, null, PortalConfig.class);
-   new Query<PortalConfig>(null, null, null, null, PortalConfig.class);
-   */
 
    /** . */
    protected final Query<T> q;
@@ -153,10 +131,10 @@ public abstract class SearchTask<T> extends AbstractPOMTask
 
    }
 
-   public static class FindPage extends FindSiteObject<org.gatein.mop.api.workspace.Page, Page>
+   public static class FindPage extends FindSiteObject<org.gatein.mop.api.workspace.Page, PageData>
    {
 
-      public FindPage(Query<Page> pageQuery)
+      public FindPage(Query<PageData> pageQuery)
       {
          super(pageQuery);
       }
@@ -167,21 +145,21 @@ public abstract class SearchTask<T> extends AbstractPOMTask
          return session.findObjects(ObjectType.PAGE, siteType, q.getOwnerId(), q.getTitle());
       }
 
-      protected Page[] createT(int length)
+      protected PageData[] createT(int length)
       {
-         return new Page[length];
+         return new PageData[length];
       }
 
-      protected Page loadT(POMSession session, org.gatein.mop.api.workspace.Page w)
+      protected PageData loadT(POMSession session, org.gatein.mop.api.workspace.Page w)
       {
          return new Mapper(session).load(w);
       }
    }
 
-   public static class FindNavigation extends FindSiteObject<Navigation, PageNavigation>
+   public static class FindNavigation extends FindSiteObject<Navigation, NavigationData>
    {
 
-      public FindNavigation(Query<PageNavigation> pageQuery)
+      public FindNavigation(Query<NavigationData> pageQuery)
       {
          super(pageQuery);
       }
@@ -192,12 +170,12 @@ public abstract class SearchTask<T> extends AbstractPOMTask
          return session.findObjects(ObjectType.NAVIGATION, siteType, q.getOwnerId(), q.getTitle());
       }
 
-      protected PageNavigation[] createT(int length)
+      protected NavigationData[] createT(int length)
       {
-         return new PageNavigation[length];
+         return new NavigationData[length];
       }
 
-      protected PageNavigation loadT(POMSession session, Navigation w)
+      protected NavigationData loadT(POMSession session, Navigation w)
       {
          return new Mapper(session).load(w);
       }
@@ -230,10 +208,10 @@ public abstract class SearchTask<T> extends AbstractPOMTask
       }
    }
 
-   public static class FindSite extends SearchTask<PortalConfig>
+   public static class FindSite extends SearchTask<PortalData>
    {
 
-      public FindSite(Query<PortalConfig> siteQuery)
+      public FindSite(Query<PortalData> siteQuery)
       {
          super(siteQuery);
       }
@@ -241,15 +219,16 @@ public abstract class SearchTask<T> extends AbstractPOMTask
       public void run(final POMSession session) throws Exception
       {
          Workspace workspace = session.getWorkspace();
-         final Collection<? extends Site> portals = workspace.getSites(ObjectType.PORTAL_SITE);
-
-         ListAccess<PortalConfig> la = new ListAccess<PortalConfig>()
+         String ownerType = q.getOwnerType();
+         ObjectType<Site> siteType = ownerType == null ? ObjectType.PORTAL_SITE : Mapper.parseSiteType(ownerType);
+         final Collection<? extends Site> portals = workspace.getSites(siteType);
+         ListAccess<PortalData> la = new ListAccess<PortalData>()
          {
-            public PortalConfig[] load(int index, int length) throws Exception, IllegalArgumentException
+            public PortalData[] load(int index, int length) throws Exception, IllegalArgumentException
             {
                Iterator<? extends Site> iterator = portals.iterator();
                Mapper mapper = new Mapper(session);
-               PortalConfig[] result = new PortalConfig[length];
+               PortalData[] result = new PortalData[length];
                for (int i = 0; i < length; i++)
                {
                   result[i] = mapper.load(iterator.next());
@@ -262,7 +241,42 @@ public abstract class SearchTask<T> extends AbstractPOMTask
                return portals.size();
             }
          };
-         result = new LazyPageList<PortalConfig>(la, 10);
+         result = new LazyPageList<PortalData>(la, 10);
+      }
+   }
+
+   public static class FindSiteKey extends SearchTask<PortalKey>
+   {
+
+      public FindSiteKey(Query<PortalKey> siteQuery)
+      {
+         super(siteQuery);
+      }
+
+      public void run(final POMSession session) throws Exception
+      {
+         Workspace workspace = session.getWorkspace();
+         final Collection<? extends Site> portals = workspace.getSites(ObjectType.PORTAL_SITE);
+         ListAccess<PortalKey> la = new ListAccess<PortalKey>()
+         {
+            public PortalKey[] load(int index, int length) throws Exception, IllegalArgumentException
+            {
+               Iterator<? extends Site> iterator = portals.iterator();
+               PortalKey[] result = new PortalKey[length];
+               for (int i = 0; i < length; i++)
+               {
+                  Site site = iterator.next();
+                  result[i] = new PortalKey("portal", site.getName());
+               }
+               return result;
+            }
+
+            public int getSize() throws Exception
+            {
+               return portals.size();
+            }
+         };
+         result = new LazyPageList<PortalKey>(la, 10);
       }
    }
 }

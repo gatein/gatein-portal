@@ -23,6 +23,7 @@ import org.exoplatform.commons.utils.LazyPageList;
 import org.exoplatform.portal.application.PortletPreferences;
 import org.exoplatform.portal.config.model.ApplicationState;
 import org.exoplatform.portal.config.model.Container;
+import org.exoplatform.portal.config.model.Dashboard;
 import org.exoplatform.portal.config.model.ModelChange;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
@@ -41,8 +42,6 @@ import java.util.List;
  */
 public interface DataStorage
 {
-
-   public <T extends POMTask> T execute(T task) throws Exception;
 
    public void create(PortalConfig config) throws Exception;
 
@@ -109,4 +108,8 @@ public interface DataStorage
    public <T> LazyPageList<T> find(Query<T> q, Comparator<T> sortComparator) throws Exception;
 
    public Container getSharedLayout() throws Exception;
+
+   public Dashboard loadDashboard(String dashboardId) throws Exception;
+
+   public void saveDashboard(Dashboard dashboard) throws Exception;
 }

@@ -20,6 +20,7 @@
 package org.exoplatform.portal.config.model.wsrp;
 
 import org.exoplatform.portal.config.model.Application;
+import org.exoplatform.portal.pom.data.ApplicationData;
 import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.pom.spi.wsrp.WSRPState;
 
@@ -29,6 +30,11 @@ import org.exoplatform.portal.pom.spi.wsrp.WSRPState;
  */
 public class WSRPApplication extends Application<WSRPState, WSRPId>
 {
+
+   public WSRPApplication(ApplicationData<WSRPState, WSRPId> data)
+   {
+      super(data);
+   }
 
    public WSRPApplication(String storageId, WSRPId id)
    {

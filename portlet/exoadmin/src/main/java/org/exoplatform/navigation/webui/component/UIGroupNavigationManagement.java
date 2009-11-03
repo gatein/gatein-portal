@@ -22,11 +22,9 @@ package org.exoplatform.navigation.webui.component;
 import org.exoplatform.commons.utils.ObjectPageList;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.DataStorage;
-import org.exoplatform.portal.config.Query;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.PageNavigation;
-import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.webui.navigation.UIAddGroupNavigation;
 import org.exoplatform.portal.webui.navigation.UINavigationManagement;
 import org.exoplatform.portal.webui.navigation.UINavigationNodeSelector;
@@ -54,7 +52,6 @@ import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -96,26 +93,8 @@ public class UIGroupNavigationManagement extends UIContainer
 
    public void loadNavigations() throws Exception
    {
-      navigations = new ArrayList<PageNavigation>();
-      UserACL userACL = getApplicationComponent(UserACL.class);
-      DataStorage dataStorage = getApplicationComponent(DataStorage.class);
-      // load all navigation that user has edit permission
-      Query<PageNavigation> query = new Query<PageNavigation>(PortalConfig.GROUP_TYPE, null, PageNavigation.class);
-      List<PageNavigation> navis = dataStorage.find(query, new Comparator<PageNavigation>()
-      {
-         public int compare(PageNavigation pconfig1, PageNavigation pconfig2)
-         {
-            return pconfig1.getOwnerId().compareTo(pconfig2.getOwnerId());
-         }
-      }).getAll();
-      for (PageNavigation ele : navis)
-      {
-         if (userACL.hasEditPermission(ele))
-         {
-            navigations.add(ele);
-         }
-      }
-
+      UserPortalConfigService userPortalConfigService = getApplicationComponent(UserPortalConfigService.class);
+      navigations = userPortalConfigService.loadEditableNavigations();
       UIVirtualList virtualList = getChild(UIVirtualList.class);
       virtualList.dataBind(new ObjectPageList<PageNavigation>(navigations, navigations.size()));
    }

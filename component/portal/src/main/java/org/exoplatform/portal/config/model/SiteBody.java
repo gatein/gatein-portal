@@ -19,6 +19,10 @@
 
 package org.exoplatform.portal.config.model;
 
+import org.exoplatform.portal.pom.data.BodyData;
+import org.exoplatform.portal.pom.data.BodyType;
+import org.exoplatform.portal.pom.data.ModelData;
+
 public class SiteBody extends ModelObject
 {
 
@@ -29,5 +33,11 @@ public class SiteBody extends ModelObject
 
    public SiteBody()
    {
+   }
+
+   @Override
+   public ModelData build()
+   {
+      return new BodyData(storageId, BodyType.SITE);
    }
 }

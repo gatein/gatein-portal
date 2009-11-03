@@ -304,6 +304,7 @@ public class PortalDataMapper
 
    private static void toUIContainer(UIContainer uiContainer, Container model, boolean dashboard) throws Exception
    {
+      uiContainer.setStorageId(model.getStorageId());
       uiContainer.setId(model.getId());
       uiContainer.setWidth(model.getWidth());
       uiContainer.setHeight(model.getHeight());
@@ -426,7 +427,6 @@ public class PortalDataMapper
          Container container = (Container)model;
          UIContainer uiTempContainer =
             uiContainer.createUIComponent(context, UIContainer.class, container.getFactoryId(), null);
-         uiTempContainer.setStorageId(container.getStorageId());
          toUIContainer(uiTempContainer, (Container)model, dashboard);
          uiComponent = uiTempContainer;
       }

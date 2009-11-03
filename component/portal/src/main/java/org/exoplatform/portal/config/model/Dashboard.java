@@ -19,12 +19,23 @@
 
 package org.exoplatform.portal.config.model;
 
+import org.exoplatform.portal.pom.config.Utils;
+import org.exoplatform.portal.pom.data.ComponentData;
+import org.exoplatform.portal.pom.data.DashboardData;
+
+import java.util.List;
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
 public class Dashboard extends Container
 {
+
+   public Dashboard(DashboardData data)
+   {
+      super(data);
+   }
 
    public Dashboard()
    {
@@ -33,5 +44,26 @@ public class Dashboard extends Container
    public Dashboard(String storageId)
    {
       super(storageId);
+   }
+
+   @Override
+   public DashboardData build()
+   {
+      List<ComponentData> children = buildChildren();
+      return new DashboardData(
+         storageId,
+         id,
+         name,
+         icon,
+         decorator,
+         template,
+         factoryId,
+         title,
+         description,
+         width,
+         height,
+         Utils.safeImmutableList(accessPermissions),
+         children
+      );
    }
 }

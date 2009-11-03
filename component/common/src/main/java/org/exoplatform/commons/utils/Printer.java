@@ -19,53 +19,17 @@
 
 package org.exoplatform.commons.utils;
 
-import java.io.IOException;
 import java.io.Writer;
 
 /**
+ * Extend the writer class by providing various method for printing text.
+ *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
 public abstract class Printer extends Writer
 {
-
    public Printer()
    {
-   }
-
-   public void println(Object o)
-   {
-      print(o);
-      println();
-   }
-
-   public void println()
-   {
-      try
-      {
-         write('\n');
-      }
-      catch (IOException ignore)
-      {
-      }
-   }
-
-   public void print(Object o)
-   {
-      try
-      {
-         if (o instanceof Text)
-         {
-            ((Text)o).writeTo(this);
-         }
-         else
-         {
-            String s = String.valueOf(o);
-            write(s);
-         }
-      }
-      catch (IOException ignore)
-      {
-      }
    }
 }

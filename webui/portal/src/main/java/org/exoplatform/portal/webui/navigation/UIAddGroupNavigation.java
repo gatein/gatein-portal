@@ -22,7 +22,6 @@ package org.exoplatform.portal.webui.navigation;
 import org.exoplatform.commons.utils.ObjectPageList;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.DataStorage;
-import org.exoplatform.portal.config.Query;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.PageNavigation;
@@ -50,6 +49,7 @@ import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 /*
  * Created by The eXo Platform SAS
@@ -102,24 +102,14 @@ public class UIAddGroupNavigation extends UIContainer
          listGroup = dataService.getMakableNavigations(pContext.getRemoteUser());
       }
 
-      List<PageNavigation> navigations = new ArrayList<PageNavigation>();
-      DataStorage dataStorage = getApplicationComponent(DataStorage.class);
-      // get all group navigation that user have edit permission
-      Query<PageNavigation> query = new Query<PageNavigation>(PortalConfig.GROUP_TYPE, null, PageNavigation.class);
-      // filter, only get group don't have navigation
       if (listGroup == null)
       {
          listGroup = new ArrayList<String>();
       }
 
-      List<PageNavigation> navis = dataStorage.find(query).getAll();
-      for (PageNavigation ele : navis)
-      {
-         if (listGroup.contains(ele.getOwnerId()))
-         {
-            listGroup.remove(ele.getOwnerId());
-         }
-      }
+      UserPortalConfigService configService = getApplicationComponent(UserPortalConfigService.class);
+      Set<String> groupIdsWithNotNavigation = configService.findGroupWithoutNavigation();
+      listGroup.removeAll(groupIdsWithNotNavigation);
 
       UIVirtualList virtualList = getChild(UIVirtualList.class);
       virtualList.dataBind(new ObjectPageList<String>(listGroup, listGroup.size()));

@@ -19,8 +19,8 @@
 
 package org.exoplatform.portal.pom.config.tasks;
 
-import org.exoplatform.portal.config.model.Dashboard;
-import org.exoplatform.portal.config.model.Mapper;
+import org.exoplatform.portal.pom.data.DashboardData;
+import org.exoplatform.portal.pom.data.Mapper;
 import org.exoplatform.portal.pom.config.AbstractPOMTask;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.gatein.mop.api.workspace.ObjectType;
@@ -40,7 +40,7 @@ public abstract class DashboardTask extends AbstractPOMTask
       protected final String storageId;
 
       /** . */
-      protected Dashboard dashboard;
+      protected DashboardData dashboard;
 
       public Load(String storageId)
       {
@@ -58,9 +58,15 @@ public abstract class DashboardTask extends AbstractPOMTask
          }
       }
 
-      public Dashboard getDashboard()
+      public DashboardData getDashboard()
       {
          return dashboard;
+      }
+
+      @Override
+      public String toString()
+      {
+         return "DashboardTask.Load[id=" + storageId + "]";
       }
    }
 
@@ -68,10 +74,18 @@ public abstract class DashboardTask extends AbstractPOMTask
    {
 
       /** The dashboard object. */
-      protected final Dashboard dashboard;
+      protected final DashboardData dashboard;
 
-      public Save(Dashboard dashboard)
+      public Save(DashboardData dashboard)
       {
+         if (dashboard == null)
+         {
+            throw new NullPointerException("No null dashboard accepted");
+         }
+         if (dashboard.getStorageId() == null)
+         {
+            throw new IllegalArgumentException("No dasbhoard with null storage id accepted");
+         }
          this.dashboard = dashboard;
       }
 
@@ -95,6 +109,12 @@ public abstract class DashboardTask extends AbstractPOMTask
 
          //
          mapper.saveDashboard(dashboard, container);
+      }
+
+      @Override
+      public String toString()
+      {
+         return "DashboardTask.Save[id=" + dashboard.getStorageId() + "]";
       }
    }
 }

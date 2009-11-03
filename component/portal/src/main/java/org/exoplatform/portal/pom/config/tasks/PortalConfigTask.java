@@ -20,10 +20,13 @@
 package org.exoplatform.portal.pom.config.tasks;
 
 import org.exoplatform.portal.application.PortletPreferences;
-import org.exoplatform.portal.config.model.Mapper;
-import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.pom.config.cache.DataAccessMode;
+import org.exoplatform.portal.pom.config.cache.CacheableDataTask;
+import org.exoplatform.portal.pom.data.Mapper;
+import org.exoplatform.portal.pom.data.PortalData;
 import org.exoplatform.portal.pom.config.AbstractPOMTask;
 import org.exoplatform.portal.pom.config.POMSession;
+import org.exoplatform.portal.pom.data.PortalKey;
 import org.gatein.mop.api.workspace.ObjectType;
 import org.gatein.mop.api.workspace.Page;
 import org.gatein.mop.api.workspace.Site;
@@ -37,62 +40,118 @@ public abstract class PortalConfigTask extends AbstractPOMTask
 {
 
    /** . */
-   protected final String name;
+   protected final PortalKey key;
 
    /** . */
    protected final ObjectType<? extends Site> type;
 
-   protected PortalConfigTask(String type, String name)
+   protected PortalConfigTask(PortalKey key)
    {
-      this.type = Mapper.parseSiteType(type);
-      this.name = name;
+      this.key = key;
+      this.type = Mapper.parseSiteType(key.getType());
    }
 
-   public static class Remove extends PortalConfigTask
+   public static class Remove extends PortalConfigTask implements CacheableDataTask<PortalKey, PortalData>
    {
 
-      public Remove(String type, String name)
+      public Remove(PortalKey key)
       {
-         super(type, name);
+         super(key);
+      }
+
+      public DataAccessMode getAccessMode()
+      {
+         return DataAccessMode.DESTROY;
+      }
+
+      public Class<PortalData> getValueType()
+      {
+         return PortalData.class;
+      }
+
+      public PortalKey getKey()
+      {
+         return key;
+      }
+
+      public void setValue(PortalData value)
+      {
+         throw new UnsupportedOperationException();
+      }
+
+      public PortalData getValue()
+      {
+         return null;
       }
 
       public void run(POMSession session)
       {
          Workspace workspace = session.getWorkspace();
-         Site site = workspace.getSite(type, name);
+         Site site = workspace.getSite(type, key.getId());
          if (site == null)
          {
-            throw new NullPointerException("Could not remove non existing portal " + name);
+            throw new NullPointerException("Could not remove non existing portal " + key.getId());
          }
          else
          {
             site.destroy();
          }
       }
+
+      @Override
+      public String toString()
+      {
+         return "PortalConfig.Remove[ownerType=" + key.getType() + ",ownerId=" + key.getId() + "]";
+      }
    }
 
-   public static class Save extends PortalConfigTask
+   public static class Save extends PortalConfigTask implements CacheableDataTask<PortalKey, PortalData>
    {
 
       /** . */
-      private final PortalConfig config;
+      private final PortalData config;
 
       /** . */
       private boolean overwrite;
 
-      public Save(PortalConfig config, boolean overwrite)
+      public Save(PortalData config, boolean overwrite)
       {
-         super(config.getType(), config.getName());
+         super(config.getKey());
 
          //
          this.config = config;
          this.overwrite = overwrite;
       }
 
+      public DataAccessMode getAccessMode()
+      {
+         return config.getStorageId() != null ? DataAccessMode.WRITE : DataAccessMode.CREATE;
+      }
+
+      public void setValue(PortalData value)
+      {
+         throw new UnsupportedOperationException();
+      }
+
+      public Class<PortalData> getValueType()
+      {
+         return PortalData.class;
+      }
+
+      public PortalData getValue()
+      {
+         return config;
+      }
+
+      public PortalKey getKey()
+      {
+         return key;
+      }
+
       public void run(POMSession session) throws Exception
       {
          Workspace workspace = session.getWorkspace();
-         Site site = workspace.getSite(type, name);
+         Site site = workspace.getSite(type, key.getId());
          if (site != null)
          {
             if (!overwrite)
@@ -115,20 +174,51 @@ public abstract class PortalConfigTask extends AbstractPOMTask
          }
          new Mapper(session).save(config, site);
       }
+
+      @Override
+      public String toString()
+      {
+         return "PortalConfig.Save[ownerType=" + key.getType() + ",ownerId=" + key.getId() + "]";
+      }
    }
 
-   public static class Load extends PortalConfigTask
+   public static class Load extends PortalConfigTask implements CacheableDataTask<PortalKey, PortalData>
    {
 
       /** . */
-      private PortalConfig config;
+      private PortalData config;
 
-      public Load(String type, String name)
+      public Load(PortalKey key)
       {
-         super(type, name);
+         super(key);
       }
 
-      public PortalConfig getConfig()
+      public DataAccessMode getAccessMode()
+      {
+         return DataAccessMode.READ;
+      }
+
+      public PortalKey getKey()
+      {
+         return key;
+      }
+
+      public void setValue(PortalData value)
+      {
+         config = value;
+      }
+
+      public Class<PortalData> getValueType()
+      {
+         return PortalData.class;
+      }
+
+      public PortalData getValue()
+      {
+         return config;
+      }
+
+      public PortalData getConfig()
       {
          return config;
       }
@@ -136,11 +226,17 @@ public abstract class PortalConfigTask extends AbstractPOMTask
       public void run(POMSession session)
       {
          Workspace workspace = session.getWorkspace();
-         Site site = workspace.getSite(type, name);
+         Site site = workspace.getSite(type, key.getId());
          if (site != null)
          {
             this.config = new Mapper(session).load(site);
          }
+      }
+
+      @Override
+      public String toString()
+      {
+         return "PortalConfig.Load[ownerType=" + key.getType() + ",ownerId=" + key.getId() + "]";
       }
    }
 }

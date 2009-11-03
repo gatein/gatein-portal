@@ -75,7 +75,8 @@ public class PortletRequestContext extends WebuiRequestContext
    {
       request_ = req;
       response_ = res;
-      writer_ = HtmlValidator.DEBUG_MODE ? new WriterPrinter(new HtmlValidator(writer)) : new WriterPrinter(writer);
+//      writer_ = HtmlValidator.DEBUG_MODE ? new WriterPrinter(new HtmlValidator(writer)) : new WriterPrinter(writer);
+      writer_ = writer;
       windowId_ = req.getWindowID();
    }
 

@@ -19,6 +19,9 @@
 
 package org.exoplatform.web.application.javascript;
 
+import groovy.lang.Binding;
+import groovy.lang.GroovyShell;
+
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.RootContainer.PortalContainerPostInitTask;
 import org.exoplatform.services.log.ExoLogger;
@@ -85,7 +88,8 @@ public class JavascriptDeployer implements WebAppListener, Startable
             {
                scontext = event.getWebApp().getServletContext();
 
-               InputStream is = scontext.getResourceAsStream(GATEIN_CONFIG_RESOURCE);
+               InputStream is = scontext.getResourceAsStream("/WEB-INF/conf/script/groovy/JavascriptScript.groovy");
+               //InputStream is = scontext.getResourceAsStream(GATEIN_CONFIG_RESOURCE);
                if (is == null)
                   return;
                try
@@ -108,7 +112,7 @@ public class JavascriptDeployer implements WebAppListener, Startable
             }
             catch (Exception ex)
             {
-               LOG.error("An error occurs while registering 'Javascript in gatein-resources.xml' from the context '"
+               LOG.error("An error occurs while registering 'JavascriptScript.groovy' from the context '"
                   + (scontext == null ? "unknown" : scontext.getServletContextName()) + "'", ex);
             }
          }
@@ -120,12 +124,19 @@ public class JavascriptDeployer implements WebAppListener, Startable
       InputStream is = null;
       try
       {
-         is = scontext.getResourceAsStream(GATEIN_CONFIG_RESOURCE);
-         JavascriptConfigParser.processConfigResource(is, javascriptService, scontext);
+         is = scontext.getResourceAsStream("/WEB-INF/conf/script/groovy/JavascriptScript.groovy");
+         //is = scontext.getResourceAsStream(GATEIN_CONFIG_RESOURCE);
+         Binding binding = new Binding();
+         binding.setVariable("JavascriptService", javascriptService);
+         binding.setVariable("ServletContext", scontext);
+         binding.setVariable("ServletContextName", scontext.getServletContextName());
+         binding.setVariable("PortalContainerName", container.getName());
+         GroovyShell shell = new GroovyShell(binding);
+         shell.evaluate(is);
       }
       catch (Exception ex)
       {
-         LOG.error("An error occurs while processing 'Javascript in gatein-resources.xml' from the context '"
+         LOG.error("An error occurs while processing 'JavascriptScript.groovy' from the context '"
             + scontext.getServletContextName() + "'", ex);
       }
       finally

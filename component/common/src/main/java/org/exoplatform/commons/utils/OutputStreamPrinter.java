@@ -21,6 +21,7 @@ package org.exoplatform.commons.utils;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.charset.Charset;
 
 /**
  * <p>An extension of {@link Printer} that encodes the text with a provided encoder and sends the resulting
@@ -42,10 +43,13 @@ import java.io.OutputStream;
  *
  * </p>
  *
+ * <p>The class provides direct write access to the underlying output stream when the client of the stream can provides
+ * bytes directly.</p>
+ *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class OutputStreamPrinter extends Printer
+public class OutputStreamPrinter extends Printer implements BinaryOutput
 {
 
    private final IOFailureFlow failureFlow;
@@ -58,6 +62,37 @@ public class OutputStreamPrinter extends Printer
 
    private boolean failed;
 
+   private final boolean flushOnClose;
+
+   /**
+    * Builds an instance with the failureFlow being {@link IOFailureFlow#RETHROW} and
+    * a the ignoreOnFailure property set to false.
+    *
+    * @param encoder the encoder
+    * @param out the output
+    * @param flushOnClose flush when stream is closed
+    * @throws IllegalArgumentException if any argument is null
+    */
+   public OutputStreamPrinter(TextEncoder encoder, OutputStream out, boolean flushOnClose) throws IllegalArgumentException
+   {
+      this(encoder, out, IOFailureFlow.RETHROW, false, flushOnClose, 0);
+   }
+
+   /**
+    * Builds an instance with the failureFlow being {@link IOFailureFlow#RETHROW} and
+    * a the ignoreOnFailure property set to false.
+    *
+    * @param encoder the encoder
+    * @param out the output
+    * @param flushOnClose flush when stream is closed
+    * @param bufferSize the size of the buffer
+    * @throws IllegalArgumentException if any argument is null
+    */
+   public OutputStreamPrinter(TextEncoder encoder, OutputStream out, boolean flushOnClose, int bufferSize) throws IllegalArgumentException
+   {
+      this(encoder, out, IOFailureFlow.RETHROW, false, flushOnClose, bufferSize);
+   }
+
    /**
     * Builds an instance with the failureFlow being {@link IOFailureFlow#RETHROW} and
     * a the ignoreOnFailure property set to false.
@@ -68,19 +103,27 @@ public class OutputStreamPrinter extends Printer
     */
    public OutputStreamPrinter(TextEncoder encoder, OutputStream out) throws IllegalArgumentException
    {
-      this(encoder, out, IOFailureFlow.RETHROW, false);
+      this(encoder, out, IOFailureFlow.RETHROW, false, false, 0);
    }
 
    /**
-    * Builds a new instance.
+    * Builds a new instance with the specified parameters and the delegate output.
     *
     * @param encoder the encoder
     * @param out the output
     * @param failureFlow the control flow failureFlow
     * @param ignoreOnFailure the behavior on failure
+    * @param flushOnClose flush when stream is closed
+    * @param bufferSize the buffer size
     * @throws IllegalArgumentException if any argument is null
     */
-   public OutputStreamPrinter(TextEncoder encoder, OutputStream out, IOFailureFlow failureFlow, boolean ignoreOnFailure)
+   public OutputStreamPrinter(
+      TextEncoder encoder,
+      OutputStream out,
+      IOFailureFlow failureFlow,
+      boolean ignoreOnFailure,
+      boolean flushOnClose,
+      int bufferSize)
       throws IllegalArgumentException
    {
       if (encoder == null)
@@ -95,11 +138,29 @@ public class OutputStreamPrinter extends Printer
       {
          throw new IllegalArgumentException("No null control flow mode accepted");
       }
+      if (bufferSize < 0)
+      {
+         throw new IllegalArgumentException("Invalid negative max buffer size: " + bufferSize);
+      }
+
+      //
+      if (bufferSize > 0)
+      {
+         out = new BufferingOutputStream(out, bufferSize);
+      }
+
+      //
       this.encoder = encoder;
       this.out = out;
       this.failureFlow = failureFlow;
       this.failed = false;
       this.ignoreOnFailure = ignoreOnFailure;
+      this.flushOnClose = flushOnClose;
+   }
+
+   public final Charset getCharset()
+   {
+      return encoder.getCharset();
    }
 
    /**
@@ -107,7 +168,7 @@ public class OutputStreamPrinter extends Printer
     *
     * @return the failure flow
     */
-   public IOFailureFlow getFailureFlow()
+   public final IOFailureFlow getFailureFlow()
    {
       return failureFlow;
    }
@@ -117,18 +178,69 @@ public class OutputStreamPrinter extends Printer
     * 
     * @return the ignore on failure property
     */
-   public boolean getIgnoreOnFailure()
+   public final boolean getIgnoreOnFailure()
    {
       return ignoreOnFailure;
    }
 
-   public boolean isFailed()
+   public final boolean isFailed()
    {
       return failed;
    }
 
+   // Bytes access interface
+
+   public final void write(byte b) throws IOException
+   {
+      if (!failed)
+      {
+         try
+         {
+            out.write(b);
+         }
+         catch (IOException e)
+         {
+            handle(e);
+         }
+      }
+   }
+
+   public final void write(byte[] bytes) throws IOException
+   {
+      if (!failed)
+      {
+         try
+         {
+            out.write(bytes);
+         }
+         catch (IOException e)
+         {
+            handle(e);
+         }
+      }
+   }
+
+   public final void write(byte[] b, int off, int len) throws IOException
+   {
+      if (!failed)
+      {
+         try
+         {
+            out.write(b, off, len);
+         }
+         catch (IOException e)
+         {
+            handle(e);
+         }
+      }
+   }
+
+   //
+
    @Override
-   public void write(int c) throws IOException
+   // Note that the parent method has a synchronisation that we want to avoid
+   // for performance reasons
+   public final void write(int c) throws IOException
    {
       if (!failed)
       {
@@ -144,7 +256,7 @@ public class OutputStreamPrinter extends Printer
    }
 
    @Override
-   public void write(char[] cbuf) throws IOException
+   public final void write(char[] cbuf) throws IOException
    {
       if (!failed)
       {
@@ -160,7 +272,7 @@ public class OutputStreamPrinter extends Printer
    }
 
    @Override
-   public void write(String str) throws IOException
+   public final void write(String str) throws IOException
    {
       if (!failed)
       {
@@ -176,7 +288,9 @@ public class OutputStreamPrinter extends Printer
    }
 
    @Override
-   public void write(String str, int off, int len) throws IOException
+   // Note that the parent method has a synchronisation that we want to avoid
+   // for performance reasons
+   public final void write(String str, int off, int len) throws IOException
    {
       if (!failed)
       {
@@ -191,7 +305,7 @@ public class OutputStreamPrinter extends Printer
       }
    }
 
-   public void write(char[] cbuf, int off, int len) throws IOException
+   public final void write(char[] cbuf, int off, int len) throws IOException
    {
       if (!failed)
       {
@@ -206,9 +320,9 @@ public class OutputStreamPrinter extends Printer
       }
    }
 
-   public void flush() throws IOException
+   public final void flush() throws IOException
    {
-      if (!failed)
+      if (!failed && !flushOnClose)
       {
          try
          {
@@ -221,7 +335,7 @@ public class OutputStreamPrinter extends Printer
       }
    }
 
-   public void close() throws IOException
+   public final void close() throws IOException
    {
       try
       {

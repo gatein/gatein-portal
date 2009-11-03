@@ -19,6 +19,8 @@
 
 package org.exoplatform.portal.config.model;
 
+import org.exoplatform.portal.pom.data.ModelData;
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
@@ -30,14 +32,14 @@ public abstract class ModelChange
    {
 
       /** . */
-      private final ModelObject object;
+      private final ModelData object;
 
-      public Create(ModelObject object)
+      public Create(ModelData object)
       {
          this.object = object;
       }
 
-      public ModelObject getObject()
+      public ModelData getObject()
       {
          return object;
       }
@@ -47,14 +49,14 @@ public abstract class ModelChange
    {
 
       /** . */
-      private final ModelObject object;
+      private final ModelData object;
 
-      public Update(ModelObject object)
+      public Update(ModelData object)
       {
          this.object = object;
       }
 
-      public ModelObject getObject()
+      public ModelData getObject()
       {
          return object;
       }

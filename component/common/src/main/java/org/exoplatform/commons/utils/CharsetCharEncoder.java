@@ -61,6 +61,11 @@ public class CharsetCharEncoder implements CharEncoder
       this.arrays = new byte[][]{new byte[0], new byte[1], new byte[2], new byte[3], new byte[4], new byte[5]};
    }
 
+   public Charset getCharset()
+   {
+      return charset;
+   }
+
    public byte[] encode(char c)
    {
       /*

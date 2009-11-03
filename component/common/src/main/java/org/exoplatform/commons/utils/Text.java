@@ -20,11 +20,12 @@
 package org.exoplatform.commons.utils;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.io.Writer;
+import java.nio.charset.Charset;
 
 /**
  * Represents text that can have several internal representations in order to minimize serialization when it is possible.
+ * The bytes returned by the byte oriented method must returned the data encoded with the UTF-8 encoding.
  *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
@@ -36,12 +37,13 @@ public abstract class Text
     * Create a text object from the provided byte array.
     * 
     * @param bytes the markup as bytes
+    * @param charset the charset
     * @return the text object
     * @throws IllegalArgumentException if the bytes is null
     */
-   public static Text create(byte[] bytes) throws IllegalArgumentException
+   public static Text create(byte[] bytes, Charset charset) throws IllegalArgumentException
    {
-      return new Bytes(bytes);
+      return new Bytes(bytes, charset);
    }
 
    /**
@@ -61,7 +63,6 @@ public abstract class Text
     *
     * @param s the markup as bytes
     * @return the text object
-    * @todo provide an optimized subclass but it's not much used for now
     * @throws IllegalArgumentException if the string is null
     */
    public static Text create(String s) throws IllegalArgumentException
@@ -69,59 +70,46 @@ public abstract class Text
       return new Chars(s.toCharArray());
    }
 
-   public abstract byte[] getBytes();
-
-   public abstract char[] getChars();
-
-   public abstract void appendTo(Appendable appendable) throws IOException;
-
    public abstract void writeTo(Writer writer) throws IOException;
 
    private static class Bytes extends Text
    {
 
+      /** . */
       private final byte[] bytes;
 
-      private Bytes(byte[] bytes)
+      /** . */
+      private final Charset charset;
+
+      /** . */
+      private volatile String s;
+
+      private Bytes(byte[] bytes, Charset charset)
       {
          this.bytes = bytes;
-      }
-
-      public byte[] getBytes()
-      {
-         return bytes;
-      }
-
-      public char[] getChars()
-      {
-         try
-         {
-            return new String(bytes, "utf-8").toCharArray();
-         }
-         catch (java.io.UnsupportedEncodingException e)
-         {
-            return new String(bytes).toCharArray();
-         }
-      }
-
-      public void appendTo(Appendable appendable) throws IOException
-      {
-         for (char c : getChars())
-         {
-            appendable.append(c);
-         }
+         this.charset = charset;
       }
 
       public void writeTo(Writer writer) throws IOException
       {
-         for (char c : getChars())
+         if (writer instanceof BinaryOutput)
          {
-            writer.append(c);
+            BinaryOutput osw = (BinaryOutput)writer;
+            if (charset.equals(osw.getCharset()))
+            {
+               osw.write(bytes);
+               return;
+            }
          }
+         if (s == null)
+         {
+            s = new String(bytes, charset);
+         }
+         writer.append(s);
       }
    }
 
-   private static class Chars extends Text implements CharSequence
+   private static class Chars extends Text
    {
 
       /** Inclusive from index. */
@@ -147,71 +135,9 @@ public abstract class Text
          this.count = count;
       }
 
-      public byte[] getBytes()
-      {
-         String s = new String(chars, offset, count);
-         try
-         {
-            return s.getBytes("UTF-8");
-         }
-         catch (UnsupportedEncodingException e)
-         {
-            return s.getBytes();
-         }
-      }
-
-      public char[] getChars()
-      {
-         // Recompute the internal state
-         if (offset > 0 || count < chars.length)
-         {
-            char[] tmp = new char[count];
-            System.arraycopy(chars, offset, tmp, 0, count);
-            chars = tmp;
-            offset = 0;
-         }
-         return chars;
-      }
-
       public void writeTo(Writer writer) throws IOException
       {
          writer.write(chars, offset, count);
-      }
-
-      public void appendTo(Appendable appendable) throws IOException
-      {
-         appendable.append(this);
-      }
-
-      public int length()
-      {
-         return count;
-      }
-
-      public char charAt(int index)
-      {
-         return chars[index - offset];
-      }
-
-      public CharSequence subSequence(int start, int end)
-      {
-         if (start < 0)
-         {
-            throw new ArrayIndexOutOfBoundsException("Start index cannot be negative");
-         }
-         if (end < 0)
-         {
-            throw new ArrayIndexOutOfBoundsException("End index cannot be negative");
-         }
-         if (start > end)
-         {
-            throw new ArrayIndexOutOfBoundsException("Start index cannot be greater than the end index");
-         }
-         if (end > count)
-         {
-            throw new ArrayIndexOutOfBoundsException("End index cannot be greater than the sequence length");
-         }
-         return new Chars(chars, offset + start, end - start);
       }
 
       @Override

@@ -19,6 +19,13 @@
 
 package org.exoplatform.portal.pom.config;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
@@ -45,6 +52,16 @@ public class Utils
       return sb.toString();
    }
 
+   public static String join(String separator, List<String> strings)
+   {
+      if (strings == null)
+      {
+         return null;
+      }
+      String[] array = strings.toArray(new String[strings.size()]);
+      return join(separator, array);
+   }
+
    public static String[] split(String separator, String s)
    {
       if (s == null)
@@ -52,6 +69,60 @@ public class Utils
          return null;
       }
       return split(s, 0, 0, separator);
+   }
+
+   public static <E> List<E> safeImmutableList(E... list)
+   {
+      if (list == null || list.length == 0)
+      {
+         return Collections.emptyList();
+      }
+      else if (list.length == 1)
+      {
+         E e = list[0];
+         return Collections.singletonList(e);
+      }
+      else
+      {
+         List<E> copy = Arrays.asList(list);
+         return Collections.unmodifiableList(copy);
+      }
+   }
+
+   public static <E> List<E> safeImmutableList(List<E> list)
+   {
+      if (list == null || list.size() == 0)
+      {
+         return Collections.emptyList();
+      }
+      else if (list.size() == 1)
+      {
+         E e = list.get(0);
+         return Collections.singletonList(e);
+      }
+      else
+      {
+         ArrayList<E> copy = new ArrayList<E>(list);
+         return Collections.unmodifiableList(copy);
+      }
+   }
+
+   public static <K, V> Map<K, V> safeImmutableMap(Map<K, V> map)
+   {
+      if (map == null || map.size() == 0)
+      {
+         return Collections.emptyMap();
+      }
+      else if (map.size() == 1)
+      {
+         Map.Entry<K, V> entry = map.entrySet().iterator().next();
+         return Collections.singletonMap(entry.getKey(), entry.getValue());
+      }
+      else
+      {
+         Map<K, V> copy = new HashMap<K,V>(map);
+         return Collections.unmodifiableMap(copy);
+      }
    }
 
    /**

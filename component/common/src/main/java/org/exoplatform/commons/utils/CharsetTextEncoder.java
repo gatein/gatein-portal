@@ -29,7 +29,7 @@ import java.nio.charset.Charset;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class CharsetTextEncoder implements TextEncoder
+public final class CharsetTextEncoder implements TextEncoder
 {
 
    private static final CharsetTextEncoder UTF8 = new CharsetTextEncoder(CharsetCharEncoder.getUTF8());
@@ -52,10 +52,40 @@ public class CharsetTextEncoder implements TextEncoder
       this(new TableCharEncoder(new CharsetCharEncoder(Charset.forName(encoding))));
    }
 
+   public Charset getCharset()
+   {
+      return charEncoder.getCharset();
+   }
+
    public void encode(char c, OutputStream out) throws IOException
    {
-      byte[] bytes = charEncoder.encode(c);
-      out.write(bytes);
+      if (c > -1 && c < 128)
+      {
+         out.write((int)c);
+      }
+      else
+      {
+         byte[] bytes = charEncoder.encode(c);
+         switch (bytes.length)
+         {
+            case 0:
+               throw new AssertionError();
+            case 1:
+               out.write(bytes[0]);
+               break;
+            case 2:
+               out.write(bytes[0]);
+               out.write(bytes[1]);
+               break;
+            case 3:
+               out.write(bytes[0]);
+               out.write(bytes[1]);
+               out.write(bytes[2]);
+               break;
+            default:
+               out.write(bytes);
+         }
+      }
    }
 
    public void encode(char[] chars, int off, int len, OutputStream out) throws IOException
@@ -63,8 +93,7 @@ public class CharsetTextEncoder implements TextEncoder
       for (int i = off; i < len; i++)
       {
          char c = chars[i];
-         byte[] bytes = charEncoder.encode(c);
-         out.write(bytes);
+         encode(c, out);
       }
    }
 
@@ -73,8 +102,7 @@ public class CharsetTextEncoder implements TextEncoder
       for (int i = off; i < len; i++)
       {
          char c = str.charAt(i);
-         byte[] bytes = charEncoder.encode(c);
-         out.write(bytes);
+         encode(c, out);
       }
    }
 }

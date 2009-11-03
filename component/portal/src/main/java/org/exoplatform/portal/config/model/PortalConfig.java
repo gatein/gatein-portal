@@ -19,7 +19,12 @@
 
 package org.exoplatform.portal.config.model;
 
+import org.exoplatform.portal.pom.config.Utils;
+import org.exoplatform.portal.pom.data.PortalData;
+
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * May 13, 2004
@@ -83,6 +88,24 @@ public class PortalConfig extends ModelObject
 
       //
       setPortalLayout(new Container());
+   }
+
+   public PortalConfig(PortalData data)
+   {
+      super(data.getStorageId());
+
+      //
+      this.name = data.getName();
+      this.type = data.getType();
+      this.locale = data.getLocale();
+      this.accessPermissions = data.getAccessPermissions().toArray(new String[data.getAccessPermissions().size()]);
+      this.editPermission = data.getEditPermission();
+      this.properties = new Properties(data.getProperties());
+      this.skin = data.getSkin();
+      this.title = data.getTitle();
+      this.portalLayout = new Container(data.getPortalLayout());
+      this.creator = data.getCreator();
+      this.modifier = data.getModifier();
    }
 
    PortalConfig(String storageId, String type)
@@ -296,5 +319,24 @@ public class PortalConfig extends ModelObject
       children.add(new PageBody());
       container.setChildren(children);
       return container;
+   }
+
+   public PortalData build()
+   {
+      List<String> accessPermissions = Utils.safeImmutableList(this.accessPermissions);
+      Map<String, String> properties = Utils.safeImmutableMap(this.properties);
+      return new PortalData(
+         storageId,
+         name,
+         type,
+         locale,
+         accessPermissions,
+         editPermission,
+         properties,
+         skin,
+         title,
+         portalLayout.build(),
+         creator,
+         modifier);
    }
 }

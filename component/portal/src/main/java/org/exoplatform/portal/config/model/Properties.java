@@ -20,6 +20,7 @@
 package org.exoplatform.portal.config.model;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by The eXo Platform SARL
@@ -31,9 +32,14 @@ import java.util.HashMap;
 public class Properties extends HashMap<String, String>
 {
 
+   public Properties(Map<String, String> m)
+   {
+      super(m);
+   }
+
    public Properties()
    {
-      super(10);
+      super();
    }
 
    public Properties(int size)
