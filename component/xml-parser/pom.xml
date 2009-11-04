@@ -31,6 +31,10 @@
   <packaging>jar</packaging>
   <name>GateIn Portal Component XML Parser</name>
 
+  <properties>
+    <maven.test.skip>true</maven.test.skip>  
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>org.exoplatform.kernel</groupId>

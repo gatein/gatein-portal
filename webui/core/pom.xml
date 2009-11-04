@@ -31,6 +31,10 @@
   <packaging>jar</packaging>
   <name>GateIn Portal WebUI Core</name>
   
+  <properties>
+    <maven.test.skip>true</maven.test.skip>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>org.exoplatform.portal</groupId>

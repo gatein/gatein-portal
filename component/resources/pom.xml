@@ -32,6 +32,10 @@
   <name>GateIn Portal Component Resources</name>
   <description>resources data service...</description>
 
+  <properties>
+    <maven.test.skip>true</maven.test.skip>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>org.exoplatform.kernel</groupId>
