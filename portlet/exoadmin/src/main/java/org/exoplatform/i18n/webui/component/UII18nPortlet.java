@@ -136,8 +136,8 @@ public class UII18nPortlet extends UIPortletApplication
          serv.removeResourceBundleData(event.getRequestContext().getRequestParameter(OBJECTID));
          Query lastQuery = uiI18n.getLastQuery();
          uiI18n.update(lastQuery.getName(), lastQuery.getLanguage());
-         while (currentPage > datasource.getAvailablePage())
-            currentPage--;
+         if (currentPage > datasource.getAvailablePage())
+            currentPage = datasource.getAvailablePage();
          datasource.getPage(currentPage);
       }
    }

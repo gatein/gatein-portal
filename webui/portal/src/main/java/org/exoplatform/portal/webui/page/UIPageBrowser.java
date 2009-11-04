@@ -30,6 +30,8 @@ import org.exoplatform.portal.config.model.ModelObject;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.webui.application.UIPortlet;
+import org.exoplatform.portal.webui.portal.PageNodeEvent;
+import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.portal.UIPortalComposer;
 import org.exoplatform.portal.webui.util.PortalDataMapper;
 import org.exoplatform.portal.webui.util.Util;
@@ -231,8 +233,8 @@ public class UIPageBrowser extends UISearch
       LazyPageList datasource = (LazyPageList)repeater.getDataSource();
       int currentPage = datasource.getCurrentPage();
       defaultValue(null);
-      while (currentPage > datasource.getAvailablePage())
-         currentPage--;
+      if (currentPage > datasource.getAvailablePage())
+         currentPage = datasource.getAvailablePage();
       if (currentPage > 0)
          datasource.getPage(currentPage);
    }
@@ -267,10 +269,22 @@ public class UIPageBrowser extends UISearch
          int currentPage = datasource.getCurrentPage();
          service.remove(page);
          uiPageBrowser.defaultValue(uiPageBrowser.getLastQuery());
-         while (currentPage > datasource.getAvailablePage())
-            currentPage--;
+         if (currentPage > datasource.getAvailablePage())
+            currentPage = datasource.getAvailablePage();
+         datasource.getPage(currentPage);
 
-         event.getRequestContext().addUIComponentToUpdateByAjax(uiPageBrowser);
+         UIPortal uiPortal = Util.getUIPortal();
+         if (uiPortal.getSelectedNode().getPageReference().equals(page.getPageId()))
+         {
+            PageNodeEvent<UIPortal> pnevent =
+               new PageNodeEvent<UIPortal>(uiPortal, PageNodeEvent.CHANGE_PAGE_NODE, uiPortal.getSelectedNode()
+                  .getUri());
+            uiPortal.broadcast(pnevent, Phase.PROCESS);
+         }
+         else
+         {
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiPageBrowser);
+         }
       }
    }
 

@@ -52,8 +52,24 @@ public class UIMainActionListener
       public void execute(Event<UIWorkingWorkspace> event) throws Exception
       {
          UIPortalApplication uiApp = Util.getUIPortalApplication();
-         uiApp.setModeState(UIPortalApplication.APP_BLOCK_EDIT_MODE);
          UIWorkingWorkspace uiWorkingWS = uiApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
+
+         // check edit permission for page
+         UIPageBody pageBody = uiWorkingWS.findFirstComponentOfType(UIPageBody.class);
+         UIPage uiPage = (UIPage)pageBody.getUIComponent();
+         if (uiPage == null) {
+            uiApp.addMessage(new ApplicationMessage("UIPageBrowser.msg.PageNotExist", null));
+            return;
+         }
+         Page page = PortalDataMapper.toPageModel(uiPage);
+
+         UserACL userACL = uiApp.getApplicationComponent(UserACL.class);
+         if (!userACL.hasEditPermission(page))
+         {
+            uiApp.addMessage(new ApplicationMessage("UIPortalManagement.msg.Invalid-editPermission", null));
+            return;
+         }
+
          uiWorkingWS.setRenderedChild(UIEditInlineWorkspace.class);
 
          UIPortalComposer portalComposer =
@@ -64,22 +80,10 @@ public class UIMainActionListener
          portalComposer.setEditted(false);
          portalComposer.setCollapse(false);
 
-         //uiWorkingWS.addChild(UIPortalComposer.class, "UIPageEditor", null);
          UIPortalToolPanel uiToolPanel = uiWorkingWS.findFirstComponentOfType(UIPortalToolPanel.class);
          uiToolPanel.setShowMaskLayer(false);
-         UIPageBody pageBody = uiWorkingWS.findFirstComponentOfType(UIPageBody.class);
-         
-         // check edit permission for page
-         UIPage uiPage = (UIPage) pageBody.getUIComponent();
-         Page page = PortalDataMapper.toPageModel(uiPage);
-         
-         UserACL userACL = uiApp.getApplicationComponent(UserACL.class);
-         if (!userACL.hasEditPermission(page))
-         {
-            uiApp.addMessage(new ApplicationMessage("UIPortalManagement.msg.Invalid-editPermission", null));
-            return;
-         }
-         
+         uiApp.setModeState(UIPortalApplication.APP_BLOCK_EDIT_MODE);
+
          uiToolPanel.setWorkingComponent(pageBody.getUIComponent());
          event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingWS);
          Util.getPortalRequestContext().setFullRender(true);
