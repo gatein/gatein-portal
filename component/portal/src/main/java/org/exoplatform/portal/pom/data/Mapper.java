@@ -345,11 +345,7 @@ public class Mapper
       String ownerId = site.getName();
       String name = src.getName();
       List<ComponentData> children = loadChildren(src.getRootComponent());
-      
-      UIContainer srcRoot = src.getRootComponent();
-      UIComponent srcChild = srcRoot.get(0);
-      
-      Attributes attrs = srcChild.getAttributes();
+      Attributes attrs = src.getAttributes();
 
       //
       return new PageData(
