@@ -93,17 +93,20 @@ public class POMSession
       }
    }
 
-  private ChromatticSession getSession() {
-    try {
-      Model model = getModel();
-      Field f = model.getClass().getDeclaredField("session");
-      f.setAccessible(true);
-      return (ChromatticSession)f.get(model);
-    }
-    catch (Exception e) {
-      throw new Error(e);
-    }
-  }
+   private ChromatticSession getSession()
+   {
+      try
+      {
+         Model model = getModel();
+         Field f = model.getClass().getDeclaredField("session");
+         f.setAccessible(true);
+         return (ChromatticSession)f.get(model);
+      }
+      catch (Exception e)
+      {
+         throw new Error(e);
+      }
+   }
 
    public Workspace getWorkspace()
    {
