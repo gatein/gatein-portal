@@ -47,6 +47,8 @@ public class PageNavigation extends PageNodeContainer
 
    private int priority = 1;
 
+   private long serialMark;
+
    PageNavigation(String storageId)
    {
       super(storageId);
@@ -188,16 +190,26 @@ public class PageNavigation extends PageNodeContainer
       return null;
    }
 
+   public long getSerialMark()
+   {
+      return serialMark;
+   }
+
+   public void setSerialMark(long serialModifiedKey)
+   {
+      this.serialMark = serialModifiedKey;
+   }
+
    public PageNavigation clone()
    {
       PageNavigation newNav = new PageNavigation();
       newNav.setOwnerId(ownerId);
       newNav.setOwnerType(ownerType);
       newNav.setPriority(priority);
-      //    newNav.setAccessPermissions(accessPermissions);
-      //    newNav.setEditPermission(editPermission);
+      // newNav.setAccessPermissions(accessPermissions);
+      // newNav.setEditPermission(editPermission);
       newNav.setModifiable(modifiable);
-      //    newNav.setDescription(description);
+      // newNav.setDescription(description);
       newNav.setCreator(creator);
       newNav.setModifier(modifier);
 
@@ -261,15 +273,6 @@ public class PageNavigation extends PageNodeContainer
    public NavigationData build()
    {
       List<NavigationNodeData> children = buildNavigationChildren();
-      return new NavigationData(
-         storageId,
-         ownerType,
-         ownerId,
-         description,
-         creator,
-         modifier,
-         priority,
-         children
-      );
+      return new NavigationData(storageId, ownerType, ownerId, description, creator, modifier, priority, children);
    }
 }

@@ -21,6 +21,7 @@ package org.exoplatform.portal.webui.portal;
 
 import org.exoplatform.portal.account.UIAccountSetting;
 import org.exoplatform.portal.application.PortalRequestContext;
+import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
@@ -64,7 +65,8 @@ import javax.servlet.http.HttpServletRequest;
    @EventConfig(listeners = ChangePageNodeActionListener.class),
    @EventConfig(listeners = ChangeApplicationListActionListener.class),
    @EventConfig(listeners = MoveChildActionListener.class),
-   //      @EventConfig(listeners = RemoveJSApplicationToDesktopActionListener.class),
+   // @EventConfig(listeners =
+   // RemoveJSApplicationToDesktopActionListener.class),
    @EventConfig(listeners = UIPortal.ChangeWindowStateActionListener.class),
    @EventConfig(listeners = UIPortal.LogoutActionListener.class),
    @EventConfig(listeners = ShowLoginFormActionListener.class),
@@ -186,8 +188,29 @@ public class UIPortal extends UIContainer
       publicParameters_ = publicParams;
    }
 
-   public List<PageNavigation> getNavigations()
+   public List<PageNavigation> getNavigations() throws Exception
    {
+      UserPortalConfigService serv = getApplicationComponent(UserPortalConfigService.class);
+      for (int i = 0; i < navigations.size(); i++)
+      {
+         PageNavigation ele = navigations.get(i);
+         PageNavigation temp = serv.getPageNavigation(ele.getOwnerType(), ele.getOwnerId());
+         if (temp != null)
+         {
+            if (temp.getSerialMark() != ele.getSerialMark())
+            {
+               temp.setModifiable(ele.isModifiable());
+               localizePageNavigation(temp);
+               navigations.set(i, temp);
+            }
+         }
+         else
+         {
+            navigations.remove(i);
+            --i;
+         }
+      }
+
       return navigations;
    }
 
@@ -197,11 +220,11 @@ public class UIPortal extends UIContainer
       selectedPaths_ = new ArrayList<PageNode>();
       if (navigations == null || navigations.size() < 1)
          return;
-      //    PageNavigation pNav = navigations.get(0);
-      //    if(pNav.getNodes() == null || pNav.getNodes().size() < 1) return;
+      // PageNavigation pNav = navigations.get(0);
+      // if(pNav.getNodes() == null || pNav.getNodes().size() < 1) return;
 
-      //TODO dang.tung: get suitable navigation
-      //----------------------------------------------------------
+      // TODO dang.tung: get suitable navigation
+      // ----------------------------------------------------------
       PageNavigation pNav = null;
       for (PageNavigation nav : navs)
       {
@@ -213,7 +236,7 @@ public class UIPortal extends UIContainer
       }
       if (pNav == null)
          return;
-      //----------------------------------------------------------
+      // ----------------------------------------------------------
       selectedNode_ = pNav.getNodes().get(0);
       selectedPaths_.add(selectedNode_);
       UIPageBody uiPageBody = findFirstComponentOfType(UIPageBody.class);
@@ -229,7 +252,7 @@ public class UIPortal extends UIContainer
       selectedNode_ = node;
    }
 
-   public PageNode getSelectedNode()
+   public PageNode getSelectedNode() throws Exception
    {
       if (selectedNode_ != null)
          return selectedNode_;
@@ -250,7 +273,7 @@ public class UIPortal extends UIContainer
       selectedPaths_ = nodes;
    }
 
-   public PageNavigation getSelectedNavigation()
+   public PageNavigation getSelectedNavigation() throws Exception
    {
       if (selectedNavigation_ != null && selectedNavigation_.getNodes() != null
          && selectedNavigation_.getNodes().size() > 0)
@@ -259,8 +282,8 @@ public class UIPortal extends UIContainer
       }
       if (getNavigations().size() < 1)
          return null;
-      //TODO dang.tung: get right selectedNavigation
-      //-------------------------------------------
+      // TODO dang.tung: get right selectedNavigation
+      // -------------------------------------------
       List<PageNavigation> navs = getNavigations();
       PageNavigation pNav = navs.get(0);
       for (PageNavigation nav : navs)
@@ -271,7 +294,7 @@ public class UIPortal extends UIContainer
             break;
          }
       }
-      //-------------------------------------------  
+      // -------------------------------------------
       setSelectedNavigation(pNav);
       return pNav;
    }
@@ -373,17 +396,21 @@ public class UIPortal extends UIContainer
 
    public void refreshNavigation(Locale locale)
    {
-      ResourceBundleManager mgr = getApplicationComponent(ResourceBundleManager.class);
       for (PageNavigation nav : navigations)
       {
-         if (nav.getOwnerType().equals(PortalConfig.USER_TYPE))
-            continue;
-         ResourceBundle res =
-            mgr.getNavigationResourceBundle(locale.getLanguage(), nav.getOwnerType(), nav.getOwnerId());
-         for (PageNode node : nav.getNodes())
-         {
-            resolveLabel(res, node);
-         }
+         localizePageNavigation(nav);
+      }
+   }
+
+   private void localizePageNavigation(PageNavigation nav)
+   {
+      ResourceBundleManager mgr = getApplicationComponent(ResourceBundleManager.class);
+      if (nav.getOwnerType().equals(PortalConfig.USER_TYPE))
+         return;
+      ResourceBundle res = mgr.getNavigationResourceBundle(locale, nav.getOwnerType(), nav.getOwnerId());
+      for (PageNode node : nav.getNodes())
+      {
+         resolveLabel(res, node);
       }
    }
 
@@ -409,7 +436,8 @@ public class UIPortal extends UIContainer
          cookie.setPath(req.getContextPath());
          cookie.setMaxAge(0);
          prContext.getResponse().addCookie(cookie);
-         //String portalName = URLEncoder.encode(Util.getUIPortal().getName(), "UTF-8") ;
+         // String portalName = URLEncoder.encode(Util.getUIPortal().getName(),
+         // "UTF-8") ;
          String portalName = URLEncoder.encode(prContext.getPortalOwner(), "UTF-8");
          String redirect = req.getContextPath() + "/public/" + portalName + "/";
          prContext.getResponse().sendRedirect(redirect);

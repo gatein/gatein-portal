@@ -128,7 +128,7 @@ public class UIPortalNavigation extends UIComponent
       return treeNode_;
    }
 
-   public PageNavigation getSelectedNavigation()
+   public PageNavigation getSelectedNavigation() throws Exception
    {
       PageNavigation nav = Util.getUIPortal().getSelectedNavigation();
       if (nav != null)
@@ -143,7 +143,7 @@ public class UIPortalNavigation extends UIComponent
       return selectedParent_;
    }
 
-   public PageNode getSelectedPageNode()
+   public PageNode getSelectedPageNode() throws Exception
    {
       if (selectedNode_ != null)
          return selectedNode_;

@@ -201,13 +201,15 @@ public class UserPortalConfigService implements Startable
    /**
     * Compute and returns the list that the specified user can manage. If the
     * user is root then all existing groups are returned otherwise the list is
-    * computed from the groups in which the user has a configured membership. The
-    * membership is configured from the value returned by
+    * computed from the groups in which the user has a configured membership.
+    * The membership is configured from the value returned by
     * {@link org.exoplatform.portal.config.UserACL#getMakableMT()}
     * 
-    * @param remoteUser the user to get the makable navigations
+    * @param remoteUser
+    *           the user to get the makable navigations
     * @return the list of groups
-    * @throws Exception any exception
+    * @throws Exception
+    *            any exception
     */
    public List<String> getMakableNavigations(String remoteUser) throws Exception
    {
@@ -233,9 +235,12 @@ public class UserPortalConfigService implements Startable
     * This method should create a the portal config, pages and navigation
     * according to the template name.
     * 
-    * @param portalName the portal name
-    * @param template the template to use
-    * @throws Exception any exception
+    * @param portalName
+    *           the portal name
+    * @param template
+    *           the template to use
+    * @throws Exception
+    *            any exception
     */
    public void createUserPortalConfig(String ownerType, String portalName, String template) throws Exception
    {
@@ -257,8 +262,10 @@ public class UserPortalConfigService implements Startable
     * This method removes the PortalConfig, Page and PageNavigation that belong
     * to the portal in the database.
     * 
-    * @param portalName the portal name
-    * @throws Exception any exception
+    * @param portalName
+    *           the portal name
+    * @throws Exception
+    *            any exception
     */
    public void removeUserPortalConfig(String portalName) throws Exception
    {
@@ -268,10 +275,13 @@ public class UserPortalConfigService implements Startable
    /**
     * This method removes the PortalConfig, Page and PageNavigation that belong
     * to the portal in the database.
-    *
-    * @param ownerType the owner type
-    * @param ownerId the portal name
-    * @throws Exception any exception
+    * 
+    * @param ownerType
+    *           the owner type
+    * @param ownerId
+    *           the portal name
+    * @throws Exception
+    *            any exception
     */
    public void removeUserPortalConfig(String ownerType, String ownerId) throws Exception
    {
@@ -301,9 +311,11 @@ public class UserPortalConfigService implements Startable
    /**
     * This method load the page according to the pageId and returns.
     * 
-    * @param pageId the page id
+    * @param pageId
+    *           the page id
     * @return the page
-    * @throws Exception any exception
+    * @throws Exception
+    *            any exception
     */
    public Page getPage(String pageId) throws Exception
    {
@@ -323,10 +335,13 @@ public class UserPortalConfigService implements Startable
     * {@link UserACL#hasPermission(org.exoplatform.portal.config.model.Page)}
     * method.
     * 
-    * @param pageId the page id
-    * @param accessUser never used
+    * @param pageId
+    *           the page id
+    * @param accessUser
+    *           never used
     * @return the page
-    * @throws Exception any exception
+    * @throws Exception
+    *            any exception
     */
    public Page getPage(String pageId, String accessUser) throws Exception
    {
@@ -348,8 +363,10 @@ public class UserPortalConfigService implements Startable
     * {@link org.exoplatform.portal.config.UserPortalConfigService#REMOVE_PAGE_EVENT}
     * when the removal is successful.
     * 
-    * @param page the page to remove
-    * @throws Exception any exception
+    * @param page
+    *           the page to remove
+    * @throws Exception
+    *            any exception
     */
    public void remove(Page page) throws Exception
    {
@@ -363,8 +380,10 @@ public class UserPortalConfigService implements Startable
     * {@link org.exoplatform.portal.config.UserPortalConfigService#CREATE_PAGE_EVENT}
     * when the creation is successful.
     * 
-    * @param page the page to create
-    * @throws Exception any exception
+    * @param page
+    *           the page to create
+    * @throws Exception
+    *            any exception
     */
    public void create(Page page) throws Exception
    {
@@ -382,9 +401,11 @@ public class UserPortalConfigService implements Startable
     * {@link org.exoplatform.portal.config.UserPortalConfigService#UPDATE_PAGE_EVENT}
     * when the creation is successful.
     * 
-    * @param page the page to update
+    * @param page
+    *           the page to update
     * @return the list of model changes that occured
-    * @throws Exception any exception
+    * @throws Exception
+    *            any exception
     */
    public List<ModelChange> update(Page page) throws Exception
    {
@@ -403,12 +424,15 @@ public class UserPortalConfigService implements Startable
     * {@link org.exoplatform.portal.config.UserPortalConfigService#CREATE_NAVIGATION_EVENT}
     * when the creation is successful.
     * 
-    * @param navigation the navigation to create
-    * @throws Exception any exception
+    * @param navigation
+    *           the navigation to create
+    * @throws Exception
+    *            any exception
     */
    public void create(PageNavigation navigation) throws Exception
    {
       storage_.create(navigation);
+      navigation.setSerialMark(System.currentTimeMillis());
       pageNavigationCache_.put(navigation.getOwner(), navigation);
       listenerService.broadcast(CREATE_NAVIGATION_EVENT, this, navigation);
    }
@@ -418,8 +442,10 @@ public class UserPortalConfigService implements Startable
     * {@link org.exoplatform.portal.config.UserPortalConfigService#UPDATE_NAVIGATION_EVENT}
     * when the creation is successful.
     * 
-    * @param navigation the navigation to update
-    * @throws Exception any exception
+    * @param navigation
+    *           the navigation to update
+    * @throws Exception
+    *            any exception
     */
    public void update(PageNavigation navigation) throws Exception
    {
@@ -433,8 +459,10 @@ public class UserPortalConfigService implements Startable
     * {@link org.exoplatform.portal.config.UserPortalConfigService#REMOVE_NAVIGATION_EVENT}
     * when the removal is successful.
     * 
-    * @param navigation the navigation to remove
-    * @throws Exception any exception
+    * @param navigation
+    *           the navigation to remove
+    * @throws Exception
+    *            any exception
     */
    public void remove(PageNavigation navigation) throws Exception
    {
@@ -445,9 +473,16 @@ public class UserPortalConfigService implements Startable
 
    public PageNavigation getPageNavigation(String ownerType, String id) throws Exception
    {
-      PageNavigation navigation = pageNavigationCache_.get(ownerType + "::" + id);
+      PageNavigation navigation = (PageNavigation)pageNavigationCache_.get(ownerType + "::" + id);
       if (navigation == null)
+      {
          navigation = storage_.getPageNavigation(ownerType, id);
+         if (navigation != null)
+         {
+            navigation.setSerialMark(System.currentTimeMillis());
+            pageNavigationCache_.put(navigation.getOwner(), navigation);
+         }
+      }
       return navigation;
    }
 
@@ -479,12 +514,17 @@ public class UserPortalConfigService implements Startable
    /**
     * Clones a page.
     * 
-    * @param pageId the id of the page to clone
-    * @param pageName the new page name
-    * @param ownerType the new page owner type
-    * @param ownerId the new page owner id
+    * @param pageId
+    *           the id of the page to clone
+    * @param pageName
+    *           the new page name
+    * @param ownerType
+    *           the new page owner type
+    * @param ownerId
+    *           the new page owner id
     * @return the newly created page
-    * @throws Exception any exception
+    * @throws Exception
+    *            any exception
     */
    public Page renewPage(String pageId, String pageName, String ownerType, String ownerId) throws Exception
    {
@@ -493,12 +533,16 @@ public class UserPortalConfigService implements Startable
 
    /**
     * Creates a page from an existing template.
-    *
-    * @param temp the template name
-    * @param ownerType the new owner type
-    * @param ownerId the new owner id
+    * 
+    * @param temp
+    *           the template name
+    * @param ownerType
+    *           the new owner type
+    * @param ownerId
+    *           the new owner id
     * @return the page
-    * @throws Exception any exception
+    * @throws Exception
+    *            any exception
     */
    public Page createPageTemplate(String temp, String ownerType, String ownerId) throws Exception
    {
@@ -509,9 +553,10 @@ public class UserPortalConfigService implements Startable
 
    /**
     * Load all navigation that user has edit permission.
-    *
+    * 
     * @return the navigation the user can edit
-    * @throws Exception any exception
+    * @throws Exception
+    *            any exception
     */
    public List<PageNavigation> loadEditableNavigations() throws Exception
    {
@@ -538,9 +583,10 @@ public class UserPortalConfigService implements Startable
 
    /**
     * Returns the list of group ids that do not have an existing navigation.
-    *
+    * 
     * @return the group id with no navigation
-    * @throws Exception any exception
+    * @throws Exception
+    *            any exception
     */
    public Set<String> findGroupWithoutNavigation() throws Exception
    {
@@ -556,9 +602,10 @@ public class UserPortalConfigService implements Startable
 
    /**
     * Returns the list of all portal names.
-    *
+    * 
     * @return the list of all portal names
-    * @throws Exception any exception
+    * @throws Exception
+    *            any exception
     */
    public List<String> getAllPortalNames() throws Exception
    {
@@ -578,10 +625,13 @@ public class UserPortalConfigService implements Startable
 
    /**
     * Update the ownership recursively on the model graph.
-    *
-    * @param object the model object graph root
-    * @param ownerType the new owner type
-    * @param ownerId the new owner id
+    * 
+    * @param object
+    *           the model object graph root
+    * @param ownerType
+    *           the new owner type
+    * @param ownerId
+    *           the new owner id
     */
    private void updateOwnership(ModelObject object, String ownerType, String ownerId)
    {
