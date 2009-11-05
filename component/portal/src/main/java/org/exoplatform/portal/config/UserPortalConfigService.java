@@ -31,9 +31,6 @@ import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.TransientApplicationState;
 import org.exoplatform.portal.pom.config.ModelDemarcation;
-import org.exoplatform.services.cache.CacheService;
-import org.exoplatform.services.cache.ExoCache;
-import org.exoplatform.services.cache.ExpireKeyStartWithSelector;
 import org.exoplatform.services.listener.ListenerService;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
@@ -76,26 +73,17 @@ public class UserPortalConfigService implements Startable
 
    private ListenerService listenerService;
 
-   protected ExoCache<String, PortalConfig> portalConfigCache_;
-
-   protected ExoCache<String, Page> pageConfigCache_;
-
-   protected ExoCache<String, PageNavigation> pageNavigationCache_;
-
    private NewPortalConfigListener newPortalConfigListener_;
 
    private Log log = ExoLogger.getLogger("Portal:UserPortalConfigService");
 
-   public UserPortalConfigService(UserACL userACL, DataStorage storage, CacheService cacheService,
+   public UserPortalConfigService(UserACL userACL, DataStorage storage,
       OrganizationService orgService, ListenerService listenerService) throws Exception
    {
       this.storage_ = storage;
       this.orgService_ = orgService;
       this.listenerService = listenerService;
       this.userACL_ = userACL;
-      this.portalConfigCache_ = cacheService.getCacheInstance(PortalConfig.class.getName());
-      this.pageConfigCache_ = cacheService.getCacheInstance(Page.class.getName());
-      this.pageNavigationCache_ = cacheService.getCacheInstance(PageNavigation.class.getName());
    }
 
    /**
@@ -135,13 +123,7 @@ public class UserPortalConfigService implements Startable
     */
    public UserPortalConfig getUserPortalConfig(String portalName, String accessUser) throws Exception
    {
-      PortalConfig portal = portalConfigCache_.get(portalName);
-      if (portal == null)
-      {
-         portal = storage_.getPortalConfig(portalName);
-         if (portal != null)
-            portalConfigCache_.put(portalName, portal);
-      }
+      PortalConfig portal = storage_.getPortalConfig(portalName);
       if (portal == null || !userACL_.hasPermission(portal))
          return null;
 
@@ -288,10 +270,6 @@ public class UserPortalConfigService implements Startable
       PortalConfig config = storage_.getPortalConfig(ownerType, ownerId);
       if (config != null)
       {
-         if (ownerType.equals("portal"))
-         {
-            portalConfigCache_.remove(config.getName());
-         }
          storage_.remove(config);
       }
    }
@@ -305,7 +283,6 @@ public class UserPortalConfigService implements Startable
    public void update(PortalConfig portal) throws Exception
    {
       storage_.save(portal);
-      portalConfigCache_.select(new ExpireKeyStartWithSelector<String, PortalConfig>(portal.getName()));
    }
 
    /**
@@ -321,11 +298,7 @@ public class UserPortalConfigService implements Startable
    {
       if (pageId == null)
          return null;
-      Page page = pageConfigCache_.get(pageId);
-      if (page == null)
-         page = storage_.getPage(pageId); // TODO: pageConfigCache_ needs to be
-      // updated
-      return page;
+      return storage_.getPage(pageId); // TODO: pageConfigCache_ needs to be
    }
 
    /**
@@ -346,11 +319,6 @@ public class UserPortalConfigService implements Startable
    public Page getPage(String pageId, String accessUser) throws Exception
    {
       Page page = getPage(pageId);
-      if (page != null)
-      { // Add a check on page value before put it into the
-         // cache
-         pageConfigCache_.put(pageId, page);
-      }
       if (page == null || !userACL_.hasPermission(page))
       {
          return null;
@@ -371,7 +339,6 @@ public class UserPortalConfigService implements Startable
    public void remove(Page page) throws Exception
    {
       storage_.remove(page);
-      pageConfigCache_.remove(page.getPageId());
       listenerService.broadcast(REMOVE_PAGE_EVENT, this, page);
    }
 
@@ -388,9 +355,6 @@ public class UserPortalConfigService implements Startable
    public void create(Page page) throws Exception
    {
       storage_.create(page);
-
-      // Remove from the cache since the page can contain transient objects
-      pageConfigCache_.remove(page.getPageId());
 
       //
       listenerService.broadcast(CREATE_PAGE_EVENT, this, page);
@@ -411,9 +375,6 @@ public class UserPortalConfigService implements Startable
    {
       List<ModelChange> changes = storage_.save(page);
 
-      // Remove from the cache since the page can contain transient objects
-      pageConfigCache_.remove(page.getPageId());
-
       //
       listenerService.broadcast(UPDATE_PAGE_EVENT, this, page);
       return changes;
@@ -433,7 +394,6 @@ public class UserPortalConfigService implements Startable
    {
       storage_.create(navigation);
       navigation.setSerialMark(System.currentTimeMillis());
-      pageNavigationCache_.put(navigation.getOwner(), navigation);
       listenerService.broadcast(CREATE_NAVIGATION_EVENT, this, navigation);
    }
 
@@ -450,7 +410,6 @@ public class UserPortalConfigService implements Startable
    public void update(PageNavigation navigation) throws Exception
    {
       storage_.save(navigation);
-      pageNavigationCache_.select(new ExpireKeyStartWithSelector<String, PageNavigation>(navigation.getOwner()));
       listenerService.broadcast(UPDATE_NAVIGATION_EVENT, this, navigation);
    }
 
@@ -467,21 +426,15 @@ public class UserPortalConfigService implements Startable
    public void remove(PageNavigation navigation) throws Exception
    {
       storage_.remove(navigation);
-      pageNavigationCache_.remove(navigation.getOwner());
       listenerService.broadcast(REMOVE_NAVIGATION_EVENT, this, navigation);
    }
 
    public PageNavigation getPageNavigation(String ownerType, String id) throws Exception
    {
-      PageNavigation navigation = (PageNavigation)pageNavigationCache_.get(ownerType + "::" + id);
-      if (navigation == null)
+      PageNavigation navigation = storage_.getPageNavigation(ownerType, id);
+      if (navigation != null)
       {
-         navigation = storage_.getPageNavigation(ownerType, id);
-         if (navigation != null)
-         {
-            navigation.setSerialMark(System.currentTimeMillis());
-            pageNavigationCache_.put(navigation.getOwner(), navigation);
-         }
+         navigation.setSerialMark(System.currentTimeMillis());
       }
       return navigation;
    }
