@@ -39,7 +39,6 @@ import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
-import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.UserProfile;
 import org.exoplatform.web.application.RequestContext;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -674,8 +673,8 @@ public class UIPortlet<S, C extends Serializable, I> extends UIApplication
       StatefulPortletContext<C> preferencesPortletContext = getPortletContext();
 
       // get the user profile cached in the prc during the start of the request
-      UserProfile userProfile = (UserProfile) prc.getAttribute(UserProfileLifecycle.USER_PROFILE_ATTRIBUTE_NAME);
-      
+      UserProfile userProfile = (UserProfile)prc.getAttribute(UserProfileLifecycle.USER_PROFILE_ATTRIBUTE_NAME);
+
       // client context
       AbstractClientContext clientContext;
       Cookie[] cookies = servletRequest.getCookies();

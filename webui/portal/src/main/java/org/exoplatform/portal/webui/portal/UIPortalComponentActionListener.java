@@ -28,8 +28,10 @@ import org.exoplatform.portal.config.model.TransientApplicationState;
 import org.exoplatform.portal.config.model.gadget.GadgetId;
 import org.exoplatform.portal.config.model.portlet.PortletId;
 import org.exoplatform.portal.config.model.wsrp.WSRPId;
+import org.exoplatform.portal.pom.spi.portlet.Preferences;
 import org.exoplatform.portal.webui.application.PortletState;
 import org.exoplatform.portal.webui.application.UIApplicationList;
+import org.exoplatform.portal.webui.application.UIGadget;
 import org.exoplatform.portal.webui.application.UIPortlet;
 import org.exoplatform.portal.webui.container.UIContainerList;
 import org.exoplatform.portal.webui.login.UILogin;
@@ -245,9 +247,12 @@ public class UIPortalComponentActionListener
 
                String appType = app.getApplicationType();
                ApplicationType<?, ?> applicationType;
+               org.exoplatform.application.registry.Application temp = null;
                if (appType.equals(Application.EXO_GADGET_TYPE))
                {
-                  applicationType = ApplicationType.GADGET;
+                  temp = app;
+                  app = appList.getApplication("dashboard/GadgetPortlet");
+                  applicationType = ApplicationType.PORTLET;
                }
                else if (appType.equals(Application.EXO_PORTLET_TYPE))
                {
@@ -288,10 +293,6 @@ public class UIPortalComponentActionListener
                {
                   applicationid = new PortletId(app.getApplicationGroup(), app.getApplicationName());
                }
-               else if (applicationType == ApplicationType.GADGET)
-               {
-                  applicationid = new GadgetId(app.getApplicationName());
-               }
                else if (applicationType == ApplicationType.WSRP_PORTLET)
                {
                   applicationid = new WSRPId(app.getUri());
@@ -302,7 +303,20 @@ public class UIPortalComponentActionListener
                }
 
                //
-               TransientApplicationState<?> applicationState = new TransientApplicationState();
+               TransientApplicationState<?> applicationState;
+               if (applicationType.equals(ApplicationType.PORTLET) && temp != null)
+               {
+                  UIGadget uiGadget = uiApp.createUIComponent(pcontext, UIGadget.class, null, null);
+                  uiGadget.setGadgetId(new GadgetId(temp.getApplicationName()));
+                  Preferences pref = new Preferences();
+                  pref.setValue("url", uiGadget.getUrl());
+                  applicationState = new TransientApplicationState(pref);
+               }
+               else
+               {
+                  applicationState = new TransientApplicationState();
+               }
+
                if (uiPage != null)
                {
                   applicationState.setOwnerType(uiPage.getOwnerType());

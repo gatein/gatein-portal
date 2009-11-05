@@ -154,7 +154,9 @@ public abstract class ModelAdapter<S, C extends Serializable, I>
             {
                TransientApplicationState<Preferences> transientState =
                   (TransientApplicationState<Preferences>)applicationState;
-               return transientState.getContentState();
+               Preferences pref = transientState.getContentState();
+               if(pref == null) pref = new Preferences();
+               return pref;
             }
             else
             {
