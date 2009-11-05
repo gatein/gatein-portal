@@ -2271,6 +2271,9 @@
     <Action>
       <Add>Add Navigation</Add>
     </Action>
+    <Label>
+	<NoPermission>This user doesn't have permisson to add navigation</NoPermission>
+    </Label>		
     <header>
     	<Group>Group</Group>
     </header>
