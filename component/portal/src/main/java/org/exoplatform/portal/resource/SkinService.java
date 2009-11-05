@@ -97,7 +97,7 @@ public class SkinService implements Startable
 
    /** The deployer. */
    private final AbstractResourceHandler deployer;
-   
+
    /** The removal. */
    private final AbstractResourceHandler removal;
 
@@ -116,15 +116,16 @@ public class SkinService implements Startable
    private final MainResourceResolver mainResolver;
 
    /**
-     * The name of the portal container 
-     */
+    * The name of the portal container
+    */
    final String portalContainerName;
 
    /**
-   * An id used for caching request. The id life cycle is the same than the class instance because
-   * we consider css will change until server is restarted. Of course this only applies for the
-   * developing mode set to false.
-   */
+    * An id used for caching request. The id life cycle is the same than the
+    * class instance because we consider css will change until server is
+    * restarted. Of course this only applies for the developing mode set to
+    * false.
+    */
    final String id = Long.toString(System.currentTimeMillis());
 
    public SkinService(ExoContainerContext context)
@@ -137,7 +138,7 @@ public class SkinService implements Startable
       portletThemes_ = new HashMap<String, Set<String>>();
       portalContainerName = context.getPortalContainerName();
       mainResolver = new MainResourceResolver(portalContainerName, skinConfigs_);
-      deployer = new GateinSkinConfigDeployer(portalContainerName, this);     
+      deployer = new GateinSkinConfigDeployer(portalContainerName, this);
       removal = new GateinSkinConfigRemoval(portalContainerName, this);
    }
 
@@ -154,12 +155,18 @@ public class SkinService implements Startable
 
    /**
     * Register the stylesheet for a portal Skin.
-    *
-    * @param module skin module identifier
-    * @param skinName skin name
-    * @param cssPath path uri to the css file. This is relative to the root context, use leading '/'
-    * @param scontext the webapp's {@link javax.servlet.ServletContext}
-    * @param overwrite if any previous skin should be replaced by that one
+    * 
+    * @param module
+    *           skin module identifier
+    * @param skinName
+    *           skin name
+    * @param cssPath
+    *           path uri to the css file. This is relative to the root context,
+    *           use leading '/'
+    * @param scontext
+    *           the webapp's {@link javax.servlet.ServletContext}
+    * @param overwrite
+    *           if any previous skin should be replaced by that one
     */
    public void addPortalSkin(String module, String skinName, String cssPath, ServletContext scontext, boolean overwrite)
    {
@@ -196,8 +203,9 @@ public class SkinService implements Startable
 
    /**
     * Merge several skins into one single skin.
-    *
-    * @param skins the skins to merge
+    * 
+    * @param skins
+    *           the skins to merge
     * @return the merged skin
     */
    public Skin merge(Collection<SkinConfig> skins)
@@ -207,8 +215,9 @@ public class SkinService implements Startable
 
    /**
     * Add a resource resolver to plug external resolvers.
-    *
-    * @param resolver a resolver to add
+    * 
+    * @param resolver
+    *           a resolver to add
     */
    public void addResourceResolver(ResourceResolver resolver)
    {
@@ -265,8 +274,9 @@ public class SkinService implements Startable
 
    /**
     * Return the CSS content of the file specified by the given URI.
-    *
-    * @param cssPath path of the css to find
+    * 
+    * @param cssPath
+    *           path of the css to find
     * @return the css
     */
    public String getCSS(String cssPath)
@@ -390,6 +400,23 @@ public class SkinService implements Startable
       skinConfigs_.remove(key);
    }
 
+   public void removeSupportedSkin(String skinName) throws Exception
+   {
+      availableSkins_.remove(skinName);
+   }
+
+   public void remove(List<SkinKey> keys) throws Exception
+   {
+      if (keys == null)
+      {
+         return;
+      }
+      for (SkinKey key : keys)
+      {
+         skinConfigs_.remove(key);
+      }
+   }
+
    public int size()
    {
       return skinConfigs_.size();
@@ -474,9 +501,11 @@ public class SkinService implements Startable
 
    /**
     * Filter what if it's annotated with the alternative orientation.
-    *
-    * @param line the line to include
-    * @param orientation the orientation
+    * 
+    * @param line
+    *           the line to include
+    * @param orientation
+    *           the orientation
     * @return true if the line is included
     */
    private boolean wantInclude(String line, Orientation orientation)
@@ -538,7 +567,9 @@ public class SkinService implements Startable
 
    @Managed
    @ManagedDescription("Reload a specified skin")
-   public void reloadSkin(@ManagedDescription("The skin id") @ManagedName("skinId") String skinId)
+   public void reloadSkin(@ManagedDescription("The skin id")
+   @ManagedName("skinId")
+   String skinId)
    {
       ltCache.remove(skinId);
       rtCache.remove(skinId);

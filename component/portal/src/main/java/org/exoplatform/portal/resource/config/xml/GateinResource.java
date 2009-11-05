@@ -22,10 +22,10 @@ package org.exoplatform.portal.resource.config.xml;
 /**
  * 
  * Created by eXoPlatform SAS
- *
+ * 
  * Author: Minh Hoang TO - hoang281283@gmail.com
- *
- *      Sep 17, 2009
+ * 
+ * Sep 17, 2009
  */
 public interface GateinResource
 {
@@ -33,6 +33,8 @@ public interface GateinResource
    final public static String SKIN_DEF_TAG = "skin-def";
 
    final public static String SKIN_NAME_TAG = "skin-name";
+
+   final public static String SKIN_MODULE_TAG = "skin-module";
 
    final public static String PORTAl_SKIN_TAG = "portal-skin";
 
@@ -51,12 +53,12 @@ public interface GateinResource
    final public static String STYLE_THEME_TAG = "style-theme";
 
    final public static String THEME_NAME_TAG = "theme-name";
-   
+
    final public static String JAVA_SCRIPT_TAG = "javascript";
-   
+
    final public static String JAVA_SCRIPT_PARAM = "param";
-   
+
    final public static String JAVA_SCRIPT_MODULE = "js-module";
-   
+
    final public static String JAVA_SCRIPT_PATH = "js-path";
 }

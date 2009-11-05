@@ -19,6 +19,7 @@
 
 package org.exoplatform.portal.resource.config.tasks;
 
+import org.exoplatform.portal.resource.SkinDependentManager;
 import org.exoplatform.portal.resource.SkinService;
 
 import javax.servlet.ServletContext;
@@ -26,10 +27,10 @@ import javax.servlet.ServletContext;
 /**
  * 
  * Created by eXoPlatform SAS
- *
+ * 
  * Author: Minh Hoang TO - hoang281283@gmail.com
- *
- *      Sep 16, 2009
+ * 
+ * Sep 16, 2009
  */
 public class PortalSkinTask extends AbstractSkinTask
 {
@@ -80,8 +81,19 @@ public class PortalSkinTask extends AbstractSkinTask
       {
          return;
       }
-      String fullCSSPath = scontext.getContextPath() + cssPath;
+      String contextPath = scontext.getContextPath();
+      String fullCSSPath = contextPath + cssPath;
       skinService.addPortalSkin(moduleName, skinName, fullCSSPath, scontext, overwrite);
+      updateSkinDependentManager(contextPath, moduleName, skinName);
    }
 
+   /** Update skinDependentManager as it is needed to undeploy skin at runtime */
+   private void updateSkinDependentManager(String webApp, String moduleName, String skinName)
+   {
+      SkinDependentManager.addPortalSkin(webApp, moduleName, skinName);
+      SkinDependentManager.addSkinDeployedInApp(webApp, skinName);
+
+      // Remark: Invoked only in PortalSkinTask
+      SkinDependentManager.addDependentAppToSkinName(skinName, webApp);
+   }
 }
