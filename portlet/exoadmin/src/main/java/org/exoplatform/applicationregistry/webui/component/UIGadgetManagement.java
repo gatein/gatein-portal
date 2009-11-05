@@ -23,6 +23,9 @@ import org.exoplatform.application.gadget.Gadget;
 import org.exoplatform.application.gadget.GadgetRegistryService;
 import org.exoplatform.application.gadget.Source;
 import org.exoplatform.application.gadget.SourceStorage;
+import org.exoplatform.application.registry.Application;
+import org.exoplatform.application.registry.ApplicationCategory;
+import org.exoplatform.application.registry.ApplicationRegistryService;
 import org.exoplatform.applicationregistry.webui.Util;
 import org.exoplatform.web.WebAppController;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -185,9 +188,31 @@ public class UIGadgetManagement extends UIContainer
             sourceStorage.removeSource(dirPath + "/" + name + ".xml");
          }
          uiManagement.reload();
+
+         // update to ApplicationOrganizer
+         removeFromApplicationRegistry(name);
+         UIApplicationOrganizer uiOrganizer =
+            uiManagement.getParent().findFirstComponentOfType(UIApplicationOrganizer.class);
+         ApplicationCategory selectedCate = uiOrganizer.getSelectedCategory();
+         uiOrganizer.reload();
+         uiOrganizer.setSelectedCategory(selectedCate);
+
          ctx.addUIComponentToUpdateByAjax(uiManagement);
       }
 
+      private void removeFromApplicationRegistry(String name) throws Exception
+      {
+         ApplicationRegistryService appRegService =
+            org.exoplatform.portal.webui.util.Util.getUIPortalApplication().getApplicationComponent(
+               ApplicationRegistryService.class);
+         List<ApplicationCategory> cates = appRegService.getApplicationCategories();
+         for (ApplicationCategory cate : cates)
+         {
+            Application app = appRegService.getApplication(cate.getName(), name);
+            if (app != null)
+               appRegService.remove(app);
+         }
+      }
    }
 
    public static class AddLocalGadgetActionListener extends EventListener<UIGadgetManagement>
