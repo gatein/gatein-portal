@@ -89,7 +89,7 @@ public class UISiteManagement extends UIContainer
    {
       UIPopupWindow editNavigation = addChild(UIPopupWindow.class, null, null);
       editNavigation.setWindowSize(400, 400);
-      editNavigation.setId(editNavigation.getId()+ "-" + UUID.randomUUID().toString().replaceAll("-", ""));
+      editNavigation.setId(editNavigation.getId() + "-" + UUID.randomUUID().toString().replaceAll("-", ""));
       //loadPortalConfigs();
    }
 
@@ -192,7 +192,7 @@ public class UISiteManagement extends UIContainer
          String portalName = event.getRequestContext().getRequestParameter(OBJECTID);
          UserPortalConfigService service = event.getSource().getApplicationComponent(UserPortalConfigService.class);
          PortalRequestContext prContext = Util.getPortalRequestContext();
-         UIPortalApplication uiPortalApp = event.getSource().getAncestorOfType(UIPortalApplication.class);
+         UIPortalApplication uiPortalApp = Util.getUIPortalApplication();
 
          UserPortalConfig config = service.getUserPortalConfig(portalName, prContext.getRemoteUser());
          if (config != null && config.getPortalConfig().isModifiable())
