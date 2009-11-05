@@ -97,6 +97,9 @@ public class SkinService implements Startable
 
    /** The deployer. */
    private final AbstractResourceHandler deployer;
+   
+   /** The removal. */
+   private final AbstractResourceHandler removal;
 
    private final Map<SkinKey, SkinConfig> portalSkins_;
 
@@ -124,10 +127,6 @@ public class SkinService implements Startable
    */
    final String id = Long.toString(System.currentTimeMillis());
 
-   /** Temporary hack. */
-   //private static final List<String> skinBlackList = Arrays.asList("Vista", "Mac");
-   private static final List<String> skinBlackList = new ArrayList<String>();
-
    public SkinService(ExoContainerContext context)
    {
       portalSkins_ = new LinkedHashMap<SkinKey, SkinConfig>();
@@ -138,8 +137,8 @@ public class SkinService implements Startable
       portletThemes_ = new HashMap<String, Set<String>>();
       portalContainerName = context.getPortalContainerName();
       mainResolver = new MainResourceResolver(portalContainerName, skinConfigs_);
-      //deployer = new SkinConfigDeployer(portalContainerName, this);
-      deployer = new GateinSkinConfigDeployer(portalContainerName, this);
+      deployer = new GateinSkinConfigDeployer(portalContainerName, this);     
+      removal = new GateinSkinConfigRemoval(portalContainerName, this);
    }
 
    public void addCategoryTheme(String categoryName)
@@ -548,10 +547,12 @@ public class SkinService implements Startable
    public void start()
    {
       DefaultServletContainerFactory.getInstance().getServletContainer().addWebAppListener(deployer);
+      DefaultServletContainerFactory.getInstance().getServletContainer().addWebAppListener(removal);
    }
 
    public void stop()
    {
       DefaultServletContainerFactory.getInstance().getServletContainer().removeWebAppListener(deployer);
+      DefaultServletContainerFactory.getInstance().getServletContainer().removeWebAppListener(removal);
    }
 }
