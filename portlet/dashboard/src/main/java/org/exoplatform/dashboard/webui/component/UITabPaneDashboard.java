@@ -85,13 +85,13 @@ public class UITabPaneDashboard extends UIContainer
       initPageNavigation();
    }
 
-   private void initPageNavigation()
+   private void initPageNavigation() throws Exception
    {
       String remoteUser = Util.getPortalRequestContext().getRemoteUser();
       pageNavigation = getPageNavigation(PortalConfig.USER_TYPE + "::" + remoteUser);
    }
 
-   private PageNavigation getPageNavigation(String owner)
+   private PageNavigation getPageNavigation(String owner) throws Exception
    {
       List<PageNavigation> allNavigations = uiPortal.getNavigations();
       for (PageNavigation nav : allNavigations)
@@ -124,7 +124,7 @@ public class UITabPaneDashboard extends UIContainer
       }
    }
 
-   public PageNavigation getPageNavigation()
+   public PageNavigation getPageNavigation() throws Exception
    {
       if (pageNavigation == null)
       {

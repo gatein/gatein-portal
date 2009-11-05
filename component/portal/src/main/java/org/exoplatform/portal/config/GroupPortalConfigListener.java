@@ -19,19 +19,23 @@
 
 package org.exoplatform.portal.config;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.config.model.Container;
+import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.services.jcr.ext.registry.RegistryService;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.GroupEventListener;
+import org.exoplatform.services.organization.OrganizationService;
 
 /**
- * Created by The eXo Platform SARL
+ * Created by The eXo Platform SARL 
  * Author : Nhu Dinh Thuan
- *          nhudinhthuan@exoplatform.com
- * May 29, 2007  
+ *    nhudinhthuan@exoplatform.com May 29, 2007
  */
 public class GroupPortalConfigListener extends GroupEventListener
 {
@@ -41,8 +45,12 @@ public class GroupPortalConfigListener extends GroupEventListener
       ExoContainer container = ExoContainerContext.getCurrentContainer();
       UserPortalConfigService portalConfigService =
          (UserPortalConfigService)container.getComponentInstanceOfType(UserPortalConfigService.class);
+
+      // Remove all descendant navigations
+      removeGroupNavigation(group, portalConfigService);
+
       String groupId = group.getId().trim();
-      portalConfigService.removeUserPortalConfig("group", groupId);
+      portalConfigService.removeUserPortalConfig(PortalConfig.GROUP_TYPE, groupId);
    }
 
    @Override
@@ -50,10 +58,10 @@ public class GroupPortalConfigListener extends GroupEventListener
    {
       ExoContainer container = ExoContainerContext.getCurrentContainer();
       /*
-       * TODO Call start method on RegistryService to allow ecm, ultimate can run
-       * with JDK6. This is uncommon behavior. We need find other way to fix it I
-       * hope that this issues will be fixed when we use the lastest version of
-       * PicoContainer Comment by Hoa Pham.
+       * TODO Call start method on RegistryService to allow ecm, ultimate can
+       * run with JDK6. This is uncommon behavior. We need find other way to fix
+       * it I hope that this issues will be fixed when we use the lastest
+       * version of PicoContainer Comment by Hoa Pham.
        */
       RegistryService registryService = (RegistryService)container.getComponentInstanceOfType(RegistryService.class);
       registryService.start();
@@ -130,5 +138,32 @@ public class GroupPortalConfigListener extends GroupEventListener
          cfg.setName(groupId);
          dataStorage.create(cfg);
       }
+   }
+
+   private void removeGroupNavigation(Group group, UserPortalConfigService portalConfigService) throws Exception
+   {
+      Collection<String> descendantGroups = getDescendantGroups(group);
+      PageNavigation navigation = null;
+      for (String childGroup : descendantGroups)
+      {
+         navigation = portalConfigService.getPageNavigation(PortalConfig.GROUP_TYPE, childGroup);
+         if (navigation != null)
+            portalConfigService.remove(navigation);
+      }
+   }
+
+   private Collection<String> getDescendantGroups(Group group) throws Exception
+   {
+      ExoContainer container = ExoContainerContext.getCurrentContainer();
+      OrganizationService orgService =
+         (OrganizationService)container.getComponentInstanceOfType(OrganizationService.class);
+      Collection<Group> groupCollection = orgService.getGroupHandler().findGroups(group);
+      Collection<String> col = new ArrayList<String>();
+      for (Group childGroup : groupCollection)
+      {
+         col.add(childGroup.getId());
+         col.addAll(getDescendantGroups(childGroup));
+      }
+      return col;
    }
 }

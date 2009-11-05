@@ -33,7 +33,7 @@ public class UIAdminToolbarPortlet extends UIPortletApplication
    {
    }
 
-   public PageNavigation getSelectedNavigation()
+   public PageNavigation getSelectedNavigation() throws Exception
    {
       PageNavigation nav = Util.getUIPortal().getSelectedNavigation();
       if (nav != null)

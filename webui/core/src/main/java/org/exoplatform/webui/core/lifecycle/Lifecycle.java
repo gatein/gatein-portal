@@ -130,9 +130,9 @@ public class Lifecycle<E extends UIComponent>
             validator.endComponent();
          }
       }
-      catch (NullPointerException e)
+      catch (Exception e)
       {
-         log.error("Template: " + template + " not found");
+         log.error("Template: " + template,e);
       }
    }
 }

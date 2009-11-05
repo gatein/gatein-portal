@@ -70,7 +70,7 @@ public class UIUserToolBarSitePortlet extends UIPortletApplication
       return PageNavigationUtils.filter(navi, remoteUser);
    }
 
-   private PageNavigation getPageNavigation(String owner)
+   private PageNavigation getPageNavigation(String owner) throws Exception
    {
       List<PageNavigation> allNavigations = Util.getUIPortal().getNavigations();
       for (PageNavigation nav : allNavigations)
@@ -81,7 +81,7 @@ public class UIUserToolBarSitePortlet extends UIPortletApplication
       return null;
    }
 
-   public PageNode getSelectedPageNode()
+   public PageNode getSelectedPageNode() throws Exception
    {
       return Util.getUIPortal().getSelectedNode();
    }

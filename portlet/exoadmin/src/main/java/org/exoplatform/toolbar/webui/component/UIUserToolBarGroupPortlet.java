@@ -60,7 +60,7 @@ public class UIUserToolBarGroupPortlet extends UIPortletApplication
       return navigations;
    }
 
-   public PageNode getSelectedPageNode()
+   public PageNode getSelectedPageNode() throws Exception
    {
       return Util.getUIPortal().getSelectedNode();
    }
