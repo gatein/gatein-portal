@@ -132,7 +132,7 @@ public class UIPortalForm extends UIFormTabPane
       setSelectedTab("PortalSetting");
       invokeGetBindingBean(Util.getUIPortal());
       ((UIFormStringInput)getChild(UIFormInputSet.class).getChildById(FIELD_NAME))
-            .setValue(((PortalRequestContext)WebuiRequestContext.getCurrentInstance()).getPortalOwner());
+         .setValue(((PortalRequestContext)WebuiRequestContext.getCurrentInstance()).getPortalOwner());
       setActions(new String[]{"Save", "Close"});
    }
 
@@ -204,16 +204,15 @@ public class UIPortalForm extends UIFormTabPane
 
       UIFormInputSet uiPermissionSetting = createUIComponent(UIFormInputSet.class, "PermissionSetting", null);
       addUIComponentInput(uiPermissionSetting);
-      
+
       UIListPermissionSelector uiListPermissionSelector = createUIComponent(UIListPermissionSelector.class, null, null);
       uiListPermissionSelector.configure("UIListPermissionSelector", "accessPermissions");
       uiListPermissionSelector.addValidator(EmptyIteratorValidator.class);
       uiPermissionSetting.addChild(uiListPermissionSelector);
-      uiPermissionSetting.setSelectedComponent(uiListPermissionSelector.getId()) ;
-  
-  
+      uiPermissionSetting.setSelectedComponent(uiListPermissionSelector.getId());
+
       UIPermissionSelector uiEditPermission = createUIComponent(UIPermissionSelector.class, null, null);
-      uiEditPermission.setRendered(false) ;
+      uiEditPermission.setRendered(false);
       uiEditPermission.addValidator(org.exoplatform.webui.organization.UIPermissionSelector.MandatoryValidator.class);
       uiEditPermission.configure("UIPermissionSelector", "editPermission");
       uiPermissionSetting.addChild(uiEditPermission);
@@ -234,12 +233,17 @@ public class UIPortalForm extends UIFormTabPane
       public void execute(Event<UIPortalForm> event) throws Exception
       {
          UIPortalForm uiForm = event.getSource();
+         PortalRequestContext prContext = Util.getPortalRequestContext();
+         UIPortalApplication uiPortalApp = (UIPortalApplication)prContext.getUIApplication();
          UIPortal uiPortal = Util.getUIPortal();
          uiForm.invokeSetBindingBean(uiPortal);
-         //      uiPortal.refreshNavigation(localeConfigService.getLocaleConfig(uiPortal.getLocale()).getLocale()) ;
+         //uiPortal.refreshNavigation(localeConfigService.getLocaleConfig(uiPortal.getLocale()).getLocale()) ;
          PortalConfig portalConfig = (PortalConfig)PortalDataMapper.buildModelObject(uiPortal);
-         UserPortalConfigService configService = uiForm.getApplicationComponent(UserPortalConfigService.class);
-         configService.update(portalConfig);
+         if (uiPortalApp.getModeState() == UIPortalApplication.NORMAL_MODE)
+         {
+            UserPortalConfigService configService = uiForm.getApplicationComponent(UserPortalConfigService.class);
+            configService.update(portalConfig);
+         }
          UIMaskWorkspace uiMaskWorkspace = uiForm.getParent();
          uiMaskWorkspace.setUIComponent(null);
          event.getRequestContext().addUIComponentToUpdateByAjax(uiMaskWorkspace);
