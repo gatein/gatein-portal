@@ -463,6 +463,27 @@ public class TestUserPortalConfigService extends BasicTestCase
       }.execute(null);
    }
 
+   public void testClonePage()
+   {
+      new UnitTest()
+      {
+         public void execute() throws Exception
+         {
+            Page page = new Page();
+            page.setOwnerType("group");
+            page.setOwnerId("/platform/administrators");
+            page.setName("whatever");
+            page.setTitle("testTitle");
+            userPortalConfigSer_.create(page);
+            
+            String newName = "newPage";
+            Page newPage = userPortalConfigSer_.renewPage(page.getPageId(), newName, page.getOwnerType(), page.getOwnerId());
+            assertEquals(newName, newPage.getName());   
+            assertEquals(page.getTitle(), newPage.getTitle());   
+         }
+      }.execute(null);
+   }
+   
    public void testUpdatePage()
    {
       new UnitTest()
