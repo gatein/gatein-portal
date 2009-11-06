@@ -96,18 +96,19 @@ UIPortalNavigation.prototype.buildMenu = function(popupMenu) {
     }
   }
   
-  // Sub menus items
-  var menuItems = DOMUtil.findDescendantsByClass(topContainer, "div", this.tabStyleClass);
-  for(var i = 0; i < menuItems.length; i++) {
-    var menuItem = menuItems[i];
-    menuItem.onmouseover = eXo.portal.UIPortalNavigation.onMenuItemOver;
-    menuItem.onmouseout = eXo.portal.UIPortalNavigation.onMenuItemOut;
-
-    // Set an id to each container for future reference
-    var cont = DOMUtil.findAncestorByClass(menuItem, this.containerStyleClass) ;
-    if (!cont.id) cont.id = DOMUtil.generateId("PortalNavigationContainer");
-    cont.resized = false;
-  }
+	var itemConts = DOMUtil.findDescendantsByClass(topContainer, "div", this.containerStyleClass);
+	for (var i = 0; i < itemConts.length; i++) {
+		var cont = itemConts[i];
+		if(!cont.id) cont.id = DOMUtil.generateId("PortalNavigationContainer");
+		cont.resized = false;
+		
+		var items = DOMUtil.findDescendantsByClass(cont, "div", this.tabStyleClass);
+		if(items.length == 0) cont.parentNode.removeChild(cont);
+		for(var j = 0; j < items.length; j ++) {
+			items[i].onmouseover = eXo.portal.UIPortalNavigation.onMenuItemOver;
+    	items[i].onmouseout = eXo.portal.UIPortalNavigation.onMenuItemOut;
+		}
+	}
 };
 /**
  * Sets the tab style on mouse over and mouse out
