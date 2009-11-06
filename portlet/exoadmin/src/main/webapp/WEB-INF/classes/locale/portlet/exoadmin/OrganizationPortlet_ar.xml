@@ -317,6 +317,7 @@
     </action>
     <msg>
       <InUse>لا يمكنك حذف هذه العضوية لأنها في الاستخدام</InUse>
+      <DeleteMandatory>لا يمكنك حذف هذه العضوية لأنه إلزامية</DeleteMandatory>      
     </msg>
   </UIMembershipList>
   <!--

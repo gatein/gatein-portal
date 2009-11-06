@@ -21,6 +21,7 @@ package org.exoplatform.organization.webui.component;
 
 import org.exoplatform.commons.utils.ObjectPageList;
 import org.exoplatform.commons.utils.PageList;
+import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.services.organization.MembershipType;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -113,6 +114,15 @@ public class UIListMembershipType extends UIContainer
          {
             UIApplication uiApp = event.getRequestContext().getUIApplication();
             uiApp.addMessage(new ApplicationMessage("UIMembershipList.msg.InUse", null));
+            return;
+         }
+         
+         //  Check to see whether given membershiptype is mandatory or not
+         UserACL acl = uiMembership.getApplicationComponent(UserACL.class);
+         List<String> mandatories = acl.getMandatoryMSTypes();
+         if(!mandatories.isEmpty() && mandatories.contains(name)){
+            UIApplication uiApp = event.getRequestContext().getUIApplication();
+            uiApp.addMessage(new ApplicationMessage("UIMembershipList.msg.DeleteMandatory", null));
             return;
          }
 

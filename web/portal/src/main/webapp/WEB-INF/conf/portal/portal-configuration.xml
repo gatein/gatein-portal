@@ -78,13 +78,18 @@
         <description>guests group</description>
         <value>/platform/guests</value>	    
       </value-param>     
-			<values-param>
-				<name>mandatory.groups</name>
-				<description>Groups that can not be deleted.</description>
-				<value>/platform/administrators</value>
-				<value>/platform/users</value>
-				<value>/platform/guests</value>
-			</values-param>                 
+		<values-param>
+			<name>mandatory.groups</name>
+			<description>Groups that can not be deleted.</description>
+			<value>/platform/administrators</value>
+			<value>/platform/users</value>
+			<value>/platform/guests</value>
+		</values-param> 
+		<values-param>
+			<name>mandatory.mstypes</name>
+			<description>Membership type that can not be deleted.</description>
+			<value>member</value>			
+		</values-param>	                
 	  </init-params>   
   </component>
   

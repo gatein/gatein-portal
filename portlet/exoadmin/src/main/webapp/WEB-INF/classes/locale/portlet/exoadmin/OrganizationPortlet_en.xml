@@ -317,6 +317,7 @@
     </action>
     <msg>
       <InUse>You can not delete this membership because it is in use</InUse>
+      <DeleteMandatory>You can not delete this membership because it is mandatory</DeleteMandatory>
     </msg>
   </UIMembershipList>
   <!--

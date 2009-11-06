@@ -61,6 +61,8 @@ public class UserACL
    private String navigationCreatorMembershipType_;
 
    private List<String> mandatoryGroups_;
+   
+   private List<String> mandatoryMSTypes_;
 
    private PortalACLPlugin portalACLPlugin;
 
@@ -89,6 +91,12 @@ public class UserACL
          mandatoryGroups_ = mandatoryGroupsParam.getValues();
       else
          mandatoryGroups_ = new ArrayList<String>();
+      
+      ValuesParam mandatoryMSTypesParam = params.getValuesParam("mandatory.mstypes");
+      if (mandatoryMSTypesParam != null)
+         mandatoryMSTypes_ = mandatoryMSTypesParam.getValues();
+      else
+         mandatoryMSTypes_ = new ArrayList<String>();
 
       // tam.nguyen get admin group value
       ValueParam adminGroupsParam = params.getValueParam("portal.administrator.groups");
@@ -176,6 +184,11 @@ public class UserACL
    public List<String> getMandatoryGroups()
    {
       return mandatoryGroups_;
+   }
+   
+   public List<String> getMandatoryMSTypes()
+   {
+      return mandatoryMSTypes_;
    }
 
    public void setAdminGroups(String adminGroups)
