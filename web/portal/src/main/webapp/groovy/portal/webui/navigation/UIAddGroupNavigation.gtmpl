@@ -6,9 +6,7 @@
 	
 	listGroupNames = uicomponent.loadGroups();
 	uicomponent.renderChild(UIVirtualList.class); %>
-	 <% if (listGroupNames == null){ %>
-	 	<%=_ctx.appRes("UIAddGroupNavigation.Label.NoPermission")%>
-	 <% } %>
+	 
 	<div class="UIAction"> 
     <table class="ActionContainer">
 	    <tr>

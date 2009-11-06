@@ -6,7 +6,10 @@
     	def listGroupNames = (List<String>)uicomponent.getBeans();    	
     	def parent = uicomponent.getParent();
     %>
-<div id="$uicomponent.id" class="FeedBox">   
+<div id="$uicomponent.id" class="FeedBox"> 
+	<% if (listGroupNames.size() == 0){ %>
+	 	<%=_ctx.appRes("UIAddGroupNavigation.Label.NoPermission")%>
+	 <% } %>
 	<%   	 
 	for(groupName in listGroupNames) { 
 			addLink = parent.event("AddNavigation", java.net.URLEncoder.encode(groupName));
