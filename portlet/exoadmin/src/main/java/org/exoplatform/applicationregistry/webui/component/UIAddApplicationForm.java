@@ -257,6 +257,12 @@ public class UIAddApplicationForm extends UIForm
 
          UIFormRadioBoxInput uiRadio = uiForm.getUIInput("application");
          String displayName = uiForm.getUIStringInput(FIELD_NAME).getValue();
+         if (uiForm.getApplications().size() == 0)
+         {
+            ctx.getUIApplication().addMessage(new ApplicationMessage("UIAddApplicationForm.msg.appNotExists", null));
+            ctx.addUIComponentToUpdateByAjax(uiOrganizer);
+            return;
+         }
          Application tmp = uiForm.getApplications().get(Integer.parseInt(uiRadio.getValue()));
 
          // check portet name is exist

@@ -133,6 +133,7 @@
     </action>
     <msg>
       <PortletExist>Ứng dụng này đã tồn tại trong danh mục này, hãy chọn một ứng dụng khác!</PortletExist>
+      <appNotExists>Vui lòng chọn một ứng dụng.</appNotExists>
     </msg>
     <label>
       <displayName>#{label.displayName}</displayName>

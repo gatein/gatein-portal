@@ -133,6 +133,7 @@
     </action>
     <msg>
       <PortletExist>!إن هذه الخدمة في الفئة ، يرجى اختيار واحدة أخرى</PortletExist>
+      <appNotExists>Please select an application.</appNotExists>
     </msg>
     <label>
       <displayName>#{label.displayName}</displayName>
