@@ -63,16 +63,15 @@
 			</div>
 
 		</div>
+		<% if(portletPreferences.getKeys().size() != 0) {%>
 		<div class="Preferences" style="border: 1px solid #b7b7b7; padding: 10px; margin: 10px; background: #f7f7f7">
 			<table class="UIGrid" style="width: 99%">
 				<tr>
 					<th colspan="2"><%=_ctx.appRes("UIPortletInfo.title.portletPreferences")%></th>
 				</tr>
-				<% if(portletPreferences == null) {%>
-				<tr>
-					<td colspan="2" style="text-align: center; font-weight: bold;"><%=_ctx.appRes("UIPortletInfo.msg.noPortletPreferences")%></td>
-				</tr>
-				<% } else {
+
+				
+				<% 
 					//Iterator<Entry<String, String[]>> itr = portletPreferences.getKeys().iterator();
 					Iterator<String> itr = portletPreferences.getKeys().iterator();
                                         while(itr.hasNext()) {
@@ -89,7 +88,8 @@
 					<% } %>
 					</td>
 				</tr>
-				<% } }%>
+				<% }%>
 			</table>
 		</div>
+		<% }%>
 </div>	
