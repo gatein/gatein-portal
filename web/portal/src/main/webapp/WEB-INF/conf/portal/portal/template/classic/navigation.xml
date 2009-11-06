@@ -44,5 +44,12 @@
       <visible>false</visible>
       <page-reference>portal::@owner@::portalnavigation</page-reference>
     </node> 
+    <node>
+	   <uri>register</uri>
+	   <name>register</name>
+	   <label>Register</label>
+	   <visible>false</visible>
+	   <page-reference>portal::@owner@::register</page-reference>	    
+	 </node>
   </page-nodes>
 </node-navigation>
