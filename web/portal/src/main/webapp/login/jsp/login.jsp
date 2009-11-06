@@ -65,7 +65,7 @@
           <%
             if(username.length() > 0 || password.length() > 0) {
           %>
-            <font color="red">Sign in failed. Wrong username or password.</font><%}%>
+            <font color="red"><%=res.getString("UILoginForm.label.SigninFail")%></font><%}%>
           <form name="loginForm" action="<%= contextPath + "/login"%>" method="post" style="margin: 0px;">    
           		<input type="hidden" name="uri" value="<%=session.getAttribute("initialURI") %>"/>
           		<table> 
@@ -106,6 +106,6 @@
         </div>
       </div>
     </div>
-    <span style="font-size: 11px; color: #3f3f3f; text-align: center">Copyright &copy 2009. All rights Reserved, eXo Platform SAS and Red Hat, Inc.</span>
+    <span style="font-size: 11px; color: #3f3f3f; text-align: center"><%=res.getString("UILoginForm.label.Copyright")%></span>
   </body>
 </html>
