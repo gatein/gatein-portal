@@ -33,20 +33,23 @@ import org.w3c.dom.NodeList;
 /**
  * @author <a href="mailto:hoang281283@gmail.com">Minh Hoang TO</a>
  * @version $Id$
- *
+ * 
  */
 public class JavascriptConfigParser
 {
 
-   public static void processConfigResource(InputStream is, JavascriptConfigService service, ServletContext scontext){
+   public static void processConfigResource(InputStream is, JavascriptConfigService service, ServletContext scontext)
+   {
       List<JavascriptTask> tasks = fetchTasks(is);
-      if(tasks != null){
-         for(JavascriptTask task : tasks){
+      if (tasks != null)
+      {
+         for (JavascriptTask task : tasks)
+         {
             task.execute(service, scontext);
          }
       }
    }
-   
+
    private static List<JavascriptTask> fetchTasks(InputStream is)
    {
       try
@@ -60,42 +63,53 @@ public class JavascriptConfigParser
          return null;
       }
    }
-   
-   private static List<JavascriptTask> fetchTasksFromXMLConfig(Document document){
+
+   private static List<JavascriptTask> fetchTasksFromXMLConfig(Document document)
+   {
       List<JavascriptTask> tasks = new ArrayList<JavascriptTask>();
       Element element = document.getDocumentElement();
-      //NodeList nodes = element.getElementsByTagName(GateinResource.JAVA_SCRIPT_TAG);
+      // NodeList nodes =
+      // element.getElementsByTagName(GateinResource.JAVA_SCRIPT_TAG);
       NodeList nodes = element.getElementsByTagName("javascript");
       int length = nodes.getLength();
-      for(int i = 0; i < length; i++){
+      for (int i = 0; i < length; i++)
+      {
          JavascriptTask task = xmlToTask((Element)nodes.item(i));
-         if(task != null){
+         if (task != null)
+         {
             tasks.add(task);
          }
       }
       return tasks;
    }
-   
-   private static JavascriptTask xmlToTask(Element element){
-      //if(!GateinResource.JAVA_SCRIPT_TAG.equals(element.getTagName())){
-      if(!"javascript".equals(element.getTagName())){
+
+   private static JavascriptTask xmlToTask(Element element)
+   {
+      // if(!GateinResource.JAVA_SCRIPT_TAG.equals(element.getTagName())){
+      if (!"javascript".equals(element.getTagName()))
+      {
          return null;
       }
-      try{
+      try
+      {
          JavascriptTask task = new JavascriptTask();
-         //NodeList nodes = element.getElementsByTagName(GateinResource.JAVA_SCRIPT_PARAM);
+         // NodeList nodes =
+         // element.getElementsByTagName(GateinResource.JAVA_SCRIPT_PARAM);
          NodeList nodes = element.getElementsByTagName("param");
          int length = nodes.getLength();
-         for(int i = 0; i < length ; i++){
+         for (int i = 0; i < length; i++)
+         {
             Element param_ele = (Element)nodes.item(i);
             String js_module = param_ele.getElementsByTagName("js-module").item(0).getFirstChild().getNodeValue();
             String js_path = param_ele.getElementsByTagName("js-path").item(0).getFirstChild().getNodeValue();
-            task.addParam(js_module, js_path);
+            task.addJSKey(js_module, js_path);
          }
          return task;
-      }catch(Exception ex){
+      }
+      catch (Exception ex)
+      {
          ex.printStackTrace();
          return null;
       }
-   }   
+   }
 }

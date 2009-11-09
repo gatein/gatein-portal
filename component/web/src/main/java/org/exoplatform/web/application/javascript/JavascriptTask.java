@@ -23,39 +23,32 @@ import java.util.List;
 
 import javax.servlet.ServletContext;
 
-
 /**
  * @author <a href="mailto:hoang281283@gmail.com">Minh Hoang TO</a>
  * @version $Id$
- *
+ * 
  */
 public class JavascriptTask
 {
-   
-   private List<Parameter> parameters;
-   
-   public JavascriptTask(){
-      parameters = new ArrayList<Parameter>();
+
+   private List<JavascriptKey> jsKeys;
+
+   public JavascriptTask()
+   {
+      jsKeys = new ArrayList<JavascriptKey>();
    }
-   
-   public void execute(JavascriptConfigService service, ServletContext scontext){
-      for(Parameter param : parameters){
-         service.addJavascript(param.moduleName, param.scriptPath, scontext);
+
+   public void execute(JavascriptConfigService service, ServletContext scontext)
+   {
+      for (JavascriptKey key : jsKeys)
+      {
+         service.addJavascript(key, scontext);
       }
+      JavascriptDependentManager.addJavascriptDependent(scontext.getContextPath(), jsKeys);
    }
-   
-   public void addParam(String moduleName, String scriptPath){
-      parameters.add(new Parameter(moduleName, scriptPath));
-   }
-   
-   private class Parameter {
-      
-      private String moduleName;
-      private String scriptPath;
-      
-      Parameter(String _moduleName, String _scriptPath){
-         moduleName = _moduleName;
-         scriptPath = _scriptPath;
-      }     
+
+   public void addJSKey(String moduleName, String scriptPath)
+   {
+      jsKeys.add(new JavascriptKey(moduleName, scriptPath));
    }
 }

@@ -49,17 +49,20 @@ public class JavascriptConfigService implements Startable
    /** . */
    private JavascriptDeployer deployer;
 
+   private JavascriptRemoval removal;
+
    public JavascriptConfigService(ExoContainerContext context)
    {
       availableScripts_ = new ArrayList<String>();
       availableScriptsPaths_ = new ArrayList<String>();
       extendedJavascripts = new HashMap<String, String>();
       deployer = new JavascriptDeployer(context.getPortalContainerName(), this);
+      removal = new JavascriptRemoval(context.getPortalContainerName(), this);
    }
 
    /**
-    * return a collection  list This method should return the
-    * availables scripts in the service
+    * return a collection list This method should return the availables scripts
+    * in the service
     * 
     * @return
     */
@@ -80,6 +83,10 @@ public class JavascriptConfigService implements Startable
       availableScripts_.add(module);
       availableScriptsPaths_.add(path);
       extendedJavascripts.put(path, scriptData);
+   }
+   
+   public void addJavascript(JavascriptKey key, ServletContext scontext){
+      addJavascript(key.getModule(), key.getScriptPath(), scontext);
    }
 
    public void addJavascript(String module, String scriptPath, ServletContext scontext)
@@ -120,6 +127,14 @@ public class JavascriptConfigService implements Startable
       }
       sB.append("\n");
       mergedJavascript = mergedJavascript.concat(sB.toString());
+   }
+   
+   public void removeJavascript(JavascriptKey key, ServletContext scontext){
+      
+   }
+   
+   public void refreshMergedJavascript(){
+      
    }
 
    public byte[] getMergedJavascript()
@@ -165,10 +180,13 @@ public class JavascriptConfigService implements Startable
    public void start()
    {
       DefaultServletContainerFactory.getInstance().getServletContainer().addWebAppListener(deployer);
+      DefaultServletContainerFactory.getInstance().getServletContainer().addWebAppListener(removal);
    }
 
    public void stop()
    {
       DefaultServletContainerFactory.getInstance().getServletContainer().removeWebAppListener(deployer);
+      DefaultServletContainerFactory.getInstance().getServletContainer().removeWebAppListener(removal);
    }
+   
 }
