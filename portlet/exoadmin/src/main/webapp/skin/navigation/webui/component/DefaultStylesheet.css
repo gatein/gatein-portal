@@ -117,6 +117,14 @@
 	margin: 20px auto;
 }
 
+.UIAddGroupNavigation .WarningAddGroup {
+	text-align: center;
+	padding: 15px 0px;
+	background: #FED8D8;
+	margin: 10px;
+	font-size: 13px;
+}
+
 /********************UINavigationManagement****************/
 .UINavigationManagement {
 	padding: 10px;
