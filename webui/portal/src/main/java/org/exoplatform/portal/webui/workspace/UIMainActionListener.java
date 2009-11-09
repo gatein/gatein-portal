@@ -66,7 +66,7 @@ public class UIMainActionListener
          UserACL userACL = uiApp.getApplicationComponent(UserACL.class);
          if (!userACL.hasEditPermission(page))
          {
-            uiApp.addMessage(new ApplicationMessage("UIPortalManagement.msg.Invalid-editPermission", null));
+            uiApp.addMessage(new ApplicationMessage("UIPortalManagement.msg.Invalid-EditPage-Permission", null));
             return;
          }
 
@@ -127,7 +127,7 @@ public class UIMainActionListener
          UserACL userACL = uiPortal.getApplicationComponent(UserACL.class);
          if (!userACL.hasEditPermission(portalConfig))
          {
-            uiApp.addMessage(new ApplicationMessage("UIPortalManagement.msg.Invalid-editPermission",
+            uiApp.addMessage(new ApplicationMessage("UIPortalManagement.msg.Invalid-EditLayout-Permission",
                new String[]{uiPortal.getName()}));
             return;
          }

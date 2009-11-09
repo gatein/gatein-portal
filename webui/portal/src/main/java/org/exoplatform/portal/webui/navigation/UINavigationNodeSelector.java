@@ -415,6 +415,7 @@ public class UINavigationNodeSelector extends UIContainer
          portalComposer.setShowControl(true);
          portalComposer.setEditted(false);
          portalComposer.setCollapse(false);
+         portalComposer.setId("UIPageEditor");
          portalComposer.setComponentConfig(UIPortalComposer.class, "UIPageEditor");
 
          UIPortalToolPanel uiToolPanel =
