@@ -36,6 +36,7 @@ public class UIApplicationRegistryPortlet extends UIPortletApplication
       addChild(UIApplicationOrganizer.class, null, null).setRendered(true);
       addChild(UIPortletManagement.class, null, null).setRendered(false);
       addChild(UIGadgetManagement.class, null, null).setRendered(false);
+      addChild(UIApplicationRegistryEditMode.class,null,null).setRendered(false);
    }
 
    @Override

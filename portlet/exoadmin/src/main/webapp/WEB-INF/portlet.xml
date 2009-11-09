@@ -227,6 +227,10 @@
       <mime-type>text/html</mime-type>
       <portlet-mode>help</portlet-mode>
     </supports>
+    <supports>
+      <mime-type>text/html</mime-type>
+      <portlet-mode>edit</portlet-mode>
+    </supports>
     <supported-locale>en</supported-locale>
     
     <resource-bundle>locale.portlet.exoadmin.ApplicationRegistryPortlet</resource-bundle>
@@ -234,8 +238,8 @@
       <title>Application Registry Portlet</title>
       <short-title>Registry</short-title>
       <keywords>Administration</keywords>
-    </portlet-info>
-    
+    </portlet-info>        
+        
     <security-role-ref>
       <role-name>admin</role-name>
       <role-link>admin</role-link>

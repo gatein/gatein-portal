@@ -27,6 +27,7 @@ import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -36,6 +37,8 @@ import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.MonitorEvent;
 
 import java.util.List;
+
+import javax.portlet.PortletPreferences;
 
 /**
  * Created by The eXo Platform SAS
@@ -192,6 +195,13 @@ public class UIApplicationOrganizer extends UIContainer
 
          }
       }
+   }
+   
+   public boolean isShowImport()
+   {
+      PortletRequestContext pcontext = (PortletRequestContext)WebuiRequestContext.getCurrentInstance();
+      PortletPreferences pref = pcontext.getRequest().getPreferences();
+      return Boolean.parseBoolean(pref.getValue("showImport", "true"));
    }
 
    public void processRender(WebuiRequestContext context) throws Exception

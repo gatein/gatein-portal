@@ -30,6 +30,7 @@ import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.services.jcr.ext.registry.RegistryService;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.GroupEventListener;
+import org.exoplatform.services.organization.GroupHandler;
 import org.exoplatform.services.organization.OrganizationService;
 
 /**
@@ -45,11 +46,11 @@ public class GroupPortalConfigListener extends GroupEventListener
       ExoContainer container = ExoContainerContext.getCurrentContainer();
       UserPortalConfigService portalConfigService =
          (UserPortalConfigService)container.getComponentInstanceOfType(UserPortalConfigService.class);
+      String groupId = group.getId().trim();
 
       // Remove all descendant navigations
       removeGroupNavigation(group, portalConfigService);
-
-      String groupId = group.getId().trim();
+      
       portalConfigService.removeUserPortalConfig(PortalConfig.GROUP_TYPE, groupId);
    }
 
@@ -142,7 +143,11 @@ public class GroupPortalConfigListener extends GroupEventListener
 
    private void removeGroupNavigation(Group group, UserPortalConfigService portalConfigService) throws Exception
    {
-      Collection<String> descendantGroups = getDescendantGroups(group);
+      ExoContainer container = ExoContainerContext.getCurrentContainer();
+      OrganizationService orgService =
+         (OrganizationService)container.getComponentInstanceOfType(OrganizationService.class);
+      GroupHandler groupHandler = orgService.getGroupHandler();
+      Collection<String> descendantGroups = getDescendantGroups(group, groupHandler);
       PageNavigation navigation = null;
       for (String childGroup : descendantGroups)
       {
@@ -152,17 +157,14 @@ public class GroupPortalConfigListener extends GroupEventListener
       }
    }
 
-   private Collection<String> getDescendantGroups(Group group) throws Exception
+   private Collection<String> getDescendantGroups(Group group, GroupHandler groupHandler) throws Exception
    {
-      ExoContainer container = ExoContainerContext.getCurrentContainer();
-      OrganizationService orgService =
-         (OrganizationService)container.getComponentInstanceOfType(OrganizationService.class);
-      Collection<Group> groupCollection = orgService.getGroupHandler().findGroups(group);
+      Collection<Group> groupCollection = groupHandler.findGroups(group);
       Collection<String> col = new ArrayList<String>();
       for (Group childGroup : groupCollection)
       {
          col.add(childGroup.getId());
-         col.addAll(getDescendantGroups(childGroup));
+         col.addAll(getDescendantGroups(childGroup, groupHandler));
       }
       return col;
    }

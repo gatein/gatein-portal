@@ -63,7 +63,7 @@
   <UIOrganizer>
     <label>
       <addCategory>Add Category</addCategory>
-      <autoImport>Auto Import</autoImport>
+      <autoImport>Import Applications</autoImport>
       <categories>Categories</categories>
     </label>
     <title>
@@ -84,6 +84,17 @@
       <applicationNoExist>This application is no longer in database.</applicationNoExist>
     </msg>
   </UIOrganizer>
+  
+  <!--
+  ##org.exoplatform.applicationregistry.webui.component.UIApplicationRegistryEditMode
+  -->
+  <UIApplicationRegistryEditMode>
+  	<title>Import Applications</title>
+  	<label>
+  		<showImport>Change Show Import</showImport>
+  	</label>
+  </UIApplicationRegistryEditMode>
+  
   <!--
   ##org.exoplatform.applicationregistry.webui.component.UIApplicationInfo
   -->

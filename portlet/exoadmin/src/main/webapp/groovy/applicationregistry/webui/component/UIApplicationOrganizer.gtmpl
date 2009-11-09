@@ -7,7 +7,9 @@ def selectedApp = uicomponent.getSelectedApplication();
 <div class="UIOrganizerManagement" id="$uicomponent.id">
 	<div class="UIControlbar">
 		<div class="IconControl AddCategoryIcon" onclick="<%= uicomponent.event("AddCategory") %>"><%=_ctx.appRes("UIOrganizer.label.addCategory")%></div>
-		<div class="IconControl ImportIcon" onclick="<%= uicomponent.event("ImportAllApplications") %>"><%=_ctx.appRes("UIOrganizer.label.autoImport")%></div>
+		<% if(uicomponent.isShowImport()) { %>
+			<div class="IconControl ImportIcon" onclick="<%= uicomponent.event("ImportAllApplications") %>"><%=_ctx.appRes("UIOrganizer.label.autoImport")%></div> 
+		<% } %>	
 		<div class="ClearBoth"><span></span></div>
 	</div>
 	

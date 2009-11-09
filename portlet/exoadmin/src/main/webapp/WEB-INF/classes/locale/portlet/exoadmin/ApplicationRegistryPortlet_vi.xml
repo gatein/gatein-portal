@@ -84,6 +84,17 @@
       <applicationNoExist>Ứng dụng này không còn tồn tại trong cơ sở dữ liệu.</applicationNoExist>
     </msg>
   </UIOrganizer>
+  
+  <!--
+  ##org.exoplatform.applicationregistry.webui.component.UIApplicationRegistryEditMode
+  -->
+  <UIApplicationRegistryEditMode>
+  	<title>Import Applications</title>
+  	<label>
+  		<showImport>Change Show Import</showImport>
+  	</label>
+  </UIApplicationRegistryEditMode>
+  
   <!--
   ##org.exoplatform.applicationregistry.webui.component.UIApplicationInfo
   -->

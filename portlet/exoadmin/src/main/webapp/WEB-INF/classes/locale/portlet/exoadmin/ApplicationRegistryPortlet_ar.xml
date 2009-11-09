@@ -63,7 +63,7 @@
   <UIOrganizer>
     <label>
       <addCategory>أضف فئة</addCategory>
-      <autoImport>استيراد</autoImport>
+      <autoImport>إستيراد تطبيقات</autoImport>
       <categories>الفئات</categories>
     </label>
     <title>
@@ -84,6 +84,17 @@
       <applicationNoExist>.هذه الخدمة لم تعد في قاعدة البيانات</applicationNoExist>
     </msg>
   </UIOrganizer>
+  
+  <!--
+  ##org.exoplatform.applicationregistry.webui.component.UIApplicationRegistryEditMode
+  -->
+  <UIApplicationRegistryEditMode>
+  	<title>Import Applications</title>
+  	<label>
+  		<showImport>Change Show Import</showImport>
+  	</label>
+  </UIApplicationRegistryEditMode>
+  
   <!--
   ##org.exoplatform.applicationregistry.webui.component.UIApplicationInfo
   -->
