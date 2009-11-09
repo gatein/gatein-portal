@@ -393,7 +393,6 @@ public class UserPortalConfigService implements Startable
    public void create(PageNavigation navigation) throws Exception
    {
       storage_.create(navigation);
-      navigation.setSerialMark(System.currentTimeMillis());
       listenerService.broadcast(CREATE_NAVIGATION_EVENT, this, navigation);
    }
 
@@ -432,10 +431,6 @@ public class UserPortalConfigService implements Startable
    public PageNavigation getPageNavigation(String ownerType, String id) throws Exception
    {
       PageNavigation navigation = storage_.getPageNavigation(ownerType, id);
-      if (navigation != null)
-      {
-         navigation.setSerialMark(System.currentTimeMillis());
-      }
       return navigation;
    }
 

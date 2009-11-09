@@ -1,16 +1,16 @@
 /**
  * Copyright (C) 2009 eXo Platform SAS.
- * 
+ *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation; either version 2.1 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this software; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
@@ -28,6 +28,7 @@ import org.exoplatform.portal.pom.spi.portlet.PortletContentProvider;
 import org.exoplatform.portal.pom.spi.portlet.PortletPreferenceState;
 import org.exoplatform.portal.pom.spi.portlet.PortletPreferencesState;
 import org.exoplatform.portal.pom.spi.portlet.Preferences;
+import org.exoplatform.portal.pom.spi.wsrp.WSRP;
 import org.exoplatform.portal.pom.spi.wsrp.WSRPContentProvider;
 import org.exoplatform.portal.pom.spi.wsrp.WSRPState;
 import org.exoplatform.services.jcr.RepositoryService;
@@ -59,14 +60,13 @@ import org.gatein.mop.core.api.workspace.content.CustomizationContainer;
 import org.gatein.mop.core.api.workspace.content.WorkspaceClone;
 import org.gatein.mop.core.api.workspace.content.WorkspaceSpecialization;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.UndeclaredThrowableException;
-import java.util.Set;
-
 import javax.jcr.Credentials;
 import javax.jcr.Repository;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
+import java.lang.reflect.Field;
+import java.lang.reflect.UndeclaredThrowableException;
+import java.util.Set;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -186,16 +186,15 @@ public class POMSessionManager
             builder.add(PortletPreferencesState.class);
             builder.add(PortletPreferenceState.class);
             builder.add(GadgetState.class);
+            builder.add(WSRPState.class);
 
-            //
-            CustomizationContextProviderRegistry customizationContextResolvers =
-               new CustomizationContextProviderRegistry();
+            CustomizationContextProviderRegistry customizationContextResolvers = new CustomizationContextProviderRegistry();
 
             //
             ContentManagerRegistry contentManagerRegistry = new ContentManagerRegistry();
             contentManagerRegistry.register(Preferences.CONTENT_TYPE, new PortletContentProvider());
             contentManagerRegistry.register(Gadget.CONTENT_TYPE, new GadgetContentProvider());
-            contentManagerRegistry.register(WSRPState.CONTENT_TYPE, new WSRPContentProvider());
+            contentManagerRegistry.register(WSRP.CONTENT_TYPE, new WSRPContentProvider());
 
             //
             chromeField.set(pomService, builder.build());
@@ -224,8 +223,8 @@ public class POMSessionManager
    }
 
    /**
-    * <p>Open and returns a session to the model. When the current thread is already associated with a previously
-    * opened session the method will throw an <tt>IllegalStateException</tt>.</p>
+    * <p>Open and returns a session to the model. When the current thread is already associated with a previously opened
+    * session the method will throw an <tt>IllegalStateException</tt>.</p>
     *
     * @return a session to the model.
     */
@@ -256,8 +255,8 @@ public class POMSessionManager
    }
 
    /**
-    * <p>Closes the current session and optionally saves its content. If no session is associated
-    * then this method has no effects and returns false.</p>
+    * <p>Closes the current session and optionally saves its content. If no session is associated then this method has
+    * no effects and returns false.</p>
     *
     * @param save if the session must be saved
     * @return a boolean indicating if the session was closed
@@ -285,6 +284,34 @@ public class POMSessionManager
             session.close();
          }
          return true;
+      }
+   }
+
+   /**
+    * <p>Execute the task with a session. The method attempts first to get a current session and if no such session is
+    * found then a session will be created for the scope of the method.</p>
+    *
+    * @param task the task to execute
+    * @throws Exception any exception thrown by the task
+    */
+   public void execute(POMTask task) throws Exception
+   {
+      POMSession session = getSession();
+      if (session == null)
+      {
+         session = openSession();
+         try
+         {
+            session.execute(task);
+         }
+         finally
+         {
+            closeSession(true);
+         }
+      }
+      else
+      {
+         session.execute(task);
       }
    }
 }

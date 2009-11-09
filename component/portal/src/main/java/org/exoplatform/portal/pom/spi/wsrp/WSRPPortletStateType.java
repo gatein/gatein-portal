@@ -22,32 +22,37 @@
 
 package org.exoplatform.portal.pom.spi.wsrp;
 
-import org.chromattic.api.annotations.NodeMapping;
-import org.chromattic.api.annotations.Property;
-
-import java.io.InputStream;
+import org.gatein.pc.api.PortletStateType;
 
 /**
  * @author <a href="mailto:chris.laprun@jboss.com">Chris Laprun</a>
  * @version $Revision$
  */
-@NodeMapping(name = WSRPState.MOP_NODE_NAME)
-public abstract class WSRPState
+public class WSRPPortletStateType extends PortletStateType<WSRP>
 {
-   static final String MOP_NODE_NAME = "mop:wsrpState";
+   public static final WSRPPortletStateType instance = new WSRPPortletStateType();
 
-   @Property(name = "portletId")
-   public abstract String getPortletId();
+   @Override
+   public Class<WSRP> getJavaType()
+   {
+      return WSRP.class;
+   }
 
-   public abstract void setPortletId(String portletHandle);
+   @Override
+   public boolean equals(WSRP state1, WSRP state2)
+   {
+      return state1.equals(state2);
+   }
 
-   @Property(name = "state")
-   public abstract InputStream getState();
+   @Override
+   public int hashCode(WSRP state)
+   {
+      return state.hashCode();
+   }
 
-   public abstract void setState(InputStream state);
-
-   @Property(name = "cloned")
-   public abstract boolean getCloned();
-
-   public abstract void setCloned(boolean cloned);
+   @Override
+   public String toString(WSRP state)
+   {
+      return state.toString();
+   }
 }

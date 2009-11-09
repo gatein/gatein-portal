@@ -32,7 +32,7 @@ import org.exoplatform.portal.pom.data.ModelData;
 import org.exoplatform.portal.pom.data.PageData;
 import org.exoplatform.portal.pom.spi.gadget.Gadget;
 import org.exoplatform.portal.pom.spi.portlet.Preferences;
-import org.exoplatform.portal.pom.spi.wsrp.WSRPState;
+import org.exoplatform.portal.pom.spi.wsrp.WSRP;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -116,7 +116,7 @@ public abstract class ModelObject
          }
          else if (ApplicationType.WSRP_PORTLET == type)
          {
-            return new WSRPApplication((ApplicationData<WSRPState, WSRPId>)applicationData);
+            return new WSRPApplication((ApplicationData<WSRP, WSRPId>)applicationData);
          }
          else
          {

@@ -1,16 +1,16 @@
 /**
  * Copyright (C) 2009 eXo Platform SAS.
- * 
+ *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation; either version 2.1 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this software; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
@@ -24,7 +24,7 @@ import org.exoplatform.portal.config.model.portlet.PortletId;
 import org.exoplatform.portal.config.model.wsrp.WSRPId;
 import org.exoplatform.portal.pom.spi.gadget.Gadget;
 import org.exoplatform.portal.pom.spi.portlet.Preferences;
-import org.exoplatform.portal.pom.spi.wsrp.WSRPState;
+import org.exoplatform.portal.pom.spi.wsrp.WSRP;
 import org.gatein.mop.api.content.ContentType;
 
 /**
@@ -47,8 +47,7 @@ public class ApplicationType<S, I>
       new ApplicationType<Gadget, GadgetId>(Gadget.CONTENT_TYPE, "gadget");
 
    /** . */
-   public static final ApplicationType<WSRPState, WSRPId> WSRP_PORTLET =
-      new ApplicationType<WSRPState, WSRPId>(WSRPState.CONTENT_TYPE, "wsrp");
+   public static final ApplicationType<WSRP, WSRPId> WSRP_PORTLET = new ApplicationType<WSRP, WSRPId>(WSRP.CONTENT_TYPE, "wsrp");
 
    /** . */
    private final ContentType<S> contentType;

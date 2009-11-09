@@ -47,8 +47,6 @@ public class PageNavigation extends PageNodeContainer
 
    private int priority = 1;
 
-   private long serialMark;
-
    PageNavigation(String storageId)
    {
       super(storageId);
@@ -188,16 +186,6 @@ public class PageNavigation extends PageNodeContainer
             return node;
       }
       return null;
-   }
-
-   public long getSerialMark()
-   {
-      return serialMark;
-   }
-
-   public void setSerialMark(long serialModifiedKey)
-   {
-      this.serialMark = serialModifiedKey;
    }
 
    public PageNavigation clone()

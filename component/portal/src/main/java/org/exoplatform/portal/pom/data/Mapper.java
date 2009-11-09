@@ -22,31 +22,18 @@ package org.exoplatform.portal.pom.data;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.model.ApplicationState;
 import org.exoplatform.portal.config.model.ApplicationType;
-import org.exoplatform.portal.pom.data.BodyType;
 import org.exoplatform.portal.config.model.ModelChange;
 import org.exoplatform.portal.config.model.PersistentApplicationState;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.TransientApplicationState;
 import org.exoplatform.portal.config.model.gadget.GadgetId;
-import org.exoplatform.portal.pom.config.Utils;
-import static org.exoplatform.portal.pom.config.Utils.join;
-import static org.exoplatform.portal.pom.config.Utils.split;
-
 import org.exoplatform.portal.config.model.portlet.PortletId;
 import org.exoplatform.portal.config.model.wsrp.WSRPId;
 import org.exoplatform.portal.pom.config.POMSession;
-import org.exoplatform.portal.pom.data.ApplicationData;
-import org.exoplatform.portal.pom.data.BodyData;
-import org.exoplatform.portal.pom.data.ComponentData;
-import org.exoplatform.portal.pom.data.ContainerData;
-import org.exoplatform.portal.pom.data.DashboardData;
-import org.exoplatform.portal.pom.data.ModelData;
-import org.exoplatform.portal.pom.data.NavigationNodeContainerData;
-import org.exoplatform.portal.pom.data.PageData;
-import org.exoplatform.portal.pom.data.PortalData;
+import org.exoplatform.portal.pom.config.Utils;
 import org.exoplatform.portal.pom.spi.gadget.Gadget;
 import org.exoplatform.portal.pom.spi.portlet.Preferences;
-import org.exoplatform.portal.pom.spi.wsrp.WSRPState;
+import org.exoplatform.portal.pom.spi.wsrp.WSRP;
 import org.gatein.mop.api.Attributes;
 import org.gatein.mop.api.content.ContentType;
 import org.gatein.mop.api.content.Customization;
@@ -74,6 +61,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+
+import static org.exoplatform.portal.pom.config.Utils.join;
+import static org.exoplatform.portal.pom.config.Utils.split;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -558,21 +548,24 @@ public class Mapper
    }
 
    private void build(ContainerData parent, Map<String, String> hierarchyRelationships)
-   {      
+   {
       String parentId = parent.getStorageId();
-      for (ModelData child : parent.getChildren())
+      if (parentId != null)
       {
-         String childId = child.getStorageId();
-         if (childId != null)
+         for (ModelData child : parent.getChildren())
          {
-            if (hierarchyRelationships.put(childId, parentId) != null)
+            String childId = child.getStorageId();
+            if (childId != null)
             {
-               throw new AssertionError("The same object is present two times in the object hierarchy");
-            }            
-         }
-         if (child instanceof ContainerData)
-         {
-            build((ContainerData)child, hierarchyRelationships);
+               if (hierarchyRelationships.put(childId, parentId) != null)
+               {
+                  throw new AssertionError("The same object is present two times in the object hierarchy");
+               }
+               if (child instanceof ContainerData)
+               {
+                  build((ContainerData)child, hierarchyRelationships);
+               }
+            }
          }
       }
    }
@@ -754,6 +747,9 @@ public class Mapper
       //
       String contentId = customization.getContentId();
 
+
+
+
       //
       I ref;
       ApplicationType<S, I> type;
@@ -770,7 +766,7 @@ public class Mapper
          ref = (I)new GadgetId(contentId);
          type = (ApplicationType<S,I>)ApplicationType.GADGET;
       }
-      else if (contentType == WSRPState.CONTENT_TYPE)
+      else if (contentType == WSRP.CONTENT_TYPE)
       {
          ref = (I)new WSRPId(contentId);
          type = (ApplicationType<S,I>)ApplicationType.WSRP_PORTLET;
@@ -866,7 +862,7 @@ public class Mapper
             GadgetId id = (GadgetId)src.getRef();
             contentId = id.getGadgetName();
          }
-         else if (contentType == WSRPState.CONTENT_TYPE)
+         else if (contentType == WSRP.CONTENT_TYPE)
          {
             WSRPId id = (WSRPId)src.getRef();
             contentId = id.getUri();

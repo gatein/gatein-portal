@@ -1,16 +1,16 @@
 /**
  * Copyright (C) 2009 eXo Platform SAS.
- * 
+ *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation; either version 2.1 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this software; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
@@ -52,17 +52,16 @@ import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.UIRightClickPopupMenu;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
+import org.exoplatform.webui.event.EventListener;
 
+import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
-
-import javax.servlet.http.HttpServletRequest;
 
 @ComponentConfigs({
    @ComponentConfig(template = "app:/groovy/navigation/webui/component/UISiteManagement.gtmpl", events = {
@@ -155,17 +154,25 @@ public class UISiteManagement extends UIContainer
             PortalConfig[] pcs = new PortalConfig[tempArrayList.size()];
 
             if (index < 0)
+            {
                throw new IllegalArgumentException("Illegal index: index must be a positive number");
+            }
 
             if (length < 0)
+            {
                throw new IllegalArgumentException("Illegal length: length must be a positive number");
+            }
 
             if (index + length > tempArrayList.size())
+            {
                throw new IllegalArgumentException(
                   "Illegal index or length: sum of the index and the length cannot be greater than the list size");
+            }
 
             for (int i = 0; i < length; i++)
+            {
                pcs[i] = tempArrayList.get(i + index);
+            }
 
             return pcs;
          }
@@ -202,13 +209,15 @@ public class UISiteManagement extends UIContainer
          else if (config != null)
          {
             uiPortalApp.addMessage(new ApplicationMessage("UISiteManagement.msg.Invalid-deletePermission",
-               new String[]{config.getPortalConfig().getName()}));;
+               new String[]{config.getPortalConfig().getName()}));
+            ;
             return;
          }
          else
          {
             uiPortalApp.addMessage(new ApplicationMessage("UISiteManagement.msg.portal-not-exist",
-               new String[]{portalName}));;
+               new String[]{portalName}));
+            ;
             return;
          }
 
@@ -302,7 +311,8 @@ public class UISiteManagement extends UIContainer
          UserACL userACL = uicomp.getApplicationComponent(UserACL.class);
          if (!userACL.hasEditPermission(portalConfig))
          {
-            uiApplication.addMessage(new ApplicationMessage("UISiteManagement.msg.Invalid-editPermission", null));;
+            uiApplication.addMessage(new ApplicationMessage("UISiteManagement.msg.Invalid-editPermission", null));
+            ;
             return;
          }
 

@@ -1,16 +1,16 @@
 /**
  * Copyright (C) 2009 eXo Platform SAS.
- * 
+ *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation; either version 2.1 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this software; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
@@ -25,11 +25,18 @@ import org.exoplatform.container.configuration.ConfigurationManager;
 import org.exoplatform.container.xml.InitParams;
 import org.gatein.pc.api.PortletInvoker;
 import org.gatein.pc.federation.FederatingPortletInvoker;
+import org.gatein.pc.portlet.container.ContainerPortletInvoker;
+import org.gatein.pc.portlet.impl.state.StateConverterV0;
+import org.gatein.pc.portlet.impl.state.StateManagementPolicyService;
+import org.gatein.pc.portlet.impl.state.producer.PortletStatePersistenceManagerService;
+import org.gatein.pc.portlet.state.StateConverter;
 import org.gatein.pc.portlet.state.producer.ProducerPortletInvoker;
 import org.gatein.registration.RegistrationManager;
 import org.gatein.registration.RegistrationPersistenceManager;
 import org.gatein.registration.impl.RegistrationManagerImpl;
 import org.gatein.registration.impl.RegistrationPersistenceManagerImpl;
+import org.gatein.registration.policies.DefaultRegistrationPolicy;
+import org.gatein.registration.policies.DefaultRegistrationPropertyValidator;
 import org.gatein.wsrp.api.SessionEvent;
 import org.gatein.wsrp.api.SessionEventBroadcaster;
 import org.gatein.wsrp.api.SessionEventListener;
@@ -64,7 +71,7 @@ public class ExoKernelIntegration implements Startable
    private ConsumerRegistry consumerRegistry;
 
    public ExoKernelIntegration(InitParams params, ConfigurationManager configurationManager,
-      org.exoplatform.portal.pc.ExoKernelIntegration pc) throws Exception
+                               org.exoplatform.portal.pc.ExoKernelIntegration pc) throws Exception
    {
       if (params != null)
       {
@@ -103,9 +110,32 @@ public class ExoKernelIntegration implements Startable
       RegistrationManager registrationManager = new RegistrationManagerImpl();
       registrationManager.setPersistenceManager(registrationPersistenceManager);
 
-      // retrieve producer portlet invoker from container
-      ProducerPortletInvoker producerPortletInvoker =
-         (ProducerPortletInvoker)container.getComponentInstanceOfType(ProducerPortletInvoker.class);
+      // todo: the multiple instantiation of WSRP service causes the registration policy to not be properly initialized
+      // so we end up forcing its instantiation here.
+      DefaultRegistrationPolicy registrationPolicy = new DefaultRegistrationPolicy();
+      registrationPolicy.setValidator(new DefaultRegistrationPropertyValidator());
+      registrationManager.setPolicy(registrationPolicy);
+
+      // retrieve container portlet invoker from eXo kernel
+      ContainerPortletInvoker containerPortletInvoker =
+         (ContainerPortletInvoker)container.getComponentInstanceOfType(ContainerPortletInvoker.class);
+
+      // The producer persistence manager
+      PortletStatePersistenceManagerService producerPersistenceManager = new PortletStatePersistenceManagerService();
+
+      // The producer state management policy
+      StateManagementPolicyService producerStateManagementPolicy = new StateManagementPolicyService();
+      producerStateManagementPolicy.setPersistLocally(true);
+
+      // The producer state converter
+      StateConverter producerStateConverter = new StateConverterV0();
+
+      // The producer portlet invoker
+      ProducerPortletInvoker producerPortletInvoker = new ProducerPortletInvoker();
+      producerPortletInvoker.setNext(containerPortletInvoker);
+      producerPortletInvoker.setPersistenceManager(producerPersistenceManager);
+      producerPortletInvoker.setStateManagementPolicy(producerStateManagementPolicy);
+      producerPortletInvoker.setStateConverter(producerStateConverter);
 
       // create and wire WSRP producer
       producer = ProducerHolder.getProducer(true);

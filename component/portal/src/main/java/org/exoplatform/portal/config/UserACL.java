@@ -1,16 +1,16 @@
 /**
  * Copyright (C) 2009 eXo Platform SAS.
- * 
+ *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation; either version 2.1 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this software; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
@@ -37,9 +37,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-/**
- * Jun 27, 2006
- */
+/** Jun 27, 2006 */
 public class UserACL
 {
    public final static String EVERYONE = "Everyone";
@@ -76,21 +74,33 @@ public class UserACL
       UserACLMetaData md = new UserACLMetaData();
       ValueParam superUserParam = params.getValueParam("super.user");
       if (superUserParam != null)
+      {
          md.setSuperUser(superUserParam.getValue());
+      }
       ValueParam guestGroupParam = params.getValueParam("guests.group");
       if (guestGroupParam != null)
+      {
          md.setGuestsGroups(guestGroupParam.getValue());
+      }
       ValueParam navCretorParam = params.getValueParam("navigation.creator.membership.type");
       if (navCretorParam != null)
+      {
          md.setNavigationCreatorMembershipType(navCretorParam.getValue());
+      }
       ValueParam portalCretorGroupsParam = params.getValueParam("portal.creator.groups");
       if (portalCretorGroupsParam != null)
+      {
          md.setPortalCreateGroups(portalCretorGroupsParam.getValue());
+      }
       ValuesParam mandatoryGroupsParam = params.getValuesParam("mandatory.groups");
       if (mandatoryGroupsParam != null)
+      {
          mandatoryGroups_ = mandatoryGroupsParam.getValues();
+      }
       else
+      {
          mandatoryGroups_ = new ArrayList<String>();
+      }
       
       ValuesParam mandatoryMSTypesParam = params.getValuesParam("mandatory.mstypes");
       if (mandatoryMSTypesParam != null)
@@ -101,12 +111,16 @@ public class UserACL
       // tam.nguyen get admin group value
       ValueParam adminGroupsParam = params.getValueParam("portal.administrator.groups");
       if (adminGroupsParam != null)
+      {
          setAdminGroups(adminGroupsParam.getValue());
+      }
 
       // tam.nguyen get administrator member type
       ValueParam adminMSTypeParam = params.getValueParam("portal.administrator.mstype");
       if (adminMSTypeParam != null)
+      {
          setAdminMSType(adminMSTypeParam.getValue());
+      }
 
       init(md);
    }
@@ -123,23 +137,37 @@ public class UserACL
    private void init(UserACLMetaData md)
    {
       if (md.getSuperUser() != null)
+      {
          superUser_ = md.getSuperUser();
+      }
       if (superUser_ == null || superUser_.trim().length() == 0)
+      {
          superUser_ = "root";
+      }
 
       if (md.getGuestsGroups() != null)
+      {
          guestGroup_ = md.getGuestsGroups();
+      }
       if (guestGroup_ == null || guestGroup_.trim().length() < 1)
+      {
          guestGroup_ = "/platform/guests";
+      }
 
       if (md.getNavigationCreatorMembershipType() != null)
+      {
          navigationCreatorMembershipType_ = md.getNavigationCreatorMembershipType();
+      }
       if (navigationCreatorMembershipType_ == null || navigationCreatorMembershipType_.trim().length() == 0)
+      {
          navigationCreatorMembershipType_ = "owner";
+      }
 
       String allGroups = "";
       if (md.getPortalCreateGroups() != null)
+      {
          allGroups = md.getPortalCreateGroups();
+      }
       portalCreatorGroups_ = defragmentPermission(allGroups);
    }
 
@@ -216,7 +244,9 @@ public class UserACL
       ConversationState conv = ConversationState.getCurrent();
       Identity id = null;
       if (conv != null)
+      {
          id = conv.getIdentity();
+      }
 
       if (id == null)
       {
@@ -270,7 +300,9 @@ public class UserACL
       ConversationState conv = ConversationState.getCurrent();
       Identity id = null;
       if (conv != null)
+      {
          id = conv.getIdentity();
+      }
 
       if (id == null)
       {
@@ -282,7 +314,9 @@ public class UserACL
       while (iter.hasNext())
       {
          if (iter.next().equals(group))
+         {
             return true;
+         }
       }
 
       return false;
@@ -304,7 +338,9 @@ public class UserACL
       for (String per : accessPerms)
       {
          if (hasPermission(identity, per))
+         {
             return true;
+         }
       }
       return false;
    }
@@ -312,20 +348,28 @@ public class UserACL
    private boolean hasEditPermission(Identity identity, PortalConfig pconfig)
    {
       if (superUser_.equals(identity.getUserId()))
+      {
          return true;
+      }
       return hasPermission(identity, pconfig.getEditPermission());
    }
 
    private boolean hasCreatePortalPermission(Identity identity)
    {
       if (superUser_.equals(identity.getUserId()))
+      {
          return true;
+      }
       if (portalCreatorGroups_ == null || portalCreatorGroups_.size() < 1)
+      {
          return false;
+      }
       for (String ele : portalCreatorGroups_)
       {
          if (hasPermission(identity, ele))
+         {
             return true;
+         }
       }
       return false;
    }
@@ -351,7 +395,9 @@ public class UserACL
             expAdminGroup = expAdminGroup.startsWith("/") ? expAdminGroup : "/" + expAdminGroup;
             expPerm = temp.startsWith("/") ? temp : "/" + temp;
             if (isUserInGroup(expPerm) && isUserInGroup(expAdminGroup))
+            {
                return true;
+            }
          }
 
          expPerm = navigationCreatorMembershipType_ + (temp.startsWith("/") ? ":" + temp : ":/" + temp);
@@ -386,12 +432,15 @@ public class UserACL
       }
       page.setModifiable(false);
       String[] accessPerms = page.getAccessPermissions();
-      if (accessPerms != null) {
-	      for (String per : accessPerms)
-	      {
-	         if (hasPermission(identity, per))
-	            return true;
-	      }
+      if (accessPerms != null)
+      {
+         for (String per : accessPerms)
+         {
+            if (hasPermission(identity, per))
+            {
+               return true;
+            }
+         }
       }
       return false;
    }
@@ -437,16 +486,24 @@ public class UserACL
    {
       String currentUser = identity.getUserId();
       if (superUser_.equals(currentUser))
+      {
          return true;
+      }
       if (expPerm == null)
+      {
          return false;
+      }
       if (EVERYONE.equals(expPerm))
+      {
          return true;
+      }
       Permission permission = new Permission();
       permission.setPermissionExpression(expPerm);
       String groupId = permission.getGroupId();
       if (currentUser == null && groupId.equals(guestGroup_))
+      {
          return true;
+      }
       if (identity == null)
       {
          return false;
@@ -492,10 +549,14 @@ public class UserACL
       public void setPermissionExpression(String exp)
       {
          if (exp == null || exp.length() == 0)
+         {
             return;
+         }
          String[] temp = exp.split(":");
          if (temp.length < 2)
+         {
             return;
+         }
          expression = exp;
          membership_ = temp[0].trim();
          groupId_ = temp[1].trim();
@@ -524,7 +585,9 @@ public class UserACL
       public String getValue()
       {
          if (membership_.length() == 0 || groupId_.length() == 0)
+         {
             return null;
+         }
          return membership_ + ":" + groupId_;
       }
 

@@ -1,16 +1,16 @@
 /**
  * Copyright (C) 2009 eXo Platform SAS.
- * 
+ *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation; either version 2.1 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this software; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
@@ -38,9 +38,7 @@ import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
 import org.exoplatform.webui.form.validator.URLValidator;
 
-/**
- * Created by The eXo Platform SAS Author : eXoPlatform October 2, 2009
- */
+/** Created by The eXo Platform SAS Author : eXoPlatform October 2, 2009 */
 @ComponentConfig(lifecycle = UIFormLifecycle.class, template = "system:/groovy/webui/form/UIFormWithTitle.gtmpl", events = {@EventConfig(listeners = UILogoEditMode.SaveActionListener.class)})
 public class UILogoEditMode extends UIForm
 {
@@ -61,11 +59,12 @@ public class UILogoEditMode extends UIForm
       {
          UILogoEditMode uiForm = event.getSource();
          String url = uiForm.getUIStringInput(FIELD_URL).getValue();
-         if (url != null && !url.trim().matches(URLValidator.URL_REGEX)) {
-           UILogoPortlet uiPortlet = uiForm.getParent();
-           uiForm.getUIStringInput(FIELD_URL).setValue(uiPortlet.getURL());
-           Object[] args = {FIELD_URL, "URL"};
-           throw new MessageException(new ApplicationMessage("ExpressionValidator.msg.value-invalid", args));
+         if (url != null && !url.trim().matches(URLValidator.URL_REGEX))
+         {
+            UILogoPortlet uiPortlet = uiForm.getParent();
+            uiForm.getUIStringInput(FIELD_URL).setValue(uiPortlet.getURL());
+            Object[] args = {FIELD_URL, "URL"};
+            throw new MessageException(new ApplicationMessage("ExpressionValidator.msg.value-invalid", args));
          }
          PortletRequestContext pcontext = (PortletRequestContext)WebuiRequestContext.getCurrentInstance();
          PortletPreferences pref = pcontext.getRequest().getPreferences();
@@ -74,7 +73,9 @@ public class UILogoEditMode extends UIForm
 
          UIPortalApplication portalApp = Util.getUIPortalApplication();
          if (portalApp.getModeState() == UIPortalApplication.NORMAL_MODE)
+         {
             pcontext.setApplicationMode(PortletMode.VIEW);
+         }
       }
    }
 }

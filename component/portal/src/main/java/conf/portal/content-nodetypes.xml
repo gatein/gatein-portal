@@ -22,14 +22,23 @@
 <nodeTypes xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0"
            xmlns:jcr="http://www.jcp.org/jcr/1.0">
 
-   <nodeType name="exo:gadget" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
+   <nodeType name="mop:wsrpState" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
       <supertypes>
-         <supertype>nt:unstructured</supertype>
+         <supertype>mop:customizationstate</supertype>
       </supertypes>
       <propertyDefinitions>
-         <!--propertyDefinition name="data" requiredType="Binary" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-               <valueConstraints/>
-         </propertyDefinition-->
+         <propertyDefinition name="portletId" requiredType="String" autoCreated="false" mandatory="false"
+                             onParentVersion="COPY" protected="false" multiple="false">
+            <valueConstraints/>
+         </propertyDefinition>
+         <propertyDefinition name="state" requiredType="Binary" autoCreated="false" mandatory="false"
+                             onParentVersion="COPY" protected="false" multiple="false">
+            <valueConstraints/>
+         </propertyDefinition>
+         <propertyDefinition name="cloned" requiredType="Boolean" autoCreated="false" mandatory="false"
+                             onParentVersion="COPY" protected="false" multiple="false">
+            <valueConstraints/>
+         </propertyDefinition>
       </propertyDefinitions>
    </nodeType>
 

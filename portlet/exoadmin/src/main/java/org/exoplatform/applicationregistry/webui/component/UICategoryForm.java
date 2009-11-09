@@ -1,16 +1,16 @@
 /**
  * Copyright (C) 2009 eXo Platform SAS.
- * 
+ *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation; either version 2.1 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this software; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
@@ -29,8 +29,8 @@ import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
+import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIFormInputSet;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTabPane;
@@ -44,12 +44,7 @@ import org.exoplatform.webui.organization.UIListPermissionSelector.EmptyIterator
 import java.util.ArrayList;
 import java.util.Date;
 
-/**
- * Created by The eXo Platform SARL
- * Author : Hoa Nguyen
- *          hoa.nguyen@exoplatform.com
- * Jul 4, 2006  
- */
+/** Created by The eXo Platform SARL Author : Hoa Nguyen hoa.nguyen@exoplatform.com Jul 4, 2006 */
 @ComponentConfig(lifecycle = UIFormLifecycle.class, template = "system:/groovy/webui/form/UIFormTabPane.gtmpl", events = {
    @EventConfig(listeners = UICategoryForm.SaveActionListener.class),
    @EventConfig(listeners = UICategoryForm.CancelActionListener.class, phase = Phase.DECODE)})
@@ -131,22 +126,32 @@ public class UICategoryForm extends UIFormTabPane
          ApplicationCategory category = uiForm.getCategory();
          boolean isCreateNew = category == null;
          if (isCreateNew)
+         {
             category = new ApplicationCategory();
+         }
          UIFormInputSet uiSetting = uiForm.getChildById(FIELD_SETTING);
          UIFormInputSet uiPermission = uiForm.getChildById(FIELD_PERMISSION);
          category.setName(uiSetting.getUIStringInput(FIELD_NAME).getValue());
          String displayName = uiSetting.getUIStringInput(FIELD_DISPLAY_NAME).getValue();
          if (displayName == null || displayName.length() < 1)
+         {
             category.setDisplayName(category.getName());
+         }
          else
+         {
             category.setDisplayName(displayName);
+         }
          category.setDescription(uiSetting.getUIStringInput(FIELD_DESCRIPTION).getValue());
 
          UIListPermissionSelector uiListPermissionSelector = uiPermission.getChild(UIListPermissionSelector.class);
          ArrayList<String> pers = new ArrayList<String>();
          if (uiListPermissionSelector.getValue() != null)
+         {
             for (String per : uiListPermissionSelector.getValue())
+            {
                pers.add(per);
+            }
+         }
          category.setAccessPermissions(pers);
          ApplicationCategory existCategory = service.getApplicationCategory(category.getName());
          if (!isCreateNew)
@@ -197,7 +202,9 @@ public class UICategoryForm extends UIFormTabPane
             uiOrganizer.setSelectedApplication(application);
          }
          else
+         {
             uiOrganizer.reload();
+         }
          event.getRequestContext().addUIComponentToUpdateByAjax(uiOrganizer);
       }
 

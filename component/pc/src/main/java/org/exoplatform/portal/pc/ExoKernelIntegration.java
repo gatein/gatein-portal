@@ -1,16 +1,16 @@
 /**
  * Copyright (C) 2009 eXo Platform SAS.
- * 
+ *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation; either version 2.1 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this software; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
@@ -54,14 +54,12 @@ public class ExoKernelIntegration implements Startable
 
    protected PortletApplicationDeployer portletApplicationRegistry;
 
-   /**
-    * Exo Context
-    */
+   /** Exo Context */
    private final ExoContainer container;
 
    /**
-    * We enforce the dependency with the ResourceBundleService since it must be stared before
-    * the <code>portletApplicationRegistry</code>
+    * We enforce the dependency with the ResourceBundleService since it must be stared before the
+    * <code>portletApplicationRegistry</code>
     */
    public ExoKernelIntegration(ExoContainerContext context, ResourceBundleService resourceBundleService)
    {
@@ -102,6 +100,9 @@ public class ExoKernelIntegration implements Startable
       // The portlet container invoker continued
       containerPortletInvoker.setNext(valveInterceptor);
 
+      // register container invoker so that WSRP can use it, WSRP uses its own ProducerPortletInvoker
+      container.registerComponentInstance(ContainerPortletInvoker.class, containerPortletInvoker);
+
       // The producer persistence manager
       PortletStatePersistenceManagerService producerPersistenceManager = new PortletStatePersistenceManagerService();
 
@@ -118,9 +119,6 @@ public class ExoKernelIntegration implements Startable
       producerPortletInvoker.setPersistenceManager(producerPersistenceManager);
       producerPortletInvoker.setStateManagementPolicy(producerStateManagementPolicy);
       producerPortletInvoker.setStateConverter(producerStateConverter);
-
-      // register producer portlet invoker so that WSRP can use it
-      container.registerComponentInstance(ProducerPortletInvoker.class, producerPortletInvoker);
 
       // The consumer portlet invoker
       PortletCustomizationInterceptor portletCustomizationInterceptor = new PortletCustomizationInterceptor();

@@ -1,16 +1,16 @@
 /**
  * Copyright (C) 2009 eXo Platform SAS.
- * 
+ *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation; either version 2.1 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this software; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
@@ -48,8 +48,8 @@ import org.exoplatform.webui.core.UIRightClickPopupMenu;
 import org.exoplatform.webui.core.UIVirtualList;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
+import org.exoplatform.webui.event.EventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -107,14 +107,18 @@ public class UIGroupNavigationManagement extends UIContainer
    public void addPageNavigation(PageNavigation navigation)
    {
       if (navigations == null)
+      {
          navigations = new ArrayList<PageNavigation>();
+      }
       navigations.add(navigation);
    }
 
    public void deletePageNavigation(PageNavigation navigation)
    {
       if (navigations == null || navigations.size() < 1)
+      {
          return;
+      }
       navigations.remove(navigation);
    }
 
@@ -123,7 +127,9 @@ public class UIGroupNavigationManagement extends UIContainer
       for (PageNavigation ele : getPageNavigations())
       {
          if (ele.getId() == id)
+         {
             return ele;
+         }
       }
       return null;
    }
@@ -131,7 +137,9 @@ public class UIGroupNavigationManagement extends UIContainer
    public List<PageNavigation> getPageNavigations()
    {
       if (navigations == null)
+      {
          navigations = new ArrayList<PageNavigation>();
+      }
       return navigations;
    }
 
@@ -279,7 +287,9 @@ public class UIGroupNavigationManagement extends UIContainer
 
          // remove selected navigation
          if (uicomp.navigations == null || uicomp.navigations.size() < 1)
+         {
             return;
+         }
          uicomp.navigations.remove(navigation);
 
          // remove navigation from UIPortal
