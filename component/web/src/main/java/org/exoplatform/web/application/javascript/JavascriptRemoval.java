@@ -51,26 +51,35 @@ public class JavascriptRemoval implements WebAppListener, Startable
     */
    public void onEvent(WebAppEvent arg0)
    {
-      if(arg0 instanceof WebAppLifeCycleEvent){
+      if (arg0 instanceof WebAppLifeCycleEvent)
+      {
          WebAppLifeCycleEvent wevent = (WebAppLifeCycleEvent)arg0;
-         if(wevent.getType() == WebAppLifeCycleEvent.REMOVED){
+         if (wevent.getType() == WebAppLifeCycleEvent.REMOVED)
+         {
             removeJavascript(wevent.getWebApp().getServletContext());
             refreshJavascript();
          }
       }
    }
-   
-   /** Remove javascript deployed in this web app **/
-   private void removeJavascript(ServletContext scontext){
+
+   /** Remove javascript deployed in this web app * */
+   private void removeJavascript(ServletContext scontext)
+   {
       String webApp = scontext.getContextPath();
       List<JavascriptKey> jsKeys = JavascriptDependentManager.getDeployedJScripts(webApp);
-      for(JavascriptKey key : jsKeys){
+      if (jsKeys == null)
+      {
+         return;
+      }
+      for (JavascriptKey key : jsKeys)
+      {
          javascriptService.removeJavascript(key, scontext);
-      }  
+      }
       JavascriptDependentManager.clearAssociatedJScripts(webApp);
    }
-   
-   private void refreshJavascript(){
+
+   private void refreshJavascript()
+   {
       javascriptService.refreshMergedJavascript();
    }
 
