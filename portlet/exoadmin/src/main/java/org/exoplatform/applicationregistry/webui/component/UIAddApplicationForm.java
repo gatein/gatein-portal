@@ -59,7 +59,6 @@ import org.gatein.pc.federation.FederatingPortletInvoker;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.ResourceBundle;
 import java.util.Set;
 
 /**
@@ -87,10 +86,6 @@ public class UIAddApplicationForm extends UIForm
 
    public UIAddApplicationForm() throws Exception
    {
-
-      WebuiRequestContext contextres = WebuiRequestContext.getCurrentInstance();
-      ResourceBundle res = contextres.getApplicationResourceBundle();
-
       addUIFormInput(new UIFormStringInput(FIELD_NAME, null, null).addValidator(StringLengthValidator.class, 3, 30));
       List<SelectItemOption<String>> types = new ArrayList<SelectItemOption<String>>(2);
       types.add(new SelectItemOption<String>(org.exoplatform.web.application.Application.EXO_PORTLET_TYPE));
