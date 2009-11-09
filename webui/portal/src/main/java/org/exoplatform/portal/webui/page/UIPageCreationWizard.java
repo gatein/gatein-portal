@@ -55,26 +55,31 @@ import java.util.List;
  * Created by The eXo Platform SARL Author : Dang Van Minh minhdv81@yahoo.com
  * Jun 23, 2006
  */
-@ComponentConfigs({
-   @ComponentConfig(template = "system:/groovy/webui/core/UIWizard.gtmpl", events = {
-      @EventConfig(listeners = UIPageCreationWizard.ViewStep1ActionListener.class),
-      @EventConfig(listeners = UIPageCreationWizard.ViewStep2ActionListener.class),
-      @EventConfig(listeners = UIPageCreationWizard.ViewStep3ActionListener.class),
-      @EventConfig(listeners = UIPageCreationWizard.ViewStep4ActionListener.class),
-      @EventConfig(listeners = UIPageCreationWizard.ViewStep5ActionListener.class),
-      @EventConfig(listeners = UIPageWizard.AbortActionListener.class)}),
-   @ComponentConfig(id = "ViewStep1", type = UIContainer.class, template = "system:/groovy/portal/webui/page/UIWizardPageWelcome.gtmpl")})
+@ComponentConfigs(@ComponentConfig(template = "system:/groovy/webui/core/UIWizard.gtmpl", events = {
+   @EventConfig(listeners = UIPageCreationWizard.ViewStep1ActionListener.class),
+   @EventConfig(listeners = UIPageCreationWizard.ViewStep2ActionListener.class),
+   @EventConfig(listeners = UIPageCreationWizard.ViewStep3ActionListener.class),
+   @EventConfig(listeners = UIPageCreationWizard.ViewStep4ActionListener.class),
+   @EventConfig(listeners = UIPageWizard.AbortActionListener.class)}))
 public class UIPageCreationWizard extends UIPageWizard
 {
 
+   final public static int FIRST_STEP = 1;
+
+   final public static int SECONDE_STEP = 2;
+
+   final public static int THIRD_STEP = 3;
+
+   final public static int NUMBER_OF_STEPs = 3;
+
    public UIPageCreationWizard() throws Exception
    {
-      addChild(UIContainer.class, "ViewStep1", null);
       addChild(UIWizardPageSetInfo.class, null, null).setRendered(false);
       addChild(UIWizardPageSelectLayoutForm.class, null, null).setRendered(false);
       addChild(UIPagePreview.class, null, null).setRendered(false);
-      setNumberSteps(4);
-      setShowWelcomeComponent(true);
+      setNumberSteps(NUMBER_OF_STEPs);
+      viewStep(FIRST_STEP);
+      setShowWelcomeComponent(false);
    }
 
    private void saveData() throws Exception
@@ -165,36 +170,22 @@ public class UIPageCreationWizard extends UIPageWizard
       return false;
    }
 
-   // TODO: Review this listener after remove UIExoStart
-   static public class ViewStep1ActionListener extends EventListener<UIPageCreationWizard>
-   {
-      public void execute(Event<UIPageCreationWizard> event) throws Exception
-      {
-         UIPageCreationWizard uiWizard = event.getSource();
-         uiWizard.setDescriptionWizard(1);
-         uiWizard.updateWizardComponent();
-         uiWizard.viewStep(1);
-         UIWorkingWorkspace uiWorkingWS = uiWizard.getAncestorOfType(UIWorkingWorkspace.class);
-         uiWorkingWS.findFirstComponentOfType(UIPortalComposer.class).setRendered(false);
-      }
-   }
-
-   static public class ViewStep2ActionListener extends EventListener<UIPageWizard>
+   static public class ViewStep1ActionListener extends EventListener<UIPageWizard>
    {
       public void execute(Event<UIPageWizard> event) throws Exception
       {
          UIPageWizard uiWizard = event.getSource();
-         uiWizard.setDescriptionWizard(2);
+         uiWizard.setDescriptionWizard(FIRST_STEP);
 
          uiWizard.updateWizardComponent();
-         uiWizard.viewStep(2);
+         uiWizard.viewStep(FIRST_STEP);
 
          UIWorkingWorkspace uiWorkingWS = uiWizard.getAncestorOfType(UIWorkingWorkspace.class);
          uiWorkingWS.findFirstComponentOfType(UIPortalComposer.class).setRendered(false);
       }
    }
 
-   static public class ViewStep3ActionListener extends EventListener<UIPageCreationWizard>
+   static public class ViewStep2ActionListener extends EventListener<UIPageCreationWizard>
    {
       public void execute(Event<UIPageCreationWizard> event) throws Exception
       {
@@ -202,13 +193,13 @@ public class UIPageCreationWizard extends UIPageWizard
          UIPortalApplication uiPortalApp = uiWizard.getAncestorOfType(UIPortalApplication.class);
          UIWorkingWorkspace uiWorkingWS = uiWizard.getAncestorOfType(UIWorkingWorkspace.class);
          uiWorkingWS.findFirstComponentOfType(UIPortalComposer.class).setRendered(false);
-         uiWizard.viewStep(3);
+         uiWizard.viewStep(SECONDE_STEP);
 
-         if (uiWizard.getSelectedStep() < 3)
+         if (uiWizard.getSelectedStep() < SECONDE_STEP)
          {
             uiPortalApp.addMessage(new ApplicationMessage("UIPageCreationWizard.msg.StepByStep", null));
-            uiWizard.setDescriptionWizard(2);
-            uiWizard.viewStep(2);
+            uiWizard.setDescriptionWizard(FIRST_STEP);
+            uiWizard.viewStep(FIRST_STEP);
             uiWizard.updateWizardComponent();
             return;
          }
@@ -216,21 +207,21 @@ public class UIPageCreationWizard extends UIPageWizard
          if (uiWizard.isSelectedNodeExist())
          {
             uiPortalApp.addMessage(new ApplicationMessage("UIPageCreationWizard.msg.NameNotSame", null));
-            uiWizard.viewStep(2);
+            uiWizard.viewStep(FIRST_STEP);
             uiWizard.updateWizardComponent();
             return;
          }
 
          UIWizardPageSetInfo uiPageSetInfo = uiWizard.getChild(UIWizardPageSetInfo.class);
          UIPageNodeSelector uiNodeSelector = uiPageSetInfo.getChild(UIPageNodeSelector.class);
-         uiWizard.setDescriptionWizard(3);
+         uiWizard.setDescriptionWizard(SECONDE_STEP);
          uiWizard.updateWizardComponent();
          PageNavigation navigation = uiNodeSelector.getSelectedNavigation();
          if (navigation == null)
          {
             uiPortalApp.addMessage(new ApplicationMessage("UIPageCreationWizard.msg.notSelectedPageNavigation",
                new String[]{}));;
-            uiWizard.viewStep(2);
+            uiWizard.viewStep(FIRST_STEP);
             return;
          }
 
@@ -245,7 +236,7 @@ public class UIPageCreationWizard extends UIPageWizard
             if (startDate.after(endDate))
             {
                uiPortalApp.addMessage(new ApplicationMessage("UIPageNodeForm2.msg.startDateBeforeEndDate", null));
-               uiWizard.viewStep(2);
+               uiWizard.viewStep(FIRST_STEP);
                return;
             }
          }
@@ -253,7 +244,7 @@ public class UIPageCreationWizard extends UIPageWizard
       }
    }
 
-   static public class ViewStep4ActionListener extends EventListener<UIPageCreationWizard>
+   static public class ViewStep3ActionListener extends EventListener<UIPageCreationWizard>
    {
 
       private void setDefaultPermission(Page page, String ownerType, String ownerId)
@@ -280,14 +271,14 @@ public class UIPageCreationWizard extends UIPageWizard
          if (uiWizard.isSelectedNodeExist())
          {
             uiPortalApp.addMessage(new ApplicationMessage("UIPageCreationWizard.msg.NameNotSame", null));
-            uiWizard.setDescriptionWizard(2);
-            uiWizard.viewStep(2);
+            uiWizard.setDescriptionWizard(FIRST_STEP);
+            uiWizard.viewStep(FIRST_STEP);
             uiWizard.updateWizardComponent();
             return;
          }
-         uiWizard.viewStep(4);
+         uiWizard.viewStep(THIRD_STEP);
 
-         if (uiWizard.getSelectedStep() < 4)
+         if (uiWizard.getSelectedStep() < THIRD_STEP)
          {
             uiWizard.setDescriptionWizard(uiWizard.getSelectedStep());
             uiWizard.updateWizardComponent();
@@ -314,13 +305,13 @@ public class UIPageCreationWizard extends UIPageWizard
          if (storage.getPage(pageId) != null)
          {
             uiPortalApp.addMessage(new ApplicationMessage("UIPageCreationWizard.msg.NameNotSame", null));
-            uiWizard.setDescriptionWizard(2);
-            uiWizard.viewStep(2);
+            uiWizard.setDescriptionWizard(FIRST_STEP);
+            uiWizard.viewStep(FIRST_STEP);
             uiWizard.updateWizardComponent();
          }
          page.setModifiable(true);
 
-         //Set default permissions on the page
+         // Set default permissions on the page
          setDefaultPermission(page, ownerType, ownerId);
 
          if (page.getTitle() == null || page.getTitle().trim().length() == 0)
@@ -356,7 +347,7 @@ public class UIPageCreationWizard extends UIPageWizard
       }
    }
 
-   static public class ViewStep5ActionListener extends EventListener<UIPageCreationWizard>
+   static public class ViewStep4ActionListener extends EventListener<UIPageCreationWizard>
    {
       public void execute(Event<UIPageCreationWizard> event) throws Exception
       {
@@ -367,8 +358,8 @@ public class UIPageCreationWizard extends UIPageWizard
          if (uiWizard.isSelectedNodeExist())
          {
             uiPortalApp.addMessage(new ApplicationMessage("UIPageCreationWizard.msg.NameNotSame", null));
-            uiWizard.setDescriptionWizard(2);
-            uiWizard.viewStep(2);
+            uiWizard.setDescriptionWizard(FIRST_STEP);
+            uiWizard.viewStep(FIRST_STEP);
             uiWizard.updateWizardComponent();
             return;
          }
