@@ -105,8 +105,8 @@ UIPortalNavigation.prototype.buildMenu = function(popupMenu) {
 		var items = DOMUtil.findDescendantsByClass(cont, "div", this.tabStyleClass);
 		if(items.length == 0) cont.parentNode.removeChild(cont);
 		for(var j = 0; j < items.length; j ++) {
-			items[i].onmouseover = eXo.portal.UIPortalNavigation.onMenuItemOver;
-    	items[i].onmouseout = eXo.portal.UIPortalNavigation.onMenuItemOut;
+			items[j].onmouseover = eXo.portal.UIPortalNavigation.onMenuItemOver;
+    	items[j].onmouseout = eXo.portal.UIPortalNavigation.onMenuItemOut;
 		}
 	}
 };
