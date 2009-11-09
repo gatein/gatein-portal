@@ -30,6 +30,8 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletContext;
 
@@ -50,6 +52,9 @@ public class JavascriptConfigService implements Startable
    private JavascriptDeployer deployer;
 
    private JavascriptRemoval removal;
+   
+   /** Used to clear merged Javascript on undeploying an webapp */
+   private Map<String, List<String>> object_view_of_merged_JS;
 
    public JavascriptConfigService(ExoContainerContext context)
    {
@@ -58,6 +63,7 @@ public class JavascriptConfigService implements Startable
       extendedJavascripts = new HashMap<String, String>();
       deployer = new JavascriptDeployer(context.getPortalContainerName(), this);
       removal = new JavascriptRemoval(context.getPortalContainerName(), this);
+      object_view_of_merged_JS = new HashMap<String, List<String>>();
    }
 
    /**
@@ -94,6 +100,13 @@ public class JavascriptConfigService implements Startable
       String servletContextName = scontext.getServletContextName();
       availableScripts_.add(module);
       availableScriptsPaths_.add("/" + servletContextName + scriptPath);
+      
+      List<String> mergedJS_list = object_view_of_merged_JS.get("/" + servletContextName);
+      if(mergedJS_list == null){
+         mergedJS_list = new ArrayList<String>();
+         object_view_of_merged_JS.put("/" + servletContextName, mergedJS_list);
+      }
+      
       StringBuffer sB = new StringBuffer();
       String line = "";
       try
@@ -103,7 +116,9 @@ public class JavascriptConfigService implements Startable
          {
             while ((line = reader.readLine()) != null)
             {
-               sB.append(line + "\n");
+               line = line + "\n";
+               sB.append(line);
+               mergedJS_list.add(line);
             }
          }
          catch (Exception ex)
@@ -126,15 +141,28 @@ public class JavascriptConfigService implements Startable
          e.printStackTrace();
       }
       sB.append("\n");
+      mergedJS_list.add("\n");
+      
       mergedJavascript = mergedJavascript.concat(sB.toString());
    }
    
    public void removeJavascript(JavascriptKey key, ServletContext scontext){
-      
+      String contextPath = scontext.getContextPath();
+      availableScripts_.remove(key.getModule());
+      availableScriptsPaths_.remove(contextPath + key.getScriptPath());
+      object_view_of_merged_JS.remove(contextPath);
    }
    
+   /** Refresh the mergedJavascript **/
    public void refreshMergedJavascript(){
-      
+      mergedJavascript = "";
+      StringBuffer buffer = new StringBuffer();
+      for(String webApp : object_view_of_merged_JS.keySet()){
+         for(String jsPath : object_view_of_merged_JS.get(webApp)){
+            buffer.append(jsPath);
+         }
+      }
+      mergedJavascript = buffer.toString();
    }
 
    public byte[] getMergedJavascript()
