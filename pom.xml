@@ -60,7 +60,7 @@
       <jdk.min.version>1.6</jdk.min.version>
 
       <!-- maven-release-plugin -->
-      <arguments>-Prelease,pkg-tomcat,pkg-jbossas -Dexo.test.skip=true</arguments>       
+      <arguments>-Prelease,pkg-tomcat,pkg-jbossas -Dmaven.test.skip=true</arguments>       
         
   </properties>
   
@@ -121,47 +121,6 @@
                  <artifactId>exec-maven-plugin</artifactId>
                  <version>1.1.1</version>
             </plugin>
-            <plugin>
-               <groupId>org.apache.maven.plugins</groupId>
-               <artifactId>maven-surefire-plugin</artifactId>
-               <configuration>
-                  <forkMode>once</forkMode>
-                  <!--once , pertest -->
-                  <includes>
-                     <include>**/${exo.test.includes}.java</include>
-                  </includes>
-                  <systemProperties>
-                     <property>
-                        <name>maven.exoplatform.dir</name>
-                        <value>${exo.directory.base}/projects/exo-platform</value>
-                     </property>
-                     <property>
-                        <name>mock.portal.dir</name>
-                        <value>${exo.projects.directory.src}/gatein/portal/trunk/web/portal/src/main/webapp</value>
-                     </property>
-                     <property>
-                        <name>org.apache.commons.logging.Log</name>
-                        <value>org.apache.commons.logging.impl.SimpleLog</value>
-                     </property>
-                     <property>
-                        <name>org.apache.commons.logging.simplelog.defaultlog</name>
-                        <value>info</value>
-                     </property>
-                     <property>
-                        <name>org.apache.commons.logging.simplelog.log.[eXo]</name>
-                        <value>debug</value>
-                     </property>
-                     <property>
-                        <name>org.apache.commons.logging.simplelog.log.net.hibernate</name>
-                        <value>warn</value>
-                     </property>
-                     <property>
-                        <name>java.naming.factory.initial</name>
-                        <value>org.exoplatform.services.naming.SimpleContextFactory</value>
-                     </property>
-                  </systemProperties>
-               </configuration>
-            </plugin>
          </plugins>
       </pluginManagement>
       <plugins>
@@ -190,29 +149,6 @@
          </plugin>
       </plugins>
    </build>
-
-   <profiles>
-      <profile>
-         <id>bypass-failing-tests</id>
-         <build>
-            <plugins>
-               <plugin>
-                  <groupId>org.apache.maven.plugins</groupId>
-                  <artifactId>maven-surefire-plugin</artifactId>
-                  <configuration>
-                     <!-- Remove temporarly tests which are failing -->
-                     <excludes>
-                        <!-- /component/resources/ -->
-                        <!--<exclude>org/exoplatform/services/resources/test/TestResourceBundleService.java</exclude>-->
-                        <!-- /component/portal/ -->
-                        <exclude>org/exoplatform/portal/config/security/TestUserPageACL.java</exclude>
-                     </excludes>
-                  </configuration>
-               </plugin>
-            </plugins>
-         </build>
-      </profile>
-   </profiles>
 
    <!-- To be removed and replaced by settings in user config -->
    <repositories>
