@@ -19,7 +19,7 @@
 
 -->
 
-<Context path="/portal" docBase="../../../../web/portal/src/main/webapp" 
+<Context path="/portal" docBase="../../../../../web/portal/src/main/webapp" 
   debug="0" reloadable="true" crossContext="true" priviledge="true">
 
   <Logger className="org.apache.catalina.logger.SystemOutLogger"

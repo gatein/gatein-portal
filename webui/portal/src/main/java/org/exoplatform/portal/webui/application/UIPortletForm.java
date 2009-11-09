@@ -1,16 +1,16 @@
 /**
  * Copyright (C) 2009 eXo Platform SAS.
- * 
+ *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation; either version 2.1 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this software; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
@@ -24,6 +24,8 @@ import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.pc.ExoPortletState;
 import org.exoplatform.portal.pom.spi.portlet.Preference;
 import org.exoplatform.portal.pom.spi.portlet.Preferences;
+import org.exoplatform.portal.pom.spi.wsrp.WSRP;
+import org.exoplatform.portal.pom.spi.wsrp.WSRPPortletStateType;
 import org.exoplatform.portal.portlet.PortletExceptionHandleService;
 import org.exoplatform.portal.resource.SkinService;
 import org.exoplatform.portal.webui.util.Util;
@@ -41,8 +43,8 @@ import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
+import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormInputIconSelector;
 import org.exoplatform.webui.form.UIFormInputInfo;
@@ -63,6 +65,8 @@ import org.gatein.pc.api.invocation.RenderInvocation;
 import org.gatein.pc.api.invocation.response.ErrorResponse;
 import org.gatein.pc.api.invocation.response.FragmentResponse;
 import org.gatein.pc.api.invocation.response.PortletInvocationResponse;
+import org.gatein.pc.api.spi.InstanceContext;
+import org.gatein.pc.api.state.AccessMode;
 import org.gatein.pc.api.state.PropertyChange;
 import org.gatein.pc.portlet.impl.spi.AbstractClientContext;
 import org.gatein.pc.portlet.impl.spi.AbstractPortalContext;
@@ -71,21 +75,15 @@ import org.gatein.pc.portlet.impl.spi.AbstractServerContext;
 import org.gatein.pc.portlet.impl.spi.AbstractUserContext;
 import org.gatein.pc.portlet.impl.spi.AbstractWindowContext;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.ResourceBundle;
-
 import javax.portlet.PortletMode;
 import javax.servlet.http.Cookie;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.ResourceBundle;
 
-/**
- * Author : Nhu Dinh Thuan
- *          nhudinhthuan@yahoo.com
- * Jun 8, 2006
- */
+/** Author : Nhu Dinh Thuan nhudinhthuan@yahoo.com Jun 8, 2006 */
 @ComponentConfigs({
    @ComponentConfig(lifecycle = UIFormLifecycle.class, template = "system:/groovy/portal/webui/portal/UIPortletForm.gtmpl", events = {
       @EventConfig(listeners = UIPortletForm.SaveActionListener.class),
@@ -111,21 +109,21 @@ public class UIPortletForm extends UIFormTabPane
       addUIFormInput(uiPortletPrefSet);
       UIFormInputSet uiSettingSet = new UIFormInputSet("PortletSetting");
       uiSettingSet.
-      /*addUIFormInput(new UIFormStringInput("id", "id", null).
+         /*addUIFormInput(new UIFormStringInput("id", "id", null).
                      addValidator(MandatoryValidator.class).setEditable(false)).
       addUIFormInput(new UIFormStringInput("windowId", "windowId", null).setEditable(false)).*/
-      addUIFormInput(new UIFormInputInfo("displayName", "displayName", null)).addUIFormInput(
+            addUIFormInput(new UIFormInputInfo("displayName", "displayName", null)).addUIFormInput(
          new UIFormStringInput("title", "title", null).addValidator(StringLengthValidator.class, 3, 60))
          .addUIFormInput(
             new UIFormStringInput("width", "width", null).addValidator(ExpressionValidator.class, "(^([1-9]\\d*)px$)?",
                "UIPortletForm.msg.InvalidWidthHeight")).addUIFormInput(
-            new UIFormStringInput("height", "height", null).addValidator(ExpressionValidator.class,
-               "(^([1-9]\\d*)px$)?", "UIPortletForm.msg.InvalidWidthHeight")).addUIFormInput(
-            new UIFormCheckBoxInput("showInfoBar", "showInfoBar", false)).addUIFormInput(
-            new UIFormCheckBoxInput("showPortletMode", "showPortletMode", false)).addUIFormInput(
-            new UIFormCheckBoxInput("showWindowState", "showWindowState", false)).addUIFormInput(
-            new UIFormTextAreaInput("description", "description", null).addValidator(StringLengthValidator.class, 0,
-               255));
+         new UIFormStringInput("height", "height", null).addValidator(ExpressionValidator.class,
+            "(^([1-9]\\d*)px$)?", "UIPortletForm.msg.InvalidWidthHeight")).addUIFormInput(
+         new UIFormCheckBoxInput("showInfoBar", "showInfoBar", false)).addUIFormInput(
+         new UIFormCheckBoxInput("showPortletMode", "showPortletMode", false)).addUIFormInput(
+         new UIFormCheckBoxInput("showWindowState", "showWindowState", false)).addUIFormInput(
+         new UIFormTextAreaInput("description", "description", null).addValidator(StringLengthValidator.class, 0,
+            255));
       addUIFormInput(uiSettingSet);
       UIFormInputIconSelector uiIconSelector = new UIFormInputIconSelector("Icon", "icon");
       addUIFormInput(uiIconSelector);
@@ -170,21 +168,36 @@ public class UIPortletForm extends UIFormTabPane
       {
          PortalRequestContext prcontext = (PortalRequestContext)WebuiRequestContext.getCurrentInstance();
          prcontext.setFullRender(true);
-         PortletInvoker portletInvoker = getApplicationComponent(PortletInvoker.class);
-         StatefulPortletContext<ExoPortletState> portletContext = uiPortlet_.getPortletContext();
+         StatefulPortletContext portletContext = uiPortlet_.getPortletContext();
 
          ExoPortletInvocationContext portletInvocationContext = new ExoPortletInvocationContext(prcontext, uiPortlet_);
 
-         List<Cookie> requestCookies = new ArrayList<Cookie>();
-         for (Cookie cookie : prcontext.getRequest().getCookies())
-         {
-            requestCookies.add(cookie);
-         }
+         List<Cookie> requestCookies = new ArrayList<Cookie>(Arrays.asList(prcontext.getRequest().getCookies()));
 
          RenderInvocation renderInvocation = new RenderInvocation(portletInvocationContext);
          renderInvocation.setClientContext(new AbstractClientContext(prcontext.getRequest(), requestCookies));
          renderInvocation.setServerContext(new AbstractServerContext(prcontext.getRequest(), prcontext.getResponse()));
-         renderInvocation.setInstanceContext(new ExoPortletInstanceContext(portletContext.getState().getPortletId()));
+
+
+         // instance context
+         InstanceContext instanceContext;
+         if (portletContext.getType() instanceof WSRPPortletStateType)
+         {
+            WSRP wsrp = (WSRP)portletContext.getState();
+            AccessMode accessMode = AccessMode.CLONE_BEFORE_WRITE;
+            if (wsrp.isCloned())
+            {
+               accessMode = AccessMode.READ_WRITE;
+            }
+            instanceContext = new ExoPortletInstanceContext(wsrp.getPortletId(), accessMode);
+         }
+         else
+         {
+            ExoPortletState exo = (ExoPortletState)portletContext.getState();
+            instanceContext = new ExoPortletInstanceContext(exo.getPortletId());
+         }
+         renderInvocation.setInstanceContext(instanceContext);
+
          renderInvocation.setUserContext(new AbstractUserContext(prcontext.getRequest()));
          renderInvocation.setWindowContext(new AbstractWindowContext(uiPortlet_.getWindowId()));
          renderInvocation.setPortalContext(new AbstractPortalContext(Collections.singletonMap(
@@ -319,25 +332,6 @@ public class UIPortletForm extends UIFormTabPane
 
       // Now save it
       uiPortlet_.update(propertyChanges);
-   }
-
-   private Map<String, String[]> getRenderParameterMap(UIPortlet uiPortlet)
-   {
-      Map<String, String[]> renderParams = uiPortlet.getRenderParametersMap();
-
-      if (renderParams == null)
-      {
-         renderParams = new HashMap<String, String[]>();
-         uiPortlet.setRenderParametersMap(renderParams);
-      }
-
-      /*
-       *  handle public params to only get the one supported by the targeted portlet
-       */
-      Map<String, String[]> allParams = new HashMap<String, String[]>(renderParams);
-      allParams.putAll(uiPortlet.getPublicParameters());
-
-      return allParams;
    }
 
    static public class SaveActionListener extends EventListener<UIPortletForm>

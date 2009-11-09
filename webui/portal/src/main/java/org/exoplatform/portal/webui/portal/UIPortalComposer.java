@@ -1,16 +1,16 @@
 /**
  * Copyright (C) 2009 eXo Platform SAS.
- * 
+ *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation; either version 2.1 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this software; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
@@ -57,10 +57,7 @@ import org.exoplatform.webui.event.EventListener;
 
 import java.util.List;
 
-/**
- * Created by The eXo Platform SAS Author : Pham Thanh Tung
- * thanhtungty@gmail.com Jun 10, 2009
- */
+/** Created by The eXo Platform SAS Author : Pham Thanh Tung thanhtungty@gmail.com Jun 10, 2009 */
 @ComponentConfigs({
    @ComponentConfig(template = "app:/groovy/portal/webui/portal/UIPortalComposer.gtmpl", events = {
       @EventConfig(listeners = UIPortalComposer.ViewPropertiesActionListener.class),
@@ -97,7 +94,9 @@ public class UIPortalComposer extends UIContainer
    public void setPortalMode(int mode)
    {
       if (mode < 0 || mode > 4)
+      {
          return;
+      }
       getAncestorOfType(UIPortalApplication.class).setModeState(mode);
    }
 
@@ -163,7 +162,9 @@ public class UIPortalComposer extends UIContainer
       LocaleConfigService localeConfigService = uiPortalApp.getApplicationComponent(LocaleConfigService.class);
       LocaleConfig localeConfig = localeConfigService.getLocaleConfig(portalConfig.getLocale());
       if (localeConfig == null)
+      {
          localeConfig = localeConfigService.getDefaultLocaleConfig();
+      }
       // TODO dang.tung - change layout when portal get language from UIPortal
       // (user and browser not support)
       // ----------------------------------------------------------------------------------------------------
@@ -197,16 +198,22 @@ public class UIPortalComposer extends UIContainer
       for (UIComponent child : children)
       {
          if (!child.isRendered() || child.getClass().equals(UIPortalComposer.class))
+         {
             continue;
+         }
          rcontext.addUIComponentToUpdateByAjax(child);
       }
       int portalMode = uiApp.getModeState();
       if (portalMode != UIPortalApplication.NORMAL_MODE)
       {
          if (portalMode % 2 != 0)
+         {
             Util.showComponentLayoutMode(UIPortlet.class);
+         }
          else
+         {
             Util.showComponentEditInViewMode(UIPortlet.class);
+         }
       }
       JavascriptManager jsManager = Util.getPortalRequestContext().getJavascriptManager();
       jsManager.addJavascript("eXo.portal.portalMode=" + portalMode + ";");
@@ -303,7 +310,9 @@ public class UIPortalComposer extends UIContainer
          uiWorkingWS.setRenderedChild(UIPortalApplication.UI_VIEWING_WS_ID);
 
          if (uri == null)
+         {
             uri = (uiPortal.getSelectedNode() != null) ? uiPortal.getSelectedNode().getUri() : null;
+         }
          PageNodeEvent<UIPortal> pnevent = new PageNodeEvent<UIPortal>(uiPortal, PageNodeEvent.CHANGE_PAGE_NODE, uri);
          uiPortal.broadcast(pnevent, Event.Phase.PROCESS);
          prContext.addUIComponentToUpdateByAjax(uiWorkingWS);
@@ -334,21 +343,29 @@ public class UIPortalComposer extends UIContainer
 
          String uri = null;
          if (uiPortal == null)
+         {
             siteBody.setUIComponent(editPortal);
+         }
          // uiEditWS.setUIComponent(null);
          // uiWorkingWS.removeChild(UIEditInlineWorkspace.class);
          uiWorkingWS.getChild(UIEditInlineWorkspace.class).setRendered(false);
          uiPortal = (UIPortal)siteBody.getUIComponent();
 
          if (PortalProperties.SESSION_ALWAYS.equals(uiPortal.getSessionAlive()))
+         {
             uiPortalApp.setSessionOpen(true);
+         }
          else
+         {
             uiPortalApp.setSessionOpen(false);
+         }
          uiPortalApp.setModeState(UIPortalApplication.NORMAL_MODE);
          uiWorkingWS.setRenderedChild(UIPortalApplication.UI_VIEWING_WS_ID);
 
          if (uri == null)
+         {
             uri = uiPortal.getSelectedNode() != null ? uiPortal.getSelectedNode().getUri() : null;
+         }
          PageNodeEvent<UIPortal> pnevent = new PageNodeEvent<UIPortal>(uiPortal, PageNodeEvent.CHANGE_PAGE_NODE, uri);
          uiPortal.broadcast(pnevent, Event.Phase.PROCESS);
          prContext.addUIComponentToUpdateByAjax(uiWorkingWS);
@@ -409,19 +426,19 @@ public class UIPortalComposer extends UIContainer
 
          switch (portalMode)
          {
-            case UIPortalApplication.APP_BLOCK_EDIT_MODE :
+            case UIPortalApplication.APP_BLOCK_EDIT_MODE:
                uiPortalApp.setModeState(UIPortalApplication.APP_VIEW_EDIT_MODE);
                break;
-            case UIPortalApplication.APP_VIEW_EDIT_MODE :
+            case UIPortalApplication.APP_VIEW_EDIT_MODE:
                uiPortalApp.setModeState(UIPortalApplication.APP_BLOCK_EDIT_MODE);
                break;
-            case UIPortalApplication.CONTAINER_BLOCK_EDIT_MODE :
+            case UIPortalApplication.CONTAINER_BLOCK_EDIT_MODE:
                uiPortalApp.setModeState(UIPortalApplication.CONTAINER_VIEW_EDIT_MODE);
                break;
-            case UIPortalApplication.CONTAINER_VIEW_EDIT_MODE :
+            case UIPortalApplication.CONTAINER_VIEW_EDIT_MODE:
                uiPortalApp.setModeState(UIPortalApplication.CONTAINER_BLOCK_EDIT_MODE);
                break;
-            default :
+            default:
                uiPortalApp.setModeState(UIPortalApplication.NORMAL_MODE);
                return;
          }
@@ -519,9 +536,13 @@ public class UIPortalComposer extends UIContainer
          UIPortal uiPortal = Util.getUIPortal();
          UIPortalApplication uiPortalApp = Util.getUIPortalApplication();
          if (PortalProperties.SESSION_ALWAYS.equals(uiPortal.getSessionAlive()))
+         {
             uiPortalApp.setSessionOpen(true);
+         }
          else
+         {
             uiPortalApp.setSessionOpen(false);
+         }
          uiPortalApp.setModeState(UIPortalApplication.NORMAL_MODE);
          PageNodeEvent<UIPortal> pnevent =
             new PageNodeEvent<UIPortal>(uiPortal, PageNodeEvent.CHANGE_PAGE_NODE, (uiPortal.getSelectedNode() != null

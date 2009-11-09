@@ -194,17 +194,7 @@ public class UIPortal extends UIContainer
       for (int i = 0; i < navigations.size(); i++)
       {
          PageNavigation ele = navigations.get(i);
-         PageNavigation temp = serv.getPageNavigation(ele.getOwnerType(), ele.getOwnerId());
-         if (temp != null)
-         {
-            if (temp.getSerialMark() != ele.getSerialMark())
-            {
-               temp.setModifiable(ele.isModifiable());
-               localizePageNavigation(temp);
-               navigations.set(i, temp);
-            }
-         }
-         else
+         if (serv.getPageNavigation(ele.getOwnerType(), ele.getOwnerId()) == null)
          {
             navigations.remove(i);
             --i;

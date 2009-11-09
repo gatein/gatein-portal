@@ -1,16 +1,16 @@
 /**
  * Copyright (C) 2009 eXo Platform SAS.
- * 
+ *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation; either version 2.1 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this software; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
@@ -37,8 +37,8 @@ import org.exoplatform.webui.core.UIGrid;
 import org.exoplatform.webui.core.UIPageIterator;
 import org.exoplatform.webui.core.UITree;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
+import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.exception.MessageException;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
@@ -48,13 +48,8 @@ import org.exoplatform.webui.form.UIFormPageIterator;
 import org.exoplatform.webui.form.UIFormPopupWindow;
 import org.exoplatform.webui.form.validator.Validator;
 
-/**
- * Created by The eXo Platform SARL
- * Author : Pham Dung Ha
- *          ha.pham@exoplatform.com
- * May 7, 2007o
- */
-@ComponentConfig(template = "system:/groovy/organization/webui/component/UIListPermissionSelector.gtmpl", events = {   
+/** Created by The eXo Platform SARL Author : Pham Dung Ha ha.pham@exoplatform.com May 7, 2007o */
+@ComponentConfig(template = "system:/groovy/organization/webui/component/UIListPermissionSelector.gtmpl", events = {
    @EventConfig(phase = Phase.DECODE, listeners = UIListPermissionSelector.DeleteActionListener.class, confirm = "UIAccessGroup.deleteAccessGroup"),
    @EventConfig(phase = Phase.DECODE, listeners = UIPermissionSelector.SelectMembershipActionListener.class),
    @EventConfig(phase = Phase.DECODE, listeners = UIListPermissionSelector.ChangePublicModeActionListener.class)})
@@ -102,7 +97,9 @@ public class UIListPermissionSelector extends UISelector<String[]>
       {
          Permission per = (Permission)ele;
          if (per.getExpression().equals(permission.getExpression()))
+         {
             return true;
+         }
       }
       return false;
    }
@@ -118,7 +115,9 @@ public class UIListPermissionSelector extends UISelector<String[]>
    public String[] getValue() throws Exception
    {
       if (publicMode_)
+      {
          return new String[]{UserACL.EVERYONE};
+      }
       UIPageIterator uiIterator = getChild(UIGrid.class).getUIPageIterator();
       List<Object> values = uiIterator.getPageList().getAll();
       String[] expPermissions = new String[values.size()];
@@ -144,11 +143,15 @@ public class UIListPermissionSelector extends UISelector<String[]>
             break;
          }
          if (exp.trim().length() < 1)
+         {
             continue;
+         }
          Permission permission = new Permission();
          permission.setPermissionExpression(exp);
          if (existsPermission(list, permission))
+         {
             continue;
+         }
          list.add(permission);
       }
       UIPageIterator uiIterator = getChild(UIGrid.class).getUIPageIterator();
@@ -178,7 +181,9 @@ public class UIListPermissionSelector extends UISelector<String[]>
    public void setMembership(String groupId, String membershipType) throws Exception
    {
       if (groupId.trim().length() < 1 || membershipType.trim().length() < 1)
+      {
          return;
+      }
       Permission permission = new Permission();
       permission.setExpression(membershipType + ":" + groupId);
       permission.setGroupId(groupId);
@@ -187,7 +192,9 @@ public class UIListPermissionSelector extends UISelector<String[]>
       UIPageIterator uiIterator = getChild(UIGrid.class).getUIPageIterator();
       list.addAll(uiIterator.getPageList().getAll());
       if (existsPermission(list, permission))
+      {
          return;
+      }
       list.add(permission);
       uiIterator.setPageList(new LazyPageList(new AccessGroupListAccess(list), 10));
    }
@@ -227,7 +234,9 @@ public class UIListPermissionSelector extends UISelector<String[]>
       UIFormGrid uiGrid = getChild(UIFormGrid.class);
       uiGrid.setRendered(!publicMode_);
       if (publicMode_)
+      {
          uiGrid.getUIPageIterator().setPageList(new LazyPageList(new AccessGroupListAccess(null), 10));
+      }
    }
 
    static public class DeleteActionListener extends EventListener<UIListPermissionSelector>
@@ -244,7 +253,9 @@ public class UIListPermissionSelector extends UISelector<String[]>
          UIForm uiForm = uiPermissions.getAncestorOfType(UIForm.class);
          uiForm.broadcast(event, event.getExecutionPhase());
          while (currentPage > pageIterator.getAvailablePage())
+         {
             currentPage--;
+         }
          pageIterator.setCurrentPage(currentPage);
          event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent());
       }
@@ -268,7 +279,9 @@ public class UIListPermissionSelector extends UISelector<String[]>
          UIForm uiForm = uicom.getAncestorOfType(UIForm.class);
          UIPermissionSelector uiPermission = uiForm.findFirstComponentOfType(UIPermissionSelector.class);
          if (uiPermission != null)
+         {
             uiPermission.setRendered(false);
+         }
          if (uiForm != null)
          {
             uiForm.broadcast(event, event.getExecutionPhase());
@@ -285,7 +298,9 @@ public class UIListPermissionSelector extends UISelector<String[]>
       {
          UIListPermissionSelector uiInputContainer = (UIListPermissionSelector)uiInput;
          if (uiInputContainer.isPublicMode())
+         {
             return;
+         }
          UIFormPageIterator uiInputIterator = uiInputContainer.findFirstComponentOfType(UIFormPageIterator.class);
          if (uiInputIterator.getAvailable() < 1)
          {

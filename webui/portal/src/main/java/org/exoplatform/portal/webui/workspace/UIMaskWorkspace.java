@@ -1,16 +1,16 @@
 /**
  * Copyright (C) 2009 eXo Platform SAS.
- * 
+ *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation; either version 2.1 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this software; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
@@ -24,15 +24,13 @@ import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIComponentDecorator;
 import org.exoplatform.webui.event.Event;
+import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
 
-/**
- * Created by The eXo Platform SAS
- * Mar 13, 2007  
- */
-@ComponentConfig(id = "UIMaskWorkspace", template = "system:/groovy/portal/webui/workspace/UIMaskWorkspace.gtmpl", 
-                 events = @EventConfig(phase = Phase.DECODE, listeners = UIMaskWorkspace.CloseActionListener.class))
+/** Created by The eXo Platform SAS Mar 13, 2007 */
+@ComponentConfig(id = "UIMaskWorkspace", template = "system:/groovy/portal/webui/workspace/UIMaskWorkspace.gtmpl",
+   events = @EventConfig(phase = Phase.DECODE, listeners = UIMaskWorkspace.CloseActionListener.class))
 public class UIMaskWorkspace extends UIComponentDecorator
 {
 
@@ -69,7 +67,9 @@ public class UIMaskWorkspace extends UIComponentDecorator
    {
       this.isShow = bln;
       if (bln == false)
+      {
          isUpdated = false;
+      }
    }
 
    public boolean isUpdated()
@@ -115,7 +115,9 @@ public class UIMaskWorkspace extends UIComponentDecorator
             uiMaskWorkspace = uiSource.getAncestorOfType(UIMaskWorkspace.class);
          }
          if (uiMaskWorkspace == null || !uiMaskWorkspace.isShow())
+         {
             return;
+         }
          uiMaskWorkspace.setUIComponent(null);
          uiMaskWorkspace.setWindowSize(-1, -1);
          event.getRequestContext().addUIComponentToUpdateByAjax(uiMaskWorkspace);

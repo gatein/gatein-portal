@@ -1,16 +1,16 @@
 /**
  * Copyright (C) 2009 eXo Platform SAS.
- * 
+ *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation; either version 2.1 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this software; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
@@ -51,10 +51,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-/**
- * Created by The eXo Platform SARL Author : Dang Van Minh minhdv81@yahoo.com
- * Jun 23, 2006
- */
+/** Created by The eXo Platform SARL Author : Dang Van Minh minhdv81@yahoo.com Jun 23, 2006 */
 @ComponentConfigs(@ComponentConfig(template = "system:/groovy/webui/core/UIWizard.gtmpl", events = {
    @EventConfig(listeners = UIPageCreationWizard.ViewStep1ActionListener.class),
    @EventConfig(listeners = UIPageCreationWizard.ViewStep2ActionListener.class),
@@ -114,7 +111,9 @@ public class UIPageCreationWizard extends UIPageWizard
       {
          List<PageNode> children = selectedNode.getChildren();
          if (children == null)
+         {
             children = new ArrayList<PageNode>();
+         }
          children.add(pageNode);
          selectedNode.setChildren((ArrayList<PageNode>)children);
       }
@@ -122,7 +121,7 @@ public class UIPageCreationWizard extends UIPageWizard
       {
          pageNav.addNode(pageNode);
       }
-      pageNav.setModifier(RequestContext.<WebuiRequestContext> getCurrentInstance().getRemoteUser());
+      pageNav.setModifier(RequestContext.<WebuiRequestContext>getCurrentInstance().getRemoteUser());
       uiNodeSelector.selectPageNodeByUri(pageNode.getUri());
 
       service.create(page);
@@ -153,9 +152,13 @@ public class UIPageCreationWizard extends UIPageWizard
       PageNode selectedPageNode = uiPageSetInfo.getSelectedPageNode();
       List<PageNode> sibbling = null;
       if (selectedPageNode != null)
+      {
          sibbling = selectedPageNode.getChildren();
+      }
       else
+      {
          sibbling = navigation.getNodes();
+      }
       if (sibbling != null)
       {
          for (PageNode ele : sibbling)
@@ -220,7 +223,8 @@ public class UIPageCreationWizard extends UIPageWizard
          if (navigation == null)
          {
             uiPortalApp.addMessage(new ApplicationMessage("UIPageCreationWizard.msg.notSelectedPageNavigation",
-               new String[]{}));;
+               new String[]{}));
+            ;
             uiWizard.viewStep(FIRST_STEP);
             return;
          }
@@ -315,11 +319,15 @@ public class UIPageCreationWizard extends UIPageWizard
          setDefaultPermission(page, ownerType, ownerId);
 
          if (page.getTitle() == null || page.getTitle().trim().length() == 0)
+         {
             page.setTitle(pageNode.getName());
+         }
 
          boolean isDesktopPage = Page.DESKTOP_PAGE.equals(page.getFactoryId());
          if (isDesktopPage)
+         {
             page.setShowMaxWindow(true);
+         }
 
          UIPagePreview uiPagePreview = uiWizard.getChild(UIPagePreview.class);
          UIPage uiPage;

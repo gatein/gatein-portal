@@ -1,16 +1,16 @@
 /**
  * Copyright (C) 2009 eXo Platform SAS.
- * 
+ *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation; either version 2.1 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this software; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
@@ -27,6 +27,7 @@ import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.PortalProperties;
 import org.exoplatform.portal.resource.SkinService;
+import org.exoplatform.portal.webui.util.PortalDataMapper;
 import org.exoplatform.portal.webui.util.PortalDataMapper;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIMaskWorkspace;
@@ -49,8 +50,8 @@ import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemCategory;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
+import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIFormInputItemSelector;
 import org.exoplatform.webui.form.UIFormInputSet;
 import org.exoplatform.webui.form.UIFormSelectBox;
@@ -60,8 +61,8 @@ import org.exoplatform.webui.form.validator.IdentifierValidator;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
 import org.exoplatform.webui.form.validator.StringLengthValidator;
 import org.exoplatform.webui.organization.UIListPermissionSelector;
-import org.exoplatform.webui.organization.UIPermissionSelector;
 import org.exoplatform.webui.organization.UIListPermissionSelector.EmptyIteratorValidator;
+import org.exoplatform.webui.organization.UIPermissionSelector;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -104,14 +105,16 @@ public class UIPortalForm extends UIFormTabPane
       setSelectedTab(uiTemplateInput.getId());
       createDefaultItem();
 
-      UIFormInputSet uiPortalSetting = this.<UIFormInputSet> getChildById("PortalSetting");
+      UIFormInputSet uiPortalSetting = this.<UIFormInputSet>getChildById("PortalSetting");
       UIFormStringInput uiNameInput = uiPortalSetting.getUIStringInput(FIELD_NAME);
       uiNameInput.setEditable(true);
 
       setActions(new String[]{"Save", "Close"});
 
       if (initParams == null)
+      {
          return;
+      }
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
       Param param = initParams.getParam("PortalTemplateConfigOption");
       List<SelectItemCategory> portalTemplates = (List<SelectItemCategory>)param.getMapGroovyObject(context);
@@ -181,7 +184,9 @@ public class UIPortalForm extends UIFormTabPane
       {
          SelectItemOption<String> skinOption = new SelectItemOption<String>(skin, skin);
          if (uiPortal.getSkin().equals(skin))
+         {
             skinOption.setSelected(true);
+         }
          listSkin.add(skinOption);
       }
       UIFormSelectBox uiSelectBox = new UIFormSelectBox(FIELD_SKIN, FIELD_SKIN, listSkin);
@@ -238,9 +243,9 @@ public class UIPortalForm extends UIFormTabPane
          UIPortal uiPortal = Util.getUIPortal();
          uiForm.invokeSetBindingBean(uiPortal);
          //uiPortal.refreshNavigation(localeConfigService.getLocaleConfig(uiPortal.getLocale()).getLocale()) ;
-         PortalConfig portalConfig = (PortalConfig)PortalDataMapper.buildModelObject(uiPortal);
          if (uiPortalApp.getModeState() == UIPortalApplication.NORMAL_MODE)
          {
+            PortalConfig portalConfig = (PortalConfig)PortalDataMapper.buildModelObject(uiPortal);
             UserPortalConfigService configService = uiForm.getApplicationComponent(UserPortalConfigService.class);
             configService.update(portalConfig);
          }

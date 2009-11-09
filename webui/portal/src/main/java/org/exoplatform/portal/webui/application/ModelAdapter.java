@@ -1,16 +1,16 @@
 /**
  * Copyright (C) 2009 eXo Platform SAS.
- * 
+ *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation; either version 2.1 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this software; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
@@ -35,11 +35,11 @@ import org.exoplatform.portal.pom.spi.gadget.Gadget;
 import org.exoplatform.portal.pom.spi.portlet.Preference;
 import org.exoplatform.portal.pom.spi.portlet.Preferences;
 import org.exoplatform.portal.pom.spi.portlet.PreferencesBuilder;
-import org.exoplatform.portal.pom.spi.wsrp.WSRPState;
+import org.exoplatform.portal.pom.spi.wsrp.WSRP;
+import org.exoplatform.portal.pom.spi.wsrp.WSRPPortletStateType;
 import org.exoplatform.web.application.gadget.GadgetApplication;
 import org.gatein.pc.api.PortletContext;
 import org.gatein.pc.api.PortletInvoker;
-import org.gatein.pc.api.PortletStateType;
 import org.gatein.pc.api.StatefulPortletContext;
 
 import java.io.Serializable;
@@ -58,20 +58,17 @@ public abstract class ModelAdapter<S, C extends Serializable, I>
    {
       if (type == ApplicationType.PORTLET)
       {
-         @SuppressWarnings("unchecked")
-         ModelAdapter<S, C, I> adapter = (ModelAdapter<S, C, I>)PORTLET;
+         @SuppressWarnings("unchecked") ModelAdapter<S, C, I> adapter = (ModelAdapter<S, C, I>)PORTLET;
          return adapter;
       }
       else if (type == ApplicationType.GADGET)
       {
-         @SuppressWarnings("unchecked")
-         ModelAdapter<S, C, I> adapter = (ModelAdapter<S, C, I>)GADGET;
+         @SuppressWarnings("unchecked") ModelAdapter<S, C, I> adapter = (ModelAdapter<S, C, I>)GADGET;
          return adapter;
       }
       else if (type == ApplicationType.WSRP_PORTLET)
       {
-         @SuppressWarnings("unchecked")
-         ModelAdapter<S, C, I> adapter = (ModelAdapter<S, C, I>)WSRP;
+         @SuppressWarnings("unchecked") ModelAdapter<S, C, I> adapter = (ModelAdapter<S, C, I>)WSRP;
          return adapter;
       }
       else
@@ -81,186 +78,174 @@ public abstract class ModelAdapter<S, C extends Serializable, I>
    }
 
    /** . */
-   private static final ModelAdapter<Preferences, ExoPortletState, PortletId> PORTLET =
-      new ModelAdapter<Preferences, ExoPortletState, PortletId>()
-      {
-
-         @Override
-         public StatefulPortletContext<ExoPortletState> getPortletContext(ExoContainer container,
-            PortletId applicationId, ApplicationState<Preferences> applicationState) throws Exception
-         {
-            DataStorage dataStorage = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
-            Preferences preferences = dataStorage.load(applicationState);
-            PortletContext producerOfferedPortletContext = getProducerOfferedPortletContext(applicationId);
-            ExoPortletState map = new ExoPortletState(producerOfferedPortletContext.getId());
-            if (preferences != null)
-            {
-               for (Preference pref : preferences)
-               {
-                  map.getState().put(pref.getName(), pref.getValues());
-               }
-            }
-            return StatefulPortletContext.create("local._dumbvalue", ExoPortletStateType.getInstance(), map);
-         }
-
-         @Override
-         public ApplicationState<Preferences> update(ExoContainer container, ExoPortletState updateState,
-            ApplicationState<Preferences> applicationState) throws Exception
-         {
-            if (applicationState instanceof TransientApplicationState)
-            {
-               TransientApplicationState<Preferences> transientState =
-                  (TransientApplicationState<Preferences>)applicationState;
-               PreferencesBuilder builder = new PreferencesBuilder();
-               for (Map.Entry<String, List<String>> entry : updateState.getState().entrySet())
-               {
-                  builder.add(entry.getKey(), entry.getValue());
-               }
-               transientState.setContentState(builder.build());
-               return transientState;
-            }
-            else
-            {
-               PersistentApplicationState<Preferences> persistentState =
-                  (PersistentApplicationState<Preferences>)applicationState;
-
-               // Compute new preferences
-               PreferencesBuilder builder = new PreferencesBuilder();
-               for (Map.Entry<String, List<String>> entry : updateState.getState().entrySet())
-               {
-                  builder.add(entry.getKey(), entry.getValue());
-               }
-
-               //
-               DataStorage dataStorage = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
-               return dataStorage.save(persistentState, builder.build());
-            }
-         }
-
-         @Override
-         public PortletContext getProducerOfferedPortletContext(PortletId applicationState)
-         {
-            String appName = applicationState.getApplicationName();
-            String portletName = applicationState.getPortletName();
-            return PortletContext.createPortletContext(PortletInvoker.LOCAL_PORTLET_INVOKER_ID + "./" + appName + "."
-               + portletName);
-         }
-
-         @Override
-         public Preferences getState(ExoContainer container, ApplicationState<Preferences> applicationState)
-            throws Exception
-         {
-            if (applicationState instanceof TransientApplicationState)
-            {
-               TransientApplicationState<Preferences> transientState =
-                  (TransientApplicationState<Preferences>)applicationState;
-               Preferences pref = transientState.getContentState();
-               if(pref == null) pref = new Preferences();
-               return pref;
-            }
-            else
-            {
-               PersistentApplicationState<Preferences> persistentState =
-                  (PersistentApplicationState<Preferences>)applicationState;
-               DataStorage dataStorage = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
-               return dataStorage.load(persistentState);
-            }
-         }
-      };
-
-   private static final ModelAdapter<Gadget, ExoPortletState, GadgetId> GADGET =
-      new ModelAdapter<Gadget, ExoPortletState, GadgetId>()
-      {
-
-         /** . */
-         private final String WRAPPER_ID = "local./" + "dashboard" + "." + "GadgetPortlet";
-
-         /** . */
-         private final PortletContext WRAPPER_CONTEXT = PortletContext.createPortletContext(WRAPPER_ID);
-
-         @Override
-         public StatefulPortletContext<ExoPortletState> getPortletContext(ExoContainer container,
-            GadgetId applicationId, ApplicationState<Gadget> applicationState) throws Exception
-         {
-            GadgetRegistryService gadgetService =
-               (GadgetRegistryService)container.getComponentInstanceOfType(GadgetRegistryService.class);
-            org.exoplatform.application.gadget.Gadget model = gadgetService.getGadget(applicationId.getGadgetName());
-            GadgetApplication application = new GadgetApplication(model.getName(), model.getUrl(), model.isLocal());
-            String url = GadgetUtil.reproduceUrl(application.getUrl(), application.isLocal());
-            ExoPortletState prefs = new ExoPortletState(WRAPPER_ID);
-            prefs.getState().put("url", Arrays.asList(url));
-            return StatefulPortletContext.create("local._dumbvalue", ExoPortletStateType.getInstance(), prefs);
-         }
-
-         @Override
-         public ApplicationState<Gadget> update(ExoContainer container, ExoPortletState updateState,
-            ApplicationState<Gadget> gadgetApplicationState) throws Exception
-         {
-            throw new UnsupportedOperationException("todo / julien");
-         }
-
-         @Override
-         public PortletContext getProducerOfferedPortletContext(GadgetId applicationState)
-         {
-            return WRAPPER_CONTEXT;
-         }
-
-         @Override
-         public Preferences getState(ExoContainer container, ApplicationState<Gadget> applicationState)
-            throws Exception
-         {
-            // For now we return null as it does not make sense to edit the gadget preferences
-            return null;
-         }
-      };
-
-   private static final ModelAdapter<WSRPState, byte[], WSRPId> WSRP = new ModelAdapter<WSRPState, byte[], WSRPId>()
+   private static final ModelAdapter<Preferences, ExoPortletState, PortletId> PORTLET = new ModelAdapter<Preferences, ExoPortletState, PortletId>()
    {
-      @Override
-      public PortletContext getProducerOfferedPortletContext(WSRPId state)
-      {
-         return PortletContext.createPortletContext(state.getUri());
-      }
 
       @Override
-      public StatefulPortletContext<byte[]> getPortletContext(ExoContainer container, WSRPId applicationId,
-         ApplicationState<WSRPState> state) throws Exception
+      public StatefulPortletContext<ExoPortletState> getPortletContext(ExoContainer container, PortletId applicationId, ApplicationState<Preferences> applicationState) throws Exception
       {
          DataStorage dataStorage = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
-         WSRPState wsrpState = dataStorage.load(state);
-         // todo: it should be possible to not have a state: needs a fix in StatefulPortletContext
-         return StatefulPortletContext.create(applicationId.getUri(), PortletStateType.OPAQUE, wsrpState != null
-            ? wsrpState.getState() : new byte[]{});
+         Preferences preferences = dataStorage.load(applicationState);
+         PortletContext producerOfferedPortletContext = getProducerOfferedPortletContext(applicationId);
+         ExoPortletState map = new ExoPortletState(producerOfferedPortletContext.getId());
+         if (preferences != null)
+         {
+            for (Preference pref : preferences)
+            {
+               map.getState().put(pref.getName(), pref.getValues());
+            }
+         }
+         return StatefulPortletContext.create("local._dumbvalue", ExoPortletStateType.getInstance(), map);
       }
 
       @Override
-      public ApplicationState<WSRPState> update(ExoContainer container, byte[] updateState,
-         ApplicationState<WSRPState> wsrpApplicationState) throws Exception
+      public ApplicationState<Preferences> update(ExoContainer container, ExoPortletState updateState, ApplicationState<Preferences> applicationState) throws Exception
       {
-         throw new UnsupportedOperationException("todo / chris");
+         // Compute new preferences
+         PreferencesBuilder builder = new PreferencesBuilder();
+         for (Map.Entry<String, List<String>> entry : updateState.getState().entrySet())
+         {
+            builder.add(entry.getKey(), entry.getValue());
+         }
+
+         if (applicationState instanceof TransientApplicationState)
+         {
+            TransientApplicationState<Preferences> transientState = (TransientApplicationState<Preferences>)applicationState;
+            transientState.setContentState(builder.build());
+            return transientState;
+         }
+         else
+         {
+            PersistentApplicationState<Preferences> persistentState = (PersistentApplicationState<Preferences>)applicationState;
+            DataStorage dataStorage = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
+            return dataStorage.save(persistentState, builder.build());
+         }
       }
 
       @Override
-      public Preferences getState(ExoContainer container, ApplicationState<WSRPState> wsrpStateApplicationState)
-         throws Exception
+      public PortletContext getProducerOfferedPortletContext(PortletId applicationState)
       {
-         // For now we return null
+         String appName = applicationState.getApplicationName();
+         String portletName = applicationState.getPortletName();
+         return PortletContext.createPortletContext(PortletInvoker.LOCAL_PORTLET_INVOKER_ID + "./" + appName + "." + portletName);
+      }
+
+      @Override
+      public Preferences getState(ExoContainer container, ApplicationState<Preferences> applicationState) throws Exception
+      {
+         if (applicationState instanceof TransientApplicationState)
+         {
+            TransientApplicationState<Preferences> transientState = (TransientApplicationState<Preferences>)applicationState;
+            Preferences pref = transientState.getContentState();
+            if(pref == null) pref = new Preferences();
+            return pref;
+         }
+         else
+         {
+            PersistentApplicationState<Preferences> persistentState = (PersistentApplicationState<Preferences>)applicationState;
+            DataStorage dataStorage = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
+            return dataStorage.load(persistentState);
+         }
+      }
+   };
+
+   private static final ModelAdapter<Gadget, ExoPortletState, GadgetId> GADGET = new ModelAdapter<Gadget, ExoPortletState, GadgetId>()
+   {
+
+      /** . */
+      private final String WRAPPER_ID = "local./" + "dashboard" + "." + "GadgetPortlet";
+
+      /** . */
+      private final PortletContext WRAPPER_CONTEXT = PortletContext.createPortletContext(WRAPPER_ID);
+
+      @Override
+      public StatefulPortletContext<ExoPortletState> getPortletContext(ExoContainer container, GadgetId applicationId, ApplicationState<Gadget> applicationState) throws Exception
+      {
+         GadgetRegistryService gadgetService = (GadgetRegistryService)container.getComponentInstanceOfType(GadgetRegistryService.class);
+         org.exoplatform.application.gadget.Gadget model = gadgetService.getGadget(applicationId.getGadgetName());
+         GadgetApplication application = new GadgetApplication(model.getName(), model.getUrl(), model.isLocal());
+         String url = GadgetUtil.reproduceUrl(application.getUrl(), application.isLocal());
+         ExoPortletState prefs = new ExoPortletState(WRAPPER_ID);
+         prefs.getState().put("url", Arrays.asList(url));
+         return StatefulPortletContext.create("local._dumbvalue", ExoPortletStateType.getInstance(), prefs);
+      }
+
+      @Override
+      public ApplicationState<Gadget> update(ExoContainer container, ExoPortletState updateState, ApplicationState<Gadget> gadgetApplicationState) throws Exception
+      {
+         throw new UnsupportedOperationException("todo / julien");
+      }
+
+      @Override
+      public PortletContext getProducerOfferedPortletContext(GadgetId applicationState)
+      {
+         return WRAPPER_CONTEXT;
+      }
+
+      @Override
+      public Preferences getState(ExoContainer container, ApplicationState<Gadget> applicationState) throws Exception
+      {
+         // For now we return null as it does not make sense to edit the gadget preferences
          return null;
+      }
+   };
+
+
+   private static final ModelAdapter<WSRP, WSRP, WSRPId> WSRP = new ModelAdapter<WSRP, WSRP, WSRPId>()
+   {
+      @Override
+      public Preferences getState(ExoContainer container, ApplicationState<WSRP> state) throws Exception
+      {
+         return null;  // return null for now
+      }
+
+      @Override
+      public PortletContext getProducerOfferedPortletContext(WSRPId applicationId)
+      {
+         return PortletContext.createPortletContext(applicationId.getUri());
+      }
+
+      @Override
+      public StatefulPortletContext<WSRP> getPortletContext(ExoContainer container, WSRPId applicationId, ApplicationState<WSRP> state) throws Exception
+      {
+         DataStorage dataStorage = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
+         WSRP wsrp = dataStorage.load(state);
+         if (wsrp == null)
+         {
+            wsrp = new WSRP();
+            wsrp.setPortletId(applicationId.getUri());
+         }
+         return StatefulPortletContext.create(wsrp.getPortletId(), WSRPPortletStateType.instance, wsrp);
+      }
+
+      @Override
+      public ApplicationState<WSRP> update(ExoContainer container, WSRP updateState, ApplicationState<WSRP> state) throws Exception
+      {
+         if (state instanceof TransientApplicationState)
+         {
+            TransientApplicationState<WSRP> transientState = (TransientApplicationState<WSRP>)state;
+            transientState.setContentState(updateState);
+            return transientState;
+         }
+         else
+         {
+            PersistentApplicationState<WSRP> persistentState = (PersistentApplicationState<WSRP>)state;
+            DataStorage dataStorage = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
+            return dataStorage.save(persistentState, updateState);
+         }
       }
    };
 
    public abstract PortletContext getProducerOfferedPortletContext(I applicationId);
 
-   public abstract StatefulPortletContext<C> getPortletContext(ExoContainer container, I applicationId,
-      ApplicationState<S> applicationState) throws Exception;
+   public abstract StatefulPortletContext<C> getPortletContext(ExoContainer container, I applicationId, ApplicationState<S> applicationState) throws Exception;
 
-   public abstract ApplicationState<S> update(ExoContainer container, C updateState,
-      ApplicationState<S> applicationState) throws Exception;
+   public abstract ApplicationState<S> update(ExoContainer container, C updateState, ApplicationState<S> applicationState) throws Exception;
 
    /**
     * Returns the state of the gadget as preferences or null if the preferences cannot be edited as such.
     *
-    * @param container the container
+    * @param container        the container
     * @param applicationState the application state
     * @return the preferences
     * @throws Exception any exception

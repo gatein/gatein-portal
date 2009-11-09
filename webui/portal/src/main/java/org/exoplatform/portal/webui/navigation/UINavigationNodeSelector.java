@@ -1,16 +1,16 @@
 /**
  * Copyright (C) 2009 eXo Platform SAS.
- * 
+ *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation; either version 2.1 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this software; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
@@ -55,9 +55,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-/**
- * Copied by The eXo Platform SARL Author May 28, 2009 3:07:15 PM
- */
+/** Copied by The eXo Platform SARL Author May 28, 2009 3:07:15 PM */
 @ComponentConfigs({
    @ComponentConfig(template = "system:/groovy/portal/webui/navigation/UINavigationNodeSelector.gtmpl", events = {@EventConfig(listeners = UINavigationNodeSelector.ChangeNodeActionListener.class)}),
    @ComponentConfig(id = "NavigationNodePopupMenu", type = UIRightClickPopupMenu.class, template = "system:/groovy/webui/core/UIRightClickPopupMenu.gtmpl", events = {
@@ -138,17 +136,23 @@ public class UINavigationNodeSelector extends UIContainer
    private void selectNavigation()
    {
       if (navigations == null || navigations.size() < 1)
+      {
          return;
+      }
       if (selectedNode == null)
       {
          PageNavigation navigation = navigations.get(0);
          selectedNode = new SelectedNode(navigation, null, null);
          if (navigation.getNodes().size() > 0)
+         {
             selectedNode.setNode(navigation.getNodes().get(0));
+         }
       }
       selectNavigation(selectedNode.getPageNavigation().getId());
       if (selectedNode.getNode() != null)
+      {
          selectPageNodeByUri(selectedNode.getNode().getUri());
+      }
    }
 
    public void selectNavigation(int id)
@@ -156,7 +160,9 @@ public class UINavigationNodeSelector extends UIContainer
       for (int i = 0; i < navigations.size(); i++)
       {
          if (navigations.get(i).getId() != id)
+         {
             continue;
+         }
          selectedNode = new SelectedNode(navigations.get(i), null, null);
          selectPageNodeByUri(null);
          UITree uiTree = getChild(UITree.class);
@@ -171,7 +177,9 @@ public class UINavigationNodeSelector extends UIContainer
       for (PageNavigation nav : navigations)
       {
          if (nav.getOwnerType().equals(PortalConfig.USER_TYPE))
+         {
             continue;
+         }
          String ownerId = nav.getOwnerId();
          if (nav.getOwnerType().equals(PortalConfig.GROUP_TYPE))
          {
@@ -190,7 +198,9 @@ public class UINavigationNodeSelector extends UIContainer
    {
       node.setResolvedLabel(res);
       if (node.getChildren() == null)
+      {
          return;
+      }
       for (PageNode childNode : node.getChildren())
       {
          resolveLabel(res, childNode);
@@ -200,7 +210,9 @@ public class UINavigationNodeSelector extends UIContainer
    public void selectPageNodeByUri(String uri)
    {
       if (selectedNode == null)
+      {
          return;
+      }
       UITree tree = getChild(UITree.class);
       List<?> sibbling = tree.getSibbling();
       tree.setSibbling(null);
@@ -220,16 +232,22 @@ public class UINavigationNodeSelector extends UIContainer
    public PageNode searchPageNodeByUri(PageNavigation pageNav, String uri)
    {
       if (pageNav == null || uri == null)
+      {
          return null;
+      }
       List<PageNode> pageNodes = pageNav.getNodes();
       UITree uiTree = getChild(UITree.class);
       for (PageNode ele : pageNodes)
       {
          PageNode returnPageNode = searchPageNodeByUri(ele, uri, uiTree);
          if (returnPageNode == null)
+         {
             continue;
+         }
          if (uiTree.getSibbling() == null)
+         {
             uiTree.setSibbling(pageNodes);
+         }
          return returnPageNode;
       }
       return null;
@@ -238,19 +256,29 @@ public class UINavigationNodeSelector extends UIContainer
    private PageNode searchPageNodeByUri(PageNode pageNode, String uri, UITree tree)
    {
       if (pageNode.getUri().equals(uri))
+      {
          return pageNode;
+      }
       List<PageNode> children = pageNode.getChildren();
       if (children == null)
+      {
          return null;
+      }
       for (PageNode ele : children)
       {
          PageNode returnPageNode = searchPageNodeByUri(ele, uri, tree);
          if (returnPageNode == null)
+         {
             continue;
+         }
          if (tree.getSibbling() == null)
+         {
             tree.setSibbling(children);
+         }
          if (tree.getParentSelected() == null)
+         {
             tree.setParentSelected(pageNode);
+         }
          selectedNode.setParentNode(pageNode);
          return returnPageNode;
       }
@@ -260,14 +288,18 @@ public class UINavigationNodeSelector extends UIContainer
    public List<PageNavigation> getPageNavigations()
    {
       if (navigations == null)
+      {
          navigations = new ArrayList<PageNavigation>();
+      }
       return navigations;
    }
 
    public void addPageNavigation(PageNavigation navigation)
    {
       if (navigations == null)
+      {
          navigations = new ArrayList<PageNavigation>();
+      }
       navigations.add(navigation);
       updateUI();
    }
@@ -275,7 +307,9 @@ public class UINavigationNodeSelector extends UIContainer
    public void deletePageNavigation(PageNavigation navigation)
    {
       if (navigations == null || navigations.size() < 1)
+      {
          return;
+      }
       navigations.remove(navigation);
       deleteNavigations.add(navigation);
       selectedNode = null;
@@ -288,7 +322,9 @@ public class UINavigationNodeSelector extends UIContainer
       for (PageNavigation ele : getPageNavigations())
       {
          if (ele.getId() == id)
+         {
             return ele;
+         }
       }
       return null;
    }
@@ -299,9 +335,13 @@ public class UINavigationNodeSelector extends UIContainer
       if (uiPopupMenu != null)
       {
          if (navigations == null || navigations.size() < 1)
+         {
             uiPopupMenu.setRendered(false);
+         }
          else
+         {
             uiPopupMenu.setRendered(true);
+         }
       }
       super.processRender(context);
    }
@@ -354,11 +394,15 @@ public class UINavigationNodeSelector extends UIContainer
             {
                parent = PageNavigationUtils.searchPageNodeByUri(pageNode, uri);
                if (parent != null)
+               {
                   break;
+               }
             }
          }
          if (parent == null)
+         {
             parent = uiNodeSelector.getSelectedNavigation();
+         }
          uiNodeForm.setSelectedParent(parent);
 
          // set navigation owner, navigation type
@@ -391,7 +435,9 @@ public class UINavigationNodeSelector extends UIContainer
             {
                selectedPageNode = PageNavigationUtils.searchPageNodeByUri(pageNode, uri);
                if (selectedPageNode != null)
+               {
                   break;
+               }
             }
          }
 
@@ -462,18 +508,19 @@ public class UINavigationNodeSelector extends UIContainer
             UserACL userACL = uiApp.getApplicationComponent(UserACL.class);
             if (!userACL.hasPermission(node))
             {
-               uiApp.addMessage(new ApplicationMessage("UIPageBrowser.msg.UserNotPermission", new String[]{pageId}, 1));;
+               uiApp.addMessage(new ApplicationMessage("UIPageBrowser.msg.UserNotPermission", new String[]{pageId}, 1));
+               ;
                return;
             }
          }
          UIPopupWindow uiManagementPopup = uiNodeSelector.getAncestorOfType(UIPopupWindow.class);
          UIPageNodeForm2 uiNodeForm = uiApp.createUIComponent(UIPageNodeForm2.class, null, null);
          uiManagementPopup.setUIComponent(uiNodeForm);
-         
+
          // set navigation owner, navigation type
          uiNodeForm.setOwner(uiNodeSelector.getSelectedNavigation().getOwnerId());
          uiNodeForm.setOwnerType(uiNodeSelector.getSelectedNavigation().getOwnerType());
-         
+
          uiNodeForm.setValues(selectedNode);
          uiNodeForm.setSelectedParent(obj);
          uiManagementPopup.setWindowSize(800, 500);
@@ -494,10 +541,14 @@ public class UINavigationNodeSelector extends UIContainer
 
          PageNavigation nav = uiNodeSelector.getSelectedNavigation();
          if (nav == null)
+         {
             return;
+         }
          PageNode[] pageNodes = PageNavigationUtils.searchPageNodesByUri(nav, uri);
          if (pageNodes == null)
+         {
             return;
+         }
          SelectedNode selectedNode = new SelectedNode(nav, pageNodes[0], pageNodes[1]);
          selectedNode.setDeleteNode(false);
          uiNodeSelector.setCopyNode(selectedNode);
@@ -514,7 +565,9 @@ public class UINavigationNodeSelector extends UIContainer
          super.execute(event);
          UINavigationNodeSelector uiNodeSelector = event.getSource().getAncestorOfType(UINavigationNodeSelector.class);
          if (uiNodeSelector.getCopyNode() == null)
+         {
             return;
+         }
          uiNodeSelector.getCopyNode().setDeleteNode(true);
       }
    }
@@ -542,7 +595,9 @@ public class UINavigationNodeSelector extends UIContainer
          event.getRequestContext().addUIComponentToUpdateByAjax(uiManagement);
          SelectedNode selectedNode = uiNodeSelector.getCopyNode();
          if (selectedNode == null)
+         {
             return;
+         }
 
          PageNode newNode = selectedNode.getNode().clone();
          PageNavigation targetNav = uiNodeSelector.getSelectedNavigation();
@@ -615,7 +670,9 @@ public class UINavigationNodeSelector extends UIContainer
          }
          List<PageNode> children = node.getChildren();
          if (children == null || children.size() < 1)
+         {
             return;
+         }
          for (PageNode ele : children)
          {
             clonePageFromNode(ele, ownerType, ownerId, service);
@@ -628,14 +685,20 @@ public class UINavigationNodeSelector extends UIContainer
          child.setUri(newUri);
          List<PageNode> children = child.getChildren();
          if (children != null)
+         {
             for (PageNode node : children)
+            {
                setNewUri(child, node);
+            }
+         }
       }
 
       private boolean isExistChild(PageNode parent, PageNode child)
       {
          if (parent == null)
+         {
             return false;
+         }
          List<PageNode> nodes = parent.getChildren();
          if (nodes == null)
          {
@@ -645,7 +708,9 @@ public class UINavigationNodeSelector extends UIContainer
          for (PageNode node : nodes)
          {
             if (node.getName().equals(child.getName()))
+            {
                return true;
+            }
          }
          return false;
       }
@@ -654,11 +719,15 @@ public class UINavigationNodeSelector extends UIContainer
       {
          List<PageNode> nodes = nav.getNodes();
          if (nodes.size() == 0)
+         {
             return false;
+         }
          for (PageNode node : nodes)
          {
             if (node.getName().equals(child.getName()))
+            {
                return true;
+            }
          }
          return false;
       }
@@ -690,11 +759,17 @@ public class UINavigationNodeSelector extends UIContainer
          }
          int k = children.indexOf(targetNode);
          if (k < 0)
+         {
             return;
+         }
          if (k == 0 && i == -1)
+         {
             return;
+         }
          if (k == children.size() - 1 && i == 1)
+         {
             return;
+         }
          children.remove(k);
          children.add(k + i, targetNode);
       }
@@ -719,11 +794,15 @@ public class UINavigationNodeSelector extends UIContainer
 
          PageNavigation nav = uiNodeSelector.getSelectedNavigation();
          if (nav == null)
+         {
             return;
+         }
 
          PageNode[] pageNodes = PageNavigationUtils.searchPageNodesByUri(nav, uri);
          if (pageNodes == null)
+         {
             return;
+         }
 
          if (pageNodes[0] == null)
          {

@@ -1,16 +1,16 @@
 /**
  * Copyright (C) 2009 eXo Platform SAS.
- * 
+ *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation; either version 2.1 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this software; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
@@ -44,17 +44,11 @@ import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
+import javax.portlet.WindowState;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.portlet.WindowState;
-
-/**
- * Created by The eXo Platform SAS
- * Author : Tran The Trong
- *          trongtt@gmail.com
- * Jun 14, 2006
- */
+/** Created by The eXo Platform SAS Author : Tran The Trong trongtt@gmail.com Jun 14, 2006 */
 public class UIPageActionListener
 {
 
@@ -93,7 +87,9 @@ public class UIPageActionListener
          List<PageNavigation> navigations = uiPortal.getNavigations();
          String uri = pnevent.getTargetNodeUri();
          if (uri == null || (uri = uri.trim()).length() < 1)
+         {
             return;
+         }
          if (uri.length() == 1 && uri.charAt(0) == '/')
          {
             for (PageNavigation nav : navigations)
@@ -126,7 +122,9 @@ public class UIPageActionListener
             }
          }
          if (uri.charAt(0) == '/')
+         {
             uri = uri.substring(1);
+         }
 
          int idx = uri.lastIndexOf("::");
          if (idx < 0)
@@ -144,7 +142,9 @@ public class UIPageActionListener
                   tempNode = tempNode.getChild(nodeNames[i]);
                }
                if (tempNode != null)
+               {
                   selectedPaths_.add(selectedNode = tempNode);
+               }
 
                if (selectedNode != null)
                {
@@ -155,7 +155,8 @@ public class UIPageActionListener
             // TODO tam.nguyen: filter navigation, select navigation up to user
             if (selectedNode == null)
             {
-               filter : for (PageNavigation nav : navigations)
+               filter:
+               for (PageNavigation nav : navigations)
                {
                   for (PageNode child : nav.getNodes())
                   {
@@ -169,7 +170,9 @@ public class UIPageActionListener
             }
             uiPortal.setSelectedNode(selectedNode);
             if (selectedNode == null)
+            {
                selectedPaths_.add(uiPortal.getSelectedNode());
+            }
             uiPortal.setSelectedPaths(selectedPaths_);
             String selectedUri = (uiPortal.getSelectedNode() == null) ? null : uiPortal.getSelectedNode().getUri();
             if (currentUri != null && !currentUri.equals(selectedUri))
@@ -210,7 +213,9 @@ public class UIPageActionListener
                tempNode = tempNode.getChild(nodeNames[i]);
             }
             if (tempNode != null)
+            {
                selectedPaths_.add(selecttedNode = tempNode);
+            }
 
             uiPortal.setSelectedNode(selecttedNode);
             uiPortal.setSelectedNavigation(nav);
@@ -235,7 +240,7 @@ public class UIPageActionListener
 
       /**
        * Update the layout of UIPortal if both ownerType and ownerId of navigation are changed
-       * 
+       *
        * @param uiPortal
        * @param formerNav
        * @param newNav
@@ -243,7 +248,7 @@ public class UIPageActionListener
        * @throws Exception
        */
       private void updateLayout(UIPortal uiPortal, PageNavigation formerNav, PageNavigation newNav,
-         UIPortalApplication uiPortalApp) throws Exception
+                                UIPortalApplication uiPortalApp) throws Exception
       {
          if (formerNav == null || newNav == null)
          {
@@ -272,7 +277,7 @@ public class UIPageActionListener
 
       /**
        * Rebuild UIPortal with updated UserPortalConfig
-       * 
+       *
        * @param uiPortal
        * @param portalConfig
        * @throws Exception
@@ -349,7 +354,9 @@ public class UIPageActionListener
                   Page page = (Page)PortalDataMapper.buildModelObject(uiPage);
                   UserPortalConfigService configService = uiPage.getApplicationComponent(UserPortalConfigService.class);
                   if (page.getChildren() == null)
+                  {
                      page.setChildren(new ArrayList<ModelObject>());
+                  }
                   configService.update(page);
                }
                break;
@@ -375,7 +382,9 @@ public class UIPageActionListener
             Page page = (Page)PortalDataMapper.buildModelObject(uiPage);
             UserPortalConfigService configService = uiPage.getApplicationComponent(UserPortalConfigService.class);
             if (page.getChildren() == null)
+            {
                page.setChildren(new ArrayList<ModelObject>());
+            }
             configService.update(page);
             pcontext.setFullRender(false);
             pcontext.setResponseComplete(true);

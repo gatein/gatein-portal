@@ -1,16 +1,16 @@
 /**
  * Copyright (C) 2009 eXo Platform SAS.
- * 
+ *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation; either version 2.1 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this software; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
@@ -34,7 +34,7 @@ import org.exoplatform.portal.config.model.gadget.GadgetId;
 import org.exoplatform.portal.config.model.portlet.PortletId;
 import org.exoplatform.portal.config.model.wsrp.WSRPId;
 import org.exoplatform.portal.pom.spi.portlet.Preferences;
-import org.exoplatform.portal.pom.spi.wsrp.WSRPState;
+import org.exoplatform.portal.pom.spi.wsrp.WSRP;
 import org.exoplatform.portal.webui.page.UIPage;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.PortalDataMapper;
@@ -73,19 +73,19 @@ public class UIAddNewApplication extends UIContainer
       return listAppCategories;
    }
 
-   public List<ApplicationCategory> getApplicationCategories(String remoteUser, String[] applicationType)
-      throws Exception
+   public List<ApplicationCategory> getApplicationCategories(String remoteUser,
+                                                             String[] applicationType) throws Exception
    {
       ExoContainer container = ExoContainerContext.getCurrentContainer();
-      ApplicationRegistryService prService =
-         (ApplicationRegistryService)container.getComponentInstanceOfType(ApplicationRegistryService.class);
+      ApplicationRegistryService prService = (ApplicationRegistryService)container.getComponentInstanceOfType(ApplicationRegistryService.class);
 
       if (applicationType == null)
       {
          applicationType = new String[]{};
       }
 
-      List<ApplicationCategory> appCategories = prService.getApplicationCategories(remoteUser, applicationType);
+      List<ApplicationCategory> appCategories = prService.getApplicationCategories(remoteUser,
+         applicationType);
 
       if (appCategories == null)
       {
@@ -99,7 +99,9 @@ public class UIAddNewApplication extends UIContainer
             ApplicationCategory cate = cateItr.next();
             List<Application> applications = cate.getApplications();
             if (applications.size() < 1)
+            {
                cateItr.remove();
+            }
          }
       }
       listAppCategories = appCategories;
@@ -139,7 +141,9 @@ public class UIAddNewApplication extends UIContainer
          for (Application application : applications)
          {
             if (application.getId().equals(id))
+            {
                return application;
+            }
          }
       }
 
@@ -207,7 +211,7 @@ public class UIAddNewApplication extends UIContainer
          }
          else
          {
-            appState = new TransientApplicationState<WSRPState>();
+            appState = new TransientApplicationState<WSRP>();
             appId = new WSRPId(application.getUri());
          }
 

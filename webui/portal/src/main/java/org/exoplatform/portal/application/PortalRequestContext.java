@@ -1,16 +1,16 @@
 /**
  * Copyright (C) 2009 eXo Platform SAS.
- * 
+ *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation; either version 2.1 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this software; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
@@ -38,6 +38,8 @@ import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.lifecycle.HtmlValidator;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
@@ -48,12 +50,9 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 /**
  * This class extends the abstract WebuiRequestContext which itself extends the RequestContext one
- * 
+ * <p/>
  * It mainly implements the abstract methods and overide some.
  */
 public class PortalRequestContext extends WebuiRequestContext
@@ -114,24 +113,34 @@ public class PortalRequestContext extends WebuiRequestContext
       ajaxRequest_ = "true".equals(req.getParameter("ajaxRequest"));
       String cache = req.getParameter(CACHE_LEVEL);
       if (cache != null)
+      {
          cacheLevel_ = cache;
+      }
 
       requestURI_ = URLDecoder.decode(req.getRequestURI(), "UTF-8");
       String pathInfo = req.getPathInfo();
       if (pathInfo == null)
+      {
          pathInfo = "/";
+      }
       int colonIndex = pathInfo.indexOf("/", 1);
       if (colonIndex < 0)
+      {
          colonIndex = pathInfo.length();
+      }
       portalOwner_ = pathInfo.substring(1, colonIndex);
       nodePath_ = pathInfo.substring(colonIndex, pathInfo.length());
 
       portalURI = requestURI_.substring(0, requestURI_.lastIndexOf(nodePath_)) + "/";
 
       if (requestURI_.indexOf("/public/") >= 0)
+      {
          accessPath = PUBLIC_ACCESS;
+      }
       else if (requestURI_.indexOf("/private/") >= 0)
+      {
          accessPath = PRIVATE_ACCESS;
+      }
 
       //TODO use the encoding from the locale-config.xml file
       response_.setContentType("text/html; charset=UTF-8");
@@ -156,7 +165,9 @@ public class PortalRequestContext extends WebuiRequestContext
    {
       String title = (String)request_.getAttribute(REQUEST_TITLE);
       if (title != null)
+      {
          return title;
+      }
       UIPortal uiportal = Util.getUIPortal();
       String resolvedLabel =
          (uiportal.getSelectedNode() == null) ? null : uiportal.getSelectedNode().getResolvedLabel();
@@ -199,9 +210,8 @@ public class PortalRequestContext extends WebuiRequestContext
       Map<String, String[]> unsortedParams = getRequest().getParameterMap();
       Map<String, String[]> sortedParams = new HashMap<String, String[]>();
       Set<String> keys = unsortedParams.keySet();
-      for (Iterator<String> iter = keys.iterator(); iter.hasNext();)
+      for (String key : keys)
       {
-         String key = iter.next();
          if (!key.startsWith(Constants.PARAMETER_ENCODER))
          {
             sortedParams.put(key, unsortedParams.get(key));

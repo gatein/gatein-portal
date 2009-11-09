@@ -1,16 +1,16 @@
 /**
  * Copyright (C) 2009 eXo Platform SAS.
- * 
+ *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation; either version 2.1 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this software; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
@@ -36,11 +36,7 @@ import org.exoplatform.webui.form.UIFormInputSet;
 import org.exoplatform.webui.form.UIFormMultiValueInputSet;
 import org.exoplatform.webui.form.validator.Validator;
 
-/**
- * Author : Nhu Dinh Thuan
- *          nhudinhthuan@yahoo.com
- * Jun 1, 2006
- */
+/** Author : Nhu Dinh Thuan nhudinhthuan@yahoo.com Jun 1, 2006 */
 public class UIFormLifecycle extends Lifecycle<UIForm>
 {
 
@@ -64,31 +60,43 @@ public class UIFormLifecycle extends Lifecycle<UIForm>
       {
          Event<UIComponent> event = uicomponent.createEvent(action, Event.Phase.DECODE, context);
          if (event != null)
+         {
             event.broadcast();
+         }
          return;
       }
       UIComponent uiSubComponent = uicomponent.findComponentById(subComponentId);
       Event<UIComponent> event = uiSubComponent.createEvent(action, Event.Phase.DECODE, context);
       if (event == null)
-        event = uicomponent.createEvent(action, Event.Phase.DECODE, context);
+      {
+         event = uicomponent.createEvent(action, Event.Phase.DECODE, context);
+      }
       if (event != null)
+      {
          event.broadcast();
+      }
    }
 
    public void processAction(UIForm uicomponent, WebuiRequestContext context) throws Exception
    {
       String action = context.getRequestParameter(UIForm.ACTION);
       if (action == null)
+      {
          action = uicomponent.getSubmitAction();
+      }
       if (action == null)
+      {
          return;
+      }
       Event<UIComponent> event = uicomponent.createEvent(action, Event.Phase.PROCESS, context);
       if (event == null)
       {
-         event = uicomponent.<UIComponent> getParent().createEvent(action, Event.Phase.PROCESS, context);
+         event = uicomponent.<UIComponent>getParent().createEvent(action, Event.Phase.PROCESS, context);
       }
       if (event == null)
+      {
          return;
+      }
       UIApplication uiApp = uicomponent.getAncestorOfType(UIApplication.class);
       List<UIComponent> children = uicomponent.getChildren();
       validateChildren(children, uiApp, context);
@@ -123,7 +131,9 @@ public class UIFormLifecycle extends Lifecycle<UIForm>
       for (UIFormInputBase input : inputs)
       {
          if (!input.isValid())
+         {
             continue;
+         }
          String inputValue = context.getRequestParameter(input.getId());
          if (inputValue == null || inputValue.trim().length() == 0)
          {
@@ -169,14 +179,20 @@ public class UIFormLifecycle extends Lifecycle<UIForm>
          {
             UIFormInputBase uiInput = (UIFormInputBase)uiChild;
             if (!uiInput.isValid())
+            {
                continue;
+            }
             List<Validator> validators = uiInput.getValidators();
             if (validators == null)
+            {
                continue;
+            }
             try
             {
                for (Validator validator : validators)
+               {
                   validator.validate(uiInput);
+               }
             }
             catch (MessageException ex)
             {
@@ -200,7 +216,9 @@ public class UIFormLifecycle extends Lifecycle<UIForm>
             UIFormMultiValueInputSet uiInput = (UIFormMultiValueInputSet)uiChild;
             List<Validator> validators = uiInput.getValidators();
             if (validators == null)
+            {
                continue;
+            }
             try
             {
                for (Validator validator : validators)
@@ -232,11 +250,15 @@ public class UIFormLifecycle extends Lifecycle<UIForm>
             UIFormInputContainer uiInput = (UIFormInputContainer)uiChild;
             List<Validator> validators = uiInput.getValidators();
             if (validators == null)
+            {
                continue;
+            }
             try
             {
                for (Validator validator : validators)
+               {
                   validator.validate(uiInput);
+               }
             }
             catch (MessageException ex)
             {
