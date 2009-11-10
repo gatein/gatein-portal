@@ -26,7 +26,7 @@
 		<div class="RtTabDashboard">
 			<div class="CtTabDashboard">
 				<div class="UIHorizontalTabs">
-					<div class="TabsContainer">
+					<div class="TabsContainer ClearFix">
 						<% for(int i = 0;i < tabNbs;i++){ 
 							 		node = nodes.get(i);
 							 		String tabLabel = node.getResolvedLabel();
