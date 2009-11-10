@@ -27,7 +27,7 @@ import java.io.Writer;
  * Represents a textarea element
  * The value is stored in UIFormInputBase
  */
-public class UIFormTextAreaInput extends UIFormStringInput
+public class UIFormTextAreaInput extends UIFormInputBase<String>
 {
    /**
     * number of rows
@@ -39,9 +39,17 @@ public class UIFormTextAreaInput extends UIFormStringInput
     */
    private int columns = 30;
 
-   public UIFormTextAreaInput(String name, String bindingExpression, String value)
-   {
-      super(name, bindingExpression, value);
+   public UIFormTextAreaInput(String name, String bindingExpression, String value) {
+      super(name, bindingExpression, String.class);
+      this.value_ = value ; 
+   }
+   
+   @SuppressWarnings("unused")
+   public void decode(Object input, WebuiRequestContext context) throws Exception {
+     String val = (String) input ;
+     if((val == null || val.length() == 0)) return ; 
+     value_ = val ;
+     if(value_ != null && value_.length() == 0) value_ = null ;
    }
 
    public void processRender(WebuiRequestContext context) throws Exception
