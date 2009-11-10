@@ -33,6 +33,8 @@ import org.exoplatform.webui.application.WebuiRequestContext;
 public class OrganizationUtils
 {
 
+   private static String cachedGroupLabel;
+   
    static public String getGroupLabel(String groupId) throws Exception
    {
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
@@ -40,8 +42,12 @@ public class OrganizationUtils
       OrganizationService orgService =
          (OrganizationService)container.getComponentInstanceOfType(OrganizationService.class);
       Group group = orgService.getGroupHandler().findGroupById(groupId);
+      if(group == null){
+         return cachedGroupLabel;
+      }
       String label = group.getLabel();
-      return (label != null && label.trim().length() > 0) ? label : group.getGroupName();
+      cachedGroupLabel = (label != null && label.trim().length() > 0 )? label : group.getGroupName();
+      return cachedGroupLabel;
    }
 
 }
