@@ -109,7 +109,7 @@
 
 .UIPopupWindow .ExoMessageDecorator .TopCenterDecorator {
 	background: url('background/ExoMessageDecorator.png') repeat-x center -62px; 
-	height: 31px;
+	height: 26px;
 }
 
 .UIPopupWindow .ExoMessageDecorator .PopupTitle {

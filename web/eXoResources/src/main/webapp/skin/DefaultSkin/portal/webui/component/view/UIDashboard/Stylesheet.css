@@ -17,6 +17,7 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
+<<<<<<< .mine
 .UIWindow .UIDashboardPortlet {
 	margin: 0px;
 }
@@ -35,6 +36,7 @@
 
 .UIDashboard {
 	height: 100%;
+	background: url('background/BgRepeat.gif') repeat-y left bottom;
 }
 
 .UIDashboard .DashboardContainer {
@@ -63,26 +65,29 @@
 }
 
 .UITabPaneDashboard .LtTabDashboard {
-	background: #ffcf01 url('background/NavUser.gif') no-repeat left top;
+	background: url('background/NavUser.gif') no-repeat left top;
 	padding-left: 3px;
+	height: 32px;
 }
 
 .UITabPaneDashboard .RtTabDashboard {
-	background: #ffcf01 url('background/NavUser.gif') no-repeat right top;
+	background: url('background/NavUser.gif') no-repeat right top;
 	padding-right: 3px;
+	height: 32px;
 }
 
 .UITabPaneDashboard .CtTabDashboard {
-	background: #ffcf01 url('background/NavUser.gif') repeat-x center -32px;
+	height: 32px;
+	background: url('background/NavUser.gif') repeat-x center bottom;
 	padding: 0px 6px; 
 }
 
 .UITabPaneDashboard .UIHorizontalTabs {
-	padding: 5px 0 8px;
+	padding-top: 10px;
 }
 
 .UITabPaneDashboard .UIHorizontalTabs .TabsContainer {
-	height: auto;
+	height: 25px;
 }
 
 .UITabPaneDashboard .UIHorizontalTabs .GrayTabStyle .NormalTab .MiddleTab,
@@ -106,7 +111,6 @@
 	width: 34px; height: 22px;
 	float: left;
 	cursor: pointer;
-	margin-top: 4px;
 }
 
 .UITabPaneDashboard .UIHorizontalTabs .GrayTabStyle .NormalTab .LeftTab {
@@ -362,9 +366,8 @@
 
 .UIDashboardContainer .GadgetContainer {
 	overflow: auto;
-	height: 100%;
-  min-height: 400px;
-  _height: 400px;
+ 	min-height: 400px;
+ 	_height: 400px;
 }
 
 /**html .UIDashboardContainer .GadgetContainer {
@@ -511,30 +514,30 @@
 #UIAddGadgetPopup .PopupTitle {
 	margin-left: 22px;
 }
-/*----------------------Maximized-------------------*/
+/*----------------------UIDashboardMask-------------------*/
 
-.Maximized .UIGadget {
+.UIDashboardMask .UIGadget {
 	padding: 5px;
 	margin: 0px;
 }
 
-.Maximized .UIGadget .GadgetControl {
+.UIDashboardMask .UIGadget .GadgetControl {
 	float: none;
 	padding: 0px;
 	height: auto; width: auto;
 }
 
-.Maximized .UIGadget .GadgetControl .LeftControlBar {
+.UIDashboardMask .UIGadget .GadgetControl .LeftControlBar {
 	background: none;
 	padding: 0px;
 }
 
-.Maximized .UIGadget .GadgetControl .RightControlBar {
+.UIDashboardMask .UIGadget .GadgetControl .RightControlBar {
 	background: none;
 	padding: 0px;
 }
 
-.Maximized .UIGadget .GadgetControl .CenterControlBar {
+.UIDashboardMask .UIGadget .GadgetControl .CenterControlBar {
 	background: url('background/BgTitleGadget.gif') repeat-x left top;
 	height: 23px;
 	line-height: 23px;
@@ -543,31 +546,31 @@
 	border-top: none;
 }
 
-.Maximized .UIGadget .GadgetControl .GadgetDragHandleArea {
+.UIDashboardMask .UIGadget .GadgetControl .GadgetDragHandleArea {
 	display: none;
 }	
 
-.Maximized .UIGadget .TLGadget {
+.UIDashboardMask .UIGadget .TLGadget {
 	display: none;
 }
 
-.Maximized .UIGadget .MLGadget {
+.UIDashboardMask .UIGadget .MLGadget {
 	background: #f2f2f3;
 	border: 1px solid #c3c3c3;
 	border-top: none;
 	padding: 3px;
 }
 
-.Maximized .UIGadget .MRGadget {
+.UIDashboardMask .UIGadget .MRGadget {
 	background: white;
 	padding: 0 0 1px;
 }
 
-.Maximized .UIGadget .BLGadget {
+.UIDashboardMask .UIGadget .BLGadget {
 	display: none;
 }
 
-.Maximized .GadgetTitle {
+.UIDashboardMask .GadgetTitle {
 	float: left; /* orientation=lt */
 	float: right; /* orientation=rt */
 	padding: 0px 5px;
@@ -578,6 +581,6 @@
 	white-space: nowrap;
 }
 
-.Maximized iframe {
+.UIDashboardMask iframe {
 	width: 100%;
 }

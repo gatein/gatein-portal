@@ -17,6 +17,7 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
+
 .UIManagement {
 	padding: 10px;
 	white-space: nowrap;
@@ -25,6 +26,7 @@
 .UIManagement .ManagementBlock {
 	height: 75px;
 	background: white url('background/ContentBg.gif') repeat-x bottom;
+	_width: 97%;
 }
 
 .UIManagement table.ManagementBlock td {
@@ -37,7 +39,7 @@
 	background: url('background/LineBg.gif') no-repeat right center; /* orientation=lt */
 	background: url('background/LineBg-rt.gif') no-repeat left center; /* orientation=rt */
 	padding: 0px 15px;
-	width: 33%;
+	width: 30%;
 	overflow: hidden;
 	white-space: normal;
 }
@@ -68,9 +70,9 @@
 }
 
 .UIManagement .ManagementBlock .ActionBlock {
-	padding-left: 50px; /* orientation=lt */
-	padding-right: 50px; /* orientation=rt */
-	width: 65%;
+	padding-left: 30px; /* orientation=lt */
+	padding-right: 30px; /* orientation=rt */
+	width: 60%;
 }
 
 .UIManagement .ManagementBlock .ActionBlock a {
