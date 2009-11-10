@@ -53,7 +53,7 @@ public class UIMembershipTypeForm extends UIForm
          UIFormStringInput.ENABLE).addValidator(MandatoryValidator.class).addValidator(StringLengthValidator.class, 3,
          30).addValidator(NameValidator.class).addValidator(SpecialCharacterValidator.class));
 
-      addUIFormInput(new UIFormTextAreaInput(DESCRIPTION, DESCRIPTION, null).setMaxLength(255));
+      addUIFormInput(new UIFormTextAreaInput(DESCRIPTION, DESCRIPTION, null));
    }
 
    public void setMembershipType(MembershipType membershipType) throws Exception
