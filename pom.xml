@@ -158,6 +158,33 @@
       <plugins>
          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-enforcer-plugin</artifactId>
+            <executions>
+               <execution>
+                  <id>check-environment-ready</id>
+                  <goals>
+                     <goal>enforce</goal>
+                  </goals>
+                  <configuration>
+                     <rules>
+                        <requireProperty>
+                           <property>exo.projects.directory.src</property>
+                           <message>"You must define the property exo.projects.directory.src to give the path of the root of your working area"</message>
+                        </requireProperty>
+                        <requireFilesExist>
+                           <files>
+                              <file>${exo.projects.directory.src}/gatein/portal/trunk/web/portal/src/main/webapp</file>
+                           </files>
+                           <message>"The following directory doesn't exist : ${exo.projects.directory.src}/gatein/portal/trunk/web/portal/src/main/webapp"</message>
+                        </requireFilesExist>
+                     </rules>
+                     <fail>true</fail>
+                  </configuration>
+               </execution>
+            </executions>
+         </plugin>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-antrun-plugin</artifactId>
             <executions>
                <execution>
