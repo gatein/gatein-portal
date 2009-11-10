@@ -151,6 +151,15 @@ public abstract class PageTask extends AbstractPOMTask
          org.gatein.mop.api.workspace.Page dstPage = dstPages.addChild(cloneName);
 
          //
+         
+         Attributes srcAttrs = srcPage.getAttributes();
+         Attributes dstAttrs = dstPage.getAttributes();
+         for (String key : srcAttrs.getKeys())
+         {
+            Object value = srcAttrs.getObject(key);
+            dstAttrs.setObject(key, value);
+         }
+         
          copy(srcPage, dstPage, srcPage.getRootComponent(), dstPage.getRootComponent());
 
          //

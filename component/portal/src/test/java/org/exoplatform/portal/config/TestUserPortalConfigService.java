@@ -465,7 +465,7 @@ public class TestUserPortalConfigService extends BasicTestCase
 
 
    // Julien : see who added that and find out is test is relevant or not
-/*
+
    public void testClonePage()
    {
       new UnitTest()
@@ -486,7 +486,7 @@ public class TestUserPortalConfigService extends BasicTestCase
          }
       }.execute(null);
    }
-*/
+
 
    
    public void testUpdatePage()
