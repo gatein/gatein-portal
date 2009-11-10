@@ -20,9 +20,7 @@
 package org.exoplatform.portal.webui.portal;
 
 import org.exoplatform.commons.utils.PageList;
-import org.exoplatform.container.ExoContainer;
 import org.exoplatform.portal.application.PortalRequestContext;
-import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.config.model.CloneApplicationState;
@@ -46,7 +44,6 @@ import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.Query;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.web.application.ApplicationMessage;
-import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.UITabPane;
@@ -270,13 +267,7 @@ public class UIPortalComponentActionListener
                CloneApplicationState state = new CloneApplicationState<Object>(app.getStorageId());
 
                //
-               WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
-               ExoContainer container = context.getApplication().getApplicationServiceContainer();
-               DataStorage dataStorage = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
-               Object id = dataStorage.getId(applicationType, state);
-               PortletState portletState = new PortletState(state, applicationType, id);
-
-               uiPortlet.setState(portletState);
+               uiPortlet.setState(new PortletState(state, applicationType));
 
                uiPortlet.setPortletInPortal(uiTarget instanceof UIPortal);
                uiPortlet.setShowEditControl(true);

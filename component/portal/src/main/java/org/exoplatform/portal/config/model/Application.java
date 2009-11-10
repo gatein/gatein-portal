@@ -35,9 +35,6 @@ public abstract class Application<S, I> extends ModelObject
    /** The application state. */
    private ApplicationState<S> state;
 
-   /** The reference to the application. */
-   private I ref;
-
    private String id;
 
    private String title;
@@ -74,7 +71,6 @@ public abstract class Application<S, I> extends ModelObject
 
       //
       this.state = data.getState();
-      this.ref = data.getRef();
       this.id = data.getId();
       this.title = data.getTitle();
       this.icon = data.getIcon();
@@ -89,17 +85,14 @@ public abstract class Application<S, I> extends ModelObject
       this.accessPermissions = data.getAccessPermissions().toArray(new String[data.getAccessPermissions().size()]);
    }
 
-   public Application(String storageId, I ref)
+   public Application(String storageId)
    {
       super(storageId);
-
-      //
-      this.ref = ref;
    }
 
-   public Application(I ref)
+   public Application()
    {
-      this.ref = ref;
+      super();
    }
 
    public abstract ApplicationType<S, I> getType();
@@ -162,11 +155,6 @@ public abstract class Application<S, I> extends ModelObject
    public void setState(ApplicationState<S> value)
    {
       state = value;
-   }
-
-   public I getRef()
-   {
-      return ref;
    }
 
    public boolean getShowInfoBar()
@@ -259,7 +247,6 @@ public abstract class Application<S, I> extends ModelObject
          storageName,
          getType(),
          state,
-         ref,
          id,
          title,
          icon,

@@ -23,6 +23,7 @@ import org.exoplatform.Constants;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.application.UserProfileLifecycle;
+import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.config.model.portlet.PortletId;
 import org.exoplatform.portal.pom.spi.portlet.Preferences;
@@ -137,6 +138,9 @@ public class UIPortlet<S, C extends Serializable, I> extends UIApplication
    /** . */
    private PortletState<S, I> state;
 
+   /** . */
+   private I applicationId;
+
    private String theme_;
    private String portletStyle;
    private boolean showPortletMode = true;
@@ -194,7 +198,7 @@ public class UIPortlet<S, C extends Serializable, I> extends UIApplication
       ApplicationType<S, I> type = state.getApplicationType();
       if (type == ApplicationType.PORTLET)
       {
-         return ((PortletId)state.getApplicationId()).getApplicationName() + "/" + ((PortletId)state.getApplicationId()).getPortletName();
+         return ((PortletId)applicationId).getApplicationName() + "/" + ((PortletId)applicationId).getPortletName();
       }
       else if (type == ApplicationType.GADGET)
       {
@@ -209,6 +213,11 @@ public class UIPortlet<S, C extends Serializable, I> extends UIApplication
    public String getId()
    {
       return storageName;
+   }
+
+   public I getApplicationId()
+   {
+      return applicationId;
    }
 
    public String getPortletStyle()
@@ -744,15 +753,18 @@ public class UIPortlet<S, C extends Serializable, I> extends UIApplication
          try
          {
             PortletInvoker portletInvoker = getApplicationComponent(PortletInvoker.class);
+            DataStorage dataStorage = getApplicationComponent(DataStorage.class);
+            I applicationId = dataStorage.getId(state.getApplicationType(), state.getApplicationState());
             ModelAdapter<S, C, I> adapter = ModelAdapter.getAdapter(state.getApplicationType());
-            PortletContext producerOfferedPortletContext = adapter.getProducerOfferedPortletContext(state.getApplicationId());
+            PortletContext producerOfferedPortletContext = adapter.getProducerOfferedPortletContext(applicationId);
             Portlet producedOfferedPortlet = portletInvoker.getPortlet(producerOfferedPortletContext);
 
             this.adapter = adapter;
             this.producerOfferedPortletContext = producerOfferedPortletContext;
             this.producedOfferedPortlet = producedOfferedPortlet;
+            this.applicationId = applicationId;
          }
-         catch (PortletInvokerException e)
+         catch (Exception e)
          {
             e.printStackTrace();
          }
@@ -762,6 +774,7 @@ public class UIPortlet<S, C extends Serializable, I> extends UIApplication
          this.adapter = null;
          this.producedOfferedPortlet = null;
          this.producerOfferedPortletContext = null;
+         this.applicationId = null;
       }
       this.state = state;
    }
@@ -789,7 +802,7 @@ public class UIPortlet<S, C extends Serializable, I> extends UIApplication
    {
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
       ExoContainer container = context.getApplication().getApplicationServiceContainer();
-      return adapter.getPortletContext(container, state.getApplicationId(), state.getApplicationState());
+      return adapter.getPortletContext(container, applicationId, state.getApplicationState());
    }
 
    /**

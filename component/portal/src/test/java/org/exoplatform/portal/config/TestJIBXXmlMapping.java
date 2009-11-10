@@ -115,8 +115,7 @@ public class TestJIBXXmlMapping extends BasicTestCase
             "src/test/resources/jibx/portlet-application.xml"), null);
       TransientApplicationState portletState = (TransientApplicationState)app.getState();
       assertNotNull(portletState);
-      assertEquals("web", app.getRef().getApplicationName());
-      assertEquals("BannerPortlet", app.getRef().getPortletName());
+      assertEquals("web/BannerPortlet", portletState.getContentId());
       Preferences preferences = (Preferences)portletState.getContentState();
       assertEquals(new PreferencesBuilder().add("template", "template_value").build(), preferences);
    }

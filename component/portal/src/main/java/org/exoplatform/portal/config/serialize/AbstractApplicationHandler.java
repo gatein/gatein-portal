@@ -114,16 +114,23 @@ public class AbstractApplicationHandler implements IMarshaller, IUnmarshaller, I
          TransientApplicationState<Preferences> state;
          if (persistenceChunks.length == 2)
          {
-            state = new TransientApplicationState<Preferences>();
+            state = new TransientApplicationState<Preferences>(
+               persistenceChunks[0] + "/" +  persistenceChunks[1],
+               null,
+               ownerType,
+               ownerId,
+               null);
          }
          else
          {
-            state = new TransientApplicationState<Preferences>(persistenceChunks[2]);
+            state = new TransientApplicationState<Preferences>(
+               persistenceChunks[0] + "/" +  persistenceChunks[1],
+               null,
+               ownerType,
+               ownerId,
+               persistenceChunks[2]);
          }
-         state.setOwnerType(ownerType);
-         state.setOwnerId(ownerId);
-         state.setContentId(persistenceChunks[0] + "/" +  persistenceChunks[1]);
-         app = new PortletApplication(persistenceChunks[0], persistenceChunks[1]);
+         app = new PortletApplication();
          app.setState(state);
       }
       else
@@ -131,7 +138,7 @@ public class AbstractApplicationHandler implements IMarshaller, IUnmarshaller, I
          ctx.parsePastStartTag(m_uri, "portlet");
          String applicationName = ctx.parseElementText(m_uri, "application-ref");
          String portletName = ctx.parseElementText(m_uri, "portlet-ref");
-         TransientApplicationState<Preferences> state = new TransientApplicationState<Preferences>();
+         TransientApplicationState<Preferences> state;
          if (ctx.isAt(m_uri, "preferences"))
          {
             PreferencesBuilder builder = new PreferencesBuilder();
@@ -142,9 +149,13 @@ public class AbstractApplicationHandler implements IMarshaller, IUnmarshaller, I
                builder.add(value.getName(), value.getValues(), value.isReadOnly());
             }
             ctx.parsePastEndTag(m_uri, "preferences");
-            state.setContentState(builder.build());
+            state = new TransientApplicationState<Preferences>(applicationName + "/" + portletName, builder.build());
          }
-         app = new PortletApplication(applicationName, portletName);
+         else
+         {
+            state = new TransientApplicationState<Preferences>(applicationName + "/" + portletName, null);
+         }
+         app = new PortletApplication();
          app.setState(state);
          ctx.parsePastEndTag(m_uri, "portlet");
       }

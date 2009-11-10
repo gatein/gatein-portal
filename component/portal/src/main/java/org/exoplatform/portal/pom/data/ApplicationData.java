@@ -38,9 +38,6 @@ public class ApplicationData<S, I> extends ComponentData
    private final ApplicationState<S> state;
 
    /** . */
-   private final I ref;
-
-   /** . */
    private final String id;
 
    /** . */
@@ -81,7 +78,6 @@ public class ApplicationData<S, I> extends ComponentData
       String storageName,
       ApplicationType<S, I> type,
       ApplicationState<S> state,
-      I ref,
       String id,
       String title,
       String icon,
@@ -99,7 +95,6 @@ public class ApplicationData<S, I> extends ComponentData
       //
       this.type = type;
       this.state = state;
-      this.ref = ref;
       this.id = id;
       this.title = title;
       this.icon = icon;
@@ -122,11 +117,6 @@ public class ApplicationData<S, I> extends ComponentData
    public ApplicationState<S> getState()
    {
       return state;
-   }
-
-   public I getRef()
-   {
-      return ref;
    }
 
    public String getId()

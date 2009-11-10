@@ -36,24 +36,13 @@ public class GadgetApplication extends Application<Gadget, GadgetId>
       super(data);
    }
 
-   public GadgetApplication(String storageId, String gadgetName)
+   public GadgetApplication(String storageId)
    {
-      super(storageId, new GadgetId(gadgetName));
+      super(storageId);
    }
 
-   public GadgetApplication(String gadgetName)
+   public GadgetApplication()
    {
-      super(new GadgetId(gadgetName));
-   }
-
-   public GadgetApplication(String storageId, GadgetId instanceId)
-   {
-      super(storageId, instanceId);
-   }
-
-   public GadgetApplication(GadgetId instanceId)
-   {
-      super(instanceId);
    }
 
    public ApplicationType<Gadget, GadgetId> getType()

@@ -24,8 +24,8 @@ import org.exoplatform.application.gadget.GadgetRegistryService;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.model.ApplicationState;
+import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.config.model.Properties;
-import org.exoplatform.portal.config.model.TransientApplicationState;
 import org.exoplatform.portal.config.model.gadget.GadgetId;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.WebAppController;
@@ -97,7 +97,6 @@ public class UIGadget extends UIComponent
    {
       // That value will be overriden when it is mapped onto a data storage
       storageName = UUID.randomUUID().toString();
-      state = new TransientApplicationState<org.exoplatform.portal.pom.spi.gadget.Gadget>();
    }
 
    public String getStorageId()
@@ -132,17 +131,28 @@ public class UIGadget extends UIComponent
 
    public void setState(ApplicationState<org.exoplatform.portal.pom.spi.gadget.Gadget> state)
    {
-      this.state = state;
-   }
+      if (state != null)
+      {
+         try
+         {
+            DataStorage ds= getApplicationComponent(DataStorage.class);
+            GadgetId gadgetId = ds.getId(ApplicationType.GADGET, state);
 
-   public GadgetId getGadgetId()
-   {
-      return gadgetId;
-   }
+            //
+            this.gadgetId = gadgetId;
+            this.state = state;
+         }
+         catch (Exception e)
+         {
+            e.printStackTrace();
+         }
+      }
+      else
+      {
+         this.gadgetId = null;
+         this.state = null;
+      }
 
-   public void setGadgetId(GadgetId gadgetId)
-   {
-      this.gadgetId = gadgetId;
    }
 
    /**

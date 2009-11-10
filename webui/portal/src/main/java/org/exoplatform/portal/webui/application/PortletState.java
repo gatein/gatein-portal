@@ -39,14 +39,10 @@ public class PortletState<S, I>
    /** The application state. */
    private ApplicationState<S> applicationState;
 
-   /** The application id. */
-   private final I applicationId;
-
-   public PortletState(ApplicationState<S> applicationState, ApplicationType<S, I> applicationType, I applicationId)
+   public PortletState(ApplicationState<S> applicationState, ApplicationType<S, I> applicationType)
    {
       this.applicationState = applicationState;
       this.applicationType = applicationType;
-      this.applicationId = applicationId;
    }
 
    public ApplicationType<S, I> getApplicationType()
@@ -62,10 +58,5 @@ public class PortletState<S, I>
    public void setApplicationState(ApplicationState<S> applicationState)
    {
       this.applicationState = applicationState;
-   }
-
-   public I getApplicationId()
-   {
-      return applicationId;
    }
 }

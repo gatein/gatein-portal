@@ -76,4 +76,10 @@ public class PortletId
       }
       return false;
    }
+
+   @Override
+   public String toString()
+   {
+      return "PortletId[applicationName=" + applicationName + ",portletName=" + portletName + "]";
+   }
 }

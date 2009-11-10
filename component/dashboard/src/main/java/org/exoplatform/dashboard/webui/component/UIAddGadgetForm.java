@@ -21,7 +21,7 @@ package org.exoplatform.dashboard.webui.component;
 
 import org.exoplatform.application.gadget.Gadget;
 import org.exoplatform.application.gadget.GadgetRegistryService;
-import org.exoplatform.portal.config.model.gadget.GadgetId;
+import org.exoplatform.portal.config.model.TransientApplicationState;
 import org.exoplatform.portal.webui.application.GadgetUtil;
 import org.exoplatform.portal.webui.application.UIGadget;
 import org.exoplatform.services.rss.parser.DefaultRSSChannel;
@@ -92,7 +92,7 @@ public class UIAddGadgetForm extends UIForm
             gadget = GadgetUtil.toGadget(name, url, false);
             service.saveGadget(gadget);
             uiGadget = uiForm.createUIComponent(context, UIGadget.class, null, null);
-            uiGadget.setGadgetId(new GadgetId(gadget.getName()));
+            uiGadget.setState(new TransientApplicationState<org.exoplatform.portal.pom.spi.gadget.Gadget>(gadget.getName()));
          }
          catch (Exception e)
          {
@@ -115,7 +115,7 @@ public class UIAddGadgetForm extends UIForm
             //TODO make sure it's an rss feed
             // TODO make sure that we did not add it already
             uiGadget = uiForm.createUIComponent(context, UIGadget.class, null, null);
-            uiGadget.setGadgetId(new GadgetId(gadget.getName()));
+            uiGadget.setState(new TransientApplicationState<org.exoplatform.portal.pom.spi.gadget.Gadget>(gadget.getName()));
 
             String params = "{'rssurl':'" + url + "'}";
 

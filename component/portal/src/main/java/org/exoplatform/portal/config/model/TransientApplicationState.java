@@ -43,20 +43,24 @@ public class TransientApplicationState<S> extends ApplicationState<S>
    /** The content state. */
    private S contentState;
 
-   public TransientApplicationState(String uniqueId)
+   public TransientApplicationState(String contentId)
    {
-      this(null, uniqueId);
+      this.contentId = contentId;
    }
 
-   public TransientApplicationState(S contentState, String uniqueId)
+   public TransientApplicationState(String contentId, S contentState)
    {
+      this.contentId = contentId;
       this.contentState = contentState;
-      this.uniqueId = uniqueId;
    }
 
-   public TransientApplicationState(S contentState)
+   public TransientApplicationState(String contentId, S contentState, String ownerType, String ownerId, String uniqueId)
    {
-      this(contentState, null);
+      this.contentId = contentId;
+      this.contentState = contentState;
+      this.ownerType = ownerType;
+      this.ownerId = ownerId;
+      this.uniqueId = uniqueId;
    }
 
    public TransientApplicationState()
@@ -68,11 +72,6 @@ public class TransientApplicationState<S> extends ApplicationState<S>
    public String getContentId()
    {
       return contentId;
-   }
-
-   public void setContentId(String contentId)
-   {
-      this.contentId = contentId;
    }
 
    public S getContentState()
@@ -108,10 +107,5 @@ public class TransientApplicationState<S> extends ApplicationState<S>
    public String getUniqueId()
    {
       return uniqueId;
-   }
-
-   public void setUniqueId(String uniqueId)
-   {
-      this.uniqueId = uniqueId;
    }
 }

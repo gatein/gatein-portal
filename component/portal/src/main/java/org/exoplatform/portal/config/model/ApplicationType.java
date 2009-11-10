@@ -79,12 +79,10 @@ public class ApplicationType<S, I>
    }
 
    /** . */
-   public static final ApplicationType<Preferences, PortletId> PORTLET =
-      new ApplicationType<Preferences, PortletId>(Preferences.CONTENT_TYPE, "portlet");
+   public static final ApplicationType<Preferences, PortletId> PORTLET = new ApplicationType<Preferences, PortletId>(Preferences.CONTENT_TYPE, "portlet");
 
    /** . */
-   public static final ApplicationType<Gadget, GadgetId> GADGET =
-      new ApplicationType<Gadget, GadgetId>(Gadget.CONTENT_TYPE, "gadget");
+   public static final ApplicationType<Gadget, GadgetId> GADGET = new ApplicationType<Gadget, GadgetId>(Gadget.CONTENT_TYPE, "gadget");
 
    /** . */
    public static final ApplicationType<WSRP, WSRPId> WSRP_PORTLET = new ApplicationType<WSRP, WSRPId>(WSRP.CONTENT_TYPE, "wsrp");

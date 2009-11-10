@@ -35,8 +35,7 @@ public final class Preferences implements Iterable<Preference>
 {
 
    /** . */
-   public static final ContentType<Preferences> CONTENT_TYPE =
-      new ContentType<Preferences>("application/portlet", Preferences.class);
+   public static final ContentType<Preferences> CONTENT_TYPE = new ContentType<Preferences>("application/portlet", Preferences.class);
 
    /** . */
    final Map<String, Preference> state;

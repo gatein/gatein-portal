@@ -36,24 +36,14 @@ public class PortletApplication extends Application<Preferences, PortletId>
       super(data);
    }
 
-   public PortletApplication(String storageId, String applicationName, String portletName)
+   public PortletApplication(String storageId)
    {
-      super(storageId, new PortletId(applicationName, portletName));
+      super(storageId);
    }
 
-   public PortletApplication(String applicationName, String portletName)
+   public PortletApplication()
    {
-      super(new PortletId(applicationName, portletName));
-   }
-
-   public PortletApplication(String storageId, PortletId instanceId)
-   {
-      super(storageId, instanceId);
-   }
-
-   public PortletApplication(PortletId instanceId)
-   {
-      super(instanceId);
+      super();
    }
 
    public ApplicationType<Preferences, PortletId> getType()

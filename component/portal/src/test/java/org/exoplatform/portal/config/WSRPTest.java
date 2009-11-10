@@ -65,13 +65,11 @@ public class WSRPTest extends BasicTestCase
 
    public void testBilto() throws Exception
    {
-
-      TransientApplicationState<WSRP> state = new TransientApplicationState<WSRP>();
       WSRP wsrp = new WSRP();
       String id = "portlet id";
       wsrp.setPortletId(id);
-      state.setContentState(wsrp);
-      WSRPApplication wsrpApplication = new WSRPApplication(new WSRPId("test"));
+      TransientApplicationState<WSRP> state = new TransientApplicationState<WSRP>("test", wsrp);
+      WSRPApplication wsrpApplication = new WSRPApplication();
       wsrpApplication.setState(state);
 
       Page container = new Page();

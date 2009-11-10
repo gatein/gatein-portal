@@ -30,7 +30,8 @@ import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.config.model.CloneApplicationState;
 import org.exoplatform.portal.config.model.ModelObject;
 import org.exoplatform.portal.config.model.Page;
-import org.exoplatform.portal.config.model.gadget.GadgetId;
+import org.exoplatform.portal.config.model.TransientApplicationState;
+import org.exoplatform.portal.pom.spi.gadget.Gadget;
 import org.exoplatform.portal.pom.spi.portlet.Preferences;
 import org.exoplatform.portal.pom.spi.wsrp.WSRPState;
 import org.exoplatform.portal.webui.page.UIPage;
@@ -183,7 +184,7 @@ public class UIAddNewApplication extends UIContainer
       {
          UIGadget uiGadget = uiPage.createUIComponent(event.getRequestContext(), UIGadget.class, null, null);
 
-         uiGadget.setGadgetId(new GadgetId(portletName));
+         uiGadget.setState(new TransientApplicationState<Gadget>(portletName));
 
          // Set Properties For gadget
          int posX = (int)(Math.random() * 400);
@@ -212,7 +213,7 @@ public class UIAddNewApplication extends UIContainer
          }
 
          ApplicationType applicationType = remote ? ApplicationType.WSRP_PORTLET : ApplicationType.PORTLET;
-         PortletState portletState = new PortletState(appState, applicationType, null);
+         PortletState portletState = new PortletState(appState, applicationType);
 
          uiPortlet.setState(portletState);
          uiPortlet.setPortletInPortal(false);

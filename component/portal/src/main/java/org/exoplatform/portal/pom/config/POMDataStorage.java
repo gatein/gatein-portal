@@ -202,7 +202,8 @@ public class POMDataStorage implements ModelDataStorage, ModelDemarcation
       String contentId;
       if (state instanceof TransientApplicationState)
       {
-         throw new UnsupportedOperationException();
+         TransientApplicationState tstate = (TransientApplicationState)state;
+         contentId = tstate.getContentId();
       }
       else if (state instanceof PersistentApplicationState)
       {

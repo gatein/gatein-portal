@@ -79,7 +79,7 @@ public class UIWorkingWorkspace extends UIContainer
 
       for (UIPortlet portlet : portletInstancesInPage)
       {
-         Object applicationId = portlet.getState().getApplicationId();
+         Object applicationId = portlet.getApplicationId();
          if (applicationId instanceof PortletId)
          {
             PortletId portletId = (PortletId)applicationId;

@@ -24,7 +24,8 @@ import org.exoplatform.application.registry.ApplicationRegistryService;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.model.Container;
 import org.exoplatform.portal.config.model.Dashboard;
-import org.exoplatform.portal.config.model.gadget.GadgetId;
+import org.exoplatform.portal.config.model.TransientApplicationState;
+import org.exoplatform.portal.pom.spi.gadget.Gadget;
 import org.exoplatform.portal.webui.application.UIGadget;
 import org.exoplatform.portal.webui.application.UIPortlet;
 import org.exoplatform.portal.webui.container.UIContainer;
@@ -485,7 +486,7 @@ public class UIDashboardContainer extends org.exoplatform.webui.core.UIContainer
             return;
          }
          UIGadget uiGadget = event.getSource().createUIComponent(context, UIGadget.class, null, null);
-         uiGadget.setGadgetId(new GadgetId(application.getApplicationName()));
+         uiGadget.setState(new TransientApplicationState<Gadget>(application.getApplicationName()));
          UIDashboardContainer uiDashboardContainer = uiDashboard.getChild(UIDashboardContainer.class);
          uiDashboardContainer.addUIGadget(uiGadget, col, row);
          uiDashboardContainer.save();

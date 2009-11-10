@@ -35,14 +35,14 @@ public class WSRPApplication extends Application<WSRP, WSRPId>
       super(wsrpwsrpIdApplicationData);
    }
 
-   public WSRPApplication(String storageId, WSRPId id)
+   public WSRPApplication(String storageId)
    {
-      super(storageId, id);
+      super(storageId);
    }
 
-   public WSRPApplication(WSRPId id)
+   public WSRPApplication()
    {
-      super(id);
+      super();
    }
 
    @Override

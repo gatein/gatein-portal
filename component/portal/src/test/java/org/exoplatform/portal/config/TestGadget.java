@@ -63,11 +63,10 @@ public class TestGadget extends BasicTestCase
    public void testBilto() throws Exception
    {
 
-      TransientApplicationState<Gadget> state = new TransientApplicationState<Gadget>();
       Gadget gadget = new Gadget();
       gadget.setUserPref("user_pref");
-      state.setContentState(gadget);
-      GadgetApplication gadgetApplication = new GadgetApplication("bar");
+      TransientApplicationState<Gadget> state = new TransientApplicationState<Gadget>("bar", gadget);
+      GadgetApplication gadgetApplication = new GadgetApplication();
       gadgetApplication.setState(state);
 
       Page container = new Page();

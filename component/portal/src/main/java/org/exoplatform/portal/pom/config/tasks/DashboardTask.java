@@ -84,7 +84,7 @@ public abstract class DashboardTask extends AbstractPOMTask
          }
          if (dashboard.getStorageId() == null)
          {
-            throw new IllegalArgumentException("No dasbhoard with null storage id accepted");
+            throw new IllegalArgumentException("No dashboard with null storage id accepted");
          }
          this.dashboard = dashboard;
       }

@@ -27,9 +27,7 @@ import org.exoplatform.portal.config.model.ModelChange;
 import org.exoplatform.portal.config.model.PersistentApplicationState;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.TransientApplicationState;
-import org.exoplatform.portal.config.model.gadget.GadgetId;
 import org.exoplatform.portal.config.model.portlet.PortletId;
-import org.exoplatform.portal.config.model.wsrp.WSRPId;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.Utils;
 import org.exoplatform.portal.pom.spi.gadget.Gadget;
@@ -434,16 +432,19 @@ public class Mapper
             String type = attrs.getValue(MappedAttributes.TYPE);
             if ("dashboard".equals(type))
             {
-               TransientApplicationState<Preferences> state = new TransientApplicationState<Preferences>();
                Site owner = src.getPage().getSite();
-               state.setOwnerType(getOwnerType(owner.getObjectType()));
-               state.setOwnerId(owner.getName());
+               TransientApplicationState<Preferences> state = new TransientApplicationState<Preferences>(
+                  "dashboard/DashboardPortlet",
+                  null,
+                  getOwnerType(owner.getObjectType()),
+                  owner.getName(),
+                  null
+               );
                mo = new ApplicationData<Preferences, PortletId>(
                   srcContainer.getObjectId(),
                   component.getName(),
                   ApplicationType.PORTLET,
                   state,
-                  new PortletId("dashboard", "DashboardPortlet"),
                   null,
                   null,
                   null,
@@ -456,7 +457,7 @@ public class Mapper
                   null,
                   Collections.<String, String>emptyMap(),
                   Collections.singletonList(UserACL.EVERYONE));
-               // Julien : the everyone is bad but having null permission
+               // Julien : the everyone is not great but having null permission
                // means the same thing cf {@link UIPortalComponent} class
                // we need to solve that somehow
             }
@@ -586,10 +587,11 @@ public class Mapper
          if (srcChild instanceof ApplicationData)
          {
             ApplicationData app = (ApplicationData)srcChild;
-            if (app.getType() == ApplicationType.PORTLET)
+            if (app.getType() == ApplicationType.PORTLET && app.getState() instanceof TransientApplicationState)
             {
-               PortletId ref = (PortletId)app.getRef();
-               if (DASHBOARD_ID.equals(ref))
+               TransientApplicationState<?> state = (TransientApplicationState<?>)app.getState();
+               String contentId = state.getContentId();
+               if ("dashboard/DashboardPortlet".equals(contentId))
                {
                   if (app.getStorageId() != null)
                   {
@@ -621,6 +623,8 @@ public class Mapper
                         "that is not present in the target ui container " + session.pathOf(dst));
                     }
             */
+
+            //
             boolean found = false;
             for (UIComponent child : dst)
             {
@@ -746,36 +750,7 @@ public class Mapper
       String customizationid = customization.getId();
 
       //
-      String contentId = customization.getContentId();
-
-
-
-
-      //
-      I ref;
-      ApplicationType<S, I> type;
-      if (contentType == null || contentType == Preferences.CONTENT_TYPE)
-      {
-         int pos = contentId.indexOf('/');
-         String applicationName = contentId.substring(0, pos);
-         String portletName = contentId.substring(pos + 1);
-         ref = (I)new PortletId(applicationName, portletName);
-         type = (ApplicationType<S,I>)ApplicationType.PORTLET;
-      }
-      else if (contentType == Gadget.CONTENT_TYPE)
-      {
-         ref = (I)new GadgetId(contentId);
-         type = (ApplicationType<S,I>)ApplicationType.GADGET;
-      }
-      else if (contentType == WSRP.CONTENT_TYPE)
-      {
-         ref = (I)new WSRPId(contentId);
-         type = (ApplicationType<S,I>)ApplicationType.WSRP_PORTLET;
-      }
-      else
-      {
-         throw new AssertionError("Unknown type: " + contentType);
-      }
+      ApplicationType<S, I> type = (ApplicationType<S,I>)ApplicationType.getType(contentType);
 
       //
       PersistentApplicationState<S> instanceState = new PersistentApplicationState<S>(customizationid);
@@ -790,7 +765,6 @@ public class Mapper
          src.getName(),
          type,
          instanceState,
-         ref,
          null,
          attrs.getValue(MappedAttributes.TITLE),
          attrs.getValue(MappedAttributes.ICON),
@@ -851,27 +825,8 @@ public class Mapper
          }
 
          // The content id
-         String contentId;
+         String contentId = transientState.getContentId();
          ContentType<S> contentType = src.getType().getContentType();
-         if (contentType == Preferences.CONTENT_TYPE)
-         {
-            PortletId id = (PortletId)src.getRef();
-            contentId = id.getApplicationName() + "/" + id.getPortletName();
-         }
-         else if (contentType == Gadget.CONTENT_TYPE)
-         {
-            GadgetId id = (GadgetId)src.getRef();
-            contentId = id.getGadgetName();
-         }
-         else if (contentType == WSRP.CONTENT_TYPE)
-         {
-            WSRPId id = (WSRPId)src.getRef();
-            contentId = id.getUri();
-         }
-         else
-         {
-            throw new UnsupportedOperationException("Unsupported content type");
-         }
 
          // The customization that we will inherit from if not null
          Customization<?> customization = null;
@@ -984,6 +939,14 @@ public class Mapper
 
          //
          dst.customize(customization);
+      }
+      else if (instanceState instanceof PersistentApplicationState)
+      {
+         // Do nothing
+      }
+      else
+      {
+         throw new IllegalArgumentException("Cannot save application with state " + instanceState);
       }
    }
 

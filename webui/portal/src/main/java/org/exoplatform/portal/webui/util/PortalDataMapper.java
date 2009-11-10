@@ -21,7 +21,6 @@ package org.exoplatform.portal.webui.util;
 
 import org.exoplatform.portal.config.UserPortalConfig;
 import org.exoplatform.portal.config.model.Application;
-import org.exoplatform.portal.config.model.ApplicationState;
 import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.config.model.Container;
 import org.exoplatform.portal.config.model.Dashboard;
@@ -31,12 +30,8 @@ import org.exoplatform.portal.config.model.PageBody;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.SiteBody;
 import org.exoplatform.portal.config.model.gadget.GadgetApplication;
-import org.exoplatform.portal.config.model.gadget.GadgetId;
 import org.exoplatform.portal.config.model.portlet.PortletApplication;
-import org.exoplatform.portal.config.model.portlet.PortletId;
 import org.exoplatform.portal.config.model.wsrp.WSRPApplication;
-import org.exoplatform.portal.config.model.wsrp.WSRPId;
-import org.exoplatform.portal.pom.spi.gadget.Gadget;
 import org.exoplatform.portal.webui.application.PortletState;
 import org.exoplatform.portal.webui.application.UIGadget;
 import org.exoplatform.portal.webui.application.UIPortlet;
@@ -100,7 +95,7 @@ public class PortalDataMapper
 
    private static GadgetApplication toGadget(UIGadget uiGadget)
    {
-      GadgetApplication app = new GadgetApplication(uiGadget.getStorageId(), uiGadget.getGadgetId());
+      GadgetApplication app = new GadgetApplication(uiGadget.getStorageId());
       app.setState(uiGadget.getState());
       app.setProperties(uiGadget.getProperties());
       app.setStorageName(uiGadget.getStorageName());
@@ -138,18 +133,17 @@ public class PortalDataMapper
       Application<S, I> model;
       PortletState<S, I> state = uiPortlet.getState();
       ApplicationType<S, I> type = state.getApplicationType();
-      I applicationId = state.getApplicationId();
       if (type == ApplicationType.PORTLET)
       {
-         model = (Application<S, I>)new PortletApplication(uiPortlet.getStorageId(), (PortletId)applicationId);
+         model = (Application<S, I>)new PortletApplication(uiPortlet.getStorageId());
       }
       else if (type == ApplicationType.GADGET)
       {
-         model = (Application<S, I>)new GadgetApplication(uiPortlet.getStorageId(), (GadgetId)applicationId);
+         model = (Application<S, I>)new GadgetApplication(uiPortlet.getStorageId());
       }
       else if (type == ApplicationType.WSRP_PORTLET)
       {
-         model = (Application<S, I>)new WSRPApplication(uiPortlet.getStorageId(), (WSRPId)applicationId);
+         model = (Application<S, I>)new WSRPApplication(uiPortlet.getStorageId());
       }
       else
       {
@@ -232,8 +226,6 @@ public class PortalDataMapper
 
    static public void toUIGadget(UIGadget uiGadget, GadgetApplication model) throws Exception
    {
-      ApplicationState<Gadget> state = model.getState();
-      uiGadget.setGadgetId(new GadgetId(model.getRef().getGadgetName()));
       uiGadget.setProperties(model.getProperties());
       uiGadget.setState(model.getState());
    }
@@ -246,7 +238,7 @@ public class PortalDataMapper
    {
 
       //
-      PortletState<S, I> portletState = new PortletState<S, I>(model.getState(), model.getType(), model.getRef());
+      PortletState<S, I> portletState = new PortletState<S, I>(model.getState(), model.getType());
 
       /*
        * Fill UI component object with info from the XML file that persist portlet
@@ -413,7 +405,7 @@ public class PortalDataMapper
          }
          else
          {
-            UIPortlet uiPortlet = uiContainer.createUIComponent(context, UIPortlet.class, null, null);            
+            UIPortlet uiPortlet = uiContainer.createUIComponent(context, UIPortlet.class, null, null);
             uiPortlet.setStorageId(application.getStorageId());
             if(application.getStorageName()!=null) {
               uiPortlet.setStorageName(application.getStorageName());

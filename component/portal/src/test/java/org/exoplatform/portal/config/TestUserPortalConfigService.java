@@ -24,12 +24,14 @@ import junit.framework.AssertionFailedError;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.application.PortletPreferences;
 import org.exoplatform.portal.config.model.ApplicationState;
+import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.config.model.Container;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageBody;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.portlet.PortletApplication;
+import org.exoplatform.portal.config.model.portlet.PortletId;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.portal.pom.spi.portlet.Preferences;
@@ -643,8 +645,7 @@ public class TestUserPortalConfigService extends BasicTestCase
             PortletApplication app = (PortletApplication)clone.getChildren().get(0);
             assertEquals("Dashboard", app.getTitle());
             assertNotNull(app.getState());
-            assertEquals("dashboard", app.getRef().getApplicationName());
-            assertEquals("DashboardPortlet", app.getRef().getPortletName());
+            assertEquals(new PortletId("dashboard", "DashboardPortlet"), storage_.getId(ApplicationType.PORTLET, app.getState()));
             //        assertEquals("portal", app.getInstanceState().getOwnerType());
             //        assertEquals("test", app.getInstanceState().getOwnerId());
             Preferences prefs2 = storage_.load(app.getState());
@@ -668,8 +669,7 @@ public class TestUserPortalConfigService extends BasicTestCase
             assertTrue(container.getChildren().get(1) instanceof PortletApplication);
             PortletApplication pa = (PortletApplication)container.getChildren().get(1);
             ApplicationState state = pa.getState();
-            assertEquals("overwrite_application_ref", pa.getRef().getApplicationName());
-            assertEquals("overwrite_portlet_ref", pa.getRef().getPortletName());
+            assertEquals(new PortletId("overwrite_application_ref", "overwrite_portlet_ref"), storage_.getId(ApplicationType.PORTLET, pa.getState()));
          }
       }.execute(null);
    }
@@ -702,9 +702,7 @@ public class TestUserPortalConfigService extends BasicTestCase
             assertTrue(container.getChildren().get(1) instanceof PortletApplication);
             PortletApplication pa = (PortletApplication)container.getChildren().get(1);
             ApplicationState state = pa.getState();
-            assertEquals("foo", pa.getRef().getApplicationName());
-            assertEquals("bar", pa.getRef().getPortletName());
-
+            assertEquals(new PortletId("foo", "bar"), storage_.getId(ApplicationType.PORTLET, pa.getState()));
          }
       }.execute(null);
    }
