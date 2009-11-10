@@ -24,6 +24,9 @@ import org.exoplatform.application.gadget.Gadget;
 import org.exoplatform.application.gadget.GadgetRegistryService;
 import org.exoplatform.application.gadget.Source;
 import org.exoplatform.application.gadget.SourceStorage;
+import org.exoplatform.application.registry.Application;
+import org.exoplatform.application.registry.ApplicationCategory;
+import org.exoplatform.application.registry.ApplicationRegistryService;
 import org.exoplatform.portal.webui.application.GadgetUtil;
 import org.exoplatform.web.WebAppController;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -32,14 +35,16 @@ import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
-import org.exoplatform.webui.core.UIComponent;
+import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 /**
  * Created by The eXo Platform SAS
@@ -50,14 +55,17 @@ import java.util.Calendar;
 @ComponentConfig(template = "app:/groovy/applicationregistry/webui/component/UIGadgetInfo.gtmpl", events = {
    @EventConfig(listeners = UIGadgetInfo.RefreshActionListener.class),
    @EventConfig(listeners = UIGadgetInfo.CopyActionListener.class),
-   @EventConfig(listeners = UIGadgetInfo.EditActionListener.class)})
-public class UIGadgetInfo extends UIComponent
+   @EventConfig(listeners = UIGadgetInfo.EditActionListener.class),
+   @EventConfig(listeners = UIGadgetInfo.ShowCategoriesActionListener.class)})
+public class UIGadgetInfo extends UIContainer
 {
 
    private Gadget gadget_;
 
-   public UIGadgetInfo()
+   public UIGadgetInfo() throws Exception
    {
+      UICategorySelector categorySelector = addChild(UICategorySelector.class, null, null);
+      categorySelector.setRendered(false);
    }
 
    public Gadget getGadget()
@@ -80,6 +88,29 @@ public class UIGadgetInfo extends UIComponent
       if (gadget_.isLocal())
          return GadgetUtil.getEditPath(gadget_.getUrl());
       return null;
+   }
+
+   public String getCategorieNames() throws Exception
+   {
+      ApplicationRegistryService appRegService = getApplicationComponent(ApplicationRegistryService.class);
+      List<ApplicationCategory> allCategories = appRegService.getApplicationCategories();
+      List<String> nameList = new ArrayList<String>();
+
+      for (ApplicationCategory category : allCategories)
+      {
+         if (appRegService.getApplication(category.getName(), gadget_.getName()) != null)
+         {
+            nameList.add(category.getDisplayName());
+         }
+      }
+      StringBuffer names = new StringBuffer("");
+      for (String name : nameList)
+      {
+         names.append(name);
+         if (name != nameList.get(nameList.size() - 1))
+            names.append(", ");
+      }
+      return names.toString();
    }
 
    static public class RefreshActionListener extends EventListener<UIGadgetInfo>
@@ -177,6 +208,33 @@ public class UIGadgetInfo extends UIComponent
          event.getRequestContext().addUIComponentToUpdateByAjax(uiManagement);
       }
 
+   }
+
+   static public class ShowCategoriesActionListener extends EventListener<UIGadgetInfo>
+   {
+      @Override
+      public void execute(Event<UIGadgetInfo> event) throws Exception
+      {
+         UIGadgetInfo gadgetInfo = event.getSource();
+         Gadget gadget = gadgetInfo.getGadget();
+         UICategorySelector selector = gadgetInfo.getChild(UICategorySelector.class);
+         
+         Application app = new Application();
+         app.setApplicationName(gadget.getName());
+         app.setApplicationGroup(GadgetApplication.EXO_GADGET_GROUP);
+         app.setApplicationType(org.exoplatform.web.application.Application.EXO_GADGET_TYPE);
+         app.setDisplayName(gadget.getTitle());
+         app.setUri(gadget.getUrl());
+         String description =
+            (gadget.getDescription() == null || gadget.getDescription().length() < 1) ? gadget.getName() : gadget
+               .getDescription();
+         app.setDescription(description);
+         app.setAccessPermissions(new ArrayList<String>());
+         
+         selector.setup(app);
+         selector.setRendered(true);
+         event.getRequestContext().addUIComponentToUpdateByAjax(event.getSource());
+      }
    }
 
 }

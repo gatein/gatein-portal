@@ -1,6 +1,10 @@
 <%
+	import org.exoplatform.applicationregistry.webui.component.UICategorySelector;
+	
 	def gadget = uicomponent.getGadget();
+	boolean selectorRender = uicomponent.getChild(UICategorySelector.class).isRendered();
 	String srcBGError = "/eXoResources/skin/sharedImages/Icon80x80/DefaultPortlet.png";
+	String categoryNames = uicomponent.getCategorieNames();
 %>
 <div class="UIGadgetInfo" id="$uicomponent.id">
 	<div class="UIBreadcumb">
@@ -45,7 +49,29 @@
 				<table>
 					<tr>
 						<td class="LeftLabel"><%=_ctx.appRes("UIGadgetInfo.label.reference")%></td>
-						<td class="RightLabel"><%= gadget.getReferenceUrl() %></td>
+						<td class="RightLabel">						
+							<%= gadget.getReferenceUrl() %>
+						</td>
+					</tr>
+				</table>
+				<table>
+					<tr>
+						<td class="LeftLabel"><%=_ctx.appRes("UIGadgetInfo.label.categories")%></td>
+						<td class="RightLabel">$categoryNames
+								<% if (categoryNames.equals("")) { %>
+										<%=_ctx.appRes("UIGadgetInfo.label.categories.guide")%><br/>
+										<% if (!selectorRender) { %>
+										<a href="#" onclick="<%= uicomponent.event("ShowCategories") %>" style="color:red;text-decoration:underline;">											
+												<%=_ctx.appRes("UIGadgetInfo.label.categories.clickHere")%>											
+										</a>
+										<% } else { %>
+										<div>
+											<% uicomponent.renderChildren() %>
+										</div>
+										<%}%>
+								<%}%>
+								
+						</td>
 					</tr>
 				</table>
 		</div>
