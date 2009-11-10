@@ -113,10 +113,10 @@ public class UICategorySelector extends UIForm
          newApp.setApplicationName(app.getApplicationName());
          newApp.setDisplayName(app.getDisplayName());
          newApp.setApplicationType(app.getApplicationType());
-         newApp.setApplicationGroup(app.getApplicationGroup());
+         //newApp.setApplicationGroup(app.getApplicationGroup());
          newApp.setDescription(app.getDescription());
          newApp.setAccessPermissions(app.getAccessPermissions());
-         newApp.setUri(app.getUri());
+         //newApp.setUri(app.getUri());
          return newApp;
       }
    }

@@ -221,10 +221,10 @@ public class UIGadgetInfo extends UIContainer
          
          Application app = new Application();
          app.setApplicationName(gadget.getName());
-         app.setApplicationGroup(GadgetApplication.EXO_GADGET_GROUP);
+         //app.setApplicationGroup(GadgetApplication.EXO_GADGET_GROUP);
          app.setApplicationType(org.exoplatform.web.application.Application.EXO_GADGET_TYPE);
          app.setDisplayName(gadget.getTitle());
-         app.setUri(gadget.getUrl());
+         //app.setUri(gadget.getUrl());
          String description =
             (gadget.getDescription() == null || gadget.getDescription().length() < 1) ? gadget.getName() : gadget
                .getDescription();
