@@ -80,11 +80,11 @@ public class UIPortletActionListener
     * same portal page
     */
    static public class ProcessActionActionListener<S, C extends Serializable, I> extends
-      EventListener<UIPortlet<S, C, I>>
+      EventListener<UIPortlet<S, C>>
    {
-      public void execute(Event<UIPortlet<S, C, I>> event) throws Exception
+      public void execute(Event<UIPortlet<S, C>> event) throws Exception
       {
-         UIPortlet<S, C, I> uiPortlet = event.getSource();
+         UIPortlet<S, C> uiPortlet = event.getSource();
          PortalRequestContext prcontext = (PortalRequestContext)event.getRequestContext();
 
          //
@@ -294,11 +294,11 @@ public class UIPortletActionListener
     * processRender() method of the portal is not called as we set the response as complete
     */
    static public class ServeResourceActionListener<S, C extends Serializable, I> extends
-      EventListener<UIPortlet<S, C, I>>
+      EventListener<UIPortlet<S, C>>
    {
-      public void execute(Event<UIPortlet<S, C, I>> event) throws Exception
+      public void execute(Event<UIPortlet<S, C>> event) throws Exception
       {
-         UIPortlet<S, C, I> uiPortlet = event.getSource();
+         UIPortlet<S, C> uiPortlet = event.getSource();
          log.info("Serve Resource for portlet: " + uiPortlet.getPortletContext());
          try
          {
@@ -449,7 +449,7 @@ public class UIPortletActionListener
     * The processEvent() method can also generates IPC events and hence the portal itself will call the
     * ProcessEventsActionListener once again
     */
-   public static <S, C extends Serializable, I> List<javax.portlet.Event> processEvent(UIPortlet<S, C, I> uiPortlet,
+   public static <S, C extends Serializable, I> List<javax.portlet.Event> processEvent(UIPortlet<S, C> uiPortlet,
                                                                                        javax.portlet.Event event)
    {
       log.info("Process Event: " + event.getName() + " for portlet: " + uiPortlet.getState());

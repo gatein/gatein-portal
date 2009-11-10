@@ -33,7 +33,7 @@ import java.util.List;
 public interface ApplicationRegistryService
 {
 
-   public List<ApplicationCategory> getApplicationCategories(String accessUser, ApplicationType<?, ?>... appTypes) throws Exception;
+   public List<ApplicationCategory> getApplicationCategories(String accessUser, ApplicationType<?>... appTypes) throws Exception;
 
    public void initListener(ComponentPlugin com) throws Exception;
 
@@ -48,10 +48,10 @@ public interface ApplicationRegistryService
 
    public void remove(ApplicationCategory category) throws Exception;
 
-   public List<Application> getApplications(ApplicationCategory category, ApplicationType<?, ?>... appTypes) throws Exception;
+   public List<Application> getApplications(ApplicationCategory category, ApplicationType<?>... appTypes) throws Exception;
 
    public List<Application> getApplications(ApplicationCategory category, Comparator<Application> sortComparator,
-      ApplicationType<?, ?>... appTypes) throws Exception;
+      ApplicationType<?>... appTypes) throws Exception;
 
    public List<Application> getAllApplications() throws Exception;
 

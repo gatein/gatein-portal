@@ -51,7 +51,7 @@ import javax.portlet.WindowState;
 /**
  * Created by The eXo Platform SAS May 8, 2006
  */
-public class UIPortletLifecycle<S, C extends Serializable, I> extends Lifecycle<UIPortlet<S, C, I>>
+public class UIPortletLifecycle<S, C extends Serializable, I> extends Lifecycle<UIPortlet<S, C>>
 {
 
    protected static Log log = ExoLogger.getLogger("portal:UIPortletLifecycle");
@@ -71,7 +71,7 @@ public class UIPortletLifecycle<S, C extends Serializable, I> extends Lifecycle<
     * broadcasted and the portlet is added in the list of components to update
     * within the AJAX call
     */
-   public void processAction(UIPortlet<S, C, I> uicomponent, WebuiRequestContext context) throws Exception
+   public void processAction(UIPortlet<S, C> uicomponent, WebuiRequestContext context) throws Exception
    {
       String action = context.getRequestParameter(PortalRequestContext.UI_COMPONENT_ACTION);
       if (action != null)
@@ -146,7 +146,7 @@ public class UIPortletLifecycle<S, C extends Serializable, I> extends Lifecycle<
     * one, just write in the buffer the content returned by the portlet container
     * 4) If not AJAX, then merge the content with the UIPortlet.gtmpl
     */
-   public void processRender(UIPortlet<S, C, I> uicomponent, WebuiRequestContext context) throws Exception
+   public void processRender(UIPortlet<S, C> uicomponent, WebuiRequestContext context) throws Exception
    {
       PortalRequestContext prcontext = (PortalRequestContext)context;
       ExoContainer container = prcontext.getApplication().getApplicationServiceContainer();

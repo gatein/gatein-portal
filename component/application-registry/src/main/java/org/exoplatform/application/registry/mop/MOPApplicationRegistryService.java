@@ -86,7 +86,7 @@ public class MOPApplicationRegistryService implements ApplicationRegistryService
    public List<ApplicationCategory> getApplicationCategories(
       Comparator<ApplicationCategory> sortComparator,
       String accessUser,
-      ApplicationType<?, ?>... appTypes) throws Exception
+      ApplicationType<?>... appTypes) throws Exception
    {
       POMSession session = POMSessionManager.getSession();
       ContentRegistry registry = session.getContentRegistry();
@@ -109,7 +109,7 @@ public class MOPApplicationRegistryService implements ApplicationRegistryService
       return categories;
    }
 
-   public List<ApplicationCategory> getApplicationCategories(String accessUser, ApplicationType<?, ?>... appTypes) throws Exception
+   public List<ApplicationCategory> getApplicationCategories(String accessUser, ApplicationType<?>... appTypes) throws Exception
    {
       return getApplicationCategories(null, accessUser, appTypes);
    }
@@ -173,7 +173,7 @@ public class MOPApplicationRegistryService implements ApplicationRegistryService
       registry.getCategoryMap().remove(category.getName());
    }
 
-   public List<Application> getApplications(ApplicationCategory category, ApplicationType<?, ?>... appTypes) throws Exception
+   public List<Application> getApplications(ApplicationCategory category, ApplicationType<?>... appTypes) throws Exception
    {
       return getApplications(category, null, appTypes);
    }
@@ -181,7 +181,7 @@ public class MOPApplicationRegistryService implements ApplicationRegistryService
    public List<Application> getApplications(
       ApplicationCategory category,
       Comparator<Application> sortComparator,
-      ApplicationType<?, ?>... appTypes) throws Exception
+      ApplicationType<?>... appTypes) throws Exception
    {
       POMSession session = POMSessionManager.getSession();
       ContentRegistry registry = session.getContentRegistry();
@@ -462,13 +462,13 @@ public class MOPApplicationRegistryService implements ApplicationRegistryService
       }
    }
 
-   private boolean isApplicationType(Application app, ApplicationType<?, ?>... appTypes)
+   private boolean isApplicationType(Application app, ApplicationType<?>... appTypes)
    {
       if (appTypes == null || appTypes.length == 0)
       {
          return true;
       }
-      for (ApplicationType<?, ?> appType : appTypes)
+      for (ApplicationType<?> appType : appTypes)
       {
          if (appType.equals(app.getType()))
          {
@@ -487,7 +487,7 @@ public class MOPApplicationRegistryService implements ApplicationRegistryService
       categoryDef.setLastModificationDate(category.getModifiedDate());
    }
 
-   private ApplicationCategory load(CategoryDefinition categoryDef, ApplicationType<?, ?>... appTypes)
+   private ApplicationCategory load(CategoryDefinition categoryDef, ApplicationType<?>... appTypes)
    {
       ApplicationCategory category = new ApplicationCategory();
 
@@ -525,7 +525,7 @@ public class MOPApplicationRegistryService implements ApplicationRegistryService
    private Application load(ContentDefinition contentDef)
    {
       ContentType<?> contentType = contentDef.getCustomization().getType();
-      ApplicationType<?, ?> applicationType = ApplicationType.getType(contentType);
+      ApplicationType<?> applicationType = ApplicationType.getType(contentType);
 
       //
       Application application = new Application();

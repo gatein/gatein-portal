@@ -98,7 +98,7 @@ public interface DataStorage
 
    public void save(PortletPreferences portletPreferences) throws Exception;
 
-   public <S, I> I getId(ApplicationType<S, I> type, ApplicationState<S> state) throws Exception;
+   public <S> String getId(ApplicationState<S> state) throws Exception;
 
    public <S> S load(ApplicationState<S> state) throws Exception;
 

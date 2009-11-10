@@ -28,9 +28,9 @@ import org.exoplatform.portal.pom.spi.wsrp.WSRP;
  * @author <a href="mailto:chris.laprun@jboss.com">Chris Laprun</a>
  * @version $Revision$
  */
-public class WSRPApplication extends Application<WSRP, WSRPId>
+public class WSRPApplication extends Application<WSRP>
 {
-   public WSRPApplication(ApplicationData<WSRP, WSRPId> wsrpwsrpIdApplicationData)
+   public WSRPApplication(ApplicationData<WSRP> wsrpwsrpIdApplicationData)
    {
       super(wsrpwsrpIdApplicationData);
    }
@@ -46,7 +46,7 @@ public class WSRPApplication extends Application<WSRP, WSRPId>
    }
 
    @Override
-   public ApplicationType<WSRP, WSRPId> getType()
+   public ApplicationType<WSRP> getType()
    {
       return ApplicationType.WSRP_PORTLET;
    }

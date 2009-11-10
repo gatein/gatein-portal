@@ -28,24 +28,23 @@ import org.exoplatform.portal.config.model.ApplicationType;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  * @param <S> the application content state type
- * @param <I> the application id type
  */
-public class PortletState<S, I>
+public class PortletState<S>
 {
 
    /** The application type. */
-   private final ApplicationType<S, I> applicationType;
+   private final ApplicationType<S> applicationType;
 
    /** The application state. */
    private ApplicationState<S> applicationState;
 
-   public PortletState(ApplicationState<S> applicationState, ApplicationType<S, I> applicationType)
+   public PortletState(ApplicationState<S> applicationState, ApplicationType<S> applicationType)
    {
       this.applicationState = applicationState;
       this.applicationType = applicationType;
    }
 
-   public ApplicationType<S, I> getApplicationType()
+   public ApplicationType<S> getApplicationType()
    {
       return applicationType;
    }

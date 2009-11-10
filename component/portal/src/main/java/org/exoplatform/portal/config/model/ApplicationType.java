@@ -19,9 +19,6 @@
 
 package org.exoplatform.portal.config.model;
 
-import org.exoplatform.portal.config.model.gadget.GadgetId;
-import org.exoplatform.portal.config.model.portlet.PortletId;
-import org.exoplatform.portal.config.model.wsrp.WSRPId;
 import org.exoplatform.portal.pom.spi.gadget.Gadget;
 import org.exoplatform.portal.pom.spi.portlet.Preferences;
 import org.exoplatform.portal.pom.spi.wsrp.WSRP;
@@ -33,12 +30,11 @@ import org.gatein.mop.api.content.ContentType;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  * @param <S> the content state type of the application
- * @param <I> the id type of the application
  */
-public class ApplicationType<S, I>
+public class ApplicationType<S>
 {
 
-   public static ApplicationType<?, ?> getType(String name)
+   public static ApplicationType<?> getType(String name)
    {
       if (PORTLET.getName().equals(name))
       {
@@ -58,19 +54,19 @@ public class ApplicationType<S, I>
       }
    }
 
-   public static <S> ApplicationType<S, ?> getType(ContentType<S> name)
+   public static <S> ApplicationType<S> getType(ContentType<S> name)
    {
       if (PORTLET.getContentType().equals(name))
       {
-         return (ApplicationType<S,?>)ApplicationType.PORTLET;
+         return (ApplicationType<S>)ApplicationType.PORTLET;
       }
       else if (GADGET.getContentType().equals(name))
       {
-         return (ApplicationType<S,?>)ApplicationType.GADGET;
+         return (ApplicationType<S>)ApplicationType.GADGET;
       }
       else if (WSRP_PORTLET.getContentType().equals(name))
       {
-         return (ApplicationType<S,?>)ApplicationType.WSRP_PORTLET;
+         return (ApplicationType<S>)ApplicationType.WSRP_PORTLET;
       }
       else
       {
@@ -79,13 +75,13 @@ public class ApplicationType<S, I>
    }
 
    /** . */
-   public static final ApplicationType<Preferences, PortletId> PORTLET = new ApplicationType<Preferences, PortletId>(Preferences.CONTENT_TYPE, "portlet");
+   public static final ApplicationType<Preferences> PORTLET = new ApplicationType<Preferences>(Preferences.CONTENT_TYPE, "portlet");
 
    /** . */
-   public static final ApplicationType<Gadget, GadgetId> GADGET = new ApplicationType<Gadget, GadgetId>(Gadget.CONTENT_TYPE, "gadget");
+   public static final ApplicationType<Gadget> GADGET = new ApplicationType<Gadget>(Gadget.CONTENT_TYPE, "gadget");
 
    /** . */
-   public static final ApplicationType<WSRP, WSRPId> WSRP_PORTLET = new ApplicationType<WSRP, WSRPId>(WSRP.CONTENT_TYPE, "wsrp");
+   public static final ApplicationType<WSRP> WSRP_PORTLET = new ApplicationType<WSRP>(WSRP.CONTENT_TYPE, "wsrp");
 
    /** . */
    private final ContentType<S> contentType;

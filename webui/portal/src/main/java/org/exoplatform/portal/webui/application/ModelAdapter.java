@@ -26,11 +26,9 @@ import org.exoplatform.portal.config.model.ApplicationState;
 import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.config.model.PersistentApplicationState;
 import org.exoplatform.portal.config.model.TransientApplicationState;
-import org.exoplatform.portal.config.model.gadget.GadgetId;
-import org.exoplatform.portal.config.model.portlet.PortletId;
-import org.exoplatform.portal.config.model.wsrp.WSRPId;
 import org.exoplatform.portal.pc.ExoPortletState;
 import org.exoplatform.portal.pc.ExoPortletStateType;
+import org.exoplatform.portal.pom.config.Utils;
 import org.exoplatform.portal.pom.spi.gadget.Gadget;
 import org.exoplatform.portal.pom.spi.portlet.Preference;
 import org.exoplatform.portal.pom.spi.portlet.Preferences;
@@ -51,24 +49,24 @@ import java.util.Map;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public abstract class ModelAdapter<S, C extends Serializable, I>
+public abstract class ModelAdapter<S, C extends Serializable>
 {
 
-   public static <S, C extends Serializable, I> ModelAdapter<S, C, I> getAdapter(ApplicationType<S, I> type)
+   public static <S, C extends Serializable, I> ModelAdapter<S, C> getAdapter(ApplicationType<S> type)
    {
       if (type == ApplicationType.PORTLET)
       {
-         @SuppressWarnings("unchecked") ModelAdapter<S, C, I> adapter = (ModelAdapter<S, C, I>)PORTLET;
+         @SuppressWarnings("unchecked") ModelAdapter<S, C> adapter = (ModelAdapter<S, C>)PORTLET;
          return adapter;
       }
       else if (type == ApplicationType.GADGET)
       {
-         @SuppressWarnings("unchecked") ModelAdapter<S, C, I> adapter = (ModelAdapter<S, C, I>)GADGET;
+         @SuppressWarnings("unchecked") ModelAdapter<S, C> adapter = (ModelAdapter<S, C>)GADGET;
          return adapter;
       }
       else if (type == ApplicationType.WSRP_PORTLET)
       {
-         @SuppressWarnings("unchecked") ModelAdapter<S, C, I> adapter = (ModelAdapter<S, C, I>)WSRP;
+         @SuppressWarnings("unchecked") ModelAdapter<S, C> adapter = (ModelAdapter<S, C>)WSRP;
          return adapter;
       }
       else
@@ -78,11 +76,11 @@ public abstract class ModelAdapter<S, C extends Serializable, I>
    }
 
    /** . */
-   private static final ModelAdapter<Preferences, ExoPortletState, PortletId> PORTLET = new ModelAdapter<Preferences, ExoPortletState, PortletId>()
+   private static final ModelAdapter<Preferences, ExoPortletState> PORTLET = new ModelAdapter<Preferences, ExoPortletState>()
    {
 
       @Override
-      public StatefulPortletContext<ExoPortletState> getPortletContext(ExoContainer container, PortletId applicationId, ApplicationState<Preferences> applicationState) throws Exception
+      public StatefulPortletContext<ExoPortletState> getPortletContext(ExoContainer container, String applicationId, ApplicationState<Preferences> applicationState) throws Exception
       {
          DataStorage dataStorage = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
          Preferences preferences = dataStorage.load(applicationState);
@@ -123,10 +121,11 @@ public abstract class ModelAdapter<S, C extends Serializable, I>
       }
 
       @Override
-      public PortletContext getProducerOfferedPortletContext(PortletId applicationState)
+      public PortletContext getProducerOfferedPortletContext(String applicationState)
       {
-         String appName = applicationState.getApplicationName();
-         String portletName = applicationState.getPortletName();
+         String[] chunks = Utils.split("/", applicationState);
+         String appName = chunks[0];
+         String portletName = chunks[1];
          return PortletContext.createPortletContext(PortletInvoker.LOCAL_PORTLET_INVOKER_ID + "./" + appName + "." + portletName);
       }
 
@@ -149,7 +148,7 @@ public abstract class ModelAdapter<S, C extends Serializable, I>
       }
    };
 
-   private static final ModelAdapter<Gadget, ExoPortletState, GadgetId> GADGET = new ModelAdapter<Gadget, ExoPortletState, GadgetId>()
+   private static final ModelAdapter<Gadget, ExoPortletState> GADGET = new ModelAdapter<Gadget, ExoPortletState>()
    {
 
       /** . */
@@ -159,10 +158,10 @@ public abstract class ModelAdapter<S, C extends Serializable, I>
       private final PortletContext WRAPPER_CONTEXT = PortletContext.createPortletContext(WRAPPER_ID);
 
       @Override
-      public StatefulPortletContext<ExoPortletState> getPortletContext(ExoContainer container, GadgetId applicationId, ApplicationState<Gadget> applicationState) throws Exception
+      public StatefulPortletContext<ExoPortletState> getPortletContext(ExoContainer container, String applicationId, ApplicationState<Gadget> applicationState) throws Exception
       {
          GadgetRegistryService gadgetService = (GadgetRegistryService)container.getComponentInstanceOfType(GadgetRegistryService.class);
-         org.exoplatform.application.gadget.Gadget model = gadgetService.getGadget(applicationId.getGadgetName());
+         org.exoplatform.application.gadget.Gadget model = gadgetService.getGadget(applicationId);
          GadgetApplication application = new GadgetApplication(model.getName(), model.getUrl(), model.isLocal());
          String url = GadgetUtil.reproduceUrl(application.getUrl(), application.isLocal());
          ExoPortletState prefs = new ExoPortletState(WRAPPER_ID);
@@ -177,7 +176,7 @@ public abstract class ModelAdapter<S, C extends Serializable, I>
       }
 
       @Override
-      public PortletContext getProducerOfferedPortletContext(GadgetId applicationState)
+      public PortletContext getProducerOfferedPortletContext(String applicationState)
       {
          return WRAPPER_CONTEXT;
       }
@@ -191,7 +190,7 @@ public abstract class ModelAdapter<S, C extends Serializable, I>
    };
 
 
-   private static final ModelAdapter<WSRP, WSRP, WSRPId> WSRP = new ModelAdapter<WSRP, WSRP, WSRPId>()
+   private static final ModelAdapter<WSRP, WSRP> WSRP = new ModelAdapter<WSRP, WSRP>()
    {
       @Override
       public Preferences getState(ExoContainer container, ApplicationState<WSRP> state) throws Exception
@@ -200,20 +199,20 @@ public abstract class ModelAdapter<S, C extends Serializable, I>
       }
 
       @Override
-      public PortletContext getProducerOfferedPortletContext(WSRPId applicationId)
+      public PortletContext getProducerOfferedPortletContext(String applicationId)
       {
-         return PortletContext.createPortletContext(applicationId.getUri());
+         return PortletContext.createPortletContext(applicationId);
       }
 
       @Override
-      public StatefulPortletContext<WSRP> getPortletContext(ExoContainer container, WSRPId applicationId, ApplicationState<WSRP> state) throws Exception
+      public StatefulPortletContext<WSRP> getPortletContext(ExoContainer container, String applicationId, ApplicationState<WSRP> state) throws Exception
       {
          DataStorage dataStorage = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
          WSRP wsrp = dataStorage.load(state);
          if (wsrp == null)
          {
             wsrp = new WSRP();
-            wsrp.setPortletId(applicationId.getUri());
+            wsrp.setPortletId(applicationId);
          }
          return StatefulPortletContext.create(wsrp.getPortletId(), WSRPPortletStateType.instance, wsrp);
       }
@@ -236,9 +235,9 @@ public abstract class ModelAdapter<S, C extends Serializable, I>
       }
    };
 
-   public abstract PortletContext getProducerOfferedPortletContext(I applicationId);
+   public abstract PortletContext getProducerOfferedPortletContext(String applicationId);
 
-   public abstract StatefulPortletContext<C> getPortletContext(ExoContainer container, I applicationId, ApplicationState<S> applicationState) throws Exception;
+   public abstract StatefulPortletContext<C> getPortletContext(ExoContainer container, String applicationId, ApplicationState<S> applicationState) throws Exception;
 
    public abstract ApplicationState<S> update(ExoContainer container, C updateState, ApplicationState<S> applicationState) throws Exception;
 

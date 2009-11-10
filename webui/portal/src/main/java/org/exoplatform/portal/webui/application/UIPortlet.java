@@ -25,7 +25,6 @@ import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.application.UserProfileLifecycle;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.model.ApplicationType;
-import org.exoplatform.portal.config.model.portlet.PortletId;
 import org.exoplatform.portal.pom.spi.portlet.Preferences;
 import org.exoplatform.portal.pom.spi.wsrp.WSRP;
 import org.exoplatform.portal.webui.application.UIPortletActionListener.ChangePortletModeActionListener;
@@ -110,7 +109,7 @@ import java.util.UUID;
       @EventConfig(phase = Phase.PROCESS, listeners = ProcessEventsActionListener.class)
    }
 )
-public class UIPortlet<S, C extends Serializable, I> extends UIApplication
+public class UIPortlet<S, C extends Serializable> extends UIApplication
 {
 
    protected static final Log log = ExoLogger.getLogger("portal:UIPortlet");
@@ -124,7 +123,7 @@ public class UIPortlet<S, C extends Serializable, I> extends UIApplication
    private String storageName;
 
    /** . */
-   private ModelAdapter<S, C, I> adapter;
+   private ModelAdapter<S, C> adapter;
 
    /** . */
    private Portlet producedOfferedPortlet;
@@ -136,10 +135,10 @@ public class UIPortlet<S, C extends Serializable, I> extends UIApplication
    private LocalizedString displayName;
 
    /** . */
-   private PortletState<S, I> state;
+   private PortletState<S> state;
 
    /** . */
-   private I applicationId;
+   private String applicationId;
 
    private String theme_;
    private String portletStyle;
@@ -195,10 +194,10 @@ public class UIPortlet<S, C extends Serializable, I> extends UIApplication
     */
    public String getSkinId()
    {
-      ApplicationType<S, I> type = state.getApplicationType();
+      ApplicationType<S> type = state.getApplicationType();
       if (type == ApplicationType.PORTLET)
       {
-         return ((PortletId)applicationId).getApplicationName() + "/" + ((PortletId)applicationId).getPortletName();
+         return applicationId;
       }
       else if (type == ApplicationType.GADGET)
       {
@@ -215,7 +214,7 @@ public class UIPortlet<S, C extends Serializable, I> extends UIApplication
       return storageName;
    }
 
-   public I getApplicationId()
+   public String getApplicationId()
    {
       return applicationId;
    }
@@ -741,12 +740,12 @@ public class UIPortlet<S, C extends Serializable, I> extends UIApplication
       update(updateState);
    }
 
-   public PortletState<S, I> getState()
+   public PortletState<S> getState()
    {
       return state;
    }
 
-   public void setState(PortletState<S, I> state)
+   public void setState(PortletState<S> state)
    {
       if (state != null)
       {
@@ -754,8 +753,8 @@ public class UIPortlet<S, C extends Serializable, I> extends UIApplication
          {
             PortletInvoker portletInvoker = getApplicationComponent(PortletInvoker.class);
             DataStorage dataStorage = getApplicationComponent(DataStorage.class);
-            I applicationId = dataStorage.getId(state.getApplicationType(), state.getApplicationState());
-            ModelAdapter<S, C, I> adapter = ModelAdapter.getAdapter(state.getApplicationType());
+            String applicationId = dataStorage.getId(state.getApplicationState());
+            ModelAdapter<S, C> adapter = ModelAdapter.getAdapter(state.getApplicationType());
             PortletContext producerOfferedPortletContext = adapter.getProducerOfferedPortletContext(applicationId);
             Portlet producedOfferedPortlet = portletInvoker.getPortlet(producerOfferedPortletContext);
 

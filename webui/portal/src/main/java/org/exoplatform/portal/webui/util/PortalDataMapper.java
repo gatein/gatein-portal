@@ -128,22 +128,22 @@ public class PortalDataMapper
       model.setChildren(children);
    }
 
-   private static <S, I> Application<S, I> toPortletModel(UIPortlet<S, ?, I> uiPortlet)
+   private static <S> Application<S> toPortletModel(UIPortlet<S, ?> uiPortlet)
    {
-      Application<S, I> model;
-      PortletState<S, I> state = uiPortlet.getState();
-      ApplicationType<S, I> type = state.getApplicationType();
+      Application<S> model;
+      PortletState<S> state = uiPortlet.getState();
+      ApplicationType<S> type = state.getApplicationType();
       if (type == ApplicationType.PORTLET)
       {
-         model = (Application<S, I>)new PortletApplication(uiPortlet.getStorageId());
+         model = (Application<S>)new PortletApplication(uiPortlet.getStorageId());
       }
       else if (type == ApplicationType.GADGET)
       {
-         model = (Application<S, I>)new GadgetApplication(uiPortlet.getStorageId());
+         model = (Application<S>)new GadgetApplication(uiPortlet.getStorageId());
       }
       else if (type == ApplicationType.WSRP_PORTLET)
       {
-         model = (Application<S, I>)new WSRPApplication(uiPortlet.getStorageId());
+         model = (Application<S>)new WSRPApplication(uiPortlet.getStorageId());
       }
       else
       {
@@ -234,11 +234,11 @@ public class PortalDataMapper
     * Fill the UI component with both information from the persistent model and
     * some coming from the portlet.xml defined by the JSR 286 specification
     */
-   private static <S, I> void toUIPortlet(UIPortlet<S, ?, I> uiPortlet, Application<S, I> model) throws Exception
+   private static <S> void toUIPortlet(UIPortlet<S, ?> uiPortlet, Application<S> model) throws Exception
    {
 
       //
-      PortletState<S, I> portletState = new PortletState<S, I>(model.getState(), model.getType());
+      PortletState<S> portletState = new PortletState<S>(model.getState(), model.getType());
 
       /*
        * Fill UI component object with info from the XML file that persist portlet

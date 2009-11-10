@@ -28,10 +28,10 @@ import org.exoplatform.portal.pom.spi.portlet.Preferences;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class PortletApplication extends Application<Preferences, PortletId>
+public class PortletApplication extends Application<Preferences>
 {
 
-   public PortletApplication(ApplicationData<Preferences, PortletId> data)
+   public PortletApplication(ApplicationData<Preferences> data)
    {
       super(data);
    }
@@ -46,7 +46,7 @@ public class PortletApplication extends Application<Preferences, PortletId>
       super();
    }
 
-   public ApplicationType<Preferences, PortletId> getType()
+   public ApplicationType<Preferences> getType()
    {
       return ApplicationType.PORTLET;
    }

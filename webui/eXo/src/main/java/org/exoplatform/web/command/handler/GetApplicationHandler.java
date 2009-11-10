@@ -46,9 +46,9 @@ import javax.servlet.http.HttpServletResponse;
 public class GetApplicationHandler extends Command
 {
 
-   private ApplicationType<?, ?>[] applicationType;
+   private ApplicationType<?>[] applicationType;
 
-   public void setApplicationTypes(ApplicationType<?, ?>[] type)
+   public void setApplicationTypes(ApplicationType<?>[] type)
    {
       applicationType = type;
    }
@@ -77,7 +77,7 @@ public class GetApplicationHandler extends Command
          (ApplicationRegistryService)container.getComponentInstanceOfType(ApplicationRegistryService.class);
 
       if (applicationType == null)
-         applicationType = new ApplicationType<?, ?>[0];
+         applicationType = new ApplicationType<?>[0];
       List<ApplicationCategory> appCategories = prService.getApplicationCategories(remoteUser, applicationType);
       ApplicationCategoryToJSONPlugin toJSON = new ApplicationCategoryToJSONPlugin();
 

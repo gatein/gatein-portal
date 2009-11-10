@@ -29,7 +29,7 @@ import org.exoplatform.portal.pom.data.ModelData;
  * @email:   tuan08@users.sourceforge.net
  * @version: $Id: Portlet.java,v 1.7 2004/09/30 01:00:05 tuan08 Exp $
  **/
-public abstract class Application<S, I> extends ModelObject
+public abstract class Application<S> extends ModelObject
 {
 
    /** The application state. */
@@ -61,7 +61,7 @@ public abstract class Application<S, I> extends ModelObject
 
    private boolean isModifiable;
 
-   public Application(ApplicationData<S, I> data)
+   public Application(ApplicationData<S> data)
    {
       super(data.getStorageId());
 
@@ -95,7 +95,7 @@ public abstract class Application<S, I> extends ModelObject
       super();
    }
 
-   public abstract ApplicationType<S, I> getType();
+   public abstract ApplicationType<S> getType();
 
    public String getWidth()
    {
@@ -242,7 +242,7 @@ public abstract class Application<S, I> extends ModelObject
    @Override
    public ModelData build()
    {
-      return new ApplicationData<S,I>(
+      return new ApplicationData<S>(
          storageId,
          storageName,
          getType(),

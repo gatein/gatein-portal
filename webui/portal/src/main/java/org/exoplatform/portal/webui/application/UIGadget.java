@@ -24,9 +24,7 @@ import org.exoplatform.application.gadget.GadgetRegistryService;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.model.ApplicationState;
-import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.config.model.Properties;
-import org.exoplatform.portal.config.model.gadget.GadgetId;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.WebAppController;
 import org.exoplatform.web.application.gadget.GadgetApplication;
@@ -66,7 +64,7 @@ public class UIGadget extends UIComponent
    private ApplicationState<org.exoplatform.portal.pom.spi.gadget.Gadget> state;
 
    /** . */
-   private GadgetId gadgetId;
+   private String gadgetId;
 
    private Properties properties_;
 
@@ -136,7 +134,7 @@ public class UIGadget extends UIComponent
          try
          {
             DataStorage ds= getApplicationComponent(DataStorage.class);
-            GadgetId gadgetId = ds.getId(ApplicationType.GADGET, state);
+            String gadgetId = ds.getId(state);
 
             //
             this.gadgetId = gadgetId;
@@ -162,7 +160,7 @@ public class UIGadget extends UIComponent
     */
    public String getApplicationName()
    {
-      return gadgetId.getGadgetName();
+      return gadgetId;
    }
 
    /**
@@ -222,14 +220,14 @@ public class UIGadget extends UIComponent
    private GadgetApplication getApplication()
    {
       WebAppController webController = getApplicationComponent(WebAppController.class);
-      GadgetApplication application = webController.getApplication("eXoGadgets/" + gadgetId.getGadgetName());
+      GadgetApplication application = webController.getApplication("eXoGadgets/" + gadgetId);
       if (application == null)
       {
          GadgetRegistryService gadgetService = getApplicationComponent(GadgetRegistryService.class);
          Gadget model;
          try
          {
-            model = gadgetService.getGadget(gadgetId.getGadgetName());
+            model = gadgetService.getGadget(gadgetId);
          }
          catch (Exception ex)
          {

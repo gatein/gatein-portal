@@ -28,10 +28,10 @@ import org.exoplatform.portal.pom.spi.gadget.Gadget;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class GadgetApplication extends Application<Gadget, GadgetId>
+public class GadgetApplication extends Application<Gadget>
 {
 
-   public GadgetApplication(ApplicationData<Gadget, GadgetId> data)
+   public GadgetApplication(ApplicationData<Gadget> data)
    {
       super(data);
    }
@@ -45,7 +45,7 @@ public class GadgetApplication extends Application<Gadget, GadgetId>
    {
    }
 
-   public ApplicationType<Gadget, GadgetId> getType()
+   public ApplicationType<Gadget> getType()
    {
       return ApplicationType.GADGET;
    }

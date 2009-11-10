@@ -26,7 +26,6 @@ import org.exoplatform.portal.application.PortletPreferences;
 import org.exoplatform.portal.application.Preference;
 import org.exoplatform.portal.config.model.Application;
 import org.exoplatform.portal.config.model.ApplicationState;
-import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.config.model.Container;
 import org.exoplatform.portal.config.model.Dashboard;
 import org.exoplatform.portal.config.model.ModelChange;
@@ -35,9 +34,7 @@ import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.TransientApplicationState;
 import org.exoplatform.portal.config.model.gadget.GadgetApplication;
-import org.exoplatform.portal.config.model.gadget.GadgetId;
 import org.exoplatform.portal.config.model.portlet.PortletApplication;
-import org.exoplatform.portal.config.model.portlet.PortletId;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.portal.pom.spi.gadget.Gadget;
 import org.exoplatform.portal.pom.spi.portlet.Preferences;
@@ -304,7 +301,7 @@ public class TestDataStorage extends BasicTestCase
       storage_.save(page);
       page = storage_.getPage(page.getPageId());
       app = (PortletApplication)page.getChildren().get(0);
-      assertEquals(new PortletId("web", "BannerPortlet"), storage_.getId(ApplicationType.PORTLET, app.getState()));
+      assertEquals("web/BannerPortlet", storage_.getId(app.getState()));
    }
 
    public void testPageMerge() throws Exception
@@ -383,7 +380,7 @@ public class TestDataStorage extends BasicTestCase
       ApplicationState<Preferences> instanceId = banner1.getState();
 
       // Check instance id format
-      assertEquals(new PortletId("web", "BannerPortlet"), storage_.getId(ApplicationType.PORTLET, banner1.getState()));
+      assertEquals("web/BannerPortlet", storage_.getId(banner1.getState()));
 
       // Check state
       Preferences pagePrefs = storage_.load(instanceId);
@@ -400,7 +397,7 @@ public class TestDataStorage extends BasicTestCase
       instanceId = banner1.getState();
 
       // Check instance id format
-      assertEquals(new PortletId("web", "BannerPortlet"), storage_.getId(ApplicationType.PORTLET, banner1.getState()));
+      assertEquals("web/BannerPortlet", storage_.getId(banner1.getState()));
 
       // Update site prefs
       PortletPreferences sitePrefs = new PortletPreferences();
@@ -450,7 +447,7 @@ public class TestDataStorage extends BasicTestCase
       String dashboardId = dashboardPortlet.getStorageId();
       assertNotNull(dashboardId);
       assertNotNull(dashboardPortlet.getStorageName());
-      assertEquals(new PortletId("dashboard", "DashboardPortlet"), storage_.getId(ApplicationType.PORTLET, dashboardPortlet.getState()));
+      assertEquals("dashboard/DashboardPortlet", storage_.getId(dashboardPortlet.getState()));
 
       // Configures the dashboard
       Dashboard dashboard = new Dashboard(dashboardId);
@@ -471,7 +468,7 @@ public class TestDataStorage extends BasicTestCase
       dashboard = storage_.loadDashboard(dashboardId);
       assertEquals(1, dashboard.getChildren().size());
       app = (PortletApplication)dashboard.getChildren().get(0);
-      assertEquals(new PortletId("foo", "bar"), storage_.getId(ApplicationType.PORTLET, app.getState()));
+      assertEquals("foo/bar", storage_.getId(app.getState()));
    }
 
    public void _testDashboardLayout() throws Exception
@@ -543,7 +540,7 @@ public class TestDataStorage extends BasicTestCase
       assertEquals(0, row0.getChildren().size());
       assertEquals(1, row1.getChildren().size());
       gadgetApp = (GadgetApplication)row1.getChildren().get(0);
-      assertEquals(new GadgetId("foo"), storage_.getId(ApplicationType.GADGET, gadgetApp.getState()));
+      assertEquals("foo", storage_.getId(gadgetApp.getState()));
    }
 
    public void _testDashboardMoveLeft() throws Exception
@@ -587,7 +584,7 @@ public class TestDataStorage extends BasicTestCase
       assertEquals(0, row1.getChildren().size());
       assertEquals(1, row0.getChildren().size());
       gadgetApp = (GadgetApplication)row0.getChildren().get(0);
-      assertEquals(new GadgetId("foo"), storage_.getId(ApplicationType.GADGET, gadgetApp.getState()));
+      assertEquals("foo", storage_.getId(gadgetApp.getState()));
    }
 
    private PortletApplication create(String instanceId)

@@ -28,11 +28,11 @@ import java.util.Map;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class ApplicationData<S, I> extends ComponentData
+public class ApplicationData<S> extends ComponentData
 {
 
    /** . */
-   private final ApplicationType<S, I> type;
+   private final ApplicationType<S> type;
 
    /** . */
    private final ApplicationState<S> state;
@@ -76,7 +76,7 @@ public class ApplicationData<S, I> extends ComponentData
    public ApplicationData(
       String storageId,
       String storageName,
-      ApplicationType<S, I> type,
+      ApplicationType<S> type,
       ApplicationState<S> state,
       String id,
       String title,
@@ -109,7 +109,7 @@ public class ApplicationData<S, I> extends ComponentData
       this.accessPermissions = accessPermissions;
    }
 
-   public ApplicationType<S, I> getType()
+   public ApplicationType<S> getType()
    {
       return type;
    }

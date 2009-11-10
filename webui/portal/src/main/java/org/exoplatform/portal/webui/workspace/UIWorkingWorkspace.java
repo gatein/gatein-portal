@@ -19,8 +19,8 @@
 
 package org.exoplatform.portal.webui.workspace;
 
-import org.exoplatform.portal.config.model.gadget.GadgetId;
-import org.exoplatform.portal.config.model.portlet.PortletId;
+import org.exoplatform.portal.config.model.ApplicationType;
+import org.exoplatform.portal.pom.config.Utils;
 import org.exoplatform.portal.webui.application.UIPortlet;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
@@ -79,19 +79,19 @@ public class UIWorkingWorkspace extends UIContainer
 
       for (UIPortlet portlet : portletInstancesInPage)
       {
-         Object applicationId = portlet.getApplicationId();
-         if (applicationId instanceof PortletId)
+         String applicationId = portlet.getApplicationId();
+         ApplicationType<?> type = portlet.getState().getApplicationType();
+         if (type == ApplicationType.PORTLET)
          {
-            PortletId portletId = (PortletId)applicationId;
-            if (portletId.getPortletName().equals(portletName))
+            String[] chunks = Utils.split("/", applicationId);
+            if (chunks[1].equals(portletName))
             {
                Util.getPortalRequestContext().addUIComponentToUpdateByAjax(portlet);
             }
          }
-         else if (applicationId instanceof GadgetId)
+         else if (type == ApplicationType.GADGET)
          {
-            GadgetId gadgetId = (GadgetId)applicationId;
-            if (gadgetId.getGadgetName().equals(portletName))
+            if (applicationId.equals(portletName))
             {
                Util.getPortalRequestContext().addUIComponentToUpdateByAjax(portlet);
             }

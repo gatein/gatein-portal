@@ -27,12 +27,9 @@ import org.exoplatform.portal.config.model.ModelChange;
 import org.exoplatform.portal.config.model.PersistentApplicationState;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.TransientApplicationState;
-import org.exoplatform.portal.config.model.portlet.PortletId;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.Utils;
-import org.exoplatform.portal.pom.spi.gadget.Gadget;
 import org.exoplatform.portal.pom.spi.portlet.Preferences;
-import org.exoplatform.portal.pom.spi.wsrp.WSRP;
 import org.gatein.mop.api.Attributes;
 import org.gatein.mop.api.content.ContentType;
 import org.gatein.mop.api.content.Customization;
@@ -440,7 +437,7 @@ public class Mapper
                   owner.getName(),
                   null
                );
-               mo = new ApplicationData<Preferences, PortletId>(
+               mo = new ApplicationData<Preferences>(
                   srcContainer.getObjectId(),
                   component.getName(),
                   ApplicationType.PORTLET,
@@ -515,7 +512,7 @@ public class Mapper
       }
       else if (src instanceof ApplicationData)
       {
-         save((ApplicationData<?, ?>)src, (UIWindow)dst);
+         save((ApplicationData<?>)src, (UIWindow)dst);
       }
       else if (src instanceof BodyData)
       {
@@ -526,9 +523,6 @@ public class Mapper
          throw new AssertionError("Was not expecting child " + src);
       }
    }
-
-   /** . */
-   private static final PortletId DASHBOARD_ID = new PortletId("dashboard", "DashboardPortlet");
 
    private LinkedList<ModelChange> saveChildren(final ContainerData src, UIContainer dst)
    {
@@ -736,7 +730,7 @@ public class Mapper
       }
    }
 
-   private <S, I> ApplicationData<S, I> load(UIWindow src)
+   private <S> ApplicationData<S> load(UIWindow src)
    {
       Attributes attrs = src.getAttributes();
 
@@ -749,8 +743,8 @@ public class Mapper
       //
       String customizationid = customization.getId();
 
-      //
-      ApplicationType<S, I> type = (ApplicationType<S,I>)ApplicationType.getType(contentType);
+      // julien: should type check that
+      ApplicationType<S> type = (ApplicationType<S>)ApplicationType.getType(contentType);
 
       //
       PersistentApplicationState<S> instanceState = new PersistentApplicationState<S>(customizationid);
@@ -760,7 +754,7 @@ public class Mapper
       load(attrs, properties, windowPropertiesBlackList);
 
       //
-      return new ApplicationData<S,I>(
+      return new ApplicationData<S>(
          src.getObjectId(),
          src.getName(),
          type,
@@ -780,7 +774,7 @@ public class Mapper
       );
    }
 
-   public <S, I> void save(ApplicationData<S, I> src, UIWindow dst)
+   public <S, I> void save(ApplicationData<S> src, UIWindow dst)
    {
       Attributes attrs = dst.getAttributes();
       attrs.setValue(MappedAttributes.THEME, src.getTheme());

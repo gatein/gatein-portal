@@ -20,11 +20,8 @@
 package org.exoplatform.portal.config.model;
 
 import org.exoplatform.portal.config.model.gadget.GadgetApplication;
-import org.exoplatform.portal.config.model.gadget.GadgetId;
 import org.exoplatform.portal.config.model.portlet.PortletApplication;
-import org.exoplatform.portal.config.model.portlet.PortletId;
 import org.exoplatform.portal.config.model.wsrp.WSRPApplication;
-import org.exoplatform.portal.config.model.wsrp.WSRPId;
 import org.exoplatform.portal.pom.data.ApplicationData;
 import org.exoplatform.portal.pom.data.BodyData;
 import org.exoplatform.portal.pom.data.ContainerData;
@@ -108,15 +105,15 @@ public abstract class ModelObject
          ApplicationType type = applicationData.getType();
          if (ApplicationType.PORTLET == type)
          {
-            return new PortletApplication((ApplicationData<Preferences, PortletId>)applicationData);
+            return new PortletApplication((ApplicationData<Preferences>)applicationData);
          }
          else if (ApplicationType.GADGET == type)
          {
-            return new GadgetApplication((ApplicationData<Gadget, GadgetId>)applicationData);
+            return new GadgetApplication((ApplicationData<Gadget>)applicationData);
          }
          else if (ApplicationType.WSRP_PORTLET == type)
          {
-            return new WSRPApplication((ApplicationData<WSRP, WSRPId>)applicationData);
+            return new WSRPApplication((ApplicationData<WSRP>)applicationData);
          }
          else
          {
