@@ -30,12 +30,8 @@ import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.config.model.CloneApplicationState;
 import org.exoplatform.portal.config.model.ModelObject;
 import org.exoplatform.portal.config.model.Page;
-import org.exoplatform.portal.config.model.TransientApplicationState;
 import org.exoplatform.portal.config.model.gadget.GadgetId;
-import org.exoplatform.portal.config.model.portlet.PortletId;
-import org.exoplatform.portal.config.model.wsrp.WSRPId;
 import org.exoplatform.portal.pom.spi.portlet.Preferences;
-import org.exoplatform.portal.pom.spi.wsrp.WSRP;
 import org.exoplatform.portal.pom.spi.wsrp.WSRPState;
 import org.exoplatform.portal.webui.page.UIPage;
 import org.exoplatform.portal.webui.portal.UIPortal;
@@ -76,14 +72,14 @@ public class UIAddNewApplication extends UIContainer
    }
 
    public List<ApplicationCategory> getApplicationCategories(String remoteUser,
-                                                             String[] applicationType) throws Exception
+                                                             ApplicationType[] applicationType) throws Exception
    {
       ExoContainer container = ExoContainerContext.getCurrentContainer();
       ApplicationRegistryService prService = (ApplicationRegistryService)container.getComponentInstanceOfType(ApplicationRegistryService.class);
 
       if (applicationType == null)
       {
-         applicationType = new String[]{};
+         applicationType = new ApplicationType[0];
       }
 
       List<ApplicationCategory> appCategories = prService.getApplicationCategories(remoteUser,
@@ -177,13 +173,13 @@ public class UIAddNewApplication extends UIContainer
       String applicationId = event.getRequestContext().getRequestParameter(UIComponent.OBJECTID);
 
       Application application = event.getSource().getApplication(applicationId);
-      String appType = application.getApplicationType();
+      ApplicationType appType = application.getType();
       String portletName = application.getApplicationName();
 //      String appGroup = application.getApplicationGroup();
 
       // TODO review windowId for eXoWidget and eXoApplication
       UIComponent component = null;
-      if (org.exoplatform.web.application.Application.EXO_GADGET_TYPE.equals(appType))
+      if (ApplicationType.GADGET.equals(appType))
       {
          UIGadget uiGadget = uiPage.createUIComponent(event.getRequestContext(), UIGadget.class, null, null);
 
@@ -200,7 +196,7 @@ public class UIAddNewApplication extends UIContainer
       }
       else
       {
-         boolean remote = org.exoplatform.web.application.Application.WSRP_TYPE.equals(appType);
+         boolean remote = ApplicationType.WSRP_PORTLET.equals(appType);
 
          UIPortlet uiPortlet = uiPage.createUIComponent(UIPortlet.class, null, null);
 

@@ -120,7 +120,7 @@
                                  <field name="description">
                                     <string>Application Registry</string>
                                  </field>
-                                 <field name="applicationType">
+                                 <field name="type">
                                     <string>portlet</string>
                                  </field>
                                  <field name="contentId">
@@ -152,7 +152,7 @@
                                  <field name="description">
                                     <string>Organization Management</string>
                                  </field>
-                                 <field name="applicationType">
+                                 <field name="type">
                                     <string>portlet</string>
                                  </field>
                                  <field name="contentId">
@@ -184,7 +184,7 @@
                                  <field name="description">
                                     <string>New Account</string>
                                  </field>
-                                 <field name="applicationType">
+                                 <field name="type">
                                     <string>portlet</string>
                                  </field>
                                  <field name="contentId">
@@ -243,7 +243,7 @@
                                  <field name="description">
                                     <string>IFrame</string>
                                  </field>
-                                 <field name="applicationType">
+                                 <field name="type">
                                     <string>portlet</string>
                                  </field>
                                  <field name="contentId">
@@ -272,7 +272,7 @@
                                  <field name="description">
                                     <string>SiteMap</string>
                                  </field>
-                                 <field name="applicationType">
+                                 <field name="type">
                                     <string>portlet</string>
                                  </field>
                                  <field name="contentId">
@@ -328,7 +328,7 @@
                                  <field name="description">
                                     <string>Dashboard Portlet</string>
                                  </field>
-                                 <field name="applicationType">
+                                 <field name="type">
                                     <string>portlet</string>
                                  </field>
                                  <field name="contentId">
@@ -357,7 +357,7 @@
                                  <field name="description">
                                     <string>Gadget Wrapper Portlet</string>
                                  </field>
-                                 <field name="applicationType">
+                                 <field name="type">
                                     <string>portlet</string>
                                  </field>
                                  <field name="contentId">
@@ -413,8 +413,8 @@
                                  <field name="description">
                                     <string>ToDo Gadget, easily manage and track your daily to-do list.</string>
                                  </field>
-                                 <field name="applicationType">
-                                    <string>eXoGadget</string>
+                                 <field name="type">
+                                    <string>gadget</string>
                                  </field>
                                  <field name="contentId">
                                     <string>Todo</string>
@@ -444,8 +444,8 @@
                                        You can switch easily between daily, monthly or yearly view.
                                     </string>
                                  </field>
-                                 <field name="applicationType">
-                                    <string>eXoGadget</string>
+                                 <field name="type">
+                                    <string>gadget</string>
                                  </field>
                                  <field name="contentId">
                                     <string>Calendar</string>
@@ -475,8 +475,8 @@
                                        arithmetic operations.
                                     </string>
                                  </field>
-                                 <field name="applicationType">
-                                    <string>eXoGadget</string>
+                                 <field name="type">
+                                    <string>gadget</string>
                                  </field>
                                  <field name="contentId">
                                     <string>Calculator</string>
@@ -504,8 +504,8 @@
                                  <field name="description">
                                     <string>Rss Reader</string>
                                  </field>
-                                 <field name="applicationType">
-                                    <string>eXoGadget</string>
+                                 <field name="type">
+                                    <string>gadget</string>
                                  </field>
                                  <field name="contentId">
                                     <string>rssAggregator</string>

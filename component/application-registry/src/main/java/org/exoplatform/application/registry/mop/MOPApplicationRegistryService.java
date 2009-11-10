@@ -26,6 +26,7 @@ import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.component.ComponentPlugin;
 import org.exoplatform.portal.config.UserACL;
+import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.portal.pom.registry.CategoryDefinition;
@@ -85,7 +86,7 @@ public class MOPApplicationRegistryService implements ApplicationRegistryService
    public List<ApplicationCategory> getApplicationCategories(
       Comparator<ApplicationCategory> sortComparator,
       String accessUser,
-      String... appTypes) throws Exception
+      ApplicationType<?, ?>... appTypes) throws Exception
    {
       POMSession session = POMSessionManager.getSession();
       ContentRegistry registry = session.getContentRegistry();
@@ -108,7 +109,7 @@ public class MOPApplicationRegistryService implements ApplicationRegistryService
       return categories;
    }
 
-   public List<ApplicationCategory> getApplicationCategories(String accessUser, String... appTypes) throws Exception
+   public List<ApplicationCategory> getApplicationCategories(String accessUser, ApplicationType<?, ?>... appTypes) throws Exception
    {
       return getApplicationCategories(null, accessUser, appTypes);
    }
@@ -172,7 +173,7 @@ public class MOPApplicationRegistryService implements ApplicationRegistryService
       registry.getCategoryMap().remove(category.getName());
    }
 
-   public List<Application> getApplications(ApplicationCategory category, String... appTypes) throws Exception
+   public List<Application> getApplications(ApplicationCategory category, ApplicationType<?, ?>... appTypes) throws Exception
    {
       return getApplications(category, null, appTypes);
    }
@@ -180,7 +181,7 @@ public class MOPApplicationRegistryService implements ApplicationRegistryService
    public List<Application> getApplications(
       ApplicationCategory category,
       Comparator<Application> sortComparator,
-      String... appTypes) throws Exception
+      ApplicationType<?, ?>... appTypes) throws Exception
    {
       POMSession session = POMSessionManager.getSession();
       ContentRegistry registry = session.getContentRegistry();
@@ -266,17 +267,17 @@ public class MOPApplicationRegistryService implements ApplicationRegistryService
       {
          String contentId = application.getContentId();
          ContentType<?> contentType;
-         if ("portlet".equals(application.getApplicationType()))
+         if (ApplicationType.PORTLET.equals(application.getType()))
          {
             contentType = Preferences.CONTENT_TYPE;
          }
-         else if ("eXoGadget".equals(application.getApplicationType()))
+         else if (ApplicationType.GADGET.equals(application.getType()))
          {
             contentType = org.exoplatform.portal.pom.spi.gadget.Gadget.CONTENT_TYPE;
          }
          else
          {
-            throw new UnsupportedOperationException("Nnsupported type " + application.getApplicationType());
+            throw new UnsupportedOperationException("Unnsupported type " + application.getType());
          }
          String definitionName = application.getDisplayName().replace(' ', '_');
          contentDef = categoryDef.createContent(definitionName, contentType, contentId);
@@ -473,15 +474,15 @@ public class MOPApplicationRegistryService implements ApplicationRegistryService
       }
    }
 
-   private boolean isApplicationType(Application app, String... appTypes)
+   private boolean isApplicationType(Application app, ApplicationType<?, ?>... appTypes)
    {
       if (appTypes == null || appTypes.length == 0)
       {
          return true;
       }
-      for (String appType : appTypes)
+      for (ApplicationType<?, ?> appType : appTypes)
       {
-         if (appType.equals(app.getApplicationType()))
+         if (appType.equals(app.getType()))
          {
             return true;
          }
@@ -498,7 +499,7 @@ public class MOPApplicationRegistryService implements ApplicationRegistryService
       categoryDef.setLastModificationDate(category.getModifiedDate());
    }
 
-   private ApplicationCategory load(CategoryDefinition categoryDef, String... appTypes)
+   private ApplicationCategory load(CategoryDefinition categoryDef, ApplicationType<?, ?>... appTypes)
    {
       ApplicationCategory category = new ApplicationCategory();
 
@@ -535,31 +536,14 @@ public class MOPApplicationRegistryService implements ApplicationRegistryService
 
    private Application load(ContentDefinition contentDef)
    {
-      String applicationType;
       ContentType<?> contentType = contentDef.getCustomization().getType();
-      if (contentType == org.exoplatform.portal.pom.spi.gadget.Gadget.CONTENT_TYPE)
-      {
-         applicationType = org.exoplatform.web.application.Application.EXO_GADGET_TYPE;
-      }
-      else if (contentType == WSRP.CONTENT_TYPE)
-      {
-         applicationType = org.exoplatform.web.application.Application.WSRP_TYPE;
-      }
-      else if (contentType == Preferences.CONTENT_TYPE)
-      {
-         applicationType = org.exoplatform.web.application.Application.EXO_PORTLET_TYPE;
-      }
-      else
-      {
-         throw new AssertionError();
-      }
-
+      ApplicationType<?, ?> applicationType = ApplicationType.getType(contentType);
 
       //
       Application application = new Application();
       application.setId(contentDef.getCategory().getName() + "/" + contentDef.getName());
       application.setCategoryName(contentDef.getCategory().getName());
-      application.setApplicationType(applicationType);
+      application.setType(applicationType);
       application.setApplicationName(contentDef.getName());
       application.setIconURL(getApplicationIconURL(contentDef));
       application.setDisplayName(contentDef.getDisplayName());

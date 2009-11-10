@@ -60,10 +60,4 @@ public class GadgetApplication extends Application<Gadget, GadgetId>
    {
       return ApplicationType.GADGET;
    }
-
-   @Override
-   public String getApplicationType()
-   {
-      return org.exoplatform.web.application.Application.EXO_GADGET_TYPE;
-   }
 }

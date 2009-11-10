@@ -22,6 +22,7 @@ package org.exoplatform.dashboard.webui.component;
 import org.exoplatform.application.registry.Application;
 import org.exoplatform.application.registry.ApplicationCategory;
 import org.exoplatform.application.registry.ApplicationRegistryService;
+import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -61,7 +62,7 @@ public class UIDashboardSelectContainer extends UIContainer
 
       String remoteUser = ((WebuiRequestContext)WebuiRequestContext.getCurrentInstance()).getRemoteUser();
       List<ApplicationCategory> listCategories =
-         service.getApplicationCategories(remoteUser, org.exoplatform.web.application.Application.EXO_GADGET_TYPE);
+         service.getApplicationCategories(remoteUser, ApplicationType.GADGET);
 
       Iterator<ApplicationCategory> appCateIte = listCategories.iterator();
       while (appCateIte.hasNext())

@@ -22,6 +22,7 @@ package org.exoplatform.gadget.webui.component;
 import org.exoplatform.application.registry.Application;
 import org.exoplatform.application.registry.ApplicationRegistryService;
 import org.exoplatform.portal.config.UserACL;
+import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.config.model.gadget.GadgetId;
 import org.exoplatform.portal.webui.application.UIGadget;
 import org.exoplatform.portal.webui.util.Util;
@@ -191,7 +192,7 @@ public class UIGadgetEditMode extends UIForm
             List<Application> appList = service.getAllApplications();
             for (Application app : appList)
             {
-               if (app.getApplicationType().equals(org.exoplatform.web.application.Application.EXO_GADGET_TYPE))
+               if (app.getType().equals(ApplicationType.GADGET))
                {
                   for (String per : app.getAccessPermissions())
                   {

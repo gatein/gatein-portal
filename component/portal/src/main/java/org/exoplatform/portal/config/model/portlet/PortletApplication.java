@@ -60,10 +60,4 @@ public class PortletApplication extends Application<Preferences, PortletId>
    {
       return ApplicationType.PORTLET;
    }
-
-   @Override
-   public String getApplicationType()
-   {
-      return org.exoplatform.web.application.Application.EXO_PORTLET_TYPE;
-   }
 }

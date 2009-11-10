@@ -28,8 +28,8 @@ import org.exoplatform.applicationregistry.webui.Util;
 import org.exoplatform.commons.utils.LazyPageList;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.web.application.ApplicationMessage;
-import org.exoplatform.web.application.gadget.GadgetApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -83,8 +83,8 @@ public class UIAddApplicationForm extends UIForm
    {
       addUIFormInput(new UIFormStringInput(FIELD_NAME, null, null).addValidator(StringLengthValidator.class, 3, 30));
       List<SelectItemOption<String>> types = new ArrayList<SelectItemOption<String>>(2);
-      types.add(new SelectItemOption<String>(org.exoplatform.web.application.Application.EXO_PORTLET_TYPE));
-      types.add(new SelectItemOption<String>(org.exoplatform.web.application.Application.EXO_GADGET_TYPE));
+      types.add(new SelectItemOption<String>(ApplicationType.PORTLET.getName()));
+      types.add(new SelectItemOption<String>(ApplicationType.GADGET.getName()));
       UIFormSelectBox uiSelectBox = new UIFormSelectBox(FIELD_TYPE, null, types);
       uiSelectBox.setOnChange("ChangeType");
       addUIFormInput(uiSelectBox);
@@ -94,7 +94,7 @@ public class UIAddApplicationForm extends UIForm
       uiTableInputSet.setId(tableName);
       uiTableInputSet.setColumns(TABLE_COLUMNS);
       addChild(uiTableInputSet);
-      setApplicationList(org.exoplatform.web.application.Application.EXO_PORTLET_TYPE);
+      setApplicationList(ApplicationType.PORTLET.getName());
       setActions(new String[]{"Add", "Cancel"});
    }
 
@@ -142,17 +142,18 @@ public class UIAddApplicationForm extends UIForm
       uiIterator.setPageList(pageList);
    }
 
-   private List<Application> getApplicationByType(String type) throws Exception
+   private List<Application> getApplicationByType(String typeName) throws Exception
    {
-      if (org.exoplatform.web.application.Application.EXO_PORTLET_TYPE.equals(type))
+      ApplicationType type = ApplicationType.getType(typeName);
+      if (ApplicationType.PORTLET == type)
       {
          return createApplicationsFromPortlets(false);
       }
-      else if (org.exoplatform.web.application.Application.WSRP_TYPE.equals(type))
+      else if (ApplicationType.WSRP_PORTLET == type)
       {
          return createApplicationsFromPortlets(true);
       }
-      else if (org.exoplatform.web.application.Application.EXO_GADGET_TYPE.equals(type))
+      else if (ApplicationType.GADGET == type)
       {
          GadgetRegistryService gadgetService = getApplicationComponent(GadgetRegistryService.class);
          List<Gadget> gadgets = gadgetService.getAllGadgets();
@@ -161,11 +162,9 @@ public class UIAddApplicationForm extends UIForm
          {
             Application app = new Application();
             app.setApplicationName(gadget.getName());
-//            app.setApplicationGroup(GadgetApplication.EXO_GADGET_GROUP);
-            app.setApplicationType(org.exoplatform.web.application.Application.EXO_GADGET_TYPE);
+            app.setType(ApplicationType.GADGET);
             app.setDisplayName(gadget.getTitle());
-//            app.setUri(gadget.getUrl());
-            app.setContentId(gadget.getUrl()); 
+            app.setContentId(gadget.getName());
             String description =
                (gadget.getDescription() == null || gadget.getDescription().length() < 1) ? gadget.getName() : gadget
                   .getDescription();
@@ -198,19 +197,19 @@ public class UIAddApplicationForm extends UIForm
          Application app = new Application();
          app.setApplicationName(portletName);
 //         app.setApplicationGroup(info.getApplicationName());
-         String appType;
+         ApplicationType appType;
          String contentId;
          if (remote)
          {
-            appType = org.exoplatform.web.application.Application.WSRP_TYPE;
+            appType = ApplicationType.WSRP_PORTLET;
             contentId = portlet.getContext().getId();
          }
          else
          {
-            appType = org.exoplatform.web.application.Application.EXO_PORTLET_TYPE;
+            appType = ApplicationType.PORTLET;
             contentId = info.getApplicationName() + "/" + info.getName(); 
          }
-         app.setApplicationType(appType);
+         app.setType(appType);
          app.setDisplayName(Util.getLocalizedStringValue(displayNameLS, portletName));
          app.setDescription(Util.getLocalizedStringValue(descriptionLS, portletName));
          app.setAccessPermissions(new ArrayList<String>());
@@ -290,7 +289,7 @@ public class UIAddApplicationForm extends UIForm
          Application newApp = new Application();
          newApp.setApplicationName(app.getApplicationName());
          newApp.setDisplayName(app.getDisplayName());
-         newApp.setApplicationType(app.getApplicationType());
+         newApp.setType(app.getType());
          newApp.setDescription(app.getDescription());
          newApp.setAccessPermissions(app.getAccessPermissions());
          newApp.setContentId(app.getContentId());

@@ -27,6 +27,7 @@ import org.exoplatform.application.gadget.SourceStorage;
 import org.exoplatform.application.registry.Application;
 import org.exoplatform.application.registry.ApplicationCategory;
 import org.exoplatform.application.registry.ApplicationRegistryService;
+import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.webui.application.GadgetUtil;
 import org.exoplatform.web.WebAppController;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -221,9 +222,8 @@ public class UIGadgetInfo extends UIContainer
          
          Application app = new Application();
          app.setApplicationName(gadget.getName());
-         app.setApplicationType(org.exoplatform.web.application.Application.EXO_GADGET_TYPE);
+         app.setType(ApplicationType.GADGET);
          app.setDisplayName(gadget.getTitle());
-         //app.setUri(gadget.getUrl());
          String description =
             (gadget.getDescription() == null || gadget.getDescription().length() < 1) ? gadget.getName() : gadget
                .getDescription();

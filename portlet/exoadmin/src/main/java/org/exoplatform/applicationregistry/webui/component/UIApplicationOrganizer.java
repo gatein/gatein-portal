@@ -24,6 +24,7 @@ import org.exoplatform.application.registry.ApplicationCategory;
 import org.exoplatform.application.registry.ApplicationRegistryService;
 import org.exoplatform.applicationregistry.webui.Util;
 import org.exoplatform.portal.application.PortalRequestContext;
+import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -121,7 +122,7 @@ public class UIApplicationOrganizer extends UIContainer
    {
       selectedCategory = category;
       ApplicationRegistryService service = getApplicationComponent(ApplicationRegistryService.class);
-      applications = service.getApplications(selectedCategory, new Util.ApplicationComparator(), new String[]{});
+      applications = service.getApplications(selectedCategory, new Util.ApplicationComparator(), new ApplicationType[0]);
       if (applications == null || applications.isEmpty())
       {
          setSelectedApplication(null);

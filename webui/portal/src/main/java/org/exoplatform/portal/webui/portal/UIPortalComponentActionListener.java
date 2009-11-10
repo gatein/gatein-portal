@@ -27,14 +27,8 @@ import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.config.model.CloneApplicationState;
 import org.exoplatform.portal.config.model.Container;
-import org.exoplatform.portal.config.model.TransientApplicationState;
-import org.exoplatform.portal.config.model.gadget.GadgetId;
-import org.exoplatform.portal.config.model.portlet.PortletId;
-import org.exoplatform.portal.config.model.wsrp.WSRPId;
-import org.exoplatform.portal.pom.spi.portlet.Preferences;
 import org.exoplatform.portal.webui.application.PortletState;
 import org.exoplatform.portal.webui.application.UIApplicationList;
-import org.exoplatform.portal.webui.application.UIGadget;
 import org.exoplatform.portal.webui.application.UIPortlet;
 import org.exoplatform.portal.webui.container.UIContainerList;
 import org.exoplatform.portal.webui.login.UILogin;
@@ -51,7 +45,6 @@ import org.exoplatform.portal.webui.workspace.UIWorkingWorkspace;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.Query;
 import org.exoplatform.services.organization.User;
-import org.exoplatform.web.application.Application;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIComponent;
@@ -248,29 +241,9 @@ public class UIPortalComponentActionListener
                org.exoplatform.application.registry.Application app = null;
                UIApplicationList appList = uiApp.findFirstComponentOfType(UIApplicationList.class);
                app = appList.getApplication(sourceId);
-
-               String appType = app.getApplicationType();
-               ApplicationType applicationType;
-               org.exoplatform.application.registry.Application temp = null;
-               if (appType.equals(Application.EXO_GADGET_TYPE))
-               {
-                  applicationType = ApplicationType.GADGET;
-               }
-               else if (appType.equals(Application.EXO_PORTLET_TYPE))
-               {
-                  applicationType = ApplicationType.PORTLET;
-               }
-               else if (appType.equals(Application.WSRP_TYPE))
-               {
-                  applicationType = ApplicationType.WSRP_PORTLET;
-               }
-               else
-               {
-                  throw new AssertionError("Wrong type " + appType);
-               }
+               ApplicationType applicationType = app.getType();
 
                //
-
                UIPortlet uiPortlet = uiTarget.createUIComponent(UIPortlet.class, null, null);
                if (app.getDisplayName() != null)
                {

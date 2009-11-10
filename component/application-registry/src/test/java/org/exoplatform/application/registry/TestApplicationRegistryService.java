@@ -323,7 +323,7 @@ public class TestApplicationRegistryService extends BasicTestCase
       Application app = new Application();
       app.setApplicationName(appName);
       app.setDisplayName(appName);
-      app.setApplicationType(appType);
+      app.setType(appType);
 //      app.setApplicationGroup(appGroup);
       return app;
    }

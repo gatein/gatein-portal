@@ -209,8 +209,6 @@ public abstract class Application<S, I> extends ModelObject
       icon = value;
    }
 
-   public abstract String getApplicationType();
-
    public String getDescription()
    {
       return description;

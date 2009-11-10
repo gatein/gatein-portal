@@ -19,6 +19,8 @@
 
 package org.exoplatform.application.registry;
 
+import org.exoplatform.portal.config.model.ApplicationType;
+
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -45,7 +47,7 @@ public class Application
 
    private String applicationName;
 
-   private String applicationType;
+   private String type;
 
    /** . */
    private String storageId;
@@ -162,14 +164,14 @@ public class Application
       this.applicationName = applicationName;
    }
 
-   public String getApplicationType()
+   public ApplicationType getType()
    {
-      return applicationType;
+      return type != null ? ApplicationType.getType(type) : null;
    }
 
-   public void setApplicationType(String applicationType)
+   public void setType(ApplicationType type)
    {
-      this.applicationType = applicationType;
+      this.type = type != null ? type.getName() : null;
    }
 
    public String getIconURL()

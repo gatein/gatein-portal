@@ -26,6 +26,7 @@ import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.json.BeanToJSONPlugin;
 import org.exoplatform.json.JSONService;
+import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.web.WebAppController;
 import org.exoplatform.web.command.Command;
 
@@ -45,9 +46,9 @@ import javax.servlet.http.HttpServletResponse;
 public class GetApplicationHandler extends Command
 {
 
-   private String[] applicationType;
+   private ApplicationType<?, ?>[] applicationType;
 
-   public void setApplicationTypes(String[] type)
+   public void setApplicationTypes(ApplicationType<?, ?>[] type)
    {
       applicationType = type;
    }
@@ -76,7 +77,7 @@ public class GetApplicationHandler extends Command
          (ApplicationRegistryService)container.getComponentInstanceOfType(ApplicationRegistryService.class);
 
       if (applicationType == null)
-         applicationType = new String[]{};
+         applicationType = new ApplicationType<?, ?>[0];
       List<ApplicationCategory> appCategories = prService.getApplicationCategories(remoteUser, applicationType);
       ApplicationCategoryToJSONPlugin toJSON = new ApplicationCategoryToJSONPlugin();
 
@@ -159,7 +160,7 @@ public class GetApplicationHandler extends Command
          appendIndentation(builder, indentLevel + 1);
          builder.append("'id' : ").append("'").append(application.getId()).append("',\n");
          appendIndentation(builder, indentLevel + 1);
-         builder.append("'type' : ").append("'").append(application.getApplicationType()).append("'\n");
+         builder.append("'type' : ").append("'").append(application.getType()).append("'\n");
          appendIndentation(builder, indentLevel);
          builder.append("}\n");
       }

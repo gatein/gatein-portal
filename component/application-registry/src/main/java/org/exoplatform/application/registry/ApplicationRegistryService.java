@@ -20,6 +20,7 @@
 package org.exoplatform.application.registry;
 
 import org.exoplatform.container.component.ComponentPlugin;
+import org.exoplatform.portal.config.model.ApplicationType;
 
 import java.util.Comparator;
 import java.util.List;
@@ -32,7 +33,7 @@ import java.util.List;
 public interface ApplicationRegistryService
 {
 
-   public List<ApplicationCategory> getApplicationCategories(String accessUser, String... appTypes) throws Exception;
+   public List<ApplicationCategory> getApplicationCategories(String accessUser, ApplicationType<?, ?>... appTypes) throws Exception;
 
    public void initListener(ComponentPlugin com) throws Exception;
 
@@ -47,10 +48,10 @@ public interface ApplicationRegistryService
 
    public void remove(ApplicationCategory category) throws Exception;
 
-   public List<Application> getApplications(ApplicationCategory category, String... appTypes) throws Exception;
+   public List<Application> getApplications(ApplicationCategory category, ApplicationType<?, ?>... appTypes) throws Exception;
 
    public List<Application> getApplications(ApplicationCategory category, Comparator<Application> sortComparator,
-      String... appTypes) throws Exception;
+      ApplicationType<?, ?>... appTypes) throws Exception;
 
    public List<Application> getAllApplications() throws Exception;
 

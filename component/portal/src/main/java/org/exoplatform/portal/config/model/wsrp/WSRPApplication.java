@@ -50,10 +50,4 @@ public class WSRPApplication extends Application<WSRP, WSRPId>
    {
       return ApplicationType.WSRP_PORTLET;
    }
-
-   @Override
-   public String getApplicationType()
-   {
-      return org.exoplatform.web.application.Application.WSRP_TYPE;
-   }
 }
