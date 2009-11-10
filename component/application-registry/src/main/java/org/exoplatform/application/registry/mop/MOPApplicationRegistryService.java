@@ -266,19 +266,7 @@ public class MOPApplicationRegistryService implements ApplicationRegistryService
       if (contentDef == null)
       {
          String contentId = application.getContentId();
-         ContentType<?> contentType;
-         if (ApplicationType.PORTLET.equals(application.getType()))
-         {
-            contentType = Preferences.CONTENT_TYPE;
-         }
-         else if (ApplicationType.GADGET.equals(application.getType()))
-         {
-            contentType = org.exoplatform.portal.pom.spi.gadget.Gadget.CONTENT_TYPE;
-         }
-         else
-         {
-            throw new UnsupportedOperationException("Unnsupported type " + application.getType());
-         }
+         ContentType<?> contentType = application.getType().getContentType();
          String definitionName = application.getDisplayName().replace(' ', '_');
          contentDef = categoryDef.createContent(definitionName, contentType, contentId);
       }
