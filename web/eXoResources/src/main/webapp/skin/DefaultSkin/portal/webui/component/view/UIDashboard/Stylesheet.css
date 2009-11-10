@@ -63,29 +63,26 @@
 }
 
 .UITabPaneDashboard .LtTabDashboard {
-	background: url('background/NavUser.gif') no-repeat left top;
+	background: #ffcf01 url('background/NavUser.gif') no-repeat left top;
 	padding-left: 3px;
-	height: 32px;
 }
 
 .UITabPaneDashboard .RtTabDashboard {
-	background: url('background/NavUser.gif') no-repeat right top;
+	background: #ffcf01 url('background/NavUser.gif') no-repeat right top;
 	padding-right: 3px;
-	height: 32px;
 }
 
 .UITabPaneDashboard .CtTabDashboard {
-	height: 32px;
-	background: url('background/NavUser.gif') repeat-x center bottom;
+	background: #ffcf01 url('background/NavUser.gif') repeat-x center -32px;
 	padding: 0px 6px; 
 }
 
 .UITabPaneDashboard .UIHorizontalTabs {
-	padding-top: 10px;
+	padding: 5px 0 8px;
 }
 
 .UITabPaneDashboard .UIHorizontalTabs .TabsContainer {
-	height: 25px;
+	height: auto;
 }
 
 .UITabPaneDashboard .UIHorizontalTabs .GrayTabStyle .NormalTab .MiddleTab,
@@ -109,6 +106,7 @@
 	width: 34px; height: 22px;
 	float: left;
 	cursor: pointer;
+	margin-top: 4px;
 }
 
 .UITabPaneDashboard .UIHorizontalTabs .GrayTabStyle .NormalTab .LeftTab {
