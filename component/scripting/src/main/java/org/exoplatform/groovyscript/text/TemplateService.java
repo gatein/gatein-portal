@@ -119,8 +119,16 @@ public class TemplateService
       bytes = IOUtil.getStreamContentAsBytes(is);
       is.close();
 
+      // The template class name
+      int pos = url.lastIndexOf('/');
+      if (pos == -1)
+      {
+         pos = 0;
+      }
+      String name = url.substring(pos);
+
       String text = new String(bytes);
-      template = engine_.createTemplate(text);
+      template = engine_.createTemplate(url, name, text);
 
       if (cacheable)
       {

@@ -122,6 +122,7 @@ public class AbstractApplicationHandler implements IMarshaller, IUnmarshaller, I
          }
          state.setOwnerType(ownerType);
          state.setOwnerId(ownerId);
+         state.setContentId(persistenceChunks[0] + "/" +  persistenceChunks[1]);
          app = new PortletApplication(persistenceChunks[0], persistenceChunks[1]);
          app.setState(state);
       }

@@ -42,18 +42,15 @@ public class GroovyTemplate
       return builder.toString();
    }
 
-   /** The name of the template. */
-   private final String name;
-
    /** The text of the template. */
    private final String templateText;
 
    /** The groovy script. */
    private final GroovyScript script;
 
-   public GroovyTemplate(String name, Reader scriptReader) throws IOException, TemplateCompilationException
+   public GroovyTemplate(String id, String name, Reader scriptReader) throws IOException, TemplateCompilationException
    {
-      this(name, read(scriptReader));
+      this(id, name, read(scriptReader));
    }
 
    public GroovyTemplate(Reader scriptReader) throws IOException, TemplateCompilationException
@@ -63,28 +60,27 @@ public class GroovyTemplate
 
    public GroovyTemplate(String templateText) throws TemplateCompilationException
    {
-      this(null, templateText);
+      this(null, null, templateText);
    }
 
-   public GroovyTemplate(String name, String templateText) throws TemplateCompilationException
+   public GroovyTemplate(String templateId, String templateName, String templateText) throws TemplateCompilationException
    {
-      if (name == null)
+      if (templateName == null)
       {
-         name = "fic";
+         templateName = "fic";
       }
 
       //
-      GroovyScriptBuilder compiler = new GroovyScriptBuilder(name, templateText);
+      GroovyScriptBuilder compiler = new GroovyScriptBuilder(templateId, templateName, templateText);
 
       //
-      this.name = name;
       this.script = compiler.build();
       this.templateText = templateText;
    }
 
-   public String getName()
+   public String getId()
    {
-      return name;
+      return script.getTemplateId();
    }
 
    public String getClassName()
@@ -92,12 +88,12 @@ public class GroovyTemplate
       return script.getScriptClass().getName();
    }
 
-   public String getTemplateText()
+   public String getText()
    {
       return templateText;
    }
 
-   public String getGroovyText()
+   public String getGroovy()
    {
       return script.getGroovyText();
    }

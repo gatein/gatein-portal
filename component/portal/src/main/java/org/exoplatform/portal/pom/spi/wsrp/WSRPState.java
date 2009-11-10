@@ -34,9 +34,9 @@ import java.io.InputStream;
 @NodeMapping(name = WSRPState.MOP_NODE_NAME)
 public abstract class WSRPState
 {
-   static final String MOP_NODE_NAME = "mop:wsrpState";
+   static final String MOP_NODE_NAME = "mop:wsrpstate";
 
-   @Property(name = "portletId")
+   @Property(name = "portletid")
    public abstract String getPortletId();
 
    public abstract void setPortletId(String portletHandle);

@@ -29,6 +29,9 @@ public class TransientApplicationState<S> extends ApplicationState<S>
 {
 
    /** The owner type. */
+   private String contentId;
+
+   /** The owner type. */
    private String ownerType;
 
    /** The owner id. */
@@ -60,6 +63,16 @@ public class TransientApplicationState<S> extends ApplicationState<S>
    {
       this.contentState = null;
       this.uniqueId = null;
+   }
+
+   public String getContentId()
+   {
+      return contentId;
+   }
+
+   public void setContentId(String contentId)
+   {
+      this.contentId = contentId;
    }
 
    public S getContentState()

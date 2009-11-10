@@ -23,6 +23,7 @@ import org.exoplatform.commons.utils.LazyPageList;
 import org.exoplatform.portal.application.PortletPreferences;
 import org.exoplatform.portal.config.Query;
 import org.exoplatform.portal.config.model.ApplicationState;
+import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.config.model.Container;
 import org.exoplatform.portal.config.model.Dashboard;
 import org.exoplatform.portal.config.model.ModelChange;
@@ -90,6 +91,8 @@ public interface ModelDataStorage
    public void remove(NavigationData navigation) throws Exception;
 
    public void save(PortletPreferences portletPreferences) throws Exception;
+
+   public <S, I> I getId(ApplicationType<S, I> type, ApplicationState<S> state) throws Exception;
 
    public <S> S load(ApplicationState<S> state) throws Exception;
 

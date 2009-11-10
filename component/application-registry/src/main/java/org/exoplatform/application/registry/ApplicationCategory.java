@@ -41,9 +41,9 @@ public class ApplicationCategory
 
    private Date modifiedDate;
 
-   private List<Application> applications;
+   private List<Application> applications = new ArrayList<Application>();
 
-   private ArrayList<String> accessPermissions;
+   private List<String> accessPermissions = new ArrayList<String>();
 
    public String getName()
    {
@@ -105,15 +105,13 @@ public class ApplicationCategory
       this.applications = applications;
    }
 
-   public void setAccessPermissions(ArrayList<String> accessPerms)
+   public void setAccessPermissions(List<String> accessPerms)
    {
       accessPermissions = accessPerms;
    }
 
-   public ArrayList<String> getAccessPermissions()
+   public List<String> getAccessPermissions()
    {
-      if (accessPermissions == null)
-         accessPermissions = new ArrayList<String>();
       return accessPermissions;
    }
 

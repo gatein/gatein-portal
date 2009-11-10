@@ -43,6 +43,7 @@ import org.exoplatform.webui.organization.UIListPermissionSelector.EmptyIterator
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /** Created by The eXo Platform SARL Author : Hoa Nguyen hoa.nguyen@exoplatform.com Jul 4, 2006 */
 @ComponentConfig(lifecycle = UIFormLifecycle.class, template = "system:/groovy/webui/form/UIFormTabPane.gtmpl", events = {
@@ -102,7 +103,7 @@ public class UICategoryForm extends UIFormTabPane
       uiSetting.getUIStringInput(FIELD_NAME).setEditable(false).setValue(category_.getName());
       uiSetting.getUIStringInput(FIELD_DISPLAY_NAME).setValue(category_.getDisplayName());
       uiSetting.getUIStringInput(FIELD_DESCRIPTION).setValue(category_.getDescription());
-      ArrayList<String> accessPermissions = category_.getAccessPermissions();
+      List<String> accessPermissions = category_.getAccessPermissions();
       String[] per = new String[accessPermissions.size()];
       if (accessPermissions != null && accessPermissions.size() > 0)
       {

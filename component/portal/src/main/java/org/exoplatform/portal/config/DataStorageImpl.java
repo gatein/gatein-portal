@@ -22,6 +22,7 @@ import org.exoplatform.commons.utils.LazyPageList;
 import org.exoplatform.commons.utils.ListAccess;
 import org.exoplatform.portal.application.PortletPreferences;
 import org.exoplatform.portal.config.model.ApplicationState;
+import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.config.model.Container;
 import org.exoplatform.portal.config.model.Dashboard;
 import org.exoplatform.portal.config.model.ModelChange;
@@ -241,6 +242,11 @@ public class DataStorageImpl implements DataStorage, ModelDemarcation
    public <T> LazyPageList<T> find(Query<T> q) throws Exception
    {
       return find(q, null);
+   }
+
+   public <S, I> I getId(ApplicationType<S, I> type, ApplicationState<S> state) throws Exception
+   {
+      return delegate.getId(type, state);
    }
 
    public void save(PortletPreferences portletPreferences) throws Exception

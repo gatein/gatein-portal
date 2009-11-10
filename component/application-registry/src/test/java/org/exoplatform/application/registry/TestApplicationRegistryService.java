@@ -324,7 +324,7 @@ public class TestApplicationRegistryService extends BasicTestCase
       app.setApplicationName(appName);
       app.setDisplayName(appName);
       app.setApplicationType(appType);
-      app.setApplicationGroup(appGroup);
+//      app.setApplicationGroup(appGroup);
       return app;
    }
 
@@ -410,10 +410,5 @@ public class TestApplicationRegistryService extends BasicTestCase
       up.getUserInfoMap().put("user.gender", "male");
       orgService.getUserProfileHandler().saveUserProfile(up, true);
       return u;
-   }
-
-   public void testClearAllRegistry() throws Exception
-   {
-      service_.clearAllRegistries();
    }
 }

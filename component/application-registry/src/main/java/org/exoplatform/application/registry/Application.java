@@ -43,19 +43,50 @@ public class Application
 
    private ArrayList<String> accessPermissions;
 
-   private String applicationGroup;
-
    private String applicationName;
 
    private String applicationType;
 
-   private String uri;
+   /** . */
+   private String storageId;
 
-   private int minWidthResolution;
+   /** . */
+   private String id;
+
+   /** . */
+   private String iconURL;
+
+   /** . */
+   private String contentId;
+
+   public String getContentId()
+   {
+      return contentId;
+   }
+
+   public void setContentId(String contentId)
+   {
+      this.contentId = contentId;
+   }
+
+   public String getStorageId()
+   {
+      return storageId;
+   }
+
+   public void setStorageId(String storageId)
+   {
+      this.storageId = storageId;
+   }
 
    public String getId()
    {
-      return categoryName + "/" + applicationName;
+      return id;
+   }
+
+   public void setId(String id)
+   {
+      this.id = id;
    }
 
    public String getDisplayName()
@@ -121,16 +152,6 @@ public class Application
       return accessPermissions;
    }
 
-   public String getApplicationGroup()
-   {
-      return applicationGroup;
-   }
-
-   public void setApplicationGroup(String applicationGroup)
-   {
-      this.applicationGroup = applicationGroup;
-   }
-
    public String getApplicationName()
    {
       return applicationName;
@@ -151,23 +172,13 @@ public class Application
       this.applicationType = applicationType;
    }
 
-   public int getMinWidthResolution()
+   public String getIconURL()
    {
-      return minWidthResolution;
+      return iconURL;
    }
 
-   public void setMinWidthResolution(int minWidthResolution)
+   public void setIconURL(String iconURL)
    {
-      this.minWidthResolution = minWidthResolution;
-   }
-
-   public String getUri()
-   {
-      return uri;
-   }
-
-   public void setUri(String uri)
-   {
-      this.uri = uri;
+      this.iconURL = iconURL;
    }
 }

@@ -22,8 +22,8 @@ package org.exoplatform.groovyscript;
  */
 public class GroovyTemplateEngine
 {
-   public GroovyTemplate createTemplate(String text) throws TemplateCompilationException
+   public GroovyTemplate createTemplate(String id, String name, String text) throws TemplateCompilationException
    {
-      return new GroovyTemplate(text);
+      return new GroovyTemplate(id, name, text);
    }
 }

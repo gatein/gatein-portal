@@ -27,6 +27,7 @@ import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.ApplicationType;
+import org.exoplatform.portal.config.model.CloneApplicationState;
 import org.exoplatform.portal.config.model.ModelObject;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.TransientApplicationState;
@@ -35,6 +36,7 @@ import org.exoplatform.portal.config.model.portlet.PortletId;
 import org.exoplatform.portal.config.model.wsrp.WSRPId;
 import org.exoplatform.portal.pom.spi.portlet.Preferences;
 import org.exoplatform.portal.pom.spi.wsrp.WSRP;
+import org.exoplatform.portal.pom.spi.wsrp.WSRPState;
 import org.exoplatform.portal.webui.page.UIPage;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.PortalDataMapper;
@@ -177,7 +179,7 @@ public class UIAddNewApplication extends UIContainer
       Application application = event.getSource().getApplication(applicationId);
       String appType = application.getApplicationType();
       String portletName = application.getApplicationName();
-      String appGroup = application.getApplicationGroup();
+//      String appGroup = application.getApplicationGroup();
 
       // TODO review windowId for eXoWidget and eXoApplication
       UIComponent component = null;
@@ -202,25 +204,19 @@ public class UIAddNewApplication extends UIContainer
 
          UIPortlet uiPortlet = uiPage.createUIComponent(UIPortlet.class, null, null);
 
-         TransientApplicationState appState;
+         CloneApplicationState appState;
          Object appId;
          if (!remote)
          {
-            appState = new TransientApplicationState<Preferences>();
-            appId = new PortletId(appGroup, portletName);
+            appState = new CloneApplicationState<Preferences>(application.getId());
          }
          else
          {
-            appState = new TransientApplicationState<WSRP>();
-            appId = new WSRPId(application.getUri());
+            appState = new CloneApplicationState<WSRPState>(application.getId());
          }
 
-         // set URI to identify the content associated with the state
-         appState.setOwnerId(uiPage.getOwnerId());
-         appState.setOwnerType(uiPage.getOwnerType());
-
          ApplicationType applicationType = remote ? ApplicationType.WSRP_PORTLET : ApplicationType.PORTLET;
-         PortletState portletState = new PortletState(appState, applicationType, appId);
+         PortletState portletState = new PortletState(appState, applicationType, null);
 
          uiPortlet.setState(portletState);
          uiPortlet.setPortletInPortal(false);

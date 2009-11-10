@@ -19,58 +19,16 @@
 
 package org.exoplatform.application.registry.jcr;
 
-import org.exoplatform.application.gadget.Gadget;
-import org.exoplatform.application.gadget.GadgetRegistryService;
-import org.exoplatform.application.registry.Application;
-import org.exoplatform.application.registry.ApplicationCategoriesPlugins;
-import org.exoplatform.application.registry.ApplicationCategory;
-import org.exoplatform.application.registry.ApplicationRegistryService;
-import org.exoplatform.container.ExoContainer;
-import org.exoplatform.container.ExoContainerContext;
-import org.exoplatform.container.component.ComponentPlugin;
-import org.exoplatform.portal.config.UserACL;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
-import org.exoplatform.services.jcr.ext.registry.RegistryEntry;
-import org.exoplatform.services.jcr.ext.registry.RegistryService;
-import org.exoplatform.services.log.ExoLogger;
-import org.exoplatform.services.log.Log;
-import org.exoplatform.services.organization.MembershipHandler;
-import org.exoplatform.services.organization.OrganizationService;
-import org.exoplatform.web.application.gadget.GadgetApplication;
-import org.gatein.common.i18n.LocalizedString;
-import org.gatein.common.util.Tools;
-import org.gatein.pc.api.Portlet;
-import org.gatein.pc.api.PortletInvoker;
-import org.gatein.pc.api.info.MetaInfo;
-import org.gatein.pc.api.info.PortletInfo;
-import org.picocontainer.Startable;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
-import javax.jcr.Node;
-import javax.jcr.NodeIterator;
-import javax.jcr.PathNotFoundException;
-import javax.jcr.RepositoryException;
-import javax.jcr.Session;
-import javax.jcr.query.Query;
-import javax.jcr.query.QueryManager;
-import javax.jcr.query.QueryResult;
-
 /**
  * Created by The eXo Platform SARL
  * Author : Tung Pham
  *          thanhtungty@gmail.com
  * Nov 23, 2007
  */
-public class ApplicationRegistryServiceImpl implements ApplicationRegistryService, Startable
+public class ApplicationRegistryServiceImpl
 {
 
+/*
    static final private String APPLICATION_REGISTRY = "ApplicationRegistry";
 
    static final private String CATEGORY_DATA = "CategoryData";
@@ -515,14 +473,6 @@ public class ApplicationRegistryServiceImpl implements ApplicationRegistryServic
       sessionProvider.close();
    }
 
-   public void clearAllRegistries() throws Exception
-   {
-      for (ApplicationCategory cate : getApplicationCategories())
-      {
-         remove(cate);
-      }
-   }
-
    public void initListener(ComponentPlugin com) throws Exception
    {
       if (com instanceof ApplicationCategoriesPlugins)
@@ -648,5 +598,6 @@ public class ApplicationRegistryServiceImpl implements ApplicationRegistryServic
          return localizedString.getDefaultString();
       }
    }
+*/
 
 }

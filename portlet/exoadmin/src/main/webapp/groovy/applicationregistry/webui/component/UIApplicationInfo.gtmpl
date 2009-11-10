@@ -2,7 +2,7 @@
 def application = uicomponent.getApplication();
 def category = uicomponent.getApplicationCategory();
 String name = application.getApplicationName();
-String srcBG = "/" + application.getApplicationGroup() + "/skin/DefaultSkin/portletIcons/" + name + ".png";
+String srcBG = application.getIconURL();
 String srcBGError = "/eXoResources/skin/sharedImages/Icon80x80/DefaultPortlet.png";
 %>
 <div class="$uicomponent.id" id="$uicomponent.id">

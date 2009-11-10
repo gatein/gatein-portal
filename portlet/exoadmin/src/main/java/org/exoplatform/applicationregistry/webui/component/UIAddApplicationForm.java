@@ -161,10 +161,11 @@ public class UIAddApplicationForm extends UIForm
          {
             Application app = new Application();
             app.setApplicationName(gadget.getName());
-            app.setApplicationGroup(GadgetApplication.EXO_GADGET_GROUP);
+//            app.setApplicationGroup(GadgetApplication.EXO_GADGET_GROUP);
             app.setApplicationType(org.exoplatform.web.application.Application.EXO_GADGET_TYPE);
             app.setDisplayName(gadget.getTitle());
-            app.setUri(gadget.getUrl());
+//            app.setUri(gadget.getUrl());
+            app.setContentId(gadget.getUrl()); 
             String description =
                (gadget.getDescription() == null || gadget.getDescription().length() < 1) ? gadget.getName() : gadget
                   .getDescription();
@@ -196,17 +197,24 @@ public class UIAddApplicationForm extends UIForm
          String portletName = info.getName();
          Application app = new Application();
          app.setApplicationName(portletName);
-         app.setApplicationGroup(info.getApplicationName());
-         String appType = org.exoplatform.web.application.Application.EXO_PORTLET_TYPE;
+//         app.setApplicationGroup(info.getApplicationName());
+         String appType;
+         String contentId;
          if (remote)
          {
             appType = org.exoplatform.web.application.Application.WSRP_TYPE;
+            contentId = portlet.getContext().getId();
+         }
+         else
+         {
+            appType = org.exoplatform.web.application.Application.EXO_PORTLET_TYPE;
+            contentId = info.getApplicationName() + "/" + info.getName(); 
          }
          app.setApplicationType(appType);
          app.setDisplayName(Util.getLocalizedStringValue(displayNameLS, portletName));
          app.setDescription(Util.getLocalizedStringValue(descriptionLS, portletName));
          app.setAccessPermissions(new ArrayList<String>());
-         app.setUri(portlet.getContext().getId());
+         app.setContentId(contentId);
          applications.add(app);
       }
 
@@ -283,10 +291,9 @@ public class UIAddApplicationForm extends UIForm
          newApp.setApplicationName(app.getApplicationName());
          newApp.setDisplayName(app.getDisplayName());
          newApp.setApplicationType(app.getApplicationType());
-         newApp.setApplicationGroup(app.getApplicationGroup());
          newApp.setDescription(app.getDescription());
          newApp.setAccessPermissions(app.getAccessPermissions());
-         newApp.setUri(app.getUri());
+         newApp.setContentId(app.getContentId());
          return newApp;
       }
 

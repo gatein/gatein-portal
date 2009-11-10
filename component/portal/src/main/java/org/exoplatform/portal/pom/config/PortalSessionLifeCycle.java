@@ -20,6 +20,7 @@
 package org.exoplatform.portal.pom.config;
 
 import org.chromattic.spi.jcr.SessionLifeCycle;
+import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.config.RepositoryConfigurationException;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
@@ -53,9 +54,11 @@ public class PortalSessionLifeCycle implements SessionLifeCycle
       private Entry(POMSession session) throws RepositoryException
       {
          ManageableRepository repo;
+         POMSessionManager mgr = session.mgr;
          try
          {
-            repo = session.mgr.repositoryService.getRepository(session.mgr.repositoryName);
+            RepositoryService repoService = mgr.repositoryService;
+            repo = repoService.getRepository(mgr.repositoryName);
          }
          catch (RepositoryConfigurationException e)
          {
@@ -66,7 +69,7 @@ public class PortalSessionLifeCycle implements SessionLifeCycle
          this.provider = SessionProvider.createSystemProvider();
          this.count = 0;
          this.repo = repo;
-         this.workspaceName = session.mgr.workspaceName;
+         this.workspaceName = mgr.workspaceName;
       }
 
       Session openSession() throws RepositoryException

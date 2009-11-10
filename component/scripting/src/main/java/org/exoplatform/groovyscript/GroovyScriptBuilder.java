@@ -38,7 +38,10 @@ public class GroovyScriptBuilder
 {
 
    /** . */
-   private final String name;
+   private final String templateId;
+
+   /** . */
+   private final String templateName;
 
    /** . */
    private final String templateText;
@@ -52,9 +55,10 @@ public class GroovyScriptBuilder
    /** . */
    private Script script = new Script();
 
-   public GroovyScriptBuilder(String name, String templateText)
+   public GroovyScriptBuilder(String templateId, String templateName, String templateText)
    {
-      this.name = name;
+      this.templateId = templateId;
+      this.templateName = templateName;
       this.templateText = templateText;
    }
 
@@ -195,7 +199,7 @@ public class GroovyScriptBuilder
 
       //
       InputStream in = new ByteArrayInputStream(bytes);
-      GroovyCodeSource gcs = new GroovyCodeSource(in, name, "/groovy/shell");
+      GroovyCodeSource gcs = new GroovyCodeSource(in, templateName, "/groovy/shell");
       GroovyClassLoader loader = new GroovyClassLoader(Thread.currentThread().getContextClassLoader(), config);
       Class<?> scriptClass;
       try
@@ -212,7 +216,10 @@ public class GroovyScriptBuilder
       }
 
       return new GroovyScript(
-         script.toString(), scriptClass, Collections.unmodifiableMap(new HashMap<Integer, TextItem>(script.positionTable))
+         templateId,
+         script.toString(),
+         scriptClass,
+         Collections.unmodifiableMap(new HashMap<Integer, TextItem>(script.positionTable))
       );
    }
 

@@ -26,21 +26,26 @@ public class TemplateRuntimeException extends Exception
 {
 
    /** . */
+   private final String templateId;
+
+   /** . */
    private final TextItem textItem;
 
-   public TemplateRuntimeException(TextItem textItem, String message, Throwable cause)
+   public TemplateRuntimeException(String templateId, TextItem textItem, String message, Throwable cause)
    {
       super(message, cause);
 
       //
+      this.templateId = templateId;
       this.textItem = textItem;
    }
 
-   public TemplateRuntimeException(TextItem textItem, Throwable cause)
+   public TemplateRuntimeException(String templateId, TextItem textItem, Throwable cause)
    {
       super(cause);
 
       //
+      this.templateId = templateId;
       this.textItem = textItem;
    }
 
@@ -62,6 +67,15 @@ public class TemplateRuntimeException extends Exception
    @Override
    public String getMessage()
    {
-      return textItem != null ? ("Groovy template exception at " + textItem) : "Groovy template exception";
+      StringBuilder sb = new StringBuilder("Groovy template exception");
+      if (textItem != null)
+      {
+         sb.append(" at ").append(textItem);
+      }
+      if (templateId != null)
+      {
+         sb.append(" for template ").append(templateId);
+      }
+      return sb.toString();
    }
 }

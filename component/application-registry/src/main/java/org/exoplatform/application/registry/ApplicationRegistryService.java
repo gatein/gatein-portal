@@ -68,6 +68,4 @@ public interface ApplicationRegistryService
 
    //TODO: dang.tung
    public void importExoGadgets() throws Exception;
-
-   public void clearAllRegistries() throws Exception;
 }

@@ -26,9 +26,14 @@ import org.exoplatform.portal.application.PortletPreferences;
 import org.exoplatform.portal.config.Query;
 import org.exoplatform.portal.config.model.Application;
 import org.exoplatform.portal.config.model.ApplicationState;
+import org.exoplatform.portal.config.model.ApplicationType;
+import org.exoplatform.portal.config.model.CloneApplicationState;
 import org.exoplatform.portal.config.model.Container;
 import org.exoplatform.portal.config.model.ModelChange;
 import org.exoplatform.portal.config.model.ModelObject;
+import org.exoplatform.portal.config.model.gadget.GadgetId;
+import org.exoplatform.portal.config.model.portlet.PortletId;
+import org.exoplatform.portal.config.model.wsrp.WSRPId;
 import org.exoplatform.portal.pom.config.cache.DataCache;
 import org.exoplatform.portal.pom.config.tasks.DashboardTask;
 import org.exoplatform.portal.pom.data.DashboardData;
@@ -192,6 +197,48 @@ public class POMDataStorage implements ModelDataStorage, ModelDemarcation
       execute(new PortletPreferencesTask.Save(portletPreferences));
    }
 
+   public <S, I> I getId(ApplicationType<S, I> type, ApplicationState<S> state) throws Exception
+   {
+      String contentId;
+      if (state instanceof TransientApplicationState)
+      {
+         throw new UnsupportedOperationException();
+      }
+      else if (state instanceof PersistentApplicationState)
+      {
+         PersistentApplicationState pstate = (PersistentApplicationState)state;
+         contentId = execute(new PreferencesTask.GetContentId<S>(pstate.getStorageId())).getContentId();
+      }
+      else if (state instanceof CloneApplicationState)
+      {
+         CloneApplicationState cstate = (CloneApplicationState)state;
+         contentId = execute(new PreferencesTask.GetContentId<S>(cstate.getStorageId())).getContentId();
+      }
+      else
+      {
+         throw new AssertionError();
+      }
+
+      //
+      if (type == ApplicationType.PORTLET)
+      {
+         String[] chunks = contentId.split("/");
+         return (I)new PortletId(chunks[0], chunks[1]);
+      }
+      else if (type == ApplicationType.GADGET)
+      {
+         return (I)new GadgetId(contentId);
+      }
+      else if (type == ApplicationType.WSRP_PORTLET)
+      {
+         return (I)new WSRPId(contentId);
+      }
+      else
+      {
+         throw new UnsupportedOperationException();
+      }
+   }
+
    public <S> S load(ApplicationState<S> state) throws Exception
    {
       if (state instanceof TransientApplicationState)
@@ -200,9 +247,15 @@ public class POMDataStorage implements ModelDataStorage, ModelDemarcation
          S prefs = transientState.getContentState();
          return prefs != null ? prefs : null;
       }
+      else if (state instanceof CloneApplicationState)
+      {
+         PreferencesTask.Load<S> load = new PreferencesTask.Load<S>(((CloneApplicationState<S>)state).getStorageId());
+         execute(load);
+         return load.getState();
+      }
       else
       {
-         PreferencesTask.Load<S> load = new PreferencesTask.Load<S>((PersistentApplicationState<S>)state);
+         PreferencesTask.Load<S> load = new PreferencesTask.Load<S>(((PersistentApplicationState<S>)state).getStorageId());
          execute(load);
          return load.getState();
       }
@@ -216,7 +269,7 @@ public class POMDataStorage implements ModelDataStorage, ModelDemarcation
       }
       else
       {
-         PreferencesTask.Save<S> save = new PreferencesTask.Save<S>((PersistentApplicationState<S>)state, preferences);
+         PreferencesTask.Save<S> save = new PreferencesTask.Save<S>(((PersistentApplicationState<S>)state).getStorageId(), preferences);
          execute(save);
          return state;
       }

@@ -19,7 +19,6 @@
 
 package org.exoplatform.portal.pom.config.tasks;
 
-import org.exoplatform.portal.config.model.PersistentApplicationState;
 import org.exoplatform.portal.pom.config.AbstractPOMTask;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.cache.CacheableDataTask;
@@ -36,18 +35,44 @@ public abstract class PreferencesTask<S> extends AbstractPOMTask
    /** . */
    private static final Object NULL_PREFS = new Object();
 
-   public static class Load<S> extends PreferencesTask<S> implements CacheableDataTask<PersistentApplicationState<S>, Object>
+   public static class GetContentId<S> extends PreferencesTask<S>
    {
 
       /** . */
-      private final PersistentApplicationState<S> state;
+      private final String storageId;
+
+      /** . */
+      private String contentId;
+
+      public GetContentId(String storageId)
+      {
+         this.storageId = storageId;
+      }
+
+      public void run(POMSession session) throws Exception
+      {
+         Customization<S> customization = (Customization<S>)session.findCustomizationById(storageId);
+         contentId = customization.getContentId();
+      }
+
+      public String getContentId()
+      {
+         return contentId;
+      }
+   }
+
+   public static class Load<S> extends PreferencesTask<S> implements CacheableDataTask<String, Object>
+   {
+
+      /** . */
+      private final String storageId;
 
       /** . */
       private S prefs;
 
-      public Load(PersistentApplicationState<S> state)
+      public Load(String storageId)
       {
-         this.state = state;
+         this.storageId = storageId;
       }
 
       public DataAccessMode getAccessMode()
@@ -73,15 +98,14 @@ public abstract class PreferencesTask<S> extends AbstractPOMTask
          return prefs == null ? NULL_PREFS : prefs;
       }
 
-      public PersistentApplicationState<S> getKey()
+      public String getKey()
       {
-         return state;
+         return storageId;
       }
 
       public void run(POMSession session) throws Exception
       {
-         String id = state.getStorageId();
-         Customization<S> customization = (Customization<S>)session.findCustomizationById(id);
+         Customization<S> customization = (Customization<S>)session.findCustomizationById(storageId);
          prefs = customization.getVirtualState();
       }
 
@@ -93,22 +117,22 @@ public abstract class PreferencesTask<S> extends AbstractPOMTask
       @Override
       public String toString()
       {
-         return "PreferencesTask.Load[state=" + state.getStorageId() + "]";
+         return "PreferencesTask.Load[id=" + storageId + "]";
       }
    }
 
-   public static class Save<S> extends PreferencesTask<S> implements CacheableDataTask<PersistentApplicationState<S>, Object>
+   public static class Save<S> extends PreferencesTask<S> implements CacheableDataTask<String, Object>
    {
 
       /** . */
-      private final PersistentApplicationState<S> state;
+      private final String storageId;
 
       /** . */
       private final S prefs;
 
-      public Save(PersistentApplicationState<S> state, S prefs)
+      public Save(String storageId, S prefs)
       {
-         this.state = state;
+         this.storageId = storageId;
          this.prefs = prefs;
       }
 
@@ -132,17 +156,15 @@ public abstract class PreferencesTask<S> extends AbstractPOMTask
          return prefs == null ? NULL_PREFS : prefs ;
       }
 
-      public PersistentApplicationState<S> getKey()
+      public String getKey()
       {
-         return state;
+         return storageId;
       }
 
       public void run(POMSession session) throws Exception
       {
 
-         String id = state.getStorageId();
-
-         Customization<S> customization = (Customization<S>)session.findCustomizationById(id);
+         Customization<S> customization = (Customization<S>)session.findCustomizationById(storageId);
 
          if (prefs != null)
          {
@@ -157,7 +179,7 @@ public abstract class PreferencesTask<S> extends AbstractPOMTask
       @Override
       public String toString()
       {
-         return "PreferencesTask.Save[state=" + state.getStorageId() + "]";
+         return "PreferencesTask.Save[id=" + storageId + "]";
       }
    }
 }

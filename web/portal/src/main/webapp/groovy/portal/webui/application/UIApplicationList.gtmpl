@@ -37,7 +37,7 @@ def selectedCategory = uicomponent.getSelectedCategory();
 								for(application in category.getApplications()) {
 									String applicationLabel = application.getDisplayName();
 									if(applicationLabel.length() > 30) applicationLabel = applicationLabel.substring(0, 27) + "...";
-									String srcBG = "/" + application.getApplicationGroup() + "/skin/DefaultSkin/portletIcons/" + application.getApplicationName() + ".png";
+									String srcBG = application.getIconURL();
 									String srcBGError = "/eXoResources/skin/sharedImages/Icon80x80/DefaultPortlet.png";
 								%>
 									<div class="UIVTab VTabStyle3" id="<%=application.getId();%>" onmousedown="eXo.portal.PortalDragDrop.init.call(this, event);">

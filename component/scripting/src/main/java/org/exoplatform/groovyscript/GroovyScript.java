@@ -34,6 +34,9 @@ public class GroovyScript
 {
 
    /** . */
+   private final String templateId;
+
+   /** . */
    private final String groovyText;
 
    /** . */
@@ -42,11 +45,17 @@ public class GroovyScript
    /** . */
    private final Map<Integer, TextItem> lineTable;
 
-   public GroovyScript(String groovyText, Class<?> scriptClass, Map<Integer, TextItem> lineTable)
+   public GroovyScript(String templateId, String groovyText, Class<?> scriptClass, Map<Integer, TextItem> lineTable)
    {
+      this.templateId = templateId;
       this.groovyText = groovyText;
       this.scriptClass = scriptClass;
       this.lineTable = lineTable;
+   }
+
+   public String getTemplateId()
+   {
+      return templateId;
    }
 
    public String getGroovyText()
@@ -148,6 +157,6 @@ public class GroovyScript
       t.setStackTrace(trace);
 
       //
-      return new TemplateRuntimeException(firstItem, t);
+      return new TemplateRuntimeException(templateId, firstItem, t);
    }
 }

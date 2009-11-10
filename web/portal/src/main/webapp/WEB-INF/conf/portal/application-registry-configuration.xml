@@ -73,7 +73,7 @@
 
    <component>
       <key>org.exoplatform.application.registry.ApplicationRegistryService</key>
-      <type>org.exoplatform.application.registry.jcr.ApplicationRegistryServiceImpl</type>
+      <type>org.exoplatform.application.registry.mop.MOPApplicationRegistryService</type>
       <component-plugins>
          <component-plugin>
             <name>new.portal.portlets.registry</name>
@@ -123,8 +123,8 @@
                                  <field name="applicationType">
                                     <string>portlet</string>
                                  </field>
-                                 <field name="applicationGroup">
-                                    <string>exoadmin</string>
+                                 <field name="contentId">
+                                    <string>exoadmin/ApplicationRegistryPortlet</string>
                                  </field>
                                  <field name="accessPermissions">
                                     <collection type="java.util.ArrayList" item-type="java.lang.String">
@@ -155,8 +155,8 @@
                                  <field name="applicationType">
                                     <string>portlet</string>
                                  </field>
-                                 <field name="applicationGroup">
-                                    <string>exoadmin</string>
+                                 <field name="contentId">
+                                    <string>exoadmin/OrganizationPortlet</string>
                                  </field>
                                  <field name="accessPermissions">
                                     <collection type="java.util.ArrayList" item-type="java.lang.String">
@@ -187,8 +187,8 @@
                                  <field name="applicationType">
                                     <string>portlet</string>
                                  </field>
-                                 <field name="applicationGroup">
-                                    <string>exoadmin</string>
+                                 <field name="contentId">
+                                    <string>exoadmin/AccountPortlet</string>
                                  </field>
                                  <field name="accessPermissions">
                                     <collection type="java.util.ArrayList" item-type="java.lang.String">
@@ -246,8 +246,8 @@
                                  <field name="applicationType">
                                     <string>portlet</string>
                                  </field>
-                                 <field name="applicationGroup">
-                                    <string>web</string>
+                                 <field name="contentId">
+                                    <string>web/IFramePortlet</string>
                                  </field>
                                  <field name="accessPermissions">
                                     <collection type="java.util.ArrayList" item-type="java.lang.String">
@@ -275,8 +275,8 @@
                                  <field name="applicationType">
                                     <string>portlet</string>
                                  </field>
-                                 <field name="applicationGroup">
-                                    <string>web</string>
+                                 <field name="contentId">
+                                    <string>web/SiteMapPortlet</string>
                                  </field>
                                  <field name="accessPermissions">
                                     <collection type="java.util.ArrayList" item-type="java.lang.String">
@@ -331,8 +331,8 @@
                                  <field name="applicationType">
                                     <string>portlet</string>
                                  </field>
-                                 <field name="applicationGroup">
-                                    <string>dashboard</string>
+                                 <field name="contentId">
+                                    <string>dashboard/DashboardPortlet</string>
                                  </field>
                                  <field name="accessPermissions">
                                     <collection type="java.util.ArrayList" item-type="java.lang.String">
@@ -360,8 +360,8 @@
                                  <field name="applicationType">
                                     <string>portlet</string>
                                  </field>
-                                 <field name="applicationGroup">
-                                    <string>dashboard</string>
+                                 <field name="contentId">
+                                    <string>dashboard/GadgetPortlet</string>
                                  </field>
                                  <field name="accessPermissions">
                                     <collection type="java.util.ArrayList" item-type="java.lang.String">
@@ -416,8 +416,8 @@
                                  <field name="applicationType">
                                     <string>eXoGadget</string>
                                  </field>
-                                 <field name="applicationGroup">
-                                    <string>eXoGadgets</string>
+                                 <field name="contentId">
+                                    <string>Todo</string>
                                  </field>
                                  <field name="accessPermissions">
                                     <collection type="java.util.ArrayList" item-type="java.lang.String">
@@ -447,8 +447,8 @@
                                  <field name="applicationType">
                                     <string>eXoGadget</string>
                                  </field>
-                                 <field name="applicationGroup">
-                                    <string>eXoGadgets</string>
+                                 <field name="contentId">
+                                    <string>Calendar</string>
                                  </field>
                                  <field name="accessPermissions">
                                     <collection type="java.util.ArrayList" item-type="java.lang.String">
@@ -478,8 +478,8 @@
                                  <field name="applicationType">
                                     <string>eXoGadget</string>
                                  </field>
-                                 <field name="applicationGroup">
-                                    <string>eXoGadgets</string>
+                                 <field name="contentId">
+                                    <string>Calculator</string>
                                  </field>
                                  <field name="accessPermissions">
                                     <collection type="java.util.ArrayList" item-type="java.lang.String">
@@ -507,8 +507,8 @@
                                  <field name="applicationType">
                                     <string>eXoGadget</string>
                                  </field>
-                                 <field name="applicationGroup">
-                                    <string>eXoGadgets</string>
+                                 <field name="contentId">
+                                    <string>rssAggregator</string>
                                  </field>
                                  <field name="accessPermissions">
                                     <collection type="java.util.ArrayList" item-type="java.lang.String">

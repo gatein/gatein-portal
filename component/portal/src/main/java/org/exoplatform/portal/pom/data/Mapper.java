@@ -22,6 +22,7 @@ package org.exoplatform.portal.pom.data;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.model.ApplicationState;
 import org.exoplatform.portal.config.model.ApplicationType;
+import org.exoplatform.portal.config.model.CloneApplicationState;
 import org.exoplatform.portal.config.model.ModelChange;
 import org.exoplatform.portal.config.model.PersistentApplicationState;
 import org.exoplatform.portal.config.model.PortalConfig;
@@ -973,6 +974,16 @@ public class Mapper
          {
             dstCustomization.setState(state);
          }
+      }
+      else if (instanceState instanceof CloneApplicationState)
+      {
+         CloneApplicationState cloneState = (CloneApplicationState)instanceState;
+
+         //
+         Customization<?> customization = session.findCustomizationById(cloneState.getStorageId());
+
+         //
+         dst.customize(customization);
       }
    }
 

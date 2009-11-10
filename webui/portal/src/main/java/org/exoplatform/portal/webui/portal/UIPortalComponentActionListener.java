@@ -20,9 +20,12 @@
 package org.exoplatform.portal.webui.portal;
 
 import org.exoplatform.commons.utils.PageList;
+import org.exoplatform.container.ExoContainer;
 import org.exoplatform.portal.application.PortalRequestContext;
+import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.model.ApplicationType;
+import org.exoplatform.portal.config.model.CloneApplicationState;
 import org.exoplatform.portal.config.model.Container;
 import org.exoplatform.portal.config.model.TransientApplicationState;
 import org.exoplatform.portal.config.model.gadget.GadgetId;
@@ -50,6 +53,7 @@ import org.exoplatform.services.organization.Query;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.web.application.Application;
 import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.UITabPane;
@@ -246,21 +250,23 @@ public class UIPortalComponentActionListener
                app = appList.getApplication(sourceId);
 
                String appType = app.getApplicationType();
-               ApplicationType<?, ?> applicationType;
+               ApplicationType applicationType;
                org.exoplatform.application.registry.Application temp = null;
                if (appType.equals(Application.EXO_GADGET_TYPE))
                {
-                  temp = app;
-                  app = appList.getApplication("dashboard/GadgetPortlet");
-                  applicationType = ApplicationType.PORTLET;
+                  applicationType = ApplicationType.GADGET;
                }
                else if (appType.equals(Application.EXO_PORTLET_TYPE))
                {
                   applicationType = ApplicationType.PORTLET;
                }
-               else
+               else if (appType.equals(Application.WSRP_TYPE))
                {
                   applicationType = ApplicationType.WSRP_PORTLET;
+               }
+               else
+               {
+                  throw new AssertionError("Wrong type " + appType);
                }
 
                //
@@ -288,46 +294,14 @@ public class UIPortalComponentActionListener
                UIPage uiPage = uiTarget.getAncestorOfType(UIPage.class);
 
                //
-               Object applicationid;
-               if (applicationType == ApplicationType.PORTLET)
-               {
-                  applicationid = new PortletId(app.getApplicationGroup(), app.getApplicationName());
-               }
-               else if (applicationType == ApplicationType.WSRP_PORTLET)
-               {
-                  applicationid = new WSRPId(app.getUri());
-               }
-               else
-               {
-                  throw new AssertionError();
-               }
+               CloneApplicationState state = new CloneApplicationState<Object>(app.getStorageId());
 
                //
-               TransientApplicationState<?> applicationState;
-               if (applicationType.equals(ApplicationType.PORTLET) && temp != null)
-               {
-                  UIGadget uiGadget = uiApp.createUIComponent(pcontext, UIGadget.class, null, null);
-                  uiGadget.setGadgetId(new GadgetId(temp.getApplicationName()));
-                  Preferences pref = new Preferences();
-                  pref.setValue("url", uiGadget.getUrl());
-                  applicationState = new TransientApplicationState(pref);
-               }
-               else
-               {
-                  applicationState = new TransientApplicationState();
-               }
-
-               if (uiPage != null)
-               {
-                  applicationState.setOwnerType(uiPage.getOwnerType());
-               }
-               else
-               {
-                  applicationState.setOwnerType(Util.getUIPortal().getOwnerType());
-               }
-               applicationState.setOwnerId(Util.getUIPortal().getOwner());
-
-               PortletState portletState = new PortletState(applicationState, applicationType, applicationid);
+               WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
+               ExoContainer container = context.getApplication().getApplicationServiceContainer();
+               DataStorage dataStorage = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
+               Object id = dataStorage.getId(applicationType, state);
+               PortletState portletState = new PortletState(state, applicationType, id);
 
                uiPortlet.setState(portletState);
 

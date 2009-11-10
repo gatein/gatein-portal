@@ -20,7 +20,11 @@
 package org.exoplatform.portal.pom.config;
 
 import org.chromattic.api.ChromatticBuilder;
+import org.chromattic.api.ChromatticSession;
 import org.chromattic.apt.InstrumentorImpl;
+import org.exoplatform.portal.pom.registry.CategoryDefinition;
+import org.exoplatform.portal.pom.registry.ContentDefinition;
+import org.exoplatform.portal.pom.registry.ContentRegistry;
 import org.exoplatform.portal.pom.spi.gadget.Gadget;
 import org.exoplatform.portal.pom.spi.gadget.GadgetContentProvider;
 import org.exoplatform.portal.pom.spi.gadget.GadgetState;
@@ -188,7 +192,14 @@ public class POMSessionManager
             builder.add(GadgetState.class);
             builder.add(WSRPState.class);
 
-            CustomizationContextProviderRegistry customizationContextResolvers = new CustomizationContextProviderRegistry();
+            //
+            builder.add(ContentRegistry.class);
+            builder.add(CategoryDefinition.class);
+            builder.add(ContentDefinition.class);
+
+            //
+            CustomizationContextProviderRegistry customizationContextResolvers =
+               new CustomizationContextProviderRegistry();
 
             //
             ContentManagerRegistry contentManagerRegistry = new ContentManagerRegistry();
@@ -235,6 +246,11 @@ public class POMSessionManager
       {
          session = new POMSession(this);
          current.set(session);
+
+         //
+         // A bit ugly but we will improve that later
+         ChromatticSession csession = session.getSession();
+         csession.addEventListener(new Injector(session));
       }
       else
       {

@@ -1,0 +1,641 @@
+/*
+ * Copyright (C) 2003-2007 eXo Platform SAS.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation; either version 3
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, see<http://www.gnu.org/licenses/>.
+ */
+package org.exoplatform.application.registry.mop;
+
+import org.exoplatform.application.gadget.Gadget;
+import org.exoplatform.application.gadget.GadgetRegistryService;
+import org.exoplatform.application.registry.Application;
+import org.exoplatform.application.registry.ApplicationCategoriesPlugins;
+import org.exoplatform.application.registry.ApplicationCategory;
+import org.exoplatform.application.registry.ApplicationRegistryService;
+import org.exoplatform.container.ExoContainer;
+import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.container.component.ComponentPlugin;
+import org.exoplatform.portal.config.UserACL;
+import org.exoplatform.portal.pom.config.POMSession;
+import org.exoplatform.portal.pom.config.POMSessionManager;
+import org.exoplatform.portal.pom.registry.CategoryDefinition;
+import org.exoplatform.portal.pom.registry.ContentDefinition;
+import org.exoplatform.portal.pom.registry.ContentRegistry;
+import org.exoplatform.portal.pom.spi.portlet.Preferences;
+import org.exoplatform.portal.pom.spi.wsrp.WSRP;
+import org.gatein.common.i18n.LocalizedString;
+import org.gatein.common.util.Tools;
+import org.gatein.mop.api.content.ContentType;
+import org.gatein.mop.api.content.Customization;
+import org.gatein.pc.api.Portlet;
+import org.gatein.pc.api.PortletInvoker;
+import org.gatein.pc.api.info.MetaInfo;
+import org.gatein.pc.api.info.PortletInfo;
+import org.picocontainer.Startable;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Set;
+
+/**
+ * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
+ * @version $Revision$
+ */
+public class MOPApplicationRegistryService implements ApplicationRegistryService, Startable
+{
+
+   /** . */
+   private static final String REMOTE_CATEGORY_NAME = "remote";
+
+   /** . */
+   private List<ApplicationCategoriesPlugins> plugins;
+
+   /** . */
+   private final POMSessionManager pomMGr;
+
+   public MOPApplicationRegistryService(POMSessionManager pomMGr)
+   {
+      this.pomMGr = pomMGr;
+   }
+
+   public void initListener(ComponentPlugin com) throws Exception
+   {
+      if (com instanceof ApplicationCategoriesPlugins)
+      {
+         if (plugins == null)
+         {
+            plugins = new ArrayList<ApplicationCategoriesPlugins>();
+         }
+         plugins.add((ApplicationCategoriesPlugins)com);
+      }
+   }
+
+   public List<ApplicationCategory> getApplicationCategories(
+      Comparator<ApplicationCategory> sortComparator,
+      String accessUser,
+      String... appTypes) throws Exception
+   {
+      POMSession session = POMSessionManager.getSession();
+      ContentRegistry registry = session.getContentRegistry();
+
+      //
+      List<ApplicationCategory> categories = new ArrayList<ApplicationCategory>();
+      for (CategoryDefinition categoryDef : registry.getCategoryList())
+      {
+         ApplicationCategory category = load(categoryDef, appTypes);
+         categories.add(category);
+      }
+
+      //
+      if (sortComparator != null)
+      {
+         Collections.sort(categories, sortComparator);
+      }
+
+      //
+      return categories;
+   }
+
+   public List<ApplicationCategory> getApplicationCategories(String accessUser, String... appTypes) throws Exception
+   {
+      return getApplicationCategories(null, accessUser, appTypes);
+   }
+
+   public List<ApplicationCategory> getApplicationCategories() throws Exception
+   {
+      return getApplicationCategories(null);
+   }
+
+   public List<ApplicationCategory> getApplicationCategories(Comparator<ApplicationCategory> sortComparator) throws Exception
+   {
+      return getApplicationCategories(sortComparator, null);
+   }
+
+   public ApplicationCategory getApplicationCategory(String name) throws Exception
+   {
+      POMSession session = POMSessionManager.getSession();
+      ContentRegistry registry = session.getContentRegistry();
+
+      //
+      CategoryDefinition categoryDef = registry.getCategory(name);
+      if (categoryDef != null)
+      {
+         return load(categoryDef);
+      }
+      else
+      {
+         return null;
+      }
+   }
+
+   public void save(ApplicationCategory category) throws Exception
+   {
+      POMSession session = POMSessionManager.getSession();
+      ContentRegistry registry = session.getContentRegistry();
+
+      //
+      String categoryName = category.getName();
+
+      //
+      CategoryDefinition categoryDef = registry.getCategory(categoryName);
+      if (categoryDef == null)
+      {
+         categoryDef = registry.createCategory(categoryName);
+      }
+
+      //
+      categoryDef.setDisplayName(category.getDisplayName());
+      categoryDef.setCreationDate(category.getCreatedDate());
+      categoryDef.setLastModificationDate(category.getModifiedDate());
+      categoryDef.setDescription(category.getDescription());
+      categoryDef.setAccessPermissions(category.getAccessPermissions());
+   }
+
+   public void remove(ApplicationCategory category) throws Exception
+   {
+      POMSession session = POMSessionManager.getSession();
+      ContentRegistry registry = session.getContentRegistry();
+
+      //
+      registry.getCategoryMap().remove(category.getName());
+   }
+
+   public List<Application> getApplications(ApplicationCategory category, String... appTypes) throws Exception
+   {
+      return getApplications(category, null, appTypes);
+   }
+
+   public List<Application> getApplications(
+      ApplicationCategory category,
+      Comparator<Application> sortComparator,
+      String... appTypes) throws Exception
+   {
+      POMSession session = POMSessionManager.getSession();
+      ContentRegistry registry = session.getContentRegistry();
+
+      //
+      CategoryDefinition categoryDef = registry.getCategory(category.getName());
+      List<Application> applications = load(categoryDef, appTypes).getApplications();
+
+      //
+      if (sortComparator != null)
+      {
+         Collections.sort(applications, sortComparator);
+      }
+
+      //
+      return applications;
+   }
+
+   public List<Application> getAllApplications() throws Exception
+   {
+      List<Application> applications = new ArrayList<Application>();
+      List<ApplicationCategory> categories = getApplicationCategories();
+      for (ApplicationCategory category : categories)
+      {
+         applications.addAll(getApplications(category));
+      }
+      return applications;
+   }
+
+   public Application getApplication(String id) throws Exception
+   {
+      String[] fragments = id.split("/");
+      if (fragments.length < 2)
+      {
+         throw new Exception("Invalid Application Id: [" + id + "]");
+      }
+      return getApplication(fragments[0], fragments[1]);
+   }
+
+   public Application getApplication(String category, String name) throws Exception
+   {
+      POMSession session = POMSessionManager.getSession();
+      ContentRegistry registry = session.getContentRegistry();
+
+      //
+      CategoryDefinition categoryDef = registry.getCategory(category);
+      if (categoryDef != null)
+      {
+         ContentDefinition contentDef = categoryDef.getContentMap().get(name);
+         if (contentDef != null)
+         {
+            return load(contentDef);
+         }
+      }
+
+      //
+      return null;
+   }
+
+   public void save(ApplicationCategory category, Application application) throws Exception
+   {
+      POMSession session = POMSessionManager.getSession();
+      ContentRegistry registry = session.getContentRegistry();
+
+      //
+      String categoryName = category.getName();
+      CategoryDefinition categoryDef = registry.getCategory(categoryName);
+      if (categoryDef == null)
+      {
+         categoryDef = registry.createCategory(categoryName);
+         save(category, categoryDef);
+      }
+
+      //
+      ContentDefinition contentDef = null;
+      CategoryDefinition applicationCategoryDef = registry.getCategory(application.getCategoryName());
+      String applicationName = application.getApplicationName();
+      if (applicationCategoryDef != null)
+      {
+         contentDef = applicationCategoryDef.getContentMap().get(applicationName);
+      }
+      if (contentDef == null)
+      {
+         String contentId = application.getContentId();
+         ContentType<?> contentType;
+         if ("portlet".equals(application.getApplicationType()))
+         {
+            contentType = Preferences.CONTENT_TYPE;
+         }
+         else if ("eXoGadget".equals(application.getApplicationType()))
+         {
+            contentType = org.exoplatform.portal.pom.spi.gadget.Gadget.CONTENT_TYPE;
+         }
+         else
+         {
+            throw new UnsupportedOperationException("Nnsupported type " + application.getApplicationType());
+         }
+         String definitionName = application.getDisplayName().replace(' ', '_');
+         contentDef = categoryDef.createContent(definitionName, contentType, contentId);
+      }
+      else
+      {
+         // A JCR move actually
+         categoryDef.getContentList().add(contentDef);
+      }
+
+      // Update state
+      save(application, contentDef);
+   }
+
+   public void update(Application application) throws Exception
+   {
+      POMSession session = POMSessionManager.getSession();
+      ContentRegistry registry = session.getContentRegistry();
+
+      //
+      String categoryName = application.getCategoryName();
+      CategoryDefinition categoryDef = registry.getCategory(categoryName);
+      if (categoryDef == null)
+      {
+         throw new IllegalStateException();
+      }
+
+      //
+      ContentDefinition contentDef = categoryDef.getContentMap().get(application.getApplicationName());
+      if (contentDef == null)
+      {
+         throw new IllegalStateException();
+      }
+
+      // Update state
+      save(application, contentDef);
+   }
+
+   public void remove(Application app) throws Exception
+   {
+      if (app == null)
+      {
+         throw new NullPointerException();
+      }
+
+      //
+      POMSession session = POMSessionManager.getSession();
+      ContentRegistry registry = session.getContentRegistry();
+
+      //
+      String categoryName = app.getCategoryName();
+      CategoryDefinition categoryDef = registry.getCategory(categoryName);
+
+      //
+      if (categoryDef != null)
+      {
+
+         String contentName = app.getApplicationName();
+         categoryDef.getContentMap().remove(contentName);
+      }
+   }
+
+   public void importExoGadgets() throws Exception
+   {
+      POMSession session = POMSessionManager.getSession();
+      ContentRegistry registry = session.getContentRegistry();
+
+      //
+      ExoContainer container = ExoContainerContext.getCurrentContainer();
+      GadgetRegistryService gadgetService = (GadgetRegistryService)container.getComponentInstanceOfType(GadgetRegistryService.class);
+      List<Gadget> eXoGadgets = gadgetService.getAllGadgets();
+
+      //
+      if (eXoGadgets != null)
+      {
+         ArrayList<String> permissions = new ArrayList<String>();
+         permissions.add(UserACL.EVERYONE);
+         String categoryName = "Gadgets";
+
+         //
+         CategoryDefinition category = registry.getCategory(categoryName);
+         if (category == null)
+         {
+            category = registry.createCategory(categoryName);
+            category.setDisplayName(categoryName);
+            category.setDescription(categoryName);
+            category.setAccessPermissions(permissions);
+         }
+
+         //
+         for (Gadget ele : eXoGadgets)
+         {
+            ContentDefinition app = category.getContentMap().get(ele.getName());
+            if (app == null)
+            {
+               app = category.createContent(ele.getName(), org.exoplatform.portal.pom.spi.gadget.Gadget.CONTENT_TYPE, ele.getName());
+               app.setDisplayName(ele.getTitle());
+               app.setDescription(ele.getDescription());
+               app.setAccessPermissions(permissions);
+            }
+         }
+      }
+   }
+
+   public void importAllPortlets() throws Exception
+   {
+      POMSession session = POMSessionManager.getSession();
+      ContentRegistry registry = session.getContentRegistry();
+
+      //
+      ExoContainer manager = ExoContainerContext.getCurrentContainer();
+      PortletInvoker portletInvoker = (PortletInvoker)manager.getComponentInstance(PortletInvoker.class);
+      Set<Portlet> portlets = portletInvoker.getPortlets();
+
+      //
+      for (Portlet portlet : portlets)
+      {
+         PortletInfo info = portlet.getInfo();
+         String portletApplicationName = info.getApplicationName();
+         String portletName = info.getName();
+
+         // Need to sanitize portlet and application names in case they contain characters that would
+         // cause an improper Application name
+         portletApplicationName = portletApplicationName.replace('/', '_');
+         portletName = portletName.replace('/', '_');
+
+         LocalizedString keywordsLS = info.getMeta().getMetaValue(MetaInfo.KEYWORDS);
+
+         String[] categoryNames = null;
+         if (keywordsLS != null)
+         {
+            String keywords = keywordsLS.getDefaultString();
+            if (keywords != null && keywords.length() != 0)
+            {
+               categoryNames = keywords.split(",");
+            }
+         }
+
+         if (categoryNames == null || categoryNames.length == 0)
+         {
+            categoryNames = new String[]{portletApplicationName};
+         }
+
+         if (portlet.isRemote())
+         {
+            categoryNames = Tools.appendTo(categoryNames, REMOTE_CATEGORY_NAME);
+         }
+
+         //
+         for (String categoryName : categoryNames)
+         {
+            categoryName = categoryName.trim();
+
+            //
+            CategoryDefinition category = registry.getCategory(categoryName);
+
+            //
+            if (category == null)
+            {
+               category = registry.createCategory(categoryName);
+               category.setDisplayName(categoryName);
+            }
+
+            //
+            ContentDefinition app = category.getContentMap().get(portletName);
+            if (app == null)
+            {
+               LocalizedString descriptionLS = portlet.getInfo().getMeta().getMetaValue(MetaInfo.DESCRIPTION);
+               LocalizedString displayNameLS = portlet.getInfo().getMeta().getMetaValue(MetaInfo.DISPLAY_NAME);
+
+               // julien: ????
+               // getLocalizedStringValue(descriptionLS, portletName);
+
+               ContentType<?> contentType;
+               String contentId;
+               if (portlet.isRemote())
+               {
+                  contentType = WSRP.CONTENT_TYPE;
+                  contentId = portlet.getContext().getId();
+               }
+               else
+               {
+                  contentType = Preferences.CONTENT_TYPE;
+                  contentId = info.getApplicationName() + "/" + info.getName();
+               }
+
+
+               //
+               app = category.createContent(portletName, contentType, contentId);
+               app.setDisplayName(getLocalizedStringValue(displayNameLS, portletName));
+               app.setDescription(getLocalizedStringValue(descriptionLS, portletName));
+            }
+         }
+      }
+   }
+
+   private boolean isApplicationType(Application app, String... appTypes)
+   {
+      if (appTypes == null || appTypes.length == 0)
+      {
+         return true;
+      }
+      for (String appType : appTypes)
+      {
+         if (appType.equals(app.getApplicationType()))
+         {
+            return true;
+         }
+      }
+      return false;
+   }
+
+   private void save(ApplicationCategory category, CategoryDefinition categoryDef)
+   {
+      categoryDef.setDisplayName(category.getDisplayName());
+      categoryDef.setDescription(category.getDescription());
+      categoryDef.setAccessPermissions(category.getAccessPermissions());
+      categoryDef.setCreationDate(category.getCreatedDate());
+      categoryDef.setLastModificationDate(category.getModifiedDate());
+   }
+
+   private ApplicationCategory load(CategoryDefinition categoryDef, String... appTypes)
+   {
+      ApplicationCategory category = new ApplicationCategory();
+
+      //
+      category.setName(categoryDef.getName());
+      category.setDisplayName(categoryDef.getDisplayName());
+      category.setDescription(categoryDef.getDescription());
+      category.setAccessPermissions(new ArrayList<String>(categoryDef.getAccessPermissions()));
+      category.setCreatedDate(categoryDef.getCreationDate());
+      category.setModifiedDate(categoryDef.getLastModificationDate());
+
+      //
+      for (ContentDefinition contentDef : categoryDef.getContentList())
+      {
+         Application application = load(contentDef);
+         if (isApplicationType(application, appTypes))
+         {
+            category.getApplications().add(application);
+         }
+      }
+
+      //
+      return category;
+   }
+
+   private void save(Application application, ContentDefinition contentDef)
+   {
+      contentDef.setDisplayName(application.getDisplayName());
+      contentDef.setDescription(application.getDescription());
+      contentDef.setAccessPermissions(application.getAccessPermissions());
+      contentDef.setCreationDate(application.getCreatedDate());
+      contentDef.setLastModificationDate(application.getModifiedDate());
+   }
+
+   private Application load(ContentDefinition contentDef)
+   {
+      String applicationType;
+      ContentType<?> contentType = contentDef.getCustomization().getType();
+      if (contentType == org.exoplatform.portal.pom.spi.gadget.Gadget.CONTENT_TYPE)
+      {
+         applicationType = org.exoplatform.web.application.Application.EXO_GADGET_TYPE;
+      }
+      else if (contentType == WSRP.CONTENT_TYPE)
+      {
+         applicationType = org.exoplatform.web.application.Application.WSRP_TYPE;
+      }
+      else if (contentType == Preferences.CONTENT_TYPE)
+      {
+         applicationType = org.exoplatform.web.application.Application.EXO_PORTLET_TYPE;
+      }
+      else
+      {
+         throw new AssertionError();
+      }
+
+
+      //
+      Application application = new Application();
+      application.setId(contentDef.getCategory().getName() + "/" + contentDef.getName());
+      application.setCategoryName(contentDef.getCategory().getName());
+      application.setApplicationType(applicationType);
+      application.setApplicationName(contentDef.getName());
+      application.setIconURL(getApplicationIconURL(contentDef));
+      application.setDisplayName(contentDef.getDisplayName());
+      application.setDescription(contentDef.getDescription());
+      application.setAccessPermissions(new ArrayList<String>(contentDef.getAccessPermissions()));
+      application.setCreatedDate(contentDef.getCreationDate());
+      application.setModifiedDate(contentDef.getLastModificationDate());
+      application.setStorageId(contentDef.getCustomization().getId());
+      application.setContentId(contentDef.getCustomization().getContentId());
+      return application;
+   }
+
+   private String getLocalizedStringValue(LocalizedString localizedString, String portletName)
+   {
+      if (localizedString == null || localizedString.getDefaultString() == null)
+      {
+         return portletName;
+      }
+      else
+      {
+         return localizedString.getDefaultString();
+      }
+   }
+
+   private static String getApplicationIconURL(ContentDefinition contentDef)
+   {
+      Customization customization = contentDef.getCustomization();
+      if (customization != null)
+      {
+         ContentType type = customization.getType();
+         String contentId = customization.getContentId();
+         if (type == Preferences.CONTENT_TYPE)
+         {
+            String[] chunks = contentId.split("/");
+            if (chunks.length == 2)
+            {
+               return "/" + chunks[0] + "/skin/DefaultSkin/portletIcons/" + chunks[1] + ".png";
+            }
+         }
+         else if (type == org.exoplatform.portal.pom.spi.gadget.Gadget.CONTENT_TYPE)
+         {
+            return "/" + "eXoGadgets" + "/skin/DefaultSkin/portletIcons/" + contentId + ".png";
+         }
+      }
+
+      //
+      return null;
+   }
+
+   public void start()
+   {
+      if (plugins != null)
+      {
+         pomMGr.openSession();
+         boolean save = false;
+         try
+         {
+            for (ApplicationCategoriesPlugins plugin : plugins)
+            {
+               plugin.run();
+            }
+            save = true;
+         }
+         catch (Exception e)
+         {
+            // log.error(e);
+            e.printStackTrace();
+         }
+         finally
+         {
+            pomMGr.closeSession(save);
+         }
+      }
+   }
+
+   public void stop()
+   {
+   }
+}
