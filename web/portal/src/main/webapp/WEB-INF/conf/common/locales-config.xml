@@ -51,20 +51,18 @@
   </locale-config>
 
   <locale-config>
+    <locale>es</locale>
+    <output-encoding>UTF-8</output-encoding>
+    <input-encoding>UTF-8</input-encoding>
+    <description>Default configuration for spanish locale</description>
+  </locale-config>
+
+  <locale-config>
     <locale>uk</locale>
     <output-encoding>UTF-8</output-encoding>
     <input-encoding>UTF-8</input-encoding>
     <description>Default configuration for ukr locale</description>
   </locale-config>
-	
-
-
-<locale-config>^M
-    <locale>es</locale>^M
-        <output-encoding>UTF-8</output-encoding>^M
-            <input-encoding>UTF-8</input-encoding>^M
-                <description>Default configuration for the spanish locale</description>
-                  </locale-config>
 
   <locale-config>
     <locale>ar</locale>
