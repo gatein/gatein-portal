@@ -74,14 +74,16 @@ public class InitiateLoginServlet extends AbstractHttpServlet
                cookie.setPath(req.getContextPath());
                cookie.setMaxAge(0);
                resp.addCookie(cookie);
-               // This allows the customer to define another login page without changing the portal
+               // This allows the customer to define another login page without
+               // changing the portal
                context.getRequestDispatcher("/login/jsp/login.jsp").include(req, resp);
                return;
             }
          }
          else
          {
-            // This allows the customer to define another login page without changing the portal
+            // This allows the customer to define another login page without
+            // changing the portal
             context.getRequestDispatcher("/login/jsp/login.jsp").include(req, resp);
             return;
          }
@@ -95,8 +97,12 @@ public class InitiateLoginServlet extends AbstractHttpServlet
       {
          if (InitiateLoginServlet.COOKIE_NAME.equals(cookie.getName()))
          {
-            token = cookie.getValue();
-            break;
+            String rememberme = req.getParameter(COOKIE_NAME);
+            if (rememberme != null)
+            {
+               token = cookie.getValue();
+               break;
+            }
          }
       }
       if (token == null)
