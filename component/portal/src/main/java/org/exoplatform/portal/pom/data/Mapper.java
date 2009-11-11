@@ -546,22 +546,19 @@ public class Mapper
    private void build(ContainerData parent, Map<String, String> hierarchyRelationships)
    {
       String parentId = parent.getStorageId();
-      if (parentId != null)
+      for (ModelData child : parent.getChildren())
       {
-         for (ModelData child : parent.getChildren())
+         String childId = child.getStorageId();
+         if (childId != null)
          {
-            String childId = child.getStorageId();
-            if (childId != null)
+            if (hierarchyRelationships.put(childId, parentId) != null)
             {
-               if (hierarchyRelationships.put(childId, parentId) != null)
-               {
-                  throw new AssertionError("The same object is present two times in the object hierarchy");
-               }
-               if (child instanceof ContainerData)
-               {
-                  build((ContainerData)child, hierarchyRelationships);
-               }
-            }
+               throw new AssertionError("The same object is present two times in the object hierarchy");
+            }            
+         }
+         if (child instanceof ContainerData)
+         {
+            build((ContainerData)child, hierarchyRelationships);
          }
       }
    }
