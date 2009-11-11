@@ -31,8 +31,10 @@ import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageBody;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.pom.config.POMDataStorage;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.POMSessionManager;
+import org.exoplatform.portal.pom.config.cache.DataCache;
 import org.exoplatform.portal.pom.spi.portlet.Portlet;
 import org.exoplatform.portal.pom.spi.portlet.PortletBuilder;
 import org.exoplatform.services.listener.Event;
@@ -91,6 +93,9 @@ public class TestUserPortalConfigService extends BasicTestCase
    /** . */
    private boolean registered;
 
+   /** . */
+   private POMDataStorage mopStorage;
+
    public TestUserPortalConfigService(String name)
    {
       super(name);
@@ -114,8 +119,7 @@ public class TestUserPortalConfigService extends BasicTestCase
       };
 
       PortalContainer container = PortalContainer.getInstance();
-      userPortalConfigSer_ =
-         (UserPortalConfigService)container.getComponentInstanceOfType(UserPortalConfigService.class);
+      userPortalConfigSer_ = (UserPortalConfigService)container.getComponentInstanceOfType(UserPortalConfigService.class);
       orgService_ = (OrganizationService)container.getComponentInstanceOfType(OrganizationService.class);
       idmService = (JBossIDMService)container.getComponentInstanceOfType(JBossIDMService.class);
       mgr = (POMSessionManager)container.getComponentInstanceOfType(POMSessionManager.class);
@@ -123,6 +127,7 @@ public class TestUserPortalConfigService extends BasicTestCase
       listenerService = (ListenerService)container.getComponentInstanceOfType(ListenerService.class);
       events = new LinkedList<Event>();
       storage_ = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
+      mopStorage = (POMDataStorage)container.getComponentInstanceOfType(POMDataStorage.class);
 
       // Register only once for all unit tests
       if (!registered)
@@ -706,6 +711,60 @@ public class TestUserPortalConfigService extends BasicTestCase
       }.execute(null);
    }
 
+   public void testCacheUserPortalConfig()
+   {
+      new UnitTest()
+      {
+         public void execute() throws Exception
+         {
+            DataCache cache = mopStorage.getDecorator(DataCache.class);
+            long readCount0 = cache.getReadCount();
+            userPortalConfigSer_.getUserPortalConfig("classic", null);
+            long readCount1 = cache.getReadCount();
+            assertTrue(readCount1 > readCount0);
+            userPortalConfigSer_.getUserPortalConfig("classic", null);
+            long readCount2 = cache.getReadCount();
+            assertEquals(readCount1, readCount2);
+         }
+      }.execute(null);
+   }
+
+   public void testCachePage()
+   {
+      new UnitTest()
+      {
+         public void execute() throws Exception
+         {
+            DataCache cache = mopStorage.getDecorator(DataCache.class);
+            long readCount0 = cache.getReadCount();
+            userPortalConfigSer_.getPage("portal::test::test1");
+            long readCount1 = cache.getReadCount();
+            assertTrue(readCount1 > readCount0);
+            userPortalConfigSer_.getPage("portal::test::test1");
+            long readCount2 = cache.getReadCount();
+            assertEquals(readCount1, readCount2);
+         }
+      }.execute(null);
+   }
+
+   public void testCachePageNavigation()
+   {
+      new UnitTest()
+      {
+         public void execute() throws Exception
+         {
+            DataCache cache = mopStorage.getDecorator(DataCache.class);
+            long readCount0 = cache.getReadCount();
+            userPortalConfigSer_.getPageNavigation("portal", "test");
+            long readCount1 = cache.getReadCount();
+            assertTrue(readCount1 > readCount0);
+            userPortalConfigSer_.getPageNavigation("portal", "test");
+            long readCount2 = cache.getReadCount();
+            assertEquals(readCount1, readCount2);
+         }
+      }.execute(null);
+   }
+
    private abstract class UnitTest
    {
 
@@ -743,6 +802,10 @@ public class TestUserPortalConfigService extends BasicTestCase
             {
                failure = e;
             }
+
+            // Clear cache
+            DataCache cache = mopStorage.getDecorator(DataCache.class);
+            cache.clear();
 
             //
             mopSession = mgr.openSession();

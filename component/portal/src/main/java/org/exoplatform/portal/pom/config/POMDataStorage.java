@@ -77,7 +77,7 @@ public class POMDataStorage implements ModelDataStorage, ModelDemarcation
    private final Log log = ExoLogger.getLogger(getClass());
    
    /** . */
-   private final TaskExecutor executor;
+   private final TaskExecutionDecorator executor;
 
    public POMDataStorage(CacheService cacheService, POMSessionManager pomMgr, ConfigurationManager confManager)
    {
@@ -90,7 +90,12 @@ public class POMDataStorage implements ModelDataStorage, ModelDemarcation
    {
       return pomMgr;
    }
-   
+
+   public <E extends TaskExecutionDecorator> E getDecorator(Class<E> decoratorClass)
+   {
+      return executor.getDecorator(decoratorClass);
+   }
+
    /**
     * <p>Execute the task with a session. The method attempts first to get a current session and if no such session
     * is found then a session will be created for the scope of the method.</p>
@@ -115,7 +120,7 @@ public class POMDataStorage implements ModelDataStorage, ModelDemarcation
       }
       else
       {
-         session.execute(task);
+         executor.execute(session, task);
       }
 
       //

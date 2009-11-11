@@ -24,7 +24,7 @@ import java.io.Serializable;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class OwnerKey implements Serializable
+public abstract class OwnerKey implements Serializable
 {
 
    /** . */
@@ -66,7 +66,11 @@ public class OwnerKey implements Serializable
    @Override
    public boolean equals(Object obj)
    {
-      if (obj instanceof OwnerKey)
+      if (obj == this)
+      {
+         return true;
+      }
+      if (getClass().isInstance(obj))
       {
          OwnerKey that = (OwnerKey)obj;
          return type.equals(that.type) && id.equals(that.id);

@@ -21,27 +21,31 @@ package org.exoplatform.portal.pom.config.cache;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.POMTask;
 import org.exoplatform.portal.pom.config.TaskExecutor;
+import org.exoplatform.portal.pom.config.TaskExecutionDecorator;
 import org.exoplatform.services.cache.CacheService;
 import org.exoplatform.services.cache.ExoCache;
 
 import java.io.Serializable;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class DataCache implements TaskExecutor
+public class DataCache extends TaskExecutionDecorator
 {
 
    /** . */
-   private TaskExecutor next;
+   private final ExoCache<Serializable, Object> cache;
 
    /** . */
-   private ExoCache<Serializable, Object> cache;
+   private final AtomicLong readCount = new AtomicLong();
 
    public DataCache(CacheService cacheService, TaskExecutor next)
    {
-      this.next = next;
+      super(next);
+
+      //
       this.cache = cacheService.getCacheInstance(DataCache.class.getSimpleName());
    }
 
@@ -70,31 +74,40 @@ public class DataCache implements TaskExecutor
                   throw new UnsupportedOperationException();
             }
          }
+         else
+         {
+            super.execute(session, task);
+         }
       }
       else
       {
-         next.execute(session, task);
+         super.execute(session, task);
       }
+   }
+
+   public void clear()
+   {
+      cache.clearCache();
    }
 
    private <K extends Serializable, V> void remove(POMSession session, CacheableDataTask<K, V> task) throws Exception
    {
       K key = task.getKey();
       cache.remove(key);
-      next.execute(session, task);
+      super.execute(session, task);
    }
 
    private <K extends Serializable, V> void write(POMSession session, CacheableDataTask<K, V> task) throws Exception
    {
       K key = task.getKey();
       cache.remove(key);
-      next.execute(session, task);
+      super.execute(session, task);
    }
 
    private <K extends Serializable, V> void create(POMSession session, CacheableDataTask<K, V> task) throws Exception
    {
       // Nothing to do for now
-      next.execute(session, task);
+      super.execute(session, task);
    }
 
    private <K extends Serializable, V> void read(POMSession session, CacheableDataTask<K, V> task) throws Exception
@@ -118,8 +131,10 @@ public class DataCache implements TaskExecutor
       }
       else
       {
+         readCount.incrementAndGet();
+
          //
-         next.execute(session, task);
+         super.execute(session, task);
 
          //
          v = task.getValue();
@@ -128,5 +143,10 @@ public class DataCache implements TaskExecutor
             cache.put(key, v);
          }
       }
+   }
+
+   public long getReadCount()
+   {
+      return readCount.longValue();
    }
 }
