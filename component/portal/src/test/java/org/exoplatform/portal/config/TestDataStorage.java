@@ -36,8 +36,8 @@ import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.TransientApplicationState;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.portal.pom.spi.gadget.Gadget;
-import org.exoplatform.portal.pom.spi.portlet.Preferences;
-import org.exoplatform.portal.pom.spi.portlet.PreferencesBuilder;
+import org.exoplatform.portal.pom.spi.portlet.Portlet;
+import org.exoplatform.portal.pom.spi.portlet.PortletBuilder;
 import org.exoplatform.test.BasicTestCase;
 
 import java.util.ArrayList;
@@ -293,13 +293,13 @@ public class TestDataStorage extends BasicTestCase
    {
       Page page = new Page();
       page.setPageId("portal::test::foo");
-      TransientApplicationState<Preferences> state = new TransientApplicationState<Preferences>("web/BannerPortlet", new PreferencesBuilder().add("template", "bar").build());
-      Application<Preferences> app = Application.createPortletApplication();
+      TransientApplicationState<Portlet> state = new TransientApplicationState<Portlet>("web/BannerPortlet", new PortletBuilder().add("template", "bar").build());
+      Application<Portlet> app = Application.createPortletApplication();
       app.setState(state);
       page.getChildren().add(app);
       storage_.save(page);
       page = storage_.getPage(page.getPageId());
-      app = (Application<Preferences>)page.getChildren().get(0);
+      app = (Application<Portlet>)page.getChildren().get(0);
       assertEquals("web/BannerPortlet", storage_.getId(app.getState()));
    }
 
@@ -314,7 +314,7 @@ public class TestDataStorage extends BasicTestCase
       String app3Id = container.getChildren().get(1).getStorageId();
 
       // Add an application
-      Application<Preferences> groovyApp = create("portal#test:/web/GroovyPortlet/groovyportlet");
+      Application<Portlet> groovyApp = create("portal#test:/web/GroovyPortlet/groovyportlet");
       ((Container)page.getChildren().get(1)).getChildren().add(1, groovyApp);
 
       // Save
@@ -375,15 +375,15 @@ public class TestDataStorage extends BasicTestCase
       // Get cloned page
       Page clone = storage_.getPage("portal::test::_test4");
       assertEquals(2, clone.getChildren().size());
-      Application<Preferences> banner1 = (Application<Preferences>)clone.getChildren().get(0);
-      ApplicationState<Preferences> instanceId = banner1.getState();
+      Application<Portlet> banner1 = (Application<Portlet>)clone.getChildren().get(0);
+      ApplicationState<Portlet> instanceId = banner1.getState();
 
       // Check instance id format
       assertEquals("web/BannerPortlet", storage_.getId(banner1.getState()));
 
       // Check state
-      Preferences pagePrefs = storage_.load(instanceId);
-      assertEquals(new PreferencesBuilder().add("template", "par:/groovy/groovy/webui/component/UIBannerPortlet.gtmpl")
+      Portlet pagePrefs = storage_.load(instanceId);
+      assertEquals(new PortletBuilder().add("template", "par:/groovy/groovy/webui/component/UIBannerPortlet.gtmpl")
          .build(), pagePrefs);
 
       // Now save the cloned page
@@ -392,7 +392,7 @@ public class TestDataStorage extends BasicTestCase
       // Get cloned page
       clone = storage_.getPage("portal::test::_test4");
       assertEquals(2, clone.getChildren().size());
-      banner1 = (Application<Preferences>)clone.getChildren().get(0);
+      banner1 = (Application<Portlet>)clone.getChildren().get(0);
       instanceId = banner1.getState();
 
       // Check instance id format
@@ -408,7 +408,7 @@ public class TestDataStorage extends BasicTestCase
 
       // Check that page prefs have not changed
       pagePrefs = storage_.load(instanceId);
-      assertEquals(new PreferencesBuilder().add("template", "par:/groovy/groovy/webui/component/UIBannerPortlet.gtmpl")
+      assertEquals(new PortletBuilder().add("template", "par:/groovy/groovy/webui/component/UIBannerPortlet.gtmpl")
          .build(), pagePrefs);
 
       // Update page prefs
@@ -417,7 +417,7 @@ public class TestDataStorage extends BasicTestCase
 
       // Check that page prefs have changed
       pagePrefs = storage_.load(instanceId);
-      assertEquals(new PreferencesBuilder().add("template", "foo").build(), pagePrefs);
+      assertEquals(new PortletBuilder().add("template", "foo").build(), pagePrefs);
 
       // Check that site prefs have not changed
       sitePrefs = storage_.getPortletPreferences("portal#test:/web/BannerPortlet/banner");
@@ -442,7 +442,7 @@ public class TestDataStorage extends BasicTestCase
       //
       page = storage_.getPage("portal::test::foo");
       assertEquals(1, page.getChildren().size());
-      Application<Preferences> dashboardPortlet = (Application<Preferences>)page.getChildren().get(0);
+      Application<Portlet> dashboardPortlet = (Application<Portlet>)page.getChildren().get(0);
       String dashboardId = dashboardPortlet.getStorageId();
       assertNotNull(dashboardId);
       assertNotNull(dashboardPortlet.getStorageName());
@@ -450,8 +450,8 @@ public class TestDataStorage extends BasicTestCase
 
       // Configures the dashboard
       Dashboard dashboard = new Dashboard(dashboardId);
-      TransientApplicationState<Preferences> state = new TransientApplicationState<Preferences>("foo/bar");
-      Application<Preferences> app = Application.createPortletApplication();
+      TransientApplicationState<Portlet> state = new TransientApplicationState<Portlet>("foo/bar");
+      Application<Portlet> app = Application.createPortletApplication();
       app.setState(state);
       dashboard.getChildren().add(app);
 
@@ -466,14 +466,14 @@ public class TestDataStorage extends BasicTestCase
       // Now check we have the state on the dashboard
       dashboard = storage_.loadDashboard(dashboardId);
       assertEquals(1, dashboard.getChildren().size());
-      app = (Application<Preferences>)dashboard.getChildren().get(0);
+      app = (Application<Portlet>)dashboard.getChildren().get(0);
       assertEquals("foo/bar", storage_.getId(app.getState()));
    }
 
    public void _testDashboardLayout() throws Exception
    {
-      Application<Preferences> dashboardPortlet = Application.createPortletApplication();
-      ApplicationState<Preferences> state = new TransientApplicationState<Preferences>("dashboard/DashboardPortlet");
+      Application<Portlet> dashboardPortlet = Application.createPortletApplication();
+      ApplicationState<Portlet> state = new TransientApplicationState<Portlet>("dashboard/DashboardPortlet");
       dashboardPortlet.setState(state);
 
       //
@@ -502,8 +502,8 @@ public class TestDataStorage extends BasicTestCase
    {
       Page page = new Page();
       page.setPageId("portal::test::foo");
-      Application<Preferences> app = Application.createPortletApplication();
-      app.setState(new TransientApplicationState<Preferences>("dashboard/DashboardPortlet"));
+      Application<Portlet> app = Application.createPortletApplication();
+      app.setState(new TransientApplicationState<Portlet>("dashboard/DashboardPortlet"));
       page.getChildren().add(app);
       storage_.save(page);
       page = storage_.getPage("portal::test::foo");
@@ -546,8 +546,8 @@ public class TestDataStorage extends BasicTestCase
    {
       Page page = new Page();
       page.setPageId("portal::test::foo");
-      Application<Preferences> app = Application.createPortletApplication();
-      app.setState(new TransientApplicationState<Preferences>("dashboard/DashboardPortlet"));
+      Application<Portlet> app = Application.createPortletApplication();
+      app.setState(new TransientApplicationState<Portlet>("dashboard/DashboardPortlet"));
       page.getChildren().add(app);
       storage_.save(page);
       page = storage_.getPage("portal::test::foo");
@@ -586,7 +586,7 @@ public class TestDataStorage extends BasicTestCase
       assertEquals("foo", storage_.getId(gadgetApp.getState()));
    }
 
-   private Application<Preferences> create(String instanceId)
+   private Application<Portlet> create(String instanceId)
    {
       int i0 = instanceId.indexOf("#");
       int i1 = instanceId.indexOf(":/", i0 + 1);
@@ -594,13 +594,13 @@ public class TestDataStorage extends BasicTestCase
       String ownerId = instanceId.substring(i0 + 1, i1);
       String persistenceid = instanceId.substring(i1 + 2);
       String[] persistenceChunks = split("/", persistenceid);
-      TransientApplicationState<Preferences> state = new TransientApplicationState<Preferences>(
+      TransientApplicationState<Portlet> state = new TransientApplicationState<Portlet>(
          persistenceChunks[0] + "/" + persistenceChunks[1],
          null,
          ownerType,
          ownerId,
          persistenceChunks[2]);
-      Application<Preferences> portletApp = Application.createPortletApplication();
+      Application<Portlet> portletApp = Application.createPortletApplication();
       portletApp.setState(state);
       return portletApp;
    }

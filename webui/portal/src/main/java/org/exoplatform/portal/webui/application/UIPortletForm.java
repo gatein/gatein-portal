@@ -23,7 +23,7 @@ import org.exoplatform.commons.utils.ExceptionUtil;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.pc.ExoPortletState;
 import org.exoplatform.portal.pom.spi.portlet.Preference;
-import org.exoplatform.portal.pom.spi.portlet.Preferences;
+import org.exoplatform.portal.pom.spi.portlet.Portlet;
 import org.exoplatform.portal.pom.spi.wsrp.WSRP;
 import org.exoplatform.portal.pom.spi.wsrp.WSRPPortletStateType;
 import org.exoplatform.portal.portlet.PortletExceptionHandleService;
@@ -277,7 +277,7 @@ public class UIPortletForm extends UIFormTabPane
       {
 
          //
-         Preferences pp = uiPortlet.getPreferences();
+         Portlet pp = uiPortlet.getPreferences();
          if (pp != null)
          {
             UIFormInputSet uiPortletPrefSet = getChildById(FIELD_PORTLET_PREF);

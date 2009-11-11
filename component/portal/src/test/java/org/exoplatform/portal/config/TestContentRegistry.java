@@ -22,7 +22,7 @@ import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.portal.pom.registry.CategoryDefinition;
 import org.exoplatform.portal.pom.registry.ContentDefinition;
 import org.exoplatform.portal.pom.registry.ContentRegistry;
-import org.exoplatform.portal.pom.spi.portlet.Preferences;
+import org.exoplatform.portal.pom.spi.portlet.Portlet;
 import org.exoplatform.test.BasicTestCase;
 import org.gatein.mop.api.workspace.Workspace;
 
@@ -77,7 +77,7 @@ public class TestContentRegistry extends BasicTestCase
       POMSession session = POMSessionManager.getSession();
       ContentRegistry registry = session.getContentRegistry();
       CategoryDefinition category = registry.createCategory("foo");
-      ContentDefinition content = category.createContent("bar", Preferences.CONTENT_TYPE, "myportlet");
+      ContentDefinition content = category.createContent("bar", Portlet.CONTENT_TYPE, "myportlet");
       assertNotNull(content);
 
       // Test that we do have a customization shared at the workspace level

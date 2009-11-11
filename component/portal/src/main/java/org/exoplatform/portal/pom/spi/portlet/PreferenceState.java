@@ -31,11 +31,11 @@ import java.util.List;
  * @version $Revision$
  */
 @NodeMapping(name = "mop:portletpreference")
-public abstract class PortletPreferenceState
+public abstract class PreferenceState
 {
 
    @ManyToOne
-   public abstract PortletPreferenceState getParent();
+   public abstract PreferenceState getParent();
 
    @Name
    public abstract String getName();

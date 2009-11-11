@@ -32,13 +32,12 @@ import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.portal.pom.registry.CategoryDefinition;
 import org.exoplatform.portal.pom.registry.ContentDefinition;
 import org.exoplatform.portal.pom.registry.ContentRegistry;
-import org.exoplatform.portal.pom.spi.portlet.Preferences;
+import org.exoplatform.portal.pom.spi.portlet.Portlet;
 import org.exoplatform.portal.pom.spi.wsrp.WSRP;
 import org.gatein.common.i18n.LocalizedString;
 import org.gatein.common.util.Tools;
 import org.gatein.mop.api.content.ContentType;
 import org.gatein.mop.api.content.Customization;
-import org.gatein.pc.api.Portlet;
 import org.gatein.pc.api.PortletInvoker;
 import org.gatein.pc.api.info.MetaInfo;
 import org.gatein.pc.api.info.PortletInfo;
@@ -378,10 +377,10 @@ public class MOPApplicationRegistryService implements ApplicationRegistryService
       //
       ExoContainer manager = ExoContainerContext.getCurrentContainer();
       PortletInvoker portletInvoker = (PortletInvoker)manager.getComponentInstance(PortletInvoker.class);
-      Set<Portlet> portlets = portletInvoker.getPortlets();
+      Set<org.gatein.pc.api.Portlet> portlets = portletInvoker.getPortlets();
 
       //
-      for (Portlet portlet : portlets)
+      for (org.gatein.pc.api.Portlet portlet : portlets)
       {
          PortletInfo info = portlet.getInfo();
          String portletApplicationName = info.getApplicationName();
@@ -448,7 +447,7 @@ public class MOPApplicationRegistryService implements ApplicationRegistryService
                }
                else
                {
-                  contentType = Preferences.CONTENT_TYPE;
+                  contentType = Portlet.CONTENT_TYPE;
                   contentId = info.getApplicationName() + "/" + info.getName();
                }
 
@@ -563,7 +562,7 @@ public class MOPApplicationRegistryService implements ApplicationRegistryService
       {
          ContentType type = customization.getType();
          String contentId = customization.getContentId();
-         if (type == Preferences.CONTENT_TYPE)
+         if (type == Portlet.CONTENT_TYPE)
          {
             String[] chunks = contentId.split("/");
             if (chunks.length == 2)

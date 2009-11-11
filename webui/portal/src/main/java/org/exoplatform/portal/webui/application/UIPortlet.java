@@ -25,7 +25,7 @@ import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.application.UserProfileLifecycle;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.model.ApplicationType;
-import org.exoplatform.portal.pom.spi.portlet.Preferences;
+import org.exoplatform.portal.pom.spi.portlet.Portlet;
 import org.exoplatform.portal.pom.spi.wsrp.WSRP;
 import org.exoplatform.portal.webui.application.UIPortletActionListener.ChangePortletModeActionListener;
 import org.exoplatform.portal.webui.application.UIPortletActionListener.ChangeWindowStateActionListener;
@@ -49,7 +49,6 @@ import org.exoplatform.webui.event.Event.Phase;
 import org.gatein.common.i18n.LocalizedString;
 import org.gatein.common.net.media.MediaType;
 import org.gatein.pc.api.Mode;
-import org.gatein.pc.api.Portlet;
 import org.gatein.pc.api.PortletContext;
 import org.gatein.pc.api.PortletInvoker;
 import org.gatein.pc.api.PortletInvokerException;
@@ -126,7 +125,7 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
    private ModelAdapter<S, C> adapter;
 
    /** . */
-   private Portlet producedOfferedPortlet;
+   private org.gatein.pc.api.Portlet producedOfferedPortlet;
 
    /** . */
    private PortletContext producerOfferedPortletContext;
@@ -370,7 +369,7 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
    {
       if (displayName == null)
       {
-         Portlet portlet = getProducedOfferedPortlet();
+         org.gatein.pc.api.Portlet portlet = getProducedOfferedPortlet();
          if (portlet != null)
          {
             PortletInfo info = portlet.getInfo();
@@ -405,7 +404,7 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
          }
          if (value == null || value.length() == 0)
          {
-            Portlet portlet = getProducedOfferedPortlet();
+            org.gatein.pc.api.Portlet portlet = getProducedOfferedPortlet();
             PortletInfo info = portlet.getInfo();
             value = info.getName();
          }
@@ -413,7 +412,7 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
       }
    }
 
-   public Portlet getProducedOfferedPortlet()
+   public org.gatein.pc.api.Portlet getProducedOfferedPortlet()
    {
       return producedOfferedPortlet;
    }
@@ -427,7 +426,7 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
 
       List<String> supportModes = new ArrayList<String>();
 
-      Portlet portlet = getProducedOfferedPortlet();
+      org.gatein.pc.api.Portlet portlet = getProducedOfferedPortlet();
 
       // if we couldn't get the portlet that just return an empty modes list
       if (portlet == null)
@@ -467,7 +466,7 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
       if (supportedProcessingEvents_ == null)
       {
 
-         Portlet portlet = getProducedOfferedPortlet();
+         org.gatein.pc.api.Portlet portlet = getProducedOfferedPortlet();
 
          if (portlet == null)
          {
@@ -756,7 +755,7 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
             String applicationId = dataStorage.getId(state.getApplicationState());
             ModelAdapter<S, C> adapter = ModelAdapter.getAdapter(state.getApplicationType());
             PortletContext producerOfferedPortletContext = adapter.getProducerOfferedPortletContext(applicationId);
-            Portlet producedOfferedPortlet = portletInvoker.getPortlet(producerOfferedPortletContext);
+            org.gatein.pc.api.Portlet producedOfferedPortlet = portletInvoker.getPortlet(producerOfferedPortletContext);
 
             this.adapter = adapter;
             this.producerOfferedPortletContext = producerOfferedPortletContext;
@@ -784,7 +783,7 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
     * @return the preferences of the portlet
     * @throws Exception any exception
     */
-   public Preferences getPreferences() throws Exception
+   public Portlet getPreferences() throws Exception
    {
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
       ExoContainer container = context.getApplication().getApplicationServiceContainer();

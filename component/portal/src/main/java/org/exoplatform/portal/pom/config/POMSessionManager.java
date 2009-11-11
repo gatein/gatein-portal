@@ -28,10 +28,10 @@ import org.exoplatform.portal.pom.registry.ContentRegistry;
 import org.exoplatform.portal.pom.spi.gadget.Gadget;
 import org.exoplatform.portal.pom.spi.gadget.GadgetContentProvider;
 import org.exoplatform.portal.pom.spi.gadget.GadgetState;
+import org.exoplatform.portal.pom.spi.portlet.Portlet;
 import org.exoplatform.portal.pom.spi.portlet.PortletContentProvider;
-import org.exoplatform.portal.pom.spi.portlet.PortletPreferenceState;
-import org.exoplatform.portal.pom.spi.portlet.PortletPreferencesState;
-import org.exoplatform.portal.pom.spi.portlet.Preferences;
+import org.exoplatform.portal.pom.spi.portlet.PreferenceState;
+import org.exoplatform.portal.pom.spi.portlet.PortletState;
 import org.exoplatform.portal.pom.spi.wsrp.WSRP;
 import org.exoplatform.portal.pom.spi.wsrp.WSRPContentProvider;
 import org.exoplatform.portal.pom.spi.wsrp.WSRPState;
@@ -187,8 +187,8 @@ public class POMSessionManager
             builder.add(WorkspaceSpecialization.class);
 
             //
-            builder.add(PortletPreferencesState.class);
-            builder.add(PortletPreferenceState.class);
+            builder.add(PortletState.class);
+            builder.add(PreferenceState.class);
             builder.add(GadgetState.class);
             builder.add(WSRPState.class);
 
@@ -203,7 +203,7 @@ public class POMSessionManager
 
             //
             ContentManagerRegistry contentManagerRegistry = new ContentManagerRegistry();
-            contentManagerRegistry.register(Preferences.CONTENT_TYPE, new PortletContentProvider());
+            contentManagerRegistry.register(Portlet.CONTENT_TYPE, new PortletContentProvider());
             contentManagerRegistry.register(Gadget.CONTENT_TYPE, new GadgetContentProvider());
             contentManagerRegistry.register(WSRP.CONTENT_TYPE, new WSRPContentProvider());
 

@@ -32,36 +32,36 @@ import java.util.Map;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-@NodeMapping(name = PortletPreferencesState.MOP_NODE_NAME)
-public abstract class PortletPreferencesState
+@NodeMapping(name = PortletState.MOP_NODE_NAME)
+public abstract class PortletState
 {
 
    /** . */
-   private Preferences payload;
+   private Portlet payload;
    static final String MOP_NODE_NAME = "mop:portletpreferences";
 
    @OneToMany
-   public abstract Map<String, PortletPreferenceState> getChildren();
+   public abstract Map<String, PreferenceState> getChildren();
 
    @Create
-   public abstract PortletPreferenceState create();
+   public abstract PreferenceState create();
 
    @OneToOne
    @RelatedMappedBy("state")
    public abstract AbstractCustomization getCustomization();
 
-   private void setPayload(Preferences payload)
+   private void setPayload(Portlet payload)
    {
 
       this.payload = payload;
 
       //
-      Map<String, PortletPreferenceState> entries = getChildren();
+      Map<String, PreferenceState> entries = getChildren();
       entries.clear();
 
       for (Preference pref : payload)
       {
-         PortletPreferenceState prefState = create();
+         PreferenceState prefState = create();
          entries.put(pref.getName(), prefState);
          prefState.setValue(pref.getValues());
          prefState.setReadOnly(pref.isReadOnly());
@@ -70,15 +70,15 @@ public abstract class PortletPreferencesState
 
    public void setPayload(Object payload)
    {
-      setPayload((Preferences)payload);
+      setPayload((Portlet)payload);
    }
 
    public Object getPayload()
    {
       if (payload == null)
       {
-         PreferencesBuilder builder = new PreferencesBuilder();
-         for (PortletPreferenceState entry : getChildren().values())
+         PortletBuilder builder = new PortletBuilder();
+         for (PreferenceState entry : getChildren().values())
          {
             builder.add(entry.getName(), entry.getValues(), entry.getReadOnly());
          }

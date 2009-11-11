@@ -20,7 +20,7 @@
 package org.exoplatform.portal.config.serialize;
 
 import org.exoplatform.portal.application.Preference;
-import org.exoplatform.portal.pom.spi.portlet.PreferencesBuilder;
+import org.exoplatform.portal.pom.spi.portlet.PortletBuilder;
 import org.jibx.runtime.IAliasable;
 import org.jibx.runtime.IMarshaller;
 import org.jibx.runtime.IMarshallingContext;
@@ -90,7 +90,7 @@ public class PreferencesHandler implements IMarshaller, IUnmarshaller, IAliasabl
       }
 
       //
-      PreferencesBuilder builder = new PreferencesBuilder();
+      PortletBuilder builder = new PortletBuilder();
 
       //
       ctx.parsePastStartTag(m_uri, m_name);

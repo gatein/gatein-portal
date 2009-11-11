@@ -20,7 +20,7 @@
 package org.exoplatform.portal.config.model;
 
 import org.exoplatform.portal.pom.spi.gadget.Gadget;
-import org.exoplatform.portal.pom.spi.portlet.Preferences;
+import org.exoplatform.portal.pom.spi.portlet.Portlet;
 import org.exoplatform.portal.pom.spi.wsrp.WSRP;
 import org.gatein.mop.api.content.ContentType;
 
@@ -75,7 +75,7 @@ public class ApplicationType<S>
    }
 
    /** . */
-   public static final ApplicationType<Preferences> PORTLET = new ApplicationType<Preferences>(Preferences.CONTENT_TYPE, "portlet");
+   public static final ApplicationType<Portlet> PORTLET = new ApplicationType<Portlet>(Portlet.CONTENT_TYPE, "portlet");
 
    /** . */
    public static final ApplicationType<Gadget> GADGET = new ApplicationType<Gadget>(Gadget.CONTENT_TYPE, "gadget");

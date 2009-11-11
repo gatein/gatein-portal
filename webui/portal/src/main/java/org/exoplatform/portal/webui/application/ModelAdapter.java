@@ -30,9 +30,9 @@ import org.exoplatform.portal.pc.ExoPortletState;
 import org.exoplatform.portal.pc.ExoPortletStateType;
 import org.exoplatform.portal.pom.config.Utils;
 import org.exoplatform.portal.pom.spi.gadget.Gadget;
+import org.exoplatform.portal.pom.spi.portlet.Portlet;
+import org.exoplatform.portal.pom.spi.portlet.PortletBuilder;
 import org.exoplatform.portal.pom.spi.portlet.Preference;
-import org.exoplatform.portal.pom.spi.portlet.Preferences;
-import org.exoplatform.portal.pom.spi.portlet.PreferencesBuilder;
 import org.exoplatform.portal.pom.spi.wsrp.WSRP;
 import org.exoplatform.portal.pom.spi.wsrp.WSRPPortletStateType;
 import org.exoplatform.web.application.gadget.GadgetApplication;
@@ -76,14 +76,14 @@ public abstract class ModelAdapter<S, C extends Serializable>
    }
 
    /** . */
-   private static final ModelAdapter<Preferences, ExoPortletState> PORTLET = new ModelAdapter<Preferences, ExoPortletState>()
+   private static final ModelAdapter<Portlet, ExoPortletState> PORTLET = new ModelAdapter<Portlet, ExoPortletState>()
    {
 
       @Override
-      public StatefulPortletContext<ExoPortletState> getPortletContext(ExoContainer container, String applicationId, ApplicationState<Preferences> applicationState) throws Exception
+      public StatefulPortletContext<ExoPortletState> getPortletContext(ExoContainer container, String applicationId, ApplicationState<Portlet> applicationState) throws Exception
       {
          DataStorage dataStorage = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
-         Preferences preferences = dataStorage.load(applicationState);
+         Portlet preferences = dataStorage.load(applicationState);
          PortletContext producerOfferedPortletContext = getProducerOfferedPortletContext(applicationId);
          ExoPortletState map = new ExoPortletState(producerOfferedPortletContext.getId());
          if (preferences != null)
@@ -97,10 +97,10 @@ public abstract class ModelAdapter<S, C extends Serializable>
       }
 
       @Override
-      public ApplicationState<Preferences> update(ExoContainer container, ExoPortletState updateState, ApplicationState<Preferences> applicationState) throws Exception
+      public ApplicationState<Portlet> update(ExoContainer container, ExoPortletState updateState, ApplicationState<Portlet> applicationState) throws Exception
       {
          // Compute new preferences
-         PreferencesBuilder builder = new PreferencesBuilder();
+         PortletBuilder builder = new PortletBuilder();
          for (Map.Entry<String, List<String>> entry : updateState.getState().entrySet())
          {
             builder.add(entry.getKey(), entry.getValue());
@@ -108,13 +108,13 @@ public abstract class ModelAdapter<S, C extends Serializable>
 
          if (applicationState instanceof TransientApplicationState)
          {
-            TransientApplicationState<Preferences> transientState = (TransientApplicationState<Preferences>)applicationState;
+            TransientApplicationState<Portlet> transientState = (TransientApplicationState<Portlet>)applicationState;
             transientState.setContentState(builder.build());
             return transientState;
          }
          else
          {
-            PersistentApplicationState<Preferences> persistentState = (PersistentApplicationState<Preferences>)applicationState;
+            PersistentApplicationState<Portlet> persistentState = (PersistentApplicationState<Portlet>)applicationState;
             DataStorage dataStorage = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
             return dataStorage.save(persistentState, builder.build());
          }
@@ -130,18 +130,18 @@ public abstract class ModelAdapter<S, C extends Serializable>
       }
 
       @Override
-      public Preferences getState(ExoContainer container, ApplicationState<Preferences> applicationState) throws Exception
+      public Portlet getState(ExoContainer container, ApplicationState<Portlet> applicationState) throws Exception
       {
          if (applicationState instanceof TransientApplicationState)
          {
-            TransientApplicationState<Preferences> transientState = (TransientApplicationState<Preferences>)applicationState;
-            Preferences pref = transientState.getContentState();
-            if(pref == null) pref = new Preferences();
+            TransientApplicationState<Portlet> transientState = (TransientApplicationState<Portlet>)applicationState;
+            Portlet pref = transientState.getContentState();
+            if(pref == null) pref = new Portlet();
             return pref;
          }
          else
          {
-            PersistentApplicationState<Preferences> persistentState = (PersistentApplicationState<Preferences>)applicationState;
+            PersistentApplicationState<Portlet> persistentState = (PersistentApplicationState<Portlet>)applicationState;
             DataStorage dataStorage = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
             return dataStorage.load(persistentState);
          }
@@ -182,7 +182,7 @@ public abstract class ModelAdapter<S, C extends Serializable>
       }
 
       @Override
-      public Preferences getState(ExoContainer container, ApplicationState<Gadget> applicationState) throws Exception
+      public Portlet getState(ExoContainer container, ApplicationState<Gadget> applicationState) throws Exception
       {
          // For now we return null as it does not make sense to edit the gadget preferences
          return null;
@@ -193,7 +193,7 @@ public abstract class ModelAdapter<S, C extends Serializable>
    private static final ModelAdapter<WSRP, WSRP> WSRP = new ModelAdapter<WSRP, WSRP>()
    {
       @Override
-      public Preferences getState(ExoContainer container, ApplicationState<WSRP> state) throws Exception
+      public Portlet getState(ExoContainer container, ApplicationState<WSRP> state) throws Exception
       {
          return null;  // return null for now
       }
@@ -249,6 +249,6 @@ public abstract class ModelAdapter<S, C extends Serializable>
     * @return the preferences
     * @throws Exception any exception
     */
-   public abstract Preferences getState(ExoContainer container, ApplicationState<S> applicationState) throws Exception;
+   public abstract Portlet getState(ExoContainer container, ApplicationState<S> applicationState) throws Exception;
 
 }

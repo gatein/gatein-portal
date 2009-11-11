@@ -29,7 +29,7 @@ import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.TransientApplicationState;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.Utils;
-import org.exoplatform.portal.pom.spi.portlet.Preferences;
+import org.exoplatform.portal.pom.spi.portlet.Portlet;
 import org.gatein.mop.api.Attributes;
 import org.gatein.mop.api.content.ContentType;
 import org.gatein.mop.api.content.Customization;
@@ -430,14 +430,14 @@ public class Mapper
             if ("dashboard".equals(type))
             {
                Site owner = src.getPage().getSite();
-               TransientApplicationState<Preferences> state = new TransientApplicationState<Preferences>(
+               TransientApplicationState<Portlet> state = new TransientApplicationState<Portlet>(
                   "dashboard/DashboardPortlet",
                   null,
                   getOwnerType(owner.getObjectType()),
                   owner.getName(),
                   null
                );
-               mo = new ApplicationData<Preferences>(
+               mo = new ApplicationData<Portlet>(
                   srcContainer.getObjectId(),
                   component.getName(),
                   ApplicationType.PORTLET,

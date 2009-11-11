@@ -32,7 +32,7 @@ import org.exoplatform.portal.config.model.ModelObject;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.TransientApplicationState;
 import org.exoplatform.portal.pom.spi.gadget.Gadget;
-import org.exoplatform.portal.pom.spi.portlet.Preferences;
+import org.exoplatform.portal.pom.spi.portlet.Portlet;
 import org.exoplatform.portal.pom.spi.wsrp.WSRPState;
 import org.exoplatform.portal.webui.page.UIPage;
 import org.exoplatform.portal.webui.portal.UIPortal;
@@ -205,7 +205,7 @@ public class UIAddNewApplication extends UIContainer
          Object appId;
          if (!remote)
          {
-            appState = new CloneApplicationState<Preferences>(application.getId());
+            appState = new CloneApplicationState<Portlet>(application.getId());
          }
          else
          {

@@ -24,8 +24,8 @@ import org.exoplatform.portal.config.model.Application;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PersistentApplicationState;
 import org.exoplatform.portal.pom.config.POMSessionManager;
-import org.exoplatform.portal.pom.spi.portlet.Preferences;
-import org.exoplatform.portal.pom.spi.portlet.PreferencesBuilder;
+import org.exoplatform.portal.pom.spi.portlet.Portlet;
+import org.exoplatform.portal.pom.spi.portlet.PortletBuilder;
 import org.exoplatform.test.BasicTestCase;
 
 /**
@@ -65,12 +65,12 @@ public class TestPortletPreferences extends BasicTestCase
    public void testSiteScopedPreferences() throws Exception
    {
       Page page = storage_.getPage("portal::test::test4");
-      Application<Preferences> app = (Application<Preferences>)page.getChildren().get(0);
-      PersistentApplicationState<Preferences> state = (PersistentApplicationState)app.getState();
+      Application<Portlet> app = (Application<Portlet>)page.getChildren().get(0);
+      PersistentApplicationState<Portlet> state = (PersistentApplicationState)app.getState();
 
       //
-      Preferences prefs = storage_.load(state);
-      assertEquals(new PreferencesBuilder().add("template", "par:/groovy/groovy/webui/component/UIBannerPortlet.gtmpl")
+      Portlet prefs = storage_.load(state);
+      assertEquals(new PortletBuilder().add("template", "par:/groovy/groovy/webui/component/UIBannerPortlet.gtmpl")
          .build(), prefs);
 
       //
@@ -80,6 +80,6 @@ public class TestPortletPreferences extends BasicTestCase
       //
       prefs = storage_.load(state);
       assertNotNull(prefs);
-      assertEquals(new PreferencesBuilder().add("template", "someanothervalue").build(), prefs);
+      assertEquals(new PortletBuilder().add("template", "someanothervalue").build(), prefs);
    }
 }

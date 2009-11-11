@@ -24,8 +24,8 @@ import org.exoplatform.portal.application.Preference;
 import org.exoplatform.portal.pom.data.Mapper;
 import org.exoplatform.portal.pom.config.AbstractPOMTask;
 import org.exoplatform.portal.pom.config.POMSession;
-import org.exoplatform.portal.pom.spi.portlet.Preferences;
-import org.exoplatform.portal.pom.spi.portlet.PreferencesBuilder;
+import org.exoplatform.portal.pom.spi.portlet.Portlet;
+import org.exoplatform.portal.pom.spi.portlet.PortletBuilder;
 import org.gatein.mop.api.content.Customization;
 import org.gatein.mop.api.workspace.ObjectType;
 import org.gatein.mop.api.workspace.Page;
@@ -137,8 +137,8 @@ public abstract class PortletPreferencesTask extends AbstractPOMTask
                      c.destroy();
                   }
                   customization =
-                     page.customize(a, Preferences.CONTENT_TYPE, applicationName + "/" + portletName,
-                        new PreferencesBuilder().build());
+                     page.customize(a, Portlet.CONTENT_TYPE, applicationName + "/" + portletName,
+                        new PortletBuilder().build());
                }
                else
                {
@@ -148,8 +148,8 @@ public abstract class PortletPreferencesTask extends AbstractPOMTask
                      c.destroy();
                   }
                   customization =
-                     site.customize(instanceName, Preferences.CONTENT_TYPE, applicationName + "/" + portletName,
-                        new PreferencesBuilder().build());
+                     site.customize(instanceName, Portlet.CONTENT_TYPE, applicationName + "/" + portletName,
+                        new PortletBuilder().build());
                }
             }
          }
@@ -157,7 +157,7 @@ public abstract class PortletPreferencesTask extends AbstractPOMTask
          //
          if (customization != null)
          {
-            PreferencesBuilder builder = new PreferencesBuilder();
+            PortletBuilder builder = new PortletBuilder();
             ArrayList<Preference> list = prefs.getPreferences();
             if (list != null)
             {
@@ -204,33 +204,33 @@ public abstract class PortletPreferencesTask extends AbstractPOMTask
          //
          if (instanceName != null)
          {
-            Customization<Preferences> customization;
+            Customization<Portlet> customization;
             if (instanceName.startsWith("@"))
             {
                String id = instanceName.substring(1);
                UIWindow window = session.findObjectById(ObjectType.WINDOW, id);
-               customization = (Customization<Preferences>)window.getCustomization();
+               customization = (Customization<Portlet>)window.getCustomization();
             }
             else
             {
                int pos = instanceName.indexOf('#');
                if (pos == -1)
                {
-                  customization = (Customization<Preferences>)site.getCustomization(instanceName);
+                  customization = (Customization<Portlet>)site.getCustomization(instanceName);
                }
                else
                {
                   String a = instanceName.substring(0, pos);
                   String b = instanceName.substring(pos + 1);
                   Page page = site.getRootPage().getChild("pages").getChild(b);
-                  customization = (Customization<Preferences>)page.getCustomization(a);
+                  customization = (Customization<Portlet>)page.getCustomization(a);
                }
             }
 
             //
             if (customization != null)
             {
-               Preferences state = customization.getVirtualState();
+               Portlet state = customization.getVirtualState();
                if (state != null)
                {
                   ArrayList<Preference> list = new ArrayList<Preference>();

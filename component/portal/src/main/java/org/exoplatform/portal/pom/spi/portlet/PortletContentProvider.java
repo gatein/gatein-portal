@@ -33,25 +33,25 @@ import java.util.Map;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class PortletContentProvider implements ContentProvider<Preferences>,
-   HelpableContentProvider<PortletPreferencesState, Preferences>
+public class PortletContentProvider implements ContentProvider<Portlet>,
+   HelpableContentProvider<PortletState, Portlet>
 {
 
    public PortletContentProvider()
    {
    }
 
-   public GetState<Preferences> getState(String contentId)
+   public GetState<Portlet> getState(String contentId)
    {
       throw new UnsupportedOperationException();
    }
 
-   public Preferences combine(List<Preferences> states)
+   public Portlet combine(List<Portlet> states)
    {
       Map<String, Preference> entries = new HashMap<String, Preference>();
 
       //
-      for (Preferences preferences : states)
+      for (Portlet preferences : states)
       {
          for (Preference preference : preferences)
          {
@@ -64,36 +64,36 @@ public class PortletContentProvider implements ContentProvider<Preferences>,
       }
 
       //
-      return new Preferences(entries);
+      return new Portlet(entries);
    }
 
-   public void setState(StateContainer container, Preferences state)
+   public void setState(StateContainer container, Portlet state)
    {
       ContentProviderHelper.setState(container, state, this);
    }
 
-   public Preferences getState(StateContainer container)
+   public Portlet getState(StateContainer container)
    {
       return ContentProviderHelper.getState(container, this);
    }
 
-   public Class<Preferences> getStateType()
+   public Class<Portlet> getStateType()
    {
-      return Preferences.class;
+      return Portlet.class;
    }
 
    public String getNodeName()
    {
-      return PortletPreferencesState.MOP_NODE_NAME;
+      return PortletState.MOP_NODE_NAME;
    }
 
-   public void setInternalState(PortletPreferencesState portletPreferencesState, Preferences preferences)
+   public void setInternalState(PortletState portletPreferencesState, Portlet preferences)
    {
       portletPreferencesState.setPayload(preferences);
    }
 
-   public Preferences getState(PortletPreferencesState portletPreferencesState)
+   public Portlet getState(PortletState portletPreferencesState)
    {
-      return (Preferences)portletPreferencesState.getPayload();
+      return (Portlet)portletPreferencesState.getPayload();
    }
 }

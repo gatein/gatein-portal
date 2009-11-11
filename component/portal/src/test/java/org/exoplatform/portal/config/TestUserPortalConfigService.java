@@ -33,8 +33,8 @@ import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.POMSessionManager;
-import org.exoplatform.portal.pom.spi.portlet.Preferences;
-import org.exoplatform.portal.pom.spi.portlet.PreferencesBuilder;
+import org.exoplatform.portal.pom.spi.portlet.Portlet;
+import org.exoplatform.portal.pom.spi.portlet.PortletBuilder;
 import org.exoplatform.services.listener.Event;
 import org.exoplatform.services.listener.Listener;
 import org.exoplatform.services.listener.ListenerService;
@@ -608,9 +608,9 @@ public class TestUserPortalConfigService extends BasicTestCase
             assertEquals("test5", clone.getName());
 
             //
-            Application<Preferences> app = (Application<Preferences>)clone.getChildren().get(0);
-            Preferences prefs2 = storage_.load(app.getState());
-            assertEquals(new PreferencesBuilder().add("template",
+            Application<Portlet> app = (Application<Portlet>)clone.getChildren().get(0);
+            Portlet prefs2 = storage_.load(app.getState());
+            assertEquals(new PortletBuilder().add("template",
                "par:/groovy/groovy/webui/component/UIBannerPortlet.gtmpl").build(), prefs2);
 
             // Update prefs of original page
@@ -620,7 +620,7 @@ public class TestUserPortalConfigService extends BasicTestCase
 
             //
             prefs2 = storage_.load(app.getState());
-            assertEquals(new PreferencesBuilder().add("template",
+            assertEquals(new PortletBuilder().add("template",
                "par:/groovy/groovy/webui/component/UIBannerPortlet.gtmpl").build(), prefs2);
          }
       }.execute(null);
@@ -641,13 +641,13 @@ public class TestUserPortalConfigService extends BasicTestCase
             assertEquals(1, clone.getChildren().size());
 
             //
-            Application<Preferences> app = (Application<Preferences>)clone.getChildren().get(0);
+            Application<Portlet> app = (Application<Portlet>)clone.getChildren().get(0);
             assertEquals("Dashboard", app.getTitle());
             assertNotNull(app.getState());
             assertEquals("dashboard/DashboardPortlet", storage_.getId(app.getState()));
             //        assertEquals("portal", app.getInstanceState().getOwnerType());
             //        assertEquals("test", app.getInstanceState().getOwnerId());
-            Preferences prefs2 = storage_.load(app.getState());
+            Portlet prefs2 = storage_.load(app.getState());
             assertNull(prefs2);
          }
       }.execute(null);
@@ -666,7 +666,7 @@ public class TestUserPortalConfigService extends BasicTestCase
             assertEquals(2, container.getChildren().size());
             assertTrue(container.getChildren().get(0) instanceof PageBody);
             assertTrue(((Application)container.getChildren().get(1)).getType() == ApplicationType.PORTLET);
-            Application<Preferences> pa = (Application<Preferences>)container.getChildren().get(1);
+            Application<Portlet> pa = (Application<Portlet>)container.getChildren().get(1);
             ApplicationState state = pa.getState();
             assertEquals("overwrite_application_ref/overwrite_portlet_ref", storage_.getId(pa.getState()));
          }
@@ -699,7 +699,7 @@ public class TestUserPortalConfigService extends BasicTestCase
             assertEquals(2, container.getChildren().size());
             assertTrue(container.getChildren().get(0) instanceof PageBody);
             assertTrue(((Application)container.getChildren().get(1)).getType() == ApplicationType.PORTLET);
-            Application<Preferences> pa = (Application<Preferences>)container.getChildren().get(1);
+            Application<Portlet> pa = (Application<Portlet>)container.getChildren().get(1);
             ApplicationState state = pa.getState();
             assertEquals("foo/bar", storage_.getId(pa.getState()));
          }

@@ -25,15 +25,15 @@ import java.util.List;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class PreferencesBuilder
+public class PortletBuilder
 {
 
    /** The state being configured. */
-   private Preferences prefs;
+   private Portlet prefs;
 
-   public PreferencesBuilder()
+   public PortletBuilder()
    {
-      this.prefs = new Preferences();
+      this.prefs = new Portlet();
    }
 
    /**
@@ -41,16 +41,16 @@ public class PreferencesBuilder
     *
     * @param that the preferences to clone
     */
-   public PreferencesBuilder(Preferences that)
+   public PortletBuilder(Portlet that)
    {
-      Preferences prefs = new Preferences();
+      Portlet prefs = new Portlet();
       prefs.state.putAll(that.state);
 
       //
       this.prefs = prefs;
    }
 
-   public PreferencesBuilder add(Preference preference)
+   public PortletBuilder add(Preference preference)
    {
       if (preference == null)
       {
@@ -60,27 +60,27 @@ public class PreferencesBuilder
       return this;
    }
 
-   public PreferencesBuilder add(String name, List<String> values, boolean readOnly)
+   public PortletBuilder add(String name, List<String> values, boolean readOnly)
    {
       return add(new Preference(name, values, readOnly));
    }
 
-   public PreferencesBuilder add(String name, List<String> values)
+   public PortletBuilder add(String name, List<String> values)
    {
       return add(new Preference(name, values, false));
    }
 
-   public PreferencesBuilder add(String name, String value, boolean readOnly)
+   public PortletBuilder add(String name, String value, boolean readOnly)
    {
       return add(new Preference(name, value, readOnly));
    }
 
-   public PreferencesBuilder add(String name, String value)
+   public PortletBuilder add(String name, String value)
    {
       return add(name, value, false);
    }
 
-   public PreferencesBuilder remove(String name)
+   public PortletBuilder remove(String name)
    {
       if (name == null)
       {
@@ -90,16 +90,16 @@ public class PreferencesBuilder
       return this;
    }
 
-   public PreferencesBuilder clear()
+   public PortletBuilder clear()
    {
       prefs.state.clear();
       return this;
    }
 
-   public Preferences build()
+   public Portlet build()
    {
-      Preferences tmp = prefs;
-      prefs = new Preferences();
+      Portlet tmp = prefs;
+      prefs = new Portlet();
       return tmp;
    }
 }

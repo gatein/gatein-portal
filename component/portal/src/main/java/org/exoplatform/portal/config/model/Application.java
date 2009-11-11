@@ -23,7 +23,7 @@ import org.exoplatform.portal.pom.config.Utils;
 import org.exoplatform.portal.pom.data.ApplicationData;
 import org.exoplatform.portal.pom.data.ModelData;
 import org.exoplatform.portal.pom.spi.gadget.Gadget;
-import org.exoplatform.portal.pom.spi.portlet.Preferences;
+import org.exoplatform.portal.pom.spi.portlet.Portlet;
 import org.exoplatform.portal.pom.spi.wsrp.WSRP;
 
 /**
@@ -293,19 +293,19 @@ public class Application<S> extends ModelObject
       return new Application<Gadget>(ApplicationType.GADGET);
    }
 
-   public static Application<Preferences> createPortletApplication(ApplicationData<Preferences> data)
+   public static Application<Portlet> createPortletApplication(ApplicationData<Portlet> data)
    {
-      return new Application<Preferences>(data);
+      return new Application<Portlet>(data);
    }
 
-   public static Application<Preferences> createPortletApplication(String storageId)
+   public static Application<Portlet> createPortletApplication(String storageId)
    {
-      return new Application<Preferences>(ApplicationType.PORTLET, storageId);
+      return new Application<Portlet>(ApplicationType.PORTLET, storageId);
    }
 
-   public static Application<Preferences> createPortletApplication()
+   public static Application<Portlet> createPortletApplication()
    {
-      return new Application<Preferences>(ApplicationType.PORTLET);
+      return new Application<Portlet>(ApplicationType.PORTLET);
    }
 
    public static Application<WSRP> createWSRPApplication(ApplicationData<WSRP> wsrpwsrpIdApplicationData)

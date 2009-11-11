@@ -31,11 +31,11 @@ import java.util.Map;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public final class Preferences implements Iterable<Preference>
+public final class Portlet implements Iterable<Preference>
 {
 
    /** . */
-   public static final ContentType<Preferences> CONTENT_TYPE = new ContentType<Preferences>("application/portlet", Preferences.class);
+   public static final ContentType<Portlet> CONTENT_TYPE = new ContentType<Portlet>("application/portlet", Portlet.class);
 
    /** . */
    final Map<String, Preference> state;
@@ -43,13 +43,13 @@ public final class Preferences implements Iterable<Preference>
    /** . */
    private final Map<String, Preference> entries;
 
-   public Preferences()
+   public Portlet()
    {
       this.state = new HashMap<String, Preference>();
       this.entries = Collections.unmodifiableMap(this.state);
    }
 
-   public Preferences(Map<String, Preference> state)
+   public Portlet(Map<String, Preference> state)
    {
       if (state == null)
       {
@@ -67,7 +67,7 @@ public final class Preferences implements Iterable<Preference>
       return entry != null ? entry.getValues() : null;
    }
 
-   public Preferences setValues(String name, List<String> values)
+   public Portlet setValues(String name, List<String> values)
    {
       Preference entry = entries.get(name);
       if (entry == null)
@@ -88,7 +88,7 @@ public final class Preferences implements Iterable<Preference>
       return entry != null ? entry.getValue() : null;
    }
 
-   public Preferences setValue(String name, String value)
+   public Portlet setValue(String name, String value)
    {
       Preference entry = entries.get(name);
       if (entry == null)
@@ -109,7 +109,7 @@ public final class Preferences implements Iterable<Preference>
       return entry != null ? entry.isReadOnly() : null;
    }
 
-   public Preferences setReadOnly(String name, boolean readOnly)
+   public Portlet setReadOnly(String name, boolean readOnly)
    {
       Preference entry = entries.get(name);
       if (entry == null)
@@ -126,7 +126,7 @@ public final class Preferences implements Iterable<Preference>
       return entries.get(name);
    }
 
-   public Preferences putPreference(Preference preference)
+   public Portlet putPreference(Preference preference)
    {
       state.put(preference.getName(), preference);
       return this;
@@ -144,9 +144,9 @@ public final class Preferences implements Iterable<Preference>
       {
          return true;
       }
-      if (obj instanceof Preferences)
+      if (obj instanceof Portlet)
       {
-         Preferences that = (Preferences)obj;
+         Portlet that = (Portlet)obj;
          return state.equals(that.state);
       }
       return false;

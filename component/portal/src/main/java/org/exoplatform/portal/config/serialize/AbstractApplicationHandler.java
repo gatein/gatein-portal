@@ -26,8 +26,8 @@ import org.exoplatform.portal.config.NewPortalConfigListener;
 import org.exoplatform.portal.config.model.Application;
 import org.exoplatform.portal.config.model.Properties;
 import org.exoplatform.portal.config.model.TransientApplicationState;
-import org.exoplatform.portal.pom.spi.portlet.Preferences;
-import org.exoplatform.portal.pom.spi.portlet.PreferencesBuilder;
+import org.exoplatform.portal.pom.spi.portlet.Portlet;
+import org.exoplatform.portal.pom.spi.portlet.PortletBuilder;
 import org.jibx.runtime.IAliasable;
 import org.jibx.runtime.IMarshaller;
 import org.jibx.runtime.IMarshallingContext;
@@ -100,7 +100,7 @@ public class AbstractApplicationHandler implements IMarshaller, IUnmarshaller, I
       ctx.parsePastStartTag(m_uri, m_name);
 
       //
-      Application<Preferences> app;
+      Application<Portlet> app;
       if ("application".equals(m_name))
       {
          String instanceId = ctx.parseElementText(m_uri, "instance-id");
@@ -111,10 +111,10 @@ public class AbstractApplicationHandler implements IMarshaller, IUnmarshaller, I
          String ownerId = instanceId.substring(i0 + 1, i1);
          String persistenceid = instanceId.substring(i1 + 2);
          String[] persistenceChunks = split("/", persistenceid);
-         TransientApplicationState<Preferences> state;
+         TransientApplicationState<Portlet> state;
          if (persistenceChunks.length == 2)
          {
-            state = new TransientApplicationState<Preferences>(
+            state = new TransientApplicationState<Portlet>(
                persistenceChunks[0] + "/" +  persistenceChunks[1],
                null,
                ownerType,
@@ -123,7 +123,7 @@ public class AbstractApplicationHandler implements IMarshaller, IUnmarshaller, I
          }
          else
          {
-            state = new TransientApplicationState<Preferences>(
+            state = new TransientApplicationState<Portlet>(
                persistenceChunks[0] + "/" +  persistenceChunks[1],
                null,
                ownerType,
@@ -138,10 +138,10 @@ public class AbstractApplicationHandler implements IMarshaller, IUnmarshaller, I
          ctx.parsePastStartTag(m_uri, "portlet");
          String applicationName = ctx.parseElementText(m_uri, "application-ref");
          String portletName = ctx.parseElementText(m_uri, "portlet-ref");
-         TransientApplicationState<Preferences> state;
+         TransientApplicationState<Portlet> state;
          if (ctx.isAt(m_uri, "preferences"))
          {
-            PreferencesBuilder builder = new PreferencesBuilder();
+            PortletBuilder builder = new PortletBuilder();
             ctx.parsePastStartTag(m_uri, "preferences");
             while (ctx.isAt(m_uri, "preference"))
             {
@@ -149,11 +149,11 @@ public class AbstractApplicationHandler implements IMarshaller, IUnmarshaller, I
                builder.add(value.getName(), value.getValues(), value.isReadOnly());
             }
             ctx.parsePastEndTag(m_uri, "preferences");
-            state = new TransientApplicationState<Preferences>(applicationName + "/" + portletName, builder.build());
+            state = new TransientApplicationState<Portlet>(applicationName + "/" + portletName, builder.build());
          }
          else
          {
-            state = new TransientApplicationState<Preferences>(applicationName + "/" + portletName, null);
+            state = new TransientApplicationState<Portlet>(applicationName + "/" + portletName, null);
          }
          app = Application.createPortletApplication();
          app.setState(state);

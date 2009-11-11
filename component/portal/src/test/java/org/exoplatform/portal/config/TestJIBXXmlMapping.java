@@ -26,8 +26,8 @@ import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.TransientApplicationState;
 import org.exoplatform.portal.config.model.Page.PageSet;
-import org.exoplatform.portal.pom.spi.portlet.Preferences;
-import org.exoplatform.portal.pom.spi.portlet.PreferencesBuilder;
+import org.exoplatform.portal.pom.spi.portlet.Portlet;
+import org.exoplatform.portal.pom.spi.portlet.PortletBuilder;
 import org.exoplatform.test.BasicTestCase;
 import org.jibx.runtime.BindingDirectory;
 import org.jibx.runtime.IBindingFactory;
@@ -110,13 +110,13 @@ public class TestJIBXXmlMapping extends BasicTestCase
    {
       IBindingFactory bfact = BindingDirectory.getFactory(PortalConfig.class);
       IUnmarshallingContext uctx = bfact.createUnmarshallingContext();
-      Application<Preferences> app =
-         (Application<Preferences>)uctx.unmarshalDocument(new FileInputStream(
+      Application<Portlet> app =
+         (Application<Portlet>)uctx.unmarshalDocument(new FileInputStream(
             "src/test/resources/jibx/portlet-application.xml"), null);
       TransientApplicationState portletState = (TransientApplicationState)app.getState();
       assertNotNull(portletState);
       assertEquals("web/BannerPortlet", portletState.getContentId());
-      Preferences preferences = (Preferences)portletState.getContentState();
-      assertEquals(new PreferencesBuilder().add("template", "template_value").build(), preferences);
+      Portlet preferences = (Portlet)portletState.getContentState();
+      assertEquals(new PortletBuilder().add("template", "template_value").build(), preferences);
    }
 }
