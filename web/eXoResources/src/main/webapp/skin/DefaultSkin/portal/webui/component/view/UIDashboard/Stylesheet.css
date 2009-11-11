@@ -78,7 +78,7 @@
 }
 
 .UITabPaneDashboard .UIHorizontalTabs {
-	padding: 5px 0 8px;
+	padding: 1px 0 5px;
 }
 
 .UITabPaneDashboard .UIHorizontalTabs .TabsContainer {
@@ -86,7 +86,7 @@
 }
 
 .UITabPaneDashboard .UIHorizontalTabs .GrayTabStyle {
-	padding: 4px 2px 0 0;
+	margin: 4px 2px 0 0;
 }
 
 .UITabPaneDashboard .UIHorizontalTabs .GrayTabStyle .NormalTab .MiddleTab,
