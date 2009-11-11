@@ -64,11 +64,7 @@
 										<a href="#" onclick="<%= uicomponent.event("ShowCategories") %>" style="color:red;text-decoration:underline;">											
 												<%=_ctx.appRes("UIGadgetInfo.label.categories.clickHere")%>											
 										</a>
-										<% } else { %>
-										<div>
-											<% uicomponent.renderChildren() %>
-										</div>
-										<%}%>
+										<% } %>
 								<%}%>
 								
 						</td>
@@ -76,5 +72,10 @@
 				</table>
 		</div>
 		
+	</div>
+	<div>		
+		<% if (categoryNames.equals("") && selectorRender) { 
+				uicomponent.renderChildren(); 
+		} %>
 	</div>
 </div>

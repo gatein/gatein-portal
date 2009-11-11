@@ -99,7 +99,8 @@ public class UIGadgetInfo extends UIContainer
 
       for (ApplicationCategory category : allCategories)
       {
-         if (appRegService.getApplication(category.getName(), gadget_.getName()) != null)
+         String definitionName = gadget_.getTitle().replace(' ', '_');
+         if (appRegService.getApplication(category.getName(), definitionName) != null)
          {
             nameList.add(category.getDisplayName());
          }
@@ -217,6 +218,15 @@ public class UIGadgetInfo extends UIContainer
       public void execute(Event<UIGadgetInfo> event) throws Exception
       {
          UIGadgetInfo gadgetInfo = event.getSource();
+         
+         ApplicationRegistryService appRegService = gadgetInfo.getApplicationComponent(ApplicationRegistryService.class);
+         List<ApplicationCategory> categories = appRegService.getApplicationCategories();
+         if (categories == null || categories.isEmpty()) {
+            UIApplication uiApp = event.getRequestContext().getUIApplication();
+            uiApp.addMessage(new ApplicationMessage("UICategorySelector.msg.NoCategory", null));
+            return;
+         }
+         
          Gadget gadget = gadgetInfo.getGadget();
          UICategorySelector selector = gadgetInfo.getChild(UICategorySelector.class);
          
@@ -224,13 +234,14 @@ public class UIGadgetInfo extends UIContainer
          app.setApplicationName(gadget.getName());
          app.setType(ApplicationType.GADGET);
          app.setDisplayName(gadget.getTitle());
+         app.setContentId(gadget.getName());
          String description =
             (gadget.getDescription() == null || gadget.getDescription().length() < 1) ? gadget.getName() : gadget
                .getDescription();
          app.setDescription(description);
          app.setAccessPermissions(new ArrayList<String>());
          
-         selector.setup(app);
+         selector.setApplication(app);
          selector.setRendered(true);
          event.getRequestContext().addUIComponentToUpdateByAjax(event.getSource());
       }

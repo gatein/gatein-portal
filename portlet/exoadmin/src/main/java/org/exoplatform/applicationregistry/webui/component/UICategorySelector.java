@@ -3,6 +3,8 @@ package org.exoplatform.applicationregistry.webui.component;
 import org.exoplatform.application.registry.Application;
 import org.exoplatform.application.registry.ApplicationCategory;
 import org.exoplatform.application.registry.ApplicationRegistryService;
+import org.exoplatform.applicationregistry.webui.Util;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
@@ -25,7 +27,7 @@ import java.util.List;
  */
 @ComponentConfig(template = "system:/groovy/webui/form/UIForm.gtmpl", lifecycle = UIFormLifecycle.class, events = {
    @EventConfig(listeners = UICategorySelector.SaveActionListener.class),
-   @EventConfig(listeners = UICategorySelector.CloseActionListener.class, phase = Phase.DECODE)})
+   @EventConfig(listeners = UICategorySelector.CancelActionListener.class, phase = Phase.DECODE)})
 public class UICategorySelector extends UIForm
 {
    private List<ApplicationCategory> categories;
@@ -36,17 +38,39 @@ public class UICategorySelector extends UIForm
 
    private final static String[] TABLE_COLUMNS = {"choose", "categoryName"};
 
-   public UICategorySelector() throws Exception
+   public UICategorySelector()
    {
-      ApplicationRegistryService appRegService = getApplicationComponent(ApplicationRegistryService.class);
-      categories = appRegService.getApplicationCategories();
-      categories = categories != null ? categories : new ArrayList<ApplicationCategory>();
    }
 
-   public void setup(Application app) throws Exception
+   @Override
+   public boolean isRendered()
+   {
+      ApplicationRegistryService appRegService = getApplicationComponent(ApplicationRegistryService.class);
+      List<ApplicationCategory> categories;
+      try
+      {
+         categories = appRegService.getApplicationCategories();
+      }
+      catch (Exception e)
+      {
+         throw new RuntimeException(e);
+      }
+      categories = categories != null ? categories : new ArrayList<ApplicationCategory>();
+      if (categories.isEmpty())
+         return false;
+      return super.isRendered();
+   }
+
+   /**
+    * @see Refresh each render time
+    */
+   @Override
+   public void processRender(WebuiRequestContext context) throws Exception
    {
       setChildren(null);
-      this.application = app;
+      ApplicationRegistryService appRegService = getApplicationComponent(ApplicationRegistryService.class);
+      List<ApplicationCategory> categories = appRegService.getApplicationCategories(new Util.CategoryComparator());
+      categories = categories != null ? categories : new ArrayList<ApplicationCategory>();
 
       UIFormTableInputSet uiTableInputSet = createUIComponent(UIFormTableInputSet.class, null, null);
       uiTableInputSet.setName(getClass().getSimpleName());
@@ -57,28 +81,34 @@ public class UICategorySelector extends UIForm
       UIFormInputSet uiInputSet;
       UIFormCheckBoxInput<Boolean> checkBoxInput;
       UIFormInputInfo uiInfo;
-
-      ApplicationRegistryService appRegService = getApplicationComponent(ApplicationRegistryService.class);
       for (ApplicationCategory category : categories)
       {
          uiInputSet = new UIFormInputSet(category.getName());
-         boolean defaultValue = appRegService.getApplication(category.getName(), app.getApplicationName()) != null;
+         boolean defaultValue = false;
+         if (application != null)
+         {
+            String definitionName = application.getDisplayName().replace(' ', '_');
+            defaultValue =
+               appRegService.getApplication(category.getName(), definitionName) != null;
+         }
          checkBoxInput = new UIFormCheckBoxInput<Boolean>("category_" + category.getName(), null, defaultValue);
          uiInfo = new UIFormInputInfo("categoryName", null, category.getDisplayName());
          uiInputSet.addChild(checkBoxInput);
          uiInputSet.addChild(uiInfo);
          uiTableInputSet.addChild(uiInputSet);
       }
+
+      super.processRender(context);
    }
 
    public String[] getActions()
    {
       return ACTIONS;
-   }
+   }   
 
-   public List<ApplicationCategory> getCategories()
+   public void setApplication(Application app)
    {
-      return this.categories;
+      this.application = app;
    }
 
    public Application getApplication()
@@ -91,11 +121,12 @@ public class UICategorySelector extends UIForm
       public void execute(Event<UICategorySelector> event) throws Exception
       {
          UICategorySelector selector = event.getSource();
-         List<ApplicationCategory> categories = selector.getCategories();
-         UIFormCheckBoxInput<Boolean> chkInput;
          ApplicationRegistryService appRegService = selector.getApplicationComponent(ApplicationRegistryService.class);
+         List<ApplicationCategory> categories = appRegService.getApplicationCategories();
+         categories = categories != null ? categories : new ArrayList<ApplicationCategory>();
+         UIFormCheckBoxInput<Boolean> chkInput;         
          for (ApplicationCategory category : categories)
-         {            
+         {
             chkInput = selector.getUIInput("category_" + category.getName());
             if (chkInput != null && chkInput.isChecked())
             {
@@ -115,11 +146,12 @@ public class UICategorySelector extends UIForm
          newApp.setType(app.getType());
          newApp.setDescription(app.getDescription());
          newApp.setAccessPermissions(app.getAccessPermissions());
+         newApp.setContentId(app.getContentId());
          return newApp;
       }
    }
 
-   static public class CloseActionListener extends EventListener<UICategorySelector>
+   static public class CancelActionListener extends EventListener<UICategorySelector>
    {
       public void execute(Event<UICategorySelector> event) throws Exception
       {
