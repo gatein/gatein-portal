@@ -20,9 +20,9 @@
 package org.exoplatform.portal.config;
 
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.portal.config.model.Application;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.TransientApplicationState;
-import org.exoplatform.portal.config.model.gadget.GadgetApplication;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.portal.pom.spi.gadget.Gadget;
@@ -66,7 +66,7 @@ public class TestGadget extends BasicTestCase
       Gadget gadget = new Gadget();
       gadget.setUserPref("user_pref");
       TransientApplicationState<Gadget> state = new TransientApplicationState<Gadget>("bar", gadget);
-      GadgetApplication gadgetApplication = new GadgetApplication();
+      Application<Gadget> gadgetApplication = Application.createGadgetApplication();
       gadgetApplication.setState(state);
 
       Page container = new Page();
@@ -76,7 +76,7 @@ public class TestGadget extends BasicTestCase
       storage_.create(container);
 
       container = storage_.getPage("portal::test::gadget_page");
-      gadgetApplication = (GadgetApplication)container.getChildren().get(0);
+      gadgetApplication = (Application<Gadget>)container.getChildren().get(0);
 
       gadget = storage_.load(gadgetApplication.getState());
       assertNotNull(gadget);

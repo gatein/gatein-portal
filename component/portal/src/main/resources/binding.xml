@@ -60,7 +60,7 @@
 
   <mapping name="portlet-application"
            label="portlet-application"
-           class="org.exoplatform.portal.config.model.portlet.PortletApplication"
+           class="org.exoplatform.portal.config.serialize.PortletApplication"
            marshaller="org.exoplatform.portal.config.serialize.PortletApplicationHandler"
            unmarshaller="org.exoplatform.portal.config.serialize.PortletApplicationHandler">
 <!--
@@ -129,7 +129,7 @@
       <structure map-as="org.exoplatform.portal.config.model.Application" usage="optional"/>
       <structure map-as="org.exoplatform.portal.config.model.PageBody" usage="optional"/>
 			<structure map-as="org.exoplatform.portal.config.model.SiteBody" usage="optional"/>
-			<structure map-as="org.exoplatform.portal.config.model.portlet.PortletApplication" usage="optional"/>
+			<structure map-as="org.exoplatform.portal.config.serialize.PortletApplication" usage="optional"/>
     </collection>
   </mapping>
   
@@ -149,7 +149,7 @@
       <structure map-as="org.exoplatform.portal.config.model.Container" usage="optional"/>
       <structure map-as="org.exoplatform.portal.config.model.Application" usage="optional"/>
       <structure map-as="org.exoplatform.portal.config.model.PageBody" usage="optional"/>
-      <structure map-as="org.exoplatform.portal.config.model.portlet.PortletApplication" usage="optional"/>
+      <structure map-as="org.exoplatform.portal.config.serialize.PortletApplication" usage="optional"/>
     </collection>
   </mapping>
   

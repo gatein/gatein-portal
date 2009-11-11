@@ -22,6 +22,9 @@ package org.exoplatform.portal.config.model;
 import org.exoplatform.portal.pom.config.Utils;
 import org.exoplatform.portal.pom.data.ApplicationData;
 import org.exoplatform.portal.pom.data.ModelData;
+import org.exoplatform.portal.pom.spi.gadget.Gadget;
+import org.exoplatform.portal.pom.spi.portlet.Preferences;
+import org.exoplatform.portal.pom.spi.wsrp.WSRP;
 
 /**
  * May 13, 2004
@@ -29,7 +32,7 @@ import org.exoplatform.portal.pom.data.ModelData;
  * @email:   tuan08@users.sourceforge.net
  * @version: $Id: Portlet.java,v 1.7 2004/09/30 01:00:05 tuan08 Exp $
  **/
-public abstract class Application<S> extends ModelObject
+public class Application<S> extends ModelObject
 {
 
    /** The application state. */
@@ -61,6 +64,9 @@ public abstract class Application<S> extends ModelObject
 
    private boolean isModifiable;
 
+   /** We cannot allow the type to change once the object is created. */
+   private final ApplicationType<S> type;
+
    public Application(ApplicationData<S> data)
    {
       super(data.getStorageId());
@@ -83,19 +89,29 @@ public abstract class Application<S> extends ModelObject
       this.height = data.getHeight();
       this.properties = new Properties(data.getProperties());
       this.accessPermissions = data.getAccessPermissions().toArray(new String[data.getAccessPermissions().size()]);
+      this.type = data.getType();
    }
 
-   public Application(String storageId)
+   public Application(ApplicationType<S> type, String storageId)
    {
       super(storageId);
+
+      //
+      this.type = type;
    }
 
-   public Application()
+   public Application(ApplicationType<S> type)
    {
       super();
+
+      //
+      this.type = type;
    }
 
-   public abstract ApplicationType<S> getType();
+   public ApplicationType<S> getType()
+   {
+      return type;
+   }
 
    public String getWidth()
    {
@@ -260,5 +276,50 @@ public abstract class Application<S> extends ModelObject
          Utils.safeImmutableMap(properties),
          Utils.safeImmutableList(accessPermissions)
       );
+   }
+
+   public static Application<Gadget> createGadgetApplication(ApplicationData<Gadget> data)
+   {
+      return new Application<Gadget>(data);
+   }
+
+   public static Application<Gadget> createGadgetApplication(String storageId)
+   {
+      return new Application<Gadget>(ApplicationType.GADGET, storageId);
+   }
+
+   public static Application<Gadget> createGadgetApplication()
+   {
+      return new Application<Gadget>(ApplicationType.GADGET);
+   }
+
+   public static Application<Preferences> createPortletApplication(ApplicationData<Preferences> data)
+   {
+      return new Application<Preferences>(data);
+   }
+
+   public static Application<Preferences> createPortletApplication(String storageId)
+   {
+      return new Application<Preferences>(ApplicationType.PORTLET, storageId);
+   }
+
+   public static Application<Preferences> createPortletApplication()
+   {
+      return new Application<Preferences>(ApplicationType.PORTLET);
+   }
+
+   public static Application<WSRP> createWSRPApplication(ApplicationData<WSRP> wsrpwsrpIdApplicationData)
+   {
+      return new Application<WSRP>(wsrpwsrpIdApplicationData);
+   }
+
+   public static Application<WSRP> createWSRPApplication()
+   {
+      return new Application<WSRP>(ApplicationType.WSRP_PORTLET);
+   }
+
+   public static Application<WSRP> createWSRPApplication(String storageId)
+   {
+      return new Application<WSRP>(ApplicationType.WSRP_PORTLET, storageId);
    }
 }

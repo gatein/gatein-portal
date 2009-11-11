@@ -29,9 +29,7 @@ import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageBody;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.SiteBody;
-import org.exoplatform.portal.config.model.gadget.GadgetApplication;
-import org.exoplatform.portal.config.model.portlet.PortletApplication;
-import org.exoplatform.portal.config.model.wsrp.WSRPApplication;
+import org.exoplatform.portal.pom.spi.gadget.Gadget;
 import org.exoplatform.portal.webui.application.PortletState;
 import org.exoplatform.portal.webui.application.UIGadget;
 import org.exoplatform.portal.webui.application.UIPortlet;
@@ -93,9 +91,9 @@ public class PortalDataMapper
       return model;
    }
 
-   private static GadgetApplication toGadget(UIGadget uiGadget)
+   private static Application<Gadget> toGadget(UIGadget uiGadget)
    {
-      GadgetApplication app = new GadgetApplication(uiGadget.getStorageId());
+      Application<Gadget> app = Application.createGadgetApplication(uiGadget.getStorageId());
       app.setState(uiGadget.getState());
       app.setProperties(uiGadget.getProperties());
       app.setStorageName(uiGadget.getStorageName());
@@ -135,15 +133,15 @@ public class PortalDataMapper
       ApplicationType<S> type = state.getApplicationType();
       if (type == ApplicationType.PORTLET)
       {
-         model = (Application<S>)new PortletApplication(uiPortlet.getStorageId());
+         model = (Application<S>)Application.createPortletApplication(uiPortlet.getStorageId());
       }
       else if (type == ApplicationType.GADGET)
       {
-         model = (Application<S>)new GadgetApplication(uiPortlet.getStorageId());
+         model = (Application<S>)Application.createGadgetApplication(uiPortlet.getStorageId());
       }
       else if (type == ApplicationType.WSRP_PORTLET)
       {
-         model = (Application<S>)new WSRPApplication(uiPortlet.getStorageId());
+         model = (Application<S>)Application.createWSRPApplication(uiPortlet.getStorageId());
       }
       else
       {
@@ -224,7 +222,7 @@ public class PortalDataMapper
       return model;
    }
 
-   static public void toUIGadget(UIGadget uiGadget, GadgetApplication model) throws Exception
+   static public void toUIGadget(UIGadget uiGadget, Application<Gadget> model) throws Exception
    {
       uiGadget.setProperties(model.getProperties());
       uiGadget.setState(model.getState());
@@ -395,9 +393,9 @@ public class PortalDataMapper
       {
          Application application = (Application)model;
 
-         if (dashboard && application instanceof GadgetApplication)
+         if (dashboard && application.getType() == ApplicationType.GADGET)
          {
-            GadgetApplication ga = (GadgetApplication)application;
+            Application<Gadget> ga = (Application<Gadget>)application;
             UIGadget uiGadget = uiContainer.createUIComponent(context, UIGadget.class, null, null);
             uiGadget.setStorageId(application.getStorageId());
             toUIGadget(uiGadget, ga);

@@ -20,12 +20,12 @@
 package org.exoplatform.portal.config;
 
 import org.exoplatform.portal.application.PortletPreferences.PortletPreferencesSet;
+import org.exoplatform.portal.config.model.Application;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.TransientApplicationState;
 import org.exoplatform.portal.config.model.Page.PageSet;
-import org.exoplatform.portal.config.model.portlet.PortletApplication;
 import org.exoplatform.portal.pom.spi.portlet.Preferences;
 import org.exoplatform.portal.pom.spi.portlet.PreferencesBuilder;
 import org.exoplatform.test.BasicTestCase;
@@ -110,8 +110,8 @@ public class TestJIBXXmlMapping extends BasicTestCase
    {
       IBindingFactory bfact = BindingDirectory.getFactory(PortalConfig.class);
       IUnmarshallingContext uctx = bfact.createUnmarshallingContext();
-      PortletApplication app =
-         (PortletApplication)uctx.unmarshalDocument(new FileInputStream(
+      Application<Preferences> app =
+         (Application<Preferences>)uctx.unmarshalDocument(new FileInputStream(
             "src/test/resources/jibx/portlet-application.xml"), null);
       TransientApplicationState portletState = (TransientApplicationState)app.getState();
       assertNotNull(portletState);

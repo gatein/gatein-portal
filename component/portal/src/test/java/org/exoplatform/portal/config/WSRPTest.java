@@ -20,9 +20,9 @@
 package org.exoplatform.portal.config;
 
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.portal.config.model.Application;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.TransientApplicationState;
-import org.exoplatform.portal.config.model.wsrp.WSRPApplication;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.portal.pom.spi.wsrp.WSRP;
@@ -68,7 +68,7 @@ public class WSRPTest extends BasicTestCase
       String id = "portlet id";
       wsrp.setPortletId(id);
       TransientApplicationState<WSRP> state = new TransientApplicationState<WSRP>("test", wsrp);
-      WSRPApplication wsrpApplication = new WSRPApplication();
+      Application<WSRP> wsrpApplication = Application.createWSRPApplication();
       wsrpApplication.setState(state);
 
       Page container = new Page();
@@ -79,7 +79,7 @@ public class WSRPTest extends BasicTestCase
       storage_.create(container);
 
       container = storage_.getPage(pageId);
-      wsrpApplication = (WSRPApplication)container.getChildren().get(0);
+      wsrpApplication = (Application<WSRP>)container.getChildren().get(0);
 
       wsrp = storage_.load(wsrpApplication.getState());
       assertNotNull(wsrp);

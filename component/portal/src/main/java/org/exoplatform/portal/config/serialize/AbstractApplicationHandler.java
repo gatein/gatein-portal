@@ -23,9 +23,9 @@ import static org.exoplatform.portal.pom.config.Utils.split;
 
 import org.exoplatform.portal.application.Preference;
 import org.exoplatform.portal.config.NewPortalConfigListener;
+import org.exoplatform.portal.config.model.Application;
 import org.exoplatform.portal.config.model.Properties;
 import org.exoplatform.portal.config.model.TransientApplicationState;
-import org.exoplatform.portal.config.model.portlet.PortletApplication;
 import org.exoplatform.portal.pom.spi.portlet.Preferences;
 import org.exoplatform.portal.pom.spi.portlet.PreferencesBuilder;
 import org.jibx.runtime.IAliasable;
@@ -100,7 +100,7 @@ public class AbstractApplicationHandler implements IMarshaller, IUnmarshaller, I
       ctx.parsePastStartTag(m_uri, m_name);
 
       //
-      PortletApplication app;
+      Application<Preferences> app;
       if ("application".equals(m_name))
       {
          String instanceId = ctx.parseElementText(m_uri, "instance-id");
@@ -130,7 +130,7 @@ public class AbstractApplicationHandler implements IMarshaller, IUnmarshaller, I
                ownerId,
                persistenceChunks[2]);
          }
-         app = new PortletApplication();
+         app = Application.createPortletApplication();
          app.setState(state);
       }
       else
@@ -155,7 +155,7 @@ public class AbstractApplicationHandler implements IMarshaller, IUnmarshaller, I
          {
             state = new TransientApplicationState<Preferences>(applicationName + "/" + portletName, null);
          }
-         app = new PortletApplication();
+         app = Application.createPortletApplication();
          app.setState(state);
          ctx.parsePastEndTag(m_uri, "portlet");
       }

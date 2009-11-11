@@ -20,9 +20,9 @@
 package org.exoplatform.portal.config;
 
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.portal.config.model.Application;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PersistentApplicationState;
-import org.exoplatform.portal.config.model.portlet.PortletApplication;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.portal.pom.spi.portlet.Preferences;
 import org.exoplatform.portal.pom.spi.portlet.PreferencesBuilder;
@@ -65,7 +65,7 @@ public class TestPortletPreferences extends BasicTestCase
    public void testSiteScopedPreferences() throws Exception
    {
       Page page = storage_.getPage("portal::test::test4");
-      PortletApplication app = (PortletApplication)page.getChildren().get(0);
+      Application<Preferences> app = (Application<Preferences>)page.getChildren().get(0);
       PersistentApplicationState<Preferences> state = (PersistentApplicationState)app.getState();
 
       //

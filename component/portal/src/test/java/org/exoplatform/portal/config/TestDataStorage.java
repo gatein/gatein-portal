@@ -26,6 +26,7 @@ import org.exoplatform.portal.application.PortletPreferences;
 import org.exoplatform.portal.application.Preference;
 import org.exoplatform.portal.config.model.Application;
 import org.exoplatform.portal.config.model.ApplicationState;
+import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.config.model.Container;
 import org.exoplatform.portal.config.model.Dashboard;
 import org.exoplatform.portal.config.model.ModelChange;
@@ -33,8 +34,6 @@ import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.TransientApplicationState;
-import org.exoplatform.portal.config.model.gadget.GadgetApplication;
-import org.exoplatform.portal.config.model.portlet.PortletApplication;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.portal.pom.spi.gadget.Gadget;
 import org.exoplatform.portal.pom.spi.portlet.Preferences;
@@ -295,12 +294,12 @@ public class TestDataStorage extends BasicTestCase
       Page page = new Page();
       page.setPageId("portal::test::foo");
       TransientApplicationState<Preferences> state = new TransientApplicationState<Preferences>("web/BannerPortlet", new PreferencesBuilder().add("template", "bar").build());
-      PortletApplication app = new PortletApplication();
+      Application<Preferences> app = Application.createPortletApplication();
       app.setState(state);
       page.getChildren().add(app);
       storage_.save(page);
       page = storage_.getPage(page.getPageId());
-      app = (PortletApplication)page.getChildren().get(0);
+      app = (Application<Preferences>)page.getChildren().get(0);
       assertEquals("web/BannerPortlet", storage_.getId(app.getState()));
    }
 
@@ -315,7 +314,7 @@ public class TestDataStorage extends BasicTestCase
       String app3Id = container.getChildren().get(1).getStorageId();
 
       // Add an application
-      PortletApplication groovyApp = create("portal#test:/web/GroovyPortlet/groovyportlet");
+      Application<Preferences> groovyApp = create("portal#test:/web/GroovyPortlet/groovyportlet");
       ((Container)page.getChildren().get(1)).getChildren().add(1, groovyApp);
 
       // Save
@@ -376,7 +375,7 @@ public class TestDataStorage extends BasicTestCase
       // Get cloned page
       Page clone = storage_.getPage("portal::test::_test4");
       assertEquals(2, clone.getChildren().size());
-      PortletApplication banner1 = (PortletApplication)clone.getChildren().get(0);
+      Application<Preferences> banner1 = (Application<Preferences>)clone.getChildren().get(0);
       ApplicationState<Preferences> instanceId = banner1.getState();
 
       // Check instance id format
@@ -393,7 +392,7 @@ public class TestDataStorage extends BasicTestCase
       // Get cloned page
       clone = storage_.getPage("portal::test::_test4");
       assertEquals(2, clone.getChildren().size());
-      banner1 = (PortletApplication)clone.getChildren().get(0);
+      banner1 = (Application<Preferences>)clone.getChildren().get(0);
       instanceId = banner1.getState();
 
       // Check instance id format
@@ -443,7 +442,7 @@ public class TestDataStorage extends BasicTestCase
       //
       page = storage_.getPage("portal::test::foo");
       assertEquals(1, page.getChildren().size());
-      PortletApplication dashboardPortlet = (PortletApplication)page.getChildren().get(0);
+      Application<Preferences> dashboardPortlet = (Application<Preferences>)page.getChildren().get(0);
       String dashboardId = dashboardPortlet.getStorageId();
       assertNotNull(dashboardId);
       assertNotNull(dashboardPortlet.getStorageName());
@@ -452,7 +451,7 @@ public class TestDataStorage extends BasicTestCase
       // Configures the dashboard
       Dashboard dashboard = new Dashboard(dashboardId);
       TransientApplicationState<Preferences> state = new TransientApplicationState<Preferences>("foo/bar");
-      PortletApplication app = new PortletApplication();
+      Application<Preferences> app = Application.createPortletApplication();
       app.setState(state);
       dashboard.getChildren().add(app);
 
@@ -462,18 +461,18 @@ public class TestDataStorage extends BasicTestCase
       // Test that load page does not load the children
       page = storage_.getPage("portal::test::foo");
       assertEquals(1, page.getChildren().size());
-      assertTrue(page.getChildren().get(0) instanceof PortletApplication);
+      assertTrue(((Application)page.getChildren().get(0)).getType() == ApplicationType.PORTLET);
 
       // Now check we have the state on the dashboard
       dashboard = storage_.loadDashboard(dashboardId);
       assertEquals(1, dashboard.getChildren().size());
-      app = (PortletApplication)dashboard.getChildren().get(0);
+      app = (Application<Preferences>)dashboard.getChildren().get(0);
       assertEquals("foo/bar", storage_.getId(app.getState()));
    }
 
    public void _testDashboardLayout() throws Exception
    {
-      PortletApplication dashboardPortlet = new PortletApplication();
+      Application<Preferences> dashboardPortlet = Application.createPortletApplication();
       ApplicationState<Preferences> state = new TransientApplicationState<Preferences>("dashboard/DashboardPortlet");
       dashboardPortlet.setState(state);
 
@@ -503,7 +502,7 @@ public class TestDataStorage extends BasicTestCase
    {
       Page page = new Page();
       page.setPageId("portal::test::foo");
-      PortletApplication app = new PortletApplication();
+      Application<Preferences> app = Application.createPortletApplication();
       app.setState(new TransientApplicationState<Preferences>("dashboard/DashboardPortlet"));
       page.getChildren().add(app);
       storage_.save(page);
@@ -515,7 +514,7 @@ public class TestDataStorage extends BasicTestCase
 
       // Put a gadget in one container
       Container row0 = (Container)dashboard.getChildren().get(0);
-      GadgetApplication gadgetApp = new GadgetApplication();
+      Application<Gadget> gadgetApp = Application.createGadgetApplication();
       gadgetApp.setState(new TransientApplicationState<Gadget>("foo"));
       row0.getChildren().add(gadgetApp);
 
@@ -539,7 +538,7 @@ public class TestDataStorage extends BasicTestCase
       row1 = (Container)dashboard.getChildren().get(1);
       assertEquals(0, row0.getChildren().size());
       assertEquals(1, row1.getChildren().size());
-      gadgetApp = (GadgetApplication)row1.getChildren().get(0);
+      gadgetApp = (Application<Gadget>)row1.getChildren().get(0);
       assertEquals("foo", storage_.getId(gadgetApp.getState()));
    }
 
@@ -547,7 +546,7 @@ public class TestDataStorage extends BasicTestCase
    {
       Page page = new Page();
       page.setPageId("portal::test::foo");
-      PortletApplication app = new PortletApplication();
+      Application<Preferences> app = Application.createPortletApplication();
       app.setState(new TransientApplicationState<Preferences>("dashboard/DashboardPortlet"));
       page.getChildren().add(app);
       storage_.save(page);
@@ -559,7 +558,7 @@ public class TestDataStorage extends BasicTestCase
 
       // Put a gadget in one container
       Container row1 = (Container)dashboard.getChildren().get(1);
-      GadgetApplication gadgetApp = new GadgetApplication();
+      Application<Gadget> gadgetApp = Application.createGadgetApplication();
       gadgetApp.setState(new TransientApplicationState<Gadget>("foo"));
       row1.getChildren().add(gadgetApp);
 
@@ -583,11 +582,11 @@ public class TestDataStorage extends BasicTestCase
       row1 = (Container)dashboard.getChildren().get(1);
       assertEquals(0, row1.getChildren().size());
       assertEquals(1, row0.getChildren().size());
-      gadgetApp = (GadgetApplication)row0.getChildren().get(0);
+      gadgetApp = (Application<Gadget>)row0.getChildren().get(0);
       assertEquals("foo", storage_.getId(gadgetApp.getState()));
    }
 
-   private PortletApplication create(String instanceId)
+   private Application<Preferences> create(String instanceId)
    {
       int i0 = instanceId.indexOf("#");
       int i1 = instanceId.indexOf(":/", i0 + 1);
@@ -601,7 +600,7 @@ public class TestDataStorage extends BasicTestCase
          ownerType,
          ownerId,
          persistenceChunks[2]);
-      PortletApplication portletApp = new PortletApplication();
+      Application<Preferences> portletApp = Application.createPortletApplication();
       portletApp.setState(state);
       return portletApp;
    }
