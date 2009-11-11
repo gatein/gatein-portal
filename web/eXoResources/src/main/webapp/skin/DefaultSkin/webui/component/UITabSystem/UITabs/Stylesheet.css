@@ -308,8 +308,8 @@
 
 /***************************** GrayTabStyle ************************/
 .UIHorizontalTabs .GrayTabStyle {
-	margin: 4px 2px 0 0; /* orientation=lt */
-	margin: 4px 0 0 2px; /* orientation=rt */
+	margin-right: 2px; /* orientation=lt */
+	margin-left: 2px; /* orientation=rt */
 }
 
 .UIHorizontalTabs .GrayTabStyle .NormalTab .LeftTab {
