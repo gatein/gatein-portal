@@ -101,6 +101,9 @@ public class UIMembershipTypeForm extends UIForm
                return;
             }
             service.getMembershipTypeHandler().createMembershipType(mt, true);
+
+            // Update the list of membership under GroupManagment if any
+            uiMembershipManagement.addOptions(mt);
          }
 
          uiMembershipManagement.getChild(UIListMembershipType.class).loadData();

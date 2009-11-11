@@ -27,11 +27,8 @@ import org.exoplatform.webui.core.UIContainer;
 import java.io.Writer;
 
 /**
- * Created by The eXo Platform SARL
- * Author : chungnv
- *          nguyenchung136@yahoo.com
- * Jun 23, 2006
- * 10:07:15 AM
+ * Created by The eXo Platform SARL Author : chungnv nguyenchung136@yahoo.com
+ * Jun 23, 2006 10:07:15 AM
  */
 @ComponentConfig()
 public class UIMembershipManagement extends UIContainer
@@ -43,7 +40,8 @@ public class UIMembershipManagement extends UIContainer
       addChild(UIMembershipTypeForm.class, null, null);
    }
 
-   public UIGroupMembershipForm getGroupMembershipForm()
+   /** Returns currently selected GroupMembershipForm under the Group tab * */
+   private UIGroupMembershipForm getGroupMembershipForm()
    {
       UIOrganizationPortlet uiParent = getParent();
       UIGroupManagement groupManagement = uiParent.getChild(UIGroupManagement.class);
@@ -55,12 +53,20 @@ public class UIMembershipManagement extends UIContainer
 
    public void addOptions(MembershipType option)
    {
-      getGroupMembershipForm().addOptionMembershipType(option);
+      UIGroupMembershipForm membershipFormUnderGroupTab = getGroupMembershipForm();
+      if (membershipFormUnderGroupTab != null)
+      {
+         membershipFormUnderGroupTab.addOptionMembershipType(option);
+      }
    }
 
    public void deleteOptions(MembershipType option)
    {
-      getGroupMembershipForm().removeOptionMembershipType(option);
+      UIGroupMembershipForm membershipFormUnderGroupTab = getGroupMembershipForm();
+      if (membershipFormUnderGroupTab != null)
+      {
+         membershipFormUnderGroupTab.removeOptionMembershipType(option);
+      }
    }
 
    @SuppressWarnings("unused")
