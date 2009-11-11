@@ -29,7 +29,7 @@ import org.exoplatform.portal.config.model.ApplicationState;
 import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.config.model.Container;
 import org.exoplatform.portal.config.model.Dashboard;
-import org.exoplatform.portal.config.model.ModelChange;
+import org.exoplatform.portal.pom.data.ModelChange;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PortalConfig;
@@ -321,17 +321,17 @@ public class TestDataStorage extends BasicTestCase
       List<ModelChange> changes = storage_.save(page);
       assertEquals(6, changes.size());
       ModelChange.Update c0 = (ModelChange.Update)changes.get(0);
-//      assertSame(page, c0.getObject());
+      assertSame(page.getStorageId(), c0.getObject().getStorageId());
       ModelChange.Update c1 = (ModelChange.Update)changes.get(1);
-//      assertSame(page.getChildren().get(0), c1.getObject());
+      assertSame(page.getChildren().get(0).getStorageId(), c1.getObject().getStorageId());
       ModelChange.Update c2 = (ModelChange.Update)changes.get(2);
-//      assertSame(page.getChildren().get(1), c2.getObject());
+      assertSame(page.getChildren().get(1).getStorageId(), c2.getObject().getStorageId());
       ModelChange.Update c3 = (ModelChange.Update)changes.get(3);
-//      assertSame(container.getChildren().get(0), c3.getObject());
+      assertSame(container.getChildren().get(0).getStorageId(), c3.getObject().getStorageId());
       ModelChange.Create c4 = (ModelChange.Create)changes.get(4);
-//      assertSame(container.getChildren().get(1), c4.getObject());
+      assertSame(container.getChildren().get(1).getStorageId(), c4.getObject().getStorageId());
       ModelChange.Update c5 = (ModelChange.Update)changes.get(5);
-//      assertSame(container.getChildren().get(2), c5.getObject());
+      assertSame(container.getChildren().get(2).getStorageId(), c5.getObject().getStorageId());
 
       // Check it is existing at the correct location
       // and also that the ids are still the same
@@ -432,7 +432,7 @@ public class TestDataStorage extends BasicTestCase
       // assertEquals(banner2.getInstanceId(), banner1.getInstanceId());
    }
 
-   public void _testDashboard() throws Exception
+   public void testDashboard() throws Exception
    {
       Page page = new Page();
       page.setPageId("portal::test::foo");
@@ -470,7 +470,7 @@ public class TestDataStorage extends BasicTestCase
       assertEquals("foo/bar", storage_.getId(app.getState()));
    }
 
-   public void _testDashboardLayout() throws Exception
+   public void testDashboardLayout() throws Exception
    {
       Application<Portlet> dashboardPortlet = Application.createPortletApplication();
       ApplicationState<Portlet> state = new TransientApplicationState<Portlet>("dashboard/DashboardPortlet");
@@ -498,7 +498,7 @@ public class TestDataStorage extends BasicTestCase
       assertEquals(3, dashboard.getChildren().size());
    }
 
-   public void _testDashboardMoveRight() throws Exception
+   public void testDashboardMoveRight() throws Exception
    {
       Page page = new Page();
       page.setPageId("portal::test::foo");
@@ -542,7 +542,7 @@ public class TestDataStorage extends BasicTestCase
       assertEquals("foo", storage_.getId(gadgetApp.getState()));
    }
 
-   public void _testDashboardMoveLeft() throws Exception
+   public void testDashboardMoveLeft() throws Exception
    {
       Page page = new Page();
       page.setPageId("portal::test::foo");

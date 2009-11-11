@@ -23,13 +23,10 @@ import org.exoplatform.commons.utils.LazyPageList;
 import org.exoplatform.portal.application.PortletPreferences;
 import org.exoplatform.portal.config.Query;
 import org.exoplatform.portal.config.model.ApplicationState;
-import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.config.model.Container;
-import org.exoplatform.portal.config.model.Dashboard;
-import org.exoplatform.portal.config.model.ModelChange;
+import org.exoplatform.portal.pom.data.ModelChange;
 import org.exoplatform.portal.pom.data.PageData;
 import org.exoplatform.portal.pom.data.PortalData;
-import org.exoplatform.portal.pom.config.POMTask;
 
 import java.util.Comparator;
 import java.util.List;

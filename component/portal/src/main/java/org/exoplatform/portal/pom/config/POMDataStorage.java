@@ -28,7 +28,7 @@ import org.exoplatform.portal.config.model.Application;
 import org.exoplatform.portal.config.model.ApplicationState;
 import org.exoplatform.portal.config.model.CloneApplicationState;
 import org.exoplatform.portal.config.model.Container;
-import org.exoplatform.portal.config.model.ModelChange;
+import org.exoplatform.portal.pom.data.ModelChange;
 import org.exoplatform.portal.config.model.ModelObject;
 import org.exoplatform.portal.pom.config.cache.DataCache;
 import org.exoplatform.portal.pom.config.tasks.DashboardTask;

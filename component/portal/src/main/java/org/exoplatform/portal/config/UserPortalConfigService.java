@@ -23,7 +23,7 @@ import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.container.component.ComponentPlugin;
 import org.exoplatform.portal.config.model.Application;
 import org.exoplatform.portal.config.model.Container;
-import org.exoplatform.portal.config.model.ModelChange;
+import org.exoplatform.portal.pom.data.ModelChange;
 import org.exoplatform.portal.config.model.ModelObject;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;

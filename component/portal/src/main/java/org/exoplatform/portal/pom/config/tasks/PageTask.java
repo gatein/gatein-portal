@@ -22,9 +22,9 @@ package org.exoplatform.portal.pom.config.tasks;
 import org.exoplatform.portal.pom.config.cache.DataAccessMode;
 import org.exoplatform.portal.pom.config.cache.CacheableDataTask;
 import org.exoplatform.portal.pom.data.Mapper;
+import org.exoplatform.portal.pom.data.ModelChange;
 import org.exoplatform.portal.pom.data.PageData;
 
-import org.exoplatform.portal.config.model.ModelChange;
 import org.exoplatform.portal.pom.config.AbstractPOMTask;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.data.PageKey;
