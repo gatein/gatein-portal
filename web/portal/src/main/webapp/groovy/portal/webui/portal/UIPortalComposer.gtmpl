@@ -16,6 +16,11 @@
 						<% if(uicomponent.isShowControl) { %>
 						<a class="CloseButton" title="<%=_ctx.appRes(popupId + ".action.Abort")%>" href="<%=uicomponent.event("Abort")%>"><span></span></a>
 						<a class="<%= isEditted ? "EdittedSaveButton" : "SaveButton" %>" title="<%=_ctx.appRes(popupId + ".action.Finish")%>" href="<%=uicomponent.event("Finish")%>"><span></span></a>
+							<% if (uicomponent.isUsedInWizard()) { %>
+								<a class="BackButton"" title="<%=_ctx.appRes(popupId + ".action.Back")%>" href="<%=uicomponent.event("Back")%>">
+									<span></span>
+								</a>
+							<% } %>
 						<% } %>
 					<div class="PopupTitle"><%=_ctx.appRes(popupId + ".title."+ popupId)%></div>
 				</div>

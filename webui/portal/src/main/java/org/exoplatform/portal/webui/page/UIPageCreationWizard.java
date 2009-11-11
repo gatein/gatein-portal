@@ -42,7 +42,6 @@ import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.ComponentConfigs;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
@@ -182,6 +181,8 @@ public class UIPageCreationWizard extends UIPageWizard
 
          uiWizard.updateWizardComponent();
          uiWizard.viewStep(FIRST_STEP);
+         
+         uiWizard.setShowActions(true);
 
          UIWorkingWorkspace uiWorkingWS = uiWizard.getAncestorOfType(UIWorkingWorkspace.class);
          uiWorkingWS.findFirstComponentOfType(UIPortalComposer.class).setRendered(false);
@@ -193,6 +194,7 @@ public class UIPageCreationWizard extends UIPageWizard
       public void execute(Event<UIPageCreationWizard> event) throws Exception
       {
          UIPageCreationWizard uiWizard = event.getSource();
+         uiWizard.setShowActions(true);
          UIPortalApplication uiPortalApp = uiWizard.getAncestorOfType(UIPortalApplication.class);
          UIWorkingWorkspace uiWorkingWS = uiWizard.getAncestorOfType(UIWorkingWorkspace.class);
          uiWorkingWS.findFirstComponentOfType(UIPortalComposer.class).setRendered(false);
@@ -268,6 +270,7 @@ public class UIPageCreationWizard extends UIPageWizard
       public void execute(Event<UIPageCreationWizard> event) throws Exception
       {
          UIPageCreationWizard uiWizard = event.getSource();
+         uiWizard.setShowActions(false);
          UIPortalApplication uiPortalApp = uiWizard.getAncestorOfType(UIPortalApplication.class);
          UIWorkingWorkspace uiWorkingWS = uiWizard.getAncestorOfType(UIWorkingWorkspace.class);
          WebuiRequestContext context = Util.getPortalRequestContext();
@@ -360,6 +363,7 @@ public class UIPageCreationWizard extends UIPageWizard
       public void execute(Event<UIPageCreationWizard> event) throws Exception
       {
          UIPageCreationWizard uiWizard = event.getSource();
+         uiWizard.setShowActions(true);
          UIPortalApplication uiPortalApp = uiWizard.getAncestorOfType(UIPortalApplication.class);
          UIWorkingWorkspace uiWorkingWS = uiWizard.getAncestorOfType(UIWorkingWorkspace.class);
          uiWorkingWS.findFirstComponentOfType(UIPortalComposer.class).setRendered(false);

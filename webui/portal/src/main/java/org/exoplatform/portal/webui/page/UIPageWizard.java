@@ -42,6 +42,8 @@ public abstract class UIPageWizard extends UIWizard
    private int numberStep_;
 
    private boolean showWelcome = true;
+   
+   private boolean showActions = true;
 
    public UIPageWizard() throws Exception
    {
@@ -59,6 +61,16 @@ public abstract class UIPageWizard extends UIWizard
    public int getNumberSteps()
    {
       return numberStep_;
+   }
+
+   public boolean isShowActions()
+   {
+      return showActions;
+   }
+
+   public void setShowActions(boolean showActions)
+   {
+      this.showActions = showActions;
    }
 
    public void processRender(WebuiRequestContext context) throws Exception

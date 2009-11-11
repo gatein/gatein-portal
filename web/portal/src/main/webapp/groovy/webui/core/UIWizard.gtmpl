@@ -57,7 +57,7 @@
 						<table class="ActionContainer">
 							<tr>
 								<td>
-								
+								  <% if (uicomponent.isShowActions()) { %>
 									<div onclick="<%=uicomponent.event("Abort", "");%>" class="ActionButton LightBlueStyle">
 										<div class="ButtonLeft">
 											<div class="ButtonRight">
@@ -103,8 +103,10 @@
 											</div>
 										</div>
 									</div>
-									<% } %>
-						
+									<% } %>									
+									
+									
+									<%} // End if (step != 3)%> 
 								</td>
 							</tr>
 						</table>

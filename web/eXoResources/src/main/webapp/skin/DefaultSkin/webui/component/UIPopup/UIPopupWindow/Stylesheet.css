@@ -56,6 +56,16 @@
 	background: url('background/TopExitBtn.gif') no-repeat right bottom;
 }
 
+.UIPopupWindow .BackButton {
+	float: right; /* orientation=lt */
+	float: left; /* orientation=rt */
+	margin: 5px 3px 0px 0px; /* orientation=lt */
+	margin: 5px 0px 0px 3px; /* orientation=rt */
+	cursor: pointer;
+	width: 18px; height: 18px;
+	background: url('background/BackBtn.gif') no-repeat right bottom;
+}
+
 .UIPopupWindow .TopLeftCornerDecorator {
 	background: url('background/TopPopup.png') no-repeat left top;
 	padding-left: 8px;
@@ -188,6 +198,14 @@
 	height: 17px;
 	margin-top: 6px;
 	width: 25px;
+}
+
+.UIPortalComposer .BackButton {
+	background: #666666 no-repeat scroll right bottom; /* orientation=lt */
+	background: #666666 no-repeat scroll left bottom; /* orientation=rt */
+	width: 25px;
+	height: 17px;
+	margin: 6px 0px 0px 0px;
 }
 
 .UIPortalComposer .EdittedSaveButton {

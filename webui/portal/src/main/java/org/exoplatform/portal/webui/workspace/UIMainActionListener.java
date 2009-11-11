@@ -103,9 +103,9 @@ public class UIMainActionListener
          portalComposer.setRendered(false);
          portalComposer.setComponentConfig(UIPortalComposer.class, "UIPageEditor");
          portalComposer.setId("UIPageEditor");
-         portalComposer.setShowControl(false);
-         portalComposer.setEditted(false);
-         portalComposer.setCollapse(true);
+         portalComposer.setShowControl(true);
+         portalComposer.setEditted(true);
+         portalComposer.setCollapse(false);
 
          UIPortalToolPanel uiToolPanel = uiWorkingWS.findFirstComponentOfType(UIPortalToolPanel.class);
          uiToolPanel.setShowMaskLayer(false);

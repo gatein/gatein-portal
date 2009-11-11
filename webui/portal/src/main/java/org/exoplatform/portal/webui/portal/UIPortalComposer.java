@@ -52,8 +52,10 @@ import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.UITabPane;
+import org.exoplatform.webui.core.UIWizard;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.event.Event.Phase;
 
 import java.util.List;
 
@@ -70,6 +72,7 @@ import java.util.List;
       @EventConfig(name = "ViewProperties", listeners = UIPortalComposer.ViewProperties2ActionListener.class),
       @EventConfig(name = "Abort", listeners = UIPortalComposer.Abort2ActionListener.class),
       @EventConfig(name = "Finish", listeners = UIPortalComposer.Finish2ActionListener.class),
+      @EventConfig(name = "Back", listeners = UIPortalComposer.BackActionListener.class),
       @EventConfig(listeners = UIPortalComposer.SwitchModeActionListener.class),
       @EventConfig(listeners = UIPortalComposer.ChangeEdittedStateActionListener.class),
       @EventConfig(listeners = UIPortalComposer.ToggleActionListener.class)}),
@@ -133,6 +136,18 @@ public class UIPortalComposer extends UIContainer
    public void setShowControl(boolean state)
    {
       isShowControl = state;
+   }
+
+   public boolean isUsedInWizard()
+   {
+      UIWorkingWorkspace uiWorkingWS = getAncestorOfType(UIWorkingWorkspace.class);
+      UIPortalToolPanel uiToolPanel = uiWorkingWS.findFirstComponentOfType(UIPortalToolPanel.class);
+      UIComponent uicomponent = uiToolPanel.getUIComponent();
+      if (uicomponent != null && uicomponent instanceof UIWizard)
+      {
+         return true;
+      }
+      return false;
    }
 
    public void save() throws Exception
@@ -426,19 +441,19 @@ public class UIPortalComposer extends UIContainer
 
          switch (portalMode)
          {
-            case UIPortalApplication.APP_BLOCK_EDIT_MODE:
+            case UIPortalApplication.APP_BLOCK_EDIT_MODE :
                uiPortalApp.setModeState(UIPortalApplication.APP_VIEW_EDIT_MODE);
                break;
-            case UIPortalApplication.APP_VIEW_EDIT_MODE:
+            case UIPortalApplication.APP_VIEW_EDIT_MODE :
                uiPortalApp.setModeState(UIPortalApplication.APP_BLOCK_EDIT_MODE);
                break;
-            case UIPortalApplication.CONTAINER_BLOCK_EDIT_MODE:
+            case UIPortalApplication.CONTAINER_BLOCK_EDIT_MODE :
                uiPortalApp.setModeState(UIPortalApplication.CONTAINER_VIEW_EDIT_MODE);
                break;
-            case UIPortalApplication.CONTAINER_VIEW_EDIT_MODE:
+            case UIPortalApplication.CONTAINER_VIEW_EDIT_MODE :
                uiPortalApp.setModeState(UIPortalApplication.CONTAINER_BLOCK_EDIT_MODE);
                break;
-            default:
+            default :
                uiPortalApp.setModeState(UIPortalApplication.NORMAL_MODE);
                return;
          }
@@ -522,6 +537,14 @@ public class UIPortalComposer extends UIContainer
          UIPortalToolPanel uiToolPanel = uiWorkingWS.findFirstComponentOfType(UIPortalToolPanel.class);
          UIPortalComposer composer = uiWorkingWS.findFirstComponentOfType(UIPortalComposer.class).setRendered(false);
          composer.setEditted(false);
+         if (composer.isUsedInWizard()) {            
+            UIWizard wizard = (UIWizard)uiToolPanel.getUIComponent();
+            int step = wizard.getCurrentStep();
+            step ++;
+            Event<UIComponent> uiEvent = wizard.createEvent("ViewStep" + step, Phase.PROCESS, event.getRequestContext());
+            uiEvent.broadcast();
+            return;
+         }
          UIPage uiPage = uiToolPanel.findFirstComponentOfType(UIPage.class);
 
          //
@@ -550,6 +573,23 @@ public class UIPortalComposer extends UIContainer
          uiPortal.broadcast(pnevent, Event.Phase.PROCESS);
          JavascriptManager jsManager = event.getRequestContext().getJavascriptManager();
          jsManager.addJavascript("eXo.portal.portalMode=" + UIPortalApplication.NORMAL_MODE + ";");
+      }
+   }
+
+   static public class BackActionListener extends EventListener<UIPortalComposer>
+   {
+      public void execute(Event<UIPortalComposer> event) throws Exception
+      {
+         UIPortalComposer composer = event.getSource();
+         if (composer.isUsedInWizard()) {
+            UIWorkingWorkspace uiWorkingWS = composer.getAncestorOfType(UIWorkingWorkspace.class);
+            UIPortalToolPanel uiToolPanel = uiWorkingWS.findFirstComponentOfType(UIPortalToolPanel.class);
+            UIWizard wizard = (UIWizard)uiToolPanel.getUIComponent();
+            int step = wizard.getCurrentStep();
+            step --;
+            Event<UIComponent> uiEvent = wizard.createEvent("ViewStep" + step, Phase.PROCESS, event.getRequestContext());
+            uiEvent.broadcast();
+         }
       }
    }
 }
