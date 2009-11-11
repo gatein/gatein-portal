@@ -26,7 +26,6 @@
 <%@ page import="java.util.ResourceBundle"%>
 <%@ page import="org.exoplatform.web.login.InitiateLoginServlet"%>
 <%@ page language="java" %>
-<%@ page contentType="text/html; charset=utf-8" %>
 <%
   String contextPath = request.getContextPath() ;
 
@@ -43,12 +42,15 @@
 	cookie.setPath(request.getContextPath());
 	cookie.setMaxAge(0);
 	response.addCookie(cookie);
+	
+  response.setCharacterEncoding("UTF-8"); 
+
 %>
 <!DOCTYPE html 
     PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
            "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <title>Login</title>
     <link rel="shortcut icon" type="image/x-icon"  href="<%=contextPath%>/favicon.ico" />
@@ -65,7 +67,7 @@
           <%
             if(username.length() > 0 || password.length() > 0) {
           %>
-            <font color="red"><%=res.getString("UILoginForm.label.SigninFail")%></font><%}%>
+          <font color="red"><%=res.getString("UILoginForm.label.SigninFail")%></font><%}%>
           <form name="loginForm" action="<%= contextPath + "/login"%>" method="post" style="margin: 0px;">    
           		<input type="hidden" name="uri" value="<%=session.getAttribute("initialURI") %>"/>
           		<table> 
