@@ -528,7 +528,7 @@
     </label>
     <action>
       <Close>الغاء</Close>
-      <Save>#{word.save}</Save>
+      <Save>Save And Close</Save>
     </action>
     <tab>
       <label>
