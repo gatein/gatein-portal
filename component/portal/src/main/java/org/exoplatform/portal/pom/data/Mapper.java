@@ -357,43 +357,6 @@ public class Mapper
       );
    }
 
-   public List<ModelChange> save(PageData src, Site site, String name)
-   {
-      org.gatein.mop.api.workspace.Page root = site.getRootPage();
-      org.gatein.mop.api.workspace.Page pages = root.getChild("pages");
-      org.gatein.mop.api.workspace.Page dst = pages.getChild(name);
-
-      //
-      LinkedList<ModelChange> changes = new LinkedList<ModelChange>();
-
-      //
-      if (dst == null)
-      {
-         dst = pages.addChild(name);
-         changes.add(new ModelChange.Create(src));
-      }
-      else
-      {
-         changes.add(new ModelChange.Update(src));
-      }
-
-      //
-      Attributes attrs = dst.getAttributes();
-      attrs.setValue(MappedAttributes.TITLE, src.getTitle());
-      attrs.setValue(MappedAttributes.FACTORY_ID, src.getFactoryId());
-      attrs.setValue(MappedAttributes.ACCESS_PERMISSIONS, join("|", src.getAccessPermissions()));
-      attrs.setValue(MappedAttributes.EDIT_PERMISSION, src.getEditPermission());
-      attrs.setValue(MappedAttributes.SHOW_MAX_WINDOW, src.isShowMaxWindow());
-      attrs.setValue(MappedAttributes.CREATOR, src.getCreator());
-      attrs.setValue(MappedAttributes.MODIFIER, src.getModifier());
-
-      //
-      changes.addAll(saveChildren(src, dst.getRootComponent()));
-
-      //
-      return changes;
-   }
-
    private ContainerData load(UIContainer src, List<ComponentData> children)
    {
       Attributes attrs = src.getAttributes();
@@ -485,6 +448,47 @@ public class Mapper
       return children;
    }
 
+   public List<ModelChange> save(PageData src, Site site, String name)
+   {
+      org.gatein.mop.api.workspace.Page root = site.getRootPage();
+      org.gatein.mop.api.workspace.Page pages = root.getChild("pages");
+      org.gatein.mop.api.workspace.Page dst = pages.getChild(name);
+
+      //
+      LinkedList<ModelChange> changes = new LinkedList<ModelChange>();
+
+      //
+      if (dst == null)
+      {
+         dst = pages.addChild(name);
+         changes.add(new ModelChange.Create(dst.getObjectId(), src));
+      }
+      else
+      {
+         changes.add(new ModelChange.Update(src));
+      }
+
+      //
+      Attributes attrs = dst.getAttributes();
+      attrs.setValue(MappedAttributes.TITLE, src.getTitle());
+      attrs.setValue(MappedAttributes.FACTORY_ID, src.getFactoryId());
+      attrs.setValue(MappedAttributes.ACCESS_PERMISSIONS, join("|", src.getAccessPermissions()));
+      attrs.setValue(MappedAttributes.EDIT_PERMISSION, src.getEditPermission());
+      attrs.setValue(MappedAttributes.SHOW_MAX_WINDOW, src.isShowMaxWindow());
+      attrs.setValue(MappedAttributes.CREATOR, src.getCreator());
+      attrs.setValue(MappedAttributes.MODIFIER, src.getModifier());
+
+      //
+      UIContainer rootContainer = dst.getRootComponent();
+      LinkedList<ModelChange> childrenChanges = saveChildren(src, rootContainer);
+
+      //
+      changes.addAll(childrenChanges);
+
+      //
+      return changes;
+   }
+
    private void save(ContainerData src, UIContainer dst)
    {
       Attributes dstAttrs = dst.getAttributes();
@@ -502,6 +506,9 @@ public class Mapper
       dstAttrs.setValue(MappedAttributes.NAME, src.getName());
    }
 
+   /*
+    * Performs routing of the corresponding save method
+    */
    private void save(ModelData src, WorkspaceObject dst, LinkedList<ModelChange> changes,
       Map<String, String> hierarchyRelationships)
    {
@@ -526,18 +533,18 @@ public class Mapper
 
    private LinkedList<ModelChange> saveChildren(final ContainerData src, UIContainer dst)
    {
-
-      //
       LinkedList<ModelChange> changes = new LinkedList<ModelChange>();
 
-      //
+      // The relationship in the hierarchy
+      // basically it's a map of the relationships between parent/child nodes
+      // that is helpful to detect move operations
+      // that we make immutable to avoid any bug
       Map<String, String> hierarchyRelationships = new HashMap<String, String>();
-
-      //
       build(src, hierarchyRelationships);
+      hierarchyRelationships = Collections.unmodifiableMap(hierarchyRelationships);
 
       //
-      saveChildren(src, dst, changes, Collections.unmodifiableMap(hierarchyRelationships));
+      saveChildren(src, dst, changes, hierarchyRelationships);
 
       //
       return changes;
@@ -572,9 +579,11 @@ public class Mapper
       //
       for (ModelData srcChild : src.getChildren())
       {
-         String srcId = srcChild.getStorageId();
+         String srcChildId = srcChild.getStorageId();
 
          // Replace dashboard application by container if needed
+         // this should be removed once we make the dashboard as first class
+         // citizen of the portal
          if (srcChild instanceof ApplicationData)
          {
             ApplicationData app = (ApplicationData)srcChild;
@@ -599,13 +608,14 @@ public class Mapper
 
          //
          UIComponent dstChild;
-         if (srcId != null)
+         if (srcChildId != null)
          {
-            dstChild = session.findObjectById(ObjectType.COMPONENT, srcId);
+            dstChild = session.findObjectById(ObjectType.COMPONENT, srcChildId);
             if (dstChild == null)
             {
-               throw new AssertionError("Could not find supposed present child with id " + srcId);
+               throw new AssertionError("Could not find supposed present child with id " + srcChildId);
             }
+
             // julien : this can fail due to a bug in chromattic not implementing equals method properly
             // and is replaced with the foreach below
             /*
@@ -614,23 +624,27 @@ public class Mapper
                         "that is not present in the target ui container " + session.pathOf(dst));
                     }
             */
-
-            //
             boolean found = false;
             for (UIComponent child : dst)
             {
-               if (child.getObjectId().equals(srcId))
+               if (child.getObjectId().equals(srcChildId))
                {
                   found = true;
                   break;
                }
             }
+
+            //
             if (!found)
             {
-               if (hierarchyRelationships.containsKey(srcId))
+               String srcId = hierarchyRelationships.get(srcChildId);
+               if (srcId != null)
                {
                   // It's a move operation, so we move the node first
                   dst.add(dstChild);
+
+                  //
+                  changes.add(new ModelChange.Move(srcId, dst.getObjectId(), srcChildId));
                }
                else
                {
@@ -666,34 +680,40 @@ public class Mapper
             {
                throw new AssertionError("Was not expecting child " + srcChild);
             }
-            changes.add(new ModelChange.Create(srcChild));
+            changes.add(new ModelChange.Create(dst.getObjectId(), srcChild));
          }
 
          //
          save(srcChild, dstChild, changes, hierarchyRelationships);
 
          //
-         String dstId = dstChild.getObjectId();
-         modelObjectMap.put(dstId, srcChild);
-         orders.add(dstId);
+         String dstChildId = dstChild.getObjectId();
+         modelObjectMap.put(dstChildId, srcChild);
+         orders.add(dstChildId);
       }
 
-      // Take care of move operation that could be seen as a remove
+      // Take care of move operation that could be seen as a remove otherwise
       for (UIComponent dstChild : dst)
       {
-         String dstId = dstChild.getObjectId();
-         if (!modelObjectMap.containsKey(dstId) && hierarchyRelationships.containsKey(dstId))
+         String dstChildId = dstChild.getObjectId();
+         if (!modelObjectMap.containsKey(dstChildId))
          {
-            String parentId = hierarchyRelationships.get(dstId);
+            String parentId = hierarchyRelationships.get(dstChildId);
+            if (parentId != null)
+            {
+               // Get the new parent
+               UIContainer parent = session.findObjectById(ObjectType.CONTAINER, parentId);
 
-            // Get the new parent
-            UIContainer parent = session.findObjectById(ObjectType.CONTAINER, parentId);
+               // Perform the move
+               parent.add(dstChild);
 
-            // Perform the move
-            parent.add(dstChild);
+               //
+               changes.add(new ModelChange.Move(dst.getObjectId(), parentId, dstChildId));
 
-            //
-            changes.add(new ModelChange.Destroy(dstId));
+               // julien : we do not need to create an update operation
+               // as later the update operation will be created when the object
+               // will be processed
+            }
          }
       }
 
@@ -701,11 +721,11 @@ public class Mapper
       for (Iterator<UIComponent> i = dst.iterator(); i.hasNext();)
       {
          UIComponent dstChild = i.next();
-         String dstId = dstChild.getObjectId();
-         if (!modelObjectMap.containsKey(dstId))
+         String dstChildId = dstChild.getObjectId();
+         if (!modelObjectMap.containsKey(dstChildId))
          {
             i.remove();
-            changes.add(new ModelChange.Destroy(dstId));
+            changes.add(new ModelChange.Destroy(dstChildId));
          }
       }
 
@@ -771,7 +791,7 @@ public class Mapper
       );
    }
 
-   public <S, I> void save(ApplicationData<S> src, UIWindow dst)
+   public <S> void save(ApplicationData<S> src, UIWindow dst)
    {
       Attributes attrs = dst.getAttributes();
       attrs.setValue(MappedAttributes.THEME, src.getTheme());

@@ -204,6 +204,49 @@ public class TestDataStorage extends BasicTestCase
       assertNull(page);
    }
 
+   public void testWindowMove1() throws Exception
+   {
+      Page page = storage_.getPage("portal::test::test4");
+      Application<?> a1 = (Application<?>)page.getChildren().get(0);
+      Container a2 = (Container)page.getChildren().get(1);
+      Application<?> a3 = (Application<?>)a2.getChildren().get(0);
+      Application<?> a4 = (Application<?>)a2.getChildren().remove(1);
+      page.getChildren().add(1, a4);
+      List<ModelChange> changes = storage_.save(page);
+
+      //
+      page = storage_.getPage("portal::test::test4");
+      assertEquals(3, page.getChildren().size());
+      Application<?> c1 = (Application<?>)page.getChildren().get(0);
+      assertEquals(a1.getStorageId(), c1.getStorageId());
+      Application<?> c2 = (Application<?>)page.getChildren().get(1);
+      assertEquals(a4.getStorageId(), c2.getStorageId());
+      Container c3 = (Container)page.getChildren().get(2);
+      assertEquals(a2.getStorageId(), c3.getStorageId());
+      assertEquals(1, c3.getChildren().size());
+      Application<?> c4 = (Application<?>)c3.getChildren().get(0);
+      assertEquals(a3.getStorageId(), c4.getStorageId());
+
+      //
+      assertEquals(6, changes.size());
+      ModelChange.Update ch1 = (ModelChange.Update)changes.get(0);
+      assertEquals(page.getStorageId(), ch1.getObject().getStorageId());
+      ModelChange.Update ch2 = (ModelChange.Update)changes.get(1);
+      assertEquals(a1.getStorageId(), ch2.getObject().getStorageId());
+      ModelChange.Move ch3 = (ModelChange.Move)changes.get(2);
+//      assertEquals(a2.getStorageId(), ch3.getSrcId());
+//      assertEquals(page.getStorageId(), ch3.getDstId());
+      assertEquals(a4.getStorageId(), ch3.getId());
+      ModelChange.Update ch4 = (ModelChange.Update)changes.get(3);
+      assertEquals(a4.getStorageId(), ch4.getObject().getStorageId());
+      ModelChange.Update ch5 = (ModelChange.Update)changes.get(4);
+      assertEquals(a2.getStorageId(), ch5.getObject().getStorageId());
+      ModelChange.Update ch6 = (ModelChange.Update)changes.get(5);
+      assertEquals(a3.getStorageId(), ch6.getObject().getStorageId());
+   }
+
+   // Need to make window move 2 unit test
+
    public void testNavigationCreate() throws Exception
    {
       testPageConfigRemove();

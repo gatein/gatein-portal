@@ -30,16 +30,26 @@ public abstract class ModelChange
    {
 
       /** . */
+      private final String parentId;
+
+      /** . */
       private final ModelData object;
 
-      public Create(ModelData object)
+      public Create(String parentId, ModelData object)
       {
+         this.parentId = parentId;
          this.object = object;
       }
 
       public ModelData getObject()
       {
          return object;
+      }
+
+      @Override
+      public String toString()
+      {
+         return "ModelChange.Create[parentId=" + parentId + "id=" + object.getStorageId() + ",name=" + object.getStorageName() + "]";
       }
    }
 
@@ -58,22 +68,75 @@ public abstract class ModelChange
       {
          return object;
       }
+
+      @Override
+      public String toString()
+      {
+         return "ModelChange.Update[id=" + object.getStorageId() + "]";
+      }
    }
 
    public static class Destroy extends ModelChange
    {
 
       /** . */
-      private final String objectId;
+      private final String id;
 
-      public Destroy(String objectId)
+      public Destroy(String id)
       {
-         this.objectId = objectId;
+         this.id = id;
       }
 
-      public String getObjectId()
+      public String getId()
       {
-         return objectId;
+         return id;
+      }
+
+      @Override
+      public String toString()
+      {
+         return "ModelChange.Destroy[id=" + id + "]";
+      }
+   }
+
+   public static class Move extends ModelChange
+   {
+
+      /** . */
+      private final String srcId;
+
+      /** . */
+      private final String dstId;
+
+      /** . */
+      private final String id;
+
+      public Move(String srcId, String dstId, String id)
+      {
+         this.srcId = srcId;
+         this.dstId = dstId;
+         this.id = id;
+      }
+
+      public String getSrcId()
+      {
+         return srcId;
+      }
+
+      public String getDstId()
+      {
+         return dstId;
+      }
+
+      public String getId()
+      {
+         return id;
+      }
+
+      @Override
+      public String toString()
+      {
+         return "ModelChange.Move[srcId=" + srcId + ",dstId=" + dstId + ",id" + id + "]";
       }
    }
 }
