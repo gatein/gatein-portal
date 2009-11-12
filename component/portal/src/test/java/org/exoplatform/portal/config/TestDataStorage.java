@@ -82,124 +82,107 @@ public class TestDataStorage extends BasicTestCase
       mgr.closeSession(false);
    }
 
-   public void testPortalConfigCreate() throws Exception
+   public void testCreatePortal() throws Exception
    {
-      PortalConfig portalConfig = new PortalConfig();
-      portalConfig.setName(testPortal);
-      portalConfig.setLocale("en");
-      portalConfig.setAccessPermissions(new String[]{UserACL.EVERYONE});
+      PortalConfig portal = new PortalConfig();
+      portal.setType("portal");
+      portal.setName("foo");
+      portal.setLocale("en");
+      portal.setAccessPermissions(new String[]{UserACL.EVERYONE});
 
-      PortalConfig returnConfig = storage_.getPortalConfig(portalConfig.getName());
-      if (returnConfig != null)
-         storage_.remove(returnConfig);
-
-      storage_.create(portalConfig);
-      returnConfig = storage_.getPortalConfig(portalConfig.getName());
-      assertNotNull(returnConfig);
-      assertEquals(portalConfig.getName(), returnConfig.getName());
-      assertEquals(portalConfig.getCreator(), returnConfig.getCreator());
+      //
+      storage_.create(portal);
+      portal = storage_.getPortalConfig(portal.getName());
+      assertNotNull(portal);
+      assertEquals("portal", portal.getType());
+      assertEquals("foo", portal.getName());
    }
 
    public void testPortalConfigSave() throws Exception
    {
-      testPortalConfigCreate();
+      PortalConfig portal = storage_.getPortalConfig("portal", "test");
+      assertNotNull(portal);
 
       //
-      PortalConfig portalConfig = storage_.getPortalConfig(testPortal);
+      portal.setLocale("vietnam");
+      storage_.save(portal);
 
-      assertNotNull(portalConfig);
-
-      String newLocale = "vietnam";
-      portalConfig.setLocale(newLocale);
-      storage_.save(portalConfig);
-      portalConfig = storage_.getPortalConfig(testPortal);
-      assertNotNull(portalConfig);
-      assertEquals(newLocale, portalConfig.getLocale());
+      //
+      portal = storage_.getPortalConfig("portal", "test");
+      assertNotNull(portal);
+      assertEquals("vietnam", portal.getLocale());
    }
 
    public void testPortalConfigRemove() throws Exception
    {
-      testPortalConfigSave();
+      PortalConfig portal = storage_.getPortalConfig("portal", "test");
+      assertNotNull(portal);
 
       //
-      PortalConfig portalConfig = storage_.getPortalConfig(testPortal);
-      assertNotNull(portalConfig);
-
-      storage_.remove(portalConfig);
-      assertNull(storage_.getPortalConfig(testPortal));
+      storage_.remove(portal);
+      portal = storage_.getPortalConfig(testPortal);
+      assertNull(portal);
    }
 
-   public void testPageConfigCreate() throws Exception
-   {
-      testPortalConfigRemove();
-
-      //
-      createPageConfig(PortalConfig.PORTAL_TYPE, "portalone");
-      createPageConfig(PortalConfig.USER_TYPE, "exoadmin");
-      createPageConfig(PortalConfig.GROUP_TYPE, "portal/admin");
-   }
-
-   private void createPageConfig(String ownerType, String ownerId) throws Exception
+   public void testCreatePage() throws Exception
    {
       Page page = new Page();
-      page.setName("testPage");
-      page.setOwnerId("classic");
-      page.setOwnerType("portal");
-
-      try
-      {
-         storage_.create(page);
-      }
-      catch (Exception e)
-      {
-         page = storage_.getPage(page.getPageId());
-      }
-
-      Page returnPage = storage_.getPage(page.getPageId());
-      assertNotNull(returnPage);
-      assertEquals(page.getPageId(), returnPage.getPageId());
-      assertEquals(page.getOwnerType(), returnPage.getOwnerType());
-      assertEquals(page.getOwnerId(), returnPage.getOwnerId());
-      assertEquals(page.getChildren().size(), returnPage.getChildren().size());
-   }
-
-   public void testPageConfigSave() throws Exception
-   {
-      testPageConfigCreate();
+      page.setTitle("MyTitle");
+      page.setOwnerType(PortalConfig.PORTAL_TYPE);
+      page.setOwnerId("test");
+      page.setName("foo");
 
       //
-      Page page = storage_.getPage(testPage);
+      storage_.create(page);
+
+      //
+      Page page2 = storage_.getPage(page.getPageId());
+
+      //
+      assertNotNull(page2);
+      assertEquals("portal::test::foo", page2.getPageId());
+      assertEquals("portal", page2.getOwnerType());
+      assertEquals("test", page2.getOwnerId());
+      assertEquals("foo", page2.getName());
+      assertEquals("MyTitle", page2.getTitle());
+      assertEquals(0, page2.getChildren().size());
+   }
+
+   public void testSavePage() throws Exception
+   {
+      Page page = new Page();
+      page.setTitle("MyTitle");
+      page.setOwnerType(PortalConfig.PORTAL_TYPE);
+      page.setOwnerId("test");
+      page.setName("foo");
+
+      //
+      storage_.create(page);
+
+      //
+      Page page2 = storage_.getPage(page.getPageId());
+      page2.setTitle("MyTitle2");
+      storage_.save(page2);
+
+      //
+      assertNotNull(page2);
+      assertEquals("portal::test::foo", page2.getPageId());
+      assertEquals("portal", page2.getOwnerType());
+      assertEquals("test", page2.getOwnerId());
+      assertEquals("foo", page2.getName());
+      assertEquals("MyTitle2", page2.getTitle());
+      assertEquals(0, page2.getChildren().size());
+   }
+
+   public void testPageRemove() throws Exception
+   {
+      Page page = storage_.getPage("portal::test::test1");
       assertNotNull(page);
 
       //
-      PortalConfig portalConfig = new PortalConfig();
-      portalConfig.setName("customers");
-      portalConfig.setLocale("en");
-      portalConfig.setAccessPermissions(new String[]{UserACL.EVERYONE});
-      storage_.create(portalConfig);
-
-      page.setTitle("New Page Title");
-      page.setOwnerId("customers");
-      storage_.save(page);
-
-      Page returnPage = storage_.getPage(page.getPageId());
-      assertEquals("New Page Title", returnPage.getTitle());
-      assertEquals(page.getPageId(), returnPage.getPageId());
-      assertEquals(page.getOwnerType(), returnPage.getOwnerType());
-      assertEquals(page.getOwnerId(), returnPage.getOwnerId());
-      assertEquals(page.getChildren().size(), returnPage.getChildren().size());
-   }
-
-   public void testPageConfigRemove() throws Exception
-   {
-      testPageConfigSave();
-
-      //
-      Page page = storage_.getPage(testPage);
-      assertNotNull(page);
-
       storage_.remove(page);
 
+      //
       page = storage_.getPage(testPage);
       assertNull(page);
    }
@@ -247,59 +230,50 @@ public class TestDataStorage extends BasicTestCase
 
    // Need to make window move 2 unit test
 
-   public void testNavigationCreate() throws Exception
+   public void testCreateNavigation() throws Exception
    {
-      testPageConfigRemove();
+      PortalConfig portal = new PortalConfig();
+      portal.setName("foo");
+      portal.setLocale("en");
+      portal.setAccessPermissions(new String[]{UserACL.EVERYONE});
+      storage_.save(portal);
 
       //
-      PortalConfig portalConfig = new PortalConfig();
-      portalConfig.setName(testPortal);
-      portalConfig.setLocale("en");
-      portalConfig.setAccessPermissions(new String[]{UserACL.EVERYONE});
-      storage_.save(portalConfig);
-
-      //
-      PageNavigation pageNavi = new PageNavigation();
-      pageNavi.setOwnerId(testPortal);
-      pageNavi.setOwnerType("portal");
-      storage_.create(pageNavi);
+      PageNavigation navigation = new PageNavigation();
+      navigation.setOwnerId("foo");
+      navigation.setOwnerType("portal");
+      storage_.create(navigation);
    }
 
-   public void testNavigationSave() throws Exception
+   public void testSaveNavigation() throws Exception
    {
-      testNavigationCreate();
-
-      //
-      PageNavigation pageNavi = storage_.getPageNavigation("portal", testPortal);
+      PageNavigation pageNavi = storage_.getPageNavigation("portal", "test");
       assertNotNull(pageNavi);
 
-      String newModifier = "trong.tran";
-      pageNavi.setModifier(newModifier);
+      //
+      pageNavi.setModifier("trong.tran");
       storage_.save(pageNavi);
 
+      //
       PageNavigation newPageNavi = storage_.getPageNavigation(pageNavi.getOwnerType(), pageNavi.getOwnerId());
-      assertEquals(newModifier, newPageNavi.getModifier());
+      assertEquals("trong.tran", newPageNavi.getModifier());
    }
 
-   public void testNavigationRemove() throws Exception
+   public void testRemoveNavigation() throws Exception
    {
-      testNavigationSave();
+      PageNavigation navigation = storage_.getPageNavigation("portal", "test");
+      assertNotNull(navigation);
 
       //
-      PageNavigation pageNavi = storage_.getPageNavigation("portal", testPortal);
-      assertNotNull(pageNavi);
+      storage_.remove(navigation);
 
-      storage_.remove(pageNavi);
-
-      pageNavi = storage_.getPageNavigation("portal", testPortal);
-      // assertNull(pageNavi);
+      //
+      navigation = storage_.getPageNavigation("portal", "test");
+      assertNull(navigation);
    }
 
-   public void testPortletPreferencesCreate() throws Exception
+   public void testCreatePortletPreferences() throws Exception
    {
-      testNavigationRemove();
-
-      //
       ArrayList<Preference> prefs = new ArrayList<Preference>();
       for (int i = 0; i < 5; i++)
       {
@@ -309,27 +283,17 @@ public class TestDataStorage extends BasicTestCase
          prefs.add(pref);
       }
 
+      //
       PortletPreferences portletPreferences = new PortletPreferences();
       portletPreferences.setWindowId(testPortletPreferences);
       portletPreferences.setPreferences(prefs);
 
+      //
       storage_.save(portletPreferences);
-
-      PortletPreferences portletPref = storage_.getPortletPreferences(testPortletPreferences);
-      assertEquals(portletPref.getWindowId(), testPortletPreferences);
-   }
-
-   public void testPortletPreferencesSave() throws Exception
-   {
-      testPortletPreferencesCreate();
 
       //
       PortletPreferences portletPref = storage_.getPortletPreferences(testPortletPreferences);
-      assertNotNull(portletPref);
-
-      List<Preference> prefs = portletPref.getPreferences();
-      assertNotNull(prefs);
-      assertEquals(5, prefs.size());
+      assertEquals(portletPref.getWindowId(), testPortletPreferences);
    }
 
    public void testWindowScopedPortletPreferences() throws Exception

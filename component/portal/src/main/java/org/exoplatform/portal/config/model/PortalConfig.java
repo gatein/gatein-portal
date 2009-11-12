@@ -198,11 +198,6 @@ public class PortalConfig extends ModelObject
       modifiable = b;
    }
 
-   //  public String getFactoryId() { 
-   //    return factoryId; 
-   //  }
-   //  public void setFactoryId(String factoryId) { this.factoryId = factoryId; }
-
    public String getCreator()
    {
       return creator;
