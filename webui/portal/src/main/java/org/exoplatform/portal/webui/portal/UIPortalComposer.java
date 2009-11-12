@@ -22,7 +22,7 @@ package org.exoplatform.portal.webui.portal;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.UserPortalConfig;
 import org.exoplatform.portal.config.UserPortalConfigService;
-import org.exoplatform.portal.config.model.ModelChange;
+import org.exoplatform.portal.pom.data.ModelChange;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.PortalProperties;
@@ -537,11 +537,13 @@ public class UIPortalComposer extends UIContainer
          UIPortalToolPanel uiToolPanel = uiWorkingWS.findFirstComponentOfType(UIPortalToolPanel.class);
          UIPortalComposer composer = uiWorkingWS.findFirstComponentOfType(UIPortalComposer.class).setRendered(false);
          composer.setEditted(false);
-         if (composer.isUsedInWizard()) {            
+         if (composer.isUsedInWizard())
+         {
             UIWizard wizard = (UIWizard)uiToolPanel.getUIComponent();
             int step = wizard.getCurrentStep();
-            step ++;
-            Event<UIComponent> uiEvent = wizard.createEvent("ViewStep" + step, Phase.PROCESS, event.getRequestContext());
+            step++;
+            Event<UIComponent> uiEvent =
+               wizard.createEvent("ViewStep" + step, Phase.PROCESS, event.getRequestContext());
             uiEvent.broadcast();
             return;
          }
@@ -581,13 +583,15 @@ public class UIPortalComposer extends UIContainer
       public void execute(Event<UIPortalComposer> event) throws Exception
       {
          UIPortalComposer composer = event.getSource();
-         if (composer.isUsedInWizard()) {
+         if (composer.isUsedInWizard())
+         {
             UIWorkingWorkspace uiWorkingWS = composer.getAncestorOfType(UIWorkingWorkspace.class);
             UIPortalToolPanel uiToolPanel = uiWorkingWS.findFirstComponentOfType(UIPortalToolPanel.class);
             UIWizard wizard = (UIWizard)uiToolPanel.getUIComponent();
             int step = wizard.getCurrentStep();
-            step --;
-            Event<UIComponent> uiEvent = wizard.createEvent("ViewStep" + step, Phase.PROCESS, event.getRequestContext());
+            step--;
+            Event<UIComponent> uiEvent =
+               wizard.createEvent("ViewStep" + step, Phase.PROCESS, event.getRequestContext());
             uiEvent.broadcast();
          }
       }

@@ -103,7 +103,7 @@ public class UIPortletActionListener
          }
          else
          {
-            // todo: fix me as this shouldn't probably be done only for the WSRP case…
+            // todo: fix me as this shouldn't probably be done only for the WSRP case
             PortletContext clonedContext = instanceCtx.getClonedContext();
             if (clonedContext != null)
             {

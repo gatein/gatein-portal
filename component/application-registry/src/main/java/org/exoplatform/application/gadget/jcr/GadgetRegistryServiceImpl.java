@@ -127,7 +127,7 @@ public class GadgetRegistryServiceImpl implements GadgetRegistryService
       {
          sessionProvider.close();
       }
-      Gadget gadget = mapper_.toApplciation(entry.getDocument());
+      Gadget gadget = mapper_.toApplication(entry.getDocument());
       return gadget;
    }
 
@@ -152,7 +152,7 @@ public class GadgetRegistryServiceImpl implements GadgetRegistryService
          {
             String entryPath = itr.nextNode().getPath().substring(regNode.getPath().length() + 1);
             RegistryEntry entry = regService_.getEntry(sessionProvider, entryPath);
-            Gadget gadget = mapper_.toApplciation(entry.getDocument());
+            Gadget gadget = mapper_.toApplication(entry.getDocument());
             gadgets.add(gadget);
          }
          if (sortComparator != null)

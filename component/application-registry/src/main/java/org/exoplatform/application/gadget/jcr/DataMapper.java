@@ -67,7 +67,7 @@ public class DataMapper
       root.setAttribute(EXO_GADGET_IS_REMOTE, String.valueOf(app.isLocal()));
    }
 
-   public Gadget toApplciation(Document doc) throws Exception
+   public Gadget toApplication(Document doc) throws Exception
    {
       Element root = doc.getDocumentElement();
       Gadget app = new Gadget();
