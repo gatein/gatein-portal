@@ -87,6 +87,10 @@ public class UIPortletActionListener
          UIPortlet<S, C> uiPortlet = event.getSource();
          PortalRequestContext prcontext = (PortalRequestContext)event.getRequestContext();
 
+         // set the public render parameters from the request before creating the invocation
+         HttpServletRequest request = prcontext.getRequest();
+         setupPublicRenderParams(uiPortlet, request.getParameterMap());
+         
          //
          ActionInvocation actionInvocation = uiPortlet.create(ActionInvocation.class, prcontext);
 
@@ -152,10 +156,6 @@ public class UIPortletActionListener
          PortletMode mode = new PortletMode(getPortletModeOrDefault(navStateResponse));
          setNextMode(uiPortlet, mode);
 
-         // set the public params
-         HttpServletRequest request = prcontext.getRequest();
-         setupPublicRenderParams(uiPortlet, navStateResponse.getPublicNavigationalStateUpdates());
-
          /*
           * Cache the render parameters in the UI portlet component to handle the
           * navigational state. Each time a portlet is rendered (except using
@@ -166,8 +166,10 @@ public class UIPortletActionListener
          //
          StateString navigationalState = navStateResponse.getNavigationalState();
          uiPortlet.setNavigationalState(navigationalState);
-         uiPortlet.setPublicNavigationalStateUpdates(navStateResponse.getPublicNavigationalStateUpdates());
 
+         // update the public render parameters with the changes from the invocation
+         setupPublicRenderParams(uiPortlet, navStateResponse.getPublicNavigationalStateUpdates());
+         
          /*
           * Handle the events returned by the action output and broadcast a new UI
           * event to the ProcessEventsActionListener that will then target the

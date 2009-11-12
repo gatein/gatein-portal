@@ -152,7 +152,6 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
    private List<String> supportedPublicParams_;
    private boolean portletInPortal_ = true;
    private StateString navigationalState;
-   private Map<String, String[]> publicNavigationalStateChanges;
 
    public UIPortlet()
    {
@@ -659,8 +658,8 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
       // Navigational state
       invocation.setNavigationalState(navigationalState);
 
-      // Public navigational state
-      invocation.setPublicNavigationalState(publicNavigationalStateChanges);
+      // Public navigational state      
+      invocation.setPublicNavigationalState(this.getPublicParameters());
 
       // Mode
       invocation.setMode(Mode.create(getCurrentPortletMode().toString()));
@@ -668,9 +667,6 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
       // Window state
       invocation.setWindowState(org.gatein.pc.api.WindowState.create(getCurrentWindowState().toString()));
 
-      // Public navigational state
-      invocation.setPublicNavigationalState(this.getPublicParameters());
-      //
       StatefulPortletContext<C> preferencesPortletContext = getPortletContext();
 
       // get the user profile cached in the prc during the start of the request
@@ -849,10 +845,5 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
    void setNavigationalState(StateString navigationalState)
    {
       this.navigationalState = navigationalState;
-   }
-
-   void setPublicNavigationalStateUpdates(Map<String, String[]> publicNavigationalStateUpdates)
-   {
-      this.publicNavigationalStateChanges = publicNavigationalStateUpdates;
    }
 }
