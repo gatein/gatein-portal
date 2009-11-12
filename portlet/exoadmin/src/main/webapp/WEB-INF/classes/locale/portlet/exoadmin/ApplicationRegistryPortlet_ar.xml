@@ -52,7 +52,7 @@
   -->
   <UIToolbar>
     <label>
-      <organize>تنظيم</organize>
+      <organize>الفئات</organize>
       <portlet>مدخل</portlet>
       <gadget>أداة</gadget>
     </label>

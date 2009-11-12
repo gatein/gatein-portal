@@ -19,14 +19,18 @@
 
 package org.exoplatform.portal.webui.portal;
 
+import org.exoplatform.application.registry.Application;
 import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.config.model.CloneApplicationState;
 import org.exoplatform.portal.config.model.Container;
+import org.exoplatform.portal.config.model.TransientApplicationState;
+import org.exoplatform.portal.pom.spi.gadget.Gadget;
 import org.exoplatform.portal.webui.application.PortletState;
 import org.exoplatform.portal.webui.application.UIApplicationList;
+import org.exoplatform.portal.webui.application.UIGadget;
 import org.exoplatform.portal.webui.application.UIPortlet;
 import org.exoplatform.portal.webui.container.UIContainerList;
 import org.exoplatform.portal.webui.login.UILogin;
@@ -235,10 +239,17 @@ public class UIPortalComponentActionListener
             }
             else
             {
-               org.exoplatform.application.registry.Application app = null;
+               Application app = null;
                UIApplicationList appList = uiApp.findFirstComponentOfType(UIApplicationList.class);
                app = appList.getApplication(sourceId);
                ApplicationType applicationType = app.getType();
+               Application temp = null;
+               if (applicationType.equals(ApplicationType.GADGET))
+               {
+                  applicationType = ApplicationType.PORTLET;
+                  temp = app;
+                  app = appList.getApplication("dashboard/Gadget_Wrapper_Portlet");
+               }
 
                //
                UIPortlet uiPortlet = uiTarget.createUIComponent(UIPortlet.class, null, null);
@@ -268,6 +279,12 @@ public class UIPortalComponentActionListener
 
                //
                uiPortlet.setState(new PortletState(state, applicationType));
+               if (temp != null && applicationType.equals(ApplicationType.PORTLET))
+               {
+                  UIGadget uiGadget = uiPortlet.createUIComponent(UIGadget.class, null, null);
+                  uiGadget.setState(new TransientApplicationState<Gadget>(temp.getApplicationName()));
+                  uiPortlet.getPreferences().setValue("url", uiGadget.getUrl());
+               }
 
                uiPortlet.setPortletInPortal(uiTarget instanceof UIPortal);
                uiPortlet.setShowEditControl(true);
@@ -303,7 +320,6 @@ public class UIPortalComponentActionListener
          uiTarget.getChildren().add(position, uiSource);
          uiSource.setParent(uiTarget);
       }
-
    }
 
    public static class ChangeLanguageActionListener extends EventListener<UIPortal>

@@ -28,26 +28,26 @@ import org.exoplatform.portal.config.model.Application;
 import org.exoplatform.portal.config.model.ApplicationState;
 import org.exoplatform.portal.config.model.CloneApplicationState;
 import org.exoplatform.portal.config.model.Container;
-import org.exoplatform.portal.pom.data.ModelChange;
 import org.exoplatform.portal.config.model.ModelObject;
+import org.exoplatform.portal.config.model.PersistentApplicationState;
+import org.exoplatform.portal.config.model.TransientApplicationState;
 import org.exoplatform.portal.pom.config.cache.DataCache;
 import org.exoplatform.portal.pom.config.tasks.DashboardTask;
-import org.exoplatform.portal.pom.data.DashboardData;
-import org.exoplatform.portal.pom.data.ModelDataStorage;
-import org.exoplatform.portal.pom.data.NavigationData;
-import org.exoplatform.portal.pom.data.NavigationKey;
-import org.exoplatform.portal.pom.data.PageData;
-import org.exoplatform.portal.config.model.PersistentApplicationState;
-import org.exoplatform.portal.pom.data.PageKey;
-import org.exoplatform.portal.pom.data.PortalData;
-import org.exoplatform.portal.pom.data.PortalKey;
-import org.exoplatform.portal.config.model.TransientApplicationState;
 import org.exoplatform.portal.pom.config.tasks.PageNavigationTask;
 import org.exoplatform.portal.pom.config.tasks.PageTask;
 import org.exoplatform.portal.pom.config.tasks.PortalConfigTask;
 import org.exoplatform.portal.pom.config.tasks.PortletPreferencesTask;
 import org.exoplatform.portal.pom.config.tasks.PreferencesTask;
 import org.exoplatform.portal.pom.config.tasks.SearchTask;
+import org.exoplatform.portal.pom.data.DashboardData;
+import org.exoplatform.portal.pom.data.ModelChange;
+import org.exoplatform.portal.pom.data.ModelDataStorage;
+import org.exoplatform.portal.pom.data.NavigationData;
+import org.exoplatform.portal.pom.data.NavigationKey;
+import org.exoplatform.portal.pom.data.PageData;
+import org.exoplatform.portal.pom.data.PageKey;
+import org.exoplatform.portal.pom.data.PortalData;
+import org.exoplatform.portal.pom.data.PortalKey;
 import org.exoplatform.services.cache.CacheService;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
@@ -75,7 +75,7 @@ public class POMDataStorage implements ModelDataStorage, ModelDemarcation
 
    /** . */
    private final Log log = ExoLogger.getLogger(getClass());
-   
+
    /** . */
    private final TaskExecutionDecorator executor;
 
@@ -152,8 +152,7 @@ public class POMDataStorage implements ModelDataStorage, ModelDemarcation
       return execute(new PageTask.Load(key)).getPage();
    }
 
-   public PageData clonePage(PageKey key, PageKey cloneKey)
-      throws Exception
+   public PageData clonePage(PageKey key, PageKey cloneKey) throws Exception
    {
       return execute(new PageTask.Clone(key, cloneKey, true)).getPage();
    }
@@ -241,7 +240,8 @@ public class POMDataStorage implements ModelDataStorage, ModelDemarcation
       }
       else
       {
-         PreferencesTask.Load<S> load = new PreferencesTask.Load<S>(((PersistentApplicationState<S>)state).getStorageId());
+         PreferencesTask.Load<S> load =
+            new PreferencesTask.Load<S>(((PersistentApplicationState<S>)state).getStorageId());
          execute(load);
          return load.getState();
       }
@@ -255,8 +255,18 @@ public class POMDataStorage implements ModelDataStorage, ModelDemarcation
       }
       else
       {
-         PreferencesTask.Save<S> save = new PreferencesTask.Save<S>(((PersistentApplicationState<S>)state).getStorageId(), preferences);
-         execute(save);
+         if (state instanceof PersistentApplicationState)
+         {
+            PreferencesTask.Save<S> save =
+               new PreferencesTask.Save<S>(((PersistentApplicationState<S>)state).getStorageId(), preferences);
+            execute(save);
+         }
+         else
+         {
+            PreferencesTask.Save<S> save =
+               new PreferencesTask.Save<S>(((CloneApplicationState<S>)state).getStorageId(), preferences);
+            execute(save);
+         }
          return state;
       }
    }
@@ -284,7 +294,8 @@ public class POMDataStorage implements ModelDataStorage, ModelDemarcation
       }
       else if (PortletPreferences.class.equals(type))
       {
-         return (LazyPageList<T>)execute(new SearchTask.FindPortletPreferences((Query<PortletPreferences>)q)).getResult();
+         return (LazyPageList<T>)execute(new SearchTask.FindPortletPreferences((Query<PortletPreferences>)q))
+            .getResult();
       }
       else if (PortalData.class.equals(type))
       {

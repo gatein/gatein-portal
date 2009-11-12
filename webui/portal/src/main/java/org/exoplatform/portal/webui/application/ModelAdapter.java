@@ -56,17 +56,20 @@ public abstract class ModelAdapter<S, C extends Serializable>
    {
       if (type == ApplicationType.PORTLET)
       {
-         @SuppressWarnings("unchecked") ModelAdapter<S, C> adapter = (ModelAdapter<S, C>)PORTLET;
+         @SuppressWarnings("unchecked")
+         ModelAdapter<S, C> adapter = (ModelAdapter<S, C>)PORTLET;
          return adapter;
       }
       else if (type == ApplicationType.GADGET)
       {
-         @SuppressWarnings("unchecked") ModelAdapter<S, C> adapter = (ModelAdapter<S, C>)GADGET;
+         @SuppressWarnings("unchecked")
+         ModelAdapter<S, C> adapter = (ModelAdapter<S, C>)GADGET;
          return adapter;
       }
       else if (type == ApplicationType.WSRP_PORTLET)
       {
-         @SuppressWarnings("unchecked") ModelAdapter<S, C> adapter = (ModelAdapter<S, C>)WSRP;
+         @SuppressWarnings("unchecked")
+         ModelAdapter<S, C> adapter = (ModelAdapter<S, C>)WSRP;
          return adapter;
       }
       else
@@ -80,7 +83,8 @@ public abstract class ModelAdapter<S, C extends Serializable>
    {
 
       @Override
-      public StatefulPortletContext<ExoPortletState> getPortletContext(ExoContainer container, String applicationId, ApplicationState<Portlet> applicationState) throws Exception
+      public StatefulPortletContext<ExoPortletState> getPortletContext(ExoContainer container, String applicationId,
+         ApplicationState<Portlet> applicationState) throws Exception
       {
          DataStorage dataStorage = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
          Portlet preferences = dataStorage.load(applicationState);
@@ -97,7 +101,8 @@ public abstract class ModelAdapter<S, C extends Serializable>
       }
 
       @Override
-      public ApplicationState<Portlet> update(ExoContainer container, ExoPortletState updateState, ApplicationState<Portlet> applicationState) throws Exception
+      public ApplicationState<Portlet> update(ExoContainer container, ExoPortletState updateState,
+         ApplicationState<Portlet> applicationState) throws Exception
       {
          // Compute new preferences
          PortletBuilder builder = new PortletBuilder();
@@ -114,9 +119,8 @@ public abstract class ModelAdapter<S, C extends Serializable>
          }
          else
          {
-            PersistentApplicationState<Portlet> persistentState = (PersistentApplicationState<Portlet>)applicationState;
             DataStorage dataStorage = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
-            return dataStorage.save(persistentState, builder.build());
+            return dataStorage.save(applicationState, builder.build());
          }
       }
 
@@ -126,7 +130,8 @@ public abstract class ModelAdapter<S, C extends Serializable>
          String[] chunks = Utils.split("/", applicationState);
          String appName = chunks[0];
          String portletName = chunks[1];
-         return PortletContext.createPortletContext(PortletInvoker.LOCAL_PORTLET_INVOKER_ID + "./" + appName + "." + portletName);
+         return PortletContext.createPortletContext(PortletInvoker.LOCAL_PORTLET_INVOKER_ID + "./" + appName + "."
+            + portletName);
       }
 
       @Override
@@ -136,14 +141,17 @@ public abstract class ModelAdapter<S, C extends Serializable>
          {
             TransientApplicationState<Portlet> transientState = (TransientApplicationState<Portlet>)applicationState;
             Portlet pref = transientState.getContentState();
-            if(pref == null) pref = new Portlet();
+            if (pref == null)
+               pref = new Portlet();
             return pref;
          }
          else
          {
-            PersistentApplicationState<Portlet> persistentState = (PersistentApplicationState<Portlet>)applicationState;
             DataStorage dataStorage = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
-            return dataStorage.load(persistentState);
+            Portlet pref = dataStorage.load(applicationState);
+            if (pref == null)
+               pref = new Portlet();
+            return pref;
          }
       }
    };
@@ -158,9 +166,11 @@ public abstract class ModelAdapter<S, C extends Serializable>
       private final PortletContext WRAPPER_CONTEXT = PortletContext.createPortletContext(WRAPPER_ID);
 
       @Override
-      public StatefulPortletContext<ExoPortletState> getPortletContext(ExoContainer container, String applicationId, ApplicationState<Gadget> applicationState) throws Exception
+      public StatefulPortletContext<ExoPortletState> getPortletContext(ExoContainer container, String applicationId,
+         ApplicationState<Gadget> applicationState) throws Exception
       {
-         GadgetRegistryService gadgetService = (GadgetRegistryService)container.getComponentInstanceOfType(GadgetRegistryService.class);
+         GadgetRegistryService gadgetService =
+            (GadgetRegistryService)container.getComponentInstanceOfType(GadgetRegistryService.class);
          org.exoplatform.application.gadget.Gadget model = gadgetService.getGadget(applicationId);
          GadgetApplication application = new GadgetApplication(model.getName(), model.getUrl(), model.isLocal());
          String url = GadgetUtil.reproduceUrl(application.getUrl(), application.isLocal());
@@ -170,7 +180,8 @@ public abstract class ModelAdapter<S, C extends Serializable>
       }
 
       @Override
-      public ApplicationState<Gadget> update(ExoContainer container, ExoPortletState updateState, ApplicationState<Gadget> gadgetApplicationState) throws Exception
+      public ApplicationState<Gadget> update(ExoContainer container, ExoPortletState updateState,
+         ApplicationState<Gadget> gadgetApplicationState) throws Exception
       {
          throw new UnsupportedOperationException("todo / julien");
       }
@@ -189,13 +200,12 @@ public abstract class ModelAdapter<S, C extends Serializable>
       }
    };
 
-
    private static final ModelAdapter<WSRP, WSRP> WSRP = new ModelAdapter<WSRP, WSRP>()
    {
       @Override
       public Portlet getState(ExoContainer container, ApplicationState<WSRP> state) throws Exception
       {
-         return null;  // return null for now
+         return null; // return null for now
       }
 
       @Override
@@ -205,7 +215,8 @@ public abstract class ModelAdapter<S, C extends Serializable>
       }
 
       @Override
-      public StatefulPortletContext<WSRP> getPortletContext(ExoContainer container, String applicationId, ApplicationState<WSRP> state) throws Exception
+      public StatefulPortletContext<WSRP> getPortletContext(ExoContainer container, String applicationId,
+         ApplicationState<WSRP> state) throws Exception
       {
          DataStorage dataStorage = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
          WSRP wsrp = dataStorage.load(state);
@@ -218,7 +229,8 @@ public abstract class ModelAdapter<S, C extends Serializable>
       }
 
       @Override
-      public ApplicationState<WSRP> update(ExoContainer container, WSRP updateState, ApplicationState<WSRP> state) throws Exception
+      public ApplicationState<WSRP> update(ExoContainer container, WSRP updateState, ApplicationState<WSRP> state)
+         throws Exception
       {
          if (state instanceof TransientApplicationState)
          {
@@ -237,9 +249,11 @@ public abstract class ModelAdapter<S, C extends Serializable>
 
    public abstract PortletContext getProducerOfferedPortletContext(String applicationId);
 
-   public abstract StatefulPortletContext<C> getPortletContext(ExoContainer container, String applicationId, ApplicationState<S> applicationState) throws Exception;
+   public abstract StatefulPortletContext<C> getPortletContext(ExoContainer container, String applicationId,
+      ApplicationState<S> applicationState) throws Exception;
 
-   public abstract ApplicationState<S> update(ExoContainer container, C updateState, ApplicationState<S> applicationState) throws Exception;
+   public abstract ApplicationState<S> update(ExoContainer container, C updateState,
+      ApplicationState<S> applicationState) throws Exception;
 
    /**
     * Returns the state of the gadget as preferences or null if the preferences cannot be edited as such.

@@ -52,7 +52,7 @@
   -->
   <UIToolbar>
     <label>
-      <organize>Tổ chức</organize>
+      <organize>Danh mục</organize>
       <portlet>Portlet</portlet>
       <gadget>Gadget</gadget>
     </label>
