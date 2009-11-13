@@ -19,6 +19,7 @@
 
 package org.exoplatform.portal.webui.portal;
 
+import org.exoplatform.application.gadget.GadgetRegistryService;
 import org.exoplatform.application.registry.Application;
 import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.portal.application.PortalRequestContext;
@@ -28,6 +29,8 @@ import org.exoplatform.portal.config.model.CloneApplicationState;
 import org.exoplatform.portal.config.model.Container;
 import org.exoplatform.portal.config.model.TransientApplicationState;
 import org.exoplatform.portal.pom.spi.gadget.Gadget;
+import org.exoplatform.portal.pom.spi.portlet.Portlet;
+import org.exoplatform.portal.pom.spi.portlet.Preference;
 import org.exoplatform.portal.webui.application.PortletState;
 import org.exoplatform.portal.webui.application.UIApplicationList;
 import org.exoplatform.portal.webui.application.UIGadget;
@@ -47,6 +50,10 @@ import org.exoplatform.portal.webui.workspace.UIWorkingWorkspace;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.Query;
 import org.exoplatform.services.organization.User;
+import org.exoplatform.services.rss.parser.DefaultRSSChannel;
+import org.exoplatform.services.rss.parser.DefaultRSSItem;
+import org.exoplatform.services.rss.parser.RSSDocument;
+import org.exoplatform.services.rss.parser.RSSParser;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIContainer;
@@ -55,6 +62,7 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.exception.MessageException;
 
+import java.net.URI;
 import java.util.Date;
 import java.util.List;
 
@@ -243,7 +251,7 @@ public class UIPortalComponentActionListener
                UIApplicationList appList = uiApp.findFirstComponentOfType(UIApplicationList.class);
                app = appList.getApplication(sourceId);
                ApplicationType applicationType = app.getType();
-               
+
                //TanPD: Hardcoded to fix bug GTNPORTAL-91
                Application temp = null;
                if (applicationType.equals(ApplicationType.GADGET))
@@ -281,13 +289,35 @@ public class UIPortalComponentActionListener
 
                //
                uiPortlet.setState(new PortletState(state, applicationType));
-               
+
                //TanPD: Fix bug GTNPORTAL-91
                if (temp != null && applicationType.equals(ApplicationType.PORTLET))
                {
-                  UIGadget uiGadget = uiPortlet.createUIComponent(UIGadget.class, null, null);
-                  uiGadget.setState(new TransientApplicationState<Gadget>(temp.getApplicationName()));
-                  uiPortlet.getPreferences().setValue("url", uiGadget.getUrl());
+                  Portlet pref = uiPortlet.getPreferences();
+                  try
+                  {
+                     UIGadget uiGadget = uiPortlet.createUIComponent(UIGadget.class, null, null);
+                     uiGadget.setState(new TransientApplicationState<Gadget>(temp.getApplicationName()));
+                     pref.setValue("url", uiGadget.getUrl());
+                  }
+                  catch (Exception e)
+                  {
+                     //Fix in case: RSS Reader Gadget
+                     Preference aggIdPref = pref.getPreference("aggregatorId");
+                     String aggregatorId = null;
+                     if (aggIdPref == null || aggIdPref.getValue() == null || aggIdPref.getValue().length() == 0)
+                        aggregatorId = "rssAggregator";
+                     else
+                        aggregatorId = aggIdPref.getValue();
+                     GadgetRegistryService gadgetSrv = uiApp.getApplicationComponent(GadgetRegistryService.class);
+                     org.exoplatform.application.gadget.Gadget gadget = gadgetSrv.getGadget(aggregatorId);
+                     //TODO make sure it's an rss feed
+                     // TODO make sure that we did not add it already
+                     UIGadget uiGadget = uiPortlet.createUIComponent(UIGadget.class, null, null);
+                     uiGadget.setState(new TransientApplicationState<org.exoplatform.portal.pom.spi.gadget.Gadget>(
+                        gadget.getName()));
+                     pref.setValue("url", uiGadget.getUrl());
+                  }
                }
 
                uiPortlet.setPortletInPortal(uiTarget instanceof UIPortal);
