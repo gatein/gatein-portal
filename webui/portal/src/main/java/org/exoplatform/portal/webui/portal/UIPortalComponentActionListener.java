@@ -243,6 +243,8 @@ public class UIPortalComponentActionListener
                UIApplicationList appList = uiApp.findFirstComponentOfType(UIApplicationList.class);
                app = appList.getApplication(sourceId);
                ApplicationType applicationType = app.getType();
+               
+               //TanPD: Hardcoded to fix bug GTNPORTAL-91
                Application temp = null;
                if (applicationType.equals(ApplicationType.GADGET))
                {
@@ -279,6 +281,8 @@ public class UIPortalComponentActionListener
 
                //
                uiPortlet.setState(new PortletState(state, applicationType));
+               
+               //TanPD: Fix bug GTNPORTAL-91
                if (temp != null && applicationType.equals(ApplicationType.PORTLET))
                {
                   UIGadget uiGadget = uiPortlet.createUIComponent(UIGadget.class, null, null);

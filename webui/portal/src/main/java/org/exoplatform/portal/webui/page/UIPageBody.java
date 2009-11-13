@@ -96,6 +96,7 @@ public class UIPageBody extends UIComponentDecorator
          }
       }
 
+      uiPortal.setMaximizedUIComponent(null);
       if (page != null)
       {
          if (Page.DESKTOP_PAGE.equals(page.getFactoryId()))
@@ -109,8 +110,6 @@ public class UIPageBody extends UIComponentDecorator
          PortalDataMapper.toUIPage(uiPage, page);
          if (uiPage.isShowMaxWindow())
             uiPortal.setMaximizedUIComponent(uiPage);
-         else
-            uiPortal.setMaximizedUIComponent(null);
       }
       setUIComponent(uiPage);
    }
