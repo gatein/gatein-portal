@@ -530,13 +530,13 @@ public class UserPortalConfigService implements Startable
    }
 
    /**
-    * Returns the list of group ids that do not have an existing navigation.
+    * Returns the list of group ids having navigation.
     * 
-    * @return the group id with no navigation
+    * @return the group id having navigation
     * @throws Exception
     *            any exception
     */
-   public Set<String> findGroupWithoutNavigation() throws Exception
+   public Set<String> findGroupHavingNavigation() throws Exception
    {
       Query<PageNavigation> query = new Query<PageNavigation>(PortalConfig.GROUP_TYPE, null, PageNavigation.class);
       Set<String> groupIds = new HashSet<String>();

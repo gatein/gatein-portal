@@ -108,8 +108,8 @@ public class UIAddGroupNavigation extends UIContainer
       }
 
       UserPortalConfigService configService = getApplicationComponent(UserPortalConfigService.class);
-      Set<String> groupIdsWithNotNavigation = configService.findGroupWithoutNavigation();
-      listGroup.removeAll(groupIdsWithNotNavigation);
+      Set<String> groupIdsHavingNavigation = configService.findGroupHavingNavigation();
+      listGroup.removeAll(groupIdsHavingNavigation);
 
       UIVirtualList virtualList = getChild(UIVirtualList.class);
       virtualList.dataBind(new ObjectPageList<String>(listGroup, listGroup.size()));
