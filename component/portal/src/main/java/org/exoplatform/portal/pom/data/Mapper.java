@@ -558,10 +558,13 @@ public class Mapper
          String childId = child.getStorageId();
          if (childId != null)
          {
-            if (hierarchyRelationships.put(childId, parentId) != null)
+            if (hierarchyRelationships.containsKey(childId))
             {
                throw new AssertionError("The same object is present two times in the object hierarchy");
-            }            
+            }
+
+            // Note that we are aware that parent id may be null
+            hierarchyRelationships.put(childId, parentId);
          }
          if (child instanceof ContainerData)
          {
@@ -637,9 +640,10 @@ public class Mapper
             //
             if (!found)
             {
-               String srcId = hierarchyRelationships.get(srcChildId);
-               if (srcId != null)
+               if (hierarchyRelationships.containsKey(srcChildId))
                {
+                  String srcId = hierarchyRelationships.get(srcChildId);
+
                   // It's a move operation, so we move the node first
                   dst.add(dstChild);
 
@@ -648,8 +652,8 @@ public class Mapper
                }
                else
                {
-                  throw new IllegalArgumentException("Attempt for updating a ui component " + session.pathOf(dstChild)
-                     + "that is not present in the target ui container " + session.pathOf(dst));
+                     throw new IllegalArgumentException("Attempt for updating a ui component " + session.pathOf(dstChild)
+                     + " that is not present in the target ui container " + session.pathOf(dst));
                }
             }
 

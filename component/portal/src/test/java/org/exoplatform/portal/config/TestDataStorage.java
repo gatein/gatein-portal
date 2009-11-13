@@ -228,7 +228,29 @@ public class TestDataStorage extends BasicTestCase
       assertEquals(a3.getStorageId(), ch6.getObject().getStorageId());
    }
 
-   // Need to make window move 2 unit test
+   public void testWindowMove2() throws Exception
+   {
+      Page page = storage_.getPage("portal::test::test3");
+      Container container = new Container();
+      Application application = (Application)page.getChildren().remove(0);
+      container.getChildren().add(application);
+      page.getChildren().add(container);
+      
+      //
+      storage_.save(page);
+
+      //
+      Page page2 = storage_.getPage("portal::test::test3");
+
+      //
+      assertEquals(1, page2.getChildren().size());
+      Container container2 = (Container)page2.getChildren().get(0);
+      assertEquals(1, page2.getChildren().size());
+      Application application2 = (Application)container2.getChildren().get(0);
+      assertEquals(application2.getStorageId(), application.getStorageId());
+   }
+
+   // Need to make window move 3 unit test
 
    public void testCreateNavigation() throws Exception
    {
