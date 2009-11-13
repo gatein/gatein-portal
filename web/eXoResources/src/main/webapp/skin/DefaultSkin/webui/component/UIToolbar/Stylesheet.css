@@ -71,18 +71,19 @@
 }
 
 .UIToolbar .LargeToolbar a {
-	color: black; font-weight: bold;
+	color: #7E9BC9; 
+	font-weight: bold;
 	padding: 0px 3px 0px 3px;
 	cursor: pointer;
 }
 
 .UIToolbar .LargeToolbar a:hover{
-	color: #1043b1;
+	color: #003C7F;
 }
 
 .UIToolbar .LargeToolbar .SelectButtonLabel {
 	line-height: 18px;
-	color: #058ee6;
+	color: #003C7F;
 }
 
 .UIToolbar .LargeToolbar .HorizontalSeparator {
