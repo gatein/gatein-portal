@@ -104,32 +104,62 @@ public class UIUserProfileInputSet extends UIFormInputSet
          }
          else if (key.equalsIgnoreCase("user.language"))
          {
-            List<SelectItemOption<String>> lang = new ArrayList<SelectItemOption<String>>();
-            LocaleConfigService localeService = getApplicationComponent(LocaleConfigService.class);
-            Locale currentLocale = ((PortletRequestContext)WebuiRequestContext.getCurrentInstance()).getLocale();
-            Iterator i = localeService.getLocalConfigs().iterator();
-            String displayLanguage = null;
-            String displayName = null;
-            String language = null;
-            while (i.hasNext())
-            {
-               LocaleConfig config = (LocaleConfig)i.next();
-               displayLanguage = config.getLocale().getDisplayLanguage(currentLocale);
-               displayName = config.getLocale().getDisplayName(currentLocale);
-               language = config.getLanguage();
-               if (config.getLanguage().equals("en"))
-               {
-                  lang.add(0, new SelectItemOption<String>(displayLanguage, language, displayName));
-                  continue;
-               }
-               lang.add(new SelectItemOption<String>(displayLanguage, language, displayName));
-            }
-            UIFormSelectBox langSelectBox = new UIFormSelectBox(key, key, lang);
+            UIFormSelectBox langSelectBox = new UIFormSelectBox(key, key, null);
             set.addUIFormInput(langSelectBox);
+            initLanguageCombo();
             continue;
          }
          set.addUIFormInput(new UIFormStringInput(key, null, null));
       }
+   }
+
+   /**
+    * Update language select box
+    */
+   @Override
+   public void processRender(WebuiRequestContext context) throws Exception
+   {
+      initLanguageCombo();
+      super.processRender(context);
+   }
+
+   private void initLanguageCombo()
+   {
+      UIFormSelectBox langSelectBox = this.findComponentById("user.language");
+      if (langSelectBox == null)
+         return;
+      String selectedLang = langSelectBox.getSelectedValues()[0];
+
+      List<SelectItemOption<String>> lang = new ArrayList<SelectItemOption<String>>();
+      langSelectBox.setOptions(lang); // Clear
+
+      LocaleConfigService localeService = getApplicationComponent(LocaleConfigService.class);
+      Locale currentLocale = ((PortletRequestContext)WebuiRequestContext.getCurrentInstance()).getLocale();
+      Iterator<LocaleConfig> i = localeService.getLocalConfigs().iterator();
+      String displayLanguage = null;
+      String displayName = null;
+      String language = null;
+      SelectItemOption<String> option;
+      while (i.hasNext())
+      {
+         LocaleConfig config = i.next();
+         displayLanguage = config.getLocale().getDisplayLanguage(currentLocale);
+         displayName = config.getLocale().getDisplayName(currentLocale);
+         language = config.getLanguage();
+         option = new SelectItemOption<String>(displayLanguage, language, displayName);
+         if (lang.equals(selectedLang))
+         {
+            option.setSelected(true);
+         }
+         if (config.getLanguage().equals("en"))
+         {
+            lang.add(0, option);
+            continue;
+         }
+         lang.add(option);
+      }
+
+      langSelectBox.setOptions(lang);
    }
 
    @SuppressWarnings("deprecation")
