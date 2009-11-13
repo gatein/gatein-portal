@@ -449,41 +449,54 @@ public class UINavigationNodeSelector extends UIContainer
             return;
          }
 
-         uiApp.setModeState(UIPortalApplication.APP_BLOCK_EDIT_MODE);
          UIWorkingWorkspace uiWorkingWS = uiApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
-         //uiWorkingWS.setRenderedChild(UIPortalToolPanel.class);
-         //uiWorkingWS.addChild(UIPortalComposer.class, "UIPageEditor", null);
-
-         uiWorkingWS.setRenderedChild(UIEditInlineWorkspace.class);
-
-         UIPortalComposer portalComposer =
-            uiWorkingWS.findFirstComponentOfType(UIPortalComposer.class).setRendered(true);
-         portalComposer.setShowControl(true);
-         portalComposer.setEditted(false);
-         portalComposer.setCollapse(false);
-         portalComposer.setId("UIPageEditor");
-         portalComposer.setComponentConfig(UIPortalComposer.class, "UIPageEditor");
-
          UIPortalToolPanel uiToolPanel =
-            uiWorkingWS.findFirstComponentOfType(UIPortalToolPanel.class).setRendered(true);
-         uiToolPanel.setShowMaskLayer(false);
-         uiToolPanel.setWorkingComponent(UIPage.class, null);
-         UIPage uiPage = (UIPage)uiToolPanel.getUIComponent();
-
+                        uiWorkingWS.findFirstComponentOfType(UIPortalToolPanel.class).setRendered(true);
          UserPortalConfigService userService = uiToolPanel.getApplicationComponent(UserPortalConfigService.class);
-         WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
 
          // get selected page
-         Page selectPage = null;
-         selectPage = userService.getPage(selectedPageNode.getPageReference(), context.getRemoteUser());
-         selectPage.setModifier(context.getRemoteUser());
-         selectPage.setTitle(selectedPageNode.getLabel());
-
-         // convert Page to UIPage
-         PortalDataMapper.toUIPage(uiPage, selectPage);
-         Util.getPortalRequestContext().addUIComponentToUpdateByAjax(uiWorkingWS);
-         Util.getPortalRequestContext().setFullRender(true);
-
+         String pageId = selectedPageNode.getPageReference();
+         Page selectPage = (pageId != null) ? userService.getPage(pageId) : null;
+         if (selectPage != null)
+         {
+            UserACL userACL = uiApp.getApplicationComponent(UserACL.class);
+            if (!userACL.hasPermission(selectPage))
+            {
+               uiApp.addMessage(new ApplicationMessage("UIPageBrowser.msg.UserNotPermission", new String[]{pageId}, 1));
+               return;
+            }
+            
+            uiApp.setModeState(UIPortalApplication.APP_BLOCK_EDIT_MODE);
+            //uiWorkingWS.setRenderedChild(UIPortalToolPanel.class);
+            //uiWorkingWS.addChild(UIPortalComposer.class, "UIPageEditor", null);
+            
+            uiWorkingWS.setRenderedChild(UIEditInlineWorkspace.class);
+            
+            UIPortalComposer portalComposer =
+               uiWorkingWS.findFirstComponentOfType(UIPortalComposer.class).setRendered(true);
+            portalComposer.setShowControl(true);
+            portalComposer.setEditted(false);
+            portalComposer.setCollapse(false);
+            portalComposer.setId("UIPageEditor");
+            portalComposer.setComponentConfig(UIPortalComposer.class, "UIPageEditor");
+            
+            uiToolPanel.setShowMaskLayer(false);
+            uiToolPanel.setWorkingComponent(UIPage.class, null);
+            UIPage uiPage = (UIPage)uiToolPanel.getUIComponent();
+            
+            WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
+            selectPage.setModifier(context.getRemoteUser());
+            selectPage.setTitle(selectedPageNode.getLabel());
+            
+            // convert Page to UIPage
+            PortalDataMapper.toUIPage(uiPage, selectPage);
+            Util.getPortalRequestContext().addUIComponentToUpdateByAjax(uiWorkingWS);
+            Util.getPortalRequestContext().setFullRender(true);
+         }
+         else
+         {
+            throw new Exception("Page don't exist!");
+         }
       }
    }
 
