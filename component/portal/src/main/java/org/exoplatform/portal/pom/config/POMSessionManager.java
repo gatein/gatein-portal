@@ -108,9 +108,6 @@ public class POMSessionManager
       this.cache = cacheService.getCacheInstance(POMSessionManager.class.getSimpleName());
       this.repositoryService = repositoryService;
       this.pomService = null;
-
-      //
-      this.cache.setLiveTime(100000000);
    }
    
    public void clearCache()
