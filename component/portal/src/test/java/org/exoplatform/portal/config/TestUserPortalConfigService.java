@@ -722,16 +722,22 @@ public class TestUserPortalConfigService extends BasicTestCase
       {
          public void execute() throws Exception
          {
+//            mgr.clearCache();
+
             PortalConfig cfg = storage_.getPortalConfig(PortalConfig.USER_TYPE, "overwritelayout");
             assertNotNull(cfg);
+
+
             Container container = cfg.getPortalLayout();
             assertNotNull(container);
             assertEquals(2, container.getChildren().size());
             assertTrue(container.getChildren().get(0) instanceof PageBody);
             assertTrue(((Application)container.getChildren().get(1)).getType() == ApplicationType.PORTLET);
             Application<Portlet> pa = (Application<Portlet>)container.getChildren().get(1);
-            ApplicationState state = pa.getState();
-            assertEquals("overwrite_application_ref/overwrite_portlet_ref", storage_.getId(pa.getState()));
+            ApplicationState<Portlet> state = pa.getState();
+
+
+            assertEquals("overwrite_application_ref/overwrite_portlet_ref", storage_.getId(state));
          }
       }.execute(null);
    }
@@ -775,6 +781,7 @@ public class TestUserPortalConfigService extends BasicTestCase
       {
          public void execute() throws Exception
          {
+            mgr.clearCache();
             DataCache cache = mopStorage.getDecorator(DataCache.class);
             long readCount0 = cache.getReadCount();
             userPortalConfigSer_.getUserPortalConfig("classic", null);
@@ -793,6 +800,7 @@ public class TestUserPortalConfigService extends BasicTestCase
       {
          public void execute() throws Exception
          {
+            mgr.clearCache();
             DataCache cache = mopStorage.getDecorator(DataCache.class);
             long readCount0 = cache.getReadCount();
             userPortalConfigSer_.getPage("portal::test::test1");
@@ -811,6 +819,7 @@ public class TestUserPortalConfigService extends BasicTestCase
       {
          public void execute() throws Exception
          {
+            mgr.clearCache();
             DataCache cache = mopStorage.getDecorator(DataCache.class);
             long readCount0 = cache.getReadCount();
             userPortalConfigSer_.getPageNavigation("portal", "test");
@@ -862,8 +871,7 @@ public class TestUserPortalConfigService extends BasicTestCase
             }
 
             // Clear cache
-            DataCache cache = mopStorage.getDecorator(DataCache.class);
-            cache.clear();
+//            mgr.clearCache();
 
             //
             mopSession = mgr.openSession();

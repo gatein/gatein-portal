@@ -35,6 +35,8 @@ import org.exoplatform.portal.pom.spi.portlet.PortletState;
 import org.exoplatform.portal.pom.spi.wsrp.WSRP;
 import org.exoplatform.portal.pom.spi.wsrp.WSRPContentProvider;
 import org.exoplatform.portal.pom.spi.wsrp.WSRPState;
+import org.exoplatform.services.cache.CacheService;
+import org.exoplatform.services.cache.ExoCache;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.registry.RegistryService;
@@ -68,6 +70,7 @@ import javax.jcr.Credentials;
 import javax.jcr.Repository;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
+import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.UndeclaredThrowableException;
 import java.util.Set;
@@ -94,13 +97,25 @@ public class POMSessionManager
    /** . */
    final String workspaceName = "portal-system";
 
-   public POMSessionManager(RegistryService service) throws Exception
+   /** . */
+   final ExoCache<Serializable, Object> cache;
+
+   public POMSessionManager(CacheService cacheService, RegistryService service) throws Exception
    {
       RepositoryService repositoryService = service.getRepositoryService();
 
       //
+      this.cache = cacheService.getCacheInstance(POMSessionManager.class.getSimpleName());
       this.repositoryService = repositoryService;
       this.pomService = null;
+
+      //
+      this.cache.setLiveTime(100000000);
+   }
+   
+   public void clearCache()
+   {
+      cache.clearCache();
    }
 
    public Session login() throws RepositoryException

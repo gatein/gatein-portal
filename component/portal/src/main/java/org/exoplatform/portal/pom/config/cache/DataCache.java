@@ -22,8 +22,6 @@ import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.POMTask;
 import org.exoplatform.portal.pom.config.TaskExecutor;
 import org.exoplatform.portal.pom.config.TaskExecutionDecorator;
-import org.exoplatform.services.cache.CacheService;
-import org.exoplatform.services.cache.ExoCache;
 
 import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicLong;
@@ -36,47 +34,34 @@ public class DataCache extends TaskExecutionDecorator
 {
 
    /** . */
-   private final ExoCache<Serializable, Object> cache;
-
-   /** . */
    private final AtomicLong readCount = new AtomicLong();
 
-   public DataCache(CacheService cacheService, TaskExecutor next)
+   public DataCache(TaskExecutor next)
    {
       super(next);
-
-      //
-      this.cache = cacheService.getCacheInstance(DataCache.class.getSimpleName());
    }
 
    public void execute(POMSession session, POMTask task) throws Exception
    {
       if (task instanceof CacheableDataTask)
       {
-         if (!session.isModified())
+         CacheableDataTask<?, ?> loadTask = (CacheableDataTask<?,?>)task;
+         switch (loadTask.getAccessMode())
          {
-            CacheableDataTask<?, ?> loadTask = (CacheableDataTask<?,?>)task;
-            switch (loadTask.getAccessMode())
-            {
-               case READ:
-                  read(session, loadTask);
-                  break;
-               case CREATE:
-                  create(session, loadTask);
-                  break;
-               case WRITE:
-                  write(session, loadTask);
-                  break;
-               case DESTROY:
-                  remove(session, loadTask);
-                  break;
-               default:
-                  throw new UnsupportedOperationException();
-            }
-         }
-         else
-         {
-            super.execute(session, task);
+            case READ:
+               read(session, loadTask);
+               break;
+            case CREATE:
+               create(session, loadTask);
+               break;
+            case WRITE:
+               write(session, loadTask);
+               break;
+            case DESTROY:
+               remove(session, loadTask);
+               break;
+            default:
+               throw new UnsupportedOperationException();
          }
       }
       else
@@ -85,22 +70,17 @@ public class DataCache extends TaskExecutionDecorator
       }
    }
 
-   public void clear()
-   {
-      cache.clearCache();
-   }
-
    private <K extends Serializable, V> void remove(POMSession session, CacheableDataTask<K, V> task) throws Exception
    {
       K key = task.getKey();
-      cache.remove(key);
+      session.scheduleForEviction(key);
       super.execute(session, task);
    }
 
    private <K extends Serializable, V> void write(POMSession session, CacheableDataTask<K, V> task) throws Exception
    {
       K key = task.getKey();
-      cache.remove(key);
+      session.scheduleForEviction(key);
       super.execute(session, task);
    }
 
@@ -112,36 +92,43 @@ public class DataCache extends TaskExecutionDecorator
 
    private <K extends Serializable, V> void read(POMSession session, CacheableDataTask<K, V> task) throws Exception
    {
-      K key = task.getKey();
-      Object o = cache.get(key);
-      V v = null;
-      if (o != null)
+      if (!session.isModified())
       {
-         Class<V> type = task.getValueType();
-         if (type.isInstance(o))
+         K key = task.getKey();
+         Object o = session.getFromCache(key);
+         V v = null;
+         if (o != null)
          {
-            v = type.cast(o);
+            Class<V> type = task.getValueType();
+            if (type.isInstance(o))
+            {
+               v = type.cast(o);
+            }
          }
-      }
 
-      //
-      if (v != null)
-      {
-         task.setValue(v);
+         //
+         if (v != null)
+         {
+            task.setValue(v);
+         }
+         else
+         {
+            readCount.incrementAndGet();
+
+            //
+            super.execute(session, task);
+
+            //
+            v = task.getValue();
+            if (v != null)
+            {
+               session.putInCache(key, v);
+            }
+         }
       }
       else
       {
-         readCount.incrementAndGet();
-
-         //
          super.execute(session, task);
-
-         //
-         v = task.getValue();
-         if (v != null)
-         {
-            cache.put(key, v);
-         }
       }
    }
 

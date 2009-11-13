@@ -320,6 +320,11 @@ public class NewPortalConfigListener extends BaseComponentPlugin
          }
 
          PortalConfig pconfig = fromXML(config.getOwnerType(), owner, xml, PortalConfig.class);
+
+         // We use that owner value because it may have been fixed for group names
+         owner = pconfig.getName();
+
+         //
          PortalConfig currentPortalConfig = pdcService_.getPortalConfig(type, owner);
          if (currentPortalConfig == null)
          {

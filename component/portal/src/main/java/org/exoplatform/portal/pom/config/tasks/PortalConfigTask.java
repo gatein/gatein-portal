@@ -125,7 +125,7 @@ public abstract class PortalConfigTask extends AbstractPOMTask
 
       public DataAccessMode getAccessMode()
       {
-         return config.getStorageId() != null ? DataAccessMode.WRITE : DataAccessMode.CREATE;
+         return overwrite ? DataAccessMode.WRITE : DataAccessMode.CREATE;
       }
 
       public void setValue(PortalData value)
@@ -161,6 +161,12 @@ public abstract class PortalConfigTask extends AbstractPOMTask
          }
          else
          {
+            if (overwrite)
+            {
+               throw new IllegalArgumentException("Cannot update portal " + config.getName() + " that does not exist");
+            }
+
+            //
             site = workspace.addSite(type, config.getName());
             Page root = site.getRootPage();
             root.addChild("pages");

@@ -236,7 +236,7 @@ public class TestDataStorage extends BasicTestCase
       portal.setName("foo");
       portal.setLocale("en");
       portal.setAccessPermissions(new String[]{UserACL.EVERYONE});
-      storage_.save(portal);
+      storage_.create(portal);
 
       //
       PageNavigation navigation = new PageNavigation();

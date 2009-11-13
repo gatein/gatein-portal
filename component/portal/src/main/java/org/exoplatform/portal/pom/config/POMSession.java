@@ -36,10 +36,13 @@ import org.gatein.mop.core.api.workspace.NavigationImpl;
 import org.gatein.mop.core.api.workspace.PageImpl;
 
 import javax.jcr.RepositoryException;
+import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -65,11 +68,49 @@ public class POMSession
    /** . */
    private boolean markedForRollback;
 
+   /** . */
+   private List<Serializable> staleKeys;
+
+   /** . */
+   private boolean modified;
+
    public POMSession(POMSessionManager mgr)
    {
       this.mgr = mgr;
       this.isInTask = false;
       this.markedForRollback = false;
+      this.staleKeys = null;
+   }
+
+   public Object getFromCache(Serializable key)
+   {
+      if (isModified())
+      {
+         throw new IllegalStateException("Cannot read object in shared cache from a modified session");
+      }
+      return mgr.cache.get(key);
+   }
+
+   public void putInCache(Serializable key, Object value)
+   {
+      if (isModified())
+      {
+         throw new IllegalStateException("Cannot put object in shared cache from a modified session");
+      }
+      mgr.cache.put(key, value);
+   }
+
+   public void scheduleForEviction(Serializable key)
+   {
+      if (key == null)
+      {
+         throw new NullPointerException();
+      }
+      if (staleKeys == null)
+      {
+         staleKeys = new LinkedList<Serializable>();
+      }
+      staleKeys.add(key);
    }
 
    private Model getModel()
@@ -81,17 +122,21 @@ public class POMSession
       return model;
    }
 
-   // julien todo : investigate how expensive is the call to hasPendingChanges method
    public boolean isModified()
    {
+      if (modified)
+      {
+         return true;
+      }
       try
       {
-         return getSession().getJCRSession().hasPendingChanges();
+         modified = getSession().getJCRSession().hasPendingChanges();
       }
       catch (RepositoryException e)
       {
          throw new UndeclaredRepositoryException(e);
       }
+      return modified;
    }
 
    protected ChromatticSession getSession()
@@ -355,6 +400,15 @@ public class POMSession
       if (model != null)
       {
          model.close();
+      }
+
+      //
+      if (staleKeys != null)
+      {
+         for (Serializable key : staleKeys)
+         {
+            mgr.cache.remove(key);
+         }
       }
    }
 }

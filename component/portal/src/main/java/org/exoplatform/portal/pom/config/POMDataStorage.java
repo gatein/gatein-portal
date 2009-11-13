@@ -48,7 +48,6 @@ import org.exoplatform.portal.pom.data.PageData;
 import org.exoplatform.portal.pom.data.PageKey;
 import org.exoplatform.portal.pom.data.PortalData;
 import org.exoplatform.portal.pom.data.PortalKey;
-import org.exoplatform.services.cache.CacheService;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.jibx.runtime.BindingDirectory;
@@ -79,11 +78,11 @@ public class POMDataStorage implements ModelDataStorage, ModelDemarcation
    /** . */
    private final TaskExecutionDecorator executor;
 
-   public POMDataStorage(CacheService cacheService, POMSessionManager pomMgr, ConfigurationManager confManager)
+   public POMDataStorage(POMSessionManager pomMgr, ConfigurationManager confManager)
    {
       this.pomMgr = pomMgr;
       this.confManager_ = confManager;
-      this.executor = new DataCache(cacheService, new ExecutorDispatcher());
+      this.executor = new DataCache(new ExecutorDispatcher());
    }
 
    public POMSessionManager getPOMSessionManager()
@@ -134,7 +133,7 @@ public class POMDataStorage implements ModelDataStorage, ModelDemarcation
 
    public void create(PortalData config) throws Exception
    {
-      execute(new PortalConfigTask.Save(config, true));
+      execute(new PortalConfigTask.Save(config, false));
    }
 
    public void save(PortalData config) throws Exception

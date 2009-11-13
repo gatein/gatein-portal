@@ -148,7 +148,7 @@ public class DataStorageImpl implements DataStorage, ModelDemarcation
 
    public void create(PageNavigation navigation) throws Exception
    {
-      delegate.save(navigation.build());
+      delegate.create(navigation.build());
    }
 
    private abstract class Bilto<O extends ModelObject, D extends ModelData>
