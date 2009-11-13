@@ -119,7 +119,8 @@ public class TestUserPortalConfigService extends BasicTestCase
       };
 
       PortalContainer container = PortalContainer.getInstance();
-      userPortalConfigSer_ = (UserPortalConfigService)container.getComponentInstanceOfType(UserPortalConfigService.class);
+      userPortalConfigSer_ =
+         (UserPortalConfigService)container.getComponentInstanceOfType(UserPortalConfigService.class);
       orgService_ = (OrganizationService)container.getComponentInstanceOfType(OrganizationService.class);
       idmService = (JBossIDMService)container.getComponentInstanceOfType(JBossIDMService.class);
       mgr = (POMSessionManager)container.getComponentInstanceOfType(POMSessionManager.class);
@@ -132,7 +133,8 @@ public class TestUserPortalConfigService extends BasicTestCase
       // Register only once for all unit tests
       if (!registered)
       {
-         // I'm using this due to crappy design of org.exoplatform.services.listener.ListenerService
+         // I'm using this due to crappy design of
+         // org.exoplatform.services.listener.ListenerService
          listenerService.addListener(UserPortalConfigService.CREATE_PAGE_EVENT, listener);
          listenerService.addListener(UserPortalConfigService.REMOVE_PAGE_EVENT, listener);
          listenerService.addListener(UserPortalConfigService.UPDATE_PAGE_EVENT, listener);
@@ -469,7 +471,6 @@ public class TestUserPortalConfigService extends BasicTestCase
       }.execute(null);
    }
 
-
    // Julien : see who added that and find out is test is relevant or not
 
    public void testClonePage()
@@ -484,17 +485,16 @@ public class TestUserPortalConfigService extends BasicTestCase
             page.setName("whatever");
             page.setTitle("testTitle");
             userPortalConfigSer_.create(page);
-            
+
             String newName = "newPage";
-            Page newPage = userPortalConfigSer_.renewPage(page.getPageId(), newName, page.getOwnerType(), page.getOwnerId());
-            assertEquals(newName, newPage.getName());   
-            assertEquals(page.getTitle(), newPage.getTitle());   
+            Page newPage =
+               userPortalConfigSer_.renewPage(page.getPageId(), newName, page.getOwnerType(), page.getOwnerId());
+            assertEquals(newName, newPage.getName());
+            assertEquals(page.getTitle(), newPage.getTitle());
          }
       }.execute(null);
    }
 
-
-   
    public void testUpdatePage()
    {
       new UnitTest()
@@ -571,6 +571,64 @@ public class TestUserPortalConfigService extends BasicTestCase
             assertEquals("/platform/administrators", n2.getOwnerId());
          }
       }.execute(null);
+   }
+
+   public void testCreateMultipleNavigations(){
+      for(int i =0; i < 10; i++){
+         createNavigation(null, "group", "/platform/administrators" + i);
+      }
+   }
+   
+   private void createNavigation(final String user, final String ownerType, final String ownerId)
+   {
+      new UnitTest()
+      {
+
+         public void execute() throws Exception
+         {
+            createNavigationInSeperatedThread();
+         }
+
+         private void createNavigationInSeperatedThread()
+         {
+            Thread task = new Thread()
+            {
+               public void run()
+               {
+                  PageNavigation navigation = new PageNavigation();
+                  navigation.setOwnerType(ownerType);
+                  navigation.setOwnerId(ownerId);
+                  try
+                  {
+                     userPortalConfigSer_.create(navigation);
+                     Event event = events.removeFirst();
+                     assertEquals(UserPortalConfigService.CREATE_NAVIGATION_EVENT, event.getEventName());
+                     PageNavigation n1 = (PageNavigation)event.getSource();
+                     assertEquals(ownerType, n1.getOwnerType());
+                     assertEquals(ownerId, n1.getOwnerId());
+                     PageNavigation n2 = userPortalConfigSer_.getPageNavigation(ownerType, ownerId);
+                     assertEquals(ownerType, n2.getOwnerType());
+                     assertEquals(ownerId, n2.getOwnerId());
+                  }
+                  catch (Exception ex)
+                  {
+                     assertTrue("Failed while create '" + ownerType + " ' navigation for owner: " + ownerId, false);
+                     ex.printStackTrace();
+                  }
+               }
+            };
+
+            task.start();
+            try
+            {
+               task.sleep(200);
+            }
+            catch (InterruptedException ex)
+            {
+               ex.printStackTrace();
+            }
+         }
+      }.execute(user);
    }
 
    public void testUpdateNavigation()
@@ -650,8 +708,8 @@ public class TestUserPortalConfigService extends BasicTestCase
             assertEquals("Dashboard", app.getTitle());
             assertNotNull(app.getState());
             assertEquals("dashboard/DashboardPortlet", storage_.getId(app.getState()));
-            //        assertEquals("portal", app.getInstanceState().getOwnerType());
-            //        assertEquals("test", app.getInstanceState().getOwnerId());
+            // assertEquals("portal", app.getInstanceState().getOwnerType());
+            // assertEquals("test", app.getInstanceState().getOwnerId());
             Portlet prefs2 = storage_.load(app.getState());
             assertNull(prefs2);
          }
