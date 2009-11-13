@@ -11,7 +11,7 @@
 							<tr>
 								<%fieldName = uicomponent.getLabel(field.getName());%>
 								<%
-									if(fieldName != null && fieldName.length() > 0 && !fieldName.equals(uicomponent.getId())) {
+									if(fieldName != null && fieldName.length() > 0 && !fieldName.equals(uicomponent.getId()) && !fieldName.equals(field.getName())) {
 								%>												
 									<td class="FieldLabel">
 										<%/*if(fieldName != null && fieldName.length() > 0) {*/%> 
