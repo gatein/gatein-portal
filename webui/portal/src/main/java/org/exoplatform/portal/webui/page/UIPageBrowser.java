@@ -268,10 +268,6 @@ public class UIPageBrowser extends UISearch
          LazyPageList datasource = (LazyPageList)repeater.getDataSource();
          int currentPage = datasource.getCurrentPage();
          service.remove(page);
-         uiPageBrowser.defaultValue(uiPageBrowser.getLastQuery());
-         if (currentPage > datasource.getAvailablePage())
-            currentPage = datasource.getAvailablePage();
-         datasource.getPage(currentPage);
 
          UIPortal uiPortal = Util.getUIPortal();
          if (uiPortal.getSelectedNode().getPageReference().equals(page.getPageId()))
@@ -283,6 +279,10 @@ public class UIPageBrowser extends UISearch
          }
          else
          {
+            uiPageBrowser.defaultValue(uiPageBrowser.getLastQuery());
+            if (currentPage > datasource.getAvailablePage())
+               currentPage = datasource.getAvailablePage();
+            datasource.getPage(currentPage);
             event.getRequestContext().addUIComponentToUpdateByAjax(uiPageBrowser);
          }
       }
