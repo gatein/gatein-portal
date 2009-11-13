@@ -55,7 +55,7 @@ public class UIUserToolBarSitePortlet extends UIPortletApplication
 
    public String getCurrentPortal()
    {
-      return Util.getUIPortal().getName();
+      return Util.getPortalRequestContext().getPortalOwner();
    }
 
    public String getPortalURI(String portalName)
@@ -65,7 +65,7 @@ public class UIUserToolBarSitePortlet extends UIPortletApplication
 
    public PageNavigation getCurrentPortalNavigation() throws Exception
    {
-      PageNavigation navi = getPageNavigation(PortalConfig.PORTAL_TYPE + "::" + Util.getUIPortal().getName());
+      PageNavigation navi = getPageNavigation(PortalConfig.PORTAL_TYPE + "::" + getCurrentPortal());
       String remoteUser = Util.getPortalRequestContext().getRemoteUser();
       return PageNavigationUtils.filter(navi, remoteUser);
    }
