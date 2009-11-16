@@ -2279,5 +2279,19 @@
     	<Group>Group</Group>
     </header>
   </UIAddGroupNavigation>
+	<!--
+  ############################################################################
+  #		           org.exoplatform.portal.webui.application.UIGadget           #
+  ############################################################################
+	-->
+	<UIGadget>
+		<tooltip>
+			<Minimize>تصغير</Minimize>
+			<Unminimize>استعادة</Unminimize>
+			<Maximize>تكبير</Maximize>
+			<Unmaximize>استعادة بانخفاض</Unmaximize>
+			<editGadget>Edit Gadget</editGadget>
+			<deleteGadget>Delete this gadget</deleteGadget>
+		</tooltip>
+	</UIGadget>
 </bundle>
-

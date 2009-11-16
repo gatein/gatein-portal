@@ -197,10 +197,12 @@ eXo.gadget.UIGadget = {
             minimized = true;
             gadgetApp.style.display = "none";
             DOMUtil.replaceClass(selectedElement, "MinimizeGadget", "RestoreGadget");
+            selectedElement.title = selectedElement.getAttribute("unminiTitle");
         } else {
             minimized = false;
             gadgetApp.style.display = "block";
             DOMUtil.replaceClass(selectedElement, "RestoreGadget", "MinimizeGadget");
+            selectedElement.title = selectedElement.getAttribute("miniTitle");
         }
 
         var compId = portletFrag.parentNode.id;
