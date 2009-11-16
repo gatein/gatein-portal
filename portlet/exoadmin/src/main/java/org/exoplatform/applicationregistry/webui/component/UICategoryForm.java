@@ -102,7 +102,7 @@ public class UICategoryForm extends UIFormTabPane
       category_ = category;
       uiSetting.getUIStringInput(FIELD_NAME).setEditable(false).setValue(category_.getName());
       uiSetting.getUIStringInput(FIELD_DISPLAY_NAME).setValue(category_.getDisplayName());
-      uiSetting.getUIStringInput(FIELD_DESCRIPTION).setValue(category_.getDescription());
+      uiSetting.getUIFormTextAreaInput(FIELD_DESCRIPTION).setValue(category_.getDescription());
       List<String> accessPermissions = category_.getAccessPermissions();
       String[] per = new String[accessPermissions.size()];
       if (accessPermissions != null && accessPermissions.size() > 0)
