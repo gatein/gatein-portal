@@ -79,7 +79,7 @@
   
   <component>
     <key>org.exoplatform.services.resources.ResourceBundleService</key>
-    <type>org.exoplatform.services.resources.jcr.ResourceBundleServiceImpl</type>
+    <type>org.exoplatform.services.resources.impl.SimpleResourceBundleService</type>
     <init-params>
       <values-param>
         <name>classpath.resources</name>

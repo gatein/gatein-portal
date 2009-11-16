@@ -42,10 +42,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 /**
  * Created by The eXo Platform SAS Mar 9, 2007
@@ -255,6 +257,16 @@ abstract public class BaseResourceBundleService implements ResourceBundleService
          throw new Exception("Error while reading the file: " + fileName, e);
       }
       return null;
+   }
+
+   /**
+    * Invalidate an entry in the cache at this level. Normally this is called by the subclass.
+    *
+    * @param name the bundle name
+    */
+   protected final void invalidate(String name)
+   {
+      cache_.remove(name);
    }
 
    public ResourceBundle getResourceBundle(String name, Locale locale, ClassLoader cl)

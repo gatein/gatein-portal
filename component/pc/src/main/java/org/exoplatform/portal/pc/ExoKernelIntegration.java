@@ -21,7 +21,6 @@ package org.exoplatform.portal.pc;
 
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
-import org.exoplatform.services.resources.ResourceBundleService;
 import org.gatein.pc.api.PortletInvoker;
 import org.gatein.pc.federation.FederatingPortletInvoker;
 import org.gatein.pc.federation.impl.FederatingPortletInvokerService;
@@ -61,7 +60,7 @@ public class ExoKernelIntegration implements Startable
     * We enforce the dependency with the ResourceBundleService since it must be stared before the
     * <code>portletApplicationRegistry</code>
     */
-   public ExoKernelIntegration(ExoContainerContext context, ResourceBundleService resourceBundleService)
+   public ExoKernelIntegration(ExoContainerContext context)
    {
       this.container = context.getContainer();
    }

@@ -109,7 +109,7 @@ public interface ResourceBundleService
     * @return A PageDescription Iterator
     * @throws Exception
     */
-   public PageList findResourceDescriptions(Query q) throws Exception;
+   public PageList<ResourceBundleData> findResourceDescriptions(Query q) throws Exception;
 
    /**
     * This method is acted as a factory of
