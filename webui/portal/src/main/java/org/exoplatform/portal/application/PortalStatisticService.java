@@ -24,9 +24,10 @@ import org.exoplatform.management.annotations.ManagedDescription;
 import org.exoplatform.management.annotations.ManagedName;
 import org.exoplatform.management.jmx.annotations.NameTemplate;
 import org.exoplatform.management.jmx.annotations.Property;
-import org.exoplatform.services.jcr.ext.registry.RegistryService;
+import org.exoplatform.portal.config.UserPortalConfigService;
 import org.picocontainer.Startable;
 
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -43,11 +44,11 @@ public class PortalStatisticService implements Startable
 
    private ConcurrentMap<String, PortalStatistic> apps = new ConcurrentHashMap<String, PortalStatistic>();
 
-   private RegistryService regService_;
+   private UserPortalConfigService configService;
 
-   public PortalStatisticService(RegistryService res)
+   public PortalStatisticService(UserPortalConfigService res)
    {
-      regService_ = res;
+      configService = res;
 
    }
 
@@ -58,36 +59,16 @@ public class PortalStatisticService implements Startable
    @ManagedDescription("The list of identifier of the known portals")
    public String[] getPortalList()
    {
-      /*
-          ArrayList<String> list = new ArrayList<String>();
-          SessionProvider sessionProvider = SessionProvider.createSystemProvider();
-          StringBuilder builder = new StringBuilder("select * from " + "exo:registryEntry");
-
-          try {
-            String registryNodePath = regService_.getRegistry(sessionProvider).getNode().getPath();
-            Session session = regService_.getRegistry(sessionProvider).getNode().getSession();
-            generateLikeScript(builder, "jcr:path", registryNodePath + "/%");
-            generateLikeScript(builder, "exo:dataType", "PortalConfig");
-            QueryManager queryManager = session.getWorkspace().getQueryManager();
-            javax.jcr.query.Query query = queryManager.createQuery(builder.toString(), "sql");
-            QueryResult result = query.execute();
-
-            NodeIterator itr = result.getNodes();
-            while (itr.hasNext()) {
-              Node node = itr.nextNode();
-              String entryPath = node.getPath().substring(registryNodePath.length() + 1);
-              RegistryEntry entry = regService_.getEntry(sessionProvider, entryPath);
-              list.add(mapper_.fromDocument(entry.getDocument(), PortalConfig.class).getName());
-            }
-            Collections.sort(list);
-          } catch (Exception ex) {
-            ex.printStackTrace();
-          } finally {
-            sessionProvider.close();
-          }
-          return list.toArray(new String[list.size()]);
-      */
-      throw new UnsupportedOperationException("Todo with MOP");
+      try
+      {
+         List<String> names = configService.getAllPortalNames();
+         return names.toArray(new String[names.size()]);
+      }
+      catch (Exception e)
+      {
+         e.printStackTrace();
+         return new String[0];
+      }
    }
 
    /*
@@ -156,19 +137,6 @@ public class PortalStatisticService implements Startable
    public long getExecutionCount(@ManagedDescription("The portal id") @ManagedName("portalId") String id)
    {
       return getPortalStatistic(id).viewCount();
-   }
-
-   private void generateLikeScript(StringBuilder sql, String name, String value)
-   {
-      if (value == null || value.length() < 1)
-         return;
-      if (sql.indexOf(" where") < 0)
-         sql.append(" where ");
-      else
-         sql.append(" and ");
-      value = value.replace('*', '%');
-      value = value.replace('?', '_');
-      sql.append(name).append(" like '").append(value).append("'");
    }
 
    private double toSeconds(double value)
