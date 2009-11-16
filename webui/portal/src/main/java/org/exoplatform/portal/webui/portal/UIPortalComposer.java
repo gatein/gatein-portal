@@ -280,7 +280,10 @@ public class UIPortalComposer extends UIContainer
 
          UIMaskWorkspace uiMaskWS = uiApp.getChildById(UIPortalApplication.UI_MASK_WS_ID);
          UIPortalForm portalForm = uiMaskWS.createUIComponent(UIPortalForm.class, null, "UIPortalForm");
-         portalForm.setPortalOwner(((PortalRequestContext)WebuiRequestContext.getCurrentInstance()).getPortalOwner());
+         portalForm.setPortalOwner(uiPortal.getOwner());
+         if(PortalConfig.USER_TYPE.equals(uiPortal.getOwnerType())){
+            portalForm.removeChildById("PermissionSetting");
+         }
          uiMaskWS.setWindowSize(700, -1);
          event.getRequestContext().addUIComponentToUpdateByAjax(uiMaskWS);
       }
