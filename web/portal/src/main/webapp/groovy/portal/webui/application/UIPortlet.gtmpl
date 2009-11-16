@@ -97,7 +97,10 @@
 		if(portalMode != uiPortalApp.CONTAINER_BLOCK_EDIT_MODE && portalMode != uiPortalApp.APP_BLOCK_EDIT_MODE) {
 			if(uicomponent.getShowInfoBar()) {
 				String title = uicomponent.getTitle();
-				if(title == null || title.trim().length() < 1) title = portletId;
+				if(title == null || title.trim().length() < 1) 
+					title = uicomponent.getDisplayName();
+				if(title == null || title.trim().length() < 1)					
+					title = portletId;
 				/*Begin Window Portlet Bar*/
 				String visibility = "visible";
 				String appDisplay = "block";
