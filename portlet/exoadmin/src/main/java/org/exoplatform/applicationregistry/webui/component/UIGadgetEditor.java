@@ -22,7 +22,6 @@ package org.exoplatform.applicationregistry.webui.component;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.shindig.common.uri.Uri;
 import org.apache.shindig.gadgets.spec.GadgetSpec;
-import org.apache.shindig.gadgets.spec.SpecParserException;
 import org.exoplatform.application.gadget.Gadget;
 import org.exoplatform.application.gadget.GadgetRegistryService;
 import org.exoplatform.application.gadget.Source;
@@ -205,7 +204,7 @@ public class UIGadgetEditor extends UIForm
          {
             new GadgetSpec(Uri.parse("http://exoplatform.org"), (String)uiInput.getValue());
          }
-         catch (SpecParserException se)
+         catch (Exception se)
          {
             throw new MessageException(new ApplicationMessage("UIGadgetEditor.msg.invalidSpec", null,
                ApplicationMessage.WARNING));
