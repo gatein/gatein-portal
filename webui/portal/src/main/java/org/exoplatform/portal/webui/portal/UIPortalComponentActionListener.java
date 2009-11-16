@@ -126,7 +126,6 @@ public class UIPortalComponentActionListener
             Util.getUIPortalApplication().addMessage(
                new ApplicationMessage("UIPortalApplication.msg.deletePageBody", new Object[]{},
                   ApplicationMessage.WARNING));
-            event.getRequestContext().addUIComponentToUpdateByAjax(Util.getUIPortalApplication().getUIPopupMessages());
             return;
          }
 
