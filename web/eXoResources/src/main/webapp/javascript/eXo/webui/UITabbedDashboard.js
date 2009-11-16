@@ -31,7 +31,7 @@ eXo.webui.UITabbedDashboard = {
 		if(keyNum == 13){
 			var inputElement = eXo.core.Browser.getEventSource(e);
 			var newTabLabel = inputElement.value;
-			if(newTabLabel.length < 1){
+			if(!newTabLabel || newTabLabel.length < 1){
 				return;
 			}
 			var DOMUtil = eXo.core.DOMUtil;
@@ -53,15 +53,10 @@ eXo.webui.UITabbedDashboard = {
 			href += "&objectId=" + nodeIndex;
 			href += "&newTabLabel=" + encodeURIComponent(newTabLabel);
 			window.location = href;
-			return;			
 		}
 		//If user presses on the ESCAPE key, then reset the span element on the tab
 		else if(keyNum == 27){
 			var inputElement = eXo.core.Browser.getEventSource(e);
-//			var spanElement = document.createElement("span");
-//			spanElement.ondblclick = "#"; //TODO: Set the callback on this property
-//			spanElement.innerHTML = inputElement.name;
-//			inputElement.parentNode.replaceChild(spanElement, inputElement);
 			if(eXo.webui.UITabbedDashboard.backupElement) {
  				inputElement.parentNode.replaceChild(eXo.webui.UITabbedDashboard.backupElement, inputElement);
  				eXo.webui.UITabbedDashboard.backupElement = null;
@@ -102,6 +97,7 @@ eXo.webui.UITabbedDashboard = {
 		if(keyNum == 13){
 			var inputElement = eXo.core.Browser.getEventSource(e);
 			var newTabLabel = inputElement.value;
+			if(!newTabLabel || newTabLabel.length < 1) return;
 			
 			//Send request to server to change node name
 			var href = eXo.env.server.portalBaseURL + "?portal:componentId=" + inputElement.id;

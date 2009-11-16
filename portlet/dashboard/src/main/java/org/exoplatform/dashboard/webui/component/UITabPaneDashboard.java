@@ -38,7 +38,6 @@ import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
-import org.exoplatform.webui.exception.MessageException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -212,6 +211,10 @@ public class UITabPaneDashboard extends UIContainer
 
    private boolean validateName(String label)
    {
+      if (label == null || label.length() < 1)
+      {
+         return false;
+      }
       label = label.trim();
       if (Character.isDigit(label.charAt(0)) || label.charAt(0) == '-')
       {
