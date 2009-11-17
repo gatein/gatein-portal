@@ -55,6 +55,7 @@ import org.exoplatform.services.rss.parser.DefaultRSSItem;
 import org.exoplatform.services.rss.parser.RSSDocument;
 import org.exoplatform.services.rss.parser.RSSParser;
 import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.web.application.JavascriptManager;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.UITabPane;
@@ -94,42 +95,30 @@ public class UIPortalComponentActionListener
       }
    }
 
-   //  
-   // static public class RemoveJSApplicationToDesktopActionListener extends
-   // EventListener<UIPortalComponent> {
-   // public void execute(Event<UIPortalComponent> event) throws Exception {
-   // UIPortal uiPortal = Util.getUIPortal();
-   // UIPortalApplication uiApp =
-   // uiPortal.getAncestorOfType(UIPortalApplication.class);
-   // UIPage uiPage = uiApp.findFirstComponentOfType(UIPage.class);
-   // String id = event.getRequestContext().getRequestParameter("jsInstanceId");
-   // uiPage.removeChildById(id);
-   //     
-   // Page page = PortalDataMapper.toPageModel(uiPage);
-   // UserPortalConfigService configService =
-   // uiPortal.getApplicationComponent(UserPortalConfigService.class);
-   // if(page.getChildren() == null) page.setChildren(new ArrayList<Object>());
-   // configService.update(page);
-   // }
-   // }
-
    static public class DeleteComponentActionListener extends EventListener<UIComponent>
    {
+      private final static String UI_CONTAINER = "UIContainer";
+
+      private final static String UI_PORTLET = "UIPortlet";
+
       public void execute(Event<UIComponent> event) throws Exception
       {
          String id = event.getRequestContext().getRequestParameter(UIComponent.OBJECTID);
          UIComponent uiComponent = event.getSource();
          UIPortalComponent uiParent = (UIPortalComponent)uiComponent.getParent();
          UIComponent uiRemoveComponent = uiParent.findComponentById(id);
+         UIPortalApplication uiApp = Util.getUIPortalApplication();
          if (uiRemoveComponent.findFirstComponentOfType(UIPageBody.class) != null)
          {
-            Util.getUIPortalApplication().addMessage(
-               new ApplicationMessage("UIPortalApplication.msg.deletePageBody", new Object[]{},
-                  ApplicationMessage.WARNING));
+            uiApp.addMessage(new ApplicationMessage("UIPortalApplication.msg.deletePageBody", new Object[]{},
+               ApplicationMessage.WARNING));
             return;
          }
 
          uiParent.removeChildById(id);
+         UIPortalComposer portalComposer = uiApp.findFirstComponentOfType(UIPortalComposer.class);
+         portalComposer.setEditted(true);
+
          UIPage uiPage = uiParent.getAncestorOfType(UIPage.class);
          if (uiPage != null && uiPage.getMaximizedUIPortlet() != null)
          {
@@ -162,10 +151,34 @@ public class UIPortalComponentActionListener
          }
          Util.showComponentLayoutMode(uiRemoveComponent.getClass());
 
-         PortalRequestContext pcontext = (PortalRequestContext)event.getRequestContext();
-         pcontext.setFullRender(false);
-         pcontext.getWriter().write("OK");
-         pcontext.setResponseComplete(true);
+         String componentType = null;
+         if (uiComponent instanceof UIPortlet)
+         {
+            componentType = UI_PORTLET;
+         }
+         else if (uiComponent instanceof UIContainer)
+         {
+            componentType = UI_CONTAINER;
+         }
+
+         if (componentType != null)
+         {
+            PortalRequestContext pcontext = (PortalRequestContext)event.getRequestContext();
+            JavascriptManager jsManager = pcontext.getJavascriptManager();
+            jsManager.addJavascript(scriptRemovingComponent(id, componentType));
+            jsManager.addJavascript("eXo.portal.UIPortal.changeComposerSaveButton();");
+         }
+      }
+
+      private String scriptRemovingComponent(String componentId, String componentType)
+      {
+         StringBuffer buffer = new StringBuffer();
+         buffer.append("eXo.portal.UIPortal.removeComponent('");
+         buffer.append(componentType);
+         buffer.append("-");
+         buffer.append(componentId);
+         buffer.append("');");
+         return buffer.toString();
       }
    }
 
@@ -251,7 +264,7 @@ public class UIPortalComponentActionListener
                app = appList.getApplication(sourceId);
                ApplicationType applicationType = app.getType();
 
-               //TanPD: Hardcoded to fix bug GTNPORTAL-91
+               // TanPD: Hardcoded to fix bug GTNPORTAL-91
                Application temp = null;
                if (applicationType.equals(ApplicationType.GADGET))
                {
@@ -289,7 +302,7 @@ public class UIPortalComponentActionListener
                //
                uiPortlet.setState(new PortletState(state, applicationType));
 
-               //TanPD: Fix bug GTNPORTAL-91
+               // TanPD: Fix bug GTNPORTAL-91
                if (temp != null && applicationType.equals(ApplicationType.PORTLET))
                {
                   Portlet pref = uiPortlet.getPreferences();
@@ -301,7 +314,7 @@ public class UIPortalComponentActionListener
                   }
                   catch (Exception e)
                   {
-                     //Fix in case: RSS Reader Gadget
+                     // Fix in case: RSS Reader Gadget
                      Preference aggIdPref = pref.getPreference("aggregatorId");
                      String aggregatorId = null;
                      if (aggIdPref == null || aggIdPref.getValue() == null || aggIdPref.getValue().length() == 0)
@@ -310,7 +323,7 @@ public class UIPortalComponentActionListener
                         aggregatorId = aggIdPref.getValue();
                      GadgetRegistryService gadgetSrv = uiApp.getApplicationComponent(GadgetRegistryService.class);
                      org.exoplatform.application.gadget.Gadget gadget = gadgetSrv.getGadget(aggregatorId);
-                     //TODO make sure it's an rss feed
+                     // TODO make sure it's an rss feed
                      // TODO make sure that we did not add it already
                      UIGadget uiGadget = uiPortlet.createUIComponent(UIGadget.class, null, null);
                      uiGadget.setState(new TransientApplicationState<org.exoplatform.portal.pom.spi.gadget.Gadget>(

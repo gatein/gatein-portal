@@ -515,9 +515,7 @@ UIPortal.prototype.popupButton = function(url, action) {
   window.location = url + '&action='+ action ;
 } ;
 
-UIPortal.prototype.removeComponent = function(uri, componentId) {
-	var result = ajaxAsyncGetRequest(uri, false) ;
-	if(result == "OK") {
+UIPortal.prototype.removeComponent = function(componentId) {
 		var comp = document.getElementById(componentId);
 		var viewPage = eXo.core.DOMUtil.findAncestorByClass(comp, "VIEW-PAGE");
 		eXo.core.DOMUtil.removeElement(comp);
@@ -528,8 +526,8 @@ UIPortal.prototype.removeComponent = function(uri, componentId) {
 			viewPage.style.paddingBottom = "50px";
 			viewPage.style.paddingLeft = "0px";
 		}
-	}	
 };
+
 
 UIPortal.prototype.changeComposerSaveButton = function() {
 	if(eXo.portal.hasEditted == false) {
@@ -537,7 +535,6 @@ UIPortal.prototype.changeComposerSaveButton = function() {
 		var portalComposer = eXo.core.DOMUtil.findFirstDescendantByClass(uiWorkingWS, "div", "UIPortalComposer");
 		var saveButton = eXo.core.DOMUtil.findFirstDescendantByClass(portalComposer, "a", "SaveButton");
 		if(saveButton) eXo.core.DOMUtil.replaceClass(saveButton, "SaveButton", "EdittedSaveButton");
-		ajaxAsyncGetRequest(eXo.env.server.createPortalURL(portalComposer.id, "ChangeEdittedState", true));
   }
 };
 

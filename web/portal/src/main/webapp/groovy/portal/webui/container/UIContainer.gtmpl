@@ -17,13 +17,6 @@
 	if(uiComponentHeight != null) cssStyle += "height: "+uiComponentHeight+";"
 	if(cssStyle.length() > 0) cssStyle += "\"";
 	
-	String deleteUri = uicomponent.url('DeleteComponent', uicomponent.id);
-	String keyMark = "window.location=";
-	String confirm = deleteUri.substring(0, deleteUri.indexOf(keyMark));
-	String url = deleteUri.substring(deleteUri.indexOf(keyMark) + keyMark.length());
-	url = url.substring(0, url.lastIndexOf(";"));
-	deleteUri = confirm + " eXo.portal.UIPortal.removeComponent(" + url + ",'UIContainer-" + uicomponent.id + "')";
-	
 %>
 
 <div class="UIContainer <%=uiPortalApp.isEditting()?"EdittingContainer":""%>" id="UIContainer-${uicomponent.id}" ${cssStyle} onmouseover="eXo.portal.UIPortal.blockOnMouseOver(event, this, true);" onmouseout="eXo.portal.UIPortal.blockOnMouseOver(event, this, false);">
@@ -72,10 +65,7 @@
 															<%=_ctx.appRes("UIContainer.title.Container")%>
 															<%}%>
 														</div>						
-														<!--
 														<a href="<%=uicomponent.event("DeleteComponent","$uicomponent.id")%>" class="DeleteContainerIcon" title="<%=_ctx.appRes("UIContainer.tooltip.closeContainer")%>"><span></span></a>
-														-->
-														<a href="$deleteUri;eXo.portal.UIPortal.changeComposerSaveButton()" class="DeleteContainerIcon" title="<%=_ctx.appRes("UIContainer.tooltip.closeContainer")%>"><span></span></a>
 														<a href="<%=uicomponent.event("EditContainer","$uicomponent.id")%>;eXo.portal.UIPortal.changeComposerSaveButton()" class="EditContainerIcon" title="<%=_ctx.appRes("UIContainer.tooltip.editContainer")%>"><span></span></a>
 														<div class="ClearBoth"><span></span></div>
 													</div>
