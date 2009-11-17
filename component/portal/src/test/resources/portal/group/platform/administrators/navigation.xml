@@ -53,13 +53,6 @@
 	    </node>
 	    
 	    <node>
-		    <uri>administration/i18n</uri>
-		    <name>i18n</name>
-		    <label>#{administration.i18n}</label>
-		    <page-reference>group::platform/administrators::i18n</page-reference>
-	    </node>	    	   
-	    
-	    <node>
 		    <uri>administration/pageManagement</uri>
 		    <name>i18n</name>
 		    <label>#{administration.pageManagement}</label>

@@ -186,31 +186,6 @@
    </portlet>
 
    <portlet>
-      <description xml:lang="EN">Internationalization Portlet</description>
-      <portlet-name>I18nPortlet</portlet-name>
-      <display-name xml:lang="EN">Internationalization Portlet</display-name>
-      <portlet-class>org.exoplatform.webui.application.portlet.PortletApplicationController</portlet-class>
-
-      <init-param>
-         <name>webui.configuration</name>
-         <value>/WEB-INF/conf/portlet/exoadmin/I18nPortlet/webui/configuration.xml</value>
-      </init-param>
-
-      <expiration-cache>0</expiration-cache>
-      <supports>
-         <mime-type>text/html</mime-type>
-         <portlet-mode>help</portlet-mode>
-      </supports>
-      <supported-locale>en</supported-locale>
-      <resource-bundle>locale.portlet.exoadmin.I18nPortlet</resource-bundle>
-      <portlet-info>
-         <title>Internationalization Portlet</title>
-         <short-title>Internationalization</short-title>
-         <keywords>Administration</keywords>
-      </portlet-info>
-   </portlet>
-
-   <portlet>
       <description xml:lang="EN">Application Registry</description>
       <portlet-name>ApplicationRegistryPortlet</portlet-name>
       <display-name xml:lang="EN">Application Registry</display-name>

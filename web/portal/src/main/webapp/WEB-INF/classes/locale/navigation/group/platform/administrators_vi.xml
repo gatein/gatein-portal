@@ -26,7 +26,6 @@
     <application-registry>Quản lý ứng dụng</application-registry>
     <newAccount>Tài khoản mới</newAccount>
     <community-management>Quản lý cộng đồng</community-management>
-    <i18n>Quốc tế hóa</i18n>
     <console>Web Console</console>
     <pageManagement>Quản lý trang</pageManagement>
   </administration>
