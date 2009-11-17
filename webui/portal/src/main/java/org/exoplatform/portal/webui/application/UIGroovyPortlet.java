@@ -31,11 +31,13 @@ import javax.portlet.PortletRequest;
 public class UIGroovyPortlet extends UIPortletApplication
 {
 
-   private String DEFAULT_TEMPLATE = "system:/groovy/portal/webui/application/UIGroovyPortlet.gtmpl";
+   private static final String DEFAULT_TEMPLATE = "system:/groovy/portal/webui/application/UIGroovyPortlet.gtmpl";
 
-   private String template_;
+   private final String template_;
 
-   private String windowId;
+   private final String windowId;
+
+   private final String id;
 
    public UIGroovyPortlet() throws Exception
    {
@@ -43,11 +45,12 @@ public class UIGroovyPortlet extends UIPortletApplication
       PortletRequest prequest = context.getRequest();
       template_ = prequest.getPreferences().getValue("template", DEFAULT_TEMPLATE);
       windowId = prequest.getWindowID();
+      id = windowId + "-portlet";
    }
 
    public String getId()
    {
-      return windowId + "-portlet";
+      return id;
    }
 
    public String getTemplate()
