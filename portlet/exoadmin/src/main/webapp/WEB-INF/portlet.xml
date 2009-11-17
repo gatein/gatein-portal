@@ -79,7 +79,6 @@
       </portlet-info>
    </portlet>
 
-   <!--
    <portlet>
      <description xml:lang="EN">Register Portlet</description>
      <portlet-name>RegisterPortlet</portlet-name>
@@ -98,14 +97,13 @@
      </supports>
      <supported-locale>en</supported-locale>
 
-     <resource-bundle>locale.portlet.exoadmin.RegisterPortlet</resource-bundle>
+     <!--<resource-bundle>locale.portlet.exoadmin.RegisterPortlet</resource-bundle>-->
      <portlet-info>
        <title>Register Portlet</title>
        <short-title>Register Portlet</short-title>
        <keywords>Administration</keywords>
      </portlet-info>
    </portlet>
-   -->
 
    <portlet>
       <description xml:lang="EN">Group Navigation Portlet</description>

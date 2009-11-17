@@ -74,6 +74,15 @@
 		<skin-name>Default</skin-name>
 		<css-path>/skin/navigation/webui/component/DefaultStylesheet.css</css-path>
 	</portlet-skin>
+	
+	<!-- Register Portlet skins -->
+	
+	<portlet-skin>
+		<application-name>exoadmin</application-name>
+		<portlet-name>RegisterPortlet</portlet-name>
+		<skin-name>Default</skin-name>
+		<css-path>/skin/register/webui/component/DefaultStylesheet.css</css-path>
+	</portlet-skin>
 			
 </gatein-resources>
 

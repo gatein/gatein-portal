@@ -1,0 +1,152 @@
+/*
+ * Copyright (C) 2009 eXo Platform SAS.
+ *
+ * This is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2.1 of
+ * the License, or (at your option) any later version.
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this software; if not, write to the Free
+ * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ */
+package org.exoplatform.account.webui.component;
+
+import org.exoplatform.services.organization.Query;
+import org.exoplatform.services.organization.User;
+import org.exoplatform.services.organization.UserHandler;
+import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.core.UIApplication;
+import org.exoplatform.webui.form.UIFormInputWithActions;
+import org.exoplatform.webui.form.UIFormStringInput;
+import org.exoplatform.webui.form.validator.EmailAddressValidator;
+import org.exoplatform.webui.form.validator.ExpressionValidator;
+import org.exoplatform.webui.form.validator.MandatoryValidator;
+import org.exoplatform.webui.form.validator.PasswordStringLengthValidator;
+import org.exoplatform.webui.form.validator.ResourceValidator;
+import org.exoplatform.webui.form.validator.StringLengthValidator;
+
+/**
+ * @author <a href="mailto:hoang281283@gmail.com">Minh Hoang TO</a>
+ * @version $Id$
+ *
+ */
+public class UIRegisterInputSet extends UIFormInputWithActions
+{
+   protected static final String USER_NAME = "User Name:";
+   
+   protected static final String PASSWORD = "Password:";
+   
+   protected static final String CONFIRM_PASSWORD = "Confirm Password:";
+   
+   protected static final String FIRST_NAME = "First Name:";
+   
+   protected static final String LAST_NAME = "Last Name:";
+   
+   protected static final String EMAIL_ADDRESS = "Email Address:";
+   
+   public UIRegisterInputSet(String name) throws Exception{
+      super(name);
+      
+      addUIFormInput(new UIFormStringInput(USER_NAME, USER_NAME, null).addValidator(MandatoryValidator.class)
+         .addValidator(StringLengthValidator.class, 3, 30).addValidator(ResourceValidator.class).addValidator(
+            ExpressionValidator.class, "^[\\p{L}][\\p{L}._\\-\\d]+$", "ResourceValidator.msg.Invalid-char"));
+   
+      addUIFormInput(new UIFormStringInput(PASSWORD, PASSWORD, null).setType(UIFormStringInput.PASSWORD_TYPE)
+         .addValidator(MandatoryValidator.class).addValidator(PasswordStringLengthValidator.class, 6, 30));
+      
+      addUIFormInput(new UIFormStringInput(CONFIRM_PASSWORD, CONFIRM_PASSWORD, null).setType(UIFormStringInput.PASSWORD_TYPE)
+         .addValidator(MandatoryValidator.class).addValidator(PasswordStringLengthValidator.class, 6, 30));
+      
+      addUIFormInput(new UIFormStringInput(FIRST_NAME, FIRST_NAME, null).addValidator(StringLengthValidator.class, 3,
+         45).addValidator(MandatoryValidator.class).addValidator(ExpressionValidator.class, "^[\\p{L}][\\p{ASCII}]+$",
+         "FirstCharacterNameValidator.msg").addValidator(ExpressionValidator.class, "^[\\p{L}][\\p{L}._\\- \\d]+$",
+         "ResourceValidator.msg.Invalid-char"));
+      
+      addUIFormInput(new UIFormStringInput(LAST_NAME, LAST_NAME, null).addValidator(StringLengthValidator.class, 3,
+         45).addValidator(MandatoryValidator.class).addValidator(ExpressionValidator.class, "^[\\p{L}][\\p{ASCII}]+$",
+         "FirstCharacterNameValidator.msg").addValidator(ExpressionValidator.class, "^[\\p{L}][\\p{L}._\\- \\d]+$",
+         "ResourceValidator.msg.Invalid-char"));
+      
+      addUIFormInput(new UIFormStringInput(EMAIL_ADDRESS, EMAIL_ADDRESS, null).addValidator(MandatoryValidator.class).addValidator(
+         EmailAddressValidator.class));      
+   }
+   
+   private String getUserName(){
+      return getUIStringInput(USER_NAME).getValue();
+   }
+   
+   private String getEmail(){
+      return getUIStringInput(EMAIL_ADDRESS).getValue();
+   }
+   
+   private String getPassword(){
+      return getUIStringInput(PASSWORD).getValue();
+   }
+   
+   private String getFirstName(){
+      return getUIStringInput(FIRST_NAME).getValue();
+   }
+   
+   private String getLastName(){
+      return getUIStringInput(LAST_NAME).getValue();
+   }
+   
+   /**
+    * Use this method instead of invokeSetBinding, to avoid abusing reflection
+    * @param user
+    */
+   private void bindingFields(User user){
+      user.setPassword(getPassword());
+      user.setFirstName(getFirstName());
+      user.setLastName(getLastName());
+      user.setEmail(getEmail());
+   }
+   
+   public boolean save(UserHandler userHandler, WebuiRequestContext context) throws Exception
+   {
+      UIApplication uiApp = context.getUIApplication();
+      String pass = getPassword();
+      String confirm_pass = getUIStringInput(CONFIRM_PASSWORD).getValue();
+      
+      if (!pass.equals(confirm_pass))
+      {
+         uiApp.addMessage(new ApplicationMessage("UIAccountForm.msg.password-is-not-match", null));
+         return false;
+      }
+      
+      String username = getUserName();
+      
+      //Check if user name already existed
+      if (userHandler.findUserByName(username) != null)
+      {
+         Object[] args = {username};
+         uiApp.addMessage(new ApplicationMessage("UIAccountInputSet.msg.user-exist", args));
+         return false;
+      }
+
+      //Check if mail address is already used
+      Query query = new Query();
+      query.setEmail(getEmail());
+      if (userHandler.findUsers(query).getAll().size() > 0)
+      {
+         Object[] args = {username};
+         uiApp.addMessage(new ApplicationMessage("UIAccountInputSet.msg.email-exist", args));
+         return false;
+      }
+
+      User user = userHandler.createUserInstance(username);
+      bindingFields(user);
+
+      userHandler.createUser(user, true);//Broadcast user creaton event
+      reset();//Reset the input form
+      return true;
+   }
+}
