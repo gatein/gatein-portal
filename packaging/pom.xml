@@ -32,7 +32,7 @@
    <name>GateIn Portal Packaging</name>
 
    <modules>
-    <!--module>exopackage</module-->
+    <module>exopackage</module>
     <module>module</module>
     <module>product</module>
     <module>pkg</module>

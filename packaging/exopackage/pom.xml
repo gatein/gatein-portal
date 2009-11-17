@@ -24,26 +24,27 @@
       <artifactId>exo.portal.packaging</artifactId>
       <version>3.0.0-CR01-SNAPSHOT</version>
    </parent>
-   <modelVersion>4.0.0</modelVersion> 	
+   
+    <modelVersion>4.0.0</modelVersion>     
     <artifactId>exopackage</artifactId>
-	<name>GateIn eXo Package</name>
+    <name>GateIn eXo Package</name>
     <packaging>pom</packaging>
     
     <build>
         <plugins>
-    		<!-- exobuild packaging -->
-			<plugin>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<goals><goal>assembly</goal></goals>
-					</execution>
-				</executions>
-				<configuration>
-					<descriptors><descriptor>src/assemble/exopackage-zip.xml</descriptor></descriptors>
-				</configuration>
-			</plugin>
+            <!-- exobuild packaging -->
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals><goal>assembly</goal></goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <descriptors><descriptor>src/assemble/exopackage-zip.xml</descriptor></descriptors>
+                </configuration>
+            </plugin>
           <plugin>
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>build-helper-maven-plugin</artifactId>
@@ -66,6 +67,6 @@
               </execution>
             </executions>
           </plugin>
-		</plugins>
-	</build>
+        </plugins>
+    </build>
 </project>
