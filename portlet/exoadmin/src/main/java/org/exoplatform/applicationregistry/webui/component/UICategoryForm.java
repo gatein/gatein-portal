@@ -142,7 +142,7 @@ public class UICategoryForm extends UIFormTabPane
          {
             category.setDisplayName(displayName);
          }
-         category.setDescription(uiSetting.getUIStringInput(FIELD_DESCRIPTION).getValue());
+         category.setDescription(uiSetting.getUIFormTextAreaInput(FIELD_DESCRIPTION).getValue());
 
          UIListPermissionSelector uiListPermissionSelector = uiPermission.getChild(UIListPermissionSelector.class);
          ArrayList<String> pers = new ArrayList<String>();
