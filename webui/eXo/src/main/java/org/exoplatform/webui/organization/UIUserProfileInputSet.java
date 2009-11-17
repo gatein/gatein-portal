@@ -106,7 +106,7 @@ public class UIUserProfileInputSet extends UIFormInputSet
          {
             UIFormSelectBox langSelectBox = new UIFormSelectBox(key, key, null);
             set.addUIFormInput(langSelectBox);
-            initLanguageCombo();
+            initLanguageCombo(langSelectBox);
             continue;
          }
          set.addUIFormInput(new UIFormStringInput(key, null, null));
@@ -119,13 +119,13 @@ public class UIUserProfileInputSet extends UIFormInputSet
    @Override
    public void processRender(WebuiRequestContext context) throws Exception
    {
-      initLanguageCombo();
+      UIFormSelectBox langSelectBox = this.findComponentById("user.language");
+      initLanguageCombo(langSelectBox);
       super.processRender(context);
    }
 
-   private void initLanguageCombo()
-   {
-      UIFormSelectBox langSelectBox = this.findComponentById("user.language");
+   private void initLanguageCombo(UIFormSelectBox langSelectBox)
+   {      
       if (langSelectBox == null)
          return;
       String selectedLang = langSelectBox.getSelectedValues()[0];
