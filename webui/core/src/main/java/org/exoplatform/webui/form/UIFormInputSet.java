@@ -182,7 +182,12 @@ public class UIFormInputSet extends UIContainer
             }
             w.write("<tr>");
             w.write("<td class=\"FieldLabel\">");
-            w.write(label);
+            
+            // if missing resource, don't print out the label.
+            if(!label.equals(inputEntry.getName()))
+            {
+               w.write(label);
+            }
             w.write("</td>");
             w.write("<td class=\"FieldComponent\">");
             renderUIComponent(inputEntry);
