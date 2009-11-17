@@ -75,8 +75,7 @@ public class UIContainerForm extends UIFormTabPane
       infoInputSet.addUIFormInput(
          new UIFormStringInput("id", "id", null).addValidator(MandatoryValidator.class).addValidator(
             StringLengthValidator.class, 3, 30).addValidator(NameValidator.class)).addUIFormInput(
-         new UIFormStringInput("title", "title", null)).
-      //addValidator(StringLengthValidator.class, 3, 30)).
+         new UIFormStringInput("title", "title", null).addValidator(StringLengthValidator.class, 50)).
          addUIFormInput(
             new UIFormStringInput("width", "width", null).addValidator(ExpressionValidator.class,
                "(^([1-9]\\d*)(px|%)$)?", "UIContainerForm.msg.InvalidWidthHeight")).addUIFormInput(
