@@ -34,10 +34,10 @@
    <dependencies>
 
       <dependency>
-         <groupId>org.exoplatform.tool</groupId>
+         <groupId>org.exoplatform.portal</groupId>
          <artifactId>exopackage</artifactId>
          <type>zip</type>
-         <version>1.1.0-Beta05</version>
+         <version>3.0.0-CR01-SNAPSHOT</version>
       </dependency>
 
       <dependency>
@@ -104,7 +104,7 @@
                      <overWriteSnapshots>true</overWriteSnapshots>
                      <artifactItems>
                         <artifactItem>
-                           <groupId>org.exoplatform.tool</groupId>
+                           <groupId>org.exoplatform.portal</groupId>
                            <artifactId>exopackage</artifactId>
                            <type>zip</type>
                            <outputDirectory>target/exopackage</outputDirectory>
