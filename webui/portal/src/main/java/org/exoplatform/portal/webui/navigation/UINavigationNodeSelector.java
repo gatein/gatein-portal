@@ -537,7 +537,7 @@ public class UINavigationNodeSelector extends UIContainer
          uiNodeForm.setValues(selectedNode);
          uiNodeForm.setSelectedParent(obj);
          uiManagementPopup.setWindowSize(800, 500);
-         ctx.addUIComponentToUpdateByAjax(uiManagementPopup);
+         event.getRequestContext().addUIComponentToUpdateByAjax(uiManagementPopup.getParent());
       }
    }
 

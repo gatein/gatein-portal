@@ -356,7 +356,7 @@ public class UISiteManagement extends UIContainer
          selector.removeChild(UIRightClickPopupMenu.class);
          uiNavigationPopup.setUIComponent(pageManager);
          uiNavigationPopup.setWindowSize(400, 400);
-         event.getRequestContext().addUIComponentToUpdateByAjax(uiNavigationPopup);
+         event.getRequestContext().addUIComponentToUpdateByAjax(uiNavigationPopup.getParent());
       }
 
    }
