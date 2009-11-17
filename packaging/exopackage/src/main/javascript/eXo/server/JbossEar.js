@@ -93,7 +93,6 @@ JbossEar.prototype.preDeploy = function(product) {
   // Remove hibernate libs for JBoss AS5
   if (this.exoJBoss5) {
     print("====================== JBOSS5 AS 5 ====================== ");
-    product.removeDependencyByGroupId("org.hibernate");
     product.removeDependency(new Project("org.jboss", "jbossxb", "jar", "2.0.0.GA"));
     product.removeDependency(new Project("org.jboss.logging", "jboss-logging-spi", "jar", "2.0.5.GA"));
     product.removeDependency(new Project("org.jboss", "jboss-common-core", "jar", "2.2.9.GA"));
