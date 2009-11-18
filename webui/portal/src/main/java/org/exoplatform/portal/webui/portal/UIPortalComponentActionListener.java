@@ -151,19 +151,31 @@ public class UIPortalComponentActionListener
          }
          Util.showComponentLayoutMode(uiRemoveComponent.getClass());
 
+         PortalRequestContext pcontext = (PortalRequestContext)event.getRequestContext();
          String componentType = null;
          if (uiComponent instanceof UIPortlet)
          {
             componentType = UI_PORTLET;
          }
-         else if (uiComponent instanceof UIContainer)
+         else if (uiComponent instanceof org.exoplatform.portal.webui.container.UIContainer)
          {
             componentType = UI_CONTAINER;
+            org.exoplatform.portal.webui.container.UIContainer topAncestor = getTopBlockContainer((org.exoplatform.portal.webui.container.UIContainer)uiParent);
+            
+            //Case of nested container like tab container, mixed container
+            if(topAncestor != null){
+               String topAncestorId = topAncestor.getId();
+               //Add UIContainer- prefix to the id as it is required to be updated by Ajax
+               if(!topAncestorId.startsWith("UIContainer-")){
+                  topAncestor.setId("UIContainer-" + topAncestorId);
+               }
+               pcontext.addUIComponentToUpdateByAjax(topAncestor);
+               return;
+            }
          }
 
          if (componentType != null)
          {
-            PortalRequestContext pcontext = (PortalRequestContext)event.getRequestContext();
             JavascriptManager jsManager = pcontext.getJavascriptManager();
             jsManager.addJavascript(scriptRemovingComponent(id, componentType));
             jsManager.addJavascript("eXo.portal.UIPortal.changeComposerSaveButton();");
@@ -179,6 +191,35 @@ public class UIPortalComponentActionListener
          buffer.append(componentId);
          buffer.append("');");
          return buffer.toString();
+      }
+
+      /**
+       * Returns the top ancestor( of type
+       * org.exoplatform.portal.webui.container.UIContainer but not of type
+       * UIPortal) of a given container
+       */
+      private static org.exoplatform.portal.webui.container.UIContainer getTopBlockContainer(
+         org.exoplatform.portal.webui.container.UIContainer container)
+      {
+         if(container instanceof UIPortal){
+            return null;
+         }
+         org.exoplatform.portal.webui.container.UIContainer topAncestor = container;
+         org.exoplatform.portal.webui.container.UIContainer intermediateCont;
+         try
+         {
+            intermediateCont = topAncestor.getParent();
+            while (intermediateCont != null && !(intermediateCont instanceof UIPortal))
+            {
+               topAncestor = intermediateCont;
+               intermediateCont = topAncestor.getParent();
+            }
+         }
+         catch (ClassCastException ex)
+         {
+
+         }
+         return topAncestor;
       }
    }
 

@@ -5,6 +5,13 @@
 	def rcontext = _ctx.getRequestContext(); 
 	ResourceBundle res = rcontext.getApplicationResourceBundle(); 
 	JavascriptManager jsmanager = rcontext.getJavascriptManager();
+	
+	/** Trim the prefix UIContainer- if any, this hardcoded part is needed to update nested container via Ajax */
+	String componentId = uicomponent.getId();
+	if(componentId.startsWith("UIContainer-")){
+		uicomponent.setId(componentId.substring("UIContainer-".length()));
+	}
+	
 	ArrayList children = uicomponent.getChildren();
 	
 	if(children != null && children.size > 0){
