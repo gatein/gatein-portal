@@ -46,7 +46,7 @@ import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
 
 @ComponentConfig(
 		lifecycle = UIFormLifecycle.class,
-		template = "system:/groovy/webui/form/UIForm.gtmpl",
+		template = "system:/groovy/webui/form/UIFormWithTitle.gtmpl",
 		events = {
 				@EventConfig( listeners = UIRegisterForm.SubscribeActionListener.class),
             @EventConfig( listeners = UIRegisterForm.ResetActionListener.class, phase = Phase.DECODE),

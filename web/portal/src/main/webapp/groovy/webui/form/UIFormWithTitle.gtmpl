@@ -1,4 +1,7 @@
-<% String fieldName; %>
+<% 
+	import org.exoplatform.webui.form.UIFormInputBase;
+	
+	String fieldName; %>
 <div class="UIFormWithTitle $uicomponent.id" onkeypress="javascript:SubmitAction.call(this, event);">
 	<div class="TitleBar"><%=_ctx.appRes(uicomponent.getName() + ".title")%></div>
 	<% uiform.begin() %>
@@ -11,13 +14,13 @@
 				%>
 							<tr>
 								<%fieldName = uicomponent.getLabel(field.getName());%>
-								<%if(!fieldName.equals(uicomponent.getId())) { %>												
+								<%if(field instanceof UIFormInputBase && !fieldName.equals(uicomponent.getId())) { %>												
 									<td class="FieldLabel">
 										<%if(fieldName != null && fieldName.length() > 0) {%> 
 											<%=uicomponent.getLabel(field.getName()) %>
 										<%}%>
 									</td>
-									<% if(field.isEditable()) { %>
+									<% if(field instanceof UIFormInputBase && field.isEditable()) { %>
 										<td class="FieldComponent"><% uiform.renderField(field) %></td>
 									<% }else { %>
 										<td class="NonEditableField"><% uiform.renderField(field) %></td>
