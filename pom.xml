@@ -128,7 +128,7 @@
                   <systemProperties>
                      <property>
                         <name>mock.portal.dir</name>
-                        <value>${exo.projects.directory.src}/gatein/portal/trunk/web/portal/src/main/webapp</value>
+                        <value>${exo.projects.directory.src}/web/portal/src/main/webapp</value>
                      </property>
                      <property>
                         <name>org.apache.commons.logging.Log</name>
@@ -173,9 +173,9 @@
                         </requireProperty>
                         <requireFilesExist>
                            <files>
-                              <file>${exo.projects.directory.src}/gatein/portal/trunk/web/portal/src/main/webapp</file>
+                              <file>${exo.projects.directory.src}/web/portal/src/main/webapp</file>
                            </files>
-                           <message>"The following directory doesn't exist : ${exo.projects.directory.src}/gatein/portal/trunk/web/portal/src/main/webapp"</message>
+                           <message>"The following directory doesn't exist : ${exo.projects.directory.src}/web/portal/src/main/webapp"</message>
                         </requireFilesExist>
                      </rules>
                      <fail>true</fail>

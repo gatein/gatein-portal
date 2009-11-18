@@ -1,4 +1,4 @@
-Welcome to gatein codebase:
+Welcome to GateIn:
 ===========================
 
 This will explain you how to build a package of GateIn with Tomcat or JBoss.
@@ -7,7 +7,8 @@ This will explain you how to build a package of GateIn with Tomcat or JBoss.
 * COMPILATION
 *****************
 
-* mvn install
+* mvn install -Dexo.projects.directory.src=//Full Path to the the root of gatein portal
+For example: mvn install -Dexo.projects.directory.src=$PWD on Linux
 
 **********************
 * MAVEN CONFIGURATION:
@@ -27,11 +28,11 @@ provided in profiles.xml. It will override what's in the provided file.
 * PACKAGING:
 *****************
 
-* mvn install -Ppkg-tomcat
+* mvn install -Ppkg-tomcat -Dexo.projects.directory.src=//Full Path to the the root of gatein portal
 ** Creates a Tomcat delivery in packaging/pkg/target/tomcat/ 
 ** Creates compressed archives in packaging/pkg/target/target
 
-* mvn install -Ppkg-jbossas
+* mvn install -Ppkg-jbossas -Dexo.projects.directory.src=//Full Path to the the root of gatein portal
 ** Creates a JBossAS delivery in packaging/pkg/target/jboss/
 ** Creates compressed archives in packaging/pkg/target/target
 
