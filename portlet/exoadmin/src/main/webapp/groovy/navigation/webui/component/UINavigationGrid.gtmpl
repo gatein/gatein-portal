@@ -8,24 +8,26 @@
 %>
 
 <div id="$uicomponent.id" class="FeedBox">
-	<% for(navigation in navigations) { 
+	<% 
+	boolean isEvenRow = true;
+	for(navigation in navigations) { 
 			description = (navigation.getDescription()==null)? "" : navigation.getDescription();
 			deleteLink = parent.event("DeleteNavigation",String.valueOf(navigation.getId()));
 			editProperties = parent.event("EditProperties",String.valueOf(navigation.getId()));
 			editLink = parent.event("EditNavigation",String.valueOf(navigation.getId()));%>
-  <table class="ManagementBlock" style="table-layout: fixed">
+  <table class="ManagementBlock <%=isEvenRow ? "EvenRow":"OddRow"%>" style="table-layout: fixed">
 	  <tr>
 		  <td class="Image"><img src="/exoadmin/skin/navigation/webui/component/background/GroupImage.png" alt="" /></td>
    		<td class="Content">
    			<div class="Label" title="$navigation.ownerId"><%= OrganizationUtils.getGroupLabel(navigation.ownerId) %></div>
-   			<div><strong>Description: <%= description%></strong></div>
+   			<div>Description: <%= description%></div>
    		</td>	
      	<td class="ActionBlock">
      		<a href="<%=editLink%>" class="EditNavIcon">Edit Navigation</a> 
-     		<a href="<%=editProperties%>" class="EditNavIcon">Edit Properties</a> 
+     		<a href="<%=editProperties%>" class="EditProIcon">Edit Properties</a> 
      		<a href="<%=deleteLink%>" class="DeleteIcon">Delete Navigation</a>
 	  	</td>	
     </tr>								
   </table>  
-	<% } %>    
+	<% isEvenRow = !isEvenRow;} %>    
 </div>
