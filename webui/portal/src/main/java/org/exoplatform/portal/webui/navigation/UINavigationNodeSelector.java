@@ -460,7 +460,7 @@ public class UINavigationNodeSelector extends UIContainer
          if (selectPage != null)
          {
             UserACL userACL = uiApp.getApplicationComponent(UserACL.class);
-            if (!userACL.hasPermission(selectPage))
+            if (!userACL.hasEditPermission(selectPage))
             {
                uiApp.addMessage(new ApplicationMessage("UIPageBrowser.msg.UserNotPermission", new String[]{pageId}, 1));
                return;
