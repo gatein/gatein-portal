@@ -89,7 +89,7 @@
 
 	<login-config>
 		<auth-method>BASIC</auth-method>
-		<realm-name>exo-domain-sample-portal</realm-name>
+		<realm-name>gatein-domain-sample-portal</realm-name>
 	</login-config>
 
 	<security-role>

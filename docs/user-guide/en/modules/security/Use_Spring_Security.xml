@@ -77,7 +77,7 @@
    
     &lt;login-config&gt;
         &lt;auth-method&gt;FORM&lt;/auth-method&gt;
-        &lt;realm-name&gt;exo-domain&lt;/realm-name&gt;
+        &lt;realm-name&gt;gatein-domain&lt;/realm-name&gt;
         &lt;form-login-config&gt;
             &lt;form-login-page&gt;/login/jsp/login.jsp&lt;/form-login-page&gt;
             &lt;form-error-page&gt;/login/jsp/login.jsp&lt;/form-error-page&gt;

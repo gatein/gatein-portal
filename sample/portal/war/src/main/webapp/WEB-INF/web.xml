@@ -278,7 +278,7 @@
 	</security-constraint>
 	<login-config>
 		<auth-method>FORM</auth-method>
-		<realm-name>exo-domain-sample-portal</realm-name>
+		<realm-name>gatein-domain-sample-portal</realm-name>
 		<form-login-config>
 			<form-login-page>/initiatelogin</form-login-page>
 			<form-error-page>/errorlogin</form-error-page>

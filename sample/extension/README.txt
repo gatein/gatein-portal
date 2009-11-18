@@ -25,8 +25,8 @@
 # On JBoss (tested on JBoss 5.1.0.GA)
 ########################################
 
-We assume that you have a clean JBoss version of GateIn: ie We assume that you have already the file exoplatform.ear in the deploy directory 
-of jboss and you have the retlated application policy "exo-domain" in your conf/login-config.xml 
+We assume that you have a clean JBoss version of GateIn: ie We assume that you have already the file gatein.ear in the deploy directory 
+of jboss 
 
 You need to:
 
@@ -41,7 +41,7 @@ the load order is first the exoplatform.ear then the sample-ext.ear and finally 
 ########################################
 
 We assume that you have a clean Tomcat version of GateIn: ie We assume that you have already all the jar files of GateIn and their dependencies 
-into tomcat/lib and you have the related relam name "exo-domain" defined in the file tomcat/conf/jaas.conf
+into tomcat/lib and you have the related relam name "gatein-domain" defined in the file tomcat/conf/jaas.conf
 
 1. Add the file sample-ext.war from sample/extension/war/target/ to the tomcat/webapps directory
 2. Add the folder starter from starter/war/target/ to the tomcat/webapps directory 

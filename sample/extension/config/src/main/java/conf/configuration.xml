@@ -41,7 +41,7 @@
 						<!-- The name of the context name of the rest web application -->
 						<field name="restContextName"><string>rest</string></field>
 						<!-- The name of the realm -->
-						<field name="realmName"><string>exo-domain</string></field>						
+						<field name="realmName"><string>gatein-domain</string></field>						
 						<!-- All the dependencies of the portal container ordered by loading priority -->
 						<field name="dependencies">
 							<collection type="java.util.ArrayList">

@@ -25,41 +25,23 @@
 # On JBoss (tested on JBoss 5.1.0.GA)
 ########################################
 
-We assume that you have a clean JBoss version of GateIn: ie We assume that you have already the file exoplatform.ear in the deploy directory 
-of jboss and you have the retlated application policy in your conf/login-config.xml 
+We assume that you have a clean JBoss version of GateIn: ie We assume that you have already the file gatein.ear in the deploy directory 
+of jboss
 
 You need to:
 
 1. Add the file sample-portal.ear from sample/portal/ear/target/ to the deploy directory of jboss 
 2. Add the file starter.ear from starter/ear/target/ to the deploy directory of jboss 
-3. Define the related application policy in your file conf/login-config.xml, as below:
-
-  <application-policy name="exo-domain-sample-portal">
-    <authentication>
-      <login-module code="org.exoplatform.web.security.PortalLoginModule" flag="required">
-      	<module-option name="portalContainerName">sample-portal</module-option>
-      	<module-option name="realmName">exo-domain-sample-portal</module-option>
-      </login-module>
-      <login-module code="org.exoplatform.services.security.jaas.SharedStateLoginModule" flag="required">
-      	<module-option name="portalContainerName">sample-portal</module-option>
-      	<module-option name="realmName">exo-domain-sample-portal</module-option>
-      </login-module>
-      <login-module code="org.exoplatform.services.security.j2ee.JbossLoginModule" flag="required">
-      	<module-option name="portalContainerName">sample-portal</module-option>
-      	<module-option name="realmName">exo-domain-sample-portal</module-option>
-      </login-module>
-    </authentication>
-  </application-policy>
   
 WARNING: This can only work if a Unified ClassLoader has been configured on your JBoss (default behavior) and
-the load order is first the exoplatform.ear then the sample-portal.ear and finally the starter.ear
+the load order is first the gatein.ear then the sample-portal.ear and finally the starter.ear
 
 ########################################
 # On Tomcat (tested on Tomcat 6.0.20)
 ########################################
 
 We assume that you have a clean Tomcat version of GateIn: ie We assume that you have already all the jar files of GateIn and their dependencies 
-into tomcat/lib and you have the related relam name "exo-domain" defined in the file tomcat/conf/jaas.conf
+into tomcat/lib and you have the related relam name "gatein-domain" defined in the file tomcat/conf/jaas.conf
 
 1. Add the file sample-portal.war from sample/portal/war/target/ to the tomcat/webapps directory
 2. Add the file rest-sample-portal.war from sample/portal/rest-war/target/ to the tomcat/webapps directory
@@ -69,16 +51,16 @@ into tomcat/lib and you have the related relam name "exo-domain" defined in the 
 6. Add the jar file exo.portal.sample.portal.jar-X.Y.Z.jar from sample/portal/jar/target/ to the tomcat/lib directory
 7. Define the related realm in your file tomcat/conf/jaas.conf, as below:
 
-exo-domain-sample-portal {
+gatein-domain-sample-portal {
   org.exoplatform.web.security.PortalLoginModule required 
   	portalContainerName="sample-portal" 
-  	realmName="exo-domain-sample-portal";
+  	realmName="gatein-domain-sample-portal";
   org.exoplatform.services.security.jaas.SharedStateLoginModule required 
   	portalContainerName="sample-portal" 
-  	realmName="exo-domain-sample-portal";
+  	realmName="gatein-domain-sample-portal";
   org.exoplatform.services.security.j2ee.TomcatLoginModule required 
   	portalContainerName="sample-portal" 
-  	realmName="exo-domain-sample-portal"; 
+  	realmName="gatein-domain-sample-portal"; 
 };
 8. Define the context of sample-portal by creating a file called "sample-portal.xml" in tomcat/conf/Catalina/localhost/ with the following content
 
@@ -87,7 +69,7 @@ exo-domain-sample-portal {
           prefix='localhost_portal_log.' suffix='.txt' timestamp='true'/> 
   <Manager className='org.apache.catalina.session.PersistentManager' saveOnRestart='false'/> 
   <Realm className='org.apache.catalina.realm.JAASRealm' 
-         appName='exo-domain-sample-portal' 
+         appName='gatein-domain-sample-portal' 
          userClassNames='org.exoplatform.services.security.jaas.UserPrincipal' 
          roleClassNames='org.exoplatform.services.security.jaas.RolePrincipal' 
          debug='0' cache='false'/> 
@@ -101,7 +83,7 @@ exo-domain-sample-portal {
             prefix='localhost_portal_log.' suffix='.txt' timestamp='true'/>
     <Manager className='org.apache.catalina.session.PersistentManager' saveOnRestart='false'/>
     <Realm className='org.apache.catalina.realm.JAASRealm'
-           appName='exo-domain-sample-portal'
+           appName='gatein-domain-sample-portal'
            userClassNames="org.exoplatform.services.security.jaas.UserPrincipal"
            roleClassNames="org.exoplatform.services.security.jaas.RolePrincipal"
            debug='0' cache='false'/>

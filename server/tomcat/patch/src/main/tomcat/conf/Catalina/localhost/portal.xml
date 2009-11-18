@@ -24,7 +24,7 @@
           prefix='localhost_portal_log.' suffix='.txt' timestamp='true'/> 
   <Manager className='org.apache.catalina.session.PersistentManager' saveOnRestart='false'/> 
   <Realm className='org.apache.catalina.realm.JAASRealm' 
-         appName='exo-domain' 
+         appName='gatein-domain' 
          userClassNames='org.exoplatform.services.security.jaas.UserPrincipal' 
          roleClassNames='org.exoplatform.services.security.jaas.RolePrincipal' 
          debug='0' cache='false'/> 

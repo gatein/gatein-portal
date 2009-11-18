@@ -100,7 +100,7 @@ Tomcat.prototype.onDeploy = function(project) {
   // " <Manager className='org.apache.catalina.session.PersistentManager'
   // saveOnRestart='false'/> \n" +
   // " <Realm className='org.apache.catalina.realm.JAASRealm' \n" +
-  // " appName='exo-domain' \n" +
+  // " appName='gatein-domain' \n" +
   // " userClassNames='org.exoplatform.services.security.jaas.UserPrincipal'
   // \n" +
   // " roleClassNames='org.exoplatform.services.security.jaas.RolePrincipal'

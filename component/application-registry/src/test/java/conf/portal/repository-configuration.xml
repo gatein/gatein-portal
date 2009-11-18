@@ -23,7 +23,7 @@
    <repositories>
 
     <repository name="repository" system-workspace="system" default-workspace="collaboration">
-     <security-domain>exo-domain</security-domain>
+     <security-domain>gatein-domain</security-domain>
      <access-control>optional</access-control>
 
      <!-- config for replication IPv4 -->

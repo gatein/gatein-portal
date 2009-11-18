@@ -21,5 +21,5 @@
 -->
 
 <jboss-web>
-  <security-domain>java:/jaas/exo-domain-sample-portal</security-domain>
+  <security-domain>java:/jaas/gatein-domain-sample-portal</security-domain>
 </jboss-web>
