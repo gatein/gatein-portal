@@ -25,17 +25,15 @@
 
 .UIManagement .ManagementBlock {
 	background: url('background/BgEvenRow.gif') repeat-x left top;
-	height: 54px;
 	margin-bottom: 1px;
-	_width: 97%;
 }
 
 .UIManagement .EvenRow {
-	background: url('background/BgEvenRow.gif') repeat-x left top;
+	background: #f8f8f8 url('background/BgEvenRow.gif') repeat-x left top;
 }
 
 .UIManagement .OddRow {
-	background: url('background/BgOddRow.gif') repeat-x left top;
+	background: #eaeaea url('background/BgOddRow.gif') repeat-x left top;
 }
 
 .UIManagement table.ManagementBlock td {
@@ -47,14 +45,18 @@
 	vertical-align: middle;
 	background: url('background/LineBg.gif') no-repeat right center; /* orientation=lt */
 	background: url('background/LineBg-rt.gif') no-repeat left center; /* orientation=rt */
-	padding: 0px 15px;
+	padding: 5px 15px;
 	width: 27%;
 	overflow: hidden;
 	white-space: normal;
 }
 
 .UIPortalNavigationPortlet .UIManagement table.ManagementBlock td.Content {
-	width: 27%;
+	width: 23%;
+}
+
+.UIPortalNavigationPortlet .UIManagement table.ManagementBlock td.ActionBlock {
+	width: 65%;
 }
 
 .UIManagement table.ManagementBlock td.Content strong {
@@ -64,13 +66,14 @@
 
 .UIManagement .ManagementBlock .Image {
 	_width: 8%;
-	line-height: 54px;
-	padding-left: 20px; /* orientation=lt */
-	padding-right: 20px; /* orientation=rt */
+	line-height: 41px;
+	padding: 5px 0px 6px 20px; /* orientation=lt */
+	padding: 5px 20px 6px 0px; /* orientation=rt */
 }
 
 .UIManagement .ManagementBlock .Image img {
 	width: 41px;
+	height: 41px;
 }
 
 .UIManagement .ManagementBlock .Label {
@@ -79,18 +82,22 @@
 }
 
 .UIManagement .ManagementBlock .ActionBlock {
-	padding-left: 30px; /* orientation=lt */
-	padding-right: 30px; /* orientation=rt */
+	padding-left: 20px; /* orientation=lt */
+	padding-right: 20px; /* orientation=rt */
 	width: 60%;
 }
 
 .UIManagement .ManagementBlock .ActionBlock a {
 	line-height: 16px;
-	width: auto;
-	padding: 1px 0px 2px 25px; /* orientation=lt */
-	padding: 1px 25px 2px 0px; /* orientation=rt */
-	margin: 0px 35px 0px 0px; /* orientation=lt */
-	margin: 0px 0px 0px 35px; /* orientation=rt */
+	width: 110px;
+	display: block;
+	float: left; /* orientation=lt */
+	float: right; /* orientation=rt */
+	padding-left: 25px; /* orientation=lt */
+	padding-right: 25px; /* orientation=rt */
+	margin-right: 15px; /* orientation=lt */
+	margin-left: 15px; /* orientation=rt */
+	white-space: normal;
 }
 
 .UIManagement .ManagementBlock .ActionBlock a:hover {
@@ -98,23 +105,23 @@
 }
 
 .UIManagement .ManagementBlock .EditLayoutIcon {
-	background: url('background/MiniIcon.gif') no-repeat left 0px; /* orientation=lt */
-	background: url('background/MiniIcon-rt.gif') no-repeat right 0px; /* orientation=rt */
+	background: url('background/MiniIcon.gif') no-repeat left 2px; /* orientation=lt */
+	background: url('background/MiniIcon-rt.gif') no-repeat right 2px; /* orientation=rt */
 }
 
 .UIManagement .ManagementBlock .EditNavIcon {
-	background: url('background/MiniIcon.gif') no-repeat left -25px; /* orientation=lt */
-	background: url('background/MiniIcon-rt.gif') no-repeat right -25px; /* orientation=rt */
+	background: url('background/MiniIcon.gif') no-repeat left -48px; /* orientation=lt */
+	background: url('background/MiniIcon-rt.gif') no-repeat right -48px; /* orientation=rt */
 }
 
 .UIManagement .ManagementBlock .DeleteIcon {
-	background: url('background/MiniIcon.gif') no-repeat left -50px; /* orientation=lt */
-	background: url('background/MiniIcon-rt.gif') no-repeat right -50px; /* orientation=rt */
+	background: url('background/MiniIcon.gif') no-repeat left -98px; /* orientation=lt */
+	background: url('background/MiniIcon-rt.gif') no-repeat right -98px; /* orientation=rt */
 }
 
 .UIManagement .ManagementBlock .EditProIcon{
-	background: url('background/MiniIcon.gif') no-repeat left 0px; /* orientation=lt */
-	background: url('background/MiniIcon-rt.gif') no-repeat right 0px; /* orientation=rt */
+	background: url('background/MiniIcon.gif') no-repeat left 2px; /* orientation=lt */
+	background: url('background/MiniIcon-rt.gif') no-repeat right 2px; /* orientation=rt */
 }
 
 .UIManagement .UIAction .ButtonLeft {
