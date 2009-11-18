@@ -51,6 +51,11 @@ public class ApplicationStatistic
       this.appId = appId;
    }
 
+   public String getAppId()
+   {
+      return appId;
+   }
+
    /**
     * Log the time.
     * 

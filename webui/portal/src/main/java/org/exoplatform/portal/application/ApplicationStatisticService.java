@@ -20,7 +20,6 @@
 package org.exoplatform.portal.application;
 
 import org.exoplatform.application.registry.Application;
-import org.exoplatform.application.registry.ApplicationRegistryService;
 import org.exoplatform.management.annotations.Managed;
 import org.exoplatform.management.annotations.ManagedDescription;
 import org.exoplatform.management.annotations.ManagedName;
@@ -36,6 +35,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -50,17 +50,11 @@ import java.util.concurrent.ConcurrentMap;
 public class ApplicationStatisticService implements Startable
 {
 
-   private ApplicationRegistryService appRegistryService;
+   /** . */
+   private final ConcurrentMap<String, ApplicationStatistic> apps = new ConcurrentHashMap<String, ApplicationStatistic>();
 
-   private ConcurrentMap<String, ApplicationStatistic> apps = new ConcurrentHashMap<String, ApplicationStatistic>();
-
-   private final String ASC = "ASC";
-
-   private final String DESC = "DESC";
-
-   public ApplicationStatisticService(ApplicationRegistryService appRegistryService)
+   public ApplicationStatisticService()
    {
-      this.appRegistryService = appRegistryService;
    }
 
    /*
@@ -70,22 +64,9 @@ public class ApplicationStatisticService implements Startable
    @ManagedDescription("The list of application identifiers sorted alphabetically")
    public String[] getApplicationList()
    {
-      List<Application> list = null;
-      try
-      {
-         list = appRegistryService.getAllApplications();
-      }
-      catch (Exception e)
-      {
-         e.printStackTrace();
-      }
-      List<String> appIds = new ArrayList<String>();
-      for (Application app : list)
-      {
-         appIds.add(app.getId());
-      }
-      Collections.sort(appIds);
-      return appIds.toArray(new String[appIds.size()]);
+      List<String> list = new ArrayList<String>(apps.keySet());
+      Collections.sort(list);
+      return list.toArray(new String[list.size()]);
    }
 
    /*
@@ -158,28 +139,7 @@ public class ApplicationStatisticService implements Startable
    @ManagedDescription("The list of the 10 slowest applications")
    public String[] getSlowestApplications()
    {
-      List<Application> list = null;
-      Map application = new HashMap();
-      try
-      {
-         list = appRegistryService.getAllApplications();
-      }
-      catch (Exception e)
-      {
-         e.printStackTrace();
-      }
-
-      for (Application app : list)
-      {
-         ApplicationStatistic appSta = getApplicationStatistic(app.getId());
-         // remove application haven't loaded
-         if (appSta.getAverageTime() != 0)
-         {
-            application.put(app.getId(), appSta.getAverageTime());
-         }
-      }
-
-      return sort(application, DESC);
+      return getApplicationsSortedByAverageTime(true);
    }
 
    /*
@@ -189,28 +149,26 @@ public class ApplicationStatisticService implements Startable
    @ManagedDescription("The list of the 10 fastest applications")
    public String[] getFastestApplications()
    {
-      List<Application> list = null;
-      Map application = new HashMap();
-      try
-      {
-         list = appRegistryService.getAllApplications();
-      }
-      catch (Exception e)
-      {
-         e.printStackTrace();
-      }
+      return getApplicationsSortedByAverageTime(false);
+   }
 
-      for (Application app : list)
+   private String[] getApplicationsSortedByAverageTime(boolean desc)
+   {
+      TreeMap<Double, String> map = new TreeMap<Double, String>();
+      for (ApplicationStatistic app : apps.values())
       {
-         ApplicationStatistic appSta = getApplicationStatistic(app.getId());
-         // remove application haven't loaded
-         if (appSta.getAverageTime() != 0)
+         if (app.getAverageTime() > 0)
          {
-            application.put(app.getId(), appSta.getAverageTime());
+            map.put(app.getAverageTime(), app.getAppId());
          }
       }
-
-      return sort(application, ASC);
+      List<String> list = new ArrayList<String>(map.values());
+      if (desc)
+      {
+         Collections.reverse(list);
+      }
+      List<String> sub = list.subList(0, Math.min(map.size(), 10));
+      return sub.toArray(new String[sub.size()]);
    }
 
    /*
@@ -220,97 +178,18 @@ public class ApplicationStatisticService implements Startable
    @ManagedDescription("The list of the 10 most executed applications")
    public String[] getMostExecutedApplications()
    {
-      List<Application> list = null;
-      Map application = new HashMap();
-      try
+      TreeMap<Long, String> map = new TreeMap<Long, String>();
+      for (ApplicationStatistic app : apps.values())
       {
-         list = appRegistryService.getAllApplications();
-      }
-      catch (Exception e)
-      {
-         e.printStackTrace();
-      }
-
-      for (Application app : list)
-      {
-         ApplicationStatistic appSta = getApplicationStatistic(app.getId());
-         // remove application haven't loaded
-         if (appSta.executionCount() != 0)
+         if (app.executionCount() > 0)
          {
-            application.put(app.getId(), appSta.executionCount());
+            map.put(app.executionCount(), app.getAppId());
          }
       }
-
-      return sort(application, DESC);
-   }
-
-   /*
-    * sort map by value asc or desc
-    */
-   private String[] sort(Map source, String order)
-   {
-      String[] app = new String[10];
-      List<Object> list = new LinkedList<Object>(source.entrySet());
-      if (order.equals(ASC))
-      {
-         Collections.sort(list, new Comparator<Object>()
-         {
-            public int compare(Object o1, Object o2)
-            {
-               double value1 = Double.parseDouble(((Map.Entry)(o1)).getValue().toString());
-               double value2 = Double.parseDouble(((Map.Entry)(o2)).getValue().toString());
-               if (value1 > value2)
-               {
-                  return 1;
-               }
-               else if (value1 < value2)
-               {
-                  return -1;
-               }
-               else
-               {
-                  return 0;
-               }
-            }
-         });
-      }
-      else if (order.equals(DESC))
-      {
-         Collections.sort(list, new Comparator<Object>()
-         {
-            public int compare(Object o1, Object o2)
-            {
-               double value1 = Double.parseDouble(((Map.Entry)(o1)).getValue().toString());
-               double value2 = Double.parseDouble(((Map.Entry)(o2)).getValue().toString());
-               if (value2 > value1)
-               {
-                  return 1;
-               }
-               else if (value2 < value1)
-               {
-                  return -1;
-               }
-               else
-               {
-                  return 0;
-               }
-            }
-         });
-      }
-
-      int index = 0;
-      for (Iterator it = list.iterator(); it.hasNext();)
-      {
-         Map.Entry entry = (Map.Entry)it.next();
-         app[index] = (String)entry.getKey();
-         index++;
-         if (index >= app.length)
-         {
-            break;
-         }
-      }
-      return app;
-
+      List<String> list = new ArrayList<String>(map.values());
+      Collections.reverse(list);
+      List<String> sub = list.subList(0, Math.min(map.size(), 10));
+      return sub.toArray(new String[sub.size()]);
    }
 
    private double toSeconds(double value)
