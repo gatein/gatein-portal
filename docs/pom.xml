@@ -27,7 +27,7 @@
    <artifactId>docs-aggregator</artifactId>
    <packaging>pom</packaging>
    <name>GateIn - Portal (docs-aggregator)</name>
-   <version>3.0.0-CR01-SNAPSHOT</version>
+   <version>3.0.0-Beta03-SNAPSHOT</version>
 
    <modules>
       <module>user-guide</module>

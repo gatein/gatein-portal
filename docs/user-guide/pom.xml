@@ -34,7 +34,7 @@
     
     <groupId>org.gatein.doc</groupId>
     <artifactId>gatein-user-guide-en</artifactId>
-    <version>3.0.0-CR01-SNAPSHOT</version>
+    <version>3.0.0-Beta03-SNAPSHOT</version>
     <packaging>jdocbook</packaging>
     <name>GateIn User Guide en</name>
 
