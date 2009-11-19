@@ -118,6 +118,9 @@
 
 	<!-- Gadgets -->
 	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="modules/Gadgets.xml" />
+	
+	<!-- Single Sign On -->
+	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="modules/SSO.xml" />
 
 
 	<!--
