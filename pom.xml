@@ -34,7 +34,7 @@
    <version>3.0.0-Beta03-SNAPSHOT</version>
    <packaging>pom</packaging>
 
-   <name>GateIn Portal</name>
+   <name>GateIn - Portal</name>
 
    <properties>
       <org.exoplatform.kernel.version>2.2.0-Beta02</org.exoplatform.kernel.version>
