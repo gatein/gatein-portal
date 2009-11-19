@@ -345,15 +345,6 @@ public class UIPortalComponentActionListener
                app = appList.getApplication(sourceId);
                ApplicationType applicationType = app.getType();
 
-               // TanPD: Hardcoded to fix bug GTNPORTAL-91
-               Application temp = null;
-               if (applicationType.equals(ApplicationType.GADGET))
-               {
-                  applicationType = ApplicationType.PORTLET;
-                  temp = app;
-                  app = appList.getApplication("dashboard/Gadget_Wrapper_Portlet");
-               }
-
                //
                UIPortlet uiPortlet = uiTarget.createUIComponent(UIPortlet.class, null, null);
                if (app.getDisplayName() != null)
@@ -382,41 +373,9 @@ public class UIPortalComponentActionListener
 
                //
                uiPortlet.setState(new PortletState(state, applicationType));
-
-               // TanPD: Fix bug GTNPORTAL-91
-               if (temp != null && applicationType.equals(ApplicationType.PORTLET))
-               {
-                  Portlet pref = uiPortlet.getPreferences();
-                  try
-                  {
-                     UIGadget uiGadget = uiPortlet.createUIComponent(UIGadget.class, null, null);
-                     uiGadget.setState(new TransientApplicationState<Gadget>(temp.getApplicationName()));
-                     pref.setValue("url", uiGadget.getUrl());
-                  }
-                  catch (Exception e)
-                  {
-                     // Fix in case: RSS Reader Gadget
-                     Preference aggIdPref = pref.getPreference("aggregatorId");
-                     String aggregatorId = null;
-                     if (aggIdPref == null || aggIdPref.getValue() == null || aggIdPref.getValue().length() == 0)
-                        aggregatorId = "rssAggregator";
-                     else
-                        aggregatorId = aggIdPref.getValue();
-                     GadgetRegistryService gadgetSrv = uiApp.getApplicationComponent(GadgetRegistryService.class);
-                     org.exoplatform.application.gadget.Gadget gadget = gadgetSrv.getGadget(aggregatorId);
-                     // TODO make sure it's an rss feed
-                     // TODO make sure that we did not add it already
-                     UIGadget uiGadget = uiPortlet.createUIComponent(UIGadget.class, null, null);
-                     uiGadget.setState(new TransientApplicationState<org.exoplatform.portal.pom.spi.gadget.Gadget>(
-                        gadget.getName()));
-                     pref.setValue("url", uiGadget.getUrl());
-                  }
-               }
-
                uiPortlet.setPortletInPortal(uiTarget instanceof UIPortal);
                uiPortlet.setShowEditControl(true);
                uiSource = uiPortlet;
-
             }
             List<UIComponent> children = uiTarget.getChildren();
             uiSource.setParent(uiTarget);

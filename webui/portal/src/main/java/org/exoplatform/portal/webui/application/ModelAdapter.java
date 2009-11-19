@@ -183,7 +183,7 @@ public abstract class ModelAdapter<S, C extends Serializable>
       public ApplicationState<Gadget> update(ExoContainer container, ExoPortletState updateState,
          ApplicationState<Gadget> gadgetApplicationState) throws Exception
       {
-         throw new UnsupportedOperationException("todo / julien");
+         throw new UnsupportedOperationException("Cannot edit gadget preferences");
       }
 
       @Override
