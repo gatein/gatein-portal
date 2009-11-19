@@ -19,7 +19,6 @@
 
 package org.exoplatform.portal.application;
 
-import org.exoplatform.application.registry.Application;
 import org.exoplatform.management.annotations.Managed;
 import org.exoplatform.management.annotations.ManagedDescription;
 import org.exoplatform.management.annotations.ManagedName;
@@ -30,12 +29,7 @@ import org.picocontainer.Startable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -154,21 +148,27 @@ public class ApplicationStatisticService implements Startable
 
    private String[] getApplicationsSortedByAverageTime(boolean desc)
    {
-      TreeMap<Double, String> map = new TreeMap<Double, String>();
+      List<ApplicationStatistic> list = new ArrayList<ApplicationStatistic>();
       for (ApplicationStatistic app : apps.values())
       {
          if (app.getAverageTime() > 0)
          {
-            map.put(app.getAverageTime(), app.getAppId());
+            list.add(app);
          }
       }
-      List<String> list = new ArrayList<String>(map.values());
+      Collections.sort(list, new Comparator<ApplicationStatistic>()
+      {
+         public int compare(ApplicationStatistic o1, ApplicationStatistic o2)
+         {
+            return (int)Math.signum(o1.getAverageTime() - o2.getAverageTime());
+         }
+      });
       if (desc)
       {
          Collections.reverse(list);
       }
-      List<String> sub = list.subList(0, Math.min(map.size(), 10));
-      return sub.toArray(new String[sub.size()]);
+      List<ApplicationStatistic> sub = list.subList(0, Math.min(list.size(), 10));
+      return asIds(sub);
    }
 
    /*
@@ -178,18 +178,34 @@ public class ApplicationStatisticService implements Startable
    @ManagedDescription("The list of the 10 most executed applications")
    public String[] getMostExecutedApplications()
    {
-      TreeMap<Long, String> map = new TreeMap<Long, String>();
+      ArrayList<ApplicationStatistic> list = new ArrayList<ApplicationStatistic>();
       for (ApplicationStatistic app : apps.values())
       {
          if (app.executionCount() > 0)
          {
-            map.put(app.executionCount(), app.getAppId());
+            list.add(app);
          }
       }
-      List<String> list = new ArrayList<String>(map.values());
-      Collections.reverse(list);
-      List<String> sub = list.subList(0, Math.min(map.size(), 10));
-      return sub.toArray(new String[sub.size()]);
+      Collections.sort(list, new Comparator<ApplicationStatistic>()
+      {
+         public int compare(ApplicationStatistic o1, ApplicationStatistic o2)
+         {
+            long diff = o1.executionCount() - o2.executionCount();
+            return diff == 0 ? 0 : diff > 0 ? -1 : 1;
+         }
+      });
+      List<ApplicationStatistic> sub = list.subList(0, Math.min(list.size(), 10));
+      return asIds(sub);
+   }
+
+   private String[] asIds(List<ApplicationStatistic> list)
+   {
+      String[] array = new String[list.size()];
+      for (int i = 0;i < list.size();i++)
+      {
+         array[i] = list.get(i).getAppId();
+      }
+      return array;
    }
 
    private double toSeconds(double value)
