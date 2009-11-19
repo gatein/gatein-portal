@@ -378,11 +378,11 @@
                </object-param>
 
                <object-param>
-                  <name>eXoGadgets</name>
+                  <name>Gadgets</name>
                   <description>Gadgets</description>
                   <object type="org.exoplatform.application.registry.ApplicationCategory">
                      <field name="name">
-                        <string>eXoGadgets</string>
+                        <string>Gadgets</string>
                      </field>
                      <field name="displayName">
                         <string>Gadgets</string>
@@ -402,7 +402,7 @@
                            <value>
                               <object type="org.exoplatform.application.registry.Application">
                                  <field name="categoryName">
-                                    <string>eXoGadgets</string>
+                                    <string>Gadgets</string>
                                  </field>
                                  <field name="applicationName">
                                     <string>Todo</string>
@@ -431,7 +431,7 @@
                            <value>
                               <object type="org.exoplatform.application.registry.Application">
                                  <field name="categoryName">
-                                    <string>eXoGadgets</string>
+                                    <string>Gadgets</string>
                                  </field>
                                  <field name="applicationName">
                                     <string>Calendar</string>
@@ -462,7 +462,7 @@
                            <value>
                               <object type="org.exoplatform.application.registry.Application">
                                  <field name="categoryName">
-                                    <string>eXoGadgets</string>
+                                    <string>Gadgets</string>
                                  </field>
                                  <field name="applicationName">
                                     <string>Calculator</string>
@@ -493,7 +493,7 @@
                            <value>
                               <object type="org.exoplatform.application.registry.Application">
                                  <field name="categoryName">
-                                    <string>eXoGadgets</string>
+                                    <string>Gadgets</string>
                                  </field>
                                  <field name="applicationName">
                                     <string>rssAggregator</string>

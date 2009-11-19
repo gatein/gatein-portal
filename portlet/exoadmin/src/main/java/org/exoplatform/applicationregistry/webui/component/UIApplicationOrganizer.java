@@ -239,6 +239,15 @@ public class UIApplicationOrganizer extends UIContainer
       {
          UIApplicationOrganizer uiOrganizer = event.getSource();
          ApplicationRegistryService service = uiOrganizer.getApplicationComponent(ApplicationRegistryService.class);
+         
+         // Remove preconfig application to prevent duplicating
+         List<Application> preConfigApplications = service.getAllApplications();
+         if (preConfigApplications!=null) {
+            for (Application application : preConfigApplications) {
+               service.remove(application);
+            }
+         }
+         
          service.importAllPortlets();
          service.importExoGadgets();
          uiOrganizer.reload();
