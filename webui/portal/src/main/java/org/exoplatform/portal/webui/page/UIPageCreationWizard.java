@@ -287,6 +287,7 @@ public class UIPageCreationWizard extends UIPageWizard
 
          if (uiWizard.getSelectedStep() < THIRD_STEP)
          {
+            uiWizard.setShowActions(true);
             uiWizard.setDescriptionWizard(uiWizard.getSelectedStep());
             uiWizard.updateWizardComponent();
             uiPortalApp.addMessage(new ApplicationMessage("UIPageCreationWizard.msg.StepByStep", null));
