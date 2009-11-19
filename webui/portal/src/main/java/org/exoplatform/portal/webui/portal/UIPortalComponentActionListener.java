@@ -97,9 +97,9 @@ public class UIPortalComponentActionListener
 
    static public class DeleteComponentActionListener extends EventListener<UIComponent>
    {
-      private final static String UI_CONTAINER = "UIContainer";
+      private final static String UI_CONTAINER_PREFIX = "UIContainer-";
 
-      private final static String UI_PORTLET = "UIPortlet";
+      private final static String UI_PORTLET_PREFIX = "UIPortlet-";
 
       public void execute(Event<UIComponent> event) throws Exception
       {
@@ -152,42 +152,80 @@ public class UIPortalComponentActionListener
          Util.showComponentLayoutMode(uiRemoveComponent.getClass());
 
          PortalRequestContext pcontext = (PortalRequestContext)event.getRequestContext();
-         String componentType = null;
+
+         // Case1: current component is a portlet
          if (uiComponent instanceof UIPortlet)
          {
-            componentType = UI_PORTLET;
+            removeComponent(id, UI_PORTLET_PREFIX, pcontext);
+            return;
          }
-         else if (uiComponent instanceof org.exoplatform.portal.webui.container.UIContainer)
+
+         // Case 2: current component is a container
+         if (uiComponent instanceof org.exoplatform.portal.webui.container.UIContainer)
          {
-            componentType = UI_CONTAINER;
-            org.exoplatform.portal.webui.container.UIContainer topAncestor = getTopBlockContainer((org.exoplatform.portal.webui.container.UIContainer)uiParent);
-            
-            //Case of nested container like tab container, mixed container
-            if(topAncestor != null){
+            org.exoplatform.portal.webui.container.UIContainer topAncestor =
+               getTopBlockContainer((org.exoplatform.portal.webui.container.UIContainer)uiParent);
+
+            /**
+             * topAncestor is null if the uiParent is either UIPortal or UIPage,
+             * that happens when our container is a simple container
+             */
+            if (topAncestor == null)
+            {
+               removeComponent(id, UI_CONTAINER_PREFIX, pcontext);
+               return;
+            }
+            /** Case of nested container like tab container, mixed container */
+            else
+            {
                String topAncestorId = topAncestor.getId();
-               //Add UIContainer- prefix to the id as it is required to be updated by Ajax
-               if(!topAncestorId.startsWith("UIContainer-")){
-                  topAncestor.setId("UIContainer-" + topAncestorId);
+
+               /** If the topAncestor has no child, then it is removed */
+               if (topAncestor.getChildren().size() == 0)
+               {
+                  /** Update server-side */
+                  UIContainer parentOfTopAncestor = topAncestor.getParent();
+                  parentOfTopAncestor.removeChildById(topAncestorId);
+                  
+                  /** Update client side */
+                  if (topAncestorId.startsWith(UI_CONTAINER_PREFIX))
+                  {
+                     topAncestorId = topAncestorId.substring(UI_CONTAINER_PREFIX.length());
+                     topAncestor.setId(topAncestorId);
+                  }
+                  removeComponent(topAncestorId, UI_CONTAINER_PREFIX, pcontext);
+                  return;
+               }
+
+               /**
+                * If the topAncestor contains at least one child, then it is
+                * updated via Ajax
+                */
+               if (!topAncestorId.startsWith(UI_CONTAINER_PREFIX))
+               {
+                  topAncestor.setId(UI_CONTAINER_PREFIX + topAncestorId);
                }
                pcontext.addUIComponentToUpdateByAjax(topAncestor);
                return;
             }
          }
 
-         if (componentType != null)
-         {
-            JavascriptManager jsManager = pcontext.getJavascriptManager();
-            jsManager.addJavascript(scriptRemovingComponent(id, componentType));
-            jsManager.addJavascript("eXo.portal.UIPortal.changeComposerSaveButton();");
-         }
       }
 
-      private String scriptRemovingComponent(String componentId, String componentType)
+      /** Add Javascript script to remove component */
+      private void removeComponent(String componentId, String componentType, PortalRequestContext pcontext)
+      {
+         String scriptRemovingComponent = scriptRemovingComponent(componentId, componentType);
+         JavascriptManager jsManager = pcontext.getJavascriptManager();
+         jsManager.addJavascript(scriptRemovingComponent);
+         jsManager.addJavascript("eXo.portal.UIPortal.changeComposerSaveButton();");
+      }
+
+      private String scriptRemovingComponent(String componentId, String prefix)
       {
          StringBuffer buffer = new StringBuffer();
          buffer.append("eXo.portal.UIPortal.removeComponent('");
-         buffer.append(componentType);
-         buffer.append("-");
+         buffer.append(prefix);
          buffer.append(componentId);
          buffer.append("');");
          return buffer.toString();
@@ -196,12 +234,13 @@ public class UIPortalComponentActionListener
       /**
        * Returns the top ancestor( of type
        * org.exoplatform.portal.webui.container.UIContainer but not of type
-       * UIPortal) of a given container
+       * UIPortal or UIPage) of a given container
        */
       private static org.exoplatform.portal.webui.container.UIContainer getTopBlockContainer(
          org.exoplatform.portal.webui.container.UIContainer container)
       {
-         if(container instanceof UIPortal){
+         if (container instanceof UIPortal || container instanceof UIPage)
+         {
             return null;
          }
          org.exoplatform.portal.webui.container.UIContainer topAncestor = container;
@@ -209,7 +248,8 @@ public class UIPortalComponentActionListener
          try
          {
             intermediateCont = topAncestor.getParent();
-            while (intermediateCont != null && !(intermediateCont instanceof UIPortal))
+            while (intermediateCont != null && !(intermediateCont instanceof UIPortal)
+               && !(intermediateCont instanceof UIPage))
             {
                topAncestor = intermediateCont;
                intermediateCont = topAncestor.getParent();
