@@ -101,9 +101,10 @@ public class UITabPaneDashboard extends UIContainer
       return null;
    }
 
-   public int getCurrentNumberOfTabs()
+   public int getCurrentNumberOfTabs() throws Exception
    {
-      return pageNavigation.getNodes().size();
+
+      return getSameSiblingsNode().size();
    }
 
    public int getStartShowIndex()
@@ -121,6 +122,19 @@ public class UITabPaneDashboard extends UIContainer
       {
          return Math.min(this.tabNbs, this.startShowIndex + MAX_SHOWED_TAB_NUMBER);
       }
+   }
+
+   public List<PageNode> getSameSiblingsNode() throws Exception
+   {
+      List<PageNode> siblings = getPageNavigation().getNodes();
+      List<PageNode> selectedPath = Util.getUIPortal().getSelectedPaths();
+      if (selectedPath != null && selectedPath.size() > 1)
+      {
+         PageNode currentParent = selectedPath.get(selectedPath.size() - 2);
+         siblings = currentParent.getChildren();
+
+      }
+      return siblings;
    }
 
    public PageNavigation getPageNavigation() throws Exception
@@ -141,8 +155,15 @@ public class UITabPaneDashboard extends UIContainer
    {
       try
       {
-         ArrayList<PageNode> nodes = pageNavigation.getNodes();
-         if (nodes.size() < 2)
+         List<PageNode> nodes = pageNavigation.getNodes();
+         PageNode parentNode = null;
+         List<PageNode> selectedPath = uiPortal.getSelectedPaths();
+         if (selectedPath != null && selectedPath.size() > 1)
+         {
+            parentNode = selectedPath.get(selectedPath.size() - 2);
+            nodes = parentNode.getChildren();
+         }
+         if (parentNode == null && nodes.size() < 2)
          {
             return null; // At the moment, we prevent user from deleting all the dashboard
          }
@@ -181,6 +202,13 @@ public class UITabPaneDashboard extends UIContainer
                pageNavigation.getOwnerId());
          page.setTitle(nodeLabel);
 
+         List<PageNode> selectedPath = uiPortal.getSelectedPaths();
+         PageNode parentNode = null;
+         if (selectedPath != null && selectedPath.size() > 1)
+         {
+            parentNode = selectedPath.get(selectedPath.size() - 2);
+         }
+
          PageNode pageNode = new PageNode();
          pageNode.setLabel(nodeLabel);
          String uniqueNodeName = nodeLabel.toLowerCase().replace(' ', '_');
@@ -189,18 +217,28 @@ public class UITabPaneDashboard extends UIContainer
             uniqueNodeName = uniqueNodeName + "_" + System.currentTimeMillis();
          }
 
+         String fullName = (parentNode != null) ? parentNode.getUri() + "/" + uniqueNodeName : uniqueNodeName;
+
          page.setName(uniqueNodeName);
          pageNode.setName(uniqueNodeName);
-         pageNode.setUri(uniqueNodeName);
+         pageNode.setUri(fullName);
          pageNode.setPageReference(page.getPageId());
 
-         pageNavigation.addNode(pageNode);
+         if (parentNode == null)
+         {
+            pageNavigation.addNode(pageNode);
+         }
+         else if (parentNode.getChildren() != null)
+         {
+            parentNode.getChildren().add(pageNode);
+         }
+
          uiPortal.setSelectedNode(pageNode);
 
          configService.create(page);
          configService.update(pageNavigation);
 
-         return uniqueNodeName;
+         return fullName;
       }
       catch (Exception ex)
       {
@@ -248,7 +286,15 @@ public class UITabPaneDashboard extends UIContainer
    {
       try
       {
-         ArrayList<PageNode> nodes = pageNavigation.getNodes();
+         List<PageNode> nodes = pageNavigation.getNodes();
+         List<PageNode> selectedPath = uiPortal.getSelectedPaths();
+         PageNode parentNode = null;
+         if (selectedPath != null && selectedPath.size() > 1)
+         {
+            parentNode = selectedPath.get(selectedPath.size() - 2);
+            nodes = parentNode.getChildren();
+         }
+
          PageNode renamedNode = nodes.get(nodeIndex);
          if (renamedNode == null || newNodeLabel.length() == 0)
          {
@@ -263,10 +309,13 @@ public class UITabPaneDashboard extends UIContainer
             newNodeName = newNodeName + "_" + System.currentTimeMillis();
          }
          renamedNode.setName(newNodeName);
-         renamedNode.setUri(newNodeName);
+
+         String newUri = (parentNode != null) ? parentNode.getUri() + "/" + newNodeName : newNodeName;
+
+         renamedNode.setUri(newUri);
 
          configService.update(pageNavigation);
-         return newNodeName;
+         return newUri;
       }
       catch (Exception ex)
       {
@@ -311,7 +360,11 @@ public class UITabPaneDashboard extends UIContainer
       {
          UITabPaneDashboard source = event.getSource();
          WebuiRequestContext context = event.getRequestContext();
-         if (source.getCurrentNumberOfTabs() == 1)
+         List<PageNode> path = Util.getUIPortal().getSelectedPaths();
+         boolean isRoot = true;
+         if (path != null && path.size() > 1)
+            isRoot = false;
+         if (isRoot && source.getCurrentNumberOfTabs() == 1)
          {
             source.getAncestorOfType(UIApplication.class).addMessage(
                new ApplicationMessage("UITabPaneDashboard.msg.cannotDeleteLastTab", null));
@@ -324,7 +377,7 @@ public class UITabPaneDashboard extends UIContainer
          if (selectedNode != null)
          {
             PortalRequestContext prContext = Util.getPortalRequestContext();
-            prContext.getResponse().sendRedirect(prContext.getPortalURI() + selectedNode.getName());
+            prContext.getResponse().sendRedirect(prContext.getPortalURI() + selectedNode.getUri());
          }
       }
    }
@@ -341,13 +394,13 @@ public class UITabPaneDashboard extends UIContainer
             context.getUIApplication().addMessage(new ApplicationMessage("UITabPaneDashboard.msg.wrongTabName", null));
             return;
          }
-         String newNodeName = tabPane.createNewPageNode(newTabLabel);
+         String uri = tabPane.createNewPageNode(newTabLabel);
 
          //If new node is created with success, then redirect to it
-         if (newNodeName != null)
+         if (uri != null)
          {
             PortalRequestContext prContext = Util.getPortalRequestContext();
-            prContext.getResponse().sendRedirect(prContext.getPortalURI() + newNodeName);
+            prContext.getResponse().sendRedirect(prContext.getPortalURI() + uri);
          }
       }
    }
@@ -375,13 +428,13 @@ public class UITabPaneDashboard extends UIContainer
             context.getUIApplication().addMessage(new ApplicationMessage("UITabPaneDashboard.msg.wrongTabName", null));
             return;
          }
-         String newNodeName = tabPane.renamePageNode(nodeIndex, newTabLabel);
+         String newUri = tabPane.renamePageNode(nodeIndex, newTabLabel);
 
          //If page node is renamed with success, then redirect to new URL
-         if (newNodeName != null)
+         if (newUri != null)
          {
             PortalRequestContext prContext = Util.getPortalRequestContext();
-            prContext.getResponse().sendRedirect(prContext.getPortalURI() + newNodeName);
+            prContext.getResponse().sendRedirect(prContext.getPortalURI() + newUri);
          }
       }
    }

@@ -7,8 +7,9 @@
 	import org.exoplatform.portal.application.PortalRequestContext;
 	import org.exoplatform.web.application.JavascriptManager;
 	
-	PageNavigation pageNavigation = uicomponent.getPageNavigation();
-	ArrayList<PageNode> nodes = pageNavigation.getNodes();
+	//PageNavigation pageNavigation = uicomponent.getPageNavigation();
+	//ArrayList<PageNode> nodes = pageNavigation.getNodes();
+	ArrayList<PageNode> nodes = uicomponent.getSameSiblingsNode();
 	def tabNbs = nodes.size();
 
 	PortalRequestContext pcontext = Util.getPortalRequestContext();	
@@ -56,7 +57,7 @@
 										<div class="LeftTab">
 											<div class="RightTab">
 												<div class="MiddleTab">
-													<a	href="<%= portalURI + node.getName(); %>"><span>$tabLabel</span></a>
+													<a	href="<%= portalURI + node.getUri(); %>"><span>$tabLabel</span></a>
 													<a  href="<%= uicomponent.url("DeleteTab",param); %>">
 														<img class="CloseIcon" src="/eXoResources/skin/sharedImages/Blank.gif" alt="DEL" />
 													</a>	
