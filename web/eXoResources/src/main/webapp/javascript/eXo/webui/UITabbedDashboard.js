@@ -19,7 +19,7 @@
 
 eXo.webui.UITabbedDashboard = {
 	
-	init : function(){},
+	init : function(){eXo.webui.UITabbedDashboard.isInRequest = false;},
 	
 	renameTabLabel : function(e){
 		if(!e){
@@ -91,6 +91,7 @@ eXo.webui.UITabbedDashboard = {
 		if(!e){
 			e = window.event;
 		}	
+		if(eXo.webui.UITabbedDashboard.isInRequest) return;
 		var keyNum = e.keyCode;
 		
 		//If user presses on ENTER button
@@ -106,6 +107,7 @@ eXo.webui.UITabbedDashboard = {
 			href += "&uicomponent=UITabPaneDashboard";
 			href += "&op=AddDashboard";
 			href += "&objectId=" + newTabLabel;
+			eXo.webui.UITabbedDashboard.isInRequest = true;
 			window.location = href;
 		}
 		//If user presses on ESCAPE button
