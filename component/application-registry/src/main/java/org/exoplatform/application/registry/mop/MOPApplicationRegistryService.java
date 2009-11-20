@@ -317,7 +317,7 @@ public class MOPApplicationRegistryService implements ApplicationRegistryService
             {
                String contentId = application.getContentId();
                ContentType<?> contentType = application.getType().getContentType();
-               String definitionName = application.getDisplayName().replace(' ', '_');
+               String definitionName = application.getApplicationName();
                contentDef = categoryDef.createContent(definitionName, contentType, contentId);
             }
             else
