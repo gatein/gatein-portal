@@ -103,13 +103,6 @@
       <portlet>
         <application-ref>web</application-ref>
         <portlet-ref>SiteMapPortlet</portlet-ref>
-        <preferences>
-          <preference>
-              <name>url</name>
-              <value>http://www.facebook.com</value>
-              <read-only>false</read-only>
-            </preference>
-        </preferences>
       </portlet>
       <title>SiteMap</title>
       <access-permissions>Everyone</access-permissions>
