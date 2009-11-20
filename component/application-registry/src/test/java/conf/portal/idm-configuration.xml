@@ -25,8 +25,8 @@
                xmlns="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd">
 
    <component>
-      <key>org.exoplatform.services.organization.jbidm.JBossIDMService</key>
-      <type>org.exoplatform.services.organization.jbidm.JBossIDMServiceImpl</type>
+      <key>org.exoplatform.services.organization.idm.PicketLinkIDMService</key>
+      <type>org.exoplatform.services.organization.idm.PicketLinkIDMServiceImpl</type>
       <init-params>
          <value-param>
             <name>config</name>
@@ -34,18 +34,18 @@
          </value-param>
          <values-param>
             <name>hibernate.annotations</name>
-            <value>org.jboss.identity.idm.impl.model.hibernate.HibernateIdentityObject</value>
-            <value>org.jboss.identity.idm.impl.model.hibernate.HibernateIdentityObjectAttribute</value>
-            <value>org.jboss.identity.idm.impl.model.hibernate.HibernateIdentityObjectBinaryAttribute</value>
-            <value>org.jboss.identity.idm.impl.model.hibernate.HibernateIdentityObjectBinaryAttributeValue</value>
-            <value>org.jboss.identity.idm.impl.model.hibernate.HibernateIdentityObjectCredential</value>
-            <value>org.jboss.identity.idm.impl.model.hibernate.HibernateIdentityObjectCredentialType</value>
-            <value>org.jboss.identity.idm.impl.model.hibernate.HibernateIdentityObjectRelationship</value>
-            <value>org.jboss.identity.idm.impl.model.hibernate.HibernateIdentityObjectRelationshipName</value>
-            <value>org.jboss.identity.idm.impl.model.hibernate.HibernateIdentityObjectRelationshipType</value>
-            <value>org.jboss.identity.idm.impl.model.hibernate.HibernateIdentityObjectTextAttribute</value>
-            <value>org.jboss.identity.idm.impl.model.hibernate.HibernateIdentityObjectType</value>
-            <value>org.jboss.identity.idm.impl.model.hibernate.HibernateRealm</value>
+            <value>org.picketlink.idm.impl.model.hibernate.HibernateIdentityObject</value>
+            <value>org.picketlink.idm.impl.model.hibernate.HibernateIdentityObjectAttribute</value>
+            <value>org.picketlink.idm.impl.model.hibernate.HibernateIdentityObjectBinaryAttribute</value>
+            <value>org.picketlink.idm.impl.model.hibernate.HibernateIdentityObjectBinaryAttributeValue</value>
+            <value>org.picketlink.idm.impl.model.hibernate.HibernateIdentityObjectCredential</value>
+            <value>org.picketlink.idm.impl.model.hibernate.HibernateIdentityObjectCredentialType</value>
+            <value>org.picketlink.idm.impl.model.hibernate.HibernateIdentityObjectRelationship</value>
+            <value>org.picketlink.idm.impl.model.hibernate.HibernateIdentityObjectRelationshipName</value>
+            <value>org.picketlink.idm.impl.model.hibernate.HibernateIdentityObjectRelationshipType</value>
+            <value>org.picketlink.idm.impl.model.hibernate.HibernateIdentityObjectTextAttribute</value>
+            <value>org.picketlink.idm.impl.model.hibernate.HibernateIdentityObjectType</value>
+            <value>org.picketlink.idm.impl.model.hibernate.HibernateRealm</value>
          </values-param>
          <properties-param>
             <name>hibernate.properties</name>
@@ -70,7 +70,7 @@
 
    <component>
       <key>org.exoplatform.services.organization.OrganizationService</key>
-      <type>org.exoplatform.services.organization.jbidm.JBossIDMOrganizationServiceImpl</type>
+      <type>org.exoplatform.services.organization.idm.PicketLinkIDMOrganizationServiceImpl</type>
    </component>
 
 </configuration>

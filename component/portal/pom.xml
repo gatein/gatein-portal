@@ -82,9 +82,9 @@
     </dependency>
 
     <dependency>
-       <groupId>org.jboss.identity.idm</groupId>
-       <artifactId>idm-core</artifactId>
-       <version>${org.jboss.identity.idm}</version>
+       <groupId>org.picketlink.idm</groupId>
+       <artifactId>picketlink-idm-core</artifactId>
+       <version>${org.picketlink.idm}</version>
     </dependency>
 
   </dependencies>

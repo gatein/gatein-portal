@@ -17,13 +17,13 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.services.organization.jbidm;
+package org.exoplatform.services.organization.idm;
 
 import org.exoplatform.services.organization.MembershipType;
 import org.exoplatform.services.organization.MembershipTypeHandler;
 import org.exoplatform.services.organization.impl.MembershipTypeImpl;
-import org.jboss.identity.idm.api.IdentitySession;
-import org.jboss.identity.idm.api.RoleType;
+import org.picketlink.idm.api.IdentitySession;
+import org.picketlink.idm.api.RoleType;
 
 import java.text.DateFormat;
 import java.util.Collection;
@@ -46,11 +46,11 @@ public class MembershipTypeDAOImpl implements MembershipTypeHandler
 
    public static final DateFormat dateFormat = DateFormat.getInstance();
 
-   private JBossIDMService service_;
+   private PicketLinkIDMService service_;
 
-   private JBossIDMOrganizationServiceImpl orgService;
+   private PicketLinkIDMOrganizationServiceImpl orgService;
 
-   public MembershipTypeDAOImpl(JBossIDMOrganizationServiceImpl orgService, JBossIDMService service)
+   public MembershipTypeDAOImpl(PicketLinkIDMOrganizationServiceImpl orgService, PicketLinkIDMService service)
    {
       service_ = service;
       this.orgService = orgService;

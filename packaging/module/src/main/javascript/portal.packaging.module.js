@@ -37,7 +37,7 @@ function getModule(params)
    var mopVersion =  "${org.gatein.mop.version}";
    var chromatticVersion =  "${version.chromattic}";
    var reflectVersion =  "${version.reflect}";
-   var idmVersion = "${org.jboss.identity.idm}";
+   var idmVersion = "${org.picketlink.idm}";
    var pcVersion = "${org.gatein.pc.version}";
    var wciVersion = "${org.gatein.wci.version}";
    var commonVersion = "${org.gatein.common.version}";
@@ -115,12 +115,12 @@ function getModule(params)
 
    module.component.identity =
    new Project("org.exoplatform.portal", "exo.portal.component.identity", "jar", module.version).
-      addDependency(new Project("org.jboss.identity.idm", "idm-core", "jar", idmVersion)).
-      addDependency(new Project("org.jboss.identity.idm", "idm-common", "jar", idmVersion)).
-      addDependency(new Project("org.jboss.identity.idm", "idm-api", "jar", idmVersion)).
-      addDependency(new Project("org.jboss.identity.idm", "idm-spi", "jar", idmVersion)).
-      addDependency(new Project("org.jboss.identity.idm", "idm-hibernate", "jar", idmVersion)).
-      addDependency(new Project("org.jboss.identity.idm", "idm-ldap", "jar", idmVersion));
+      addDependency(new Project("org.picketlink.idm", "picketlink-idm-core", "jar", idmVersion)).
+      addDependency(new Project("org.picketlink.idm", "picketlink-idm-common", "jar", idmVersion)).
+      addDependency(new Project("org.picketlink.idm", "picketlink-idm-api", "jar", idmVersion)).
+      addDependency(new Project("org.picketlink.idm", "picketlink-idm-spi", "jar", idmVersion)).
+      addDependency(new Project("org.picketlink.idm", "picketlink-idm-hibernate", "jar", idmVersion)).
+      addDependency(new Project("org.picketlink.idm", "picketlink-idm-ldap", "jar", idmVersion));
 
    module.component.applicationRegistry =
    new Project("org.exoplatform.portal", "exo.portal.component.application-registry", "jar", module.version).

@@ -17,7 +17,7 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.services.organization.jbidm;
+package org.exoplatform.services.organization.idm;
 
 import org.exoplatform.services.cache.CacheService;
 import org.exoplatform.services.cache.ExoCache;
@@ -25,9 +25,9 @@ import org.exoplatform.services.organization.UserProfile;
 import org.exoplatform.services.organization.UserProfileEventListener;
 import org.exoplatform.services.organization.UserProfileHandler;
 import org.exoplatform.services.organization.impl.UserProfileImpl;
-import org.jboss.identity.idm.api.Attribute;
-import org.jboss.identity.idm.api.IdentitySession;
-import org.jboss.identity.idm.impl.api.SimpleAttribute;
+import org.picketlink.idm.api.Attribute;
+import org.picketlink.idm.api.IdentitySession;
+import org.picketlink.idm.impl.api.SimpleAttribute;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -42,15 +42,15 @@ public class UserProfileDAOImpl implements UserProfileHandler
 
    static private UserProfile NOT_FOUND = new UserProfileImpl();
 
-   private JBossIDMService service_;
+   private PicketLinkIDMService service_;
 
    private ExoCache cache_;
 
    private List<UserProfileEventListener> listeners_;
 
-   private JBossIDMOrganizationServiceImpl orgService;
+   private PicketLinkIDMOrganizationServiceImpl orgService;
 
-   public UserProfileDAOImpl(JBossIDMOrganizationServiceImpl orgService, JBossIDMService service, CacheService cservice)
+   public UserProfileDAOImpl(PicketLinkIDMOrganizationServiceImpl orgService, PicketLinkIDMService service, CacheService cservice)
       throws Exception
    {
       service_ = service;
@@ -136,7 +136,7 @@ public class UserProfileDAOImpl implements UserProfileHandler
    public UserProfile findUserProfileByName(String userName) throws Exception
    {
 
-      org.jboss.identity.idm.api.User foundUser = getIdentitySession().getPersistenceManager().findUser(userName);
+      org.picketlink.idm.api.User foundUser = getIdentitySession().getPersistenceManager().findUser(userName);
 
       if (foundUser == null)
       {

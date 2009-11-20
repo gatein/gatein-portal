@@ -20,9 +20,9 @@
 
 -->
 
-<jboss-identity xmlns="urn:jboss:identity:idm:config:v1_0_beta"
+<jboss-identity xmlns="urn:picketlink:idm:config:v1_0_0_cr1"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                xsi:schemaLocation="urn:jboss:identity:idm:config:v1_0_alpha identity-config.xsd">
+                xsi:schemaLocation="urn:picketlink:idm:config:v1_0_0_cr1 identity-config.xsd">
     <realms>
         <realm>
             <id>PortalRealm</id>
@@ -35,7 +35,7 @@
     <repositories>
         <repository>
             <id>PortalRepository</id>
-            <class>org.jboss.identity.idm.impl.repository.WrapperIdentityStoreRepository</class>
+            <class>org.picketlink.idm.impl.repository.WrapperIdentityStoreRepository</class>
             <external-config/>
             <default-identity-store-id>HibernateStore</default-identity-store-id>
             <default-attribute-store-id>HibernateStore</default-attribute-store-id>
@@ -46,7 +46,7 @@
         <identity-stores>
             <identity-store>
                 <id>HibernateStore</id>
-                <class>org.jboss.identity.idm.impl.store.hibernate.HibernateIdentityStoreImpl</class>
+                <class>org.picketlink.idm.impl.store.hibernate.HibernateIdentityStoreImpl</class>
                 <external-config/>
                 <supported-relationship-types>
                     <relationship-type>JBOSS_IDENTITY_MEMBERSHIP</relationship-type>
