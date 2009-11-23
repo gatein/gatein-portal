@@ -196,10 +196,17 @@ public class UIPortalComponentActionListener
                   removeComponent(topAncestorId, UI_CONTAINER_PREFIX, pcontext);
                   return;
                }
+               
+               /** If the uiParent is not the topAncestor and having no child, then it is removed */
+               if(uiParent.getChildren().size() == 0)
+               {
+                  /** Update server-side */
+                  UIContainer itsParent = uiParent.getParent();
+                  itsParent.removeChildById(uiParent.getId());
+               }
 
                /**
-                * If the topAncestor contains at least one child, then it is
-                * updated via Ajax
+                * Update the topAncestor by Ajax
                 */
                if (!topAncestorId.startsWith(UI_CONTAINER_PREFIX))
                {
