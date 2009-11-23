@@ -1,6 +1,5 @@
 <% 	import javax.portlet.PortletMode ; 
-		import org.exoplatform.gadget.webui.component.UIGadgetViewMode ;
-		import org.exoplatform.gadget.webui.component.UIGadgetEditMode ;
+		import org.exoplatform.gadget.webui.component.UIGadgetViewMode;
 		def rcontext = _ctx.getRequestContext() ;
   	def popupMsgs = uicomponent.getUIPopupMessages();
 %>
@@ -8,8 +7,6 @@
 <%
 	if( rcontext.getApplicationMode() == PortletMode.VIEW ) {
 		uicomponent.renderChild(UIGadgetViewMode.class) ;
-  } else {
-    uicomponent.renderChild(UIGadgetEditMode.class);
   }
 	
 	if(popupMsgs != null) popupMsgs.processRender(rcontext); %>

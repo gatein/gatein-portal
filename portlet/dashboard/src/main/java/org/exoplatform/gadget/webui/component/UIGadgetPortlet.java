@@ -41,8 +41,7 @@ public class UIGadgetPortlet extends UIPortletApplication
 {
    public UIGadgetPortlet() throws Exception
    {
-      addChild(UIGadgetViewMode.class, null, null);
-      addChild(UIGadgetEditMode.class, null, null);
+      addChild(UIGadgetViewMode.class, null, null);      
    }
 
    public String getUrl()
