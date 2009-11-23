@@ -90,6 +90,8 @@ public class UIRegisterForm extends UIForm {
          
          if(registerInput.save(userHandler, context)){
             //TODO: Send email and add Account Activating feature
+            UIApplication uiApp = context.getUIApplication();
+            uiApp.addMessage(new ApplicationMessage("UIRegisterForm.registerWithSuccess.message", null));
          }
 		}
 	}
