@@ -19,9 +19,6 @@
 
 package org.exoplatform.portal.webui.component;
 
-import javax.portlet.PortletMode;
-import javax.portlet.PortletPreferences;
-
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -35,8 +32,10 @@ import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.exception.MessageException;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormStringInput;
-import org.exoplatform.webui.form.validator.MandatoryValidator;
 import org.exoplatform.webui.form.validator.URLValidator;
+
+import javax.portlet.PortletMode;
+import javax.portlet.PortletPreferences;
 
 /** Created by The eXo Platform SAS Author : eXoPlatform October 2, 2009 */
 @ComponentConfig(lifecycle = UIFormLifecycle.class, template = "system:/groovy/webui/form/UIFormWithTitle.gtmpl", events = {@EventConfig(listeners = UILogoEditMode.SaveActionListener.class)})
@@ -49,8 +48,7 @@ public class UILogoEditMode extends UIForm
    {
       PortletRequestContext pcontext = (PortletRequestContext)WebuiRequestContext.getCurrentInstance();
       PortletPreferences pref = pcontext.getRequest().getPreferences();
-      addUIFormInput(new UIFormStringInput(FIELD_URL, FIELD_URL, pref.getValue("url", ""))
-         .addValidator(MandatoryValidator.class));
+      addUIFormInput(new UIFormStringInput(FIELD_URL, FIELD_URL, pref.getValue("url", "")));
    }
 
    static public class SaveActionListener extends EventListener<UILogoEditMode>
@@ -59,7 +57,7 @@ public class UILogoEditMode extends UIForm
       {
          UILogoEditMode uiForm = event.getSource();
          String url = uiForm.getUIStringInput(FIELD_URL).getValue();
-         if (url != null && !url.trim().matches(URLValidator.URL_REGEX))
+         if ((url == null || url.trim().length() == 0) || (!url.trim().matches(URLValidator.URL_REGEX)))
          {
             UILogoPortlet uiPortlet = uiForm.getParent();
             uiForm.getUIStringInput(FIELD_URL).setValue(uiPortlet.getURL());
