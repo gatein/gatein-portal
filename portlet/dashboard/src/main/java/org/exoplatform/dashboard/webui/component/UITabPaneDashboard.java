@@ -132,7 +132,6 @@ public class UITabPaneDashboard extends UIContainer
       {
          PageNode currentParent = selectedPath.get(selectedPath.size() - 2);
          siblings = currentParent.getChildren();
-
       }
       return siblings;
    }
@@ -171,6 +170,12 @@ public class UITabPaneDashboard extends UIContainer
          PageNode selectedNode = uiPortal.getSelectedNode();
 
          nodes.remove(nodeIndex);
+
+         String pageRef = tobeRemoved.getPageReference();
+         if (pageRef != null && pageRef.length() > 0)
+         {
+            configService.remove(configService.getPage(pageRef));
+         }
 
          if (tobeRemoved.getUri().equals(selectedNode.getUri()))
          {
@@ -377,6 +382,7 @@ public class UITabPaneDashboard extends UIContainer
          if (selectedNode != null)
          {
             PortalRequestContext prContext = Util.getPortalRequestContext();
+            prContext.setResponseComplete(true);
             prContext.getResponse().sendRedirect(prContext.getPortalURI() + selectedNode.getUri());
          }
       }
@@ -400,6 +406,7 @@ public class UITabPaneDashboard extends UIContainer
          if (uri != null)
          {
             PortalRequestContext prContext = Util.getPortalRequestContext();
+            prContext.setResponseComplete(true);
             prContext.getResponse().sendRedirect(prContext.getPortalURI() + uri);
          }
       }
