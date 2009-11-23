@@ -95,7 +95,11 @@ public class UINavigationManagement extends UIContainer
          UserPortalConfigService portalConfigService =
             uiManagement.getApplicationComponent(UserPortalConfigService.class);
          PageNavigation navigation = uiNodeSelector.getSelectedNavigation();
-         portalConfigService.update(navigation);
+         List<String> allPortalNames = portalConfigService.getAllPortalNames();
+         if(allPortalNames.contains(navigation.getOwnerId()))
+         {
+            portalConfigService.update(navigation);
+         }         
          UIPortal uiPortal = Util.getUIPortal();
          setNavigation(uiPortal.getNavigations(), navigation);
          UIPopupWindow uiPopup = uiManagement.getParent();

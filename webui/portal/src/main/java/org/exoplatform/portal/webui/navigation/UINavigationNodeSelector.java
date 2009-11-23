@@ -495,7 +495,8 @@ public class UINavigationNodeSelector extends UIContainer
          }
          else
          {
-            throw new Exception("Page don't exist!");
+            uiApp.addMessage(new ApplicationMessage("UIPageNodeSelector.msg.notAvailable", null));
+            return;
          }
       }
    }
