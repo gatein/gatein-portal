@@ -97,7 +97,7 @@
      </supports>
      <supported-locale>en</supported-locale>
 
-     <!--<resource-bundle>locale.portlet.exoadmin.RegisterPortlet</resource-bundle>-->
+     <resource-bundle>locale.portlet.exoadmin.RegisterPortlet</resource-bundle>
      <portlet-info>
        <title>Register Portlet</title>
        <short-title>Register Portlet</short-title>

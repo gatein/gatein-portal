@@ -75,6 +75,10 @@ public class UIRegisterForm extends UIForm {
       setActions(ACTIONS);
 	}
 	
+   private void resetInput(){
+      getChild(UIRegisterInputSet.class).reset();
+   }
+   
 	static public class SubscribeActionListener extends EventListener<UIRegisterForm>{
 		@Override
 		public void execute(Event<UIRegisterForm> event) throws Exception {
@@ -129,7 +133,7 @@ public class UIRegisterForm extends UIForm {
       {
          // TODO Auto-generated method stub
          UIRegisterForm registerForm = event.getSource();
-         registerForm.reset();
+         registerForm.resetInput();
       }
    }
 }
