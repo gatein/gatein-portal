@@ -128,6 +128,7 @@ public class UIGadgetManagement extends UIContainer
          uiGadgetInfo = addChild(UIGadgetInfo.class, null, null);
       }
       uiGadgetInfo.setGadget(selectedGadget_);
+      uiGadgetInfo.getChild(UICategorySelector.class).setRendered(false);
    }
 
    public void processRender(WebuiRequestContext context) throws Exception

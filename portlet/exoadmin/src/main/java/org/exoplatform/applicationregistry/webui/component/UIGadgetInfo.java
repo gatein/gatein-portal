@@ -65,8 +65,7 @@ public class UIGadgetInfo extends UIContainer
 
    public UIGadgetInfo() throws Exception
    {
-      UICategorySelector categorySelector = addChild(UICategorySelector.class, null, null);
-      categorySelector.setRendered(false);
+      addChild(UICategorySelector.class, null, null);
    }
 
    public Gadget getGadget()
@@ -99,8 +98,7 @@ public class UIGadgetInfo extends UIContainer
 
       for (ApplicationCategory category : allCategories)
       {
-         String definitionName = gadget_.getTitle().replace(' ', '_');
-         if (appRegService.getApplication(category.getName(), definitionName) != null)
+         if (appRegService.getApplication(category.getName(), gadget_.getName()) != null)
          {
             nameList.add(category.getDisplayName());
          }
