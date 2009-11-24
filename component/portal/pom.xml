@@ -87,6 +87,13 @@
        <version>${org.jboss.identity.idm}</version>
     </dependency>
 
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>servlet-api</artifactId>
+      <version>${javax.servlet.version}</version>
+      <scope>provided</scope>
+    </dependency>
+
   </dependencies>
   
   <build>
