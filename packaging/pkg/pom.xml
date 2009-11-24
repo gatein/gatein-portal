@@ -34,10 +34,10 @@
    <dependencies>
 
       <dependency>
-         <groupId>org.exoplatform.tool</groupId>
-         <artifactId>exopackage</artifactId>
+         <groupId>org.gatein.tools</groupId>
+         <artifactId>packager</artifactId>
          <type>zip</type>
-         <version>1.1.0-Beta05</version>
+         <version>1.0.0-Beta02</version>
       </dependency>
 
       <dependency>
@@ -104,19 +104,11 @@
                      <overWriteSnapshots>true</overWriteSnapshots>
                      <artifactItems>
                         <artifactItem>
-                           <groupId>org.exoplatform.tool</groupId>
-                           <artifactId>exopackage</artifactId>
-                           <type>zip</type>
-                           <outputDirectory>target/exopackage</outputDirectory>
+                             <groupId>org.gatein.tools</groupId>
+                             <artifactId>packager</artifactId>
+                             <type>zip</type>
+                             <outputDirectory>target/packager</outputDirectory>
                         </artifactItem>
-                        <!--
-                        <artifactItem>
-                           <groupId>org.exoplatform.delivery</groupId>
-                           <artifactId>exopackage-conf</artifactId>
-                           <type>zip</type>
-                           <outputDirectory>target/exopackage-conf</outputDirectory>
-                        </artifactItem>
-                        -->
                      </artifactItems>
                   </configuration>
                </execution>
@@ -129,8 +121,7 @@
 			       <configuration>
                      <includeTypes>js</includeTypes>
                      <stripVersion>true</stripVersion>
-			         <!--includeArtifactIds>exo.packaging.*.module</includeArtifactIds-->
-                     <outputDirectory>${project.build.directory}/exopackage-conf</outputDirectory>
+                     <outputDirectory>${project.build.directory}/packager-conf</outputDirectory>
 			       </configuration>
 			     </execution>
             </executions>
@@ -186,16 +177,16 @@
                   <artifactId>exec-maven-plugin</artifactId>
                   <executions>
                      <execution>
-                        <id>tomcat-exopackage</id>
+                        <id>tomcat-packaging</id>
                         <phase>package</phase>
                         <configuration>
                            <executable>java</executable>
                            <workingDirectory>${basedir}</workingDirectory>
                            <arguments>
-                              <argument>-Dexo.package.home=${basedir}/target/exopackage</argument>
+                              <argument>-Dexo.package.home=${basedir}/target/packager</argument>
                               <argument>-Dexo.current.dir=${basedir}</argument>
                               <argument>-Dexo.base.dir=${exo.projects.directory.base}</argument>
-                              <argument>-Dexo.conf.dir=${basedir}/target/exopackage-conf</argument>
+                              <argument>-Dexo.conf.dir=${basedir}/target/packager-conf</argument>
                               <argument>-Dexo.working.dir=${gatein.working.dir}/</argument>
                               <!--argument>-Dexo.src.dir=NONE</argument-->
                               <argument>-Dexo.dep.dir=${exo.projects.directory.dependencies}</argument><!-- to get the server ref install -->
@@ -206,9 +197,9 @@
                               <argument>-Xms128m</argument>
                               <argument>-Xmx512m</argument>
                               <argument>-classpath</argument>
-                              <argument>${basedir}/target/exopackage/lib/js.jar</argument>
+                              <argument>${basedir}/target/packager/lib/js.jar</argument>
                               <argument>org.mozilla.javascript.tools.shell.Main</argument>
-                              <argument>${basedir}/target/exopackage/javascript/eXo/eXo.js</argument>
+                              <argument>${basedir}/target/packager/javascript/eXo/eXo.js</argument>
                               <argument>exobuild</argument>
                               <argument>--product=portal</argument>
                               <argument>--deploy=tomcat</argument>
@@ -287,16 +278,16 @@
                   <artifactId>exec-maven-plugin</artifactId>
                   <executions>
                      <execution>
-                        <id>jbossas-exopackage</id>
+                        <id>jbossas-packaging</id>
                         <phase>package</phase>
                         <configuration>
                            <executable>java</executable>
                            <workingDirectory>${basedir}</workingDirectory>
                            <arguments>
-                              <argument>-Dexo.package.home=${basedir}/target/exopackage</argument>
+                              <argument>-Dexo.package.home=${basedir}/target/packager</argument>
                               <argument>-Dexo.current.dir=${basedir}</argument>
                               <argument>-Dexo.base.dir=${exo.projects.directory.base}</argument>
-                              <argument>-Dexo.conf.dir=${basedir}/target/exopackage-conf</argument>
+                              <argument>-Dexo.conf.dir=${basedir}/target/packager-conf</argument>
                               <argument>-Dexo.working.dir=${gatein.working.dir}</argument>
                               <!--argument>-Dexo.src.dir=NONE</argument-->
                               <argument>-Dexo.dep.dir=${exo.projects.directory.dependencies}</argument><!-- to get the server ref install -->
@@ -307,9 +298,9 @@
                               <argument>-Xms128m</argument>
                               <argument>-Xmx512m</argument>
                               <argument>-classpath</argument>
-                              <argument>${basedir}/target/exopackage/lib/js.jar</argument>
+                              <argument>${basedir}/target/packager/lib/js.jar</argument>
                               <argument>org.mozilla.javascript.tools.shell.Main</argument>
-                              <argument>${basedir}/target/exopackage/javascript/eXo/eXo.js</argument>
+                              <argument>${basedir}/target/packager/javascript/eXo/eXo.js</argument>
                               <argument>exobuild</argument>
                               <argument>--product=portal</argument>
                               <argument>--deploy=jbossear</argument>
