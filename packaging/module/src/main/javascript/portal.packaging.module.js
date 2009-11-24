@@ -43,6 +43,8 @@ function getModule(params)
    var commonVersion = "${org.gatein.common.version}";
    var wsrpVersion = "${org.gatein.wsrp.version}";
    var shindigVersion = "${org.shindig.version}";
+   var groovyVersion = "${org.codehaus.groovy.version}";
+   var rhinoVersion = "${rhino.version}";
 
    //TODO versions for gatein components
    
@@ -89,8 +91,8 @@ function getModule(params)
    module.component.scripting =
    new Project("org.exoplatform.portal", "exo.portal.component.scripting", "jar", module.version).
       addDependency(module.component.xmlParser).
-      addDependency(new Project("rhino", "js", "jar", "1.6R5")).
-      addDependency(new Project("org.codehaus.groovy", "groovy-all", "jar", "1.6.5"));
+      addDependency(new Project("rhino", "js", "jar", rhinoVersion)).
+      addDependency(new Project("org.codehaus.groovy", "groovy-all", "jar", groovyVersion));
 
    module.component.web =
    new Project("org.exoplatform.portal", "exo.portal.component.web", "jar", module.version).

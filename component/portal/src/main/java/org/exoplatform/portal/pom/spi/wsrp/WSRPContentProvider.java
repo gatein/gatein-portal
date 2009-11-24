@@ -23,7 +23,6 @@ import org.exoplatform.portal.pom.spi.ContentProviderHelper;
 import org.exoplatform.portal.pom.spi.HelpableContentProvider;
 import org.gatein.common.io.IOTools;
 import org.gatein.mop.spi.content.ContentProvider;
-import org.gatein.mop.spi.content.GetState;
 import org.gatein.mop.spi.content.StateContainer;
 
 import java.io.ByteArrayInputStream;
@@ -37,11 +36,6 @@ import java.util.List;
  */
 public class WSRPContentProvider implements ContentProvider<WSRP>, HelpableContentProvider<WSRPState, WSRP>
 {
-
-   public GetState<WSRP> getState(String s)
-   {
-      throw new UnsupportedOperationException("todo");
-   }
 
    public WSRP combine(List<WSRP> wsrpStates)
    {

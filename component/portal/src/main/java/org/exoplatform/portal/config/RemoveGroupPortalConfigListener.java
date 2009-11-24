@@ -24,7 +24,7 @@ import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.services.listener.Event;
 import org.exoplatform.services.listener.Listener;
 import org.exoplatform.services.organization.Group;
-import org.exoplatform.services.organization.jdbc.GroupDAOImpl;
+import org.exoplatform.services.organization.GroupHandler;
 
 /**
  * Created by The eXo Platform SARL
@@ -32,11 +32,11 @@ import org.exoplatform.services.organization.jdbc.GroupDAOImpl;
  *          tung.pham@exoplatform.com
  * Jul 31, 2007  
  */
-public class RemoveGroupPortalConfigListener extends Listener<GroupDAOImpl, Group>
+public class RemoveGroupPortalConfigListener extends Listener<GroupHandler, Group>
 {
 
    @Override
-   public void onEvent(Event<GroupDAOImpl, Group> event) throws Exception
+   public void onEvent(Event<GroupHandler, Group> event) throws Exception
    {
       Group group = event.getData();
       ExoContainer container = ExoContainerContext.getCurrentContainer();

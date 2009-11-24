@@ -79,7 +79,7 @@
  		    <values-param>
  		      <name>autoCreatedInNewRepository</name>
  		      <description>Node types configuration file</description>
-          <value>jar:/conf/standalone/nodetypes.xml</value>
+          <value>jar:/conf/mop-nodetypes.xml</value>
           <value>jar:/conf/portal/portal-nodetypes.xml</value>
  		    </values-param>
  		  </init-params>

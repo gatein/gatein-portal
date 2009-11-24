@@ -22,7 +22,6 @@ package org.exoplatform.portal.pom.spi.portlet;
 import org.exoplatform.portal.pom.spi.ContentProviderHelper;
 import org.exoplatform.portal.pom.spi.HelpableContentProvider;
 import org.gatein.mop.spi.content.ContentProvider;
-import org.gatein.mop.spi.content.GetState;
 import org.gatein.mop.spi.content.StateContainer;
 
 import java.util.HashMap;
@@ -39,11 +38,6 @@ public class PortletContentProvider implements ContentProvider<Portlet>,
 
    public PortletContentProvider()
    {
-   }
-
-   public GetState<Portlet> getState(String contentId)
-   {
-      throw new UnsupportedOperationException();
    }
 
    public Portlet combine(List<Portlet> states)

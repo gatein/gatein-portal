@@ -29,6 +29,7 @@ import org.exoplatform.portal.config.model.ApplicationState;
 import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.config.model.Container;
 import org.exoplatform.portal.config.model.Dashboard;
+import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.pom.data.ModelChange;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
@@ -292,6 +293,48 @@ public class TestDataStorage extends BasicTestCase
       //
       navigation = storage_.getPageNavigation("portal", "test");
       assertNull(navigation);
+   }
+
+   public void testNavigationOrder() throws Exception
+   {
+      PortalConfig portal = new PortalConfig("portal");
+      portal.setName("test_nav");
+      storage_.create(portal);
+
+      //
+      PageNavigation nav = new PageNavigation();
+      nav.setOwnerType("portal");
+      nav.setOwnerId("test_nav");
+      PageNode node1 = new PageNode();
+      node1.setName("n1");
+      PageNode node2 = new PageNode();
+      node2.setName("n2");
+      PageNode node3 = new PageNode();
+      node3.setName("n3");
+      nav.addNode(node1);
+      nav.addNode(node2);
+      nav.addNode(node3);
+
+      //
+      storage_.save(nav);
+
+      //
+      nav = storage_.getPageNavigation("portal", "test_nav");
+      assertEquals(3, nav.getNodes().size());
+      assertEquals("n1", nav.getNodes().get(0).getName());
+      assertEquals("n2", nav.getNodes().get(1).getName());
+      assertEquals("n3", nav.getNodes().get(2).getName());
+
+      //
+      nav.getNodes().add(0, nav.getNodes().remove(1));
+      storage_.save(nav);
+
+      //
+      nav = storage_.getPageNavigation("portal", "test_nav");
+      assertEquals(3, nav.getNodes().size());
+      assertEquals("n2", nav.getNodes().get(0).getName());
+      assertEquals("n1", nav.getNodes().get(1).getName());
+      assertEquals("n3", nav.getNodes().get(2).getName());
    }
 
    public void testCreatePortletPreferences() throws Exception

@@ -216,6 +216,7 @@ public class Mapper
       }
 
       //
+      final List<String> orders = new ArrayList<String>();
       Set<String> savedSet = new HashSet<String>();
       for (NavigationNodeData node : src.getNodes())
       {
@@ -236,6 +237,7 @@ public class Mapper
          }
          save(node, dstChild);
          savedSet.add(srcId);
+         orders.add(dstChild.getObjectId());
       }
       for (Iterator<? extends Navigation> i = dst.getChildren().iterator(); i.hasNext();)
       {
@@ -244,6 +246,22 @@ public class Mapper
          {
             i.remove();
          }
+      }
+      // Now sort children according to the order provided by the container
+      // need to replace that with Collections.sort once the set(int index, E element) is implemented in Chromattic lists
+      Navigation[] a = dst.getChildren().toArray(new Navigation[dst.getChildren().size()]);
+      Arrays.sort(a, new Comparator<Navigation>()
+      {
+         public int compare(Navigation o1, Navigation o2)
+         {
+            int i1 = orders.indexOf(o1.getObjectId());
+            int i2 = orders.indexOf(o2.getObjectId());
+            return i1 - i2;
+         }
+      });
+      for (int j = 0; j < a.length; j++)
+      {
+         dst.getChildren().add(j, a[j]);
       }
    }
 

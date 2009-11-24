@@ -19,61 +19,19 @@
 
 package org.exoplatform.portal.pom.config;
 
-import org.chromattic.api.ChromatticBuilder;
 import org.chromattic.api.ChromatticSession;
-import org.chromattic.apt.InstrumentorImpl;
-import org.exoplatform.portal.pom.registry.CategoryDefinition;
-import org.exoplatform.portal.pom.registry.ContentDefinition;
-import org.exoplatform.portal.pom.registry.ContentRegistry;
-import org.exoplatform.portal.pom.spi.gadget.Gadget;
-import org.exoplatform.portal.pom.spi.gadget.GadgetContentProvider;
-import org.exoplatform.portal.pom.spi.gadget.GadgetState;
-import org.exoplatform.portal.pom.spi.portlet.Portlet;
-import org.exoplatform.portal.pom.spi.portlet.PortletContentProvider;
-import org.exoplatform.portal.pom.spi.portlet.PreferenceState;
-import org.exoplatform.portal.pom.spi.portlet.PortletState;
-import org.exoplatform.portal.pom.spi.wsrp.WSRP;
-import org.exoplatform.portal.pom.spi.wsrp.WSRPContentProvider;
-import org.exoplatform.portal.pom.spi.wsrp.WSRPState;
 import org.exoplatform.services.cache.CacheService;
 import org.exoplatform.services.cache.ExoCache;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.registry.RegistryService;
 import org.gatein.mop.core.api.MOPService;
-import org.gatein.mop.core.api.content.ContentManagerRegistry;
-import org.gatein.mop.core.api.content.CustomizationContextProviderRegistry;
-import org.gatein.mop.core.api.workspace.GroupSite;
-import org.gatein.mop.core.api.workspace.GroupSiteContainer;
-import org.gatein.mop.core.api.workspace.NavigationContainer;
-import org.gatein.mop.core.api.workspace.NavigationImpl;
-import org.gatein.mop.core.api.workspace.PageContainer;
-import org.gatein.mop.core.api.workspace.PageImpl;
-import org.gatein.mop.core.api.workspace.PageLinkImpl;
-import org.gatein.mop.core.api.workspace.PortalSite;
-import org.gatein.mop.core.api.workspace.PortalSiteContainer;
-import org.gatein.mop.core.api.workspace.UIBodyImpl;
-import org.gatein.mop.core.api.workspace.UIContainerImpl;
-import org.gatein.mop.core.api.workspace.UIWindowImpl;
-import org.gatein.mop.core.api.workspace.URLLinkImpl;
-import org.gatein.mop.core.api.workspace.UserSite;
-import org.gatein.mop.core.api.workspace.UserSiteContainer;
-import org.gatein.mop.core.api.workspace.WorkspaceImpl;
-import org.gatein.mop.core.api.workspace.content.ContextSpecialization;
-import org.gatein.mop.core.api.workspace.content.ContextType;
-import org.gatein.mop.core.api.workspace.content.ContextTypeContainer;
-import org.gatein.mop.core.api.workspace.content.CustomizationContainer;
-import org.gatein.mop.core.api.workspace.content.WorkspaceClone;
-import org.gatein.mop.core.api.workspace.content.WorkspaceSpecialization;
 
 import javax.jcr.Credentials;
 import javax.jcr.Repository;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import java.io.Serializable;
-import java.lang.reflect.Field;
-import java.lang.reflect.UndeclaredThrowableException;
-import java.util.Set;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -146,91 +104,20 @@ public class POMSessionManager
    {
       if (pomService == null)
       {
+         PortalMOPService mopService = new PortalMOPService();
+
+         //
          try
          {
-            MOPService pomService = new MOPService();
-            pomService.setOption(ChromatticBuilder.SESSION_LIFECYCLE_CLASSNAME, PortalSessionLifeCycle.class.getName());
-            pomService.setOption(ChromatticBuilder.INSTRUMENTOR_CLASSNAME, InstrumentorImpl.class.getName());
-
-            //
-            Field chromeField = MOPService.class.getDeclaredField("chrome");
-            Field builderField = MOPService.class.getDeclaredField("builder");
-            Field contentManagerRegistryField = MOPService.class.getDeclaredField("contentManagerRegistry");
-            Field customizationContextResolversField =
-               MOPService.class.getDeclaredField("customizationContextResolvers");
-            chromeField.setAccessible(true);
-            builderField.setAccessible(true);
-            contentManagerRegistryField.setAccessible(true);
-            customizationContextResolversField.setAccessible(true);
-
-            // Perform a manual start of the MOPService until the real .start() is cleaned in a new beta
-            ChromatticBuilder builder = (ChromatticBuilder)builderField.get(pomService);
-
-            //
-            Field classesField = ChromatticBuilder.class.getDeclaredField("classes");
-            classesField.setAccessible(true);
-            Set<Class<?>> classes = (Set<Class<?>>)classesField.get(builder);
-            classes.clear();
-
-            //
-            builder.add(WorkspaceImpl.class);
-            builder.add(UIContainerImpl.class);
-            builder.add(UIWindowImpl.class);
-            builder.add(UIBodyImpl.class);
-            builder.add(PageImpl.class);
-            builder.add(PageContainer.class);
-            builder.add(NavigationImpl.class);
-            builder.add(NavigationContainer.class);
-            builder.add(PageLinkImpl.class);
-            builder.add(URLLinkImpl.class);
-            builder.add(PortalSiteContainer.class);
-            builder.add(PortalSite.class);
-            builder.add(GroupSiteContainer.class);
-            builder.add(GroupSite.class);
-            builder.add(UserSiteContainer.class);
-            builder.add(UserSite.class);
-
-            //
-            builder.add(CustomizationContainer.class);
-            builder.add(ContextTypeContainer.class);
-            builder.add(ContextType.class);
-            builder.add(ContextSpecialization.class);
-            builder.add(WorkspaceClone.class);
-            builder.add(WorkspaceSpecialization.class);
-
-            //
-            builder.add(PortletState.class);
-            builder.add(PreferenceState.class);
-            builder.add(GadgetState.class);
-            builder.add(WSRPState.class);
-
-            //
-            builder.add(ContentRegistry.class);
-            builder.add(CategoryDefinition.class);
-            builder.add(ContentDefinition.class);
-
-            //
-            CustomizationContextProviderRegistry customizationContextResolvers =
-               new CustomizationContextProviderRegistry();
-
-            //
-            ContentManagerRegistry contentManagerRegistry = new ContentManagerRegistry();
-            contentManagerRegistry.register(Portlet.CONTENT_TYPE, new PortletContentProvider());
-            contentManagerRegistry.register(Gadget.CONTENT_TYPE, new GadgetContentProvider());
-            contentManagerRegistry.register(WSRP.CONTENT_TYPE, new WSRPContentProvider());
-
-            //
-            chromeField.set(pomService, builder.build());
-            contentManagerRegistryField.set(pomService, contentManagerRegistry);
-            customizationContextResolversField.set(pomService, customizationContextResolvers);
-
-            //
-            this.pomService = pomService;
+            mopService.start();
          }
          catch (Exception e)
          {
-            throw new UndeclaredThrowableException(e);
+            throw new RuntimeException(e);
          }
+
+         //
+         this.pomService = mopService;
       }
       return pomService;
    }

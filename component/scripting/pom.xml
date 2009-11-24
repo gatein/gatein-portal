@@ -53,13 +53,13 @@
     <dependency>
       <groupId>rhino</groupId>
       <artifactId>js</artifactId>
-      <version>1.6R5</version>
+      <version>${rhino.version}</version>
     </dependency>
 
     <dependency>
       <groupId>org.codehaus.groovy</groupId>
       <artifactId>groovy-all</artifactId>
-      <version>1.5.7</version>
+      <version>${org.codehaus.groovy.version}</version>
     </dependency>
   </dependencies>
 </project>

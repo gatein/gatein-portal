@@ -24,7 +24,7 @@ import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.services.listener.Event;
 import org.exoplatform.services.listener.Listener;
 import org.exoplatform.services.organization.User;
-import org.exoplatform.services.organization.jdbc.UserDAOImpl;
+import org.exoplatform.services.organization.UserHandler;
 
 /**
  * Created by The eXo Platform SARL
@@ -32,11 +32,11 @@ import org.exoplatform.services.organization.jdbc.UserDAOImpl;
  *          tung.pham@exoplatform.com
  * Aug 1, 2007  
  */
-public class RemoveUserPortalConfigListener extends Listener<UserDAOImpl, User>
+public class RemoveUserPortalConfigListener extends Listener<UserHandler, User>
 {
 
    @Override
-   public void onEvent(Event<UserDAOImpl, User> event) throws Exception
+   public void onEvent(Event<UserHandler, User> event) throws Exception
    {
       User user = event.getData();
       ExoContainer container = ExoContainerContext.getCurrentContainer();
