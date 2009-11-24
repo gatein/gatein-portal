@@ -17,15 +17,15 @@
    <section>
       <title>Configuration files</title>
       <para>Main configuration file is <emphasis role="bold">idm-configuration</emphasis>:</para>
-      <programlisting><![CDATA[<![CDATA[<![CDATA[
+      <programlisting>
          <![CDATA[
 <configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd http://www.exoplaform.org/xml/ns/kernel_1_0.xsd"
                xmlns="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd">
 
    <component>
-      <key>org.exoplatform.services.orgaidmion.jbidm.PicketLinkIDMService</key>
-      <type>org.exoplatform.servicidmganization.jbidm.PicketLinkIDMServiceImpl</type>
+      <key>org.exoplatform.services.organization.jbidm.JBossIDMService</key>
+      <type>org.exoplatform.services.organization.jbidm.JBossIDMServiceImpl</type>
       <init-params>
          <value-param>
             <name>config</name>
@@ -33,18 +33,18 @@
          </value-param>
          <values-param>
             <name>hibernate.annotations</name>
-            <value>org.picketlink.idm.impl.model.hibernate.HibernateIdentityObject</value>
-            <value>org.picketlink.idm.impl.model.hibernate.HibernateIdentityObjectAttribute</value>
-            <value>org.picketlink.idm.impl.model.hibernate.HibernateIdentityObjectBinaryAttribute</value>
-            <value>org.picketlink.idm.impl.model.hibernate.HibernateIdentityObjectBinaryAttributeValue</value>
-            <value>org.picketlink.idm.impl.model.hibernate.HibernateIdentityObjectCredential</value>
-            <value>org.picketlink.idm.impl.model.hibernate.HibernateIdentityObjectCredentialType</value>
-            <value>org.picketlink.idm.impl.model.hibernate.HibernateIdentityObjectRelationship</value>
-            <value>org.picketlink.idm.impl.model.hibernate.HibernateIdentityObjectRelationshipName</value>
-            <value>org.picketlink.idm.impl.model.hibernate.HibernateIdentityObjectRelationshipType</value>
-            <value>org.picketlink.idm.impl.model.hibernate.HibernateIdentityObjectTextAttribute</value>
-            <value>org.picketlink.idm.impl.model.hibernate.HibernateIdentityObjectType</value>
-            <value>org.picketlink.idm.impl.model.hibernate.HibernateRealm</value>
+            <value>org.jboss.identity.idm.impl.model.hibernate.HibernateIdentityObject</value>
+            <value>org.jboss.identity.idm.impl.model.hibernate.HibernateIdentityObjectAttribute</value>
+            <value>org.jboss.identity.idm.impl.model.hibernate.HibernateIdentityObjectBinaryAttribute</value>
+            <value>org.jboss.identity.idm.impl.model.hibernate.HibernateIdentityObjectBinaryAttributeValue</value>
+            <value>org.jboss.identity.idm.impl.model.hibernate.HibernateIdentityObjectCredential</value>
+            <value>org.jboss.identity.idm.impl.model.hibernate.HibernateIdentityObjectCredentialType</value>
+            <value>org.jboss.identity.idm.impl.model.hibernate.HibernateIdentityObjectRelationship</value>
+            <value>org.jboss.identity.idm.impl.model.hibernate.HibernateIdentityObjectRelationshipName</value>
+            <value>org.jboss.identity.idm.impl.model.hibernate.HibernateIdentityObjectRelationshipType</value>
+            <value>org.jboss.identity.idm.impl.model.hibernate.HibernateIdentityObjectTextAttribute</value>
+            <value>org.jboss.identity.idm.impl.model.hibernate.HibernateIdentityObjectType</value>
+            <value>org.jboss.identity.idm.impl.model.hibernate.HibernateRealm</value>
          </values-param>
          <properties-param>
             <name>hibernate.properties</name>
@@ -70,18 +70,18 @@
 
    <component>
       <key>org.exoplatform.services.organization.OrganizationService</key>
-      <type>org.exoplatform.services.organization.idm.PicketLinkIDMOrganizationServiceImpl</type>
+      <type>org.exoplatform.services.organization.jbidm.JBossIDMOrganizationServiceImpl</type>
    </component>
 
-</configuration>
+</configuration>                 
          ]]>
-      ]]>]]>]]></programlisting>
-      <para><emphasis role="bold">org.exoplatform.services.organization.idm.PicketLinkIDMOrganizationServiceImpl</emphasis>
+      </programlisting>
+      <para><emphasis role="bold">org.exoplatform.services.organization.jbidm.JBossIDMOrganizationServiceImpl</emphasis>
          is a main entrypoint implementing
       <emphasis role="bold">org.exoplatform.services.organization.OrganizationService</emphasis> and is dependant on
-       <emphasis role="bold">org.exoplatform.services.organization.idm.PicketLinkIDMService</emphasis></para>
+       <emphasis role="bold">org.exoplatform.services.organization.jbidm.JBossIDMService</emphasis></para>
 
-      <para><emphasis role="bold">org.exoplatform.services.organization.idm.PicketLinkIDMServiceImpl</emphasis> service has following
+      <para><emphasis role="bold">org.exoplatform.services.organization.jbidm.JBossIDMServiceImpl</emphasis> service has following
       options:</para>
       <itemizedlist>
          <listitem>
@@ -121,25 +121,25 @@
          </listitem>
       </itemizedlist>
 
-       <para><emphasis role="bold">org.exoplatform.services.organization.idm.PicketLinkIDMOrganizationServiceImpl</emphasis> service has following
+       <para><emphasis role="bold">org.exoplatform.services.organization.jbidm.JBossIDMOrganizationServiceImpl</emphasis> service has following
       options:</para>
       <itemizedlist>
          <listitem>
             <para>
-               <emphasis role="bold">gtnGroupTypeName</emphasis> - (value-param) - Name of JBoss Identity IDM GroupType
-               that will be used to store groups. Default is 'GTN_GROUP_TYPE'
+               <emphasis role="bold">exoGroupTypeName</emphasis> - (value-param) - Name of JBoss Identity IDM GroupType
+               that will be used to store groups. Default is 'EXO_GROUP_TYPE'
             </para>
          </listitem>
          <listitem>
             <para>
-               <emphasis role="bold">gtnRootGroupName</emphasis> - (value-param) - Name of JBoss Identity IDM Group that will
-               be used as a root parent. Default is 'GTN_ROOT_GROUP'
+               <emphasis role="bold">exoRootGroupName</emphasis> - (value-param) - Name of JBoss Identity IDM Group that will
+               be used as a root parent. Default is 'EXO_ROOT_GROUP'
             </para>
          </listitem>
          <listitem>
             <para>
-               <emphasis role="bold">gtnRootGroupTypeName</emphasis> - (value-param) - Name of JBoss Identity IDM GroupType
-               of a Group used as a parent root. Default is 'GTN_GROUP_TYPE'
+               <emphasis role="bold">exoRootGroupTypeName</emphasis> - (value-param) - Name of JBoss Identity IDM GroupType
+               of a Group used as a parent root. Default is 'EXO_GROUP_TYPE'
             </para>
          </listitem>
          <listitem>
@@ -187,7 +187,7 @@
     <repositories>
         <repository>
             <id>PortalRepository</id>
-            <class>org.picketlink.idm.impl.repository.WrapperIdentityStoreRepository</class>
+            <class>org.jboss.identity.idm.impl.repository.WrapperIdentityStoreRepository</class>
             <external-config/>
             <default-identity-store-id>HibernateStore</default-identity-store-id>
             <default-attribute-store-id>HibernateStore</default-attribute-store-id>
@@ -198,7 +198,7 @@
         <identity-stores>
             <identity-store>
                 <id>HibernateStore</id>
-                <class>org.picketlink.idm.impl.store.hibernate.HibernateIdentityStoreImpl</class>
+                <class>org.jboss.identity.idm.impl.store.hibernate.HibernateIdentityStoreImpl</class>
                 <external-config/>
                 <supported-relationship-types>
                     <relationship-type>JBOSS_IDENTITY_MEMBERSHIP</relationship-type>

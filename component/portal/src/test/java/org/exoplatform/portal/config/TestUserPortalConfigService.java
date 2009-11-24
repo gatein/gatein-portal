@@ -43,12 +43,12 @@ import org.exoplatform.services.listener.ListenerService;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.UserHandler;
-import org.exoplatform.services.organization.idm.PicketLinkIDMService;
+import org.exoplatform.services.organization.jbidm.JBossIDMService;
 import org.exoplatform.services.security.Authenticator;
 import org.exoplatform.services.security.ConversationState;
 import org.exoplatform.test.BasicTestCase;
-import org.picketlink.idm.api.IdentitySession;
-import org.picketlink.idm.common.exception.IdentityException;
+import org.jboss.identity.idm.api.IdentitySession;
+import org.jboss.identity.idm.common.exception.IdentityException;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -76,7 +76,7 @@ public class TestUserPortalConfigService extends BasicTestCase
    private DataStorage storage_;
 
    /** . */
-   private PicketLinkIDMService idmService;
+   private JBossIDMService idmService;
 
    /** . */
    private POMSessionManager mgr;
@@ -122,7 +122,7 @@ public class TestUserPortalConfigService extends BasicTestCase
       userPortalConfigSer_ =
          (UserPortalConfigService)container.getComponentInstanceOfType(UserPortalConfigService.class);
       orgService_ = (OrganizationService)container.getComponentInstanceOfType(OrganizationService.class);
-      idmService = (PicketLinkIDMService)container.getComponentInstanceOfType(PicketLinkIDMService.class);
+      idmService = (JBossIDMService)container.getComponentInstanceOfType(JBossIDMService.class);
       mgr = (POMSessionManager)container.getComponentInstanceOfType(POMSessionManager.class);
       authenticator = (Authenticator)container.getComponentInstanceOfType(Authenticator.class);
       listenerService = (ListenerService)container.getComponentInstanceOfType(ListenerService.class);

@@ -173,7 +173,6 @@ public class TestOrganizationService extends BasicTestCase
       // newly created 'test' and 'demo'
       assertEquals(2, piterator.currentPage().size());
 
-//      membershipHandler_.removeMembershipByUser(USER,false);
       userHandler_.removeUser(USER, true);
       piterator = userHandler_.getUserPageList(10);
       // one 'demo'
@@ -437,20 +436,19 @@ public class TestOrganizationService extends BasicTestCase
       groupHandler_.removeGroup(group3, true);
    }
 
-//   public void testUserProfileListener() throws Exception
-//   {
-//      UserProfileListener l = new UserProfileListener();
-//      profileHandler_.addUserProfileEventListener(l);
-//      User user = createUser(USER);
-//      assertNotNull(user);
-//      UserProfile profile = profileHandler_.createUserProfileInstance(user.getUserName());
-//      profile.setAttribute("blah", "blah");
-//      profileHandler_.saveUserProfile(profile, true);
-//      assertTrue(l.preSave && l.postSave);
-//      profileHandler_.removeUserProfile(user.getUserName(), true);
-//      assertFalse(l.preDelete && l.postDelete);
-//      userHandler_.removeUser(user.getUserName(), false);
-//   }
+   public void testUserProfileListener() throws Exception
+   {
+      UserProfileListener l = new UserProfileListener();
+      profileHandler_.addUserProfileEventListener(l);
+      User user = createUser(USER);
+      assertNotNull(user);
+      UserProfile profile = profileHandler_.createUserProfileInstance(user.getUserName());
+      profile.setAttribute("blah", "blah");
+      profileHandler_.saveUserProfile(profile, true);
+      assertTrue(l.preSave && l.postSave);
+      profileHandler_.removeUserProfile(user.getUserName(), true);
+      assertFalse(l.preDelete && l.postDelete);
+   }
 
    public void testFindUsersByGroupId() throws Exception
    {

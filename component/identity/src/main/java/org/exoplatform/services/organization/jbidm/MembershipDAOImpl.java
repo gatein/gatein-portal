@@ -17,7 +17,7 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.services.organization.idm;
+package org.exoplatform.services.organization.jbidm;
 
 import org.exoplatform.commons.utils.ListenerStack;
 import org.exoplatform.services.organization.Group;
@@ -26,9 +26,9 @@ import org.exoplatform.services.organization.MembershipEventListener;
 import org.exoplatform.services.organization.MembershipHandler;
 import org.exoplatform.services.organization.MembershipType;
 import org.exoplatform.services.organization.User;
-import org.picketlink.idm.api.IdentitySession;
-import org.picketlink.idm.api.Role;
-import org.picketlink.idm.api.RoleType;
+import org.jboss.identity.idm.api.IdentitySession;
+import org.jboss.identity.idm.api.Role;
+import org.jboss.identity.idm.api.RoleType;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -42,13 +42,13 @@ import javax.naming.InvalidNameException;
 public class MembershipDAOImpl implements MembershipHandler
 {
 
-   private PicketLinkIDMService service_;
+   private JBossIDMService service_;
 
    private List listeners_;
 
-   private PicketLinkIDMOrganizationServiceImpl orgService;
+   private JBossIDMOrganizationServiceImpl orgService;
 
-   public MembershipDAOImpl(PicketLinkIDMOrganizationServiceImpl orgService, PicketLinkIDMService service)
+   public MembershipDAOImpl(JBossIDMOrganizationServiceImpl orgService, JBossIDMService service)
    {
       service_ = service;
       listeners_ = new ListenerStack(5);
@@ -102,7 +102,7 @@ public class MembershipDAOImpl implements MembershipHandler
       }
 
       String groupId =
-         getIdentitySession().getPersistenceManager().createGroupKey(g.getGroupName(), orgService.getGtnGroupType());
+         getIdentitySession().getPersistenceManager().createGroupId(g.getGroupName(), orgService.getExoGroupType());
 
       if (getIdentitySession().getRoleManager().hasRole(user.getUserName(), groupId, mt.getName()))
       {
@@ -131,8 +131,8 @@ public class MembershipDAOImpl implements MembershipHandler
    public void saveMembership(Membership m, boolean broadcast) throws Exception
    {
       String groupId =
-         getIdentitySession().getPersistenceManager().createGroupKey(getGroupNameFromId(m.getGroupId()),
-            orgService.getGtnGroupType());
+         getIdentitySession().getPersistenceManager().createGroupId(getGroupNameFromId(m.getGroupId()),
+            orgService.getExoGroupType());
 
       if (getIdentitySession().getRoleManager().hasRole(m.getUserName(), groupId, m.getMembershipType()))
       {
@@ -158,8 +158,8 @@ public class MembershipDAOImpl implements MembershipHandler
       Membership m = new MembershipImpl(id);
 
       String groupId =
-         getIdentitySession().getPersistenceManager().createGroupKey(getGroupNameFromId(m.getGroupId()),
-            orgService.getGtnGroupType());
+         getIdentitySession().getPersistenceManager().createGroupId(getGroupNameFromId(m.getGroupId()),
+            orgService.getExoGroupType());
 
       if (!getIdentitySession().getRoleManager().hasRole(m.getUserName(), groupId, m.getMembershipType()))
       {
@@ -218,8 +218,8 @@ public class MembershipDAOImpl implements MembershipHandler
    public Membership findMembershipByUserGroupAndType(String userName, String groupId, String type) throws Exception
    {
       String gid =
-         getIdentitySession().getPersistenceManager().createGroupKey(getGroupNameFromId(groupId),
-            orgService.getGtnGroupType());
+         getIdentitySession().getPersistenceManager().createGroupId(getGroupNameFromId(groupId),
+            orgService.getExoGroupType());
 
       Role role = getIdentitySession().getRoleManager().getRole(type, userName, gid);
 
@@ -245,8 +245,8 @@ public class MembershipDAOImpl implements MembershipHandler
       }
 
       String gid =
-         getIdentitySession().getPersistenceManager().createGroupKey(getGroupNameFromId(groupId),
-            orgService.getGtnGroupType());
+         getIdentitySession().getPersistenceManager().createGroupId(getGroupNameFromId(groupId),
+            orgService.getExoGroupType());
 
       Collection<RoleType> roleTypes = getIdentitySession().getRoleManager().findRoleTypes(userName, gid, null);
 
@@ -285,10 +285,10 @@ public class MembershipDAOImpl implements MembershipHandler
       return memberships;
    }
 
-   static void removeMembershipEntriesOfGroup(PicketLinkIDMOrganizationServiceImpl orgService, Group group,
+   static void removeMembershipEntriesOfGroup(JBossIDMOrganizationServiceImpl orgService, Group group,
       IdentitySession session) throws Exception
    {
-      String gid = session.getPersistenceManager().createGroupKey(group.getGroupName(), orgService.getGtnGroupType());
+      String gid = session.getPersistenceManager().createGroupId(group.getGroupName(), orgService.getExoGroupType());
 
       Collection<Role> roles = session.getRoleManager().findRoles(gid, null);
 
@@ -306,8 +306,8 @@ public class MembershipDAOImpl implements MembershipHandler
    public Collection findMembershipsByGroupId(String groupId) throws Exception
    {
       String gid =
-         getIdentitySession().getPersistenceManager().createGroupKey(getGroupNameFromId(groupId),
-            orgService.getGtnGroupType());
+         getIdentitySession().getPersistenceManager().createGroupId(getGroupNameFromId(groupId),
+            orgService.getExoGroupType());
 
       Collection<Role> roles = getIdentitySession().getRoleManager().findRoles(gid, null);
 
@@ -333,8 +333,8 @@ public class MembershipDAOImpl implements MembershipHandler
       Membership m = new MembershipImpl(id);
 
       String groupId =
-         getIdentitySession().getPersistenceManager().createGroupKey(getGroupNameFromId(m.getGroupId()),
-            orgService.getGtnGroupType());
+         getIdentitySession().getPersistenceManager().createGroupId(getGroupNameFromId(m.getGroupId()),
+            orgService.getExoGroupType());
 
       if (getIdentitySession().getRoleManager().hasRole(m.getUserName(), groupId, m.getMembershipType()))
       {

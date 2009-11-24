@@ -17,7 +17,7 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.services.organization.idm;
+package org.exoplatform.services.organization.jbidm;
 
 import org.exoplatform.commons.utils.LazyPageList;
 import org.exoplatform.services.cache.CacheService;
@@ -27,11 +27,11 @@ import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.UserEventListener;
 import org.exoplatform.services.organization.UserHandler;
 import org.exoplatform.services.organization.impl.UserImpl;
-import org.picketlink.idm.api.Attribute;
-import org.picketlink.idm.api.AttributesManager;
-import org.picketlink.idm.api.IdentitySession;
-import org.picketlink.idm.api.query.UserQueryBuilder;
-import org.picketlink.idm.impl.api.SimpleAttribute;
+import org.jboss.identity.idm.api.Attribute;
+import org.jboss.identity.idm.api.AttributesManager;
+import org.jboss.identity.idm.api.IdentitySession;
+import org.jboss.identity.idm.api.query.UserQueryBuilder;
+import org.jboss.identity.idm.impl.api.SimpleAttribute;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -47,7 +47,7 @@ import java.util.Set;
 public class UserDAOImpl implements UserHandler
 {
 
-   private final PicketLinkIDMService service_;
+   private final JBossIDMService service_;
 
    private ExoCache cache_;
 
@@ -71,7 +71,7 @@ public class UserDAOImpl implements UserHandler
 
    public static final DateFormat dateFormat = DateFormat.getInstance();
 
-   private PicketLinkIDMOrganizationServiceImpl orgService;
+   private JBossIDMOrganizationServiceImpl orgService;
 
    static
    {
@@ -87,7 +87,7 @@ public class UserDAOImpl implements UserHandler
       USER_NON_PROFILE_KEYS = Collections.unmodifiableSet(keys);
    }
 
-   public UserDAOImpl(PicketLinkIDMOrganizationServiceImpl orgService, PicketLinkIDMService idmService, CacheService cservice)
+   public UserDAOImpl(JBossIDMOrganizationServiceImpl orgService, JBossIDMService idmService, CacheService cservice)
       throws Exception
    {
       service_ = idmService;
@@ -155,7 +155,7 @@ public class UserDAOImpl implements UserHandler
    {
       IdentitySession session = service_.getIdentitySession();
 
-      org.picketlink.idm.api.User foundUser = session.getPersistenceManager().findUser(userName);
+      org.jboss.identity.idm.api.User foundUser = session.getPersistenceManager().findUser(userName);
 
       if (foundUser == null)
       {
@@ -163,10 +163,6 @@ public class UserDAOImpl implements UserHandler
          return null;
       }
 
-      // Remove all memberships and profile first
-      orgService.getMembershipHandler().removeMembershipByUser(userName, false);
-      orgService.getUserProfileHandler().removeUserProfile(userName, false);
-      
       User exoUser = getPopulatedUser(userName, session);
 
       if (broadcast)
@@ -226,7 +222,7 @@ public class UserDAOImpl implements UserHandler
       else
       {
          IdentitySession session = service_.getIdentitySession();
-         org.picketlink.idm.api.User idmUser = session.getPersistenceManager().findUser(user.getUserName());
+         org.jboss.identity.idm.api.User idmUser = session.getPersistenceManager().findUser(user.getUserName());
 
          authenticated = session.getAttributesManager().validatePassword(idmUser, password);
       }
@@ -273,7 +269,7 @@ public class UserDAOImpl implements UserHandler
    {
       UserQueryBuilder qb = service_.getIdentitySession().createUserQueryBuilder();
 
-      org.picketlink.idm.api.Group jbidGroup = orgService.getJBIDMGroup(groupId);
+      org.jboss.identity.idm.api.Group jbidGroup = orgService.getJBIDMGroup(groupId);
 
       qb.addRelatedGroup(jbidGroup);
 

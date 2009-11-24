@@ -41,5 +41,19 @@
        <property name="hibernate.connection.username">sa</property>
        <property name="hibernate.connection.password"></property>
 
+       <!-- Mapping classes -->
+       <!-- all nessesary mappings are added programatically to the configuration -->
+       <!--<mapping class="org.jboss.identity.idm.impl.model.hibernate.HibernateRealm"/>-->
+       <!--<mapping class="org.jboss.identity.idm.impl.model.hibernate.HibernateIdentityObject"/>-->
+       <!--<mapping class="org.jboss.identity.idm.impl.model.hibernate.HibernateIdentityObjectCredential"/>-->
+       <!--<mapping class="org.jboss.identity.idm.impl.model.hibernate.HibernateIdentityObjectCredentialType"/>-->
+       <!--<mapping class="org.jboss.identity.idm.impl.model.hibernate.HibernateIdentityObjectAttribute"/>-->
+       <!--<mapping class="org.jboss.identity.idm.impl.model.hibernate.HibernateIdentityObjectTextAttribute"/>-->
+       <!--<mapping class="org.jboss.identity.idm.impl.model.hibernate.HibernateIdentityObjectBinaryAttribute"/>-->
+       <!--<mapping class="org.jboss.identity.idm.impl.model.hibernate.HibernateIdentityObjectType"/>-->
+       <!--<mapping class="org.jboss.identity.idm.impl.model.hibernate.HibernateIdentityObjectRelationship"/>-->
+       <!--<mapping class="org.jboss.identity.idm.impl.model.hibernate.HibernateIdentityObjectRelationshipType"/>-->
+       <!--<mapping class="org.jboss.identity.idm.impl.model.hibernate.HibernateIdentityObjectRelationshipName"/>-->
+
    </session-factory>
 </hibernate-configuration>

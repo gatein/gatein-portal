@@ -55,24 +55,24 @@
     </dependency>
 
      <dependency>
-        <groupId>org.picketlink.idm</groupId>
-        <artifactId>picketlink-idm-core</artifactId>
-        <version>${org.picketlink.idm}</version>
+        <groupId>org.jboss.identity.idm</groupId>
+        <artifactId>idm-core</artifactId>
+        <version>${org.jboss.identity.idm}</version>
      </dependency>
      <dependency>
-        <groupId>org.picketlink.idm</groupId>
-        <artifactId>picketlink-idm-hibernate</artifactId>
-        <version>${org.picketlink.idm}</version>
+        <groupId>org.jboss.identity.idm</groupId>
+        <artifactId>idm-hibernate</artifactId>
+        <version>${org.jboss.identity.idm}</version>
      </dependency>
      <dependency>
-        <groupId>org.picketlink.idm</groupId>
-        <artifactId>picketlink-idm-ldap</artifactId>
-        <version>${org.picketlink.idm}</version>
+        <groupId>org.jboss.identity.idm</groupId>
+        <artifactId>idm-ldap</artifactId>
+        <version>${org.jboss.identity.idm}</version>
      </dependency>
      <dependency>
-        <groupId>org.picketlink.idm</groupId>
-        <artifactId>picketlink-idm-cache</artifactId>
-        <version>${org.picketlink.idm}</version>
+        <groupId>org.jboss.identity.idm</groupId>
+        <artifactId>idm-cache</artifactId>
+        <version>${org.jboss.identity.idm}</version>
      </dependency>
 
       <!--To use instead of outdated version from xdoclet-->
