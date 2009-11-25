@@ -93,6 +93,7 @@
 
 .UIPageBody .VIEW-PAGEBODY .UIPage .UIComponentBlock {
 	background: white;
+	height: 100%;
 }
 
 .UIPageBody .BLPagebody {
