@@ -24,7 +24,7 @@
 }
 
 .UIManagement .ManagementBlock {
-	background: url('background/BgEvenRow.gif') repeat-x left top;
+	background: #f8f8f8 url('background/BgEvenRow.gif') repeat-x left top;
 	margin-bottom: 1px;
 }
 
@@ -52,11 +52,11 @@
 }
 
 .UIPortalNavigationPortlet .UIManagement table.ManagementBlock td.Content {
-	width: 23%;
+	width: 20%;
 }
 
 .UIPortalNavigationPortlet .UIManagement table.ManagementBlock td.ActionBlock {
-	width: 65%;
+	width: 68%;
 }
 
 .UIManagement table.ManagementBlock td.Content strong {
