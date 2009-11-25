@@ -17,38 +17,31 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.services.organization.jbidm;
+package org.exoplatform.services.organization.idm;
 
 import org.exoplatform.container.configuration.ConfigurationManager;
 import org.exoplatform.container.xml.InitParams;
-import org.exoplatform.container.xml.PropertiesParam;
-import org.exoplatform.container.xml.Property;
 import org.exoplatform.container.xml.ValueParam;
-import org.exoplatform.container.xml.ValuesParam;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.AnnotationConfiguration;
-import org.hibernate.dialect.Dialect;
-import org.jboss.identity.idm.api.IdentitySession;
-import org.jboss.identity.idm.api.IdentitySessionFactory;
-import org.jboss.identity.idm.api.cfg.IdentityConfiguration;
-import org.jboss.identity.idm.common.exception.IdentityConfigurationException;
-import org.jboss.identity.idm.impl.configuration.IdentityConfigurationImpl;
-import org.jboss.identity.idm.impl.configuration.jaxb2.JAXB2IdentityConfiguration;
-import org.jboss.identity.idm.spi.configuration.metadata.IdentityConfigurationMetaData;
+import org.exoplatform.services.database.HibernateService;
+import org.picketlink.idm.api.IdentitySession;
+import org.picketlink.idm.api.IdentitySessionFactory;
+import org.picketlink.idm.api.cfg.IdentityConfiguration;
+import org.picketlink.idm.common.exception.IdentityConfigurationException;
+import org.picketlink.idm.impl.configuration.IdentityConfigurationImpl;
+import org.picketlink.idm.impl.configuration.jaxb2.JAXB2IdentityConfiguration;
+import org.picketlink.idm.spi.configuration.metadata.IdentityConfigurationMetaData;
 import org.picocontainer.Startable;
 
 import java.net.URL;
-import java.util.Iterator;
-import java.util.List;
 
 import javax.naming.InitialContext;
 
-public class JBossIDMServiceImpl implements JBossIDMService, Startable
+public class PicketLinkIDMServiceImpl implements PicketLinkIDMService, Startable
 {
 
-   private static Log log_ = ExoLogger.getLogger(JBossIDMServiceImpl.class);
+   private static Log log_ = ExoLogger.getLogger(PicketLinkIDMServiceImpl.class);
 
    public static final String PARAM_CONFIG_OPTION = "config";
 
@@ -72,11 +65,11 @@ public class JBossIDMServiceImpl implements JBossIDMService, Startable
 
    private IdentityConfiguration identityConfiguration;
 
-   private JBossIDMServiceImpl()
+   private PicketLinkIDMServiceImpl()
    {
    }
 
-   public JBossIDMServiceImpl(InitParams initParams, ConfigurationManager confManager) throws Exception
+   public PicketLinkIDMServiceImpl(InitParams initParams, HibernateService hibernateService, ConfigurationManager confManager) throws Exception
    {
       ValueParam config = initParams.getValueParam(PARAM_CONFIG_OPTION);
       ValueParam jndiName = initParams.getValueParam(PARAM_JNDI_NAME_OPTION);
@@ -90,69 +83,6 @@ public class JBossIDMServiceImpl implements JBossIDMService, Startable
       if (realmName != null)
       {
          this.defaultRealmName = realmName.getValue();
-      }
-
-      SessionFactory sf = null;
-
-      if (initParams.containsKey(PARAM_HIBERNATE_PROPS))
-      {
-         PropertiesParam param = initParams.getPropertiesParam(PARAM_HIBERNATE_PROPS);
-         AnnotationConfiguration conf_ = new AnnotationConfiguration();
-         Iterator properties = param.getPropertyIterator();
-         while (properties.hasNext())
-         {
-            Property p = (Property)properties.next();
-
-            //
-            String name = p.getName();
-            String value = p.getValue();
-
-            // Julien: Don't remove that unless you know what you are doing
-            if (name.equals("hibernate.dialect"))
-            {
-               Package pkg = Dialect.class.getPackage();
-               String dialect = value.substring(22);
-               value = pkg.getName() + "." + dialect; // 22 is the length of
-               // "org.hibernate.dialect"
-               log_.info("Using dialect " + dialect);
-            }
-
-            //
-            conf_.setProperty(name, value);
-         }
-
-         ClassLoader cl = Thread.currentThread().getContextClassLoader();
-
-         if (initParams.containsKey(PARAM_HIBERNATE_MAPPINGS))
-         {
-            ValuesParam mappings = initParams.getValuesParam(PARAM_HIBERNATE_MAPPINGS);
-
-            List<String> paths = mappings.getValues();
-
-            for (String path : paths)
-            {
-               URL url = cl.getResource(path);
-               log_.info("Adding  Hibernate Mapping: " + path);
-               conf_.addURL(url);
-            }
-         }
-
-         if (initParams.containsKey(PARAM_HIBERNATE_ANNOTATIONS))
-         {
-            ValuesParam annotations = initParams.getValuesParam(PARAM_HIBERNATE_ANNOTATIONS);
-
-            List<String> classes = annotations.getValues();
-
-            for (String name : classes)
-            {
-               Class clazz = cl.loadClass(name);
-               conf_.addAnnotatedClass(clazz);
-            }
-
-         }
-
-         sf = conf_.buildSessionFactory();
-
       }
 
       if (config != null)
@@ -170,10 +100,7 @@ public class JBossIDMServiceImpl implements JBossIDMService, Startable
 
          identityConfiguration = new IdentityConfigurationImpl().configure(configMD);
 
-         if (sf != null)
-         {
-            identityConfiguration.getIdentityConfigurationRegistry().register(sf, "hibernateSessionFactory");
-         }
+         identityConfiguration.getIdentityConfigurationRegistry().register(hibernateService.getSessionFactory(), "hibernateSessionFactory");
       }
       else
       {
@@ -200,7 +127,7 @@ public class JBossIDMServiceImpl implements JBossIDMService, Startable
    public void stop()
    {
    }
-
+                                    
    public IdentitySessionFactory getIdentitySessionFactory()
    {
       return identitySessionFactory; //To change body of implemented methods use File | Settings | File Templates.

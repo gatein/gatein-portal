@@ -33,6 +33,11 @@
         <name>hibernate.properties</name>
         <description>Default Hibernate Service</description>
         <property name="hibernate.show_sql" value="false"/>
+         <property name="hibernate.current_session_context_class" value="thread"/>
+        <property name="hibernate.cache.use_second_level_cache" value="false"/>
+        <property name="hibernate.cache.use_query_cache" value="false"/>
+        <property name="hibernate.jdbc.batch_size" value="0"/>
+        <property name="hibernate.cache.provider_class" value="org.hibernate.cache.HashtableCacheProvider"/>
         <property name="hibernate.cglib.use_reflection_optimizer" value="true"/>
         <property name="hibernate.connection.url" value="jdbc:hsqldb:file:target/temp/data/exodb"/>
         <property name="hibernate.connection.driver_class" value="org.hsqldb.jdbcDriver"/>

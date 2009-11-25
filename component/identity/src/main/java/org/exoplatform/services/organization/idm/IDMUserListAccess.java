@@ -17,12 +17,12 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.services.organization.jbidm;
+package org.exoplatform.services.organization.idm;
 
 import org.exoplatform.commons.utils.ListAccess;
 import org.exoplatform.services.organization.User;
-import org.jboss.identity.idm.api.query.UserQuery;
-import org.jboss.identity.idm.api.query.UserQueryBuilder;
+import org.picketlink.idm.api.query.UserQuery;
+import org.picketlink.idm.api.query.UserQueryBuilder;
 
 import java.util.List;
 
@@ -30,7 +30,7 @@ public class IDMUserListAccess implements ListAccess<User>
 {
    private final UserDAOImpl userDAO;
 
-   private final JBossIDMService idmService;
+   private final PicketLinkIDMService idmService;
 
    private final UserQueryBuilder userQueryBuilder;
 
@@ -38,7 +38,7 @@ public class IDMUserListAccess implements ListAccess<User>
 
    private final boolean countAll;
 
-   public IDMUserListAccess(UserDAOImpl userDAO, JBossIDMService idmService, UserQueryBuilder userQueryBuilder,
+   public IDMUserListAccess(UserDAOImpl userDAO, PicketLinkIDMService idmService, UserQueryBuilder userQueryBuilder,
       int pageSize, boolean countAll)
    {
       this.userDAO = userDAO;
@@ -52,13 +52,13 @@ public class IDMUserListAccess implements ListAccess<User>
    {
       userQueryBuilder.page(index, length);
       UserQuery query = userQueryBuilder.createQuery();
-      List<org.jboss.identity.idm.api.User> users = idmService.getIdentitySession().list(query);
+      List<org.picketlink.idm.api.User> users = idmService.getIdentitySession().list(query);
 
       User[] exoUsers = new User[users.size()];
 
       for (int i = 0; i < users.size(); i++)
       {
-         org.jboss.identity.idm.api.User user = users.get(i);
+         org.picketlink.idm.api.User user = users.get(i);
 
          exoUsers[i] = UserDAOImpl.getPopulatedUser(user.getId(), idmService.getIdentitySession());
       }

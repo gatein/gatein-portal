@@ -17,12 +17,12 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.services.organization.jbidm;
+package org.exoplatform.services.organization.idm;
 
-import org.jboss.identity.idm.api.IdentitySession;
-import org.jboss.identity.idm.api.IdentitySessionFactory;
+import org.picketlink.idm.api.IdentitySession;
+import org.picketlink.idm.api.IdentitySessionFactory;
 
-public interface JBossIDMService
+public interface PicketLinkIDMService
 {
 
    IdentitySessionFactory getIdentitySessionFactory();

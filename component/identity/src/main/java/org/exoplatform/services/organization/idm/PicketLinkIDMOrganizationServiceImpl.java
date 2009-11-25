@@ -17,7 +17,7 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.services.organization.jbidm;
+package org.exoplatform.services.organization.idm;
 
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.component.ComponentRequestLifecycle;
@@ -27,66 +27,66 @@ import org.exoplatform.services.cache.CacheService;
 import org.exoplatform.services.organization.BaseOrganizationService;
 import org.picocontainer.Startable;
 
-public class JBossIDMOrganizationServiceImpl extends BaseOrganizationService implements Startable,
+public class PicketLinkIDMOrganizationServiceImpl extends BaseOrganizationService implements Startable,
    ComponentRequestLifecycle
 {
 
-   // We may have several portal containers thus we need one JBossIDMService per portal container   
-   //   private static JBossIDMService jbidmService_;
-   private JBossIDMService jbidmService_;
+   // We may have several portal containers thus we need one PicketLinkIDMService per portal container
+   //   private static PicketLinkIDMService jbidmService_;
+   private PicketLinkIDMService idmService_;
 
-   public static final String EXO_GROUP_TYPE_OPTION = "exoGroupTypeName";
+   public static final String GTN_GROUP_TYPE_OPTION = "gtnGroupTypeName";
 
-   public static final String EXO_ROOT_GROUP_NAME_OPTION = "exoRootGroupName";
+   public static final String GTN_ROOT_GROUP_NAME_OPTION = "gtnRootGroupName";
 
-   public static final String EXO_ROOT_GROUP_TYPE_NAME_OPTION = "exoRootGroupTypeName";
+   public static final String GTN_ROOT_GROUP_TYPE_NAME_OPTION = "gtnRootGroupTypeName";
 
    public static final String PASSWORD_AS_ATTRIBUTE_OPTION = "passwordAsAttribute";
 
-   private String exoGroupType = "EXO_GROUP_TYPE";
+   private String gtnGroupType = "GTN_GROUP_TYPE";
 
-   private String exoRootGroupName = "EXO_ROOT_GROUP";
+   private String gtnRootGroupName = "GTN_ROOT_GROUP";
 
-   private String exoRootGroupType = exoGroupType;
+   private String gtnRootGroupType = gtnGroupType;
 
    private boolean passwordAsAttribute = false;
 
-   public JBossIDMOrganizationServiceImpl(InitParams params, CacheService cservice, JBossIDMService jbidmService)
+   public PicketLinkIDMOrganizationServiceImpl(InitParams params, CacheService cservice, PicketLinkIDMService idmService)
       throws Exception
    {
-      groupDAO_ = new GroupDAOImpl(this, jbidmService);
-      userDAO_ = new UserDAOImpl(this, jbidmService, cservice);
-      userProfileDAO_ = new UserProfileDAOImpl(this, jbidmService, cservice);
-      membershipDAO_ = new MembershipDAOImpl(this, jbidmService);
-      membershipTypeDAO_ = new MembershipTypeDAOImpl(this, jbidmService);
+      groupDAO_ = new GroupDAOImpl(this, idmService);
+      userDAO_ = new UserDAOImpl(this, idmService, cservice);
+      userProfileDAO_ = new UserProfileDAOImpl(this, idmService, cservice);
+      membershipDAO_ = new MembershipDAOImpl(this, idmService);
+      membershipTypeDAO_ = new MembershipTypeDAOImpl(this, idmService);
 
-      jbidmService_ = jbidmService;
+      idmService_ = idmService;
 
       if (params != null)
       {
          //Options
-         ValueParam exoGroupTypeNameParam = params.getValueParam(EXO_GROUP_TYPE_OPTION);
-         ValueParam exoRootGroupTypeNameParam = params.getValueParam(EXO_ROOT_GROUP_TYPE_NAME_OPTION);
-         ValueParam exoRootGroupNameParam = params.getValueParam(EXO_ROOT_GROUP_NAME_OPTION);
+         ValueParam gtnGroupTypeNameParam = params.getValueParam(GTN_GROUP_TYPE_OPTION);
+         ValueParam gtnRootGroupTypeNameParam = params.getValueParam(GTN_ROOT_GROUP_TYPE_NAME_OPTION);
+         ValueParam gtnRootGroupNameParam = params.getValueParam(GTN_ROOT_GROUP_NAME_OPTION);
          ValueParam passwordAsAttributeParam = params.getValueParam(PASSWORD_AS_ATTRIBUTE_OPTION);
 
-         if (exoGroupTypeNameParam != null)
+         if (gtnGroupTypeNameParam != null)
          {
-            this.exoGroupType = exoGroupTypeNameParam.getValue();
+            this.gtnGroupType = gtnGroupTypeNameParam.getValue();
          }
 
-         if (exoRootGroupNameParam != null)
+         if (gtnRootGroupNameParam != null)
          {
-            this.exoRootGroupName = exoRootGroupNameParam.getValue();
+            this.gtnRootGroupName = gtnRootGroupNameParam.getValue();
          }
 
-         if (exoRootGroupTypeNameParam != null)
+         if (gtnRootGroupTypeNameParam != null)
          {
-            this.exoRootGroupType = exoRootGroupTypeNameParam.getValue();
+            this.gtnRootGroupType = gtnRootGroupTypeNameParam.getValue();
          }
-         else if (exoRootGroupTypeNameParam != null)
+         else if (gtnRootGroupTypeNameParam != null)
          {
-            this.exoRootGroupType = this.exoGroupType;
+            this.gtnRootGroupType = this.gtnGroupType;
          }
 
          if (passwordAsAttributeParam != null && passwordAsAttributeParam.getValue().equalsIgnoreCase("true"))
@@ -97,11 +97,11 @@ public class JBossIDMOrganizationServiceImpl extends BaseOrganizationService imp
 
    }
 
-   public final org.jboss.identity.idm.api.Group getJBIDMGroup(String groupId) throws Exception
+   public final org.picketlink.idm.api.Group getJBIDMGroup(String groupId) throws Exception
    {
       String[] ids = groupId.split("/");
       String name = ids[ids.length - 1];
-      return jbidmService_.getIdentitySession().getPersistenceManager().findGroup(name, getExoGroupType());
+      return idmService_.getIdentitySession().getPersistenceManager().findGroup(name, getGtnGroupType());
    }
 
    @Override
@@ -111,9 +111,9 @@ public class JBossIDMOrganizationServiceImpl extends BaseOrganizationService imp
       try
       {
          // Wrap within transaction so all initializers can work
-         jbidmService_.getIdentitySession().beginTransaction();
+         idmService_.getIdentitySession().beginTransaction();
          super.start();
-         jbidmService_.getIdentitySession().getTransaction().commit();
+         idmService_.getIdentitySession().getTransaction().commit();
 
       }
       catch (Exception e)
@@ -133,7 +133,7 @@ public class JBossIDMOrganizationServiceImpl extends BaseOrganizationService imp
    {
       try
       {
-         jbidmService_.getIdentitySession().beginTransaction();
+         idmService_.getIdentitySession().beginTransaction();
       }
       catch (Exception e)
       {
@@ -145,27 +145,27 @@ public class JBossIDMOrganizationServiceImpl extends BaseOrganizationService imp
    {
       try
       {
-         jbidmService_.getIdentitySession().getTransaction().commit();
+         idmService_.getIdentitySession().getTransaction().commit();
       }
       catch (Exception e)
       {
-         e.printStackTrace(); //To change body of catch statement use File | Settings | File Templates.
+         e.printStackTrace();
       }
    }
 
-   public String getExoGroupType()
+   public String getGtnGroupType()
    {
-      return exoGroupType;
+      return gtnGroupType;
    }
 
    public String getExoRootGroupName()
    {
-      return exoRootGroupName;
+      return gtnRootGroupName;
    }
 
-   public String getExoRootGroupType()
+   public String getGtnRootGroupType()
    {
-      return exoRootGroupType;
+      return gtnRootGroupType;
    }
 
    public boolean isPasswordAsAttribute()
