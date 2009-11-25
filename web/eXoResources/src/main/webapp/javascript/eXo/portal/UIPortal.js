@@ -543,7 +543,6 @@ UIPortal.prototype.toggleComposer = function(clickedEle) {
 	var middleBlock = eXo.core.DOMUtil.findFirstChildByClass(portalComposer, "div", "MLPortalComposer");
 	var bottomBlock = eXo.core.DOMUtil.findFirstChildByClass(portalComposer, "div", "BLPortalComposer");
 	var fakeBottom = eXo.core.DOMUtil.findFirstChildByClass(portalComposer, "div", "Bottom");
-	var params;
 	if(middleBlock && middleBlock.style.display != "none") {
 		middleBlock.style.display = "none";
 		bottomBlock.style.display = "none";
@@ -556,7 +555,7 @@ UIPortal.prototype.toggleComposer = function(clickedEle) {
 		eXo.core.DOMUtil.replaceClass(clickedEle, "CollapseIcon", "ExpandIcon");
 	}
 	var requestStr = eXo.env.server.createPortalURL(portalComposer.id, "Toggle", true);
-	ajaxGet(requestStr);
+	ajaxAsyncGetRequest(requestStr);
 };
 
 UIPortal.prototype.collapseExpand = function(element) {
