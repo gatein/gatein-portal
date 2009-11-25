@@ -21,6 +21,7 @@ package org.exoplatform.portal.pc;
 
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.services.resources.ResourceBundleService;
 import org.gatein.pc.api.PortletInvoker;
 import org.gatein.pc.bridge.BridgeInterceptor;
 import org.gatein.pc.federation.FederatingPortletInvoker;
@@ -57,13 +58,20 @@ public class ExoKernelIntegration implements Startable
    /** Exo Context */
    private final ExoContainer container;
 
+   /** DO NOT REMOVE ME, OTHERWISE YOU'LL BREAK THINGS. */
+   private final ResourceBundleService resourceBundleService;
+
    /**
     * We enforce the dependency with the ResourceBundleService since it must be stared before the
     * <code>portletApplicationRegistry</code>
+    *
+    * @param context the exo container context
+    * @param resourceBundleService the resource bundle service that is here for the sake of creating a dependency
     */
-   public ExoKernelIntegration(ExoContainerContext context)
+   public ExoKernelIntegration(ExoContainerContext context, ResourceBundleService resourceBundleService)
    {
       this.container = context.getContainer();
+      this.resourceBundleService = resourceBundleService;
    }
 
    public void start()
