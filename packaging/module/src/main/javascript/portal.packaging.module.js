@@ -53,7 +53,8 @@ function getModule(params)
    new Project("org.exoplatform.portal", "exo.portal.component.resources", "jar", module.version);
 
    module.component.common =
-   new Project("org.exoplatform.portal", "exo.portal.component.common", "jar", module.version);
+   new Project("org.exoplatform.portal", "exo.portal.component.common", "jar", module.version).
+      addDependency(new Project("org.gatein.common", "common-logging", "jar", commonVersion));
 
    module.component.pc =
    new Project("org.exoplatform.portal", "exo.portal.component.pc", "jar", module.version).
@@ -61,6 +62,7 @@ function getModule(params)
       addDependency(new Project("javax.ccpp", "ccpp", "jar", "1.0")).
       addDependency(new Project("javax.xml.bind", "jaxb-api", "jar", "2.1")).
       addDependency(new Project("org.gatein.pc", "pc-api", "jar", pcVersion)).
+      addDependency(new Project("org.gatein.pc", "pc-bridge", "jar", pcVersion)).
       addDependency(new Project("org.gatein.pc", "pc-portlet", "jar", pcVersion)).
       addDependency(new Project("org.gatein.pc", "pc-mc", "jar", pcVersion)).
       addDependency(new Project("org.gatein.pc", "pc-controller", "jar", pcVersion)).
@@ -72,6 +74,7 @@ function getModule(params)
       addDependency(new Project("log4j", "log4j", "jar", "1.2.14")).
       addDependency(new Project("org.jboss", "jbossxb", "jar", "2.0.1.GA")).
       addDependency(new Project("org.jboss.logging", "jboss-logging-spi", "jar", "2.0.5.GA")).
+      addDependency(new Project("org.apache.portals.bridges", "portals-bridges-common", "jar", "1.0.4")).
       addDependency(new Project("org.jboss", "jboss-common-core", "jar", "2.2.9.GA"));
 
 
