@@ -35,7 +35,6 @@
    <name>GateIn Portal Server JBoss</name>
 
    <modules>
-      <module>patch</module>
       <module>patch-ear</module>
       <module>plugin</module>
    </modules>
