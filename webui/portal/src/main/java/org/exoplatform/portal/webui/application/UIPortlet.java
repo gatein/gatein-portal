@@ -149,6 +149,7 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
    private List<String> supportModes_;
 
    private List<QName> supportedProcessingEvents_;
+   private List<QName> supportedPublishingEvents_;
    private List<String> supportedPublicParams_;
    private boolean portletInPortal_ = true;
    private StateString navigationalState;
@@ -488,14 +489,49 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
          QName eventName = iter.next();
          if (eventName.equals(name))
          {
-            log.info("The Portlet " + producerOfferedPortletContext + " supports the event : " + name);
+            log.info("The Portlet " + producerOfferedPortletContext + " supports comsuming the event : " + name);
             return true;
          }
       }
-      log.info("The portlet " + producerOfferedPortletContext + " doesn't support the event : " + name);
+      log.info("The portlet " + producerOfferedPortletContext + " doesn't support consuming the event : " + name);
       return false;
    }
 
+   public boolean supportsPublishingEvent (QName name)
+   {
+	   if (supportedPublishingEvents_ == null)
+	   {
+		     org.gatein.pc.api.Portlet portlet = getProducedOfferedPortlet();
+
+	         if (portlet == null)
+	         {
+	            log.info("Could not find portlet with ID : " + producerOfferedPortletContext.getId());
+	            return false;
+	         }
+
+	         Map<QName, EventInfo> producedEvents = (Map<QName, EventInfo>)portlet.getInfo().getEventing().getProducedEvents();
+
+	         if (producedEvents == null)
+	         {
+	            return false;
+	         }
+
+	         supportedPublishingEvents_ = new ArrayList<QName>(producedEvents.keySet());
+	   }
+	   
+	      for (Iterator<QName> iter = supportedPublishingEvents_.iterator(); iter.hasNext();)
+	      {
+	         QName eventName = iter.next();
+	         if (eventName.equals(name))
+	         {
+	            log.info("The Portlet " + producerOfferedPortletContext + " supports producing the event : " + name);
+	            return true;
+	         }
+	      }
+	      log.info("The portlet " + producerOfferedPortletContext + " doesn't support producing the event : " + name);
+	   return false;
+   }
+   
    /**
     * Tells, according to the info located in portlet.xml, wether this portlet supports the public render parameter
     * given as a method argument

@@ -211,8 +211,11 @@ public class UIPortletActionListener
          {
             for (UpdateNavigationalStateResponse.Event nsEvent : nsEvents)
             {
-               javax.portlet.Event portletEvent = new PortletEvent(nsEvent.getName(), nsEvent.getPayload());
-               events.add(portletEvent);
+               if (uiPortlet.supportsPublishingEvent(nsEvent.getName()))
+               {
+                  javax.portlet.Event portletEvent = new PortletEvent(nsEvent.getName(), nsEvent.getPayload());
+                  events.add(portletEvent);
+               }
             }
          }
 
@@ -597,8 +600,8 @@ public class UIPortletActionListener
          setupPublicRenderParams(uiPortlet, request.getParameterMap());
 
          //set render params
-         Map<String, String[]> renderParams = ((PortalRequestContext)event.getRequestContext()).getPortletParameters();
-         uiPortlet.setNavigationalState(ParametersStateString.create(renderParams));
+         String navState = ((PortalRequestContext)event.getRequestContext()).getRequestParameter(ExoPortletInvocationContext.NAVIGATIONAL_STATE_PARAM_NAME);
+         uiPortlet.setNavigationalState(ParametersStateString.create(navState));
       }
    }
 
