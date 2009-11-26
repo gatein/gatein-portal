@@ -82,4 +82,24 @@ public class TestOrganization extends BasicTestCase
          System.out.println(a.getUserName());
       }
    }
+
+   public void testFindUserByUserName() throws Exception
+   {
+      UserHandler uHandler = organizationService.getUserHandler();
+      User user = uHandler.findUserByName("root");
+      assertNotNull(user);
+      assertEquals("gtn", user.getPassword());
+      
+      // Test changing password
+      user.setPassword("newPassword");
+      uHandler.saveUser(user, false);
+      user = uHandler.findUserByName("root");
+      assertNotNull(user);
+      assertEquals("newPassword", user.getPassword());      
+
+      // Reset to default password
+      user.setPassword("gtn");
+      uHandler.saveUser(user, false);
+
+   }
 }
