@@ -64,7 +64,7 @@ public class UILanguageSelector extends UIContainer
          Locale locale = localeConfig.getLocale();
          String displayName = locale.getDisplayLanguage(currentLocale);
          String lang = locale.getLanguage();
-         String localedName = locale.getDisplayName(locale);
+         String localedName = capitalizeFirstLetter(locale.getDisplayLanguage(locale));
          if (localedName == null || localedName.length() == 0)
             localedName = "???";
          if (locale.getDisplayName().equalsIgnoreCase(currentLocale.getDisplayName()))
@@ -135,5 +135,20 @@ public class UILanguageSelector extends UIContainer
             hanlder.saveUserProfile(userProfile, true);
          }
       }
+   }
+   
+   private String capitalizeFirstLetter(String word)
+   {
+      if (word == null)
+      {
+         return null;
+      }
+      if (word.length() == 0)
+      {
+         return word;
+      }
+      StringBuilder result = new StringBuilder(word);
+      result.replace(0, 1, result.substring(0, 1).toUpperCase());
+      return result.toString();
    }
 }
