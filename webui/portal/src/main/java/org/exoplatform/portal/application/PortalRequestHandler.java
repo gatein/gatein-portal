@@ -82,7 +82,10 @@ public class PortalRequestHandler extends WebRequestHandler
       res.setHeader("Cache-Control", "no-cache");
 
       PortalApplication app = controller.getApplication(PortalApplication.PORTAL_APPLICATION_ID);
-      WebuiRequestContext context = new PortalRequestContext(app, req, res);
+      PortalRequestContext context = new PortalRequestContext(app, req, res);
+      if (context.getPortalOwner().isEmpty()) {
+         res.sendRedirect(req.getContextPath());
+      }
       WebuiRequestContext.setCurrentInstance(context);
       List<ApplicationLifecycle> lifecycles = app.getApplicationLifecycle();
       try
