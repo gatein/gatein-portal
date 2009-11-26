@@ -1,0 +1,33 @@
+<faces-config xmlns="http://java.sun.com/xml/ns/javaee"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd"
+              version="1.2">
+
+    <application>
+      <view-handler>org.jboss.portletbridge.application.PortletViewHandler</view-handler>
+      <state-manager>org.jboss.portletbridge.application.PortletStateManager</state-manager>
+   </application>
+   
+   <managed-bean>
+      <managed-bean-name>user</managed-bean-name>
+      <managed-bean-class>
+         org.jboss.portal.portlet.samples.jsf.UserBean
+      </managed-bean-class>
+      <managed-bean-scope>request</managed-bean-scope>
+   </managed-bean>
+
+   <navigation-rule>
+      <navigation-case>
+         <from-outcome>sayHello</from-outcome>
+         <to-view-id>/jsf/hello.jsp</to-view-id>
+      </navigation-case>
+   </navigation-rule>
+
+   <navigation-rule>
+      <navigation-case>
+         <from-outcome>back</from-outcome>
+         <to-view-id>/jsf/welcome.jsp</to-view-id>
+      </navigation-case>
+   </navigation-rule>
+   
+</faces-config>

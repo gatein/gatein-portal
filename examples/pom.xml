@@ -37,6 +37,7 @@
    <modules>
       <module>extension</module>
       <module>portal</module>
+      <module>portlets</module>
    </modules>
 
 </project>
