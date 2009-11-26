@@ -83,7 +83,7 @@ public class PortalRequestHandler extends WebRequestHandler
 
       PortalApplication app = controller.getApplication(PortalApplication.PORTAL_APPLICATION_ID);
       PortalRequestContext context = new PortalRequestContext(app, req, res);
-      if (context.getPortalOwner().isEmpty()) {
+      if (context.getPortalOwner().length() == 0) {
          res.sendRedirect(req.getContextPath());
       }
       WebuiRequestContext.setCurrentInstance(context);
