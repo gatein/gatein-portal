@@ -24,6 +24,7 @@ import org.exoplatform.application.registry.Application;
 import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.UserACL;
+import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.config.model.CloneApplicationState;
 import org.exoplatform.portal.config.model.Container;
@@ -508,10 +509,15 @@ public class UIPortalComponentActionListener
       public void execute(Event<UIPortal> event) throws Exception
       {
          String portalName = event.getRequestContext().getRequestParameter("portalName");
-
          UIPortal uiPortal = Util.getUIPortal();
-         UIPortalApplication uiApp = uiPortal.getAncestorOfType(UIPortalApplication.class);
-
+         UIPortalApplication uiApp = uiPortal.getAncestorOfType(UIPortalApplication.class);        
+         UserPortalConfigService service = uiApp.getApplicationComponent(UserPortalConfigService.class);
+         if(portalName !=null && service.getUserPortalConfig(portalName, event.getRequestContext().getRemoteUser()) == null)
+         {
+            uiApp.addMessage(new ApplicationMessage("UISiteManagement.msg.portal-not-exist",new String[]{portalName}));
+            return;
+         }
+         
          UIMaskWorkspace uiMaskWS = uiApp.getChildById(UIPortalApplication.UI_MASK_WS_ID);
          UIPortalForm portalForm = uiMaskWS.createUIComponent(UIPortalForm.class, null, "UIPortalForm");
          portalForm.setPortalOwner(portalName);

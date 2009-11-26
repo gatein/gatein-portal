@@ -22,7 +22,7 @@
 				        <td class="ActionBlock">
 					        	<a href="<%=uicomponent.event("EditPortalLayout", portalConfig.getName());%>" class="EditLayoutIcon"><%=_ctx.appRes("UISiteManagement.label.editLayout")%></a>
 					        	<a href="<%=uicomponent.event("EditNavigation", portalConfig.getName());%>" class="EditNavIcon"><%=_ctx.appRes("UISiteManagement.label.editNav")%></a>
-					        	<a href="javascript:ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'EditPortalProperties', true, ['<%=portalConfig.getName()%>']))" class="EditNavIcon"><%=_ctx.appRes("UISiteManagement.label.editPortalProp")%></a>
+					        	<a href="javascript:ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'EditPortalProperties', true, [{name:'portalName',value:'<%=portalConfig.getName()%>'}]))" class="EditNavIcon"><%=_ctx.appRes("UISiteManagement.label.editPortalProp")%></a>
 					        	<a href="<%=uicomponent.url("DeletePortal", portalConfig.getName());%>" class="DeleteIcon"><%=_ctx.appRes("UISiteManagement.label.deletePortal")%></a>
 				        </td>
 				      </tr>

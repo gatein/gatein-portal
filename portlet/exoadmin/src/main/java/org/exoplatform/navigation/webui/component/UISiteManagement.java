@@ -216,8 +216,7 @@ public class UISiteManagement extends UIContainer
          else
          {
             uiPortalApp.addMessage(new ApplicationMessage("UISiteManagement.msg.portal-not-exist",
-               new String[]{portalName}));
-            ;
+               new String[]{portalName}));            
             return;
          }
 
@@ -251,11 +250,18 @@ public class UISiteManagement extends UIContainer
          String portalName = event.getRequestContext().getRequestParameter(OBJECTID);
          UserPortalConfigService service = uicomp.getApplicationComponent(UserPortalConfigService.class);
          PortalRequestContext prContext = Util.getPortalRequestContext();
+         UIPortalApplication portalApp = (UIPortalApplication)prContext.getUIApplication();
 
          UserPortalConfig userConfig = service.getUserPortalConfig(portalName, prContext.getRemoteUser());
+         
+         if(userConfig == null)
+         {
+            portalApp.addMessage(new ApplicationMessage("UISiteManagement.msg.portal-not-exist",
+                     new String[]{portalName}));
+            return;
+         }
          PortalConfig portalConfig = userConfig.getPortalConfig();
 
-         UIPortalApplication portalApp = (UIPortalApplication)prContext.getUIApplication();
          UserACL userACL = portalApp.getApplicationComponent(UserACL.class);
          if (!userACL.hasEditPermission(portalConfig))
          {
@@ -306,6 +312,12 @@ public class UISiteManagement extends UIContainer
          UIApplication uiApplication = context.getUIApplication();
 
          UserPortalConfig userConfig = service.getUserPortalConfig(portalName, prContext.getRemoteUser());
+         if(userConfig == null)
+         {
+            uiApplication.addMessage(new ApplicationMessage("UISiteManagement.msg.portal-not-exist",
+               new String[]{portalName}));
+            return;
+         }
          PortalConfig portalConfig = userConfig.getPortalConfig();
 
          UserACL userACL = uicomp.getApplicationComponent(UserACL.class);
@@ -314,7 +326,7 @@ public class UISiteManagement extends UIContainer
             uiApplication.addMessage(new ApplicationMessage("UISiteManagement.msg.Invalid-editPermission", null));
             ;
             return;
-         }
+         }        
 
          UIPopupWindow popUp = uicomp.getChild(UIPopupWindow.class);
 

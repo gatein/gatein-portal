@@ -19,8 +19,11 @@
 
 package org.exoplatform.portal.webui.navigation;
 
+import org.exoplatform.portal.application.PortalRequestContext;
+import org.exoplatform.portal.config.UserPortalConfig;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.PageNavigation;
+import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.webui.page.UIPageNodeForm2;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
@@ -95,19 +98,28 @@ public class UINavigationManagement extends UIContainer
          UserPortalConfigService portalConfigService =
             uiManagement.getApplicationComponent(UserPortalConfigService.class);
          PageNavigation navigation = uiNodeSelector.getSelectedNavigation();
-         List<String> allPortalNames = portalConfigService.getAllPortalNames();
-         if(allPortalNames.contains(navigation.getOwnerId()))
+         PortalRequestContext prContext = Util.getPortalRequestContext();
+         if(navigation.getOwnerType() == PortalConfig.PORTAL_TYPE)
+         {
+            UserPortalConfig portalConfig = portalConfigService.getUserPortalConfig(navigation.getOwnerId(), prContext.getRemoteUser());
+            if(portalConfig != null)
+            {
+               portalConfigService.update(navigation); 
+            }         
+            
+         }
+         else
          {
             portalConfigService.update(navigation);
-         }         
+         }
          UIPortal uiPortal = Util.getUIPortal();
          setNavigation(uiPortal.getNavigations(), navigation);
          UIPopupWindow uiPopup = uiManagement.getParent();
          uiPopup.setShow(false);
          UIPortalApplication uiPortalApp = Util.getUIPortalApplication();
          UIWorkingWorkspace uiWorkingWS = uiPortalApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
-         Util.getPortalRequestContext().addUIComponentToUpdateByAjax(uiWorkingWS);
-         Util.getPortalRequestContext().setFullRender(true);
+         prContext.addUIComponentToUpdateByAjax(uiWorkingWS);
+         prContext.setFullRender(true);
       }
 
       private void setNavigation(List<PageNavigation> navs, PageNavigation nav)
