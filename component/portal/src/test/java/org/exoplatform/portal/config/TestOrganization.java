@@ -83,19 +83,19 @@ public class TestOrganization extends BasicTestCase
       }
    }
 
-   public void testFindUserByUserName() throws Exception
+   public void testChangePassword() throws Exception
    {
       UserHandler uHandler = organizationService.getUserHandler();
       User user = uHandler.findUserByName("root");
       assertNotNull(user);
-      assertEquals("gtn", user.getPassword());
+      assertTrue(uHandler.authenticate("root", "gtn"));
       
       // Test changing password
       user.setPassword("newPassword");
       uHandler.saveUser(user, false);
       user = uHandler.findUserByName("root");
       assertNotNull(user);
-      assertEquals("newPassword", user.getPassword());      
+      assertTrue(uHandler.authenticate("root", "newPassword"));    
 
       // Reset to default password
       user.setPassword("gtn");
