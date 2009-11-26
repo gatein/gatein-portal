@@ -226,8 +226,8 @@ public class UIGadgetInfo extends UIContainer
          }
          
          Gadget gadget = gadgetInfo.getGadget();
-         UICategorySelector selector = gadgetInfo.getChild(UICategorySelector.class);
-         
+         gadgetInfo.removeChild(UICategorySelector.class);
+         UICategorySelector selector = gadgetInfo.addChild(UICategorySelector.class, null, null);
          Application app = new Application();
          app.setApplicationName(gadget.getName());
          app.setType(ApplicationType.GADGET);

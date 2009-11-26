@@ -84,6 +84,13 @@ public class UIApplicationOrganizer extends UIContainer
          setSelectedCategory(categories.get(0));
       }
 
+      if (getParent() != null)
+      {
+         UIGadgetManagement gadgetManager = getParent().findFirstComponentOfType(UIGadgetManagement.class);
+         if (gadgetManager != null)
+            gadgetManager.reload();
+      }
+
       PortalRequestContext portalContext = org.exoplatform.portal.webui.util.Util.getPortalRequestContext();
       UIPortal uiPortal = org.exoplatform.portal.webui.util.Util.getUIPortal();
       MonitorEvent<UIPortal> pnevent = new MonitorEvent<UIPortal>(uiPortal, "ChangeApplicationList", portalContext);
@@ -122,7 +129,8 @@ public class UIApplicationOrganizer extends UIContainer
    {
       selectedCategory = category;
       ApplicationRegistryService service = getApplicationComponent(ApplicationRegistryService.class);
-      applications = service.getApplications(selectedCategory, new Util.ApplicationComparator(), new ApplicationType[0]);
+      applications =
+         service.getApplications(selectedCategory, new Util.ApplicationComparator(), new ApplicationType[0]);
       if (applications == null || applications.isEmpty())
       {
          setSelectedApplication(null);
@@ -196,7 +204,7 @@ public class UIApplicationOrganizer extends UIContainer
          }
       }
    }
-   
+
    public boolean isShowImport()
    {
       PortletRequestContext pcontext = (PortletRequestContext)WebuiRequestContext.getCurrentInstance();
@@ -239,7 +247,7 @@ public class UIApplicationOrganizer extends UIContainer
       {
          UIApplicationOrganizer uiOrganizer = event.getSource();
          ApplicationRegistryService service = uiOrganizer.getApplicationComponent(ApplicationRegistryService.class);
-         
+
          service.importAllPortlets();
          service.importExoGadgets();
          uiOrganizer.reload();

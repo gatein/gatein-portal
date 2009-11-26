@@ -121,12 +121,8 @@ public class UIGadgetManagement extends UIContainer
    public void setSelectedGadget(Gadget gadget) throws Exception
    {
       selectedGadget_ = gadget;
-      UIGadgetInfo uiGadgetInfo = getChild(UIGadgetInfo.class);
-      if (uiGadgetInfo == null)
-      {
-         getChildren().clear();
-         uiGadgetInfo = addChild(UIGadgetInfo.class, null, null);
-      }
+      getChildren().clear();
+      UIGadgetInfo uiGadgetInfo = addChild(UIGadgetInfo.class, null, null);
       uiGadgetInfo.setGadget(selectedGadget_);
       uiGadgetInfo.getChild(UICategorySelector.class).setRendered(false);
    }
