@@ -222,11 +222,12 @@ public abstract class SearchTask<T> extends AbstractPOMTask
          String ownerType = q.getOwnerType();
          ObjectType<Site> siteType = ownerType == null ? ObjectType.PORTAL_SITE : Mapper.parseSiteType(ownerType);
          final Collection<? extends Site> portals = workspace.getSites(siteType);
+         final Iterator<? extends Site> iterator = portals.iterator();
          ListAccess<PortalData> la = new ListAccess<PortalData>()
          {
             public PortalData[] load(int index, int length) throws Exception, IllegalArgumentException
             {
-               Iterator<? extends Site> iterator = portals.iterator();
+               //Iterator<? extends Site> iterator = portals.iterator();
                Mapper mapper = new Mapper(session);
                PortalData[] result = new PortalData[length];
                for (int i = 0; i < length; i++)
