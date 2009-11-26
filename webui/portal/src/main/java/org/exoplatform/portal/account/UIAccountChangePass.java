@@ -84,7 +84,7 @@ public class UIAccountChangePass extends UIForm
          String newPass = uiForm.getUIStringInput("newpass").getValue();
          String confirmnewPass = uiForm.getUIStringInput("confirmnewpass").getValue();
 
-         if (!currentPass.equals(user.getPassword()))
+         if (!service.getUserHandler().authenticate(username, currentPass))
          {
             uiApp.addMessage(new ApplicationMessage("UIAccountChangePass.msg.currentpassword-is-not-match", null, 1));
             uiForm.reset();
