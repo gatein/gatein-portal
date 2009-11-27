@@ -132,9 +132,22 @@ public class UIPortalForm extends UIFormTabPane
       super("UIPortalForm");
       createDefaultItem();
       setSelectedTab("PortalSetting");
-      invokeGetBindingBean(Util.getUIPortal());
+
+   }
+
+   public void setBindingBean() throws Exception
+   {
+
+      UserPortalConfigService service = this.getApplicationComponent(UserPortalConfigService.class);
+      PortalRequestContext prContext = Util.getPortalRequestContext();
+
+      UserPortalConfig userConfig = service.getUserPortalConfig(getPortalOwner(), prContext.getRemoteUser());
+      UIPortal editPortal = this.createUIComponent(UIPortal.class, null, null);
+      PortalDataMapper.toUIPortal(editPortal, userConfig);
+
+      invokeGetBindingBean(editPortal);
       ((UIFormStringInput)getChild(UIFormInputSet.class).getChildById(FIELD_NAME))
-         .setValue(((PortalRequestContext)WebuiRequestContext.getCurrentInstance()).getPortalOwner());
+         .setValue(getPortalOwner());
       setActions(new String[]{"Save", "Close"});
    }
 
@@ -238,9 +251,15 @@ public class UIPortalForm extends UIFormTabPane
       public void execute(Event<UIPortalForm> event) throws Exception
       {
          UIPortalForm uiForm = event.getSource();
+         
+         UserPortalConfigService service = uiForm.getApplicationComponent(UserPortalConfigService.class);
          PortalRequestContext prContext = Util.getPortalRequestContext();
+
+         UserPortalConfig userConfig = service.getUserPortalConfig(uiForm.getPortalOwner(), prContext.getRemoteUser());
+         UIPortal uiPortal = uiForm.createUIComponent(UIPortal.class, null, null);
+         PortalDataMapper.toUIPortal(uiPortal, userConfig);
+         
          UIPortalApplication uiPortalApp = (UIPortalApplication)prContext.getUIApplication();
-         UIPortal uiPortal = Util.getUIPortal();
          uiForm.invokeSetBindingBean(uiPortal);
          //uiPortal.refreshNavigation(localeConfigService.getLocaleConfig(uiPortal.getLocale()).getLocale()) ;
          if (uiPortalApp.getModeState() == UIPortalApplication.NORMAL_MODE)
