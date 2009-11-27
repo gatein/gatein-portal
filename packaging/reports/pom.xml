@@ -23,7 +23,7 @@
   <parent>
     <groupId>org.exoplatform.portal</groupId>
     <artifactId>exo.portal.packaging</artifactId>
-    <version>3.0.0-Beta03-SNAPSHOT</version>
+    <version>3.0.0-Beta03</version>
   </parent>
    
   <modelVersion>4.0.0</modelVersion>
@@ -67,8 +67,8 @@
             <phase>site</phase>
             <configuration>
               <tasks>
-                <property name="jboss_output_dir" value="${project.build.directory}/jboss-tattletale"/>
-                <property name="tomcat_output_dir" value="${project.build.directory}/tomcat-tattletale"/>
+                <property name="jboss_output_dir" value="${project.build.directory}/jboss-tattletale" />
+                <property name="tomcat_output_dir" value="${project.build.directory}/tomcat-tattletale" />
     			<property name="jboss_scan_dir" value="${basedir}/../pkg/target/jboss/server/default/deploy/gatein.ear/lib" />
                 <property name="tomcat_scan_dir" value="${basedir}/../pkg/target/tomcat/lib" />
 					     
