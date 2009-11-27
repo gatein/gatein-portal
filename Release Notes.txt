@@ -1,8 +1,0 @@
-Release Notes will start from GateIn CR1
-
-Release Notes - GateIn
-
-- Other resources and links
-     Community site      http://www.gatein.org
-     Community JIRA      https://jira.jboss.org/jira/secure/Dashboard.jspa
-     Community Forum     http://www.jboss.org/index.html?module=bb&op=viewforum&f=335
