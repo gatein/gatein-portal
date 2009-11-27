@@ -11,7 +11,7 @@
 %>
 <div class="UIWizardPageSetInfo">
 	<%uiform.begin()%>
-	<div class="OverflowContainer <%=isNoSelecter ? "NoPageSelecter" : ""%>">
+	<div class="<%=isNoSelecter ? "NoPageSelecter" : ""%>">
 		<%if(!isNoSelecter) {%>
 		<div class="PageNodeContainer">
 			<% uicomponent.renderChild(UIPageNodeSelector.class); %>
