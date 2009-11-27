@@ -196,6 +196,11 @@
 	width: 240px;
 }
 
+.UIWizard .UIWizardPageSetInfo .NoPageSelecter .SelectedPageInfo {
+	margin-left: auto; /* orientation=lt */
+	margin-right: auto; /* orientation=rt */
+}
+
 .UIWizard .UIWizardPageSetInfo .SelectedPageInfo {
 	border: 1px #b7b7b7 solid;
 	margin-left: 250px; /* orientation=lt */

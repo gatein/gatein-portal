@@ -70,12 +70,15 @@ public class UIPageCreationWizard extends UIPageWizard
 
    public UIPageCreationWizard() throws Exception
    {
-      addChild(UIWizardPageSetInfo.class, null, null).setRendered(false);
+      UIWizardPageSetInfo uiPageInfo = addChild(UIWizardPageSetInfo.class, null, null).setRendered(false);
       addChild(UIWizardPageSelectLayoutForm.class, null, null).setRendered(false);
       addChild(UIPagePreview.class, null, null).setRendered(false);
       setNumberSteps(NUMBER_OF_STEPs);
       viewStep(FIRST_STEP);
       setShowWelcomeComponent(false);
+      boolean isUserNav = Util.getUIPortal().getSelectedNavigation().getOwnerType().equals(PortalConfig.USER_TYPE);
+      if (isUserNav)
+         uiPageInfo.getChild(UIPageNodeSelector.class).setRendered(false);
    }
 
    private void saveData() throws Exception
@@ -120,7 +123,7 @@ public class UIPageCreationWizard extends UIPageWizard
       {
          pageNav.addNode(pageNode);
       }
-      pageNav.setModifier(RequestContext.<WebuiRequestContext>getCurrentInstance().getRemoteUser());
+      pageNav.setModifier(RequestContext.<WebuiRequestContext> getCurrentInstance().getRemoteUser());
       uiNodeSelector.selectPageNodeByUri(pageNode.getUri());
 
       service.create(page);
@@ -181,7 +184,7 @@ public class UIPageCreationWizard extends UIPageWizard
 
          uiWizard.updateWizardComponent();
          uiWizard.viewStep(FIRST_STEP);
-         
+
          uiWizard.setShowActions(true);
 
          UIWorkingWorkspace uiWorkingWS = uiWizard.getAncestorOfType(UIWorkingWorkspace.class);
@@ -225,8 +228,7 @@ public class UIPageCreationWizard extends UIPageWizard
          if (navigation == null)
          {
             uiPortalApp.addMessage(new ApplicationMessage("UIPageCreationWizard.msg.notSelectedPageNavigation",
-               new String[]{}));
-            ;
+               new String[]{}));;
             uiWizard.viewStep(FIRST_STEP);
             return;
          }

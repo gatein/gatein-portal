@@ -7,13 +7,16 @@
 	PageNode pageNode = uicomponent.getSelectedPageNode();
 	String nodeName = ""; 	
 	if(pageNode!=null ) nodeName = "/"+pageNode.getResolvedLabel();
+	boolean isNoSelecter = !uicomponent.getChild(UIPageNodeSelector.class).isRendered();
 %>
 <div class="UIWizardPageSetInfo">
 	<%uiform.begin()%>
-	<div class="OverflowContainer">
+	<div class="OverflowContainer <%=isNoSelecter ? "NoPageSelecter" : ""%>">
+		<%if(!isNoSelecter) {%>
 		<div class="PageNodeContainer">
 			<% uicomponent.renderChild(UIPageNodeSelector.class); %>
 		</div>
+		<%}%>
 		<div class="SelectedPageInfo">
 			<div class="PageInfoContainer">
 				<div class="PageNodeInfo">
