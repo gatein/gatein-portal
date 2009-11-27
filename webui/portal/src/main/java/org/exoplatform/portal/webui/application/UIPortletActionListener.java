@@ -410,13 +410,13 @@ public class UIPortletActionListener
           * page (usual layout or webos) which instance can be targeted by the
           * event and then process the event on the associated UIPortlet component
           */
-         for (Iterator<javax.portlet.Event> iter = events.iterator(); iter.hasNext();)
+         while(events.size() > 0)
          {
-            javax.portlet.Event nativeEvent = iter.next();
+            javax.portlet.Event nativeEvent = events.remove(0);
             QName eventName = nativeEvent.getQName();
-            for (Iterator iterator = portletInstancesInPage.iterator(); iterator.hasNext();)
+            for (Iterator<UIPortlet> iterator = portletInstancesInPage.iterator(); iterator.hasNext();)
             {
-               UIPortlet uiPortletInPage = (UIPortlet)iterator.next();
+               UIPortlet uiPortletInPage = iterator.next();
                if (uiPortletInPage.supportsProcessingEvent(eventName)
                   && !eventsWrapper.isInvokedTooManyTimes(uiPortletInPage))
                {
@@ -439,7 +439,6 @@ public class UIPortletActionListener
                      log.info("The portlet: " + uiPortletInPage.getPortletContext().getId()
                         + " processEvent() method has generated new events itself");
                      events.addAll(newEvents);
-                     uiPortlet.createEvent("ProcessEvents", Phase.PROCESS, context).broadcast();
                   }
                }
             }
