@@ -193,8 +193,8 @@
 }
 
 .UIPortalComposer .SaveButton {
-	background: url(background/SaveIcon.gif) no-repeat right bottom; /* orientation=lt */
-	background: url(background/SaveIcon-rt.gif) no-repeat left bottom; /* orientation=rt */
+	background: url(background/EdittedSaveIcon.gif) no-repeat right bottom; /* orientation=lt */
+	background: url(background/EdittedSaveIcon-rt.gif) no-repeat left bottom; /* orientation=rt */
 	cursor: pointer;
 	float: right; /* orientation=lt */
 	float: left; /* orientation=rt */
@@ -215,8 +215,8 @@
 }
 
 .UIPortalComposer .EdittedSaveButton {
-	background: url(background/EdittedSaveIcon.gif) no-repeat right bottom; /* orientation=lt */
-	background: url(background/EdittedSaveIcon-rt.gif) no-repeat left bottom; /* orientation=rt */
+	background: url(background/SaveIcon.gif) no-repeat right bottom; /* orientation=lt */
+	background: url(background/SaveIcon-rt.gif) no-repeat left bottom; /* orientation=rt */
 	cursor: pointer;
 	float: right; /* orientation=lt */
 	float: left; /* orientation=rt */
