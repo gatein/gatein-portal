@@ -28,7 +28,6 @@ import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.PortalProperties;
 import org.exoplatform.portal.resource.SkinService;
 import org.exoplatform.portal.webui.util.PortalDataMapper;
-import org.exoplatform.portal.webui.util.PortalDataMapper;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIMaskWorkspace;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
@@ -50,8 +49,8 @@ import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemCategory;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIFormInputItemSelector;
 import org.exoplatform.webui.form.UIFormInputSet;
 import org.exoplatform.webui.form.UIFormSelectBox;
@@ -61,8 +60,8 @@ import org.exoplatform.webui.form.validator.IdentifierValidator;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
 import org.exoplatform.webui.form.validator.StringLengthValidator;
 import org.exoplatform.webui.organization.UIListPermissionSelector;
-import org.exoplatform.webui.organization.UIListPermissionSelector.EmptyIteratorValidator;
 import org.exoplatform.webui.organization.UIPermissionSelector;
+import org.exoplatform.webui.organization.UIListPermissionSelector.EmptyIteratorValidator;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -105,7 +104,7 @@ public class UIPortalForm extends UIFormTabPane
       setSelectedTab(uiTemplateInput.getId());
       createDefaultItem();
 
-      UIFormInputSet uiPortalSetting = this.<UIFormInputSet>getChildById("PortalSetting");
+      UIFormInputSet uiPortalSetting = this.<UIFormInputSet> getChildById("PortalSetting");
       UIFormStringInput uiNameInput = uiPortalSetting.getUIStringInput(FIELD_NAME);
       uiNameInput.setEditable(true);
 
@@ -204,6 +203,7 @@ public class UIPortalForm extends UIFormTabPane
          .add(new SelectItemOption<String>(PortalProperties.SESSION_NEVER, PortalProperties.SESSION_NEVER));
       UIFormSelectBox uiSessionAliveBox =
          new UIFormSelectBox(FIELD_SESSION_ALIVE, FIELD_SESSION_ALIVE, listSessionAlive);
+      uiSessionAliveBox.setValue(PortalProperties.SESSION_ON_DEMAND);
       uiPropertiesSet.addUIFormInput(uiSessionAliveBox);
       addUIFormInput(uiPropertiesSet);
 
