@@ -21,7 +21,7 @@
 			<div class="HomePortletAdBackround">
 				<div class="AdImageLeft">
 					<div class="AdImageRight">
-						<div class="EmptyBlock"><span></span></div>
+						<div class="EmptyBlock"><%=_ctx.appRes("UIHomePagePortlet.Label.Slogan")%></div>
 					</div>
 				</div>
 			</div>
@@ -30,8 +30,7 @@
 				<div class="LeftAccountsContainer">
 					<div class="RightAccountsContainer">
 						<div class="MiddleAccountsContainer">
-							<div class="InstructionTitle">Try GateIn 3.0 with one of these user accounts
-							</div>
+							<div class="InstructionTitle"><%=_ctx.appRes("UIHomePagePortlet.Label.Title")%></div>
 							<div class="AccountsContainerDeco">
 								<div class="AccountBlock AdministratorUser">
 									<div class="AccountInfos">
@@ -99,10 +98,4 @@
 	</div>	
 	<div class="ClearBoth"><span></span></div>
 </div>
-<div class="BottomDecoratorHome">
-	<div class="BottomDecoratorLeft">
-		<div class="BottomDecoratorRight">
-			<div class="BottomDecoratorMiddle"><span></span></div>
-		</div>
-	</div>
-</div>
+
