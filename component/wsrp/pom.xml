@@ -25,13 +25,13 @@
    <parent>
       <groupId>org.exoplatform.portal</groupId>
       <artifactId>exo.portal.component</artifactId>
-      <version>3.0.0-Beta03</version>
+      <version>3.0.0-Beta03-SNAPSHOT</version>
    </parent>
 
    <modelVersion>4.0.0</modelVersion>
    <artifactId>exo.portal.component.wsrp</artifactId>
    <packaging>jar</packaging>
-   <version>3.0.0-Beta03</version>
+   <version>3.0.0-Beta03-SNAPSHOT</version>
    <name>GateIn Portal Component WSRP integration</name>
 
    <dependencies>
