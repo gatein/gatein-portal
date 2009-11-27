@@ -25,7 +25,7 @@
 				<table class="TitleBarApplication">
 					<tr>
 						<td class="LeftLabel"><%=_ctx.appRes("UIGadgetInfo.label.name")%></td>
-						<td class="RightLabel" title=" <%= gadget.getTitle() %> "><%= gadget.getTitle() %></td>
+						<td class="RightLabel" title=" <%= gadget.getName() %> "><%= gadget.getName() %></td>
 					</tr>
 				</table>
 				<table>

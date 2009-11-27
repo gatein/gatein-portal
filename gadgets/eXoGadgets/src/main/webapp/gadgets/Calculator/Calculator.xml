@@ -31,7 +31,7 @@
 <Module>
    <ModulePrefs author="eXoPlatform"
                 title="Calculator"
-                directory_title="Caculator"
+                directory_title="Calculator"
                 title_url="http://www.exoplatform.org"
                 description="This simple and useful calculator lets you perform most of the basic arithmetic operations."
                 thumbnail="http://localhost:8080/eXoGadgets/skin/DefaultSkin/portletIcons/Calculator.png"
