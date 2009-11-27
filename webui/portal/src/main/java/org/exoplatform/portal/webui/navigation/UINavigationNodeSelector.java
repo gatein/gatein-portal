@@ -69,7 +69,9 @@ import java.util.ResourceBundle;
       @EventConfig(listeners = UINavigationNodeSelector.MoveUpActionListener.class),
       @EventConfig(listeners = UINavigationNodeSelector.MoveDownActionListener.class),
       @EventConfig(listeners = UINavigationNodeSelector.DeleteNodeActionListener.class, confirm = "UIPageNodeSelector.deleteNavigation")}),
-   @ComponentConfig(id = "UINavigationNodeSelectorPopupMenu", type = UIRightClickPopupMenu.class, template = "system:/groovy/webui/core/UIRightClickPopupMenu.gtmpl", events = {})})
+   @ComponentConfig(id = "UINavigationNodeSelectorPopupMenu", type = UIRightClickPopupMenu.class, template = "system:/groovy/webui/core/UIRightClickPopupMenu.gtmpl", events = {
+      @EventConfig(listeners = UINavigationNodeSelector.AddNodeActionListener.class),
+      @EventConfig(listeners = UINavigationNodeSelector.PasteNodeActionListener.class)})})
 public class UINavigationNodeSelector extends UIContainer
 {
 
@@ -83,7 +85,9 @@ public class UINavigationNodeSelector extends UIContainer
 
    public UINavigationNodeSelector() throws Exception
    {
-      addChild(UIRightClickPopupMenu.class, "UINavigationNodeSelectorPopupMenu", null).setRendered(false);
+      UIRightClickPopupMenu rightClickPopup =
+         addChild(UIRightClickPopupMenu.class, "UINavigationNodeSelectorPopupMenu", null).setRendered(true);
+      rightClickPopup.setActions(new String[]{"AddNode", "PasteNode"});
 
       UITree uiTree = addChild(UITree.class, null, "TreeNodeSelector");
       uiTree.setIcon("DefaultPageIcon");
@@ -451,7 +455,7 @@ public class UINavigationNodeSelector extends UIContainer
 
          UIWorkingWorkspace uiWorkingWS = uiApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
          UIPortalToolPanel uiToolPanel =
-                        uiWorkingWS.findFirstComponentOfType(UIPortalToolPanel.class).setRendered(true);
+            uiWorkingWS.findFirstComponentOfType(UIPortalToolPanel.class).setRendered(true);
          UserPortalConfigService userService = uiToolPanel.getApplicationComponent(UserPortalConfigService.class);
 
          // get selected page
@@ -465,13 +469,13 @@ public class UINavigationNodeSelector extends UIContainer
                uiApp.addMessage(new ApplicationMessage("UIPageBrowser.msg.UserNotPermission", new String[]{pageId}, 1));
                return;
             }
-            
+
             uiApp.setModeState(UIPortalApplication.APP_BLOCK_EDIT_MODE);
             //uiWorkingWS.setRenderedChild(UIPortalToolPanel.class);
             //uiWorkingWS.addChild(UIPortalComposer.class, "UIPageEditor", null);
-            
+
             uiWorkingWS.setRenderedChild(UIEditInlineWorkspace.class);
-            
+
             UIPortalComposer portalComposer =
                uiWorkingWS.findFirstComponentOfType(UIPortalComposer.class).setRendered(true);
             portalComposer.setShowControl(true);
@@ -479,15 +483,15 @@ public class UINavigationNodeSelector extends UIContainer
             portalComposer.setCollapse(false);
             portalComposer.setId("UIPageEditor");
             portalComposer.setComponentConfig(UIPortalComposer.class, "UIPageEditor");
-            
+
             uiToolPanel.setShowMaskLayer(false);
             uiToolPanel.setWorkingComponent(UIPage.class, null);
             UIPage uiPage = (UIPage)uiToolPanel.getUIComponent();
-            
+
             WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
             selectPage.setModifier(context.getRemoteUser());
             selectPage.setTitle(selectedPageNode.getLabel());
-            
+
             // convert Page to UIPage
             PortalDataMapper.toUIPage(uiPage, selectPage);
             Util.getPortalRequestContext().addUIComponentToUpdateByAjax(uiWorkingWS);
@@ -522,8 +526,7 @@ public class UINavigationNodeSelector extends UIContainer
             UserACL userACL = uiApp.getApplicationComponent(UserACL.class);
             if (!userACL.hasPermission(node))
             {
-               uiApp.addMessage(new ApplicationMessage("UIPageBrowser.msg.UserNotPermission", new String[]{pageId}, 1));
-               ;
+               uiApp.addMessage(new ApplicationMessage("UIPageBrowser.msg.UserNotPermission", new String[]{pageId}, 1));;
                return;
             }
          }

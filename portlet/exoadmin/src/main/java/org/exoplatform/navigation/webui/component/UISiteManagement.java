@@ -341,7 +341,7 @@ public class UISiteManagement extends UIContainer
          ArrayList<PageNavigation> list = new ArrayList<PageNavigation>();
          list.add(navi);
          selector.initNavigations(list);
-         selector.removeChild(UIRightClickPopupMenu.class);
+         //selector.removeChild(UIRightClickPopupMenu.class);
          popUp.setUIComponent(naviManager);
          popUp.setShowMask(true);
          popUp.setShow(true);
