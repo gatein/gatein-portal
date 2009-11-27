@@ -78,7 +78,9 @@ public class UIPageCreationWizard extends UIPageWizard
       setShowWelcomeComponent(false);
       boolean isUserNav = Util.getUIPortal().getSelectedNavigation().getOwnerType().equals(PortalConfig.USER_TYPE);
       if (isUserNav)
+      {
          uiPageInfo.getChild(UIPageNodeSelector.class).setRendered(false);
+      }
    }
 
    private void saveData() throws Exception
@@ -105,6 +107,8 @@ public class UIPageCreationWizard extends UIPageWizard
       UIPageNodeSelector uiNodeSelector = uiPageInfo.getChild(UIPageNodeSelector.class);
       PageNode selectedNode = uiNodeSelector.getSelectedPageNode();
       PageNavigation pageNav = uiNodeSelector.getSelectedNavigation();
+      if (PortalConfig.USER_TYPE.equals(pageNav.getOwnerType()))
+         selectedNode = null;
 
       Page page = (Page)PortalDataMapper.buildModelObject(uiPage);
       PageNode pageNode = uiPageInfo.getPageNode();
