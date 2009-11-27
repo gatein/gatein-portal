@@ -85,6 +85,7 @@ public class PortalRequestHandler extends WebRequestHandler
       PortalRequestContext context = new PortalRequestContext(app, req, res);
       if (context.getPortalOwner().length() == 0) {
          res.sendRedirect(req.getContextPath());
+         return;
       }
       WebuiRequestContext.setCurrentInstance(context);
       List<ApplicationLifecycle> lifecycles = app.getApplicationLifecycle();
