@@ -33,9 +33,12 @@ import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
+import org.exoplatform.webui.exception.MessageException;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormInputWithActions;
+import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
+import org.exoplatform.webui.form.validator.MandatoryValidator;
 
 /**
  * 
@@ -44,23 +47,18 @@ import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
  *
  */
 
-@ComponentConfig(
-		lifecycle = UIFormLifecycle.class,
-		template = "system:/groovy/webui/form/UIFormWithTitle.gtmpl",
-		events = {
-				@EventConfig( listeners = UIRegisterForm.SubscribeActionListener.class),
-            @EventConfig( listeners = UIRegisterForm.ResetActionListener.class, phase = Phase.DECODE),
-            @EventConfig( name = UIRegisterForm.CheckUsernameAvailability.LISTENER_NAME, 
-                          listeners = UIRegisterForm.CheckUsernameAvailability.class, 
-                          phase = Phase.DECODE)
-		}
-)
-public class UIRegisterForm extends UIForm {
+@ComponentConfig(lifecycle = UIFormLifecycle.class, template = "system:/groovy/webui/form/UIFormWithTitle.gtmpl", events = {
+   @EventConfig(listeners = UIRegisterForm.SubscribeActionListener.class),
+   @EventConfig(listeners = UIRegisterForm.ResetActionListener.class, phase = Phase.DECODE),
+   @EventConfig(name = UIRegisterForm.CheckUsernameAvailability.LISTENER_NAME, listeners = UIRegisterForm.CheckUsernameAvailability.class, phase = Phase.DECODE)})
+public class UIRegisterForm extends UIForm
+{
 
-	private final static String[] ACTIONS = {"Subscribe", "Reset"};
-   
-	public UIRegisterForm() throws Exception{
-	   UIFormInputWithActions registerInput = new UIRegisterInputSet("RegisterInputSet");
+   private final static String[] ACTIONS = {"Subscribe", "Reset"};
+
+   public UIRegisterForm() throws Exception
+   {
+      UIFormInputWithActions registerInput = new UIRegisterInputSet("RegisterInputSet");
       //Set actions on registerInput 's User Name field
       List<ActionData> fieldActions = new ArrayList<ActionData>();
       ActionData checkAvailable = new ActionData();
@@ -70,66 +68,89 @@ public class UIRegisterForm extends UIForm {
       checkAvailable.setCssIconClass("SearchIcon");
       fieldActions.add(checkAvailable);
       registerInput.setActionField(UIRegisterInputSet.USER_NAME, fieldActions);
-      
+
       addUIFormInput(registerInput);
       setActions(ACTIONS);
-	}
-	
-   private void resetInput(){
+   }
+
+   private void resetInput()
+   {
       getChild(UIRegisterInputSet.class).reset();
    }
-   
-	static public class SubscribeActionListener extends EventListener<UIRegisterForm>{
-		@Override
-		public void execute(Event<UIRegisterForm> event) throws Exception {
-		   UIRegisterForm registerForm = event.getSource();
+
+   static public class SubscribeActionListener extends EventListener<UIRegisterForm>
+   {
+      @Override
+      public void execute(Event<UIRegisterForm> event) throws Exception
+      {
+         UIRegisterForm registerForm = event.getSource();
          OrganizationService orgService = registerForm.getApplicationComponent(OrganizationService.class);
          UserHandler userHandler = orgService.getUserHandler();
          WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
          UIRegisterInputSet registerInput = registerForm.getChild(UIRegisterInputSet.class);
-         
-         if(registerInput.save(userHandler, context)){
+
+         if (registerInput.save(userHandler, context))
+         {
             //TODO: Send email and add Account Activating feature
             UIApplication uiApp = context.getUIApplication();
             uiApp.addMessage(new ApplicationMessage("UIRegisterForm.registerWithSuccess.message", null));
          }
-		}
-	}
-   
-   static public class CheckUsernameAvailability extends EventListener<UIRegisterForm>{
-      
-      final static String LISTENER_NAME =  "CheckUsernameAvailability";
-      
+      }
+   }
+
+   static public class CheckUsernameAvailability extends EventListener<UIRegisterForm>
+   {
+
+      final static String LISTENER_NAME = "CheckUsernameAvailability";
+
       @Override
       public void execute(Event<UIRegisterForm> event) throws Exception
       {
          UIRegisterForm registerForm = event.getSource();
          OrganizationService orgService = registerForm.getApplicationComponent(OrganizationService.class);
          UIRegisterInputSet registerInput = registerForm.getChild(UIRegisterInputSet.class);
-         String typedUsername = registerInput.getUIStringInput(UIRegisterInputSet.USER_NAME).getValue();
-         
-         if(usernameIsUsed(typedUsername, orgService)){
+         UIFormStringInput userNameInput = registerInput.getUIStringInput(UIRegisterInputSet.USER_NAME);
+         MandatoryValidator validator = new MandatoryValidator();
+         try
+         {
+            validator.validate(userNameInput);
+         }
+         catch (MessageException e)
+         {
+            event.getRequestContext().getUIApplication().addMessage(e.getDetailMessage());
+            return;
+         }
+
+         String typedUsername = userNameInput.getValue();
+         if (usernameIsUsed(typedUsername, orgService))
+         {
             WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
             UIApplication uiApp = context.getUIApplication();
-            
-            uiApp.addMessage(new ApplicationMessage("UIAccountInputSet.msg.user-exist", new String[]{ typedUsername}));
+
+            uiApp.addMessage(new ApplicationMessage("UIAccountInputSet.msg.user-exist", new String[]{typedUsername}));
          }
       }
-      
-      private boolean usernameIsUsed(String username, OrganizationService orgService){
+
+      private boolean usernameIsUsed(String username, OrganizationService orgService)
+      {
          UserHandler userHandler = orgService.getUserHandler();
-         try{
-            if( userHandler.findUserByName(username) != null){
+         try
+         {
+            if (userHandler.findUserByName(username) != null)
+            {
                return true;
             }
-         }catch(Exception ex){
+         }
+         catch (Exception ex)
+         {
             ex.printStackTrace();
          }
          return false;
       }
    }
-   
-   static public class ResetActionListener extends EventListener<UIRegisterForm>{
+
+   static public class ResetActionListener extends EventListener<UIRegisterForm>
+   {
       @Override
       public void execute(Event<UIRegisterForm> event) throws Exception
       {
