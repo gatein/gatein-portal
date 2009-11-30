@@ -41,14 +41,6 @@
 		href="modules/Portal_Manual.xml" />
 	-->
 
-	<!--  1 Terms -->
-	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="modules/Terms.xml" />
-
-	<!--
-		Portal, Portlet, Navigation, Node, Gadget, Public mode and Private
-		mode, Permission levels, Workspace concept, Toolbar concept
-	-->
-
 	<!-- 4_Configuration -->
 	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="modules/Configuration.xml" />
 
@@ -112,18 +104,6 @@
 		http://www.exoplatform.com/portal/public/en/forum?portal:componentId=forum&portal:type=action&portal:isSecure=false&uicomponent=UIBreadcumbs&op=ChangePath&objectId=forumCategory88afa455c0a8020100a6752323da4b60
 		http://faq.exoplatform.com/ http://jira.exoplatform.org/browse/Portal
 	-->
-
-
-	<!-- Orphan from XWiki site -->
-	<chapter>
-		<title>Orphans chapters: TODO: move and integrate those</title>
-		<xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
-			href="modules/_orphans/Setup_GadgetServer.xml" />
-			<!-- 
-		<xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
-			href="modules/_orphans/Internationalization_Guidelines.xml" />
-			 -->
-	</chapter>
 
 
 	<!--
