@@ -1,4 +1,8 @@
-<!--
+<?xml version='1.0' encoding='utf-8' ?>
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+]>
+<section id="sect-User_Guide-Manage_Gadgets_in_User_Workspace">
+	<!--  
 
     Copyright (C) 2009 eXo Platform SAS.
     
@@ -17,164 +21,139 @@
     Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
     02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
--->
-
-<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook V4.4//EN" "http://www.oasis-open.org/docbook/sgml/4.4/docbookx.dtd">
-<section>
-	<title>Manage Gadgets in User Workspace</title>
+  --><title>Manage Gadgets in User Workspace</title>
 	<orderedlist numeration="arabic">
-		<listitem>gadget is a small convenient application that helps
-			you perform private actions. GateIn Portal provides you with some
-			useful gadgets: todo, calendar, calculator and RSS Reader. Besides
-			using ready-to-use gadgets in your User Workspace. You can easily add
-			gadgets organized in categories in your User Workspace to meet the
-			need of your work :</listitem>
+		<listitem>
+			<para>
+				gadget is a small convenient application that helps you perform private actions. GateIn Portal provides you with some useful gadgets: todo, calendar, calculator and RSS Reader. Besides using ready-to-use gadgets in your User Workspace. You can easily add gadgets organized in categories in your User Workspace to meet the need of your work :
+			</para>
+		</listitem>
 	</orderedlist>
-	<section>
+	<section id="sect-User_Guide-Manage_Gadgets_in_User_Workspace-Add_a_Gadget">
 		<title>Add a Gadget</title>
+		<para>
+			To add a gadget, you can follow these steps:
+		</para>
+		<para>
+			1. Open the User Workspace on your left pane.
+		</para>
+		<para>
+			2. Click the tool!images/Tool.png! icon to add a new category
+		</para>
+		<mediaobject>
+			<imageobject>
+				<imagedata fileref="images/UserWorkspace.png" format="PNG" />
+			</imageobject>
+		</mediaobject>
+		<para>
+			The <emphasis role="bold">Gadget Containers Management</emphasis> dialog appears:
+		</para>
+		<mediaobject>
+			<imageobject>
+				<imagedata fileref="images/GadgetManagement.png" format="PNG" />
+			</imageobject>
+		</mediaobject>
+		<para>
+			Click the add icon !images/AddIcon.png! to show the <emphasis role="bold">Gadget Container Form</emphasis> .
+		</para>
+		<mediaobject>
+			<imageobject>
+				<imagedata fileref="images/GadgetContainer.png" format="PNG" />
+			</imageobject>
+		</mediaobject>
+		<informaltable colsep="0" frame="none" rowsep="0">
+			<tgroup cols="2">
+				<colspec align="center"></colspec>
+				<colspec align="center"></colspec>
+				<tbody>
+					<row>
+						<entry>
+							<emphasis role="bold"> Name </emphasis>
+						</entry>
+						<entry>
+							<emphasis role="bold"> Description </emphasis>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							Label
+						</entry>
+						<entry>
+							The display name of the category. This field is required and must have at least 3 characters.
+						</entry>
+					</row>
+					<row>
+						<entry>
+							Description
+						</entry>
+						<entry>
+							The brief description of the category.A length from 0 to 255 characters is allowed. This field is not required.
+						</entry>
+					</row>
+				</tbody>
+			</tgroup>
+		</informaltable>
+		<para>
+			Enter values for fields in the <emphasis role="bold">Gadget Container Form</emphasis> .
+		</para>
+		<para>
+			Click on the <emphasis role="bold">Save</emphasis> button to accept adding a new category or click <emphasis role="bold">Cancel</emphasis> to quit. After you added the new category you will see it in the dialog :
+		</para>
+		<mediaobject>
+			<imageobject>
+				<imagedata fileref="images/GadgetManagement1.png" format="PNG" />
+			</imageobject>
+		</mediaobject>
+		<para>
+			Edit the information of an existing category by selecting it from the left pane, the selected category is marked by a symbol. Then click the edit icon to show the edit form. Change the current category information and click on the <emphasis role="bold">button</emphasis> to accept changes.
+		</para>
+		<para>
+			Delete an existing category by selecting it from the left pane. In the message box Click on the <emphasis role="bold">OK</emphasis> button to confirm the deletion or click the <emphasis role="bold">Cancel</emphasis> button.
+		</para>
+		<para>
+			3. Click on the <emphasis role="bold">Save</emphasis> button in the <emphasis role="bold">Gadget Containers Management</emphasis> dialog to accept or on the <emphasis role="bold">Cancel</emphasis> button to quit. Added categories will be displayed in list in the User Workspace.
+		</para>
+		<para>
+			4. Click the list icon!images/ListIcon.png! to see category list and select one in list.
+		</para>
+		<mediaobject>
+			<imageobject>
+				<imagedata fileref="images/UserWorkspace1.png" format="PNG" />
+			</imageobject>
+		</mediaobject>
+		<para>
+			5. Click the add icon!images/AddIcon1.png! at the bottom of the User Workspace to open the <emphasis role="bold">Add Application</emphasis> dialog:
+		</para>
+		<mediaobject>
+			<imageobject>
+				<imagedata fileref="images/AddApplication.png" format="PNG" />
+			</imageobject>
+		</mediaobject>
+		<para>
+			6. Select a gadget by clicking the add icon !images/PlusIcon.png! that is located next to the the gadget. The selected gadget is displayed immediately in the user workspace. Normally, you can see only two gadgets in the User Workspace. When there are more gadgets, some gadgets are not visible.
+		</para>
+		<para>
+			7. Click the scroll down icon !images/DownIcon.png!images/ or the scroll up icon!images/ UpIcon.png! at the bottom of the User Workspace to see the other gadgets. If there are no more gadgets to scroll to, the color of the scroll down and scroll up icon switches to gray color.
+		</para>
 	</section>
-	<para>To add a gadget, you can follow these steps:</para>
-	<para>1. Open the User Workspace on your left pane.</para>
-	<para>2. Click the tool!images/Tool.png! icon to add a new category</para>
-	<mediaobject>
-		<imageobject>
-			<imagedata fileref="images/UserWorkspace.png" format="PNG"></imagedata>
-		</imageobject>
-	</mediaobject>
-	<para>
-		The
-		<emphasis role="bold">Gadget Containers Management</emphasis>
-		dialog appears:
-	</para>
-	<mediaobject>
-		<imageobject>
-			<imagedata fileref="images/GadgetManagement.png" format="PNG"></imagedata>
-		</imageobject>
-	</mediaobject>
-	<para>
-		Click the add icon !images/AddIcon.png! to show the
-		<emphasis role="bold">Gadget Container Form</emphasis>
-		.
-	</para>
-	<mediaobject>
-		<imageobject>
-			<imagedata fileref="images/GadgetContainer.png" format="PNG"></imagedata>
-		</imageobject>
-	</mediaobject>
-	<informaltable frame="none" rowsep="0" colsep="0">
-		<tgroup cols="2">
-			<colspec align="center"></colspec>
-			<colspec align="center"></colspec>
-			<tbody>
-				<row>
-					<entry>
-						<emphasis role="bold"> Name </emphasis>
-					</entry>
-					<entry>
-						<emphasis role="bold"> Description </emphasis>
-					</entry>
-				</row>
-				<row>
-					<entry> Label </entry>
-					<entry> The display name of the category. This field is required
-						and must have at least 3 characters. </entry>
-				</row>
-				<row>
-					<entry> Description  </entry>
-					<entry> The brief description of the category.A length from 0 to
-						255 characters is allowed. This field is not required. </entry>
-				</row>
-			</tbody>
-		</tgroup>
-	</informaltable>
-	<para>
-		Enter values for fields in the
-		<emphasis role="bold">Gadget Container Form</emphasis>
-		.
-	</para>
-	<para>
-		Click on the
-		<emphasis role="bold">Save</emphasis>
-		button to accept adding a new category or click
-		<emphasis role="bold">Cancel</emphasis>
-		to quit. After you added the new category you will see it in the
-		dialog :
-	</para>
-	<mediaobject>
-		<imageobject>
-			<imagedata fileref="images/GadgetManagement1.png" format="PNG"></imagedata>
-		</imageobject>
-	</mediaobject>
-	<para>
-		Edit the information of an existing category by selecting it from the
-		left pane, the selected category is marked by a symbol. Then click the
-		edit icon to show the edit form. Change the current category
-		information and click on the
-		<emphasis role="bold">button</emphasis>
-		to accept changes.
-	</para>
-	<para>
-		Delete an existing category by selecting it from the left pane. In the
-		message box Click on the
-		<emphasis role="bold">OK</emphasis>
-		button to confirm the deletion or click the
-		<emphasis role="bold">Cancel</emphasis>
-		button.
-	</para>
-	<para>
-		3. Click on the
-		<emphasis role="bold">Save</emphasis>
-		button in the
-		<emphasis role="bold">Gadget Containers Management</emphasis>
-		dialog to accept or on the
-		<emphasis role="bold">Cancel</emphasis>
-		button to quit. Added categories will be displayed in list in the User
-		Workspace.
-	</para>
-	<para>4. Click the list icon!images/ListIcon.png! to see category
-		list and select one in list.</para>
-	<mediaobject>
-		<imageobject>
-			<imagedata fileref="images/UserWorkspace1.png" format="PNG"></imagedata>
-		</imageobject>
-	</mediaobject>
-	<para>
-		5. Click the add icon!images/AddIcon1.png! at the bottom of the User
-		Workspace to open the
-		<emphasis role="bold">Add Application</emphasis>
-		dialog:
-	</para>
-	<mediaobject>
-		<imageobject>
-			<imagedata fileref="images/AddApplication.png" format="PNG"></imagedata>
-		</imageobject>
-	</mediaobject>
-	<para>6. Select a gadget by clicking the add icon
-		!images/PlusIcon.png! that is located next to the the gadget. The
-		selected gadget is displayed immediately in the user workspace.
-		Normally, you can see only two gadgets in the User Workspace. When
-		there are more gadgets, some gadgets are not visible.</para>
-	<para>7. Click the scroll down icon !images/DownIcon.png!images/ or
-		the scroll up icon!images/ UpIcon.png! at the bottom of the User
-		Workspace to see the other gadgets. If there are no more gadgets to
-		scroll to, the color of the scroll down and scroll up icon switches to
-		gray color.</para>
-	<section>
+	
+	<section id="sect-User_Guide-Manage_Gadgets_in_User_Workspace-Edit_a_Gadget">
 		<title>Edit a Gadget</title>
+		<para>
+			To edit a gadget, click !images/EditIcon.png! icon.
+		</para>
 	</section>
-	<para>To edit a gadget, click !images/EditIcon.png! icon.</para>
-	<section>
+	
+	<section id="sect-User_Guide-Manage_Gadgets_in_User_Workspace-Remove_a_Gadget">
 		<title>Remove a Gadget</title>
+		<para>
+			Remove a gadget from the User Workspace by using the functional bar!images/FunctionBar.png! at the upper right corner of that gadget.
+		</para>
+		<para>
+			Click the remove icon !images/RemoveIcon.png! . When the confirmation message appears, click the <emphasis role="bold">OK</emphasis> button to accept or the <emphasis role="bold">Cancel</emphasis> to quit.
+		</para>
 	</section>
-	<para>Remove a gadget from the User Workspace by using the
-		functional bar!images/FunctionBar.png! at the upper right corner of
-		that gadget.</para>
-	<para>
-		Click the remove icon !images/RemoveIcon.png! . When the confirmation
-		message appears, click the
-		<emphasis role="bold">OK</emphasis>
-		button to accept or the
-		<emphasis role="bold">Cancel</emphasis>
-		to quit.
-	</para>
+
 </section>
+
+

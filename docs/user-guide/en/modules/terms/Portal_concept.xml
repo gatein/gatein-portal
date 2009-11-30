@@ -1,4 +1,8 @@
-<!--
+<?xml version='1.0' encoding='utf-8' ?>
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+]>
+<section id="sect-User_Guide-Portal_concept">
+	<!--       
 
     Copyright (C) 2009 eXo Platform SAS.
     
@@ -17,25 +21,28 @@
     Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
     02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
--->
-
-<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook V4.4//EN" "http://www.oasis-open.org/docbook/sgml/4.4/docbookx.dtd">
-<section>
-	<title>Portal concept</title>
-	<para>Portal is the Web-based application software that provides
-		users
-		with personalized User Interface(UI). Through this UI, users can
-		easily access, search, communicate with other users, applications and
-		informations.</para>
-	<para> The
-		portal is responsible for UI management, personalization and
-		aggregation of enterprise contents and business applications.</para>
-	<para>Portal has two main components:</para>
+       --><title>Portal</title>
+	<para>
+		The Enterprise Portal Platform is a web-based application that provides users with personalized User Interface (UI). This UI allows users to easily perform actions such as searching applications or information and communicating with other users.
+	</para>
+	<para>
+		The Portal provides a graphical aggregation of enterprise content and business applications with flexible management and personalization options.
+	</para>
+	<para>
+		Portal has two main components:
+	</para>
 	<itemizedlist>
-		<listitem>Portal Engine: takes care of pages, navigations and
-			preferences.</listitem>
-		<listitem>WebUI framework: a portlet Web framework tailored for
-			easy
-			screen composition and ajax support in Portal environment.</listitem>
+		<listitem>
+			<para>
+				Portal Engine: The engine renders and runs pages, navigations and preferences.
+			</para>
+		</listitem>
+		<listitem>
+			<para>
+				WebUI Framework: a Web framework tailored for easy screen composition and Ajax support in Portal environment.
+			</para>
+		</listitem>
 	</itemizedlist>
 </section>
+
+

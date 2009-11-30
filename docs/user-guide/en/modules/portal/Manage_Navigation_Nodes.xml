@@ -1,4 +1,8 @@
-<!--
+<?xml version='1.0' encoding='utf-8' ?>
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+]>
+<section id="sect-User_Guide-Manage_Navigation_Nodes">
+	<!--    
 
     Copyright (C) 2009 eXo Platform SAS.
     
@@ -17,32 +21,395 @@
     Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
     02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
--->
-
-<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook V4.4//EN" "http://www.oasis-open.org/docbook/sgml/4.4/docbookx.dtd">
-<section>
-	<title>Manage Navigation Nodes</title>
-	<section>
+    --><title>Manage Navigation Nodes</title>
+	<section id="sect-User_Guide-Manage_Navigation_Nodes-Overview">
 		<title>Overview</title>
+		<para>
+			If you are allowed to access GateIn Start in the User Workspace, you can take all actions related to a node such as : add a new node, edit, copy, cut, delete and clone node.
+		</para>
 	</section>
-	<para>If you are allowed to access GateIn Start in the User Workspace,
-		you can take all actions related to a node such as : add a new node,
-		edit, copy, cut, delete and clone node.</para>
-	<section>
+	
+	<section id="sect-User_Guide-Manage_Navigation_Nodes-Add_a_new_node">
 		<title>Add a new node</title>
+		<para>
+			1. Go to <emphasis role="bold">GateIn Start</emphasis> -&gt; <emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Advanced</emphasis> --&gt; <emphasis role="bold">Edit Page and Navigation</emphasis>
+		</para>
+		<para>
+			2. Select a navigation from the navigation list.
+		</para>
+		<para>
+			3. Select a node from list (to create a new node like sub-node of the selected node) or click the icon!images/UpIcon.png! to create a new node on root
+		</para>
+		<para>
+			4. Right-click on the selected navigation or node and select <emphasis role="bold">Add new Node</emphasis> option. Add new node form appears:
+		</para>
+		<mediaobject>
+			<imageobject>
+				<imagedata fileref="images/AddNode4.png" format="PNG" />
+			</imageobject>
+		</mediaobject>
+		<para>
+			The <emphasis role="bold">Page Node Setting</emphasis> tab includes:
+		</para>
+		<informaltable colsep="0" frame="none" rowsep="0">
+			<tgroup cols="2">
+				<colspec align="center"></colspec>
+				<colspec align="center"></colspec>
+				<tbody>
+					<row>
+						<entry>
+							<emphasis role="bold"> Name </emphasis>
+						</entry>
+						<entry>
+							<emphasis role="bold"> Description </emphasis>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							Uri
+						</entry>
+						<entry>
+							An identification of the node. The Uri is automatically created after adding a new node
+						</entry>
+					</row>
+					<row>
+						<entry>
+							Node name
+						</entry>
+						<entry>
+							The name of the node. This field is required and must be unique. Only alpha, digit and underscore characters are allowed for this field and it must have at least 3 characters.
+						</entry>
+					</row>
+					<row>
+						<entry>
+							Label
+						</entry>
+						<entry>
+							The display name of the node on the screen. This field is not required and may be changed. This field must have a length between 3 and 120 characters.
+						</entry>
+					</row>
+					<row>
+						<entry>
+							Visible
+						</entry>
+						<entry>
+							This check box allow to hide (and show) the page and its node at the navigation bar, the page navigation and the site map
+						</entry>
+					</row>
+					<row>
+						<entry>
+							Publication date &amp; time
+						</entry>
+						<entry>
+							This option allows publishing this node for a period of time. *Start Publication Date* and *End Publication Date* only appear when this option is selected.
+						</entry>
+					</row>
+					<row>
+						<entry>
+							Start Publication Date
+						</entry>
+						<entry>
+							The start date and time to publish the node.
+						</entry>
+					</row>
+					<row>
+						<entry>
+							End Publication Date
+						</entry>
+						<entry>
+							The end date and time to publish the node.
+						</entry>
+					</row>
+				</tbody>
+			</tgroup>
+		</informaltable>
+		<para>
+			In the <emphasis role="bold">Page Selector</emphasis> tab, you can select a page or not for this node.
+		</para>
+		<mediaobject>
+			<imageobject>
+				<imagedata fileref="images/PageSelector.png" format="PNG" />
+			</imageobject>
+		</mediaobject>
+		<informaltable colsep="0" frame="none" rowsep="0">
+			<tgroup cols="2">
+				<colspec align="center"></colspec>
+				<colspec align="center"></colspec>
+				<tbody>
+					<row>
+						<entry>
+							<emphasis role="bold"> Name </emphasis>
+						</entry>
+						<entry>
+							<emphasis role="bold"> Description </emphasis>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							Page Id
+						</entry>
+						<entry>
+							The identification string of the page.
+						</entry>
+					</row>
+					<row>
+						<entry>
+							Name
+						</entry>
+						<entry>
+							The selected page's name.
+						</entry>
+					</row>
+					<row>
+						<entry>
+							Title
+						</entry>
+						<entry>
+							The selected page's title.
+						</entry>
+					</row>
+				</tbody>
+			</tgroup>
+		</informaltable>
+		<para>
+			You do not have to input values in these fields. It is automatically displayed after selecting an existing page by clicking the <emphasis role="bold">Search and Select Page</emphasis> button. The <emphasis role="bold">Select a page</emphasis> form appears like:
+		</para>
+		<mediaobject>
+			<imageobject>
+				<imagedata fileref="images/SelectPage1.png" format="PNG" />
+			</imageobject>
+		</mediaobject>
+		<orderedlist numeration="arabic">
+			<listitem>
+				<para>
+					list of all existing pages is displayed with basic information. You can follow these guides to select a page for creating a node:
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					Select a page from list or search a specific page :
+				</para>
+			</listitem>
+		</orderedlist>
+		<itemizedlist>
+			<listitem>
+				<para>
+					Enter a search term related to the page which you want to search:
+				</para>
+			</listitem>
+		</itemizedlist>
+		<mediaobject>
+			<imageobject>
+				<imagedata fileref="images/NewSearch1.png" format="PNG" />
+			</imageobject>
+		</mediaobject>
+		<itemizedlist>
+			<listitem>
+				<para>
+					Choose the field you wish to search in:
+				</para>
+			</listitem>
+		</itemizedlist>
+		<mediaobject>
+			<imageobject>
+				<imagedata fileref="images/NewSearch2.png" format="PNG" />
+			</imageobject>
+		</mediaobject>
+		<itemizedlist>
+			<listitem>
+				<para>
+					Click the magnifying glass!images/NewGlassIcon.png! icon to perform searching. All pages matching with search term will be listed.
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					Click the OK!images/NewOkIcon.png! icon on the row of the page to select.
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					After selecting a page, the details of this page will be displayed in the <emphasis role="bold">Page Selector</emphasis> form.
+				</para>
+			</listitem>
+		</itemizedlist>
+		<para>
+			After configuring the page node settings, the page selector and the node's icon, click the <emphasis role="bold">Save</emphasis> button to accept or the <emphasis role="bold">Cancel</emphasis> button to quit without creating a new node.
+		</para>
 	</section>
-	<para>
-		1. Go to
-		<emphasis role="bold">GateIn Start</emphasis>
-		-&gt; <emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Advanced</emphasis> --&gt; <emphasis role="bold">Edit Page and Navigation</emphasis></para><para>2. Select a navigation from the navigation list.</para><para>3. Select a node from list (to create a new node like sub-node of the selected node) or click the icon!images/UpIcon.png! to create a new node on root</para><para>4. Right-click on the selected navigation or node and select <emphasis role="bold">Add new Node</emphasis> option. Add new node form appears:</para><mediaobject><imageobject><imagedata fileref="images/AddNode4.png" format="PNG"></imagedata></imageobject></mediaobject><para>The <emphasis role="bold">Page Node Setting</emphasis> tab includes:</para><informaltable frame="none" rowsep="0" colsep="0"><tgroup cols="2"><colspec align="center"></colspec><colspec align="center"></colspec><tbody><row><entry><emphasis role="bold"> Name </emphasis></entry><entry><emphasis role="bold"> Description </emphasis></entry></row><row><entry> Uri  </entry><entry>	An identification of the node. The Uri is automatically created after adding a new node  </entry></row><row><entry> Node name  </entry><entry>	The name of the node. This field is required and must be unique. Only alpha, digit and underscore characters are allowed for this field and it must have at least 3 characters. </entry></row><row><entry> Label  </entry><entry> 	The display name of the node on the screen. This field is not required and may be changed. This field must have a length between 3 and 120 characters.  </entry></row><row><entry> Visible  </entry><entry>	This check box allow to hide (and show) the page and its node at the navigation bar, the page navigation and the site map   </entry></row><row><entry> Publication date &amp; time  </entry><entry>	This option allows publishing this node for a period of time. *Start Publication Date* and *End Publication Date* only appear when this option is selected. </entry></row><row><entry> Start Publication Date  </entry><entry> 	The start date and time to publish the node.	 </entry></row><row><entry> End Publication Date </entry><entry>	The end date and time to publish the node. </entry></row></tbody></tgroup></informaltable><para>In the <emphasis role="bold">Page Selector</emphasis> tab, you can select a page or not for this node.</para><mediaobject><imageobject><imagedata fileref="images/PageSelector.png" format="PNG"></imagedata></imageobject></mediaobject><informaltable frame="none" rowsep="0" colsep="0"><tgroup cols="2"><colspec align="center"></colspec><colspec align="center"></colspec><tbody><row><entry><emphasis role="bold"> Name </emphasis></entry><entry><emphasis role="bold"> Description </emphasis></entry></row><row><entry> Page Id </entry><entry>	The identification string of the page. </entry></row><row><entry> Name    </entry><entry>		               The selected page's name.  </entry></row><row><entry> Title   </entry><entry>	               The selected page's title. </entry></row></tbody></tgroup></informaltable><para>You do not have to input values in these fields. It is automatically displayed after selecting an existing page by clicking the <emphasis role="bold">Search and Select Page</emphasis> button. The <emphasis role="bold">Select a page</emphasis> form appears like:</para><mediaobject><imageobject><imagedata fileref="images/SelectPage1.png" format="PNG"></imagedata></imageobject></mediaobject><orderedlist numeration="arabic"><listitem>list of all existing pages is displayed with basic information. You can follow these guides to select a page for creating a node:</listitem><listitem>Select a page from list or search a specific page :</listitem></orderedlist><itemizedlist><listitem>Enter a search term related to the page which you want to search:</listitem></itemizedlist><mediaobject><imageobject><imagedata fileref="images/NewSearch1.png" format="PNG"></imagedata></imageobject></mediaobject><itemizedlist><listitem>Choose the field you wish to search in:</listitem></itemizedlist><mediaobject><imageobject><imagedata fileref="images/NewSearch2.png" format="PNG"></imagedata></imageobject></mediaobject><itemizedlist><listitem>Click the magnifying glass!images/NewGlassIcon.png!  icon to perform searching. All pages matching with search term will be listed.</listitem><listitem>Click the OK!images/NewOkIcon.png!   icon on the row of the page to select.</listitem><listitem>After selecting a page, the details of this page will be displayed in the <emphasis role="bold">Page Selector</emphasis> form.</listitem></itemizedlist><para>After configuring the page node settings,  the page selector and the node's  icon, click the <emphasis role="bold">Save</emphasis> button to accept or the <emphasis role="bold">Cancel</emphasis> button to quit without creating a new node.</para>
-<section><title>Edit a node</title></section>
-<para>1. Go to <emphasis role="bold">GateIn Start</emphasis> -&gt; <emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Advanced</emphasis> --&gt; <emphasis role="bold">Edit Page and Navigation</emphasis></para><para>2. Select a navigation from the navigation list.</para><para>3. Right-click on the selected node and select <emphasis role="bold">Edit this Node</emphasis> option.</para><mediaobject><imageobject><imagedata fileref="images/EditNode1.png" format="PNG"></imagedata></imageobject></mediaobject><para>It will displays a form to edit this node:</para><mediaobject><imageobject><imagedata fileref="images/PageNodeSetting.png" format="PNG"></imagedata></imageobject></mediaobject><para>In the <emphasis role="bold">Page Node Setting</emphasis> tab: you can change the value of these fields: Label, Visible and Publication Date &amp; time. After finish changing, click the <emphasis role="bold">Save</emphasis> button to accept changing or <emphasis role="bold">Cancel</emphasis> button to refuse it.</para><mediaobject><imageobject><imagedata fileref="images/PageSelector6.png" format="PNG"></imagedata></imageobject></mediaobject><para>In the <emphasis role="bold">Page Selector</emphasis> tab : you also search and select another page for this node by clicking the <emphasis role="bold">Search and Select Page</emphasis> button. You can see more details on how to select a page for a node on the above <emphasis role="bold">Add a new node</emphasis> section. After finish changing another page for this node, click the <emphasis role="bold">Save</emphasis> button to accept changing or <emphasis role="bold">Cancel</emphasis> button to leave without saving any changes.</para>
-<section><title>Copy a node</title></section>
-<para>You also easily copy a node by following these steps:</para><para>1. Go to <emphasis role="bold">GateIn Start</emphasis> -&gt; <emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Advanced</emphasis> --&gt; <emphasis role="bold">Edit Page and Navigation</emphasis></para><para>2. Select a navigation from the navigation list.</para><para>3. Right-click on the selected node and select <emphasis role="bold">Copy node</emphasis> option.</para><mediaobject><imageobject><imagedata fileref="images/CopyNode3.png" format="PNG"></imagedata></imageobject></mediaobject><para>4. Select the position that you want to paste this node and select <emphasis role="bold">Paste Node</emphasis> option. Click the!images/MarkIcon.png! icon to <emphasis role="bold">Save</emphasis>.</para><mediaobject><imageobject><imagedata fileref="images/PasteNode3.png" format="PNG"></imagedata></imageobject></mediaobject>
-<section><title>Clone nodes</title></section>
-<itemizedlist><listitem>Clone node<emphasis role="bold">function allows you to copy the node. However, the differences between</emphasis>copy node<emphasis role="bold">and</emphasis>clone node<emphasis role="bold">is that the clone node has its own page and this page has the same content as the selected node, so there will be a new page that has the same name with the selected node's page, is shown in the page list when you access</emphasis>Manage Pages.</listitem></itemizedlist><para>1. Go to <emphasis role="bold">GateIn Start</emphasis> -&gt; <emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Advanced</emphasis> --&gt; <emphasis role="bold">Edit Page and Navigation</emphasis></para><para>2. Select a navigation from the navigation list.</para><para>3. Right-click on selected node and select <emphasis role="bold">Clone node</emphasis> option.</para><mediaobject><imageobject><imagedata fileref="images/CloneNode2.png" format="PNG"></imagedata></imageobject></mediaobject><para>4. Select the position that you want to paste this node and select <emphasis role="bold">Paste Node</emphasis> option. Click the!images/MarkIcon.png! icon to <emphasis role="bold">Save</emphasis>.</para><mediaobject><imageobject><imagedata fileref="images/PasteCloneNode2.png" format="PNG"></imagedata></imageobject></mediaobject><para>In <emphasis role="bold">Manage Pages</emphasis>  you will see:</para><mediaobject><imageobject><imagedata fileref="images/ManagePage2.png" format="PNG"></imagedata></imageobject></mediaobject>
-<section><title>Cut a node</title></section>
-<para>1. Go to <emphasis role="bold">GateIn Start</emphasis> -&gt; <emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Advanced</emphasis> --&gt; <emphasis role="bold">Edit Page and Navigation</emphasis></para><para>2. Select a navigation from the navigation list.</para><para>3. Right-click on the selected node and select <emphasis role="bold">Cut node</emphasis> option.</para><mediaobject><imageobject><imagedata fileref="images/CutNode4.png" format="PNG"></imagedata></imageobject></mediaobject><para>4. Select the position that you want to paste this node and select <emphasis role="bold">Paste Node</emphasis> option. Click the!images/MarkIcon.png! icon to <emphasis role="bold">Save</emphasis>.</para><mediaobject><imageobject><imagedata fileref="images/PasteCutNode4.png" format="PNG"></imagedata></imageobject></mediaobject>
-<section><title>Delete a node</title></section>
-<para>1. Go to <emphasis role="bold">GateIn Start</emphasis> -&gt; <emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Advanced</emphasis> --&gt; <emphasis role="bold">Edit Page and Navigation</emphasis></para><para>2. Select a navigation from the navigation list.</para><para>3. Right-click on the selected node and select <emphasis role="bold">Delete node</emphasis> option.</para><mediaobject><imageobject><imagedata fileref="images/DeleteNode2.png" format="PNG"></imagedata></imageobject></mediaobject><para>It will display an alert message, click the <emphasis role="bold">OK</emphasis> button to accept deleting or <emphasis role="bold">Cancel</emphasis> button to quit without deleting a node.</para><mediaobject><imageobject><imagedata fileref="images/http.png" format="PNG"></imagedata></imageobject></mediaobject>
+	
+	<section id="sect-User_Guide-Manage_Navigation_Nodes-Edit_a_node">
+		<title>Edit a node</title>
+		<para>
+			1. Go to <emphasis role="bold">GateIn Start</emphasis> -&gt; <emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Advanced</emphasis> --&gt; <emphasis role="bold">Edit Page and Navigation</emphasis>
+		</para>
+		<para>
+			2. Select a navigation from the navigation list.
+		</para>
+		<para>
+			3. Right-click on the selected node and select <emphasis role="bold">Edit this Node</emphasis> option.
+		</para>
+		<mediaobject>
+			<imageobject>
+				<imagedata fileref="images/EditNode1.png" format="PNG" />
+			</imageobject>
+		</mediaobject>
+		<para>
+			It will displays a form to edit this node:
+		</para>
+		<mediaobject>
+			<imageobject>
+				<imagedata fileref="images/PageNodeSetting.png" format="PNG" />
+			</imageobject>
+		</mediaobject>
+		<para>
+			In the <emphasis role="bold">Page Node Setting</emphasis> tab: you can change the value of these fields: Label, Visible and Publication Date &amp; time. After finish changing, click the <emphasis role="bold">Save</emphasis> button to accept changing or <emphasis role="bold">Cancel</emphasis> button to refuse it.
+		</para>
+		<mediaobject>
+			<imageobject>
+				<imagedata fileref="images/PageSelector6.png" format="PNG" />
+			</imageobject>
+		</mediaobject>
+		<para>
+			In the <emphasis role="bold">Page Selector</emphasis> tab : you also search and select another page for this node by clicking the <emphasis role="bold">Search and Select Page</emphasis> button. You can see more details on how to select a page for a node on the above <emphasis role="bold">Add a new node</emphasis> section. After finish changing another page for this node, click the <emphasis role="bold">Save</emphasis> button to accept changing or <emphasis role="bold">Cancel</emphasis> button to leave without saving any changes.
+		</para>
+	</section>
+	
+	<section id="sect-User_Guide-Manage_Navigation_Nodes-Copy_a_node">
+		<title>Copy a node</title>
+		<para>
+			You also easily copy a node by following these steps:
+		</para>
+		<para>
+			1. Go to <emphasis role="bold">GateIn Start</emphasis> -&gt; <emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Advanced</emphasis> --&gt; <emphasis role="bold">Edit Page and Navigation</emphasis>
+		</para>
+		<para>
+			2. Select a navigation from the navigation list.
+		</para>
+		<para>
+			3. Right-click on the selected node and select <emphasis role="bold">Copy node</emphasis> option.
+		</para>
+		<mediaobject>
+			<imageobject>
+				<imagedata fileref="images/CopyNode3.png" format="PNG" />
+			</imageobject>
+		</mediaobject>
+		<para>
+			4. Select the position that you want to paste this node and select <emphasis role="bold">Paste Node</emphasis> option. Click the!images/MarkIcon.png! icon to <emphasis role="bold">Save</emphasis>.
+		</para>
+		<mediaobject>
+			<imageobject>
+				<imagedata fileref="images/PasteNode3.png" format="PNG" />
+			</imageobject>
+		</mediaobject>
+	</section>
+	
+	<section id="sect-User_Guide-Manage_Navigation_Nodes-Clone_nodes">
+		<title>Clone nodes</title>
+		<para>
+			Clone node<emphasis role="bold">function allows you to copy the node. However, the differences between</emphasis>copy node<emphasis role="bold">and</emphasis>clone node<emphasis role="bold">is that the clone node has its own page and this page has the same content as the selected node, so there will be a new page that has the same name with the selected node's page, is shown in the page list when you access</emphasis>Manage Pages.
+		</para>
+		<itemizedlist>
+			<listitem>
+				<para>
+					1. Go to <emphasis role="bold">GateIn Start</emphasis> -&gt; <emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Advanced</emphasis> --&gt; <emphasis role="bold">Edit Page and Navigation</emphasis>
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					2. Select a navigation from the navigation list.
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					3. Right-click on selected node and select <emphasis role="bold">Clone node</emphasis> option.
+				</para>
+				<mediaobject>
+					<imageobject>
+						<imagedata fileref="images/CloneNode2.png" format="PNG" />
+					</imageobject>
+				</mediaobject>
+			</listitem>
+			<listitem>
+				<para>
+					4. Select the position that you want to paste this node and select <emphasis role="bold">Paste Node</emphasis> option. Click the!images/MarkIcon.png! icon to <emphasis role="bold">Save</emphasis>.
+				</para>
+				<mediaobject>
+					<imageobject>
+						<imagedata fileref="images/PasteCloneNode2.png" format="PNG" />
+					</imageobject>
+				</mediaobject>
+				<para>
+					In <emphasis role="bold">Manage Pages</emphasis> you will see:
+				</para>
+				<mediaobject>
+					<imageobject>
+						<imagedata fileref="images/ManagePage2.png" format="PNG" />
+					</imageobject>
+				</mediaobject>
+			</listitem>
+		</itemizedlist>
+	</section>
+	
+	<section id="sect-User_Guide-Manage_Navigation_Nodes-Cut_a_node">
+		<title>Cut a node</title>
+		<para>
+			1. Go to <emphasis role="bold">GateIn Start</emphasis> -&gt; <emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Advanced</emphasis> --&gt; <emphasis role="bold">Edit Page and Navigation</emphasis>
+		</para>
+		<para>
+			2. Select a navigation from the navigation list.
+		</para>
+		<para>
+			3. Right-click on the selected node and select <emphasis role="bold">Cut node</emphasis> option.
+		</para>
+		<mediaobject>
+			<imageobject>
+				<imagedata fileref="images/CutNode4.png" format="PNG" />
+			</imageobject>
+		</mediaobject>
+		<para>
+			4. Select the position that you want to paste this node and select <emphasis role="bold">Paste Node</emphasis> option. Click the!images/MarkIcon.png! icon to <emphasis role="bold">Save</emphasis>.
+		</para>
+		<mediaobject>
+			<imageobject>
+				<imagedata fileref="images/PasteCutNode4.png" format="PNG" />
+			</imageobject>
+		</mediaobject>
+	</section>
+	
+	<section id="sect-User_Guide-Manage_Navigation_Nodes-Delete_a_node">
+		<title>Delete a node</title>
+		<orderedlist>
+			<listitem>
+				<para>
+					1. Go to <emphasis role="bold">GateIn Start</emphasis> -&gt; <emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Advanced</emphasis> --&gt; <emphasis role="bold">Edit Page and Navigation</emphasis>
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					2. Select a navigation from the navigation list.
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					3. Right-click on the selected node and select <emphasis role="bold">Delete node</emphasis> option.
+				</para>
+				<mediaobject>
+					<imageobject>
+						<imagedata fileref="images/DeleteNode2.png" format="PNG" />
+					</imageobject>
+				</mediaobject>
+				<para>
+					It will display an alert message, click the <emphasis role="bold">OK</emphasis> button to accept deleting or <emphasis role="bold">Cancel</emphasis> button to quit without deleting a node.
+				</para>
+				<mediaobject>
+					<imageobject>
+						<imagedata fileref="images/http.png" format="PNG" />
+					</imageobject>
+				</mediaobject>
+			</listitem>
+		</orderedlist>
+	</section>
+
 </section>
+
+

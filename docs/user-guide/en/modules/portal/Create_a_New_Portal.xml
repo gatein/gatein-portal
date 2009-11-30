@@ -1,4 +1,8 @@
-<!--
+<?xml version='1.0' encoding='utf-8' ?>
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+]>
+<section id="sect-User_Guide-Create_a_New_Portal">
+	<!--    
 
     Copyright (C) 2009 eXo Platform SAS.
     
@@ -17,126 +21,90 @@
     Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
     02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
--->
-
-<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook V4.4//EN" "http://www.oasis-open.org/docbook/sgml/4.4/docbookx.dtd">
-<section>
-	<title>Create a New Portal</title>
-	<para>Creating a new portal requires you to have a special
-		permission
-		that only an administrator can give you. You need follow
-		these guides
-		to create a new portal.</para>
+    --><title>Create a New Portal</title>
+	<para>
+		Creating a new portal requires you to have a special permission that only an administrator can give you. You need follow these guides to create a new portal.
+	</para>
 	<para>
 		<orderedlist>
 			<listitem>
 				<para>
-					Click on
-					<emphasis role="bold">Site</emphasis>
-					in the toolbar.
+					Click on <emphasis role="bold">Site</emphasis> in the toolbar.
 				</para>
 			</listitem>
 			<listitem>
 				<para>
-					Click the
-					<emphasis role="bold">Add New Portal</emphasis>
-					button.
-					By default, the
-					<emphasis role="bold">Create New Portal</emphasis>
-					form is shown with the
-					<emphasis role="bold">Portal Templates</emphasis>
-					tab.
+					Click the <emphasis role="bold">Add New Portal</emphasis> button. By default, the <emphasis role="bold">Create New Portal</emphasis> form is shown with the <emphasis role="bold">Portal Templates</emphasis> tab. 
 					<mediaobject>
 						<imageobject>
-							<imagedata fileref="images/PortalTemplate2.6.png"
-								format="PNG"></imagedata>
+							<imagedata fileref="images/PortalTemplate2.6.png" format="PNG" />
 						</imageobject>
 					</mediaobject>
 				</para>
 				<para>
-					<para>
-						By default, Portal template is Classic. Select the
-						<emphasis role="bold">Portal Setting</emphasis>
-						tab.
-					</para>
+					By default, Portal template is Classic. Select the <emphasis role="bold">Portal Setting</emphasis> tab. 
 					<mediaobject>
 						<imageobject>
-							<imagedata fileref="images/PortalSetting2.5.png"
-								format="PNG"></imagedata>
+							<imagedata fileref="images/PortalSetting2.5.png" format="PNG" />
 						</imageobject>
 					</mediaobject>
 				</para>
 			</listitem>
 			<listitem>
 				<para>
-					Enter a value for the
-					<emphasis role="bold">Portal Name</emphasis>
-					field. This field is required and must be unique. Only alpha, digit
-					and underscore characters are allowed for this field and it must
-					have at least 3 characters.
+					Enter a value for the <emphasis role="bold">Portal Name</emphasis> field. This field is required and must be unique. Only alpha, digit and underscore characters are allowed for this field and it must have at least 3 characters.
 				</para>
 			</listitem>
 			<listitem>
-				<para>Select a display language for the portal by selecting a
-					language
-					from the list.</para>
-			</listitem>
-			<listitem>
-				<para>Select a skin for a portal by selecting one from the skin
-					list.</para>
+				<para>
+					Select a display language for the portal by selecting a language from the list.
+				</para>
 			</listitem>
 			<listitem>
 				<para>
-					Click on the
-					<emphasis role="bold">Properties</emphasis>
-					tab to fill in the
-					<emphasis role="bold">Keep session alive</emphasis>
-					property.
-					Keeping the working session for a long time to avoid a
-					time out. There are
-					3
-					options:
+					Select a skin for a portal by selecting one from the skin list.
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					Click on the <emphasis role="bold">Properties</emphasis> tab to fill in the <emphasis role="bold">Keep session alive</emphasis> property. Keeping the working session for a long time to avoid a time out. There are 3 options: 
 					<itemizedlist>
 						<listitem>
-							<para>never : it never happens even if an application requests it</para>
+							<para>
+								never : it never happens even if an application requests it
+							</para>
 						</listitem>
 						<listitem>
-							<para>on-demand : it starts to be used as soon as an application
-								requests it</para>
+							<para>
+								on-demand : it starts to be used as soon as an application requests it
+							</para>
 						</listitem>
 						<listitem>
-							<para>always : it's always enabled (which has a cost but the
-								administrator will be aware of that)</para>
+							<para>
+								always : it's always enabled (which has a cost but the administrator will be aware of that)
+							</para>
 						</listitem>
 					</itemizedlist>
 				</para>
 			</listitem>
 			<listitem>
 				<para>
-					Click on the
-					<emphasis role="bold">Permission Setting</emphasis>
-					tab and set the permissions for the Portal.
+					Click on the <emphasis role="bold">Permission Setting</emphasis> tab and set the permissions for the Portal.
 				</para>
 				<para>
-					By default the access permissions list for the portal is empty. You
-					have to select at least one or tick on the
-					<emphasis role="bold">Make it public</emphasis>
-					check box to assign access permission to everyone.
+					By default the access permissions list for the portal is empty. You have to select at least one or tick on the <emphasis role="bold">Make it public</emphasis> check box to assign access permission to everyone.
 				</para>
 			</listitem>
 			<listitem>
 				<para>
-					Click on
-					<emphasis role="bold">Save</emphasis>
-					to accept creating a new portal.
+					Click on <emphasis role="bold">Save</emphasis> to accept creating a new portal.
 				</para>
 			</listitem>
 		</orderedlist>
 	</para>
-
-
 	<para>
-		You also can edit or delete a portal, see more details on
-		<link linkend="Manage Portals">Manage Portals</link>
+		You also can edit or delete a portal, see more details on <xref linkend="sect-User_Guide-Manage_Portals" />
 	</para>
 </section>
+
+

@@ -1,4 +1,8 @@
-<!--
+<?xml version='1.0' encoding='utf-8' ?>
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+]>
+<section id="sect-User_Guide-Switching_between_Portals">
+	<!--    
 
     Copyright (C) 2009 eXo Platform SAS.
     
@@ -17,26 +21,21 @@
     Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
     02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
--->
-
-<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook V4.4//EN" "http://www.oasis-open.org/docbook/sgml/4.4/docbookx.dtd">
-<section>
-	<title>Switching between Portals</title>
-	<para>GateIn Portal allows users to switch between Portals simply and
-		easily. You can use another portals such as gateway, starting site if
-		you are given the appropriate permissions by the administrators.</para>
+    --><title>Switching between Portals</title>
 	<para>
-		Go to
-		<emphasis role="bold">Site</emphasis>
-		on the Toolbarm it will list all portals in which you have at least
-		the access right
+		GateIn Portal allows users to switch between Portals simply and easily. You can use another portals such as gateway, starting site if you are given the appropriate permissions by the administrators.
+	</para>
+	<para>
+		Go to <emphasis role="bold">Site</emphasis> on the Toolbarm it will list all portals in which you have at least the access right
 	</para>
 	<mediaobject>
 		<imageobject>
-			<imagedata fileref="images/ChangePortal2.6.png" format="PNG"></imagedata>
+			<imagedata fileref="images/ChangePortal2.6.png" format="PNG" />
 		</imageobject>
 	</mediaobject>
-	<para>You easily switch between Portals by simply clicking on the
-		portal that you want to choose and wait for few seconds to take
-		effect.</para>
+	<para>
+		You easily switch between Portals by simply clicking on the portal that you want to choose and wait for few seconds to take effect.
+	</para>
 </section>
+
+

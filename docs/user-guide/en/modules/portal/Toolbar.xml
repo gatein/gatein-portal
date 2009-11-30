@@ -1,4 +1,8 @@
-<!--
+<?xml version='1.0' encoding='utf-8' ?>
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+]>
+<section id="sect-User_Guide-Toolbar">
+	<!--    
 
     Copyright (C) 2009 eXo Platform SAS.
     
@@ -17,77 +21,91 @@
     Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
     02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
--->
-
-<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook V4.4//EN" "http://www.oasis-open.org/docbook/sgml/4.4/docbookx.dtd">
-<section>
-	<title>Toolbar</title>
-	<para>The convenient Toolbar helps users
-		and administrators to manipulate all actions quickly.</para>
-	<section>
+    --><title>Toolbar</title>
+	<para>
+		The convenient Toolbar helps users and administrators to manipulate all actions quickly.
+	</para>
+	<section id="sect-User_Guide-Toolbar-User_Actions_in_the_Toolbar">
 		<title>User Actions in the Toolbar</title>
+		<mediaobject>
+			<imageobject>
+				<imagedata fileref="images/exo2.6.png" format="PNG" />
+			</imageobject>
+		</mediaobject>
+		<para>
+			You can change language, change skin and sign out from GateIn Portal.
+		</para>
 	</section>
-
-	<section>
-		<title></title>
-	</section>
-	<mediaobject>
-		<imageobject>
-			<imagedata fileref="images/exo2.6.png" format="PNG"></imagedata>
-		</imageobject>
-	</mediaobject>
-	<para>You can change language, change skin and sign out from GateIn Portal.</para>
-	<section>
+	
+	<section id="sect-User_Guide-Toolbar-Dashboard">
 		<title>Dashboard</title>
+		<para>
+			Stuff Goes Here?
+		</para>
 	</section>
-
-	<section>
+	
+	<section id="sect-User_Guide-Toolbar-Site">
 		<title>Site</title>
+		<mediaobject>
+			<imageobject>
+				<imagedata fileref="images/Site2.6.png" format="PNG" />
+			</imageobject>
+		</mediaobject>
+		<para>
+			It shows all different sites available in GateIn Portal allows users to directly edit the navigation tree.
+		</para>
 	</section>
-	<mediaobject>
-		<imageobject>
-			<imagedata fileref="images/Site2.6.png" format="PNG"></imagedata>
-		</imageobject>
-	</mediaobject>
-	<para>It shows all different sites available in GateIn Portal allows
-		users to directly edit the navigation tree.</para>
-	<section>
+	
+	<section id="sect-User_Guide-Toolbar-Group">
 		<title>Group</title>
+		<mediaobject>
+			<imageobject>
+				<imagedata fileref="images/GroupPortal2.6.png" format="PNG" />
+			</imageobject>
+		</mediaobject>
+		<para>
+			Users can easily see and access pages in GateIn Portal.
+		</para>
 	</section>
-	<mediaobject>
-		<imageobject>
-			<imagedata fileref="images/GroupPortal2.6.png" format="PNG"></imagedata>
-		</imageobject>
-	</mediaobject>
-	<para>Users can easily see and access pages in GateIn Portal.</para>
-	<section>
+	
+	<section id="sect-User_Guide-Toolbar-Administration_Actions_in_the_Toolbar">
 		<title>Administration Actions in the Toolbar</title>
+		<para>
+			Stuff Goes Here?
+		</para>
+	</section>
+	
+	<section id="sect-User_Guide-Toolbar-Editor">
+		<title>Editor</title>
+		<mediaobject>
+			<imageobject>
+				<imagedata fileref="images/Edit.png" format="PNG" />
+			</imageobject>
+		</mediaobject>
+		<para>
+			You easily edit a page or add a new page
+		</para>
+	</section>
+	
+	<section id="sect-User_Guide-Toolbar-Administrator">
+		<title>Administrator</title>
+		<mediaobject>
+			<imageobject>
+				<imagedata fileref="images/Admin2.6.png" format="PNG" />
+			</imageobject>
+		</mediaobject>
+	</section>
+	
+	<section id="sect-User_Guide-Toolbar-Edit_Inline">
+		<title>Edit Inline</title>
+		<para>
+			With the Edit Inline Composer popup that consists of two tabs: Applications and Containers, it is convenient for a user to select the component that he wants and to drag and drop it to the page.
+		</para>
+		<para>
+			You also quickly edit, delete portlets in a page, change portal's properties or switch the view mode.
+		</para>
 	</section>
 
-	<section>
-		<title>Editor</title>
-	</section>
-	<mediaobject>
-		<imageobject>
-			<imagedata fileref="images/Edit.png" format="PNG"></imagedata>
-		</imageobject>
-	</mediaobject>
-	<para>You easily edit a page or add a new page</para>
-	<section>
-		<title>Administrator</title>
-	</section>
-	<mediaobject>
-		<imageobject>
-			<imagedata fileref="images/Admin2.6.png" format="PNG"></imagedata>
-		</imageobject>
-	</mediaobject>
-	<section>
-		<title>Edit Inline</title>
-	</section>
-	<para>With the Edit Inline Composer popup that consists of two
-		tabs: Applications and Containers, it is convenient for a user to
-		select the component that he wants and to drag and drop it to the
-		page.</para>
-	<para>You also quickly edit, delete portlets in a page, change
-		portal's properties or switch the view mode.</para>
 </section>
+
+

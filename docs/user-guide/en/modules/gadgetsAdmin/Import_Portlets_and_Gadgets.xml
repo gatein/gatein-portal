@@ -1,4 +1,8 @@
-<!--
+<?xml version='1.0' encoding='utf-8' ?>
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+]>
+<section id="sect-User_Guide-Import_Portlets_and_Gadgets">
+	<!--  
 
     Copyright (C) 2009 eXo Platform SAS.
     
@@ -17,14 +21,36 @@
     Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
     02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
--->
-
-<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook V4.4//EN" "http://www.oasis-open.org/docbook/sgml/4.4/docbookx.dtd">
-<section>
-	<title>Import Portlets and Gadgets</title>
-	<para>This convenient feature that helps you import default
-		portlets/gadgets automatically in different categories and these
-		portlets/gadgets will be listed on the left pane.</para>
+  --><title>Import Portlets and Gadgets</title>
+	<para>
+		This convenient feature that helps you import default portlets/gadgets automatically in different categories and these portlets/gadgets will be listed on the left pane.
+	</para>
 	<orderedlist numeration="arabic">
-		<listitem>info(&quot;Technical Information about the Portlet Import: The Application Registry looks in all webapps of your application server for a file located at WEB-INF/portlet.xml and registers the portlets found there. When the user clicks on &quot;Auto Import&quot; the portlets of all webapps are imported. If there is a portlet.xml file in a webapp a new category is created whose name is the webapp war name (or the webapp folder name).  All the portlets that are configured in the portlet.xml file are added to the new category.&quot;)</listitem></orderedlist><para>1. Go to <emphasis role="bold">Administration</emphasis>-&gt; <emphasis role="bold">Application Registry</emphasis> page-&gt; <emphasis role="bold">Organize</emphasis> item on the navigation bar. A form for organizing portlets/gadgets will be displayed:</para><mediaobject><imageobject><imagedata fileref="images/Org1.png" format="PNG"></imagedata></imageobject></mediaobject><para>2. Click the <emphasis role="bold">Auto Import</emphasis> button!images/Auto1.png! at upper right corner on the action bar. A pop up will be shown:</para><mediaobject><imageobject><imagedata fileref="images/local.png" format="PNG"></imagedata></imageobject></mediaobject><para>2. Click the <emphasis role="bold">OK</emphasis> button to accept importing gadgets automatically. All portlets/gadgets categories will be imported and listed on the left pane.</para>
+		<listitem>
+			<para>
+				info("Technical Information about the Portlet Import: The Application Registry looks in all webapps of your application server for a file located at WEB-INF/portlet.xml and registers the portlets found there. When the user clicks on "Auto Import" the portlets of all webapps are imported. If there is a portlet.xml file in a webapp a new category is created whose name is the webapp war name (or the webapp folder name). All the portlets that are configured in the portlet.xml file are added to the new category.")
+			</para>
+		</listitem>
+	</orderedlist>
+	<para>
+		1. Go to <emphasis role="bold">Administration</emphasis>-&gt; <emphasis role="bold">Application Registry</emphasis> page-&gt; <emphasis role="bold">Organize</emphasis> item on the navigation bar. A form for organizing portlets/gadgets will be displayed:
+	</para>
+	<mediaobject>
+		<imageobject>
+			<imagedata fileref="images/Org1.png" format="PNG" />
+		</imageobject>
+	</mediaobject>
+	<para>
+		2. Click the <emphasis role="bold">Auto Import</emphasis> button!images/Auto1.png! at upper right corner on the action bar. A pop up will be shown:
+	</para>
+	<mediaobject>
+		<imageobject>
+			<imagedata fileref="images/local.png" format="PNG" />
+		</imageobject>
+	</mediaobject>
+	<para>
+		2. Click the <emphasis role="bold">OK</emphasis> button to accept importing gadgets automatically. All portlets/gadgets categories will be imported and listed on the left pane.
+	</para>
 </section>
+
+

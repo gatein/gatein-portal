@@ -1,4 +1,8 @@
-<!--
+<?xml version='1.0' encoding='utf-8' ?>
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+]>
+<section id="sect-User_Guide-Navigation_concept">
+	<!--       
 
     Copyright (C) 2009 eXo Platform SAS.
     
@@ -17,34 +21,28 @@
     Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
     02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
--->
-
-<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook V4.4//EN" "http://www.oasis-open.org/docbook/sgml/4.4/docbookx.dtd">
-<section>
-	<title>Navigation concept</title>
-	<para>A  navigation is a menu that helps users to
-			visualize the structure of a site and provides hyper links to quickly
-			move from page to page. There is a bar which contains navigations
-			called Navigation bar. There are three navigation types:</para>
-	<itemizedlist>
-		<listitem>
-			<emphasis role="bold">Portal navigation</emphasis>
-			: This navigation type is used to keep the links to pages of Portal.
-			Each portal has only one navigation and it is automatically created
-			when a portal is created.
-		</listitem>
-		<listitem>
-			<emphasis role="bold">Group navigation</emphasis>
-			: All registered users are organized in groups. There is a navigation
-			keeping the links to all pages of each group, called group
-			navigation.
-		</listitem>
-		<listitem>
-			<emphasis role="bold">User navigation</emphasis>
-			: Each user has own navigation that keeps the links to pages. User's
-			navigation is created automatically like Navigation of Portal when
-			user is created (registered). This navigation only can be deleted
-			when the user is deleted.
-		</listitem>
-	</itemizedlist>
+       --><title>Navigation</title>
+	<para>
+		Portal navigations are menus that list hyperlinks to other parts of a Portal. They can help users to visualize the structure of a site. The navigation menus in EPP 5.0 are located in a bar across the top of the 'Home' page. There are three navigation types:
+	</para>
+	<formalpara>
+		<title>Site</title>
+		<para>
+			This navigation links to separate sites of the main Portal. Each site has only one navigation and it is automatically created when the site is created. This functionality allows different sites to administer some Portal aspects, such as portlets, individually while maintaining other content standaradized with the parent Portal.
+		</para>
+	</formalpara>
+	<formalpara>
+		<title>Group</title>
+		<para>
+			The content of this navigation differs depending on the type of account logged in. For user accounts the Groups navigation holds personal links set up by the user. For management accounts, it keeps the links to pages for registered Portal users as well as adminisrative tasks and personal links. In the administrator account, the navigation adds further management abilities such as Internationalization and community management.
+		</para>
+	</formalpara>
+	<formalpara>
+		<title>Dashboard</title>
+		<para>
+			Each user has own navigation 'Dashboard' that houses links and portlets (or gadgets) that the user has selected. A user's navigation is created automatically when user is registered. This navigation only can be deleted when the user is deleted.
+		</para>
+	</formalpara>
 </section>
+
+

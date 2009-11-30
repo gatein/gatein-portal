@@ -1,4 +1,8 @@
-<!--
+<?xml version='1.0' encoding='utf-8' ?>
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+]>
+<section id="sect-User_Guide-Remember_User_Account">
+	<!--      
 
     Copyright (C) 2009 eXo Platform SAS.
     
@@ -17,38 +21,27 @@
     Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
     02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
--->
-
-<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook V4.4//EN" "http://www.oasis-open.org/docbook/sgml/4.4/docbookx.dtd">
-<section>
-	<title>Remember User Account</title>
-	<para>This feature allows users to return to the GateIn Portal and be
-		automatically authenticated based on the value of a cookie provided by
-		the browser. Thus users do not have to perform an explicit
-		authentication again.</para>
+      --><title>Remember User Account</title>
+	<para>
+		This feature allows users to return to the GateIn Portal and be automatically authenticated based on the value of a cookie provided by the browser. Thus users do not have to perform an explicit authentication again.
+	</para>
 	<mediaobject>
 		<imageobject>
-			<imagedata fileref="images/RememberMe2.6.png" format="PNG"></imagedata>
+			<imagedata fileref="images/RememberMe2.6.png" format="PNG" />
 		</imageobject>
 	</mediaobject>
 	<para>
-		1. Input your registered
-		<emphasis role="bold">User name</emphasis>
-		and
-		<emphasis role="bold">Password</emphasis>
-		.
+		1. Input your registered <emphasis role="bold">User name</emphasis> and <emphasis role="bold">Password</emphasis> .
 	</para>
 	<para>
-		2. Select the
-		<emphasis role="bold">Remember My Login</emphasis>
-		check box when logging in GateIn Portal at the first time.
+		2. Select the <emphasis role="bold">Remember My Login</emphasis> check box when logging in GateIn Portal at the first time.
 	</para>
 	<para>
-		3. Click the
-		<emphasis role="bold">Sign in</emphasis>
-		button to sign in the portal.
+		3. Click the <emphasis role="bold">Sign in</emphasis> button to sign in the portal.
 	</para>
-	<para>You must remember escaping the browser without signing out.
-		The next time, you can automatically sign in the portal without
-		signing in again with your first/last name welcome.</para>
+	<para>
+		You must remember escaping the browser without signing out. The next time, you can automatically sign in the portal without signing in again with your first/last name welcome.
+	</para>
 </section>
+
+

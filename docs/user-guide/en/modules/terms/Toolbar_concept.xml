@@ -1,4 +1,8 @@
-<!--
+<?xml version='1.0' encoding='utf-8' ?>
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+]>
+<section id="sect-User_Guide-Toolbar_concept">
+	<!--       
 
     Copyright (C) 2009 eXo Platform SAS.
     
@@ -17,18 +21,15 @@
     Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
     02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
--->
-
-<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook V4.4//EN" "http://www.oasis-open.org/docbook/sgml/4.4/docbookx.dtd">
-<section>
-	<title>Toolbar concept</title>
-	<para>This is a specific bar that contains all user and
-		administration actions for the purpose of helping users and the
-		administrator access and perform actions easily, quickly and
-		effectively. You can see this Toolbar in GateIn Portal as below:</para>
+       --><title>Toolbar concept</title>
+	<para>
+		This is a specific bar that contains all user and administration actions for the purpose of helping users and the administrator access and perform actions easily, quickly and effectively. You can see this Toolbar in GateIn Portal as below:
+	</para>
 	<mediaobject>
 		<imageobject>
-			<imagedata fileref="images/Toolbar.png" format="PNG"></imagedata>
+			<imagedata fileref="images/Toolbar.png" format="PNG" />
 		</imageobject>
 	</mediaobject>
 </section>
+
+

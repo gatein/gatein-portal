@@ -1,4 +1,8 @@
-<!--
+<?xml version='1.0' encoding='utf-8' ?>
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+]>
+<section id="sect-User_Guide-Interface_Portlets">
+	<!--       
 
     Copyright (C) 2009 eXo Platform SAS.
     
@@ -17,166 +21,168 @@
     Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
     02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
--->
-
-<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook V4.4//EN" "http://www.oasis-open.org/docbook/sgml/4.4/docbookx.dtd">
-<section>
-	<title>Interface Portlets</title>
-	<para>These Portlets constitute the interface of the Portal.
-		GateIn
-		Portal consists of the following Interface Portlets:</para>
-	<section>
+       --><title>Interface Portlets</title>
+	<para>
+		These Portlets constitute the interface of the Portal. GateIn Portal consists of the following Interface Portlets:
+	</para>
+	<section id="sect-User_Guide-Interface_Portlets-Banner_Portlet">
 		<title>Banner Portlet</title>
-		<para>This Portlet is considered as the welcome gateway of a
-			Portal. It contains the organization's slogan, logo, icon, button,
-			etc.</para>
-			<!-- 
+		<para>
+			This Portlet is considered as the welcome gateway of a Portal. It contains the organization's slogan, logo, icon, button, etc.
+		</para>
+		<!--        
 		<mediaobject>
 			<imageobject>
 				<imagedata fileref="images/BannerPortlet.png" format="PNG"></imagedata>
 			</imageobject>
 		</mediaobject>
-		 -->
+		        -->
 	</section>
-	<section>
+	
+	<section id="sect-User_Guide-Interface_Portlets-Breadcumbs_Portlet">
 		<title>Breadcumbs Portlet</title>
-		<para>This Portlet is used to display the path of the selected
-			page
-			from Navigation.</para>
-			<!-- 
+		<para>
+			This Portlet is used to display the path of the selected page from Navigation.
+		</para>
+		<!--        
 		<mediaobject>
 			<imageobject>
 				<imagedata fileref="images/Breadcumbs.png" format="PNG"></imagedata>
 			</imageobject>
 		</mediaobject>
-		 -->
+		        -->
 	</section>
-	<!--
+	
+	<!--       
 		<section> <title>Console Portlet</title> <para>This Portlet is used as
 		console to run Java Script commands.</para> <mediaobject>
 		<imageobject> <imagedata fileref="images/Console.png"
 		format="PNG"></imagedata> </imageobject> </mediaobject> </section>
-	-->
-	<section>
+	       -->
+	<section id="sect-User_Guide-Interface_Portlets-Footer_Portlet">
 		<title>Footer Portlet</title>
-		<para>This Portlet provides the footer for a site. Footer can be a
-			text, images that are displayed at the bottom of a web site. It
-			provides information about author/institutional sponsor, revision
-			date, copyright, comments form, and navigational links.</para>
-			<!-- 
+		<para>
+			This Portlet provides the footer for a site. Footer can be a text, images that are displayed at the bottom of a web site. It provides information about author/institutional sponsor, revision date, copyright, comments form, and navigational links.
+		</para>
+		<!--        
 		<mediaobject>
 			<imageobject>
 				<imagedata fileref="images/Footer.png" format="PNG"></imagedata>
 			</imageobject>
 		</mediaobject>
-		-->
+		       -->
 	</section>
-	<section>
+	
+	<section id="sect-User_Guide-Interface_Portlets-HomePage_Portlet">
 		<title>HomePage Portlet</title>
-		<para>This Portlet is used to provide a home page for a portal.
-			The
-			home page is a main page displayed firstly when you visit the site.</para>
-			<!-- 
+		<para>
+			This Portlet is used to provide a home page for a portal. The home page is a main page displayed firstly when you visit the site.
+		</para>
+		<!--        
 		<mediaobject>
 			<imageobject>
 				<imagedata fileref="images/PortletHome2.png" format="PNG"></imagedata>
 			</imageobject>
 		</mediaobject>
-        -->
+               -->
 	</section>
-	<section>
+	
+	<section id="sect-User_Guide-Interface_Portlets-Iframe_Portlet">
 		<title>Iframe Portlet</title>
-		<para>This Portlet is used to create IFrame elements for a site.
-			Iframe is a HTML element which can embed a document into a HTML
-			document. So embedded data is displayed inside a sub window of
-			browser
-			window.</para>
-			<!-- 
+		<para>
+			This Portlet is used to create IFrame elements for a site. Iframe is a HTML element which can embed a document into a HTML document. So embedded data is displayed inside a sub window of browser window.
+		</para>
+		<!--        
 		<mediaobject>
 			<imageobject>
 				<imagedata fileref="images/IFrame.png" format="PNG"></imagedata>
 			</imageobject>
 		</mediaobject>
-        -->
+               -->
 	</section>
-	<section>
+	
+	<section id="sect-User_Guide-Interface_Portlets-Navigation_Portlet">
 		<title>Navigation Portlet</title>
-		<para>This Portlet provides a navigation bar. A navigation likes a
-			menu that helps users to visualize the structure of a site and
-			provide
-			links to quickly move from page to page.</para>
-			<!-- 
+		<para>
+			This Portlet provides a navigation bar. A navigation likes a menu that helps users to visualize the structure of a site and provide links to quickly move from page to page.
+		</para>
+		<!--        
 		<mediaobject>
 			<imageobject>
 				<imagedata fileref="images/NavigationPortlet.png" format="PNG"></imagedata>
 			</imageobject>
 		</mediaobject>
-        -->
+               -->
 	</section>
-	<section>
+	
+	<section id="sect-User_Guide-Interface_Portlets-Sitemap_Portlet">
 		<title>Sitemap Portlet</title>
-		<para>This Portlet is used to provide a site map page of a web
-			site. It lists pages on a website, typically organized in
-			hierarchical
-			fashion.</para>
-			<!-- 
+		<para>
+			This Portlet is used to provide a site map page of a web site. It lists pages on a website, typically organized in hierarchical fashion.
+		</para>
+		<!--        
 		<mediaobject>
 			<imageobject>
 				<imagedata fileref="images/SiteMap3.png" format="PNG"></imagedata>
 			</imageobject>
 		</mediaobject>
-        -->
+               -->
 	</section>
-	<section>
+	
+	<section id="sect-User_Guide-Interface_Portlets-Web_Explorer_Portlet">
 		<title>Web Explorer Portlet</title>
-		<para>This Portlet provides web-browser for users. It allows users
-			to connect to other sites over Internet.</para>
+		<para>
+			This Portlet provides web-browser for users. It allows users to connect to other sites over Internet.
+		</para>
 		<mediaobject>
 			<imageobject>
-				<imagedata fileref="images/WebExplorer1.png" format="PNG"></imagedata>
+				<imagedata fileref="images/WebExplorer1.png" format="PNG" />
 			</imageobject>
 		</mediaobject>
 	</section>
-	<section>
+	
+	<section id="sect-User_Guide-Interface_Portlets-Dashboard_Portlet">
 		<title>Dashboard Portlet</title>
-		<para>This portlet is used for hosting mini - applications known
-			as
-			gadgets. The dashboard uses a variety of graphical effects for
-			displaying, opening, and using gadgets.</para>
+		<para>
+			This portlet is used for hosting mini - applications known as gadgets. The dashboard uses a variety of graphical effects for displaying, opening, and using gadgets.
+		</para>
 		<mediaobject>
 			<imageobject>
-				<imagedata fileref="images/Dashboard1.png" format="PNG"></imagedata>
+				<imagedata fileref="images/Dashboard1.png" format="PNG" />
 			</imageobject>
 		</mediaobject>
 		<para>
-			See more details in
-			<link linkend="Dashboard Portlet">Dashboard Portlet</link>
+			See more details in <xref linkend="sect-User_Guide-Dashboard_Portlet" />
 		</para>
 	</section>
-	<section>
+	
+	<section id="sect-User_Guide-Interface_Portlets-Gadget_Wrapper_Portlet">
 		<title>Gadget Wrapper Portlet</title>
-		<para>This Portlet allows users to view a gadget in canvas mode.
-		<mediaobject>
-			<imageobject>
-				<imagedata fileref="images/GadgetWrapper.png" format="PNG"></imagedata>
-			</imageobject>
-		</mediaobject>
+		<para>
+			This Portlet allows users to view a gadget in canvas mode. 
+			<mediaobject>
+				<imageobject>
+					<imagedata fileref="images/GadgetWrapper.png" format="PNG" />
+				</imageobject>
+			</mediaobject>
 		</para>
 	</section>
-	<section>
+	
+	<section id="sect-User_Guide-Interface_Portlets-FCK_editor_Portlet">
 		<title>FCK editor Portlet</title>
-		<para>All its common used functions (like Word editor) such as
-			writing, formatting text, creating tables, inserting links or
-			picture,
-			etc.</para>
+		<para>
+			All its common used functions (like Word editor) such as writing, formatting text, creating tables, inserting links or picture, etc.
+		</para>
 		<mediaobject>
 			<imageobject>
-				<imagedata fileref="images/FCK1.png" format="PNG"></imagedata>
+				<imagedata fileref="images/FCK1.png" format="PNG" />
 			</imageobject>
 		</mediaobject>
 		<para>
-			See more details in
-			<link linkend="FCK Portlet">FCK Portlet</link>
+			See more details in <xref linkend="sect-User_Guide-FCK_Portlet" />
 		</para>
 	</section>
+
 </section>
+
+

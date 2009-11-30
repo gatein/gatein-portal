@@ -1,4 +1,8 @@
-<!--
+<?xml version='1.0' encoding='utf-8' ?>
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+]>
+<section id="sect-User_Guide-Change_Node_Order">
+	<!--    
 
     Copyright (C) 2009 eXo Platform SAS.
     
@@ -17,15 +21,32 @@
     Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
     02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
--->
-
-<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook V4.4//EN" "http://www.oasis-open.org/docbook/sgml/4.4/docbookx.dtd">
-<section>
-	<title>Change Node Order</title>
-	<para>You can easily change the position of node on the navigation
-		bar on their own convenient order by following these steps:</para>
+    --><title>Change Node Order</title>
 	<para>
-		1. Go to
-		<emphasis role="bold">GateIn Start</emphasis>
-		-&gt; <emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Advanced</emphasis> --&gt; <emphasis role="bold">Edit Page and Navigation</emphasis>.</para><para>2. Select a navigation from the navigation list.</para><mediaobject><imageobject><imagedata fileref="images/Navigation.png" format="PNG"></imagedata></imageobject></mediaobject><para>3. Select the node that you want to move. Right click on the selected node and then click on <emphasis role="bold">Move up</emphasis> or  <emphasis role="bold">Move down</emphasis></para><mediaobject><imageobject><imagedata fileref="images/MoveUpDown.png" format="PNG"></imagedata></imageobject></mediaobject><para>The selected node will be moved up/down.</para>
+		You can easily change the position of node on the navigation bar on their own convenient order by following these steps:
+	</para>
+	<para>
+		1. Go to <emphasis role="bold">GateIn Start</emphasis> -&gt; <emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Advanced</emphasis> --&gt; <emphasis role="bold">Edit Page and Navigation</emphasis>.
+	</para>
+	<para>
+		2. Select a navigation from the navigation list.
+	</para>
+	<mediaobject>
+		<imageobject>
+			<imagedata fileref="images/Navigation.png" format="PNG" />
+		</imageobject>
+	</mediaobject>
+	<para>
+		3. Select the node that you want to move. Right click on the selected node and then click on <emphasis role="bold">Move up</emphasis> or <emphasis role="bold">Move down</emphasis>
+	</para>
+	<mediaobject>
+		<imageobject>
+			<imagedata fileref="images/MoveUpDown.png" format="PNG" />
+		</imageobject>
+	</mediaobject>
+	<para>
+		The selected node will be moved up/down.
+	</para>
 </section>
+
+

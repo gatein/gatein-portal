@@ -1,4 +1,8 @@
-<!--
+<?xml version='1.0' encoding='utf-8' ?>
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+]>
+<section id="sect-User_Guide-RTL_Support_Right_To_Left">
+	<!--   
 
     Copyright (C) 2009 eXo Platform SAS.
     
@@ -17,64 +21,63 @@
     Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
     02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
--->
-
-<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook V4.4//EN" "http://www.oasis-open.org/docbook/sgml/4.4/docbookx.dtd">
-<section>
-	<title>RTL Support (Right To Left)</title>
-	<para>GateIn Portal supports RTL (Right to Left) to meet the demand of
-		Arabian customers who want to use the Portal by their own language for
-		more convenient and easy to use. When you change from other languages
-		to Arabic or set the displaying language as Arabic, the displaying on
-		Portal will be changed to Right to Left (RTL) direction because
-		Arabian usually read from Right to Left.</para>
-	<para>Some screen shots of Portal with RTL:</para>
+   --><title>RTL Support (Right To Left)</title>
+	<para>
+		GateIn Portal supports RTL (Right to Left) to meet the demand of Arabian customers who want to use the Portal by their own language for more convenient and easy to use. When you change from other languages to Arabic or set the displaying language as Arabic, the displaying on Portal will be changed to Right to Left (RTL) direction because Arabian usually read from Right to Left.
+	</para>
+	<para>
+		Some screen shots of Portal with RTL:
+	</para>
 	<mediaobject>
 		<imageobject>
-			<imagedata fileref="images/HomePage2.png" format="PNG"></imagedata>
+			<imagedata fileref="images/HomePage2.png" format="PNG" />
 		</imageobject>
 	</mediaobject>
-	<section>
+	<section id="sect-User_Guide-RTL_Support_Right_To_Left-The_Account_Portlet">
 		<title>The Account Portlet</title>
+		<mediaobject>
+			<imageobject>
+				<imagedata fileref="images/NewAccount3.png" format="PNG" />
+			</imageobject>
+		</mediaobject>
 	</section>
-	<mediaobject>
-		<imageobject>
-			<imagedata fileref="images/NewAccount3.png" format="PNG"></imagedata>
-		</imageobject>
-	</mediaobject>
-	<section>
+	
+	<section id="sect-User_Guide-RTL_Support_Right_To_Left-The_Application_Registry_Portlet">
 		<title>The Application Registry Portlet</title>
+		<mediaobject>
+			<imageobject>
+				<imagedata fileref="images/ApplicationRegistry2.png" format="PNG" />
+			</imageobject>
+		</mediaobject>
 	</section>
-	<mediaobject>
-		<imageobject>
-			<imagedata fileref="images/ApplicationRegistry2.png"
-				format="PNG"></imagedata>
-		</imageobject>
-	</mediaobject>
-	<section>
+	
+	<section id="sect-User_Guide-RTL_Support_Right_To_Left-The_Internationalization_Portlet">
 		<title>The Internationalization Portlet:</title>
+		<mediaobject>
+			<imageobject>
+				<imagedata fileref="images/In3.png" format="PNG" />
+			</imageobject>
+		</mediaobject>
 	</section>
-	<mediaobject>
-		<imageobject>
-			<imagedata fileref="images/In3.png"
-				format="PNG"></imagedata>
-		</imageobject>
-	</mediaobject>
-	<section>
+	
+	<section id="sect-User_Guide-RTL_Support_Right_To_Left-The_Organization_Portlet">
 		<title>The Organization Portlet:</title>
+		<mediaobject>
+			<imageobject>
+				<imagedata fileref="images/Organization5.png" format="PNG" />
+			</imageobject>
+		</mediaobject>
 	</section>
-	<mediaobject>
-		<imageobject>
-			<imagedata fileref="images/Organization5.png" format="PNG"></imagedata>
-		</imageobject>
-	</mediaobject>
-	<section>
+	
+	<section id="sect-User_Guide-RTL_Support_Right_To_Left-The_User_Workspace">
 		<title>The User Workspace</title>
+		<mediaobject>
+			<imageobject>
+				<imagedata fileref="images/UserWorkspace2.png" format="PNG" />
+			</imageobject>
+		</mediaobject>
 	</section>
-	<mediaobject>
-		<imageobject>
-			<imagedata fileref="images/UserWorkspace2.png"
-				format="PNG"></imagedata>
-		</imageobject>
-	</mediaobject>
+
 </section>
+
+

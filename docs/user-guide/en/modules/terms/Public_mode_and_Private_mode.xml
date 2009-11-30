@@ -1,4 +1,8 @@
-<!--
+<?xml version='1.0' encoding='utf-8' ?>
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+]>
+<section id="sect-User_Guide-Public_mode_and_private_mode">
+	<!--       
 
     Copyright (C) 2009 eXo Platform SAS.
     
@@ -17,26 +21,22 @@
     Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
     02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
--->
-
-<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook V4.4//EN" "http://www.oasis-open.org/docbook/sgml/4.4/docbookx.dtd">
-<section>
-	<title>Public mode and private mode</title>
-	<para>GateIn Portal has two modes:</para>
-	<itemizedlist>
-		<listitem>
-			<emphasis role="bold">Public mode</emphasis>
-			: this mode is for guest users (visitors) who have not registered yet
-			and it doesn't require to sign in so they can only visit the public
-			pages in a portal. Visitors can also register in order to get an
-			account. After being registered, they can use the private mode and
-			have to contact the administrator to get more rights or a group
-			manager in order to become a member of that group.
-		</listitem>
-		<listitem>
-			<emphasis role="bold">Private mode</emphasis>
-			: this mode is for registered users, users have to use username and
-			password to sign in. This mode supports users take many actions such
-			as :manage private resources (create private pages, edit or delete
-			them), &quot;borrow&quot; pages from others by creating hyperlinks to existing pages, change the language for individual needs, manage private information.</listitem></itemizedlist>
+       --><title>Public mode and private mode</title>
+	<para>
+		Enterprise Portal Platform 5.0 has two modes:
+	</para>
+	<formalpara>	
+		<title>Public</title> 
+			<para>
+				This mode is for guest users who are not registered with the Portal. It does not require a log in and restricts the visitor to the public pages in the portal. Visitors can register an account to gain access to the restricted pages. After being registered, they can use the Private mode but must still contact the Portal administrator to get more rights or a group manager to become a member and gain access a group.
+			</para>
+	</formalpara>
+	<formalpara>
+		<title>Private</title>
+			<para>
+				This mode is for registered users. Users set a username and password during registration which they can use to sign in. This mode allows users more site privileges. Registered users can manage private resources (creating, editing or deleting private pages), "borrow" pages from other users by creating hyperlinks and change the language for individual needs.
+			</para>
+	</formalpara>
 </section>
+
+

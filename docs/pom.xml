@@ -31,6 +31,7 @@
 
    <modules>
       <module>user-guide</module>
+      <module>reference-guide</module>
    </modules>
 
 </project>

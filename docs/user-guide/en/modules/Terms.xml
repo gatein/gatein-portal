@@ -1,4 +1,8 @@
-<!--
+<?xml version='1.0' encoding='utf-8' ?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+]>
+<chapter id="chap-User_Guide-Terms">
+	<!--        
 
     Copyright (C) 2009 eXo Platform SAS.
     
@@ -17,21 +21,15 @@
     Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
     02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
--->
-
-<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook V4.4//EN" "http://www.oasis-open.org/docbook/sgml/4.4/docbookx.dtd">
-<chapter>
-<title>Terms</title>
-
-<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="terms/Portal_concept.xml" />
-<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="terms/Portlet_concept.xml" />
-<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="terms/Navigation_concept.xml" />
-<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="terms/Gadget_concept.xml" />
-<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="terms/Public_mode_and_Private_mode.xml" />
-<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="terms/Permission_levels.xml" />
-<!--  Deprecated
+        --><title>Terms</title>
+	<xi:include href="terms/Portal_concept.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+	<xi:include href="terms/Portlet_concept.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+	<xi:include href="terms/Navigation_concept.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+	<xi:include href="terms/Gadget_concept.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+	<xi:include href="terms/Public_mode_and_Private_mode.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+	<xi:include href="terms/Permission_levels.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+	<!--         Deprecated
 <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="terms/Workspace_concept.xml" />
- -->
-<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="terms/Toolbar_concept.xml" />
-
+        --><xi:include href="terms/Toolbar_concept.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 </chapter>
+

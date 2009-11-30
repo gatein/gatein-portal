@@ -1,4 +1,8 @@
-<!--
+<?xml version='1.0' encoding='utf-8' ?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+]>
+<chapter id="chap-User_Guide-Further_Documentation">
+	<!--        
 
     Copyright (C) 2009 eXo Platform SAS.
     
@@ -17,14 +21,11 @@
     Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
     02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
--->
+        --><title>Futher Documentation</title>
 
-<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook V4.4//EN" "http://www.oasis-open.org/docbook/sgml/4.4/docbookx.dtd">
-<section>
-	<title>Sample JSF 1.1+MyFaces+Spring</title>
-	<orderedlist numeration="arabic">
-		<listitem>sample based on JSF 1.1, MyFaces JSF implementation
-			and Spring.</listitem>
-	</orderedlist>
-	<para>Download exoportlet.war file in the attachment section.</para>
-</section>
+	<para>
+		Further documentation about using and configuring the GateIn Portal can be found in the GateIn Portal Install Guide or the GateIn Portal Reference Guide which are hosted at <ulink type="http" url="www.redhat.com/docs">www.redhat.com/docs</ulink>.
+	</para>
+
+</chapter>
+

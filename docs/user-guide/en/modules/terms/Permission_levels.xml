@@ -1,4 +1,8 @@
-<!--
+<?xml version='1.0' encoding='utf-8' ?>
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+]>
+<section id="sect-User_Guide-Permission_levels">
+	<!--       
 
     Copyright (C) 2009 eXo Platform SAS.
     
@@ -17,45 +21,42 @@
     Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
     02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
--->
-
-<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook V4.4//EN" "http://www.oasis-open.org/docbook/sgml/4.4/docbookx.dtd">
-<section>
-	<title>Permission levels</title>
-	<para>There are two permission types:</para>
+       --><title>Permission levels</title>
+	<para>
+		There are two permission types:
+	</para>
 	<itemizedlist>
 		<listitem>
-			<emphasis role="bold">Access Permission</emphasis>
-			: allows users to use (see a page content, drag and drop portlets
-			into pages, sign in). The access permission can be set for a list of
-			groups.
+			<para>
+				<emphasis role="bold">Access Permission</emphasis> : allows users to use (see a page content, drag and drop portlets into pages, sign in). The access permission can be set for a list of groups.
+			</para>
 		</listitem>
 		<listitem>
-			<emphasis role="bold">Edit Permission</emphasis>
-			: allows users to change (change portal or page information, delete
-			portals or pages). The edit permission is set for only one group at
-			the same time.
+			<para>
+				<emphasis role="bold">Edit Permission</emphasis> : allows users to change (change portal or page information, delete portals or pages). The edit permission is set for only one group at the same time.
+			</para>
 		</listitem>
 	</itemizedlist>
-	<para>There are several permission levels:</para>
+	<para>
+		There are several permission levels:
+	</para>
 	<itemizedlist>
 		<listitem>
-			<emphasis role="bold">Portal</emphasis>
-			: The portal includes all pages, pages only can be accessed if the
-			user has also access to the Portal.
+			<para>
+				<emphasis role="bold">Portal</emphasis> : The portal includes all pages, pages only can be accessed if the user has also access to the Portal.
+			</para>
 		</listitem>
 		<listitem>
-			<emphasis role="bold">Page</emphasis>
-			: You can restrict the access permission to single pages. Users can
-			change page information (properties, layout) if they have the edit
-			permission.
+			<para>
+				<emphasis role="bold">Page</emphasis> : You can restrict the access permission to single pages. Users can change page information (properties, layout) if they have the edit permission.
+			</para>
 		</listitem>
 		<listitem>
-			<emphasis role="bold">Portlet</emphasis>
-			: When users create a page, they need to drag and drop portlets into
-			a page to create the page content. Some portlets are only used for
-			administrators, some are used for individual needs of a group thus
-			you have to set the appropriate access permission.
+			<para>
+				<emphasis role="bold">Portlet</emphasis> : When users create a page, they need to drag and drop portlets into a page to create the page content. Some portlets are only used for administrators, some are used for individual needs of a group thus you have to set the appropriate access permission.
+			</para>
 		</listitem>
 	</itemizedlist>
 </section>
+
+

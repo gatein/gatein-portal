@@ -1,4 +1,8 @@
-<!--
+<?xml version='1.0' encoding='utf-8' ?>
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+]>
+<section id="sect-User_Guide-Page_Creation_Wizard">
+	<!--    
 
     Copyright (C) 2009 eXo Platform SAS.
     
@@ -17,15 +21,231 @@
     Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
     02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
--->
-
-<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook V4.4//EN" "http://www.oasis-open.org/docbook/sgml/4.4/docbookx.dtd">
-<section>
-	<title>Page Creation Wizard</title>
-	<para>Only by following there simple steps can you create a page
-		quickly by using a wizard and publish this page on the Navigation bar:</para>
+    --><title>Page Creation Wizard</title>
 	<para>
-		1. Go to
-		<emphasis role="bold">GateIn Start</emphasis>
-		-&gt;<emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Basic</emphasis> --&gt; <emphasis role="bold">Create page wizard</emphasis>.  <emphasis role="bold">Welcome to Page Creation Wizard</emphasis> appears:</para><variablelist><listitem>For GateIn Portal 2.6</listitem></variablelist><para>1. Go to <emphasis role="bold">Editor</emphasis> --&gt; <emphasis role="bold">Add New Page</emphasis> on the Toolbar. <emphasis role="bold">Create page wizard</emphasis>: <emphasis role="bold">Welcome to Page Creation Wizard</emphasis> appears:</para><mediaobject><imageobject><imagedata fileref="images/Welcome.png" format="PNG"></imagedata></imageobject></mediaobject><para>2. Click the <emphasis role="bold">Next</emphasis> button or number '1' of the wizard steps in order to go to step 1. This step allows users to set up page setting such as :the navigation path, the node name, the display name, etc.</para><mediaobject><imageobject><imagedata fileref="images/Wizard1.png" format="PNG"></imagedata></imageobject></mediaobject><para>There are two parts: the left pane is used to show a small description that will guide you what to do in this step. And the main wizard includes two parts: the left pane contains a list of navigations and shows the page list of each selected navigation, the right pane displays main information of a page.</para><para>3. On the left of wizard: Click the combo box icon !images/ComboBox.png!   to see the navigations list. Select a navigation from the list that you want to create page. The pages list of selected navigation are displayed.</para><mediaobject><imageobject><imagedata fileref="images/PageList.png" format="PNG"></imagedata></imageobject></mediaobject><para>4. Select a page from the above list or click on arrow up icon !images/ArrowIcon.png!  to add a page at root.</para><mediaobject><imageobject><imagedata fileref="images/Pagewizard1.png" format="PNG"></imagedata></imageobject></mediaobject><informaltable frame="none" rowsep="0" colsep="0"><tgroup cols="2"><colspec align="center"></colspec><colspec align="center"></colspec><tbody><row><entry><emphasis role="bold"> Name </emphasis></entry><entry><emphasis role="bold"> Description </emphasis></entry></row><row><entry> Current Selected Page Node  </entry><entry>	The path of the selected node to add a new sub page </entry></row><row><entry> Node Name    </entry><entry>   The node name of the added page. It is required field. This field must start with a character and must have a length between 3 and 30 characters. </entry></row><row><entry> Display Name </entry><entry>	The display name of the node which contains the added page and must have a length between 3 and 30 characters. </entry></row><row><entry> Visible  </entry><entry>	This check box allows to hide this page. If not checked the page is under no circumstances shown, even if the publication period is OK. If checked the page or the page node appears on on the navigation bar, the page navigation and the site map. If &quot;visible&quot; is checked the visibility can depend on the &quot;publication date &amp; time&quot; option.  </entry></row><row><entry> Publication date&amp;time </entry><entry>	This option allows publishing the page for a period of time. If this option is checked the visibility of the page depends on the publication period start and end date. </entry></row><row><entry> Start Publication Date </entry><entry>	The start date and time to publish the page </entry></row><row><entry> End Publication Date </entry><entry>	The end date and time to  publish the page </entry></row></tbody></tgroup></informaltable><para>+<emphasis role="bold">Note:</emphasis>+You can set date and time by clicking the <emphasis role="bold">Start Publication Date</emphasis> field and <emphasis role="bold">End Publication Date</emphasis> field and select a date in the calendar pop up</para><mediaobject><imageobject><imagedata fileref="images/Calendar.png" format="PNG"></imagedata></imageobject></mediaobject><para>5. Click <emphasis role="bold">Next</emphasis> or number '2' of the wizard steps to go to step 2.</para><mediaobject><imageobject><imagedata fileref="images/PageWizard2.png" format="PNG"></imagedata></imageobject></mediaobject><para>6. Select <emphasis role="bold">Empty Layout</emphasis> or click the icon to see more templates to select.</para><para>7. Click the <emphasis role="bold">Next</emphasis> button or number '3' of the wizard step to go to step 3. You can drag portlets on the left pane and drop it on the right pane to constitute the content of this page.</para><mediaobject><imageobject><imagedata fileref="images/PageWizard3.png" format="PNG"></imagedata></imageobject></mediaobject><informaltable frame="none" rowsep="0" colsep="0"><tgroup cols="2"><colspec align="center"></colspec><colspec align="center"></colspec><tbody><row><entry><emphasis role="bold"> Indicator </emphasis></entry><entry><emphasis role="bold"> Meaning </emphasis></entry></row><row><entry>!images/preview.png! </entry><entry>   *Preview Page*: allows viewing a page in preview mode </entry></row><row><entry>!images/ShowContainer.png!  </entry><entry>   *Show Container*: allows listing all existing containers </entry></row><row><entry>!images/ShowPortlet.png!  </entry><entry>   *Show Portlets*: allows listing all existing portlets </entry></row></tbody></tgroup></informaltable><para>8. Click the <emphasis role="bold">Show Container</emphasis> icon  !images/ShowContainer.png!    if you want to see the existing containers and re-select the layout of the page. There will be a category list which contains specific containers when clicking the  icon.</para><variablelist><listitem>for GateIn Portal 2.6</listitem></variablelist><para>The step 2 of creating a page by wizard is the same as the above</para><para>In the step 3, you can drag portlets from the Edit Inline Composer popup and drag it to the constitute the content of this page</para><mediaobject><imageobject><imagedata fileref="images/Step32.6.png" format="PNG"></imagedata></imageobject></mediaobject><para>You can click on!images/Switch.png! to view the content of this page.</para><para>Click <emphasis role="bold">Save</emphasis> to accept creating a new page, the <emphasis role="bold">Back</emphasis> button to return the previous step or the <emphasis role="bold">Abort</emphasis> button to quit without creating a new page.</para>
+		Only by following there simple steps can you create a page quickly by using a wizard and publish this page on the Navigation bar:
+	</para>
+	<para>
+		1. Go to <emphasis role="bold">GateIn Start</emphasis> -&gt;<emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Basic</emphasis> --&gt; <emphasis role="bold">Create page wizard</emphasis>. <emphasis role="bold">Welcome to Page Creation Wizard</emphasis> appears:
+	</para>
+	<para>
+		For GateIn Portal 2.6
+	</para>
+	<orderedlist>
+		<listitem>
+			<para>
+				1. Go to <emphasis role="bold">Editor</emphasis> --&gt; <emphasis role="bold">Add New Page</emphasis> on the Toolbar. <emphasis role="bold">Create page wizard</emphasis>: <emphasis role="bold">Welcome to Page Creation Wizard</emphasis> appears:
+			</para>
+			<mediaobject>
+				<imageobject>
+					<imagedata fileref="images/Welcome.png" format="PNG" />
+				</imageobject>
+			</mediaobject>
+		</listitem>
+		<listitem>
+			<para>
+				2. Click the <emphasis role="bold">Next</emphasis> button or number '1' of the wizard steps in order to go to step 1. This step allows users to set up page setting such as :the navigation path, the node name, the display name, etc.
+			</para>
+			<mediaobject>
+				<imageobject>
+					<imagedata fileref="images/Wizard1.png" format="PNG" />
+				</imageobject>
+			</mediaobject>
+			<para>
+				There are two parts: the left pane is used to show a small description that will guide you what to do in this step. And the main wizard includes two parts: the left pane contains a list of navigations and shows the page list of each selected navigation, the right pane displays main information of a page.
+			</para>
+		</listitem>
+		<listitem>
+			<para>
+				3. On the left of wizard: Click the combo box icon !images/ComboBox.png! to see the navigations list. Select a navigation from the list that you want to create page. The pages list of selected navigation are displayed.
+			</para>
+			<mediaobject>
+				<imageobject>
+					<imagedata fileref="images/PageList.png" format="PNG" />
+				</imageobject>
+			</mediaobject>
+		</listitem>
+		<listitem>
+			<para>
+				4. Select a page from the above list or click on arrow up icon !images/ArrowIcon.png! to add a page at root.
+			</para>
+			<mediaobject>
+				<imageobject>
+					<imagedata fileref="images/Pagewizard1.png" format="PNG" />
+				</imageobject>
+			</mediaobject>
+			<informaltable colsep="0" frame="none" rowsep="0">
+				<tgroup cols="2">
+					<colspec align="center"></colspec>
+					<colspec align="center"></colspec>
+					<tbody>
+						<row>
+							<entry>
+								<emphasis role="bold"> Name </emphasis>
+							</entry>
+							<entry>
+								<emphasis role="bold"> Description </emphasis>
+							</entry>
+						</row>
+						<row>
+							<entry>
+								Current Selected Page Node
+							</entry>
+							<entry>
+								The path of the selected node to add a new sub page
+							</entry>
+						</row>
+						<row>
+							<entry>
+								Node Name
+							</entry>
+							<entry>
+								The node name of the added page. It is required field. This field must start with a character and must have a length between 3 and 30 characters.
+							</entry>
+						</row>
+						<row>
+							<entry>
+								Display Name
+							</entry>
+							<entry>
+								The display name of the node which contains the added page and must have a length between 3 and 30 characters.
+							</entry>
+						</row>
+						<row>
+							<entry>
+								Visible
+							</entry>
+							<entry>
+								This check box allows to hide this page. If not checked the page is under no circumstances shown, even if the publication period is OK. If checked the page or the page node appears on on the navigation bar, the page navigation and the site map. If "visible" is checked the visibility can depend on the "publication date &amp; time" option.
+							</entry>
+						</row>
+						<row>
+							<entry>
+								Publication date&amp;time
+							</entry>
+							<entry>
+								This option allows publishing the page for a period of time. If this option is checked the visibility of the page depends on the publication period start and end date.
+							</entry>
+						</row>
+						<row>
+							<entry>
+								Start Publication Date
+							</entry>
+							<entry>
+								The start date and time to publish the page
+							</entry>
+						</row>
+						<row>
+							<entry>
+								End Publication Date
+							</entry>
+							<entry>
+								The end date and time to publish the page
+							</entry>
+						</row>
+					</tbody>
+				</tgroup>
+			</informaltable>
+			<para>
+				+<emphasis role="bold">Note:</emphasis>+You can set date and time by clicking the <emphasis role="bold">Start Publication Date</emphasis> field and <emphasis role="bold">End Publication Date</emphasis> field and select a date in the calendar pop up
+			</para>
+			<mediaobject>
+				<imageobject>
+					<imagedata fileref="images/Calendar.png" format="PNG" />
+				</imageobject>
+			</mediaobject>
+		</listitem>
+		<listitem>
+			<para>
+				5. Click <emphasis role="bold">Next</emphasis> or number '2' of the wizard steps to go to step 2.
+			</para>
+			<mediaobject>
+				<imageobject>
+					<imagedata fileref="images/PageWizard2.png" format="PNG" />
+				</imageobject>
+			</mediaobject>
+		</listitem>
+		<listitem>
+			<para>
+				6. Select <emphasis role="bold">Empty Layout</emphasis> or click the icon to see more templates to select.
+			</para>
+		</listitem>
+		<listitem>
+			<para>
+				7. Click the <emphasis role="bold">Next</emphasis> button or number '3' of the wizard step to go to step 3. You can drag portlets on the left pane and drop it on the right pane to constitute the content of this page.
+			</para>
+			<mediaobject>
+				<imageobject>
+					<imagedata fileref="images/PageWizard3.png" format="PNG" />
+				</imageobject>
+			</mediaobject>
+			<informaltable colsep="0" frame="none" rowsep="0">
+				<tgroup cols="2">
+					<colspec align="center"></colspec>
+					<colspec align="center"></colspec>
+					<tbody>
+						<row>
+							<entry>
+								<emphasis role="bold"> Indicator </emphasis>
+							</entry>
+							<entry>
+								<emphasis role="bold"> Meaning </emphasis>
+							</entry>
+						</row>
+						<row>
+							<entry>
+								!images/preview.png!
+							</entry>
+							<entry>
+								*Preview Page*: allows viewing a page in preview mode
+							</entry>
+						</row>
+						<row>
+							<entry>
+								!images/ShowContainer.png!
+							</entry>
+							<entry>
+								*Show Container*: allows listing all existing containers
+							</entry>
+						</row>
+						<row>
+							<entry>
+								!images/ShowPortlet.png!
+							</entry>
+							<entry>
+								*Show Portlets*: allows listing all existing portlets
+							</entry>
+						</row>
+					</tbody>
+				</tgroup>
+			</informaltable>
+		</listitem>
+		<listitem>
+			<para>
+				8. Click the <emphasis role="bold">Show Container</emphasis> icon !images/ShowContainer.png! if you want to see the existing containers and re-select the layout of the page. There will be a category list which contains specific containers when clicking the icon.
+			</para>
+		</listitem>
+	</orderedlist>
+	<para>
+		for GateIn Portal 2.6
+	</para>
+	<para>
+		The step 2 of creating a page by wizard is the same as the above
+	</para>
+	<para>
+		In the step 3, you can drag portlets from the Edit Inline Composer popup and drag it to the constitute the content of this page
+	</para>
+	<mediaobject>
+		<imageobject>
+			<imagedata fileref="images/Step32.6.png" format="PNG" />
+		</imageobject>
+	</mediaobject>
+	<para>
+		You can click on!images/Switch.png! to view the content of this page.
+	</para>
+	<para>
+		Click <emphasis role="bold">Save</emphasis> to accept creating a new page, the <emphasis role="bold">Back</emphasis> button to return the previous step or the <emphasis role="bold">Abort</emphasis> button to quit without creating a new page.
+	</para>
 </section>
+
+

@@ -1,4 +1,8 @@
-<!--
+<?xml version='1.0' encoding='utf-8' ?>
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+]>
+<section id="sect-User_Guide-Internationalization_Portlet">
+	<!--   
 
     Copyright (C) 2009 eXo Platform SAS.
     
@@ -17,127 +21,110 @@
     Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
     02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
--->
-
-<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook V4.4//EN" "http://www.oasis-open.org/docbook/sgml/4.4/docbookx.dtd">
-<section>
-	<title>Internationalization Portlet</title>
-	<para>This portlet is used to define a word or a phrase of the
-		current language to an expected language. The form of this portlet is
-		like:</para>
+   --><title>Internationalization Portlet</title>
+	<para>
+		This portlet is used to define a word or a phrase of the current language to an expected language. The form of this portlet is like:
+	</para>
 	<mediaobject>
 		<imageobject>
-			<imagedata fileref="images/Inter2.png" format="PNG"></imagedata>
+			<imagedata fileref="images/Inter2.png" format="PNG" />
 		</imageobject>
 	</mediaobject>
-	<para>Each resource supports a language. So, you can define a word
-		or a phrase according to the supported language.</para>
-	<section>
+	<para>
+		Each resource supports a language. So, you can define a word or a phrase according to the supported language.
+	</para>
+	<section id="sect-User_Guide-Internationalization_Portlet-Add_a_new_Resource">
 		<title>Add a new Resource</title>
+		<para>
+			1. Select the <emphasis role="bold">New Resource</emphasis> button in the <emphasis role="bold">Internationalization Portlet</emphasis> form. The <emphasis role="bold">Resource Data</emphasis> form will appear:
+		</para>
+		<mediaobject>
+			<imageobject>
+				<imagedata fileref="images/ResourceData1.png" format="PNG" />
+			</imageobject>
+		</mediaobject>
+		<informaltable colsep="0" frame="none" rowsep="0">
+			<tgroup cols="2">
+				<colspec align="center"></colspec>
+				<colspec align="center"></colspec>
+				<tbody>
+					<row>
+						<entry>
+							<emphasis role="bold"> Name </emphasis>
+						</entry>
+						<entry>
+							<emphasis role="bold"> Description </emphasis>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							Name
+						</entry>
+						<entry>
+							The name of Resource. This field is required.
+						</entry>
+					</row>
+					<row>
+						<entry>
+							Language
+						</entry>
+						<entry>
+							The language that this resource 'll support. This field is required.
+						</entry>
+					</row>
+					<row>
+						<entry>
+							Resource
+						</entry>
+						<entry>
+							The word or the phrase which you want to define.
+						</entry>
+					</row>
+				</tbody>
+			</tgroup>
+		</informaltable>
+		<para>
+			2. Enter values into required fields.
+		</para>
+		<para>
+			3. Click the <emphasis role="bold">Save</emphasis> button to accept adding a new resource or the <emphasis role="bold">Cancel</emphasis> button to quit.
+		</para>
 	</section>
-	<para>
-		1. Select the
-		<emphasis role="bold">New Resource</emphasis>
-		button in the
-		<emphasis role="bold">Internationalization
-			Portlet</emphasis>
-		form. The
-		<emphasis role="bold">Resource Data</emphasis>
-		form will appear:
-	</para>
-	<mediaobject>
-		<imageobject>
-			<imagedata fileref="images/ResourceData1.png" format="PNG"></imagedata>
-		</imageobject>
-	</mediaobject>
-	<informaltable frame="none" rowsep="0" colsep="0">
-		<tgroup cols="2">
-			<colspec align="center"></colspec>
-			<colspec align="center"></colspec>
-			<tbody>
-				<row>
-					<entry>
-						<emphasis role="bold"> Name </emphasis>
-					</entry>
-					<entry>
-						<emphasis role="bold"> Description </emphasis>
-					</entry>
-				</row>
-				<row>
-					<entry> Name </entry>
-					<entry> The name of Resource. This field is required. </entry>
-				</row>
-				<row>
-					<entry> Language </entry>
-					<entry> The language that this resource 'll support. This field is
-						required. </entry>
-				</row>
-				<row>
-					<entry> Resource </entry>
-					<entry> The word or the phrase which you want to define.  </entry>
-				</row>
-			</tbody>
-		</tgroup>
-	</informaltable>
-	<para>2. Enter values into required fields.</para>
-	<para>
-		3. Click the
-		<emphasis role="bold">Save</emphasis>
-		button to accept adding a new resource or the
-		<emphasis role="bold">Cancel</emphasis>
-		button to quit.
-	</para>
-	<section>
+	
+	<section id="sect-User_Guide-Internationalization_Portlet-View_and_Edit_a_Resource">
 		<title>View and Edit a Resource</title>
+		<para>
+			Click the magnifying icon !images/GlassIcon.png! corresponding to resource which you want to view. On the view form, you also can edit information again by clicking the <emphasis role="bold">Edit</emphasis> button. You only can change <emphasis role="bold">Resource</emphasis> field, then click the <emphasis role="bold">Save</emphasis> button to accept changes or click the <emphasis role="bold">Cancel</emphasis> button to quit without saving any changes.
+		</para>
+		<mediaobject>
+			<imageobject>
+				<imagedata fileref="images/Resource2.png" format="PNG" />
+			</imageobject>
+		</mediaobject>
 	</section>
-	<para>
-		Click the magnifying icon !images/GlassIcon.png! corresponding to
-		resource which you want to view. On the view form, you also can edit
-		information again by clicking the
-		<emphasis role="bold">Edit</emphasis>
-		button. You only can change
-		<emphasis role="bold">Resource</emphasis>
-		field, then click the
-		<emphasis role="bold">Save</emphasis>
-		button to accept changes or click the
-		<emphasis role="bold">Cancel</emphasis>
-		button to quit without saving any changes.
-	</para>
-	<mediaobject>
-		<imageobject>
-			<imagedata fileref="images/Resource2.png" format="PNG"></imagedata>
-		</imageobject>
-	</mediaobject>
-	<section>
+	
+	<section id="sect-User_Guide-Internationalization_Portlet-Delete_a_Resource">
 		<title>Delete a Resource</title>
+		<para>
+			Click the trash can icon!images/DeleIcon.png! corresponding to the resource which you want to delete. There 'll be a confirmation message, click the <emphasis role="bold">OK</emphasis> button to confirm deleting and the <emphasis role="bold">Cancel</emphasis> button to quit.
+		</para>
 	</section>
-	<para>
-		Click the trash can icon!images/DeleIcon.png! corresponding to the
-		resource which you want to delete. There 'll be a confirmation
-		message, click the
-		<emphasis role="bold">OK</emphasis>
-		button to confirm deleting and the
-		<emphasis role="bold">Cancel</emphasis>
-		button to quit.
-	</para>
-	<section>
+	
+	<section id="sect-User_Guide-Internationalization_Portlet-Search_a_Resource">
 		<title>Search a Resource</title>
+		<para>
+			The <emphasis role="bold">Search Resource</emphasis> form displays directly on the portlet:
+		</para>
+		<mediaobject>
+			<imageobject>
+				<imagedata fileref="images/Resource3.png" format="PNG" />
+			</imageobject>
+		</mediaobject>
+		<para>
+			Enter the name of the resource which you want to search and select the supported language. Click the <emphasis role="bold">Search</emphasis> button to perform searching and displaying a list of the expected Resource.
+		</para>
 	</section>
-	<para>
-		The
-		<emphasis role="bold">Search Resource</emphasis>
-		form displays directly on the portlet:
-	</para>
-	<mediaobject>
-		<imageobject>
-			<imagedata fileref="images/Resource3.png" format="PNG"></imagedata>
-		</imageobject>
-	</mediaobject>
-	<para>
-		Enter the name of the resource which you want to search and select the
-		supported language. Click the
-		<emphasis role="bold">Search</emphasis>
-		button to perform searching and displaying a list of the expected
-		Resource.
-	</para>
+
 </section>
+
+

@@ -1,4 +1,8 @@
-<!--
+<?xml version='1.0' encoding='utf-8' ?>
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+]>
+<section id="sect-User_Guide-Drag_and_Drop_the_Page_Body">
+	<!--    
 
     Copyright (C) 2009 eXo Platform SAS.
     
@@ -17,15 +21,26 @@
     Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
     02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
--->
-
-<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook V4.4//EN" "http://www.oasis-open.org/docbook/sgml/4.4/docbookx.dtd">
-<section>
-	<title>Drag and Drop the Page Body</title>
-	<para>You can easily drag and drop page body to the specific place
-		where you want to in the page by following guides:</para>
+    --><title>Drag and Drop the Page Body</title>
 	<para>
-		1. Go to
-		<emphasis role="bold">GateIn Start</emphasis>
-		-&gt; <emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Advanced</emphasis> --&gt; <emphasis role="bold">Edit Current portal</emphasis>. It will display :</para><mediaobject><imageobject><imagedata fileref="images/DragPage1.png" format="PNG"></imagedata></imageobject></mediaobject><para>2. Click on the <emphasis role="bold">Portal Page</emphasis>, drag and drop to another reasonable places which you want to in this page.</para><mediaobject><imageobject><imagedata fileref="images/DragPage3.png" format="PNG"></imagedata></imageobject></mediaobject>
+		You can easily drag and drop page body to the specific place where you want to in the page by following guides:
+	</para>
+	<para>
+		1. Go to <emphasis role="bold">GateIn Start</emphasis> -&gt; <emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Advanced</emphasis> --&gt; <emphasis role="bold">Edit Current portal</emphasis>. It will display :
+	</para>
+	<mediaobject>
+		<imageobject>
+			<imagedata fileref="images/DragPage1.png" format="PNG" />
+		</imageobject>
+	</mediaobject>
+	<para>
+		2. Click on the <emphasis role="bold">Portal Page</emphasis>, drag and drop to another reasonable places which you want to in this page.
+	</para>
+	<mediaobject>
+		<imageobject>
+			<imagedata fileref="images/DragPage3.png" format="PNG" />
+		</imageobject>
+	</mediaobject>
 </section>
+
+
