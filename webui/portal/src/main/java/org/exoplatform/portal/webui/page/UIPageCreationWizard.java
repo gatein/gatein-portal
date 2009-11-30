@@ -389,6 +389,14 @@ public class UIPageCreationWizard extends UIPageWizard
          uiWizard.updateUIPortal(uiPortalApp, event);
          JavascriptManager jsManager = event.getRequestContext().getJavascriptManager();
          jsManager.addJavascript("eXo.portal.portalMode=" + UIPortalApplication.NORMAL_MODE + ";");
+
+         UIWizardPageSetInfo uiPageInfo = uiWizard.getChild(UIWizardPageSetInfo.class);
+         UIPageNodeSelector uiNodeSelector = uiPageInfo.getChild(UIPageNodeSelector.class);
+         PageNode selectedNode = uiNodeSelector.getSelectedPageNode();
+
+         String uri = Util.getPortalRequestContext().getPortalURI() + "\\" + selectedNode.getUri();
+         //Util.getPortalRequestContext().sendRedirect(uri);
+         jsManager.addJavascript("window.location = '" + uri + "'");
       }
    }
 
