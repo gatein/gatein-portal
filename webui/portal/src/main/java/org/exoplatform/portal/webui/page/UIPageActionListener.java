@@ -48,7 +48,10 @@ import javax.portlet.WindowState;
 import java.util.ArrayList;
 import java.util.List;
 
-/** Created by The eXo Platform SAS Author : Tran The Trong trongtt@gmail.com Jun 14, 2006 */
+/**
+ * Created by The eXo Platform SAS Author : Tran The Trong trongtt@gmail.com Jun
+ * 14, 2006
+ */
 public class UIPageActionListener
 {
 
@@ -64,7 +67,8 @@ public class UIPageActionListener
          {
             UserPortalConfigService configService = uiPortalApp.getApplicationComponent(UserPortalConfigService.class);
             String remoteUser = Util.getPortalRequestContext().getRemoteUser();
-            UserPortalConfig portalConfig = configService.getUserPortalConfig(Util.getPortalRequestContext().getPortalOwner(), remoteUser);
+            UserPortalConfig portalConfig =
+               configService.getUserPortalConfig(Util.getPortalRequestContext().getPortalOwner(), remoteUser);
             uiPortal.getChildren().clear();
             PortalDataMapper.toUIPortal(uiPortal, portalConfig);
             uiPortalApp.setModeState(UIPortalApplication.NORMAL_MODE);
@@ -155,8 +159,7 @@ public class UIPageActionListener
             // TODO tam.nguyen: filter navigation, select navigation up to user
             if (selectedNode == null)
             {
-               filter:
-               for (PageNavigation nav : navigations)
+               filter : for (PageNavigation nav : navigations)
                {
                   for (PageNode child : nav.getNodes())
                   {
@@ -239,8 +242,9 @@ public class UIPageActionListener
       }
 
       /**
-       * Update the layout of UIPortal if both ownerType and ownerId of navigation are changed
-       *
+       * Update the layout of UIPortal if both ownerType and ownerId of
+       * navigation are changed
+       * 
        * @param uiPortal
        * @param formerNav
        * @param newNav
@@ -248,7 +252,7 @@ public class UIPageActionListener
        * @throws Exception
        */
       private void updateLayout(UIPortal uiPortal, PageNavigation formerNav, PageNavigation newNav,
-                                UIPortalApplication uiPortalApp) throws Exception
+         UIPortalApplication uiPortalApp) throws Exception
       {
          if (formerNav == null || newNav == null)
          {
@@ -269,20 +273,33 @@ public class UIPageActionListener
          Container container = pConfig.getPortalLayout();
          if (container != null)
          {
+            /** Keep track of show max window property * */
+            boolean showMaxWindow = false;
+            try
+            {
+               PageNode selectedNode = uiPortal.getSelectedNode();
+               Page displayedPage = storage.getPage(selectedNode.getPageReference());
+               showMaxWindow = displayedPage.isShowMaxWindow();
+            }
+            catch (Exception ex)
+            {
+
+            }
             UserPortalConfig portalConfig = uiPortalApp.getUserPortalConfig();
             portalConfig.setPortal(pConfig);
-            rebuildUIPortal(uiPortal, portalConfig);
+            rebuildUIPortal(uiPortal, portalConfig, showMaxWindow);
          }
       }
 
       /**
        * Rebuild UIPortal with updated UserPortalConfig
-       *
+       * 
        * @param uiPortal
        * @param portalConfig
        * @throws Exception
        */
-      private void rebuildUIPortal(UIPortal uiPortal, UserPortalConfig portalConfig) throws Exception
+      private void rebuildUIPortal(UIPortal uiPortal, UserPortalConfig portalConfig, boolean showMaxWindow)
+         throws Exception
       {
          PageNode backupSelectedNode = uiPortal.getSelectedNode();
          PageNavigation backupSelectedNavigation = uiPortal.getSelectedNavigation();
@@ -292,40 +309,61 @@ public class UIPageActionListener
          uiPortal.setSelectedNode(backupSelectedNode);
          uiPortal.setSelectedNavigation(backupSelectedNavigation);
          uiPortal.setSelectedPaths(backupSelectedPaths);
+
+         /** Update the show-max-window property on UIPage * */
+         UIPageBody uiPageBody = uiPortal.findFirstComponentOfType(UIPageBody.class);
+         UIPage uiPage = (UIPage)uiPageBody.getUIComponent();
+         uiPage.setShowMaxWindow(showMaxWindow);
+         
+         if(showMaxWindow){
+            //To maximized the UIPage
+            uiPortal.setMaximizedUIComponent(uiPage);
+         }else{
+            //To un-maximized the UIPage
+            UIComponent showedMaxComponent = uiPortal.getMaximizedUIComponent();
+            if(showedMaxComponent instanceof UIPage){
+               uiPortal.setMaximizedUIComponent(null);
+            }
+         }
       }
    }
 
    //  
-   //  static public class DeleteWidgetActionListener extends EventListener<UIPage> {
-   //    public void execute(Event<UIPage> event) throws Exception {
-   //      WebuiRequestContext pContext = event.getRequestContext();
-   //      String id  = pContext.getRequestParameter(UIComponent.OBJECTID);
-   //      UIPage uiPage = event.getSource();
-   //      List<UIWidget> uiWidgets = new ArrayList<UIWidget>();
-   //      uiPage.findComponentOfType(uiWidgets, UIWidget.class);
-   //      for(UIWidget uiWidget : uiWidgets) {
-   //        if(uiWidget.getApplicationInstanceUniqueId().equals(id)) {
-   //          uiPage.getChildren().remove(uiWidget);
-   //          String userName = pContext.getRemoteUser() ;
-   //          if(userName != null && userName.trim().length() > 0) {
-   //            UserWidgetStorage widgetDataService = uiPage.getApplicationComponent(UserWidgetStorage.class) ;
-   //            widgetDataService.delete(userName, uiWidget.getApplicationName(), uiWidget.getApplicationInstanceUniqueId()) ;            
-   //          }
-   //          if(uiPage.isModifiable()) {
-   //            Page page = PortalDataMapper.toPageModel(uiPage);    
-   //            UserPortalConfigService configService = uiPage.getApplicationComponent(UserPortalConfigService.class);     
-   //            if(page.getChildren() == null) page.setChildren(new ArrayList<Object>());
-   //            configService.update(page);
-   //          }
-   //          break;
-   //        }
-   //      }
-   //      PortalRequestContext pcontext = (PortalRequestContext)event.getRequestContext();
-   //      pcontext.setFullRender(false);
-   //      pcontext.setResponseComplete(true) ;
-   //      pcontext.getWriter().write(EventListener.RESULT_OK) ;
-   //    }
-   //  }
+   // static public class DeleteWidgetActionListener extends
+   // EventListener<UIPage> {
+   // public void execute(Event<UIPage> event) throws Exception {
+   // WebuiRequestContext pContext = event.getRequestContext();
+   // String id = pContext.getRequestParameter(UIComponent.OBJECTID);
+   // UIPage uiPage = event.getSource();
+   // List<UIWidget> uiWidgets = new ArrayList<UIWidget>();
+   // uiPage.findComponentOfType(uiWidgets, UIWidget.class);
+   // for(UIWidget uiWidget : uiWidgets) {
+   // if(uiWidget.getApplicationInstanceUniqueId().equals(id)) {
+   // uiPage.getChildren().remove(uiWidget);
+   // String userName = pContext.getRemoteUser() ;
+   // if(userName != null && userName.trim().length() > 0) {
+   // UserWidgetStorage widgetDataService =
+   // uiPage.getApplicationComponent(UserWidgetStorage.class) ;
+   // widgetDataService.delete(userName, uiWidget.getApplicationName(),
+   // uiWidget.getApplicationInstanceUniqueId()) ;
+   // }
+   // if(uiPage.isModifiable()) {
+   // Page page = PortalDataMapper.toPageModel(uiPage);
+   // UserPortalConfigService configService =
+   // uiPage.getApplicationComponent(UserPortalConfigService.class);
+   // if(page.getChildren() == null) page.setChildren(new ArrayList<Object>());
+   // configService.update(page);
+   // }
+   // break;
+   // }
+   // }
+   // PortalRequestContext pcontext =
+   // (PortalRequestContext)event.getRequestContext();
+   // pcontext.setFullRender(false);
+   // pcontext.setResponseComplete(true) ;
+   // pcontext.getWriter().write(EventListener.RESULT_OK) ;
+   // }
+   // }
    //  
    static public class DeleteGadgetActionListener extends EventListener<UIPage>
    {
@@ -344,10 +382,13 @@ public class UIPageActionListener
                String userName = pContext.getRemoteUser();
                if (userName != null && userName.trim().length() > 0)
                {
-                  // Julien : commented as normally removing the gadget should remove the state associated with it
+                  // Julien : commented as normally removing the gadget should
+                  // remove the state associated with it
                   // in the MOP
-                  // UserGadgetStorage widgetDataService = uiPage.getApplicationComponent(UserGadgetStorage.class) ;
-                  // widgetDataService.delete(userName, uiWidget.getApplicationName(), uiWidget.getId()) ;
+                  // UserGadgetStorage widgetDataService =
+                  // uiPage.getApplicationComponent(UserGadgetStorage.class) ;
+                  // widgetDataService.delete(userName,
+                  // uiWidget.getApplicationName(), uiWidget.getId()) ;
                }
                if (uiPage.isModifiable())
                {
