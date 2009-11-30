@@ -212,7 +212,7 @@ public class UIGroupNavigationManagement extends UIContainer
          list.add(navigation);
          selector.initNavigations(list);
          selector.loadNavigationByNavId(navId, uicomp.navigations);
-         selector.removeChild(UIRightClickPopupMenu.class);
+         //selector.removeChild(UIRightClickPopupMenu.class);
          popUp.setUIComponent(pageManager);
          popUp.setWindowSize(400, 400);
          popUp.setShowMask(true);
