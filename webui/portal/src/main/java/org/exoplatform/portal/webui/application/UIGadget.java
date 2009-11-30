@@ -25,9 +25,11 @@ import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.model.ApplicationState;
 import org.exoplatform.portal.config.model.Properties;
+import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.WebAppController;
 import org.exoplatform.web.application.gadget.GadgetApplication;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIComponent;
@@ -133,7 +135,7 @@ public class UIGadget extends UIComponent
       {
          try
          {
-            DataStorage ds= getApplicationComponent(DataStorage.class);
+            DataStorage ds = getApplicationComponent(DataStorage.class);
             String gadgetId = ds.getId(state);
 
             //
@@ -211,6 +213,17 @@ public class UIGadget extends UIComponent
       }
    }
 
+   @Override
+   public void processRender(WebuiRequestContext context) throws Exception
+   {
+      if (getApplication() == null)
+      {
+         this.setRendered(false);
+         return;
+      }
+      super.processRender(context);
+   }
+
    /**
     * Gets GadgetApplication by GadgedRegistryService
     * 
@@ -233,8 +246,11 @@ public class UIGadget extends UIComponent
          {
             return null;
          }
-         application = GadgetUtil.toGadgetApplication(model);
-         webController.addApplication(application);
+         if (model != null)
+         {
+            application = GadgetUtil.toGadgetApplication(model);
+            webController.addApplication(application);
+         }
       }
       return application;
    }
