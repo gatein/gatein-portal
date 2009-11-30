@@ -359,7 +359,7 @@ public class UIGroupNavigationManagement extends UIContainer
          ArrayList<PageNavigation> navis = new ArrayList<PageNavigation>();
          navis.add(selectedNavigation);
          selector.initNavigations(navis);
-         selector.removeChild(UIRightClickPopupMenu.class);
+         //selector.removeChild(UIRightClickPopupMenu.class);
          uiNavigationPopup.setUIComponent(pageManager);
          uiNavigationPopup.setWindowSize(400, 400);
          uiNavigationPopup.setRendered(true);
