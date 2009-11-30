@@ -287,6 +287,7 @@ public class UIPortalComposer extends UIContainer
          UIMaskWorkspace uiMaskWS = uiApp.getChildById(UIPortalApplication.UI_MASK_WS_ID);
          UIPortalForm portalForm = uiMaskWS.createUIComponent(UIPortalForm.class, null, "UIPortalForm");
          portalForm.setPortalOwner(uiPortal.getOwner());
+         portalForm.setBindingBean();
          if(PortalConfig.USER_TYPE.equals(uiPortal.getOwnerType())){
             portalForm.removeChildById("PermissionSetting");
          }
