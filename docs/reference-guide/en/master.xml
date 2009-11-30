@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) 2009 eXo Platform SAS.
+    
+    This is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Lesser General Public License as
+    published by the Free Software Foundation; either version 2.1 of
+    the License, or (at your option) any later version.
+    
+    This software is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+    Lesser General Public License for more details.
+    
+    You should have received a copy of the GNU Lesser General Public
+    License along with this software; if not, write to the Free
+    Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+    02110-1301 USA, or see the FSF site: http://www.fsf.org.
+
+-->
+
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+      "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+<book lang="en">
+	<bookinfo>
+		<title>GateIn Documentation</title>
+		<subtitle>GateIn</subtitle>
+		<releaseinfo>This is a very rough documentation issued from the merge,
+				content still has to be validated, we still hope that it can help the
+				beta testers. Thanks !</releaseinfo>
+
+	</bookinfo>
+	<toc />
+
+
+	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="modules/Introduction.xml" />
+	<!--
+		Table of content in Wiki Format <xi:include
+		xmlns:xi="http://www.w3.org/2001/XInclude"
+		href="modules/Portal_Manual.xml" />
+	-->
+
+	<!--  1 Terms -->
+	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="modules/Terms.xml" />
+
+	<!--
+		Portal, Portlet, Navigation, Node, Gadget, Public mode and Private
+		mode, Permission levels, Workspace concept, Toolbar concept
+	-->
+
+	<!-- 4_Configuration -->
+	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="modules/Configuration.xml" />
+
+
+	<!-- 5_Security -->
+
+	<!-- Core/Security_Service -->
+	<!--
+		Outdated <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+		href="modules/Security.xml" />
+	-->
+
+	<!-- 6_Integration -->
+
+	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="modules/Integration.xml" />
+
+	<!-- 7_SSO -->
+
+	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="modules/SSO.xml" />
+
+
+	<!-- 8_Migration -->
+	<!--
+		Archived <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+		href="modules/Migration_from_2-1_to_2-2.xml" /> <xi:include
+		xmlns:xi="http://www.w3.org/2001/XInclude"
+		href="modules/Migration_from_2-2_to_2-5.xml" /> <xi:include
+		xmlns:xi="http://www.w3.org/2001/XInclude"
+		href="modules/Export-Import_Portal_Configuration.xml" />
+	-->
+
+	<!-- 9_Technical_Foundations -->
+
+	<!--  Main/Overall_Architecture -->
+	<!--  Kernel/Inversion_of_Control -->
+	<!--  Portlet_Container -->
+	<!-- Java_Content_Repository -->
+	<!-- Web_Services -->
+	<!-- GateIn_Core -->
+	<!-- GateIn_Kernel -->
+
+	<!-- 10_Development_ -->
+
+	<!-- Main/Developers -->
+	<!-- http://docs.exoplatform.org -->
+	<!-- Products_Tech_Overview/Components_Registry -->
+	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="modules/Development.xml" />
+
+	<!--  Portlets -->
+	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="modules/Portlets.xml" />
+
+	<!-- Gadgets -->
+	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="modules/Gadgets.xml" />
+	
+	<!-- Single Sign On -->
+	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="modules/SSO.xml" />
+
+
+	<!--
+		11_Support
+		http://www.exoplatform.com/portal/public/en/forum?portal:componentId=forum&portal:type=action&portal:isSecure=false&uicomponent=UIBreadcumbs&op=ChangePath&objectId=forumCategory88afa455c0a8020100a6752323da4b60
+		http://faq.exoplatform.com/ http://jira.exoplatform.org/browse/Portal
+	-->
+
+
+	<!-- Orphan from XWiki site -->
+	<chapter>
+		<title>Orphans chapters: TODO: move and integrate those</title>
+		<xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+			href="modules/_orphans/Setup_GadgetServer.xml" />
+			<!-- 
+		<xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+			href="modules/_orphans/Internationalization_Guidelines.xml" />
+			 -->
+	</chapter>
+
+
+	<!--
+		Deprecated <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+		href="modules/Advanced_User_Guide.xml" /> <xi:include
+		xmlns:xi="http://www.w3.org/2001/XInclude"
+		href="modules/Create_a_predefined_Portal_Navigation.xml" />
+		<xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+		href="modules/RTL.xml" /> Was in HowTo <xi:include
+		xmlns:xi="http://www.w3.org/2001/XInclude"
+		href="modules/Skin_Config.xml" />
+	-->
+
+</book>

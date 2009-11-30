@@ -1,0 +1,258 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+]>
+<section id="sect-Reference_Guide-Internationalization_Configuration">
+	<!--   
+
+    Copyright (C) 2009 eXo Platform SAS.
+    
+    This is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Lesser General Public License as
+    published by the Free Software Foundation; either version 2.1 of
+    the License, or (at your option) any later version.
+    
+    This software is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+    Lesser General Public License for more details.
+    
+    You should have received a copy of the GNU Lesser General Public
+    License along with this software; if not, write to the Free
+    Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+    02110-1301 USA, or see the FSF site: http://www.fsf.org.
+
+   --><title>Internationalization Configuration</title>
+	<section id="sect-Reference_Guide-Internationalization_Configuration-Overview">
+		<title>Overview</title>
+		<para>
+			All aspects of internationalization in GateIn products are covered. You should have a general knowledge of Internationalization in Java products. Sun created a <ulink url=" http://java:sun.com-docs-books-tutorial-i18n-TOC.html">good internationalization tutorial</ulink> .
+		</para>
+		<section id="sect-Reference_Guide-Overview-Introduction">
+			<title>Introduction</title>
+			<orderedlist numeration="arabic">
+				<listitem>
+					<para>
+						typical locale file can be found in:
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						.../WEB-INF/classes/locale/navigation/group/organization/management/executive-board
+					</para>
+				</listitem>
+			</orderedlist>
+			<para>
+				You should notice that
+			</para>
+			<itemizedlist>
+				<listitem>
+					<para>
+						the file is located in the <emphasis role="bold">classes</emphasis> folder of your WEB-INF, this way they are loaded by the ClassLoader.
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						all resource files are in the subfolder <emphasis role="bold">locale</emphasis> .
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						resources for the <xref linkend="sect-Reference_Guide-Portal_Navigation_Configuration" /> are located in a <emphasis role="bold">navigation</emphasis> subfolder of locale.
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						resources concerning the navigation of a group are in a <emphasis role="bold">navigation/group</emphasis> subfolder. The other possible navigations are <emphasis role="bold">user</emphasis> and <emphasis role="bold">portal</emphasis> .
+					</para>
+				</listitem>
+			</itemizedlist>
+			<para>
+				Furthermore there are properties files in portal sub-folder, they form together the <emphasis role="bold">portal resource bundle</emphasis> .:<!--   <ulink url="http://fisheye.exoplatform.org-browse-projects-portal-trunk-web-portal-src-main-webapp-WEB-INF-classes-locale-portal">::/WEB-INF/classes/locale/portal></ulink>   -->
+			</para>
+			<para>
+				The <emphasis>executive-board</emphasis> en.properties{code:none}{code} The keys (example: ~~organization.newstaff~~) can have any name but must not contain spaces. The values (~~New Staff~~) contain the translation to the language of the resource file. The suffix "en" means in this case "English".
+			</para>
+			<orderedlist numeration="arabic">
+				<listitem>
+					<para>
+						info("There are also resource bundles in XML format <xref linkend="sect-Reference_Guide-XML_Resources_Bundles" /> which are a proprietary format of GateIn Platform.")
+					</para>
+				</listitem>
+			</orderedlist>
+			<para>
+				1 LocalesConfig
+			</para>
+			<!--   <ulink url="http://fisheye.exoplatform.org-browse-projects-portal-trunk-web-portal-src-main-webapp-WEB-INF-conf-common-common-configuration.xml?r=28705">/WEB-INF/conf/common/common-configuration.xml"</ulink>   -->
+			<para>
+				In the <filename>/WEB-INF/conf/common/common-configuration.xml</filename> file of your installation you find:
+			</para>
+			
+<programlisting> &lt;component&gt;
+  &lt;key&gt;org.exoplatform.services.resources.LocaleConfigService&lt;/key&gt; 
+  &lt;type&gt;org.exoplatform.services.resources.impl.LocaleConfigServiceImpl&lt;/type&gt; 
+ &lt;init-params&gt;
+ &lt;value-param&gt;
+  &lt;name&gt;locale.config.file&lt;/name&gt; 
+  &lt;value&gt;war:/conf/common/locales-config.xml&lt;/value&gt; 
+  &lt;/value-param&gt;
+  &lt;/init-params&gt;
+  &lt;/component&gt;
+</programlisting>
+			<para>
+				The configuration points to the locale configuration file like this one<ulink type="http" url="http://fisheye.exoplatform.org-browse-projects-portal-trunk-web-portal-src-main-webapp-WEB-INF-conf-common-locales-config.xml?r=24696" />
+			</para>
+			
+<programlisting>{code:xml} &lt;locale-config&gt; &lt;locale&gt;ar&lt;/locale&gt; &lt;output-encoding&gt;UTF-8&lt;/output-encoding&gt; &lt;input-encoding&gt;UTF-8&lt;/input-encoding&gt; &lt;description&gt;Default configuration for the Arabic locale&lt;/description&gt; &lt;orientation&gt;rt&lt;/orientation&gt; &lt;/locale-config&gt; {code}
+</programlisting>
+			<para>
+				The locale has to be defined using <ulink type="http" url="http://ftp.ics.uci.edu-pub-ietf-http-related-iso639.txt" />, in this example "ar" is Arabic.
+			</para>
+			<para>
+				This configuration defines also the list of languages in the "Change Language" section of the portal.
+			</para>
+			<para>
+				1.1 Encoding It's highly recommended to always use <emphasis role="bold">UTF-8</emphasis>. You should also encode all property files in UTF-8.
+			</para>
+			<para>
+				In the java implementation, the encoding parameters will be used for the request response stream. The input-encoding parameter will be used for request setCharacterEncoding(..).
+			</para>
+			<para>
+				1.1 Orientation The default orientation of text and images is Left-To-Right. As you know GateIn support <emphasis role="bold">Right-To-Left</emphasis> orientation. Therefore for Arabic you define
+			</para>
+			<para>
+				&lt;orientation&gt;rt&lt;/orientation&gt;
+			</para>
+			<para>
+				1 ResourceBundleService
+			</para>
+			<para>
+				The resource bundle service is configured here: // <ulink url="http://fisheye.exoplatform.org/browse/projects/portal/trunk/web/portal/src/main/webapp/WEB-INF/conf/common/common-configuration.xml?r=28705">http://fisheye.exoplatform.org/browse/projects/portal/trunk/web/portal/src/main/webapp/WEB-INF/conf/common/common-configuration.xml?r=28705</ulink>
+			</para>
+			<para>
+				Caution: Other GateIn products like DMS use dedicated configuration file called "resource-bundle-configuration.xml".
+			</para>
+			<para>
+				A typical configuration looks like this one: {code:xml} &lt;component&gt; &lt;key&gt;org.exoplatform.services.resources.ResourceBundleService&lt;/key&gt; &lt;type&gt;org.exoplatform.services.resources.jcr.ResourceBundleServiceImpl&lt;/type&gt; &lt;init-params&gt;
+			</para>
+			<para>
+				&lt;values-param&gt; &lt;name&gt;classpath.resources&lt;/name&gt; &lt;description&gt;The resources that start with the following package name should be loaded from file system&lt;/description&gt; &lt;value&gt;locale.portlet&lt;/value&gt; &lt;/values-param&gt;
+			</para>
+			<para>
+				&lt;values-param&gt; &lt;name&gt;init.resources&lt;/name&gt; &lt;description&gt;Store the following resources in the DB for the first launch &lt;/description&gt; &lt;value&gt;locale.portal.expression&lt;/value&gt; &lt;value&gt;locale.portal.services&lt;/value&gt; &lt;value&gt;locale.portal.webui&lt;/value&gt; &lt;value&gt;locale.portal.custom&lt;/value&gt;
+			</para>
+			<para>
+				&lt;value&gt;locale.navigation.portal.classic&lt;/value&gt; &lt;value&gt;locale.navigation.group.platform.administrators&lt;/value&gt; &lt;value&gt;locale.navigation.group.platform.users&lt;/value&gt; &lt;value&gt;locale.navigation.group.platform.guests&lt;/value&gt; &lt;value&gt;locale.navigation.group.organization.management.executive-board&lt;/value&gt; &lt;/values-param&gt;
+			</para>
+			<para>
+				&lt;values-param&gt; &lt;name&gt;portal.resource.names&lt;/name&gt; &lt;description&gt;The properties files of the portal, these files will be merged into one ResoruceBundle properties &lt;/description&gt; &lt;value&gt;locale.portal.expression&lt;/value&gt; &lt;value&gt;locale.portal.services&lt;/value&gt; &lt;value&gt;locale.portal.webui&lt;/value&gt; &lt;value&gt;locale.portal.custom&lt;/value&gt; &lt;/values-param&gt;
+			</para>
+			<para>
+				&lt;/init-params&gt; &lt;/component&gt;
+			</para>
+			
+<programlisting>
+There are three parameters: *classpath.resources*, *init.resources*, and *portal.resource.names*. We will talk later about _classpath.resources_. 
+In _init.resources_ you have to define _*all resources*_ that you want use in the product, independently of the fact that they belong to the portal or to the navigation. All these resources are stored in JCR at the first launch of your product. After that, you only can modify these resources using the [Portal:Internationalization Portlet].
+h2. Portal Resource Bundle
+The parameter *portal.resource.names* defines all resources that belong to the *Portal Resource Bundle*. This means that these resources are merged to a *single resource bundle* which is accessible from anywhere in GateIn products. As mentioned, all these keys are located in the same bundle, which is separated from the navigation resource bundles.
+h2. Navigation Resource Bundles
+There is a resource bundle for each navigation. A navigation can exist for user, groups, and portal. In the example above you see bundle definitions for the navigation of the classic portal and of four different groups. Each of these resource bundles lives in a different sphere, they are independent of each other and they do not belong to the portal.resource.names parameter (because they are not mentioned in _portal.resource.names_).
+As you learned in the introduction you must put the properties for a group in the _WEB-INF/classes/locale/navigation/group/_ folder.
+Example: 
+*.../portal/trunk/web/portal/src/main/webapp/WEB-INF/classes/locale/navigation/group/organization/management/executive-board_en.properties* 
+The folder and file names must correspond to the group hierarchy. The group name "executive-board" is followed by the iso 639 code. For each language you defined in the LocalesConfig you must provide a resource file.
+If you ever change the name of a group you also need to change the name of the folder and/or files of the correspondent navigation resource bundles.
+You already know the content of _executive-board_en.properties_:
+{code:none}
+organization.title=Organization
+organization.newstaff=New Staff
+organization.management=Management
+</programlisting>
+			<para>
+				This resource bundle is only accessible for the navigation of the ~~organization.management.executive-board~~ group.
+			</para>
+			<para>
+				1 Portlet
+			</para>
+			<para>
+				1.1 classpath.resources
+			</para>
+			<para>
+				Portlets are independent application and they deliver their own resource files. You can find an example for the GadgetPortlet: <!--    LB    --> .../WEB-INF/classes/locale/portlet/gadget/GadgetPortlet/en.properties <ulink url="http://fisheye.exoplatform.org/browse/projects/portal/trunk/portlet/dashboard/src/main/webapp/WEB/INF/classes/locale/portlet/gadget/GadgetPortlet/en.properties?r=24413" />
+			</para>
+			<para>
+				All portlet resources are located in the <emphasis role="bold">locale/portlet</emphasis> subfolder. The ResourceBundleService parameter <emphasis role="bold">classpath.resources</emphasis> defines exactly this subfolder. Doing so the resource file that are in ~~locale/portlet~~ will never be stored in the JCR and reloaded at each start of the application server.
+			</para>
+			
+<programlisting>&lt;values-param&gt;
+  &lt;name&gt;classpath.resources&lt;/name&gt;
+  &lt;description&gt;The resources that start with the following package name should
+               be loaded from file system&lt;/description&gt;
+  &lt;value&gt;locale.portlet&lt;/value&gt;      
+&lt;/values-param&gt;
+</programlisting>
+		</section>
+		
+		<section id="sect-Reference_Guide-Overview-Example">
+			<title>Example</title>
+			<para>
+				Let's suppose you want to add a Spanish translation to the GadgetPortlet.
+			</para>
+			<para>
+				Create the file in: <filename>.../WEB-INF/classes/locale/portlet/gadget/GadgetPortlet</filename>
+			</para>
+			<para>
+				In <emphasis role="bold">portlet.xml</emphasis>, add Spanish as a <emphasis role="bold">supported-locale</emphasis>, the <emphasis role="bold">resource-bundle</emphasis> is already declared and is the same for all languages : {code:xml} &lt;supported-locale&gt;en&lt;/supported-locale&gt; &lt;supported-locale&gt;es&lt;/supported-locale&gt; &lt;resource-bundle&gt;locale.portlet.gadget.GadgetPortlet&lt;/resource-bundle&gt; {code}
+			</para>
+			<para>
+				Find <ulink type="http" url="http://developers.sun.com-portalserver-reference-techart-i18n-portlets.html" /> for more details about portlet internationalization.
+			</para>
+			<para>
+				1.1 Standard Portlet Resource Keys There are three standard keys defined : Title, Short Title and Keywords. Keywords contain a comma-separated list of keywords.
+			</para>
+			
+<programlisting> javax.portlet.title=Breadcrumbs Portlet
+ javax.portlet.short-title=Breadcrumbs
+ javax.portlet.keywords=Breadcrumbs, Breadcrumb
+</programlisting>
+		</section>
+		
+		<section id="sect-Reference_Guide-Overview-Access">
+			<title>Access</title>
+			<para>
+				Whenever you want to display a property in the user language you use its <emphasis>key</emphasis>. Using the below access method the translation is returned in the preferred language of the current http session:
+			</para>
+			<itemizedlist>
+				<listitem>
+					<para>
+						Groovy Template{code}{code}
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						Java
+					</para>
+				</listitem>
+			</itemizedlist>
+			
+<programlisting>WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+ResourceBundle res = context.getApplicationResourceBundle() ;
+String translatedString = res.getString(key);
+</programlisting>
+		</section>
+		
+		<section id="sect-Reference_Guide-Overview-Debugging_resource_bundle_usage">
+			<title>Debugging resource bundle usage</title>
+			<para>
+				When an application needs to be translated, it is never obvious to find out the right key for a given translated property. When the portal is executed in <emphasis role="bold">debug mode</emphasis> it is possible to select among the available languages a special language called <emphasis role="bold">Magic locale</emphasis>.
+			</para>
+			<para>
+				This feature translates a key to the same key value. For instance, the translated value for the key "organization.title" is simply the value "organization.title". Selecting that language allows to use the portal and its applications with <emphasis role="bold">all the keys visible</emphasis> and it is easy to find out the correct key for a given label in the portal page.
+			</para>
+		</section>
+
+	</section>
+
+</section>
+
+

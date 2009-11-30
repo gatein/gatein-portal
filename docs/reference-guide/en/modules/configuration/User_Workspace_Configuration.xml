@@ -1,0 +1,99 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+]>
+<section id="sect-Reference_Guide-User_Workspace_Configuration">
+	<!--    
+
+    Copyright (C) 2009 eXo Platform SAS.
+    
+    This is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Lesser General Public License as
+    published by the Free Software Foundation; either version 2.1 of
+    the License, or (at your option) any later version.
+    
+    This software is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+    Lesser General Public License for more details.
+    
+    You should have received a copy of the GNU Lesser General Public
+    License along with this software; if not, write to the Free
+    Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+    02110-1301 USA, or see the FSF site: http://www.fsf.org.
+
+    --> <title>User Workspace Configuration</title>
+	<section id="sect-Reference_Guide-User_Workspace_Configuration-Overview">
+		<title>Overview</title>
+		<para>
+			The User Workspace is give privileged users access to administration actions. Please refer to the <emphasis>"User Workspace"</emphasis> <!--   <link linkend="Portal:User Workspace">User Workspace Guide</link>    --> to know more details.
+		</para>
+	</section>
+	
+	<section id="sect-Reference_Guide-User_Workspace_Configuration-Default_Configuration">
+		<title>Default Configuration</title>
+		<para>
+			The default configuration defines two groups:
+		</para>
+		<itemizedlist>
+			<listitem>
+				<para>
+					&lt;code&gt;:/platform/administrators&lt;/code&gt; and
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					&lt;code&gt;:/platform/organization/management/executive-board&lt;/code&gt;
+				</para>
+			</listitem>
+		</itemizedlist>
+		<para>
+			anyone in these groups can access and use the User Workspace. The asterisk symbol stands for "any membership type".
+		</para>
+		<orderedlist numeration="arabic">
+			<listitem>
+				<para>
+					user that wants to access the User Workspace he or she a member of at least one of these groups with the appropriate membership.
+				</para>
+			</listitem>
+		</orderedlist>
+	</section>
+	
+	<section id="sect-Reference_Guide-User_Workspace_Configuration-Customize_the_Configuration">
+		<title>Customize the Configuration</title>
+		<para>
+			If an administrator wants to allow someone to access the User Workspace, the admin can add the user to one of these groups or he or she modifies the workspace access configuration. This permission is set in the <emphasis>portal-configuration.xml</emphasis> file.
+		</para>
+		
+<programlisting>  &lt;component&gt;
+    &lt;key&gt;org.exoplatform.portal.config.UserACL&lt;/key&gt;
+    &lt;type&gt;org.exoplatform.portal.config.UserACL&lt;/type&gt;
+    &lt;init-params&gt;
+...
+&lt;value-param&gt;
+        &lt;name&gt;access.control.workspace&lt;/name&gt;
+        &lt;description&gt;groups with memberships that have the right to access the User Control Workspace&lt;/description&gt;
+        &lt;value&gt;*:/platform/administrators,*:/organization/management/executive-board&lt;/value&gt;     
+&lt;/value-param&gt;
+</programlisting>
+		<para>
+			Modify the content of the &lt;code&gt;value&lt;/code&gt; tag depending on your needs. The configuration is taken into account after you restarted the application server.
+		</para>
+		<orderedlist numeration="arabic">
+			<listitem>
+				<para>
+					info(" Remember to specify the groups in &lt;code&gt;organization-configuration.xml&lt;/code&gt;" )
+				</para>
+			</listitem>
+		</orderedlist>
+	</section>
+	
+	<section id="sect-Reference_Guide-User_Workspace_Configuration-Related_links">
+		<title>Related links</title>
+		<para>
+			Please refer to <emphasis>"User Workspace"</emphasis> <!--   <link linkend="Portal:User Workspace">User Workspace Guide</link>    --> to see the user workspace.
+		</para>
+	</section>
+
+</section>
+
+

@@ -1,0 +1,146 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+]>
+<section id="sect-Reference_Guide-Groovy_Templates">
+	<!--  
+
+    Copyright (C) 2009 eXo Platform SAS.
+    
+    This is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Lesser General Public License as
+    published by the Free Software Foundation; either version 2.1 of
+    the License, or (at your option) any later version.
+    
+    This software is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+    Lesser General Public License for more details.
+    
+    You should have received a copy of the GNU Lesser General Public
+    License along with this software; if not, write to the Free
+    Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+    02110-1301 USA, or see the FSF site: http://www.fsf.org.
+
+  --><title>Groovy Templates</title>
+	<section id="sect-Reference_Guide-Groovy_Templates-Overview">
+		<title>Overview</title>
+		<para>
+			This article gives a glance at the Groovy language, and explains how to configure the portlet and and the groovy template.
+		</para>
+		<para>
+			It's recommended to read also <xref linkend="sect-Reference_Guide-AJAX_in_GateIn_Framework" /> in order to understand better the communication between the Groovy Template and the portlet.
+		</para>
+	</section>
+	
+	<section id="sect-Reference_Guide-Groovy_Templates-Basic_structure">
+		<title>Basic structure</title>
+		<para>
+			The structure of a template is very easy :
+		</para>
+		<itemizedlist>
+			<listitem>
+				<para>
+					The HTML code
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					zero or more groovy language code blocks, enclosed by &lt;% ... %&gt;
+				</para>
+			</listitem>
+		</itemizedlist>
+		<para>
+			The HTML code in the template doesn't have to contain the &lt;code&gt;html&lt;/code&gt;, or &lt;code&gt;body&lt;/code&gt; tags. Hence, you can use a groovy template for a component that will be rendered in another component.
+		</para>
+		<para>
+			Example : <emphasis role="bold">UIPortalApplication.gtmpl</emphasis> template (<emphasis role="bold">/GateInProjects/portal/trunk/web/portal/src/main/webapp/groovy/portal/webui/workspace/</emphasis>)
+		</para>
+		
+<programlisting>&lt;!DOCTYPE html 
+    PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+           "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"&gt;
+&lt;%
+  import org.exoplatform.webui.core.UIComponent;
+  def currentPage = uicomponent.getCurrentPage();
+  ... 
+%&gt;
+  ...
+  &lt;div class="$uicomponent.skin" id="UIPortalApplication"&gt;
+    &lt;%uicomponent.renderChildren();%&gt;
+</programlisting>
+	</section>
+	
+	<section id="sect-Reference_Guide-Groovy_Templates-Groovy_language">
+		<title>Groovy language</title>
+		<para>
+			Groovy is a scripting language for Java. Here are a few examples on how to use it, but you can find more information in <ulink url="http://groovy.codehaus.org/Documentation">the full documentation</ulink>.
+		</para>
+		<para>
+			This language looks like Java a lot, so it's very easy to use. Examples :
+		</para>
+		<para>
+			Variables definition : {code} int min = 1; def totalPage = uicomponent.getAvailablePage(); String name = "uiPortlet"; categories = uicomponent.getItemCategories(); String columns = uicomponent.getColumns(); {code} Other expressions : {code} for(category in categories) { ... } // easy to use for loop for(i in min..max) { ... } // min and max are int variables println "&lt;/div&gt;" ; println """ &lt;div class="Item"&gt; &lt;div class="OverflowContainer"&gt; """; &lt;%=uicomponent.getToolbarStyle();%&gt; // &lt;%= to avoid a call of println method import org.exoplatform.portal.config.model.PageNode; {code}
+		</para>
+	</section>
+	
+	<section id="sect-Reference_Guide-Groovy_Templates-Linking_a_portlet_with_a_template">
+		<title>Linking a portlet with a template</title>
+		<para>
+			Stuff Goes Here?
+		</para>
+	</section>
+	
+	<section id="sect-Reference_Guide-Groovy_Templates-Portlet_configuration">
+		<title>Portlet configuration</title>
+		<para>
+			The configuration of a portlet is partly made with {style:type=span|font-family=courier new,courier}ComponentConfig {style}annotations (others are ComponentConfigs, EventConfig, etc). One of the parameters of this annotation is called {style:type=span|font-family=courier new,courier}template{style}, where you can define the path to the template file associated with this portlet.
+		</para>
+		<para>
+			To specify this parameter to your portlet, just add this statement to your configuration annotation, for example in <emphasis role="bold">/GateInProjects/portal/trunk/portlet/exoadmin/src/main/java/org/exoplatform/applicationregistry/webui/component/</emphasis> you find <emphasis role="bold">UIApplicationForm.java</emphasis>:
+		</para>
+		
+<programlisting>@ComponentConfig(
+    lifecycle = UIFormLifecycle.class,
+    template =  "system:/groovy/webui/form/UIFormWithTitle.gtmpl",
+    events = {
+      @EventConfig(listeners = UIApplicationForm.SaveActionListener.class),
+      @EventConfig(phase = Phase.DECODE, listeners = UIApplicationForm.CancelActionListener.class)
+    }
+)
+</programlisting>
+		<para>
+			You see that the path is in the namespace called "system", "system" is a reference to the portal webapp. In this webapp you find some reusable groovy templates, just open the folder <emphasis role="bold">/GateInProjects/portal/trunk/web/portal/src/main/webapp/groovy/webui/form/</emphasis> to see them.
+		</para>
+		<para>
+			As you want to create your own template, create a groovy file in your webbapp and refer to it. Please use the namespace "app" for refering to the same webapp as your component. GateIn always puts the component templates in a folder like "/webapp/groovy/your<emphasis>portlet</emphasis>name/webui/component".
+		</para>
+		
+<programlisting>template = "app:/groovy/your_portlet_name/webui/component/your_component.gtmpl"
+</programlisting>
+		<para>
+			You can now edit your template file.
+		</para>
+	</section>
+	
+	<section id="sect-Reference_Guide-Groovy_Templates-The_template_file">
+		<title>The template file</title>
+		<para>
+			As we said before, the template file is composed of HTML code and groovy code blocks. There are a few things more that you need to know to fully link your portlet with your template.
+		</para>
+		<para>
+			If your template defines the UI of a component, you have an access to this component instance (the java object) using the variable {style:type=span|font-family=courier new,courier}uicomponent{style}. This should be the case almost all the time, but we recommend that you check that your java class inherits from UIComponent before you use this variable. With this {style:type=span|font-family=courier new,courier}uicomponent {style}variable, you can access all the attributes and functions of your component, to use them in your template. Example : UIPageIterator.gtmpl {code} &lt;% def currentPage = uicomponent.getCurrentPage(); %&gt; ... &lt;a href="&lt;%=uicomponent.event("ShowPage","$currentPage")%&gt;" class="Icon LastTopPageIcon"&gt;&lt;span&gt;&lt;/span&gt;&lt;/a&gt; {code}
+		</para>
+		<para>
+			This example shows that {style:type=span|font-family=courier new,courier}uicomponent {style}can be used to make Ajax calls, thanks to the {style:type=span|font-family=courier new,courier}event {style}method. See <xref linkend="sect-Reference_Guide-AJAX_in_GateIn_Framework" /> for more details.
+		</para>
+		<para>
+			Another variable that you can use is {style:type=span|font-family=courier new,courier}{style}<emphasis>ctx. It gives access to the context in which the template is processed. Hence, you can get some elements like the request, the Javscript manager, or the resource resolver (</emphasis>ctx.appRes). Examples : {code} &lt;% def rcontext = <emphasis>ctx.getRequestContext() ; rcontext.getJavascriptManager().importJavascript('GateIn.webui.UIPopupWindow');</emphasis>ctx.appRes(popupId + ".title."+ title); %&gt; {code}
+		</para>
+		<para>
+			If you use your template to define the user interface of a component that includes a form, you can access the instance of UIForm in a variable named {style:type=span|font-family=courier new,courier}uiform{style}. The UIForm class provides the methods, {style:type=span|font-family=courier new,courier}begin(){style} and {style:type=span|font-family=courier new,courier}end(){style}, that write the HTML tags of the form. Your form class must inherit from <literal>UIForm</literal>, in this class you add the input elements (fields, checkboxes, lists) which you wish to use in your form. In your groovy template you can render your input elements using {style:type=span|font-family=courier new,courier}{style}{code}{ uiform.renderField(field) }{code}
+		</para>
+	</section>
+
+</section>
+
+

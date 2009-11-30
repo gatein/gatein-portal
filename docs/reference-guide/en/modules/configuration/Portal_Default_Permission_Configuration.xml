@@ -1,0 +1,125 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+]>
+<section id="sect-Reference_Guide-Portal_Default_Permission_Configuration">
+	<!--    
+
+    Copyright (C) 2009 eXo Platform SAS.
+    
+    This is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Lesser General Public License as
+    published by the Free Software Foundation; either version 2.1 of
+    the License, or (at your option) any later version.
+    
+    This software is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+    Lesser General Public License for more details.
+    
+    You should have received a copy of the GNU Lesser General Public
+    License along with this software; if not, write to the Free
+    Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+    02110-1301 USA, or see the FSF site: http://www.fsf.org.
+
+    --> <title>Portal Default Permission Configuration</title>
+	<section id="sect-Reference_Guide-Portal_Default_Permission_Configuration-Overview">
+		<title>Overview</title>
+		<para>
+			The permission configuration for the portal is defined in the file portal/WEB-INF/conf/portal/portal-configuration.xml. The component UserACL is described there along with other portal component configurations.
+		</para>
+		<para>
+			It defines 5 permissions types:
+		</para>
+		<itemizedlist>
+			<listitem>
+				<para>
+					<emphasis>super.user</emphasis>: The super user has all the rights on the platform, by default this user is called root
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					<emphasis>portal.creator.groups</emphasis>: This list defines all groups that will be able to manage the different portals, they also have the permission to create new portals. The format is "membership:/group/subgroup".
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					<emphasis>navigation.creator.membership.type</emphasis>: Defines the membership type of the group managers. The group managers have the permission to create and edit group pages and they can modify the group navigation.
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					<emphasis>guests.group</emphasis>: Contains the name of the group that is used as guest group. Any anonymous user becomes automatically member of this group when he enters the public pages.
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					<emphasis>access.control.workspace</emphasis>: Defines the users that have access to the control workspace. In the demo version the control workspace is accessible only to 'root' and 'john'. They can expand/collapse the workspace at the left hand side. The format is "membership:/group/subgroup", An asterisk '' gives permission to all memberships.
+				</para>
+			</listitem>
+		</itemizedlist>
+		
+<programlisting> &lt;component&gt;
+    &lt;key&gt;org.exoplatform.portal.config.UserACL&lt;/key&gt;
+    &lt;type&gt;org.exoplatform.portal.config.UserACL&lt;/type&gt;   
+    &lt;init-params&gt;      
+      &lt;value-param&gt;
+        &lt;name&gt;super.user&lt;/name&gt;
+        &lt;description&gt;administrator&lt;/description&gt;
+        &lt;value&gt;root&lt;/value&gt;     
+      &lt;/value-param&gt;
+      
+      &lt;value-param&gt;
+        &lt;name&gt;portal.creator.groups&lt;/name&gt;
+        &lt;description&gt;groups with membership type have permission to manage portal&lt;/description&gt;
+        &lt;value&gt;*:/platform/administrators,*:/organization/management/executive-board&lt;/value&gt;     
+      &lt;/value-param&gt;
+      
+      &lt;value-param&gt;
+        &lt;name&gt;navigation.creator.membership.type&lt;/name&gt;
+        &lt;description&gt;specific membership type have full permission with group navigation&lt;/description&gt;
+        &lt;value&gt;manager&lt;/value&gt;     
+      &lt;/value-param&gt;
+      &lt;value-param&gt;
+        &lt;name&gt;guests.group&lt;/name&gt;
+        &lt;description&gt;guests group&lt;/description&gt;
+        &lt;value&gt;/platform/guests&lt;/value&gt;     
+      &lt;/value-param&gt;     
+      &lt;value-param&gt;
+        &lt;name&gt;access.control.workspace&lt;/name&gt;
+        &lt;description&gt;groups with memberships that have the right to access the User Control Workspace&lt;/description&gt;
+        &lt;value&gt;*:/platform/administrators,*:/organization/management/executive-board&lt;/value&gt;     
+      &lt;/value-param&gt;           
+    &lt;/init-params&gt;   
+  &lt;/component&gt;
+</programlisting>
+		<para>
+			1 Overwrite Portal Default Permissions In GateIn Portal 2.5 and later the UserACL component supports adding a PortalACLPlugin plugin that allows to overwrite portal default permissions.
+		</para>
+		
+<programlisting>  &lt;external-component-plugins&gt;
+    &lt;target-component&gt;org.exoplatform.portal.config.UserACL&lt;/target-component&gt;
+    &lt;component-plugin&gt;
+      &lt;name&gt;addPortalACLPlugin&lt;/name&gt;
+      &lt;set-method&gt;addPortalACLPlugin&lt;/set-method&gt;
+      &lt;type&gt;org.exoplatform.portal.config.PortalACLPlugin&lt;/type&gt;
+      &lt;description&gt;setting some permission for portal&lt;/description&gt;
+      &lt;init-params&gt;     
+        &lt;values-param&gt;
+          &lt;name&gt;access.control.workspace.roles&lt;/name&gt;
+          &lt;value&gt;*:/platform/administrators&lt;/value&gt;
+          &lt;value&gt;*:/organization/management/executive-board&lt;/value&gt;       
+        &lt;/values-param&gt;
+        &lt;values-param&gt;
+          &lt;name&gt;portal.creation.roles&lt;/name&gt;
+          &lt;value&gt;*:/platform/administrators&lt;/value&gt;
+          &lt;value&gt;*:/organization/management/executive-board&lt;/value&gt;      
+        &lt;/values-param&gt;
+      &lt;/init-params&gt;
+    &lt;/component-plugin&gt;
+  &lt;/external-component-plugins&gt;
+</programlisting>
+	</section>
+
+</section>
+
+
