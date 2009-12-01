@@ -134,8 +134,12 @@ public class UIUserInGroup extends UIContainer
       }
       UIGridUser uiGrid = getChild(UIGridUser.class);
       pageList.setPageSize(5);
-      uiGrid.getUIPageIterator().setPageList(pageList);
-
+      
+      UIPageIterator pageIterator = uiGrid.getUIPageIterator();
+      /** We keep the currently selected page index **/
+      int backupPageIndex = pageIterator.getCurrentPage();
+      pageIterator.setPageList(pageList);
+      
       if (group != null)
       {
          String groupId = group.getId();
@@ -164,6 +168,8 @@ public class UIUserInGroup extends UIContainer
             removeChild(UIGroupMembershipForm.class);
       }
 
+      /** Reset the selected page index **/
+      pageIterator.setCurrentPage(backupPageIndex);
    }
 
    public void processRender(WebuiRequestContext context) throws Exception
