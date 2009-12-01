@@ -21,7 +21,9 @@ package org.exoplatform.portal.webui.page;
 
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Page;
+import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
+import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.webui.navigation.UIPageNodeSelector;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
@@ -144,12 +146,18 @@ public class UIWizardPageSetInfo extends UIForm
 
       UIPageNodeSelector uiNodeSelector = getChild(UIPageNodeSelector.class);
       PageNode selectedNode = uiNodeSelector.getSelectedPageNode();
-      if (selectedNode != null)
-      {
-         pageNode.setUri(selectedNode.getUri() + "/" + pageNode.getName());
-      }
-      else
+      PageNavigation nav = uiNodeSelector.getSelectedNavigation();
+      if(nav.getOwnerType().equals(PortalConfig.USER_TYPE))
          pageNode.setUri(pageNode.getName());
+      else
+      {
+         if (selectedNode != null)
+         {
+            pageNode.setUri(selectedNode.getUri() + "/" + pageNode.getName());
+         }
+         else
+            pageNode.setUri(pageNode.getName());
+      }
       return pageNode;
    }
 
@@ -188,6 +196,9 @@ public class UIWizardPageSetInfo extends UIForm
    public PageNode getSelectedPageNode()
    {
       UIPageNodeSelector uiPageNodeSelector = getChild(UIPageNodeSelector.class);
+      PageNavigation nav = uiPageNodeSelector.getSelectedNavigation();
+      if(nav.getOwnerType().equals(PortalConfig.USER_TYPE))
+         return null;
       return uiPageNodeSelector.getSelectedPageNode();
    }
 
