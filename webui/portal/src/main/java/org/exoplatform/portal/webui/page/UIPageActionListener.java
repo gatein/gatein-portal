@@ -320,9 +320,13 @@ public class UIPageActionListener
             uiPortal.setMaximizedUIComponent(uiPage);
          }else{
             //To un-maximized the UIPage
-            UIComponent showedMaxComponent = uiPortal.getMaximizedUIComponent();
-            if(showedMaxComponent instanceof UIPage){
+            UIComponent uiPortalMaxComponent = uiPortal.getMaximizedUIComponent();
+            if(uiPortalMaxComponent instanceof UIPage){
                uiPortal.setMaximizedUIComponent(null);
+            }
+            UIComponent pageBodyMaxComponent = uiPageBody.getMaximizedUIComponent();
+            if(pageBodyMaxComponent instanceof UIPage){
+               uiPageBody.setMaximizedUIComponent(null);
             }
          }
       }
