@@ -2,43 +2,38 @@
 <!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
 ]>
 <section id="sect-Reference_Guide-Portal_Lifecycle">
-	<!--   
-
-    Copyright (C) 2009 eXo Platform SAS.
-    
-    This is free software; you can redistribute it and/or modify it
-    under the terms of the GNU Lesser General Public License as
-    published by the Free Software Foundation; either version 2.1 of
-    the License, or (at your option) any later version.
-    
-    This software is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-    Lesser General Public License for more details.
-    
-    You should have received a copy of the GNU Lesser General Public
-    License along with this software; if not, write to the Free
-    Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
-    02110-1301 USA, or see the FSF site: http://www.fsf.org.
-
-   --><title>Portal Lifecycle</title>
+	<title>Portal Lifecycle</title>
 	<section id="sect-Reference_Guide-Portal_Lifecycle-Overview">
 		<title>Overview</title>
 		<para>
-			This chapter describes the portal lifecycle from the application server start to its stop as well as how requests are handled.
+			This chapter describes the portal lifecycle from the application
+			server start to its stop as well as how requests are handled.
 		</para>
 	</section>
-	
-	<section id="sect-Reference_Guide-Portal_Lifecycle-Application_Server_start_and_stop">
+
+	<section
+		id="sect-Reference_Guide-Portal_Lifecycle-Application_Server_start_and_stop">
 		<title>Application Server start and stop</title>
 		<para>
-			An GateIn Portal instance is simply a web application deployed as a WAR in an application server. Each portlet is also part of an enhanced WAR that we call a portlet application. Hence, the portal web.xml file is the main entry point to grab information about how does the portal start.
+			A GateIn Portal instance is simply a web application deployed as
+			a WAR in an application server.
+			Portlets are also part of an enhanced
+			WAR that we call a portlet application.
 		</para>
 		<para>
-			The web.xml file contains several information such as a listener, a servlet as well as some security information.
+			GateIn doesn't require any particular setup in most common scenario and the
+			web.xml file can remain empty. During deployment,
+			GateIn will automatically and transparently inject a listener and a servlet
+			filter to be able to interact with the portlet application.
+			This feature is dependent on the underlying servlet container and will
+			work out of the box on the proposed bundles. 
 		</para>
 	</section>
 	
+	<!-- 
+	   TODO: Define the added listener
+	 -->
+	<!-- 
 	<section id="sect-Reference_Guide-Portal_Lifecycle-The_Listener">
 		<title>The Listener</title>
 		<para>
@@ -98,19 +93,22 @@
     }
   }
 </programlisting>
+ -->
+        <section>
+           <title>The Servlet</title>
 		<para>
-			1.1 The Servlet
+			The servlet is the main entry point for incoming requests, it
+			also includes some interesting init code when the portal is launched.
+			This servlet (org.gatein.wci.command.CommandServlet) is automatically
+			added during deployment.
 		</para>
-		<para>
-			The servlet is the main entry point for incoming requests, it also includes some interesting init code when the portal is launched.
-		</para>
+       </section>
+<!-- 
 		<para>
 			Here is its definition in the web.xml file:
 		</para>
 		
-<programlisting>  &lt;!-- ================================================================== --&gt;
-  &lt;!--           SERVLET                                                  --&gt;
-  &lt;!-- ================================================================== --&gt;
+<programlisting>
   &lt;servlet&gt;
     &lt;servlet-name&gt;portal&lt;/servlet-name&gt;
     &lt;servlet-class&gt;org.exoplatform.portal.application.PortalController&lt;/servlet-class&gt;
@@ -328,7 +326,6 @@ public class PortalController  extends HttpServlet {
     if(userPortalConfig_ == null) throw new Exception("Can't load user portal config");
     
     //  dang.tung - set portal language by user preference -&gt; browser -&gt; default
-    //----
     String portalLanguage = null ;
     LocaleConfigService localeConfigService  = getApplicationComponent(LocaleConfigService.class) ;
     OrganizationService orgService = getApplicationComponent(OrganizationService.class) ;
@@ -353,7 +350,7 @@ public class PortalController  extends HttpServlet {
     }
     setLocale(localeConfig.getLocale()) ;
     setOrientation(localeConfig.getOrientation());
-    //----
+
     context.setUIApplication(this);
     UserACL acl = getApplicationComponent(UserACL.class);
     if(acl.hasAccessControlWorkspacePermission(context.getRemoteUser()))
@@ -951,6 +948,7 @@ abstract public class WebuiRequestContext extends RequestContext {
   }
 </programlisting>
 	</section>
+-->
 
 </section>
 

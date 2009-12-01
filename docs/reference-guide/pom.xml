@@ -33,10 +33,10 @@
     </parent> 
     
     <groupId>org.gatein.doc</groupId>
-    <artifactId>gatein-user-guide-en</artifactId>
+    <artifactId>gatein-reference-guide-en</artifactId>
     <version>3.0.0-Beta03-SNAPSHOT</version>
     <packaging>jdocbook</packaging>
-    <name>GateIn User Guide en</name>
+    <name>GateIn Reference Guide en</name>
 
     <!-- TODO Remove when repositories are configured once for all -->
     <repositories>
