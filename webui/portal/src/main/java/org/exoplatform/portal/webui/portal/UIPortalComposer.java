@@ -318,23 +318,18 @@ public class UIPortalComposer extends UIContainer
          UIPortal uiPortal = (UIPortal)siteBody.getUIComponent();
 
          String uri = null;
-         if (uiPortal == null)
-         {
+         String remoteUser = prContext.getRemoteUser();
+         String ownerUser = prContext.getPortalOwner();
+         if(uiEditPortal != null && uiEditPortal.getOwner().equals(ownerUser))            
             uri = (uiEditPortal.getSelectedNode() != null) ? uiEditPortal.getSelectedNode().getUri() : null;
-            UserPortalConfigService configService = uiPortalApp.getApplicationComponent(UserPortalConfigService.class);
-            String remoteUser = prContext.getRemoteUser();
-            String ownerUser = prContext.getPortalOwner();
-            UserPortalConfig userPortalConfig = configService.getUserPortalConfig(ownerUser, remoteUser);
-            UIPortal newPortal = uiWorkingWS.createUIComponent(UIPortal.class, null, null);
-            PortalDataMapper.toUIPortal(newPortal, userPortalConfig);
-            siteBody.setUIComponent(newPortal);
-         }
-         else
-         {
-            siteBody.setUIComponent(uiEditPortal);
-         }
-         // uiEditWS.setUIComponent(null);
-         // uiWorkingWS.removeChild(UIEditInlineWorkspace.class);
+         else if(uiPortal != null)   
+            uri = (uiPortal.getSelectedNode() != null) ? uiPortal.getSelectedNode().getUri() : null;
+               
+         UserPortalConfigService configService = uiPortalApp.getApplicationComponent(UserPortalConfigService.class);
+         UserPortalConfig userPortalConfig = configService.getUserPortalConfig(ownerUser, remoteUser);
+         UIPortal newPortal = uiWorkingWS.createUIComponent(UIPortal.class, null, null);
+         PortalDataMapper.toUIPortal(newPortal, userPortalConfig);
+         siteBody.setUIComponent(newPortal);
          uiWorkingWS.getChild(UIEditInlineWorkspace.class).setRendered(false);
 
          uiPortal = (UIPortal)siteBody.getUIComponent();
