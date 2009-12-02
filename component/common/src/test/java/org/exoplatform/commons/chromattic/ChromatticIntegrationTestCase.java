@@ -130,6 +130,12 @@ public class ChromatticIntegrationTestCase extends TestCase
       assertFalse(jcrSession.isLive());
    }
 
+   public void testLocalRequestNoSessionAccess()
+   {
+      SessionContext context = configurator.openContext();
+      configurator.closeContext(context, false);
+   }
+
    public void testGlobalRequest() throws Exception
    {
       Session jcrSession;

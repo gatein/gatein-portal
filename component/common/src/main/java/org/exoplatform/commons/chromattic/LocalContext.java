@@ -28,7 +28,7 @@ public class LocalContext extends AbstractContext implements LoginContext
 {
 
    /** The related JCR session. */
-   Session jcrSession;
+   private Session jcrSession;
 
    public LocalContext(ChromatticLifeCycle configurator)
    {
@@ -49,7 +49,10 @@ public class LocalContext extends AbstractContext implements LoginContext
       }
       finally
       {
-         jcrSession.logout();
+         if (jcrSession != null)
+         {
+            jcrSession.logout();
+         }
       }
    }
 }
