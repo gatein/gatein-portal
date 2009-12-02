@@ -394,9 +394,9 @@ public class UIPageCreationWizard extends UIPageWizard
          UIPageNodeSelector uiNodeSelector = uiPageInfo.getChild(UIPageNodeSelector.class);
          PageNode selectedNode = uiNodeSelector.getSelectedPageNode();
 
-         String uri = Util.getPortalRequestContext().getPortalURI() + "\\" + selectedNode.getUri();
+         String uri = Util.getPortalRequestContext().getPortalURI() + selectedNode.getUri();
          //Util.getPortalRequestContext().sendRedirect(uri);
-         jsManager.addJavascript("window.location = '" + uri + "'");
+         jsManager.addJavascript("window.location = '" + uri + "';");
       }
    }
 
