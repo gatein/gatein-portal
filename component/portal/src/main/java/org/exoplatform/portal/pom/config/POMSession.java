@@ -21,6 +21,7 @@ package org.exoplatform.portal.pom.config;
 
 import org.chromattic.api.ChromatticSession;
 import org.chromattic.api.UndeclaredRepositoryException;
+import org.exoplatform.commons.chromattic.SessionContext;
 import org.exoplatform.portal.application.PortletPreferences;
 import org.exoplatform.portal.pom.data.Mapper;
 import org.exoplatform.portal.pom.registry.ContentRegistry;
@@ -74,12 +75,20 @@ public class POMSession
    /** . */
    private boolean modified;
 
-   public POMSession(POMSessionManager mgr)
+   /** . */
+   private SessionContext context;
+
+   /** . */
+   private MOPChromatticLifeCycle configurator;
+
+   public POMSession(POMSessionManager mgr, MOPChromatticLifeCycle configurator, SessionContext context)
    {
       this.mgr = mgr;
       this.isInTask = false;
       this.markedForRollback = false;
       this.staleKeys = null;
+      this.configurator = configurator;
+      this.context = context;
    }
 
    public Object getFromCache(Serializable key)
@@ -141,17 +150,7 @@ public class POMSession
 
    protected ChromatticSession getSession()
    {
-      try
-      {
-         Model model = getModel();
-         Field f = model.getClass().getDeclaredField("session");
-         f.setAccessible(true);
-         return (ChromatticSession)f.get(model);
-      }
-      catch (Exception e)
-      {
-         throw new Error(e);
-      }
+      return context.getSession();
    }
 
    /**
@@ -395,12 +394,36 @@ public class POMSession
       }
    }
 
-   void close()
+   /**
+    * <p>Closes the current session and discard the changes done during the session.</p>
+    *
+    * @see #close(boolean)
+    */
+   public void close()
    {
+      close(false);
+   }
+
+   /**
+    * <p>Closes the current session and optionally saves its content. If no session is associated then this method has
+    * no effects and returns false.</p>
+    *
+    * @param save if the session must be saved
+    */
+   public void close(boolean save)
+   {
+      if (save)
+      {
+         save();
+      }
+
       if (model != null)
       {
          model.close();
       }
+
+      //
+      configurator.closeContext(context, save & markedForRollback);
 
       //
       if (staleKeys != null)

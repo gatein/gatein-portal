@@ -78,7 +78,7 @@ public class TestSavedPOM extends BasicTestCase
 
    protected void tearDown() throws Exception
    {
-      mgr.closeSession(false);
+      session.close();
       storage = null;
    }
 
@@ -151,9 +151,6 @@ public class TestSavedPOM extends BasicTestCase
       Page layout = portal.getRootNavigation().getTemplate();
       assertNotNull(layout);
       assertSame(portal.getRootPage().getChild("templates").getChild("default"), layout);
-
-      //
-      mgr.closeSession();
    }
 
    public void testPageWithoutPageId() throws Exception
@@ -224,8 +221,5 @@ public class TestSavedPOM extends BasicTestCase
       assertEquals("application/portlet", customization.getType().getMimeType());
       assertEquals("web/BannerPortlet", customization.getContentId());
       //    assertEquals("banner", customization.getName());
-
-      //
-      mgr.closeSession();
    }
 }

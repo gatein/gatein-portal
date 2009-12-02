@@ -16,21 +16,13 @@
  */
 package org.exoplatform.portal.pom.config;
 
-import org.chromattic.api.ChromatticBuilder;
-import org.chromattic.apt.InstrumentorImpl;
-import org.exoplatform.portal.pom.registry.CategoryDefinition;
-import org.exoplatform.portal.pom.registry.ContentDefinition;
-import org.exoplatform.portal.pom.registry.ContentRegistry;
+import org.chromattic.api.Chromattic;
 import org.exoplatform.portal.pom.spi.gadget.Gadget;
 import org.exoplatform.portal.pom.spi.gadget.GadgetContentProvider;
-import org.exoplatform.portal.pom.spi.gadget.GadgetState;
 import org.exoplatform.portal.pom.spi.portlet.Portlet;
 import org.exoplatform.portal.pom.spi.portlet.PortletContentProvider;
-import org.exoplatform.portal.pom.spi.portlet.PortletState;
-import org.exoplatform.portal.pom.spi.portlet.PreferenceState;
 import org.exoplatform.portal.pom.spi.wsrp.WSRP;
 import org.exoplatform.portal.pom.spi.wsrp.WSRPContentProvider;
-import org.exoplatform.portal.pom.spi.wsrp.WSRPState;
 import org.gatein.mop.core.api.MOPService;
 import org.gatein.mop.core.api.content.ContentManagerRegistry;
 
@@ -41,22 +33,18 @@ import org.gatein.mop.core.api.content.ContentManagerRegistry;
 public class PortalMOPService extends MOPService
 {
 
-   @Override
-   protected void configure(ChromatticBuilder builder)
+   /** . */
+   private final Chromattic chromattic;
+
+   public PortalMOPService(Chromattic chromattic)
    {
-      builder.setOption(ChromatticBuilder.SESSION_LIFECYCLE_CLASSNAME, PortalSessionLifeCycle.class.getName());
-      builder.setOption(ChromatticBuilder.INSTRUMENTOR_CLASSNAME, InstrumentorImpl.class.getName());
+      this.chromattic = chromattic;
+   }
 
-      //
-      builder.add(PortletState.class);
-      builder.add(PreferenceState.class);
-      builder.add(GadgetState.class);
-      builder.add(WSRPState.class);
-
-      //
-      builder.add(ContentRegistry.class);
-      builder.add(CategoryDefinition.class);
-      builder.add(ContentDefinition.class);
+   @Override
+   protected Chromattic getChromattic()
+   {
+      return chromattic;
    }
 
    @Override

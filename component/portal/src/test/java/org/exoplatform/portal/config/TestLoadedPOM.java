@@ -28,6 +28,7 @@ import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.test.BasicTestCase;
 
@@ -54,6 +55,9 @@ public class TestLoadedPOM extends BasicTestCase
    /** . */
    private POMSessionManager mgr;
 
+   /** . */
+   private POMSession session;
+
    public TestLoadedPOM(String name)
    {
       super(name);
@@ -69,12 +73,13 @@ public class TestLoadedPOM extends BasicTestCase
          (UserPortalConfigService)container.getComponentInstanceOfType(UserPortalConfigService.class);
       storage = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
       mgr = (POMSessionManager)container.getComponentInstanceOfType(POMSessionManager.class);
-      mgr.openSession();
+      session = mgr.openSession();
    }
 
    protected void tearDown() throws Exception
    {
-      mgr.closeSession(false);
+      session.close(false);
+      session = null;
       storage = null;
    }
 

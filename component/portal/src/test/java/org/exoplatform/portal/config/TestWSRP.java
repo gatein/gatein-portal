@@ -59,7 +59,8 @@ public class TestWSRP extends BasicTestCase
 
    protected void tearDown() throws Exception
    {
-      mgr.closeSession(false);
+      session.close(false);
+      session = null;
    }
 
    public void testBilto() throws Exception

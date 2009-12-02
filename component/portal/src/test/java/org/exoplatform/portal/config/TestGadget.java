@@ -57,7 +57,7 @@ public class TestGadget extends BasicTestCase
 
    protected void tearDown() throws Exception
    {
-      mgr.closeSession(false);
+      session.close();
    }
 
    public void testBilto() throws Exception

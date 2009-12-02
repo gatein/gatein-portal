@@ -18,6 +18,7 @@ package org.exoplatform.portal.config;
 
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.config.model.Page;
+import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.test.BasicTestCase;
 
@@ -36,6 +37,9 @@ public class TestCache extends BasicTestCase
    /** . */
    private POMSessionManager mgr;
 
+   /** . */
+   private POMSession session;
+
    public void setUp() throws Exception
    {
       super.setUp();
@@ -44,12 +48,12 @@ public class TestCache extends BasicTestCase
       PortalContainer container = PortalContainer.getInstance();
       storage_ = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
       mgr = (POMSessionManager)container.getComponentInstanceOfType(POMSessionManager.class);
-      mgr.openSession();
+      session = mgr.openSession();
    }
 
    protected void tearDown() throws Exception
    {
-      mgr.closeSession(false);
+      session.close();
    }
 
    public void testDirtyWrite() throws Exception
@@ -65,7 +69,9 @@ public class TestCache extends BasicTestCase
       //
       final AtomicBoolean go = new AtomicBoolean(false);
 
-      // Force a cache update
+      // Force a cache update with the entry that will be modified
+      // when the main session is closed
+     
       new Thread()
       {
          @Override
@@ -75,7 +81,7 @@ public class TestCache extends BasicTestCase
             {
                mgr.openSession();
                storage_.getPage("portal::test::test4");
-               mgr.closeSession(false);
+               session.close();
             }
             catch (Exception e)
             {
@@ -95,7 +101,7 @@ public class TestCache extends BasicTestCase
       }
 
       // Reopen session with no modifications that use the cache
-      mgr.closeSession(true);
+      session.close(true);
       mgr.openSession();
 
       //

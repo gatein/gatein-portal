@@ -19,8 +19,8 @@
 
 package org.exoplatform.portal.application;
 
+import org.exoplatform.commons.chromattic.ChromatticManager;
 import org.exoplatform.container.ExoContainer;
-import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.web.application.Application;
 import org.exoplatform.web.application.ApplicationLifecycle;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -33,7 +33,7 @@ public class MOPSessionLifeCycle implements ApplicationLifecycle<WebuiRequestCon
 {
 
    /** . */
-   private final ThreadLocal<POMSessionManager> currentMgr = new ThreadLocal<POMSessionManager>();
+   private final ThreadLocal<ChromatticManager> currentMgr = new ThreadLocal<ChromatticManager>();
 
    public void onInit(Application app) throws Exception
    {
@@ -42,18 +42,18 @@ public class MOPSessionLifeCycle implements ApplicationLifecycle<WebuiRequestCon
    public void onStartRequest(Application app, WebuiRequestContext context) throws Exception
    {
       ExoContainer container = context.getApplication().getApplicationServiceContainer();
-      POMSessionManager mgr = (POMSessionManager)container.getComponentInstanceOfType(POMSessionManager.class);
-      mgr.openSession();
+      ChromatticManager mgr = (ChromatticManager)container.getComponentInstanceOfType(ChromatticManager.class);
+      mgr.beginRequest();
       currentMgr.set(mgr);
    }
 
    public void onEndRequest(Application app, WebuiRequestContext context) throws Exception
    {
-      POMSessionManager mgr = currentMgr.get();
+      ChromatticManager mgr = currentMgr.get();
       currentMgr.remove();
 
       // Need to see if saving untouched session has an impact or not on performances
-      mgr.closeSession(true);
+      mgr.endRequest(true);
    }
 
    public void onDestroy(Application app) throws Exception

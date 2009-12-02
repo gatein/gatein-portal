@@ -23,6 +23,7 @@ import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.config.model.Application;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PersistentApplicationState;
+import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.portal.pom.spi.portlet.Portlet;
 import org.exoplatform.portal.pom.spi.portlet.PortletBuilder;
@@ -46,6 +47,9 @@ public class TestPortletPreferences extends BasicTestCase
    /** . */
    private POMSessionManager mgr;
 
+   /** . */
+   private POMSession session;
+
    public void setUp() throws Exception
    {
       super.setUp();
@@ -54,12 +58,13 @@ public class TestPortletPreferences extends BasicTestCase
       PortalContainer container = PortalContainer.getInstance();
       storage_ = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
       mgr = (POMSessionManager)container.getComponentInstanceOfType(POMSessionManager.class);
-      mgr.openSession();
+      session = mgr.openSession();
    }
 
    protected void tearDown() throws Exception
    {
-      mgr.closeSession(false);
+      session.close(false);
+      session = null;
    }
 
    public void testSiteScopedPreferences() throws Exception

@@ -39,6 +39,9 @@ public class TestContentRegistry extends BasicTestCase
    /** . */
    private POMSessionManager mgr;
 
+   /** . */
+   private POMSession session;
+
    public void setUp() throws Exception
    {
       super.setUp();
@@ -47,25 +50,26 @@ public class TestContentRegistry extends BasicTestCase
       PortalContainer container = PortalContainer.getInstance();
       storage = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
       mgr = (POMSessionManager)container.getComponentInstanceOfType(POMSessionManager.class);
-      mgr.openSession();
+      session = mgr.openSession();
    }
 
    protected void tearDown() throws Exception
    {
-      mgr.closeSession(false);
+      session.close(false);
+      session = null;
       storage = null;
    }
 
    public void testGetContentRegistry()
    {
-      POMSession session = POMSessionManager.getSession();
+      POMSession session = mgr.getSession();
       ContentRegistry registry = session.getContentRegistry();
       assertNotNull(registry);
    }
 
    public void testCreateCategory()
    {
-      POMSession session = POMSessionManager.getSession();
+      POMSession session = mgr.getSession();
       ContentRegistry registry = session.getContentRegistry();
       CategoryDefinition category = registry.createCategory("foo");
       assertNotNull(category);
@@ -74,7 +78,7 @@ public class TestContentRegistry extends BasicTestCase
 
    public void testCreateContent()
    {
-      POMSession session = POMSessionManager.getSession();
+      POMSession session = mgr.getSession();
       ContentRegistry registry = session.getContentRegistry();
       CategoryDefinition category = registry.createCategory("foo");
       ContentDefinition content = category.createContent("bar", Portlet.CONTENT_TYPE, "myportlet");

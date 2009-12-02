@@ -657,7 +657,7 @@ public class MOPApplicationRegistryService implements ApplicationRegistryService
    {
       if (plugins != null)
       {
-         pomMGr.openSession();
+         POMSession session = pomMGr.openSession();
          boolean save = false;
          try
          {
@@ -674,7 +674,7 @@ public class MOPApplicationRegistryService implements ApplicationRegistryService
          }
          finally
          {
-            pomMGr.closeSession(save);
+            session.close(save);
          }
       }
    }

@@ -23,18 +23,23 @@
 <configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd http://www.exoplaform.org/xml/ns/kernel_1_0.xsd"
   xmlns="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd">
+
+
   <component>
     <key>org.exoplatform.portal.pom.config.POMSessionManager</key>
     <type>org.exoplatform.portal.pom.config.POMSessionManager</type>
   </component>
+
   <component>
     <key>org.exoplatform.portal.pom.data.ModelDataStorage</key>
     <type>org.exoplatform.portal.pom.config.POMDataStorage</type>
   </component>
+
   <component>
     <key>org.exoplatform.portal.config.DataStorage</key>
     <type>org.exoplatform.portal.config.DataStorageImpl</type>
   </component>
+
   <component>
     <key>org.exoplatform.portal.config.UserACL</key>
     <type>org.exoplatform.portal.config.UserACL</type>
@@ -187,6 +192,58 @@
     <key>org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator</key>
     <type>org.exoplatform.services.jcr.ext.hierarchy.impl.NodeHierarchyCreatorImpl</type>
   </component>
+
+  <external-component-plugins>
+    <target-component>org.exoplatform.commons.chromattic.ChromatticManager</target-component>
+    <component-plugin>
+      <name>chromattic</name>
+      <set-method>addLifeCycle</set-method>
+      <type>org.exoplatform.portal.pom.config.MOPChromatticLifeCycle</type>
+      <init-params>
+        <value-param>
+          <name>name</name>
+          <value>mop</value>
+        </value-param>
+        <value-param>
+          <name>workspace-name</name>
+          <value>portal-system</value>
+        </value-param>
+        <values-param>
+          <name>entities</name>
+          <value>org.gatein.mop.core.api.workspace.WorkspaceImpl</value>
+          <value>org.gatein.mop.core.api.workspace.UIContainerImpl</value>
+          <value>org.gatein.mop.core.api.workspace.UIWindowImpl</value>
+          <value>org.gatein.mop.core.api.workspace.UIBodyImpl</value>
+          <value>org.gatein.mop.core.api.workspace.PageImpl</value>
+          <value>org.gatein.mop.core.api.workspace.PageContainer</value>
+          <value>org.gatein.mop.core.api.workspace.NavigationImpl</value>
+          <value>org.gatein.mop.core.api.workspace.NavigationContainer</value>
+          <value>org.gatein.mop.core.api.workspace.PageLinkImpl</value>
+          <value>org.gatein.mop.core.api.workspace.URLLinkImpl</value>
+          <value>org.gatein.mop.core.api.workspace.PortalSiteContainer</value>
+          <value>org.gatein.mop.core.api.workspace.PortalSite</value>
+          <value>org.gatein.mop.core.api.workspace.GroupSiteContainer</value>
+          <value>org.gatein.mop.core.api.workspace.GroupSite</value>
+          <value>org.gatein.mop.core.api.workspace.UserSiteContainer</value>
+          <value>org.gatein.mop.core.api.workspace.UserSite</value>
+          <value>org.gatein.mop.core.api.workspace.content.CustomizationContainer</value>
+          <value>org.gatein.mop.core.api.workspace.content.ContextTypeContainer</value>
+          <value>org.gatein.mop.core.api.workspace.content.ContextType</value>
+          <value>org.gatein.mop.core.api.workspace.content.ContextSpecialization</value>
+          <value>org.gatein.mop.core.api.workspace.content.WorkspaceClone</value>
+          <value>org.gatein.mop.core.api.workspace.content.WorkspaceSpecialization</value>
+          <value>org.exoplatform.portal.pom.spi.portlet.PortletState</value>
+          <value>org.exoplatform.portal.pom.spi.portlet.PreferenceState</value>
+          <value>org.exoplatform.portal.pom.spi.gadget.GadgetState</value>
+          <value>org.exoplatform.portal.pom.spi.wsrp.WSRPState</value>
+          <value>org.exoplatform.portal.pom.registry.ContentRegistry</value>
+          <value>org.exoplatform.portal.pom.registry.CategoryDefinition</value>
+          <value>org.exoplatform.portal.pom.registry.ContentDefinition</value>
+        </values-param>
+      </init-params>
+    </component-plugin>
+  </external-component-plugins>
+
   <external-component-plugins>
     <target-component>org.exoplatform.services.jcr.RepositoryService</target-component>
     <component-plugin>

@@ -19,32 +19,24 @@
 
 package org.exoplatform.portal.pom.config;
 
-import org.chromattic.api.ChromatticSession;
+import org.exoplatform.commons.chromattic.ChromatticLifeCycle;
+import org.exoplatform.commons.chromattic.ChromatticManager;
+import org.exoplatform.commons.chromattic.SessionContext;
+import org.exoplatform.portal.pom.config.cache.DataCache;
 import org.exoplatform.services.cache.CacheService;
 import org.exoplatform.services.cache.ExoCache;
-import org.exoplatform.services.jcr.RepositoryService;
-import org.exoplatform.services.jcr.core.ManageableRepository;
-import org.exoplatform.services.jcr.ext.registry.RegistryService;
 import org.gatein.mop.core.api.MOPService;
+import org.picocontainer.Startable;
 
-import javax.jcr.Credentials;
-import javax.jcr.Repository;
-import javax.jcr.RepositoryException;
-import javax.jcr.Session;
 import java.io.Serializable;
+import java.lang.reflect.UndeclaredThrowableException;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class POMSessionManager
+public class POMSessionManager implements Startable
 {
-
-   /** . */
-   private static final ThreadLocal<POMSession> current = new ThreadLocal<POMSession>();
-
-   /** . */
-   final RepositoryService repositoryService;
 
    /** . */
    private MOPService pomService;
@@ -58,68 +50,62 @@ public class POMSessionManager
    /** . */
    final ExoCache<Serializable, Object> cache;
 
-   public POMSessionManager(CacheService cacheService, RegistryService service) throws Exception
-   {
-      RepositoryService repositoryService = service.getRepositoryService();
+   /** . */
+   final ChromatticManager manager;
 
+   /** . */
+   private ChromatticLifeCycle configurator;
+
+   /** . */
+   private final TaskExecutionDecorator executor;
+
+   public POMSessionManager(ChromatticManager manager, CacheService cacheService)
+   {
       //
+      this.manager = manager;
       this.cache = cacheService.getCacheInstance(POMSessionManager.class.getSimpleName());
-      this.repositoryService = repositoryService;
       this.pomService = null;
+      this.executor = new DataCache(new ExecutorDispatcher());
    }
-   
+
+   public void start()
+   {
+      try
+      {
+         MOPChromatticLifeCycle configurator = (MOPChromatticLifeCycle)manager.getConfigurator("mop");
+         configurator.manager = this;
+
+         //
+         PortalMOPService pomService = new PortalMOPService(configurator.getChromattic());
+         pomService.start();
+
+         //
+         this.pomService = pomService;
+         this.configurator = configurator;
+      }
+      catch (Exception e)
+      {
+         throw new UndeclaredThrowableException(e);
+      }
+   }
+
+   public void stop()
+   {
+   }
+
    public void clearCache()
    {
       cache.clearCache();
    }
 
-   public Session login() throws RepositoryException
+   public MOPService getPOMService()
    {
-      ManageableRepository repo = repositoryService.getCurrentRepository();
-      return repo.login();
-   }
-
-   public Session login(String workspace) throws RepositoryException
-   {
-      Repository repo = repositoryService.getCurrentRepository();
-      return repo.login(workspace);
-   }
-
-   public Session login(Credentials credentials, String workspace) throws RepositoryException
-   {
-      Repository repo = repositoryService.getCurrentRepository();
-      return repo.login(credentials, workspace);
-   }
-
-   public Session login(Credentials credentials) throws RepositoryException
-   {
-      Repository repo = repositoryService.getCurrentRepository();
-      return repo.login(credentials);
-   }
-
-   /*
-    * todo : use better than the synchronized block  
-    */
-   public synchronized MOPService getPOMService()
-   {
-      if (pomService == null)
-      {
-         PortalMOPService mopService = new PortalMOPService();
-
-         //
-         try
-         {
-            mopService.start();
-         }
-         catch (Exception e)
-         {
-            throw new RuntimeException(e);
-         }
-
-         //
-         this.pomService = mopService;
-      }
       return pomService;
+   }
+
+   public <E extends TaskExecutionDecorator> E getDecorator(Class<E> decoratorClass)
+   {
+      return executor.getDecorator(decoratorClass);
    }
 
    /**
@@ -127,9 +113,10 @@ public class POMSessionManager
     *
     * @return the current session
     */
-   public static POMSession getSession()
+   public POMSession getSession()
    {
-      return current.get();
+      SessionContext context = configurator.getSessionContext();
+      return context != null ? (POMSession)context.getAttachment("mopsession") : null;
    }
 
    /**
@@ -140,76 +127,18 @@ public class POMSessionManager
     */
    public POMSession openSession()
    {
-      POMSession session = current.get();
-      if (session == null)
-      {
-         session = new POMSession(this);
-         current.set(session);
-
-         //
-         // A bit ugly but we will improve that later
-         ChromatticSession csession = session.getSession();
-         csession.addEventListener(new Injector(session));
-      }
-      else
-      {
-         throw new IllegalStateException("A session is already opened.");
-      }
-      return session;
+      SessionContext context = configurator.openContext();
+      return (POMSession)context.getAttachment("mopsession");
    }
 
    /**
-    * <p>Closes the current session and discard the changes done during the session.</p>
-    *
-    * @return a boolean indicating if the session was closed
-    * @see #closeSession(boolean)
-    */
-   public boolean closeSession()
-   {
-      return closeSession(false);
-   }
-
-   /**
-    * <p>Closes the current session and optionally saves its content. If no session is associated then this method has
-    * no effects and returns false.</p>
-    *
-    * @param save if the session must be saved
-    * @return a boolean indicating if the session was closed
-    */
-   public boolean closeSession(boolean save)
-   {
-      POMSession session = current.get();
-      if (session == null)
-      {
-         // Should warn
-         return false;
-      }
-      else
-      {
-         current.set(null);
-         try
-         {
-            if (save)
-            {
-               session.save();
-            }
-         }
-         finally
-         {
-            session.close();
-         }
-         return true;
-      }
-   }
-
-   /**
-    * <p>Execute the task with a session. The method attempts first to get a current session and if no such session is
-    * found then a session will be created for the scope of the method.</p>
+    * <p>Execute the task with a session. The method attempts first to get a current session and if no such session
+    * is found then a session will be created for the scope of the method.</p>
     *
     * @param task the task to execute
     * @throws Exception any exception thrown by the task
     */
-   public void execute(POMTask task) throws Exception
+   public <T extends POMTask> T execute(T task) throws Exception
    {
       POMSession session = getSession();
       if (session == null)
@@ -217,16 +146,20 @@ public class POMSessionManager
          session = openSession();
          try
          {
-            session.execute(task);
+            executor.execute(session, task);
          }
          finally
          {
-            closeSession(true);
+            session.close(true);
          }
       }
       else
       {
-         session.execute(task);
+         executor.execute(session, task);
       }
+
+      //
+      return task;
    }
+
 }

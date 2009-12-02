@@ -30,6 +30,7 @@ import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.config.model.Container;
 import org.exoplatform.portal.config.model.Dashboard;
 import org.exoplatform.portal.config.model.PageNode;
+import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.data.ModelChange;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
@@ -62,6 +63,9 @@ public class TestDataStorage extends BasicTestCase
 
    private POMSessionManager mgr;
 
+   /** . */
+   private POMSession session;
+
    public TestDataStorage(String name)
    {
       super(name);
@@ -75,12 +79,12 @@ public class TestDataStorage extends BasicTestCase
       PortalContainer container = PortalContainer.getInstance();
       storage_ = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
       mgr = (POMSessionManager)container.getComponentInstanceOfType(POMSessionManager.class);
-      mgr.openSession();
+      session = mgr.openSession();
    }
 
    protected void tearDown() throws Exception
    {
-      mgr.closeSession(false);
+      session.close();
    }
 
    public void testCreatePortal() throws Exception
