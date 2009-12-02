@@ -281,12 +281,18 @@ public class UIPortalComposer extends UIContainer
 
       public void execute(Event<UIPortalComposer> event) throws Exception
       {
-         UIPortal uiPortal = Util.getUIPortal();
+         UIComponent temp = null;
+         UIPortal uiPortal = null;
+         UIEditInlineWorkspace uiEditWS = event.getSource().getAncestorOfType(UIEditInlineWorkspace.class);
+         temp = uiEditWS.getUIComponent();
+         if(temp != null && (temp instanceof UIPortal)) 
+            uiPortal = (UIPortal)temp;
+         else
+            uiPortal = Util.getUIPortal();
          UIPortalApplication uiApp = uiPortal.getAncestorOfType(UIPortalApplication.class);
-
          UIMaskWorkspace uiMaskWS = uiApp.getChildById(UIPortalApplication.UI_MASK_WS_ID);
-         UIPortalForm portalForm = uiMaskWS.createUIComponent(UIPortalForm.class, null, "UIPortalForm");
-         portalForm.setPortalOwner(uiPortal.getOwner());
+         UIPortalForm portalForm = uiMaskWS.createUIComponent(UIPortalForm.class, null, "UIPortalForm");         
+         portalForm.setPortalOwner(uiPortal.getOwner());            
          portalForm.setBindingBean();
          if(PortalConfig.USER_TYPE.equals(uiPortal.getOwnerType())){
             portalForm.removeChildById("PermissionSetting");
@@ -337,7 +343,7 @@ public class UIPortalComposer extends UIContainer
          if (uri == null)
          {
             uri = (uiPortal.getSelectedNode() != null) ? uiPortal.getSelectedNode().getUri() : null;
-         }
+         }         
          PageNodeEvent<UIPortal> pnevent = new PageNodeEvent<UIPortal>(uiPortal, PageNodeEvent.CHANGE_PAGE_NODE, uri);
          uiPortal.broadcast(pnevent, Event.Phase.PROCESS);
          prContext.addUIComponentToUpdateByAjax(uiWorkingWS);
