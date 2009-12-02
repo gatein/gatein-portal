@@ -22,6 +22,7 @@ package org.exoplatform.portal.resource;
 import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
 
+import org.exoplatform.commons.utils.Safe;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.RootContainer.PortalContainerPostInitTask;
 import org.exoplatform.services.log.ExoLogger;
@@ -69,20 +70,11 @@ public class SkinConfigDeployer extends AbstractResourceHandler
          if (waEvent.getType() == WebAppLifeCycleEvent.ADDED)
          {
             ServletContext scontext = null;
+            InputStream is = null;
             try
             {
                scontext = event.getWebApp().getServletContext();
-               InputStream is = scontext.getResourceAsStream("/WEB-INF/conf/script/groovy/SkinConfigScript.groovy");
-               if (is == null)
-                  return;
-               try
-               {
-                  is.close();
-               }
-               catch (Exception ex)
-               {
-                  // ignore me
-               }
+               is = scontext.getResourceAsStream("/WEB-INF/conf/script/groovy/SkinConfigScript.groovy");
                final PortalContainerPostInitTask task = new PortalContainerPostInitTask()
                {
 
@@ -97,6 +89,10 @@ public class SkinConfigDeployer extends AbstractResourceHandler
             {
                LOG.error("An error occurs while registering 'SkinConfigScript.groovy' from the context '"
                   + (scontext == null ? "unknown" : scontext.getServletContextName()) + "'", ex);
+            }
+            finally
+            {
+               Safe.close(is);
             }
          }
       }
