@@ -227,8 +227,10 @@ public class UIPortal extends UIContainer
       if (pNav == null)
          return;
       // ----------------------------------------------------------
-      selectedNode_ = pNav.getNodes().get(0);
-      selectedPaths_.add(selectedNode_);
+      if(selectedNode_ == null){
+         selectedNode_ = pNav.getNodes().get(0);
+         selectedPaths_.add(selectedNode_);
+      }
       UIPageBody uiPageBody = findFirstComponentOfType(UIPageBody.class);
       if (uiPageBody == null)
          return;

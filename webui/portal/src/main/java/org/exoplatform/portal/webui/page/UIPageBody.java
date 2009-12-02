@@ -32,6 +32,7 @@ import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
+import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIComponentDecorator;
 
 /**
@@ -109,7 +110,22 @@ public class UIPageBody extends UIComponentDecorator
          }
          PortalDataMapper.toUIPage(uiPage, page);
          if (uiPage.isShowMaxWindow())
+         {
             uiPortal.setMaximizedUIComponent(uiPage);
+         }
+         else
+         {
+            UIComponent maximizedComponent = uiPortal.getMaximizedUIComponent();
+            if (maximizedComponent != null && maximizedComponent instanceof UIPage)
+            {
+               uiPortal.setMaximizedUIComponent(null);
+            }
+            UIComponent maximizedComponentInPageBody = this.getMaximizedUIComponent();
+            if(maximizedComponentInPageBody !=null && maximizedComponentInPageBody instanceof UIPage){
+               this.setMaximizedUIComponent(null);
+            }
+         }
+
       }
       setUIComponent(uiPage);
    }

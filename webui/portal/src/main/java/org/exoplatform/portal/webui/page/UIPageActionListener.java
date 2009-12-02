@@ -273,21 +273,9 @@ public class UIPageActionListener
          Container container = pConfig.getPortalLayout();
          if (container != null)
          {
-            /** Keep track of show max window property * */
-            boolean showMaxWindow = false;
-            try
-            {
-               PageNode selectedNode = uiPortal.getSelectedNode();
-               Page displayedPage = storage.getPage(selectedNode.getPageReference());
-               showMaxWindow = displayedPage.isShowMaxWindow();
-            }
-            catch (Exception ex)
-            {
-
-            }
             UserPortalConfig portalConfig = uiPortalApp.getUserPortalConfig();
             portalConfig.setPortal(pConfig);
-            rebuildUIPortal(uiPortal, portalConfig, showMaxWindow);
+            rebuildUIPortal(uiPortal, portalConfig);
          }
       }
 
@@ -298,8 +286,7 @@ public class UIPageActionListener
        * @param portalConfig
        * @throws Exception
        */
-      private void rebuildUIPortal(UIPortal uiPortal, UserPortalConfig portalConfig, boolean showMaxWindow)
-         throws Exception
+      private void rebuildUIPortal(UIPortal uiPortal, UserPortalConfig portalConfig) throws Exception
       {
          PageNode backupSelectedNode = uiPortal.getSelectedNode();
          PageNavigation backupSelectedNavigation = uiPortal.getSelectedNavigation();
@@ -309,26 +296,6 @@ public class UIPageActionListener
          uiPortal.setSelectedNode(backupSelectedNode);
          uiPortal.setSelectedNavigation(backupSelectedNavigation);
          uiPortal.setSelectedPaths(backupSelectedPaths);
-
-         /** Update the show-max-window property on UIPage * */
-         UIPageBody uiPageBody = uiPortal.findFirstComponentOfType(UIPageBody.class);
-         UIPage uiPage = (UIPage)uiPageBody.getUIComponent();
-         uiPage.setShowMaxWindow(showMaxWindow);
-         
-         if(showMaxWindow){
-            //To maximized the UIPage
-            uiPortal.setMaximizedUIComponent(uiPage);
-         }else{
-            //To un-maximized the UIPage
-            UIComponent uiPortalMaxComponent = uiPortal.getMaximizedUIComponent();
-            if(uiPortalMaxComponent instanceof UIPage){
-               uiPortal.setMaximizedUIComponent(null);
-            }
-            UIComponent pageBodyMaxComponent = uiPageBody.getMaximizedUIComponent();
-            if(pageBodyMaxComponent instanceof UIPage){
-               uiPageBody.setMaximizedUIComponent(null);
-            }
-         }
       }
    }
 
