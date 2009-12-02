@@ -527,4 +527,31 @@
          </component-plugin>
       </component-plugins>
    </component>
+
+  <external-component-plugins>
+    <target-component>org.exoplatform.commons.chromattic.ChromatticManager</target-component>
+    <component-plugin>
+      <name>chromattic</name>
+      <set-method>addLifeCycle</set-method>
+      <type>org.exoplatform.application.registry.mop.ApplicationRegistryChromatticLifeCycle</type>
+      <init-params>
+        <value-param>
+          <name>name</name>
+          <value>registry</value>
+        </value-param>
+        <value-param>
+          <name>workspace-name</name>
+          <value>portal-system</value>
+        </value-param>
+        <values-param>
+          <name>entities</name>
+          <value>org.exoplatform.application.registry.mop.ContentRegistry</value>
+          <value>org.exoplatform.application.registry.mop.CategoryDefinition</value>
+          <value>org.exoplatform.application.registry.mop.ContentDefinition</value>
+        </values-param>
+      </init-params>
+    </component-plugin>
+  </external-component-plugins>
+
+
 </configuration>

@@ -14,10 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see<http://www.gnu.org/licenses/>.
  */
-package org.exoplatform.portal.pom.config;
+package org.exoplatform.application.registry.mop;
 
 import org.chromattic.api.event.LifeCycleListener;
-import org.exoplatform.portal.pom.registry.CategoryDefinition;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -27,11 +26,11 @@ public class Injector implements LifeCycleListener
 {
 
    /** . */
-   private final POMSession session;
+   private final MOPApplicationRegistryService registry;
 
-   public Injector(POMSession session)
+   public Injector(MOPApplicationRegistryService registry)
    {
-      this.session = session;
+      this.registry = registry;
    }
 
    public void created(Object o)
@@ -42,7 +41,7 @@ public class Injector implements LifeCycleListener
    {
       if (o instanceof CategoryDefinition)
       {
-         ((CategoryDefinition)o).session = session;
+         ((CategoryDefinition)o).registry = registry;
       }
    }
 
@@ -50,7 +49,7 @@ public class Injector implements LifeCycleListener
    {
       if (o instanceof CategoryDefinition)
       {
-         ((CategoryDefinition)o).session = session;
+         ((CategoryDefinition)o).registry = registry;
       }
    }
 
@@ -58,7 +57,7 @@ public class Injector implements LifeCycleListener
    {
       if (o instanceof CategoryDefinition)
       {
-         ((CategoryDefinition)o).session = null;
+         ((CategoryDefinition)o).registry = null;
       }
    }
 }

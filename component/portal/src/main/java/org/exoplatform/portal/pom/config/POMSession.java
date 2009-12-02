@@ -24,7 +24,6 @@ import org.chromattic.api.UndeclaredRepositoryException;
 import org.exoplatform.commons.chromattic.SessionContext;
 import org.exoplatform.portal.application.PortletPreferences;
 import org.exoplatform.portal.pom.data.Mapper;
-import org.exoplatform.portal.pom.registry.ContentRegistry;
 import org.gatein.mop.api.Model;
 import org.gatein.mop.api.content.Customization;
 import org.gatein.mop.api.workspace.ObjectType;
@@ -151,28 +150,6 @@ public class POMSession
    protected ChromatticSession getSession()
    {
       return context.getSession();
-   }
-
-   /**
-    * Returns the application registry.
-    *
-    * @return the application registry
-    */
-   public ContentRegistry getContentRegistry()
-   {
-      ChromatticSession session = getSession();
-
-      //
-      ContentRegistry registry = session.findByPath(ContentRegistry.class, "registry");
-
-      //
-      if (registry == null)
-      {
-         registry = session.insert(ContentRegistry.class, "registry");
-      }
-
-      //
-      return registry;
    }
 
    public Workspace getWorkspace()

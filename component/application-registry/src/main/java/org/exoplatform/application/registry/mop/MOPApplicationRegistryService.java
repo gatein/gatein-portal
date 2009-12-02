@@ -16,23 +16,21 @@
  */
 package org.exoplatform.application.registry.mop;
 
+import org.chromattic.api.ChromatticSession;
 import org.exoplatform.application.gadget.Gadget;
 import org.exoplatform.application.gadget.GadgetRegistryService;
 import org.exoplatform.application.registry.Application;
 import org.exoplatform.application.registry.ApplicationCategoriesPlugins;
 import org.exoplatform.application.registry.ApplicationCategory;
 import org.exoplatform.application.registry.ApplicationRegistryService;
+import org.exoplatform.commons.chromattic.ChromatticLifeCycle;
+import org.exoplatform.commons.chromattic.ChromatticManager;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.component.ComponentPlugin;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.model.ApplicationType;
-import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.POMSessionManager;
-import org.exoplatform.portal.pom.config.POMTask;
-import org.exoplatform.portal.pom.registry.CategoryDefinition;
-import org.exoplatform.portal.pom.registry.ContentDefinition;
-import org.exoplatform.portal.pom.registry.ContentRegistry;
 import org.exoplatform.portal.pom.spi.portlet.Portlet;
 import org.exoplatform.portal.pom.spi.wsrp.WSRP;
 import org.gatein.common.i18n.LocalizedString;
@@ -69,11 +67,34 @@ public class MOPApplicationRegistryService implements ApplicationRegistryService
    private List<ApplicationCategoriesPlugins> plugins;
 
    /** . */
-   private final POMSessionManager pomMGr;
+   private final ChromatticManager manager;
 
-   public MOPApplicationRegistryService(POMSessionManager pomMGr)
+   /** . */
+   private final ChromatticLifeCycle lifeCycle;
+
+   /** . */
+   final POMSessionManager mopManager;
+
+   public MOPApplicationRegistryService(ChromatticManager manager, POMSessionManager mopManager)
    {
-      this.pomMGr = pomMGr;
+      ApplicationRegistryChromatticLifeCycle lifeCycle = (ApplicationRegistryChromatticLifeCycle)manager.getLifeCycle("registry");
+      lifeCycle.registry = this;
+
+      //
+      this.manager = manager;
+      this.lifeCycle = lifeCycle;
+      this.mopManager = mopManager;
+   }
+
+   public ContentRegistry getContentRegistry()
+   {
+      ChromatticSession session = lifeCycle.getChromattic().openSession();
+      ContentRegistry registry = session.findByPath(ContentRegistry.class, "registry");
+      if (registry == null)
+      {
+         registry = session.insert(ContentRegistry.class, "registry");
+      }
+      return registry;
    }
 
    public void initListener(ComponentPlugin com) throws Exception
@@ -96,11 +117,13 @@ public class MOPApplicationRegistryService implements ApplicationRegistryService
       final List<ApplicationCategory> categories = new ArrayList<ApplicationCategory>();
 
       //
+/*
       pomMGr.execute(new POMTask()
       {
          public void run(POMSession session) throws Exception
          {
-            ContentRegistry registry = session.getContentRegistry();
+*/
+            ContentRegistry registry = getContentRegistry();
 
             //
             for (CategoryDefinition categoryDef : registry.getCategoryList())
@@ -114,8 +137,10 @@ public class MOPApplicationRegistryService implements ApplicationRegistryService
             {
                Collections.sort(categories, sortComparator);
             }
+/*
          }
       });
+*/
 
       //
       return categories;
@@ -141,11 +166,13 @@ public class MOPApplicationRegistryService implements ApplicationRegistryService
       final AtomicReference<ApplicationCategory> a = new AtomicReference<ApplicationCategory>();
 
       //
+/*
       pomMGr.execute(new POMTask()
       {
          public void run(POMSession session) throws Exception
          {
-            ContentRegistry registry = session.getContentRegistry();
+*/
+            ContentRegistry registry = getContentRegistry();
 
             //
             CategoryDefinition categoryDef = registry.getCategory(name);
@@ -154,8 +181,10 @@ public class MOPApplicationRegistryService implements ApplicationRegistryService
                ApplicationCategory applicationCategory = load(categoryDef);
                a.set(applicationCategory);
             }
+/*
          }
       });
+*/
 
       //
       return a.get();
@@ -163,11 +192,13 @@ public class MOPApplicationRegistryService implements ApplicationRegistryService
 
    public void save(final ApplicationCategory category) throws Exception
    {
+/*
       pomMGr.execute(new POMTask()
       {
          public void run(POMSession session) throws Exception
          {
-            ContentRegistry registry = session.getContentRegistry();
+*/
+            ContentRegistry registry = getContentRegistry();
 
             //
             String categoryName = category.getName();
@@ -186,19 +217,25 @@ public class MOPApplicationRegistryService implements ApplicationRegistryService
             categoryDef.setDescription(category.getDescription());
             categoryDef.setAccessPermissions(category.getAccessPermissions());
          }
+/*
       });
    }
+*/
 
    public void remove(final ApplicationCategory category) throws Exception
    {
+/*
       pomMGr.execute(new POMTask()
       {
          public void run(POMSession session) throws Exception
          {
-            ContentRegistry registry = session.getContentRegistry();
+*/
+            ContentRegistry registry = getContentRegistry();
             registry.getCategoryMap().remove(category.getName());
+/*
          }
       });
+*/
    }
 
    public List<Application> getApplications(ApplicationCategory category, ApplicationType<?>... appTypes) throws Exception
@@ -214,11 +251,13 @@ public class MOPApplicationRegistryService implements ApplicationRegistryService
       final AtomicReference<List<Application>> ref = new AtomicReference<List<Application>>();
 
       //
+/*
       pomMGr.execute(new POMTask()
       {
          public void run(POMSession session) throws Exception
          {
-            ContentRegistry registry = session.getContentRegistry();
+*/
+            ContentRegistry registry = getContentRegistry();
 
             //
             CategoryDefinition categoryDef = registry.getCategory(category.getName());
@@ -232,8 +271,10 @@ public class MOPApplicationRegistryService implements ApplicationRegistryService
 
             //
             ref.set(applications);
+/*
          }
       });
+*/
 
       //
       return ref.get();
@@ -265,11 +306,13 @@ public class MOPApplicationRegistryService implements ApplicationRegistryService
       final AtomicReference<Application> ref = new AtomicReference<Application>();
 
       //
+/*
       pomMGr.execute(new POMTask()
       {
          public void run(POMSession session) throws Exception
          {
-            ContentRegistry registry = session.getContentRegistry();
+*/
+            ContentRegistry registry = getContentRegistry();
 
             //
             CategoryDefinition categoryDef = registry.getCategory(category);
@@ -281,8 +324,10 @@ public class MOPApplicationRegistryService implements ApplicationRegistryService
                   ref.set(load(contentDef));
                }
             }
+/*
          }
       });
+*/
 
       //
       return ref.get();
@@ -290,11 +335,13 @@ public class MOPApplicationRegistryService implements ApplicationRegistryService
 
    public void save(final ApplicationCategory category, final Application application) throws Exception
    {
+/*
       pomMGr.execute(new POMTask()
       {
          public void run(POMSession session) throws Exception
          {
-            ContentRegistry registry = session.getContentRegistry();
+*/
+            ContentRegistry registry = getContentRegistry();
 
             //
             String categoryName = category.getName();
@@ -328,17 +375,21 @@ public class MOPApplicationRegistryService implements ApplicationRegistryService
 
             // Update state
             save(application, contentDef);
+/*
          }
       });
+*/
    }
 
    public void update(final Application application) throws Exception
    {
+/*
       pomMGr.execute(new POMTask()
       {
          public void run(POMSession session) throws Exception
          {
-            ContentRegistry registry = session.getContentRegistry();
+*/
+            ContentRegistry registry = getContentRegistry();
 
             //
             String categoryName = application.getCategoryName();
@@ -357,8 +408,10 @@ public class MOPApplicationRegistryService implements ApplicationRegistryService
 
             // Update state
             save(application, contentDef);
+/*
          }
       });
+*/
    }
 
    public void remove(final Application app) throws Exception
@@ -369,11 +422,13 @@ public class MOPApplicationRegistryService implements ApplicationRegistryService
       }
 
       //
+/*
       pomMGr.execute(new POMTask()
       {
          public void run(POMSession session) throws Exception
          {
-            ContentRegistry registry = session.getContentRegistry();
+*/
+            ContentRegistry registry = getContentRegistry();
 
             //
             String categoryName = app.getCategoryName();
@@ -386,17 +441,21 @@ public class MOPApplicationRegistryService implements ApplicationRegistryService
                String contentName = app.getApplicationName();
                categoryDef.getContentMap().remove(contentName);
             }
+/*
          }
       });
+*/
    }
 
    public void importExoGadgets() throws Exception
    {
+/*
       pomMGr.execute(new POMTask()
       {
          public void run(POMSession session) throws Exception
          {
-            ContentRegistry registry = session.getContentRegistry();
+*/
+            ContentRegistry registry = getContentRegistry();
 
             //
             ExoContainer container = ExoContainerContext.getCurrentContainer();
@@ -433,17 +492,21 @@ public class MOPApplicationRegistryService implements ApplicationRegistryService
                   }
                }
             }
+/*
          }
       });
+*/
    }
 
    public void importAllPortlets() throws Exception
    {
+/*
       pomMGr.execute(new POMTask()
       {
          public void run(POMSession session) throws Exception
          {
-            ContentRegistry registry = session.getContentRegistry();
+*/
+            ContentRegistry registry = getContentRegistry();
 
             //
             ExoContainer manager = ExoContainerContext.getCurrentContainer();
@@ -530,8 +593,10 @@ public class MOPApplicationRegistryService implements ApplicationRegistryService
                   }
                }
             }
+/*
          }
       });
+*/
    }
 
    private boolean isApplicationType(Application app, ApplicationType<?>... appTypes)
@@ -657,7 +722,9 @@ public class MOPApplicationRegistryService implements ApplicationRegistryService
    {
       if (plugins != null)
       {
-         POMSession session = pomMGr.openSession();
+//         POMSession session = pomMGr.openSession();
+//         SessionContext context = lifeCycle.openContext();
+         manager.beginRequest();
          boolean save = false;
          try
          {
@@ -674,7 +741,8 @@ public class MOPApplicationRegistryService implements ApplicationRegistryService
          }
          finally
          {
-            session.close(save);
+            // lifeCycle.closeContext(context, true);
+            manager.endRequest(true);
          }
       }
    }

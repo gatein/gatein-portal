@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see<http://www.gnu.org/licenses/>.
  */
-package org.exoplatform.portal.pom.registry;
+package org.exoplatform.application.registry.mop;
 
 import org.chromattic.api.annotations.Create;
 import org.chromattic.api.annotations.Name;
@@ -39,7 +39,7 @@ public abstract class CategoryDefinition
 {
 
    /** The injected workspace. */
-   public POMSession session;
+   public MOPApplicationRegistryService registry;
 
    @Name
    public abstract String getName();
@@ -103,6 +103,9 @@ public abstract class CategoryDefinition
       {
          throw new NullPointerException("No null content id accepted");
       }
+
+      //
+      POMSession session = registry.mopManager.getSession();
 
       //
       Workspace workspace = session.getWorkspace();

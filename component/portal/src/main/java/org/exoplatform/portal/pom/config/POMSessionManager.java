@@ -72,7 +72,7 @@ public class POMSessionManager implements Startable
    {
       try
       {
-         MOPChromatticLifeCycle configurator = (MOPChromatticLifeCycle)manager.getConfigurator("mop");
+         MOPChromatticLifeCycle configurator = (MOPChromatticLifeCycle)manager.getLifeCycle("mop");
          configurator.manager = this;
 
          //
@@ -115,7 +115,7 @@ public class POMSessionManager implements Startable
     */
    public POMSession getSession()
    {
-      SessionContext context = configurator.getSessionContext();
+      SessionContext context = configurator.getContext();
       return context != null ? (POMSession)context.getAttachment("mopsession") : null;
    }
 

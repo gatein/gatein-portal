@@ -42,7 +42,7 @@ public class ChromatticImpl implements Chromattic
 
    public ChromatticSession openSession()
    {
-      SessionContext sessionContext = configurator.getSessionContext();
+      SessionContext sessionContext = configurator.getContext(false);
 
       //
       if (sessionContext == null)

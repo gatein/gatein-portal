@@ -14,38 +14,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see<http://www.gnu.org/licenses/>.
  */
-package org.exoplatform.portal.pom.config;
+package org.exoplatform.application.registry.mop;
 
 import org.exoplatform.commons.chromattic.ChromatticLifeCycle;
 import org.exoplatform.commons.chromattic.SessionContext;
 import org.exoplatform.container.xml.InitParams;
 
 /**
- * Extends the chromattic life cycle to associate the mop session as an attachment of the chromattic session.
- *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class MOPChromatticLifeCycle extends ChromatticLifeCycle
+public class ApplicationRegistryChromatticLifeCycle extends ChromatticLifeCycle
 {
 
    /** . */
-   POMSessionManager manager;
+   MOPApplicationRegistryService registry;
 
-   public MOPChromatticLifeCycle(InitParams params)
-   {
+   public ApplicationRegistryChromatticLifeCycle(InitParams params) {
       super(params);
    }
 
    @Override
-   protected void onOpenSession(SessionContext context)
-   {
-      POMSession session = new POMSession(manager, this, context);
-      context.setAttachment("mopsession", session);
-   }
-
-   @Override
-   protected void onCloseSession(SessionContext context)
-   {
+   protected void onOpenSession(SessionContext context) {
+      context.getSession().addEventListener(new Injector(registry));
    }
 }

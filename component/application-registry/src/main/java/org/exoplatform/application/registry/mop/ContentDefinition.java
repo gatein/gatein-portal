@@ -14,13 +14,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see<http://www.gnu.org/licenses/>.
  */
-package org.exoplatform.portal.pom.registry;
+package org.exoplatform.application.registry.mop;
 
 import org.chromattic.api.annotations.Id;
 import org.chromattic.api.annotations.ManyToOne;
 import org.chromattic.api.annotations.Name;
 import org.chromattic.api.annotations.NodeMapping;
 import org.chromattic.api.annotations.Property;
+import org.exoplatform.portal.pom.config.POMSession;
 import org.gatein.mop.api.content.Customization;
 import org.gatein.mop.api.workspace.Workspace;
 
@@ -72,7 +73,8 @@ public abstract class ContentDefinition
    public Customization getCustomization()
    {
       CategoryDefinition category = getCategory();
-      Workspace workspace = category.session.getWorkspace();
+      POMSession session = category.registry.mopManager.getSession();
+      Workspace workspace = session.getWorkspace();
       String name = getName();
       return workspace.getCustomization(name);
    }

@@ -50,9 +50,9 @@ public class ChromatticManager
       return currentSynchronization.get();
    }
 
-   public ChromatticLifeCycle getConfigurator(String configuratorKey)
+   public ChromatticLifeCycle getLifeCycle(String lifeCycleName)
    {
-      return lifeCycles.get(configuratorKey);
+      return lifeCycles.get(lifeCycleName);
    }
 
    public void addLifeCycle(ComponentPlugin plugin)

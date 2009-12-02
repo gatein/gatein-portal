@@ -32,7 +32,7 @@ public class ChromatticIntegrationTestCase extends TestCase
 {
 
    /** . */
-   private ChromatticLifeCycle configurator;
+   private ChromatticLifeCycle testLF;
 
    /** . */
    private ChromatticManager chromatticManager;
@@ -42,7 +42,7 @@ public class ChromatticIntegrationTestCase extends TestCase
    {
       PortalContainer container = PortalContainer.getInstance();
       chromatticManager = (ChromatticManager)container.getComponent(ChromatticManager.class);
-      configurator = chromatticManager.getConfigurator("test");
+      testLF = chromatticManager.getLifeCycle("test");
    }
 
    @Override
@@ -53,10 +53,10 @@ public class ChromatticIntegrationTestCase extends TestCase
 
    public void testConfiguratorInitialized() throws Exception
    {
-      assertNotNull(configurator);
-      assertEquals("test", configurator.getWorkspaceName());
-      assertNotNull(configurator.getChromattic());
-      assertSame(chromatticManager, configurator.getManager());
+      assertNotNull(testLF);
+      assertEquals("test", testLF.getWorkspaceName());
+      assertNotNull(testLF.getChromattic());
+      assertSame(chromatticManager, testLF.getManager());
    }
 
    public void testCannotInitiateMoreThanOneRequest()
@@ -94,7 +94,7 @@ public class ChromatticIntegrationTestCase extends TestCase
    {
       try
       {
-         configurator.getChromattic().openSession();
+         testLF.getChromattic().openSession();
          fail();
       }
       catch (IllegalStateException e)
@@ -107,10 +107,10 @@ public class ChromatticIntegrationTestCase extends TestCase
       Session jcrSession;
 
       //
-      SessionContext context = configurator.openContext();
+      SessionContext context = testLF.openContext();
       try
       {
-         ChromatticSession session = configurator.getChromattic().openSession();
+         ChromatticSession session = testLF.getChromattic().openSession();
          FooEntity foo = session.create(FooEntity.class);
          assertEquals("test", foo.getWorkspace());
          jcrSession = session.getJCRSession();
@@ -123,7 +123,7 @@ public class ChromatticIntegrationTestCase extends TestCase
       }
       finally
       {
-         configurator.closeContext(context, false);
+         testLF.closeContext(context, false);
       }
 
       // Assert JCR session was properly closed
@@ -132,11 +132,11 @@ public class ChromatticIntegrationTestCase extends TestCase
 
    public void testLocalRequestNoSessionAccess()
    {
-      SessionContext context = configurator.openContext();
-      configurator.closeContext(context, false);
+      SessionContext context = testLF.openContext();
+      testLF.closeContext(context, false);
    }
 
-   public void testGlobalRequest() throws Exception
+   public void testGlobalSession() throws Exception
    {
       Session jcrSession;
 
@@ -144,10 +144,16 @@ public class ChromatticIntegrationTestCase extends TestCase
       chromatticManager.beginRequest();
       try
       {
-         Chromattic chromattic = configurator.getChromattic();
+         Chromattic chromattic = testLF.getChromattic();
+
+         // No context should be open
+         assertNull(testLF.getContext(true));
 
          // Opens a session with the provided Chromattic
          ChromatticSession session = chromattic.openSession();
+
+         // Now we should have a context
+         assertNotNull(testLF.getContext(true));
 
          // Check how chromattic see the session
          FooEntity foo = session.create(FooEntity.class);
@@ -170,5 +176,23 @@ public class ChromatticIntegrationTestCase extends TestCase
 
       // Assert JCR session was properly closed
       assertFalse(jcrSession.isLive());
+   }
+
+   public void testGlobalSessionContext() throws Exception
+   {
+      chromatticManager.beginRequest();
+      try
+      {
+         SessionContext context = testLF.getContext(true);
+         assertNull(context);
+
+         //
+         context = testLF.getContext(false);
+         assertNotNull(context);
+      }
+      finally
+      {
+         chromatticManager.endRequest(false);
+      }
    }
 }

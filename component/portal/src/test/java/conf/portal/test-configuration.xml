@@ -236,9 +236,6 @@
           <value>org.exoplatform.portal.pom.spi.portlet.PreferenceState</value>
           <value>org.exoplatform.portal.pom.spi.gadget.GadgetState</value>
           <value>org.exoplatform.portal.pom.spi.wsrp.WSRPState</value>
-          <value>org.exoplatform.portal.pom.registry.ContentRegistry</value>
-          <value>org.exoplatform.portal.pom.registry.CategoryDefinition</value>
-          <value>org.exoplatform.portal.pom.registry.ContentDefinition</value>
         </values-param>
       </init-params>
     </component-plugin>

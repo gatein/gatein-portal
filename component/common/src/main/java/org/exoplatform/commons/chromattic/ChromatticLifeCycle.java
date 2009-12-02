@@ -99,14 +99,40 @@ public class ChromatticLifeCycle extends BaseComponentPlugin
       return manager;
    }
 
-   public final SessionContext getSessionContext()
+   /**
+    * Returns <code>#getContext(false)</code>.
+    *
+    * @see #getContext(boolean)
+    * @return a session context
+    */
+   public final SessionContext getContext()
+   {
+      return getContext(false);
+   }
+
+   /**
+    * A best effort to return a session context whether it's local or global.
+    *
+    * @param peek true if no context should be automatically created
+    * @return a session context
+    */
+   public final SessionContext getContext(boolean peek)
    {
       Synchronization sync = manager.getSynchronization();
 
       //
       if (sync != null)
       {
-         return sync.getContext(name);
+         GlobalContext context = sync.getContext(name);
+
+         //
+         if (context == null && !peek)
+         {
+            context = sync.openContext(this);
+         }
+
+         //
+         return context;
       }
 
       //
@@ -129,7 +155,7 @@ public class ChromatticLifeCycle extends BaseComponentPlugin
 
    final SessionContext openGlobalContext()
    {
-      AbstractContext context = (AbstractContext)getSessionContext();
+      AbstractContext context = (AbstractContext)getContext(true);
 
       //
       if (context != null)
@@ -158,7 +184,7 @@ public class ChromatticLifeCycle extends BaseComponentPlugin
     */
    public final SessionContext openContext()
    {
-      AbstractContext context = (AbstractContext)getSessionContext();
+      AbstractContext context = (AbstractContext)getContext(true);
 
       //
       if (context != null)
