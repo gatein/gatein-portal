@@ -2,126 +2,149 @@
 <!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
 ]>
 <section id="sect-Reference_Guide-Internationalization_Configuration">
-	<!--   
-
-    Copyright (C) 2009 eXo Platform SAS.
-    
-    This is free software; you can redistribute it and/or modify it
-    under the terms of the GNU Lesser General Public License as
-    published by the Free Software Foundation; either version 2.1 of
-    the License, or (at your option) any later version.
-    
-    This software is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-    Lesser General Public License for more details.
-    
-    You should have received a copy of the GNU Lesser General Public
-    License along with this software; if not, write to the Free
-    Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
-    02110-1301 USA, or see the FSF site: http://www.fsf.org.
-
-   --><title>Internationalization Configuration</title>
+    <title>Internationalization Configuration</title>
 	<section id="sect-Reference_Guide-Internationalization_Configuration-Overview">
 		<title>Overview</title>
 		<para>
-			All aspects of internationalization in GateIn products are covered. You should have a general knowledge of Internationalization in Java products. Sun created a <ulink url=" http://java:sun.com-docs-books-tutorial-i18n-TOC.html">good internationalization tutorial</ulink> .
+			All aspects of internationalization in GateIn products are covered. You should have a general knowledge of Internationalization in Java products. Sun created a <ulink url="http://java.sun.com/docs/books/tutorial/i18n/TOC.html">good internationalization tutorial</ulink> .
 		</para>
 		<section id="sect-Reference_Guide-Overview-Introduction">
 			<title>Introduction</title>
-			<orderedlist numeration="arabic">
-				<listitem>
-					<para>
-						typical locale file can be found in:
-					</para>
-				</listitem>
-				<listitem>
-					<para>
-						.../WEB-INF/classes/locale/navigation/group/organization/management/executive-board
-					</para>
-				</listitem>
-			</orderedlist>
+            <para>All embedded applications contains property files for various languages. They are packaged with the portlets applications in a WEB-INF/classes/locale/ directory.</para>
 			<para>
 				You should notice that
-			</para>
+		    </para>
 			<itemizedlist>
 				<listitem>
 					<para>
-						the file is located in the <emphasis role="bold">classes</emphasis> folder of your WEB-INF, this way they are loaded by the ClassLoader.
+						the files are located in the <literal>classes</literal> folder of your WEB-INF, this way they are loaded by the ClassLoader.
 					</para>
 				</listitem>
 				<listitem>
 					<para>
-						all resource files are in the subfolder <emphasis role="bold">locale</emphasis> .
-					</para>
-				</listitem>
-				<listitem>
-					<para>
-						resources for the <xref linkend="sect-Reference_Guide-Portal_Navigation_Configuration" /> are located in a <emphasis role="bold">navigation</emphasis> subfolder of locale.
-					</para>
-				</listitem>
-				<listitem>
-					<para>
-						resources concerning the navigation of a group are in a <emphasis role="bold">navigation/group</emphasis> subfolder. The other possible navigations are <emphasis role="bold">user</emphasis> and <emphasis role="bold">portal</emphasis> .
+						all resource files are in a subfolder named <literal>locale</literal>
 					</para>
 				</listitem>
 			</itemizedlist>
+            <para>For instance you will find the translations for the NavigationPortlet in <literal>web.war/WEB-INF/classes/locale/portlet/portal</literal></para>
+            <programlisting><![CDATA[NavigationPortlet_de.properties
+NavigationPortlet_en.properties
+NavigationPortlet_es.properties
+NavigationPortlet_fr.properties
+NavigationPortlet_nl.properties
+NavigationPortlet_ru.properties
+NavigationPortlet_uk.properties
+NavigationPortlet_ar.xml
+]]></programlisting>
+            <para>Inside those file we find typical <literal>key=value</literal> Java EE properties. For example the French one:</para>
+            <programlisting><![CDATA[javax.portlet.title=Portlet Navigation]]></programlisting>
 			<para>
-				Furthermore there are properties files in portal sub-folder, they form together the <emphasis role="bold">portal resource bundle</emphasis> .:<!--   <ulink url="http://fisheye.exoplatform.org-browse-projects-portal-trunk-web-portal-src-main-webapp-WEB-INF-classes-locale-portal">::/WEB-INF/classes/locale/portal></ulink>   -->
+				Furthermore there are properties files in the portal itself. They form together the <emphasis role="bold">portal resource bundle</emphasis>.
+                From a portlet you can then access translations from the portlet itself or shared at the portal level, both are aggregated when you need them.
 			</para>
+			<note>
+                <title>Translation in XML format</title>
+				<para>
+					It is also possible to use a proprietary XML format to define translations. This is a more convenient way to translate a document for some languages
+               such as Japanese, Arabic or Russian. Property files have te be ASCII encoded, while the XML file can define its encoding. As a result it's easier for a human being
+               to read (and fix) a translation in XML instead of having to decode and encode the property file.
+               </para>
+               <para>
+               More information are available here: <xref linkend="sect-Reference_Guide-XML_Resources_Bundles" />
+				</para>
+            </note>
+         </section>
+         <section id="sect-Reference_Guide-I18N-Locale-Configuration">
+            <title>Locales configuration</title>
+         <para>
+            Various languages are available in the shipped portal, one may want to add or remove languages.
+            This configuration will define the list of languages in the "Change Language" section of the portal that the user can pick from.
+         </para>
 			<para>
-				The <emphasis>executive-board</emphasis> en.properties{code:none}{code} The keys (example: ~~organization.newstaff~~) can have any name but must not contain spaces. The values (~~New Staff~~) contain the translation to the language of the resource file. The suffix "en" means in this case "English".
-			</para>
-			<orderedlist numeration="arabic">
-				<listitem>
-					<para>
-						info("There are also resource bundles in XML format <xref linkend="sect-Reference_Guide-XML_Resources_Bundles" /> which are a proprietary format of GateIn Platform.")
-					</para>
-				</listitem>
-			</orderedlist>
-			<para>
-				1 LocalesConfig
-			</para>
-			<!--   <ulink url="http://fisheye.exoplatform.org-browse-projects-portal-trunk-web-portal-src-main-webapp-WEB-INF-conf-common-common-configuration.xml?r=28705">/WEB-INF/conf/common/common-configuration.xml"</ulink>   -->
-			<para>
-				In the <filename>/WEB-INF/conf/common/common-configuration.xml</filename> file of your installation you find:
+				In the <filename>02portal.war:/WEB-INF/conf/common/common-configuration.xml</filename> file of your installation you can find the following section:
 			</para>
 			
-<programlisting> &lt;component&gt;
-  &lt;key&gt;org.exoplatform.services.resources.LocaleConfigService&lt;/key&gt; 
-  &lt;type&gt;org.exoplatform.services.resources.impl.LocaleConfigServiceImpl&lt;/type&gt; 
- &lt;init-params&gt;
- &lt;value-param&gt;
-  &lt;name&gt;locale.config.file&lt;/name&gt; 
-  &lt;value&gt;war:/conf/common/locales-config.xml&lt;/value&gt; 
-  &lt;/value-param&gt;
-  &lt;/init-params&gt;
-  &lt;/component&gt;
-</programlisting>
+<programlisting role="XML"><![CDATA[<component>
+  <key>org.exoplatform.services.resources.LocaleConfigService</key>
+  <type>org.exoplatform.services.resources.impl.LocaleConfigServiceImpl</type>
+  <init-params>
+    <value-param>
+      <name>locale.config.file</name>
+      <value>war:/conf/common/locales-config.xml</value>
+    </value-param>
+  </init-params>
+</component>]]></programlisting>
 			<para>
-				The configuration points to the locale configuration file like this one<ulink type="http" url="http://fisheye.exoplatform.org-browse-projects-portal-trunk-web-portal-src-main-webapp-WEB-INF-conf-common-locales-config.xml?r=24696" />
+				The configuration points to the locale configuration file such as the following one located in <filename>02portal.war:/WEB-INF/conf/common/locales-config.xml</filename>:
 			</para>
-			
-<programlisting>{code:xml} &lt;locale-config&gt; &lt;locale&gt;ar&lt;/locale&gt; &lt;output-encoding&gt;UTF-8&lt;/output-encoding&gt; &lt;input-encoding&gt;UTF-8&lt;/input-encoding&gt; &lt;description&gt;Default configuration for the Arabic locale&lt;/description&gt; &lt;orientation&gt;rt&lt;/orientation&gt; &lt;/locale-config&gt; {code}
-</programlisting>
-			<para>
-				The locale has to be defined using <ulink type="http" url="http://ftp.ics.uci.edu-pub-ietf-http-related-iso639.txt" />, in this example "ar" is Arabic.
-			</para>
-			<para>
-				This configuration defines also the list of languages in the "Change Language" section of the portal.
-			</para>
-			<para>
-				1.1 Encoding It's highly recommended to always use <emphasis role="bold">UTF-8</emphasis>. You should also encode all property files in UTF-8.
-			</para>
-			<para>
-				In the java implementation, the encoding parameters will be used for the request response stream. The input-encoding parameter will be used for request setCharacterEncoding(..).
-			</para>
-			<para>
-				1.1 Orientation The default orientation of text and images is Left-To-Right. As you know GateIn support <emphasis role="bold">Right-To-Left</emphasis> orientation. Therefore for Arabic you define
-			</para>
-			<para>
-				&lt;orientation&gt;rt&lt;/orientation&gt;
-			</para>
+<programlistingco>
+               <areaspec>
+                  <area id="i18n.locales.configuration.locale" coords='4' />
+                  <area id="i18n.locales.configuration.output-encoding" coords='5' />
+                  <area id="i18n.locales.configuration.input-encoding" coords='6' />
+                  <area id="i18n.locales.configuration.description" coords='7' />
+                  <area id="i18n.locales.configuration.orientation" coords='22' />
+               </areaspec>
+<programlisting role="XML"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<locales-config>
+  <locale-config>
+    <locale>en</locale>
+    <output-encoding>UTF-8</output-encoding>
+    <input-encoding>UTF-8</input-encoding>
+    <description>Default configuration for english locale</description>
+  </locale-config>
+
+  <locale-config>
+    <locale>fr</locale>
+    <output-encoding>UTF-8</output-encoding>
+    <input-encoding>UTF-8</input-encoding>
+    <description>Default configuration for the french locale</description>
+  </locale-config>
+
+  <locale-config>
+    <locale>ar</locale>
+    <output-encoding>UTF-8</output-encoding>
+    <input-encoding>UTF-8</input-encoding>
+    <description>Default configuration for the arabic locale</description>
+    <orientation>rt</orientation>
+  </locale-config>
+</locales-config>
+]]></programlisting>
+<calloutlist>
+                  <callout arearefs="i18n.locales.configuration.locale">
+                     <para>
+                        <emphasis>locale</emphasis>
+                        The locale has to be defined such as defined here <ulink type="http" url="http://ftp.ics.uci.edu-pub-ietf-http-related-iso639.txt" />, in this example "ar" is Arabic.
+                     </para>
+                  </callout>
+                  <callout arearefs="i18n.locales.configuration.output-encoding">
+                     <para>
+                        <emphasis>output-encoding</emphasis>
+                        Encoding It's highly recommended to always use <emphasis role="bold">UTF-8</emphasis>.
+                     </para>
+                  </callout>
+                  <callout arearefs="i18n.locales.configuration.input-encoding">
+                     <para>
+                        <emphasis>input-encoding</emphasis>
+                        In the java implementation, the encoding parameters will be used for the request response stream. The input-encoding parameter will be used for request setCharacterEncoding(..).
+                     </para>
+                  </callout>
+                  <callout arearefs="i18n.locales.configuration.description">
+                     <para>
+                        <emphasis>description</emphasis>
+                        Description for the language
+                     </para>
+                  </callout>
+                  <callout arearefs="i18n.locales.configuration.orientation">
+                     <para>
+                        <emphasis>description</emphasis>
+                        The default orientation of text and images is Left-To-Right.
+                        GateIn supports <emphasis role="bold">Right-To-Left</emphasis> orientation. Therefore you can define the orientation to use as explained in <xref linkend="sect-Reference_Guide-RTL_Right_To_Left_Framework"/>.
+                     </para>
+                  </callout>
+               </calloutlist>
+            </programlistingco>
+
 			<para>
 				1 ResourceBundleService
 			</para>

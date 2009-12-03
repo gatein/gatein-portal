@@ -117,8 +117,7 @@
 <servlet-mapping>
   <servlet-name>TomcatGateInServlet</servlet-name>
   <url-pattern>/tomcatgateinservlet</url-pattern>
-</servlet-mapping>
-]]></programlisting>
+</servlet-mapping>]]></programlisting>
 
 		<para>
 	With this in mind it's possible to filter on the CommandServlet by
@@ -157,8 +156,7 @@ public class MyFilter implements javax.servlet.Filter {
   {
   }
 
-}
-]]></programlisting>
+}]]></programlisting>
 		<para>
 		The Java EE web application configuration file (web.xml) of the portlet on which we want to
 		know the time to serve a portlet request. As mentioned above nothing specific to GateIn needs to be included,
@@ -181,8 +179,7 @@ public class MyFilter implements javax.servlet.Filter {
     <dispatcher>INCLUDE</dispatcher>  
   </filter-mapping>    
     
-</web-app>
-]]></programlisting>
+</web-app>]]></programlisting>
         <para>
           <note>
             <title>INCLUDE dispatcher</title>
