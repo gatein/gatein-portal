@@ -21,11 +21,11 @@
 			WAR that we call a portlet application.
 		</para>
 		<para>
-			GateIn doesn't require any particular setup in most common scenario and the
-			web.xml file can remain empty. During deployment,
-			GateIn will automatically and transparently inject a listener and a servlet
-			filter to be able to interact with the portlet application.
-			This feature is dependent on the underlying servlet container and will
+			GateIn doesn't require any particular setup for your portlet in most common scenario and the
+			web.xml file can remain without any GateIn specific configuration. During deployment,
+			GateIn will automatically and transparently inject a servlet
+			into the portlet application to be able to interact with it.
+			This feature is dependent on the underlying servlet container but will
 			work out of the box on the proposed bundles. 
 		</para>
 	</section>
@@ -95,12 +95,101 @@
 </programlisting>
  -->
         <section>
-           <title>The Servlet</title>
+           <title>The Command Servlet</title>
 		<para>
 			The servlet is the main entry point for incoming requests, it
 			also includes some interesting init code when the portal is launched.
-			This servlet (org.gatein.wci.command.CommandServlet) is automatically
-			added during deployment.
+			This servlet (<literal>org.gatein.wci.command.CommandServlet</literal>) is automatically
+			added during deployment and mapped to <literal>/tomcatgateinservlet</literal>.
+		</para>
+		<para>
+			In other words, this is equivalent to adding the following into web.xml (But this is for
+			information only, the servlet is already configured)
+			</para>
+
+<programlisting role="XML"><![CDATA[
+<servlet>
+  <servlet-name>TomcatGateInServlet</servlet-name>
+  <servlet-class>org.gatein.wci.command.CommandServlet</servlet-class>
+  <load-on-startup>0</load-on-startup>
+</servlet>
+  
+<servlet-mapping>
+  <servlet-name>TomcatGateInServlet</servlet-name>
+  <url-pattern>/tomcatgateinservlet</url-pattern>
+</servlet-mapping>
+]]></programlisting>
+
+		<para>
+	With this in mind it's possible to filter on the CommandServlet by
+	filtering on the URL pattern used by the Servlet mapping. As an example
+	below we will create a servlet filter that calculates the time of
+	execution of a portlet request.
+	    </para>
+		<para>The filter class: </para>
+<programlisting role="JAVA"><![CDATA[
+package org.example;
+
+import java.io.IOException;
+
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+
+public class MyFilter implements javax.servlet.Filter {
+
+  public void doFilter(ServletRequest request, ServletResponse response,
+      FilterChain chain) throws IOException, ServletException
+  {
+    long beforeTime = System.currentTimeMillis();
+    chain.doFilter(request, response);
+    long afterTime = System.currentTimeMillis();
+    System.out.println("Time to execute the portlet request (in ms): " + (afterTime - beforeTime));
+  }
+
+  public void init(FilterConfig config) throws ServletException
+  {
+  }
+
+  public void destroy()
+  {
+  }
+
+}
+]]></programlisting>
+		<para>
+		The Java EE web application configuration file (web.xml) of the portlet on which we want to
+		know the time to serve a portlet request. As mentioned above nothing specific to GateIn needs to be included,
+		only the URL pattern to set has to be known.
+        </para>
+<programlisting role="XML"><![CDATA[
+<?xml version="1.0"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+    version="2.5">
+        
+  <filter>
+    <filter-name>MyFilter</filter-name>
+    <filter-class>org.example.MyFilter</filter-class>        
+  </filter>
+
+  <filter-mapping>
+    <filter-name>MyFilter</filter-name>
+    <url-pattern>/tomcatgateinservlet</url-pattern>
+    <dispatcher>INCLUDE</dispatcher>  
+  </filter-mapping>    
+    
+</web-app>
+]]></programlisting>
+        <para>
+          <note>
+            <title>INCLUDE dispatcher</title>
+            <para>Here it's important to set INCLUDE as dispatcher as the portal will always hit
+            the CommandServlet through a request dispatcher. Without this, the filter will not be
+            triggered, unless direct access to a resource (such as an image).</para>
+          </note>
 		</para>
        </section>
 <!-- 
