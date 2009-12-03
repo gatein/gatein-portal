@@ -20,6 +20,7 @@
 package org.exoplatform.application.registry;
 
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.MembershipType;
 import org.exoplatform.services.organization.OrganizationService;
@@ -323,7 +324,7 @@ public class TestApplicationRegistryService extends BasicTestCase
       Application app = new Application();
       app.setApplicationName(appName);
       app.setDisplayName(appName);
-      app.setType(appType);
+      app.setType(ApplicationType.getType(appType));
 //      app.setApplicationGroup(appGroup);
       return app;
    }
