@@ -61,9 +61,9 @@ public class UIPermissionForm extends UIForm
    {
       application_ = app;
       ArrayList<String> accessPermissions = application_.getAccessPermissions();
-      String[] per = new String[accessPermissions.size()];
-      if (accessPermissions != null && accessPermissions.size() > 0)
+      if (accessPermissions != null)
       {
+         String[] per = new String[accessPermissions.size()];
          getChild(UIListPermissionSelector.class).setValue(accessPermissions.toArray(per));
       }
    }

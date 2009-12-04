@@ -106,7 +106,8 @@ public class UIApplicationForm extends UIForm
             application.setDisplayName(application.getApplicationName());
          }
          service.update(application);
-         uiOrganizer.setSelectedApplication(uiOrganizer.getSelectedApplication());
+         //uiOrganizer.setSelectedApplication(uiOrganizer.getSelectedApplication());
+         uiOrganizer.setSelectedApplication(application);
          ctx.addUIComponentToUpdateByAjax(uiOrganizer);
       }
    }
