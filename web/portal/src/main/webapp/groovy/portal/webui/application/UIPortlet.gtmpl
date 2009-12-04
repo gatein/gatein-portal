@@ -313,8 +313,8 @@
 																if(title.length() > 30) title = title.substring(0,27) + "...";
 															%>
 															<div class="PortletIcon $portletIcon">$title</div>
-															<a href="<%=uicomponent.event("EditPortlet","$uicomponent.id")%>;eXo.portal.UIPortal.changeComposerSaveButton()" class="EditPortletPropertiesIcon" title="<%=_ctx.appRes("UIPortlet.tooltip.editPortlet");%>"></a>
 															<a href="<%=uicomponent.event("DeleteComponent","$uicomponent.id")%>" class="DeletePortletIcon" title="<%=_ctx.appRes("UIPortlet.tooltip.deletePortlet");%>"></a>
+															<a href="<%=uicomponent.event("EditPortlet","$uicomponent.id")%>;eXo.portal.UIPortal.changeComposerSaveButton()" class="EditPortletPropertiesIcon" title="<%=_ctx.appRes("UIPortlet.tooltip.editPortlet");%>"></a>
 														</div>
 														<div class="ClearLeft"><span></span></div>
 													</div>

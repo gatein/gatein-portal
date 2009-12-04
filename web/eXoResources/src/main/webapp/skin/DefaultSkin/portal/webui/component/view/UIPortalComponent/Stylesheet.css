@@ -49,8 +49,8 @@
 }
 
 .UIPortlet .EditPortletPropertiesIcon {
-	float: left; /* orientation=lt */
-	float: right; /* orientation=rt */
+	float: right;	/* orientation=lt */
+	float: left;	/* orientation=rt */
 	width: 20px; height: 20px;
 	background: url('background/Pen.gif') no-repeat top;
 	margin: 4px 3px 0px 5px; /* orientation=lt */
@@ -58,8 +58,8 @@
 }
 
 .UIPortlet .DeletePortletIcon {
-	float: left; /* orientation=lt */
-	float: right; /* orientation=rt */
+	float: right;	/* orientation=lt */
+	float: left;	/* orientation=rt */
 	width: 20px; height:20px; 
 	background: url('background/Close.gif') no-repeat bottom;
 	margin: 0px 4px 0px 0px; /* orientation=lt */
