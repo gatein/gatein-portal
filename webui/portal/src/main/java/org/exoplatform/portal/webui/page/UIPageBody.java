@@ -121,7 +121,8 @@ public class UIPageBody extends UIComponentDecorator
                uiPortal.setMaximizedUIComponent(null);
             }
             maximizedComponent = this.getMaximizedUIComponent();
-            if(maximizedComponent !=null && maximizedComponent instanceof UIPage){
+            if (maximizedComponent != null && maximizedComponent instanceof UIPage)
+            {
                this.setMaximizedUIComponent(null);
             }
          }
@@ -137,6 +138,11 @@ public class UIPageBody extends UIComponentDecorator
 
    public void processRender(WebuiRequestContext context) throws Exception
    {
+      if (maximizedUIComponent != null && Util.getUIPortalApplication().getModeState() % 2 == 0)
+      {
+         maximizedUIComponent.processRender((WebuiRequestContext)WebuiRequestContext.getCurrentInstance());
+         return;
+      }
       if (uicomponent_ == null)
       {
          setPageBody(Util.getUIPortal().getSelectedNode(), Util.getUIPortal());
