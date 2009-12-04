@@ -49,19 +49,19 @@ import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.UIPopupWindow;
-import org.exoplatform.webui.core.UIRightClickPopupMenu;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.event.Event.Phase;
 
-import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
+
+import javax.servlet.http.HttpServletRequest;
 
 @ComponentConfigs({
    @ComponentConfig(template = "app:/groovy/navigation/webui/component/UISiteManagement.gtmpl", events = {
@@ -209,14 +209,13 @@ public class UISiteManagement extends UIContainer
          else if (config != null)
          {
             uiPortalApp.addMessage(new ApplicationMessage("UISiteManagement.msg.Invalid-deletePermission",
-               new String[]{config.getPortalConfig().getName()}));
-            ;
+               new String[]{config.getPortalConfig().getName()}));;
             return;
          }
          else
          {
             uiPortalApp.addMessage(new ApplicationMessage("UISiteManagement.msg.portal-not-exist",
-               new String[]{portalName}));            
+               new String[]{portalName}));
             return;
          }
 
@@ -253,11 +252,11 @@ public class UISiteManagement extends UIContainer
          UIPortalApplication portalApp = (UIPortalApplication)prContext.getUIApplication();
 
          UserPortalConfig userConfig = service.getUserPortalConfig(portalName, prContext.getRemoteUser());
-         
-         if(userConfig == null)
+
+         if (userConfig == null)
          {
             portalApp.addMessage(new ApplicationMessage("UISiteManagement.msg.portal-not-exist",
-                     new String[]{portalName}));
+               new String[]{portalName}));
             return;
          }
          PortalConfig portalConfig = userConfig.getPortalConfig();
@@ -280,16 +279,19 @@ public class UISiteManagement extends UIContainer
          uiComposer.setComponentConfig(UIPortalComposer.class, null);
 
          UIPortal uiPortal = Util.getUIPortal();
-         if (portalName.equals(uiPortal.getName()))
+         uiWorkingWS.setBackupUIPortal(uiPortal);
+
+         UIPortal editPortal = uiWorkingWS.createUIComponent(UIPortal.class, null, null);
+         PortalDataMapper.toUIPortal(editPortal, userConfig);
+         uiEditWS.setUIComponent(editPortal);         
+         
+         if (uiPortal.getName().equals(editPortal.getName()))
          {
-            uiEditWS.setUIComponent(uiPortal);
-            uiWorkingWS.findFirstComponentOfType(UISiteBody.class).setUIComponent(null);
-         }
-         else
-         {
-            UIPortal editPortal = uiWorkingWS.createUIComponent(UIPortal.class, null, null);
-            PortalDataMapper.toUIPortal(editPortal, userConfig);
-            uiEditWS.setUIComponent(editPortal);
+            editPortal.setSelectedNode(uiPortal.getSelectedNode());
+            editPortal.setSelectedNavigation(uiPortal.getSelectedNavigation());
+            editPortal.setSelectedPaths(uiPortal.getSelectedPaths());
+            UISiteBody siteBody = uiWorkingWS.findFirstComponentOfType(UISiteBody.class);
+            siteBody.setUIComponent(null);
          }
 
          portalApp.setModeState(UIPortalApplication.APP_BLOCK_EDIT_MODE);
@@ -312,7 +314,7 @@ public class UISiteManagement extends UIContainer
          UIApplication uiApplication = context.getUIApplication();
 
          UserPortalConfig userConfig = service.getUserPortalConfig(portalName, prContext.getRemoteUser());
-         if(userConfig == null)
+         if (userConfig == null)
          {
             uiApplication.addMessage(new ApplicationMessage("UISiteManagement.msg.portal-not-exist",
                new String[]{portalName}));
@@ -323,10 +325,9 @@ public class UISiteManagement extends UIContainer
          UserACL userACL = uicomp.getApplicationComponent(UserACL.class);
          if (!userACL.hasEditPermission(portalConfig))
          {
-            uiApplication.addMessage(new ApplicationMessage("UISiteManagement.msg.Invalid-editPermission", null));
-            ;
+            uiApplication.addMessage(new ApplicationMessage("UISiteManagement.msg.Invalid-editPermission", null));;
             return;
-         }        
+         }
 
          UIPopupWindow popUp = uicomp.getChild(UIPopupWindow.class);
 

@@ -21,6 +21,7 @@ package org.exoplatform.portal.webui.workspace;
 
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.UserACL;
+import org.exoplatform.portal.config.UserPortalConfig;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.webui.page.UIPage;
@@ -34,7 +35,6 @@ import org.exoplatform.portal.webui.portal.UIPortalForm;
 import org.exoplatform.portal.webui.util.PortalDataMapper;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
-import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
@@ -57,7 +57,8 @@ public class UIMainActionListener
          // check edit permission for page
          UIPageBody pageBody = uiWorkingWS.findFirstComponentOfType(UIPageBody.class);
          UIPage uiPage = (UIPage)pageBody.getUIComponent();
-         if (uiPage == null) {
+         if (uiPage == null)
+         {
             uiApp.addMessage(new ApplicationMessage("UIPageBrowser.msg.PageNotExist", null));
             return;
          }
@@ -133,23 +134,20 @@ public class UIMainActionListener
          }
          PortalRequestContext pcontext = (PortalRequestContext)event.getRequestContext();
          UIWorkingWorkspace uiWorkingWS = uiApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
-         uiWorkingWS.setBackupUIPortal(null);
+         uiWorkingWS.setBackupUIPortal(uiPortal);
          uiApp.setModeState(UIPortalApplication.APP_BLOCK_EDIT_MODE);
-         // uiWorkingWS.addChild(UIPortalComposer.class, null, null);
 
-         // UserPortalConfig portalConfig = uiApp.getUserPortalConfig();
-         // UIPortal newPortal = uiWorkingWS.createUIComponent(UIPortal.class,
-         // null, null);
-         // PortalDataMapper.toUIPortal(newPortal, portalConfig);
-         // UIEditInlineWorkspace uiEditWS =
-         // uiWorkingWS.addChild(UIEditInlineWorkspace.class, null,
-         // UIPortalApplication.UI_EDITTING_WS_ID);
+         UIPortal newPortal = uiWorkingWS.createUIComponent(UIPortal.class, null, null);
+         PortalDataMapper.toUIPortal(newPortal, uiApp.getUserPortalConfig());
+         newPortal.setSelectedNode(uiPortal.getSelectedNode());
+         newPortal.setSelectedNavigation(uiPortal.getSelectedNavigation());
+         newPortal.setSelectedPaths(uiPortal.getSelectedPaths());
+
          UIEditInlineWorkspace uiEditWS = uiWorkingWS.getChild(UIEditInlineWorkspace.class);
-         // uiEditWS.setUIComponent(newPortal);
-         UISiteBody uiSiteBody = uiWorkingWS.findFirstComponentOfType(UISiteBody.class);
-         uiEditWS.setUIComponent(uiPortal);
-         uiSiteBody.setUIComponent(null);
-
+         uiEditWS.setUIComponent(newPortal);
+         UISiteBody siteBody = uiWorkingWS.findFirstComponentOfType(UISiteBody.class);
+         siteBody.setUIComponent(null);
+         
          UIPortalComposer uiComposer = uiEditWS.getComposer().setRendered(true);
          uiComposer.setComponentConfig(UIPortalComposer.class, null);
          uiComposer.setShowControl(true);

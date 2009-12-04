@@ -22,10 +22,11 @@ package org.exoplatform.portal.webui.portal;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.UserPortalConfig;
 import org.exoplatform.portal.config.UserPortalConfigService;
-import org.exoplatform.portal.pom.data.ModelChange;
 import org.exoplatform.portal.config.model.Page;
+import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.PortalProperties;
+import org.exoplatform.portal.pom.data.ModelChange;
 import org.exoplatform.portal.resource.SkinService;
 import org.exoplatform.portal.webui.application.UIApplicationList;
 import org.exoplatform.portal.webui.application.UIPortlet;
@@ -325,33 +326,14 @@ public class UIPortalComposer extends UIContainer
          UIWorkingWorkspace uiWorkingWS = uiPortalApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
          UIEditInlineWorkspace uiEditWS = uiWorkingWS.getChild(UIEditInlineWorkspace.class);
          uiEditWS.getComposer().setEditted(false);
-
-         UISiteBody siteBody = uiWorkingWS.findFirstComponentOfType(UISiteBody.class);
-         UIPortal uiEditPortal = (UIPortal)uiEditWS.getUIComponent();
-         UIPortal uiPortal = (UIPortal)siteBody.getUIComponent();
-
-         String uri = null;
-         String remoteUser = prContext.getRemoteUser();
-         String ownerUser = prContext.getPortalOwner();
-         if(uiEditPortal != null && uiEditPortal.getOwner().equals(ownerUser))            
-            uri = (uiEditPortal.getSelectedNode() != null) ? uiEditPortal.getSelectedNode().getUri() : null;
-         else if(uiPortal != null)   
-            uri = (uiPortal.getSelectedNode() != null) ? uiPortal.getSelectedNode().getUri() : null;
-               
-         UserPortalConfigService configService = uiPortalApp.getApplicationComponent(UserPortalConfigService.class);
-         UserPortalConfig userPortalConfig = configService.getUserPortalConfig(ownerUser, remoteUser);
-         UIPortal newPortal = uiWorkingWS.createUIComponent(UIPortal.class, null, null);
-         PortalDataMapper.toUIPortal(newPortal, userPortalConfig);
-         siteBody.setUIComponent(newPortal);
-         uiWorkingWS.getChild(UIEditInlineWorkspace.class).setRendered(false);
-
-         uiPortal = (UIPortal)siteBody.getUIComponent();
+         uiEditWS.setRendered(false);
          uiWorkingWS.setRenderedChild(UIPortalApplication.UI_VIEWING_WS_ID);
-
-         if (uri == null)
-         {
-            uri = (uiPortal.getSelectedNode() != null) ? uiPortal.getSelectedNode().getUri() : null;
-         }         
+         
+         UISiteBody siteBody = uiWorkingWS.findFirstComponentOfType(UISiteBody.class);         
+         UIPortal uiPortal = uiWorkingWS.getBackupUIPortal();
+         siteBody.setUIComponent(uiPortal);         
+               
+         String uri  = uiPortal.getSelectedNode() != null ? uiPortal.getSelectedNode().getUri() : null;             
          PageNodeEvent<UIPortal> pnevent = new PageNodeEvent<UIPortal>(uiPortal, PageNodeEvent.CHANGE_PAGE_NODE, uri);
          uiPortal.broadcast(pnevent, Event.Phase.PROCESS);
          prContext.addUIComponentToUpdateByAjax(uiWorkingWS);
