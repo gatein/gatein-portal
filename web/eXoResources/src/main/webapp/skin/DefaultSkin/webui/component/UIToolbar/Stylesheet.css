@@ -147,14 +147,14 @@
 }
 
 /*##############################- BlueLargeToolbar style -#########################*/
-
 .UIToolbar .BlueLargeToolbar {
-	height: 61px;
+	height: 32px;
 }
 
 .UIToolbar .BlueLargeToolbar .LeftToolbar {
 	background: url('background/BlueLargeToolbar.gif') no-repeat left top;
 	padding-left: 5px;
+	border-bottom: 1px solid #9a9a9a;
 }
 
 .UIToolbar .BlueLargeToolbar .RightToolbar {
@@ -163,7 +163,7 @@
 }
 
 .UIToolbar .BlueLargeToolbar .MiddleToolbar {
-	height: 61px;
+	height: 32px;
 	background: url('background/BlueLargeToolbar.gif') repeat-x center -61px;
 }
 
@@ -190,16 +190,11 @@
 .UIToolbar .BlueLargeToolbar .HorizontalSeparator {
 	float: left; /* orientation=lt */
 	float: right; /* orientation=rt */
-	margin: 0px 8px 0px 10px;
-	margin: 0px 10px 0px 8px;
+	margin: 2px 8px 0px 10px;
+	margin: 2px 10px 0px 8px;
 	width: 2px; 
-	height: 48px;
+	height: 22px;
 	background: url('background/BlueLargeToolbar.gif') no-repeat -6px top;
-}
-
-.UIToolbar .BlueLargeToolbar .ButtonLabel {
-	height: 20px; 
-	line-height: 20px;
 }
 
 .UIToolbar .BlueLargeToolbar .ManagementIconContainer {
@@ -210,28 +205,28 @@
 .UIToolbar .BlueLargeToolbar .ItemButton {
 	float: left; /* orientation=lt */
 	float: right; /* orientation=rt */
-	text-align: center;
-	padding: 5px;
-	width: 75px;
-}
-
-.UIToolbar .BlueLargeToolbar .LablelIcon {
-	width: 32px; height: 26px; 
-	margin: auto;
+	padding-left: 35px; /* orientation=lt */
+	padding-right: 35px; /* orientation=rt */
+	margin: 0 10px; display: block;
 	background-image: url('background/BlueLargeToolbar.gif');
 	background-repeat: no-repeat;
+	height: 26px; line-height: 26px;
+	color: #363636;
 }
 
 .UIToolbar .BlueLargeToolbar .OrganizeIcon {
-	background-position: center -122px;
+	background-position: left -122px; /* orientation=lt */
+	background-position: right -122px; /* orientation=rt */
 }
 
 .UIToolbar .BlueLargeToolbar .PorletIcon {
-	background-position: center -148px;
+	background-position: left -148px; /* orientation=lt */
+	background-position: right -148px; /* orientation=rt */
 }
 
 .UIToolbar .BlueLargeToolbar .GadgetIcon {
-	background-position: center -174px;
+	background-position: left -174px; /* orientation=lt */
+	background-position: right -174px; /* orientation=rt */
 }
 
 /*

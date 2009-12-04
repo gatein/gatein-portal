@@ -19,31 +19,26 @@
 									<div class="ManagementIconContainer ClearFix">
 										<%
 										cssClass = "ItemButton";
-										if(uicomponent.getChild(0).isRendered()) cssClass = "ItemButton SelectItemButton";
+										if(uicomponent.getChild(0).isRendered()) cssClass = "SelectItemButton";
 										%>
-										<div onclick="<%=uicomponent.event("ViewChild", "UIApplicationOrganizer")%>" class="$cssClass">
-											<div class="LablelIcon OrganizeIcon"><span></span></div>
-											<a href="javascript:void(0);" class="ButtonLabel"><%=_ctx.appRes("UIToolbar.label.organize")%></a>
-										</div>
+										<a onclick="<%=uicomponent.event("ViewChild", "UIApplicationOrganizer")%>" class="$cssClass ItemButton OrganizeIcon">
+											<%=_ctx.appRes("UIToolbar.label.organize")%>
+										</a>
 										<%
 										cssClass = "ItemButton";
 										if(uicomponent.getChild(2).isRendered()) cssClass = "ItemButton SelectItemButton";
 										%>																		
-										<div onclick="<%=uicomponent.event("ViewChild", "UIGadgetManagement")%>" class="$cssClass" style="float: <%= isLT? "right" : "left" %>">
-											<div class="LablelIcon GadgetIcon"><span></span></div>
-											<a href="javascript:void(0)" class="ButtonLabel"><%=_ctx.appRes("UIToolbar.label.gadget")%></a>
-										</div>
+										<a onclick="<%=uicomponent.event("ViewChild", "UIGadgetManagement")%>" class="$cssClass ItemButton GadgetIcon" style="float: <%= isLT? "right" : "left" %>">
+											<%=_ctx.appRes("UIToolbar.label.gadget")%>
+										</a>
 										<div class="HorizontalSeparator" style="float: <%= isLT? "right" : "left" %>"><span></span></div>
 										<%
 										cssClass = "ItemButton";
 										if(uicomponent.getChild(1).isRendered()) cssClass = "ItemButton SelectItemButton";
 										%>									
-										<div onclick="<%=uicomponent.event("ViewChild", "UIPortletManagement")%>" class="$cssClass" style="float: <%= isLT? "right" : "left" %>">
-											<div class="LablelIcon PorletIcon"><span></span></div>
-											<a href="javascript:void(0);" class="ButtonLabel"><%=_ctx.appRes("UIToolbar.label.portlet")%></a>
-										</div>
-										<div class="HorizontalSeparator" style="float: <%= isLT? "right" : "left" %>"><span></span></div>
-										
+										<a onclick="<%=uicomponent.event("ViewChild", "UIPortletManagement")%>" class="$cssClass ItemButton PorletIcon" style="float: <%= isLT? "right" : "left" %>">
+											<%=_ctx.appRes("UIToolbar.label.portlet")%>
+										</a>
 									</div>
 						 
 								</div>
