@@ -1,8 +1,18 @@
 <%	
 	import java.util.List;
+	import org.exoplatform.portal.webui.util.Util;
+	import org.exoplatform.webui.core.UIPortletApplication;
+	import org.exoplatform.portal.application.PortalRequestContext;
  
 	List list = uicomponent.getPath();
 	def styleBread = uicomponent.getBreadcumbsStyle();
+	
+	PortalRequestContext pcontext = Util.getPortalRequestContext();	
+	def String portalURI = pcontext.getPortalURI();
+	
+	UIPortletApplication breadcumbsPortlet = uicomponent.getParent();
+	
+	def useAJAX = breadcumbsPortlet.isUseAjax();
 %>
 
 <div class="UIBreadcumbs">
@@ -13,8 +23,12 @@
 				<%if(list.size() > 0) {
 						String note = "LeftBlock";
 						for(i in 0 .. list.size()-1) { 
-							localPath = list.get(i);
-							String actionLink = uicomponent.event("SelectPath", localPath.getId());
+							localPath = list.get(i);							
+							String actionLink 
+							if(useAJAX)
+								actionLink = uicomponent.event("SelectPath", localPath.getId());
+							else
+								actionLink = portalURI + localPath.getId();	
 							if(i == list.size()-1) note = "Selected";
 				%>
 							<a href="<%=(localPath.getId() == null) ? "#" : actionLink%>"	class="$note">$localPath.label</a> 																

@@ -150,7 +150,12 @@
     </portlet-info>
     
     <portlet-preferences>
-      <preference>
+       <preference>
+		<name>useAJAX</name>
+		<value>false</value>
+		<read-only>false</read-only>
+      </preference>
+       <preference>
         <name>template</name>
         <value>system:/groovy/webui/core/UIBreadcumbs.gtmpl</value>
         <read-only>false</read-only>
