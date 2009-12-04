@@ -283,16 +283,29 @@ public class UIPortalComposer extends UIContainer
       {
          UIComponent temp = null;
          UIPortal uiPortal = null;
+         String portalOwner = null;
          UIEditInlineWorkspace uiEditWS = event.getSource().getAncestorOfType(UIEditInlineWorkspace.class);
          temp = uiEditWS.getUIComponent();
          if(temp != null && (temp instanceof UIPortal)) 
+         {
             uiPortal = (UIPortal)temp;
+            if(uiPortal.getOwnerType().equals(PortalConfig.PORTAL_TYPE))
+            {
+               portalOwner = uiPortal.getOwner();
+            }
+            else
+               portalOwner = Util.getPortalRequestContext().getPortalOwner();
+         }
          else
+         {
             uiPortal = Util.getUIPortal();
+            portalOwner = Util.getPortalRequestContext().getPortalOwner();
+         }
+         
          UIPortalApplication uiApp = uiPortal.getAncestorOfType(UIPortalApplication.class);
          UIMaskWorkspace uiMaskWS = uiApp.getChildById(UIPortalApplication.UI_MASK_WS_ID);
          UIPortalForm portalForm = uiMaskWS.createUIComponent(UIPortalForm.class, null, "UIPortalForm");         
-         portalForm.setPortalOwner(uiPortal.getOwner());            
+         portalForm.setPortalOwner(portalOwner);            
          portalForm.setBindingBean();
          if(PortalConfig.USER_TYPE.equals(uiPortal.getOwnerType())){
             portalForm.removeChildById("PermissionSetting");
