@@ -30,7 +30,7 @@
   </component>   	
   <component>
     <key>org.exoplatform.application.registry.ApplicationRegistryService</key>
-    <type>org.exoplatform.application.registry.mop.MOPApplicationRegistryService</type>
+    <type>org.exoplatform.application.registry.impl.ApplicationRegistryServiceImpl</type>
   	<component-plugins>      
 	    <component-plugin>
 	      <name>new.portal.portlets.registry</name>

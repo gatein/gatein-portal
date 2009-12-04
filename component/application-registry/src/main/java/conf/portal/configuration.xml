@@ -37,7 +37,7 @@
 
   <component>
     <key>org.exoplatform.application.registry.ApplicationRegistryService</key>
-    <type>org.exoplatform.application.registry.mop.MOPApplicationRegistryService</type>
+    <type>org.exoplatform.application.registry.impl.ApplicationRegistryServiceImpl</type>
   </component>
   
 </configuration>

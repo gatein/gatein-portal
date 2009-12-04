@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright (C) 2009 eXo Platform SAS.
  *
  * This is free software; you can redistribute it and/or modify it
@@ -16,17 +16,29 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.exoplatform.application.registry.mop;
+package org.exoplatform.application.registry.impl;
 
-import javax.jcr.Node;
+import org.chromattic.core.DomainSession;
+import org.exoplatform.commons.chromattic.ChromatticLifeCycle;
+import org.exoplatform.commons.chromattic.SessionContext;
+import org.exoplatform.container.xml.InitParams;
 
 /**
- * Temporary hack.
- *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public interface NodeAware
+public class ApplicationRegistryChromatticLifeCycle extends ChromatticLifeCycle
 {
-   void setNode(Node node);
+
+   /** . */
+   ApplicationRegistryServiceImpl registry;
+
+   public ApplicationRegistryChromatticLifeCycle(InitParams params) {
+      super(params);
+   }
+
+   @Override
+   protected void onOpenSession(SessionContext context) {
+      context.getSession().addEventListener(new Injector(registry, (DomainSession)context.getSession()));
+   }
 }

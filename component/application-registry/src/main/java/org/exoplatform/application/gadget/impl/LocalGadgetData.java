@@ -26,7 +26,7 @@ import org.chromattic.api.annotations.ManyToOne;
 import org.chromattic.api.annotations.NodeMapping;
 import org.chromattic.api.annotations.Property;
 import org.exoplatform.application.gadget.EncodingDetector;
-import org.exoplatform.application.registry.mop.NodeAware;
+import org.exoplatform.application.registry.impl.NodeAware;
 import org.gatein.common.io.IOTools;
 
 import javax.jcr.Node;

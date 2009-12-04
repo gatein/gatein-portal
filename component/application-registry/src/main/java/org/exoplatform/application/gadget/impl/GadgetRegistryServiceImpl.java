@@ -22,7 +22,7 @@ import org.chromattic.api.Chromattic;
 import org.chromattic.api.ChromatticSession;
 import org.exoplatform.application.gadget.Gadget;
 import org.exoplatform.application.gadget.GadgetRegistryService;
-import org.exoplatform.application.registry.mop.ApplicationRegistryChromatticLifeCycle;
+import org.exoplatform.application.registry.impl.ApplicationRegistryChromatticLifeCycle;
 import org.exoplatform.commons.chromattic.ChromatticLifeCycle;
 import org.exoplatform.commons.chromattic.ChromatticManager;
 import org.exoplatform.container.xml.InitParams;

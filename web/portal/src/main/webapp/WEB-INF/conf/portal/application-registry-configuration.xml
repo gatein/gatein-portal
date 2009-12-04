@@ -66,7 +66,7 @@
 
    <component>
       <key>org.exoplatform.application.registry.ApplicationRegistryService</key>
-      <type>org.exoplatform.application.registry.mop.MOPApplicationRegistryService</type>
+      <type>org.exoplatform.application.registry.impl.ApplicationRegistryServiceImpl</type>
       <component-plugins>
          <component-plugin>
             <name>new.portal.portlets.registry</name>
@@ -526,7 +526,7 @@
     <component-plugin>
       <name>chromattic</name>
       <set-method>addLifeCycle</set-method>
-      <type>org.exoplatform.application.registry.mop.ApplicationRegistryChromatticLifeCycle</type>
+      <type>org.exoplatform.application.registry.impl.ApplicationRegistryChromatticLifeCycle</type>
       <init-params>
         <value-param>
           <name>name</name>
@@ -538,9 +538,9 @@
         </value-param>
         <values-param>
           <name>entities</name>
-          <value>org.exoplatform.application.registry.mop.ContentRegistry</value>
-          <value>org.exoplatform.application.registry.mop.CategoryDefinition</value>
-          <value>org.exoplatform.application.registry.mop.ContentDefinition</value>
+          <value>org.exoplatform.application.registry.impl.ContentRegistry</value>
+          <value>org.exoplatform.application.registry.impl.CategoryDefinition</value>
+          <value>org.exoplatform.application.registry.impl.ContentDefinition</value>
           <value>org.exoplatform.application.gadget.impl.GadgetRegistry</value>
           <value>org.exoplatform.application.gadget.impl.GadgetDefinition</value>
           <value>org.exoplatform.application.gadget.impl.LocalGadgetData</value>

@@ -16,7 +16,7 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.exoplatform.application.registry.mop;
+package org.exoplatform.application.registry.impl;
 
 import org.chromattic.api.event.LifeCycleListener;
 import org.chromattic.core.DomainSession;
@@ -31,12 +31,12 @@ public class Injector implements LifeCycleListener
 {
 
    /** . */
-   private final MOPApplicationRegistryService registry;
+   private final ApplicationRegistryServiceImpl registry;
 
    /** . */
    private final DomainSession session;
 
-   public Injector(MOPApplicationRegistryService registry, DomainSession session)
+   public Injector(ApplicationRegistryServiceImpl registry, DomainSession session)
    {
       this.registry = registry;
       this.session = session;

@@ -16,7 +16,7 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.exoplatform.application.registry.mop;
+package org.exoplatform.application.registry.impl;
 
 import org.chromattic.api.annotations.Create;
 import org.chromattic.api.annotations.Name;
@@ -41,7 +41,7 @@ public abstract class CategoryDefinition
 {
 
    /** The injected workspace. */
-   public MOPApplicationRegistryService registry;
+   public ApplicationRegistryServiceImpl registry;
 
    @Name
    public abstract String getName();
