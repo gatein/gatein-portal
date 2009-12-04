@@ -29,7 +29,7 @@ import java.util.Map;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-@NodeMapping(name = "mop:gadgetregistry")
+@NodeMapping(name = "app:gadgetregistry")
 public abstract class GadgetRegistry
 {
 

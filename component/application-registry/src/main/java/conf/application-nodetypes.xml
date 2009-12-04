@@ -20,22 +20,22 @@
 -->
 <nodeTypes xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0">
 
-  <nodeType name="mop:gadgetregistry" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
+  <nodeType name="app:gadgetregistry" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
     <supertypes>
       <supertype>nt:base</supertype>
       <supertype>mix:referenceable</supertype>
     </supertypes>
     <childNodeDefinitions>
-      <childNodeDefinition name="*" defaultPrimaryType="mop:gadgetdefinition" autoCreated="false" mandatory="false"
+      <childNodeDefinition name="*" defaultPrimaryType="app:gadgetdefinition" autoCreated="false" mandatory="false"
         onParentVersion="COPY" protected="false" sameNameSiblings="false">
         <requiredPrimaryTypes>
-          <requiredPrimaryType>mop:gadgetdefinition</requiredPrimaryType>
+          <requiredPrimaryType>app:gadgetdefinition</requiredPrimaryType>
         </requiredPrimaryTypes>
       </childNodeDefinition>
     </childNodeDefinitions>
   </nodeType>
 
-  <nodeType name="mop:gadgetdefinition" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
+  <nodeType name="app:gadgetdefinition" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
     <supertypes>
       <supertype>nt:base</supertype>
       <supertype>mix:referenceable</supertype>
@@ -55,25 +55,25 @@
       </propertyDefinition>
     </propertyDefinitions>
     <childNodeDefinitions>
-      <childNodeDefinition name="data" defaultPrimaryType="mop:gadgetdata" autoCreated="false" mandatory="true"
+      <childNodeDefinition name="data" defaultPrimaryType="app:gadgetdata" autoCreated="false" mandatory="true"
         onParentVersion="COPY" protected="false" sameNameSiblings="false">
         <requiredPrimaryTypes>
-          <requiredPrimaryType>mop:gadgetdata</requiredPrimaryType>
+          <requiredPrimaryType>app:gadgetdata</requiredPrimaryType>
         </requiredPrimaryTypes>
       </childNodeDefinition>
     </childNodeDefinitions>
   </nodeType>
 
-  <nodeType name="mop:gadgetdata" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
+  <nodeType name="app:gadgetdata" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
     <supertypes>
       <supertype>nt:base</supertype>
       <supertype>mix:referenceable</supertype>
     </supertypes>
   </nodeType>
 
-  <nodeType name="mop:localgadgetdata" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
+  <nodeType name="app:localgadgetdata" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
     <supertypes>
-      <supertype>mop:gadgetdata</supertype>
+      <supertype>app:gadgetdata</supertype>
     </supertypes>
     <propertyDefinitions>
       <propertyDefinition name="filename" requiredType="String" autoCreated="false" mandatory="true" onParentVersion="COPY" protected="false" multiple="false">
@@ -90,9 +90,9 @@
     </childNodeDefinitions>
   </nodeType>
 
-  <nodeType name="mop:remotegadgetdata" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
+  <nodeType name="app:remotegadgetdata" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
     <supertypes>
-      <supertype>mop:gadgetdata</supertype>
+      <supertype>app:gadgetdata</supertype>
     </supertypes>
     <propertyDefinitions>
       <propertyDefinition name="url" requiredType="String" autoCreated="false" mandatory="true" onParentVersion="COPY" protected="false" multiple="false">
@@ -101,22 +101,22 @@
     </propertyDefinitions>
   </nodeType>
 
-  <nodeType name="mop:contentregistry" isMixin="false" hasOrderableChildNodes="true" primaryItemName="">
+  <nodeType name="app:contentregistry" isMixin="false" hasOrderableChildNodes="true" primaryItemName="">
     <supertypes>
       <supertype>nt:base</supertype>
       <supertype>mix:referenceable</supertype>
     </supertypes>
     <childNodeDefinitions>
-      <childNodeDefinition name="*" defaultPrimaryType="mop:contentcategory" autoCreated="false" mandatory="false"
+      <childNodeDefinition name="*" defaultPrimaryType="app:contentcategory" autoCreated="false" mandatory="false"
         onParentVersion="COPY" protected="false" sameNameSiblings="false">
         <requiredPrimaryTypes>
-          <requiredPrimaryType>mop:contentcategory</requiredPrimaryType>
+          <requiredPrimaryType>app:contentcategory</requiredPrimaryType>
         </requiredPrimaryTypes>
       </childNodeDefinition>
     </childNodeDefinitions>
   </nodeType>
 
-  <nodeType name="mop:contentcategory" isMixin="false" hasOrderableChildNodes="true" primaryItemName="">
+  <nodeType name="app:contentcategory" isMixin="false" hasOrderableChildNodes="true" primaryItemName="">
     <supertypes>
       <supertype>nt:base</supertype>
       <supertype>mix:referenceable</supertype>
@@ -139,16 +139,16 @@
       </propertyDefinition>
     </propertyDefinitions>
     <childNodeDefinitions>
-      <childNodeDefinition name="*" defaultPrimaryType="mop:content" autoCreated="false" mandatory="false"
+      <childNodeDefinition name="*" defaultPrimaryType="app:content" autoCreated="false" mandatory="false"
         onParentVersion="COPY" protected="false" sameNameSiblings="false">
         <requiredPrimaryTypes>
-          <requiredPrimaryType>mop:content</requiredPrimaryType>
+          <requiredPrimaryType>app:content</requiredPrimaryType>
         </requiredPrimaryTypes>
       </childNodeDefinition>
     </childNodeDefinitions>
   </nodeType>
 
-  <nodeType name="mop:content" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
+  <nodeType name="app:content" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
     <supertypes>
       <supertype>nt:base</supertype>
       <supertype>mix:referenceable</supertype>

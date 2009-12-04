@@ -34,7 +34,7 @@ import java.util.List;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-@NodeMapping(name = "mop:content")
+@NodeMapping(name = "app:content")
 public abstract class ContentDefinition
 {
 

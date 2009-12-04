@@ -40,7 +40,7 @@ import java.util.Calendar;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-@NodeMapping(name = "mop:localgadgetdata")
+@NodeMapping(name = "app:localgadgetdata")
 public abstract class LocalGadgetData extends GadgetData implements NodeAware
 {
 

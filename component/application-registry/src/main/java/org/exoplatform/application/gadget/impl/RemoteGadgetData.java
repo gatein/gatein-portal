@@ -25,7 +25,7 @@ import org.chromattic.api.annotations.Property;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-@NodeMapping(name = "mop:remotegadgetdata")
+@NodeMapping(name = "app:remotegadgetdata")
 public abstract class RemoteGadgetData extends GadgetData
 {
 
