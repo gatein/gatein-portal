@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (C) 2009 eXo Platform SAS.
  *
  * This is free software; you can redistribute it and/or modify it
@@ -16,29 +16,22 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.exoplatform.application.registry.mop;
+package org.exoplatform.application.gadget.impl;
 
-import org.chromattic.core.DomainSession;
-import org.exoplatform.commons.chromattic.ChromatticLifeCycle;
-import org.exoplatform.commons.chromattic.SessionContext;
-import org.exoplatform.container.xml.InitParams;
+import org.chromattic.api.annotations.NodeMapping;
+import org.chromattic.api.annotations.Property;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class ApplicationRegistryChromatticLifeCycle extends ChromatticLifeCycle
+@NodeMapping(name = "mop:remotegadgetdata")
+public abstract class RemoteGadgetData extends GadgetData
 {
 
-   /** . */
-   MOPApplicationRegistryService registry;
+   @Property(name = "url")
+   public abstract String getURL();
 
-   public ApplicationRegistryChromatticLifeCycle(InitParams params) {
-      super(params);
-   }
+   public abstract void setURL(String url);
 
-   @Override
-   protected void onOpenSession(SessionContext context) {
-      context.getSession().addEventListener(new Injector(registry, (DomainSession)context.getSession()));
-   }
 }

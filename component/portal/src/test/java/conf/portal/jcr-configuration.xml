@@ -80,7 +80,7 @@
  		      <name>autoCreatedInNewRepository</name>
  		      <description>Node types configuration file</description>
           <value>jar:/conf/mop-nodetypes.xml</value>
-          <value>jar:/conf/portal/portal-nodetypes.xml</value>
+          <value>jar:/conf/content-nodetypes.xml</value>
  		    </values-param>
  		  </init-params>
  		</component-plugin>

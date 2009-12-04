@@ -19,6 +19,9 @@
 package org.exoplatform.application.registry.mop;
 
 import org.chromattic.api.event.LifeCycleListener;
+import org.chromattic.core.DomainSession;
+
+import javax.jcr.Node;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -30,9 +33,13 @@ public class Injector implements LifeCycleListener
    /** . */
    private final MOPApplicationRegistryService registry;
 
-   public Injector(MOPApplicationRegistryService registry)
+   /** . */
+   private final DomainSession session;
+
+   public Injector(MOPApplicationRegistryService registry, DomainSession session)
    {
       this.registry = registry;
+      this.session = session;
    }
 
    public void created(Object o)
@@ -41,6 +48,11 @@ public class Injector implements LifeCycleListener
 
    public void loaded(String id, String path, String name, Object o)
    {
+      if (o instanceof NodeAware)
+      {
+         Node node = session.getNode(o);
+         ((NodeAware)o).setNode(node);
+      }
       if (o instanceof CategoryDefinition)
       {
          ((CategoryDefinition)o).registry = registry;
@@ -49,6 +61,11 @@ public class Injector implements LifeCycleListener
 
    public void added(String id, String path, String name, Object o)
    {
+      if (o instanceof NodeAware)
+      {
+         Node node = session.getNode(o);
+         ((NodeAware)o).setNode(node);
+      }
       if (o instanceof CategoryDefinition)
       {
          ((CategoryDefinition)o).registry = registry;
@@ -57,6 +74,10 @@ public class Injector implements LifeCycleListener
 
    public void removed(String id, String path, String name, Object o)
    {
+      if (o instanceof NodeAware)
+      {
+         ((NodeAware)o).setNode(null);
+      }
       if (o instanceof CategoryDefinition)
       {
          ((CategoryDefinition)o).registry = null;

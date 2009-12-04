@@ -19,6 +19,7 @@
 
 package org.exoplatform.application.gadget.jcr;
 
+import org.exoplatform.application.gadget.Gadget;
 import org.exoplatform.application.gadget.Source;
 import org.exoplatform.application.gadget.SourceStorage;
 import org.exoplatform.container.xml.InitParams;
@@ -68,6 +69,16 @@ public class SourceStorageImpl implements SourceStorage
       wsName = properties.getProperty("workspace");
       homePath = reproduceDirPath(properties.getProperty("store.path"));
       repoService = service;
+   }
+
+   public Source getSource(Gadget gadget) throws Exception
+   {
+      throw new UnsupportedOperationException();
+   }
+
+   public void saveSource(Gadget gadget, Source source) throws Exception
+   {
+      throw new UnsupportedOperationException();
    }
 
    /**
@@ -207,8 +218,8 @@ public class SourceStorageImpl implements SourceStorage
    {
       Source source = new Source(name);
       source.setMimeType(node.getProperty(JCR_MIME).getString());
-      source.setEncoding(node.getProperty(JCR_ENCODING).getString());
-      source.setStreamContent(node.getProperty(JCR_DATA).getStream());
+//      source.setEncoding(node.getProperty(JCR_ENCODING).getString());
+//      source.setStreamContent(node.getProperty(JCR_DATA).getStream());
       source.setLastModified(node.getProperty(JCR_MODIFIED).getDate());
       return source;
    }
@@ -222,8 +233,8 @@ public class SourceStorageImpl implements SourceStorage
    private void map(Node node, Source source) throws Exception
    {
       node.setProperty(JCR_MIME, source.getMimeType());
-      node.setProperty(JCR_ENCODING, source.getEncoding());
-      node.setProperty(JCR_DATA, source.getStreamContent());
+//      node.setProperty(JCR_ENCODING, source.getEncoding());
+//      node.setProperty(JCR_DATA, source.getStreamContent());
       node.setProperty(JCR_MODIFIED, source.getLastModified());
    }
 

@@ -111,18 +111,18 @@ public class GadgetRegister implements ServletContextListener
                      File homeDir = sourceFile.getParentFile();
                      String fileName = sourceFile.getName();
                      //Saves source of gadget
-                     Source source = new Source(fileName, getMimeType(context, fileName), "UTF-8");
-                     source.setStreamContent(sourceIs);
+                     Source source = new Source(fileName, getMimeType(context, fileName));
+//                     source.setStreamContent(sourceIs);
                      source.setLastModified(Calendar.getInstance());
                      String homeName = homeDir.getName();
-                     sourceStorage.saveSource(homeName, source);
+                     // sourceStorage.saveSource(homeName, source);
                      //Saves gadget
                      ModulePrefs prefs =
                         GadgetApplication.getModulePreferences(Uri.parse("http://www.exoplatform.org"), source
                            .getTextContent());
                      Gadget gadget = new Gadget();
                      gadget.setName(gadgetName);
-                     gadget.setUrl(sourceStorage.getSourceURI(homeName + "/" + fileName));
+                     // gadget.setUrl(sourceStorage.getSourceURI(homeName + "/" + fileName));
                      gadget.setTitle(getGadgetTitle(prefs, gadget.getName()));
                      gadget.setDescription(prefs.getDescription());
                      gadget.setThumbnail(prefs.getThumbnail().toString());
@@ -177,10 +177,10 @@ public class GadgetRegister implements ServletContextListener
    {
       if (file.isFile())
       {
-         Source includedSource = new Source(file.getName(), getMimeType(context, file.getName()), "UTF-8");
-         includedSource.setStreamContent(new FileInputStream(file));
+         Source includedSource = new Source(file.getName(), getMimeType(context, file.getName()));
+//         includedSource.setStreamContent(new FileInputStream(file));
          includedSource.setLastModified(Calendar.getInstance());
-         storage.saveSource(savePath, includedSource);
+         // storage.saveSource(savePath, includedSource);
       }
       else if (file.isDirectory())
       {

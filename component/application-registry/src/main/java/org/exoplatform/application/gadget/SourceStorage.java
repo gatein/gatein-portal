@@ -33,7 +33,7 @@ public interface SourceStorage
     * @return
     * @throws Exception
     */
-   public Source getSource(String sourcePath) throws Exception;
+   public Source getSource(Gadget gadget) throws Exception;
 
    /**
     * This method will save source to database to a specify path
@@ -41,21 +41,15 @@ public interface SourceStorage
     * @param source
     * @throws Exception
     */
-   public void saveSource(String dirPath, Source source) throws Exception;
+   public void saveSource(Gadget gadget, Source source) throws Exception;
 
    /**
-    * This method will remove source from database base on source path
-    * @param sourcePath
-    * @throws Exception
+    * julien : this method does nothing and should be removed since now deleting a gadget
+    * in the gadget registry also deletes the source for the local gadgets.
+    *
+    * @param sourcePath the source path
+    * @throws Exception any exception
     */
    public void removeSource(String sourcePath) throws Exception;
-
-   /**
-    * This method will get source URI from database. 
-    * For example: jcr/repository/collaboration/source/Todo.xml
-    * @param sourcePath
-    * @return
-    */
-   public String getSourceURI(String sourcePath);
 
 }

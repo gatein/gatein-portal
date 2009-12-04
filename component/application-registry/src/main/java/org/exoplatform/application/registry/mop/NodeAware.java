@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (C) 2009 eXo Platform SAS.
  *
  * This is free software; you can redistribute it and/or modify it
@@ -18,27 +18,15 @@
  */
 package org.exoplatform.application.registry.mop;
 
-import org.chromattic.core.DomainSession;
-import org.exoplatform.commons.chromattic.ChromatticLifeCycle;
-import org.exoplatform.commons.chromattic.SessionContext;
-import org.exoplatform.container.xml.InitParams;
+import javax.jcr.Node;
 
 /**
+ * Temporary hack.
+ *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class ApplicationRegistryChromatticLifeCycle extends ChromatticLifeCycle
+public interface NodeAware
 {
-
-   /** . */
-   MOPApplicationRegistryService registry;
-
-   public ApplicationRegistryChromatticLifeCycle(InitParams params) {
-      super(params);
-   }
-
-   @Override
-   protected void onOpenSession(SessionContext context) {
-      context.getSession().addEventListener(new Injector(registry, (DomainSession)context.getSession()));
-   }
+   void setNode(Node node);
 }

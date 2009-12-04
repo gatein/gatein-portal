@@ -107,7 +107,7 @@ public class UIGadgetInfo extends UIContainer
       for (String name : nameList)
       {
          names.append(name);
-         if (name != nameList.get(nameList.size() - 1))
+         if (!name.equals(nameList.get(nameList.size() - 1)))
             names.append(", ");
       }
       return names.toString();
@@ -160,11 +160,17 @@ public class UIGadgetInfo extends UIContainer
          InputStream is = conn.getInputStream();
          SourceStorage sourceStorage = uiInfo.getApplicationComponent(SourceStorage.class);
          String fileName = name + ".xml";
-         Source source = new Source(fileName, "application/xml", "UTF-8");
+         Source source = new Source(fileName, "application/xml");
          source.setTextContent(IOUtils.toString(is, "UTF-8"));
          source.setLastModified(Calendar.getInstance());
-         sourceStorage.saveSource(name, source);
-         service.saveGadget(GadgetUtil.toGadget(name, sourceStorage.getSourceURI(name + "/" + fileName), true));
+
+         // This will update the source and also update the gadget related cached meta data
+         // from the source
+         sourceStorage.saveSource(uiInfo.getGadget(), source);
+
+         //
+         // service.saveGadget(GadgetUtil.toGadget(name, sourceStorage.getSourceURI(name + "/" + fileName), true));
+         
          WebAppController webController = uiManagement.getApplicationComponent(WebAppController.class);
          webController.removeApplication(GadgetApplication.EXO_GADGET_GROUP + "/" + name);
          uiManagement.initData();
@@ -200,7 +206,7 @@ public class UIGadgetInfo extends UIContainer
          String dirPath = gaggetUrlPart[gaggetUrlPart.length - 2];
          //String dirPath = gaggetUrlPart[gaggetUrlPart.length - 9];
          // get gadget's source: path = dir path + file name
-         Source source = sourceStorage.getSource(dirPath + "/" + fileName);
+         Source source = sourceStorage.getSource(gadget);
          uiEditor.setSource(source);
          uiEditor.setDirPath(dirPath);
          uiManagement.getChildren().clear();

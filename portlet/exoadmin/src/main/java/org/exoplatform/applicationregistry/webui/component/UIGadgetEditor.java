@@ -154,9 +154,12 @@ public class UIGadgetEditor extends UIForm
             fileName = name + ".xml";
             dirPath = name;
          }
+
+         //
+         Gadget gadget = service.getGadget(name);
          if (isEdit)
          {
-            if (service.getGadget(name) == null)
+            if (gadget == null)
             {
                UIApplication uiApp = event.getRequestContext().getUIApplication();
                uiApp.addMessage(new ApplicationMessage("gadget.msg.changeNotExist", null));
@@ -164,11 +167,17 @@ public class UIGadgetEditor extends UIForm
                return;
             }
          }
-         Source source = new Source(fileName, "application/xml", "UTF-8");
+
+         //
+         Source source = new Source(fileName, "application/xml");
          source.setTextContent(text);
          source.setLastModified(Calendar.getInstance());
-         sourceStorage.saveSource(dirPath, source);
-         service.saveGadget(GadgetUtil.toGadget(name, sourceStorage.getSourceURI(dirPath + "/" + fileName), true));
+
+         // This will update the source and also update the gadget related cached meta data
+         // from the source
+         sourceStorage.saveSource(gadget, source);
+
+         // service.saveGadget(GadgetUtil.toGadget(name, sourceStorage.getSourceURI(dirPath + "/" + fileName), true));
          uiManagement.initData();
          uiManagement.setSelectedGadget(name);
          event.getRequestContext().addUIComponentToUpdateByAjax(uiManagement);

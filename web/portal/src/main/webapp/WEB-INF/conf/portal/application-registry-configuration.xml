@@ -21,6 +21,9 @@
 -->
 <configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd http://www.exoplaform.org/xml/ns/kernel_1_0.xsd" xmlns="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd">
 
+
+
+<!--
    <component>
       <key>org.exoplatform.application.gadget.GadgetRegistryService</key>
       <type>org.exoplatform.application.gadget.jcr.GadgetRegistryServiceImpl</type>
@@ -56,10 +59,12 @@
          </properties-param>
       </init-params>
    </component>
+-->
 
    <component>
       <key>org.exoplatform.application.gadget.SourceStorage</key>
-      <type>org.exoplatform.application.gadget.jcr.SourceStorageImpl</type>
+      <type>org.exoplatform.application.gadget.impl.SourceStorageImpl</type>
+<!--
       <init-params>
          <properties-param>
             <name>location</name>
@@ -69,7 +74,45 @@
             <property name="store.path" value="/"/>
          </properties-param>
       </init-params>
+-->
    </component>
+
+  <component>
+    <key>org.exoplatform.application.gadget.GadgetRegistryService</key>
+    <type>org.exoplatform.application.gadget.impl.GadgetRegistryServiceImpl</type>
+    <init-params>
+      <value-param>
+        <name>gadgets.country</name>
+        <description>US</description>
+        <value>US</value>
+      </value-param>
+      <value-param>
+        <name>gadgets.language</name>
+        <description>en</description>
+        <value>en</value>
+      </value-param>
+      <value-param>
+        <name>gadgets.moduleId</name>
+        <description>0</description>
+        <value>0</value>
+      </value-param>
+      <value-param>
+        <name>gadgets.hostName</name>
+        <description>Gadget server url</description>
+        <value>eXoGadgetServer/gadgets</value>
+      </value-param>
+      <properties-param>
+        <name>developerInfo</name>
+        <description>The group that is allowed to develop gadgets</description>
+        <property name="developer.group" value="/platform/administrators"/>
+      </properties-param>
+    </init-params>
+  </component>
+
+  <component>
+     <key>org.exoplatform.application.gadget.GadgetDeployer</key>
+     <type>org.exoplatform.application.gadget.GadgetDeployer</type>
+  </component>
 
    <component>
       <key>org.exoplatform.application.registry.ApplicationRegistryService</key>
@@ -537,7 +580,7 @@
       <init-params>
         <value-param>
           <name>name</name>
-          <value>registry</value>
+          <value>app</value>
         </value-param>
         <value-param>
           <name>workspace-name</name>
@@ -548,6 +591,15 @@
           <value>org.exoplatform.application.registry.mop.ContentRegistry</value>
           <value>org.exoplatform.application.registry.mop.CategoryDefinition</value>
           <value>org.exoplatform.application.registry.mop.ContentDefinition</value>
+          <value>org.exoplatform.application.gadget.impl.GadgetRegistry</value>
+          <value>org.exoplatform.application.gadget.impl.GadgetDefinition</value>
+          <value>org.exoplatform.application.gadget.impl.LocalGadgetData</value>
+          <value>org.exoplatform.application.gadget.impl.RemoteGadgetData</value>
+<!--
+          <value>org.exoplatform.application.gadget.impl.NTFolder</value>
+          <value>org.exoplatform.application.gadget.impl.NTFile</value>
+          <value>org.exoplatform.application.gadget.impl.NTResource</value>
+-->
         </values-param>
       </init-params>
     </component-plugin>

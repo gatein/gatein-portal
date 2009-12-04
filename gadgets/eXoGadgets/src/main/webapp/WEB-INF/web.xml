@@ -35,9 +35,5 @@
     <filter-name>ResourceRequestFilter</filter-name>
     <url-pattern>/*</url-pattern>
   </filter-mapping>  
-  
-	<listener>
-    <listener-class>org.exoplatform.application.gadget.GadgetRegister</listener-class>
-  </listener>
 
 </web-app>

@@ -19,8 +19,6 @@
 
 package org.exoplatform.application.gadget;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.util.Calendar;
 
 /**
@@ -34,13 +32,9 @@ public class Source
 
    private String name;
 
-   private byte[] content;
+   private String content;
 
    private String mimeType = "text/plain";
-
-   private String encoding = "UTF-8";
-
-   private long length = 0;
 
    private Calendar lastModified;
 
@@ -49,11 +43,10 @@ public class Source
       this.name = name;
    }
 
-   public Source(String name, String mimeType, String encoding)
+   public Source(String name, String mimeType)
    {
       this.name = name;
       this.mimeType = mimeType;
-      this.encoding = encoding;
    }
 
    public String getName()
@@ -76,16 +69,6 @@ public class Source
       this.mimeType = mimeType;
    }
 
-   public String getEncoding()
-   {
-      return encoding;
-   }
-
-   public void setEncoding(String encoding)
-   {
-      this.encoding = encoding;
-   }
-
    public Calendar getLastModified()
    {
       return lastModified;
@@ -96,33 +79,13 @@ public class Source
       this.lastModified = lastModified;
    }
 
-   public long getLength()
-   {
-      return length;
-   }
-
    public void setTextContent(String text) throws Exception
    {
-      String textContent = (text == null) ? "" : text;
-      content = textContent.getBytes(encoding);
-      length = content.length;
+      content = text;
    }
 
    public String getTextContent() throws Exception
    {
-      return new String(content, encoding);
+      return content;
    }
-
-   public void setStreamContent(InputStream is) throws Exception
-   {
-      content = new byte[is.available()];
-      is.read(content);
-      length = content.length;
-   }
-
-   public InputStream getStreamContent()
-   {
-      return new ByteArrayInputStream(content);
-   }
-
 }

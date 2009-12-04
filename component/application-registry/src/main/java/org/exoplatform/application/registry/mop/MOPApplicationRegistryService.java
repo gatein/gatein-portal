@@ -79,7 +79,7 @@ public class MOPApplicationRegistryService implements ApplicationRegistryService
 
    public MOPApplicationRegistryService(ChromatticManager manager, POMSessionManager mopManager)
    {
-      ApplicationRegistryChromatticLifeCycle lifeCycle = (ApplicationRegistryChromatticLifeCycle)manager.getLifeCycle("registry");
+      ApplicationRegistryChromatticLifeCycle lifeCycle = (ApplicationRegistryChromatticLifeCycle)manager.getLifeCycle("app");
       lifeCycle.registry = this;
 
       //
