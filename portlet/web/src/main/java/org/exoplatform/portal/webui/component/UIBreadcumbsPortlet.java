@@ -81,15 +81,7 @@ public class UIBreadcumbsPortlet extends UIPortletApplication
       }
       UIBreadcumbs uiBreadCumbs = getChild(UIBreadcumbs.class);
       uiBreadCumbs.setPath(paths);
-   }
-   
-   public boolean isUseAjax()
-   {
-      PortletRequestContext context = (PortletRequestContext)WebuiRequestContext.getCurrentInstance();
-      PortletRequest prequest = context.getRequest();
-      PortletPreferences prefers = prequest.getPreferences();
-      return Boolean.valueOf(prefers.getValue("useAJAX", "true"));
-   }
+   }   
 
    @Override
    public void renderChildren() throws Exception

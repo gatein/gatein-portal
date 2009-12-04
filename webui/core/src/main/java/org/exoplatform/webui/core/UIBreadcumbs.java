@@ -19,6 +19,8 @@
 
 package org.exoplatform.webui.core;
 
+import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIBreadcumbs.SelectPathActionListener;
@@ -28,6 +30,9 @@ import org.exoplatform.webui.form.UIForm;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.portlet.PortletPreferences;
+import javax.portlet.PortletRequest;
 
 /**
  * Represents a breadcrumbs component.
@@ -99,6 +104,18 @@ public class UIBreadcumbs extends UIComponent
    public void setBreadcumbsStyle(String style)
    {
       styleBread = style;
+   }
+   
+   public boolean isUseAjax()
+   {
+      WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
+      if(context instanceof PortletRequestContext)
+      {
+         PortletRequest prequest = ((PortletRequestContext)context).getRequest();
+         PortletPreferences prefers = prequest.getPreferences();
+         return Boolean.valueOf(prefers.getValue("useAJAX", "true"));        
+      }
+      return true;
    }
 
    static public class SelectPathActionListener extends EventListener<UIBreadcumbs>

@@ -1,7 +1,6 @@
 <%	
 	import java.util.List;
 	import org.exoplatform.portal.webui.util.Util;
-	import org.exoplatform.webui.core.UIPortletApplication;
 	import org.exoplatform.portal.application.PortalRequestContext;
  
 	List list = uicomponent.getPath();
@@ -9,10 +8,8 @@
 	
 	PortalRequestContext pcontext = Util.getPortalRequestContext();	
 	def String portalURI = pcontext.getPortalURI();
-	
-	UIPortletApplication breadcumbsPortlet = uicomponent.getParent();
-	
-	def useAJAX = breadcumbsPortlet.isUseAjax();
+		
+	def useAJAX = uicomponent.isUseAjax();
 %>
 
 <div class="UIBreadcumbs">
