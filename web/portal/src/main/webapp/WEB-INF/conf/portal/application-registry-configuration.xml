@@ -22,60 +22,10 @@
 <configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd http://www.exoplaform.org/xml/ns/kernel_1_0.xsd" xmlns="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd">
 
 
-
-<!--
-   <component>
-      <key>org.exoplatform.application.gadget.GadgetRegistryService</key>
-      <type>org.exoplatform.application.gadget.jcr.GadgetRegistryServiceImpl</type>
-      <init-params>
-         <value-param>
-            <name>gadgets.country</name>
-            <description>US</description>
-            <value>US</value>
-         </value-param>
-
-         <value-param>
-            <name>gadgets.language</name>
-            <description>en</description>
-            <value>en</value>
-         </value-param>
-
-         <value-param>
-            <name>gadgets.moduleId</name>
-            <description>0</description>
-            <value>0</value>
-         </value-param>
-
-         <value-param>
-            <name>gadgets.hostName</name>
-            <description>Gadget server url</description>
-            <value>eXoGadgetServer/gadgets</value>
-         </value-param>
-
-         <properties-param>
-            <name>developerInfo</name>
-            <description>The group that is allowed to develop gadgets</description>
-            <property name="developer.group" value="/platform/administrators"/>
-         </properties-param>
-      </init-params>
-   </component>
--->
-
-   <component>
-      <key>org.exoplatform.application.gadget.SourceStorage</key>
-      <type>org.exoplatform.application.gadget.impl.SourceStorageImpl</type>
-<!--
-      <init-params>
-         <properties-param>
-            <name>location</name>
-            <description>The location store source of gadgets</description>
-            <property name="repository" value="repository"/>
-            <property name="workspace" value="gadgets"/>
-            <property name="store.path" value="/"/>
-         </properties-param>
-      </init-params>
--->
-   </component>
+  <component>
+    <key>org.exoplatform.application.gadget.SourceStorage</key>
+    <type>org.exoplatform.application.gadget.impl.SourceStorageImpl</type>
+  </component>
 
   <component>
     <key>org.exoplatform.application.gadget.GadgetRegistryService</key>
@@ -595,15 +545,9 @@
           <value>org.exoplatform.application.gadget.impl.GadgetDefinition</value>
           <value>org.exoplatform.application.gadget.impl.LocalGadgetData</value>
           <value>org.exoplatform.application.gadget.impl.RemoteGadgetData</value>
-<!--
-          <value>org.exoplatform.application.gadget.impl.NTFolder</value>
-          <value>org.exoplatform.application.gadget.impl.NTFile</value>
-          <value>org.exoplatform.application.gadget.impl.NTResource</value>
--->
         </values-param>
       </init-params>
     </component-plugin>
   </external-component-plugins>
-
 
 </configuration>
