@@ -38,12 +38,12 @@
 }
 
 .UIMaskWorkspace .MiddleLeftDecorator {
-	background: url('background/MiddleMaskWorkspace.png') repeat-y left;
+	background: url('background/MiddleMaskWorkspace.png') repeat-y left top;
 	padding: 0px 0px 0px 10px;
 }
 
 .UIMaskWorkspace .MiddleRightDecorator {
-	background: url('background/MiddleMaskWorkspace.png') repeat-y right;
+	background: url('background/MiddleMaskWorkspace.png') repeat-y right top;
 	padding: 0px 11px 0px 0px;
 }
 
