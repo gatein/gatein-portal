@@ -30,13 +30,9 @@ public class Injector implements LifeCycleListener
    /** . */
    private final ApplicationRegistryServiceImpl registry;
 
-   /** . */
-//   private final DomainSession session;
-
-   public Injector(ApplicationRegistryServiceImpl registry/*, DomainSession session*/)
+   public Injector(ApplicationRegistryServiceImpl registry)
    {
       this.registry = registry;
-//      this.session = session;
    }
 
    public void created(Object o)
@@ -45,13 +41,6 @@ public class Injector implements LifeCycleListener
 
    public void loaded(String id, String path, String name, Object o)
    {
-/*
-      if (o instanceof NodeAware)
-      {
-         Node node = session.getNode(o);
-         ((NodeAware)o).setNode(node);
-      }
-*/
       if (o instanceof CategoryDefinition)
       {
          ((CategoryDefinition)o).registry = registry;
@@ -60,13 +49,6 @@ public class Injector implements LifeCycleListener
 
    public void added(String id, String path, String name, Object o)
    {
-/*
-      if (o instanceof NodeAware)
-      {
-         Node node = session.getNode(o);
-         ((NodeAware)o).setNode(node);
-      }
-*/
       if (o instanceof CategoryDefinition)
       {
          ((CategoryDefinition)o).registry = registry;
@@ -75,12 +57,6 @@ public class Injector implements LifeCycleListener
 
    public void removed(String id, String path, String name, Object o)
    {
-/*
-      if (o instanceof NodeAware)
-      {
-         ((NodeAware)o).setNode(null);
-      }
-*/
       if (o instanceof CategoryDefinition)
       {
          ((CategoryDefinition)o).registry = null;
