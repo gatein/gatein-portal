@@ -61,8 +61,8 @@ public class PortalLoginController extends AbstractHttpServlet
       String rememberme = req.getParameter("rememberme");
       if ("true".equals(rememberme))
       {
-         boolean isRememeber = "true".equals(req.getParameter(InitiateLoginServlet.COOKIE_NAME));
-         if (isRememeber)
+         boolean isRemember = "true".equals(req.getParameter(InitiateLoginServlet.COOKIE_NAME));
+         if (isRemember)
          {
             //Create token
             AbstractTokenService tokenService = AbstractTokenService.getInstance(CookieTokenService.class);

@@ -26,6 +26,7 @@ import org.exoplatform.management.annotations.ManagedDescription;
 import org.exoplatform.management.annotations.ManagedName;
 import org.exoplatform.management.jmx.annotations.NameTemplate;
 import org.exoplatform.management.jmx.annotations.Property;
+import org.exoplatform.web.login.InitiateLoginServlet;
 import org.exoplatform.web.security.Credentials;
 import org.exoplatform.web.security.Token;
 import org.exoplatform.web.security.TokenStore;
@@ -37,20 +38,17 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import javax.jcr.PathNotFoundException;
-import javax.jcr.RepositoryException;
-
 /**
  * Created by The eXo Platform SAS Author : liem.nguyen ncliam@gmail.com Jun 5,
  * 2009
  */
 @Managed
-@NameTemplate({@Property(key = "service", value = "auth_token"), @Property(key = "name", value = "{Name}")})
-@ManagedDescription("Token Service")
+@NameTemplate({@Property(key = "service", value = "TokenStore"), @Property(key = "name", value = "{Name}")})
+@ManagedDescription("Token Store Service")
 public abstract class AbstractTokenService implements Startable, TokenStore
 {
 
-   protected final String SERVICE_CONFIG = "service.configuration";
+   protected static final String SERVICE_CONFIG = "service.configuration";
 
    protected static final int DELAY_TIME = 600;
 
@@ -78,14 +76,7 @@ public abstract class AbstractTokenService implements Startable, TokenStore
       {
          public void run()
          {
-            try
-            {
-               service.cleanExpiredTokens();
-            }
-            catch (RepositoryException re)
-            {
-               System.out.println("Error occur when delete expired cookie token");
-            }
+            service.cleanExpiredTokens();
          }
       }, 0, DELAY_TIME, TimeUnit.SECONDS);
 
@@ -96,11 +87,10 @@ public abstract class AbstractTokenService implements Startable, TokenStore
       // do nothing
    }
 
-   @SuppressWarnings("unchecked")
    public static <T extends AbstractTokenService> T getInstance(Class<T> classType)
    {
       PortalContainer container = PortalContainer.getInstance();
-      return (T)container.getComponentInstanceOfType(classType);
+      return classType.cast(container.getComponentInstanceOfType(classType));
    }
 
    public Credentials validateToken(String tokenKey, boolean remove)
@@ -144,7 +134,7 @@ public abstract class AbstractTokenService implements Startable, TokenStore
 
    @Managed
    @ManagedDescription("Clean all tokens are expired")
-   public void cleanExpiredTokens() throws PathNotFoundException, RepositoryException
+   public void cleanExpiredTokens()
    {
       String[] ids = getAllTokens();
       for (String s : ids)
@@ -174,11 +164,11 @@ public abstract class AbstractTokenService implements Startable, TokenStore
 
    @Managed
    @ManagedDescription("get a token by id")
-   public abstract Token getToken(String id) throws PathNotFoundException, RepositoryException;
+   public abstract Token getToken(String id);
 
    @Managed
    @ManagedDescription("Delete a token by id")
-   public abstract Token deleteToken(String id) throws PathNotFoundException, RepositoryException;
+   public abstract Token deleteToken(String id);
 
    @Managed
    @ManagedDescription("The list of all tokens")
@@ -202,5 +192,10 @@ public abstract class AbstractTokenService implements Startable, TokenStore
       {
          return configValue * multiply;
       }
+   }
+
+   protected String nextTokenId()
+   {
+      return InitiateLoginServlet.COOKIE_NAME + random.nextInt();
    }
 }

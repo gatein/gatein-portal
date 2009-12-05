@@ -24,6 +24,7 @@ import org.exoplatform.container.component.BaseComponentPlugin;
 import org.exoplatform.container.xml.InitParams;
 
 import java.util.List;
+import java.util.concurrent.Callable;
 
 /**
  * <p>The chromattic life cycle objets is a plugin that allow to bootstrap a chromattic builder and make

@@ -20,14 +20,10 @@
 package org.exoplatform.web.security.security;
 
 import org.exoplatform.container.xml.InitParams;
-import org.exoplatform.web.login.InitiateLoginServlet;
 import org.exoplatform.web.security.Credentials;
 import org.exoplatform.web.security.Token;
 
 import java.util.concurrent.ConcurrentHashMap;
-
-import javax.jcr.PathNotFoundException;
-import javax.jcr.RepositoryException;
 
 /**
  * Created by The eXo Platform SAS Author : liem.nguyen ncliam@gmail.com Jun 5,
@@ -53,20 +49,20 @@ public class TransientTokenService extends AbstractTokenService
       {
          throw new NullPointerException();
       }
-      String tokenId = InitiateLoginServlet.COOKIE_NAME + random.nextInt();
+      String tokenId = nextTokenId();
       long expirationTimeMillis = System.currentTimeMillis() + validityMillis;
       tokens.put(tokenId, new Token(expirationTimeMillis, credentials));
       return tokenId;
    }
 
    @Override
-   public Token getToken(String id) throws PathNotFoundException, RepositoryException
+   public Token getToken(String id)
    {
       return tokens.get(id);
    }
 
    @Override
-   public Token deleteToken(String id) throws PathNotFoundException, RepositoryException
+   public Token deleteToken(String id)
    {
       Token token = tokens.get(id);
       tokens.remove(id);

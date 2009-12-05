@@ -20,60 +20,64 @@
 -->
 
 <repository-service default-repository="repository">
-	<repositories>
+  <repositories>
     <repository name="repository" system-workspace="system" default-workspace="portal-system">
-			<security-domain>gatein-domain</security-domain>
-			<access-control>optional</access-control>
-			<authentication-policy>org.exoplatform.services.jcr.impl.core.access.JAASAuthenticator</authentication-policy>
-			<workspaces>
-			  <workspace name="system">
-					<container class="org.exoplatform.services.jcr.impl.storage.jdbc.JDBCWorkspaceDataContainer">
-					  <properties>
-					    <property name="source-name" value="jdbcexo${container.name.suffix}"/>
-					    <property name="dialect" value="hsqldb"/>
-					    <property name="multi-db" value="false"/>
-					    <property name="update-storage" value="true"/>
-					    <property name="max-buffer-size" value="204800"/>
-					    <property name="swap-directory" value="../temp/swap/system${container.name.suffix}"/>
-					  </properties>
-					  <value-storages>
-					    <value-storage id="system" class="org.exoplatform.services.jcr.impl.storage.value.fs.TreeFileValueStorage">
-					      <properties>
-					        <property name="path" value="../temp/values/system${container.name.suffix}"/>
-					      </properties>
-					      <filters>
-					        <filter property-type="Binary"/>
-					      </filters>
-					    </value-storage>
-					  </value-storages>
-					</container>
-					<initializer class="org.exoplatform.services.jcr.impl.core.ScratchWorkspaceInitializer">
-						<properties>
-						  <property name="root-nodetype" value="nt:unstructured"/>
-						  <property name="root-permissions" value="*:/platform/administrators read;*:/platform/administrators add_node;*:/platform/administrators set_property;*:/platform/administrators remove"/>
-						</properties>
-					</initializer>
-			    <cache enabled="true">
-						<properties>
-						  <property name="max-size" value="20000"/>
-						  <property name="live-time" value="30000"/>
-						</properties>
-			    </cache>
-			    <query-handler class="org.exoplatform.services.jcr.impl.core.query.lucene.SearchIndex">
-						<properties>
-						  <property name="index-dir" value="../temp/jcrlucenedb/system${container.name.suffix}"/>
-						</properties>
-			    </query-handler>
-			    <lock-manager>
-						<time-out>15m</time-out><!-- 15min -->
-						<persister class="org.exoplatform.services.jcr.impl.core.lock.FileSystemLockPersister">
-							<properties>
-								<property name="path" value="../temp/lock/system${container.name.suffix}"/>
-							</properties>
-						</persister>
-			 		</lock-manager>
-			  </workspace>
-				<workspace name="portal-system">
+      <security-domain>gatein-domain</security-domain>
+      <access-control>optional</access-control>
+      <authentication-policy>org.exoplatform.services.jcr.impl.core.access.JAASAuthenticator</authentication-policy>
+
+      <!-- System --> 
+      <workspaces>
+        <workspace name="system">
+          <container class="org.exoplatform.services.jcr.impl.storage.jdbc.JDBCWorkspaceDataContainer">
+            <properties>
+              <property name="source-name" value="jdbcexo${container.name.suffix}"/>
+              <property name="dialect" value="hsqldb"/>
+              <property name="multi-db" value="false"/>
+              <property name="update-storage" value="true"/>
+              <property name="max-buffer-size" value="204800"/>
+              <property name="swap-directory" value="../temp/swap/system${container.name.suffix}"/>
+            </properties>
+            <value-storages>
+              <value-storage id="system" class="org.exoplatform.services.jcr.impl.storage.value.fs.TreeFileValueStorage">
+                <properties>
+                  <property name="path" value="../temp/values/system${container.name.suffix}"/>
+                </properties>
+                <filters>
+                  <filter property-type="Binary"/>
+                </filters>
+              </value-storage>
+            </value-storages>
+          </container>
+          <initializer class="org.exoplatform.services.jcr.impl.core.ScratchWorkspaceInitializer">
+            <properties>
+              <property name="root-nodetype" value="nt:unstructured"/>
+              <property name="root-permissions" value="*:/platform/administrators read;*:/platform/administrators add_node;*:/platform/administrators set_property;*:/platform/administrators remove"/>
+            </properties>
+          </initializer>
+          <cache enabled="true">
+            <properties>
+              <property name="max-size" value="20000"/>
+              <property name="live-time" value="30000"/>
+            </properties>
+          </cache>
+          <query-handler class="org.exoplatform.services.jcr.impl.core.query.lucene.SearchIndex">
+            <properties>
+              <property name="index-dir" value="../temp/jcrlucenedb/system${container.name.suffix}"/>
+            </properties>
+          </query-handler>
+          <lock-manager>
+            <time-out>15m</time-out><!-- 15min -->
+            <persister class="org.exoplatform.services.jcr.impl.core.lock.FileSystemLockPersister">
+              <properties>
+                <property name="path" value="../temp/lock/system${container.name.suffix}"/>
+              </properties>
+            </persister>
+           </lock-manager>
+        </workspace>
+
+        <!-- Portal system data -->
+        <workspace name="portal-system">
           <container class="org.exoplatform.services.jcr.impl.storage.jdbc.JDBCWorkspaceDataContainer">
             <properties>
               <property name="source-name" value="jdbcexo${container.name.suffix}"/>
@@ -94,12 +98,61 @@
               </value-storage>
             </value-storages>
           </container>
-					<initializer class="org.exoplatform.services.jcr.impl.core.ScratchWorkspaceInitializer">
-						<properties>
-						  <property name="root-nodetype" value="nt:unstructured"/>
-						  <property name="root-permissions" value="any read;*:/platform/administrators read;*:/platform/administrators add_node;*:/platform/administrators set_property;*:/platform/administrators remove"/>
-						</properties>
-					</initializer>
+          <initializer class="org.exoplatform.services.jcr.impl.core.ScratchWorkspaceInitializer">
+            <properties>
+              <property name="root-nodetype" value="nt:unstructured"/>
+              <property name="root-permissions" value="any read;*:/platform/administrators read;*:/platform/administrators add_node;*:/platform/administrators set_property;*:/platform/administrators remove"/>
+            </properties>
+          </initializer>
+          <cache enabled="true">
+            <properties>
+              <property name="max-size" value="20000"/>
+              <property name="live-time" value="30000"/>
+            </properties>
+          </cache>
+          <query-handler class="org.exoplatform.services.jcr.impl.core.query.lucene.SearchIndex">
+            <properties>
+              <property name="index-dir" value="../temp/jcrlucenedb/portal-system${container.name.suffix}"/>
+            </properties>
+          </query-handler>
+          <lock-manager>
+            <time-out>15m</time-out><!-- 15min -->
+            <persister class="org.exoplatform.services.jcr.impl.core.lock.FileSystemLockPersister">
+              <properties>
+                <property name="path" value="../temp/lock/portal-system${container.name.suffix}"/>
+              </properties>
+            </persister>
+          </lock-manager>
+        </workspace>
+
+        <!-- Portal work data -->
+        <workspace name="portal-work">
+          <container class="org.exoplatform.services.jcr.impl.storage.jdbc.JDBCWorkspaceDataContainer">
+            <properties>
+              <property name="source-name" value="jdbcexo${container.name.suffix}"/>
+              <property name="dialect" value="hsqldb"/>
+              <property name="multi-db" value="false"/>
+              <property name="update-storage" value="true"/>
+              <property name="max-buffer-size" value="204800"/>
+              <property name="swap-directory" value="../temp/swap/portal-work${container.name.suffix}"/>
+            </properties>
+            <value-storages>
+              <value-storage id="portal-work" class="org.exoplatform.services.jcr.impl.storage.value.fs.TreeFileValueStorage">
+                <properties>
+                  <property name="path" value="../temp/values/portal-work${container.name.suffix}"/>
+                </properties>
+                <filters>
+                  <filter property-type="Binary"/>
+                </filters>
+              </value-storage>
+            </value-storages>
+          </container>
+          <initializer class="org.exoplatform.services.jcr.impl.core.ScratchWorkspaceInitializer">
+            <properties>
+              <property name="root-nodetype" value="nt:unstructured"/>
+              <property name="root-permissions" value="any read;*:/platform/administrators read;*:/platform/administrators add_node;*:/platform/administrators set_property;*:/platform/administrators remove"/>
+            </properties>
+          </initializer>
          <cache enabled="true">
           <properties>
             <property name="max-size" value="20000"/>
@@ -108,19 +161,20 @@
          </cache>
          <query-handler class="org.exoplatform.services.jcr.impl.core.query.lucene.SearchIndex">
           <properties>
-            <property name="index-dir" value="../temp/jcrlucenedb/portal-system${container.name.suffix}"/>
+            <property name="index-dir" value="../temp/jcrlucenedb/portal-work${container.name.suffix}"/>
           </properties>
          </query-handler>
          <lock-manager>
-			    <time-out>15m</time-out><!-- 15min -->
-			     <persister class="org.exoplatform.services.jcr.impl.core.lock.FileSystemLockPersister">
-			       <properties>
-			         <property name="path" value="../temp/lock/portal-system${container.name.suffix}"/>
-			       </properties>
-			     </persister>
-			   </lock-manager>
+          <time-out>15m</time-out><!-- 15min -->
+           <persister class="org.exoplatform.services.jcr.impl.core.lock.FileSystemLockPersister">
+             <properties>
+               <property name="path" value="../temp/lock/portal-work${container.name.suffix}"/>
+             </properties>
+           </persister>
+         </lock-manager>
        </workspace>
-			</workspaces>
+
+      </workspaces>
     </repository>
   </repositories>
 </repository-service>

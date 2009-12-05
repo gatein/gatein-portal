@@ -57,7 +57,7 @@
       </properties-param>
     </init-params>
   </component>
-    
+
   <component>
     <key>org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator</key>
     <type>org.exoplatform.services.jcr.ext.hierarchy.impl.NodeHierarchyCreatorImpl</type>
@@ -106,7 +106,8 @@
  		      <name>namespaces</name>
  		      <property name="dc" value="http://purl.org/dc/elements/1.1/"/>
  		      <property name="mop" value="http://www.gatein.org/jcr/mop/1.0/"/>
- 		      <property name="app" value="http://www.gatein.org/jcr/app/1.0/"/>
+ 		      <property name="app" value="http://www.gatein.org/jcr/application-registry/1.0/"/>
+ 		      <property name="lgn" value="http://www.gatein.org/jcr/autologin/1.0/"/>
  		      </properties-param>
  		  </init-params>
  		</component-plugin>
@@ -123,8 +124,10 @@
  		      <value>jar:/conf/mop-nodetypes.xml</value>
  		      <value>jar:/conf/application-nodetypes.xml</value>
           <value>jar:/conf/content-nodetypes.xml</value>
+          <value>jar:/conf/autologin-nodetypes.xml</value>
  		    </values-param>
  		  </init-params>
  		</component-plugin>
   </external-component-plugins>
+
 </configuration>

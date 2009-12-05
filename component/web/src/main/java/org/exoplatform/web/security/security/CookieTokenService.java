@@ -19,21 +19,17 @@
 
 package org.exoplatform.web.security.security;
 
+import org.chromattic.api.ChromatticSession;
+import org.exoplatform.commons.chromattic.ChromatticLifeCycle;
+import org.exoplatform.commons.chromattic.ChromatticManager;
+import org.exoplatform.commons.chromattic.ContextualTask;
+import org.exoplatform.commons.chromattic.SessionContext;
 import org.exoplatform.container.xml.InitParams;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
-import org.exoplatform.services.jcr.ext.registry.RegistryEntry;
-import org.exoplatform.services.jcr.ext.registry.RegistryService;
-import org.exoplatform.web.login.InitiateLoginServlet;
 import org.exoplatform.web.security.Credentials;
 import org.exoplatform.web.security.Token;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 
-import java.util.ArrayList;
-
-import javax.jcr.NodeIterator;
-import javax.jcr.PathNotFoundException;
-import javax.jcr.RepositoryException;
+import java.util.Collection;
+import java.util.Date;
 
 /**
  * Created by The eXo Platform SAS Author : liem.nguyen ncliam@gmail.com Jun 5,
@@ -42,15 +38,22 @@ import javax.jcr.RepositoryException;
 public class CookieTokenService extends AbstractTokenService
 {
 
-   private RegistryService regService_;
+   /** . */
+   private ChromatticManager chromatticManager;
 
-   public CookieTokenService(InitParams initParams, RegistryService rService)
+   /** . */
+   private ChromatticLifeCycle chromatticLifeCycle;
+
+   public CookieTokenService(InitParams initParams, ChromatticManager chromatticManager)
    {
       super(initParams);
-      regService_ = rService;
+
+      //
+      this.chromatticManager = chromatticManager;
+      this.chromatticLifeCycle = chromatticManager.getLifeCycle("autologin");
    }
 
-   public String createToken(Credentials credentials)
+   public String createToken(final Credentials credentials)
    {
       if (validityMillis < 0)
       {
@@ -60,163 +63,117 @@ public class CookieTokenService extends AbstractTokenService
       {
          throw new NullPointerException();
       }
-      String tokenId = InitiateLoginServlet.COOKIE_NAME + random.nextInt();
-      long expirationTimeMillis = System.currentTimeMillis() + validityMillis;
-      this.saveToken(tokenId, new Token(expirationTimeMillis, credentials));
-      return tokenId;
+      return new TokenTask<String>() {
+         @Override
+         protected String execute()
+         {
+            String tokenId = nextTokenId();
+            long expirationTimeMillis = System.currentTimeMillis() + validityMillis;
+            Token token = new Token(expirationTimeMillis, credentials);
+            TokenContainer container = getTokenContainer();
+            container.saveToken(tokenId, token.getPayload(), new Date(token.getExpirationTimeMillis()));
+            return tokenId;
+         }
+      }.executeWith(chromatticLifeCycle);
    }
 
    @Override
-   public Token getToken(String id) throws PathNotFoundException, RepositoryException
+   public Token getToken(final String id)
    {
-      String entryPath = getServiceRegistryPath() + "/" + id;
-      SessionProvider sessionProvider = SessionProvider.createSystemProvider();
-      try
-      {
-         RegistryEntry entry = regService_.getEntry(sessionProvider, entryPath);
-         return toToken(entry.getDocument());
-      }
-      finally
-      {
-         sessionProvider.close();
-      }
+      return new TokenTask<Token>() {
+         @Override
+         protected Token execute()
+         {
+            return getTokenContainer().getToken(id);
+         }
+      }.executeWith(chromatticLifeCycle);
    }
 
    @Override
-   public Token deleteToken(String id) throws PathNotFoundException, RepositoryException
+   public Token deleteToken(final String id)
    {
-      Token data = getToken(id);
-      if (data == null)
-         return null;
-      String entryPath = getServiceRegistryPath() + "/" + id;
-      SessionProvider sessionProvider = SessionProvider.createSystemProvider();
-      try
-      {
-         regService_.removeEntry(sessionProvider, entryPath);
-         return data;
-      }
-      finally
-      {
-         sessionProvider.close();
-      }
-   }
-
-   private void saveToken(String tokenId, Token token)
-   {
-      if (tokenId == null || tokenId.length() == 0 || token == null)
-      {
-         return;
-      }
-      SessionProvider sessionProvider = SessionProvider.createSystemProvider();
-      String servicePath = getServiceRegistryPath();
-      String entryPath = servicePath + "/" + tokenId;
-      RegistryEntry entry;
-      try
-      {
-         try
+      return new TokenTask<Token>() {
+         @Override
+         protected Token execute()
          {
-            entry = regService_.getEntry(sessionProvider, entryPath);
+            return getTokenContainer().removeToken(id);
          }
-         catch (PathNotFoundException e)
-         {
-            entry = new RegistryEntry(tokenId);
-            regService_.createEntry(sessionProvider, servicePath, entry);
-         }
-         Document doc = entry.getDocument();
-         map(doc, token);
-         regService_.recreateEntry(sessionProvider, servicePath, entry);
-      }
-      catch (Exception e)
-      {
-      }
-      finally
-      {
-         sessionProvider.close();
-      }
-   }
-
-   private Token toToken(Document document)
-   {
-      Element root = document.getDocumentElement();
-      String userName = root.getAttribute(Token.USERNAME);
-      String password = root.getAttribute(Token.PASSWORD);
-      long time = Long.parseLong(root.getAttribute(Token.EXPIRE_MILI));
-      Credentials payload = new Credentials(userName, password);
-      return new Token(time, payload);
-   }
-
-   private void map(Document document, Token token)
-   {
-      Element root = document.getDocumentElement();
-      prepareXmlNamespace(root);
-      root.setAttribute(Token.EXPIRE_MILI, "" + token.getExpirationTimeMillis());
-      root.setAttribute(Token.USERNAME, token.getPayload().getUsername());
-      root.setAttribute(Token.PASSWORD, token.getPayload().getPassword());
-   }
-
-   private void prepareXmlNamespace(Element element)
-   {
-      setXmlNameSpace(element, "xmlns:exo", "http://www.exoplatform.com/jcr/exo/1.0");
-      setXmlNameSpace(element, "xmlns:jcr", "http://www.jcp.org/jcr/1.0");
-   }
-
-   private void setXmlNameSpace(Element element, String key, String value)
-   {
-      String xmlns = element.getAttribute(key);
-      if (xmlns == null || xmlns.trim().length() < 1)
-      {
-         element.setAttribute(key, value);
-      }
-   }
-
-   private String getServiceRegistryPath()
-   {
-      return RegistryService.EXO_SERVICES + "/" + name;
+      }.executeWith(chromatticLifeCycle);
    }
 
    @Override
    public String[] getAllTokens()
    {
-      SessionProvider sessionProvider = SessionProvider.createSystemProvider();
-      try
-      {
-         javax.jcr.Node regNode = regService_.getRegistry(sessionProvider).getNode();
-         NodeIterator itr = regNode.getNode(getServiceRegistryPath()).getNodes();
-         ArrayList<String> list = new ArrayList<String>();
-         while (itr.hasNext())
+      return new TokenTask<String[]>() {
+         @Override
+         protected String[] execute()
          {
-            javax.jcr.Node node = itr.nextNode();
-            list.add(node.getName());
+            TokenContainer container = getTokenContainer();
+            Collection<TokenEntry> tokens = container.getAllTokens();
+            String[] ids = new String[tokens.size()];
+            int count = 0;
+            for (TokenEntry token : tokens)
+            {
+               ids[count++] = token.getId();
+            }
+            return ids;
          }
-         return list.toArray(new String[]{});
-      }
-      catch (RepositoryException e)
-      {
-         return null;
-      }
-      finally
-      {
-         sessionProvider.close();
-      }
+      }.executeWith(chromatticLifeCycle);
    }
 
    @Override
    public long getNumberTokens() throws Exception
    {
-      SessionProvider sessionProvider = SessionProvider.createSystemProvider();
-      try
-      {
-         javax.jcr.Node regNode = regService_.getRegistry(sessionProvider).getNode();
-         NodeIterator itr = regNode.getNode(getServiceRegistryPath()).getNodes();
-         return itr.getSize();
+      return new TokenTask<Long>() {
+         @Override
+         protected Long execute()
+         {
+            TokenContainer container = getTokenContainer();
+            Collection<TokenEntry> tokens = container.getAllTokens();
+            return (long)tokens.size();
+         }
+      }.executeWith(chromatticLifeCycle);
+   }
+
+   /**
+    * Wraps token store logic conveniently.
+    *
+    * @param <V> the return type
+    */
+   private abstract class TokenTask<V> extends ContextualTask<V>
+   {
+
+      /** . */
+      private SessionContext context;
+
+      protected final TokenContainer getTokenContainer() {
+         SessionContext ctx = chromatticLifeCycle.getContext();
+         ChromatticSession session = ctx.getSession();
+         TokenContainer container = session.findByPath(TokenContainer.class, "autologin");
+         if (container == null)
+         {
+            container = session.insert(TokenContainer.class, "autologin");
+         }
+         return container;
       }
-      catch (Exception ex)
+
+      @Override
+      protected V execute(SessionContext context)
       {
-         return 0;
+         this.context = context;
+
+         //
+         try
+         {
+            return execute();
+         }
+         finally
+         {
+            this.context = null;
+         }
       }
-      finally
-      {
-         sessionProvider.close();
-      }
+
+      protected abstract V execute();
+
    }
 }

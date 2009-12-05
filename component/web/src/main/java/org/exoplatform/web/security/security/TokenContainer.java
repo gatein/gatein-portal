@@ -1,0 +1,88 @@
+/*
+ * Copyright (C) 2009 eXo Platform SAS.
+ *
+ * This is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2.1 of
+ * the License, or (at your option) any later version.
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this software; if not, write to the Free
+ * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ */
+package org.exoplatform.web.security.security;
+
+import org.chromattic.api.annotations.Create;
+import org.chromattic.api.annotations.NodeMapping;
+import org.chromattic.api.annotations.OneToMany;
+import org.exoplatform.web.security.Credentials;
+import org.exoplatform.web.security.Token;
+
+import java.util.Collection;
+import java.util.Date;
+import java.util.Map;
+
+/**
+ * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
+ * @version $Revision$
+ */
+@NodeMapping(name = "lgn:tokencontainer")
+public abstract class TokenContainer
+{
+
+   @Create
+   protected abstract TokenEntry createToken();
+
+   @OneToMany
+   protected abstract Map<String, TokenEntry> getTokens();
+
+   public Collection<TokenEntry> getAllTokens()
+   {
+      return getTokens().values();
+   }
+
+   public Token getToken(String tokenId)
+   {
+      Map<String, TokenEntry> tokens = getTokens();
+      TokenEntry entry = tokens.get(tokenId);
+      return entry != null ? entry.getToken() : null;
+   }
+
+   public Token removeToken(String tokenId)
+   {
+      Map<String, TokenEntry> tokens = getTokens();
+      TokenEntry entry = tokens.get(tokenId);
+      if (entry != null)
+      {
+         Token token = entry.getToken();
+         entry.remove();
+         return token;
+      }
+      else
+      {
+         return null;
+      }
+   }
+
+   public Token saveToken(String tokenId, Credentials credentials, Date expirationTime)
+   {
+      Map<String, TokenEntry> tokens = getTokens();
+      TokenEntry entry = tokens.get(tokenId);
+      if (entry == null)
+      {
+         entry = createToken();
+         tokens.put(tokenId, entry);
+         entry.setUserName(credentials.getUsername());
+         entry.setPassword(credentials.getPassword());
+      }
+      entry.setExpirationTime(expirationTime);
+      return entry.getToken();
+   }
+
+}

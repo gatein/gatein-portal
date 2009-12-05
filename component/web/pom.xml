@@ -112,6 +112,13 @@
     </exclusions>
 	</dependency>
 
+  <dependency>
+    <groupId>org.chromattic</groupId>
+    <artifactId>chromattic.apt</artifactId>
+    <version>${version.chromattic}</version>
+    <scope>compile</scope> 
+  </dependency>
+
 	<dependency>
 		<groupId>org.gatein.pc</groupId>
 		<artifactId>pc-federation</artifactId>

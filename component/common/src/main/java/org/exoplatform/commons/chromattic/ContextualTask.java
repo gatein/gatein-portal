@@ -1,79 +1,66 @@
-/**
+/*
  * Copyright (C) 2009 eXo Platform SAS.
- * 
+ *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation; either version 2.1 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this software; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-
-package org.exoplatform.web.security;
+package org.exoplatform.commons.chromattic;
 
 /**
- * An immutable object that contains a username and a password.
- *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
+ * @param <V> the return type value
  */
-public class Credentials
+public abstract class ContextualTask<V>
 {
 
-   
-
-   /** . */
-   private final String username;
-
-   /** . */
-   private final String password;
-
    /**
-    * Construct a new instance.
+    * Executes a task within a context from the specified life cycle. If an existing context already exists
+    * then this context is used otherwise a context is managed for the duration of the {@link #execute(SessionContext)}
+    * method.
     *
-    * @param username the username value
-    * @param password the password value
-    * @throws NullPointerException if any argument is null
+    * @param lifeCycle the life cycle
+    * @return a value
     */
-   public Credentials(String username, String password) throws NullPointerException
+   public final V executeWith(ChromatticLifeCycle lifeCycle)
    {
-      if (username == null)
+      SessionContext context = lifeCycle.getContext(true);
+      if (context == null)
       {
-         throw new NullPointerException("Username is null");
+         context = lifeCycle.openContext();
+         try
+         {
+            return execute(context);
+         }
+         finally
+         {
+            lifeCycle.closeContext(context, true);
+         }
       }
-      if (password == null)
+      else
       {
-         throw new NullPointerException("Password is null");
+         return execute(context);
       }
-      this.username = username;
-      this.password = password;
    }
 
    /**
-    * Returns the username.
+    * Implementor must provide the task logic here.
     *
-    * @return the username
+    * @param context the context
+    * @return a value
     */
-   public String getUsername()
-   {
-      return username;
-   }
+   protected abstract V execute(SessionContext context);
 
-   /**
-    * Returns the password.
-    *
-    * @return the password
-    */
-   public String getPassword()
-   {
-      return password;
-   }
 }
