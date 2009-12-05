@@ -81,7 +81,7 @@
       </propertyDefinition>
     </propertyDefinitions>
     <childNodeDefinitions>
-      <childNodeDefinition name="resources" defaultPrimaryType="nt:folder" autoCreated="false" mandatory="true"
+      <childNodeDefinition name="resources" defaultPrimaryType="nt:folder" autoCreated="true" mandatory="true"
         onParentVersion="COPY" protected="false" sameNameSiblings="false">
         <requiredPrimaryTypes>
           <requiredPrimaryType>nt:folder</requiredPrimaryType>

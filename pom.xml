@@ -48,12 +48,12 @@
       <org.gatein.pc.version>2.1.0-CR01</org.gatein.pc.version>
       <org.picketlink.idm>1.0.0.CR1</org.picketlink.idm>
       <org.gatein.wsrp.version>1.0.0-Beta01</org.gatein.wsrp.version>
-      <org.gatein.mop.version>1.0.0-Beta11</org.gatein.mop.version>
+      <org.gatein.mop.version>1.0.0-Beta12</org.gatein.mop.version>
       <org.slf4j.version>1.5.6</org.slf4j.version>
       <rhino.version>1.6R5</rhino.version>
       <org.codehaus.groovy.version>1.6.5</org.codehaus.groovy.version>
       <javax.servlet.version>2.5</javax.servlet.version>
-      <version.chromattic>1.0.0-beta8</version.chromattic>
+      <version.chromattic>1.0.0-beta10</version.chromattic>
       <version.reflect>1.0.0-beta4</version.reflect>
 
       <!-- ************** -->

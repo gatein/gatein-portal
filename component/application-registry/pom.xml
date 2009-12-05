@@ -55,6 +55,12 @@
     </dependency>
     
     <dependency>
+       <groupId>org.chromattic</groupId>
+       <artifactId>chromattic.ntdef</artifactId>
+       <version>${version.chromattic}</version>
+    </dependency>
+
+    <dependency>
       <groupId>org.gatein.pc</groupId>
       <artifactId>pc-api</artifactId>
       <version>${org.gatein.pc.version}</version>

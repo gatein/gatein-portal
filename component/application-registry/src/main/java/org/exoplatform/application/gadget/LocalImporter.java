@@ -22,6 +22,8 @@ package org.exoplatform.application.gadget;
 import org.apache.shindig.common.uri.Uri;
 import org.apache.shindig.gadgets.spec.GadgetSpec;
 import org.apache.shindig.gadgets.spec.ModulePrefs;
+import org.chromattic.ntdef.NTFolder;
+import org.chromattic.ntdef.Resource;
 import org.exoplatform.application.gadget.impl.GadgetDefinition;
 import org.exoplatform.application.gadget.impl.GadgetRegistry;
 import org.exoplatform.application.gadget.impl.LocalGadgetData;
@@ -30,11 +32,9 @@ import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 import org.gatein.common.net.URLTools;
 
-import javax.jcr.Node;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Calendar;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -59,7 +59,7 @@ public abstract class LocalImporter
    private boolean local;
 
    /** Used temporarily when importing resources. */
-   private Node folder;
+   private NTFolder folder;
 
    protected LocalImporter(
       String name,
@@ -169,7 +169,7 @@ public abstract class LocalImporter
          data.setFileName(fileName);
 
          // Import resource
-         folder = data.getNode().addNode("resources", "nt:folder");
+         folder = data.getResources();
          String folderPath = getParent(gadgetPath);
          visitChildren(folderPath);
          folder = null;
@@ -195,24 +195,20 @@ public abstract class LocalImporter
          {
             String mimeType = getMimeType(name);
 
-            //
-            Node file = folder.addNode(name, "nt:file");
-            Node resource = file.addNode("jcr:content", "nt:resource");
-            resource.setProperty("jcr:data", new ByteArrayInputStream(content));
-            resource.setProperty("jcr:lastModified", Calendar.getInstance());
-            resource.setProperty("jcr:mimeType", mimeType);
-
             // We can detect encoding for XML files
+            String encoding = null;
             if ("application/xml".equals(mimeType))
             {
-               String encoding = EncodingDetector.detect(new ByteArrayInputStream(content));
-               resource.setProperty("jcr:encoding", encoding);
+               encoding = EncodingDetector.detect(new ByteArrayInputStream(content));
             }
+
+            //
+            folder.createFile(name, new Resource(mimeType, encoding, content));
          }
       }
       else
       {
-         folder = folder.addNode(name, "nt:folder");
+         folder = folder.createFolder(name);
          visitChildren(resourcePath);
          folder = folder.getParent();
       }

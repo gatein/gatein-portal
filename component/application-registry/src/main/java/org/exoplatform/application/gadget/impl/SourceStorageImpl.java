@@ -18,16 +18,11 @@
  */
 package org.exoplatform.application.gadget.impl;
 
-import org.exoplatform.application.gadget.EncodingDetector;
 import org.exoplatform.application.gadget.Gadget;
 import org.exoplatform.application.gadget.GadgetRegistryService;
 import org.exoplatform.application.gadget.Source;
 import org.exoplatform.application.gadget.SourceStorage;
-import org.gatein.common.io.IOTools;
 
-import javax.jcr.Node;
-import java.io.ByteArrayInputStream;
-import java.io.InputStreamReader;
 import java.util.Calendar;
 
 /**
@@ -41,10 +36,6 @@ public class SourceStorageImpl implements SourceStorage
 
    public SourceStorageImpl(GadgetRegistryService gadgetRegistryService)
    {
-
-      // resources/Calculator.xml
-      // resources/rssAggregator.xml
-
       this.gadgetRegistryService = (GadgetRegistryServiceImpl)gadgetRegistryService;
    }
 
@@ -64,7 +55,8 @@ public class SourceStorageImpl implements SourceStorage
       {
          LocalGadgetData localData = (LocalGadgetData)data;
          String content = localData.getSource();
-         Calendar lastModified = localData.getLastModified();
+         Calendar lastModified = Calendar.getInstance();
+         lastModified.setTime(localData.getLastModified());
 
          //
          Source source = new Source(gadget.getName());

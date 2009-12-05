@@ -100,6 +100,13 @@
       <scope>provided</scope>
     </dependency>
 
+    <dependency>
+       <groupId>org.chromattic</groupId>
+       <artifactId>chromattic.core</artifactId>
+       <version>${version.chromattic}</version>
+       <scope>test</scope>
+    </dependency>
+
   </dependencies>
   
   <build>

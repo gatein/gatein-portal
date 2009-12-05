@@ -20,7 +20,6 @@ package org.exoplatform.commons.chromattic;
 
 import org.chromattic.api.Chromattic;
 import org.chromattic.api.ChromatticSession;
-import org.chromattic.api.SessionTask;
 
 import javax.jcr.Credentials;
 
@@ -67,16 +66,6 @@ public class ChromatticImpl implements Chromattic
    }
 
    public ChromatticSession openSession(Credentials credentials)
-   {
-      throw new UnsupportedOperationException();
-   }
-
-   public void execute(SessionTask task) throws Throwable
-   {
-      throw new UnsupportedOperationException();
-   }
-
-   public void stop()
    {
       throw new UnsupportedOperationException();
    }

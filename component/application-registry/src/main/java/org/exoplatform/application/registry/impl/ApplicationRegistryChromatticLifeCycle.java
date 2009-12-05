@@ -18,7 +18,6 @@
  */
 package org.exoplatform.application.registry.impl;
 
-import org.chromattic.core.DomainSession;
 import org.exoplatform.commons.chromattic.ChromatticLifeCycle;
 import org.exoplatform.commons.chromattic.SessionContext;
 import org.exoplatform.container.xml.InitParams;
@@ -39,6 +38,6 @@ public class ApplicationRegistryChromatticLifeCycle extends ChromatticLifeCycle
 
    @Override
    protected void onOpenSession(SessionContext context) {
-      context.getSession().addEventListener(new Injector(registry, (DomainSession)context.getSession()));
+      context.getSession().addEventListener(new Injector(registry));
    }
 }

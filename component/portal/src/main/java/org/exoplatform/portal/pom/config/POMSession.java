@@ -323,7 +323,7 @@ public class POMSession
          throw new Error(e);
       }
       Class<O> mappedClass = (Class<O>)mapping.get(type);
-      return session.createQueryBuilder().from(mappedClass).<O> where(statement).get().iterator();
+      return session.createQueryBuilder().from(mappedClass).<O> where(statement).get().objects();
    }
 
    private static final Map<ObjectType<?>, Class> mapping = new HashMap<ObjectType<?>, Class>();

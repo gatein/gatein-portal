@@ -21,19 +21,20 @@ package org.exoplatform.application.gadget.impl;
 import org.apache.shindig.common.uri.Uri;
 import org.apache.shindig.gadgets.spec.GadgetSpec;
 import org.apache.shindig.gadgets.spec.ModulePrefs;
-import org.chromattic.api.UndeclaredRepositoryException;
 import org.chromattic.api.annotations.ManyToOne;
+import org.chromattic.api.annotations.MappedBy;
 import org.chromattic.api.annotations.NodeMapping;
+import org.chromattic.api.annotations.OneToOne;
 import org.chromattic.api.annotations.Property;
+import org.chromattic.ntdef.NTFile;
+import org.chromattic.ntdef.Resource;
 import org.exoplatform.application.gadget.EncodingDetector;
 import org.exoplatform.application.registry.impl.NodeAware;
-import org.gatein.common.io.IOTools;
 
-import javax.jcr.Node;
-import javax.jcr.RepositoryException;
+import org.chromattic.ntdef.NTFolder;
+
 import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.util.Calendar;
+import java.util.Date;
 
 
 /**
@@ -44,9 +45,6 @@ import java.util.Calendar;
 public abstract class LocalGadgetData extends GadgetData implements NodeAware
 {
 
-   /** Temporary hack, use with care. */
-   private Node node;
-
    @ManyToOne
    public abstract GadgetDefinition getDefinition();
 
@@ -55,27 +53,24 @@ public abstract class LocalGadgetData extends GadgetData implements NodeAware
 
    public abstract void setFileName(String fileName);
 
-   public void setNode(Node node)
-   {
-      this.node = node;
-   }
+   @OneToOne
+   @MappedBy("resources")
+   public abstract NTFolder getResources();
 
-   public Node getNode()
-   {
-      return node;
+   private NTFile getGadgetContent() {
+      String fileName = getFileName();
+      NTFolder resources = getResources();
+      return resources.getFile(fileName);
    }
 
    public void setSource(String gadgetXML) throws Exception
    {
-
       // Get the definition
       GadgetDefinition def = getDefinition();
 
       // Get the related content
       GadgetSpec spec = new GadgetSpec(Uri.parse("http://www.gatein.org"), gadgetXML);
       ModulePrefs prefs = spec.getModulePrefs();
-      String fileName = getFileName();
-      Node contentNode = node.getNode("resources/" + fileName + "/jcr:content");
       byte[] bytes = gadgetXML.getBytes();
       String encoding = EncodingDetector.detect(new ByteArrayInputStream(bytes));
 
@@ -86,66 +81,22 @@ public abstract class LocalGadgetData extends GadgetData implements NodeAware
       def.setReferenceURL(prefs.getTitleUrl().toString());
 
       // Update content
-      contentNode.setProperty("jcr:encoding", encoding);
-      contentNode.setProperty("jcr:data", new ByteArrayInputStream(bytes));
-      contentNode.setProperty("jcr:mimeType", "application/xml");
-      contentNode.setProperty("jcr:lastModified", Calendar.getInstance());
+      NTFile content = getGadgetContent();
+      content.setContentResource(new Resource("application/xml", encoding, bytes));
    }
 
    public String getSource() throws Exception
    {
-      String fileName = getFileName();
-      Node contentNode = node.getNode("resources/" + fileName + "/jcr:content");
-      InputStream in = contentNode.getProperty("jcr:data").getStream();
-      String encoding = contentNode.getProperty("jcr:encoding").getString();
-      byte[] bytes = IOTools.getBytes(in);
+      NTFile content = getGadgetContent();
+      Resource res = content.getContentResource();
+      String encoding = res.getEncoding();
+      byte[] bytes = res.getData();
       return new String(bytes, encoding);
    }
 
-   public Calendar getLastModified()
+   public Date getLastModified()
    {
-      try
-      {
-         String fileName = getFileName();
-         Node contentNode = node.getNode("resources/" + fileName + "/jcr:content");
-         return contentNode.getProperty("jcr:lastModified").getDate();
-      }
-      catch (RepositoryException e)
-      {
-         throw new UndeclaredRepositoryException(e);
-      }
+      NTFile content = getGadgetContent();
+      return content.getLastModified();
    }
-
-   private static String getProperty(Node node, String name, String defaultValue) throws Exception
-   {
-      if (node.hasProperty(name))
-      {
-         return node.getProperty(name).getString();
-      }
-      else
-      {
-         return defaultValue;
-      }
-   }
-
-   private static Calendar getCalendarProperty(Node node, String name) throws Exception
-   {
-      if (node.hasProperty(name))
-      {
-         return node.getProperty(name).getDate();
-      }
-      else
-      {
-         return null;
-      }
-   }
-
-
-/*
-   @OneToOne
-   @MappedBy("folder")
-   public abstract NTFolder getFolder();
-
-   public abstract void setFolder(NTFolder folder);
-*/
 }
