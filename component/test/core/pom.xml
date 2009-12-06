@@ -19,20 +19,45 @@
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
-   <parent>
-     <groupId>org.exoplatform.portal</groupId>
-     <artifactId>exo.portal.component</artifactId>
-     <version>3.0.0-Beta04-SNAPSHOT</version>
-   </parent>
+  <parent>
+    <groupId>org.exoplatform.portal</groupId>
+    <artifactId>exo.portal.component.test</artifactId>
+    <version>3.0.0-Beta04-SNAPSHOT</version>
+  </parent>
 
-   <modelVersion>4.0.0</modelVersion>
-   <artifactId>exo.portal.component.test</artifactId>
-   <packaging>pom</packaging>
-   <name>GateIn Portal Test Component</name>
+  <modelVersion>4.0.0</modelVersion>
+  <artifactId>exo.portal.component.test.core</artifactId>
+  <packaging>jar</packaging>
+  <name>GateIn Portal Component Core Test</name>
 
-   <modules>
-      <module>core</module>
-      <module>jcr</module>
-   </modules>
+  <dependencies>
+
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.exoplatform.kernel</groupId>
+      <artifactId>exo.kernel.commons</artifactId>
+      <version>${org.exoplatform.kernel.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.exoplatform.kernel</groupId>
+      <artifactId>exo.kernel.container</artifactId>
+      <version>${org.exoplatform.kernel.version}</version>
+    </dependency>
+
+  </dependencies>
+
+  <build>
+    <resources>
+       <resource>
+          <directory>src/main/resources</directory>
+       </resource>
+    </resources>
+  </build>
 
 </project>
