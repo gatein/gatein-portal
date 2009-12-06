@@ -24,6 +24,10 @@
   xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd http://www.exoplaform.org/xml/ns/kernel_1_0.xsd"
   xmlns="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd">
 
+  <component>
+    <key>org.exoplatform.commons.chromattic.ChromatticManager</key>
+    <type>org.exoplatform.commons.chromattic.ChromatticManager</type>
+  </component>
 
   <component>
     <key>org.exoplatform.portal.pom.config.POMSessionManager</key>

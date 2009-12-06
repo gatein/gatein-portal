@@ -35,6 +35,7 @@
    <name>GateIn Portal Component</name>
 
    <modules>
+      <module>test</module>
       <module>common</module>
       <module>pc</module>
       <module>xml-parser</module>

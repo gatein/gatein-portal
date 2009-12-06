@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+
+    Copyright (C) 2009 eXo Platform SAS.
+
+    This is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Lesser General Public License as
+    published by the Free Software Foundation; either version 2.1 of
+    the License, or (at your option) any later version.
+
+    This software is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+    Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public
+    License along with this software; if not, write to the Free
+    Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+    02110-1301 USA, or see the FSF site: http://www.fsf.org.
+
+-->
+
+<configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd http://www.exoplaform.org/xml/ns/kernel_1_0.xsd"
+               xmlns="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd">
+
+  <component>
+    <type>org.exoplatform.container.definition.PortalContainerConfig</type>
+  </component>
+
+  <component>
+    <key>org.exoplatform.services.naming.InitialContextInitializer</key>
+    <type>org.exoplatform.services.naming.InitialContextInitializer</type>
+    <init-params>
+      <properties-param>
+        <name>default-properties</name>
+        <description>Default initial context properties</description>
+      </properties-param>
+    </init-params>
+  </component>
+
+  <external-component-plugins>
+    <target-component>org.exoplatform.services.naming.InitialContextInitializer</target-component>
+    <component-plugin>
+      <name>bind.datasource</name>
+      <set-method>addPlugin</set-method>
+      <type>org.exoplatform.services.naming.BindReferencePlugin</type>
+      <init-params>
+        <value-param>
+          <name>bind-name</name>
+          <value>jdbcexo</value>
+        </value-param>
+        <value-param>
+          <name>class-name</name>
+          <value>javax.sql.DataSource</value>
+        </value-param>
+        <value-param>
+          <name>factory</name>
+          <value>org.apache.commons.dbcp.BasicDataSourceFactory</value>
+        </value-param>
+        <properties-param>
+          <name>ref-addresses</name>
+          <description>ref-addresses</description>
+          <property name="driverClassName" value="org.hsqldb.jdbcDriver"/>
+          <property name="url" value="jdbc:hsqldb:file:../temp/data/exodb"/>
+          <property name="username" value="sa"/>
+          <property name="password" value=""/>
+        </properties-param>
+      </init-params>
+    </component-plugin>
+  </external-component-plugins>
+
+</configuration>

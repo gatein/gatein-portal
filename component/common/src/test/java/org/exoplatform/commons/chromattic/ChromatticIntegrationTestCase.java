@@ -18,9 +18,12 @@
  */
 package org.exoplatform.commons.chromattic;
 
-import junit.framework.TestCase;
 import org.chromattic.api.Chromattic;
 import org.chromattic.api.ChromatticSession;
+import org.exoplatform.component.test.AbstractGateInTest;
+import org.exoplatform.component.test.ConfigurationUnit;
+import org.exoplatform.component.test.ConfiguredBy;
+import org.exoplatform.component.test.ContainerScope;
 import org.exoplatform.container.PortalContainer;
 
 import javax.jcr.Session;
@@ -30,7 +33,11 @@ import javax.jcr.Workspace;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class ChromatticIntegrationTestCase extends TestCase
+@ConfiguredBy({
+   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/jcr/jcr-configuration.xml"),
+   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/test-configuration.xml")
+})
+public class ChromatticIntegrationTestCase extends AbstractGateInTest
 {
 
    /** . */
@@ -56,7 +63,7 @@ public class ChromatticIntegrationTestCase extends TestCase
    public void testConfiguratorInitialized() throws Exception
    {
       assertNotNull(testLF);
-      assertEquals("test", testLF.getWorkspaceName());
+      assertEquals("portal-test", testLF.getWorkspaceName());
       assertNotNull(testLF.getChromattic());
       assertSame(chromatticManager, testLF.getManager());
    }
@@ -114,11 +121,11 @@ public class ChromatticIntegrationTestCase extends TestCase
       {
          ChromatticSession session = testLF.getChromattic().openSession();
          FooEntity foo = session.create(FooEntity.class);
-         assertEquals("test", foo.getWorkspace());
+         assertEquals("portal-test", foo.getWorkspace());
          jcrSession = session.getJCRSession();
          assertTrue(jcrSession.isLive());
          Workspace workspace = jcrSession.getWorkspace();
-         assertEquals("test", workspace.getName());
+         assertEquals("portal-test", workspace.getName());
 
          session.close();
          assertTrue(jcrSession.isLive());
@@ -159,13 +166,13 @@ public class ChromatticIntegrationTestCase extends TestCase
 
          // Check how chromattic see the session
          FooEntity foo = session.create(FooEntity.class);
-         assertEquals("test", foo.getWorkspace());
+         assertEquals("portal-test", foo.getWorkspace());
 
          // Check related JCR session
          jcrSession = session.getJCRSession();
          assertTrue(jcrSession.isLive());
          Workspace workspace = jcrSession.getWorkspace();
-         assertEquals("test", workspace.getName());
+         assertEquals("portal-test", workspace.getName());
 
          // Closing chromattic session should not close the underlying JCR session
          session.close();
