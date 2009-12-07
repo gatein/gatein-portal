@@ -86,6 +86,46 @@
       <module>packaging</module>
    </modules>
 
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.exoplatform.kernel</groupId>
+        <artifactId>exo.kernel.commons</artifactId>
+        <version>${org.exoplatform.kernel.version}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+      <dependency>
+        <groupId>org.exoplatform.kernel</groupId>
+        <artifactId>exo.kernel.component.cache</artifactId>
+        <version>${org.exoplatform.kernel.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.exoplatform.kernel</groupId>
+        <artifactId>exo.kernel.component.command</artifactId>
+        <version>${org.exoplatform.kernel.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.exoplatform.kernel</groupId>
+        <artifactId>exo.kernel.component.common</artifactId>
+        <version>${org.exoplatform.kernel.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.exoplatform.kernel</groupId>
+        <artifactId>exo.kernel.container</artifactId>
+        <version>${org.exoplatform.kernel.version}</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
    <dependencies>
       <dependency>
          <groupId>org.slf4j</groupId>
