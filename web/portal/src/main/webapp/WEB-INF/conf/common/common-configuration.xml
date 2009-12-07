@@ -60,7 +60,7 @@
       </values-param>      
       <values-param>
         <name>init.resources</name>
-        <description>Store the following resources into the db for  the first launch </description>
+        <description>Initiate the following resources during the first launch</description>
         <value>locale.portal.expression</value>
         <value>locale.portal.services</value>
         <value>locale.portal.webui</value>
