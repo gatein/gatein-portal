@@ -23,6 +23,7 @@ import org.exoplatform.portal.resource.config.tasks.AbstractSkinTask;
 import org.exoplatform.portal.resource.config.tasks.PortalSkinTask;
 import org.exoplatform.portal.resource.config.tasks.PortletSkinTask;
 import org.exoplatform.portal.resource.config.tasks.ThemeTask;
+import org.exoplatform.web.resource.config.xml.GateinResource;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 

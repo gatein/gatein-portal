@@ -17,7 +17,7 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.resource.config.xml;
+package org.exoplatform.web.resource.config.xml;
 
 /**
  * 

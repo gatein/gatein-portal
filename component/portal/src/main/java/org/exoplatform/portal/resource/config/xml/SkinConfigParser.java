@@ -21,6 +21,7 @@ package org.exoplatform.portal.resource.config.xml;
 
 import org.exoplatform.portal.resource.SkinService;
 import org.exoplatform.portal.resource.config.tasks.AbstractSkinTask;
+import org.exoplatform.web.resource.config.xml.GateinResource;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
