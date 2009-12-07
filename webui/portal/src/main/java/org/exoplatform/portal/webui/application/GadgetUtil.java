@@ -46,12 +46,12 @@ import java.util.Map;
  */
 public class GadgetUtil
 {
-   static final public GadgetApplication toGadgetApplication(Gadget model)
+   static public GadgetApplication toGadgetApplication(Gadget model)
    {
       return new GadgetApplication(model.getName(), model.getUrl(), model.isLocal());
    }
 
-   static final public Gadget toGadget(String name, String path, boolean isLocal) throws Exception
+   static public Gadget toGadget(String name, String path, boolean isLocal) throws Exception
    {
       Gadget gadget = new Gadget();
       gadget.setName(name);
@@ -79,7 +79,7 @@ public class GadgetUtil
     * 
     * @return the string represents metadata of gadget application
     */
-   static final public String fetchGagdetMetadata(String urlStr)
+   public static String fetchGagdetMetadata(String urlStr)
    {
       String result = null;
 
@@ -127,7 +127,7 @@ public class GadgetUtil
     * @throws JSONException if can't create jsonObject from metadata
     */
    @SuppressWarnings("unchecked")
-   static final public Map<String, String> getMapMetadata(String url) throws JSONException
+   static public Map<String, String> getMapMetadata(String url) throws JSONException
    {
       Map<String, String> mapMetaData = new HashMap<String, String>();
       String metadata = fetchGagdetMetadata(url);
@@ -142,7 +142,7 @@ public class GadgetUtil
       return mapMetaData;
    }
 
-   static final public String reproduceUrl(String path, boolean isLocal)
+   static public String reproduceUrl(String path, boolean isLocal)
    {
       if (isLocal)
       {
@@ -151,12 +151,12 @@ public class GadgetUtil
       return path;
    }
 
-   static final public String getViewPath(String uri)
+   static public String getViewPath(String uri)
    {
       return getLocalHostBase() + "/" + PortalContainer.getCurrentRestContextName() + "/" + uri;
    }
 
-   static final public String getEditPath(String uri)
+   static public String getEditPath(String uri)
    {
       return getLocalHostBase() + "/" + PortalContainer.getCurrentRestContextName() + "/private/" + uri;
    }
@@ -225,7 +225,7 @@ public class GadgetUtil
       return hostName.substring(0, index);
    }
 
-   static final private String getHostName()
+   static private String getHostName()
    {
       ExoContainer container = ExoContainerContext.getCurrentContainer();
       GadgetRegistryService gadgetService =
@@ -233,7 +233,7 @@ public class GadgetUtil
       return gadgetService.getHostName();
    }
 
-   static final private String getLocalHostName()
+   static private String getLocalHostName()
    {
       PortalRequestContext pContext = Util.getPortalRequestContext();
       StringBuffer requestUrl = pContext.getRequest().getRequestURL();

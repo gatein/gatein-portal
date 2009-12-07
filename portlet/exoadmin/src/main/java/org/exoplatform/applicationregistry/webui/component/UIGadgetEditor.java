@@ -168,6 +168,23 @@ public class UIGadgetEditor extends UIForm
             }
          }
 
+         // If gadget is null we need to create it first
+         if (gadget == null)
+         {
+            gadget = new Gadget();
+            gadget.setName("CHANGME");
+
+            // Those data will be taken from the gadget XML anyway
+            gadget.setDescription("");
+            gadget.setThumbnail("");
+            gadget.setLocal(true);
+            gadget.setTitle("");
+            gadget.setReferenceUrl("");
+
+            // Save gadget with empty data first
+            service.saveGadget(gadget);
+         }
+
          //
          Source source = new Source(fileName, "application/xml");
          source.setTextContent(text);

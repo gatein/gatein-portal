@@ -20,6 +20,8 @@ package org.exoplatform.application.gadget.impl;
 
 import org.chromattic.api.Chromattic;
 import org.chromattic.api.ChromatticSession;
+import org.chromattic.ntdef.NTFile;
+import org.chromattic.ntdef.Resource;
 import org.exoplatform.application.gadget.Gadget;
 import org.exoplatform.application.gadget.GadgetRegistryService;
 import org.exoplatform.application.registry.impl.ApplicationRegistryChromatticLifeCycle;
@@ -171,7 +173,28 @@ public class GadgetRegistryServiceImpl implements GadgetRegistryService
       //
       if (def == null)
       {
-         throw new IllegalArgumentException("No such gadget " + gadget.getName());
+         def = registry.addGadget(gadget.getName());
+         if (gadget.isLocal())
+         {
+            def.setLocal(true);
+            LocalGadgetData data = (LocalGadgetData)def.getData();
+            String fileName = gadget.getName() + ".xml";
+            data.setFileName(fileName);
+            data.getResources().createFile(fileName, new Resource(
+               "application.xml",
+               "UTF-8",
+               ("<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+                "<Module><ModulePrefs title=\"\" />" +
+                "<Content type=\"html\"> <![CDATA[]]>" +
+                "</Content>" +
+                "</Module>").getBytes("UTF-8")));
+         }
+         else
+         {
+            def.setLocal(false);
+            RemoteGadgetData data = (RemoteGadgetData)def.getData();
+            data.setURL(gadget.getUrl());
+         }
       }
 
       //

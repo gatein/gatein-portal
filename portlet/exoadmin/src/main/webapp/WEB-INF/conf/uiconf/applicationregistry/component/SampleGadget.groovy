@@ -19,7 +19,7 @@
 
 String sample = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"+
 								"<Module>" +
-								"<ModulePrefs title=\"hello world example\" />" +
+								"<ModulePrefs title=\"hello world example\" description=\"The hello world gadget.\"/>" +
 								"<Content type=\"html\">" +
 								" <![CDATA[" +
 								"    Hello, world!" +
