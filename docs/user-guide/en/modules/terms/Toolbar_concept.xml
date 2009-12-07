@@ -2,7 +2,7 @@
 <!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
 ]>
 <section id="sect-User_Guide-Toolbar_concept">
-	<!--       
+	<!--         
 
     Copyright (C) 2009 eXo Platform SAS.
     
@@ -21,15 +21,21 @@
     Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
     02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
-       --><title>Toolbar concept</title>
+         --><title>Toolbar concept</title>
 	<para>
-		This is a specific bar that contains all user and administration actions for the purpose of helping users and the administrator access and perform actions easily, quickly and effectively. You can see this Toolbar in GateIn Portal as below:
+		This bar contains all user and administration actions. It helps users and the administrator access and perform actions easily, quickly and effectively. You can see this toolbar as it appears in the Portal below:
 	</para>
 	<mediaobject>
 		<imageobject>
-			<imagedata fileref="images/Toolbar.png" format="PNG" />
+			<imagedata fileref="images/Toolbar.png" format="PNG" width="444" />
 		</imageobject>
 	</mediaobject>
+	<para>
+		In this image you can see the three Navigations referred to in <xref linkend="sect-User_Guide-Navigation" /> as well as the main Menu button (on the far left of the toolbar) and the name of the current user (on the far right).
+	</para>
+	<para>
+		In this example the current user is the site administrator, hence the extra "Site Editor" menu.
+	</para>
 </section>
 
 

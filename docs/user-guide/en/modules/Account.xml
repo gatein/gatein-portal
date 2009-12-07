@@ -2,7 +2,7 @@
 <!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
 ]>
 <chapter id="chap-User_Guide-Account">
-	<!--      
+	<!--       
 
     Copyright (C) 2009 eXo Platform SAS.
     
@@ -21,7 +21,7 @@
     Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
     02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
-      --><title>Account</title>
+       --><title>Accounts</title>
 	<xi:include href="account/Register_New_Accounts.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 	<xi:include href="account/Change_User_Password.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 	<xi:include href="account/Change_Account_Settings.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />

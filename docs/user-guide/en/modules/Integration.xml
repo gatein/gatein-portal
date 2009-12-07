@@ -1,4 +1,8 @@
-<!--
+<?xml version='1.0' encoding='utf-8' ?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+]>
+<chapter id="chap-User_Guide-Integration">
+	<!-- 
 
     Copyright (C) 2009 eXo Platform SAS.
     
@@ -17,19 +21,13 @@
     Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
     02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
--->
-
-<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook V4.4//EN" "http://www.oasis-open.org/docbook/sgml/4.4/docbookx.dtd">
-<chapter>
-<title>Integration</title>
-
-TODO
-
-<!-- 
+ --><title>Integration</title>
+	 TODO <!--  
 <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="integration/Use_an_Existing_Portlet_Application.xml" />
 <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="integration/Package_Gadgets.xml" />
 <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="integration/JSF1_2_JBossPortletBridge_Richfaces.xml" />
 <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="integration/JSF1_1_MyFaces_Spring.xml" />
 <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="integration/Changing_GateIn_URL.xml" />
- -->
+  -->
 </chapter>
+

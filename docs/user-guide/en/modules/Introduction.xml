@@ -2,7 +2,7 @@
 <!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
 ]>
 <chapter id="chap-User_Guide-Introduction">
-	<!--        
+	<!--         
 
     Copyright (C) 2009 eXo Platform SAS.
     
@@ -21,10 +21,10 @@
     Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
     02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
-        --><title>Introduction</title>
+         --><title>Introduction</title>
 	<mediaobject>
 		<imageobject>
-			<imagedata fileref="images/Frontpage.png" format="PNG" scalefit="1" />
+			<imagedata fileref="images/Frontpage.png" format="PNG" scalefit="1" width="444" />
 		</imageobject>
 	</mediaobject>
 	<para>
@@ -38,7 +38,7 @@
 					GateIn project homepage. GateIn 3.0 is the community project that Enterprise Portal Platform 5.0 is based on. <ulink url="http://www.gatein.org">www.gatein.org</ulink>
 				</para>
 			</listitem>
-<!--			<listitem>
+			<!-- 			<listitem>
 				<para>
 					GateIn videos. Various video clips created by the GateIn community leads that provide a guide to the usage and features of the GateIn portal, many of wh <ulink url="http://www.jboss.org/gatein/videos.html">www.jboss.org/gatein/videos.html</ulink>
 				</para>
@@ -52,7 +52,7 @@
 				<para>
 					GateIn downloads: <ulink url="http://www.jboss.org/gatein/downloads.html">www.jboss.org/gatein/downloads.html</ulink>
 				</para>
-			</listitem> -->
+			</listitem>  -->
 		</itemizedlist>
 	</section>
 

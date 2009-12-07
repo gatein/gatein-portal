@@ -2,7 +2,7 @@
 <!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
 ]>
 <section id="sect-User_Guide-FCK_Portlet">
-	<!--       
+	<!--         
 
     Copyright (C) 2009 eXo Platform SAS.
     
@@ -21,70 +21,72 @@
     Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
     02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
-       --><title>FCK Portlet</title>
-	<section id="sect-User_Guide-FCK_Portlet-Overview">
-		<title>Overview</title>
-		<para>
-			GateIn Portal provides users with FCK portlet used as a lightweight text editor in the web pages. All its common used functions (like Word editor) such as writing, formatting text, creating tables, inserting links or picture, etc.
-		</para>
-		<mediaobject>
-			<imageobject>
-				<imagedata fileref="images/FCK1.png" format="PNG" />
-			</imageobject>
-		</mediaobject>
-		<para>
-			FCK portlet also consists of some main elements:
-		</para>
-	</section>
-	
-	<section id="sect-User_Guide-FCK_Portlet-Toolbar">
-		<title>Toolbar</title>
-		<para>
-			The area at the top of the editor which contains many different buttons. You will use these buttons to activate the program functions.
-		</para>
-		<mediaobject>
-			<imageobject>
-				<imagedata fileref="images/ToolBar1.png" format="PNG" />
-			</imageobject>
-		</mediaobject>
-	</section>
-	
-	<section id="sect-User_Guide-FCK_Portlet-Editing_Area">
-		<title>Editing Area</title>
-		<para>
-			This area is under the toolbar. This area allows typing your text and format document.
-		</para>
-		<mediaobject>
-			<imageobject>
-				<imagedata fileref="images/EditingArea1.png" format="PNG" />
-			</imageobject>
-		</mediaobject>
-	</section>
-	
-	<section id="sect-User_Guide-FCK_Portlet-Context_menu">
-		<title>Context menu</title>
-		<para>
-			It is a menu with the functions that will appear when you right click anywhere in the space of editing area or an existing object.
-		</para>
-		<mediaobject>
-			<imageobject>
-				<imagedata fileref="images/ContextMenu1.png" format="PNG" />
-			</imageobject>
-		</mediaobject>
-	</section>
-	
-	<section id="sect-User_Guide-FCK_Portlet-Dialogs">
-		<title>Dialogs</title>
-		<para>
-			Small windows appear when some of the functions are activated, it is used to provide the necessary information to accomplish that functions. For an example: To insert a link, you need to open <emphasis role="bold">Link</emphasis> dialog by clicking!images/LinkIcon.png! icon on the Tool bar :
-		</para>
-		<mediaobject>
-			<imageobject>
-				<imagedata fileref="images/Link.png" format="PNG" />
-			</imageobject>
-		</mediaobject>
-	</section>
-
+         --><title>FCK Portlet</title>
+	<para>
+		GateIn Portal provides users with FCK portlet used as a lightweight text editor in the web pages. All its common used functions (like Word editor) such as writing, formatting text, creating tables, inserting links or picture, etc.
+	</para>
+	<mediaobject>
+		<imageobject>
+			<imagedata fileref="images/FCK1.png" format="PNG" width="444" />
+		</imageobject>
+	</mediaobject>
+	<para>
+		FCK portlet also consists of some main elements:
+	</para>
+	<variablelist>
+		<varlistentry>
+			<term>Toolbar</term>
+			<listitem>
+				<para>
+					The area at the top of the editor which contains many different buttons. You will use these buttons to activate the program functions.
+				</para>
+				<mediaobject>
+					<imageobject>
+						<imagedata fileref="images/ToolBar1.png" format="PNG" width="444" />
+					</imageobject>
+				</mediaobject>
+			</listitem>
+		</varlistentry>
+		<varlistentry>
+			<term>Editing Area</term>
+			<listitem>
+				<para>
+					This area is under the toolbar. This area allows typing your text and format document.
+				</para>
+				<mediaobject>
+					<imageobject>
+						<imagedata fileref="images/EditingArea1.png" format="PNG" width="444" />
+					</imageobject>
+				</mediaobject>
+			</listitem>
+		</varlistentry>
+		<varlistentry>
+			<term>Context menu</term>
+			<listitem>
+				<para>
+					It is a menu with the functions that will appear when you right click anywhere in the space of editing area or an existing object.
+				</para>
+				<mediaobject>
+					<imageobject>
+						<imagedata fileref="images/ContextMenu1.png" format="PNG" width="444" />
+					</imageobject>
+				</mediaobject>
+			</listitem>
+		</varlistentry>
+		<varlistentry>
+			<term>Dialogs</term>
+			<listitem>
+				<para>
+					Small windows appear when some of the functions are activated, it is used to provide the necessary information to accomplish that functions. For an example: To insert a link, you need to open <emphasis role="bold">Link</emphasis> dialog by clicking!images/LinkIcon.png! icon on the Tool bar :
+				</para>
+				<mediaobject>
+					<imageobject>
+						<imagedata fileref="images/Link.png" format="PNG" />
+					</imageobject>
+				</mediaobject>
+			</listitem>
+		</varlistentry>
+	</variablelist>
 </section>
 
 

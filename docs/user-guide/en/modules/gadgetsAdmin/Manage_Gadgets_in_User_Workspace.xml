@@ -2,7 +2,7 @@
 <!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
 ]>
 <section id="sect-User_Guide-Manage_Gadgets_in_User_Workspace">
-	<!--  
+	<!--   
 
     Copyright (C) 2009 eXo Platform SAS.
     
@@ -21,7 +21,7 @@
     Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
     02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
-  --><title>Manage Gadgets in User Workspace</title>
+   --><title>Manage Gadgets in User Workspace</title>
 	<orderedlist numeration="arabic">
 		<listitem>
 			<para>
@@ -50,7 +50,7 @@
 		</para>
 		<mediaobject>
 			<imageobject>
-				<imagedata fileref="images/GadgetManagement.png" format="PNG" />
+				<imagedata fileref="images/GadgetManagement.png" format="PNG" width="444" />
 			</imageobject>
 		</mediaobject>
 		<para>
@@ -101,7 +101,7 @@
 		</para>
 		<mediaobject>
 			<imageobject>
-				<imagedata fileref="images/GadgetManagement1.png" format="PNG" />
+				<imagedata fileref="images/GadgetManagement1.png" format="PNG" width="444" />
 			</imageobject>
 		</mediaobject>
 		<para>
@@ -118,7 +118,7 @@
 		</para>
 		<mediaobject>
 			<imageobject>
-				<imagedata fileref="images/UserWorkspace1.png" format="PNG" />
+				<imagedata fileref="images/UserWorkspace1.png" format="PNG" width="444" />
 			</imageobject>
 		</mediaobject>
 		<para>
@@ -126,7 +126,7 @@
 		</para>
 		<mediaobject>
 			<imageobject>
-				<imagedata fileref="images/AddApplication.png" format="PNG" />
+				<imagedata fileref="images/AddApplication.png" format="PNG" width="444" />
 			</imageobject>
 		</mediaobject>
 		<para>

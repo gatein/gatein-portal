@@ -2,7 +2,7 @@
 <!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
 ]>
 <section id="sect-User_Guide-Change_Portal_Skins">
-	<!--    
+	<!--     
 
     Copyright (C) 2009 eXo Platform SAS.
     
@@ -21,82 +21,73 @@
     Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
     02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
-    --><title>Change Portal Skins</title>
-	<section id="sect-User_Guide-Change_Portal_Skins-Overview">
-		<title>Overview</title>
+     --><title>Change Portal Skins</title>
 		<para>
 			GateIn Portal skins are graphic styles that help users display an attractive user interface. Each skin has its own characteristics with different backgrounds, icons, etc. In order to be user-friendly and flexible in use, users are allowed to change their skins without having edit rights on the portal.
 		</para>
 		<para>
 			skin switch that takes only effect on the user's current session until he signs out. You can change the skin permanently or temporarily.
 		</para>
-	</section>
+		<itemizedlist>
+			<listitem>
+				<para>
+					<xref linkend="User_Guide-Change_Portal_Skins-Change_the_skin_temporarily"/>
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					<xref linkend="User_Guide-Change_Portal_Skins-Change_the_skin_permanently"/>
+				</para>
+			</listitem>
+		</itemizedlist>	
+
+		<variablelist>
+		<varlistentry id="User_Guide-Change_Portal_Skins-Change_the_skin_temporarily">
+			<term>Change the skin temporarily</term>
+			<listitem>
+				<para>
+					Go to <emphasis role="bold">GateIn Start</emphasis> -&gt; <emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Skin Settings</emphasis>.
+				</para>
+			</listitem>
+		</varlistentry>
+		  <varlistentry id="User_Guide-Change_Portal_Skins-Change_the_skin_permanently">
+			<term>Change the skin permanently</term>
+			<listitem>
+				<procedure>
+					<step>
+						<para>
+							Go to <emphasis role="bold">GateIn Start</emphasis> -&gt; <emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Advanced</emphasis> --&gt; <emphasis role="bold">Edit Current portal</emphasis>
+						</para>
+					</step>
+					<step>
+						<para>
+							Click the edit icon!images/EditIcon.png! to edit portal properties.
+						</para>
+					</step>
+					<step>
+						<para>
+							In the <emphasis role="bold">Portal Setting</emphasis> tab: select one skin type in the <emphasis role="bold">Skin</emphasis> list field to change and display a skin.
+						</para>
+						<mediaobject>
+							<imageobject>
+								<imagedata fileref="images/Skin1.png" format="PNG" width="444" />
+							</imageobject>
+						</mediaobject>
+					</step>
+					<step>
+						<para>
+							Click <emphasis role="bold">Save</emphasis> and <emphasis role="bold">Finish</emphasis> icon !images/Finish1.png! so that the modification can take effect.
+						</para>
+					</step>
+				</procedure>
+			</listitem>
+		</varlistentry>
+	</variablelist>
 	
-	<section id="sect-User_Guide-Change_Portal_Skins-Change_the_skin_permanently">
-		<title>Change the skin permanently</title>
-		<orderedlist>
-			<listitem>
-				<para>
-					1. Go to <emphasis role="bold">GateIn Start</emphasis> -&gt; <emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Advanced</emphasis> --&gt; <emphasis role="bold">Edit Current portal</emphasis>
-				</para>
-			</listitem>
-			<listitem>
-				<para>
-					2. Click the edit icon!images/EditIcon.png! to edit portal properties.
-				</para>
-			</listitem>
-			<listitem>
-				<para>
-					3. In the <emphasis role="bold">Portal Setting</emphasis> tab: select one skin type in the <emphasis role="bold">Skin</emphasis> list field to change and display a skin.
-				</para>
-				<mediaobject>
-					<imageobject>
-						<imagedata fileref="images/Skin1.png" format="PNG" />
-					</imageobject>
-				</mediaobject>
-			</listitem>
-			<listitem>
-				<para>
-					4. Click <emphasis role="bold">Save</emphasis> and <emphasis role="bold">Finish</emphasis> icon !images/Finish1.png! so that the modification can take effect.
-				</para>
-			</listitem>
-		</orderedlist>
+<!--	<section >
+		<title></title>
 		<para>
-			For Portal 2.6
-		</para>
-		<orderedlist>
-			<listitem>
-				<para>
-					1. Click <emphasis role="bold">Edit Inline</emphasis> on the Toolbar. The <emphasis role="bold">Edit Inline Composer</emphasis> will appear.
-				</para>
-			</listitem>
-			<listitem>
-				<para>
-					2. Click <emphasis role="bold">Portal Properties</emphasis> to edit portal's properties.
-				</para>
-			</listitem>
-			<listitem>
-				<para>
-					3. In the <emphasis role="bold">Portal Setting</emphasis> tab: select one skin type in the <emphasis role="bold">Skin</emphasis> list field to change and display a skin.
-				</para>
-				<mediaobject>
-					<imageobject>
-						<imagedata fileref="images/PortalSet.png" format="PNG" />
-					</imageobject>
-				</mediaobject>
-			</listitem>
-			<listitem>
-				<para>
-					4. Click <emphasis role="bold">Save</emphasis> and the !images/DiskIcon.png! icon so that the modification can take effect.
-				</para>
-			</listitem>
-		</orderedlist>
-	</section>
-	
-	<section id="sect-User_Guide-Change_Portal_Skins-Change_the_skin_temporarily">
-		<title>Change the skin temporarily</title>
-		<para>
-			1. Go to <emphasis role="bold">GateIn Start</emphasis> -&gt; <emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Skin Settings</emphasis>.
+			1. 
 		</para>
 		<para>
 			For GateIn Portal 2.6
@@ -104,7 +95,7 @@
 		<orderedlist>
 			<listitem>
 				<para>
-					1. Go to <emphasis role="bold">GateIn</emphasis> on the Toolbar --&gt; click <emphasis role="bold">Change Skin</emphasis>.
+					1. Go to <emphasis role="bold">GateIn</emphasis> on the Toolbar &gt; click <emphasis role="bold">Change Skin</emphasis>.
 				</para>
 				<para>
 					The <emphasis role="bold">Skin Setting</emphasis> form is displayed with a list of all supported skins. The left pane contains the skin list and the right pane is used to display the template of the selected skin.
@@ -121,12 +112,12 @@
 				</para>
 				<mediaobject>
 					<imageobject>
-						<imagedata fileref="images/SkinSet1.png" format="PNG" />
+						<imagedata fileref="images/SkinSet1.png" format="PNG" width="444" />
 					</imageobject>
 				</mediaobject>
 			</listitem>
 		</orderedlist>
-	</section>
+	</section> -->
 
 </section>
 

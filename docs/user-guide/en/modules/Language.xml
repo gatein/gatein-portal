@@ -2,7 +2,7 @@
 <!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
 ]>
 <chapter id="chap-User_Guide-Language_administration">
-	<!--   
+	<!--    
 
     Copyright (C) 2009 eXo Platform SAS.
     
@@ -21,7 +21,7 @@
     Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
     02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
-   --><title>Language administration</title>
+    --><title>Language administration</title>
 	<xi:include href="language/Change_Interface_Language.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 	<xi:include href="language/Right_To_Left_Support_(RTL).xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 	<xi:include href="language/Multi-Language_Navigation_Nodes.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />

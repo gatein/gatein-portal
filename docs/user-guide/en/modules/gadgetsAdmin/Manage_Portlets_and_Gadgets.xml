@@ -2,7 +2,7 @@
 <!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
 ]>
 <section id="sect-User_Guide-Manage_Portlets_and_Gadgets">
-	<!--  
+	<!--   
 
 		Copyright (C) 2009 eXo Platform SAS. This is free software; you can
 		redistribute it and/or modify it under the terms of the GNU Lesser
@@ -16,7 +16,7 @@
 		this software; if not, write to the Free Software Foundation, Inc., 51
 		Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
 		site: http://www.fsf.org.
-	  --><title>Manage Portlets and Gadgets</title>
+	   --><title>Manage Portlets and Gadgets</title>
 	<section id="sect-User_Guide-Manage_Portlets_and_Gadgets-Introduction">
 		<title>Introduction</title>
 		<para>
@@ -36,7 +36,7 @@
 			1. Open a form to add a new category on the right pane by clicking the <emphasis role="bold">Add Category</emphasis> button on the action bar: 
 			<mediaobject>
 				<imageobject>
-					<imagedata fileref="images/AddCategory1.png" format="PNG" />
+					<imagedata fileref="images/AddCategory1.png" format="PNG" width="444" />
 				</imageobject>
 			</mediaobject>
 		</para>
@@ -90,7 +90,7 @@
 			<title>{info} This access permission enters the game whenever a user creates or modifies a page. In that moment the user only can see and use portlets in those categories on which he or she has access permission (defined by groups and memberships). {info}</title>
 			<mediaobject>
 				<imageobject>
-					<imagedata fileref="images/Permission2.png" format="PNG" />
+					<imagedata fileref="images/Permission2.png" format="PNG" width="444" />
 				</imageobject>
 			</mediaobject>
 		</figure>
@@ -140,7 +140,7 @@
 			1. Click the "add" icon!images/AddIcon.png! on the title bar of a category to which you want to add portlets. An interface will appear in the right pane as you can see below: 
 			<mediaobject>
 				<imageobject>
-					<imagedata fileref="images/AddPortlet2.png" format="PNG" />
+					<imagedata fileref="images/AddPortlet2.png" format="PNG" width="444" />
 				</imageobject>
 			</mediaobject>
 			<informaltable colsep="0" frame="none" rowsep="0">
@@ -196,7 +196,7 @@
 			1. Go to <emphasis role="bold">GateIn Start</emphasis> -&gt; <emphasis role="bold">Page Navigations</emphasis> -&gt; select <emphasis role="bold">Administration</emphasis> --&gt; <emphasis role="bold">Application Registry</emphasis>
 			<mediaobject>
 				<imageobject>
-					<imagedata fileref="images/PortletPermission.png" format="PNG" />
+					<imagedata fileref="images/PortletPermission.png" format="PNG" width="444" />
 				</imageobject>
 			</mediaobject>
 		</para>
@@ -231,7 +231,7 @@
 		</para>
 		<mediaobject>
 			<imageobject>
-				<imagedata fileref="images/Portlet.png" format="PNG" />
+				<imagedata fileref="images/Portlet.png" format="PNG" width="444" />
 			</imageobject>
 		</mediaobject>
 		<informaltable colsep="0" frame="none" rowsep="0">
@@ -281,7 +281,7 @@
 		</para>
 		<mediaobject>
 			<imageobject>
-				<imagedata fileref="images/Gadgetnew.png" format="PNG" />
+				<imagedata fileref="images/Gadgetnew.png" format="PNG" width="444" />
 			</imageobject>
 		</mediaobject>
 		<para>
@@ -296,7 +296,7 @@
 		</para>
 		<mediaobject>
 			<imageobject>
-				<imagedata fileref="images/AddGadgetnew.png" format="PNG" />
+				<imagedata fileref="images/AddGadgetnew.png" format="PNG" width="444" />
 			</imageobject>
 		</mediaobject>
 		<para>
@@ -314,7 +314,7 @@
 		</para>
 		<mediaobject>
 			<imageobject>
-				<imagedata fileref="images/CreateGadget1.png" format="PNG" />
+				<imagedata fileref="images/CreateGadget1.png" format="PNG" width="444" />
 			</imageobject>
 		</mediaobject>
 		<para>
@@ -331,7 +331,7 @@
 		</para>
 		<mediaobject>
 			<imageobject>
-				<imagedata fileref="images/ActionGadget.png" format="PNG" />
+				<imagedata fileref="images/ActionGadget.png" format="PNG" width="444" />
 			</imageobject>
 		</mediaobject>
 	</section>
@@ -346,7 +346,7 @@
 		</para>
 		<mediaobject>
 			<imageobject>
-				<imagedata fileref="images/Add.png" format="PNG" />
+				<imagedata fileref="images/Add.png" format="PNG" width="444" />
 			</imageobject>
 		</mediaobject>
 		<para>
@@ -354,7 +354,7 @@
 		</para>
 		<mediaobject>
 			<imageobject>
-				<imagedata fileref="images/Add3.png" format="PNG" />
+				<imagedata fileref="images/Add3.png" format="PNG" width="444" />
 			</imageobject>
 		</mediaobject>
 		<para>
@@ -373,7 +373,7 @@
 				1. Click the edit icon!images/EditGadget.png! . It will display a dialog: 
 				<mediaobject>
 					<imageobject>
-						<imagedata fileref="images/Source.png" format="PNG" />
+						<imagedata fileref="images/Source.png" format="PNG" width="444" />
 					</imageobject>
 				</mediaobject>
 			</para>

@@ -2,7 +2,7 @@
 <!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
 ]>
 <section id="sect-User_Guide-Manage_Pages">
-	<!--    
+	<!--     
 
     Copyright (C) 2009 eXo Platform SAS.
     
@@ -21,7 +21,7 @@
     Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
     02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
-    --><title>Manage Pages</title>
+     --><title>Manage Pages</title>
 	<para>
 		Only by using one page list can users add, edit, delete and view quickly and easily which pages you like to. Following these guides to manage pages:
 	</para>
@@ -35,7 +35,7 @@
 		</para>
 		<mediaobject>
 			<imageobject>
-				<imagedata fileref="images/ManagePage.png" format="PNG" />
+				<imagedata fileref="images/ManagePage.png" format="PNG" width="444" />
 			</imageobject>
 		</mediaobject>
 		<para>
@@ -48,7 +48,7 @@
 				</para>
 				<mediaobject>
 					<imageobject>
-						<imagedata fileref="images/ManagePage2.6.png" format="PNG" />
+						<imagedata fileref="images/ManagePage2.6.png" format="PNG" width="444" />
 					</imageobject>
 				</mediaobject>
 				<para>
@@ -98,7 +98,7 @@
 				</para>
 				<mediaobject>
 					<imageobject>
-						<imagedata fileref="images/PageSetting.png" format="PNG" />
+						<imagedata fileref="images/PageSetting.png" format="PNG" width="444" />
 					</imageobject>
 				</mediaobject>
 				<informaltable colsep="0" frame="none" rowsep="0">
@@ -182,7 +182,7 @@
 				</itemizedlist>
 				<mediaobject>
 					<imageobject>
-						<imagedata fileref="images/PageSetting1.png" format="PNG" />
+						<imagedata fileref="images/PageSetting1.png" format="PNG" width="444" />
 					</imageobject>
 				</mediaobject>
 				<itemizedlist>
@@ -194,7 +194,7 @@
 				</itemizedlist>
 				<mediaobject>
 					<imageobject>
-						<imagedata fileref="images/PermissionSetting1.png" format="PNG" />
+						<imagedata fileref="images/PermissionSetting1.png" format="PNG" width="444" />
 					</imageobject>
 				</mediaobject>
 				<itemizedlist>
@@ -233,7 +233,7 @@
 				</itemizedlist>
 				<mediaobject>
 					<imageobject>
-						<imagedata fileref="images/EditPermission1.png" format="PNG" />
+						<imagedata fileref="images/EditPermission1.png" format="PNG" width="444" />
 					</imageobject>
 				</mediaobject>
 				<itemizedlist>
@@ -245,7 +245,7 @@
 				</itemizedlist>
 				<mediaobject>
 					<imageobject>
-						<imagedata fileref="images/EditPermission2.png" format="PNG" />
+						<imagedata fileref="images/EditPermission2.png" format="PNG" width="444" />
 					</imageobject>
 				</mediaobject>
 			</listitem>

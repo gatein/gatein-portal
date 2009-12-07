@@ -2,7 +2,7 @@
 <!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
 ]>
 <section id="sect-User_Guide-Change_Node_Order">
-	<!--    
+	<!--     
 
     Copyright (C) 2009 eXo Platform SAS.
     
@@ -21,7 +21,7 @@
     Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
     02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
-    --><title>Change Node Order</title>
+     --><title>Change Node Order</title>
 	<para>
 		You can easily change the position of node on the navigation bar on their own convenient order by following these steps:
 	</para>

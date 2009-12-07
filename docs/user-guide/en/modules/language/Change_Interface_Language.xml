@@ -2,7 +2,7 @@
 <!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
 ]>
 <section id="sect-User_Guide-Change_Interface_Language">
-	<!--   
+	<!--    
 
     Copyright (C) 2009 eXo Platform SAS.
     
@@ -21,7 +21,7 @@
     Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
     02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
-   --><title>Change Interface Language</title>
+    --><title>Change Interface Language</title>
 	<para>
 		GateIn Portal provides users with the most familiar interface language to work with and perform all actions efficiently. The priority of the interface language is 1. User's language 2. Browser's language 3. Portal 's language. Thus to display your prefer language, you should pay attention to this order to change the language type appropriately.
 	</para>
@@ -80,7 +80,7 @@
 		</para>
 		<mediaobject>
 			<imageobject>
-				<imagedata fileref="images/InterfaceLanguage.png" format="PNG" />
+				<imagedata fileref="images/InterfaceLanguage.png" format="PNG" width="444" />
 			</imageobject>
 		</mediaobject>
 		<para>
@@ -103,7 +103,7 @@
 		</para>
 		<mediaobject>
 			<imageobject>
-				<imagedata fileref="images/InterfaceLanguage2.6.png" format="PNG" />
+				<imagedata fileref="images/InterfaceLanguage2.6.png" format="PNG" width="444" />
 			</imageobject>
 		</mediaobject>
 		<para>
@@ -135,7 +135,7 @@
 		</para>
 		<mediaobject>
 			<imageobject>
-				<imagedata fileref="images/InterfaceLanguage.png" format="PNG" />
+				<imagedata fileref="images/InterfaceLanguage.png" format="PNG" width="444" />
 			</imageobject>
 		</mediaobject>
 		<para>

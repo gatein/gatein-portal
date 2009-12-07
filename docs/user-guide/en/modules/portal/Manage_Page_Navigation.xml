@@ -2,7 +2,7 @@
 <!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
 ]>
 <section id="sect-User_Guide-Manage_Page_Navigation">
-	<!--    
+	<!--     
 
     Copyright (C) 2009 eXo Platform SAS.
     
@@ -21,13 +21,11 @@
     Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
     02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
-    --><title>Manage Page Navigation</title>
-	<section id="sect-User_Guide-Manage_Page_Navigation-Overview">
-		<title>Overview</title>
+     --><title>Manage Page Navigation</title>
 		<para>
-			In order to understand clearly about what the navigation is and navigation types that GateIn Portal supports, please refer the <xref linkend="sect-User_Guide-Navigation_concept" /> page.
+			In order to understand clearly about what the navigation is and navigation types that GateIn Portal supports, please refer the <xref linkend="sect-User_Guide-Navigation" /> page.
 		</para>
-	</section>
+
 	
 	<section id="sect-User_Guide-Manage_Page_Navigation-Portals_page_navigation">
 		<title>Portal's page navigation</title>
@@ -70,7 +68,7 @@
 		</para>
 		<mediaobject>
 			<imageobject>
-				<imagedata fileref="images/EditPortalNavigation2.png" format="PNG" />
+				<imagedata fileref="images/EditPortalNavigation2.png" format="PNG" width="444" />
 			</imageobject>
 		</mediaobject>
 		<para>
@@ -125,7 +123,7 @@
 		</para>
 		<mediaobject>
 			<imageobject>
-				<imagedata fileref="images/EditGroupNavigation2.png" format="PNG" />
+				<imagedata fileref="images/EditGroupNavigation2.png" format="PNG" width="444" />
 			</imageobject>
 		</mediaobject>
 		<para>

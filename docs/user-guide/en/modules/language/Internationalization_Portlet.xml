@@ -2,7 +2,7 @@
 <!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
 ]>
 <section id="sect-User_Guide-Internationalization_Portlet">
-	<!--   
+	<!--    
 
     Copyright (C) 2009 eXo Platform SAS.
     
@@ -21,13 +21,13 @@
     Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
     02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
-   --><title>Internationalization Portlet</title>
+    --><title>Internationalization Portlet</title>
 	<para>
 		This portlet is used to define a word or a phrase of the current language to an expected language. The form of this portlet is like:
 	</para>
 	<mediaobject>
 		<imageobject>
-			<imagedata fileref="images/Inter2.png" format="PNG" />
+			<imagedata fileref="images/Inter2.png" format="PNG" width="444" />
 		</imageobject>
 	</mediaobject>
 	<para>
@@ -40,7 +40,7 @@
 		</para>
 		<mediaobject>
 			<imageobject>
-				<imagedata fileref="images/ResourceData1.png" format="PNG" />
+				<imagedata fileref="images/ResourceData1.png" format="PNG" width="444" />
 			</imageobject>
 		</mediaobject>
 		<informaltable colsep="0" frame="none" rowsep="0">
@@ -98,7 +98,7 @@
 		</para>
 		<mediaobject>
 			<imageobject>
-				<imagedata fileref="images/Resource2.png" format="PNG" />
+				<imagedata fileref="images/Resource2.png" format="PNG" width="444" />
 			</imageobject>
 		</mediaobject>
 	</section>
@@ -117,7 +117,7 @@
 		</para>
 		<mediaobject>
 			<imageobject>
-				<imagedata fileref="images/Resource3.png" format="PNG" />
+				<imagedata fileref="images/Resource3.png" format="PNG" width="444" />
 			</imageobject>
 		</mediaobject>
 		<para>

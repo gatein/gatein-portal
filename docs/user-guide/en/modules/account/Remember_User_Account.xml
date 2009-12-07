@@ -2,7 +2,7 @@
 <!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
 ]>
 <section id="sect-User_Guide-Remember_User_Account">
-	<!--      
+	<!--        
 
     Copyright (C) 2009 eXo Platform SAS.
     
@@ -21,26 +21,34 @@
     Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
     02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
-      --><title>Remember User Account</title>
+        --><title>Remember User Account</title>
 	<para>
-		This feature allows users to return to the GateIn Portal and be automatically authenticated based on the value of a cookie provided by the browser. Thus users do not have to perform an explicit authentication again.
+		This feature allows users to return to the &PRODUCT; and be automatically authenticated based on the value of a cookie provided by the browser. Thus users do not have to perform an explicit authentication again.
 	</para>
 	<mediaobject>
 		<imageobject>
-			<imagedata fileref="images/RememberMe2.6.png" format="PNG" />
+			<imagedata fileref="images/RememberMe2.6.png" format="PNG" width="444" />
 		</imageobject>
 	</mediaobject>
+	<procedure>
+		<step>
+			<para>
+				Input your registered <emphasis role="bold">User name</emphasis> and <emphasis role="bold">Password</emphasis> .
+			</para>
+		</step>
+		<step>
+			<para>
+				Select the <emphasis role="bold">Remember My Login</emphasis> check box when logging in &PRODUCT; at the first time.
+			</para>
+		</step>
+		<step>
+			<para>
+				Click the <emphasis role="bold">Sign in</emphasis> button to sign in the portal.
+			</para>
+		</step>
+	</procedure>
 	<para>
-		1. Input your registered <emphasis role="bold">User name</emphasis> and <emphasis role="bold">Password</emphasis> .
-	</para>
-	<para>
-		2. Select the <emphasis role="bold">Remember My Login</emphasis> check box when logging in GateIn Portal at the first time.
-	</para>
-	<para>
-		3. Click the <emphasis role="bold">Sign in</emphasis> button to sign in the portal.
-	</para>
-	<para>
-		You must remember escaping the browser without signing out. The next time, you can automatically sign in the portal without signing in again with your first/last name welcome.
+		You must remember to close your browser without signing out (as signing out will delete the cookie). The next time, you can automatically sign in the portal without signing in again with your first/last name welcome.
 	</para>
 </section>
 

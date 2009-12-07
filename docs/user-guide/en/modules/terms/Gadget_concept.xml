@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='utf-8' ?>
 <!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
 ]>
-<section id="sect-User_Guide-Gadget_concept">
-	<!--       
+<section id="sect-User_Guide-Gadgets">
+	<!--         
 
     Copyright (C) 2009 eXo Platform SAS.
     
@@ -21,55 +21,13 @@
     Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
     02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
-       --><title>Gadget</title>
+         --><title>Gadgets</title>
 	<para>
-		A gadget is a mini web application that a portal user can to their web page. EPP provides some useful gadgets such as:
+		A gadget is a mini web application that a portal user can add to their web page. Some useful gadgets that are packaged by default with &PRODUCT;:
 	</para>
-		<formalpara>
-			<title>Calculator</title>
-				<para>
-					This mini-application lets you perform most basic arithmetic operations and can be themed to match the rest of your portal.
-				</para>
-		</formalpara>		
-		<mediaobject>
-			<imageobject>
-					<imagedata fileref="images/Calculator.png" format="PNG" />
-			</imageobject>
-		</mediaobject>
-		<formalpara>
-			<title>Calendar</title>
-				<para>
-					The calendar gadget allows users to switch easily between daily, monthly and yearly view and, again, is customizable to match your portal's theme. 
-				</para>
-		</formalpara>
-					<mediaobject>
-						<imageobject>
-							<imagedata fileref="images/Calendar.png" format="PNG" />
-						</imageobject>
-					</mediaobject>
-		<formalpara>
-			<title>Todo</title>
-			<para>
-				This application helps you organize your day and work group. It is designed to keep track of your tasks in a convenient and transparent way. Tasks can be highlighted with different colors. 
-			</para>
-		</formalpara>
-					<mediaobject>
-						<imageobject>
-							<imagedata fileref="images/Todo.png" format="PNG" />
-						</imageobject>
-					</mediaobject>
-		<formalpara>
-			<title>RSS Reader</title>
-			<para>
-				An RSS reader, or aggregator, collates content from various, user-specified feed sources and displays them in one location. This content can include, but isn't limited to, news headlines, blog posts or email. The RSS Reader gadget displays this content in a single window on your Portal page.
-			</para>
-		</formalpara>
-				<!--       
-				<mediaobject> <imageobject> <imagedata fileref="images/RSS.png"
-				format="PNG"></imagedata> </imageobject> </mediaobject>
-			       -->
+
 	<para>
-		Further gadgets can be obtained from the <ulink type="http" url="http://www.google.com/ig/directory?synd=open">Google Gadget</ulink> site. EPP is compatible with any gadget available here.
+		See the <emphasis role="bold">Default Gadgets</emphasis> section of <xref linkend="sect-User_Guide-Dashboard_Portlet-Using_the_Dashboard_Workspace" /> for more information about these gadgets.
 	</para>
 </section>
 

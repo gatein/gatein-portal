@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='utf-8' ?>
 <!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
 ]>
-<section id="sect-User_Guide-Navigation_concept">
-	<!--       
+<section id="sect-User_Guide-Navigation">
+	<!--         
 
     Copyright (C) 2009 eXo Platform SAS.
     
@@ -21,28 +21,40 @@
     Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
     02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
-       --><title>Navigation</title>
+         --><title>Navigation</title>
 	<para>
-		Portal navigations are menus that list hyperlinks to other parts of a Portal. They can help users to visualize the structure of a site. The navigation menus in EPP 5.0 are located in a bar across the top of the 'Home' page. There are three navigation types:
+		Portal navigations are menus that list hyperlinks to other parts of a Portal. They can help users to visualize the structure of a site. The navigation menus in EPP 5.0 are located in a bar across the top of the 'Home' page.
 	</para>
-	<formalpara>
-		<title>Site</title>
-		<para>
-			This navigation links to separate sites of the main Portal. Each site has only one navigation and it is automatically created when the site is created. This functionality allows different sites to administer some Portal aspects, such as portlets, individually while maintaining other content standaradized with the parent Portal.
-		</para>
-	</formalpara>
-	<formalpara>
-		<title>Group</title>
-		<para>
-			The content of this navigation differs depending on the type of account logged in. For user accounts the Groups navigation holds personal links set up by the user. For management accounts, it keeps the links to pages for registered Portal users as well as adminisrative tasks and personal links. In the administrator account, the navigation adds further management abilities such as Internationalization and community management.
-		</para>
-	</formalpara>
-	<formalpara>
-		<title>Dashboard</title>
-		<para>
-			Each user has own navigation 'Dashboard' that houses links and portlets (or gadgets) that the user has selected. A user's navigation is created automatically when user is registered. This navigation only can be deleted when the user is deleted.
-		</para>
-	</formalpara>
+	<para>
+		There are three navigation types.
+	</para>
+	<variablelist>
+	  <varlistentry>
+		<term>Site</term>
+		<listitem>
+			<para>
+				This navigation links to separate sites of the main Portal. Each site has only one navigation and it is automatically created when the site is created. This functionality allows different sites to administer some Portal aspects, such as portlets, individually while maintaining other content standaradized with the parent Portal.
+			</para>
+		</listitem>
+	</varlistentry>
+	<varlistentry>
+		<term>Group</term>
+		<listitem>
+			<para>
+				The content of this navigation differs depending on the type of account logged in. For user accounts the Groups navigation holds personal links set up by the user. For management accounts, it keeps the links to pages for registered Portal users as well as adminisrative tasks and personal links. In the administrator account, the navigation adds further management abilities such as Internationalization and community management.
+			</para>
+		</listitem>
+	</varlistentry>
+	<varlistentry>
+		<term>Dashboard</term>
+		<listitem>
+			<para>
+				Each user has own navigation 'Dashboard' that houses links and portlets (or gadgets) that the user has selected. A user's navigation is created automatically when user is registered. This navigation only can be deleted when the user is deleted.
+			</para>
+		</listitem>
+	</varlistentry>
+
+	</variablelist>
 </section>
 
 

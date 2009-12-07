@@ -2,7 +2,7 @@
 <!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
 ]>
 <section id="sect-User_Guide-Switching_between_Portals">
-	<!--    
+	<!--     
 
     Copyright (C) 2009 eXo Platform SAS.
     
@@ -21,7 +21,7 @@
     Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
     02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
-    --><title>Switching between Portals</title>
+     --><title>Switching between Portals</title>
 	<para>
 		GateIn Portal allows users to switch between Portals simply and easily. You can use another portals such as gateway, starting site if you are given the appropriate permissions by the administrators.
 	</para>

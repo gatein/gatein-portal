@@ -2,7 +2,7 @@
 <!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
 ]>
 <section id="sect-User_Guide-Sign_In_and_Sign_Out">
-	<!--     
+	<!--       
 
     Copyright (C) 2009 eXo Platform SAS.
     
@@ -21,129 +21,146 @@
     Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
     02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
-     --><title>Sign In and Sign Out</title>
-	<section id="sect-User_Guide-Sign_In_and_Sign_Out-Sign_In">
+       --><title>Sign In and Sign Out</title>
+
+		<para>
+			After registering your account, you can easily sign in to &PRODUCT; to go into your private mode:
+		</para>
+	<procedure>
 		<title>Sign In</title>
-		<para>
-			After registering your account, you can easily sign in GateIn Portal to go into your private mode:
-		</para>
-		<para>
-			1. Go to a Portal in the public mode by inputting URL in the address bar (e.g: http://localhost:8080/portal)
-		</para>
-		<para>
-			2. Click the <emphasis role="bold">Sign in</emphasis> link at the top right of a page if you are current in the Classic portal. The <emphasis role="bold">Sign in</emphasis> form appears:
-		</para>
-		<mediaobject>
-			<imageobject>
-				<imagedata fileref="images/SignIn2.6.png" format="PNG" />
-			</imageobject>
-		</mediaobject>
-		<para>
-			3. Input your registered <emphasis role="bold">User name</emphasis> and <emphasis role="bold">Password</emphasis> .
-		</para>
-		<para>
-			2. Select the <emphasis role="bold">Remember My Login</emphasis> check box when you sign in GateIn Portal at the first time if you want to automatically return to GateIn Portal without signing in again. You can see <xref linkend="sect-User_Guide-Remember_User_Account" /> for more details.
-		</para>
-		<para>
-			3.Click the <emphasis role="bold">Sign in</emphasis> button to accept or <emphasis role="bold">Discard</emphasis> to escape the <emphasis role="bold">Sign in</emphasis> form.
-		</para>
-		<para>
-			Details:
-		</para>
-		<informaltable colsep="0" frame="none" rowsep="0">
-			<tgroup cols="2">
-				<colspec align="center"></colspec>
-				<colspec align="center"></colspec>
-				<tbody>
-					<row>
-						<entry>
-							<emphasis role="bold"> Field </emphasis>
-						</entry>
-						<entry>
-							<emphasis role="bold"> Description </emphasis>
-						</entry>
-					</row>
-					<row>
-						<entry>
-							User name
-						</entry>
-						<entry>
-							The registered user name.
-						</entry>
-					</row>
-					<row>
-						<entry>
-							Password
-						</entry>
-						<entry>
-							The registered password.
-						</entry>
-					</row>
-					<row>
-						<entry>
-							Remember My Login
-						</entry>
-						<entry>
-							This option allows users to return to GateIn Portal and be automatically authenticated based on the value of a cookie provided by the browser. Thus users do not have to perform an explicit authentication again.
-						</entry>
-					</row>
-					<row>
-						<entry>
-							Forgot your User Name/Password?
-						</entry>
-						<entry>
-							To follow some steps to get the forgotten user name or password. Please refer [Portal:Account and Password Retrieval] for more details.
-						</entry>
-					</row>
-					<row>
-						<entry>
-							Sign in
-						</entry>
-						<entry>
-							To sign into GateIn Portal with user name and password.
-						</entry>
-					</row>
-					<row>
-						<entry>
-							Discard
-						</entry>
-						<entry>
-							To close the *Sign In* form.
-						</entry>
-					</row>
-				</tbody>
-			</tgroup>
-		</informaltable>
-		<para>
-			In case, <emphasis role="bold">User Name</emphasis> does not exist or the inputted User name/Password is invalid, there will be an alert message requires you to input the right value. To login again, you click the <emphasis role="bold">OK</emphasis> button on the alert message and enter <emphasis role="bold">User Name</emphasis> and <emphasis role="bold">Password</emphasis> again.
-		</para>
-		<para>
-			After signing in, you will be redirected to the authenticated homepage:
-		</para>
-		<para>
-			After signing in, you will be redirected to the authenticated homepage and welcomed with your full First Name and Last Name:
-		</para>
-		<mediaobject>
-			<imageobject>
-				<imagedata fileref="images/PortalHome.png" format="PNG" />
-			</imageobject>
-		</mediaobject>
-	</section>
+			<step>
+				<para>
+					Go to a Portal in the public mode by inputting URL in the address bar (e.g: http://localhost:8080/portal)
+				</para>
+			</step>
+			<step>
+				<para>
+					Click the <emphasis role="bold">Sign in</emphasis> link at the top right of a page if you are current in the Classic portal. The <emphasis role="bold">Sign in</emphasis> form appears:
+			</para>
+			<mediaobject>
+				<imageobject>
+					<imagedata fileref="images/SignIn2.6.png" format="PNG" width="444" />
+				</imageobject>
+			</mediaobject>
+			</step>
+			<step>
+				<para>
+					Input your registered <emphasis role="bold">User name</emphasis> and <emphasis role="bold">Password</emphasis> .
+				</para>
+			</step>
+			<step>
+				<para>
+					Select the <emphasis role="bold">Remember My Login</emphasis> check box when you sign in &PRODUCT; at the first time if you want to automatically return to &PRODUCT; without signing in again. You can see <xref linkend="sect-User_Guide-Remember_User_Account" /> for more details.
+				</para>
+			</step>
+			<step>
+				<para>
+					Click the <emphasis role="bold">Sign in</emphasis> button to accept or <emphasis role="bold">Discard</emphasis> to escape the <emphasis role="bold">Sign in</emphasis> form.
+				</para>
+			</step>
+			<step>
+				<para>
+					Details:
+				</para>
+				<informaltable colsep="0" frame="none" rowsep="0">
+					<tgroup cols="2">
+						<colspec align="center"></colspec>
+						<colspec align="center"></colspec>
+						<tbody>
+							<row>
+								<entry>
+									<emphasis role="bold"> Field </emphasis>
+								</entry>
+								<entry>
+									<emphasis role="bold"> Description </emphasis>
+								</entry>
+							</row>
+							<row>
+								<entry>
+									User name
+								</entry>
+								<entry>
+									The registered user name.
+								</entry>
+							</row>
+							<row>
+								<entry>
+									Password
+								</entry>
+								<entry>
+									The registered password.
+								</entry>
+							</row>
+							<row>
+								<entry>
+									Remember My Login
+								</entry>
+								<entry>
+									This option allows users to return to &PRODUCT; and be automatically authenticated based on the value of a cookie provided by the browser. Thus users do not have to perform an explicit authentication again.
+								</entry>
+							</row>
+							<row>
+								<entry>
+									Forgot your User Name/Password?
+								</entry>
+								<entry>
+									To follow some steps to get the forgotten user name or password. Please refer [Portal:Account and Password Retrieval] for more details.
+								</entry>
+							</row>
+							<row>
+								<entry>
+									Sign in
+								</entry>
+								<entry>
+									To sign into &PRODUCT; with user name and password.
+								</entry>
+							</row>
+							<row>
+								<entry>
+									Discard
+								</entry>
+								<entry>
+									To close the *Sign In* form.
+								</entry>
+							</row>
+						</tbody>
+					</tgroup>
+				</informaltable>
+				<para>
+					In case, <emphasis role="bold">User Name</emphasis> does not exist or the inputted User name/Password is invalid, there will be an alert message requires you to input the right value. To login again, you click the <emphasis role="bold">OK</emphasis> button on the alert message and enter <emphasis role="bold">User Name</emphasis> and <emphasis role="bold">Password</emphasis> again.
+				</para>
+				<para>
+					After signing in, you will be redirected to the authenticated homepage:
+				</para>
+				<para>
+					After signing in, you will be redirected to the authenticated homepage and welcomed with your full First Name and Last Name:
+				</para>
+					<mediaobject>
+						<imageobject>
+							<imagedata fileref="images/PortalHome.png" format="PNG" width="444" />
+						</imageobject>
+					</mediaobject>
+			</step>
+	</procedure>
 	
-	<section id="sect-User_Guide-Sign_In_and_Sign_Out-Sign_Out">
+	<procedure>
 		<title>Sign Out</title>
-		<para>
-			This function lets you get back to the anonymous portal. It ends your current portal session.
-		</para>
-		<para>
-			In the upper left corner of the screen, click <emphasis role="bold">Sign out</emphasis> :
-		</para>
-		<mediaobject>
-			<imageobject>
-				<imagedata fileref="images/SignOut.png" format="PNG" />
-			</imageobject>
-		</mediaobject>
-	</section>
+			<step>
+				<para>
+					This function lets you get back to the anonymous portal. It ends your current portal session.
+				</para>
+			</step>
+			<step>
+				<para>
+					In the upper left corner of the screen, click <emphasis role="bold">Sign out</emphasis> :
+				</para>
+				<mediaobject>
+					<imageobject>
+						<imagedata fileref="images/SignOut.png" format="PNG" />
+					</imageobject>
+				</mediaobject>
+			</step>
+	</procedure>
 
 </section>
 

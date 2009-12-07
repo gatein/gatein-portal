@@ -2,7 +2,7 @@
 <!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
 ]>
 <section id="sect-User_Guide-Create_a_New_Portal">
-	<!--    
+	<!--     
 
     Copyright (C) 2009 eXo Platform SAS.
     
@@ -21,7 +21,7 @@
     Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
     02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
-    --><title>Create a New Portal</title>
+     --><title>Create a New Portal</title>
 	<para>
 		Creating a new portal requires you to have a special permission that only an administrator can give you. You need follow these guides to create a new portal.
 	</para>
@@ -37,7 +37,7 @@
 					Click the <emphasis role="bold">Add New Portal</emphasis> button. By default, the <emphasis role="bold">Create New Portal</emphasis> form is shown with the <emphasis role="bold">Portal Templates</emphasis> tab. 
 					<mediaobject>
 						<imageobject>
-							<imagedata fileref="images/PortalTemplate2.6.png" format="PNG" />
+							<imagedata fileref="images/PortalTemplate2.6.png" format="PNG" width="444" />
 						</imageobject>
 					</mediaobject>
 				</para>
@@ -45,7 +45,7 @@
 					By default, Portal template is Classic. Select the <emphasis role="bold">Portal Setting</emphasis> tab. 
 					<mediaobject>
 						<imageobject>
-							<imagedata fileref="images/PortalSetting2.5.png" format="PNG" />
+							<imagedata fileref="images/PortalSetting2.5.png" format="PNG" width="444" />
 						</imageobject>
 					</mediaobject>
 				</para>

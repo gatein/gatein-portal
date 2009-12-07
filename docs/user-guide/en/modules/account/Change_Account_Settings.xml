@@ -2,7 +2,7 @@
 <!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
 ]>
 <section id="sect-User_Guide-Change_Account_Settings">
-	<!--      
+	<!--        
 
     Copyright (C) 2009 eXo Platform SAS.
     
@@ -21,11 +21,11 @@
     Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
     02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
-      --><title>Change Account Settings</title>
-	<!--    	<para>
+        --><title>Change Account Settings</title>
+	<!--      	<para>
 		There are two ways to change the account information:
 	</para>
-		 		<title>The 1^st^ way</title>       -->
+		 		<title>The 1^st^ way</title>         -->
 	<para>
 		All users can follow this guides to change your account information.
 	</para>
@@ -42,45 +42,65 @@
 	</para>
 	<mediaobject>
 		<imageobject>
-			<imagedata fileref="images/AccountProfiles3.png" format="PNG" />
+			<imagedata fileref="images/AccountProfiles3.png" format="PNG" width="444" />
 		</imageobject>
 	</mediaobject>
 	<para>
 		If you want to change your <emphasis role="bold">Account Profiles</emphasis> :
 	</para>
-	<para>
-		1. Select the <emphasis role="bold">Account Profiles</emphasis> tab. It will display your current basic information.
-	</para>
-	<para>
-		2. Your <emphasis role="bold">User Name</emphasis> can not be changed. You can change these fields: <emphasis role="bold">First Name</emphasis> , <emphasis role="bold">Last Name</emphasis> and <emphasis role="bold">Email</emphasis> .
-	</para>
-	<para>
-		3. Click the <emphasis role="bold">Save</emphasis> button to accept changes.
-	</para>
+	<procedure>
+		<step>
+			<para>
+				Select the <emphasis role="bold">Account Profiles</emphasis> tab. It will display your current basic information.
+			</para>
+		</step>
+		<step>
+			<para>
+				Your <emphasis role="bold">User Name</emphasis> can not be changed. You can change these fields: <emphasis role="bold">First Name</emphasis> , <emphasis role="bold">Last Name</emphasis> and <emphasis role="bold">Email</emphasis> .
+			</para>
+		</step>
+		<step>
+			<para>
+				Click the <emphasis role="bold">Save</emphasis> button to accept changes.
+			</para>
+		</step>
+	</procedure> 
 	<para>
 		If you want to change your <emphasis role="bold">Password</emphasis> :
 	</para>
-	<para>
-		1. Select the <emphasis role="bold">Change Password</emphasis> tab, it will display a form:
-	</para>
-	<mediaobject>
-		<imageobject>
-			<imagedata fileref="images/ChangePassword.png" format="PNG" />
-		</imageobject>
-	</mediaobject>
-	<para>
-		2. Input your current password to identify that you are the owner of this account.
-	</para>
-	<para>
-		3. Input your new password, it must have at least 6 characters
-	</para>
-	<para>
-		4. Reinput your password in the <emphasis role="bold">Confirm New Password</emphasis> field.
-	</para>
-	<para>
-		5. Click the <emphasis role="bold">Save</emphasis> button to accept changes.
-	</para>
-	<!--       
+	<procedure>
+		<step>
+			<para>
+				Select the <emphasis role="bold">Change Password</emphasis> tab, it will display a form:
+			</para>
+			<mediaobject>
+				<imageobject>
+					<imagedata fileref="images/ChangePassword.png" format="PNG" width="444" />
+				</imageobject>
+			</mediaobject>
+		 </step>
+		 <step>
+			<para>
+				Input your current password to identify that you are the owner of this account.
+			</para>
+		 </step>
+		 <step>
+			<para>
+				Input your new password, it must have at least 6 characters
+			</para>
+		 </step>
+		 <step>
+			<para>
+				Reinput your password in the <emphasis role="bold">Confirm New Password</emphasis> field.
+			</para>
+		 </step>
+		 <step>
+			<para>
+				Click the <emphasis role="bold">Save</emphasis> button to accept changes.
+			</para>
+		 </step>
+	</procedure>
+	<!--         
 	<section>
 		<title>The 2^nd^ way</title>
 
@@ -91,7 +111,7 @@
 		Go to
 		<emphasis role="bold">GateIn Start</emphasis>
 		-&gt; <emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Account Settings</emphasis></para><mediaobject><imageobject><imagedata fileref="images/ChangeLanguage3.png" format="PNG"></imagedata></imageobject></mediaobject><para>It will also open the <emphasis role="bold">Account Profiles</emphasis> form.</para><mediaobject><imageobject><imagedata fileref="images/AccountProfiles1.png" format="PNG"></imagedata></imageobject></mediaobject><para>You can change your information in the <emphasis role="bold">Account Profiles</emphasis> tab and the <emphasis role="bold">Change Password</emphasis> tab as the same as the first way.</para>
-		   	</section>    -->
+		   	</section>      -->
 </section>
 
 

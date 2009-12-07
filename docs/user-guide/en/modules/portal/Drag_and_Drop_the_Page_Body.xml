@@ -2,7 +2,7 @@
 <!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
 ]>
 <section id="sect-User_Guide-Drag_and_Drop_the_Page_Body">
-	<!--    
+	<!--     
 
     Copyright (C) 2009 eXo Platform SAS.
     
@@ -21,7 +21,7 @@
     Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
     02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
-    --><title>Drag and Drop the Page Body</title>
+     --><title>Drag and Drop the Page Body</title>
 	<para>
 		You can easily drag and drop page body to the specific place where you want to in the page by following guides:
 	</para>
@@ -30,7 +30,7 @@
 	</para>
 	<mediaobject>
 		<imageobject>
-			<imagedata fileref="images/DragPage1.png" format="PNG" />
+			<imagedata fileref="images/DragPage1.png" format="PNG" width="444" />
 		</imageobject>
 	</mediaobject>
 	<para>
@@ -38,7 +38,7 @@
 	</para>
 	<mediaobject>
 		<imageobject>
-			<imagedata fileref="images/DragPage3.png" format="PNG" />
+			<imagedata fileref="images/DragPage3.png" format="PNG" width="444" />
 		</imageobject>
 	</mediaobject>
 </section>
