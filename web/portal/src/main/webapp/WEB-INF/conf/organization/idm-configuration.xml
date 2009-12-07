@@ -32,7 +32,7 @@
       <init-params>
          <value-param>
             <name>config</name>
-            <value>war:/conf/organization/idm-config.xml</value>
+            <value>war:/conf/organization/picketlink-idm/picketlink-idm-config.xml</value>
          </value-param>
       </init-params>
    </component>
@@ -52,17 +52,17 @@
          <init-params>
             <values-param>
                <name>hibernate.mapping</name>
-               <value>mappings/HibernateRealm.hbm.xml</value>
-               <value>mappings/HibernateIdentityObjectCredentialBinaryValue.hbm.xml</value>
-               <value>mappings/HibernateIdentityObjectAttributeBinaryValue.hbm.xml</value>
-               <value>mappings/HibernateIdentityObject.hbm.xml</value>
-               <value>mappings/HibernateIdentityObjectCredential.hbm.xml</value>
-               <value>mappings/HibernateIdentityObjectCredentialType.hbm.xml</value>
-               <value>mappings/HibernateIdentityObjectAttribute.hbm.xml</value>
-               <value>mappings/HibernateIdentityObjectType.hbm.xml</value>
-               <value>mappings/HibernateIdentityObjectRelationship.hbm.xml</value>
-               <value>mappings/HibernateIdentityObjectRelationshipType.hbm.xml</value>
-               <value>mappings/HibernateIdentityObjectRelationshipName.hbm.xml</value>
+               <value>picketlink-idm/mappings/HibernateRealm.hbm.xml</value>
+               <value>picketlink-idm/mappings/HibernateIdentityObjectCredentialBinaryValue.hbm.xml</value>
+               <value>picketlink-idm/mappings/HibernateIdentityObjectAttributeBinaryValue.hbm.xml</value>
+               <value>picketlink-idm/mappings/HibernateIdentityObject.hbm.xml</value>
+               <value>picketlink-idm/mappings/HibernateIdentityObjectCredential.hbm.xml</value>
+               <value>picketlink-idm/mappings/HibernateIdentityObjectCredentialType.hbm.xml</value>
+               <value>picketlink-idm/mappings/HibernateIdentityObjectAttribute.hbm.xml</value>
+               <value>picketlink-idm/mappings/HibernateIdentityObjectType.hbm.xml</value>
+               <value>picketlink-idm/mappings/HibernateIdentityObjectRelationship.hbm.xml</value>
+               <value>picketlink-idm/mappings/HibernateIdentityObjectRelationshipType.hbm.xml</value>
+               <value>picketlink-idm/mappings/HibernateIdentityObjectRelationshipName.hbm.xml</value>
             </values-param>
          </init-params>
       </component-plugin>

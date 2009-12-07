@@ -30,7 +30,7 @@
       <init-params>
          <value-param>
             <name>config</name>
-            <value>war:/conf/organization/idm-config.xml</value>
+            <value>war:/conf/organization/picketlink-idm/picketlink-idm-config.xml</value>
          </value-param>
       </init-params>
    </component>
