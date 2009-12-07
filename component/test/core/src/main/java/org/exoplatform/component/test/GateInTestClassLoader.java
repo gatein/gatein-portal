@@ -18,9 +18,10 @@
  */
 package org.exoplatform.component.test;
 
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
+
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -50,6 +51,9 @@ public final class GateInTestClassLoader extends ClassLoader
    /** . */
    private final Set<String> portalConfigPaths;
 
+   /** . */
+   private Logger log = LoggerFactory.getLogger(AbstractGateInTest.class);
+
    public GateInTestClassLoader(ClassLoader parent, Set<String> rootConfigPaths, Set<String> portalConfigPaths)
    {
       super(parent);
@@ -62,14 +66,15 @@ public final class GateInTestClassLoader extends ClassLoader
    @Override
    public Enumeration<URL> getResources(String name) throws IOException
    {
-      System.out.println("name = " + name);
       if ("conf/configuration.xml".equals(name))
       {
-         return getURLs(rootConfigPaths);
+         log.info("About to load root configuration");
+         return getResourceURLs(rootConfigPaths);
       }
       else if ("conf/portal/configuration.xml".equals(name))
       {
-         return getURLs(portalConfigPaths);
+         log.info("About to load portal configuration");
+         return getResourceURLs(portalConfigPaths);
       }
       else if ("conf/portal/test-configuration.xml".equals(name))
       {
@@ -81,12 +86,14 @@ public final class GateInTestClassLoader extends ClassLoader
       }
    }
 
-   private Enumeration<URL> getURLs(Set<String> paths) throws IOException
+   private Enumeration<URL> getResourceURLs(Set<String> paths) throws IOException
    {
       ArrayList<URL> urls = new ArrayList<URL>();
       for (String path : paths)
       {
-         urls.addAll(Collections.list(super.getResources(path)));
+         ArrayList<URL> resourceURLs = Collections.list(super.getResources(path));
+         log.info("Want to load for resource named " + path + " the urls " + resourceURLs);
+         urls.addAll(resourceURLs);
       }
       return Collections.enumeration(urls);
    }
