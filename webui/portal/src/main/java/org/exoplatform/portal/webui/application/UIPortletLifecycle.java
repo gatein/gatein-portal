@@ -46,6 +46,7 @@ import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.portlet.PortletMode;
 import javax.portlet.WindowState;
 
 /**
@@ -170,7 +171,7 @@ public class UIPortletLifecycle<S, C extends Serializable, I> extends Lifecycle<
             else
             {
                int portalMode = Util.getUIPortalApplication().getModeState();
-               if (portalMode % 2 == 0)
+               if (portalMode % 2 == 0 || uicomponent.getCurrentPortletMode().equals(PortletMode.EDIT))
                {
                   PortletInvocationResponse response = uicomponent.invoke(renderInvocation);
                   if (response instanceof FragmentResponse)

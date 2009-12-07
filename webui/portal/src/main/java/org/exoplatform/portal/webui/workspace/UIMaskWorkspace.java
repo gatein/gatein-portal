@@ -24,7 +24,6 @@ import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIComponentDecorator;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
 
@@ -79,7 +78,7 @@ public class UIMaskWorkspace extends UIComponentDecorator
 
    public void setUpdated(boolean bln)
    {
-      this.isUpdated = bln;
+//      this.isUpdated = bln;
    }
 
    public <T extends UIComponent> T createUIComponent(Class<T> clazz, String configId, String id) throws Exception

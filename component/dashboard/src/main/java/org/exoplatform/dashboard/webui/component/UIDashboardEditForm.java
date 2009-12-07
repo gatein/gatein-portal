@@ -19,6 +19,8 @@
 
 package org.exoplatform.dashboard.webui.component;
 
+import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
@@ -99,12 +101,6 @@ public class UIDashboardEditForm extends UIForm
             throw new MessageException(new ApplicationMessage("NumberFormatValidator.msg.Invalid-number", args));
          }
 
-         //      if (totalCols < 1 || totalCols > MAX_COLUMNS) {
-         //        uiInput.setValue(lastValue);
-         //        throw new MessageException(new ApplicationMessage(
-         //            "NumberInRangeValidator.msg.Invalid-number", args));
-         //      }
-
          uiInput = uiForm.getUIStringInput(DashboardParent.ISPRIVATE);
          pref.setValue(DashboardParent.ISPRIVATE, uiInput.getValue());
 
@@ -115,7 +111,8 @@ public class UIDashboardEditForm extends UIForm
             ((UIContainer)uiForm.getParent()).getChild(UIDashboard.class).getChild(UIDashboardContainer.class);
          uiDashboardContainer.setColumns(totalCols);
          uiDashboardContainer.save();
-         pcontext.setApplicationMode(PortletMode.VIEW);
+         if (Util.getUIPortalApplication().getModeState() == UIPortalApplication.NORMAL_MODE)
+            pcontext.setApplicationMode(PortletMode.VIEW);
       }
    }
 }

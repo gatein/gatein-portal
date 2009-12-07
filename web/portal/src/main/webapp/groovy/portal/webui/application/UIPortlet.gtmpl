@@ -241,7 +241,7 @@
 							<div class="MiddleDecoratorLeft">
 								<div class="MiddleDecoratorRight">
 									<div class="MiddleDecoratorCenter">
-										<div id="${portletId}" style="width: 100%">
+										<div id="<%=portalMode == UIPortalApplication.NORMAL_MODE ? portletId : "EditMode-"+ portletId%>" style="width: 100%">
 											<div class="PORTLET-FRAGMENT UIResizableBlock UIApplication" style="width: 100%; height: $windowHeight;">
 												<% if(windowState != WindowState.MINIMIZED) out.println(portletContent) %>
 											</div>		
@@ -276,7 +276,7 @@
 					cssStyle += "height: "+ windowHeight +";";
 					cssStyle += "\"";
 		%>
-						<div id="${portletId}">
+						<div id="<%=portalMode == UIPortalApplication.NORMAL_MODE ? portletId : "EditMode-"+ portletId%>">
 							<div class="PORTLET-FRAGMENT"	${cssStyle}>
 								<% out.println(portletContent); %>
 							</div>

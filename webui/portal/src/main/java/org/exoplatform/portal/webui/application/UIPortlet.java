@@ -94,20 +94,15 @@ import java.util.Set;
 import java.util.UUID;
 
 /** May 19, 2006 */
-@ComponentConfig(
-   lifecycle = UIPortletLifecycle.class,
-   template = "system:/groovy/portal/webui/application/UIPortlet.gtmpl",
-   events = {
-      @EventConfig(listeners = RenderActionListener.class),
-      @EventConfig(listeners = ChangePortletModeActionListener.class),
-      @EventConfig(listeners = ChangeWindowStateActionListener.class),
-      @EventConfig(listeners = DeleteComponentActionListener.class, confirm = "UIPortlet.deletePortlet"),
-      @EventConfig(listeners = EditPortletActionListener.class),
-      @EventConfig(phase = Phase.PROCESS, listeners = ProcessActionActionListener.class),
-      @EventConfig(phase = Phase.PROCESS, listeners = ServeResourceActionListener.class),
-      @EventConfig(phase = Phase.PROCESS, listeners = ProcessEventsActionListener.class)
-   }
-)
+@ComponentConfig(lifecycle = UIPortletLifecycle.class, template = "system:/groovy/portal/webui/application/UIPortlet.gtmpl", events = {
+   @EventConfig(listeners = RenderActionListener.class),
+   @EventConfig(listeners = ChangePortletModeActionListener.class),
+   @EventConfig(listeners = ChangeWindowStateActionListener.class),
+   @EventConfig(listeners = DeleteComponentActionListener.class, confirm = "UIPortlet.deletePortlet"),
+   @EventConfig(listeners = EditPortletActionListener.class),
+   @EventConfig(phase = Phase.PROCESS, listeners = ProcessActionActionListener.class),
+   @EventConfig(phase = Phase.PROCESS, listeners = ServeResourceActionListener.class),
+   @EventConfig(phase = Phase.PROCESS, listeners = ProcessEventsActionListener.class)})
 public class UIPortlet<S, C extends Serializable> extends UIApplication
 {
 
@@ -140,18 +135,25 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
    private String applicationId;
 
    private String theme_;
+
    private String portletStyle;
+
    private boolean showPortletMode = true;
 
    private PortletMode currentPortletMode_ = PortletMode.VIEW;
+
    private WindowState currentWindowState_ = WindowState.NORMAL;
 
    private List<String> supportModes_;
 
    private List<QName> supportedProcessingEvents_;
+
    private List<QName> supportedPublishingEvents_;
+
    private List<String> supportedPublicParams_;
+
    private boolean portletInPortal_ = true;
+
    private StateString navigationalState;
 
    public UIPortlet()
@@ -474,7 +476,8 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
             return false;
          }
 
-         Map<QName, EventInfo> consumedEvents = (Map<QName, EventInfo>)portlet.getInfo().getEventing().getConsumedEvents();
+         Map<QName, EventInfo> consumedEvents =
+            (Map<QName, EventInfo>)portlet.getInfo().getEventing().getConsumedEvents();
 
          if (consumedEvents == null)
          {
@@ -497,41 +500,42 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
       return false;
    }
 
-   public boolean supportsPublishingEvent (QName name)
+   public boolean supportsPublishingEvent(QName name)
    {
-	   if (supportedPublishingEvents_ == null)
-	   {
-		     org.gatein.pc.api.Portlet portlet = getProducedOfferedPortlet();
+      if (supportedPublishingEvents_ == null)
+      {
+         org.gatein.pc.api.Portlet portlet = getProducedOfferedPortlet();
 
-	         if (portlet == null)
-	         {
-	            log.info("Could not find portlet with ID : " + producerOfferedPortletContext.getId());
-	            return false;
-	         }
+         if (portlet == null)
+         {
+            log.info("Could not find portlet with ID : " + producerOfferedPortletContext.getId());
+            return false;
+         }
 
-	         Map<QName, EventInfo> producedEvents = (Map<QName, EventInfo>)portlet.getInfo().getEventing().getProducedEvents();
+         Map<QName, EventInfo> producedEvents =
+            (Map<QName, EventInfo>)portlet.getInfo().getEventing().getProducedEvents();
 
-	         if (producedEvents == null)
-	         {
-	            return false;
-	         }
+         if (producedEvents == null)
+         {
+            return false;
+         }
 
-	         supportedPublishingEvents_ = new ArrayList<QName>(producedEvents.keySet());
-	   }
-	   
-	      for (Iterator<QName> iter = supportedPublishingEvents_.iterator(); iter.hasNext();)
-	      {
-	         QName eventName = iter.next();
-	         if (eventName.equals(name))
-	         {
-	            log.info("The Portlet " + producerOfferedPortletContext + " supports producing the event : " + name);
-	            return true;
-	         }
-	      }
-	      log.info("The portlet " + producerOfferedPortletContext + " doesn't support producing the event : " + name);
-	   return false;
+         supportedPublishingEvents_ = new ArrayList<QName>(producedEvents.keySet());
+      }
+
+      for (Iterator<QName> iter = supportedPublishingEvents_.iterator(); iter.hasNext();)
+      {
+         QName eventName = iter.next();
+         if (eventName.equals(name))
+         {
+            log.info("The Portlet " + producerOfferedPortletContext + " supports producing the event : " + name);
+            return true;
+         }
+      }
+      log.info("The portlet " + producerOfferedPortletContext + " doesn't support producing the event : " + name);
+      return false;
    }
-   
+
    /**
     * Tells, according to the info located in portlet.xml, wether this portlet supports the public render parameter
     * given as a method argument
@@ -549,7 +553,8 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
          }
 
          //
-         Collection<ParameterInfo> parameters = (Collection<ParameterInfo>)producedOfferedPortlet.getInfo().getNavigation().getPublicParameters();
+         Collection<ParameterInfo> parameters =
+            (Collection<ParameterInfo>)producedOfferedPortlet.getInfo().getNavigation().getPublicParameters();
          supportedPublicParams_ = new ArrayList<String>();
          for (ParameterInfo parameter : parameters)
          {
@@ -564,7 +569,8 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
          {
             if (log.isDebugEnabled())
             {
-               log.debug("The Portlet " + producerOfferedPortletContext.getId() + " supports the public render parameter : " + supportedPublicParam);
+               log.debug("The Portlet " + producerOfferedPortletContext.getId()
+                  + " supports the public render parameter : " + supportedPublicParam);
             }
             return true;
          }
@@ -643,7 +649,8 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
          actionInvocation.setForm(allParams);
          actionInvocation.setRequestContext(new AbstractRequestContext(servletRequest));
 
-         String interactionState = servletRequest.getParameter(ExoPortletInvocationContext.INTERACTION_STATE_PARAM_NAME);
+         String interactionState =
+            servletRequest.getParameter(ExoPortletInvocationContext.INTERACTION_STATE_PARAM_NAME);
          if (interactionState != null)
          {
             actionInvocation.setInteractionState(StateString.create(interactionState));
@@ -739,12 +746,12 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
       }
       invocation.setInstanceContext(instanceContext);
 
-
       invocation.setServerContext(new AbstractServerContext(servletRequest, prc.getResponse()));
       //TODO: ExoUserContext impl not tested
       invocation.setUserContext(new ExoUserContext(servletRequest, userProfile));
       invocation.setWindowContext(new ExoWindowContext(storageName));
-      invocation.setPortalContext(new AbstractPortalContext(Collections.singletonMap("javax.portlet.markup.head.element.support", "true")));
+      invocation.setPortalContext(new AbstractPortalContext(Collections.singletonMap(
+         "javax.portlet.markup.head.element.support", "true")));
       invocation.setSecurityContext(new AbstractSecurityContext(servletRequest));
 
       //
@@ -762,7 +769,8 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
       PortletInvoker portletInvoker = getApplicationComponent(PortletInvoker.class);
 
       // Get marshalled version
-      StatefulPortletContext<C> updatedCtx = (StatefulPortletContext<C>)portletInvoker.setProperties(portletContext, changes);
+      StatefulPortletContext<C> updatedCtx =
+         (StatefulPortletContext<C>)portletInvoker.setProperties(portletContext, changes);
 
       //
       C updateState = updatedCtx.getState();

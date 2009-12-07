@@ -744,6 +744,7 @@ public class UIPortletActionListener
          UIPortletForm uiPortletForm = uiMaskWS.createUIComponent(UIPortletForm.class, null, null);
          uiPortletForm.setValues(uiPortlet);
          uiMaskWS.setWindowSize(800, -1);
+         event.getRequestContext().addUIComponentToUpdateByAjax(uiMaskWS);
       }
    }
 
