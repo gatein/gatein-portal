@@ -34,7 +34,7 @@ def selectedCategory = uicomponent.getSelectedCategory();
 							<% if(isSelected) { %>
 								<div class="UIVTabContent" style="display: block">
 								<%
-								for(application in category.getApplications()) {
+								for(application in uicomponent.getApplications()) {
 									String applicationLabel = application.getDisplayName();
 									if(applicationLabel.length() > 30) applicationLabel = applicationLabel.substring(0, 27) + "...";
 									String srcBG = application.getIconURL();

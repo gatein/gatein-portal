@@ -19,9 +19,12 @@
 
 package org.exoplatform.portal.webui.application;
 
+import org.exoplatform.application.gadget.Gadget;
+import org.exoplatform.application.gadget.GadgetRegistryService;
 import org.exoplatform.application.registry.Application;
 import org.exoplatform.application.registry.ApplicationCategory;
 import org.exoplatform.application.registry.ApplicationRegistryService;
+import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -99,6 +102,33 @@ public class UIApplicationList extends UIContainer
             selectedCategory = category;
          }
       }
+   }
+
+   public List<Application> getApplications()
+   {
+      if (selectedCategory == null)
+         return null;
+      List<Application> apps = selectedCategory.getApplications();
+
+      //Correct IconURL of Gadget
+      GadgetRegistryService gadgetService = getApplicationComponent(GadgetRegistryService.class);
+      for (Application app : apps)
+      {
+         if (ApplicationType.GADGET.equals(app.getType()))
+         {
+            try
+            {
+               Gadget gadget;
+               gadget = gadgetService.getGadget(app.getApplicationName());
+               if (gadget != null)
+                  app.setIconURL(gadget.getThumbnail());
+            }
+            catch (Exception e)
+            {
+            }
+         }
+      }
+      return apps;
    }
 
    public List<ApplicationCategory> getCategories()

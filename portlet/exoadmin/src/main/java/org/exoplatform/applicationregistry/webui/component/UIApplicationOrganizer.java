@@ -19,6 +19,8 @@
 
 package org.exoplatform.applicationregistry.webui.component;
 
+import org.exoplatform.application.gadget.Gadget;
+import org.exoplatform.application.gadget.GadgetRegistryService;
 import org.exoplatform.application.registry.Application;
 import org.exoplatform.application.registry.ApplicationCategory;
 import org.exoplatform.application.registry.ApplicationRegistryService;
@@ -128,14 +130,25 @@ public class UIApplicationOrganizer extends UIContainer
    public void setSelectedCategory(ApplicationCategory category) throws Exception
    {
       selectedCategory = category;
-      ApplicationRegistryService service = getApplicationComponent(ApplicationRegistryService.class);
-      applications =
-         service.getApplications(selectedCategory, new Util.ApplicationComparator(), new ApplicationType[0]);
+      applications = category.getApplications();
       if (applications == null || applications.isEmpty())
       {
          setSelectedApplication(null);
          return;
       }
+
+      //Correct IconUrl of gadget
+      GadgetRegistryService gadgetService = getApplicationComponent(GadgetRegistryService.class);
+      for (Application app : applications)
+      {
+         if (ApplicationType.GADGET.equals(app.getType()))
+         {
+            Gadget gadget = gadgetService.getGadget(app.getApplicationName());
+            if (gadget != null)
+               app.setIconURL(gadget.getThumbnail());
+         }
+      }
+
       setSelectedApplication(applications.get(0));
    }
 
