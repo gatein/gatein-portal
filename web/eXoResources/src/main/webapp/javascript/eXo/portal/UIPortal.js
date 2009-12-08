@@ -101,7 +101,7 @@ UIPortal.prototype.blockOnMouseOver = function(event, portlet, isOver) {
 			DOMUtil.replaceClass(normalBlock, "NormalContainerBlock", "OverContainerBlock");
 		}
 		newLayer.parentNode.style.top = -height + "px";
-		editBlock.style.display = "block";
+		editBlock.style.display = "block";		
 	}	else {
 		editBlock.style.display = "none";
 		if(!DOMUtil.hasClass(portlet, "UIPortlet")) {
@@ -109,6 +109,13 @@ UIPortal.prototype.blockOnMouseOver = function(event, portlet, isOver) {
 			DOMUtil.replaceClass(normalBlock, "OverContainerBlock", "NormalContainerBlock");
 		}
 	}
+	
+	// Don't displat portlet control when View Container
+		var controlPortlet =	DOMUtil.findFirstDescendantByClass(editBlock, "div", "CONTROL-PORTLET");
+		controlPortlet.style.display = "block";
+		if (controlPortlet != null && eXo.portal.portalMode == 4) {				
+				controlPortlet.style.display = "none";
+		}
 };
 
 UIPortal.prototype.getUIPortlets = function() {
