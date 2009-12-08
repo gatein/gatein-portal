@@ -63,7 +63,7 @@ UIPortal.prototype.blockOnMouseOver = function(event, portlet, isOver) {
   var DOMUtil = eXo.core.DOMUtil;
   if(!eXo.portal.portalMode || eXo.portal.isInDragging) return;
 	if(eXo.portal.portalMode <= 2 && DOMUtil.hasClass(portlet, "UIContainer")) return;
-	if(eXo.portal.portalMode > 2 && DOMUtil.hasClass(portlet, "UIPortlet")) return;
+	if(eXo.portal.portalMode > 2 && eXo.portal.portalMode != 4 && DOMUtil.hasClass(portlet, "UIPortlet")) return;
 	
 	if(!event) event = window.event;
 	event.cancelBubble = true;
