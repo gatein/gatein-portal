@@ -43,6 +43,7 @@
       <dependency>
          <groupId>org.exoplatform.kernel</groupId>
          <artifactId>kernel.packaging.module</artifactId>
+         <version>${org.exoplatform.kernel.version}</version>
          <type>js</type>
        </dependency>
        <dependency>
