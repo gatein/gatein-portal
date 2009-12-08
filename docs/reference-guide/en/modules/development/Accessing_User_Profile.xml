@@ -2,61 +2,40 @@
 <!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
 ]>
 <section id="sect-Reference_Guide-Accessing_User_Profile">
-	<!--   
-
-    Copyright (C) 2009 eXo Platform SAS.
-    
-    This is free software; you can redistribute it and/or modify it
-    under the terms of the GNU Lesser General Public License as
-    published by the Free Software Foundation; either version 2.1 of
-    the License, or (at your option) any later version.
-    
-    This software is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-    Lesser General Public License for more details.
-    
-    You should have received a copy of the GNU Lesser General Public
-    License along with this software; if not, write to the Free
-    Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
-    02110-1301 USA, or see the FSF site: http://www.fsf.org.
-
-   --><title>Accessing User Profile</title>
-	<para>
-		To retrieve the logged in user you can do as follows :
+   <title>Accessing User Profile</title>
+   <para>
+      To retrieve the logged in user you can do as follows :
 	</para>
-	
-<programlisting>// Alternative context: WebuiRequestContext context =
-		WebuiRequestContext.getCurrentInstance() ;
-		PortalRequestContext context = PortalRequestContext.getCurrentInstance() ;
-		// Get the id of the user logged
-		String userId = context.getRemoteUser();
-		// Request the information from OrganizationService:
-		OrganizationService orgService = getApplicationComponent(OrganizationService.class) ;
-		if(userId!images/= null) {
-		User user = orgService.getUserHandler().findUserByName(userId) ;
-		if (user!images/= null) {
-		String firstName = user.getFirstName();
-		String lastName = user.getLastName();
-		String email = user.getEmail();
-		}
-		}
-</programlisting>
-	<para>
-		Alternatives for retrieving the Organization Service
+
+   <programlisting role="JAVA"><![CDATA[// Alternative context: WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+PortalRequestContext context = PortalRequestContext.getCurrentInstance() ;
+// Get the id of the user logged
+String userId = context.getRemoteUser();
+// Request the information from OrganizationService:
+OrganizationService orgService = getApplicationComponent(OrganizationService.class) ;
+if (userId != null)
+  {
+  User user = orgService.getUserHandler().findUserByName(userId) ;
+  if (user != null)
+  {
+    String firstName = user.getFirstName();
+    String lastName = user.getLastName();
+    String email = user.getEmail();
+  }
+}]]></programlisting>
+   <para>
+      Alternatives for retrieving the Organization Service
 	</para>
-	<orderedlist numeration="arabic">
-		<listitem>
-			<para>
-				OrganizationService service = (OrganizationService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(OrganizationService.class);
-			</para>
-		</listitem>
-		<listitem>
-			<para>
-				OrganizationService service = (OrganizationService) PortalContainer.getInstance().getComponentInstanceOfType(OrganizationService.class);
-			</para>
-		</listitem>
-	</orderedlist>
+   <orderedlist>
+      <listitem>
+         <programlisting role="JAVA"><![CDATA[OrganizationService service = (OrganizationService)
+   ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(OrganizationService.class);]]></programlisting>
+      </listitem>
+      <listitem>
+         <programlisting role="JAVA"><![CDATA[OrganizationService service = (OrganizationService)
+   PortalContainer.getInstance().getComponentInstanceOfType(OrganizationService.class);]]></programlisting>
+      </listitem>
+   </orderedlist>
 </section>
 
 
