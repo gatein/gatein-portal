@@ -19,6 +19,7 @@
 
 package org.exoplatform.web.application.javascript;
 
+import org.exoplatform.commons.utils.Safe;
 import org.exoplatform.container.ExoContainerContext;
 import org.gatein.wci.impl.DefaultServletContainerFactory;
 import org.picocontainer.Startable;
@@ -127,13 +128,7 @@ public class JavascriptConfigService implements Startable
          }
          finally
          {
-            try
-            {
-               reader.close();
-            }
-            catch (Exception ex)
-            {
-            }
+            Safe.close(reader);
          }
       }
       catch (Exception e)
