@@ -47,16 +47,6 @@
     <key>org.exoplatform.services.jcr.RepositoryService</key>
     <type>org.exoplatform.services.jcr.impl.RepositoryServiceImpl</type>
   </component>
-  
-  <component>
-    <type>org.exoplatform.services.jcr.ext.registry.RegistryService</type>
-    <init-params>
-      <properties-param>
-      	<name>locations</name>
-      	<property name="repository" value="portal-system"/>
-      </properties-param>
-    </init-params>
-  </component>
 
   <component>
     <key>org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator</key>

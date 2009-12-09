@@ -42,17 +42,7 @@
         </object>
       </object-param>
     </init-params>	
-  </component> 
-  
-  <component>
-    <type>org.exoplatform.services.jcr.ext.registry.RegistryService</type>
-    <init-params>
-      <properties-param>
-      	<name>locations</name>
-      	<property name="repository" value="system"/>
-      </properties-param>
-    </init-params>
-  </component>
+  </component>  
   
   <component>
     <key>org.exoplatform.services.resources.LocaleConfigService</key>
