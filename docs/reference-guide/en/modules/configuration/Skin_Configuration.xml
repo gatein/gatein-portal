@@ -2,26 +2,7 @@
 <!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
 ]>
 <section id="sect-Reference_Guide-Skin_Configuration">
-	<!--    
-
-    Copyright (C) 2009 eXo Platform SAS.
-    
-    This is free software; you can redistribute it and/or modify it
-    under the terms of the GNU Lesser General Public License as
-    published by the Free Software Foundation; either version 2.1 of
-    the License, or (at your option) any later version.
-    
-    This software is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-    Lesser General Public License for more details.
-    
-    You should have received a copy of the GNU Lesser General Public
-    License along with this software; if not, write to the Free
-    Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
-    02110-1301 USA, or see the FSF site: http://www.fsf.org.
-
-    --><title>Skin Configuration</title>
+	<title>Skin Configuration</title>
 	<section id="sect-Reference_Guide-Skin_Configuration-Overview">
 		<title>Overview</title>
 		<para>
@@ -32,7 +13,7 @@
 	<section id="sect-Reference_Guide-Skin_Configuration-Skin_Switching">
 		<title>Skin Switching</title>
 		<para>
-			Skins can be switched dynamically at runtime by the <emphasis>Skin Settings</emphasis> action in <emphasis> "User Workspace" </emphasis> <!--    <link linkend="User Workspace">User Workspace</link>    --> .
+			Skins can be switched dynamically at runtime.
 		</para>
 		<mediaobject>
 			<imageobject>
@@ -50,16 +31,15 @@
 			An GateIn skin contains css styles for GateIn portal's components but also shares components that may be reused in portlets. When GateIn generates a portal page markup, it inserts stylesheet links in the page's <literal>head</literal> tag.
 		</para>
 		
-<programlisting>&lt;head&gt;
+<programlisting><![CDATA[<head>
 ...   
-&lt;link id="CoreSkin" rel="stylesheet" type="text/css" href="/GateInResources/skin/Stylesheet.css" /&gt;
-&lt;link id="web_FooterPortlet" rel="stylesheet" type="text/css" href= "/web/skin/portal/webui/component/UIFooterPortlet/DefaultStylesheet.css" /&gt;
-&lt;link id="web_NavigationPortlet" rel="stylesheet" type="text/css" href= "/web/skin/portal/webui/component/UINavigationPortlet/DefaultStylesheet.css" /&gt;
-&lt;link id="web_HomePagePortlet" rel="stylesheet" type="text/css" href= "/portal/templates/skin/webui/component/UIHomePagePortlet/DefaultStylesheet.css" /&gt;
-&lt;link id="web_BannerPortlet" rel="stylesheet" type="text/css" href= "/web/skin/portal/webui/component/UIBannerPortlet/DefaultStylesheet.css" /&gt;
+<link id="CoreSkin" rel="stylesheet" type="text/css" href="/eXoResources/skin/Stylesheet.css" />
+<link id="web_FooterPortlet" rel="stylesheet" type="text/css" href= "/web/skin/portal/webui/component/UIFooterPortlet/DefaultStylesheet.css" />
+<link id="web_NavigationPortlet" rel="stylesheet" type="text/css" href= "/web/skin/portal/webui/component/UINavigationPortlet/DefaultStylesheet.css" />
+<link id="web_HomePagePortlet" rel="stylesheet" type="text/css" href= "/portal/templates/skin/webui/component/UIHomePagePortlet/DefaultStylesheet.css" />
+<link id="web_BannerPortlet" rel="stylesheet" type="text/css" href= "/web/skin/portal/webui/component/UIBannerPortlet/DefaultStylesheet.css" />
 ...
-&lt;/head&gt;
-</programlisting>
+</head>]]></programlisting>
 		<para>
 			In the snipped code above, you can see two types of links :
 		</para>
@@ -102,11 +82,12 @@
 			</listitem>
 		</orderedlist>
 		<para>
-			This is revealed easily by the main portal skin stylesheets. For example <emphasis role="bold">/GateInVistaSkin/skin/Stylesheet.css</emphasis>
+			This is revealed easily by the main portal skin stylesheets. For example <emphasis role="bold">/eXoVistaSkin/skin/Stylesheet.css</emphasis>
 		</para>
 		
-<programlisting>{code} @import url(/GateInResources/skin/PortletThemes/Stylesheet.css) ; @import url(VistaSkin/portal/webui/component/UIPortalApplicationSkin.css) ; @import url(VistaSkin/webui/component/Stylesheet.css) ; {code}
-</programlisting>
+<programlisting>@import url(/eXoResources/skin/PortletThemes/Stylesheet.css) ;
+@import url(VistaSkin/portal/webui/component/UIPortalApplicationSkin.css) ;
+@import url(VistaSkin/webui/component/Stylesheet.css) ;</programlisting>
 	</section>
 	
 	<section id="sect-Reference_Guide-Skin_Configuration-Portlet_Styles">
@@ -124,18 +105,14 @@
 	
 	<section id="sect-Reference_Guide-Skin_Configuration-How_to_Configure_a_Portal_Skin">
 		<title>How to Configure a Portal Skin</title>
-		<para>
-			Stuff Goes Here?
-		</para>
-	</section>
-	
+
 	<section id="sect-Reference_Guide-Skin_Configuration-SkinService">
 		<title>SkinService</title>
 		<para>
 			The <ulink url="http://fisheye.exoplatform.org/browse/projects/portal/trunk/webui/portal/src/main/java/org/exoplatform/portal/webui/skin/SkinService.java">SkinService</ulink> is an GateIn service that manages portal skin, portlet styles and portlet themes (windows borders). The code snippet below is an excerpt of the API offered by this service.
 		</para>
 		
-<programlisting>  /**
+<programlisting role="JAVA"><![CDATA[/**
    * Register the stylesheet for a portal Skin.
    * @param module skin module identifier
    * @param skinName skin name
@@ -169,10 +146,9 @@
    * @param categoryName portlet theme category
    * @param themesName names of the themes
    */
-  public void addTheme(String categoryName, List&lt;String&gt; themesName) {
+  public void addTheme(String categoryName, List<String> themesName) {
     [...]
-  }
-</programlisting>
+  }]]></programlisting>
 		<para>
 			Use the skin service to register your own portal skins, portlet styles and portlet themes.
 		</para>
@@ -184,22 +160,21 @@
 			GateIn provides a servlet listener that allows you to register your own skins and styles when your webapp starts up. Your first step is to add the listener to your portlet app <literal>web.xml</literal>.
 		</para>
 		
-<programlisting>  &lt;web-app&gt;
+<programlisting role="XML"><![CDATA[<web-app>
     [::]
-    &lt;listener&gt;
-      &lt;listener-class&gt;org.exoplatform.portal.webui.skin.SkinConfigListener&lt;/listener-class&gt;
-    &lt;/listener&gt;
+    <listener>
+      <listener-class>org.exoplatform.portal.webui.skin.SkinConfigListener</listener-class>
+    </listener>
     [::]
-  &lt;/web-app&gt;
-</programlisting>
+  </web-app>]]></programlisting>
+</section>
+		<section>
+      <title>SkinConfigScript.groovy</title>
 		<para>
-			1.1 SkinConfigScript.groovy
+			The <literal>SkinListener</literal> looks for the groovy script file located in your war under: <filename>/WEB-INF/conf/script/groovy/SkinConfigScript.groovy</filename>
 		</para>
 		<para>
-			The &lt;tt&gt;SkinListener&lt;/tt&gt; looks for the groovy script file located in your war under: <filename>/WEB-INF/conf/script/groovy/SkinConfigScript.groovy</filename>
-		</para>
-		<para>
-			In this script, you have full access to the &lt;tt&gt;SkinService&lt;/tt&gt; and &lt;tt&gt;ServletContext&lt;/tt&gt; which are bound as scripting variables under the same name. As an example, take a look at the following script. It can be found in the &lt;tt&gt;GateInResources.war&lt;/tt&gt; and is used by GateIn to register the &lt;tt&gt;Default&lt;/tt&gt; portal skin and some portlet themes.
+			In this script, you have full access to the <literal>SkinService</literal> and <literal>ServletContext</literal> which are bound as scripting variables under the same name. As an example, take a look at the following script. It can be found in the <literal>GateInResources.war</literal> and is used by GateIn to register the <literal>Default</literal> portal skin and some portlet themes.
 		</para>
 		
 <programlisting>SkinService.addPortalSkin("CoreSkin","Default", "/GateInResources/skin/Stylesheet.css", ServletContext);
@@ -210,46 +185,45 @@ SkinService.addTheme("MacStyle", ["MacTheme","MacGray","MacGreenSteel","MacBlack
 SkinService.addTheme("VistaStyle", ["VistaTheme","VistaBlue"]);
 </programlisting>
 		<para>
-			The syntax of addTheme() is:<!--     LB     --> &lt;tt&gt;addTheme(String categoryName, List&lt;String&gt; themesName)&lt;/tt&gt;
+			The syntax of addTheme() is: <programlisting><![CDATA[addTheme(String categoryName, List<String> themesName)]]></programlisting>
 		</para>
 		<para>
-			So, to provide your own skin you could use the following: {code} SkinService.addSkin("mywebapp/MyPortlet", "MyPortalSkin", "/mywebapp/skin/Stylesheet.css", ServletContext); {code}
+			So, to provide your own skin you could use the following: <programlisting><![CDATA[SkinService.addSkin("mywebapp/MyPortlet", "MyPortalSkin", "/mywebapp/skin/Stylesheet.css", ServletContext);]]></programlisting>
 		</para>
 		<para>
-			This simple line would register a styleesheet for a portlet named &lt;tt&gt;MyPortlet&lt;/tt&gt; in a portlet app named &lt;tt&gt;mywebapp&lt;/tt&gt;. The stylesheet would be used when a skin named &lt;tt&gt;MyPortalSkin&lt;/tt&gt; is selected in portal.
+			This simple line would register a styleesheet for a portlet named <literal>MyPortlet</literal> in a portlet app named <literal>mywebapp</literal>. The stylesheet would be used when a skin named <literal>MyPortalSkin</literal> is selected in portal.
 		</para>
 		<para>
-			The syntax of addSkin() is:<!--     LB     --> &lt;tt&gt;addSkin(String module, String skinName, String cssPath, ServletContext scontext, boolean overwrite)&lt;/tt&gt;
+			The syntax of addSkin() is: <programlisting><![CDATA[addSkin(String module, String skinName, String cssPath, ServletContext scontext, boolean overwrite)]]></programlisting>
 		</para>
 		<para>
-			<parameter>~~overwrite~~</parameter> is optional, its default value is "false". If its value is true, the later call of addSkin() for the same skin key (combination of module + skinName) replaces the skin of the previous call.
+			<literal>overwrite</literal> is optional, its default value is "false". If its value is true, the later call of addSkin() for the same skin key (combination of module + skinName) replaces the skin of the previous call.
 		</para>
 		<para>
 			Similarly, to configure a particular portal you can use the following :
 		</para>
 		
-<programlisting> {code} SkinService.addSkin("myportalname", "skin", "/path/to/skin/Stylesheet.css", ServletContext); {code}
-</programlisting>
+<programlisting>SkinService.addSkin("myportalname", "skin", "/path/to/skin/Stylesheet.css", ServletContext);</programlisting>
 		<para>
-			The syntax of addPortalSkin() is:<!--     LB     --> &lt;tt&gt;addPortalSkin(String module, String skinName, String cssPath, ServletContext scontext, boolean overwrite)&lt;/tt&gt;
+			The syntax of addPortalSkin() is: <programlisting><![CDATA[addPortalSkin(String module, String skinName, String cssPath, ServletContext scontext, boolean overwrite)]]></programlisting>
 		</para>
-		<para>
-			1 Tips and Tricks
-		</para>
-		<para>
-			1.1 Easier css debugging
-		</para>
+      </section>
+      </section>
+      <section>
+		<title>Tips and Tricks</title>
+		<section>
+			<title>Easier css debuggin</title>
 		<para>
 			By default, CSS files are cached and their imports are merged, at the server side, into a single CSS file to reduce the number of HTTP requests from the browser to the server.
 		</para>
 		<para>
-			The &lt;tt&gt;ServletContext&lt;/tt&gt; parameter is there to allow the direct access to the CSS files from the &lt;tt&gt;SkinService&lt;/tt&gt;. The optimization code is quite simple as all the CSS files are parsed at the server startup time and all the @import and url(...) references are rewritten to support a single flat file. The result is stored in a cache directly used from the &lt;tt&gt;ResourceRequestFilter&lt;/tt&gt;.
+			The <literal>ServletContext</literal> parameter is there to allow the direct access to the CSS files from the <literal>SkinService</literal>. The optimization code is quite simple as all the CSS files are parsed at the server startup time and all the @import and url(...) references are rewritten to support a single flat file. The result is stored in a cache directly used from the <literal>ResourceRequestFilter</literal>.
 		</para>
 		<para>
-			Although the optimization is useful for a production environments, you may find it easier to deactivate this optimization while debugging your stylesheets. For that, you simply need to set the java system property &lt;tt&gt;exo.product.developing&lt;/tt&gt; to &lt;tt&gt;true&lt;/tt&gt;.
+			Although the optimization is useful for a production environments, you may find it easier to deactivate this optimization while debugging your stylesheets. For that, you simply need to set the java system property <literal>exo.product.developing</literal> to <literal>true</literal>.
 		</para>
 		<para>
-			For example, you can pass the property as a JVM parameter with the &lt;tt&gt;-D&lt;/tt&gt; option in your &lt;tt&gt;GateIn.sh&lt;/tt&gt; startup script: {code} EXO{code}
+			For example, you can pass the property as a JVM parameter with the <literal>-D</literal> option in your <literal>GateIn.sh</literal> startup script: {code} EXO{code}
 		</para>
 		<orderedlist numeration="arabic">
 			<listitem>
@@ -258,9 +232,11 @@ SkinService.addTheme("VistaStyle", ["VistaTheme","VistaBlue"]);
 				</para>
 			</listitem>
 		</orderedlist>
-		<para>
-			1.1 Change portlet icons
-		</para>
+      </section>
+      <section>
+		<title>
+			Change portlet icons
+		</title>
 		<para>
 			Each portlet is represented by an icon that you can see in the portlet registry, or the webos dock. You can change this icon by adding an image in the directory :
 		</para>
@@ -281,29 +257,23 @@ SkinService.addTheme("VistaStyle", ["VistaTheme","VistaBlue"]);
 				</para>
 			</listitem>
 		</itemizedlist>
+      </section>
+      <section>
+		<title>
+			Set the default skin for Portal
+		</title>
 		<para>
-			1.1 Set the default skin for Portal
-		</para>
-		<para>
-			When not configured, the default skin of portal is Default. If you want to change this value (to Mac skin, Vista skin, or your own), add a skin tag in the &lt;tt&gt;portal.xml&lt;/tt&gt; that defines your portal:
+			When not configured, the default skin of portal is Default. If you want to change this value (to Mac skin, Vista skin, or your own), add a skin tag in the <literal>portal.xml</literal> that defines your portal:
 		</para>
 		
-<programlisting>&lt;portal-config&gt;
-  &lt;portal-name&gt;classic&lt;/portal-name&gt;
-  &lt;locale&gt;en&lt;/locale&gt;
-  &lt;factory-id&gt;office&lt;/factory-id&gt;
-  &lt;access-permissions&gt;Everyone&lt;/access-permissions&gt;
-  &lt;edit-permission&gt;*:/platform/administrators&lt;/edit-permission&gt;
-  &lt;skin&gt;Mac&lt;/skin&gt;
-  &lt;creator&gt;root&lt;/creator&gt;
-...
-</programlisting>
-		<para>
-			factory-id was removed since Portal 2.5
-		</para>
-		<para>
-			Portal 2.6 and after will not take the order of the tags into account. Before 2.6, the order must be the same as in the example.
-		</para>
+<programlisting role="XML"><![CDATA[<portal-config>
+  <portal-name>classic</portal-name>
+  <locale>en</locale>
+  <access-permissions>Everyone</access-permissions>
+  <edit-permission>*:/platform/administrators</edit-permission>
+  <skin>Mac</skin>
+  <creator>root</creator>
+...]]></programlisting>
 	</section>
 	
 	<section id="sect-Reference_Guide-Skin_Configuration-Some_CSS_techniques">
@@ -314,7 +284,6 @@ SkinService.addTheme("VistaStyle", ["VistaTheme","VistaBlue"]);
 		<para>
 			GateIn relies heavily on CSS to create the layout and special effects for the UI. Below we explain some common techniques you may find often inside GateIn's markup. We explain them here to help you better understand GateIn generated markup, ease css issues fixing or get inspration for styling your own apps.
 		</para>
-	</section>
 	
 	<section id="sect-Reference_Guide-Skin_Configuration-Decorator_pattern">
 		<title>Decorator pattern</title>
@@ -322,39 +291,37 @@ SkinService.addTheme("VistaStyle", ["VistaTheme","VistaBlue"]);
 			The decorator is a pattern to create a contour or a curve around an area. In order to achieve this effect you need to create 9 cells. The BODY is the central area that you want to decorate. The other 8 cells are distributed around the BODY cell. You can use the width, height and background image properties to achieve any decoration effect that you want.
 		</para>
 		
-<programlisting>
-~UWC_TOKEN_START~1255420331338~UWC_TOKEN_END~
+<programlisting role="HTML"><![CDATA[
+-----------------------------------------------------------------------
 |            |                                          |             |
 | TopLeft    |               TopCenter                  |    TopRight |
 |            |                                          |             |
-----
-|            |                                          |             |
+-----------------------------------------------------------------------
 |            |                                          |             |
 | CenterLeft |                 BODY                     | CenterRight |
 |            |                                          |             |
-|            |                                          |             |
-~UWC_TOKEN_START~1255420331340~UWC_TOKEN_END~
+-----------------------------------------------------------------------
 |            |                                          |             |
 | BottomLeft |              BottomCenter                | BottomRight |
 |            |                                          |             |
-~UWC_TOKEN_START~1255420331341~UWC_TOKEN_END~
-&lt;div class="Parent"&gt;
-  &lt;div class="TopLeft"&gt;
-    &lt;div class="TopRight"&gt;
-      &lt;div class="TopCenter"&gt;&lt;span&gt;&lt;/span&gt;&lt;/div&gt;
-    &lt;/div&gt;
-  &lt;/div&gt;
-  &lt;div class="CenterLeft"&gt;
-    &lt;div class="CenterRight"&gt;
-      &lt;div class="CenterCenter"&gt;BODY&lt;/div&gt;
-    &lt;/div&gt;
-  &lt;/div&gt;
-  &lt;div class="BottomLeft"&gt;
-    &lt;div class="BottomRight"&gt;
-      &lt;div class="BottomCenter"&gt;&lt;span&gt;&lt;/span&gt;&lt;/div&gt;
-    &lt;/div&gt;
-  &lt;div&gt;
-&lt;/div&gt;
+-----------------------------------------------------------------------
+<div class="Parent">
+  <div class="TopLeft">
+    <div class="TopRight">
+      <div class="TopCenter"><span></span></div>
+    </div>
+  </div>
+  <div class="CenterLeft">
+    <div class="CenterRight">
+      <div class="CenterCenter">BODY</div>
+    </div>
+  </div>
+  <div class="BottomLeft">
+    <div class="BottomRight">
+      <div class="BottomCenter"><span></span></div>
+    </div>
+  <div>
+</div>]]>
 </programlisting>
 	</section>
 	
@@ -364,24 +331,24 @@ SkinService.addTheme("VistaStyle", ["VistaTheme","VistaBlue"]);
 			Left margin left pattern is a technique to create 2 blocks side by side. The left block will have a fixed size and the right block will take the rest of the available space. When the user resizes the browser the added or removed space will be taken from the right block.
 		</para>
 		
-<programlisting>~UWC_TOKEN_START~1255420331342~UWC_TOKEN_END~
+<programlisting role="HTML"><![CDATA[
 |                         |                                                |      
 |                         |                                                |      
-| |&lt;--- fixed width ---&gt;| |                   will expand to right ----&gt; |      
+| |<--- fixed width --->| |                   will expand to right ---->   |      
 |                         |                                                |      
 |                         |                                                |      
 |                         |                                                |      
 ----
-&lt;div class="Parent"&gt;
-  &lt;div style="float: left; width: 100px"&gt;
-  &lt;/div&gt;
-  &lt;div style="margin-left: 105px;"&gt;
-  &lt;div&gt;
-  &lt;div style="clear: left"&gt;&lt;span&gt;&lt;/span&gt;&lt;/div&gt;
-&lt;/div&gt;
-</programlisting>
+<div class="Parent">
+  <div style="float: left; width: 100px">
+  </div>
+  <div style="margin-left: 105px;">
+  <div>
+  <div style="clear: left"><span></span></div>
+</div>]]></programlisting>
 	</section>
-	
+	</section>
+   </section>
 	<section id="sect-Reference_Guide-Skin_Configuration-How_to_create_a_new_skin">
 		<title>How to create a new skin</title>
 		<para>
@@ -403,7 +370,7 @@ SkinService.addPortalSkin("MyPortalSkin","MyPortal","/GateInResourcesMyPortal/sk
 			Finally, you have to definy the name of new skin and the image preview for the <emphasis>Skin Settings</emphasis> action in <emphasis> "User Workspace" </emphasis> <!--    <link linkend="User Workspace">User Workspace</link>    -->.
 		</para>
 		<para>
-			By default, if you don not set new name for skin, its name is &lt;t&gt;label&gt;&lt;/tt&gt;. Looking in the file and add yout new name here.
+			By default, if you don not set new name for skin, its name is <literal>label></literal>. Looking in the file and add yout new name here.
 		</para>
 		
 <programlisting>
@@ -434,7 +401,7 @@ Skin.left.title=Voir et s?lectionner un style
 }
 </programlisting>
 		<para>
-			And now, you copy your image <literal>MyPortal.jpg</literal> (that you definy above) to the folder <literal>ressource/skin/DefaultSkin/portal/webui/component/customization/UIChangeSkinForm/background</literal> and test your new skin.
+			And now, you copy your image <literal>MyPortal.jpg</literal> (that you defined above) to the folder <literal>ressource/skin/DefaultSkin/portal/webui/component/customization/UIChangeSkinForm/background</literal> and test your new skin.
 		</para>
 	</section>
 	
@@ -444,16 +411,12 @@ Skin.left.title=Voir et s?lectionner un style
 			Firstly, you have to definy the new theme in <literal>WEB-INF/conf/script/groovy/SkinConfigScript.groovy</literal> in your <literal>Ressource</literal> (for example, in the project MyPortal, you can put it in <literal>GateInResourcesCp060508</literal>).
 		</para>
 		
-<programlisting>
-SkinService.addTheme("MyPortal-MacTheme", ["MacGray","MacBlue","MacBlack"]);
-</programlisting>
+<programlisting>SkinService.addTheme("MyPortal-MacTheme", ["MacGray","MacBlue","MacBlack"]);</programlisting>
 		<para>
 			Secondly, you put all your new theme into <literal>folder skinyourSkin</literal> and create new file <literal>Stylesheet.css</literal> here. In this file, you will import all links to your CSS. For example in MyPortal project.
 		</para>
 		
-<programlisting>
-@import url(MyPortalSkin/PortletThemes/Stylesheet.css) ;
-</programlisting>
+<programlisting>@import url(MyPortalSkin/PortletThemes/Stylesheet.css) ;</programlisting>
 		<para>
 			You can see here, in the <literal>GateInResourcesCp060508/skin/MyPortalSkin/PortletThemes/Stylesheet.css</literal>, you put all your CSS of new theme.
 		</para>

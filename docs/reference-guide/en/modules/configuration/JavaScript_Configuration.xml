@@ -2,93 +2,93 @@
 <!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
 ]>
 <section id="sect-Reference_Guide-Javascript_Configuration">
-	<!--    
-
-    Copyright (C) 2009 eXo Platform SAS.
-    
-    This is free software; you can redistribute it and/or modify it
-    under the terms of the GNU Lesser General Public License as
-    published by the Free Software Foundation; either version 2.1 of
-    the License, or (at your option) any later version.
-    
-    This software is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-    Lesser General Public License for more details.
-    
-    You should have received a copy of the GNU Lesser General Public
-    License along with this software; if not, write to the Free
-    Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
-    02110-1301 USA, or see the FSF site: http://www.fsf.org.
-
-    --><title>Javascript Configuration</title>
-	<para>
-		Manaing Javascript scripts in an application like GateIn Platform is a critical part of the configuration work if you want to get good response time.
+   <title>Javascript Configuration</title>
+   <para>
+      Manaing Javascript scripts in an application like GateIn
+      Platform is a
+      critical part of the configuration work if you want
+      to get good
+      response time.
 	</para>
-	<para>
-		Every portlet can have its own javscript code but in many cases it is more convenient to reuse some existing shared libraries. For that reason, GateIn has a mechanism to easily register the libraries that will be loaded when the first page will be rendered. To do so, every WAR deployed in GateIn can register the js files thanks to a groovy script "WEB-INF/conf/script/groovy/JavascriptScript.groovy". The next file is the one you can find in the GateInResources.war
+   <para>
+      Every portlet can have its own javscript code but in many cases
+      it is more
+      convenient to reuse some existing shared libraries. For
+      that
+      reason, GateIn has a mechanism to easily register the
+      libraries
+      that will be loaded when the first page will be rendered.
+      To do
+      so, every WAR deployed in GateIn can register the js files
+      thanks
+      to a groovy script
+      "WEB-INF/conf/script/groovy/JavascriptScript.groovy". The next
+      file is the one you can find in the GateInResources.war
 	</para>
-	
-<programlisting>JavascriptService.addJavascript("GateIn", "/javascript/GateIn.js", ServletContext);
+
+   <programlisting>JavascriptService.addJavascript("eXo", "/javascript/eXo.js", ServletContext);
 /* Animation Javascripts */
-JavascriptService.addJavascript("GateIn.animation.ImplodeExplode", "/javascript/GateIn/animation/ImplodeExplode.js", ServletContext);
+JavascriptService.addJavascript("eXo.animation.ImplodeExplode", "/javascript/eXo/animation/ImplodeExplode.js", ServletContext);
 /* Application descriptor */
-JavascriptService.addJavascript("GateIn.application.ApplicationDescriptor", "/javascript/GateIn/application/ApplicationDescriptor.js", ServletContext);
+JavascriptService.addJavascript("eXo.application.ApplicationDescriptor", "/javascript/eXo/application/ApplicationDescriptor.js", ServletContext);
 /* CORE Javascripts */
-JavascriptService.addJavascript("GateIn.core.Utils", "/javascript/GateIn/core/Util.js", ServletContext);
-JavascriptService.addJavascript("GateIn.core.DOMUtil", "/javascript/GateIn/core/DOMUtil.js", ServletContext);
-JavascriptService.addJavascript("GateIn.core.Browser", "/javascript/GateIn/core/Browser.js", ServletContext);
-JavascriptService.addJavascript("GateIn.core.MouseEventManager", "/javascript/GateIn/core/MouseEventManager.js", ServletContext);
-JavascriptService.addJavascript("GateIn.core.UIMaskLayer", "/javascript/GateIn/core/UIMaskLayer.js", ServletContext);
-JavascriptService.addJavascript("GateIn.core.Skin", "/javascript/GateIn/core/Skin.js", ServletContext);
-JavascriptService.addJavascript("GateIn.core.DragDrop", "/javascript/GateIn/core/DragDrop.js", ServletContext);
-JavascriptService.addJavascript("GateIn.core.TemplateEngine", "/javascript/GateIn/core/TemplateEngine.js", ServletContext);
+JavascriptService.addJavascript("eXo.core.Utils", "/javascript/eXo/core/Util.js", ServletContext);
+JavascriptService.addJavascript("eXo.core.DOMUtil", "/javascript/eXo/core/DOMUtil.js", ServletContext);
+JavascriptService.addJavascript("eXo.core.Browser", "/javascript/eXo/core/Browser.js", ServletContext);
+JavascriptService.addJavascript("eXo.core.MouseEventManager", "/javascript/eXo/core/MouseEventManager.js", ServletContext);
+JavascriptService.addJavascript("eXo.core.UIMaskLayer", "/javascript/eXo/core/UIMaskLayer.js", ServletContext);
+JavascriptService.addJavascript("eXo.core.Skin", "/javascript/eXo/core/Skin.js", ServletContext);
+JavascriptService.addJavascript("eXo.core.DragDrop", "/javascript/eXo/core/DragDrop.js", ServletContext);
+JavascriptService.addJavascript("eXo.core.TemplateEngine", "/javascript/eXo/core/TemplateEngine.js", ServletContext);
 /* Widget Javascripts */
-JavascriptService.addJavascript("GateIn.widget.UIWidget", "/javascript/GateIn/widget/UIWidget.js", ServletContext);
-JavascriptService.addJavascript("GateIn.widget.UIAddWidget", "/javascript/GateIn/widget/UIAddWidget.js", ServletContext);
-JavascriptService.addJavascript("GateIn.widget.UIExoWidget", "/javascript/GateIn/widget/UIExoWidget.js", ServletContext);
+JavascriptService.addJavascript("eXo.widget.UIWidget", "/javascript/eXo/widget/UIWidget.js", ServletContext);
+JavascriptService.addJavascript("eXo.widget.UIAddWidget", "/javascript/eXo/widget/UIAddWidget.js", ServletContext);
+JavascriptService.addJavascript("eXo.widget.UIExoWidget", "/javascript/eXo/widget/UIExoWidget.js", ServletContext);
 /* Desktop Javascripts */
-JavascriptService.addJavascript("GateIn.desktop.UIDockbar", "/javascript/GateIn/desktop/UIDockbar.js", ServletContext);
-JavascriptService.addJavascript("GateIn.desktop.UIDesktop", "/javascript/GateIn/desktop/UIDesktop.js", ServletContext);
+JavascriptService.addJavascript("eXo.desktop.UIDockbar", "/javascript/eXo/desktop/UIDockbar.js", ServletContext);
+JavascriptService.addJavascript("eXo.desktop.UIDesktop", "/javascript/eXo/desktop/UIDesktop.js", ServletContext);
 /* WebUI Javascripts */ 
-JavascriptService.addJavascript("GateIn.webui.UIItemSelector", "/javascript/GateIn/webui/UIItemSelector.js", ServletContext);
-JavascriptService.addJavascript("GateIn.webui.UIForm", "/javascript/GateIn/webui/UIForm.js", ServletContext);
-JavascriptService.addJavascript("GateIn.webui.UIPopup", "/javascript/GateIn/webui/UIPopup.js", ServletContext);
-JavascriptService.addJavascript("GateIn.webui.UIPopupSelectCategory", "/javascript/GateIn/webui/UIPopupSelectCategory.js", ServletContext);
-JavascriptService.addJavascript("GateIn.webui.UIPopupWindow", "/javascript/GateIn/webui/UIPopupWindow.js", ServletContext);
-JavascriptService.addJavascript("GateIn.webui.UIVerticalScroller", "/javascript/GateIn/webui/UIVerticalScroller.js", ServletContext);
-JavascriptService.addJavascript("GateIn.webui.UIHorizontalTabs", "/javascript/GateIn/webui/UIHorizontalTabs.js", ServletContext);
-JavascriptService.addJavascript("GateIn.webui.UIPopupMenu", "/javascript/GateIn/webui/UIPopupMenu.js", ServletContext);
-JavascriptService.addJavascript("GateIn.webui.UIDropDownControl", "/javascript/GateIn/webui/UIDropDownControl.js", ServletContext);
+JavascriptService.addJavascript("eXo.webui.UIItemSelector", "/javascript/eXo/webui/UIItemSelector.js", ServletContext);
+JavascriptService.addJavascript("eXo.webui.UIForm", "/javascript/eXo/webui/UIForm.js", ServletContext);
+JavascriptService.addJavascript("eXo.webui.UIPopup", "/javascript/eXo/webui/UIPopup.js", ServletContext);
+JavascriptService.addJavascript("eXo.webui.UIPopupSelectCategory", "/javascript/eXo/webui/UIPopupSelectCategory.js", ServletContext);
+JavascriptService.addJavascript("eXo.webui.UIPopupWindow", "/javascript/eXo/webui/UIPopupWindow.js", ServletContext);
+JavascriptService.addJavascript("eXo.webui.UIVerticalScroller", "/javascript/eXo/webui/UIVerticalScroller.js", ServletContext);
+JavascriptService.addJavascript("eXo.webui.UIHorizontalTabs", "/javascript/eXo/webui/UIHorizontalTabs.js", ServletContext);
+JavascriptService.addJavascript("eXo.webui.UIPopupMenu", "/javascript/eXo/webui/UIPopupMenu.js", ServletContext);
+JavascriptService.addJavascript("eXo.webui.UIDropDownControl", "/javascript/eXo/webui/UIDropDownControl.js", ServletContext);
 /* Portal Javascripts */ 
-JavascriptService.addJavascript("GateIn.portal.PortalHttpRequest", "/javascript/GateIn/portal/PortalHttpRequest.js", ServletContext);
-JavascriptService.addJavascript("GateIn.portal.UIPortal", "/javascript/GateIn/portal/UIPortal.js", ServletContext);
-JavascriptService.addJavascript("GateIn.portal.UIWorkspace", "/javascript/GateIn/portal/UIWorkspace.js", ServletContext);
-JavascriptService.addJavascript("GateIn.portal.UIPortalControl", "/javascript/GateIn/portal/UIPortalControl.js", ServletContext);
-JavascriptService.addJavascript("GateIn.portal.PortalDragDrop", "/javascript/GateIn/portal/PortalDragDrop.js", ServletContext);
-JavascriptService.addJavascript("GateIn.portal.UIPortalNavigation", "/javascript/GateIn/portal/UIPortalNavigation.js", ServletContext);
-JavascriptService.addJavascript("GateIn.portal.UIMaskWorkspace", "/javascript/GateIn/portal/UIMaskWorkspace.js", ServletContext);
-JavascriptService.addJavascript("GateIn.portal.UIExoStartMenu", "/javascript/GateIn/portal/UIExoStartMenu.js", ServletContext);
+JavascriptService.addJavascript("eXo.portal.PortalHttpRequest", "/javascript/eXo/portal/PortalHttpRequest.js", ServletContext);
+JavascriptService.addJavascript("eXo.portal.UIPortal", "/javascript/eXo/portal/UIPortal.js", ServletContext);
+JavascriptService.addJavascript("eXo.portal.UIWorkspace", "/javascript/eXo/portal/UIWorkspace.js", ServletContext);
+JavascriptService.addJavascript("eXo.portal.UIPortalControl", "/javascript/eXo/portal/UIPortalControl.js", ServletContext);
+JavascriptService.addJavascript("eXo.portal.PortalDragDrop", "/javascript/eXo/portal/PortalDragDrop.js", ServletContext);
+JavascriptService.addJavascript("eXo.portal.UIPortalNavigation", "/javascript/eXo/portal/UIPortalNavigation.js", ServletContext);
+JavascriptService.addJavascript("eXo.portal.UIMaskWorkspace", "/javascript/eXo/portal/UIMaskWorkspace.js", ServletContext);
+JavascriptService.addJavascript("eXo.portal.UIExoStartMenu", "/javascript/eXo/portal/UIExoStartMenu.js", ServletContext);
 /* Desktop Javascripts 2 */
-JavascriptService.addJavascript("GateIn.desktop.UIWindow", "/javascript/GateIn/desktop/UIWindow.js", ServletContext);
+JavascriptService.addJavascript("eXo.desktop.UIWindow", "/javascript/eXo/desktop/UIWindow.js", ServletContext);
 </programlisting>
+   <para>
+      Note that even if the you register dedicated javascripts, they
+      will be merged into a single
+      <literal>merged.js</literal>
+      file when the server will load in order to reduce the number of
+      HTTP calls as seen in the home page source code:
+   </para>
+
+   <programlisting>&lt;script type="text/javascript" src="/portal/javascript/merged.js"&gt;&lt;/script&gt;</programlisting>
 	<para>
-		Note that even if the you register dedicated javascripts, they will be merged into a single <literal>merged.js</literal> file when the server will load in order to reduce the number of HTTP calls as seen in the home page source code:
+		Although this optimization is useful for a production environment, you may find it easier to deactivate this optimization while debugging your javascript. For that, you simply need to set the java system property <literal>exo.product.developing</literal> to <literal>true</literal>. But if you <emphasis>want to see or use the merged file</emphasis> you have to set this property to <literal>false</literal>.
+       You can pass the property as a JVM parameter with the <literal>-D</literal> option in your <literal>GateIn.sh</literal> or <literal>GateIn.bat</literal> startup script: 
+	</para>
+	<para>
+		Every javascript file is referenced with a module name of type "eXo.core.DragDrop" which acts like a namespace. Inside the associated files, global javascript functions are used following the same namespace convention:
 	</para>
 	
-<programlisting>    &lt;script type="text/javascript" src="/portal/javascript/merged.js"&gt;&lt;/script&gt;
-</programlisting>
+<programlisting>eXo.core.DragDrop = new DragDrop() ;</programlisting>
 	<para>
-		Although this optimization is useful for a production environment, you may find it easier to deactivate this optimization while debugging your javascript. For that, you simply need to set the java system property <literal>exo.product.developing</literal> to <literal>true</literal>. But if you <emphasis>want to see or use the merged file</emphasis> you have to set this property to <literal>false</literal>. You can pass the property as a JVM parameter with the <literal>-D</literal> option in your <literal>GateIn.sh</literal> or <literal>GateIn.bat</literal> startup script: {code} EXO{code}
-	</para>
-	<para>
-		Every javascript file is referenced with a module name of type "GateIn.core.DragDrop" which acts like a namespace. Inside the associated files, global javascript functions are used following the same namespace convention:
-	</para>
-	
-<programlisting>GateIn.core.DragDrop = new DragDrop() ;
-</programlisting>
-	<para>
-		It is also possible to use the GateIn.require() javascript method to lazy load and evaluate some javascript code. This is quite useful from the portlet or widget applications that will use this javascript only once. Otherwise, if the library is reusable in several places it is better to reference it in the groovy file.
+		It is also possible to use the eXo.require() javascript method to lazy load and evaluate some javascript code. This is quite useful from the portlet or widget applications that will use this javascript only once. Otherwise, if the library is reusable in several places it is better to reference it in the groovy file.
 	</para>
 </section>
 

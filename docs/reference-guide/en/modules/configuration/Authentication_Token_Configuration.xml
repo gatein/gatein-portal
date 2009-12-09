@@ -2,119 +2,128 @@
 <!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
 ]>
 <section id="sect-Reference_Guide-Authentication_Token_Configuration">
-	<!--    
+   <title>Authentication Token Configuration</title>
+   <section
+      id="sect-Reference_Guide-Authentication_Token_Configuration-Overview">
+      <title>Overview</title>
+      <para>
+         In this article, you will learn:
+		</para>
+      <itemizedlist>
+         <listitem>
+            <para>
+               What token services are.
+				</para>
+         </listitem>
+         <listitem>
+            <para>
+               Implement a token service for using in GateIn portal.
+				</para>
+         </listitem>
+         <listitem>
+            <para>
+               Configure a token service with a token's life-time.
+				</para>
+         </listitem>
+      </itemizedlist>
+   </section>
 
-    Copyright (C) 2009 eXo Platform SAS.
-    
-    This is free software; you can redistribute it and/or modify it
-    under the terms of the GNU Lesser General Public License as
-    published by the Free Software Foundation; either version 2.1 of
-    the License, or (at your option) any later version.
-    
-    This software is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-    Lesser General Public License for more details.
-    
-    You should have received a copy of the GNU Lesser General Public
-    License along with this software; if not, write to the Free
-    Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
-    02110-1301 USA, or see the FSF site: http://www.fsf.org.
+   <section
+      id="sect-Reference_Guide-Authentication_Token_Configuration-What_is_token_service">
+      <title>What is token service</title>
+      <para>
+         Token service is used in authentication.
+		</para>
+      <para>
+         Using token helps preventing information such as user name, password into
+         user request so the system will become more secure.
+		</para>
+      <para>
+         Token service provides the way to manipulate tokens such as create,
+         delete, retrieve, clean ... Token service also defines the
+         life-time of token. After the life-time, token has no more
+         effect. The life-time definition must be configured.
+		</para>
+   </section>
 
-    --><title>Authentication Token Configuration</title>
-	<section id="sect-Reference_Guide-Authentication_Token_Configuration-Overview">
-		<title>Overview</title>
-		<para>
-			In this article, you will learn:
-		</para>
-		<itemizedlist>
-			<listitem>
-				<para>
-					What token services are.
-				</para>
-			</listitem>
-			<listitem>
-				<para>
-					Implement a token service for using in GateIn portal.
-				</para>
-			</listitem>
-			<listitem>
-				<para>
-					Configure a token service with a token's life-time.
-				</para>
-			</listitem>
-		</itemizedlist>
-	</section>
-	
-	<section id="sect-Reference_Guide-Authentication_Token_Configuration-What_is_token_service">
-		<title>What is token service</title>
-		<para>
-			Token service is used in authentication.
-		</para>
-		<para>
-			Using token helps preventing information such as user name, password into user request so the system will become more secure.
-		</para>
-		<para>
-			Token service provides the way to manipulate tokens such as create, delete, retrieve, clean ... Token service also defines the life-time of token. After the life-time, token has no more effect. The life-time definition must be configured.
-		</para>
-	</section>
-	
-	<section id="sect-Reference_Guide-Authentication_Token_Configuration-Implement_token_services_API">
-		<title>Implement token service's API</title>
-		<para>
-			All token services used in GateIn portal's authentication must be a subclass of an abstract class <emphasis role="bold">AbstractTokenService</emphasis> . So they must have these following methods:
-		</para>
-		
-<programlisting>
-		public Token getToken(String id) throws PathNotFoundException,
-		RepositoryException;
-		public Token deleteToken(String id) throws PathNotFoundException,
-		RepositoryException;
+   <section
+      id="sect-Reference_Guide-Authentication_Token_Configuration-Implement_token_services_API">
+      <title>Implement token service's API</title>
+      <para>
+         All token services used in GateIn portal's authentication must
+         be a subclass of an abstract class
+         <emphasis role="bold">AbstractTokenService</emphasis>
+         . So they must have these following methods:
+      </para>
+
+      <programlisting role="JAVA"><![CDATA[
+		public Token getToken(String id) throws PathNotFoundException, RepositoryException;
+		public Token deleteToken(String id) throws PathNotFoundException, RepositoryException;
 		public String[] getAllTokens();
 		public long getNumberTokens() throws Exception;
-		public String createToken(Credentials credentials) throws
-		IllegalArgumentException,NullPointerException;
-		public Credentials validateToken(String tokenKey, boolean remove) throws
-		NullPointerException;
-</programlisting>
-		<para>
-			These methods show how the token-service manipulates its tokens.
+		public String createToken(Credentials credentials) throws IllegalArgumentException,NullPointerException;
+		public Credentials validateToken(String tokenKey, boolean remove) throws NullPointerException;
+]]></programlisting>
+      <para>
+         These methods show how the token-service manipulates its tokens.
 		</para>
-	</section>
-	
-	<section id="sect-Reference_Guide-Authentication_Token_Configuration-Configure_token_services">
-		<title>Configure token services</title>
-		<para>
-			Token services configuration is also known as specifying the life-time of token in the configuration file. The token service is configured as a portal component.
+   </section>
+
+   <section
+      id="sect-Reference_Guide-Authentication_Token_Configuration-Configure_token_services">
+      <title>Configure token services</title>
+      <para>
+         Token services configuration is also known as specifying the life-time of
+         token in the configuration file. The token service is
+         configured as a portal component.
 		</para>
-		<para>
-			Examples:
+      <para>
+         Examples:
 		</para>
-		
-<programlisting>
-&lt;component&gt;
-    &lt;key&gt;org.exoplatform.web.security.security.CookieTokenService&lt;/key&gt;
-    &lt;type&gt;org.exoplatform.web.security.security.CookieTokenService&lt;/type&gt;
-    &lt;init-params&gt;
-    	&lt;values-param&gt;
-          &lt;name&gt;tokenTimeout&lt;/name&gt;          
-          &lt;value&gt;jcr-token&lt;/value&gt;
-          &lt;value&gt;7&lt;/value&gt;
-          &lt;value&gt;DAY&lt;/value&gt;
-        &lt;/values-param&gt;    	
-    &lt;/init-params&gt;
-&lt;/component&gt;
-</programlisting>
-		<para>
-			In this example, <emphasis>CookieTokenService</emphasis> is a subclass of <emphasis role="bold">AbstractTokenService</emphasis> so it has a property which specifies <emphasis>how long token can live</emphasis>.
-		</para>
-		<para>
-			Service will initiate this property by looking for an init-param named as "<emphasis role="bold">service.configuration</emphasis>". This property must have 3 values (service's name, amount of time, unit of time). In this case, we can see the service's name is "jcr-token", the token's expiration time is a week.
-		</para>
-		<para>
-			At this time, GateIn Portal supports <emphasis>four</emphasis> timing units: <emphasis role="bold">SECOND</emphasis>, <emphasis role="bold">MINUTE</emphasis>, <emphasis role="bold">HOUR</emphasis> and <emphasis role="bold">DAY</emphasis>.
-		</para>
-	</section>
+
+      <programlisting role="XML"><![CDATA[<component>
+  <key>org.exoplatform.web.security.security.CookieTokenService</key>
+  <type>org.exoplatform.web.security.security.CookieTokenService</type>
+  <init-params>
+  	<values-param>
+      <name>tokenTimeout</name>          
+      <value>jcr-token</value>
+      <value>7</value>
+      <value>DAY</value>
+    </values-param>    	
+  </init-params>
+</component>]]></programlisting>
+      <para>
+         In this example,
+         <emphasis>CookieTokenService</emphasis>
+         is a subclass of
+         <emphasis role="bold">AbstractTokenService</emphasis>
+         so it has a property which specifies
+         <emphasis>how long token can live</emphasis>
+         .
+      </para>
+      <para>
+         Service will initiate this property by looking for an
+         init-param named as "
+         <emphasis role="bold">service.configuration</emphasis>
+         ". This property must have 3 values (service's name, amount of
+         time, unit of time). In this case, we can see the service's
+         name is "jcr-token", the token's expiration time is a week.
+      </para>
+      <para>
+         At this time, GateIn Portal supports
+         <emphasis>four</emphasis>
+         timing units:
+         <emphasis role="bold">SECOND</emphasis>
+         ,
+         <emphasis role="bold">MINUTE</emphasis>
+         ,
+         <emphasis role="bold">HOUR</emphasis>
+         and
+         <emphasis role="bold">DAY</emphasis>
+         .
+      </para>
+   </section>
 
 </section>
 

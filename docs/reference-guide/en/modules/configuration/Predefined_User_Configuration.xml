@@ -2,128 +2,211 @@
 <!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
 ]>
 <section id="sect-Reference_Guide-Predefined_User_Configuration">
-	<!--    
+   <title>Predefined User Configuration</title>
+   <section
+      id="sect-Reference_Guide-Predefined_User_Configuration-Overview">
+      <title>Overview</title>
+      <para>
+         To specify the initial Organization configuration, the content
+         of
+         <literal>02portal.war:/WEB-INF/conf/organization/organization-configuration.xml
+         </literal>
+         should be edited. This file complies with the XML GateIn
+         configuration schema. It lists several configuration plugins.
+      </para>
+   </section>
 
-    Copyright (C) 2009 eXo Platform SAS.
-    
-    This is free software; you can redistribute it and/or modify it
-    under the terms of the GNU Lesser General Public License as
-    published by the Free Software Foundation; either version 2.1 of
-    the License, or (at your option) any later version.
-    
-    This software is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-    Lesser General Public License for more details.
-    
-    You should have received a copy of the GNU Lesser General Public
-    License along with this software; if not, write to the Free
-    Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
-    02110-1301 USA, or see the FSF site: http://www.fsf.org.
+   <section
+      id="sect-Reference_Guide-Predefined_User_Configuration-Plugin_for_adding_users_groups_and_membership_types">
+      <title>Plugin for adding users, groups and membership types
+      </title>
+      <para>
+         The plugin of type
+         <literal>org.exoplatform.services.organization.OrganizationDatabaseInitializer
+         </literal>
+         specifies the list of users, groups and membership types to be
+         created. The initialization parameter named
+         "checkDatabaseAlgorithm" determines how the creation is
+         triggered. Thus, the value "entry" means that each user, group
+         and membership listed in the configuration is checked each time
+         GateIn is started. If not existing, it is created. The value
+         "empty" means that the whole list of preconfigured users,
+         groups and memberships is processed only if the database is
+         empty.
+      </para>
+   </section>
 
-    --> <title>Predefined User Configuration</title>
-	<section id="sect-Reference_Guide-Predefined_User_Configuration-Overview">
-		<title>Overview</title>
-		<para>
-			To specify the initial Organization configuration, the content of <literal>portal.war:WEB-INF/conf/organization/organization-configuration.xml</literal> should be edited. This file complies with the XML GateIn configuration schema. It lists several configuration plugins.
+   <section
+      id="sect-Reference_Guide-Predefined_User_Configuration-Membership_types">
+      <title>Membership types</title>
+      <para>
+         The predefined membership types are specified in the
+         "membershipType"
+         field of the "OrganizationConfig" plugin
+         parameter.
+      </para>
+      <programlisting role="XML"><![CDATA[<field name="membershipType">
+  <collection type="java.util.ArrayList">
+    <value>
+      <object type="org.exoplatform.services.organization.OrganizationConfig$MembershipType">
+        <field name="type">
+          <string>member</string>
+        </field>
+        <field name="description">
+          <string>member membership type</string>
+        </field>
+      </object>
+    </value>
+    <value>
+      <object type="org.exoplatform.services.organization.OrganizationConfig$MembershipType">
+        <field name="type">
+          <string>owner</string>
+        </field>
+        <field name="description">
+          <string>owner membership type</string>
+        </field>
+      </object>
+     </value>
+     <value>
+       <object type="org.exoplatform.services.organization.OrganizationConfig$MembershipType">
+         <field name="type">
+           <string>validator</string>
+         </field>
+         <field name="description">
+           <string>validator membership type</string>
+         </field>
+       </object>
+     </value>
+   </collection>
+</field>]]></programlisting>
+   </section>
+
+   <section id="sect-Reference_Guide-Predefined_User_Configuration-Groups">
+      <title>Groups</title>
+      <para>
+         The predefined groups are specified in the "group" field of
+         the
+         "OrganizationConfig" plugin parameter.
+      </para>
+      <programlisting role="XML"><![CDATA[<field name="group">
+  <collection type="java.util.ArrayList">
+    <value>
+      <object type="org.exoplatform.services.organization.OrganizationConfig$Group">
+        <field name="name">
+          <string>portal</string>
+        </field>
+        <field name="parentId">
+          <string></string>
+        </field>
+        <field name="type">
+          <string>hierachy</string>
+        </field>
+        <field name="description">
+          <string>the /portal group</string>
+        </field>
+      </object>
+    </value>
+    <value>
+      <object type="org.exoplatform.services.organization.OrganizationConfig$Group">
+        <field name="name">
+          <string>community</string>
+        </field>
+        <field name="parentId">
+          <string>/portal</string>
+        </field>
+        <field name="type">
+          <string>hierachy</string>
+        </field>
+        <field name="description">
+          <string>the /portal/community group</string>
+        </field>
+      </object>
+    </value>
+    ...
+  </collection>
+</field>]]></programlisting>
+   </section>
+
+   <section id="sect-Reference_Guide-Predefined_User_Configuration-Users">
+      <title>Users</title>
+      <para>
+         The predefined users are specified in the "membershipType"
+         field of the
+         "OrganizationConfig" plugin parameter.
 		</para>
-	</section>
-	
-	<section id="sect-Reference_Guide-Predefined_User_Configuration-Plugin_for_adding_users_groups_and_membership_types">
-		<title>Plugin for adding users, groups and membership types</title>
-		<para>
-			The plugin of type <literal>org.exoplatform.services.organization.OrganizationDatabaseInitializer</literal> specifies the list of users, groups and membership types to be created. The initialization parameter named "checkDatabaseAlgorithm" determines how the creation is triggered. Thus, the value "entry" means that each user, group and membership listed in the configuration is checked each time GateIn is started. If not existing, it is created. The value "empty" means that the whole list of preconfigured users, groups and memberships is processed only if the database is empty.
-		</para>
-	</section>
-	
-	<section id="sect-Reference_Guide-Predefined_User_Configuration-Membership_types">
-		<title>Membership types</title>
-		<para>
-			The predefined membership types are specified in the "membershipType" field of the "OrganizationConfig" plugin parameter. {code} &lt;field name="membershipType"&gt; &lt;collection type="java.util.ArrayList"&gt; &lt;value&gt; &lt;object type="org.exoplatform.services.organization.OrganizationConfig$MembershipType"&gt; &lt;field name="type"&gt;&lt;string&gt;member&lt;/string&gt;&lt;/field&gt; &lt;field name="description"&gt;&lt;string&gt;member membership type&lt;/string&gt;&lt;/field&gt; &lt;/object&gt; &lt;/value&gt; &lt;value&gt; &lt;object type="org.exoplatform.services.organization.OrganizationConfig$MembershipType"&gt; &lt;field name="type"&gt;&lt;string&gt;owner&lt;/string&gt;&lt;/field&gt; &lt;field name="description"&gt;&lt;string&gt;owner membership type&lt;/string&gt;&lt;/field&gt; &lt;/object&gt; &lt;/value&gt; &lt;value&gt; &lt;object type="org.exoplatform.services.organization.OrganizationConfig$MembershipType"&gt; &lt;field name="type"&gt;&lt;string&gt;validator&lt;/string&gt;&lt;/field&gt; &lt;field name="description"&gt;&lt;string&gt;validator membership type&lt;/string&gt;&lt;/field&gt; &lt;/object&gt; &lt;/value&gt; &lt;/collection&gt; &lt;/field&gt; {code}
-		</para>
-	</section>
-	
-	<section id="sect-Reference_Guide-Predefined_User_Configuration-Groups">
-		<title>Groups</title>
-		<para>
-			The predefined groups are specified in the "group" field of the "OrganizationConfig" plugin parameter. {code} &lt;field name="group"&gt; &lt;collection type="java.util.ArrayList"&gt; &lt;value&gt; &lt;object type="org.exoplatform.services.organization.OrganizationConfig$Group"&gt; &lt;field name="name"&gt;&lt;string&gt;portal&lt;/string&gt;&lt;/field&gt; &lt;field name="parentId"&gt;&lt;string&gt;&lt;/string&gt;&lt;/field&gt; &lt;field name="type"&gt;&lt;string&gt;hierachy&lt;/string&gt;&lt;/field&gt; &lt;field name="description"&gt;&lt;string&gt;the /portal group&lt;/string&gt;&lt;/field&gt; &lt;/object&gt; &lt;/value&gt; &lt;value&gt; &lt;object type="org.exoplatform.services.organization.OrganizationConfig$Group"&gt; &lt;field name="name"&gt;&lt;string&gt;community&lt;/string&gt;&lt;/field&gt; &lt;field name="parentId"&gt;&lt;string&gt;/portal&lt;/string&gt;&lt;/field&gt; &lt;field name="type"&gt;&lt;string&gt;hierachy&lt;/string&gt;&lt;/field&gt; &lt;field name="description"&gt;&lt;string&gt;the /portal/community group&lt;/string&gt;&lt;/field&gt; &lt;/object&gt; &lt;/value&gt; ... &lt;/collection&gt; &lt;/field&gt; {code}
-		</para>
-	</section>
-	
-	<section id="sect-Reference_Guide-Predefined_User_Configuration-Users">
-		<title>Users</title>
-		<para>
-			The predefined users are specified in the "membershipType" field of the "OrganizationConfig" plugin parameter.
-		</para>
-		
-<programlisting>  &lt;field name="user"&gt;
-    &lt;collection type="java.util.ArrayList"&gt;
-      &lt;value&gt;
-        &lt;object type="org.exoplatform.services.organization.OrganizationConfig$User"&gt;
-          &lt;field name="userName"&gt;&lt;string&gt;root&lt;/string&gt;&lt;/field&gt;
-          &lt;field name="password"&gt;&lt;string&gt;exo&lt;/string&gt;&lt;/field&gt;
-          &lt;field name="firstName"&gt;&lt;string&gt;root&lt;/string&gt;&lt;/field&gt;
-          &lt;field name="lastName"&gt;&lt;string&gt;root&lt;/string&gt;&lt;/field&gt;
-          &lt;field name="email"&gt;&lt;string&gt;exoadmin@localhost&lt;/string&gt;&lt;/field&gt;
-          &lt;field name="groups"&gt;&lt;string&gt;member:/admin,member:/user,owner:/portal/admin&lt;/string&gt;&lt;/field&gt;
-        &lt;/object&gt;
-      &lt;/value&gt;
-      &lt;value&gt;
-        &lt;object type="org.exoplatform.services.organization.OrganizationConfig$User"&gt;
-          &lt;field name="userName"&gt;&lt;string&gt;exo&lt;/string&gt;&lt;/field&gt;
-          &lt;field name="password"&gt;&lt;string&gt;exo&lt;/string&gt;&lt;/field&gt;
-          &lt;field name="firstName"&gt;&lt;string&gt;site&lt;/string&gt;&lt;/field&gt;
-          &lt;field name="lastName"&gt;&lt;string&gt;site&lt;/string&gt;&lt;/field&gt;
-          &lt;field name="email"&gt;&lt;string&gt;exo@localhost&lt;/string&gt;&lt;/field&gt;
-          &lt;field name="groups"&gt;&lt;string&gt;member:/user&lt;/string&gt;&lt;/field&gt;
-        &lt;/object&gt;
-      &lt;/value&gt;
-      ...
-    &lt;/collection&gt;
-  &lt;/field&gt;
-</programlisting>
-	</section>
-	
-	<section id="sect-Reference_Guide-Predefined_User_Configuration-Plugin_for_monitoring_user_creation">
-		<title>Plugin for monitoring user creation</title>
-		<para>
-			The plugin of type <literal>org.exoplatform.services.organization.impl.NewUserEventListener</literal> specifies which groups should join all newly created users. It notably specifies the groups and memberships to be used. It also specifies a list of users that should be excepted.
-		</para>
-		
-<programlisting>    &lt;component-plugin&gt;
-      &lt;name&gt;new.user.event.listener&lt;/name&gt;
-      &lt;set-method&gt;addListenerPlugin&lt;/set-method&gt;
-      &lt;type&gt;org.exoplatform.services.organization.impl.NewUserEventListener&lt;/type&gt;
-      &lt;description&gt;this listener assign group and membership to a new created user&lt;/description&gt;
-      &lt;init-params&gt;
-        &lt;object-param&gt;
-          &lt;name&gt;configuration&lt;/name&gt;
-          &lt;description&gt;description&lt;/description&gt;
-          &lt;object type="org.exoplatform.services.organization.impl.NewUserConfig"&gt;
-            &lt;field  name="group"&gt;
-              &lt;collection type="java.util.ArrayList"&gt;
-                &lt;value&gt;
-                  &lt;object type="org.exoplatform.services.organization.impl.NewUserConfig$JoinGroup"&gt;
-                    &lt;field name="groupId"&gt;&lt;string&gt;/user&lt;/string&gt;&lt;/field&gt;
-                    &lt;field name="membership"&gt;&lt;string&gt;member&lt;/string&gt;&lt;/field&gt;
-                  &lt;/object&gt;
-                &lt;/value&gt;               
-              &lt;/collection&gt;
-            &lt;/field&gt;
-            &lt;field  name="ignoredUser"&gt;
-              &lt;collection type="java.util.HashSet"&gt;
-                &lt;value&gt;&lt;string&gt;exo&lt;/string&gt;&lt;/value&gt;
-                &lt;value&gt;&lt;string&gt;root&lt;/string&gt;&lt;/value&gt;
-                &lt;value&gt;&lt;string&gt;company&lt;/string&gt;&lt;/value&gt;
-                &lt;value&gt;&lt;string&gt;community&lt;/string&gt;&lt;/value&gt;
-              &lt;/collection&gt;
-            &lt;/field&gt;
-          &lt;/object&gt;
-        &lt;/object-param&gt;
-      &lt;/init-params&gt;
-    &lt;/component-plugin&gt;
-</programlisting>
-	</section>
+
+      <programlisting role="XML"><![CDATA[<field name="user">
+  <collection type="java.util.ArrayList">
+    <value>
+      <object type="org.exoplatform.services.organization.OrganizationConfig$User">
+        <field name="userName"><string>root</string></field>
+        <field name="password"><string>exo</string></field>
+        <field name="firstName"><string>root</string></field>
+        <field name="lastName"><string>root</string></field>
+        <field name="email"><string>exoadmin@localhost</string></field>
+        <field name="groups"><string>member:/admin,member:/user,owner:/portal/admin</string></field>
+      </object>
+    </value>
+    <value>
+      <object type="org.exoplatform.services.organization.OrganizationConfig$User">
+        <field name="userName"><string>exo</string></field>
+        <field name="password"><string>exo</string></field>
+        <field name="firstName"><string>site</string></field>
+        <field name="lastName"><string>site</string></field>
+        <field name="email"><string>exo@localhost</string></field>
+        <field name="groups"><string>member:/user</string></field>
+      </object>
+    </value>
+    ...
+  </collection>
+</field>]]></programlisting>
+   </section>
+
+   <section
+      id="sect-Reference_Guide-Predefined_User_Configuration-Plugin_for_monitoring_user_creation">
+      <title>Plugin for monitoring user creation</title>
+      <para>
+         The plugin of type
+         <literal>org.exoplatform.services.organization.impl.NewUserEventListener
+         </literal>
+         specifies which groups should join all newly created users. It
+         notably specifies the groups and memberships to be used. It
+         also specifies a list of users that should be excepted.
+      </para>
+
+      <programlisting role="XML"><![CDATA[<component-plugin>
+  <name>new.user.event.listener</name>
+  <set-method>addListenerPlugin</set-method>
+  <type>org.exoplatform.services.organization.impl.NewUserEventListener</type>
+  <description>this listener assign group and membership to a new created user</description>
+  <init-params>
+    <object-param>
+      <name>configuration</name>
+      <description>description</description>
+      <object type="org.exoplatform.services.organization.impl.NewUserConfig">
+        <field  name="group">
+          <collection type="java.util.ArrayList">
+            <value>
+              <object type="org.exoplatform.services.organization.impl.NewUserConfig$JoinGroup">
+                <field name="groupId"><string>/user</string></field>
+                <field name="membership"><string>member</string></field>
+              </object>
+            </value>               
+          </collection>
+        </field>
+        <field  name="ignoredUser">
+          <collection type="java.util.HashSet">
+            <value><string>exo</string></value>
+            <value><string>root</string></value>
+            <value><string>company</string></value>
+            <value><string>community</string></value>
+          </collection>
+        </field>
+      </object>
+    </object-param>
+  </init-params>
+</component-plugin>]]></programlisting>
+   </section>
 
 </section>
 
