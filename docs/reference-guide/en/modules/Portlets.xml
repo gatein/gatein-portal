@@ -6,7 +6,8 @@
 	<xi:include href="portlets/WebUI.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 	<xi:include href="portlets/AJAX_in_GateIn_Framework.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 	<xi:include href="portlets/Groovy_Templates.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
-	<xi:include href="portlets/Create_a_WebUI_Portlet.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 	<xi:include href="portlets/Portlet_Lifecycle.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+    <xi:include href="portlets/Standard.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+    <xi:include href="portlets/Create_a_WebUI_Portlet.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 </chapter>
 
