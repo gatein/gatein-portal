@@ -131,7 +131,8 @@
 		</para>
       <para>
          Done. Your portlet is ready to accept Ajax calls from
-         your client.
+         your
+         client.
       </para>
    </section>
 
@@ -154,10 +155,14 @@
 </programlisting>
       <para>
          in a groovy code block. The event function will create an
-         url starting
-         with <literal>javascript:</literal> so you have to make sure this
-         code can be executed in your environment.
-		</para>
+         url
+         starting
+         with
+         <literal>javascript:</literal>
+         so you have to make sure this
+         code can be executed in your
+         environment.
+      </para>
       <para>
          If your operation must update the content of a component,
          you have to
@@ -196,57 +201,103 @@
       <title>How JavaScript works</title>
       <para>
          All the javascript is managed by the file
-         02eXoresources:javascript/eXo/portal/PortalHttpRequest.js in the portal project.
+         <filename>02eXoresources:javascript/eXo/portal/PortalHttpRequest.js</filename> in
+         the portal project.
       </para>
       <para>
          In this class, you will find 4 functions/classes (detailed
          below):
          <itemizedlist>
-            <listitem><para>PortletResponse</para></listitem>
-            <listitem><para>PortalResponse</para></listitem>
-            <listitem><para>AjaxRequest</para></listitem>
-            <listitem><para>HttpResponseHandler</para></listitem>
+            <listitem>
+               <para>PortletResponse</para>
+            </listitem>
+            <listitem>
+               <para>PortalResponse</para>
+            </listitem>
+            <listitem>
+               <para>AjaxRequest</para>
+            </listitem>
+            <listitem>
+               <para>HttpResponseHandler</para>
+            </listitem>
          </itemizedlist>
       </para>
       <para>
-         and 6 functions : {code}
+         and 6 functions:
 		</para>
       <itemizedlist>
          <listitem>
             <para>
-               ajaxGet // Calls doRequest with an url in GET mode
+               ajaxGet(url, callback)
+            </para>
+            <para>This is the main entry method for every Ajax calls to
+               the GateIn Portal
+               It is simply a dispatcher method that fills some init fields before
+               calling the doRequest() method</para>
+         </listitem>
+         <listitem>
+            <para>
+               ajaxPost(formElement, callback) // Calls doRequest
+               with an url in POST mode
+            </para>
+            <para>This method is called when a HTTP POST should be done
+               but in an AJAX
+               case some maniputalions are needed. Once
+               the content of the form is placed
+               into a string object,
+               the call is delegated to the doRequest() method </para>
+         </listitem>
+         <listitem>
+            <para>
+               doRequest(method, url, queryString, callback)
+            </para>
+            <para>
+               The doRequest() method takes incoming request from GET
+               and POST calls
+               The second argument is the URL to target on
+               the server
+               The third argument is the query string object
+               which is created out of a
+               form element, this value is not null only when there is a POST request.
+               <orderedlist>
+                  <listitem>
+                     <para>An AjaxRequest object is instanciated, it
+                        holds the reference to the XHR method</para>
+                  </listitem>
+                  <listitem>
+                     <para>An HttpResponseHandler object is instantiated
+                        and its methods like
+                        ajaxResponse, ajaxLoading, ajaxTimeout are associated with the one from
+                        the AjaxRequest and will be called by the XHR during the process
+                        method</para>
+                  </listitem>
+               </orderedlist>
             </para>
          </listitem>
          <listitem>
             <para>
-               ajaxPost // Calls doRequest with an url in POST mode
+               ajaxAbort()
+			</para>
+            <para>Cancels the current request</para>
+         </listitem>
+         <listitem>
+            <para>
+               ajaxAsyncGetRequest(url, async)
             </para>
+            <para>Allows to create and execute a
+               sync or async GET
+               request
+		    </para>
          </listitem>
          <listitem>
             <para>
-               doRequest // Creates the AjaxRequest and
-               HttpResponseHandler objects, and
-               lauches the request
-               process
+               ajaxRedirect(url)
             </para>
-         </listitem>
-         <listitem>
-            <para>
-               ajaxAbort // Cancels the current request
-				</para>
-         </listitem>
-         <listitem>
-            <para>
-               ajaxAsyncGetRequest // Allows to create and execute a
-               sync or async GET request
-				</para>
-         </listitem>
-         <listitem>
-            <para>
-               ajaxRedirect // A simple javascript redirection with
+            <para>A simple javascript redirection with
                window.location.href
-               {code} that are the entry points of
-               these classes. You
+               that are the entry points of
+               these
+               classes. You
                shouldn't have to call explicitly these
                functions, since
                the template file and the portlet class
@@ -265,7 +316,7 @@
          gets the
          response elements from the xml returned by Ajax, and
          store them
-         in the corresponding attributes : {code}
+         in the corresponding attributes :
 		</para>
       <itemizedlist>
          <listitem>
@@ -303,7 +354,6 @@
             <para>
                blocksToUpdate // An array containing the containers
                to update with this script
-               {code}
 				</para>
          </listitem>
       </itemizedlist>
@@ -322,7 +372,7 @@
          <literal>PortletResponse</literal>
          s (
          <literal>portletResponses</literal>
-         ) and two other attributes : {code}
+         ) and two other attributes :
       </para>
       <itemizedlist>
          <listitem>
@@ -332,7 +382,7 @@
          </listitem>
          <listitem>
             <para>
-               script // Javascript code to update {code}
+               script // Javascript code to update
 				</para>
          </listitem>
       </itemizedlist>
@@ -356,7 +406,6 @@
       <title>HttpResponseHandler</title>
       <para>
          This class provides methods to handle the Ajax response.
-         {code}
 		</para>
       <itemizedlist>
          <listitem>
@@ -386,7 +435,6 @@
          <listitem>
             <para>
                ajaxLoading // shows the loading popup and mask layer
-               {code}
 				</para>
          </listitem>
       </itemizedlist>
