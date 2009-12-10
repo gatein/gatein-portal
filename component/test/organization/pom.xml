@@ -19,33 +19,45 @@
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
-  <parent>
-    <groupId>org.exoplatform.portal</groupId>
-    <artifactId>exo.portal.component.test</artifactId>
-    <version>3.0.0-Beta04-SNAPSHOT</version>
-  </parent>
-
-  <modelVersion>4.0.0</modelVersion>
-  <artifactId>exo.portal.component.test.organization</artifactId>
-  <packaging>jar</packaging>
-  <name>GateIn Portal Component Core Test Organization</name>
-
-  <dependencies>
-
-    <dependency>
+   <parent>
       <groupId>org.exoplatform.portal</groupId>
-      <artifactId>exo.portal.component.test.core</artifactId>
+      <artifactId>exo.portal.component.test</artifactId>
       <version>3.0.0-Beta04-SNAPSHOT</version>
-    </dependency>
+   </parent>
 
-  </dependencies>
+   <modelVersion>4.0.0</modelVersion>
+   <artifactId>exo.portal.component.test.organization</artifactId>
+   <packaging>jar</packaging>
+   <name>GateIn Portal Component Core Test Organization</name>
+
+   <dependencies>
+
+      <dependency>
+         <groupId>org.exoplatform.portal</groupId>
+         <artifactId>exo.portal.component.test.core</artifactId>
+         <version>3.0.0-Beta04-SNAPSHOT</version>
+      </dependency>
+        
+      <dependency>
+         <groupId>org.exoplatform.portal</groupId>
+         <artifactId>exo.portal.component.identity</artifactId>
+         <version>3.0.0-Beta04-SNAPSHOT</version>
+      </dependency>
+
+      <dependency>
+         <groupId>commons-collections</groupId>
+         <artifactId>commons-collections</artifactId>
+         <version>3.2.1</version>
+      </dependency>
+
+   </dependencies>
   
-  <build>
-    <resources>
-       <resource>
-          <directory>src/main/resources</directory>
-       </resource>
-    </resources>
-  </build>
+   <build>
+      <resources>
+         <resource>
+            <directory>src/main/resources</directory>
+         </resource>
+      </resources>
+   </build>
 
 </project>
