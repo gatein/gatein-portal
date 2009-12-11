@@ -32,6 +32,9 @@ import java.util.Map;
  */
 public class Utils
 {
+   public final static String USER_NAME_VALIDATOR_REGEX = "^[\\p{L}][\\p{L}._\\-\\d]+$";
+
+   public final static String FIRST_CHARACTER_NAME_VALIDATOR_REGEX = "^[\\p{L}][\\p{L}._'\\- \\d]+$";
 
    public static String join(String separator, String... strings)
    {
@@ -120,7 +123,7 @@ public class Utils
       }
       else
       {
-         Map<K, V> copy = new HashMap<K,V>(map);
+         Map<K, V> copy = new HashMap<K, V>(map);
          return Collections.unmodifiableMap(copy);
       }
    }

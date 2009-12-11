@@ -19,6 +19,7 @@
 
 package org.exoplatform.portal.account;
 
+import org.exoplatform.portal.pom.config.Utils;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
@@ -62,16 +63,14 @@ public class UIAccountProfiles extends UIForm
       UIFormStringInput userName = new UIFormStringInput("userName", "userName", username);
       userName.setEditable(false);
       addUIFormInput(userName.addValidator(MandatoryValidator.class).addValidator(StringLengthValidator.class, 3, 30)
-         .addValidator(ResourceValidator.class).addValidator(ExpressionValidator.class, "^[\\p{L}][\\p{L}._\\-\\d]+$",
-            "ResourceValidator.msg.Invalid-char"));
+         .addValidator(ResourceValidator.class).addValidator(ExpressionValidator.class,
+            Utils.USER_NAME_VALIDATOR_REGEX, "ResourceValidator.msg.Invalid-char"));
       addUIFormInput(new UIFormStringInput("firstName", "firstName", useraccount.getFirstName()).addValidator(
          StringLengthValidator.class, 3, 45).addValidator(MandatoryValidator.class).addValidator(
-         ExpressionValidator.class, "^[\\p{L}][\\p{ASCII}]+$", "FirstCharacterNameValidator.msg").addValidator(
-         ExpressionValidator.class, "^[\\p{L}][\\p{L}._\\- \\d]+$", "ResourceValidator.msg.Invalid-char"));
+         ExpressionValidator.class, Utils.FIRST_CHARACTER_NAME_VALIDATOR_REGEX, "FirstCharacterNameValidator.msg"));
       addUIFormInput(new UIFormStringInput("lastName", "lastName", useraccount.getLastName()).addValidator(
          StringLengthValidator.class, 3, 45).addValidator(MandatoryValidator.class).addValidator(
-         ExpressionValidator.class, "^[\\p{L}][\\p{ASCII}]+$", "FirstCharacterNameValidator.msg").addValidator(
-         ExpressionValidator.class, "^[\\p{L}][\\p{L}._\\- \\d]+$", "ResourceValidator.msg.Invalid-char"));
+         ExpressionValidator.class, Utils.FIRST_CHARACTER_NAME_VALIDATOR_REGEX, "FirstCharacterNameValidator.msg"));
       addUIFormInput(new UIFormStringInput("email", "email", useraccount.getEmail()).addValidator(
          MandatoryValidator.class).addValidator(EmailAddressValidator.class));
    }

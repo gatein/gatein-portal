@@ -19,6 +19,7 @@
 
 package org.exoplatform.organization.webui.component;
 
+import org.exoplatform.portal.pom.config.Utils;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -57,16 +58,14 @@ public class UIAccountEditInputSet extends UIFormInputSet
       super(name);
       addUIFormInput(new UIFormStringInput(USERNAME, "userName", null).setEditable(false).addValidator(
          MandatoryValidator.class).addValidator(StringLengthValidator.class, 3, 30).addValidator(
-         ResourceValidator.class).addValidator(ExpressionValidator.class, "^[\\p{L}][\\p{L}._\\-\\d]+$",
+         ResourceValidator.class).addValidator(ExpressionValidator.class, Utils.USER_NAME_VALIDATOR_REGEX,
          "ResourceValidator.msg.Invalid-char"));
       addUIFormInput(new UIFormStringInput("firstName", "firstName", null).setMaxLength(45).addValidator(
          StringLengthValidator.class, 3, 45).addValidator(MandatoryValidator.class).addValidator(
-         ExpressionValidator.class, "^[\\p{L}][\\p{ASCII}]+$", "FirstCharacterNameValidator.msg").addValidator(
-         ExpressionValidator.class, "^[\\p{L}][\\p{L}._\\- \\d]+$", "ResourceValidator.msg.Invalid-char"));
+         ExpressionValidator.class, Utils.FIRST_CHARACTER_NAME_VALIDATOR_REGEX, "FirstCharacterNameValidator.msg"));
       addUIFormInput(new UIFormStringInput("lastName", "lastName", null).setMaxLength(45).addValidator(
          StringLengthValidator.class, 3, 45).addValidator(MandatoryValidator.class).addValidator(
-         ExpressionValidator.class, "^[\\p{L}][\\p{ASCII}]+$", "FirstCharacterNameValidator.msg").addValidator(
-         ExpressionValidator.class, "^[\\p{L}][\\p{L}._\\- \\d]+$", "ResourceValidator.msg.Invalid-char"));
+         ExpressionValidator.class, Utils.FIRST_CHARACTER_NAME_VALIDATOR_REGEX, "FirstCharacterNameValidator.msg"));
       addUIFormInput(new UIFormStringInput("email", "email", null).addValidator(MandatoryValidator.class).addValidator(
          EmailAddressValidator.class));
       UIFormCheckBoxInput<Boolean> uiCheckbox = new UIFormCheckBoxInput<Boolean>(CHANGEPASS, null, false);
