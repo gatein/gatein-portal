@@ -26,13 +26,12 @@ import org.exoplatform.portal.config.model.TransientApplicationState;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.portal.pom.spi.gadget.Gadget;
-import org.exoplatform.test.BasicTestCase;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class TestGadget extends BasicTestCase
+public class TestGadget extends AbstractPortalTest
 {
 
    /** . */
@@ -62,7 +61,6 @@ public class TestGadget extends BasicTestCase
 
    public void testBilto() throws Exception
    {
-
       Gadget gadget = new Gadget();
       gadget.setUserPref("user_pref");
       TransientApplicationState<Gadget> state = new TransientApplicationState<Gadget>("bar", gadget);

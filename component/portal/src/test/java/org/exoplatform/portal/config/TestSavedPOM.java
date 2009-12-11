@@ -43,7 +43,7 @@ import java.util.TimeZone;
  * Created by The eXo Platform SARL Author : Tung Pham thanhtungty@gmail.com Nov
  * 13, 2007
  */
-public class TestSavedPOM extends BasicTestCase
+public class TestSavedPOM extends AbstractPortalTest
 {
 
    /** . */

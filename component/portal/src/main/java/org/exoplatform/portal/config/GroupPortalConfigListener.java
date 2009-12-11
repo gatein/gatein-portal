@@ -129,7 +129,7 @@ public class GroupPortalConfigListener extends GroupEventListener
       // Create the portal from the template
       portalConfigService.createUserPortalConfig(PortalConfig.GROUP_TYPE, groupId, "group");
 
-      // Need to insert the corresponding user site
+      // Need to insert the corresponding group site
       PortalConfig cfg = dataStorage.getPortalConfig(PortalConfig.GROUP_TYPE, groupId);
       if (cfg == null)
       {

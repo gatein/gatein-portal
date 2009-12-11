@@ -27,7 +27,7 @@ import org.exoplatform.test.BasicTestCase;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class TestContentRegistry extends BasicTestCase
+public class TestContentRegistry extends AbstractPortalTest
 {
 
    /** . */

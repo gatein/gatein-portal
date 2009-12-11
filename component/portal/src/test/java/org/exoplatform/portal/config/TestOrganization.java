@@ -35,7 +35,7 @@ import java.util.List;
  * Created by The eXo Platform SARL Author : Tung Pham thanhtungty@gmail.com Nov
  * 13, 2007
  */
-public class TestOrganization extends BasicTestCase
+public class TestOrganization extends AbstractPortalTest
 {
 
    private OrganizationService organizationService;

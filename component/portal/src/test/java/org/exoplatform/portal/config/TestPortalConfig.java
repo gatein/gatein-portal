@@ -29,12 +29,11 @@ import org.exoplatform.services.organization.GroupHandler;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.UserHandler;
-import org.exoplatform.test.BasicTestCase;
 
 /**
  * Author : TrongTT
  */
-public class TestPortalConfig extends BasicTestCase
+public class TestPortalConfig extends AbstractPortalTest
 {
 
    private DataStorage storage;
@@ -115,7 +114,7 @@ public class TestPortalConfig extends BasicTestCase
 
       PortalConfig pConfig = storage.getPortalConfig(PortalConfig.GROUP_TYPE, "/groupTest");
       assertNotNull("the Group's PortalConfig is not null", pConfig);
-      assertTrue(pConfig.getPortalLayout().getChildren() == null || pConfig.getPortalLayout().getChildren().size() < 1);
+      assertTrue(pConfig.getPortalLayout().getChildren() == null || pConfig.getPortalLayout().getChildren().size() == 4);
    }
 
    public void testUserLayout() throws Exception

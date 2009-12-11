@@ -32,7 +32,7 @@ import org.exoplatform.test.BasicTestCase;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class TestWSRP extends BasicTestCase
+public class TestWSRP extends AbstractPortalTest
 {
 
    /** . */

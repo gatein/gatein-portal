@@ -33,7 +33,7 @@ import org.exoplatform.test.BasicTestCase;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class TestPortletPreferences extends BasicTestCase
+public class TestPortletPreferences extends AbstractPortalTest
 {
 
    public TestPortletPreferences(String name)

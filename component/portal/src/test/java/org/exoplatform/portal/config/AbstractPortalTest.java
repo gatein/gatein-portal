@@ -16,32 +16,31 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.exoplatform.component.test;
+package org.exoplatform.portal.config;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import org.exoplatform.component.test.AbstractGateInTest;
+import org.exoplatform.component.test.ConfigurationUnit;
+import org.exoplatform.component.test.ConfiguredBy;
+import org.exoplatform.component.test.ContainerScope;
 
 /**
- * Annotates a unit test extending the {@link org.exoplatform.component.test.AbstractGateInTest} to provide
- * the various configuration unit relevant for executing the unit test.
- *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-@Target(ElementType.TYPE)
-@Retention(RetentionPolicy.RUNTIME)
-@Inherited
-public @interface ConfiguredBy
+@ConfiguredBy({
+   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/jcr/jcr-configuration.xml"),
+   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/organization/organization-configuration.xml"),
+   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/test-configuration.xml")
+})
+public abstract class AbstractPortalTest extends AbstractGateInTest
 {
 
-   /**
-    * Returns the various relevant configuration units.
-    *
-    * @return the configuration units
-    */
-   ConfigurationUnit[] value();
+   public AbstractPortalTest()
+   {
+   }
 
+   public AbstractPortalTest(String name)
+   {
+      super(name);
+   }
 }

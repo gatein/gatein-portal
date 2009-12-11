@@ -40,7 +40,6 @@ import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.portal.pom.spi.gadget.Gadget;
 import org.exoplatform.portal.pom.spi.portlet.Portlet;
 import org.exoplatform.portal.pom.spi.portlet.PortletBuilder;
-import org.exoplatform.test.BasicTestCase;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -50,7 +49,7 @@ import java.util.List;
  * Created by The eXo Platform SARL Author : Tung Pham thanhtungty@gmail.com Nov
  * 13, 2007
  */
-public class TestDataStorage extends BasicTestCase
+public class TestDataStorage extends AbstractPortalTest
 {
 
    private final String testPortal = "testPortal";
