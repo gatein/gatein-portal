@@ -77,11 +77,14 @@
             <!--CHANGEME HashtableCacheProvider shold not be used in production env-->
             <property name="hibernate.cache.provider_class" value="org.hibernate.cache.HashtableCacheProvider"/>
             <property name="hibernate.cglib.use_reflection_optimizer" value="true"/>
-            <property name="hibernate.connection.url" value="jdbc:hsqldb:file:./target/temp/data/exodb${container.name.suffix}"/>
+<!--
+            <property name="hibernate.connection.url" value="jdbc:hsqldb:file:${basedir}/target/temp/organization"/>
             <property name="hibernate.connection.driver_class" value="org.hsqldb.jdbcDriver"/>
             <property name="hibernate.connection.autocommit" value="true"/>
             <property name="hibernate.connection.username" value="sa"/>
             <property name="hibernate.connection.password" value=""/>
+-->
+            <property name="hibernate.connection.datasource" value="jdbcexo"/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.HSQLDialect"/>
             <property name="hibernate.c3p0.min_size" value="5"/>
             <property name="hibernate.c3p0.max_size" value="20"/>

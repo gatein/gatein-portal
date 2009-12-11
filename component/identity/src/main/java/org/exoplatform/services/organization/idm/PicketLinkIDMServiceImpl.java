@@ -25,6 +25,7 @@ import org.exoplatform.container.xml.ValueParam;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.database.HibernateService;
+import org.exoplatform.services.naming.InitialContextInitializer;
 import org.picketlink.idm.api.IdentitySession;
 import org.picketlink.idm.api.IdentitySessionFactory;
 import org.picketlink.idm.api.cfg.IdentityConfiguration;
@@ -69,7 +70,11 @@ public class PicketLinkIDMServiceImpl implements PicketLinkIDMService, Startable
    {
    }
 
-   public PicketLinkIDMServiceImpl(InitParams initParams, HibernateService hibernateService, ConfigurationManager confManager) throws Exception
+   public PicketLinkIDMServiceImpl(
+      InitParams initParams,
+      HibernateService hibernateService,
+      ConfigurationManager confManager,
+      InitialContextInitializer dependency) throws Exception
    {
       ValueParam config = initParams.getValueParam(PARAM_CONFIG_OPTION);
       ValueParam jndiName = initParams.getValueParam(PARAM_JNDI_NAME_OPTION);
