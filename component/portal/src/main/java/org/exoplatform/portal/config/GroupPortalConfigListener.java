@@ -19,19 +19,18 @@
 
 package org.exoplatform.portal.config;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.config.model.Container;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PortalConfig;
-import org.exoplatform.services.jcr.ext.registry.RegistryService;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.GroupEventListener;
 import org.exoplatform.services.organization.GroupHandler;
 import org.exoplatform.services.organization.OrganizationService;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * Created by The eXo Platform SARL 
@@ -64,8 +63,8 @@ public class GroupPortalConfigListener extends GroupEventListener
        * it I hope that this issues will be fixed when we use the lastest
        * version of PicoContainer Comment by Hoa Pham.
        */
-      RegistryService registryService = (RegistryService)container.getComponentInstanceOfType(RegistryService.class);
-      registryService.start();
+      //      RegistryService registryService = (RegistryService)container.getComponentInstanceOfType(RegistryService.class);
+      //      registryService.start();
       UserPortalConfigService portalConfigService =
          (UserPortalConfigService)container.getComponentInstanceOfType(UserPortalConfigService.class);
       DataStorage dataStorage = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);

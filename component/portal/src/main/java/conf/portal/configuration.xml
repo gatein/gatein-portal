@@ -24,17 +24,7 @@
    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
    xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd http://www.exoplaform.org/xml/ns/kernel_1_0.xsd"
    xmlns="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd">
-
-	<component>
-    <type>org.exoplatform.services.jcr.ext.registry.RegistryService</type>
-    <init-params>
-      <properties-param>
-      	<name>locations</name>
-      	<property name="repository" value="system"/>
-      </properties-param>
-    </init-params>
-  </component>
-
+   
   <component>
     <key>org.exoplatform.portal.pom.data.ModelDataStorage</key>
     <type>org.exoplatform.portal.pom.config.POMDataStorage</type>

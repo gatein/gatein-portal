@@ -25,7 +25,6 @@ import org.exoplatform.portal.config.model.Container;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
-import org.exoplatform.services.jcr.ext.registry.RegistryService;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.UserEventListener;
 
@@ -55,8 +54,8 @@ public class UserPortalConfigListener extends UserEventListener
        * hope that this issues will be fixed when we use the lastest version of
        * PicoContainer Comment by Hoa Pham.
        */
-      RegistryService registryService = (RegistryService)container.getComponentInstanceOfType(RegistryService.class);
-      registryService.start();
+      //      RegistryService registryService = (RegistryService)container.getComponentInstanceOfType(RegistryService.class);
+      //      registryService.start();
       UserPortalConfigService portalConfigService =
          (UserPortalConfigService)container.getComponentInstanceOfType(UserPortalConfigService.class);
       DataStorage dataStorage = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
