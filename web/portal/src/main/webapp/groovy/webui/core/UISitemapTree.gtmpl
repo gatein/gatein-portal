@@ -52,7 +52,10 @@
 					println """
 						<div class="$lastNode Node ClearFix">
 							<div class="CollapseIcon FloatLeft" onclick="eXo.portal.UIPortal.collapseExpand(this);$actionCollapse">
-									<a class="NodeIcon DefaultPageIcon" href="$actionLink">$label</a>
+					""";
+					      if(treeNode.getNode().getPageReference() == null) println "<a class='NodeIcon DefaultPageIcon' href='javascript:void(0);'>$label</a>";
+					      else println "<a class='NodeIcon DefaultPageIcon' href='$actionLink'>$label</a>";
+					println """
 							</div>
 							<div class="ChildrenContainer FloatLeft" style="display: block">
 					""";
@@ -63,7 +66,10 @@
 					println """
 						<div class="$lastNode Node ClearFix">
 							<div class="ExpandIcon FloatLeft" onclick="if(eXo.portal.UIPortal.collapseExpand(this)){$actionExpand}">
-									<a class="NodeIcon DefaultPageIcon" href="$actionLink">$label</a>
+					""";
+					      if(treeNode.getNode().getPageReference() == null) println "<a class='NodeIcon DefaultPageIcon' href='javascript:void(0);'>$label</a>";
+					      else println "<a class='NodeIcon DefaultPageIcon' href='$actionLink'>$label</a>";
+					println """
 							</div>
 							<div class="ChildrenContainer FloatLeft" style="display: none">
 					""";
@@ -102,10 +108,6 @@
 		<div class="UISiteTree">
 			<% TreeNode treeNodeRoot = uicomponent.getTreeNodes() ;%>
 			<% renderNodes(treeNodeRoot,portalURI,useAJAX); %>
-			
-			
-			
-			
 		</div>
 	</div>
 </div>

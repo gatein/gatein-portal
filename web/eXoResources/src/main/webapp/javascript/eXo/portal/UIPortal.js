@@ -566,14 +566,12 @@ UIPortal.prototype.toggleComposer = function(clickedEle) {
 };
 
 UIPortal.prototype.collapseExpand = function(element) {
-	var node = element.parentNode ;
-	var subGroup = eXo.core.DOMUtil.findFirstChildByClass(node, "div", "ChildrenContainer") ;
+	var subGroup = eXo.core.DOMUtil.findFirstChildByClass(element.parentNode, "div", "ChildrenContainer") ;
 	var className = element.className;
 	if(!subGroup) return false;
 	if(subGroup.style.display == "none") {
 		if (className.indexOf("ExpandIcon") == 0) 	element.className = "CollapseIcon FloatLeft" ;
 		subGroup.style.display = "block" ;
-		return false;
 	} else {
 		if (className.indexOf("CollapseIcon") == 0) element.className = "ExpandIcon FloatLeft" ;
 		subGroup.style.display = "none" ;
