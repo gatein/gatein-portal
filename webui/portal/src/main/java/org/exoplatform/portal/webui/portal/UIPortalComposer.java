@@ -86,7 +86,7 @@ public class UIPortalComposer extends UIContainer
    private boolean isCollapse = false;
 
    private boolean isShowControl = true;
-
+        
    public UIPortalComposer() throws Exception
    {
       UITabPane uiTabPane = addChild(UITabPane.class, "UIPortalComposerTab", null);
@@ -159,19 +159,28 @@ public class UIPortalComposer extends UIContainer
       UIEditInlineWorkspace uiEditWS = uiWorkingWS.getChild(UIEditInlineWorkspace.class);
       UIPortal editPortal = (UIPortal)uiEditWS.getUIComponent();
       UIPortal uiPortal = Util.getUIPortal();
-
-      PortalConfig portalConfig = (PortalConfig)PortalDataMapper.buildModelObject(editPortal);
-      UserPortalConfigService configService = getApplicationComponent(UserPortalConfigService.class);
-      
-      List<String> allPortalNames = configService.getAllPortalNames();
-      if(allPortalNames.contains(portalConfig.getName()))
-      {
-         configService.update(portalConfig);
-      } 
-      
-      uiPortalApp.getUserPortalConfig().setPortal(portalConfig);
       String remoteUser = prContext.getRemoteUser();
       String ownerUser = prContext.getPortalOwner();
+
+      String portalOwner = null;
+      if (editPortal.getOwnerType().equals(PortalConfig.PORTAL_TYPE))
+      {
+         portalOwner = editPortal.getOwner();
+      }
+      else
+      {         
+         portalOwner = Util.getPortalRequestContext().getPortalOwner();
+      }
+     
+      PortalConfig portalConfig = (PortalConfig)PortalDataMapper.buildModelObject(editPortal);
+      UserPortalConfigService configService = getApplicationComponent(UserPortalConfigService.class);
+
+      if (configService.getUserPortalConfig(portalOwner, remoteUser) != null)
+      {
+         configService.update(portalConfig);
+      }
+
+      uiPortalApp.getUserPortalConfig().setPortal(portalConfig);
       UserPortalConfig userPortalConfig = configService.getUserPortalConfig(ownerUser, remoteUser);
       if (userPortalConfig != null)
       {
@@ -328,8 +337,8 @@ public class UIPortalComposer extends UIContainer
          uiEditWS.getComposer().setEditted(false);
          uiEditWS.setRendered(false);
          uiWorkingWS.setRenderedChild(UIPortalApplication.UI_VIEWING_WS_ID);
-         
          UISiteBody siteBody = uiWorkingWS.findFirstComponentOfType(UISiteBody.class);         
+                  
          UIPortal uiPortal = uiWorkingWS.getBackupUIPortal();
          siteBody.setUIComponent(uiPortal);         
                

@@ -29,6 +29,7 @@ import org.exoplatform.portal.config.model.PortalProperties;
 import org.exoplatform.portal.resource.SkinService;
 import org.exoplatform.portal.webui.util.PortalDataMapper;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.portal.webui.workspace.UIEditInlineWorkspace;
 import org.exoplatform.portal.webui.workspace.UIMaskWorkspace;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.portal.webui.workspace.UIWorkingWorkspace;
@@ -268,6 +269,14 @@ public class UIPortalForm extends UIFormTabPane
             UserPortalConfigService configService = uiForm.getApplicationComponent(UserPortalConfigService.class);
             configService.update(portalConfig);
          }
+         else
+         {
+            UIWorkingWorkspace uiWorkingWS = uiPortalApp.findFirstComponentOfType(UIWorkingWorkspace.class);
+            UIEditInlineWorkspace uiEditWS = uiWorkingWS.getChild(UIEditInlineWorkspace.class);
+            UIPortal editPortal = (UIPortal)uiEditWS.getUIComponent();
+            uiForm.invokeSetBindingBean(editPortal);           
+         }
+         
          UIMaskWorkspace uiMaskWorkspace = uiForm.getParent();
          uiMaskWorkspace.setUIComponent(null);
          event.getRequestContext().addUIComponentToUpdateByAjax(uiMaskWorkspace);
