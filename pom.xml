@@ -176,10 +176,6 @@
                <configuration>
                   <systemProperties>
                      <property>
-                        <name>mock.portal.dir</name>
-                        <value>${gatein.checkout.dir}/web/portal/src/main/webapp</value>
-                     </property>
-                     <property>
                         <name>org.apache.commons.logging.Log</name>
                         <value>org.apache.commons.logging.impl.SimpleLog</value>
                      </property>
@@ -205,33 +201,6 @@
          </plugins>
       </pluginManagement>
       <plugins>
-         <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-enforcer-plugin</artifactId>
-            <executions>
-               <execution>
-                  <id>check-environment-ready</id>
-                  <goals>
-                     <goal>enforce</goal>
-                  </goals>
-                  <configuration>
-                     <rules>
-                        <requireProperty>
-                           <property>gatein.checkout.dir</property>
-                           <message>"You must define the property gatein.checkout.dir to give the path of the root of your working area"</message>
-                        </requireProperty>
-                        <requireFilesExist>
-                           <files>
-                              <file>${gatein.checkout.dir}/web/portal/src/main/webapp</file>
-                           </files>
-                           <message>"The following directory doesn't exist : ${gatein.checkout.dir}/web/portal/src/main/webapp"</message>
-                        </requireFilesExist>
-                     </rules>
-                     <fail>true</fail>
-                  </configuration>
-               </execution>
-            </executions>
-         </plugin>
          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-antrun-plugin</artifactId>
