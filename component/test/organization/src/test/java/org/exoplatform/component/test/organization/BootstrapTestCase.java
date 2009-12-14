@@ -28,7 +28,6 @@ import org.exoplatform.component.test.ConfigurationUnit;
 import org.exoplatform.component.test.ConfiguredBy;
 import org.exoplatform.component.test.ContainerScope;
 import org.exoplatform.container.PortalContainer;
-import org.exoplatform.container.component.ComponentRequestLifecycle;
 import org.exoplatform.services.database.HibernateService;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
@@ -52,7 +51,6 @@ public class BootstrapTestCase extends AbstractGateInTest
       PortalContainer container = PortalContainer.getInstance();
       OrganizationService organization = (OrganizationService)container.getComponentInstanceOfType(OrganizationService.class);
       assertNotNull(organization);
-      ((ComponentRequestLifecycle)organization).startRequest(container);
 
       User test = new UserImpl("testUser");
       organization.getUserHandler().createUser(test, false);
@@ -61,10 +59,6 @@ public class BootstrapTestCase extends AbstractGateInTest
       assertNull(test);
       test = organization.getUserHandler().findUserByName("testUser");
       assertNotNull(test);
-
-      ((ComponentRequestLifecycle)organization).endRequest(container);
-
-
    }
 
 }

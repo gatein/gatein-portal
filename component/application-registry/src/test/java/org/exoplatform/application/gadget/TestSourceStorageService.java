@@ -21,7 +21,9 @@ package org.exoplatform.application.gadget;
 
 import org.exoplatform.test.BasicTestCase;
 
-/*
+/**
+ * todo julien : fix or remove
+ *
  * Thu, May 15, 2004 @   
  * @author: Tuan Nguyen
  * @version: $Id: TestResourceBundleService.java 5799 2006-05-28 17:55:42Z geaz $

@@ -30,6 +30,7 @@ import org.exoplatform.component.test.ContainerScope;
 @ConfiguredBy({
    @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/jcr/jcr-configuration.xml"),
    @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/organization/organization-configuration.xml"),
+   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/portal/portal-configuration.xml"),
    @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/test-configuration.xml")
 })
 public abstract class AbstractPortalTest extends AbstractGateInTest

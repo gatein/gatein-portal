@@ -27,6 +27,9 @@ import org.exoplatform.services.cache.CacheService;
 import org.exoplatform.services.organization.BaseOrganizationService;
 import org.picocontainer.Startable;
 
+import java.util.LinkedList;
+import java.util.concurrent.atomic.AtomicInteger;
+
 public class PicketLinkIDMOrganizationServiceImpl extends BaseOrganizationService implements Startable,
    ComponentRequestLifecycle
 {
@@ -129,27 +132,48 @@ public class PicketLinkIDMOrganizationServiceImpl extends BaseOrganizationServic
       //toto
    }
 
+   /**
+    * Used to allow nested requests (as done by the authenticator during unit tests) and avoid
+    * to commit two times the same transaction.
+    */
+   private ThreadLocal<AtomicInteger> currentRequestCount = new ThreadLocal<AtomicInteger>()
+   {
+      @Override
+      protected AtomicInteger initialValue()
+      {
+         return new AtomicInteger();
+      }
+   };
+
    public void startRequest(ExoContainer container)
    {
-      try
+      AtomicInteger count = currentRequestCount.get();
+      if (count.getAndIncrement() == 0)
       {
-         idmService_.getIdentitySession().beginTransaction();
-      }
-      catch (Exception e)
-      {
-         e.printStackTrace();
+         try
+         {
+            idmService_.getIdentitySession().beginTransaction();
+         }
+         catch (Exception e)
+         {
+            e.printStackTrace();
+         }
       }
    }
 
    public void endRequest(ExoContainer container)
    {
-      try
+      AtomicInteger count = currentRequestCount.get();
+      if (count.decrementAndGet() == 0)
       {
-         idmService_.getIdentitySession().getTransaction().commit();
-      }
-      catch (Exception e)
-      {
-         e.printStackTrace();
+         try
+         {
+            idmService_.getIdentitySession().getTransaction().commit();
+         }
+         catch (Exception e)
+         {
+            e.printStackTrace();
+         }
       }
    }
 

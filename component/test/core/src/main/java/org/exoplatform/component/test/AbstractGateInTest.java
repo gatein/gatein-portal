@@ -18,10 +18,16 @@
  */
 package org.exoplatform.component.test;
 
+import junit.framework.AssertionFailedError;
 import junit.framework.TestCase;
+import org.exoplatform.container.PortalContainer;
+import org.exoplatform.container.component.ComponentRequestLifecycle;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.EnumMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -72,15 +78,59 @@ public abstract class AbstractGateInTest extends TestCase
       }
 
       //
+      PortalContainer container = null;
+      List<ComponentRequestLifecycle> componentRLFs = Collections.emptyList();
+      List<Throwable> failures = new ArrayList<Throwable>();
+
+      //
       try
       {
          ClassLoader testClassLoader = new GateInTestClassLoader(realClassLoader, rootConfigPaths, portalConfigPaths);
          Thread.currentThread().setContextClassLoader(testClassLoader);
+
+         // Boot the container
+         container = PortalContainer.getInstance();
+
+         // Honours the request life cycle
+         componentRLFs = (List<ComponentRequestLifecycle>)container.getComponentInstancesOfType(ComponentRequestLifecycle.class);
+
+         //
+         for (ComponentRequestLifecycle componentRLF : componentRLFs)
+         {
+            componentRLF.startRequest(container);
+         }
+
+         // Execute test
          super.runBare();
       }
       finally
       {
+         if (container != null)
+         {
+            for (ComponentRequestLifecycle componentRLF : componentRLFs)
+            {
+               try
+               {
+                  componentRLF.endRequest(container);
+               }
+               catch (Throwable e)
+               {
+                  failures.add(e);
+               }
+            }
+         }
+
+         //
          Thread.currentThread().setContextClassLoader(realClassLoader);
+      }
+
+      //
+      if (failures.size() > 0)
+      {
+         Throwable failure = failures.get(0);
+         AssertionFailedError afe = new AssertionFailedError();
+         afe.initCause(failure);
+         throw afe;
       }
    }
 }

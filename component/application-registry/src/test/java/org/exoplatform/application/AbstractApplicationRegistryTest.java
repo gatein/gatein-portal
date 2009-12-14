@@ -16,14 +16,12 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
+package org.exoplatform.application;
 
-package org.exoplatform.component.test;
-
-import org.exoplatform.container.PortalContainer;
-import org.exoplatform.services.naming.InitialContextInitializer;
-
-import javax.naming.InitialContext;
-import javax.sql.DataSource;
+import org.exoplatform.component.test.AbstractGateInTest;
+import org.exoplatform.component.test.ConfigurationUnit;
+import org.exoplatform.component.test.ConfiguredBy;
+import org.exoplatform.component.test.ContainerScope;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -31,24 +29,20 @@ import javax.sql.DataSource;
  */
 @ConfiguredBy({
    @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/jcr/jcr-configuration.xml"),
-   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/test-configuration.xml")
+   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/organization/organization-configuration.xml"),
+   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/application-registry-configuration.xml"),
+   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/portal/portal-configuration.xml")
 })
-public class BootstrapTestCase extends AbstractGateInTest
+public abstract class AbstractApplicationRegistryTest extends AbstractGateInTest
 {
 
-   public void testRequestLifeCycle()
+/*
+   public void testFoo() throws Exception
    {
       PortalContainer container = PortalContainer.getInstance();
-      CustomService testService = (CustomService)container.getComponentInstanceOfType(CustomService.class);
-      assertSame(container, testService.currentContainer);
-      assertNotNull(testService);
+      ApplicationRegistryService registry = (ApplicationRegistryService)container.getComponentInstanceOfType(ApplicationRegistryService.class);
+      registry.getAllApplications();
    }
+*/
 
-   public void testDataSource() throws Exception
-   {
-      PortalContainer container = PortalContainer.getInstance();
-      container.getComponentInstanceOfType(InitialContextInitializer.class);
-      DataSource ds = (DataSource)new InitialContext().lookup("jdbcexo");
-      assertNotNull(ds);
-   }
 }

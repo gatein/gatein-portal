@@ -31,10 +31,6 @@
   <name>GateIn Portal Component Application Registry</name>
   <packaging>jar</packaging> 
 
-  <properties>
-    <maven.test.skip>true</maven.test.skip>
-  </properties>
-
   <dependencies>
     <dependency>
       <groupId>org.exoplatform.jcr</groupId>
@@ -59,6 +55,52 @@
        <artifactId>chromattic.ntdef</artifactId>
        <version>${version.chromattic}</version>
     </dependency>
+
+    <dependency>
+      <groupId>org.exoplatform.portal</groupId>
+      <artifactId>exo.portal.component.test.core</artifactId>
+      <version>3.0.0-Beta04-SNAPSHOT</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.exoplatform.portal</groupId>
+      <artifactId>exo.portal.component.test.jcr</artifactId>
+      <version>3.0.0-Beta04-SNAPSHOT</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.exoplatform.portal</groupId>
+      <artifactId>exo.portal.component.test.organization</artifactId>
+      <version>3.0.0-Beta04-SNAPSHOT</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.exoplatform.portal</groupId>
+      <artifactId>exo.portal.component.portal</artifactId>
+      <version>3.0.0-Beta04-SNAPSHOT</version>
+      <type>test-jar</type>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.chromattic</groupId>
+      <artifactId>chromattic.core</artifactId>
+      <version>${version.chromattic}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <!--
+    <dependency>
+      <groupId>org.exoplatform.portal</groupId>
+      <artifactId>exo.portal.component.portal</artifactId>
+      <version>3.0.0-Beta04-SNAPSHOT</version>
+      <classifier>testconf</classifier>
+      <scope>test</scope>
+    </dependency>
+-->
 
     <dependency>
       <groupId>org.gatein.pc</groupId>

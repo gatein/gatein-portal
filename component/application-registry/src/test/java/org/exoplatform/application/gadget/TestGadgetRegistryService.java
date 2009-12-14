@@ -25,12 +25,14 @@ import org.exoplatform.test.BasicTestCase;
 import java.util.List;
 
 /**
+ * todo julien : to fix
+ *
  * Created by The eXo Platform SAS
  * Author : Pham Thanh Tung
  *          thanhtungty@gmail.com
  * Jul 11, 2008  
  */
-public class TestGadgetRegistryService extends BasicTestCase
+public abstract class TestGadgetRegistryService extends BasicTestCase
 {
 
    private GadgetRegistryService service_;

@@ -1,0 +1,593 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+
+    Copyright (C) 2009 eXo Platform SAS.
+
+    This is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Lesser General Public License as
+    published by the Free Software Foundation; either version 2.1 of
+    the License, or (at your option) any later version.
+
+    This software is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+    Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public
+    License along with this software; if not, write to the Free
+    Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+    02110-1301 USA, or see the FSF site: http://www.fsf.org.
+
+-->
+
+<configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd http://www.exoplaform.org/xml/ns/kernel_1_0.xsd"
+  xmlns="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd">
+
+  <component>
+    <key>org.exoplatform.application.registry.ApplicationRegistryService</key>
+    <type>org.exoplatform.application.registry.impl.ApplicationRegistryServiceImpl</type>
+    <!--
+  	<component-plugins>
+	    <component-plugin>
+	      <name>new.portal.portlets.registry</name>
+	      <set-method>initListener</set-method>
+	      <type>org.exoplatform.application.registry.ApplicationCategoriesPlugins</type>
+	      <description>this listener init the portlets are registered in PortletRegister</description>
+	      <init-params>
+	      	<object-param>
+	          <name>administration</name>
+	          <description>description</description>
+	          <object type="org.exoplatform.application.registry.ApplicationCategory">
+	            <field  name="name"><string>administration</string></field>
+	            <field  name="displayName"><string>Administration</string></field>
+	            <field  name="description"><string>application for administration</string></field>
+		          <field name="accessPermissions">
+				        <collection type="java.util.ArrayList" item-type="java.lang.String">
+				        	<value><string>*:/platform/administrators</string></value>
+				        	<value><string>*:/organization/management/executive-board</string></value>
+				        </collection>
+		          </field>
+	            <field  name="applications">
+		            <collection type="java.util.ArrayList">
+									<value>
+	                  <object type="org.exoplatform.application.registry.Application">
+									    <field name="applicationName"><string>ApplicationRegistryPortlet</string></field>
+	                    <field  name="categoryName"><string>administration</string></field>
+						          <field name="displayName"><string>Application Registry</string></field>
+						          <field name="description"><string>Application Registry</string></field>
+		                  <field name="applicationType"><string>portlet</string></field>
+		                  <field name="applicationGroup"><string>exoadmin</string></field>
+						          <field name="accessPermissions">
+								        <collection type="java.util.ArrayList" item-type="java.lang.String">
+								        	<value><string>*:/platform/administrators</string></value>
+								        	<value><string>*:/organization/management/executive-board</string></value>
+								        </collection>
+						          </field>
+		                </object>
+	                </value>
+					        <value>
+		                <object type="org.exoplatform.application.registry.Application">
+		                  <field name="applicationName"><string>OrganizationPortlet</string></field>
+		                  <field  name="categoryName"><string>administration</string></field>
+	                    <field name="displayName"><string>Organization Management</string></field>
+	                    <field name="description"><string>Organization Management</string></field>
+		                  <field name="applicationType"><string>portlet</string></field>
+		                  <field name="applicationGroup"><string>exoadmin</string></field>
+		                  <field name="accessPermissions">
+								        <collection type="java.util.ArrayList" item-type="java.lang.String">
+													<value><string>*:/platform/administrators</string></value>
+													<value><string>*:/organization/management/executive-board</string></value>
+								        </collection>
+						          </field>
+		                </object>
+	                </value>
+					        <value>
+		                <object type="org.exoplatform.application.registry.Application">
+		                  <field name="applicationName"><string>AccountPortlet</string></field>
+		                  <field  name="categoryName"><string>administration</string></field>
+						          <field name="displayName"><string>New Account</string></field>
+						          <field name="description"><string>New Account</string></field>
+		                  <field name="applicationType"><string>portlet</string></field>
+		                  <field name="applicationGroup"><string>exoadmin</string></field>
+		                  <field name="accessPermissions">
+								        <collection type="java.util.ArrayList" item-type="java.lang.String">
+													<value><string>*:/platform/administrators</string></value>
+													<value><string>*:/organization/management/executive-board</string></value>
+								        </collection>
+						          </field>
+		                </object>
+	                </value>
+		            </collection>
+	            </field>
+	          </object>
+	        </object-param>
+
+			    <object-param>
+	          <name>web</name>
+	          <description>description</description>
+	          <object type="org.exoplatform.application.registry.ApplicationCategory">
+	            <field  name="name"><string>web</string></field>
+	            <field  name="displayName"><string>web</string></field>
+	            <field  name="description"><string>BasicPortlets</string></field>
+              <field name="accessPermissions">
+				        <collection type="java.util.ArrayList" item-type="java.lang.String">
+									<value><string>*:/platform/users</string></value>
+				        </collection>
+		          </field>
+	            <field  name="applications">
+		            <collection type="java.util.ArrayList">
+	                <value>
+		                <object type="org.exoplatform.application.registry.Application">
+		                  <field  name="categoryName"><string>web</string></field>
+		                  <field name="applicationName"><string>IFramePortlet</string></field>
+						          <field name="displayName"><string>IFrame</string></field>
+						          <field name="description"><string>IFrame</string></field>
+		                  <field name="applicationType"><string>portlet</string></field>
+		                  <field name="applicationGroup"><string>web</string></field>
+		                  <field name="accessPermissions">
+								        <collection type="java.util.ArrayList" item-type="java.lang.String">
+													<value><string>*:/platform/users</string></value>
+								        </collection>
+						          </field>
+		                </object>
+	                </value>
+					        <value>
+		                <object type="org.exoplatform.application.registry.Application">
+		                  <field  name="categoryName"><string>web</string></field>
+		                  <field name="applicationName"><string>SiteMapPortlet</string></field>
+						          <field name="displayName"><string>SiteMap</string></field>
+						          <field name="description"><string>SiteMap</string></field>
+		                  <field name="applicationType"><string>portlet</string></field>
+		                  <field name="applicationGroup"><string>web</string></field>
+		                  <field name="accessPermissions">
+								        <collection type="java.util.ArrayList" item-type="java.lang.String">
+													<value><string>*:/platform/users</string></value>
+								        </collection>
+						          </field>
+		                </object>
+	                </value>
+	                <value>
+		                <object type="org.exoplatform.application.registry.Application">
+		                  <field  name="categoryName"><string>web</string></field>
+		                  <field name="applicationName"><string>BrowserPortlet</string></field>
+						          <field name="displayName"><string>Web Explorer</string></field>
+						          <field name="description"><string>Web Explorer</string></field>
+		                  <field name="applicationType"><string>portlet</string></field>
+		                  <field name="applicationGroup"><string>web</string></field>
+		                  <field name="accessPermissions">
+								        <collection type="java.util.ArrayList" item-type="java.lang.String">
+													<value><string>*:/platform/users</string></value>
+								        </collection>
+						          </field>
+		                </object>
+	                </value>
+		            </collection>
+	            </field>
+	          </object>
+	        </object-param>
+
+	        <object-param>
+	          <name>dashboard</name>
+	          <description>description</description>
+	          <object type="org.exoplatform.application.registry.ApplicationCategory">
+	            <field name="name"><string>dashboard</string></field>
+	            <field name="displayName"><string>Dashboard</string></field>
+	            <field name="description"><string>Dashboard</string></field>
+              <field name="accessPermissions">
+				        <collection type="java.util.ArrayList" item-type="java.lang.String">
+									<value><string>*:/platform/users</string></value>
+				        </collection>
+		          </field>
+	            <field  name="applications">
+		            <collection type="java.util.ArrayList">
+	                <value>
+		                <object type="org.exoplatform.application.registry.Application">
+		                  <field name="categoryName"><string>dashboard</string></field>
+		                  <field name="applicationName"><string>DashboardPortlet</string></field>
+						          <field name="displayName"><string>Dashboard Portlet</string></field>
+						          <field name="description"><string>Dashboard Portlet</string></field>
+		                  <field name="applicationType"><string>portlet</string></field>
+		                  <field name="applicationGroup"><string>dashboard</string></field>
+		                  <field name="accessPermissions">
+								        <collection type="java.util.ArrayList" item-type="java.lang.String">
+													<value><string>*:/platform/users</string></value>
+								        </collection>
+						          </field>
+		                </object>
+	                </value>
+	                <value>
+		                <object type="org.exoplatform.application.registry.Application">
+		                  <field name="categoryName"><string>dashboard</string></field>
+		                  <field name="applicationName"><string>GadgetPortlet</string></field>
+						          <field name="displayName"><string>Gadget Wrapper Portlet</string></field>
+						          <field name="description"><string>Gadget Wrapper Portlet</string></field>
+		                  <field name="applicationType"><string>portlet</string></field>
+		                  <field name="applicationGroup"><string>dashboard</string></field>
+		                  <field name="accessPermissions">
+								        <collection type="java.util.ArrayList" item-type="java.lang.String">
+													<value><string>*:/platform/users</string></value>
+								        </collection>
+						          </field>
+		                </object>
+	                </value>
+		            </collection>
+	            </field>
+	          </object>
+	        </object-param>
+	      </init-params>
+	    </component-plugin>
+	  </component-plugins>
+-->
+  </component>
+  
+  <external-component-plugins>
+    <target-component>org.exoplatform.commons.chromattic.ChromatticManager</target-component>
+    <component-plugin>
+      <name>chromattic</name>
+      <set-method>addLifeCycle</set-method>
+      <type>org.exoplatform.application.registry.impl.ApplicationRegistryChromatticLifeCycle</type>
+      <init-params>
+        <value-param>
+          <name>name</name>
+          <value>app</value>
+        </value-param>
+        <value-param>
+          <name>workspace-name</name>
+          <value>portal-test</value>
+        </value-param>
+        <values-param>
+          <name>entities</name>
+          <value>org.exoplatform.application.registry.impl.ContentRegistry</value>
+          <value>org.exoplatform.application.registry.impl.CategoryDefinition</value>
+          <value>org.exoplatform.application.registry.impl.ContentDefinition</value>
+          <value>org.exoplatform.application.gadget.impl.GadgetRegistry</value>
+          <value>org.exoplatform.application.gadget.impl.GadgetDefinition</value>
+          <value>org.exoplatform.application.gadget.impl.LocalGadgetData</value>
+          <value>org.exoplatform.application.gadget.impl.RemoteGadgetData</value>
+          <value>org.chromattic.ntdef.NTFile</value>
+          <value>org.chromattic.ntdef.NTFolder</value>
+          <value>org.chromattic.ntdef.NTResource</value>
+        </values-param>
+      </init-params>
+    </component-plugin>
+  </external-component-plugins>
+
+  <external-component-plugins>
+ 		<target-component>org.exoplatform.services.jcr.RepositoryService</target-component>
+ 		<component-plugin>
+ 		  <name>add.namespaces</name>
+ 		  <set-method>addPlugin</set-method>
+ 		  <type>org.exoplatform.services.jcr.impl.AddNamespacesPlugin</type>
+ 		  <init-params>
+ 		    <properties-param>
+ 		      <name>namespaces</name>
+ 		      <property name="app" value="http://www.gatein.org/jcr/application-registry/1.0/"/>
+ 		      </properties-param>
+ 		  </init-params>
+ 		</component-plugin>
+ 		<component-plugin>
+ 		  <name>add.nodeType</name>
+ 		  <set-method>addPlugin</set-method>
+ 		  <type>org.exoplatform.services.jcr.impl.AddNodeTypePlugin</type>
+ 		  <init-params>
+ 		    <values-param>
+ 		      <name>autoCreatedInNewRepository</name>
+ 		      <description>Node types configuration file</description>
+ 		      <value>jar:/conf/application-nodetypes.xml</value>
+ 		    </values-param>
+ 		  </init-params>
+ 		</component-plugin>
+  </external-component-plugins>
+
+  <external-component-plugins>
+    <target-component>org.exoplatform.portal.config.UserPortalConfigService</target-component>
+    <component-plugin>
+      <name>new.portal.config.user.listener</name>
+      <set-method>initListener</set-method>
+      <type>org.exoplatform.portal.config.NewPortalConfigListener</type>
+      <description>this listener init the portal configuration</description>
+      <init-params>
+        <value-param>
+          <name>default.portal</name>
+          <description>The default portal for checking db is empty or not</description>
+          <value>classic</value>
+        </value-param>
+        <value-param>
+          <name>initializing.failure.ignore</name>
+          <description>In the run method, use try catch or not (value is true/false)</description>
+          <value>true</value>
+        </value-param>
+        <object-param>
+          <name>portal.configuration</name>
+          <description>description</description>
+          <object type="org.exoplatform.portal.config.NewPortalConfig">
+            <field name="predefinedOwner">
+              <collection type="java.util.HashSet">
+                <value>
+                  <string>classic</string>
+                </value>
+                <value>
+                  <string>test</string>
+                </value>
+              </collection>
+            </field>
+            <field name="ownerType">
+              <string>portal</string>
+            </field>
+            <field name="templateLocation">
+              <string>classpath:/portal</string>
+            </field>
+          </object>
+        </object-param>
+        <object-param>
+          <name>group.configuration</name>
+          <description>description</description>
+          <object type="org.exoplatform.portal.config.NewPortalConfig">
+            <field name="predefinedOwner">
+              <collection type="java.util.HashSet">
+                <value>
+                  <string>platform/administrators</string>
+                </value>
+                <value>
+                  <string>platform/users</string>
+                </value>
+                <value>
+                  <string>platform/guests</string>
+                </value>
+                <value>
+                  <string>platform/test/legacy</string>
+                </value>
+                <value>
+                  <string>platform/test/normalized</string>
+                </value>
+                <value>
+                  <string>organization/management/executive-board</string>
+                </value>
+              </collection>
+            </field>
+            <field name="ownerType">
+              <string>group</string>
+            </field>
+            <field name="templateLocation">
+              <string>classpath:/portal</string>
+            </field>
+          </object>
+        </object-param>
+        <object-param>
+          <name>user.configuration</name>
+          <description>description</description>
+          <object type="org.exoplatform.portal.config.NewPortalConfig">
+            <field name="predefinedOwner">
+              <collection type="java.util.HashSet">
+                <value>
+                  <string>root</string>
+                </value>
+                <value>
+                  <string>john</string>
+                </value>
+                <value>
+                  <string>mary</string>
+                </value>
+                <value>
+                  <string>demo</string>
+                </value>
+                <value>
+                  <string>overwritelayout</string>
+                </value>
+              </collection>
+            </field>
+            <field name="ownerType">
+              <string>user</string>
+            </field>
+            <field name="templateLocation">
+              <string>classpath:/portal</string>
+            </field>
+          </object>
+        </object-param>
+        <object-param>
+          <name>page.templates</name>
+          <description>List of page templates</description>
+          <object type="org.exoplatform.portal.config.PageTemplateConfig">
+            <field name="templates">
+              <collection type="java.util.ArrayList"></collection>
+            </field>
+            <field name="location">
+              <string>classpath:/portal/template/pages</string>
+            </field>
+          </object>
+        </object-param>
+      </init-params>
+    </component-plugin>
+  </external-component-plugins>
+
+  <external-component-plugins>
+    <target-component>org.exoplatform.services.organization.OrganizationService</target-component>
+    <component-plugin>
+      <name>init.service.listener</name>
+      <set-method>addListenerPlugin</set-method>
+      <type>org.exoplatform.services.organization.OrganizationDatabaseInitializer</type>
+      <description>this listener populate organization data for the first launch</description>
+      <init-params>
+        <value-param>
+          <name>checkDatabaseAlgorithm</name>
+          <description>check database</description>
+          <value>entry</value>
+        </value-param>
+        <value-param>
+          <name>printInformation</name>
+          <description>Print information init database</description>
+          <value>true</value>
+        </value-param>
+        <object-param>
+          <name>configuration</name>
+          <description>description</description>
+          <object type="org.exoplatform.services.organization.OrganizationConfig">
+            <field  name="membershipType">
+              <collection type="java.util.ArrayList">
+                <value>
+                  <object type="org.exoplatform.services.organization.OrganizationConfig$MembershipType">
+                    <field  name="type"><string>member</string></field>
+                    <field  name="description"><string>member membership type</string></field>
+                  </object>
+                </value>
+                <value>
+                  <object type="org.exoplatform.services.organization.OrganizationConfig$MembershipType">
+                    <field  name="type"><string>MembershipType_1</string></field>
+                    <field  name="description"><string>MembershipType_1 membership type</string></field>
+                  </object>
+                </value>
+                <value>
+                  <object type="org.exoplatform.services.organization.OrganizationConfig$MembershipType">
+                    <field  name="type"><string>MembershipType_2</string></field>
+                    <field  name="description"><string>MembershipType_2 membership type</string></field>
+                  </object>
+                </value>
+              </collection>
+            </field>
+
+            <field  name="group">
+              <collection type="java.util.ArrayList">
+                <value>
+                  <object type="org.exoplatform.services.organization.OrganizationConfig$Group">
+                    <field  name="name"><string>platform</string></field>
+                    <field  name="parentId"><string></string></field>
+                    <field  name="description"><string>the /platform group</string></field>
+                    <field  name="label"><string>Platform</string></field>
+                  </object>
+                </value>
+                <value>
+                  <object type="org.exoplatform.services.organization.OrganizationConfig$Group">
+                    <field  name="name"><string>users</string></field>
+                    <field  name="parentId"><string>/platform</string></field>
+                    <field  name="description"><string>the /platform/users group</string></field>
+                    <field  name="label"><string>Users</string></field>
+                  </object>
+                </value>
+                <value>
+                  <object type="org.exoplatform.services.organization.OrganizationConfig$Group">
+                    <field  name="name"><string>Group1</string></field>
+                    <field  name="parentId"><string>/platform/users</string></field>
+                    <field  name="description"><string>the /platform/users/Group1 group</string></field>
+                    <field  name="label"><string>Group1</string></field>
+                  </object>
+                </value>
+                <value>
+                  <object type="org.exoplatform.services.organization.OrganizationConfig$Group">
+                    <field  name="name"><string>Group2</string></field>
+                    <field  name="parentId"><string>/platform/users</string></field>
+                    <field  name="description"><string>the /platform/users/Group2 group</string></field>
+                    <field  name="label"><string>Group2</string></field>
+                  </object>
+                </value>
+              </collection>
+            </field>
+
+            <field  name="user">
+              <collection type="java.util.ArrayList">
+                <value>
+                  <object type="org.exoplatform.services.organization.OrganizationConfig$User">
+                    <field  name="userName"><string>demo</string></field>
+                    <field  name="password"><string>gtn</string></field>
+                    <field  name="firstName"><string>Demo</string></field>
+                    <field  name="lastName"><string>gtn</string></field>
+                    <field  name="email"><string>demo@localhost</string></field>
+                    <field  name="groups">
+                      <string>member:/platform/users</string>
+                    </field>
+                  </object>
+                </value>
+                <value>
+                  <object type="org.exoplatform.services.organization.OrganizationConfig$User">
+                    <field  name="userName"><string>userName_1</string></field>
+                    <field  name="password"><string>default</string></field>
+                    <field  name="firstName"><string>default</string></field>
+                    <field  name="lastName"><string>default</string></field>
+                    <field  name="email"><string>exo@exoportal.org</string></field>
+                    <field  name="groups">
+                      <string>member:/platform/users</string>
+                    </field>
+                  </object>
+                </value>
+                <value>
+                  <object type="org.exoplatform.services.organization.OrganizationConfig$User">
+                    <field  name="userName"><string>userName_2</string></field>
+                    <field  name="password"><string>default</string></field>
+                    <field  name="firstName"><string>default</string></field>
+                    <field  name="lastName"><string>default</string></field>
+                    <field  name="email"><string>exo@exoportal.org</string></field>
+                    <field  name="groups">
+                      <string>member:/platform/users</string>
+                    </field>
+                  </object>
+                </value>
+
+                <!--
+                <value>
+                  <object type="org.exoplatform.services.organization.OrganizationConfig$User">
+                    <field  name="userName"><string>root</string></field>
+                    <field  name="password"><string>gtn</string></field>
+                    <field  name="firstName"><string>Root</string></field>
+                    <field  name="lastName"><string>Root</string></field>
+                    <field  name="email"><string>root@localhost</string></field>
+                    <field  name="groups">
+                      <string>
+                      	manager:/platform/administrators,member:/platform/users,
+                      	member:/organization/management/executive-board
+                      </string>
+                    </field>
+                  </object>
+                </value>
+
+                <value>
+                  <object type="org.exoplatform.services.organization.OrganizationConfig$User">
+                    <field  name="userName"><string>john</string></field>
+                    <field  name="password"><string>gtn</string></field>
+                    <field  name="firstName"><string>John</string></field>
+                    <field  name="lastName"><string>Anthony</string></field>
+                    <field  name="email"><string>john@localhost</string></field>
+                    <field  name="groups">
+                      <string>
+                      	member:/platform/administrators,member:/platform/users,
+                      	manager:/organization/management/executive-board
+                      </string>
+                    </field>
+                  </object>
+                </value>
+                <value>
+                  <object type="org.exoplatform.services.organization.OrganizationConfig$User">
+                    <field  name="userName"><string>mary</string></field>
+                    <field  name="password"><string>gtn</string></field>
+                    <field  name="firstName"><string>Mary</string></field>
+                    <field  name="lastName"><string>Kelly</string></field>
+                    <field  name="email"><string>mary@localhost</string></field>
+                    <field  name="groups">
+                      <string>member:/platform/users</string>
+                    </field>
+                  </object>
+                </value>
+
+                <value>
+                  <object type="org.exoplatform.services.organization.OrganizationConfig$User">
+                    <field name="userName"><string>overwritelayout</string></field>
+                    <field name="password"><string>whatever</string></field>
+                    <field name="firstName"><string>whatever</string></field>
+                    <field name="lastName"><string>whatever</string></field>
+                    <field name="email"><string>whatever@localhost</string></field>
+                    <field name="groups">
+                      <string>member:/platform/guests</string>
+                    </field>
+                  </object>
+                </value>
+-->
+
+              </collection>
+            </field>
+          </object>
+        </object-param>
+      </init-params>
+    </component-plugin>
+
+  </external-component-plugins>
+
+</configuration>

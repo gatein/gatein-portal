@@ -43,12 +43,8 @@ import org.exoplatform.services.listener.ListenerService;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.UserHandler;
-import org.exoplatform.services.organization.idm.PicketLinkIDMService;
 import org.exoplatform.services.security.Authenticator;
 import org.exoplatform.services.security.ConversationState;
-import org.exoplatform.test.BasicTestCase;
-import org.picketlink.idm.api.IdentitySession;
-import org.picketlink.idm.common.exception.IdentityException;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -74,9 +70,6 @@ public class TestUserPortalConfigService extends AbstractPortalTest
 
    /** . */
    private DataStorage storage_;
-
-   /** . */
-   private PicketLinkIDMService idmService;
 
    /** . */
    private POMSessionManager mgr;
@@ -122,7 +115,6 @@ public class TestUserPortalConfigService extends AbstractPortalTest
       userPortalConfigSer_ =
          (UserPortalConfigService)container.getComponentInstanceOfType(UserPortalConfigService.class);
       orgService_ = (OrganizationService)container.getComponentInstanceOfType(OrganizationService.class);
-      idmService = (PicketLinkIDMService)container.getComponentInstanceOfType(PicketLinkIDMService.class);
       mgr = (POMSessionManager)container.getComponentInstanceOfType(POMSessionManager.class);
       authenticator = (Authenticator)container.getComponentInstanceOfType(Authenticator.class);
       listenerService = (ListenerService)container.getComponentInstanceOfType(ListenerService.class);
@@ -857,17 +849,6 @@ public class TestUserPortalConfigService extends AbstractPortalTest
          //
          if (failure == null)
          {
-            IdentitySession session = null;
-            try
-            {
-               session = idmService.getIdentitySession();
-               session.beginTransaction();
-            }
-            catch (Exception e)
-            {
-               failure = e;
-            }
-
             // Clear cache
 //            mgr.clearCache();
 
@@ -891,17 +872,6 @@ public class TestUserPortalConfigService extends AbstractPortalTest
                   ConversationState.setCurrent(null);
                   mopSession.close();
                   mopSession = null;
-                  try
-                  {
-                     session.close();
-                  }
-                  catch (IdentityException e)
-                  {
-                     if (failure == null)
-                     {
-                        failure = e;
-                     }
-                  }
                }
             }
          }

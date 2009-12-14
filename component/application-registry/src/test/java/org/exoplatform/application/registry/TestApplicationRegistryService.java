@@ -19,14 +19,14 @@
 
 package org.exoplatform.application.registry;
 
+import org.exoplatform.application.AbstractApplicationRegistryTest;
+import org.exoplatform.commons.chromattic.ChromatticManager;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.MembershipType;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
-import org.exoplatform.services.organization.UserProfile;
-import org.exoplatform.test.BasicTestCase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +37,7 @@ import java.util.List;
  *          thanhtungty@gmail.com
  * Nov 27, 2007  
  */
-public class TestApplicationRegistryService extends BasicTestCase
+public class TestApplicationRegistryService extends AbstractApplicationRegistryTest
 {
 
    protected static String demo = "demo";
@@ -62,31 +62,30 @@ public class TestApplicationRegistryService extends BasicTestCase
 
    protected ApplicationRegistryService service_;
 
+   protected OrganizationService orgService;
+
+/*
    protected int initialCats;
 
    protected int initialApps;
+*/
 
-   public TestApplicationRegistryService(String name)
-   {
-      super(name);
-   }
+   protected ChromatticManager chromatticManager;
 
    @Override
    protected void setUp() throws Exception
    {
-      super.setUp();
       PortalContainer portalContainer = PortalContainer.getInstance();
-      service_ =
-         (ApplicationRegistryService)portalContainer.getComponentInstanceOfType(ApplicationRegistryService.class);
-      initialCats = service_.getApplicationCategories().size();
-      initialApps = service_.getAllApplications().size();
+      chromatticManager = (ChromatticManager)portalContainer.getComponentInstanceOfType(ChromatticManager.class);
+      chromatticManager.beginRequest();
+      service_ = (ApplicationRegistryService)portalContainer.getComponentInstanceOfType(ApplicationRegistryService.class);
+      orgService = (OrganizationService)portalContainer.getComponentInstanceOfType(OrganizationService.class);
    }
 
-   public void testInitializeService() throws Exception
+   @Override
+   protected void tearDown() throws Exception
    {
-      assertNotNull(service_);
-      assertEquals(3, initialCats);
-      assertEquals(8, initialApps);
+      chromatticManager.endRequest(false);
    }
 
    public void testApplicationCategory() throws Exception
@@ -98,7 +97,7 @@ public class TestApplicationRegistryService extends BasicTestCase
       service_.save(category1);
 
       int numberOfCats = service_.getApplicationCategories().size();
-      assertEquals(initialCats + 1, numberOfCats);
+      assertEquals(1, numberOfCats);
 
       ApplicationCategory returnedCategory1 = service_.getApplicationCategory(categoryName);
       assertNotNull(returnedCategory1);
@@ -111,64 +110,59 @@ public class TestApplicationRegistryService extends BasicTestCase
       service_.save(category1);
 
       numberOfCats = service_.getApplicationCategories().size();
-      assertEquals(initialCats + 1, numberOfCats);
+      assertEquals(1, numberOfCats);
       returnedCategory1 = service_.getApplicationCategory(categoryName);
       assertEquals(newDescription, returnedCategory1.getDescription());
 
       //Remove the ApplicationRegistry
       service_.remove(category1);
       numberOfCats = service_.getApplicationCategories().size();
-      assertEquals(initialCats, numberOfCats);
+      assertEquals(0, numberOfCats);
 
       returnedCategory1 = service_.getApplicationCategory(categoryName);
       assertNull(returnedCategory1);
    }
 
-   void assertAppCategoryGetByAccessUser(ApplicationRegistryService service) throws Exception
+   public void testAppCategoryGetByAccessUser() throws Exception
    {
-      PortalContainer portalContainer = PortalContainer.getInstance();
-      OrganizationService orgService =
-         (OrganizationService)portalContainer.getComponentInstanceOfType(OrganizationService.class);
-      assertNotNull(orgService);
-      prepareOrganizationData(orgService);
-
       String officeCategoryName = "Office";
       ApplicationCategory officeCategory = createAppCategory(officeCategoryName, "None");
-      service.save(officeCategory);
+      service_.save(officeCategory);
       String[] officeApps = {"MSOffice", "OpenOffice"};
-      Application msApp = createApplication(officeApps[0], "TestType", officeCategoryName);
+      Application msApp = createApplication(officeApps[0], officeCategoryName);
       ArrayList<String> pers = new ArrayList<String>();
       pers.add("member:/users");
       msApp.setAccessPermissions(pers);
-      service.save(officeCategory, msApp);
-      Application openApp = createApplication(officeApps[1], "TestType", officeCategoryName);
-      service.save(officeCategory, openApp);
+      service_.save(officeCategory, msApp);
+      Application openApp = createApplication(officeApps[1], officeCategoryName);
+      service_.save(officeCategory, openApp);
 
       String gameCategoryName = "Game";
       ApplicationCategory gameCategory = createAppCategory(gameCategoryName, "None");
-      service.save(gameCategory);
+      service_.save(gameCategory);
       String[] gameApps = {"HaftLife", "Chess"};
-      Application haftlifeApp = createApplication(gameApps[0], "TestType", gameCategoryName);
+      Application haftlifeApp = createApplication(gameApps[0], gameCategoryName);
       pers = new ArrayList<String>();
       pers.add("member:/portal/admin");
       haftlifeApp.setAccessPermissions(pers);
-      service.save(gameCategory, haftlifeApp);
-      Application chessApp = createApplication(gameApps[1], "TestType", gameCategoryName);
+      service_.save(gameCategory, haftlifeApp);
+      Application chessApp = createApplication(gameApps[1], gameCategoryName);
       chessApp.setAccessPermissions(pers);
-      service.save(gameCategory, chessApp);
+      service_.save(gameCategory, chessApp);
 
-      List<ApplicationCategory> returnCategorys = service.getApplicationCategories(username1);
+      List<ApplicationCategory> returnCategorys = service_.getApplicationCategories(username1);
       for (ApplicationCategory cate : returnCategorys)
       {
          System.out.println("\n\n\ncateName: " + cate.getName());
-         List<Application> apps = service.getApplications(cate);
+         List<Application> apps = service_.getApplications(cate);
          for (Application app : apps)
          {
             System.out.println("\nappName: " + app.getApplicationName() + "---" + app.getAccessPermissions());
          }
       }
-      assertEquals(1, returnCategorys.size());
+      assertEquals(2, returnCategorys.size());
    }
+/*
 
    void assertApplicationOperation(ApplicationRegistryService service) throws Exception
    {
@@ -309,7 +303,7 @@ public class TestApplicationRegistryService extends BasicTestCase
       assertEquals(0, apps2.size());
       //    service.clearAllRegistries() ;
    }
-
+*/
    private ApplicationCategory createAppCategory(String categoryName, String categoryDes)
    {
       ApplicationCategory category = new ApplicationCategory();
@@ -318,18 +312,18 @@ public class TestApplicationRegistryService extends BasicTestCase
       category.setDescription(categoryDes);
       return category;
    }
-
-   private Application createApplication(String appName, String appType, String appGroup)
+   private Application createApplication(String appName, String appGroup)
    {
       Application app = new Application();
+      app.setContentId(appName);
       app.setApplicationName(appName);
       app.setDisplayName(appName);
-      app.setType(ApplicationType.getType(appType));
-//      app.setApplicationGroup(appGroup);
+      app.setType(ApplicationType.PORTLET);
       return app;
    }
 
-   private void prepareOrganizationData(OrganizationService orgService) throws Exception
+/*
+   private void prepareOrganizationData() throws Exception
    {
       groupDefault = orgService.getGroupHandler().findGroupById("/platform/users");
       if (group1 == null)
@@ -412,4 +406,5 @@ public class TestApplicationRegistryService extends BasicTestCase
       orgService.getUserProfileHandler().saveUserProfile(up, true);
       return u;
    }
+*/
 }
