@@ -37,6 +37,7 @@ import org.exoplatform.web.application.URLBuilder;
 import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.lifecycle.HtmlValidator;
+import org.w3c.dom.Element;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -44,8 +45,10 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.net.URLDecoder;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -97,6 +100,8 @@ public class PortalRequestContext extends WebuiRequestContext
    private Writer writer_;
 
    protected JavascriptManager jsmanager_ = new JavascriptManager();
+   
+   private List<Element> extraMarkupHeaders;
 
    public JavascriptManager getJavascriptManager()
    {
@@ -293,6 +298,11 @@ public class PortalRequestContext extends WebuiRequestContext
       }
       return writer_;
    }
+   
+   final public void setWriter(Writer writer)
+   {
+	   this.writer_ = writer;
+   }
 
    final public boolean useAjax()
    {
@@ -336,5 +346,28 @@ public class PortalRequestContext extends WebuiRequestContext
          response_.setHeader(key, headers.get(key));
       }
    }
+   
+   /**
+    * Get the extra markup headers to add to the head of the html.
+    * @return The markup to be added.
+    */
+   public List<Element> getExtraMarkupHeaders()
+   {
+	   return this.extraMarkupHeaders;
+   }
+   
+   /**
+    * Add an extra markup to the head of the html page.
+    * @param element The element to add
+    */
+   public void addExtraMarkupHeader(Element element)
+   {
+	  if (this.extraMarkupHeaders == null)
+	  {
+		  this.extraMarkupHeaders = new ArrayList<Element>();
+	  }
+	  this.extraMarkupHeaders.add(element);
+   }
+
 
 }

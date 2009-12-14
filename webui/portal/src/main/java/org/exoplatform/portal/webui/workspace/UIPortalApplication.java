@@ -39,6 +39,7 @@ import org.exoplatform.services.organization.UserProfile;
 import org.exoplatform.services.resources.LocaleConfig;
 import org.exoplatform.services.resources.LocaleConfigService;
 import org.exoplatform.services.resources.Orientation;
+import org.exoplatform.web.application.RequestContext;
 import org.exoplatform.web.application.javascript.JavascriptConfigService;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -48,6 +49,9 @@ import org.exoplatform.webui.core.UIComponentDecorator;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.event.Event;
 
+import java.io.CharArrayWriter;
+import java.io.IOException;
+import java.io.StringWriter;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -99,6 +103,11 @@ public class UIPortalApplication extends UIApplication
    private UserPortalConfig userPortalConfig_;
 
    private boolean isSessionOpen = false;
+   
+   /**
+    * Stores the child html markup
+    */
+   private String childMarkup;
 
    /**
     * The constructor of this class is used to build the tree of UI components
@@ -400,6 +409,43 @@ public class UIPortalApplication extends UIApplication
       super.processDecode(context);
    }
 
+
+
+   /**
+    * Process the child elements storing the generated markup to be used
+    * when calling renderChildren().
+    * @throws Exception
+    */
+   public void processChildren() throws Exception
+   {
+	   RequestContext context = RequestContext.getCurrentInstance();
+	   Writer oldWriter = context.getWriter();
+
+	   Writer writer = new CharArrayWriter();
+
+	   context.setWriter(writer);
+	   super.renderChildren();
+	   context.setWriter(oldWriter);
+
+	   childMarkup = writer.toString();
+   }
+   
+   /**
+    * This method will not do any processing of the child elements. It will take 
+    * the previously processed html markup for the children (see processChildren)
+    * and write this to the RequestContext writer.
+    */
+   public void renderChildren() throws Exception 
+   {
+	   if (childMarkup != null && !childMarkup.isEmpty())
+	   {
+		   RequestContext context = RequestContext.getCurrentInstance();
+		   Writer writer = context.getWriter();
+
+		   writer.write(childMarkup);
+	   }
+   }
+   
    /**
     * The processrender() method handles the creation of the returned HTML either
     * for a full page render or in the case of an AJAX call The first request,

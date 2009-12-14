@@ -151,6 +151,11 @@ public class PortletRequestContext extends WebuiRequestContext
    {
       return writer_;
    }
+   
+   public void setWriter(Writer writer)
+   {
+	   this.writer_ = writer;
+   }
 
    final public boolean useAjax()
    {

@@ -119,6 +119,11 @@ abstract public class RequestContext
    {
       return parentAppRequestContext_.getWriter();
    }
+   
+   public void setWriter (Writer writer)
+   {
+	   parentAppRequestContext_.setWriter(writer);
+   }
 
    final public Object getAttribute(String name)
    {

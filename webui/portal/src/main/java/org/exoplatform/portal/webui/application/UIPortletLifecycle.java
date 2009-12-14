@@ -40,12 +40,13 @@ import org.gatein.pc.api.invocation.RenderInvocation;
 import org.gatein.pc.api.invocation.response.ErrorResponse;
 import org.gatein.pc.api.invocation.response.FragmentResponse;
 import org.gatein.pc.api.invocation.response.PortletInvocationResponse;
+import org.w3c.dom.Element;
 
 import java.io.Serializable;
 import java.nio.charset.Charset;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
+import javax.portlet.MimeResponse;
 import javax.portlet.PortletMode;
 import javax.portlet.WindowState;
 
@@ -176,36 +177,62 @@ public class UIPortletLifecycle<S, C extends Serializable, I> extends Lifecycle<
                   PortletInvocationResponse response = uicomponent.invoke(renderInvocation);
                   if (response instanceof FragmentResponse)
                   {
-                     FragmentResponse fragmentResponse = (FragmentResponse)response;
-                     switch (fragmentResponse.getType())
-                     {
-                        case FragmentResponse.TYPE_CHARS:
-                           markup = Text.create(fragmentResponse.getContent());
-                           break;
-                        case FragmentResponse.TYPE_BYTES:
-                           markup = Text.create(fragmentResponse.getBytes(), Charset.forName("UTF-8"));
-                           break;
-                        case FragmentResponse.TYPE_EMPTY:
-                           markup = Text.create("");
-                           break;
-                     }
-                     portletTitle = fragmentResponse.getTitle();
-                     if (fragmentResponse.getProperties() != null
-                        && fragmentResponse.getProperties().getTransportHeaders() != null)
-                     {
-                        MultiValuedPropertyMap<String> transportHeaders =
-                           fragmentResponse.getProperties().getTransportHeaders();
-                        Map<String, String> headers = new HashMap<String, String>();
+                	  FragmentResponse fragmentResponse = (FragmentResponse)response;
+                	  switch (fragmentResponse.getType())
+                	  {
+                	  case FragmentResponse.TYPE_CHARS:
+                		  markup = Text.create(fragmentResponse.getContent());
+                		  break;
+                	  case FragmentResponse.TYPE_BYTES:
+                		  markup = Text.create(fragmentResponse.getBytes(), Charset.forName("UTF-8"));
+                		  break;
+                	  case FragmentResponse.TYPE_EMPTY:
+                		  markup = Text.create("");
+                		  break;
+                	  }
+                	  portletTitle = fragmentResponse.getTitle();
 
-                        for (String key : transportHeaders.keySet())
-                        {
-                           for (String value : transportHeaders.getValues(key))
-                           {
-                              headers.put(key, value);
-                           }
-                        }
-                        prcontext.setHeaders(headers);
-                     }
+                	  // setup portlet properties
+                	  if (fragmentResponse.getProperties() != null)
+                	  {
+                		  //setup transport headers
+                		  if (fragmentResponse.getProperties().getTransportHeaders() != null)
+                		  {
+                			  MultiValuedPropertyMap<String> transportHeaders =
+                				  fragmentResponse.getProperties().getTransportHeaders();
+                			  for (String key : transportHeaders.keySet())
+                			  {
+                				  for (String value : transportHeaders.getValues(key))
+                				  {
+                					  prcontext.getResponse().setHeader(key, value);
+                				  }
+                			  }
+                		  }
+
+                		  //setup markup headers
+                		  if (fragmentResponse.getProperties().getMarkupHeaders() != null)
+                		  {
+                			  MultiValuedPropertyMap<Element> markupHeaders =
+                				  fragmentResponse.getProperties().getMarkupHeaders();
+
+                			  List<Element> markupElements = markupHeaders.getValues(MimeResponse.MARKUP_HEAD_ELEMENT);
+                			  if (markupElements != null)
+                			  {
+                				  for (Element element : markupElements)
+                				  {
+                					  if ("title".equals(element.getNodeName().toLowerCase()) && element.getFirstChild() != null)
+                					  {
+                						  String title = element.getFirstChild().getTextContent();
+                						  prcontext.getRequest().setAttribute(PortalRequestContext.REQUEST_TITLE, title);
+                					  }
+                					  else
+                					  {
+                						  prcontext.addExtraMarkupHeader(element);
+                					  }
+                				  }
+                			  }
+                		  }
+                	  }
 
                   }
                   else
