@@ -751,7 +751,7 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
       invocation.setUserContext(new ExoUserContext(servletRequest, userProfile));
       invocation.setWindowContext(new ExoWindowContext(storageName));
       invocation.setPortalContext(new AbstractPortalContext(Collections.singletonMap(
-         "javax.portlet.markup.head.element.support", "true")));
+         "javax.portlet.markup.head.element.support", "false")));
       invocation.setSecurityContext(new AbstractSecurityContext(servletRequest));
 
       //

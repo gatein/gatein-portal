@@ -18,10 +18,10 @@
   def title = rcontext.getTitle();
   def metaInformation = rcontext.getMetaInformation();
 %>
-<% uicomponent.processChildren();%>
+
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="$lang" lang="$lang" dir="$dir">
   <head id="head">
-    <title><%=rcontext.getTitle()%></title>
+    <title><%=title%></title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <%
     	if(metaInformation!= null) {
@@ -87,17 +87,6 @@
     </script>
     <script type="text/javascript" src="/eXoResources/javascript/eXo/i18n/I18NMessage.js"></script>
     <script type="text/javascript" src="/eXoResources/javascript/eXo/i18n/MessageResource_<%=lang%>.js"></script>
-    
-    <% 
-     def headerElements = rcontext.getExtraMarkupHeaders();
-     if (headerElements != null) 
-     {
-       for (element in headerElements)
-       { %>
-        <%=element%>  
-    <% }
-     }     
-    %>
   </head>
 
   <body style="height: 100%;">

@@ -40,13 +40,10 @@ import org.gatein.pc.api.invocation.RenderInvocation;
 import org.gatein.pc.api.invocation.response.ErrorResponse;
 import org.gatein.pc.api.invocation.response.FragmentResponse;
 import org.gatein.pc.api.invocation.response.PortletInvocationResponse;
-import org.w3c.dom.Element;
 
 import java.io.Serializable;
 import java.nio.charset.Charset;
-import java.util.List;
 
-import javax.portlet.MimeResponse;
 import javax.portlet.PortletMode;
 import javax.portlet.WindowState;
 
@@ -205,30 +202,6 @@ public class UIPortletLifecycle<S, C extends Serializable, I> extends Lifecycle<
                 				  for (String value : transportHeaders.getValues(key))
                 				  {
                 					  prcontext.getResponse().setHeader(key, value);
-                				  }
-                			  }
-                		  }
-
-                		  //setup markup headers
-                		  if (fragmentResponse.getProperties().getMarkupHeaders() != null)
-                		  {
-                			  MultiValuedPropertyMap<Element> markupHeaders =
-                				  fragmentResponse.getProperties().getMarkupHeaders();
-
-                			  List<Element> markupElements = markupHeaders.getValues(MimeResponse.MARKUP_HEAD_ELEMENT);
-                			  if (markupElements != null)
-                			  {
-                				  for (Element element : markupElements)
-                				  {
-                					  if ("title".equals(element.getNodeName().toLowerCase()) && element.getFirstChild() != null)
-                					  {
-                						  String title = element.getFirstChild().getTextContent();
-                						  prcontext.getRequest().setAttribute(PortalRequestContext.REQUEST_TITLE, title);
-                					  }
-                					  else
-                					  {
-                						  prcontext.addExtraMarkupHeader(element);
-                					  }
                 				  }
                 			  }
                 		  }
