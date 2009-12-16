@@ -187,7 +187,7 @@ public class UIPortalComponentActionListener
                   /** Update server-side */
                   UIContainer parentOfTopAncestor = topAncestor.getParent();
                   parentOfTopAncestor.removeChildById(topAncestorId);
-                  
+
                   /** Update client side */
                   if (topAncestorId.startsWith(UI_CONTAINER_PREFIX))
                   {
@@ -197,9 +197,12 @@ public class UIPortalComponentActionListener
                   removeComponent(topAncestorId, UI_CONTAINER_PREFIX, pcontext);
                   return;
                }
-               
-               /** If the uiParent is not the topAncestor and having no child, then it is removed */
-               if(uiParent.getChildren().size() == 0)
+
+               /**
+                * If the uiParent is not the topAncestor and having no child,
+                * then it is removed
+                */
+               if (uiParent.getChildren().size() == 0)
                {
                   /** Update server-side */
                   UIContainer itsParent = uiParent.getParent();
@@ -376,11 +379,17 @@ public class UIPortalComponentActionListener
                uiPortlet.setAccessPermissions(accessPers);
                UIPage uiPage = uiTarget.getAncestorOfType(UIPage.class);
 
-               //
-               CloneApplicationState state = new CloneApplicationState<Object>(app.getStorageId());
-
-               //
-               uiPortlet.setState(new PortletState(state, applicationType));
+               // Hardcode on state to fix error while drag/drop Dashboard
+               if ("dashboard/DashboardPortlet".equals(app.getContentId()))
+               {
+                  TransientApplicationState state = new TransientApplicationState<Object>(app.getContentId());
+                  uiPortlet.setState(new PortletState(state, applicationType));
+               }
+               else
+               {
+                  CloneApplicationState state = new CloneApplicationState<Object>(app.getStorageId());
+                  uiPortlet.setState(new PortletState(state, applicationType));
+               }
                uiPortlet.setPortletInPortal(uiTarget instanceof UIPortal);
                uiPortlet.setShowEditControl(true);
                uiSource = uiPortlet;
@@ -510,14 +519,15 @@ public class UIPortalComponentActionListener
       {
          String portalName = event.getRequestContext().getRequestParameter("portalName");
          UIPortal uiPortal = Util.getUIPortal();
-         UIPortalApplication uiApp = uiPortal.getAncestorOfType(UIPortalApplication.class);        
+         UIPortalApplication uiApp = uiPortal.getAncestorOfType(UIPortalApplication.class);
          UserPortalConfigService service = uiApp.getApplicationComponent(UserPortalConfigService.class);
-         if(portalName !=null && service.getUserPortalConfig(portalName, event.getRequestContext().getRemoteUser()) == null)
+         if (portalName != null
+            && service.getUserPortalConfig(portalName, event.getRequestContext().getRemoteUser()) == null)
          {
-            uiApp.addMessage(new ApplicationMessage("UISiteManagement.msg.portal-not-exist",new String[]{portalName}));
+            uiApp.addMessage(new ApplicationMessage("UISiteManagement.msg.portal-not-exist", new String[]{portalName}));
             return;
          }
-         
+
          UIMaskWorkspace uiMaskWS = uiApp.getChildById(UIPortalApplication.UI_MASK_WS_ID);
          UIPortalForm portalForm = uiMaskWS.createUIComponent(UIPortalForm.class, null, "UIPortalForm");
          portalForm.setPortalOwner(portalName);
