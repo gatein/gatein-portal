@@ -19,9 +19,6 @@
 
 package org.exoplatform.account.webui.component;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.UserHandler;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -39,6 +36,9 @@ import org.exoplatform.webui.form.UIFormInputWithActions;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 
@@ -122,12 +122,16 @@ public class UIRegisterForm extends UIForm
          }
 
          String typedUsername = userNameInput.getValue();
+         WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
+         UIApplication uiApp = context.getUIApplication();
          if (usernameIsUsed(typedUsername, orgService))
          {
-            WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
-            UIApplication uiApp = context.getUIApplication();
-
-            uiApp.addMessage(new ApplicationMessage("UIAccountInputSet.msg.user-exist", new String[]{typedUsername}));
+            uiApp.addMessage(new ApplicationMessage("UIAccountInputSet.msg.user-exist", new String[]{typedUsername},
+               ApplicationMessage.WARNING));
+         }
+         else
+         {
+            uiApp.addMessage(new ApplicationMessage("UIAccountInputSet.msg.user-not-exist", new String[]{typedUsername}));
          }
       }
 
