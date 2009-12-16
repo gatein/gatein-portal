@@ -27,7 +27,9 @@ import org.exoplatform.portal.config.model.ModelObject;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
+import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.webui.navigation.PageNavigationUtils;
+import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -376,8 +378,16 @@ public class UIPageNodeForm2 extends UIFormTabPane
          String[] accessPermission = new String[1];
          accessPermission[0] = "*:" + ownerId;
          String editPermission = userACL.getMakableMT() + ":" + ownerId;
+         
+         if (PortalConfig.PORTAL_TYPE.equals(uiForm.getOwnerType()))
+         {
+            UIPortal uiPortal = Util.getUIPortal();
+            accessPermission = uiPortal.getAccessPermissions();
+            editPermission = uiPortal.getEditPermission();
+         }
+         
+         
          UIFormStringInput uiPageName = uiInputSet.getChildById("pageName");
-
          UIFormStringInput uiPageTitle = uiInputSet.getChildById("pageTitle");
 
          Page page = new Page();
