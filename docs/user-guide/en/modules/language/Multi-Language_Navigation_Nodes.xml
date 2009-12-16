@@ -150,12 +150,12 @@
 						A Create/Edit node dialog appears, enter a resource key in the <emphasis role="bold">Label</emphasis> field
 					</para>
 				</step>
+			</procedure>
 					<note> 
 						<para>
 							You can reuse the same resource key in several nodes.
 						</para>
 					</note>
-			</procedure>
 	</section>
 	
 	<section id="sect-User_Guide-Multi_Language_Navigation_Nodes-Internationalize_Resource_Keys">
@@ -163,7 +163,7 @@
 		<para>
 			&PRODUCT; organizes resource keys in resource files. Each file contains a list of keys and their meanings (translations) in one specific language. Normally one resource file has one language supported by Portal. This helps to structure the resource keys. Each resource file has a name and a language attribute. One resource file only can contain translations for one single language.
 		</para>
-		<procedure>
+
 		<para>
 			Do as follows: 1. Go to <emphasis role="bold">GateIn Start</emphasis> -&gt; <emphasis role="bold">Page Navigation</emphasis> -&gt; <emphasis role="bold">Administration</emphasis> --&gt; <emphasis role="bold">Internationalization</emphasis>
 		</para>
@@ -219,6 +219,7 @@
 		<para>
 			5. Click on the <emphasis role="bold">Save</emphasis> button.
 		</para>
+
 	</section>
 	
 	<section id="sect-User_Guide-Multi_Language_Navigation_Nodes-Example">
