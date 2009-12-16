@@ -23,36 +23,67 @@
 
     --><title>Change Interface Language</title>
 	<para>
-		GateIn Portal provides users with the most familiar interface language to work with and perform all actions efficiently. The priority of the interface language is 1. User's language 2. Browser's language 3. Portal 's language. Thus to display your prefer language, you should pay attention to this order to change the language type appropriately.
+		&PRODUCT; provides users with the most familiar interface language to work with and perform all actions efficiently. The priority of the interface language is as follows:
 	</para>
+	<orderedlist numeration="arabic">
+		<listitem>
+			<para>
+				User's language
+			</para>
+		</listitem>
+		<listitem>
+			<para>
+				Browser's language
+			</para>
+		</listitem>
+		<listitem>
+			<para>
+				Portal 's language
+			</para>
+		</listitem>
+	</orderedlist>
+	<para>
+		 Thus to display your prefered language, you should pay attention to this order to change the language type appropriately.
+	</para>
+
 	<para>
 		You can change the interface language permanently by three ways :
 	</para>
 	<section id="sect-User_Guide-Change_Interface_Language-The_1st_way">
-		<title>The 1^st^ way</title>
-		<para>
-			This way supports you to change the interface language of the current Portal.
-		</para>
-		<para>
-			1. Go to <emphasis role="bold">GateIn Start</emphasis> -&gt; <emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Advanced</emphasis> --&gt; <emphasis role="bold">Edit Current portal</emphasis>.
-		</para>
-		<para>
-			2. Click !images/EditIcon.png! icon to edit portal's properties.
-		</para>
-		<para>
-			3. In the <emphasis role="bold">Portal Setting</emphasis> tab: You can change display language of Portal by selecting another language in the <emphasis role="bold">Locale</emphasis> field.
-		</para>
-		<para>
-			4. Click <emphasis role="bold">Save</emphasis> and <emphasis role="bold">Finish</emphasis>!images/FinishIcon.png! icon to take affect.
-		</para>
-		<para>
+		<title>Method One</title>
+			<para>
+				This way supports you to change the interface language of the current Portal.
+			</para>
+				<procedure>
+					<step>
+						<para>
+							Go to <emphasis role="bold">&PRODUCT; Start</emphasis> -&gt; <emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Advanced</emphasis> --&gt; <emphasis role="bold">Edit Current portal</emphasis>.
+						</para>
+					</step>
+					<step>
+						<para>
+							Click !images/EditIcon.png! icon to edit portal's properties.
+						</para>
+					</step>
+					<step>
+						<para>
+							In the <emphasis role="bold">Portal Setting</emphasis> tab: You can change display language of Portal by selecting another language in the <emphasis role="bold">Locale</emphasis> field.
+						</para>
+					</step>
+					<step>
+						<para>
+							Click <emphasis role="bold">Save</emphasis> and <emphasis role="bold">Finish</emphasis>!images/FinishIcon.png! icon to take affect.
+						</para>
+					</step>
+				</procedure>
+	<!--	<para>
 			For Portal 2.6
 		</para>
 		<para>
 			You easily change the interface language of the current Portal by following guides:
 		</para>
 		<para>
-			1. Go to <emphasis role="bold">Editor</emphasis> on the Toolbar --&gt; click <emphasis role="bold">Edit Page</emphasis>. The <emphasis role="bold">Edit Inline Composer</emphasis> popup will appear:
+			1. Go to <emphasis role="bold">Editor</emphasis> on the Toolbar &gt; click <emphasis role="bold">Edit Page</emphasis>. The <emphasis role="bold">Edit Inline Composer</emphasis> popup will appear:
 		</para>
 		<mediaobject>
 			<imageobject>
@@ -67,39 +98,49 @@
 		</para>
 		<para>
 			4. Click <emphasis role="bold">Save</emphasis> and <emphasis role="bold">Finish</emphasis>!images/DiskIcon.png! icon to take affect.
-		</para>
+		</para> -->
 	</section>
 	
 	<section id="sect-User_Guide-Change_Interface_Language-The_2nd_way">
-		<title>The 2^nd^ way</title>
-		<para>
-			If you can access GateIn Start, you can do this way to set interface language for yourself, not for interface language of Portal by these following steps:
-		</para>
-		<para>
-			1. Go to <emphasis role="bold">GateIn Start</emphasis> -&gt; <emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Language Settings</emphasis>
-		</para>
-		<mediaobject>
-			<imageobject>
-				<imagedata fileref="images/InterfaceLanguage.png" format="PNG" width="444" />
-			</imageobject>
-		</mediaobject>
-		<para>
-			The <emphasis role="bold">Interface Language Setting</emphasis> form is displayed with a list of all supported languages. The current using language is marked by!images/MarkedIcon.png! icon.
-		</para>
-		<para>
-			2. Select another one by clicking on the name of language.
-		</para>
-		<para>
-			3. Click the <emphasis role="bold">Apply</emphasis> button and wait for few seconds to take affect.
-		</para>
-		<para>
+		<title>Method Two</title>
+			<para>
+				If you can access &PRODUCT; Start, you can do this way to set interface language for yourself, not for interface language of Portal by these following steps:
+			</para>
+			<procedure>
+				<step>
+					<para>
+						Go to <emphasis role="bold">&PRODUCT; Start</emphasis> -&gt; <emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Language Settings</emphasis>
+					</para>
+					<mediaobject>
+						<imageobject>
+							<imagedata fileref="images/InterfaceLanguage.png" format="PNG" width="444" />
+						</imageobject>
+					</mediaobject>
+				</step>
+				<step>
+					<para>
+						The <emphasis role="bold">Interface Language Setting</emphasis> form is displayed with a list of all supported languages. The current using language is marked by!images/MarkedIcon.png! icon.
+					</para>
+				</step>
+				<step>
+					<para>
+						Select another one by clicking on the name of language.
+					</para>
+				</step>
+				<step>
+					<para>
+						Click the <emphasis role="bold">Apply</emphasis> button and wait for few seconds to take affect.
+					</para>
+				</step>
+		</procedure>
+		<!--<para>
 			For Portal 2.6
 		</para>
 		<para>
 			You can set the interface language for yourself by following guides:
 		</para>
 		<para>
-			1. Go to GateIn on the Toolbar --&gt; click <emphasis role="bold">Change Language</emphasis>
+			1. Go to &PRODUCT; on the Toolbar &gt; click <emphasis role="bold">Change Language</emphasis>
 		</para>
 		<mediaobject>
 			<imageobject>
@@ -114,83 +155,83 @@
 		</para>
 		<para>
 			3. Click the <emphasis role="bold">Apply</emphasis> button and wait for few seconds to take affect.
-		</para>
+		</para> -->
 	</section>
 	
 	<section id="sect-User_Guide-Change_Interface_Language-The_3rd_way">
-		<title>The 3^rd^ way</title>
+		<title>Method Three</title>
 		<para>
 			You also set interface language for yourself, not for interface language of the Portal by this way.
 		</para>
-		<para>
-			1. Click <emphasis role="bold">Change Language</emphasis> on the right corner to show the <emphasis role="bold">Interface Language Setting</emphasis> form:
-		</para>
-		<mediaobject>
-			<imageobject>
-				<imagedata fileref="images/Root1.png" format="PNG" />
-			</imageobject>
-		</mediaobject>
-		<para>
-			The <emphasis role="bold">Interface Language Setting</emphasis> form will appear:
-		</para>
-		<mediaobject>
-			<imageobject>
-				<imagedata fileref="images/InterfaceLanguage.png" format="PNG" width="444" />
-			</imageobject>
-		</mediaobject>
-		<para>
-			2. Select another language in list. The selected language will be marked by !images/MarkedIcon.png! icon.
-		</para>
-		<para>
-			3. Click the <emphasis role="bold">Apply</emphasis> button to change the interface language and wait for few seconds to take affect or click the <emphasis role="bold">Cancel</emphasis> button to quit without changes.
-		</para>
+			<procedure> 
+				<step>
+					<para>
+						Click <emphasis role="bold">Change Language</emphasis> on the right corner to show the <emphasis role="bold">Interface Language Setting</emphasis> form:
+					</para>
+					<mediaobject>
+						<imageobject>
+							<imagedata fileref="images/Root1.png" format="PNG" />
+						</imageobject>
+					</mediaobject>
+				</step>
+				<step>
+					<para>
+						The <emphasis role="bold">Interface Language Setting</emphasis> form will appear:
+					</para>
+					<mediaobject>
+						<imageobject>
+							<imagedata fileref="images/InterfaceLanguage.png" format="PNG" width="444" />
+						</imageobject>
+					</mediaobject>
+				</step>
+				<step>
+					<para>
+						Select another language in list. The selected language will be marked by !images/MarkedIcon.png! icon.
+					</para>
+				</step>
+				<step>
+					<para>
+						Click the <emphasis role="bold">Apply</emphasis> button to change the interface language and wait for few seconds to take affect or click the <emphasis role="bold">Cancel</emphasis> button to quit without changes.
+					</para>
+				</step>
+			</procedure>
 	</section>
 	
 	<section id="sect-User_Guide-Change_Interface_Language-Set_language_for_a_user">
 		<title>Set language for a user</title>
-		<para>
-			There are two modes to set displaying language for a user.
-		</para>
-		<itemizedlist>
-			<listitem>
-				<para>
-					<emphasis role="bold">Public Mode</emphasis>: Displaying language of this mode depends on the language of browser that you are using.
-				</para>
-			</listitem>
-		</itemizedlist>
-		<itemizedlist>
-			<listitem>
-				<para>
-					If you set language of browser that Portal does not support, the displaying language will be the language of Portal.
-				</para>
-			</listitem>
-			<listitem>
-				<para>
-					If you set language of browser that Portal supports, the displaying language will be the language of browser.
-				</para>
-			</listitem>
-		</itemizedlist>
-		<itemizedlist>
-			<listitem>
-				<para>
-					<emphasis role="bold">Private Mode</emphasis>: Displaying language of this mode belongs to the language of each user which is set when registering.
-				</para>
-			</listitem>
-		</itemizedlist>
-		<itemizedlist>
-			<listitem>
-				<para>
-					When you sign in by a default account (root, john, demo, marry): the displaying language of these users are none, so it will belong to browser's language. If you change value in the <emphasis role="bold">Language</emphasis> field in the <emphasis role="bold">User Profile</emphasis> tab (only default user: root and john can change this value by access 'Management' page: Go to <emphasis role="bold">Organization</emphasis>--&gt; <emphasis role="bold">Management</emphasis> page), your displaying language will be the set value. Your displaying language has also directly affect when you change language by other ways.
-				</para>
-			</listitem>
-			<listitem>
-				<para>
-					When you sign in by a new registered user: by default, your displaying language is English. However, if you set by another language in the <emphasis role="bold">Language</emphasis> field in the <emphasis role="bold">User Profile</emphasis> tab when you register a new account, your displaying language is the set language.
-				</para>
-			</listitem>
-		</itemizedlist>
+			<para>
+				There are two modes to set displaying language for a user.
+			</para>
+			<variablelist>
+			  <varlistentry>
+				<term>Public Mode</term>
+				<listitem>
+					<para>
+						Displaying language of this mode depends on the language of browser that you are using.
+					</para>
+					<para>
+						If you set language of browser that Portal does not support, the displaying language will be the language of Portal.
+					</para>
+					<para>
+						If you set language of browser that Portal supports, the displaying language will be the language of browser.
+					</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>Private Mode</term>
+				<listitem>
+					<para>
+						Displaying language of this mode belongs to the language of each user which is set when registering.
+					</para>
+					<para>
+						When you sign in by a default account (root, john, demo, marry): the displaying language of these users are none, so it will belong to browser's language. If you change value in the <emphasis role="bold">Language</emphasis> field in the <emphasis role="bold">User Profile</emphasis> tab (only default user: root and john can change this value by access 'Management' page: Go to <emphasis role="bold">Organization</emphasis>--&gt; <emphasis role="bold">Management</emphasis> page), your displaying language will be the set value. Your displaying language has also directly affect when you change language by other ways.
+					</para>
+					<para>
+						When you sign in by a new registered user: by default, your displaying language is English. However, if you set by another language in the <emphasis role="bold">Language</emphasis> field in the <emphasis role="bold">User Profile</emphasis> tab when you register a new account, your displaying language is the set language.
+					</para>
+				</listitem>
+			</varlistentry>
+		</variablelist>
 	</section>
 
 </section>
-
-

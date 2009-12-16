@@ -25,26 +25,20 @@
 	<para>
 		Only by following there simple steps can you create a page quickly by using a wizard and publish this page on the Navigation bar:
 	</para>
-	<para>
-		1. Go to <emphasis role="bold">GateIn Start</emphasis> -&gt;<emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Basic</emphasis> --&gt; <emphasis role="bold">Create page wizard</emphasis>. <emphasis role="bold">Welcome to Page Creation Wizard</emphasis> appears:
-	</para>
-	<para>
-		For GateIn Portal 2.6
-	</para>
-	<orderedlist>
-		<listitem>
+	<procedure>
+		<step>
 			<para>
-				1. Go to <emphasis role="bold">Editor</emphasis> --&gt; <emphasis role="bold">Add New Page</emphasis> on the Toolbar. <emphasis role="bold">Create page wizard</emphasis>: <emphasis role="bold">Welcome to Page Creation Wizard</emphasis> appears:
+				Go to <emphasis role="bold">GateIn Start</emphasis> -&gt;<emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Basic</emphasis> --&gt; <emphasis role="bold">Create page wizard</emphasis>. <emphasis role="bold">Welcome to Page Creation Wizard</emphasis> appears:
 			</para>
 			<mediaobject>
 				<imageobject>
 					<imagedata fileref="images/Welcome.png" format="PNG" width="444" />
 				</imageobject>
 			</mediaobject>
-		</listitem>
-		<listitem>
+		</step>
+		<step>
 			<para>
-				2. Click the <emphasis role="bold">Next</emphasis> button or number '1' of the wizard steps in order to go to step 1. This step allows users to set up page setting such as :the navigation path, the node name, the display name, etc.
+				Click the <emphasis role="bold">Next</emphasis> button or number '1' of the wizard steps in order to go to step 1. This step allows users to set up page setting such as :the navigation path, the node name, the display name, etc.
 			</para>
 			<mediaobject>
 				<imageobject>
@@ -54,27 +48,86 @@
 			<para>
 				There are two parts: the left pane is used to show a small description that will guide you what to do in this step. And the main wizard includes two parts: the left pane contains a list of navigations and shows the page list of each selected navigation, the right pane displays main information of a page.
 			</para>
-		</listitem>
-		<listitem>
+		</step>
+		<step>
 			<para>
-				3. On the left of wizard: Click the combo box icon !images/ComboBox.png! to see the navigations list. Select a navigation from the list that you want to create page. The pages list of selected navigation are displayed.
+				On the left of wizard: Click the combo box icon !images/ComboBox.png! to see the navigations list. Select a navigation from the list that you want to create page. The pages list of selected navigation are displayed.
 			</para>
 			<mediaobject>
 				<imageobject>
 					<imagedata fileref="images/PageList.png" format="PNG" />
 				</imageobject>
 			</mediaobject>
-		</listitem>
-		<listitem>
+		</step>
+		<step>
 			<para>
-				4. Select a page from the above list or click on arrow up icon !images/ArrowIcon.png! to add a page at root.
+				Select a page from the above list or click on arrow up icon !images/ArrowIcon.png! to add a page at root.
 			</para>
 			<mediaobject>
 				<imageobject>
 					<imagedata fileref="images/Pagewizard1.png" format="PNG" width="444" />
 				</imageobject>
 			</mediaobject>
-			<informaltable colsep="0" frame="none" rowsep="0">
+			<variablelist>
+			  <varlistentry>
+				<term>Current Selected Page Node</term>
+				<listitem>
+					<para>
+						The path of the selected node to add a new sub page
+					</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>Node Name</term>
+				<listitem>
+					<para>
+						The node name of the added page. It is required field. This field must start with a character and must have a length between 3 and 30 characters.
+					</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>Display Name</term>
+				<listitem>
+					<para>
+						The display name of the node which contains the added page and must have a length between 3 and 30 characters.
+					</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>Visible</term>
+				<listitem>
+					<para>
+						This check box allows to hide this page. If not checked the page is under no circumstances shown, even if the publication period is OK. If checked the page or the page node appears on on the navigation bar, the page navigation and the site map. If "visible" is checked the visibility can depend on the "publication date &amp; time" option.
+					</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>Publication date &amp;time</term>
+				<listitem>
+					<para>
+						This option allows publishing the page for a period of time. If this option is checked the visibility of the page depends on the publication period start and end date.
+					</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>Start Publication Date</term>
+				<listitem>
+					<para>
+						The start date and time to publish the page
+					</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>End Publication Date</term>
+				<listitem>
+					<para>
+						The end date and time to publish the page.
+					</para>
+				</listitem>
+			</varlistentry>
+		</variablelist>
+
+	<!--		<informaltable colsep="0" frame="none" rowsep="0">
 				<tgroup cols="2">
 					<colspec align="center"></colspec>
 					<colspec align="center"></colspec>
@@ -145,17 +198,19 @@
 						</row>
 					</tbody>
 				</tgroup>
-			</informaltable>
-			<para>
-				+<emphasis role="bold">Note:</emphasis>+You can set date and time by clicking the <emphasis role="bold">Start Publication Date</emphasis> field and <emphasis role="bold">End Publication Date</emphasis> field and select a date in the calendar pop up
-			</para>
+			</informaltable> -->
+			<note>
+				<para>
+					You can set date and time by clicking the <emphasis role="bold">Start Publication Date</emphasis> field and <emphasis role="bold">End Publication Date</emphasis> field and select a date in the calendar pop up
+				</para>
+			</note>
 			<mediaobject>
 				<imageobject>
 					<imagedata fileref="images/Calendar.png" format="PNG" />
 				</imageobject>
 			</mediaobject>
-		</listitem>
-		<listitem>
+		</step>
+		<step>
 			<para>
 				5. Click <emphasis role="bold">Next</emphasis> or number '2' of the wizard steps to go to step 2.
 			</para>
@@ -164,13 +219,13 @@
 					<imagedata fileref="images/PageWizard2.png" format="PNG" width="444" />
 				</imageobject>
 			</mediaobject>
-		</listitem>
-		<listitem>
+		</step>
+		<step>
 			<para>
 				6. Select <emphasis role="bold">Empty Layout</emphasis> or click the icon to see more templates to select.
 			</para>
-		</listitem>
-		<listitem>
+		</step>
+		<step>
 			<para>
 				7. Click the <emphasis role="bold">Next</emphasis> button or number '3' of the wizard step to go to step 3. You can drag portlets on the left pane and drop it on the right pane to constitute the content of this page.
 			</para>
@@ -179,6 +234,12 @@
 					<imagedata fileref="images/PageWizard3.png" format="PNG" width="444" />
 				</imageobject>
 			</mediaobject>
+<warning>
+<title>These Images are not present</title>
+<para>
+	the images in the below table are not present in the raw document files.
+</para>
+</warning> 
 			<informaltable colsep="0" frame="none" rowsep="0">
 				<tgroup cols="2">
 					<colspec align="center"></colspec>
@@ -219,27 +280,13 @@
 					</tbody>
 				</tgroup>
 			</informaltable>
-		</listitem>
-		<listitem>
+		</step>
+		<step>
 			<para>
 				8. Click the <emphasis role="bold">Show Container</emphasis> icon !images/ShowContainer.png! if you want to see the existing containers and re-select the layout of the page. There will be a category list which contains specific containers when clicking the icon.
 			</para>
-		</listitem>
-	</orderedlist>
-	<para>
-		for GateIn Portal 2.6
-	</para>
-	<para>
-		The step 2 of creating a page by wizard is the same as the above
-	</para>
-	<para>
-		In the step 3, you can drag portlets from the Edit Inline Composer popup and drag it to the constitute the content of this page
-	</para>
-	<mediaobject>
-		<imageobject>
-			<imagedata fileref="images/Step32.6.png" format="PNG" width="444" />
-		</imageobject>
-	</mediaobject>
+		</step>
+	</procedure>
 	<para>
 		You can click on!images/Switch.png! to view the content of this page.
 	</para>

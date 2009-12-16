@@ -22,31 +22,41 @@
     02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
      --><title>Change Node Order</title>
-	<para>
-		You can easily change the position of node on the navigation bar on their own convenient order by following these steps:
-	</para>
-	<para>
-		1. Go to <emphasis role="bold">GateIn Start</emphasis> -&gt; <emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Advanced</emphasis> --&gt; <emphasis role="bold">Edit Page and Navigation</emphasis>.
-	</para>
-	<para>
-		2. Select a navigation from the navigation list.
-	</para>
-	<mediaobject>
-		<imageobject>
-			<imagedata fileref="images/Navigation.png" format="PNG" />
-		</imageobject>
-	</mediaobject>
-	<para>
-		3. Select the node that you want to move. Right click on the selected node and then click on <emphasis role="bold">Move up</emphasis> or <emphasis role="bold">Move down</emphasis>
-	</para>
-	<mediaobject>
-		<imageobject>
-			<imagedata fileref="images/MoveUpDown.png" format="PNG" />
-		</imageobject>
-	</mediaobject>
-	<para>
-		The selected node will be moved up/down.
-	</para>
+		<para>
+			You can easily change the position of node on the navigation bar on their own convenient order by following these steps:
+		</para>
+		<procedure>
+			<step>	
+				<para>
+					Go to <emphasis role="bold">GateIn Start</emphasis> -&gt; <emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Advanced</emphasis> --&gt; <emphasis role="bold">Edit Page and Navigation</emphasis>.
+				</para>
+			</step>
+			<step>
+				<para>
+					Select a navigation from the navigation list.
+				</para>
+				<mediaobject>
+					<imageobject>
+						<imagedata fileref="images/Navigation.png" format="PNG" />
+					</imageobject>
+				</mediaobject>
+			</step>
+			<step>
+				<para>
+					Select the node that you want to move. Right click on the selected node and then click on <emphasis role="bold">Move up</emphasis> or <emphasis role="bold">Move down</emphasis>
+				</para>
+				<mediaobject>
+					<imageobject>
+						<imagedata fileref="images/MoveUpDown.png" format="PNG" />
+					</imageobject>
+				</mediaobject>
+			</step>
+			<step>
+				<para>
+					The selected node will be moved up/down.
+				</para>
+			</step>
+		</procedure>
 </section>
 
 

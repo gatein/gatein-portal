@@ -28,18 +28,6 @@
 		<para>
 			skin switch that takes only effect on the user's current session until he signs out. You can change the skin permanently or temporarily.
 		</para>
-		<itemizedlist>
-			<listitem>
-				<para>
-					<xref linkend="User_Guide-Change_Portal_Skins-Change_the_skin_temporarily"/>
-				</para>
-			</listitem>
-			<listitem>
-				<para>
-					<xref linkend="User_Guide-Change_Portal_Skins-Change_the_skin_permanently"/>
-				</para>
-			</listitem>
-		</itemizedlist>	
 
 		<variablelist>
 		<varlistentry id="User_Guide-Change_Portal_Skins-Change_the_skin_temporarily">

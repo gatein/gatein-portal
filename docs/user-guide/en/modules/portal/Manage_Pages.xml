@@ -22,438 +22,444 @@
     02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
      --><title>Manage Pages</title>
-	<para>
-		Only by using one page list can users add, edit, delete and view quickly and easily which pages you like to. Following these guides to manage pages:
-	</para>
-	<section id="sect-User_Guide-Manage_Pages-Add_a_new_Page_in_the_Page_List">
-		<title>Add a new Page in the Page List</title>
 		<para>
-			You easily add a new page by following these simple steps:
+			Only by using one page list can users add, edit, delete and view quickly and easily which pages you like to. Following these guides to manage pages:
 		</para>
-		<para>
-			1. Go to <emphasis role="bold">GateIn</emphasis> -&gt;<emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Advanced</emphasis> --&gt; <emphasis role="bold">Manage Pages</emphasis>
-		</para>
-		<mediaobject>
-			<imageobject>
-				<imagedata fileref="images/ManagePage.png" format="PNG" width="444" />
-			</imageobject>
-		</mediaobject>
-		<para>
-			For GateIn Portal 2.6
-		</para>
-		<orderedlist>
-			<listitem>
+
+		<section id="sect-User_Guide-Manage_Pages-Add_a_new_Page_in_the_Page_List">
+			<title>Add a new Page in the Page List</title>
 				<para>
-					1. Go to <emphasis role="bold">Administrator</emphasis> on the Toolbar --&gt; <emphasis role="bold">Manage Pages</emphasis>
+					You easily add a new page by following these simple steps:
 				</para>
-				<mediaobject>
-					<imageobject>
-						<imagedata fileref="images/ManagePage2.6.png" format="PNG" width="444" />
-					</imageobject>
-				</mediaobject>
-				<para>
-					Details
-				</para>
-				<informaltable colsep="0" frame="none" rowsep="0">
-					<tgroup cols="2">
-						<colspec align="center"></colspec>
-						<colspec align="center"></colspec>
-						<tbody>
-							<row>
-								<entry>
-									<emphasis role="bold"> Button </emphasis>
-								</entry>
-								<entry>
-									<emphasis role="bold"> Description </emphasis>
-								</entry>
-							</row>
-							<row>
-								<entry>
-									Add New Page
-								</entry>
-								<entry>
-									allows you to add a new page.
-								</entry>
-							</row>
-							<row>
-								<entry>
-									Back
-								</entry>
-								<entry>
-									allows you to return to home page.
-								</entry>
-							</row>
-						</tbody>
-					</tgroup>
-				</informaltable>
-			</listitem>
-			<listitem>
-				<para>
-					2. Click the <emphasis role="bold">Add New Page</emphasis> button.
-				</para>
-			</listitem>
-			<listitem>
-				<para>
-					3. Enter values for fields in the <emphasis role="bold">Page Setting</emphasis> tab
-				</para>
-				<mediaobject>
-					<imageobject>
-						<imagedata fileref="images/PageSetting.png" format="PNG" width="444" />
-					</imageobject>
-				</mediaobject>
-				<informaltable colsep="0" frame="none" rowsep="0">
-					<tgroup cols="2">
-						<colspec align="center"></colspec>
-						<colspec align="center"></colspec>
-						<tbody>
-							<row>
-								<entry>
-									<emphasis role="bold"> Name </emphasis>
-								</entry>
-								<entry>
-									<emphasis role="bold"> Description </emphasis>
-								</entry>
-							</row>
-							<row>
-								<entry>
-									Page Id
-								</entry>
-								<entry>
-									The string to identify the page. It is automatically generated when you will finish creating page.
-								</entry>
-							</row>
-							<row>
-								<entry>
-									Owner type
-								</entry>
-								<entry>
-									The owner type of the the page (portal, group or user). The "User" type is displayed by default. You can change the owner type by clicking on the icon.
-								</entry>
-							</row>
-							<row>
-								<entry>
-									Owner Id
-								</entry>
-								<entry>
-									The identification name of page owner. When the owner type is "group", there will be a list of groups of which you have to select one.
-								</entry>
-							</row>
-							<row>
-								<entry>
-									Page Name
-								</entry>
-								<entry>
-									The name of the page. This is a required field and must be unique. Only alpha, digit and underscore characters are allowed to be used for this field and it must have a length between 3 and 30 characters
-								</entry>
-							</row>
-							<row>
-								<entry>
-									Page title
-								</entry>
-								<entry>
-									The title of the the page. This field is not required and must have a length between 3 and 30 characters.
-								</entry>
-							</row>
-							<row>
-								<entry>
-									Show Max Window
-								</entry>
-								<entry>
-									The option allows to choose whether showing the page in maximum size or not.
-								</entry>
-							</row>
-						</tbody>
-					</tgroup>
-				</informaltable>
-				<para>
-					If the <emphasis role="bold">Owner type</emphasis> is "portal" or "group":
-				</para>
-				<itemizedlist>
-					<listitem>
+				<procedure>
+					<step>
 						<para>
-							<emphasis role="bold">Owner type</emphasis> is 'portal': it means you create a page for a portal. Thus only users who have edit permissions on the portal can create this page type.
+							Go to <emphasis role="bold">GateIn</emphasis> -&gt;<emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Advanced</emphasis> --&gt; <emphasis role="bold">Manage Pages</emphasis>.
 						</para>
-					</listitem>
-					<listitem>
+					<mediaobject>
+						<imageobject>
+							<imagedata fileref="images/ManagePage.png" format="PNG" width="444" />
+						</imageobject>
+					</mediaobject>
+					</step>
+					<step>
 						<para>
-							<emphasis role="bold">Owner type</emphasis> is 'group': it means you create a page for a group. Thus only users who are 'manager' of a group can create this page type.
+							Click on Add New Page
 						</para>
-					</listitem>
-				</itemizedlist>
-				<mediaobject>
-					<imageobject>
-						<imagedata fileref="images/PageSetting1.png" format="PNG" width="444" />
-					</imageobject>
-				</mediaobject>
-				<itemizedlist>
-					<listitem>
+						<mediaobject>
+							<imageobject>
+								<imagedata fileref="images/ManagePage2.6.png" format="PNG" width="444" />
+							</imageobject>
+						</mediaobject>
+					</step>
+					<step>
 						<para>
-							Permission Setting is initialized
+							Details
 						</para>
-					</listitem>
-				</itemizedlist>
-				<mediaobject>
-					<imageobject>
-						<imagedata fileref="images/PermissionSetting1.png" format="PNG" width="444" />
-					</imageobject>
-				</mediaobject>
-				<itemizedlist>
-					<listitem>
+						<informaltable colsep="0" frame="none" rowsep="0">
+							<tgroup cols="2">
+								<colspec align="center"></colspec>
+								<colspec align="center"></colspec>
+								<tbody>
+									<row>
+										<entry>
+											<emphasis role="bold"> Button </emphasis>
+										</entry>
+										<entry>
+											<emphasis role="bold"> Description </emphasis>
+										</entry>
+									</row>
+									<row>
+										<entry>
+											Add New Page
+										</entry>
+										<entry>
+											allows you to add a new page.
+										</entry>
+									</row>
+									<row>
+										<entry>
+											Back
+										</entry>
+										<entry>
+											allows you to return to home page.
+										</entry>
+									</row>
+								</tbody>
+							</tgroup>
+						</informaltable>
+					</step>
+					<step>
 						<para>
+							Click the <emphasis role="bold">Add New Page</emphasis> button.
+						</para>
+					</step>
+					<step>
+						<para>
+							Enter values for fields in the <emphasis role="bold">Page Setting</emphasis> tab
+						</para>
+						<mediaobject>
+							<imageobject>
+							<imagedata fileref="images/PageSetting.png" format="PNG" width="444" />
+						</imageobject>
+					</mediaobject>
+					<informaltable colsep="0" frame="none" rowsep="0">
+						<tgroup cols="2">
+							<colspec align="center"></colspec>
+							<colspec align="center"></colspec>
+							<tbody>
+								<row>
+									<entry>
+										<emphasis role="bold"> Name </emphasis>
+									</entry>
+									<entry>
+										<emphasis role="bold"> Description </emphasis>
+									</entry>
+								</row>
+								<row>
+									<entry>
+										Page Id
+									</entry>
+									<entry>
+										The string to identify the page. It is automatically generated when you will finish creating page.
+									</entry>
+								</row>
+								<row>
+									<entry>
+										Owner type
+									</entry>
+									<entry>
+										The owner type of the the page (portal, group or user). The "User" type is displayed by default. You can change the owner type by clicking on the icon.	
+									</entry>
+								</row>
+								<row>
+									<entry>
+										Owner Id
+									</entry>
+									<entry>
+										The identification name of page owner. When the owner type is "group", there will be a list of groups of which you have to select one.	
+									</entry>
+								</row>
+								<row>
+									<entry>
+										Page Name
+									</entry>
+									<entry>
+										The name of the page. This is a required field and must be unique. Only alpha, digit and underscore characters are allowed to be used for this field and it must have a length between 3 and 30 characters
+									</entry>
+								</row>
+								<row>
+									<entry>
+										Page title
+									</entry>
+									<entry>
+										The title of the the page. This field is not required and must have a length between 3 and 30 characters.
+									</entry>
+								</row>
+								<row>
+									<entry>
+										Show Max Window
+									</entry>
+									<entry>
+										The option allows to choose whether showing the page in maximum size or not.
+									</entry>
+								</row>
+							</tbody>
+						</tgroup>
+					</informaltable>
+					<para>
+						If the <emphasis role="bold">Owner type</emphasis> is "portal" or "group":
+					</para>
+					<itemizedlist>
+						<listitem>
+							<para>
+								<emphasis role="bold">Owner type</emphasis> is 'portal': it means you create a page for a portal. Thus only users who have edit permissions on the portal can create this page type.
+							</para>
+						</listitem>
+						<listitem>
+							<para>
+								<emphasis role="bold">Owner type</emphasis> is 'group': it means you create a page for a group. Thus only users who are 'manager' of a group can create this page type.
+							</para>
+							<mediaobject>
+								<imageobject>
+									<imagedata fileref="images/PageSetting1.png" format="PNG" width="444" />
+								</imageobject>
+							</mediaobject>
+						</listitem>
+						<listitem>
+							<para>
+								Permission Setting is initialized
+							</para>
+							<mediaobject>
+								<imageobject>
+									<imagedata fileref="images/PermissionSetting1.png" format="PNG" width="444" />
+								</imageobject>
+							</mediaobject>
+						</listitem>
+						<listitem>
+							<para>
 							With <emphasis role="bold">Access Permission</emphasis>: The content of this tab is identical to the <emphasis role="bold">Owner type</emphasis> field in the <emphasis role="bold">Page Setting</emphasis> tab. Thus, all users have access rights of the page type selected in the <emphasis role="bold">Owner type</emphasis> field will appear in this tab. But you also can change the value of this tab as follows:
-						</para>
-					</listitem>
-					<listitem>
+							</para>
+						</listitem>
+						<listitem>
+							<para>
+								Check the check box if you want to share access with everyone
+							</para>
+						</listitem>
+						<listitem>
+							<para>
+								Or click the <emphasis role="bold">Add Permission</emphasis> button to assign permission on group level, then select a group and membership.
+							</para>
+						</listitem>
+						<listitem>
+							<para>
+								Or click the trash can icon to remove a group from the list.
+							</para>
+						</listitem>
+						<listitem>
+							<para>
+								With <emphasis role="bold">Edit Permission</emphasis>: The content of this tab depends on the value of the <emphasis role="bold">Owner type</emphasis> field in the <emphasis role="bold">Page Setting</emphasis> tab.
+							</para>
+						</listitem>
+						<listitem>
+							<para>
+								If the <emphasis role="bold">Owner type</emphasis> is "group", edit permission is assigned to users who are "manager" of the group that is selected in <emphasis role="bold">Owner id</emphasis>. You only can change this value when editing the page.
+							</para>
+							<mediaobject>
+								<imageobject>
+									<imagedata fileref="images/EditPermission1.png" format="PNG" width="444" />
+								</imageobject>
+							</mediaobject>
+						</listitem>
+						<listitem>
+							<para>
+								If the <emphasis role="bold">Owner type</emphasis> is "portal": The name of the current portal is automatically selected for <emphasis role="bold">Owner id</emphasis> so that the edit permissions are assigned to users who can edit the current portal. Users only can change this value when editing the page.
+							</para>
+							<mediaobject>
+								<imageobject>
+									<imagedata fileref="images/EditPermission2.png" format="PNG" width="444" />
+								</imageobject>
+							</mediaobject>
+						</listitem>
+					</itemizedlist>
+					</step>
+					<step>
 						<para>
-							Check the check box if you want to share access with everyone
+							Click the <emphasis role="bold">Save</emphasis> button to accept creating a new page or the <emphasis role="bold">Cancel</emphasis> button to quit the form.
 						</para>
-					</listitem>
-					<listitem>
-						<para>
-							Or click the <emphasis role="bold">Add Permission</emphasis> button to assign permission on group level, then select a group and membership.
-						</para>
-					</listitem>
-					<listitem>
-						<para>
-							Or click the trash can icon to remove a group from the list.
-						</para>
-					</listitem>
-				</itemizedlist>
-				<itemizedlist>
-					<listitem>
-						<para>
-							With <emphasis role="bold">Edit Permission</emphasis>: The content of this tab depends on the value of the <emphasis role="bold">Owner type</emphasis> field in the <emphasis role="bold">Page Setting</emphasis> tab.
-						</para>
-					</listitem>
-					<listitem>
-						<para>
-							If the <emphasis role="bold">Owner type</emphasis> is "group", edit permission is assigned to users who are "manager" of the group that is selected in <emphasis role="bold">Owner id</emphasis>. You only can change this value when editing the page.
-						</para>
-					</listitem>
-				</itemizedlist>
-				<mediaobject>
-					<imageobject>
-						<imagedata fileref="images/EditPermission1.png" format="PNG" width="444" />
-					</imageobject>
-				</mediaobject>
-				<itemizedlist>
-					<listitem>
-						<para>
-							If the <emphasis role="bold">Owner type</emphasis> is "portal": The name of the current portal is automatically selected for <emphasis role="bold">Owner id</emphasis> so that the edit permissions are assigned to users who can edit the current portal. Users only can change this value when editing the page.
-						</para>
-					</listitem>
-				</itemizedlist>
-				<mediaobject>
-					<imageobject>
-						<imagedata fileref="images/EditPermission2.png" format="PNG" width="444" />
-					</imageobject>
-				</mediaobject>
-			</listitem>
-			<listitem>
-				<para>
-					4. Click the <emphasis role="bold">Save</emphasis> button to accept creating a new page or the <emphasis role="bold">Cancel</emphasis> button to quit the form.
-				</para>
-			</listitem>
-		</orderedlist>
-	</section>
+					</step>
+			</procedure>
+		</section>
 	
-	<section id="sect-User_Guide-Manage_Pages-Edit_a_Page">
-		<title>Edit a Page</title>
-		<para>
-			1. Go to <emphasis role="bold">GateIn Start</emphasis> -&gt; <emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Advanced</emphasis> --&gt; <emphasis role="bold">Manage Pages</emphasis>
-		</para>
-		<para>
-			2. In the existing pages list: click the edit icon on the row of page you want to edit.
-		</para>
-		<informaltable colsep="0" frame="none" rowsep="0">
-			<tgroup cols="2">
-				<colspec align="center"></colspec>
-				<colspec align="center"></colspec>
-				<tbody>
-					<row>
-						<entry>
-							<emphasis role="bold"> Indicator </emphasis>
-						</entry>
-						<entry>
-							<emphasis role="bold"> Meaning </emphasis>
-						</entry>
-					</row>
-					<row>
-						<entry>
-							!images/PreviewPage.png!
-						</entry>
-						<entry>
-							Preview page: allows viewing node's page with preview mode in a Normal Page
-						</entry>
-					</row>
-					<row>
-						<entry>
-							!images/EditPage.png!
-						</entry>
-						<entry>
-							Edit page properties: allows editing node's page properties
-						</entry>
-					</row>
-					<row>
-						<entry>
-							!images/ShowContainer.png!
-						</entry>
-						<entry>
-							Show container: allows to list all existing containers that will be used to change the layout of a selected page
-						</entry>
-					</row>
-					<row>
-						<entry>
-							!images/ShowPortlet.png!
-						</entry>
-						<entry>
-							Show portlet: allows to list all existing portlets that will be used to re-arrange the content of selected page.
-						</entry>
-					</row>
-					<row>
-						<entry>
-							!images/SavePage.png!
-						</entry>
-						<entry>
-							Save page: allows saving changes of a page
-						</entry>
-					</row>
-					<row>
-						<entry>
-							!images/Back.png!
-						</entry>
-						<entry>
-							Back: allows returning to the page list without saving
-						</entry>
-					</row>
-					<row>
-						<entry>
-							!images/Finish.png!
-						</entry>
-						<entry>
-							Finish:allows saving and returning to the page list
-						</entry>
-					</row>
-				</tbody>
-			</tgroup>
-		</informaltable>
-		<itemizedlist>
-			<listitem>
-				<para>
-					Edit page properties Click the edit!images/EditPage.png! icon to show a form to edit page properties.
-				</para>
-			</listitem>
-		</itemizedlist>
-		<para>
-			In the <emphasis role="bold">Page Setting</emphasis> tab:
-		</para>
-		<informaltable colsep="0" frame="none" rowsep="0">
-			<tgroup cols="2">
-				<colspec align="center"></colspec>
-				<colspec align="center"></colspec>
-				<tbody>
-					<row>
-						<entry>
-							<emphasis role="bold"> Name </emphasis>
-						</entry>
-						<entry>
-							<emphasis role="bold"> Description </emphasis>
-						</entry>
-					</row>
-					<row>
-						<entry>
-							Page Id
-						</entry>
-						<entry>
-							The string to identify editing page. This string is generated automatically, user can not change.
-						</entry>
-					</row>
-					<row>
-						<entry>
-							Owner type
-						</entry>
-						<entry>
-							The type of editing page. User can not change.
-						</entry>
-					</row>
-					<row>
-						<entry>
-							Owner Id
-						</entry>
-						<entry>
-							The identification name of page's owner. User can not change.
-						</entry>
-					</row>
-					<row>
-						<entry>
-							Page name
-						</entry>
-						<entry>
-							The name of the page. User can not change.
-						</entry>
-					</row>
-					<row>
-						<entry>
-							Page title
-						</entry>
-						<entry>
-							The title of page. User can change and it must have length from 3 to 30 characters.
-						</entry>
-					</row>
-					<row>
-						<entry>
-							Show Max Window
-						</entry>
-						<entry>
-							The option allows whether showing page in maximum size or not. User should check this option for desktop page only.
-						</entry>
-					</row>
-				</tbody>
-			</tgroup>
-		</informaltable>
-		<itemizedlist>
-			<listitem>
-				<para>
-					Permission Setting: This form is supported for pages of a group or a portal. Because page of an user is private, no one else can access or edit user's page except the creator, so you do not have to set permission for it. Permission on each page is set in two levels: Access right and Edit right.
-				</para>
-			</listitem>
-			<listitem>
-				<para>
-					<emphasis role="bold">Access right</emphasis>: Page Access right can be set to some user groups or set to everyone (also includes unregistered users). There is a list of current access permissions on page. You can click delete icon to remove permission or click the <emphasis role="bold">Add Permission</emphasis> button to add more or tick on <emphasis role="bold">Make it public</emphasis> option check box to allow all users to access.
-				</para>
-			</listitem>
-			<listitem>
-				<para>
-					<emphasis role="bold">Edit right</emphasis>: It allows users to change information of page. Edit right only is set for a group of users. Edit right on a page can be set for one group with one specific membership type (or <emphasis role="bold">means every membership types in group). If you want to re-assign this right to another group, click</emphasis>Select Permission to choose another one.
-				</para>
-			</listitem>
-		</itemizedlist>
-		<itemizedlist>
-			<listitem>
-				<para>
-					Editing page container layout
-				</para>
-			</listitem>
-		</itemizedlist>
-		<para>
-			Click !images/ShowContainer.png! icon to show current container layout of selected page on your right and all the container layouts list on the left pane.
-		</para>
-		<para>
-			If you want to change current layout, select a layout type from the list on the left pane, then left click on the template you want and drag and drop it into the right pane. New container will be displayed on the right pane. You can change position of current container by left click and drag and drop it to another place on the right pane or remove current container by clicking delete icon on the right corner.
-		</para>
-		<itemizedlist>
-			<listitem>
-				<para>
-					Editing page portlet layout
-				</para>
-			</listitem>
-		</itemizedlist>
-		<para>
-			Click !images/ShowPortlet.png! icon to show current portlet layout of page.
-		</para>
-		<para>
-			If you want to change current layout, select layout type from the list on the left pane, then left click on the template you want and drag and drop it into the right pane. New portlet will be added and displayed in the right pane. You can change position of current portlet by left click and drag and drop it to the place you want on the right pane or remove current portlet by clicking delete icon.
-		</para>
+		<section id="sect-User_Guide-Manage_Pages-Edit_a_Page">
+			<title>Edit a Page</title>
+				<procedure>
+					<step>
+						<para>
+							Go to <emphasis role="bold">GateIn Start</emphasis> -&gt; <emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Advanced</emphasis> --&gt; <emphasis role="bold">Manage Pages</emphasis>
+						</para>
+					</step>
+					<step>
+						<para>
+							In the existing pages list: click the edit icon on the row of page you want to edit.
+						</para>
+					<!--	<informaltable colsep="0" frame="none" rowsep="0">
+							<tgroup cols="2">
+								<colspec align="center"></colspec>
+								<colspec align="center"></colspec>
+								<tbody>
+									<row>
+										<entry>
+											<emphasis role="bold"> Indicator </emphasis>
+										</entry>
+										<entry>
+											<emphasis role="bold"> Meaning </emphasis>
+										</entry>
+									</row>
+									<row>
+										<entry>
+											!images/PreviewPage.png!
+										</entry>
+										<entry>
+											Preview page: allows viewing node's page with preview mode in a Normal Page
+										</entry>
+									</row>
+									<row>
+										<entry>
+											!images/EditPage.png!
+										</entry>
+										<entry>
+											Edit page properties: allows editing node's page properties
+										</entry>
+									</row>
+									<row>
+										<entry>
+											!images/ShowContainer.png!
+										</entry>
+										<entry>
+											Show container: allows to list all existing containers that will be used to change the layout of a selected page
+										</entry>
+									</row>
+									<row>
+										<entry>
+											!images/ShowPortlet.png!
+										</entry>
+										<entry>
+											Show portlet: allows to list all existing portlets that will be used to re-arrange the content of selected page.
+										</entry>
+									</row>
+									<row>
+										<entry>
+											!images/SavePage.png!
+										</entry>
+										<entry>
+											Save page: allows saving changes of a page
+										</entry>
+									</row>
+									<row>
+										<entry>
+											!images/Back.png!
+										</entry>
+										<entry>
+											Back: allows returning to the page list without saving
+										</entry>
+									</row>
+									<row>
+										<entry>
+											!images/Finish.png!
+										</entry>
+										<entry>
+											Finish:allows saving and returning to the page list
+										</entry>
+									</row>
+								</tbody>
+							</tgroup>
+						</informaltable> -->
+						<para>
+							Edit page properties Click the edit!images/EditPage.png! icon to show a form to edit page properties.
+						</para>
+					</step>
+					<step>
+						<para>
+							In the <emphasis role="bold">Page Properties</emphasis> window:
+						</para>
+						<informaltable colsep="0" frame="none" rowsep="0">
+							<tgroup cols="2">
+								<colspec align="center"></colspec>
+								<colspec align="center"></colspec>
+								<tbody>
+									<row>
+										<entry>
+											<emphasis role="bold"> Name </emphasis>
+										</entry>
+										<entry>
+											<emphasis role="bold"> Description </emphasis>
+										</entry>
+									</row>
+									<row>
+										<entry>
+											Page Id
+										</entry>
+										<entry>
+											The string to identify editing page. This string is generated automatically, user can not change.
+										</entry>
+									</row>
+									<row>
+										<entry>
+											Owner type
+										</entry>
+											<entry>
+											The type of editing page. User can not change.
+											</entry>
+									</row>
+									<row>
+										<entry>
+											Owner Id
+										</entry>
+										<entry>
+											The identification name of page's owner. User can not change.
+										</entry>
+									</row>
+									<row>
+										<entry>
+											Page name
+										</entry>
+										<entry>
+											The name of the page. User can not change.
+										</entry>
+									</row>
+									<row>
+										<entry>
+											Page title
+										</entry>
+										<entry>
+											The title of page. User can change and it must have length from 3 to 30 characters.
+										</entry>
+									</row>
+									<row>
+										<entry>
+											Show Max Window
+										</entry>
+										<entry>
+											The option allows whether showing page in maximum size or not. User should check this option for desktop page only.
+										</entry>
+									</row>
+								</tbody>
+							</tgroup>
+						</informaltable>
+						<itemizedlist>
+							<listitem>
+								<para>
+									Permission Setting: This form is supported for pages of a group or a portal. Because page of an user is private, no one else can access or edit user's page except the creator, so you do not have to set permission for it. Permission on each page is set in two levels: Access right and Edit right.
+								</para>
+							</listitem>
+							<listitem>
+<important>
+<title>This does not match GateIn-3.0.0-Beta02</title>
+								<para>
+									 <emphasis role="bold">Access right</emphasis>: Page Access right can be set to some user groups or set to everyone (also includes unregistered users). There is a list of current access permissions on page. You can click delete icon to remove permission or click the <emphasis role="bold">Add Permission</emphasis> button to add more or tick on <emphasis role="bold">Make it public</emphasis> option check box to allow all users to access.
+								</para>
+</important>
+							</listitem>
+							<listitem>
+<important>
+<title>This does not match GateIn-3.0.0-Beta02</title>
+								<para>
+									<emphasis role="bold">Edit right</emphasis>: It allows users to change information of page. Edit right only is set for a group of users. Edit right on a page can be set for one group with one specific membership type (or <emphasis role="bold">means every membership types in group). If you want to re-assign this right to another group, click</emphasis>Select Permission to choose another one.
+								</para>
+</important>
+							</listitem>
+							<listitem>
+								<para>
+									Editing page container layout
+								</para>
+							</listitem>
+						</itemizedlist>
+					</step>
+					<step>
+						<para>
+							Click !images/ShowContainer.png! icon to show current container layout of selected page on your right and all the container layouts list on the left pane.
+						</para>
+						<para>
+							If you want to change current layout, select a layout type from the list on the left pane, then left click on the template you want and drag and drop it into the right pane. New container will be displayed on the right pane. You can change position of current container by left click and drag and drop it to another place on the right pane or remove current container by clicking delete icon on the right corner.
+						</para>
+						<itemizedlist>
+							<listitem>
+								<para>
+									Editing page portlet layout
+								</para>
+							</listitem>
+						</itemizedlist>
+					</step>
+					<step>
+						<para>
+							Click !images/ShowPortlet.png! icon to show current portlet layout of page.
+						</para>
+						<para>
+							If you want to change current layout, select layout type from the list on the left pane, then left click on the template you want and drag and drop it into the right pane. New portlet will be added and displayed in the right pane. You can change position of current portlet by left click and drag and drop it to the place you want on the right pane or remove current portlet by clicking delete icon.
+						</para>
+					</step>
+				</procedure>
 	</section>
 	
 	<section id="sect-User_Guide-Manage_Pages-View_a_Page">

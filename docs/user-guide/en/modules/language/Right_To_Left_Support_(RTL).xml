@@ -33,50 +33,58 @@
 			<imagedata fileref="images/HomePage2.png" format="PNG" width="444" />
 		</imageobject>
 	</mediaobject>
-	<section id="sect-User_Guide-RTL_Support_Right_To_Left-The_Account_Portlet">
+	<formalpara>
 		<title>The Account Portlet</title>
+		<para>
 		<mediaobject>
 			<imageobject>
 				<imagedata fileref="images/NewAccount3.png" format="PNG" width="444" />
 			</imageobject>
 		</mediaobject>
-	</section>
+		</para>
+	</formalpara>
 	
-	<section id="sect-User_Guide-RTL_Support_Right_To_Left-The_Application_Registry_Portlet">
+	<formalpara>
 		<title>The Application Registry Portlet</title>
+		<para>
 		<mediaobject>
 			<imageobject>
 				<imagedata fileref="images/ApplicationRegistry2.png" format="PNG" width="444" />
 			</imageobject>
 		</mediaobject>
-	</section>
+		</para>
+	</formalpara>
 	
-	<section id="sect-User_Guide-RTL_Support_Right_To_Left-The_Internationalization_Portlet">
+	<formalpara>
 		<title>The Internationalization Portlet:</title>
+		<para>
 		<mediaobject>
 			<imageobject>
 				<imagedata fileref="images/In3.png" format="PNG" />
 			</imageobject>
 		</mediaobject>
-	</section>
+		</para>
+	</formalpara>
 	
-	<section id="sect-User_Guide-RTL_Support_Right_To_Left-The_Organization_Portlet">
+	<formalpara>
 		<title>The Organization Portlet:</title>
+		<para>
 		<mediaobject>
 			<imageobject>
 				<imagedata fileref="images/Organization5.png" format="PNG" width="444" />
 			</imageobject>
 		</mediaobject>
-	</section>
+		</para>
+	</formalpara>
 	
-	<section id="sect-User_Guide-RTL_Support_Right_To_Left-The_User_Workspace">
+<!--	Deprecated <section id="sect-User_Guide-RTL_Support_Right_To_Left-The_User_Workspace">
 		<title>The User Workspace</title>
 		<mediaobject>
 			<imageobject>
 				<imagedata fileref="images/UserWorkspace2.png" format="PNG" width="444" />
 			</imageobject>
 		</mediaobject>
-	</section>
+	</section> -->
 
 </section>
 

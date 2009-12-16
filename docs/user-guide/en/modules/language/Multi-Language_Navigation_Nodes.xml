@@ -25,7 +25,7 @@
 	<section id="sect-User_Guide-Multi_Language_Navigation_Nodes-Overview">
 		<title>Overview</title>
 		<para>
-			Exo Portal supports a multi-language environment for your portal. You can internationalize any menu entry on the navigation. As the navigation bar is composed by nodes so you have to modify the display names of the nodes. Instead of entering the display name in English you have to use a so called resource key. This resource key is used to define the label that is shown on the navigation bar, the menu, and the breadcrumb.
+			&PRODUCT; supports a multi-language environment for your portal. You can internationalize any menu entry on the navigation. As the navigation bar is composed by nodes so you have to modify the display names of the nodes. Instead of entering the display name in English you have to use a so called resource key. This resource key is used to define the label that is shown on the navigation bar, the menu, and the breadcrumb.
 		</para>
 	</section>
 	
@@ -42,8 +42,26 @@
 	<section id="sect-User_Guide-Multi_Language_Navigation_Nodes-Creating_Keys">
 		<title>Creating Keys</title>
 		<para>
-			There are three ways to create a key for a node: using the <emphasis role="bold">Create Page Wizard</emphasis> or using the <emphasis role="bold">Edit Page Wizard</emphasis> or the <emphasis role="bold">Edit Page and Navigation</emphasis> dialog.
+			There are three ways to create a key for a node: 
 		</para>
+		<orderedlist numeration="arabic">
+			<listitem>
+				<para>
+					<xref linkend="sect-User_Guide-Multi_Language_Navigation_Nodes-Creating_Keys_using_the_Create_Page_Wizard"/>;
+				</para> 
+			</listitem>
+			 <listitem>
+			 	<para>
+			 		<xref linkend="sect-User_Guide-Multi_Language_Navigation_Nodes-CreatingEditing_Keys_by_Edit_Page_Wizard"/>
+			 	</para>
+			 </listitem>
+			 <listitem>
+			 	<para>
+			 		<xref linkend="sect-User_Guide-Multi_Language_Navigation_Nodes-CreatingEditing_Keys_using_the_Edit_Page_and_Navigation"/>
+			 	</para>
+			 </listitem>			 
+		</orderedlist>
+ 
 	</section>
 	
 	<section id="sect-User_Guide-Multi_Language_Navigation_Nodes-Creating_Keys_using_the_Create_Page_Wizard">
@@ -54,27 +72,27 @@
 		<procedure>
 			<step>
 				<para>
-					1. Go to <emphasis role="bold">GateIn Start</emphasis> -&gt; <emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Basic</emphasis> --&gt; <emphasis role="bold">Create Page Wizard</emphasis>
+					Go to <emphasis role="bold">GateIn Start</emphasis> -&gt; <emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Basic</emphasis> --&gt; <emphasis role="bold">Create Page Wizard</emphasis>
 				</para>
 			</step>
 			<step>
 				<para>
-					2. Click <emphasis role="bold">Next</emphasis> to move to step 1
+					Click <emphasis role="bold">Next</emphasis> to move to step 1
 				</para>
 			</step>
 			<step>
 				<para>
-					3. At step 1, continue as usual, but enter a resource key in the <emphasis role="bold">Display Name</emphasis> field. 
+					At step 1, continue as usual, but enter a resource key in the <emphasis role="bold">Display Name</emphasis> field. 
+				</para>
 					<mediaobject>
 						<imageobject>
 							<imagedata fileref="images/PageWizard.png" format="PNG" width="444" />
 						</imageobject>
 					</mediaobject>
-				</para>
 			</step>
 			<step>
 				<para>
-					4. Click on the <emphasis role="bold">Next</emphasis> button and continue and click on the <emphasis role="bold">Save</emphasis> button. For example, create a key named "AAA".
+					Click on the <emphasis role="bold">Next</emphasis> button and continue and click on the <emphasis role="bold">Save</emphasis> button. For example, create a key named "AAA".
 				</para>
 			</step>
 		</procedure>
@@ -83,50 +101,69 @@
 	
 	<section id="sect-User_Guide-Multi_Language_Navigation_Nodes-CreatingEditing_Keys_by_Edit_Page_Wizard">
 		<title>Creating/Editing Keys by *Edit Page Wizard*</title>
-		<para>
-			1. Go to <emphasis role="bold">GateIn Start</emphasis> -&gt; <emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Basic</emphasis> --&gt; <emphasis role="bold">Edit Page Wizard</emphasis>
-		</para>
-		<para>
-			2. Click on the <emphasis role="bold">Next</emphasis> button to move to step 1
-		</para>
-		<para>
-			3. At step 1, continue as usual, but enter a resource key in the <emphasis role="bold">Display Name</emphasis> field.
-		</para>
+			<procedure>
+				<step>
+					<para>
+						Go to <emphasis role="bold">GateIn Start</emphasis> -&gt; <emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Basic</emphasis> --&gt; <emphasis role="bold">Edit Page Wizard</emphasis>
+					</para>
+				</step>
+				<step>
+					<para>
+						Click on the <emphasis role="bold">Next</emphasis> button to move to step 1
+					</para>
+				</step>
+				<step>
+					<para>
+						At step 1, continue as usual, but enter a resource key in the <emphasis role="bold">Display Name</emphasis> field.
+					</para>
+				</step>
+		</procedure>
 	</section>
 	
 	<section id="sect-User_Guide-Multi_Language_Navigation_Nodes-CreatingEditing_Keys_using_the_Edit_Page_and_Navigation">
 		<title>Creating/Editing Keys using the *Edit Page and Navigation*</title>
-		<para>
-			1. Go to <emphasis role="bold">GateIn Start</emphasis> -&gt; <emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Advanced</emphasis> --&gt; <emphasis role="bold">Edit Page and Navigation</emphasis>.
-		</para>
-		<para>
-			2. There are two alternatives:
-		</para>
-		<itemizedlist>
-			<listitem>
-				<para>
-					Create a new node: Select the parent path, right click and click on <emphasis role="bold">Add new node</emphasis> option .
-				</para>
-			</listitem>
-			<listitem>
-				<para>
-					Edit an existing node: Right click on the node you want to create/edit key and click on <emphasis role="bold">Edit this node</emphasis> in the pop-up menu.
-				</para>
-			</listitem>
-		</itemizedlist>
-		<para>
-			3. A Create/Edit node dialog appears, enter a resource key in the <emphasis role="bold">Label</emphasis> field
-		</para>
-		<para>
-			+Note:+ You can reuse the same resource key in several nodes.
-		</para>
+			<procedure>
+				<step>
+					<para>
+						Go to <emphasis role="bold">GateIn Start</emphasis> -&gt; <emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Advanced</emphasis> --&gt; <emphasis role="bold">Edit Page and Navigation</emphasis>.
+					</para>
+				</step>
+				<step>
+					<para>
+						There are two alternatives:
+					</para>
+					<itemizedlist>
+						<listitem>
+							<para>
+								Create a new node: Select the parent path, right click and click on <emphasis role="bold">Add new node</emphasis> option .
+							</para>
+						</listitem>
+						<listitem>
+							<para>
+								Edit an existing node: Right click on the node you want to create/edit key and click on <emphasis role="bold">Edit this node</emphasis> in the pop-up menu.
+							</para>
+						</listitem>
+					</itemizedlist>
+				</step>
+				<step>
+					<para>
+						A Create/Edit node dialog appears, enter a resource key in the <emphasis role="bold">Label</emphasis> field
+					</para>
+				</step>
+					<note> 
+						<para>
+							You can reuse the same resource key in several nodes.
+						</para>
+					</note>
+			</procedure>
 	</section>
 	
 	<section id="sect-User_Guide-Multi_Language_Navigation_Nodes-Internationalize_Resource_Keys">
 		<title>Internationalize Resource Keys</title>
 		<para>
-			Exo Portal organizes resource keys in resource files. Each file contains a list of keys and their meanings (translations) in one specific language. Normally one resource file has one language supported by Portal. This helps to structure the resource keys. Each resource file has a name and a language attribute. One resource file only can contain translations for one single language.
+			&PRODUCT; organizes resource keys in resource files. Each file contains a list of keys and their meanings (translations) in one specific language. Normally one resource file has one language supported by Portal. This helps to structure the resource keys. Each resource file has a name and a language attribute. One resource file only can contain translations for one single language.
 		</para>
+		<procedure>
 		<para>
 			Do as follows: 1. Go to <emphasis role="bold">GateIn Start</emphasis> -&gt; <emphasis role="bold">Page Navigation</emphasis> -&gt; <emphasis role="bold">Administration</emphasis> --&gt; <emphasis role="bold">Internationalization</emphasis>
 		</para>

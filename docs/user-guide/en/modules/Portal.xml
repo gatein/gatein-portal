@@ -28,8 +28,8 @@
 	<xi:include href="portal/Manage_Permission.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 	<xi:include href="portal/Change_Portal_Skins.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 	<xi:include href="portal/Manage_Page_Navigation.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
-<!-- 	<xi:include href="portal/Manage_Navigation_Nodes.xml" xmlns:xi="http://www.w3.org/2001/XInclude" /> 
-	<xi:include href="portal/Change_Node_Order.xml" xmlns:xi="http://www.w3.org/2001/XInclude" /> To be included in Reference Guide -->
+ 	<xi:include href="portal/Manage_Navigation_Nodes.xml" xmlns:xi="http://www.w3.org/2001/XInclude" /> 
+	<xi:include href="portal/Change_Node_Order.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 	<xi:include href="portal/Manage_Pages.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 	<xi:include href="portal/Page_Creation_Wizard.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 	<xi:include href="portal/Drag_and_Drop_the_Page_Body.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
