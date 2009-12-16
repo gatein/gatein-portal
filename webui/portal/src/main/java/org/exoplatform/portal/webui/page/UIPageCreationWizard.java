@@ -89,7 +89,7 @@ public class UIPageCreationWizard extends UIPageWizard
       UIPagePreview uiPagePreview = getChild(UIPagePreview.class);
       UIPage uiPage = (UIPage)uiPagePreview.getUIComponent();
       UIPortal uiPortal = Util.getUIPortal();
-      if (PortalConfig.PORTAL_TYPE.equals(uiPage.getOwnerType()))
+      /*if (PortalConfig.PORTAL_TYPE.equals(uiPage.getOwnerType()))
       {
          uiPage.setAccessPermissions(uiPortal.getAccessPermissions());
          uiPage.setEditPermission(uiPortal.getEditPermission());
@@ -102,7 +102,7 @@ public class UIPageCreationWizard extends UIPageWizard
          uiPage.setAccessPermissions(new String[]{"*:" + ownerId});
          uiPage.setEditPermission(acl.getMakableMT() + ":" + ownerId);
       }
-
+       */
       UIWizardPageSetInfo uiPageInfo = getChild(UIWizardPageSetInfo.class);
       UIPageNodeSelector uiNodeSelector = uiPageInfo.getChild(UIPageNodeSelector.class);
       PageNode selectedNode = uiNodeSelector.getSelectedPageNode();
@@ -261,16 +261,19 @@ public class UIPageCreationWizard extends UIPageWizard
 
       private void setDefaultPermission(Page page, String ownerType, String ownerId)
       {
+         UIPortal uiPortal = Util.getUIPortal();
          if (PortalConfig.PORTAL_TYPE.equals(ownerType))
          {
-            page.setAccessPermissions(new String[]{"Everyone"});
-            page.setEditPermission("manager:/platform/administrators");
+            page.setAccessPermissions(uiPortal.getAccessPermissions());
+            page.setEditPermission(uiPortal.getEditPermission());
          }
          else if (PortalConfig.GROUP_TYPE.equals(ownerType))
          {
+            UserACL acl = Util.getUIPortalApplication().getApplicationComponent(UserACL.class);
+            ownerId = ownerId.startsWith("/") ? ownerId : "/" + ownerId;
             page.setAccessPermissions(new String[]{"*:" + ownerId});
-            page.setEditPermission("manager:" + ownerId);
-         }
+            page.setEditPermission(acl.getMakableMT() + ":" + ownerId);
+         }         
       }
 
       public void execute(Event<UIPageCreationWizard> event) throws Exception

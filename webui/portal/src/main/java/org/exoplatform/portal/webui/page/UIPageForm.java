@@ -445,13 +445,13 @@ public class UIPageForm extends UIFormTabPane
       public void execute(Event<UIGroupMembershipSelector> event) throws Exception
       {
          UIPageForm uiForm = event.getSource().getAncestorOfType(UIPageForm.class);
-         if (!uiForm.getUIStringInput(OWNER_TYPE).getValue().equals(PortalConfig.GROUP_TYPE))
+         /*if (!uiForm.getUIStringInput(OWNER_TYPE).getValue().equals(PortalConfig.GROUP_TYPE))
             return;
          String editPer = uiForm.findFirstComponentOfType(UIPermissionSelector.class).getValue();
          if (editPer == null || editPer.length() < 1)
             return;
          String group = editPer.substring(editPer.indexOf("/") + 1);
-         uiForm.ownerIdInput.setValue(group);
+         uiForm.ownerIdInput.setValue(group);*/
          event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent());
       }
    }
