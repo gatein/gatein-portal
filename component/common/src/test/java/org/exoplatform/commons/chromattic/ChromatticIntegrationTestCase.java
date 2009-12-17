@@ -216,4 +216,24 @@ public class ChromatticIntegrationTestCase extends AbstractGateInTest
          chromatticManager.endRequest(false);
       }
    }
+
+   public void testPersistence() throws Exception {
+
+      chromatticManager.beginRequest();
+      ChromatticSession session = testLF.getChromattic().openSession();
+      FooEntity foo = session.create(FooEntity.class);
+      String fooId = session.persist(foo, "testPersistence");
+      session.save();
+      chromatticManager.endRequest(true);
+
+      chromatticManager.beginRequest();
+      session = testLF.getChromattic().openSession();
+      foo = session.findById(FooEntity.class, fooId);
+      session.close();
+      chromatticManager.endRequest(false);
+
+      assertNotNull(foo);
+
+   }
+
 }

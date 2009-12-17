@@ -25,7 +25,7 @@ import org.chromattic.api.annotations.WorkspaceName;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-@NodeMapping(name = "foo")
+@NodeMapping(name = "nt:base")
 public abstract class FooEntity
 {
 
