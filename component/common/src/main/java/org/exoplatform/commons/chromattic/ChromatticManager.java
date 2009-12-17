@@ -63,7 +63,7 @@ public class ChromatticManager implements ComponentRequestLifecycle
       {
          lifeCycle.manager = this;
          lifeCycle.start();
-         lifeCycles.put(lifeCycle.getName(), lifeCycle);
+         lifeCycles.put(lifeCycle.getDomainName(), lifeCycle);
       }
       catch (Exception e)
       {
@@ -130,7 +130,7 @@ public class ChromatticManager implements ComponentRequestLifecycle
    public void endRequest(ExoContainer container)
    {
       Synchronization sync = currentSynchronization.get();
-      boolean save = sync.isSave();
+      boolean save = sync.getSaveOnClose();
       endRequest(save);
    }
 }

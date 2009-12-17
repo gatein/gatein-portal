@@ -22,6 +22,8 @@ import org.chromattic.api.Chromattic;
 import org.chromattic.api.ChromatticBuilder;
 import org.exoplatform.container.component.BaseComponentPlugin;
 import org.exoplatform.container.xml.InitParams;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 
 import java.util.List;
 
@@ -33,14 +35,14 @@ import java.util.List;
  * or {@link #onCloseSession(SessionContext)} to perform additional treatment on the session context at a precise
  * phase of its life cycle.</p>
  *
- * <p>The life cycle name uniquely identifies the chromattic domain among all domain registered against the
+ * <p>The life cycle domain uniquely identifies the chromattic domain among all domain registered against the
  * {@link org.exoplatform.commons.chromattic.ChromatticManager} manager.</p>
  *
  * <p>The plugin takes an instance of {@link org.exoplatform.container.xml.InitParams} as parameter that contains
  * the following entries:
  *
  * <ul>
- * <li>The <code>name</code> string that is the life cycle name</li>
+ * <li>The <code>domain-name</code> string that is the life cycle domain name</li>
  * <li>The <code>workspace-name</code> string that is the repository workspace name associated with this life cycle</li>
  * <li>The <code>entities</code> list value that contains the list of chromattic entities that will be registered
  * against the builder chromattic builder</li>
@@ -54,7 +56,7 @@ public class ChromatticLifeCycle extends BaseComponentPlugin
 {
 
    /** . */
-   private final String name;
+   private final String domainName;
 
    /** . */
    private final String workspaceName;
@@ -74,16 +76,19 @@ public class ChromatticLifeCycle extends BaseComponentPlugin
    /** . */
    final ThreadLocal<LocalContext> currentContext = new ThreadLocal<LocalContext>();
 
+   /** . */
+   final Logger log = LoggerFactory.getLogger(ChromatticLifeCycle.class);
+
    public ChromatticLifeCycle(InitParams params)
    {
-      this.name = params.getValueParam("name").getValue();
+      this.domainName = params.getValueParam("domain-name").getValue();
       this.workspaceName = params.getValueParam("workspace-name").getValue();
       this.entityClassNames = params.getValuesParam("entities").getValues();
    }
 
-   public final String getName()
+   public String getDomainName()
    {
-      return name;
+      return domainName;
    }
 
    public final String getWorkspaceName()
@@ -120,17 +125,24 @@ public class ChromatticLifeCycle extends BaseComponentPlugin
     */
    public final SessionContext getContext(boolean peek)
    {
+      log.trace("Requesting context");
       Synchronization sync = manager.getSynchronization();
 
       //
       if (sync != null)
       {
-         GlobalContext context = sync.getContext(name);
+         log.trace("Found synchronization about to get the current context for chromattic " + domainName);
+         GlobalContext context = sync.getContext(domainName);
 
          //
          if (context == null && !peek)
          {
+            log.trace("No current context found, about to open one");
             context = sync.openContext(this);
+         }
+         else
+         {
+            log.trace("Found a context and will return it");
          }
 
          //
@@ -138,7 +150,12 @@ public class ChromatticLifeCycle extends BaseComponentPlugin
       }
 
       //
-      return currentContext.get();
+      log.trace("No active synchronization about to try the current local context");
+      LocalContext localContext = currentContext.get();
+      log.trace("Found local context " + localContext);
+
+      //
+      return localContext;
    }
 
    LoginContext getLoginContext()
@@ -157,24 +174,31 @@ public class ChromatticLifeCycle extends BaseComponentPlugin
 
    final SessionContext openGlobalContext()
    {
+      log.trace("Opening a global context");
       AbstractContext context = (AbstractContext)getContext(true);
 
       //
       if (context != null)
       {
-         throw new IllegalStateException("A session is already opened.");
+         String msg = "A global context is already opened";
+         log.trace(msg);
+         throw new IllegalStateException(msg);
       }
 
       // Attempt to get the synchronization
+      log.trace("Ok, no global context found, asking current synchronization");
       Synchronization sync = manager.getSynchronization();
 
       //
       if (sync == null)
       {
-         throw new IllegalStateException("Need global synchronization");
+         String msg = "Need global synchronization for opening a global context";
+         log.trace(msg);
+         throw new IllegalStateException(msg);
       }
 
       //
+      log.trace("Opening a global context for the related sync");
       return sync.openContext(this);
    }
 
@@ -186,24 +210,30 @@ public class ChromatticLifeCycle extends BaseComponentPlugin
     */
    public final SessionContext openContext()
    {
+      log.trace("Opening a context");
       AbstractContext context = (AbstractContext)getContext(true);
 
       //
       if (context != null)
       {
-         throw new IllegalStateException("A session is already opened.");
+         String msg = "A context is already opened";
+         log.trace(msg);
+         throw new IllegalStateException(msg);
       }
 
       //
+      log.trace("Ok, no context found, asking current synchronization");
       Synchronization sync = manager.getSynchronization();
 
       //
       if (sync != null)
       {
+         log.trace("Found a synchronization, about to open a global context");
          context = sync.openContext(this);
       }
       else
       {
+         log.trace("Not synchronization found, about to a local context");
          LocalContext localContext = new LocalContext(this);
          currentContext.set(localContext);
          onOpenSession(localContext);
@@ -216,12 +246,15 @@ public class ChromatticLifeCycle extends BaseComponentPlugin
 
    public final void closeContext(boolean save)
    {
+      log.trace("Requesting for context close with save=" + save + " going to look for any context");
       AbstractContext context = (AbstractContext)getContext(true);
 
       //
       if (context == null)
       {
-         throw new IllegalStateException("No current context existing");
+         String msg = "Cannot close non existing context";
+         log.trace(msg);
+         throw new IllegalStateException(msg);
       }
 
       //
@@ -238,13 +271,16 @@ public class ChromatticLifeCycle extends BaseComponentPlugin
 
    public final void start() throws Exception
    {
+      log.debug("About to setup Chromattic life cycle " + domainName);
       ChromatticBuilder builder = ChromatticBuilder.create();
 
       //
       ClassLoader cl = Thread.currentThread().getContextClassLoader();
       for (String className : entityClassNames)
       {
-         Class<?> entityClass = cl.loadClass(className);
+         String fqn = className.trim();
+         log.debug("Adding class " + fqn + " to life cycle " + domainName);
+         Class<?> entityClass = cl.loadClass(fqn);
          builder.add(entityClass);
       }
 
@@ -258,12 +294,13 @@ public class ChromatticLifeCycle extends BaseComponentPlugin
          builder.setOption(ChromatticBuilder.SESSION_LIFECYCLE_CLASSNAME, PortalSessionLifeCycle.class.getName());
 
          //
+         log.debug("Building Chromattic " + domainName);
          realChromattic = builder.build();
          chromattic = new ChromatticImpl(this);
       }
       catch (Exception e)
       {
-         e.printStackTrace();
+         log.error("Could not start Chromattic " + domainName, e);
       }
       finally
       {

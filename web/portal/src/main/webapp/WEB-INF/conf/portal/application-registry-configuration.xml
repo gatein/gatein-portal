@@ -529,7 +529,7 @@
       <type>org.exoplatform.application.registry.impl.ApplicationRegistryChromatticLifeCycle</type>
       <init-params>
         <value-param>
-          <name>name</name>
+          <name>domain-name</name>
           <value>app</value>
         </value-param>
         <value-param>

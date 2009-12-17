@@ -620,7 +620,7 @@ public class ApplicationRegistryServiceImpl implements ApplicationRegistryServic
          finally
          {
             // lifeCycle.closeContext(context, true);
-            manager.getSynchronization().setSave(save);
+            manager.getSynchronization().setSaveOnClose(save);
             RequestLifeCycle.end();
          }
       }

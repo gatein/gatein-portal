@@ -35,7 +35,7 @@
       <type>org.exoplatform.commons.chromattic.ChromatticLifeCycle</type>
       <init-params>
         <value-param>
-          <name>name</name>
+          <name>domain-name</name>
           <value>test</value>
         </value-param>
         <value-param>

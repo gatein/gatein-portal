@@ -85,7 +85,7 @@ public class TestApplicationRegistryService extends AbstractApplicationRegistryT
    @Override
    protected void tearDown() throws Exception
    {
-      chromatticManager.getSynchronization().setSave(false);
+      chromatticManager.getSynchronization().setSaveOnClose(false);
       end();
    }
 

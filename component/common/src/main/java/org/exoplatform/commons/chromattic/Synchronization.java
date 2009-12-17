@@ -38,7 +38,7 @@ public class Synchronization implements LoginContext
    private final Map<String, GlobalContext> contexts = new HashMap<String, GlobalContext>();
 
    /** . */
-   private boolean save = true;
+   private boolean saveOnClose = true;
 
    /**
     * Returns a specified global context by its name.
@@ -68,7 +68,7 @@ public class Synchronization implements LoginContext
       {
          throw new NullPointerException();
       }
-      String name = lifeCycle.getName();
+      String name = lifeCycle.getDomainName();
       GlobalContext context = contexts.get(name);
       if (context != null)
       {
@@ -100,13 +100,13 @@ public class Synchronization implements LoginContext
       }
    }
 
-   public boolean isSave()
+   public boolean getSaveOnClose()
    {
-      return save;
+      return saveOnClose;
    }
 
-   public void setSave(boolean save)
+   public void setSaveOnClose(boolean saveOnClose)
    {
-      this.save = save;
+      this.saveOnClose = saveOnClose;
    }
 }

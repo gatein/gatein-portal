@@ -57,7 +57,7 @@ public abstract class AbstractPortalTest extends AbstractGateInTest
    {
       PortalContainer container = getContainer();
       ChromatticManager manager = (ChromatticManager)container.getComponentInstanceOfType(ChromatticManager.class);
-      manager.getSynchronization().setSave(save);
+      manager.getSynchronization().setSaveOnClose(save);
       super.end();
    }
 

@@ -141,7 +141,7 @@
       <type>org.exoplatform.portal.pom.config.MOPChromatticLifeCycle</type>
       <init-params>
         <value-param>
-          <name>name</name>
+          <name>domain-name</name>
           <value>mop</value>
         </value-param>
         <value-param>
