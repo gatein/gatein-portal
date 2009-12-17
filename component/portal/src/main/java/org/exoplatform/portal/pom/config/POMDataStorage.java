@@ -63,7 +63,7 @@ import java.util.UUID;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class POMDataStorage implements ModelDataStorage, ModelDemarcation
+public class POMDataStorage implements ModelDataStorage
 {
 
    /** . */
@@ -313,15 +313,5 @@ public class POMDataStorage implements ModelDataStorage, ModelDemarcation
       Container container = Container.class.cast(uctx.unmarshalDocument(is, null));
       generateStorageName(container);
       return container;
-   }
-
-   public void begin()
-   {
-      manager.beginRequest();
-   }
-
-   public void end(boolean save)
-   {
-      manager.endRequest(true);
    }
 }

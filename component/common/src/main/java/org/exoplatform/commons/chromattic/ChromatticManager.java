@@ -18,7 +18,9 @@
  */
 package org.exoplatform.commons.chromattic;
 
+import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.component.ComponentPlugin;
+import org.exoplatform.container.component.ComponentRequestLifecycle;
 import org.exoplatform.services.jcr.RepositoryService;
 
 import java.util.HashMap;
@@ -28,7 +30,7 @@ import java.util.Map;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class ChromatticManager
+public class ChromatticManager implements ComponentRequestLifecycle
 {
 
    /** . */
@@ -41,15 +43,11 @@ public class ChromatticManager
    Map<String, ChromatticLifeCycle> lifeCycles = new HashMap<String, ChromatticLifeCycle>();
 
    /** . */
-   private static final ThreadLocal<Synchronization> currentSynchronization = new ThreadLocal<Synchronization>();
+   private final ThreadLocal<Synchronization> currentSynchronization = new ThreadLocal<Synchronization>();
 
    public ChromatticManager(RepositoryService repositoryService) throws Exception {
       this.repositoryService = repositoryService;
       this.lifeCycleToWorkspaceMap = new HashMap<String, String>();
-   }
-
-   static Synchronization getCurrentSynchronization() {
-      return currentSynchronization.get();
    }
 
    public ChromatticLifeCycle getLifeCycle(String lifeCycleName)
@@ -57,6 +55,7 @@ public class ChromatticManager
       return lifeCycles.get(lifeCycleName);
    }
 
+   // Called by kernel
    public void addLifeCycle(ComponentPlugin plugin)
    {
       ChromatticLifeCycle lifeCycle = (ChromatticLifeCycle)plugin;
@@ -100,7 +99,7 @@ public class ChromatticManager
    /**
     * Ends the demarcation of a request.
     *
-    * @param save if state must be saved
+    * @param save to save the state
     * @throws IllegalStateException if no request was started previously
     */
    public void endRequest(boolean save) throws IllegalStateException
@@ -121,5 +120,17 @@ public class ChromatticManager
 
       //
       currentSynchronization.set(null);
+   }
+
+   public void startRequest(ExoContainer container)
+   {
+      beginRequest();
+   }
+
+   public void endRequest(ExoContainer container)
+   {
+      Synchronization sync = currentSynchronization.get();
+      boolean save = sync.isSave();
+      endRequest(save);
    }
 }

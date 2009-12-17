@@ -57,6 +57,8 @@ public abstract class LocalGadgetData extends GadgetData implements NodeAware
    @MappedBy("resources")
    public abstract NTFolder getResources();
 
+   protected abstract void setResources(NTFolder resources);
+
    private NTFile getGadgetContent() {
       String fileName = getFileName();
       NTFolder resources = getResources();

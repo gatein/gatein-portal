@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (C) 2009 eXo Platform SAS.
  *
  * This is free software; you can redistribute it and/or modify it
@@ -16,17 +16,27 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.exoplatform.portal.pom.config;
+package org.exoplatform.commons.chromattic;
 
 /**
+ * <p>Useful for being aware of the synchronization.</p>
+ *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public interface ModelDemarcation
+public interface SynchronizationListener
 {
 
-   void begin();
+   /**
+    * Before synchronization occurs.
+    */
+   void beforeSynchronization();
 
-   void end(boolean save);
+   /**
+    * Once synchronization occured.
+    *
+    * @param status the status of the synchronization
+    */
+   void afterSynchronization(SynchronizationStatus status);
 
 }

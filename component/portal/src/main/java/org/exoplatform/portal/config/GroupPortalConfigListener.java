@@ -19,8 +19,8 @@
 
 package org.exoplatform.portal.config;
 
-import org.exoplatform.container.ExoContainer;
-import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.container.PortalContainer;
+import org.exoplatform.container.component.RequestLifeCycle;
 import org.exoplatform.portal.config.model.Container;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PortalConfig;
@@ -40,111 +40,131 @@ import java.util.Collection;
 public class GroupPortalConfigListener extends GroupEventListener
 {
 
+   /** . */
+   private final UserPortalConfigService portalConfigService;
+
+   /** . */
+   private final DataStorage dataStorage;
+
+   /** . */
+   private final OrganizationService orgService;
+
+   public GroupPortalConfigListener(
+      UserPortalConfigService portalConfigService,
+      DataStorage dataStorage,
+      OrganizationService orgService)
+   {
+      this.portalConfigService = portalConfigService;
+      this.dataStorage = dataStorage;
+      this.orgService = orgService;
+   }
+
    public void preDelete(Group group) throws Exception
    {
-      ExoContainer container = ExoContainerContext.getCurrentContainer();
-      UserPortalConfigService portalConfigService =
-         (UserPortalConfigService)container.getComponentInstanceOfType(UserPortalConfigService.class);
-      String groupId = group.getId().trim();
+      RequestLifeCycle.begin(PortalContainer.getInstance());
+      try
+      {
+         String groupId = group.getId().trim();
 
-      // Remove all descendant navigations
-      removeGroupNavigation(group, portalConfigService);
-      
-      portalConfigService.removeUserPortalConfig(PortalConfig.GROUP_TYPE, groupId);
+         // Remove all descendant navigations
+         removeGroupNavigation(group, portalConfigService);
+
+         portalConfigService.removeUserPortalConfig(PortalConfig.GROUP_TYPE, groupId);
+      }
+      finally
+      {
+         RequestLifeCycle.end();
+      }
    }
 
    @Override
    public void preSave(Group group, boolean isNew) throws Exception
    {
-      ExoContainer container = ExoContainerContext.getCurrentContainer();
-      /*
-       * TODO Call start method on RegistryService to allow ecm, ultimate can
-       * run with JDK6. This is uncommon behavior. We need find other way to fix
-       * it I hope that this issues will be fixed when we use the lastest
-       * version of PicoContainer Comment by Hoa Pham.
-       */
-      //      RegistryService registryService = (RegistryService)container.getComponentInstanceOfType(RegistryService.class);
-      //      registryService.start();
-      UserPortalConfigService portalConfigService =
-         (UserPortalConfigService)container.getComponentInstanceOfType(UserPortalConfigService.class);
-      DataStorage dataStorage = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
-      String groupId = group.getId();
+      RequestLifeCycle.begin(PortalContainer.getInstance());
 
-      // Bug in hibernate org service implementation
-      if (groupId == null)
+      try
       {
-         groupId = "/" + group.getGroupName();
-      }
 
-      // Bug in JCR org service implementation
-      if ("/administrators".equals(groupId))
-      {
-         groupId = "/platform/administrators";
-      }
-      else if ("/users".equals(groupId))
-      {
-         groupId = "/platform/users";
-      }
-      else if ("/guests".equals(groupId))
-      {
-         groupId = "/platform/guests";
-      }
-      else if ("/management".equals(groupId))
-      {
-         groupId = "/organization/management";
-      }
-      else if ("/executive-board".equals(groupId))
-      {
-         groupId = "/organization/management/executive-board";
-      }
-      else if ("/human-resources".equals(groupId))
-      {
-         groupId = "/organization/management/human-resources";
-      }
-      else if ("/communication".equals(groupId))
-      {
-         groupId = "/organization/communication";
-      }
-      else if ("/marketing".equals(groupId))
-      {
-         groupId = "/organization/communication/marketing";
-      }
-      else if ("/press-and-media".equals(groupId))
-      {
-         groupId = "/organization/communication/press-and-media";
-      }
-      else if ("/operations".equals(groupId))
-      {
-         groupId = "/organization/operations";
-      }
-      else if ("/sales".equals(groupId))
-      {
-         groupId = "/organization/operations/sales";
-      }
-      else if ("/finances".equals(groupId))
-      {
-         groupId = "/organization/operations/finances";
-      }
+         String groupId = group.getId();
 
-      // Create the portal from the template
-      portalConfigService.createUserPortalConfig(PortalConfig.GROUP_TYPE, groupId, "group");
+         // Bug in hibernate org service implementation
+         if (groupId == null)
+         {
+            groupId = "/" + group.getGroupName();
+         }
 
-      // Need to insert the corresponding group site
-      PortalConfig cfg = dataStorage.getPortalConfig(PortalConfig.GROUP_TYPE, groupId);
-      if (cfg == null)
+         // Bug in JCR org service implementation
+         if ("/administrators".equals(groupId))
+         {
+            groupId = "/platform/administrators";
+         }
+         else if ("/users".equals(groupId))
+         {
+            groupId = "/platform/users";
+         }
+         else if ("/guests".equals(groupId))
+         {
+            groupId = "/platform/guests";
+         }
+         else if ("/management".equals(groupId))
+         {
+            groupId = "/organization/management";
+         }
+         else if ("/executive-board".equals(groupId))
+         {
+            groupId = "/organization/management/executive-board";
+         }
+         else if ("/human-resources".equals(groupId))
+         {
+            groupId = "/organization/management/human-resources";
+         }
+         else if ("/communication".equals(groupId))
+         {
+            groupId = "/organization/communication";
+         }
+         else if ("/marketing".equals(groupId))
+         {
+            groupId = "/organization/communication/marketing";
+         }
+         else if ("/press-and-media".equals(groupId))
+         {
+            groupId = "/organization/communication/press-and-media";
+         }
+         else if ("/operations".equals(groupId))
+         {
+            groupId = "/organization/operations";
+         }
+         else if ("/sales".equals(groupId))
+         {
+            groupId = "/organization/operations/sales";
+         }
+         else if ("/finances".equals(groupId))
+         {
+            groupId = "/organization/operations/finances";
+         }
+
+         // Create the portal from the template
+         portalConfigService.createUserPortalConfig(PortalConfig.GROUP_TYPE, groupId, "group");
+
+         // Need to insert the corresponding group site
+         PortalConfig cfg = dataStorage.getPortalConfig(PortalConfig.GROUP_TYPE, groupId);
+         if (cfg == null)
+         {
+            cfg = new PortalConfig(PortalConfig.GROUP_TYPE);
+            cfg.setPortalLayout(new Container());
+            cfg.setName(groupId);
+            dataStorage.create(cfg);
+         }
+
+      }
+      finally
       {
-         cfg = new PortalConfig(PortalConfig.GROUP_TYPE);
-         cfg.setPortalLayout(new Container());
-         cfg.setName(groupId);
-         dataStorage.create(cfg);
+         RequestLifeCycle.end();
       }
    }
 
    private void removeGroupNavigation(Group group, UserPortalConfigService portalConfigService) throws Exception
    {
-      ExoContainer container = ExoContainerContext.getCurrentContainer();
-      OrganizationService orgService =
-         (OrganizationService)container.getComponentInstanceOfType(OrganizationService.class);
       GroupHandler groupHandler = orgService.getGroupHandler();
       Collection<String> descendantGroups = getDescendantGroups(group, groupHandler);
       PageNavigation navigation = null;

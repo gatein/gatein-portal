@@ -46,18 +46,16 @@ public class ChromatticIntegrationTestCase extends AbstractGateInTest
    /** . */
    private ChromatticManager chromatticManager;
 
+   public ChromatticIntegrationTestCase()
+   {
+   }
+
    @Override
    protected void setUp() throws Exception
    {
       PortalContainer container = PortalContainer.getInstance();
       chromatticManager = (ChromatticManager)container.getComponent(ChromatticManager.class);
       testLF = chromatticManager.getLifeCycle("test");
-   }
-
-   @Override
-   protected void tearDown() throws Exception
-   {
-      
    }
 
    public void testConfiguratorInitialized() throws Exception
@@ -132,7 +130,7 @@ public class ChromatticIntegrationTestCase extends AbstractGateInTest
       }
       finally
       {
-         testLF.closeContext(context, false);
+         testLF.closeContext(false);
       }
 
       // Assert JCR session was properly closed
@@ -142,12 +140,15 @@ public class ChromatticIntegrationTestCase extends AbstractGateInTest
    public void testLocalRequestNoSessionAccess()
    {
       SessionContext context = testLF.openContext();
-      testLF.closeContext(context, false);
+      testLF.closeContext(false);
    }
 
    public void testGlobalSession() throws Exception
    {
       Session jcrSession;
+
+      //
+      SynchronizationEventQueue queue = new SynchronizationEventQueue();
 
       //
       chromatticManager.beginRequest();
@@ -162,7 +163,11 @@ public class ChromatticIntegrationTestCase extends AbstractGateInTest
          ChromatticSession session = chromattic.openSession();
 
          // Now we should have a context
-         assertNotNull(testLF.getContext(true));
+         SessionContext context = testLF.getContext(true);
+         assertNotNull(context);
+
+         // Register synchronzation with event queue
+         context.addSynchronizationListener(queue);
 
          // Check how chromattic see the session
          FooEntity foo = session.create(FooEntity.class);
@@ -177,11 +182,18 @@ public class ChromatticIntegrationTestCase extends AbstractGateInTest
          // Closing chromattic session should not close the underlying JCR session
          session.close();
          assertTrue(jcrSession.isLive());
+
+         // Queue should be empty up to here
+         queue.assertEmpty();
       }
       finally
       {
          chromatticManager.endRequest(false);
       }
+
+      // 
+      queue.assertEvent(SynchronizationEvent.BEFORE);
+      queue.assertEvent(SynchronizationEvent.DISCARDED);
 
       // Assert JCR session was properly closed
       assertFalse(jcrSession.isLive());

@@ -77,15 +77,16 @@ public class TestApplicationRegistryService extends AbstractApplicationRegistryT
    {
       PortalContainer portalContainer = PortalContainer.getInstance();
       chromatticManager = (ChromatticManager)portalContainer.getComponentInstanceOfType(ChromatticManager.class);
-      chromatticManager.beginRequest();
       service_ = (ApplicationRegistryService)portalContainer.getComponentInstanceOfType(ApplicationRegistryService.class);
       orgService = (OrganizationService)portalContainer.getComponentInstanceOfType(OrganizationService.class);
+      begin();
    }
 
    @Override
    protected void tearDown() throws Exception
    {
-      chromatticManager.endRequest(false);
+      chromatticManager.getSynchronization().setSave(false);
+      end();
    }
 
    public void testApplicationCategory() throws Exception

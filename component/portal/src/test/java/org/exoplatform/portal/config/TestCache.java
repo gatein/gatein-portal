@@ -45,26 +45,21 @@ public class TestCache extends AbstractPortalTest
    public void setUp() throws Exception
    {
       super.setUp();
-      if (storage_ != null)
-         return;
-      PortalContainer container = PortalContainer.getInstance();
+      PortalContainer container = getContainer();
       storage_ = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
       mgr = (POMSessionManager)container.getComponentInstanceOfType(POMSessionManager.class);
-      session = mgr.openSession();
-   }
-
-   protected void tearDown() throws Exception
-   {
-      session.close();
    }
 
    public void testDirtyWrite() throws Exception
    {
+      begin();
+      session = mgr.openSession();
+
       // Read
       Page page = storage_.getPage("portal::test::test4");
       assertEquals(null, page.getTitle());
 
-      // Update
+      // Update and save
       page.setTitle("foo");
       storage_.save(page);
 
@@ -81,9 +76,11 @@ public class TestCache extends AbstractPortalTest
          {
             try
             {
+               begin();
                mgr.openSession();
                storage_.getPage("portal::test::test4");
                session.close();
+               end();
             }
             catch (Exception e)
             {
@@ -102,12 +99,19 @@ public class TestCache extends AbstractPortalTest
          Thread.sleep(1);
       }
 
+      // Save the cache should be invalidated
+      session.close();
+      end(true);
+
       // Reopen session with no modifications that use the cache
-      session.close(true);
+      begin();
       mgr.openSession();
 
       //
       page = storage_.getPage("portal::test::test4");
       assertEquals("foo", page.getTitle());
+
+      //
+      end();
    }
 }

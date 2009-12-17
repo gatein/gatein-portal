@@ -24,6 +24,7 @@ import org.chromattic.api.annotations.Name;
 import org.chromattic.api.annotations.NodeMapping;
 import org.chromattic.api.annotations.OneToOne;
 import org.chromattic.api.annotations.Property;
+import org.chromattic.ntdef.NTFolder;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -68,6 +69,9 @@ public abstract class GadgetDefinition
    @Create
    protected abstract RemoteGadgetData createRemoteData();
 
+   @Create
+   protected abstract NTFolder createFolder();
+
    public boolean isLocal()
    {
       GadgetData data = getData();
@@ -83,6 +87,8 @@ public abstract class GadgetDefinition
          {
             LocalGadgetData localData = createLocalData();
             setData(localData);
+            NTFolder resources = createFolder();
+            localData.setResources(resources);
          }
       }
       else

@@ -53,9 +53,8 @@ public class TestPortletPreferences extends AbstractPortalTest
    public void setUp() throws Exception
    {
       super.setUp();
-      if (storage_ != null)
-         return;
-      PortalContainer container = PortalContainer.getInstance();
+      begin();
+      PortalContainer container = getContainer();
       storage_ = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
       mgr = (POMSessionManager)container.getComponentInstanceOfType(POMSessionManager.class);
       session = mgr.openSession();
@@ -63,8 +62,9 @@ public class TestPortletPreferences extends AbstractPortalTest
 
    protected void tearDown() throws Exception
    {
-      session.close(false);
-      session = null;
+      session.close();
+      end();
+      super.tearDown();
    }
 
    public void testSiteScopedPreferences() throws Exception

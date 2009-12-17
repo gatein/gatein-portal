@@ -29,7 +29,6 @@ import org.exoplatform.portal.config.model.ModelObject;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PortalConfig;
-import org.exoplatform.portal.pom.config.ModelDemarcation;
 import org.exoplatform.portal.pom.data.DashboardData;
 import org.exoplatform.portal.pom.data.ModelData;
 import org.exoplatform.portal.pom.data.ModelDataStorage;
@@ -48,7 +47,7 @@ import java.util.List;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class DataStorageImpl implements DataStorage, ModelDemarcation
+public class DataStorageImpl implements DataStorage
 {
 
    /** . */
@@ -274,21 +273,5 @@ public class DataStorageImpl implements DataStorage, ModelDemarcation
    public void saveDashboard(Dashboard dashboard) throws Exception
    {
       delegate.saveDashboard(dashboard.build());
-   }
-
-   public void begin()
-   {
-      if (delegate instanceof ModelDemarcation)
-      {
-         ((ModelDemarcation)delegate).begin();
-      }
-   }
-
-   public void end(boolean save)
-   {
-      if (delegate instanceof ModelDemarcation)
-      {
-         ((ModelDemarcation)delegate).end(save);
-      }
    }
 }

@@ -22,6 +22,7 @@ package org.exoplatform.web;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.component.ComponentRequestLifecycle;
+import org.exoplatform.container.component.RequestLifeCycle;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.web.application.Application;
@@ -136,29 +137,14 @@ public class WebAppController
       if (handler != null)
       {
          ExoContainer portalContainer = ExoContainerContext.getCurrentContainer();
-         List<ComponentRequestLifecycle> components =
-            portalContainer.getComponentInstancesOfType(ComponentRequestLifecycle.class);
+         RequestLifeCycle.begin(portalContainer);
          try
          {
-            for (ComponentRequestLifecycle component : components)
-            {
-               component.startRequest(portalContainer);
-            }
             handler.execute(this, req, res);
          }
          finally
          {
-            for (ComponentRequestLifecycle component : components)
-            {
-               try
-               {
-                  component.endRequest(portalContainer);
-               }
-               catch (Exception e)
-               {
-                  log.warn("An error occured while calling the endRequest method", e);
-               }
-            }
+            RequestLifeCycle.end();
          }
       }
    }

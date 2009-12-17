@@ -24,7 +24,6 @@ import org.exoplatform.container.component.BaseComponentPlugin;
 import org.exoplatform.container.xml.InitParams;
 
 import java.util.List;
-import java.util.concurrent.Callable;
 
 /**
  * <p>The chromattic life cycle objets is a plugin that allow to bootstrap a chromattic builder and make
@@ -166,7 +165,7 @@ public class ChromatticLifeCycle extends BaseComponentPlugin
          throw new IllegalStateException("A session is already opened.");
       }
 
-      //
+      // Attempt to get the synchronization
       Synchronization sync = manager.getSynchronization();
 
       //
@@ -215,12 +214,18 @@ public class ChromatticLifeCycle extends BaseComponentPlugin
       return context;
    }
 
-   public final void closeContext(SessionContext context, boolean save)
+   public final void closeContext(boolean save)
    {
-      AbstractContext abstractContext = (AbstractContext)context;
+      AbstractContext context = (AbstractContext)getContext(true);
 
       //
-      ((AbstractContext)context).close(save);
+      if (context == null)
+      {
+         throw new IllegalStateException("No current context existing");
+      }
+
+      //
+      context.close(save);
    }
 
    protected void onOpenSession(SessionContext context)

@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (C) 2009 eXo Platform SAS.
  *
  * This is free software; you can redistribute it and/or modify it
@@ -18,45 +18,13 @@
  */
 package org.exoplatform.commons.chromattic;
 
-import org.chromattic.api.ChromatticSession;
-
 /**
- * The contract for integration between client of a chromattic session and the session management system.
- * Attachments are useful to associated an arbitrary payload with the session context.
- *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public interface SessionContext
+public enum SynchronizationStatus
 {
 
-   /**
-    * Returns the managed chromattic session.
-    *
-    * @return the session
-    */
-   ChromatticSession getSession();
+   DISCARDED, SAVED
 
-   /**
-    * Returns an attachment of this context.
-    *
-    * @param name the attachment name
-    * @return the attached object
-    */
-   Object getAttachment(String name);
-
-   /**
-    * Sets an attachment on this context.
-    *
-    * @param name the attachment name
-    * @param payload the attachment payload
-    */
-   void setAttachment(String name, Object payload);
-
-   /**
-    * Registers a synchronization listener.
-    *
-    * @param listener the listener
-    */
-   void addSynchronizationListener(SynchronizationListener listener);
 }

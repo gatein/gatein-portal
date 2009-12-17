@@ -22,6 +22,7 @@ package org.exoplatform.services.organization;
 import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.component.ComponentRequestLifecycle;
+import org.exoplatform.container.component.RequestLifeCycle;
 import org.exoplatform.test.BasicTestCase;
 
 import java.util.ArrayList;
@@ -92,7 +93,8 @@ public class TestOrganizationService extends BasicTestCase
       mtHandler_ = service_.getMembershipTypeHandler();
       membershipHandler_ = service_.getMembershipHandler();
 
-      ((ComponentRequestLifecycle)service_).startRequest(manager);
+//      ((ComponentRequestLifecycle)service_).startRequest(manager);
+      RequestLifeCycle.begin((ComponentRequestLifecycle)service_);
 
    }
 
@@ -110,8 +112,8 @@ public class TestOrganizationService extends BasicTestCase
          userHandler_.removeUser(userName, true);
       }
 
-      ((ComponentRequestLifecycle)service_).endRequest(manager);
-
+//      ((ComponentRequestLifecycle)service_).endRequest(manager);
+      RequestLifeCycle.end();
    }
 
    public void testSimle() throws Exception

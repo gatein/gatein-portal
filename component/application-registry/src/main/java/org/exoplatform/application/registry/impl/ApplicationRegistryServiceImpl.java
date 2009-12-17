@@ -30,6 +30,7 @@ import org.exoplatform.commons.chromattic.ChromatticManager;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.component.ComponentPlugin;
+import org.exoplatform.container.component.RequestLifeCycle;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.pom.config.POMSessionManager;
@@ -49,7 +50,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * The fundamental reason that motives to use tasks is because of the JMX access that does not
@@ -119,30 +119,20 @@ public class ApplicationRegistryServiceImpl implements ApplicationRegistryServic
       final List<ApplicationCategory> categories = new ArrayList<ApplicationCategory>();
 
       //
-/*
-      pomMGr.execute(new POMTask()
+      ContentRegistry registry = getContentRegistry();
+
+      //
+      for (CategoryDefinition categoryDef : registry.getCategoryList())
       {
-         public void run(POMSession session) throws Exception
-         {
-*/
-            ContentRegistry registry = getContentRegistry();
+         ApplicationCategory category = load(categoryDef, appTypes);
+         categories.add(category);
+      }
 
-            //
-            for (CategoryDefinition categoryDef : registry.getCategoryList())
-            {
-               ApplicationCategory category = load(categoryDef, appTypes);
-               categories.add(category);
-            }
-
-            //
-            if (sortComparator != null)
-            {
-               Collections.sort(categories, sortComparator);
-            }
-/*
-         }
-      });
-*/
+      //
+      if (sortComparator != null)
+      {
+         Collections.sort(categories, sortComparator);
+      }
 
       //
       return categories;
@@ -165,79 +155,46 @@ public class ApplicationRegistryServiceImpl implements ApplicationRegistryServic
 
    public ApplicationCategory getApplicationCategory(final String name) throws Exception
    {
-      final AtomicReference<ApplicationCategory> a = new AtomicReference<ApplicationCategory>();
+      ContentRegistry registry = getContentRegistry();
 
       //
-/*
-      pomMGr.execute(new POMTask()
+      CategoryDefinition categoryDef = registry.getCategory(name);
+      if (categoryDef != null)
       {
-         public void run(POMSession session) throws Exception
-         {
-*/
-            ContentRegistry registry = getContentRegistry();
-
-            //
-            CategoryDefinition categoryDef = registry.getCategory(name);
-            if (categoryDef != null)
-            {
-               ApplicationCategory applicationCategory = load(categoryDef);
-               a.set(applicationCategory);
-            }
-/*
-         }
-      });
-*/
+         ApplicationCategory applicationCategory = load(categoryDef);
+         return applicationCategory;
+      }
 
       //
-      return a.get();
+      return null;
    }
 
    public void save(final ApplicationCategory category) throws Exception
    {
-/*
-      pomMGr.execute(new POMTask()
+      ContentRegistry registry = getContentRegistry();
+
+      //
+      String categoryName = category.getName();
+
+      //
+      CategoryDefinition categoryDef = registry.getCategory(categoryName);
+      if (categoryDef == null)
       {
-         public void run(POMSession session) throws Exception
-         {
-*/
-            ContentRegistry registry = getContentRegistry();
+         categoryDef = registry.createCategory(categoryName);
+      }
 
-            //
-            String categoryName = category.getName();
-
-            //
-            CategoryDefinition categoryDef = registry.getCategory(categoryName);
-            if (categoryDef == null)
-            {
-               categoryDef = registry.createCategory(categoryName);
-            }
-
-            //
-            categoryDef.setDisplayName(category.getDisplayName());
-            categoryDef.setCreationDate(category.getCreatedDate());
-            categoryDef.setLastModificationDate(category.getModifiedDate());
-            categoryDef.setDescription(category.getDescription());
-            categoryDef.setAccessPermissions(category.getAccessPermissions());
-         }
-/*
-      });
+      //
+      categoryDef.setDisplayName(category.getDisplayName());
+      categoryDef.setCreationDate(category.getCreatedDate());
+      categoryDef.setLastModificationDate(category.getModifiedDate());
+      categoryDef.setDescription(category.getDescription());
+      categoryDef.setAccessPermissions(category.getAccessPermissions());
    }
-*/
 
    public void remove(final ApplicationCategory category) throws Exception
    {
-/*
-      pomMGr.execute(new POMTask()
-      {
-         public void run(POMSession session) throws Exception
-         {
-*/
-            ContentRegistry registry = getContentRegistry();
-            registry.getCategoryMap().remove(category.getName());
-/*
-         }
-      });
-*/
+      ContentRegistry registry = getContentRegistry();
+      registry.getCategoryMap().remove(category.getName());
    }
 
    public List<Application> getApplications(ApplicationCategory category, ApplicationType<?>... appTypes) throws Exception
@@ -250,36 +207,20 @@ public class ApplicationRegistryServiceImpl implements ApplicationRegistryServic
       final Comparator<Application> sortComparator,
       final ApplicationType<?>... appTypes) throws Exception
    {
-      final AtomicReference<List<Application>> ref = new AtomicReference<List<Application>>();
+      ContentRegistry registry = getContentRegistry();
 
       //
-/*
-      pomMGr.execute(new POMTask()
+      CategoryDefinition categoryDef = registry.getCategory(category.getName());
+      List<Application> applications = load(categoryDef, appTypes).getApplications();
+
+      //
+      if (sortComparator != null)
       {
-         public void run(POMSession session) throws Exception
-         {
-*/
-            ContentRegistry registry = getContentRegistry();
-
-            //
-            CategoryDefinition categoryDef = registry.getCategory(category.getName());
-            List<Application> applications = load(categoryDef, appTypes).getApplications();
-
-            //
-            if (sortComparator != null)
-            {
-               Collections.sort(applications, sortComparator);
-            }
-
-            //
-            ref.set(applications);
-/*
-         }
-      });
-*/
+         Collections.sort(applications, sortComparator);
+      }
 
       //
-      return ref.get();
+      return applications;
    }
 
    public List<Application> getAllApplications() throws Exception
@@ -305,115 +246,82 @@ public class ApplicationRegistryServiceImpl implements ApplicationRegistryServic
 
    public Application getApplication(final String category, final String name) throws Exception
    {
-      final AtomicReference<Application> ref = new AtomicReference<Application>();
+      ContentRegistry registry = getContentRegistry();
 
       //
-/*
-      pomMGr.execute(new POMTask()
+      CategoryDefinition categoryDef = registry.getCategory(category);
+      if (categoryDef != null)
       {
-         public void run(POMSession session) throws Exception
+         ContentDefinition contentDef = categoryDef.getContentMap().get(name);
+         if (contentDef != null)
          {
-*/
-            ContentRegistry registry = getContentRegistry();
-
-            //
-            CategoryDefinition categoryDef = registry.getCategory(category);
-            if (categoryDef != null)
-            {
-               ContentDefinition contentDef = categoryDef.getContentMap().get(name);
-               if (contentDef != null)
-               {
-                  ref.set(load(contentDef));
-               }
-            }
-/*
+            return load(contentDef);
          }
-      });
-*/
+      }
 
       //
-      return ref.get();
+      return null;
    }
 
    public void save(final ApplicationCategory category, final Application application) throws Exception
    {
-/*
-      pomMGr.execute(new POMTask()
+      ContentRegistry registry = getContentRegistry();
+
+      //
+      String categoryName = category.getName();
+      CategoryDefinition categoryDef = registry.getCategory(categoryName);
+      if (categoryDef == null)
       {
-         public void run(POMSession session) throws Exception
-         {
-*/
-            ContentRegistry registry = getContentRegistry();
+         categoryDef = registry.createCategory(categoryName);
+         save(category, categoryDef);
+      }
 
-            //
-            String categoryName = category.getName();
-            CategoryDefinition categoryDef = registry.getCategory(categoryName);
-            if (categoryDef == null)
-            {
-               categoryDef = registry.createCategory(categoryName);
-               save(category, categoryDef);
-            }
+      //
+      ContentDefinition contentDef = null;
+      CategoryDefinition applicationCategoryDef = registry.getCategory(application.getCategoryName());
+      String applicationName = application.getApplicationName();
+      if (applicationCategoryDef != null)
+      {
+         contentDef = applicationCategoryDef.getContentMap().get(applicationName);
+      }
+      if (contentDef == null)
+      {
+         String contentId = application.getContentId();
+         ContentType<?> contentType = application.getType().getContentType();
+         String definitionName = application.getApplicationName();
+         contentDef = categoryDef.createContent(definitionName, contentType, contentId);
+      }
+      else
+      {
+         // A JCR move actually
+         categoryDef.getContentList().add(contentDef);
+      }
 
-            //
-            ContentDefinition contentDef = null;
-            CategoryDefinition applicationCategoryDef = registry.getCategory(application.getCategoryName());
-            String applicationName = application.getApplicationName();
-            if (applicationCategoryDef != null)
-            {
-               contentDef = applicationCategoryDef.getContentMap().get(applicationName);
-            }
-            if (contentDef == null)
-            {
-               String contentId = application.getContentId();
-               ContentType<?> contentType = application.getType().getContentType();
-               String definitionName = application.getApplicationName();
-               contentDef = categoryDef.createContent(definitionName, contentType, contentId);
-            }
-            else
-            {
-               // A JCR move actually
-               categoryDef.getContentList().add(contentDef);
-            }
-
-            // Update state
-            save(application, contentDef);
-/*
-         }
-      });
-*/
+      // Update state
+      save(application, contentDef);
    }
 
    public void update(final Application application) throws Exception
    {
-/*
-      pomMGr.execute(new POMTask()
+      ContentRegistry registry = getContentRegistry();
+
+      //
+      String categoryName = application.getCategoryName();
+      CategoryDefinition categoryDef = registry.getCategory(categoryName);
+      if (categoryDef == null)
       {
-         public void run(POMSession session) throws Exception
-         {
-*/
-            ContentRegistry registry = getContentRegistry();
+         throw new IllegalStateException();
+      }
 
-            //
-            String categoryName = application.getCategoryName();
-            CategoryDefinition categoryDef = registry.getCategory(categoryName);
-            if (categoryDef == null)
-            {
-               throw new IllegalStateException();
-            }
+      //
+      ContentDefinition contentDef = categoryDef.getContentMap().get(application.getApplicationName());
+      if (contentDef == null)
+      {
+         throw new IllegalStateException();
+      }
 
-            //
-            ContentDefinition contentDef = categoryDef.getContentMap().get(application.getApplicationName());
-            if (contentDef == null)
-            {
-               throw new IllegalStateException();
-            }
-
-            // Update state
-            save(application, contentDef);
-/*
-         }
-      });
-*/
+      // Update state
+      save(application, contentDef);
    }
 
    public void remove(final Application app) throws Exception
@@ -424,181 +332,151 @@ public class ApplicationRegistryServiceImpl implements ApplicationRegistryServic
       }
 
       //
-/*
-      pomMGr.execute(new POMTask()
+      ContentRegistry registry = getContentRegistry();
+
+      //
+      String categoryName = app.getCategoryName();
+      CategoryDefinition categoryDef = registry.getCategory(categoryName);
+
+      //
+      if (categoryDef != null)
       {
-         public void run(POMSession session) throws Exception
-         {
-*/
-            ContentRegistry registry = getContentRegistry();
 
-            //
-            String categoryName = app.getCategoryName();
-            CategoryDefinition categoryDef = registry.getCategory(categoryName);
-
-            //
-            if (categoryDef != null)
-            {
-
-               String contentName = app.getApplicationName();
-               categoryDef.getContentMap().remove(contentName);
-            }
-/*
-         }
-      });
-*/
+         String contentName = app.getApplicationName();
+         categoryDef.getContentMap().remove(contentName);
+      }
    }
 
    public void importExoGadgets() throws Exception
    {
-/*
-      pomMGr.execute(new POMTask()
+      ContentRegistry registry = getContentRegistry();
+
+      //
+      ExoContainer container = ExoContainerContext.getCurrentContainer();
+      GadgetRegistryService gadgetService = (GadgetRegistryService)container.getComponentInstanceOfType(GadgetRegistryService.class);
+      List<Gadget> eXoGadgets = gadgetService.getAllGadgets();
+
+      //
+      if (eXoGadgets != null)
       {
-         public void run(POMSession session) throws Exception
+         ArrayList<String> permissions = new ArrayList<String>();
+         permissions.add(UserACL.EVERYONE);
+         String categoryName = "Gadgets";
+
+         //
+         CategoryDefinition category = registry.getCategory(categoryName);
+         if (category == null)
          {
-*/
-            ContentRegistry registry = getContentRegistry();
-
-            //
-            ExoContainer container = ExoContainerContext.getCurrentContainer();
-            GadgetRegistryService gadgetService = (GadgetRegistryService)container.getComponentInstanceOfType(GadgetRegistryService.class);
-            List<Gadget> eXoGadgets = gadgetService.getAllGadgets();
-
-            //
-            if (eXoGadgets != null)
-            {
-               ArrayList<String> permissions = new ArrayList<String>();
-               permissions.add(UserACL.EVERYONE);
-               String categoryName = "Gadgets";
-
-               //
-               CategoryDefinition category = registry.getCategory(categoryName);
-               if (category == null)
-               {
-                  category = registry.createCategory(categoryName);
-                  category.setDisplayName(categoryName);
-                  category.setDescription(categoryName);
-                  category.setAccessPermissions(permissions);
-               }
-
-               //
-               for (Gadget ele : eXoGadgets)
-               {
-                  ContentDefinition app = category.getContentMap().get(ele.getName());
-                  if (app == null)
-                  {
-                     app = category.createContent(ele.getName(), org.exoplatform.portal.pom.spi.gadget.Gadget.CONTENT_TYPE, ele.getName());
-                     app.setDisplayName(ele.getTitle());
-                     app.setDescription(ele.getDescription());
-                     app.setAccessPermissions(permissions);
-                  }
-               }
-            }
-/*
+            category = registry.createCategory(categoryName);
+            category.setDisplayName(categoryName);
+            category.setDescription(categoryName);
+            category.setAccessPermissions(permissions);
          }
-      });
-*/
+
+         //
+         for (Gadget ele : eXoGadgets)
+         {
+            ContentDefinition app = category.getContentMap().get(ele.getName());
+            if (app == null)
+            {
+               app = category.createContent(ele.getName(), org.exoplatform.portal.pom.spi.gadget.Gadget.CONTENT_TYPE, ele.getName());
+               app.setDisplayName(ele.getTitle());
+               app.setDescription(ele.getDescription());
+               app.setAccessPermissions(permissions);
+            }
+         }
+      }
    }
 
    public void importAllPortlets() throws Exception
    {
-/*
-      pomMGr.execute(new POMTask()
+      ContentRegistry registry = getContentRegistry();
+
+      //
+      ExoContainer manager = ExoContainerContext.getCurrentContainer();
+      PortletInvoker portletInvoker = (PortletInvoker)manager.getComponentInstance(PortletInvoker.class);
+      Set<org.gatein.pc.api.Portlet> portlets = portletInvoker.getPortlets();
+
+      //
+      for (org.gatein.pc.api.Portlet portlet : portlets)
       {
-         public void run(POMSession session) throws Exception
+         PortletInfo info = portlet.getInfo();
+         String portletApplicationName = info.getApplicationName();
+         String portletName = info.getName();
+
+         // Need to sanitize portlet and application names in case they contain characters that would
+         // cause an improper Application name
+         portletApplicationName = portletApplicationName.replace('/', '_');
+         portletName = portletName.replace('/', '_');
+
+         LocalizedString keywordsLS = info.getMeta().getMetaValue(MetaInfo.KEYWORDS);
+
+         String[] categoryNames = null;
+         if (keywordsLS != null)
          {
-*/
-            ContentRegistry registry = getContentRegistry();
-
-            //
-            ExoContainer manager = ExoContainerContext.getCurrentContainer();
-            PortletInvoker portletInvoker = (PortletInvoker)manager.getComponentInstance(PortletInvoker.class);
-            Set<org.gatein.pc.api.Portlet> portlets = portletInvoker.getPortlets();
-
-            //
-            for (org.gatein.pc.api.Portlet portlet : portlets)
+            String keywords = keywordsLS.getDefaultString();
+            if (keywords != null && keywords.length() != 0)
             {
-               PortletInfo info = portlet.getInfo();
-               String portletApplicationName = info.getApplicationName();
-               String portletName = info.getName();
+               categoryNames = keywords.split(",");
+            }
+         }
 
-               // Need to sanitize portlet and application names in case they contain characters that would
-               // cause an improper Application name
-               portletApplicationName = portletApplicationName.replace('/', '_');
-               portletName = portletName.replace('/', '_');
+         if (categoryNames == null || categoryNames.length == 0)
+         {
+            categoryNames = new String[]{portletApplicationName};
+         }
 
-               LocalizedString keywordsLS = info.getMeta().getMetaValue(MetaInfo.KEYWORDS);
+         if (portlet.isRemote())
+         {
+            categoryNames = Tools.appendTo(categoryNames, REMOTE_CATEGORY_NAME);
+         }
 
-               String[] categoryNames = null;
-               if (keywordsLS != null)
-               {
-                  String keywords = keywordsLS.getDefaultString();
-                  if (keywords != null && keywords.length() != 0)
-                  {
-                     categoryNames = keywords.split(",");
-                  }
-               }
+         //
+         for (String categoryName : categoryNames)
+         {
+            categoryName = categoryName.trim();
 
-               if (categoryNames == null || categoryNames.length == 0)
-               {
-                  categoryNames = new String[]{portletApplicationName};
-               }
+            //
+            CategoryDefinition category = registry.getCategory(categoryName);
 
+            //
+            if (category == null)
+            {
+               category = registry.createCategory(categoryName);
+               category.setDisplayName(categoryName);
+            }
+
+            //
+            ContentDefinition app = category.getContentMap().get(portletName);
+            if (app == null)
+            {
+               LocalizedString descriptionLS = portlet.getInfo().getMeta().getMetaValue(MetaInfo.DESCRIPTION);
+               LocalizedString displayNameLS = portlet.getInfo().getMeta().getMetaValue(MetaInfo.DISPLAY_NAME);
+
+               // julien: ????
+               // getLocalizedStringValue(descriptionLS, portletName);
+
+               ContentType<?> contentType;
+               String contentId;
                if (portlet.isRemote())
                {
-                  categoryNames = Tools.appendTo(categoryNames, REMOTE_CATEGORY_NAME);
+                  contentType = WSRP.CONTENT_TYPE;
+                  contentId = portlet.getContext().getId();
                }
+               else
+               {
+                  contentType = Portlet.CONTENT_TYPE;
+                  contentId = info.getApplicationName() + "/" + info.getName();
+               }
+
 
                //
-               for (String categoryName : categoryNames)
-               {
-                  categoryName = categoryName.trim();
-
-                  //
-                  CategoryDefinition category = registry.getCategory(categoryName);
-
-                  //
-                  if (category == null)
-                  {
-                     category = registry.createCategory(categoryName);
-                     category.setDisplayName(categoryName);
-                  }
-
-                  //
-                  ContentDefinition app = category.getContentMap().get(portletName);
-                  if (app == null)
-                  {
-                     LocalizedString descriptionLS = portlet.getInfo().getMeta().getMetaValue(MetaInfo.DESCRIPTION);
-                     LocalizedString displayNameLS = portlet.getInfo().getMeta().getMetaValue(MetaInfo.DISPLAY_NAME);
-
-                     // julien: ????
-                     // getLocalizedStringValue(descriptionLS, portletName);
-
-                     ContentType<?> contentType;
-                     String contentId;
-                     if (portlet.isRemote())
-                     {
-                        contentType = WSRP.CONTENT_TYPE;
-                        contentId = portlet.getContext().getId();
-                     }
-                     else
-                     {
-                        contentType = Portlet.CONTENT_TYPE;
-                        contentId = info.getApplicationName() + "/" + info.getName();
-                     }
-
-
-                     //
-                     app = category.createContent(portletName, contentType, contentId);
-                     app.setDisplayName(getLocalizedStringValue(displayNameLS, portletName));
-                     app.setDescription(getLocalizedStringValue(descriptionLS, portletName));
-                  }
-               }
+               app = category.createContent(portletName, contentType, contentId);
+               app.setDisplayName(getLocalizedStringValue(displayNameLS, portletName));
+               app.setDescription(getLocalizedStringValue(descriptionLS, portletName));
             }
-/*
          }
-      });
-*/
+      }
    }
 
    private boolean isApplicationType(Application app, ApplicationType<?>... appTypes)
@@ -724,9 +602,7 @@ public class ApplicationRegistryServiceImpl implements ApplicationRegistryServic
    {
       if (plugins != null)
       {
-//         POMSession session = pomMGr.openSession();
-//         SessionContext context = lifeCycle.openContext();
-         manager.beginRequest();
+         RequestLifeCycle.begin(manager);
          boolean save = false;
          try
          {
@@ -744,7 +620,8 @@ public class ApplicationRegistryServiceImpl implements ApplicationRegistryServic
          finally
          {
             // lifeCycle.closeContext(context, true);
-            manager.endRequest(true);
+            manager.getSynchronization().setSave(save);
+            RequestLifeCycle.end();
          }
       }
    }

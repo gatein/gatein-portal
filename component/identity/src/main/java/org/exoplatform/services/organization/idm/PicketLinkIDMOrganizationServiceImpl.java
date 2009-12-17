@@ -21,6 +21,7 @@ package org.exoplatform.services.organization.idm;
 
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.component.ComponentRequestLifecycle;
+import org.exoplatform.container.component.RequestLifeCycle;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.container.xml.ValueParam;
 import org.exoplatform.services.cache.CacheService;
@@ -114,14 +115,22 @@ public class PicketLinkIDMOrganizationServiceImpl extends BaseOrganizationServic
       try
       {
          // Wrap within transaction so all initializers can work
-         idmService_.getIdentitySession().beginTransaction();
+//         idmService_.getIdentitySession().beginTransaction();
+
+         RequestLifeCycle.begin(this);
+
          super.start();
-         idmService_.getIdentitySession().getTransaction().commit();
+
+//         idmService_.getIdentitySession().getTransaction().commit();
 
       }
       catch (Exception e)
       {
          e.printStackTrace(); //To change body of catch statement use File | Settings | File Templates.
+      }
+      finally
+      {
+         RequestLifeCycle.end();
       }
 
    }
@@ -132,10 +141,13 @@ public class PicketLinkIDMOrganizationServiceImpl extends BaseOrganizationServic
       //toto
    }
 
-   /**
+/*
+   */
+/**
     * Used to allow nested requests (as done by the authenticator during unit tests) and avoid
     * to commit two times the same transaction.
-    */
+    *//*
+
    private ThreadLocal<AtomicInteger> currentRequestCount = new ThreadLocal<AtomicInteger>()
    {
       @Override
@@ -144,36 +156,29 @@ public class PicketLinkIDMOrganizationServiceImpl extends BaseOrganizationServic
          return new AtomicInteger();
       }
    };
+*/
 
    public void startRequest(ExoContainer container)
    {
-      AtomicInteger count = currentRequestCount.get();
-      if (count.getAndIncrement() == 0)
+      try
       {
-         try
-         {
-            idmService_.getIdentitySession().beginTransaction();
-         }
-         catch (Exception e)
-         {
-            e.printStackTrace();
-         }
+         idmService_.getIdentitySession().beginTransaction();
+      }
+      catch (Exception e)
+      {
+         e.printStackTrace();
       }
    }
 
    public void endRequest(ExoContainer container)
    {
-      AtomicInteger count = currentRequestCount.get();
-      if (count.decrementAndGet() == 0)
+      try
       {
-         try
-         {
-            idmService_.getIdentitySession().getTransaction().commit();
-         }
-         catch (Exception e)
-         {
-            e.printStackTrace();
-         }
+         idmService_.getIdentitySession().getTransaction().commit();
+      }
+      catch (Exception e)
+      {
+         e.printStackTrace();
       }
    }
 

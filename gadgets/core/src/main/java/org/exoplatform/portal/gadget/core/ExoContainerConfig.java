@@ -57,7 +57,8 @@ import java.security.SecureRandom;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class ExoContainerConfig extends JsonContainerConfig
+public class
+   ExoContainerConfig extends JsonContainerConfig
 {
 
    /** . */

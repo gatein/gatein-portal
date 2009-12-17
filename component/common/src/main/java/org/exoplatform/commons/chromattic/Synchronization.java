@@ -28,7 +28,7 @@ import java.util.Map;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-class Synchronization implements LoginContext
+public class Synchronization implements LoginContext
 {
 
    /** The sessions mapped by workspace name. */
@@ -36,6 +36,9 @@ class Synchronization implements LoginContext
    
    /** . */
    private final Map<String, GlobalContext> contexts = new HashMap<String, GlobalContext>();
+
+   /** . */
+   private boolean save = true;
 
    /**
     * Returns a specified global context by its name.
@@ -84,8 +87,8 @@ class Synchronization implements LoginContext
 
    public void close(boolean save)
    {
-      // First close all sessions
-      for (AbstractContext context : contexts.values())
+      // First save all global contexts (sessions)
+      for (GlobalContext context : contexts.values())
       {
          context.close(save);
       }
@@ -95,5 +98,15 @@ class Synchronization implements LoginContext
       {
          session.logout();
       }
+   }
+
+   public boolean isSave()
+   {
+      return save;
+   }
+
+   public void setSave(boolean save)
+   {
+      this.save = save;
    }
 }

@@ -21,10 +21,12 @@ package org.exoplatform.commons.chromattic;
 import org.chromattic.api.ChromatticSession;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 /**
- * An abstract implementation of the {@link org.exoplatform.commons.chromattic.SessionContext} interface.
+ * An abstract implementation of the {@link org.exoplatform.commons.chromattic.SessionContext} interface. The context
+ * owns the chromattic session.
  *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
@@ -38,20 +40,24 @@ class AbstractContext implements SessionContext
    /** . */
    private Map<String, Object> attributes;
 
-   /** The related configurator. */
-   private final ChromatticLifeCycle configurator;
+   /** The related life cycle. */
+   private final ChromatticLifeCycle lifeCycle;
 
-   public AbstractContext(ChromatticLifeCycle configurator)
+   /** . */
+   private HashSet<SynchronizationListener> listeners;
+
+   AbstractContext(ChromatticLifeCycle lifeCycle)
    {
-      this.configurator = configurator;
+      this.lifeCycle = lifeCycle;
       this.session = null;
+      this.listeners = null;
    }
 
    public final ChromatticSession getSession()
    {
       if (session == null)
       {
-         session = configurator.realChromattic.openSession();
+         session = lifeCycle.realChromattic.openSession();
       }
       return session;
    }
@@ -83,6 +89,22 @@ class AbstractContext implements SessionContext
 
    public void close(boolean save)
    {
+      if (listeners != null)
+      {
+         for (SynchronizationListener listener : listeners)
+         {
+            try
+            {
+               listener.beforeSynchronization();
+            }
+            catch (Exception e)
+            {
+               // to log
+            }
+         }
+      }
+
+      //
       if (session != null)
       {
          if (save)
@@ -95,9 +117,39 @@ class AbstractContext implements SessionContext
       }
 
       //
-      configurator.currentContext.set(null);
+      if (listeners != null)
+      {
+         SynchronizationStatus status = save ? SynchronizationStatus.SAVED : SynchronizationStatus.DISCARDED;
+         for (SynchronizationListener listener : listeners)
+         {
+            try
+            {
+               listener.afterSynchronization(status);
+            }
+            catch (Exception e)
+            {
+               // to log
+            }
+         }
+      }
 
       //
-      configurator.onCloseSession(this);
+      lifeCycle.currentContext.set(null);
+
+      //
+      lifeCycle.onCloseSession(this);
+   }
+
+   public final void addSynchronizationListener(SynchronizationListener listener)
+   {
+      if (listener == null)
+      {
+         throw new NullPointerException();
+      }
+      if (listeners == null)
+      {
+         listeners = new HashSet<SynchronizationListener>();
+      }
+      listeners.add(listener);
    }
 }

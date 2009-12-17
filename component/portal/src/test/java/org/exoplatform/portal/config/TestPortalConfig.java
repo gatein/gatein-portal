@@ -21,6 +21,7 @@ package org.exoplatform.portal.config;
 
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.component.ComponentRequestLifecycle;
+import org.exoplatform.container.component.RequestLifeCycle;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.POMSessionManager;
@@ -53,21 +54,19 @@ public class TestPortalConfig extends AbstractPortalTest
    public void setUp() throws Exception
    {
       super.setUp();
-
+      begin();
       PortalContainer container = PortalContainer.getInstance();
       org = (OrganizationService)container.getComponentInstanceOfType(OrganizationService.class);
       storage = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
       mgr = (POMSessionManager)container.getComponentInstanceOfType(POMSessionManager.class);
       session = mgr.openSession();
-      ((ComponentRequestLifecycle)org).startRequest(container);
    }
 
    protected void tearDown() throws Exception
    {
       session.close();
-      storage = null;
-      PortalContainer container = PortalContainer.getInstance();
-      ((ComponentRequestLifecycle)org).endRequest(container);
+      end();
+      super.tearDown();
    }
 
    public void testSiteLayout() throws Exception

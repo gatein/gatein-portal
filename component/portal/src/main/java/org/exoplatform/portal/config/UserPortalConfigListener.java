@@ -19,8 +19,8 @@
 
 package org.exoplatform.portal.config;
 
-import org.exoplatform.container.ExoContainer;
-import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.container.PortalContainer;
+import org.exoplatform.container.component.RequestLifeCycle;
 import org.exoplatform.portal.config.model.Container;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
@@ -36,54 +36,69 @@ import java.util.ArrayList;
 public class UserPortalConfigListener extends UserEventListener
 {
 
+   /** . */
+   private final UserPortalConfigService portalConfigService;
+
+   /** . */
+   private final DataStorage dataStorage;
+
+   public UserPortalConfigListener(
+      UserPortalConfigService portalConfigService,
+      DataStorage dataStorage)
+   {
+      this.portalConfigService = portalConfigService;
+      this.dataStorage = dataStorage;
+   }
+
    public void preDelete(User user) throws Exception
    {
-      ExoContainer container = ExoContainerContext.getCurrentContainer();
-      UserPortalConfigService portalConfigService =
-         (UserPortalConfigService)container.getComponentInstanceOfType(UserPortalConfigService.class);
-      String userName = user.getUserName();
-      portalConfigService.removeUserPortalConfig("user", userName);
+      RequestLifeCycle.begin(PortalContainer.getInstance());
+      try
+      {
+         String userName = user.getUserName();
+         portalConfigService.removeUserPortalConfig("user", userName);
+      }
+      finally
+      {
+         RequestLifeCycle.end();
+      }
    }
 
    public void preSave(User user, boolean isNew) throws Exception
    {
-      ExoContainer container = ExoContainerContext.getCurrentContainer();
-      /*
-       * TODO Call start method on RegistryService to allow ecm, ultimate can run
-       * with JDK6. This is uncommon behavior. We need find other way to fix it I
-       * hope that this issues will be fixed when we use the lastest version of
-       * PicoContainer Comment by Hoa Pham.
-       */
-      //      RegistryService registryService = (RegistryService)container.getComponentInstanceOfType(RegistryService.class);
-      //      registryService.start();
-      UserPortalConfigService portalConfigService =
-         (UserPortalConfigService)container.getComponentInstanceOfType(UserPortalConfigService.class);
-      DataStorage dataStorage = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
-      String userName = user.getUserName();
-
-      // Create the portal from the template
-      portalConfigService.createUserPortalConfig(PortalConfig.USER_TYPE, userName, "user");
-
-      // Need to insert the corresponding user site if needed
-      PortalConfig cfg = dataStorage.getPortalConfig(PortalConfig.USER_TYPE, userName);
-      if (cfg == null)
+      RequestLifeCycle.begin(PortalContainer.getInstance());
+      try
       {
-         cfg = new PortalConfig(PortalConfig.USER_TYPE);
-         cfg.setPortalLayout(new Container());
-         cfg.setName(userName);
-         dataStorage.create(cfg);
+         String userName = user.getUserName();
+
+         // Create the portal from the template
+         portalConfigService.createUserPortalConfig(PortalConfig.USER_TYPE, userName, "user");
+
+         // Need to insert the corresponding user site if needed
+         PortalConfig cfg = dataStorage.getPortalConfig(PortalConfig.USER_TYPE, userName);
+         if (cfg == null)
+         {
+            cfg = new PortalConfig(PortalConfig.USER_TYPE);
+            cfg.setPortalLayout(new Container());
+            cfg.setName(userName);
+            dataStorage.create(cfg);
+         }
+
+         // Create a blank navigation if needed
+         PageNavigation navigation = dataStorage.getPageNavigation(PortalConfig.USER_TYPE, userName);
+         if (navigation == null)
+         {
+            PageNavigation pageNav = new PageNavigation();
+            pageNav.setOwnerType(PortalConfig.USER_TYPE);
+            pageNav.setOwnerId(userName);
+            pageNav.setPriority(5);
+            pageNav.setNodes(new ArrayList<PageNode>());
+            portalConfigService.create(pageNav);
+         }
       }
-
-      // Create a blank navigation if needed
-      PageNavigation navigation = dataStorage.getPageNavigation(PortalConfig.USER_TYPE, userName);
-      if (navigation == null)
+      finally
       {
-         PageNavigation pageNav = new PageNavigation();
-         pageNav.setOwnerType(PortalConfig.USER_TYPE);
-         pageNav.setOwnerId(userName);
-         pageNav.setPriority(5);
-         pageNav.setNodes(new ArrayList<PageNode>());
-         portalConfigService.create(pageNav);
+         RequestLifeCycle.end();
       }
    }
 }

@@ -154,7 +154,7 @@ public class GadgetDeployer implements WebAppListener, Startable
       }
       finally
       {
-         lifeCycle.closeContext(context, true);
+         lifeCycle.closeContext(true);
       }
    }
 }

@@ -18,10 +18,12 @@
  */
 package org.exoplatform.portal.config;
 
+import org.exoplatform.commons.chromattic.ChromatticManager;
 import org.exoplatform.component.test.AbstractGateInTest;
 import org.exoplatform.component.test.ConfigurationUnit;
 import org.exoplatform.component.test.ConfiguredBy;
 import org.exoplatform.component.test.ContainerScope;
+import org.exoplatform.container.PortalContainer;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -43,5 +45,30 @@ public abstract class AbstractPortalTest extends AbstractGateInTest
    public AbstractPortalTest(String name)
    {
       super(name);
+   }
+
+   @Override
+   protected void end()
+   {
+      end(false);
+   }
+
+   protected void end(boolean save)
+   {
+      PortalContainer container = getContainer();
+      ChromatticManager manager = (ChromatticManager)container.getComponentInstanceOfType(ChromatticManager.class);
+      manager.getSynchronization().setSave(save);
+      super.end();
+   }
+
+   @Override
+   protected void setUp() throws Exception
+   {
+   }
+
+   @Override
+   protected void tearDown() throws Exception
+   {
+      //
    }
 }

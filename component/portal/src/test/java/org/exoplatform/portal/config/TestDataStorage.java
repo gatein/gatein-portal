@@ -52,14 +52,19 @@ import java.util.List;
 public class TestDataStorage extends AbstractPortalTest
 {
 
+   /** . */
    private final String testPortal = "testPortal";
 
+   /** . */
    private final String testPage = "portal::classic::testPage";
 
+   /** . */
    private final String testPortletPreferences = "portal#classic:/web/BannerPortlet/testPortletPreferences";
 
-   DataStorage storage_;
+   /** . */
+   private DataStorage storage_;
 
+   /** . */
    private POMSessionManager mgr;
 
    /** . */
@@ -73,8 +78,7 @@ public class TestDataStorage extends AbstractPortalTest
    public void setUp() throws Exception
    {
       super.setUp();
-      if (storage_ != null)
-         return;
+      begin();
       PortalContainer container = PortalContainer.getInstance();
       storage_ = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
       mgr = (POMSessionManager)container.getComponentInstanceOfType(POMSessionManager.class);
@@ -84,6 +88,8 @@ public class TestDataStorage extends AbstractPortalTest
    protected void tearDown() throws Exception
    {
       session.close();
+      end();
+      super.tearDown();
    }
 
    public void testCreatePortal() throws Exception

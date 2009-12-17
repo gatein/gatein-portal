@@ -42,8 +42,7 @@ public class TestContentRegistry extends AbstractPortalTest
    public void setUp() throws Exception
    {
       super.setUp();
-
-      //
+      begin();
       PortalContainer container = PortalContainer.getInstance();
       storage = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
       mgr = (POMSessionManager)container.getComponentInstanceOfType(POMSessionManager.class);
@@ -53,8 +52,8 @@ public class TestContentRegistry extends AbstractPortalTest
    protected void tearDown() throws Exception
    {
       session.close(false);
-      session = null;
-      storage = null;
+      end();
+      super.tearDown();
    }
 
    public void testFoo()

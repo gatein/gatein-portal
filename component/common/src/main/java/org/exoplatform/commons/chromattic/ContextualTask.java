@@ -46,7 +46,7 @@ public abstract class ContextualTask<V>
          }
          finally
          {
-            lifeCycle.closeContext(context, true);
+            lifeCycle.closeContext(true);
          }
       }
       else

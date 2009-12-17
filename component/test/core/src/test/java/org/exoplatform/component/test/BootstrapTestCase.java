@@ -40,8 +40,12 @@ public class BootstrapTestCase extends AbstractGateInTest
    {
       PortalContainer container = PortalContainer.getInstance();
       CustomService testService = (CustomService)container.getComponentInstanceOfType(CustomService.class);
-      assertSame(container, testService.currentContainer);
+      assertNull(testService.currentContainer);
+      begin();
       assertNotNull(testService);
+      assertSame(container, testService.currentContainer);
+      end();
+      assertNull(testService.currentContainer);
    }
 
    public void testDataSource() throws Exception

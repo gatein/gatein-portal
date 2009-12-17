@@ -22,6 +22,8 @@ package org.exoplatform.portal.pom.config;
 import org.chromattic.api.ChromatticSession;
 import org.chromattic.api.UndeclaredRepositoryException;
 import org.exoplatform.commons.chromattic.SessionContext;
+import org.exoplatform.commons.chromattic.SynchronizationListener;
+import org.exoplatform.commons.chromattic.SynchronizationStatus;
 import org.exoplatform.portal.application.PortletPreferences;
 import org.exoplatform.portal.pom.data.Mapper;
 import org.gatein.mop.api.Model;
@@ -54,6 +56,15 @@ public class POMSession
 {
 
    /** . */
+   private static final Map<ObjectType<?>, Class> mapping = new HashMap<ObjectType<?>, Class>();
+
+   static
+   {
+      mapping.put(ObjectType.PAGE, PageImpl.class);
+      mapping.put(ObjectType.NAVIGATION, NavigationImpl.class);
+   }
+
+   /** . */
    final POMSessionManager mgr;
 
    /** . */
@@ -82,6 +93,10 @@ public class POMSession
 
    public POMSession(POMSessionManager mgr, MOPChromatticLifeCycle configurator, SessionContext context)
    {
+      // Register for cache eviction
+      context.addSynchronizationListener(listener);
+
+      //
       this.mgr = mgr;
       this.isInTask = false;
       this.markedForRollback = false;
@@ -326,13 +341,22 @@ public class POMSession
       return session.createQueryBuilder().from(mappedClass).<O> where(statement).get().objects();
    }
 
-   private static final Map<ObjectType<?>, Class> mapping = new HashMap<ObjectType<?>, Class>();
-
-   static
+   private final SynchronizationListener listener = new SynchronizationListener()
    {
-      mapping.put(ObjectType.PAGE, PageImpl.class);
-      mapping.put(ObjectType.NAVIGATION, NavigationImpl.class);
-   }
+      public void beforeSynchronization()
+      {
+      }
+      public void afterSynchronization(SynchronizationStatus status)
+      {
+         if (status == SynchronizationStatus.SAVED && staleKeys != null)
+         {
+            for (Serializable key : staleKeys)
+            {
+               mgr.cache.remove(key);
+            }
+         }
+      }
+   };
 
    public void execute(POMTask task) throws Exception
    {
@@ -394,21 +418,13 @@ public class POMSession
          save();
       }
 
+      // Close model
       if (model != null)
       {
          model.close();
       }
 
       //
-      configurator.closeContext(context, save & markedForRollback);
-
-      //
-      if (staleKeys != null)
-      {
-         for (Serializable key : staleKeys)
-         {
-            mgr.cache.remove(key);
-         }
-      }
+      configurator.closeContext(save & markedForRollback);
    }
 }

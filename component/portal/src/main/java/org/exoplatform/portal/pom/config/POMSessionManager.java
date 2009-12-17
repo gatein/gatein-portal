@@ -42,12 +42,6 @@ public class POMSessionManager implements Startable
    private MOPService pomService;
 
    /** . */
-   final String repositoryName = "repository";
-
-   /** . */
-   final String workspaceName = "portal-system";
-
-   /** . */
    final ExoCache<Serializable, Object> cache;
 
    /** . */
@@ -132,8 +126,7 @@ public class POMSessionManager implements Startable
    }
 
    /**
-    * <p>Execute the task with a session. The method attempts first to get a current session and if no such session
-    * is found then a session will be created for the scope of the method.</p>
+    * <p>Execute the task with a session.</p>
     *
     * @param task the task to execute
     * @throws Exception any exception thrown by the task
@@ -141,22 +134,9 @@ public class POMSessionManager implements Startable
    public <T extends POMTask> T execute(T task) throws Exception
    {
       POMSession session = getSession();
-      if (session == null)
-      {
-         session = openSession();
-         try
-         {
-            executor.execute(session, task);
-         }
-         finally
-         {
-            session.close(true);
-         }
-      }
-      else
-      {
-         executor.execute(session, task);
-      }
+
+      //
+      executor.execute(session, task);
 
       //
       return task;

@@ -54,6 +54,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.CountDownLatch;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -111,9 +112,8 @@ public class TestUserPortalConfigService extends AbstractPortalTest
          }
       };
 
-      PortalContainer container = PortalContainer.getInstance();
-      userPortalConfigSer_ =
-         (UserPortalConfigService)container.getComponentInstanceOfType(UserPortalConfigService.class);
+      PortalContainer container = getContainer();
+      userPortalConfigSer_ = (UserPortalConfigService)container.getComponentInstanceOfType(UserPortalConfigService.class);
       orgService_ = (OrganizationService)container.getComponentInstanceOfType(OrganizationService.class);
       mgr = (POMSessionManager)container.getComponentInstanceOfType(POMSessionManager.class);
       authenticator = (Authenticator)container.getComponentInstanceOfType(Authenticator.class);
@@ -165,7 +165,7 @@ public class TestUserPortalConfigService extends AbstractPortalTest
             assertEquals("classic", portalCfg.getName());
             assertNotNull(userPortalCfg.getNavigations());
             Map<String, PageNavigation> navigations = toMap(userPortalCfg);
-            assertEquals(5, navigations.size());
+            assertEquals("expected to have 5 navigations instead of " + navigations, 5, navigations.size());
             assertTrue(navigations.containsKey("portal::classic"));
             assertTrue(navigations.containsKey("group::/platform/administrators"));
             assertTrue(navigations.containsKey("group::/organization/management/executive-board"));
@@ -189,7 +189,7 @@ public class TestUserPortalConfigService extends AbstractPortalTest
             assertEquals("classic", portalCfg.getName());
             assertNotNull(userPortalCfg.getNavigations());
             Map<String, PageNavigation> navigations = toMap(userPortalCfg);
-            assertEquals(5, navigations.size());
+            assertEquals("expected to have 5 navigations instead of " + navigations, 5, navigations.size());
             assertTrue(navigations.containsKey("portal::classic"));
             assertTrue(navigations.containsKey("group::/platform/administrators"));
             assertTrue(navigations.containsKey("group::/organization/management/executive-board"));
@@ -249,7 +249,7 @@ public class TestUserPortalConfigService extends AbstractPortalTest
          {
             UserPortalConfig userPortalCfg = userPortalConfigSer_.getUserPortalConfig("classic", "root");
             List<PageNavigation> navigations = userPortalCfg.getNavigations();
-            assertEquals(5, navigations.size());
+            assertEquals("expected to have 5 navigations instead of " + navigations, 5, navigations.size());
             assertEquals("classic", navigations.get(0).getOwnerId()); // 1
             assertEquals("/platform/administrators", navigations.get(1).getOwnerId()); // 2
             assertEquals("root", navigations.get(2).getOwnerId()); // 3
@@ -274,7 +274,7 @@ public class TestUserPortalConfigService extends AbstractPortalTest
             assertEquals("jazz", portalCfg.getName());
             assertNotNull(userPortalCfg.getNavigations());
             Map<String, PageNavigation> navigations = toMap(userPortalCfg);
-            assertEquals(5, navigations.size());
+            assertEquals("expected to have 5 navigations instead of " + navigations, 5, navigations.size());
             assertTrue(navigations.containsKey("portal::jazz"));
             assertTrue(navigations.containsKey("group::/platform/administrators"));
             assertTrue(navigations.containsKey("group::/organization/management/executive-board"));
@@ -565,6 +565,7 @@ public class TestUserPortalConfigService extends AbstractPortalTest
       }.execute(null);
    }
 
+/*
    public void testCreateMultipleNavigations(){
       for(int i =0; i < 10; i++){
          createNavigation(null, "group", "/platform/administrators" + i);
@@ -622,6 +623,7 @@ public class TestUserPortalConfigService extends AbstractPortalTest
          }
       }.execute(user);
    }
+*/
 
    public void testUpdateNavigation()
    {
@@ -833,6 +835,9 @@ public class TestUserPortalConfigService extends AbstractPortalTest
          Throwable failure = null;
 
          //
+         begin();
+
+         //
          ConversationState conversationState = null;
          if (userId != null)
          {
@@ -849,10 +854,6 @@ public class TestUserPortalConfigService extends AbstractPortalTest
          //
          if (failure == null)
          {
-            // Clear cache
-//            mgr.clearCache();
-
-            //
             mopSession = mgr.openSession();
             if (failure == null)
             {
@@ -870,8 +871,8 @@ public class TestUserPortalConfigService extends AbstractPortalTest
                finally
                {
                   ConversationState.setCurrent(null);
-                  mopSession.close();
-                  mopSession = null;
+                  mopSession.close(false);
+                  end();
                }
             }
          }

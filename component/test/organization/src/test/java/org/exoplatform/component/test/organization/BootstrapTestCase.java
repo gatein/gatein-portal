@@ -52,6 +52,7 @@ public class BootstrapTestCase extends AbstractGateInTest
       OrganizationService organization = (OrganizationService)container.getComponentInstanceOfType(OrganizationService.class);
       assertNotNull(organization);
 
+      begin();
       User test = new UserImpl("testUser");
       organization.getUserHandler().createUser(test, false);
 
@@ -59,6 +60,7 @@ public class BootstrapTestCase extends AbstractGateInTest
       assertNull(test);
       test = organization.getUserHandler().findUserByName("testUser");
       assertNotNull(test);
+      end();
    }
 
 }

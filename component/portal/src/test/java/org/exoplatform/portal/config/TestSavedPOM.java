@@ -66,11 +66,9 @@ public class TestSavedPOM extends AbstractPortalTest
    public void setUp() throws Exception
    {
       super.setUp();
-
-      //
-      PortalContainer container = PortalContainer.getInstance();
-      portalConfigService =
-         (UserPortalConfigService)container.getComponentInstanceOfType(UserPortalConfigService.class);
+      begin();
+      PortalContainer container = getContainer();
+      portalConfigService = (UserPortalConfigService)container.getComponentInstanceOfType(UserPortalConfigService.class);
       storage = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
       mgr = (POMSessionManager)container.getComponentInstanceOfType(POMSessionManager.class);
       session = mgr.openSession();
@@ -79,7 +77,8 @@ public class TestSavedPOM extends AbstractPortalTest
    protected void tearDown() throws Exception
    {
       session.close();
-      storage = null;
+      end();
+      super.tearDown();
    }
 
    public void testNavigation() throws Exception

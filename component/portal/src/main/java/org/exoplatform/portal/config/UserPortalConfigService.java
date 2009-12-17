@@ -19,8 +19,11 @@
 
 package org.exoplatform.portal.config;
 
+import org.exoplatform.commons.chromattic.ChromatticManager;
 import org.exoplatform.commons.utils.PageList;
+import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.component.ComponentPlugin;
+import org.exoplatform.container.component.RequestLifeCycle;
 import org.exoplatform.portal.config.model.Application;
 import org.exoplatform.portal.config.model.Container;
 import org.exoplatform.portal.pom.data.ModelChange;
@@ -30,7 +33,6 @@ import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.TransientApplicationState;
-import org.exoplatform.portal.pom.config.ModelDemarcation;
 import org.exoplatform.services.listener.ListenerService;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
@@ -77,13 +79,17 @@ public class UserPortalConfigService implements Startable
 
    private Log log = ExoLogger.getLogger("Portal:UserPortalConfigService");
 
-   public UserPortalConfigService(UserACL userACL, DataStorage storage,
-      OrganizationService orgService, ListenerService listenerService) throws Exception
+   private ChromatticManager manager;
+
+   public UserPortalConfigService(
+      UserACL userACL, DataStorage storage,
+      OrganizationService orgService, ListenerService listenerService, ChromatticManager manager) throws Exception
    {
       this.storage_ = storage;
       this.orgService_ = orgService;
       this.listenerService = listenerService;
       this.userACL_ = userACL;
+      this.manager = manager;
    }
 
    /**
@@ -636,29 +642,19 @@ public class UserPortalConfigService implements Startable
             return;
 
          //
-         if (storage_ instanceof ModelDemarcation)
-         {
-            ((ModelDemarcation)storage_).begin();
-         }
+         RequestLifeCycle.begin(PortalContainer.getInstance());
 
+         //
          newPortalConfigListener_.run();
       }
       catch (Exception e)
       {
          log.error("Could not import initial data", e);
 
-         //
-         if (storage_ instanceof ModelDemarcation)
-         {
-            ((ModelDemarcation)storage_).end(false);
-         }
       }
       finally
       {
-         if (storage_ instanceof ModelDemarcation)
-         {
-            ((ModelDemarcation)storage_).end(true);
-         }
+         RequestLifeCycle.end();
       }
    }
 

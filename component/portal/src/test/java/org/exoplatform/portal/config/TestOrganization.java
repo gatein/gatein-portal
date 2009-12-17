@@ -21,12 +21,10 @@ package org.exoplatform.portal.config;
 
 import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.container.PortalContainer;
-import org.exoplatform.container.component.ComponentRequestLifecycle;
 import org.exoplatform.services.organization.GroupHandler;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.UserHandler;
-import org.exoplatform.test.BasicTestCase;
 
 import java.util.Collection;
 import java.util.List;
@@ -43,17 +41,17 @@ public class TestOrganization extends AbstractPortalTest
    @Override
    protected void setUp() throws Exception
    {
-      PortalContainer container = PortalContainer.getInstance();
+      super.setUp();
+      begin();
+      PortalContainer container = getContainer();
       organizationService = (OrganizationService)container.getComponentInstance(OrganizationService.class);
-      ((ComponentRequestLifecycle)organizationService).startRequest(container);
    }
 
    @Override
    protected void tearDown() throws Exception
    {
-      PortalContainer container = PortalContainer.getInstance();
-      organizationService = (OrganizationService)container.getComponentInstance(OrganizationService.class);
-      ((ComponentRequestLifecycle)organizationService).endRequest(container);
+      end();
+      super.tearDown();
    }
 
    public void testFindGroups() throws Exception

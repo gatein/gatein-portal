@@ -311,6 +311,7 @@
       <type>org.exoplatform.portal.config.GroupPortalConfigListener</type>
     </component-plugin>
 
+<!--
 	  <component-plugin>
 	    <name>ecm.new.user.event.listener</name>
 	    <set-method>addListenerPlugin</set-method>
@@ -359,5 +360,6 @@
 	      </object-param>
 	    </init-params>
 	  </component-plugin>
+-->
   </external-component-plugins>
 </configuration>
