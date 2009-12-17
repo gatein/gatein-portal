@@ -34,12 +34,12 @@
 							<property name="multi-db" value="false" />
 							<property name="update-storage" value="true" />
 							<property name="max-buffer-size" value="204800" />
-							<property name="swap-directory" value="../temp/swap/sample-ws${container.name.suffix}" />
+							<property name="swap-directory" value="${gatein.jcr.data.dir}/swap/sample-ws${container.name.suffix}" />
 						</properties>
 						<value-storages>
 							<value-storage id="sample-ws" class="org.exoplatform.services.jcr.impl.storage.value.fs.TreeFileValueStorage">
 								<properties>
-									<property name="path" value="../temp/values/sample-ws${container.name.suffix}" />
+									<property name="path" value="${gatein.jcr.data.dir}/values/sample-ws${container.name.suffix}" />
 								</properties>
 								<filters>
 									<filter property-type="Binary" />
@@ -62,14 +62,14 @@
 					</cache>
 					<query-handler class="org.exoplatform.services.jcr.impl.core.query.lucene.SearchIndex">
 						<properties>
-							<property name="index-dir" value="../temp/jcrlucenedb/sample-ws${container.name.suffix}" />
+							<property name="index-dir" value="${gatein.jcr.data.dir}/jcrlucenedb/sample-ws${container.name.suffix}" />
 						</properties>
 					</query-handler>
 					<lock-manager>
 						<time-out>15m</time-out><!-- 15min -->
 						<persister class="org.exoplatform.services.jcr.impl.core.lock.FileSystemLockPersister">
 							<properties>
-								<property name="path" value="../temp/lock/sample-ws${container.name.suffix}" />
+								<property name="path" value="${gatein.jcr.data.dir}/lock/sample-ws${container.name.suffix}" />
 							</properties>
 						</persister>
 					</lock-manager>
