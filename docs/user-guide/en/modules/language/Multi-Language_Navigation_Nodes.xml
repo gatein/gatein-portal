@@ -165,163 +165,165 @@
 		</para>
 
 		<para>
-			Do as follows: 1. Go to <emphasis role="bold">GateIn Start</emphasis> -&gt; <emphasis role="bold">Page Navigation</emphasis> -&gt; <emphasis role="bold">Administration</emphasis> --&gt; <emphasis role="bold">Internationalization</emphasis>
+			To utilize Internationalization features do the following: 
 		</para>
-		<mediaobject>
-			<imageobject>
-				<imagedata fileref="images/Internal2.png" format="PNG" width="444" />
-			</imageobject>
-		</mediaobject>
-		<para>
-			2. Select a data resource that you want to internationalize. You also may search the desired resource name with a specific language:
-		</para>
-		<itemizedlist>
-			<listitem>
+		<procedure>
+			<step>
 				<para>
-					Enter a resource name in the <emphasis role="bold">Name</emphasis> field in the <emphasis role="bold">Search Resource</emphasis> form
+					Go to <emphasis role="bold">GateIn Start</emphasis> -&gt; <emphasis role="bold">Page Navigation</emphasis> -&gt; <emphasis role="bold">Administration</emphasis> --&gt; <emphasis role="bold">Internationalization</emphasis>
 				</para>
-			</listitem>
-			<listitem>
+				<mediaobject>
+					<imageobject>
+						<imagedata fileref="images/Internal2.png" format="PNG" width="444" />
+					</imageobject>
+				</mediaobject>
+			</step>
+			<step>
 				<para>
-					Select a corresponding language of the resource.
+					Select a data resource that you want to internationalize. You also may search the desired resource name with a specific language:
 				</para>
-			</listitem>
-			<listitem>
+				<itemizedlist>
+					<listitem>
+						<para>
+							Enter a resource name in the <emphasis role="bold">Name</emphasis> field in the <emphasis role="bold">Search Resource</emphasis> form
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							Select a corresponding language of the resource.
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							Click on the <emphasis role="bold">Search</emphasis> button to match all data resource and display the result on the table above.
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							If you want to define a key for a node which belongs to a specific portal, search for a resource like:locale.navigation.portal.portal name]
+						</para>
+					</listitem>
+				</itemizedlist>
 				<para>
-					Click on the <emphasis role="bold">Search</emphasis> button to match all data resource and display the result on the table above.
+					+Example:+ if you want to define a key of a node of portal "classic" in language French, search resource: locale.navigation.portal.classic with value in the <emphasis role="bold">Language</emphasis> field is "fr"
 				</para>
-			</listitem>
-			<listitem>
+				<itemizedlist>
+					<listitem>
+						<para>
+							If you want to define a key for the node that belongs to a specific group, search resource like: locale.navigation.group.group path]
+						</para>
+					</listitem>
+				</itemizedlist>
 				<para>
-					If you want to define a key for a node which belongs to a specific portal, search for a resource like:locale.navigation.portal.portal name]
+					+Example:+ if you want to define a key for a node on navigation of "administrators" group that is the sub one of the "platform" group in language French, search resource: locale.navigation.group.platform.administrators with the value in the <emphasis role="bold">Language</emphasis> field is "fr"
 				</para>
-			</listitem>
-		</itemizedlist>
-		<para>
-			+Example:+ if you want to define a key of a node of portal "classic" in language French, search resource: locale.navigation.portal.classic with value in the <emphasis role="bold">Language</emphasis> field is "fr"
-		</para>
-		<itemizedlist>
-			<listitem>
+			</step>
+			<step>
 				<para>
-					If you want to define a key for the node that belongs to a specific group, search resource like: locale.navigation.group.group path]
+					Click the magnifying glass!images/MagnifyIcon.png! icon corresponding to a data resource to see details of the resource file. Click the <emphasis role="bold">Edit</emphasis> button in order to modify the content.
 				</para>
-			</listitem>
-		</itemizedlist>
-		<para>
-			+Example:+ if you want to define a key for a node on navigation of "administrators" group that is the sub one of the "platform" group in language French, search resource: locale.navigation.group.platform.administrators with the value in the <emphasis role="bold">Language</emphasis> field is "fr"
-		</para>
-		<para>
-			3. Click the magnifying glass!images/MagnifyIcon.png! icon corresponding to a data resource to see details of the resource file. Click the <emphasis role="bold">Edit</emphasis> button in order to modify the content.
-		</para>
-		<para>
-			4. Enter the resource key with the string that will be displayed as node name on the navigation bar .
-		</para>
-		<para>
-			5. Click on the <emphasis role="bold">Save</emphasis> button.
-		</para>
-
-	</section>
-	
-	<section id="sect-User_Guide-Multi_Language_Navigation_Nodes-Example">
-		<title>Example</title>
-		<itemizedlist>
-			<listitem>
+			</step>
+			<step>
 				<para>
-					The current language is English
+					Enter the resource key with the string that will be displayed as node name on the navigation bar .
 				</para>
-			</listitem>
-			<listitem>
-				<para>
-					Go to <emphasis role="bold">Create Page Wizard</emphasis>, at step 1, select navigation and enter values like in the figure below:
-				</para>
-			</listitem>
-		</itemizedlist>
-		<mediaobject>
-			<imageobject>
-				<imagedata fileref="images/PageWizard.png" format="PNG" width="444" />
-			</imageobject>
-		</mediaobject>
-		<itemizedlist>
-			<listitem>
-				<para>
-					Click <emphasis role="bold">Next</emphasis>, at step 2 and 3, set layout for page Test button.
-				</para>
-			</listitem>
-			<listitem>
-				<para>
-					After creating page with that key, the node on the navigation bar will be displayed with name #{AAA}
-				</para>
-			</listitem>
-		</itemizedlist>
-		<mediaobject>
-			<imageobject>
-				<imagedata fileref="images/AAANavi.png" format="PNG" width="444" />
-			</imageobject>
-		</mediaobject>
-		<itemizedlist>
-			<listitem>
-				<para>
-					And now you have to define what to display instead of displaying the key. Go to <emphasis role="bold">GateIn Start</emphasis> -&gt; <emphasis role="bold">Page Navigation</emphasis> -&gt; <emphasis role="bold">Administration</emphasis> --&gt; <emphasis role="bold">Internationalization</emphasis>.
-				</para>
-			</listitem>
-			<listitem>
-				<para>
-					Search resource locale.navigation.portal.classic with language French (fr)
-				</para>
-			</listitem>
-		</itemizedlist>
-		<mediaobject>
-			<imageobject>
-				<imagedata fileref="images/Search.png" format="PNG" width="444" />
-			</imageobject>
-		</mediaobject>
-		<itemizedlist>
-			<listitem>
-				<para>
-					Click the magnifying icon!images/MagnifyIcon.png! to see the content.
-				</para>
-			</listitem>
-		</itemizedlist>
-		<mediaobject>
-			<imageobject>
-				<imagedata fileref="images/ResourceData1.png" format="PNG" width="444" />
-			</imageobject>
-		</mediaobject>
-		<itemizedlist>
-			<listitem>
-				<para>
-					Click on the <emphasis role="bold">Edit</emphasis> button to modify. In the <emphasis role="bold">Resource</emphasis> field, enter the key and assign the string to display.
-				</para>
-			</listitem>
-		</itemizedlist>
-		<mediaobject>
-			<imageobject>
-				<imagedata fileref="images/AfterEdit1.png" format="PNG" width="444" />
-			</imageobject>
-		</mediaobject>
-		<itemizedlist>
-			<listitem>
+			</step>
+			<step>
 				<para>
 					Click on the <emphasis role="bold">Save</emphasis> button.
 				</para>
-			</listitem>
-			<listitem>
+			</step>
+		</procedure>
+	</section>
+
+	<section id="sect-User_Guide-Multi_Language_Navigation_Nodes-Example">
+		<title>Walk-through</title>
+		<procedure>
+			<para>
+				Below is a graphical walk-through illustrating how to change the language of a resource. In this case the current language is English and will be changed to French.
+			</para>
+			<step>
+				<para>
+					Go to <emphasis role="bold">Create Page Wizard</emphasis>, at step 1, select navigation and enter values like in the figure below:
+				</para>
+				<mediaobject>
+					<imageobject>
+						<imagedata fileref="images/PageWizard.png" format="PNG" width="444" />
+					</imageobject>
+				</mediaobject>
+			</step>
+			<step>
+				<para>
+					Click <emphasis role="bold">Next</emphasis>, at step 2 and 3, set layout for page Test button.
+				</para>
+			</step>
+			<step>
+				<para>
+					After creating page with that key, the node on the navigation bar will be displayed with name #{AAA}
+				</para>
+				<mediaobject>
+					<imageobject>
+						<imagedata fileref="images/AAANavi.png" format="PNG" width="444" />
+					</imageobject>
+				</mediaobject>
+			</step>
+			<step>
+				<para>
+					And now you have to define what to display instead of displaying the key. Go to <emphasis role="bold">GateIn Start</emphasis> -&gt; <emphasis role="bold">Page Navigation</emphasis> -&gt; <emphasis role="bold">Administration</emphasis> --&gt; <emphasis role="bold">Internationalization</emphasis>.
+				</para>
+			</step>
+			<step>
+				<para>
+					Search resource locale.navigation.portal.classic with language French (fr)
+				</para>
+				<mediaobject>
+					<imageobject>
+						<imagedata fileref="images/Search.png" format="PNG" width="444" />
+					</imageobject>
+				</mediaobject>
+			</step>
+			<step>
+				<para>
+					Click the magnifying icon!images/MagnifyIcon.png! to see the content.
+				</para>
+				<mediaobject>
+					<imageobject>
+						<imagedata fileref="images/ResourceData1.png" format="PNG" width="444" />
+					</imageobject>
+				</mediaobject>
+			</step>
+			<step>
+				<para>
+					Click on the <emphasis role="bold">Edit</emphasis> button to modify. In the <emphasis role="bold">Resource</emphasis> field, enter the key and assign the string to display.
+				</para>
+				<mediaobject>
+					<imageobject>
+						<imagedata fileref="images/AfterEdit1.png" format="PNG" width="444" />
+					</imageobject>
+				</mediaobject>
+			</step>
+			<step>
+				<para>
+					Click on the <emphasis role="bold">Save</emphasis> button.
+				</para>
+			</step>
+			<step>
 				<para>
 					Go to GateIn <emphasis role="bold">Start</emphasis> -&gt; <emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Language Settings</emphasis>: select French --&gt; Apply.
 				</para>
-			</listitem>
-			<listitem>
+			</step>
+			<step>
 				<para>
 					The French translation of your new resource key appears on the menu.
 				</para>
-			</listitem>
-		</itemizedlist>
-		<mediaobject>
-			<imageobject>
-				<imagedata fileref="images/Nouvel.png" format="PNG" width="444" />
-			</imageobject>
-		</mediaobject>
-	</section>
+				<mediaobject>
+					<imageobject>
+						<imagedata fileref="images/Nouvel.png" format="PNG" width="444" />
+					</imageobject>
+				</mediaobject>
+			</step>
+		</procedure>
+	</section>	
 
 </section>
 

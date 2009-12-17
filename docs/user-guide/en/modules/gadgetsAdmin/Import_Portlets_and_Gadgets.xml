@@ -25,32 +25,39 @@
 	<para>
 		This convenient feature that helps you import default portlets/gadgets automatically in different categories and these portlets/gadgets will be listed on the left pane.
 	</para>
-	<orderedlist numeration="arabic">
-		<listitem>
+	<note>	
+		<title>Technical Information about the Portlet Import</title>
 			<para>
-				info("Technical Information about the Portlet Import: The Application Registry looks in all webapps of your application server for a file located at WEB-INF/portlet.xml and registers the portlets found there. When the user clicks on "Auto Import" the portlets of all webapps are imported. If there is a portlet.xml file in a webapp a new category is created whose name is the webapp war name (or the webapp folder name). All the portlets that are configured in the portlet.xml file are added to the new category.")
+				The Application Registry looks in all webapps of your application server for a file located at WEB-INF/portlet.xml and registers the portlets found there. When the user clicks on "Auto Import" the portlets of all webapps are imported. If there is a portlet.xml file in a webapp a new category is created whose name is the webapp war name (or the webapp folder name). All the portlets that are configured in the portlet.xml file are added to the new category.")
 			</para>
-		</listitem>
-	</orderedlist>
-	<para>
-		1. Go to <emphasis role="bold">Administration</emphasis>-&gt; <emphasis role="bold">Application Registry</emphasis> page-&gt; <emphasis role="bold">Organize</emphasis> item on the navigation bar. A form for organizing portlets/gadgets will be displayed:
-	</para>
-	<mediaobject>
-		<imageobject>
-			<imagedata fileref="images/Org1.png" format="PNG" width="444" />
-		</imageobject>
-	</mediaobject>
-	<para>
-		2. Click the <emphasis role="bold">Auto Import</emphasis> button!images/Auto1.png! at upper right corner on the action bar. A pop up will be shown:
-	</para>
-	<mediaobject>
-		<imageobject>
-			<imagedata fileref="images/local.png" format="PNG" width="444" />
-		</imageobject>
-	</mediaobject>
-	<para>
-		2. Click the <emphasis role="bold">OK</emphasis> button to accept importing gadgets automatically. All portlets/gadgets categories will be imported and listed on the left pane.
-	</para>
+	</note> 
+	<procedure>
+		<step>
+			<para>
+				Go to <emphasis role="bold">Administration</emphasis>-&gt; <emphasis role="bold">Application Registry</emphasis> page-&gt; <emphasis role="bold">Organize</emphasis> item on the navigation bar. A form for organizing portlets/gadgets will be displayed:
+			</para>
+			<mediaobject>
+				<imageobject>
+					<imagedata fileref="images/Org1.png" format="PNG" width="444" />
+				</imageobject>
+			</mediaobject>
+		</step>
+		<step>
+			<para>
+				Click the <emphasis role="bold">Auto Import</emphasis> button!images/Auto1.png! at upper right corner on the action bar. A pop up will be shown:
+			</para>
+			<mediaobject>
+				<imageobject>
+					<imagedata fileref="images/local.png" format="PNG" width="444" />
+				</imageobject>
+			</mediaobject>
+		</step>
+		<step>
+			<para>
+				Click the <emphasis role="bold">OK</emphasis> button to accept importing gadgets automatically. All portlets/gadgets categories will be imported and listed on the left pane.
+			</para>
+		</step>
+	</procedure>
 </section>
 
 

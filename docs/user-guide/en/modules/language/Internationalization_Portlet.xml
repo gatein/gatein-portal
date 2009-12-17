@@ -33,62 +33,57 @@
 	<para>
 		Each resource supports a language. So, you can define a word or a phrase according to the supported language.
 	</para>
+
 	<section id="sect-User_Guide-Internationalization_Portlet-Add_a_new_Resource">
 		<title>Add a new Resource</title>
-		<para>
-			1. Select the <emphasis role="bold">New Resource</emphasis> button in the <emphasis role="bold">Internationalization Portlet</emphasis> form. The <emphasis role="bold">Resource Data</emphasis> form will appear:
-		</para>
-		<mediaobject>
-			<imageobject>
-				<imagedata fileref="images/ResourceData1.png" format="PNG" width="444" />
-			</imageobject>
-		</mediaobject>
-		<informaltable colsep="0" frame="none" rowsep="0">
-			<tgroup cols="2">
-				<colspec align="center"></colspec>
-				<colspec align="center"></colspec>
-				<tbody>
-					<row>
-						<entry>
-							<emphasis role="bold"> Name </emphasis>
-						</entry>
-						<entry>
-							<emphasis role="bold"> Description </emphasis>
-						</entry>
-					</row>
-					<row>
-						<entry>
-							Name
-						</entry>
-						<entry>
-							The name of Resource. This field is required.
-						</entry>
-					</row>
-					<row>
-						<entry>
-							Language
-						</entry>
-						<entry>
+		<procedure>
+			<step>
+				<para>
+					Select the <emphasis role="bold">New Resource</emphasis> button in the <emphasis role="bold">Internationalization Portlet</emphasis> form. The <emphasis role="bold">Resource Data</emphasis> form will appear:
+				</para>
+				<mediaobject>
+					<imageobject>
+						<imagedata fileref="images/ResourceData1.png" format="PNG" width="444" />
+					</imageobject>
+				</mediaobject>
+				<variablelist>
+					<varlistentry>
+					<term>Name</term>
+						<listitem>
+							<para>
+								The name of Resource. This field is required.
+							</para>
+						</listitem>
+					</varlistentry>
+					<varlistentry>
+					<term>Language</term>
+						<listitem>
+						<para>
 							The language that this resource 'll support. This field is required.
-						</entry>
-					</row>
-					<row>
-						<entry>
-							Resource
-						</entry>
-						<entry>
+						</para>
+						</listitem>
+					</varlistentry>
+					<varlistentry>
+					<term>Resource</term>
+						<listitem>
+						<para>
 							The word or the phrase which you want to define.
-						</entry>
-					</row>
-				</tbody>
-			</tgroup>
-		</informaltable>
-		<para>
-			2. Enter values into required fields.
-		</para>
-		<para>
-			3. Click the <emphasis role="bold">Save</emphasis> button to accept adding a new resource or the <emphasis role="bold">Cancel</emphasis> button to quit.
-		</para>
+						</para>
+						</listitem>
+					</varlistentry>
+				</variablelist>
+			</step>
+			<step>
+				<para>
+					Enter values into required fields.
+				</para>
+			</step>
+			<step>
+				<para>
+					Click the <emphasis role="bold">Save</emphasis> button to accept adding a new resource or the <emphasis role="bold">Cancel</emphasis> button to quit.
+				</para>
+			</step>
+		</procedure>
 	</section>
 	
 	<section id="sect-User_Guide-Internationalization_Portlet-View_and_Edit_a_Resource">
