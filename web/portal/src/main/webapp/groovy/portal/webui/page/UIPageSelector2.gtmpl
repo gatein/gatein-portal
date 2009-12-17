@@ -27,7 +27,7 @@
 	
 	UIFormInputSet uiform = uicomponent.getChild(UIFormInputSet.class); 
 %>
-<div class="UIPageSelector" id="<%=uicomponent.getId();%>" >
+<div class="UIPageSelector" id="<%=uicomponent.getId();%>">
 	<div class="PageSelectorTitle">
 		<div class="Icon BlueInfoBox16x16Icon"><span></span></div>
 		<div class="Title"><%=_ctx.appRes(uicomponent.getId()+".label.currentSelectedPage")%></div>
@@ -35,37 +35,37 @@
 	</div>
 	<div class="UIFormInfo">
 		<div class="FormInfoBG">
-			<div class="FormInfoIcon">
-				<div class="UIPropertyInfo">
-					<div class="OverflowContainer">
-						<div class="PropertyName"><%=_ctx.appRes(uicomponent.getId()+".header.id")%>:</div>
-						<div class="PropertyValue">
+			<div class="FormInfoIcon UIForm">
+				<table class="UIPropertyInfo UIFormGrid">
+					<tr>
+						<td class="FieldLabel"><%=_ctx.appRes(uicomponent.getId()+".header.id")%>:</td>
+						<td class="FieldComponent">
 							<% if(page != null) { %>
 							$pageId
 							<% } %>
-						</div>
-					</div>
-					<div class="OverflowContainer">
-						<div class="PropertyName"><%=_ctx.appRes(uicomponent.getId()+".label.name")%>:</div>
-						<div class="PropertyValue">
+						</td>
+					</tr>
+					<tr>
+						<td class="FieldLabel"><%=_ctx.appRes(uicomponent.getId()+".label.name")%>:</td>
+						<td class="FieldComponent">
 							<% if(page == null) { %>
 							<% uiform.renderChild("pageName");%>
 							<% } else { %>
 							$name
 							<% } %>
-						</div>
-					</div>
-					<div class="OverflowContainer">
-						<div class="PropertyName"><%=_ctx.appRes(uicomponent.getId()+".label.title")%>:</div>
-						<div class="PropertyValue">
+						</td>
+					</tr>
+					<tr>
+						<td class="FieldLabel"><%=_ctx.appRes(uicomponent.getId()+".label.title")%>:</td>
+						<td class="FieldComponent">
 							<% if(page == null) { %>
 							<% uiform.renderChild("pageTitle");%>
 							<% } else { %>
 							$title
 							<% } %>
-						</div>
-					</div>
-				</div>
+						</td>
+					</tr>
+				</table>
 			</div>
 		</div>
 	</div>
