@@ -58,7 +58,6 @@
 	margin: 7px auto;
 }
 
-
 .UIHomePagePortlet .TRContainer .VersionIcon {
 	background: url("DefaultSkin/background/HomePagePortlet.gif") no-repeat left -978px;
 	height: 65px;
@@ -181,11 +180,10 @@ _html .UIHomePagePortlet .HomePortletContent .RightAccountsContainer {
 
 .UIHomePagePortlet .HomePortletContent .AccountBlock {
 	height: 105px; 
-	width: 118px;
+	width: 160px;
 	float: left; /* orientation=lt */
 	float: right; /* orientation=rt */
-	padding: 0px 42px 0px 0px; /* orientation=lt */
-	padding: 0px 0px 0px 42px; /* orientation=rt */
+	text-align: right; /* orientation=rt */
 }
 
 .UIHomePagePortlet .HomePortletContent .AdministratorUser {
