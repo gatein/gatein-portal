@@ -41,56 +41,52 @@ public class DataCache extends TaskExecutionDecorator
       super(next);
    }
 
-   public void execute(POMSession session, POMTask task) throws Exception
+   public <V> V execute(POMSession session, POMTask<V> task) throws Exception
    {
       if (task instanceof CacheableDataTask)
       {
-         CacheableDataTask<?, ?> loadTask = (CacheableDataTask<?,?>)task;
+         CacheableDataTask<?, V> loadTask = (CacheableDataTask<?, V>)task;
          switch (loadTask.getAccessMode())
          {
             case READ:
-               read(session, loadTask);
-               break;
+               return read(session, loadTask);
             case CREATE:
-               create(session, loadTask);
-               break;
+               return create(session, loadTask);
             case WRITE:
-               write(session, loadTask);
-               break;
+               return write(session, loadTask);
             case DESTROY:
-               remove(session, loadTask);
-               break;
+               return remove(session, loadTask);
             default:
                throw new UnsupportedOperationException();
          }
       }
       else
       {
-         super.execute(session, task);
+         return super.execute(session, task);
       }
    }
 
-   private <K extends Serializable, V> void remove(POMSession session, CacheableDataTask<K, V> task) throws Exception
+   private <K extends Serializable, V> V remove(POMSession session, CacheableDataTask<K, V> task) throws Exception
    {
       K key = task.getKey();
       session.scheduleForEviction(key);
-      super.execute(session, task);
+      return super.execute(session, task);
    }
 
-   private <K extends Serializable, V> void write(POMSession session, CacheableDataTask<K, V> task) throws Exception
+   private <K extends Serializable, V> V write(POMSession session, CacheableDataTask<K, V> task) throws Exception
    {
       K key = task.getKey();
       session.scheduleForEviction(key);
-      super.execute(session, task);
+      return super.execute(session, task);
    }
 
-   private <K extends Serializable, V> void create(POMSession session, CacheableDataTask<K, V> task) throws Exception
+   private <K extends Serializable, V> V create(POMSession session, CacheableDataTask<K, V> task) throws Exception
    {
       // Nothing to do for now
-      super.execute(session, task);
+      return super.execute(session, task);
    }
 
-   private <K extends Serializable, V> void read(POMSession session, CacheableDataTask<K, V> task) throws Exception
+   private <K extends Serializable, V> V read(POMSession session, CacheableDataTask<K, V> task) throws Exception
    {
       if (!session.isModified())
       {
@@ -109,26 +105,28 @@ public class DataCache extends TaskExecutionDecorator
          //
          if (v != null)
          {
-            task.setValue(v);
+            return v;
          }
          else
          {
             readCount.incrementAndGet();
 
             //
-            super.execute(session, task);
+            v = super.execute(session, task);
 
             //
-            v = task.getValue();
             if (v != null)
             {
                session.putInCache(key, v);
             }
+
+            //
+            return v;
          }
       }
       else
       {
-         super.execute(session, task);
+         return super.execute(session, task);
       }
    }
 

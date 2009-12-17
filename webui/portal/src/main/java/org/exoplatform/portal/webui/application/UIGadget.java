@@ -24,8 +24,8 @@ import org.exoplatform.application.gadget.GadgetRegistryService;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.model.ApplicationState;
+import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.config.model.Properties;
-import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.WebAppController;
 import org.exoplatform.web.application.gadget.GadgetApplication;
@@ -355,7 +355,7 @@ public class UIGadget extends UIComponent
    public String getUserPref() throws Exception
    {
       DataStorage service = getApplicationComponent(DataStorage.class);
-      org.exoplatform.portal.pom.spi.gadget.Gadget pp = service.load(state);
+      org.exoplatform.portal.pom.spi.gadget.Gadget pp = service.load(state, ApplicationType.GADGET);
       return pp != null ? pp.getUserPref() : null;
    }
 

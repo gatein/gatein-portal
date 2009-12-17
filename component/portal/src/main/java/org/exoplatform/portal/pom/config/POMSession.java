@@ -358,7 +358,7 @@ public class POMSession
       }
    };
 
-   public void execute(POMTask task) throws Exception
+   public <V> V execute(POMTask<V> task) throws Exception
    {
       if (isInTask)
       {
@@ -370,8 +370,9 @@ public class POMSession
       try
       {
          isInTask = true;
-         task.run(this);
+         V v = task.run(this);
          needRollback = false;
+         return v;
       }
       finally
       {

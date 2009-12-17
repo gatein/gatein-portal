@@ -21,8 +21,8 @@ package org.exoplatform.portal.pom.config.tasks;
 
 import org.exoplatform.portal.application.PortletPreferences;
 import org.exoplatform.portal.application.Preference;
+import org.exoplatform.portal.pom.config.POMTask;
 import org.exoplatform.portal.pom.data.Mapper;
-import org.exoplatform.portal.pom.config.AbstractPOMTask;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.spi.portlet.Portlet;
 import org.exoplatform.portal.pom.spi.portlet.PortletBuilder;
@@ -39,7 +39,7 @@ import java.util.ArrayList;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public abstract class PortletPreferencesTask extends AbstractPOMTask
+public abstract class PortletPreferencesTask
 {
 
    /*
@@ -92,7 +92,7 @@ public abstract class PortletPreferencesTask extends AbstractPOMTask
       this.windowId = windowId;
    }
 
-   public static class Save extends PortletPreferencesTask
+   public static class Save extends PortletPreferencesTask implements POMTask<Void>
    {
 
       /** . */
@@ -106,7 +106,12 @@ public abstract class PortletPreferencesTask extends AbstractPOMTask
          this.prefs = prefs;
       }
 
-      public void run(POMSession session) throws Exception
+      public Class<Void> getValueType()
+      {
+         return Void.class;
+      }
+
+      public Void run(POMSession session) throws Exception
       {
          Workspace workspace = session.getWorkspace();
          Site site = workspace.getSite(siteType, ownerId);
@@ -172,26 +177,26 @@ public abstract class PortletPreferencesTask extends AbstractPOMTask
          {
             session.addPortletPreferences(prefs);
          }
+
+         //
+         return null;
       }
    }
 
-   public static class Load extends PortletPreferencesTask
+   public static class Load extends PortletPreferencesTask implements POMTask<PortletPreferences>
    {
-
-      /** . */
-      private PortletPreferences prefs;
 
       public Load(String windowId)
       {
          super(windowId);
       }
 
-      public PortletPreferences getPreferences()
+      public Class<PortletPreferences> getValueType()
       {
-         return prefs;
+         return PortletPreferences.class;
       }
 
-      public void run(POMSession session) throws Exception
+      public PortletPreferences run(POMSession session) throws Exception
       {
          Workspace workspace = session.getWorkspace();
          Site site = workspace.getSite(siteType, ownerId);
@@ -245,10 +250,13 @@ public abstract class PortletPreferencesTask extends AbstractPOMTask
                   PortletPreferences prefs = new PortletPreferences();
                   prefs.setWindowId(windowId);
                   prefs.setPreferences(list);
-                  this.prefs = prefs;
+                  return prefs;
                }
             }
          }
+
+         //
+         return null;
       }
    }
 }

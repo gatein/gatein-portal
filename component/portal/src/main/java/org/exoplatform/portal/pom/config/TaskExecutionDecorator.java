@@ -33,9 +33,9 @@ public class TaskExecutionDecorator implements TaskExecutor
       this.next = next;
    }
 
-   public void execute(POMSession session, POMTask task) throws Exception
+   public <V> V execute(POMSession session, POMTask<V> task) throws Exception
    {
-      next.execute(session, task);
+      return next.execute(session, task);
    }
 
    public <E extends TaskExecutor> E getDecorator(Class<E> decoratorClass)

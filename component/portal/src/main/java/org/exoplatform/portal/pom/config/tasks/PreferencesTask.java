@@ -19,8 +19,8 @@
 
 package org.exoplatform.portal.pom.config.tasks;
 
-import org.exoplatform.portal.pom.config.AbstractPOMTask;
 import org.exoplatform.portal.pom.config.POMSession;
+import org.exoplatform.portal.pom.config.POMTask;
 import org.exoplatform.portal.pom.config.cache.CacheableDataTask;
 import org.exoplatform.portal.pom.config.cache.DataAccessMode;
 import org.gatein.mop.api.content.Customization;
@@ -29,50 +29,43 @@ import org.gatein.mop.api.content.Customization;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public abstract class PreferencesTask<S> extends AbstractPOMTask
+public abstract class PreferencesTask<S>
 {
 
    /** . */
    private static final Object NULL_PREFS = new Object();
 
-   public static class GetContentId<S> extends PreferencesTask<S>
+   public static class GetContentId<S> extends PreferencesTask<S> implements POMTask<String>
    {
 
       /** . */
       private final String storageId;
-
-      /** . */
-      private String contentId;
 
       public GetContentId(String storageId)
       {
          this.storageId = storageId;
       }
 
-      public void run(POMSession session) throws Exception
+      public String run(POMSession session) throws Exception
       {
          Customization<S> customization = (Customization<S>)session.findCustomizationById(storageId);
-         contentId = customization.getContentId();
-      }
-
-      public String getContentId()
-      {
-         return contentId;
+         return customization.getContentId();
       }
    }
 
-   public static class Load<S> extends PreferencesTask<S> implements CacheableDataTask<String, Object>
+   public static class Load<S> extends PreferencesTask<S> implements CacheableDataTask<String, S>
    {
 
       /** . */
       private final String storageId;
 
       /** . */
-      private S prefs;
+      private final Class<S> valueType;
 
-      public Load(String storageId)
+      public Load(String storageId, Class<S> valueType)
       {
          this.storageId = storageId;
+         this.valueType = valueType;
       }
 
       public DataAccessMode getAccessMode()
@@ -80,22 +73,9 @@ public abstract class PreferencesTask<S> extends AbstractPOMTask
          return DataAccessMode.READ;
       }
 
-      public void setValue(Object value)
+      public Class<S> getValueType()
       {
-         if (value != NULL_PREFS)
-         {
-            prefs = (S)value;
-         }
-      }
-
-      public Class<Object> getValueType()
-      {
-         return Object.class;
-      }
-
-      public Object getValue()
-      {
-         return prefs == null ? NULL_PREFS : prefs;
+         return valueType;
       }
 
       public String getKey()
@@ -103,15 +83,11 @@ public abstract class PreferencesTask<S> extends AbstractPOMTask
          return storageId;
       }
 
-      public void run(POMSession session) throws Exception
+      public S run(POMSession session) throws Exception
       {
          Customization<S> customization = (Customization<S>)session.findCustomizationById(storageId);
-         prefs = customization.getVirtualState();
-      }
-
-      public S getState()
-      {
-         return prefs;
+         S prefs = customization.getVirtualState();
+         return prefs == null ? (S)NULL_PREFS : prefs;
       }
 
       @Override
@@ -121,7 +97,7 @@ public abstract class PreferencesTask<S> extends AbstractPOMTask
       }
    }
 
-   public static class Save<S> extends PreferencesTask<S> implements CacheableDataTask<String, Object>
+   public static class Save<S> extends PreferencesTask<S> implements CacheableDataTask<String, Void>
    {
 
       /** . */
@@ -141,19 +117,9 @@ public abstract class PreferencesTask<S> extends AbstractPOMTask
          return DataAccessMode.WRITE;
       }
 
-      public void setValue(Object value)
+      public Class<Void> getValueType()
       {
-         throw new UnsupportedOperationException();
-      }
-
-      public Class<Object> getValueType()
-      {
-         return Object.class;
-      }
-
-      public Object getValue()
-      {
-         return prefs == null ? NULL_PREFS : prefs ;
+         return Void.class;
       }
 
       public String getKey()
@@ -161,7 +127,7 @@ public abstract class PreferencesTask<S> extends AbstractPOMTask
          return storageId;
       }
 
-      public void run(POMSession session) throws Exception
+      public Void run(POMSession session) throws Exception
       {
 
          Customization<S> customization = (Customization<S>)session.findCustomizationById(storageId);
@@ -174,6 +140,9 @@ public abstract class PreferencesTask<S> extends AbstractPOMTask
          {
             customization.setState(null);
          }
+
+         //
+         return null;
       }
 
       @Override

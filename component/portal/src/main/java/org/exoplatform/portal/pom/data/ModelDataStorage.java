@@ -23,6 +23,7 @@ import org.exoplatform.commons.utils.LazyPageList;
 import org.exoplatform.portal.application.PortletPreferences;
 import org.exoplatform.portal.config.Query;
 import org.exoplatform.portal.config.model.ApplicationState;
+import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.config.model.Container;
 import org.exoplatform.portal.pom.data.ModelChange;
 import org.exoplatform.portal.pom.data.PageData;
@@ -91,7 +92,7 @@ public interface ModelDataStorage
 
    public <S> String getId(ApplicationState<S> state) throws Exception;
 
-   public <S> S load(ApplicationState<S> state) throws Exception;
+   public <S> S load(ApplicationState<S> state, ApplicationType<S> type) throws Exception;
 
    public <S> ApplicationState<S> save(ApplicationState<S> state, S preferences) throws Exception;
 

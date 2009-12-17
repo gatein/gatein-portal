@@ -34,11 +34,11 @@ public class ExecutorDispatcher implements TaskExecutor
    /** . */
    private static final String[] padding = {"    ", "   ", "  ", " "};
 
-   public void execute(POMSession session, POMTask task) throws Exception
+   public <V> V execute(POMSession session, POMTask<V> task) throws Exception
    {
       String s = task.toString();
       long t0 = System.currentTimeMillis();
-      session.execute(task);
+      V v = session.execute(task);
       long t1 = System.currentTimeMillis();
       String t = "" + (t1 - t0);
       if (t.length() < 4)
@@ -50,5 +50,6 @@ public class ExecutorDispatcher implements TaskExecutor
       {
          log.debug("Executed in " + t + " " + s + "");
       }
+      return v;
    }
 }

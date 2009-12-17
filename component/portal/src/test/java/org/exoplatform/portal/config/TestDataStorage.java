@@ -463,7 +463,7 @@ public class TestDataStorage extends AbstractPortalTest
       assertEquals("web/BannerPortlet", storage_.getId(banner1.getState()));
 
       // Check state
-      Portlet pagePrefs = storage_.load(instanceId);
+      Portlet pagePrefs = storage_.load(instanceId, ApplicationType.PORTLET);
       assertEquals(new PortletBuilder().add("template", "par:/groovy/groovy/webui/component/UIBannerPortlet.gtmpl")
          .build(), pagePrefs);
 
@@ -488,7 +488,7 @@ public class TestDataStorage extends AbstractPortalTest
       storage_.save(sitePrefs);
 
       // Check that page prefs have not changed
-      pagePrefs = storage_.load(instanceId);
+      pagePrefs = storage_.load(instanceId, ApplicationType.PORTLET);
       assertEquals(new PortletBuilder().add("template", "par:/groovy/groovy/webui/component/UIBannerPortlet.gtmpl")
          .build(), pagePrefs);
 
@@ -497,7 +497,7 @@ public class TestDataStorage extends AbstractPortalTest
       storage_.save(instanceId, pagePrefs);
 
       // Check that page prefs have changed
-      pagePrefs = storage_.load(instanceId);
+      pagePrefs = storage_.load(instanceId, ApplicationType.PORTLET);
       assertEquals(new PortletBuilder().add("template", "foo").build(), pagePrefs);
 
       // Check that site prefs have not changed

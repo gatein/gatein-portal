@@ -54,7 +54,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.CountDownLatch;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -666,7 +665,7 @@ public class TestUserPortalConfigService extends AbstractPortalTest
 
             //
             Application<Portlet> app = (Application<Portlet>)clone.getChildren().get(0);
-            Portlet prefs2 = storage_.load(app.getState());
+            Portlet prefs2 = storage_.load(app.getState(), ApplicationType.PORTLET);
             assertEquals(new PortletBuilder().add("template",
                "par:/groovy/groovy/webui/component/UIBannerPortlet.gtmpl").build(), prefs2);
 
@@ -676,7 +675,7 @@ public class TestUserPortalConfigService extends AbstractPortalTest
             storage_.save(prefs);
 
             //
-            prefs2 = storage_.load(app.getState());
+            prefs2 = storage_.load(app.getState(), ApplicationType.PORTLET);
             assertEquals(new PortletBuilder().add("template",
                "par:/groovy/groovy/webui/component/UIBannerPortlet.gtmpl").build(), prefs2);
          }
@@ -704,7 +703,7 @@ public class TestUserPortalConfigService extends AbstractPortalTest
             assertEquals("dashboard/DashboardPortlet", storage_.getId(app.getState()));
             // assertEquals("portal", app.getInstanceState().getOwnerType());
             // assertEquals("test", app.getInstanceState().getOwnerId());
-            Portlet prefs2 = storage_.load(app.getState());
+            Portlet prefs2 = storage_.load(app.getState(), ApplicationType.PORTLET);
             assertNull(prefs2);
          }
       }.execute(null);

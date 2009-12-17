@@ -130,16 +130,14 @@ public class POMSessionManager implements Startable
     *
     * @param task the task to execute
     * @throws Exception any exception thrown by the task
+    * @return the value
     */
-   public <T extends POMTask> T execute(T task) throws Exception
+   public <V> V execute(POMTask<V> task) throws Exception
    {
       POMSession session = getSession();
 
       //
-      executor.execute(session, task);
-
-      //
-      return task;
+      return executor.execute(session, task);
    }
 
 }

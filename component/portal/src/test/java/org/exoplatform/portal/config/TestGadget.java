@@ -21,6 +21,7 @@ package org.exoplatform.portal.config;
 
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.config.model.Application;
+import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.TransientApplicationState;
 import org.exoplatform.portal.pom.config.POMSession;
@@ -77,7 +78,7 @@ public class TestGadget extends AbstractPortalTest
       container = storage_.getPage("portal::test::gadget_page");
       gadgetApplication = (Application<Gadget>)container.getChildren().get(0);
 
-      gadget = storage_.load(gadgetApplication.getState());
+      gadget = storage_.load(gadgetApplication.getState(), ApplicationType.GADGET);
       assertNotNull(gadget);
       assertEquals("user_pref", gadget.getUserPref());
    }

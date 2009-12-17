@@ -87,7 +87,7 @@ public abstract class ModelAdapter<S, C extends Serializable>
          ApplicationState<Portlet> applicationState) throws Exception
       {
          DataStorage dataStorage = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
-         Portlet preferences = dataStorage.load(applicationState);
+         Portlet preferences = dataStorage.load(applicationState, ApplicationType.PORTLET);
          PortletContext producerOfferedPortletContext = getProducerOfferedPortletContext(applicationId);
          ExoPortletState map = new ExoPortletState(producerOfferedPortletContext.getId());
          if (preferences != null)
@@ -148,7 +148,7 @@ public abstract class ModelAdapter<S, C extends Serializable>
          else
          {
             DataStorage dataStorage = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
-            Portlet pref = dataStorage.load(applicationState);
+            Portlet pref = dataStorage.load(applicationState, ApplicationType.PORTLET);
             if (pref == null)
                pref = new Portlet();
             return pref;
@@ -219,7 +219,7 @@ public abstract class ModelAdapter<S, C extends Serializable>
          ApplicationState<WSRP> state) throws Exception
       {
          DataStorage dataStorage = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
-         WSRP wsrp = dataStorage.load(state);
+         WSRP wsrp = dataStorage.load(state, ApplicationType.WSRP_PORTLET);
          if (wsrp == null)
          {
             wsrp = new WSRP();

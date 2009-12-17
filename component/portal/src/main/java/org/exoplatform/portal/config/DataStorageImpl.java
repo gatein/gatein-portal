@@ -22,6 +22,7 @@ import org.exoplatform.commons.utils.LazyPageList;
 import org.exoplatform.commons.utils.ListAccess;
 import org.exoplatform.portal.application.PortletPreferences;
 import org.exoplatform.portal.config.model.ApplicationState;
+import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.config.model.Container;
 import org.exoplatform.portal.config.model.Dashboard;
 import org.exoplatform.portal.pom.data.ModelChange;
@@ -76,9 +77,9 @@ public class DataStorageImpl implements DataStorage
       delegate.remove(page.build());
    }
 
-   public <S> S load(ApplicationState<S> state) throws Exception
+   public <S> S load(ApplicationState<S> state, ApplicationType<S> type) throws Exception
    {
-      return delegate.load(state);
+      return delegate.load(state, type);
    }
 
    public void create(Page page) throws Exception

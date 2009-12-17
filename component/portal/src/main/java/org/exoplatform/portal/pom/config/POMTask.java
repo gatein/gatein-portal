@@ -23,9 +23,9 @@ package org.exoplatform.portal.pom.config;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public interface POMTask
+public interface POMTask<V>
 {
 
-   void run(POMSession session) throws Exception;
+   V run(POMSession session) throws Exception;
 
 }

@@ -19,7 +19,6 @@
 
 package org.exoplatform.portal.pom.config;
 
-import org.exoplatform.commons.chromattic.ChromatticManager;
 import org.exoplatform.commons.utils.IOUtil;
 import org.exoplatform.commons.utils.LazyPageList;
 import org.exoplatform.container.configuration.ConfigurationManager;
@@ -27,6 +26,7 @@ import org.exoplatform.portal.application.PortletPreferences;
 import org.exoplatform.portal.config.Query;
 import org.exoplatform.portal.config.model.Application;
 import org.exoplatform.portal.config.model.ApplicationState;
+import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.config.model.CloneApplicationState;
 import org.exoplatform.portal.config.model.Container;
 import org.exoplatform.portal.config.model.ModelObject;
@@ -48,8 +48,6 @@ import org.exoplatform.portal.pom.data.PageData;
 import org.exoplatform.portal.pom.data.PageKey;
 import org.exoplatform.portal.pom.data.PortalData;
 import org.exoplatform.portal.pom.data.PortalKey;
-import org.exoplatform.services.log.ExoLogger;
-import org.exoplatform.services.log.Log;
 import org.jibx.runtime.BindingDirectory;
 import org.jibx.runtime.IBindingFactory;
 import org.jibx.runtime.IUnmarshallingContext;
@@ -72,27 +70,15 @@ public class POMDataStorage implements ModelDataStorage
    /** . */
    private ConfigurationManager confManager_;
 
-   /** . */
-   private final Log log = ExoLogger.getLogger(getClass());
-
-   /** . */
-   private final ChromatticManager manager;
-
-   public POMDataStorage(POMSessionManager pomMgr, ConfigurationManager confManager, ChromatticManager manager)
+   public POMDataStorage(POMSessionManager pomMgr, ConfigurationManager confManager)
    {
       this.pomMgr = pomMgr;
       this.confManager_ = confManager;
-      this.manager = manager;
-   }
-
-   public POMSessionManager getPOMSessionManager()
-   {
-      return pomMgr;
    }
 
    public PortalData getPortalConfig(PortalKey key) throws Exception
    {
-      return pomMgr.execute(new PortalConfigTask.Load(key)).getConfig();
+      return pomMgr.execute(new PortalConfigTask.Load(key));
    }
 
    public void create(PortalData config) throws Exception
@@ -112,12 +98,12 @@ public class POMDataStorage implements ModelDataStorage
 
    public PageData getPage(PageKey key) throws Exception
    {
-      return pomMgr.execute(new PageTask.Load(key)).getPage();
+      return pomMgr.execute(new PageTask.Load(key));
    }
 
    public PageData clonePage(PageKey key, PageKey cloneKey) throws Exception
    {
-      return pomMgr.execute(new PageTask.Clone(key, cloneKey, true)).getPage();
+      return pomMgr.execute(new PageTask.Clone(key, cloneKey, true));
    }
 
    public void remove(PageData page) throws Exception
@@ -132,12 +118,14 @@ public class POMDataStorage implements ModelDataStorage
 
    public List<ModelChange> save(PageData page) throws Exception
    {
-      return pomMgr.execute(new PageTask.Save(page)).getChanges();
+      PageTask.Save task = new PageTask.Save(page);
+      pomMgr.execute(task);
+      return task.getChanges();
    }
 
    public NavigationData getPageNavigation(NavigationKey key) throws Exception
    {
-      return pomMgr.execute(new PageNavigationTask.Load(key)).getPageNavigation();
+      return pomMgr.execute(new PageNavigationTask.Load(key));
    }
 
    public void save(NavigationData navigation) throws Exception
@@ -171,12 +159,12 @@ public class POMDataStorage implements ModelDataStorage
       else if (state instanceof PersistentApplicationState)
       {
          PersistentApplicationState pstate = (PersistentApplicationState)state;
-         contentId = pomMgr.execute(new PreferencesTask.GetContentId<S>(pstate.getStorageId())).getContentId();
+         contentId = pomMgr.execute(new PreferencesTask.GetContentId<S>(pstate.getStorageId()));
       }
       else if (state instanceof CloneApplicationState)
       {
          CloneApplicationState cstate = (CloneApplicationState)state;
-         contentId = pomMgr.execute(new PreferencesTask.GetContentId<S>(cstate.getStorageId())).getContentId();
+         contentId = pomMgr.execute(new PreferencesTask.GetContentId<S>(cstate.getStorageId()));
       }
       else
       {
@@ -187,8 +175,9 @@ public class POMDataStorage implements ModelDataStorage
       return contentId;
    }
 
-   public <S> S load(ApplicationState<S> state) throws Exception
+   public <S> S load(ApplicationState<S> state, ApplicationType<S> type) throws Exception
    {
+      Class<S> clazz = type.getContentType().getStateClass();
       if (state instanceof TransientApplicationState)
       {
          TransientApplicationState<S> transientState = (TransientApplicationState<S>)state;
@@ -197,16 +186,13 @@ public class POMDataStorage implements ModelDataStorage
       }
       else if (state instanceof CloneApplicationState)
       {
-         PreferencesTask.Load<S> load = new PreferencesTask.Load<S>(((CloneApplicationState<S>)state).getStorageId());
-         pomMgr.execute(load);
-         return load.getState();
+         PreferencesTask.Load<S> load = new PreferencesTask.Load<S>(((CloneApplicationState<S>)state).getStorageId(), clazz);
+         return pomMgr.execute(load);
       }
       else
       {
-         PreferencesTask.Load<S> load =
-            new PreferencesTask.Load<S>(((PersistentApplicationState<S>)state).getStorageId());
-         pomMgr.execute(load);
-         return load.getState();
+         PreferencesTask.Load<S> load = new PreferencesTask.Load<S>(((PersistentApplicationState<S>)state).getStorageId(), clazz);
+         return pomMgr.execute(load);
       }
    }
 
@@ -236,7 +222,7 @@ public class POMDataStorage implements ModelDataStorage
 
    public PortletPreferences getPortletPreferences(String windowID) throws Exception
    {
-      return pomMgr.execute(new PortletPreferencesTask.Load(windowID)).getPreferences();
+      return pomMgr.execute(new PortletPreferencesTask.Load(windowID));
    }
 
    public <T> LazyPageList<T> find(Query<T> q) throws Exception
@@ -249,24 +235,23 @@ public class POMDataStorage implements ModelDataStorage
       Class<T> type = q.getClassType();
       if (PageData.class.equals(type))
       {
-         return (LazyPageList<T>)pomMgr.execute(new SearchTask.FindPage((Query<PageData>)q)).getResult();
+         return (LazyPageList<T>)pomMgr.execute(new SearchTask.FindPage((Query<PageData>)q));
       }
       else if (NavigationData.class.equals(type))
       {
-         return (LazyPageList<T>)pomMgr.execute(new SearchTask.FindNavigation((Query<NavigationData>)q)).getResult();
+         return (LazyPageList<T>)pomMgr.execute(new SearchTask.FindNavigation((Query<NavigationData>)q));
       }
       else if (PortletPreferences.class.equals(type))
       {
-         return (LazyPageList<T>)pomMgr.execute(new SearchTask.FindPortletPreferences((Query<PortletPreferences>)q))
-            .getResult();
+         return (LazyPageList<T>)pomMgr.execute(new SearchTask.FindPortletPreferences((Query<PortletPreferences>)q));
       }
       else if (PortalData.class.equals(type))
       {
-         return (LazyPageList<T>)pomMgr.execute(new SearchTask.FindSite((Query<PortalData>)q)).getResult();
+         return (LazyPageList<T>)pomMgr.execute(new SearchTask.FindSite((Query<PortalData>)q));
       }
       else if (PortalKey.class.equals(type) && "portal".equals(q.getOwnerType()))
       {
-         return (LazyPageList<T>)pomMgr.execute(new SearchTask.FindSiteKey((Query<PortalKey>)q)).getResult();
+         return (LazyPageList<T>)pomMgr.execute(new SearchTask.FindSiteKey((Query<PortalKey>)q));
       }
       else
       {
@@ -289,13 +274,13 @@ public class POMDataStorage implements ModelDataStorage
       }
       else if (obj instanceof Application)
       {
-         ((Application)obj).setStorageName(UUID.randomUUID().toString());
+         obj.setStorageName(UUID.randomUUID().toString());
       }
    }
 
    public DashboardData loadDashboard(String dashboardId) throws Exception
    {
-      return pomMgr.execute(new DashboardTask.Load(dashboardId)).getDashboard();
+      return pomMgr.execute(new DashboardTask.Load(dashboardId));
    }
 
    public void saveDashboard(DashboardData dashboard) throws Exception

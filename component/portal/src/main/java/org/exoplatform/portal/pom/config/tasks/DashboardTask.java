@@ -19,9 +19,9 @@
 
 package org.exoplatform.portal.pom.config.tasks;
 
+import org.exoplatform.portal.pom.config.POMTask;
 import org.exoplatform.portal.pom.data.DashboardData;
 import org.exoplatform.portal.pom.data.Mapper;
-import org.exoplatform.portal.pom.config.AbstractPOMTask;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.gatein.mop.api.workspace.ObjectType;
 import org.gatein.mop.api.workspace.ui.UIContainer;
@@ -30,37 +30,32 @@ import org.gatein.mop.api.workspace.ui.UIContainer;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public abstract class DashboardTask extends AbstractPOMTask
+public abstract class DashboardTask
 {
 
-   public static class Load extends DashboardTask
+   public static class Load implements POMTask<DashboardData>
    {
 
       /** . */
       protected final String storageId;
-
-      /** . */
-      protected DashboardData dashboard;
 
       public Load(String storageId)
       {
          this.storageId = storageId;
       }
 
-      public void run(POMSession session) throws Exception
+      public DashboardData run(POMSession session) throws Exception
       {
          UIContainer container = session.findObjectById(ObjectType.CONTAINER, storageId);
 
          //
          if (container != null)
          {
-            dashboard = new Mapper(session).loadDashboard(container);
+            return new Mapper(session).loadDashboard(container);
          }
-      }
 
-      public DashboardData getDashboard()
-      {
-         return dashboard;
+         //
+         return null;
       }
 
       @Override
@@ -70,7 +65,7 @@ public abstract class DashboardTask extends AbstractPOMTask
       }
    }
 
-   public static class Save extends DashboardTask
+   public static class Save implements POMTask<Void>
    {
 
       /** The dashboard object. */
@@ -89,7 +84,7 @@ public abstract class DashboardTask extends AbstractPOMTask
          this.dashboard = dashboard;
       }
 
-      public void run(POMSession session) throws Exception
+      public Void run(POMSession session) throws Exception
       {
          String id = dashboard.getStorageId();
          if (id == null)
@@ -109,6 +104,9 @@ public abstract class DashboardTask extends AbstractPOMTask
 
          //
          mapper.saveDashboard(dashboard, container);
+
+         //
+         return null;
       }
 
       @Override

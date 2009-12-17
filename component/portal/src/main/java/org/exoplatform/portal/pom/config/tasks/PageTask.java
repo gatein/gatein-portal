@@ -19,13 +19,13 @@
 
 package org.exoplatform.portal.pom.config.tasks;
 
+import org.exoplatform.portal.pom.config.POMTask;
 import org.exoplatform.portal.pom.config.cache.DataAccessMode;
 import org.exoplatform.portal.pom.config.cache.CacheableDataTask;
 import org.exoplatform.portal.pom.data.Mapper;
 import org.exoplatform.portal.pom.data.ModelChange;
 import org.exoplatform.portal.pom.data.PageData;
 
-import org.exoplatform.portal.pom.config.AbstractPOMTask;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.data.PageKey;
 import org.gatein.mop.api.Attributes;
@@ -45,7 +45,7 @@ import java.util.List;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public abstract class PageTask extends AbstractPOMTask
+public abstract class PageTask
 {
 
    /** . */
@@ -72,7 +72,7 @@ public abstract class PageTask extends AbstractPOMTask
       this.siteType = Mapper.parseSiteType(ownerType);
    }
 
-   public static class Clone extends PageTask
+   public static class Clone extends PageTask implements POMTask<PageData>
    {
 
       /** . */
@@ -86,9 +86,6 @@ public abstract class PageTask extends AbstractPOMTask
 
       /** . */
       private final String cloneName;
-
-      /** . */
-      private PageData page;
 
       /** . */
       private boolean deep;
@@ -105,7 +102,7 @@ public abstract class PageTask extends AbstractPOMTask
          this.cloneSiteType = Mapper.parseSiteType(cloneOwnerType);
       }
 
-      public void run(POMSession session) throws Exception
+      public PageData run(POMSession session) throws Exception
       {
          Workspace workspace = session.getWorkspace();
 
@@ -163,7 +160,7 @@ public abstract class PageTask extends AbstractPOMTask
          copy(srcPage, dstPage, srcPage.getRootComponent(), dstPage.getRootComponent());
 
          //
-         this.page = new Mapper(session).load(dstPage);
+         return new Mapper(session).load(dstPage);
       }
 
       private void copy(org.gatein.mop.api.workspace.Page srcPage, org.gatein.mop.api.workspace.Page dstPage,
@@ -232,11 +229,6 @@ public abstract class PageTask extends AbstractPOMTask
          }
       }
 
-      public PageData getPage()
-      {
-         return page;
-      }
-
       @Override
       public String toString()
       {
@@ -245,7 +237,7 @@ public abstract class PageTask extends AbstractPOMTask
       }
    }
 
-   public static class Remove extends PageTask implements CacheableDataTask<PageKey, PageData>
+   public static class Remove extends PageTask implements CacheableDataTask<PageKey, Void>
    {
 
       public Remove(PageData page)
@@ -258,19 +250,9 @@ public abstract class PageTask extends AbstractPOMTask
          return DataAccessMode.DESTROY;
       }
 
-      public void setValue(PageData value)
+      public Class<Void> getValueType()
       {
-         throw new UnsupportedOperationException();
-      }
-
-      public Class<PageData> getValueType()
-      {
-         return PageData.class;
-      }
-
-      public PageData getValue()
-      {
-         return null;
+         return Void.class;
       }
 
       public PageKey getKey()
@@ -278,7 +260,7 @@ public abstract class PageTask extends AbstractPOMTask
          return key;
       }
 
-      public void run(POMSession session)
+      public Void run(POMSession session)
       {
          Workspace workspace = session.getWorkspace();
          Site site = workspace.getSite(siteType, ownerId);
@@ -299,6 +281,9 @@ public abstract class PageTask extends AbstractPOMTask
             }
             page.destroy();
          }
+
+         //
+         return null;
       }
 
       @Override
@@ -308,7 +293,7 @@ public abstract class PageTask extends AbstractPOMTask
       }
    }
 
-   public static class Save extends PageTask implements CacheableDataTask<PageKey, PageData>
+   public static class Save extends PageTask implements CacheableDataTask<PageKey, Void>
    {
 
       /** . */
@@ -330,19 +315,9 @@ public abstract class PageTask extends AbstractPOMTask
          return page.getStorageId() != null ? DataAccessMode.WRITE : DataAccessMode.CREATE;
       }
 
-      public void setValue(PageData value)
+      public Class<Void> getValueType()
       {
-         throw new UnsupportedOperationException();
-      }
-
-      public Class<PageData> getValueType()
-      {
-         return PageData.class;
-      }
-
-      public PageData getValue()
-      {
-         return page;
+         return Void.class;
       }
 
       public PageKey getKey()
@@ -350,7 +325,7 @@ public abstract class PageTask extends AbstractPOMTask
          return key;
       }
 
-      public void run(POMSession session) throws Exception
+      public Void run(POMSession session) throws Exception
       {
          Workspace workspace = session.getWorkspace();
          Site site = workspace.getSite(siteType, ownerId);
@@ -363,6 +338,9 @@ public abstract class PageTask extends AbstractPOMTask
          //
          Mapper mapper = new Mapper(session);
          changes = mapper.save(this.page, site, name);
+
+         //
+         return null;
       }
 
       public List<ModelChange> getChanges()
@@ -380,17 +358,9 @@ public abstract class PageTask extends AbstractPOMTask
    public static class Load extends PageTask implements CacheableDataTask<PageKey, PageData>
    {
 
-      /** . */
-      private PageData page;
-
       public Load(PageKey key)
       {
          super(key);
-      }
-
-      public PageData getPage()
-      {
-         return page;
       }
 
       public DataAccessMode getAccessMode()
@@ -408,17 +378,7 @@ public abstract class PageTask extends AbstractPOMTask
          return PageData.class;
       }
 
-      public void setValue(PageData value)
-      {
-         page = value;
-      }
-
-      public PageData getValue()
-      {
-         return page;
-      }
-
-      public void run(POMSession session)
+      public PageData run(POMSession session)
       {
          Workspace workspace = session.getWorkspace();
          Site site = workspace.getSite(siteType, ownerId);
@@ -429,9 +389,12 @@ public abstract class PageTask extends AbstractPOMTask
             org.gatein.mop.api.workspace.Page page = pages.getChild(name);
             if (page != null)
             {
-               this.page = new Mapper(session).load(page);
+               return new Mapper(session).load(page);
             }
          }
+
+         //
+         return null;
       }
 
       @Override

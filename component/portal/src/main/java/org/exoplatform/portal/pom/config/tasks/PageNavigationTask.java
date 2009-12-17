@@ -23,7 +23,6 @@ import org.exoplatform.portal.pom.config.cache.DataAccessMode;
 import org.exoplatform.portal.pom.config.cache.CacheableDataTask;
 import org.exoplatform.portal.pom.data.Mapper;
 
-import org.exoplatform.portal.pom.config.AbstractPOMTask;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.data.NavigationData;
 import org.exoplatform.portal.pom.data.NavigationKey;
@@ -36,7 +35,7 @@ import org.gatein.mop.api.workspace.Workspace;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public abstract class PageNavigationTask extends AbstractPOMTask
+public abstract class PageNavigationTask
 {
 
    /** . */
@@ -54,17 +53,9 @@ public abstract class PageNavigationTask extends AbstractPOMTask
    public static class Load extends PageNavigationTask implements CacheableDataTask<NavigationKey, NavigationData>
    {
 
-      /** . */
-      private NavigationData pageNav;
-
       public Load(NavigationKey key)
       {
          super(key);
-      }
-
-      public NavigationData getPageNavigation()
-      {
-         return pageNav;
       }
 
       public DataAccessMode getAccessMode()
@@ -77,22 +68,12 @@ public abstract class PageNavigationTask extends AbstractPOMTask
          return key;
       }
 
-      public NavigationData getValue()
-      {
-         return pageNav;
-      }
-
-      public void setValue(NavigationData value)
-      {
-         this.pageNav = value;
-      }
-
       public Class<NavigationData> getValueType()
       {
          return NavigationData.class;
       }
 
-      public void run(POMSession session) throws Exception
+      public NavigationData run(POMSession session) throws Exception
       {
          Workspace workspace = session.getWorkspace();
          Site site = workspace.getSite(siteType, key.getId());
@@ -102,7 +83,7 @@ public abstract class PageNavigationTask extends AbstractPOMTask
             Navigation defaultNav = nav.getChild("default");
             if (defaultNav != null)
             {
-               pageNav = new Mapper(session).load(defaultNav);
+               return new Mapper(session).load(defaultNav);
             }
          }
          else
@@ -110,6 +91,9 @@ public abstract class PageNavigationTask extends AbstractPOMTask
             System.out.println("Cannot load page navigation as the corresponding portal " + key.getId()
                + " with type " + siteType + " does not exist");
          }
+
+         //
+         return null;
       }
 
       @Override
@@ -119,7 +103,7 @@ public abstract class PageNavigationTask extends AbstractPOMTask
       }
    }
 
-   public static class Save extends PageNavigationTask implements CacheableDataTask<NavigationKey, NavigationData>
+   public static class Save extends PageNavigationTask implements CacheableDataTask<NavigationKey, Void>
    {
 
       /** . */
@@ -137,24 +121,14 @@ public abstract class PageNavigationTask extends AbstractPOMTask
          this.overwrite = overwrite;
       }
 
+      public Class<Void> getValueType()
+      {
+         return Void.class;
+      }
+
       public DataAccessMode getAccessMode()
       {
          return pageNav.getStorageId() != null ? DataAccessMode.WRITE : DataAccessMode.CREATE;
-      }
-
-      public void setValue(NavigationData value)
-      {
-         throw new UnsupportedOperationException();
-      }
-
-      public Class<NavigationData> getValueType()
-      {
-         return NavigationData.class;
-      }
-
-      public NavigationData getValue()
-      {
-         return pageNav;
       }
 
       public NavigationKey getKey()
@@ -162,7 +136,7 @@ public abstract class PageNavigationTask extends AbstractPOMTask
          return key;
       }
 
-      public void run(POMSession session) throws Exception
+      public Void run(POMSession session) throws Exception
       {
          Workspace workspace = session.getWorkspace();
          Site site = workspace.getSite(siteType, key.getId());
@@ -184,6 +158,9 @@ public abstract class PageNavigationTask extends AbstractPOMTask
 
          //
          new Mapper(session).save(pageNav, defaultNav);
+
+         //
+         return null;
       }
 
       @Override
@@ -193,7 +170,7 @@ public abstract class PageNavigationTask extends AbstractPOMTask
       }
    }
 
-   public static class Remove extends PageNavigationTask implements CacheableDataTask<NavigationKey, NavigationData>
+   public static class Remove extends PageNavigationTask implements CacheableDataTask<NavigationKey, Void>
    {
 
       public Remove(NavigationData pageNav)
@@ -206,19 +183,9 @@ public abstract class PageNavigationTask extends AbstractPOMTask
          return DataAccessMode.DESTROY;
       }
 
-      public void setValue(NavigationData value)
+      public Class<Void> getValueType()
       {
-         throw new UnsupportedOperationException();
-      }
-
-      public Class<NavigationData> getValueType()
-      {
-         return NavigationData.class;
-      }
-
-      public NavigationData getValue()
-      {
-         return null;
+         return Void.class;
       }
 
       public NavigationKey getKey()
@@ -226,7 +193,7 @@ public abstract class PageNavigationTask extends AbstractPOMTask
          return key;
       }
 
-      public void run(POMSession session) throws Exception
+      public Void run(POMSession session) throws Exception
       {
          Workspace workspace = session.getWorkspace();
          Site site = workspace.getSite(siteType, key.getId());
@@ -245,6 +212,9 @@ public abstract class PageNavigationTask extends AbstractPOMTask
          {
             defaultNav.destroy();
          }
+
+         //
+         return null;
       }
 
       @Override

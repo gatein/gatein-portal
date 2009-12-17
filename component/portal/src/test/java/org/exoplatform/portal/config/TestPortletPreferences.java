@@ -21,13 +21,13 @@ package org.exoplatform.portal.config;
 
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.config.model.Application;
+import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PersistentApplicationState;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.portal.pom.spi.portlet.Portlet;
 import org.exoplatform.portal.pom.spi.portlet.PortletBuilder;
-import org.exoplatform.test.BasicTestCase;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -74,7 +74,7 @@ public class TestPortletPreferences extends AbstractPortalTest
       PersistentApplicationState<Portlet> state = (PersistentApplicationState)app.getState();
 
       //
-      Portlet prefs = storage_.load(state);
+      Portlet prefs = storage_.load(state, ApplicationType.PORTLET);
       assertEquals(new PortletBuilder().add("template", "par:/groovy/groovy/webui/component/UIBannerPortlet.gtmpl")
          .build(), prefs);
 
@@ -83,7 +83,7 @@ public class TestPortletPreferences extends AbstractPortalTest
       storage_.save(state, prefs);
 
       //
-      prefs = storage_.load(state);
+      prefs = storage_.load(state, ApplicationType.PORTLET);
       assertNotNull(prefs);
       assertEquals(new PortletBuilder().add("template", "someanothervalue").build(), prefs);
    }

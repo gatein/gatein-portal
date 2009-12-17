@@ -26,17 +26,13 @@ import java.io.Serializable;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public interface CacheableDataTask<K extends Serializable, V> extends POMTask
+public interface CacheableDataTask<K extends Serializable, V> extends POMTask<V>
 {
+
+   Class<V> getValueType();
 
    DataAccessMode getAccessMode();
 
    K getKey();
-
-   V getValue();
-
-   void setValue(V value);
-
-   Class<V> getValueType();
 
 }

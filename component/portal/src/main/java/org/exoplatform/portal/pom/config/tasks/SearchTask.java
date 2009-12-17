@@ -23,12 +23,12 @@ import org.exoplatform.commons.utils.LazyPageList;
 import org.exoplatform.commons.utils.ListAccess;
 import org.exoplatform.portal.application.PortletPreferences;
 import org.exoplatform.portal.config.Query;
+import org.exoplatform.portal.pom.config.POMTask;
 import org.exoplatform.portal.pom.data.Mapper;
 import org.exoplatform.portal.pom.data.NavigationData;
 import org.exoplatform.portal.pom.data.PageData;
 import org.exoplatform.portal.pom.data.PortalData;
 import org.exoplatform.portal.pom.data.PortalKey;
-import org.exoplatform.portal.pom.config.AbstractPOMTask;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.gatein.mop.api.workspace.Navigation;
 import org.gatein.mop.api.workspace.ObjectType;
@@ -45,23 +45,15 @@ import java.util.Iterator;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public abstract class SearchTask<T> extends AbstractPOMTask
+public abstract class SearchTask<T> implements POMTask<LazyPageList<T>>
 {
 
    /** . */
    protected final Query<T> q;
 
-   /** . */
-   protected LazyPageList<T> result;
-
    public SearchTask(Query<T> query)
    {
       this.q = query;
-   }
-
-   public LazyPageList<T> getResult()
-   {
-      return result;
    }
 
    public abstract static class FindSiteObject<W extends WorkspaceObject, T> extends SearchTask<T>
@@ -72,7 +64,7 @@ public abstract class SearchTask<T> extends AbstractPOMTask
          super(query);
       }
 
-      public void run(final POMSession session) throws Exception
+      public LazyPageList<T> run(final POMSession session) throws Exception
       {
          Iterator<W> ite;
          try
@@ -119,7 +111,8 @@ public abstract class SearchTask<T> extends AbstractPOMTask
             }
          };
 
-         result = new LazyPageList<T>(la, 10);
+         //
+         return new LazyPageList<T>(la, 10);
       }
 
       protected abstract Iterator<W> findW(POMSession session, ObjectType<? extends Site> siteType, String ownerId,
@@ -189,11 +182,11 @@ public abstract class SearchTask<T> extends AbstractPOMTask
          super(portletPreferencesQuery);
       }
 
-      public void run(final POMSession session) throws Exception
+      public LazyPageList<PortletPreferences> run(final POMSession session) throws Exception
       {
          // We return empty on purpose at it is used when preferences are deleted by the UserPortalConfigService
          // and the prefs are deleted transitively when an entity is removed
-         result = new LazyPageList<PortletPreferences>(new ListAccess<PortletPreferences>()
+         return new LazyPageList<PortletPreferences>(new ListAccess<PortletPreferences>()
          {
             public PortletPreferences[] load(int index, int length) throws Exception, IllegalArgumentException
             {
@@ -216,7 +209,7 @@ public abstract class SearchTask<T> extends AbstractPOMTask
          super(siteQuery);
       }
 
-      public void run(final POMSession session) throws Exception
+      public LazyPageList<PortalData> run(final POMSession session) throws Exception
       {
          Workspace workspace = session.getWorkspace();
          String ownerType = q.getOwnerType();
@@ -242,7 +235,7 @@ public abstract class SearchTask<T> extends AbstractPOMTask
                return portals.size();
             }
          };
-         result = new LazyPageList<PortalData>(la, 10);
+         return new LazyPageList<PortalData>(la, 10);
       }
    }
 
@@ -254,7 +247,7 @@ public abstract class SearchTask<T> extends AbstractPOMTask
          super(siteQuery);
       }
 
-      public void run(final POMSession session) throws Exception
+      public LazyPageList<PortalKey> run(final POMSession session) throws Exception
       {
          Workspace workspace = session.getWorkspace();
          final Collection<? extends Site> portals = workspace.getSites(ObjectType.PORTAL_SITE);
@@ -277,7 +270,7 @@ public abstract class SearchTask<T> extends AbstractPOMTask
                return portals.size();
             }
          };
-         result = new LazyPageList<PortalKey>(la, 10);
+         return new LazyPageList<PortalKey>(la, 10);
       }
    }
 }

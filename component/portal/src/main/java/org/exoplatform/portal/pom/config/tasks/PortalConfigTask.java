@@ -24,7 +24,6 @@ import org.exoplatform.portal.pom.config.cache.DataAccessMode;
 import org.exoplatform.portal.pom.config.cache.CacheableDataTask;
 import org.exoplatform.portal.pom.data.Mapper;
 import org.exoplatform.portal.pom.data.PortalData;
-import org.exoplatform.portal.pom.config.AbstractPOMTask;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.data.PortalKey;
 import org.gatein.mop.api.workspace.ObjectType;
@@ -36,7 +35,7 @@ import org.gatein.mop.api.workspace.Workspace;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public abstract class PortalConfigTask extends AbstractPOMTask
+public abstract class PortalConfigTask
 {
 
    /** . */
@@ -51,7 +50,7 @@ public abstract class PortalConfigTask extends AbstractPOMTask
       this.type = Mapper.parseSiteType(key.getType());
    }
 
-   public static class Remove extends PortalConfigTask implements CacheableDataTask<PortalKey, PortalData>
+   public static class Remove extends PortalConfigTask implements CacheableDataTask<PortalKey, Void>
    {
 
       public Remove(PortalKey key)
@@ -64,9 +63,9 @@ public abstract class PortalConfigTask extends AbstractPOMTask
          return DataAccessMode.DESTROY;
       }
 
-      public Class<PortalData> getValueType()
+      public Class<Void> getValueType()
       {
-         return PortalData.class;
+         return Void.class;
       }
 
       public PortalKey getKey()
@@ -74,17 +73,7 @@ public abstract class PortalConfigTask extends AbstractPOMTask
          return key;
       }
 
-      public void setValue(PortalData value)
-      {
-         throw new UnsupportedOperationException();
-      }
-
-      public PortalData getValue()
-      {
-         return null;
-      }
-
-      public void run(POMSession session)
+      public Void run(POMSession session)
       {
          Workspace workspace = session.getWorkspace();
          Site site = workspace.getSite(type, key.getId());
@@ -96,6 +85,7 @@ public abstract class PortalConfigTask extends AbstractPOMTask
          {
             site.destroy();
          }
+         return null;
       }
 
       @Override
@@ -105,7 +95,7 @@ public abstract class PortalConfigTask extends AbstractPOMTask
       }
    }
 
-   public static class Save extends PortalConfigTask implements CacheableDataTask<PortalKey, PortalData>
+   public static class Save extends PortalConfigTask implements CacheableDataTask<PortalKey, Void>
    {
 
       /** . */
@@ -128,19 +118,9 @@ public abstract class PortalConfigTask extends AbstractPOMTask
          return overwrite ? DataAccessMode.WRITE : DataAccessMode.CREATE;
       }
 
-      public void setValue(PortalData value)
+      public Class<Void> getValueType()
       {
-         throw new UnsupportedOperationException();
-      }
-
-      public Class<PortalData> getValueType()
-      {
-         return PortalData.class;
-      }
-
-      public PortalData getValue()
-      {
-         return config;
+         return Void.class;
       }
 
       public PortalKey getKey()
@@ -148,7 +128,7 @@ public abstract class PortalConfigTask extends AbstractPOMTask
          return key;
       }
 
-      public void run(POMSession session) throws Exception
+      public Void run(POMSession session) throws Exception
       {
          Workspace workspace = session.getWorkspace();
          Site site = workspace.getSite(type, key.getId());
@@ -179,6 +159,9 @@ public abstract class PortalConfigTask extends AbstractPOMTask
             }
          }
          new Mapper(session).save(config, site);
+
+         //
+         return null;
       }
 
       @Override
@@ -209,34 +192,22 @@ public abstract class PortalConfigTask extends AbstractPOMTask
          return key;
       }
 
-      public void setValue(PortalData value)
-      {
-         config = value;
-      }
-
       public Class<PortalData> getValueType()
       {
          return PortalData.class;
       }
 
-      public PortalData getValue()
-      {
-         return config;
-      }
-
-      public PortalData getConfig()
-      {
-         return config;
-      }
-
-      public void run(POMSession session)
+      public PortalData run(POMSession session)
       {
          Workspace workspace = session.getWorkspace();
          Site site = workspace.getSite(type, key.getId());
          if (site != null)
          {
-            this.config = new Mapper(session).load(site);
+            return new Mapper(session).load(site);
          }
+
+         //
+         return null;
       }
 
       @Override

@@ -21,12 +21,12 @@ package org.exoplatform.portal.config;
 
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.config.model.Application;
+import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.TransientApplicationState;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.portal.pom.spi.wsrp.WSRP;
-import org.exoplatform.test.BasicTestCase;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -80,7 +80,7 @@ public class TestWSRP extends AbstractPortalTest
       container = storage_.getPage(pageId);
       wsrpApplication = (Application<WSRP>)container.getChildren().get(0);
 
-      wsrp = storage_.load(wsrpApplication.getState());
+      wsrp = storage_.load(wsrpApplication.getState(), ApplicationType.WSRP_PORTLET);
       assertNotNull(wsrp);
       assertEquals(id, wsrp.getPortletId());
    }
