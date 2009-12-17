@@ -274,7 +274,7 @@ public class UIPortal extends UIContainer
       }
       if (getNavigations().size() < 1)
          return null;
-      // TODO dang.tung: get right selectedNavigation
+      // TODO dang.tung: get right selectedNavigation 
       // -------------------------------------------
       List<PageNavigation> navs = getNavigations();
       PageNavigation pNav = navs.get(0);
@@ -390,16 +390,16 @@ public class UIPortal extends UIContainer
    {
       for (PageNavigation nav : navigations)
       {
-         localizePageNavigation(nav);
+         localizePageNavigation(nav,locale);
       }
    }
 
-   private void localizePageNavigation(PageNavigation nav)
+   private void localizePageNavigation(PageNavigation nav,Locale locale)
    {
       ResourceBundleManager mgr = getApplicationComponent(ResourceBundleManager.class);
       if (nav.getOwnerType().equals(PortalConfig.USER_TYPE))
          return;
-      ResourceBundle res = mgr.getNavigationResourceBundle(locale, nav.getOwnerType(), nav.getOwnerId());
+      ResourceBundle res = mgr.getNavigationResourceBundle(locale.getLanguage(), nav.getOwnerType(), nav.getOwnerId());
       for (PageNode node : nav.getNodes())
       {
          resolveLabel(res, node);
