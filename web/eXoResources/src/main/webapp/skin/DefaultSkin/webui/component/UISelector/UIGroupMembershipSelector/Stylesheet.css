@@ -38,12 +38,11 @@
 }
 
 .UIGroupMembershipSelector .UIBreadcumbs .RightBreadcumbsBar {
-	background: none;
 	height: auto;
 }
 
 .UIGroupMembershipSelector .UIBreadcumbs .BreadcumbsInfoBar {
-	background: none;
+	height: auto;
 }
 
 .UIGroupMembershipSelector .UIBreadcumbs a.Selected {
