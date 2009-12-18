@@ -21,8 +21,6 @@ package org.exoplatform.application.gadget;
 import org.exoplatform.application.gadget.impl.GadgetRegistryServiceImpl;
 import org.exoplatform.commons.chromattic.ChromatticLifeCycle;
 import org.exoplatform.commons.chromattic.SessionContext;
-import org.exoplatform.container.PortalContainer;
-import org.exoplatform.container.RootContainer;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 import org.gatein.common.xml.XMLTools;
@@ -75,14 +73,7 @@ public class GadgetDeployer implements WebAppListener, Startable
                final URL url = scontext.getResource("/WEB-INF/gadget.xml");
                if (url != null)
                {
-                  final RootContainer.PortalContainerPostInitTask task = new RootContainer.PortalContainerPostInitTask()
-                  {
-                     public void execute(ServletContext context, PortalContainer portalContainer)
-                     {
-                        handle(context, url);
-                     }
-                  };
-                  PortalContainer.addInitTask(scontext, task);
+                  handle(scontext, url);
                }
             }
             catch (MalformedURLException e)
