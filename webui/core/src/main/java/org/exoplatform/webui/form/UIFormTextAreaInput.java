@@ -47,7 +47,6 @@ public class UIFormTextAreaInput extends UIFormInputBase<String>
    @SuppressWarnings("unused")
    public void decode(Object input, WebuiRequestContext context) throws Exception {
      String val = (String) input ;
-     if((val == null || val.length() == 0)) return ; 
      value_ = val ;
      if(value_ != null && value_.length() == 0) value_ = null ;
    }
