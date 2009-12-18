@@ -142,9 +142,22 @@ public class UIPortalForm extends UIFormTabPane
       UserPortalConfigService service = this.getApplicationComponent(UserPortalConfigService.class);
       PortalRequestContext prContext = Util.getPortalRequestContext();
 
-      UserPortalConfig userConfig = service.getUserPortalConfig(getPortalOwner(), prContext.getRemoteUser());
-      UIPortal editPortal = this.createUIComponent(UIPortal.class, null, null);
-      PortalDataMapper.toUIPortal(editPortal, userConfig);
+      UIPortal editPortal = null;
+      UIPortalApplication uiPortalApp = Util.getUIPortalApplication();      
+      UIEditInlineWorkspace uiEditWS = uiPortalApp.<UIWorkingWorkspace>getChildById(UIPortalApplication.UI_WORKING_WS_ID).
+                                                   getChild(UIEditInlineWorkspace.class);
+      if(uiPortalApp.getModeState() != UIPortalApplication.NORMAL_MODE && 
+                 uiEditWS != null && uiEditWS.getUIComponent() != null && 
+                 (uiEditWS.getUIComponent() instanceof UIPortal))
+      {
+         editPortal = (UIPortal)uiEditWS.getUIComponent();
+      }
+      else
+      {
+         UserPortalConfig userConfig = service.getUserPortalConfig(getPortalOwner(), prContext.getRemoteUser());
+         editPortal = this.createUIComponent(UIPortal.class, null, null);
+         PortalDataMapper.toUIPortal(editPortal, userConfig);
+      }
 
       invokeGetBindingBean(editPortal);
       ((UIFormStringInput)getChild(UIFormInputSet.class).getChildById(FIELD_NAME))
