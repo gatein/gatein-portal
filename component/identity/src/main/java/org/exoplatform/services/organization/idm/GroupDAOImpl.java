@@ -429,7 +429,8 @@ public class GroupDAOImpl implements GroupHandler
 
          attrs = attrsList.toArray(attrs);
 
-         getIdentitySession().getAttributesManager().addAttributes(jbidGroup, attrs);
+         //getIdentitySession().getAttributesManager().addAttributes(jbidGroup, attrs);        
+         getIdentitySession().getAttributesManager().updateAttributes(jbidGroup, attrs);
 
       }
 
