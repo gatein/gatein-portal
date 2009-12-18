@@ -67,76 +67,12 @@
     </dependency>
 
     <dependency>
-      <groupId>org.gatein.pc</groupId>
-      <artifactId>pc-api</artifactId>
-      <version>${org.gatein.pc.version}</version>
-      <exclusions>
-        <exclusion>
-          <groupId>org.gatein.wci</groupId>
-          <artifactId>wci-wci</artifactId>
-        </exclusion>
-      </exclusions>
+      <groupId>org.chromattic</groupId>
+      <artifactId>chromattic.apt</artifactId>
+      <version>${version.chromattic}</version>
+      <scope>compile</scope>
     </dependency>
-    <dependency>
-      <groupId>org.gatein.pc</groupId>
-      <artifactId>pc-portlet</artifactId>
-      <version>${org.gatein.pc.version}</version>
-      <exclusions>
-        <exclusion>
-          <groupId>org.gatein.wci</groupId>
-          <artifactId>wci-wci</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-	<!-- just to get those deps into the repo -->
-	<dependency>
-		<groupId>org.gatein.pc</groupId>
-		<artifactId>pc-controller</artifactId>
-		<version>${org.gatein.pc.version}</version>
-    <exclusions>
-      <exclusion>
-        <groupId>org.gatein.wci</groupId>
-        <artifactId>wci-wci</artifactId>
-      </exclusion>
-    </exclusions>
-	</dependency>
-	<dependency>
-		<groupId>org.gatein.pc</groupId>
-		<artifactId>pc-portal</artifactId>
-		<version>${org.gatein.pc.version}</version>
-    <exclusions>
-      <exclusion>
-        <groupId>org.gatein.wci</groupId>
-        <artifactId>wci-wci</artifactId>
-      </exclusion>
-    </exclusions>
-	</dependency>
 
-  <dependency>
-    <groupId>org.chromattic</groupId>
-    <artifactId>chromattic.apt</artifactId>
-    <version>${version.chromattic}</version>
-    <scope>compile</scope> 
-  </dependency>
-
-	<dependency>
-		<groupId>org.gatein.pc</groupId>
-		<artifactId>pc-federation</artifactId>
-		<version>${org.gatein.pc.version}</version>
-	</dependency>
-	<dependency>
-		<groupId>org.gatein.pc</groupId>
-		<artifactId>pc-mc</artifactId>
-		<version>${org.gatein.pc.version}</version>
-    <exclusions>
-      <exclusion>
-        <groupId>org.gatein.wci</groupId>
-        <artifactId>wci-wci</artifactId>
-      </exclusion>
-    </exclusions>
-	</dependency>
-
-	<!-- end -->
     <dependency>
       <groupId>org.exoplatform.portal</groupId>
       <artifactId>exo.portal.component.scripting</artifactId>

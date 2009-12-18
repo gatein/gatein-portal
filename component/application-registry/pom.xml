@@ -106,12 +106,6 @@
       <groupId>org.gatein.pc</groupId>
       <artifactId>pc-api</artifactId>
       <version>${org.gatein.pc.version}</version>
-      <exclusions>
-        <exclusion>
-          <groupId>org.gatein.wci</groupId>
-          <artifactId>wci-wci</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
   </dependencies>
 </project>
