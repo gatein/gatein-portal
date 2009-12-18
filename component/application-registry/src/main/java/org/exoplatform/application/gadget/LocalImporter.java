@@ -116,7 +116,7 @@ public abstract class LocalImporter
    {
       if (registry.getGadget(name) != null)
       {
-         System.out.println("Cannot import existing gagdet " + name);
+         log.debug("Will not import existing gagdet " + name);
          return;
       }
 
@@ -124,7 +124,7 @@ public abstract class LocalImporter
       byte[] bytes = getGadgetBytes();
       if (bytes == null)
       {
-         System.out.println("Coult not import gadget " + gadgetPath);
+         log.error("Cannot import gadget " + gadgetPath + " because its data could not be found");
          return;
       }
 

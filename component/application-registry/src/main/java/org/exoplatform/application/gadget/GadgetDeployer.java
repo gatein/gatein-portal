@@ -118,7 +118,7 @@ public class GadgetDeployer implements WebAppListener, Startable
          {
             Element gadgetElement = (Element)nodeList.item(i);
             String gadgetName = gadgetElement.getAttribute("name");
-            log.info("About to import gadget " + gadgetName);
+            log.debug("About to import gadget " + gadgetName);
             Element pathElt = XMLTools.getUniqueChild(gadgetElement, "path", false);
             if (pathElt != null)
             {
