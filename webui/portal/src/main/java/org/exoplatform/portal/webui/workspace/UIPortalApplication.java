@@ -134,10 +134,6 @@ public class UIPortalApplication extends UIApplication
          if (userProfile != null)
          {
             portalLanguage = userProfile.getUserInfoMap().get("user.language");
-            if(portalLanguage == null)
-            {
-               portalLanguage = "en";
-            }
          }
          else
          {
