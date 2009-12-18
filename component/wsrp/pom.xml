@@ -39,31 +39,26 @@
       <dependency>
          <groupId>org.gatein.wsrp</groupId>
          <artifactId>wsrp-producer-lib</artifactId>
-         <version>${org.gatein.wsrp.version}</version>
          <scope>provided</scope>
       </dependency>
       <dependency>
          <groupId>org.gatein.wsrp</groupId>
          <artifactId>wsrp-consumer</artifactId>
-         <version>${org.gatein.wsrp.version}</version>
          <scope>provided</scope>
       </dependency>
       <dependency>
          <groupId>org.gatein.wsrp</groupId>
          <artifactId>wsrp-integration-api</artifactId>
-         <version>${org.gatein.wsrp.version}</version>
          <scope>provided</scope>
       </dependency>
       <dependency>
          <groupId>org.gatein.pc</groupId>
          <artifactId>pc-api</artifactId>
-         <version>${org.gatein.pc.version}</version>
          <scope>provided</scope>
       </dependency>
       <dependency>
          <groupId>org.gatein.pc</groupId>
          <artifactId>pc-portlet</artifactId>
-         <version>${org.gatein.pc.version}</version>
          <scope>provided</scope>
       </dependency>
       <dependency>
@@ -80,7 +75,6 @@
       <dependency>
          <groupId>org.chromattic</groupId>
          <artifactId>chromattic.api</artifactId>
-         <version>${version.chromattic}</version>
       </dependency>
    </dependencies>
 </project>

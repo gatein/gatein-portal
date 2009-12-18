@@ -41,19 +41,16 @@
     <dependency>
        <groupId>commons-collections</groupId>
        <artifactId>commons-collections</artifactId>
-       <version>3.2.1</version>
     </dependency>
 
     <dependency>
       <groupId>org.exoplatform.jcr</groupId>
       <artifactId>exo.jcr.component.ext</artifactId>
-      <version>${org.exoplatform.jcr.version}</version>
     </dependency>
 
     <dependency>
       <groupId>org.exoplatform.core</groupId>
       <artifactId>exo.core.component.organization.jdbc</artifactId>
-      <version>${org.exoplatform.core.version}</version>
     </dependency>
   </dependencies>
   

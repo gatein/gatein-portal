@@ -42,37 +42,30 @@
     <dependency>
       <groupId>org.gatein.common</groupId>
       <artifactId>common-common</artifactId>
-      <version>${org.gatein.common.version}</version>
     </dependency>
     <dependency>
       <groupId>org.gatein.pc</groupId>
       <artifactId>pc-api</artifactId>
-      <version>${org.gatein.pc.version}</version>
     </dependency>
     <dependency>
       <groupId>org.gatein.pc</groupId>
       <artifactId>pc-portlet</artifactId>
-      <version>${org.gatein.pc.version}</version>
     </dependency>
     <dependency>
       <groupId>org.gatein.pc</groupId>
       <artifactId>pc-mc</artifactId>
-      <version>${org.gatein.pc.version}</version>
     </dependency>
     <dependency>
       <groupId>org.gatein.pc</groupId>
       <artifactId>pc-federation</artifactId>
-      <version>${org.gatein.pc.version}</version>
     </dependency>
     <dependency>
       <groupId>org.gatein.pc</groupId>
       <artifactId>pc-bridge</artifactId>
-      <version>${org.gatein.pc.version}</version>
     </dependency>
     <dependency>
       <groupId>org.gatein.wci</groupId>
       <artifactId>wci-wci</artifactId>
-      <version>${org.gatein.wci.version}</version>
     </dependency>
     <dependency>
       <groupId>org.exoplatform.kernel</groupId>

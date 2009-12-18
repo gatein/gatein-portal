@@ -35,14 +35,12 @@
     <dependency>
       <groupId>org.exoplatform.core</groupId>
       <artifactId>exo.core.component.organization.jdbc</artifactId>
-      <version>${org.exoplatform.core.version}</version>
       <scope>compile</scope>
     </dependency>
     
     <dependency>
       <groupId>org.exoplatform.jcr</groupId>
       <artifactId>exo.jcr.component.ext</artifactId>
-      <version>${org.exoplatform.jcr.version}</version>
     </dependency>
     
     <dependency>
@@ -72,38 +70,32 @@
     <dependency>
       <groupId>org.gatein.mop</groupId>
       <artifactId>mop-api</artifactId>
-      <version>${org.gatein.mop.version}</version>
     </dependency>
 
     <dependency>
       <groupId>org.gatein.mop</groupId>
       <artifactId>mop-spi</artifactId>
-      <version>${org.gatein.mop.version}</version>
     </dependency>
 
     <dependency>
       <groupId>org.gatein.mop</groupId>
       <artifactId>mop-core</artifactId>
-      <version>${org.gatein.mop.version}</version>
     </dependency>
 
     <dependency>
        <groupId>org.picketlink.idm</groupId>
        <artifactId>picketlink-idm-core</artifactId>
-       <version>${org.picketlink.idm}</version>
     </dependency>
 
     <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>servlet-api</artifactId>
-      <version>${javax.servlet.version}</version>
       <scope>provided</scope>
     </dependency>
 
     <dependency>
        <groupId>org.chromattic</groupId>
        <artifactId>chromattic.core</artifactId>
-       <version>${version.chromattic}</version>
        <scope>test</scope>
     </dependency>
 

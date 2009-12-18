@@ -39,13 +39,11 @@
     <dependency>
       <groupId>org.exoplatform.core</groupId>
       <artifactId>exo.core.component.organization.api</artifactId>
-      <version>${org.exoplatform.core.version}</version>
     </dependency>
     
     <dependency>
       <groupId>org.exoplatform.jcr</groupId>
       <artifactId>exo.jcr.component.ext</artifactId>
-      <version>${org.exoplatform.jcr.version}</version>
     </dependency>
         
     <dependency>
@@ -63,13 +61,11 @@
     <dependency>
       <groupId>org.gatein.wci</groupId>
       <artifactId>wci-wci</artifactId>
-      <version>${org.gatein.wci.version}</version>
     </dependency>
 
     <dependency>
       <groupId>org.chromattic</groupId>
       <artifactId>chromattic.apt</artifactId>
-      <version>${version.chromattic}</version>
       <scope>compile</scope>
     </dependency>
 
@@ -82,20 +78,17 @@
     <dependency>
 	    <groupId>org.apache.shindig</groupId>
 		  <artifactId>shindig-gadgets</artifactId>
-      <version>${org.shindig.version}</version>
     </dependency>
 
     <dependency>
-        <groupId>commons-io</groupId>
-        <artifactId>commons-io</artifactId>
-        <version>1.4</version>
-        <type>jar</type>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <type>jar</type>
     </dependency>
 		
 		<dependency>
     	<groupId>org.json</groupId>
     	<artifactId>json</artifactId>
-    	<version>20070829</version>
     	<type>jar</type>
     </dependency>
   </dependencies>

@@ -35,7 +35,6 @@
     <dependency>
       <groupId>org.exoplatform.core</groupId>
       <artifactId>exo.core.component.database</artifactId>
-      <version>${org.exoplatform.core.version}</version>
         <exclusions>
             <exclusion>
                 <groupId>org.hibernate</groupId>
@@ -51,59 +50,34 @@
     <dependency>
       <groupId>org.exoplatform.core</groupId>
       <artifactId>exo.core.component.organization.api</artifactId>
-      <version>${org.exoplatform.core.version}</version>
     </dependency>
 
      <dependency>
         <groupId>org.picketlink.idm</groupId>
         <artifactId>picketlink-idm-core</artifactId>
-        <version>${org.picketlink.idm}</version>
      </dependency>
      <dependency>
         <groupId>org.picketlink.idm</groupId>
         <artifactId>picketlink-idm-hibernate</artifactId>
-        <version>${org.picketlink.idm}</version>
      </dependency>
      <dependency>
         <groupId>org.picketlink.idm</groupId>
         <artifactId>picketlink-idm-ldap</artifactId>
-        <version>${org.picketlink.idm}</version>
      </dependency>
      <dependency>
         <groupId>org.picketlink.idm</groupId>
         <artifactId>picketlink-idm-cache</artifactId>
-        <version>${org.picketlink.idm}</version>
      </dependency>
-
-      <!--To use instead of outdated version from xdoclet-->
-      <!--<dependency>-->
-          <!--<groupId>commons-collections</groupId>-->
-          <!--<artifactId>commons-collections</artifactId>-->
-          <!--<version>3.2.1</version>-->
-
-      <!--</dependency>-->
 
       <dependency>
          <groupId>hsqldb</groupId>
          <artifactId>hsqldb</artifactId>
-         <version>1.8.0.7</version>
          <scope>test</scope>
       </dependency>
-
-      <!--<dependency>-->
-         <!--<groupId>com.sun.xml.bind</groupId>-->
-         <!--<artifactId>jaxb-impl</artifactId>-->
-         <!--<version>2.1.8</version>-->
-      <!--</dependency>-->
-
-
-      
-
 
     <dependency>
       <groupId>javax.resource</groupId>
       <artifactId>connector-api</artifactId>
-      <version>1.5</version>
       <scope>test</scope>
     </dependency>
 

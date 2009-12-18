@@ -37,7 +37,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
-                <!-- <version>2.0</version> -->
                 <configuration>
                     <dependentWarExcludes>gadgets/**</dependentWarExcludes>
                     <dependentWarExcludes>WEB-INF/web**</dependentWarExcludes>
@@ -51,19 +50,16 @@
         <dependency>
             <groupId>org.apache.shindig</groupId>
             <artifactId>shindig-server</artifactId>
-            <version>${org.shindig.version}</version>
             <type>war</type>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.shindig</groupId>
-            <version>${org.shindig.version}</version>
             <artifactId>shindig-features</artifactId>
             <scope>provided</scope>
         </dependency>
 				<dependency>
             <groupId>org.apache.shindig</groupId>
-            <version>${org.shindig.version}</version>
             <artifactId>shindig-social-api</artifactId>
             <scope>provided</scope>
         </dependency>
@@ -72,96 +68,76 @@
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
-            <version>20070829</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>caja</groupId>
             <artifactId>caja</artifactId>
-            <version>r3375</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>caja</groupId>
             <artifactId>json_simple</artifactId>
-            <version>r1</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>net.oauth</groupId>
             <artifactId>core</artifactId>
-            <version>20080621</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
 					<groupId>com.google.collections</groupId>
 			 		<artifactId>google-collections</artifactId>
-			 		<version>1.0-rc2</version>
 					<scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.google.code.guice</groupId>
             <artifactId>guice</artifactId>
-            <version>2.0</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
-            <version>2.4</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>rome</groupId>
             <artifactId>rome</artifactId>
-            <version>0.9</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.ibm.icu</groupId>
             <artifactId>icu4j</artifactId>
-            <version>3.8</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>net.sourceforge.nekohtml</groupId>
             <artifactId>nekohtml</artifactId>
-            <version>1.9.9</version>
             <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>xerces</groupId>
             <artifactId>xercesImpl</artifactId>
-            <version>2.9.1</version>
             <scope>provided</scope>
         </dependency>
 
 	    <dependency>
 	        <groupId>jaxen</groupId>
 	        <artifactId>jaxen</artifactId>
-	        <version>1.1.1</version>
 	        <scope>provided</scope>
 	    </dependency>
 	
 	<dependency>
         <groupId>nu.validator.htmlparser</groupId>
         <artifactId>htmlparser</artifactId>
-        <version>1.0.7</version>
         <scope>provided</scope>
     </dependency>
 
 	<dependency>
         <groupId>commons-digester</groupId>
         <artifactId>commons-digester</artifactId>
-        <version>1.7</version>
         <scope>provided</scope>
     </dependency>
-        <!--dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>1.4</version>
-            <type>jar</type>
-        </dependency-->
     </dependencies>
 </project>

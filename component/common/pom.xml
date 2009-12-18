@@ -34,37 +34,30 @@
     <dependency>
       <groupId>org.gatein.common</groupId>
       <artifactId>common-logging</artifactId>
-      <version>${org.gatein.common.version}</version>
     </dependency>
     <dependency>
       <groupId>org.exoplatform.kernel</groupId>
       <artifactId>exo.kernel.commons</artifactId>
-      <version>${org.exoplatform.kernel.version}</version>
     </dependency>
     <dependency>
       <groupId>org.exoplatform.core</groupId>
       <artifactId>exo.core.component.database</artifactId>
-      <version>${org.exoplatform.core.version}</version>
     </dependency>
     <dependency>
       <groupId>org.exoplatform.jcr</groupId>
       <artifactId>exo.jcr.component.core</artifactId>
-      <version>${org.exoplatform.jcr.version}</version>
     </dependency>
     <dependency>
       <groupId>org.exoplatform.jcr</groupId>
       <artifactId>exo.jcr.component.ext</artifactId>
-      <version>${org.exoplatform.jcr.version}</version>
     </dependency>
     <dependency>
       <groupId>org.chromattic</groupId>
       <artifactId>chromattic.api</artifactId>
-      <version>${version.chromattic}</version>
     </dependency>
     <dependency>
       <groupId>org.chromattic</groupId>
       <artifactId>chromattic.spi</artifactId>
-      <version>${version.chromattic}</version>
     </dependency>
 
     <dependency>
@@ -84,19 +77,16 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>3.8.1</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.chromattic</groupId>
       <artifactId>chromattic.core</artifactId>
-      <version>${version.chromattic}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
        <groupId>org.chromattic</groupId>
        <artifactId>chromattic.apt</artifactId>
-       <version>${version.chromattic}</version>
        <scope>test</scope>
     </dependency>
   </dependencies>

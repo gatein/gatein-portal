@@ -35,7 +35,6 @@
     <dependency>
       <groupId>org.exoplatform.ws</groupId>
       <artifactId>exo.ws.frameworks.servlet</artifactId>
-      <version>${org.exoplatform.ws.version}</version>
       <scope>provided</scope>
     </dependency>
   </dependencies>

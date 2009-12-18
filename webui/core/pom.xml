@@ -44,7 +44,6 @@
     <dependency>
       <groupId>org.gatein.common</groupId>
       <artifactId>common-common</artifactId>
-      <version>${org.gatein.common.version}</version>
     </dependency>
   </dependencies>
   
