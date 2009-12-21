@@ -10,6 +10,10 @@ This will explain you how to build a package of GateIn with Tomcat or JBoss.
 * mvn install
 For example: mvn install
 
+Note: If you run "mvn install" twice in a row without cleaning, one test will
+fail. To workaround this issue you will need to delete the test data located
+here: component/portal/target/temp/
+
 **********************
 * MAVEN CONFIGURATION:
 **********************
