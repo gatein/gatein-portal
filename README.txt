@@ -7,8 +7,8 @@ This will explain you how to build a package of GateIn with Tomcat or JBoss.
 * COMPILATION
 *****************
 
-* mvn install -Dgatein.checkout.dir=//Full Path to the the root of gatein portal sourcess
-For example: mvn install -Dgatein.checkout.dir=$PWD on Linux
+* mvn install
+For example: mvn install
 
 **********************
 * MAVEN CONFIGURATION:
@@ -28,13 +28,11 @@ provided in profiles.xml. It will override what's in the provided file.
 * PACKAGING:
 *****************
 
-* mvn install -Ppkg-tomcat -Dgatein.checkout.dir=//Full Path to the the root of gatein portal sources
+* mvn install -Ppkg-tomcat
 ** Creates a Tomcat delivery in packaging/pkg/target/tomcat/ 
-** Creates compressed archives in packaging/pkg/target/target
 
-* mvn install -Ppkg-jbossas -Dgatein.checkout.dir=//Full Path to the the root of gatein portal sources
+* mvn install -Ppkg-jbossas
 ** Creates a JBossAS delivery in packaging/pkg/target/jboss/
-** Creates compressed archives in packaging/pkg/target/target
 
 *****************
 * STARTING:
@@ -44,24 +42,3 @@ provided in profiles.xml. It will override what's in the provided file.
 
 * Go to http://localhost:8080/portal to see the homepage of the portal. That's it. 
 
-******************
-* ADDITIONAL INFO:
-******************
-Portal packaging tooling:
-* An embedded version of exobuild (exo packaging tooling) is pom embbed and autorun with the install goal
-* http://svn.exoplatform.org/projects/utils/exopackage/ for the sources
-
-Process:
-1/ Tomcat or JBossAS packaging are done during the "mvn install" process of
-the "packaging" module
-2/ exopackage-x.x.x is downloaded from maven
-4/ product and module for this version are stored in the current project, and
-found by exopackage during the run
-5/ a maven-exec-plugin calls exobuild from maven with the right parameters
-6/ Deliveries is in the target directory
-
-**************
-* WHAT'S NEXT
-**************
-The exobuild tooling will be ported in a maven plugin with no more .js files, or replaced by a pure maven configuration.
-This work will be done before GateIn final version
