@@ -26,7 +26,7 @@
 		Permission settings control what users can and cannot do within the portal and are set by portal administrators.
 	</para>
 	<para>
-		There are two permission <emphasis role="bold">types</emphasis>:
+		Permission <emphasis role="bold">types</emphasis> dictate <emphasis>what</emphasis> a user can do within the portal. There are two permission types used in &PRODUCT;:
 	</para>
 
 	<variablelist>
@@ -34,7 +34,7 @@
 			<term>Access</term>
 				<listitem>
 					<para>
-						This allows users to use (see a page content, drag and drop portlets into pages, sign in). The access permission can be set for a list of groups.
+						This permission type allows users to utilize portal content, that is; sign in, rearrange portlets, etc. This permission can be set for multiple member groups.
 					</para>
 				</listitem>
 		</varlistentry>
@@ -42,14 +42,14 @@
 			<term>Edit</term>
 			<listitem>
 				<para>
-					Allows users to change (change portal or page information, delete portals or pages). The edit permission is set for only one group at the same time.
+					This permission type allows users to change portal content. This includes actions such as changing page information, deleting pages etc. The <emphasis>edit</emphasis> permission is set for only one group at a time.
 				</para>
 			</listitem>
 		</varlistentry>
 	</variablelist>
 
 	<para>
-		There are several permission <emphasis role="bold"> levels</emphasis> used in EPP 5.0:
+		Permission <emphasis role="bold"> levels</emphasis> dictate <emphasis>where</emphasis> in the portal the user's permission type applies. There are three permission levels:
 	</para>
 
 	<variablelist>
@@ -57,7 +57,7 @@
 			<term>Portal</term>
 			<listitem>
 				<para>
-					The portal permission level includes all pages, pages only can be accessed if the user has also access to the Portal.
+					The portal permission level includes all pages within the portal. Therefore, a user with the <emphasis role="bold">access</emphasis> permission type can view (but not edit) all the pages within the portal. A user with <emphasis role="bold">edit</emphasis> permission at the portal level, can change any page in the portal.
 				</para>
 			</listitem>
 		</varlistentry>
@@ -65,7 +65,7 @@
 			<term>Page</term>
 			<listitem>
 				<para>
-					The page permission level restricts the access permission to single pages. Users can change page information (properties, layout) if they have the edit permission.
+					The page permission level restricts the user to particular pages. Users are only able to see and/or edit (depending on their permission <emphasis role="bold">type</emphasis>) pages they have been given access to.
 				</para>
 			</listitem>
 		</varlistentry>
@@ -73,55 +73,15 @@
 			<term>Portlet</term>
 			<listitem>
 				<para>
-					The portlet permission level allows users create a page, they need to drag and drop portlets into a page to create the page content. Some portlets are only used for administrators, some are used for individual needs of a group thus you have to set the appropriate access permission.
+					The portlet permission level allows users create a page by dragging and dropping portlets into a page. Some portlets are only used for administrators while some are used for individuals thus administrators have to set the appropriate access permissions.
 				</para>
 			</listitem>
 		</varlistentry>
 	</variablelist>
 
-<!--	<section id="sect-User_Guide-Permissions-Permission_Types">
-		<title>Permission Types</title>
-		<para>
-			There are two permission <emphasis role="bold">types</emphasis>:
-		</para>
-		<itemizedlist>
-			<listitem>
-				<para>
-					<emphasis role="bold">Access</emphasis>: This allows users to use (see a page content, drag and drop portlets into pages, sign in). The access permission can be set for a list of groups.
-				</para>
-			</listitem>
-			<listitem>
-				<para>
-					<emphasis role="bold">Edit</emphasis>: allows users to change (change portal or page information, delete portals or pages). The edit permission is set for only one group at the same time.
-				</para>
-			</listitem>
-		</itemizedlist>
-	</section>
-	
-	<section id="sect-User_Guide-Permissions-Permission_Levels">
-		<title>Permission Levels</title>
-		<para>
-			There are several permission <emphasis role="bold"> levels</emphasis> used in EPP 5.0:
-		</para>
-		<itemizedlist>
-			<listitem>
-				<para>
-					<emphasis role="bold">Portal</emphasis>: The portal permission level includes all pages, pages only can be accessed if the user has also access to the Portal.
-				</para>
-			</listitem>
-			<listitem>
-				<para>
-					<emphasis role="bold">Page</emphasis>: The page permission level restricts the access permission to single pages. Users can change page information (properties, layout) if they have the edit permission.
-				</para>
-			</listitem>
-			<listitem>
-				<para>
-					<emphasis role="bold">Portlet</emphasis>: The portlet permission level allows users create a page, they need to drag and drop portlets into a page to create the page content. Some portlets are only used for administrators, some are used for individual needs of a group thus you have to set the appropriate access permission.
-				</para>
-			</listitem>
-		</itemizedlist>
-	</section> -->
-
+	<para>
+		Permission <emphasis role="bold">types</emphasis> and <emphasis role="bold">levels</emphasis> can be used to effectively control who can do what within the portal. For more information on setting permissions refer to <xref linkend="sect-User_Guide-Manage_Permissions"/>
+	</para>
 </section>
 
 

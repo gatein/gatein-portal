@@ -33,7 +33,7 @@
 		<term>Site</term>
 		<listitem>
 			<para>
-				This navigation links to separate sites of the main Portal. Each site has only one navigation and it is automatically created when the site is created. This functionality allows different sites to administer some Portal aspects, such as portlets, individually while maintaining other content standaradized with the parent Portal.
+				This navigation links to separate sites of the main Portal. Each site has only one navigation and it is automatically created when the site is created. This functionality allows different sites to administer some Portal aspects individually, such as portlets, while maintaining other content standardized with the parent Portal.
 			</para>
 		</listitem>
 	</varlistentry>
@@ -41,7 +41,7 @@
 		<term>Group</term>
 		<listitem>
 			<para>
-				The content of this navigation differs depending on the type of account logged in. For user accounts the Groups navigation holds personal links set up by the user. For management accounts, it keeps the links to pages for registered Portal users as well as adminisrative tasks and personal links. In the administrator account, the navigation adds further management abilities such as Internationalization and community management.
+				The content of this navigation differs depending on the type of account logged in. For user accounts the Groups navigation holds personal links set up by the user. For management accounts, it keeps the links to pages for registered Portal users as well as administrative tasks and personal links. In the administrator account, the navigation adds further management abilities such as Internationalization and community management.
 			</para>
 		</listitem>
 	</varlistentry>
@@ -53,7 +53,19 @@
 			</para>
 		</listitem>
 	</varlistentry>
-
+	</variablelist>
+	<para>
+		When logged in as an Administrator, a fourth navigation appears in the Toolbar:
+	</para>
+	<variablelist>
+	  <varlistentry>
+		<term>Site Editor</term>
+		<listitem>
+			<para>
+				This navigation contains links to add a new page to the portal, to edit a page or to change the portal's layout. Administrators can use these links to manage the portal.
+			</para>
+		</listitem>
+	</varlistentry>
 	</variablelist>
 </section>
 

@@ -23,7 +23,7 @@
 
          --><title>FCK Portlet</title>
 	<para>
-		GateIn Portal provides users with FCK portlet used as a lightweight text editor in the web pages. All its common used functions (like Word editor) such as writing, formatting text, creating tables, inserting links or picture, etc.
+		&PRODUCT; provides users with a portlet for the FCK Editor; a <ulink type="http" url="http://en.wikipedia.org/wiki/WYSIWYG">WYSIWYG</ulink> text editor that can be embedded in HTML web pages. FCK Editor offers users many of the commonly used word-processor functions such as writing, formatting text, creating tables, inserting links or pictures and more.
 	</para>
 	<mediaobject>
 		<imageobject>
@@ -31,14 +31,14 @@
 		</imageobject>
 	</mediaobject>
 	<para>
-		FCK portlet also consists of some main elements:
+		The main elements of the FCK portlet are:
 	</para>
 	<variablelist>
 		<varlistentry>
 			<term>Toolbar</term>
 			<listitem>
 				<para>
-					The area at the top of the editor which contains many different buttons. You will use these buttons to activate the program functions.
+					The area at the top of the editor which, like a desktop word-processsor, contains buttons used to perform various functions.
 				</para>
 				<mediaobject>
 					<imageobject>
@@ -51,7 +51,7 @@
 			<term>Editing Area</term>
 			<listitem>
 				<para>
-					This area is under the toolbar. This area allows typing your text and format document.
+					This is the main pane of the text editor portlet. It is where you type, view and format your text.
 				</para>
 				<mediaobject>
 					<imageobject>
@@ -64,7 +64,7 @@
 			<term>Context menu</term>
 			<listitem>
 				<para>
-					It is a menu with the functions that will appear when you right click anywhere in the space of editing area or an existing object.
+					A context menu is the program-specific right-click menu. It allows users to perform functions based on the context of where they clicked in the application. In the FCK Editor, context options include items like 'cut', 'copy' and 'paste'.
 				</para>
 				<mediaobject>
 					<imageobject>
@@ -74,10 +74,13 @@
 			</listitem>
 		</varlistentry>
 		<varlistentry>
-			<term>Dialogs</term>
+			<term>Dialogues</term>
 			<listitem>
 				<para>
-					Small windows appear when some of the functions are activated, it is used to provide the necessary information to accomplish that functions. For an example: To insert a link, you need to open <emphasis role="bold">Link</emphasis> dialog by clicking!images/LinkIcon.png! icon on the Tool bar :
+					In the FCK Editor, as in most programs, small windows called 'dialogues' may appear when some of the functions are activated. They provide the necessary information to accomplish those functions. 
+				</para>
+				<para>
+					For an example: To insert a link into your document, you click the <emphasis role="bold">Link</emphasis> icon in the Toolbar. This will open a dialogue to allow you to input necessary information about the link:
 				</para>
 				<mediaobject>
 					<imageobject>

@@ -22,22 +22,28 @@
     02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
          --><title>Introduction</title>
+	<para>
+		Enterprise Portal Platform (<acronym>EPP</acronym>) 5.0 is a merge of two mature projects; the JBoss Portal and the eXo Portal. It takes the best of both offerings and incorporates them into a single new project. The aim is to provide an intuitive portal for as-is use and a framework to build upon depending on your needs.
+	</para>
 	<mediaobject>
 		<imageobject>
 			<imagedata fileref="images/Frontpage.png" format="PNG" scalefit="1" width="444" />
 		</imageobject>
 	</mediaobject>
-	<para>
-		Enterprise Portal Platform (<acronym>EPP</acronym>) 5.0 is a merge of two mature projects; the JBoss Portal and the eXo Portal. It takes the best of both offerings and incorporates them into a single new project. The aim is to provide an intuitive portal for as-is use and a framework to build upon depending on your needs.
-	</para>
 	<section id="sect-User_Guide-Introduction-Links">
 		<title>Links</title>
 		<itemizedlist>
 			<listitem>
 				<para>
-					GateIn project homepage. GateIn 3.0 is the community project that Enterprise Portal Platform 5.0 is based on. <ulink url="http://www.gatein.org">www.gatein.org</ulink>
+					GateIn project homepage. GateIn 3.0 is the community project that Enterprise Portal Platform 5.0 is based on. <ulink url="http://www.gatein.org"></ulink>
 				</para>
 			</listitem>
+			<listitem>
+				<para>
+					Further documentation about the Red Hat &PRODUCT; and other Red Hat products can be found at <ulink type="http" url="www.redhat.com/docs"></ulink>
+				</para>
+			</listitem>
+			
 			<!-- 			<listitem>
 				<para>
 					GateIn videos. Various video clips created by the GateIn community leads that provide a guide to the usage and features of the GateIn portal, many of wh <ulink url="http://www.jboss.org/gatein/videos.html">www.jboss.org/gatein/videos.html</ulink>

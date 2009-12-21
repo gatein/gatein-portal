@@ -23,6 +23,36 @@
 			Portlets and gadgets are organized in different categories. Each category contains one or several portlets or gadgets. You can also mix portlets and gadgets into one category. By default all gadgets are placed in the <emphasis>ExoGadgets</emphasis> category.
 		</para>
 	
+		<section id="sect-User_Guide-Dashboard_Portlet-Display_Gadgets">
+		<title>Display Gadgets</title>
+		<para>
+			You can change the number of columns available in the Dashboard Portlet.
+		</para>
+		<procedure>
+			<step>
+				<para>
+					Click on <emphasis role="bold">Site Editor</emphasis> : <emphasis role="bold">Edit Page</emphasis>
+				</para>
+			</step>
+			<step>
+				<para>
+					Click on <emphasis role="bold">Edit Portlet</emphasis> button (which is displayed a pencil icon when you mouse-over the portlet in edit mode). It will show a dialog to change the number of columns to display gadgets.
+				</para>
+				<mediaobject>
+					<imageobject>
+						<imagedata fileref="images/Column.png" format="PNG" width="444" />
+					</imageobject>
+				</mediaobject>
+			</step>
+			<step>
+				<para>
+					Change the number of columns and click the <emphasis role="bold">Save</emphasis> button to accept the changes.
+				</para>
+			</step>
+		</procedure>
+
+	</section>
+
 	<section id="sect-User_Guide-Manage_Portlets_and_Gadgets-Add_a_new_Category">
 		<title>Add a new Category</title>
 		<para>

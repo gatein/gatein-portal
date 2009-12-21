@@ -103,55 +103,25 @@
 				<term>More Gadgets</term>
 				<listitem>
 					<para>
-						Further gadgets can be obtained from the <ulink type="http" url="http://www.google.com/ig/directory?synd=open">Google Gadget</ulink> site. EPP is compatible with any gadget available here.
+						Further gadgets can be obtained from the <ulink type="http" url="http://www.google.com/ig/directory?synd=open">Google Gadget</ulink> site. &PRODUCT; is compatible with most of the gadgets available here.
 					</para>
 				</listitem>
 			</varlistentry>
 		</variablelist>
 	</section>
-	
-	<section id="sect-User_Guide-Dashboard_Portlet-Display_Gadgets">
-		<title>Display Gadgets</title>
-		<para>
-			You can change the number of columns to create in this space.
-		</para>
-		<procedure>
-			<step>
-				<para>
-					Click on <emphasis role="bold">Site Editor</emphasis> : <emphasis role="bold">Edit Page</emphasis>
-				</para>
-			</step>
-			<step>
-				<para>
-					Click on <emphasis role="bold">Edit Portlet</emphasis> . It will show a dialog to change the number of columns to display gadgets.
-				</para>
-				<mediaobject>
-					<imageobject>
-						<imagedata fileref="images/Column.png" format="PNG" width="444" />
-					</imageobject>
-				</mediaobject>
-			</step>
-			<step>
-				<para>
-					Change the number of columns and click the <emphasis role="bold">Save</emphasis> button to accept changing.
-				</para>
-			</step>
-		</procedure>
-
-	</section>
-	
+		
 	<section id="sect-User_Guide-Dashboard_Portlet-Add_Gadgets">
 		<title>Add Gadgets</title>
 		<para>
-			You can also add more gadgets, do as follows:
+			To add more gadgets, do the following:
 		</para>
 		<para>
-			Open the popup to add gadges
+			Open the popup to add gadgets
 		</para>
 		<procedure>
 			<step>
 				<para>
-					Click the <emphasis role="bold">Add Gadgets</emphasis> link 
+					While in the Dashboard portlet, click the <emphasis role="bold">Add Gadgets</emphasis> link 
 					<mediaobject>
 						<imageobject>
 							<imagedata fileref="images/Dashboard1.png" format="PNG" width="444" />
@@ -161,7 +131,7 @@
 			</step>
 			<step>
 				<para>
-					dialog to add a new gadget will appear : 
+					The Dashboard Workspace dialog appear : 
 					<mediaobject>
 						<imageobject>
 							<imagedata fileref="images/EnterLink.png" format="PNG" />
@@ -171,21 +141,21 @@
 			</step>
 			<step>
 				<para>
-					Enter a link (a .xml or .rss) in a text box on the left pane.
+					Enter a link (a .xml or .rss) in the text box above the gadgets list.
 				</para>
 				<note>
 					<title>Note</title>
 					<para>
-						If you enter a .rss file or a link that generate rss format (for example: http://feeds.feedburner.com/gatein), a new rss gadget reader will be created in the dashboard.
+						If you enter an .rss file or a link that generate an RSS feed (for example: http://feeds.feedburner.com/gatein), a new RSS gadget reader will be created in the dashboard.
 					</para>
 				</note>
 				<para>
-					Remote gadgets can be only created using the .xml file format which s the standard gadget format.
+					Remote gadgets can be only created using the .xml file format (which is the standard gadget format).
 				</para>
 			</step>
 			<step>
 				<para>
-					Click on the + icon to add a new gadget to the gadget list beneath.
+					Click on the + icon to add a new gadget to the gadget list.
 				</para>
 			</step>
 		</procedure>

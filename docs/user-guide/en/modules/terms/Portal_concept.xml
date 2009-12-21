@@ -23,7 +23,7 @@
 
          --><title>Portal</title>
 		<para>
-			&PRODUCT; is a web-based application that provides users with personalized User Interface (UI). This UI allows users to easily perform actions such as searching applications or information and communicating with other users.
+			&PRODUCT; is a web-based application that provides users with personalized User Interface (UI). This interface allows users to easily search applications or information or communicating with other users.
 		</para>
 		<para>
 			The Portal provides a graphical aggregation of enterprise content and business applications with flexible management and personalization options.
@@ -45,7 +45,7 @@
 			<term>WebUI Framework</term>
 			<listitem>
 				<para>
-					The WebUI (User Interface) Framework is tailored for easy screen composition and Ajax support in Portal environment.
+					The WebUI Framework has <ulink type="http" url="http://www.xul.fr/en-xml-ajax.html">AJAX</ulink> support and is designed for easy screen composition.
 				</para>
 			</listitem>
 		</varlistentry>

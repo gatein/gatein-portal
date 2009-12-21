@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8' ?>
 <!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
 ]>
-<section id="sect-User_Guide-Manage_Permission">
+<section id="sect-User_Guide-Manage_Permissions">
 	<!--     
 
     Copyright (C) 2009 eXo Platform SAS.
@@ -21,7 +21,7 @@
     Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
     02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
-     --><title>Manage Permission</title>
+     --><title>Manage Permissions</title>
 	<para>
 		Permissions play an important part in accessing and performing actions in the Portal. Depending on permissions assigned by an administrator, users can either access or edit portals, pages and portlets. GateIn Portal have applied several permission levels:
 	</para>
