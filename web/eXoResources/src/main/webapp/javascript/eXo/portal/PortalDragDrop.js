@@ -222,11 +222,6 @@ PortalDragDrop.prototype.init = function(e) {
         /*Set properties for drag object */
         eXo.portal.PortalDragDrop.setDragObjectProperties(dragObject, tdElementList, "column", dndEvent.backupMouseEvent) ;
       }
-			//when dragObject out of page
-			if ((Browser.findPosY(dragObject) < 0)  || (Browser.findPosX(dragObject) + 64 > eXo.core.Browser.getBrowserWidth())) {
-				DragDrop.dropCallback(dndEvent);
-				document.onmousemove = null;
-			} 
     } 
   } ;
 
@@ -248,7 +243,13 @@ PortalDragDrop.prototype.init = function(e) {
     
     eXo.portal.isInDragging = false;
   	eXo.portal.UIPortal.changeComposerSaveButton();
- }
+  };
+  
+  DragDrop.cancelCallback = function(dndEvent) {
+  	if(Browser.browserType == "ie" && Browser.findMouseYInClient(dndEvent.backupMouseEvent) < 0) {
+  		DragDrop.onDrop(dndEvent.backupMouseEvent);
+  	}
+  };
   
   var clickObject = this;
   var componentBlock = DOMUtil.findAncestorByClass(clickObject, "UIComponentBlock") ;
@@ -338,12 +339,10 @@ PortalDragDrop.prototype.scrollOnDrag = function(dragObject, dndEvent) {
   var deltaBottom = mouseY - (Math.round(browserHeight/6)) ;
   if(deltaTop > 0) {
     document.documentElement.scrollTop += deltaTop - 5 ;
-//    if(!dragObject.isComponent) dragObject.style.top = parseInt(dragObject.style.top) + (deltaTop -5) + "px";
   }
   
   if(deltaBottom < 0 && document.documentElement.scrollTop > 0) {
     document.documentElement.scrollTop += deltaBottom ;
-//    if(!dragObject.isComponent) dragObject.style.top = parseInt(dragObject.style.top) + deltaBottom + "px";
   }
 };
 

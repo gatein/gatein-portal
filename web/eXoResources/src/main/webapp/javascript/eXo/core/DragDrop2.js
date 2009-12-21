@@ -49,6 +49,7 @@ eXo.core.DragDrop2 = {
 		o.root.onDragStart(x, y, o.lastMouseX, o.lastMouseY, e);
 		document.onmousemove = eXo.core.DragDrop2.drag;
 		document.onmouseup = eXo.core.DragDrop2.end;
+		document.onmouseout = eXo.core.DragDrop2.cancel;
 		return false;
 	},
 	
@@ -76,9 +77,14 @@ eXo.core.DragDrop2 = {
 		e = eXo.core.DragDrop2.fixE(e);
 		document.onmousemove = null;
 		document.onmouseup = null;
+		document.onmouseout = null;
 		eXo.core.DragDrop2.obj.root.onDragEnd( parseInt(eXo.core.DragDrop2.obj.root.style["left"]), 
 		parseInt(eXo.core.DragDrop2.obj.root.style["top"]), e.clientX, e.clientY);
 		eXo.core.DragDrop2.obj = null;
+	},
+	
+	cancel : function(e) {
+		if(eXo.core.DragDrop2.obj.root.onCancel) eXo.core.DragDrop2.obj.root.onCancel(e);
 	},
 	
 	fixE : function(e) {

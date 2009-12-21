@@ -251,7 +251,14 @@ eXo.webui.UIDashboard = {
 				uiTarget = eXo.core.DOMUtil.findFirstDescendantByClass(portletFragment, "div", "UITarget");
 			}
 			uiDashboard.targetObj = uiDashboard.currCol = uiDashboard.compId = null;
-		}	
+		}
+		
+		
+		dragObj.onCancel = function(e){
+			if(eXo.core.Browser.browserType == "ie" && eXo.core.Browser.findMouseYInClient() < 0) {
+				eXo.core.DragDrop2.end(e);
+			}
+		}
 	},
 	
 	onLoad : function(windowId, canEdit) {
