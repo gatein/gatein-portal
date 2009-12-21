@@ -24,6 +24,7 @@ import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.RootContainer;
 import org.exoplatform.container.RootContainer.PortalContainerPostInitTask;
+import org.exoplatform.container.util.EnvSpecific;
 import org.exoplatform.container.web.AbstractHttpSessionListener;
 import org.exoplatform.services.listener.ListenerService;
 import org.exoplatform.services.log.ExoLogger;
@@ -180,7 +181,17 @@ public class GenericHttpListener extends AbstractHttpSessionListener implements 
             }
          }
       };
-      RootContainer.getInstance().addInitTask(event.getServletContext(), task);
+      ServletContext ctx = event.getServletContext();
+      try
+      {
+         EnvSpecific.initThreadEnv(ctx);
+         RootContainer.getInstance().addInitTask(event.getServletContext(), task);
+      }
+      finally
+      {
+         EnvSpecific.cleanupThreadEnv(ctx);      
+      }
+      
    }
 
    /**
