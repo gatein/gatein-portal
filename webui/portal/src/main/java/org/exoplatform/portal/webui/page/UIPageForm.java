@@ -429,11 +429,11 @@ public class UIPageForm extends UIFormTabPane
       public void execute(Event<UIPageForm> event) throws Exception
       {
          UIPageForm uiForm = event.getSource();
-         String permission = "*:/" + uiForm.groupIdSelectBox.getValue();
-         uiForm.findFirstComponentOfType(UIListPermissionSelector.class).setValue(new String[]{permission});
-         UserACL userACL = uiForm.getApplicationComponent(UserACL.class);
          String groupIdSelected = uiForm.groupIdSelectBox.getValue();
          groupIdSelected = groupIdSelected.startsWith("/") ? groupIdSelected : "/" + groupIdSelected;
+         String permission = "*:" + groupIdSelected;
+         uiForm.findFirstComponentOfType(UIListPermissionSelector.class).setValue(new String[]{permission});
+         UserACL userACL = uiForm.getApplicationComponent(UserACL.class);         
          permission = userACL.getMakableMT() + ":" + groupIdSelected;
          uiForm.findFirstComponentOfType(UIPermissionSelector.class).setValue(permission);
          event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent());
