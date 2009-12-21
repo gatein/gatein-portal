@@ -198,15 +198,21 @@ public class TestOrganizationService extends BasicTestCase
       /* Create a child group with name: Group1 */
       Group groupChild1 = groupHandler_.createGroupInstance();
       groupChild1.setGroupName(Group1);
+      groupChild1.setLabel("Group1 Label");
       groupHandler_.addChild(groupParent, groupChild1, true);
+      
+      assertEquals(groupHandler_.findGroupById(groupChild1.getId()).getLabel(), "Group1 Label");
+      
       groupChild1 = groupHandler_.findGroupById(groupChild1.getId());
       assertEquals(groupChild1.getParentId(), groupParent.getId());
       assertEquals("Expect group child's name is: ", Group1, groupChild1.getGroupName());
       /* Update groupChild's information */
-      groupChild1.setLabel("GroupRenamed");
+      groupChild1.setLabel("Group1 Label renamed");
       groupChild1.setDescription("new description ");
       groupHandler_.saveGroup(groupChild1, true);
-      assertEquals(groupHandler_.findGroupById(groupChild1.getId()).getLabel(), "GroupRenamed");
+
+      assertEquals(groupHandler_.findGroupById(groupChild1.getId()).getLabel(), "Group1 Label renamed");
+      
       /* Create a group child with name is: Group2 */
       Group groupChild2 = groupHandler_.createGroupInstance();
       groupChild2.setGroupName(Group2);
