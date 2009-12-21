@@ -235,6 +235,17 @@ DOMUtil.prototype.findDescendantById = function(root, id) {
   return null ;
 } ;
 /**
+ * Returns true if root has obj as a ancestor
+ */
+DOMUtil.prototype.hasAncestor= function(root, obj) {
+  var prtEle = root.parentNode ;
+  while (prtEle) {
+  	if(prtEle == obj) return true;
+  	prtEle = prtEle.parentNode;
+  }
+  return false ;
+} ;
+/**
  * Returns true if root has obj as a descendant
  */
 DOMUtil.prototype.hasDescendant= function(root, obj) {

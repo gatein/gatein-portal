@@ -255,13 +255,13 @@ PortalDragDrop.prototype.init = function(e) {
 
   if(componentBlock != null) {
     var dragBlock = eXo.portal.UIPortal.findUIComponentOf(componentBlock) ;
-    DragDrop.init(eXo.portal.PortalDragDrop.findDropableTargets(), clickObject, dragBlock, e) ;
+    DragDrop.init(eXo.portal.PortalDragDrop.findDropableTargets(dragBlock), clickObject, dragBlock, e) ;
   } else {
   	var dragBlock = DOMUtil.findAncestorByClass(clickObject, "DragObjectPortlet") ;
 		if(dragBlock) {
-  		DragDrop.init(eXo.portal.PortalDragDrop.findDropableTargets(), clickObject, dragBlock, e) ;
+  		DragDrop.init(eXo.portal.PortalDragDrop.findDropableTargets(dragBlock), clickObject, dragBlock, e) ;
 		} else {
-    	DragDrop.init(eXo.portal.PortalDragDrop.findDropableTargets(), clickObject, clickObject, e) ;
+    	DragDrop.init(eXo.portal.PortalDragDrop.findDropableTargets(dragBlock), clickObject, clickObject, e) ;
 		}
   }
 };
@@ -310,7 +310,7 @@ PortalDragDrop.prototype.doDropCallback = function(dndEvent) {
 };
 
 /* Find components in dropable target */
-PortalDragDrop.prototype.findDropableTargets = function() {
+PortalDragDrop.prototype.findDropableTargets = function(dragBlock) {
   var dropableTargets = new Array() ;
   var uiWorkingWorkspace = document.getElementById("UIWorkingWorkspace") ;
   var uiPortal = eXo.core.DOMUtil.findFirstDescendantByClass(uiWorkingWorkspace, "div", "UIPortal") ;
@@ -323,6 +323,7 @@ PortalDragDrop.prototype.findDropableTargets = function() {
     if(uiPage) dropableTargets.push(uiPage) ;
   }
   for(var i = 0; i < uiContainers.length; i++) {
+  	if (eXo.core.DOMUtil.hasAncestor(uiContainers[i], dragBlock)) continue;
     dropableTargets.push(uiContainers[i]) ;
   }
   return dropableTargets ;

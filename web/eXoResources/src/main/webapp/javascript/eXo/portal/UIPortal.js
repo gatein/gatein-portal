@@ -98,7 +98,7 @@ UIPortal.prototype.blockOnMouseOver = function(event, portlet, isOver) {
 		} else {
 			newLayer.parentNode.style.width = width + "px";
 			var normalBlock = DOMUtil.findFirstChildByClass(portlet, "div", "NormalContainerBlock");
-			DOMUtil.replaceClass(normalBlock, "NormalContainerBlock", "OverContainerBlock");
+			if(normalBlock) DOMUtil.replaceClass(normalBlock, "NormalContainerBlock", "OverContainerBlock");
 		}
 		newLayer.parentNode.style.top = -height + "px";
 		editBlock.style.display = "block";		
@@ -106,15 +106,18 @@ UIPortal.prototype.blockOnMouseOver = function(event, portlet, isOver) {
 		editBlock.style.display = "none";
 		if(!DOMUtil.hasClass(portlet, "UIPortlet")) {
 			var normalBlock = DOMUtil.findFirstChildByClass(portlet, "div", "OverContainerBlock");
-			DOMUtil.replaceClass(normalBlock, "OverContainerBlock", "NormalContainerBlock");
+			if(normalBlock) DOMUtil.replaceClass(normalBlock, "OverContainerBlock", "NormalContainerBlock");
 		}
 	}
 	
 	// Don't displat portlet control when View Container
 		var controlPortlet =	DOMUtil.findFirstDescendantByClass(editBlock, "div", "CONTROL-PORTLET");
-		controlPortlet.style.display = "block";
-		if (controlPortlet != null && eXo.portal.portalMode == 4) {				
+		if (controlPortlet) {
+			if(eXo.portal.portalMode == 4) {
 				controlPortlet.style.display = "none";
+			} else {				
+				controlPortlet.style.display = "block";
+			}
 		}
 };
 
