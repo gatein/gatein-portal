@@ -23,98 +23,84 @@
 
         --><title>Register New Accounts</title>
 	<para>
-		If you are a visitor to a portal built with &PRODUCT;, you only may read news or take some normal actions. Thus to access and get more actions, you should register and contact with administrators to get more permissions!
+		Users who visit the Portal and who are not registered are limited in the content they can see. User who need access to deeper content or who need to undertake actions within the prtal should register themselves and then contact the portal administrator to have appropriate permissions added to their account.
 	</para>
 	<para>
-		&PRODUCT; supports users to register a new account by themselves quickly and easily. Just by completing the steps below, you will have a new account that helps you access more pages and take more actions in &PRODUCT;:
+		Users can  quickly and easily register a new account by themselves. Just by completing the steps below, you will have a new account that helps you access more pages and take more actions in &PRODUCT;:
 	</para>
 	<procedure>
 		<step>
 			<para>
-				Go to a portal by typing the URL in the address bar (e.g: http://localhost:8080/portal). 
+				Click <emphasis role="bold">Register</emphasis> on the Navigation bar.
+			</para>
 				<mediaobject>
 					<imageobject>
 						<imagedata fileref="images/Frontpage.png" format="PNG" width="444" />
 					</imageobject>
 				</mediaobject>
-			</para>
-		</step>
-		<step>
-			<para>
-				Click <emphasis role="bold">Register</emphasis> on the Navigation bar. The Register page will appear: 
+				<para>
+					The Register page will appear: 
+				</para>
 				<mediaobject>
 					<imageobject>
 						<imagedata fileref="images/AccountSetting.png" format="PNG" width="444" />
 					</imageobject>
 				</mediaobject>
-			</para>
+
 			<para>
 				The <emphasis role="bold">Account Setting</emphasis> information includes:
 			</para>
-			<informaltable colsep="0" frame="none" rowsep="0">
-				<tgroup cols="2">
-					<colspec align="center"></colspec>
-					<colspec align="center"></colspec>
-					<tbody>
-						<row>
-							<entry>
-								<emphasis role="bold"> Name </emphasis>
-							</entry>
-							<entry>
-								<emphasis role="bold"> Description </emphasis>
-							</entry>
-						</row>
-						<row>
-							<entry>
-								User Name
-							</entry>
-							<entry>
-								the name that the user uses to login. This field must be unique and start with a character
-							</entry>
-						</row>
-						<row>
-							<entry>
-								Password
-							</entry>
-							<entry>
-								The *Password* must be between 6 and 30 characters and can contain space characters. Since Portal 2.6, space characters are either at the beginning or in the end can be counted.
-							</entry>
-						</row>
-						<row>
-							<entry>
-								Confirm Password
-							</entry>
-							<entry>
-								re-type the password above. *Password* and *Confirm Password* must be the same.
-							</entry>
-						</row>
-						<row>
-							<entry>
-								First Name
-							</entry>
-							<entry>
-								the first name of a user.
-							</entry>
-						</row>
-						<row>
-							<entry>
-								Last Name
-							</entry>
-							<entry>
-								the last name of a user.
-							</entry>
-						</row>
-						<row>
-							<entry>
-								Email Address
-							</entry>
-							<entry>
-								the email of a user. It must be in the right format likes username@abc.com
-							</entry>
-						</row>
-					</tbody>
-				</tgroup>
-			</informaltable>
+
+					<variablelist>
+						<varlistentry>
+							<term>User Name</term> 
+							<listitem>
+								<para>
+									The name that the user uses to login.
+								</para>
+							</listitem>
+						</varlistentry>
+						<varlistentry>
+							<term>Password</term>
+							<listitem>
+								<para>
+									The *Password* must be between 6 and 30 characters and can contain space characters. Since Portal 2.6, space characters are either at the beginning or in the end can be counted.
+								</para>
+							</listitem>
+						</varlistentry>
+						<varlistentry>
+							<term>Confirm Password</term>
+							<listitem>
+								<para>
+									Re-type the password above. *Password* and *Confirm Password* must be the same.
+								</para>
+							</listitem>
+						</varlistentry>
+						<varlistentry>
+							<term>First Name</term>
+							<listitem>
+								<para>
+									The first name of the user.
+								</para>
+							</listitem>
+						</varlistentry>
+						<varlistentry>
+							<term>Last Name</term>
+							<listitem>
+								<para>
+									The last name of the user.
+								</para>
+							</listitem>
+						</varlistentry>
+						<varlistentry>
+							<term>Email Address</term>
+							<listitem>
+								<para>
+									The email address of the user. It must be in the appropriate format, example: username@abc.com.
+								</para>
+							</listitem>
+						</varlistentry>
+					</variablelist>
 		</step>
 		<step>
 			<para>
@@ -123,7 +109,7 @@
 		</step>
 		<step>
 			<para>
-				Click the magnifying glass icon !images/magnifyIcon.png! to search and check if the chosen username is available.
+				Click the magnifying glass icon to search and check if the chosen username is available.
 			</para>
 		</step>
 		<step>
@@ -131,7 +117,7 @@
 				Input values in the <emphasis role="bold">User Profile</emphasis> tab, include: Profile information, Home information, Business information. These fields are not required.
 			</para>
 			<para>
-				&PRODUCT; facilitates users with 4 commonly used languagues: English, French, Vietnamese and Arabic in the <emphasis role="bold">Language</emphasis> field. You can select one of these languages to work with.
+				&PRODUCT; facilitates users with four commonly used languagues: English, French, Vietnamese and Arabic in the <emphasis role="bold">Language</emphasis> field. You can select one of these languages to work with.
 			</para>
 			<mediaobject>
 				<imageobject>
@@ -146,38 +132,38 @@
 			<itemizedlist>
 				<listitem>
 					<para>
-						<emphasis role="bold">User name</emphasis> already exists or user name is invalid.
+						The chosen <emphasis role="bold">User name</emphasis> already exists or is invalid.
 					</para>
 				</listitem>
 				<listitem>
 					<para>
-						<emphasis role="bold">Password</emphasis> has less than 6 characters or more than 30 characters.
+						The nominated <emphasis role="bold">Password</emphasis> has less than 6 characters or more than 30 characters.
 					</para>
 				</listitem>
 				<listitem>
 					<para>
-						<emphasis role="bold">Password</emphasis> and <emphasis role="bold">Confirm Password</emphasis> are not the same.
+						The <emphasis role="bold">Password</emphasis> and <emphasis role="bold">Confirm Password</emphasis> fields are not the same.
 					</para>
 				</listitem>
 				<listitem>
 					<para>
-						<emphasis role="bold">Email Address</emphasis> format is not valid
+						The <emphasis role="bold">Email Address</emphasis> format is not valid
 					</para>
 				</listitem>
 				<listitem>
 					<para>
-						Required fields are blank (empty).
+						A required field (or fields) is empty.
 					</para>
 				</listitem>
 			</itemizedlist>
 		</step>
 	</procedure>
 	<para>
-		After adding a new account, you should either contact the administrator to get more permissions or you are only a visitor user. 
+		After adding a new account, you should contact the administrator to get appropriate permissions added to your account. 
 		<note>
 			<title>Note</title>
 			<para>
-				You should enter your email address carefully because when you forget your user name or password, you can recover it by using this email address.
+				Be sure you enter your email address carefully. If you should forget your user name or password, you can recover it by using this email address.
 			</para>
 		</note>
 	</para>

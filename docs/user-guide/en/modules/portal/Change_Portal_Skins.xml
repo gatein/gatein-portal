@@ -29,7 +29,7 @@
 			skin switch that takes only effect on the user's current session until he signs out. You can change the skin permanently or temporarily.
 		</para>
 
-		<variablelist>
+<!--			<variablelist>
 		<varlistentry id="User_Guide-Change_Portal_Skins-Change_the_skin_temporarily">
 			<term>Change the skin temporarily</term>
 			<listitem>
@@ -44,7 +44,7 @@
 				<procedure>
 					<step>
 						<para>
-							Go to <emphasis role="bold">GateIn Start</emphasis> -&gt; <emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Advanced</emphasis> --&gt; <emphasis role="bold">Edit Current portal</emphasis>
+							Go to <emphasis role="bold">GateIn Start</emphasis> -&gt; <emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Advanced</emphasis> -&gt; <emphasis role="bold">Edit Current portal</emphasis>
 						</para>
 					</step>
 					<step>
@@ -70,42 +70,30 @@
 				</procedure>
 			</listitem>
 		</varlistentry>
-	</variablelist>
-	
-<!--	<section >
-		<title></title>
-		<para>
-			1. 
-		</para>
-		<para>
-			For GateIn Portal 2.6
-		</para>
-		<orderedlist>
-			<listitem>
+	</variablelist> -->
+
+		<procedure>
+			<step>
 				<para>
-					1. Go to <emphasis role="bold">GateIn</emphasis> on the Toolbar &gt; click <emphasis role="bold">Change Skin</emphasis>.
+					Go to <emphasis role="bold">GateIn</emphasis> on the Toolbar &gt; click <emphasis role="bold">Change Skin</emphasis>. The <emphasis role="bold">Skin Setting</emphasis> form is displayed with a list of all supported skins. The left pane contains the skin list and the right pane is used to display the template of the selected skin.
 				</para>
+			</step>
+			<step>
 				<para>
-					The <emphasis role="bold">Skin Setting</emphasis> form is displayed with a list of all supported skins. The left pane contains the skin list and the right pane is used to display the template of the selected skin.
+					Select a skin by clicking on the its name.
 				</para>
-			</listitem>
-			<listitem>
+			</step>
+			<step>
 				<para>
-					2. Select one by clicking on the skin's name.
-				</para>
-			</listitem>
-			<listitem>
-				<para>
-					3. Click the <emphasis role="bold">Apply</emphasis> button and wait for few seconds to take effect.
+					Click the <emphasis role="bold">Apply</emphasis> button and wait for few seconds to take effect.
 				</para>
 				<mediaobject>
 					<imageobject>
 						<imagedata fileref="images/SkinSet1.png" format="PNG" width="444" />
 					</imageobject>
 				</mediaobject>
-			</listitem>
-		</orderedlist>
-	</section> -->
+			</step>
+		</procedure>
 
 </section>
 
