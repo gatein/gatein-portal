@@ -482,7 +482,7 @@ public class UserACL
       return id;
    }
 
-   private boolean hasPermission(Identity identity, String expPerm)
+   public boolean hasPermission(Identity identity, String expPerm)
    {
       String currentUser = identity.getUserId();
       if (superUser_.equals(currentUser))

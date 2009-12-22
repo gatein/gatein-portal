@@ -24,14 +24,18 @@ import org.exoplatform.application.gadget.GadgetRegistryService;
 import org.exoplatform.application.registry.Application;
 import org.exoplatform.application.registry.ApplicationCategory;
 import org.exoplatform.application.registry.ApplicationRegistryService;
+import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.services.security.Identity;
+import org.exoplatform.services.security.IdentityRegistry;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -57,15 +61,33 @@ public class UIApplicationList extends UIContainer
       String remoteUser = Util.getPortalRequestContext().getRemoteUser();
       if (remoteUser == null || remoteUser.equals(""))
          return;
+      UserACL userACL = Util.getUIPortalApplication().getApplicationComponent(UserACL.class);
+      IdentityRegistry identityRegistry = Util.getUIPortalApplication().getApplicationComponent(IdentityRegistry.class);
+      Identity identity = identityRegistry.getIdentity(remoteUser);
+      if (identity == null) return;
+      
       PortletComparator portletComparator = new PortletComparator();
       categories = service.getApplicationCategories(remoteUser);
       Collections.sort(categories, new PortletCategoryComparator());
-      Iterator<ApplicationCategory> cateItr = categories.iterator();
+      Iterator<ApplicationCategory> cateItr = categories.iterator();      
       while (cateItr.hasNext())
       {
-         ApplicationCategory cate = cateItr.next();
+         ApplicationCategory cate = cateItr.next();         
          List<Application> applications = cate.getApplications();
-         if (applications.size() < 1)
+         
+         boolean hasPermission = false;
+         List<String> accessPermission = cate.getAccessPermissions();
+         if (accessPermission == null) {
+            accessPermission = new ArrayList<String>();
+            accessPermission.add(null);
+         }         
+         for (String permssion : accessPermission)
+         {
+            hasPermission = userACL.hasPermission(identity, permssion);
+            if (hasPermission) break;
+         }
+         
+         if (!hasPermission || applications.size() < 1)
             cateItr.remove();
          else
             Collections.sort(applications, portletComparator);
