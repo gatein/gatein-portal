@@ -1,4 +1,15 @@
-<% def maxiGadget = uicomponent.getMaximizedGadget(); %>
+<%
+  import org.exoplatform.web.application.JavascriptManager;
+  
+  def rcontext = _ctx.getRequestContext() ;
+  JavascriptManager jsmanager = rcontext.getJavascriptManager(); 
+  jsmanager.addCustomizedOnLoadScript("eXo.gadget.UIGadget.SaveTitle='" + _ctx.appRes("UIDashboardContainer.label.SaveTitle") + "';");
+  jsmanager.addCustomizedOnLoadScript("eXo.gadget.UIGadget.CancelTitle='" + _ctx.appRes("UIDashboardContainer.label.CancelTitle") + "';");
+  jsmanager.addCustomizedOnLoadScript("eXo.gadget.UIGadget.Cache='" + _ctx.appRes("UIDashboardContainer.label.Cache") + "';");
+  jsmanager.addCustomizedOnLoadScript("eXo.gadget.UIGadget.Debug='" + _ctx.appRes("UIDashboardContainer.label.Debug") + "';");
+   
+  def maxiGadget = uicomponent.getMaximizedGadget(); 
+%>
 <div id="$uicomponent.id" class="UIDashboard">
 	<div class="DashboardContainer <%=maxiGadget == null ? "" : "Maximized"%>">
 	<%
