@@ -104,7 +104,7 @@
       </supertypes>
       <propertyDefinitions>
          <propertyDefinition name="status" requiredType="String" autoCreated="false" mandatory="false"
-                             onParentVersion="COPY" protected="false" multiple="true">
+                             onParentVersion="COPY" protected="false" multiple="false">
             <valueConstraints/>
          </propertyDefinition>
          <propertyDefinition name="registrationhandle" requiredType="String" autoCreated="false" mandatory="false"

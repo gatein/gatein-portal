@@ -33,7 +33,7 @@
       </supertypes>
       <propertyDefinitions>
          <propertyDefinition name="strictmode" requiredType="boolean" autoCreated="false" mandatory="false"
-                             onParentVersion="COPY" protected="false" multiple="true">
+                             onParentVersion="COPY" protected="false" multiple="false">
             <valueConstraints/>
          </propertyDefinition>
       </propertyDefinitions>
@@ -86,7 +86,7 @@
       </supertypes>
       <propertyDefinitions>
          <propertyDefinition name="value" requiredType="String" autoCreated="false" mandatory="false"
-                             onParentVersion="COPY" protected="false" multiple="true">
+                             onParentVersion="COPY" protected="false" multiple="false">
             <valueConstraints/>
          </propertyDefinition>
          <propertyDefinition name="status" requiredType="Integer" autoCreated="false" mandatory="false"
@@ -112,7 +112,7 @@
       </supertypes>
       <propertyDefinitions>
          <propertyDefinition name="name" requiredType="String" autoCreated="false" mandatory="false"
-                             onParentVersion="COPY" protected="false" multiple="true">
+                             onParentVersion="COPY" protected="false" multiple="false">
             <valueConstraints/>
          </propertyDefinition>
          <propertyDefinition name="type" requiredType="String" autoCreated="false" mandatory="false"
