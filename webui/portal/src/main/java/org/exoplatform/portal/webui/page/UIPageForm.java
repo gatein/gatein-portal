@@ -186,6 +186,7 @@ public class UIPageForm extends UIFormTabPane
       invokeGetBindingBean(page);
       getUIStringInput("name").setEditable(false);
       getUIStringInput("pageId").setValue(uiPage.getPageId());
+      getUIStringInput("title").setValue(uiPage.getTitle());
       getUIFormCheckBoxInput("showMaxWindow").setValue(uiPage.isShowMaxWindow());
       getUIFormSelectBox(OWNER_TYPE).setEnable(false).setValue(uiPage.getOwnerType());
       removeChild(UIPageTemplateOptions.class);

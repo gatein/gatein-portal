@@ -490,7 +490,8 @@ public class UINavigationNodeSelector extends UIContainer
 
             WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
             selectPage.setModifier(context.getRemoteUser());
-            selectPage.setTitle(selectedPageNode.getLabel());
+            if(selectPage.getTitle() == null)
+               selectPage.setTitle(selectedPageNode.getLabel());
 
             // convert Page to UIPage
             PortalDataMapper.toUIPage(uiPage, selectPage);
