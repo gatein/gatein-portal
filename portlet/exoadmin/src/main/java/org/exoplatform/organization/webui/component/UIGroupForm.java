@@ -114,6 +114,19 @@ public class UIGroupForm extends UIForm
             {
                currentGroup.setLabel(currentGroup.getGroupName());
             }
+            
+            Group updateGroup = service.getGroupHandler().findGroupById(currentGroup.getGroupName());
+            if (updateGroup == null) {
+               Object[] args = {"GroupName", currentGroup.getGroupName()};
+               UIApplication uiApp = event.getRequestContext().getUIApplication();
+               uiApp.addMessage(new ApplicationMessage("UIGroupForm.msg.group-not-exist", args));
+               String parentId = currentGroup.getParentId();
+               uiGroupExplorer.changeGroup(parentId);
+               uiGroupDetail.getChild(UIGroupForm.class).setGroup(null);
+               uiGroupDetail.setRenderedChild(UIGroupInfo.class);
+               return;
+            }
+            
             service.getGroupHandler().saveGroup(currentGroup, false);
             uiGroupForm.reset();
             uiGroupForm.setGroup(null);
