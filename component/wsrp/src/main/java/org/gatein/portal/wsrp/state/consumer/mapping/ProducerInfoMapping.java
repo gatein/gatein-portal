@@ -23,10 +23,15 @@
 
 package org.gatein.portal.wsrp.state.consumer.mapping;
 
+import org.chromattic.api.annotations.DefaultValue;
+import org.chromattic.api.annotations.Id;
+import org.chromattic.api.annotations.MappedBy;
 import org.chromattic.api.annotations.NodeMapping;
 import org.chromattic.api.annotations.OneToOne;
 import org.chromattic.api.annotations.Property;
-import org.chromattic.api.annotations.RelatedMappedBy;
+import org.gatein.wsrp.consumer.EndpointConfigurationInfo;
+import org.gatein.wsrp.consumer.ProducerInfo;
+import org.gatein.wsrp.consumer.RegistrationInfo;
 
 /**
  * @author <a href="mailto:chris.laprun@jboss.com">Chris Laprun</a>
@@ -38,17 +43,17 @@ public abstract class ProducerInfoMapping
    public static final String NODE_NAME = "wsrp:producerinfo";
 
    @OneToOne
-   @RelatedMappedBy("endpoint")
+   @MappedBy("endpoint")
    public abstract EndpointInfoMapping getEndpointInfo();
 
    @OneToOne
-   @RelatedMappedBy("registration")
+   @MappedBy("registration")
    public abstract RegistrationInfoMapping getRegistrationInfo();
 
    @Property(name = "producerid")
-   public abstract String getProducerId();
+   public abstract String getId();
 
-   public abstract void setProducerId(String id);
+   public abstract void setId(String id);
 
    @Property(name = "cache")
    public abstract Integer getExpirationCacheSeconds();
@@ -56,12 +61,52 @@ public abstract class ProducerInfoMapping
    public abstract void setExpirationCacheSeconds(Integer expiration);
 
    @Property(name = "active")
+   @DefaultValue.Boolean(false)
    public abstract boolean getActive();
 
    public abstract void setActive(boolean active);
 
-   @Property(name = "available")
-   public abstract boolean getAvailable();
+   @Id
+   public abstract String getKey();
 
-   public abstract void setAvailable(boolean available);
+   /* @Property(name = "available")
+public abstract boolean getAvailable();
+
+public abstract void setAvailable(boolean available);*/
+
+   public void initFrom(ProducerInfo producerInfo)
+   {
+      setActive(producerInfo.isActive());
+      setExpirationCacheSeconds(producerInfo.getExpirationCacheSeconds());
+      setId(producerInfo.getId());
+
+      EndpointInfoMapping eim = getEndpointInfo();
+      eim.initFrom(producerInfo.getEndpointConfigurationInfo());
+
+      RegistrationInfoMapping rim = getRegistrationInfo();
+      RegistrationInfo regInfo = producerInfo.getRegistrationInfo();
+      rim.initFrom(regInfo);
+   }
+
+   public ProducerInfo toProducerInfo()
+   {
+      // todo: should probably use a ProducerInfo implementation backed by mapping at some point
+      ProducerInfo info = new ProducerInfo();
+
+      // basic properties
+      info.setKey(getKey());
+      info.setId(getId());
+      info.setActive(getActive());
+      info.setExpirationCacheSeconds(getExpirationCacheSeconds());
+
+      // endpoint
+      EndpointConfigurationInfo endInfo = getEndpointInfo().toEndpointConfigurationInfo();
+      info.setEndpointConfigurationInfo(endInfo);
+
+      // registration
+      RegistrationInfo regInfo = getRegistrationInfo().toRegistrationInfo();
+      info.setRegistrationInfo(regInfo);
+
+      return info;
+   }
 }

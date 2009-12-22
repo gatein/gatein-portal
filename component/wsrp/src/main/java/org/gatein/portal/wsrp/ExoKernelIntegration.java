@@ -1,5 +1,9 @@
-/**
- * Copyright (C) 2009 eXo Platform SAS.
+/*
+ * JBoss, a division of Red Hat
+ * Copyright 2009, Red Hat Middleware, LLC, and individual
+ * contributors as indicated by the @authors tag. See the
+ * copyright.txt in the distribution for a full listing of
+ * individual contributors.
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -31,21 +35,21 @@ import org.gatein.pc.portlet.impl.state.StateManagementPolicyService;
 import org.gatein.pc.portlet.impl.state.producer.PortletStatePersistenceManagerService;
 import org.gatein.pc.portlet.state.StateConverter;
 import org.gatein.pc.portlet.state.producer.ProducerPortletInvoker;
+import org.gatein.portal.wsrp.state.consumer.JCRConsumerRegistry;
+import org.gatein.portal.wsrp.state.producer.configuration.JCRProducerConfigurationService;
+import org.gatein.portal.wsrp.state.producer.registrations.JCRRegistrationPersistenceManager;
 import org.gatein.registration.RegistrationManager;
 import org.gatein.registration.RegistrationPersistenceManager;
 import org.gatein.registration.impl.RegistrationManagerImpl;
-import org.gatein.registration.impl.RegistrationPersistenceManagerImpl;
 import org.gatein.registration.policies.DefaultRegistrationPolicy;
 import org.gatein.registration.policies.DefaultRegistrationPropertyValidator;
 import org.gatein.wsrp.api.SessionEvent;
 import org.gatein.wsrp.api.SessionEventBroadcaster;
 import org.gatein.wsrp.api.SessionEventListener;
 import org.gatein.wsrp.consumer.registry.ConsumerRegistry;
-import org.gatein.wsrp.consumer.registry.xml.XMLConsumerRegistry;
 import org.gatein.wsrp.producer.ProducerHolder;
 import org.gatein.wsrp.producer.WSRPProducer;
 import org.gatein.wsrp.producer.config.ProducerConfigurationService;
-import org.gatein.wsrp.producer.config.impl.xml.SimpleXMLProducerConfigurationService;
 import org.picocontainer.Startable;
 
 import java.io.InputStream;
@@ -58,32 +62,37 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class ExoKernelIntegration implements Startable
 {
-   private static final String DEFAULT_PRODUCER_CONFIG_LOCATION = "conf/wsrp-producer-config.xml";
-
    private static final String CLASSPATH = "classpath:/";
+   private static final String PRODUCER_CONFIG_LOCATION = "producerConfigLocation";
+   private static final String CONSUMERS_CONFIG_LOCATION = "consumersConfigLocation";
+   private static final String WORKSPACE_NAME = "workspaceName";
+   private static final String REPOSITORY_NAME = "repositoryName";
 
    private final InputStream configurationIS;
-
-   private String configLocation;
-
+   private final String producerConfigLocation;
    private WSRPProducer producer;
 
+   private final String consumersConfigLocation;
    private ConsumerRegistry consumerRegistry;
 
    public ExoKernelIntegration(InitParams params, ConfigurationManager configurationManager,
                                org.exoplatform.portal.pc.ExoKernelIntegration pc) throws Exception
    {
+      // IMPORTANT: even though PC ExoKernelIntegration is not used anywhere in the code, it's still needed for pico
+      // to properly make sure that this service is started after the PC one. Yes, Pico is crap. :/
+
       if (params != null)
       {
-         configLocation = params.getValueParam("configLocation").getValue();
+         producerConfigLocation = params.getValueParam(PRODUCER_CONFIG_LOCATION).getValue();
+         consumersConfigLocation = params.getValueParam(CONSUMERS_CONFIG_LOCATION).getValue();
       }
-
-      if (configLocation == null)
+      else
       {
-         configLocation = DEFAULT_PRODUCER_CONFIG_LOCATION;
+         throw new IllegalArgumentException("Improperly configured service: missing values for "
+            + PRODUCER_CONFIG_LOCATION + "and " + CONSUMERS_CONFIG_LOCATION);
       }
 
-      configurationIS = configurationManager.getInputStream(CLASSPATH + configLocation);
+      configurationIS = configurationManager.getInputStream(CLASSPATH + producerConfigLocation);
    }
 
    public void start()
@@ -96,17 +105,29 @@ public class ExoKernelIntegration implements Startable
    private void startProducer(ExoContainer container)
    {
 
-      ProducerConfigurationService producerConfigurationService = new SimpleXMLProducerConfigurationService();
+      JCRProducerConfigurationService producerConfigurationService;
       try
       {
-         producerConfigurationService.loadConfigurationFrom(configurationIS);
+         producerConfigurationService = new JCRProducerConfigurationService(container);
+         producerConfigurationService.setDefaultConfigurationIS(configurationIS);
+         producerConfigurationService.reloadConfiguration();
       }
       catch (Exception e)
       {
-         throw new RuntimeException("Couldn't load WSRP producer configuration from " + configLocation, e);
+         throw new RuntimeException("Couldn't load WSRP producer configuration from " + producerConfigLocation, e);
       }
+      container.registerComponentInstance(ProducerConfigurationService.class, producerConfigurationService);
 
-      RegistrationPersistenceManager registrationPersistenceManager = new RegistrationPersistenceManagerImpl();
+      RegistrationPersistenceManager registrationPersistenceManager = null;
+      try
+      {
+         registrationPersistenceManager = new JCRRegistrationPersistenceManager(container);
+//         registrationPersistenceManager = new RegistrationPersistenceManagerImpl();
+      }
+      catch (Exception e)
+      {
+         throw new RuntimeException("Couln't instantiate RegistrationPersistenceManager", e);
+      }
       RegistrationManager registrationManager = new RegistrationManagerImpl();
       registrationManager.setPersistenceManager(registrationPersistenceManager);
 
@@ -152,18 +173,18 @@ public class ExoKernelIntegration implements Startable
       FederatingPortletInvoker federatingPortletInvoker =
          (FederatingPortletInvoker)container.getComponentInstanceOfType(PortletInvoker.class);
 
-      consumerRegistry = new XMLConsumerRegistry();
-      consumerRegistry.setFederatingPortletInvoker(federatingPortletInvoker);
-      consumerRegistry.setSessionEventBroadcaster(new SimpleSessionEventBroadcaster());
-
       try
       {
+         consumerRegistry = new JCRConsumerRegistry(container);
+         consumerRegistry.setFederatingPortletInvoker(federatingPortletInvoker);
+         consumerRegistry.setSessionEventBroadcaster(new SimpleSessionEventBroadcaster());
          consumerRegistry.start();
       }
       catch (Exception e)
       {
          throw new RuntimeException("Couldn't start WSRP consumers registry.", e);
       }
+      container.registerComponentInstance(ConsumerRegistry.class, consumerRegistry);
    }
 
    public void stop()

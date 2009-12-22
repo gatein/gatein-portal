@@ -23,6 +23,7 @@
 
 package org.gatein.portal.wsrp.state.consumer.mapping;
 
+import org.chromattic.api.annotations.Create;
 import org.chromattic.api.annotations.NodeMapping;
 import org.chromattic.api.annotations.OneToMany;
 
@@ -39,4 +40,7 @@ public abstract class ProducerInfosMapping
 
    @OneToMany
    public abstract List<ProducerInfoMapping> getProducerInfos();
+
+   @Create
+   public abstract ProducerInfoMapping createProducerInfo(String producerId);
 }

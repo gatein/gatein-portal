@@ -19,7 +19,8 @@
 
 -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
    <modelVersion>4.0.0</modelVersion>
 
@@ -47,7 +48,7 @@
       <org.gatein.wci.version>2.0.0-CR02</org.gatein.wci.version>
       <org.gatein.pc.version>2.1.0-CR01</org.gatein.pc.version>
       <org.picketlink.idm>1.0.0.CR1</org.picketlink.idm>
-      <org.gatein.wsrp.version>1.0.0-Beta01</org.gatein.wsrp.version>
+      <org.gatein.wsrp.version>1.0.0-Beta03</org.gatein.wsrp.version>
       <org.gatein.mop.version>1.0.0-Beta12</org.gatein.mop.version>
       <org.slf4j.version>1.5.6</org.slf4j.version>
       <rhino.version>1.6R5</rhino.version>
@@ -59,15 +60,15 @@
       <!-- ************** -->
       <!-- Build settings -->
       <!-- ************** -->
-   
+
       <!-- maven-enforcer-plugin -->
       <jdk.min.version>1.6</jdk.min.version>
 
       <!-- maven-release-plugin -->
-      <arguments>-Prelease,pkg-tomcat,pkg-jbossas -Dmaven.test.skip=true</arguments>       
-        
-  </properties>
-  
+      <arguments>-Prelease,pkg-tomcat,pkg-jbossas -Dmaven.test.skip=true</arguments>
+
+   </properties>
+
    <scm>
       <connection>scm:svn:http://anonsvn.jboss.org/repos/gatein/portal/trunk</connection>
       <developerConnection>scm:svn:http://svn.jboss.org/repos/gatein/portal/trunk</developerConnection>
@@ -494,7 +495,7 @@
          <scope>test</scope>
       </dependency>
    </dependencies>
-   
+
    <build>
       <resources>
          <resource>
@@ -521,9 +522,9 @@
       <pluginManagement>
          <plugins>
             <plugin>
-                 <groupId>org.codehaus.mojo</groupId>
-                 <artifactId>exec-maven-plugin</artifactId>
-                 <version>1.1.1</version>
+               <groupId>org.codehaus.mojo</groupId>
+               <artifactId>exec-maven-plugin</artifactId>
+               <version>1.1.1</version>
             </plugin>
             <plugin>
                  <groupId>org.codehaus.mojo</groupId>
@@ -570,11 +571,12 @@
                   <phase>compile</phase>
                   <configuration>
                      <tasks>
-                        <copy failonerror="false" todir="${project.build.directory}/${project.build.finalName}/WEB-INF/classes">
+                        <copy failonerror="false"
+                              todir="${project.build.directory}/${project.build.finalName}/WEB-INF/classes">
                            <fileset dir="${basedir}/src/main/webapp/WEB-INF/classes">
-                              <include name="**/*_en.properties" />
+                              <include name="**/*_en.properties"/>
                            </fileset>
-                           <globmapper from="*_en.properties" to="*.properties" />
+                           <globmapper from="*_en.properties" to="*.properties"/>
                         </copy>
                      </tasks>
                   </configuration>

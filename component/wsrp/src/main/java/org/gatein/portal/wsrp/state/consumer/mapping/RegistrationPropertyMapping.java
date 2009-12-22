@@ -23,10 +23,14 @@
 
 package org.gatein.portal.wsrp.state.consumer.mapping;
 
+import org.chromattic.api.annotations.Create;
+import org.chromattic.api.annotations.MappedBy;
 import org.chromattic.api.annotations.NodeMapping;
 import org.chromattic.api.annotations.OneToOne;
 import org.chromattic.api.annotations.Property;
-import org.chromattic.api.annotations.RelatedMappedBy;
+import org.gatein.portal.wsrp.state.mapping.RegistrationPropertyDescriptionMapping;
+import org.gatein.wsrp.consumer.RegistrationProperty;
+import org.gatein.wsrp.registration.RegistrationPropertyDescription;
 
 /**
  * @author <a href="mailto:chris.laprun@jboss.com">Chris Laprun</a>
@@ -37,18 +41,46 @@ public abstract class RegistrationPropertyMapping
 {
    public static final String NODE_NAME = "wsrp:registrationproperty";
 
+   @Property(name = "name")
+   public abstract String getName();
+
+   public abstract void setName(String name);
+
    @Property(name = "value")
    public abstract String getValue();
 
    public abstract void setValue(String value);
 
    @OneToOne
-   @RelatedMappedBy("description")
+   @MappedBy("description")
    public abstract RegistrationPropertyDescriptionMapping getDescription();
 
-   // todo: this should really be an enum…
-   @Property(name = "status")
-   public abstract String getStatus();
+   public abstract void setDescription(RegistrationPropertyDescriptionMapping rpdm);
 
-   public abstract void setStatus(String status);
+   @Create
+   public abstract RegistrationPropertyDescriptionMapping createDescription();
+
+   // todo: this should really be an enum…
+
+   @Property(name = "status")
+   public abstract RegistrationProperty.Status getStatus();
+
+   public abstract void setStatus(RegistrationProperty.Status status);
+
+   public void initFrom(RegistrationProperty property)
+   {
+      // set properties
+      setName(property.getName());
+      setStatus(property.getStatus());
+      setValue(property.getValue());
+
+      // description
+      RegistrationPropertyDescription desc = property.getDescription();
+      if (desc != null)
+      {
+         RegistrationPropertyDescriptionMapping rpdm = createDescription();
+         setDescription(rpdm);
+         rpdm.initFrom(desc);
+      }
+   }
 }

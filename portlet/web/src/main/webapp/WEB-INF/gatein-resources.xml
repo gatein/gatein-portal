@@ -58,7 +58,7 @@
 
 	<portlet-skin>
 		<application-name>web</application-name>
-		<portlet-name>PortalNavigationPortlet</portlet-name>
+		<portlet-name>PortalNavigationPortlet2</portlet-name>
 		<skin-name>Default</skin-name>
 		<css-path>/skin/portal/webui/component/UIPortalNavigationPortlet/DefaultStylesheet.css</css-path>
 	</portlet-skin>

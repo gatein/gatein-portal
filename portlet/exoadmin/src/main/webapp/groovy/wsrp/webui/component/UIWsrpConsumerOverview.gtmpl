@@ -1,0 +1,32 @@
+
+<%
+  import org.exoplatform.webui.core.UIComponent ;
+	import org.exoplatform.webui.form.UIFormPageIterator ;
+	import org.exoplatform.webui.form.UIFormCheckBoxInput ;
+
+%>
+
+
+<div class="<%=uicomponent.getId()%>" id="<%=uicomponent.getId()%>">
+
+  <div class="UIAction">
+      <table class="ActionContainer">
+        <tr>
+          <td>
+            <div onclick="<%=uicomponent.event("OpenPopup", "")%>" class="ActionButton LightBlueStyle">
+              <div class="ButtonLeft">
+                <div class="ButtonRight">
+                  <div class="ButtonMiddle">
+                    <a href="javascript:void(0);">Add New Consumer</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </table>
+  </div>
+
+  <% uicomponent.renderChildren(); %>
+
+</div>

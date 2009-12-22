@@ -202,7 +202,7 @@
   
   <portlet>
     <description xml:lang="EN">Portal Navigation Portlet</description>
-    <portlet-name>PortalNavigationPortlet</portlet-name>
+    <portlet-name>PortalNavigationPortlet2</portlet-name>
     <display-name xml:lang="EN">Portal Navigation Portlet</display-name>
     <portlet-class>org.exoplatform.webui.application.portlet.PortletApplicationController</portlet-class>    
     

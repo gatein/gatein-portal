@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+
+    Copyright (C) 2009 eXo Platform SAS.
+    
+    This is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Lesser General Public License as
+    published by the Free Software Foundation; either version 2.1 of
+    the License, or (at your option) any later version.
+    
+    This software is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+    Lesser General Public License for more details.
+    
+    You should have received a copy of the GNU Lesser General Public
+    License along with this software; if not, write to the Free
+    Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+    02110-1301 USA, or see the FSF site: http://www.fsf.org.
+
+-->
+
+<configuration
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd http://www.exoplaform.org/xml/ns/kernel_1_0.xsd"
+   xmlns="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd">
+
+   <component>
+      <key>org.gatein.portal.wsrp.ExoKernelIntegration</key>
+      <type>org.gatein.portal.wsrp.ExoKernelIntegration</type>
+      <init-params>
+         <value-param>
+            <name>producerConfigLocation</name>
+            <description>Location of the default producer configuration file</description>
+            <value>conf/wsrp-producer-config.xml</value>
+         </value-param>
+         <value-param>
+            <name>consumersConfigLocation</name>
+            <description>Location of the default consumers configuration file</description>
+            <value>conf/wsrp-consumers-config.xml</value>
+         </value-param>
+      </init-params>
+   </component>
+
+   <external-component-plugins>
+      <target-component>org.exoplatform.commons.chromattic.ChromatticManager</target-component>
+      <component-plugin>
+         <name>chromattic</name>
+         <set-method>addLifeCycle</set-method>
+         <type>org.exoplatform.commons.chromattic.ChromatticLifeCycle</type>
+         <init-params>
+            <value-param>
+               <name>domain-name</name>
+               <value>wsrp</value>
+            </value-param>
+            <value-param>
+               <name>workspace-name</name>
+               <value>wsrp-system</value>
+            </value-param>
+            <values-param>
+               <name>entities</name>
+               <value>org.gatein.portal.wsrp.state.mapping.RegistrationPropertyDescriptionMapping</value>
+               <value>org.gatein.portal.wsrp.state.consumer.mapping.ProducerInfoMapping</value>
+               <value>org.gatein.portal.wsrp.state.consumer.mapping.ProducerInfosMapping</value>
+               <value>org.gatein.portal.wsrp.state.consumer.mapping.RegistrationInfoMapping</value>
+               <value>org.gatein.portal.wsrp.state.consumer.mapping.RegistrationPropertyMapping</value>
+               <value>org.gatein.portal.wsrp.state.consumer.mapping.EndpointInfoMapping</value>
+               <value>org.gatein.portal.wsrp.state.producer.configuration.mapping.ProducerConfigurationMapping</value>
+               <value>org.gatein.portal.wsrp.state.producer.configuration.mapping.RegistrationRequirementsMapping</value>
+               <value>org.gatein.portal.wsrp.state.producer.registrations.mapping.ConsumerCapabilitiesMapping</value>
+               <value>org.gatein.portal.wsrp.state.producer.registrations.mapping.ConsumerGroupMapping</value>
+               <value>org.gatein.portal.wsrp.state.producer.registrations.mapping.ConsumerMapping</value>
+               <value>org.gatein.portal.wsrp.state.producer.registrations.mapping.ConsumersAndGroupsMapping</value>
+               <value>org.gatein.portal.wsrp.state.producer.registrations.mapping.RegistrationMapping</value>
+               <value>org.gatein.portal.wsrp.state.producer.registrations.mapping.RegistrationPropertiesMapping</value>
+            </values-param>
+         </init-params>
+      </component-plugin>
+   </external-component-plugins>
+
+</configuration>

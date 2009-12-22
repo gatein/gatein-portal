@@ -23,10 +23,19 @@
 
 package org.gatein.portal.wsrp.state.consumer.mapping;
 
+import org.chromattic.api.annotations.Create;
+import org.chromattic.api.annotations.FormattedBy;
 import org.chromattic.api.annotations.NodeMapping;
 import org.chromattic.api.annotations.OneToMany;
 import org.chromattic.api.annotations.Property;
+import org.exoplatform.commons.utils.Safe;
+import org.gatein.portal.wsrp.state.JCRPersister;
+import org.gatein.portal.wsrp.state.mapping.RegistrationPropertyDescriptionMapping;
+import org.gatein.wsrp.consumer.RegistrationInfo;
+import org.gatein.wsrp.consumer.RegistrationProperty;
+import org.gatein.wsrp.registration.RegistrationPropertyDescription;
 
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.List;
 
@@ -35,6 +44,7 @@ import java.util.List;
  * @version $Revision$
  */
 @NodeMapping(name = RegistrationInfoMapping.NODE_NAME)
+@FormattedBy(JCRPersister.QNameFormatter.class)
 public abstract class RegistrationInfoMapping
 {
    public static final String NODE_NAME = "wsrp:registrationinfo";
@@ -56,4 +66,58 @@ public abstract class RegistrationInfoMapping
 
    @OneToMany
    public abstract List<RegistrationPropertyMapping> getRegistrationProperties();
+
+   @Create
+   public abstract RegistrationPropertyMapping createRegistrationProperty(String propertyName);
+
+   public void initFrom(RegistrationInfo regInfo)
+   {
+      setConsumerName(regInfo.getConsumerName());
+      setRegistrationHandle(regInfo.getRegistrationHandle());
+      byte[] bytes = regInfo.getRegistrationState();
+      if (bytes != null && bytes.length > 0)
+      {
+         ByteArrayInputStream is = new ByteArrayInputStream(bytes);
+         setRegistrationState(is);
+      }
+
+      // clear and recreate registration properties
+      List<RegistrationPropertyMapping> rpms = getRegistrationProperties();
+      rpms.clear();
+      for (RegistrationProperty property : regInfo.getRegistrationProperties().values())
+      {
+         // create new RegistrationPropertyMapping for this RegistrationInfoMapping
+         RegistrationPropertyMapping rpm = createRegistrationProperty(property.getName());
+
+         // add newly created RegistrationPropertyMapping to parent then initialize for JCR
+         rpms.add(rpm);
+         rpm.initFrom(property);
+      }
+   }
+
+   public RegistrationInfo toRegistrationInfo()
+   {
+      RegistrationInfo regInfo = new RegistrationInfo();
+
+      regInfo.setConsumerName(getConsumerName());
+      regInfo.setRegistrationHandle(getRegistrationHandle());
+      regInfo.setRegistrationState(Safe.getBytes(getRegistrationState()));
+
+      // registration properties
+      for (RegistrationPropertyMapping rpm : getRegistrationProperties())
+      {
+         RegistrationProperty prop = regInfo.setRegistrationPropertyValue(rpm.getName(), rpm.getValue());
+
+         RegistrationPropertyDescriptionMapping rpdm = rpm.getDescription();
+         if (rpdm != null)
+         {
+            RegistrationPropertyDescription desc = rpdm.toRegistrationPropertyDescription();
+            prop.setDescription(desc);
+         }
+
+         prop.setStatus(rpm.getStatus());
+      }
+
+      return regInfo;
+   }
 }

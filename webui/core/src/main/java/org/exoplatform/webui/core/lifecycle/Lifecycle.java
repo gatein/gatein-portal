@@ -57,15 +57,12 @@ public class Lifecycle<E extends UIComponent>
    }
 
    /**
-    * That method is the most generic one for every UICOmponent that is bound to
-    * this Lifecycle object and the class that extends it withouyt overiding the
+    * That method is the most generic one for every UIComponent that is bound to
+    * this Lifecycle object and the class that extends it without overriding the
     * method.
     * 
-    * According to the template type associated with the UI component (groovy or
-    * javascript one); the template is rendered using either the method
-    * renderJSTemplate() or renderTemplate(). In the case of the use of a groovy
-    * template, a context object of type WebuiBindingContext is used to then
-    * provide to the template all the necessary objects to render
+    * The template associated to the specified UIComponent is rendered using renderTemplate(). A WebuiBindingContext
+    * context object provides the template with all the necessary objects to render. 
     * (WebuiBindingContext extends the Map class)
     * 
     */
@@ -74,7 +71,7 @@ public class Lifecycle<E extends UIComponent>
       String template = uicomponent.getTemplate();
       ResourceResolver resolver = uicomponent.getTemplateResourceResolver(context, template);
       WebuiBindingContext bcontext = new WebuiBindingContext(resolver, context.getWriter(), uicomponent, context);
-      bcontext.put("uicomponent", uicomponent);
+      bcontext.put(UIComponent.UICOMPONENT, uicomponent);
       bcontext.put(uicomponent.getUIComponentName(), uicomponent);
       renderTemplate(template, bcontext);
    }
@@ -83,15 +80,15 @@ public class Lifecycle<E extends UIComponent>
 
    /**
     * The method allows to use Groovy templates to render the portal components.
-    * 
-    * 1) Add a decorator object into the context 2) Get a reference of the
-    * TemplateService 3) If the system property "exo.product.developing" is set
-    * to true, the templates are not cached 4) If the writer used to render the
-    * output is of type HtmlValidator, which is the case in the Portal
-    * environement, then it is also possible to validate the generated HTML (for
-    * debug purposes) 6) The template and the context are then merged using the
-    * method service.merge(groovyTemplate, bcontext) to generate the HTML
-    * fragment
+    *
+    * <ol>
+    * <li>Add a decorator object into the context</li>
+    * <li>Get a reference to the TemplateService</li>
+    * <li>If the system property "exo.product.developing" is set to <code>true</code>, the templates are not cached</li>
+    * <li>If the writer used to render the output is of type HtmlValidator, which is the case in the Portal
+    * environment, then it is also possible to validate the generated HTML (for debugging purposes)</li>
+    * <li>The template and the context are then merged to generate the HTML fragment</li>
+    * </ol>
     * 
     */
    protected void renderTemplate(String template, WebuiBindingContext bcontext) throws Exception

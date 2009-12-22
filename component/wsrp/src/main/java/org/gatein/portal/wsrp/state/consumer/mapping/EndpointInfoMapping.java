@@ -25,6 +25,7 @@ package org.gatein.portal.wsrp.state.consumer.mapping;
 
 import org.chromattic.api.annotations.NodeMapping;
 import org.chromattic.api.annotations.Property;
+import org.gatein.wsrp.consumer.EndpointConfigurationInfo;
 
 /**
  * @author <a href="mailto:chris.laprun@jboss.com">Chris Laprun</a>
@@ -39,4 +40,16 @@ public abstract class EndpointInfoMapping
    public abstract String getWSDLURL();
 
    public abstract void setWSDLURL(String wsdlURL);
+
+   public void initFrom(EndpointConfigurationInfo info)
+   {
+      setWSDLURL(info.getWsdlDefinitionURL());
+   }
+
+   public EndpointConfigurationInfo toEndpointConfigurationInfo()
+   {
+      EndpointConfigurationInfo info = new EndpointConfigurationInfo();
+      info.setWsdlDefinitionURL(getWSDLURL());
+      return info;
+   }
 }

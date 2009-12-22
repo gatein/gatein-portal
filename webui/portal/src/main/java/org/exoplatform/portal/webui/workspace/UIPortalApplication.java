@@ -211,7 +211,7 @@ public class UIPortalApplication extends UIApplication
     * 
     * @return True if the Portal is not in the normal mode
     */
-   public boolean isEditting()
+   public boolean isEditing()
    {
       return (modeState != NORMAL_MODE);
    }

@@ -41,6 +41,7 @@ abstract public class UIApplication extends UIContainer
    private long lastAccessApplication_;
 
    private UIPopupMessages uiPopupMessages_;
+   private static final String UIAPPLICATION = "uiapplication";
 
    public UIApplication() throws Exception
    {
@@ -81,11 +82,11 @@ abstract public class UIApplication extends UIContainer
    public void setLastAccessApplication(long time)
    {
       lastAccessApplication_ = time;
-   };
+   }
 
    public String getUIComponentName()
    {
-      return "uiapplication";
+      return UIAPPLICATION;
    }
 
    @SuppressWarnings("unchecked")

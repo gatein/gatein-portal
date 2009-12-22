@@ -7,7 +7,7 @@
 	def rcontext = _ctx.getRequestContext();
 	
 	UIPortalApplication uiPortalApp = rcontext.getUIApplication();
-	if(!uiPortalApp.isEditting() && !uicomponent.hasPermission()) return;
+	if(!uiPortalApp.isEditing() && !uicomponent.hasPermission()) return;
 	int portalMode = uiPortalApp.getModeState(); 
 	
 	JavascriptManager jsmanager = rcontext.getJavascriptManager();
@@ -20,7 +20,7 @@
 	WindowState windowState = uicomponent.getCurrentWindowState();	
 	boolean isDesktop = "Window".equals(uicomponent.getPortletStyle());
 	String portletId = uicomponent.getId();
-	if(!isDesktop && uiPortalApp.isEditting()) {
+	if(!isDesktop && uiPortalApp.isEditing()) {
 %>
 	<div class="UIPortlet" id="UIPortlet-$portletId" onmouseover="eXo.portal.UIPortal.blockOnMouseOver(event, this, true);" onmouseout="eXo.portal.UIPortal.blockOnMouseOver(event, this, false);"
 		style="top: 0px; left:0px;">
@@ -285,7 +285,7 @@
 				} 
 			}
 		}
-			if(!isDesktop && uiPortalApp.isEditting()) {
+			if(!isDesktop && uiPortalApp.isEditing()) {
 				if(portalMode != uiPortalApp.CONTAINER_BLOCK_EDIT_MODE && portalMode != uiPortalApp.APP_BLOCK_EDIT_MODE) {
 		%>
 						<div class="UIPortlet-$portletId UIPortletMask" style="position: absolute; display:none;"><span></span></div>

@@ -98,6 +98,7 @@
  		      <property name="mop" value="http://www.gatein.org/jcr/mop/1.0/"/>
  		      <property name="app" value="http://www.gatein.org/jcr/application-registry/1.0/"/>
  		      <property name="lgn" value="http://www.gatein.org/jcr/autologin/1.0/"/>
+                      <property name="wsrp" value="http://www.gatein.org/jcr/wsrp/1.0/"/>
  		      </properties-param>
  		  </init-params>
  		</component-plugin>
@@ -113,8 +114,11 @@
  		      <value>jar:/conf/organization-nodetypes.xml</value>
  		      <value>jar:/conf/mop-nodetypes.xml</value>
  		      <value>jar:/conf/application-nodetypes.xml</value>
-          <value>jar:/conf/content-nodetypes.xml</value>
-          <value>jar:/conf/autologin-nodetypes.xml</value>
+                      <value>jar:/conf/content-nodetypes.xml</value>
+                      <value>jar:/conf/autologin-nodetypes.xml</value>
+                      <value>war:/conf/wsrp/consumers-configuration-nodetypes.xml</value>
+                      <value>war:/conf/wsrp/producer-configuration-nodetypes.xml</value>
+                      <value>war:/conf/wsrp/producer-registrations-nodetypes.xml</value>
  		    </values-param>
  		  </init-params>
  		</component-plugin>

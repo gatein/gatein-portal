@@ -1,0 +1,173 @@
+/*
+* JBoss, a division of Red Hat
+* Copyright 2008, Red Hat Middleware, LLC, and individual contributors as indicated
+* by the @authors tag. See the copyright.txt in the distribution for a
+* full listing of individual contributors.
+*
+* This is free software; you can redistribute it and/or modify it
+* under the terms of the GNU Lesser General Public License as
+* published by the Free Software Foundation; either version 2.1 of
+* the License, or (at your option) any later version.
+*
+* This software is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+* Lesser General Public License for more details.
+*
+* You should have received a copy of the GNU Lesser General Public
+* License along with this software; if not, write to the Free
+* Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+* 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+*/
+
+package org.gatein.portal.wsrp.state;
+
+import org.chromattic.api.Chromattic;
+import org.chromattic.api.ChromatticBuilder;
+import org.chromattic.api.ChromatticSession;
+import org.chromattic.api.format.FormatterContext;
+import org.chromattic.api.format.ObjectFormatter;
+import org.chromattic.spi.jcr.SessionLifeCycle;
+import org.exoplatform.container.ExoContainer;
+import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.services.jcr.RepositoryService;
+import org.exoplatform.services.jcr.core.ManageableRepository;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
+
+import javax.jcr.Credentials;
+import javax.jcr.RepositoryException;
+import javax.jcr.Session;
+import java.util.List;
+
+/**
+ * @author <a href="mailto:chris.laprun@jboss.com">Chris Laprun</a>
+ * @version $Revision$
+ */
+public class JCRPersister
+{
+   private Chromattic chrome;
+   private static final String WORKSPACE_NAME = "wsrp-system";
+   private static final String REPOSITORY_NAME = "repository";
+
+   public JCRPersister(ExoContainer container)
+   {
+   }
+
+   public void initializeBuilderFor(List<Class> mappingClasses) throws Exception
+   {
+      ChromatticBuilder builder = ChromatticBuilder.create();
+      builder.setOption(ChromatticBuilder.INSTRUMENTOR_CLASSNAME, "org.chromattic.apt.InstrumentorImpl");
+      builder.setOption(ChromatticBuilder.SESSION_LIFECYCLE_CLASSNAME, WSRPSessionLifeCycle.class.getName());
+
+      for (Class mappingClass : mappingClasses)
+      {
+         builder.add(mappingClass);
+      }
+
+      chrome = builder.build();
+   }
+
+   public ChromatticSession getSession()
+   {
+      return chrome.openSession();
+   }
+
+   public void closeSession(ChromatticSession session, boolean save)
+   {
+      if (save)
+      {
+         session.save();
+      }
+      session.close();
+   }
+
+
+   public static class WSRPSessionLifeCycle implements SessionLifeCycle
+   {
+      private ManageableRepository repository;
+      private SessionProvider provider;
+
+      public WSRPSessionLifeCycle()
+      {
+         try
+         {
+            ExoContainer container = ExoContainerContext.getCurrentContainer();
+            RepositoryService repoService = (RepositoryService)container.getComponentInstanceOfType(RepositoryService.class);
+            repository = repoService.getRepository(REPOSITORY_NAME);
+         }
+         catch (Exception e)
+         {
+            throw new RuntimeException(e);
+         }
+
+         provider = SessionProvider.createSystemProvider();
+      }
+
+      public Session login() throws RepositoryException
+      {
+         return provider.getSession(WORKSPACE_NAME, repository);
+      }
+
+      public Session login(String s) throws RepositoryException
+      {
+         throw new UnsupportedOperationException();
+      }
+
+      public Session login(Credentials credentials, String s) throws RepositoryException
+      {
+         throw new UnsupportedOperationException();
+      }
+
+      public Session login(Credentials credentials) throws RepositoryException
+      {
+         throw new UnsupportedOperationException();
+      }
+
+      public void save(Session session) throws RepositoryException
+      {
+         session.save();
+      }
+
+      public void close(Session session)
+      {
+         session.logout();
+      }
+   }
+
+   public static class QNameFormatter implements ObjectFormatter
+   {
+      private static final String OPEN_BRACE_REPLACEMENT = "-__";
+      private static final String CLOSE_BRACE_REPLACEMENT = "__-";
+      private static final String COLON_REPLACEMENT = "_-_";
+
+      public String decodeNodeName(FormatterContext formatterContext, String s)
+      {
+         return decode(s);
+      }
+
+      public String encodeNodeName(FormatterContext formatterContext, String s)
+      {
+         return encode(s);
+      }
+
+      public String decodePropertyName(FormatterContext formatterContext, String s)
+      {
+         return decode(s);
+      }
+
+      public String encodePropertyName(FormatterContext formatterContext, String s)
+      {
+         return encode(s);
+      }
+
+      private String decode(String s)
+      {
+         return s.replace(CLOSE_BRACE_REPLACEMENT, "}").replace(OPEN_BRACE_REPLACEMENT, "{").replace(COLON_REPLACEMENT, ":");
+      }
+
+      private String encode(String s)
+      {
+         return s.replace("{", OPEN_BRACE_REPLACEMENT).replace("}", CLOSE_BRACE_REPLACEMENT).replace(":", COLON_REPLACEMENT);
+      }
+   }
+}

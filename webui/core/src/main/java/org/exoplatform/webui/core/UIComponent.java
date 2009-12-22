@@ -372,7 +372,7 @@ abstract public class UIComponent
 
    public String getUIComponentName()
    {
-      return "uicomponent";
+      return UICOMPONENT;
    }
 
    public <T> T getApplicationComponent(Class<T> type)

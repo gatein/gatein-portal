@@ -266,7 +266,7 @@ public class UIPortletLifecycle<S, C extends Serializable, I> extends Lifecycle<
          WebuiApplication app = (WebuiApplication)prcontext.getApplication();
          ApplicationResourceResolver resolver = app.getResourceResolver();
          WebuiBindingContext bcontext = new WebuiBindingContext(resolver, context.getWriter(), uicomponent, prcontext);
-         bcontext.put("uicomponent", uicomponent);
+         bcontext.put(UIComponent.UICOMPONENT, uicomponent);
          bcontext.put("portletContent", markup);
          bcontext.put("portletTitle", portletTitle);
          try

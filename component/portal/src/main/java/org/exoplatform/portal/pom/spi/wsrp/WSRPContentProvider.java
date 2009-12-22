@@ -19,15 +19,13 @@
 
 package org.exoplatform.portal.pom.spi.wsrp;
 
+import org.exoplatform.commons.utils.Safe;
 import org.exoplatform.portal.pom.spi.ContentProviderHelper;
 import org.exoplatform.portal.pom.spi.HelpableContentProvider;
-import org.gatein.common.io.IOTools;
 import org.gatein.mop.spi.content.ContentProvider;
 import org.gatein.mop.spi.content.StateContainer;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 
 /**
@@ -74,31 +72,10 @@ public class WSRPContentProvider implements ContentProvider<WSRP>, HelpableConte
       persistedState.setCloned(updatedState.isCloned());
    }
 
-   private byte[] getBytes(InputStream is)
-   {
-      byte[] bytes;
-
-      if (is == null)
-      {
-         return null;
-      }
-
-      try
-      {
-         bytes = IOTools.getBytes(is);
-      }
-      catch (IOException e)
-      {
-         throw new RuntimeException("Couldn't get bytes from WSRPState", e); // todo: log instead?
-      }
-      IOTools.safeClose(is);
-      return bytes;
-   }
-
    public WSRP getState(WSRPState state)
    {
       WSRP wsrp = new WSRP();
-      byte[] bytes = getBytes(state.getState());
+      byte[] bytes = Safe.getBytes(state.getState());
       wsrp.setState(bytes);
       wsrp.setPortletId(state.getPortletId());
       wsrp.setCloned(state.getCloned());

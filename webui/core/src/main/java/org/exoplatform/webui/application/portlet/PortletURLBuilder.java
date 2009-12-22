@@ -30,8 +30,10 @@ import org.exoplatform.webui.core.UIComponent;
  */
 public class PortletURLBuilder extends URLBuilder<UIComponent>
 {
+    private static final String AMP = "&amp;";
+    private static final char EQUALS = '=';
 
-   public PortletURLBuilder()
+    public PortletURLBuilder()
    {
       super(null);
    }
@@ -54,25 +56,25 @@ public class PortletURLBuilder extends URLBuilder<UIComponent>
    protected void createURL(StringBuilder builder, UIComponent targetComponent, String action, String targetBeanId,
       Parameter[] params)
    {
-      String baseUrl = getBaseURL().replaceAll("&", "&amp;");
-      builder.append(baseUrl).append("&amp;").append(UIComponent.UICOMPONENT).append('=').append(
+      String baseUrl = getBaseURL().replaceAll("&", AMP);
+      builder.append(baseUrl).append(AMP).append(UIComponent.UICOMPONENT).append(EQUALS).append(
          targetComponent.getId());
 
       if (action != null && action.trim().length() > 0)
       {
-         builder.append("&amp;").append(WebuiRequestContext.ACTION).append('=').append(action);
+         builder.append(AMP).append(WebuiRequestContext.ACTION).append(EQUALS).append(action);
       }
 
       if (targetBeanId != null && targetBeanId.trim().length() > 0)
       {
-         builder.append("&amp;").append(UIComponent.OBJECTID).append('=').append(targetBeanId);
+         builder.append(AMP).append(UIComponent.OBJECTID).append(EQUALS).append(targetBeanId);
       }
 
       if (params == null || params.length < 1)
          return;
       for (Parameter param : params)
       {
-         builder.append("&amp;").append(param.getName()).append('=').append(param.getValue());
+         builder.append(AMP).append(param.getName()).append(EQUALS).append(param.getValue());
       }
 
    }

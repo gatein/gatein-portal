@@ -21,10 +21,14 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.gatein.portal.wsrp.state.consumer.mapping;
+package org.gatein.portal.wsrp.state.mapping;
 
 import org.chromattic.api.annotations.NodeMapping;
 import org.chromattic.api.annotations.Property;
+import org.gatein.wsrp.registration.LocalizedString;
+import org.gatein.wsrp.registration.RegistrationPropertyDescription;
+
+import javax.xml.namespace.QName;
 
 /**
  * @author <a href="mailto:chris.laprun@jboss.com">Chris Laprun</a>
@@ -35,34 +39,50 @@ public abstract class RegistrationPropertyDescriptionMapping
 {
    public static final String NODE_NAME = "wsrp:registrationpropertydescription";
 
-   // todo: this should really be a QName
    @Property(name = "name")
-   public abstract String getName();
+   public abstract String getName(); // todo: this should really be a QName
 
    public abstract void setName(String name);
 
-   // todo: this should really be a QName
+
    @Property(name = "type")
-   public abstract String getType();
+   public abstract String getType(); // todo: this should really be a QName
 
    public abstract void setType(String type);
 
-
-   // todo: this should really be a LocalizedString
    @Property(name = "description")
-   public abstract String getDescription();
+   public abstract String getDescription(); // todo: this should really be a LocalizedString
 
    public abstract void setDescription(String description);
 
-   // todo: this should really be a LocalizedString
    @Property(name = "hint")
-   public abstract String getHint();
+   public abstract String getHint(); // todo: this should really be a LocalizedString
 
    public abstract void setHint(String hint);
 
-   // todo: this should really be a LocalizedString
    @Property(name = "label")
-   public abstract String getLabel();
+   public abstract String getLabel(); // todo: this should really be a LocalizedString
 
    public abstract void setLabel(String label);
+
+   public void initFrom(RegistrationPropertyDescription desc)
+   {
+      setDescription(desc.getDescription().getValue());
+      setHint(desc.getHint().getValue());
+      setLabel(desc.getLabel().getValue());
+
+      // convert QNames to Strings
+      setName(desc.getName().toString());
+      setType(desc.getType().toString());
+   }
+
+   public RegistrationPropertyDescription toRegistrationPropertyDescription()
+   {
+      RegistrationPropertyDescription desc = new RegistrationPropertyDescription(getName(), QName.valueOf(getType()));
+      desc.setDefaultDescription(getDescription());
+      desc.setHint(new LocalizedString(getHint()));
+      desc.setLabel(new LocalizedString(getLabel()));
+
+      return desc;
+   }
 }
