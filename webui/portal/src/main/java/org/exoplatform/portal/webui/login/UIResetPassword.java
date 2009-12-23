@@ -102,7 +102,7 @@ public class UIResetPassword extends UIForm
          OrganizationService orgService = uiForm.getApplicationComponent(OrganizationService.class);
          uiForm.reset();
          boolean isNew = true;
-         if (!password.equals(user_.getPassword()))
+         if (!orgService.getUserHandler().authenticate(user_.getUserName(), password))
          {
             uiApp.addMessage(new ApplicationMessage("UIResetPassword.msg.Invalid-account", null));
             isNew = false;
