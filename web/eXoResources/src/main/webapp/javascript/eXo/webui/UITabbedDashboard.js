@@ -106,7 +106,7 @@ eXo.webui.UITabbedDashboard = {
 			href += "&portal:isSecure=false";
 			href += "&uicomponent=UITabPaneDashboard";
 			href += "&op=AddDashboard";
-			href += "&objectId=" + newTabLabel;
+			href += "&objectId=" + encodeURIComponent(newTabLabel);
 			eXo.webui.UITabbedDashboard.isInRequest = true;
 			window.location = href;
 		}
