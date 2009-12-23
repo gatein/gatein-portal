@@ -97,6 +97,12 @@ public class UIListMembershipType extends UIContainer
          UIMembershipManagement uiMembershipManager = uiMembership.getParent();
          UIMembershipTypeForm uiForm = uiMembershipManager.getChild(UIMembershipTypeForm.class);
          uiForm.setMembershipType(mt);
+         if (mt == null)
+         {
+            UIApplication uiApp = event.getRequestContext().getUIApplication();
+            uiApp.addMessage(new ApplicationMessage("UIMembershipTypeForm.msg.MembershipNotExist", new String[]{name}));
+            uiMembership.loadData();
+         }
       }
    }
 
@@ -116,11 +122,12 @@ public class UIListMembershipType extends UIContainer
             uiApp.addMessage(new ApplicationMessage("UIMembershipList.msg.InUse", null));
             return;
          }
-         
+
          //  Check to see whether given membershiptype is mandatory or not
          UserACL acl = uiMembership.getApplicationComponent(UserACL.class);
          List<String> mandatories = acl.getMandatoryMSTypes();
-         if(!mandatories.isEmpty() && mandatories.contains(name)){
+         if (!mandatories.isEmpty() && mandatories.contains(name))
+         {
             UIApplication uiApp = event.getRequestContext().getUIApplication();
             uiApp.addMessage(new ApplicationMessage("UIMembershipList.msg.DeleteMandatory", null));
             return;

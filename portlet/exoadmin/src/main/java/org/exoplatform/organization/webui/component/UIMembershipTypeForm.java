@@ -85,8 +85,18 @@ public class UIMembershipTypeForm extends UIForm
 
          if (mt != null)
          {
-            uiForm.invokeSetBindingBean(mt);
-            service.getMembershipTypeHandler().saveMembershipType(mt, true);
+            MembershipType existMembershipType = service.getMembershipTypeHandler().findMembershipType(mt.getName());
+            if (existMembershipType == null)
+            {
+               UIApplication uiApp = event.getRequestContext().getUIApplication();
+               uiApp.addMessage(new ApplicationMessage("UIMembershipTypeForm.msg.MembershipNotExist", new String[]{mt
+                  .getName()}));
+            }
+            else
+            {
+               uiForm.invokeSetBindingBean(mt);
+               service.getMembershipTypeHandler().saveMembershipType(mt, true);
+            }
          }
          else
          {

@@ -106,6 +106,10 @@ public class UIAccountEditInputSet extends UIFormInputSet
       UIApplication uiApp = context.getUIApplication();
       String username = getUIStringInput(USERNAME).getValue();
       User user = service.getUserHandler().findUserByName(username);
+      if (user==null) {
+         uiApp.addMessage(new ApplicationMessage("UIAccountInputSet.msg.user-is-deleted", null));
+         return false;
+      }
       invokeSetBindingField(user);
       if (isChangePassword())
       {
