@@ -49,10 +49,8 @@ import org.exoplatform.webui.form.validator.Validator;
 import java.util.Calendar;
 
 /**
- * Created by The eXo Platform SAS
- * Author : Pham Thanh Tung
- *          thanhtungty@gmail.com
- * Jul 29, 2008  
+ * Created by The eXo Platform SAS Author : Pham Thanh Tung
+ * thanhtungty@gmail.com Jul 29, 2008
  */
 @ComponentConfig(lifecycle = UIFormLifecycle.class, template = "system:/groovy/webui/form/UIForm.gtmpl", initParams = @ParamConfig(name = "SampleGadget", value = "app:/WEB-INF/conf/uiconf/applicationregistry/component/SampleGadget.groovy"), events = {
    @EventConfig(listeners = UIGadgetEditor.SaveActionListener.class),
@@ -190,13 +188,14 @@ public class UIGadgetEditor extends UIForm
          source.setTextContent(text);
          source.setLastModified(Calendar.getInstance());
 
-         // This will update the source and also update the gadget related cached meta data
-         // from the source
          sourceStorage.saveSource(gadget, source);
 
-         // service.saveGadget(GadgetUtil.toGadget(name, sourceStorage.getSourceURI(dirPath + "/" + fileName), true));
+         uiManagement.removeChild(UIGadgetEditor.class);
+         // This will update the source and also update the gadget related
+         // cached meta data
+         // from the source
          uiManagement.initData();
-         uiManagement.setSelectedGadget(name);
+         uiManagement.setSelectedGadget(gadget.getName());
          event.getRequestContext().addUIComponentToUpdateByAjax(uiManagement);
       }
 
