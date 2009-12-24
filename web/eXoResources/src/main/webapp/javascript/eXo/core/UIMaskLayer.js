@@ -76,8 +76,8 @@ UIMaskLayer.prototype.showAjaxLoading = function(mask){
 UIMaskLayer.prototype.removeTransparentMask = function() {
 	var mask = document.getElementById("TransparentMaskLayer");
 	if (mask) {
-		mask.style.height = "0" ;
-		mask.style.width = "0" ;
+		mask.style.height = "0px" ;
+		mask.style.width = "0px" ;
 	}
 };
 /**
@@ -126,8 +126,8 @@ UIMaskLayer.prototype.createMask = function(blockContainerId, object, opacity, p
 		maskLayer.className = "MaskLayer" ;
 		maskLayer.id = "MaskLayer" ;
 		maskLayer.maxZIndex = 4; //3 ;
-		maskLayer.style.width = eXo.core.Browser.getBrowserWidth();
-		maskLayer.style.height = eXo.core.Browser.getBrowserHeight();
+		maskLayer.style.width = eXo.core.Browser.getBrowserWidth() + "px";
+		maskLayer.style.height = eXo.core.Browser.getBrowserHeight() + "px";
 		maskLayer.style.top = "0px" ;
 		maskLayer.style.left = "0px" ;
 		maskLayer.style.zIndex = maskLayer.maxZIndex ;
