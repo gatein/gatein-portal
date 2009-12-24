@@ -17,17 +17,17 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-eXo.webui.UIDashboard = {
+function UIDashboard() {
 	
-	currCol : null,	
-	targetObj : null,
+	var currCol = null;	
+	var targetObj = null;
 	
-	init : function (dragItem, dragObj) {
+	UIDashboard.prototype.init = function (dragItem, dragObj) {
 		
-		eXo.core.DragDrop2.init(dragItem, dragObj)	;
+		var DOMUtil = eXo.core.DOMUtil;
+		eXo.core.DragDrop2.init(dragItem, dragObj);
 
 		dragObj.onDragStart = function(x, y, lastMouseX, lastMouseY, e) {
-			var DOMUtil = eXo.core.DOMUtil;
 			var uiDashboard = eXo.webui.UIDashboard ;
 			var portletFragment = DOMUtil.findAncestorByClass(dragObj, "PORTLET-FRAGMENT");
 			if(!portletFragment) return;
@@ -56,20 +56,16 @@ eXo.webui.UIDashboard = {
 				temp = temp.parentNode;
 			}
 			
-//			var slideBar = document.getElementById("ControlWorkspaceSlidebar");
-//			if(slideBar!=null && slideBar.style.display!="none" && eXo.core.Browser.getBrowserType()=="ie")
-//				x -= slideBar.offsetWidth;
-			
 			var uiTarget = null;
 			if(!DOMUtil.hasClass(dragObj, "SelectItem")) {
 				uiTarget = uiDashboard.createTarget(ggwidth, 0);
 				dragObj.parentNode.insertBefore(uiTarget, dragObj.nextSibling);
-				uiDashboard.currCol = eXo.webui.UIDashboardUtil.findColIndexInDashboard(dragObj);
+				currCol = eXo.webui.UIDashboardUtil.findColIndexInDashboard(dragObj);
 			}else{
 				var dragCopyObj = dragObj.cloneNode(true);
 				DOMUtil.addClass(dragCopyObj, "CopyObj");
 				dragObj.parentNode.insertBefore(dragCopyObj, dragObj);
-				uiDashboard.targetObj = null;
+				targetObj = null;
 			}
 			dragObj.style.width = ggwidth +"px";
 
@@ -96,15 +92,14 @@ eXo.webui.UIDashboard = {
 			eXo.webui.UIDashboardUtil.setPositionInContainer(uiWorkingWS, dragObj, x, y);
 			if(uiTarget!=null) {
 				uiTarget.style.height = ggheight +"px";
-				uiDashboard.targetObj = uiTarget;
+				targetObj = uiTarget;
 			}
 		}
 		
 		
 		
 		dragObj.onDrag = function(nx, ny, ex, ey, e) {	
-			var DOMUtil = eXo.core.DOMUtil;		
-			var uiTarget = eXo.webui.UIDashboard.targetObj;
+			var uiTarget = targetObj;
 			var portletFragment = DOMUtil.findAncestorByClass(dragObj, "PORTLET-FRAGMENT");
 
 			if(!portletFragment) return;
@@ -116,18 +111,17 @@ eXo.webui.UIDashboard = {
 			if(eXo.webui.UIDashboardUtil.isIn(ex, ey, dashboardCont)) {
 				if(!uiTarget) {
 					uiTarget = eXo.webui.UIDashboard.createTargetOfAnObject(dragObj);
-					eXo.webui.UIDashboard.targetObj = uiTarget;
+					targetObj = uiTarget;
 				}
 				
-				var uiCol = eXo.webui.UIDashboard.currCol ;
+				var uiCol = currCol ;
 				
 				if(!uiCol) {
 					if(!cols) cols = DOMUtil.findDescendantsByClass(dashboardCont, "div", "UIColumn");
 					for(var i=0; i<cols.length; i++) {
 						var uiColLeft = eXo.webui.UIDashboardUtil.findPosX(cols[i]) - dashboardCont.scrollLeft;
 						if(uiColLeft<ex  &&  ex<uiColLeft+cols[i].offsetWidth) {
-							uiCol = cols[i];
-							eXo.webui.UIDashboard.currCol = uiCol;
+							currCol = uiCol = cols[i];
 							break;
 						}
 					}
@@ -170,7 +164,7 @@ eXo.webui.UIDashboard = {
 					for(var i=0; i<cols.length; i++) {
 						var uiColLeft = eXo.webui.UIDashboardUtil.findPosX(cols[i]) - dashboardCont.scrollLeft;
 						if(uiColLeft<ex  &&  ex<uiColLeft+cols[i].offsetWidth) {
-							eXo.webui.UIDashboard.currCol = cols[i];
+							currCol = cols[i];
 							break;
 						}
 					}
@@ -179,7 +173,7 @@ eXo.webui.UIDashboard = {
 				//prevent dragging gadget object out of DashboardContainer
 				if(uiTarget!=null && DOMUtil.hasClass(dragObj, "SelectItem")) {
 					uiTarget.parentNode.removeChild(uiTarget);					
-					eXo.webui.UIDashboard.targetObj = uiTarget = null;
+					targetObj = uiTarget = null;
 				}
 			}
 		}
@@ -187,26 +181,25 @@ eXo.webui.UIDashboard = {
 
 	
 		dragObj.onDragEnd = function(x, y, clientX, clientY) {
-			var uiDashboard = eXo.webui.UIDashboard;
 			var uiDashboardUtil = eXo.webui.UIDashboardUtil;
-			var portletFragment = eXo.core.DOMUtil.findAncestorByClass(dragObj, "PORTLET-FRAGMENT");
+			var portletFragment = DOMUtil.findAncestorByClass(dragObj, "PORTLET-FRAGMENT");
 			
 			if(!portletFragment) return;
 			
-			var masks = eXo.core.DOMUtil.findDescendantsByClass(portletFragment, "div", "UIMask");
+			var masks = DOMUtil.findDescendantsByClass(portletFragment, "div", "UIMask");
 			for(var i=0; i<masks.length; i++) {
 				eXo.core.Browser.setOpacity(masks[i], 100);
 				masks[i].style.display = "none";
 			}
 			
-			var uiTarget = uiDashboard.targetObj;
+			var uiTarget = targetObj;
 			if(uiTarget && !uiTarget.parentNode) { 
 				uiTarget = null; 
 			}
 			dragObj.style.position = "static";
-			eXo.core.DOMUtil.removeClass(dragObj,"Dragging");
+			DOMUtil.removeClass(dragObj,"Dragging");
 
-			var dragCopyObj = eXo.core.DOMUtil.findFirstDescendantByClass(portletFragment, "div", "CopyObj");
+			var dragCopyObj = DOMUtil.findFirstDescendantByClass(portletFragment, "div", "CopyObj");
 			if(dragCopyObj) {
 				dragCopyObj.parentNode.replaceChild(dragObj, dragCopyObj);
 				dragObj.style.width = "auto";
@@ -218,7 +211,7 @@ eXo.webui.UIDashboard = {
 				var row = uiDashboardUtil.findRowIndexInDashboard(uiTarget);
 				var compId = portletFragment.parentNode.id;
 				
-				if(eXo.core.DOMUtil.hasClass(dragObj, "SelectItem")) {
+				if(DOMUtil.hasClass(dragObj, "SelectItem")) {
 					var params = [
 						{name: "colIndex", value: col},
 						{name: "rowIndex", value: row},
@@ -245,12 +238,12 @@ eXo.webui.UIDashboard = {
 				}
 			}
 
-			uiTarget = eXo.core.DOMUtil.findFirstDescendantByClass(portletFragment, "div", "UITarget");
+			uiTarget = DOMUtil.findFirstDescendantByClass(portletFragment, "div", "UITarget");
 			while (uiTarget) {
-				eXo.core.DOMUtil.removeElement(uiTarget);
+				DOMUtil.removeElement(uiTarget);
 				uiTarget = eXo.core.DOMUtil.findFirstDescendantByClass(portletFragment, "div", "UITarget");
 			}
-			uiDashboard.targetObj = uiDashboard.currCol = uiDashboard.compId = null;
+			targetObj = currCol = null;
 		}
 		
 		
@@ -259,9 +252,9 @@ eXo.webui.UIDashboard = {
 				eXo.core.DragDrop2.end(e);
 			}
 		}
-	},
+	};
 	
-	onLoad : function(windowId, canEdit) {
+	UIDashboard.prototype.onLoad = function(windowId, canEdit) {
 		var portletWindow = document.getElementById(windowId);
 		if(!portletWindow) return;
 		
@@ -299,9 +292,9 @@ eXo.webui.UIDashboard = {
 
 		eXo.webui.UIDashboard.initHeight(windowId) ;
 		setTimeout("eXo.webui.UIDashboard.initDragDrop('" + windowId + "'," + canEdit + ");", 300) ;
-	},
+	};
 	
-	initDragDrop : function(windowId, canEdit) {
+	UIDashboard.prototype.initDragDrop = function(windowId, canEdit) {
 		var DOMUtil = eXo.core.DOMUtil ;
 		var portletWindow = document.getElementById(windowId) ;
 		var gadgetControls = DOMUtil.findDescendantsByClass(portletWindow, "div", "GadgetControl");
@@ -328,9 +321,9 @@ eXo.webui.UIDashboard = {
 				}
 			}
 		}
-	},
+	};
 	
-	initHeight : function(windowId) {
+	UIDashboard.prototype.initHeight = function(windowId) {
 		var DOMUtil = eXo.core.DOMUtil;
 		var portletWindow, uiWindow ;
 		if(typeof(windowId) != "string") {
@@ -390,26 +383,26 @@ eXo.webui.UIDashboard = {
 				}
 			}
 		}
-	},
+	};
 	
-	createTarget : function(width, height) {
+	UIDashboard.prototype.createTarget = function(width, height) {
 		var uiTarget = document.createElement("div");
 		uiTarget.id = "UITarget";
 		uiTarget.className = "UITarget";
 		uiTarget.style.width = width + "px";
 		uiTarget.style.height = height + "px";
 		return uiTarget;
-	},
+	};
 	
-	createTargetOfAnObject : function(obj) {
+	UIDashboard.prototype.createTargetOfAnObject = function(obj) {
 		var uiTarget = document.createElement("div");
 		uiTarget.id = "UITarget";
 		uiTarget.className = "UITarget";
 		uiTarget.style.height = obj.offsetHeight + "px";
 		return uiTarget;
-	},
+	};
 	
-	showHideSelectContainer : function(event) {
+	UIDashboard.prototype.showHideSelectContainer = function(event) {
 		if(!event) event = window.event;
 		var DOMUtil = eXo.core.DOMUtil;
 		var comp = eXo.core.Browser.getEventSource(event);
@@ -433,9 +426,9 @@ eXo.webui.UIDashboard = {
 			var url = eXo.webui.UIDashboardUtil.createRequest(portletFragment.parentNode.id, "SetShowSelectContainer", params);
 			ajaxGet(url);
 		}
-	}, 
+	};
 	
-	onTabClick : function(clickElement, normalStyle, selectedType) {
+	UIDashboard.prototype.onTabClick = function(clickElement, normalStyle, selectedType) {
 		var DOMUtil = eXo.core.DOMUtil;
 		var category = DOMUtil.findAncestorByClass(clickElement, "GadgetCategory");
 		var categoryContent = DOMUtil.findFirstChildByClass(category, "div", "ItemsContainer");
@@ -454,27 +447,27 @@ eXo.webui.UIDashboard = {
 			DOMUtil.findFirstChildByClass(category, "div", "GadgetTab").className = "GadgetTab " + normalStyle;
 			categoryContent.style.display = "none";
 		}
-	},
+	};
 	
-	enableContainer : function(elemt) {
+	UIDashboard.prototype.enableContainer = function(elemt) {
 		var DOMUtil = eXo.core.DOMUtil;
 		if(DOMUtil.hasClass(elemt, "DisableContainer")) {
 			DOMUtil.replaceClass(elemt, " DisableContainer", "");
 		}
 		var arrow = DOMUtil.findFirstChildByClass(elemt, "div", "Arrow");
 		if(DOMUtil.hasClass(arrow, "DisableArrowIcon")) DOMUtil.replaceClass(arrow," DisableArrowIcon", "");
-	},
+	};
 	
-	disableContainer : function(elemt) {
+	UIDashboard.prototype.disableContainer = function(elemt) {
 		var DOMUtil = eXo.core.DOMUtil;
 		if(!DOMUtil.hasClass(elemt, "DisableContainer")) {
 			DOMUtil.addClass(elemt, "DisableContainer");
 		}
 		var arrow = DOMUtil.findFirstChildByClass(elemt, "div", "Arrow");
 		if(!DOMUtil.hasClass(arrow, "DisableArrowIcon")) DOMUtil.addClass(arrow," DisableArrowIcon");
-	},
+	};
 	
-	scrollOnDrag : function(dragObj) {
+	UIDashboard.prototype.scrollOnDrag = function(dragObj) {
 		var DOMUtil = eXo.core.DOMUtil;
 		var dashboardUtil = eXo.webui.UIDashboardUtil;
 		var uiDashboard = DOMUtil.findAncestorByClass(dragObj, "UIDashboard");
@@ -511,6 +504,7 @@ eXo.webui.UIDashboard = {
 		}	else {
 			if(objTop < 0 && deltaY > 0) gadgetContainer.scrollTop -= 5;
 		}
-	}	
-	
-}
+	};
+};
+
+eXo.webui.UIDashboard = new UIDashboard();

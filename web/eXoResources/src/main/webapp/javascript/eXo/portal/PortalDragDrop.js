@@ -39,6 +39,9 @@ PortalDragDrop.prototype.init = function(e) {
 	var Browser = eXo.core.Browser ;
   var DragDrop = eXo.core.DragDrop ;
   var Mouse = eXo.core.Mouse;
+  
+  var previewBlock = null;
+  var previewTD = null;
 	/**
 	 * This function is called after the DragDrop object is initialized
 	 */
@@ -50,7 +53,6 @@ PortalDragDrop.prototype.init = function(e) {
     this.origDragObjectStyle.copyProperties(properties, dragObject.style) ;
     
     var isComponent = !!DOMUtil.findFirstDescendantByClass(dragObject, "div", "UIComponentBlock");
-    dragObject.isComponent = isComponent;
    	
    	var uiWorkingWS = document.getElementById("UIWorkingWorkspace");
 		PortalDragDrop.positionRootObj = isComponent ? uiWorkingWS : 
@@ -58,8 +60,6 @@ PortalDragDrop.prototype.init = function(e) {
 		
 		var originalDragObjectTop = Browser.findPosYInContainer(dragObject, PortalDragDrop.positionRootObj);
 		var originalDragObjectLeft = Browser.findPosXInContainer(dragObject, PortalDragDrop.positionRootObj);
-    var originalMousePositionY = Mouse.mouseyInPage;
-    var originalMousePositionX = Mouse.mousexInPage;
 		PortalDragDrop.deltaYDragObjectAndMouse = Browser.findMouseRelativeY(dragObject, e);
 		PortalDragDrop.deltaXDragObjectAndMouse = Browser.findMouseRelativeX(dragObject, e);
     if(!isComponent) {
@@ -75,25 +75,28 @@ PortalDragDrop.prototype.init = function(e) {
     if(!isComponent) {
       var cloneObject = dragObject.cloneNode(true) ;
       dragObject.parentNode.insertBefore(cloneObject, dragObject) ;
-      
-      dndEvent.dragObject = cloneObject ;
-      
-      cloneObject.style.position = "absolute" ;
-      if(eXo.core.I18n.isLT()) cloneObject.style.left = originalDragObjectLeft + "px" ;
-      else cloneObject.style.right = (PortalDragDrop.positionRootObj.offsetWidth - originalDragObjectLeft - dragObject.offsetWidth) + "px" ;
-            
-      cloneObject.style.top = originalDragObjectTop + "px" ;
       cloneObject.style.opacity = 0.5 ;
       cloneObject.style.filter = "alpha(opacity=50)" ;
       cloneObject.style.width = PortalDragDrop.backupDragObjectWidth + "px" ;
-      cloneObject.isComponent = false;
+      dndEvent.dragObject = cloneObject ;
+    } else {
+    	previewBlock = PortalDragDrop.createPreview();
+    	dragObject.parentNode.insertBefore(previewBlock, dragObject);
+    	dragObject.style.width = "300px";
+    	var componentBlock = eXo.core.DOMUtil.findFirstDescendantByClass(dragObject, "div", "UIComponentBlock") ;
+    	var editBlock = eXo.core.DOMUtil.findFirstChildByClass(componentBlock, "div", "EDITION-BLOCK");
+	    if(editBlock) {
+	    	var newLayer = eXo.core.DOMUtil.findFirstDescendantByClass(editBlock, "div", "NewLayer");
+	    	if(newLayer) newLayer.style.width = "300px";
+	    }
     }
+    dragObject.isComponent = isComponent;
     
-    //fix bug ie in RTL 
-//    if(eXo.core.I18n.isRT() && Browser.isIE6() && DOMUtil.findFirstDescendantByClass(dragObject, "div", "CONTROL-BLOCK")) {
-//    	dragObject.style.right = parseInt(dragObject.style.right) 
-//    			+ document.getElementById("UIControlWorkspace").offsetWidth + "px" ;
-//    }
+    dragObject = dndEvent.dragObject;
+    dragObject.style.position = "absolute" ;
+    if(eXo.core.I18n.isLT()) dragObject.style.left = originalDragObjectLeft + "px" ;
+    else dragObject.style.right = (PortalDragDrop.positionRootObj.offsetWidth - originalDragObjectLeft - dragObject.offsetWidth) + "px" ;
+    dragObject.style.top = originalDragObjectTop + "px" ;
     
     eXo.portal.isInDragging = true;
   }
@@ -101,145 +104,117 @@ PortalDragDrop.prototype.init = function(e) {
   DragDrop.dragCallback = function(dndEvent) {
     var dragObject = dndEvent.dragObject ;
     /* Control Scroll */
-    eXo.portal.PortalDragDrop.scrollOnDrag(dragObject, dndEvent) ;
-    if(dndEvent.foundTargetObject && dndEvent.lastFoundTargetObject) {
-      /*Check and asign UIPage to uiComponentLayout when DND on UIPage*/
-      var uiComponentLayout ;
-      if(dndEvent.foundTargetObject.className == "UIPage") {
-				uiComponentLayout = DOMUtil.findFirstDescendantByClass(dndEvent.foundTargetObject, "div", "VIEW-PAGE");
-      } else if(dndEvent.foundTargetObject.className == "UIPortal") {
-        if(eXo.portal.portalMode%2) uiComponentLayout = DOMUtil.findFirstDescendantByClass(dndEvent.foundTargetObject, "div", "LAYOUT-PORTAL") ;
-        else uiComponentLayout = DOMUtil.findFirstDescendantByClass(dndEvent.foundTargetObject, "div", "VIEW-PORTAL");
+    eXo.portal.PortalDragDrop.scrollOnDrag(dndEvent) ;
+    if(!dndEvent.foundTargetObject) return;
+    var uiComponentLayout ;
+    if(dndEvent.foundTargetObject.className == "UIPage") {
+			uiComponentLayout = DOMUtil.findFirstDescendantByClass(dndEvent.foundTargetObject, "div", "VIEW-PAGE");
+    } else if(dndEvent.foundTargetObject.className == "UIPortal") {
+      if(eXo.portal.portalMode%2) uiComponentLayout = DOMUtil.findFirstDescendantByClass(dndEvent.foundTargetObject, "div", "LAYOUT-PORTAL") ;
+      else uiComponentLayout = DOMUtil.findFirstDescendantByClass(dndEvent.foundTargetObject, "div", "VIEW-PORTAL");
+    } else {
+      var foundUIComponent = new eXo.portal.UIPortalComponent(dndEvent.foundTargetObject) ;
+      if(eXo.portal.portalMode%2) uiComponentLayout = foundUIComponent.getLayoutBlock() ;
+      else uiComponentLayout = foundUIComponent.getViewBlock();
+      uiComponentLayout.style.height = "auto";
+    }
+    
+    dndEvent.foundTargetObject.uiComponentLayoutType = uiComponentLayout ;
+    var componentIdElement = DOMUtil.getChildrenByTagName(uiComponentLayout, "div")[0] ;
+    var layoutTypeElement = DOMUtil.getChildrenByTagName(componentIdElement, "div")[0] ;
+    eXo.portal.PortalDragDrop.layoutTypeElementNode = layoutTypeElement ;
+    
+    if(previewBlock == null) previewBlock = eXo.portal.PortalDragDrop.createPreview();
+    if(previewTD || document.getElementById("PreviewTDBlock")) {
+    	if(!previewTD) previewTD = document.getElementById("PreviewTDBlock");
+    	if(previewTD.parentNode) previewTD.parentNode.removeChild(previewTD);
+    	previewTD = null;
+    }
+    
+    if(layoutTypeElement != null && !DOMUtil.hasClass(layoutTypeElement, "UITableColumnContainer")) {
+      /* ===============================CASE ROW LAYOUT================================ */
+      var rowContainer = DOMUtil.findFirstDescendantByClass(uiComponentLayout, "div", "UIRowContainer") ;
+      var childRowContainer = DOMUtil.getChildrenByTagName(rowContainer, "div") ;
+      
+      var listComponent = new Array() ;
+      for(var i = 0; i < childRowContainer.length; i++) {
+        if((childRowContainer[i].className != "DragAndDropPreview") && (childRowContainer[i] != dragObject)) {
+          listComponent.push(childRowContainer[i]) ;
+        }
+      }
+      
+      dndEvent.foundTargetObject.listComponentInTarget = listComponent ;
+      var insertPosition = eXo.portal.PortalDragDrop.findInsertPosition(listComponent, dragObject, "row") ;
+      dndEvent.foundTargetObject.foundIndex = insertPosition ;
+      
+      /* Insert preview block */
+      if(insertPosition >= 0) {
+        rowContainer.insertBefore(previewBlock, listComponent[insertPosition]) ;
       } else {
-        var foundUIComponent = new eXo.portal.UIPortalComponent(dndEvent.foundTargetObject) ;
-        if(eXo.portal.portalMode%2) uiComponentLayout = foundUIComponent.getLayoutBlock() ;
-        else uiComponentLayout = foundUIComponent.getViewBlock();
-        uiComponentLayout.style.height = "auto";
+        rowContainer.appendChild(previewBlock) ;
       }
+    } else {
+      /* ===============================CASE COLUMN LAYOUT================================ */
+    	var columnContainer = DOMUtil.findFirstDescendantByClass(uiComponentLayout, "table", "UITableColumnContainer") ;
+      var trContainer = DOMUtil.findFirstDescendantByClass(uiComponentLayout, "tr", "TRContainer") ;
+      var tdElementList = DOMUtil.getChildrenByTagName(trContainer, "td") ;
       
-      try {
-	      if(eXo.portal.PortalDragDrop.backupLastFoundTarget) {
-	      	var lastFoundUIComponent = new eXo.portal.UIPortalComponent(eXo.portal.PortalDragDrop.backupLastFoundTarget);
-	      	
-	      	var lastFoundComponentLayout = lastFoundUIComponent.getLayoutBlock();
-		      if((DOMUtil.hasClass(lastFoundComponentLayout, "LAYOUT-CONTAINER") || DOMUtil.hasClass(lastFoundComponentLayout, "VIEW-CONTAINER")) 
-		            && (lastFoundComponentLayout.offsetHeight < 30)) {
-		      	if (DOMUtil.findFirstDescendantByClass(lastFoundComponentLayout, "div", "UIContainer") == null) {
-		      		lastFoundComponentLayout.style.height = "60px" ;
-		      	}
-		      }
-	      }
-      } catch(err) {
-      	//window.status = err.toString() ;
-      }
-     
-      /*################################################################################*/
-      
-      dndEvent.foundTargetObject.uiComponentLayoutType = uiComponentLayout ;
-      
-      var componentIdElement = DOMUtil.getChildrenByTagName(uiComponentLayout, "div")[0] ;
-      var layoutTypeElement = DOMUtil.getChildrenByTagName(componentIdElement, "div")[0] ;
-      eXo.portal.PortalDragDrop.layoutTypeElementNode = layoutTypeElement ;
-      
-      if(layoutTypeElement != null && !DOMUtil.hasClass(layoutTypeElement, "UITableColumnContainer")) {
-        /* ===============================CASE ROW LAYOUT================================ */
-        var rowContainer = DOMUtil.findFirstDescendantByClass(uiComponentLayout, "div", "UIRowContainer") ;
-	      var childRowContainer = DOMUtil.getChildrenByTagName(rowContainer, "div") ;
-        
-        var listComponent = new Array() ;
-        for(var i = 0; i < childRowContainer.length; i++) {
-          if((childRowContainer[i].className != "DragAndDropPreview") && (childRowContainer[i] != dragObject)) {
-            listComponent.push(childRowContainer[i]) ;
+      var listComponent = new Array() ;
+      for(var i = 0; i < tdElementList.length; i++) {
+        if(DOMUtil.hasAncestor(previewBlock, uiComponentLayout)) {
+        	var td = tdElementList[i];
+          if((td != previewBlock.parentNode) && (td != dragObject.parentNode)) {
+            listComponent.push(td) ;
+          } else if(td == dragObject.parentNode) {
+          	td.style.width = "0px";
           }
-        }
-        
-        dndEvent.foundTargetObject.listComponentInTarget = listComponent ;
-        /*Set properties for drag object */
-        
-        var insertPosition = eXo.portal.PortalDragDrop.findInsertPosition(listComponent, dragObject, "row") ;
-        				        
-//        if(dndEvent.foundTargetObject == dndEvent.lastFoundTargetObject &&
-//           dndEvent.lastFoundTargetObject.foundIndex == insertPosition) {
-//            return ;
-//        }
-        dndEvent.foundTargetObject.foundIndex = insertPosition ;
-        
-        /*Undo preview */
-        if(dndEvent.lastFoundTargetObject != null) {
-          eXo.portal.PortalDragDrop.backupLastFoundTarget = dndEvent.lastFoundTargetObject ;
-          eXo.portal.PortalDragDrop.undoPreview(dndEvent) ;
-        }
-        
-        /* Insert preview block */
-        if(insertPosition >= 0) {
-          rowContainer.insertBefore(eXo.portal.PortalDragDrop.createPreview("row"), listComponent[insertPosition]) ;
         } else {
-          rowContainer.appendChild(eXo.portal.PortalDragDrop.createPreview("row")) ;
-        }
-
-        eXo.portal.PortalDragDrop.setDragObjectProperties(dragObject, childRowContainer, "row", dndEvent.backupMouseEvent) ;
-      } else {
-        /* ===============================CASE COLUMN LAYOUT================================ */
-        var columnContainer = DOMUtil.findFirstDescendantByClass(uiComponentLayout, "table", "UITableColumnContainer") ;
-        var trContainer = DOMUtil.findFirstDescendantByClass(uiComponentLayout, "tr", "TRContainer") ;
-        var tdElementList = DOMUtil.getChildrenByTagName(trContainer, "td") ;
-        
-        var listComponent = new Array() ;
-        for(var i = 0; i < tdElementList.length; i++) {
-          if(DOMUtil.hasDescendantClass(uiComponentLayout, "DragAndDropPreview")) {
-            var previewBlock = DOMUtil.findFirstDescendantByClass(trContainer, "div", "DragAndDropPreview") ;
-            if((tdElementList[i] != previewBlock.parentNode) && (tdElementList[i] != dragObject.parentNode)) {
-              listComponent.push(tdElementList[i]) ;
-            }
-          } else {
-            listComponent.push(tdElementList[i]) ;
-          }          
-        }
-        
-        dndEvent.foundTargetObject.listComponentInTarget = listComponent ;
-        /*Find Insert Position */
-        var insertPosition = eXo.portal.PortalDragDrop.findInsertPosition(listComponent, dragObject, "column") ;
-        
-        if(dndEvent.foundTargetObject == dndEvent.lastFoundTargetObject &&
-          dndEvent.lastFoundTargetObject.foundIndex == insertPosition) {
-          return ;
-        }
-        
-        dndEvent.foundTargetObject.foundIndex = insertPosition ;
-        /*Undo preview */
-        if(dndEvent.lastFoundTargetObject != null) {
-          eXo.portal.PortalDragDrop.undoPreview(dndEvent) ;
-        }
-        
-        /* Insert preview block */
-        eXo.portal.PortalDragDrop.tdInserted = document.createElement('td') ;
-        eXo.portal.PortalDragDrop.tdInserted .appendChild(eXo.portal.PortalDragDrop.createPreview("column")) ;
-        if(insertPosition >= 0) {
-          trContainer.insertBefore(eXo.portal.PortalDragDrop.tdInserted, listComponent[insertPosition]) ;
-        } else {
-          trContainer.appendChild(eXo.portal.PortalDragDrop.tdInserted) ;
-        }
-        /*Set properties for drag object */
-        eXo.portal.PortalDragDrop.setDragObjectProperties(dragObject, tdElementList, "column", dndEvent.backupMouseEvent) ;
+          listComponent.push(tdElementList[i]) ;
+        }          
       }
-    } 
+      
+      dndEvent.foundTargetObject.listComponentInTarget = listComponent ;
+      var insertPosition = eXo.portal.PortalDragDrop.findInsertPosition(listComponent, dragObject, "column") ;
+      dndEvent.foundTargetObject.foundIndex = insertPosition ;
+      
+      /* Insert preview block */
+      var tdBlock = document.createElement("td");
+      tdBlock.id = tdBlock.className = "PreviewTDBlock";
+      tdBlock.appendChild(previewBlock);
+      previewTD = tdBlock;
+      if(insertPosition >= 0) {
+        trContainer.insertBefore(previewTD, listComponent[insertPosition]) ;
+      } else {
+        trContainer.appendChild(previewTD) ;
+      }
+    }
   } ;
 
   DragDrop.dropCallback = function(dndEvent) {
   	this.origDragObjectStyle.setProperties(dndEvent.dragObject.style, false) ;
 
-    if(dndEvent.foundTargetObject != null) {
+    if(dndEvent.foundTargetObject != null || (dndEvent.backupMouseEvent && dndEvent.backupMouseEvent.keyCode != 27)) {
       eXo.portal.PortalDragDrop.doDropCallback(dndEvent) ;
     } else {
       if(!dndEvent.dragObject.isComponent) {
 				dndEvent.dragObject.parentNode.removeChild(dndEvent.dragObject) ;
 			}
+			if(dndEvent.dragObject.parentNode.tagName.toLowerCase() == "td") {
+				dndEvent.dragObject.parentNode.style.width = "auto";
+			}
 			// fix bug WEBOS-196	
-			var srcElement = dndEvent.dragObject ; 
-			srcElement.style.width = "auto" ;
-  		
-			eXo.portal.PortalDragDrop.removeNullPreview();
+			dndEvent.dragObject.style.width = "auto" ; 
     }
+    
+    if(dndEvent.dragObject.isComponent) {
+			var componentBlock = eXo.core.DOMUtil.findFirstDescendantByClass(dndEvent.dragObject, "div", "UIComponentBlock") ;
+	  	var editBlock = eXo.core.DOMUtil.findFirstChildByClass(componentBlock, "div", "EDITION-BLOCK");
+	    if(editBlock) editBlock.style.display = "none";
+    }
+    
+    if(previewBlock) previewBlock.parentNode.removeChild(previewBlock);
+    if(previewTD) previewTD.parentNode.removeChild(previewTD);
+    previewBlock = previewTD = null;
     
     eXo.portal.isInDragging = false;
   	eXo.portal.UIPortal.changeComposerSaveButton();
@@ -268,23 +243,15 @@ PortalDragDrop.prototype.init = function(e) {
 };
 
 PortalDragDrop.prototype.doDropCallback = function(dndEvent) {
-	if(!dndEvent.lastFoundTargetObject) {
-		dndEvent.lastFoundTargetObject = eXo.portal.PortalDragDrop.backupLastFoundTarget ;
-	}
-
-	eXo.portal.PortalDragDrop.undoPreview(dndEvent) ;
-	
 	var srcElement = dndEvent.dragObject ;
-      
-  var targetElement = dndEvent.foundTargetObject ;
+  var targetElement = dndEvent.foundTargetObject;
   
   var newComponent = false;
-  if(eXo.core.DOMUtil.hasDescendantClass(srcElement, "DragControlArea") && (targetElement.foundIndex != null)) {
-//  	alert("My Test: " + eXo.portal.PortalDragDrop.layoutTypeElementNode);
+  if(srcElement.isComponent && (targetElement.foundIndex != null)) {
     if(eXo.portal.PortalDragDrop.layoutTypeElementNode != null) {
       eXo.portal.PortalDragDrop.divRowContainerAddChild(srcElement, targetElement, targetElement.foundIndex) ;
     } else {
-//    	alert("Table is OK");
+    	eXo.portal.PortalDragDrop.parentDragObject.style.width = "auto";
       eXo.portal.PortalDragDrop.tableColumnContainerAddChild(srcElement, targetElement, targetElement.foundIndex) ;
     }
   }
@@ -330,7 +297,7 @@ PortalDragDrop.prototype.findDropableTargets = function(dragBlock) {
   return dropableTargets ;
 };
 
-PortalDragDrop.prototype.scrollOnDrag = function(dragObject, dndEvent) {
+PortalDragDrop.prototype.scrollOnDrag = function(dndEvent) {
 	var workspaceHeight = document.getElementById("UIWorkingWorkspace").offsetHeight;
   var browserHeight = eXo.core.Browser.getBrowserHeight() ;
   if(workspaceHeight <= browserHeight) return;
@@ -347,8 +314,6 @@ PortalDragDrop.prototype.scrollOnDrag = function(dragObject, dndEvent) {
 };
 
 PortalDragDrop.prototype.findInsertPosition = function(components, dragObject, layout) {
-  var dragObjectX = eXo.core.Browser.findPosX(dragObject) ;
-  
   if(layout == "row") {
     for(var i = 0; i < components.length; i++) {
       var componentTop = eXo.core.Browser.findPosY(components[i]) ;
@@ -361,6 +326,7 @@ PortalDragDrop.prototype.findInsertPosition = function(components, dragObject, l
     return -1 ;
     
   } else {
+	  var dragObjectX = eXo.core.Browser.findPosX(dragObject) ;
     for(var i = 0; i < components.length; i++) {
       var componentInTD = eXo.core.DOMUtil.getChildrenByTagName(components[i] ,"div")[0] ;    	
       var componentX = eXo.core.Browser.findPosX(components[i]) ;
@@ -372,115 +338,11 @@ PortalDragDrop.prototype.findInsertPosition = function(components, dragObject, l
   }  
 };
 
-PortalDragDrop.prototype.setDragObjectProperties = function(dragObject, listComponent, layout, e) {
-  var uiPage = eXo.core.DOMUtil.findAncestorByClass(dragObject, "UIPage");
-  
-  /* IE's Bug: It always double when set position, margin-left for 
-   * UIWorkingWorkspace is problem.
-   * If WorkingWorkspace is setted a width, that bug disappear
-   * but the layout on IE has breakdown!!!
-   * */
-	dragObject.style.top = (eXo.core.Browser.findMouseRelativeY(eXo.portal.PortalDragDrop.positionRootObj, e) - 
-													eXo.portal.PortalDragDrop.deltaYDragObjectAndMouse) + "px";
-  var componentBlock = eXo.core.DOMUtil.findFirstDescendantByClass(dragObject, "div", "UIComponentBlock") ;
-  if(!componentBlock) {
-    if(eXo.core.I18n.isLT()) dragObject.style.left = (eXo.core.Browser.findMouseRelativeX(dragObject.offsetParent, e) -
-                              eXo.portal.PortalDragDrop.deltaXDragObjectAndMouse) + "px" ;
-  } else {
-  	var uiWorkingWS = document.getElementById("UIWorkingWorkspace");
-    if(eXo.core.I18n.isLT()) dragObject.style.left = (eXo.core.Browser.findMouseRelativeX(uiWorkingWS, e) - 
-                                eXo.portal.PortalDragDrop.deltaXDragObjectAndMouse) + "px" ;
-    var editBlock = eXo.core.DOMUtil.findFirstChildByClass(componentBlock, "div", "EDITION-BLOCK");
-    if(editBlock) {
-    	var newLayer = eXo.core.DOMUtil.findFirstDescendantByClass(editBlock, "div", "NewLayer");
-    	if(newLayer) newLayer.style.width = "300px";
-    }
-  }
-  dragObject.style.width = "300px" ;
-  dragObject.style.position = "absolute" ;
-};
-
 PortalDragDrop.prototype.createPreview = function(layoutType) {
-
-  var previewBlock = document.createElement("div") ;
-  var components = eXo.core.DragDrop.dndEvent.foundTargetObject.listComponentInTarget ;
-  
-  previewBlock.className = "DragAndDropPreview" ;
-  previewBlock.id = "DragAndDropPreview" ;
-  
-  if((layoutType == "column") && (components.length > 0)) {
-    var offsetWidthTR = components[0].parentNode.offsetWidth ;
-    var widthComponent = 0 ;
-    
-    if(eXo.core.DOMUtil.findAncestorByClass(eXo.portal.PortalDragDrop.parentDragObject, "TRContainer") != null) {
-      widthComponent = Math.round(offsetWidthTR / (components.length)) - 1 ;
-    } else {
-      widthComponent = Math.round(offsetWidthTR / (components.length + 1)) - 1 ;
-    }
-    
-    eXo.portal.PortalDragDrop.tdInserted.style.width = widthComponent + "px" ;
-    
-    for(var i = 0 ; i < components.length; i++) {
-      if(components[i] == eXo.portal.PortalDragDrop.parentDragObject) {
-        components[i].style.width = "0px" ;
-      } else {
-        components[i].style.width = widthComponent + "px" ;
-      }
-    }
-    
-    eXo.portal.PortalDragDrop.widthComponentInTarget = widthComponent ;
-  }
-  return previewBlock ;
-};
-
-PortalDragDrop.prototype.removeNullPreview = function() {
-	var dropObject = document.getElementById("DragAndDropPreview") ;
-	if (dropObject && dropObject.innerHTML == "") {
-		dropObject.parentNode.removeChild(dropObject);
-	}
-}
-
-PortalDragDrop.prototype.undoPreview = function(dndEvent) {
-	var DOMUtil = eXo.core.DOMUtil ;
-  var uiComponentLayout ;
-  try{
-	  if(dndEvent.lastFoundTargetObject.className == "UIPage") {
-			uiComponentLayout = DOMUtil.findFirstDescendantByClass(dndEvent.foundTargetObject, "div", "VIEW-PAGE");
-	  } else if(dndEvent.lastFoundTargetObject.className == "UIPortal") {
-	    if(eXo.portal.portalMode%2) uiComponentLayout = DOMUtil.findFirstDescendantByClass(dndEvent.lastFoundTargetObject, "div", "LAYOUT-PORTAL");
-	    else uiComponentLayout = DOMUtil.findFirstDescendantByClass(dndEvent.lastFoundTargetObject, "div", "VIEW-PORTAL");
-	  } else {
-	    var foundUIComponent = new eXo.portal.UIPortalComponent(dndEvent.lastFoundTargetObject) ;
-	    if(eXo.portal.portalMode%2) uiComponentLayout = foundUIComponent.getLayoutBlock() ;
-	    else uiComponentLayout = foundUIComponent.getViewBlock();
-	  }
-  }catch(e) {}  
-  var componentIdElement = DOMUtil.getChildrenByTagName(uiComponentLayout ,"div")[0] ;
-  var layoutTypeElement = DOMUtil.getChildrenByTagName(componentIdElement ,"div")[0] ;
-  
-  var dropHere = document.getElementById("DragAndDropPreview") ;
-
-  var dragObject = dndEvent.dragObject ;
-	
-  if(dropHere != null) {
-    if(layoutTypeElement != null) {
-      dropHere.parentNode.removeChild(dropHere) ;
-    } else {
-      var tableLayoutElement = DOMUtil.getChildrenByTagName(componentIdElement ,"table")[0] ;
-      var trContainer = DOMUtil.findFirstDescendantByClass(tableLayoutElement, "tr", "TRContainer") ;
-      
-      trContainer.removeChild(dropHere.parentNode) ;
-      childTRContainer = DOMUtil.getChildrenByTagName(trContainer, "td") ;
-      
-      for(var i = 0; i < childTRContainer.length; i++) {
-        if(childTRContainer[i] == eXo.portal.PortalDragDrop.parentDragObject) {
-          childTRContainer[i].style.width = "0px" ;
-        }
-      }
-      
-    }
-  }
-  dragObject.style.border = "none" ;
+	var previewBlock = document.createElement("div") ;
+	previewBlock.className = "DragAndDropPreview" ;
+	previewBlock.id = "DragAndDropPreview" ;
+	return previewBlock;
 };
 
 PortalDragDrop.prototype.divRowContainerAddChild = function(insertBlock, targetElement, insertPosition) {
@@ -493,23 +355,16 @@ PortalDragDrop.prototype.divRowContainerAddChild = function(insertBlock, targetE
   } else {
     uiRowContainer.appendChild(insertBlock) ;
   }
-  
-  if(eXo.portal.PortalDragDrop.parentDragObject.parentNode.className == "TRContainer") {
-    eXo.portal.PortalDragDrop.parentDragObject.parentNode.removeChild(eXo.portal.PortalDragDrop.parentDragObject) ;
-  }
 };
 
 PortalDragDrop.prototype.tableColumnContainerAddChild = function(insertBlock, targetElement, insertPosition) {
   var listComponent = eXo.core.DragDrop.dndEvent.foundTargetObject.listComponentInTarget ;
   var DOMUtil = eXo.core.DOMUtil ;
   var trContainer = DOMUtil.findFirstDescendantByClass(targetElement, "tr", "TRContainer") ;
+  
   var tdInserted = document.createElement('td') ;
-  
-  var checkTRContainerInsertBlock = DOMUtil.findAncestorByClass(insertBlock, "TRContainer") ;
-      
-  tdInserted.style.width = eXo.portal.PortalDragDrop.widthComponentInTarget + "px" ;
-  
   tdInserted.appendChild(insertBlock) ;
+  
   if(insertPosition >= 0) {
     trContainer.insertBefore(tdInserted, listComponent[insertPosition]) ;
   } else {
@@ -518,8 +373,8 @@ PortalDragDrop.prototype.tableColumnContainerAddChild = function(insertBlock, ta
 
   insertBlock.style.width = "auto" ;
   
-  if(checkTRContainerInsertBlock) {
-    trContainer.removeChild(eXo.portal.PortalDragDrop.parentDragObject) ;
+	if(eXo.portal.PortalDragDrop.parentDragObject.tagName.toLowerCase() == "td") {
+    DOMUtil.removeElement(eXo.portal.PortalDragDrop.parentDragObject) ;
   }
 };
 

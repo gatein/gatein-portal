@@ -156,7 +156,7 @@ DragDrop.prototype.findDropableTarget = function(dndEvent, dropableTargets, mous
       if(foundTarget == null) {
         foundTarget = ele ;
       } else {
-        if(this.isAncestor(foundTarget, ele)) {
+        if(eXo.core.DOMUtil.hasAncestor(ele, foundTarget)) {
           foundTarget = ele ;
         }
       } 
@@ -166,31 +166,12 @@ DragDrop.prototype.findDropableTarget = function(dndEvent, dropableTargets, mous
   return foundTarget ;
 } ;
   
-DragDrop.prototype.isAncestor = function(ancestor , child) {
-  var parent = child.parentNode ;
-  while(parent != null) {
-    if(parent == ancestor) 	return true ;
-    var tmp = parent.parentNode ;
-    parent = tmp ;
-  }
-  return false ;
-} ;
-  
 DragDrop.prototype.isIn = function(x, y, component) {
   var componentLeft = eXo.core.Browser.findPosX(component);
   var componentRight = componentLeft + component.offsetWidth ;
   var componentTop = eXo.core.Browser.findPosY(component) ;
   var componentBottom = componentTop + component.offsetHeight ;
   var isOver = false ;
-
-	var uiWorkspaceContainer = document.getElementById("UIWorkspaceContainer") ;
-	if ((uiWorkspaceContainer && uiWorkspaceContainer.style.display != "none") && eXo.core.Browser.isIE7()) {
-		if(eXo.core.I18n.isLT()) componentRight = componentRight - uiWorkspaceContainer.clientWidth ;
-	}
-	
-  if(eXo.core.Browser.getBrowserType() == "ie") {
-  	componentLeft = componentLeft / 2 ;
-  }
 
   if((componentLeft < x) && (x < componentRight)) {
     if((componentTop < y) && (y < componentBottom)) {

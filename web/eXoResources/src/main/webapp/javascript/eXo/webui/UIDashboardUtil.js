@@ -17,9 +17,9 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-eXo.webui.UIDashboardUtil = {
+function UIDashboardUtil() {
 
-	findPosX : function(obj) {
+	UIDashboardUtil.prototype.findPosX = function(obj) {
 	  var curleft = 0;
 	  var uiWorkspaceContainer = document.getElementById("UIWorkspaceContainer");
 	  var uiWorkingWorkspace = document.getElementById("UIWorkingWorkspace");
@@ -38,18 +38,18 @@ eXo.webui.UIDashboardUtil = {
 	    obj = obj.offsetParent ;
 	  }
 	  return curleft ;
-	} ,
+	};
 	
-	findPosY : function(obj) {
+	UIDashboardUtil.prototype.findPosY = function(obj) {
 	  var curtop = 0 ;
 	  while (obj) {
 	    curtop += obj.offsetTop ;
 	    obj = obj.offsetParent ;
 	  }
 	  return curtop ;
-	} ,
+	};
 	
-	findMouseRelativeX : function (object, e){
+	UIDashboardUtil.prototype.findMouseRelativeX = function (object, e){
 		var posx = -1 ;
 		var posXObject = eXo.webui.UIDashboardUtil.findPosX(object) ;
 		if (!e) e = window.event ;
@@ -59,9 +59,9 @@ eXo.webui.UIDashboardUtil = {
 		  posx = e.clientX + document.body.scrollLeft - posXObject ;
 		}
 		return posx ;
-	},
+	};
 	
-	findMouseRelativeY : function(object, e) {
+	UIDashboardUtil.prototype.findMouseRelativeY = function(object, e) {
 	  var posy = -1 ;
 	  var posYObject = eXo.webui.UIDashboardUtil.findPosY(object) ;
 	  if (!e) e = window.event ;
@@ -76,21 +76,21 @@ eXo.webui.UIDashboardUtil = {
 	    }
 	  }
 	  return  posy ;
-	},
+	};
 	
-	findPosXInContainer : function(obj, container) {
+	UIDashboardUtil.prototype.findPosXInContainer = function(obj, container) {
   	var objX =  eXo.webui.UIDashboardUtil.findPosX(obj) ;
   	var containerX =  eXo.webui.UIDashboardUtil.findPosX(container) ;  
 	  return (objX - containerX) ;
-	},
+	};
 
-	findPosYInContainer : function(obj, container) {
+	UIDashboardUtil.prototype.findPosYInContainer = function(obj, container) {
 	  var objY = eXo.webui.UIDashboardUtil.findPosY(obj) ;
 	  var containerY =  eXo.webui.UIDashboardUtil.findPosY(container) ;
 	  return (objY - containerY) ;
-	}, 
+	}; 
 	
-	setPositionInContainer : function(container, component, posX, posY) {
+	UIDashboardUtil.prototype.setPositionInContainer = function(container, component, posX, posY) {
 		var offsetX = component.offsetLeft ;
 		var offsetY = component.offsetTop ;
 	
@@ -102,9 +102,9 @@ eXo.webui.UIDashboardUtil = {
 	
 		component.style.left = deltaX + "px" ;
 		component.style.top = deltaY + "px" ;
-	}, 
+	}; 
 	
-	isIn : function(x, y, component) {
+	UIDashboardUtil.prototype.isIn = function(x, y, component) {
 	  var componentLeft = eXo.webui.UIDashboardUtil.findPosX(component);
 	  var componentRight = componentLeft + component.offsetWidth ;
 	  var componentTop = eXo.webui.UIDashboardUtil.findPosY(component) ;
@@ -118,9 +118,9 @@ eXo.webui.UIDashboardUtil = {
 	  }
 	  
 	  return isOver ;
-	},
+	};
 	
-	findColIndexInDashboard : function(dragObj){
+	UIDashboardUtil.prototype.findColIndexInDashboard = function(dragObj){
 		var col = dragObj.parentNode;
 		if(col==null) return null;
 		var dashboardContainer = eXo.core.DOMUtil.findAncestorByClass(col, "DashboardContainer");
@@ -130,16 +130,16 @@ eXo.webui.UIDashboardUtil = {
 				return i;
 			}
 		}
-	},
+	};
 	
-	findRowIndexInDashboard : function(dragObj){
+	UIDashboardUtil.prototype.findRowIndexInDashboard = function(dragObj){
 		var modules = eXo.core.DOMUtil.getChildrenByTagName(dragObj.parentNode, "div");
 		for(var i=0; i<modules.length; i++){
 			if(modules[i].id == dragObj.id) return i;
 		}
-	},
+	};
 	
-	createRequest : function(componentId, action, params){
+	UIDashboardUtil.prototype.createRequest = function(componentId, action, params){
 		var url = eXo.env.server.portalBaseURL;
 		url += '?portal:componentId=' + componentId +
 							'&portal:type=action&uicomponent=UIDashboard&op=' + action ;
@@ -151,5 +151,7 @@ eXo.webui.UIDashboardUtil = {
 	    }
 	  }
 		return url;
-	}
-}
+	};
+};
+
+eXo.webui.UIDashboardUtil = new UIDashboardUtil();
