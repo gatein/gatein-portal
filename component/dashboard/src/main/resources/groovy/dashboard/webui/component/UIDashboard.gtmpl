@@ -13,7 +13,7 @@
 <div id="$uicomponent.id" class="UIDashboard">
 	<div class="DashboardContainer <%=maxiGadget == null ? "" : "Maximized"%>">
 	<%
-		if(maxiGadget == null) {
+		if(maxiGadget == null || !maxiGadget.isRendered()) {
 			uicomponent.renderChildren(); 
 	%>
 			<div class="ClearLeft"><span></span></div>

@@ -212,18 +212,26 @@ public class UIGadget extends UIComponent
          return null;
       }
    }
-
+   
    @Override
-   public void processRender(WebuiRequestContext context) throws Exception
+   public boolean isRendered()
    {
-      if (getApplication() == null)
+      DataStorage service = getApplicationComponent(DataStorage.class);      
+      try
       {
-         this.setRendered(false);
-         return;
+         service.load(state, ApplicationType.GADGET);
+         if (getApplication() == null)
+         {
+            throw new Exception("ApplicationNotExisted");
+         }
       }
-      super.processRender(context);
+      catch (Exception e)
+      {         
+         return false;
+      }
+      return super.isRendered();
    }
-
+   
    /**
     * Gets GadgetApplication by GadgedRegistryService
     * 

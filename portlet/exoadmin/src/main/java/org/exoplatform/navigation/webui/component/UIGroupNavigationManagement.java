@@ -44,12 +44,11 @@ import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.UIRepeater;
-import org.exoplatform.webui.core.UIRightClickPopupMenu;
 import org.exoplatform.webui.core.UIVirtualList;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.event.Event.Phase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -189,7 +188,7 @@ public class UIGroupNavigationManagement extends UIContainer
 
          if (!userACL.hasEditPermission(navigation))
          {
-            uiApplication.addMessage(new ApplicationMessage("UIDashboard.msg.notUrl", null));
+            uiApplication.addMessage(new ApplicationMessage("UIGroupNavigationManagement.msg.Invalid-editPermission", null));
             return;
          }
 
@@ -197,7 +196,7 @@ public class UIGroupNavigationManagement extends UIContainer
          DataStorage service = uicomp.getApplicationComponent(DataStorage.class);
          if (service.getPageNavigation(navigation.getOwnerType(), navigation.getOwnerId()) == null)
          {
-            uiApplication.addMessage(new ApplicationMessage("UIDashboard.msg.notUrl", null));
+            uiApplication.addMessage(new ApplicationMessage("UIGroupNavigationManagement.msg.navigation-not-exist", null));
             return;
          }
 
@@ -273,7 +272,7 @@ public class UIGroupNavigationManagement extends UIContainer
 
          if (!userACL.hasEditPermission(navigation))
          {
-            uiApplication.addMessage(new ApplicationMessage("UIDashboard.msg.notUrl", null));
+            uiApplication.addMessage(new ApplicationMessage("UIGroupNavigationManagement.msg.Invalid-editPermission", null));
             return;
          }
 
@@ -281,7 +280,7 @@ public class UIGroupNavigationManagement extends UIContainer
          DataStorage service = uicomp.getApplicationComponent(DataStorage.class);
          if (service.getPageNavigation(navigation.getOwnerType(), navigation.getOwnerId()) == null)
          {
-            uiApplication.addMessage(new ApplicationMessage("UIDashboard.msg.notUrl", null));
+            uiApplication.addMessage(new ApplicationMessage("UIGroupNavigationManagement.msg.navigation-not-exist", null));
             return;
          }
 
