@@ -5,6 +5,10 @@
 	boolean selectorRender = uicomponent.getChild(UICategorySelector.class).isRendered();
 	String srcBGError = "/eXoResources/skin/sharedImages/Icon80x80/DefaultPortlet.png";
 	String categoryNames = uicomponent.getCategorieNames();
+	String gadgetThumbnail = gadget.getThumbnail();
+	if(gadgetThumbnail == null || gadgetThumbnail.length() == 0){
+		gadgetThumbnail = srcBGError ;
+	}
 %>
 <div class="UIGadgetInfo" id="$uicomponent.id">
 	<div class="UIBreadcumb">
@@ -19,7 +23,7 @@
 	</div>
  	<div class="Application">
  		<div class="PortletIcons">
-				<img src="<%= gadget.getThumbnail() %>" onError="src='$srcBGError'" alt=""/>
+				<img src="$gadgetThumbnail" onError="src='$srcBGError'" alt=""/>
 		</div>
 		<div class="ApplicationContent">
 				<table class="TitleBarApplication">
