@@ -21,6 +21,7 @@ package org.exoplatform.organization.webui.component;
 
 import org.exoplatform.portal.pom.config.Utils;
 import org.exoplatform.services.organization.OrganizationService;
+import org.exoplatform.services.organization.Query;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -35,6 +36,7 @@ import org.exoplatform.webui.form.validator.MandatoryValidator;
 import org.exoplatform.webui.form.validator.PasswordStringLengthValidator;
 import org.exoplatform.webui.form.validator.ResourceValidator;
 import org.exoplatform.webui.form.validator.StringLengthValidator;
+import org.exoplatform.webui.organization.UIUserProfileInputSet;
 
 /**
  * Created by The eXo Platform SARL
@@ -106,8 +108,22 @@ public class UIAccountEditInputSet extends UIFormInputSet
       UIApplication uiApp = context.getUIApplication();
       String username = getUIStringInput(USERNAME).getValue();
       User user = service.getUserHandler().findUserByName(username);
-      if (user==null) {
+      if (user == null)
+      {
          uiApp.addMessage(new ApplicationMessage("UIAccountInputSet.msg.user-is-deleted", null));
+         UIUserInfo userInfo = getParent();
+         if (userInfo != null)
+         {
+            UIUserManagement userManagement = userInfo.getParent();
+            UIListUsers listUser = userManagement.getChild(UIListUsers.class);
+            UIAccountEditInputSet accountInput = userInfo.getChild(UIAccountEditInputSet.class);
+            UIUserProfileInputSet userProfile = userInfo.getChild(UIUserProfileInputSet.class);
+            userInfo.setRenderSibbling(UIListUsers.class);
+            listUser.search(new Query());
+            accountInput.reset();
+            userProfile.reset();
+            context.setProcessRender(true);
+         }
          return false;
       }
       invokeSetBindingField(user);

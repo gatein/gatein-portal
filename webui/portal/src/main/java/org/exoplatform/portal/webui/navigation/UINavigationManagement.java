@@ -29,8 +29,10 @@ import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.portal.webui.workspace.UIWorkingWorkspace;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.UIPopupWindow;
@@ -93,20 +95,41 @@ public class UINavigationManagement extends UIContainer
 
       public void execute(Event<UINavigationManagement> event) throws Exception
       {
+         PortalRequestContext prContext = Util.getPortalRequestContext();
          UINavigationManagement uiManagement = event.getSource();
          UINavigationNodeSelector uiNodeSelector = uiManagement.getChild(UINavigationNodeSelector.class);
          UserPortalConfigService portalConfigService =
             uiManagement.getApplicationComponent(UserPortalConfigService.class);
          PageNavigation navigation = uiNodeSelector.getSelectedNavigation();
-         PortalRequestContext prContext = Util.getPortalRequestContext();
+         // Check existed
+         PageNavigation persistNavigation =  portalConfigService.getPageNavigation(navigation.getOwnerType(), navigation.getOwnerId());
+         if (persistNavigation == null) {
+            UIApplication uiApp = Util.getPortalRequestContext().getUIApplication();
+            uiApp.addMessage(new ApplicationMessage("UINavigationManagement.msg.NavigationNotExistAnymore", null));
+            UIPopupWindow uiPopup = uiManagement.getParent();
+            uiPopup.setShow(false);
+            UIPortalApplication uiPortalApp = (UIPortalApplication)prContext.getUIApplication();
+            UIWorkingWorkspace uiWorkingWS = uiPortalApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
+            prContext.addUIComponentToUpdateByAjax(uiWorkingWS);
+            return;
+         }
+         
          if(navigation.getOwnerType() == PortalConfig.PORTAL_TYPE)
          {
             UserPortalConfig portalConfig = portalConfigService.getUserPortalConfig(navigation.getOwnerId(), prContext.getRemoteUser());
             if(portalConfig != null)
             {
                portalConfigService.update(navigation); 
-            }         
-            
+            } else {
+               UIApplication uiApp = Util.getPortalRequestContext().getUIApplication();
+               uiApp.addMessage(new ApplicationMessage("UIPortalForm.msg.notExistAnymore", null));
+               UIPopupWindow uiPopup = uiManagement.getParent();
+               uiPopup.setShow(false);
+               UIPortalApplication uiPortalApp = (UIPortalApplication)prContext.getUIApplication();
+               UIWorkingWorkspace uiWorkingWS = uiPortalApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
+               prContext.addUIComponentToUpdateByAjax(uiWorkingWS);
+               return;
+            }
          }
          else
          {

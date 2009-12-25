@@ -143,12 +143,12 @@ public class UIPortalForm extends UIFormTabPane
       PortalRequestContext prContext = Util.getPortalRequestContext();
 
       UIPortal editPortal = null;
-      UIPortalApplication uiPortalApp = Util.getUIPortalApplication();      
-      UIEditInlineWorkspace uiEditWS = uiPortalApp.<UIWorkingWorkspace>getChildById(UIPortalApplication.UI_WORKING_WS_ID).
-                                                   getChild(UIEditInlineWorkspace.class);
-      if(uiPortalApp.getModeState() != UIPortalApplication.NORMAL_MODE && 
-                 uiEditWS != null && uiEditWS.getUIComponent() != null && 
-                 (uiEditWS.getUIComponent() instanceof UIPortal))
+      UIPortalApplication uiPortalApp = Util.getUIPortalApplication();
+      UIEditInlineWorkspace uiEditWS =
+         uiPortalApp.<UIWorkingWorkspace> getChildById(UIPortalApplication.UI_WORKING_WS_ID).getChild(
+            UIEditInlineWorkspace.class);
+      if (uiPortalApp.getModeState() != UIPortalApplication.NORMAL_MODE && uiEditWS != null
+         && uiEditWS.getUIComponent() != null && (uiEditWS.getUIComponent() instanceof UIPortal))
       {
          editPortal = (UIPortal)uiEditWS.getUIComponent();
       }
@@ -160,8 +160,7 @@ public class UIPortalForm extends UIFormTabPane
       }
 
       invokeGetBindingBean(editPortal);
-      ((UIFormStringInput)getChild(UIFormInputSet.class).getChildById(FIELD_NAME))
-         .setValue(getPortalOwner());
+      ((UIFormStringInput)getChild(UIFormInputSet.class).getChildById(FIELD_NAME)).setValue(getPortalOwner());
       setActions(new String[]{"Save", "Close"});
    }
 
@@ -265,31 +264,42 @@ public class UIPortalForm extends UIFormTabPane
       public void execute(Event<UIPortalForm> event) throws Exception
       {
          UIPortalForm uiForm = event.getSource();
-         
+
          UserPortalConfigService service = uiForm.getApplicationComponent(UserPortalConfigService.class);
          PortalRequestContext prContext = Util.getPortalRequestContext();
 
          UserPortalConfig userConfig = service.getUserPortalConfig(uiForm.getPortalOwner(), prContext.getRemoteUser());
-         UIPortal uiPortal = uiForm.createUIComponent(UIPortal.class, null, null);
-         PortalDataMapper.toUIPortal(uiPortal, userConfig);
-         
-         UIPortalApplication uiPortalApp = (UIPortalApplication)prContext.getUIApplication();
-         uiForm.invokeSetBindingBean(uiPortal);
-         //uiPortal.refreshNavigation(localeConfigService.getLocaleConfig(uiPortal.getLocale()).getLocale()) ;
-         if (uiPortalApp.getModeState() == UIPortalApplication.NORMAL_MODE)
+         if (userConfig != null)
          {
-            PortalConfig portalConfig = (PortalConfig)PortalDataMapper.buildModelObject(uiPortal);
-            UserPortalConfigService configService = uiForm.getApplicationComponent(UserPortalConfigService.class);
-            configService.update(portalConfig);
+            UIPortal uiPortal = uiForm.createUIComponent(UIPortal.class, null, null);
+            PortalDataMapper.toUIPortal(uiPortal, userConfig);
+
+            UIPortalApplication uiPortalApp = (UIPortalApplication)prContext.getUIApplication();
+            uiForm.invokeSetBindingBean(uiPortal);
+            //uiPortal.refreshNavigation(localeConfigService.getLocaleConfig(uiPortal.getLocale()).getLocale()) ;
+            if (uiPortalApp.getModeState() == UIPortalApplication.NORMAL_MODE)
+            {
+               PortalConfig portalConfig = (PortalConfig)PortalDataMapper.buildModelObject(uiPortal);
+               UserPortalConfigService configService = uiForm.getApplicationComponent(UserPortalConfigService.class);
+               configService.update(portalConfig);
+            }
+            else
+            {
+               UIWorkingWorkspace uiWorkingWS = uiPortalApp.findFirstComponentOfType(UIWorkingWorkspace.class);
+               UIEditInlineWorkspace uiEditWS = uiWorkingWS.getChild(UIEditInlineWorkspace.class);
+               UIPortal editPortal = (UIPortal)uiEditWS.getUIComponent();
+               uiForm.invokeSetBindingBean(editPortal);
+            }
          }
          else
          {
-            UIWorkingWorkspace uiWorkingWS = uiPortalApp.findFirstComponentOfType(UIWorkingWorkspace.class);
-            UIEditInlineWorkspace uiEditWS = uiWorkingWS.getChild(UIEditInlineWorkspace.class);
-            UIPortal editPortal = (UIPortal)uiEditWS.getUIComponent();
-            uiForm.invokeSetBindingBean(editPortal);           
+            UIApplication uiApp = Util.getPortalRequestContext().getUIApplication();
+            uiApp.addMessage(new ApplicationMessage("UIPortalForm.msg.notExistAnymore", null));
+            UIPortalApplication uiPortalApp = (UIPortalApplication)prContext.getUIApplication();
+            UIWorkingWorkspace uiWorkingWS = uiPortalApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
+            prContext.addUIComponentToUpdateByAjax(uiWorkingWS);
          }
-         
+
          UIMaskWorkspace uiMaskWorkspace = uiForm.getParent();
          uiMaskWorkspace.setUIComponent(null);
          event.getRequestContext().addUIComponentToUpdateByAjax(uiMaskWorkspace);

@@ -19,6 +19,7 @@
 
 package org.exoplatform.portal.webui.navigation;
 
+import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.PageNavigation;
@@ -29,6 +30,7 @@ import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
@@ -156,7 +158,24 @@ public class UIPageNavigationForm extends UIForm
       {
          UIPageNavigationForm uiForm = event.getSource();
          PageNavigation pageNav = uiForm.getPageNav();
-         //PortalRequestContext pcontext = Util.getPortalRequestContext();
+
+         // Check existed
+         PortalRequestContext prContext = Util.getPortalRequestContext();
+         UserPortalConfigService portalConfigService = uiForm.getApplicationComponent(UserPortalConfigService.class);
+         PageNavigation persistNavigation =
+            portalConfigService.getPageNavigation(pageNav.getOwnerType(), pageNav.getOwnerId());
+         if (persistNavigation == null)
+         {
+            UIApplication uiApp = Util.getPortalRequestContext().getUIApplication();
+            uiApp.addMessage(new ApplicationMessage("UINavigationManagement.msg.NavigationNotExistAnymore", null));
+            UIPortalApplication uiPortalApp = (UIPortalApplication)prContext.getUIApplication();
+            UIWorkingWorkspace uiWorkingWS = uiPortalApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
+            UIPopupWindow uiPopup = uiForm.getParent();
+            uiPopup.setShow(false);
+            prContext.addUIComponentToUpdateByAjax(uiWorkingWS);
+            return;
+         }
+
          WebuiRequestContext pcontext = event.getRequestContext();
 
          UserPortalConfigService service = uiForm.getApplicationComponent(UserPortalConfigService.class);

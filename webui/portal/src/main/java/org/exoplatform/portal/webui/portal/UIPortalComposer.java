@@ -44,11 +44,13 @@ import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.UserProfile;
 import org.exoplatform.services.resources.LocaleConfig;
 import org.exoplatform.services.resources.LocaleConfigService;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.web.application.JavascriptManager;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.ComponentConfigs;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.UITabPane;
@@ -177,6 +179,11 @@ public class UIPortalComposer extends UIContainer
       if (configService.getUserPortalConfig(portalOwner, remoteUser) != null)
       {
          configService.update(portalConfig);
+      } else {
+         UIApplication uiApp = prContext.getUIApplication();
+         uiApp.addMessage(new ApplicationMessage("UIPortalForm.msg.notExistAnymore", null));         
+         prContext.addUIComponentToUpdateByAjax(uiWorkingWS);
+         return;
       }
 
       uiPortalApp.getUserPortalConfig().setPortal(portalConfig);
