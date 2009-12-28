@@ -1,4 +1,4 @@
-<% uicomponent.defaultValue(null); %>
+<% uicomponent.defaultValue(uicomponent.getLastQuery()); %>
 <div class="UIPageBrowser" id="<%=uicomponent.getId();%>">
 	
 	<%/*Begin UIPageBrowser Content*/%>
@@ -23,7 +23,6 @@
 						</td>
 					</tr>
 		 		</table>
-			</div>
-			
+			</div>			
 	<%}%>
 </div>
