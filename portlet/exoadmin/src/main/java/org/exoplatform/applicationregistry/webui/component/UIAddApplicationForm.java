@@ -279,10 +279,10 @@ public class UIAddApplicationForm extends UIForm
 
          appRegService.save(selectedCate, app);
          uiOrganizer.reload();
-         uiOrganizer.setSelectedCategory(selectedCate);
+         uiOrganizer.setSelectedCategory(selectedCate.getName());
          uiOrganizer.selectApplication(app.getApplicationName());
          ctx.addUIComponentToUpdateByAjax(uiOrganizer);
-      }
+      }     
 
       private Application cloneApplication(Application app)
       {
