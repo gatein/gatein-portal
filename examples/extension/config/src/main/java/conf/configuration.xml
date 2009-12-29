@@ -69,7 +69,7 @@
 								<value>
 									<string>web</string>
 								</value>
-								<value>
+								<value profiles="jboss">
 									<string>wsrp-producer</string>
 								</value>						
 								<value>
