@@ -78,9 +78,11 @@ public class UIApplicationList extends UIContainer
          boolean hasPermission = false;
          List<String> accessPermission = cate.getAccessPermissions();
          if (accessPermission == null) {
-            accessPermission = new ArrayList<String>();
+            accessPermission = new ArrayList<String>();            
+         }
+         if (accessPermission.size() == 0) {
             accessPermission.add(null);
-         }         
+         }
          for (String permssion : accessPermission)
          {
             hasPermission = userACL.hasPermission(identity, permssion);
