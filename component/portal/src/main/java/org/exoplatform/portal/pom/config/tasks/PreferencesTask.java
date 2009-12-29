@@ -33,8 +33,7 @@ public abstract class PreferencesTask<S>
 {
 
    /** . */
-//   private static final Object NULL_PREFS = new Object();
-
+   //   private static final Object NULL_PREFS = new Object();
    public static class GetContentId<S> extends PreferencesTask<S> implements POMTask<String>
    {
 
@@ -86,6 +85,8 @@ public abstract class PreferencesTask<S>
       public S run(POMSession session) throws Exception
       {
          Customization<S> customization = (Customization<S>)session.findCustomizationById(storageId);
+         if (customization == null)
+            return null;
          return customization.getVirtualState();
       }
 

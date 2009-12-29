@@ -25,7 +25,6 @@ import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.PortalProperties;
-import org.exoplatform.portal.pom.data.ModelChange;
 import org.exoplatform.portal.resource.SkinService;
 import org.exoplatform.portal.webui.application.UIApplicationList;
 import org.exoplatform.portal.webui.application.UIPortlet;
@@ -87,7 +86,7 @@ public class UIPortalComposer extends UIContainer
    private boolean isCollapse = false;
 
    private boolean isShowControl = true;
-        
+
    public UIPortalComposer() throws Exception
    {
       UITabPane uiTabPane = addChild(UITabPane.class, "UIPortalComposerTab", null);
@@ -169,19 +168,21 @@ public class UIPortalComposer extends UIContainer
          portalOwner = editPortal.getOwner();
       }
       else
-      {         
+      {
          portalOwner = Util.getPortalRequestContext().getPortalOwner();
       }
-     
+
       PortalConfig portalConfig = (PortalConfig)PortalDataMapper.buildModelObject(editPortal);
       UserPortalConfigService configService = getApplicationComponent(UserPortalConfigService.class);
 
       if (configService.getUserPortalConfig(portalOwner, remoteUser) != null)
       {
          configService.update(portalConfig);
-      } else {
+      }
+      else
+      {
          UIApplication uiApp = prContext.getUIApplication();
-         uiApp.addMessage(new ApplicationMessage("UIPortalForm.msg.notExistAnymore", null));         
+         uiApp.addMessage(new ApplicationMessage("UIPortalForm.msg.notExistAnymore", null));
          prContext.addUIComponentToUpdateByAjax(uiWorkingWS);
          return;
       }
@@ -302,10 +303,10 @@ public class UIPortalComposer extends UIContainer
          String portalOwner = null;
          UIEditInlineWorkspace uiEditWS = event.getSource().getAncestorOfType(UIEditInlineWorkspace.class);
          temp = uiEditWS.getUIComponent();
-         if(temp != null && (temp instanceof UIPortal)) 
+         if (temp != null && (temp instanceof UIPortal))
          {
             uiPortal = (UIPortal)temp;
-            if(uiPortal.getOwnerType().equals(PortalConfig.PORTAL_TYPE))
+            if (uiPortal.getOwnerType().equals(PortalConfig.PORTAL_TYPE))
             {
                portalOwner = uiPortal.getOwner();
             }
@@ -317,13 +318,14 @@ public class UIPortalComposer extends UIContainer
             uiPortal = Util.getUIPortal();
             portalOwner = Util.getPortalRequestContext().getPortalOwner();
          }
-         
+
          UIPortalApplication uiApp = uiPortal.getAncestorOfType(UIPortalApplication.class);
          UIMaskWorkspace uiMaskWS = uiApp.getChildById(UIPortalApplication.UI_MASK_WS_ID);
-         UIPortalForm portalForm = uiMaskWS.createUIComponent(UIPortalForm.class, null, "UIPortalForm");         
-         portalForm.setPortalOwner(portalOwner);            
+         UIPortalForm portalForm = uiMaskWS.createUIComponent(UIPortalForm.class, null, "UIPortalForm");
+         portalForm.setPortalOwner(portalOwner);
          portalForm.setBindingBean();
-         if(PortalConfig.USER_TYPE.equals(uiPortal.getOwnerType())){
+         if (PortalConfig.USER_TYPE.equals(uiPortal.getOwnerType()))
+         {
             portalForm.removeChildById("PermissionSetting");
          }
          uiMaskWS.setWindowSize(700, -1);
@@ -343,12 +345,12 @@ public class UIPortalComposer extends UIContainer
          uiEditWS.getComposer().setEditted(false);
          uiEditWS.setRendered(false);
          uiWorkingWS.setRenderedChild(UIPortalApplication.UI_VIEWING_WS_ID);
-         UISiteBody siteBody = uiWorkingWS.findFirstComponentOfType(UISiteBody.class);         
-                  
+         UISiteBody siteBody = uiWorkingWS.findFirstComponentOfType(UISiteBody.class);
+
          UIPortal uiPortal = uiWorkingWS.getBackupUIPortal();
-         siteBody.setUIComponent(uiPortal);         
-               
-         String uri  = uiPortal.getSelectedNode() != null ? uiPortal.getSelectedNode().getUri() : null;             
+         siteBody.setUIComponent(uiPortal);
+
+         String uri = uiPortal.getSelectedNode() != null ? uiPortal.getSelectedNode().getUri() : null;
          PageNodeEvent<UIPortal> pnevent = new PageNodeEvent<UIPortal>(uiPortal, PageNodeEvent.CHANGE_PAGE_NODE, uri);
          uiPortal.broadcast(pnevent, Event.Phase.PROCESS);
          prContext.addUIComponentToUpdateByAjax(uiWorkingWS);
@@ -553,9 +555,28 @@ public class UIPortalComposer extends UIContainer
    {
       public void execute(Event<UIPortalComposer> event) throws Exception
       {
+         UIPortalApplication uiPortalApp = Util.getUIPortalApplication();
+         UIPortal uiPortal = Util.getUIPortal();
          UIEditInlineWorkspace editInlineWS = event.getSource().getParent();
          UIWorkingWorkspace uiWorkingWS = editInlineWS.getParent();
          UIPortalToolPanel uiToolPanel = uiWorkingWS.findFirstComponentOfType(UIPortalToolPanel.class);
+         UIPage uiPage = uiToolPanel.findFirstComponentOfType(UIPage.class);
+         Page page = (Page)PortalDataMapper.buildModelObject(uiPage);
+         UserPortalConfigService portalConfigService =
+            uiWorkingWS.getApplicationComponent(UserPortalConfigService.class);
+         if (page.getStorageId() != null && portalConfigService.getPage(page.getPageId()) == null)
+         {
+            uiPortalApp.addMessage(new ApplicationMessage("UIPageBrowser.msg.PageNotExist", new String[]{page
+               .getPageId()}, 1));
+            uiPortalApp.setModeState(UIPortalApplication.NORMAL_MODE);
+            PageNodeEvent<UIPortal> pnevent =
+               new PageNodeEvent<UIPortal>(uiPortal, PageNodeEvent.CHANGE_PAGE_NODE,
+                  (uiPortal.getSelectedNode() != null ? uiPortal.getSelectedNode().getUri() : null));
+            uiPortal.broadcast(pnevent, Event.Phase.PROCESS);
+            JavascriptManager jsManager = event.getRequestContext().getJavascriptManager();
+            jsManager.addJavascript("eXo.portal.portalMode=" + UIPortalApplication.NORMAL_MODE + ";");
+            return;
+         }
          UIPortalComposer composer = uiWorkingWS.findFirstComponentOfType(UIPortalComposer.class).setRendered(false);
          composer.setEditted(false);
          if (composer.isUsedInWizard())
@@ -568,19 +589,10 @@ public class UIPortalComposer extends UIContainer
             uiEvent.broadcast();
             return;
          }
-         UIPage uiPage = uiToolPanel.findFirstComponentOfType(UIPage.class);
-
-         //
-         Page page = (Page)PortalDataMapper.buildModelObject(uiPage);
-         UserPortalConfigService portalConfigService =
-            uiWorkingWS.getApplicationComponent(UserPortalConfigService.class);
 
          // Perform mop update
-         List<ModelChange> changes = portalConfigService.update(page);
-
+         portalConfigService.update(page);
          uiToolPanel.setUIComponent(null);
-         UIPortal uiPortal = Util.getUIPortal();
-         UIPortalApplication uiPortalApp = Util.getUIPortalApplication();
          if (PortalProperties.SESSION_ALWAYS.equals(uiPortal.getSessionAlive()))
          {
             uiPortalApp.setSessionOpen(true);

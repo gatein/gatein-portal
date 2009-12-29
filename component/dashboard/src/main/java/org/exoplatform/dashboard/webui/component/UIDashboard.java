@@ -20,6 +20,9 @@
 package org.exoplatform.dashboard.webui.component;
 
 import org.exoplatform.portal.webui.application.UIGadget;
+import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.portal.webui.workspace.UIPortalApplication;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -133,9 +136,20 @@ public class UIDashboard extends UIContainer
          String objectId = context.getRequestParameter(OBJECTID);
          String minimized = context.getRequestParameter("minimized");
 
+         UIDashboardContainer uiDashboardCont = uiDashboard.getChild(UIDashboardContainer.class);
          UIGadget uiGadget = uiDashboard.getChild(UIDashboardContainer.class).getUIGadget(objectId);
-         uiGadget.getProperties().setProperty("minimized", minimized);
-         uiDashboard.getChild(UIDashboardContainer.class).save();
+         if (uiGadget.isLossData())
+         {
+            UIPortalApplication uiApp = Util.getUIPortalApplication();
+            uiApp.addMessage(new ApplicationMessage("UIDashboard.msg.ApplicationNotExisted", null));
+            uiDashboardCont.removeUIGadget(uiGadget.getId());
+            context.addUIComponentToUpdateByAjax(uiDashboard);
+         }
+         else
+         {
+            uiGadget.getProperties().setProperty("minimized", minimized);
+         }
+         uiDashboardCont.save();
          context.addUIComponentToUpdateByAjax(uiGadget);
       }
    }
@@ -150,6 +164,16 @@ public class UIDashboard extends UIContainer
          String maximize = context.getRequestParameter("maximize");
          UIDashboardContainer uiDashboardCont = uiDashboard.getChild(UIDashboardContainer.class);
          UIGadget uiGadget = uiDashboardCont.getUIGadget(objectId);
+         if (uiGadget == null || uiGadget.isLossData())
+         {
+            UIPortalApplication uiApp = Util.getUIPortalApplication();
+            uiApp.addMessage(new ApplicationMessage("UIDashboard.msg.ApplicationNotExisted", null));
+            if (uiGadget != null)
+               uiDashboardCont.removeUIGadget(uiGadget.getId());
+            uiDashboardCont.save();
+            context.addUIComponentToUpdateByAjax(uiDashboard);
+            return;
+         }
          if (maximize.equals("maximize"))
          {
             uiGadget.setView(UIGadget.CANVAS_VIEW);

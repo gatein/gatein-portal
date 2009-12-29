@@ -74,11 +74,6 @@ import org.gatein.pc.portlet.impl.spi.AbstractRequestContext;
 import org.gatein.pc.portlet.impl.spi.AbstractSecurityContext;
 import org.gatein.pc.portlet.impl.spi.AbstractServerContext;
 
-import javax.portlet.PortletMode;
-import javax.portlet.WindowState;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.xml.namespace.QName;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -89,9 +84,15 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
+import java.util.Map.Entry;
+
+import javax.portlet.PortletMode;
+import javax.portlet.WindowState;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.xml.namespace.QName;
 
 /** May 19, 2006 */
 @ComponentConfig(lifecycle = UIPortletLifecycle.class, template = "system:/groovy/portal/webui/application/UIPortlet.gtmpl", events = {
@@ -711,6 +712,10 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
       invocation.setWindowState(org.gatein.pc.api.WindowState.create(getCurrentWindowState().toString()));
 
       StatefulPortletContext<C> preferencesPortletContext = getPortletContext();
+      if (preferencesPortletContext == null)
+      {        
+         return null;
+      }
 
       // get the user profile cached in the prc during the start of the request
       UserProfile userProfile = (UserProfile)prc.getAttribute(UserProfileLifecycle.USER_PROFILE_ATTRIBUTE_NAME);

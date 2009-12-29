@@ -29,7 +29,6 @@ import org.exoplatform.portal.config.model.Properties;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.WebAppController;
 import org.exoplatform.web.application.gadget.GadgetApplication;
-import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIComponent;
@@ -212,26 +211,44 @@ public class UIGadget extends UIComponent
          return null;
       }
    }
-   
+
    @Override
    public boolean isRendered()
    {
-      DataStorage service = getApplicationComponent(DataStorage.class);      
       try
       {
+         DataStorage service = getApplicationComponent(DataStorage.class);
          service.load(state, ApplicationType.GADGET);
          if (getApplication() == null)
          {
-            throw new Exception("ApplicationNotExisted");
+            throw new Exception();
          }
       }
       catch (Exception e)
-      {         
+      {
          return false;
       }
       return super.isRendered();
    }
-   
+
+   public boolean isLossData()
+   {
+      try
+      {
+         DataStorage service = getApplicationComponent(DataStorage.class);
+         service.load(state, ApplicationType.GADGET);
+         if (getApplication() == null)
+         {
+            throw new Exception();
+         }
+      }
+      catch (Exception e)
+      {
+         return true;
+      }
+      return false;
+   }
+
    /**
     * Gets GadgetApplication by GadgedRegistryService
     * 
@@ -381,11 +398,18 @@ public class UIGadget extends UIComponent
          org.exoplatform.portal.pom.spi.gadget.Gadget gadget = new org.exoplatform.portal.pom.spi.gadget.Gadget();
          gadget.setUserPref(userPref);
 
-         //
          UIGadget uiGadget = event.getSource();
+         if (uiGadget.isLossData())
+         {
+            /*
+            UIPortalApplication uiApp = Util.getUIPortalApplication();
+            uiApp.addMessage(new ApplicationMessage("UIDashboard.msg.ApplicationNotExisted", null));
+            PortalRequestContext pcontext = Util.getPortalRequestContext();
+            pcontext.addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+            */
+            return;
+         }
          DataStorage service = uiGadget.getApplicationComponent(DataStorage.class);
-
-         //
          uiGadget.state = service.save(uiGadget.state, gadget);
          event.getRequestContext().setResponseComplete(true);
       }

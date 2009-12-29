@@ -79,8 +79,7 @@ public class UIPortletActionListener
     * modes (if they have to change) as well as a list of Events to be broadcasted to the other portlets located in the
     * same portal page
     */
-   static public class ProcessActionActionListener<S, C extends Serializable, I> extends
-      EventListener<UIPortlet<S, C>>
+   static public class ProcessActionActionListener<S, C extends Serializable, I> extends EventListener<UIPortlet<S, C>>
    {
       public void execute(Event<UIPortlet<S, C>> event) throws Exception
       {
@@ -90,10 +89,11 @@ public class UIPortletActionListener
          // set the public render parameters from the request before creating the invocation
          HttpServletRequest request = prcontext.getRequest();
          setupPublicRenderParams(uiPortlet, request.getParameterMap());
-         
+
          //
          ActionInvocation actionInvocation = uiPortlet.create(ActionInvocation.class, prcontext);
-
+         if (actionInvocation == null)
+            return;
          //
          PortletInvocationResponse portletResponse = uiPortlet.invoke(actionInvocation);
 
@@ -169,7 +169,7 @@ public class UIPortletActionListener
 
          // update the public render parameters with the changes from the invocation
          setupPublicRenderParams(uiPortlet, navStateResponse.getPublicNavigationalStateUpdates());
-         
+
          /*
           * Handle the events returned by the action output and broadcast a new UI
           * event to the ProcessEventsActionListener that will then target the
@@ -298,8 +298,7 @@ public class UIPortletActionListener
     * Finally the content is set in the portal response writer or outputstream depending on the type; the
     * processRender() method of the portal is not called as we set the response as complete
     */
-   static public class ServeResourceActionListener<S, C extends Serializable, I> extends
-      EventListener<UIPortlet<S, C>>
+   static public class ServeResourceActionListener<S, C extends Serializable, I> extends EventListener<UIPortlet<S, C>>
    {
       public void execute(Event<UIPortlet<S, C>> event) throws Exception
       {
@@ -410,7 +409,7 @@ public class UIPortletActionListener
           * page (usual layout or webos) which instance can be targeted by the
           * event and then process the event on the associated UIPortlet component
           */
-         while(events.size() > 0)
+         while (events.size() > 0)
          {
             javax.portlet.Event nativeEvent = events.remove(0);
             QName eventName = nativeEvent.getQName();
@@ -454,7 +453,7 @@ public class UIPortletActionListener
     * ProcessEventsActionListener once again
     */
    public static <S, C extends Serializable, I> List<javax.portlet.Event> processEvent(UIPortlet<S, C> uiPortlet,
-                                                                                       javax.portlet.Event event)
+      javax.portlet.Event event)
    {
       log.info("Process Event: " + event.getName() + " for portlet: " + uiPortlet.getState());
       try
@@ -599,7 +598,9 @@ public class UIPortletActionListener
          setupPublicRenderParams(uiPortlet, request.getParameterMap());
 
          //set render params
-         String navState = ((PortalRequestContext)event.getRequestContext()).getRequestParameter(ExoPortletInvocationContext.NAVIGATIONAL_STATE_PARAM_NAME);
+         String navState =
+            ((PortalRequestContext)event.getRequestContext())
+               .getRequestParameter(ExoPortletInvocationContext.NAVIGATIONAL_STATE_PARAM_NAME);
          uiPortlet.setNavigationalState(ParametersStateString.create(navState));
       }
    }
