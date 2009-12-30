@@ -280,6 +280,7 @@ public class UIPageForm extends UIFormTabPane
          UIPage uiPage = uiPageForm.getUIPage();
          if (uiPage == null)
             return;
+         String storageId = uiPage.getStorageId();
          Page page = new Page();
          page.setPageId(uiPage.getPageId());
          uiPageForm.invokeSetBindingBean(page);
@@ -355,6 +356,7 @@ public class UIPageForm extends UIFormTabPane
 
          page.setModifier(pcontext.getRemoteUser());
          PortalDataMapper.toUIPage(uiPage, page);
+         uiPage.setStorageId(storageId);
          //      if(page.getTemplate() == null) page.setTemplate(uiPage.getTemplate()) ;
          if (page.getChildren() == null)
             page.setChildren(new ArrayList<ModelObject>());
