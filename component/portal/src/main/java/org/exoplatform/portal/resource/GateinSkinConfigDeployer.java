@@ -89,6 +89,7 @@ public class GateinSkinConfigDeployer extends AbstractResourceHandler
                   public void execute(ServletContext scontext, PortalContainer portalContainer)
                   {
                      register(scontext, portalContainer);
+                     skinService.registerContext(scontext);
                   }
                };
                PortalContainer.addInitTask(scontext, task, portalContainerName);

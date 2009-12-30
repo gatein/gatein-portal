@@ -171,8 +171,8 @@ public class SkinService implements Startable
    public void addPortalSkin(String module, String skinName, String cssPath, ServletContext scontext, boolean overwrite)
    {
 
-      // Triggers a put if absent
-      mainResolver.registerContext(scontext);
+      //      // Triggers a put if absent
+      //      mainResolver.registerContext(scontext);
 
       availableSkins_.add(skinName);
       SkinKey key = new SkinKey(module, skinName);
@@ -226,8 +226,8 @@ public class SkinService implements Startable
 
    public void addSkin(String module, String skinName, String cssPath, ServletContext scontext, boolean overwrite)
    {
-      // Triggers a put if absent
-      mainResolver.registerContext(scontext);
+      //      // Triggers a put if absent
+      //      mainResolver.registerContext(scontext);
 
       availableSkins_.add(skinName);
       SkinKey key = new SkinKey(module, skinName);
@@ -556,6 +556,11 @@ public class SkinService implements Startable
       return availableSkin.toArray(new String[availableSkin.size()]);
    }
 
+   public void registerContext(ServletContext sContext)
+   {
+      mainResolver.registerContext(sContext);
+   }
+
    @Managed
    @ManagedDescription("Reload all skins")
    public void reloadSkins()
@@ -567,9 +572,7 @@ public class SkinService implements Startable
 
    @Managed
    @ManagedDescription("Reload a specified skin")
-   public void reloadSkin(@ManagedDescription("The skin id")
-   @ManagedName("skinId")
-   String skinId)
+   public void reloadSkin(@ManagedDescription("The skin id") @ManagedName("skinId") String skinId)
    {
       ltCache.remove(skinId);
       rtCache.remove(skinId);

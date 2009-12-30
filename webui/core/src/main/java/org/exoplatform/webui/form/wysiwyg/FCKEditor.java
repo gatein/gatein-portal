@@ -21,7 +21,7 @@ package org.exoplatform.webui.form.wysiwyg;
 
 import com.sun.syndication.io.impl.PropertiesLoader;
 
-import org.exoplatform.container.PortalContainer;
+import org.exoplatform.web.resource.config.xml.FCKConfigListener;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -42,7 +42,6 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class FCKEditor
 {
-
    private final static String DEFAULT_HEIGHT = "300".intern();
 
    private final static String DEFAULT_WIDTH = "100%".intern();
@@ -106,8 +105,8 @@ public class FCKEditor
 
    public FCKEditor(final HttpServletRequest request, final String instanceName)
    {
-      this(request, instanceName, DEFAULT_WIDTH, DEFAULT_HEIGHT, DEFAULT_TOOLBAR, null, "/"
-         + PortalContainer.getCurrentPortalContainerName() + "/fckeditor");
+      this(request, instanceName, DEFAULT_WIDTH, DEFAULT_HEIGHT, DEFAULT_TOOLBAR, null,
+         FCKConfigListener.FCK_CONTEXT_PATH + "/fckeditor");
    }
 
    /**
