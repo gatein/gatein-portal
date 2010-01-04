@@ -23,10 +23,11 @@
 
        --><title>Accounts</title>
 	<xi:include href="account/Register_New_Accounts.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
-	<xi:include href="account/Change_User_Password.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
-	<xi:include href="account/Change_Account_Settings.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 	<xi:include href="account/Sign_in_and_Sign_out.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
-	<xi:include href="account/Account_and_Password_Retrieval.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 	<xi:include href="account/Remember_User_Account.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+	<xi:include href="account/Change_Account_Settings.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+<!--	<xi:include href="account/Change_User_Password.xml" xmlns:xi="http://www.w3.org/2001/XInclude" /> - Covered in Change_Account_Setings.xml -->
+	<xi:include href="account/Account_and_Password_Retrieval.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+
 </chapter>
 

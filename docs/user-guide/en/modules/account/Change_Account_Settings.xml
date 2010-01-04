@@ -22,15 +22,12 @@
     02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
         --><title>Change Account Settings</title>
-	<!--      	<para>
-		There are two ways to change the account information:
-	</para>
-		 		<title>The 1^st^ way</title>         -->
+
 	<para>
-		All users can follow this guides to change your account information.
+		Users can follow this guide to change account information.
 	</para>
 	<para>
-		To change your account information, you just click on your account:
+		To change your account information, click on the account name in the top navigation bar:
 	</para>
 	<mediaobject>
 		<imageobject>
@@ -46,22 +43,22 @@
 		</imageobject>
 	</mediaobject>
 	<para>
-		If you want to change your <emphasis role="bold">Account Profiles</emphasis> :
+		If you want to change your Account Profile information:
 	</para>
 	<procedure>
 		<step>
 			<para>
-				Select the <emphasis role="bold">Account Profiles</emphasis> tab. It will display your current basic information.
+				Select the <emphasis role="bold">Account Profiles</emphasis> tab. This will display your current basic information.
 			</para>
 		</step>
 		<step>
 			<para>
-				Your <emphasis role="bold">User Name</emphasis> can not be changed. You can change these fields: <emphasis role="bold">First Name</emphasis> , <emphasis role="bold">Last Name</emphasis> and <emphasis role="bold">Email</emphasis> .
+				Your <emphasis role="bold">User Name</emphasis> cannot be changed. You can change your: <emphasis role="bold">First Name</emphasis> , <emphasis role="bold">Last Name</emphasis> and <emphasis role="bold">Email</emphasis>.
 			</para>
 		</step>
 		<step>
 			<para>
-				Click the <emphasis role="bold">Save</emphasis> button to accept changes.
+				Once the desired changes have been made, click the <emphasis role="bold">Save</emphasis> button to submit them.
 			</para>
 		</step>
 	</procedure> 
@@ -71,7 +68,7 @@
 	<procedure>
 		<step>
 			<para>
-				Select the <emphasis role="bold">Change Password</emphasis> tab, it will display a form:
+				Select the <emphasis role="bold">Change Password</emphasis> tab, it will display the following form:
 			</para>
 			<mediaobject>
 				<imageobject>
@@ -91,7 +88,7 @@
 		 </step>
 		 <step>
 			<para>
-				Reinput your password in the <emphasis role="bold">Confirm New Password</emphasis> field.
+				Re-enter your password in the <emphasis role="bold">Confirm New Password</emphasis> field.
 			</para>
 		 </step>
 		 <step>
@@ -100,18 +97,7 @@
 			</para>
 		 </step>
 	</procedure>
-	<!--         
-	<section>
-		<title>The 2^nd^ way</title>
 
-	<para>Only users who have the permission to access GateIn start in
-		the
-		User Workspace can follow this way.</para>
-	<para>
-		Go to
-		<emphasis role="bold">GateIn Start</emphasis>
-		-&gt; <emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Account Settings</emphasis></para><mediaobject><imageobject><imagedata fileref="images/ChangeLanguage3.png" format="PNG"></imagedata></imageobject></mediaobject><para>It will also open the <emphasis role="bold">Account Profiles</emphasis> form.</para><mediaobject><imageobject><imagedata fileref="images/AccountProfiles1.png" format="PNG"></imagedata></imageobject></mediaobject><para>You can change your information in the <emphasis role="bold">Account Profiles</emphasis> tab and the <emphasis role="bold">Change Password</emphasis> tab as the same as the first way.</para>
-		   	</section>      -->
 </section>
 
 

@@ -23,7 +23,7 @@
 
         --><title>Register New Accounts</title>
 	<para>
-		Users who visit the Portal and who are not registered are limited in the content they can see. User who need access to deeper content or who need to undertake actions within the prtal should register themselves and then contact the portal administrator to have appropriate permissions added to their account.
+		Users who visit the Portal and who are not registered are limited in the content they can see. Users who need access to deeper content or who need to undertake actions within the prtal should register themselves and then contact the portal administrator to have appropriate permissions added to their account.
 	</para>
 	<para>
 		Users can  quickly and easily register a new account by themselves. Just by completing the steps below, you will have a new account that helps you access more pages and take more actions in &PRODUCT;:
@@ -72,7 +72,7 @@
 							<term>Confirm Password</term>
 							<listitem>
 								<para>
-									Re-type the password above. *Password* and *Confirm Password* must be the same.
+									Re-type the password above. The <emphasis>Password</emphasis> and <emphasis>Confirm Password</emphasis> fields must be the same.
 								</para>
 							</listitem>
 						</varlistentry>
@@ -117,7 +117,7 @@
 				Input values in the <emphasis role="bold">User Profile</emphasis> tab, include: Profile information, Home information, Business information. These fields are not required.
 			</para>
 			<para>
-				&PRODUCT; facilitates users with four commonly used languagues: English, French, Vietnamese and Arabic in the <emphasis role="bold">Language</emphasis> field. You can select one of these languages to work with.
+				&PRODUCT; facilitates four commonly used languagues: English, French, Vietnamese and Arabic in the <emphasis role="bold">Language</emphasis> field. You can select one of these languages to work with.
 			</para>
 			<mediaobject>
 				<imageobject>
@@ -127,7 +127,7 @@
 		</step>
 		<step>
 			<para>
-				Click <emphasis role="bold">Save</emphasis> to register a new account or <emphasis role="bold">Reset</emphasis> to refresh all entered values. There will be an alert message and you can not add a new account if one of these cases occurs:
+				Click <emphasis role="bold">Save</emphasis> to register a new account or <emphasis role="bold">Reset</emphasis> to refresh all entered values. You cannot add a new account if one of these cases occurs:
 			</para>
 			<itemizedlist>
 				<listitem>
