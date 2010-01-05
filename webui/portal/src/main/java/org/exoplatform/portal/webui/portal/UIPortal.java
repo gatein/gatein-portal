@@ -43,6 +43,8 @@ import org.exoplatform.portal.webui.workspace.UIMaskWorkspace;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.services.resources.ResourceBundleManager;
 import org.exoplatform.web.login.InitiateLoginServlet;
+import org.exoplatform.web.security.security.AbstractTokenService;
+import org.exoplatform.web.security.security.CookieTokenService;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -423,6 +425,14 @@ public class UIPortal extends UIContainer
       {
          PortalRequestContext prContext = Util.getPortalRequestContext();
          HttpServletRequest req = prContext.getRequest();
+         
+         //Delete the token from JCR
+         String token = getTokenCookie(req);
+         if(token != null){
+            AbstractTokenService tokenService = AbstractTokenService.getInstance(CookieTokenService.class);
+            tokenService.deleteToken(token);
+         }
+         
          req.getSession().invalidate();
          Cookie cookie = new Cookie(InitiateLoginServlet.COOKIE_NAME, "");
          cookie.setPath(req.getContextPath());
@@ -435,6 +445,23 @@ public class UIPortal extends UIContainer
          prContext.getResponse().sendRedirect(redirect);
          prContext.setResponseComplete(true);
       }
+      
+      private String getTokenCookie(HttpServletRequest req)
+      {
+         Cookie[] cookies = req.getCookies();
+         if (cookies != null)
+         {
+            for (Cookie cookie : cookies)
+            {
+               if (InitiateLoginServlet.COOKIE_NAME.equals(cookie.getName()))
+               {
+                  return cookie.getValue();
+               }
+            }
+         }
+         return null;
+      }
+
    }
 
    static public class ChangeWindowStateActionListener extends EventListener<UIPortal>
