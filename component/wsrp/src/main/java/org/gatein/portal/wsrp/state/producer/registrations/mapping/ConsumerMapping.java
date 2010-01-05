@@ -110,6 +110,7 @@ public abstract class ConsumerMapping
    public void initFrom(Consumer consumer)
    {
       setName(consumer.getName());
+      setId(consumer.getId());
       setConsumerAgent(consumer.getConsumerAgent());
       setStatus(consumer.getStatus());
 
