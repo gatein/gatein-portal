@@ -34,6 +34,11 @@
             <name>config</name>
             <value>war:/conf/organization/picketlink-idm/picketlink-idm-config.xml</value>
          </value-param>
+        <value-param>
+            <name>portalRealm</name>
+            <value>realm${container.name.suffix}</value>
+         </value-param>
+
       </init-params>
    </component>
 

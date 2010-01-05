@@ -20,9 +20,9 @@
 
 -->
 
-<jboss-identity xmlns="urn:picketlink:idm:config:v1_0_0_cr1"
+<jboss-identity xmlns="urn:picketlink:idm:config:v1_0_0_ga"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                xsi:schemaLocation="urn:picketlink:idm:config:v1_0_0_cr1 identity-config.xsd">
+                xsi:schemaLocation="urn:picketlink:idm:config:v1_0_0_ga identity-config.xsd">
     <realms>
         <realm>
             <id>PortalRealm</id>

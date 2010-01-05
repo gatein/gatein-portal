@@ -99,7 +99,7 @@ public class PicketLinkIDMOrganizationServiceImpl extends BaseOrganizationServic
          }
       }
 
-   }
+   }                             
 
    public final org.picketlink.idm.api.Group getJBIDMGroup(String groupId) throws Exception
    {

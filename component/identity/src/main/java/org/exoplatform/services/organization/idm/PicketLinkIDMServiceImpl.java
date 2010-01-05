@@ -54,7 +54,7 @@ public class PicketLinkIDMServiceImpl implements PicketLinkIDMService, Startable
 
    public static final String PARAM_JNDI_NAME_OPTION = "jndiName";
 
-   public static final String DEFAULT_REALM_NAME_OPTION = "PortalRealm";
+   public static final String REALM_NAME_OPTION = "portalRealm";
 
    // We may have several portal containers thus we need one indentitySessionFactory per portal container
    //   private static IdentitySessionFactory identitySessionFactory;
@@ -62,7 +62,7 @@ public class PicketLinkIDMServiceImpl implements PicketLinkIDMService, Startable
 
    private String config;
 
-   private String defaultRealmName = "PortalRealm";
+   private String realmName = "PortalRealm";
 
    private IdentityConfiguration identityConfiguration;
 
@@ -78,7 +78,7 @@ public class PicketLinkIDMServiceImpl implements PicketLinkIDMService, Startable
    {
       ValueParam config = initParams.getValueParam(PARAM_CONFIG_OPTION);
       ValueParam jndiName = initParams.getValueParam(PARAM_JNDI_NAME_OPTION);
-      ValueParam realmName = initParams.getValueParam(DEFAULT_REALM_NAME_OPTION);
+      ValueParam realmName = initParams.getValueParam(REALM_NAME_OPTION);
 
       if (config == null && jndiName == null)
       {
@@ -87,7 +87,7 @@ public class PicketLinkIDMServiceImpl implements PicketLinkIDMService, Startable
       }
       if (realmName != null)
       {
-         this.defaultRealmName = realmName.getValue();
+         this.realmName = realmName.getValue();
       }
 
       if (config != null)
@@ -140,7 +140,7 @@ public class PicketLinkIDMServiceImpl implements PicketLinkIDMService, Startable
 
    public IdentitySession getIdentitySession() throws Exception
    {
-      return getIdentitySessionFactory().getCurrentIdentitySession(defaultRealmName);
+      return getIdentitySessionFactory().getCurrentIdentitySession(realmName);
    }
 
    public IdentitySession getIdentitySession(String realm) throws Exception
