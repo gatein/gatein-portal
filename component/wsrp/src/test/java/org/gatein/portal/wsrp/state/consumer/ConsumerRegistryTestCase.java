@@ -44,8 +44,8 @@ import java.util.Collection;
  * @version $Revision$
  */
 @ConfiguredBy({
-   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/jcr/jcr-configuration.xml"),
-   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/wsrp-configuration.xml")
+   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.test.jcr-configuration.xml"),
+   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.wsrp-configuration.xml")
 })
 public class ConsumerRegistryTestCase extends AbstractGateInTest
 {

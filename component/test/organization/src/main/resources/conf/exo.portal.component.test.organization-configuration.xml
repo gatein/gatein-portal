@@ -32,7 +32,7 @@
       <init-params>
          <value-param>
             <name>config</name>
-            <value>jar:/conf/organization/picketlink-idm/picketlink-idm-config.xml</value>
+            <value>jar:/conf/picketlink-idm-config.xml</value>
          </value-param>
       </init-params>
    </component>
@@ -103,17 +103,17 @@
          <init-params>
             <values-param>
                <name>hibernate.mapping</name>
-               <value>conf/organization/picketlink-idm/mappings/HibernateRealm.hbm.xml</value>
-               <value>conf/organization/picketlink-idm/mappings/HibernateIdentityObjectCredentialBinaryValue.hbm.xml</value>
-               <value>conf/organization/picketlink-idm/mappings/HibernateIdentityObjectAttributeBinaryValue.hbm.xml</value>
-               <value>conf/organization/picketlink-idm/mappings/HibernateIdentityObject.hbm.xml</value>
-               <value>conf/organization/picketlink-idm/mappings/HibernateIdentityObjectCredential.hbm.xml</value>
-               <value>conf/organization/picketlink-idm/mappings/HibernateIdentityObjectCredentialType.hbm.xml</value>
-               <value>conf/organization/picketlink-idm/mappings/HibernateIdentityObjectAttribute.hbm.xml</value>
-               <value>conf/organization/picketlink-idm/mappings/HibernateIdentityObjectType.hbm.xml</value>
-               <value>conf/organization/picketlink-idm/mappings/HibernateIdentityObjectRelationship.hbm.xml</value>
-               <value>conf/organization/picketlink-idm/mappings/HibernateIdentityObjectRelationshipType.hbm.xml</value>
-               <value>conf/organization/picketlink-idm/mappings/HibernateIdentityObjectRelationshipName.hbm.xml</value>
+               <value>conf/mappings/HibernateRealm.hbm.xml</value>
+               <value>conf/mappings/HibernateIdentityObjectCredentialBinaryValue.hbm.xml</value>
+               <value>conf/mappings/HibernateIdentityObjectAttributeBinaryValue.hbm.xml</value>
+               <value>conf/mappings/HibernateIdentityObject.hbm.xml</value>
+               <value>conf/mappings/HibernateIdentityObjectCredential.hbm.xml</value>
+               <value>conf/mappings/HibernateIdentityObjectCredentialType.hbm.xml</value>
+               <value>conf/mappings/HibernateIdentityObjectAttribute.hbm.xml</value>
+               <value>conf/mappings/HibernateIdentityObjectType.hbm.xml</value>
+               <value>conf/mappings/HibernateIdentityObjectRelationship.hbm.xml</value>
+               <value>conf/mappings/HibernateIdentityObjectRelationshipType.hbm.xml</value>
+               <value>conf/mappings/HibernateIdentityObjectRelationshipName.hbm.xml</value>
             </values-param>
          </init-params>
       </component-plugin>

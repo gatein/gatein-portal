@@ -170,7 +170,7 @@
       <value-param>
         <name>conf-path</name>
         <description>JCR configuration file</description>
-        <value>jar:/conf/jcr/repository-configuration.xml</value>
+        <value>jar:/conf/exo.portal.component.test.jcr-repository-configuration.xml</value>
       </value-param>
     </init-params>
   </component>
