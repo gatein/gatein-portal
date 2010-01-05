@@ -18,12 +18,17 @@
  */
 package org.exoplatform.component.test;
 
+import junit.framework.AssertionFailedError;
 import junit.framework.TestCase;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.component.RequestLifeCycle;
 
+import java.io.File;
+import java.io.FilenameFilter;
+import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -35,6 +40,9 @@ import java.util.Set;
  */
 public abstract class AbstractGateInTest extends TestCase
 {
+
+   /** The system property for gatein tmp dir. */
+   private static final String TMP_DIR = "gatein.tmp.dir";
 
    /** . */
    private PortalContainer container;
@@ -90,6 +98,60 @@ public abstract class AbstractGateInTest extends TestCase
          {
             configs.get(src.scope()).add(src.path());
          }
+      }
+
+      // Take care of creating tmp directory for unit test
+      if (System.getProperty(TMP_DIR) == null)
+      {
+         // Get base dir set by maven or die
+         File targetDir = new File(new File(System.getProperty("basedir")), "target");
+         if (!targetDir.exists())
+         {
+            throw new AssertionFailedError("Target dir for unit test does not exist");
+         }
+         if (!targetDir.isDirectory())
+         {
+            throw new AssertionFailedError("Target dir is not a directory");
+         }
+         if (!targetDir.canWrite())
+         {
+            throw new AssertionFailedError("Target dir is not writable");
+         }
+
+         //
+         Set<String> fileNames = new HashSet<String>();
+         for (File child : targetDir.listFiles(new FilenameFilter()
+         {
+            public boolean accept(File dir, String name)
+            {
+               return name.startsWith("gateintest-");
+            }
+         })) 
+         {
+            fileNames.add(child.getName());
+         }
+
+         //
+         String fileName;
+         int count = 0;
+         while (true)
+         {
+            fileName = "gateintest-" + count;
+            if (!fileNames.contains(fileName)) {
+               break;
+            }
+            count++;
+         }
+
+         //
+         File tmp = new File(targetDir, fileName);
+         if (!tmp.mkdirs())
+         {
+            throw new AssertionFailedError("Could not create directory " + tmp.getCanonicalPath());
+         }
+
+         //
+         System.setProperty(TMP_DIR, tmp.getCanonicalPath());
       }
 
       //

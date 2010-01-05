@@ -24,6 +24,7 @@ import org.exoplatform.services.naming.InitialContextInitializer;
 
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
+import java.io.File;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -35,6 +36,9 @@ import javax.sql.DataSource;
 })
 public class BootstrapTestCase extends AbstractGateInTest
 {
+
+   /** . */
+   private String previousTmpDirPath = null;
 
    public void testRequestLifeCycle()
    {
@@ -54,5 +58,38 @@ public class BootstrapTestCase extends AbstractGateInTest
       container.getComponentInstanceOfType(InitialContextInitializer.class);
       DataSource ds = (DataSource)new InitialContext().lookup("jdbcexo");
       assertNotNull(ds);
+   }
+
+   public void testTmpDir1() throws Exception
+   {
+      ensureTmpDir();
+   }
+
+   public void testTmpDir2() throws Exception
+   {
+      ensureTmpDir();
+   }
+
+   private void ensureTmpDir() throws Exception
+   {
+      String tmpDirPath = System.getProperty("gatein.tmp.dir");
+      assertNotNull(tmpDirPath);
+
+      //
+      if (previousTmpDirPath != null)
+      {
+         assertEquals(previousTmpDirPath, tmpDirPath);
+      }
+      else
+      {
+         previousTmpDirPath = tmpDirPath;
+      }
+
+      //
+      File f = new File(tmpDirPath);
+      assertTrue(f.exists());
+      assertTrue(f.isDirectory());
+      assertTrue(f.canWrite());
+      assertEquals(0, f.list().length);
    }
 }

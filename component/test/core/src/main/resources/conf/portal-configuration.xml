@@ -58,7 +58,7 @@
           <name>ref-addresses</name>
           <description>ref-addresses</description>
           <property name="driverClassName" value="org.hsqldb.jdbcDriver"/>
-          <property name="url" value="jdbc:hsqldb:file:${basedir}/target/temp/hsqldb"/>
+          <property name="url" value="jdbc:hsqldb:file:${gatein.tmp.dir}/hsqldb"/>
           <property name="username" value="sa"/>
           <property name="password" value=""/>
         </properties-param>

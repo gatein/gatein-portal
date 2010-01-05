@@ -35,7 +35,7 @@ import javax.jcr.Workspace;
  */
 @ConfiguredBy({
    @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/jcr/jcr-configuration.xml"),
-   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/test-configuration.xml")
+   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/chromattic-configuration.xml")
 })
 public class ChromatticIntegrationTestCase extends AbstractGateInTest
 {
