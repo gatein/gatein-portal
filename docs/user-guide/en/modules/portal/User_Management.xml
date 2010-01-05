@@ -52,12 +52,7 @@
 				<procedure>
 					<step>
 						<para>
-							Type the search title related to the user that you want to search. You do not need to enter an exact title.
-						</para>
-					</step>
-					<step>
-						<para>
-							Select the field in which you would like to search
+							Select the parameter (name, email, etc) by which you would like to search from the drop-down menu.
 						</para>
 						<mediaobject>
 							<imageobject>
@@ -67,7 +62,12 @@
 					</step>
 					<step>
 						<para>
-							Click the magnifying glass icon!images/SearchIcon.png! to perform searching. It will return a searching result in form.
+							Type the search terms for the user that you want to locate. You may not need to enter the complete title as the tool will present partial match search results.
+						</para>
+					</step>
+					<step>
+						<para>
+							Click the magnifying glass icon to begin the search.
 						</para>
 					</step>
 				</procedure>
@@ -77,8 +77,13 @@
 		<title>Edit a user</title>
 			<procedure>
 				<step>
+					 <para>
+						Locate the user you wish to edit.
+					</para>
+				</step>
+				<step>
 					<para>
-						 Click the edit icon!images/EditIcon.png! corresponding to the user that you want to edit.
+						Click the edit icon (next to the trash icon) in the list entry of that user.
 					</para>
 					<mediaobject>
 						<imageobject>
@@ -90,49 +95,56 @@
 					<para>
 						Select the <emphasis role="bold">Account Info</emphasis> tab to view and change the essential user information.
 					</para>
-					<itemizedlist>
-						<listitem>
+					<variablelist>
+						<varlistentry>
+							<term>User Name</term>
+							<listitem>
 							<para>
-								The <emphasis role="bold">User Name</emphasis> field can not be changed, other fields 	<emphasis role="bold">First Name</emphasis> , <emphasis role="bold">Last Name</emphasis> , <emphasis role="bold">Email Address</emphasis> can be changed.
+								The <emphasis role="bold">User Name</emphasis> field cannot be changed. Other fields <emphasis role="bold">First Name</emphasis> , <emphasis role="bold">Last Name</emphasis> , <emphasis role="bold">Email Address</emphasis> can be changed.
 							</para>
-						</listitem>
-						<listitem>
+							</listitem>
+						</varlistentry>
+						<varlistentry>
+							<term>Change Password</term>
+							<listitem>
 							<para>
-								The <emphasis role="bold">Change Password</emphasis> option allows making a new password for this user when he/she forgets his/her password. When the <emphasis role="bold">Change Password</emphasis> option is unchecked, <emphasis role="bold">New Password</emphasis> and <emphasis role="bold">Confirm Password</emphasis> are hidden. Passwords must contain at least 6 characters (letters, numbers and punctuation marks).
+								The <emphasis role="bold">Change Password</emphasis> option allows an administrator to set a new password for a user. When the <emphasis role="bold">Change Password</emphasis> option is unchecked, <emphasis role="bold">New Password</emphasis> and <emphasis role="bold">Confirm Password</emphasis> are hidden. Passwords must contain at least 6 characters and can contain letters, numbers and punctuation marks.
 							</para>
-						</listitem>
-					</itemizedlist>
+							</listitem>
+						</varlistentry>
+					</variablelist>
 				</step>
 				<step>
 					<para>
-						Select the <emphasis role="bold">User Profile</emphasis> tab to view and change profile information. The <emphasis role="bold">Language</emphasis> field is used to set the display language of that user.
+						Select the <emphasis role="bold">User Profile</emphasis> tab to view and change profile information. The <emphasis role="bold">Language</emphasis> field is used to set the display language for that user.
 					</para>
 				</step>
 				<step>
 					<para>
-						Select the <emphasis role="bold">User Membership</emphasis> tab to see user's information in groups.
+						Select the <emphasis role="bold">User Membership</emphasis> tab to see a user's group membership information.
 					</para>
 					<mediaobject>
 						<imageobject>
 							<imagedata fileref="images/Demo3.png" format="PNG" width="444" />
 						</imageobject>
 					</mediaobject>
-					<itemizedlist>
-						<listitem>
+					<variablelist>
+						<varlistentry>
+							<term>User Membership</term>
+							<listitem>
 							<para>
-								The <emphasis role="bold">User Membership</emphasis> tab indicates to which group the selected user belongs. In the above figure, the user "demo" is a member of two groups: "guests" and "users". The parent group of both is "platform".
+								The <emphasis role="bold">User Membership</emphasis> tab indicates which group (or groups) the selected user belongs to. In the above figure, the user "demo" is a member of two groups: "guests" and "users". The parent group of both is "platform".
 							</para>
-						</listitem>
-						<listitem>
 							<para>
-								To remove the user from a group, click the trash can icon!images/DeleteIcon.png! on the row you want.
+								To remove the user from a group, click the trash can icon on the row of the membership you want to revoke.
 							</para>
-						</listitem>
-					</itemizedlist>
+							</listitem>
+						</varlistentry>
+					</variablelist>
 				</step>
 				<step>
 					<para>
-						Click the <emphasis role="bold">Save</emphasis> button to accept changes.
+						Click the <emphasis role="bold">Save</emphasis> button to submit changes.
 					</para>
 				</step>
 			</procedure>
@@ -143,12 +155,15 @@
 			<procedure>
 				<step>
 					<para>
-						In the <emphasis role="bold">User Management</emphasis> form: Click the trash can icon !images/DeleteIcon.png! corresponding to the user that you want to delete.
+						Locate the user you wish to delete in the <emphasis role="bold">User Management</emphasis> form.
+					</para> 
+					<para>
+						Click the trash icon in the list entry corresponding to the user that you want to delete.
 					</para>
 				</step>
 				<step>
 					<para>
-						Click the <emphasis role="bold">OK</emphasis> button in the confirmation message to confirm or the <emphasis role="bold">Cancel</emphasis> button to quit without deleting anything.
+						Click the <emphasis role="bold">OK</emphasis> button in the confirmation message to confirm or the <emphasis role="bold">Cancel</emphasis> button to quit without changing anything.
 					</para>
 				</step>
 			</procedure>
@@ -174,7 +189,7 @@
 				<procedure>
 					<step>
 						<para>
-							Choose the path to create a new group by selecting the groups from list on the left pane or clicking the arrow icon !images/ArrowIcon.png! if you want to create a group in a higher level. The selected path is displayed in the path bar.
+							Choose the path to create a new group by selecting the groups from list on the left pane or clicking the arrow icon if you want to create a group in a higher level. The selected path is displayed in the path bar.
 						</para>
 						<mediaobject>
 							<imageobject>
@@ -191,50 +206,36 @@
 								<imagedata fileref="images/AddGroup.png" format="PNG" width="444" />
 							</imageobject>
 						</mediaobject>
-						<informaltable colsep="0" frame="none" rowsep="0">
-							<tgroup cols="2">
-								<colspec align="center"></colspec>
-								<colspec align="center"></colspec>
-								<tbody>
-									<row>
-										<entry>
-											<emphasis role="bold"> Name </emphasis>
-										</entry>
-										<entry>
-											<emphasis role="bold"> Description </emphasis>
-										</entry>
-										</row>
-								<row>
-										<entry>
-											Group Name
-										</entry>
-										<entry>
-											The name of the new group. This field is required and any length from 3 to 30 characters is allowed.
-										</entry>
-									</row>
-									<row>
-										<entry>
-											Label
-										</entry>
-										<entry>
-											The display name of the group. Any length from 3 to 30 characters is allowed.
-										</entry>
-									</row>
-									<row>
-										<entry>
-											Description
-										</entry>
-										<entry>
-											The description about the group. Any length from 3 to 30 characters is allowed.
-										</entry>
-									</row>
-								</tbody>
-							</tgroup>
-						</informaltable>
+						<variablelist>
+							<varlistentry>
+								<term>Group Name</term>
+								<listitem>
+									<para>
+										The name of the new group. This field is required and any length from 3 to 30 characters is allowed. Once saved this name cannot be edited.
+									</para>
+									</listitem>
+							</varlistentry>
+							<varlistentry>
+								<term>Label</term>
+								<listitem>
+									<para>
+										The display name of the group. Any length from 3 to 30 characters is allowed.
+									</para>
+								</listitem>
+							</varlistentry>
+							<varlistentry>
+								<term>Description</term>
+								<listitem>
+									<para>
+										a description of the group. Any length from 3 to 30 characters is allowed.
+									</para>
+								</listitem>
+							</varlistentry>
+						</variablelist>
 					</step>
 					<step>
 						<para>
-							Fill in the required fields. Only alpha, digit and underscore characters are allowed for the <emphasis role="bold">Group Name</emphasis> field and it must be unique.
+							Fill in the required fields. Only letters, numbers and underscore characters are allowed for the <emphasis role="bold">Group Name</emphasis> field. The name must be unique within the portal.
 						</para>
 					</step>
 					<step>
@@ -255,23 +256,28 @@
 					</step>
 					<step>
 						<para>
-							Click the edit icon!images/EditIcon1.png! to show the <emphasis role="bold">Edit Group</emphasis> form of the selected group. This form is identical with the <emphasis role="bold">New Group</emphasis> form.
+							Click the edit icon to show the <emphasis role="bold">Edit Group</emphasis> form for the selected group. This form is identical to the <emphasis role="bold">New Group</emphasis> form.
 						</para>
 					</step>
 					<step>
 						<para>
-							You can not change the Group Name. Make changes for a <emphasis role="bold">Label</emphasis> or a <emphasis role="bold">Description</emphasis> field and then click the <emphasis role="bold">Save</emphasis> button to accept changes or the <emphasis role="bold">Cancel</emphasis> button to cancel changes and return to the <emphasis role="bold">Group Info</emphasis> form.
+							Make the desired changes in the approapraite fields. You can not change the Group Name, however you may change to the <emphasis role="bold">Label</emphasis> field if you wish to refer to the group by a different name. You are also able to edit the <emphasis role="bold">Description</emphasis> field should it be appropriate. 
+						</para>
+					</step>
+					<step>
+						<para>
+							Click the <emphasis role="bold">Save</emphasis> button to accept changes or the <emphasis role="bold">Cancel</emphasis> button to cancel changes and return to the <emphasis role="bold">Group Info</emphasis> form.
 						</para>
 					</step>
 				</procedure>
 		</section>
 
-		<section id="sect-User_Guide-User_Management-Add_a_new_user_to_the_group">
-			<title>Add a new user to the group</title>
+		<section id="sect-User_Guide-User_Management-Add_a_new_user_to_a_group">
+			<title>Add a new user to a group</title>
 				<procedure>
 					<step>
 						<para>
-							Select the path to the group you want to edit by selecting the groups from the list on the left pane. The Group's information is displayed including the user list and a form which allows to add a new user.
+							Select the path to the group you want to edit by selecting the groups from the list on the left pane. The Group's information is displayed including the user list and a form which allows the addition of a new user.
 						</para>
 						<mediaobject>
 							<imageobject>
@@ -281,39 +287,21 @@
 					</step>
 					<step>
 						<para>
-							Enter the exact user name of the user that you want to add to the selected group or you can enter some 	characters if you are not sure about the exact spelling.
+							Enter the username of the new user of the selected group.
 						</para>
-						<itemizedlist>
-							<listitem>
-								<para>
-									Click the magnifying glass icon!images/MagnifyIcon.png! to select users.
-								</para>
-							</listitem>
-							<listitem>
-								<para>
-									After clicking the magnifying icon!images/MagnifyIcon.png! , there will be a list of all existing users :
-								</para>
-								<mediaobject>
-									<imageobject>
-										<imagedata fileref="images/SelectUser.png" format="PNG" width="444" />
-									</imageobject>
-								</mediaobject>
-							</listitem>
-							<listitem>
-								<para>
-									Select the check box of the user (s) that you would like to add to the group.
-								</para>
-							</listitem>
-							<listitem>
-								<para>
-									After clicking the <emphasis role="bold">Add</emphasis> button you will see the complete user name(s) in the <emphasis role="bold">Add member</emphasis> form.
-								</para>
-							</listitem>
-						</itemizedlist>
+						<para>
+							If you are unsure of the exact username of the user you wish to add to the group, you can use the search function to locate them. 
+						</para>
+						<para>
+							Refer to <xref linkend="sect-User_Guide-User_Management-Search_a_user" /> for instructions on how to locate a user.
+						</para>
+						<para>
+							After you have found the required username, click the <emphasis role="bold">Add</emphasis> button and the complete username will populate the <emphasis role="bold">Add member</emphasis> form.
+							</para>
 					</step>
 					<step>
 						<para>
-							Select the membership for the user in a group from memberships list. The refresh icon!images/RefreshIcon.png! can be used to update the memberships list in case there are any changes.
+							Select the membership for the user in a group from memberships list. The refresh icon can be used to update the memberships list if there are any changes to incorporate.
 						</para>
 					</step>
 					<step>
@@ -329,7 +317,7 @@
 				<procedure>
 					<step>
 						<para>
-							Click the edit icon!images/EditIcon.png! corresponding to a specific user with a membership in the <emphasis role="bold">Group Info</emphasis> table to open the <emphasis role="bold">Edit Membership</emphasis> form :
+							Click the edit icon corresponding to a specific user with a membership in the <emphasis role="bold">Group Info</emphasis> table to open the <emphasis role="bold">Edit Membership</emphasis> form :
 						</para>
 						<mediaobject>
 							<imageobject>
@@ -360,7 +348,7 @@
 					</step>
 					<step>
 						<para>
-							Click the trash can !images/DeleteIcon.png! icon in order to delete.
+							Click the trash icon to delete the group.
 						</para>
 					</step>
 					<step>
@@ -374,7 +362,16 @@
 		<section id="sect-User_Guide-User_Management-Manage_memberships">
 			<title>Manage memberships</title>
 				<para>
-					The roles of an user in the specific group are managed in <emphasis role="bold">Membership Management</emphasis> form. Currently there are three membership types: Manager, Member and Validator. By default, Manager has the highest rights in a group. You can add new, edit or delete a 	membership type. Select the <emphasis role="bold">Membership Management</emphasis> tab in the <emphasis role="bold">Organization</emphasis> portlet. There will be a 	membership type list and a form to add new/edit:
+					The roles of an user in the specific group are managed in the <emphasis role="bold">Membership Management</emphasis> form.
+				</para>
+				<para>
+					Currently there are three membership types: <emphasis>Manager</emphasis>, <emphasis>Member</emphasis> and <emphasis>Validator</emphasis>. By default, Manager has the highest rights in a group. 
+				</para>
+				<para>
+					Administrators can add new, edit or delete a membership type. Select the <emphasis role="bold">Membership Management</emphasis> tab in the <emphasis role="bold">Organization</emphasis> portlet.
+				</para>
+				<para>
+					This will open a membership type list and a form to add new/edit:
 				</para>
 				<mediaobject>
 					<imageobject>
@@ -388,7 +385,7 @@
 				<procedure>
 					<step>
 						<para>
-							In the <emphasis role="bold">Add/Edit Membership</emphasis> form at the bottom, the input value for the membership name field (required) and the description field (optional). Only letters, digits, dots, dashes and underscores are allowed for the membership name.
+							In the <emphasis role="bold">Add/Edit Membership</emphasis> form, enter the values for the membership name field (required) and the description field (optional). Only letters, digits, dots, dashes and underscores are allowed for the membership name.
 						</para>
 					</step>
 					<step>
@@ -404,12 +401,12 @@
 				<procedure>
 					<step>
 						<para>
-							Click the edit icon!images/EditIcon.png! in the row of the membership type you want to edit. The selected Membership type information is displayed in the Add/Edit Membership form.
+							Click the edit icon in the row of the membership type you want to edit. The selected Membership type information is displayed in the Add/Edit Membership form.
 						</para>
 					</step>
 					<step>
 						<para>
-							Make changes in this form.
+							Make the desired changes in this form.
 						</para>
 					</step>
 					<step>
@@ -425,7 +422,7 @@
 				<procedure>
 					<step>
 						<para>
-							Click the trash can icon in the row of the membership type that you want to delete.
+							Click the trash icon in the row of the membership type that you want to delete.
 						</para>
 					</step>
 					<step>
@@ -435,5 +432,4 @@
 					</step>
 				</procedure>
 		</section>
-
 </section>
