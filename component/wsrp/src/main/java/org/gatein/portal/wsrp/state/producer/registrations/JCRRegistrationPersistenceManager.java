@@ -58,7 +58,7 @@ public class JCRRegistrationPersistenceManager extends RegistrationPersistenceMa
    {
       persister = new JCRPersister(container);
 
-      List<Class> mappingClasses = new ArrayList<Class>(5);
+      List<Class> mappingClasses = new ArrayList<Class>(6);
       Collections.addAll(mappingClasses, ConsumersAndGroupsMapping.class, ConsumerMapping.class, ConsumerGroupMapping.class,
          RegistrationMapping.class, ConsumerCapabilitiesMapping.class, RegistrationPropertiesMapping.class);
 
