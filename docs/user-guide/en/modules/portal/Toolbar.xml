@@ -23,7 +23,7 @@
 
      --><title>Toolbar</title>
 	<para>
-		The convenient Toolbar helps users and administrators to manipulate all actions quickly.
+		The Toolbar offers a convenient way for users and administrators to undertake portal actions quickly and easily.
 	</para>
 
 	<section>
@@ -34,7 +34,7 @@
 					<term>Dashboard</term>
 						<listitem>
 							<para>
-								You can change language, change skin and sign out from GateIn Portal.
+								You can use the Dashboard to change the language or skin used in the portal or to sign out.
 							</para>
 							<mediaobject>
 								<imageobject>
@@ -47,7 +47,7 @@
 					<term>Site</term>
 						<listitem>
 							<para>
-								It shows all different sites available in GateIn Portal allows users to directly edit the navigation tree.
+								The Site navigation function shows the different sites available in this Portal and allows users to directly edit the navigation tree.
 							</para>
 							<mediaobject>
 								<imageobject>
@@ -60,7 +60,7 @@
 					<term>Group</term>
 						<listitem>
 							<para>
-								Users can easily see and access pages in GateIn Portal.
+								Using the Group navigation function users can easily see and access pages in the Portal.
 							</para>
 							<mediaobject>
 								<imageobject>
@@ -74,46 +74,16 @@
 	
 	<section>
 		<title>Administration Actions in the Toolbar</title>
-
 			<variablelist>
 				<varlistentry>
-					<term>Editor</term>
-						<listitem>
-							<para>
-								You easily edit a page or add a new page
-							</para>
-							<mediaobject>
-								<imageobject>
-									<imagedata fileref="images/Edit.png" format="PNG" />
-								</imageobject>
-							</mediaobject>
-						</listitem>
-				</varlistentry>
-				<varlistentry>
-					<term>Administrator</term>
+					<term> Editor</term>
 					<listitem>
 						<para>
-							You can add or edit pages to the current portal, manage details for othe rportals or create new portals. 
-						</para>
-						<mediaobject>
-							<imageobject>
-								<imagedata fileref="images/Admin2.6.png" format="PNG" />
-							</imageobject>
-						</mediaobject>
-					</listitem>
-				</varlistentry>
-				<varlistentry>
-					<term>Edit Inline</term>
-					<listitem>
-						<para>
-							With the Edit Inline Composer popup that consists of two tabs: Applications and Containers, it is convenient for a user to select the component that he wants and to drag and drop it to the page.
-						</para>
-						<para>
-							You also quickly edit, delete portlets in a page, change portal's properties or switch the view mode.
+							Portal Administrators have access to another navigation that offers links to add a new page to the current portal, edit a particular page's properties or to change a page's layout. This navigation appears next to the Dashboard navigation in the Toolbar and is contextually-named. It will appear as either <emphasis role="bold">Site Editor</emphasis> or <emphasis role="bold">Group Editor</emphasis> dependinfg on the user's location within the portal.
 						</para>
 					</listitem>
 				</varlistentry>
-		</variablelist>
+			</variablelist>
 	</section>
 
 </section>

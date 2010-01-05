@@ -23,28 +23,31 @@
 
      --><title>User management</title>
 	<para>
-		It is so difficult to manage and set permissions for a great number of registered users in a system. To solve this problem, GateIn Portal helps Administrators manage users, groups and memberships easily as well as effectively.
+		To assist Administrators to manage a number of registered users &PRODUCT; offers a number of tools to manage users, groups and memberships easily and effectively.
 	</para>
-	<para>
-		Go to <emphasis role="bold">Administration</emphasis> / <emphasis role="bold">Community Management</emphasis> (or Organization/Management). The <emphasis role="bold">Organization</emphasis> form appears:
-	</para>
-	<mediaobject>
-		<imageobject>
-			<imagedata fileref="images/UserManage.png" format="PNG" width="444" />
-		</imageobject>
-	</mediaobject>
 
 	  <section id="sect-User_Guide-User_Management-Manage_users">
 				<title>Manage users</title>
 					<para>
-						Select the <emphasis role="bold">User Management</emphasis> tab in the <emphasis role="bold">Organization</emphasis> form. By default, it will show all existing registered users. With <emphasis role="bold">User Management</emphasis> , you can see all existing registered users, and also search, edit, delete them. For each user, you can see his groups and his memberships (roles) in these groups. You can not add users to a group but you can remove them from the group.
+						Select the <emphasis role="bold">Group</emphasis> navigation in the Toolbar. Under the <emphasis role="bold">Executive Board's Pages</emphasis> heading is a link to <emphasis role="bold">Organization</emphasis> options. 
+					</para>
+					<para>
+						Clicking <emphasis>Users and Groups Management</emphasis> in this list will open an easily navigated table of current registered users. 
+					</para>
+					<mediaobject>
+						<imageobject>
+							<imagedata fileref="images/UserManage.png" format="PNG" width="444" />
+						</imageobject>
+					</mediaobject>
+					<para>
+						Administrators can see all existing registered users and search, edit or even delete them. Each user's groups and memberships (roles) in these groups are also available. You can not add users to a group but you can remove them from the group.
 					</para>
 	</section>
 
 	<section id="sect-User_Guide-User_Management-Search_a_user">
 		<title>Search a user</title>
 			<para>
-				The Administrator can search users by user name, first name, last name or email address.
+				The Administrator can search for specific users by username, first name, last name or email address.
 			</para>
 				<procedure>
 					<step>
