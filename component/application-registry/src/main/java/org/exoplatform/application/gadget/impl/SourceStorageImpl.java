@@ -64,7 +64,7 @@ public class SourceStorageImpl implements SourceStorage
 
          //
          Source source = new Source(gadget.getName());
-         source.setMimeType("application/xml");
+         source.setMimeType(LocalGadgetData.GADGET_MIME_TYPE);
          source.setLastModified(lastModified);
          source.setTextContent(content);
 

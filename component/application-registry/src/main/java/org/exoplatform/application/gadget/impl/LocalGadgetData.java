@@ -45,6 +45,9 @@ import java.util.Date;
 public abstract class LocalGadgetData extends GadgetData
 {
 
+   /** Mime type for gadgets. */
+   public static final String GADGET_MIME_TYPE = "application/x-google-gadget";
+
    @ManyToOne
    public abstract GadgetDefinition getDefinition();
 
@@ -84,7 +87,7 @@ public abstract class LocalGadgetData extends GadgetData
 
       // Update content
       NTFile content = getGadgetContent();
-      content.setContentResource(new Resource("application/xml", encoding, bytes));
+      content.setContentResource(new Resource(GADGET_MIME_TYPE, encoding, bytes));
    }
 
    public String getSource() throws Exception

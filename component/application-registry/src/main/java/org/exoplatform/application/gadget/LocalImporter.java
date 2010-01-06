@@ -202,6 +202,11 @@ public abstract class LocalImporter
                encoding = EncodingDetector.detect(new ByteArrayInputStream(content));
             }
 
+            // Correct mime type for gadgets
+            if (resourcePath.equals(gadgetPath)) {
+               mimeType = LocalGadgetData.GADGET_MIME_TYPE;
+            }
+
             //
             folder.createFile(name, new Resource(mimeType, encoding, content));
          }
