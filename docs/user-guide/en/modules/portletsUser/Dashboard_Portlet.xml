@@ -114,7 +114,7 @@
 			</step>
 			<step>
 				<para>
-					The Dashboard Workspace dialog appear : 
+					The Dashboard Workspace dialog appears: 
 					<mediaobject>
 						<imageobject>
 							<imagedata fileref="images/EnterLink.png" format="PNG" />
@@ -124,7 +124,7 @@
 			</step>
 			<step>
 				<para>
-					Enter a link (a .xml or .rss) in the text box above the gadgets list.
+					Enter a link (.xml or .rss) in the text box above the gadgets list.
 				</para>
 				<note>
 					<title>Note</title>

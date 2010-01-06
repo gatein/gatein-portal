@@ -22,8 +22,13 @@
     02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
      --><title>Change Node Order</title>
+<warning>
+<para>
+The <emphasis role="bold">Administration</emphasis> menu entry reported to be under the <emphasis role="bold">GateIn Start</emphasis> button does not exist in GateIn 3.0 Beta 3. Therefore some of the instructions in this section may be incomplete or inaccurate.
+</para>
+</warning>
 		<para>
-			You can easily change the position of node on the navigation bar on their own convenient order by following these steps:
+			You can easily change the position of nodes in the navigation bar following these steps:
 		</para>
 		<procedure>
 			<step>	
@@ -53,7 +58,7 @@
 			</step>
 			<step>
 				<para>
-					The selected node will be moved up/down.
+					The selected node will be moved up or down within the list.
 				</para>
 			</step>
 		</procedure>
