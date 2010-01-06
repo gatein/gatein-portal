@@ -95,15 +95,37 @@ public abstract class ConsumerMapping
    @FindById
    public abstract ConsumerGroupMapping findGroupById(String id);
 
+   @FindById
+   public abstract RegistrationMapping findRegistrationById(String id);
+
    public RegistrationMapping createAndAddRegistrationMappingFrom(Registration registration)
    {
-      // create, add to parent then init
-      RegistrationMapping rm = createRegistration("" + System.nanoTime());
-      getRegistrations().add(rm);
+      RegistrationMapping rm;
       if (registration != null)
       {
+         // check if the registration has already been persisted and it should already be associated to this ConsumerMapping
+         String key = registration.getPersistentKey();
+         if (key != null)
+         {
+            rm = findRegistrationById(key);
+         }
+         else
+         {
+            // else create the registration, add to parent
+            rm = createRegistration("" + System.nanoTime());
+            getRegistrations().add(rm);
+         }
+
+         // then init
          rm.initFrom(registration);
       }
+      else
+      {
+         // only create the registration and add to parent
+         rm = createRegistration("" + System.nanoTime());
+         getRegistrations().add(rm);
+      }
+
       return rm;
    }
 

@@ -81,7 +81,14 @@ public class JCRRegistrationPersistenceManager extends RegistrationPersistenceMa
 
       for (ConsumerMapping cm : mappings.getConsumers())
       {
-         internalAddConsumer(cm.toConsumer(this));
+         ConsumerSPI consumer = cm.toConsumer(this);
+         internalAddConsumer(consumer);
+
+         // get the registrations and add them to local map.
+         for (Registration registration : consumer.getRegistrations())
+         {
+            internalAddRegistration((RegistrationSPI)registration);
+         }
       }
    }
 
@@ -154,6 +161,27 @@ public class JCRRegistrationPersistenceManager extends RegistrationPersistenceMa
 
       return consumer;
    }
+
+   /*@Override
+   protected ConsumerSPI internalSaveChangesTo(Consumer consumer)
+   {
+      ConsumerSPI consumerSPI = super.internalSaveChangesTo(consumer);
+
+      ChromatticSession session = persister.getSession();
+      try
+      {
+         ConsumerMapping cm = session.findById(ConsumerMapping.class, consumer.getPersistentKey());
+         cm.initFrom(consumer);
+         persister.closeSession(session, true);
+      }
+      catch (Exception e)
+      {
+         e.printStackTrace();  // todo: fix me
+         persister.closeSession(session, false);
+      }
+
+      return consumerSPI;
+   }*/
 
    @Override
    protected ConsumerGroupSPI internalRemoveConsumerGroup(String name)
