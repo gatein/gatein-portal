@@ -59,10 +59,13 @@
 	</para>
 	<variablelist>
 	  <varlistentry>
-		<term>Site Editor</term>
+		<term>Site/Group Editor</term>
 		<listitem>
 			<para>
-				This navigation contains links to add a new page to the portal, to edit a page or to change the portal's layout. Administrators can use these links to manage the portal.
+				This navigation appears as either <emphasis role="bold">Site Editor</emphasis> or <emphasis role="bold">Group Editor</emphasis> depending on the administrator's location within the portal. When in areas of the portal displaying content, the navigation shows as  <emphasis role="bold">Site Editor</emphasis> and in areas of the portal pertaining to users, the navigation shows as  <emphasis role="bold">Group Editor</emphasis>. 
+			</para>
+			<para>
+				This navigation contains links to add a new pages to the portal, to edit a page or to change the portal's layout. Administrators can use these links to manage the portal.
 			</para>
 		</listitem>
 	</varlistentry>

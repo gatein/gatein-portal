@@ -23,77 +23,80 @@
 
      --><title>Change Portal Skins</title>
 		<para>
-			GateIn Portal skins are graphic styles that help users display an attractive user interface. Each skin has its own characteristics with different backgrounds, icons, etc. In order to be user-friendly and flexible in use, users are allowed to change their skins without having edit rights on the portal.
+			Skins are graphic styles that display an attractive user interface. Each skin has its own characteristics with different backgrounds, icons, and other visual elements. In order to be user-friendly and flexible, users are allowed to change the skin they use on the portal without having edit rights.
 		</para>
 		<para>
-			skin switch that takes only effect on the user's current session until he signs out. You can change the skin permanently or temporarily.
+			Skins can be changed temporarily (and are reset at log-out) or permanently.
 		</para>
-
-<!--			<variablelist>
-		<varlistentry id="User_Guide-Change_Portal_Skins-Change_the_skin_temporarily">
-			<term>Change the skin temporarily</term>
-			<listitem>
-				<para>
-					Go to <emphasis role="bold">GateIn Start</emphasis> -&gt; <emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Skin Settings</emphasis>.
-				</para>
-			</listitem>
-		</varlistentry>
-		  <varlistentry id="User_Guide-Change_Portal_Skins-Change_the_skin_permanently">
-			<term>Change the skin permanently</term>
-			<listitem>
-				<procedure>
-					<step>
-						<para>
-							Go to <emphasis role="bold">GateIn Start</emphasis> -&gt; <emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Advanced</emphasis> -&gt; <emphasis role="bold">Edit Current portal</emphasis>
-						</para>
-					</step>
-					<step>
-						<para>
-							Click the edit icon!images/EditIcon.png! to edit portal properties.
-						</para>
-					</step>
-					<step>
-						<para>
-							In the <emphasis role="bold">Portal Setting</emphasis> tab: select one skin type in the <emphasis role="bold">Skin</emphasis> list field to change and display a skin.
-						</para>
-						<mediaobject>
-							<imageobject>
-								<imagedata fileref="images/Skin1.png" format="PNG" width="444" />
-							</imageobject>
-						</mediaobject>
-					</step>
-					<step>
-						<para>
-							Click <emphasis role="bold">Save</emphasis> and <emphasis role="bold">Finish</emphasis> icon !images/Finish1.png! so that the modification can take effect.
-						</para>
-					</step>
-				</procedure>
-			</listitem>
-		</varlistentry>
-	</variablelist> -->
-
-		<procedure>
-			<step>
-				<para>
-					Go to <emphasis role="bold">GateIn</emphasis> on the Toolbar &gt; click <emphasis role="bold">Change Skin</emphasis>. The <emphasis role="bold">Skin Setting</emphasis> form is displayed with a list of all supported skins. The left pane contains the skin list and the right pane is used to display the template of the selected skin.
-				</para>
-			</step>
-			<step>
-				<para>
-					Select a skin by clicking on the its name.
-				</para>
-			</step>
-			<step>
-				<para>
-					Click the <emphasis role="bold">Apply</emphasis> button and wait for few seconds to take effect.
-				</para>
-				<mediaobject>
-					<imageobject>
-						<imagedata fileref="images/SkinSet1.png" format="PNG" width="444" />
-					</imageobject>
-				</mediaobject>
-			</step>
-		</procedure>
+			<variablelist>
+				<varlistentry>
+					<term>Change the skin temporarily</term>
+						<listitem>
+							<procedure>
+								<step>
+									<para>
+										Go to <emphasis role="bold">GateIn Start</emphasis> and click on <emphasis role="bold">Change Skin</emphasis>.
+									</para>
+								</step>
+								<step>
+									<para>
+										Select a new skin from the list on the left of the <emphasis role="bold">Skin Settings</emphasis> box. When you highlight a skin in the list a preview will appear in the pane on the right of the box.
+									</para>
+									<mediaobject>
+										<imageobject>
+											<imagedata fileref="images/SkinSet1.png" format="PNG" width="444" />
+										</imageobject>
+									</mediaobject>
+								</step>
+								<step>
+									<para>
+										If you are happy with your choice, click the <emphasis role="bold">Apply</emphasis> button to have it applied to the portal. 
+									</para>
+									<para>
+										Or, if you decide not to change the skin, click <emphasis role="bold">Cancel</emphasis> to close the dialogue box without making any changes to the portal.
+									</para>
+								</step>
+							</procedure>
+						</listitem>
+				</varlistentry>
+				<varlistentry>
+					<term>Change the skin permanently</term>
+						<listitem>
+							<procedure>
+								<step>
+									<para>
+										Go to <emphasis role="bold">GateIn Start</emphasis> -&gt; <emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Advanced</emphasis> -&gt; <emphasis role="bold">Edit Current portal</emphasis>
+									</para>
+								</step>
+								<step>
+									<para>
+										Click the edit icon to edit portal properties.
+									</para>
+								</step>
+								<step>
+									<para>
+										In the <emphasis role="bold">Portal Setting</emphasis> tab: select one skin type in the <emphasis role="bold">Skin</emphasis> list field to change and display a skin.
+									</para>
+									<mediaobject>
+										<imageobject>
+											<imagedata fileref="images/Skin1.png" format="PNG" width="444" />
+										</imageobject>
+									</mediaobject>
+								</step>
+								<step>
+									<para>
+										Click <emphasis role="bold">Save</emphasis> and <emphasis role="bold">Finish</emphasis> icon so that the modification can take effect.
+									</para>
+								</step>
+							</procedure>
+						</listitem>
+				</varlistentry>
+			</variablelist>
+	<warning>
+		<para>
+			The <emphasis role="bold">Administration</emphasis> item referred to in the above procedure is not present in GateIn 3.0 Beta 3
+		</para>
+	</warning> 
 
 </section>
 

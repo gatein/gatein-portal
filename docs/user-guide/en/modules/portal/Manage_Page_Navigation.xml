@@ -26,12 +26,12 @@
 			In order to understand clearly about what the navigation is and navigation types that GateIn Portal supports, please refer the <xref linkend="sect-User_Guide-Navigation" /> page.
 		</para>
 
-		<section id="User_Guide-Manage_Page_Navigation-Portals_page_navigation">
+<!--		<section id="User_Guide-Manage_Page_Navigation-Portals_page_navigation">
 			<title>Portal's page navigation</title>
 				<para>
 					Stuff Goes here?
 				</para>
-		</section>
+		</section> Editing out until I have some reason to use this section--> 
 		
 		<section id="User_Guide-Manage_Page_Navigation-Creating_a_portals_navigation">
 			<title>Creating a portal's navigation</title>
@@ -42,12 +42,12 @@
 		
 		<section id="User_Guide-Manage_Page_Navigation-Editing_a_portals_navigation">
 			<title>Editing a portal's navigation</title>
-				<para>
-					Only users who have the edit right on a portal can perform this action.
-				</para>
-				<para>
-					Follows these below guides to edit a portal's navigation:
-				</para>
+				<note>
+				<title>Edit permissions</title>
+					<para>
+						Only users who have the edit right on a portal can edit entries in navigation menus.
+					</para>
+				</note>
 				<procedure>
 					<step>
 						<para>

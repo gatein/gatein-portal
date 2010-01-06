@@ -26,7 +26,7 @@
 		Permission settings control what users can and cannot do within the portal and are set by portal administrators.
 	</para>
 	<para>
-		Permission <emphasis role="bold">types</emphasis> dictate <emphasis>what</emphasis> a user can do within the portal. There are two permission types used in &PRODUCT;:
+		Permission <emphasis role="bold">types</emphasis> dictate what a user can do within the portal. There are two permission types used in &PRODUCT;:
 	</para>
 
 	<variablelist>
