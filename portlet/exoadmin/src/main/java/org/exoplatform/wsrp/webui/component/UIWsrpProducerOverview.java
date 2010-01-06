@@ -37,7 +37,6 @@ import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
-import org.gatein.wsrp.WSRPConsumer;
 import org.gatein.wsrp.producer.config.ProducerConfiguration;
 import org.gatein.wsrp.producer.config.ProducerConfigurationService;
 import org.gatein.wsrp.registration.RegistrationPropertyDescription;
@@ -65,7 +64,7 @@ public class UIWsrpProducerOverview extends UIContainer
 
    public static String[] FIELDS = {"name", "description", "label", "hint"};
 
-   public static String[] SELECT_ACTIONS = {"EditProperty", "DeleteProperty"};
+   public static String[] SELECT_ACTIONS = {"AddProperty", "EditProperty", "DeleteProperty"};
 
    public UIWsrpProducerOverview() throws Exception
    {
@@ -116,9 +115,9 @@ public class UIWsrpProducerOverview extends UIContainer
       return Collections.singletonList(("xsd:string"));
    }
 
-   public LazyPageList createPageList(final List pageList)
+   public LazyPageList<RegistrationPropertyDescription> createPageList(final List<RegistrationPropertyDescription> pageList)
    {
-      return new LazyPageList<WSRPConsumer>(new ListAccess<WSRPConsumer>()
+      return new LazyPageList<RegistrationPropertyDescription>(new ListAccess<RegistrationPropertyDescription>()
       {
 
          public int getSize() throws Exception
@@ -126,9 +125,9 @@ public class UIWsrpProducerOverview extends UIContainer
             return pageList.size();
          }
 
-         public WSRPConsumer[] load(int index, int length) throws Exception, IllegalArgumentException
+         public RegistrationPropertyDescription[] load(int index, int length) throws Exception, IllegalArgumentException
          {
-            WSRPConsumer[] pcs = new WSRPConsumer[pageList.size()];
+            RegistrationPropertyDescription[] pcs = new RegistrationPropertyDescription[pageList.size()];
 
             if (index < 0)
             {
@@ -148,7 +147,7 @@ public class UIWsrpProducerOverview extends UIContainer
 
             for (int i = 0; i < length; i++)
             {
-               pcs[i] = (WSRPConsumer)pageList.get(i + index);
+               pcs[i] = pageList.get(i + index);
             }
 
             return pcs;

@@ -28,9 +28,9 @@ import org.chromattic.api.annotations.FindById;
 import org.chromattic.api.annotations.Id;
 import org.chromattic.api.annotations.ManyToOne;
 import org.chromattic.api.annotations.MappedBy;
-import org.chromattic.api.annotations.PrimaryType;
 import org.chromattic.api.annotations.OneToMany;
 import org.chromattic.api.annotations.OneToOne;
+import org.chromattic.api.annotations.PrimaryType;
 import org.chromattic.api.annotations.Property;
 import org.chromattic.api.annotations.RelatedMappedBy;
 import org.gatein.portal.wsrp.state.producer.registrations.JCRRegistrationPersistenceManager;
@@ -38,7 +38,6 @@ import org.gatein.registration.Consumer;
 import org.gatein.registration.ConsumerGroup;
 import org.gatein.registration.Registration;
 import org.gatein.registration.RegistrationException;
-import org.gatein.registration.RegistrationStatus;
 import org.gatein.registration.spi.ConsumerSPI;
 
 import java.util.List;
@@ -69,11 +68,6 @@ public abstract class ConsumerMapping
    public abstract String getConsumerAgent();
 
    public abstract void setConsumerAgent(String consumerAgent);
-
-   @Property(name = "status")
-   public abstract RegistrationStatus getStatus();
-
-   public abstract void setStatus(RegistrationStatus status);
 
    @OneToMany
    @RelatedMappedBy("consumer")
@@ -134,7 +128,6 @@ public abstract class ConsumerMapping
       setName(consumer.getName());
       setId(consumer.getId());
       setConsumerAgent(consumer.getConsumerAgent());
-      setStatus(consumer.getStatus());
 
       ConsumerGroup group = consumer.getGroup();
       if (group != null)
@@ -163,7 +156,6 @@ public abstract class ConsumerMapping
    {
       ConsumerSPI consumer = persistenceManager.newConsumerSPI(getId(), getName());
       consumer.setConsumerAgent(getConsumerAgent());
-      consumer.setStatus(getStatus());
       consumer.setPersistentKey(getPersistentKey());
 
       consumer.setCapabilities(getCapabilities().toConsumerCapabilities());

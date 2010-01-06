@@ -38,18 +38,21 @@ import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
+import org.gatein.common.util.ParameterValidation;
 import org.gatein.wsrp.WSRPConsumer;
 import org.gatein.wsrp.consumer.ConsumerException;
 import org.gatein.wsrp.consumer.ProducerInfo;
 import org.gatein.wsrp.consumer.registry.ConsumerRegistry;
+import org.gatein.wsrp.services.ManageableServiceFactory;
 
 /** @author Wesley Hales */
 @ComponentConfig(template = "app:/groovy/wsrp/webui/component/UIWsrpConsumerEditor.gtmpl", lifecycle = UIFormLifecycle.class, events = {
    @EventConfig(listeners = UIWsrpConsumerEditor.SaveActionListener.class)})
 public class UIWsrpConsumerEditor extends UIForm
 {
-   protected static final String CONSUMER_NAME = "Consumer Name: ";
-   protected static final String CACHE_EXPIRATION = "Cache Expiration Seconds: ";
+   protected static final String CONSUMER_NAME = "Consumer name: ";
+   protected static final String CACHE_EXPIRATION = "Seconds before cache expiration: ";
+   protected static final String TIMEOUT = "Milliseconds before timeout: ";
    protected static final String WSDL_URL = "WSDL URL: ";
 
    public UIWsrpConsumerEditor() throws Exception
@@ -57,6 +60,7 @@ public class UIWsrpConsumerEditor extends UIForm
 
       addUIFormInput(new UIFormStringInput(CONSUMER_NAME, CONSUMER_NAME, null).addValidator(MandatoryValidator.class));
       addUIFormInput(new UIFormStringInput(CACHE_EXPIRATION, CACHE_EXPIRATION, null));
+      addUIFormInput(new UIFormStringInput(TIMEOUT, TIMEOUT, null));
       addUIFormInput(new UIFormStringInput(WSDL_URL, WSDL_URL, null));
       //addChild(UIWsrpEndpointConfigForm.class,null,null);
    }
@@ -75,6 +79,18 @@ public class UIWsrpConsumerEditor extends UIForm
          cacheExp = Integer.parseInt(cacheExpString);
       }
       return cacheExp;
+   }
+
+   private Integer getTimeout()
+   {
+      int timeout = ManageableServiceFactory.DEFAULT_TIMEOUT_MS;
+      String timeoutString = getUIStringInput(TIMEOUT).getValue();
+      if (!ParameterValidation.isNullOrEmpty(timeoutString))
+      {
+         timeout = Integer.parseInt(timeoutString);
+      }
+
+      return timeout;
    }
 
    private String getWSDLURL()
@@ -106,8 +122,10 @@ public class UIWsrpConsumerEditor extends UIForm
       getUIStringInput(CONSUMER_NAME).setEditable(UIFormStringInput.ENABLE);
 
       getUIStringInput(CONSUMER_NAME).setValue(consumer.getProducerId());
-      getUIStringInput(CACHE_EXPIRATION).setValue(consumer.getProducerInfo().getExpirationCacheSeconds().toString());
-      getUIStringInput(WSDL_URL).setValue(consumer.getProducerInfo().getEndpointConfigurationInfo().getWsdlDefinitionURL());
+      ProducerInfo producerInfo = consumer.getProducerInfo();
+      getUIStringInput(CACHE_EXPIRATION).setValue(producerInfo.getExpirationCacheSeconds().toString());
+      getUIStringInput(TIMEOUT).setValue("" + producerInfo.getEndpointConfigurationInfo().getWSOperationTimeOut());
+      getUIStringInput(WSDL_URL).setValue(producerInfo.getEndpointConfigurationInfo().getWsdlDefinitionURL());
       setNewConsumer(false);
       //invokeGetBindingBean(consumer.getProducerInfo());
 
@@ -136,9 +154,12 @@ public class UIWsrpConsumerEditor extends UIForm
          UIWsrpConsumerOverview consumerOverview = consumerEditor.getAncestorOfType(UIWsrpConsumerOverview.class);
 
          WebuiRequestContext ctx = event.getRequestContext();
-         if(consumerEditor.isNewConsumer()){
+         if (consumerEditor.isNewConsumer())
+         {
             consumerEditor.save(ctx);
-         }else{
+         }
+         else
+         {
             consumerEditor.edit(ctx);
          }
 
@@ -200,6 +221,7 @@ public class UIWsrpConsumerEditor extends UIForm
       producerInfo.setId(getConsumerName());
       producerInfo.setExpirationCacheSeconds(getCacheExpiration());
       producerInfo.getEndpointConfigurationInfo().setWsdlDefinitionURL(getWSDLURL());
+      producerInfo.getEndpointConfigurationInfo().setWSOperationTimeOut(getTimeout());
 
       UIApplication uiApp = context.getUIApplication();
 

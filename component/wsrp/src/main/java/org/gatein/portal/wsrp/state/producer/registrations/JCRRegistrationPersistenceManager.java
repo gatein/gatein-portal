@@ -31,6 +31,7 @@ import org.gatein.portal.wsrp.state.producer.registrations.mapping.ConsumerMappi
 import org.gatein.portal.wsrp.state.producer.registrations.mapping.ConsumersAndGroupsMapping;
 import org.gatein.portal.wsrp.state.producer.registrations.mapping.RegistrationMapping;
 import org.gatein.portal.wsrp.state.producer.registrations.mapping.RegistrationPropertiesMapping;
+import org.gatein.registration.Consumer;
 import org.gatein.registration.ConsumerGroup;
 import org.gatein.registration.Registration;
 import org.gatein.registration.RegistrationException;
@@ -162,7 +163,7 @@ public class JCRRegistrationPersistenceManager extends RegistrationPersistenceMa
       return consumer;
    }
 
-   /*@Override
+   @Override
    protected ConsumerSPI internalSaveChangesTo(Consumer consumer)
    {
       ConsumerSPI consumerSPI = super.internalSaveChangesTo(consumer);
@@ -181,7 +182,7 @@ public class JCRRegistrationPersistenceManager extends RegistrationPersistenceMa
       }
 
       return consumerSPI;
-   }*/
+   }
 
    @Override
    protected ConsumerGroupSPI internalRemoveConsumerGroup(String name)
