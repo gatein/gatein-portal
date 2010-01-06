@@ -4,7 +4,7 @@
 <chapter id="chap-User_Guide-Introduction">
         <title>Introduction</title>
 	<para>
-		GateIn is a merge of two mature projects; the JBoss Portal and the eXo Portal. It takes the best of both offerings and incorporates them into a single new project. The aim is to provide an intuitive portal for as-is use and a framework to build upon depending on your needs.
+		GateIn is a merge of two mature projects; JBoss Portal and eXo Portal. It takes the best of both offerings and incorporates them into a single new project. The aim is to provide an intuitive portal for as-is use and a framework to build upon depending on your needs.
 	</para>
 	<mediaobject>
 		<imageobject>
