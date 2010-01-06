@@ -23,7 +23,7 @@
 
 package org.gatein.portal.wsrp.state.producer.registrations.mapping;
 
-import org.chromattic.api.annotations.NodeMapping;
+import org.chromattic.api.annotations.PrimaryType;
 import org.chromattic.api.annotations.Property;
 import org.gatein.common.util.ParameterValidation;
 import org.gatein.pc.api.Mode;
@@ -38,7 +38,7 @@ import java.util.List;
  * @author <a href="mailto:chris.laprun@jboss.com">Chris Laprun</a>
  * @version $Revision$
  */
-@NodeMapping(name = ConsumerCapabilitiesMapping.NODE_NAME)
+@PrimaryType(name = ConsumerCapabilitiesMapping.NODE_NAME)
 public abstract class ConsumerCapabilitiesMapping
 {
    public static final String NODE_NAME = "wsrp:consumercapabilities";

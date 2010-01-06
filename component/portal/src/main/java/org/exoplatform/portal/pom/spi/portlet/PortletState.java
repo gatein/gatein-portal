@@ -20,7 +20,7 @@
 package org.exoplatform.portal.pom.spi.portlet;
 
 import org.chromattic.api.annotations.Create;
-import org.chromattic.api.annotations.NodeMapping;
+import org.chromattic.api.annotations.PrimaryType;
 import org.chromattic.api.annotations.OneToMany;
 import org.chromattic.api.annotations.OneToOne;
 import org.chromattic.api.annotations.RelatedMappedBy;
@@ -32,7 +32,7 @@ import java.util.Map;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-@NodeMapping(name = PortletState.MOP_NODE_NAME)
+@PrimaryType(name = PortletState.MOP_NODE_NAME)
 public abstract class PortletState
 {
 

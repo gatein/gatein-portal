@@ -23,13 +23,13 @@ import org.apache.shindig.gadgets.spec.GadgetSpec;
 import org.apache.shindig.gadgets.spec.ModulePrefs;
 import org.chromattic.api.annotations.ManyToOne;
 import org.chromattic.api.annotations.MappedBy;
-import org.chromattic.api.annotations.NodeMapping;
+import org.chromattic.api.annotations.PrimaryType;
 import org.chromattic.api.annotations.OneToOne;
+import org.chromattic.api.annotations.PrimaryType;
 import org.chromattic.api.annotations.Property;
 import org.chromattic.ntdef.NTFile;
 import org.chromattic.ntdef.Resource;
 import org.exoplatform.application.gadget.EncodingDetector;
-import org.exoplatform.application.registry.impl.NodeAware;
 
 import org.chromattic.ntdef.NTFolder;
 
@@ -41,8 +41,8 @@ import java.util.Date;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-@NodeMapping(name = "app:localgadgetdata")
-public abstract class LocalGadgetData extends GadgetData implements NodeAware
+@PrimaryType(name = "app:localgadgetdata")
+public abstract class LocalGadgetData extends GadgetData
 {
 
    @ManyToOne

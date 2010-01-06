@@ -19,7 +19,7 @@
 package org.exoplatform.application.gadget.impl;
 
 import org.chromattic.api.annotations.Create;
-import org.chromattic.api.annotations.NodeMapping;
+import org.chromattic.api.annotations.PrimaryType;
 import org.chromattic.api.annotations.OneToMany;
 
 import java.util.Collection;
@@ -29,7 +29,7 @@ import java.util.Map;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-@NodeMapping(name = "app:gadgetregistry")
+@PrimaryType(name = "app:gadgetregistry")
 public abstract class GadgetRegistry
 {
 

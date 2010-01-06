@@ -22,7 +22,7 @@
 
 package org.exoplatform.portal.pom.spi.wsrp;
 
-import org.chromattic.api.annotations.NodeMapping;
+import org.chromattic.api.annotations.PrimaryType;
 import org.chromattic.api.annotations.Property;
 
 import java.io.InputStream;
@@ -31,7 +31,7 @@ import java.io.InputStream;
  * @author <a href="mailto:chris.laprun@jboss.com">Chris Laprun</a>
  * @version $Revision$
  */
-@NodeMapping(name = WSRPState.MOP_NODE_NAME)
+@PrimaryType(name = WSRPState.MOP_NODE_NAME)
 public abstract class WSRPState
 {
    static final String MOP_NODE_NAME = "mop:wsrpstate";

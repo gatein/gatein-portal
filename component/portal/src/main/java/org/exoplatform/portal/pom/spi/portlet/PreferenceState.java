@@ -21,7 +21,7 @@ package org.exoplatform.portal.pom.spi.portlet;
 
 import org.chromattic.api.annotations.ManyToOne;
 import org.chromattic.api.annotations.Name;
-import org.chromattic.api.annotations.NodeMapping;
+import org.chromattic.api.annotations.PrimaryType;
 import org.chromattic.api.annotations.Property;
 
 import java.util.List;
@@ -30,7 +30,7 @@ import java.util.List;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-@NodeMapping(name = "mop:portletpreference")
+@PrimaryType(name = "mop:portletpreference")
 public abstract class PreferenceState
 {
 

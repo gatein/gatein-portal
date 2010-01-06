@@ -22,7 +22,7 @@
 
 package org.gatein.portal.wsrp.state.producer.registrations.mapping;
 
-import org.chromattic.api.annotations.NodeMapping;
+import org.chromattic.api.annotations.PrimaryType;
 import org.chromattic.api.annotations.Properties;
 
 import javax.xml.namespace.QName;
@@ -34,7 +34,7 @@ import java.util.Map;
  * @author <a href="mailto:chris.laprun@jboss.com">Chris Laprun</a>
  * @version $Revision$
  */
-@NodeMapping(name = RegistrationPropertiesMapping.NODE_NAME)
+@PrimaryType(name = RegistrationPropertiesMapping.NODE_NAME)
 public abstract class RegistrationPropertiesMapping
 {
    public static final String NODE_NAME = "wsrp:registrationproperties";

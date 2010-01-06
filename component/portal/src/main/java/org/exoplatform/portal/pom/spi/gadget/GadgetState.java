@@ -19,14 +19,14 @@
 
 package org.exoplatform.portal.pom.spi.gadget;
 
-import org.chromattic.api.annotations.NodeMapping;
+import org.chromattic.api.annotations.PrimaryType;
 import org.chromattic.api.annotations.Property;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-@NodeMapping(name = GadgetState.MOP_NODE_NAME)
+@PrimaryType(name = GadgetState.MOP_NODE_NAME)
 public abstract class GadgetState
 {
    static final String MOP_NODE_NAME = "mop:gadget";

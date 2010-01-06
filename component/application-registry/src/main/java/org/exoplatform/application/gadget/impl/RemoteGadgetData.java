@@ -18,14 +18,14 @@
  */
 package org.exoplatform.application.gadget.impl;
 
-import org.chromattic.api.annotations.NodeMapping;
+import org.chromattic.api.annotations.PrimaryType;
 import org.chromattic.api.annotations.Property;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-@NodeMapping(name = "app:remotegadgetdata")
+@PrimaryType(name = "app:remotegadgetdata")
 public abstract class RemoteGadgetData extends GadgetData
 {
 

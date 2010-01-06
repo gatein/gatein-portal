@@ -33,7 +33,8 @@ import javax.jcr.RepositoryException;
  */
 public class ContentProviderHelper
 {
-   private static final String STATE = "state";
+   /** . */
+   private static final String STATE_NODE_NAME = "mop:state";
 
    public static <InternalState, State> void setState(StateContainer container, State state,
       HelpableContentProvider<InternalState, State> provider)
@@ -46,9 +47,9 @@ public class ContentProviderHelper
 
          //
          InternalState internalState;
-         if (node.hasNode(STATE))
+         if (node.hasNode(STATE_NODE_NAME))
          {
-            Node stateNode = node.getNode(STATE);
+            Node stateNode = node.getNode(STATE_NODE_NAME);
             internalState = (InternalState)session.findById(Object.class, stateNode.getUUID());
             if (state == null)
             {
@@ -64,7 +65,7 @@ public class ContentProviderHelper
             }
             else
             {
-               Node stateNode = node.addNode(STATE, provider.getNodeName());
+               Node stateNode = node.addNode(STATE_NODE_NAME, provider.getNodeName());
                internalState = (InternalState)session.findById(Object.class, stateNode.getUUID());
             }
          }
@@ -89,9 +90,9 @@ public class ContentProviderHelper
 
          //
          InternalState prefs;
-         if (node.hasNode(STATE))
+         if (node.hasNode(STATE_NODE_NAME))
          {
-            Node stateNode = node.getNode(STATE);
+            Node stateNode = node.getNode(STATE_NODE_NAME);
             prefs = (InternalState)session.findById(Object.class, stateNode.getUUID());
             return provider.getState(prefs);
          }

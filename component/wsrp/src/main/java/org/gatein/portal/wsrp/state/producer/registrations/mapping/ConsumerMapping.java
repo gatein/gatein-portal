@@ -28,7 +28,7 @@ import org.chromattic.api.annotations.FindById;
 import org.chromattic.api.annotations.Id;
 import org.chromattic.api.annotations.ManyToOne;
 import org.chromattic.api.annotations.MappedBy;
-import org.chromattic.api.annotations.NodeMapping;
+import org.chromattic.api.annotations.PrimaryType;
 import org.chromattic.api.annotations.OneToMany;
 import org.chromattic.api.annotations.OneToOne;
 import org.chromattic.api.annotations.Property;
@@ -47,7 +47,7 @@ import java.util.List;
  * @author <a href="mailto:chris.laprun@jboss.com">Chris Laprun</a>
  * @version $Revision$
  */
-@NodeMapping(name = ConsumerMapping.NODE_NAME)
+@PrimaryType(name = ConsumerMapping.NODE_NAME)
 public abstract class ConsumerMapping
 {
    public static final String NODE_NAME = "wsrp:consumer";

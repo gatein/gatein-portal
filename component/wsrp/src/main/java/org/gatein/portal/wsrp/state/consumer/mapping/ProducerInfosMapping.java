@@ -24,7 +24,7 @@
 package org.gatein.portal.wsrp.state.consumer.mapping;
 
 import org.chromattic.api.annotations.Create;
-import org.chromattic.api.annotations.NodeMapping;
+import org.chromattic.api.annotations.PrimaryType;
 import org.chromattic.api.annotations.OneToMany;
 
 import java.util.List;
@@ -33,7 +33,7 @@ import java.util.List;
  * @author <a href="mailto:chris.laprun@jboss.com">Chris Laprun</a>
  * @version $Revision$
  */
-@NodeMapping(name = ProducerInfosMapping.NODE_NAME)
+@PrimaryType(name = ProducerInfosMapping.NODE_NAME)
 public abstract class ProducerInfosMapping
 {
    public static final String NODE_NAME = "wsrp:producerinfos";

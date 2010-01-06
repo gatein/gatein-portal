@@ -23,7 +23,7 @@
 
 package org.gatein.portal.wsrp.state.consumer.mapping;
 
-import org.chromattic.api.annotations.NodeMapping;
+import org.chromattic.api.annotations.PrimaryType;
 import org.chromattic.api.annotations.Property;
 import org.gatein.wsrp.consumer.EndpointConfigurationInfo;
 
@@ -31,7 +31,7 @@ import org.gatein.wsrp.consumer.EndpointConfigurationInfo;
  * @author <a href="mailto:chris.laprun@jboss.com">Chris Laprun</a>
  * @version $Revision$
  */
-@NodeMapping(name = EndpointInfoMapping.NODE_NAME)
+@PrimaryType(name = EndpointInfoMapping.NODE_NAME)
 public abstract class EndpointInfoMapping
 {
    public static final String NODE_NAME = "wsrp:endpointinfo";

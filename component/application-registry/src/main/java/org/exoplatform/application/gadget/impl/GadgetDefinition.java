@@ -21,8 +21,9 @@ package org.exoplatform.application.gadget.impl;
 import org.chromattic.api.annotations.Create;
 import org.chromattic.api.annotations.MappedBy;
 import org.chromattic.api.annotations.Name;
-import org.chromattic.api.annotations.NodeMapping;
+import org.chromattic.api.annotations.PrimaryType;
 import org.chromattic.api.annotations.OneToOne;
+import org.chromattic.api.annotations.PrimaryType;
 import org.chromattic.api.annotations.Property;
 import org.chromattic.ntdef.NTFolder;
 
@@ -30,7 +31,7 @@ import org.chromattic.ntdef.NTFolder;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-@NodeMapping(name = "app:gadgetdefinition")
+@PrimaryType(name = "app:gadgetdefinition")
 public abstract class GadgetDefinition
 {
 

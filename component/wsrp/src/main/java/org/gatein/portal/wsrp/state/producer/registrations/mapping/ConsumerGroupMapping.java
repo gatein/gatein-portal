@@ -24,7 +24,7 @@ package org.gatein.portal.wsrp.state.producer.registrations.mapping;
 
 import org.chromattic.api.annotations.FindById;
 import org.chromattic.api.annotations.Id;
-import org.chromattic.api.annotations.NodeMapping;
+import org.chromattic.api.annotations.PrimaryType;
 import org.chromattic.api.annotations.OneToMany;
 import org.chromattic.api.annotations.Property;
 import org.chromattic.api.annotations.RelatedMappedBy;
@@ -42,7 +42,7 @@ import java.util.Collection;
  * @author <a href="mailto:chris.laprun@jboss.com">Chris Laprun</a>
  * @version $Revision$
  */
-@NodeMapping(name = ConsumerGroupMapping.NODE_NAME)
+@PrimaryType(name = ConsumerGroupMapping.NODE_NAME)
 public abstract class ConsumerGroupMapping
 {
    public static final String NODE_NAME = "wsrp:consumergroup";

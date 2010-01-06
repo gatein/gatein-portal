@@ -18,14 +18,14 @@
  */
 package org.exoplatform.commons.chromattic;
 
-import org.chromattic.api.annotations.NodeMapping;
+import org.chromattic.api.annotations.PrimaryType;
 import org.chromattic.api.annotations.WorkspaceName;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-@NodeMapping(name = "nt:base")
+@PrimaryType(name = "nt:base")
 public abstract class FooEntity
 {
 

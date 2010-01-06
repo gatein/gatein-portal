@@ -25,7 +25,7 @@ package org.gatein.portal.wsrp.state.consumer.mapping;
 
 import org.chromattic.api.annotations.Create;
 import org.chromattic.api.annotations.MappedBy;
-import org.chromattic.api.annotations.NodeMapping;
+import org.chromattic.api.annotations.PrimaryType;
 import org.chromattic.api.annotations.OneToOne;
 import org.chromattic.api.annotations.Property;
 import org.gatein.portal.wsrp.state.mapping.RegistrationPropertyDescriptionMapping;
@@ -36,7 +36,7 @@ import org.gatein.wsrp.registration.RegistrationPropertyDescription;
  * @author <a href="mailto:chris.laprun@jboss.com">Chris Laprun</a>
  * @version $Revision$
  */
-@NodeMapping(name = RegistrationPropertyMapping.NODE_NAME)
+@PrimaryType(name = RegistrationPropertyMapping.NODE_NAME)
 public abstract class RegistrationPropertyMapping
 {
    public static final String NODE_NAME = "wsrp:registrationproperty";

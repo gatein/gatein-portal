@@ -25,7 +25,7 @@ package org.gatein.portal.wsrp.state.consumer.mapping;
 
 import org.chromattic.api.annotations.Create;
 import org.chromattic.api.annotations.FormattedBy;
-import org.chromattic.api.annotations.NodeMapping;
+import org.chromattic.api.annotations.PrimaryType;
 import org.chromattic.api.annotations.OneToMany;
 import org.chromattic.api.annotations.Property;
 import org.exoplatform.commons.utils.Safe;
@@ -43,7 +43,7 @@ import java.util.List;
  * @author <a href="mailto:chris.laprun@jboss.com">Chris Laprun</a>
  * @version $Revision$
  */
-@NodeMapping(name = RegistrationInfoMapping.NODE_NAME)
+@PrimaryType(name = RegistrationInfoMapping.NODE_NAME)
 @FormattedBy(JCRPersister.QNameFormatter.class)
 public abstract class RegistrationInfoMapping
 {

@@ -242,15 +242,15 @@ public class POMSession
       {
          if (siteType == ObjectType.PORTAL_SITE)
          {
-            ownerTypeChunk = "portalsites";
+            ownerTypeChunk = "mop:portalsites";
          }
          else if (siteType == ObjectType.GROUP_SITE)
          {
-            ownerTypeChunk = "groupsites";
+            ownerTypeChunk = "mop:groupsites";
          }
          else
          {
-            ownerTypeChunk = "usersites";
+            ownerTypeChunk = "mop:usersites";
          }
       }
       else
@@ -272,13 +272,13 @@ public class POMSession
             {
                statement =
                   "jcr:path LIKE '" + workspaceChunk + "/" + ownerTypeChunk + "/" + ownerIdChunk
-                     + "/rootpage/children/pages/children/%'";
+                     + "/mop:rootpage/mop:children/mop:pages/mop:children/%'";
             }
             else
             {
                statement =
                   "jcr:path LIKE '" + workspaceChunk + "/" + ownerTypeChunk + "/" + ownerIdChunk
-                     + "/rootnavigation/children/default'";
+                     + "/mop:rootnavigation/mop:children/mop:default'";
             }
          }
          catch (IllegalArgumentException e)
@@ -301,7 +301,7 @@ public class POMSession
             {
                statement =
                   "jcr:path LIKE '" + workspaceChunk + "/" + ownerTypeChunk + "/" + ownerIdChunk
-                     + "/rootpage/children/pages/children/%' AND mop:title='" + title + "'";
+                     + "/mop:rootpage/mop:children/mop:pages/mop:children/%' AND mop:title='" + title + "'";
             }
             else
             {
@@ -314,13 +314,13 @@ public class POMSession
             {
                statement =
                   "jcr:path LIKE '" + workspaceChunk + "/" + ownerTypeChunk + "/" + ownerIdChunk
-                     + "/rootpage/children/pages/children/%'";
+                     + "/mop:rootpage/mop:children/mop:pages/mop:children/%'";
             }
             else
             {
                statement =
                   "jcr:path LIKE '" + workspaceChunk + "/" + ownerTypeChunk + "/" + ownerIdChunk
-                     + "/rootnavigation/children/default'";
+                     + "/mop:rootnavigation/mop:children/mop:default'";
             }
          }
       }

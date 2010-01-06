@@ -20,7 +20,7 @@ package org.exoplatform.application.registry.impl;
 
 import org.chromattic.api.annotations.Create;
 import org.chromattic.api.annotations.Name;
-import org.chromattic.api.annotations.NodeMapping;
+import org.chromattic.api.annotations.PrimaryType;
 import org.chromattic.api.annotations.OneToMany;
 import org.chromattic.api.annotations.Property;
 import org.exoplatform.portal.pom.config.POMSession;
@@ -36,7 +36,7 @@ import java.util.Map;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-@NodeMapping(name = "app:contentcategory")
+@PrimaryType(name = "app:contentcategory")
 public abstract class CategoryDefinition
 {
 

@@ -21,7 +21,7 @@ package org.exoplatform.application.registry.impl;
 import org.chromattic.api.annotations.Id;
 import org.chromattic.api.annotations.ManyToOne;
 import org.chromattic.api.annotations.Name;
-import org.chromattic.api.annotations.NodeMapping;
+import org.chromattic.api.annotations.PrimaryType;
 import org.chromattic.api.annotations.Property;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.gatein.mop.api.content.Customization;
@@ -34,7 +34,7 @@ import java.util.List;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-@NodeMapping(name = "app:content")
+@PrimaryType(name = "app:content")
 public abstract class ContentDefinition
 {
 

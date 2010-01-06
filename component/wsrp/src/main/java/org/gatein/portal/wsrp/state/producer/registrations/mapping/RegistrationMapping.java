@@ -26,7 +26,7 @@ import org.chromattic.api.annotations.Create;
 import org.chromattic.api.annotations.Id;
 import org.chromattic.api.annotations.ManyToOne;
 import org.chromattic.api.annotations.MappedBy;
-import org.chromattic.api.annotations.NodeMapping;
+import org.chromattic.api.annotations.PrimaryType;
 import org.chromattic.api.annotations.OneToOne;
 import org.chromattic.api.annotations.Property;
 import org.gatein.common.util.ParameterValidation;
@@ -45,7 +45,7 @@ import java.util.Map;
  * @author <a href="mailto:chris.laprun@jboss.com">Chris Laprun</a>
  * @version $Revision$
  */
-@NodeMapping(name = RegistrationMapping.NODE_NAME)
+@PrimaryType(name = RegistrationMapping.NODE_NAME)
 public abstract class RegistrationMapping
 {
    public static final String NODE_NAME = "wsrp:registration";
