@@ -412,4 +412,7 @@
       </portlet-info>
    </portlet>
 
+   <event-definition>
+      <name>NewAccountAdded</name>
+   </event-definition>
 </portlet-app>
