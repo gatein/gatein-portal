@@ -23,6 +23,7 @@ import org.exoplatform.resolver.ApplicationResourceResolver;
 import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.web.application.Application;
 import org.exoplatform.web.application.RequestContext;
+import org.exoplatform.web.application.URLBuilder;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIComponent;
 
@@ -117,6 +118,9 @@ abstract public class WebuiRequestContext extends RequestContext
    {
       return UIComponent.UICOMPONENT;
    }
+
+   @Override
+   public abstract URLBuilder<UIComponent> getURLBuilder();
 
    abstract public String getRequestContextPath();
 

@@ -19,13 +19,12 @@
 
 package org.exoplatform.webui.application.portlet;
 
-import org.exoplatform.commons.utils.WriterPrinter;
 import org.exoplatform.services.resources.Orientation;
 import org.exoplatform.web.application.URLBuilder;
 import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIApplication;
-import org.exoplatform.webui.core.lifecycle.HtmlValidator;
+import org.exoplatform.webui.core.UIComponent;
 
 import java.io.Writer;
 
@@ -61,6 +60,8 @@ public class PortletRequestContext extends WebuiRequestContext
    private Writer writer_;
 
    private boolean hasProcessAction_ = false;
+
+   private final PortletURLBuilder urlBuilder;
 
    public PortletRequestContext(WebuiApplication app, Writer writer, PortletRequest req, PortletResponse res)
    {
@@ -179,7 +180,7 @@ public class PortletRequestContext extends WebuiRequestContext
       hasProcessAction_ = b;
    }
 
-   public URLBuilder getURLBuilder()
+   public URLBuilder<UIComponent> getURLBuilder()
    {
       RenderResponse renderRes = (RenderResponse)response_;
       urlBuilder.setBaseURL(renderRes.createActionURL().toString());

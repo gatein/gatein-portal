@@ -36,6 +36,7 @@ import org.exoplatform.web.application.JavascriptManager;
 import org.exoplatform.web.application.URLBuilder;
 import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.lifecycle.HtmlValidator;
 
 import javax.servlet.http.HttpServletRequest;
@@ -97,6 +98,8 @@ public class PortalRequestContext extends WebuiRequestContext
    private Writer writer_;
 
    protected JavascriptManager jsmanager_ = new JavascriptManager();
+
+   private final PortalURLBuilder urlBuilder;
 
    public JavascriptManager getJavascriptManager()
    {
@@ -255,7 +258,7 @@ public class PortalRequestContext extends WebuiRequestContext
       return portalURI;
    }
 
-   public URLBuilder getURLBuilder()
+   public URLBuilder<UIComponent> getURLBuilder()
    {
       return urlBuilder;
    }

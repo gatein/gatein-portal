@@ -53,8 +53,6 @@ abstract public class RequestContext
 
    private Map<String, Object> attributes;
 
-   protected URLBuilder urlBuilder;
-
    public RequestContext(Application app)
    {
       app_ = app;
@@ -91,7 +89,7 @@ abstract public class RequestContext
       return getParentAppRequestContext().getJavascriptManager();
    }
 
-   abstract public URLBuilder getURLBuilder();
+   abstract public URLBuilder<?> getURLBuilder();
 
    public String getRemoteUser()
    {

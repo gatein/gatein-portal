@@ -52,7 +52,6 @@ abstract public class Application extends BaseComponentPlugin
 
    private Hashtable<String, Object> attributes_ = new Hashtable<String, Object>();
 
-   //TODO: Replcate by  method public ApplicationInfo getApplicationInfo() ;
    abstract public String getApplicationId();
 
    abstract public String getApplicationType();

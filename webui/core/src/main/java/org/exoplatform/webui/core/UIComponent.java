@@ -214,11 +214,11 @@ abstract public class UIComponent
       if (event == null)
          return "??config??";
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
-      URLBuilder urlBuilder = context.getURLBuilder();
+      URLBuilder<UIComponent> urlBuilder = context.getURLBuilder();
       if (urlBuilder == null)
          return "??builder??";
       String confirm = loadConfirmMesssage(event, context, beanId);
-      return urlBuilder.createAjaxURL(this, event.getName(), confirm, beanId, params).toString();
+      return urlBuilder.createAjaxURL(this, event.getName(), confirm, beanId, params);
    }
 
    protected String loadConfirmMesssage(org.exoplatform.webui.config.Event event, WebuiRequestContext context,
@@ -258,7 +258,7 @@ abstract public class UIComponent
       String confirm = loadConfirmMesssage(event, context, beanId);
       try
       {
-         return context.getURLBuilder().createURL(this, event.getName(), confirm, beanId, params).toString();
+         return context.getURLBuilder().createURL(this, event.getName(), confirm, beanId, params);
       }
       catch (Exception e)
       {
