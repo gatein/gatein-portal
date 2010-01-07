@@ -39,8 +39,6 @@ import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormInputBase;
 import org.exoplatform.webui.form.UIFormStringInput;
-import org.exoplatform.webui.form.validator.MandatoryValidator;
-import org.gatein.common.util.ParameterValidation;
 import org.gatein.registration.RegistrationPolicy;
 import org.gatein.registration.policies.DefaultRegistrationPolicy;
 import org.gatein.wsrp.producer.config.ProducerConfiguration;
@@ -78,8 +76,10 @@ public class UIWsrpProducerEditor extends UIForm
    private static final String REQUIRES_REGISTRATION = "requiresregistration";
    private static final String POLICY_CLASS = "policyClassName";
    private static final String VALIDATOR_CLASS = "validatorClassName";
+   private static final String REGISTRATION_DETAILS = "registrationdetails";
 
    private ProducerConfigurationService configService;
+   private UIWSRPFormInputSet registrationDetails;
 
    public UIWsrpProducerEditor() throws Exception
    {
@@ -95,10 +95,13 @@ public class UIWsrpProducerEditor extends UIForm
       popup.setRendered(false);
    }
 
-   public void initWith(ProducerConfigurationService configurationService) throws Exception
+   public void setConfigService(ProducerConfigurationService configService)
    {
-      ParameterValidation.throwIllegalArgExceptionIfNull(configurationService, "ProducerConfigurationService");
-      configService = configurationService;
+      this.configService = configService;
+   }
+
+   private void init() throws Exception
+   {
       ProducerConfiguration configuration = configService.getConfiguration();
 
       ProducerRegistrationRequirements registrationRequirements = configuration.getRegistrationRequirements();
@@ -108,12 +111,21 @@ public class UIWsrpProducerEditor extends UIForm
       boolean registrationRequired = registrationRequirements.isRegistrationRequired();
       getUIFormCheckBoxInput(REQUIRES_REGISTRATION).setValue(registrationRequired);
 
+      // reset potentially existing registration details
+      if (registrationDetails != null)
+      {
+         removeChild(registrationDetails.getClass());
+      }
+
       // if registration is required then we display more information
       if (registrationRequired)
       {
+         registrationDetails = new UIWSRPFormInputSet(REGISTRATION_DETAILS);
+
          // registration policy
-         UIFormInputBase<String> policyInput = new UIFormStringInput(POLICY_CLASS, POLICY_CLASS, null).addValidator(MandatoryValidator.class);
+         UIFormInputBase<String> policyInput = new UIFormStringInput(POLICY_CLASS, POLICY_CLASS, null);
          addUIFormInput(policyInput);
+
          RegistrationPolicy policy = registrationRequirements.getPolicy();
          String policyClassName = policy.getClass().getName();
          policyInput.setValue(policyClassName);
@@ -121,16 +133,16 @@ public class UIWsrpProducerEditor extends UIForm
          // if policy is the default one, display information about the validator
          if (ProducerRegistrationRequirements.DEFAULT_POLICY_CLASS_NAME.equals(policyClassName))
          {
-            UIFormInputBase<String> validatorInput = new UIFormStringInput(VALIDATOR_CLASS, VALIDATOR_CLASS, null).addValidator(MandatoryValidator.class);
-            addUIFormInput(validatorInput);
+            UIFormInputBase<String> validatorInput = new UIFormStringInput(VALIDATOR_CLASS, VALIDATOR_CLASS, null);
+            registrationDetails.addUIFormInput(validatorInput);
             DefaultRegistrationPolicy defaultPolicy = (DefaultRegistrationPolicy)policy;
-            getUIStringInput(VALIDATOR_CLASS).setValue(defaultPolicy.getValidator().getClass().getName());
+            validatorInput.setValue(defaultPolicy.getValidator().getClass().getName());
          }
 
          // registration properties
          Map<QName, RegistrationPropertyDescription> regProps = configuration.getRegistrationRequirements().getRegistrationProperties();
 
-         UIGrid uiGrid = addChild(UIGrid.class, "RegistrationPropertySelector", null);
+         UIGrid uiGrid = registrationDetails.addChild(UIGrid.class, "RegistrationPropertySelector", null);
          //configure the edit and delete buttons based on an id from the data list - this will also be passed as param to listener
          uiGrid.configure("name", FIELDS, SELECT_ACTIONS);
 
@@ -141,6 +153,8 @@ public class UIWsrpProducerEditor extends UIForm
          LazyPageList propertyList = createPageList(getPropertyList(regProps));
          uiGrid.getUIPageIterator().setPageList(propertyList);
 
+         addUIFormInput(registrationDetails);
+         registrationDetails.setRendered(true);
       }
    }
 
@@ -228,8 +242,13 @@ public class UIWsrpProducerEditor extends UIForm
          registrationRequirements.setRegistrationRequiredForFullDescription(Boolean.parseBoolean(getUIFormCheckBoxInput(REG_REQUIRED_FOR_DESCRIPTION).getValue().toString()));
          producerConfiguration.setUsingStrictMode(Boolean.parseBoolean(getUIFormCheckBoxInput(STRICT_MODE).getValue().toString()));
 
-         registrationRequirements.setRegistrationRequired(Boolean.parseBoolean(getUIFormCheckBoxInput(REQUIRES_REGISTRATION).getValue().toString()));
-         registrationRequirements.reloadPolicyFrom(getUIStringInput(POLICY_CLASS).getValue(), getUIStringInput(VALIDATOR_CLASS).getValue());
+         boolean requiresReg = Boolean.parseBoolean(getUIFormCheckBoxInput(REQUIRES_REGISTRATION).getValue().toString());
+         registrationRequirements.setRegistrationRequired(requiresReg);
+         /*if (registrationDetails != null)
+         {
+            registrationRequirements.reloadPolicyFrom(registrationDetails.getUIStringInput(POLICY_CLASS).getValue(),
+               registrationDetails.getUIStringInput(VALIDATOR_CLASS).getValue());
+         }*/
 
          configService.saveConfiguration();
          uiApp.addMessage(new ApplicationMessage("Producer Successfully Changed", null));
@@ -306,5 +325,14 @@ public class UIWsrpProducerEditor extends UIForm
          //popup.setShowMask(true);
 
       }
+   }
+
+   @Override
+   public void processRender(WebuiRequestContext context) throws Exception
+   {
+      // reset the GUI
+      init();
+
+      super.processRender(context);
    }
 }

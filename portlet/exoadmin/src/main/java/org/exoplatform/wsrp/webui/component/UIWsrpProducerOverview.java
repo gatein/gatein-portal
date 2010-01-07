@@ -41,7 +41,7 @@ public class UIWsrpProducerOverview extends UIContainer
    public UIWsrpProducerOverview() throws Exception
    {
       producerForm = createUIComponent(UIWsrpProducerEditor.class, null, "Producer Editor");
-      producerForm.initWith(getProducerConfigurationService());
+      producerForm.setConfigService(getProducerConfigurationService());
       addChild(producerForm);
    }
 
