@@ -1,43 +1,61 @@
-<%
-  import org.exoplatform.webui.form.UIFormStringInput;
-%>
+<div class="WSRPProducerConfiguration">
+   <%
+      uiform.begin()
+      for (field in uiform.getChildren())
+      {
+         if (field.isRendered())
+         {
+   %>
+   <div class="row">
+      <%
+            label = uicomponent.getLabel(field.getName());
+            if (!label.equals(uicomponent.getId()))
+            {
+      %>
+      <label>
+         <%
+               if (label != null && label.length() > 0)
+               {
+         %>
+         <%=label%>
+         <%
+               }
+         %>
+      </label>
+      <% uiform.renderField(field) %>
+   </div>
+   <%
+            }
+         }
+      }
+   %>
 
-<div class="UILoginForm" id="ChildTest">
-  <% uiform.begin() %>
-  <%
-    UIFormStringInput name = uicomponent.getChild(UIFormStringInput.class);
-  %>
-  <div class="SignIn">Access to full service description requires consumers to be registered. <% uiform.renderChild(0); %></div>
-  <div class="SignIn">Use strict WSRP compliance. <% uiform.renderChild(1); %></div>
-  <div class="SignIn">Requires registration. Modifying this information will trigger invalidation of consumer registrations. <% uiform.renderChild(2); %></div>
+   <div class="FloatRight">
 
-  <div class="FloatRight">
+      <div class="UIAction">
+         <table class="ActionContainer">
+            <tr>
+               <td>
 
-      
-    <div class="UIAction">
-      <table class="ActionContainer">
-        <tr>
-          <td>
-            
-          </td>
-          <td>
-            <div onclick="<%=uicomponent.event("Save")%>" class="ActionButton LightBlueStyle">
-              <div class="ButtonLeft">
-                <div class="ButtonRight">
-                  <div class="ButtonMiddle">
-                    <a href="javascript:void(0);"><%=_ctx.appRes(uicomponent.getId() + ".action.Save")%></a>
+               </td>
+               <td>
+                  <div onclick="<%=uicomponent.event("Save")%>" class="ActionButton LightBlueStyle">
+                     <div class="ButtonLeft">
+                        <div class="ButtonRight">
+                           <div class="ButtonMiddle">
+                              <a href="javascript:void(0);"><%=_ctx.appRes(uicomponent.getId() + ".action.Save")%></a>
+                           </div>
+                        </div>
+                     </div>
                   </div>
-                </div>
-              </div>
-            </div>
-          </td>
-        </tr>
-      </table>
-    </div>
+               </td>
+            </tr>
+         </table>
+      </div>
 
-  
 
-  <div class="ClearRight"><span></span></div>
-  <% uiform.end() %>
-</div>
+
+      <div class="ClearRight"><span></span></div>
+      <% uiform.end() %>
+   </div>
 </div>
