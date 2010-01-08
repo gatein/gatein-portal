@@ -97,7 +97,7 @@ abstract public class UIComponent
       return (T)this;
    }
 
-   //  
+   //
    //  public void processInit(WebuiRequestContext context) throws Exception {
    //    MonitorEvent<UIComponent> mevent = createMonitorEvent(Event.Phase.INIT, context);
    //    config.getUIComponentLifecycle().init(this, context) ;
@@ -106,7 +106,7 @@ abstract public class UIComponent
    //      mevent.broadcast()  ;
    //    }
    //  }
-   //  
+   //
    public void processDecode(WebuiRequestContext context) throws Exception
    {
       MonitorEvent<UIComponent> mevent = createMonitorEvent(Event.Phase.DECODE, context);
@@ -258,7 +258,7 @@ abstract public class UIComponent
       String confirm = loadConfirmMesssage(event, context, beanId);
       try
       {
-         return context.getURLBuilder().createURL(this, event.getName(), confirm, beanId, params);
+         return context.getURLBuilder().createURL(this, event.getName(), confirm, beanId, params).toString();
       }
       catch (Exception e)
       {

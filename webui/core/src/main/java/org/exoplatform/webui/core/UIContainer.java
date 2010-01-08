@@ -39,11 +39,6 @@ public class UIContainer extends UIComponent
 
    private List<UIComponent> children;
 
-   public void visit() throws Exception
-   {
-
-   }
-
    public boolean hasChildren()
    {
       return children != null;
@@ -99,6 +94,7 @@ public class UIContainer extends UIComponent
       return null;
    }
 
+   // todo (julien) : this is not type safe
    @SuppressWarnings("unchecked")
    public <T extends UIComponent> T getChildById(String id)
    {
@@ -113,6 +109,7 @@ public class UIContainer extends UIComponent
       return null;
    }
 
+   // todo (julien) : this is not type safe
    @SuppressWarnings("unchecked")
    public <T extends UIComponent> T getChild(int idx)
    {
@@ -135,6 +132,7 @@ public class UIContainer extends UIComponent
       return null;
    }
 
+   // todo (julien) : this is not type safe
    @SuppressWarnings("unchecked")
    public <T extends UIComponent> T replaceChild(String targetChildId, UIComponent newComponent) throws Exception
    {
@@ -154,7 +152,6 @@ public class UIContainer extends UIComponent
       throw new Exception("Cannot  find the child : " + targetChildId);
    }
 
-   @SuppressWarnings("unchecked")
    public <T extends UIComponent> T replaceChild(String targetChildId, Class<T> type, String configId, String id)
       throws Exception
    {
@@ -162,7 +159,7 @@ public class UIContainer extends UIComponent
       WebuiApplication app = (WebuiApplication)context.getApplication();
       UIComponent comp = app.createUIComponent(type, configId, id, context);
       comp = replaceChild(targetChildId, comp);
-      return (T)comp;
+      return type.cast(comp);
    }
 
    public <T extends UIComponent> T addChild(Class<T> type, String configId, String id) throws Exception
@@ -174,6 +171,7 @@ public class UIContainer extends UIComponent
       return comp;
    }
 
+   // todo (julien) : this is not type safe
    @SuppressWarnings("unchecked")
    public <T extends UIComponent> T findComponentById(String id)
    {
