@@ -17,9 +17,10 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.config.security;
+package org.exoplatform.portal.config.security.page;
 
 import org.exoplatform.portal.config.model.Page;
+import org.exoplatform.portal.config.security.AbstractTestUserACL;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -33,7 +34,7 @@ public abstract class AbstractTestSharedPageACL extends AbstractTestUserACL
    public void testPage()
    {
       Page page = new Page();
-      page.setOwnerType("group");
+      page.setOwnerType(getOwnerType());
       page.setOwnerId("foo");
       page.setAccessPermissions(new String[0]);
 
@@ -55,7 +56,7 @@ public abstract class AbstractTestSharedPageACL extends AbstractTestUserACL
    public void testPageAccessibleByEveryone()
    {
       Page page = new Page();
-      page.setOwnerType("group");
+      page.setOwnerType(getOwnerType());
       page.setOwnerId("foo");
       page.setAccessPermissions(new String[]{"Everyone"});
 
@@ -77,7 +78,7 @@ public abstract class AbstractTestSharedPageACL extends AbstractTestUserACL
    public void testPageEditableByEveryone()
    {
       Page page = new Page();
-      page.setOwnerType("group");
+      page.setOwnerType(getOwnerType());
       page.setOwnerId("foo");
       page.setAccessPermissions(new String[0]);
       page.setEditPermission("Everyone");
@@ -100,7 +101,7 @@ public abstract class AbstractTestSharedPageACL extends AbstractTestUserACL
    public void testPageAccessibleByGuests()
    {
       Page page = new Page();
-      page.setOwnerType("group");
+      page.setOwnerType(getOwnerType());
       page.setOwnerId("foo");
       page.setAccessPermissions(new String[]{"whatever:/platform/guests"});
 
@@ -122,7 +123,7 @@ public abstract class AbstractTestSharedPageACL extends AbstractTestUserACL
    public void testPageEditableByGuests()
    {
       Page page = new Page();
-      page.setOwnerType("group");
+      page.setOwnerType(getOwnerType());
       page.setOwnerId("foo");
       page.setAccessPermissions(new String[0]);
       page.setEditPermission("whatever:/platform/guests");
@@ -145,7 +146,7 @@ public abstract class AbstractTestSharedPageACL extends AbstractTestUserACL
    public void testPageAccessibleByEveryOneAndGuests()
    {
       Page page = new Page();
-      page.setOwnerType("group");
+      page.setOwnerType(getOwnerType());
       page.setOwnerId("foo");
       page.setAccessPermissions(new String[]{"Everyone", "whatever:/platform/guests"});
 
@@ -167,7 +168,7 @@ public abstract class AbstractTestSharedPageACL extends AbstractTestUserACL
    public void testPageWithAccessPermission()
    {
       Page page = new Page();
-      page.setOwnerType("group");
+      page.setOwnerType(getOwnerType());
       page.setOwnerId("foo");
       page.setAccessPermissions(new String[]{"manager:/manageable"});
 
@@ -192,7 +193,7 @@ public abstract class AbstractTestSharedPageACL extends AbstractTestUserACL
    public void testPageWithEditPermission()
    {
       Page page = new Page();
-      page.setOwnerType("group");
+      page.setOwnerType(getOwnerType());
       page.setOwnerId("foo");
       page.setAccessPermissions(new String[0]);
       page.setEditPermission("manager:/manageable");

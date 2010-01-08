@@ -17,15 +17,16 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.config.security;
+package org.exoplatform.portal.config.security.portal;
 
 import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.config.security.AbstractTestUserACL;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class TestPortalConfigACL extends AbstractTestUserACL
+public class TestPortalACL extends AbstractTestUserACL
 {
 
    public void testFoo()

@@ -42,9 +42,9 @@ import java.util.Set;
 public abstract class AbstractTestUserACL extends BasicTestCase
 {
 
-   UserACL ua;
+   protected UserACL ua;
 
-   User root, administrator, manager, user, guest;
+   protected User root, administrator, manager, user, guest;
 
    @Override
    protected void setUp() throws Exception

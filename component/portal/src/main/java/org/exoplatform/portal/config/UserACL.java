@@ -239,23 +239,6 @@ public class UserACL
       return adminMSType;
    }
 
-   protected boolean findMembershipByUserAndGroupAndType(String groupId, String membership) throws Exception
-   {
-      ConversationState conv = ConversationState.getCurrent();
-      Identity id = null;
-      if (conv != null)
-      {
-         id = conv.getIdentity();
-      }
-
-      if (id == null)
-      {
-         return false;
-      }
-
-      return id.isMemberOf(groupId, membership);
-   }
-
    public boolean hasPermission(PortalConfig pconfig)
    {
       return hasPermission(getIdentity(), pconfig);
@@ -321,10 +304,6 @@ public class UserACL
 
       return false;
    }
-
-   // --------------------------------------------------------------------------//
-   // Utility Methods //
-   // --------------------------------------------------------------------------//
 
    private boolean hasPermission(Identity identity, PortalConfig pconfig)
    {

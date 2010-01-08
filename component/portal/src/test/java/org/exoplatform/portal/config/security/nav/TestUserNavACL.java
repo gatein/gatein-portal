@@ -17,16 +17,29 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.config.security;
+package org.exoplatform.portal.config.security.nav;
+
+import org.exoplatform.portal.config.model.PageNavigation;
+import org.exoplatform.portal.config.security.AbstractTestUserACL;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class TestGroupPageACL extends AbstractTestSharedPageACL
+public class TestUserNavACL extends AbstractTestUserACL
 {
-   protected String getOwnerType()
+
+   public void testNav()
    {
-      return "Group";
+
+      PageNavigation nav = new PageNavigation();
+      nav.setOwnerType("user");
+      nav.setOwnerId("user");
+
+      assertTrue(root.hasEditPermission(nav));
+      assertFalse(administrator.hasEditPermission(nav));
+      assertFalse(manager.hasEditPermission(nav));
+      assertTrue(user.hasEditPermission(nav));
+      assertFalse(guest.hasEditPermission(nav));
    }
 }

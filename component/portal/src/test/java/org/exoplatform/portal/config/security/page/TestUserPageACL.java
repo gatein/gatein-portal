@@ -17,9 +17,10 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.config.security;
+package org.exoplatform.portal.config.security.page;
 
 import org.exoplatform.portal.config.model.Page;
+import org.exoplatform.portal.config.security.AbstractTestUserACL;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -38,7 +39,7 @@ public class TestUserPageACL extends AbstractTestUserACL
       assertFalse(manager.hasPermission(page));
       assertTrue(user.hasPermission(page));
       assertFalse(guest.hasPermission(page));
-      //assertTrue(root.hasEditPermission(page));
+      assertFalse(root.hasEditPermission(page));
       assertFalse(administrator.hasEditPermission(page));
       assertFalse(manager.hasEditPermission(page));
       assertTrue(user.hasEditPermission(page));
@@ -54,7 +55,7 @@ public class TestUserPageACL extends AbstractTestUserACL
       assertTrue(manager.hasPermission(page));
       assertTrue(user.hasPermission(page));
       assertFalse(guest.hasPermission(page));
-      //assertTrue(root.hasEditPermission(page));
+      assertFalse(root.hasEditPermission(page));
       assertFalse(administrator.hasEditPermission(page));
       assertFalse(manager.hasEditPermission(page));
       assertTrue(user.hasEditPermission(page));
@@ -64,17 +65,16 @@ public class TestUserPageACL extends AbstractTestUserACL
       page = new Page();
       page.setOwnerType("user");
       page.setOwnerId("user");
-      page.setAccessPermissions(new String[0]);
       page.setEditPermission("manager:/manageable");
       assertTrue(root.hasPermission(page));
       assertFalse(administrator.hasPermission(page));
-      //assertTrue(manager.hasPermission(page));
+      assertFalse(manager.hasPermission(page));
       assertFalse(manager.hasPermission(page));
       assertTrue(user.hasPermission(page));
       assertFalse(guest.hasPermission(page));
-      //assertTrue(root.hasEditPermission(page));
+      assertFalse(root.hasEditPermission(page));
       assertFalse(administrator.hasEditPermission(page));
-      //assertTrue(manager.hasEditPermission(page));
+      assertFalse(manager.hasEditPermission(page));
       assertTrue(user.hasEditPermission(page));
       assertFalse(guest.hasEditPermission(page));
 
@@ -88,7 +88,7 @@ public class TestUserPageACL extends AbstractTestUserACL
       assertTrue(manager.hasPermission(page));
       assertTrue(user.hasPermission(page));
       assertTrue(guest.hasPermission(page));
-      //assertTrue(root.hasEditPermission(page));
+      assertFalse(root.hasEditPermission(page));
       assertFalse(administrator.hasEditPermission(page));
       assertFalse(manager.hasEditPermission(page));
       assertTrue(user.hasEditPermission(page));
@@ -101,14 +101,14 @@ public class TestUserPageACL extends AbstractTestUserACL
       page.setAccessPermissions(new String[0]);
       page.setEditPermission("Everyone");
       assertTrue(root.hasPermission(page));
-      //assertTrue(administrator.hasPermission(page));
-      //assertTrue(manager.hasPermission(page));
+      assertFalse(administrator.hasPermission(page));
+      assertFalse(manager.hasPermission(page));
       assertTrue(user.hasPermission(page));
-      //assertTrue(guest.hasPermission(page));
-      //assertTrue(root.hasEditPermission(page));
-      //assertTrue(administrator.hasEditPermission(page));
-      //assertTrue(manager.hasEditPermission(page));
+      assertFalse(guest.hasPermission(page));
+      assertFalse(root.hasEditPermission(page));
+      assertFalse(administrator.hasEditPermission(page));
+      assertFalse(manager.hasEditPermission(page));
       assertTrue(user.hasEditPermission(page));
-      //assertTrue(guest.hasEditPermission(page));
+      assertFalse(guest.hasEditPermission(page));
    }
 }
