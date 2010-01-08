@@ -19,6 +19,7 @@
 
 package org.exoplatform.portal.config.security;
 
+import junit.framework.TestCase;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.UserACLMetaData;
 import org.exoplatform.portal.config.model.Page;
@@ -27,7 +28,6 @@ import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.services.security.ConversationState;
 import org.exoplatform.services.security.Identity;
 import org.exoplatform.services.security.MembershipEntry;
-import org.exoplatform.test.BasicTestCase;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -39,7 +39,7 @@ import java.util.Set;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public abstract class AbstractTestUserACL extends BasicTestCase
+public abstract class AbstractTestUserACL extends TestCase
 {
 
    protected UserACL ua;
