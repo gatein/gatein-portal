@@ -25,7 +25,6 @@ package org.exoplatform.wsrp.webui.component;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.form.UIForm;
-import org.exoplatform.webui.form.UIFormInputBase;
 import org.exoplatform.webui.form.UIFormInputSet;
 
 import java.io.Writer;
@@ -52,8 +51,8 @@ public class UIWSRPFormInputSet extends UIFormInputSet
          return;
       }
 
-      StringBuilder sb = new StringBuilder(512);
-      sb.append("<div class=\"UIFormInputSet\">");
+      Writer w = context.getWriter();
+      w.write("<div class=\"UIFormInputSet\">");
 
       ResourceBundle res = context.getApplicationResourceBundle();
       UIForm uiForm = getAncestorOfType(UIForm.class);
@@ -61,33 +60,25 @@ public class UIWSRPFormInputSet extends UIFormInputSet
       {
          if (inputEntry.isRendered())
          {
-            sb.append("<div class=\"row\">");
+            w.write("<div class=\"row\">");
 
             String label;
             try
             {
                label = uiForm.getLabel(res, inputEntry.getId());
-               if (inputEntry instanceof UIFormInputBase)
-               {
-                  ((UIFormInputBase)inputEntry).setLabel(label);
-               }
             }
             catch (MissingResourceException ex)
             {
-               //label = "&nbsp;" ;
                label = inputEntry.getName();
                System.err.println("\n " + uiForm.getId() + ".label." + inputEntry.getId() + " not found value");
             }
 
-            sb.append("<label>").append(label).append("</label>");
+            w.write("<label>" + label + "</label>");
             renderUIComponent(inputEntry);
 
-            sb.append("</div>");
+            w.write("</div>");
          }
       }
-      sb.append("</div>");
-
-      Writer w = context.getWriter();
-      w.write(sb.toString());
+      w.write("</div>");
    }
 }
