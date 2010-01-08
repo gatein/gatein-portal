@@ -22,6 +22,11 @@
     02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
      --><title>Create a New Portal</title>
+<warning>
+<para>
+	The <emphasis role="bold">Add New Portal</emphasis> button mentioned in this section does not appear under the <emphasis role="bold">Site</emphasis> navigation in GateIn 3.0 Beta 3, even when logged in as the Administrator. 
+</para>
+</warning> 
 	<para>
 		Creating a new portal requires you to have a special permission that only an administrator can give you. You need follow these guides to create a new portal.
 	</para>
@@ -51,7 +56,7 @@
 		</step>
 		<step>
 			<para>
-				Enter a value for the <emphasis role="bold">Portal Name</emphasis> field. This field is required and must be unique. Only alpha, digit and underscore characters are allowed for this field and it must have at least 3 characters.
+				Enter a value for the <emphasis role="bold">Portal Name</emphasis> field. This field is required and must be unique. Only alphabetical, numerical and underscore characters are allowed for this field and the name must have at least 3 characters.
 			</para>
 		</step>
 		<step>
@@ -66,24 +71,33 @@
 		</step>
 		<step>
 			<para>
-				Click on the <emphasis role="bold">Properties</emphasis> tab to fill in the <emphasis role="bold">Keep session alive</emphasis> property. Keeping the working session for a long time to avoid a time out. There are 3 options: 
-				<itemizedlist>
-					<listitem>
-						<para>
-							never : it never happens even if an application requests it
-						</para>
-					</listitem>
-					<listitem>
-						<para>
-							on-demand : it starts to be used as soon as an application requests it
-						</para>
-					</listitem>
-					<listitem>
-						<para>
-							always : it's always enabled (which has a cost but the administrator will be aware of that)
-						</para>
-					</listitem>
-				</itemizedlist>
+				Click on the <emphasis role="bold">Properties</emphasis> tab to fill in the <emphasis role="bold">Keep session alive</emphasis> property. There are 3 options: 
+				<variablelist>
+					<varlistentry>
+						<term>Never</term> 
+							<listitem>
+								<para>
+									It never happens even if an application requests it &lt;-- <emphasis role="bold"> WHAT never happens?</emphasis>
+								</para>
+							</listitem>
+					</varlistentry>
+					<varlistentry>
+						<term>On-demand</term> 
+							<listitem>
+								<para>
+									It starts to be used as soon as an application requests it
+								</para>
+							</listitem>
+					</varlistentry>
+					<varlistentry>
+						<term>Always</term> 
+							<listitem>
+								<para>
+									It's always enabled
+								</para>
+							</listitem>
+					</varlistentry>
+				</variablelist>
 			</para>
 		</step>
 		<step>
@@ -101,7 +115,7 @@
 		</step>
 	</procedure>
 	<para>
-		You also can edit or delete a portal, see more details on <xref linkend="sect-User_Guide-Manage_Portals" />
+		You also can edit or delete a portal. See more details in <xref linkend="sect-User_Guide-Manage_Portals" />
 	</para>
 </section>
 

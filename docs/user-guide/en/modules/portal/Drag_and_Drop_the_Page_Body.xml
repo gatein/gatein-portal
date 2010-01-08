@@ -23,12 +23,12 @@
 
      --><title>Drag and Drop the Page Body</title>
 	<para>
-		You can easily drag and drop page body to the specific place where you want to in the page by following guides:
+		To assist administrators to modify or personalize their portal &PRODUCT; allows you to easily drag and drop page content within the page.
 	</para>
 		<procedure>
 			<step>
 				<para>
-					Go to <emphasis role="bold">GateIn Start</emphasis> -&gt; <emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Advanced</emphasis> --&gt; <emphasis role="bold">Edit Current portal</emphasis>. It will display :
+					Go to <emphasis role="bold">Site Editor</emphasis> in the toolbar and click on <emphasis role="bold">Edit Layout</emphasis> It will display :
 				</para>
 				<mediaobject>
 					<imageobject>
@@ -38,7 +38,7 @@
 			</step>
 			<step>
 				<para>
-					Click on the <emphasis role="bold">Portal Page</emphasis>, drag and drop to another reasonable places which you want to in this page.
+					Click on the <emphasis role="bold">Portal Page</emphasis>, drag and drop within the portal page.
 				</para>
 				<mediaobject>
 					<imageobject>

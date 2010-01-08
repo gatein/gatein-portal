@@ -23,45 +23,38 @@
 
      --><title>Page Creation Wizard</title>
 	<para>
-		Only by following there simple steps can you create a page quickly by using a wizard and publish this page on the Navigation bar:
+		A page creation wizard is included in &PRODUCT; to help administrators to create and publish a page quickly and easily.
 	</para>
 	<procedure>
 		<step>
 			<para>
-				Go to <emphasis role="bold">GateIn Start</emphasis> -&gt;<emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Basic</emphasis> --&gt; <emphasis role="bold">Create page wizard</emphasis>. <emphasis role="bold">Welcome to Page Creation Wizard</emphasis> appears:
-			</para>
-			<mediaobject>
-				<imageobject>
-					<imagedata fileref="images/Welcome.png" format="PNG" width="444" />
-				</imageobject>
-			</mediaobject>
-		</step>
-		<step>
-			<para>
-				Click the <emphasis role="bold">Next</emphasis> button or number '1' of the wizard steps in order to go to step 1. This step allows users to set up page setting such as :the navigation path, the node name, the display name, etc.
+				Go to <emphasis role="bold">Site Editor</emphasis>and click on <emphasis role="bold">Add New Page</emphasis>. Yhe <emphasis role="bold">Page Creation Wizard</emphasis> will appear.
 			</para>
 			<mediaobject>
 				<imageobject>
 					<imagedata fileref="images/Wizard1.png" format="PNG" width="444" />
 				</imageobject>
 			</mediaobject>
-			<para>
-				There are two parts: the left pane is used to show a small description that will guide you what to do in this step. And the main wizard includes two parts: the left pane contains a list of navigations and shows the page list of each selected navigation, the right pane displays main information of a page.
-			</para>
 		</step>
 		<step>
 			<para>
-				On the left of wizard: Click the combo box icon !images/ComboBox.png! to see the navigations list. Select a navigation from the list that you want to create page. The pages list of selected navigation are displayed.
+				The wizard includes two parts: the left pane contains a list of navigations and shows the page list and the right pane displays the main information of the page selected in this list.
 			</para>
 			<mediaobject>
 				<imageobject>
 					<imagedata fileref="images/PageList.png" format="PNG" />
 				</imageobject>
 			</mediaobject>
+
 		</step>
 		<step>
 			<para>
-				Select a page from the above list or click on arrow up icon !images/ArrowIcon.png! to add a page at root.
+				In the left pane, select the navigation that you want to create a new page for. Clicking a navigation displays the pages already existing for that navigation.
+			</para>
+		</step>
+		<step>
+			<para>
+				Select a page from the list or click on arrow up icon to add a page at root.
 			</para>
 			<mediaobject>
 				<imageobject>
@@ -126,80 +119,8 @@
 				</listitem>
 			</varlistentry>
 		</variablelist>
-
-	<!--		<informaltable colsep="0" frame="none" rowsep="0">
-				<tgroup cols="2">
-					<colspec align="center"></colspec>
-					<colspec align="center"></colspec>
-					<tbody>
-						<row>
-							<entry>
-								<emphasis role="bold"> Name </emphasis>
-							</entry>
-							<entry>
-								<emphasis role="bold"> Description </emphasis>
-							</entry>
-						</row>
-						<row>
-							<entry>
-								Current Selected Page Node
-							</entry>
-							<entry>
-								The path of the selected node to add a new sub page
-							</entry>
-						</row>
-						<row>
-							<entry>
-								Node Name
-							</entry>
-							<entry>
-								The node name of the added page. It is required field. This field must start with a character and must have a length between 3 and 30 characters.
-							</entry>
-						</row>
-						<row>
-							<entry>
-								Display Name
-							</entry>
-							<entry>
-								The display name of the node which contains the added page and must have a length between 3 and 30 characters.
-							</entry>
-						</row>
-						<row>
-							<entry>
-								Visible
-							</entry>
-							<entry>
-								This check box allows to hide this page. If not checked the page is under no circumstances shown, even if the publication period is OK. If checked the page or the page node appears on on the navigation bar, the page navigation and the site map. If "visible" is checked the visibility can depend on the "publication date &amp; time" option.
-							</entry>
-						</row>
-						<row>
-							<entry>
-								Publication date&amp;time
-							</entry>
-							<entry>
-								This option allows publishing the page for a period of time. If this option is checked the visibility of the page depends on the publication period start and end date.
-							</entry>
-						</row>
-						<row>
-							<entry>
-								Start Publication Date
-							</entry>
-							<entry>
-								The start date and time to publish the page
-							</entry>
-						</row>
-						<row>
-							<entry>
-								End Publication Date
-							</entry>
-							<entry>
-								The end date and time to publish the page
-							</entry>
-						</row>
-					</tbody>
-				</tgroup>
-			</informaltable> -->
 			<note>
+			<title>Setting Time and Date</title>
 				<para>
 					You can set date and time by clicking the <emphasis role="bold">Start Publication Date</emphasis> field and <emphasis role="bold">End Publication Date</emphasis> field and select a date in the calendar pop up
 				</para>
@@ -209,10 +130,11 @@
 					<imagedata fileref="images/Calendar.png" format="PNG" />
 				</imageobject>
 			</mediaobject>
+
 		</step>
 		<step>
 			<para>
-				5. Click <emphasis role="bold">Next</emphasis> or number '2' of the wizard steps to go to step 2.
+				Click <emphasis role="bold">Next</emphasis> or number '2' of the wizard steps to go to step 2.
 			</para>
 			<mediaobject>
 				<imageobject>
@@ -222,77 +144,56 @@
 		</step>
 		<step>
 			<para>
-				6. Select <emphasis role="bold">Empty Layout</emphasis> or click the icon to see more templates to select.
+				Select <emphasis role="bold">Empty Layout</emphasis> or click the icon to see more templates to select.
 			</para>
 		</step>
 		<step>
 			<para>
-				7. Click the <emphasis role="bold">Next</emphasis> button or number '3' of the wizard step to go to step 3. You can drag portlets on the left pane and drop it on the right pane to constitute the content of this page.
+				Click the <emphasis role="bold">Next</emphasis> button or number '3' of the wizard step to go to step 3. You can drag portlets from the left pane into the right pane to create the content of this page.
 			</para>
 			<mediaobject>
 				<imageobject>
 					<imagedata fileref="images/PageWizard3.png" format="PNG" width="444" />
 				</imageobject>
 			</mediaobject>
-<warning>
-<title>These Images are not present</title>
-<para>
-	the images in the below table are not present in the raw document files.
-</para>
-</warning> 
-			<informaltable colsep="0" frame="none" rowsep="0">
-				<tgroup cols="2">
-					<colspec align="center"></colspec>
-					<colspec align="center"></colspec>
-					<tbody>
-						<row>
-							<entry>
-								<emphasis role="bold"> Indicator </emphasis>
-							</entry>
-							<entry>
-								<emphasis role="bold"> Meaning </emphasis>
-							</entry>
-						</row>
-						<row>
-							<entry>
-								!images/preview.png!
-							</entry>
-							<entry>
-								*Preview Page*: allows viewing a page in preview mode
-							</entry>
-						</row>
-						<row>
-							<entry>
-								!images/ShowContainer.png!
-							</entry>
-							<entry>
-								*Show Container*: allows listing all existing containers
-							</entry>
-						</row>
-						<row>
-							<entry>
-								!images/ShowPortlet.png!
-							</entry>
-							<entry>
-								*Show Portlets*: allows listing all existing portlets
-							</entry>
-						</row>
-					</tbody>
-				</tgroup>
-			</informaltable>
+			<variablelist>
+				<varlistentry>
+					<term>Preview Page</term>
+						<listitem>
+							<para>
+								Allows viewing a page in preview mode
+							</para>
+						</listitem>
+				</varlistentry>
+				<varlistentry>
+					<term>Show Container</term>
+						<listitem>
+							<para>
+								Allows listing all existing containers
+							</para>
+						</listitem>
+				</varlistentry>
+				<varlistentry>
+					<term>Show Portlet</term>
+						<listitem>
+							<para>
+								Allows listing all existing portlets
+							</para>
+						</listitem>
+				</varlistentry>
+			</variablelist>
 		</step>
 		<step>
 			<para>
-				8. Click the <emphasis role="bold">Show Container</emphasis> icon !images/ShowContainer.png! if you want to see the existing containers and re-select the layout of the page. There will be a category list which contains specific containers when clicking the icon.
+				Click the <emphasis role="bold">Show Container</emphasis> icon if you want to see the existing containers and re-select the layout of the page. You can click on the <emphasis role="bold">Switch</emphasis> icon to view the content of this page.
+			</para>
+		</step>
+		<step>
+			<para>
+		Click <emphasis role="bold">Save</emphasis> to accept creating a new page, the <emphasis role="bold">Back</emphasis> button to return the previous step or the <emphasis role="bold">Abort</emphasis> button to quit without creating a new page.
 			</para>
 		</step>
 	</procedure>
-	<para>
-		You can click on!images/Switch.png! to view the content of this page.
-	</para>
-	<para>
-		Click <emphasis role="bold">Save</emphasis> to accept creating a new page, the <emphasis role="bold">Back</emphasis> button to return the previous step or the <emphasis role="bold">Abort</emphasis> button to quit without creating a new page.
-	</para>
 </section>
 
 
