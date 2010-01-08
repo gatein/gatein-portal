@@ -35,7 +35,6 @@ import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
-import org.gatein.wsrp.consumer.registry.ConsumerRegistry;
 import org.gatein.wsrp.producer.config.ProducerConfiguration;
 import org.gatein.wsrp.producer.config.ProducerConfigurationService;
 import org.gatein.wsrp.registration.LocalizedString;
@@ -59,7 +58,8 @@ public class UIWsrpProducerPropertyEditor extends UIForm
       addUIFormInput(new UIFormStringInput(HINT, HINT, null).addValidator(MandatoryValidator.class));
    }
 
-   public void setRegistrationPropertyDescription(RegistrationPropertyDescription registrationPropertyDescription) throws Exception {
+   public void setRegistrationPropertyDescription(RegistrationPropertyDescription registrationPropertyDescription) throws Exception
+   {
 
       this.registrationPropertyDescription_ = registrationPropertyDescription;
 
@@ -80,18 +80,11 @@ public class UIWsrpProducerPropertyEditor extends UIForm
       return registrationPropertyDescription_;
    }
 
-   static public class SaveActionListener extends EventListener<UIWsrpProducerEditor>
+   static public class SaveActionListener extends EventListener<UIWsrpProducerPropertyEditor>
    {
-      public void execute(Event<UIWsrpProducerEditor> event) throws Exception
+      public void execute(Event<UIWsrpProducerPropertyEditor> event) throws Exception
       {
-         UIWsrpProducerEditor producerEditor = event.getSource();
-
-         UIWsrpProducerEditor producerOverview = producerEditor.getAncestorOfType(UIWsrpProducerEditor.class);
-
-         WebuiRequestContext ctx = event.getRequestContext();
-         producerEditor.save(ctx);
-         //producerEditor.reset();
-
+         // todo: implement
       }
    }
 
@@ -102,15 +95,17 @@ public class UIWsrpProducerPropertyEditor extends UIForm
       ProducerConfiguration producerConfiguration = pconfService.getConfiguration();
 
 
-
       RegistrationPropertyDescription regPropDesc = getRegistrationPropertyDescription();
-      if(regPropDesc != null){
+      if (regPropDesc != null)
+      {
          System.out.println("---------old1: " + regPropDesc.getDescription());
          RegistrationPropertyDescription oldRegPropDesc = producerConfiguration.getRegistrationRequirements().getRegistrationProperties().get(regPropDesc);
          invokeSetBindingBean(oldRegPropDesc);
          System.out.println("---------new1: " + oldRegPropDesc.getNameAsString());
          //return;
-      }else{
+      }
+      else
+      {
 
          RegistrationPropertyDescription newRegProcDesc = new RegistrationPropertyDescription();
          newRegProcDesc.setDescription(new LocalizedString(getUIStringInput(DESCRIPTION).getValue()));
@@ -122,10 +117,13 @@ public class UIWsrpProducerPropertyEditor extends UIForm
 
       UIApplication uiApp = context.getUIApplication();
 
-      try{
+      try
+      {
          pconfService.saveConfiguration();
          uiApp.addMessage(new ApplicationMessage("Producer Successfully Changed", null));
-      }catch(Exception e){
+      }
+      catch (Exception e)
+      {
          uiApp.addMessage(new ApplicationMessage("Producer Modification Error", null));
 
       }

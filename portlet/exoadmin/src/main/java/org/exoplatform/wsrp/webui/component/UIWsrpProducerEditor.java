@@ -24,8 +24,8 @@ package org.exoplatform.wsrp.webui.component;
 
 import org.exoplatform.commons.utils.LazyPageList;
 import org.exoplatform.commons.utils.ListAccess;
+import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
-import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.ComponentConfigs;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -38,6 +38,7 @@ import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormInputBase;
+import org.exoplatform.webui.form.UIFormInputSet;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.gatein.registration.RegistrationPolicy;
 import org.gatein.registration.policies.DefaultRegistrationPolicy;
@@ -79,13 +80,55 @@ public class UIWsrpProducerEditor extends UIForm
    private static final String REGISTRATION_DETAILS = "registrationdetails";
 
    private ProducerConfigurationService configService;
-   private UIWSRPFormInputSet registrationDetails;
+   private static final String REGISTRATION_PROPERTIES = "RegistrationPropertySelector";
+   private static final String REGISTRATION_PROPERTIES_ITERATOR = "ProducerPropPageIterator";
+   private UIFormInputSet registrationDetails;
+   private UIFormInputBase<String> policy;
+   private UIFormInputBase<String> validator;
+   private UIFormCheckBoxInput regReqForDesc;
+   private UIFormCheckBoxInput strictMode;
+   private UIFormCheckBoxInput<Boolean> regRequired;
+   private UIGrid registrationProperties;
 
    public UIWsrpProducerEditor() throws Exception
    {
-      addUIFormInput(new UIFormCheckBoxInput(REG_REQUIRED_FOR_DESCRIPTION, REG_REQUIRED_FOR_DESCRIPTION, null));
-      addUIFormInput(new UIFormCheckBoxInput(STRICT_MODE, STRICT_MODE, null));
-      addUIFormInput(new UIFormCheckBoxInput(REQUIRES_REGISTRATION, REQUIRES_REGISTRATION, null));
+      configService = Util.getUIPortalApplication().getApplicationComponent(ProducerConfigurationService.class);
+
+      regReqForDesc = new UIFormCheckBoxInput(REG_REQUIRED_FOR_DESCRIPTION, REG_REQUIRED_FOR_DESCRIPTION, null);
+      addUIFormInput(regReqForDesc);
+      strictMode = new UIFormCheckBoxInput(STRICT_MODE, STRICT_MODE, null);
+      addUIFormInput(strictMode);
+
+      // registration required check box with onChange event
+      regRequired = new UIFormCheckBoxInput<Boolean>(REQUIRES_REGISTRATION, REQUIRES_REGISTRATION, null);
+      regRequired.setOnChange("RegistrationOnChange");
+      addUIFormInput(regRequired);
+      // because when we use setOnChange method, new eventListener will add to this form, we must re-set the actions of this form.
+      // thif form has no action, so i'll put empty string array
+      setActions(new String[]{});
+
+      // registration details
+      // form set to gather registration information
+      registrationDetails = new UIWSRPFormInputSet(REGISTRATION_DETAILS);
+      addUIFormInput(registrationDetails);
+
+      // policy
+      policy = new UIFormStringInput(POLICY_CLASS, POLICY_CLASS, null);
+      registrationDetails.addUIFormInput(policy);
+
+      // validator
+      validator = new UIFormStringInput(VALIDATOR_CLASS, VALIDATOR_CLASS, null);
+      registrationDetails.addUIFormInput(validator);
+
+      // registration properties
+      registrationProperties = registrationDetails.addChild(UIGrid.class, REGISTRATION_PROPERTIES, null);
+      //configure the edit and delete buttons based on an id from the data list - this will also be passed as param to listener
+      registrationProperties.configure("name", FIELDS, SELECT_ACTIONS);
+      registrationProperties.getUIPageIterator().setId(REGISTRATION_PROPERTIES_ITERATOR);
+      registrationDetails.addChild(registrationProperties.getUIPageIterator());
+      registrationProperties.getUIPageIterator().setRendered(false);
+
+      init();
 
       //add the popup for property edit and adding new properties
       UIPopupWindow popup = addChild(UIPopupWindow.class, null, null);
@@ -95,9 +138,9 @@ public class UIWsrpProducerEditor extends UIForm
       popup.setRendered(false);
    }
 
-   public void setConfigService(ProducerConfigurationService configService)
+   ProducerConfigurationService getService()
    {
-      this.configService = configService;
+      return configService;
    }
 
    private void init() throws Exception
@@ -105,56 +148,40 @@ public class UIWsrpProducerEditor extends UIForm
       ProducerConfiguration configuration = configService.getConfiguration();
 
       ProducerRegistrationRequirements registrationRequirements = configuration.getRegistrationRequirements();
-      getUIFormCheckBoxInput(REG_REQUIRED_FOR_DESCRIPTION).setValue(registrationRequirements.isRegistrationRequiredForFullDescription());
-      getUIFormCheckBoxInput(STRICT_MODE).setValue(configuration.isUsingStrictMode());
+      regReqForDesc.setValue(registrationRequirements.isRegistrationRequiredForFullDescription());
+      strictMode.setValue(configuration.isUsingStrictMode());
 
       boolean registrationRequired = registrationRequirements.isRegistrationRequired();
-      getUIFormCheckBoxInput(REQUIRES_REGISTRATION).setValue(registrationRequired);
-
-      // reset potentially existing registration details
-      if (registrationDetails != null)
-      {
-         removeChild(registrationDetails.getClass());
-      }
+      regRequired.setValue(registrationRequired);
 
       // if registration is required then we display more information
       if (registrationRequired)
       {
-         registrationDetails = new UIWSRPFormInputSet(REGISTRATION_DETAILS);
-
-         // registration policy
-         UIFormInputBase<String> policyInput = new UIFormStringInput(POLICY_CLASS, POLICY_CLASS, null);
-         addUIFormInput(policyInput);
+         registrationDetails.setRendered(true);
 
          RegistrationPolicy policy = registrationRequirements.getPolicy();
          String policyClassName = policy.getClass().getName();
-         policyInput.setValue(policyClassName);
+         this.policy.setValue(policyClassName);
 
          // if policy is the default one, display information about the validator
          if (ProducerRegistrationRequirements.DEFAULT_POLICY_CLASS_NAME.equals(policyClassName))
          {
-            UIFormInputBase<String> validatorInput = new UIFormStringInput(VALIDATOR_CLASS, VALIDATOR_CLASS, null);
-            registrationDetails.addUIFormInput(validatorInput);
             DefaultRegistrationPolicy defaultPolicy = (DefaultRegistrationPolicy)policy;
-            validatorInput.setValue(defaultPolicy.getValidator().getClass().getName());
+            validator.setValue(defaultPolicy.getValidator().getClass().getName());
+            validator.setRendered(true);
+         }
+         else
+         {
+            validator.setRendered(false);
          }
 
          // registration properties
          Map<QName, RegistrationPropertyDescription> regProps = configuration.getRegistrationRequirements().getRegistrationProperties();
-
-         UIGrid uiGrid = registrationDetails.addChild(UIGrid.class, "RegistrationPropertySelector", null);
-         //configure the edit and delete buttons based on an id from the data list - this will also be passed as param to listener
-         uiGrid.configure("name", FIELDS, SELECT_ACTIONS);
-
-         //add the propery grid
-         uiGrid.getUIPageIterator().setId("ProducerPropPageIterator");
-         addChild(uiGrid.getUIPageIterator());
-         uiGrid.getUIPageIterator().setRendered(false);
-         LazyPageList propertyList = createPageList(getPropertyList(regProps));
-         uiGrid.getUIPageIterator().setPageList(propertyList);
-
-         addUIFormInput(registrationDetails);
-         registrationDetails.setRendered(true);
+         registrationProperties.getUIPageIterator().setPageList(createPageList(getPropertyList(regProps)));
+      }
+      else
+      {
+         registrationDetails.setRendered(false);
       }
    }
 
@@ -219,61 +246,46 @@ public class UIWsrpProducerEditor extends UIForm
    {
       public void execute(Event<UIWsrpProducerEditor> event) throws Exception
       {
-         UIWsrpProducerEditor producerEditor = event.getSource();
-
-         WebuiRequestContext ctx = event.getRequestContext();
-         producerEditor.save(ctx);
-         //producerEditor.reset();
-
-      }
-   }
-
-   public boolean save(WebuiRequestContext context) throws Exception
-   {
-      //ConsumerRegistry consumerRegistry = getConsumerRegistry();
-      //ProducerInfo producerInfo = consumerRegistry.getProducerInfoByKey("").getRegistrationInfo().
-      UIApplication uiApp = context.getUIApplication();
-
-      ProducerConfiguration producerConfiguration = configService.getConfiguration();
-
-      try
-      {
+         UIWsrpProducerEditor source = event.getSource();
+         ProducerConfigurationService service = source.getService();
+         ProducerConfiguration producerConfiguration = service.getConfiguration();
          ProducerRegistrationRequirements registrationRequirements = producerConfiguration.getRegistrationRequirements();
-         registrationRequirements.setRegistrationRequiredForFullDescription(Boolean.parseBoolean(getUIFormCheckBoxInput(REG_REQUIRED_FOR_DESCRIPTION).getValue().toString()));
-         producerConfiguration.setUsingStrictMode(Boolean.parseBoolean(getUIFormCheckBoxInput(STRICT_MODE).getValue().toString()));
+         registrationRequirements.setRegistrationRequiredForFullDescription(Boolean.parseBoolean(source.regReqForDesc.getValue().toString()));
+         producerConfiguration.setUsingStrictMode(Boolean.parseBoolean(source.strictMode.getValue().toString()));
 
-         boolean requiresReg = Boolean.parseBoolean(getUIFormCheckBoxInput(REQUIRES_REGISTRATION).getValue().toString());
+         boolean requiresReg = Boolean.parseBoolean(source.regRequired.getValue().toString());
          registrationRequirements.setRegistrationRequired(requiresReg);
-         /*if (registrationDetails != null)
+         if (requiresReg)
          {
-            registrationRequirements.reloadPolicyFrom(registrationDetails.getUIStringInput(POLICY_CLASS).getValue(),
-               registrationDetails.getUIStringInput(VALIDATOR_CLASS).getValue());
-         }*/
+            registrationRequirements.reloadPolicyFrom(source.policy.getValue(), source.validator.getValue());
+         }
 
-         configService.saveConfiguration();
-         uiApp.addMessage(new ApplicationMessage("Producer Successfully Changed", null));
-      }
-      catch (Exception e)
-      {
-         uiApp.addMessage(new ApplicationMessage("Producer Modification Error", null, ApplicationMessage.ERROR));
-         e.printStackTrace();
-      }
+         try
+         {
+            service.saveConfiguration();
+         }
+         catch (Exception e)
+         {
+            UIApplication uiApp = event.getRequestContext().getUIApplication();
+            uiApp.addMessage(new ApplicationMessage("Producer Modification Error", null, ApplicationMessage.ERROR));
+            e.printStackTrace();
+         }
 
-      return true;
+         source.init();
+      }
    }
 
-   static public class EditPropertyActionListener extends EventListener<UIWsrpProducerOverview>
+   static public class EditPropertyActionListener extends EventListener<UIWsrpProducerEditor>
    {
-      public void execute(Event<UIWsrpProducerOverview> event) throws Exception
+      public void execute(Event<UIWsrpProducerEditor> event) throws Exception
       {
-         UIWsrpProducerOverview producerOverview = event.getSource();
-         UIApplication uiApp = event.getRequestContext().getUIApplication();
-         UIPopupWindow popup = producerOverview.getChild(UIPopupWindow.class);
+         UIWsrpProducerEditor source = event.getSource();
+         UIPopupWindow popup = source.getChild(UIPopupWindow.class);
          UIWsrpProducerPropertyEditor editor = (UIWsrpProducerPropertyEditor)popup.getUIComponent();
          String id = event.getRequestContext().getRequestParameter(OBJECTID);
          try
          {
-            editor.setRegistrationPropertyDescription(producerOverview.getProducerConfigurationService().getConfiguration().getRegistrationRequirements().getRegistrationPropertyWith(id));
+            editor.setRegistrationPropertyDescription(source.getService().getConfiguration().getRegistrationRequirements().getRegistrationPropertyWith(id));
          }
          catch (Exception e)
          {
@@ -286,19 +298,19 @@ public class UIWsrpProducerEditor extends UIForm
       }
    }
 
-   static public class DeletePropertyActionListener extends EventListener<UIWsrpProducerOverview>
+   static public class DeletePropertyActionListener extends EventListener<UIWsrpProducerEditor>
    {
-      public void execute(Event<UIWsrpProducerOverview> event)
+      public void execute(Event<UIWsrpProducerEditor> event)
       {
-         UIWsrpProducerOverview producerOverview = event.getSource();
+         UIWsrpProducerEditor source = event.getSource();
          UIApplication uiApp = event.getRequestContext().getUIApplication();
-         UIPopupWindow popup = producerOverview.getChild(UIPopupWindow.class);
-         UIWsrpProducerPropertyEditor editor = (UIWsrpProducerPropertyEditor)popup.getUIComponent();
+         UIPopupWindow popup = source.getChild(UIPopupWindow.class);
          String id = event.getRequestContext().getRequestParameter(OBJECTID);
          try
          {
-            producerOverview.getProducerConfigurationService().getConfiguration().getRegistrationRequirements().removeRegistrationProperty(id);
-            producerOverview.getProducerConfigurationService().saveConfiguration();
+            ProducerConfigurationService service = source.getService();
+            service.getConfiguration().getRegistrationRequirements().removeRegistrationProperty(id);
+            service.saveConfiguration();
          }
          catch (Exception e)
          {
@@ -309,12 +321,12 @@ public class UIWsrpProducerEditor extends UIForm
       }
    }
 
-   static public class AddPropertyActionListener extends EventListener<UIWsrpProducerOverview>
+   static public class AddPropertyActionListener extends EventListener<UIWsrpProducerEditor>
    {
-      public void execute(Event<UIWsrpProducerOverview> event) throws Exception
+      public void execute(Event<UIWsrpProducerEditor> event) throws Exception
       {
-         UIWsrpProducerOverview wsrpProducerOverview = event.getSource();
-         UIPopupWindow popup = wsrpProducerOverview.getChild(UIPopupWindow.class);
+         UIWsrpProducerEditor source = event.getSource();
+         UIPopupWindow popup = source.getChild(UIPopupWindow.class);
          UIWsrpProducerPropertyEditor editor = (UIWsrpProducerPropertyEditor)popup.getUIComponent();
 
          //reset the form
@@ -327,12 +339,17 @@ public class UIWsrpProducerEditor extends UIForm
       }
    }
 
-   @Override
-   public void processRender(WebuiRequestContext context) throws Exception
+   public static class RegistrationOnChangeActionListener extends EventListener<UIFormCheckBoxInput>
    {
-      // reset the GUI
-      init();
+      public void execute(Event<UIFormCheckBoxInput> event) throws Exception
+      {
+         UIFormCheckBoxInput source = event.getSource();
+         UIWsrpProducerEditor parent = source.getAncestorOfType(UIWsrpProducerEditor.class);
+         parent.init();
 
-      super.processRender(context);
+         //update only the parent, avoid updating the full portlet
+         event.getRequestContext().addUIComponentToUpdateByAjax(parent);
+      }
    }
+
 }

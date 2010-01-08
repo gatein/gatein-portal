@@ -1,13 +1,4 @@
-
-<%
-    import org.exoplatform.webui.core.UIComponent ;
-	import org.exoplatform.webui.form.UIFormPageIterator ;
-	import org.exoplatform.webui.form.UIFormCheckBoxInput ;
-
-%>
-
-
 <div class="<%=uicomponent.getId()%>" id="<%=uicomponent.getId()%>">
 
-  <% uicomponent.renderChildren(); %>
+   <% uicomponent.renderChildren(); %>
 </div>
