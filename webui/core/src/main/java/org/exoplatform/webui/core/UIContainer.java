@@ -1,16 +1,16 @@
 /**
  * Copyright (C) 2009 eXo Platform SAS.
- * 
+ *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation; either version 2.1 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this software; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
@@ -29,10 +29,7 @@ import org.exoplatform.webui.event.EventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by The eXo Platform SAS
- * May 7, 2006
- */
+/** Created by The eXo Platform SAS May 7, 2006 */
 @ComponentConfig(lifecycle = UIContainerLifecycle.class)
 public class UIContainer extends UIComponent
 {
@@ -52,14 +49,18 @@ public class UIContainer extends UIComponent
    public List<UIComponent> getChildren()
    {
       if (children == null)
+      {
          children = new ArrayList<UIComponent>(3);
+      }
       return children;
    }
 
    public void addChild(UIComponent uicomponent)
    {
       if (children == null)
+      {
          children = new ArrayList<UIComponent>(3);
+      }
       uicomponent.setParent(this);
       children.add(uicomponent);
    }
@@ -67,11 +68,15 @@ public class UIContainer extends UIComponent
    public UIComponent removeChildById(String id)
    {
       if (children == null)
+      {
          return null;
+      }
       for (UIComponent child : children)
       {
          if (!id.equals(child.getId()))
+         {
             continue;
+         }
          child.setParent(null);
          children.remove(child);
          return child;
@@ -82,11 +87,15 @@ public class UIContainer extends UIComponent
    public <T extends UIComponent> T removeChild(Class<T> clazz)
    {
       if (children == null)
+      {
          return null;
+      }
       for (UIComponent child : children)
       {
          if (!clazz.isInstance(child))
+         {
             continue;
+         }
          child.setParent(null);
          children.remove(child);
          return clazz.cast(child);
@@ -95,49 +104,66 @@ public class UIContainer extends UIComponent
    }
 
    // todo (julien) : this is not type safe
+
    @SuppressWarnings("unchecked")
    public <T extends UIComponent> T getChildById(String id)
    {
 
       if (children == null)
+      {
          return null;
+      }
       for (UIComponent child : children)
       {
          if (id.equals(child.getId()))
+         {
             return (T)child;
+         }
       }
       return null;
    }
 
    // todo (julien) : this is not type safe
+
    @SuppressWarnings("unchecked")
    public <T extends UIComponent> T getChild(int idx)
    {
       if (children == null)
+      {
          return null;
+      }
       if (children.size() <= idx)
+      {
          return null;
+      }
       return (T)children.get(idx);
    }
 
    public <T extends UIComponent> T getChild(Class<T> clazz)
    {
       if (children == null)
+      {
          return null;
+      }
       for (UIComponent uichild : children)
       {
          if (clazz.isInstance(uichild))
+         {
             return clazz.cast(uichild);
+         }
       }
       return null;
    }
 
    // todo (julien) : this is not type safe
+
    @SuppressWarnings("unchecked")
    public <T extends UIComponent> T replaceChild(String targetChildId, UIComponent newComponent) throws Exception
    {
       if (children == null)
+      {
          throw new Exception("Cannot  find the child : " + targetChildId);
+      }
       for (int i = 0; i < this.children.size(); i++)
       {
          UIComponent child = this.children.get(i);
@@ -172,21 +198,28 @@ public class UIContainer extends UIComponent
    }
 
    // todo (julien) : this is not type safe
+
    @SuppressWarnings("unchecked")
    public <T extends UIComponent> T findComponentById(String id)
    {
       if (getId() != null)
       {
          if (getId().equals(id))
+         {
             return (T)this;
+         }
       }
       if (children == null)
+      {
          return null;
+      }
       for (UIComponent uichild : children)
       {
          UIComponent found = uichild.findComponentById(id);
          if (found != null)
+         {
             return (T)found;
+         }
       }
       return null;
    }
@@ -206,14 +239,20 @@ public class UIContainer extends UIComponent
    public <T extends UIComponent> T findFirstComponentOfType(Class<T> type)
    {
       if (type.isInstance(this))
+      {
          return type.cast(this);
+      }
       if (children == null)
+      {
          return null;
+      }
       for (UIComponent uichild : children)
       {
          T found = uichild.findFirstComponentOfType(type);
          if (found != null)
+         {
             return found;
+         }
       }
       return null;
    }
@@ -221,9 +260,13 @@ public class UIContainer extends UIComponent
    public <T> void findComponentOfType(List<T> list, Class<T> type)
    {
       if (type.isInstance(this) && !list.contains(this))
+      {
          list.add(type.cast(this));
+      }
       if (children == null)
+      {
          return;
+      }
       for (UIComponent uichild : children)
       {
          uichild.findComponentOfType(list, type);
@@ -236,9 +279,13 @@ public class UIContainer extends UIComponent
       for (UIComponent child : list)
       {
          if (child.getId().equals(id))
+         {
             child.setRendered(true);
+         }
          else
+         {
             child.setRendered(false);
+         }
       }
    }
 
@@ -248,9 +295,13 @@ public class UIContainer extends UIComponent
       for (UIComponent child : list)
       {
          if (type.isInstance(child))
+         {
             child.setRendered(true);
+         }
          else
+         {
             child.setRendered(false);
+         }
       }
    }
 
@@ -273,20 +324,12 @@ public class UIContainer extends UIComponent
 
    public void renderChild(String id) throws Exception
    {
-      UIComponent uiChild = getChildById(id);
-      if (uiChild.isRendered())
-      {
-         uiChild.processRender((WebuiRequestContext)WebuiRequestContext.getCurrentInstance());
-      }
+      renderChild(getChildById(id));
    }
 
    public <T extends UIComponent> void renderChild(Class<T> clazz) throws Exception
    {
-      UIComponent uiChild = getChild(clazz);
-      if (uiChild.isRendered())
-      {
-         uiChild.processRender((WebuiRequestContext)WebuiRequestContext.getCurrentInstance());
-      }
+      renderChild(getChild(clazz));
    }
 
    public void renderUIComponent(UIComponent uicomponent) throws Exception
@@ -296,10 +339,14 @@ public class UIContainer extends UIComponent
 
    public void renderChild(int index) throws Exception
    {
-      UIComponent uiChild = getChild(index);
-      if (uiChild.isRendered())
+      renderChild(getChild(index));
+   }
+
+   public void renderChild(UIComponent child) throws Exception
+   {
+      if (child.isRendered())
       {
-         uiChild.processRender((WebuiRequestContext)WebuiRequestContext.getCurrentInstance());
+         child.processRender((WebuiRequestContext)WebuiRequestContext.getCurrentInstance());
       }
    }
 
@@ -315,7 +362,9 @@ public class UIContainer extends UIComponent
       for (UIComponent child : list)
       {
          if (child.isRendered())
+         {
             child.processRender(context);
+         }
       }
    }
 
@@ -327,7 +376,9 @@ public class UIContainer extends UIComponent
          UIContainer uiContainer = event.getSource();
          String renderTab = context.getRequestParameter(UIComponent.OBJECTID);
          if (renderTab == null)
+         {
             return;
+         }
          UIComponent uiComp = uiContainer.findComponentById(renderTab);
          if (uiComp != null)
          {
