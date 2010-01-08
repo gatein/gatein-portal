@@ -69,8 +69,7 @@ public class UIContainer extends UIComponent
       children.add(uicomponent);
    }
 
-   @SuppressWarnings("unchecked")
-   public <T extends UIComponent> T removeChildById(String id)
+   public UIComponent removeChildById(String id)
    {
       if (children == null)
          return null;
@@ -80,7 +79,7 @@ public class UIContainer extends UIComponent
             continue;
          child.setParent(null);
          children.remove(child);
-         return (T)child;
+         return child;
       }
       return null;
    }
