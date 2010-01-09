@@ -21,12 +21,9 @@
     Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
     02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
-    --><title>RTL Support (Right To Left)</title>
+    --><title>Right To Left Support</title>
 	<para>
-		GateIn Portal supports RTL (Right to Left) to meet the demand of Arabian customers who want to use the Portal by their own language for more convenient and easy to use. When you change from other languages to Arabic or set the displaying language as Arabic, the displaying on Portal will be changed to Right to Left (RTL) direction because Arabian usually read from Right to Left.
-	</para>
-	<para>
-		Some screen shots of Portal with RTL:
+		&PRODUCT; supports Right to Left (RTL) languages.
 	</para>
 	<mediaobject>
 		<imageobject>

@@ -77,7 +77,7 @@
 						<term>Never</term> 
 							<listitem>
 								<para>
-									It never happens even if an application requests it &lt;-- <emphasis role="bold"> WHAT never happens?</emphasis>
+									The session will never timeout, even if an application requests it.
 								</para>
 							</listitem>
 					</varlistentry>
@@ -85,7 +85,7 @@
 						<term>On-demand</term> 
 							<listitem>
 								<para>
-									It starts to be used as soon as an application requests it
+									The session will timeout if an application requests it
 								</para>
 							</listitem>
 					</varlistentry>
@@ -93,7 +93,7 @@
 						<term>Always</term> 
 							<listitem>
 								<para>
-									It's always enabled
+									The session will time out after a set period.
 								</para>
 							</listitem>
 					</varlistentry>

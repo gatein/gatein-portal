@@ -64,7 +64,7 @@
 							<term>Password</term>
 							<listitem>
 								<para>
-									The *Password* must be between 6 and 30 characters and can contain space characters. Since Portal 2.6, space characters are either at the beginning or in the end can be counted.
+									The password must be between 6 and 30 characters and can contain spaces.
 								</para>
 							</listitem>
 						</varlistentry>

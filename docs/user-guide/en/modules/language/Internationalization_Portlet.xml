@@ -23,7 +23,7 @@
 
     --><title>Internationalization Portlet</title>
 	<para>
-		This portlet is used to define a word or a phrase of the current language to an expected language. The form of this portlet is like:
+		This portlet is used to define a word or a phrase of the current language in another language.
 	</para>
 	<mediaobject>
 		<imageobject>
@@ -31,7 +31,7 @@
 		</imageobject>
 	</mediaobject>
 	<para>
-		Each resource supports a language. So, you can define a word or a phrase according to the supported language.
+		Each resource supports a language. You can define a word or a phrase according to the supported language.
 	</para>
 
 	<section id="sect-User_Guide-Internationalization_Portlet-Add_a_new_Resource">
@@ -59,7 +59,7 @@
 					<term>Language</term>
 						<listitem>
 						<para>
-							The language that this resource 'll support. This field is required.
+							The language that this resource will support. This field is required.
 						</para>
 						</listitem>
 					</varlistentry>
@@ -89,7 +89,10 @@
 	<section id="sect-User_Guide-Internationalization_Portlet-View_and_Edit_a_Resource">
 		<title>View and Edit a Resource</title>
 		<para>
-			Click the magnifying icon !images/GlassIcon.png! corresponding to resource which you want to view. On the view form, you also can edit information again by clicking the <emphasis role="bold">Edit</emphasis> button. You only can change <emphasis role="bold">Resource</emphasis> field, then click the <emphasis role="bold">Save</emphasis> button to accept changes or click the <emphasis role="bold">Cancel</emphasis> button to quit without saving any changes.
+			Click the magnifying glass icon corresponding to the resource which you want to view. On the view form, you also can edit information by clicking the <emphasis role="bold">Edit</emphasis> button. You can only edit the <emphasis role="bold">Resource</emphasis> field.
+		</para>
+		<para>
+			Click the <emphasis role="bold">Save</emphasis> button to submit your changes or click the <emphasis role="bold">Cancel</emphasis> button to quit without saving any changes.
 		</para>
 		<mediaobject>
 			<imageobject>
@@ -101,14 +104,14 @@
 	<section id="sect-User_Guide-Internationalization_Portlet-Delete_a_Resource">
 		<title>Delete a Resource</title>
 		<para>
-			Click the trash can icon!images/DeleIcon.png! corresponding to the resource which you want to delete. There 'll be a confirmation message, click the <emphasis role="bold">OK</emphasis> button to confirm deleting and the <emphasis role="bold">Cancel</emphasis> button to quit.
+			Click the trash can icon corresponding to the resource which you want to delete. When prompted by the confirmation message, click the <emphasis role="bold">OK</emphasis> button to confirm the deletion or the <emphasis role="bold">Cancel</emphasis> button to quit.
 		</para>
 	</section>
 	
 	<section id="sect-User_Guide-Internationalization_Portlet-Search_a_Resource">
 		<title>Search a Resource</title>
 		<para>
-			The <emphasis role="bold">Search Resource</emphasis> form displays directly on the portlet:
+			The <emphasis role="bold">Search Resource</emphasis> form displays directly on the portlet.
 		</para>
 		<mediaobject>
 			<imageobject>
@@ -116,7 +119,7 @@
 			</imageobject>
 		</mediaobject>
 		<para>
-			Enter the name of the resource which you want to search and select the supported language. Click the <emphasis role="bold">Search</emphasis> button to perform searching and displaying a list of the expected Resource.
+			Enter the name of the resource which you want to search and select the supported language. Click the <emphasis role="bold">Search</emphasis> button to perform the search and display a list of the matching Resources.
 		</para>
 	</section>
 

@@ -23,17 +23,97 @@
 
      --><title>Manage Portals</title>
 	<para>
-		You can easily manage a portal by editing or deleting it.
+		Portals can easily be managed by editing or deleting.
 	</para>
 	<section id="sect-User_Guide-Manage_Portals-Edit_a_Portal">
 		<title>Edit a Portal</title>
 		<para>
-			You can change information of the current using portal such as properties or layout. However, you must have the edit right given by an Admininstrator. When you have edit right, follow these steps to edit the current portal:
+			You can change aspects of the current using portal, such as properties or layout if you have the edit right (granted by an Admininstrator).
+		</para>
+		<para>
+			If you have edit rights, follow these steps to edit the current portal:
 		</para>
 		<procedure>
+				<step>
+					<para>
+						Go to <emphasis role="bold">Editor</emphasis> on the Toolbar and click <emphasis role="bold">Edit Site Layout</emphasis>.
+				</para>
+				<mediaobject>
+					<imageobject>
+						<imagedata fileref="images/EditPortal.png" format="PNG" width="444" />
+					</imageobject>
+				</mediaobject>
+				</step>
+				<step>
+				<para>
+					Click the Properties button in the <emphasis role="bold">Edit Inline Composer</emphasis>. The edit Form of the portal will be shown:
+				</para>
+				<mediaobject>
+					<imageobject>
+						<imagedata fileref="images/EditPortal2.6New.png" format="PNG" width="444" />
+					</imageobject>
+				</mediaobject>
+				</step>
+				<step>
+				<para>
+					Change the properties of the current portal.
+				</para>
+				</step>
+				<step>
+				<para>
+					Click the <emphasis role="bold">Propertites</emphasis> tab. Select an option for <emphasis role="bold">Keep session alive</emphasis>
+				</para>
+				<para>
+					This option controls how long your session is kept alive. There are 3 options:
+				</para>
+				<variablelist>
+					<varlistentry>
+						<term>Never</term> 
+							<listitem>
+								<para>
+									The session will never timeout, even if an application requests it.
+								</para>
+							</listitem>
+					</varlistentry>
+					<varlistentry>
+						<term>On-demand</term> 
+							<listitem>
+								<para>
+									The session will timeout if an application requests it
+								</para>
+							</listitem>
+					</varlistentry>
+					<varlistentry>
+						<term>Always</term> 
+							<listitem>
+								<para>
+									The session will time out after a set period.
+								</para>
+							</listitem>
+					</varlistentry>
+				</variablelist>
+				</step>
+				<step>
+				<para>
+					Set permissions for the portal:
+				</para>
+				<para>
+					To change any permission, click the <emphasis role="bold">Select Permission</emphasis> button and then select a group with the Membership type you want. Only one group can have the Edit Permission of the portal.
+				</para>
+				<para>
+					You can set the Edit Permission for the portal when you create or edit it.
+				</para>
+				</step>
+				<step>
+				<para>
+					Click the <emphasis role="bold">Save</emphasis> button to accept changes or the <emphasis role="bold">Cancel</emphasis> button to quit.
+				</para>
+				</step>
+		</procedure>
+<!--		<procedure>
 			<step>
 				<para>
-					Go to <emphasis role="bold">GateIn Start</emphasis> -&gt; <emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Advanced</emphasis> --&gt; <emphasis role="bold">Edit Current Portal</emphasis>. A form to edit the current portal will appear:
+					Go to <emphasis role="bold">GateIn Start</emphasis> -&gt; <emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Advanced</emphasis> &gt; <emphasis role="bold">Edit Current Portal</emphasis>. A form to edit the current portal will appear:
 				</para>
 				<mediaobject>
 					<imageobject>
@@ -107,86 +187,6 @@
 				</varlistentry>
 			</variablelist>
 			</step>
-	<!--	<informaltable colsep="0" frame="none" rowsep="0">
-			<tgroup cols="2">
-				<colspec align="center"></colspec>
-				<colspec align="center"></colspec>
-				<tbody>
-					<row>
-						<entry>
-							<emphasis role="bold"> Indicator </emphasis>
-						</entry>
-						<entry>
-							<emphasis role="bold"> Meaning </emphasis>
-						</entry>
-					</row>
-					<row>
-						<entry>
-							!images/preview.png!
-						</entry>
-						<entry>
-							*Preview page*: allows viewing node's page in preview mode.
-						</entry>
-					</row>
-					<row>
-						<entry>
-							!images/EditPage.png!
-						</entry>
-						<entry>
-							*Edit page properties*: allows editing node's page properties.
-						</entry>
-					</row>
-					<row>
-						<entry>
-							!images/ShowContainer.png!
-						</entry>
-						<entry>
-							*Show container*: allows listing all existing containers when editing node's page.
-						</entry>
-					</row>
-					<row>
-						<entry>
-							!images/ShowPortlet.png!
-						</entry>
-						<entry>
-							*Show portlet*: allows listing all existing portlets when editing node's page.
-						</entry>
-					</row>
-					<row>
-						<entry>
-							!images/Savepage.png!
-						</entry>
-						<entry>
-							*Save page*: allows saving changes of page when editing node's page.
-						</entry>
-					</row>
-					<row>
-						<entry>
-							!images/RollBack.png!
-						</entry>
-						<entry>
-							*Rollback*: allows canceling all changes that have not been saved.
-						</entry>
-					</row>
-					<row>
-						<entry>
-							!images/Abort.png!
-						</entry>
-						<entry>
-							*Abort*: allows canceling all changes that have not been saved and escaping Edit page and navigation form.
-						</entry>
-					</row>
-					<row>
-						<entry>
-							!images/Finish1.png!
-						</entry>
-						<entry>
-							*Finish*: allows saving all changes and escaping Edit page and navigation form.
-						</entry>
-					</row>
-				</tbody>
-			</tgroup>
-		</informaltable> -->
 			<step>
 				<para>
 					Click!images/EditPage.png! icon to edit portal properties.
@@ -207,76 +207,8 @@
 					Click!images/Savepage.png! icon to save changes.
 				</para>
 			</step>
-	</procedure>
-	<!--	<orderedlist id="orde-User_Guide-Edit_a_Portal-For_GateIn_Portal_2.6">
-			<title>For GateIn Portal 2.6</title>
-			<para>
-				You must have the edit right to change information of the current using portal:
-			</para>
-			<listitem>
-				<para>
-					1. Go to <emphasis role="bold">Editor</emphasis> on the Toolbar -&gt;click <emphasis role="bold">Edit Site Layout</emphasis>.
-				</para>
-				<mediaobject>
-					<imageobject>
-						<imagedata fileref="images/EditPortal.png" format="PNG" width="444" />
-					</imageobject>
-				</mediaobject>
-			</listitem>
-			<listitem>
-				<para>
-					2. Click the!images/PortalProperties.png! button in the <emphasis role="bold">Edit Inline Composer</emphasis>. The edit Form of the portal will be shown:
-				</para>
-				<mediaobject>
-					<imageobject>
-						<imagedata fileref="images/EditPortal2.6New.png" format="PNG" width="444" />
-					</imageobject>
-				</mediaobject>
-			</listitem>
-			<listitem>
-				<para>
-					3. Change the properties of the current portal.
-				</para>
-			</listitem>
-			<listitem>
-				<para>
-					4. Click the <emphasis role="bold">Propertites</emphasis> tab. Select an option for <emphasis role="bold">Keep session alive</emphasis> that means keeping the working session for a long time to avoid the working time out. There are 3 options:
-				</para>
-				<itemizedlist>
-					<listitem>
-						<para>
-							Never : it never happens even if an application requests it.
-						</para>
-					</listitem>
-					<listitem>
-						<para>
-							On-demand : it starts to be used as soon as an application requests it.
-						</para>
-					</listitem>
-					<listitem>
-						<para>
-							Always: it's always enabled (which has a cost but the administrator will be aware of that).
-						</para>
-					</listitem>
-				</itemizedlist>
-			</listitem>
-			<listitem>
-				<para>
-					5. Set permissions for a portal:
-				</para>
-				<para>
-					To change any permission, click the <emphasis role="bold">Select Permission</emphasis> button and then select a group with the Membership type you want. Only one group can have the Edit Permission of the portal.
-				</para>
-				<para>
-					You can set the Edit Permission for the portal when you create or edit it.
-				</para>
-			</listitem>
-			<listitem>
-				<para>
-					6. Click the <emphasis role="bold">Save</emphasis> button to accept changes or the <emphasis role="bold">Cancel</emphasis> button to quit.
-				</para>
-			</listitem>
-		</orderedlist> -->
+	</procedure> -->
+
 	</section>
 	
 	<section id="sect-User_Guide-Manage_Portals-Delete_a_Portal">
@@ -296,7 +228,7 @@
 			</step>
 			<step>
 				<para>
-					Click the trash can !images/deleteIcon.png! icon in the row of the portal you want to delete in the portal list.
+					Click the trash can icon in the row of the portal you want to delete in the portal list.
 				</para>
 			</step>
 			<step>
@@ -316,7 +248,7 @@
 			</step>
 			<step>
 				<para>
-					Click on!images/DeletePortal2.6.png! .The confirmation message will appear:
+					Click on the Delete icon.The confirmation message will appear.
 				</para>
 			</step>
 			<step>
