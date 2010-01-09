@@ -36,6 +36,7 @@ import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
+import org.exoplatform.webui.form.UIFormInputBase;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
 import org.gatein.common.util.ParameterValidation;
@@ -54,26 +55,33 @@ public class UIWsrpConsumerEditor extends UIForm
    protected static final String CACHE_EXPIRATION = "Seconds before cache expiration: ";
    protected static final String TIMEOUT = "Milliseconds before timeout: ";
    protected static final String WSDL_URL = "WSDL URL: ";
+   private UIFormInputBase<String> consumerName;
+   private UIFormStringInput cache;
+   private UIFormStringInput timeoutWS;
+   private UIFormStringInput wsdl;
 
    public UIWsrpConsumerEditor() throws Exception
    {
 
-      addUIFormInput(new UIFormStringInput(CONSUMER_NAME, CONSUMER_NAME, null).addValidator(MandatoryValidator.class));
-      addUIFormInput(new UIFormStringInput(CACHE_EXPIRATION, CACHE_EXPIRATION, null));
-      addUIFormInput(new UIFormStringInput(TIMEOUT, TIMEOUT, null));
-      addUIFormInput(new UIFormStringInput(WSDL_URL, WSDL_URL, null));
-      //addChild(UIWsrpEndpointConfigForm.class,null,null);
+      consumerName = new UIFormStringInput(CONSUMER_NAME, CONSUMER_NAME, null).addValidator(MandatoryValidator.class);
+      addUIFormInput(consumerName);
+      cache = new UIFormStringInput(CACHE_EXPIRATION, CACHE_EXPIRATION, null);
+      addUIFormInput(cache);
+      timeoutWS = new UIFormStringInput(TIMEOUT, TIMEOUT, null);
+      addUIFormInput(timeoutWS);
+      wsdl = new UIFormStringInput(WSDL_URL, WSDL_URL, null);
+      addUIFormInput(wsdl);
    }
 
    private String getConsumerName()
    {
-      return getUIStringInput(CONSUMER_NAME).getValue();
+      return consumerName.getValue();
    }
 
    private Integer getCacheExpiration()
    {
       Integer cacheExp = 0;
-      String cacheExpString = getUIStringInput(CACHE_EXPIRATION).getValue();
+      String cacheExpString = cache.getValue();
       if (cacheExpString != null)
       {
          cacheExp = Integer.parseInt(cacheExpString);
@@ -84,7 +92,7 @@ public class UIWsrpConsumerEditor extends UIForm
    private Integer getTimeout()
    {
       int timeout = ManageableServiceFactory.DEFAULT_TIMEOUT_MS;
-      String timeoutString = getUIStringInput(TIMEOUT).getValue();
+      String timeoutString = timeoutWS.getValue();
       if (!ParameterValidation.isNullOrEmpty(timeoutString))
       {
          timeout = Integer.parseInt(timeoutString);
@@ -95,7 +103,7 @@ public class UIWsrpConsumerEditor extends UIForm
 
    private String getWSDLURL()
    {
-      return getUIStringInput(WSDL_URL).getValue();
+      return wsdl.getValue();
    }
 
    private Boolean newConsumer;
@@ -112,37 +120,27 @@ public class UIWsrpConsumerEditor extends UIForm
 
    public void setConsumer(WSRPConsumer consumer) throws Exception
    {
-      //UIWsrpEndpointConfigForm uiWsrpEndpointConfigForm = getChild(UIWsrpEndpointConfigForm.class);
       if (consumer == null)
       {
-         getUIStringInput(CONSUMER_NAME).setEditable(UIFormStringInput.ENABLE);
+         consumerName.setEditable(UIFormStringInput.ENABLE);
          setNewConsumer(true);
          return;
       }
-      getUIStringInput(CONSUMER_NAME).setEditable(UIFormStringInput.ENABLE);
+      consumerName.setEditable(UIFormStringInput.ENABLE);
 
-      getUIStringInput(CONSUMER_NAME).setValue(consumer.getProducerId());
+      consumerName.setValue(consumer.getProducerId());
       ProducerInfo producerInfo = consumer.getProducerInfo();
-      getUIStringInput(CACHE_EXPIRATION).setValue(producerInfo.getExpirationCacheSeconds().toString());
-      getUIStringInput(TIMEOUT).setValue("" + producerInfo.getEndpointConfigurationInfo().getWSOperationTimeOut());
-      getUIStringInput(WSDL_URL).setValue(producerInfo.getEndpointConfigurationInfo().getWsdlDefinitionURL());
+      cache.setValue(producerInfo.getExpirationCacheSeconds().toString());
+      timeoutWS.setValue("" + producerInfo.getEndpointConfigurationInfo().getWSOperationTimeOut());
+      wsdl.setValue(producerInfo.getEndpointConfigurationInfo().getWsdlDefinitionURL());
       setNewConsumer(false);
-      //invokeGetBindingBean(consumer.getProducerInfo());
-
-      //uiWsrpEndpointConfigForm.setProducerInfo(consumer.getProducerInfo());
-      //uiWsrpEndpointConfigForm.invokeGetBindingBean(consumer.getProducerInfo().getEndpointConfigurationInfo());
-      //bindingFields(consumer);
    }
 
    private void bindingFields(WSRPConsumer consumer)
    {
-      //ExoContainer manager = ExoContainerContext.getCurrentContainer();
-      //ConsumerRegistry consumerRegistry = (ConsumerRegistry)manager.getComponentInstanceOfType(ConsumerRegistry.class);
       ProducerInfo producerInfo = consumer.getProducerInfo();
       producerInfo.setId(getConsumerName());
       producerInfo.setExpirationCacheSeconds(getCacheExpiration());
-      //EndpointConfigurationInfo ecinfo = producerInfo.getEndpointConfigurationInfo().setWsdlDefinitionURL();
-      //producerInfo.getEndpointConfigurationInfo().setWsdlDefinitionURL(getWsdlUrl());
    }
 
    static public class SaveActionListener extends EventListener<UIWsrpConsumerEditor>
@@ -213,10 +211,6 @@ public class UIWsrpConsumerEditor extends UIForm
       ExoContainer manager = ExoContainerContext.getCurrentContainer();
       ConsumerRegistry consumerRegistry = (ConsumerRegistry)manager.getComponentInstanceOfType(ConsumerRegistry.class);
       ProducerInfo producerInfo = consumerRegistry.getConsumer(getConsumerName()).getProducerInfo();
-
-      //invokeSetBindingBean(consumer.getProducerInfo());
-      //UIWsrpEndpointConfigForm uiWsrpEndpointConfigForm = getChild(UIWsrpEndpointConfigForm.class);
-      //uiWsrpEndpointConfigForm.invokeSetBindingBean(consumer.getProducerInfo().getEndpointConfigurationInfo());
 
       producerInfo.setId(getConsumerName());
       producerInfo.setExpirationCacheSeconds(getCacheExpiration());
