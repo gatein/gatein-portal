@@ -25,6 +25,7 @@ package org.gatein.portal.wsrp.state.mapping;
 
 import org.chromattic.api.annotations.PrimaryType;
 import org.chromattic.api.annotations.Property;
+import org.gatein.common.util.ParameterValidation;
 import org.gatein.wsrp.registration.LocalizedString;
 import org.gatein.wsrp.registration.RegistrationPropertyDescription;
 
@@ -67,9 +68,21 @@ public abstract class RegistrationPropertyDescriptionMapping
 
    public void initFrom(RegistrationPropertyDescription desc)
    {
-      setDescription(desc.getDescription().getValue());
-      setHint(desc.getHint().getValue());
-      setLabel(desc.getLabel().getValue());
+      LocalizedString description = desc.getDescription();
+      if (description != null)
+      {
+         setDescription(description.getValue());
+      }
+      LocalizedString hint = desc.getHint();
+      if (hint != null)
+      {
+         setHint(hint.getValue());
+      }
+      LocalizedString label = desc.getLabel();
+      if (label != null)
+      {
+         setLabel(label.getValue());
+      }
 
       // convert QNames to Strings
       setName(desc.getName().toString());
@@ -79,9 +92,21 @@ public abstract class RegistrationPropertyDescriptionMapping
    public RegistrationPropertyDescription toRegistrationPropertyDescription()
    {
       RegistrationPropertyDescription desc = new RegistrationPropertyDescription(getName(), QName.valueOf(getType()));
-      desc.setDefaultDescription(getDescription());
-      desc.setHint(new LocalizedString(getHint()));
-      desc.setLabel(new LocalizedString(getLabel()));
+      String description = getDescription();
+      if (!ParameterValidation.isNullOrEmpty(description))
+      {
+         desc.setDefaultDescription(description);
+      }
+      String hint = getHint();
+      if (!ParameterValidation.isNullOrEmpty(hint))
+      {
+         desc.setHint(new LocalizedString(hint));
+      }
+      String label = getLabel();
+      if (!ParameterValidation.isNullOrEmpty(label))
+      {
+         desc.setLabel(new LocalizedString(label));
+      }
 
       return desc;
    }
