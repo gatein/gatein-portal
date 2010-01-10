@@ -1,6 +1,6 @@
 /*
  * JBoss, a division of Red Hat
- * Copyright 2009, Red Hat Middleware, LLC, and individual
+ * Copyright 2010, Red Hat Middleware, LLC, and individual
  * contributors as indicated by the @authors tag. See the
  * copyright.txt in the distribution for a full listing of
  * individual contributors.
@@ -25,8 +25,8 @@ package org.gatein.portal.wsrp.state.consumer.mapping;
 
 import org.chromattic.api.annotations.Create;
 import org.chromattic.api.annotations.FormattedBy;
-import org.chromattic.api.annotations.PrimaryType;
 import org.chromattic.api.annotations.OneToMany;
+import org.chromattic.api.annotations.PrimaryType;
 import org.chromattic.api.annotations.Property;
 import org.exoplatform.commons.utils.Safe;
 import org.gatein.portal.wsrp.state.JCRPersister;
@@ -95,18 +95,16 @@ public abstract class RegistrationInfoMapping
       }
    }
 
-   public RegistrationInfo toRegistrationInfo()
+   RegistrationInfo toRegistrationInfo(RegistrationInfo initial)
    {
-      RegistrationInfo regInfo = new RegistrationInfo();
-
-      regInfo.setConsumerName(getConsumerName());
-      regInfo.setRegistrationHandle(getRegistrationHandle());
-      regInfo.setRegistrationState(Safe.getBytes(getRegistrationState()));
+      initial.setConsumerName(getConsumerName());
+      initial.setRegistrationHandle(getRegistrationHandle());
+      initial.setRegistrationState(Safe.getBytes(getRegistrationState()));
 
       // registration properties
       for (RegistrationPropertyMapping rpm : getRegistrationProperties())
       {
-         RegistrationProperty prop = regInfo.setRegistrationPropertyValue(rpm.getName(), rpm.getValue());
+         RegistrationProperty prop = initial.setRegistrationPropertyValue(rpm.getName(), rpm.getValue());
 
          RegistrationPropertyDescriptionMapping rpdm = rpm.getDescription();
          if (rpdm != null)
@@ -118,6 +116,6 @@ public abstract class RegistrationInfoMapping
          prop.setStatus(rpm.getStatus());
       }
 
-      return regInfo;
+      return initial;
    }
 }

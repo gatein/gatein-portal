@@ -1,6 +1,6 @@
 /*
  * JBoss, a division of Red Hat
- * Copyright 2009, Red Hat Middleware, LLC, and individual
+ * Copyright 2010, Red Hat Middleware, LLC, and individual
  * contributors as indicated by the @authors tag. See the
  * copyright.txt in the distribution for a full listing of
  * individual contributors.
@@ -26,8 +26,8 @@ package org.gatein.portal.wsrp.state.consumer.mapping;
 import org.chromattic.api.annotations.DefaultValue;
 import org.chromattic.api.annotations.Id;
 import org.chromattic.api.annotations.MappedBy;
-import org.chromattic.api.annotations.PrimaryType;
 import org.chromattic.api.annotations.OneToOne;
+import org.chromattic.api.annotations.PrimaryType;
 import org.chromattic.api.annotations.Property;
 import org.gatein.wsrp.consumer.EndpointConfigurationInfo;
 import org.gatein.wsrp.consumer.ProducerInfo;
@@ -100,11 +100,11 @@ public abstract void setAvailable(boolean available);*/
       info.setExpirationCacheSeconds(getExpirationCacheSeconds());
 
       // endpoint
-      EndpointConfigurationInfo endInfo = getEndpointInfo().toEndpointConfigurationInfo();
+      EndpointConfigurationInfo endInfo = getEndpointInfo().toEndpointConfigurationInfo(info.getEndpointConfigurationInfo());
       info.setEndpointConfigurationInfo(endInfo);
 
       // registration
-      RegistrationInfo regInfo = getRegistrationInfo().toRegistrationInfo();
+      RegistrationInfo regInfo = getRegistrationInfo().toRegistrationInfo(info.getRegistrationInfo());
       info.setRegistrationInfo(regInfo);
 
       return info;

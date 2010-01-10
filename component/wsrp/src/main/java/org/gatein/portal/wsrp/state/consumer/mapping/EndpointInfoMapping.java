@@ -1,6 +1,6 @@
 /*
  * JBoss, a division of Red Hat
- * Copyright 2009, Red Hat Middleware, LLC, and individual
+ * Copyright 2010, Red Hat Middleware, LLC, and individual
  * contributors as indicated by the @authors tag. See the
  * copyright.txt in the distribution for a full listing of
  * individual contributors.
@@ -46,10 +46,9 @@ public abstract class EndpointInfoMapping
       setWSDLURL(info.getWsdlDefinitionURL());
    }
 
-   public EndpointConfigurationInfo toEndpointConfigurationInfo()
+   EndpointConfigurationInfo toEndpointConfigurationInfo(EndpointConfigurationInfo initial)
    {
-      EndpointConfigurationInfo info = new EndpointConfigurationInfo();
-      info.setWsdlDefinitionURL(getWSDLURL());
-      return info;
+      initial.setWsdlDefinitionURL(getWSDLURL());
+      return initial;
    }
 }
