@@ -3,63 +3,59 @@
   <%
 
   %>
-  <div class="SignIn">Add New Registration Property</div>
-  <div class="FloatRight">
-    <div class="FloatLeft">
-      <div class="UserName">
+  <div class="form-title">Add New Registration Property</div>
+     <div>
+
+
         <div>
-        <!--label>Consumer Name</label-->
-        <% //uiform.renderChild(0); %>
-        <%
-          for (field in uiform.getChildren())
-          {
-            if (field.isRendered())
-            {
-        %>
-        <div>
-          <% fieldName = uicomponent.getLabel(field.getName()); %>
-          <% if (!fieldName.equals(uicomponent.getId()))
-          { %>
-          <div class="FieldLabel">
-            <% if (fieldName != null && fieldName.length() > 0)
-            { %>
-            <%=uicomponent.getLabel(field.getName())%>
-            <% } %>
+          <% //uiform.renderChild(0);  %>
+          <%
+            for (field in uiform.getChildren()) {
+              if (field.isRendered()) {
+          %>
+          <div class="form-row">
+            <label>
+              <% fieldName = uicomponent.getLabel(field.getName()); %>
+              <% if (!fieldName.equals(uicomponent.getId())) { %>
+              <span class="FieldLabel">
+                <% if (fieldName != null && fieldName.length() > 0) { %>
+                <%=uicomponent.getLabel(field.getName())%>
+                <% } %>
+              </span>
+              <% uiform.renderField(field) %>
+              <% }
+              else { %>
+              <% uiform.renderField(field) %>
+              <% } %>
+            </label>
           </div>
-          <div class="FieldComponent"><% uiform.renderField(field) %></div>
-          <% }
-          else
-          { %>
-          <div class="FieldComponent"><% uiform.renderField(field) %></div>
-          <% } %>
+          <%
+              }
+            } %>
+
         </div>
-        <%
-            }
-          } %>
+
       </div>
 
-    </div>
-    <div class="UIAction">
-      <table class="ActionContainer">
-        <tr>
-          <td>
-            <div onclick="<%=uicomponent.event("Save")%>" class="ActionButton LightBlueStyle">
-              <div class="ButtonLeft">
-                <div class="ButtonRight">
-                  <div class="ButtonMiddle">
-                    <a href="javascript:void(0);"><%=_ctx.appRes(uicomponent.getId() + ".action.Save")%></a>
+      <div class="UIAction">
+        <table class="ActionContainer">
+          <tr>
+            <td>
+              <div onclick="<%=uicomponent.event("Save")%>" class="ActionButton LightBlueStyle">
+                <div class="ButtonLeft">
+                  <div class="ButtonRight">
+                    <div class="ButtonMiddle">
+                      <a href="javascript:void(0);"><%=_ctx.appRes(uicomponent.getId() + ".action.Save")%></a>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </td>
-        </tr>
-      </table>
-    </div>
+            </td>
+          </tr>
+        </table>
+      </div>
 
-    <div class="ClearLeft"><span></span></div>
-  </div>
-  <div class="ClearRight"><span></span></div>
-  <% uiform.end() %>
-</div>
+
+    <% uiform.end() %>
+
 </div>

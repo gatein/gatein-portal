@@ -22,27 +22,213 @@
  */
 package org.exoplatform.wsrp.webui.component;
 
+import org.exoplatform.commons.utils.LazyPageList;
+import org.exoplatform.commons.utils.ListAccess;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
+import org.exoplatform.webui.config.annotation.ComponentConfigs;
+import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIContainer;
+import org.exoplatform.webui.core.UIGrid;
+import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
+import org.exoplatform.webui.event.Event;
+import org.exoplatform.webui.event.EventListener;
+import org.gatein.wsrp.producer.config.ProducerConfiguration;
 import org.gatein.wsrp.producer.config.ProducerConfigurationService;
+import org.gatein.wsrp.registration.LocalizedString;
+import org.gatein.wsrp.registration.RegistrationPropertyDescription;
+
+import javax.xml.namespace.QName;
+import java.util.*;
 
 /** @author Wesley Hales */
+@ComponentConfigs({
+@ComponentConfig(id = "RegistrationPropertySelector", type = UIGrid.class, template = "app:/groovy/wsrp/webui/component/UIWsrpGrid.gtmpl"),
 @ComponentConfig(
    lifecycle = UIApplicationLifecycle.class,
-   template = "app:/groovy/wsrp/webui/component/UIWsrpProducerOverview.gtmpl"
-)
+   template = "app:/groovy/wsrp/webui/component/UIWsrpProducerOverview.gtmpl",
+    events = {
+     @EventConfig(listeners = UIWsrpProducerOverview.AddPropertyActionListener.class),
+     @EventConfig(listeners = UIWsrpProducerOverview.EditActionListener.class),
+     @EventConfig(listeners = UIWsrpProducerOverview.DeleteActionListener.class)
+  }
+)})
+
 public class UIWsrpProducerOverview extends UIContainer
 {
+    private static String[] FIELDS = {"key","name", "description", "label", "hint"};
+   private static String[] SELECT_ACTIONS = {"Add", "Edit", "Delete"};
+
+    public static final String REGISTRATION_PROPERTIES = "RegistrationPropertySelector";
+   private static final String REGISTRATION_PROPERTIES_ITERATOR = "ProducerPropPageIterator";
+    private UIGrid registrationProperties;
+    private ProducerConfigurationService configService;
    private UIWsrpProducerEditor producerForm;
 
    public UIWsrpProducerOverview() throws Exception
    {
-      producerForm = createUIComponent(UIWsrpProducerEditor.class, null, "Producer Editor");
-      addChild(producerForm);
+       configService = Util.getUIPortalApplication().getApplicationComponent(ProducerConfigurationService.class);
+       ProducerConfiguration configuration = configService.getConfiguration();
+      //producerForm = createUIComponent();
+      addChild(UIWsrpProducerEditor.class, null, null);
+       // registration properties
+      registrationProperties = addChild(UIGrid.class, REGISTRATION_PROPERTIES, REGISTRATION_PROPERTIES);
+      //configure the edit and delete buttons based on an id from the data list - this will also be passed as param to listener
+      registrationProperties.configure("key", FIELDS, SELECT_ACTIONS);
+      registrationProperties.getUIPageIterator().setId(REGISTRATION_PROPERTIES_ITERATOR);
+      //registrationDetails.addChild(registrationProperties.getUIPageIterator());
+      registrationProperties.getUIPageIterator().setRendered(false);
+
+      Map<QName, RegistrationPropertyDescription> regProps = configuration.getRegistrationRequirements().getRegistrationProperties();
+      registrationProperties.getUIPageIterator().setPageList(createPageList(getPropertyList(regProps)));
+
+       //add the popup for property edit and adding new properties
+      UIPopupWindow popup = addChild(UIPopupWindow.class, null, null);
+      popup.setWindowSize(400, 300);
+      UIWsrpProducerPropertyEditor propertyForm = createUIComponent(UIWsrpProducerPropertyEditor.class, null, "Producer Property Editor");
+      popup.setUIComponent(propertyForm);
+      popup.setRendered(false);
+       
    }
+
+    private List<RegistrationPropertyDescription> getPropertyList(Map<QName, RegistrationPropertyDescription> descriptions) throws Exception
+   {
+      Comparator<RegistrationPropertyDescription> descComparator = new Comparator<RegistrationPropertyDescription>()
+      {
+         public int compare(RegistrationPropertyDescription o1, RegistrationPropertyDescription o2)
+         {
+            return o1.getName().toString().compareTo(o2.getName().toString());
+         }
+      };
+       List<RegistrationPropertyDescription> result = new ArrayList<RegistrationPropertyDescription>();
+        for (Object o : descriptions.entrySet()){
+         Map.Entry entry = (Map.Entry)o;
+          RegistrationPropertyDescription rpd = (RegistrationPropertyDescription)entry.getValue();
+          result.add(rpd);
+
+        }
+
+
+      //List<RegistrationPropertyDescription> result = new ArrayList<RegistrationPropertyDescription>(descriptions.values());
+      //Collections.sort(result, descComparator);
+      return result;
+   }
+
+    private LazyPageList<RegistrationPropertyDescription> createPageList(final List<RegistrationPropertyDescription> pageList)
+   {
+      return new LazyPageList<RegistrationPropertyDescription>(new ListAccess<RegistrationPropertyDescription>()
+      {
+
+         public int getSize() throws Exception
+         {
+            return pageList.size();
+         }
+
+         public RegistrationPropertyDescription[] load(int index, int length) throws Exception, IllegalArgumentException
+         {
+            RegistrationPropertyDescription[] pcs = new RegistrationPropertyDescription[pageList.size()];
+
+            if (index < 0)
+            {
+               throw new IllegalArgumentException("Illegal index: index must be a positive number");
+            }
+
+            if (length < 0)
+            {
+               throw new IllegalArgumentException("Illegal length: length must be a positive number");
+            }
+
+            if (index + length > pageList.size())
+            {
+               throw new IllegalArgumentException(
+                  "Illegal index or length: sum of the index and the length cannot be greater than the list size");
+            }
+
+            for (int i = 0; i < length; i++)
+            {
+               pcs[i] = pageList.get(i + index);
+            }
+
+            return pcs;
+         }
+
+      }, 10);
+   }
+
+static public class EditActionListener extends EventListener<UIWsrpProducerOverview>
+   {
+      public void execute(Event<UIWsrpProducerOverview> event) throws Exception
+      {
+         UIWsrpProducerOverview source = event.getSource();
+         UIPopupWindow popup = source.getChild(UIPopupWindow.class);
+         UIWsrpProducerPropertyEditor editor = (UIWsrpProducerPropertyEditor)popup.getUIComponent();
+         String id = event.getRequestContext().getRequestParameter(OBJECTID);
+         try
+         {
+            editor.setRegistrationPropertyDescription(source.getService().getConfiguration().getRegistrationRequirements().getRegistrationPropertyWith(id));
+         }
+         catch (Exception e)
+         {
+            e.printStackTrace();
+         }
+         popup.setUIComponent(editor);
+         popup.setRendered(true);
+         popup.setShow(true);
+
+      }
+   }
+
+   static public class DeleteActionListener extends EventListener<UIWsrpProducerOverview>
+   {
+      public void execute(Event<UIWsrpProducerOverview> event)
+      {
+         UIWsrpProducerOverview source = event.getSource();
+         UIApplication uiApp = event.getRequestContext().getUIApplication();
+         UIPopupWindow popup = source.getChild(UIPopupWindow.class);
+         String id = event.getRequestContext().getRequestParameter(OBJECTID);
+         try
+         {
+            ProducerConfigurationService service = source.getService();
+            service.getConfiguration().getRegistrationRequirements().removeRegistrationProperty(id);
+            service.saveConfiguration();
+         }
+         catch (Exception e)
+         {
+            e.printStackTrace();
+            uiApp.addMessage(new ApplicationMessage("Failed to delete Producer Property. Cause: " + e.getCause(), null, ApplicationMessage.ERROR));
+         }
+
+      }
+   }
+
+   static public class AddPropertyActionListener extends EventListener<UIWsrpProducerOverview>
+   {
+      public void execute(Event<UIWsrpProducerOverview> event) throws Exception
+      {
+         UIWsrpProducerOverview source = event.getSource();
+         UIPopupWindow popup = source.getChild(UIPopupWindow.class);
+         UIWsrpProducerPropertyEditor editor = (UIWsrpProducerPropertyEditor)popup.getUIComponent();
+
+         //reset the form
+         editor.setRegistrationPropertyDescription(null);
+         popup.setRendered(true);
+         popup.setShow(true);
+         popup.setShowCloseButton(true);
+         //popup.setShowMask(true);
+
+      }
+   }
+
+    ProducerConfigurationService getService()
+   {
+      return configService;
+   }
+
 
    public ProducerConfigurationService getProducerConfigurationService() throws Exception
    {
