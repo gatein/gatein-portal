@@ -1,6 +1,6 @@
 /*
  * JBoss, a division of Red Hat
- * Copyright 2009, Red Hat Middleware, LLC, and individual
+ * Copyright 2010, Red Hat Middleware, LLC, and individual
  * contributors as indicated by the @authors tag. See the
  * copyright.txt in the distribution for a full listing of
  * individual contributors.
@@ -25,8 +25,8 @@ package org.gatein.portal.wsrp.state.consumer.mapping;
 
 import org.chromattic.api.annotations.Create;
 import org.chromattic.api.annotations.MappedBy;
-import org.chromattic.api.annotations.PrimaryType;
 import org.chromattic.api.annotations.OneToOne;
+import org.chromattic.api.annotations.PrimaryType;
 import org.chromattic.api.annotations.Property;
 import org.gatein.portal.wsrp.state.mapping.RegistrationPropertyDescriptionMapping;
 import org.gatein.wsrp.consumer.RegistrationProperty;
@@ -59,8 +59,6 @@ public abstract class RegistrationPropertyMapping
 
    @Create
    public abstract RegistrationPropertyDescriptionMapping createDescription();
-
-   // todo: this should really be an enum…
 
    @Property(name = "status")
    public abstract RegistrationProperty.Status getStatus();
