@@ -53,6 +53,8 @@ import java.util.Map;
 public class ConfigurationManager
 {
    /**
+    * todo (julien) : this map should be synchronized somehow
+    *
     * The components of which we manage the configuration
     */
    private Map<String, Component> configs_ = new HashMap<String, Component>();
