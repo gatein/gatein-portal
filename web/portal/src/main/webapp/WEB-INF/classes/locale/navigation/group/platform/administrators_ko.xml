@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+   <administration>
+      <title>관리</title>
+      <application-registry>애플리케이션 레지스트리</application-registry>
+      <newAccount>계정 생성</newAccount>
+      <community-management>커뮤니티 관리</community-management>
+      <i18n>국제화(i18n)</i18n>
+      <console>웹 콘솔</console>
+      <pageManagement>페이지 관리</pageManagement>
+   </administration>
+</bundle>

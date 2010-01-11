@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+   <platform>
+      <users>
+         <iframe>IFrame</iframe>
+         <mylink>내 링크</mylink>
+         <mylink-blog>블로그</mylink-blog>
+         <mylink-google>구글</mylink-google>
+         <mylink-facebook>페이스북</mylink-facebook>
+         <sitemap>사이트맵</sitemap>
+         <dashboard>대시보드</dashboard>
+      </users>
+   </platform>
+</bundle>

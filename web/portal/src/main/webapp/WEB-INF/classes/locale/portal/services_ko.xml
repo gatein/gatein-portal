@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+   <EmptyStringValidator>
+      <msg>
+         <empty-input>"{0}" 필드가 필요합니다</empty-input>
+      </msg>
+   </EmptyStringValidator>
+   <EmailAddressValidator>
+      <msg>
+         <invalid-email>{1} 필드의 "{0}", 이메일 주소가 유효하지 않습니다 </invalid-email>
+      </msg>
+   </EmailAddressValidator>
+   <NumberFormatValidator>
+      <msg>
+         <invalid-limitAccess>{1} 필드의 "{0}", 이 필드에 대한 액세스가 제한됩니다</invalid-limitAccess>
+         <Invalid-input>{0} 필드에는 숫자값을 입력하셔야 합니다 </Invalid-input>
+      </msg>
+   </NumberFormatValidator>
+   <IdentifierValidator>
+      <msg>
+         <empty-input>"{0}" 는 값을 가져야 합니다</empty-input>
+         <invalid-char>{0} 필드는 문자, 숫자, 하이픈(-) 및 밑줄(_) 문자만 허용됩니다 </invalid-char>
+      </msg>
+   </IdentifierValidator>
+   <NameValidator>
+      <msg>
+         <empty-input>"{0}" 는 값을 가져야 합니다</empty-input>
+         <invalid-char>{0} 필드는 문자, 숫자, 하이픈(-) 및 밑줄(_) 문자만 허용됩니다 </invalid-char>
+      </msg>
+   </NameValidator>
+   <ValidUserValidator>
+      <msg>
+         <empty-input>{0} 필드에 값을 입력해 주십시오.</empty-input>
+         <invalid-username>{0} 사용자를 시스템에서 찾을 수 없습니다</invalid-username>
+      </msg>
+   </ValidUserValidator>
+   <ValidGroupValidator>
+      <msg>
+         <empty-input>{0} 필드에 값을 입력해 주십시오.</empty-input>
+         <invalid-group-id>{0} 그룹을 시스템에서 찾을 수 없습니다</invalid-group-id>
+      </msg>
+   </ValidGroupValidator>
+   <PermissionValidator>
+      <msg>
+         <invalid-permission-input>유효하지 않은 퍼미션, 퍼미션 형태는 membership:/groupId가 되어야 합니다. </invalid-permission-input>
+         <membership-group-not-found>멤버십 유형 및 그룹 이름을 찾을 수 없습니다.</membership-group-not-found>
+      </msg>
+   </PermissionValidator>
+   <CheckAdminOrOwnerRoleInterceptor>
+      <msg>
+         <owner-or-admin-require>'{0} 액션을 실행하기 위해서는 관리자 권한으로 로그인하셔야 합니다. </owner-or-admin-require>
+      </msg>
+   </CheckAdminOrOwnerRoleInterceptor>
+   <CheckOwnerInterceptor>
+      <msg>
+         <owner-require>'{0}' 액션을 실행하기 위해서는 로그인하셔야 합니다.</owner-require>
+      </msg>
+   </CheckOwnerInterceptor>
+   <ExoPermissionException>
+      <msg>
+         <message>{1} 액션을 실행하기 위해서는 {0}의 권한을 가지고 있어야 합니다</message>
+      </msg>
+   </ExoPermissionException>
+   <OrganizationService>
+      <unique-group-exception>{0} 그룹이름이 이미 존재합니다</unique-group-exception>
+   </OrganizationService>
+   <PageList>
+      <page-out-of-range>열려고 하는 페이지 {0}에 대해 오로지 {1} 페이지만이 사용 가능합니다</page-out-of-range>
+   </PageList>
+   <MessageService>
+      <account-not-found>{1} 사용자에 대한 {0} 계정을 찾을 수 없습니다. </account-not-found>
+      <invalid-standalone-message-address>단일 계정 유형을 사용하는  {0} 주소가 유효하지 않습니다. 다음의 주소 형태로 입력하셔야 합니다. : \ receiver#accountName</invalid-standalone-message-address>
+      <send-message-fail>메시지를 보낼 수 없습니다. 이메일 주소를 확인하십시오. \n\ Error: {0}</send-message-fail>
+   </MessageService>
+   <Searcher>
+      <msg>
+         <search-expression-error>입력 표현식에 에러가 있습니다.<br />{0}</search-expression-error>
+      </msg>
+   </Searcher>
+</bundle>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+   <organization>
+      <title>조직</title>
+      <newstaff>새 사용자</newstaff>
+      <management>사용자 및 그룹 관리</management>
+   </organization>
+</bundle>

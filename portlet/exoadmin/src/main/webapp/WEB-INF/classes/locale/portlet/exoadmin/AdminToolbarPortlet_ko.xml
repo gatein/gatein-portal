@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+   <UIAdminToolbarPortlet>
+      <action>
+         <AddPage>새 페이지 추가</AddPage>
+         <EditPage>페이지 편집</EditPage>
+         <CreatePortal>새 포탈 생성</CreatePortal>
+         <EditPortal>포탈 편집</EditPortal>
+         <BrowsePage>페이지 관리</BrowsePage>
+         <EditPageAndNavigation>페이지 및 내비게이션 편집</EditPageAndNavigation>
+         <Editor>편집기</Editor>
+         <portal>
+            <Editor>사이트 편집기</Editor>
+         </portal>
+         <group>
+            <Editor>그룹 편집기</Editor>
+         </group>
+         <user>
+            <Editor>대시보드 편집기</Editor>
+         </user>
+         <EditSiteLayout>레이아웃 편집</EditSiteLayout>
+      </action>
+   </UIAdminToolbarPortlet>
+</bundle>

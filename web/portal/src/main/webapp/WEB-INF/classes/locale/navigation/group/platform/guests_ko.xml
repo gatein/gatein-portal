@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+   <platform>
+      <guests>
+         <register>등록</register>
+         <sitemap>사이트맵</sitemap>
+         <link>링크</link>
+      </guests>
+   </platform>
+</bundle>

@@ -78,4 +78,11 @@
     <input-encoding>UTF-8</input-encoding>
     <description>Default configuration for the vietnam locale</description>
   </locale-config>
+  
+  <locale-config>
+    <locale>ko</locale>
+    <output-encoding>UTF-8</output-encoding>
+    <input-encoding>UTF-8</input-encoding>
+    <description>Default configuration for the korean locale</description>
+ </locale-config>
 </locales-config>

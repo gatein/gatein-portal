@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+   <word>
+      <accessPermission>퍼미션 액세스</accessPermission>
+      <abort>중지</abort>
+      <action>액션</action>
+      <back>뒤로</back>
+      <birthday>생일	</birthday>
+      <cancel>취소</cancel>
+      <category>카테고리</category>
+      <change>변경</change>
+      <city>도시</city>
+      <close>닫기</close>
+      <comment>의견</comment>
+      <content>내용</content>
+      <country>국가</country>
+      <date>날짜</date>
+      <decorator>데코레이터</decorator>
+      <department>부서</department>
+      <description>설명</description>
+      <editPermission>퍼미션 수정</editPermission>
+      <email>이메일</email>
+      <employer>고용주</employer>
+      <familyName>성</familyName>
+      <finish>완료</finish>
+      <firstName>이름</firstName>
+      <format>유형</format>
+      <groupId>그룹 아이디</groupId>
+      <gender>성별</gender>
+      <givenName>이름</givenName>
+      <height>높이</height>
+      <icon>아이콘</icon>
+      <jobTitle>직함</jobTitle>
+      <locale>로케일</locale>
+      <label>라벨</label>
+      <language>언어</language>
+      <lastName>성</lastName>
+      <mobile>핸드폰</mobile>
+      <name>이름</name>
+      <nickName>별명</nickName>
+      <next>다음</next>
+      <owner>소유자</owner>
+      <postalCode>우편번호</postalCode>
+      <refresh>초기화</refresh>
+      <restore>복구  </restore>
+      <save>저장</save>
+      <stateProv>시/군</stateProv>
+      <street>거리</street>
+      <style>스타일</style>
+      <subject>주제</subject>
+      <summary>요약</summary>
+      <skin>스킨</skin>
+      <template>템플릿</template>
+      <tel>전화번호</tel>
+      <title>제목</title>
+      <uri>Uri</uri>
+      <userName>사용자 이름</userName>
+      <update>갱신</update>
+      <viewPermission>퍼미션 보기</viewPermission>
+      <width>가로</width>
+      <website>웹사이트</website>
+   </word>
+</bundle>

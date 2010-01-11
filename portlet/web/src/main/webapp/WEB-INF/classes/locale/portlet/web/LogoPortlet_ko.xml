@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+   <UILogoPortlet>
+      <note>
+         <Text>로고</Text>
+      </note>
+      <action>
+         <changeLanguage>언어변경</changeLanguage>
+         <Register>회원가입</Register>
+         <signout>로그아웃</signout>
+         <signin>로그인</signin>
+      </action>
+      <label>
+         <Welcome>환영합니다</Welcome>
+      </label>
+   </UILogoPortlet>
+   <UILogoEditMode>
+      <title>URL 변경</title>
+      <label>
+         <logoUrl>URL</logoUrl>
+         <editmode>편집 모드</editmode>
+      </label>
+      <action>
+         <Save>저장</Save>
+      </action>
+   </UILogoEditMode>
+</bundle>

@@ -1,0 +1,379 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+   <UIOrganizationPortlet>
+      <label>
+         <userManagement>사용자 관리</userManagement>
+         <groupManagement>그룹 관리</groupManagement>
+         <membershipManagement>멤버십 관리</membershipManagement>
+      </label>
+   </UIOrganizationPortlet>
+   <UIMembershipTypeForm>
+      <title>멤버십 추가/수정</title>
+      <label>
+         <name>멤버십 이름 </name>
+         <description>설명 </description>
+      </label>
+      <action>
+         <Save>#{word.save}</Save>
+         <Back>#{word.back}</Back>
+         <Reset>초기화</Reset>
+      </action>
+      <msg>
+         <SameName>멤버십이 이미 존재합니다. 다른 이름을 선택하십시오.</SameName>
+         <MembershipNotExist> 멤버십 [{0}]이 존재하지 않거나 삭제되었습니다.</MembershipNotExist>
+      </msg>
+   </UIMembershipTypeForm>
+   <UIGroupEditMembershipForm>
+      <label>
+         <username>사용자 이름</username>
+         <membership>멤버십</membership>
+      </label>
+      <action>
+         <Save>저장</Save>
+         <Cancel>취소</Cancel>
+      </action>
+      <msg>
+         <membership-delete>저장할 수 없습니다. 멤버십이 삭제되었습니다!</membership-delete>
+         <membership-exist>멤버십 유형이 이미 존재합니다. 다른 멤버십 유형을 선택하십시오.</membership-exist>
+      </msg>
+   </UIGroupEditMembershipForm>
+   <EditMembership>
+      <title>
+         <UIGroupEditMembershipForm>멤버십 수정</UIGroupEditMembershipForm>
+         <EditMembership>멤버십 수정</EditMembership>
+      </title>
+   </EditMembership>
+   <UIGroupMembershipForm>
+      <label>
+         <title>멤버십 그룹</title>
+         <username>사용지 이름</username>
+         <membership>멤버십</membership>
+         <SearchUser>사용자 선택</SearchUser>
+         <Refresh>초기화</Refresh>
+      </label>
+      <action>
+         <Save>#{word.save}</Save>
+      </action>
+      <title>멤버 추가</title>
+   </UIGroupMembershipForm>
+   <SearchUserForm>
+      <label>
+         <option>
+            <userName>#{word.userName}</userName>
+            <firstName>#{word.firstName}</firstName>
+            <lastName>#{word.lastName}</lastName>
+            <email>#{word.email}</email>
+         </option>
+      </label>
+   </SearchUserForm>
+   <SearchUser>
+      <title>
+         <UIUserSelector>사용자 선택</UIUserSelector>
+         <SearchUser>사용자 선택</SearchUser>
+         <ListUserForSearch>사용자 검색</ListUserForSearch>
+      </title>
+   </SearchUser>
+   <UIMemberShipForm>
+      <msg>
+         <membershipType-exist>멤버십 유형 '{0}'이 생성되었습니다.</membershipType-exist>
+      </msg>
+   </UIMemberShipForm>
+   <UIMembershipForm>
+      <label>
+         <username>사용자 이름 </username>
+         <membership>멤버십 </membership>
+         <name>멤버십 이름 </name>
+         <description>#{word.description}</description>
+      </label>
+      <action>
+         <Save>#{word.save}</Save>
+         <Back>#{word.back}</Back>
+      </action>
+   </UIMembershipForm>
+   <UIListUsers>
+      <header>
+         <userName>#{word.userName}</userName>
+         <lastName>#{word.lastName}</lastName>
+         <firstName>#{word.firstName}</firstName>
+         <email>#{word.email}</email>
+         <action>#{word.action}</action>
+      </header>
+      <action>
+         <title>
+            <DeleteUser>사용자 삭제</DeleteUser>
+            <SelectUser>사용자 선택</SelectUser>
+            <ViewUserInfo>사용자 정보 수정</ViewUserInfo>
+         </title>
+      </action>
+      <label>
+         <option>
+            <userName>#{word.userName}</userName>
+            <firstName>#{word.firstName}</firstName>
+            <lastName>#{word.lastName}</lastName>
+            <email>#{word.email}</email>
+         </option>
+      </label>
+      <msg>
+         <DeleteSuperUser>{0}는 관리자입니다. 삭제하실 수 없습니다.</DeleteSuperUser>
+      </msg>
+      <deleteUser>사용자 {0}의 삭제를 원하십니까?</deleteUser>
+   </UIListUsers>
+   <UIListMembershipType>
+      <deleteMemberShip>이 멤버십을 정말로 삭제하시겠습니까?</deleteMemberShip>
+   </UIListMembershipType>
+   <UIUserInfo>
+      <title>사용자 프로파일 정보</title>
+      <tab>
+         <label>
+            <AccountInputSet>계정 정보</AccountInputSet>
+            <UIUserProfileInputSet>사용자 프로파일</UIUserProfileInputSet>
+            <UIUserMembershipSelector>멤버십 사용자</UIUserMembershipSelector>
+            <UIAccountEditInputSet>계정 정보</UIAccountEditInputSet>
+         </label>
+      </tab>
+      <label>
+         <changePassword>비밀번호 변경:</changePassword>
+         <newPassword>새로운 비밀번호:</newPassword>
+         <confirmPassword>비밀번호 확인: </confirmPassword>
+         <Profile>사용자 프로파일</Profile>
+         <userName>#{word.userName}: </userName>
+         <password>비밀번호 :</password>
+         <Confirmpassword>비밀번호 확인 : </Confirmpassword>
+         <firstName>#{word.firstName}:</firstName>
+         <lastName>#{word.lastName}:</lastName>
+         <email>메일 주소:</email>
+         <user>
+            <language>언어:</language>
+            <language>#{word.language}:</language>
+            <name>
+               <given>#{word.givenName}: </given>
+               <family>#{word.familyName}: </family>
+               <nickName>#{word.nickName}: </nickName>
+            </name>
+            <bdate>#{word.birthday}: </bdate>
+            <gender>#{word.gender}: </gender>
+            <employer>#{word.employer}: </employer>
+            <department>#{word.department}: </department>
+            <jobtitle>#{word.jobTitle}: </jobtitle>
+            <home-info>
+               <postal>
+                  <name>#:</name>
+                  <street>#{word.street}: </street>
+                  <city>#{word.city}: </city>
+                  <stateprov>#{word.stateProv}: </stateprov>
+                  <postalcode>#{word.postalCode}: </postalcode>
+                  <country>#{word.country}: </country>
+               </postal>
+               <telecom>
+                  <mobile>
+                     <number>#{word.mobile}:</number>
+                  </mobile>
+                  <telephone>
+                     <number>#{word.tel}:</number>
+                  </telephone>
+               </telecom>
+               <online>
+                  <email>#{word.email}: </email>
+                  <uri>웹사이트:</uri>
+               </online>
+            </home-info>
+            <business-info>
+               <postal>
+                  <name>#:</name>
+                  <city>#{word.city}:</city>
+                  <stateprov>State/Prov:</stateprov>
+                  <postalcode>우편번호:</postalcode>
+                  <country>#{word.country}:</country>
+               </postal>
+               <telecom>
+                  <mobile>
+                     <number>#{word.mobile}:</number>
+                  </mobile>
+                  <telephone>
+                     <number>#{word.tel}:</number>
+                  </telephone>
+               </telecom>
+               <online>
+                  <email>#{word.email}:</email>
+                  <uri>#{word.website}:</uri>
+               </online>
+            </business-info>
+         </user>
+         <HomeInfo>집 정보</HomeInfo>
+         <option>
+            <male>남자</male>
+            <female>여자</female>
+            <en>영어</en>
+            <kr>한국어</kr>
+            <ma>말레이시아어</ma>
+            <vi>베트남어</vi>
+            <ar>아랍어</ar>
+            <fr>프랑스어</fr>
+            <ru>러시아어</ru>
+         </option>
+         <BusinessInfo>직장 정보</BusinessInfo>
+      </label>
+      <action>
+         <Back>#{word.cancel}</Back>
+         <Save>#{word.save}</Save>
+      </action>
+   </UIUserInfo>
+   <UIUserInGroup>
+      <confirm>
+         <deleteUser>그룹 {1}의 사용자 {0}를 정말 삭제하시겠습니까?</deleteUser>
+      </confirm>
+      <header>
+         <userName>#{word.userName}</userName>
+         <lastName>#{word.lastName}</lastName>
+         <firstName>#{word.firstName}</firstName>
+         <email>#{word.email}</email>
+         <action>#{word.action}</action>
+         <membershipType>멤버십 유형</membershipType>
+         <lastLoginTime>최종 로그인</lastLoginTime>
+      </header>
+      <label>
+         <username>#{word.userName}</username>
+         <membership>멤버십 이름</membership>
+      </label>
+      <action>
+         <title>
+            <DeleteUser>멤버 삭제</DeleteUser>
+            <Edit>멤버 수정</Edit>
+         </title>
+      </action>
+   </UIUserInGroup>
+   <UIGroupInfo>
+      <tab>
+         <label>
+            <UIUserInGroup>그룹 사용자</UIUserInGroup>
+         </label>
+      </tab>
+      <label>
+         <UIUserInGroup></UIUserInGroup>
+      </label>
+      <title>그룹 정보</title>
+   </UIGroupInfo>
+   <UIMembershipList>
+      <header>
+         <name>멤버십 이름</name>
+         <createdDate>생성된 날짜</createdDate>
+         <modifiedDate>수정된 날짜</modifiedDate>
+         <action>#{word.action}</action>
+         <description>#{word.description}</description>
+      </header>
+      <action>
+         <title>
+            <EditMembership>멤버십 수정</EditMembership>
+            <DeleteMembership>멤버십 삭제</DeleteMembership>
+         </title>
+      </action>
+      <msg>
+         <InUse>이 멤버십이 사용중이므로 삭제할 수 없습니다.</InUse>
+         <DeleteMandatory>이 멤버십은 필수이므로 삭제할 수 없습니다.</DeleteMandatory>
+      </msg>
+   </UIMembershipList>
+   <UIUserMembershipSelector>
+      <deleteMembership>이 멤버십을 정말 삭제하시겠습니까?</deleteMembership>
+   </UIUserMembershipSelector>
+   <AddGroup>
+      <title>새 그룹 추가</title>
+      <action>
+         <Save>#{word.save}</Save>
+         <Back>#{word.cancel}</Back>
+      </action>
+   </AddGroup>
+   <EditGroup>
+      <title>현재 그룹 수정</title>
+      <action>
+         <Save>#{word.save}</Save>
+         <Back>#{word.cancel}</Back>
+      </action>
+   </EditGroup>
+   <UIGroupForm>
+      <label>
+         <groupName>그룹 이름</groupName>
+         <description>설명</description>
+         <label>라벨</label>
+      </label>
+      <msg>
+         <group-exist>그룹 이름이 이미 존재합니다. 다른 이름을 입력해 주십시오.</group-exist>
+         <group-not-exist>"{0}"그룹이 존재하지 않거나 삭제되었습니다.</group-not-exist>
+      </msg>
+   </UIGroupForm>
+   <UITabPane>
+      <title>
+         <UISharedNavigationForm>공유된 내비게이션</UISharedNavigationForm>
+         <UISharedPortalForm>공유된 포탈</UISharedPortalForm>
+         <UIUserInGroup>그룹 정보</UIUserInGroup>
+         <UISharedNavigation>그룹 페이지 내비게이션 </UISharedNavigation>
+      </title>
+   </UITabPane>
+   <UISharedNavigationForm>
+      <action>
+         <Save>#{word.save}</Save>
+         <Back>#{word.back}</Back>
+         <Remove>삭제</Remove>
+      </action>
+      <label>
+         <navigation>내비게이션</navigation>
+         <description>설명</description>
+         <membership>멤버십</membership>
+         <priority>우선순위</priority>
+      </label>
+      <tab>
+         <label>
+            <SharedNavigation>공유된 내비게이션 설정</SharedNavigation>
+            <Permission>퍼미션 선택기</Permission>
+         </label>
+      </tab>
+      <msg>
+         <user-nonexist>사용자 "{0}"가 존재하지 않습니다.</user-nonexist>
+      </msg>
+   </UISharedNavigationForm>
+   <UISharedNavigation>
+      <msg>
+         <notSelected>반드시 그룹을 선택하셔야 합니다!</notSelected>
+      </msg>
+      <label>
+         <userNavigation>사용자 페이지 내비게이션 이름</userNavigation>
+         <priority>우선순위</priority>
+      </label>
+      <action>
+         <Save>저장</Save>
+      </action>
+   </UISharedNavigation>
+   <UISharedPortalForm>
+      <action>
+         <Save>#{word.save}</Save>
+         <Back>#{word.back}</Back>
+         <Remove>삭제</Remove>
+      </action>
+      <label>
+         <portal>포탈</portal>
+         <description>설명</description>
+         <membership>멤버십</membership>
+         <priority>우선순위</priority>
+      </label>
+      <tab>
+         <label>
+            <SharedPortal>포탈 설정</SharedPortal>
+            <Permission>퍼미션 선택기</Permission>
+         </label>
+      </tab>
+      <msg>
+         <user-nonexist>사용자 "{0}"가 존재하지 않습니다.</user-nonexist>
+      </msg>
+   </UISharedPortalForm>
+   <UIGroupSharedInfo>
+      <title>공유 정보</title>
+   </UIGroupSharedInfo>
+   <UIGroupManagement>
+      <label>
+         <Groups>그룹</Groups>
+         <AddGroup>새로운 그룹 추가</AddGroup>
+         <EditGroup>선택된 그룹 수정</EditGroup>
+         <DeleteGroup>선택된 그룹 삭제</DeleteGroup>
+      </label>
+      <deleteGroup>이 그룹을 삭제하시겠습니까?</deleteGroup>
+   </UIGroupManagement>
+</bundle>

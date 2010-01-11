@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+   <portal>
+      <classic>
+         <home>홈</home>
+         <sitemap>사이트맵</sitemap>
+         <groupnavigation>그룹 내비게이션</groupnavigation>
+         <portalnavigation>포탈 내비게이션</portalnavigation>
+         <register>등록</register>
+         <webexplorer>웹 탐색기</webexplorer>
+      </classic>
+   </portal>
+   <UIAddNewApplication>
+      <label>
+         <AddApplication >애플리케이션 추가</AddApplication >
+      </label>
+   </UIAddNewApplication>
+</bundle>

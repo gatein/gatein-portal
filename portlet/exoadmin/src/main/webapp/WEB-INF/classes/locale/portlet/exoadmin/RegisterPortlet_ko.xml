@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+   <UIRegisterForm>
+      <registerWithSuccess>
+         <message>새로운 계정이 성공적으로 등록되었습니다.</message>
+      </registerWithSuccess>
+      <title>새로운 계정 등록</title>
+      <label>
+         <action>
+            <CheckUsernameAvailability>사용자 검색</CheckUsernameAvailability>
+         </action>
+      </label>
+   </UIRegisterForm>
+</bundle>

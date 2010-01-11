@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) 2009 eXo Platform SAS.
+    
+    This is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Lesser General Public License as
+    published by the Free Software Foundation; either version 2.1 of
+    the License, or (at your option) any later version.
+    
+    This software is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+    Lesser General Public License for more details.
+    
+    You should have received a copy of the GNU Lesser General Public
+    License along with this software; if not, write to the Free
+    Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+    02110-1301 USA, or see the FSF site: http://www.fsf.org.
+
+-->
+
+<bundle>
+  <!--
+  ##org.exoplatform.account.webui.component.UIAccountForm
+  -->
+  <UIAccountForm>
+    <label>
+      <Profile>사용자 프로파일</Profile>
+      <username>#{word.userName}:</username>
+      <SearchUser>검색할 사용자</SearchUser>
+      <password1x>비밀번호:</password1x>
+      <password2x>비밀번호 확인:</password2x>
+      <password>비밀번호:</password>
+      <Confirmpassword>비밀번호 확인:</Confirmpassword>
+      <firstName>#{word.firstName}:</firstName>
+      <lastName>#{word.lastName}:</lastName>
+      <email>이메일:</email>
+      <note><![CDATA[<span style="color: red">*</span>로 선언된 필드들이 필요합니다.]]></note>
+      <action>
+        <SearchUser>검색할 사용자</SearchUser>
+      </action>
+      <Membership>멤버십</Membership>
+      <option>
+        <male>남자</male>
+        <female>여자</female>
+      </option>
+      <HomeInfo>사용자 정보</HomeInfo>
+      <user>
+        <name>
+          <given>#{word.givenName}:</given>
+          <family>#{word.familyName}:</family>
+          <nickName>#{word.nickName}:</nickName>
+        </name>
+        <bdate>#{word.birthday}:</bdate>
+        <gender>#{word.gender}:</gender>
+        <employer>#{word.employer}:</employer>
+        <department>#{word.department}:</department>
+        <jobtitle>#{word.jobTitle}:</jobtitle>
+        <language>언어:</language>
+        <home-info>
+          <postal>
+            <name>#:</name>
+            <street>#{word.street}:</street>
+            <city>#{word.city}:</city>
+            <stateprov>#{word.stateProv}:</stateprov>
+            <postalcode>#{word.postalCode}:</postalcode>
+            <country>#{word.country}:</country>
+          </postal>
+          <telecom>
+            <mobile>
+              <number>#{word.mobile}:</number>
+            </mobile>
+            <telephone>
+              <number>#{word.tel}:</number>
+            </telephone>
+          </telecom>
+          <online>
+            <email>#{word.email}:</email>
+            <uri>#{word.website}:</uri>
+          </online>
+        </home-info>
+        <business-info>
+          <postal>
+            <name>#:</name>
+            <street>#{word.street}:</street>
+            <city>#{word.city}:</city>
+            <stateprov>#{word.stateProv}:</stateprov>
+            <postalcode>#{word.postalCode}:</postalcode>
+            <country>#{word.country}:</country>
+          </postal>
+          <telecom>
+            <mobile>
+              <number>#{word.mobile}:</number>
+            </mobile>
+            <telephone>
+              <number>#{word.tel}:</number>
+            </telephone>
+          </telecom>
+          <online>
+            <email>#{word.email}:</email>
+            <uri>#{word.website}:</uri>
+          </online>
+        </business-info>
+      </user>
+      <BusinessInfo>직장 정보</BusinessInfo>
+    </label>
+    <title>계정 추가/수정</title>
+    <action>
+      <Reset>초기화</Reset>
+      <Back>#{word.back}</Back>
+      <Save>#{word.save}</Save>
+    </action>
+    <msg>
+      <user-exist>'{0}' 사용자가 존재합니다.</user-exist>
+      <incorrect-password>재입력한 비밀번호가 틀립니다.</incorrect-password>
+      <sucsesful>
+        <create>
+          <user>사용자 생성에 성공하였습니다.</user>
+        </create>
+      </sucsesful>
+    </msg>
+    <tab>
+      <label>
+        <AccountTemplate>계정 템플릿</AccountTemplate>
+        <UIUserProfileInputSet>사용자 프로파일</UIUserProfileInputSet>
+        <AccountInputSet>사용자 설정</AccountInputSet>
+        <UIUserMembershipSelector>사용자 멤버십</UIUserMembershipSelector>
+      </label>
+    </tab>
+  </UIAccountForm>
+  <!--
+  #{0} is the username that the remote user enter
+  -->
+  <UIPopupWindow>
+    <title>
+      <UIGroupMembershipSelector>사용자 멤버십 선택</UIGroupMembershipSelector>
+    </title>
+  </UIPopupWindow>
+  <UISiteManagement>
+  	<action>
+  		<addNewPortal>포탈 추가</addNewPortal>
+  	</action>
+  </UISiteManagement>
+</bundle>
+

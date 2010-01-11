@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+   <UISiteManagement>
+      <action>
+         <addNewPortal>새 포탈 추가</addNewPortal>
+      </action>
+      <label>
+         <editLayout>레이아웃 수정</editLayout>
+         <editNav>내비게이션 수정</editNav>
+         <editPortalProp>포탈 프로퍼티 편집</editPortalProp>
+         <deletePortal>삭제</deletePortal>
+      </label>
+   </UISiteManagement>
+</bundle>
