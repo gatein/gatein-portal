@@ -275,8 +275,6 @@ public class UIPortletManagement extends UIContainer
          return type_;
       }
 
-      //public PortletData getPortletData() { return portletData_; }
-
       public String getDisplayName()
       {
          LocalizedString displayName = portletInfo_.getMeta().getMetaValue(MetaInfo.DISPLAY_NAME);
