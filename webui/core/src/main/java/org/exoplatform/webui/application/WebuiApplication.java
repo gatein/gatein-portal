@@ -112,7 +112,7 @@ abstract public class WebuiApplication extends Application
       }
       T uicomponent = Util.createObject(type, config.getInitParams());
       uicomponent.setComponentConfig(id, config);
-      return type.cast(uicomponent);
+      return uicomponent;
    }
 
    public Set<UIComponent> getDefaultUIComponentToUpdateByAjax(WebuiRequestContext context)
