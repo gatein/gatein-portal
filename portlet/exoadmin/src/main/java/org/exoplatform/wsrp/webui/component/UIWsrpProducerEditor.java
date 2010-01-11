@@ -59,11 +59,11 @@ import java.util.Map;
 /** @author Wesley Hales */
 
 @ComponentConfig(
-    lifecycle = UIFormLifecycle.class,
-    template = "app:/groovy/wsrp/webui/component/UIWsrpProducerEditor.gtmpl",
-    events = {
-     @EventConfig(listeners = UIWsrpProducerEditor.SaveActionListener.class)
-})
+   lifecycle = UIFormLifecycle.class,
+   template = "app:/groovy/wsrp/webui/component/UIWsrpProducerEditor.gtmpl",
+   events = {
+      @EventConfig(listeners = UIWsrpProducerEditor.SaveActionListener.class)
+   })
 
 public class UIWsrpProducerEditor extends UIForm
 {
@@ -116,17 +116,11 @@ public class UIWsrpProducerEditor extends UIForm
       validator = new UIFormStringInput(VALIDATOR_CLASS, VALIDATOR_CLASS, null);
       registrationDetails.addUIFormInput(validator);
 
-      
 
-      init();
+      //init();
    }
 
-   ProducerConfigurationService getService()
-   {
-      return configService;
-   }
-
-   private void init() throws Exception
+   public void processRender(WebuiRequestContext context) throws Exception
    {
       ProducerConfiguration configuration = configService.getConfiguration();
 
@@ -137,12 +131,17 @@ public class UIWsrpProducerEditor extends UIForm
       boolean registrationRequired = registrationRequirements.isRegistrationRequired();
       regRequired.setValue(registrationRequired);
 
+
+
+
       // if registration is required then we display more information
       if (registrationRequired)
       {
-         registrationDetails.setRendered(true);
 
-          RegistrationPolicy policy = registrationRequirements.getPolicy();
+         registrationDetails.setRendered(true);
+         context.getUIApplication().findComponentById(UIWsrpProducerOverview.REGISTRATION_PROPERTIES).setRendered(true);
+
+         RegistrationPolicy policy = registrationRequirements.getPolicy();
          String policyClassName = policy.getClass().getName();
          this.policy.setValue(policyClassName);
 
@@ -164,13 +163,21 @@ public class UIWsrpProducerEditor extends UIForm
       else
       {
          registrationDetails.setRendered(false);
-         //getParent().findComponentById(UIWsrpProducerOverview.REGISTRATION_PROPERTIES).setRendered(false);
+         context.getUIApplication().findComponentById(UIWsrpProducerOverview.REGISTRATION_PROPERTIES).setRendered(false);
       }
+
+      super.processRender(context);
    }
 
+   ProducerConfigurationService getService()
+   {
+      return configService;
+   }
 
+   private void init() throws Exception
+   {
 
-
+   }
 
 
    static public class SaveActionListener extends EventListener<UIWsrpProducerEditor>
@@ -213,7 +220,7 @@ public class UIWsrpProducerEditor extends UIForm
       {
          UIFormCheckBoxInput source = event.getSource();
          UIWsrpProducerEditor parent = source.getAncestorOfType(UIWsrpProducerEditor.class);
-         parent.init();
+         //parent.init();
 
          //update only the parent, avoid updating the full portlet
          event.getRequestContext().addUIComponentToUpdateByAjax(parent);

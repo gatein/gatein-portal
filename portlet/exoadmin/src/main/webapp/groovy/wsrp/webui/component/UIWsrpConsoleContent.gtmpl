@@ -22,7 +22,7 @@
           <div class="LeftTab">
             <div class="RightTab">
               <% String consumerLink = "ajaxAsyncGetRequest('" + uicomponent.url("SelectTab",consumerOverview.getId()) + "', true)" %>
-              <div class="MiddleTab" onclick="eXo.webui.UIHorizontalTabs.changeTabForUITabPane(this, '${consumerOverview.getId()}', '$url');$consumerLink;if(eXo.portal.portalMode) eXo.portal.portalMode -= 2;">
+              <div class="MiddleTab" onclick="eXo.webui.UIHorizontalTabs.changeTabForUITabPane(this, '${consumerOverview.getId()}', '$url');$consumerLink;">
                   <%=_ctx.appRes("UITabPane.title." + consumerOverview.getId());%>
               </div>
             </div>
@@ -34,7 +34,7 @@
           <div class="LeftTab">
             <div class="RightTab">
               <% String producerLink = "ajaxAsyncGetRequest('" + uicomponent.url("SelectTab",producerOverview.getId()) + "', true)" %>
-              <div class="MiddleTab" onclick="eXo.webui.UIHorizontalTabs.changeTabForUITabPane(this, '${producerOverview.getId()}', '$url');$producerLink;if(eXo.portal.portalMode) eXo.portal.portalMode -= 2;">
+              <div class="MiddleTab" onclick="eXo.webui.UIHorizontalTabs.changeTabForUITabPane(this, '${producerOverview.getId()}', '$url');$producerLink;">
                   <%=_ctx.appRes("UITabPane.title." + producerOverview.getId());%>
               </div>
             </div>

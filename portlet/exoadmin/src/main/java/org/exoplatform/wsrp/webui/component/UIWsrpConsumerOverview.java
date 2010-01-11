@@ -26,6 +26,7 @@ import org.exoplatform.commons.utils.LazyPageList;
 import org.exoplatform.commons.utils.ListAccess;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.portal.webui.container.UIContainerForm;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -35,6 +36,7 @@ import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.UIGrid;
 import org.exoplatform.webui.core.UIPopupWindow;
+import org.exoplatform.webui.core.UITabPane;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -122,6 +124,7 @@ public class UIWsrpConsumerOverview extends UIContainer
 
    public UIWsrpConsumerOverview() throws Exception
    {
+      //setSelectedTab(1);
       UIPopupWindow popup = addChild(UIPopupWindow.class, null, null);
       popup.setWindowSize(450, 0);
       UIWsrpConsumerEditor consumerForm = createUIComponent(UIWsrpConsumerEditor.class, null, "Consumer Editor");
@@ -319,6 +322,13 @@ public class UIWsrpConsumerOverview extends UIContainer
             e.printStackTrace();
          }
       }
+   }
+
+   public void processRender(WebuiRequestContext context) throws Exception
+   {
+//         UITabPane uiTabPane = context.getUIApplication().findComponentById("UIWsrpConsoleTab");
+//         uiTabPane.setSelectedTab(1);
+      super.processRender(context);
    }
 
 

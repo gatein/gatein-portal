@@ -50,12 +50,18 @@ import org.exoplatform.webui.event.Event;
    events = {@EventConfig(listeners = UIWsrpConsole.SelectTabActionListener.class)})})
 public class UIWsrpConsole extends UIContainer
 {
+
+   private UITabPane uiTabPane;
+
    public UIWsrpConsole() throws Exception
    {
-      UITabPane uiTabPane = addChild(UITabPane.class, "UIWsrpConsoleTab", null);
+      uiTabPane = addChild(UITabPane.class, "UIWsrpConsoleTab", null);
       uiTabPane.addChild(UIWsrpConsumerOverview.class, null, "Manage Consumers").setRendered(true);
-      uiTabPane.addChild(UIWsrpProducerOverview.class, null, "Producer Configuration");
-      uiTabPane.setSelectedTab(1);
+      uiTabPane.addChild(UIWsrpProducerOverview.class, null, "Producer Configuration").setRendered(false);
+
+      if (uiTabPane.getSelectedTabId().equals("")){
+         uiTabPane.setSelectedTab(1);
+      }
    
    }
 

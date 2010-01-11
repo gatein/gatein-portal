@@ -26,8 +26,10 @@ import org.exoplatform.commons.utils.LazyPageList;
 import org.exoplatform.commons.utils.ListAccess;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.portal.webui.container.UIContainerForm;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.ComponentConfigs;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -35,6 +37,7 @@ import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.UIGrid;
 import org.exoplatform.webui.core.UIPopupWindow;
+import org.exoplatform.webui.core.UITabPane;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -48,35 +51,36 @@ import java.util.*;
 
 /** @author Wesley Hales */
 @ComponentConfigs({
-@ComponentConfig(id = "RegistrationPropertySelector", type = UIGrid.class, template = "app:/groovy/wsrp/webui/component/UIWsrpGrid.gtmpl"),
-@ComponentConfig(
-   lifecycle = UIApplicationLifecycle.class,
-   template = "app:/groovy/wsrp/webui/component/UIWsrpProducerOverview.gtmpl",
-    events = {
-     @EventConfig(listeners = UIWsrpProducerOverview.AddPropertyActionListener.class),
-     @EventConfig(listeners = UIWsrpProducerOverview.EditActionListener.class),
-     @EventConfig(listeners = UIWsrpProducerOverview.DeleteActionListener.class)
-  }
-)})
+   @ComponentConfig(id = "RegistrationPropertySelector", type = UIGrid.class, template = "app:/groovy/wsrp/webui/component/UIWsrpGrid.gtmpl"),
+   @ComponentConfig(
+      lifecycle = UIApplicationLifecycle.class,
+      template = "app:/groovy/wsrp/webui/component/UIWsrpProducerOverview.gtmpl",
+      events = {
+         @EventConfig(listeners = UIWsrpProducerOverview.AddPropertyActionListener.class),
+         @EventConfig(listeners = UIWsrpProducerOverview.EditActionListener.class),
+         @EventConfig(listeners = UIWsrpProducerOverview.DeleteActionListener.class)
+      }
+   )})
 
 public class UIWsrpProducerOverview extends UIContainer
 {
-    private static String[] FIELDS = {"key","name", "description", "label", "hint"};
+   private static String[] FIELDS = {"key", "name", "description", "label", "hint"};
    private static String[] SELECT_ACTIONS = {"Add", "Edit", "Delete"};
 
-    public static final String REGISTRATION_PROPERTIES = "RegistrationPropertySelector";
+   public static final String REGISTRATION_PROPERTIES = "RegistrationPropertySelector";
    private static final String REGISTRATION_PROPERTIES_ITERATOR = "ProducerPropPageIterator";
-    private UIGrid registrationProperties;
-    private ProducerConfigurationService configService;
+   private UIGrid registrationProperties;
+   private ProducerConfigurationService configService;
    private UIWsrpProducerEditor producerForm;
 
    public UIWsrpProducerOverview() throws Exception
    {
-       configService = Util.getUIPortalApplication().getApplicationComponent(ProducerConfigurationService.class);
-       ProducerConfiguration configuration = configService.getConfiguration();
+      //setSelectedTab(2);
+      configService = Util.getUIPortalApplication().getApplicationComponent(ProducerConfigurationService.class);
+      ProducerConfiguration configuration = configService.getConfiguration();
       //producerForm = createUIComponent();
       addChild(UIWsrpProducerEditor.class, null, null);
-       // registration properties
+      // registration properties
       registrationProperties = addChild(UIGrid.class, REGISTRATION_PROPERTIES, REGISTRATION_PROPERTIES);
       //configure the edit and delete buttons based on an id from the data list - this will also be passed as param to listener
       registrationProperties.configure("key", FIELDS, SELECT_ACTIONS);
@@ -87,16 +91,16 @@ public class UIWsrpProducerOverview extends UIContainer
       Map<QName, RegistrationPropertyDescription> regProps = configuration.getRegistrationRequirements().getRegistrationProperties();
       registrationProperties.getUIPageIterator().setPageList(createPageList(getPropertyList(regProps)));
 
-       //add the popup for property edit and adding new properties
+      //add the popup for property edit and adding new properties
       UIPopupWindow popup = addChild(UIPopupWindow.class, null, null);
       popup.setWindowSize(400, 300);
       UIWsrpProducerPropertyEditor propertyForm = createUIComponent(UIWsrpProducerPropertyEditor.class, null, "Producer Property Editor");
       popup.setUIComponent(propertyForm);
       popup.setRendered(false);
-       
+
    }
 
-    private List<RegistrationPropertyDescription> getPropertyList(Map<QName, RegistrationPropertyDescription> descriptions) throws Exception
+   private List<RegistrationPropertyDescription> getPropertyList(Map<QName, RegistrationPropertyDescription> descriptions) throws Exception
    {
       Comparator<RegistrationPropertyDescription> descComparator = new Comparator<RegistrationPropertyDescription>()
       {
@@ -105,13 +109,14 @@ public class UIWsrpProducerOverview extends UIContainer
             return o1.getName().toString().compareTo(o2.getName().toString());
          }
       };
-       List<RegistrationPropertyDescription> result = new ArrayList<RegistrationPropertyDescription>();
-        for (Object o : descriptions.entrySet()){
+      List<RegistrationPropertyDescription> result = new ArrayList<RegistrationPropertyDescription>();
+      for (Object o : descriptions.entrySet())
+      {
          Map.Entry entry = (Map.Entry)o;
-          RegistrationPropertyDescription rpd = (RegistrationPropertyDescription)entry.getValue();
-          result.add(rpd);
+         RegistrationPropertyDescription rpd = (RegistrationPropertyDescription)entry.getValue();
+         result.add(rpd);
 
-        }
+      }
 
 
       //List<RegistrationPropertyDescription> result = new ArrayList<RegistrationPropertyDescription>(descriptions.values());
@@ -119,7 +124,7 @@ public class UIWsrpProducerOverview extends UIContainer
       return result;
    }
 
-    private LazyPageList<RegistrationPropertyDescription> createPageList(final List<RegistrationPropertyDescription> pageList)
+   private LazyPageList<RegistrationPropertyDescription> createPageList(final List<RegistrationPropertyDescription> pageList)
    {
       return new LazyPageList<RegistrationPropertyDescription>(new ListAccess<RegistrationPropertyDescription>()
       {
@@ -160,7 +165,7 @@ public class UIWsrpProducerOverview extends UIContainer
       }, 10);
    }
 
-static public class EditActionListener extends EventListener<UIWsrpProducerOverview>
+   static public class EditActionListener extends EventListener<UIWsrpProducerOverview>
    {
       public void execute(Event<UIWsrpProducerOverview> event) throws Exception
       {
@@ -224,9 +229,16 @@ static public class EditActionListener extends EventListener<UIWsrpProducerOverv
       }
    }
 
-    ProducerConfigurationService getService()
+   ProducerConfigurationService getService()
    {
       return configService;
+   }
+
+   public void processRender(WebuiRequestContext context) throws Exception
+   {
+//         UITabPane uiTabPane = context.getUIApplication().findComponentById("UIWsrpConsoleTab");
+//         uiTabPane.setSelectedTab(2);
+      super.processRender(context);
    }
 
 
@@ -235,4 +247,6 @@ static public class EditActionListener extends EventListener<UIWsrpProducerOverv
       ExoContainer manager = ExoContainerContext.getCurrentContainer();
       return (ProducerConfigurationService)manager.getComponentInstanceOfType(ProducerConfigurationService.class);
    }
+
+
 }
