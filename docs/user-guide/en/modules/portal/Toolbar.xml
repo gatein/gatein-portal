@@ -1,5 +1,7 @@
 <?xml version='1.0' encoding='utf-8' ?>
 <!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+<!ENTITY % BOOK_ENTITIES SYSTEM "../../User_Guide.ent">
+%BOOK_ENTITIES;
 ]>
 <section id="sect-User_Guide-Toolbar">
 	<!--     
@@ -79,7 +81,7 @@
 					<term> Editor</term>
 					<listitem>
 						<para>
-							Portal Administrators have access to another navigation that offers links to add a new page to the current portal, edit a particular page's properties or to change a page's layout. This navigation appears next to the Dashboard navigation in the Toolbar and is contextually-named. It will appear as either <emphasis role="bold">Site Editor</emphasis> or <emphasis role="bold">Group Editor</emphasis> dependinfg on the user's location within the portal.
+							Portal Administrators have access to another navigation that offers links to add a new page to the current portal, edit a particular page's properties or to change a page's layout. This navigation appears next to the Dashboard navigation in the Toolbar and is contextually-named. It will appear as either <emphasis role="bold">Site Editor</emphasis> or <emphasis role="bold">Group Editor</emphasis> depending on the user's location within the portal.
 						</para>
 					</listitem>
 				</varlistentry>

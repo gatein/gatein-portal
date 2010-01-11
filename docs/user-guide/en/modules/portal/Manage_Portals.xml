@@ -1,5 +1,7 @@
 <?xml version='1.0' encoding='utf-8' ?>
 <!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+<!ENTITY % BOOK_ENTITIES SYSTEM "../../User_Guide.ent">
+%BOOK_ENTITIES;
 ]>
 <section id="sect-User_Guide-Manage_Portals">
 	<!--     
@@ -54,14 +56,17 @@
 					</imageobject>
 				</mediaobject>
 				</step>
-				<step>
+		</procedure>
+		<para>
+			This form is where you can change portal settings.
+		</para>
+		
+
+		<procedure id="proc-User_Guide-Manage_Portals-Edit_a_Portal-Change_Timeout_Settings">
+			<title>Change Timeout Settings</title>
+				<step> 
 				<para>
-					Change the properties of the current portal.
-				</para>
-				</step>
-				<step>
-				<para>
-					Click the <emphasis role="bold">Propertites</emphasis> tab. Select an option for <emphasis role="bold">Keep session alive</emphasis>
+					Click the <emphasis role="bold">Propertites</emphasis> tab of the edit form. Select an option for <emphasis role="bold">Keep session alive</emphasis>
 				</para>
 				<para>
 					This option controls how long your session is kept alive. There are 3 options:
@@ -94,16 +99,29 @@
 				</variablelist>
 				</step>
 				<step>
+					<para>
+						Select the option that best suits your needs.
+					</para>
+				</step>
+				<step>
 				<para>
-					Set permissions for the portal:
-				</para>
-				<para>
-					To change any permission, click the <emphasis role="bold">Select Permission</emphasis> button and then select a group with the Membership type you want. Only one group can have the Edit Permission of the portal.
-				</para>
-				<para>
-					You can set the Edit Permission for the portal when you create or edit it.
+					Click the <emphasis role="bold">Save</emphasis> button to accept changes or the <emphasis role="bold">Cancel</emphasis> button to quit.
 				</para>
 				</step>
+		</procedure>
+		<procedure id="proc-User_Guide-Manage_Portals-Edit_a_Portal-Set_permissions_for_the_portal">
+				<title>Set permissions for the portal</title>
+				<step>
+				<para>
+					Go to the <emphasis role="bold">Permission Setting</emphasis> tab of the edit form and then the <emphasis role="bold">Edit Permission Setting</emphasis> sub-tab. 
+				</para>
+				</step>
+				<step>
+					<para>
+						Click the <emphasis role="bold">Select Permission</emphasis> button and then select a group with the Membership type you want. Only one group can have the Edit Permission of the portal.
+					</para>
+				</step>
+
 				<step>
 				<para>
 					Click the <emphasis role="bold">Save</emphasis> button to accept changes or the <emphasis role="bold">Cancel</emphasis> button to quit.
@@ -213,17 +231,11 @@
 	
 	<section id="sect-User_Guide-Manage_Portals-Delete_a_Portal">
 		<title>Delete a Portal</title>
-		<para>
-			You can delete a portal by following these guides:
-		</para>
-		<para>
-			1. Go to <emphasis role="bold">GateIn Start</emphasis> -&gt; <emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Advanced</emphasis> --&gt; <emphasis role="bold">Manage Portals</emphasis>
-		</para>
-		<procedure>
+					<procedure>
 			<title>Method One:</title>
 			<step>
 				<para>
-					Go to <emphasis role="bold">Administrator</emphasis> on the Toolbar --&gt; <emphasis role="bold">Manage Portals</emphasis>. List of all portals will be shown.
+					Go to <emphasis role="bold">Group</emphasis> on the Toolbar and highlight <emphasis role="bold">Administration</emphasis>. Click on <emphasis role="bold">Portal Management</emphasis>. List of all portals will be shown.
 				</para>
 			</step>
 			<step>
