@@ -45,6 +45,7 @@
   <UIGroovyPortlet>
     <action>
       <changeLanguage>Thay ngôn ngữ</changeLanguage>
+      <register>Register</register>
     </action>
   </UIGroovyPortlet>
 </bundle>

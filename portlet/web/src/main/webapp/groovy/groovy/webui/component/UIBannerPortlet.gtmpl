@@ -26,7 +26,7 @@
 								<div class="MiddleLoginContainer Signin">
 									<a class="Login" onclick="$signInAction"><%=_ctx.appRes("UILoginForm.label.Signin")%></a>
 									<a class="Register" href="$registerURI">
-										<%=_ctx.appRes("UIBannerPortlet.action.Register")%>
+										<%=_ctx.appRes("UIBannerPortlet.action.register")%>
 									</a>						
 									<a class="Language" onclick="$changeLanguageAction">
 										<%=_ctx.appRes("UIBannerPortlet.action.changeLanguage")%>
