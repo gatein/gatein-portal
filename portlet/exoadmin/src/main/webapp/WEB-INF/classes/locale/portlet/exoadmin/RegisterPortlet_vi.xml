@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+   <UIRegisterForm>
+      <registerWithSuccess>
+         <message>Bạn đã đăng ký thành công tài khoản.</message>
+      </registerWithSuccess>
+      <title>Đăng ký tài khoản mới</title>
+      <label>
+         <action>
+            <CheckUsernameAvailability>Kiểm tra tên đăng nhập</CheckUsernameAvailability>
+         </action>
+         <username>Tên đăng nhập</username>
+         <password>Mật khẩu</password>
+         <confirmPassword>Xác nhận mật khẩu</confirmPassword>
+         <firstName>Tên</firstName>
+         <lastName>Họ</lastName>
+         <emailAddress>Địa chỉ email</emailAddress>
+      </label>
+   </UIRegisterForm>
+</bundle>

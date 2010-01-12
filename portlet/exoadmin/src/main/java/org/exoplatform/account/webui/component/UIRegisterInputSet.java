@@ -40,25 +40,25 @@ import org.exoplatform.webui.form.validator.StringLengthValidator;
  */
 public class UIRegisterInputSet extends UIFormInputWithActions
 {
-   protected static final String USER_NAME = "User Name:";
+   protected static String USER_NAME = "username";
    
-   protected static final String PASSWORD = "Password:";
+   protected static String PASSWORD = "password";
    
-   protected static final String CONFIRM_PASSWORD = "Confirm Password:";
+   protected static String CONFIRM_PASSWORD = "confirmPassword";
    
-   protected static final String FIRST_NAME = "First Name:";
+   protected static String FIRST_NAME = "firstName";
    
-   protected static final String LAST_NAME = "Last Name:";
+   protected static String LAST_NAME = "lastName";
    
-   protected static final String EMAIL_ADDRESS = "Email Address:";
+   protected static String EMAIL_ADDRESS = "emailAddress";
    
    public UIRegisterInputSet(String name) throws Exception{
       super(name);
       
       addUIFormInput(new UIFormStringInput(USER_NAME, USER_NAME, null).addValidator(MandatoryValidator.class)
-         .addValidator(StringLengthValidator.class, 3, 30).addValidator(ResourceValidator.class).addValidator(
-            ExpressionValidator.class, "^[\\p{L}][\\p{L}._\\-\\d]+$", "ResourceValidator.msg.Invalid-char"));
-   
+                     .addValidator(StringLengthValidator.class, 3, 30).addValidator(ResourceValidator.class)
+                     .addValidator(ExpressionValidator.class, "^[\\p{L}][\\p{L}._\\-\\d]+$", "ResourceValidator.msg.Invalid-char"));
+      
       addUIFormInput(new UIFormStringInput(PASSWORD, PASSWORD, null).setType(UIFormStringInput.PASSWORD_TYPE)
          .addValidator(MandatoryValidator.class).addValidator(PasswordStringLengthValidator.class, 6, 30));
       

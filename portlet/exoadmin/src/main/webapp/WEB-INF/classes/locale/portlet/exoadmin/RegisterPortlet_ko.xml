@@ -9,6 +9,12 @@
          <action>
             <CheckUsernameAvailability>사용자 검색</CheckUsernameAvailability>
          </action>
+         <username>사용자 이름</username>
+         <password>비밀 번호</password>
+         <confirmPassword>비밀 번호 확인</confirmPassword>
+         <firstName>이름</firstName>
+         <lastName>성</lastName>
+         <emailAddress>이메일 주소</emailAddress>
       </label>
    </UIRegisterForm>
 </bundle>
