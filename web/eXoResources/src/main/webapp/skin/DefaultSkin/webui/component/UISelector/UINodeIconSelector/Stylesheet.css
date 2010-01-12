@@ -29,6 +29,15 @@
 	height: 263px;
 }
 
+.UINodeIconSelector .LeftColumnStyle .UIDropDownControl {
+	width: auto; /* orientation=rt */
+	position: static; /* orientation=rt */
+}
+
+.UINodeIconSelector .LeftColumnStyle .UIDropDownControl .UIDropDownAnchor {
+	width: 175px; /* orientation=rt */
+}
+
 .UINodeIconSelector .SelectedIconInfo {
 	background: white;
 	border: solid 1px #b7b7b7;
