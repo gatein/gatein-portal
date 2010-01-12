@@ -33,12 +33,10 @@
 	_height: 100%;
 }
 
-.UIPortalToolPanel .Body .PageDecoratorContainer {
+.UIEditInlineWS .UIPortalToolPanel .PageDecoratorContainer {
 }
  
 .UIPortalToolPanel .Body .PageDecoratorContent {
-	min-width: 100px;
-	overflow: auto;
 }
 
 .UIPortalToolPanel .Body .UIPage {

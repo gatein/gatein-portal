@@ -83,8 +83,8 @@
 	padding-left: 2px; /* orientation=rt */
 	text-align: left; /* orientation=lt */
 	text-align: right; /* orientation=rt */
-	float: none;
-	
+	float: none; /* orientation=lt */
+	!float: left; /* orientation=rt */
 }
 
 /****************************/
