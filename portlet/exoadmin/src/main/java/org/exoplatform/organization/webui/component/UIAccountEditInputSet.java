@@ -135,6 +135,16 @@ public class UIAccountEditInputSet extends UIFormInputSet
          }
          user.setPassword(pass1x);
       }
+      
+      //Check if mail address is already used
+      Query query = new Query();
+      query.setEmail(getUIStringInput("email").getValue());
+      if (service.getUserHandler().findUsers(query).getAll().size() > 0)
+      {
+         Object[] args = {username};
+         uiApp.addMessage(new ApplicationMessage("UIAccountInputSet.msg.email-exist", args));
+         return false;
+      }
       service.getUserHandler().saveUser(user, true);
       enableChangePassword(false);
       return true;
