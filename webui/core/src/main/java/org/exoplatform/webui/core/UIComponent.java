@@ -26,6 +26,8 @@ import org.exoplatform.web.application.URLBuilder;
 import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.Component;
+import org.exoplatform.webui.core.renderers.ValueRenderer;
+import org.exoplatform.webui.core.renderers.ValueRendererRegistry;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.event.EventListener;
@@ -51,6 +53,8 @@ abstract public class UIComponent
    transient protected UIComponent uiparent;
 
    transient protected Component config;
+
+   transient private ValueRendererRegistry rendererRegistry = new ValueRendererRegistry();
 
    public String getId()
    {
@@ -457,5 +461,15 @@ abstract public class UIComponent
          return mevent;
       }
       return null;
+   }
+
+   public ValueRenderer getRendererFor(Object value)
+   {
+      return rendererRegistry.getRendererFor(value == null ? null : value.getClass());
+   }
+
+   public <ValueType> void registerRendererFor(ValueRenderer<ValueType> renderer, Class<? extends ValueType> valueType)
+   {
+      rendererRegistry.registerRendererFor(renderer, valueType);
    }
 }
