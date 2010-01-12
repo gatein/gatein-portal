@@ -1,6 +1,6 @@
 /*
  * JBoss, a division of Red Hat
- * Copyright 2009, Red Hat Middleware, LLC, and individual
+ * Copyright 2010, Red Hat Middleware, LLC, and individual
  * contributors as indicated by the @authors tag. See the
  * copyright.txt in the distribution for a full listing of
  * individual contributors.
@@ -22,18 +22,12 @@
  */
 package org.exoplatform.wsrp.webui.component;
 
-import org.exoplatform.commons.utils.LazyPageList;
-import org.exoplatform.commons.utils.ListAccess;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
-import org.exoplatform.webui.config.annotation.ComponentConfigs;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
-import org.exoplatform.webui.core.UIComponent;
-import org.exoplatform.webui.core.UIGrid;
-import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -47,14 +41,6 @@ import org.gatein.registration.policies.DefaultRegistrationPolicy;
 import org.gatein.wsrp.producer.config.ProducerConfiguration;
 import org.gatein.wsrp.producer.config.ProducerConfigurationService;
 import org.gatein.wsrp.producer.config.ProducerRegistrationRequirements;
-import org.gatein.wsrp.registration.RegistrationPropertyDescription;
-
-import javax.xml.namespace.QName;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
 
 /** @author Wesley Hales */
 
@@ -67,8 +53,6 @@ import java.util.Map;
 
 public class UIWsrpProducerEditor extends UIForm
 {
-
-
    private static final String REG_REQUIRED_FOR_DESCRIPTION = "registrationrequiredforfulldescription";
    private static final String STRICT_MODE = "strictmode";
    private static final String REQUIRES_REGISTRATION = "requiresregistration";
@@ -130,8 +114,6 @@ public class UIWsrpProducerEditor extends UIForm
 
       boolean registrationRequired = registrationRequirements.isRegistrationRequired();
       regRequired.setValue(registrationRequired);
-
-
 
 
       // if registration is required then we display more information

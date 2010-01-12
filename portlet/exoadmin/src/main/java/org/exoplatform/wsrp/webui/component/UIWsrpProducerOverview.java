@@ -1,6 +1,6 @@
 /*
  * JBoss, a division of Red Hat
- * Copyright 2009, Red Hat Middleware, LLC, and individual
+ * Copyright 2010, Red Hat Middleware, LLC, and individual
  * contributors as indicated by the @authors tag. See the
  * copyright.txt in the distribution for a full listing of
  * individual contributors.
@@ -26,7 +26,6 @@ import org.exoplatform.commons.utils.LazyPageList;
 import org.exoplatform.commons.utils.ListAccess;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
-import org.exoplatform.portal.webui.container.UIContainerForm;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -37,8 +36,8 @@ import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.UIGrid;
 import org.exoplatform.webui.core.UIPopupWindow;
-import org.exoplatform.webui.core.UITabPane;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
+import org.exoplatform.webui.core.renderers.ValueRenderer;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.gatein.wsrp.producer.config.ProducerConfiguration;
@@ -47,11 +46,14 @@ import org.gatein.wsrp.registration.LocalizedString;
 import org.gatein.wsrp.registration.RegistrationPropertyDescription;
 
 import javax.xml.namespace.QName;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
 
 /** @author Wesley Hales */
 @ComponentConfigs({
-   @ComponentConfig(id = "RegistrationPropertySelector", type = UIGrid.class, template = "app:/groovy/wsrp/webui/component/UIWsrpGrid.gtmpl"),
+   @ComponentConfig(id = UIWsrpProducerOverview.REGISTRATION_PROPERTIES, type = UIGrid.class, template = "system:/groovy/webui/core/UIGrid.gtmpl"),
    @ComponentConfig(
       lifecycle = UIApplicationLifecycle.class,
       template = "app:/groovy/wsrp/webui/component/UIWsrpProducerOverview.gtmpl",
@@ -82,6 +84,18 @@ public class UIWsrpProducerOverview extends UIContainer
       addChild(UIWsrpProducerEditor.class, null, null);
       // registration properties
       registrationProperties = addChild(UIGrid.class, REGISTRATION_PROPERTIES, REGISTRATION_PROPERTIES);
+
+      // add renderer for LocalizedString
+      ValueRenderer<LocalizedString> renderer = new ValueRenderer<LocalizedString>()
+      {
+         @Override
+         public String render(LocalizedString value)
+         {
+            return value.getValue();
+         }
+      };
+      registrationProperties.registerRendererFor(renderer, LocalizedString.class);
+
       //configure the edit and delete buttons based on an id from the data list - this will also be passed as param to listener
       registrationProperties.configure("key", FIELDS, SELECT_ACTIONS);
       registrationProperties.getUIPageIterator().setId(REGISTRATION_PROPERTIES_ITERATOR);
