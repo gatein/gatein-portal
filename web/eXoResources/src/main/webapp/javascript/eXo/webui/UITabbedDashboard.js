@@ -148,6 +148,7 @@ eXo.webui.UITabbedDashboard = {
 		inputElement.style.width = "95px";
 		inputElement.onkeypress = eXo.webui.UITabbedDashboard.createDashboardPage;
 		inputElement.onblur = eXo.webui.UITabbedDashboard.cancelTabDashboard;
+		inputElement.setAttribute('maxLength', 50);
 		inputElement.id = portletFrag.parentNode.id; //Store the id of the portlet here
 		
 		var spanElement = DOMUtil.findDescendantsByTagName(newTabElement, "span")[0];
