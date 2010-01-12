@@ -545,6 +545,7 @@ UIPortal.prototype.changeComposerSaveButton = function() {
 		var portalComposer = eXo.core.DOMUtil.findFirstDescendantByClass(uiWorkingWS, "div", "UIPortalComposer");
 		var saveButton = eXo.core.DOMUtil.findFirstDescendantByClass(portalComposer, "a", "SaveButton");
 		if(saveButton) eXo.core.DOMUtil.replaceClass(saveButton, "SaveButton", "EdittedSaveButton");
+		ajaxAsyncGetRequest(eXo.env.server.createPortalURL(portalComposer.id, "ChangeEdittedState", true));
   }
 };
 

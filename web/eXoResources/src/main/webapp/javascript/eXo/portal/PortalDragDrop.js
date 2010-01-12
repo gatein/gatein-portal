@@ -261,6 +261,8 @@ PortalDragDrop.prototype.doDropCallback = function(dndEvent) {
     newComponent = true;
   }
   
+  if(!targetElement) return;
+  
   var params = [
     {name: "srcID", value: (srcElement.id.replace(/^UIPortlet-/, "")).replace(/^UIContainer-/,"")},
     {name: "targetID", value: targetElement.id.replace(/^.*-/, "")},
