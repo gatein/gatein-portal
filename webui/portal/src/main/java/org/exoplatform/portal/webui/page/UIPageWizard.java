@@ -42,7 +42,7 @@ public abstract class UIPageWizard extends UIWizard
    private int numberStep_;
 
    private boolean showWelcome = true;
-   
+
    private boolean showActions = true;
 
    public UIPageWizard() throws Exception
@@ -99,7 +99,7 @@ public abstract class UIPageWizard extends UIWizard
       PortalRequestContext pcontext = (PortalRequestContext)event.getRequestContext();
 
       UIPortal uiPortal = Util.getUIPortal();
-      uiPortal.setRenderSibbling(UIPortal.class);
+      uiPortal.setRenderSibling(UIPortal.class);
       pcontext.setFullRender(true);
    }
 
@@ -115,6 +115,7 @@ public abstract class UIPageWizard extends UIWizard
    }
 
    // TODO: Need to place UIPageCreateDescription component in other component
+
    public void setDescriptionWizard() throws Exception
    {
       // UIPortalApplication uiPortalApp =
@@ -134,6 +135,7 @@ public abstract class UIPageWizard extends UIWizard
    }
 
    // TODO: Need to place UIPageCreateDescription component in other component
+
    public void setDescriptionWizard(int step) throws Exception
    {
       // UIPortalApplication uiPortalApp =
@@ -165,7 +167,7 @@ public abstract class UIPageWizard extends UIWizard
          PortalRequestContext pcontext = (PortalRequestContext)event.getRequestContext();
 
          UIPortal uiPortal = Util.getUIPortal();
-         uiPortal.setRenderSibbling(UIPortal.class);
+         uiPortal.setRenderSibling(UIPortal.class);
          pcontext.setFullRender(true);
 
          UIWorkingWorkspace uiWorkingWS = uiPortalApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);

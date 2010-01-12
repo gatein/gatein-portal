@@ -1,16 +1,16 @@
 /**
  * Copyright (C) 2009 eXo Platform SAS.
- * 
+ *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation; either version 2.1 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this software; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
@@ -27,17 +27,14 @@ import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.Component;
 import org.exoplatform.webui.event.Event;
+import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.MonitorEvent;
-import org.exoplatform.webui.event.Event.Phase;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by The eXo Platform SAS
- * May 7, 2006
- */
+/** Created by The eXo Platform SAS May 7, 2006 */
 abstract public class UIComponent
 {
 
@@ -63,9 +60,13 @@ abstract public class UIComponent
    public UIComponent setId(String id)
    {
       if (id == null)
+      {
          this.id = Integer.toString(hashCode());
+      }
       else
+      {
          this.id = id;
+      }
       return this;
    }
 
@@ -107,6 +108,7 @@ abstract public class UIComponent
    //    }
    //  }
    //
+
    public void processDecode(WebuiRequestContext context) throws Exception
    {
       MonitorEvent<UIComponent> mevent = createMonitorEvent(Event.Phase.DECODE, context);
@@ -159,7 +161,9 @@ abstract public class UIComponent
    {
       this.config = config;
       if (componentId == null || componentId.length() == 0)
+      {
          componentId = config.getId();
+      }
       if (componentId == null)
       {
          String type = config.getType();
@@ -191,7 +195,9 @@ abstract public class UIComponent
       while (parent != null)
       {
          if (classType.isInstance(parent))
+         {
             return classType.cast(parent);
+         }
          parent = parent.getParent();
       }
       return null;
@@ -212,21 +218,27 @@ abstract public class UIComponent
    {
       org.exoplatform.webui.config.Event event = config.getUIComponentEventConfig(name);
       if (event == null)
+      {
          return "??config??";
+      }
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
       URLBuilder<UIComponent> urlBuilder = context.getURLBuilder();
       if (urlBuilder == null)
+      {
          return "??builder??";
+      }
       String confirm = loadConfirmMesssage(event, context, beanId);
       return urlBuilder.createAjaxURL(this, event.getName(), confirm, beanId, params);
    }
 
    protected String loadConfirmMesssage(org.exoplatform.webui.config.Event event, WebuiRequestContext context,
-      String beanId)
+                                        String beanId)
    {
       String confirmKey = event.getConfirm();
       if (confirmKey.length() < 1)
+      {
          return confirmKey;
+      }
       try
       {
          String confirm = context.getApplicationResourceBundle().getString(confirmKey);
@@ -253,7 +265,9 @@ abstract public class UIComponent
    {
       org.exoplatform.webui.config.Event event = config.getUIComponentEventConfig(name);
       if (event == null)
+      {
          return "??config??";
+      }
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
       String confirm = loadConfirmMesssage(event, context, beanId);
       try
@@ -298,20 +312,26 @@ abstract public class UIComponent
    public <T> void broadcast(Event<T> event, Phase phase) throws Exception
    {
       if (config == null)
+      {
          return;
+      }
       org.exoplatform.webui.config.Event econfig = config.getUIComponentEventConfig(event.getName());
       if (econfig == null)
+      {
          return;
+      }
       Phase executionPhase = econfig.getExecutionPhase();
       if (executionPhase == phase || executionPhase == Event.Phase.ANY)
       {
          for (EventListener<T> listener : econfig.getCachedEventListeners())
+         {
             listener.execute(event);
+         }
       }
    }
 
    public <T extends UIComponent> T createUIComponent(Class<T> type, String configId, String componentId,
-      UIComponent parent) throws Exception
+                                                      UIComponent parent) throws Exception
    {
       T uicomp = createUIComponent(type, configId, componentId);
       uicomp.setParent(parent);
@@ -326,7 +346,7 @@ abstract public class UIComponent
    }
 
    public <T extends UIComponent> T createUIComponent(WebuiRequestContext context, Class<T> type, String configId,
-      String componentId) throws Exception
+                                                      String componentId) throws Exception
    {
       WebuiApplication app = (WebuiApplication)context.getApplication();
       T comp = app.createUIComponent(type, configId, componentId, context);
@@ -337,24 +357,30 @@ abstract public class UIComponent
    public <T extends UIComponent> T findComponentById(String lookupId)
    {
       if (getId().equals(lookupId))
+      {
          return (T)this;
+      }
       return null;
    }
 
    public <T extends UIComponent> T findFirstComponentOfType(Class<T> type)
    {
       if (type.isInstance(this))
+      {
          return type.cast(this);
+      }
       return null;
    }
 
    public <T> void findComponentOfType(List<T> list, Class<T> type)
    {
       if (type.isInstance(this))
+      {
          list.add(type.cast(this));
+      }
    }
 
-   public <T extends UIComponent> void setRenderSibbling(Class<T> type)
+   public <T extends UIComponent> void setRenderSibling(Class<T> type)
    {
       if (uiparent instanceof UIContainer)
       {
@@ -363,9 +389,13 @@ abstract public class UIComponent
          for (UIComponent child : children)
          {
             if (type.isInstance(child))
+            {
                child.setRendered(true);
+            }
             else
+            {
                child.setRendered(false);
+            }
          }
       }
    }
@@ -385,10 +415,14 @@ abstract public class UIComponent
    public Event<UIComponent> createEvent(String name, Phase phase, WebuiRequestContext context) throws Exception
    {
       if (config == null)
+      {
          return null;
+      }
       org.exoplatform.webui.config.Event econfig = config.getUIComponentEventConfig(name);
       if (econfig == null)
+      {
          return null;
+      }
       Phase executionPhase = econfig.getExecutionPhase();
       if (executionPhase == phase || executionPhase == Event.Phase.ANY)
       {
@@ -403,11 +437,15 @@ abstract public class UIComponent
    private MonitorEvent<UIComponent> createMonitorEvent(Phase phase, WebuiRequestContext context) throws Exception
    {
       if (config == null)
+      {
          return null;
+      }
       org.exoplatform.webui.config.Event econfig =
          config.getUIComponentEventConfig(MonitorEvent.UICOMPONENT_LIFECYCLE_MONITOR_EVENT);
       if (econfig == null)
+      {
          return null;
+      }
       Phase executionPhase = econfig.getExecutionPhase();
       if (executionPhase == phase || executionPhase == Event.Phase.ANY)
       {

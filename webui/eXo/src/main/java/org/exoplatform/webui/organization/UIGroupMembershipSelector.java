@@ -1,16 +1,16 @@
 /**
  * Copyright (C) 2009 eXo Platform SAS.
- * 
+ *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation; either version 2.1 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this software; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
@@ -29,25 +29,21 @@ import org.exoplatform.webui.config.annotation.ComponentConfigs;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIBreadcumbs;
+import org.exoplatform.webui.core.UIBreadcumbs.LocalPath;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.UITree;
-import org.exoplatform.webui.core.UIBreadcumbs.LocalPath;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
+import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-/**
- * Author : Nhu Dinh Thuan
- *          nhudinhthuan@exoplatform.com
- * Jun 27, 2006
- */
+/** Author : Nhu Dinh Thuan nhudinhthuan@exoplatform.com Jun 27, 2006 */
 @ComponentConfigs({
    @ComponentConfig(template = "system:/groovy/organization/webui/component/UIGroupMembershipSelector.gtmpl", events = {
       @EventConfig(phase = Phase.DECODE, listeners = UIGroupMembershipSelector.ChangeNodeActionListener.class),
@@ -132,10 +128,14 @@ public class UIGroupMembershipSelector extends UIContainer
       selectGroup_ = service.getGroupHandler().findGroupById(groupId);
       String parentGroupId = null;
       if (selectGroup_ != null)
+      {
          parentGroupId = selectGroup_.getParentId();
+      }
       Group parentGroup = null;
       if (parentGroupId != null)
+      {
          parentGroup = service.getGroupHandler().findGroupById(parentGroupId);
+      }
 
       Collection childrenGroup = service.getGroupHandler().findGroups(selectGroup_);
       sibblingGroup = service.getGroupHandler().findGroups(parentGroup);
@@ -149,13 +149,19 @@ public class UIGroupMembershipSelector extends UIContainer
    private List<LocalPath> getPath(List<LocalPath> list, String id) throws Exception
    {
       if (list == null)
+      {
          list = new ArrayList<LocalPath>(5);
+      }
       if (id == null)
+      {
          return list;
+      }
       OrganizationService service = getApplicationComponent(OrganizationService.class);
       Group group = service.getGroupHandler().findGroupById(id);
       if (group == null)
+      {
          return list;
+      }
       list.add(0, new LocalPath(group.getId(), group.getGroupName()));
       getPath(list, group.getParentId());
       return list;
@@ -170,7 +176,9 @@ public class UIGroupMembershipSelector extends UIContainer
    {
       UIForm uiForm = getAncestorOfType(UIForm.class);
       if (uiForm != null)
+      {
          return uiForm.event(name, getId(), beanId);
+      }
       return super.event(name, beanId);
    }
 
@@ -182,8 +190,8 @@ public class UIGroupMembershipSelector extends UIContainer
          UIComponent uiComp = event.getSource();
          UIGroupMembershipSelector uiSelector = uiComp.getParent();
          uiSelector.changeGroup(groupId);
-         UIComponent uiPermission = uiSelector.<UIComponent> getParent().getParent();
-         uiPermission.setRenderSibbling(uiPermission.getClass());
+         UIComponent uiPermission = uiSelector.<UIComponent>getParent().getParent();
+         uiPermission.setRenderSibling(uiPermission.getClass());
          uiPermission.broadcast(event, Event.Phase.PROCESS);
          UIPopupWindow uiPopup = uiSelector.getParent();
          uiPopup.setShow(true);
@@ -204,8 +212,8 @@ public class UIGroupMembershipSelector extends UIContainer
       public void execute(Event<UIGroupMembershipSelector> event) throws Exception
       {
          UIGroupMembershipSelector uiSelector = event.getSource();
-         UIComponent uiPermission = uiSelector.<UIComponent> getParent().getParent();
-         uiPermission.setRenderSibbling(uiPermission.getClass());
+         UIComponent uiPermission = uiSelector.<UIComponent>getParent().getParent();
+         uiPermission.setRenderSibling(uiPermission.getClass());
          WebuiRequestContext pcontext = event.getRequestContext();
 
          UIPopupWindow uiPopup = uiSelector.getParent();

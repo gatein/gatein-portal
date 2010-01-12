@@ -55,8 +55,8 @@ import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.UITabPane;
 import org.exoplatform.webui.core.UIWizard;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
+import org.exoplatform.webui.event.EventListener;
 
 import java.util.List;
 
@@ -311,7 +311,9 @@ public class UIPortalComposer extends UIContainer
                portalOwner = uiPortal.getOwner();
             }
             else
+            {
                portalOwner = Util.getPortalRequestContext().getPortalOwner();
+            }
          }
          else
          {
@@ -464,19 +466,19 @@ public class UIPortalComposer extends UIContainer
 
          switch (portalMode)
          {
-            case UIPortalApplication.APP_BLOCK_EDIT_MODE :
+            case UIPortalApplication.APP_BLOCK_EDIT_MODE:
                uiPortalApp.setModeState(UIPortalApplication.APP_VIEW_EDIT_MODE);
                break;
-            case UIPortalApplication.APP_VIEW_EDIT_MODE :
+            case UIPortalApplication.APP_VIEW_EDIT_MODE:
                uiPortalApp.setModeState(UIPortalApplication.APP_BLOCK_EDIT_MODE);
                break;
-            case UIPortalApplication.CONTAINER_BLOCK_EDIT_MODE :
+            case UIPortalApplication.CONTAINER_BLOCK_EDIT_MODE:
                uiPortalApp.setModeState(UIPortalApplication.CONTAINER_VIEW_EDIT_MODE);
                break;
-            case UIPortalApplication.CONTAINER_VIEW_EDIT_MODE :
+            case UIPortalApplication.CONTAINER_VIEW_EDIT_MODE:
                uiPortalApp.setModeState(UIPortalApplication.CONTAINER_BLOCK_EDIT_MODE);
                break;
-            default :
+            default:
                uiPortalApp.setModeState(UIPortalApplication.NORMAL_MODE);
                return;
          }
@@ -538,7 +540,7 @@ public class UIPortalComposer extends UIContainer
          uiPortalApp.setModeState(UIPortalApplication.NORMAL_MODE);
 
          UIPortal uiPortal = Util.getUIPortal();
-         uiPortal.setRenderSibbling(UIPortal.class);
+         uiPortal.setRenderSibling(UIPortal.class);
          UIPortalComposer composer = uiWorkingWS.findFirstComponentOfType(UIPortalComposer.class).setRendered(false);
          composer.setEditted(false);
 

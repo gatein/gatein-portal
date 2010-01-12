@@ -1,16 +1,16 @@
 /**
  * Copyright (C) 2009 eXo Platform SAS.
- * 
+ *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation; either version 2.1 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this software; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
@@ -41,13 +41,7 @@ import org.exoplatform.webui.event.EventListener;
 
 import java.util.List;
 
-/**
- * Created by The eXo Platform SARL
- * Author : chungnv
- *          nguyenchung136@yahoo.com
- * Jun 23, 2006
- * 10:07:15 AM
- */
+/** Created by The eXo Platform SARL Author : chungnv nguyenchung136@yahoo.com Jun 23, 2006 10:07:15 AM */
 @ComponentConfig(template = "system:/groovy/portal/webui/navigation/UIPageNodeSelector.gtmpl", events = {@EventConfig(listeners = UIPageNodeSelector.ChangeNodeActionListener.class)})
 public class UIPageNodeSelector extends UIContainer
 {
@@ -79,7 +73,9 @@ public class UIPageNodeSelector extends UIContainer
          selectNavigation(portalSelectedNav);
          PageNode portalSelectedNode = Util.getUIPortal().getSelectedNode();
          if (portalSelectedNode != null)
+         {
             selectPageNodeByUri(portalSelectedNode.getUri());
+         }
          return;
       }
       selectNavigation();
@@ -88,16 +84,22 @@ public class UIPageNodeSelector extends UIContainer
    private void selectNavigation()
    {
       if (selectedNavigation == null)
+      {
          return;
+      }
       if (selectedNode == null || selectedNavigation.getId() != selectedNode.getPageNavigation().getId())
       {
          selectedNode = new SelectedNode(selectedNavigation, null, null);
          if (selectedNavigation.getNodes().size() > 0)
+         {
             selectedNode.setNode(selectedNavigation.getNodes().get(0));
+         }
       }
       selectNavigation(selectedNode.getPageNavigation());
       if (selectedNode.getNode() != null)
+      {
          selectPageNodeByUri(selectedNode.getNode().getUri());
+      }
    }
 
    public void selectNavigation(PageNavigation pageNav)
@@ -112,7 +114,9 @@ public class UIPageNodeSelector extends UIContainer
    public void selectPageNodeByUri(String uri)
    {
       if (selectedNode == null || (selectedNavigation.getId() != selectedNode.getPageNavigation().getId()))
+      {
          return;
+      }
       UITree tree = getChild(UITree.class);
       List<?> sibbling = tree.getSibbling();
       tree.setSibbling(null);
@@ -132,16 +136,22 @@ public class UIPageNodeSelector extends UIContainer
    public PageNode searchPageNodeByUri(PageNavigation pageNav, String uri)
    {
       if (pageNav == null || uri == null)
+      {
          return null;
+      }
       List<PageNode> pageNodes = pageNav.getNodes();
       UITree uiTree = getChild(UITree.class);
       for (PageNode ele : pageNodes)
       {
          PageNode returnPageNode = searchPageNodeByUri(ele, uri, uiTree);
          if (returnPageNode == null)
+         {
             continue;
+         }
          if (uiTree.getSibbling() == null)
+         {
             uiTree.setSibbling(pageNodes);
+         }
          return returnPageNode;
       }
       return null;
@@ -150,19 +160,29 @@ public class UIPageNodeSelector extends UIContainer
    private PageNode searchPageNodeByUri(PageNode pageNode, String uri, UITree tree)
    {
       if (pageNode.getUri().equals(uri))
+      {
          return pageNode;
+      }
       List<PageNode> children = pageNode.getChildren();
       if (children == null)
+      {
          return null;
+      }
       for (PageNode ele : children)
       {
          PageNode returnPageNode = searchPageNodeByUri(ele, uri, tree);
          if (returnPageNode == null)
+         {
             continue;
+         }
          if (tree.getSibbling() == null)
+         {
             tree.setSibbling(children);
+         }
          if (tree.getParentSelected() == null)
+         {
             tree.setParentSelected(pageNode);
+         }
          selectedNode.setParentNode(pageNode);
          return returnPageNode;
       }
@@ -230,7 +250,7 @@ public class UIPageNodeSelector extends UIContainer
          PortalRequestContext pcontext = (PortalRequestContext)event.getRequestContext();
          UIPortalApplication uiPortalApp = uiPageNodeSelector.getAncestorOfType(UIPortalApplication.class);
          UIPortalToolPanel uiToolPanel = Util.getUIPortalToolPanel();
-         uiToolPanel.setRenderSibbling(UIPortalToolPanel.class);
+         uiToolPanel.setRenderSibling(UIPortalToolPanel.class);
          uiToolPanel.setShowMaskLayer(true);
          UIWorkingWorkspace uiWorkingWS = uiPortalApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
          pcontext.addUIComponentToUpdateByAjax(uiWorkingWS);
@@ -269,7 +289,9 @@ public class UIPageNodeSelector extends UIContainer
          UIPage uiPage = Util.toUIPage(node, uiToolPanel);
          UIPageBody uiPageBody = uiPortalApp.findFirstComponentOfType(UIPageBody.class);
          if (uiPageBody.getUIComponent() != null)
+         {
             uiPageBody.setUIComponent(null);
+         }
          uiToolPanel.setUIComponent(uiPage);
       }
    }

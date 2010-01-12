@@ -1,16 +1,16 @@
 /**
  * Copyright (C) 2009 eXo Platform SAS.
- * 
+ *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation; either version 2.1 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this software; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
@@ -30,8 +30,8 @@ import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
+import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
@@ -39,13 +39,7 @@ import org.exoplatform.webui.form.validator.IdentifierValidator;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
 import org.exoplatform.webui.form.validator.StringLengthValidator;
 
-/**
- * Created by The eXo Platform SARL
- * Author : chungnv
- *          nguyenchung136@yahoo.com
- * Jun 27, 2006
- * 8:48:47 AM 
- */
+/** Created by The eXo Platform SARL Author : chungnv nguyenchung136@yahoo.com Jun 27, 2006 8:48:47 AM */
 @ComponentConfig(lifecycle = UIFormLifecycle.class, template = "system:/groovy/webui/form/UIFormWithTitle.gtmpl", events = {
    @EventConfig(listeners = UIGroupForm.SaveActionListener.class),
    @EventConfig(phase = Phase.DECODE, listeners = UIGroupForm.BackActionListener.class)})
@@ -114,9 +108,10 @@ public class UIGroupForm extends UIForm
             {
                currentGroup.setLabel(currentGroup.getGroupName());
             }
-            
+
             Group updateGroup = service.getGroupHandler().findGroupById(currentGroup.getGroupName());
-            if (updateGroup == null) {
+            if (updateGroup == null)
+            {
                Object[] args = {"GroupName", currentGroup.getGroupName()};
                UIApplication uiApp = event.getRequestContext().getUIApplication();
                uiApp.addMessage(new ApplicationMessage("UIGroupForm.msg.group-not-exist", args));
@@ -126,12 +121,12 @@ public class UIGroupForm extends UIForm
                uiGroupDetail.setRenderedChild(UIGroupInfo.class);
                return;
             }
-            
+
             service.getGroupHandler().saveGroup(currentGroup, false);
             uiGroupForm.reset();
             uiGroupForm.setGroup(null);
             uiGroupExplorer.changeGroup(currentGroup.getId());
-            uiGroupForm.setRenderSibbling(UIGroupInfo.class);
+            uiGroupForm.setRenderSibling(UIGroupInfo.class);
             return;
          }
 
@@ -139,13 +134,17 @@ public class UIGroupForm extends UIForm
          String currentGroupId = null;
          currentGroup = uiGroupExplorer.getCurrentGroup();
          if (currentGroup != null)
+         {
             currentGroupId = currentGroup.getId();
+         }
          String groupName = "/" + uiGroupForm.getUIStringInput(GROUP_NAME).getValue();
 
          GroupHandler groupHandler = service.getGroupHandler();
 
          if (currentGroupId != null)
+         {
             groupName = currentGroupId + groupName;
+         }
 
          Group newGroup = groupHandler.findGroupById(groupName);
          if (newGroup != null)
@@ -186,7 +185,7 @@ public class UIGroupForm extends UIForm
          uiGroupExplorer.changeGroup(changeGroupId);
          uiGroupForm.reset();
          uiGroupForm.setGroup(null);
-         uiGroupForm.setRenderSibbling(UIGroupInfo.class);
+         uiGroupForm.setRenderSibling(UIGroupInfo.class);
       }
    }
 
@@ -197,7 +196,7 @@ public class UIGroupForm extends UIForm
          UIGroupForm uiGroupForm = event.getSource();
          uiGroupForm.reset();
          uiGroupForm.setGroup(null);
-         uiGroupForm.setRenderSibbling(UIGroupInfo.class);
+         uiGroupForm.setRenderSibling(UIGroupInfo.class);
          event.getRequestContext().setProcessRender(true);
       }
    }

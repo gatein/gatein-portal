@@ -1,16 +1,16 @@
 /**
  * Copyright (C) 2009 eXo Platform SAS.
- * 
+ *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation; either version 2.1 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this software; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
@@ -28,21 +28,15 @@ import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
+import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIFormInputContainer;
 import org.exoplatform.webui.form.UIFormInputSet;
 import org.exoplatform.webui.form.UIFormTabPane;
 import org.exoplatform.webui.organization.UIUserMembershipSelector;
 import org.exoplatform.webui.organization.UIUserProfileInputSet;
 
-/**
- * Created by The eXo Platform SARL
- * Author : chungnv
- *          nguyenchung136@yahoo.com
- * Jun 23, 2006
- * 10:07:15 AM
- */
+/** Created by The eXo Platform SARL Author : chungnv nguyenchung136@yahoo.com Jun 23, 2006 10:07:15 AM */
 @ComponentConfig(lifecycle = UIFormLifecycle.class, template = "system:/groovy/webui/form/UIFormTabPane.gtmpl", events = {
    @EventConfig(listeners = UIUserInfo.SaveActionListener.class),
    @EventConfig(listeners = UIUserInfo.BackActionListener.class, phase = Phase.DECODE),
@@ -92,10 +86,14 @@ public class UIUserInfo extends UIFormTabPane
       super.processRender(context);
       UIUserMembershipSelector uiUserMembershipSelector = getChild(UIUserMembershipSelector.class);
       if (uiUserMembershipSelector == null)
+      {
          return;
+      }
       UIPopupWindow uiPopupWindow = uiUserMembershipSelector.getChild(UIPopupWindow.class);
       if (uiPopupWindow == null)
+      {
          return;
+      }
       uiPopupWindow.processRender(context);
    }
 
@@ -107,7 +105,9 @@ public class UIUserInfo extends UIFormTabPane
          OrganizationService service = uiUserInfo.getApplicationComponent(OrganizationService.class);
          boolean save = uiUserInfo.getChild(UIAccountEditInputSet.class).save(service);
          if (!save)
+         {
             return;
+         }
          uiUserInfo.getChild(UIUserProfileInputSet.class).save(service, uiUserInfo.getUserName(), false);
       }
    }
@@ -121,7 +121,7 @@ public class UIUserInfo extends UIFormTabPane
          UIListUsers listUser = userManagement.getChild(UIListUsers.class);
          UIAccountEditInputSet accountInput = userInfo.getChild(UIAccountEditInputSet.class);
          UIUserProfileInputSet userProfile = userInfo.getChild(UIUserProfileInputSet.class);
-         userInfo.setRenderSibbling(UIListUsers.class);
+         userInfo.setRenderSibling(UIListUsers.class);
          listUser.search(new Query());
          accountInput.reset();
          userProfile.reset();
