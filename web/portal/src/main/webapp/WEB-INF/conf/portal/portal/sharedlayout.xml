@@ -70,7 +70,10 @@
           <application-ref>exoadmin</application-ref>
           <portlet-ref>AdminToolbarPortlet</portlet-ref>
         </portlet>
+        <!--
 	      <access-permissions>*:/platform/administrators; *:/organization/management/executive-board</access-permissions>
+		   -->
+		   <access-permissions>Everyone</access-permissions>
 		    <show-info-bar>false</show-info-bar>
 		  </portlet-application>
 		</container>
