@@ -59,7 +59,7 @@ public class UserACL
    private String navigationCreatorMembershipType_;
 
    private List<String> mandatoryGroups_;
-   
+
    private List<String> mandatoryMSTypes_;
 
    private PortalACLPlugin portalACLPlugin;
@@ -101,7 +101,7 @@ public class UserACL
       {
          mandatoryGroups_ = new ArrayList<String>();
       }
-      
+
       ValuesParam mandatoryMSTypesParam = params.getValuesParam("mandatory.mstypes");
       if (mandatoryMSTypesParam != null)
          mandatoryMSTypes_ = mandatoryMSTypesParam.getValues();
@@ -213,7 +213,7 @@ public class UserACL
    {
       return mandatoryGroups_;
    }
-   
+
    public List<String> getMandatoryMSTypes()
    {
       return mandatoryMSTypes_;
@@ -267,6 +267,30 @@ public class UserACL
    public boolean hasEditPermission(Page page)
    {
       return hasEditPermission(getIdentity(), page);
+   }
+
+   /**
+    * 
+    * Minh Hoang TO - This method is equivalent to
+    * <code>hasEditPermission(Page)</code>. It allows us to check edit
+    * permission with a UIPage, without converting UIPage into Page via
+    * PortalDataMapper
+    * 
+    */
+   public boolean hasEditPermissionOnPage(String ownerType, String ownerId, String editPermExpression)
+   {
+      Identity identity = this.getIdentity();
+
+      if (PortalConfig.USER_TYPE.equals(ownerType))
+      {
+         if (ownerId.equals(identity.getUserId()))
+         {
+            return true;
+         }
+         return false;
+      }
+
+      return hasPermission(identity, editPermExpression);
    }
 
    public boolean hasPermission(String expPerm)
@@ -367,8 +391,9 @@ public class UserACL
          String expAdminGroup = getAdminGroups();
          String expPerm = null;
 
-         //Check to see whether current user is member of admin group or not, if so grant 
-         //edit permission for group navigation for that user.
+         // Check to see whether current user is member of admin group or not,
+         // if so grant
+         // edit permission for group navigation for that user.
          if (expAdminGroup != null)
          {
             expAdminGroup = expAdminGroup.startsWith("/") ? expAdminGroup : "/" + expAdminGroup;

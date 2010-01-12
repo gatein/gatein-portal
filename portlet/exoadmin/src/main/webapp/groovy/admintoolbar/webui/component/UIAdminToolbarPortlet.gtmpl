@@ -20,6 +20,9 @@
 	String editSiteLayout = _ctx.appRes("UIAdminToolbarPortlet.action.EditSiteLayout");
 	String editorLabel = _ctx.appRes("UIAdminToolbarPortlet.action.Editor");
 	
+	boolean userCouldEditNavigation = uicomponent.hasEditPermissionOnNavigation();
+	boolean userCouldEditPage = uicomponent.hasEditPermissionOnPage();
+	
 	PageNavigation selectedNav = uicomponent.getSelectedNavigation();
 	if (selectedNav != null) {
 		editorLabel = _ctx.appRes("UIAdminToolbarPortlet.action." + selectedNav.getOwnerType() + ".Editor");
@@ -35,15 +38,23 @@
 				</div>
 				<div class="MenuItemContainer" style="position: absolute; display:none;">
 					<div class="SubBlock">
-						<div class="MenuItem">	
-							<a href="javascript:ajaxGet(eXo.env.server.createPortalURL('UIWorkingWorkspace', 'PageCreationWizard', true))" title="" class="ItemIcon AddPageIcon">$addPageLabel</a>
-						</div>
-						<div class="MenuItem">
-							<a href="javascript:ajaxGet(eXo.env.server.createPortalURL('UIWorkingWorkspace', 'EditCurrentPage', true))" title="" class="ItemIcon EditPageIcon">$editPageLabel</a>
-						</div>
-						<div class="MenuItem">	
-							<a href="javascript:ajaxGet(eXo.env.server.createPortalURL('UIWorkingWorkspace', 'EditInline', true))" title="" class="ItemIcon EditSiteIcon">$editSiteLayout</a>
-						</div>
+						<% if(userCouldEditNavigation){ %>
+							<div class="MenuItem">	
+								<a href="javascript:ajaxGet(eXo.env.server.createPortalURL('UIWorkingWorkspace', 'PageCreationWizard', true))" title="" class="ItemIcon AddPageIcon">$addPageLabel</a>
+							</div>
+						<% } %>
+						
+						<% if(userCouldEditPage){ %>
+							<div class="MenuItem">
+								<a href="javascript:ajaxGet(eXo.env.server.createPortalURL('UIWorkingWorkspace', 'EditCurrentPage', true))" title="" class="ItemIcon EditPageIcon">$editPageLabel</a>
+							</div>
+						<% } %>
+						
+						<% if(userCouldEditNavigation){ %>
+							<div class="MenuItem">	
+								<a href="javascript:ajaxGet(eXo.env.server.createPortalURL('UIWorkingWorkspace', 'EditInline', true))" title="" class="ItemIcon EditSiteIcon">$editSiteLayout</a>
+							</div>
+						<% } %>
 					</div>
 				</div>
 			</div>
