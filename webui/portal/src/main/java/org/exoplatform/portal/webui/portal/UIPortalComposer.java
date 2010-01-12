@@ -55,10 +55,12 @@ import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.UITabPane;
 import org.exoplatform.webui.core.UIWizard;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.event.Event.Phase;
 
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 
 /** Created by The eXo Platform SAS Author : Pham Thanh Tung thanhtungty@gmail.com Jun 10, 2009 */
 @ComponentConfigs({
@@ -162,20 +164,10 @@ public class UIPortalComposer extends UIContainer
       String remoteUser = prContext.getRemoteUser();
       String ownerUser = prContext.getPortalOwner();
 
-      String portalOwner = null;
-      if (editPortal.getOwnerType().equals(PortalConfig.PORTAL_TYPE))
-      {
-         portalOwner = editPortal.getOwner();
-      }
-      else
-      {
-         portalOwner = Util.getPortalRequestContext().getPortalOwner();
-      }
-
       PortalConfig portalConfig = (PortalConfig)PortalDataMapper.buildModelObject(editPortal);
       UserPortalConfigService configService = getApplicationComponent(UserPortalConfigService.class);
 
-      if (configService.getUserPortalConfig(portalOwner, remoteUser) != null)
+      if (isPortalExist(editPortal))
       {
          configService.update(portalConfig);
       }
@@ -225,6 +217,25 @@ public class UIPortalComposer extends UIContainer
       prContext.refreshResourceBundle();
       SkinService skinService = getApplicationComponent(SkinService.class);
       skinService.invalidatePortalSkinCache(editPortal.getName(), editPortal.getSkin());
+   }
+   
+   public boolean isPortalExist(UIPortal editPortal) throws Exception
+   {
+      String remoteUser = Util.getPortalRequestContext().getRemoteUser();
+
+      String portalOwner = null;
+      if (editPortal.getOwnerType().equals(PortalConfig.PORTAL_TYPE))
+      {
+         portalOwner = editPortal.getOwner();
+      }
+      else
+      {
+         portalOwner = Util.getPortalRequestContext().getPortalOwner();
+      }
+
+      UserPortalConfigService configService = getApplicationComponent(UserPortalConfigService.class);
+      
+      return configService.getUserPortalConfig(portalOwner, remoteUser) != null;
    }
 
    public void updateWorkspaceComponent() throws Exception
@@ -406,11 +417,32 @@ public class UIPortalComposer extends UIContainer
          {
             uri = uiPortal.getSelectedNode() != null ? uiPortal.getSelectedNode().getUri() : null;
          }
-         PageNodeEvent<UIPortal> pnevent = new PageNodeEvent<UIPortal>(uiPortal, PageNodeEvent.CHANGE_PAGE_NODE, uri);
-         uiPortal.broadcast(pnevent, Event.Phase.PROCESS);
-         prContext.addUIComponentToUpdateByAjax(uiWorkingWS);
-         JavascriptManager jsManager = prContext.getJavascriptManager();
-         jsManager.addJavascript("eXo.portal.portalMode=" + UIPortalApplication.NORMAL_MODE + ";");
+         
+         if(uiComposer.isPortalExist(editPortal))
+         {
+            PageNodeEvent<UIPortal> pnevent = new PageNodeEvent<UIPortal>(uiPortal, PageNodeEvent.CHANGE_PAGE_NODE, uri);
+            uiPortal.broadcast(pnevent, Event.Phase.PROCESS);
+            prContext.addUIComponentToUpdateByAjax(uiWorkingWS);
+            JavascriptManager jsManager = prContext.getJavascriptManager();
+            jsManager.addJavascript("eXo.portal.portalMode=" + UIPortalApplication.NORMAL_MODE + ";");
+         }
+         else
+         {  
+            if(editPortal.getOwner().equals(prContext.getPortalOwner()))
+            {
+               HttpServletRequest request = prContext.getRequest();
+               request.getSession().invalidate();
+               prContext.setResponseComplete(true);
+               prContext.getResponse().sendRedirect(request.getContextPath());
+               return;
+            }
+            else
+            {
+               UIApplication uiApp = prContext.getUIApplication();
+               uiApp.addMessage(new ApplicationMessage("UIPortalForm.msg.notExistAnymore", null));
+               prContext.addUIComponentToUpdateByAjax(uiWorkingWS);
+            }
+         }
       }
 
    }
