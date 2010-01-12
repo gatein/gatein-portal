@@ -1,6 +1,6 @@
 /*
  * JBoss, a division of Red Hat
- * Copyright 2009, Red Hat Middleware, LLC, and individual
+ * Copyright 2010, Red Hat Middleware, LLC, and individual
  * contributors as indicated by the @authors tag. See the
  * copyright.txt in the distribution for a full listing of
  * individual contributors.
@@ -26,7 +26,6 @@ import org.exoplatform.commons.utils.LazyPageList;
 import org.exoplatform.commons.utils.ListAccess;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
-import org.exoplatform.portal.webui.container.UIContainerForm;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -36,12 +35,12 @@ import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.UIGrid;
 import org.exoplatform.webui.core.UIPopupWindow;
-import org.exoplatform.webui.core.UITabPane;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.gatein.wsrp.WSRPConsumer;
 import org.gatein.wsrp.consumer.RefreshResult;
+import org.gatein.wsrp.consumer.RegistrationInfo;
 import org.gatein.wsrp.consumer.registry.ConsumerRegistry;
 
 import java.util.List;
@@ -74,6 +73,8 @@ public class UIWsrpConsumerOverview extends UIContainer
    //delete
    //
    public static String[] SELECT_ACTIONS = {"Edit", "Delete", "Refresh", "Activate", "Deactivate"};
+
+   private RegistrationInfo expectedRegistrationInfo;
 
    public List getConfiguredConsumers() throws Exception
    {
@@ -141,6 +142,11 @@ public class UIWsrpConsumerOverview extends UIContainer
 
       LazyPageList pageList = createPageList(getConfiguredConsumers());
       uiGrid.getUIPageIterator().setPageList(pageList);
+   }
+
+   private void setExpectedRegistrationInfo(RegistrationInfo expectedRegistrationInfo)
+   {
+      this.expectedRegistrationInfo = expectedRegistrationInfo;
    }
 
    static public class RefreshGridActionListener extends EventListener<UIWsrpConsumerOverview>
@@ -292,12 +298,14 @@ public class UIWsrpConsumerOverview extends UIContainer
                if (result.hasIssues())
                {
                   // create the expected registration info and make it available
-                  /*RegistrationInfo expected = new RegistrationInfo(consumer.getProducerInfo().getRegistrationInfo());
+                  RegistrationInfo expected = new RegistrationInfo(consumer.getProducerInfo().getRegistrationInfo());
                   expected.refresh(result.getServiceDescription(), consumer.getProducerId(), true, true, true);
-                  setExpectedRegistrationInfo(expected);*/
+                  consumerOverview.setExpectedRegistrationInfo(expected);
 
                   // refresh had issues, we should deactivate this consumer
                   registry.deactivateConsumerWith(consumer.getProducerId());
+
+                  uiApp.addMessage(new ApplicationMessage("Consumer refresh resulted in errors that need to be fixed", null, ApplicationMessage.ERROR));
                }
                else
                {
@@ -310,9 +318,8 @@ public class UIWsrpConsumerOverview extends UIContainer
                   {
                      registry.deactivateConsumerWith(consumer.getProducerId());
                   }
-
+                  uiApp.addMessage(new ApplicationMessage("Consumer Refreshed Successfully", null));
                }
-               uiApp.addMessage(new ApplicationMessage("Consumer Refreshed Successfully", null));
                consumerOverview.refreshGrid(event);
             }
          }
