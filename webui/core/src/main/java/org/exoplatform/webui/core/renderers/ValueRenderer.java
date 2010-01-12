@@ -29,12 +29,12 @@ import org.gatein.common.util.ParameterValidation;
  * @author <a href="mailto:chris.laprun@jboss.com">Chris Laprun</a>
  * @version $Revision$
  */
-public class ValueRenderer<ValueType>
+public class ValueRenderer<V>
 {
    public static final String EMPTY = "";
    public static final String DEFAULT_CSS_CLASS = "Text";
    public static final ValueRenderer<Object> DEFAULT_RENDERER = new ValueRenderer<Object>();
-   public static final ValueRenderer NULL_RENDERER = new ValueRenderer()
+   public static final ValueRenderer<Object> NULL_RENDERER = new ValueRenderer<Object>()
    {
       @Override
       public String render(Object value)
@@ -50,13 +50,13 @@ public class ValueRenderer<ValueType>
    };
 
 
-   public String render(ValueType value)
+   public String render(V value)
    {
       ParameterValidation.throwIllegalArgExceptionIfNull(value, "Value");
       return value.toString();
    }
 
-   public String getCSSClassFor(ValueType value)
+   public String getCSSClassFor(V value)
    {
       return DEFAULT_CSS_CLASS;
    }

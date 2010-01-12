@@ -28,9 +28,7 @@ import org.gatein.common.util.ParameterValidation;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author <a href="mailto:chris.laprun@jboss.com">Chris Laprun</a>
@@ -38,12 +36,12 @@ import java.util.Map;
  */
 public class ValueRendererRegistry
 {
-   private static Map<Class, ValueRenderer> DEFAULT_RENDERERS;
-   private Map<Class, ValueRenderer> renderers;
+   private static Map<Class<?>, ValueRenderer<?>> DEFAULT_RENDERERS;
+   private Map<Class<?>, ValueRenderer<?>> renderers;
 
    static
    {
-      FormattableValueRenderer numberRenderer = new FormattableValueRenderer(null, "number");
+      FormattableValueRenderer<Number> numberRenderer = new FormattableValueRenderer<Number>(null, "number");
       registerDefaultRendererFor(numberRenderer, Number.class);
       registerDefaultRendererFor(numberRenderer, Byte.class);
       registerDefaultRendererFor(numberRenderer, Double.class);
@@ -52,15 +50,30 @@ public class ValueRendererRegistry
       registerDefaultRendererFor(numberRenderer, Long.class);
       registerDefaultRendererFor(numberRenderer, Short.class);
 
-      FormattableValueRenderer dateRenderer = new FormattableValueRenderer(new SimpleDateFormat("HH:mm:ss yyyy-MM-dd"), "Datetime");
+      FormattableValueRenderer<Date> dateRenderer = new FormattableValueRenderer<Date>(new SimpleDateFormat("HH:mm:ss yyyy-MM-dd"), "Datetime");
       registerDefaultRendererFor(dateRenderer, Date.class);
       registerDefaultRendererFor(dateRenderer, java.sql.Date.class);
       registerDefaultRendererFor(dateRenderer, Time.class);
       registerDefaultRendererFor(dateRenderer, Timestamp.class);
    }
 
+   public <V> ValueRenderer<? super V> getRendererFor(V value)
+   {
+      if (value == null)
+      {
+         return null;
+      }
+      else
+      {
+         Class<?> valueType = value.getClass();
+         // This is almost OK
+         @SuppressWarnings("unchecked")
+         ValueRenderer<? super V> renderer = (ValueRenderer<? super V>)getRendererFor(valueType);
+         return renderer;
+      }
+   }
 
-   public <ValueType> ValueRenderer<ValueType> getRendererFor(Class<? extends ValueType> valueType)
+   public <V> ValueRenderer<? super V> getRendererFor(Class<V> valueType)
    {
       if (valueType == null)
       {
@@ -68,7 +81,7 @@ public class ValueRendererRegistry
       }
 
       // first check local renderers
-      ValueRenderer renderer = getRendererIn(valueType, renderers);
+      ValueRenderer<? super V> renderer = getRendererIn(valueType, renderers);
       if (renderer == null)
       {
          // then globally registered ones
@@ -77,15 +90,24 @@ public class ValueRendererRegistry
          // if we haven't found a match, check inheritance and return first match
          if (renderer == null)
          {
-            for (Map.Entry<Class, ValueRenderer> entry : DEFAULT_RENDERERS.entrySet())
+            for (Map.Entry<Class<?>, ValueRenderer<?>> entry : DEFAULT_RENDERERS.entrySet())
             {
-               Class type = entry.getKey();
+               Class<?> type = entry.getKey();
                if (type.isAssignableFrom(valueType))
                {
-                  renderer = entry.getValue();
+                  // the valueType class is assignable to the type class which mean that
+                  // the type class is a super class of the valueType class
+                  // This cast is OK
+                  @SuppressWarnings("unchecked")
+                  ValueRenderer<? super V> tmp = (ValueRenderer<? super V>) entry.getValue();
+                  renderer = tmp;
+
+                  // OK
+                  @SuppressWarnings("unchecked")
+                  Class<? extends V> asSubclassOfV = (Class<? extends V>)type;
 
                   // add the found renderers to the default ones so that further look-ups will be faster
-                  registerDefaultRendererFor(renderer, type);
+                  registerDefaultRendererFor(renderer, asSubclassOfV);
 
                   break;
                }
@@ -103,24 +125,32 @@ public class ValueRendererRegistry
       return renderer;
    }
 
-   public static <ValueType> void registerDefaultRendererFor(ValueRenderer<ValueType> renderer, Class<? extends ValueType> type)
+   public static <V> void registerDefaultRendererFor(ValueRenderer<? super V> renderer, Class<? extends V> type)
    {
       DEFAULT_RENDERERS = registerIn(renderer, type, DEFAULT_RENDERERS);
    }
 
-   public <ValueType> void registerRendererFor(ValueRenderer<ValueType> renderer, Class<? extends ValueType> type)
+   public <V> void registerRendererFor(ValueRenderer<V> renderer, Class<? extends V> type)
    {
       renderers = registerIn(renderer, type, renderers);
    }
 
-   private static <ValueType> Map<Class, ValueRenderer> registerIn(ValueRenderer<ValueType> renderer, Class<? extends ValueType> type, Map<Class, ValueRenderer> renderers)
+   private static <V> Map<Class<?>, ValueRenderer<?>> registerIn(
+      ValueRenderer<? super V> renderer,
+      Class<? extends V> type,
+      Map<Class<?>, ValueRenderer<?>> renderers)
    {
       ParameterValidation.throwIllegalArgExceptionIfNull(type, "Value class");
       ParameterValidation.throwIllegalArgExceptionIfNull(renderer, "Renderer");
 
       if (renderers == null)
       {
-         renderers = new HashMap<Class, ValueRenderer>(7);
+         renderers = new HashMap<Class<?>, ValueRenderer<?>>(7);
+      }
+      else
+      {
+         // Copy on write for thread safety
+         renderers = new HashMap<Class<?>, ValueRenderer<?>>(renderers);
       }
 
       renderers.put(type, renderer);
@@ -128,7 +158,7 @@ public class ValueRendererRegistry
       return renderers;
    }
 
-   private static ValueRenderer getRendererIn(Class valueType, Map<Class, ValueRenderer> renderers)
+   private static <V> ValueRenderer<? super V> getRendererIn(Class<V> valueType, Map<Class<?>, ValueRenderer<?>> renderers)
    {
       if (renderers == null)
       {
@@ -136,7 +166,10 @@ public class ValueRendererRegistry
       }
       else
       {
-         return renderers.get(valueType);
+         // this cast is OK
+         @SuppressWarnings("unchecked")
+         ValueRenderer<? super V> renderer = (ValueRenderer<? super V>) renderers.get(valueType);
+         return renderer;
       }
    }
 }

@@ -35,18 +35,16 @@ import java.util.Date;
 public class ValueRendererRegistryTestCase extends TestCase
 {
    private ValueRendererRegistry registry;
-   private ValueRenderer renderer;
 
    @Override
    protected void setUp() throws Exception
    {
       registry = new ValueRendererRegistry();
-      renderer = null;
    }
 
    public void testGetDefaultRenderer()
    {
-      renderer = registry.getRendererFor(Object.class);
+      ValueRenderer<? super Object> renderer = registry.getRendererFor(Object.class);
       assertEquals(ValueRenderer.DEFAULT_RENDERER, renderer);
       assertEquals(ValueRenderer.DEFAULT_CSS_CLASS, renderer.getCSSClassFor(new Object()));
    }
@@ -55,10 +53,10 @@ public class ValueRendererRegistryTestCase extends TestCase
    {
       SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
       String css = "testDate";
-      registry.registerRendererFor(new FormattableValueRenderer(dateFormat, css), TestDate.class);
+      registry.registerRendererFor(new FormattableValueRenderer<Date>(dateFormat, css), TestDate.class);
 
       TestDate date = new TestDate(2010, 1, 12, 13, 37, 0);
-      renderer = registry.getRendererFor(date.getClass());
+      ValueRenderer<? super TestDate> renderer = registry.getRendererFor(date);
       assertNotNull(renderer);
       assertEquals(dateFormat.format(date), renderer.render(date));
       assertEquals(css, renderer.getCSSClassFor(date));
@@ -66,7 +64,7 @@ public class ValueRendererRegistryTestCase extends TestCase
 
    public void testRenderNullValue()
    {
-      renderer = registry.getRendererFor(null);
+      ValueRenderer<? super Object> renderer = registry.getRendererFor(null);
       assertNotNull(renderer);
       assertEquals(ValueRenderer.EMPTY, renderer.render(null));
       assertEquals(ValueRenderer.EMPTY, renderer.getCSSClassFor(null));
@@ -74,17 +72,17 @@ public class ValueRendererRegistryTestCase extends TestCase
 
    public void testSupportsPreviousUIGridScenario()
    {
-      renderer = registry.getRendererFor(Integer.class);
+      ValueRenderer<? super Integer> renderer = registry.getRendererFor(Integer.class);
       assertNotNull(renderer);
       assertEquals("100", renderer.render(100));
       assertEquals("number", renderer.getCSSClassFor(100));
 
       SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss yyyy-MM-dd");
       TestDate date = new TestDate(2010, 1, 12, 13, 37, 0);
-      renderer = registry.getRendererFor(date.getClass());
+      ValueRenderer<? super TestDate> renderer2 = registry.getRendererFor(date);
       assertNotNull(renderer);
-      assertEquals(dateFormat.format(date), renderer.render(date));
-      assertEquals("Datetime", renderer.getCSSClassFor(date));
+      assertEquals(dateFormat.format(date), renderer2.render(date));
+      assertEquals("Datetime", renderer2.getCSSClassFor(date));
    }
 
    private static class TestDate extends Date

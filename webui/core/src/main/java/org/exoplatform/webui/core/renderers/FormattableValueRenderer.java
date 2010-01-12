@@ -26,26 +26,38 @@ package org.exoplatform.webui.core.renderers;
 import java.text.Format;
 
 /**
+ *
  * @author <a href="mailto:chris.laprun@jboss.com">Chris Laprun</a>
  * @version $Revision$
  */
-public class FormattableValueRenderer extends ValueRenderer<Object>
+public class FormattableValueRenderer<V> extends ValueRenderer<V>
 {
-   private Format format;
+
    private String cssClass;
+
+   private Format formatPrototype;
+
+   private final ThreadLocal<Format> format = new ThreadLocal<Format>()
+   {
+      @Override
+      public Format get()
+      {
+         return (Format)formatPrototype.clone();
+      }
+   };
 
    public FormattableValueRenderer(Format format, String cssClass)
    {
-      this.format = format;
+      this.formatPrototype = format;
       this.cssClass = cssClass;
    }
 
    @Override
-   public String render(Object value)
+   public String render(V value)
    {
-      if (format != null)
+      if (formatPrototype != null)
       {
-         return format.format(value);
+         return format.get().format(value);
       }
       else
       {
@@ -54,7 +66,7 @@ public class FormattableValueRenderer extends ValueRenderer<Object>
    }
 
    @Override
-   public String getCSSClassFor(Object value)
+   public String getCSSClassFor(V value)
    {
       if (cssClass != null)
       {

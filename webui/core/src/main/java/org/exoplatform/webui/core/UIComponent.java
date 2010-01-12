@@ -463,12 +463,12 @@ abstract public class UIComponent
       return null;
    }
 
-   public ValueRenderer getRendererFor(Object value)
+   public ValueRenderer<?> getRendererFor(Object value)
    {
-      return rendererRegistry.getRendererFor(value == null ? null : value.getClass());
+      return rendererRegistry.getRendererFor(value);
    }
 
-   public <ValueType> void registerRendererFor(ValueRenderer<ValueType> renderer, Class<? extends ValueType> valueType)
+   public <V> void registerRendererFor(ValueRenderer<V> renderer, Class<? extends V> valueType)
    {
       rendererRegistry.registerRendererFor(renderer, valueType);
    }
