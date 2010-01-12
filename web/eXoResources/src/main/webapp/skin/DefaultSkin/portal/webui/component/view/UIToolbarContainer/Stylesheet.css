@@ -84,7 +84,7 @@
 	text-align: left; /* orientation=lt */
 	text-align: right; /* orientation=rt */
 	float: none; /* orientation=lt */
-	!float: left; /* orientation=rt */
+	!float: left; /* orientation=rt */ /* fix for IE7 */
 }
 
 /****************************/
@@ -243,7 +243,7 @@
 }
 
 .UIToolbarContainer .UIAdminToolbarPortlet {
-	width: 120px; /* orientation=rt */
+	width: 200px; /* orientation=rt */
 }
 
 .UIToolbarContainer .UIAdminToolbarPortlet .UIHorizontalTabs .UITab {
