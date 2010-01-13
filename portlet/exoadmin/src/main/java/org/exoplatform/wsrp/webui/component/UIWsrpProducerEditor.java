@@ -25,8 +25,10 @@ package org.exoplatform.wsrp.webui.component;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
+import org.exoplatform.webui.config.annotation.ComponentConfigs;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
+import org.exoplatform.webui.core.UIGrid;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -40,25 +42,38 @@ import org.gatein.wsrp.producer.config.ProducerRegistrationRequirements;
  * @author Wesley Hales
  * @author Chris Laprun
  */
-@ComponentConfig(
-   lifecycle = UIFormLifecycle.class,
-   template = "app:/groovy/wsrp/webui/component/UIWsrpProducerEditor.gtmpl",
-   events = {
-      @EventConfig(listeners = UIWsrpProducerEditor.SaveActionListener.class)
-   }
-)
+@ComponentConfigs({
+   @ComponentConfig(id = "RegistrationPropertySelector", type = UIGrid.class, template = "system:/groovy/webui/core/UIGrid.gtmpl"),
+   @ComponentConfig(
+      lifecycle = UIFormLifecycle.class,
+      template = "app:/groovy/wsrp/webui/component/UIWsrpProducerEditor.gtmpl",
+      events = {
+         @EventConfig(listeners = UIWsrpProducerEditor.SaveActionListener.class)
+      }
+   )
+})
 public class UIWsrpProducerEditor extends UIForm
 {
    private static final String REG_REQUIRED_FOR_DESCRIPTION = "registrationrequiredforfulldescription";
    private static final String STRICT_MODE = "strictmode";
    private static final String REQUIRES_REGISTRATION = "requiresregistration";
    private static final String REGISTRATION_DETAILS = "registrationdetails";
+   static final String REGISTRATION_PROPERTIES = "RegistrationPropertySelector";
 
    private ProducerConfigurationService configService;
    private UIWsrpRegistrationDetails registrationDetails;
    private UIFormCheckBoxInput regReqForDesc;
    private UIFormCheckBoxInput strictMode;
    private UIFormCheckBoxInput<Boolean> regRequired;
+
+   private UIGrid registrationProperties;
+
+   public UIGrid getRegistrationProperties() throws Exception
+   {
+      return createUIComponent(UIGrid.class, REGISTRATION_PROPERTIES, REGISTRATION_PROPERTIES);
+   }
+
+
 
    public UIWsrpProducerEditor() throws Exception
    {

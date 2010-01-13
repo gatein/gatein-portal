@@ -63,16 +63,15 @@ import java.util.ResourceBundle;
  * @author <a href="mailto:chris.laprun@jboss.com">Chris Laprun</a>
  * @version $Revision$
  */
-@ComponentConfigs({
-   @ComponentConfig(id = "RegistrationPropertySelector", type = UIGrid.class, template = "system:/groovy/webui/core/UIGrid.gtmpl"),
-   @ComponentConfig(
-      lifecycle = UIApplicationLifecycle.class,
-      events = {
-         @EventConfig(listeners = UIWsrpRegistrationDetails.AddPropertyActionListener.class),
-         @EventConfig(listeners = UIWsrpRegistrationDetails.EditPropertyActionListener.class),
-         @EventConfig(listeners = UIWsrpRegistrationDetails.DeletePropertyActionListener.class)
-      })
-})
+
+@ComponentConfig(
+   lifecycle = UIApplicationLifecycle.class,
+   events = {
+      @EventConfig(listeners = UIWsrpRegistrationDetails.AddPropertyActionListener.class),
+      @EventConfig(listeners = UIWsrpRegistrationDetails.EditPropertyActionListener.class),
+      @EventConfig(listeners = UIWsrpRegistrationDetails.DeletePropertyActionListener.class)
+   })
+
 public class UIWsrpRegistrationDetails extends UIFormInputSet
 {
    private UIFormInputBase<String> policy;
@@ -85,6 +84,7 @@ public class UIWsrpRegistrationDetails extends UIFormInputSet
    static final String REGISTRATION_PROPERTIES = "RegistrationPropertySelector";
    static final String REGISTRATION_PROPERTIES_ITERATOR = "ProducerPropPageIterator";
 
+
    public UIWsrpRegistrationDetails(String name, UIWsrpProducerEditor parent) throws Exception
    {
       super(name);
@@ -96,9 +96,10 @@ public class UIWsrpRegistrationDetails extends UIFormInputSet
       // validator
       validator = new UIFormStringInput(VALIDATOR_CLASS, VALIDATOR_CLASS, null);
       addUIFormInput(validator);
-
+      registrationProperties = parent.getRegistrationProperties();
       // registration properties
-      registrationProperties = addChild(UIGrid.class, REGISTRATION_PROPERTIES, REGISTRATION_PROPERTIES);
+      //registrationProperties.setComponentConfig(UIGrid.class,REGISTRATION_PROPERTIES);
+      //registrationProperties = createUIComponent(UIGrid.class, null, null);
 
       // add renderer for LocalizedString
       ValueRenderer<LocalizedString> renderer = new ValueRenderer<LocalizedString>()
