@@ -25,6 +25,7 @@ package org.exoplatform.wsrp.webui.component;
 
 import org.exoplatform.commons.utils.LazyPageList;
 import org.exoplatform.commons.utils.ListAccess;
+import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -35,6 +36,7 @@ import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIGrid;
 import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
+import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.renderers.ValueRenderer;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -63,31 +65,31 @@ import java.util.ResourceBundle;
  * @author <a href="mailto:chris.laprun@jboss.com">Chris Laprun</a>
  * @version $Revision$
  */
-
-@ComponentConfig(
-   lifecycle = UIApplicationLifecycle.class,
-   events = {
-      @EventConfig(listeners = UIWsrpRegistrationDetails.AddPropertyActionListener.class),
-      @EventConfig(listeners = UIWsrpRegistrationDetails.EditPropertyActionListener.class),
-      @EventConfig(listeners = UIWsrpRegistrationDetails.DeletePropertyActionListener.class)
-   })
-
-public class UIWsrpRegistrationDetails extends UIFormInputSet
+@ComponentConfigs({
+   @ComponentConfig(id = "RegistrationPropertySelector", type = UIGrid.class, template = "system:/groovy/webui/core/UIGrid.gtmpl"),
+   @ComponentConfig(
+      lifecycle = UIFormLifecycle.class,
+      events = {
+         @EventConfig(listeners = UIWsrpRegistrationDetails.AddPropertyActionListener.class),
+         @EventConfig(listeners = UIWsrpRegistrationDetails.EditPropertyActionListener.class),
+         @EventConfig(listeners = UIWsrpRegistrationDetails.DeletePropertyActionListener.class)
+      })
+})
+public class UIWsrpRegistrationDetails extends UIForm
 {
    private UIFormInputBase<String> policy;
    private UIFormInputBase<String> validator;
    private UIGrid registrationProperties;
-   static String[] FIELDS = {"key","name", "description", "label", "hint"};
-   static String[] SELECT_ACTIONS = {"AddProperty", "EditProperty", "DeleteProperty"};
+   static String[] FIELDS = {"key", "name", "description", "label", "hint"};
+   static String[] SELECT_ACTIONS = {"EditProperty", "DeleteProperty"};
    static final String POLICY_CLASS = "policyClassName";
    static final String VALIDATOR_CLASS = "validatorClassName";
    static final String REGISTRATION_PROPERTIES = "RegistrationPropertySelector";
    static final String REGISTRATION_PROPERTIES_ITERATOR = "ProducerPropPageIterator";
 
-
-   public UIWsrpRegistrationDetails(String name, UIWsrpProducerEditor parent) throws Exception
+   public UIWsrpRegistrationDetails() throws Exception
    {
-      super(name);
+      //super(name);
 
       // policy
       policy = new UIFormStringInput(POLICY_CLASS, POLICY_CLASS, null);
@@ -96,11 +98,9 @@ public class UIWsrpRegistrationDetails extends UIFormInputSet
       // validator
       validator = new UIFormStringInput(VALIDATOR_CLASS, VALIDATOR_CLASS, null);
       addUIFormInput(validator);
-      addChild(parent.getRegistrationProperties());
-      registrationProperties = getChildById(REGISTRATION_PROPERTIES);
+
       // registration properties
-      //registrationProperties.setComponentConfig(UIGrid.class,REGISTRATION_PROPERTIES);
-      //registrationProperties = createUIComponent(UIGrid.class, null, null);
+      registrationProperties = addChild(UIGrid.class, REGISTRATION_PROPERTIES, REGISTRATION_PROPERTIES);
 
       // add renderer for LocalizedString
       ValueRenderer<LocalizedString> renderer = new ValueRenderer<LocalizedString>()
@@ -119,7 +119,7 @@ public class UIWsrpRegistrationDetails extends UIFormInputSet
       registrationProperties.getUIPageIterator().setRendered(false);
       addChild(registrationProperties.getUIPageIterator());
 
-      init(parent.getService().getConfiguration().getRegistrationRequirements());
+      init(getService().getConfiguration().getRegistrationRequirements());
 
       //add the popup for property edit and adding new properties
       UIPopupWindow popup = addChild(UIPopupWindow.class, null, null);
@@ -150,6 +150,11 @@ public class UIWsrpRegistrationDetails extends UIFormInputSet
       // registration properties
       Map<QName, RegistrationPropertyDescription> regProps = registrationRequirements.getRegistrationProperties();
       registrationProperties.getUIPageIterator().setPageList(createPageList(getPropertyList(regProps)));
+   }
+
+   ProducerConfigurationService getService()
+   {
+      return Util.getUIPortalApplication().getApplicationComponent(ProducerConfigurationService.class);
    }
 
    private List<RegistrationPropertyDescription> getPropertyList(Map<QName, RegistrationPropertyDescription> descriptions) throws Exception

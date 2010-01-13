@@ -1,5 +1,6 @@
 <%
     import org.exoplatform.wsrp.webui.component.UIWsrpProducerEditor;
+    import org.exoplatform.wsrp.webui.component.UIWsrpRegistrationDetails;
 %>
 
 <div class="<%=uicomponent.getId()%>" id="<%=uicomponent.getId()%>">
@@ -12,11 +13,11 @@
          <table class="ActionContainer">
             <tr>
                <td>
-                  <div onclick="<%=uicomponent.event("AddProperty")%>" class="ActionButton LightBlueStyle">
+                  <div onclick="<%=uicomponent.getChild(UIWsrpProducerEditor.class).getChild(UIWsrpRegistrationDetails.class).event("Add")%>" class="ActionButton LightBlueStyle">
                      <div class="ButtonLeft">
                         <div class="ButtonRight">
                            <div class="ButtonMiddle">
-                              <a href="javascript:void(0);"><%=_ctx.appRes(uicomponent.getId() + ".action.AddProperty")%></a>
+                              <a href="javascript:void(0);"><%=_ctx.appRes(uicomponent.getChild(UIWsrpProducerEditor.class).getChild(UIWsrpRegistrationDetails.class).getId() + ".action.Add")%></a>
                            </div>
                         </div>
                      </div>

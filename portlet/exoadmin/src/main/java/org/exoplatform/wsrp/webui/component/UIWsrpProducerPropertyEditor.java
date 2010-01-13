@@ -42,7 +42,8 @@ import org.gatein.wsrp.registration.RegistrationPropertyDescription;
 
 
 /** @author Wesley Hales */
-@ComponentConfig(template = "app:/groovy/wsrp/webui/component/UIWsrpProducerPropertyEditor.gtmpl", lifecycle = UIFormLifecycle.class, events = {
+@ComponentConfig(template = "app:/groovy/wsrp/webui/component/UIWsrpProducerPropertyEditor.gtmpl", lifecycle = UIFormLifecycle.class,
+   events = {
    @EventConfig(listeners = UIWsrpProducerPropertyEditor.SaveActionListener.class)})
 public class UIWsrpProducerPropertyEditor extends UIForm
 {
