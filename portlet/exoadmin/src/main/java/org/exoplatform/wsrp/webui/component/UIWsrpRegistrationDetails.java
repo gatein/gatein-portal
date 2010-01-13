@@ -77,7 +77,7 @@ public class UIWsrpRegistrationDetails extends UIFormInputSet
    private UIFormInputBase<String> policy;
    private UIFormInputBase<String> validator;
    private UIGrid registrationProperties;
-   static String[] FIELDS = {"name", "description", "label", "hint"};
+   static String[] FIELDS = {"key","name", "description", "label", "hint"};
    static String[] SELECT_ACTIONS = {"AddProperty", "EditProperty", "DeleteProperty"};
    static final String POLICY_CLASS = "policyClassName";
    static final String VALIDATOR_CLASS = "validatorClassName";
@@ -114,7 +114,7 @@ public class UIWsrpRegistrationDetails extends UIFormInputSet
       registrationProperties.registerRendererFor(renderer, LocalizedString.class);
 
       //configure the edit and delete buttons based on an id from the data list - this will also be passed as param to listener
-      registrationProperties.configure("name", FIELDS, SELECT_ACTIONS);
+      registrationProperties.configure("key", FIELDS, SELECT_ACTIONS);
       registrationProperties.getUIPageIterator().setId(REGISTRATION_PROPERTIES_ITERATOR);
       registrationProperties.getUIPageIterator().setRendered(false);
       addChild(registrationProperties.getUIPageIterator());
