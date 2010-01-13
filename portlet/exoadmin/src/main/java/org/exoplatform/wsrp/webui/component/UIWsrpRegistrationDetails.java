@@ -96,7 +96,8 @@ public class UIWsrpRegistrationDetails extends UIFormInputSet
       // validator
       validator = new UIFormStringInput(VALIDATOR_CLASS, VALIDATOR_CLASS, null);
       addUIFormInput(validator);
-      registrationProperties = parent.getRegistrationProperties();
+      addChild(parent.getRegistrationProperties());
+      registrationProperties = getChildById(REGISTRATION_PROPERTIES);
       // registration properties
       //registrationProperties.setComponentConfig(UIGrid.class,REGISTRATION_PROPERTIES);
       //registrationProperties = createUIComponent(UIGrid.class, null, null);
