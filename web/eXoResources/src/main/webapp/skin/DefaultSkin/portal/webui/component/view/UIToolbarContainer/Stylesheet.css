@@ -121,7 +121,7 @@
 
 .UIToolbarContainer .MenuItem .ArrowIcon {
 	background: url('background/ToolbarContainer.gif') no-repeat right bottom; /* orientation=lt */
-	background: url('background/ToolbarContainer-rt.gif') no-repeat 5px bottom; /* orientation=rt */
+	background: url('background/ToolbarContainer-rt.gif') no-repeat -5px bottom; /* orientation=rt */
 }
 
 .UIToolbarContainer .MenuItem a {	
