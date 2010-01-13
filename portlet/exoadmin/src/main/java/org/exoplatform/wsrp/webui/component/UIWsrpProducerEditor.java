@@ -24,7 +24,6 @@ package org.exoplatform.wsrp.webui.component;
 
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
-import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -33,42 +32,33 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
-import org.exoplatform.webui.form.UIFormInputBase;
-import org.exoplatform.webui.form.UIFormInputSet;
-import org.exoplatform.webui.form.UIFormStringInput;
-import org.gatein.registration.RegistrationPolicy;
-import org.gatein.registration.policies.DefaultRegistrationPolicy;
 import org.gatein.wsrp.producer.config.ProducerConfiguration;
 import org.gatein.wsrp.producer.config.ProducerConfigurationService;
 import org.gatein.wsrp.producer.config.ProducerRegistrationRequirements;
 
-/** @author Wesley Hales */
-
+/**
+ * @author Wesley Hales
+ * @author Chris Laprun
+ */
 @ComponentConfig(
    lifecycle = UIFormLifecycle.class,
    template = "app:/groovy/wsrp/webui/component/UIWsrpProducerEditor.gtmpl",
    events = {
       @EventConfig(listeners = UIWsrpProducerEditor.SaveActionListener.class)
-   })
-
+   }
+)
 public class UIWsrpProducerEditor extends UIForm
 {
    private static final String REG_REQUIRED_FOR_DESCRIPTION = "registrationrequiredforfulldescription";
    private static final String STRICT_MODE = "strictmode";
    private static final String REQUIRES_REGISTRATION = "requiresregistration";
-   private static final String POLICY_CLASS = "policyClassName";
-   private static final String VALIDATOR_CLASS = "validatorClassName";
    private static final String REGISTRATION_DETAILS = "registrationdetails";
 
    private ProducerConfigurationService configService;
-
-   private UIFormInputSet registrationDetails;
-   private UIFormInputBase<String> policy;
-   private UIFormInputBase<String> validator;
+   private UIWsrpRegistrationDetails registrationDetails;
    private UIFormCheckBoxInput regReqForDesc;
    private UIFormCheckBoxInput strictMode;
    private UIFormCheckBoxInput<Boolean> regRequired;
-
 
    public UIWsrpProducerEditor() throws Exception
    {
@@ -89,22 +79,18 @@ public class UIWsrpProducerEditor extends UIForm
 
       // registration details
       // form set to gather registration information
-      registrationDetails = new UIWSRPFormInputSet(REGISTRATION_DETAILS);
+      registrationDetails = new UIWsrpRegistrationDetails(REGISTRATION_DETAILS, this);
       addUIFormInput(registrationDetails);
 
-      // policy
-      policy = new UIFormStringInput(POLICY_CLASS, POLICY_CLASS, null);
-      registrationDetails.addUIFormInput(policy);
-
-      // validator
-      validator = new UIFormStringInput(VALIDATOR_CLASS, VALIDATOR_CLASS, null);
-      registrationDetails.addUIFormInput(validator);
-
-
-      //init();
+      init();
    }
 
-   public void processRender(WebuiRequestContext context) throws Exception
+   ProducerConfigurationService getService()
+   {
+      return configService;
+   }
+
+   private void init() throws Exception
    {
       ProducerConfiguration configuration = configService.getConfiguration();
 
@@ -115,50 +101,16 @@ public class UIWsrpProducerEditor extends UIForm
       boolean registrationRequired = registrationRequirements.isRegistrationRequired();
       regRequired.setValue(registrationRequired);
 
-
       // if registration is required then we display more information
       if (registrationRequired)
       {
-
+         registrationDetails.init(registrationRequirements);
          registrationDetails.setRendered(true);
-         context.getUIApplication().findComponentById(UIWsrpProducerOverview.REGISTRATION_PROPERTIES).setRendered(true);
-
-         RegistrationPolicy policy = registrationRequirements.getPolicy();
-         String policyClassName = policy.getClass().getName();
-         this.policy.setValue(policyClassName);
-
-         // if policy is the default one, display information about the validator
-         if (ProducerRegistrationRequirements.DEFAULT_POLICY_CLASS_NAME.equals(policyClassName))
-         {
-            DefaultRegistrationPolicy defaultPolicy = (DefaultRegistrationPolicy)policy;
-            validator.setValue(defaultPolicy.getValidator().getClass().getName());
-            validator.setRendered(true);
-         }
-         else
-         {
-            validator.setRendered(false);
-         }
-
-         // registration properties
-
       }
       else
       {
          registrationDetails.setRendered(false);
-         context.getUIApplication().findComponentById(UIWsrpProducerOverview.REGISTRATION_PROPERTIES).setRendered(false);
       }
-
-      super.processRender(context);
-   }
-
-   ProducerConfigurationService getService()
-   {
-      return configService;
-   }
-
-   private void init() throws Exception
-   {
-
    }
 
 
@@ -177,7 +129,7 @@ public class UIWsrpProducerEditor extends UIForm
          registrationRequirements.setRegistrationRequired(requiresReg);
          if (requiresReg)
          {
-            registrationRequirements.reloadPolicyFrom(source.policy.getValue(), source.validator.getValue());
+            source.registrationDetails.updateRegistrationDetailsFromForm(registrationRequirements);
          }
 
          try
@@ -195,14 +147,13 @@ public class UIWsrpProducerEditor extends UIForm
       }
    }
 
-
    public static class RegistrationOnChangeActionListener extends EventListener<UIFormCheckBoxInput>
    {
       public void execute(Event<UIFormCheckBoxInput> event) throws Exception
       {
          UIFormCheckBoxInput source = event.getSource();
          UIWsrpProducerEditor parent = source.getAncestorOfType(UIWsrpProducerEditor.class);
-         //parent.init();
+         parent.init();
 
          //update only the parent, avoid updating the full portlet
          event.getRequestContext().addUIComponentToUpdateByAjax(parent);
