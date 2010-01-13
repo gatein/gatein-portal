@@ -44,9 +44,9 @@
       <org.exoplatform.jcr.version>1.12.0-Beta05</org.exoplatform.jcr.version>
       <org.jibx.version>1.2.1</org.jibx.version>
       <org.shindig.version>SNAPSHOT-r790473</org.shindig.version>
-      <org.gatein.common.version>2.0.0-CR02</org.gatein.common.version>
+      <org.gatein.common.version>2.0.0-CR03</org.gatein.common.version>
       <org.gatein.wci.version>2.0.0-CR02</org.gatein.wci.version>
-      <org.gatein.pc.version>2.1.0-CR01</org.gatein.pc.version>
+      <org.gatein.pc.version>2.1.0-CR02</org.gatein.pc.version>
       <org.picketlink.idm>1.1.0.Beta1</org.picketlink.idm>
       <org.gatein.wsrp.version>1.0.0-Beta04</org.gatein.wsrp.version>
       <org.gatein.mop.version>1.0.0-Beta13</org.gatein.mop.version>

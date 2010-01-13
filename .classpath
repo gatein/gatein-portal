@@ -38,12 +38,7 @@
 	<classpathentry kind="src" output="portlet/web/target/classes" path="portlet/web/src/main/java"/>
 	<classpathentry excluding="**" kind="src" output="server/tomcat/patch/target/classes" path="server/tomcat/patch/src/main/tomcat"/>
 	<classpathentry kind="src" output="server/tomcat/plugin/target/classes" path="server/tomcat/plugin/src/main/java"/>
-	<classpathentry excluding="**" kind="src" output="server/jboss/patch/target/classes" path="server/jboss/patch/src/main/jboss"/>
 	<classpathentry kind="src" output="server/jboss/plugin/target/classes" path="server/jboss/plugin/src/main/java"/>
-	<classpathentry kind="src" output="sample/extension/config/target/classes" path="sample/extension/config/src/main/java"/>
-	<classpathentry kind="src" output="sample/extension/jar/target/classes" path="sample/extension/jar/src/main/java"/>
-	<classpathentry kind="src" output="sample/portal/config/target/classes" path="sample/portal/config/src/main/java"/>
-	<classpathentry kind="src" output="sample/portal/jar/target/classes" path="sample/portal/jar/src/main/java"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.maven.ide.eclipse.MAVEN2_CLASSPATH_CONTAINER"/>
 	<classpathentry kind="output" path="target/classes"/>

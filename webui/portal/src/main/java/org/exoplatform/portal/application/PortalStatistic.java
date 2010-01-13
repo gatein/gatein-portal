@@ -19,8 +19,8 @@
 
 package org.exoplatform.portal.application;
 
-import org.exoplatform.commons.utils.AtomicPositiveLong;
-import org.exoplatform.commons.utils.LongSampler;
+import org.gatein.common.concurrent.AtomicPositiveLong;
+import org.gatein.common.concurrent.LongSampler;
 
 public class PortalStatistic
 {
