@@ -199,7 +199,7 @@ PortalDragDrop.prototype.init = function(e) {
       if(!dndEvent.dragObject.isComponent) {
 				dndEvent.dragObject.parentNode.removeChild(dndEvent.dragObject) ;
 			}
-			if(dndEvent.dragObject.parentNode.tagName.toLowerCase() == "td") {
+			if(dndEvent.dragObject.parentNode.nodeName.toLowerCase() == "td") {
 				dndEvent.dragObject.parentNode.style.width = "auto";
 			}
 			// fix bug WEBOS-196	
@@ -375,7 +375,7 @@ PortalDragDrop.prototype.tableColumnContainerAddChild = function(insertBlock, ta
 
   insertBlock.style.width = "auto" ;
   
-	if(eXo.portal.PortalDragDrop.parentDragObject.tagName.toLowerCase() == "td") {
+	if(eXo.portal.PortalDragDrop.parentDragObject.nodeName.toLowerCase() == "td") {
     DOMUtil.removeElement(eXo.portal.PortalDragDrop.parentDragObject) ;
   }
 };
