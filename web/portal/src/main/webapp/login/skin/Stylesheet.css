@@ -139,11 +139,12 @@
 }
 
 .UILogin .LoginContent .LoginButtonContainer {
-
+	padding-left: 32px; /* orientation=rt */
+	width: auto;
+	margin: auto;
 }
 
 .UILogin .LoginContent .Button {
-  width: 80px; 
   height: 22px;
   margin: auto; 
 }
