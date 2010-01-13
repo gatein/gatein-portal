@@ -332,7 +332,8 @@ public class UIPortalNavigation extends UIComponent
       {
          PortalRequestContext prContext = Util.getPortalRequestContext();
          UIPortalNavigation uiNavigation = event.getSource();
-
+         // reload TreeNodes
+         uiNavigation.loadTreeNodes();
          TreeNode treeNode = uiNavigation.getTreeNodes();
 
          expandAllNode(treeNode);
