@@ -25,32 +25,52 @@ import java.lang.reflect.Field;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class FieldModel {
+public class FieldModel
+{
 
-  /** . */
-  private final Field field;
+   /** . */
+   private final Field field;
 
-  /** . */
-  private final TypeModel type;
+   /** . */
+   private final TypeModel type;
 
-  public FieldModel(Field field, TypeModel type) {
-    this.field = field;
-    this.type = type;
-  }
+   public FieldModel(Field field, TypeModel type)
+   {
+      this.field = field;
+      this.type = type;
+   }
 
-  public String getName() {
-    return field.getName();
-  }
+   public String getName()
+   {
+      return field.getName();
+   }
 
-  public TypeModel getType() {
-    return type;
-  }
+   public TypeModel getType()
+   {
+      return type;
+   }
 
-  public Object getValue(Object o) {
-    try {
-      return field.get(o);
-    } catch (IllegalAccessException e) {
-      throw new AssertionError(e);
-    }
-  }
+   public Object getValue(Object o)
+   {
+      try
+      {
+         return field.get(o);
+      }
+      catch (IllegalAccessException e)
+      {
+         throw new AssertionError(e);
+      }
+   }
+
+   public void setValue(Object o, Object value)
+   {
+      try
+      {
+         field.set(o, value);
+      }
+      catch (IllegalAccessException e)
+      {
+         throw new AssertionError(e);
+      }
+   }
 }

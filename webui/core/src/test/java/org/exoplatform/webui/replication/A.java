@@ -28,8 +28,8 @@ import org.exoplatform.webui.application.replication.annotations.ReplicatedType;
 @ReplicatedType
 public class A {
 
-  String a = "a";
-  int b = 2;
-  boolean c = true;
+  String a;
+  int b;
+  boolean c;
 
 }
