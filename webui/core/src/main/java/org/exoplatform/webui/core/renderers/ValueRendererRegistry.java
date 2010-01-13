@@ -28,7 +28,9 @@ import org.gatein.common.util.ParameterValidation;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author <a href="mailto:chris.laprun@jboss.com">Chris Laprun</a>
@@ -61,7 +63,7 @@ public class ValueRendererRegistry
    {
       if (value == null)
       {
-         return null;
+         return ValueRenderer.NULL_RENDERER;
       }
       else
       {
@@ -99,7 +101,7 @@ public class ValueRendererRegistry
                   // the type class is a super class of the valueType class
                   // This cast is OK
                   @SuppressWarnings("unchecked")
-                  ValueRenderer<? super V> tmp = (ValueRenderer<? super V>) entry.getValue();
+                  ValueRenderer<? super V> tmp = (ValueRenderer<? super V>)entry.getValue();
                   renderer = tmp;
 
                   // OK
@@ -168,7 +170,7 @@ public class ValueRendererRegistry
       {
          // this cast is OK
          @SuppressWarnings("unchecked")
-         ValueRenderer<? super V> renderer = (ValueRenderer<? super V>) renderers.get(valueType);
+         ValueRenderer<? super V> renderer = (ValueRenderer<? super V>)renderers.get(valueType);
          return renderer;
       }
    }
