@@ -246,6 +246,15 @@ PortalDragDrop.prototype.doDropCallback = function(dndEvent) {
 	var srcElement = dndEvent.dragObject ;
   var targetElement = dndEvent.foundTargetObject;
   
+  if(!targetElement) {
+  	if(!dndEvent.dragObject.isComponent) {
+	    dndEvent.dragObject.parentNode.removeChild(dndEvent.dragObject) ;
+	    newComponent = true;
+  	}
+  	dndEvent.dragObject.style.width = "auto";
+  	return;
+  }
+  
   var newComponent = false;
   if(srcElement.isComponent && (targetElement.foundIndex != null)) {
     if(eXo.portal.PortalDragDrop.layoutTypeElementNode != null) {
@@ -260,8 +269,6 @@ PortalDragDrop.prototype.doDropCallback = function(dndEvent) {
     dndEvent.dragObject.parentNode.removeChild(dndEvent.dragObject) ;
     newComponent = true;
   }
-  
-  if(!targetElement) return;
   
   var params = [
     {name: "srcID", value: (srcElement.id.replace(/^UIPortlet-/, "")).replace(/^UIContainer-/,"")},
