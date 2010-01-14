@@ -81,7 +81,7 @@ public class ObjectWriter extends ObjectOutputStream
       }
       else
       {
-         ClassTypeModel typeModel = (ClassTypeModel) domain.getTypeModel(obj.getClass());
+         ClassTypeModel<?, ?> typeModel = (ClassTypeModel<?, ?>)domain.getTypeModel(obj.getClass());
 
          //
          if (typeModel == null)
@@ -95,7 +95,7 @@ public class ObjectWriter extends ObjectOutputStream
          output.writeObject(obj.getClass());
 
          //
-         ClassTypeModel currentTypeModel = typeModel;
+         ClassTypeModel<?, ?> currentTypeModel = typeModel;
          while (true)
          {
             for (FieldModel fieldModel : (currentTypeModel).getFields())

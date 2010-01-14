@@ -19,7 +19,7 @@
 
 package org.exoplatform.webui.application.replication.model;
 
-import org.exoplatform.webui.application.replication.serial.ObjectWriter;
+import org.exoplatform.webui.application.replication.factory.ObjectFactory;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -29,35 +29,72 @@ import java.util.Map;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class ClassTypeModel extends TypeModel {
+public class ClassTypeModel<O, C> extends TypeModel
+{
 
-  /** . */
-  private final TypeModel superType;
+   /** . */
+   private final Class<O> objectType;
 
-  /** . */
-  private final Map<String, FieldModel> fields;
+   /** . */
+   private final TypeModel superType;
 
-  /** . */
-  private final Map<String, FieldModel> immutableFields;
+   /** . */
+   private final Map<String, FieldModel> fields;
 
-  ClassTypeModel(Class<?> javaType, TypeModel superType, Map<String, FieldModel> fields) {
-    super(javaType);
+   /** . */
+   private final Map<String, FieldModel> immutableFields;
 
-    //
-    this.superType = superType;
-    this.fields = fields;
-    this.immutableFields = Collections.unmodifiableMap(fields);
-  }
+   /** . */
+   private final ObjectFactory<? super O, C> factory;
 
-  public TypeModel getSuperType() {
-    return superType;
-  }
+   /** . */
+   private final Class<C> contextType;
 
-  public Collection<FieldModel> getFields() {
-    return immutableFields.values();
-  }
+   ClassTypeModel(
+      Class<O> javaType,
+      TypeModel superType,
+      Map<String, FieldModel> fields,
+      ObjectFactory<? super O, C> factory,
+      Class<C> contextType)
+   {
+      super(javaType);
 
-  public Map<String, FieldModel> getFieldMap() {
-    return immutableFields;
-  }
+      //
+      this.objectType = javaType;
+      this.superType = superType;
+      this.fields = fields;
+      this.immutableFields = Collections.unmodifiableMap(fields);
+      this.factory = factory;
+      this.contextType = contextType;
+   }
+
+   public Class<O> getObjectType()
+   {
+      return objectType;
+   }
+
+   public Class<C> getContextType()
+   {
+      return contextType;
+   }
+
+   public ObjectFactory<? super O, C> getFactory()
+   {
+      return factory;
+   }
+
+   public TypeModel getSuperType()
+   {
+      return superType;
+   }
+
+   public Collection<FieldModel> getFields()
+   {
+      return immutableFields.values();
+   }
+
+   public Map<String, FieldModel> getFieldMap()
+   {
+      return immutableFields;
+   }
 }

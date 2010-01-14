@@ -19,11 +19,14 @@
 
 package org.exoplatform.webui.application.replication.model;
 
+import org.exoplatform.webui.application.replication.annotations.Factory;
 import org.exoplatform.webui.application.replication.annotations.ReplicatedType;
+import org.exoplatform.webui.application.replication.factory.DefaultObjectFactory;
+import org.exoplatform.webui.application.replication.factory.ObjectFactory;
 
 import java.io.Serializable;
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
 import java.util.*;
 
 /**
@@ -123,7 +126,7 @@ public class TypeDomain
       return null;
    }
 
-   private ClassTypeModel buildClassTypeModel(Class<?> javaType, Map<String, TypeModel> addedTypeModels)
+   private <O> ClassTypeModel<O, ?> buildClassTypeModel(Class<O> javaType, Map<String, TypeModel> addedTypeModels)
    {
       ClassTypeModel typeModel = (ClassTypeModel) get(javaType, addedTypeModels);
       if (typeModel == null)
@@ -142,10 +145,41 @@ public class TypeDomain
          TreeMap<String, FieldModel> fieldModels = new TreeMap<String, FieldModel>();
 
          //
-         typeModel = new ClassTypeModel(javaType, superTypeModel, fieldModels);
-         addedTypeModels.put(javaType.getName(), typeModel);
+         Class<? extends ObjectFactory<?, ?>> declaredFactoryType = null;
+         Factory factoryAnn = javaType.getAnnotation(Factory.class);
+         if (factoryAnn != null)
+         {
+            declaredFactoryType = factoryAnn.type();
+         }
 
          //
+         Class<? extends ObjectFactory<? super O, Object>> factoryType = null;
+         if (declaredFactoryType != null)
+         {
+            if (((Class<Object>)((ParameterizedType)declaredFactoryType.getGenericSuperclass()).getActualTypeArguments()[0]).isAssignableFrom(javaType))
+            {
+               factoryType = (Class<ObjectFactory<? super O,Object>>)declaredFactoryType;
+            }
+            else
+            {
+               throw new TypeException();
+            }
+         }
+
+         //
+         if (factoryType != null)
+         {
+            typeModel = createClassType(javaType, fieldModels, superTypeModel, factoryType);
+         }
+         else
+         {
+            typeModel = createClassType(javaType, fieldModels, superTypeModel);
+         }
+
+         //
+         addedTypeModels.put(javaType.getName(), typeModel);
+
+         // Now build fields
          for (Field field : javaType.getDeclaredFields())
          {
             field.setAccessible(true);
@@ -157,7 +191,34 @@ public class TypeDomain
             }
          }
       }
-      return typeModel;
+
+      // It must be good
+      return (ClassTypeModel<O,?>)typeModel;
+   }
+
+   private <O, C> ClassTypeModel<O, C> createClassType(
+      Class<O> javaType,
+      Map<String, FieldModel> fieldModels,
+      TypeModel superTypeModel,
+      Class<? extends ObjectFactory<? super O, C>> factoryType) {
+      Class<C> contextType = (Class<C>)((ParameterizedType)factoryType.getGenericSuperclass()).getActualTypeArguments()[1];
+      ObjectFactory<? super O, C> factory;
+      try
+      {
+         factory = factoryType.newInstance();
+      }
+      catch (Exception e)
+      {
+         throw new TypeException();
+      }
+      return new ClassTypeModel<O, C>(javaType, superTypeModel, fieldModels, factory, contextType);
+   }
+
+   private <O> ClassTypeModel<O, Object> createClassType(
+      Class<O> javaType,
+      Map<String, FieldModel> fieldModels,
+      TypeModel superTypeModel) {
+      return new ClassTypeModel<O, Object>(javaType, superTypeModel, fieldModels, new DefaultObjectFactory(), Object.class);
    }
 
    private SerializableTypeModel buildSerializable(Class<?> javaType, Map<String, TypeModel> addedTypeModels)

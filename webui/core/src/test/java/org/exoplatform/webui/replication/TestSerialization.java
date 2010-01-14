@@ -89,4 +89,9 @@ public class TestSerialization extends TestCase
       assertSame(e.left.left, e.right.left);
       assertSame(e.left.right, e.right.right);
    }
+
+   public void testCustomFactory() throws Exception
+   {
+
+   }
 }

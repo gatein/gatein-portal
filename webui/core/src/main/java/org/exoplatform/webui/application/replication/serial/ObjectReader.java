@@ -24,9 +24,7 @@ import org.exoplatform.webui.application.replication.model.FieldModel;
 import org.exoplatform.webui.application.replication.model.TypeDomain;
 import org.exoplatform.webui.application.replication.model.TypeModel;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
+import java.io.*;
 import java.util.*;
 
 /**
@@ -66,7 +64,8 @@ public class ObjectReader extends ObjectInputStream
          DataContainer container = (DataContainer) obj;
 
          int id;
-         switch (container.readInt())
+         int sw = container.readInt();
+         switch (sw)
          {
             case DataKind.OBJECT_REF:
                id = container.readInt();
@@ -79,20 +78,27 @@ public class ObjectReader extends ObjectInputStream
             case DataKind.OBJECT:
                id = container.readInt();
                Class clazz = (Class) container.readObject();
+
+               ClassTypeModel<?, ?> typeModel = (ClassTypeModel) domain.getTypeModel(clazz);
+
+               //
                Object instance;
                try
                {
-                  instance = clazz.newInstance();
+                  instance = typeModel.getFactory().create(clazz, null);
                }
                catch (Exception e)
                {
-                  throw new AssertionError(e);
+                  InvalidClassException ice = new InvalidClassException("Cannot instantiate object from class " + clazz.getName());
+                  ice.initCause(e);
+                  throw ice;
                }
-               ClassTypeModel typeModel = (ClassTypeModel) domain.getTypeModel(clazz);
+
+               //
                idToObject.put(id, instance);
 
                //
-               ClassTypeModel currentTypeModel = typeModel;
+               ClassTypeModel<?, ?> currentTypeModel = typeModel;
                while (true)
                {
                   for (FieldModel fieldModel : (currentTypeModel).getFields())
@@ -155,7 +161,7 @@ public class ObjectReader extends ObjectInputStream
                //
                return instance;
             default:
-               throw new AssertionError();
+               throw new StreamCorruptedException("Unrecognized data " + sw);
          }
       }
       else
