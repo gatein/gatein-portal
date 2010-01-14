@@ -35,7 +35,9 @@ import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIGrid;
 import org.exoplatform.webui.core.UIPopupWindow;
+import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
+import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.renderers.ValueRenderer;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -67,11 +69,11 @@ import java.util.ResourceBundle;
 @ComponentConfigs({
    @ComponentConfig(id = UIWsrpRegistrationDetails.REGISTRATION_PROPERTIES, type = UIGrid.class, template = "system:/groovy/webui/core/UIGrid.gtmpl"),
    @ComponentConfig(
-      lifecycle = UIContainerLifecycle.class,
+      lifecycle = UIApplicationLifecycle.class,
       events = {
          @EventConfig(listeners = UIWsrpRegistrationDetails.AddPropertyActionListener.class),
          @EventConfig(listeners = UIWsrpRegistrationDetails.EditPropertyActionListener.class),
-         @EventConfig(listeners = UIWsrpRegistrationDetails.DeletePropertyActionListener.class)
+         @EventConfig(listeners = UIWsrpRegistrationDetails.DeleteActionListener.class)
       })
 })
 public class UIWsrpRegistrationDetails extends UIFormInputSet
@@ -81,7 +83,7 @@ public class UIWsrpRegistrationDetails extends UIFormInputSet
    private UIGrid registrationProperties;
    private static final String NAME = "name";
    static String[] FIELDS = {NAME, "description", "label", "hint"};
-   static String[] SELECT_ACTIONS = {"EditProperty", "DeleteProperty"};
+   static String[] SELECT_ACTIONS = {"EditProperty", "Delete"};
    static final String POLICY_CLASS = "policyClassName";
    static final String VALIDATOR_CLASS = "validatorClassName";
    static final String REGISTRATION_PROPERTIES = "RegistrationPropertySelector";
@@ -260,11 +262,11 @@ public class UIWsrpRegistrationDetails extends UIFormInputSet
       // todo: deal with registration properties
    }
 
-   static public class EditPropertyActionListener extends EventListener<UIWsrpProducerEditor>
+   static public class EditPropertyActionListener extends EventListener<UIWsrpRegistrationDetails>
    {
-      public void execute(Event<UIWsrpProducerEditor> event) throws Exception
+      public void execute(Event<UIWsrpRegistrationDetails> event) throws Exception
       {
-         UIWsrpProducerEditor source = event.getSource();
+         UIWsrpRegistrationDetails source = event.getSource();
          UIPopupWindow popup = source.getChild(UIPopupWindow.class);
          UIWsrpProducerPropertyEditor editor = (UIWsrpProducerPropertyEditor)popup.getUIComponent();
          String id = event.getRequestContext().getRequestParameter(OBJECTID);
@@ -283,11 +285,11 @@ public class UIWsrpRegistrationDetails extends UIFormInputSet
       }
    }
 
-   static public class DeletePropertyActionListener extends EventListener<UIWsrpProducerEditor>
+   static public class DeleteActionListener extends EventListener<UIWsrpRegistrationDetails>
    {
-      public void execute(Event<UIWsrpProducerEditor> event)
+      public void execute(Event<UIWsrpRegistrationDetails> event)
       {
-         UIWsrpProducerEditor source = event.getSource();
+         UIWsrpRegistrationDetails source = event.getSource();
          UIApplication uiApp = event.getRequestContext().getUIApplication();
          UIPopupWindow popup = source.getChild(UIPopupWindow.class);
          String id = event.getRequestContext().getRequestParameter(OBJECTID);
@@ -306,11 +308,11 @@ public class UIWsrpRegistrationDetails extends UIFormInputSet
       }
    }
 
-   static public class AddPropertyActionListener extends EventListener<UIWsrpProducerEditor>
+   static public class AddPropertyActionListener extends EventListener<UIWsrpRegistrationDetails>
    {
-      public void execute(Event<UIWsrpProducerEditor> event) throws Exception
+      public void execute(Event<UIWsrpRegistrationDetails> event) throws Exception
       {
-         UIWsrpProducerEditor source = event.getSource();
+         UIWsrpRegistrationDetails source = event.getSource();
          UIPopupWindow popup = source.getChild(UIPopupWindow.class);
          UIWsrpProducerPropertyEditor editor = (UIWsrpProducerPropertyEditor)popup.getUIComponent();
 

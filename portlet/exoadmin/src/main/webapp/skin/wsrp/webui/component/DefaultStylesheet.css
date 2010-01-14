@@ -97,3 +97,18 @@ img.DeletePropertyIcon {
    margin: 0;
 }
 
+.UIWsrpPortlet .UIFormInputSet div.row {
+   clear: both;
+   margin: 0;
+   width: 500px;
+}
+
+.UIWsrpPortlet .UIFormInputSet div.row label {
+   float: left;
+   width: 26%;
+}
+
+.UIWsrpPortlet .UIFormInputSet div.row input {
+   float: left;
+   width: 69%;
+}

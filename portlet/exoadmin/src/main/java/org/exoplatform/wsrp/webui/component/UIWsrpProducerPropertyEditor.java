@@ -29,6 +29,7 @@ import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
+import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -85,7 +86,11 @@ public class UIWsrpProducerPropertyEditor extends UIForm
    {
       public void execute(Event<UIWsrpProducerPropertyEditor> event) throws Exception
       {
-         // todo: implement
+          UIWsrpProducerPropertyEditor source = event.getSource();
+          source.save(event.getRequestContext());
+          UIPopupWindow popup = source.getParent();
+          popup.setRendered(false);
+          popup.setShow(false);
       }
    }
 
