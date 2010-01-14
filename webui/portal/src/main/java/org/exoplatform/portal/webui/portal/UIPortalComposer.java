@@ -173,9 +173,6 @@ public class UIPortalComposer extends UIContainer
       }
       else
       {
-         UIApplication uiApp = prContext.getUIApplication();
-         uiApp.addMessage(new ApplicationMessage("UIPortalForm.msg.notExistAnymore", null));
-         prContext.addUIComponentToUpdateByAjax(uiWorkingWS);
          return;
       }
 
