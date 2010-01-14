@@ -60,17 +60,17 @@ public class TestSerialization extends TestCase
    public void testAAA() throws Exception
    {
       TypeDomain domain = new TypeDomain();
-      domain.add(E.class);
-      E e = new E();
-      e.left = new E();
-      e.left.left = new E();
-      e.left.right = new E();
-      e.right = new E();
-      e.right.left = e.left.left;
-      e.right.right = e.left.right;
+      domain.add(E2.class);
+      E2 e = new E2();
+      e.left = new E2();
+      ((E2)e.left).left = new E1();
+      ((E2)e.left).right = new E1();
+      e.right = new E2();
+      ((E2)e.right).left = ((E2)e.left).left;
+      ((E2)e.right).right = ((E2)e.left).right;
       SerializationContext context = new SerializationContext(domain);
       e = context.clone(e);
-      assertSame(e.left.left, e.right.left);
-      assertSame(e.left.right, e.right.right);
+      assertSame(((E2)e.left).left, ((E2)e.right).left);
+      assertSame(((E2)e.left).right, ((E2)e.right).right);
    }
 }

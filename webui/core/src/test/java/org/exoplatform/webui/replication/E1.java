@@ -26,10 +26,6 @@ import org.exoplatform.webui.application.replication.annotations.ReplicatedType;
  * @version $Revision$
  */
 @ReplicatedType
-public class E
+public class E1
 {
-
-   E left;
-   E right;
-
 }
