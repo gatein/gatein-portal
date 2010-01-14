@@ -25,7 +25,7 @@ import java.lang.reflect.Field;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class FieldModel
+public final class FieldModel
 {
 
    /** . */
@@ -34,7 +34,7 @@ public class FieldModel
    /** . */
    private final TypeModel type;
 
-   public FieldModel(Field field, TypeModel type)
+   FieldModel(Field field, TypeModel type)
    {
       this.field = field;
       this.type = type;

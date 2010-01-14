@@ -25,7 +25,7 @@ import java.io.Serializable;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class SerializableTypeModel extends TypeModel
+public final class SerializableTypeModel extends TypeModel
 {
    SerializableTypeModel(Class<? extends Serializable> serializable)
    {

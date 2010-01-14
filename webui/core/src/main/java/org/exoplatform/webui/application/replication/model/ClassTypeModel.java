@@ -27,7 +27,7 @@ import java.util.Map;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class ClassTypeModel<O> extends TypeModel
+public final class ClassTypeModel<O> extends TypeModel
 {
 
    /** . */
