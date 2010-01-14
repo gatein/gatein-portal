@@ -82,7 +82,6 @@ a {
 	float: left; /* orientation=rt */
 }
 
-
 .ClearFix:after {
   content: ".";
   display: block;

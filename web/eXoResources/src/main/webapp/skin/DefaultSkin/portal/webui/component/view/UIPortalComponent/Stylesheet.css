@@ -22,6 +22,8 @@
 }
 
 .UIPortlet .CONTROL-PORTLET {
+	left: 0; /* orientation=lt */
+	right: 0; /* orientation=rt */
 }
 
 .UIPortlet .CONTROL-PORTLET .Login {
@@ -302,6 +304,7 @@
 .EdittingContainer .OverContainerBlock {
 	border: 1px solid #b8babf;
 	background: none;
+	height: 100%;
 }
 
 .EdittingContainer .OverContainerBlock .LeftContainerBlock {

@@ -129,7 +129,7 @@
 							<div class="WindowBarLeft">
 								<div class="WindowBarRight">
 									<div class="WindowBarCenter">
-										<div class="FixHeight">
+										<div class="FixHeight ClearFix">
 												<%
 													
 													String restoreDown = _ctx.appRes("UIPortlet.tooltip.MaximizeRestore");
@@ -231,7 +231,6 @@
 												%>
 												<div class="$portletIcon WindowPortletIcon NovaPortletIcon WindowPortletInfo"><div class="PortletName">$title</div></div>
 											 
-											<div class="ClearBoth"><span></span></div>
 										</div>
 									</div>
 								</div>
@@ -254,10 +253,9 @@
 							<div class="BottomDecoratorLeft">
 								<div class="BottomDecoratorRight">
 									<div class="BottomDecoratorCenter">
-										<div class="FixHeight">
+										<div class="FixHeight ClearFix">
 											<div class="ResizeArea" title="<%=_ctx.appRes("UIPortlet.tooltip.ResizeWindow");%>"><span></span></div>
 											<div class="Information"><%=_ctx.appRes("UIPortlet.lable.information");%></div>
-											<div class="ClearRight"><span></span></div>
 										</div>
 									</div>
 								</div>
@@ -303,7 +301,7 @@
 											<div class="LeftBar">
 												<div class="RightBar">
 													<div class="MiddleBar">
-														<div class="FixHeight">
+														<div class="FixHeight ClearFix">
 															<div class="DragControlArea" title="<%=_ctx.appRes("UIPortlet.tooltip.DragControl");%>" onmousedown="eXo.portal.PortalDragDrop.init.call(this,event);"><span></span></div>
 															<% 
 																String portletIcon = uicomponent.getIcon();
@@ -316,7 +314,6 @@
 															<a href="<%=uicomponent.event("DeleteComponent","$uicomponent.id")%>" class="DeletePortletIcon" title="<%=_ctx.appRes("UIPortlet.tooltip.deletePortlet");%>"></a>
 															<a href="<%=uicomponent.event("EditPortlet","$uicomponent.id")%>;eXo.portal.UIPortal.changeComposerSaveButton()" class="EditPortletPropertiesIcon" title="<%=_ctx.appRes("UIPortlet.tooltip.editPortlet");%>"></a>
 														</div>
-														<div class="ClearLeft"><span></span></div>
 													</div>
 												</div>
 											</div>
