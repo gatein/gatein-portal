@@ -70,7 +70,8 @@
 }
 
 .UIToolbarContainer .UIHorizontalTabs .TabsContainer {
-	height: 32px;
+	height: 32px; /* orientation=lt */
+	height: auto; /* orientation=rt */
 	float: left; /* orientation=lt */
 	float: none; /* orientation=rt */
 }
