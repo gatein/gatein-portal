@@ -26,6 +26,9 @@ import org.exoplatform.commons.utils.LazyPageList;
 import org.exoplatform.commons.utils.ListAccess;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.portal.application.PortalRequestContext;
+import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -233,13 +236,13 @@ public class UIWsrpConsumerOverview extends UIContainer
             if (consumer != null)
             {
                consumerRegistry.destroyConsumer(id);
-               uiApp.addMessage(new ApplicationMessage("Consumer has been deleted.", null));
+               uiApp.addMessage(new ApplicationMessage("UIWsrp.consumer.grid.action.delete.success", null, ApplicationMessage.INFO));
                consumerOverview.refreshGrid(event);
             }
          }
          catch (Exception e)
          {
-            uiApp.addMessage(new ApplicationMessage("Failed to delete Consumer. Cause: " + e.getCause(), null, ApplicationMessage.ERROR));
+            uiApp.addMessage(new ApplicationMessage("UIWsrp.consumer.grid.action.delete.fail", new String[]{e.getCause().toString()}, ApplicationMessage.ERROR));
          }
 
       }
@@ -259,12 +262,12 @@ public class UIWsrpConsumerOverview extends UIContainer
             {
                ConsumerRegistry registry = consumerOverview.getConsumerRegistry();
                registry.deactivateConsumerWith(consumer.getProducerId());
-               uiApp.addMessage(new ApplicationMessage("Consumer successfully deactivated", null));
+               uiApp.addMessage(new ApplicationMessage("UIWsrp.consumer.grid.action.deactivate.success", null));
                consumerOverview.refreshGrid(event);
             }
             else
             {
-               uiApp.addMessage(new ApplicationMessage("Consumer Must be Active to Deactivate", null));
+               uiApp.addMessage(new ApplicationMessage("UIWsrp.consumer.grid.action.deactivate.fail", null));
             }
          }
       }
@@ -284,12 +287,12 @@ public class UIWsrpConsumerOverview extends UIContainer
             {
                ConsumerRegistry registry = consumerOverview.getConsumerRegistry();
                registry.activateConsumerWith(consumer.getProducerId());
-               uiApp.addMessage(new ApplicationMessage("Consumer successfully activated", null));
+               uiApp.addMessage(new ApplicationMessage("UIWsrp.consumer.grid.action.activate.success", null));
                consumerOverview.refreshGrid(event);
             }
             catch (Exception e)
             {
-               uiApp.addMessage(new ApplicationMessage("Problem Activating Consumer: " + e.getCause(), null, ApplicationMessage.ERROR));
+               uiApp.addMessage(new ApplicationMessage("UIWsrp.consumer.grid.action.activate.fail" , new String[]{e.getCause().toString()}, ApplicationMessage.ERROR));
                e.printStackTrace();
             }
          }
@@ -321,7 +324,7 @@ public class UIWsrpConsumerOverview extends UIContainer
                   // refresh had issues, we should deactivate this consumer
                   registry.deactivateConsumerWith(consumer.getProducerId());
 
-                  uiApp.addMessage(new ApplicationMessage("Consumer refresh resulted in errors that need to be fixed: " + result.getStatus().toString(), null, ApplicationMessage.ERROR));
+                  uiApp.addMessage(new ApplicationMessage("UIWsrp.consumer.grid.action.refresh.fail", null, ApplicationMessage.ERROR));
                }
                else
                {
@@ -334,14 +337,14 @@ public class UIWsrpConsumerOverview extends UIContainer
                   {
                      registry.deactivateConsumerWith(consumer.getProducerId());
                   }
-                  uiApp.addMessage(new ApplicationMessage("Consumer Refreshed Successfully", null, ApplicationMessage.INFO));
+                  uiApp.addMessage(new ApplicationMessage("UIWsrp.consumer.grid.action.refresh.success", null, ApplicationMessage.INFO));
                }
                consumerOverview.refreshGrid(event);
             }
          }
          catch (Exception e)
          {
-            uiApp.addMessage(new ApplicationMessage("Failed to refresh Consumer: " + e.getCause(), null, ApplicationMessage.ERROR));
+            uiApp.addMessage(new ApplicationMessage("UIWsrp.consumer.grid.action.refresh.fail" + e.getCause(), null, ApplicationMessage.ERROR));
             e.printStackTrace();
          }
       }

@@ -25,6 +25,8 @@ package org.exoplatform.wsrp.webui.component;
 import org.exoplatform.commons.utils.LazyPageList;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.portal.application.PortalRequestContext;
+import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -35,6 +37,7 @@ import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.event.MonitorEvent;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormInputBase;
 import org.exoplatform.webui.form.UIFormStringInput;
@@ -162,26 +165,22 @@ public class UIWsrpConsumerEditor extends UIForm
          }
 
          consumerEditor.reset();
-         //loose the popup
 
-         //update the consumer grid/list using ajax
-         //event.getRequestContext().addUIComponentToUpdateByAjax(consumerEditor.getParent().getParent().findComponentById("ConsumerSelector"));
-
-         //getChild(UIAccountInputSet.class).reset();
          UIPopupWindow popup = consumerEditor.getParent();
          popup.setRendered(false);
          popup.setShow(false);
-         //create a new form, clears out the old, probably a better way
-         //popup.setUIComponent(consumerOverview.createUIComponent(UIWsrpConsumerEditor.class, null, null));
 
+         //temp way to refresh list, should call broadcast event (below)
          LazyPageList pageList = consumerOverview.createPageList(consumerOverview.getConfiguredConsumers());
          UIGrid uiGrid = consumerOverview.getChild(UIGrid.class);
          uiGrid.getUIPageIterator().setPageList(pageList);
+         //uiGrid.configure()
+         //try to broadcast an event back to consumerOverview to refresh grid... works but shows error
+         //PortalRequestContext portalContext = org.exoplatform.portal.webui.util.Util.getPortalRequestContext();
+         //Event<UIWsrpConsumerOverview> pnevent = new Event<UIWsrpConsumerOverview>(consumerOverview, "RefreshGrid", portalContext);
+         //consumerOverview.broadcast(pnevent, Event.Phase.PROCESS);
 
          ctx.addUIComponentToUpdateByAjax(consumerOverview);
-
-         //consumerOverview.renderUIComponent(consumerEditor.getParent().getParent().findComponentById("ConsumerSelector"));
-         //ctx.sendRedirect(consumerOverview.url("wsrp"));
       }
    }
 
@@ -189,19 +188,18 @@ public class UIWsrpConsumerEditor extends UIForm
    {
       ExoContainer manager = ExoContainerContext.getCurrentContainer();
       ConsumerRegistry consumerRegistry = (ConsumerRegistry)manager.getComponentInstanceOfType(ConsumerRegistry.class);
-      //WSRPConsumer consumer;
 
       UIApplication uiApp = context.getUIApplication();
 
       try
       {
          consumerRegistry.createConsumer(getConsumerName(), getCacheExpiration(), getWSDLURL());
-         uiApp.addMessage(new ApplicationMessage("Consumer Successfully Added", null));
+         uiApp.addMessage(new ApplicationMessage("UIWsrp.consumer.action.add.success", null));
       }
       catch (ConsumerException ce)
       {
          //todo - add to resource bundle
-         uiApp.addMessage(new ApplicationMessage("Consumer already exists!", null));
+         uiApp.addMessage(new ApplicationMessage("UIWsrp.consumer.action.add.exists", null, ApplicationMessage.ERROR));
       }
       return true;
    }
@@ -222,12 +220,11 @@ public class UIWsrpConsumerEditor extends UIForm
       try
       {
          consumerRegistry.updateProducerInfo(producerInfo);
-         uiApp.addMessage(new ApplicationMessage("Edit Consumer Successful!", null));
+         uiApp.addMessage(new ApplicationMessage("UIWsrp.consumer.action.edit.success", null));
       }
       catch (ConsumerException ce)
       {
-         //todo - add to resource bundle
-         uiApp.addMessage(new ApplicationMessage("Edit Consumer Problem!", null));
+         uiApp.addMessage(new ApplicationMessage("UIWsrp.consumer.action.edit.fail", null, ApplicationMessage.ERROR));
       }
       return true;
    }
