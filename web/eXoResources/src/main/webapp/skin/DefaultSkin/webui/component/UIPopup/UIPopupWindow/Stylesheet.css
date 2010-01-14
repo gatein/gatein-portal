@@ -272,8 +272,8 @@
 	height: 50px;
 }
 
-.UIPortalComposer .BCPortalComposer .UIAction {
-	height: 50px;	
+.UIPortalComposer .BCPortalComposer {
+
 }
 
 .UIPortalComposer .Bottom {
@@ -311,4 +311,5 @@
 
 .UIPortalComposer .ResizeButton {
 	width: 13px; height: 13px;
+	margin: 0;
 }
