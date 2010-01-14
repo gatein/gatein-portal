@@ -344,7 +344,7 @@ public class UIWsrpConsumerOverview extends UIContainer
          }
          catch (Exception e)
          {
-            uiApp.addMessage(new ApplicationMessage("UIWsrp.consumer.grid.action.refresh.fail" + e.getCause(), null, ApplicationMessage.ERROR));
+            uiApp.addMessage(new ApplicationMessage("UIWsrp.consumer.grid.action.refresh.fail", new String[]{e.getCause().toString()}, ApplicationMessage.ERROR));
             e.printStackTrace();
          }
       }
