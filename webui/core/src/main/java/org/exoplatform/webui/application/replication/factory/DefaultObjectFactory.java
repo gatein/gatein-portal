@@ -19,17 +19,31 @@
 
 package org.exoplatform.webui.application.replication.factory;
 
+import org.exoplatform.webui.application.replication.model.FieldModel;
+
+import java.util.Map;
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
 public final class DefaultObjectFactory extends ObjectFactory<Object>
 {
-   public <O> O create(Class<O> type) throws CreateException
+   @Override
+   public <S> S create(Class<S> type, Map<FieldModel, ?> state) throws CreateException
    {
       try
       {
-         return type.newInstance();
+         S instance = type.newInstance();
+
+         //
+         for (Map.Entry<FieldModel, ?> entry : state.entrySet())
+         {
+            entry.getKey().setValue(instance, entry.getValue());
+         }
+
+         //
+         return instance;
       }
       catch (Exception e)
       {

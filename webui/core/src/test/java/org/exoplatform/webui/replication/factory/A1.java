@@ -21,6 +21,9 @@ package org.exoplatform.webui.replication.factory;
 
 import org.exoplatform.webui.application.replication.factory.ObjectFactory;
 import org.exoplatform.webui.application.replication.factory.CreateException;
+import org.exoplatform.webui.application.replication.model.FieldModel;
+
+import java.util.Map;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -32,7 +35,7 @@ public class A1 extends ObjectFactory<A2>
    static A2 instance = new A2();
 
    @Override
-   public <E extends A2> E create(Class<E> type) throws CreateException
+   public <S extends A2> S create(Class<S> type, Map<FieldModel, ?> state) throws CreateException
    {
       if (type == A2.class)
       {

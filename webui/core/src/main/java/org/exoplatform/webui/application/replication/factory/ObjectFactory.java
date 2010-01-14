@@ -19,6 +19,10 @@
 
 package org.exoplatform.webui.application.replication.factory;
 
+import org.exoplatform.webui.application.replication.model.FieldModel;
+
+import java.util.Map;
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
@@ -31,10 +35,11 @@ public abstract class ObjectFactory<B>
     * Instantiate an object based on the provided class.
     *
     * @param type the type
+    * @param state the state
     * @param <S> the sub type of the base type
     * @return the S instance
     * @throws CreateException anything wrong that could happen during instance creation
     */
-   public abstract <S extends B> S create(Class<S> type) throws CreateException;
+   public abstract <S extends B> S create(Class<S> type, Map<FieldModel, ?> state) throws CreateException;
 
 }

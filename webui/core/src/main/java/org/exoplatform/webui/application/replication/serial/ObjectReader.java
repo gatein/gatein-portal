@@ -57,14 +57,14 @@ public class ObjectReader extends ObjectInputStream
       this.idToResolutions = new HashMap<Integer, List<Resolution>>();
    }
 
-   private <O> O instantiate(ClassTypeModel<O> typeModel) throws InvalidClassException
+   private <O> O instantiate(ClassTypeModel<O> typeModel, Map<FieldModel, ?> state) throws InvalidClassException
    {
       try
       {
          ObjectFactory<? super O> factory = context.getFactory(typeModel.getObjectType());
 
          //
-         return factory.create(typeModel.getObjectType());
+         return factory.create(typeModel.getObjectType(), state);
       }
       catch (Exception e)
       {
@@ -100,13 +100,9 @@ public class ObjectReader extends ObjectInputStream
                ClassTypeModel<?> typeModel = (ClassTypeModel)context.getTypeDomain().getTypeModel(clazz);
 
                //
-               Object instance = instantiate(typeModel);
-
-               //
-               idToObject.put(id, instance);
-
-               //
+               Map<FieldModel, Object> state = new HashMap<FieldModel, Object>();
                ClassTypeModel<?> currentTypeModel = typeModel;
+               List<Bilto> biltos = new ArrayList<Bilto>();
                while (true)
                {
                   for (FieldModel fieldModel : (currentTypeModel).getFields())
@@ -114,29 +110,23 @@ public class ObjectReader extends ObjectInputStream
                      switch (container.readInt())
                      {
                         case DataKind.NULL_VALUE:
-                           fieldModel.setValue(instance, null);
+                           state.put(fieldModel, null);
                            break;
                         case DataKind.OBJECT_REF:
                            int refId = container.readInt();
                            Object refO = idToObject.get(refId);
                            if (refO != null)
                            {
-                              fieldModel.setValue(instance, refO);
+                              state.put(fieldModel, refO);
                            }
                            else
                            {
-                              List<Resolution> resolutions = idToResolutions.get(refId);
-                              if (resolutions == null)
-                              {
-                                 resolutions = new ArrayList<Resolution>();
-                                 idToResolutions.put(refId, resolutions);
-                              }
-                              resolutions.add(new Resolution(instance, fieldModel));
+                              biltos.add(new Bilto(refId, fieldModel));
                            }
                            break;
                         case DataKind.OBJECT:
                            Object o = container.readObject();
-                           fieldModel.setValue(instance, o);
+                           state.put(fieldModel, o);
                            break;
 
                      }
@@ -157,6 +147,24 @@ public class ObjectReader extends ObjectInputStream
                }
 
                //
+               Object instance = instantiate(typeModel, state);
+
+               //
+               for (Bilto bilto : biltos)
+               {
+                  List<Resolution> resolutions = idToResolutions.get(bilto.ref);
+                  if (resolutions == null)
+                  {
+                     resolutions = new ArrayList<Resolution>();
+                     idToResolutions.put(bilto.ref, resolutions);
+                  }
+                  resolutions.add(new Resolution(instance, bilto.fieldModel));
+               }
+
+               //
+               idToObject.put(id, instance);
+
+               //
                List<Resolution> resolutions = idToResolutions.remove(id);
                if (resolutions != null)
                {
@@ -175,6 +183,21 @@ public class ObjectReader extends ObjectInputStream
       else
       {
          return obj;
+      }
+   }
+
+   private static class Bilto
+   {
+      /** . */
+      private final int ref;
+
+      /** . */
+      private final FieldModel fieldModel;
+
+      private Bilto(int ref, FieldModel fieldModel)
+      {
+         this.ref = ref;
+         this.fieldModel = fieldModel;
       }
    }
 
