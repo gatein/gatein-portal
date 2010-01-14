@@ -109,7 +109,8 @@
 .UITabPaneDashboard .UIHorizontalTabs .AddDashboard {
 	background: url('background/AddDashboard.gif') no-repeat bottom;
 	width: 34px; height: 22px;
-	float: left;
+	float: left; /* orientation=lt */
+	float: right; /* orientation=rt */
 	cursor: pointer;
 	margin-top: 4px;
 }
