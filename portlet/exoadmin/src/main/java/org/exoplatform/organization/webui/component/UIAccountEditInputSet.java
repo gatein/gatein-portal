@@ -105,6 +105,7 @@ public class UIAccountEditInputSet extends UIFormInputSet
       UIApplication uiApp = context.getUIApplication();
       String username = getUIStringInput(USERNAME).getValue();
       User user = service.getUserHandler().findUserByName(username);
+      String oldEmail = user.getEmail();
       if (user == null)
       {
          uiApp.addMessage(new ApplicationMessage("UIAccountInputSet.msg.user-is-deleted", null));
@@ -138,9 +139,13 @@ public class UIAccountEditInputSet extends UIFormInputSet
       
       //Check if mail address is already used
       Query query = new Query();
-      query.setEmail(getUIStringInput("email").getValue());
-      if (service.getUserHandler().findUsers(query).getAll().size() > 0)
+      String email = getUIStringInput("email").getValue();
+      query.setEmail(email);
+      if (service.getUserHandler().findUsers(query).getAll().size() > 0 && !oldEmail.equals(email))
       {
+         //Be sure it keep old value
+         user.setEmail(oldEmail);
+         query.setEmail(oldEmail);
          Object[] args = {username};
          uiApp.addMessage(new ApplicationMessage("UIAccountInputSet.msg.email-exist", args));
          return false;
@@ -169,5 +174,6 @@ public class UIAccountEditInputSet extends UIFormInputSet
       ((UIFormStringInput)password1.setValue(null)).setRendered(isChange);
       ((UIFormStringInput)password2.setValue(null)).setRendered(isChange);
    }
+      
 
 }
