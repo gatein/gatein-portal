@@ -11,6 +11,7 @@
 		<para>
 			The Portal provides a graphical aggregation of enterprise content and business applications with flexible management and personalization options.
 		</para>
+        <!-- 
 		<para>
 			Portal has two main components:
 		</para>
@@ -33,6 +34,7 @@
 			</listitem>
 		</varlistentry>
 		</variablelist>
+       -->
 </section>
 
 

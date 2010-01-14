@@ -11,10 +11,10 @@
       with any web technology used by the portlet deployed. Using a particular technology
       would have make it more difficult for a user to use a different version (newer or older)
       of the same technology. If one choose to create WebUI portlets, here is some documentation.
+      In general we recommend to use JSF as the framework of choice to develop new portlets.
    </para>
    <para>
-      In its concepts, the WebUI framework is similar to JSF as
-      it is a component tree based framework. The key aspects of WebUI
+      The WebUI framework is a component tree based framework. The key aspects of WebUI
       are :
 	</para>
    <itemizedlist>
