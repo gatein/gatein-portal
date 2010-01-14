@@ -1,16 +1,16 @@
 /**
  * Copyright (C) 2009 eXo Platform SAS.
- * 
+ *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation; either version 2.1 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this software; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
@@ -26,35 +26,25 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 /**
- * Created by The eXo Platform SARL
- * Author : Tuan Nguyen
- *          tuan08@users.sourceforge.net
- * May 7, 2006
- * 
+ * Created by The eXo Platform SARL Author : Tuan Nguyen tuan08@users.sourceforge.net May 7, 2006
+ * <p/>
  * A grid element (represented by an HTML table) that can be paginated with a UIPageIterator
+ *
  * @see UIPageIterator
  */
 @ComponentConfig(template = "system:/groovy/webui/core/UIGrid.gtmpl")
 public class UIGrid extends UIComponent
 {
-   /**
-    * The page iterator
-    */
+   /** The page iterator */
    protected UIPageIterator uiIterator_;
 
-   /**
-    * The bean field that holds the id of this bean
-    */
+   /** The bean field that holds the id of this bean */
    protected String beanIdField_;
 
-   /**
-    * An array of String representing the fields in each bean
-    */
+   /** An array of String representing the fields in each bean */
    protected String[] beanField_;
 
-   /**
-    * An array of String representing the actions on each bean
-    */
+   /** An array of String representing the actions on each bean */
    protected String[] action_;
 
    protected String classname_;
@@ -125,11 +115,18 @@ public class UIGrid extends UIComponent
       return method.invoke(bean, ReflectionUtil.EMPTY_ARGS);
    }
 
+   public String getBeanIdFor(Object bean) throws Exception
+   {
+      return getFieldValue(bean, beanIdField_).toString();
+   }
+
    @SuppressWarnings("unchecked")
    public UIComponent findComponentById(String lookupId)
    {
       if (uiIterator_.getId().equals(lookupId))
+      {
          return uiIterator_;
+      }
       return super.findComponentById(lookupId);
    }
 

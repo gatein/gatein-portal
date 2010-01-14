@@ -18,72 +18,82 @@
  */
 
 .UIWsrpPortlet {
-	padding:10px;
+   padding: 10px;
 }
 
 img.RefreshIcon {
-    width: 16px; height: 16px;
-    background: url('/eXoResources/skin/DefaultSkin/skinIcons/16x16/icons/RefreshIcon.gif') no-repeat;
+   width: 16px;
+   height: 16px;
+   background: url('/eXoResources/skin/DefaultSkin/skinIcons/16x16/icons/RefreshIcon.gif') no-repeat;
 }
 
 img.DeactivateIcon {
-    width: 16px; height: 16px;
-    background: url('/eXoResources/skin/DefaultSkin/skinIcons/16x16/icons/Cancel.gif') no-repeat;
-}
-
-img.StopIcon {
-    width: 16px; height: 16px;
-    background: url('/eXoResources/skin/DefaultSkin/skinIcons/16x16/icons/DustBinClickButton.gif') no-repeat;
+   width: 16px;
+   height: 16px;
+   background: url('/eXoResources/skin/DefaultSkin/skinIcons/16x16/icons/Cancel.gif') no-repeat;
 }
 
 img.ActivateIcon {
-    width: 16px; height: 16px;
-    background: url('/eXoResources/skin/DefaultSkin/skinIcons/16x16/icons/SelectIcon.gif') no-repeat;
+   width: 16px;
+   height: 16px;
+   background: url('/eXoResources/skin/DefaultSkin/skinIcons/16x16/icons/SelectIcon.gif') no-repeat;
+}
+
+img.EditPropertyIcon {
+   width: 16px;
+   height: 16px;
+   background: url('/eXoResources/skin/DefaultSkin/skinIcons/16x16/icons/EditIcon.gif') no-repeat;
+}
+
+img.DeletePropertyIcon {
+   width: 16px;
+   height: 16px;
+   background: url('/eXoResources/skin/DefaultSkin/skinIcons/16x16/icons/DustBinIcon.gif') no-repeat;
 }
 
 .UIWsrpPortlet .UITabPane {
-    margin: 10px
+   margin: 10px
 }
 
 .UIWsrpPortlet .UIHorizontalTabs .TabsContainer {
-    border-bottom:1px solid #DDDDDD;
-    height:24px;
+   border-bottom: 1px solid #DDDDDD;
+   height: 24px;
 }
 
 .UIWsrpPortlet .UIAction .ActionContainer {
-    margin:0;
-    width:auto;
+   margin: 0;
+   width: auto;
 }
 
 .UIWsrpPortlet .form-row {
-    /*border-bottom: 1px solid #ddd;*/
-    padding: 3px;
-    clear:both;
+/*border-bottom: 1px solid #ddd;*/
+   padding: 3px;
+   clear: both;
 }
 
 .UIWsrpPortlet .form-row label {
-    float:left;
-    width: 100%;
+   float: left;
+   width: 100%;
 }
 
 .UIWsrpPortlet .form-row label span {
-    display:block;
-    float:left;
-    width: 26%;
+   display: block;
+   float: left;
+   width: 26%;
 }
 
 .UIWsrpPortlet .form-row label input {
-    float:left;
-    width: 69%;
+   float: left;
+   width: 69%;
 }
 
 .UIWsrpPortlet .UILoginForm .UIAction {
-    clear:both;
-    padding: 8px 0;
+   clear: both;
+   padding: 8px 0;
 }
 
 .UIWsrpPortlet .UILoginForm .ActionContainer {
-    float:right;
-    margin:0;
+   float: right;
+   margin: 0;
 }
 

@@ -70,22 +70,22 @@
             <div class="ActionContainer">
                <%
                      def beanIdField = uicomponent.getBeanIdField();
+                     def beanId = uicomponent.getBeanIdFor(bean);
                      for (action in beanActions)
                      {
-                        def beanId = uicomponent.getFieldValue(bean, beanIdField);
                         if (action == null) continue;
-                        String title = _ctx.appRes(uicomponent.getParent().getName() + ".action.title." + action);
+                        String title = _ctx.appRes(uiParent.getName() + ".action.title." + action);
                         String actionLink = "";
                         if (uiForm != null)
                         {
-                           actionLink = uiForm.event(action, uicomponent.getParent().getId(), beanId);
+                           actionLink = uiForm.event(action, uiParent.getId(), beanId);
                         }
                         else
                         {
                            actionLink = uiParent.event(action, beanId);
                         }
                %>
-               <img onclick="$actionLink" alt="" title="$title" src="/eXoResources/skin/sharedImages/Blank.gif" class="${action}Icon"/>
+               <img onclick="$actionLink" alt="$action" title="$title" src="/eXoResources/skin/sharedImages/Blank.gif" class="${action}Icon"/>
                <% } %>
             </div>
          </td>

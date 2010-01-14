@@ -35,8 +35,7 @@ import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIGrid;
 import org.exoplatform.webui.core.UIPopupWindow;
-import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
-import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
+import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
 import org.exoplatform.webui.core.renderers.ValueRenderer;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -66,21 +65,22 @@ import java.util.ResourceBundle;
  * @version $Revision$
  */
 @ComponentConfigs({
-   @ComponentConfig(id = "RegistrationPropertySelector", type = UIGrid.class, template = "system:/groovy/webui/core/UIGrid.gtmpl"),
+   @ComponentConfig(id = UIWsrpRegistrationDetails.REGISTRATION_PROPERTIES, type = UIGrid.class, template = "system:/groovy/webui/core/UIGrid.gtmpl"),
    @ComponentConfig(
-      lifecycle = UIFormLifecycle.class,
+      lifecycle = UIContainerLifecycle.class,
       events = {
          @EventConfig(listeners = UIWsrpRegistrationDetails.AddPropertyActionListener.class),
          @EventConfig(listeners = UIWsrpRegistrationDetails.EditPropertyActionListener.class),
          @EventConfig(listeners = UIWsrpRegistrationDetails.DeletePropertyActionListener.class)
       })
 })
-public class UIWsrpRegistrationDetails extends UIForm
+public class UIWsrpRegistrationDetails extends UIFormInputSet
 {
    private UIFormInputBase<String> policy;
    private UIFormInputBase<String> validator;
    private UIGrid registrationProperties;
-   static String[] FIELDS = {"key", "name", "description", "label", "hint"};
+   private static final String NAME = "name";
+   static String[] FIELDS = {NAME, "description", "label", "hint"};
    static String[] SELECT_ACTIONS = {"EditProperty", "DeleteProperty"};
    static final String POLICY_CLASS = "policyClassName";
    static final String VALIDATOR_CLASS = "validatorClassName";
@@ -114,7 +114,7 @@ public class UIWsrpRegistrationDetails extends UIForm
       registrationProperties.registerRendererFor(renderer, LocalizedString.class);
 
       //configure the edit and delete buttons based on an id from the data list - this will also be passed as param to listener
-      registrationProperties.configure("key", FIELDS, SELECT_ACTIONS);
+      registrationProperties.configure(NAME, FIELDS, SELECT_ACTIONS);
       registrationProperties.getUIPageIterator().setId(REGISTRATION_PROPERTIES_ITERATOR);
       registrationProperties.getUIPageIterator().setRendered(false);
       addChild(registrationProperties.getUIPageIterator());
@@ -216,11 +216,11 @@ public class UIWsrpRegistrationDetails extends UIForm
    @Override
    public void processRender(WebuiRequestContext context) throws Exception
    {
-      if (getComponentConfig() != null)
+      /*if (getComponentConfig() != null)
       {
          super.processRender(context);
          return;
-      }
+      }*/
 
       Writer w = context.getWriter();
       w.write("<div class=\"UIFormInputSet\">");

@@ -44,7 +44,8 @@ import org.gatein.wsrp.producer.config.ProducerRegistrationRequirements;
    lifecycle = UIFormLifecycle.class,
    template = "app:/groovy/wsrp/webui/component/UIWsrpProducerEditor.gtmpl",
    events = {
-      @EventConfig(listeners = UIWsrpProducerEditor.SaveActionListener.class)
+      @EventConfig(listeners = UIWsrpProducerEditor.SaveActionListener.class),
+      @EventConfig(listeners = UIWsrpProducerEditor.RegistrationOnChangeActionListener.class)
    }
 )
 public class UIWsrpProducerEditor extends UIForm
@@ -79,9 +80,9 @@ public class UIWsrpProducerEditor extends UIForm
 
       // registration details
       // form set to gather registration information
-      registrationDetails = addChild(UIWsrpRegistrationDetails.class,null,null);
+      registrationDetails = addChild(UIWsrpRegistrationDetails.class, null, null);
 
-      init();
+      init(false);
    }
 
    ProducerConfigurationService getService()
@@ -89,7 +90,7 @@ public class UIWsrpProducerEditor extends UIForm
       return configService;
    }
 
-   private void init() throws Exception
+   private void init(boolean getRegistrationRequiredFromCheckBox) throws Exception
    {
       ProducerConfiguration configuration = configService.getConfiguration();
 
@@ -97,7 +98,9 @@ public class UIWsrpProducerEditor extends UIForm
       regReqForDesc.setValue(registrationRequirements.isRegistrationRequiredForFullDescription());
       strictMode.setValue(configuration.isUsingStrictMode());
 
-      boolean registrationRequired = registrationRequirements.isRegistrationRequired();
+      boolean registrationRequired = getRegistrationRequiredFromCheckBox ?
+         regRequired.getValue() :
+         registrationRequirements.isRegistrationRequired();
       regRequired.setValue(registrationRequired);
 
       // if registration is required then we display more information
@@ -142,11 +145,11 @@ public class UIWsrpProducerEditor extends UIForm
             e.printStackTrace();
          }
 
-         source.init();
+         source.init(false);
       }
    }
 
-   public static class RegistrationOnChangeActionListener extends EventListener<UIFormCheckBoxInput>
+   /*public static class RegistrationOnChangeActionListener extends EventListener<UIFormCheckBoxInput>
    {
       public void execute(Event<UIFormCheckBoxInput> event) throws Exception
       {
@@ -156,6 +159,18 @@ public class UIWsrpProducerEditor extends UIForm
 
          //update only the parent, avoid updating the full portlet
          event.getRequestContext().addUIComponentToUpdateByAjax(parent);
+      }
+   }*/
+
+   public static class RegistrationOnChangeActionListener extends EventListener<UIWsrpProducerEditor>
+   {
+      public void execute(Event<UIWsrpProducerEditor> event) throws Exception
+      {
+         UIWsrpProducerEditor source = event.getSource();
+         source.init(true);
+
+         //update only the parent, avoid updating the full portlet
+         event.getRequestContext().addUIComponentToUpdateByAjax(source);
       }
    }
 
