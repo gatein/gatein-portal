@@ -248,6 +248,31 @@ public class UserACL
    {
       return hasEditPermission(getIdentity(), pconfig);
    }
+   
+   /**
+    *  This method is equivalent to <code>hasEditPermission(PortalConfig)</code>. That allows us
+    * to check edit permission on a UIPortal, without converting UIPortal into PortalConfig via
+    * PortalDataMapper.
+    * 
+    * @param ownerType
+    * @param ownerId
+    * @param editPermExpression
+    * @return
+    */
+   public boolean hasEditPermissionOnPortal(String ownerType, String ownerId, String editPermExpression)
+   {
+      Identity identity = this.getIdentity();
+      if(superUser_.equals(identity.getUserId()))
+      {
+         return true;
+      }
+      
+      if(PortalConfig.USER_TYPE.equals(ownerType)){
+         return identity.getUserId().equals(ownerId);
+      }
+      
+      return hasPermission(identity, editPermExpression);
+   }
 
    public boolean hasCreatePortalPermission()
    {

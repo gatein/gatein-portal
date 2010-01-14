@@ -21,8 +21,10 @@ package org.exoplatform.toolbar.webui.component;
 
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.model.PageNavigation;
+import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.webui.page.UIPage;
 import org.exoplatform.portal.webui.page.UIPageBody;
+import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.portal.webui.workspace.UIWorkingWorkspace;
@@ -58,8 +60,8 @@ public class UIAdminToolbarPortlet extends UIPortletApplication
    {
       // A user could view the toolbar portlet iff he/she has edit permission
       // either on
-      // 'active' page or 'active' portal
-      if (hasEditPermissionOnNavigation() || hasEditPermissionOnPage())
+      // 'active' page, 'active' portal or 'active' navigation
+      if (hasEditPermissionOnNavigation() || hasEditPermissionOnPage() || hasEditPermissionOnPortal())
       {
          super.processRender(app, context);
       }
@@ -78,6 +80,14 @@ public class UIAdminToolbarPortlet extends UIPortletApplication
       {
          return userACL.hasEditPermission(selectedNavigation);
       }
+   }
+   
+   private boolean hasEditPermissionOnPortal() throws Exception
+   {
+      UIPortalApplication portalApp = Util.getUIPortalApplication();
+      UIPortal currentUIPortal = portalApp.<UIWorkingWorkspace>findComponentById(UIPortalApplication.UI_WORKING_WS_ID).findFirstComponentOfType(UIPortal.class);
+      UserACL userACL = portalApp.getApplicationComponent(UserACL.class);
+      return userACL.hasEditPermissionOnPortal(currentUIPortal.getOwnerType(), currentUIPortal.getOwner(), currentUIPortal.getEditPermission());
    }
 
    private boolean hasEditPermissionOnPage() throws Exception

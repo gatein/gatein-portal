@@ -22,6 +22,7 @@
 	
 	boolean userCouldEditNavigation = uicomponent.hasEditPermissionOnNavigation();
 	boolean userCouldEditPage = uicomponent.hasEditPermissionOnPage();
+	boolean userCouldEditPortal = uicomponent.hasEditPermissionOnPortal();
 	
 	PageNavigation selectedNav = uicomponent.getSelectedNavigation();
 	if (selectedNav != null) {
@@ -50,7 +51,7 @@
 							</div>
 						<% } %>
 						
-						<% if(userCouldEditNavigation){ %>
+						<% if(userCouldEditPortal){ %>
 							<div class="MenuItem">	
 								<a href="javascript:ajaxGet(eXo.env.server.createPortalURL('UIWorkingWorkspace', 'EditInline', true))" title="" class="ItemIcon EditSiteIcon">$editSiteLayout</a>
 							</div>
