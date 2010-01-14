@@ -23,6 +23,8 @@ import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.component.ComponentRequestLifecycle;
 import org.exoplatform.container.component.RequestLifeCycle;
 import org.exoplatform.container.xml.InitParams;
+import org.exoplatform.container.xml.ObjectParam;
+import org.exoplatform.container.xml.ObjectParameter;
 import org.exoplatform.container.xml.ValueParam;
 import org.exoplatform.services.cache.CacheService;
 import org.exoplatform.services.organization.BaseOrganizationService;
@@ -39,21 +41,9 @@ public class PicketLinkIDMOrganizationServiceImpl extends BaseOrganizationServic
    //   private static PicketLinkIDMService jbidmService_;
    private PicketLinkIDMService idmService_;
 
-   public static final String GTN_GROUP_TYPE_OPTION = "gtnGroupTypeName";
+   public static final String CONFIGURATION_OPTION = "configuration";
 
-   public static final String GTN_ROOT_GROUP_NAME_OPTION = "gtnRootGroupName";
-
-   public static final String GTN_ROOT_GROUP_TYPE_NAME_OPTION = "gtnRootGroupTypeName";
-
-   public static final String PASSWORD_AS_ATTRIBUTE_OPTION = "passwordAsAttribute";
-
-   private String gtnGroupType = "GTN_GROUP_TYPE";
-
-   private String gtnRootGroupName = "GTN_ROOT_GROUP";
-
-   private String gtnRootGroupType = gtnGroupType;
-
-   private boolean passwordAsAttribute = false;
+   private Config configuration = new Config();
 
    public PicketLinkIDMOrganizationServiceImpl(InitParams params, CacheService cservice, PicketLinkIDMService idmService)
       throws Exception
@@ -69,34 +59,13 @@ public class PicketLinkIDMOrganizationServiceImpl extends BaseOrganizationServic
       if (params != null)
       {
          //Options
-         ValueParam gtnGroupTypeNameParam = params.getValueParam(GTN_GROUP_TYPE_OPTION);
-         ValueParam gtnRootGroupTypeNameParam = params.getValueParam(GTN_ROOT_GROUP_TYPE_NAME_OPTION);
-         ValueParam gtnRootGroupNameParam = params.getValueParam(GTN_ROOT_GROUP_NAME_OPTION);
-         ValueParam passwordAsAttributeParam = params.getValueParam(PASSWORD_AS_ATTRIBUTE_OPTION);
+         ObjectParameter configurationParam = params.getObjectParam(CONFIGURATION_OPTION);
 
-         if (gtnGroupTypeNameParam != null)
+         if (configurationParam != null)
          {
-            this.gtnGroupType = gtnGroupTypeNameParam.getValue();
+            this.configuration = (Config)configurationParam.getObject(); 
          }
 
-         if (gtnRootGroupNameParam != null)
-         {
-            this.gtnRootGroupName = gtnRootGroupNameParam.getValue();
-         }
-
-         if (gtnRootGroupTypeNameParam != null)
-         {
-            this.gtnRootGroupType = gtnRootGroupTypeNameParam.getValue();
-         }
-         else if (gtnRootGroupTypeNameParam != null)
-         {
-            this.gtnRootGroupType = this.gtnGroupType;
-         }
-
-         if (passwordAsAttributeParam != null && passwordAsAttributeParam.getValue().equalsIgnoreCase("true"))
-         {
-            this.passwordAsAttribute = true;
-         }
       }
 
    }                             
@@ -105,7 +74,13 @@ public class PicketLinkIDMOrganizationServiceImpl extends BaseOrganizationServic
    {
       String[] ids = groupId.split("/");
       String name = ids[ids.length - 1];
-      return idmService_.getIdentitySession().getPersistenceManager().findGroup(name, getGtnGroupType());
+      String parentId = null;
+      if (groupId.contains("/"))
+      {
+         parentId = groupId.substring(0, groupId.lastIndexOf("/"));
+      }
+      return idmService_.getIdentitySession().getPersistenceManager().
+         findGroup(name, getConfiguration().getGroupType(parentId));
    }
 
    @Override
@@ -114,14 +89,10 @@ public class PicketLinkIDMOrganizationServiceImpl extends BaseOrganizationServic
 
       try
       {
-         // Wrap within transaction so all initializers can work
-//         idmService_.getIdentitySession().beginTransaction();
 
          RequestLifeCycle.begin(this);
 
          super.start();
-
-//         idmService_.getIdentitySession().getTransaction().commit();
 
       }
       catch (Exception e)
@@ -182,23 +153,14 @@ public class PicketLinkIDMOrganizationServiceImpl extends BaseOrganizationServic
       }
    }
 
-   public String getGtnGroupType()
+
+   public Config getConfiguration()
    {
-      return gtnGroupType;
+      return configuration;
    }
 
-   public String getExoRootGroupName()
+   public void setConfiguration(Config configuration)
    {
-      return gtnRootGroupName;
-   }
-
-   public String getGtnRootGroupType()
-   {
-      return gtnRootGroupType;
-   }
-
-   public boolean isPasswordAsAttribute()
-   {
-      return passwordAsAttribute;
+      this.configuration = configuration;
    }
 }

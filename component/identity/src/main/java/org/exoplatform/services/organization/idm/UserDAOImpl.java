@@ -219,7 +219,7 @@ public class UserDAOImpl implements UserHandler
 
       boolean authenticated = false;
 
-      if (orgService.isPasswordAsAttribute())
+      if (orgService.getConfiguration().isPasswordAsAttribute())
       {
          authenticated = user.getPassword().equals(password);
       }
@@ -347,7 +347,7 @@ public class UserDAOImpl implements UserHandler
       }
       if (user.getPassword() != null)
       {
-         if (orgService.isPasswordAsAttribute())
+         if (orgService.getConfiguration().isPasswordAsAttribute())
          {
             attributes.add(new SimpleAttribute(USER_PASSWORD, user.getPassword()));
          }

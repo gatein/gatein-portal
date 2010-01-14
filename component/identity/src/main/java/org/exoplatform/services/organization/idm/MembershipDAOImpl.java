@@ -102,7 +102,8 @@ public class MembershipDAOImpl implements MembershipHandler
       }
 
       String groupId =
-         getIdentitySession().getPersistenceManager().createGroupKey(g.getGroupName(), orgService.getGtnGroupType());
+         getIdentitySession().getPersistenceManager().
+            createGroupKey(g.getGroupName(), orgService.getConfiguration().getGroupType(g.getParentId()));
 
       if (getIdentitySession().getRoleManager().hasRole(user.getUserName(), groupId, mt.getName()))
       {
@@ -131,8 +132,8 @@ public class MembershipDAOImpl implements MembershipHandler
    public void saveMembership(Membership m, boolean broadcast) throws Exception
    {
       String groupId =
-         getIdentitySession().getPersistenceManager().createGroupKey(getGroupNameFromId(m.getGroupId()),
-            orgService.getGtnGroupType());
+         getIdentitySession().getPersistenceManager().
+            createGroupKey(getGroupNameFromId(m.getGroupId()), getGroupTypeFromId(m.getGroupId()));
 
       if (getIdentitySession().getRoleManager().hasRole(m.getUserName(), groupId, m.getMembershipType()))
       {
@@ -158,8 +159,8 @@ public class MembershipDAOImpl implements MembershipHandler
       Membership m = new MembershipImpl(id);
 
       String groupId =
-         getIdentitySession().getPersistenceManager().createGroupKey(getGroupNameFromId(m.getGroupId()),
-            orgService.getGtnGroupType());
+         getIdentitySession().getPersistenceManager().
+            createGroupKey(getGroupNameFromId(m.getGroupId()), getGroupTypeFromId(m.getGroupId()));
 
       if (!getIdentitySession().getRoleManager().hasRole(m.getUserName(), groupId, m.getMembershipType()))
       {
@@ -191,7 +192,7 @@ public class MembershipDAOImpl implements MembershipHandler
       for (Role role : roles)
       {
          MembershipImpl m = new MembershipImpl();
-         Group g = ((GroupDAOImpl)orgService.getGroupHandler()).getGroup(role.getGroup().getName());
+         Group g = ((GroupDAOImpl)orgService.getGroupHandler()).convertGroup(role.getGroup());
          m.setGroupId(g.getId());
          m.setUserName(role.getUser().getId());
          m.setMembershipType(role.getRoleType().getName());
@@ -218,8 +219,8 @@ public class MembershipDAOImpl implements MembershipHandler
    public Membership findMembershipByUserGroupAndType(String userName, String groupId, String type) throws Exception
    {
       String gid =
-         getIdentitySession().getPersistenceManager().createGroupKey(getGroupNameFromId(groupId),
-            orgService.getGtnGroupType());
+         getIdentitySession().getPersistenceManager().
+            createGroupKey(getGroupNameFromId(groupId), getGroupTypeFromId(groupId));
 
       Role role = getIdentitySession().getRoleManager().getRole(type, userName, gid);
 
@@ -245,8 +246,8 @@ public class MembershipDAOImpl implements MembershipHandler
       }
 
       String gid =
-         getIdentitySession().getPersistenceManager().createGroupKey(getGroupNameFromId(groupId),
-            orgService.getGtnGroupType());
+         getIdentitySession().getPersistenceManager().
+            createGroupKey(getGroupNameFromId(groupId), getGroupTypeFromId(groupId));
 
       Collection<RoleType> roleTypes = getIdentitySession().getRoleManager().findRoleTypes(userName, gid, null);
 
@@ -275,7 +276,7 @@ public class MembershipDAOImpl implements MembershipHandler
       for (Role role : roles)
       {
          MembershipImpl m = new MembershipImpl();
-         Group g = ((GroupDAOImpl)orgService.getGroupHandler()).getGroup(role.getGroup().getName());
+         Group g = ((GroupDAOImpl)orgService.getGroupHandler()).convertGroup(role.getGroup());
          m.setGroupId(g.getId());
          m.setUserName(role.getUser().getId());
          m.setMembershipType(role.getRoleType().getName());
@@ -288,7 +289,8 @@ public class MembershipDAOImpl implements MembershipHandler
    static void removeMembershipEntriesOfGroup(PicketLinkIDMOrganizationServiceImpl orgService, Group group,
       IdentitySession session) throws Exception
    {
-      String gid = session.getPersistenceManager().createGroupKey(group.getGroupName(), orgService.getGtnGroupType());
+      String gid = session.getPersistenceManager().
+         createGroupKey(group.getGroupName(), orgService.getConfiguration().getGroupType(group.getParentId()));
 
       Collection<Role> roles = session.getRoleManager().findRoles(gid, null);
 
@@ -307,7 +309,7 @@ public class MembershipDAOImpl implements MembershipHandler
    {
       String gid =
          getIdentitySession().getPersistenceManager().createGroupKey(getGroupNameFromId(groupId),
-            orgService.getGtnGroupType());
+            getGroupTypeFromId(groupId));
 
       Collection<Role> roles = getIdentitySession().getRoleManager().findRoles(gid, null);
 
@@ -317,7 +319,7 @@ public class MembershipDAOImpl implements MembershipHandler
       for (Role role : roles)
       {
          MembershipImpl m = new MembershipImpl();
-         Group g = ((GroupDAOImpl)orgService.getGroupHandler()).getGroup(role.getGroup().getName());
+         Group g = ((GroupDAOImpl)orgService.getGroupHandler()).convertGroup(role.getGroup());
          m.setGroupId(g.getId());
          m.setUserName(role.getUser().getId());
          m.setMembershipType(role.getRoleType().getName());
@@ -334,7 +336,7 @@ public class MembershipDAOImpl implements MembershipHandler
 
       String groupId =
          getIdentitySession().getPersistenceManager().createGroupKey(getGroupNameFromId(m.getGroupId()),
-            orgService.getGtnGroupType());
+            getGroupTypeFromId(m.getGroupId()));
 
       if (getIdentitySession().getRoleManager().hasRole(m.getUserName(), groupId, m.getMembershipType()))
       {
@@ -390,5 +392,13 @@ public class MembershipDAOImpl implements MembershipHandler
       String[] ids = groupId.split("/");
 
       return ids[ids.length - 1];
+   }
+
+   private String getGroupTypeFromId(String groupId)
+   {
+
+      String parentId = groupId.substring(0, groupId.lastIndexOf("/"));
+
+      return orgService.getConfiguration().getGroupType(parentId);
    }
 }

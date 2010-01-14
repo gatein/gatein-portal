@@ -76,26 +76,6 @@
             <attributes/>
             <options/>
           </identity-object-type>
-          <identity-object-type>
-            <name>GTN_GROUP_TYPE</name>
-            <relationships>
-              <relationship>
-                <relationship-type-ref>JBOSS_IDENTITY_MEMBERSHIP</relationship-type-ref>
-                <identity-object-type-ref>USER</identity-object-type-ref>
-              </relationship>
-              <relationship>
-                <relationship-type-ref>JBOSS_IDENTITY_MEMBERSHIP</relationship-type-ref>
-                <identity-object-type-ref>GTN_GROUP_TYPE</identity-object-type-ref>
-              </relationship>
-              <relationship>
-                <relationship-type-ref>JBOSS_IDENTITY_ROLE</relationship-type-ref>
-                <identity-object-type-ref>USER</identity-object-type-ref>
-              </relationship>
-            </relationships>
-            <credentials/>
-            <attributes/>
-            <options/>
-          </identity-object-type>
         </supported-identity-object-types>
         <options>
           <option>
@@ -108,6 +88,10 @@
           </option>
           <option>
             <name>populateIdentityObjectTypes</name>
+            <value>true</value>
+          </option>
+          <option>
+            <name>allowNotDefinedIdentityObjectTypes</name>
             <value>true</value>
           </option>
           <option>

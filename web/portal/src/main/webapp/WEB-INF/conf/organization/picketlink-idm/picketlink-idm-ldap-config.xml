@@ -58,7 +58,8 @@
           <identity-store-id>PortalLDAPStore</identity-store-id>
           <identity-object-types>
             <identity-object-type>USER</identity-object-type>
-            <identity-object-type>GTN_GROUP_TYPE</identity-object-type>
+            <identity-object-type>platform_type</identity-object-type>
+            <identity-object-type>organization_type</identity-object-type>
           </identity-object-types>
           <options/>
         </identity-store-mapping>
@@ -72,26 +73,10 @@
     </repository>
     <repository>
       <id>SamplePortalRepository</id>
-      <class>org.picketlink.idm.impl.repository.FallbackIdentityStoreRepository</class>
+      <class>org.picketlink.idm.impl.repository.WrapperIdentityStoreRepository</class>
       <external-config/>
       <default-identity-store-id>HibernateStore</default-identity-store-id>
       <default-attribute-store-id>HibernateStore</default-attribute-store-id>
-      <identity-store-mappings>
-        <identity-store-mapping>
-          <identity-store-id>SamplePortalLDAPStore</identity-store-id>
-          <identity-object-types>
-            <identity-object-type>USER</identity-object-type>
-            <identity-object-type>GTN_GROUP_TYPE</identity-object-type>
-          </identity-object-types>
-          <options/>
-        </identity-store-mapping>
-      </identity-store-mappings>
-      <options>
-        <option>
-          <name>allowNotDefinedAttributes</name>
-          <value>true</value>
-        </option>
-      </options>
     </repository>
   </repositories>
   <stores>
@@ -115,26 +100,6 @@
             <attributes/>
             <options/>
           </identity-object-type>
-          <identity-object-type>
-            <name>GTN_GROUP_TYPE</name>
-            <relationships>
-              <relationship>
-                <relationship-type-ref>JBOSS_IDENTITY_MEMBERSHIP</relationship-type-ref>
-                <identity-object-type-ref>USER</identity-object-type-ref>
-              </relationship>
-              <relationship>
-                <relationship-type-ref>JBOSS_IDENTITY_MEMBERSHIP</relationship-type-ref>
-                <identity-object-type-ref>GTN_GROUP_TYPE</identity-object-type-ref>
-              </relationship>
-              <relationship>
-                <relationship-type-ref>JBOSS_IDENTITY_ROLE</relationship-type-ref>
-                <identity-object-type-ref>USER</identity-object-type-ref>
-              </relationship>
-            </relationships>
-            <credentials/>
-            <attributes/>
-            <options/>
-          </identity-object-type>
         </supported-identity-object-types>
         <options>
           <option>
@@ -147,6 +112,10 @@
           </option>
           <option>
             <name>populateIdentityObjectTypes</name>
+            <value>true</value>
+          </option>
+          <option>
+            <name>allowNotDefinedIdentityObjectTypes</name>
             <value>true</value>
           </option>
           <option>
@@ -202,7 +171,7 @@
             </options>
           </identity-object-type>
           <identity-object-type>
-            <name>GTN_GROUP_TYPE</name>
+            <name>platform_type</name>
             <relationships>
               <relationship>
                 <relationship-type-ref>JBOSS_IDENTITY_MEMBERSHIP</relationship-type-ref>
@@ -210,7 +179,7 @@
               </relationship>
               <relationship>
                 <relationship-type-ref>JBOSS_IDENTITY_MEMBERSHIP</relationship-type-ref>
-                <identity-object-type-ref>GTN_GROUP_TYPE</identity-object-type-ref>
+                <identity-object-type-ref>platform_type</identity-object-type-ref>
               </relationship>
             </relationships>
             <credentials/>
@@ -222,7 +191,57 @@
               </option>
               <option>
                 <name>ctxDNs</name>
-                <value>ou=Groups,o=portal,o=gatein,dc=example,dc=com</value>
+                <value>ou=Platform,o=portal,o=gatein,dc=example,dc=com</value>
+              </option>
+              <!--<option>-->
+              <!--<name>entrySearchFilter</name>-->
+              <!--<value></value>-->
+              <!--</option>-->
+              <option>
+                <name>allowCreateEntry</name>
+                <value>true</value>
+              </option>
+              <option>
+                <name>parentMembershipAttributeName</name>
+                <value>member</value>
+              </option>
+              <option>
+                <name>isParentMembershipAttributeDN</name>
+                <value>true</value>
+              </option>
+              <option>
+                <name>allowEmptyMemberships</name>
+                <value>true</value>
+              </option>
+              <option>
+                <name>createEntryAttributeValues</name>
+                <value>objectClass=top</value>
+                <value>objectClass=groupOfNames</value>
+              </option>
+            </options>
+          </identity-object-type>
+          <identity-object-type>
+            <name>organization_type</name>
+            <relationships>
+              <relationship>
+                <relationship-type-ref>JBOSS_IDENTITY_MEMBERSHIP</relationship-type-ref>
+                <identity-object-type-ref>USER</identity-object-type-ref>
+              </relationship>
+              <relationship>
+                <relationship-type-ref>JBOSS_IDENTITY_MEMBERSHIP</relationship-type-ref>
+                <identity-object-type-ref>organization_type</identity-object-type-ref>
+              </relationship>
+            </relationships>
+            <credentials/>
+            <attributes/>
+            <options>
+              <option>
+                <name>idAttributeName</name>
+                <value>cn</value>
+              </option>
+              <option>
+                <name>ctxDNs</name>
+                <value>ou=Organization,o=portal,o=gatein,dc=example,dc=com</value>
               </option>
               <!--<option>-->
               <!--<name>entrySearchFilter</name>-->
@@ -269,117 +288,9 @@
             <name>searchTimeLimit</name>
             <value>10000</value>
           </option>
-        </options>
-      </identity-store>
-      <identity-store>
-        <id>SamplePortalLDAPStore</id>
-        <class>org.picketlink.idm.impl.store.ldap.LDAPIdentityStoreImpl</class>
-        <external-config/>
-        <supported-relationship-types>
-          <relationship-type>JBOSS_IDENTITY_MEMBERSHIP</relationship-type>
-        </supported-relationship-types>
-        <supported-identity-object-types>
-          <identity-object-type>
-            <name>USER</name>
-            <relationships/>
-            <credentials>
-              <credential-type>PASSWORD</credential-type>
-            </credentials>
-            <attributes>
-            </attributes>
-            <options>
-              <option>
-                <name>idAttributeName</name>
-                <value>uid</value>
-              </option>
-              <option>
-                <name>passwordAttributeName</name>
-                <value>userPassword</value>
-              </option>
-              <option>
-                <name>ctxDNs</name>
-                <value>ou=People,o=sample-portal,o=gatein,dc=example,dc=com</value>
-              </option>
-              <option>
-                <name>allowCreateEntry</name>
-                <value>true</value>
-              </option>
-              <option>
-                <name>createEntryAttributeValues</name>
-                <value>objectClass=top</value>
-                <value>objectClass=inetOrgPerson</value>
-                <value>sn= </value>
-                <value>cn= </value>
-              </option>
-            </options>
-          </identity-object-type>
-          <identity-object-type>
-            <name>GTN_GROUP_TYPE</name>
-            <relationships>
-              <relationship>
-                <relationship-type-ref>JBOSS_IDENTITY_MEMBERSHIP</relationship-type-ref>
-                <identity-object-type-ref>USER</identity-object-type-ref>
-              </relationship>
-              <relationship>
-                <relationship-type-ref>JBOSS_IDENTITY_MEMBERSHIP</relationship-type-ref>
-                <identity-object-type-ref>GTN_GROUP_TYPE</identity-object-type-ref>
-              </relationship>
-            </relationships>
-            <credentials/>
-            <attributes/>
-            <options>
-              <option>
-                <name>idAttributeName</name>
-                <value>cn</value>
-              </option>
-              <option>
-                <name>ctxDNs</name>
-                <value>ou=Groups,o=sample-portal,o=gatein,dc=example,dc=com</value>
-              </option>
-              <!--<option>-->
-              <!--<name>entrySearchFilter</name>-->
-              <!--<value></value>-->
-              <!--</option>-->
-              <option>
-                <name>allowCreateEntry</name>
-                <value>true</value>
-              </option>
-              <option>
-                <name>parentMembershipAttributeName</name>
-                <value>member</value>
-              </option>
-              <option>
-                <name>isParentMembershipAttributeDN</name>
-                <value>true</value>
-              </option>
-              <option>
-                <name>allowEmptyMemberships</name>
-                <value>true</value>
-              </option>
-              <option>
-                <name>createEntryAttributeValues</name>
-                <value>objectClass=top</value>
-                <value>objectClass=groupOfNames</value>
-              </option>
-            </options>
-          </identity-object-type>
-        </supported-identity-object-types>
-        <options>
           <option>
-            <name>providerURL</name>
-            <value>ldap://localhost:1389</value>
-          </option>
-          <option>
-            <name>adminDN</name>
-            <value>cn=Directory Manager</value>
-          </option>
-          <option>
-            <name>adminPassword</name>
-            <value>password</value>
-          </option>
-          <option>
-            <name>searchTimeLimit</name>
-            <value>10000</value>
+            <name>createMissingContexts</name>
+            <value>true</value>
           </option>
         </options>
       </identity-store>

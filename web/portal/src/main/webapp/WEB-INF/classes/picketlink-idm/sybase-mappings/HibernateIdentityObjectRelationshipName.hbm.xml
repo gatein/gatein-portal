@@ -18,7 +18,6 @@
                 lazy="false">
          <column name="NAME"
                  not-null="true"
-                 unique="true"
                  unique-key="id"/>
       </property>
       <map name="properties"
