@@ -42,6 +42,8 @@ public class UserACL
 {
    public final static String EVERYONE = "Everyone";
 
+   public final static String MANAGER = "manager";
+   
    protected static Log log = ExoLogger.getLogger("organization:UserACL");
 
    private final Collection<MembershipEntry> NO_MEMBERSHIP = Collections.emptyList();
@@ -410,7 +412,17 @@ public class UserACL
          return true;
       }
       String ownerType = pageNav.getOwnerType();
-      if (PortalConfig.GROUP_TYPE.equals(ownerType))
+      
+      if(PortalConfig.PORTAL_TYPE.equals(ownerType))
+      {
+         //For portal navigation, only manager of admin group has edit permission
+         String adminGroup = getAdminGroups();
+         if(adminGroup == null){
+            return false;
+         }
+         return identity.isMemberOf(adminGroup, UserACL.MANAGER);
+      }
+      else if (PortalConfig.GROUP_TYPE.equals(ownerType))
       {
          String temp = pageNav.getOwnerId().trim();
          String expAdminGroup = getAdminGroups();
@@ -438,7 +450,7 @@ public class UserACL
       }
       return false;
    }
-
+   
    private boolean hasPermission(Identity identity, Page page)
    {
       if (PortalConfig.USER_TYPE.equals(page.getOwnerType()))
