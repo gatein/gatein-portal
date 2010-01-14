@@ -20,11 +20,8 @@
 package org.exoplatform.webui.replication;
 
 import junit.framework.TestCase;
+import org.exoplatform.webui.application.replication.SerializationContext;
 import org.exoplatform.webui.application.replication.model.TypeDomain;
-import org.exoplatform.webui.application.replication.serial.ObjectReader;
-import org.exoplatform.webui.application.replication.serial.ObjectWriter;
-
-import java.io.*;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -41,13 +38,8 @@ public class TestSerialization extends TestCase
       a.a = "foo";
       a.b = 2;
       a.c = true;
-      ByteArrayOutputStream baos = new ByteArrayOutputStream();
-      ObjectWriter writer = new ObjectWriter(domain, baos);
-      writer.writeObject(a);
-      writer.close();
-      ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
-      ObjectReader in = new ObjectReader(domain, bais);
-      a = (A)in.readObject();
+      SerializationContext context = new SerializationContext(domain);
+      a = context.clone(a);
       assertEquals("foo", a.a);
       assertEquals(2, a.b);
       assertEquals(true, a.c);
@@ -59,12 +51,8 @@ public class TestSerialization extends TestCase
       domain.add(B.class);
       B b = new B();
       b.ref = new B(b);
-      ByteArrayOutputStream baos = new ByteArrayOutputStream();
-      ObjectWriter writer = new ObjectWriter(domain, baos);
-      writer.writeObject(b);
-      ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
-      ObjectReader in = new ObjectReader(domain, bais);
-      b = (B)in.readObject();
+      SerializationContext context = new SerializationContext(domain);
+      b = context.clone(b);
       assertNotNull(b.ref);
       assertSame(b, b.ref.ref);
    }
@@ -80,18 +68,9 @@ public class TestSerialization extends TestCase
       e.right = new E();
       e.right.left = e.left.left;
       e.right.right = e.left.right;
-      ByteArrayOutputStream baos = new ByteArrayOutputStream();
-      ObjectWriter writer = new ObjectWriter(domain, baos);
-      writer.writeObject(e);
-      ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
-      ObjectReader in = new ObjectReader(domain, bais);
-      e = (E)in.readObject();
+      SerializationContext context = new SerializationContext(domain);
+      e = context.clone(e);
       assertSame(e.left.left, e.right.left);
       assertSame(e.left.right, e.right.right);
-   }
-
-   public void testCustomFactory() throws Exception
-   {
-
    }
 }

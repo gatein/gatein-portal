@@ -19,6 +19,7 @@
 
 package org.exoplatform.webui.application.replication.serial;
 
+import org.exoplatform.webui.application.replication.SerializationContext;
 import org.exoplatform.webui.application.replication.model.ClassTypeModel;
 import org.exoplatform.webui.application.replication.model.FieldModel;
 import org.exoplatform.webui.application.replication.model.TypeDomain;
@@ -37,12 +38,12 @@ public class ObjectWriter extends ObjectOutputStream
 {
 
    /** . */
-   private final TypeDomain domain;
+   private final SerializationContext context;
 
    /** . */
    private final IdentityHashMap<Object, Integer> objectToId;
 
-   public ObjectWriter(TypeDomain domain, OutputStream out) throws IOException
+   public ObjectWriter(SerializationContext context, OutputStream out) throws IOException
    {
       super(out);
 
@@ -50,7 +51,7 @@ public class ObjectWriter extends ObjectOutputStream
       enableReplaceObject(true);
 
       //
-      this.domain = domain;
+      this.context = context;
       this.objectToId = new IdentityHashMap<Object, Integer>();
    }
 
@@ -81,7 +82,7 @@ public class ObjectWriter extends ObjectOutputStream
       }
       else
       {
-         ClassTypeModel<?, ?> typeModel = (ClassTypeModel<?, ?>)domain.getTypeModel(obj.getClass());
+         ClassTypeModel<?, ?> typeModel = (ClassTypeModel<?, ?>)context.getTypeDomain().getTypeModel(obj.getClass());
 
          //
          if (typeModel == null)

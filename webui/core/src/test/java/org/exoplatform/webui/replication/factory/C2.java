@@ -17,26 +17,17 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.webui.application.replication.factory;
+package org.exoplatform.webui.replication.factory;
+
+import org.exoplatform.webui.application.replication.annotations.Factory;
+import org.exoplatform.webui.application.replication.annotations.ReplicatedType;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
- * @param <B> the base object type
- * @param <C> the context type
  */
-public abstract class ObjectFactory<B, C>
+@ReplicatedType
+@Factory(type = C1.class)
+public class C2
 {
-
-   /**
-    * Instantiate an object based on the provided class.
-    *
-    * @param type the type
-    * @param context the context
-    * @param <S> the sub type of the base type
-    * @return the S instance
-    * @throws CreateException anything wrong that could happen during instance creation
-    */
-   public abstract <S extends B> S create(Class<S> type, C context) throws CreateException;
-
 }

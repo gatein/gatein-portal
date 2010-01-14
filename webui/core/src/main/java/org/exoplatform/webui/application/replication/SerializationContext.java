@@ -26,41 +26,54 @@ import org.exoplatform.webui.application.replication.serial.ObjectWriter;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class ReplicationContext
+public class SerializationContext
 {
 
    /** . */
    private final TypeDomain typeDomain;
 
    /** . */
-   private final Set<Object> creationContexts;
+   private final Map<Class<?>, Object> creationContexts;
 
-   public ReplicationContext(TypeDomain typeDomain)
+   public SerializationContext(TypeDomain typeDomain)
    {
       this.typeDomain = typeDomain;
-      this.creationContexts = new HashSet<Object>();
+      this.creationContexts = new HashMap<Class<?>, Object>();
    }
 
    public void addCreationContext(Object o)
    {
-      creationContexts.add(o);
+      creationContexts.put(o.getClass(), o);
+   }
+
+   public TypeDomain getTypeDomain()
+   {
+      return typeDomain;
+   }
+
+   public <C> C getContext(Class<C> contextType)
+   {
+      // This is ok
+      return (C)creationContexts.get(contextType);
    }
 
    public <O> O clone(O o) throws IOException, ClassNotFoundException
    {
       ByteArrayOutputStream baos = new ByteArrayOutputStream();
-      ObjectWriter writer = new ObjectWriter(typeDomain, baos);
+      ObjectWriter writer = new ObjectWriter(this, baos);
       writer.writeObject(o);
       writer.close();
       ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
-      ObjectReader in = new ObjectReader(typeDomain, bais);
+      ObjectReader in = new ObjectReader(this, bais);
       return (O)in.readObject();
    }
 }

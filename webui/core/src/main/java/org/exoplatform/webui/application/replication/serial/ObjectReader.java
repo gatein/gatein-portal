@@ -19,9 +19,10 @@
 
 package org.exoplatform.webui.application.replication.serial;
 
+import org.exoplatform.webui.application.replication.SerializationContext;
+import org.exoplatform.webui.application.replication.factory.ObjectFactory;
 import org.exoplatform.webui.application.replication.model.ClassTypeModel;
 import org.exoplatform.webui.application.replication.model.FieldModel;
-import org.exoplatform.webui.application.replication.model.TypeDomain;
 import org.exoplatform.webui.application.replication.model.TypeModel;
 
 import java.io.*;
@@ -35,7 +36,7 @@ public class ObjectReader extends ObjectInputStream
 {
 
    /** . */
-   private final TypeDomain domain;
+   private final SerializationContext context;
 
    /** . */
    private final Map<Integer, Object> idToObject;
@@ -43,7 +44,7 @@ public class ObjectReader extends ObjectInputStream
    /** . */
    private final Map<Integer, List<Resolution>> idToResolutions;
 
-   public ObjectReader(TypeDomain domain, InputStream in) throws IOException
+   public ObjectReader(SerializationContext context, InputStream in) throws IOException
    {
       super(in);
 
@@ -51,9 +52,29 @@ public class ObjectReader extends ObjectInputStream
       enableResolveObject(true);
 
       //
-      this.domain = domain;
+      this.context = context;
       this.idToObject = new HashMap<Integer, Object>();
       this.idToResolutions = new HashMap<Integer, List<Resolution>>();
+   }
+
+   private <O, C> O instantiate(ClassTypeModel<O, C> typeModel) throws InvalidClassException
+   {
+      try
+      {
+         ObjectFactory<? super O, C> factory = typeModel.getFactory();
+
+         //
+         C c = context.getContext(typeModel.getContextType());
+
+         //
+         return factory.create(typeModel.getObjectType(), c);
+      }
+      catch (Exception e)
+      {
+         InvalidClassException ice = new InvalidClassException("Cannot instantiate object from class " + typeModel.getObjectType().getName());
+         ice.initCause(e);
+         throw ice;
+      }
    }
 
    @Override
@@ -79,20 +100,10 @@ public class ObjectReader extends ObjectInputStream
                id = container.readInt();
                Class clazz = (Class) container.readObject();
 
-               ClassTypeModel<?, ?> typeModel = (ClassTypeModel) domain.getTypeModel(clazz);
+               ClassTypeModel<?, ?> typeModel = (ClassTypeModel)context.getTypeDomain().getTypeModel(clazz);
 
                //
-               Object instance;
-               try
-               {
-                  instance = typeModel.getFactory().create(clazz, null);
-               }
-               catch (Exception e)
-               {
-                  InvalidClassException ice = new InvalidClassException("Cannot instantiate object from class " + clazz.getName());
-                  ice.initCause(e);
-                  throw ice;
-               }
+               Object instance = instantiate(typeModel);
 
                //
                idToObject.put(id, instance);

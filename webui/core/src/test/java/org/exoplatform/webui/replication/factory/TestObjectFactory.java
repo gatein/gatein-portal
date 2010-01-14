@@ -20,8 +20,11 @@
 package org.exoplatform.webui.replication.factory;
 
 import junit.framework.TestCase;
-import org.exoplatform.webui.application.replication.ReplicationContext;
+import org.exoplatform.webui.application.replication.SerializationContext;
 import org.exoplatform.webui.application.replication.model.TypeDomain;
+import org.exoplatform.webui.application.replication.model.TypeException;
+
+import java.io.InvalidClassException;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -34,8 +37,43 @@ public class TestObjectFactory extends TestCase
    {
       TypeDomain domain = new TypeDomain();
       domain.add(A2.class);
-      ReplicationContext context = new ReplicationContext(domain);
+      SerializationContext context = new SerializationContext(domain);
       A2 a2 = new A2();
       assertSame(A1.instance, context.clone(a2));
    }
+
+   public void testFactoryThrowsException() throws Exception
+   {
+      TypeDomain domain = new TypeDomain();
+      domain.add(B.class);
+      SerializationContext context = new SerializationContext(domain);
+      B b = new B(false);
+      try
+      {
+         context.clone(b);
+         fail();
+      }
+      catch (InvalidClassException e)
+      {
+      }
+   }
+
+   public void testFactoryClassNotAssignable() throws Exception
+   {
+      TypeDomain domain = new TypeDomain();
+      try
+      {
+         domain.add(C2.class);
+         fail();
+      }
+      catch (TypeException e)
+      {
+      }
+   }
+
+   public void testCreationContext() throws Exception
+   {
+      TypeDomain domain = new TypeDomain();
+   }
+
 }
