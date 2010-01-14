@@ -19,6 +19,8 @@
 
 package org.exoplatform.webui.application.replication;
 
+import org.exoplatform.webui.application.replication.factory.DefaultObjectFactory;
+import org.exoplatform.webui.application.replication.factory.ObjectFactory;
 import org.exoplatform.webui.application.replication.model.TypeDomain;
 import org.exoplatform.webui.application.replication.serial.ObjectReader;
 import org.exoplatform.webui.application.replication.serial.ObjectWriter;
@@ -26,10 +28,9 @@ import org.exoplatform.webui.application.replication.serial.ObjectWriter;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.lang.reflect.ParameterizedType;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -42,17 +43,31 @@ public class SerializationContext
    private final TypeDomain typeDomain;
 
    /** . */
-   private final Map<Class<?>, Object> creationContexts;
+   private final Map<Class<?>, ObjectFactory<?>> factories;
 
    public SerializationContext(TypeDomain typeDomain)
    {
+      HashMap<Class<?>, ObjectFactory<?>> factories = new HashMap<Class<?>, ObjectFactory<?>>();
+      factories.put(Object.class, new DefaultObjectFactory());
+
+      //
       this.typeDomain = typeDomain;
-      this.creationContexts = new HashMap<Class<?>, Object>();
+      this.factories = factories;
    }
 
-   public void addCreationContext(Object o)
+   public <O> void addFactory(ObjectFactory<O> factory)
    {
-      creationContexts.put(o.getClass(), o);
+      // OK
+      Class<ObjectFactory<O>> factoryClass = (Class<ObjectFactory<O>>)factory.getClass();
+
+      //
+      ParameterizedType pt = (ParameterizedType)factoryClass.getGenericSuperclass();
+
+      // OK
+      Class<?> objectType = (Class<Object>)pt.getActualTypeArguments()[0];
+
+      //
+      factories.put(objectType, factory);
    }
 
    public TypeDomain getTypeDomain()
@@ -60,10 +75,19 @@ public class SerializationContext
       return typeDomain;
    }
 
-   public <C> C getContext(Class<C> contextType)
+   public <O>ObjectFactory<? super O> getFactory(Class<O> type)
    {
-      // This is ok
-      return (C)creationContexts.get(contextType);
+      // OK
+      ObjectFactory<O> factory = (ObjectFactory<O>)factories.get(type);
+
+      //
+      if (factory == null)
+      {
+         return getFactory(type.getSuperclass());
+      }
+
+      //
+      return factory;
    }
 
    public <O> O clone(O o) throws IOException, ClassNotFoundException

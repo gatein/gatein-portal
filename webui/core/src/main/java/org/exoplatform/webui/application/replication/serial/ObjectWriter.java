@@ -22,13 +22,10 @@ package org.exoplatform.webui.application.replication.serial;
 import org.exoplatform.webui.application.replication.SerializationContext;
 import org.exoplatform.webui.application.replication.model.ClassTypeModel;
 import org.exoplatform.webui.application.replication.model.FieldModel;
-import org.exoplatform.webui.application.replication.model.TypeDomain;
 import org.exoplatform.webui.application.replication.model.TypeModel;
 
 import java.io.*;
-import java.util.HashMap;
 import java.util.IdentityHashMap;
-import java.util.Map;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -82,7 +79,7 @@ public class ObjectWriter extends ObjectOutputStream
       }
       else
       {
-         ClassTypeModel<?, ?> typeModel = (ClassTypeModel<?, ?>)context.getTypeDomain().getTypeModel(obj.getClass());
+         ClassTypeModel<?> typeModel = (ClassTypeModel<?>)context.getTypeDomain().getTypeModel(obj.getClass());
 
          //
          if (typeModel == null)
@@ -96,7 +93,7 @@ public class ObjectWriter extends ObjectOutputStream
          output.writeObject(obj.getClass());
 
          //
-         ClassTypeModel<?, ?> currentTypeModel = typeModel;
+         ClassTypeModel<?> currentTypeModel = typeModel;
          while (true)
          {
             for (FieldModel fieldModel : (currentTypeModel).getFields())

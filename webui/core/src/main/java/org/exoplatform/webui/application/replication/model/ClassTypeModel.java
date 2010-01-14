@@ -19,8 +19,6 @@
 
 package org.exoplatform.webui.application.replication.model;
 
-import org.exoplatform.webui.application.replication.factory.ObjectFactory;
-
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
@@ -29,7 +27,7 @@ import java.util.Map;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class ClassTypeModel<O, C> extends TypeModel
+public class ClassTypeModel<O> extends TypeModel
 {
 
    /** . */
@@ -44,18 +42,10 @@ public class ClassTypeModel<O, C> extends TypeModel
    /** . */
    private final Map<String, FieldModel> immutableFields;
 
-   /** . */
-   private final ObjectFactory<? super O, C> factory;
-
-   /** . */
-   private final Class<C> contextType;
-
    ClassTypeModel(
       Class<O> javaType,
       TypeModel superType,
-      Map<String, FieldModel> fields,
-      ObjectFactory<? super O, C> factory,
-      Class<C> contextType)
+      Map<String, FieldModel> fields)
    {
       super(javaType);
 
@@ -64,23 +54,11 @@ public class ClassTypeModel<O, C> extends TypeModel
       this.superType = superType;
       this.fields = fields;
       this.immutableFields = Collections.unmodifiableMap(fields);
-      this.factory = factory;
-      this.contextType = contextType;
    }
 
    public Class<O> getObjectType()
    {
       return objectType;
-   }
-
-   public Class<C> getContextType()
-   {
-      return contextType;
-   }
-
-   public ObjectFactory<? super O, C> getFactory()
-   {
-      return factory;
    }
 
    public TypeModel getSuperType()

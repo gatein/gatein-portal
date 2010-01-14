@@ -23,9 +23,9 @@ package org.exoplatform.webui.application.replication.factory;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public final class DefaultObjectFactory extends ObjectFactory<Object, Object>
+public final class DefaultObjectFactory extends ObjectFactory<Object>
 {
-   public <O> O create(Class<O> type, Object context) throws CreateException
+   public <O> O create(Class<O> type) throws CreateException
    {
       try
       {

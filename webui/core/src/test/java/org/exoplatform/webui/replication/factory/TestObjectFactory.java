@@ -38,6 +38,7 @@ public class TestObjectFactory extends TestCase
       TypeDomain domain = new TypeDomain();
       domain.add(A2.class);
       SerializationContext context = new SerializationContext(domain);
+      context.addFactory(new A1());
       A2 a2 = new A2();
       assertSame(A1.instance, context.clone(a2));
    }
@@ -57,23 +58,4 @@ public class TestObjectFactory extends TestCase
       {
       }
    }
-
-   public void testFactoryClassNotAssignable() throws Exception
-   {
-      TypeDomain domain = new TypeDomain();
-      try
-      {
-         domain.add(C2.class);
-         fail();
-      }
-      catch (TypeException e)
-      {
-      }
-   }
-
-   public void testCreationContext() throws Exception
-   {
-      TypeDomain domain = new TypeDomain();
-   }
-
 }

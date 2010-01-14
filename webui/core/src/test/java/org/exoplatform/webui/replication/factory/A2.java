@@ -19,7 +19,6 @@
 
 package org.exoplatform.webui.replication.factory;
 
-import org.exoplatform.webui.application.replication.annotations.Factory;
 import org.exoplatform.webui.application.replication.annotations.ReplicatedType;
 
 /**
@@ -27,7 +26,6 @@ import org.exoplatform.webui.application.replication.annotations.ReplicatedType;
  * @version $Revision$
  */
 @ReplicatedType
-@Factory(type = A1.class)
 public class A2
 {
 }

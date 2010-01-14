@@ -26,13 +26,13 @@ import org.exoplatform.webui.application.replication.factory.CreateException;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class A1 extends ObjectFactory<A2, Object>
+public class A1 extends ObjectFactory<A2>
 {
 
    static A2 instance = new A2();
 
    @Override
-   public <E extends A2> E create(Class<E> type, Object context) throws CreateException
+   public <E extends A2> E create(Class<E> type) throws CreateException
    {
       if (type == A2.class)
       {

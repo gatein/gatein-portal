@@ -57,17 +57,14 @@ public class ObjectReader extends ObjectInputStream
       this.idToResolutions = new HashMap<Integer, List<Resolution>>();
    }
 
-   private <O, C> O instantiate(ClassTypeModel<O, C> typeModel) throws InvalidClassException
+   private <O> O instantiate(ClassTypeModel<O> typeModel) throws InvalidClassException
    {
       try
       {
-         ObjectFactory<? super O, C> factory = typeModel.getFactory();
+         ObjectFactory<? super O> factory = context.getFactory(typeModel.getObjectType());
 
          //
-         C c = context.getContext(typeModel.getContextType());
-
-         //
-         return factory.create(typeModel.getObjectType(), c);
+         return factory.create(typeModel.getObjectType());
       }
       catch (Exception e)
       {
@@ -100,7 +97,7 @@ public class ObjectReader extends ObjectInputStream
                id = container.readInt();
                Class clazz = (Class) container.readObject();
 
-               ClassTypeModel<?, ?> typeModel = (ClassTypeModel)context.getTypeDomain().getTypeModel(clazz);
+               ClassTypeModel<?> typeModel = (ClassTypeModel)context.getTypeDomain().getTypeModel(clazz);
 
                //
                Object instance = instantiate(typeModel);
@@ -109,7 +106,7 @@ public class ObjectReader extends ObjectInputStream
                idToObject.put(id, instance);
 
                //
-               ClassTypeModel<?, ?> currentTypeModel = typeModel;
+               ClassTypeModel<?> currentTypeModel = typeModel;
                while (true)
                {
                   for (FieldModel fieldModel : (currentTypeModel).getFields())
