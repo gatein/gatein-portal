@@ -35,9 +35,7 @@ import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIGrid;
 import org.exoplatform.webui.core.UIPopupWindow;
-import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
-import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.renderers.ValueRenderer;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -69,11 +67,11 @@ import java.util.ResourceBundle;
 @ComponentConfigs({
    @ComponentConfig(id = UIWsrpRegistrationDetails.REGISTRATION_PROPERTIES, type = UIGrid.class, template = "system:/groovy/webui/core/UIGrid.gtmpl"),
    @ComponentConfig(
-      lifecycle = UIApplicationLifecycle.class,
+      lifecycle = UIContainerLifecycle.class,
       events = {
          @EventConfig(listeners = UIWsrpRegistrationDetails.AddPropertyActionListener.class),
          @EventConfig(listeners = UIWsrpRegistrationDetails.EditPropertyActionListener.class),
-         @EventConfig(listeners = UIWsrpRegistrationDetails.DeleteActionListener.class)
+         @EventConfig(listeners = UIWsrpRegistrationDetails.DeletePropertyActionListener.class)
       })
 })
 public class UIWsrpRegistrationDetails extends UIFormInputSet
@@ -83,7 +81,7 @@ public class UIWsrpRegistrationDetails extends UIFormInputSet
    private UIGrid registrationProperties;
    private static final String NAME = "name";
    static String[] FIELDS = {NAME, "description", "label", "hint"};
-   static String[] SELECT_ACTIONS = {"EditProperty", "Delete"};
+   static String[] PROPERTIES_ACTIONS = {"EditProperty", "DeleteProperty"};
    static final String POLICY_CLASS = "policyClassName";
    static final String VALIDATOR_CLASS = "validatorClassName";
    static final String REGISTRATION_PROPERTIES = "RegistrationPropertySelector";
@@ -116,7 +114,7 @@ public class UIWsrpRegistrationDetails extends UIFormInputSet
       registrationProperties.registerRendererFor(renderer, LocalizedString.class);
 
       //configure the edit and delete buttons based on an id from the data list - this will also be passed as param to listener
-      registrationProperties.configure(NAME, FIELDS, SELECT_ACTIONS);
+      registrationProperties.configure(NAME, FIELDS, PROPERTIES_ACTIONS);
       registrationProperties.getUIPageIterator().setId(REGISTRATION_PROPERTIES_ITERATOR);
       registrationProperties.getUIPageIterator().setRendered(false);
       addChild(registrationProperties.getUIPageIterator());
@@ -285,13 +283,11 @@ public class UIWsrpRegistrationDetails extends UIFormInputSet
       }
    }
 
-   static public class DeleteActionListener extends EventListener<UIWsrpRegistrationDetails>
+   static public class DeletePropertyActionListener extends EventListener<UIWsrpRegistrationDetails>
    {
       public void execute(Event<UIWsrpRegistrationDetails> event)
       {
          UIWsrpRegistrationDetails source = event.getSource();
-         UIApplication uiApp = event.getRequestContext().getUIApplication();
-         UIPopupWindow popup = source.getChild(UIPopupWindow.class);
          String id = event.getRequestContext().getRequestParameter(OBJECTID);
          try
          {
@@ -302,6 +298,7 @@ public class UIWsrpRegistrationDetails extends UIFormInputSet
          catch (Exception e)
          {
             e.printStackTrace();
+            UIApplication uiApp = event.getRequestContext().getUIApplication();
             uiApp.addMessage(new ApplicationMessage("Failed to delete Producer Property. Cause: " + e.getCause(), null, ApplicationMessage.ERROR));
          }
 
