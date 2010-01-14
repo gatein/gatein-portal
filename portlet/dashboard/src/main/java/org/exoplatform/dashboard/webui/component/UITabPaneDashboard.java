@@ -25,6 +25,7 @@ import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.webui.page.UIPageBody;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.log.ExoLogger;
@@ -386,6 +387,13 @@ public class UITabPaneDashboard extends UIContainer
          //If the node is removed successfully, then redirect to the node specified by tab on the left
          if (selectedNode != null)
          {
+           // set maximizedUIComponent of UIPageBody is null if it is maximized portlet of removed page
+           UIPortal uiPortal = Util.getUIPortal();
+           UIPageBody uiPageBody = uiPortal.findFirstComponentOfType(UIPageBody.class);
+           if(uiPageBody.getMaximizedUIComponent() != null){
+             uiPageBody.setMaximizedUIComponent(null);
+           }
+           
             PortalRequestContext prContext = Util.getPortalRequestContext();
             prContext.setResponseComplete(true);
             prContext.getResponse().sendRedirect(prContext.getPortalURI() + selectedNode.getUri());
