@@ -60,7 +60,7 @@
     <div class="UILogin">
       <div class="LoginHeader">Sign In</div>
       <div class="LoginContent">
-        <div class="WelcomeText">Welcome to eXo Portal from "sample-portal"</div>
+        <div class="WelcomeText">Welcome to GateIn Portal</div>
         <div class="CenterLoginContent">
           <%/*Begin form*/%>
           <%
