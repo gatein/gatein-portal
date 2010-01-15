@@ -130,4 +130,17 @@ public class TestSerialization extends TestCase
       {
       }
    }
+
+   public void testTransientField() throws Exception
+   {
+      TypeDomain domain = new TypeDomain();
+      domain.add(G.class);
+      SerializationContext context = new SerializationContext(domain);
+      G g = new G();
+      g.a = "foo";
+      g.b = new Thread();
+      g = context.clone(g);
+      assertEquals("foo", g.a);
+      assertEquals(null, g.b);
+   }
 }

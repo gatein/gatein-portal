@@ -20,6 +20,7 @@
 package org.exoplatform.webui.application.replication.model;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -34,15 +35,24 @@ public final class FieldModel
    /** . */
    private final TypeModel type;
 
+   /** . */
+   private boolean _transient;
+
    FieldModel(Field field, TypeModel type)
    {
       this.field = field;
       this.type = type;
+      this._transient = Modifier.isTransient(field.getModifiers());
    }
 
    public String getName()
    {
       return field.getName();
+   }
+
+   public boolean isTransient()
+   {
+      return _transient;
    }
 
    public TypeModel getType()

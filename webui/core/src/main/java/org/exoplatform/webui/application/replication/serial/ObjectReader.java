@@ -109,28 +109,31 @@ public class ObjectReader extends ObjectInputStream
                   {
                      for (FieldModel fieldModel : currentTypeModel.getFields())
                      {
-                        switch (container.readInt())
+                        if (!fieldModel.isTransient())
                         {
-                           case DataKind.NULL_VALUE:
-                              state.put(fieldModel, null);
-                              break;
-                           case DataKind.OBJECT_REF:
-                              int refId = container.readInt();
-                              Object refO = idToObject.get(refId);
-                              if (refO != null)
-                              {
-                                 state.put(fieldModel, refO);
-                              }
-                              else
-                              {
-                                 biltos.add(new Bilto(refId, fieldModel));
-                              }
-                              break;
-                           case DataKind.OBJECT:
-                              Object o = container.readObject();
-                              state.put(fieldModel, o);
-                              break;
+                           switch (container.readInt())
+                           {
+                              case DataKind.NULL_VALUE:
+                                 state.put(fieldModel, null);
+                                 break;
+                              case DataKind.OBJECT_REF:
+                                 int refId = container.readInt();
+                                 Object refO = idToObject.get(refId);
+                                 if (refO != null)
+                                 {
+                                    state.put(fieldModel, refO);
+                                 }
+                                 else
+                                 {
+                                    biltos.add(new Bilto(refId, fieldModel));
+                                 }
+                                 break;
+                              case DataKind.OBJECT:
+                                 Object o = container.readObject();
+                                 state.put(fieldModel, o);
+                                 break;
 
+                           }
                         }
                      }
                   }

@@ -105,23 +105,26 @@ public class ObjectWriter extends ObjectOutputStream
             {
                for (FieldModel fieldModel : currentTypeModel.getFields())
                {
-                  Object fieldValue = fieldModel.getValue(obj);
-                  if (fieldValue == null)
+                  if (!fieldModel.isTransient())
                   {
-                     output.writeObject(DataKind.NULL_VALUE);
-                  }
-                  else
-                  {
-                     Integer fieldValueId = objectToId.get(fieldValue);
-                     if (fieldValueId != null)
+                     Object fieldValue = fieldModel.getValue(obj);
+                     if (fieldValue == null)
                      {
-                        output.writeObject(DataKind.OBJECT_REF);
-                        output.writeInt(fieldValueId);
+                        output.writeObject(DataKind.NULL_VALUE);
                      }
                      else
                      {
-                        output.writeObject(DataKind.OBJECT);
-                        output.writeObject(fieldValue);
+                        Integer fieldValueId = objectToId.get(fieldValue);
+                        if (fieldValueId != null)
+                        {
+                           output.writeObject(DataKind.OBJECT_REF);
+                           output.writeInt(fieldValueId);
+                        }
+                        else
+                        {
+                           output.writeObject(DataKind.OBJECT);
+                           output.writeObject(fieldValue);
+                        }
                      }
                   }
                }
