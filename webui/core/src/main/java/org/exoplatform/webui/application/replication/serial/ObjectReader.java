@@ -61,14 +61,14 @@ public class ObjectReader extends ObjectInputStream
    {
       try
       {
-         ObjectFactory<? super O> factory = context.getFactory(typeModel.getObjectType());
+         ObjectFactory<? super O> factory = context.getFactory(typeModel.getJavaType());
 
          //
-         return factory.create(typeModel.getObjectType(), state);
+         return factory.create(typeModel.getJavaType(), state);
       }
       catch (Exception e)
       {
-         InvalidClassException ice = new InvalidClassException("Cannot instantiate object from class " + typeModel.getObjectType().getName());
+         InvalidClassException ice = new InvalidClassException("Cannot instantiate object from class " + typeModel.getJavaType().getName());
          ice.initCause(e);
          throw ice;
       }
@@ -107,7 +107,7 @@ public class ObjectReader extends ObjectInputStream
                {
                   if (currentTypeModel instanceof ReplicatableTypeModel)
                   {
-                     for (FieldModel fieldModel : ((ReplicatableTypeModel<?>)currentTypeModel).getFields())
+                     for (FieldModel fieldModel : currentTypeModel.getFields())
                      {
                         switch (container.readInt())
                         {

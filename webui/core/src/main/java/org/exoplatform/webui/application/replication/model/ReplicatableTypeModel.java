@@ -19,8 +19,6 @@
 
 package org.exoplatform.webui.application.replication.model;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Map;
 
 /**
@@ -33,37 +31,20 @@ public final class ReplicatableTypeModel<O> extends TypeModel
    /** . */
    private final Class<O> objectType;
 
-   /** . */
-   private final Map<String, FieldModel> fields;
-
-   /** . */
-   private final Map<String, FieldModel> immutableFields;
-
    ReplicatableTypeModel(
       Class<O> javaType,
       TypeModel superType,
       Map<String, FieldModel> fields)
    {
-      super(javaType, superType);
+      super(javaType, superType, fields);
 
       //
       this.objectType = javaType;
-      this.fields = fields;
-      this.immutableFields = Collections.unmodifiableMap(fields);
    }
 
-   public Class<O> getObjectType()
+   @Override
+   public Class<O> getJavaType()
    {
       return objectType;
-   }
-
-   public Collection<FieldModel> getFields()
-   {
-      return immutableFields.values();
-   }
-
-   public Map<String, FieldModel> getFieldMap()
-   {
-      return immutableFields;
    }
 }

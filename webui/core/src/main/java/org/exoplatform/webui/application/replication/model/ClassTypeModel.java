@@ -19,14 +19,16 @@
 
 package org.exoplatform.webui.application.replication.model;
 
+import java.util.Map;
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public final class ClassTypeModel extends TypeModel
+public final class ClassTypeModel<O> extends TypeModel
 {
-   ClassTypeModel(Class<?> type, TypeModel superType)
+   ClassTypeModel(Class<?> type, TypeModel superType, Map<String, FieldModel> fields)
    {
-      super(type, superType);
+      super(type, superType, fields);
    }
 }

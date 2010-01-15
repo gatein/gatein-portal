@@ -43,18 +43,26 @@ public class TestTypeModel extends TestCase
    {
       TypeDomain domain = new TypeDomain();
       assertType(String.class, domain.add(String.class));
-      assertEquals(2, domain.getSize());
+      assertEquals(4, domain.getSize());
       assertType(String.class, domain.getTypeModel(String.class));
       assertType(Object.class, domain.getTypeModel(Object.class));
+      assertType(int.class, domain.getTypeModel(int.class));
+      assertType(char[].class, domain.getTypeModel(char[].class));
    }
 
    public void testJuu()
    {
       TypeDomain domain = new TypeDomain();
       ReplicatableTypeModel aTM = (ReplicatableTypeModel) domain.add(A.class);
-      assertEquals(5, domain.getSize());
       assertEquals(A.class.getName(), aTM.getName());
-      assertEquals(SetBuilder.create(domain.getTypeModel(int.class)).with(aTM).with(domain.getTypeModel(boolean.class)).with(domain.getTypeModel(Object.class)).build(domain.getTypeModel(String.class)), domain.getTypeModels());
+      assertEquals(SetBuilder.
+         create(domain.getTypeModel(Object.class)).
+         with(domain.getTypeModel(int.class)).
+         with(domain.getTypeModel(char[].class)).
+         with(aTM).
+         with(domain.getTypeModel(boolean.class)).
+         build(domain.getTypeModel(String.class))
+         , domain.getTypeModels());
       Map<String, FieldModel> fieldMap = aTM.getFieldMap();
       assertEquals(3, fieldMap.size());
       FieldModel aFM = fieldMap.get("a");

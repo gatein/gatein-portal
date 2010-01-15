@@ -19,6 +19,10 @@
 
 package org.exoplatform.webui.application.replication.model;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
@@ -32,10 +36,28 @@ public abstract class TypeModel
    /** . */
    private final TypeModel superType;
 
-   TypeModel(Class<?> javaType, TypeModel superType)
+   /** . */
+   private final Map<String, FieldModel> fields;
+
+   /** . */
+   private final Map<String, FieldModel> immutableFields;
+
+   TypeModel(Class<?> javaType, TypeModel superType, Map<String, FieldModel> fields)
    {
       this.javaType = javaType;
       this.superType = superType;
+      this.fields = fields;
+      this.immutableFields = Collections.unmodifiableMap(fields);
+   }
+
+   public Collection<FieldModel> getFields()
+   {
+      return immutableFields.values();
+   }
+
+   public Map<String, FieldModel> getFieldMap()
+   {
+      return immutableFields;
    }
 
    public String getName()

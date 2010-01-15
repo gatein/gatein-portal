@@ -21,7 +21,6 @@ package org.exoplatform.webui.application.replication.model;
 
 import org.exoplatform.webui.application.replication.annotations.ReplicatedType;
 
-import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.*;
@@ -105,24 +104,16 @@ public final class TypeDomain
       return typeModelMap.size();
    }
 
-   private TypeModel build(Class<?> javaType, Map<String, TypeModel> addedTypeModels)
+   private <O> TypeModel build(Class<O> javaType, Map<String, TypeModel> addedTypeModels)
    {
-      ReplicatedType replicatedType = javaType.getAnnotation(ReplicatedType.class);
-      if (replicatedType != null)
-      {
-         return buildReplicatableTypeModel(javaType, addedTypeModels);
-      }
-      else
-      {
-         return buildClassTypeModel(javaType, addedTypeModels);
-      }
-   }
+      TypeModel typeModel = get(javaType, addedTypeModels);
 
-   private <O> ReplicatableTypeModel<O> buildReplicatableTypeModel(Class<O> javaType, Map<String, TypeModel> addedTypeModels)
-   {
-      ReplicatableTypeModel typeModel = (ReplicatableTypeModel) get(javaType, addedTypeModels);
+      //
       if (typeModel == null)
       {
+         boolean replicated = javaType.getAnnotation(ReplicatedType.class) != null;
+
+         //
          TypeModel superTypeModel = null;
          for (Class<?> ancestor = javaType.getSuperclass();ancestor != null;ancestor = ancestor.getSuperclass())
          {
@@ -137,7 +128,14 @@ public final class TypeDomain
          TreeMap<String, FieldModel> fieldModels = new TreeMap<String, FieldModel>();
 
          //
-         typeModel = new ReplicatableTypeModel<O>(javaType, superTypeModel, fieldModels);
+         if (replicated)
+         {
+            typeModel = new ReplicatableTypeModel<O>(javaType, superTypeModel, fieldModels);
+         }
+         else
+         {
+            typeModel = new ClassTypeModel(javaType, superTypeModel, fieldModels);
+         }
 
          //
          addedTypeModels.put(javaType.getName(), typeModel);
@@ -158,23 +156,7 @@ public final class TypeDomain
          }
       }
 
-      // It must be good
-      return (ReplicatableTypeModel<O>)typeModel;
-   }
-
-   private ClassTypeModel buildClassTypeModel(Class<?> javaType, Map<String, TypeModel> addedTypeModels)
-   {
-      ClassTypeModel typeModel = (ClassTypeModel) get(javaType, addedTypeModels);
-      if (typeModel == null)
-      {
-         TypeModel superTypeModel = null;
-         if (javaType.getSuperclass() != null)
-         {
-            superTypeModel = build(javaType.getSuperclass(), addedTypeModels);
-         }
-         typeModel = new ClassTypeModel(javaType, superTypeModel);
-         addedTypeModels.put(javaType.getName(), typeModel);
-      }
+      //
       return typeModel;
    }
 

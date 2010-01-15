@@ -103,7 +103,7 @@ public class ObjectWriter extends ObjectOutputStream
          {
             if (currentTypeModel instanceof ReplicatableTypeModel)
             {
-               for (FieldModel fieldModel : ((ReplicatableTypeModel<?>)currentTypeModel).getFields())
+               for (FieldModel fieldModel : currentTypeModel.getFields())
                {
                   Object fieldValue = fieldModel.getValue(obj);
                   if (fieldValue == null)
@@ -134,11 +134,14 @@ public class ObjectWriter extends ObjectOutputStream
             }
             else
             {
-               switch (status)
+               if (!currentTypeModel.getFields().isEmpty())
                {
-                  case FULL:
-                     status = SerializationStatus.PARTIAL;
-                     break;
+                  switch (status)
+                  {
+                     case FULL:
+                        status = SerializationStatus.PARTIAL;
+                        break;
+                  }
                }
             }
          }
