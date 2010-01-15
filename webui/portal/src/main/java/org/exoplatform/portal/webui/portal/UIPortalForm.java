@@ -161,6 +161,11 @@ public class UIPortalForm extends UIFormTabPane
 
       invokeGetBindingBean(editPortal);
       ((UIFormStringInput)getChild(UIFormInputSet.class).getChildById(FIELD_NAME)).setValue(getPortalOwner());
+      
+      
+      LocaleConfigService localeConfigService = getApplicationComponent(LocaleConfigService.class);
+      LocaleConfig localeConfig = localeConfigService.getLocaleConfig(editPortal.getLocale());
+      this.<UIFormInputSet> getChildById("PortalSetting").<UIFormSelectBox>getChildById(FIELD_LOCALE).setValue(localeConfig.getLanguage());     
       setActions(new String[]{"Save", "Close"});
    }
 
@@ -178,16 +183,17 @@ public class UIPortalForm extends UIFormTabPane
       UIPortal uiPortal = Util.getUIPortal();
       LocaleConfigService localeConfigService = getApplicationComponent(LocaleConfigService.class);
       Collection<?> listLocaleConfig = localeConfigService.getLocalConfigs();
+      LocaleConfig defaultLocale = localeConfigService.getDefaultLocaleConfig();
+      String defaultLanguage = defaultLocale.getLanguage();
       Locale currentLocate = Util.getPortalRequestContext().getLocale();
       Iterator<?> iterator = listLocaleConfig.iterator();
       while (iterator.hasNext())
       {
          LocaleConfig localeConfig = (LocaleConfig)iterator.next();
-         Locale locale = localeConfig.getLocale();
          SelectItemOption<String> option =
             new SelectItemOption<String>(localeConfig.getLocale().getDisplayName(currentLocate), localeConfig
                .getLanguage());
-         if (locale.getLanguage().equalsIgnoreCase(uiPortal.getLocale()))
+         if(defaultLanguage.equals(localeConfig.getLanguage()))
          {
             option.setSelected(true);
          }
