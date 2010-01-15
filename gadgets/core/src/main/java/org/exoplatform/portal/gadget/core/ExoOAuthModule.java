@@ -19,17 +19,27 @@
 
 package org.exoplatform.portal.gadget.core;
 
-import com.google.inject.Inject;
-import com.google.inject.name.Names;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.shindig.auth.AnonymousAuthenticationHandler;
 import org.apache.shindig.common.crypto.BlobCrypter;
+import org.apache.shindig.common.util.ResourceLoader;
 import org.apache.shindig.config.ContainerConfig;
 import org.apache.shindig.gadgets.http.HttpFetcher;
+import org.apache.shindig.gadgets.oauth.BasicOAuthStore;
+import org.apache.shindig.gadgets.oauth.BasicOAuthStoreConsumerKeyAndSecret;
 import org.apache.shindig.gadgets.oauth.OAuthFetcherConfig;
 import org.apache.shindig.gadgets.oauth.OAuthModule;
 import org.apache.shindig.gadgets.oauth.OAuthRequest;
 import org.apache.shindig.gadgets.oauth.OAuthStore;
+import org.apache.shindig.gadgets.oauth.BasicOAuthStoreConsumerKeyAndSecret.KeyType;
+
+import com.google.inject.Inject;
+import com.google.inject.Provider;
+import com.google.inject.name.Names;
 
 /**
  * Created by IntelliJ IDEA.
@@ -45,6 +55,14 @@ public class ExoOAuthModule extends OAuthModule
    private static final String SIGNING_KEY_NAME = "gadgets.signingKeyName";
 
    private static final String CALLBACK_URL = "gadgets.signing.global-callback-url";
+   
+   private static final String OAUTH_CONFIG = "config/oauth.json";
+   private static final String OAUTH_SIGNING_KEY_FILE = "shindig.signing.key-file";
+   private static final String OAUTH_SIGNING_KEY_NAME = "shindig.signing.key-name";
+   private static final String OAUTH_CALLBACK_URL = "shindig.signing.global-callback-url";
+   
+   
+   private static final Logger logger = Logger.getLogger(OAuthModule.class.getName());
 
    @Override
    protected void configure()
@@ -62,17 +80,72 @@ public class ExoOAuthModule extends OAuthModule
          Boolean.TRUE);
    }
 
-   public static class ExoOAuthStoreProvider extends OAuthStoreProvider
+   public static class ExoOAuthStoreProvider implements Provider<OAuthStore>
    {
-      @Inject
+     
+     private final ExoOAuthStore store;
+     
+     @Inject
       public ExoOAuthStoreProvider(ContainerConfig config)
       {
          //super(config.getString(ContainerConfig.DEFAULT_CONTAINER, SIGNING_KEY_FILE), config.getString(ContainerConfig.DEFAULT_CONTAINER, SIGNING_KEY_NAME));
-         super(config.getString(ContainerConfig.DEFAULT_CONTAINER, SIGNING_KEY_FILE), config.getString(
-            ContainerConfig.DEFAULT_CONTAINER, SIGNING_KEY_NAME), config.getString(ContainerConfig.DEFAULT_CONTAINER,
-            CALLBACK_URL));
+//         super(config.getString(ContainerConfig.DEFAULT_CONTAINER, SIGNING_KEY_FILE), config.getString(
+//            ContainerConfig.DEFAULT_CONTAINER, SIGNING_KEY_NAME), config.getString(ContainerConfig.DEFAULT_CONTAINER,
+//            CALLBACK_URL));
+         
+         store = new ExoOAuthStore();
+         
+         String signingKeyFile = config.getString(ContainerConfig.DEFAULT_CONTAINER, SIGNING_KEY_FILE);
+         String signingKeyName = config.getString(ContainerConfig.DEFAULT_CONTAINER, SIGNING_KEY_NAME);
+         String defaultCallbackUrl = config.getString(ContainerConfig.DEFAULT_CONTAINER,CALLBACK_URL);
+         
+         loadDefaultKey(signingKeyFile, signingKeyName);
+         store.setDefaultCallbackUrl(defaultCallbackUrl);
+         loadConsumers();
       }
-   }
+      
+
+
+      private void loadDefaultKey(String signingKeyFile, String signingKeyName) {
+        BasicOAuthStoreConsumerKeyAndSecret key = null;
+        if (!StringUtils.isBlank(signingKeyFile)) {
+          try {
+            logger.info("Loading OAuth signing key from " + signingKeyFile);
+            String privateKey = IOUtils.toString(ResourceLoader.open(signingKeyFile), "UTF-8");
+            privateKey = BasicOAuthStore.convertFromOpenSsl(privateKey);
+            key = new BasicOAuthStoreConsumerKeyAndSecret(null, privateKey, KeyType.RSA_PRIVATE,
+                signingKeyName, null);
+          } catch (Throwable t) {
+            logger.log(Level.WARNING, "Couldn't load key file " + signingKeyFile, t);
+          }
+        }
+        if (key != null) {
+          store.setDefaultKey(key);
+        } else {
+          logger.log(Level.WARNING, "Couldn't load OAuth signing key.  To create a key, run:\n" +
+              "  openssl req -newkey rsa:1024 -days 365 -nodes -x509 -keyout testkey.pem \\\n" +
+              "     -out testkey.pem -subj '/CN=mytestkey'\n" +
+              "  openssl pkcs8 -in testkey.pem -out oauthkey.pem -topk8 -nocrypt -outform PEM\n" +
+              '\n' +
+              "Then edit gadgets.properties and add these lines:\n" +
+              OAUTH_SIGNING_KEY_FILE + "=<path-to-oauthkey.pem>\n" +
+              OAUTH_SIGNING_KEY_NAME + "=mykey\n");
+        }
+      }
+
+      private void loadConsumers() {
+        try {
+          String oauthConfigString = ResourceLoader.getContent(OAUTH_CONFIG);
+          store.initFromConfigString(oauthConfigString);
+        } catch (Throwable t) {
+          logger.log(Level.WARNING, "Failed to initialize OAuth consumers from " + OAUTH_CONFIG, t);
+        }
+      }
+
+      public OAuthStore get() {
+        return store;
+      }
+    }
 
    public static class ExoOAuthRequestProvider extends OAuthRequestProvider
    {

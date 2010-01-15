@@ -28,6 +28,7 @@ import org.exoplatform.management.jmx.annotations.NameTemplate;
 import org.exoplatform.management.jmx.annotations.Property;
 import org.exoplatform.web.login.InitiateLoginServlet;
 import org.exoplatform.web.security.Credentials;
+import org.exoplatform.web.security.GateInToken;
 import org.exoplatform.web.security.Token;
 import org.exoplatform.web.security.TokenStore;
 import org.picocontainer.Startable;
@@ -100,7 +101,7 @@ public abstract class AbstractTokenService implements Startable, TokenStore
          throw new NullPointerException();
       }
 
-      Token token;
+      GateInToken token;
       try
       {
          if (remove)
@@ -139,7 +140,7 @@ public abstract class AbstractTokenService implements Startable, TokenStore
       String[] ids = getAllTokens();
       for (String s : ids)
       {
-         Token token = getToken(s);
+         GateInToken token = getToken(s);
          if (token.isExpired())
          {
             deleteToken(s);
@@ -164,15 +165,15 @@ public abstract class AbstractTokenService implements Startable, TokenStore
 
    @Managed
    @ManagedDescription("get a token by id")
-   public abstract Token getToken(String id);
+   public abstract <T extends Token> T getToken(Object id);
 
    @Managed
    @ManagedDescription("Delete a token by id")
-   public abstract Token deleteToken(String id);
+   public abstract <T extends Token> T deleteToken(Object id);
 
    @Managed
    @ManagedDescription("The list of all tokens")
-   public abstract String[] getAllTokens();
+   public abstract  <T extends Object> T[] getAllTokens();
 
    @Managed
    @ManagedDescription("The number of tokens")

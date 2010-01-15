@@ -17,8 +17,10 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.web.security.security;
+package org.exoplatform.portal.gadget.core;
 
+import org.apache.shindig.gadgets.oauth.BasicOAuthStoreTokenIndex;
+import org.apache.shindig.gadgets.oauth.OAuthStore.TokenInfo;
 import org.chromattic.api.ChromatticSession;
 import org.exoplatform.commons.chromattic.ChromatticLifeCycle;
 import org.exoplatform.commons.chromattic.ChromatticManager;
@@ -26,97 +28,76 @@ import org.exoplatform.commons.chromattic.ContextualTask;
 import org.exoplatform.commons.chromattic.SessionContext;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.web.security.Credentials;
-import org.exoplatform.web.security.GateInToken;
+import org.exoplatform.web.security.security.AbstractTokenService;
 
 import java.util.Collection;
-import java.util.Date;
 
-/**
- * Created by The eXo Platform SAS Author : liem.nguyen ncliam@gmail.com Jun 5,
- * 2009
- */
-public class CookieTokenService extends AbstractTokenService
+public class GadgetTokenInfoService extends AbstractTokenService
 {
 
-   /** . */
-   private ChromatticManager chromatticManager;
-
-   /** . */
    private ChromatticLifeCycle chromatticLifeCycle;
 
-   public CookieTokenService(InitParams initParams, ChromatticManager chromatticManager)
+   public GadgetTokenInfoService(InitParams initParams, ChromatticManager chromatticManager)
    {
       super(initParams);
-
-      //
-      this.chromatticManager = chromatticManager;
-      this.chromatticLifeCycle = chromatticManager.getLifeCycle("autologin");
+      chromatticLifeCycle = chromatticManager.getLifeCycle("gadgettokens");
    }
 
-   public String createToken(final Credentials credentials)
+   public GadgetToken createToken(final BasicOAuthStoreTokenIndex key, final TokenInfo tokenInfo)
    {
-      if (validityMillis < 0)
+      return new TokenTask<GadgetToken>()
       {
-         throw new IllegalArgumentException();
-      }
-      if (credentials == null)
+         @Override
+         protected GadgetToken execute()
+         {
+            GadgetTokenContainer container = getGadgetTokenContainer();
+            return container.saveToken(key, tokenInfo);
+         }
+      }.executeWith(chromatticLifeCycle);
+   }
+
+   @Override
+   public GadgetToken getToken(final Object key)
+   {
+      return new TokenTask<GadgetToken>()
       {
-         throw new NullPointerException();
-      }
-      return new TokenTask<String>() {
          @Override
-         protected String execute()
+         protected GadgetToken execute()
          {
-            String tokenId = nextTokenId();
-            long expirationTimeMillis = System.currentTimeMillis() + validityMillis;
-            GateInToken token = new GateInToken(expirationTimeMillis, credentials);
-            TokenContainer container = getTokenContainer();
-            container.saveToken(tokenId, token.getPayload(), new Date(token.getExpirationTimeMillis()));
-            return tokenId;
+            return getGadgetTokenContainer().getToken((BasicOAuthStoreTokenIndex)key);
          }
       }.executeWith(chromatticLifeCycle);
    }
 
    @Override
-   public GateInToken getToken(final Object id)
+   public GadgetToken deleteToken(final Object key)
    {
-      return new TokenTask<GateInToken>() {
+      return new TokenTask<GadgetToken>()
+      {
          @Override
-         protected GateInToken execute()
+         protected GadgetToken execute()
          {
-            return getTokenContainer().getToken((String)id);
+            return getGadgetTokenContainer().removeToken((BasicOAuthStoreTokenIndex)key);
          }
       }.executeWith(chromatticLifeCycle);
    }
-
+   
    @Override
-   public GateInToken deleteToken(final Object id)
+   public GadgetToken[] getAllTokens()
    {
-      return new TokenTask<GateInToken>() {
+      return new TokenTask<GadgetToken[]>()
+      {
          @Override
-         protected GateInToken execute()
+         protected GadgetToken[] execute()
          {
-            return getTokenContainer().removeToken((String)id);
-         }
-      }.executeWith(chromatticLifeCycle);
-   }
-
-   @Override
-   public String[] getAllTokens()
-   {
-      return new TokenTask<String[]>() {
-         @Override
-         protected String[] execute()
-         {
-            TokenContainer container = getTokenContainer();
-            Collection<TokenEntry> tokens = container.getAllTokens();
-            String[] ids = new String[tokens.size()];
+            GadgetTokenContainer container = getGadgetTokenContainer();
+            Collection<GadgetTokenEntry> tokens = container.getGadgetTokens().values();
+            GadgetToken[] gadgetTokens = new GadgetToken[9];
             int count = 0;
-            for (TokenEntry token : tokens)
-            {
-               ids[count++] = token.getId();
+            for(GadgetTokenEntry tokenEntry : tokens) {
+               gadgetTokens[count++] = tokenEntry.getToken();
             }
-            return ids;
+            return gadgetTokens;
          }
       }.executeWith(chromatticLifeCycle);
    }
@@ -124,16 +105,24 @@ public class CookieTokenService extends AbstractTokenService
    @Override
    public long getNumberTokens() throws Exception
    {
-      return new TokenTask<Long>() {
+      return new TokenTask<Long>()
+      {
          @Override
          protected Long execute()
          {
-            TokenContainer container = getTokenContainer();
-            Collection<TokenEntry> tokens = container.getAllTokens();
+            GadgetTokenContainer container = getGadgetTokenContainer();
+            Collection<GadgetTokenEntry> tokens = container.getGadgetTokens().values();
             return (long)tokens.size();
          }
       }.executeWith(chromatticLifeCycle);
    }
+
+   public String createToken(Credentials credentials) throws IllegalArgumentException, NullPointerException
+   {
+      // TODO Auto-generated method stub
+      return null;
+   }
+
 
    /**
     * Wraps token store logic conveniently.
@@ -146,13 +135,13 @@ public class CookieTokenService extends AbstractTokenService
       /** . */
       private SessionContext context;
 
-      protected final TokenContainer getTokenContainer() {
-         SessionContext ctx = chromatticLifeCycle.getContext();
-         ChromatticSession session = ctx.getSession();
-         TokenContainer container = session.findByPath(TokenContainer.class, "autologin");
+      protected final GadgetTokenContainer getGadgetTokenContainer()
+      {
+         ChromatticSession session = context.getSession();
+         GadgetTokenContainer container = session.findByPath(GadgetTokenContainer.class, "gadgettokens");
          if (container == null)
          {
-            container = session.insert(TokenContainer.class, "autologin");
+            container = session.insert(GadgetTokenContainer.class, "gadgettokens");
          }
          return container;
       }

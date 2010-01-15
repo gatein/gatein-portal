@@ -150,6 +150,29 @@ public class TestUserPortalConfigService extends AbstractPortalTest
       return map;
    }
 
+   public void testUpdatePortalConfig() {
+      new UnitTest()
+      {
+         public void execute() throws Exception
+         {
+            UserPortalConfig userPortalCfg = userPortalConfigSer_.getUserPortalConfig("classic", "root");
+            assertNotNull(userPortalCfg);
+            PortalConfig portalCfg = userPortalCfg.getPortalConfig();
+            assertNotNull(portalCfg);
+            assertEquals(PortalConfig.PORTAL_TYPE, portalCfg.getType());
+            assertEquals("classic", portalCfg.getName());
+            assertEquals("en", portalCfg.getLocale());
+            portalCfg.setLocale("fr");
+            
+            userPortalConfigSer_.update(portalCfg);
+
+            userPortalCfg = userPortalConfigSer_.getUserPortalConfig("classic", "root");
+            portalCfg = userPortalCfg.getPortalConfig();
+            assertEquals("fr", portalCfg.getLocale());
+         }
+      }.execute("root");
+   }
+   
    public void testRootGetUserPortalConfig()
    {
       new UnitTest()
@@ -497,6 +520,8 @@ public class TestUserPortalConfigService extends AbstractPortalTest
             page.setOwnerId("/platform/administrators");
             page.setName("newAccount");
             page.setCreator("someone");
+            page.setShowMaxWindow(true);
+            page.setTitle("newAccount title");
             assertTrue(events.isEmpty());
             userPortalConfigSer_.create(page);
             assertEquals(1, events.size());
@@ -507,11 +532,41 @@ public class TestUserPortalConfigService extends AbstractPortalTest
             assertEquals("/platform/administrators", p.getOwnerId());
             assertEquals("newAccount", p.getName());
             assertEquals("someone", p.getCreator());
+            assertEquals("newAccount title", p.getTitle());
+            assertTrue(p.isShowMaxWindow());
+            
+            p.setShowMaxWindow(false);
+            userPortalConfigSer_.update(p);
+            p = userPortalConfigSer_.getPage("group::/platform/administrators::newAccount");
+            assertFalse(p.isShowMaxWindow());
+            p.setShowMaxWindow(true);
+            userPortalConfigSer_.update(p);
+            p = userPortalConfigSer_.getPage("group::/platform/administrators::newAccount");
+            assertTrue(p.isShowMaxWindow());
+            p.setShowMaxWindow(false);
+            userPortalConfigSer_.update(p);
+            p = userPortalConfigSer_.getPage("group::/platform/administrators::newAccount");
+            assertFalse(p.isShowMaxWindow());
+            p.setShowMaxWindow(true);
+            userPortalConfigSer_.update(p);
+            p = userPortalConfigSer_.getPage("group::/platform/administrators::newAccount");
+            assertTrue(p.isShowMaxWindow());
+            
             Page p2 = userPortalConfigSer_.getPage("group::/platform/administrators::newAccount");
             assertEquals("group", p2.getOwnerType());
             assertEquals("/platform/administrators", p2.getOwnerId());
             assertEquals("newAccount", p2.getName());
             assertEquals("someone", p2.getCreator());
+//            assertFalse(p2.isShowMaxWindow());
+            p2.setTitle("newAccount title 1");
+            p2.setShowMaxWindow(true);
+            userPortalConfigSer_.update(p2);
+            
+            Page p3 = userPortalConfigSer_.getPage("group::/platform/administrators::newAccount");
+            assertEquals("newAccount title 1", p3.getTitle());
+//            assertTrue(p3.isShowMaxWindow());
+            
+           
          }
       }.execute(null);
    }

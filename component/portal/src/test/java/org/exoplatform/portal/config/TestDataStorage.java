@@ -165,6 +165,7 @@ public class TestDataStorage extends AbstractPortalTest
       page.setOwnerType(PortalConfig.PORTAL_TYPE);
       page.setOwnerId("test");
       page.setName("foo");
+      page.setShowMaxWindow(false);
 
       //
       storage_.create(page);
@@ -172,9 +173,10 @@ public class TestDataStorage extends AbstractPortalTest
       //
       Page page2 = storage_.getPage(page.getPageId());
       page2.setTitle("MyTitle2");
+      page2.setShowMaxWindow(true);
       storage_.save(page2);
 
-      //
+      page2 = storage_.getPage(page.getPageId());
       assertNotNull(page2);
       assertEquals("portal::test::foo", page2.getPageId());
       assertEquals("portal", page2.getOwnerType());
@@ -182,6 +184,7 @@ public class TestDataStorage extends AbstractPortalTest
       assertEquals("foo", page2.getName());
       assertEquals("MyTitle2", page2.getTitle());
       assertEquals(0, page2.getChildren().size());
+      assertEquals(true, page2.isShowMaxWindow());
    }
 
    public void testPageRemove() throws Exception

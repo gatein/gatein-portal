@@ -23,7 +23,7 @@ import org.chromattic.api.annotations.Name;
 import org.chromattic.api.annotations.PrimaryType;
 import org.chromattic.api.annotations.Property;
 import org.exoplatform.web.security.Credentials;
-import org.exoplatform.web.security.Token;
+import org.exoplatform.web.security.GateInToken;
 
 import java.util.Date;
 
@@ -56,9 +56,9 @@ public abstract class TokenEntry
    @Destroy
    public abstract void remove();
 
-   public Token getToken()
+   public GateInToken getToken()
    {
-      return new Token(
+      return new GateInToken(
          getExpirationTime().getTime(),
          new Credentials(getUserName(), getPassword()));
    }

@@ -22,7 +22,7 @@ import org.chromattic.api.annotations.Create;
 import org.chromattic.api.annotations.PrimaryType;
 import org.chromattic.api.annotations.OneToMany;
 import org.exoplatform.web.security.Credentials;
-import org.exoplatform.web.security.Token;
+import org.exoplatform.web.security.GateInToken;
 
 import java.util.Collection;
 import java.util.Date;
@@ -47,20 +47,20 @@ public abstract class TokenContainer
       return getTokens().values();
    }
 
-   public Token getToken(String tokenId)
+   public GateInToken getToken(String tokenId)
    {
       Map<String, TokenEntry> tokens = getTokens();
       TokenEntry entry = tokens.get(tokenId);
       return entry != null ? entry.getToken() : null;
    }
 
-   public Token removeToken(String tokenId)
+   public GateInToken removeToken(String tokenId)
    {
       Map<String, TokenEntry> tokens = getTokens();
       TokenEntry entry = tokens.get(tokenId);
       if (entry != null)
       {
-         Token token = entry.getToken();
+         GateInToken token = entry.getToken();
          entry.remove();
          return token;
       }
@@ -70,7 +70,7 @@ public abstract class TokenContainer
       }
    }
 
-   public Token saveToken(String tokenId, Credentials credentials, Date expirationTime)
+   public GateInToken saveToken(String tokenId, Credentials credentials, Date expirationTime)
    {
       Map<String, TokenEntry> tokens = getTokens();
       TokenEntry entry = tokens.get(tokenId);

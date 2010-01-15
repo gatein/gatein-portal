@@ -24,8 +24,59 @@
    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
    xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd http://www.exoplaform.org/xml/ns/kernel_1_0.xsd"
    xmlns="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd">
-  <component>
-   <key>org.exoplatform.portal.gadget.core.SecurityTokenGenerator</key>
-   <type>org.exoplatform.portal.gadget.core.ExoDefaultSecurityTokenGenerator</type>
+<component>
+		<key>org.exoplatform.portal.gadget.core.SecurityTokenGenerator</key>
+		<type>org.exoplatform.portal.gadget.core.ExoDefaultSecurityTokenGenerator</type>
   </component>
+  <component>
+		<type>org.exoplatform.portal.gadget.core.GadgetTokenInfoService</type>
+		<init-params>
+  		<values-param>
+        <name>service.configuration</name>
+        <value>gadget-token</value>
+        <value>7</value>
+      	<value>DAY</value>
+      </values-param>
+    </init-params>
+  </component>
+		
+  <external-component-plugins>
+    <target-component>org.exoplatform.commons.chromattic.ChromatticManager</target-component>
+    <component-plugin>
+      <name>chromattic</name>
+      <set-method>addLifeCycle</set-method>
+      <type>org.exoplatform.commons.chromattic.ChromatticLifeCycle</type>
+      <init-params>
+        <value-param>
+          <name>domain-name</name>
+          <value>gadgettokens</value>
+        </value-param>
+        <value-param>
+          <name>workspace-name</name>
+          <value>portal-work</value>
+        </value-param>
+        <values-param>
+          <name>entities</name>
+          <value>org.exoplatform.portal.gadget.core.GadgetTokenContainer</value>
+          <value>org.exoplatform.portal.gadget.core.GadgetTokenEntry</value>
+        </values-param>
+      </init-params>
+    </component-plugin>
+  </external-component-plugins>
+	
+	<external-component-plugins>
+ 		<target-component>org.exoplatform.services.jcr.RepositoryService</target-component>
+ 		<component-plugin>
+ 		  <name>add.nodeType</name>
+ 		  <set-method>addPlugin</set-method>
+ 		  <type>org.exoplatform.services.jcr.impl.AddNodeTypePlugin</type>
+ 		  <init-params>
+ 		    <values-param>
+ 		      <name>autoCreatedInNewRepository</name>
+ 		      <description>Node types configuration file</description>
+					<value>jar:/conf/gadgettoken-nodetypes.xml</value>
+ 		    </values-param>
+ 		  </init-params>
+ 		</component-plugin>
+  </external-component-plugins>
 </configuration>

@@ -379,6 +379,7 @@ public class UserPortalConfigService implements Startable
     */
    public List<ModelChange> update(Page page) throws Exception
    {
+      System.out.println("\n\n\n show max window : " + page.isShowMaxWindow() + "\n\n");
       List<ModelChange> changes = storage_.save(page);
 
       //

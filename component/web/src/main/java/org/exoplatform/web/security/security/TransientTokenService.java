@@ -21,7 +21,7 @@ package org.exoplatform.web.security.security;
 
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.web.security.Credentials;
-import org.exoplatform.web.security.Token;
+import org.exoplatform.web.security.GateInToken;
 
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -32,7 +32,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class TransientTokenService extends AbstractTokenService
 {
 
-   protected final ConcurrentHashMap<String, Token> tokens = new ConcurrentHashMap<String, Token>();
+   protected final ConcurrentHashMap<String, GateInToken> tokens = new ConcurrentHashMap<String, GateInToken>();
 
    public TransientTokenService(InitParams initParams)
    {
@@ -51,20 +51,20 @@ public class TransientTokenService extends AbstractTokenService
       }
       String tokenId = nextTokenId();
       long expirationTimeMillis = System.currentTimeMillis() + validityMillis;
-      tokens.put(tokenId, new Token(expirationTimeMillis, credentials));
+      tokens.put(tokenId, new GateInToken(expirationTimeMillis, credentials));
       return tokenId;
    }
 
    @Override
-   public Token getToken(String id)
+   public GateInToken getToken(Object id)
    {
       return tokens.get(id);
    }
 
    @Override
-   public Token deleteToken(String id)
+   public GateInToken deleteToken(Object id)
    {
-      Token token = tokens.get(id);
+      GateInToken token = tokens.get(id);
       tokens.remove(id);
       return token;
    }
