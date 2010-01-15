@@ -1,6 +1,6 @@
 /*
  * JBoss, a division of Red Hat
- * Copyright 2009, Red Hat Middleware, LLC, and individual
+ * Copyright 2010, Red Hat Middleware, LLC, and individual
  * contributors as indicated by the @authors tag. See the
  * copyright.txt in the distribution for a full listing of
  * individual contributors.
@@ -74,6 +74,7 @@ public class ExoKernelIntegration implements Startable
 
    private final String consumersConfigLocation;
    private ConsumerRegistry consumerRegistry;
+   private static final String REMOTE_INVOKERS_INVOKER_ID = "remote";
 
    public ExoKernelIntegration(InitParams params, ConfigurationManager configurationManager,
                                org.exoplatform.portal.pc.ExoKernelIntegration pc) throws Exception
@@ -118,11 +119,10 @@ public class ExoKernelIntegration implements Startable
       }
       container.registerComponentInstance(ProducerConfigurationService.class, producerConfigurationService);
 
-      RegistrationPersistenceManager registrationPersistenceManager = null;
+      RegistrationPersistenceManager registrationPersistenceManager;
       try
       {
          registrationPersistenceManager = new JCRRegistrationPersistenceManager(container);
-//         registrationPersistenceManager = new RegistrationPersistenceManagerImpl();
       }
       catch (Exception e)
       {
@@ -173,12 +173,19 @@ public class ExoKernelIntegration implements Startable
       FederatingPortletInvoker federatingPortletInvoker =
          (FederatingPortletInvoker)container.getComponentInstanceOfType(PortletInvoker.class);
 
+      // set up a second level federating portlet invoker so that when a remote producer is queried, we can start it if needed
+      ActivatingFederatingPortletInvoker remoteInvokers = new ActivatingFederatingPortletInvoker();
+      federatingPortletInvoker.registerInvoker(REMOTE_INVOKERS_INVOKER_ID, remoteInvokers);
+
       try
       {
          consumerRegistry = new JCRConsumerRegistry(container);
-         consumerRegistry.setFederatingPortletInvoker(federatingPortletInvoker);
+         consumerRegistry.setFederatingPortletInvoker(remoteInvokers);
          consumerRegistry.setSessionEventBroadcaster(new SimpleSessionEventBroadcaster());
          consumerRegistry.start();
+
+         // set the consumer registry on the second level federating invoker
+         remoteInvokers.setConsumerRegistry(consumerRegistry);
       }
       catch (Exception e)
       {
