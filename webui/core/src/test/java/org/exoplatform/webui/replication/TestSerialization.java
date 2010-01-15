@@ -23,6 +23,10 @@ import junit.framework.TestCase;
 import org.exoplatform.webui.application.replication.SerializationContext;
 import org.exoplatform.webui.application.replication.model.TypeDomain;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.NotSerializableException;
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
@@ -109,5 +113,21 @@ public class TestSerialization extends TestCase
       assertEquals(1, f1.children.size());
       assertNotNull(f1.children.get(0));
       assertSame(f1, f1.children.get(0).parent);
+   }
+
+   public void testNotSerializable() throws Exception
+   {
+      TypeDomain domain = new TypeDomain();
+      domain.add(ByteArrayInputStream.class);
+
+      SerializationContext context = new SerializationContext(domain);
+      try
+      {
+         context.write(new ByteArrayInputStream(new byte[0]));
+         fail();
+      }
+      catch (NotSerializableException e)
+      {
+      }
    }
 }

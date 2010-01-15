@@ -60,8 +60,12 @@ public class ObjectWriter extends ObjectOutputStream
    }
 
    @Override
-   protected Object replaceObject(Object obj) throws IOException
+   protected Object replaceObject(final Object obj) throws IOException
    {
+      if (obj == null)
+      {
+         return null;
+      }
       if (obj instanceof Serializable)
       {
          return obj;
@@ -79,22 +83,23 @@ public class ObjectWriter extends ObjectOutputStream
       }
       else
       {
-         ReplicatableTypeModel<?> typeModel = (ReplicatableTypeModel<?>)context.getTypeDomain().getTypeModel(obj.getClass());
+         Class<? extends Object> objClass = obj.getClass();
+         TypeModel typeModel = context.getTypeDomain().getTypeModel(objClass);
 
          //
          if (typeModel == null)
          {
-            throw new NotSerializableException("Object " + obj + " is not serializable");
+            throw new NotSerializableException("Object " + obj + " does not have its type described");
          }
 
          //
          output.writeInt(DataKind.OBJECT);
          output.writeInt(register(obj));
-         output.writeObject(obj.getClass());
+         output.writeObject(objClass);
 
          //
-         TypeModel currentTypeModel = typeModel;
-         while (currentTypeModel != null)
+         SerializationStatus status = SerializationStatus.NONE;
+         for (TypeModel currentTypeModel = typeModel;currentTypeModel != null;currentTypeModel = currentTypeModel.getSuperType())
          {
             if (currentTypeModel instanceof ReplicatableTypeModel)
             {
@@ -120,10 +125,34 @@ public class ObjectWriter extends ObjectOutputStream
                      }
                   }
                }
+               switch (status)
+               {
+                  case NONE:
+                     status = SerializationStatus.FULL;
+                     break;
+               }
             }
+            else
+            {
+               switch (status)
+               {
+                  case FULL:
+                     status = SerializationStatus.PARTIAL;
+                     break;
+               }
+            }
+         }
 
-            //
-            currentTypeModel = currentTypeModel.getSuperType();
+         //
+         switch (status)
+         {
+            case FULL:
+               break;
+            case PARTIAL:
+               System.out.println("Partial serialization of object " + obj);
+               break;
+            case NONE:
+               throw new NotSerializableException("Type " + objClass.getName() + " is not serializable");
          }
       }
 
