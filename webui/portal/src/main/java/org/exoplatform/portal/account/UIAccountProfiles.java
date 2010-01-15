@@ -22,6 +22,7 @@ package org.exoplatform.portal.account;
 import org.exoplatform.portal.pom.config.Utils;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.organization.OrganizationService;
+import org.exoplatform.services.organization.Query;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -101,9 +102,23 @@ public class UIAccountProfiles extends UIForm
 
          String userName = uiForm.getUIStringInput("userName").getValue();
          User user = service.getUserHandler().findUserByName(userName);
+         String oldEmail = user.getEmail();
+         String newEmail = uiForm.getUIStringInput("email").getValue();
+         
+         // Check if mail address is already used
+         Query query = new Query();
+         query.setEmail(newEmail);
+         if (service.getUserHandler().findUsers(query).getAll().size() > 0 && !oldEmail.equals(newEmail))
+         {
+            //Be sure it keep old value
+            user.setEmail(oldEmail);
+            Object[] args = {userName};
+            uiApp.addMessage(new ApplicationMessage("UIAccountInputSet.msg.email-exist", args));
+            return;
+         }
          user.setFirstName(uiForm.getUIStringInput("firstName").getValue());
          user.setLastName(uiForm.getUIStringInput("lastName").getValue());
-         user.setEmail(uiForm.getUIStringInput("email").getValue());
+         user.setEmail(newEmail);
          uiApp.addMessage(new ApplicationMessage("UIAccountProfiles.msg.update.success", null));
          service.getUserHandler().saveUser(user, true);
          return;
