@@ -30,7 +30,7 @@ import org.exoplatform.webui.application.replication.model.TypeDomain;
 public class TestSerialization extends TestCase
 {
 
-   public void testBar() throws Exception
+   public void testState() throws Exception
    {
       TypeDomain domain = new TypeDomain();
       domain.add(A.class);
@@ -45,7 +45,7 @@ public class TestSerialization extends TestCase
       assertEquals(true, a.c);
    }
 
-   public void testFoo() throws Exception
+   public void testMultipleReference1() throws Exception
    {
       TypeDomain domain = new TypeDomain();
       domain.add(B.class);
@@ -71,7 +71,7 @@ public class TestSerialization extends TestCase
       assertEquals("bar", d.b);
    }
 
-   public void testAAA() throws Exception
+   public void testMultipleReference2() throws Exception
    {
       TypeDomain domain = new TypeDomain();
       domain.add(E2.class);
@@ -88,25 +88,26 @@ public class TestSerialization extends TestCase
       assertSame(((E2)e.left).right, ((E2)e.right).right);
    }
 
-/*
    public void testListOfReplicatable() throws Exception
    {
       TypeDomain domain = new TypeDomain();
-      domain.add(F1.class);
-      domain.add(F2.class);
+      domain.add(F.class);
 
       //
-      F1 f1 = new F1();
-      F2 f2 = new F2();
-      f1.values.add(f2);
+      F f1 = new F();
+      F f2 = new F();
+      f1.children.add(f2);
+      f2.parent = f1;
 
       //
       SerializationContext context = new SerializationContext(domain);
       f1 = context.clone(f1);
 
       //
-      assertNotNull(f1.values);
-      assertEquals(1, f1.values.size());
+      assertNotNull(f1.children);
+      assertNull(f1.parent);
+      assertEquals(1, f1.children.size());
+      assertNotNull(f1.children.get(0));
+      assertSame(f1, f1.children.get(0).parent);
    }
-*/
 }

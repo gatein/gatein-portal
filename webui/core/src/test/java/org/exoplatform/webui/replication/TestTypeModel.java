@@ -43,17 +43,18 @@ public class TestTypeModel extends TestCase
    {
       TypeDomain domain = new TypeDomain();
       assertType(String.class, domain.add(String.class));
-      assertEquals(1, domain.getSize());
+      assertEquals(2, domain.getSize());
       assertType(String.class, domain.getTypeModel(String.class));
+      assertType(Object.class, domain.getTypeModel(Object.class));
    }
 
    public void testJuu()
    {
       TypeDomain domain = new TypeDomain();
       ReplicatableTypeModel aTM = (ReplicatableTypeModel) domain.add(A.class);
-      assertEquals(4, domain.getSize());
+      assertEquals(5, domain.getSize());
       assertEquals(A.class.getName(), aTM.getName());
-      assertEquals(SetBuilder.create(domain.getTypeModel(int.class)).with(aTM).with(domain.getTypeModel(boolean.class)).build(domain.getTypeModel(String.class)), domain.getTypeModels());
+      assertEquals(SetBuilder.create(domain.getTypeModel(int.class)).with(aTM).with(domain.getTypeModel(boolean.class)).with(domain.getTypeModel(Object.class)).build(domain.getTypeModel(String.class)), domain.getTypeModels());
       Map<String, FieldModel> fieldMap = aTM.getFieldMap();
       assertEquals(3, fieldMap.size());
       FieldModel aFM = fieldMap.get("a");
@@ -67,11 +68,10 @@ public class TestTypeModel extends TestCase
       assertEquals(domain.getTypeModel(boolean.class), cFM.getType());
    }
 
-   private void assertType(Class<? extends Serializable> javaType, TypeModel typeModel)
+   private void assertType(Class<?> javaType, TypeModel typeModel)
    {
-      assertTrue(typeModel instanceof SerializableTypeModel);
-      SerializableTypeModel serializableTypeModel = (SerializableTypeModel)typeModel;
+      assertTrue(typeModel instanceof ClassTypeModel);
+      ClassTypeModel serializableTypeModel = (ClassTypeModel)typeModel;
       assertEquals(javaType, serializableTypeModel.getJavaType());
    }
-
 }

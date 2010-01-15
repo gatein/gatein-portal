@@ -23,39 +23,10 @@ package org.exoplatform.webui.application.replication.model;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public abstract class TypeModel
+public final class ClassTypeModel extends TypeModel
 {
-
-   /** . */
-   private final Class<?> javaType;
-
-   /** . */
-   private final TypeModel superType;
-
-   TypeModel(Class<?> javaType, TypeModel superType)
+   ClassTypeModel(Class<?> type, TypeModel superType)
    {
-      this.javaType = javaType;
-      this.superType = superType;
-   }
-
-   public String getName()
-   {
-      return javaType.getName();
-   }
-
-   public Class<?> getJavaType()
-   {
-      return javaType;
-   }
-
-   public TypeModel getSuperType()
-   {
-      return superType;
-   }
-
-   @Override
-   public String toString()
-   {
-      return "TypeModel[name=" + javaType.getName() + "]";
+      super(type, superType);
    }
 }

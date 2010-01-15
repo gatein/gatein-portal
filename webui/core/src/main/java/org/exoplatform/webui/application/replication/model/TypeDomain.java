@@ -78,7 +78,7 @@ public final class TypeDomain
       return typeModelMap.get(typeName);
    }
 
-   public TypeModel getTypeModel(Class javaType)
+   public TypeModel getTypeModel(Class<?> javaType)
    {
       if (javaType == null)
       {
@@ -110,23 +110,15 @@ public final class TypeDomain
       ReplicatedType replicatedType = javaType.getAnnotation(ReplicatedType.class);
       if (replicatedType != null)
       {
-         return buildClassTypeModel(javaType, addedTypeModels);
-      }
-      else if (javaType.isPrimitive())
-      {
-         return buildSerializable(javaType, addedTypeModels);
-      }
-      else if (Serializable.class.isAssignableFrom(javaType))
-      {
-         return buildSerializable(javaType, addedTypeModels);
+         return buildReplicatableTypeModel(javaType, addedTypeModels);
       }
       else
       {
-         return null;
+         return buildClassTypeModel(javaType, addedTypeModels);
       }
    }
 
-   private <O> ReplicatableTypeModel<O> buildClassTypeModel(Class<O> javaType, Map<String, TypeModel> addedTypeModels)
+   private <O> ReplicatableTypeModel<O> buildReplicatableTypeModel(Class<O> javaType, Map<String, TypeModel> addedTypeModels)
    {
       ReplicatableTypeModel typeModel = (ReplicatableTypeModel) get(javaType, addedTypeModels);
       if (typeModel == null)
@@ -170,12 +162,17 @@ public final class TypeDomain
       return (ReplicatableTypeModel<O>)typeModel;
    }
 
-   private SerializableTypeModel buildSerializable(Class<?> javaType, Map<String, TypeModel> addedTypeModels)
+   private ClassTypeModel buildClassTypeModel(Class<?> javaType, Map<String, TypeModel> addedTypeModels)
    {
-      SerializableTypeModel typeModel = (SerializableTypeModel) get(javaType, addedTypeModels);
+      ClassTypeModel typeModel = (ClassTypeModel) get(javaType, addedTypeModels);
       if (typeModel == null)
       {
-         typeModel = new SerializableTypeModel((Class<Serializable>)javaType);
+         TypeModel superTypeModel = null;
+         if (javaType.getSuperclass() != null)
+         {
+            superTypeModel = build(javaType.getSuperclass(), addedTypeModels);
+         }
+         typeModel = new ClassTypeModel(javaType, superTypeModel);
          addedTypeModels.put(javaType.getName(), typeModel);
       }
       return typeModel;

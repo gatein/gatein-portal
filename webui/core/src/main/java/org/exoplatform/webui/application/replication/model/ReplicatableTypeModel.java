@@ -34,9 +34,6 @@ public final class ReplicatableTypeModel<O> extends TypeModel
    private final Class<O> objectType;
 
    /** . */
-   private final TypeModel superType;
-
-   /** . */
    private final Map<String, FieldModel> fields;
 
    /** . */
@@ -47,11 +44,10 @@ public final class ReplicatableTypeModel<O> extends TypeModel
       TypeModel superType,
       Map<String, FieldModel> fields)
    {
-      super(javaType);
+      super(javaType, superType);
 
       //
       this.objectType = javaType;
-      this.superType = superType;
       this.fields = fields;
       this.immutableFields = Collections.unmodifiableMap(fields);
    }
@@ -59,11 +55,6 @@ public final class ReplicatableTypeModel<O> extends TypeModel
    public Class<O> getObjectType()
    {
       return objectType;
-   }
-
-   public TypeModel getSuperType()
-   {
-      return superType;
    }
 
    public Collection<FieldModel> getFields()

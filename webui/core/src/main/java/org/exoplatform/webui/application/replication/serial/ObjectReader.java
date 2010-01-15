@@ -101,49 +101,40 @@ public class ObjectReader extends ObjectInputStream
 
                //
                Map<FieldModel, Object> state = new HashMap<FieldModel, Object>();
-               ReplicatableTypeModel<?> currentTypeModel = typeModel;
+               TypeModel currentTypeModel = typeModel;
                List<Bilto> biltos = new ArrayList<Bilto>();
-               while (true)
+               while (currentTypeModel != null)
                {
-                  for (FieldModel fieldModel : (currentTypeModel).getFields())
+                  if (currentTypeModel instanceof ReplicatableTypeModel)
                   {
-                     switch (container.readInt())
+                     for (FieldModel fieldModel : ((ReplicatableTypeModel<?>)currentTypeModel).getFields())
                      {
-                        case DataKind.NULL_VALUE:
-                           state.put(fieldModel, null);
-                           break;
-                        case DataKind.OBJECT_REF:
-                           int refId = container.readInt();
-                           Object refO = idToObject.get(refId);
-                           if (refO != null)
-                           {
-                              state.put(fieldModel, refO);
-                           }
-                           else
-                           {
-                              biltos.add(new Bilto(refId, fieldModel));
-                           }
-                           break;
-                        case DataKind.OBJECT:
-                           Object o = container.readObject();
-                           state.put(fieldModel, o);
-                           break;
+                        switch (container.readInt())
+                        {
+                           case DataKind.NULL_VALUE:
+                              state.put(fieldModel, null);
+                              break;
+                           case DataKind.OBJECT_REF:
+                              int refId = container.readInt();
+                              Object refO = idToObject.get(refId);
+                              if (refO != null)
+                              {
+                                 state.put(fieldModel, refO);
+                              }
+                              else
+                              {
+                                 biltos.add(new Bilto(refId, fieldModel));
+                              }
+                              break;
+                           case DataKind.OBJECT:
+                              Object o = container.readObject();
+                              state.put(fieldModel, o);
+                              break;
 
+                        }
                      }
                   }
-                  TypeModel currentSuperTypeModel = currentTypeModel.getSuperType();
-                  if (currentSuperTypeModel == null)
-                  {
-                     break;
-                  }
-                  if (currentSuperTypeModel instanceof ReplicatableTypeModel)
-                  {
-                     currentTypeModel = (ReplicatableTypeModel)currentSuperTypeModel;
-                  }
-                  else
-                  {
-                     throw new UnsupportedOperationException();
-                  }
+                  currentTypeModel = currentTypeModel.getSuperType();
                }
 
                //

@@ -17,18 +17,23 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.webui.application.replication.model;
+package org.exoplatform.webui.replication;
 
-import java.io.Serializable;
+import org.exoplatform.webui.application.replication.annotations.ReplicatedType;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public final class SerializableTypeModel extends TypeModel
+@ReplicatedType
+public class F
 {
-   SerializableTypeModel(Class<? extends Serializable> serializable)
-   {
-      super(serializable);
-   }
+
+   List<F> children = new ArrayList<F>();
+
+   F parent;
+
 }

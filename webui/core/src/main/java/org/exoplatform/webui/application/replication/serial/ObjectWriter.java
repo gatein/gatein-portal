@@ -93,48 +93,37 @@ public class ObjectWriter extends ObjectOutputStream
          output.writeObject(obj.getClass());
 
          //
-         ReplicatableTypeModel<?> currentTypeModel = typeModel;
-         while (true)
+         TypeModel currentTypeModel = typeModel;
+         while (currentTypeModel != null)
          {
-            for (FieldModel fieldModel : (currentTypeModel).getFields())
+            if (currentTypeModel instanceof ReplicatableTypeModel)
             {
-               Object fieldValue = fieldModel.getValue(obj);
-               if (fieldValue == null)
+               for (FieldModel fieldModel : ((ReplicatableTypeModel<?>)currentTypeModel).getFields())
                {
-                  output.writeObject(DataKind.NULL_VALUE);
-               }
-               else
-               {
-                  Integer fieldValueId = objectToId.get(fieldValue);
-                  if (fieldValueId != null)
+                  Object fieldValue = fieldModel.getValue(obj);
+                  if (fieldValue == null)
                   {
-                     output.writeObject(DataKind.OBJECT_REF);
-                     output.writeInt(fieldValueId);
+                     output.writeObject(DataKind.NULL_VALUE);
                   }
                   else
                   {
-                     output.writeObject(DataKind.OBJECT);
-                     output.writeObject(fieldValue);
+                     Integer fieldValueId = objectToId.get(fieldValue);
+                     if (fieldValueId != null)
+                     {
+                        output.writeObject(DataKind.OBJECT_REF);
+                        output.writeInt(fieldValueId);
+                     }
+                     else
+                     {
+                        output.writeObject(DataKind.OBJECT);
+                        output.writeObject(fieldValue);
+                     }
                   }
                }
             }
 
             //
-            TypeModel currentSuperTypeModel = currentTypeModel.getSuperType();
-            if (currentSuperTypeModel == null)
-            {
-               break;
-            }
-
-            //
-            if (currentSuperTypeModel instanceof ReplicatableTypeModel)
-            {
-               currentTypeModel = (ReplicatableTypeModel)currentSuperTypeModel;
-            }
-            else
-            {
-               throw new UnsupportedOperationException();
-            }
+            currentTypeModel = currentTypeModel.getSuperType();
          }
       }
 
