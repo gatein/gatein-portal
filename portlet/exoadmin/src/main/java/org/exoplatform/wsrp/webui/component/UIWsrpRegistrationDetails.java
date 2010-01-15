@@ -81,11 +81,12 @@ public class UIWsrpRegistrationDetails extends UIFormInputSet
    private UIGrid registrationProperties;
    private static final String NAME = "name";
    static String[] FIELDS = {NAME, "description", "label", "hint"};
-   static String[] PROPERTIES_ACTIONS = {"EditProperty", "DeleteProperty"};
+//   static String[] PROPERTIES_ACTIONS = {"EditProperty", "DeleteProperty"};
+   static String[] PROPERTIES_ACTIONS = {};
    static final String POLICY_CLASS = "policyClassName";
    static final String VALIDATOR_CLASS = "validatorClassName";
-   static final String REGISTRATION_PROPERTIES = "RegistrationPropertySelector";
-   static final String REGISTRATION_PROPERTIES_ITERATOR = "ProducerPropPageIterator";
+   static final String REGISTRATION_PROPERTIES = "registrationproperties";
+   static final String REGISTRATION_PROPERTIES_ITERATOR = "registrationpropertiesiterator";
 
    public UIWsrpRegistrationDetails() throws Exception
    {
@@ -256,8 +257,6 @@ public class UIWsrpRegistrationDetails extends UIFormInputSet
    public void updateRegistrationDetailsFromForm(ProducerRegistrationRequirements registrationRequirements)
    {
       registrationRequirements.reloadPolicyFrom(policy.getValue(), validator.getValue());
-
-      // todo: deal with registration properties
    }
 
    static public class EditPropertyActionListener extends EventListener<UIWsrpRegistrationDetails>

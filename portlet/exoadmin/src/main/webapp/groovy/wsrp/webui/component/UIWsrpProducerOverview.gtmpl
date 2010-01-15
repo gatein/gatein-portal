@@ -1,28 +1,17 @@
 <%
-    import org.exoplatform.wsrp.webui.component.UIWsrpProducerEditor;
-    import org.exoplatform.wsrp.webui.component.UIWsrpRegistrationDetails;
+   import org.exoplatform.wsrp.webui.component.UIWsrpProducerEditor;
+   import org.exoplatform.wsrp.webui.component.UIWsrpRegistrationDetails;
 %>
 
 <div class="<%=uicomponent.getId()%>" id="<%=uicomponent.getId()%>">
 
    <% uicomponent.renderChildren(); %>
 
-    <div class="FloatRight">
+   <div class="FloatRight">
 
       <div class="UIAction">
          <table class="ActionContainer">
             <tr>
-               <td>
-                  <div onclick="<%=uicomponent.getChild(UIWsrpProducerEditor.class).getChild(UIWsrpRegistrationDetails.class).event("AddProperty")%>" class="ActionButton LightBlueStyle">
-                     <div class="ButtonLeft">
-                        <div class="ButtonRight">
-                           <div class="ButtonMiddle">
-                              <a href="javascript:void(0);"><%=_ctx.appRes(uicomponent.getChild(UIWsrpProducerEditor.class).getChild(UIWsrpRegistrationDetails.class).getId() + ".action.AddProperty")%></a>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-               </td>
                <td>
                   <div onclick="<%=uicomponent.getChild(UIWsrpProducerEditor.class).event("Save")%>" class="ActionButton LightBlueStyle">
                      <div class="ButtonLeft">

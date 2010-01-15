@@ -80,7 +80,7 @@ public class UIWsrpProducerEditor extends UIForm
 
       // registration details
       // form set to gather registration information
-      registrationDetails = addChild(UIWsrpRegistrationDetails.class, null, null);
+      registrationDetails = addChild(UIWsrpRegistrationDetails.class, null, REGISTRATION_DETAILS);
 
       init(false);
    }

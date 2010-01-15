@@ -63,7 +63,11 @@
                              onParentVersion="COPY" protected="false" multiple="false">
             <valueConstraints/>
          </propertyDefinition>
-         <propertyDefinition name="state" requiredType="Binary" autoCreated="false" mandatory="false"
+         <propertyDefinition name="policyclassname" requiredType="String" autoCreated="false" mandatory="false"
+                             onParentVersion="COPY" protected="false" multiple="false">
+            <valueConstraints/>
+         </propertyDefinition>
+         <propertyDefinition name="validatorclassname" requiredType="String" autoCreated="false" mandatory="false"
                              onParentVersion="COPY" protected="false" multiple="false">
             <valueConstraints/>
          </propertyDefinition>
@@ -89,7 +93,7 @@
                              onParentVersion="COPY" protected="false" multiple="false">
             <valueConstraints/>
          </propertyDefinition>
-         <propertyDefinition name="status" requiredType="Integer" autoCreated="false" mandatory="false"
+         <propertyDefinition name="status" requiredType="String" autoCreated="false" mandatory="false"
                              onParentVersion="COPY" protected="false" multiple="false">
             <valueConstraints/>
          </propertyDefinition>

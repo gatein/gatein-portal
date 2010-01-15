@@ -23,6 +23,7 @@
 
 package org.gatein.portal.wsrp.state.mapping;
 
+import org.chromattic.api.annotations.Id;
 import org.chromattic.api.annotations.PrimaryType;
 import org.chromattic.api.annotations.Property;
 import org.gatein.common.util.ParameterValidation;
@@ -39,6 +40,9 @@ import javax.xml.namespace.QName;
 public abstract class RegistrationPropertyDescriptionMapping
 {
    public static final String NODE_NAME = "wsrp:registrationpropertydescription";
+
+   @Id
+   public abstract String getPersistentKey();
 
    @Property(name = "name")
    public abstract String getName(); // todo: this should really be a QName
@@ -92,6 +96,8 @@ public abstract class RegistrationPropertyDescriptionMapping
    public RegistrationPropertyDescription toRegistrationPropertyDescription()
    {
       RegistrationPropertyDescription desc = new RegistrationPropertyDescription(getName(), QName.valueOf(getType()));
+      desc.setPersistentKey(getPersistentKey());
+
       String description = getDescription();
       if (!ParameterValidation.isNullOrEmpty(description))
       {

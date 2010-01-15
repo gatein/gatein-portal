@@ -26,9 +26,6 @@ import org.exoplatform.commons.utils.LazyPageList;
 import org.exoplatform.commons.utils.ListAccess;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
-import org.exoplatform.portal.application.PortalRequestContext;
-import org.exoplatform.portal.webui.util.Util;
-import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -292,7 +289,7 @@ public class UIWsrpConsumerOverview extends UIContainer
             }
             catch (Exception e)
             {
-               uiApp.addMessage(new ApplicationMessage("UIWsrp.consumer.grid.action.activate.fail" , new String[]{e.getCause().toString()}, ApplicationMessage.ERROR));
+               uiApp.addMessage(new ApplicationMessage("UIWsrp.consumer.grid.action.activate.fail", new String[]{e.getCause().toString()}, ApplicationMessage.ERROR));
                e.printStackTrace();
             }
          }
@@ -324,7 +321,8 @@ public class UIWsrpConsumerOverview extends UIContainer
                   // refresh had issues, we should deactivate this consumer
                   registry.deactivateConsumerWith(consumer.getProducerId());
 
-                  uiApp.addMessage(new ApplicationMessage("UIWsrp.consumer.grid.action.refresh.fail", null, ApplicationMessage.ERROR));
+                  uiApp.addMessage(new ApplicationMessage("UIWsrp.consumer.grid.action.refresh.fail",
+                     new Object[]{result.getStatus()}, ApplicationMessage.ERROR));
                }
                else
                {

@@ -23,10 +23,13 @@
 package org.gatein.portal.wsrp.state.producer.configuration.mapping;
 
 import org.chromattic.api.annotations.Create;
-import org.chromattic.api.annotations.PrimaryType;
+import org.chromattic.api.annotations.FindById;
 import org.chromattic.api.annotations.OneToMany;
+import org.chromattic.api.annotations.PrimaryType;
 import org.chromattic.api.annotations.Property;
 import org.gatein.portal.wsrp.state.mapping.RegistrationPropertyDescriptionMapping;
+import org.gatein.registration.RegistrationPolicy;
+import org.gatein.registration.policies.DefaultRegistrationPolicy;
 import org.gatein.wsrp.producer.config.ProducerRegistrationRequirements;
 import org.gatein.wsrp.producer.config.impl.ProducerRegistrationRequirementsImpl;
 import org.gatein.wsrp.registration.RegistrationPropertyDescription;
@@ -52,18 +55,42 @@ public abstract class RegistrationRequirementsMapping
 
    public abstract void setRegistrationRequiredForFullDescription(boolean fullServiceDescriptionRequiresRegistration);
 
+   @Property(name = "policyclassname")
+   public abstract String getPolicyClassName();
+
+   public abstract void setPolicyClassName(String policyClassName);
+
+   @Property(name = "validatorclassname")
+   public abstract String getValidatorClassName();
+
+   public abstract void setValidatorClassName(String validatorClassName);
+
    @OneToMany
    public abstract List<RegistrationPropertyDescriptionMapping> getRegistrationPropertyDescriptions();
 
    @Create
    public abstract RegistrationPropertyDescriptionMapping createRegistrationPropertyDescription(String propertyName);
 
+   @FindById
+   public abstract RegistrationPropertyDescriptionMapping findRegistrationPropertyDescriptionById(String id);
+
    public void initFrom(ProducerRegistrationRequirements registrationRequirements)
    {
       setRegistrationRequired(registrationRequirements.isRegistrationRequired());
       setRegistrationRequiredForFullDescription(registrationRequirements.isRegistrationRequiredForFullDescription());
+      RegistrationPolicy policy = registrationRequirements.getPolicy();
+      setPolicyClassName(policy.getClass().getName());
+      if (policy instanceof DefaultRegistrationPolicy)
+      {
+         DefaultRegistrationPolicy drp = (DefaultRegistrationPolicy)policy;
+         setValidatorClassName(drp.getValidator().getClass().getName());
+      }
 
+      // first clear persisted properties
       List<RegistrationPropertyDescriptionMapping> rpdms = getRegistrationPropertyDescriptions();
+      rpdms.clear();
+
+      // then add the new ones if any
       for (RegistrationPropertyDescription desc : registrationRequirements.getRegistrationProperties().values())
       {
          RegistrationPropertyDescriptionMapping rpdm = createRegistrationPropertyDescription(desc.getNameAsString());
@@ -80,6 +107,7 @@ public abstract class RegistrationRequirementsMapping
 
       req.setRegistrationRequired(getRegistrationRequired());
       req.setRegistrationRequiredForFullDescription(getRegistrationRequiredForFullDescription());
+      req.reloadPolicyFrom(getPolicyClassName(), getValidatorClassName());
 
       for (RegistrationPropertyDescriptionMapping rpdm : getRegistrationPropertyDescriptions())
       {
