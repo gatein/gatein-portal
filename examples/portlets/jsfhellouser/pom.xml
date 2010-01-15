@@ -37,14 +37,17 @@
          <scope>provided</scope>
       </dependency>
 
+      <!-- Portlet bridge -->
       <dependency>
          <groupId>org.jboss.portletbridge</groupId>
          <artifactId>portletbridge-api</artifactId>
+         <version>2.0.0.CR1</version>
       </dependency>
 
       <dependency>
          <groupId>org.jboss.portletbridge</groupId>
          <artifactId>portletbridge-impl</artifactId>
+         <version>2.0.0.CR1</version>
       </dependency>
 
    </dependencies>

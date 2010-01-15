@@ -14,7 +14,7 @@
    </context-param>
 
    <context-param>
-      <param-name>javax.portlet.faces.renderPolicy</param-name>
+      <param-name>javax.portlet.faces.RENDER_POLICY</param-name>
       <param-value>NEVER_DELEGATE</param-value>
    </context-param>
 
