@@ -21,16 +21,15 @@ package org.exoplatform.webui.replication;
 
 import org.exoplatform.webui.application.replication.annotations.ReplicatedType;
 
-import java.util.ArrayList;
-
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
 @ReplicatedType
-public class D extends ArrayList
+public class D
 {
 
-   String a = "a";
+   static String a = "a";
+   String b = "b";
 
 }

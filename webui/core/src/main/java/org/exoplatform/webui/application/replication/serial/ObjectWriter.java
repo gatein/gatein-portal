@@ -20,7 +20,7 @@
 package org.exoplatform.webui.application.replication.serial;
 
 import org.exoplatform.webui.application.replication.SerializationContext;
-import org.exoplatform.webui.application.replication.model.ClassTypeModel;
+import org.exoplatform.webui.application.replication.model.ReplicatableTypeModel;
 import org.exoplatform.webui.application.replication.model.FieldModel;
 import org.exoplatform.webui.application.replication.model.TypeModel;
 
@@ -79,7 +79,7 @@ public class ObjectWriter extends ObjectOutputStream
       }
       else
       {
-         ClassTypeModel<?> typeModel = (ClassTypeModel<?>)context.getTypeDomain().getTypeModel(obj.getClass());
+         ReplicatableTypeModel<?> typeModel = (ReplicatableTypeModel<?>)context.getTypeDomain().getTypeModel(obj.getClass());
 
          //
          if (typeModel == null)
@@ -93,7 +93,7 @@ public class ObjectWriter extends ObjectOutputStream
          output.writeObject(obj.getClass());
 
          //
-         ClassTypeModel<?> currentTypeModel = typeModel;
+         ReplicatableTypeModel<?> currentTypeModel = typeModel;
          while (true)
          {
             for (FieldModel fieldModel : (currentTypeModel).getFields())
@@ -127,9 +127,9 @@ public class ObjectWriter extends ObjectOutputStream
             }
 
             //
-            if (currentSuperTypeModel instanceof ClassTypeModel)
+            if (currentSuperTypeModel instanceof ReplicatableTypeModel)
             {
-               currentTypeModel = (ClassTypeModel)currentSuperTypeModel;
+               currentTypeModel = (ReplicatableTypeModel)currentSuperTypeModel;
             }
             else
             {

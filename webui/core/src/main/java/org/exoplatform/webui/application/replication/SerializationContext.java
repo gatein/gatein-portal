@@ -100,4 +100,20 @@ public class SerializationContext
       ObjectReader in = new ObjectReader(this, bais);
       return (O)in.readObject();
    }
+
+   public byte[] write(Object o) throws IOException
+   {
+      ByteArrayOutputStream baos = new ByteArrayOutputStream();
+      ObjectWriter writer = new ObjectWriter(this, baos);
+      writer.writeObject(o);
+      writer.close();
+      return baos.toByteArray();
+   }
+
+   public Object read(byte[] bytes) throws IOException, ClassNotFoundException
+   {
+      ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
+      ObjectReader in = new ObjectReader(this, bais);
+      return in.readObject();
+   }
 }

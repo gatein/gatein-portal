@@ -23,6 +23,7 @@ import org.exoplatform.webui.application.replication.annotations.ReplicatedType;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.*;
 
 /**
@@ -119,12 +120,15 @@ public final class TypeDomain
       {
          return buildSerializable(javaType, addedTypeModels);
       }
-      return null;
+      else
+      {
+         return null;
+      }
    }
 
-   private <O> ClassTypeModel<O> buildClassTypeModel(Class<O> javaType, Map<String, TypeModel> addedTypeModels)
+   private <O> ReplicatableTypeModel<O> buildClassTypeModel(Class<O> javaType, Map<String, TypeModel> addedTypeModels)
    {
-      ClassTypeModel typeModel = (ClassTypeModel) get(javaType, addedTypeModels);
+      ReplicatableTypeModel typeModel = (ReplicatableTypeModel) get(javaType, addedTypeModels);
       if (typeModel == null)
       {
          TypeModel superTypeModel = null;
@@ -141,7 +145,7 @@ public final class TypeDomain
          TreeMap<String, FieldModel> fieldModels = new TreeMap<String, FieldModel>();
 
          //
-         typeModel = new ClassTypeModel<O>(javaType, superTypeModel, fieldModels);
+         typeModel = new ReplicatableTypeModel<O>(javaType, superTypeModel, fieldModels);
 
          //
          addedTypeModels.put(javaType.getName(), typeModel);
@@ -149,18 +153,21 @@ public final class TypeDomain
          // Now build fields
          for (Field field : javaType.getDeclaredFields())
          {
-            field.setAccessible(true);
-            Class<?> fieldJavaType = field.getType();
-            TypeModel fieldTypeModel = build(fieldJavaType, addedTypeModels);
-            if (fieldTypeModel != null)
+            if (!Modifier.isStatic(field.getModifiers()))
             {
-               fieldModels.put(field.getName(), new FieldModel(field, fieldTypeModel));
+               field.setAccessible(true);
+               Class<?> fieldJavaType = field.getType();
+               TypeModel fieldTypeModel = build(fieldJavaType, addedTypeModels);
+               if (fieldTypeModel != null)
+               {
+                  fieldModels.put(field.getName(), new FieldModel(field, fieldTypeModel));
+               }
             }
          }
       }
 
       // It must be good
-      return (ClassTypeModel<O>)typeModel;
+      return (ReplicatableTypeModel<O>)typeModel;
    }
 
    private SerializableTypeModel buildSerializable(Class<?> javaType, Map<String, TypeModel> addedTypeModels)

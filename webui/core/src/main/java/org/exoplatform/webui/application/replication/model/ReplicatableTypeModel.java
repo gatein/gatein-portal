@@ -27,7 +27,7 @@ import java.util.Map;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public final class ClassTypeModel<O> extends TypeModel
+public final class ReplicatableTypeModel<O> extends TypeModel
 {
 
    /** . */
@@ -42,7 +42,7 @@ public final class ClassTypeModel<O> extends TypeModel
    /** . */
    private final Map<String, FieldModel> immutableFields;
 
-   ClassTypeModel(
+   ReplicatableTypeModel(
       Class<O> javaType,
       TypeModel superType,
       Map<String, FieldModel> fields)

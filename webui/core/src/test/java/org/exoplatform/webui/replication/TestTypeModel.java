@@ -50,7 +50,7 @@ public class TestTypeModel extends TestCase
    public void testJuu()
    {
       TypeDomain domain = new TypeDomain();
-      ClassTypeModel aTM = (ClassTypeModel) domain.add(A.class);
+      ReplicatableTypeModel aTM = (ReplicatableTypeModel) domain.add(A.class);
       assertEquals(4, domain.getSize());
       assertEquals(A.class.getName(), aTM.getName());
       assertEquals(SetBuilder.create(domain.getTypeModel(int.class)).with(aTM).with(domain.getTypeModel(boolean.class)).build(domain.getTypeModel(String.class)), domain.getTypeModels());

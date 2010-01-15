@@ -21,7 +21,7 @@ package org.exoplatform.webui.application.replication.serial;
 
 import org.exoplatform.webui.application.replication.SerializationContext;
 import org.exoplatform.webui.application.replication.factory.ObjectFactory;
-import org.exoplatform.webui.application.replication.model.ClassTypeModel;
+import org.exoplatform.webui.application.replication.model.ReplicatableTypeModel;
 import org.exoplatform.webui.application.replication.model.FieldModel;
 import org.exoplatform.webui.application.replication.model.TypeModel;
 
@@ -57,7 +57,7 @@ public class ObjectReader extends ObjectInputStream
       this.idToResolutions = new HashMap<Integer, List<Resolution>>();
    }
 
-   private <O> O instantiate(ClassTypeModel<O> typeModel, Map<FieldModel, ?> state) throws InvalidClassException
+   private <O> O instantiate(ReplicatableTypeModel<O> typeModel, Map<FieldModel, ?> state) throws InvalidClassException
    {
       try
       {
@@ -97,11 +97,11 @@ public class ObjectReader extends ObjectInputStream
                id = container.readInt();
                Class clazz = (Class) container.readObject();
 
-               ClassTypeModel<?> typeModel = (ClassTypeModel)context.getTypeDomain().getTypeModel(clazz);
+               ReplicatableTypeModel<?> typeModel = (ReplicatableTypeModel)context.getTypeDomain().getTypeModel(clazz);
 
                //
                Map<FieldModel, Object> state = new HashMap<FieldModel, Object>();
-               ClassTypeModel<?> currentTypeModel = typeModel;
+               ReplicatableTypeModel<?> currentTypeModel = typeModel;
                List<Bilto> biltos = new ArrayList<Bilto>();
                while (true)
                {
@@ -136,9 +136,9 @@ public class ObjectReader extends ObjectInputStream
                   {
                      break;
                   }
-                  if (currentSuperTypeModel instanceof ClassTypeModel)
+                  if (currentSuperTypeModel instanceof ReplicatableTypeModel)
                   {
-                     currentTypeModel = (ClassTypeModel)currentSuperTypeModel;
+                     currentTypeModel = (ReplicatableTypeModel)currentSuperTypeModel;
                   }
                   else
                   {

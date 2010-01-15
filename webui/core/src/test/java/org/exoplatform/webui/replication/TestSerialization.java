@@ -57,6 +57,20 @@ public class TestSerialization extends TestCase
       assertSame(b, b.ref.ref);
    }
 
+   public void testStaticField() throws Exception
+   {
+      TypeDomain domain = new TypeDomain();
+      domain.add(D.class);
+      D d = new D();
+      d.b = "bar";
+      SerializationContext context = new SerializationContext(domain);
+      byte[] bytes =  context.write(d);
+      D.a = "foo";
+      d = (D)context.read(bytes);
+      assertEquals("foo", D.a);
+      assertEquals("bar", d.b);
+   }
+
    public void testAAA() throws Exception
    {
       TypeDomain domain = new TypeDomain();
@@ -73,4 +87,26 @@ public class TestSerialization extends TestCase
       assertSame(((E2)e.left).left, ((E2)e.right).left);
       assertSame(((E2)e.left).right, ((E2)e.right).right);
    }
+
+/*
+   public void testListOfReplicatable() throws Exception
+   {
+      TypeDomain domain = new TypeDomain();
+      domain.add(F1.class);
+      domain.add(F2.class);
+
+      //
+      F1 f1 = new F1();
+      F2 f2 = new F2();
+      f1.values.add(f2);
+
+      //
+      SerializationContext context = new SerializationContext(domain);
+      f1 = context.clone(f1);
+
+      //
+      assertNotNull(f1.values);
+      assertEquals(1, f1.values.size());
+   }
+*/
 }
