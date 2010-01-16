@@ -588,6 +588,10 @@ public class ApplicationRegistryServiceImpl implements ApplicationRegistryServic
                return "/" + chunks[0] + "/skin/DefaultSkin/portletIcons/" + chunks[1] + ".png";
             }
          }
+         else if (type == WSRP.CONTENT_TYPE)
+         {
+        	 return "/eXoResources/skin/sharedImages/Icon80x80/DefaultPortlet.png";
+         }
          else if (type == org.exoplatform.portal.pom.spi.gadget.Gadget.CONTENT_TYPE)
          {
             return "/" + "eXoGadgets" + "/skin/DefaultSkin/portletIcons/" + contentId + ".png";
