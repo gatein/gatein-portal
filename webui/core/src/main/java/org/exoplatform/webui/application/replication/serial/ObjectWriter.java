@@ -83,8 +83,8 @@ public class ObjectWriter extends ObjectOutputStream
       }
       else
       {
-         Class<? extends Object> objClass = obj.getClass();
-         TypeModel typeModel = context.getTypeDomain().getTypeModel(objClass);
+         Class<?> objClass = obj.getClass();
+         TypeModel<?> typeModel = context.getTypeDomain().getTypeModel(objClass);
 
          //
          if (typeModel == null)
@@ -99,15 +99,15 @@ public class ObjectWriter extends ObjectOutputStream
 
          //
          SerializationStatus status = SerializationStatus.NONE;
-         for (TypeModel currentTypeModel = typeModel;currentTypeModel != null;currentTypeModel = currentTypeModel.getSuperType())
+         for (TypeModel<?> currentTypeModel = typeModel;currentTypeModel != null;currentTypeModel = currentTypeModel.getSuperType())
          {
-            if (currentTypeModel instanceof ReplicatableTypeModel)
+            if (currentTypeModel instanceof ReplicatableTypeModel<?>)
             {
-               for (FieldModel fieldModel : currentTypeModel.getFields())
+               for (FieldModel<?, ?> fieldModel : currentTypeModel.getFields())
                {
                   if (!fieldModel.isTransient())
                   {
-                     Object fieldValue = fieldModel.getValue(obj);
+                     Object fieldValue = fieldModel.get(obj);
                      if (fieldValue == null)
                      {
                         output.writeObject(DataKind.NULL_VALUE);

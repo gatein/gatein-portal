@@ -24,6 +24,7 @@ import org.exoplatform.webui.application.replication.annotations.ReplicatedType;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -33,29 +34,48 @@ public final class TypeDomain
 {
 
    /** . */
+   private static final Map<Class<?>, Class<?>> primitiveToWrapperMap = new HashMap<Class<?>, Class<?>>();
+
+   static
+   {
+      primitiveToWrapperMap.put(byte.class, Byte.class);
+      primitiveToWrapperMap.put(short.class, Short.class);
+      primitiveToWrapperMap.put(int.class, Integer.class);
+      primitiveToWrapperMap.put(long.class, Long.class);
+      primitiveToWrapperMap.put(float.class, Float.class);
+      primitiveToWrapperMap.put(double.class, Double.class);
+      primitiveToWrapperMap.put(boolean.class, Boolean.class);
+      primitiveToWrapperMap.put(char.class, Character.class);
+   }
+
+   /** . */
    private final Map<String, TypeModel> typeModelMap;
 
    /** . */
    private final Map<String, TypeModel> immutableTypeModelMap;
 
    /** . */
-   private final Set<TypeModel> typeModelSet;
+   private final Collection<TypeModel> immutableTypeModelSet;
 
    /** . */
-   private final Set<TypeModel> immutableTypeModelSet;
+   private final boolean buildIfAbsent;
 
    public TypeDomain()
    {
-      HashMap<String, TypeModel> typeModelMap = new HashMap<String, TypeModel>();
+      this(false);
+   }
+
+   public TypeDomain(boolean buildIfAbsent)
+   {
+      ConcurrentHashMap<String, TypeModel> typeModelMap = new ConcurrentHashMap<String, TypeModel>();
       Map<String, TypeModel> immutableTypeModelMap = Collections.unmodifiableMap(typeModelMap);
-      HashSet<TypeModel> typeModelSet = new HashSet<TypeModel>();
-      Set<TypeModel> immutableTypeModelSet = Collections.unmodifiableSet(typeModelSet);
+      Collection<TypeModel> immutableTypeModelSet = Collections.unmodifiableCollection(typeModelMap.values());
 
       //
       this.typeModelMap = typeModelMap;
       this.immutableTypeModelMap = immutableTypeModelMap;
-      this.typeModelSet = typeModelSet;
       this.immutableTypeModelSet = immutableTypeModelSet;
+      this.buildIfAbsent = buildIfAbsent;
    }
 
    public Map<String, TypeModel> getTypeModelMap()
@@ -63,7 +83,12 @@ public final class TypeDomain
       return immutableTypeModelMap;
    }
 
-   public Set<TypeModel> getTypeModels()
+   public boolean getBuildIfAbsent()
+   {
+      return buildIfAbsent;
+   }
+
+   public Collection<TypeModel> getTypeModels()
    {
       return immutableTypeModelSet;
    }
@@ -83,19 +108,40 @@ public final class TypeDomain
       {
          throw new NullPointerException();
       }
-      return typeModelMap.get(javaType.getName());
+
+      //
+      TypeModel typeModel = typeModelMap.get(javaType.getName());
+
+      //
+      if (typeModel == null && buildIfAbsent)
+      {
+         typeModel = add(javaType);
+      }
+
+      //
+      return typeModel;
    }
 
-   public TypeModel add(Class<?> javaType)
+   // For now that operation is synchronized
+   public synchronized TypeModel add(Class<?> javaType)
    {
       if (javaType == null)
       {
          throw new NullPointerException();
       }
+
+      // Build the missing types required to have knowledge about the
+      // provided java type
       Map<String, TypeModel> addedTypeModels = new HashMap<String, TypeModel>();
       TypeModel model = build(javaType, addedTypeModels);
+
+      // Perform merge
       typeModelMap.putAll(addedTypeModels);
-      typeModelSet.addAll(addedTypeModels.values());
+
+      //
+      System.out.println("Added types " + addedTypeModels.values() + " to replication domain");
+
+      //
       return model;
    }
 
@@ -106,7 +152,13 @@ public final class TypeDomain
 
    private <O> TypeModel build(Class<O> javaType, Map<String, TypeModel> addedTypeModels)
    {
-      TypeModel typeModel = get(javaType, addedTypeModels);
+      if (javaType.isPrimitive())
+      {
+         throw new IllegalArgumentException("No primitive type accepted");
+      }
+
+      // Cast OK
+      TypeModel<O> typeModel = (TypeModel<O>)get(javaType, addedTypeModels);
 
       //
       if (typeModel == null)
@@ -114,7 +166,7 @@ public final class TypeDomain
          boolean replicated = javaType.getAnnotation(ReplicatedType.class) != null;
 
          //
-         TypeModel superTypeModel = null;
+         TypeModel<?> superTypeModel = null;
          for (Class<?> ancestor = javaType.getSuperclass();ancestor != null;ancestor = ancestor.getSuperclass())
          {
             superTypeModel = build(ancestor, addedTypeModels);
@@ -125,16 +177,16 @@ public final class TypeDomain
          }
 
          //
-         TreeMap<String, FieldModel> fieldModels = new TreeMap<String, FieldModel>();
+         TreeMap<String, FieldModel<O, ?>> fieldModels = new TreeMap<String, FieldModel<O, ?>>();
 
          //
          if (replicated)
          {
-            typeModel = new ReplicatableTypeModel<O>(javaType, superTypeModel, fieldModels);
+            typeModel = new ReplicatableTypeModel<O>(javaType, (TypeModel<? super O>)superTypeModel, fieldModels);
          }
          else
          {
-            typeModel = new ClassTypeModel(javaType, superTypeModel, fieldModels);
+            typeModel = new ClassTypeModel<O>(javaType, (TypeModel<? super O>)superTypeModel, fieldModels);
          }
 
          //
@@ -147,10 +199,17 @@ public final class TypeDomain
             {
                field.setAccessible(true);
                Class<?> fieldJavaType = field.getType();
-               TypeModel fieldTypeModel = build(fieldJavaType, addedTypeModels);
+
+               // Replace if a primitive
+               if (fieldJavaType.isPrimitive())
+               {
+                  fieldJavaType = primitiveToWrapperMap.get(fieldJavaType);
+               }
+
+               TypeModel<?> fieldTypeModel = build(fieldJavaType, addedTypeModels);
                if (fieldTypeModel != null)
                {
-                  fieldModels.put(field.getName(), new FieldModel(field, fieldTypeModel));
+                  fieldModels.put(field.getName(), createField(typeModel, field, fieldTypeModel));
                }
             }
          }
@@ -158,6 +217,11 @@ public final class TypeDomain
 
       //
       return typeModel;
+   }
+
+   private <O, V> FieldModel<O, V> createField(TypeModel<O> owner, Field field, TypeModel<V> fieldTypeModel)
+   {
+      return new FieldModel<O, V>(owner, field, fieldTypeModel);
    }
 
    private TypeModel get(Class<?> javaType, Map<String, TypeModel> addedTypeModels)

@@ -25,26 +25,14 @@ import java.util.Map;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public final class ReplicatableTypeModel<O> extends TypeModel
+public final class ReplicatableTypeModel<O> extends TypeModel<O>
 {
-
-   /** . */
-   private final Class<O> objectType;
 
    ReplicatableTypeModel(
       Class<O> javaType,
-      TypeModel superType,
-      Map<String, FieldModel> fields)
+      TypeModel<? super O> superType,
+      Map<String, FieldModel<O, ?>> fields)
    {
       super(javaType, superType, fields);
-
-      //
-      this.objectType = javaType;
-   }
-
-   @Override
-   public Class<O> getJavaType()
-   {
-      return objectType;
    }
 }

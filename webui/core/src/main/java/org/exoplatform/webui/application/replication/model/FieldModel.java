@@ -26,23 +26,32 @@ import java.lang.reflect.Modifier;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public final class FieldModel
+public final class FieldModel<O, V>
 {
+
+   /** . */
+   private final TypeModel<O> owner;
 
    /** . */
    private final Field field;
 
    /** . */
-   private final TypeModel type;
+   private final TypeModel<V> type;
 
    /** . */
    private boolean _transient;
 
-   FieldModel(Field field, TypeModel type)
+   FieldModel(TypeModel<O> owner, Field field, TypeModel<V> type)
    {
+      this.owner = owner;
       this.field = field;
       this.type = type;
       this._transient = Modifier.isTransient(field.getModifiers());
+   }
+
+   public TypeModel<O> getOwner()
+   {
+      return owner;
    }
 
    public String getName()
@@ -55,16 +64,32 @@ public final class FieldModel
       return _transient;
    }
 
-   public TypeModel getType()
+   public TypeModel<V> getType()
    {
       return type;
    }
 
-   public Object getValue(Object o)
+   public V get(Object o)
    {
       try
       {
-         return field.get(o);
+         Object value = field.get(o);
+         if (value == null)
+         {
+            return null;
+         }
+         else
+         {
+            Class<V> valueType = type.getJavaType();
+            if (valueType.isInstance(value))
+            {
+               return valueType.cast(value);
+            }
+            else
+            {
+               throw new ClassCastException("Cannot cast value " + value + " with type " + value.getClass().getName() + " to type " + valueType.getName());
+            }
+         }
       }
       catch (IllegalAccessException e)
       {
@@ -72,7 +97,13 @@ public final class FieldModel
       }
    }
 
-   public void setValue(Object o, Object value)
+   public void castAndSet(Object o, Object value)
+   {
+      V v = type.getJavaType().cast(value);
+      set(o, v);
+   }
+
+   public void set(Object o, V value)
    {
       try
       {

@@ -43,37 +43,41 @@ public class TestTypeModel extends TestCase
    {
       TypeDomain domain = new TypeDomain();
       assertType(String.class, domain.add(String.class));
-      assertEquals(4, domain.getSize());
+      assertEquals(5, domain.getSize());
       assertType(String.class, domain.getTypeModel(String.class));
       assertType(Object.class, domain.getTypeModel(Object.class));
-      assertType(int.class, domain.getTypeModel(int.class));
+      assertType(Integer.class, domain.getTypeModel(Integer.class));
       assertType(char[].class, domain.getTypeModel(char[].class));
+      assertType(Number.class, domain.getTypeModel(Number.class));
    }
 
    public void testJuu()
    {
       TypeDomain domain = new TypeDomain();
-      ReplicatableTypeModel aTM = (ReplicatableTypeModel) domain.add(A.class);
+      ReplicatableTypeModel<A> aTM = (ReplicatableTypeModel) domain.add(A.class);
       assertEquals(A.class.getName(), aTM.getName());
+/*
       assertEquals(SetBuilder.
          create(domain.getTypeModel(Object.class)).
-         with(domain.getTypeModel(int.class)).
+         with(domain.getTypeModel(Integer.class)).
+         with(domain.getTypeModel(Number.class)).
          with(domain.getTypeModel(char[].class)).
          with(aTM).
-         with(domain.getTypeModel(boolean.class)).
+         with(domain.getTypeModel(Boolean.class)).
          build(domain.getTypeModel(String.class))
          , domain.getTypeModels());
-      Map<String, FieldModel> fieldMap = aTM.getFieldMap();
+*/
+      Map<String, FieldModel<A, ?>> fieldMap = aTM.getFieldMap();
       assertEquals(3, fieldMap.size());
       FieldModel aFM = fieldMap.get("a");
       assertEquals("a", aFM.getName());
       assertEquals(domain.getTypeModel(String.class), aFM.getType());
       FieldModel bFM = fieldMap.get("b");
       assertEquals("b", bFM.getName());
-      assertEquals(domain.getTypeModel(int.class), bFM.getType());
+      assertEquals(domain.getTypeModel(Integer.class), bFM.getType());
       FieldModel cFM = fieldMap.get("c");
       assertEquals("c", cFM.getName());
-      assertEquals(domain.getTypeModel(boolean.class), cFM.getType());
+      assertEquals(domain.getTypeModel(Boolean.class), cFM.getType());
    }
 
    private void assertType(Class<?> javaType, TypeModel typeModel)

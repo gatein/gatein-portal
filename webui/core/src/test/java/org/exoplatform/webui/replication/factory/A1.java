@@ -35,7 +35,7 @@ public class A1 extends ObjectFactory<A2>
    static A2 instance = new A2();
 
    @Override
-   public <S extends A2> S create(Class<S> type, Map<FieldModel, ?> state) throws CreateException
+   public <S extends A2> S create(Class<S> type, Map<FieldModel<?, ?>, ?> state) throws CreateException
    {
       if (type == A2.class)
       {

@@ -27,22 +27,22 @@ import java.util.Map;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public abstract class TypeModel
+public abstract class TypeModel<O>
 {
 
    /** . */
-   private final Class<?> javaType;
+   private final Class<O> javaType;
 
    /** . */
-   private final TypeModel superType;
+   private final TypeModel<? super O> superType;
 
    /** . */
-   private final Map<String, FieldModel> fields;
+   private final Map<String, FieldModel<O, ?>> fields;
 
    /** . */
-   private final Map<String, FieldModel> immutableFields;
+   private final Map<String, FieldModel<O, ?>> immutableFields;
 
-   TypeModel(Class<?> javaType, TypeModel superType, Map<String, FieldModel> fields)
+   TypeModel(Class<O> javaType, TypeModel<? super O> superType, Map<String, FieldModel<O, ?>> fields)
    {
       this.javaType = javaType;
       this.superType = superType;
@@ -50,12 +50,12 @@ public abstract class TypeModel
       this.immutableFields = Collections.unmodifiableMap(fields);
    }
 
-   public Collection<FieldModel> getFields()
+   public Collection<FieldModel<O, ?>> getFields()
    {
       return immutableFields.values();
    }
 
-   public Map<String, FieldModel> getFieldMap()
+   public Map<String, FieldModel<O, ?>> getFieldMap()
    {
       return immutableFields;
    }
@@ -65,12 +65,12 @@ public abstract class TypeModel
       return javaType.getName();
    }
 
-   public Class<?> getJavaType()
+   public Class<O> getJavaType()
    {
       return javaType;
    }
 
-   public TypeModel getSuperType()
+   public TypeModel<? super O> getSuperType()
    {
       return superType;
    }

@@ -25,9 +25,9 @@ import java.util.Map;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public final class ClassTypeModel<O> extends TypeModel
+public final class ClassTypeModel<O> extends TypeModel<O>
 {
-   ClassTypeModel(Class<?> type, TypeModel superType, Map<String, FieldModel> fields)
+   ClassTypeModel(Class<O> type, TypeModel<? super O> superType, Map<String, FieldModel<O, ?>> fields)
    {
       super(type, superType, fields);
    }

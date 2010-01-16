@@ -30,16 +30,18 @@ import java.util.Map;
 public final class DefaultObjectFactory extends ObjectFactory<Object>
 {
    @Override
-   public <S> S create(Class<S> type, Map<FieldModel, ?> state) throws CreateException
+   public <S> S create(Class<S> type, Map<FieldModel<?, ?>, ?> state) throws CreateException
    {
       try
       {
          S instance = type.newInstance();
 
          //
-         for (Map.Entry<FieldModel, ?> entry : state.entrySet())
+         for (Map.Entry<FieldModel<?, ?>, ?> entry : state.entrySet())
          {
-            entry.getKey().setValue(instance, entry.getValue());
+            FieldModel<?, ?> fieldModel = entry.getKey();
+            Object value = entry.getValue();
+            fieldModel.castAndSet(instance, value);
          }
 
          //

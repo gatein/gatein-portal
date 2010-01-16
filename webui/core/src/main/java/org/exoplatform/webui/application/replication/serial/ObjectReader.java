@@ -57,7 +57,7 @@ public class ObjectReader extends ObjectInputStream
       this.idToResolutions = new HashMap<Integer, List<Resolution>>();
    }
 
-   private <O> O instantiate(ReplicatableTypeModel<O> typeModel, Map<FieldModel, ?> state) throws InvalidClassException
+   private <O> O instantiate(ReplicatableTypeModel<O> typeModel, Map<FieldModel<?, ?>, ?> state) throws InvalidClassException
    {
       try
       {
@@ -95,19 +95,19 @@ public class ObjectReader extends ObjectInputStream
                return o1;
             case DataKind.OBJECT:
                id = container.readInt();
-               Class clazz = (Class) container.readObject();
+               Class<?> clazz = (Class) container.readObject();
 
                ReplicatableTypeModel<?> typeModel = (ReplicatableTypeModel)context.getTypeDomain().getTypeModel(clazz);
 
                //
-               Map<FieldModel, Object> state = new HashMap<FieldModel, Object>();
-               TypeModel currentTypeModel = typeModel;
+               Map<FieldModel<?, ?>, Object> state = new HashMap<FieldModel<?, ?>, Object>();
+               TypeModel<?> currentTypeModel = typeModel;
                List<Bilto> biltos = new ArrayList<Bilto>();
                while (currentTypeModel != null)
                {
                   if (currentTypeModel instanceof ReplicatableTypeModel)
                   {
-                     for (FieldModel fieldModel : currentTypeModel.getFields())
+                     for (FieldModel<?, ?> fieldModel : currentTypeModel.getFields())
                      {
                         if (!fieldModel.isTransient())
                         {
@@ -164,7 +164,7 @@ public class ObjectReader extends ObjectInputStream
                {
                   for (Resolution resolution : resolutions)
                   {
-                     resolution.fieldModel.setValue(resolution.target, instance);
+                     resolution.fieldModel.set(resolution.target, instance);
                   }
                }
 
