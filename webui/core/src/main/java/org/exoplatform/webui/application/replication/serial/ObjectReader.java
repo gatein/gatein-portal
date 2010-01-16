@@ -42,7 +42,7 @@ public class ObjectReader extends ObjectInputStream
    private final Map<Integer, Object> idToObject;
 
    /** . */
-   private final Map<Integer, List<Resolution>> idToResolutions;
+   private final Map<Integer, List<FutureFieldUpdate<?>>> idToResolutions;
 
    public ObjectReader(SerializationContext context, InputStream in) throws IOException
    {
@@ -54,10 +54,10 @@ public class ObjectReader extends ObjectInputStream
       //
       this.context = context;
       this.idToObject = new HashMap<Integer, Object>();
-      this.idToResolutions = new HashMap<Integer, List<Resolution>>();
+      this.idToResolutions = new HashMap<Integer, List<FutureFieldUpdate<?>>>();
    }
 
-   private <O> O instantiate(ReplicatableTypeModel<O> typeModel, Map<FieldModel<?, ?>, ?> state) throws InvalidClassException
+   private <O> O instantiate(ReplicatableTypeModel<O> typeModel, Map<FieldModel<? super O, ?>, ?> state) throws InvalidClassException
    {
       try
       {
@@ -71,6 +71,110 @@ public class ObjectReader extends ObjectInputStream
          InvalidClassException ice = new InvalidClassException("Cannot instantiate object from class " + typeModel.getJavaType().getName());
          ice.initCause(e);
          throw ice;
+      }
+   }
+
+   protected <O> O instantiate(int id, DataContainer container, ReplicatableTypeModel<O> typeModel) throws IOException
+   {
+      Map<FieldModel<? super O, ?>, Object> state = new HashMap<FieldModel<? super O, ?>, Object>();
+      TypeModel<? super O> currentTypeModel = typeModel;
+      List<FieldUpdate<O>> sets = new ArrayList<FieldUpdate<O>>();
+      while (currentTypeModel != null)
+      {
+         if (currentTypeModel instanceof ReplicatableTypeModel)
+         {
+            for (FieldModel<? super O, ?> fieldModel : currentTypeModel.getFields())
+            {
+               if (!fieldModel.isTransient())
+               {
+                  switch (container.readInt())
+                  {
+                     case DataKind.NULL_VALUE:
+                        state.put(fieldModel, null);
+                        break;
+                     case DataKind.OBJECT_REF:
+                        int refId = container.readInt();
+                        Object refO = idToObject.get(refId);
+                        if (refO != null)
+                        {
+                           state.put(fieldModel, refO);
+                        }
+                        else
+                        {
+                           sets.add(new FieldUpdate<O>(refId, fieldModel));
+                        }
+                        break;
+                     case DataKind.OBJECT:
+                        Object o = container.readObject();
+                        state.put(fieldModel, o);
+                        break;
+
+                  }
+               }
+            }
+         }
+         currentTypeModel = currentTypeModel.getSuperType();
+      }
+
+      //
+      O instance = instantiate(typeModel, state);
+
+      // Create future field updates
+      for (FieldUpdate<O> set : sets)
+      {
+         List<FutureFieldUpdate<?>> resolutions = idToResolutions.get(set.ref);
+         if (resolutions == null)
+         {
+            resolutions = new ArrayList<FutureFieldUpdate<?>>();
+            idToResolutions.put(set.ref, resolutions);
+         }
+         resolutions.add(new FutureFieldUpdate<O>(instance, set.fieldModel));
+      }
+
+      //
+      idToObject.put(id, instance);
+
+      // Resolve future field updates
+      List<FutureFieldUpdate<?>> resolutions = idToResolutions.remove(id);
+      if (resolutions != null)
+      {
+         for (FutureFieldUpdate<?> resolution : resolutions)
+         {
+            resolution.fieldModel.castAndSet(resolution.target, instance);
+         }
+      }
+
+      //
+      return instance;
+   }
+
+   private static class FieldUpdate<O>
+   {
+      /** . */
+      private final int ref;
+
+      /** . */
+      private final FieldModel<? super O, ?> fieldModel;
+
+      private FieldUpdate(int ref, FieldModel<? super O, ?> fieldModel)
+      {
+         this.ref = ref;
+         this.fieldModel = fieldModel;
+      }
+   }
+
+   private static class FutureFieldUpdate<O>
+   {
+      /** . */
+      private final O target;
+
+      /** . */
+      private final FieldModel<? super O, ?> fieldModel;
+
+      private FutureFieldUpdate(O target, FieldModel<? super O, ?> fieldModel)
+      {
+         this.target = target;
+         this.fieldModel = fieldModel;
       }
    }
 
@@ -96,80 +200,8 @@ public class ObjectReader extends ObjectInputStream
             case DataKind.OBJECT:
                id = container.readInt();
                Class<?> clazz = (Class) container.readObject();
-
                ReplicatableTypeModel<?> typeModel = (ReplicatableTypeModel)context.getTypeDomain().getTypeModel(clazz);
-
-               //
-               Map<FieldModel<?, ?>, Object> state = new HashMap<FieldModel<?, ?>, Object>();
-               TypeModel<?> currentTypeModel = typeModel;
-               List<Bilto> biltos = new ArrayList<Bilto>();
-               while (currentTypeModel != null)
-               {
-                  if (currentTypeModel instanceof ReplicatableTypeModel)
-                  {
-                     for (FieldModel<?, ?> fieldModel : currentTypeModel.getFields())
-                     {
-                        if (!fieldModel.isTransient())
-                        {
-                           switch (container.readInt())
-                           {
-                              case DataKind.NULL_VALUE:
-                                 state.put(fieldModel, null);
-                                 break;
-                              case DataKind.OBJECT_REF:
-                                 int refId = container.readInt();
-                                 Object refO = idToObject.get(refId);
-                                 if (refO != null)
-                                 {
-                                    state.put(fieldModel, refO);
-                                 }
-                                 else
-                                 {
-                                    biltos.add(new Bilto(refId, fieldModel));
-                                 }
-                                 break;
-                              case DataKind.OBJECT:
-                                 Object o = container.readObject();
-                                 state.put(fieldModel, o);
-                                 break;
-
-                           }
-                        }
-                     }
-                  }
-                  currentTypeModel = currentTypeModel.getSuperType();
-               }
-
-               //
-               Object instance = instantiate(typeModel, state);
-
-               //
-               for (Bilto bilto : biltos)
-               {
-                  List<Resolution> resolutions = idToResolutions.get(bilto.ref);
-                  if (resolutions == null)
-                  {
-                     resolutions = new ArrayList<Resolution>();
-                     idToResolutions.put(bilto.ref, resolutions);
-                  }
-                  resolutions.add(new Resolution(instance, bilto.fieldModel));
-               }
-
-               //
-               idToObject.put(id, instance);
-
-               //
-               List<Resolution> resolutions = idToResolutions.remove(id);
-               if (resolutions != null)
-               {
-                  for (Resolution resolution : resolutions)
-                  {
-                     resolution.fieldModel.set(resolution.target, instance);
-                  }
-               }
-
-               //
-               return instance;
+               return instantiate(id, container, typeModel);
             default:
                throw new StreamCorruptedException("Unrecognized data " + sw);
          }
@@ -179,35 +211,4 @@ public class ObjectReader extends ObjectInputStream
          return obj;
       }
    }
-
-   private static class Bilto
-   {
-      /** . */
-      private final int ref;
-
-      /** . */
-      private final FieldModel fieldModel;
-
-      private Bilto(int ref, FieldModel fieldModel)
-      {
-         this.ref = ref;
-         this.fieldModel = fieldModel;
-      }
-   }
-
-   private static class Resolution
-   {
-      /** . */
-      private final Object target;
-
-      /** . */
-      private final FieldModel fieldModel;
-
-      private Resolution(Object target, FieldModel fieldModel)
-      {
-         this.target = target;
-         this.fieldModel = fieldModel;
-      }
-   }
-
 }

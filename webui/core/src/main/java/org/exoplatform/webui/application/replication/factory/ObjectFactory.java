@@ -40,6 +40,6 @@ public abstract class ObjectFactory<B>
     * @return the S instance
     * @throws CreateException anything wrong that could happen during instance creation
     */
-   public abstract <S extends B> S create(Class<S> type, Map<FieldModel<?, ?>, ?> state) throws CreateException;
+   public abstract <S extends B> S create(Class<S> type, Map<FieldModel<? super S, ?>, ?> state) throws CreateException;
 
 }
