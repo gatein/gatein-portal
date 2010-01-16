@@ -20,8 +20,10 @@
 package org.exoplatform.webui.application.replication.serial;
 
 import org.exoplatform.webui.application.replication.SerializationContext;
+import org.exoplatform.webui.application.replication.api.TypeConverter;
 import org.exoplatform.webui.application.replication.api.factory.ObjectFactory;
 import org.exoplatform.webui.application.replication.model.ClassTypeModel;
+import org.exoplatform.webui.application.replication.model.ConvertedTypeModel;
 import org.exoplatform.webui.application.replication.model.FieldModel;
 
 import java.io.*;
@@ -177,33 +179,81 @@ public class ObjectReader extends ObjectInputStream
       }
    }
 
+   private Object read(DataContainer container) throws IOException
+   {
+      int sw = container.readInt();
+      switch (sw)
+      {
+         case DataKind.OBJECT_REF:
+         {
+            int id = container.readInt();
+            Object o1 = idToObject.get(id);
+            if (o1 == null)
+            {
+               throw new AssertionError();
+            }
+            return o1;
+         }
+         case DataKind.OBJECT:
+         {
+            int id = container.readInt();
+            Class<?> clazz = (Class)container.readObject();
+            ClassTypeModel<?> typeModel = (ClassTypeModel<?>)context.getTypeDomain().getTypeModel(clazz);
+            return instantiate(id, container, typeModel);
+         }
+         case DataKind.CONVERTED_OBJECT:
+         {
+            Class<?> tclazz = (Class<?>)container.readObject();
+            ConvertedTypeModel<?, ?> ctm = (ConvertedTypeModel<?,?>) context.getTypeDomain().getTypeModel(tclazz);
+            return convertObject(container, ctm);
+         }
+         default:
+            throw new StreamCorruptedException("Unrecognized data " + sw);
+      }
+   }
+
+   private <O, T> O convertObject(DataContainer container, ConvertedTypeModel<O, T> convertedType) throws IOException
+   {
+      Object inner = resolveObject(container);
+      T t = convertedType.getTargetType().getJavaType().cast(inner);
+
+      TypeConverter<O, T> converter;
+      try
+      {
+         converter = convertedType.getConverterJavaType().newInstance();
+      }
+      catch (Exception e)
+      {
+         throw new AssertionError(e);
+      }
+
+      //
+      O o;
+      try
+      {
+         o = converter.read(t);
+      }
+      catch (Exception e)
+      {
+         InvalidObjectException ioe = new InvalidObjectException("The object " + t + " conversion throw an exception ");
+         ioe.initCause(e);
+         throw ioe;
+      }
+      if (o == null)
+      {
+         throw new InvalidObjectException("The object " + t + " was converted to null by converter " + converter);
+      }
+
+      //
+      return o;
+   }
+
    @Override
    protected Object resolveObject(Object obj) throws IOException
    {
       if (obj instanceof DataContainer)
       {
-         DataContainer container = (DataContainer) obj;
-
-         int id;
-         int sw = container.readInt();
-         switch (sw)
-         {
-            case DataKind.OBJECT_REF:
-               id = container.readInt();
-               Object o1 = idToObject.get(id);
-               if (o1 == null)
-               {
-                  throw new AssertionError();
-               }
-               return o1;
-            case DataKind.OBJECT:
-               id = container.readInt();
-               Class<?> clazz = (Class) container.readObject();
-               ClassTypeModel<?> typeModel = (ClassTypeModel<?>)context.getTypeDomain().getTypeModel(clazz);
-               return instantiate(id, container, typeModel);
-            default:
-               throw new StreamCorruptedException("Unrecognized data " + sw);
-         }
+         return read((DataContainer)obj);
       }
       else
       {

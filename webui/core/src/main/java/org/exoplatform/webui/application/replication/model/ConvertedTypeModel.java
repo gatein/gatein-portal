@@ -19,43 +19,41 @@
 
 package org.exoplatform.webui.application.replication.model;
 
+import org.exoplatform.webui.application.replication.api.TypeConverter;
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public abstract class TypeModel<O>
+public class ConvertedTypeModel<O, T> extends TypeModel<O>
 {
 
    /** . */
-   private final Class<O> javaType;
+   private final TypeModel<T> targetType;
 
    /** . */
-   private final TypeModel<? super O> superType;
+   private final Class<? extends TypeConverter<O, T>> converterJavaType;
 
-   TypeModel(Class<O> javaType, TypeModel<? super O> superType)
+   ConvertedTypeModel(
+      Class<O> javaType,
+      TypeModel<? super O> superType,
+      TypeModel<T> targetType,
+      Class<? extends TypeConverter<O, T>> converterJavaType)
    {
-      this.javaType = javaType;
-      this.superType = superType;
+      super(javaType, superType);
+
+      //
+      this.targetType = targetType;
+      this.converterJavaType = converterJavaType;
    }
 
-   public String getName()
+   public TypeModel<T> getTargetType()
    {
-      return javaType.getName();
+      return targetType;
    }
 
-   public Class<O> getJavaType()
+   public Class<? extends TypeConverter<O, T>> getConverterJavaType()
    {
-      return javaType;
-   }
-
-   public TypeModel<? super O> getSuperType()
-   {
-      return superType;
-   }
-
-   @Override
-   public String toString()
-   {
-      return "TypeModel[name=" + javaType.getName() + "]";
+      return converterJavaType;
    }
 }

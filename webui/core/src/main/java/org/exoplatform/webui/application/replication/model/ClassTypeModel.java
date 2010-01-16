@@ -44,7 +44,7 @@ public final class ClassTypeModel<O> extends TypeModel<O>
 
    ClassTypeModel(Class<O> type, ClassTypeModel<? super O> superType, Map<String, FieldModel<O, ?>> fields, boolean serialized)
    {
-      super(type, superType, fields);
+      super(type, superType);
 
       //
       this.superType = superType;

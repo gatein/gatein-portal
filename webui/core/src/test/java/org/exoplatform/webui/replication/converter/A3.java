@@ -17,45 +17,38 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.webui.application.replication.model;
+package org.exoplatform.webui.replication.converter;
+
+import junit.framework.AssertionFailedError;
+import org.exoplatform.webui.application.replication.api.TypeConverter;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public abstract class TypeModel<O>
+public class A3 extends TypeConverter<A1, A2>
 {
 
    /** . */
-   private final Class<O> javaType;
+   public static TypeConverter<A1, A2> delegate;
 
-   /** . */
-   private final TypeModel<? super O> superType;
-
-   TypeModel(Class<O> javaType, TypeModel<? super O> superType)
+   @Override
+   public A2 write(A1 input) throws Exception
    {
-      this.javaType = javaType;
-      this.superType = superType;
-   }
-
-   public String getName()
-   {
-      return javaType.getName();
-   }
-
-   public Class<O> getJavaType()
-   {
-      return javaType;
-   }
-
-   public TypeModel<? super O> getSuperType()
-   {
-      return superType;
+      if (delegate == null)
+      {
+         throw new AssertionFailedError();
+      }
+      return delegate.write(input);
    }
 
    @Override
-   public String toString()
+   public A1 read(A2 output) throws Exception
    {
-      return "TypeModel[name=" + javaType.getName() + "]";
+      if (delegate == null)
+      {
+         throw new AssertionFailedError();
+      }
+      return delegate.read(output);
    }
 }

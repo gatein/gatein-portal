@@ -17,45 +17,27 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.webui.application.replication.model;
+package org.exoplatform.webui.replication.converter;
+
+import org.exoplatform.webui.application.replication.api.annotations.Serialized;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public abstract class TypeModel<O>
+@Serialized
+public class A2
 {
 
-   /** . */
-   private final Class<O> javaType;
+   String state;
 
-   /** . */
-   private final TypeModel<? super O> superType;
-
-   TypeModel(Class<O> javaType, TypeModel<? super O> superType)
+   public A2()
    {
-      this.javaType = javaType;
-      this.superType = superType;
    }
 
-   public String getName()
+   public A2(String state)
    {
-      return javaType.getName();
-   }
 
-   public Class<O> getJavaType()
-   {
-      return javaType;
-   }
-
-   public TypeModel<? super O> getSuperType()
-   {
-      return superType;
-   }
-
-   @Override
-   public String toString()
-   {
-      return "TypeModel[name=" + javaType.getName() + "]";
+      this.state = state;
    }
 }

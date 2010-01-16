@@ -20,8 +20,11 @@
 package org.exoplatform.webui.application.replication.serial;
 
 import org.exoplatform.webui.application.replication.SerializationContext;
+import org.exoplatform.webui.application.replication.api.TypeConverter;
 import org.exoplatform.webui.application.replication.model.ClassTypeModel;
+import org.exoplatform.webui.application.replication.model.ConvertedTypeModel;
 import org.exoplatform.webui.application.replication.model.FieldModel;
+import org.exoplatform.webui.application.replication.model.TypeModel;
 
 import java.io.*;
 import java.util.IdentityHashMap;
@@ -58,7 +61,69 @@ public class ObjectWriter extends ObjectOutputStream
       return nextId;
    }
 
-   private <O> void write(DataContainer output, ClassTypeModel<O> typeModel, O obj) throws IOException
+   private void write(Object obj, DataContainer output) throws IOException
+   {
+      Class objClass = obj.getClass();
+      TypeModel typeModel = context.getTypeDomain().getTypeModel(objClass);
+
+      //
+      if (typeModel == null)
+      {
+         throw new NotSerializableException("Object " + obj + " does not have its type described");
+      }
+
+      //
+      if (typeModel instanceof ClassTypeModel)
+      {
+         // This is obviously unchecked because of the fact that Object.getClass() returns Class<?>
+         // need to find a work around for that
+         write((ClassTypeModel)typeModel, obj, output);
+      }
+      else
+      {
+         write((ConvertedTypeModel)typeModel, obj, output);
+      }
+   }
+
+   private <O, T> void write(ConvertedTypeModel<O, T> typeModel, O obj, DataContainer output) throws IOException
+   {
+      Class<? extends TypeConverter<O, T>> converterClass = typeModel.getConverterJavaType();
+
+      //
+      TypeConverter<O, T> converter;
+      try
+      {
+         converter = converterClass.newInstance();
+      }
+      catch (Exception e)
+      {
+         throw new AssertionError(e);
+      }
+
+      //
+      T target;
+      try
+      {
+         target = converter.write(obj);
+      }
+      catch (Exception e)
+      {
+         InvalidObjectException ioe = new InvalidObjectException("The object " + obj + " conversion threw an exception ");
+         ioe.initCause(e);
+         throw ioe;
+      }
+      if (target == null)
+      {
+         throw new InvalidObjectException("The object " + obj + " was converted to null by converter " + converter);
+      }
+
+      //
+      output.writeInt(DataKind.CONVERTED_OBJECT);
+      output.writeObject(typeModel.getJavaType());
+      write(target, output);
+   }
+
+   private <O> void write(ClassTypeModel<O> typeModel, O obj, DataContainer output) throws IOException
    {
       if (!typeModel.isSerialized())
       {
@@ -154,23 +219,13 @@ public class ObjectWriter extends ObjectOutputStream
       Integer id = objectToId.get(obj);
       if (id != null)
       {
+         output = new DataContainer();
          output.writeInt(DataKind.OBJECT_REF);
          output.writeObject(id);
       }
       else
       {
-         Class objClass = obj.getClass();
-         ClassTypeModel typeModel = (ClassTypeModel)context.getTypeDomain().getTypeModel(objClass);
-
-         //
-         if (typeModel == null)
-         {
-            throw new NotSerializableException("Object " + obj + " does not have its type described");
-         }
-
-         // This is obviously unchecked because of the fact that Object.getClass() returns Class<?>
-         // need to find a work around for that
-         write(output, typeModel, obj);
+         write(obj, output);
       }
 
       //

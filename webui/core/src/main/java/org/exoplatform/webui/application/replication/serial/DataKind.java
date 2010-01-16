@@ -29,6 +29,6 @@ public class DataKind
    public static final int OBJECT = 0;
    public static final int NULL_VALUE = 1;
    public static final int OBJECT_REF = 2;
-   public static final int SERIALIZABLE_OBJECT = 3;
+   public static final int CONVERTED_OBJECT = 3;
 
 }

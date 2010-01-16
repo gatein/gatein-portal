@@ -19,10 +19,13 @@
 
 package org.exoplatform.webui.application.replication.model;
 
+import org.exoplatform.webui.application.replication.api.TypeConverter;
+import org.exoplatform.webui.application.replication.api.annotations.Converted;
 import org.exoplatform.webui.application.replication.api.annotations.Serialized;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.ParameterizedType;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -49,13 +52,13 @@ public final class TypeDomain
    }
 
    /** . */
-   private final Map<String, TypeModel> typeModelMap;
+   private final Map<String, TypeModel<?>> typeModelMap;
 
    /** . */
-   private final Map<String, TypeModel> immutableTypeModelMap;
+   private final Map<String, TypeModel<?>> immutableTypeModelMap;
 
    /** . */
-   private final Collection<TypeModel> immutableTypeModelSet;
+   private final Collection<TypeModel<?>> immutableTypeModelSet;
 
    /** . */
    private final boolean buildIfAbsent;
@@ -67,9 +70,9 @@ public final class TypeDomain
 
    public TypeDomain(boolean buildIfAbsent)
    {
-      ConcurrentHashMap<String, TypeModel> typeModelMap = new ConcurrentHashMap<String, TypeModel>();
-      Map<String, TypeModel> immutableTypeModelMap = Collections.unmodifiableMap(typeModelMap);
-      Collection<TypeModel> immutableTypeModelSet = Collections.unmodifiableCollection(typeModelMap.values());
+      ConcurrentHashMap<String, TypeModel<?>> typeModelMap = new ConcurrentHashMap<String, TypeModel<?>>();
+      Map<String, TypeModel<?>> immutableTypeModelMap = Collections.unmodifiableMap(typeModelMap);
+      Collection<TypeModel<?>> immutableTypeModelSet = Collections.unmodifiableCollection(typeModelMap.values());
 
       //
       this.typeModelMap = typeModelMap;
@@ -78,7 +81,7 @@ public final class TypeDomain
       this.buildIfAbsent = buildIfAbsent;
    }
 
-   public Map<String, TypeModel> getTypeModelMap()
+   public Map<String, TypeModel<?>> getTypeModelMap()
    {
       return immutableTypeModelMap;
    }
@@ -88,12 +91,12 @@ public final class TypeDomain
       return buildIfAbsent;
    }
 
-   public Collection<TypeModel> getTypeModels()
+   public Collection<TypeModel<?>> getTypeModels()
    {
       return immutableTypeModelSet;
    }
 
-   public TypeModel getTypeModel(String typeName)
+   public TypeModel<?> getTypeModel(String typeName)
    {
       if (typeName == null)
       {
@@ -102,15 +105,15 @@ public final class TypeDomain
       return typeModelMap.get(typeName);
    }
 
-   public TypeModel getTypeModel(Class<?> javaType)
+   public <O> TypeModel<O> getTypeModel(Class<O> javaType)
    {
       if (javaType == null)
       {
          throw new NullPointerException();
       }
 
-      //
-      TypeModel typeModel = typeModelMap.get(javaType.getName());
+      // Cast OK
+      TypeModel<O> typeModel = (TypeModel<O>)typeModelMap.get(javaType.getName());
 
       //
       if (typeModel == null && buildIfAbsent)
@@ -133,6 +136,8 @@ public final class TypeDomain
       // Build the missing types required to have knowledge about the
       // provided java type
       Map<String, TypeModel<?>> addedTypeModels = new HashMap<String, TypeModel<?>>();
+
+      //
       TypeModel<O> model = build(javaType, addedTypeModels);
 
       // Perform merge
@@ -157,57 +162,130 @@ public final class TypeDomain
          throw new IllegalArgumentException("No primitive type accepted");
       }
 
-      // Cast OK
-      TypeModel<O> typeModel = (TypeModel<O>)get(javaType, addedTypeModels);
+      //
+      TypeModel<O> typeModel = get(javaType, addedTypeModels);
 
       //
       if (typeModel == null)
       {
-         boolean replicated = javaType.getAnnotation(Serialized.class) != null;
+         boolean serialized = javaType.getAnnotation(Serialized.class) != null;
+         boolean converted = javaType.getAnnotation(Converted.class) != null;
 
          //
-         ClassTypeModel<? super O> superTypeModel = null;
-         if (javaType.getSuperclass() != null)
+         if (serialized)
          {
-            TypeModel<? super O> builtType = build(javaType.getSuperclass(), addedTypeModels);
-            if (builtType instanceof ClassTypeModel)
-            {
-               superTypeModel = (ClassTypeModel<? super O>)builtType;
-            }
-            else
+            if (converted)
             {
                throw new TypeException();
             }
+            typeModel = buildClassType(javaType, addedTypeModels, true);
          }
-
-         //
-         TreeMap<String, FieldModel<O, ?>> fieldModels = new TreeMap<String, FieldModel<O, ?>>();
-
-         //
-         typeModel = new ClassTypeModel<O>(javaType, superTypeModel, fieldModels, replicated);
-
-         //
-         addedTypeModels.put(javaType.getName(), typeModel);
-
-         // Now build fields
-         for (Field field : javaType.getDeclaredFields())
+         else if (converted)
          {
-            if (!Modifier.isStatic(field.getModifiers()))
+            typeModel = buildConvertedType(javaType, addedTypeModels);
+         }
+         else
+         {
+            typeModel = buildClassType(javaType, addedTypeModels, false);
+         }
+      }
+
+      //
+      return typeModel;
+   }
+
+   private <O> ConvertedTypeModel<O, ?> buildConvertedType(Class<O> javaType, Map<String, TypeModel<?>> addedTypeModels)
+   {
+      Converted converted = javaType.getAnnotation(Converted.class);
+
+      //
+      Class<? extends TypeConverter<?, ?>> converterClass = converted.value();
+      ParameterizedType converterParameterizedType = (ParameterizedType)converterClass.getGenericSuperclass();
+
+      //
+      if (!converterParameterizedType.getActualTypeArguments()[0].equals(javaType))
+      {
+         throw new TypeException();
+      }
+
+      //
+      Class<? extends TypeConverter<O, ?>> converterJavaType = (Class<TypeConverter<O, ?>>)converted.value();
+
+      //
+      return buildConvertedType(javaType, addedTypeModels, converterJavaType);
+   }
+
+   private <O, T> ConvertedTypeModel<O, T> buildConvertedType(
+      Class<O> javaType,
+      Map<String, TypeModel<?>> addedTypeModels,
+      Class<? extends TypeConverter<O, ? /* This is a bit funky and nasty, need to investigate*/ >> converterJavaType)
+   {
+      Class<T> outputClass = (Class<T>)((ParameterizedType)converterJavaType.getGenericSuperclass()).getActualTypeArguments()[1];
+
+      //
+      ClassTypeModel<T> targetType = (ClassTypeModel<T>)build(outputClass, addedTypeModels);
+
+      //
+      TypeModel<? super O> superType = null;
+      Class<? super O> superJavaType = javaType.getSuperclass();
+      if (superJavaType != null)
+      {
+         superType = build(superJavaType, addedTypeModels);
+      }
+
+      //
+      ConvertedTypeModel<O, T> typeModel = new ConvertedTypeModel<O, T>(javaType, superType, targetType, (Class<TypeConverter<O, T>>) converterJavaType);
+
+      //
+      addedTypeModels.put(typeModel.getName(), typeModel);
+
+      //
+      return typeModel;
+   }
+
+   private <O> ClassTypeModel<O> buildClassType(Class<O> javaType, Map<String, TypeModel<?>> addedTypeModels, boolean serialized)
+   {
+      ClassTypeModel<? super O> superTypeModel = null;
+      if (javaType.getSuperclass() != null)
+      {
+         TypeModel<? super O> builtType = build(javaType.getSuperclass(), addedTypeModels);
+         if (builtType instanceof ClassTypeModel)
+         {
+            superTypeModel = (ClassTypeModel<? super O>)builtType;
+         }
+         else
+         {
+            throw new TypeException();
+         }
+      }
+
+      //
+      TreeMap<String, FieldModel<O, ?>> fieldModels = new TreeMap<String, FieldModel<O, ?>>();
+
+      //
+      ClassTypeModel<O> typeModel = new ClassTypeModel<O>(javaType, superTypeModel, fieldModels, serialized);
+
+      //
+      addedTypeModels.put(javaType.getName(), typeModel);
+
+      // Now build fields
+      for (Field field : javaType.getDeclaredFields())
+      {
+         if (!Modifier.isStatic(field.getModifiers()))
+         {
+            field.setAccessible(true);
+            Class<?> fieldJavaType = field.getType();
+
+            // Replace if a primitive
+            if (fieldJavaType.isPrimitive())
             {
-               field.setAccessible(true);
-               Class<?> fieldJavaType = field.getType();
+               fieldJavaType = primitiveToWrapperMap.get(fieldJavaType);
+            }
 
-               // Replace if a primitive
-               if (fieldJavaType.isPrimitive())
-               {
-                  fieldJavaType = primitiveToWrapperMap.get(fieldJavaType);
-               }
-
-               TypeModel<?> fieldTypeModel = build(fieldJavaType, addedTypeModels);
-               if (fieldTypeModel != null)
-               {
-                  fieldModels.put(field.getName(), createField(typeModel, field, fieldTypeModel));
-               }
+            TypeModel<?> fieldTypeModel = build(fieldJavaType, addedTypeModels);
+            if (fieldTypeModel != null)
+            {
+               fieldModels.put(field.getName(), createField(typeModel, field, fieldTypeModel));
             }
          }
       }
