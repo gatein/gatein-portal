@@ -19,7 +19,7 @@
 
 package org.exoplatform.webui.application.replication.model;
 
-import org.exoplatform.webui.application.replication.api.annotations.ReplicatedType;
+import org.exoplatform.webui.application.replication.api.annotations.Serialized;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -123,7 +123,7 @@ public final class TypeDomain
    }
 
    // For now that operation is synchronized
-   public synchronized TypeModel add(Class<?> javaType)
+   public synchronized <O> TypeModel<O> add(Class<O> javaType)
    {
       if (javaType == null)
       {
@@ -132,8 +132,8 @@ public final class TypeDomain
 
       // Build the missing types required to have knowledge about the
       // provided java type
-      Map<String, TypeModel> addedTypeModels = new HashMap<String, TypeModel>();
-      TypeModel model = build(javaType, addedTypeModels);
+      Map<String, TypeModel<?>> addedTypeModels = new HashMap<String, TypeModel<?>>();
+      TypeModel<O> model = build(javaType, addedTypeModels);
 
       // Perform merge
       typeModelMap.putAll(addedTypeModels);
@@ -150,7 +150,7 @@ public final class TypeDomain
       return typeModelMap.size();
    }
 
-   private <O> TypeModel build(Class<O> javaType, Map<String, TypeModel> addedTypeModels)
+   private <O> TypeModel<O> build(Class<O> javaType, Map<String, TypeModel<?>> addedTypeModels)
    {
       if (javaType.isPrimitive())
       {
@@ -163,16 +163,20 @@ public final class TypeDomain
       //
       if (typeModel == null)
       {
-         boolean replicated = javaType.getAnnotation(ReplicatedType.class) != null;
+         boolean replicated = javaType.getAnnotation(Serialized.class) != null;
 
          //
-         TypeModel<?> superTypeModel = null;
-         for (Class<?> ancestor = javaType.getSuperclass();ancestor != null;ancestor = ancestor.getSuperclass())
+         ClassTypeModel<? super O> superTypeModel = null;
+         if (javaType.getSuperclass() != null)
          {
-            superTypeModel = build(ancestor, addedTypeModels);
-            if (superTypeModel != null)
+            TypeModel<? super O> builtType = build(javaType.getSuperclass(), addedTypeModels);
+            if (builtType instanceof ClassTypeModel)
             {
-               break;
+               superTypeModel = (ClassTypeModel<? super O>)builtType;
+            }
+            else
+            {
+               throw new TypeException();
             }
          }
 
@@ -180,14 +184,7 @@ public final class TypeDomain
          TreeMap<String, FieldModel<O, ?>> fieldModels = new TreeMap<String, FieldModel<O, ?>>();
 
          //
-         if (replicated)
-         {
-            typeModel = new ReplicatableTypeModel<O>(javaType, (TypeModel<? super O>)superTypeModel, fieldModels);
-         }
-         else
-         {
-            typeModel = new ClassTypeModel<O>(javaType, (TypeModel<? super O>)superTypeModel, fieldModels);
-         }
+         typeModel = new ClassTypeModel<O>(javaType, superTypeModel, fieldModels, replicated);
 
          //
          addedTypeModels.put(javaType.getName(), typeModel);
@@ -224,13 +221,14 @@ public final class TypeDomain
       return new FieldModel<O, V>(owner, field, fieldTypeModel);
    }
 
-   private TypeModel get(Class<?> javaType, Map<String, TypeModel> addedTypeModels)
+   private <O> TypeModel<O> get(Class<O> javaType, Map<String, TypeModel<?>> addedTypeModels)
    {
-      TypeModel typeModel = typeModelMap.get(javaType.getName());
+      TypeModel<?> typeModel = typeModelMap.get(javaType.getName());
       if (typeModel == null)
       {
          typeModel = addedTypeModels.get(javaType.getName());
       }
-      return typeModel;
+      // Cast OK
+      return (TypeModel<O>)typeModel;
    }
 }

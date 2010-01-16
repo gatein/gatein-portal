@@ -19,18 +19,14 @@
 
 package org.exoplatform.webui.application.replication.api.annotations;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import org.exoplatform.webui.application.replication.api.TypeConverter;
+import org.exoplatform.webui.application.replication.impl.api.DefaultTypeConverter;
 
 /**
- * Annotates a field
- *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-@Target(ElementType.FIELD)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface ReplicatedField {
+public @interface Converted
+{
+   Class<? extends TypeConverter<?, ?>> value();
 }

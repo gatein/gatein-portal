@@ -19,24 +19,19 @@
 
 package org.exoplatform.webui.application.replication.api.annotations;
 
-import org.exoplatform.webui.application.replication.api.TypeConverter;
-import org.exoplatform.webui.application.replication.impl.api.DefaultTypeConverter;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Annotates a field
+ * Annotates a type to be serializable.
  *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ReplicatedType {
-
-   Class<? extends TypeConverter<?, ?>> convertedBy() default DefaultTypeConverter.class;
-
+public @interface Serialized
+{
 }

@@ -25,16 +25,16 @@ import org.exoplatform.webui.application.replication.api.TypeConverter;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class DefaultTypeConverter extends TypeConverter<Object, Object>
+public class DefaultTypeConverter<O> extends TypeConverter<O, O>
 {
    @Override
-   public Object write(Object input) throws Exception
+   public O write(O input) throws Exception
    {
       return input;
    }
 
    @Override
-   public Object read(Object output) throws Exception
+   public O read(O output) throws Exception
    {
       return output;
    }

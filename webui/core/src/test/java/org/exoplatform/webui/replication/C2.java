@@ -19,13 +19,13 @@
 
 package org.exoplatform.webui.replication;
 
-import org.exoplatform.webui.application.replication.api.annotations.ReplicatedType;
+import org.exoplatform.webui.application.replication.api.annotations.Serialized;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-@ReplicatedType
+@Serialized
 public class C2 extends C1
 {
 

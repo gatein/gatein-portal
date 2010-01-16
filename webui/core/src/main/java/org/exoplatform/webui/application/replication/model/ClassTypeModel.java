@@ -19,6 +19,8 @@
 
 package org.exoplatform.webui.application.replication.model;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 
 /**
@@ -27,8 +29,49 @@ import java.util.Map;
  */
 public final class ClassTypeModel<O> extends TypeModel<O>
 {
-   ClassTypeModel(Class<O> type, TypeModel<? super O> superType, Map<String, FieldModel<O, ?>> fields)
+
+   /** . */
+   private final ClassTypeModel<? super O> superType;
+
+   /** . */
+   private final Map<String, FieldModel<O, ?>> fields;
+
+   /** . */
+   private final Map<String, FieldModel<O, ?>> immutableFields;
+
+   /** . */
+   private final boolean serialized;
+
+   ClassTypeModel(Class<O> type, ClassTypeModel<? super O> superType, Map<String, FieldModel<O, ?>> fields, boolean serialized)
    {
       super(type, superType, fields);
+
+      //
+      this.superType = superType;
+      this.fields = fields;
+      this.immutableFields = Collections.unmodifiableMap(fields);
+      this.serialized = serialized;
    }
+
+   @Override
+   public ClassTypeModel<? super O> getSuperType()
+   {
+      return superType;
+   }
+
+   public boolean isSerialized()
+   {
+      return serialized;
+   }
+
+   public Collection<FieldModel<O, ?>> getFields()
+   {
+      return immutableFields.values();
+   }
+
+   public Map<String, FieldModel<O, ?>> getFieldMap()
+   {
+      return immutableFields;
+   }
+
 }

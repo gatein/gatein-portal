@@ -21,9 +21,8 @@ package org.exoplatform.webui.application.replication.serial;
 
 import org.exoplatform.webui.application.replication.SerializationContext;
 import org.exoplatform.webui.application.replication.api.factory.ObjectFactory;
-import org.exoplatform.webui.application.replication.model.ReplicatableTypeModel;
+import org.exoplatform.webui.application.replication.model.ClassTypeModel;
 import org.exoplatform.webui.application.replication.model.FieldModel;
-import org.exoplatform.webui.application.replication.model.TypeModel;
 
 import java.io.*;
 import java.util.*;
@@ -57,7 +56,7 @@ public class ObjectReader extends ObjectInputStream
       this.idToResolutions = new HashMap<Integer, List<FutureFieldUpdate<?>>>();
    }
 
-   private <O> O instantiate(ReplicatableTypeModel<O> typeModel, Map<FieldModel<? super O, ?>, ?> state) throws InvalidClassException
+   private <O> O instantiate(ClassTypeModel<O> typeModel, Map<FieldModel<? super O, ?>, ?> state) throws InvalidClassException
    {
       try
       {
@@ -74,14 +73,14 @@ public class ObjectReader extends ObjectInputStream
       }
    }
 
-   protected <O> O instantiate(int id, DataContainer container, ReplicatableTypeModel<O> typeModel) throws IOException
+   protected <O> O instantiate(int id, DataContainer container, ClassTypeModel<O> typeModel) throws IOException
    {
       Map<FieldModel<? super O, ?>, Object> state = new HashMap<FieldModel<? super O, ?>, Object>();
-      TypeModel<? super O> currentTypeModel = typeModel;
+      ClassTypeModel<? super O> currentTypeModel = typeModel;
       List<FieldUpdate<O>> sets = new ArrayList<FieldUpdate<O>>();
       while (currentTypeModel != null)
       {
-         if (currentTypeModel instanceof ReplicatableTypeModel)
+         if (currentTypeModel instanceof ClassTypeModel)
          {
             for (FieldModel<? super O, ?> fieldModel : currentTypeModel.getFields())
             {
@@ -200,7 +199,7 @@ public class ObjectReader extends ObjectInputStream
             case DataKind.OBJECT:
                id = container.readInt();
                Class<?> clazz = (Class) container.readObject();
-               ReplicatableTypeModel<?> typeModel = (ReplicatableTypeModel)context.getTypeDomain().getTypeModel(clazz);
+               ClassTypeModel<?> typeModel = (ClassTypeModel<?>)context.getTypeDomain().getTypeModel(clazz);
                return instantiate(id, container, typeModel);
             default:
                throw new StreamCorruptedException("Unrecognized data " + sw);

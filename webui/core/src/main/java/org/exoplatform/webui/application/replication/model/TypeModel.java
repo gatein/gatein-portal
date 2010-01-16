@@ -36,28 +36,10 @@ public abstract class TypeModel<O>
    /** . */
    private final TypeModel<? super O> superType;
 
-   /** . */
-   private final Map<String, FieldModel<O, ?>> fields;
-
-   /** . */
-   private final Map<String, FieldModel<O, ?>> immutableFields;
-
    TypeModel(Class<O> javaType, TypeModel<? super O> superType, Map<String, FieldModel<O, ?>> fields)
    {
       this.javaType = javaType;
       this.superType = superType;
-      this.fields = fields;
-      this.immutableFields = Collections.unmodifiableMap(fields);
-   }
-
-   public Collection<FieldModel<O, ?>> getFields()
-   {
-      return immutableFields.values();
-   }
-
-   public Map<String, FieldModel<O, ?>> getFieldMap()
-   {
-      return immutableFields;
    }
 
    public String getName()
