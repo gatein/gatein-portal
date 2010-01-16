@@ -17,20 +17,25 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.webui.application.replication.annotations;
+package org.exoplatform.webui.application.replication.impl.api;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import org.exoplatform.webui.application.replication.api.TypeConverter;
 
 /**
- * Annotates a field
- *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-@Target(ElementType.FIELD)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface ReplicatedField {
+public class DefaultTypeConverter extends TypeConverter<Object, Object>
+{
+   @Override
+   public Object write(Object input) throws Exception
+   {
+      return input;
+   }
+
+   @Override
+   public Object read(Object output) throws Exception
+   {
+      return output;
+   }
 }

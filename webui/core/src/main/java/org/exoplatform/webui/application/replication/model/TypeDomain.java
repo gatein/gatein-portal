@@ -19,7 +19,7 @@
 
 package org.exoplatform.webui.application.replication.model;
 
-import org.exoplatform.webui.application.replication.annotations.ReplicatedType;
+import org.exoplatform.webui.application.replication.api.annotations.ReplicatedType;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;

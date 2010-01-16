@@ -17,29 +17,20 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.webui.application.replication.factory;
+package org.exoplatform.webui.application.replication.api.annotations;
 
-import org.exoplatform.webui.application.replication.model.FieldModel;
-
-import java.util.Map;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
+ * Annotates a field
+ *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
- * @param <B> the base object type
  */
-public abstract class ObjectFactory<B>
-{
-
-   /**
-    * Instantiate an object based on the provided class.
-    *
-    * @param type the type
-    * @param state the state
-    * @param <S> the sub type of the base type
-    * @return the S instance
-    * @throws CreateException anything wrong that could happen during instance creation
-    */
-   public abstract <S extends B> S create(Class<S> type, Map<FieldModel<? super S, ?>, ?> state) throws CreateException;
-
+@Target(ElementType.FIELD)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface ReplicatedField {
 }

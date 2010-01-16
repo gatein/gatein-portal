@@ -17,27 +17,17 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.webui.replication.factory;
-
-import org.exoplatform.webui.application.replication.api.annotations.ReplicatedType;
+package org.exoplatform.webui.application.replication.api;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-@ReplicatedType
-public class B
+public abstract class TypeConverter<I, O>
 {
-   public B()
-   {
-      this(true);
-   }
 
-   public B(boolean fail)
-   {
-      if (fail)
-      {
-         throw new RuntimeException();
-      }
-   }
+   public abstract O write(I input) throws Exception;
+
+   public abstract I read(O output) throws Exception;
+
 }

@@ -19,7 +19,7 @@
 
 package org.exoplatform.webui.replication.factory;
 
-import org.exoplatform.webui.application.replication.annotations.ReplicatedType;
+import org.exoplatform.webui.application.replication.api.annotations.ReplicatedType;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>

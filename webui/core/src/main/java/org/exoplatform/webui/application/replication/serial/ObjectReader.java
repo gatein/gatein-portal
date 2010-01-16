@@ -20,7 +20,7 @@
 package org.exoplatform.webui.application.replication.serial;
 
 import org.exoplatform.webui.application.replication.SerializationContext;
-import org.exoplatform.webui.application.replication.factory.ObjectFactory;
+import org.exoplatform.webui.application.replication.api.factory.ObjectFactory;
 import org.exoplatform.webui.application.replication.model.ReplicatableTypeModel;
 import org.exoplatform.webui.application.replication.model.FieldModel;
 import org.exoplatform.webui.application.replication.model.TypeModel;

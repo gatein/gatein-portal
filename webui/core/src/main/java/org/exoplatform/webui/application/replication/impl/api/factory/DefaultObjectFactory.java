@@ -17,27 +17,41 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.webui.replication.factory;
+package org.exoplatform.webui.application.replication.impl.api.factory;
 
-import org.exoplatform.webui.application.replication.api.annotations.ReplicatedType;
+import org.exoplatform.webui.application.replication.api.factory.CreateException;
+import org.exoplatform.webui.application.replication.api.factory.ObjectFactory;
+import org.exoplatform.webui.application.replication.model.FieldModel;
+
+import java.util.Map;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-@ReplicatedType
-public class B
+public final class DefaultObjectFactory extends ObjectFactory<Object>
 {
-   public B()
+   @Override
+   public <S> S create(Class<S> type, Map<FieldModel<? super S, ?>, ?> state) throws CreateException
    {
-      this(true);
-   }
-
-   public B(boolean fail)
-   {
-      if (fail)
+      try
       {
-         throw new RuntimeException();
+         S instance = type.newInstance();
+
+         //
+         for (Map.Entry<FieldModel<? super S, ?>, ?> entry : state.entrySet())
+         {
+            FieldModel<?, ?> fieldModel = entry.getKey();
+            Object value = entry.getValue();
+            fieldModel.castAndSet(instance, value);
+         }
+
+         //
+         return instance;
+      }
+      catch (Exception e)
+      {
+         throw new CreateException(e);
       }
    }
 }

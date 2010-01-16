@@ -19,8 +19,8 @@
 
 package org.exoplatform.webui.application.replication;
 
-import org.exoplatform.webui.application.replication.factory.DefaultObjectFactory;
-import org.exoplatform.webui.application.replication.factory.ObjectFactory;
+import org.exoplatform.webui.application.replication.impl.api.factory.DefaultObjectFactory;
+import org.exoplatform.webui.application.replication.api.factory.ObjectFactory;
 import org.exoplatform.webui.application.replication.model.TypeDomain;
 import org.exoplatform.webui.application.replication.serial.ObjectReader;
 import org.exoplatform.webui.application.replication.serial.ObjectWriter;

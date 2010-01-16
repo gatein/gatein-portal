@@ -17,39 +17,26 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.webui.application.replication.factory;
+package org.exoplatform.webui.application.replication.api.annotations;
 
-import org.exoplatform.webui.application.replication.model.FieldModel;
+import org.exoplatform.webui.application.replication.api.TypeConverter;
+import org.exoplatform.webui.application.replication.impl.api.DefaultTypeConverter;
 
-import java.util.Map;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
+ * Annotates a field
+ *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public final class DefaultObjectFactory extends ObjectFactory<Object>
-{
-   @Override
-   public <S> S create(Class<S> type, Map<FieldModel<? super S, ?>, ?> state) throws CreateException
-   {
-      try
-      {
-         S instance = type.newInstance();
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface ReplicatedType {
 
-         //
-         for (Map.Entry<FieldModel<? super S, ?>, ?> entry : state.entrySet())
-         {
-            FieldModel<?, ?> fieldModel = entry.getKey();
-            Object value = entry.getValue();
-            fieldModel.castAndSet(instance, value);
-         }
+   Class<? extends TypeConverter<?, ?>> convertedBy() default DefaultTypeConverter.class;
 
-         //
-         return instance;
-      }
-      catch (Exception e)
-      {
-         throw new CreateException(e);
-      }
-   }
 }

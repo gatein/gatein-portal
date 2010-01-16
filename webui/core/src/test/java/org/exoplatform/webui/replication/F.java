@@ -19,7 +19,7 @@
 
 package org.exoplatform.webui.replication;
 
-import org.exoplatform.webui.application.replication.annotations.ReplicatedType;
+import org.exoplatform.webui.application.replication.api.annotations.ReplicatedType;
 
 import java.util.ArrayList;
 import java.util.List;

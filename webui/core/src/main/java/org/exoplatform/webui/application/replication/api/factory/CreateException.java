@@ -17,20 +17,30 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.webui.application.replication.annotations;
-
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+package org.exoplatform.webui.application.replication.api.factory;
 
 /**
- * Annotates a field
- *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-@Target(ElementType.TYPE)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface ReplicatedType {
+public class CreateException extends Exception
+{
+   public CreateException()
+   {
+   }
+
+   public CreateException(String message)
+   {
+      super(message);
+   }
+
+   public CreateException(String message, Throwable cause)
+   {
+      super(message, cause);
+   }
+
+   public CreateException(Throwable cause)
+   {
+      super(cause);
+   }
 }

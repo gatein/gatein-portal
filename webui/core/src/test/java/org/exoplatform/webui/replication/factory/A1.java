@@ -19,8 +19,8 @@
 
 package org.exoplatform.webui.replication.factory;
 
-import org.exoplatform.webui.application.replication.factory.ObjectFactory;
-import org.exoplatform.webui.application.replication.factory.CreateException;
+import org.exoplatform.webui.application.replication.api.factory.ObjectFactory;
+import org.exoplatform.webui.application.replication.api.factory.CreateException;
 import org.exoplatform.webui.application.replication.model.FieldModel;
 
 import java.util.Map;
