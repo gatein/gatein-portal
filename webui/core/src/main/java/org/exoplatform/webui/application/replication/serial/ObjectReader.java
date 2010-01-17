@@ -261,4 +261,19 @@ public class ObjectReader extends ObjectInputStream
          return obj;
       }
    }
+
+   @Override
+   protected Class<?> resolveClass(ObjectStreamClass desc) throws IOException, ClassNotFoundException
+   {
+      try
+      {
+         ClassLoader cl = Thread.currentThread().getContextClassLoader();
+         String name = desc.getName();
+         return Class.forName(name, false, cl);
+      }
+      catch (ClassNotFoundException ex)
+      {
+         return super.resolveClass(desc);
+      }
+   }
 }

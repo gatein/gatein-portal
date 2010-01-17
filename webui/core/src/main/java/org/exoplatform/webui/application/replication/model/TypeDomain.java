@@ -22,6 +22,10 @@ package org.exoplatform.webui.application.replication.model;
 import org.exoplatform.webui.application.replication.api.TypeConverter;
 import org.exoplatform.webui.application.replication.api.annotations.Converted;
 import org.exoplatform.webui.application.replication.api.annotations.Serialized;
+import org.exoplatform.webui.application.replication.model.metadata.ClassTypeMetaData;
+import org.exoplatform.webui.application.replication.model.metadata.ConvertedTypeMetaData;
+import org.exoplatform.webui.application.replication.model.metadata.DomainMetaData;
+import org.exoplatform.webui.application.replication.model.metadata.TypeMetaData;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
@@ -53,6 +57,9 @@ public final class TypeDomain
    }
 
    /** . */
+   private final DomainMetaData metaData;
+
+   /** . */
    private final Map<String, TypeModel<?>> typeModelMap;
 
    /** . */
@@ -64,12 +71,22 @@ public final class TypeDomain
    /** . */
    private final boolean buildIfAbsent;
 
-   public TypeDomain()
+   public TypeDomain(boolean putIfAbsent)
    {
-      this(false);
+      this(new DomainMetaData(), putIfAbsent);
    }
 
-   public TypeDomain(boolean buildIfAbsent)
+   public TypeDomain()
+   {
+      this(new DomainMetaData(), false);
+   }
+
+   public TypeDomain(DomainMetaData metaData)
+   {
+      this(metaData, false);
+   }
+
+   public TypeDomain(DomainMetaData metaData, boolean buildIfAbsent)
    {
       ConcurrentHashMap<String, TypeModel<?>> typeModelMap = new ConcurrentHashMap<String, TypeModel<?>>();
       Map<String, TypeModel<?>> immutableTypeModelMap = Collections.unmodifiableMap(typeModelMap);
@@ -80,6 +97,7 @@ public final class TypeDomain
       this.immutableTypeModelMap = immutableTypeModelMap;
       this.immutableTypeModelSet = immutableTypeModelSet;
       this.buildIfAbsent = buildIfAbsent;
+      this.metaData = new DomainMetaData(metaData);
    }
 
    public Map<String, TypeModel<?>> getTypeModelMap()
@@ -169,25 +187,39 @@ public final class TypeDomain
       //
       if (typeModel == null)
       {
-         boolean serialized = javaType.getAnnotation(Serialized.class) != null;
-         boolean converted = javaType.getAnnotation(Converted.class) != null;
+         TypeMetaData typeMetaData = metaData.getTypeMetaData(javaType);
 
          //
-         if (serialized)
+         if (typeMetaData == null)
          {
-            if (converted)
+            boolean serialized = javaType.getAnnotation(Serialized.class) != null;
+            Converted converted = javaType.getAnnotation(Converted.class);
+            if (serialized)
             {
-               throw new TypeException();
+               if (converted != null)
+               {
+                  throw new TypeException();
+               }
+               typeMetaData = new ClassTypeMetaData(true);
             }
-            typeModel = buildClassType(javaType, addedTypeModels, true);
+            else if (converted != null)
+            {
+               typeMetaData = new ConvertedTypeMetaData(converted.value());
+            }
+            else
+            {
+               typeMetaData = new ClassTypeMetaData(false);
+            }
          }
-         else if (converted)
+
+         //
+         if (typeMetaData instanceof ClassTypeMetaData)
          {
-            typeModel = buildConvertedType(javaType, addedTypeModels);
+            typeModel = buildClassType(javaType, addedTypeModels, (ClassTypeMetaData)typeMetaData);
          }
          else
          {
-            typeModel = buildClassType(javaType, addedTypeModels, false);
+            typeModel = buildConvertedType(javaType, addedTypeModels, (ConvertedTypeMetaData)typeMetaData);
          }
       }
 
@@ -195,12 +227,12 @@ public final class TypeDomain
       return typeModel;
    }
 
-   private <O> ConvertedTypeModel<O, ?> buildConvertedType(Class<O> javaType, Map<String, TypeModel<?>> addedTypeModels)
+   private <O> ConvertedTypeModel<O, ?> buildConvertedType(
+      Class<O> javaType,
+      Map<String, TypeModel<?>> addedTypeModels,
+      ConvertedTypeMetaData typeMetaData)
    {
-      Converted converted = javaType.getAnnotation(Converted.class);
-
-      //
-      Class<? extends TypeConverter<?, ?>> converterClass = converted.value();
+      Class<? extends TypeConverter<?, ?>> converterClass = typeMetaData.getConverterClass();
       ParameterizedType converterParameterizedType = (ParameterizedType)converterClass.getGenericSuperclass();
 
       //
@@ -210,7 +242,7 @@ public final class TypeDomain
       }
 
       //
-      Class<? extends TypeConverter<O, ?>> converterJavaType = (Class<TypeConverter<O, ?>>)converted.value();
+      Class<? extends TypeConverter<O, ?>> converterJavaType = (Class<TypeConverter<O, ?>>)typeMetaData.getConverterClass();
 
       //
       return buildConvertedType(javaType, addedTypeModels, converterJavaType);
@@ -244,7 +276,7 @@ public final class TypeDomain
       return typeModel;
    }
 
-   private <O> ClassTypeModel<O> buildClassType(Class<O> javaType, Map<String, TypeModel<?>> addedTypeModels, boolean serialized)
+   private <O> ClassTypeModel<O> buildClassType(Class<O> javaType, Map<String, TypeModel<?>> addedTypeModels, ClassTypeMetaData typeMetaData)
    {
       ClassTypeModel<? super O> superTypeModel = null;
       if (javaType.getSuperclass() != null)
@@ -265,7 +297,7 @@ public final class TypeDomain
 
       //
       SerializationMode serializationMode;
-      if (serialized)
+      if (typeMetaData.isSerialized())
       {
          serializationMode = SerializationMode.SERIALIZED;
       }

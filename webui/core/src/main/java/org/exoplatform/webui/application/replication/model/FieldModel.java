@@ -114,4 +114,10 @@ public final class FieldModel<O, V>
          throw new AssertionError(e);
       }
    }
+
+   @Override
+   public String toString()
+   {
+      return "FieldModel[name=" + field.getName() + ",owner=" + owner + "]";
+   }
 }
