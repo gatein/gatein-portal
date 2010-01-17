@@ -23,6 +23,7 @@ import org.exoplatform.webui.application.replication.api.TypeConverter;
 import org.exoplatform.webui.application.replication.api.annotations.Converted;
 import org.exoplatform.webui.application.replication.api.annotations.Serialized;
 
+import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
@@ -263,7 +264,22 @@ public final class TypeDomain
       TreeMap<String, FieldModel<O, ?>> fieldModels = new TreeMap<String, FieldModel<O, ?>>();
 
       //
-      ClassTypeModel<O> typeModel = new ClassTypeModel<O>(javaType, superTypeModel, fieldModels, serialized);
+      SerializationMode serializationMode;
+      if (serialized)
+      {
+         serializationMode = SerializationMode.SERIALIZED;
+      }
+      else if (Serializable.class.isAssignableFrom(javaType))
+      {
+         serializationMode = SerializationMode.SERIALIZABLE;
+      }
+      else
+      {
+         serializationMode = SerializationMode.NONE;
+      }
+
+      //
+      ClassTypeModel<O> typeModel = new ClassTypeModel<O>(javaType, superTypeModel, fieldModels, serializationMode);
 
       //
       addedTypeModels.put(javaType.getName(), typeModel);

@@ -21,10 +21,7 @@ package org.exoplatform.webui.application.replication.serial;
 
 import org.exoplatform.webui.application.replication.SerializationContext;
 import org.exoplatform.webui.application.replication.api.TypeConverter;
-import org.exoplatform.webui.application.replication.model.ClassTypeModel;
-import org.exoplatform.webui.application.replication.model.ConvertedTypeModel;
-import org.exoplatform.webui.application.replication.model.FieldModel;
-import org.exoplatform.webui.application.replication.model.TypeModel;
+import org.exoplatform.webui.application.replication.model.*;
 
 import java.io.*;
 import java.util.IdentityHashMap;
@@ -125,78 +122,85 @@ public class ObjectWriter extends ObjectOutputStream
 
    private <O> void write(ClassTypeModel<O> typeModel, O obj, DataContainer output) throws IOException
    {
-      if (!typeModel.isSerialized())
+      if (typeModel.getSerializationMode() == SerializationMode.SERIALIZED)
       {
-         throw new NotSerializableException("Type " + typeModel + " cannot be serialized");
-      }
+         //
+         output.writeInt(DataKind.OBJECT);
+         output.writeInt(register(obj));
+         output.writeObject(typeModel.getJavaType());
 
-      //
-      output.writeInt(DataKind.OBJECT);
-      output.writeInt(register(obj));
-      output.writeObject(typeModel.getJavaType());
-
-      //
-      SerializationStatus status = SerializationStatus.NONE;
-      for (ClassTypeModel<? super O> currentTypeModel = typeModel;currentTypeModel != null;currentTypeModel = currentTypeModel.getSuperType())
-      {
-         if (currentTypeModel instanceof ClassTypeModel<?>)
+         //
+         SerializationStatus status = SerializationStatus.NONE;
+         for (ClassTypeModel<? super O> currentTypeModel = typeModel;currentTypeModel != null;currentTypeModel = currentTypeModel.getSuperType())
          {
-            for (FieldModel<?, ?> fieldModel : currentTypeModel.getFields())
+            if (currentTypeModel instanceof ClassTypeModel<?>)
             {
-               if (!fieldModel.isTransient())
+               for (FieldModel<?, ?> fieldModel : currentTypeModel.getFields())
                {
-                  Object fieldValue = fieldModel.get(obj);
-                  if (fieldValue == null)
+                  if (!fieldModel.isTransient())
                   {
-                     output.writeObject(DataKind.NULL_VALUE);
-                  }
-                  else
-                  {
-                     Integer fieldValueId = objectToId.get(fieldValue);
-                     if (fieldValueId != null)
+                     Object fieldValue = fieldModel.get(obj);
+                     if (fieldValue == null)
                      {
-                        output.writeObject(DataKind.OBJECT_REF);
-                        output.writeInt(fieldValueId);
+                        output.writeObject(DataKind.NULL_VALUE);
                      }
                      else
                      {
-                        output.writeObject(DataKind.OBJECT);
-                        output.writeObject(fieldValue);
+                        Integer fieldValueId = objectToId.get(fieldValue);
+                        if (fieldValueId != null)
+                        {
+                           output.writeObject(DataKind.OBJECT_REF);
+                           output.writeInt(fieldValueId);
+                        }
+                        else
+                        {
+                           output.writeObject(DataKind.OBJECT);
+                           output.writeObject(fieldValue);
+                        }
                      }
                   }
                }
-            }
-            switch (status)
-            {
-               case NONE:
-                  status = SerializationStatus.FULL;
-                  break;
-            }
-         }
-         else
-         {
-            if (!currentTypeModel.getFields().isEmpty())
-            {
                switch (status)
                {
-                  case FULL:
-                     status = SerializationStatus.PARTIAL;
+                  case NONE:
+                     status = SerializationStatus.FULL;
                      break;
                }
             }
+            else
+            {
+               if (!currentTypeModel.getFields().isEmpty())
+               {
+                  switch (status)
+                  {
+                     case FULL:
+                        status = SerializationStatus.PARTIAL;
+                        break;
+                  }
+               }
+            }
+         }
+
+         //
+         switch (status)
+         {
+            case FULL:
+               break;
+            case PARTIAL:
+               System.out.println("Partial serialization of object " + obj);
+               break;
+            case NONE:
+               throw new NotSerializableException("Type " + typeModel + " is not serializable");
          }
       }
-
-      //
-      switch (status)
+      else if (typeModel.getSerializationMode() == SerializationMode.SERIALIZABLE)
       {
-         case FULL:
-            break;
-         case PARTIAL:
-            System.out.println("Partial serialization of object " + obj);
-            break;
-         case NONE:
-            throw new NotSerializableException("Type " + typeModel + " is not serializable");
+         output.writeInt(DataKind.SERIALIZED_OBJECT);
+         output.writeObject(obj);
+      }
+      else
+      {
+         throw new NotSerializableException("Type " + typeModel + " is not serializable");
       }
    }
 

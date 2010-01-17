@@ -40,9 +40,9 @@ public final class ClassTypeModel<O> extends TypeModel<O>
    private final Map<String, FieldModel<O, ?>> immutableFields;
 
    /** . */
-   private final boolean serialized;
+   private final SerializationMode serializationMode;
 
-   ClassTypeModel(Class<O> type, ClassTypeModel<? super O> superType, Map<String, FieldModel<O, ?>> fields, boolean serialized)
+   ClassTypeModel(Class<O> type, ClassTypeModel<? super O> superType, Map<String, FieldModel<O, ?>> fields, SerializationMode serializationMode)
    {
       super(type, superType);
 
@@ -50,7 +50,7 @@ public final class ClassTypeModel<O> extends TypeModel<O>
       this.superType = superType;
       this.fields = fields;
       this.immutableFields = Collections.unmodifiableMap(fields);
-      this.serialized = serialized;
+      this.serializationMode = serializationMode;
    }
 
    @Override
@@ -59,9 +59,9 @@ public final class ClassTypeModel<O> extends TypeModel<O>
       return superType;
    }
 
-   public boolean isSerialized()
+   public SerializationMode getSerializationMode()
    {
-      return serialized;
+      return serializationMode;
    }
 
    public Collection<FieldModel<O, ?>> getFields()

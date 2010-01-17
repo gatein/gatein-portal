@@ -109,7 +109,6 @@ public class ObjectReader extends ObjectInputStream
                         Object o = container.readObject();
                         state.put(fieldModel, o);
                         break;
-
                   }
                }
             }
@@ -207,6 +206,8 @@ public class ObjectReader extends ObjectInputStream
             ConvertedTypeModel<?, ?> ctm = (ConvertedTypeModel<?,?>) context.getTypeDomain().getTypeModel(tclazz);
             return convertObject(container, ctm);
          }
+         case DataKind.SERIALIZED_OBJECT:
+            return container.readObject();
          default:
             throw new StreamCorruptedException("Unrecognized data " + sw);
       }
@@ -228,14 +229,14 @@ public class ObjectReader extends ObjectInputStream
       }
 
       //
-      O o;
+      O o = null;
       try
       {
          o = converter.read(t);
       }
       catch (Exception e)
       {
-         InvalidObjectException ioe = new InvalidObjectException("The object " + t + " conversion throw an exception ");
+         InvalidObjectException ioe = new InvalidObjectException("The object " + t + " conversion throw an exception " + converter);
          ioe.initCause(e);
          throw ioe;
       }

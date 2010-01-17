@@ -35,7 +35,7 @@ import java.io.InvalidObjectException;
 public class TestConverter extends TestCase
 {
 
-   public void testConvert() throws Exception
+   public void testConvertSerializedType() throws Exception
    {
       TypeDomain domain = new TypeDomain();
       domain.add(A1.class);
@@ -58,6 +58,18 @@ public class TestConverter extends TestCase
       SerializationContext context = new SerializationContext(domain);
       a = context.clone(a);
       assertEquals("foo", a.state);
+   }
+
+   public void testConvertSerializableType() throws Exception
+   {
+      TypeDomain domain = new TypeDomain();
+      domain.add(B1.class);
+      B1 b = new B1("foo");
+
+      //
+      SerializationContext context = new SerializationContext(domain);
+      b = context.clone(b);
+      assertEquals("foo", b.state);
    }
 
    public void testConverterWriteThrowsException() throws Exception

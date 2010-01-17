@@ -17,19 +17,27 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.webui.application.replication.serial;
+package org.exoplatform.webui.replication.converter;
+
+import org.exoplatform.webui.application.replication.api.annotations.Serialized;
+
+import java.io.Serializable;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class DataKind
+public class B2 implements Serializable
 {
 
-   public static final int OBJECT = 0;
-   public static final int NULL_VALUE = 1;
-   public static final int OBJECT_REF = 2;
-   public static final int CONVERTED_OBJECT = 3;
-   public static final int SERIALIZED_OBJECT = 4;
+   String state;
 
+   public B2()
+   {
+   }
+
+   public B2(String state)
+   {
+      this.state = state;
+   }
 }

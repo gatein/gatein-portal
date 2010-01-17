@@ -17,19 +17,27 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.webui.application.replication.serial;
+package org.exoplatform.webui.replication.converter;
+
+import junit.framework.AssertionFailedError;
+import org.exoplatform.webui.application.replication.api.TypeConverter;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class DataKind
+public class B3 extends TypeConverter<B1, B2>
 {
 
-   public static final int OBJECT = 0;
-   public static final int NULL_VALUE = 1;
-   public static final int OBJECT_REF = 2;
-   public static final int CONVERTED_OBJECT = 3;
-   public static final int SERIALIZED_OBJECT = 4;
+   @Override
+   public B2 write(B1 input) throws Exception
+   {
+      return new B2(input.state);
+   }
 
+   @Override
+   public B1 read(B2 output) throws Exception
+   {
+      return new B1(output.state);
+   }
 }
