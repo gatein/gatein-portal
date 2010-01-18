@@ -19,14 +19,17 @@
 
 package org.exoplatform.webui.application.replication.serial;
 
-import java.io.*;
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 import java.util.LinkedList;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class DataContainer implements Serializable
+public class DataContainer implements Externalizable
 {
 
    /** . */
@@ -55,6 +58,24 @@ public class DataContainer implements Serializable
    public Object readObject()
    {
       return structure.removeFirst();
+   }
+
+   public void writeExternal(ObjectOutput out) throws IOException
+   {
+      out.writeInt(structure.size());
+      for (Object o : structure)
+      {
+         out.writeObject(o);
+      }
+   }
+
+   public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException
+   {
+      int size = in.readInt();
+      while (size-- > 0)
+      {
+         structure.addLast(in.readObject());
+      }
    }
 
    @Override

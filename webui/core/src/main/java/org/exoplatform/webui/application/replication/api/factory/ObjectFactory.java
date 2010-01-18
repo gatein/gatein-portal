@@ -24,21 +24,24 @@ import org.exoplatform.webui.application.replication.model.FieldModel;
 import java.util.Map;
 
 /**
+ * A factory that creates instance of a type.
+ *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
- * @param <B> the base object type
+ * @param <B> the paraemter type of the base type
  */
 public abstract class ObjectFactory<B>
 {
 
    /**
-    * Instantiate an object based on the provided class.
+    * Instantiate an object based on the provided type. The implementor should take care of
+    * configuring the state of the returned objet with the provided state map argument.
     *
     * @param type the type
     * @param state the state
-    * @param <S> the sub type of the base type
+    * @param <S> the parameter type of the sub type of the base type
     * @return the S instance
-    * @throws CreateException anything wrong that could happen during instance creation
+    * @throws CreateException anything wrong that happened during instance creation
     */
    public abstract <S extends B> S create(Class<S> type, Map<FieldModel<? super S, ?>, ?> state) throws CreateException;
 

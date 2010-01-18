@@ -23,7 +23,7 @@ package org.exoplatform.webui.application.replication.serial;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class DataKind
+class DataKind
 {
 
    public static final int OBJECT = 0;
