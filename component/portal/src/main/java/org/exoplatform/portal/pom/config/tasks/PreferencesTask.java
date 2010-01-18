@@ -19,6 +19,7 @@
 
 package org.exoplatform.portal.pom.config.tasks;
 
+import org.exoplatform.commons.utils.DataMissingException;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.POMTask;
 import org.exoplatform.portal.pom.config.cache.CacheableDataTask;
@@ -48,6 +49,9 @@ public abstract class PreferencesTask<S>
       public String run(POMSession session) throws Exception
       {
          Customization<S> customization = (Customization<S>)session.findCustomizationById(storageId);
+         if (customization == null) {
+            throw new DataMissingException("Can not find " + storageId);
+         }
          return customization.getContentId();
       }
    }
@@ -131,7 +135,9 @@ public abstract class PreferencesTask<S>
       {
 
          Customization<S> customization = (Customization<S>)session.findCustomizationById(storageId);
-
+         if (customization == null) {
+            throw new DataMissingException("Can not find " + storageId);
+         }
          if (prefs != null)
          {
             customization.setState(prefs);

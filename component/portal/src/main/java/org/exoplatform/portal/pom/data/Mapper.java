@@ -19,6 +19,7 @@
 
 package org.exoplatform.portal.pom.data;
 
+import org.exoplatform.commons.utils.DataMissingException;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.model.ApplicationState;
 import org.exoplatform.portal.config.model.ApplicationType;
@@ -397,6 +398,7 @@ public class Mapper
 
    private List<ComponentData> loadChildren(UIContainer src)
    {
+      if (src == null) throw new DataMissingException("Can not load children");
       ArrayList<ComponentData> children = new ArrayList<ComponentData>(src.size());
       for (UIComponent component : src)
       {

@@ -19,6 +19,7 @@
 
 package org.exoplatform.portal.pom.config.tasks;
 
+import org.exoplatform.commons.utils.DataMissingException;
 import org.exoplatform.portal.application.PortletPreferences;
 import org.exoplatform.portal.pom.config.cache.DataAccessMode;
 import org.exoplatform.portal.pom.config.cache.CacheableDataTask;
@@ -79,7 +80,7 @@ public abstract class PortalConfigTask
          Site site = workspace.getSite(type, key.getId());
          if (site == null)
          {
-            throw new NullPointerException("Could not remove non existing portal " + key.getId());
+            throw new DataMissingException("Could not remove non existing portal " + key.getId());
          }
          else
          {

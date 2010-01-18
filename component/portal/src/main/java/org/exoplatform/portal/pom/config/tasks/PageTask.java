@@ -19,6 +19,7 @@
 
 package org.exoplatform.portal.pom.config.tasks;
 
+import org.exoplatform.commons.utils.DataMissingException;
 import org.exoplatform.portal.pom.config.POMTask;
 import org.exoplatform.portal.pom.config.cache.DataAccessMode;
 import org.exoplatform.portal.pom.config.cache.CacheableDataTask;
@@ -111,7 +112,7 @@ public abstract class PageTask
          Site srcSite = workspace.getSite(siteType, ownerId);
          if (srcSite == null)
          {
-            throw new IllegalArgumentException("Could not clone  page " + name + "from non existing site of type "
+            throw new DataMissingException("Could not clone  page " + name + "from non existing site of type "
                + ownerType + " with id " + ownerId);
          }
          else
@@ -124,7 +125,7 @@ public abstract class PageTask
          //
          if (srcPage == null)
          {
-            throw new IllegalArgumentException("Could not clone non existing page " + name + " from site of type "
+            throw new DataMissingException("Could not clone non existing page " + name + " from site of type "
                + ownerType + " with id " + ownerId);
          }
 
@@ -266,7 +267,7 @@ public abstract class PageTask
          Site site = workspace.getSite(siteType, ownerId);
          if (site == null)
          {
-            throw new IllegalArgumentException("Could not remove page " + name + "of non existing site of type "
+            throw new DataMissingException("Could not remove page " + name + "of non existing site of type "
                + ownerType + " with id " + ownerId);
          }
          else
@@ -276,7 +277,7 @@ public abstract class PageTask
             org.gatein.mop.api.workspace.Page page = pages.getChild(name);
             if (page == null)
             {
-               throw new IllegalArgumentException("Could not remove non existing page " + name + " of site of type "
+               throw new DataMissingException("Could not remove non existing page " + name + " of site of type "
                   + ownerType + " with id " + ownerId);
             }
             page.destroy();

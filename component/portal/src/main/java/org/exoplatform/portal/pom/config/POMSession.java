@@ -24,6 +24,7 @@ import org.chromattic.api.UndeclaredRepositoryException;
 import org.exoplatform.commons.chromattic.SessionContext;
 import org.exoplatform.commons.chromattic.SynchronizationListener;
 import org.exoplatform.commons.chromattic.SynchronizationStatus;
+import org.exoplatform.commons.utils.DataMissingException;
 import org.exoplatform.portal.application.PortletPreferences;
 import org.exoplatform.portal.pom.data.Mapper;
 import org.gatein.mop.api.Model;
@@ -200,7 +201,11 @@ public class POMSession
 
    public Customization<?> findCustomizationById(String id)
    {
-      return getModel().findCustomizationById(id);
+      Customization<?> customization = getModel().findCustomizationById(id);
+      if (customization == null) {
+         throw new DataMissingException("Can not find " + id);
+      }
+      return customization;
    }
 
    public void addPortletPreferences(PortletPreferences prefs)
