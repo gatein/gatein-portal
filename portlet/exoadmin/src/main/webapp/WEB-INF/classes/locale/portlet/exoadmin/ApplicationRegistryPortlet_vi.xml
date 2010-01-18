@@ -145,6 +145,7 @@
     <msg>
       <PortletExist>Ứng dụng này đã tồn tại trong danh mục này, hãy chọn một ứng dụng khác!</PortletExist>
       <appNotExists>Vui lòng chọn một ứng dụng.</appNotExists>
+      <typeNoApps>Không tồn tại ứng dụng theo kiểu ứng dụng đã chọn.</typeNoApps>
     </msg>
     <label>
       <displayName>#{label.displayName}</displayName>

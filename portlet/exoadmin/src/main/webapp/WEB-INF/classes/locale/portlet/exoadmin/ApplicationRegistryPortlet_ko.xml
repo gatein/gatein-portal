@@ -145,6 +145,7 @@
     <msg>
       <PortletExist>카테고리에 이 애플리케이션이 이미 존재합니다. 다른 애플리케이션을 선택해 주십시오.</PortletExist>
       <appNotExists>애플리케이션을 선택해 주십시오.</appNotExists>
+      <typeNoApps>There is no applications of this type.</typeNoApps>
     </msg>
     <label>
       <displayName>#{label.displayName}</displayName>

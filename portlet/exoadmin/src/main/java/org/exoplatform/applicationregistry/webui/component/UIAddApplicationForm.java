@@ -37,8 +37,8 @@ import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormInputInfo;
 import org.exoplatform.webui.form.UIFormInputSet;
@@ -196,7 +196,7 @@ public class UIAddApplicationForm extends UIForm
          String portletName = info.getName();
          Application app = new Application();
          app.setApplicationName(portletName);
-//         app.setApplicationGroup(info.getApplicationName());
+         //         app.setApplicationGroup(info.getApplicationName());
          ApplicationType appType;
          String contentId;
          if (remote)
@@ -207,7 +207,7 @@ public class UIAddApplicationForm extends UIForm
          else
          {
             appType = ApplicationType.PORTLET;
-            contentId = info.getApplicationName() + "/" + info.getName(); 
+            contentId = info.getApplicationName() + "/" + info.getName();
          }
          app.setType(appType);
          app.setDisplayName(Util.getLocalizedStringValue(displayNameLS, portletName));
@@ -228,6 +228,14 @@ public class UIAddApplicationForm extends UIForm
          UIAddApplicationForm uiForm = event.getSource();
          String type = uiForm.getUIFormSelectBox(UIAddApplicationForm.FIELD_TYPE).getValue();
          uiForm.setApplicationList(type);
+         uiForm.getChild(UIFormTableIteratorInputSet.class).setRendered(true);
+         if (uiForm.getApplications().size() == 0)
+         {
+            UIApplication uiApp = event.getRequestContext().getUIApplication();
+            uiApp.addMessage(new ApplicationMessage("UIAddApplicationForm.msg.typeNoApps", null));
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+            uiForm.getChild(UIFormTableIteratorInputSet.class).setRendered(false);
+         }
          event.getRequestContext().addUIComponentToUpdateByAjax(uiForm);
       }
 
@@ -282,7 +290,7 @@ public class UIAddApplicationForm extends UIForm
          uiOrganizer.setSelectedCategory(selectedCate.getName());
          uiOrganizer.selectApplication(app.getApplicationName());
          ctx.addUIComponentToUpdateByAjax(uiOrganizer);
-      }     
+      }
 
       private Application cloneApplication(Application app)
       {
