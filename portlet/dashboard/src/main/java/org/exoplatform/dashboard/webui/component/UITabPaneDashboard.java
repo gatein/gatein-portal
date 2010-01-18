@@ -390,7 +390,7 @@ public class UITabPaneDashboard extends UIContainer
            // set maximizedUIComponent of UIPageBody is null if it is maximized portlet of removed page
            UIPortal uiPortal = Util.getUIPortal();
            UIPageBody uiPageBody = uiPortal.findFirstComponentOfType(UIPageBody.class);
-           if(uiPageBody.getMaximizedUIComponent() != null){
+           if(uiPageBody != null && uiPageBody.getMaximizedUIComponent() != null){
              uiPageBody.setMaximizedUIComponent(null);
            }
            
