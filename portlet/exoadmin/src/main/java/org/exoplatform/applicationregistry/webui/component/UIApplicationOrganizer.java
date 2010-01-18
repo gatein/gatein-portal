@@ -31,6 +31,7 @@ import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
+import org.exoplatform.webui.application.replication.api.annotations.Serialized;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -53,7 +54,8 @@ import javax.portlet.PortletPreferences;
    @EventConfig(listeners = UIApplicationOrganizer.EditCategoryActionListener.class),
    @EventConfig(listeners = UIApplicationOrganizer.AddApplicationActionListener.class),
    @EventConfig(listeners = UIApplicationOrganizer.RemoveApplicationActionListener.class, confirm = "UIOrganizer.msg.deleteApplication")})
-public class UIApplicationOrganizer extends UIContainer
+@Serialized
+public class   UIApplicationOrganizer extends UIContainer
 {
 
    private ApplicationCategory selectedCategory;
@@ -279,7 +281,8 @@ public class UIApplicationOrganizer extends UIContainer
          UIApplicationOrganizer uiOrganizer = event.getSource();
          Application selectedApp = uiOrganizer.getApplication(appName);
          ApplicationRegistryService service = uiOrganizer.getApplicationComponent(ApplicationRegistryService.class);
-         if (service.getApplication(selectedApp.getId()) == null)
+         String selectedAppId = selectedApp.getId();
+         if (service.getApplication(selectedAppId) == null)
          {
             UIApplication uiApp = ctx.getUIApplication();
             uiApp.addMessage(new ApplicationMessage("UIOrganizer.msg.applicationNoExist", null));

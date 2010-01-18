@@ -20,6 +20,7 @@
 package org.exoplatform.webui.core;
 
 import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.replication.api.annotations.Serialized;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.event.Event;
@@ -35,6 +36,7 @@ import org.exoplatform.webui.event.EventListener;
  * A component that creates an empty popup window
  */
 @ComponentConfig(template = "system:/groovy/webui/core/UIPopupWindow.gtmpl", events = @EventConfig(listeners = UIPopupWindow.CloseActionListener.class, name = "ClosePopup"))
+@Serialized
 public class UIPopupWindow extends UIComponentDecorator
 {
    /**

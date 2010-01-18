@@ -19,13 +19,15 @@
 
 package org.exoplatform.web.application;
 
+import java.io.Serializable;
+
 /**
  * Created by The eXo Platform SARL
  * Author : Dang Van Minh
  *          minhdv81@yahoo.com
  * Jun 7, 2006
  */
-public class ApplicationMessage
+public class ApplicationMessage implements Serializable
 {
    final public static int ERROR = 0, WARNING = 1, INFO = 2;
 

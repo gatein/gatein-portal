@@ -19,6 +19,8 @@
 
 package org.exoplatform.webui.core.model;
 
+import org.exoplatform.webui.application.replication.api.annotations.Serialized;
+
 /**
  * Created by The eXo Platform SARL
  * Author : Tuan Nguyen
@@ -30,7 +32,8 @@ package org.exoplatform.webui.core.model;
  * @see SelectItemCategory
  * @see org.exoplatform.webui.form.UIFormInputItemSelector
  */
-public class SelectItemOption<T extends Object>
+@Serialized
+public class SelectItemOption<T>
 {
    /**
     * The label of the item
@@ -56,6 +59,10 @@ public class SelectItemOption<T extends Object>
     * A description of the item
     */
    protected String description_;
+
+   public SelectItemOption()
+   {
+   }
 
    public SelectItemOption(String label, T value, String icon)
    {

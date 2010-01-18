@@ -20,6 +20,7 @@
 package org.exoplatform.webui.form;
 
 import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.replication.api.annotations.Serialized;
 import org.exoplatform.webui.core.model.SelectItemOption;
 
 import java.io.Writer;
@@ -32,6 +33,7 @@ import java.util.ResourceBundle;
  * Represents a radio box element
  * The selected box value is stored in the value_ property of UIFormInputBase
  */
+@Serialized
 public class UIFormRadioBoxInput extends UIFormInputBase<String>
 {
 
@@ -50,6 +52,10 @@ public class UIFormRadioBoxInput extends UIFormInputBase<String>
    private int align_;
 
    private int topRender_ = 0;
+
+   public UIFormRadioBoxInput()
+   {
+   }
 
    public UIFormRadioBoxInput(String name, String value)
    {

@@ -24,7 +24,9 @@ package org.exoplatform.services.organization.idm;
 
 import org.exoplatform.services.organization.Group;
 
-public class ExtGroup implements Group
+import java.io.Serializable;
+
+public class ExtGroup implements Group, Serializable
 {
    private String id;
 

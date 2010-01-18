@@ -19,6 +19,7 @@
 
 package org.exoplatform.webui.form;
 
+import org.exoplatform.webui.application.replication.api.annotations.Serialized;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.form.validator.Validator;
 
@@ -34,6 +35,7 @@ import java.util.List;
  * 
  * Represents an abstract container of elements, inside a form
  */
+@Serialized
 abstract public class UIFormInputContainer<T> extends UIContainer implements UIFormInput<T>
 {
 

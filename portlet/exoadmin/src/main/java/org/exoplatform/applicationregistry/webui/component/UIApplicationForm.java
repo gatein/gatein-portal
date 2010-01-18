@@ -23,6 +23,7 @@ import org.exoplatform.application.registry.Application;
 import org.exoplatform.application.registry.ApplicationRegistryService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.replication.api.annotations.Serialized;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -48,6 +49,7 @@ import java.util.Calendar;
 @ComponentConfig(lifecycle = UIFormLifecycle.class, template = "system:/groovy/webui/form/UIFormWithTitle.gtmpl", events = {
    @EventConfig(listeners = UIApplicationForm.SaveActionListener.class),
    @EventConfig(phase = Phase.DECODE, listeners = UIApplicationForm.CancelActionListener.class)})
+@Serialized
 public class UIApplicationForm extends UIForm
 {
 

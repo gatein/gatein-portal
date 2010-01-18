@@ -23,6 +23,7 @@ import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.replication.api.annotations.Serialized;
 import org.exoplatform.webui.exception.MessageException;
 
 import java.io.Writer;
@@ -31,6 +32,7 @@ import java.io.Writer;
  * Created by The eXo Platform SAS
  * May 8, 2006
  */
+@Serialized
 abstract public class UIApplication extends UIContainer
 {
 

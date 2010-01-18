@@ -31,6 +31,7 @@ import org.exoplatform.services.security.ConversationState;
 import org.exoplatform.services.security.Identity;
 import org.exoplatform.services.security.MembershipEntry;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -574,7 +575,7 @@ public class UserACL
       return result;
    }
 
-   static public class Permission
+   static public class Permission implements Serializable
    {
 
       private String name_;

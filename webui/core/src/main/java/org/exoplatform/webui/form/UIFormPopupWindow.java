@@ -20,6 +20,7 @@
 package org.exoplatform.webui.form;
 
 import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.replication.api.annotations.Serialized;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIComponent;
@@ -37,6 +38,7 @@ import java.util.List;
  * Nov 20, 2006
  */
 @ComponentConfig(template = "system:/groovy/webui/core/UIPopupWindow.gtmpl", events = @EventConfig(listeners = UIFormPopupWindow.CloseActionListener.class, name = "CloseFormPopup", phase = Phase.DECODE))
+@Serialized
 public class UIFormPopupWindow extends UIPopupWindow implements UIFormInput<Object>
 {
 

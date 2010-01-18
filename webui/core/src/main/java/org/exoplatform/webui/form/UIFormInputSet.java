@@ -20,6 +20,7 @@
 package org.exoplatform.webui.form;
 
 import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.replication.api.annotations.Serialized;
 import org.exoplatform.webui.bean.BeanDataMapping;
 import org.exoplatform.webui.bean.ReflectionDataMapping;
 import org.exoplatform.webui.core.UIComponent;
@@ -39,10 +40,11 @@ import java.util.ResourceBundle;
  * 
  * Represents table containing several input fields
  */
+@Serialized
 public class UIFormInputSet extends UIContainer
 {
 
-   private BeanDataMapping beanMapping = null;
+   private transient BeanDataMapping beanMapping = null;
 
    private static String selectedCompId = "";
 
@@ -132,14 +134,14 @@ public class UIFormInputSet extends UIContainer
    public void invokeGetBindingField(Object bean) throws Exception
    {
       if (beanMapping == null)
-         beanMapping = new ReflectionDataMapping();
+         beanMapping = ReflectionDataMapping.getInstance();
       beanMapping.mapField(this, bean);
    }
 
    public void invokeSetBindingField(Object bean) throws Exception
    {
       if (beanMapping == null)
-         beanMapping = new ReflectionDataMapping();
+         beanMapping = ReflectionDataMapping.getInstance();
       beanMapping.mapBean(bean, this);
    }
 

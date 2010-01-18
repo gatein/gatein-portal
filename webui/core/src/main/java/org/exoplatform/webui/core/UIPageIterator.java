@@ -19,7 +19,9 @@
 
 package org.exoplatform.webui.core;
 
+import org.exoplatform.commons.utils.EmptySerializablePageList;
 import org.exoplatform.commons.utils.PageList;
+import org.exoplatform.webui.application.replication.api.annotations.Serialized;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.event.Event;
@@ -32,12 +34,13 @@ import java.util.List;
  *
  */
 @ComponentConfig(template = "system:/groovy/webui/core/UIPageIterator.gtmpl", events = @EventConfig(listeners = UIPageIterator.ShowPageActionListener.class))
+@Serialized
 public class UIPageIterator extends UIComponent
 {
    /**
     * The list of pages
     */
-   private PageList pageList_ = PageList.EMPTY_LIST;
+   private PageList pageList_ = EmptySerializablePageList.get();
 
    public UIPageIterator()
    {

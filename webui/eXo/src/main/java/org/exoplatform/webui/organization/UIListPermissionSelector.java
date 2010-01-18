@@ -19,16 +19,16 @@
 
 package org.exoplatform.webui.organization;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
+import java.io.Serializable;
+import java.util.*;
 
 import org.exoplatform.commons.utils.LazyPageList;
+import org.exoplatform.commons.utils.SerializablePageList;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.UserACL.Permission;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.replication.api.annotations.Serialized;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIBreadcumbs;
@@ -53,6 +53,7 @@ import org.exoplatform.webui.form.validator.Validator;
    @EventConfig(phase = Phase.DECODE, listeners = UIListPermissionSelector.DeleteActionListener.class, confirm = "UIAccessGroup.deleteAccessGroup"),
    @EventConfig(phase = Phase.DECODE, listeners = UIPermissionSelector.SelectMembershipActionListener.class),
    @EventConfig(phase = Phase.DECODE, listeners = UIListPermissionSelector.ChangePublicModeActionListener.class)})
+@Serialized
 public class UIListPermissionSelector extends UISelector<String[]>
 {
    private boolean publicMode_ = false;
@@ -65,7 +66,7 @@ public class UIListPermissionSelector extends UISelector<String[]>
       uiGrid.setLabel("UIListPermissionSelector");
       uiGrid.configure("expression", new String[]{"groupId", "membership"}, new String[]{"Delete"});
       UIFormPageIterator uiIterator = (UIFormPageIterator)uiGrid.getUIPageIterator();
-      uiIterator.setPageList(new LazyPageList(new PermissionListAccess(null), 10));
+      uiIterator.setPageList(new SerializablePageList(Permission.class, Collections.emptyList(), 10));
       addChild(uiIterator);
       uiIterator.setRendered(false);
       UIFormPopupWindow uiPopup = addChild(UIFormPopupWindow.class, null, null);
@@ -131,7 +132,7 @@ public class UIListPermissionSelector extends UISelector<String[]>
 
    public UIListPermissionSelector setValue(String[] permissions) throws Exception
    {
-      List<Object> list = new ArrayList<Object>();
+      List<Permission> list = new ArrayList<Permission>();
       setPublicMode(false);
       for (String exp : permissions)
       {
@@ -155,7 +156,7 @@ public class UIListPermissionSelector extends UISelector<String[]>
          list.add(permission);
       }
       UIPageIterator uiIterator = getChild(UIGrid.class).getUIPageIterator();
-      uiIterator.setPageList(new LazyPageList(new AccessGroupListAccess(list), 10));
+      uiIterator.setPageList(new SerializablePageList(Permission.class, list, 10));
       return this;
    }
 
@@ -292,7 +293,7 @@ public class UIListPermissionSelector extends UISelector<String[]>
 
    }
 
-   static public class EmptyIteratorValidator implements Validator
+   static public class EmptyIteratorValidator implements Validator, Serializable
    {
       public void validate(UIFormInput uiInput) throws Exception
       {

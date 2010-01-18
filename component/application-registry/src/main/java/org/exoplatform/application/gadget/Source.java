@@ -19,6 +19,7 @@
 
 package org.exoplatform.application.gadget;
 
+import java.io.Serializable;
 import java.util.Calendar;
 
 /**
@@ -27,7 +28,7 @@ import java.util.Calendar;
  *          thanhtungty@gmail.com
  * Oct 23, 2008  
  */
-public class Source
+public class Source implements Serializable
 {
 
    private String name;

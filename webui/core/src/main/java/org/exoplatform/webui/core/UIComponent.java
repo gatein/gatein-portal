@@ -25,6 +25,7 @@ import org.exoplatform.web.application.Parameter;
 import org.exoplatform.web.application.URLBuilder;
 import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.replication.api.annotations.Serialized;
 import org.exoplatform.webui.config.Component;
 import org.exoplatform.webui.core.renderers.ValueRenderer;
 import org.exoplatform.webui.core.renderers.ValueRendererRegistry;
@@ -37,6 +38,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /** Created by The eXo Platform SAS May 7, 2006 */
+@Serialized
 abstract public class UIComponent
 {
 
@@ -50,11 +52,13 @@ abstract public class UIComponent
 
    private boolean rendered = true;
 
-   transient protected UIComponent uiparent;
+   protected UIComponent uiparent;
 
-   transient protected Component config;
+   private String configId;
 
-   transient private ValueRendererRegistry rendererRegistry = new ValueRendererRegistry();
+   protected transient Component config;
+
+   private transient ValueRendererRegistry rendererRegistry = new ValueRendererRegistry();
 
    public String getId()
    {
@@ -164,6 +168,7 @@ abstract public class UIComponent
    public void setComponentConfig(String componentId, Component config) throws Exception
    {
       this.config = config;
+      this.configId = config.getId();
       if (componentId == null || componentId.length() == 0)
       {
          componentId = config.getId();

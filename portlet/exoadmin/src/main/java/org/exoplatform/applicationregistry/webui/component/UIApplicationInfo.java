@@ -22,6 +22,7 @@ package org.exoplatform.applicationregistry.webui.component;
 import org.exoplatform.application.registry.Application;
 import org.exoplatform.application.registry.ApplicationCategory;
 import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.replication.api.annotations.Serialized;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIContainer;
@@ -36,6 +37,7 @@ import org.exoplatform.webui.event.EventListener;
  */
 
 @ComponentConfig(template = "app:/groovy/applicationregistry/webui/component/UIApplicationInfo.gtmpl", events = {@EventConfig(listeners = UIApplicationInfo.EditApplicationActionListener.class)})
+@Serialized
 public class UIApplicationInfo extends UIContainer
 {
 

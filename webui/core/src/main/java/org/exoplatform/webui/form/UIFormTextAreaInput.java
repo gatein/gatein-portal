@@ -20,6 +20,7 @@
 package org.exoplatform.webui.form;
 
 import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.replication.api.annotations.Serialized;
 
 import java.io.Writer;
 
@@ -27,6 +28,7 @@ import java.io.Writer;
  * Represents a textarea element
  * The value is stored in UIFormInputBase
  */
+@Serialized
 public class UIFormTextAreaInput extends UIFormInputBase<String>
 {
    /**
@@ -38,6 +40,10 @@ public class UIFormTextAreaInput extends UIFormInputBase<String>
     * number of columns
     */
    private int columns = 30;
+
+   public UIFormTextAreaInput()
+   {
+   }
 
    public UIFormTextAreaInput(String name, String bindingExpression, String value) {
       super(name, bindingExpression, String.class);

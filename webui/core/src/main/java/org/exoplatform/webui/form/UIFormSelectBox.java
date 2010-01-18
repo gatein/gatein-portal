@@ -20,6 +20,7 @@
 package org.exoplatform.webui.form;
 
 import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.replication.api.annotations.Serialized;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.model.SelectItemOption;
 
@@ -33,6 +34,7 @@ import java.util.ResourceBundle;
  * Represents a select element
  * 
  */
+@Serialized
 public class UIFormSelectBox extends UIFormStringInput
 {
 
@@ -55,6 +57,10 @@ public class UIFormSelectBox extends UIFormStringInput
     * The javascript expression executed when an onChange event fires
     */
    private String onchange_;
+
+   public UIFormSelectBox()
+   {
+   }
 
    public UIFormSelectBox(String name, String bindingExpression, List<SelectItemOption<String>> options)
    {

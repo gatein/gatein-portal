@@ -20,6 +20,7 @@
 package org.exoplatform.webui.form;
 
 import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.replication.api.annotations.Serialized;
 
 import java.io.Writer;
 
@@ -28,6 +29,7 @@ import java.io.Writer;
  * @param <T> The type of value that is expected
  */
 @SuppressWarnings("hiding")
+@Serialized
 public class UIFormCheckBoxInput<T> extends UIFormInputBase<T>
 {
    /**
@@ -41,6 +43,10 @@ public class UIFormCheckBoxInput<T> extends UIFormInputBase<T>
    private String onchange_;
 
    private String componentEvent_ = null;
+
+   public UIFormCheckBoxInput()
+   {
+   }
 
    @SuppressWarnings("unchecked")
    public UIFormCheckBoxInput(String name, String bindingExpression, T value)

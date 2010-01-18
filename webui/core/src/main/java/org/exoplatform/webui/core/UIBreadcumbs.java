@@ -21,6 +21,7 @@ package org.exoplatform.webui.core;
 
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
+import org.exoplatform.webui.application.replication.api.annotations.Serialized;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIBreadcumbs.SelectPathActionListener;
@@ -28,6 +29,7 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +41,7 @@ import javax.portlet.PortletRequest;
  *
  */
 @ComponentConfig(events = @EventConfig(listeners = SelectPathActionListener.class))
+@Serialized
 public class UIBreadcumbs extends UIComponent
 {
    /**
@@ -129,7 +132,7 @@ public class UIBreadcumbs extends UIComponent
       }
    }
 
-   static public class LocalPath
+   static public class LocalPath implements Serializable
    {
 
       private String label_;

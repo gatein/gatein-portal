@@ -19,8 +19,7 @@
 
 package org.exoplatform.organization.webui.component;
 
-import org.exoplatform.commons.utils.ObjectPageList;
-import org.exoplatform.commons.utils.PageList;
+import org.exoplatform.commons.utils.*;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.services.organization.MembershipType;
 import org.exoplatform.services.organization.OrganizationService;
@@ -36,6 +35,7 @@ import org.exoplatform.webui.core.UIPageIterator;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
+import java.io.Serializable;
 import java.io.Writer;
 import java.util.List;
 
@@ -70,11 +70,17 @@ public class UIListMembershipType extends UIContainer
    @SuppressWarnings("unchecked")
    public void loadData() throws Exception
    {
-      OrganizationService service = getApplicationComponent(OrganizationService.class);
-      List memberships = (List)service.getMembershipTypeHandler().findMembershipTypes();
-      PageList pagelist = new ObjectPageList(memberships, 10);
-      pagelist.setPageSize(5);
-      getChild(UIGrid.class).getUIPageIterator().setPageList(pagelist);
+      StatelessPageList<MembershipType> pla = new StatelessPageList<MembershipType>(5)
+      {
+         @Override
+         protected ListAccess<MembershipType> connect() throws Exception
+         {
+            OrganizationService service = getApplicationComponent(OrganizationService.class);
+            List<MembershipType> memberships = (List<MembershipType>)service.getMembershipTypeHandler().findMembershipTypes();
+            return new ListAccessImpl<MembershipType>(MembershipType.class, memberships);
+         }
+      };
+      getChild(UIGrid.class).getUIPageIterator().setPageList(pla);
    }
 
    public void processRender(WebuiRequestContext context) throws Exception

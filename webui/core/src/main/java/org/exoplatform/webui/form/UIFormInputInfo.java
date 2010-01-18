@@ -20,6 +20,7 @@
 package org.exoplatform.webui.form;
 
 import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.replication.api.annotations.Serialized;
 
 import java.io.Writer;
 
@@ -27,8 +28,13 @@ import java.io.Writer;
  * Represents a info text element
  *
  */
+@Serialized
 public class UIFormInputInfo extends UIFormInputBase<String>
 {
+
+   public UIFormInputInfo()
+   {
+   }
 
    public UIFormInputInfo(String name, String bindingExpression, String value)
    {

@@ -20,6 +20,7 @@
 package org.exoplatform.webui.bean;
 
 import org.exoplatform.util.ReflectionUtil;
+import org.exoplatform.webui.application.replication.api.annotations.Converted;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormInput;
@@ -30,10 +31,24 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 /**
+ * A stateless object that must be obtained via the {@link #getInstance()} method.
+ *
  * Author : Nhu Dinh Thuan thuan.nhu@exoplatform.com Oct 13, 2006
  */
 public class ReflectionDataMapping implements BeanDataMapping
 {
+
+   /** . */
+   private static final ReflectionDataMapping instance = new ReflectionDataMapping();
+
+   public static ReflectionDataMapping getInstance()
+   {
+      return instance;
+   }
+
+   private ReflectionDataMapping()
+   {
+   }
 
    public void mapBean(Object bean, UIForm uiForm) throws Exception
    {

@@ -19,6 +19,7 @@
 
 package org.exoplatform.application.registry;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -28,7 +29,7 @@ import java.util.List;
  * User: Benjamin Mestrallet
  * Date: 15 juin 2004
  */
-public class ApplicationCategory
+public class ApplicationCategory implements Serializable
 {
 
    private String name;

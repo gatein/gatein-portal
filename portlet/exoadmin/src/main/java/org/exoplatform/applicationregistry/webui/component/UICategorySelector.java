@@ -4,6 +4,9 @@ import org.exoplatform.application.registry.Application;
 import org.exoplatform.application.registry.ApplicationCategory;
 import org.exoplatform.application.registry.ApplicationRegistryService;
 import org.exoplatform.commons.utils.LazyPageList;
+import org.exoplatform.commons.utils.PageListAccess;
+import org.exoplatform.commons.utils.SerializablePageList;
+import org.exoplatform.webui.application.replication.api.annotations.Serialized;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
@@ -27,6 +30,7 @@ import java.util.List;
 @ComponentConfig(template = "system:/groovy/webui/form/UIForm.gtmpl", lifecycle = UIFormLifecycle.class, events = {
    @EventConfig(listeners = UICategorySelector.SaveActionListener.class),
    @EventConfig(listeners = UICategorySelector.CancelActionListener.class, phase = Phase.DECODE)})
+@Serialized
 public class UICategorySelector extends UIForm
 {
    private Application application;
@@ -72,6 +76,8 @@ public class UICategorySelector extends UIForm
       UIFormInputSet uiInputSet;
       UIFormCheckBoxInput<Boolean> checkBoxInput;
       UIFormInputInfo uiInfo;
+
+      //
       ApplicationRegistryService appRegService = getApplicationComponent(ApplicationRegistryService.class);
       List<ApplicationCategory> categories = getAllCategories();
       List<UIFormInputSet> uiInputSetList = new ArrayList<UIFormInputSet>();
@@ -93,8 +99,9 @@ public class UICategorySelector extends UIForm
       }
       
       UIFormPageIterator uiIterator = uiTableInputSet.getChild(UIFormPageIterator.class);
-      LazyPageList<UIFormInputSet> pageList =
-         new LazyPageList<UIFormInputSet>(new FormInputSetListAccess(uiInputSetList), 5);
+      SerializablePageList<UIFormInputSet> pageList = new SerializablePageList<UIFormInputSet>(
+         UIFormInputSet.class, uiInputSetList, 5
+      );
       uiIterator.setPageList(pageList);
    }
 

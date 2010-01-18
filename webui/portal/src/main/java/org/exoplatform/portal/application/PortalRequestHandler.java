@@ -110,6 +110,9 @@ public class PortalRequestHandler extends WebRequestHandler
 
          if (uiApp != null)
             uiApp.setLastAccessApplication(System.currentTimeMillis());
+
+         // Store ui root
+         app.getStateManager().storeUIRootComponent(context);
       }
       catch (Exception ex)
       {

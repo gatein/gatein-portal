@@ -21,10 +21,12 @@ package org.exoplatform.webui.core;
 
 import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.replication.api.annotations.Serialized;
 
 import java.io.Writer;
 import java.util.Set;
 
+@Serialized
 abstract public class UIPortletApplication extends UIApplication
 {
    private int minWidth = 300;

@@ -21,6 +21,7 @@ package org.exoplatform.webui.core;
 
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.replication.api.annotations.Serialized;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.event.Event;
@@ -39,6 +40,7 @@ import java.util.List;
  * A component to display messages of different types, in a popup window
  */
 @ComponentConfig(template = "system:/groovy/webui/core/UIPopupMessages.gtmpl", events = @EventConfig(listeners = UIPopupMessages.CloseActionListener.class))
+@Serialized
 public class UIPopupMessages extends UIPopupWindow
 {
    /**

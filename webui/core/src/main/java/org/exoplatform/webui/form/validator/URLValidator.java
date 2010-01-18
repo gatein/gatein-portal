@@ -25,13 +25,15 @@ import org.exoplatform.webui.exception.MessageException;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormInput;
 
+import java.io.Serializable;
+
 /**
  * Created by The eXo Platform SAS
  * Author : Tan Pham Dinh
  *          pdtanit@gmail.com
  * Oct 30, 2008  
  */
-public class URLValidator implements Validator
+public class URLValidator implements Validator, Serializable
 {
 
    static private final String IP_REGEX =

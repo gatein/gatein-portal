@@ -163,7 +163,7 @@ public final class TypeDomain
       typeModelMap.putAll(addedTypeModels);
 
       //
-      System.out.println("Added types " + addedTypeModels.values() + " to replication domain");
+//      System.out.println("Added types " + addedTypeModels.values() + " to replication domain");
 
       //
       return model;

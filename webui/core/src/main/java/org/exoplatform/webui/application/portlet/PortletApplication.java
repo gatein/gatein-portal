@@ -27,6 +27,7 @@ import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.web.application.ApplicationLifecycle;
 import org.exoplatform.web.application.RequestContext;
+import org.exoplatform.webui.application.StateManager;
 import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIApplication;
@@ -159,13 +160,17 @@ public class PortletApplication extends WebuiApplication
          {
             lifecycle.onStartRequest(this, context);
          }
-         UIApplication uiApp = getStateManager().restoreUIRootComponent(context);
+         StateManager sm = getStateManager();
+         UIApplication uiApp = sm.restoreUIRootComponent(context);
          context.setUIApplication(uiApp);
          uiApp.processDecode(context);
          if (!context.isResponseComplete() && !context.getProcessRender())
          {
             uiApp.processAction(context);
          }
+
+         // Store ui root
+         sm.storeUIRootComponent(context);
       }
       finally
       {
@@ -194,12 +199,16 @@ public class PortletApplication extends WebuiApplication
          {
             lifecycle.onStartRequest(this, context);
          }
-         UIApplication uiApp = getStateManager().restoreUIRootComponent(context);
+         StateManager sm = getStateManager();
+         UIApplication uiApp = sm.restoreUIRootComponent(context);
          context.setUIApplication(uiApp);
          javax.portlet.Event portletEvent = req.getEvent();
          context.setAttribute(PORTLET_EVENT_VALUE, portletEvent.getValue());
          Event<UIComponent> uiEvent = uiApp.createEvent(portletEvent.getName(), Phase.PROCESS, context);
          uiEvent.broadcast();
+
+         // Store ui root
+         sm.storeUIRootComponent(context);
       }
       finally
       {
@@ -236,7 +245,8 @@ public class PortletApplication extends WebuiApplication
                lifecycle.onStartRequest(this, context);
             }
          }
-         UIApplication uiApp = getStateManager().restoreUIRootComponent(context);
+         StateManager sm = getStateManager();
+         UIApplication uiApp = sm.restoreUIRootComponent(context);
          context.setUIApplication(uiApp);
          if (!context.isResponseComplete())
          {
@@ -244,6 +254,9 @@ public class PortletApplication extends WebuiApplication
             uiPortletApp.processRender(this, context);
          }
          uiApp.setLastAccessApplication(System.currentTimeMillis());
+
+         // Store ui root
+         sm.storeUIRootComponent(context);
       }
       finally
       {

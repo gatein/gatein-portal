@@ -23,6 +23,7 @@ import org.exoplatform.application.registry.Application;
 import org.exoplatform.application.registry.ApplicationRegistryService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.replication.api.annotations.Serialized;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -45,6 +46,7 @@ import java.util.Calendar;
    @EventConfig(listeners = UIPermissionForm.SelectMembershipActionListener.class),
    @EventConfig(listeners = UIPermissionForm.DeleteActionListener.class),
    @EventConfig(listeners = UIPermissionForm.ChangePublicModeActionListener.class)})
+@Serialized
 public class UIPermissionForm extends UIForm
 {
 

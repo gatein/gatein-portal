@@ -20,6 +20,7 @@
 package org.exoplatform.applicationregistry.webui.component;
 
 import org.exoplatform.applicationregistry.webui.component.UIPortletManagement.PortletExtra;
+import org.exoplatform.webui.application.replication.api.annotations.Serialized;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIComponent;
 
@@ -30,6 +31,7 @@ import org.exoplatform.webui.core.UIComponent;
  * Sep 11, 2008  
  */
 @ComponentConfig(template = "app:/groovy/applicationregistry/webui/component/UIPortletInfo.gtmpl")
+@Serialized
 public class UIPortletInfo extends UIComponent
 {
 

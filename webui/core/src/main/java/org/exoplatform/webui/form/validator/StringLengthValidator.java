@@ -25,6 +25,8 @@ import org.exoplatform.webui.exception.MessageException;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormInput;
 
+import java.io.Serializable;
+
 /**
  * Created by The eXo Platform SARL
  * Author : Dang Van Minh
@@ -33,7 +35,7 @@ import org.exoplatform.webui.form.UIFormInput;
  * 
  * Validates whether this value has a length between min and max
  */
-public class StringLengthValidator implements Validator
+public class StringLengthValidator implements Validator, Serializable
 {
    /**
     * The minimum number of characters in this String

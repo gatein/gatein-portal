@@ -25,6 +25,8 @@ import org.exoplatform.webui.exception.MessageException;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormInput;
 
+import java.io.Serializable;
+
 /**
  * Created by The eXo Platform SARL
  * Author : Dang Van Minh
@@ -33,7 +35,7 @@ import org.exoplatform.webui.form.UIFormInput;
  * 
  * Validates whether this value is composed of letters, numbers, '_', '-', '.' or '*'
  */
-public class NameValidator implements Validator
+public class NameValidator implements Validator, Serializable
 {
 
    public void validate(UIFormInput uiInput) throws Exception

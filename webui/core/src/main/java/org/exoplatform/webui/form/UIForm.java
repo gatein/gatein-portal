@@ -21,6 +21,7 @@ package org.exoplatform.webui.form;
 
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
+import org.exoplatform.webui.application.replication.api.annotations.Serialized;
 import org.exoplatform.webui.bean.BeanDataMapping;
 import org.exoplatform.webui.bean.ReflectionDataMapping;
 import org.exoplatform.webui.config.Event;
@@ -38,6 +39,7 @@ import java.util.ResourceBundle;
  *          minhdv81@yahoo.com
  * Jun 6, 2006
  */
+@Serialized
 public class UIForm extends UIContainer
 {
 
@@ -53,7 +55,7 @@ public class UIForm extends UIContainer
 
    private boolean multipart_ = false;
 
-   private BeanDataMapping beanMapping = null;
+   private transient BeanDataMapping beanMapping = null;
 
    public UIForm addUIFormInput(UIFormInput input)
    {
@@ -151,14 +153,14 @@ public class UIForm extends UIContainer
    public void invokeGetBindingBean(Object bean) throws Exception
    {
       if (beanMapping == null)
-         beanMapping = new ReflectionDataMapping();
+         beanMapping = ReflectionDataMapping.getInstance();
       beanMapping.mapField(this, bean);
    }
 
    public void invokeSetBindingBean(Object bean) throws Exception
    {
       if (beanMapping == null)
-         beanMapping = new ReflectionDataMapping();
+         beanMapping = ReflectionDataMapping.getInstance();
       beanMapping.mapBean(bean, this);
    }
 

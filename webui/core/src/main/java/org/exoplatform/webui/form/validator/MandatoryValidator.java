@@ -25,6 +25,8 @@ import org.exoplatform.webui.exception.MessageException;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormInput;
 
+import java.io.Serializable;
+
 /**
  * Created by The eXo Platform SARL
  * Author : Dang Van Minh
@@ -36,7 +38,7 @@ import org.exoplatform.webui.form.UIFormInput;
  * is mandatory in your form, add it this validator. A '*' character will be automatically added
  * during the rendering phase to specify the user
  */
-public class MandatoryValidator implements Validator
+public class MandatoryValidator implements Validator, Serializable
 {
 
    public void validate(UIFormInput uiInput) throws Exception

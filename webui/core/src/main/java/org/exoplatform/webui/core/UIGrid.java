@@ -20,6 +20,7 @@
 package org.exoplatform.webui.core;
 
 import org.exoplatform.util.ReflectionUtil;
+import org.exoplatform.webui.application.replication.api.annotations.Serialized;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 
 import java.lang.reflect.Method;
@@ -33,6 +34,7 @@ import java.util.List;
  * @see UIPageIterator
  */
 @ComponentConfig(template = "system:/groovy/webui/core/UIGrid.gtmpl")
+@Serialized
 public class UIGrid extends UIComponent
 {
    /** The page iterator */

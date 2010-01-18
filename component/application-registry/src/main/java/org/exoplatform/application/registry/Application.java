@@ -21,6 +21,7 @@ package org.exoplatform.application.registry;
 
 import org.exoplatform.portal.config.model.ApplicationType;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -30,7 +31,7 @@ import java.util.Date;
  * Date: 15 juin 2004
  *
  */
-public class Application
+public class Application implements Serializable
 {
 
    private String categoryName;

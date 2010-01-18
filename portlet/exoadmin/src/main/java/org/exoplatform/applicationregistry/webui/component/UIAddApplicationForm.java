@@ -26,11 +26,13 @@ import org.exoplatform.application.registry.ApplicationCategory;
 import org.exoplatform.application.registry.ApplicationRegistryService;
 import org.exoplatform.applicationregistry.webui.Util;
 import org.exoplatform.commons.utils.LazyPageList;
+import org.exoplatform.commons.utils.SerializablePageList;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.replication.api.annotations.Serialized;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -66,6 +68,7 @@ import java.util.Set;
    @EventConfig(listeners = UIAddApplicationForm.ChangeTypeActionListener.class, phase = Phase.DECODE),
    @EventConfig(listeners = UIAddApplicationForm.AddActionListener.class),
    @EventConfig(listeners = UIAddApplicationForm.CancelActionListener.class, phase = Phase.DECODE)})
+@Serialized
 public class UIAddApplicationForm extends UIForm
 {
 
@@ -137,8 +140,7 @@ public class UIAddApplicationForm extends UIForm
          i++;
       }
       UIFormPageIterator uiIterator = uiTableInputSet.getChild(UIFormPageIterator.class);
-      LazyPageList<UIFormInputSet> pageList =
-         new LazyPageList<UIFormInputSet>(new FormInputSetListAccess(uiInputSetList), 10);
+      SerializablePageList<UIFormInputSet> pageList = new SerializablePageList<UIFormInputSet>(UIFormInputSet.class, uiInputSetList, 10);
       uiIterator.setPageList(pageList);
    }
 

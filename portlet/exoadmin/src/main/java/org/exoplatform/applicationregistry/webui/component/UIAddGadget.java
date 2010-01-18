@@ -24,6 +24,7 @@ import org.exoplatform.application.gadget.GadgetRegistryService;
 import org.exoplatform.portal.webui.application.GadgetUtil;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.replication.api.annotations.Serialized;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -48,6 +49,7 @@ import java.util.List;
 @ComponentConfig(lifecycle = UIFormLifecycle.class, template = "system:/groovy/webui/form/UIForm.gtmpl", events = {
    @EventConfig(listeners = UIAddGadget.AddActionListener.class),
    @EventConfig(listeners = UIAddGadget.CancelActionListener.class, phase = Phase.DECODE)})
+@Serialized
 public class UIAddGadget extends UIForm
 {
 

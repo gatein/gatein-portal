@@ -20,6 +20,7 @@
 package org.exoplatform.webui.core;
 
 import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.replication.api.annotations.Serialized;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.lifecycle.Lifecycle;
 
@@ -34,6 +35,7 @@ import java.util.List;
  * The decorator of a component 
  */
 @ComponentConfig(lifecycle = UIComponentDecorator.UIComponentDecoratorLifecycle.class)
+@Serialized
 public class UIComponentDecorator extends UIComponent
 {
    /**

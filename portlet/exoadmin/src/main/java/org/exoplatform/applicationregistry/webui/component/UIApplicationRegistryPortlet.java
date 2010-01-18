@@ -22,12 +22,14 @@ package org.exoplatform.applicationregistry.webui.component;
 import org.exoplatform.portal.webui.portal.UIPortalComponentActionListener.ViewChildActionListener;
 import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.replication.api.annotations.Serialized;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 
 @ComponentConfig(lifecycle = UIApplicationLifecycle.class, template = "app:/groovy/applicationregistry/webui/component/UIApplicationRegistryPortlet.gtmpl", events = {@EventConfig(listeners = ViewChildActionListener.class)})
+@Serialized
 public class UIApplicationRegistryPortlet extends UIPortletApplication
 {
 

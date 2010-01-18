@@ -21,6 +21,7 @@ package org.exoplatform.webui.core;
 
 import org.exoplatform.util.ReflectionUtil;
 import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.replication.api.annotations.Serialized;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.event.Event;
@@ -40,6 +41,7 @@ import java.util.List;
  * @see UIRightClickPopupMenu
  */
 @ComponentConfig(template = "system:/groovy/webui/core/UITree.gtmpl", events = @EventConfig(listeners = UITree.ChangeNodeActionListener.class))
+@Serialized
 public class UITree extends UIComponent
 {
    /**

@@ -29,6 +29,7 @@ import org.exoplatform.application.gadget.SourceStorage;
 import org.exoplatform.portal.webui.application.GadgetUtil;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.replication.api.annotations.Serialized;
 import org.exoplatform.webui.config.InitParams;
 import org.exoplatform.webui.config.Param;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -46,6 +47,7 @@ import org.exoplatform.webui.form.UIFormTextAreaInput;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
 import org.exoplatform.webui.form.validator.Validator;
 
+import java.io.Serializable;
 import java.util.Calendar;
 
 /**
@@ -55,6 +57,7 @@ import java.util.Calendar;
 @ComponentConfig(lifecycle = UIFormLifecycle.class, template = "system:/groovy/webui/form/UIForm.gtmpl", initParams = @ParamConfig(name = "SampleGadget", value = "app:/WEB-INF/conf/uiconf/applicationregistry/component/SampleGadget.groovy"), events = {
    @EventConfig(listeners = UIGadgetEditor.SaveActionListener.class),
    @EventConfig(listeners = UIGadgetEditor.CancelActionListener.class, phase = Phase.DECODE)})
+@Serialized
 public class UIGadgetEditor extends UIForm
 {
 
@@ -220,7 +223,7 @@ public class UIGadgetEditor extends UIForm
 
    }
 
-   public static class GadgetSpecValidator implements Validator
+   public static class GadgetSpecValidator implements Validator, Serializable
    {
 
       public void validate(UIFormInput uiInput) throws Exception

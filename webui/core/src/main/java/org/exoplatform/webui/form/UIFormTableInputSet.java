@@ -20,6 +20,7 @@
 package org.exoplatform.webui.form;
 
 import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.replication.api.annotations.Serialized;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIComponent;
 
@@ -30,6 +31,7 @@ import org.exoplatform.webui.core.UIComponent;
  * May 7, 2006
  */
 @ComponentConfig(template = "system:/groovy/webui/form/UIFormTableInputSet.gtmpl")
+@Serialized
 public class UIFormTableInputSet extends UIFormInputSet
 {
 

@@ -28,6 +28,7 @@ package org.exoplatform.webui.form;
  * Represents a multi page iterator
  */
 import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.replication.api.annotations.Serialized;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIComponent;
@@ -40,6 +41,7 @@ import org.exoplatform.webui.form.validator.Validator;
 import java.util.List;
 
 @ComponentConfig(template = "system:/groovy/webui/core/UIPageIterator.gtmpl", events = @EventConfig(listeners = UIFormPageIterator.ShowPageActionListener.class, phase = Phase.DECODE))
+@Serialized
 public class UIFormPageIterator extends UIPageIterator implements UIFormInput<Object>
 {
 

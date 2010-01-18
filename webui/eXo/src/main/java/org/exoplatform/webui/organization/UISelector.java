@@ -19,6 +19,7 @@
 
 package org.exoplatform.webui.organization;
 
+import org.exoplatform.webui.application.replication.api.annotations.Serialized;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -31,6 +32,7 @@ import org.exoplatform.webui.form.UIFormInputContainer;
  *          nhudinhthuan@exoplatform.com
  * Jul 19, 2006  
  */
+@Serialized
 abstract class UISelector<T> extends UIFormInputContainer<T>
 {
 

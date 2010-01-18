@@ -24,6 +24,7 @@ import org.exoplatform.application.registry.ApplicationCategory;
 import org.exoplatform.application.registry.ApplicationRegistryService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.replication.api.annotations.Serialized;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -49,6 +50,7 @@ import java.util.List;
 @ComponentConfig(lifecycle = UIFormLifecycle.class, template = "system:/groovy/webui/form/UIFormTabPane.gtmpl", events = {
    @EventConfig(listeners = UICategoryForm.SaveActionListener.class),
    @EventConfig(listeners = UICategoryForm.CancelActionListener.class, phase = Phase.DECODE)})
+@Serialized
 public class UICategoryForm extends UIFormTabPane
 {
 

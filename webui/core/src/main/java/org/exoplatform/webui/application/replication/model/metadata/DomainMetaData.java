@@ -85,4 +85,22 @@ public class DomainMetaData
       }
       state.put(clazz.getName(), new ClassTypeMetaData(serialized));
    }
+
+   public void addConvertedType(String name, Class<? extends TypeConverter<?, ?>> converterClass)
+   {
+      if (name == null)
+      {
+         throw new NullPointerException();
+      }
+      state.put(name, new ConvertedTypeMetaData(converterClass));
+   }
+
+   public void addClassType(String name, boolean serialized)
+   {
+      if (name == null)
+      {
+         throw new NullPointerException();
+      }
+      state.put(name, new ClassTypeMetaData(serialized));
+   }
 }

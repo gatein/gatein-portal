@@ -23,6 +23,8 @@ import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.replication.api.annotations.Converted;
+import org.exoplatform.webui.application.replication.api.annotations.Serialized;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIContainer;
@@ -30,6 +32,7 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.gatein.common.i18n.LocalizedString;
 import org.gatein.pc.api.Portlet;
+import org.gatein.pc.api.PortletContext;
 import org.gatein.pc.api.PortletInvoker;
 import org.gatein.pc.api.info.MetaInfo;
 import org.gatein.pc.api.info.PortletInfo;
@@ -53,6 +56,7 @@ import java.util.Set;
 @ComponentConfig(template = "app:/groovy/applicationregistry/webui/component/UIPortletManagement.gtmpl", events = {
    @EventConfig(listeners = UIPortletManagement.SelectPortletActionListener.class),
    @EventConfig(listeners = UIPortletManagement.SelectPortletType.class)})
+@Serialized
 public class UIPortletManagement extends UIContainer
 {
 
@@ -68,9 +72,21 @@ public class UIPortletManagement extends UIContainer
 
    private String selectedType;
 
-   private static final Comparator<WebApp> WEB_APP_COMPARATOR = new WebAppComparator();
+   private static final Comparator<WebApp> WEB_APP_COMPARATOR = new Comparator<WebApp>()
+   {
+      public int compare(WebApp app1, WebApp app2)
+      {
+         return app1.getName().compareToIgnoreCase(app2.getName());
+      }
+   };
 
-   private static final Comparator<PortletExtra> PORTLET_EXTRA_COMPARATOR = new PortletComparator();
+   private static final Comparator<PortletExtra> PORTLET_EXTRA_COMPARATOR = new Comparator<PortletExtra>()
+   {
+      public int compare(PortletExtra portlet1, PortletExtra portlet2)
+      {
+         return portlet1.getName().compareToIgnoreCase(portlet2.getName());
+      }
+   };
 
    public UIPortletManagement() throws Exception
    {
@@ -80,6 +96,7 @@ public class UIPortletManagement extends UIContainer
    private void initWebApps(String type) throws Exception
    {
       webApps = new LinkedList<WebApp>(); // LinkedList is more appropriate here since we add lots of elements and sort
+      // julien : who said that LinkedList is appropriate for sorting ?
       ExoContainer manager = ExoContainerContext.getCurrentContainer();
 
       FederatingPortletInvoker portletInvoker =
@@ -104,7 +121,6 @@ public class UIPortletManagement extends UIContainer
       for (Portlet portlet : portlets)
       {
          PortletInfo info = portlet.getInfo();
-         String portletName = info.getName();
          String appName = info.getApplicationName();
 
          WebApp webApp = getWebApp(appName);
@@ -113,8 +129,7 @@ public class UIPortletManagement extends UIContainer
             webApp = new WebApp(appName);
             webApps.add(webApp);
          }
-         String portletId = appName + "/" + portletName;
-         webApp.addPortlet(new PortletExtra(portletId, type, info));
+         webApp.addPortlet(new PortletExtra(portlet));
       }
 
       Collections.sort(webApps, WEB_APP_COMPARATOR);
@@ -232,6 +247,7 @@ public class UIPortletManagement extends UIContainer
 
    }
 
+   @Converted(PortletExtraSerializer.class)
    static public class PortletExtra
    {
 
@@ -245,14 +261,24 @@ public class UIPortletManagement extends UIContainer
 
       private PortletInfo portletInfo_;
 
-      public PortletExtra(String id, String type, PortletInfo info)
+      final PortletContext context;
+
+      public PortletExtra(Portlet portlet)
       {
-         id_ = id;
-         String[] fragments = id.split("/");
+         PortletInfo info = portlet.getInfo();
+         String portletName = info.getName();
+         String appName = info.getApplicationName();
+         String portletId = appName + "/" + portletName;
+         String type = portlet.isRemote() ? REMOTE : LOCAL;
+
+         //
+         id_ = portletId;
+         String[] fragments = portletId.split("/");
          group_ = fragments[0];
          name_ = fragments[1];
          type_ = type;
          portletInfo_ = info;
+         context = portlet.getContext();
       }
 
       public String getId()
@@ -277,18 +303,12 @@ public class UIPortletManagement extends UIContainer
 
       public String getDisplayName()
       {
-         LocalizedString displayName = portletInfo_.getMeta().getMetaValue(MetaInfo.DISPLAY_NAME);
-         if (displayName == null || displayName.getDefaultString() == null)
-            return name_;
-         return displayName.getDefaultString();
+         return getMetaValue(MetaInfo.DISPLAY_NAME, name_);
       }
 
       public String getDescription()
       {
-         LocalizedString description = portletInfo_.getMeta().getMetaValue(MetaInfo.DESCRIPTION);
-         if (description == null || description.getDefaultString() == null)
-            return name_;
-         return description.getDefaultString();
+         return getMetaValue(MetaInfo.DESCRIPTION, name_);
       }
 
       public PreferencesInfo getPortletPreferences()
@@ -296,14 +316,26 @@ public class UIPortletManagement extends UIContainer
          return portletInfo_.getPreferences();
       }
 
+      private String getMetaValue(String metaKey, String defaultValue)
+      {
+         LocalizedString metaValue = portletInfo_.getMeta().getMetaValue(metaKey);
+         if (metaValue == null || metaValue.getDefaultString() == null)
+            return defaultValue;
+         return metaValue.getDefaultString();
+      }
    }
 
+   @Serialized
    static public class WebApp
    {
 
       String name_;
 
       List<PortletExtra> portlets_;
+
+      public WebApp()
+      {
+      }
 
       public WebApp(String name)
       {
@@ -344,25 +376,4 @@ public class UIPortletManagement extends UIContainer
       }
 
    }
-
-   static public class WebAppComparator implements Comparator<WebApp>
-   {
-
-      public int compare(WebApp app1, WebApp app2)
-      {
-         return app1.getName().compareToIgnoreCase(app2.getName());
-      }
-
-   }
-
-   static public class PortletComparator implements Comparator<PortletExtra>
-   {
-
-      public int compare(PortletExtra portlet1, PortletExtra portlet2)
-      {
-         return portlet1.getName().compareToIgnoreCase(portlet2.getName());
-      }
-
-   }
-
 }

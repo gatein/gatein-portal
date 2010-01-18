@@ -20,6 +20,7 @@
 package org.exoplatform.webui.form;
 
 import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.replication.api.annotations.Serialized;
 
 import java.io.Writer;
 
@@ -32,6 +33,7 @@ import java.io.Writer;
  * Represents a input string field
  * The value is stored in UIFormInputBase
  */
+@Serialized
 public class UIFormStringInput extends UIFormInputBase<String>
 {
    /**
@@ -53,6 +55,10 @@ public class UIFormStringInput extends UIFormInputBase<String>
     * max size of text field
     */
    private int maxLength = 0;
+
+   public UIFormStringInput()
+   {
+   }
 
    public UIFormStringInput(String name, String bindingExpression, String value)
    {

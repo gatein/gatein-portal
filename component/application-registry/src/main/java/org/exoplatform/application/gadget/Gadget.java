@@ -19,13 +19,15 @@
 
 package org.exoplatform.application.gadget;
 
+import java.io.Serializable;
+
 /**
  * Created by The eXo Platform SAS
  * Author : Pham Thanh Tung
  *          thanhtungty@gmail.com
  * Jul 28, 2008  
  */
-public class Gadget
+public class Gadget implements Serializable
 {
 
    private String name;

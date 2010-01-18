@@ -20,6 +20,7 @@
 package org.exoplatform.webui.form;
 
 import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.replication.api.annotations.Serialized;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.event.Event;
@@ -39,6 +40,7 @@ import java.util.List;
  * The base class to create form elements.
  * Extend it to create your own elements.
  */
+@Serialized
 abstract public class UIFormInputBase<T> extends UIContainer implements UIFormInput<T>
 {
 
@@ -95,6 +97,10 @@ abstract public class UIFormInputBase<T> extends UIContainer implements UIFormIn
       this.bindingField = bindingField;
       this.typeValue_ = typeValue;
       setId(name);
+   }
+
+   protected UIFormInputBase()
+   {
    }
 
    public String getName()
