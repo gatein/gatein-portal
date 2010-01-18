@@ -20,18 +20,29 @@
 package org.exoplatform.commons.utils;
 
 import java.io.Serializable;
-import java.util.Collections;
-import java.util.List;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class EmptySerializablePageList<E> extends NoArgConstructorPageList<E> implements Serializable
+public class EmptySerializablePageList<E> extends AbstractSerializablePageList<E> implements Serializable
 {
 
    /** . */
    private static final EmptySerializablePageList instance = new EmptySerializablePageList();
+
+   /** . */
+   private final ListAccess<E> listAccess = new ListAccess<E>()
+   {
+      public E[] load(int index, int length) throws Exception, IllegalArgumentException
+      {
+         throw new UnsupportedOperationException("Should not be called");
+      }
+      public int getSize() throws Exception
+      {
+         return 0;
+      }
+   };
 
    public EmptySerializablePageList()
    {
@@ -39,15 +50,9 @@ public class EmptySerializablePageList<E> extends NoArgConstructorPageList<E> im
    }
 
    @Override
-   protected void populateCurrentPage(int page) throws Exception
+   protected ListAccess<E> connect() throws Exception
    {
-      currentListPage_ = Collections.emptyList();
-   }
-
-   @Override
-   public List<E> getAll() throws Exception
-   {
-      return Collections.emptyList();
+      return listAccess;
    }
 
    public static <E> PageList<E> get()

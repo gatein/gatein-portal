@@ -20,37 +20,16 @@
 package org.exoplatform.commons.utils;
 
 import java.io.*;
-import java.lang.reflect.Field;
-import java.util.List;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public abstract class PageListAccess<E, S extends Serializable> extends NoArgConstructorPageList<E> implements Serializable
+public abstract class PageListAccess<E, S extends Serializable> extends AbstractSerializablePageList<E> implements Serializable
 {
-
-   /** . */
-   private static final Field pageSizeField;
-
-   static
-   {
-      try
-      {
-         pageSizeField = PageList.class.getDeclaredField("pageSize_");
-         pageSizeField.setAccessible(true);
-      }
-      catch (NoSuchFieldException e)
-      {
-         throw new Error(e);
-      }
-   }
 
    /** The state that recreates the list. */
    private S state;
-
-   /** . */
-   private LazyList<E> lazyList;
 
    protected PageListAccess(S state, int pageSize)
    {
@@ -68,49 +47,12 @@ public abstract class PageListAccess<E, S extends Serializable> extends NoArgCon
 
       //
       this.state = state;
-      this.lazyList = null;
-   }
-
-   private void ensureCorrectState()
-   {
-      if (lazyList == null)
-      {
-         lazyList = new LazyList<E>(create(state), super.getPageSize());
-
-         // Save temporarily the current page
-         int currentPage = currentPage_;
-
-         // Refresh state
-         super.setAvailablePage(lazyList.size());
-
-         // Put back current page that was written by previous method call
-         if (currentPage != -1)
-         {
-            currentPage_ = currentPage;
-         }
-      }
-   }
-
-
-   @Override
-   protected final void populateCurrentPage(int page) throws Exception
-   {
-      // Make sure we have correct state
-      ensureCorrectState();
-
-      //
-      int from = getFrom();
-      int to = getTo();
-      currentListPage_ = lazyList.subList(from, to);
    }
 
    @Override
-   public final List<E> getAll()
+   protected ListAccess<E> connect() throws Exception
    {
-      ensureCorrectState();
-
-      //
-      return lazyList;
+      return create(state);
    }
 
    protected abstract ListAccess<E> create(S state);
@@ -119,116 +61,13 @@ public abstract class PageListAccess<E, S extends Serializable> extends NoArgCon
 
    private void writeObject(ObjectOutputStream out) throws IOException
    {
-      int pageSize;
-      try
-      {
-         pageSize = pageSizeField.getInt(this);
-      }
-      catch (IllegalAccessException e)
-      {
-         InvalidObjectException ioe = new InvalidObjectException("Cannot set page size");
-         ioe.initCause(e);
-         throw ioe;
-      }
-
-      //
-      out.writeInt(pageSize);
-      out.writeInt(currentPage_);
+      super.writeState(out);
       out.writeObject(state);
    }
 
    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException
    {
-      try
-      {
-         pageSizeField.setInt(this, in.readInt());
-      }
-      catch (IllegalAccessException e)
-      {
-         InvalidObjectException ioe = new InvalidObjectException("Cannot set page size");
-         ioe.initCause(e);
-         throw ioe;
-      }
-      currentPage_ = in.readInt();
+      super.readState(in);
       state = (S)in.readObject();
-   }
-   
-   // Intercept all method calls
-
-   @Override
-   public final int getAvailablePage()
-   {
-      ensureCorrectState();
-      return super.getAvailablePage();
-   }
-
-   @Override
-   public final int getTo()
-   {
-      ensureCorrectState();
-      return super.getTo();    
-   }
-
-   @Override
-   public final int getFrom()
-   {
-      ensureCorrectState();
-      return super.getFrom();
-   }
-
-   @Override
-   protected final void setAvailablePage(int available)
-   {
-      ensureCorrectState();
-      super.setAvailablePage(available);
-   }
-
-   @Override
-   protected final void checkAndSetPage(int page) throws Exception
-   {
-      ensureCorrectState();
-      super.checkAndSetPage(page);
-   }
-
-   @Override
-   public final List<E> getPage(int page) throws Exception
-   {
-      ensureCorrectState();
-      return super.getPage(page);
-   }
-
-   @Override
-   public final List<E> currentPage() throws Exception
-   {
-      ensureCorrectState();
-      return super.currentPage();
-   }
-
-   @Override
-   public final int getAvailable()
-   {
-      ensureCorrectState();
-      return super.getAvailable();
-   }
-
-   @Override
-   public final int getCurrentPage()
-   {
-      ensureCorrectState();
-      return super.getCurrentPage();
-   }
-
-   @Override
-   public final void setPageSize(int pageSize)
-   {
-      ensureCorrectState();
-      super.setPageSize(pageSize);
-   }
-
-   @Override
-   public final int getPageSize()
-   {
-      ensureCorrectState();
-      return super.getPageSize();
    }
 }
