@@ -30,6 +30,8 @@ public enum SerializationMode
 
    SERIALIZABLE,
 
+   STATELESS,
+
    NONE
 
 
