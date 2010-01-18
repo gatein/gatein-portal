@@ -19,6 +19,7 @@
 
 package org.exoplatform.webui.core;
 
+import org.exoplatform.commons.utils.DataMissingException;
 import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.util.ReflectionUtil;
 import org.exoplatform.webui.bean.UIDataFeed;
@@ -105,13 +106,27 @@ public class UIRepeater extends UIComponent implements UIDataFeed
       return method.invoke(bean, ReflectionUtil.EMPTY_ARGS);
    }
 
-   public void feedNext() throws Exception
+   public void feedNext() throws DataMissingException, Exception
    {
       int page = datasource.getCurrentPage();
       page++;
       if (page <= datasource.getAvailablePage())
       {
          datasource.getPage(page);
+      }
+
+      // Check LazyList load current page
+      try
+      {
+         List<?> objects = datasource.currentPage();
+         for (Object obj : objects) {
+            if (obj == null) throw new Exception("Data Row is Null");
+         }
+      }
+      catch (Throwable e)
+      {
+         datasource.getPage(page--);
+         throw new DataMissingException(e);
       }
    }
 

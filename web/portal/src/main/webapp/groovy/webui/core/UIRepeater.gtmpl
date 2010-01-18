@@ -12,8 +12,7 @@
   String name = uicomponent.getLabel() ;
   UIForm uiForm = uicomponent.getAncestorOfType(UIForm.class); 
   
-  DateFormat dateFormat = null;  
-  try {
+  DateFormat dateFormat = null;
 %>
 <div id="$uicomponent.id">
     <table class="UIGrid" cellspacing="0">
@@ -91,5 +90,3 @@
         </tbody>
     </table>
 </div>
-
-<% } catch (java.lang.Throwable e) {} %>

@@ -19,6 +19,7 @@
 
 package org.exoplatform.webui.bean;
 
+import org.exoplatform.commons.utils.DataMissingException;
 import org.exoplatform.commons.utils.PageList;
 
 /**
@@ -30,7 +31,12 @@ public interface UIDataFeed
 
    public void setDataSource(PageList datasource) throws Exception;
 
-   public void feedNext() throws Exception;
+   /***
+    * Load data of next page. Throws DataMissingException when page's data is cannot load
+    * @throws DataMissingException
+    * @throws Exception
+    */
+   public void feedNext() throws DataMissingException, Exception;
 
    public boolean hasNext();
 }

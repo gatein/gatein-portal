@@ -19,6 +19,7 @@
 
 package org.exoplatform.webui.core;
 
+import org.exoplatform.commons.utils.DataMissingException;
 import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.bean.UIDataFeed;
@@ -75,7 +76,17 @@ public class UIVirtualList extends UIComponentDecorator
          UIVirtualList virtualList = event.getSource();
          UIDataFeed dataFeed = virtualList.getDataFeed();
          WebuiRequestContext rContext = event.getRequestContext();
-         dataFeed.feedNext();
+         try
+         {
+            dataFeed.feedNext();
+         }
+         catch (DataMissingException e)
+         {
+            // Update parent of virtual list to refresh
+            event.getRequestContext().addUIComponentToUpdateByAjax(virtualList.getParent());
+            return;
+         }
+         
          if (!dataFeed.hasNext())
          {
             rContext.getJavascriptManager().addJavascript(
