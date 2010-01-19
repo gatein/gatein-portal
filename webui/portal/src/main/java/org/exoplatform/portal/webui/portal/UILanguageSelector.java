@@ -62,20 +62,16 @@ public class UILanguageSelector extends UIContainer
       {
          LocaleConfig localeConfig = (LocaleConfig)object;
          Locale locale = localeConfig.getLocale();
-         String displayName = locale.getDisplayLanguage(currentLocale);
+         String displayName = capitalizeFirstLetter(locale.getDisplayLanguage(currentLocale));
          String lang = locale.getLanguage();
          String country = locale.getCountry();
-         String localedName;
+         String localedName = capitalizeFirstLetter(locale.getDisplayLanguage(locale));;
 
          if (country != null && country.length() > 0)
          {
-            localedName =
-               capitalizeFirstLetter(locale.getDisplayLanguage(currentLocale) + " (" + locale.getDisplayCountry(currentLocale) + ")");
+        	displayName = capitalizeFirstLetter(locale.getDisplayLanguage(currentLocale)) + " - " + capitalizeFirstLetter(locale.getDisplayCountry(currentLocale));
+            localedName = capitalizeFirstLetter(locale.getDisplayLanguage(locale)) + " - " + capitalizeFirstLetter(locale.getDisplayCountry(locale));
             lang = lang + "_" + country;
-         }
-         else
-         {
-            localedName = capitalizeFirstLetter(locale.getDisplayLanguage(currentLocale));
          }
 
          if (localedName == null || localedName.length() == 0)
