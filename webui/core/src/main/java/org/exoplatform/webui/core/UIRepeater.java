@@ -19,8 +19,8 @@
 
 package org.exoplatform.webui.core;
 
-import org.exoplatform.commons.utils.DataMissingException;
 import org.exoplatform.commons.utils.PageList;
+import org.exoplatform.portal.config.NoSuchDateException;
 import org.exoplatform.util.ReflectionUtil;
 import org.exoplatform.webui.bean.UIDataFeed;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -106,7 +106,7 @@ public class UIRepeater extends UIComponent implements UIDataFeed
       return method.invoke(bean, ReflectionUtil.EMPTY_ARGS);
    }
 
-   public void feedNext() throws DataMissingException, Exception
+   public void feedNext() throws NoSuchDateException, Exception
    {
       int page = datasource.getCurrentPage();
       page++;
@@ -126,7 +126,7 @@ public class UIRepeater extends UIComponent implements UIDataFeed
       catch (Throwable e)
       {
          datasource.getPage(page--);
-         throw new DataMissingException(e);
+         throw new NoSuchDateException(e);
       }
    }
 

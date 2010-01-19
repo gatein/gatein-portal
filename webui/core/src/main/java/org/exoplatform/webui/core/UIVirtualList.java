@@ -19,8 +19,8 @@
 
 package org.exoplatform.webui.core;
 
-import org.exoplatform.commons.utils.DataMissingException;
 import org.exoplatform.commons.utils.PageList;
+import org.exoplatform.portal.config.NoSuchDateException;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.bean.UIDataFeed;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -80,7 +80,7 @@ public class UIVirtualList extends UIComponentDecorator
          {
             dataFeed.feedNext();
          }
-         catch (DataMissingException e)
+         catch (NoSuchDateException e)
          {
             // Update parent of virtual list to refresh
             event.getRequestContext().addUIComponentToUpdateByAjax(virtualList.getParent());

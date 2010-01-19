@@ -21,32 +21,23 @@
   * 02110-1301 USA, or see the FSF site: http://www.fsf.org.                   *
   ******************************************************************************/
 
-package org.exoplatform.commons.utils;
+package org.exoplatform.portal.config;
 
-public class DataMissingException extends RuntimeException
+
+public class NoSuchDateException extends StorageException
 {
-
-   public DataMissingException()
+   public NoSuchDateException()
    {
-      // TODO Auto-generated constructor stub
    }
 
-   public DataMissingException(String message)
+   public NoSuchDateException(String message)
    {
       super(message);
-      // TODO Auto-generated constructor stub
    }
 
-   public DataMissingException(Throwable cause)
-   {
-      super(cause);
-      // TODO Auto-generated constructor stub
-   }
-
-   public DataMissingException(String message, Throwable cause)
+   public NoSuchDateException(String message, Throwable cause)
    {
       super(message, cause);
-      // TODO Auto-generated constructor stub
    }
 
 }

@@ -53,9 +53,6 @@ public class TestDataStorage extends AbstractPortalTest
 {
 
    /** . */
-   private final String testPortal = "testPortal";
-
-   /** . */
    private final String testPage = "portal::classic::testPage";
 
    /** . */
@@ -128,10 +125,19 @@ public class TestDataStorage extends AbstractPortalTest
       PortalConfig portal = storage_.getPortalConfig("portal", "test");
       assertNotNull(portal);
 
-      //
       storage_.remove(portal);
-      portal = storage_.getPortalConfig(testPortal);
-      assertNull(portal);
+      assertNull(storage_.getPortalConfig("portal", "test"));
+      
+      try
+      {
+         //Trying to remove non existing a portal config
+         storage_.remove(portal);
+         fail("was expecting a NoSuchDataException");
+      }
+      catch (NoSuchDateException e)
+      {
+
+      }
    }
 
    public void testCreatePage() throws Exception
