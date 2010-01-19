@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="" />
+<title>AddEditGroupPageWizard</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">AddEditGroupPageWizard</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/portal/private/classic/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>link=Page Management</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='UIPageBrowser']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>link=Add New Page</td>
+	<td>1,1</td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>pageName</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>pageName</td>
+	<td>newpage21211</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>pageDisplayName</td>
+	<td>new page21211</td>
+</tr>
+<!--Click "Next" to move to step2 to choose page layout-->
+<tr>
+	<td>clickAt</td>
+	<td>//div[@id='UIPageCreationWizard']//div[@class='UIAction']//div[2]</td>
+	<td>1,1</td>
+</tr>
+<!--Keep "Empty layout" and Click "Next" to move to step 3-->
+<tr>
+	<td>clickAt</td>
+	<td>//div[@id='UIPageCreationWizard']//div[@class='UIAction']//div[2]</td>
+	<td>1,1</td>
+</tr>
+<!--Open Page Editor pane-->
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='Administration/AccountPortlet']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>link=View Page properties</td>
+	<td>1,1</td>
+</tr>
+<!--Select Permission Setting tab-->
+<tr>
+	<td>waitForTextPresent</td>
+	<td>Show Max Window</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>//div[@id='UIMaskWorkspace']//div[3]//div[@class='MiddleTab']</td>
+	<td>1,1</td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>link=Edit Permission Setting</td>
+	<td>1,1</td>
+</tr>
+<!--Do not change anything in Page properties-->
+<tr>
+	<td>clickAt</td>
+	<td>link=Cancel</td>
+	<td>1,1</td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>//div[@id='UIPageEditor']/div[1]/div/div/div/a[2]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//img[@alt='']</td>
+	<td></td>
+</tr>
+<!--Click Save to complete adding new page by wizard with no content (no portlet)-->
+<tr>
+	<td>clickAt</td>
+	<td>link=Edit Page</td>
+	<td></td>
+</tr>
+<!--EDIT PAGE: Show form to edit page by wizard-->
+<tr>
+	<td>clickAt</td>
+	<td>link=View Page properties</td>
+	<td>1,1</td>
+</tr>
+<!--Select Permission Setting tab-->
+<tr>
+	<td>clickAt</td>
+	<td>//div[@id='UIMaskWorkspace']//div[3]//div[@class='MiddleTab']</td>
+	<td>1,1</td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>link=Add Permission</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>link=Platform</td>
+	<td>1,1</td>
+</tr>
+<tr>
+	<td>doubleClickAt</td>
+	<td>link=Administrators</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>//div[@id='UIPageFormPopupGroupMembershipSelector']//div[@class='MembershipSelector']//a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>link=Save</td>
+	<td>1,1</td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>//div[@id='UIPageEditor']/div[1]/div/div/div/a[2]</td>
+	<td></td>
+</tr>
+<!--Click Save & Finish-->
+
+</tbody></table>
+</body>
+</html>

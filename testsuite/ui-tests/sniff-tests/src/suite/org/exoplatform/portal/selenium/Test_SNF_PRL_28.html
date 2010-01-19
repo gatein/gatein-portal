@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="" />
+<title>ActionsDashboardpage</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">ActionsDashboardpage</td></tr>
+</thead><tbody>
+<!--tr>
+	<td>open</td>
+	<td>/portal/private/classic/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>username</td>
+	<td>root</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>password</td>
+	<td>gtn</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//div[@id='UIPortalLoginFormAction']/div/div/div</td>
+	<td></td>
+</tr-->
+<tr>
+	<td>open</td>
+	<td>/portal/private/classic/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>link=Dashboard</td>
+	<td>1,1</td>
+</tr>
+<!--Add gadgets into dashboard page-->
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Add Gadgets</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>link=Add Gadgets</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//input[@id='url']</td>
+	<td>http://hosting.gmodules.com/ig/gadgets/file/112581010116074801021/treefrog.xml</td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>//img[@class='AddNewNodeIcon']</td>
+	<td>1,1</td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>//div[@id='UIAddGadgetPopup']//div[@class='CloseButton']</td>
+	<td></td>
+</tr>
+<!--tr>
+	<td>click</td>
+	<td>//a[@onclick='eXo.portal.logout();']</td>
+	<td></td>
+</tr-->
+
+</tbody></table>
+</body>
+</html>

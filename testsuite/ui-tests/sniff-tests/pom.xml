@@ -1,0 +1,137 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.exoplatform.portal</groupId>
+  <artifactId>selenium-testcases-gatein</artifactId>
+  <packaging>jar</packaging>
+  <version>3.0.0-CR01-SNAPSHOT</version>
+  <name>Selenium test suite for GateIn 3.0-Beta04</name>
+  <url>http://www.exoplatform.org</url>
+  <description>Selenium test suite for GateIn 3.0-Beta04</description>
+  
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId> 
+      <version>4.0</version>
+    </dependency>
+    
+    <dependency>
+       <groupId>org.seleniumhq.selenium.client-drivers</groupId>
+       <artifactId>selenium-java-client-driver</artifactId>
+       <version>1.0.1</version>
+   </dependency>
+
+    <dependency>
+      <groupId>org.seleniumhq.selenium.server</groupId>
+      <artifactId>selenium-server</artifactId>
+      <version>1.0.1</version>
+    </dependency>
+   
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <version>1.4</version>
+    </dependency>
+    
+     </dependencies>
+
+     <profiles>
+    <profile>
+      <id>junit</id>
+      <activation><activeByDefault>false</activeByDefault></activation>
+      <build>
+      <plugins>
+
+           <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>selenium-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>start-server</goal>
+                        </goals>
+                        <configuration>
+                            <background>true</background>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+
+           <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.3</version>
+                <configuration>
+                    <skip>true</skip>
+                    <!-- TODO Use a TestSuite to ensure the Test execution order -->
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>integration-test</phase>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                        <configuration>
+                            <skip>false</skip>
+<!--                            <includes><include>**/Test_SNF_PRL_06.java</include></includes>-->
+                            <includes><include>**/Test_All.java</include></includes>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+		      </plugins>
+         </build>
+    </profile>
+ 
+    <profile>
+      <id>selenese</id>
+      <activation><activeByDefault>false</activeByDefault></activation>
+    <build>
+ 	 <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <skip>true</skip>
+        </configuration>
+      </plugin>
+      <plugin>
+ 		    <groupId>org.codehaus.mojo</groupId>
+		    <artifactId>selenium-maven-plugin</artifactId>
+			<version>1.0</version>
+		    <executions>
+		     <execution>
+					<phase>integration-test</phase>
+					<goals>
+						<goal>selenese</goal>
+					</goals>
+					<configuration>
+						<browser>*firefox</browser>
+						<startURL>http://localhost:8080/</startURL>
+						<suite>src/suite/org/exoplatform/portal/selenium/TestSuite_SNF_PRL.html</suite>
+						<results>target/selenium/TestSuite_SNF_PRL_result.html</results>
+					</configuration>
+				</execution>
+			</executions>
+		</plugin>
+	 </plugins>
+  </build>
+  </profile>
+  </profiles>
+
+   <build>
+ 	 <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <skip>true</skip>
+        </configuration>
+      </plugin>
+ 	 </plugins>
+   </build>
+
+
+</project>

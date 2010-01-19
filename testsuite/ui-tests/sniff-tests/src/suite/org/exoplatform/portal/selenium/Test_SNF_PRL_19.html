@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="" />
+<title>EditPortalNavigation</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">EditPortalNavigation</td></tr>
+</thead><tbody>
+<!--tr>
+	<td>open</td>
+	<td>/portal/public/classic/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Sign in</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>username</td>
+	<td>root</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>password</td>
+	<td>gtn</td>
+</tr-->
+<tr>
+	<td>open</td>
+	<td>/portal/private/classic/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Site</td>
+	<td></td>
+</tr>
+<!--Edit Portal layout, currently do not change anything-->
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Edit Layout</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>link=Edit Layout</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>css=div#Administration/ApplicationRegistryPortlet</td>
+	<td></td>
+</tr>
+<tr>
+	<td>dragAndDropToObject</td>
+	<td>css=div#Administration/ApplicationRegistryPortlet</td>
+	<td>css=div#UIPortal div.UIRowContainer</td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='UIPortalComposer']//div[@class='OverflowContainer']/a[@class='EdittedSaveButton']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>//div[@id='UIPortalComposer']//div[@class='OverflowContainer']/a[@class='EdittedSaveButton']</td>
+	<td>1,1</td>
+</tr>
+<tr>
+	<td>waitForTextPresent</td>
+	<td>classic</td>
+	<td></td>
+</tr>
+<!--Edit nav: add node, actions ...-->
+<tr>
+	<td>clickAt</td>
+	<td>link=Edit Navigation</td>
+	<td>1,1</td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Add Node</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>link=Add Node</td>
+	<td>1,1</td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>name</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name</td>
+	<td>Node_test</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>label</td>
+	<td>New node</td>
+</tr>
+<!--Select Page-->
+<tr>
+	<td>clickAt</td>
+	<td>css=div#UISiteManagement &gt; div.UIPopupWindow div.TabsContainer div.NormalTab div.MiddleTab</td>
+	<td>1,1</td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Search and Select Page</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>link=Search and Select Page</td>
+	<td></td>
+</tr>
+<!--Select the first page-->
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='UIRepeater']//table//tbody/tr/td[5]/div[@class='ActionContainer']/img</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='UIRepeater']//table//tbody/tr/td[5]/div[@class='ActionContainer']/img</td>
+	<td></td>
+</tr>
+<!--Save-->
+<tr>
+	<td>clickAt</td>
+	<td>link=Save</td>
+	<td>1,1</td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>link=Save</td>
+	<td>1,1</td>
+</tr>
+<!--Edit Portal Properties-->
+<tr>
+	<td>clickAt</td>
+	<td>link=Edit Portal's Properties</td>
+	<td>1,1</td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='UIMaskWorkspace']//div[3]//div[@class='MiddleTab']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>//div[@id='UIMaskWorkspace']//div[3]//div[@class='MiddleTab']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Edit Permission Setting</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>link=Edit Permission Setting</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Select Permission</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>link=Select Permission</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Platform</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>link=Platform</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Administrators</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>link=Administrators</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>link=Platform</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>link=Administrators</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>//div[@id='PermissionSelector']//div[2]/a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>//form[@id='UIPortalForm']//div[@class='UIAction']//div[@class='ActionButton LightBlueStyle']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>/portal/private/classic/</td>
+	<td></td>
+</tr>
+<!--Select new added node to view page-->
+<tr>
+	<td>clickAt</td>
+	<td>link=New node</td>
+	<td></td>
+</tr>
+<!--tr>
+	<td>click</td>
+	<td>//a[@onclick='eXo.portal.logout();']</td>
+	<td></td>
+</tr-->
+
+</tbody></table>
+</body>
+</html>

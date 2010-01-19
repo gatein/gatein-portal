@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="" />
+<title>SNF_PRL_07</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">SNF_PRL_07</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/portal/public/classic/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Sign in</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>username</td>
+	<td>root</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>password</td>
+	<td>gtn</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//div[@id='UIPortalLoginFormAction']/div/div/div</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Group</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Group</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Users and groups management</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Users and groups management</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>//div[@id='UIOrganizationPortlet']//div[@class='ManagementIconContainer']/a[@class='GroupButton']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='UIOrganizationPortlet']/div[2]/div[2]/div[1]/div[2]/div[1]/div[2]/div/div/div/div[3]/div/a</td>
+	<td></td>
+</tr>
+<!--Select "Organization" group from group tree-->
+<tr>
+	<td>clickAt</td>
+	<td>//div[@id='UIOrganizationPortlet']//div[3]//div[@class='ExpandIcon']/a</td>
+	<td></td>
+</tr>
+<!--Select "Management group" from group tree-->
+<tr>
+	<td>waitForTextPresent</td>
+	<td>Management</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>//div[@id='UIOrganizationPortlet']//div[3]//div[@class='ExpandIcon']/a</td>
+	<td></td>
+</tr>
+<!--Click Add new group icon-->
+<tr>
+	<td>clickAt</td>
+	<td>//div[@id='UIOrganizationPortlet']//div[@class='TitleBar']/a[@class='TreeActionIcon AddGroupIcon']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>groupName</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>groupName</td>
+	<td>testgroup</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>label</td>
+	<td>testgroup label</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>description</td>
+	<td>testgroup description</td>
+</tr>
+<!--Click "Save" to complete adding new group-->
+<tr>
+	<td>clickAt</td>
+	<td>//form[@id='UIGroupForm']//div[@class='ActionButton LightBlueStyle']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForTextPresent</td>
+	<td>testgroup label</td>
+	<td></td>
+</tr>
+<!--Click "Select User" icon-->
+<tr>
+	<td>clickAt</td>
+	<td>//form[@id='UIGroupMembershipForm']//div[@class='HorizontalLayout']//table[@class='UIFormGrid']//td[@class='FieldComponent']/a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//form[@id='UIUserSelector']/div[2]/div[2]/table/tbody/tr/td/a[1]/div/div/div</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>demo</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>john</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>mary</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>root</td>
+	<td></td>
+</tr>
+<!--Click "Add" button-->
+<tr>
+	<td>clickAt</td>
+	<td>//form[@id='UIUserSelector']//div[@class='UIAction']//a[@class='ActionButton LightBlueStyle']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>link=Save</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>demo</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>john</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>mary</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>root</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Sign out</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Sign out</td>
+	<td></td>
+</tr>
+<!---->
+
+</tbody></table>
+</body>
+</html>

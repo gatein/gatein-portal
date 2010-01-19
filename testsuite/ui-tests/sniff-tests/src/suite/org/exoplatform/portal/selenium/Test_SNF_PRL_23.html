@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="" />
+<title>AddNavigation</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">AddNavigation</td></tr>
+</thead><tbody>
+<!--tr>
+	<td>open</td>
+	<td>/portal/public/NewPortal/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Sign in</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>username</td>
+	<td>root</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>password</td>
+	<td>gtn</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//div[@id='UIPortalLoginFormAction']/div/div/div/a</td>
+	<td></td>
+</tr-->
+<tr>
+	<td>open</td>
+	<td>/portal/private/classic/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Group</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Add Navigation</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>link=Add Navigation</td>
+	<td>1,1</td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Cancel</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>link=Cancel</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>link=Edit Navigation</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Add Node</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>link=Add Node</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name</td>
+	<td>grp_node</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>label</td>
+	<td>new_grp_node</td>
+</tr>
+<!--Choose "Page Selector" tab-->
+<tr>
+	<td>clickAt</td>
+	<td>//div[@class='CenterHorizontalTabs']//div[@class='NormalTab']//div[@class='MiddleTab']</td>
+	<td></td>
+</tr>
+<!--Show form to select existing page-->
+<tr>
+	<td>clickAt</td>
+	<td>link=Search and Select Page</td>
+	<td>1,1</td>
+</tr>
+<!--Select the first page from pages list-->
+<tr>
+	<td>clickAt</td>
+	<td>//div[@id='UIRepeater']//img[@class='SelectPageIcon']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>link=Save</td>
+	<td>1,1</td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>link=Save</td>
+	<td>1,1</td>
+</tr>
+<!--tr>
+	<td>click</td>
+	<td>link=Cancel</td>
+	<td></td>
+</tr>
+<tr>
+	<td>checkAndWait</td>
+	<td>//a[@onclick='eXo.portal.logout();']</td>
+	<td></td>
+</tr-->
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=new_grp_node</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=new_grp_node</td>
+	<td></td>
+</tr>
+
+</tbody></table>
+</body>
+</html>
