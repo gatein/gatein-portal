@@ -195,6 +195,12 @@ public abstract class LocalImporter
          {
             String mimeType = getMimeType(name);
 
+            //
+            if (mimeType == null)
+            {
+               mimeType = "application/octet-stream";
+            }
+
             // We can detect encoding for XML files
             String encoding = null;
             if ("application/xml".equals(mimeType))
