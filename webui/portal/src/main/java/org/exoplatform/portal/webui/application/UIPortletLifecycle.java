@@ -24,6 +24,7 @@ import org.exoplatform.commons.utils.Text;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.portlet.PortletExceptionHandleService;
+import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.resolver.ApplicationResourceResolver;
 import org.exoplatform.services.log.ExoLogger;
@@ -43,6 +44,7 @@ import org.gatein.pc.api.invocation.response.PortletInvocationResponse;
 
 import java.io.Serializable;
 import java.nio.charset.Charset;
+import java.util.Map;
 
 import javax.portlet.PortletMode;
 import javax.portlet.WindowState;
@@ -106,6 +108,8 @@ public class UIPortletLifecycle<S, C extends Serializable, I> extends Lifecycle<
        * 
        * In case of a RenderURL, the parameter state map must be invalidated and
        * ths is done in the associated ActionListener
+       * 
+       * If no action type is specified we assume the default, which is to render
        */
       String portletActionType = context.getRequestParameter(Constants.TYPE_PARAMETER);
       if (portletActionType != null)
@@ -123,14 +127,15 @@ public class UIPortletLifecycle<S, C extends Serializable, I> extends Lifecycle<
             if (event != null)
                event.broadcast();
          }
-         else
-         {
-            Event<UIComponent> event = uicomponent.createEvent("Render", Event.Phase.PROCESS, context);
-            if (event != null)
-               event.broadcast();
-            addUpdateComponent = true;
-         }
       }
+      else
+      {
+    	  Event<UIComponent> event = uicomponent.createEvent("Render", Event.Phase.PROCESS, context);
+    	  if (event != null)
+    		  event.broadcast();
+    	  addUpdateComponent = true;
+      }
+
       if (addUpdateComponent)
          context.addUIComponentToUpdateByAjax(uicomponent);
    }
@@ -156,6 +161,16 @@ public class UIPortletLifecycle<S, C extends Serializable, I> extends Lifecycle<
 
       try
       {
+    	 Map<String, String[]> paramMap = prcontext.getRequest().getParameterMap();
+    	 if (paramMap.containsKey("removePP"))
+    	 {
+    		 UIPortal uiPortal = Util.getUIPortal();
+    		 for (String publicParamName : paramMap.get("removePP"))
+    		 {
+    			 uiPortal.getPublicParameters().remove(publicParamName);
+    		 }
+    	 }
+    	 
          RenderInvocation renderInvocation = uicomponent.create(RenderInvocation.class, prcontext);
 
          if (uicomponent.getCurrentWindowState() != WindowState.MINIMIZED)
@@ -242,7 +257,14 @@ public class UIPortletLifecycle<S, C extends Serializable, I> extends Lifecycle<
          PortletContainerException pcException = new PortletContainerException(e);
          PortletExceptionHandleService portletExceptionService =
             (PortletExceptionHandleService)container.getComponentInstanceOfType(PortletExceptionHandleService.class);
-         portletExceptionService.handle(pcException);
+         if (portletExceptionService != null)
+         {
+             portletExceptionService.handle(pcException);
+         }
+         else
+         {
+        	 log.warn("Could not find the PortletExceptionHandleService in the exo container");
+         }
 
          markup = Text.create("This portlet encountered an error and could not be displayed.");
       }

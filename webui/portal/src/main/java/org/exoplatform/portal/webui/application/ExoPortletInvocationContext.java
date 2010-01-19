@@ -98,36 +98,43 @@ class ExoPortletInvocationContext extends AbstractPortletInvocationContext
       String type;
       if (containerURL instanceof RenderURL)
       {
-         type = "render";
+         type = Constants.PORTAL_RENDER;
       }
       else if (containerURL instanceof ResourceURL)
       {
-         type = "resource";
+         type = Constants.PORTAL_SERVE_RESOURCE;
       }
       else if (containerURL instanceof ActionURL)
       {
-         type = "action";
+         type = Constants.PORTAL_PROCESS_ACTION;
       }
       else
       {
          throw new Error("Unrecognized containerURL type");
       }
 
-      appendParameter(baseURL, "portal:type", type);
-      appendParameter(baseURL, "portal:isSecure", "" + format.getWantSecure());
-
+      if (!type.equals(Constants.PORTAL_RENDER))
+      {
+      appendParameter(baseURL, Constants.TYPE_PARAMETER, type);
+      }
+      
+      if (format != null && format.getWantSecure() != null)
+      {
+      appendParameter(baseURL, Constants.SECURE_PARAMETER, format.getWantSecure().toString());
+      }
+      
       if (containerURL instanceof ActionURL)
       {
          ActionURL actionURL = (ActionURL)containerURL;
 
          StateString state = actionURL.getInteractionState();
-         if (state != null)
+         if (state != null && !state.getStringValue().equals(StateString.JBPNS_PREFIX))
          {
             appendParameter(baseURL, INTERACTION_STATE_PARAM_NAME, state.getStringValue());
          }
-
+         
          state = actionURL.getNavigationalState();
-         if (state != null)
+         if (state != null && !state.getStringValue().equals(StateString.JBPNS_PREFIX) )
          {
             appendParameter(baseURL, NAVIGATIONAL_STATE_PARAM_NAME, state.getStringValue());
          }
@@ -157,13 +164,13 @@ class ExoPortletInvocationContext extends AbstractPortletInvocationContext
          }
 
          StateString resourceState = resourceURL.getResourceState();
-         if (resourceState != null)
+         if (resourceState != null && !resourceState.getStringValue().equals(StateString.JBPNS_PREFIX))
          {
             appendParameter(baseURL, RESOURCE_STATE_PARAM_NAME, resourceState.getStringValue());
          }
 
          resourceState = resourceURL.getNavigationalState();
-         if (resourceState != null)
+         if (resourceState != null && !resourceState.getStringValue().equals(StateString.JBPNS_PREFIX))
          {
             appendParameter(baseURL, NAVIGATIONAL_STATE_PARAM_NAME, resourceState.getStringValue());
          }
@@ -185,13 +192,13 @@ class ExoPortletInvocationContext extends AbstractPortletInvocationContext
          RenderURL renderURL = (RenderURL)containerURL;
 
          WindowState windowState = renderURL.getWindowState();
-         if (windowState != null)
+         if (windowState != null && !windowState.equals(WindowState.NORMAL))
          {
             appendParameter(baseURL, Constants.WINDOW_STATE_PARAMETER, windowState.toString());
          }
 
          Mode mode = renderURL.getMode();
-         if (mode != null)
+         if (mode != null && !mode.equals(Mode.VIEW))
          {
             appendParameter(baseURL, Constants.PORTLET_MODE_PARAMETER, mode.toString());
          }
@@ -201,11 +208,18 @@ class ExoPortletInvocationContext extends AbstractPortletInvocationContext
          {
             for (String key : publicNSChanges.keySet())
             {
-               String[] values = publicNSChanges.get(key);
-               for (String value : values)
-               {
-                  appendParameter(baseURL, key, value);
-               }
+            	String[] values = publicNSChanges.get(key);
+            	if (values != null && values.length > 0)
+            	{
+            		for (String value : values)
+            		{
+            			appendParameter(baseURL, key, value);
+            		}
+            	}
+            	else
+            	{
+            		appendParameter(baseURL, "removePP", key);
+            	}
             }
          }
 

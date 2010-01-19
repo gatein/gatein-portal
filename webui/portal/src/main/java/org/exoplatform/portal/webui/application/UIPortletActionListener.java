@@ -619,10 +619,18 @@ public class UIPortletActionListener
 
       for (String key : requestParams.keySet())
       {
-         if (uiPortlet.supportsPublicParam(key))
-         {
-            publicParams.put(key, requestParams.get(key));
-         }
+    	  String[] value = requestParams.get(key);
+    	  if (uiPortlet.supportsPublicParam(key))
+    	  {
+    		  if (value.length > 0)
+    		  {
+    			  publicParams.put(key, value);
+    		  }
+    		  else
+    		  {
+    			  publicParams.remove(key);
+    		  }
+    	  }
       }
 
    }
@@ -719,9 +727,14 @@ public class UIPortletActionListener
          {
             uiPortlet.setCurrentPortletMode(PortletMode.EDIT);
          }
+         else if (portletMode.equals(PortletMode.VIEW.toString()))
+         {
+        	 uiPortlet.setCurrentPortletMode(PortletMode.VIEW);
+         }
          else
          {
-            uiPortlet.setCurrentPortletMode(PortletMode.VIEW);
+        	PortletMode customMode = new PortletMode(portletMode);
+            uiPortlet.setCurrentPortletMode(customMode);
          }
          event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);
       }
