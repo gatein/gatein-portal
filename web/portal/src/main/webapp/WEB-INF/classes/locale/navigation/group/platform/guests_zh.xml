@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+   <platform>
+      <guests>
+         <register>注册</register>
+         <sitemap>网站地图</sitemap>
+         <link>链接</link>
+      </guests>
+   </platform>
+</bundle>

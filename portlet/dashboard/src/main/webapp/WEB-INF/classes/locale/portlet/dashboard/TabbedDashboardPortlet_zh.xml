@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+   <UITabPaneDashboard>
+      <action>
+         <addNewDashboard>增加控制面板</addNewDashboard>
+         <switchShowRange>更改范围</switchShowRange>
+      </action>
+      <msg>
+         <deleteTab>确认要删除这个控制面板吗？</deleteTab>
+         <cannotDeleteLastTab>最后一个标签，无法删除。</cannotDeleteLastTab>
+         <wrongTabName>只有α，数字，下划线，破折号和空格是允许的。</wrongTabName>
+      </msg>
+   </UITabPaneDashboard>
+</bundle>

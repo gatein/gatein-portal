@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+   <UIGroovyPortlet>
+      <note>
+         <Text>这是Groovy Portlet(示例Portlet)，将来可以将其开发成web应用。</Text>
+      </note>
+   </UIGroovyPortlet>
+   <UIIFrameEditMode>
+      <title>更改URL</title>
+      <label>
+         <iframeUrl>URL</iframeUrl>
+         <editmode>编辑模式</editmode>
+      </label>
+      <action>
+         <Save>保存</Save>
+      </action>
+   </UIIFrameEditMode>
+   <UIBannerPortlet>
+      <action>
+         <changeLanguage>更改语言</changeLanguage>
+      </action>
+   </UIBannerPortlet>
+ 
+   <UIHomePagePortlet>
+      <Label>
+         <Title>用一个用户帐户尝试GateIn 3.0：</Title>
+         <Intro>新版本增加了新的用户界面<br/>经典和WebOS桌面布局<br/>拖放功能,创建页向导<br/>等等。。。</Intro>
+         <Slogan>eXo和JBoss Portal最好的门户平台<div>GateIn 3.0 Beta 4</div></Slogan>
+         <Username>用户名：</Username>
+         <Password>密码：</Password>
+      </Label>
+   </UIHomePagePortlet>
+</bundle>

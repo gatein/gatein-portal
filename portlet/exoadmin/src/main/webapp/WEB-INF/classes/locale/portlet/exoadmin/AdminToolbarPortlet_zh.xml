@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+   <UIAdminToolbarPortlet>
+      <action>
+         <AddPage>增加新页面</AddPage>
+         <EditPage>编辑页面</EditPage>
+         <CreatePortal>创建新门户</CreatePortal>
+         <EditPortal>编辑门户</EditPortal>
+         <BrowsePage>管理页面</BrowsePage>
+         <EditPageAndNavigation>编辑页面和导航</EditPageAndNavigation>
+         <Editor>编辑器</Editor>
+         <portal>
+            <Editor>网站编辑器</Editor>
+         </portal>
+         <group>
+            <Editor>组编辑器</Editor>
+         </group>
+         <user>
+            <Editor>控制面板编辑器</Editor>
+         </user>
+         <EditSiteLayout>修改布局</EditSiteLayout>
+      </action>
+   </UIAdminToolbarPortlet>
+</bundle>

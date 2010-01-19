@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+   <UILogoPortlet>
+      <note>
+         <Text>这是标志</Text>
+      </note>
+      <action>
+         <changeLanguage>更改语言</changeLanguage>
+         <Register>注册</Register>
+         <signout>退出</signout>
+         <signin>登录</signin>
+      </action>
+      <label>
+         <Welcome>欢迎</Welcome>
+      </label>
+   </UILogoPortlet>
+   <UILogoEditMode>
+      <title>更改 URL</title>
+      <label>
+         <logoUrl>URL</logoUrl>
+         <editmode>更改模式</editmode>
+      </label>
+      <action>
+         <Save>保存</Save>
+      </action>
+   </UILogoEditMode>
+</bundle>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+   <UIGadgetEditMode>
+      <title>设置小工具的网址</title>
+      <label>
+         <gadgetUrl>网址：</gadgetUrl>
+         <typeSelector>输入：</typeSelector>
+         <gadgetSelector>小工具：</gadgetSelector>
+         <option>
+            <remote>远端小工具</remote>
+            <local>本地小工具</local>
+         </option>
+      </label>
+      <action>
+         <Save>保存</Save>
+      </action>
+   </UIGadgetEditMode>
+</bundle>

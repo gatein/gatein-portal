@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+   <UISiteManagement>
+      <action>
+         <addNewPortal>增加新的门户</addNewPortal>
+      </action>
+      <label>
+         <editLayout>修改布局</editLayout>
+         <editNav>编辑导航</editNav>
+         <editPortalProp>编辑门户属性</editPortalProp>
+         <deletePortal>删除</deletePortal>
+      </label>
+   </UISiteManagement>
+</bundle>

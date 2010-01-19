@@ -93,4 +93,10 @@
     <description>Default configuration for the italian locale</description>
   </locale-config>
 
+  <locale-config>
+    <locale>zh</locale>
+    <output-encoding>UTF-8</output-encoding>
+    <input-encoding>UTF-8</input-encoding>
+    <description>Default configuration for the chinese locale</description>
+  </locale-config>
 </locales-config>

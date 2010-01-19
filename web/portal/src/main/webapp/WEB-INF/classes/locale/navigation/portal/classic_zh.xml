@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+   <portal>
+      <classic>
+         <home>主页</home>
+         <sitemap>网站地图</sitemap>
+         <groupnavigation>组导航</groupnavigation>
+         <portalnavigation>门户导航</portalnavigation>
+         <register>注册</register>
+         <webexplorer>网络浏览器</webexplorer>
+      </classic>
+   </portal>
+   <UIAddNewApplication>
+      <label>
+         <AddApplication >增加应用</AddApplication >
+      </label>
+   </UIAddNewApplication>
+</bundle>
