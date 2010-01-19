@@ -20,6 +20,7 @@
 package org.exoplatform.webui.form.validator;
 
 import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.webui.application.replication.api.annotations.Serialized;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.exception.MessageException;
 import org.exoplatform.webui.form.UIForm;
@@ -33,11 +34,17 @@ import org.exoplatform.webui.form.UIFormInput;
  * 
  * Validates whether this value matches one regular expression.
  */
+@Serialized
 public class ExpressionValidator implements Validator
 {
    private String expression_;
 
    private String key_;
+
+   // For @Serialized needs
+   public ExpressionValidator()
+   {
+   }
 
    public ExpressionValidator(final String expression)
    {

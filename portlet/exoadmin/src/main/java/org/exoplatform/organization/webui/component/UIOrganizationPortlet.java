@@ -21,6 +21,7 @@ package org.exoplatform.organization.webui.component;
 
 import org.exoplatform.portal.webui.portal.UIPortalComponentActionListener.ViewChildActionListener;
 import org.exoplatform.services.organization.Query;
+import org.exoplatform.webui.application.replication.api.annotations.Serialized;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIPortletApplication;
@@ -41,6 +42,7 @@ import org.exoplatform.webui.event.EventListener;
    @EventConfig(listeners = ViewChildActionListener.class)}
 
 )
+@Serialized
 public class UIOrganizationPortlet extends UIPortletApplication
 {
 

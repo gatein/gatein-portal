@@ -20,6 +20,7 @@
 package org.exoplatform.webui.form.validator;
 
 import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.webui.application.replication.api.annotations.Serialized;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.exception.MessageException;
 import org.exoplatform.webui.form.UIForm;
@@ -31,6 +32,7 @@ import org.exoplatform.webui.form.UIFormInput;
  *          tungcnw@gmail.com
  * Dec 12, 2007  
  */
+@Serialized
 public class SpecialCharacterValidator implements Validator
 {
 

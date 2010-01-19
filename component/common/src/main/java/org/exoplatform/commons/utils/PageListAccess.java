@@ -25,7 +25,7 @@ import java.io.*;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public abstract class PageListAccess<E, S extends Serializable> extends AbstractSerializablePageList<E> implements Serializable
+public abstract class PageListAccess<E, S> extends AbstractSerializablePageList<E> implements Serializable
 {
 
    /** The state that recreates the list. */
@@ -50,12 +50,12 @@ public abstract class PageListAccess<E, S extends Serializable> extends Abstract
    }
 
    @Override
-   protected ListAccess<E> connect() throws Exception
+   protected final ListAccess<E> connect() throws Exception
    {
       return create(state);
    }
 
-   protected abstract ListAccess<E> create(S state);
+   protected abstract ListAccess<E> create(S state) throws Exception;
    
    // Serialization
 

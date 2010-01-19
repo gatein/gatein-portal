@@ -19,12 +19,10 @@
 
 package org.exoplatform.portal.application;
 
-import org.exoplatform.commons.utils.LazyList;
-import org.exoplatform.commons.utils.LazyPageList;
-import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.portal.config.UserPortalConfig;
 import org.exoplatform.portal.config.UserPortalConfigService;
+import org.exoplatform.services.organization.Query;
 import org.exoplatform.webui.Util;
 import org.exoplatform.webui.application.ConfigurationManager;
 import org.exoplatform.webui.application.StateManager;
@@ -46,7 +44,6 @@ import org.exoplatform.webui.core.UIComponent;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.ByteArrayOutputStream;
 import java.util.Map;
 
 /**
@@ -119,12 +116,7 @@ public class ReplicatingStateManager extends StateManager
          try
          {
             DomainMetaData domainMetaData = new DomainMetaData();
-/*
-            domainMetaData.addClassType(PageList.class, true);
-            domainMetaData.addClassType(LazyPageList.class, true);
-            domainMetaData.addClassType(LazyList.class, true);
-            domainMetaData.addClassType(LazyList.class.getName() + "$Batch", true);
-*/
+            domainMetaData.addClassType(Query.class, true);
 
             //
             SerializationContext serializationContext = (SerializationContext)session.getAttribute("SerializationContext");

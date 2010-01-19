@@ -19,6 +19,7 @@
 
 package org.exoplatform.webui.core;
 
+import org.exoplatform.webui.application.replication.api.annotations.Serialized;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.form.UIFormInputSet;
@@ -36,6 +37,7 @@ import java.util.List;
  * @see UISearchForm
  */
 @ComponentConfig()
+@Serialized
 abstract public class UISearch extends UIContainer
 {
 

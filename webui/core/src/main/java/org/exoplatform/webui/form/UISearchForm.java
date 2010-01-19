@@ -19,6 +19,7 @@
 
 package org.exoplatform.webui.form;
 
+import org.exoplatform.webui.application.replication.api.annotations.Serialized;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UISearch;
@@ -38,6 +39,7 @@ import java.util.List;
  * Represents a search form
  */
 @ComponentConfig(lifecycle = UIFormLifecycle.class, template = "system:/groovy/webui/form/UISearchForm.gtmpl", events = @EventConfig(listeners = UISearchForm.QuickSearchActionListener.class))
+@Serialized
 public class UISearchForm extends UIForm
 {
    /**

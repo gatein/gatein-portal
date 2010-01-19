@@ -20,6 +20,7 @@
 package org.exoplatform.organization.webui.component;
 
 import org.exoplatform.services.organization.Group;
+import org.exoplatform.webui.application.replication.api.annotations.Serialized;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIContainer;
 
@@ -31,6 +32,7 @@ import org.exoplatform.webui.core.UIContainer;
  * 10:08:51 AM 
  */
 @ComponentConfig(template = "app:/groovy/organization/webui/component/UIGroupInfoContainer.gtmpl")
+@Serialized
 public class UIGroupInfo extends UIContainer
 {
 

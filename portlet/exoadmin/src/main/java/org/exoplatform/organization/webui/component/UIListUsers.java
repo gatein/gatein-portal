@@ -19,12 +19,12 @@
 
 package org.exoplatform.organization.webui.component;
 
-import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.Query;
 import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.webui.application.replication.api.annotations.Serialized;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -41,7 +41,8 @@ import org.exoplatform.webui.form.UIFormInputSet;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
 
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -55,29 +56,28 @@ import java.util.List;
    @EventConfig(listeners = UIListUsers.ViewUserInfoActionListener.class),
    @EventConfig(listeners = UIListUsers.SelectUserActionListener.class),
    @EventConfig(listeners = UIListUsers.DeleteUserActionListener.class, confirm = "UIListUsers.deleteUser")})
+@Serialized
 public class UIListUsers extends UISearch
 {
 
-   public static String USER_NAME = "userName";
+   public static final String USER_NAME = "userName";
 
-   public static String LAST_NAME = "lastName";
+   public static final String LAST_NAME = "lastName";
 
-   public static String FIRST_NAME = "firstName";
+   public static final String FIRST_NAME = "firstName";
 
-   public static String EMAIL = "email";
+   public static final String EMAIL = "email";
 
-   private static String[] USER_BEAN_FIELD = {USER_NAME, LAST_NAME, FIRST_NAME, EMAIL};
+   private static final String[] USER_BEAN_FIELD = {USER_NAME, LAST_NAME, FIRST_NAME, EMAIL};
 
-   private static String[] USER_ACTION = {"ViewUserInfo", "DeleteUser"};
+   private static final String[] USER_ACTION = {"ViewUserInfo", "DeleteUser"};
 
-   private static List<SelectItemOption<String>> OPTIONS_ = new ArrayList<SelectItemOption<String>>(4);
-   static
-   {
-      OPTIONS_.add(new SelectItemOption<String>(USER_NAME, USER_NAME));
-      OPTIONS_.add(new SelectItemOption<String>(LAST_NAME, LAST_NAME));
-      OPTIONS_.add(new SelectItemOption<String>(FIRST_NAME, FIRST_NAME));
-      OPTIONS_.add(new SelectItemOption<String>(EMAIL, EMAIL));
-   }
+   private final static List<SelectItemOption<String>> OPTIONS_ = Collections.unmodifiableList(Arrays.asList(
+         new SelectItemOption<String>(USER_NAME, USER_NAME),
+         new SelectItemOption<String>(LAST_NAME, LAST_NAME),
+         new SelectItemOption<String>(FIRST_NAME, FIRST_NAME),
+         new SelectItemOption<String>(EMAIL, EMAIL)
+      ));
 
    private Query lastQuery_;
 
@@ -108,10 +108,7 @@ public class UIListUsers extends UISearch
    public void search(Query query) throws Exception
    {
       lastQuery_ = query;
-      OrganizationService service = getApplicationComponent(OrganizationService.class);
-      PageList pageList = service.getUserHandler().findUsers(query);
-      pageList.setPageSize(10);
-      grid_.getUIPageIterator().setPageList(pageList);
+      grid_.getUIPageIterator().setPageList(new FindUsersPageList(query, 10));
       UIPageIterator pageIterator = grid_.getUIPageIterator();
       if (pageIterator.getAvailable() == 0)
       {

@@ -23,6 +23,7 @@ import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.Query;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.replication.api.annotations.Serialized;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIPopupWindow;
@@ -41,6 +42,7 @@ import org.exoplatform.webui.organization.UIUserProfileInputSet;
    @EventConfig(listeners = UIUserInfo.SaveActionListener.class),
    @EventConfig(listeners = UIUserInfo.BackActionListener.class, phase = Phase.DECODE),
    @EventConfig(listeners = UIUserInfo.ToggleChangePasswordActionListener.class, phase = Phase.DECODE)})
+@Serialized
 public class UIUserInfo extends UIFormTabPane
 {
 

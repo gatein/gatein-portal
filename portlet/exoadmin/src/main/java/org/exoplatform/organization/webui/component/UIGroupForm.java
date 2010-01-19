@@ -25,6 +25,7 @@ import org.exoplatform.services.organization.MembershipType;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.webui.application.replication.api.annotations.Serialized;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -43,10 +44,11 @@ import org.exoplatform.webui.form.validator.StringLengthValidator;
 @ComponentConfig(lifecycle = UIFormLifecycle.class, template = "system:/groovy/webui/form/UIFormWithTitle.gtmpl", events = {
    @EventConfig(listeners = UIGroupForm.SaveActionListener.class),
    @EventConfig(phase = Phase.DECODE, listeners = UIGroupForm.BackActionListener.class)})
+@Serialized
 public class UIGroupForm extends UIForm
 {
 
-   private Group group_;
+   private String groupId;
 
    private String componentName_ = "AddGroup";
 
@@ -62,22 +64,24 @@ public class UIGroupForm extends UIForm
          StringLengthValidator.class, 0, 255));
    }
 
-   public Group getGroup()
+   public String getGroupId()
    {
-      return group_;
+      return groupId;
    }
 
    public void setGroup(Group group) throws Exception
    {
-      this.group_ = group;
-      if (group_ == null)
+      if (group != null)
+      {
+         this.groupId = group.getId();
+         getUIStringInput(GROUP_NAME).setEditable(UIFormStringInput.DISABLE);
+         invokeGetBindingBean(group);
+      }
+      else
       {
          getUIStringInput(GROUP_NAME).setEditable(UIFormStringInput.ENABLE);
          reset();
-         return;
       }
-      getUIStringInput(GROUP_NAME).setEditable(UIFormStringInput.DISABLE);
-      invokeGetBindingBean(group_);
    }
 
    public String getName()
@@ -100,9 +104,10 @@ public class UIGroupForm extends UIForm
          OrganizationService service = uiGroupForm.getApplicationComponent(OrganizationService.class);
          UIGroupExplorer uiGroupExplorer = uiGroupManagement.getChild(UIGroupExplorer.class);
 
-         Group currentGroup = uiGroupForm.getGroup();
-         if (currentGroup != null)
+         String currentGroupId = uiGroupForm.getGroupId();
+         if (currentGroupId != null)
          {
+            Group currentGroup = service.getGroupHandler().findGroupById(currentGroupId);
             uiGroupForm.invokeSetBindingBean(currentGroup);
             if (currentGroup.getLabel() == null || currentGroup.getLabel().trim().length() == 0)
             {
@@ -131,11 +136,14 @@ public class UIGroupForm extends UIForm
          }
 
          //UIGroupExplorer uiGroupExplorer = uiGroupManagement.getChild(UIGroupExplorer.class) ;      
-         String currentGroupId = null;
-         currentGroup = uiGroupExplorer.getCurrentGroup();
+         Group currentGroup = uiGroupExplorer.getCurrentGroup();
          if (currentGroup != null)
          {
             currentGroupId = currentGroup.getId();
+         }
+         else
+         {
+            currentGroupId = null;
          }
          String groupName = "/" + uiGroupForm.getUIStringInput(GROUP_NAME).getValue();
 

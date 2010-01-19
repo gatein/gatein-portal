@@ -22,6 +22,7 @@ package org.exoplatform.organization.webui.component;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.replication.api.annotations.Serialized;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIBreadcumbs;
@@ -43,6 +44,7 @@ import java.util.List;
  * 10:07:15 AM
  */
 @ComponentConfig(events = @EventConfig(listeners = UIGroupExplorer.ChangeNodeActionListener.class))
+@Serialized
 public class UIGroupExplorer extends UIContainer
 {
 

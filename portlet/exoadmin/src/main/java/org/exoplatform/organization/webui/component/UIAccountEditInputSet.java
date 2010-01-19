@@ -25,6 +25,7 @@ import org.exoplatform.services.organization.Query;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.replication.api.annotations.Serialized;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormInputBase;
@@ -39,6 +40,7 @@ import org.exoplatform.webui.form.validator.StringLengthValidator;
 import org.exoplatform.webui.organization.UIUserProfileInputSet;
 
 /** Created by The eXo Platform SARL Author : dang.tung tungcnw@gmail.com Jun 25, 2008 */
+@Serialized
 public class UIAccountEditInputSet extends UIFormInputSet
 {
 
@@ -49,6 +51,10 @@ public class UIAccountEditInputSet extends UIFormInputSet
    final static String PASSWORD2X = "confirmPassword";
 
    final static String CHANGEPASS = "changePassword";
+
+   public UIAccountEditInputSet()
+   {
+   }
 
    public UIAccountEditInputSet(String name) throws Exception
    {

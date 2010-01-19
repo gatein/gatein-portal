@@ -26,6 +26,7 @@ import org.exoplatform.services.organization.MembershipType;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.webui.application.replication.api.annotations.Serialized;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -51,6 +52,7 @@ import java.util.List;
 @ComponentConfig(lifecycle = UIFormLifecycle.class, template = "system:/groovy/webui/form/UIForm.gtmpl", events = {
    @EventConfig(listeners = UIGroupEditMembershipForm.SaveActionListener.class),
    @EventConfig(listeners = UIGroupEditMembershipForm.CancelActionListener.class)})
+@Serialized
 public class UIGroupEditMembershipForm extends UIForm
 {
 
@@ -60,9 +62,9 @@ public class UIGroupEditMembershipForm extends UIForm
 
    private final static String MEMBER_SHIP = "membership";
 
-   private Membership membership;
+   private String membershipId;
 
-   private Group group;
+   private String groupId;
 
    public UIGroupEditMembershipForm() throws Exception
    {
@@ -72,8 +74,8 @@ public class UIGroupEditMembershipForm extends UIForm
 
    public void setValue(Membership memberShip, Group selectedGroup) throws Exception
    {
-      this.membership = memberShip;
-      this.group = selectedGroup;
+      this.membershipId = memberShip.getId();
+      this.groupId = selectedGroup.getId();
       getUIStringInput(USER_NAME).setValue(memberShip.getUserName());
       OrganizationService service = getApplicationComponent(OrganizationService.class);
       List<?> collection = (List<?>)service.getMembershipTypeHandler().findMembershipTypes();
@@ -96,8 +98,9 @@ public class UIGroupEditMembershipForm extends UIForm
          UIApplication uiApp = event.getRequestContext().getUIApplication();
          UIPopupWindow uiPopup = uiForm.getParent();
          OrganizationService service = uiForm.getApplicationComponent(OrganizationService.class);
-         String userName = uiForm.membership.getUserName();
-         Group group = uiForm.group;
+         Membership formMembership =  service.getMembershipHandler().findMembership(uiForm.membershipId);
+         String userName = formMembership.getUserName();
+         Group group = service.getGroupHandler().findGroupById(uiForm.groupId);
          User user = service.getUserHandler().findUserByName(userName);
          MembershipHandler memberShipHandler = service.getMembershipHandler();
          String memberShipType = uiForm.getUIFormSelectBox(MEMBER_SHIP).getValue();
@@ -111,7 +114,7 @@ public class UIGroupEditMembershipForm extends UIForm
                uiApp.addMessage(new ApplicationMessage("UIGroupEditMembershipForm.msg.membership-exist", null));
                return;
             }
-            memberShipHandler.removeMembership(uiForm.membership.getId(), true);
+            memberShipHandler.removeMembership(uiForm.membershipId, true);
             memberShipHandler.linkMembership(user, group, membershipType, true);
          }
          catch (Exception e)

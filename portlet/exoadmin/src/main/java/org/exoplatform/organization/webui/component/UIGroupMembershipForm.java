@@ -26,6 +26,7 @@ import org.exoplatform.services.organization.MembershipType;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.webui.application.replication.api.annotations.Serialized;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.ComponentConfigs;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -65,6 +66,7 @@ import java.util.List;
       @EventConfig(listeners = UIPopupWindow.CloseActionListener.class, name = "ClosePopup"),
       @EventConfig(listeners = UIGroupMembershipForm.CloseActionListener.class, name = "Close", phase = Phase.DECODE),
       @EventConfig(listeners = UIGroupMembershipForm.AddActionListener.class, name = "Add", phase = Phase.DECODE)})})
+@Serialized
 public class UIGroupMembershipForm extends UIForm
 {
 

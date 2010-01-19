@@ -21,6 +21,7 @@ package org.exoplatform.organization.webui.component;
 
 import org.exoplatform.services.organization.MembershipType;
 import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.replication.api.annotations.Serialized;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIContainer;
 
@@ -31,6 +32,7 @@ import java.io.Writer;
  * Jun 23, 2006 10:07:15 AM
  */
 @ComponentConfig()
+@Serialized
 public class UIMembershipManagement extends UIContainer
 {
 

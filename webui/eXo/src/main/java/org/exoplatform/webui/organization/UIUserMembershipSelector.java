@@ -26,6 +26,7 @@ import org.exoplatform.services.organization.MembershipType;
 import org.exoplatform.services.organization.MembershipTypeHandler;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
+import org.exoplatform.webui.application.replication.api.annotations.Serialized;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIGrid;
@@ -36,6 +37,7 @@ import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormPopupWindow;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -50,6 +52,7 @@ import java.util.List;
 @ComponentConfig(template = "system:/groovy/organization/webui/component/UIUserMembershipSelector.gtmpl", events = {
    @EventConfig(listeners = UIUserMembershipSelector.SelectMembershipActionListener.class),
    @EventConfig(listeners = UIUserMembershipSelector.DeleteMembershipActionListener.class, phase = Phase.DECODE, confirm = "UIUserMembershipSelector.deleteMembership")})
+@Serialized
 public class UIUserMembershipSelector extends UISelector<String>
 {
 
@@ -59,9 +62,9 @@ public class UIUserMembershipSelector extends UISelector<String>
 
    private boolean isAdminRole_ = false;
 
-   public static String[] BEAN_FIELD = {"userName", "groupId", "membershipType"};
+   public static final String[] BEAN_FIELD = {"userName", "groupId", "membershipType"};
 
-   public static String[] ACTIONS = {"DeleteMembership"};
+   public static final String[] ACTIONS = {"DeleteMembership"};
 
    public UIUserMembershipSelector() throws Exception
    {
@@ -198,7 +201,7 @@ public class UIUserMembershipSelector extends UISelector<String>
       }
    }
 
-   static public class Membership
+   static public class Membership implements Serializable
    {
 
       private String groupId_;

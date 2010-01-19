@@ -19,7 +19,7 @@
 
 package org.exoplatform.organization.webui.component;
 
-import org.exoplatform.commons.utils.ObjectPageList;
+import org.exoplatform.commons.utils.EmptySerializablePageList;
 import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.Membership;
@@ -28,6 +28,7 @@ import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.UserHandler;
 import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.replication.api.annotations.Serialized;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.ComponentConfigs;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -38,6 +39,7 @@ import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
+import java.io.Serializable;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -55,6 +57,7 @@ import java.util.List;
       @EventConfig(listeners = UIUserInGroup.DeleteUserActionListener.class, confirm = "UIUserInGroup.confirm.deleteUser"),
       @EventConfig(listeners = UIUserInGroup.EditActionListener.class)}),
    @ComponentConfig(type = org.exoplatform.organization.webui.component.UIUserInGroup.UIGridUser.class, id = "UIGridUser", template = "system:/groovy/webui/core/UIGrid.gtmpl")})
+@Serialized
 public class UIUserInGroup extends UIContainer
 {
 
@@ -123,14 +126,14 @@ public class UIUserInGroup extends UIContainer
       PageList pageList = null;
       if (group == null)
       {
-         pageList = new ObjectPageList(new ArrayList<Object>(), 10);
+         pageList = EmptySerializablePageList.get();
       }
       else
       {
          OrganizationService service = getApplicationComponent(OrganizationService.class);
          MembershipHandler handler = service.getMembershipHandler();
          List<?> memberships = (List<?>)handler.findMembershipsByGroup(group);
-         pageList = new ObjectPageList(memberships, 10);
+         pageList = new FindMembershipByGroupPageList(group.getId(), 10);
       }
       UIGridUser uiGrid = getChild(UIGridUser.class);
       pageList.setPageSize(5);
@@ -220,6 +223,7 @@ public class UIUserInGroup extends UIContainer
       }
    }
 
+   @Serialized
    static public class UIGridUser extends UIGrid
    {
 
@@ -269,19 +273,28 @@ public class UIUserInGroup extends UIContainer
 
    }
 
-   static public class MembershipUser
+   static public class MembershipUser implements Serializable
    {
 
-      private User user;
-
       private String mtype;
+
+      private String userName;
+
+      private String firstName;
+
+      private String lastName;
+
+      private String email;
 
       private String id;
 
       public MembershipUser(User user, String mtype, String id)
       {
          this.mtype = mtype;
-         this.user = user;
+         this.userName = user.getUserName();
+         this.firstName = user.getFirstName();
+         this.lastName = user.getLastName();
+         this.email = user.getEmail();
          this.id = id;
       }
 
@@ -295,34 +308,24 @@ public class UIUserInGroup extends UIContainer
          this.mtype = mtype;
       }
 
-      public User getUser()
-      {
-         return user;
-      }
-
-      public void setUser(User user)
-      {
-         this.user = user;
-      }
-
       public String getUserName()
       {
-         return user.getUserName();
+         return userName;
       }
 
       public String getFirstName()
       {
-         return user.getFirstName();
+         return firstName;
       }
 
       public String getLastName()
       {
-         return user.getLastName();
+         return lastName;
       }
 
       public String getEmail()
       {
-         return user.getEmail();
+         return email;
       }
 
       public String getId()

@@ -22,6 +22,7 @@ package org.exoplatform.organization.webui.component;
 import org.exoplatform.services.organization.MembershipType;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.webui.application.replication.api.annotations.Serialized;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -40,12 +41,13 @@ import org.exoplatform.webui.form.validator.StringLengthValidator;
 @ComponentConfig(lifecycle = UIFormLifecycle.class, template = "system:/groovy/webui/form/UIFormWithTitle.gtmpl", events = {
    @EventConfig(listeners = UIMembershipTypeForm.SaveActionListener.class),
    @EventConfig(listeners = UIMembershipTypeForm.ResetActionListener.class, phase = Phase.DECODE)})
+@Serialized
 public class UIMembershipTypeForm extends UIForm
 {
 
    private static String MEMBERSHIP_TYPE_NAME = "name", DESCRIPTION = "description";
 
-   private MembershipType membershipType_;
+   private String membershipTypeName;
 
    public UIMembershipTypeForm() throws Exception
    {
@@ -58,20 +60,23 @@ public class UIMembershipTypeForm extends UIForm
 
    public void setMembershipType(MembershipType membershipType) throws Exception
    {
-      membershipType_ = membershipType;
-      if (membershipType_ == null)
+      if (membershipType == null)
       {
          getUIStringInput(MEMBERSHIP_TYPE_NAME).setEditable(UIFormStringInput.ENABLE);
          return;
       }
-      getUIStringInput(MEMBERSHIP_TYPE_NAME).setEditable(UIFormStringInput.DISABLE);
-      invokeGetBindingBean(membershipType_);
+      else
+      {
+         membershipTypeName = membershipType.getName();
+         getUIStringInput(MEMBERSHIP_TYPE_NAME).setEditable(UIFormStringInput.DISABLE);
+      }
+      invokeGetBindingBean(membershipType);
    }
 
-   public MembershipType getMembershipType()
+   public String getMembershipTypeName()
    {
-      return membershipType_;
-   };
+      return membershipTypeName;
+   }
 
    static public class SaveActionListener extends EventListener<UIMembershipTypeForm>
    {
@@ -81,7 +86,7 @@ public class UIMembershipTypeForm extends UIForm
          UIMembershipManagement uiMembershipManagement = uiForm.getParent();
          OrganizationService service = uiForm.getApplicationComponent(OrganizationService.class);
 
-         MembershipType mt = uiForm.getMembershipType();
+         MembershipType mt = service.getMembershipTypeHandler().findMembershipType(uiForm.membershipTypeName);
 
          if (mt != null)
          {

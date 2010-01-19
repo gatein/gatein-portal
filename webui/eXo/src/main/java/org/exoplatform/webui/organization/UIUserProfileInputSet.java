@@ -27,6 +27,7 @@ import org.exoplatform.services.resources.LocaleConfigService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
+import org.exoplatform.webui.application.replication.api.annotations.Serialized;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIComponent;
@@ -46,14 +47,19 @@ import java.util.Locale;
  * Jun 28, 2006
  */
 @ComponentConfig(template = "system:/groovy/webui/form/UIVTabInputSet.gtmpl")
+@Serialized
 public class UIUserProfileInputSet extends UIFormInputSet
 {
 
    private String user_;
 
-   public static String MALE = "male";
+   public final static String MALE = "male";
 
-   public static String FEMALE = "female";
+   public final static String FEMALE = "female";
+
+   public UIUserProfileInputSet()
+   {
+   }
 
    public UIUserProfileInputSet(String name) throws Exception
    {

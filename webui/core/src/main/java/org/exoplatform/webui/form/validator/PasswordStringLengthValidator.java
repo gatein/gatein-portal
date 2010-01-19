@@ -20,6 +20,7 @@
 package org.exoplatform.webui.form.validator;
 
 import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.webui.application.replication.api.annotations.Serialized;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.exception.MessageException;
 import org.exoplatform.webui.form.UIForm;
@@ -33,6 +34,7 @@ import org.exoplatform.webui.form.UIFormInput;
  * 
  * Validates whether this value has a length between min and max
  */
+@Serialized
 public class PasswordStringLengthValidator implements Validator
 {
    /**
@@ -44,6 +46,11 @@ public class PasswordStringLengthValidator implements Validator
     * The maximum number of characters in this String
     */
    private Integer max_ = 0;
+
+   // For @Serialized needs
+   public PasswordStringLengthValidator()
+   {
+   }
 
    public PasswordStringLengthValidator(Integer max)
    {

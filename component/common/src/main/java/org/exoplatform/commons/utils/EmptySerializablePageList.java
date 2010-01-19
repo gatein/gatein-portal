@@ -32,7 +32,7 @@ public class EmptySerializablePageList<E> extends AbstractSerializablePageList<E
    private static final EmptySerializablePageList instance = new EmptySerializablePageList();
 
    /** . */
-   private final ListAccess<E> listAccess = new ListAccess<E>()
+   private transient final ListAccess<E> listAccess = new ListAccess<E>()
    {
       public E[] load(int index, int length) throws Exception, IllegalArgumentException
       {
@@ -59,5 +59,10 @@ public class EmptySerializablePageList<E> extends AbstractSerializablePageList<E
    {
       // Cast OK
       return (PageList<E>)instance;
+   }
+
+   private Object readResolve()
+   {
+      return instance;
    }
 }

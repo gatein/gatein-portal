@@ -25,6 +25,7 @@ import org.exoplatform.services.organization.MembershipType;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.replication.api.annotations.Serialized;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -42,6 +43,7 @@ import java.util.List;
 @ComponentConfig(events = {
    @EventConfig(listeners = UIListMembershipType.EditMembershipActionListener.class),
    @EventConfig(listeners = UIListMembershipType.DeleteMembershipActionListener.class, confirm = "UIListMembershipType.deleteMemberShip")})
+@Serialized
 public class UIListMembershipType extends UIContainer
 {
 
@@ -70,17 +72,7 @@ public class UIListMembershipType extends UIContainer
    @SuppressWarnings("unchecked")
    public void loadData() throws Exception
    {
-      StatelessPageList<MembershipType> pla = new StatelessPageList<MembershipType>(5)
-      {
-         @Override
-         protected ListAccess<MembershipType> connect() throws Exception
-         {
-            OrganizationService service = getApplicationComponent(OrganizationService.class);
-            List<MembershipType> memberships = (List<MembershipType>)service.getMembershipTypeHandler().findMembershipTypes();
-            return new ListAccessImpl<MembershipType>(MembershipType.class, memberships);
-         }
-      };
-      getChild(UIGrid.class).getUIPageIterator().setPageList(pla);
+      getChild(UIGrid.class).getUIPageIterator().setPageList(new FindMembershipTypesPageList(5));
    }
 
    public void processRender(WebuiRequestContext context) throws Exception
@@ -121,8 +113,8 @@ public class UIListMembershipType extends UIContainer
          UIMembershipManagement membership = uiMembership.getParent();
          UIMembershipTypeForm uiForm = membership.findFirstComponentOfType(UIMembershipTypeForm.class);
 
-         MembershipType existMembershipType = uiForm.getMembershipType();
-         if (existMembershipType != null && existMembershipType.getName().equals(name))
+         String existMembershipTypeName = uiForm.getMembershipTypeName();
+         if (existMembershipTypeName != null && existMembershipTypeName.equals(name))
          {
             UIApplication uiApp = event.getRequestContext().getUIApplication();
             uiApp.addMessage(new ApplicationMessage("UIMembershipList.msg.InUse", null));

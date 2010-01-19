@@ -25,6 +25,7 @@ import org.exoplatform.services.organization.GroupHandler;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.replication.api.annotations.Serialized;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -54,6 +55,7 @@ import java.util.List;
    @EventConfig(listeners = UIGroupManagement.EditGroupActionListener.class)
 
 })
+@Serialized
 public class UIGroupManagement extends UIContainer
 {
 
@@ -140,7 +142,7 @@ public class UIGroupManagement extends UIContainer
             return;
          }
          UIGroupForm groupForm = uiGroupManagement.findFirstComponentOfType(UIGroupForm.class);
-         if (groupForm.getGroup() != null)
+         if (groupForm.getGroupId() != null)
          {
             uiApp.addMessage(new ApplicationMessage("UIGroupManagement.msg.Delete", null));
             return;

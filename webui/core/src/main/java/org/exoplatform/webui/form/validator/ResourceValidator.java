@@ -20,6 +20,7 @@
 package org.exoplatform.webui.form.validator;
 
 import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.webui.application.replication.api.annotations.Serialized;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.exception.MessageException;
 import org.exoplatform.webui.form.UIForm;
@@ -33,6 +34,7 @@ import org.exoplatform.webui.form.UIFormInput;
  * 
  * Validates whether the value is composed of letters, numbers or '_'
  */
+@Serialized
 public class ResourceValidator implements Validator
 {
 
