@@ -414,11 +414,22 @@ public class GroupDAOImpl implements GroupHandler
 
       if (parents.size() == 0)
       {
+
+         String id = orgService.getConfiguration().getParentId(jbidGroup.getGroupType());
+
+         if (id != null && orgService.getConfiguration().isForceMembershipOfMappedTypes())
+         {
+            if (id.endsWith("/*"))
+            {
+               id = id.substring(0, id.length() - 2);
+            }
+
+            return id + jbidGroup.getName();
+         }
+
          //As there is special root group this shouldn't happen:
          throw new IllegalStateException("Group present that is not connected to the root: " + jbidGroup.getName());
 
-         // This group is at the root
-         //return "/" + groupName;
       }
 
       String parentGroupId = getGroupId(((org.picketlink.idm.api.Group)parents.iterator().next()));
