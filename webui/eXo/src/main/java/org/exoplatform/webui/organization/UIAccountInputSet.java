@@ -25,6 +25,7 @@ import org.exoplatform.services.organization.Query;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.replication.api.annotations.Serialized;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.form.UIFormInputWithActions;
 import org.exoplatform.webui.form.UIFormStringInput;
@@ -41,6 +42,7 @@ import org.exoplatform.webui.form.validator.StringLengthValidator;
  *          minhdv81@yahoo.com
  * Jun 28, 2006
  */
+@Serialized
 public class UIAccountInputSet extends UIFormInputWithActions
 {
 
@@ -49,6 +51,10 @@ public class UIAccountInputSet extends UIFormInputWithActions
    final static String PASSWORD1X = "password";
 
    final static String PASSWORD2X = "Confirmpassword";
+
+   public UIAccountInputSet()
+   {
+   }
 
    public UIAccountInputSet(String name) throws Exception
    {

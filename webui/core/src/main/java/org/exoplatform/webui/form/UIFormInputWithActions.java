@@ -20,8 +20,12 @@
 package org.exoplatform.webui.form;
 
 import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.replication.api.annotations.Serialized;
 import org.exoplatform.webui.core.UIComponent;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 
+import java.io.Serializable;
 import java.io.Writer;
 import java.util.HashMap;
 import java.util.List;
@@ -35,11 +39,19 @@ import java.util.ResourceBundle;
  *          minh.dang@exoplatform.com
  * Sep 20, 2006
  */
-
+@Serialized
 public class UIFormInputWithActions extends UIFormInputSet
 {
 
+
+   /** . */
+   private static final Logger log = LoggerFactory.getLogger(UIFormInputWithActions.class);
+
    Map<String, List<ActionData>> actionField = new HashMap<String, List<ActionData>>();
+
+   public UIFormInputWithActions()
+   {
+   }
 
    public UIFormInputWithActions(String id)
    {
@@ -76,7 +88,7 @@ public class UIFormInputWithActions extends UIFormInputSet
          catch (MissingResourceException ex)
          {
             label = inputEntry.getId();
-            System.err.println("\n " + uiForm.getId() + ".label." + inputEntry.getId() + " not found value");
+            log.error("\n " + uiForm.getId() + ".label." + inputEntry.getId() + " not found value");
          }
          w.write("<tr>");
          w.write("<td class=\"FieldLabel\">");
@@ -135,7 +147,7 @@ public class UIFormInputWithActions extends UIFormInputSet
       w.write("</div>");
    }
 
-   static public class ActionData
+   static public class ActionData implements Serializable
    {
       final public static int TYPE_ICON = 0;
 

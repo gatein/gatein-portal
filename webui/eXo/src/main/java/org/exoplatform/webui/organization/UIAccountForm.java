@@ -22,6 +22,7 @@ package org.exoplatform.webui.organization;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.replication.api.annotations.Serialized;
 import org.exoplatform.webui.config.InitParams;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -54,6 +55,7 @@ import javax.xml.namespace.QName;
    @EventConfig(listeners = UIAccountForm.SaveActionListener.class),
    @EventConfig(listeners = UIAccountForm.ResetActionListener.class, phase = Phase.DECODE),
    @EventConfig(listeners = UIAccountForm.SearchUserActionListener.class, phase = Phase.DECODE)})
+@Serialized
 public class UIAccountForm extends UIFormTabPane
 {
 
