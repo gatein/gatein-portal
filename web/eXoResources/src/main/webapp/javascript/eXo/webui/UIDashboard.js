@@ -290,7 +290,6 @@ function UIDashboard() {
 		colsContainer.style.width = "100%" ;
 
 		eXo.webui.UIDashboard.initHeight(windowId) ;
-		eXo.webui.UIDashboard.initPopup(windowId);
 		setTimeout("eXo.webui.UIDashboard.initDragDrop('" + windowId + "'," + canEdit + ");", 300) ;
 	};
 	
@@ -385,13 +384,12 @@ function UIDashboard() {
 		}
 	};
 	
-	UIDashboard.prototype.initPopup = function(windowId) {
-		var uiWindow = document.getElementById(windowId);
-		var uiDashboardCont = eXo.core.DOMUtil.findFirstDescendantByClass(uiWindow, "div", "UIDashboardContainer");
-		var popup = eXo.core.DOMUtil.findPreviousElementByTagName(uiDashboardCont, "div");
+	UIDashboard.prototype.initPopup = function(popup) {
+		if(typeof(popup) == "string") popup = document.getElementById(popup);
 		if(!popup || popup.style.display == "none") return;
-		var deltaY = Math.ceil((uiWindow.offsetHeight - popup.offsetHeight) / 2);
-		popup.style.top = eXo.core.Browser.findPosY(uiWindow) + deltaY + "px";
+		var uiDashboard = eXo.core.DOMUtil.findAncestorByClass(popup, "UIDashboard");
+		var deltaY = Math.ceil((uiDashboard.offsetHeight - popup.offsetHeight) / 2);
+		popup.style.top = eXo.core.Browser.findPosY(uiDashboard) + deltaY + "px";
 	};
 	
 	UIDashboard.prototype.createTarget = function(width, height) {
