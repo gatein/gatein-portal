@@ -18,6 +18,7 @@
    <UIBannerPortlet>
       <action>
          <changeLanguage>更改语言</changeLanguage>
+         <register>注册</register>
       </action>
    </UIBannerPortlet>
  

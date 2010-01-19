@@ -9,6 +9,12 @@
          <action>
             <CheckUsernameAvailability>查询用户</CheckUsernameAvailability>
          </action>
+         <username>用户名</username>
+         <password>密码</password>
+         <confirmPassword>确认密码</confirmPassword>
+         <firstName>名</firstName>
+         <lastName>姓</lastName>
+         <emailAddress>电子邮件</emailAddress>
       </label>
    </UIRegisterForm>
 </bundle>
