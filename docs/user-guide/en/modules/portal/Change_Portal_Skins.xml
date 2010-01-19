@@ -24,6 +24,11 @@
     02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
      --><title>Change Portal Skins</title>
+<warning>
+<para>
+The <emphasis role="bold">Administration</emphasis> menu entry reported to be under the <emphasis role="bold">GateIn Start</emphasis> button does not exist in GateIn 3.0 Beta 3. Therefore some of the instructions in this section may be incomplete or inaccurate.
+</para>
+</warning>
 		<para>
 			Skins are graphic styles that display an attractive user interface. Each skin has its own characteristics with different backgrounds, icons, and other visual elements. In order to be user-friendly and flexible, users are allowed to change the skin they use on the portal without having edit rights.
 		</para>
@@ -37,7 +42,7 @@
 							<procedure>
 								<step>
 									<para>
-										Go to <emphasis role="bold">GateIn Start</emphasis> and click on <emphasis role="bold">Change Skin</emphasis>.
+										Go to <emphasis role="bold">&PRODUCT; Start</emphasis> and click on <emphasis role="bold">Change Skin</emphasis>.
 									</para>
 								</step>
 								<step>
@@ -94,11 +99,6 @@
 						</listitem>
 				</varlistentry>
 			</variablelist>
-	<warning>
-		<para>
-			The <emphasis role="bold">Administration</emphasis> item referred to in the above procedure is not present in GateIn 3.0 Beta 3
-		</para>
-	</warning> 
 
 </section>
 

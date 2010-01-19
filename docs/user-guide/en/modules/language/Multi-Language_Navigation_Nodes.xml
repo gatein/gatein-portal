@@ -26,7 +26,7 @@
     --><title>Multi-Language Navigation Nodes</title>
 <warning>
 <para>
-	The <emphasis role="bold">Add New Portal</emphasis> button mentioned in this section does not appear under the <emphasis role="bold">Site</emphasis> navigation in GateIn 3.0 Beta 3, even when logged in as the Administrator. 
+	The <emphasis role="bold">Create Page Wizard</emphasis> mentioned in this section does not appear to allow editing of existing pages in GateIn 3.0 Beta 3, even when logged in as the Administrator. Therefore these instructions may be incomplete or incorrect.
 </para>
 </warning> 
 
@@ -83,7 +83,7 @@
 		<procedure>
 			<step>
 				<para>
-					Go to <emphasis role="bold">GateIn Start</emphasis> -&gt; <emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Basic</emphasis> --&gt; <emphasis role="bold">Create Page Wizard</emphasis>
+					Go to <emphasis role="bold">Group</emphasis> and click on <emphasis role="bold">Add New Page</emphasis>. This will activate the <emphasis role="bold">Create Page Wizard</emphasis>.
 				</para>
 			</step>
 			<step>

@@ -31,7 +31,7 @@ The <emphasis role="bold">Administration</emphasis> menu entry reported to be un
 </para>
 </warning>
 		<para>
-			If you are allowed to access GateIn Start in the User Workspace, you can take all actions related to a node such as : add a new node, edit, copy, cut, delete and clone node.
+			If you are allowed to access &PRODUCT; in the User Workspace, you can take all actions related to a node such as : add a new node, edit, copy, cut, delete and clone node.
 		</para>
 		<section id="sect-User_Guide-Manage_Navigation_Nodes-Add_a_new_node">
 			<title>Add a new node</title>
