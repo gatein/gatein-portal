@@ -275,10 +275,9 @@ function UIDashboard() {
 		portletFragment.style.overflow = "hidden" ;
 		if(eXo.core.Browser.isIE6()) gadgetContainer.style.width = "99.5%";
 		
-		var selectPopup = DOMUtil.findDescendantById(uiDashboard, "UIAddGadgetPopup");
+		var selectPopup = DOMUtil.findPreviousElementByTagName(uiContainer, "div");
 		var closeButton = DOMUtil.findFirstDescendantByClass(selectPopup, "div", "CloseButton");
 		closeButton.onclick = eXo.webui.UIDashboard.showHideSelectContainer;
-		var uiSelect = DOMUtil.findFirstDescendantByClass(selectPopup, "div", "UIDashboardSelectContainer");
 		
 		var colsContainer = DOMUtil.findFirstChildByClass(gadgetContainer, "div", "UIColumns");
 		var columns = DOMUtil.findChildrenByClass(colsContainer, "div", "UIColumn");
@@ -291,6 +290,7 @@ function UIDashboard() {
 		colsContainer.style.width = "100%" ;
 
 		eXo.webui.UIDashboard.initHeight(windowId) ;
+		eXo.webui.UIDashboard.initPopup(windowId);
 		setTimeout("eXo.webui.UIDashboard.initDragDrop('" + windowId + "'," + canEdit + ");", 300) ;
 	};
 	
@@ -385,6 +385,15 @@ function UIDashboard() {
 		}
 	};
 	
+	UIDashboard.prototype.initPopup = function(windowId) {
+		var uiWindow = document.getElementById(windowId);
+		var uiDashboardCont = eXo.core.DOMUtil.findFirstDescendantByClass(uiWindow, "div", "UIDashboardContainer");
+		var popup = eXo.core.DOMUtil.findPreviousElementByTagName(uiDashboardCont, "div");
+		if(!popup || popup.style.display == "none") return;
+		var deltaY = Math.ceil((uiWindow.offsetHeight - popup.offsetHeight) / 2);
+		popup.style.top = eXo.core.Browser.findPosY(uiWindow) + deltaY + "px";
+	};
+	
 	UIDashboard.prototype.createTarget = function(width, height) {
 		var uiTarget = document.createElement("div");
 		uiTarget.id = "UITarget";
@@ -408,8 +417,8 @@ function UIDashboard() {
 		var comp = eXo.core.Browser.getEventSource(event);
 		var uiDashboardPortlet = DOMUtil.findAncestorByClass(comp, "UIDashboard");
 		var portletFragment = DOMUtil.findAncestorByClass(uiDashboardPortlet, "PORTLET-FRAGMENT");
-		var uiSelectPopup = DOMUtil.findDescendantById(uiDashboardPortlet, "UIAddGadgetPopup");
 		var uiContainer = DOMUtil.findFirstDescendantByClass(uiDashboardPortlet, "div", "UIDashboardContainer");
+		var uiSelectPopup = DOMUtil.findPreviousElementByTagName(uiContainer, "div");
 		var addButton = DOMUtil.findFirstDescendantByClass(uiContainer, "div", "ContainerControlBarL");
 
 		var params;

@@ -53,7 +53,7 @@ public class UIDashboard extends UIContainer
 
    public UIDashboard() throws Exception
    {
-      UIPopupWindow popup = addChild(UIPopupWindow.class, null, GADGET_POPUP_ID);
+      UIPopupWindow popup = addChild(UIPopupWindow.class, null, GADGET_POPUP_ID + "-" + hashCode());
       popup.setUIComponent(createUIComponent(UIDashboardSelectContainer.class, null, null));
       addChild(UIDashboardContainer.class, null, null).setColumns(3);
    }
@@ -82,7 +82,7 @@ public class UIDashboard extends UIContainer
    public void setShowSelectPopup(final boolean value)
    {
       this.isShowSelectPopup = value;
-      ((UIPopupWindow)getChildById(GADGET_POPUP_ID)).setShow(value);
+      getChild(UIPopupWindow.class).setShow(value);
    }
 
    public String getAggregatorId()
@@ -118,7 +118,7 @@ public class UIDashboard extends UIContainer
          boolean isShow = Boolean.parseBoolean(pcontext.getRequestParameter("isShow"));
          uiDashboard.setShowSelectPopup(isShow);
          String windowId = uiDashboard.getChild(UIDashboardContainer.class).getWindowId();
-         event.getRequestContext().addUIComponentToUpdateByAjax(uiDashboard.getChildById(GADGET_POPUP_ID));
+         event.getRequestContext().addUIComponentToUpdateByAjax(uiDashboard.getChild(UIPopupWindow.class));
          if (isShow)
          {
             event.getRequestContext().getJavascriptManager().addCustomizedOnLoadScript(
