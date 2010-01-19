@@ -25,7 +25,7 @@ import org.exoplatform.commons.chromattic.SessionContext;
 import org.exoplatform.commons.chromattic.SynchronizationListener;
 import org.exoplatform.commons.chromattic.SynchronizationStatus;
 import org.exoplatform.portal.application.PortletPreferences;
-import org.exoplatform.portal.config.NoSuchDateException;
+import org.exoplatform.portal.config.NoSuchDataException;
 import org.exoplatform.portal.pom.data.Mapper;
 import org.gatein.mop.api.Model;
 import org.gatein.mop.api.content.Customization;
@@ -203,7 +203,7 @@ public class POMSession
    {
       Customization<?> customization = getModel().findCustomizationById(id);
       if (customization == null) {
-         throw new NoSuchDateException("Can not find " + id);
+         throw new NoSuchDataException("Can not find " + id);
       }
       return customization;
    }

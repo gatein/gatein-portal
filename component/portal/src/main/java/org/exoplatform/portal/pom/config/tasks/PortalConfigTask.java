@@ -20,7 +20,7 @@
 package org.exoplatform.portal.pom.config.tasks;
 
 import org.exoplatform.portal.application.PortletPreferences;
-import org.exoplatform.portal.config.NoSuchDateException;
+import org.exoplatform.portal.config.NoSuchDataException;
 import org.exoplatform.portal.pom.config.cache.DataAccessMode;
 import org.exoplatform.portal.pom.config.cache.CacheableDataTask;
 import org.exoplatform.portal.pom.data.Mapper;
@@ -80,7 +80,7 @@ public abstract class PortalConfigTask
          Site site = workspace.getSite(type, key.getId());
          if (site == null)
          {
-            throw new NoSuchDateException("Could not remove non existing portal " + key.getId());
+            throw new NoSuchDataException("Could not remove non existing portal " + key.getId());
          }
          else
          {

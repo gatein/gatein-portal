@@ -134,7 +134,7 @@ public class TestDataStorage extends AbstractPortalTest
          storage_.remove(portal);
          fail("was expecting a NoSuchDataException");
       }
-      catch (NoSuchDateException e)
+      catch (NoSuchDataException e)
       {
 
       }

@@ -19,7 +19,7 @@
 
 package org.exoplatform.portal.pom.config.tasks;
 
-import org.exoplatform.portal.config.NoSuchDateException;
+import org.exoplatform.portal.config.NoSuchDataException;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.POMTask;
 import org.exoplatform.portal.pom.config.cache.CacheableDataTask;
@@ -50,7 +50,7 @@ public abstract class PreferencesTask<S>
       {
          Customization<S> customization = (Customization<S>)session.findCustomizationById(storageId);
          if (customization == null) {
-            throw new NoSuchDateException("Can not find " + storageId);
+            throw new NoSuchDataException("Can not find " + storageId);
          }
          return customization.getContentId();
       }
@@ -136,7 +136,7 @@ public abstract class PreferencesTask<S>
 
          Customization<S> customization = (Customization<S>)session.findCustomizationById(storageId);
          if (customization == null) {
-            throw new NoSuchDateException("Can not find " + storageId);
+            throw new NoSuchDataException("Can not find " + storageId);
          }
          if (prefs != null)
          {

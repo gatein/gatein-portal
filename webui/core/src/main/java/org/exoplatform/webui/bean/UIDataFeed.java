@@ -20,7 +20,7 @@
 package org.exoplatform.webui.bean;
 
 import org.exoplatform.commons.utils.PageList;
-import org.exoplatform.portal.config.NoSuchDateException;
+import org.exoplatform.portal.config.NoSuchDataException;
 
 /**
  * Created by The eXo Platform SAS Author : liem.nguyen ncliam@gmail.com Jun 26,
@@ -33,10 +33,10 @@ public interface UIDataFeed
 
    /***
     * Load data of next page. Throws DataMissingException when page's data is cannot load
-    * @throws NoSuchDateException
+    * @throws NoSuchDataException
     * @throws Exception
     */
-   public void feedNext() throws NoSuchDateException, Exception;
+   public void feedNext() throws NoSuchDataException, Exception;
 
    public boolean hasNext();
 }

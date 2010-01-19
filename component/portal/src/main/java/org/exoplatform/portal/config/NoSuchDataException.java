@@ -1,5 +1,6 @@
 /******************************************************************************
   * JBoss, a division of Red Hat                                               *
+
   * Copyright 2009, Red Hat Middleware, LLC, and individual                    *
   * contributors as indicated by the @authors tag. See the                     *
   * copyright.txt in the distribution for a full listing of                    *
@@ -24,18 +25,22 @@
 package org.exoplatform.portal.config;
 
 
-public class NoSuchDateException extends StorageException
+public class NoSuchDataException extends StorageException
 {
-   public NoSuchDateException()
+   public NoSuchDataException()
    {
    }
 
-   public NoSuchDateException(String message)
+   public NoSuchDataException(String message)
    {
       super(message);
    }
 
-   public NoSuchDateException(String message, Throwable cause)
+   public NoSuchDataException(Throwable cause) {
+      super(cause);
+   }
+   
+   public NoSuchDataException(String message, Throwable cause)
    {
       super(message, cause);
    }
