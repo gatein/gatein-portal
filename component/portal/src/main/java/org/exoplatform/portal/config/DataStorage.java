@@ -20,6 +20,7 @@
 package org.exoplatform.portal.config;
 
 import org.exoplatform.commons.utils.LazyPageList;
+import org.exoplatform.commons.utils.ListAccess;
 import org.exoplatform.portal.application.PortletPreferences;
 import org.exoplatform.portal.config.model.ApplicationState;
 import org.exoplatform.portal.config.model.ApplicationType;
@@ -108,6 +109,10 @@ public interface DataStorage
    public <T> LazyPageList<T> find(Query<T> q) throws Exception;
 
    public <T> LazyPageList<T> find(Query<T> q, Comparator<T> sortComparator) throws Exception;
+
+   public <T> ListAccess<T> find2(Query<T> q) throws Exception;
+
+   public <T> ListAccess<T> find2(Query<T> q, Comparator<T> sortComparator) throws Exception;
 
    public Container getSharedLayout() throws Exception;
 

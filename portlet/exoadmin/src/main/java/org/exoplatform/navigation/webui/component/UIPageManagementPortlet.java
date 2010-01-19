@@ -20,6 +20,7 @@
 package org.exoplatform.navigation.webui.component;
 
 import org.exoplatform.portal.webui.page.UIPageBrowser;
+import org.exoplatform.webui.application.replication.api.annotations.Serialized;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
@@ -32,6 +33,7 @@ import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
  */
 
 @ComponentConfig(lifecycle = UIApplicationLifecycle.class)
+@Serialized
 public class UIPageManagementPortlet extends UIPortletApplication
 {
    public UIPageManagementPortlet() throws Exception

@@ -21,6 +21,7 @@ package org.exoplatform.portal.webui.page;
 
 import org.exoplatform.commons.utils.LazyPageList;
 import org.exoplatform.commons.utils.ObjectPageList;
+import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.Query;
@@ -41,6 +42,7 @@ import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.portal.webui.workspace.UIWorkingWorkspace;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.replication.api.annotations.Serialized;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.ComponentConfigs;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -84,12 +86,13 @@ import javax.jcr.RepositoryException;
       @EventConfig(listeners = UIPageForm.SelectMembershipActionListener.class, phase = Phase.DECODE),
       @EventConfig(listeners = UIMaskWorkspace.CloseActionListener.class, phase = Phase.DECODE)}, initParams = @ParamConfig(name = "PageTemplate", value = "system:/WEB-INF/conf/uiconf/portal/webui/page/PageTemplate.groovy")),
    @ComponentConfig(type = UIFormInputSet.class, id = "PermissionSetting", template = "system:/groovy/webui/core/UITabSelector.gtmpl", events = {@EventConfig(listeners = UIFormInputSet.SelectComponentActionListener.class)})})
+@Serialized
 public class UIPageBrowser extends UISearch
 {
 
-   public static String[] BEAN_FIELD = {"pageId", "title", "accessPermissions", "editPermission"};
+   public static final String[] BEAN_FIELD = {"pageId", "title", "accessPermissions", "editPermission"};
 
-   public static String[] ACTIONS = {"EditInfo", "Delete"};
+   public static final String[] ACTIONS = {"EditInfo", "Delete"};
 
    private boolean showAddNewPage = false;
 
@@ -137,19 +140,14 @@ public class UIPageBrowser extends UISearch
       {
          lastQuery_ = new Query<Page>(null, null, null, null, Page.class);
       }
-      LazyPageList<Page> pagelist = null;
+/*
       try
       {
-         pagelist = service.find(lastQuery_, new Comparator<Page>()
-         {
-            public int compare(Page page1, Page page2)
-            {
-               return page1.getName().compareTo(page2.getName());
-            }
-         });
+*/
          //pagelist.setPageSize(10);
          //pageIterator.setPageList(pagelist);
-         virtualList.dataBind(pagelist);
+      virtualList.dataBind(new PageQueryAccessList(lastQuery_, 10));
+/*
       }
       catch (RepositoryException e)
       {
@@ -160,8 +158,11 @@ public class UIPageBrowser extends UISearch
          Util.getPortalRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
          return;
       }
+*/
+
+
       UIRepeater repeater = (UIRepeater)virtualList.getDataFeed();
-      LazyPageList datasource = (LazyPageList)repeater.getDataSource();
+      PageList datasource = repeater.getDataSource();
       if (datasource.getAvailable() > 0)
          return;
       UIApplication uiApp = Util.getPortalRequestContext().getUIApplication();

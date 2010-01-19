@@ -166,12 +166,12 @@ public class DataStorageImpl implements DataStorage
 
       protected abstract O create(D d);
 
-      LazyPageList<O> execute() throws Exception
+      ListAccess<O> execute() throws Exception
       {
          Query<D> delegateQ = new Query<D>(q, dataType);
          LazyPageList<D> r = delegate.find(delegateQ, null);
          final List<D> list = r.getAll();
-         ListAccess<O> access = new ListAccess<O>()
+         return new ListAccess<O>()
          {
             public int getSize() throws Exception
             {
@@ -188,12 +188,21 @@ public class DataStorageImpl implements DataStorage
                return pages;
             }
          };
-         return new LazyPageList<O>(access, r.getPageSize());
       }
 
    }
 
+   public <T> ListAccess<T> find2(Query<T> q) throws Exception
+   {
+      return find2(q, null);
+   }
+
    public <T> LazyPageList<T> find(Query<T> q, Comparator<T> sortComparator) throws Exception
+   {
+      return new LazyPageList<T>(find2(q, sortComparator), 10);
+   }
+
+   public <T> ListAccess<T> find2(Query<T> q, Comparator<T> sortComparator) throws Exception
    {
       Class<T> type = q.getClassType();
       if (type == Page.class)
@@ -206,7 +215,7 @@ public class DataStorageImpl implements DataStorage
                return new Page(pageData);
             }
          };
-         return (LazyPageList<T>)bilto.execute();
+         return (ListAccess<T>)bilto.execute();
       }
       else if (type == PageNavigation.class)
       {
@@ -218,7 +227,7 @@ public class DataStorageImpl implements DataStorage
                return new PageNavigation(page);
             }
          };
-         return (LazyPageList<T>)bilto.execute();
+         return (ListAccess<T>)bilto.execute();
       }
       else if (type == PortalConfig.class)
       {
@@ -230,7 +239,7 @@ public class DataStorageImpl implements DataStorage
                return new PortalConfig(portalData);
             }
          };
-         return (LazyPageList<T>)bilto.execute();
+         return (ListAccess<T>)bilto.execute();
       }
       else
       {

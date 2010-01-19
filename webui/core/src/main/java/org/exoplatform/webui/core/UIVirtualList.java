@@ -22,6 +22,7 @@ package org.exoplatform.webui.core;
 import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.portal.config.NoSuchDataException;
 import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.replication.api.annotations.Serialized;
 import org.exoplatform.webui.bean.UIDataFeed;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -29,6 +30,7 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
 @ComponentConfig(template = "system:/groovy/webui/core/UIVirtualList.gtmpl", events = {@EventConfig(listeners = UIVirtualList.LoadNextActionListener.class)})
+@Serialized
 public class UIVirtualList extends UIComponentDecorator
 {
 

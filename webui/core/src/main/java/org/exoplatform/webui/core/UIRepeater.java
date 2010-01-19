@@ -22,6 +22,7 @@ package org.exoplatform.webui.core;
 import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.portal.config.NoSuchDataException;
 import org.exoplatform.util.ReflectionUtil;
+import org.exoplatform.webui.application.replication.api.annotations.Serialized;
 import org.exoplatform.webui.bean.UIDataFeed;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 
@@ -35,6 +36,7 @@ import java.util.List;
  * @see UIPageIterator
  */
 @ComponentConfig(template = "system:/groovy/webui/core/UIRepeater.gtmpl")
+@Serialized
 public class UIRepeater extends UIComponent implements UIDataFeed
 {
 
