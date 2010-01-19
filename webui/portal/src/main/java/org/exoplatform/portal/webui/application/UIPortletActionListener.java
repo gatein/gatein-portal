@@ -511,6 +511,9 @@ public class UIPortletActionListener
          // update the portlet with the next mode to display
          PortletMode mode = new PortletMode(getPortletModeOrDefault(navResponse));
          setNextMode(uiPortlet, mode);
+         
+         uiPortlet.setNavigationalState(navResponse.getNavigationalState());
+         setupPublicRenderParams(uiPortlet, navResponse.getPublicNavigationalStateUpdates());
 
          //TODO: (mwringe) add this to the UpdateNavigationStateResponse.Event class instead of here
          class PortletEvent implements javax.portlet.Event
