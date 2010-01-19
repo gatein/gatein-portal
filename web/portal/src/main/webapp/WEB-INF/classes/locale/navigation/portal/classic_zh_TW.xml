@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+   <portal>
+      <classic>
+         <home>首頁</home>
+         <sitemap>網站導覽</sitemap>
+         <groupnavigation>瀏覽群組</groupnavigation>
+         <portalnavigation>瀏覽入口網</portalnavigation>
+         <register>註冊</register>
+         <webexplorer>網頁瀏覽器</webexplorer>
+      </classic>
+   </portal>
+   <UIAddNewApplication>
+      <label>
+         <AddApplication >新增應用程式</AddApplication >
+      </label>
+   </UIAddNewApplication>
+</bundle>

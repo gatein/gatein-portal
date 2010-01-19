@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+   <EmptyStringValidator>
+      <msg>
+         <empty-input>欄位 "{0}" 為必填</empty-input>
+      </msg>
+   </EmptyStringValidator>
+   <EmailAddressValidator>
+      <msg>
+         <invalid-email>您在欄位 {1} 輸入的 "{0}" , 不是有效的 email 位置</invalid-email>
+      </msg>
+   </EmailAddressValidator>
+   <NumberFormatValidator>
+      <msg>
+         <invalid-limitAccess>你不可輸入 "{0}" 在欄位 {1} , 你不可以修改此欄位</invalid-limitAccess>
+         <Invalid-input>你輸入在欄位 {0} 的值錯誤, 你應該輸入數字</Invalid-input>
+      </msg>
+   </NumberFormatValidator>
+   <IdentifierValidator>
+      <msg>
+         <empty-input>欄位 "{0}" 不可以為空白</empty-input>
+         <invalid-char>只有文數字, 可以輸入在欄位 {0}</invalid-char>
+      </msg>
+   </IdentifierValidator>
+   <NameValidator>
+      <msg>
+         <empty-input>欄位 "{0}" 不可以為空白</empty-input>
+         <invalid-char>只有文數字, 可以輸入在欄位 {0}</invalid-char>
+      </msg>
+   </NameValidator>
+   <ValidUserValidator>
+      <msg>
+         <empty-input>欄位 "{0}" 不可以為空白</empty-input>
+         <invalid-username>系統找不到使用者 {0}</invalid-username>
+      </msg>
+   </ValidUserValidator>
+   <ValidGroupValidator>
+      <msg>
+         <empty-input>欄位 "{0}" 不可以為空白</empty-input>
+         <invalid-group-id>系統找不到群組 {0}</invalid-group-id>
+      </msg>
+   </ValidGroupValidator>
+   <PermissionValidator>
+      <msg>
+         <invalid-permission-input>無效的權限, 格式必須為 membership:/groupId.</invalid-permission-input>
+         <membership-group-not-found>Membership type 或 Group 找不到</membership-group-not-found>
+      </msg>
+   </PermissionValidator>
+   <CheckAdminOrOwnerRoleInterceptor>
+      <msg>
+         <owner-or-admin-require>你必須登入為系統管理者, 才可以執行功能 '{0}'</owner-or-admin-require>
+      </msg>
+   </CheckAdminOrOwnerRoleInterceptor>
+   <CheckOwnerInterceptor>
+      <msg>
+         <owner-require>你必須登入, 才能執行 '{0}'</owner-require>
+      </msg>
+   </CheckOwnerInterceptor>
+   <ExoPermissionException>
+      <msg>
+         <message>你必須是 '{0}' 角色, 才可以執行 {1}</message>
+      </msg>
+   </ExoPermissionException>
+   <OrganizationService>
+      <unique-group-exception>這個群組: {0} 已經存在</unique-group-exception>
+   </OrganizationService>
+   <PageList>
+      <page-out-of-range>你嘗試開啟頁面 {0}, 但是只有 {1} 頁而已</page-out-of-range>
+   </PageList>
+   <MessageService>
+      <account-not-found>找不到使用者 {1} 的帳號 {0}</account-not-found>
+      <invalid-standalone-message-address>You are using the standalone account type and \ the address {0} is not valid.  The system expects an address with the following format: \ receiver#accountName</invalid-standalone-message-address>
+      <send-message-fail>無法傳送訊息. 請檢查你的郵寄地址 \n\ Error: {0}</send-message-fail>
+   </MessageService>
+   <Searcher>
+      <msg>
+         <search-expression-error>你輸入的語法錯誤.<br />{0}</search-expression-error>
+      </msg>
+   </Searcher>
+</bundle>

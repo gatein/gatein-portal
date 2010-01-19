@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+   <UILogoPortlet>
+      <note>
+         <Text>JBoss GateIn</Text>
+      </note>
+      <action>
+         <changeLanguage>變更語言</changeLanguage>
+         <Register>註冊</Register>
+         <signout>登出</signout>
+         <signin>登入</signin>
+      </action>
+      <label>
+         <Welcome>歡迎來到 GateIn</Welcome>
+      </label>
+   </UILogoPortlet>
+   <UILogoEditMode>
+      <title>更改 URL</title>
+      <label>
+         <logoUrl>URL</logoUrl>
+         <editmode>更改模式</editmode>
+      </label>
+      <action>
+         <Save>儲存</Save>
+      </action>
+   </UILogoEditMode>
+</bundle>

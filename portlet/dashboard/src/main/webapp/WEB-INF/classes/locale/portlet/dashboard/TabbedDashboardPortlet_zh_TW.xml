@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+   <UITabPaneDashboard>
+      <action>
+         <addNewDashboard>新增數位儀表板</addNewDashboard>
+         <switchShowRange>切換大小</switchShowRange>
+      </action>
+      <msg>
+         <deleteTab>確定要移除這個數位儀表板?</deleteTab>
+         <cannotDeleteLastTab>無法刪除 TAB</cannotDeleteLastTab>
+         <wrongTabName>只可以輸入英文文數字</wrongTabName>
+      </msg>
+   </UITabPaneDashboard>
+</bundle>

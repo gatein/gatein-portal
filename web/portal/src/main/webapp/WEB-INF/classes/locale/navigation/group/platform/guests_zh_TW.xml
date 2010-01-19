@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+   <platform>
+      <guests>
+         <register>註冊</register>
+         <sitemap>網站導覽</sitemap>
+         <link>網頁連結</link>
+      </guests>
+   </platform>
+</bundle>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+   <administration>
+      <title>系統管理</title>
+      <application-registry>應用程式註冊</application-registry>
+      <newAccount>新增帳號</newAccount>
+      <community-management>社群管理</community-management>
+      <i18n>多國語系</i18n>
+      <console>控制台</console>
+      <pageManagement>網頁管理</pageManagement>
+   </administration>
+</bundle>

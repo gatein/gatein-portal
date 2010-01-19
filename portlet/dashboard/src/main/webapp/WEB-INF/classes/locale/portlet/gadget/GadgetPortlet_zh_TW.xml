@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+   <UIGadgetEditMode>
+      <title>設定 URL</title>
+      <label>
+         <gadgetUrl>URL:</gadgetUrl>
+         <typeSelector>Type:</typeSelector>
+         <gadgetSelector>Gadget:</gadgetSelector>
+         <option>
+            <remote>遠端 Gadget</remote>
+            <local>本機 Gadget</local>
+         </option>
+      </label>
+      <action>
+         <Save>儲存</Save>
+      </action>
+   </UIGadgetEditMode>
+</bundle>

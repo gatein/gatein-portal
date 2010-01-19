@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+   <UIAdminToolbarPortlet>
+      <action>
+         <AddPage>新增頁面</AddPage>
+         <EditPage>編輯頁面</EditPage>
+         <CreatePortal>建立子入口網站</CreatePortal>
+         <EditPortal>編輯入口網站</EditPortal>
+         <BrowsePage>管理頁面</BrowsePage>
+         <EditPageAndNavigation>編輯頁面及導覽</EditPageAndNavigation>
+         <Editor>編輯器</Editor>
+         <portal>
+            <Editor>網站編輯器</Editor>
+         </portal>
+         <group>
+            <Editor>群組編輯器</Editor>
+         </group>
+         <user>
+            <Editor>數位儀表板編輯器</Editor>
+         </user>
+         <EditSiteLayout>編輯版面配置</EditSiteLayout>
+      </action>
+   </UIAdminToolbarPortlet>
+</bundle>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+   <word>
+      <accessPermission>存取權限</accessPermission>
+      <abort>離開</abort>
+      <action>動作</action>
+      <back>回上頁</back>
+      <birthday>生日</birthday>
+      <cancel>取消</cancel>
+      <category>類別</category>
+      <change>變更</change>
+      <city>城市</city>
+      <close>關閉</close>
+      <comment>附註</comment>
+      <content>內容</content>
+      <country>國家</country>
+      <date>日期</date>
+      <decorator>外框</decorator>
+      <department>部門</department>
+      <description>說明</description>
+      <editPermission>編輯權限</editPermission>
+      <email>Email</email>
+      <employer>公司</employer>
+      <familyName>姓 </familyName>
+      <finish>完成</finish>
+      <firstName>名 </firstName>
+      <format>格式</format>
+      <groupId>群組 ID</groupId>
+      <gender>性別</gender>
+      <givenName>名 </givenName>
+      <height>高</height>
+      <icon>Icon</icon>
+      <jobTitle>職稱</jobTitle>
+      <locale>語系</locale>
+      <label>標籤</label>
+      <language>語言</language>
+      <lastName>姓</lastName>
+      <mobile>手機</mobile>
+      <name>姓名</name>
+      <nickName>別名</nickName>
+      <next>下一步</next>
+      <owner>擁有者</owner>
+      <postalCode>郵遞區號</postalCode>
+      <refresh>重整</refresh>
+      <restore>復原</restore>
+      <save>儲存</save>
+      <stateProv>州/省</stateProv>
+      <street>街</street>
+      <style>樣式</style>
+      <subject>主題</subject>
+      <summary>總結</summary>
+      <skin>外觀</skin>
+      <template>模板</template>
+      <tel>電話</tel>
+      <title>標題</title>
+      <uri>位址</uri>
+      <userName>帳號</userName>
+      <update>更新</update>
+      <viewPermission>瀏覽權限</viewPermission>
+      <width>寬</width>
+      <website>網站</website>
+   </word>
+</bundle>

@@ -97,6 +97,13 @@
     <locale>zh</locale>
     <output-encoding>UTF-8</output-encoding>
     <input-encoding>UTF-8</input-encoding>
-    <description>Default configuration for the chinese locale</description>
+    <description>Default configuration for the simplified chinese locale</description>
+  </locale-config>
+
+  <locale-config>
+    <locale>zh_TW</locale>
+    <output-encoding>UTF-8</output-encoding>
+    <input-encoding>UTF-8</input-encoding>
+    <description>Default configuration for the traditional chinese locale</description>
   </locale-config>
 </locales-config>

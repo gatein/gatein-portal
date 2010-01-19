@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+   <UIRegisterForm>
+      <registerWithSuccess>
+         <message>You have successfully registered a new account! </message>
+      </registerWithSuccess>
+      <title>Register New Account</title>
+      <label>
+         <action>
+            <CheckUsernameAvailability>Search User</CheckUsernameAvailability>
+         </action>
+      </label>
+   </UIRegisterForm>
+</bundle>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+   <UIStarToolbarPortlet>
+      <item>
+         <ChangeLanguage>變更語系</ChangeLanguage>
+         <ChangeSkin>變更外觀</ChangeSkin>
+         <AccountSetting>帳號設定</AccountSetting>
+         <Logout>登出</Logout>
+      </item>
+   </UIStarToolbarPortlet>
+</bundle>

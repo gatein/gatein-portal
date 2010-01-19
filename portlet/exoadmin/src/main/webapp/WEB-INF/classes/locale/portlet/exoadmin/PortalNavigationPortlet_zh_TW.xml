@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+   <UISiteManagement>
+      <action>
+         <addNewPortal>Add New Portal</addNewPortal>
+      </action>
+      <label>
+         <editLayout>Edit Layout</editLayout>
+         <editNav>Edit Navigation</editNav>
+         <editPortalProp>Edit Portal's Properties</editPortalProp>
+         <deletePortal>Delete</deletePortal>
+      </label>
+   </UISiteManagement>
+</bundle>

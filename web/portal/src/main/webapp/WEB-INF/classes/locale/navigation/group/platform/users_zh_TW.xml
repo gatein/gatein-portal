@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+   <platform>
+      <users>
+         <iframe>IFrame</iframe>
+         <mylink>我的連結</mylink>
+         <mylink-blog>部落格</mylink-blog>
+         <mylink-google>Google</mylink-google>
+         <mylink-facebook>Facebook</mylink-facebook>
+         <sitemap>網站導覽</sitemap>
+         <dashboard>數位儀表板</dashboard>
+      </users>
+   </platform>
+</bundle>
