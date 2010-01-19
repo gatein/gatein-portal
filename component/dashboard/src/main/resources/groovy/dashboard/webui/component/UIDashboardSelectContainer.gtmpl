@@ -1,6 +1,11 @@
 <% 
 	def uiDashboard = uicomponent.getAncestorOfType(org.exoplatform.dashboard.webui.component.UIDashboard.class);
 	if(!uiDashboard.canEdit()) return;
+		
+	def uiPopup = uicomponent.getAncestorOfType(org.exoplatform.webui.core.UIPopupWindow.class);
+	def rcontext = _ctx.getRequestContext();
+	rcontext.getJavascriptManager().addJavascript("eXo.webui.UIDashboard.initPopup('"+uiPopup.getId()+"');");
+	
  %>
 <div class="$uicomponent.id" id="UIDashboardSelectContainer" style="display: <%= uiDashboard.isShowSelectPopup()? "block" : "none"; %>;">
 	<div class="DashboardItemContainer ItemContainer">
