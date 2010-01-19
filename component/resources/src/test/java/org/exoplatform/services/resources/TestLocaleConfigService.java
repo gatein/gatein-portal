@@ -113,7 +113,7 @@ public class TestLocaleConfigService extends TestCase
       assertLocaleConfig(en, "en", "Default configuration for english locale", "UTF-8", "UTF-8", Orientation.LT,
          Locale.ENGLISH);
       assertLocaleConfig(fr, "fr", "Default configuration for the french locale", "UTF-8", "UTF-8", Orientation.LT,
-         Locale.FRANCE);
+         Locale.FRENCH);
       assertLocaleConfig(ar, "ar", "Default configuration for the arabic locale", "UTF-8", "UTF-8", Orientation.RT,
          new Locale("ar"));
       assertLocaleConfig(vi, "vi", "Default configuration for the vietnam locale", "UTF-8", "UTF-8", Orientation.LT,

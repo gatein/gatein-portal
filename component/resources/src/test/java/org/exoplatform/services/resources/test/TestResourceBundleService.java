@@ -74,8 +74,8 @@ public class TestResourceBundleService extends BasicTestCase
       ResourceBundle res = service_.getResourceBundle(fileRes, Locale.ENGLISH);
 
       //    //------------create ressource bundle in database------------------
-      createResourceBundle(databaseRes, PROPERTIES, Locale.ENGLISH.getLanguage());
-      createResourceBundle(databaseRes, PROPERTIES_FR, Locale.FRANCE.getLanguage());
+      createResourceBundle(databaseRes, PROPERTIES, Locale.ENGLISH);
+      createResourceBundle(databaseRes, PROPERTIES_FR, Locale.FRANCE);
 
       res = service_.getResourceBundle(databaseRes, Locale.ENGLISH);
       assertTrue("Expect to find the ResourceBundle", res != null);
@@ -85,13 +85,13 @@ public class TestResourceBundleService extends BasicTestCase
       assertEquals("Expect French locale bundle", "fr", res.getString("language"));
       assertEquals("Expect French locale bundle", "property", res.getString("property"));
       //--------- Update a databseRes resource bundle in database ----------------
-      createResourceBundle(databaseRes, PROPERTIES_FR_UPDATE, Locale.FRANCE.getLanguage());
+      createResourceBundle(databaseRes, PROPERTIES_FR_UPDATE, Locale.FRANCE);
       res = service_.getResourceBundle(databaseRes, Locale.FRANCE);
       assertEquals("Expect French locale bundle", "fr-property", res.getString("property"));
 
       //--------Update fileRes resource bundle in databse--------------
       String datas = "key1=fileSystem\nlanguage=french";
-      createResourceBundle(fileRes, datas, Locale.FRANCE.getLanguage());
+      createResourceBundle(fileRes, datas, Locale.FRANCE);
       res = service_.getResourceBundle(fileRes, Locale.FRANCE);
       assertTrue("Expect to find the ResourceBundle", res != null);
       assertTrue("Expect 'fileRes' is updated", res.getString("key1").equals("fileSystem"));
@@ -99,7 +99,7 @@ public class TestResourceBundleService extends BasicTestCase
 
       //--------Update fileRes resource bundle in databse--------------
       datas = "key1=fileSystemUpdate\nlanguage=french";
-      createResourceBundle(fileRes, datas, Locale.FRANCE.getLanguage());
+      createResourceBundle(fileRes, datas, Locale.FRANCE);
       res = service_.getResourceBundle(fileRes, Locale.FRANCE);
       assertTrue("Expect to find the ResourceBundle", res != null);
       assertTrue("Expect 'fileRes' is updated", res.getString("key1").equals("fileSystemUpdate"));
@@ -112,8 +112,8 @@ public class TestResourceBundleService extends BasicTestCase
       ResourceBundle res = service_.getResourceBundle(fileRes, Locale.ENGLISH);
 
       //------------create ressource bundle in database------------------
-      createResourceBundle(databaseRes, PROPERTIES, Locale.ENGLISH.getLanguage());
-      createResourceBundle(databaseRes, PROPERTIES_FR, Locale.FRANCE.getLanguage());
+      createResourceBundle(databaseRes, PROPERTIES, Locale.ENGLISH);
+      createResourceBundle(databaseRes, PROPERTIES_FR, Locale.FRANCE);
 
       res = service_.getResourceBundle(databaseRes, Locale.ENGLISH);
       assertTrue("Expect to find the ResourceBundle", res != null);
@@ -147,8 +147,8 @@ public class TestResourceBundleService extends BasicTestCase
       ResourceBundle res = service_.getResourceBundle(fileRes, Locale.ENGLISH);
 
       //------------create ressource bundle in database------------------
-      createResourceBundle(databaseRes, PROPERTIES, Locale.ENGLISH.getLanguage());
-      createResourceBundle(databaseRes, PROPERTIES_FR, Locale.FRANCE.getLanguage());
+      createResourceBundle(databaseRes, PROPERTIES, Locale.ENGLISH);
+      createResourceBundle(databaseRes, PROPERTIES_FR, Locale.FRANCE);
 
       res = service_.getResourceBundle(databaseRes, Locale.ENGLISH);
       assertTrue("Expect to find the ResourceBundle", res != null);
@@ -165,12 +165,16 @@ public class TestResourceBundleService extends BasicTestCase
       assertTrue("Expect at least 2 locale properties resources", l.size() >= 2);
    }
 
-   private void createResourceBundle(String name, String datas, String language) throws Exception
+   private void createResourceBundle(String name, String datas, Locale locale) throws Exception
    {
       ResourceBundleData data = service_.createResourceBundleDataInstance();
       data.setName(name);
       data.setData(datas);
-      data.setLanguage(language);
+      data.setLanguage(locale.getLanguage());
+      if (locale.getCountry().trim().length() != 0)
+      {
+    	  data.setCountry(locale.getCountry());
+      }
       service_.saveResourceBundle(data);
    }
 

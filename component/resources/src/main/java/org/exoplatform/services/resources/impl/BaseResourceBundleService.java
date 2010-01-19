@@ -121,7 +121,8 @@ abstract public class BaseResourceBundleService implements ResourceBundleService
    }
 
    /**
-    * Loads all the "init" resource bundles 
+    * Loads all the "init" resource bundles
+    * 
     * @see org.picocontainer.Startable#start()
     */
    public void start()
@@ -194,17 +195,33 @@ abstract public class BaseResourceBundleService implements ResourceBundleService
       try
       {
          Collection<LocaleConfig> localeConfigs = localeService_.getLocalConfigs();
-         String defaultLang = localeService_.getDefaultLocaleConfig().getLanguage();
+         // String defaultLang =
+         // localeService_.getDefaultLocaleConfig().getLanguage();
+         Locale defaultLocale = localeService_.getDefaultLocaleConfig().getLocale();
+
          for (Iterator<LocaleConfig> iter = localeConfigs.iterator(); iter.hasNext();)
          {
             LocaleConfig localeConfig = iter.next();
-            String language = localeConfig.getLanguage();
-            String content = getResourceBundleContent(name, language, defaultLang, cl);
+            // String language = localeConfig.getLanguage();
+            // String content = getResourceBundleContent(name, language,
+            // defaultLang, cl);
+            Locale locale = localeConfig.getLocale();
+            String language = locale.getLanguage();
+            String country = locale.getCountry();
+
+            String content = getResourceBundleContent(name, locale, defaultLocale, cl);
             if (content != null)
             {
                // save the content
                ResourceBundleData data = new ResourceBundleData();
-               data.setId(baseName + "_" + language);
+               if (country != null && country.length() > 0)
+               {
+                  data.setId(baseName + "_" + language + "_" + country);
+               }
+               else
+               {
+                  data.setId(baseName + "_" + language);
+               }
                data.setName(baseName);
                data.setLanguage(language);
                data.setData(content);
@@ -260,9 +277,99 @@ abstract public class BaseResourceBundleService implements ResourceBundleService
    }
 
    /**
-    * Invalidate an entry in the cache at this level. Normally this is called by the subclass.
-    *
-    * @param name the bundle name
+    * This method is used for country support
+    * 
+    * @param baseName
+    * @param locale
+    * @param defaultLocale
+    * @param cl
+    * @return
+    */
+   protected String getResourceBundleContent(String baseName, Locale locale, Locale defaultLocale, ClassLoader cl)
+      throws Exception
+   {
+      List<String> candidateFiles = new ArrayList<String>();
+
+      String language = locale.getLanguage();
+      String country = locale.getCountry().toUpperCase();
+
+      String defaultLanguage = defaultLocale.getLanguage();
+      String defaultCountry = defaultLocale.getCountry().toUpperCase();
+
+      if (country != null && country.length() > 0)
+      {
+         candidateFiles.add(baseName + "_" + language + "_" + country + ".properties");
+      }
+
+      if (language != null && language.length() > 0 )
+      {
+         candidateFiles.add(baseName + "_" + language + ".properties");
+      }
+
+      if (defaultCountry != null && defaultCountry.length() > 0)
+      {
+         candidateFiles.add(baseName + "_" + defaultLanguage + "_" + defaultCountry + ".properties");
+      }
+
+      if (defaultLanguage != null && defaultLanguage.length() > 0)
+      {
+         candidateFiles.add(baseName + "_" + defaultLanguage + ".properties");
+      }
+
+      candidateFiles.add(baseName + ".properties");
+
+      cl = new PropertiesClassLoader(cl, true);
+      String fileName = null;
+
+      try
+      {
+         URL url = null;
+         for (String candidateFile : candidateFiles)
+         {
+            url = cl.getResource(candidateFile);
+            if (url != null)
+            {
+               fileName = candidateFile;
+               break;
+            }
+         }
+
+         if (url != null)
+         {
+            InputStream is = url.openStream();
+            try
+            {
+               byte[] buf = IOUtil.getStreamContentAsBytes(is);
+               return new String(buf, "UTF-8");
+            }
+            finally
+            {
+               try
+               {
+                  is.close();
+               }
+               catch (IOException e)
+               {
+                  // Do nothing
+               }
+            }
+         }
+      }
+      catch (Exception ex)
+      {
+         throw new Exception("Error while reading the file: " + fileName, ex);
+      }
+
+      return null;
+
+   }
+
+   /**
+    * Invalidate an entry in the cache at this level. Normally this is called by
+    * the subclass.
+    * 
+    * @param name
+    *           the bundle name
     */
    protected final void invalidate(String name)
    {
@@ -275,14 +382,30 @@ abstract public class BaseResourceBundleService implements ResourceBundleService
       {
          return IdentityResourceBundle.getInstance();
       }
+
+      // Case 1: ResourceBundle of portlets, standard java API is used
       if (isClasspathResource(name))
          return ResourceBundleLoader.load(name, locale, cl);
-      String id = name + "_" + locale.getLanguage();
+
+      // Case 2: ResourceBundle of portal
+      String country = locale.getCountry();
+      String id;
+      if (country != null && country.length() > 0)
+      {
+         id = name + "_" + locale.getLanguage() + "_" + locale.getCountry();
+      }
+      else
+      {
+         id = name + "_" + locale.getLanguage();
+      }
+
       try
       {
          ResourceBundle rb = cache_.get(id);
          if (rb != null)
+         {
             return rb;
+         }
       }
       catch (Exception ex)
       {

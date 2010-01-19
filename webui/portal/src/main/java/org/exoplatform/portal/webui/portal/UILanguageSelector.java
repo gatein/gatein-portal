@@ -64,7 +64,20 @@ public class UILanguageSelector extends UIContainer
          Locale locale = localeConfig.getLocale();
          String displayName = locale.getDisplayLanguage(currentLocale);
          String lang = locale.getLanguage();
-         String localedName = capitalizeFirstLetter(locale.getDisplayLanguage(locale));
+         String country = locale.getCountry();
+         String localedName;
+
+         if (country != null && country.length() > 0)
+         {
+            localedName =
+               capitalizeFirstLetter(locale.getDisplayLanguage(currentLocale) + " (" + locale.getDisplayCountry(currentLocale) + ")");
+            lang = lang + "_" + country;
+         }
+         else
+         {
+            localedName = capitalizeFirstLetter(locale.getDisplayLanguage(currentLocale));
+         }
+
          if (localedName == null || localedName.length() == 0)
             localedName = "???";
          if (locale.getDisplayName().equalsIgnoreCase(currentLocale.getDisplayName()))
@@ -77,7 +90,7 @@ public class UILanguageSelector extends UIContainer
          }
          optionsList.add(localeItem);
       }
-      //TODO need use other UIComponent here
+      // TODO need use other UIComponent here
       Collections.sort(optionsList, new LanguagesComparator());
       List<SelectItemCategory> contientsCategories = new ArrayList<SelectItemCategory>();
       SelectItemCategory category = new SelectItemCategory("Languages");
@@ -111,12 +124,11 @@ public class UILanguageSelector extends UIContainer
          UIPortalApplication uiApp = Util.getUIPortalApplication();
          UIMaskWorkspace uiMaskWS = uiApp.getChildById(UIPortalApplication.UI_MASK_WS_ID);
          uiMaskWS.setUIComponent(null);
-         //event.getRequestContext().addUIComponentToUpdateByAjax(uiMaskWS) ;
+         // event.getRequestContext().addUIComponentToUpdateByAjax(uiMaskWS) ;
          Util.getPortalRequestContext().setFullRender(false);
          if (language == null || language.trim().length() < 1)
             return;
-         //if(!uiPortal.isModifiable()) return;
-
+         // if(!uiPortal.isModifiable()) return;
          LocaleConfigService localeConfigService = event.getSource().getApplicationComponent(LocaleConfigService.class);
          LocaleConfig localeConfig = localeConfigService.getLocaleConfig(language);
          if (localeConfig == null)
@@ -136,7 +148,7 @@ public class UILanguageSelector extends UIContainer
          }
       }
    }
-   
+
    private String capitalizeFirstLetter(String word)
    {
       if (word == null)

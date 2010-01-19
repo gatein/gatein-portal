@@ -45,7 +45,7 @@ public class LocaleConfigImpl implements LocaleConfig
       predefinedLocaleMap_ = new HashMap<String, Locale>(10);
       predefinedLocaleMap_.put("us", Locale.US);
       predefinedLocaleMap_.put("en", Locale.ENGLISH);
-      predefinedLocaleMap_.put("fr", Locale.FRANCE);
+      predefinedLocaleMap_.put("fr", Locale.FRENCH);
       predefinedLocaleMap_.put("zh", Locale.SIMPLIFIED_CHINESE);
    }
 
@@ -112,7 +112,15 @@ public class LocaleConfigImpl implements LocaleConfig
       localeName_ = localeName;
       locale_ = predefinedLocaleMap_.get(localeName);
       if (locale_ == null)
-         locale_ = new Locale(localeName);
+      {
+         String[] localeParams = localeName.split("_");
+         if (localeParams.length > 1)
+         {
+            locale_ = new Locale(localeParams[0], localeParams[1]);
+         }else{
+            locale_ = new Locale(localeName);
+         }
+      }
    }
 
    public final String getLanguage()

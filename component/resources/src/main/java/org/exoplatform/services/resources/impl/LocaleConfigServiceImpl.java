@@ -80,7 +80,8 @@ public class LocaleConfigServiceImpl implements LocaleConfigService
    }
 
    /**
-    * @param lang a locale language
+    * @param lang
+    *           a locale language
     * @return The LocalConfig
     */
    public LocaleConfig getLocaleConfig(String lang)
@@ -159,7 +160,15 @@ public class LocaleConfigServiceImpl implements LocaleConfigService
          log.debug("Added locale config " + config + " to the set of locale configs");
 
          //
-         configs_.put(config.getLanguage(), config);
+         String country = config.getLocale().getCountry();
+         if (country != null && country.length() > 0)
+         {
+            configs_.put(config.getLanguage() + "_" + country, config);
+         }
+         else
+         {
+            configs_.put(config.getLanguage(), config);
+         }
          if (i == 0)
             defaultConfig_ = config;
       }

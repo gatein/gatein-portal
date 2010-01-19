@@ -42,9 +42,7 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * Created by The eXo Platform SARL
- * Author : Dang Van Minh
- *          minhdv81@yahoo.com
+ * Created by The eXo Platform SARL Author : Dang Van Minh minhdv81@yahoo.com
  * Jun 28, 2006
  */
 @ComponentConfig(template = "system:/groovy/webui/form/UIVTabInputSet.gtmpl")
@@ -125,7 +123,7 @@ public class UIUserProfileInputSet extends UIFormInputSet
    }
 
    private void initLanguageCombo(UIFormSelectBox langSelectBox)
-   {      
+   {
       if (langSelectBox == null)
          return;
       String selectedLang = langSelectBox.getSelectedValues()[0];
@@ -139,13 +137,23 @@ public class UIUserProfileInputSet extends UIFormInputSet
       String displayLanguage = null;
       String displayName = null;
       String language = null;
+      String country = null;
       SelectItemOption<String> option;
       while (i.hasNext())
       {
          LocaleConfig config = i.next();
-         displayLanguage = config.getLocale().getDisplayLanguage(currentLocale);
-         displayName = config.getLocale().getDisplayName(currentLocale);
-         language = config.getLanguage();
+         Locale locale = config.getLocale();
+         displayName = locale.getDisplayName(currentLocale);
+         language = locale.getDisplayLanguage(currentLocale);
+         country = locale.getCountry();
+         if (country != null && country.length() > 0)
+         {
+            displayLanguage = language + " (" + locale.getDisplayCountry(currentLocale) + ")";
+         }
+         else
+         {
+            displayLanguage = language;
+         }
          option = new SelectItemOption<String>(displayLanguage, language, displayName);
          if (lang.equals(selectedLang))
          {
@@ -208,7 +216,8 @@ public class UIUserProfileInputSet extends UIFormInputSet
          for (UIComponent uiComp : inputSet.getChildren())
          {
             UIFormStringInput uiInput = (UIFormStringInput)uiComp;
-            //if(uiInput.getValue() == null || uiInput.getValue().length() < 1) continue;
+            // if(uiInput.getValue() == null || uiInput.getValue().length() < 1)
+            // continue;
             userProfile.getUserInfoMap().put(uiInput.getName(), uiInput.getValue());
          }
       }

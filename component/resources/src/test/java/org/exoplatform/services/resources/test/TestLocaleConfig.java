@@ -64,7 +64,7 @@ public class TestLocaleConfig extends BasicTestCase
       // --------------get a locale------------------
       locale = service_.getLocaleConfig("fr");
       assertTrue("expect locale config is found", locale != null);
-      assertTrue("expect France locale is found", locale.getLocale().equals(Locale.FRANCE));
+      assertTrue("expect France locale is found", locale.getLocale().equals(Locale.FRENCH));
 
       locale = service_.getLocaleConfig("vi");
       assertTrue("expect locale config is found", locale != null);
@@ -78,7 +78,7 @@ public class TestLocaleConfig extends BasicTestCase
       Locale vnlocale = service_.getLocaleConfig("vi").getLocale();
       hasObjectInCollection(vnlocale, locales, new LocaleComparator());
       hasObjectInCollection(Locale.ENGLISH, locales, new LocaleComparator());
-      hasObjectInCollection(Locale.FRANCE, locales, new LocaleComparator());
+      hasObjectInCollection(Locale.FRENCH, locales, new LocaleComparator());
    }
 
    public static class LocaleComparator implements Comparator
