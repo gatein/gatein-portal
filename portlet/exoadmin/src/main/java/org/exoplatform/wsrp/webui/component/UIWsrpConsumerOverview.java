@@ -27,7 +27,6 @@ import org.exoplatform.commons.utils.ListAccess;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
-import org.exoplatform.webui.config.annotation.ComponentConfigs;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIContainer;
@@ -44,24 +43,19 @@ import org.gatein.wsrp.consumer.registry.ConsumerRegistry;
 import java.util.List;
 
 /** @author Wesley Hales */
-@ComponentConfigs({
-   @ComponentConfig(id = "ConsumerSelector", type = UIGrid.class, template = "system:/groovy/webui/core/UIGrid.gtmpl",
-      events = { //make note in doc not to put grid listeners here
-      }),
-   @ComponentConfig(
-      lifecycle = UIApplicationLifecycle.class,
-      template = "app:/groovy/wsrp/webui/component/UIWsrpConsumerOverview.gtmpl",
-      events = {
-         @EventConfig(listeners = UIWsrpConsumerOverview.OpenPopupActionListener.class),
-         @EventConfig(listeners = UIWsrpConsumerOverview.EditActionListener.class),
-         @EventConfig(listeners = UIWsrpConsumerOverview.DeleteActionListener.class),
-         @EventConfig(listeners = UIWsrpConsumerOverview.RefreshActionListener.class),
-         @EventConfig(listeners = UIWsrpConsumerOverview.DeactivateActionListener.class),
-         @EventConfig(listeners = UIWsrpConsumerOverview.ActivateActionListener.class),
-         @EventConfig(listeners = UIWsrpConsumerOverview.RefreshGridActionListener.class)
-      })
-})
 
+@ComponentConfig(
+   lifecycle = UIApplicationLifecycle.class,
+   template = "app:/groovy/wsrp/webui/component/UIWsrpConsumerOverview.gtmpl",
+   events = {
+      @EventConfig(listeners = UIWsrpConsumerOverview.CreateConsumerActionListener.class),
+      @EventConfig(listeners = UIWsrpConsumerOverview.EditActionListener.class),
+      @EventConfig(listeners = UIWsrpConsumerOverview.DeleteActionListener.class),
+      @EventConfig(listeners = UIWsrpConsumerOverview.RefreshActionListener.class),
+      @EventConfig(listeners = UIWsrpConsumerOverview.DeactivateActionListener.class),
+      @EventConfig(listeners = UIWsrpConsumerOverview.ActivateActionListener.class),
+      @EventConfig(listeners = UIWsrpConsumerOverview.RefreshGridActionListener.class)
+   })
 public class UIWsrpConsumerOverview extends UIContainer
 {
    public static String[] FIELDS = {"producerId", "active", "refreshNeeded"};
@@ -135,7 +129,7 @@ public class UIWsrpConsumerOverview extends UIContainer
       consumerEditorPopup.setUIComponent(consumerForm);
       consumerEditorPopup.setRendered(false);
 
-      UIGrid consumers = addChild(UIGrid.class, "ConsumerSelector", null);
+      UIGrid consumers = addChild(UIGrid.class, null, null);
       //configure the edit and delete buttons based on an id from the data list - this will also be passed as param to listener
       consumers.configure("producerId", FIELDS, SELECT_ACTIONS);
 
@@ -169,7 +163,7 @@ public class UIWsrpConsumerOverview extends UIContainer
       consumersIterator.setPageList(pageList);
    }
 
-   static public class OpenPopupActionListener extends EventListener<UIWsrpConsumerOverview>
+   static public class CreateConsumerActionListener extends EventListener<UIWsrpConsumerOverview>
    {
       public void execute(Event<UIWsrpConsumerOverview> event) throws Exception
       {
