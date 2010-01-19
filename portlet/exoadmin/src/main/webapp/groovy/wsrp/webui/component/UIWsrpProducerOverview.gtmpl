@@ -1,6 +1,6 @@
 <%
-   import org.exoplatform.wsrp.webui.component.UIWsrpProducerEditor;
-   import org.exoplatform.wsrp.webui.component.UIWsrpRegistrationDetails;
+   import org.exoplatform.wsrp.webui.component.producer.UIWsrpProducerEditor;
+   import org.exoplatform.wsrp.webui.component.producer.UIWsrpRegistrationDetails;
 %>
 
 <div class="<%=uicomponent.getId()%>" id="<%=uicomponent.getId()%>">

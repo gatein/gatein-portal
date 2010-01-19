@@ -20,7 +20,7 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA         *
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.                   *
  ******************************************************************************/
-package org.exoplatform.wsrp.webui.component;
+package org.exoplatform.wsrp.webui.component.producer;
 
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
@@ -45,7 +45,7 @@ import org.gatein.wsrp.registration.RegistrationPropertyDescription;
 /** @author Wesley Hales */
 @ComponentConfig(template = "app:/groovy/wsrp/webui/component/UIWsrpProducerPropertyEditor.gtmpl", lifecycle = UIFormLifecycle.class,
    events = {
-   @EventConfig(listeners = UIWsrpProducerPropertyEditor.SaveActionListener.class)})
+      @EventConfig(listeners = UIWsrpProducerPropertyEditor.SaveActionListener.class)})
 public class UIWsrpProducerPropertyEditor extends UIForm
 {
    protected static final String DESCRIPTION = "description";
@@ -86,11 +86,11 @@ public class UIWsrpProducerPropertyEditor extends UIForm
    {
       public void execute(Event<UIWsrpProducerPropertyEditor> event) throws Exception
       {
-          UIWsrpProducerPropertyEditor source = event.getSource();
-          source.save(event.getRequestContext());
-          UIPopupWindow popup = source.getParent();
-          popup.setRendered(false);
-          popup.setShow(false);
+         UIWsrpProducerPropertyEditor source = event.getSource();
+         source.save(event.getRequestContext());
+         UIPopupWindow popup = source.getParent();
+         popup.setRendered(false);
+         popup.setShow(false);
       }
    }
 

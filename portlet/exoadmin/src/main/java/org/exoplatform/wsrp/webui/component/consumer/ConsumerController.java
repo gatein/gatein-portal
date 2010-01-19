@@ -21,7 +21,7 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.wsrp.webui.component;
+package org.exoplatform.wsrp.webui.component.consumer;
 
 import org.gatein.pc.api.PortletInvokerException;
 import org.gatein.wsrp.WSRPConsumer;

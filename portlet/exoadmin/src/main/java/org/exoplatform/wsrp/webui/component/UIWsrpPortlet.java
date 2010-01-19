@@ -26,6 +26,8 @@ import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.UITabPane;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
+import org.exoplatform.wsrp.webui.component.consumer.UIWsrpConsumerOverview;
+import org.exoplatform.wsrp.webui.component.producer.UIWsrpProducerOverview;
 
 /** @author Wesley Hales */
 @ComponentConfig(
