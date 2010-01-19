@@ -49,6 +49,7 @@ import org.exoplatform.webui.event.Event.Phase;
 import org.gatein.common.i18n.LocalizedString;
 import org.gatein.common.net.media.MediaType;
 import org.gatein.pc.api.Mode;
+import org.gatein.pc.api.NoSuchPortletException;
 import org.gatein.pc.api.PortletContext;
 import org.gatein.pc.api.PortletInvoker;
 import org.gatein.pc.api.PortletInvokerException;
@@ -800,8 +801,18 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
             String applicationId = dataStorage.getId(state.getApplicationState());
             ModelAdapter<S, C> adapter = ModelAdapter.getAdapter(state.getApplicationType());
             PortletContext producerOfferedPortletContext = adapter.getProducerOfferedPortletContext(applicationId);
-            org.gatein.pc.api.Portlet producedOfferedPortlet = portletInvoker.getPortlet(producerOfferedPortletContext);
-
+            org.gatein.pc.api.Portlet producedOfferedPortlet;
+            
+            try
+            {
+            	producedOfferedPortlet = portletInvoker.getPortlet(producerOfferedPortletContext);
+            }
+            catch (NoSuchPortletException nspe)
+            {
+            	producedOfferedPortlet = null;
+            	nspe.printStackTrace();
+            }
+            
             this.adapter = adapter;
             this.producerOfferedPortletContext = producerOfferedPortletContext;
             this.producedOfferedPortlet = producedOfferedPortlet;
