@@ -1,4 +1,0 @@
-
-<div class="<%=uicomponent.getId()%>">
- <% uicomponent.renderChildren(); %>
-</div>

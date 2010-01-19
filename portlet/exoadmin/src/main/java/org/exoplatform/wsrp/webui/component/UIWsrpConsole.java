@@ -23,29 +23,21 @@
 package org.exoplatform.wsrp.webui.component;
 
 import org.exoplatform.webui.config.annotation.ComponentConfig;
-import org.exoplatform.webui.config.annotation.ComponentConfigs;
-import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.UITabPane;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 
-/** @author Wesley Hales */
-@ComponentConfigs({
-   @ComponentConfig(
-      lifecycle = UIApplicationLifecycle.class,
-      template = "app:/groovy/wsrp/webui/component/UIWsrpConsole.gtmpl"),
-   @ComponentConfig(
-      id = "UIWsrpConsoleTab",
-      type = UITabPane.class,
-      template = "app:/groovy/wsrp/webui/component/UIWsrpConsoleContent.gtmpl",
-      events = {@EventConfig(listeners = UITabPane.SelectTabActionListener.class)})})
+@ComponentConfig(
+   lifecycle = UIApplicationLifecycle.class,
+   template = "app:/groovy/wsrp/webui/component/UIWsrpConsole.gtmpl"
+)
 public class UIWsrpConsole extends UIContainer
 {
    public UIWsrpConsole() throws Exception
    {
-      UITabPane uiTabPane = addChild(UITabPane.class, "UIWsrpConsoleTab", null);
-      uiTabPane.addChild(UIWsrpConsumerOverview.class, null, "Manage Consumers").setRendered(true);
-      uiTabPane.addChild(UIWsrpProducerOverview.class, null, "Producer Configuration").setRendered(false);
+      UITabPane uiTabPane = addChild(UITabPane.class, null, null);
+      uiTabPane.addChild(UIWsrpConsumerOverview.class, null, "Manage Consumers");
+      uiTabPane.addChild(UIWsrpProducerOverview.class, null, "Producer Configuration");
 
       if (uiTabPane.getSelectedTabId().equals(""))
       {

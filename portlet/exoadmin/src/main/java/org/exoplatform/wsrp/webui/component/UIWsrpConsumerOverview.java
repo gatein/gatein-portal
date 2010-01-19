@@ -24,23 +24,21 @@ package org.exoplatform.wsrp.webui.component;
 
 import org.exoplatform.commons.utils.LazyPageList;
 import org.exoplatform.commons.utils.ListAccess;
-import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.web.application.ApplicationMessage;
-import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.ComponentConfigs;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.UIGrid;
+import org.exoplatform.webui.core.UIPageIterator;
 import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.gatein.wsrp.WSRPConsumer;
 import org.gatein.wsrp.consumer.RefreshResult;
-import org.gatein.wsrp.consumer.RegistrationInfo;
 import org.gatein.wsrp.consumer.registry.ConsumerRegistry;
 
 import java.util.List;
@@ -74,12 +72,13 @@ public class UIWsrpConsumerOverview extends UIContainer
    //
    public static String[] SELECT_ACTIONS = {"Edit", "Delete", "Refresh", "Activate", "Deactivate"};
 
-   private RegistrationInfo expectedRegistrationInfo;
+   private ConsumerController controller;
+   private UIPopupWindow consumerEditorPopup;
+   private UIPageIterator consumersIterator;
 
    public List getConfiguredConsumers() throws Exception
    {
-      ConsumerRegistry consumerRegistry = getConsumerRegistry();
-      return consumerRegistry.getConfiguredConsumers();
+      return controller.getConfiguredConsumers();
    }
 
    public LazyPageList createPageList(final List pageList)
@@ -92,7 +91,7 @@ public class UIWsrpConsumerOverview extends UIContainer
             return pageList.size();
          }
 
-         public WSRPConsumer[] load(int index, int length) throws Exception, IllegalArgumentException
+         public WSRPConsumer[] load(int index, int length) throws Exception
          {
             WSRPConsumer[] pcs = new WSRPConsumer[pageList.size()];
 
@@ -125,28 +124,26 @@ public class UIWsrpConsumerOverview extends UIContainer
 
    public UIWsrpConsumerOverview() throws Exception
    {
+      // controller
+      ConsumerRegistry registry = (ConsumerRegistry)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(ConsumerRegistry.class);
+      controller = new ConsumerController(registry);
+
       //setSelectedTab(1);
-      UIPopupWindow popup = addChild(UIPopupWindow.class, null, null);
-      popup.setWindowSize(450, 0);
+      consumerEditorPopup = addChild(UIPopupWindow.class, null, null);
+      consumerEditorPopup.setWindowSize(450, 0);
       UIWsrpConsumerEditor consumerForm = createUIComponent(UIWsrpConsumerEditor.class, null, "Consumer Editor");
-      popup.setUIComponent(consumerForm);
-      popup.setRendered(false);
+      consumerEditorPopup.setUIComponent(consumerForm);
+      consumerEditorPopup.setRendered(false);
 
-      UIGrid uiGrid = addChild(UIGrid.class, "ConsumerSelector", null);
+      UIGrid consumers = addChild(UIGrid.class, "ConsumerSelector", null);
       //configure the edit and delete buttons based on an id from the data list - this will also be passed as param to listener
-      uiGrid.configure("producerId", FIELDS, SELECT_ACTIONS);
+      consumers.configure("producerId", FIELDS, SELECT_ACTIONS);
 
-      uiGrid.getUIPageIterator().setId("ChangeConsumerPageIterator");
-      addChild(uiGrid.getUIPageIterator());
-      uiGrid.getUIPageIterator().setRendered(false);
+      consumersIterator = consumers.getUIPageIterator();
+      consumersIterator.setId("ChangeConsumerPageIterator");
+      consumersIterator.setRendered(false);
 
-      LazyPageList pageList = createPageList(getConfiguredConsumers());
-      uiGrid.getUIPageIterator().setPageList(pageList);
-   }
-
-   private void setExpectedRegistrationInfo(RegistrationInfo expectedRegistrationInfo)
-   {
-      this.expectedRegistrationInfo = expectedRegistrationInfo;
+      refreshConsumersList();
    }
 
    static public class RefreshGridActionListener extends EventListener<UIWsrpConsumerOverview>
@@ -160,15 +157,16 @@ public class UIWsrpConsumerOverview extends UIContainer
 
    public void refreshGrid(Event<UIWsrpConsumerOverview> event) throws Exception
    {
-      UIWsrpConsumerOverview consumerOverview = event.getSource();
-      WebuiRequestContext ctx = event.getRequestContext();
-
-      UIGrid uiGrid = consumerOverview.getChild(UIGrid.class);
       //refresh the list
-      LazyPageList pageList = consumerOverview.createPageList(consumerOverview.getConfiguredConsumers());
-      uiGrid.getUIPageIterator().setPageList(pageList);
+      refreshConsumersList();
 
-      ctx.addUIComponentToUpdateByAjax(consumerOverview);
+      event.getRequestContext().addUIComponentToUpdateByAjax(this);
+   }
+
+   private void refreshConsumersList() throws Exception
+   {
+      LazyPageList pageList = createPageList(getConfiguredConsumers());
+      consumersIterator.setPageList(pageList);
    }
 
    static public class OpenPopupActionListener extends EventListener<UIWsrpConsumerOverview>
@@ -176,18 +174,20 @@ public class UIWsrpConsumerOverview extends UIContainer
       public void execute(Event<UIWsrpConsumerOverview> event) throws Exception
       {
          UIWsrpConsumerOverview consumerOverview = event.getSource();
-         UIPopupWindow popup = consumerOverview.getChild(UIPopupWindow.class);
-         UIWsrpConsumerEditor editor = (UIWsrpConsumerEditor)popup.getUIComponent();
-
-         //reset the form
-         editor.reset();
-         editor.setConsumer(null);
-         popup.setRendered(true);
-         popup.setShow(true);
-         popup.setShowCloseButton(true);
-         //popup.setShowMask(true);
-
+         consumerOverview.displayConsumerEditor(null);
       }
+   }
+
+   private void displayConsumerEditor(WSRPConsumer consumer) throws Exception
+   {
+      UIWsrpConsumerEditor editor = (UIWsrpConsumerEditor)consumerEditorPopup.getUIComponent();
+
+      //reset the form
+      editor.reset();
+      editor.setConsumer(consumer);
+      consumerEditorPopup.setRendered(true);
+      consumerEditorPopup.setShow(true);
+      consumerEditorPopup.setShowCloseButton(true);
    }
 
    static public class EditActionListener extends EventListener<UIWsrpConsumerOverview>
@@ -197,24 +197,9 @@ public class UIWsrpConsumerOverview extends UIContainer
          UIWsrpConsumerOverview consumerOverview = event.getSource();
          WSRPConsumer consumer = consumerOverview.getConsumerFromEvent(event);
 
-         UIApplication uiApp = event.getRequestContext().getUIApplication();
-
          if (consumer != null)
          {
-            UIPopupWindow popup = consumerOverview.getChild(UIPopupWindow.class);
-            UIWsrpConsumerEditor editor = (UIWsrpConsumerEditor)popup.getUIComponent();
-
-            try
-            {
-               editor.setConsumer(consumer);
-            }
-            catch (Exception e)
-            {
-               e.printStackTrace();
-            }
-            popup.setUIComponent(editor);
-            popup.setRendered(true);
-            popup.setShow(true);
+            consumerOverview.displayConsumerEditor(consumer);
          }
       }
    }
@@ -308,35 +293,18 @@ public class UIWsrpConsumerOverview extends UIContainer
 
             if (consumer != null)
             {
-               ConsumerRegistry registry = consumerOverview.getConsumerRegistry();
-               RefreshResult result = consumer.refresh(true);
+               RefreshResult result = consumerOverview.controller.refreshConsumer(consumer);
 
                if (result.hasIssues())
                {
-                  // create the expected registration info and make it available
-                  RegistrationInfo expected = new RegistrationInfo(consumer.getProducerInfo().getRegistrationInfo());
-                  expected.refresh(result.getServiceDescription(), consumer.getProducerId(), true, true, true);
-                  consumerOverview.setExpectedRegistrationInfo(expected);
-
-                  // refresh had issues, we should deactivate this consumer
-                  registry.deactivateConsumerWith(consumer.getProducerId());
-
-                  uiApp.addMessage(new ApplicationMessage("UIWsrp.consumer.grid.action.refresh.fail",
-                     new Object[]{result.getStatus()}, ApplicationMessage.ERROR));
+                  consumerOverview.displayConsumerEditor(consumer);
                }
                else
                {
-                  // activate the consumer if it's supposed to be active
-                  if (consumer.isActive())
-                  {
-                     registry.activateConsumerWith(consumer.getProducerId());
-                  }
-                  else
-                  {
-                     registry.deactivateConsumerWith(consumer.getProducerId());
-                  }
                   uiApp.addMessage(new ApplicationMessage("UIWsrp.consumer.grid.action.refresh.success", null, ApplicationMessage.INFO));
                }
+
+               // refresh consumers
                consumerOverview.refreshGrid(event);
             }
          }
@@ -348,25 +316,14 @@ public class UIWsrpConsumerOverview extends UIContainer
       }
    }
 
-   public void processRender(WebuiRequestContext context) throws Exception
-   {
-//         UITabPane uiTabPane = context.getUIApplication().findComponentById("UIWsrpConsoleTab");
-//         uiTabPane.setSelectedTab(1);
-      super.processRender(context);
-   }
-
-
    public WSRPConsumer getConsumerFromEvent(Event<?> event) throws Exception
    {
-      ConsumerRegistry consumerRegistry = getConsumerRegistry();
       String id = event.getRequestContext().getRequestParameter(OBJECTID);
-      return consumerRegistry.getConsumer(id);
+      return controller.getConsumer(id);
    }
 
    public ConsumerRegistry getConsumerRegistry() throws Exception
    {
-      // todo: this lookup shouldn't be done on each invocation, store it if possible
-      ExoContainer manager = ExoContainerContext.getCurrentContainer();
-      return (ConsumerRegistry)manager.getComponentInstanceOfType(ConsumerRegistry.class);
+      return controller.getRegistry();
    }
 }

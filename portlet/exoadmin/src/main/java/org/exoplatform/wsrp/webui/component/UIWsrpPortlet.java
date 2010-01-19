@@ -23,24 +23,20 @@
 package org.exoplatform.wsrp.webui.component;
 
 import org.exoplatform.webui.config.annotation.ComponentConfig;
-import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 
 /** @author Wesley Hales */
 @ComponentConfig(
-   lifecycle = UIApplicationLifecycle.class,
-   template = "app:/groovy/wsrp/webui/component/UIWsrpPortlet.gtmpl"
+   lifecycle = UIApplicationLifecycle.class
 )
 
 public class UIWsrpPortlet extends UIPortletApplication
 {
    public UIWsrpPortlet() throws Exception
    {
-      addChild(UIWsrpConsole.class,null,null);
+      addChild(UIWsrpConsole.class, null, null);
    }
-
-
 
 
 }

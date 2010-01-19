@@ -25,8 +25,6 @@ package org.exoplatform.wsrp.webui.component;
 import org.exoplatform.commons.utils.LazyPageList;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
-import org.exoplatform.portal.application.PortalRequestContext;
-import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -37,7 +35,6 @@ import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
-import org.exoplatform.webui.event.MonitorEvent;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormInputBase;
 import org.exoplatform.webui.form.UIFormStringInput;
@@ -121,7 +118,7 @@ public class UIWsrpConsumerEditor extends UIForm
       this.newConsumer = newConsumer;
    }
 
-   public void setConsumer(WSRPConsumer consumer) throws Exception
+   public void setConsumer(WSRPConsumer consumer)
    {
       if (consumer == null)
       {
@@ -137,13 +134,6 @@ public class UIWsrpConsumerEditor extends UIForm
       timeoutWS.setValue("" + producerInfo.getEndpointConfigurationInfo().getWSOperationTimeOut());
       wsdl.setValue(producerInfo.getEndpointConfigurationInfo().getWsdlDefinitionURL());
       setNewConsumer(false);
-   }
-
-   private void bindingFields(WSRPConsumer consumer)
-   {
-      ProducerInfo producerInfo = consumer.getProducerInfo();
-      producerInfo.setId(getConsumerName());
-      producerInfo.setExpirationCacheSeconds(getCacheExpiration());
    }
 
    static public class SaveActionListener extends EventListener<UIWsrpConsumerEditor>
