@@ -113,6 +113,22 @@ public class PortalRequestContext extends WebuiRequestContext
       response_ = res;
       response_.setBufferSize(1024 * 100);
       setSessionId(req.getSession().getId());
+      
+      
+      //The encoding needs to be set before reading any of the parameters since the parameters's encoding
+      //is set at the first acces.
+      
+      //TODO use the encoding from the locale-config.xml file
+      response_.setContentType("text/html; charset=UTF-8");
+      try
+      {
+         request_.setCharacterEncoding("UTF-8");
+      }
+      catch (UnsupportedEncodingException e)
+      {
+         log.error("Encoding not supported", e);
+      }
+      
       ajaxRequest_ = "true".equals(req.getParameter("ajaxRequest"));
       String cache = req.getParameter(CACHE_LEVEL);
       if (cache != null)
@@ -143,17 +159,6 @@ public class PortalRequestContext extends WebuiRequestContext
       else if (requestURI_.indexOf("/private/") >= 0)
       {
          accessPath = PRIVATE_ACCESS;
-      }
-
-      //TODO use the encoding from the locale-config.xml file
-      response_.setContentType("text/html; charset=UTF-8");
-      try
-      {
-         request_.setCharacterEncoding("UTF-8");
-      }
-      catch (UnsupportedEncodingException e)
-      {
-         log.error("Encoding not supported", e);
       }
 
       urlBuilder = new PortalURLBuilder(requestURI_);
