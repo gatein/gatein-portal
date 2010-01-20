@@ -1,39 +1,30 @@
 <?xml version='1.0' encoding='utf-8' ?>
 <!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+<!ENTITY % BOOK_ENTITIES SYSTEM "../../Reference_Guide.ent">
+%BOOK_ENTITIES;
 ]>
 <section id="sect-Reference_Guide-Portal_Lifecycle">
 	<title>Portal Lifecycle</title>
 	<section id="sect-Reference_Guide-Portal_Lifecycle-Overview">
 		<title>Overview</title>
 		<para>
-			This chapter describes the portal lifecycle from the application
-			server start to its stop as well as how requests are handled.
-		</para>
-	</section>
-
-	<section
-		id="sect-Reference_Guide-Portal_Lifecycle-Application_Server_start_and_stop">
-		<title>Application Server start and stop</title>
-		<para>
-			A GateIn Portal instance is simply a web application deployed as
-			a WAR in an application server.
-			Portlets are also part of an enhanced
-			WAR that we call a portlet application.
-		</para>
-		<para>
-			GateIn doesn't require any particular setup for your portlet in most common scenario and the
-			web.xml file can remain without any GateIn specific configuration. During deployment,
-			GateIn will automatically and transparently inject a servlet
-			into the portlet application to be able to interact with it.
-			This feature is dependent on the underlying servlet container but will
-			work out of the box on the proposed bundles. 
+			This chapter describes the portal lifecycle from the application server start to its stop as well as how requests are handled.
 		</para>
 	</section>
 	
-	<!-- 
+	<section id="sect-Reference_Guide-Portal_Lifecycle-Application_Server_start_and_stop">
+		<title>Application Server start and stop</title>
+		<para>
+			A GateIn Portal instance is simply a web application deployed as a WAR in an application server. Portlets are also part of an enhanced WAR that we call a portlet application.
+		</para>
+		<para>
+			GateIn doesn't require any particular setup for your portlet in most common scenario and the web.xml file can remain without any GateIn specific configuration. During deployment, GateIn will automatically and transparently inject a servlet into the portlet application to be able to interact with it. This feature is dependent on the underlying servlet container but will work out of the box on the proposed bundles.
+		</para>
+	</section>
+	
+	<!--  
 	   TODO: Define the added listener
-	 -->
-	<!-- 
+	  --><!--  
 	<section id="sect-Reference_Guide-Portal_Lifecycle-The_Listener">
 		<title>The Listener</title>
 		<para>
@@ -93,40 +84,36 @@
     }
   }
 </programlisting>
- -->
-        <section>
-           <title>The Command Servlet</title>
+  -->
+	<section id="sect-Reference_Guide-Portal_Lifecycle-The_Command_Servlet">
+		<title>The Command Servlet</title>
 		<para>
-			The servlet is the main entry point for incoming requests, it
-			also includes some interesting init code when the portal is launched.
-			This servlet (<literal>org.gatein.wci.command.CommandServlet</literal>) is automatically
-			added during deployment and mapped to <literal>/tomcatgateinservlet</literal>.
+			The servlet is the main entry point for incoming requests, it also includes some interesting init code when the portal is launched. This servlet (<literal>org.gatein.wci.command.CommandServlet</literal>) is automatically added during deployment and mapped to <literal>/tomcatgateinservlet</literal>.
 		</para>
 		<para>
-			In other words, this is equivalent to adding the following into web.xml (But this is for
-			information only, the servlet is already configured)
-			</para>
-
-<programlisting role="XML"><![CDATA[
-<servlet>
-  <servlet-name>TomcatGateInServlet</servlet-name>
-  <servlet-class>org.gatein.wci.command.CommandServlet</servlet-class>
-  <load-on-startup>0</load-on-startup>
-</servlet>
+			In other words, this is equivalent to adding the following into web.xml (But this is for information only, the servlet is already configured)
+		</para>
+		
+<programlisting role="XML">
+&lt;servlet&gt;
+  &lt;servlet-name&gt;TomcatGateInServlet&lt;/servlet-name&gt;
+  &lt;servlet-class&gt;org.gatein.wci.command.CommandServlet&lt;/servlet-class&gt;
+  &lt;load-on-startup&gt;0&lt;/load-on-startup&gt;
+&lt;/servlet&gt;
   
-<servlet-mapping>
-  <servlet-name>TomcatGateInServlet</servlet-name>
-  <url-pattern>/tomcatgateinservlet</url-pattern>
-</servlet-mapping>]]></programlisting>
-
+&lt;servlet-mapping&gt;
+  &lt;servlet-name&gt;TomcatGateInServlet&lt;/servlet-name&gt;
+  &lt;url-pattern&gt;/tomcatgateinservlet&lt;/url-pattern&gt;
+&lt;/servlet-mapping&gt;
+</programlisting>
 		<para>
-	With this in mind it's possible to filter on the CommandServlet by
-	filtering on the URL pattern used by the Servlet mapping. As an example
-	below we will create a servlet filter that calculates the time of
-	execution of a portlet request.
-	    </para>
-		<para>The filter class: </para>
-<programlisting role="JAVA"><![CDATA[
+			With this in mind it's possible to filter on the CommandServlet by filtering on the URL pattern used by the Servlet mapping. As an example below we will create a servlet filter that calculates the time of execution of a portlet request.
+		</para>
+		<para>
+			The filter class:
+		</para>
+		
+<programlisting role="JAVA">
 package org.example;
 
 import java.io.IOException;
@@ -156,40 +143,42 @@ public class MyFilter implements javax.servlet.Filter {
   {
   }
 
-}]]></programlisting>
+}
+</programlisting>
 		<para>
-		The Java EE web application configuration file (web.xml) of the portlet on which we want to
-		know the time to serve a portlet request. As mentioned above nothing specific to GateIn needs to be included,
-		only the URL pattern to set has to be known.
-        </para>
-<programlisting role="XML"><![CDATA[
-<?xml version="1.0"?>
-<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
-    version="2.5">
-        
-  <filter>
-    <filter-name>MyFilter</filter-name>
-    <filter-class>org.example.MyFilter</filter-class>        
-  </filter>
-
-  <filter-mapping>
-    <filter-name>MyFilter</filter-name>
-    <url-pattern>/tomcatgateinservlet</url-pattern>
-    <dispatcher>INCLUDE</dispatcher>  
-  </filter-mapping>    
-    
-</web-app>]]></programlisting>
-        <para>
-          <note>
-            <title>INCLUDE dispatcher</title>
-            <para>Here it's important to set INCLUDE as dispatcher as the portal will always hit
-            the CommandServlet through a request dispatcher. Without this, the filter will not be
-            triggered, unless direct access to a resource (such as an image).</para>
-          </note>
+			The Java EE web application configuration file (web.xml) of the portlet on which we want to know the time to serve a portlet request. As mentioned above nothing specific to GateIn needs to be included, only the URL pattern to set has to be known.
 		</para>
-       </section>
-<!-- 
+		
+<programlisting role="XML">
+&lt;?xml version="1.0"?&gt;
+&lt;web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+    version="2.5"&gt;
+        
+  &lt;filter&gt;
+    &lt;filter-name&gt;MyFilter&lt;/filter-name&gt;
+    &lt;filter-class&gt;org.example.MyFilter&lt;/filter-class&gt;        
+  &lt;/filter&gt;
+
+  &lt;filter-mapping&gt;
+    &lt;filter-name&gt;MyFilter&lt;/filter-name&gt;
+    &lt;url-pattern&gt;/tomcatgateinservlet&lt;/url-pattern&gt;
+    &lt;dispatcher&gt;INCLUDE&lt;/dispatcher&gt;  
+  &lt;/filter-mapping&gt;    
+    
+&lt;/web-app&gt;
+</programlisting>
+		<para>
+			<note>
+				<title>INCLUDE dispatcher</title>
+				<para>
+					Here it's important to set INCLUDE as dispatcher as the portal will always hit the CommandServlet through a request dispatcher. Without this, the filter will not be triggered, unless direct access to a resource (such as an image).
+				</para>
+			</note>
+		</para>
+	</section>
+	
+	<!--  
 		<para>
 			Here is its definition in the web.xml file:
 		</para>
@@ -1034,8 +1023,7 @@ abstract public class WebuiRequestContext extends RequestContext {
   }
 </programlisting>
 	</section>
--->
-
+ -->
 </section>
 
 

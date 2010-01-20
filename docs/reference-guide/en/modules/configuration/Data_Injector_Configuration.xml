@@ -1,210 +1,174 @@
 <?xml version='1.0' encoding='utf-8' ?>
 <!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+<!ENTITY % BOOK_ENTITIES SYSTEM "../../Reference_Guide.ent">
+%BOOK_ENTITIES;
 ]>
 <section id="sect-Reference_Guide-Data_Injector_Configuration">
-   <title>Data Injector Configuration</title>
-   <section
-      id="sect-Reference_Guide-Data_Injector_Configuration-Data_Injector">
-      <title>Data Injector</title>
-      <para>
-         <emphasis>Data-injector</emphasis>
-         is an utility to initialize enterprise data for Portal. It is
-         packed as a .jar.
-<!--
+	<title>Data Injector Configuration</title>
+	<section id="sect-Reference_Guide-Data_Injector_Configuration-Data_Injector">
+		<title>Data Injector</title>
+		<para>
+			<emphasis>Data-injector</emphasis> is an utility to initialize enterprise data for Portal. It is packed as a .jar. <!-- 
             and deployed under $TOMCATHOME/lib. It is started
             automatically when Tomcat starts.
-         -->
-
-      </para>
-   </section>
-
-   <section
-      id="sect-Reference_Guide-Data_Injector_Configuration-OrganizationInitializer">
-      <title>OrganizationInitializer</title>
-      <para>
-         <emphasis>OrganizationInitializer</emphasis>
-         is the service that allows creating a large organization with
-         many groups and users. It also creates portal navigation and
-         page(s) for each group, each user.
-      </para>
-   </section>
-
-   <section
-      id="sect-Reference_Guide-Data_Injector_Configuration-Service_configuration_file">
-      <title>Service configuration file</title>
-
-      <programlisting role="XML"><![CDATA[<configuration>
-  <component>
-  <key>org.exoplatform.portal.initializer.organization.OrganizationInitializer</key>
-  <type>org.exoplatform.portal.initializer.organization.OrganizationInitializer</type>
-    <init-params>
-      <value-param>
-        <name>auto.create.group.page.navigation</name>
-        <description>true or false</description>
-        <value>true</value>
-      </value-param>
+          -->
+		</para>
+	</section>
+	
+	<section id="sect-Reference_Guide-Data_Injector_Configuration-OrganizationInitializer">
+		<title>OrganizationInitializer</title>
+		<para>
+			<emphasis>OrganizationInitializer</emphasis> is the service that allows creating a large organization with many groups and users. It also creates portal navigation and page(s) for each group, each user.
+		</para>
+	</section>
+	
+	<section id="sect-Reference_Guide-Data_Injector_Configuration-Service_configuration_file">
+		<title>Service configuration file</title>
+		
+<programlisting role="XML">&lt;configuration&gt;
+  &lt;component&gt;
+  &lt;key&gt;org.exoplatform.portal.initializer.organization.OrganizationInitializer&lt;/key&gt;
+  &lt;type&gt;org.exoplatform.portal.initializer.organization.OrganizationInitializer&lt;/type&gt;
+    &lt;init-params&gt;
+      &lt;value-param&gt;
+        &lt;name&gt;auto.create.group.page.navigation&lt;/name&gt;
+        &lt;description&gt;true or false&lt;/description&gt;
+        &lt;value&gt;true&lt;/value&gt;
+      &lt;/value-param&gt;
        
-      <value-param>
-        <name>auto.create.user.page.navigation</name>
-        <description>number of pages per user</description>
-        <value>10</value>
-      </value-param>
+      &lt;value-param&gt;
+        &lt;name&gt;auto.create.user.page.navigation&lt;/name&gt;
+        &lt;description&gt;number of pages per user&lt;/description&gt;
+        &lt;value&gt;10&lt;/value&gt;
+      &lt;/value-param&gt;
       
-      <object-param>
-        <name>organization</name>
-        <description>description</description>
-        <object type="org.exoplatform.portal.initializer.organization.OrganizationConfig">
-          <field name="groups">
-            <collection type="java.util.ArrayList">
-              <value>
-                <object type="org.exoplatform.portal.initializer.organization.OrganizationConfig$GroupsConfig">
-                  <field name="group">
-                    <object type="org.exoplatform.services.organization.OrganizationConfig$Group">
-                      <field name="name"><string>province</string></field>
-                      <field name="parentId"><string>/africa/tanzania</string></field>
-                      <field name="description"><string>Tanzania's province</string></field>
-                      <field name="label"><string>Province</string></field>
-                    </object>                
-                  </field> 
-                  <field name="from"><string>1</string></field>
-                  <field name="to"><string>10</string></field>
-                </object>
-              </value>
-            </collection>
-          </field>
-          <field name="users">
-            <collection type="java.util.ArrayList"> 
-              <value>
-                <object type="org.exoplatform.portal.initializer.organization.OrganizationConfig$UsersConfig">
-                  <field name="user">
-                    <object type="org.exoplatform.services.organization.OrganizationConfig$User">
-                      <field name="userName"><string>user</string></field>
-                      <field name="password"><string>GateInPlatform</string></field>
-                      <field name="firstName"><string>First-Name</string></field>
-                      <field name="lastName"><string>Last-Name</string></field>
-                      <field name="email"><string>exo@localhost</string></field>
-                      <field name="groups"><string>member:/africa</string></field>
-                    </object>
-                  </field>
-                  <field name="from"><string>0</string></field>
-                  <field name="to"><string>9</string></field>
-                </object>
-              </value>
-            </collection>
-          </field>
-        </object>
-      </object-param>
-    </init-params>
-  </component>  
-</configuration>]]></programlisting>
-   </section>
-
-   <section
-      id="sect-Reference_Guide-Data_Injector_Configuration-Parameters_for_Group">
-      <title>Parameters for Group</title>
-      <itemizedlist>
-         <listitem>
-            <para>
-               <emphasis>name</emphasis>
-               : The name of group.
-            </para>
-         </listitem>
-         <listitem>
-            <para>
-               <emphasis>parentId</emphasis>
-               : The id of parent group. If the parent id is null, it
-               means that the group is at the first level. If parent
-               groups do not exist, it will be created automatically.
-            </para>
-         </listitem>
-         <listitem>
-            <para>
-               <emphasis>description</emphasis>
-               : The description of group.
-            </para>
-         </listitem>
-         <listitem>
-            <para>
-               <emphasis>label</emphasis>
-               : The label of group.
-            </para>
-         </listitem>
-         <listitem>
-            <para>
-               <emphasis>from and to</emphasis>
-               : This group can be cloned to may copies and each copy is
-               marked a number from!images/number.png!images/ to!images/
-               number.png!.
-            </para>
-         </listitem>
-      </itemizedlist>
-   </section>
-
-   <section
-      id="sect-Reference_Guide-Data_Injector_Configuration-Parameters_for_User">
-      <title>Parameters for User</title>
-      <itemizedlist>
-         <listitem>
-            <para>
-               <emphasis>userName</emphasis>
-               : The ID of user.
-            </para>
-         </listitem>
-         <listitem>
-            <para>
-               <emphasis>password</emphasis>
-               : The password of user.
-            </para>
-         </listitem>
-         <listitem>
-            <para>
-               <emphasis>firstName</emphasis>
-               : The first name of user.
-            </para>
-         </listitem>
-         <listitem>
-            <para>
-               <emphasis>lastName</emphasis>
-               : The last name of user.
-            </para>
-         </listitem>
-         <listitem>
-            <para>
-               <emphasis>email</emphasis>
-               : The email of user.
-            </para>
-         </listitem>
-         <listitem>
-            <para>
-               <emphasis>groups</emphasis>
-               : The list of groups that user join with membership type
-            </para>
-         </listitem>
-         <listitem>
-            <para>
-               <emphasis>from and to</emphasis>
-               : This user can be cloned to may copies and each copy is
-               marked a number from!images/number.png!images/ to!images/
-               number.png!. With this configuration we can create a
-               range of users and put them to various groups and other
-               range to other groups.
-            </para>
-         </listitem>
-      </itemizedlist>
-      <para>
-         The "
-         <emphasis>auto.create.group.page.navigation</emphasis>
-         " Parameter Value is true or false. If TRUE it automatically
-         create portal navigation and page for each group. If FALSE it
-         does not create portal navigation and page for each group.
-      </para>
-      <para>
-         The "
-         <emphasis>auto.create.user.page.navigation</emphasis>
-         " Parameter Value is number of pages that automatically created
-         for each user.
-      </para>
-   </section>
+      &lt;object-param&gt;
+        &lt;name&gt;organization&lt;/name&gt;
+        &lt;description&gt;description&lt;/description&gt;
+        &lt;object type="org.exoplatform.portal.initializer.organization.OrganizationConfig"&gt;
+          &lt;field name="groups"&gt;
+            &lt;collection type="java.util.ArrayList"&gt;
+              &lt;value&gt;
+                &lt;object type="org.exoplatform.portal.initializer.organization.OrganizationConfig$GroupsConfig"&gt;
+                  &lt;field name="group"&gt;
+                    &lt;object type="org.exoplatform.services.organization.OrganizationConfig$Group"&gt;
+                      &lt;field name="name"&gt;&lt;string&gt;province&lt;/string&gt;&lt;/field&gt;
+                      &lt;field name="parentId"&gt;&lt;string&gt;/africa/tanzania&lt;/string&gt;&lt;/field&gt;
+                      &lt;field name="description"&gt;&lt;string&gt;Tanzania's province&lt;/string&gt;&lt;/field&gt;
+                      &lt;field name="label"&gt;&lt;string&gt;Province&lt;/string&gt;&lt;/field&gt;
+                    &lt;/object&gt;                
+                  &lt;/field&gt; 
+                  &lt;field name="from"&gt;&lt;string&gt;1&lt;/string&gt;&lt;/field&gt;
+                  &lt;field name="to"&gt;&lt;string&gt;10&lt;/string&gt;&lt;/field&gt;
+                &lt;/object&gt;
+              &lt;/value&gt;
+            &lt;/collection&gt;
+          &lt;/field&gt;
+          &lt;field name="users"&gt;
+            &lt;collection type="java.util.ArrayList"&gt; 
+              &lt;value&gt;
+                &lt;object type="org.exoplatform.portal.initializer.organization.OrganizationConfig$UsersConfig"&gt;
+                  &lt;field name="user"&gt;
+                    &lt;object type="org.exoplatform.services.organization.OrganizationConfig$User"&gt;
+                      &lt;field name="userName"&gt;&lt;string&gt;user&lt;/string&gt;&lt;/field&gt;
+                      &lt;field name="password"&gt;&lt;string&gt;GateInPlatform&lt;/string&gt;&lt;/field&gt;
+                      &lt;field name="firstName"&gt;&lt;string&gt;First-Name&lt;/string&gt;&lt;/field&gt;
+                      &lt;field name="lastName"&gt;&lt;string&gt;Last-Name&lt;/string&gt;&lt;/field&gt;
+                      &lt;field name="email"&gt;&lt;string&gt;exo@localhost&lt;/string&gt;&lt;/field&gt;
+                      &lt;field name="groups"&gt;&lt;string&gt;member:/africa&lt;/string&gt;&lt;/field&gt;
+                    &lt;/object&gt;
+                  &lt;/field&gt;
+                  &lt;field name="from"&gt;&lt;string&gt;0&lt;/string&gt;&lt;/field&gt;
+                  &lt;field name="to"&gt;&lt;string&gt;9&lt;/string&gt;&lt;/field&gt;
+                &lt;/object&gt;
+              &lt;/value&gt;
+            &lt;/collection&gt;
+          &lt;/field&gt;
+        &lt;/object&gt;
+      &lt;/object-param&gt;
+    &lt;/init-params&gt;
+  &lt;/component&gt;  
+&lt;/configuration&gt;
+</programlisting>
+	</section>
+	
+	<section id="sect-Reference_Guide-Data_Injector_Configuration-Parameters_for_Group">
+		<title>Parameters for Group</title>
+		<itemizedlist>
+			<listitem>
+				<para>
+					<emphasis>name</emphasis> : The name of group.
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					<emphasis>parentId</emphasis> : The id of parent group. If the parent id is null, it means that the group is at the first level. If parent groups do not exist, it will be created automatically.
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					<emphasis>description</emphasis> : The description of group.
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					<emphasis>label</emphasis> : The label of group.
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					<emphasis>from and to</emphasis> : This group can be cloned to may copies and each copy is marked a number from!images/number.png!images/ to!images/ number.png!.
+				</para>
+			</listitem>
+		</itemizedlist>
+	</section>
+	
+	<section id="sect-Reference_Guide-Data_Injector_Configuration-Parameters_for_User">
+		<title>Parameters for User</title>
+		<itemizedlist>
+			<listitem>
+				<para>
+					<emphasis>userName</emphasis> : The ID of user.
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					<emphasis>password</emphasis> : The password of user.
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					<emphasis>firstName</emphasis> : The first name of user.
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					<emphasis>lastName</emphasis> : The last name of user.
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					<emphasis>email</emphasis> : The email of user.
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					<emphasis>groups</emphasis> : The list of groups that user join with membership type
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					<emphasis>from and to</emphasis> : This user can be cloned to may copies and each copy is marked a number from!images/number.png!images/ to!images/ number.png!. With this configuration we can create a range of users and put them to various groups and other range to other groups.
+				</para>
+			</listitem>
+		</itemizedlist>
+		<para>
+			The " <emphasis>auto.create.group.page.navigation</emphasis> " Parameter Value is true or false. If TRUE it automatically create portal navigation and page for each group. If FALSE it does not create portal navigation and page for each group.
+		</para>
+		<para>
+			The " <emphasis>auto.create.user.page.navigation</emphasis> " Parameter Value is number of pages that automatically created for each user.
+		</para>
+	</section>
 
 </section>
 

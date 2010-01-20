@@ -1,67 +1,45 @@
 <?xml version='1.0' encoding='utf-8' ?>
 <!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+<!ENTITY % BOOK_ENTITIES SYSTEM "../../Reference_Guide.ent">
+%BOOK_ENTITIES;
 ]>
 <section id="sect-Reference_Guide-XML_Resources_Bundles">
 	<title>XML Resources Bundles</title>
 	<section id="sect-Reference_Guide-XML_Resources_Bundles-Motivation">
 		<title>Motivation</title>
 		<para>
-			Usually resource bundles are stored in property files however as
-			property files are plain files it raise issues with the encoding of
-			the file. The XML resource bundle format has been developed to
-			provide an alternative to property files.
+			Usually resource bundles are stored in property files however as property files are plain files it raise issues with the encoding of the file. The XML resource bundle format has been developed to provide an alternative to property files.
 		</para>
 		<itemizedlist>
 			<listitem>
 				<para>
-					The XML format declares the encoding of the file in the XML
-					declaration which avoids to use the native2ascii program and mess
-					with encoding.
+					The XML format declares the encoding of the file in the XML declaration which avoids to use the native2ascii program and mess with encoding.
 				</para>
 			</listitem>
 			<listitem>
 				<para>
-					Property files use the ISO 8859-1 which does not cover the
-					full unicode charset and language such as Arabic would not be
-					supported natively and require the use of escaping, leading the
-					files to be barely maintainable.
+					Property files use the ISO 8859-1 which does not cover the full unicode charset and language such as Arabic would not be supported natively and require the use of escaping, leading the files to be barely maintainable.
 				</para>
 			</listitem>
 			<listitem>
 				<para>
-					Tooling support for XML files is better than the tooling for
-					Java property files and usually the XML editor cope very well with
-					the file encoding.
+					Tooling support for XML files is better than the tooling for Java property files and usually the XML editor cope very well with the file encoding.
 				</para>
 			</listitem>
 		</itemizedlist>
 	</section>
-
+	
 	<section id="sect-Reference_Guide-XML_Resources_Bundles-Portal_support">
 		<title>Portal support</title>
 		<para>
-			In order to be loaded by the portal at runtime (actually the resource
-			bundle service), the name of the file must be the same as a property
-			file but instead of ending with the
-			<emphasis role="bold">.properties</emphasis>
-			suffix, it ends with the
-			<emphasis role="bold">.xml</emphasis>
-			suffix. For instance
-			<emphasis role="bold">
-				AccountPortlet_ar.xml</emphasis>
-				instead of
-			<emphasis role="bold">AccountPortlet_ar.properties</emphasis>.
+			In order to be loaded by the portal at runtime (actually the resource bundle service), the name of the file must be the same as a property file but instead of ending with the <emphasis role="bold">.properties</emphasis> suffix, it ends with the <emphasis role="bold">.xml</emphasis> suffix. For instance <emphasis role="bold"> AccountPortlet_ar.xml</emphasis> instead of <emphasis role="bold">AccountPortlet_ar.properties</emphasis>.
 		</para>
 	</section>
-
+	
 	<section id="sect-Reference_Guide-XML_Resources_Bundles-XML_format">
 		<title>XML format</title>
 		<para>
-			The XML format is very simple and has been developed based on
-			the DRY (Don't Repeat Yourself) principle. Usually resource bundle
-			keys are hierarchically defined and we can leverage the hierarchic
-			nature of the XML for that purpose. Here is an example of turning a
-			property file into an XML resource bundle file:
+			The XML format is very simple and has been developed based on the DRY (Don't Repeat Yourself) principle. Usually resource bundle keys are hierarchically defined and we can leverage the hierarchic nature of the XML for that purpose. Here is an example of turning a property file into an XML resource bundle file:
 		</para>
 		
 <programlisting>UIAccountForm.tab.label.AccountInputSet = ...
@@ -75,29 +53,29 @@ UIAccountForm.label.email= ...
 UIAccountForm.action.Reset= ...
 </programlisting>
 		
-<programlisting role="XML"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
-<bundle>
-  <UIAccountForm>
-    <tab>
-      <label>
-        <AccountInputSet>...</AccountInputSet>
-        <UIUserProfileInputSet>...</UIUserProfileInputSet>
-      </label>
-    </tab>
-    <label>
-      <Profile>...</Profile>
-      <HomeInfo>...</HomeInfo>
-      <BusinessInfo>...</BusinessInfo>
-      <password>...</password>
-      <Confirmpassword>...</Confirmpassword>
-      <email>...</email>
-    </label>
-    <action>
-      <Reset>...</Reset>
-    </action>
-  </UIAccountForm>
-</bundle>
-]]></programlisting>
+<programlisting role="XML">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;bundle&gt;
+  &lt;UIAccountForm&gt;
+    &lt;tab&gt;
+      &lt;label&gt;
+        &lt;AccountInputSet&gt;...&lt;/AccountInputSet&gt;
+        &lt;UIUserProfileInputSet&gt;...&lt;/UIUserProfileInputSet&gt;
+      &lt;/label&gt;
+    &lt;/tab&gt;
+    &lt;label&gt;
+      &lt;Profile&gt;...&lt;/Profile&gt;
+      &lt;HomeInfo&gt;...&lt;/HomeInfo&gt;
+      &lt;BusinessInfo&gt;...&lt;/BusinessInfo&gt;
+      &lt;password&gt;...&lt;/password&gt;
+      &lt;Confirmpassword&gt;...&lt;/Confirmpassword&gt;
+      &lt;email&gt;...&lt;/email&gt;
+    &lt;/label&gt;
+    &lt;action&gt;
+      &lt;Reset&gt;...&lt;/Reset&gt;
+    &lt;/action&gt;
+  &lt;/UIAccountForm&gt;
+&lt;/bundle&gt;
+</programlisting>
 	</section>
 
 </section>

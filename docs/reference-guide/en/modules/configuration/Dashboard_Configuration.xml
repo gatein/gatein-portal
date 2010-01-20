@@ -1,51 +1,51 @@
 <?xml version='1.0' encoding='utf-8' ?>
 <!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+<!ENTITY % BOOK_ENTITIES SYSTEM "../../Reference_Guide.ent">
+%BOOK_ENTITIES;
 ]>
 <section id="sect-Reference_Guide-Dashboard_configuration">
-   <title>Dashboard configuration</title>
-   <section
-      id="sect-Reference_Guide-Dashboard_configuration-Parameters_in_edit_mode">
-      <title>Parameters (in edit mode)</title>
+	<title>Dashboard configuration</title>
+	<section id="sect-Reference_Guide-Dashboard_configuration-Parameters_in_edit_mode">
+		<title>Parameters (in edit mode)</title>
+		<section id="sect-Reference_Guide-Parameters_in_edit_mode-owner">
+			<title>owner</title>
+			<itemizedlist>
+				<listitem>
+					<para>
+						if empty, everyone share the same dashboard and can edit it
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						if set to <emphasis>CURRENTUSER</emphasis> , every user has his own dashboard
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						if set to a username, everyone will see the dashboard of this person
+					</para>
+				</listitem>
+			</itemizedlist>
+		</section>
+		
+		<section id="sect-Reference_Guide-Parameters_in_edit_mode-isPrivate">
+			<title>isPrivate</title>
+			<itemizedlist>
+				<listitem>
+					<para>
+						if set to 1, only the owner of the dashboard can edit it
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						if set to 0, everyone can edit it
+					</para>
+				</listitem>
+			</itemizedlist>
+		</section>
 
-      <section id="sect-Reference_Guide-Dashboard_configuration-owner">
-         <title>owner</title>
-         <itemizedlist>
-            <listitem>
-               <para>
-                  if empty, everyone share the same dashboard and can edit it
-				</para>
-            </listitem>
-            <listitem>
-               <para>
-                  if set to
-                  <emphasis>CURRENTUSER</emphasis>
-                  , every user has his own dashboard
-               </para>
-            </listitem>
-            <listitem>
-               <para>
-                  if set to a username, everyone will see the dashboard of this person
-               </para>
-            </listitem>
-         </itemizedlist>
-      </section>
+	</section>
 
-      <section id="sect-Reference_Guide-Dashboard_configuration-isPrivate">
-         <title>isPrivate</title>
-         <itemizedlist>
-            <listitem>
-               <para>
-                  if set to 1, only the owner of the dashboard can edit it
-				</para>
-            </listitem>
-            <listitem>
-               <para>
-                  if set to 0, everyone can edit it
-				</para>
-            </listitem>
-         </itemizedlist>
-      </section>
-   </section>
 </section>
 
 

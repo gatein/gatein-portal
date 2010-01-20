@@ -1,130 +1,125 @@
 <?xml version='1.0' encoding='utf-8' ?>
 <!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+<!ENTITY % BOOK_ENTITIES SYSTEM "../../Reference_Guide.ent">
+%BOOK_ENTITIES;
 ]>
 <section id="sect-Reference_Guide-Gadgets">
-   <title>Gadgets</title>
-   <section id="sect-Reference_Guide-Gadgets-Overview">
-      <title>Overview</title>
-      <para>
-         An gadget is a mini web application running on a platform and you can
-         put it in a web page. This is a small application that helps
-         users to do some private actions.
-	</para>
-      <para>
-         GateIn Portal supports some gadgets such as: Todo gadget, Calendar gadget,
-         Calculator gadget, Weather Forecasts, RSS Reader gadget.
-	</para>
-      <itemizedlist>
-         <listitem>
-            <para>
-               Todo: This mini - application helps you to organize your day and work
-               group.
-			</para>
-         </listitem>
-         <listitem>
-            <para>
-               Calendar: A cool calendar to keep track of date in style.
-			</para>
-         </listitem>
-         <listitem>
-            <para>
-               Calculator: This is the coolest calculator for your page.
-			</para>
-         </listitem>
-         <listitem>
-            <para>
-               RSS Reader: This gadget lets you het a sneak preview of your favourite
-               feeds around web
-			</para>
-         </listitem>
-         <listitem>
-            <para>
-               Weather Forecasts: This gadget notifies you of current weather condition
-               and gives tomorrow's forecast.
-			</para>
-         </listitem>
-      </itemizedlist>
-   </section>
+	<title>Gadgets</title>
+	<section id="sect-Reference_Guide-Gadgets-Overview">
+		<title>Overview</title>
+		<para>
+			An gadget is a mini web application running on a platform and you can put it in a web page. This is a small application that helps users to do some private actions.
+		</para>
+		<para>
+			GateIn Portal supports some gadgets such as: Todo gadget, Calendar gadget, Calculator gadget, Weather Forecasts, RSS Reader gadget.
+		</para>
+		<itemizedlist>
+			<listitem>
+				<para>
+					Todo: This mini - application helps you to organize your day and work group.
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					Calendar: A cool calendar to keep track of date in style.
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					Calculator: This is the coolest calculator for your page.
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					RSS Reader: This gadget lets you het a sneak preview of your favourite feeds around web
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					Weather Forecasts: This gadget notifies you of current weather condition and gives tomorrow's forecast.
+				</para>
+			</listitem>
+		</itemizedlist>
+	</section>
+	
+	<section id="sect-Reference_Guide-Gadgets-Existing_Gadgets">
+		<title>Existing Gadgets</title>
+		<mediaobject>
+			<imageobject>
+				<imagedata fileref="images/Liste.png" format="PNG" width="444" />
+			</imageobject>
+		</mediaobject>
+	</section>
+	
+	<section id="sect-Reference_Guide-Gadgets-Create_a_new_Gadget">
+		<title>Create a new Gadget</title>
+		<mediaobject>
+			<imageobject>
+				<imagedata fileref="images/New.png" format="PNG" width="444" />
+			</imageobject>
+		</mediaobject>
+	</section>
+	
+	<section id="sect-Reference_Guide-Gadgets-Remote_Gadget">
+		<title>Remote Gadget</title>
+		<para>
+			This is the reference to a remote gadget (stock one).
+		</para>
+		<mediaobject>
+			<imageobject>
+				<imagedata fileref="images/Import.png" format="PNG" width="444" />
+			</imageobject>
+		</mediaobject>
+	</section>
+	
+	<section id="sect-Reference_Guide-Gadgets-Gadget_Importing">
+		<title>Gadget Importing</title>
+		<para>
+			After referencing the gadget successfully, then import it into the local repository.
+		</para>
+		<mediaobject>
+			<imageobject>
+				<imagedata fileref="images/Imported.png" format="PNG" width="444" />
+			</imageobject>
+		</mediaobject>
+	</section>
+	
+	<section id="sect-Reference_Guide-Gadgets-Gadget_Web_Editing">
+		<title>Gadget Web Editing</title>
+		<para>
+			Edit it from the Web the imported Gadget to modify it:
+		</para>
+		<mediaobject>
+			<imageobject>
+				<imagedata fileref="images/EditImportedOnline.png" format="PNG" width="444" />
+			</imageobject>
+		</mediaobject>
+	</section>
+	
+	<section id="sect-Reference_Guide-Gadgets-Gadget_IDE_Editing">
+		<title>Gadget IDE Editing</title>
+		<para>
+			Edit it from your IDE thanks to the WebDAV protocol:
+		</para>
+		<mediaobject>
+			<imageobject>
+				<imagedata fileref="images/EditImportedWebDAV.png" format="PNG" width="444" />
+			</imageobject>
+		</mediaobject>
+	</section>
+	
+	<section id="sect-Reference_Guide-Gadgets-Dashboard_Viewing">
+		<title>Dashboard Viewing</title>
+		<para>
+			View it from the Dashboard when you drag and drop the Gadget from listing to the dashboard.
+		</para>
+		<mediaobject>
+			<imageobject>
+				<imagedata fileref="images/Dashboard.png" format="PNG" width="444" />
+			</imageobject>
+		</mediaobject>
+	</section>
 
-   <section id="sect-Reference_Guide-Gadgets-Existing_Gadgets">
-      <title>Existing Gadgets</title>
-      <mediaobject>
-         <imageobject>
-            <imagedata fileref="images/Liste.png" format="PNG" />
-         </imageobject>
-      </mediaobject>
-   </section>
-
-   <section id="sect-Reference_Guide-Gadgets-Create_a_new_Gadget">
-      <title>Create a new Gadget</title>
-      <mediaobject>
-         <imageobject>
-            <imagedata fileref="images/New.png" format="PNG" />
-         </imageobject>
-      </mediaobject>
-   </section>
-
-   <section id="sect-Reference_Guide-Gadgets-Remote_Gadget">
-      <title>Remote Gadget</title>
-      <para>
-         This is the reference to a remote gadget (stock one).
-	</para>
-      <mediaobject>
-         <imageobject>
-            <imagedata fileref="images/Import.png" format="PNG" />
-         </imageobject>
-      </mediaobject>
-   </section>
-
-   <section id="sect-Reference_Guide-Gadgets-Gadget_Importing">
-      <title>Gadget Importing</title>
-      <para>
-         After referencing the gadget successfully, then import it into the local
-         repository.
-	</para>
-      <mediaobject>
-         <imageobject>
-            <imagedata fileref="images/Imported.png" format="PNG" />
-         </imageobject>
-      </mediaobject>
-   </section>
-
-   <section id="sect-Reference_Guide-Gadgets-Gadget_Web_Editing">
-      <title>Gadget Web Editing</title>
-      <para>
-         Edit it from the Web the imported Gadget to modify it:
-	</para>
-      <mediaobject>
-         <imageobject>
-            <imagedata fileref="images/EditImportedOnline.png"
-               format="PNG" />
-         </imageobject>
-      </mediaobject>
-   </section>
-
-   <section id="sect-Reference_Guide-Gadgets-Gadget_IDE_Editing">
-      <title>Gadget IDE Editing</title>
-      <para>
-         Edit it from your IDE thanks to the WebDAV protocol:
-	</para>
-      <mediaobject>
-         <imageobject>
-            <imagedata fileref="images/EditImportedWebDAV.png"
-               format="PNG" />
-         </imageobject>
-      </mediaobject>
-   </section>
-
-   <section id="sect-Reference_Guide-Gadgets-Dashboard_Viewing">
-      <title>Dashboard Viewing</title>
-      <para>
-         View it from the Dashboard when you drag and drop the Gadget from listing
-         to the dashboard.
-	</para>
-      <mediaobject>
-         <imageobject>
-            <imagedata fileref="images/Dashboard.png" format="PNG" />
-         </imageobject>
-      </mediaobject>
-   </section>
 </section>
+
+

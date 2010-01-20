@@ -1,13 +1,15 @@
 <?xml version='1.0' encoding='utf-8' ?>
 <!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+<!ENTITY % BOOK_ENTITIES SYSTEM "../../Reference_Guide.ent">
+%BOOK_ENTITIES;
 ]>
 <section id="sect-Reference_Guide-Accessing_User_Profile">
-   <title>Accessing User Profile</title>
-   <para>
-      To retrieve the logged in user you can do as follows :
+	<title>Accessing User Profile</title>
+	<para>
+		To retrieve the logged in user you can do as follows :
 	</para>
-
-   <programlisting role="JAVA"><![CDATA[// Alternative context: WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+	
+<programlisting role="JAVA">// Alternative context: WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
 PortalRequestContext context = PortalRequestContext.getCurrentInstance() ;
 // Get the id of the user logged
 String userId = context.getRemoteUser();
@@ -22,20 +24,25 @@ if (userId != null)
     String lastName = user.getLastName();
     String email = user.getEmail();
   }
-}]]></programlisting>
-   <para>
-      Alternatives for retrieving the Organization Service
+}
+</programlisting>
+	<para>
+		Alternatives for retrieving the Organization Service
 	</para>
-   <orderedlist>
-      <listitem>
-         <programlisting role="JAVA"><![CDATA[OrganizationService service = (OrganizationService)
-   ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(OrganizationService.class);]]></programlisting>
-      </listitem>
-      <listitem>
-         <programlisting role="JAVA"><![CDATA[OrganizationService service = (OrganizationService)
-   PortalContainer.getInstance().getComponentInstanceOfType(OrganizationService.class);]]></programlisting>
-      </listitem>
-   </orderedlist>
+	<orderedlist>
+		<listitem>
+			
+<programlisting role="JAVA">OrganizationService service = (OrganizationService)
+   ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(OrganizationService.class);
+</programlisting>
+		</listitem>
+		<listitem>
+			
+<programlisting role="JAVA">OrganizationService service = (OrganizationService)
+   PortalContainer.getInstance().getComponentInstanceOfType(OrganizationService.class);
+</programlisting>
+		</listitem>
+	</orderedlist>
 </section>
 
 

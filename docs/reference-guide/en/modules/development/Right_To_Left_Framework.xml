@@ -1,28 +1,24 @@
 <?xml version='1.0' encoding='utf-8' ?>
 <!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+<!ENTITY % BOOK_ENTITIES SYSTEM "../../Reference_Guide.ent">
+%BOOK_ENTITIES;
 ]>
 <section id="sect-Reference_Guide-RTL_Right_To_Left_Framework">
-
 	<title>RTL (Right To Left) Framework</title>
 	<section id="sect-Reference_Guide-RTL_Right_To_Left_Framework-Overview">
 		<title>Overview</title>
 		<para>
-			The RTL framework (Right-To-Left framework) provides a set of
-			tools that can be leveraged by the user interface components to
-			handle directionality gracefully.
+			The RTL framework (Right-To-Left framework) provides a set of tools that can be leveraged by the user interface components to handle directionality gracefully.
 		</para>
 	</section>
-
+	
 	<section id="sect-Reference_Guide-RTL_Right_To_Left_Framework-Direction">
 		<title>Direction</title>
 		<para>
-			The orientation depends on the current locale and during a
-			portal request the current orientation is made available by various
-			means. The orientation is a Java 5 enum that provides a set of
-			functionalities:
+			The orientation depends on the current locale and during a portal request the current orientation is made available by various means. The orientation is a Java 5 enum that provides a set of functionalities:
 		</para>
-
-		<programlisting>
+		
+<programlisting>
    LT, // Western Europe
    RT, // Middle East (Arabic, Hebrew)
    TL, // Japanese, Chinese, Korean
@@ -32,24 +28,15 @@
    public boolean isTL() { ... }
    public boolean isTR() { ... }
 </programlisting>
-		<para>The object defining the current Orientation for the current
-			request is the UIPortalApplication. However it should be accessed at
-			runtime using the RequestContext that delegates to the
-			UIPortalApplication. In the case of a PortalRequestContext it is a
-			direct delegate as the PortalRequestContext has a reference to the
-			current UIPortalApplication. In case of a different context such as
-			the PortletRequestContext, it delegates to the parent context given
-			the fact that the root RequestContext is always a
-			PortalRequestContext.</para>
-
+		<para>
+			The object defining the current Orientation for the current request is the UIPortalApplication. However it should be accessed at runtime using the RequestContext that delegates to the UIPortalApplication. In the case of a PortalRequestContext it is a direct delegate as the PortalRequestContext has a reference to the current UIPortalApplication. In case of a different context such as the PortletRequestContext, it delegates to the parent context given the fact that the root RequestContext is always a PortalRequestContext.
+		</para>
 	</section>
-
-	<section
-		id="sect-Reference_Guide-RTL_Right_To_Left_Framework-Groovy_templates">
+	
+	<section id="sect-Reference_Guide-RTL_Right_To_Left_Framework-Groovy_templates">
 		<title>Groovy templates</title>
 		<para>
-			Orientation is obtained from implicit variables defined by the
-			groovy binding context:
+			Orientation is obtained from implicit variables defined by the groovy binding context:
 		</para>
 		<itemizedlist>
 			<listitem>
@@ -69,119 +56,88 @@
 			</listitem>
 			<listitem>
 				<para>
-					dir : the string 'ltr' if the orientation is LT or the string
-					'rtl' if the orientation is RT
+					dir : the string 'ltr' if the orientation is LT or the string 'rtl' if the orientation is RT
 				</para>
 			</listitem>
 		</itemizedlist>
 	</section>
-
+	
 	<section id="sect-Reference_Guide-RTL_Right_To_Left_Framework-Stylesheet">
 		<title>Stylesheet</title>
 		<para>
-			The skin service handles stylesheet rewriting to accommodate the
-			orientation. It works by appending -lt or -rt to the stylesheet name.
-			For instance
-			<emphasis role="bold">
-				/web/skin/portal/webui/component/UIFooterPortlet/DefaultStylesheet-rt.css
-			</emphasis>
-			will return the same stylesheet as
-			<emphasis role="bold">
-				/web/skin/portal/webui/component/UIFooterPortlet/DefaultStylesheet.css
-			</emphasis>
-			but processed for the RT orientation. Obviously the -lt suffix is
-			optional.
+			The skin service handles stylesheet rewriting to accommodate the orientation. It works by appending -lt or -rt to the stylesheet name. For instance <emphasis role="bold"> /web/skin/portal/webui/component/UIFooterPortlet/DefaultStylesheet-rt.css </emphasis> will return the same stylesheet as <emphasis role="bold"> /web/skin/portal/webui/component/UIFooterPortlet/DefaultStylesheet.css </emphasis> but processed for the RT orientation. Obviously the -lt suffix is optional.
 		</para>
 		<para>
-			Stylesheet authors can annotate their stylesheet to create
-			content that depends on the orientation.
+			Stylesheet authors can annotate their stylesheet to create content that depends on the orientation.
 		</para>
-		<section>
-		<title>Example 1</title>
-		<para>
-			In the example we need to use the orientation to modify the
-			float
-			attribute that will make the horizontal tabs either float on
-			left or
-			on right:
-			<programlisting>
+		<section id="sect-Reference_Guide-Stylesheet-Example_1">
+			<title>Example 1</title>
+			<para>
+				In the example we need to use the orientation to modify the float attribute that will make the horizontal tabs either float on left or on right: 
+<programlisting>
 float: left; /* orientation=lt */
 float: right; /* orientation=rt */
 font-weight: bold;
 text-align: center;
 white-space: nowrap;
 </programlisting>
-			The LT produced output will be:
-			<programlisting>
+				 The LT produced output will be: 
+<programlisting>
 float: left; /* orientation=lt */
 font-weight: bold;
 text-align: center;
 white-space: nowrap;
-		</programlisting>
-			The RT produced output will be:
-			<programlisting> 
+</programlisting>
+				 The RT produced output will be: 
+<programlisting> 
 float: right; /* orientation=rt */
 font-weight: bold;
 text-align: center;
 white-space: nowrap;
 </programlisting>
-		</para>
+			</para>
 		</section>
-		<section>
-		   <title>Example 2</title>
-		<para>
-			In this example we need to modify the padding according to the
-			orientation:
-			<programlisting>
+		
+		<section id="sect-Reference_Guide-Stylesheet-Example_2">
+			<title>Example 2</title>
+			<para>
+				In this example we need to modify the padding according to the orientation: 
+<programlisting>
 color: white;
 line-height: 24px;
 padding: 0px 5px 0px 0px; /* orientation=lt */
-padding: 0px 0px 0px 5px; /* >orientation=rt */
+padding: 0px 0px 0px 5px; /* &gt;orientation=rt */
 </programlisting>
-			The LT produced output will be:
-			<programlisting> 
+				 The LT produced output will be: 
+<programlisting> 
 color: white;
 line-height: 24px;
 padding: 0px 5px 0px 0px; /* orientation=lt */
 </programlisting>
-			The RT produced output will be:
-			<programlisting> 
+				 The RT produced output will be: 
+<programlisting> 
 color: white;
 line-height: 24px;
 padding: 0px 0px 0px 5px; /* orientation=rt */
 </programlisting>
-		</para>
+			</para>
 		</section>
-	</section>
 
+	</section>
+	
 	<section id="sect-Reference_Guide-RTL_Right_To_Left_Framework-Images">
 		<title>Images</title>
 		<para>
-			Sometimes it is necessary to create an RT version of an image
-			that will be used from a template or from a stylesheet. However
-			symmetric images can be automatically generated avoiding the
-			necessity to create a mirrored version of an image and furthermore
-			avoiding maintenance cost.
+			Sometimes it is necessary to create an RT version of an image that will be used from a template or from a stylesheet. However symmetric images can be automatically generated avoiding the necessity to create a mirrored version of an image and furthermore avoiding maintenance cost.
 		</para>
 		<para>
-			The web resource filter uses the same naming pattern than the skin
-			service does. When an image ends with the -rt suffix the portal will
-			attempt to locate the original image and create a mirror of it. For
-			instance requesting the image
-			<emphasis role="bold">
-				/GateInResources/skin/DefaultSkin/webui/component/UITabSystem/UITabs/background/NormalTabStyle-rt.gif
-			</emphasis>
-			returns a mirror of the image
-			<emphasis role="bold">
-				/GateInResources/skin/DefaultSkin/webui/component/UITabSystem/UITabs/background/NormalTabStyle.gif
-			</emphasis>
-			and it works perfectly because the image is symmetric.
+			The web resource filter uses the same naming pattern than the skin service does. When an image ends with the -rt suffix the portal will attempt to locate the original image and create a mirror of it. For instance requesting the image <emphasis role="bold"> /GateInResources/skin/DefaultSkin/webui/component/UITabSystem/UITabs/background/NormalTabStyle-rt.gif </emphasis> returns a mirror of the image <emphasis role="bold"> /GateInResources/skin/DefaultSkin/webui/component/UITabSystem/UITabs/background/NormalTabStyle.gif </emphasis> and it works perfectly because the image is symmetric.
 		</para>
 		<para>
 			Here is an example combining stylesheet and images:
 		</para>
-
-		<programlisting>
+		
+<programlisting>
 line-height: 24px; 
 background: url('background/NavigationTab.gif') no-repeat right top; /* orientation=lt */
 background: url('background/NavigationTab-rt.gif') no-repeat left top; /* orientation=rt */
@@ -189,28 +145,36 @@ padding-right: 2px; /* orientation=lt */
 padding-left: 2px; /* orientation=rt */
 </programlisting>
 	</section>
-	<section>
+	
+	<section id="sect-Reference_Guide-RTL_Right_To_Left_Framework-Client_side_JavaScript">
 		<title>Client side JavaScript</title>
 		<para>
-			Just use the eXo.core.I18n object that provides the following
-			methods:
+			Just use the eXo.core.I18n object that provides the following methods: 
 			<itemizedlist>
 				<listitem>
-					<para>getOrientation() : returns either the string
-						lt or rt</para>
-				</listitem>
-				<listitem>
-					<para>getDir() : returns either the string ltr or rtl
+					<para>
+						getOrientation() : returns either the string lt or rt
 					</para>
 				</listitem>
 				<listitem>
-					<para>isLT() : returns true for LT</para>
+					<para>
+						getDir() : returns either the string ltr or rtl
+					</para>
 				</listitem>
 				<listitem>
-					<para>isRT() : returns true of RT</para>
+					<para>
+						isLT() : returns true for LT
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						isRT() : returns true of RT
+					</para>
 				</listitem>
 			</itemizedlist>
 		</para>
 	</section>
 
 </section>
+
+

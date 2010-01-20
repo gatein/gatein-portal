@@ -1,78 +1,55 @@
 <?xml version='1.0' encoding='utf-8' ?>
 <!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+<!ENTITY % BOOK_ENTITIES SYSTEM "../../Reference_Guide.ent">
+%BOOK_ENTITIES;
 ]>
 <section id="sect-Reference_Guide-Portlet_Lifecycle">
-   <title>Portlet Lifecycle</title>
-   <section id="sect-Reference_Guide-Portlet_Lifecycle-Overview">
-      <title>Overview</title>
-      <para>
-         The goal of this chapter is not to talk about the Portlet API
-         specification lifecycle but more about GateIn UI framework to
-         easily develop portlets.
+	<title>Portlet Lifecycle</title>
+	<section id="sect-Reference_Guide-Portlet_Lifecycle-Overview">
+		<title>Overview</title>
+		<para>
+			The goal of this chapter is not to talk about the Portlet API specification lifecycle but more about GateIn UI framework to easily develop portlets.
 		</para>
-      <para>
-         The web framework used here has been completely developed by GateIn and
-         perfectly suits the portal environment, it even allows to send
-         events from the portlet UIComponents to the Portal ones.
+		<para>
+			The web framework used here has been completely developed by GateIn and perfectly suits the portal environment, it even allows to send events from the portlet UIComponents to the Portal ones.
 		</para>
-      <para>
-         Of course using the GateIn web framework to build portlets is not
-         necessary and any other web framework that supports portlet
-         environment can be used. But all GateIn portlets that are part
-         of GateIn products are developed using that framework and we
-         provide several UI components that can be used in different
-         abstracted contexts such as the portal itself or some portlets.
-      </para>
-      <para>
-         This chapter is not a tutorial on how to write portlets, it
-         will go in the details of the code implementation and logic;
-         hence it is intended for advanced developers. It is also
-         advised to read the
-         <xref linkend="sect-Reference_Guide-Portal_Lifecycle" />
-         article before as the that article explains concepts that are
-         similar and top hierarchy classes that are shared.
-      </para>
-   </section>
-
-   <section id="sect-Reference_Guide-Portlet_Lifecycle-Portlet_init">
-      <title>Portlet init</title>
-      <para>
-         The main entry point for configuring a portlet is in the
-         <emphasis role="bold">portlet.xml</emphasis>
-         file located in the portlet application WAR. Every portlet that
-         shall be built using the GateIn web framework must reference
-         the
-         <emphasis role="bold">PortletApplicationController</emphasis>
-         . The portlet configuration such as the root component is
-         defined in a
-         <emphasis role="bold">configuration.xml</emphasis>
-         file. The path to this configuration.xml file is defined in the
-         init-param "
-         <emphasis role="bold">webui.configuration</emphasis>
-         " of porlet.xml.
-      </para>
-
-      <programlisting><![CDATA[<portlet>
-  <description xml:lang="EN">Content Portlet</description>
-  <portlet-name>ContentPortlet</portlet-name>
-  <display-name xml:lang="EN">Content Portlet</display-name>
-  <portlet-class>org.exoplatform.webui.application.portlet.PortletApplicationController</portlet-class>    
+		<para>
+			Of course using the GateIn web framework to build portlets is not necessary and any other web framework that supports portlet environment can be used. But all GateIn portlets that are part of GateIn products are developed using that framework and we provide several UI components that can be used in different abstracted contexts such as the portal itself or some portlets.
+		</para>
+		<para>
+			This chapter is not a tutorial on how to write portlets, it will go in the details of the code implementation and logic; hence it is intended for advanced developers. It is also advised to read the <xref linkend="sect-Reference_Guide-Portal_Lifecycle" /> article before as the that article explains concepts that are similar and top hierarchy classes that are shared.
+		</para>
+	</section>
+	
+	<section id="sect-Reference_Guide-Portlet_Lifecycle-Portlet_init">
+		<title>Portlet init</title>
+		<para>
+			The main entry point for configuring a portlet is in the <emphasis role="bold">portlet.xml</emphasis> file located in the portlet application WAR. Every portlet that shall be built using the GateIn web framework must reference the <emphasis role="bold">PortletApplicationController</emphasis> . The portlet configuration such as the root component is defined in a <emphasis role="bold">configuration.xml</emphasis> file. The path to this configuration.xml file is defined in the init-param " <emphasis role="bold">webui.configuration</emphasis> " of porlet.xml.
+		</para>
+		
+<programlisting>&lt;portlet&gt;
+  &lt;description xml:lang="EN"&gt;Content Portlet&lt;/description&gt;
+  &lt;portlet-name&gt;ContentPortlet&lt;/portlet-name&gt;
+  &lt;display-name xml:lang="EN"&gt;Content Portlet&lt;/display-name&gt;
+  &lt;portlet-class&gt;org.exoplatform.webui.application.portlet.PortletApplicationController&lt;/portlet-class&gt;    
     
-  <init-param>
-    <name>webui.configuration</name>
-    <value>/WEB-INF/conf/portlet/content/ContentPortlet/webui/configuration.xml</value>
-  </init-param>
-</portlet>]]></programlisting>
+  &lt;init-param&gt;
+    &lt;name&gt;webui.configuration&lt;/name&gt;
+    &lt;value&gt;/WEB-INF/conf/portlet/content/ContentPortlet/webui/configuration.xml&lt;/value&gt;
+  &lt;/init-param&gt;
+&lt;/portlet&gt;
+</programlisting>
 		<para>
 			The structure of the <emphasis role="bold">configuration.xml</emphasis> file is exactly the same as the <emphasis>webui-configuration.xml</emphasis>which we have already introduced in the <xref linkend="sect-Reference_Guide-Portal_Lifecycle" /> article. In the case of the content portlet it looks like:
 		</para>
 		
-<programlisting><![CDATA[<webui-configuration>
-  <application> 
-    <ui-component-root>org.exoplatform.content.webui.component.UIContentPortlet</ui-component-root>
-    <state-manager>org.exoplatform.webui.application.portlet.ParentAppStateManager</state-manager>
-  </application>
-</webui-configuration>]]></programlisting>
+<programlisting>&lt;webui-configuration&gt;
+  &lt;application&gt; 
+    &lt;ui-component-root&gt;org.exoplatform.content.webui.component.UIContentPortlet&lt;/ui-component-root&gt;
+    &lt;state-manager&gt;org.exoplatform.webui.application.portlet.ParentAppStateManager&lt;/state-manager&gt;
+  &lt;/application&gt;
+&lt;/webui-configuration&gt;
+</programlisting>
 		<para>
 			The <emphasis role="bold">PortletApplicationController</emphasis> class extends the <emphasis role="bold">GenericPortlet</emphasis> class defined in the Portlet API specification.
 		</para>
@@ -80,7 +57,7 @@
 			All methods like <emphasis>processAction()</emphasis> or <emphasis>render()</emphasis> are delegated to the <emphasis role="bold">PortletApplication</emphasis>. The creation and caching inside the <emphasis role="bold">WebController</emphasis> object is described in the following method:
 		</para>
 		
-<programlisting><![CDATA[/**
+<programlisting>/**
  * try to obtain the PortletApplication from the WebAppController.
  * 
  * If it does not exist a new PortletApplication object is created, init and cached in the
@@ -97,7 +74,8 @@ private PortletApplication getPortletApplication() throws Exception {
     controller.addApplication(application) ;
   }
   return application ;
-}]]></programlisting>
+}
+</programlisting>
 	</section>
 	
 	<section id="sect-Reference_Guide-Portlet_Lifecycle-Portlet_request_handler">
@@ -113,7 +91,7 @@ private PortletApplication getPortletApplication() throws Exception {
 			The code of the method in PortletApplication is described here. The business logic is shown in the javadoc:
 		</para>
 		
-<programlisting><![CDATA[/**
+<programlisting>/**
  * The processAction() method is the one modelled according to the Portlet API specification
  * 
  * The process is quite simple and here are te different steps done in the method:
@@ -150,12 +128,13 @@ public void processAction(ActionRequest req, ActionResponse res) throws Exceptio
     context.setProcessAction(true) ;
     WebuiRequestContext.setCurrentInstance(parentAppRequestContext) ;
   }
-}]]></programlisting>
+}
+</programlisting>
 		<para>
 			The <emphasis role="bold">PortletRequestContext</emphasis> extends <emphasis role="bold">WebuiRequestContext</emphasis> class and acts as a wrapper on top of all the portlet request information:
 		</para>
 		
-<programlisting><![CDATA[/**
+<programlisting>/**
  * In this method we try to get the PortletRequestContext object from the attribute map of the parent 
  * WebuiRequestContext. 
  * 
@@ -184,7 +163,8 @@ private PortletRequestContext createRequestContext(PortletRequest req, PortletRe
   }
   context.setParentAppRequestContext(parentAppRequestContext) ;
   return context;
-}]]></programlisting>
+}
+</programlisting>
 		<para>
 			In the PortletApplication, the line
 		</para>
@@ -192,7 +172,7 @@ private PortletRequestContext createRequestContext(PortletRequest req, PortletRe
 			<emphasis>UIApplication uiApp = getStateManager().restoreUIRootComponent(context);</emphasis> asks the StateManager defined for the portlet to get the UI root component. In the case of a portlet the root component must extend UIPortletApplication.
 		</para>
 		
-<programlisting><![CDATA[public class ParentAppStateManager extends StateManager {
+<programlisting>public class ParentAppStateManager extends StateManager {
   
   /**
    * This method simply delegate the call to the same method of the parent WebuiRequestContext
@@ -201,12 +181,13 @@ private PortletRequestContext createRequestContext(PortletRequest req, PortletRe
   public UIApplication restoreUIRootComponent(WebuiRequestContext context) throws Exception {
     WebuiRequestContext pcontext = (WebuiRequestContext)  context.getParentAppRequestContext() ;
     return pcontext.getStateManager().restoreUIRootComponent(context) ;
-  }]]></programlisting>
+  }
+</programlisting>
 		<para>
 			Hence this is the PortalStateManager that will also handle the extraction of the root component.
 		</para>
 		
-<programlisting><![CDATA[public UIApplication restoreUIRootComponent(WebuiRequestContext context) throws Exception {
+<programlisting>public UIApplication restoreUIRootComponent(WebuiRequestContext context) throws Exception {
   context.setStateManager(this) ;
   WebuiApplication app  = (WebuiApplication)context.getApplication() ;
   
@@ -231,7 +212,8 @@ private PortletRequestContext createRequestContext(PortletRequest req, PortletRe
     }
     return uiApplication ;
   }
-}]]></programlisting>
+}
+</programlisting>
 	</section>
 	
 	<section id="sect-Reference_Guide-Portlet_Lifecycle-Render_phase">
@@ -240,7 +222,7 @@ private PortletRequestContext createRequestContext(PortletRequest req, PortletRe
 			The render method business logic is quite similar to processAction().
 		</para>
 		
-<programlisting><![CDATA[/**
+<programlisting>/**
  * The render method business logic is quite similar to the processAction() one.
  * 
  * 1) A PortletRequestContext object is created (or extracted from the cache if it already exists) 
@@ -283,12 +265,13 @@ public  void render(RenderRequest req,  RenderResponse res) throws Exception {
     }
     WebuiRequestContext.setCurrentInstance(parentAppRequestContext) ;
   }
-}]]></programlisting>
+}
+</programlisting>
 		<para>
 			The processRender() call made on the UIPortletApplication is shown now:
 		</para>
 		
-<programlisting><![CDATA[/**
+<programlisting>/**
  * The default processRender for an UIPortletApplication handles two cases:
  * 
  *   A. Ajax is used 
@@ -308,7 +291,7 @@ public void  processRender(WebuiApplication app, WebuiRequestContext context) th
   if(context.useAjax() &amp;&amp;!images/pContext.getFullRender()) {
     Writer w =  context.getWriter() ;
     
-    Set<UIComponent> list = context.getUIComponentToUpdateByAjax() ;
+    Set&lt;UIComponent&gt; list = context.getUIComponentToUpdateByAjax() ;
     if(list!images/= null) {
       if(getUIPopupMessages().hasMessage()) context.addUIComponentToUpdateByAjax(getUIPopupMessages()) ;
       for(UIComponent uicomponent : list) {
@@ -318,7 +301,8 @@ public void  processRender(WebuiApplication app, WebuiRequestContext context) th
     }
   }
   super.processRender(context) ;    
-}]]></programlisting>
+}
+</programlisting>
 	</section>
 
 </section>

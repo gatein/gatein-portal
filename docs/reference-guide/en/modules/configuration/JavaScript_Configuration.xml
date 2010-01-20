@@ -1,32 +1,18 @@
 <?xml version='1.0' encoding='utf-8' ?>
 <!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+<!ENTITY % BOOK_ENTITIES SYSTEM "../../Reference_Guide.ent">
+%BOOK_ENTITIES;
 ]>
 <section id="sect-Reference_Guide-Javascript_Configuration">
-   <title>Javascript Configuration</title>
-   <para>
-      Manaing Javascript scripts in an application like GateIn
-      Platform is a
-      critical part of the configuration work if you want
-      to get good
-      response time.
+	<title>Javascript Configuration</title>
+	<para>
+		Manaing Javascript scripts in an application like GateIn Platform is a critical part of the configuration work if you want to get good response time.
 	</para>
-   <para>
-      Every portlet can have its own javscript code but in many cases
-      it is more
-      convenient to reuse some existing shared libraries. For
-      that
-      reason, GateIn has a mechanism to easily register the
-      libraries
-      that will be loaded when the first page will be rendered.
-      To do
-      so, every WAR deployed in GateIn can register the js files
-      thanks
-      to a groovy script
-      "WEB-INF/conf/script/groovy/JavascriptScript.groovy". The next
-      file is the one you can find in the GateInResources.war
+	<para>
+		Every portlet can have its own javscript code but in many cases it is more convenient to reuse some existing shared libraries. For that reason, GateIn has a mechanism to easily register the libraries that will be loaded when the first page will be rendered. To do so, every WAR deployed in GateIn can register the js files thanks to a groovy script "WEB-INF/conf/script/groovy/JavascriptScript.groovy". The next file is the one you can find in the GateInResources.war
 	</para>
-
-   <programlisting>JavascriptService.addJavascript("eXo", "/javascript/eXo.js", ServletContext);
+	
+<programlisting>JavascriptService.addJavascript("eXo", "/javascript/eXo.js", ServletContext);
 /* Animation Javascripts */
 JavascriptService.addJavascript("eXo.animation.ImplodeExplode", "/javascript/eXo/animation/ImplodeExplode.js", ServletContext);
 /* Application descriptor */
@@ -69,24 +55,21 @@ JavascriptService.addJavascript("eXo.portal.UIExoStartMenu", "/javascript/eXo/po
 /* Desktop Javascripts 2 */
 JavascriptService.addJavascript("eXo.desktop.UIWindow", "/javascript/eXo/desktop/UIWindow.js", ServletContext);
 </programlisting>
-   <para>
-      Note that even if the you register dedicated javascripts, they
-      will be merged into a single
-      <literal>merged.js</literal>
-      file when the server will load in order to reduce the number of
-      HTTP calls as seen in the home page source code:
-   </para>
-
-   <programlisting>&lt;script type="text/javascript" src="/portal/javascript/merged.js"&gt;&lt;/script&gt;</programlisting>
 	<para>
-		Although this optimization is useful for a production environment, you may find it easier to deactivate this optimization while debugging your javascript. For that, you simply need to set the java system property <literal>exo.product.developing</literal> to <literal>true</literal>. But if you <emphasis>want to see or use the merged file</emphasis> you have to set this property to <literal>false</literal>.
-       You can pass the property as a JVM parameter with the <literal>-D</literal> option in your <literal>GateIn.sh</literal> or <literal>GateIn.bat</literal> startup script: 
+		Note that even if the you register dedicated javascripts, they will be merged into a single <literal>merged.js</literal> file when the server will load in order to reduce the number of HTTP calls as seen in the home page source code:
+	</para>
+	
+<programlisting>&lt;script type="text/javascript" src="/portal/javascript/merged.js"&gt;&lt;/script&gt;
+</programlisting>
+	<para>
+		Although this optimization is useful for a production environment, you may find it easier to deactivate this optimization while debugging your javascript. For that, you simply need to set the java system property <literal>exo.product.developing</literal> to <literal>true</literal>. But if you <emphasis>want to see or use the merged file</emphasis> you have to set this property to <literal>false</literal>. You can pass the property as a JVM parameter with the <literal>-D</literal> option in your <literal>GateIn.sh</literal> or <literal>GateIn.bat</literal> startup script:
 	</para>
 	<para>
 		Every javascript file is referenced with a module name of type "eXo.core.DragDrop" which acts like a namespace. Inside the associated files, global javascript functions are used following the same namespace convention:
 	</para>
 	
-<programlisting>eXo.core.DragDrop = new DragDrop() ;</programlisting>
+<programlisting>eXo.core.DragDrop = new DragDrop() ;
+</programlisting>
 	<para>
 		It is also possible to use the eXo.require() javascript method to lazy load and evaluate some javascript code. This is quite useful from the portlet or widget applications that will use this javascript only once. Otherwise, if the library is reusable in several places it is better to reference it in the groovy file.
 	</para>

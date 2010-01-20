@@ -1,124 +1,110 @@
 <?xml version='1.0' encoding='utf-8' ?>
 <!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+<!ENTITY % BOOK_ENTITIES SYSTEM "../../Reference_Guide.ent">
+%BOOK_ENTITIES;
 ]>
-<section
-   id="sect-Reference_Guide-Deactivation_of_the_Ajax_Loading_Mask_Layer">
-   <title>Deactivation of the Ajax Loading Mask Layer
-   </title>
-   <section
-      id="sect-Reference_Guide-Deactivation_of_the_Ajax_Loading_Mask_Layer-Overview">
-      <title>Overview</title>
-      <para>
-         In this article, you will learn:
+<section id="sect-Reference_Guide-Deactivation_of_the_Ajax_Loading_Mask_Layer_">
+	<title>Deactivation of the Ajax Loading Mask Layer </title>
+	<section id="sect-Reference_Guide-Deactivation_of_the_Ajax_Loading_Mask_Layer_-Overview">
+		<title>Overview</title>
+		<para>
+			In this article, you will learn:
 		</para>
-      <itemizedlist>
-         <listitem>
-            <para>
-               Purpose of ajax-loading mask.
+		<itemizedlist>
+			<listitem>
+				<para>
+					Purpose of ajax-loading mask.
 				</para>
-         </listitem>
-         <listitem>
-            <para>
-               How to deactivate ajax-loading mask.
+			</listitem>
+			<listitem>
+				<para>
+					How to deactivate ajax-loading mask.
 				</para>
-         </listitem>
-         <listitem>
-            <para>
-               Synchronous / Asynchronous issue.
+			</listitem>
+			<listitem>
+				<para>
+					Synchronous / Asynchronous issue.
 				</para>
-         </listitem>
-      </itemizedlist>
-   </section>
-
-   <section
-      id="sect-Reference_Guide-Deactivation_of_the_Ajax_Loading_Mask_Layer-Purpose_of_requirement">
-      <title>Purpose of requirement</title>
-      <itemizedlist>
-         <listitem>
-            <para>
-               Loading mask layer is displayed after ajax-call for
-               blocking GUI to
-               prevent user's action until the the
-               ajax-request is
-               completed.
+			</listitem>
+		</itemizedlist>
+	</section>
+	
+	<section id="sect-Reference_Guide-Deactivation_of_the_Ajax_Loading_Mask_Layer_-Purpose_of_requirement">
+		<title>Purpose of requirement</title>
+		<itemizedlist>
+			<listitem>
+				<para>
+					Loading mask layer is displayed after ajax-call for blocking GUI to prevent user's action until the the ajax-request is completed.
 				</para>
-         </listitem>
-         <listitem>
-            <para>
-               Sometimes portal needs to be ready for user
-               instructions without waiting
-               previous instructions
-               completed. So mask layer may need
-               to be deactivated.
-            </para>
-         </listitem>
-      </itemizedlist>
-   </section>
-
-   <section
-      id="sect-Reference_Guide-Deactivation_of_the_Ajax_Loading_Mask_Layer-How_to_deactivate_ajax_loading_mask_in_your_code">
-      <title>How to deactivate ajax-loading mask in your code</title>
-      <para>
-         To generate script to make an asynchronous ajax-call, we use
-         uicomponent.doAsync() method instead of uicomponent.event()
-         method.
+			</listitem>
+			<listitem>
+				<para>
+					Sometimes portal needs to be ready for user instructions without waiting previous instructions completed. So mask layer may need to be deactivated.
+				</para>
+			</listitem>
+		</itemizedlist>
+	</section>
+	
+	<section id="sect-Reference_Guide-Deactivation_of_the_Ajax_Loading_Mask_Layer_-How_to_deactivate_ajax_loading_mask_in_your_code">
+		<title>How to deactivate ajax-loading mask in your code</title>
+		<para>
+			To generate script to make an asynchronous ajax-call, we use uicomponent.doAsync() method instead of uicomponent.event() method.
 		</para>
-      <para>
-         Here is an example:
+		<para>
+			Here is an example:
 		</para>
-      <programlisting><![CDATA[<a href="<%=uicomponent.doAsync(action, beanId, params)%>" alt="">Asynchronous</a>]]></programlisting>
-      <para>
-         Method doAsync() automatically adds a parameter into parameters
-         list. Parameter async
-         <emphasis>param = new Parameter(AJAX</emphasis>
-         ASYNC,"true"); (AJAX
-         <emphasis>ASYNC == "ajax</emphasis>
-         async")
-      </para>
-      <para>
-         After all, its call method event() to generate script that make Ajax
-         Request. This request is asynchronous and ajax-loading mask
-         will not displayed.
+		
+<programlisting>&lt;a href="&lt;%=uicomponent.doAsync(action, beanId, params)%&gt;" alt=""&gt;Asynchronous&lt;/a&gt;
+</programlisting>
+		<para>
+			Method doAsync() automatically adds a parameter into parameters list. Parameter async <emphasis>param = new Parameter(AJAX</emphasis> ASYNC,"true"); (AJAX <emphasis>ASYNC == "ajax</emphasis> async")
 		</para>
-      <note>
-      <orderedlist><listitem><para>
-         You still also make an asynchronous request by using method
-         uicomponent.event(). Using this way, you must add asyncparam
-         manually.</para></listitem>
-      <listitem><para>
-         GUI is blocked so that user can do only one action at a time
-         (Request seems to be synchronous). But in fact ajax request
-         always be asynchronous. See Synchronous issue section.
-		</para></listitem>
-      </orderedlist>
-      </note>
-   </section>
-
-   <section
-      id="sect-Reference_Guide-Deactivation_of_the_Ajax_Loading_Mask_Layer-Synchronous_issue">
-      <title>Synchronous issue</title>
-      <para>
-         Almost web browser such as (IE, Chrome, Safari .. ) support ajax requests
-         in two modes: Synchronous / Asynchronous with boolean
-         value of bAsyn parameter.
+		<para>
+			After all, its call method event() to generate script that make Ajax Request. This request is asynchronous and ajax-loading mask will not displayed.
 		</para>
-      <programlisting>var bAsync = false; // Synchronous
-request.open(instance.method, instance.url, bAsync);</programlisting>
-      <para>
-         But in Mozilla Firefox versions prior to 3.5 it wouldn't support synchronous request.
-      </para>
-      <programlisting>var bAsync = false; // Synchronous
-request.open(instance.method, instance.url, bAsync); // Firefox will not execute</programlisting>
-      <para>
-         So bAsync is set to always be true (Ajax request to always be asynchronous).
-	   </para>
-      <programlisting>// Asynchronous request
+		<note>
+			<orderedlist>
+				<listitem>
+					<para>
+						You still also make an asynchronous request by using method uicomponent.event(). Using this way, you must add asyncparam manually.
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						GUI is blocked so that user can do only one action at a time (Request seems to be synchronous). But in fact ajax request always be asynchronous. See Synchronous issue section.
+					</para>
+				</listitem>
+			</orderedlist>
+		</note>
+	</section>
+	
+	<section id="sect-Reference_Guide-Deactivation_of_the_Ajax_Loading_Mask_Layer_-Synchronous_issue">
+		<title>Synchronous issue</title>
+		<para>
+			Almost web browser such as (IE, Chrome, Safari .. ) support ajax requests in two modes: Synchronous / Asynchronous with boolean value of bAsyn parameter.
+		</para>
+		
+<programlisting>var bAsync = false; // Synchronous
+request.open(instance.method, instance.url, bAsync);
+</programlisting>
+		<para>
+			But in Mozilla Firefox versions prior to 3.5 it wouldn't support synchronous request.
+		</para>
+		
+<programlisting>var bAsync = false; // Synchronous
+request.open(instance.method, instance.url, bAsync); // Firefox will not execute
+</programlisting>
+		<para>
+			So bAsync is set to always be true (Ajax request to always be asynchronous).
+		</para>
+		
+<programlisting>// Asynchronous request
 request.open(instance.method, instance.url, true);
 </programlisting>
-      <para>
-         As a consequence that Ajax Request will always be asynchronous.
+		<para>
+			As a consequence that Ajax Request will always be asynchronous.
 		</para>
-   </section>
+	</section>
 
 </section>
 

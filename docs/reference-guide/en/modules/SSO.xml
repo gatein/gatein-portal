@@ -1,175 +1,156 @@
-<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook V4.4//EN" "http://www.oasis-open.org/docbook/sgml/4.4/docbookx.dtd">
-<chapter>
-   <title>Single Sign On</title>
-
-   <section>
-      <title>Overview of SSO</title>
-      <para>Portal as an integration and aggregation platform provides
-         some form of SSO by itself. When you log into
-         the portal you gain access to many systems through portlets using a
-         single identity. Still in many cases you
-         need to integrate the portal infrastructure with other SSO enabled
-         systems. There are many different Identity Management
-         solutions on the market. In most cases each SSO framework provides its own way
-         to plug into Java EE application.
-       </para>
-   </section>
-
-   <section>
-      <title>CAS - Central Authentication Service</title>
-      <para>
-         This Single Sign On plugin enables seamless integration between
-         GateIn Portal and the CAS Single Sign On Framework.
-         Details
-         about CAS can be found
-         <ulink url="http://www.ja-sig.org/products/cas/">here</ulink>
-      </para>
-      <section>
-         <title>Integration</title>
-         <section>
-            <title>From source</title>
-            <itemizedlist>
-               <listitem>
-                  <para>
-                     Check out the GateIn SSO component from SVN using
-                     the following command:
-                     <programlisting>
-	                  <![CDATA[
-svn co http://anonsvn.jboss.org/repos/gatein/components/sso/tags/<appropriate sso component version>
-	                  ]]>
-                     </programlisting>
-                  </para>
-               </listitem>
-               <listitem>
-                  <para>
-                     Update
-                     <emphasis>packaging/profiles.xml</emphasis>
-                     to reflect the directories where your local JBoss
-                     AS 5.1.0.GA and Tomcat 6.0.2 are installed
-                  </para>
-               </listitem>
-            </itemizedlist>
-         </section>
-         <section>
-            <title>Install CAS plugin into a designated CAS (3.3.4)
-               server</title>
-            <itemizedlist>
-               <listitem>
-                  <para>
-                     <programlisting>
-	                  <![CDATA[
+<?xml version='1.0' encoding='utf-8' ?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+<!ENTITY % BOOK_ENTITIES SYSTEM "../Reference_Guide.ent">
+%BOOK_ENTITIES;
+]>
+<chapter id="chap-Reference_Guide-Single_Sign_On">
+	<title>Single Sign On</title>
+	<section id="sect-Reference_Guide-Single_Sign_On-Overview_of_SSO">
+		<title>Overview of SSO</title>
+		<para>
+			Portal as an integration and aggregation platform provides some form of SSO by itself. When you log into the portal you gain access to many systems through portlets using a single identity. Still in many cases you need to integrate the portal infrastructure with other SSO enabled systems. There are many different Identity Management solutions on the market. In most cases each SSO framework provides its own way to plug into Java EE application.
+		</para>
+	</section>
+	
+	<section id="sect-Reference_Guide-Single_Sign_On-CAS_Central_Authentication_Service">
+		<title>CAS - Central Authentication Service</title>
+		<para>
+			This Single Sign On plugin enables seamless integration between GateIn Portal and the CAS Single Sign On Framework. Details about CAS can be found <ulink url="http://www.ja-sig.org/products/cas/">here</ulink>
+		</para>
+		<section id="sect-Reference_Guide-CAS_Central_Authentication_Service-Integration">
+			<title>Integration</title>
+			<section id="sect-Reference_Guide-Integration-From_source">
+				<title>From source</title>
+				<itemizedlist>
+					<listitem>
+						<para>
+							Check out the GateIn SSO component from SVN using the following command: 
+<programlisting>
+	                  
+svn co http://anonsvn.jboss.org/repos/gatein/components/sso/tags/&lt;appropriate sso component version&gt;
+</programlisting>
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							Update <emphasis>packaging/profiles.xml</emphasis> to reflect the directories where your local JBoss AS 5.1.0.GA and Tomcat 6.0.2 are installed
+						</para>
+					</listitem>
+				</itemizedlist>
+			</section>
+			
+			<section id="sect-Reference_Guide-Integration-Install_CAS_plugin_into_a_designated_CAS_3.3.4_server">
+				<title>Install CAS plugin into a designated CAS (3.3.4) server</title>
+				<itemizedlist>
+					<listitem>
+						<para>
+							
+<programlisting>
+	                  
 	                  mvn -Pplugin-cas-install install
-	                  ]]>
-                     </programlisting>
-                  </para>
-               </listitem>
-            </itemizedlist>
-         </section>
-         <section>
-            <title>Install CAS GateIn Agent into the designated GateIn
-               server</title>
-            <itemizedlist>
-               <listitem>
-                  <para>
-                     <programlisting>
-	                  <![CDATA[
+</programlisting>
+						</para>
+					</listitem>
+				</itemizedlist>
+			</section>
+			
+			<section id="sect-Reference_Guide-Integration-Install_CAS_GateIn_Agent_into_the_designated_GateIn_server">
+				<title>Install CAS GateIn Agent into the designated GateIn server</title>
+				<itemizedlist>
+					<listitem>
+						<para>
+							
+<programlisting>
+	                  
 	                  mvn -Pgatein-cas-install install
-	                  ]]>
-                     </programlisting>
-                  </para>
-               </listitem>
-            </itemizedlist>
-         </section>
-      </section>
-      <section>
-         <title>CAS Server Plugin Configuration</title>
-         <para>
-            The CAS Server Plugin makes secure authentication callbacks
-            to a RESTful service installed on the remote GateIn server
-            in order to authenticate a user.
-            In order for the plugin to function correctly, it needs to be properly
-            configured to connect to this service. This configuration is
-            done via the
-            <emphasis>cas.war/WEB-INF/deployerConfigContext.xml</emphasis>
-            file.
-         </para>
-         <para>
-            <programlisting>
-	                  <![CDATA[	            
-			    <!--
+</programlisting>
+						</para>
+					</listitem>
+				</itemizedlist>
+			</section>
+
+		</section>
+		
+		<section id="sect-Reference_Guide-CAS_Central_Authentication_Service-CAS_Server_Plugin_Configuration">
+			<title>CAS Server Plugin Configuration</title>
+			<para>
+				The CAS Server Plugin makes secure authentication callbacks to a RESTful service installed on the remote GateIn server in order to authenticate a user. In order for the plugin to function correctly, it needs to be properly configured to connect to this service. This configuration is done via the <emphasis>cas.war/WEB-INF/deployerConfigContext.xml</emphasis> file.
+			</para>
+			<para>
+				
+<programlisting>
+	                  	            
+			    &lt;!--
 			    	Note: Modify the Plugin Configuration based on the actual information of a GateIn instance.
 			    	The instance can be anywhere on the internet...Not on localhost where CAS is running 
-			     -->    				
-				<bean class="org.gatein.sso.cas.plugin.AuthenticationPlugin">
-					<property name="gateInHost"><value>localhost</value></property>
-					<property name="gateInPort"><value>8080</value></property>
-					<property name="gateInContext"><value>portal</value></property>
-				</bean>		
-	                  ]]>
-            </programlisting>
-         </para>
-      </section>
-      <section>
-         <title>GateIn Agent Configuration</title>
-         <para>
-            In a Single Sign On usecase, the GateIn server re-directs
-            all "private" resource requests to the CAS server for
-            authentication first. The CAS server can be
-            located anywhere on the Internet, and this information must be properly
-            configured within the GateIn instance. This configuration
-            needs to be done in 3 files
-            <itemizedlist>
-               <listitem>
-                  <emphasis>gatein.ear/02portal.war/groovy/portal/webui/UILoginForm.gtmpl</emphasis>
-                  <para>
-                     <programlisting>
-				                  <![CDATA[	            
-			  <script>
-				<%=uicomponent.event("Close");%>
+			     --&gt;    				
+				&lt;bean class="org.gatein.sso.cas.plugin.AuthenticationPlugin"&gt;
+					&lt;property name="gateInHost"&gt;&lt;value&gt;localhost&lt;/value&gt;&lt;/property&gt;
+					&lt;property name="gateInPort"&gt;&lt;value&gt;8080&lt;/value&gt;&lt;/property&gt;
+					&lt;property name="gateInContext"&gt;&lt;value&gt;portal&lt;/value&gt;&lt;/property&gt;
+				&lt;/bean&gt;
+</programlisting>
+			</para>
+		</section>
+		
+		<section id="sect-Reference_Guide-CAS_Central_Authentication_Service-GateIn_Agent_Configuration">
+			<title>GateIn Agent Configuration</title>
+			<para>
+				In a Single Sign On usecase, the GateIn server re-directs all "private" resource requests to the CAS server for authentication first. The CAS server can be located anywhere on the Internet, and this information must be properly configured within the GateIn instance. This configuration needs to be done in 3 files 
+				<itemizedlist>
+					<listitem>
+						<emphasis>gatein.ear/02portal.war/groovy/portal/webui/UILoginForm.gtmpl</emphasis>
+						<para>
+							
+<programlisting>
+				                  	            
+			  &lt;script&gt;
+				&lt;%=uicomponent.event("Close");%&gt;
 				window.location = 'http://localhost:8888/cas/login?service=http://localhost:8080/portal/private/classic';			
-			  </script>		
-				                  ]]>
-                     </programlisting>
-                  </para>
-               </listitem>
-               <listitem>
-                  <emphasis>gatein.ear/02portal.war/login/jsp/login.jsp</emphasis>
-                  <para>
-                     <programlisting>
-				                  <![CDATA[	            
-			 <html>
-				<head>
-					<script type="text/javascript">
+			  &lt;/script&gt;
+</programlisting>
+						</para>
+					</listitem>
+					<listitem>
+						<emphasis>gatein.ear/02portal.war/login/jsp/login.jsp</emphasis>
+						<para>
+							
+<programlisting>
+				                  	            
+			 &lt;html&gt;
+				&lt;head&gt;
+					&lt;script type="text/javascript"&gt;
 					    window.location = 'http://localhost:8888/cas/login?service=http://localhost:8080/portal/private/classic';			
-					</script>
-				</head>
-				<body>
-				</body>
-			</html>		
-				                  ]]>
-                     </programlisting>
-                  </para>
-               </listitem>
-               <listitem>
-                  <emphasis>gatein.ear/02portal.war/WEB-INF/web.xml</emphasis>
-                  <para>
-                     <programlisting>
-				                  <![CDATA[	            
-			  <servlet>
-			    <servlet-name>InitiateLoginServlet</servlet-name>
-			    <servlet-class>org.gatein.sso.agent.GenericSSOAgent</servlet-class>
-			    <init-param>
-			    	<param-name>casServerUrl</param-name>    	
-			    	<param-value>http://localhost:8888/cas</param-value>
-			    </init-param>    
-			  </servlet>		
-				                  ]]>
-                     </programlisting>
-                  </para>
-               </listitem>
-            </itemizedlist>
-         </para>
+					&lt;/script&gt;
+				&lt;/head&gt;
+				&lt;body&gt;
+				&lt;/body&gt;
+			&lt;/html&gt;
+</programlisting>
+						</para>
+					</listitem>
+					<listitem>
+						<emphasis>gatein.ear/02portal.war/WEB-INF/web.xml</emphasis>
+						<para>
+							
+<programlisting>
+				                  	            
+			  &lt;servlet&gt;
+			    &lt;servlet-name&gt;InitiateLoginServlet&lt;/servlet-name&gt;
+			    &lt;servlet-class&gt;org.gatein.sso.agent.GenericSSOAgent&lt;/servlet-class&gt;
+			    &lt;init-param&gt;
+			    	&lt;param-name&gt;casServerUrl&lt;/param-name&gt;    	
+			    	&lt;param-value&gt;http://localhost:8888/cas&lt;/param-value&gt;
+			    &lt;/init-param&gt;    
+			  &lt;/servlet&gt;
+</programlisting>
+						</para>
+					</listitem>
+				</itemizedlist>
+			</para>
+		</section>
 
-      </section>
-   </section>
+	</section>
+
 </chapter>
+
