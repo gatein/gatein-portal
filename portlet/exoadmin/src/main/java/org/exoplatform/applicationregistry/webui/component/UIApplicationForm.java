@@ -95,6 +95,7 @@ public class UIApplicationForm extends UIForm
          {
             UIApplication uiApp = ctx.getUIApplication();
             uiApp.addMessage(new ApplicationMessage("application.msg.changeNotExist", null));
+            uiOrganizer.reload();
             uiOrganizer.setSelectedCategory(application.getCategoryName());
             ctx.addUIComponentToUpdateByAjax(uiOrganizer);
             ctx.addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
