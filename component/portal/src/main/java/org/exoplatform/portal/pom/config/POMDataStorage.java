@@ -299,4 +299,16 @@ public class POMDataStorage implements ModelDataStorage
       generateStorageName(container);
       return container;
    }
+
+   public void save() throws Exception
+   {
+      pomMgr.execute(new POMTask<Object>()
+      {
+         public Object run(POMSession session) throws Exception
+         {
+            session.save();
+            return null;
+         }
+      });
+   }
 }

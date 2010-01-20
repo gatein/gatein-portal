@@ -107,4 +107,6 @@ public interface ModelDataStorage
    public DashboardData loadDashboard(String dashboardId) throws Exception;
 
    public void saveDashboard(DashboardData dashboard) throws Exception;
+
+   public void save() throws Exception;
 }

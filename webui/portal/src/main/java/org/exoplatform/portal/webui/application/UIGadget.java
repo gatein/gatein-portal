@@ -26,6 +26,8 @@ import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.model.ApplicationState;
 import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.config.model.Properties;
+import org.exoplatform.portal.pom.config.POMSession;
+import org.exoplatform.portal.pom.data.ModelDataStorage;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.WebAppController;
 import org.exoplatform.web.application.gadget.GadgetApplication;
@@ -398,6 +400,12 @@ public class UIGadget extends UIComponent
 
       //
       state = service.save(state, gadget);
+
+      // WARNING :
+      // This is used to force a state save and it should not be copied else where to make things
+      // convenient as this could lead to a severe performance degradation
+      ModelDataStorage mds = getApplicationComponent(ModelDataStorage.class);
+      mds.save();
    }
 
    /**
