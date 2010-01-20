@@ -19,6 +19,8 @@
 
 package org.exoplatform.commons.utils;
 
+import org.gatein.common.util.ParameterValidation;
+
 import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.List;
@@ -38,14 +40,8 @@ public class ListAccessImpl<E> implements ListAccess<E>, Serializable
 
    public ListAccessImpl(Class<E> elementType, List<E> list)
    {
-      if (elementType == null)
-      {
-         throw new NullPointerException();
-      }
-      if (list == null)
-      {
-         throw new NullPointerException();
-      }
+      ParameterValidation.throwIllegalArgExceptionIfNull(elementType, "element type");
+      ParameterValidation.throwIllegalArgExceptionIfNull(list, "elements");
       this.elementType = elementType;
       this.list = list;
    }

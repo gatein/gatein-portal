@@ -53,6 +53,8 @@ import java.util.Set;
  * TODO: This is a fork of the FederatingPortletInvokerService in the PC module to avoid having to create a new release.
  * Once PC 2.1.0.CR03 or above is release, revisit and clean up. The only thing that is really needed here is a
  * different implementation of {@link #getFederatedPortletInvokerFor(org.gatein.pc.api.PortletContext)}.
+ * <p/>
+ * - Move to WSRP module - Update with new NullInvokerHandler capability
  *
  * @author <a href="mailto:chris.laprun@jboss.com">Chris Laprun</a>
  * @version $Revision$

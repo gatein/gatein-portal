@@ -25,6 +25,7 @@ package org.exoplatform.wsrp.webui.component.producer;
 
 import org.exoplatform.commons.utils.LazyPageList;
 import org.exoplatform.commons.utils.ListAccess;
+import org.exoplatform.commons.utils.ListAccessImpl;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -150,7 +151,9 @@ public class UIWsrpRegistrationDetails extends UIFormInputSet
 
       // registration properties
       Map<QName, RegistrationPropertyDescription> regProps = registrationRequirements.getRegistrationProperties();
-      registrationProperties.getUIPageIterator().setPageList(createPageList(getPropertyList(regProps)));
+      List<RegistrationPropertyDescription> descriptions = getPropertyList(regProps);
+      ListAccess<RegistrationPropertyDescription> listAccess = new ListAccessImpl<RegistrationPropertyDescription>(RegistrationPropertyDescription.class, descriptions);
+      registrationProperties.getUIPageIterator().setPageList(new LazyPageList<RegistrationPropertyDescription>(listAccess, 10));
    }
 
    ProducerConfigurationService getService()
@@ -171,47 +174,6 @@ public class UIWsrpRegistrationDetails extends UIFormInputSet
       List<RegistrationPropertyDescription> result = new ArrayList<RegistrationPropertyDescription>(descriptions.values());
       Collections.sort(result, descComparator);
       return result;
-   }
-
-   private LazyPageList<RegistrationPropertyDescription> createPageList(final List<RegistrationPropertyDescription> pageList)
-   {
-      return new LazyPageList<RegistrationPropertyDescription>(new ListAccess<RegistrationPropertyDescription>()
-      {
-
-         public int getSize() throws Exception
-         {
-            return pageList.size();
-         }
-
-         public RegistrationPropertyDescription[] load(int index, int length) throws Exception, IllegalArgumentException
-         {
-            RegistrationPropertyDescription[] pcs = new RegistrationPropertyDescription[pageList.size()];
-
-            if (index < 0)
-            {
-               throw new IllegalArgumentException("Illegal index: index must be a positive number");
-            }
-
-            if (length < 0)
-            {
-               throw new IllegalArgumentException("Illegal length: length must be a positive number");
-            }
-
-            if (index + length > pageList.size())
-            {
-               throw new IllegalArgumentException(
-                  "Illegal index or length: sum of the index and the length cannot be greater than the list size");
-            }
-
-            for (int i = 0; i < length; i++)
-            {
-               pcs[i] = pageList.get(i + index);
-            }
-
-            return pcs;
-         }
-
-      }, 10);
    }
 
    @Override

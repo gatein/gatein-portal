@@ -23,6 +23,7 @@
 package org.exoplatform.wsrp.webui.component.consumer;
 
 import org.exoplatform.commons.utils.LazyPageList;
+import org.exoplatform.commons.utils.ListAccessImpl;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -161,7 +162,7 @@ public class UIWsrpConsumerEditor extends UIForm
          popup.setShow(false);
 
          //temp way to refresh list, should call broadcast event (below)
-         LazyPageList pageList = consumerOverview.createPageList(consumerOverview.getConfiguredConsumers());
+         LazyPageList pageList = new LazyPageList<WSRPConsumer>(new ListAccessImpl<WSRPConsumer>(WSRPConsumer.class, consumerOverview.getConfiguredConsumers()), 10);
          UIGrid uiGrid = consumerOverview.getChild(UIGrid.class);
          uiGrid.getUIPageIterator().setPageList(pageList);
          //uiGrid.configure()

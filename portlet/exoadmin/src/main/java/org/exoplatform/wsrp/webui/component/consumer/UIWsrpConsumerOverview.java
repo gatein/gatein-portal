@@ -23,7 +23,7 @@
 package org.exoplatform.wsrp.webui.component.consumer;
 
 import org.exoplatform.commons.utils.LazyPageList;
-import org.exoplatform.commons.utils.ListAccess;
+import org.exoplatform.commons.utils.ListAccessImpl;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -70,50 +70,9 @@ public class UIWsrpConsumerOverview extends UIContainer
    private UIPopupWindow consumerEditorPopup;
    private UIPageIterator consumersIterator;
 
-   public List getConfiguredConsumers() throws Exception
+   public List<WSRPConsumer> getConfiguredConsumers() throws Exception
    {
       return controller.getConfiguredConsumers();
-   }
-
-   public LazyPageList createPageList(final List pageList)
-   {
-      return new LazyPageList<WSRPConsumer>(new ListAccess<WSRPConsumer>()
-      {
-
-         public int getSize() throws Exception
-         {
-            return pageList.size();
-         }
-
-         public WSRPConsumer[] load(int index, int length) throws Exception
-         {
-            WSRPConsumer[] pcs = new WSRPConsumer[pageList.size()];
-
-            if (index < 0)
-            {
-               throw new IllegalArgumentException("Illegal index: index must be a positive number");
-            }
-
-            if (length < 0)
-            {
-               throw new IllegalArgumentException("Illegal length: length must be a positive number");
-            }
-
-            if (index + length > pageList.size())
-            {
-               throw new IllegalArgumentException(
-                  "Illegal index or length: sum of the index and the length cannot be greater than the list size");
-            }
-
-            for (int i = 0; i < length; i++)
-            {
-               pcs[i] = (WSRPConsumer)pageList.get(i + index);
-            }
-
-            return pcs;
-         }
-
-      }, 10);
    }
 
    public UIWsrpConsumerOverview() throws Exception
@@ -159,7 +118,8 @@ public class UIWsrpConsumerOverview extends UIContainer
 
    private void refreshConsumersList() throws Exception
    {
-      LazyPageList pageList = createPageList(getConfiguredConsumers());
+      List<WSRPConsumer> consumers = getConfiguredConsumers();
+      LazyPageList pageList = new LazyPageList<WSRPConsumer>(new ListAccessImpl<WSRPConsumer>(WSRPConsumer.class, consumers), 10);
       consumersIterator.setPageList(pageList);
    }
 
