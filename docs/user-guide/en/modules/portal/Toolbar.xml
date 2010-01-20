@@ -4,46 +4,31 @@
 %BOOK_ENTITIES;
 ]>
 <section id="sect-User_Guide-Toolbar">
-	<!--     
-
-    Copyright (C) 2009 eXo Platform SAS.
-    
-    This is free software; you can redistribute it and/or modify it
-    under the terms of the GNU Lesser General Public License as
-    published by the Free Software Foundation; either version 2.1 of
-    the License, or (at your option) any later version.
-    
-    This software is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-    Lesser General Public License for more details.
-    
-    You should have received a copy of the GNU Lesser General Public
-    License along with this software; if not, write to the Free
-    Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
-    02110-1301 USA, or see the FSF site: http://www.fsf.org.
-
-     --><title>Toolbar</title>
+	<title>Toolbar</title>
 	<para>
 		The Toolbar offers a convenient way for users and administrators to undertake portal actions quickly and easily.
 	</para>
-
+	<mediaobject>
+		<imageobject>
+			<imagedata fileref="images/Toolbar.png" format="PNG" />
+		</imageobject>
+	</mediaobject>
 	<section>
 		<title>User Actions in the Toolbar</title>
 
 			<variablelist>
 				<varlistentry>
-					<term>Dashboard</term>
-						<listitem>
-							<para>
-								You can use the Dashboard to change the language or skin used in the portal or to sign out.
-							</para>
-							<mediaobject>
-								<imageobject>
-									<imagedata fileref="images/exo2.6.png" format="PNG" />
-								</imageobject>
-							</mediaobject>
-						</listitem>
+					<term>User Menu</term>
+					<listitem>
+						<para>
+							You can use the user menu  to change the language or skin used in the portal or to sign out.
+						</para>
+						<mediaobject>
+							<imageobject>
+								<imagedata fileref="images/StarPortlet.png" format="PNG" />
+							</imageobject>
+						</mediaobject>
+					</listitem>
 				</varlistentry>
 				<varlistentry>
 					<term>Site</term>
@@ -53,7 +38,7 @@
 							</para>
 							<mediaobject>
 								<imageobject>
-									<imagedata fileref="images/Site2.6.png" format="PNG" />
+									<imagedata fileref="images/SitePortlet.png" format="PNG" />
 								</imageobject>
 							</mediaobject>
 						</listitem>
@@ -66,7 +51,20 @@
 							</para>
 							<mediaobject>
 								<imageobject>
-									<imagedata fileref="images/GroupPortal2.6.png" format="PNG" />
+									<imagedata fileref="images/GroupPortlet.png" format="PNG" />
+								</imageobject>
+							</mediaobject>
+						</listitem>
+				</varlistentry>
+				<varlistentry>
+					<term>Dashboard</term>
+						<listitem>
+							<para>
+								You can use the Dashboard to create your own pages of gadgets.
+							</para>
+							<mediaobject>
+								<imageobject>
+									<imagedata fileref="images/DashboardPortlet.png" format="PNG" />
 								</imageobject>
 							</mediaobject>
 						</listitem>
@@ -83,6 +81,11 @@
 						<para>
 							Portal Administrators have access to another navigation that offers links to add a new page to the current portal, edit a particular page's properties or to change a page's layout. This navigation appears next to the Dashboard navigation in the Toolbar and is contextually-named. It will appear as either <emphasis role="bold">Site Editor</emphasis> or <emphasis role="bold">Group Editor</emphasis> depending on the user's location within the portal.
 						</para>
+						<mediaobject>
+							<imageobject>
+								<imagedata fileref="images/EditorPortlet.png" format="PNG" />
+							</imageobject>
+						</mediaobject>
 					</listitem>
 				</varlistentry>
 			</variablelist>

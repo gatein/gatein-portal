@@ -4,31 +4,8 @@
 %BOOK_ENTITIES;
 ]>
 <section id="sect-User_Guide-Multi_Language_Navigation_Nodes">
-	<!--    
+	<title>Multi-Language Navigation Nodes</title>
 
-    Copyright (C) 2009 eXo Platform SAS.
-    
-    This is free software; you can redistribute it and/or modify it
-    under the terms of the GNU Lesser General Public License as
-    published by the Free Software Foundation; either version 2.1 of
-    the License, or (at your option) any later version.
-    
-    This software is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-    Lesser General Public License for more details.
-    
-    You should have received a copy of the GNU Lesser General Public
-    License along with this software; if not, write to the Free
-    Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
-    02110-1301 USA, or see the FSF site: http://www.fsf.org.
-
-    --><title>Multi-Language Navigation Nodes</title>
-<warning>
-<para>
-	The <emphasis role="bold">Create Page Wizard</emphasis> mentioned in this section does not appear to allow editing of existing pages in GateIn 3.0 Beta 3, even when logged in as the Administrator. Therefore these instructions may be incomplete or incorrect.
-</para>
-</warning> 
 
 		<para>
 			&PRODUCT; supports a multi-language environment for your portal allowing you to internationalize any menu entry on the navigation.
@@ -169,6 +146,13 @@
 			</note>
 	</section>
 	
+	<section>
+		<title>Providing translation</title>
+		<para>To provide a translation for the resource key used as page name, resource bundles must be provided within the web archive. Property files (or XML resource bundles) must be located in: 
+		<emphasis role="bold">WEB-INF/classes/locale/navigation/portal/[portalName]_[2letterCode].properties</emphasis></para>
+	</section>
+	
+	<!-- 
 	<section id="sect-User_Guide-Multi_Language_Navigation_Nodes-Internationalize_Resource_Keys">
 		<title>Internationalize Resource Keys</title>
 		<para>
@@ -342,8 +326,8 @@
 				</mediaobject>
 			</step>
 		</procedure>
+-->
 	</section>	
-
 </section>
 
 

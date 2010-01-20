@@ -4,26 +4,7 @@
 %BOOK_ENTITIES;
 ]>
 <section id="sect-User_Guide-Manage_Navigation_Nodes">
-	<!--     
-
-    Copyright (C) 2009 eXo Platform SAS.
-    
-    This is free software; you can redistribute it and/or modify it
-    under the terms of the GNU Lesser General Public License as
-    published by the Free Software Foundation; either version 2.1 of
-    the License, or (at your option) any later version.
-    
-    This software is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-    Lesser General Public License for more details.
-    
-    You should have received a copy of the GNU Lesser General Public
-    License along with this software; if not, write to the Free
-    Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
-    02110-1301 USA, or see the FSF site: http://www.fsf.org.
-
-     --><title>Manage Navigation Nodes</title>
+	<title>Manage Navigation Nodes</title>
 <warning>
 <para>The <emphasis role="bold">User Workspace</emphasis> has been deprecated in GateIn 3.0 Beta 3. The introductory paragraph below may be obsolete.
 <emphasis role="bold">Also</emphasis>
@@ -31,20 +12,20 @@ The <emphasis role="bold">Administration</emphasis> menu entry reported to be un
 </para>
 </warning>
 		<para>
-			If you are allowed to access &PRODUCT; in the User Workspace, you can take all actions related to a node such as : add a new node, edit, copy, cut, delete and clone node.
+			With enough privileges you can take all actions related to a node such as : add a new node, edit, copy, cut, delete and clone node.
 		</para>
 		<section id="sect-User_Guide-Manage_Navigation_Nodes-Add_a_new_node">
 			<title>Add a new node</title>
 				<procedure>
 					<step>
 						<para>
-							Go to <emphasis role="bold">GateIn Start</emphasis> -&gt; <emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Advanced</emphasis> --&gt; <emphasis role="bold">Edit Page and Navigation</emphasis>
+							Click on <emphasis role="bold">Site</emphasis> then click on <emphasis role="bold">Edit Navigation</emphasis> of the portal you want to modify.
 						</para>
-					</step>
-					<step>
-						<para>
-							Select a navigation from the navigation list.
-						</para>
+						<mediaobject>
+							<imageobject>
+								<imagedata fileref="images/EditNavigation.png" format="PNG" width="444" />
+							</imageobject>
+						</mediaobject>
 					</step>
 					<step>
 						<para>
@@ -220,12 +201,7 @@ The <emphasis role="bold">Administration</emphasis> menu entry reported to be un
 				<procedure>
 					<step>
 						<para>
-							Go to <emphasis role="bold">GateIn Start</emphasis> -&gt; <emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Advanced</emphasis> --&gt; <emphasis role="bold">Edit Page and Navigation</emphasis>
-						</para>
-					</step>
-					<step>
-						<para>
-							Select a navigation from the navigation list.
+							Click on <emphasis role="bold">Site</emphasis> then click on <emphasis role="bold">Edit Navigation</emphasis> of the portal you want to modify.
 						</para>
 					</step>
 					<step>
@@ -291,12 +267,7 @@ You can see more details on how to select a page for a node in <xref linkend="se
 				<procedure>
 					<step>
 						<para>
-							Go to <emphasis role="bold">GateIn Start</emphasis> -&gt; <emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Advanced</emphasis> --&gt; <emphasis role="bold">Edit Page and Navigation</emphasis>
-						</para>
-					</step>
-					<step>
-						<para>
-							Select a navigation from the navigation list.
+							Click on <emphasis role="bold">Site</emphasis> then click on <emphasis role="bold">Edit Navigation</emphasis> of the portal you want to modify.
 						</para>
 					</step>
 					<step>
@@ -336,12 +307,7 @@ Therefore there will be a new page that has the same name as the cloned node's p
 				<procedure>
 					<step>
 						<para>
-							Go to <emphasis role="bold">GateIn Start</emphasis> -&gt; <emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Advanced</emphasis> --&gt; <emphasis role="bold">Edit Page and Navigation</emphasis>
-						</para>
-					</step>
-					<step>
-						<para>
-							Select a navigation from the navigation list.
+							Click on <emphasis role="bold">Site</emphasis> then click on <emphasis role="bold">Edit Navigation</emphasis> of the portal you want to modify.
 						</para>
 					</step>
 					<step>
@@ -380,12 +346,7 @@ Therefore there will be a new page that has the same name as the cloned node's p
 				<procedure>
 					<step>
 						<para>
-							Go to <emphasis role="bold">GateIn Start</emphasis> -&gt; <emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Advanced</emphasis> --&gt; <emphasis role="bold">Edit Page and Navigation</emphasis>
-						</para>
-					</step>
-					<step>
-						<para>
-							Select a navigation from the navigation list.
+							Click on <emphasis role="bold">Site</emphasis> then click on <emphasis role="bold">Edit Navigation</emphasis> of the portal you want to modify.
 						</para>
 					</step>
 					<step>
@@ -416,12 +377,7 @@ Therefore there will be a new page that has the same name as the cloned node's p
 				<procedure>
 					<step>
 						<para>
-							Go to <emphasis role="bold">GateIn Start</emphasis> -&gt; <emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Advanced</emphasis> --&gt; <emphasis role="bold">Edit Page and Navigation</emphasis>
-						</para>
-					</step>
-					<step>
-						<para>
-							Select a navigation from the navigation list.
+							Click on <emphasis role="bold">Site</emphasis> then click on <emphasis role="bold">Edit Navigation</emphasis> of the portal you want to modify.
 						</para>
 					</step>
 					<step>

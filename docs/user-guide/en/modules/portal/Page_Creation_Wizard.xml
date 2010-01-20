@@ -4,26 +4,7 @@
 %BOOK_ENTITIES;
 ]>
 <section id="sect-User_Guide-Page_Creation_Wizard">
-	<!--     
-
-    Copyright (C) 2009 eXo Platform SAS.
-    
-    This is free software; you can redistribute it and/or modify it
-    under the terms of the GNU Lesser General Public License as
-    published by the Free Software Foundation; either version 2.1 of
-    the License, or (at your option) any later version.
-    
-    This software is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-    Lesser General Public License for more details.
-    
-    You should have received a copy of the GNU Lesser General Public
-    License along with this software; if not, write to the Free
-    Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
-    02110-1301 USA, or see the FSF site: http://www.fsf.org.
-
-     --><title>Page Creation Wizard</title>
+	<title>Page Creation Wizard</title>
 	<para>
 		A page creation wizard is included in &PRODUCT; to help administrators to create and publish a page quickly and easily.
 	</para>
@@ -42,11 +23,6 @@
 			<para>
 				The wizard includes two parts: the left pane contains a list of navigations and shows the page list and the right pane displays the main information of the page selected in this list.
 			</para>
-			<mediaobject>
-				<imageobject>
-					<imagedata fileref="images/PageList.png" format="PNG" />
-				</imageobject>
-			</mediaobject>
 
 		</step>
 		<step>
@@ -151,7 +127,7 @@
 		</step>
 		<step>
 			<para>
-				Click the <emphasis role="bold">Next</emphasis> button or number '3' of the wizard step to go to step 3. You can drag portlets from the left pane into the right pane to create the content of this page.
+				Click the <emphasis role="bold">Next</emphasis> button or number '3' of the wizard step to go to step 3. You can drag portlets from the popup panel into the main pane to create the content of this page.
 			</para>
 			<mediaobject>
 				<imageobject>
@@ -160,15 +136,15 @@
 			</mediaobject>
 			<variablelist>
 				<varlistentry>
-					<term>Preview Page</term>
+					<term>Applications</term>
 						<listitem>
 							<para>
-								Allows viewing a page in preview mode
+								Allows listing all existing portlets
 							</para>
 						</listitem>
 				</varlistentry>
 				<varlistentry>
-					<term>Show Container</term>
+					<term>Containers</term>
 						<listitem>
 							<para>
 								Allows listing all existing containers
@@ -176,10 +152,10 @@
 						</listitem>
 				</varlistentry>
 				<varlistentry>
-					<term>Show Portlet</term>
+					<term>Switch View mode</term>
 						<listitem>
 							<para>
-								Allows listing all existing portlets
+								Allows viewing a page in preview mode
 							</para>
 						</listitem>
 				</varlistentry>

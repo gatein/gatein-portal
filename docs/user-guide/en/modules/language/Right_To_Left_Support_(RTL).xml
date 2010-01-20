@@ -4,26 +4,7 @@
 %BOOK_ENTITIES;
 ]>
 <section id="sect-User_Guide-RTL_Support_Right_To_Left">
-	<!--    
-
-    Copyright (C) 2009 eXo Platform SAS.
-    
-    This is free software; you can redistribute it and/or modify it
-    under the terms of the GNU Lesser General Public License as
-    published by the Free Software Foundation; either version 2.1 of
-    the License, or (at your option) any later version.
-    
-    This software is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-    Lesser General Public License for more details.
-    
-    You should have received a copy of the GNU Lesser General Public
-    License along with this software; if not, write to the Free
-    Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
-    02110-1301 USA, or see the FSF site: http://www.fsf.org.
-
-    --><title>Right To Left Support</title>
+	<title>Right To Left Support</title>
 	<para>
 		&PRODUCT; supports Right to Left (RTL) languages.
 	</para>
@@ -54,17 +35,7 @@
 		</para>
 	</formalpara>
 	
-	<formalpara>
-		<title>The Internationalization Portlet:</title>
-		<para>
-		<mediaobject>
-			<imageobject>
-				<imagedata fileref="images/In3.png" format="PNG" />
-			</imageobject>
-		</mediaobject>
-		</para>
-	</formalpara>
-	
+
 	<formalpara>
 		<title>The Organization Portlet:</title>
 		<para>
