@@ -28,9 +28,9 @@ gadgets.ExoBasedUserPrefStore.prototype.getPrefs = function(gadget) {
   return gadget.userPrefs_;
 };
 
-gadgets.ExoBasedUserPrefStore.prototype.savePrefs = function(gadget) {
+gadgets.ExoBasedUserPrefStore.prototype.savePrefs = function(gadget, newPrefs) {
   	//TODO: dang.tung - sent event to portal
-  var prefs = eXo.core.JSON.stringify(gadget.userPrefs_) ;
+  var prefs = eXo.core.JSON.stringify(newPrefs || gadget.userPrefs_);
   var DOMUtil = eXo.core.DOMUtil;
 	var gadget = document.getElementById("gadget_" + gadget.id) ;
 	if(gadget != null ) {

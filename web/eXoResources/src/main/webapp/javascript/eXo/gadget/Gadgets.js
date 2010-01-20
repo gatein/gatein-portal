@@ -218,11 +218,11 @@ gadgets.IfrGadgetService.prototype.setUserPref = function(editToken, name,
     value) {
   var id = gadgets.container.gadgetService.getGadgetIdFromModuleId(this.f);
   var gadget = gadgets.container.getGadget(id);
-  var prefs = gadget.getUserPrefs();
+  var new_prefs = {};
   for (var i = 1, j = arguments.length; i < j; i += 2) {
-    prefs[arguments[i]] = arguments[i + 1];
+    new_prefs[arguments[i]] = arguments[i + 1];
   }
-  gadget.setUserPrefs(prefs);
+  gadget.setUserPrefs(new_prefs);
 };
 
 /**
@@ -416,9 +416,11 @@ gadgets.Gadget.prototype.getUserPrefs = function() {
   return this.userPrefs_;
 };
 
-gadgets.Gadget.prototype.setUserPrefs = function(userPrefs) {
-  this.userPrefs_ = userPrefs;
-  gadgets.container.userPrefStore.savePrefs(this);
+gadgets.Gadget.prototype.setUserPrefs = function(newUserPrefs) {
+  for (var pref in newUserPrefs) {
+    this.userPrefs_[pref] = newUserPrefs[pref];
+  }
+  gadgets.container.userPrefStore.savePrefs(this, newUserPrefs);
 };
 
 gadgets.Gadget.prototype.getUserPref = function(name) {
@@ -427,7 +429,9 @@ gadgets.Gadget.prototype.getUserPref = function(name) {
 
 gadgets.Gadget.prototype.setUserPref = function(name, value) {
   this.userPrefs_[name] = value;
-  gadgets.container.userPrefStore.savePrefs(this);
+  var newPref = {};
+  newPref[name] = value;
+  gadgets.container.userPrefStore.savePrefs(this, newPref);
 };
 
 gadgets.Gadget.prototype.render = function(chrome) {

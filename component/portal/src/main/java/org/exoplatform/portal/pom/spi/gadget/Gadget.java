@@ -20,6 +20,10 @@
 package org.exoplatform.portal.pom.spi.gadget;
 
 import org.gatein.mop.api.content.ContentType;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Iterator;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -42,5 +46,21 @@ public class Gadget
    public void setUserPref(String userPref)
    {
       this.userPref = userPref;
+   }
+
+   public void addUserPref(String addedUserPref) throws JSONException
+   {
+      JSONObject jsonUserPref = new JSONObject(userPref != null ? userPref : "{}");
+
+      // Update the user Preferences with the new value. Replace the old ones if they exist.
+      JSONObject addedJSONUserPref = new JSONObject(addedUserPref);
+      for (Iterator<String> i = addedJSONUserPref.keys();i.hasNext();)
+      {
+         String key = i.next();
+         jsonUserPref.put(key, addedJSONUserPref.get(key));
+      }
+
+      //
+      userPref = jsonUserPref.toString();
    }
 }

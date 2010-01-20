@@ -37,6 +37,7 @@ import org.exoplatform.webui.event.EventListener;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Iterator;
 import java.util.Random;
 import java.util.UUID;
 
@@ -374,7 +375,6 @@ public class UIGadget extends UIComponent
     * Gets user preference of gadget application
     * 
     * @return the string represents user preference of gadget application
-    * @throws Exception
     * @throws Exception when can't convert object to string
     */
    public String getUserPref() throws Exception
@@ -384,21 +384,36 @@ public class UIGadget extends UIComponent
       return pp != null ? pp.getUserPref() : null;
    }
 
+   public void addUserPref(String addedUserPref) throws Exception
+   {
+      DataStorage service = getApplicationComponent(DataStorage.class);
+      org.exoplatform.portal.pom.spi.gadget.Gadget gadget = service.load(state, ApplicationType.GADGET);
+      if (gadget == null)
+      {
+         gadget = new org.exoplatform.portal.pom.spi.gadget.Gadget();
+      }
+
+      //
+      gadget.addUserPref(addedUserPref);
+
+      //
+      state = service.save(state, gadget);
+   }
+
    /**
     * Initializes a newly created <code>SaveUserPrefActionListener</code>
     * object
-    * 
-    * @throws Exception if can't initialize object
     */
    static public class SaveUserPrefActionListener extends EventListener<UIGadget>
    {
       public void execute(Event<UIGadget> event) throws Exception
       {
-         String userPref = event.getRequestContext().getRequestParameter("userPref");
-         org.exoplatform.portal.pom.spi.gadget.Gadget gadget = new org.exoplatform.portal.pom.spi.gadget.Gadget();
-         gadget.setUserPref(userPref);
-
          UIGadget uiGadget = event.getSource();
+
+         //
+         uiGadget.addUserPref(event.getRequestContext().getRequestParameter("userPref"));
+
+         //
          if (uiGadget.isLossData())
          {
             /*
@@ -409,8 +424,8 @@ public class UIGadget extends UIComponent
             */
             return;
          }
-         DataStorage service = uiGadget.getApplicationComponent(DataStorage.class);
-         uiGadget.state = service.save(uiGadget.state, gadget);
+
+         //
          event.getRequestContext().setResponseComplete(true);
       }
    }
