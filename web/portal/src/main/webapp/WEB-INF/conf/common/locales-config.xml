@@ -44,6 +44,13 @@
   </locale-config>
 
   <locale-config>
+    <locale>nl</locale>
+    <output-encoding>UTF-8</output-encoding>
+    <input-encoding>UTF-8</input-encoding>
+    <description>Default configuration for the dutch locale</description>
+  </locale-config>
+
+  <locale-config>
     <locale>ru</locale>
     <output-encoding>UTF-8</output-encoding>
     <input-encoding>UTF-8</input-encoding>
