@@ -5,8 +5,6 @@
 ]>
 <section id="sect-User_Guide-Multi_Language_Navigation_Nodes">
 	<title>Multi-Language Navigation Nodes</title>
-
-
 		<para>
 			&PRODUCT; supports a multi-language environment for your portal allowing you to internationalize any menu entry on the navigation.
 		</para>
@@ -168,7 +166,7 @@
 		<procedure>
 			<step>
 				<para>
-					Go to <emphasis role="bold">GateIn Start</emphasis> -&gt; <emphasis role="bold">Page Navigation</emphasis> -&gt; <emphasis role="bold">Administration</emphasis> --&gt; <emphasis role="bold">Internationalization</emphasis>
+					Go to <emphasis role="bold">GateIn Start</emphasis> -&gt; <emphasis role="bold">Page Navigation</emphasis> -&gt; <emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Internationalization</emphasis>
 				</para>
 				<mediaobject>
 					<imageobject>
@@ -312,7 +310,7 @@
 			</step>
 			<step>
 				<para>
-					Go to GateIn <emphasis role="bold">Start</emphasis> -&gt; <emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Language Settings</emphasis>: select French --&gt; Apply.
+					Go to GateIn <emphasis role="bold">Start</emphasis> -&gt; <emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Language Settings</emphasis>: select French -&gt; Apply.
 				</para>
 			</step>
 			<step>
@@ -325,9 +323,7 @@
 					</imageobject>
 				</mediaobject>
 			</step>
-		</procedure>
--->
-	</section>	
+		</procedure> -->
 </section>
 
 
