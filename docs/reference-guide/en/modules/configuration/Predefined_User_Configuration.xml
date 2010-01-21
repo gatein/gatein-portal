@@ -8,21 +8,28 @@
 	<section id="sect-Reference_Guide-Predefined_User_Configuration-Overview">
 		<title>Overview</title>
 		<para>
-			To specify the initial Organization configuration, the content of <literal>02portal.war:/WEB-INF/conf/organization/organization-configuration.xml </literal> should be edited. This file complies with the XML GateIn configuration schema. It lists several configuration plugins.
+			To specify the initial Organization configuration, the content of <literal>02portal.war:/WEB-INF/conf/organization/organization-configuration.xml </literal> should be edited. This file uses the portal XML configuration schema. It lists several configuration plugins.
 		</para>
 	</section>
 	
 	<section id="sect-Reference_Guide-Predefined_User_Configuration-Plugin_for_adding_users_groups_and_membership_types_">
-		<title>Plugin for adding users, groups and membership types </title>
+		<title>Plugin for adding users, groups and membership types</title>
 		<para>
-			The plugin of type <literal>org.exoplatform.services.organization.OrganizationDatabaseInitializer </literal> specifies the list of users, groups and membership types to be created. The initialization parameter named "checkDatabaseAlgorithm" determines how the creation is triggered. Thus, the value "entry" means that each user, group and membership listed in the configuration is checked each time GateIn is started. If not existing, it is created. The value "empty" means that the whole list of preconfigured users, groups and memberships is processed only if the database is empty.
+			The plugin of type <literal>org.exoplatform.services.organization.OrganizationDatabaseInitializer</literal> specifies the list of users, groups and membership types to be created. 
+		</para>	
+		<para>
+			The initialization parameter "<parameter>checkDatabaseAlgorithm</parameter>" determines how the creation is triggered.
+		</para>
+			
+		<para>
+			The value "<literal>entry</literal>" means that each user, group and membership listed in the configuration file is checked each time &PRODUCT; is started. If the entry doesn't exist, it is created. The value "<literal>empty</literal>" sets the configuration file to be processed only if the database is empty.
 		</para>
 	</section>
 	
 	<section id="sect-Reference_Guide-Predefined_User_Configuration-Membership_types">
 		<title>Membership types</title>
 		<para>
-			The predefined membership types are specified in the "membershipType" field of the "OrganizationConfig" plugin parameter.
+			The predefined membership types are specified in the "<parameter>membershipType</parameter>" field of the "<parameter>OrganizationConfig</parameter>" plugin parameter.
 		</para>
 		
 <programlisting role="XML">&lt;field name="membershipType"&gt;
@@ -65,7 +72,7 @@
 	<section id="sect-Reference_Guide-Predefined_User_Configuration-Groups">
 		<title>Groups</title>
 		<para>
-			The predefined groups are specified in the "group" field of the "OrganizationConfig" plugin parameter.
+			The predefined groups are specified in the "group" field of the "<parameter>OrganizationConfig</parameter>" plugin parameter.
 		</para>
 		
 <programlisting role="XML">&lt;field name="group"&gt;
@@ -111,7 +118,7 @@
 	<section id="sect-Reference_Guide-Predefined_User_Configuration-Users">
 		<title>Users</title>
 		<para>
-			The predefined users are specified in the "membershipType" field of the "OrganizationConfig" plugin parameter.
+			The predefined users are specified in the "<parameter>membershipType</parameter>" field of the "<parameter>OrganizationConfig</parameter>" plugin parameter.
 		</para>
 		
 <programlisting role="XML">&lt;field name="user"&gt;

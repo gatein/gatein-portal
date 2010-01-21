@@ -8,14 +8,14 @@
 	<section id="sect-Reference_Guide-Default_Portal_Configuration-Overview">
 		<title>Overview</title>
 		<para>
-			default portal will be accessed when the user doesn't specify the portal. For example: <literal>http://hostname:port/portal/</literal>. And the default portal be used for checking at starting of tomcat to determine whether database is empty or not, too.
+			The default portal will be accessed if the user doesn't specify another portal. For example: <literal>http://hostname:port/portal/</literal>. The default portal also be used at startup to determine if the tomcat database is empty or not.
 		</para>
 	</section>
 	
 	<section id="sect-Reference_Guide-Default_Portal_Configuration-Configuration">
 		<title>Configuration</title>
 		<para>
-			Configuration file path : "02portal.war:/WEB-INF/conf/portal/portal-configuration.xml"
+			The example configuration file below is found at: "<filename>02portal.war:/WEB-INF/conf/portal/portal-configuration.xml</filename>".
 		</para>
 		
 <programlisting role="XML">&lt;component&gt;
@@ -40,7 +40,7 @@
   &lt;/component&gt;
 </programlisting>
 		<para>
-			You can see in the configuration above, we defined the classic as a default portal. Notes that the definition should be as a initial parameter of the NewPortalConfigListener component-plugin
+			In this example the <emphasis role="bold">classic</emphasis> portal has been set as the default. Note that the definition should be as a initial parameter of the NewPortalConfigListener component-plugin.
 		</para>
 	</section>
 

@@ -13,34 +13,48 @@
 		<para>
 			It defines 5 permissions types:
 		</para>
-		<itemizedlist>
+		<variablelist>
+		  <varlistentry>
+			<term>super.user</term>
 			<listitem>
 				<para>
-					<emphasis>super.user</emphasis> : The super user has all the rights on the platform, by default this user is called root
+					The super user has all the rights on the platform, this user is referred to as <emphasis>root</emphasis>.
 				</para>
 			</listitem>
+		</varlistentry>
+		<varlistentry>
+			<term>portal.creator.groups</term>
 			<listitem>
 				<para>
-					<emphasis>portal.creator.groups</emphasis> : This list defines all groups that will be able to manage the different portals, they also have the permission to create new portals. The format is "membership:/group/subgroup".
+					This list defines all groups that will be able to manage the different portals. Members of this group also have the permission to create new portals. The format is "<literal>membership:/group/subgroup</literal> ".
 				</para>
 			</listitem>
+		</varlistentry>
+		<varlistentry>
+			<term>navigation.creator.membership.type</term>
 			<listitem>
 				<para>
-					<emphasis>navigation.creator.membership.type</emphasis> : Defines the membership type of the group managers. The group managers have the permission to create and edit group pages and they can modify the group navigation.
+					Defines the membership type of the group managers. The group managers have the permission to create and edit group pages and they can modify the group navigation.
 				</para>
 			</listitem>
+		</varlistentry>
+		<varlistentry>
+			<term>guests.group</term>
 			<listitem>
 				<para>
-					<emphasis>guests.group</emphasis> : Contains the name of the group that is used as guest group. Any anonymous user becomes automatically member of this group when he enters the public pages.
+					Any anonymous user automatically becomes a member of this group whent they enter the public pages.
 				</para>
 			</listitem>
+		</varlistentry>
+		<varlistentry>
+			<term>access.control.workspace</term>
 			<listitem>
 				<para>
-					<emphasis>access.control.workspace</emphasis> : Defines the users that have access to the control workspace. In the demo version the control workspace is accessible only to 'root' and 'john'. They can expand/collapse the workspace at the left hand side. The format is "membership:/group/subgroup", An asterisk '' gives permission to all memberships.
+					Defines the users that have access to the control workspace. In the demo version the control workspace is accessible only to 'root' and 'john'. They can expand/collapse the workspace at the left hand side. The format is "membership:/group/subgroup", An asterisk '' gives permission to all memberships.
 				</para>
 			</listitem>
-		</itemizedlist>
-		
+		</varlistentry>
+		</variablelist>
 <programlisting role="XML">&lt;component&gt;
   &lt;key&gt;org.exoplatform.portal.config.UserACL&lt;/key&gt;
   &lt;type&gt;org.exoplatform.portal.config.UserACL&lt;/type&gt;   

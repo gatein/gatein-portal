@@ -8,7 +8,7 @@
 	<section id="sect-Reference_Guide-Database_Configuration-Overview">
 		<title>Overview</title>
 		<para>
-			GateIn Portal has two different database dependencies. One is the Hibernate service configuration, which depends on the the Hibernate and c3p0 projects. The other database dependency is Java content repository (JCR) service, which depends on the native JDBC API and it can integrate with any existing datasource implementation.
+			&PRODUCT; has two different database dependencies. One is the Hibernate service configuration, which depends on the the Hibernate and c3p0 projects. The other database dependency is Java content repository (JCR) service, which depends on the native JDBC API and it can integrate with any existing datasource implementation.
 		</para>
 		<para>
 			When you change the database configuration for the first time, GateIn will automatically generate the proper schema (assuming that the database user has the appropriate permissions).
