@@ -97,5 +97,18 @@
     	<artifactId>json</artifactId>
     	<type>jar</type>
     </dependency>
+
+     <dependency>
+        <groupId>javax.security</groupId>
+        <artifactId>jacc</artifactId>
+        <version>1.0</version>
+     </dependency>
+
+     <dependency>
+        <groupId>org.jboss.jbossas</groupId>
+        <artifactId>jboss-as-tomcat</artifactId>
+        <version>5.1.0.GA</version>
+        <scope>provided</scope>
+     </dependency>
   </dependencies>
 </project>

@@ -23,6 +23,7 @@ import org.exoplatform.container.ExoContainer;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.security.jaas.AbstractLoginModule;
+import org.exoplatform.web.login.InitiateLoginServlet;
 import org.exoplatform.web.security.security.CookieTokenService;
 import org.exoplatform.web.security.security.TransientTokenService;
 
@@ -30,6 +31,8 @@ import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.NameCallback;
 import javax.security.auth.callback.PasswordCallback;
 import javax.security.auth.login.LoginException;
+import javax.security.jacc.PolicyContext;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * A login module implementation that relies on the token store to check the
@@ -51,6 +54,10 @@ public class PortalLoginModule extends AbstractLoginModule
     * Logger.
     */
    protected Log log = ExoLogger.getLogger(PortalLoginModule.class);
+
+   public static final String CLUSTERED_SSO = "clusteredSSO";
+
+   public static final String AUTHENTICATED_CREDENTIALS = "authenticatedCredentials";
 
    /**
     * @see javax.security.auth.spi.LoginModule#login()
@@ -77,6 +84,28 @@ public class PortalLoginModule extends AbstractLoginModule
                ((CookieTokenService)container.getComponentInstanceOfType(CookieTokenService.class)).validateToken(
                   password, false);
          //
+
+         // For clastered config check credentials stored and propagated in session. This won't work in tomcat because
+         // of lack of JACC PolicyContext so the code must be a bit defensive
+         if (o == null && isClusteredSSO() && password.startsWith(InitiateLoginServlet.COOKIE_NAME))
+         {
+            HttpServletRequest request = null;
+            try
+            {
+               request = (HttpServletRequest)PolicyContext.getContext("javax.servlet.http.HttpServletRequest");
+
+               o = request.getSession().getAttribute(AUTHENTICATED_CREDENTIALS);
+
+            }
+            catch(Throwable e)
+            {
+               log.error(this,e);
+               log.error("LoginModule error. Turn off session credentials checking with proper configuration option of " +
+                  "LoginModule set to false: " + CLUSTERED_SSO);
+            }
+
+         }
+
          if (o instanceof Credentials)
          {
             Credentials wc = (Credentials)o;
@@ -100,6 +129,31 @@ public class PortalLoginModule extends AbstractLoginModule
     */
    public boolean commit() throws LoginException
    {
+
+      if (isClusteredSSO() &&
+         sharedState.containsKey("javax.security.auth.login.name") &&
+         sharedState.containsKey("javax.security.auth.login.password"))
+      {
+         String uid = (String)sharedState.get("javax.security.auth.login.name");
+         String pass = (String)sharedState.get("javax.security.auth.login.password");
+
+         Credentials wc = new Credentials(uid, pass);
+
+         HttpServletRequest request = null;
+         try
+         {
+            request = (HttpServletRequest)PolicyContext.getContext("javax.servlet.http.HttpServletRequest");
+
+            request.getSession().setAttribute(AUTHENTICATED_CREDENTIALS, wc);
+
+         }
+         catch(Exception e)
+         {
+            log.error(this,e);
+            log.error("LoginModule error. Turn off session credentials checking with proper configuration option of " +
+               "LoginModule set to false: " + CLUSTERED_SSO);
+         }
+      }
       return true;
    }
 
@@ -124,4 +178,18 @@ public class PortalLoginModule extends AbstractLoginModule
    {
       return log;
    }
+
+   protected boolean isClusteredSSO()
+   {
+      if (options != null)
+      {
+         String optionValue = (String)options.get(CLUSTERED_SSO);
+         if (optionValue != null && optionValue.length() > 0 && optionValue.equalsIgnoreCase("true"))
+         {
+            return true;
+         }
+      }
+      return false;
+   }
+
 }

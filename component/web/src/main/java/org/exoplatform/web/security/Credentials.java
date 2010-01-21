@@ -19,13 +19,15 @@
 
 package org.exoplatform.web.security;
 
+import java.io.Serializable;
+
 /**
  * An immutable object that contains a username and a password.
  *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class Credentials
+public class Credentials implements Serializable
 {
 
    
