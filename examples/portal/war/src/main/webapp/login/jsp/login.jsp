@@ -107,6 +107,6 @@
         </div>
       </div>
     </div>
-    <span style="margin: 10px 0px 0px 5px; font-size: 11px; color: #6f6f6f; text-align: center">Copyright &copy 2009. All rights Reserved, eXo Platform SAS and Red Hat, Inc.</span>
+    <span style="margin: 10px 0px 0px 5px; font-size: 11px; color: #6f6f6f; text-align: center">Copyright &copy 2010. All rights Reserved, eXo Platform SAS and Red Hat, Inc.</span>
   </body>
 </html>

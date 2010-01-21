@@ -411,7 +411,7 @@
          <Signin>로그인</Signin>
          <ForAccount>계정 지금 등록</ForAccount>
          <SigninFail>로그인에 실패하였습니다. 사용자 이름 또는 비밀번호가 잘못되었습니다.</SigninFail>
-         <Copyright><![CDATA[Copyright &copy 2009. All rights Reserved, eXo Platform SAS and Red Hat, Inc.]]></Copyright>
+         <Copyright><![CDATA[Copyright &copy 2010. All rights Reserved, eXo Platform SAS and Red Hat, Inc.]]></Copyright>
       </label>
    </UILoginForm>
 <!--  #############################################################################-->
@@ -1448,7 +1448,7 @@
 <!--  ############################################################################-->
    <UIPortalToolPanel>
       <label>
-         <copyrightText><![CDATA[Copyright &copy; 2009. All rights Reserved,]]></copyrightText>
+         <copyrightText><![CDATA[Copyright &copy; 2010. All rights Reserved,]]></copyrightText>
          <companyTitleText> eXo Platform SAS and Red Hat, Inc..</companyTitleText>
       </label>
    </UIPortalToolPanel>
