@@ -241,7 +241,7 @@ public class ConfigurationManager
       config.setInitParams(toInitParams(annotation.initParams()));
 
       EventConfig[] eventAnnotations = annotation.events();
-      List<Event> events;
+      ArrayList<Event> events;
       if (eventAnnotations.length != 0)
       {
          events = new ArrayList<Event>();
@@ -252,12 +252,12 @@ public class ConfigurationManager
       }
       else
       {
-         events = Collections.emptyList();
+         events = new ArrayList<Event>();
       }
       config.setEvents(events);
 
       EventInterceptorConfig[] eventInterceptorAnnotations = annotation.eventInterceptors();
-      List<EventInterceptor> eventInterceptors;
+      ArrayList<EventInterceptor> eventInterceptors;
       if (eventInterceptorAnnotations.length != 0)
       {
          eventInterceptors = new ArrayList<EventInterceptor>();
@@ -268,12 +268,12 @@ public class ConfigurationManager
       }
       else
       {
-         eventInterceptors = Collections.emptyList();
+         eventInterceptors =  new ArrayList<EventInterceptor>();
       }
       config.setEventInterceptors(eventInterceptors);
 
       ValidatorConfig[] validatorAnnotations = annotation.validators();
-      List<Validator> validators;
+      ArrayList<Validator> validators;
       if (validatorAnnotations.length != 0)
       {
          validators = new ArrayList<Validator>();
@@ -284,7 +284,7 @@ public class ConfigurationManager
       }
       else
       {
-         validators = Collections.emptyList();
+         validators = new ArrayList<Validator>();
       }
       config.setValidators(validators);
 
