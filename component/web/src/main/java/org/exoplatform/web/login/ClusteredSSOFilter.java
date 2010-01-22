@@ -23,6 +23,7 @@
 
 package org.exoplatform.web.login;
 
+import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.web.AbstractFilter;
 import org.exoplatform.services.security.IdentityRegistry;
 import org.exoplatform.web.security.Credentials;
@@ -43,31 +44,36 @@ public class ClusteredSSOFilter extends AbstractFilter
 
    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException
    {
-
-      HttpServletRequest httpRequest = (HttpServletRequest)request;
-
-      Credentials credentials  = (Credentials)httpRequest.getSession().getAttribute(PortalLoginModule.AUTHENTICATED_CREDENTIALS);
-
-      // Make programatic login if authenticated credentials are present in session - they were set in another cluster node
-      if (credentials != null && httpRequest.getRemoteUser() == null)
+      if (ExoContainer.getProfiles().contains("cluster"))
       {
-         WebAuthentication pwl = new WebAuthentication();
-         pwl.login(credentials.getUsername(), credentials.getPassword());
+         HttpServletRequest httpRequest = (HttpServletRequest)request;
 
+         Credentials credentials  = (Credentials)httpRequest.getSession().getAttribute(PortalLoginModule.AUTHENTICATED_CREDENTIALS);
+
+         // Make programatic login if authenticated credentials are present in session - they were set in another cluster node
+         if (credentials != null && httpRequest.getRemoteUser() == null)
+         {
+            WebAuthentication pwl = new WebAuthentication();
+            pwl.login(credentials.getUsername(), credentials.getPassword());
+
+         }
+
+         chain.doFilter(request, response);
+
+         // TODO:
+         // This is a workaround... without this code this attr will vanish from session after first request - don't ask...
+         if (credentials != null && httpRequest.getSession(false) != null)
+         {
+            httpRequest.getSession(false).setAttribute(PortalLoginModule.AUTHENTICATED_CREDENTIALS, credentials);
+         }
       }
-
-      chain.doFilter(request, response);
-
-      // TODO:
-      // This is a workaround... without this code this attr will vanish from session after first request - don't ask...
-      if (credentials != null && httpRequest.getSession(false) != null)
+      else
       {
-         httpRequest.getSession(false).setAttribute(PortalLoginModule.AUTHENTICATED_CREDENTIALS, credentials);
+         chain.doFilter(request, response);
       }
    }
 
    public void destroy()
    {
-      //To change body of implemented methods use File | Settings | File Templates.
    }
 }

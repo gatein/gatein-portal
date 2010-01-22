@@ -55,8 +55,6 @@ public class PortalLoginModule extends AbstractLoginModule
     */
    protected Log log = ExoLogger.getLogger(PortalLoginModule.class);
 
-   public static final String CLUSTERED_SSO = "clusteredSSO";
-
    public static final String AUTHENTICATED_CREDENTIALS = "authenticatedCredentials";
 
    /**
@@ -101,7 +99,7 @@ public class PortalLoginModule extends AbstractLoginModule
             {
                log.error(this,e);
                log.error("LoginModule error. Turn off session credentials checking with proper configuration option of " +
-                  "LoginModule set to false: " + CLUSTERED_SSO);
+                  "LoginModule set to false");
             }
 
          }
@@ -151,7 +149,7 @@ public class PortalLoginModule extends AbstractLoginModule
          {
             log.error(this,e);
             log.error("LoginModule error. Turn off session credentials checking with proper configuration option of " +
-               "LoginModule set to false: " + CLUSTERED_SSO);
+               "LoginModule set to false");
          }
       }
       return true;
@@ -181,15 +179,6 @@ public class PortalLoginModule extends AbstractLoginModule
 
    protected boolean isClusteredSSO()
    {
-      if (options != null)
-      {
-         String optionValue = (String)options.get(CLUSTERED_SSO);
-         if (optionValue != null && optionValue.length() > 0 && optionValue.equalsIgnoreCase("true"))
-         {
-            return true;
-         }
-      }
-      return false;
+      return ExoContainer.getProfiles().contains("cluster");
    }
-
 }

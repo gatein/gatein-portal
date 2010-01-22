@@ -81,19 +81,16 @@
  	<filter-class>org.exoplatform.web.CacheUserProfileFilter</filter-class>
   </filter>
 
-      <!--Uncomment for clustered setup-->
-   <!--
    <filter>
 		<filter-name>ClusteredSSOFilter</filter-name>
 		<filter-class>org.exoplatform.web.login.ClusteredSSOFilter</filter-class>
 	</filter>
 
-   <filter-mapping>
+   <filter-mapping>                                           
 		<filter-name>ClusteredSSOFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
-   -->
-  
+
   <filter-mapping>
 		<filter-name>GenericFilter</filter-name>
 		<url-pattern>/*</url-pattern>

@@ -5,10 +5,6 @@
       <login-module code="org.exoplatform.web.security.PortalLoginModule" flag="required">
         <module-option name="portalContainerName">portal</module-option>
         <module-option name="realmName">gatein-domain</module-option>
-        <!--Uncomment in clustered setup-->
-        <!--
-        <module-option name="clusteredSSO">true</module-option>
-        -->
       </login-module>
       <login-module code="org.exoplatform.services.security.jaas.SharedStateLoginModule" flag="required">
         <module-option name="portalContainerName">portal</module-option>
