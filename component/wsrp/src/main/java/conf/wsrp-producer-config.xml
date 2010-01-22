@@ -26,13 +26,6 @@
    <registration-configuration fullServiceDescriptionRequiresRegistration="true">
       <registration-property-validator>org.gatein.registration.policies.DefaultRegistrationPropertyValidator
       </registration-property-validator>
-      <registration-property-description>
-         <name>prop</name>
-         <type>xsd:string</type>
-         <description xml:lang="en">desc</description>
-         <hint xml:lang="en">hint</hint>
-         <label xml:lang="en">label</label>
-      </registration-property-description>
    </registration-configuration>
 </producer-configuration>
 
