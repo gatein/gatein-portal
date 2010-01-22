@@ -37,7 +37,6 @@ import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
-import org.exoplatform.webui.form.UIFormInputBase;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
 import org.exoplatform.wsrp.webui.component.UIRegistrationPropertiesGrid;
@@ -46,33 +45,34 @@ import org.gatein.wsrp.WSRPConsumer;
 import org.gatein.wsrp.consumer.ConsumerException;
 import org.gatein.wsrp.consumer.ProducerInfo;
 import org.gatein.wsrp.consumer.RegistrationInfo;
-import org.gatein.wsrp.consumer.RegistrationProperty;
 import org.gatein.wsrp.consumer.registry.ConsumerRegistry;
 import org.gatein.wsrp.services.ManageableServiceFactory;
-
-import java.util.ArrayList;
-import java.util.Collection;
 
 /** @author Wesley Hales */
 @ComponentConfig(
    lifecycle = UIFormLifecycle.class,
    template = "system:/groovy/webui/form/UIForm.gtmpl",
    events = {
-      @EventConfig(listeners = UIWsrpConsumerEditor.SaveActionListener.class)
+      @EventConfig(listeners = UIWsrpConsumerEditor.SaveActionListener.class),
+      @EventConfig(listeners = UIWsrpConsumerEditor.CancelActionListener.class),
+      @EventConfig(listeners = UIWsrpConsumerEditor.EditPropertyActionListener.class)
    })
 public class UIWsrpConsumerEditor extends UIForm
 {
-   private UIFormInputBase<String> consumerName;
+   private UIFormStringInput consumerName;
    private UIFormStringInput cache;
    private UIFormStringInput timeoutWS;
    private UIFormStringInput wsdl;
    private UIRegistrationPropertiesGrid localRegistration;
    private UIRegistrationPropertiesGrid expectedRegistration;
-   private static final String[] ACTIONS = new String[]{"Save"};
+   private static final String[] ACTIONS = new String[]{"Save", "Cancel"};
+   private UIPopupWindow setValuePopup;
+   private UISetPropertyValueForm setPropertyForm;
 
    public UIWsrpConsumerEditor() throws Exception
    {
-      consumerName = new UIFormStringInput("name", null).addValidator(MandatoryValidator.class);
+      consumerName = new UIFormStringInput("name", null);
+      consumerName.addValidator(MandatoryValidator.class);
       addUIFormInput(consumerName);
       cache = new UIFormStringInput("cache", null);
       addUIFormInput(cache);
@@ -90,6 +90,13 @@ public class UIWsrpConsumerEditor extends UIForm
 
       // actions
       setActions(ACTIONS);
+
+      // set property value popup
+      setValuePopup = addChild(UIPopupWindow.class, null, null);
+      setValuePopup.setWindowSize(200, 0);
+      setPropertyForm = createUIComponent(UISetPropertyValueForm.class, null, "SetProperty");
+      setValuePopup.setUIComponent(setPropertyForm);
+      setValuePopup.setRendered(false);
    }
 
    private String getConsumerName()
@@ -154,16 +161,12 @@ public class UIWsrpConsumerEditor extends UIForm
       wsdl.setValue(producerInfo.getEndpointConfigurationInfo().getWsdlDefinitionURL());
 
       RegistrationInfo local = producerInfo.getRegistrationInfo();
-      Collection<RegistrationProperty> regProps = local.getRegistrationProperties().values();
-      ArrayList<RegistrationProperty> regPropsList = new ArrayList<RegistrationProperty>(regProps);
-      localRegistration.resetProps(regPropsList);
+      localRegistration.resetProps(local.getRegistrationProperties());
 
       RegistrationInfo expected = producerInfo.getExpectedRegistrationInfo();
       if (local != expected && expected != null)
       {
-         regProps = expected.getRegistrationProperties().values();
-         regPropsList = new ArrayList<RegistrationProperty>(regProps);
-         expectedRegistration.resetProps(regPropsList);
+         expectedRegistration.resetProps(expected.getRegistrationProperties());
       }
       else
       {
@@ -171,44 +174,6 @@ public class UIWsrpConsumerEditor extends UIForm
       }
 
       setNewConsumer(false);
-   }
-
-   static public class SaveActionListener extends EventListener<UIWsrpConsumerEditor>
-   {
-      public void execute(Event<UIWsrpConsumerEditor> event) throws Exception
-      {
-         UIWsrpConsumerEditor consumerEditor = event.getSource();
-
-         UIWsrpConsumerOverview consumerOverview = consumerEditor.getAncestorOfType(UIWsrpConsumerOverview.class);
-
-         WebuiRequestContext ctx = event.getRequestContext();
-         if (consumerEditor.isNewConsumer())
-         {
-            consumerEditor.save(ctx);
-         }
-         else
-         {
-            consumerEditor.edit(ctx);
-         }
-
-         consumerEditor.reset();
-
-         UIPopupWindow popup = consumerEditor.getParent();
-         popup.setRendered(false);
-         popup.setShow(false);
-
-         //temp way to refresh list, should call broadcast event (below)
-         LazyPageList pageList = new LazyPageList<WSRPConsumer>(new ListAccessImpl<WSRPConsumer>(WSRPConsumer.class, consumerOverview.getConfiguredConsumers()), 10);
-         UIGrid uiGrid = consumerOverview.getChild(UIGrid.class);
-         uiGrid.getUIPageIterator().setPageList(pageList);
-         //uiGrid.configure()
-         //try to broadcast an event back to consumerOverview to refresh grid... works but shows error
-         //PortalRequestContext portalContext = org.exoplatform.portal.webui.util.Util.getPortalRequestContext();
-         //Event<UIWsrpConsumerOverview> pnevent = new Event<UIWsrpConsumerOverview>(consumerOverview, "RefreshGrid", portalContext);
-         //consumerOverview.broadcast(pnevent, Event.Phase.PROCESS);
-
-         ctx.addUIComponentToUpdateByAjax(consumerOverview);
-      }
    }
 
    public boolean save(WebuiRequestContext context) throws Exception
@@ -256,4 +221,64 @@ public class UIWsrpConsumerEditor extends UIForm
       return true;
    }
 
+   static public class SaveActionListener extends EventListener<UIWsrpConsumerEditor>
+   {
+      public void execute(Event<UIWsrpConsumerEditor> event) throws Exception
+      {
+         UIWsrpConsumerEditor consumerEditor = event.getSource();
+
+         UIWsrpConsumerOverview consumerOverview = consumerEditor.getAncestorOfType(UIWsrpConsumerOverview.class);
+
+         WebuiRequestContext ctx = event.getRequestContext();
+         if (consumerEditor.isNewConsumer())
+         {
+            consumerEditor.save(ctx);
+         }
+         else
+         {
+            consumerEditor.edit(ctx);
+         }
+
+         consumerEditor.reset();
+
+         UIPopupWindow popup = consumerEditor.getParent();
+         popup.setRendered(false);
+         popup.setShow(false);
+
+         //temp way to refresh list, should call broadcast event (below)
+         LazyPageList pageList = new LazyPageList<WSRPConsumer>(new ListAccessImpl<WSRPConsumer>(WSRPConsumer.class, consumerOverview.getConfiguredConsumers()), 10);
+         UIGrid uiGrid = consumerOverview.getChild(UIGrid.class);
+         uiGrid.getUIPageIterator().setPageList(pageList);
+         //uiGrid.configure()
+         //try to broadcast an event back to consumerOverview to refresh grid... works but shows error
+         //PortalRequestContext portalContext = org.exoplatform.portal.webui.util.Util.getPortalRequestContext();
+         //Event<UIWsrpConsumerOverview> pnevent = new Event<UIWsrpConsumerOverview>(consumerOverview, "RefreshGrid", portalContext);
+         //consumerOverview.broadcast(pnevent, Event.Phase.PROCESS);
+
+         ctx.addUIComponentToUpdateByAjax(consumerOverview);
+      }
+   }
+
+   static public class CancelActionListener extends EventListener<UIWsrpConsumerEditor>
+   {
+      @Override
+      public void execute(Event<UIWsrpConsumerEditor> event) throws Exception
+      {
+         // simply close the popup
+         UIPopupWindow popup = event.getSource().getParent();
+         popup.setRendered(false);
+         popup.setShow(false);
+      }
+   }
+
+   static public class EditPropertyActionListener extends EventListener<UIWsrpConsumerEditor>
+   {
+      @Override
+      public void execute(Event<UIWsrpConsumerEditor> event) throws Exception
+      {
+         String name = event.getRequestContext().getRequestParameter(OBJECTID);
+         UIWsrpConsumerEditor editor = event.getSource();
+
+      }
+   }
 }

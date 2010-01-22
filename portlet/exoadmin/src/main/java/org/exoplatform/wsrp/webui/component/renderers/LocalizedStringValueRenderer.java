@@ -36,6 +36,7 @@ public class LocalizedStringValueRenderer extends ValueRenderer<LocalizedString>
    @Override
    public String render(LocalizedString value)
    {
+      // todo: maybe implement a localized version?
       return value.getValue();
    }
 }

@@ -20,27 +20,28 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.exoplatform.wsrp.webui.component.producer;
 
-import org.exoplatform.webui.config.annotation.ComponentConfig;
-import org.exoplatform.webui.core.UIContainer;
-import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
+package org.exoplatform.wsrp.webui.component.renderers;
+
+import org.exoplatform.webui.core.lifecycle.WebuiBindingContext;
+import org.exoplatform.webui.core.renderers.ValueRenderer;
+import org.gatein.wsrp.consumer.RegistrationProperty;
 
 /**
- * @author Wesley Hales
- * @author Chris Laprun
+ * @author <a href="mailto:chris.laprun@jboss.com">Chris Laprun</a>
+ * @version $Revision$
  */
-@ComponentConfig(
-   lifecycle = UIApplicationLifecycle.class,
-   template = "app:/groovy/wsrp/webui/component/UIWsrpProducerOverview.gtmpl"
-)
-public class UIWsrpProducerOverview extends UIContainer
+public class RegistrationPropertyStatusValueRenderer extends ValueRenderer<RegistrationProperty.Status>
 {
-   private UIWsrpProducerEditor producerForm;
-
-   public UIWsrpProducerOverview() throws Exception
+   @Override
+   public String render(RegistrationProperty.Status value, WebuiBindingContext context) throws Exception
    {
-      producerForm = createUIComponent(UIWsrpProducerEditor.class, null, "Producer Editor");
-      addChild(producerForm);
+      return context.appRes(value.getLocalizationKey());
+   }
+
+   @Override
+   public String getCSSClassFor(RegistrationProperty.Status value)
+   {
+      return value.name();
    }
 }

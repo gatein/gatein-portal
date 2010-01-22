@@ -61,7 +61,7 @@
                {
                   def fieldValue = uicomponent.getFieldValue(bean, field);
                   def renderer = uicomponent.getRendererFor(fieldValue);
-                  println "<td><div class=\"" + renderer.getCSSClassFor(fieldValue) + "\" title='$fieldValue'>" + renderer.render(fieldValue) + "</div></td>";
+                  println "<td><div class=\"" + renderer.getCSSClassFor(fieldValue) + "\" title='$fieldValue'>" + renderer.render(fieldValue, _ctx) + "</div></td>";
                }
                if (beanActions != null && beanActions.length > 0)
                {

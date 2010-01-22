@@ -26,24 +26,33 @@ package org.exoplatform.wsrp.webui.component;
 import org.exoplatform.commons.utils.LazyPageList;
 import org.exoplatform.commons.utils.ListAccessImpl;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
+import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIPageIterator;
+import org.exoplatform.webui.event.Event;
+import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIFormGrid;
 import org.gatein.common.util.ParameterValidation;
 import org.gatein.wsrp.consumer.RegistrationProperty;
 
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
+import java.util.Map;
 
 /**
  * @author <a href="mailto:chris.laprun@jboss.com">Chris Laprun</a>
  * @version $Revision$
  */
-@ComponentConfig(template = "system:/groovy/webui/core/UIGrid.gtmpl")
+@ComponentConfig(
+   template = "system:/groovy/webui/core/UIGrid.gtmpl",
+   events = {
+      @EventConfig(listeners = UIRegistrationPropertiesGrid.EditPropertyActionListener.class)
+   })
 public class UIRegistrationPropertiesGrid extends UIFormGrid
 {
    private static final String NAME = "name";
    static String[] FIELDS = {NAME, "description", "status", "value"};
    static String[] PROPERTIES_ACTIONS = {"EditProperty", "DeleteProperty"};
+   private Map<String, RegistrationProperty> props;
 
    public UIRegistrationPropertiesGrid() throws Exception
    {
@@ -55,8 +64,15 @@ public class UIRegistrationPropertiesGrid extends UIFormGrid
       pageIterator.setRendered(false);
    }
 
-   public void resetProps(List<RegistrationProperty> props)
+   @Override
+   public String getName()
    {
+      return getId();
+   }
+
+   public void resetProps(Map<String, RegistrationProperty> props)
+   {
+
       ListAccessImpl<RegistrationProperty> listAccess;
       if (ParameterValidation.existsAndIsNotEmpty(props))
       {
@@ -64,10 +80,29 @@ public class UIRegistrationPropertiesGrid extends UIFormGrid
       }
       else
       {
-         props = Collections.emptyList();
+         props = Collections.emptyMap();
          setRendered(false);
       }
-      listAccess = new ListAccessImpl<RegistrationProperty>(RegistrationProperty.class, props);
+
+      this.props = props;
+
+      ArrayList<RegistrationProperty> propsList = new ArrayList<RegistrationProperty>(props.values());
+      listAccess = new ListAccessImpl<RegistrationProperty>(RegistrationProperty.class, propsList);
       getUIPageIterator().setPageList(new LazyPageList<RegistrationProperty>(listAccess, 10));
+   }
+
+   public RegistrationProperty getProperty(String name)
+   {
+      return props.get(name);
+   }
+
+   static public class EditPropertyActionListener extends EventListener<UIRegistrationPropertiesGrid>
+   {
+      @Override
+      public void execute(Event<UIRegistrationPropertiesGrid> event) throws Exception
+      {
+         String name = event.getRequestContext().getRequestParameter(OBJECTID);
+         UIRegistrationPropertiesGrid registrationPropertiesGrid = event.getSource();
+      }
    }
 }

@@ -42,7 +42,7 @@ import org.gatein.wsrp.producer.config.ProducerRegistrationRequirements;
  */
 @ComponentConfig(
    lifecycle = UIFormLifecycle.class,
-   template = "app:/groovy/wsrp/webui/component/UIWsrpProducerEditor.gtmpl",
+   template = "system:/groovy/webui/form/UIForm.gtmpl",
    events = {
       @EventConfig(listeners = UIWsrpProducerEditor.SaveActionListener.class),
       @EventConfig(listeners = UIWsrpProducerEditor.RegistrationOnChangeActionListener.class)
@@ -60,6 +60,7 @@ public class UIWsrpProducerEditor extends UIForm
    private UIFormCheckBoxInput regReqForDesc;
    private UIFormCheckBoxInput strictMode;
    private UIFormCheckBoxInput<Boolean> regRequired;
+   private static final String[] ACTIONS = new String[]{"Save"};
 
    public UIWsrpProducerEditor() throws Exception
    {
@@ -76,7 +77,7 @@ public class UIWsrpProducerEditor extends UIForm
       addUIFormInput(regRequired);
       // because when we use setOnChange method, new eventListener will add to this form, we must re-set the actions of this form.
       // thif form has no action, so i'll put empty string array
-      setActions(new String[]{});
+      setActions(ACTIONS);
 
       // registration details
       // form set to gather registration information

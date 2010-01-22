@@ -23,6 +23,7 @@
 
 package org.exoplatform.webui.core.renderers;
 
+import org.exoplatform.webui.core.lifecycle.WebuiBindingContext;
 import org.gatein.common.util.ParameterValidation;
 
 /**
@@ -54,6 +55,11 @@ public class ValueRenderer<V>
    {
       ParameterValidation.throwIllegalArgExceptionIfNull(value, "Value");
       return value.toString();
+   }
+
+   public String render(V value, WebuiBindingContext context) throws Exception
+   {
+      return render(value);
    }
 
    public String getCSSClassFor(V value)

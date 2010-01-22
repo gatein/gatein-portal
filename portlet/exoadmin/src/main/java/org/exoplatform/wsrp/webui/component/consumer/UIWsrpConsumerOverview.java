@@ -81,7 +81,6 @@ public class UIWsrpConsumerOverview extends UIContainer
       ConsumerRegistry registry = (ConsumerRegistry)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(ConsumerRegistry.class);
       controller = new ConsumerController(registry);
 
-      //setSelectedTab(1);
       consumerEditorPopup = addChild(UIPopupWindow.class, null, null);
       consumerEditorPopup.setWindowSize(800, 0);
       UIWsrpConsumerEditor consumerForm = createUIComponent(UIWsrpConsumerEditor.class, null, "ConsumerEditor");
@@ -141,7 +140,6 @@ public class UIWsrpConsumerOverview extends UIContainer
       editor.setConsumer(consumer);
       consumerEditorPopup.setRendered(true);
       consumerEditorPopup.setShow(true);
-      consumerEditorPopup.setShowCloseButton(true);
    }
 
    static public class EditActionListener extends EventListener<UIWsrpConsumerOverview>
