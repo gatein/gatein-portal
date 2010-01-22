@@ -43,7 +43,24 @@ import java.util.List;
  */
 public interface DataStorage
 {
+   public final static String PAGE_CREATED = "org.exoplatform.portal.config.DataStorage.pageCreated".intern();
+   
+   public final static String PAGE_REMOVED = "org.exoplatform.portal.config.DataStorage.pageRemoved".intern();
 
+   public final static String PAGE_UPDATED = "org.exoplatform.portal.config.DataStorage.pageUpdated".intern();
+
+   public final static String NAVIGATION_CREATED = "org.exoplatform.portal.config.DataStorage.navigationCreated".intern();
+
+   public final static String NAVIGATION_REMOVED = "org.exoplatform.portal.config.DataStorage.navigationRemoved".intern();
+
+   public final static String NAVIGATION_UPDATED = "org.exoplatform.portal.config.DataStorage.navigationUpdated".intern();
+   
+   public final static String PORTAL_CONFIG_CREATED = "org.exoplatform.portal.config.DataStorage.portalConfigCreated".intern();
+
+   public final static String PORTAL_CONFIG_REMOVED = "org.exoplatform.portal.config.DataStorage.portalConfigRemoved".intern();
+
+   public final static String PORTAL_CONFIG_UPDATED = "org.exoplatform.portal.config.DataStorage.portalConfigUpdated".intern();
+   
    public void create(PortalConfig config) throws Exception;
 
    public void save(PortalConfig config) throws Exception;

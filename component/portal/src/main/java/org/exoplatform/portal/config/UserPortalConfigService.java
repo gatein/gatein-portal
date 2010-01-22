@@ -19,7 +19,6 @@
 
 package org.exoplatform.portal.config;
 
-import org.exoplatform.commons.chromattic.ChromatticManager;
 import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.component.ComponentPlugin;
@@ -33,7 +32,6 @@ import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.TransientApplicationState;
 import org.exoplatform.portal.pom.data.ModelChange;
-import org.exoplatform.services.listener.ListenerService;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.organization.Group;
@@ -54,42 +52,23 @@ import java.util.Set;
  */
 public class UserPortalConfigService implements Startable
 {
-
-   public final static String CREATE_PAGE_EVENT = "UserPortalConfigService.page.onCreate".intern();
-
-   public final static String REMOVE_PAGE_EVENT = "UserPortalConfigService.page.onRemove".intern();
-
-   public final static String UPDATE_PAGE_EVENT = "UserPortalConfigService.page.onUpdate".intern();
-
-   public final static String CREATE_NAVIGATION_EVENT = "UserPortalConfigService.navigation.onCreate".intern();
-
-   public final static String REMOVE_NAVIGATION_EVENT = "UserPortalConfigService.navigation.onRemove".intern();
-
-   public final static String UPDATE_NAVIGATION_EVENT = "UserPortalConfigService.navigation.onUpdate".intern();
-
    private DataStorage storage_;
 
    private UserACL userACL_;
 
    private OrganizationService orgService_;
 
-   private ListenerService listenerService;
-
    private NewPortalConfigListener newPortalConfigListener_;
 
    private Log log = ExoLogger.getLogger("Portal:UserPortalConfigService");
 
-   private ChromatticManager manager;
-
    public UserPortalConfigService(
       UserACL userACL, DataStorage storage,
-      OrganizationService orgService, ListenerService listenerService, ChromatticManager manager) throws Exception
+      OrganizationService orgService) throws Exception
    {
       this.storage_ = storage;
       this.orgService_ = orgService;
-      this.listenerService = listenerService;
       this.userACL_ = userACL;
-      this.manager = manager;
    }
 
    /**
@@ -317,7 +296,7 @@ public class UserPortalConfigService implements Startable
    }
 
    /**
-    * Removes a page and broadcast an event labelled as {@link org.exoplatform.portal.config.UserPortalConfigService#REMOVE_PAGE_EVENT}
+    * Removes a page and broadcast an event labelled as {@link org.exoplatform.portal.config.UserPortalConfigService#PAGE_REMOVED}
     * when the removal is successful.
     *
     * @param page the page to remove
@@ -326,7 +305,6 @@ public class UserPortalConfigService implements Startable
    public void remove(Page page) throws Exception
    {
       storage_.remove(page);
-      listenerService.broadcast(REMOVE_PAGE_EVENT, this, page);
    }
 
    /**
@@ -339,13 +317,10 @@ public class UserPortalConfigService implements Startable
    public void create(Page page) throws Exception
    {
       storage_.create(page);
-
-      //
-      listenerService.broadcast(CREATE_PAGE_EVENT, this, page);
    }
 
    /**
-    * Updates a page and broadcast an event labelled as {@link org.exoplatform.portal.config.UserPortalConfigService#UPDATE_PAGE_EVENT}
+    * Updates a page and broadcast an event labelled as {@link org.exoplatform.portal.config.UserPortalConfigService#PAGE_UPDATED}
     * when the creation is successful.
     *
     * @param page the page to update
@@ -355,9 +330,6 @@ public class UserPortalConfigService implements Startable
    public List<ModelChange> update(Page page) throws Exception
    {
       List<ModelChange> changes = storage_.save(page);
-
-      //
-      listenerService.broadcast(UPDATE_PAGE_EVENT, this, page);
       return changes;
    }
 
@@ -371,11 +343,10 @@ public class UserPortalConfigService implements Startable
    public void create(PageNavigation navigation) throws Exception
    {
       storage_.create(navigation);
-      listenerService.broadcast(CREATE_NAVIGATION_EVENT, this, navigation);
    }
 
    /**
-    * Updates a page navigation broadcast an event labelled as {@link org.exoplatform.portal.config.UserPortalConfigService#UPDATE_NAVIGATION_EVENT}
+    * Updates a page navigation broadcast an event labelled as {@link org.exoplatform.portal.config.UserPortalConfigService#NAVIGATION_UPDATED}
     * when the creation is successful.
     *
     * @param navigation the navigation to update
@@ -384,11 +355,10 @@ public class UserPortalConfigService implements Startable
    public void update(PageNavigation navigation) throws Exception
    {
       storage_.save(navigation);
-      listenerService.broadcast(UPDATE_NAVIGATION_EVENT, this, navigation);
    }
 
    /**
-    * Removes a navigation and broadcast an event labelled as {@link org.exoplatform.portal.config.UserPortalConfigService#REMOVE_NAVIGATION_EVENT}
+    * Removes a navigation and broadcast an event labelled as {@link org.exoplatform.portal.config.UserPortalConfigService#NAVIGATION_REMOVED}
     * when the removal is successful.
     *
     * @param navigation the navigation to remove
@@ -397,7 +367,6 @@ public class UserPortalConfigService implements Startable
    public void remove(PageNavigation navigation) throws Exception
    {
       storage_.remove(navigation);
-      listenerService.broadcast(REMOVE_NAVIGATION_EVENT, this, navigation);
    }
 
    public PageNavigation getPageNavigation(String ownerType, String id) throws Exception

@@ -59,7 +59,7 @@ public class NewPortalConfigListener extends BaseComponentPlugin
 
    private ConfigurationManager cmanager_;
 
-   private DataStorage pdcService_;
+   private DataStorage dataStorage_;
 
    private volatile List<?> configs;
 
@@ -71,11 +71,11 @@ public class NewPortalConfigListener extends BaseComponentPlugin
 
    private Log log = ExoLogger.getLogger("Portal:UserPortalConfigService");
 
-   public NewPortalConfigListener(DataStorage pdcService, ConfigurationManager cmanager, InitParams params)
+   public NewPortalConfigListener(DataStorage dataStorage, ConfigurationManager cmanager, InitParams params)
       throws Exception
    {
       cmanager_ = cmanager;
-      pdcService_ = pdcService;
+      dataStorage_ = dataStorage;
 
       ObjectParameter objectParam = params.getObjectParam("page.templates");
       if (objectParam != null)
@@ -246,7 +246,7 @@ public class NewPortalConfigListener extends BaseComponentPlugin
 
    private boolean isInitedDB(String portalName) throws Exception
    {
-      PortalConfig pconfig = pdcService_.getPortalConfig(portalName);
+      PortalConfig pconfig = dataStorage_.getPortalConfig(portalName);
       return pconfig != null;
    }
 
@@ -304,13 +304,13 @@ public class NewPortalConfigListener extends BaseComponentPlugin
             // Ensure that the PortalConfig has been defined
             // The PortalConfig could be empty if the related PortalConfigListener
             // has been launched after starting this service
-            PortalConfig cfg = pdcService_.getPortalConfig(type, owner);
+            PortalConfig cfg = dataStorage_.getPortalConfig(type, owner);
             if (cfg == null)
             {
                cfg = new PortalConfig(type);
                cfg.setPortalLayout(new Container());
                cfg.setName(owner);
-               pdcService_.create(cfg);
+               dataStorage_.create(cfg);
             }
             return;
          }
@@ -325,14 +325,14 @@ public class NewPortalConfigListener extends BaseComponentPlugin
          owner = pconfig.getName();
 
          //
-         PortalConfig currentPortalConfig = pdcService_.getPortalConfig(type, owner);
+         PortalConfig currentPortalConfig = dataStorage_.getPortalConfig(type, owner);
          if (currentPortalConfig == null)
          {
-            pdcService_.create(pconfig);
+            dataStorage_.create(pconfig);
          }
          else
          {
-            pdcService_.save(pconfig);
+            dataStorage_.save(pconfig);
          }
       }
       catch (JiBXException e)
@@ -372,7 +372,7 @@ public class NewPortalConfigListener extends BaseComponentPlugin
          ArrayList<Page> list = pageSet.getPages();
          for (Page page : list)
          {
-            pdcService_.create(page);
+            dataStorage_.create(page);
          }
       }
       catch (JiBXException e)
@@ -403,15 +403,15 @@ public class NewPortalConfigListener extends BaseComponentPlugin
             xml = StringUtils.replace(xml, "@owner@", owner);
          }
          PageNavigation navigation = fromXML(config.getOwnerType(), owner, xml, PageNavigation.class);
-         PageNavigation currentNavigation = pdcService_.getPageNavigation(navigation.getOwner());
+         PageNavigation currentNavigation = dataStorage_.getPageNavigation(navigation.getOwner());
          if (currentNavigation == null)
          {
-            pdcService_.create(navigation);
+            dataStorage_.create(navigation);
          }
          else
          {
             navigation.merge(currentNavigation);
-            pdcService_.save(navigation);
+            dataStorage_.save(navigation);
          }
       }
       catch (JiBXException e)
@@ -446,7 +446,7 @@ public class NewPortalConfigListener extends BaseComponentPlugin
          ArrayList<PortletPreferences> list = portletSet.getPortlets();
          for (PortletPreferences portlet : list)
          {
-            pdcService_.save(portlet);
+            dataStorage_.save(portlet);
          }
       }
       catch (JiBXException e)

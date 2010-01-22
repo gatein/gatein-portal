@@ -25,12 +25,12 @@ import org.exoplatform.portal.config.model.ApplicationState;
 import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.config.model.Container;
 import org.exoplatform.portal.config.model.Dashboard;
-import org.exoplatform.portal.pom.data.ModelChange;
 import org.exoplatform.portal.config.model.ModelObject;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.pom.data.DashboardData;
+import org.exoplatform.portal.pom.data.ModelChange;
 import org.exoplatform.portal.pom.data.ModelData;
 import org.exoplatform.portal.pom.data.ModelDataStorage;
 import org.exoplatform.portal.pom.data.NavigationData;
@@ -39,6 +39,7 @@ import org.exoplatform.portal.pom.data.PageData;
 import org.exoplatform.portal.pom.data.PageKey;
 import org.exoplatform.portal.pom.data.PortalData;
 import org.exoplatform.portal.pom.data.PortalKey;
+import org.exoplatform.services.listener.ListenerService;
 
 import java.lang.reflect.Array;
 import java.util.Comparator;
@@ -50,13 +51,15 @@ import java.util.List;
  */
 public class DataStorageImpl implements DataStorage
 {
-
    /** . */
    private ModelDataStorage delegate;
+   
+   private ListenerService listenerServ_ ;
 
-   public DataStorageImpl(ModelDataStorage delegate)
+   public DataStorageImpl(ModelDataStorage delegate, ListenerService listenerServ)
    {
       this.delegate = delegate;
+      this.listenerServ_ = listenerServ;
    }
 
    public Page clonePage(String pageId, String clonedOwnerType, String clonedOwnerId, String clonedName) throws Exception
@@ -72,19 +75,64 @@ public class DataStorageImpl implements DataStorage
       return data != null ? new PageNavigation(data) : null;
    }
 
-   public void remove(Page page) throws Exception
+   public void create(PortalConfig config) throws Exception
    {
-      delegate.remove(page.build());
+      delegate.create(config.build());
+      listenerServ_.broadcast(PORTAL_CONFIG_CREATED, this, config);
    }
 
-   public <S> S load(ApplicationState<S> state, ApplicationType<S> type) throws Exception
+   public void save(PortalConfig config) throws Exception
    {
-      return delegate.load(state, type);
+      delegate.save(config.build());
+      listenerServ_.broadcast(PORTAL_CONFIG_UPDATED, this, config);
+   }
+   
+   public void remove(PortalConfig config) throws Exception
+   {
+      delegate.remove(config.build());
+      listenerServ_.broadcast(PORTAL_CONFIG_REMOVED, this, config);
    }
 
    public void create(Page page) throws Exception
    {
       delegate.create(page.build());
+      listenerServ_.broadcast(PAGE_CREATED, this, page);
+   }
+
+   public List<ModelChange> save(Page page) throws Exception
+   {
+      List<ModelChange> changes = delegate.save(page.build());
+      listenerServ_.broadcast(PAGE_UPDATED, this, page);
+      return changes;
+   }
+   
+   public void remove(Page page) throws Exception
+   {
+      delegate.remove(page.build());
+      listenerServ_.broadcast(PAGE_REMOVED, this, page);
+   }
+
+   public void create(PageNavigation navigation) throws Exception
+   {
+      delegate.create(navigation.build());
+      listenerServ_.broadcast(NAVIGATION_CREATED, this, navigation);
+   }
+
+   public void save(PageNavigation navigation) throws Exception
+   {
+      delegate.save(navigation.build());
+      listenerServ_.broadcast(NAVIGATION_UPDATED, this, navigation);
+   }
+
+   public void remove(PageNavigation navigation) throws Exception
+   {
+      delegate.remove(navigation.build());
+      listenerServ_.broadcast(NAVIGATION_REMOVED, this, navigation);
+   }
+
+   public <S> S load(ApplicationState<S> state, ApplicationType<S> type) throws Exception
+   {
+      return delegate.load(state, type);
    }
 
    public PortletPreferences getPortletPreferences(String windowID) throws Exception
@@ -102,29 +150,9 @@ public class DataStorageImpl implements DataStorage
       return delegate.getSharedLayout();
    }
 
-   public void save(PortalConfig config) throws Exception
-   {
-      delegate.save(config.build());
-   }
-
-   public void create(PortalConfig config) throws Exception
-   {
-      delegate.create(config.build());
-   }
-
    public PortalConfig getPortalConfig(String portalName) throws Exception
    {
       return getPortalConfig(PortalConfig.PORTAL_TYPE, portalName);
-   }
-
-   public void save(PageNavigation navigation) throws Exception
-   {
-      delegate.save(navigation.build());
-   }
-
-   public void remove(PortalConfig config) throws Exception
-   {
-      delegate.remove(config.build());
    }
 
    public PageNavigation getPageNavigation(String fullId) throws Exception
@@ -139,16 +167,6 @@ public class DataStorageImpl implements DataStorage
       PageKey key = PageKey.create(pageId);
       PageData data = delegate.getPage(key);
       return data != null ? new Page(data) : null;
-   }
-
-   public List<ModelChange> save(Page page) throws Exception
-   {
-      return delegate.save(page.build());
-   }
-
-   public void create(PageNavigation navigation) throws Exception
-   {
-      delegate.create(navigation.build());
    }
 
    private abstract class Bilto<O extends ModelObject, D extends ModelData>
@@ -267,11 +285,6 @@ public class DataStorageImpl implements DataStorage
       PortalKey key = new PortalKey(ownerType, portalName);
       PortalData data = delegate.getPortalConfig(key);
       return data != null ? new PortalConfig(data) : null;
-   }
-
-   public void remove(PageNavigation navigation) throws Exception
-   {
-      delegate.remove(navigation.build());
    }
 
    public Dashboard loadDashboard(String dashboardId) throws Exception

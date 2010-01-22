@@ -100,8 +100,6 @@ public class TestUserPortalConfigService extends AbstractPortalTest
    @Override
    protected void setUp() throws Exception
    {
-
-      //
       Listener listener = new Listener()
       {
          @Override
@@ -126,12 +124,12 @@ public class TestUserPortalConfigService extends AbstractPortalTest
       {
          // I'm using this due to crappy design of
          // org.exoplatform.services.listener.ListenerService
-         listenerService.addListener(UserPortalConfigService.CREATE_PAGE_EVENT, listener);
-         listenerService.addListener(UserPortalConfigService.REMOVE_PAGE_EVENT, listener);
-         listenerService.addListener(UserPortalConfigService.UPDATE_PAGE_EVENT, listener);
-         listenerService.addListener(UserPortalConfigService.CREATE_NAVIGATION_EVENT, listener);
-         listenerService.addListener(UserPortalConfigService.REMOVE_NAVIGATION_EVENT, listener);
-         listenerService.addListener(UserPortalConfigService.UPDATE_NAVIGATION_EVENT, listener);
+         listenerService.addListener(DataStorage.PAGE_CREATED, listener);
+         listenerService.addListener(DataStorage.PAGE_REMOVED, listener);
+         listenerService.addListener(DataStorage.PAGE_UPDATED, listener);
+         listenerService.addListener(DataStorage.NAVIGATION_CREATED, listener);
+         listenerService.addListener(DataStorage.NAVIGATION_REMOVED, listener);
+         listenerService.addListener(DataStorage.NAVIGATION_UPDATED, listener);
       }
    }
 
@@ -451,7 +449,7 @@ public class TestUserPortalConfigService extends AbstractPortalTest
             userPortalConfigSer_.remove(page);
             assertEquals(1, events.size());
             Event event = events.removeFirst();
-            assertEquals(UserPortalConfigService.REMOVE_PAGE_EVENT, event.getEventName());
+            assertEquals(DataStorage.PAGE_REMOVED, event.getEventName());
             Page p = ((Page)event.getData());
             assertEquals("group", p.getOwnerType());
             assertEquals("/platform/administrators", p.getOwnerId());
@@ -475,7 +473,7 @@ public class TestUserPortalConfigService extends AbstractPortalTest
             userPortalConfigSer_.create(page);
             assertEquals(1, events.size());
             Event event = events.removeFirst();
-            assertEquals(UserPortalConfigService.CREATE_PAGE_EVENT, event.getEventName());
+            assertEquals(DataStorage.PAGE_CREATED, event.getEventName());
             Page p = ((Page)event.getData());
             assertEquals("group", p.getOwnerType());
             assertEquals("/platform/administrators", p.getOwnerId());
@@ -526,7 +524,7 @@ public class TestUserPortalConfigService extends AbstractPortalTest
             userPortalConfigSer_.create(page);
             assertEquals(1, events.size());
             Event event = events.removeFirst();
-            assertEquals(UserPortalConfigService.CREATE_PAGE_EVENT, event.getEventName());
+            assertEquals(DataStorage.PAGE_CREATED, event.getEventName());
             Page p = ((Page)event.getData());
             assertEquals("group", p.getOwnerType());
             assertEquals("/platform/administrators", p.getOwnerId());
@@ -584,7 +582,7 @@ public class TestUserPortalConfigService extends AbstractPortalTest
             userPortalConfigSer_.remove(navigation);
             assertEquals(1, events.size());
             Event event = events.removeFirst();
-            assertEquals(UserPortalConfigService.REMOVE_NAVIGATION_EVENT, event.getEventName());
+            assertEquals(DataStorage.NAVIGATION_REMOVED, event.getEventName());
             PageNavigation n = ((PageNavigation)event.getData());
             assertEquals("group", n.getOwnerType());
             assertEquals("/platform/administrators", n.getOwnerId());
@@ -608,7 +606,7 @@ public class TestUserPortalConfigService extends AbstractPortalTest
             userPortalConfigSer_.create(navigation);
             assertEquals(1, events.size());
             Event event = events.removeFirst();
-            assertEquals(UserPortalConfigService.CREATE_NAVIGATION_EVENT, event.getEventName());
+            assertEquals(DataStorage.NAVIGATION_CREATED, event.getEventName());
             PageNavigation n = ((PageNavigation)event.getData());
             assertEquals("group", n.getOwnerType());
             assertEquals("/platform/administrators", n.getOwnerId());
@@ -649,7 +647,7 @@ public class TestUserPortalConfigService extends AbstractPortalTest
                   {
                      userPortalConfigSer_.create(navigation);
                      Event event = events.removeFirst();
-                     assertEquals(UserPortalConfigService.CREATE_NAVIGATION_EVENT, event.getEventName());
+                     assertEquals(DataStorage.CREATE_NAVIGATION_EVENT, event.getEventName());
                      PageNavigation n1 = (PageNavigation)event.getSource();
                      assertEquals(ownerType, n1.getOwnerType());
                      assertEquals(ownerId, n1.getOwnerId());
@@ -693,7 +691,7 @@ public class TestUserPortalConfigService extends AbstractPortalTest
             userPortalConfigSer_.update(navigation);
             assertEquals(1, events.size());
             Event event = events.removeFirst();
-            assertEquals(UserPortalConfigService.UPDATE_NAVIGATION_EVENT, event.getEventName());
+            assertEquals(DataStorage.NAVIGATION_UPDATED, event.getEventName());
             PageNavigation n = ((PageNavigation)event.getData());
             assertEquals("group", n.getOwnerType());
             assertEquals("/platform/administrators", n.getOwnerId());
