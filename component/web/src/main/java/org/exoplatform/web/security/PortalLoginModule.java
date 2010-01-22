@@ -85,7 +85,7 @@ public class PortalLoginModule extends AbstractLoginModule
                   password, false);
          //
 
-         // For clastered config check credentials stored and propagated in session. This won't work in tomcat because
+         // For clustered config check credentials stored and propagated in session. This won't work in tomcat because
          // of lack of JACC PolicyContext so the code must be a bit defensive
          if (o == null && isClusteredSSO() && password.startsWith(InitiateLoginServlet.COOKIE_NAME))
          {
