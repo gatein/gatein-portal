@@ -25,9 +25,7 @@ import org.exoplatform.webui.application.replication.model.TypeDomain;
 import org.exoplatform.webui.application.replication.serial.ObjectReader;
 import org.exoplatform.webui.application.replication.serial.ObjectWriter;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.ParameterizedType;
 import java.util.HashMap;
 import java.util.Map;
@@ -101,6 +99,13 @@ public class SerializationContext
       return (O)in.readObject();
    }
 
+   public void write(Object o, OutputStream out) throws IOException
+   {
+      ObjectWriter writer = new ObjectWriter(this, out);
+      writer.writeObject(o);
+      writer.flush();
+   }
+
    public byte[] write(Object o) throws IOException
    {
       ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -115,5 +120,11 @@ public class SerializationContext
       ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
       ObjectReader in = new ObjectReader(this, bais);
       return in.readObject();
+   }
+
+   public Object read(InputStream in ) throws IOException, ClassNotFoundException
+   {
+      ObjectReader or = new ObjectReader(this, in);
+      return or.readObject();
    }
 }

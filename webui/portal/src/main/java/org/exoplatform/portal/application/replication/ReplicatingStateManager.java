@@ -17,34 +17,24 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.application;
+package org.exoplatform.portal.application.replication;
 
+import org.exoplatform.commons.utils.Safe;
 import org.exoplatform.container.ExoContainer;
+import org.exoplatform.portal.application.LegacyPortalStateManager;
+import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.UserPortalConfig;
 import org.exoplatform.portal.config.UserPortalConfigService;
-import org.exoplatform.services.organization.Query;
-import org.exoplatform.webui.Util;
 import org.exoplatform.webui.application.ConfigurationManager;
 import org.exoplatform.webui.application.StateManager;
 import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
-import org.exoplatform.webui.application.replication.SerializationContext;
-import org.exoplatform.webui.application.replication.api.annotations.Serialized;
-import org.exoplatform.webui.application.replication.api.factory.CreateException;
-import org.exoplatform.webui.application.replication.api.factory.ObjectFactory;
-import org.exoplatform.webui.application.replication.model.FieldModel;
-import org.exoplatform.webui.application.replication.model.TypeDomain;
-import org.exoplatform.webui.application.replication.model.metadata.DomainMetaData;
-import org.exoplatform.webui.application.replication.serial.ObjectWriter;
-import org.exoplatform.webui.config.Component;
 import org.exoplatform.webui.core.UIApplication;
-import org.exoplatform.webui.core.UIComponent;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.Map;
 
 /**
  * The basis is either {@link org.exoplatform.webui.core.UIPortletApplication} or
@@ -69,7 +59,27 @@ public class ReplicatingStateManager extends StateManager
       String key = getKey(context);
 
       //
-      UIApplication uiapp = (UIApplication)session.getAttribute("bilto_" + key);
+      ApplicationState appState = (ApplicationState)session.getAttribute("bilto_" + key);
+
+      //
+      UIApplication uiapp = null;
+      if (appState != null)
+      {
+         if (Safe.equals(context.getRemoteUser(), appState.getUserName()))
+         {
+            uiapp = appState.getApplication();
+         }
+      }
+
+      //
+      if (appState != null)
+      {
+         System.out.println("Found application " + key + " :" + appState.getApplication());
+      }
+      else
+      {
+         System.out.println("Application " + key + " not found");
+      }
 
       // Looks like some necessary hacking
       if (context instanceof PortalRequestContext)
@@ -110,101 +120,11 @@ public class ReplicatingStateManager extends StateManager
       HttpSession session = getSession(context);
 
       //
-      Class<? extends UIApplication> appClass = uiapp.getClass();
-      if (appClass.getAnnotation(Serialized.class) != null)
-      {
-         try
-         {
-            DomainMetaData domainMetaData = new DomainMetaData();
-            domainMetaData.addClassType(Query.class, true);
-
-            //
-            SerializationContext serializationContext = (SerializationContext)session.getAttribute("SerializationContext");
-            if (serializationContext == null)
-            {
-               TypeDomain domain = new TypeDomain(domainMetaData, true);
-               serializationContext = new SerializationContext(domain);
-               session.setAttribute("SerializationContext", serializationContext);
-               ObjectFactory<UIComponent> factory = new ObjectFactory<UIComponent>()
-               {
-
-                  private <S extends UIComponent> Object getFieldValue(String fieldName, Map<FieldModel<? super S, ?>, ?> state)
-                  {
-                     for (Map.Entry<FieldModel<? super S, ?>, ?> entry : state.entrySet())
-                     {
-                        FieldModel<? super S, ?> fieldModel = entry.getKey();
-                        if (fieldModel.getOwner().getJavaType() == UIComponent.class && fieldModel.getName().equals(fieldName))
-                        {
-                           return entry.getValue();
-                        }
-                     }
-                     return null;
-                  }
-
-                  @Override
-                  public <S extends UIComponent> S create(Class<S> type, Map<FieldModel<? super S, ?>, ?> state) throws CreateException
-                  {
-                     // Get config id
-                     String configId = (String)getFieldValue("configId", state);
-                     String id = (String)getFieldValue("id", state);
-
-                     //
-                     try
-                     {
-                        WebuiApplication webuiApp = (WebuiApplication) context.getApplication();
-                        ConfigurationManager configMgr = webuiApp.getConfigurationManager();
-                        Component config = configMgr.getComponentConfig(type, configId);
-
-                        //
-                        S instance;
-                        if (config != null)
-                        {
-                           instance = Util.createObject(type, config.getInitParams());
-                           instance.setComponentConfig(id, config);
-                        }
-                        else
-                        {
-                           instance = Util.createObject(type, null);
-                           instance.setId(id);
-                        }
-
-                        // Now set state
-                        for (Map.Entry<FieldModel<? super S, ?>, ?> entry : state.entrySet())
-                        {
-                           FieldModel<? super S, ?> fieldModel = entry.getKey();
-                           Object value = entry.getValue();
-                           fieldModel.castAndSet(instance, value);
-                        }
-
-                        //
-                        return instance;
-                     }
-                     catch (Exception e)
-                     {
-                        throw new CreateException(e);
-                     }
-                  }
-               };
-               serializationContext.addFactory(factory);
-            }
-
-            //
-
-            //
-            uiapp = serializationContext.clone(uiapp);
-            System.out.println("Cloned application");
-         }
-         catch (Exception e)
-         {
-            System.out.println("Could not clone application");
-            e.printStackTrace();
-         }
-      }
-
+      String key = getKey(context);
 
       //
-      String key = getKey(context);
-      session.setAttribute("bilto_" + key, uiapp);
+      System.out.println("Storing application " + key);
+      session.setAttribute("bilto_" + key, new ApplicationState(uiapp, context.getRemoteUser()));
    }
 
    @Override
@@ -227,7 +147,9 @@ public class ReplicatingStateManager extends StateManager
       if (webuiRC instanceof PortletRequestContext)
       {
          PortletRequestContext portletRC = (PortletRequestContext)webuiRC;
-         return portletRC.getApplication().getApplicationId() + "/" + portletRC.getWindowId();
+
+         // We are temporarily not using the window id as it changes when the back end is not the same
+         return portletRC.getApplication().getApplicationId()/* + "/" + portletRC.getWindowId()*/;
       }
       else
       {

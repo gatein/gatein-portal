@@ -31,8 +31,8 @@ import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.NameCallback;
 import javax.security.auth.callback.PasswordCallback;
 import javax.security.auth.login.LoginException;
-import javax.security.jacc.PolicyContext;
 import javax.servlet.http.HttpServletRequest;
+import java.lang.reflect.Method;
 
 /**
  * A login module implementation that relies on the token store to check the
@@ -50,10 +50,36 @@ import javax.servlet.http.HttpServletRequest;
 public class PortalLoginModule extends AbstractLoginModule
 {
 
-   /**
-    * Logger.
-    */
-   protected Log log = ExoLogger.getLogger(PortalLoginModule.class);
+   /** Logger. */
+   private static final Log log = ExoLogger.getLogger(PortalLoginModule.class);
+
+   /** JACC get context method. */
+   private static final Method getContextMethod;
+
+   static
+   {
+      Method getContext = null;
+      if (isClusteredSSO())
+      {
+         log.debug("About to configure clustered SSO");
+         try
+         {
+            Class<?> policyContextClass = Thread.currentThread().getContextClassLoader().loadClass("javax.security.jacc.PolicyContext");
+            getContext = policyContextClass.getDeclaredMethod("getContext", String.class);
+         }
+         catch (ClassNotFoundException ignore)
+         {
+            log.debug("JACC not found ignoring it", ignore);
+         }
+         catch (Exception e)
+         {
+            log.error("Could not obtain JACC get context method", e);
+         }
+      }
+
+      //
+      getContextMethod = getContext;
+   }
 
    public static final String AUTHENTICATED_CREDENTIALS = "authenticatedCredentials";
 
@@ -85,15 +111,13 @@ public class PortalLoginModule extends AbstractLoginModule
 
          // For clustered config check credentials stored and propagated in session. This won't work in tomcat because
          // of lack of JACC PolicyContext so the code must be a bit defensive
-         if (o == null && isClusteredSSO() && password.startsWith(InitiateLoginServlet.COOKIE_NAME))
+         if (o == null && getContextMethod != null && password.startsWith(InitiateLoginServlet.COOKIE_NAME))
          {
-            HttpServletRequest request = null;
+            HttpServletRequest request;
             try
             {
-               request = (HttpServletRequest)PolicyContext.getContext("javax.servlet.http.HttpServletRequest");
-
+               request = (HttpServletRequest)getContextMethod.invoke(null, "javax.servlet.http.HttpServletRequest");
                o = request.getSession().getAttribute(AUTHENTICATED_CREDENTIALS);
-
             }
             catch(Throwable e)
             {
@@ -128,7 +152,7 @@ public class PortalLoginModule extends AbstractLoginModule
    public boolean commit() throws LoginException
    {
 
-      if (isClusteredSSO() &&
+      if (getContextMethod != null &&
          sharedState.containsKey("javax.security.auth.login.name") &&
          sharedState.containsKey("javax.security.auth.login.password"))
       {
@@ -140,10 +164,8 @@ public class PortalLoginModule extends AbstractLoginModule
          HttpServletRequest request = null;
          try
          {
-            request = (HttpServletRequest)PolicyContext.getContext("javax.servlet.http.HttpServletRequest");
-
+            request = (HttpServletRequest)getContextMethod.invoke(null, "javax.servlet.http.HttpServletRequest");
             request.getSession().setAttribute(AUTHENTICATED_CREDENTIALS, wc);
-
          }
          catch(Exception e)
          {
@@ -177,7 +199,7 @@ public class PortalLoginModule extends AbstractLoginModule
       return log;
    }
 
-   protected boolean isClusteredSSO()
+   protected static boolean isClusteredSSO()
    {
       return ExoContainer.getProfiles().contains("cluster");
    }

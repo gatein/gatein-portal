@@ -20,6 +20,7 @@
 package org.exoplatform.portal.application;
 
 import org.exoplatform.container.ExoContainer;
+import org.exoplatform.portal.application.replication.ReplicatingStateManager;
 import org.exoplatform.webui.application.StateManager;
 import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
