@@ -8,7 +8,8 @@
 	<section id="sect-Reference_Guide-Data_Injector_Configuration-Data_Injector">
 		<title>Data Injector</title>
 		<para>
-			<emphasis>Data-injector</emphasis> is an utility to initialize enterprise data for Portal. It is packed as a .jar. <!-- 
+			<emphasis>Data-injector</emphasis> is a utility to initialize enterprise data for &PRODUCT;. It is packed as a .jar. 
+<!-- 
             and deployed under $TOMCATHOME/lib. It is started
             automatically when Tomcat starts.
           -->
@@ -18,13 +19,11 @@
 	<section id="sect-Reference_Guide-Data_Injector_Configuration-OrganizationInitializer">
 		<title>OrganizationInitializer</title>
 		<para>
-			<emphasis>OrganizationInitializer</emphasis> is the service that allows creating a large organization with many groups and users. It also creates portal navigation and page(s) for each group, each user.
+			<emphasis>OrganizationInitializer</emphasis> is the service that allows creating a large organization with many groups and users. It also creates portal navigation and page(s) for each group and each user.
 		</para>
-	</section>
-	
-	<section id="sect-Reference_Guide-Data_Injector_Configuration-Service_configuration_file">
+		<formalpara >
 		<title>Service configuration file</title>
-		
+			<para>
 <programlisting role="XML">&lt;configuration&gt;
   &lt;component&gt;
   &lt;key&gt;org.exoplatform.portal.initializer.organization.OrganizationInitializer&lt;/key&gt;
@@ -90,83 +89,125 @@
   &lt;/component&gt;  
 &lt;/configuration&gt;
 </programlisting>
+			</para>
+		</formalpara>
 	</section>
 	
-	<section id="sect-Reference_Guide-Data_Injector_Configuration-Parameters_for_Group">
-		<title>Parameters for Group</title>
-		<itemizedlist>
+	<section id="sect-Reference_Guide-Data_Injector_Configuration-Group_Parameters">
+		<title>Group Parameters</title>
+		<variablelist>
+		  <varlistentry>
+			<term>Name</term>
 			<listitem>
 				<para>
-					<emphasis>name</emphasis> : The name of group.
+					The name of the group.
 				</para>
 			</listitem>
+		</varlistentry>
+		<varlistentry>
+			<term>ParentId</term>
 			<listitem>
 				<para>
-					<emphasis>parentId</emphasis> : The id of parent group. If the parent id is null, it means that the group is at the first level. If parent groups do not exist, it will be created automatically.
+					The ID of the parent group. If the parent ID is null the group is at the first level. If parent groups do not exist, this ID will be created automatically.
 				</para>
 			</listitem>
+		</varlistentry>
+		<varlistentry>
+			<term>Description</term>
 			<listitem>
 				<para>
-					<emphasis>description</emphasis> : The description of group.
+					A description of the group.
 				</para>
 			</listitem>
+		</varlistentry>
+		<varlistentry>
+			<term>Label</term>
 			<listitem>
 				<para>
-					<emphasis>label</emphasis> : The label of group.
+					A label for the group.
 				</para>
 			</listitem>
+		</varlistentry>
+		<varlistentry>
+			<term>From and to</term>
 			<listitem>
 				<para>
-					<emphasis>from and to</emphasis> : This group can be cloned to may copies and each copy is marked a number from!images/number.png!images/ to!images/ number.png!.
+					This group can be cloned to may copies and each copy is marked with a number.
 				</para>
 			</listitem>
-		</itemizedlist>
+		</varlistentry>
+		</variablelist>
 	</section>
 	
-	<section id="sect-Reference_Guide-Data_Injector_Configuration-Parameters_for_User">
-		<title>Parameters for User</title>
-		<itemizedlist>
+	<section id="sect-Reference_Guide-Data_Injector_Configuration-User_Parameters">
+		<title>User Parameters</title>
+		<variablelist>
+		<varlistentry>
+			<term>UserName</term>
 			<listitem>
 				<para>
-					<emphasis>userName</emphasis> : The ID of user.
+					The user's ID.
 				</para>
 			</listitem>
+		</varlistentry>
+		<varlistentry>
+			<term>Password</term>
 			<listitem>
 				<para>
-					<emphasis>password</emphasis> : The password of user.
+					The user's password.
 				</para>
 			</listitem>
+		</varlistentry>
+		<varlistentry>
+			<term>FirstName</term>
 			<listitem>
 				<para>
-					<emphasis>firstName</emphasis> : The first name of user.
+
 				</para>
 			</listitem>
+		</varlistentry>
+		<varlistentry>
+			<term>LastName</term>
 			<listitem>
 				<para>
-					<emphasis>lastName</emphasis> : The last name of user.
+ last name.
 				</para>
 			</listitem>
+		</varlistentry>
+		<varlistentry>
+			<term>Email</term>
 			<listitem>
 				<para>
-					<emphasis>email</emphasis> : The email of user.
+					The user's email address.
 				</para>
 			</listitem>
+		</varlistentry>
+		<varlistentry>
+			<term>Groups</term>
+
 			<listitem>
 				<para>
-					<emphasis>groups</emphasis> : The list of groups that user join with membership type
+					A list of the groups that user belongs to.
 				</para>
 			</listitem>
+		</varlistentry>
+		<varlistentry>
+			<term>From and to</term>
 			<listitem>
 				<para>
-					<emphasis>from and to</emphasis> : This user can be cloned to may copies and each copy is marked a number from!images/number.png!images/ to!images/ number.png!. With this configuration we can create a range of users and put them to various groups and other range to other groups.
+					Users can be cloned and each copy is assigned a number. This allows the creation of a range of users that can be put into various groups based on the range value.
 				</para>
 			</listitem>
-		</itemizedlist>
+		</varlistentry>
+		</variablelist>
+	</section>
+	<section>
+	<title>Automatic Navigation Creation</title>
 		<para>
-			The " <emphasis>auto.create.group.page.navigation</emphasis> " Parameter Value is true or false. If TRUE it automatically create portal navigation and page for each group. If FALSE it does not create portal navigation and page for each group.
+			The " <literal>auto.create.group.page.navigation</literal>" parameter value is <parameter>true</parameter> or <parameter>false</parameter>. If this value is set to <parameter>true</parameter> it automatically creates portal navigations and pages for each group. If <parameter>false</parameter> it does not.
 		</para>
 		<para>
-			The " <emphasis>auto.create.user.page.navigation</emphasis> " Parameter Value is number of pages that automatically created for each user.
+			The "<literal>auto.create.user.page.navigation</literal>" parameter value is the number of pages that are automatically created for each user.
 		</para>
 	</section>
 

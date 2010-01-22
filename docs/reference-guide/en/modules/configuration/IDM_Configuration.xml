@@ -236,7 +236,7 @@
 				</para>
 			</listitem>
 		</itemizedlist> -->
-<!-- MARK -->
+
 		<para>
 			A sample <emphasis role="bold">JBoss Identity IDM</emphasis> configuration file is shown below. To understand all the options present in it please refer to the JBoss Identity IDM Reference Guide
 		</para>

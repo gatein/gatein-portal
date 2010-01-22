@@ -84,10 +84,10 @@
 &lt;/configuration&gt;
 </programlisting>
 		<para>
-			The first component configuration is for the Hibernate service. You can enter any additional properties in a hibernate.properties file, but GateIn will override hibernate.properties with values read in from this configuration file.
+			The first component configuration is for the Hibernate service. You can enter any additional properties in a <literal>hibernate.properties</literal> file, but &PRODUCT; will override <literal>hibernate.properties</literal>  with values read in from this configuration file.
 		</para>
 		<para>
-			The second component configuration is for the JCR datasource. The InitialContextInitializer component will load the factory class, use the factory object to create a datasource, and bind that datasource in the JNDI tree with the value of the "bind-name" parameter. If you want to change the bind-name, for example "jdbcexo" to "myjdbc", you also need to change JCR repository configuration in order that the service picks up the right datasource.
+			The second component configuration is for the JCR datasource. The <literal>InitialContextInitializer</literal> component will load the factory class, use the factory object to create a datasource, and bind that datasource in the JNDI tree with the value of the "bind-name" parameter. If you want to change the bind-name, for example "<parameter>jdbcexo</parameter>" to "<parameter>myjdbc</parameter>", you also need to change JCR repository configuration in order that the service picks up the right datasource.
 		</para>
 		<para>
 			Make sure you update the database connection properties and dialect for both of these component configurations.
@@ -97,7 +97,7 @@
 	<section id="sect-Reference_Guide-Database_Configuration-JCR_database_configuration">
 		<title>JCR database configuration</title>
 		<para>
-			There are two JCR configuration files that must be changed to support a different database. In both files, <emphasis role="bold">edit the dialect (and the data source name if necessary)</emphasis> .
+			There are two JCR configuration files that must be changed to support a different database. In both files, <emphasis>edit the dialect (and the data source name if necessary)</emphasis> .
 		</para>
 		<para>
 			The first file is <filename>02portal.war:/WEB-INF/conf/jcr/jcr-configuration.xml</filename> :

@@ -8,7 +8,7 @@
 	<section id="sect-Reference_Guide-Skin_Configuration-Overview">
 		<title>Overview</title>
 		<para>
-			GateIn provides support for skinning the entire portal User Interface (UI) including your own portlets. Skins are designed to help you pack and reuse common graphic resources.
+			&PRODUCT; provides support for skinning the entire portal User Interface (UI) including your own portlets. Skins are designed to help you pack and reuse common graphic resources.
 		</para>
 	</section>
 	
@@ -23,16 +23,23 @@
 			</imageobject>
 		</mediaobject>
 		<para>
-			When you switch, the whole portal will be repainted and new styles will be applied to the UI.
+			When you switch, the whole portal will be repainted and the new styles will be applied to the UI.
 		</para>
 	</section>
 	
 	<section id="sect-Reference_Guide-Skin_Configuration-Skins_in_Page_Markups">
 		<title>Skins in Page Markups</title>
 		<para>
-			An GateIn skin contains css styles for GateIn portal's components but also shares components that may be reused in portlets. When GateIn generates a portal page markup, it inserts stylesheet links in the page's <literal>head</literal> tag.
+			A &PRODUCT; skin contains css styles for the portal's components but also shares components that may be reused in portlets. When &PRODUCT; generates a portal page markup, it inserts stylesheet links in the page's <literal>head</literal> tag.
 		</para>
-		
+		<para>
+			In the snipped code below you can see two types of links:
+		</para>
+		<programlistingco>
+			<areaspec>
+				<area coords="3" id="area-Reference_Guide-Skin_Configuration-Coreskin" />
+				<area coords="4" id="area-Reference_Guide-Skin_Configuration-Stylesheets" />
+			</areaspec>
 <programlisting>&lt;head&gt;
 ...   
 &lt;link id="CoreSkin" rel="stylesheet" type="text/css" href="/eXoResources/skin/Stylesheet.css" /&gt;
@@ -43,49 +50,55 @@
 ...
 &lt;/head&gt;
 </programlisting>
-		<para>
-			In the snipped code above, you can see two types of links :
-		</para>
-		<itemizedlist>
-			<listitem>
-				<para>
-					Portal skin stylesheet (<literal>id="CoreSkin"</literal>).
-				</para>
-			</listitem>
-			<listitem>
-				<para>
-					Portlets skin stylesheets (all others) : each portlet within the page may contribute its own styles.
-				</para>
-			</listitem>
-		</itemizedlist>
+
+		<calloutlist>
+				<callout arearefs="area-Reference_Guide-Skin_Configuration-Coreskin">
+					<para>
+						Portal skin stylesheet (<literal>id="CoreSkin"</literal>).
+					</para>
+				</callout>
+				<callout arearefs="area-Reference_Guide-Skin_Configuration-Stylesheets">
+					<para>
+						Portlets skin stylesheets (<emphasis role="bold">all others</emphasis>). Each portlet within the page may contribute its own style(s).
+					</para>
+				</callout>
+		</calloutlist>
+		</programlistingco>
 	</section>
 	
 	<section id="sect-Reference_Guide-Skin_Configuration-Types_of_Styles">
 		<title>Types of Styles</title>
-		<orderedlist numeration="arabic">
-			<listitem>
-				<para>
-					portal skin is typically made of 3 types of styles:
-				</para>
-			</listitem>
-			<listitem>
-				<para>
-					Portlet themes : decorations for portlet windows.
-				</para>
-			</listitem>
-			<listitem>
-				<para>
-					Portal styles : default styles for html tags (ex div,th,td...) + the portal UI including the sidebar and portal admin screens.
-				</para>
-			</listitem>
-			<listitem>
-				<para>
-					Shared styles : GateIn WebUI components styles are reused among different GateIn portlets.
-				</para>
-			</listitem>
-		</orderedlist>
+			<para>
+				The portal skin is typically made of 3 types of styles:
+			</para>
+		<variablelist>
+			<varlistentry>
+				<term>Portlet themes</term>
+					<listitem>
+						<para>
+							 Decorations for portlet windows.
+						</para>
+					</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>Portal styles</term>
+					<listitem>
+						<para>
+							 Default styles for html tags (ex div,th,td...) and the portal UI (including the sidebar and portal admin screens).
+						</para>
+					</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>Shared styles</term>
+					<listitem>
+						<para>
+							&PRODUCT; WebUI components styles are reused among different portlets.
+						</para>
+					</listitem>
+			</varlistentry>
+		</variablelist>
 		<para>
-			This is revealed easily by the main portal skin stylesheets. For example <emphasis role="bold">/eXoVistaSkin/skin/Stylesheet.css</emphasis>
+			The main portal skin stylesheet (<filename>/eXoVistaSkin/skin/Stylesheet.css</filename>)is shown below as an example:
 		</para>
 		
 <programlisting>@import url(/eXoResources/skin/PortletThemes/Stylesheet.css) ;
@@ -97,14 +110,14 @@
 	<section id="sect-Reference_Guide-Skin_Configuration-Portlet_Styles">
 		<title>Portlet Styles</title>
 		<para>
-			Portlets often require additionnal styles that may not be defined by the portal skin. GateIn allows portlets to define additional stylesheets for each portlet and will append the corresponding <literal>link</literal> tags to the <literal>head</literal>.
+			Portlets often require additionnal styles that may not be defined by the portal skin. &PRODUCT; allows portlets to define additional stylesheets for each portlet and will append the corresponding <literal>link</literal> tags to the <literal>head</literal>.
 		</para>
 		<para>
-			The link ID will be of the form {portletAppName}{}<literal>$$<literal>PortletName</literal>. For example: <literal>ContentPortlet</literal> in <literal>content.war</literal>, will give <parameter>id="content</parameter>ContentPortlet"</literal>
+			The link ID will be of the form <parameter>{portletAppName}{}$$PortletName</parameter>. For example: <literal>ContentPortlet</literal> in <literal>content.war</literal>, will give <parameter>id="content<literal>ContentPortlet"</literal></parameter>
 		</para>
-		<para>
-			TODO: give some rules to follow in order to avoid overriding portal styles
-		</para>
+
+<!-- #################### TODO: give some rules to follow in order to avoid overriding portal styles #####################-->
+
 	</section>
 	
 	<section id="sect-Reference_Guide-Skin_Configuration-How_to_Configure_a_Portal_Skin">
