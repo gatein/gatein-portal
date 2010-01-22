@@ -44,11 +44,13 @@ public class Component
 
    private InitParams initParams;
 
-   private List<Validator> validators;
+   // Note: Specific List implementations are required by JiBX :/
 
-   private List<Event> events;
+   private ArrayList<Validator> validators;
 
-   private List<EventInterceptor> eventInterceptors;
+   private ArrayList<Event> events;
+
+   private ArrayList<EventInterceptor> eventInterceptors;
 
    transient private Map<String, Event> eventMap;
 
@@ -114,32 +116,32 @@ public class Component
       this.initParams = initParams;
    }
 
-   public List<Validator> getValidators()
+   public ArrayList<Validator> getValidators()
    {
       return validators;
    }
 
-   public void setValidators(List<Validator> validators)
+   public void setValidators(ArrayList<Validator> validators)
    {
       this.validators = validators;
    }
 
-   public List<Event> getEvents()
+   public ArrayList<Event> getEvents()
    {
       return events;
    }
 
-   public void setEvents(List<Event> events)
+   public void setEvents(ArrayList<Event> events)
    {
       this.events = events;
    }
 
-   public List<EventInterceptor> getEventInterceptors()
+   public ArrayList<EventInterceptor> getEventInterceptors()
    {
       return eventInterceptors;
    }
 
-   public void setEventInterceptors(List<EventInterceptor> events)
+   public void setEventInterceptors(ArrayList<EventInterceptor> events)
    {
       eventInterceptors = events;
    }
