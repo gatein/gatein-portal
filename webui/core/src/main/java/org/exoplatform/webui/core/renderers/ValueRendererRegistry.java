@@ -43,6 +43,8 @@ public class ValueRendererRegistry
 
    static
    {
+      registerDefaultRendererFor(ValueRenderer.DEFAULT_RENDERER, String.class);
+
       FormattableValueRenderer<Number> numberRenderer = new FormattableValueRenderer<Number>(null, "number");
       registerDefaultRendererFor(numberRenderer, Number.class);
       registerDefaultRendererFor(numberRenderer, Byte.class);

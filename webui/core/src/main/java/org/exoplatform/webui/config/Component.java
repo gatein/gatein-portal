@@ -1,16 +1,16 @@
 /**
  * Copyright (C) 2009 eXo Platform SAS.
- * 
+ *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation; either version 2.1 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this software; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
@@ -28,12 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by The eXo Platform SARL
- * Author : Tuan Nguyen
- *          tuan08@users.sourceforge.net
- * May 4, 2006
- */
+/** Created by The eXo Platform SARL Author : Tuan Nguyen tuan08@users.sourceforge.net May 4, 2006 */
 public class Component
 {
 
@@ -49,11 +44,11 @@ public class Component
 
    private InitParams initParams;
 
-   private ArrayList<Validator> validators;
+   private List<Validator> validators;
 
-   private ArrayList<Event> events;
+   private List<Event> events;
 
-   private ArrayList<EventInterceptor> eventInterceptors;
+   private List<EventInterceptor> eventInterceptors;
 
    transient private Map<String, Event> eventMap;
 
@@ -119,32 +114,32 @@ public class Component
       this.initParams = initParams;
    }
 
-   public ArrayList<Validator> getValidators()
+   public List<Validator> getValidators()
    {
       return validators;
    }
 
-   public void setValidators(ArrayList<Validator> validators)
+   public void setValidators(List<Validator> validators)
    {
       this.validators = validators;
    }
 
-   public ArrayList<Event> getEvents()
+   public List<Event> getEvents()
    {
       return events;
    }
 
-   public void setEvents(ArrayList<Event> events)
+   public void setEvents(List<Event> events)
    {
       this.events = events;
    }
 
-   public ArrayList<EventInterceptor> getEventInterceptors()
+   public List<EventInterceptor> getEventInterceptors()
    {
       return eventInterceptors;
    }
 
-   public void setEventInterceptors(ArrayList<EventInterceptor> events)
+   public void setEventInterceptors(List<EventInterceptor> events)
    {
       eventInterceptors = events;
    }
@@ -152,10 +147,14 @@ public class Component
    public Event getUIComponentEventConfig(String eventName) throws Exception
    {
       if (eventMap != null)
+      {
          return eventMap.get(eventName);
+      }
       eventMap = new HashMap<String, Event>();
       if (events == null)
+      {
          return null;
+      }
       for (Event event : events)
       {
          createCachedEventListeners(event);
@@ -168,10 +167,14 @@ public class Component
    {
       Event event = getUIComponentEventConfig(eventName);
       if (event == null)
+      {
          return null;
+      }
       List<EventListener> cachedListeners = event.getCachedEventListeners();
       if (cachedListeners != null)
+      {
          return cachedListeners;
+      }
       cachedListeners = new ArrayList<EventListener>();
       for (String listener : event.getListeners())
       {
@@ -192,7 +195,9 @@ public class Component
       for (String listener : event.getListeners())
       {
          if (listener.indexOf(".") < 0)
+         {
             listener = type + "$" + listener;
+         }
          EventListener eventListener = (EventListener)Util.createObject(listener, event.getInitParams());
          cachedListeners.add(eventListener);
       }
@@ -202,7 +207,9 @@ public class Component
    public Lifecycle getUIComponentLifecycle() throws Exception
    {
       if (componentLifecycle != null)
+      {
          return componentLifecycle;
+      }
       if (lifecycle != null)
       {
          componentLifecycle = (Lifecycle)Util.createObject(lifecycle, null);

@@ -40,38 +40,56 @@ import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormInputBase;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
+import org.exoplatform.wsrp.webui.component.UIRegistrationPropertiesGrid;
 import org.gatein.common.util.ParameterValidation;
 import org.gatein.wsrp.WSRPConsumer;
 import org.gatein.wsrp.consumer.ConsumerException;
 import org.gatein.wsrp.consumer.ProducerInfo;
+import org.gatein.wsrp.consumer.RegistrationInfo;
+import org.gatein.wsrp.consumer.RegistrationProperty;
 import org.gatein.wsrp.consumer.registry.ConsumerRegistry;
 import org.gatein.wsrp.services.ManageableServiceFactory;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 /** @author Wesley Hales */
-@ComponentConfig(template = "app:/groovy/wsrp/webui/component/UIWsrpConsumerEditor.gtmpl", lifecycle = UIFormLifecycle.class, events = {
-   @EventConfig(listeners = UIWsrpConsumerEditor.SaveActionListener.class)})
+@ComponentConfig(
+   lifecycle = UIFormLifecycle.class,
+   template = "system:/groovy/webui/form/UIForm.gtmpl",
+   events = {
+      @EventConfig(listeners = UIWsrpConsumerEditor.SaveActionListener.class)
+   })
 public class UIWsrpConsumerEditor extends UIForm
 {
-   protected static final String CONSUMER_NAME = "Consumer name: ";
-   protected static final String CACHE_EXPIRATION = "Seconds before cache expiration: ";
-   protected static final String TIMEOUT = "Milliseconds before timeout: ";
-   protected static final String WSDL_URL = "WSDL URL: ";
    private UIFormInputBase<String> consumerName;
    private UIFormStringInput cache;
    private UIFormStringInput timeoutWS;
    private UIFormStringInput wsdl;
+   private UIRegistrationPropertiesGrid localRegistration;
+   private UIRegistrationPropertiesGrid expectedRegistration;
+   private static final String[] ACTIONS = new String[]{"Save"};
 
    public UIWsrpConsumerEditor() throws Exception
    {
-
-      consumerName = new UIFormStringInput(CONSUMER_NAME, CONSUMER_NAME, null).addValidator(MandatoryValidator.class);
+      consumerName = new UIFormStringInput("name", null).addValidator(MandatoryValidator.class);
       addUIFormInput(consumerName);
-      cache = new UIFormStringInput(CACHE_EXPIRATION, CACHE_EXPIRATION, null);
+      cache = new UIFormStringInput("cache", null);
       addUIFormInput(cache);
-      timeoutWS = new UIFormStringInput(TIMEOUT, TIMEOUT, null);
+      timeoutWS = new UIFormStringInput("timeout", null);
       addUIFormInput(timeoutWS);
-      wsdl = new UIFormStringInput(WSDL_URL, WSDL_URL, null);
+      wsdl = new UIFormStringInput("wsdl", null);
       addUIFormInput(wsdl);
+
+      // registration properties
+      localRegistration = addChild(UIRegistrationPropertiesGrid.class, null, "local");
+      localRegistration.setRendered(false);
+
+      expectedRegistration = addChild(UIRegistrationPropertiesGrid.class, null, "expected");
+      expectedRegistration.setRendered(false);
+
+      // actions
+      setActions(ACTIONS);
    }
 
    private String getConsumerName()
@@ -134,6 +152,24 @@ public class UIWsrpConsumerEditor extends UIForm
       cache.setValue(producerInfo.getExpirationCacheSeconds().toString());
       timeoutWS.setValue("" + producerInfo.getEndpointConfigurationInfo().getWSOperationTimeOut());
       wsdl.setValue(producerInfo.getEndpointConfigurationInfo().getWsdlDefinitionURL());
+
+      RegistrationInfo local = producerInfo.getRegistrationInfo();
+      Collection<RegistrationProperty> regProps = local.getRegistrationProperties().values();
+      ArrayList<RegistrationProperty> regPropsList = new ArrayList<RegistrationProperty>(regProps);
+      localRegistration.resetProps(regPropsList);
+
+      RegistrationInfo expected = producerInfo.getExpectedRegistrationInfo();
+      if (local != expected && expected != null)
+      {
+         regProps = expected.getRegistrationProperties().values();
+         regPropsList = new ArrayList<RegistrationProperty>(regProps);
+         expectedRegistration.resetProps(regPropsList);
+      }
+      else
+      {
+         expectedRegistration.setRendered(false);
+      }
+
       setNewConsumer(false);
    }
 

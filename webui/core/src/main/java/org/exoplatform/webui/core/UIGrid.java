@@ -49,8 +49,6 @@ public class UIGrid extends UIComponent
    /** An array of String representing the actions on each bean */
    protected String[] action_;
 
-   protected String classname_;
-
    protected String label_;
 
    protected boolean useAjax = true;
@@ -94,11 +92,6 @@ public class UIGrid extends UIComponent
    public List<?> getBeans() throws Exception
    {
       return uiIterator_.getCurrentPageData();
-   }
-
-   public String getName()
-   {
-      return classname_;
    }
 
    public String getLabel()

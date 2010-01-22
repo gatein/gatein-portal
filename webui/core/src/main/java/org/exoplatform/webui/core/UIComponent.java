@@ -21,12 +21,15 @@ package org.exoplatform.webui.core;
 
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.resolver.ResourceResolver;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.web.application.Parameter;
 import org.exoplatform.web.application.URLBuilder;
 import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.replication.api.annotations.Serialized;
 import org.exoplatform.webui.config.Component;
+import org.exoplatform.webui.core.lifecycle.Lifecycle;
 import org.exoplatform.webui.core.renderers.ValueRenderer;
 import org.exoplatform.webui.core.renderers.ValueRendererRegistry;
 import org.exoplatform.webui.event.Event;
@@ -41,6 +44,7 @@ import java.util.List;
 @Serialized
 abstract public class UIComponent
 {
+   private static final Log log = ExoLogger.getLogger("webui:UIComponent");
 
    final static public String OBJECTID = "objectId";
 
@@ -59,6 +63,7 @@ abstract public class UIComponent
    protected transient Component config;
 
    private transient ValueRendererRegistry rendererRegistry = new ValueRendererRegistry();
+   private static final Lifecycle DEFAULT_LIFECYCLE = new Lifecycle();
 
    public String getId()
    {
@@ -120,7 +125,7 @@ abstract public class UIComponent
    public void processDecode(WebuiRequestContext context) throws Exception
    {
       MonitorEvent<UIComponent> mevent = createMonitorEvent(Event.Phase.DECODE, context);
-      config.getUIComponentLifecycle().processDecode(this, context);
+      getLifecycle().processDecode(this, context);
       if (mevent != null)
       {
          mevent.setEndExecutionTime(System.currentTimeMillis());
@@ -131,7 +136,7 @@ abstract public class UIComponent
    public void processAction(WebuiRequestContext context) throws Exception
    {
       MonitorEvent<UIComponent> mevent = createMonitorEvent(Event.Phase.PROCESS, context);
-      config.getUIComponentLifecycle().processAction(this, context);
+      getLifecycle().processAction(this, context);
       if (mevent != null)
       {
          mevent.setEndExecutionTime(System.currentTimeMillis());
@@ -142,12 +147,22 @@ abstract public class UIComponent
    public void processRender(WebuiRequestContext context) throws Exception
    {
       MonitorEvent<UIComponent> mevent = createMonitorEvent(Event.Phase.RENDER, context);
-      config.getUIComponentLifecycle().processRender(this, context);
+      getLifecycle().processRender(this, context);
       if (mevent != null)
       {
          mevent.setEndExecutionTime(System.currentTimeMillis());
          mevent.broadcast();
       }
+   }
+
+   private Lifecycle getLifecycle() throws Exception
+   {
+      if (config == null)
+      {
+         log.debug("No config was found for " + getClass().getSimpleName() + " with id '" + id + "'. Using a default one.");
+         return DEFAULT_LIFECYCLE;
+      }
+      return config.getUIComponentLifecycle();
    }
 
    //  

@@ -1,16 +1,16 @@
 /**
  * Copyright (C) 2009 eXo Platform SAS.
- * 
+ *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation; either version 2.1 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this software; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
@@ -29,16 +29,11 @@ import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIContainer;
 
 import java.io.Writer;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-/**
- * Created by The eXo Platform SARL
- * Author : Dang Van Minh
- *          minhdv81@yahoo.com
- * Jun 6, 2006
- */
+/** Created by The eXo Platform SARL Author : Dang Van Minh minhdv81@yahoo.com Jun 6, 2006 */
 @Serialized
 public class UIForm extends UIContainer
 {
@@ -153,14 +148,18 @@ public class UIForm extends UIContainer
    public void invokeGetBindingBean(Object bean) throws Exception
    {
       if (beanMapping == null)
+      {
          beanMapping = ReflectionDataMapping.getInstance();
+      }
       beanMapping.mapField(this, bean);
    }
 
    public void invokeSetBindingBean(Object bean) throws Exception
    {
       if (beanMapping == null)
+      {
          beanMapping = ReflectionDataMapping.getInstance();
+      }
       beanMapping.mapBean(bean, this);
    }
 
@@ -173,9 +172,13 @@ public class UIForm extends UIContainer
       Writer writer = context.getWriter();
       writer.append("<form class=\"UIForm\" id=\"").append(getId()).append("\" action=\"").append(b).append('\"');
       if (submitAction_ != null)
+      {
          writer.append(" onsubmit=\"").append(submitAction_).append("\"");
+      }
       if (multipart_)
+      {
          writer.append(" enctype=\"multipart/form-data\"");
+      }
       writer.append(" method=\"post\">");
       writer.append("<div><input type=\"hidden\" name=\"").append(ACTION).append("\" value=\"\"/></div>");
    }
@@ -210,8 +213,10 @@ public class UIForm extends UIContainer
    public String[] getActions()
    {
       if (actions_ != null)
+      {
          return actions_;
-      ArrayList<Event> events = config.getEvents();
+      }
+      List<Event> events = config.getEvents();
       actions_ = new String[events.size()];
       for (int i = 0; i < actions_.length; i++)
       {
@@ -223,8 +228,7 @@ public class UIForm extends UIContainer
    public void renderField(String name) throws Exception
    {
       UIComponent uiInput = findComponentById(name);
-      WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
-      uiInput.processRender(context);
+      renderField(uiInput);
    }
 
    public void renderField(UIComponent uiInput) throws Exception
@@ -279,7 +283,9 @@ public class UIForm extends UIContainer
       UIComponent subComponent = findComponentById(componentId);
       org.exoplatform.webui.config.Event event = subComponent.getComponentConfig().getUIComponentEventConfig(name);
       if (event == null)
+      {
          return "??config??";
+      }
       String confirm = event.getConfirm();
       if (confirm != null && confirm.trim().length() > 0)
       {
@@ -293,7 +299,9 @@ public class UIForm extends UIContainer
       b.append(name).append("','");
       b.append("&amp;").append(SUBCOMPONENT_ID).append("=").append(componentId);
       if (beanId != null)
+      {
          b.append("&amp;").append(OBJECTID).append("=").append(beanId);
+      }
       b.append("')");
       return b.toString();
    }

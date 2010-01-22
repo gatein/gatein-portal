@@ -83,8 +83,8 @@ public class UIWsrpConsumerOverview extends UIContainer
 
       //setSelectedTab(1);
       consumerEditorPopup = addChild(UIPopupWindow.class, null, null);
-      consumerEditorPopup.setWindowSize(450, 0);
-      UIWsrpConsumerEditor consumerForm = createUIComponent(UIWsrpConsumerEditor.class, null, "Consumer Editor");
+      consumerEditorPopup.setWindowSize(800, 0);
+      UIWsrpConsumerEditor consumerForm = createUIComponent(UIWsrpConsumerEditor.class, null, "ConsumerEditor");
       consumerEditorPopup.setUIComponent(consumerForm);
       consumerEditorPopup.setRendered(false);
 

@@ -30,14 +30,12 @@ import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
-import org.exoplatform.webui.config.annotation.ComponentConfigs;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIGrid;
 import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
-import org.exoplatform.webui.core.renderers.ValueRenderer;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
@@ -48,7 +46,6 @@ import org.gatein.registration.RegistrationPolicy;
 import org.gatein.registration.policies.DefaultRegistrationPolicy;
 import org.gatein.wsrp.producer.config.ProducerConfigurationService;
 import org.gatein.wsrp.producer.config.ProducerRegistrationRequirements;
-import org.gatein.wsrp.registration.LocalizedString;
 import org.gatein.wsrp.registration.RegistrationPropertyDescription;
 
 import javax.xml.namespace.QName;
@@ -65,16 +62,13 @@ import java.util.ResourceBundle;
  * @author <a href="mailto:chris.laprun@jboss.com">Chris Laprun</a>
  * @version $Revision$
  */
-@ComponentConfigs({
-   @ComponentConfig(id = UIWsrpRegistrationDetails.REGISTRATION_PROPERTIES, type = UIGrid.class, template = "system:/groovy/webui/core/UIGrid.gtmpl"),
-   @ComponentConfig(
-      lifecycle = UIContainerLifecycle.class,
-      events = {
-         @EventConfig(listeners = UIWsrpRegistrationDetails.AddPropertyActionListener.class),
-         @EventConfig(listeners = UIWsrpRegistrationDetails.EditPropertyActionListener.class),
-         @EventConfig(listeners = UIWsrpRegistrationDetails.DeletePropertyActionListener.class)
-      })
-})
+@ComponentConfig(
+   lifecycle = UIContainerLifecycle.class,
+   events = {
+      @EventConfig(listeners = UIWsrpRegistrationDetails.AddPropertyActionListener.class),
+      @EventConfig(listeners = UIWsrpRegistrationDetails.EditPropertyActionListener.class),
+      @EventConfig(listeners = UIWsrpRegistrationDetails.DeletePropertyActionListener.class)
+   })
 public class UIWsrpRegistrationDetails extends UIFormInputSet
 {
    private UIFormInputBase<String> policy;
@@ -102,24 +96,12 @@ public class UIWsrpRegistrationDetails extends UIFormInputSet
       addUIFormInput(validator);
 
       // registration properties
-      registrationProperties = addChild(UIGrid.class, REGISTRATION_PROPERTIES, REGISTRATION_PROPERTIES);
-
-      // add renderer for LocalizedString
-      ValueRenderer<LocalizedString> renderer = new ValueRenderer<LocalizedString>()
-      {
-         @Override
-         public String render(LocalizedString value)
-         {
-            return value.getValue();
-         }
-      };
-      registrationProperties.registerRendererFor(renderer, LocalizedString.class);
+      registrationProperties = addChild(UIGrid.class, null, REGISTRATION_PROPERTIES);
 
       //configure the edit and delete buttons based on an id from the data list - this will also be passed as param to listener
       registrationProperties.configure(NAME, FIELDS, PROPERTIES_ACTIONS);
       registrationProperties.getUIPageIterator().setId(REGISTRATION_PROPERTIES_ITERATOR);
       registrationProperties.getUIPageIterator().setRendered(false);
-      addChild(registrationProperties.getUIPageIterator());
 
       init(getService().getConfiguration().getRegistrationRequirements());
 

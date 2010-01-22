@@ -1,16 +1,16 @@
 /**
  * Copyright (C) 2009 eXo Platform SAS.
- * 
+ *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation; either version 2.1 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this software; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
@@ -46,15 +46,16 @@ import java.util.Map;
 
 /**
  * May 10, 2006
- * 
+ * <p/>
  * Manages the ComponentConfig of a list of components.
+ *
  * @see ComponentConfig
  */
 public class ConfigurationManager
 {
    /**
     * todo (julien) : this map should be synchronized somehow
-    *
+    * <p/>
     * The components of which we manage the configuration
     */
    private Map<String, Component> configs_ = new HashMap<String, Component>();
@@ -62,7 +63,6 @@ public class ConfigurationManager
    private org.exoplatform.webui.config.Application application_;
 
    /**
-    * 
     * @param inputStream A stream that links the configuration file
     * @throws Exception
     */
@@ -87,7 +87,9 @@ public class ConfigurationManager
          {
             String key = component.getType();
             if (component.getId() != null)
+            {
                key = key + ":" + component.getId();
+            }
             configs_.put(key, component);
          }
       }
@@ -97,6 +99,7 @@ public class ConfigurationManager
 
    /**
     * Adds components to the list
+    *
     * @param configs An array of Component
     */
    void setComponentConfigs(Component[] configs)
@@ -105,13 +108,16 @@ public class ConfigurationManager
       {
          String key = component.getType();
          if (component.getId() != null)
+         {
             key = key + ":" + component.getId();
+         }
          configs_.put(key, component);
       }
    }
 
    /**
     * Gets the components of a given class
+    *
     * @param clazz The class of the components
     * @return the list of components
     */
@@ -123,25 +129,32 @@ public class ConfigurationManager
       for (Component comp : values)
       {
          if (comp.getType().equals(type))
+         {
             configs.add(comp);
+         }
       }
       return configs;
    }
 
    /**
     * Gets a component of a given class and identified by id
+    *
     * @param type The class of the component
-    * @param id The id of the component
+    * @param id   The id of the component
     * @return The component
     */
    public Component getComponentConfig(Class<?> type, String id)
    {
       String key = type.getName();
       if (id != null)
+      {
          key = key + ":" + id;
+      }
       Component config = configs_.get(key);
       if (config != null)
+      {
          return config;
+      }
       try
       {
          Component[] components = annotationToComponents(type);
@@ -161,7 +174,8 @@ public class ConfigurationManager
 
    /**
     * Gets an array of Component from a ComponentConfig annotation
-    * @param cl the classloader to create the annotation
+    *
+    * @param cl       the classloader to create the annotation
     * @param annClass the annotation class
     * @return The array of Component
     * @throws Exception
@@ -174,6 +188,7 @@ public class ConfigurationManager
 
    /**
     * Gets an array of Component from a ComponentConfig annotation
+    *
     * @param clazz The annotation class from which to get the ComponentConfig
     * @return The array of Component
     * @throws Exception
@@ -205,39 +220,71 @@ public class ConfigurationManager
    {
       Component config = new Component();
       if (annotation.id().length() > 0)
+      {
          config.setId(annotation.id());
+      }
 
       Class<?> type = annotation.type() == void.class ? clazz : annotation.type();
       config.setType(type.getName());
       if (annotation.template().length() > 0)
+      {
          config.setTemplate(annotation.template());
+      }
       if (annotation.lifecycle() != void.class)
+      {
          config.setLifecycle(annotation.lifecycle().getName());
+      }
       if (annotation.decorator().length() > 0)
+      {
          config.setDecorator(annotation.decorator());
+      }
       config.setInitParams(toInitParams(annotation.initParams()));
 
       EventConfig[] eventAnnotations = annotation.events();
-      ArrayList<Event> events = new ArrayList<Event>();
-      for (EventConfig eventAnnotation : eventAnnotations)
+      List<Event> events;
+      if (eventAnnotations.length != 0)
       {
-         events.add(toEventConfig(eventAnnotation));
+         events = new ArrayList<Event>();
+         for (EventConfig eventAnnotation : eventAnnotations)
+         {
+            events.add(toEventConfig(eventAnnotation));
+         }
+      }
+      else
+      {
+         events = Collections.emptyList();
       }
       config.setEvents(events);
 
       EventInterceptorConfig[] eventInterceptorAnnotations = annotation.eventInterceptors();
-      ArrayList<EventInterceptor> eventInterceptors = new ArrayList<EventInterceptor>();
-      for (EventInterceptorConfig eventAnnotation : eventInterceptorAnnotations)
+      List<EventInterceptor> eventInterceptors;
+      if (eventInterceptorAnnotations.length != 0)
       {
-         eventInterceptors.add(toEventInterceptorConfig(eventAnnotation));
+         eventInterceptors = new ArrayList<EventInterceptor>();
+         for (EventInterceptorConfig eventAnnotation : eventInterceptorAnnotations)
+         {
+            eventInterceptors.add(toEventInterceptorConfig(eventAnnotation));
+         }
+      }
+      else
+      {
+         eventInterceptors = Collections.emptyList();
       }
       config.setEventInterceptors(eventInterceptors);
 
       ValidatorConfig[] validatorAnnotations = annotation.validators();
-      ArrayList<Validator> validators = new ArrayList<Validator>();
-      for (ValidatorConfig ele : validatorAnnotations)
+      List<Validator> validators;
+      if (validatorAnnotations.length != 0)
       {
-         validators.add(toValidator(ele));
+         validators = new ArrayList<Validator>();
+         for (ValidatorConfig ele : validatorAnnotations)
+         {
+            validators.add(toValidator(ele));
+         }
+      }
+      else
+      {
+         validators = Collections.emptyList();
       }
       config.setValidators(validators);
 
@@ -264,7 +311,9 @@ public class ConfigurationManager
          String name = annotation.listeners()[0].getSimpleName();
          int idx = name.indexOf("ActionListener");
          if (idx > -1)
+         {
             name = name.substring(0, idx);
+         }
          event.setName(name);
       }
       event.setListeners(listeners);
@@ -293,7 +342,9 @@ public class ConfigurationManager
    private InitParams toInitParams(ParamConfig[] annotations)
    {
       if (annotations == null || annotations.length < 1)
+      {
          return null;
+      }
       ArrayList<Param> listParam = new ArrayList<Param>();
       for (ParamConfig ele : annotations)
       {

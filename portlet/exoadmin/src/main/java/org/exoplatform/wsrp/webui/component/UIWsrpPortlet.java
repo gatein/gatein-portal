@@ -26,8 +26,13 @@ import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.UITabPane;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
+import org.exoplatform.webui.core.renderers.ValueRendererRegistry;
 import org.exoplatform.wsrp.webui.component.consumer.UIWsrpConsumerOverview;
 import org.exoplatform.wsrp.webui.component.producer.UIWsrpProducerOverview;
+import org.exoplatform.wsrp.webui.component.renderers.LocalizedStringValueRenderer;
+import org.exoplatform.wsrp.webui.component.renderers.RegistrationDescriptionValueRenderer;
+import org.gatein.wsrp.registration.LocalizedString;
+import org.gatein.wsrp.registration.RegistrationPropertyDescription;
 
 /** @author Wesley Hales */
 @ComponentConfig(
@@ -35,6 +40,13 @@ import org.exoplatform.wsrp.webui.component.producer.UIWsrpProducerOverview;
 )
 public class UIWsrpPortlet extends UIPortletApplication
 {
+   static
+   {
+      // register value renderers
+      ValueRendererRegistry.registerDefaultRendererFor(new RegistrationDescriptionValueRenderer(), RegistrationPropertyDescription.class);
+      ValueRendererRegistry.registerDefaultRendererFor(new LocalizedStringValueRenderer(), LocalizedString.class);
+   }
+
    public UIWsrpPortlet() throws Exception
    {
       UITabPane uiTabPane = addChild(UITabPane.class, null, null);
