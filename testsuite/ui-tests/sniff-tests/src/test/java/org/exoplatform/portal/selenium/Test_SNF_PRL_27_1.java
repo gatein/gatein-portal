@@ -66,6 +66,7 @@ selenium.clickAt("link=View Page properties", "1,1");
 selenium.clickAt("//div[@id='UIMaskWorkspace']//div[3]//div[@class='MiddleTab']", "1,1");
 selenium.clickAt("link=Add Permission", "1,1");
 selenium.clickAt("link=Platform", "1,1");
+selenium.clickAt("link=Administrators", "1,1");
 selenium.clickAt("//div[@id='UIPageFormPopupGroupMembershipSelector']//div[@class='MembershipSelector']//a", "1,1");
 selenium.clickAt("link=Save", "1,1");
 selenium.clickAt("//div[@id='UIPageEditor']/div[1]/div/div/div/a[2]", "1,1");

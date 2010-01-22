@@ -17,6 +17,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>echo</td>
+	<td>-CategoryManagement-</td>
+	<td></td>
+</tr>
+<tr>
 	<td>click</td>
 	<td>link=Sign in</td>
 	<td></td>
@@ -37,9 +42,19 @@
 	<td></td>
 </tr>
 <tr>
+	<td>echo</td>
+	<td>--Select &quot;Application Registry&quot;</td>
+	<td></td>
+</tr>
+<tr>
 	<td>clickAt</td>
 	<td>link=Application Registry</td>
 	<td>1,1</td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>--Add Category</td>
+	<td></td>
 </tr>
 <tr>
 	<td>clickAt</td>
@@ -54,17 +69,22 @@
 <tr>
 	<td>type</td>
 	<td>name</td>
-	<td>category_test</td>
+	<td>test_name_category_10</td>
 </tr>
 <tr>
 	<td>type</td>
 	<td>displayName</td>
-	<td>Category test name</td>
+	<td>test_displayname_category_10</td>
 </tr>
 <tr>
 	<td>type</td>
 	<td>description</td>
-	<td>category test description</td>
+	<td>test_description_category_10</td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>--Select permissions</td>
+	<td></td>
 </tr>
 <tr>
 	<td>click</td>
@@ -112,6 +132,16 @@
 	<td></td>
 </tr>
 <tr>
+	<td>verifyTextPresent</td>
+	<td>test_displayname_category_10</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>--Edit Category</td>
+	<td></td>
+</tr>
+<tr>
 	<td>clickAt</td>
 	<td>//div[@id='UIApplicationOrganizer']//a[@class='ControlIcon EditIcon']</td>
 	<td>1,1</td>
@@ -124,7 +154,7 @@
 <tr>
 	<td>type</td>
 	<td>displayName</td>
-	<td>category test edit</td>
+	<td>test_displayname_edit_10</td>
 </tr>
 <tr>
 	<td>clickAt</td>
@@ -132,8 +162,28 @@
 	<td></td>
 </tr>
 <tr>
-	<td>waitForTextPresent</td>
-	<td>category test edit</td>
+	<td>verifyTextPresent</td>
+	<td>test_displayname_edit_10</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>--Delete Category</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>//div[@class='SelectedTab']//a[@class='ControlIcon DeleteIcon']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForConfirmation</td>
+	<td>Are you sure to delete this category and all applications on it?</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextNotPresent</td>
+	<td>test_displayname_edit_10</td>
 	<td></td>
 </tr>
 <tr>

@@ -17,6 +17,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>echo</td>
+	<td>-UserManagement-</td>
+	<td></td>
+</tr>
+<tr>
 	<td>click</td>
 	<td>link=Sign in</td>
 	<td></td>
@@ -77,6 +82,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>echo</td>
+	<td>--Edit fields</td>
+	<td></td>
+</tr>
+<tr>
 	<td>clickAt</td>
 	<td>//div[@id='UIListUsersGird']//tbody/tr[3]//td[5]//div//img</td>
 	<td></td>
@@ -89,7 +99,7 @@
 <tr>
 	<td>type</td>
 	<td>firstName</td>
-	<td>exo2</td>
+	<td>test_user_06</td>
 </tr>
 <tr>
 	<td>clickAt</td>
@@ -124,22 +134,17 @@
 <tr>
 	<td>type</td>
 	<td>user.name.given</td>
-	<td>test</td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>user.name.given</td>
-	<td>test05</td>
+	<td>test_name_given_06</td>
 </tr>
 <tr>
 	<td>type</td>
 	<td>user.name.family</td>
-	<td>test05family</td>
+	<td>test_name_family_06</td>
 </tr>
 <tr>
 	<td>type</td>
 	<td>user.name.nickName</td>
-	<td>testnick</td>
+	<td>test_name_nick_06</td>
 </tr>
 <tr>
 	<td>clickAt</td>
@@ -167,8 +172,13 @@
 	<td></td>
 </tr>
 <tr>
+	<td>echo</td>
+	<td>--Verify changes</td>
+	<td></td>
+</tr>
+<tr>
 	<td>verifyTextPresent</td>
-	<td>exo2</td>
+	<td>test_user_06</td>
 	<td></td>
 </tr>
 <tr>
@@ -177,7 +187,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>click</td>
+	<td>clickAt</td>
 	<td>link=Sign out</td>
 	<td></td>
 </tr>

@@ -10,11 +10,13 @@ setUp("http://localhost:8080/portal/", "*firefox");
 public void testSNF_PRL_07() throws Exception {
 selenium.setSpeed("500");
 selenium.open("/portal/public/classic/");
+System.out.println("-GroupManagement-");
 selenium.click("link=Sign in");
 selenium.type("username", "root");
 selenium.type("password", "gtn");
 selenium.click("//div[@id='UIPortalLoginFormAction']/div/div/div");
 selenium.waitForPageToLoad("30000");
+System.out.println("--Select \"Users and groups management\" in menu");
 for (int second = 0;; second++) {
 if (second >= 30) fail("timeout");
 try {
@@ -23,7 +25,7 @@ break; }
  catch (Exception e) {}
 Thread.sleep(1000);
 }
-selenium.click("link=Group");
+selenium.clickAt("link=Group", "1,1");
 for (int second = 0;; second++) {
 if (second >= 30) fail("timeout");
 try {
@@ -43,7 +45,9 @@ break; }
  catch (Exception e) {}
 Thread.sleep(1000);
 }
+System.out.println("--Select \"Organization\" group from group tree");
 selenium.clickAt("//div[@id='UIOrganizationPortlet']//div[3]//div[@class='ExpandIcon']/a", "1,1");
+System.out.println("--Select \"Management group\" from group tree");
 for (int second = 0;; second++) {
 if (second >= 30) fail("timeout");
 try {
@@ -53,6 +57,7 @@ break; }
 Thread.sleep(1000);
 }
 selenium.clickAt("//div[@id='UIOrganizationPortlet']//div[3]//div[@class='ExpandIcon']/a", "1,1");
+System.out.println("--Click Add new group icon");
 selenium.clickAt("//div[@id='UIOrganizationPortlet']//div[@class='TitleBar']/a[@class='TreeActionIcon AddGroupIcon']", "1,1");
 for (int second = 0;; second++) {
 if (second >= 30) fail("timeout");
@@ -62,18 +67,20 @@ break; }
  catch (Exception e) {}
 Thread.sleep(1000);
 }
-selenium.type("groupName", "testgroup");
-selenium.type("label", "testgroup label");
-selenium.type("description", "testgroup description");
+selenium.type("groupName", "test_group_name_07");
+selenium.type("label", "test_group_label_07");
+selenium.type("description", "test_group_description_07");
+System.out.println("--Click \"Save\" to complete adding new group");
 selenium.clickAt("//form[@id='UIGroupForm']//div[@class='ActionButton LightBlueStyle']", "1,1");
 for (int second = 0;; second++) {
 if (second >= 30) fail("timeout");
 try {
- if (selenium.isTextPresent("testgroup label")) 
+ if (selenium.isTextPresent("test_group_label_07")) 
 break; }
  catch (Exception e) {}
 Thread.sleep(1000);
 }
+System.out.println("--Click \"Select User\" icon");
 selenium.clickAt("//form[@id='UIGroupMembershipForm']//div[@class='HorizontalLayout']//table[@class='UIFormGrid']//td[@class='FieldComponent']/a", "1,1");
 for (int second = 0;; second++) {
 if (second >= 30) fail("timeout");
@@ -83,10 +90,11 @@ break; }
  catch (Exception e) {}
 Thread.sleep(1000);
 }
-selenium.click("demo");
-selenium.click("john");
-selenium.click("mary");
-selenium.click("root");
+selenium.clickAt("demo", "1,1");
+selenium.clickAt("john", "1,1");
+selenium.clickAt("mary", "1,1");
+selenium.clickAt("root", "1,1");
+System.out.println("--Click \"Add\" button");
 selenium.clickAt("//form[@id='UIUserSelector']//div[@class='UIAction']//a[@class='ActionButton LightBlueStyle']", "1,1");
 selenium.clickAt("link=Save", "1,1");
 assertTrue(selenium.isTextPresent("demo"));
@@ -101,7 +109,7 @@ break; }
  catch (Exception e) {}
 Thread.sleep(1000);
 }
-selenium.click("link=Sign out");
+selenium.clickAt("link=Sign out", "1,1");
 }
 
 }

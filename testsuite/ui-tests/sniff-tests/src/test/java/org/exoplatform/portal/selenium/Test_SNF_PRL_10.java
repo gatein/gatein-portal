@@ -10,12 +10,15 @@ setUp("http://localhost:8080/portal/", "*firefox");
 public void testSNF_PRL_10() throws Exception {
 selenium.setSpeed("500");
 selenium.open("/portal/public/classic/");
+System.out.println("-CategoryManagement-");
 selenium.click("link=Sign in");
 selenium.type("username", "root");
 selenium.type("password", "gtn");
 selenium.click("//div[@id='UIPortalLoginFormAction']/div/div/div");
 selenium.waitForPageToLoad("30000");
+System.out.println("--Select \"Application Registry\"");
 selenium.clickAt("link=Application Registry", "1,1");
+System.out.println("--Add Category");
 selenium.clickAt("//div[@id='UIApplicationOrganizer']//div[@class='UIControlbar']/div[1]", "1,1");
 for (int second = 0;; second++) {
 if (second >= 30) fail("timeout");
@@ -25,9 +28,10 @@ break; }
  catch (Exception e) {}
 Thread.sleep(1000);
 }
-selenium.type("name", "category_test");
-selenium.type("displayName", "Category test name");
-selenium.type("description", "category test description");
+selenium.type("name", "test_name_category_10");
+selenium.type("displayName", "test_displayname_category_10");
+selenium.type("description", "test_description_category_10");
+System.out.println("--Select permissions");
 selenium.click("//div[@class='WorkingArea']//div[@class='TabsContainer']/div[2]//div[@class='MiddleTab']");
 for (int second = 0;; second++) {
 if (second >= 30) fail("timeout");
@@ -65,6 +69,8 @@ break; }
  catch (Exception e) {}
 Thread.sleep(1000);
 }
+assertTrue(selenium.isTextPresent("test_displayname_category_10"));
+System.out.println("--Edit Category");
 selenium.clickAt("//div[@id='UIApplicationOrganizer']//a[@class='ControlIcon EditIcon']", "1,1");
 for (int second = 0;; second++) {
 if (second >= 30) fail("timeout");
@@ -74,16 +80,23 @@ break; }
  catch (Exception e) {}
 Thread.sleep(1000);
 }
-selenium.type("displayName", "category test edit");
+selenium.type("displayName", "test_displayname_edit_10");
 selenium.clickAt("link=Save", "1,1");
+assertTrue(selenium.isTextPresent("test_displayname_edit_10"));
+System.out.println("--Delete Category");
+selenium.clickAt("//div[@class='SelectedTab']//a[@class='ControlIcon DeleteIcon']", "1,1");
 for (int second = 0;; second++) {
 if (second >= 30) fail("timeout");
 try {
- if (selenium.isTextPresent("category test edit")) 
-break; }
- catch (Exception e) {}
+if (selenium.getConfirmation().equals("Are you sure to delete this category and all applications on it?")) {
+break;
+}
+}
+catch (Exception e) {
+}
 Thread.sleep(1000);
 }
+assertFalse(selenium.isTextPresent("test_displayname_edit_10"));
 for (int second = 0;; second++) {
 if (second >= 30) fail("timeout");
 try {

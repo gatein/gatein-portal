@@ -4,16 +4,26 @@
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="selenium.base" href="" />
-<title>CreateNewPortal</title>
+<title>SNF_PRL_18</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">CreateNewPortal</td></tr>
+<tr><td rowspan="1" colspan="3">SNF_PRL_18</td></tr>
 </thead><tbody>
-<!--tr>
+<tr>
 	<td>open</td>
-	<td>/portal/private/classic/portalnavigation</td>
+	<td>/portal/public/classic/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>-CreateNewPortal-</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>link=Sign in</td>
 	<td></td>
 </tr>
 <tr>
@@ -28,44 +38,56 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>link=Sign in</td>
+	<td>//div[@id='UIPortalLoginFormAction']/div/div/div</td>
 	<td></td>
-</tr-->
+</tr>
 <tr>
 	<td>open</td>
 	<td>/portal/private/classic/portalnavigation</td>
 	<td></td>
 </tr>
-<!--Click "Add new Portal" button-->
+<tr>
+	<td>echo</td>
+	<td>--Add new portal</td>
+	<td></td>
+</tr>
 <tr>
 	<td>clickAt</td>
 	<td>//div[@id='UISiteManagement']//div[@class='UIAction']//div[@class='ActionButton BlueButton']</td>
 	<td></td>
 </tr>
-<!--Select "Portal Settings" tab-->
+<tr>
+	<td>echo</td>
+	<td>--Select portal settings</td>
+	<td></td>
+</tr>
 <tr>
 	<td>waitForElementPresent</td>
 	<td>//div[@id='UIMaskWorkspace']//div[@class='TabsContainer']/div[2]//div[@class='MiddleTab']</td>
 	<td></td>
 </tr>
 <tr>
-	<td>click</td>
+	<td>clickAt</td>
 	<td>//div[@id='UIMaskWorkspace']//div[@class='TabsContainer']/div[2]//div[@class='MiddleTab']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>type</td>
 	<td>name</td>
-	<td>New_portal</td>
+	<td>test_portal_18</td>
 </tr>
-<!--Select "Permission Setting" tab-->
 <tr>
-	<td>click</td>
+	<td>echo</td>
+	<td>--Select permission settings</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
 	<td>//div[@id='UIMaskWorkspace']//div[@class='TabsContainer']/div[4]//div[@class='MiddleTab']</td>
 	<td></td>
 </tr>
 <tr>
-	<td>click</td>
+	<td>clickAt</td>
 	<td>publicMode</td>
 	<td></td>
 </tr>
@@ -111,14 +133,54 @@
 </tr>
 <tr>
 	<td>waitForTextPresent</td>
-	<td>New_portal</td>
+	<td>test_portal_18</td>
 	<td></td>
 </tr>
-<!--tr>
-	<td>click</td>
+<tr>
+	<td>echo</td>
+	<td>--Verify portal creation</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>link=test_portal_18</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>--Delete new portal</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>link=Site</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Portal Navigation</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>//div[@id='UISiteManagement']/table[2]//a[@class='DeleteIcon']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextNotPresent</td>
+	<td>test_portal_18</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForConfirmation</td>
+	<td>Are you sure you want to delete this portal?</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
 	<td>link=Sign out</td>
 	<td></td>
-</tr-->
+</tr>
 
 </tbody></table>
 </body>

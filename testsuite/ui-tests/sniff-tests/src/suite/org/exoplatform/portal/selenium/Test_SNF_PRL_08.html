@@ -17,6 +17,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>echo</td>
+	<td>-MembershipManagement-</td>
+	<td></td>
+</tr>
+<tr>
 	<td>click</td>
 	<td>link=Sign in</td>
 	<td></td>
@@ -37,6 +42,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>echo</td>
+	<td>--Select &quot;Users and groups management&quot; in menu</td>
+	<td></td>
+</tr>
+<tr>
 	<td>waitForElementPresent</td>
 	<td>link=Group</td>
 	<td></td>
@@ -56,21 +66,30 @@
 	<td>link=Users and groups management</td>
 	<td></td>
 </tr>
-<!--Choose "Memebership Management" tab-->
+<tr>
+	<td>echo</td>
+	<td>--Choose &quot;Memebership Management&quot; tab</td>
+	<td></td>
+</tr>
 <tr>
 	<td>clickAt</td>
 	<td>//div[@id='UIOrganizationPortlet']//div[@class='ManagementIconContainer']/a[@class='MembershipButton']</td>
 	<td></td>
 </tr>
 <tr>
+	<td>echo</td>
+	<td>--Create new membership</td>
+	<td></td>
+</tr>
+<tr>
 	<td>type</td>
 	<td>name</td>
-	<td>demomembership</td>
+	<td>test_name_08</td>
 </tr>
 <tr>
 	<td>type</td>
 	<td>description</td>
-	<td>demo scripts</td>
+	<td>test_description_08</td>
 </tr>
 <tr>
 	<td>clickAt</td>
@@ -79,18 +98,28 @@
 </tr>
 <tr>
 	<td>waitForTextPresent</td>
-	<td>demomembership</td>
+	<td>test_name_08</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>test_name_08</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>--Edit membership</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAt</td>
-	<td>//table[@class='UIGrid']//tbody/tr[3]/td[5]//img</td>
+	<td>//table[@class='UIGrid']//tbody/tr[2]/td[5]//img[@class='EditMembershipIcon']</td>
 	<td>1,1</td>
 </tr>
 <tr>
 	<td>type</td>
 	<td>description</td>
-	<td>demo scripts add more text</td>
+	<td>test_description_edit_08</td>
 </tr>
 <tr>
 	<td>clickAt</td>
@@ -99,7 +128,27 @@
 </tr>
 <tr>
 	<td>waitForTextPresent</td>
-	<td>demo scripts add more text</td>
+	<td>test_description_edit_08</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>test_description_edit_08</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>--Delete membership</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>//table[@class='UIGrid']//tbody/tr[2]/td[5]//img[@class='DeleteMembershipIcon']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForConfirmation</td>
+	<td>Are you sure you want to delete this membership?</td>
 	<td></td>
 </tr>
 <tr>

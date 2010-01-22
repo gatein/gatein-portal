@@ -19,3 +19,11 @@ Informations:
 ** One Test per Selenium test
 ** One Test_all.java test which is a all in one (because currently the tests execution order is important) -- should not be the case
 
+****************************
+Running the tests in Eclipse
+****************************
+* Install SeleniumRC from http://seleniumhq.org/download/
+** Probably http://release.seleniumhq.org/selenium-remote-control/1.0.1/selenium-remote-control-1.0.1-dist.zip
+* Start a Selenium Server
+** java -jar selenium-server.jar -interactive
+* In Eclipse run you tests like classical JUnit tests

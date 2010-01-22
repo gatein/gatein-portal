@@ -17,6 +17,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>echo</td>
+	<td>-GroupManagement-</td>
+	<td></td>
+</tr>
+<tr>
 	<td>click</td>
 	<td>link=Sign in</td>
 	<td></td>
@@ -37,12 +42,17 @@
 	<td></td>
 </tr>
 <tr>
+	<td>echo</td>
+	<td>--Select &quot;Users and groups management&quot; in menu</td>
+	<td></td>
+</tr>
+<tr>
 	<td>waitForElementPresent</td>
 	<td>link=Group</td>
 	<td></td>
 </tr>
 <tr>
-	<td>click</td>
+	<td>clickAt</td>
 	<td>link=Group</td>
 	<td></td>
 </tr>
@@ -66,13 +76,21 @@
 	<td>//div[@id='UIOrganizationPortlet']/div[2]/div[2]/div[1]/div[2]/div[1]/div[2]/div/div/div/div[3]/div/a</td>
 	<td></td>
 </tr>
-<!--Select "Organization" group from group tree-->
+<tr>
+	<td>echo</td>
+	<td>--Select &quot;Organization&quot; group from group tree</td>
+	<td></td>
+</tr>
 <tr>
 	<td>clickAt</td>
 	<td>//div[@id='UIOrganizationPortlet']//div[3]//div[@class='ExpandIcon']/a</td>
 	<td></td>
 </tr>
-<!--Select "Management group" from group tree-->
+<tr>
+	<td>echo</td>
+	<td>--Select &quot;Management group&quot; from group tree</td>
+	<td></td>
+</tr>
 <tr>
 	<td>waitForTextPresent</td>
 	<td>Management</td>
@@ -83,7 +101,11 @@
 	<td>//div[@id='UIOrganizationPortlet']//div[3]//div[@class='ExpandIcon']/a</td>
 	<td></td>
 </tr>
-<!--Click Add new group icon-->
+<tr>
+	<td>echo</td>
+	<td>--Click Add new group icon</td>
+	<td></td>
+</tr>
 <tr>
 	<td>clickAt</td>
 	<td>//div[@id='UIOrganizationPortlet']//div[@class='TitleBar']/a[@class='TreeActionIcon AddGroupIcon']</td>
@@ -97,19 +119,23 @@
 <tr>
 	<td>type</td>
 	<td>groupName</td>
-	<td>testgroup</td>
+	<td>test_group_name_07</td>
 </tr>
 <tr>
 	<td>type</td>
 	<td>label</td>
-	<td>testgroup label</td>
+	<td>test_group_label_07</td>
 </tr>
 <tr>
 	<td>type</td>
 	<td>description</td>
-	<td>testgroup description</td>
+	<td>test_group_description_07</td>
 </tr>
-<!--Click "Save" to complete adding new group-->
+<tr>
+	<td>echo</td>
+	<td>--Click &quot;Save&quot; to complete adding new group</td>
+	<td></td>
+</tr>
 <tr>
 	<td>clickAt</td>
 	<td>//form[@id='UIGroupForm']//div[@class='ActionButton LightBlueStyle']</td>
@@ -117,10 +143,14 @@
 </tr>
 <tr>
 	<td>waitForTextPresent</td>
-	<td>testgroup label</td>
+	<td>test_group_label_07</td>
 	<td></td>
 </tr>
-<!--Click "Select User" icon-->
+<tr>
+	<td>echo</td>
+	<td>--Click &quot;Select User&quot; icon</td>
+	<td></td>
+</tr>
 <tr>
 	<td>clickAt</td>
 	<td>//form[@id='UIGroupMembershipForm']//div[@class='HorizontalLayout']//table[@class='UIFormGrid']//td[@class='FieldComponent']/a</td>
@@ -132,26 +162,30 @@
 	<td></td>
 </tr>
 <tr>
-	<td>click</td>
+	<td>clickAt</td>
 	<td>demo</td>
 	<td></td>
 </tr>
 <tr>
-	<td>click</td>
+	<td>clickAt</td>
 	<td>john</td>
 	<td></td>
 </tr>
 <tr>
-	<td>click</td>
+	<td>clickAt</td>
 	<td>mary</td>
 	<td></td>
 </tr>
 <tr>
-	<td>click</td>
+	<td>clickAt</td>
 	<td>root</td>
 	<td></td>
 </tr>
-<!--Click "Add" button-->
+<tr>
+	<td>echo</td>
+	<td>--Click &quot;Add&quot; button</td>
+	<td></td>
+</tr>
 <tr>
 	<td>clickAt</td>
 	<td>//form[@id='UIUserSelector']//div[@class='UIAction']//a[@class='ActionButton LightBlueStyle']</td>
@@ -188,7 +222,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>click</td>
+	<td>clickAt</td>
 	<td>link=Sign out</td>
 	<td></td>
 </tr>

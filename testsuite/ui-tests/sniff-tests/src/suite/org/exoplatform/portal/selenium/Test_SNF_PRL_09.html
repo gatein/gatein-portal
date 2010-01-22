@@ -17,7 +17,12 @@
 	<td></td>
 </tr>
 <tr>
-	<td>click</td>
+	<td>echo</td>
+	<td>-AutoImport-</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
 	<td>link=Sign in</td>
 	<td></td>
 </tr>
@@ -37,6 +42,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>echo</td>
+	<td>--Select &quot;Application Registry&quot;</td>
+	<td></td>
+</tr>
+<tr>
 	<td>clickAt</td>
 	<td>link=Application Registry</td>
 	<td>1,1</td>
@@ -47,8 +57,13 @@
 	<td></td>
 </tr>
 <tr>
-	<td>chooseOkOnNextConfirmation</td>
+	<td>echo</td>
+	<td>--Auto Import</td>
 	<td></td>
+</tr>
+<tr>
+	<td>verifyTextNotPresent</td>
+	<td>WSRP Admin Portlet</td>
 	<td></td>
 </tr>
 <tr>
@@ -62,8 +77,8 @@
 	<td></td>
 </tr>
 <tr>
-	<td>echo</td>
-	<td>!! missing assert !!</td>
+	<td>verifyTextPresent</td>
+	<td>WSRP Admin Portlet</td>
 	<td></td>
 </tr>
 <tr>
@@ -72,7 +87,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>click</td>
+	<td>clickAt</td>
 	<td>link=Sign out</td>
 	<td></td>
 </tr>

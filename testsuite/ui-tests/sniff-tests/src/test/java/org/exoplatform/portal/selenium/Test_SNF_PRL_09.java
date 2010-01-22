@@ -10,11 +10,13 @@ setUp("http://localhost:8080/portal/", "*firefox");
 public void testSNF_PRL_09() throws Exception {
 selenium.setSpeed("500");
 selenium.open("/portal/public/classic/");
-selenium.click("link=Sign in");
+System.out.println("-AutoImport-");
+selenium.clickAt("link=Sign in", "1,1");
 selenium.type("username", "root");
 selenium.type("password", "gtn");
 selenium.click("//div[@id='UIPortalLoginFormAction']/div/div/div");
 selenium.waitForPageToLoad("30000");
+System.out.println("--Select \"Application Registry\"");
 selenium.clickAt("link=Application Registry", "1,1");
 for (int second = 0;; second++) {
 if (second >= 30) fail("timeout");
@@ -24,10 +26,11 @@ break; }
  catch (Exception e) {}
 Thread.sleep(1000);
 }
-selenium.chooseOkOnNextConfirmation();
+System.out.println("--Auto Import");
+assertFalse(selenium.isTextPresent("WSRP Admin Portlet"));
 selenium.clickAt("//div[@id='UIApplicationOrganizer']//div[@class='UIControlbar']//div[@class='IconControl ImportIcon']", "1,1");
 String autoimport = selenium.getConfirmation();
-System.out.println("!! missing assert !!");
+assertTrue(selenium.isTextPresent("WSRP Admin Portlet"));
 for (int second = 0;; second++) {
 if (second >= 30) fail("timeout");
 try {
@@ -36,7 +39,7 @@ break; }
  catch (Exception e) {}
 Thread.sleep(1000);
 }
-selenium.click("link=Sign out");
+selenium.clickAt("link=Sign out", "1,1");
 }
 
 }

@@ -10,6 +10,7 @@ setUp("http://localhost:8080/portal/", "*firefox");
 public void testSNF_PRL_04() throws Exception {
 selenium.setSpeed("500");
 selenium.open("/portal/public/classic/");
+System.out.println("-SignInOut-");
 selenium.click("link=Sign in");
 for (int second = 0;; second++) {
 if (second >= 30) fail("timeout");
@@ -31,14 +32,7 @@ break; }
 Thread.sleep(1000);
 }
 selenium.click("link=Sign out");
-for (int second = 0;; second++) {
-if (second >= 30) fail("timeout");
-try {
- if (selenium.isElementPresent("link=Sign in")) 
-break; }
- catch (Exception e) {}
-Thread.sleep(1000);
-}
+assertTrue(selenium.isElementPresent("link=Sign in"));
 }
 
 }

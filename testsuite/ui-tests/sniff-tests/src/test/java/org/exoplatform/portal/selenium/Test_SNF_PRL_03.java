@@ -10,6 +10,7 @@ setUp("http://localhost:8080/portal/", "*firefox");
 public void testSNF_PRL_03() throws Exception {
 selenium.setSpeed("500");
 selenium.open("/portal/public/classic/");
+System.out.println("-Change Language-");
 selenium.clickAt("//a[@class='Language']", "1,1");
 for (int second = 0;; second++) {
 if (second >= 30) fail("timeout");
@@ -42,6 +43,7 @@ Thread.sleep(1000);
 selenium.clickAt("//div[@id='UITabContent']//div[2]/a", "1,1");
 selenium.click("link=Áp d?ng");
 selenium.waitForPageToLoad("30000");
+assertTrue(selenium.isElementPresent("link=Sign in"));
 }
 
 }

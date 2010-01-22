@@ -10,6 +10,7 @@ setUp("http://localhost:8080/portal/", "*firefox");
 public void testSNF_PRL_06() throws Exception {
 selenium.setSpeed("500");
 selenium.open("/portal/public/classic/");
+System.out.println("-UserManagement-");
 selenium.click("link=Sign in");
 selenium.type("username", "root");
 selenium.type("password", "gtn");
@@ -45,6 +46,7 @@ Thread.sleep(1000);
 assertTrue(selenium.isTextPresent("Last Name"));
 assertTrue(selenium.isTextPresent("First Name"));
 assertTrue(selenium.isTextPresent("Email"));
+System.out.println("--Edit fields");
 selenium.clickAt("//div[@id='UIListUsersGird']//tbody/tr[3]//td[5]//div//img", "1,1");
 for (int second = 0;; second++) {
 if (second >= 30) fail("timeout");
@@ -54,7 +56,7 @@ break; }
  catch (Exception e) {}
 Thread.sleep(1000);
 }
-selenium.type("firstName", "exo2");
+selenium.type("firstName", "test_user_06");
 selenium.clickAt("link=Save", "1,1");
 for (int second = 0;; second++) {
 if (second >= 30) fail("timeout");
@@ -82,10 +84,9 @@ break; }
  catch (Exception e) {}
 Thread.sleep(1000);
 }
-selenium.type("user.name.given", "test");
-selenium.type("user.name.given", "test05");
-selenium.type("user.name.family", "test05family");
-selenium.type("user.name.nickName", "testnick");
+selenium.type("user.name.given", "test_name_given_06");
+selenium.type("user.name.family", "test_name_family_06");
+selenium.type("user.name.nickName", "test_name_nick_06");
 selenium.clickAt("link=Save", "1,1");
 for (int second = 0;; second++) {
 if (second >= 30) fail("timeout");
@@ -98,7 +99,8 @@ Thread.sleep(1000);
 assertTrue(selenium.isTextPresent("The user profile has been updated."));
 selenium.clickAt("css=div#UIOrganizationPortlet div.ManagementTabContent &gt; div.UIPopupWindow div.ActionButton", "1,1");
 selenium.clickAt("link=Cancel", "1,1");
-assertTrue(selenium.isTextPresent("exo2"));
+System.out.println("--Verify changes");
+assertTrue(selenium.isTextPresent("test_user_06"));
 for (int second = 0;; second++) {
 if (second >= 30) fail("timeout");
 try {
@@ -107,7 +109,7 @@ break; }
  catch (Exception e) {}
 Thread.sleep(1000);
 }
-selenium.click("link=Sign out");
+selenium.clickAt("link=Sign out", "1,1");
 }
 
 }

@@ -9,12 +9,16 @@ setUp("http://localhost:8080/portal/", "*firefox");
 
 public void testSNF_PRL_19() throws Exception {
 selenium.setSpeed("500");
-selenium.click("link=Sign in");
+selenium.open("/portal/public/classic/");
+System.out.println("-EditPortalNavigation-");
+selenium.clickAt("link=Sign in", "1,1");
 selenium.type("username", "root");
 selenium.type("password", "gtn");
-selenium.open("/portal/private/classic/");
+selenium.click("//div[@id='UIPortalLoginFormAction']/div/div/div");
+selenium.waitForPageToLoad("30000");
 selenium.click("link=Site");
 selenium.waitForPageToLoad("30000");
+System.out.println("--Edit Portal layout, currently do not change anything");
 for (int second = 0;; second++) {
 if (second >= 30) fail("timeout");
 try {
@@ -41,7 +45,7 @@ break; }
  catch (Exception e) {}
 Thread.sleep(1000);
 }
-selenium.clickAt("//div[@id='UIPortalComposer']//div[@class='OverflowContainer']/a[@class='EdittedSaveButton']", "1,1");
+selenium.clickAt("//div[@id='UIPortalComposer']//div[@class='OverflowContainer']/a[@class='CloseButton']", "1,1");
 for (int second = 0;; second++) {
 if (second >= 30) fail("timeout");
 try {
@@ -50,6 +54,7 @@ break; }
  catch (Exception e) {}
 Thread.sleep(1000);
 }
+System.out.println("--Edit nav: add node, actions ...");
 selenium.clickAt("link=Edit Navigation", "1,1");
 for (int second = 0;; second++) {
 if (second >= 30) fail("timeout");
@@ -68,8 +73,9 @@ break; }
  catch (Exception e) {}
 Thread.sleep(1000);
 }
-selenium.type("name", "Node_test");
-selenium.type("label", "New node");
+selenium.type("name", "test_nodename_19");
+selenium.type("label", "test_node_label_19");
+System.out.println("--Select Page");
 selenium.clickAt("css=div#UISiteManagement &gt; div.UIPopupWindow div.TabsContainer div.NormalTab div.MiddleTab", "1,1");
 for (int second = 0;; second++) {
 if (second >= 30) fail("timeout");
@@ -80,6 +86,7 @@ break; }
 Thread.sleep(1000);
 }
 selenium.clickAt("link=Search and Select Page", "1,1");
+System.out.println("--Select the first page");
 for (int second = 0;; second++) {
 if (second >= 30) fail("timeout");
 try {
@@ -89,8 +96,10 @@ break; }
 Thread.sleep(1000);
 }
 selenium.click("//div[@id='UIRepeater']//table//tbody/tr/td[5]/div[@class='ActionContainer']/img");
+System.out.println("--Save");
 selenium.clickAt("link=Save", "1,1");
 selenium.clickAt("link=Save", "1,1");
+System.out.println("--Edit Portal Properties");
 selenium.clickAt("link=Edit Portal's Properties", "1,1");
 for (int second = 0;; second++) {
 if (second >= 30) fail("timeout");
@@ -137,12 +146,31 @@ break; }
 Thread.sleep(1000);
 }
 selenium.clickAt("link=Administrators", "1,1");
-selenium.clickAt("link=Platform", "1,1");
-selenium.clickAt("link=Administrators", "1,1");
 selenium.clickAt("//div[@id='PermissionSelector']//div[2]/a", "1,1");
 selenium.clickAt("//form[@id='UIPortalForm']//div[@class='UIAction']//div[@class='ActionButton LightBlueStyle']", "1,1");
 selenium.open("/portal/private/classic/");
-selenium.clickAt("link=New node", "1,1");
+System.out.println("--Select new node");
+selenium.clickAt("link=test_node_label_19", "1,1");
+assertTrue(selenium.isElementPresent("//div[@class='SelectedNavigationTab']//a"));
+selenium.clickAt("link=Site", "1,1");
+selenium.clickAt("link=Edit Navigation", "1,1");
+selenium.click("link=Delete Node");
+for (int second = 0;; second++) {
+if (second >= 30) fail("timeout");
+try {
+if (selenium.getConfirmation().equals("Are you sure you want to delete this node?")) {
+break;
+}
+}
+catch (Exception e) {
+}
+Thread.sleep(1000);
+}
+selenium.click("link=Save");
+System.out.println("--Verify Deletion");
+selenium.click("link=Home");
+assertFalse(selenium.isTextPresent("test_node_label_19"));
+selenium.clickAt("link=Sign out", "1,1");
 }
 
 }

@@ -4,16 +4,26 @@
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="selenium.base" href="" />
-<title>SiteMapAndLinkToPage</title>
+<title>SNF_PRL_15</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">SiteMapAndLinkToPage</td></tr>
+<tr><td rowspan="1" colspan="3">SNF_PRL_15</td></tr>
 </thead><tbody>
-<!--tr>
+<tr>
 	<td>open</td>
-	<td>/portal/private/classic/sitemap</td>
+	<td>/portal/public/classic/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>-SiteMapAndLinkToPage-</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>link=Sign in</td>
 	<td></td>
 </tr>
 <tr>
@@ -28,53 +38,29 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>link=Sign in</td>
+	<td>//div[@id='UIPortalLoginFormAction']/div/div/div</td>
 	<td></td>
-</tr-->
+</tr>
 <tr>
 	<td>open</td>
 	<td>/portal/private/classic/sitemap</td>
 	<td></td>
 </tr>
-<!--Expand All-->
 <tr>
-	<td>clickAt</td>
-	<td>//div[@id='UISiteMap']//div[@class='ClearFix']/div[2]</td>
-	<td>1,1</td>
-</tr>
-<tr>
-	<td>waitForTextPresent</td>
-	<td>Blog</td>
+	<td>echo</td>
+	<td>--Expand the first submenu</td>
 	<td></td>
 </tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>New Staff</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>Application Registry</td>
-	<td></td>
-</tr>
-<!--Collapse All-->
-<tr>
-	<td>clickAt</td>
-	<td>//div[@id='UISiteMap']//div[@class='ClearFix']/div[1]</td>
-	<td>1,1</td>
-</tr>
-<tr>
-	<td>waitForTextNotPresent</td>
-	<td>Blog</td>
-	<td></td>
-</tr>
-<!--Expand the first submenu-->
 <tr>
 	<td>clickAt</td>
 	<td>css=div#UISiteMap div.ExpandIcon</td>
 	<td>1,1</td>
 </tr>
-<!--Select the first link of the first submenu-->
+<tr>
+	<td>echo</td>
+	<td>--Select the first link of submenu</td>
+	<td></td>
+</tr>
 <tr>
 	<td>clickAt</td>
 	<td>css=div#UISiteMap div.ChildrenContainer a</td>
@@ -85,11 +71,11 @@
 	<td>css=div#UISiteMap div.ChildrenContainer a</td>
 	<td></td>
 </tr>
-<!--tr>
-	<td>click</td>
+<tr>
+	<td>clickAt</td>
 	<td>link=Sign out</td>
 	<td></td>
-</tr-->
+</tr>
 
 </tbody></table>
 </body>

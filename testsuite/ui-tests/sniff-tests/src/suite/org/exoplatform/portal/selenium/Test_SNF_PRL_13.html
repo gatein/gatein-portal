@@ -4,13 +4,48 @@
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="selenium.base" href="" />
-<title>AddGadget</title>
+<title>SNF_PRL_13</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">AddGadget</td></tr>
+<tr><td rowspan="1" colspan="3">SNF_PRL_13</td></tr>
 </thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/portal/public/classic/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>-AddGadget-</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>link=Sign in</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>username</td>
+	<td>root</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>password</td>
+	<td>gtn</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//div[@id='UIPortalLoginFormAction']/div/div/div</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>link=Application Registry</td>
+	<td>1,1</td>
+</tr>
 <tr>
 	<td>clickAt</td>
 	<td>link=Gadget</td>
@@ -34,7 +69,7 @@
 <tr>
 	<td>type</td>
 	<td>url</td>
-	<td>http://www.google.com/ig/modules/colorjunction.xml</td>
+	<td>http://www.google.com/ig/modules/datetime.xml</td>
 </tr>
 <tr>
 	<td>clickAt</td>
@@ -59,6 +94,16 @@
 <tr>
 	<td>verifyTextPresent</td>
 	<td>Gadget Details</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Sign out</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>link=Sign out</td>
 	<td></td>
 </tr>
 
