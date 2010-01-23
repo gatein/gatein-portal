@@ -31,7 +31,7 @@
     <init-params>
       <value-param profiles="tomcat">
         <name>properties.url</name>
-        <value>jar:/conf/configuration.properties</value>
+        <value>jar:/conf/configuration-tomcat.properties</value>
       </value-param>
       <value-param profiles="jboss">
         <name>properties.url</name>
