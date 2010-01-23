@@ -41,11 +41,13 @@
         <property name="hibernate.cglib.use_reflection_optimizer" value="true"/>
         <property name="hibernate.connection.datasource" value="${gatein.datasource.name}${container.name.suffix}"/>
         <property name="hibernate.connection.autocommit" value="true"/>
-        <property name="hibernate.dialect" value="org.hibernate.dialect.HSQLDialect"/>
+        <property name="hibernate.dialect" value="${gatein.datasource.dialect.hibernate}"/>
+<!--
         <property name="hibernate.c3p0.min_size" value="5"/>
         <property name="hibernate.c3p0.max_size" value="20"/>
         <property name="hibernate.c3p0.timeout" value="1800"/>
         <property name="hibernate.c3p0.max_statements" value="50"/>
+-->
       </properties-param>
     </init-params>
   </component>
