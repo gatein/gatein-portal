@@ -3,12 +3,18 @@ package org.exoplatform.portal.selenium;
 import com.thoughtworks.selenium.*;
 import java.util.regex.Pattern;
 public class Test_SNF_PRL_20 extends SeleneseTestCase {
+public String speed = "1000";
+public String browser = "firefox";
+public void setSpeed() {
+selenium.setSpeed(speed);
+}
+
 public void setUp() throws Exception {
-setUp("http://localhost:8080/portal/", "*firefox");
+setUp("http://localhost:8080/portal/", "*" + browser);
 }
 
 public void testSNF_PRL_20() throws Exception {
-selenium.setSpeed("500");
+setSpeed();
 selenium.open("/portal/public/classic/");
 System.out.println("-DeletePortal-");
 selenium.clickAt("link=Sign in", "1,1");
@@ -27,10 +33,10 @@ break; }
 Thread.sleep(1000);
 }
 selenium.clickAt("link=Add New Portal", "1,1");
-selenium.clickAt("//div[@onclick=\"eXo.webui.UIHorizontalTabs.changeTabForUIFormTabpane(this, 'UIPortalForm', 'PortalSetting');javascript:eXo.webui.UIForm.submitEvent('UIPortalForm','SelectTab','&amp;objectId=PortalSetting')\"]", "1,1");
+selenium.clickAt("//div[@onclick=\"eXo.webui.UIHorizontalTabs.changeTabForUIFormTabpane(this, 'UIPortalForm', 'PortalSetting');javascript:eXo.webui.UIForm.submitEvent('UIPortalForm','SelectTab','&objectId=PortalSetting')\"]", "1,1");
 selenium.type("name", "test_portal_name_20");
-selenium.clickAt("//div[@onclick=\"eXo.webui.UIHorizontalTabs.changeTabForUIFormTabpane(this, 'UIPortalForm', 'Properties');javascript:eXo.webui.UIForm.submitEvent('UIPortalForm','SelectTab','&amp;objectId=Properties')\"]", "1,1");
-selenium.clickAt("//div[@onclick=\"eXo.webui.UIHorizontalTabs.changeTabForUIFormTabpane(this, 'UIPortalForm', 'PermissionSetting');javascript:eXo.webui.UIForm.submitEvent('UIPortalForm','SelectTab','&amp;objectId=PermissionSetting')\"]", "1,1");
+selenium.clickAt("//div[@onclick=\"eXo.webui.UIHorizontalTabs.changeTabForUIFormTabpane(this, 'UIPortalForm', 'Properties');javascript:eXo.webui.UIForm.submitEvent('UIPortalForm','SelectTab','&objectId=Properties')\"]", "1,1");
+selenium.clickAt("//div[@onclick=\"eXo.webui.UIHorizontalTabs.changeTabForUIFormTabpane(this, 'UIPortalForm', 'PermissionSetting');javascript:eXo.webui.UIForm.submitEvent('UIPortalForm','SelectTab','&objectId=PermissionSetting')\"]", "1,1");
 selenium.clickAt("publicMode", "1,1");
 selenium.clickAt("link=Edit Permission Setting", "1,1");
 selenium.clickAt("link=Select Permission", "1,1");

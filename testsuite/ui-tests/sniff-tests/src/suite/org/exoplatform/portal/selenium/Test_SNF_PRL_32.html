@@ -4,20 +4,25 @@
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="selenium.base" href="" />
-<title>ChangeDisplaySkin</title>
+<title>SNF_PRL_32</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">ChangeDisplaySkin</td></tr>
+<tr><td rowspan="1" colspan="3">SNF_PRL_32</td></tr>
 </thead><tbody>
-<!--tr>
+<tr>
 	<td>open</td>
-	<td>/portal/public/classic/</td>
+	<td>/portal/public/classic</td>
 	<td></td>
 </tr>
 <tr>
-	<td>click</td>
+	<td>echo</td>
+	<td>-ChangeDisplaySkin-</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
 	<td>link=Sign in</td>
 	<td></td>
 </tr>
@@ -34,11 +39,6 @@
 <tr>
 	<td>clickAndWait</td>
 	<td>//div[@id='UIPortalLoginFormAction']/div/div/div/a</td>
-	<td></td>
-</tr-->
-<tr>
-	<td>open</td>
-	<td>/portal/private/classic/</td>
 	<td></td>
 </tr>
 <tr>
@@ -61,11 +61,21 @@
 	<td>//div[@id='UIMaskWorkspace']//div[@class='ActionButton LightBlueStyle']</td>
 	<td></td>
 </tr>
-<!--tr>
-	<td>clickAndWait</td>
-	<td>link=Se déconnecter</td>
+<tr>
+	<td>echo</td>
+	<td>--Verify</td>
 	<td></td>
-</tr-->
+</tr>
+<tr>
+	<td>echo</td>
+	<td>---------</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>link=Sign out</td>
+	<td></td>
+</tr>
 
 </tbody></table>
 </body>

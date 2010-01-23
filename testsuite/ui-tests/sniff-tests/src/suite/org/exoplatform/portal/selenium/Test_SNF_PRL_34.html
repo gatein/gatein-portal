@@ -4,20 +4,25 @@
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="selenium.base" href="" />
-<title>LogoPortletAccSetting</title>
+<title>SNF_PRL_34</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">LogoPortletAccSetting</td></tr>
+<tr><td rowspan="1" colspan="3">SNF_PRL_34</td></tr>
 </thead><tbody>
-<!--tr>
+<tr>
 	<td>open</td>
-	<td>/portal/public/classic/</td>
+	<td>/portal/public/classic</td>
 	<td></td>
 </tr>
 <tr>
-	<td>click</td>
+	<td>echo</td>
+	<td>-LogoPortletAccSetting-</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
 	<td>link=Sign in</td>
 	<td></td>
 </tr>
@@ -35,52 +40,62 @@
 	<td>clickAndWait</td>
 	<td>//div[@id='UIPortalLoginFormAction']/div/div/div/a</td>
 	<td></td>
-</tr-->
+</tr>
 <tr>
-	<td>open</td>
-	<td>/portal/private/classic/</td>
+	<td>clickAt</td>
+	<td>link=Dashboard</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>--Edit Logo Picture</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAt</td>
-	<td>link=Root Root</td>
-	<td>1,1</td>
+	<td>link=Edit Layout</td>
+	<td></td>
+</tr>
+<!--tr>
+	<td>clickAt</td>
+	<td>//div[@id='UIPortlet-9eec85a7-2589-418c-b7e2-1eacd3aefada']/div/div[3]/div/div/div[2]/div/div/div/div/div/div[1]/a[2]</td>
+	<td></td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
-	<td>email</td>
+	<td>clickAt</td>
+	<td>//form[@id='UILogoEditMode']/div[2]/div/div/table/tbody/tr/td/div/div/div/div</td>
 	<td></td>
 </tr>
 <tr>
 	<td>type</td>
-	<td>email</td>
-	<td>mytest.exo10@gmail.com</td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>lastName</td>
-	<td>Root</td>
+	<td>logoUrl</td>
+	<td>url to define !!</td>
 </tr>
 <tr>
 	<td>clickAt</td>
 	<td>link=Save</td>
-	<td>1,1</td>
-</tr>
-<tr>
-	<td>clickAt</td>
-	<td>link=OK</td>
-	<td>1,1</td>
+	<td></td>
 </tr>
 <tr>
 	<td>clickAt</td>
 	<td>link=Close</td>
-	<td>1,1</td>
+	<td></td>
 </tr>
-<!--tr>
-	<td>clickAndWait</td>
-	<td>//a[@onclick='eXo.portal.logout();']</td>
+<tr>
+	<td>clickAt</td>
+	<td>//div[@id='UIPortalComposer']/div[1]/div/div/div/a[2]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>//div[@id='UILogoPortlet']/a/img[@src='/eXoResources/skin/sharedImages/DashboardIcon.png']</td>
 	<td></td>
 </tr-->
+<tr>
+	<td>clickAt</td>
+	<td>link=Sign out</td>
+	<td></td>
+</tr>
 
 </tbody></table>
 </body>

@@ -3,12 +3,18 @@ package org.exoplatform.portal.selenium;
 import com.thoughtworks.selenium.*;
 import java.util.regex.Pattern;
 public class Test_SNF_PRL_06 extends SeleneseTestCase {
+public String speed = "1000";
+public String browser = "firefox";
+public void setSpeed() {
+selenium.setSpeed(speed);
+}
+
 public void setUp() throws Exception {
-setUp("http://localhost:8080/portal/", "*firefox");
+setUp("http://localhost:8080/portal/", "*" + browser);
 }
 
 public void testSNF_PRL_06() throws Exception {
-selenium.setSpeed("500");
+setSpeed();
 selenium.open("/portal/public/classic/");
 System.out.println("-UserManagement-");
 selenium.click("link=Sign in");
@@ -61,12 +67,12 @@ selenium.clickAt("link=Save", "1,1");
 for (int second = 0;; second++) {
 if (second >= 30) fail("timeout");
 try {
- if (selenium.isElementPresent("css=div#UIOrganizationPortlet div.ManagementTabContent &gt; div.UIPopupWindow div.ActionButton")) 
+ if (selenium.isElementPresent("css=div#UIOrganizationPortlet div.ManagementTabContent > div.UIPopupWindow div.ActionButton")) 
 break; }
  catch (Exception e) {}
 Thread.sleep(1000);
 }
-selenium.clickAt("css=div#UIOrganizationPortlet div.ManagementTabContent &gt; div.UIPopupWindow div.ActionButton", "1,1");
+selenium.clickAt("css=div#UIOrganizationPortlet div.ManagementTabContent > div.UIPopupWindow div.ActionButton", "1,1");
 for (int second = 0;; second++) {
 if (second >= 30) fail("timeout");
 try {
@@ -91,13 +97,13 @@ selenium.clickAt("link=Save", "1,1");
 for (int second = 0;; second++) {
 if (second >= 30) fail("timeout");
 try {
- if (selenium.isElementPresent("css=div#UIOrganizationPortlet div.ManagementTabContent &gt; div.UIPopupWindow div.ActionButton")) 
+ if (selenium.isElementPresent("css=div#UIOrganizationPortlet div.ManagementTabContent > div.UIPopupWindow div.ActionButton")) 
 break; }
  catch (Exception e) {}
 Thread.sleep(1000);
 }
 assertTrue(selenium.isTextPresent("The user profile has been updated."));
-selenium.clickAt("css=div#UIOrganizationPortlet div.ManagementTabContent &gt; div.UIPopupWindow div.ActionButton", "1,1");
+selenium.clickAt("css=div#UIOrganizationPortlet div.ManagementTabContent > div.UIPopupWindow div.ActionButton", "1,1");
 selenium.clickAt("link=Cancel", "1,1");
 System.out.println("--Verify changes");
 assertTrue(selenium.isTextPresent("test_user_06"));

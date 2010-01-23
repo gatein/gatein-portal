@@ -3,12 +3,18 @@ package org.exoplatform.portal.selenium;
 import com.thoughtworks.selenium.*;
 import java.util.regex.Pattern;
 public class Test_SNF_PRL_19 extends SeleneseTestCase {
+public String speed = "1000";
+public String browser = "firefox";
+public void setSpeed() {
+selenium.setSpeed(speed);
+}
+
 public void setUp() throws Exception {
-setUp("http://localhost:8080/portal/", "*firefox");
+setUp("http://localhost:8080/portal/", "*" + browser);
 }
 
 public void testSNF_PRL_19() throws Exception {
-selenium.setSpeed("500");
+setSpeed();
 selenium.open("/portal/public/classic/");
 System.out.println("-EditPortalNavigation-");
 selenium.clickAt("link=Sign in", "1,1");
@@ -76,7 +82,7 @@ Thread.sleep(1000);
 selenium.type("name", "test_nodename_19");
 selenium.type("label", "test_node_label_19");
 System.out.println("--Select Page");
-selenium.clickAt("css=div#UISiteManagement &gt; div.UIPopupWindow div.TabsContainer div.NormalTab div.MiddleTab", "1,1");
+selenium.clickAt("css=div#UISiteManagement > div.UIPopupWindow div.TabsContainer div.NormalTab div.MiddleTab", "1,1");
 for (int second = 0;; second++) {
 if (second >= 30) fail("timeout");
 try {
@@ -152,7 +158,7 @@ selenium.open("/portal/private/classic/");
 System.out.println("--Select new node");
 selenium.clickAt("link=test_node_label_19", "1,1");
 assertTrue(selenium.isElementPresent("//div[@class='SelectedNavigationTab']//a"));
-selenium.clickAt("link=Site", "1,1");
+System.out.println("--Delete node");
 selenium.clickAt("link=Edit Navigation", "1,1");
 selenium.click("link=Delete Node");
 for (int second = 0;; second++) {

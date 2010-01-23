@@ -3,12 +3,18 @@ package org.exoplatform.portal.selenium;
 import com.thoughtworks.selenium.*;
 import java.util.regex.Pattern;
 public class Test_SNF_PRL_02 extends SeleneseTestCase {
+public String speed = "1000";
+public String browser = "firefox";
+public void setSpeed() {
+selenium.setSpeed(speed);
+}
+
 public void setUp() throws Exception {
-setUp("http://localhost:8080/portal/", "*firefox");
+setUp("http://localhost:8080/portal/", "*" + browser);
 }
 
 public void testSNF_PRL_02() throws Exception {
-selenium.setSpeed("500");
+setSpeed();
 selenium.open("/portal/public/classic/");
 System.out.println("-New Account-");
 System.out.println("--Register new account");
@@ -27,6 +33,14 @@ selenium.clickAt("link=Sign in", "1,1");
 selenium.type("username", "test_user_02");
 selenium.type("password", "test_pwd_02");
 selenium.clickAt("//div[@id='UIPortalLoginFormAction']//a", "1,1");
+for (int second = 0;; second++) {
+if (second >= 30) fail("timeout");
+try {
+ if (selenium.isTextPresent("test_name_first_02 test_name_last_02")) 
+break; }
+ catch (Exception e) {}
+Thread.sleep(1000);
+}
 assertTrue(selenium.isTextPresent("test_name_first_02 test_name_last_02"));
 selenium.clickAt("link=Sign out", "1,1");
 System.out.println("--Delete new user");

@@ -4,16 +4,26 @@
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="selenium.base" href="" />
-<title>ActionsDashboardpage</title>
+<title>SNF_PRL_28</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">ActionsDashboardpage</td></tr>
+<tr><td rowspan="1" colspan="3">SNF_PRL_28</td></tr>
 </thead><tbody>
-<!--tr>
+<tr>
 	<td>open</td>
-	<td>/portal/private/classic/</td>
+	<td>/portal/public/classic</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>-ActionsDashboardpage-</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>link=Sign in</td>
 	<td></td>
 </tr>
 <tr>
@@ -28,12 +38,7 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>//div[@id='UIPortalLoginFormAction']/div/div/div</td>
-	<td></td>
-</tr-->
-<tr>
-	<td>open</td>
-	<td>/portal/private/classic/</td>
+	<td>//div[@id='UIPortalLoginFormAction']/div/div/div/a</td>
 	<td></td>
 </tr>
 <tr>
@@ -41,7 +46,11 @@
 	<td>link=Dashboard</td>
 	<td>1,1</td>
 </tr>
-<!--Add gadgets into dashboard page-->
+<tr>
+	<td>echo</td>
+	<td>--Add gadgets into dashboard page</td>
+	<td></td>
+</tr>
 <tr>
 	<td>waitForElementPresent</td>
 	<td>link=Add Gadgets</td>
@@ -53,9 +62,14 @@
 	<td></td>
 </tr>
 <tr>
+	<td>echo</td>
+	<td>--By url</td>
+	<td></td>
+</tr>
+<tr>
 	<td>type</td>
 	<td>//input[@id='url']</td>
-	<td>http://hosting.gmodules.com/ig/gadgets/file/112581010116074801021/treefrog.xml</td>
+	<td>http://www.google.com/ig/modules/datetime.xml</td>
 </tr>
 <tr>
 	<td>clickAt</td>
@@ -67,11 +81,81 @@
 	<td>//div[@id='UIAddGadgetPopup']//div[@class='CloseButton']</td>
 	<td></td>
 </tr>
-<!--tr>
-	<td>click</td>
-	<td>//a[@onclick='eXo.portal.logout();']</td>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>//div[@class='GadgetTitle']</td>
 	<td></td>
-</tr-->
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@class='CloseGadget IconControl' and @title='Delete Gadget']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>//div[@class='CloseGadget IconControl' and @title='Delete Gadget']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForConfirmation</td>
+	<td>Are you sure to delete this gadget?</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Add Gadgets</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>link=Add Gadgets</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>--By drag and drop</td>
+	<td></td>
+</tr>
+<tr>
+	<td>dragAndDropToObject</td>
+	<td>//div[@class='GadgetTitle' and @title='Calculator']</td>
+	<td>//div[@class='UIDashboardContainer']</td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>//div[@id='UIAddGadgetPopup']//div[@class='CloseButton']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>//div[@class='GadgetTitle']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@class='CloseGadget IconControl']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>//div[@title='Delete Gadget']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForConfirmation</td>
+	<td>Are you sure to delete this gadget?</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Drag your gadgets here.</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>link=Sign out</td>
+	<td></td>
+</tr>
 
 </tbody></table>
 </body>

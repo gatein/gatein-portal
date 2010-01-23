@@ -4,20 +4,25 @@
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="selenium.base" href="" />
-<title>AddNavigation</title>
+<title>SNF_PRL_23</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">AddNavigation</td></tr>
+<tr><td rowspan="1" colspan="3">SNF_PRL_23</td></tr>
 </thead><tbody>
-<!--tr>
+<tr>
 	<td>open</td>
-	<td>/portal/public/NewPortal/</td>
+	<td>/portal/public/classic</td>
 	<td></td>
 </tr>
 <tr>
-	<td>click</td>
+	<td>echo</td>
+	<td>-AddNavigation-</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
 	<td>link=Sign in</td>
 	<td></td>
 </tr>
@@ -35,7 +40,7 @@
 	<td>clickAndWait</td>
 	<td>//div[@id='UIPortalLoginFormAction']/div/div/div/a</td>
 	<td></td>
-</tr-->
+</tr>
 <tr>
 	<td>open</td>
 	<td>/portal/private/classic/</td>
@@ -82,28 +87,40 @@
 	<td></td>
 </tr>
 <tr>
+	<td>waitForText</td>
+	<td>name</td>
+	<td></td>
+</tr>
+<tr>
 	<td>type</td>
 	<td>name</td>
-	<td>grp_node</td>
+	<td>test_grp_node_23</td>
 </tr>
 <tr>
 	<td>type</td>
 	<td>label</td>
-	<td>new_grp_node</td>
+	<td>test_grp_label_23</td>
 </tr>
-<!--Choose "Page Selector" tab-->
+<tr>
+	<td>echo</td>
+	<td>--Choose &quot;Page Selector&quot; tab</td>
+	<td></td>
+</tr>
 <tr>
 	<td>clickAt</td>
 	<td>//div[@class='CenterHorizontalTabs']//div[@class='NormalTab']//div[@class='MiddleTab']</td>
 	<td></td>
 </tr>
-<!--Show form to select existing page-->
 <tr>
 	<td>clickAt</td>
 	<td>link=Search and Select Page</td>
 	<td>1,1</td>
 </tr>
-<!--Select the first page from pages list-->
+<tr>
+	<td>echo</td>
+	<td>--Select the first page from pages list</td>
+	<td></td>
+</tr>
 <tr>
 	<td>clickAt</td>
 	<td>//div[@id='UIRepeater']//img[@class='SelectPageIcon']</td>
@@ -119,24 +136,29 @@
 	<td>link=Save</td>
 	<td>1,1</td>
 </tr>
-<!--tr>
-	<td>click</td>
-	<td>link=Cancel</td>
-	<td></td>
-</tr>
-<tr>
-	<td>checkAndWait</td>
-	<td>//a[@onclick='eXo.portal.logout();']</td>
-	<td></td>
-</tr-->
 <tr>
 	<td>waitForElementPresent</td>
-	<td>link=new_grp_node</td>
+	<td>link=test_grp_label_23</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>link=new_grp_node</td>
+	<td>link=test_grp_label_23</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>--Delete new group navigation</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>-----------</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>link=Sign out</td>
 	<td></td>
 </tr>
 

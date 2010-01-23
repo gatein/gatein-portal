@@ -3,12 +3,18 @@ package org.exoplatform.portal.selenium;
 import com.thoughtworks.selenium.*;
 import java.util.regex.Pattern;
 public class Test_SNF_PRL_18 extends SeleneseTestCase {
+public String speed = "1000";
+public String browser = "firefox";
+public void setSpeed() {
+selenium.setSpeed(speed);
+}
+
 public void setUp() throws Exception {
-setUp("http://localhost:8080/portal/", "*firefox");
+setUp("http://localhost:8080/portal/", "*" + browser);
 }
 
 public void testSNF_PRL_18() throws Exception {
-selenium.setSpeed("500");
+setSpeed();
 selenium.open("/portal/public/classic/");
 System.out.println("-CreateNewPortal-");
 selenium.clickAt("link=Sign in", "1,1");

@@ -3,12 +3,18 @@ package org.exoplatform.portal.selenium;
 import com.thoughtworks.selenium.*;
 import java.util.regex.Pattern;
 public class Test_SNF_PRL_11 extends SeleneseTestCase {
+public String speed = "1000";
+public String browser = "firefox";
+public void setSpeed() {
+selenium.setSpeed(speed);
+}
+
 public void setUp() throws Exception {
-setUp("http://localhost:8080/portal/", "*firefox");
+setUp("http://localhost:8080/portal/", "*" + browser);
 }
 
 public void testSNF_PRL_11() throws Exception {
-selenium.setSpeed("500");
+setSpeed();
 selenium.open("/portal/public/classic/");
 System.out.println("-AddApplicationToCategory-");
 selenium.clickAt("link=Sign in", "1,1");
@@ -18,6 +24,14 @@ selenium.click("//div[@id='UIPortalLoginFormAction']/div/div/div");
 selenium.waitForPageToLoad("30000");
 selenium.clickAt("link=Application Registry", "1,1");
 System.out.println("--Add application to Administration Category");
+for (int second = 0;; second++) {
+if (second >= 30) fail("timeout");
+try {
+ if (selenium.isElementPresent("//div[@class='ListContent']//div[@class='SelectedTab']//a[@class='ControlIcon CreateNewIcon']")) 
+break; }
+ catch (Exception e) {}
+Thread.sleep(1000);
+}
 selenium.clickAt("//div[@class='ListContent']//div[@class='SelectedTab']//a[@class='ControlIcon CreateNewIcon']", "1,1");
 System.out.println("--Select first application in list");
 selenium.clickAt("//input[@name='application' and @value='1']", "1,1");
@@ -45,7 +59,27 @@ selenium.clickAt("link=Add Permission", "1,1");
 selenium.clickAt("//div[@id='ListPermissionSelector']//a[@title='Organization']", "1,1");
 selenium.clickAt("link=manager", "1,1");
 assertTrue(selenium.isTextPresent("test_displayname_11"));
+selenium.clickAt("//div[@class='IconControl ImportIcon']", "1,1");
+for (int second = 0;; second++) {
+if (second >= 30) fail("timeout");
+try {
+if (selenium.getConfirmation().equals("This action will automatically create categories and import all the gadgets and portlets on it.")) {
+break;
+}
+}
+catch (Exception e) {
+}
+Thread.sleep(1000);
+}
 System.out.println("--Delete application");
+for (int second = 0;; second++) {
+if (second >= 30) fail("timeout");
+try {
+ if (selenium.isElementPresent("//div[@class='ListContent']//div[@class='UIVTabContent']/div[8]//a[@class='ControlIcon DeletePortalIcon']")) 
+break; }
+ catch (Exception e) {}
+Thread.sleep(1000);
+}
 selenium.clickAt("//div[@class='ListContent']//div[@class='UIVTabContent']/div[8]//a[@class='ControlIcon DeletePortalIcon']", "1,1");
 for (int second = 0;; second++) {
 if (second >= 30) fail("timeout");
