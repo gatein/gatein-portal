@@ -36,7 +36,7 @@
               <property name="multi-db" value="false"/>
               <property name="update-storage" value="true"/>
               <property name="max-buffer-size" value="204800"/>
-              <property name="swap-directory" value="${gatein.jcr.data.dir}/swap/system${container.name.suffix}"/>
+              <property name="swap-directory" value="${gatein.jcr.data.dir}/system${container.name.suffix}"/>
             </properties>
             <value-storages>
               <value-storage id="system" class="org.exoplatform.services.jcr.impl.storage.value.fs.TreeFileValueStorage">
@@ -55,10 +55,9 @@
               <property name="root-permissions" value="*:/platform/administrators read;*:/platform/administrators add_node;*:/platform/administrators set_property;*:/platform/administrators remove"/>
             </properties>
           </initializer>
-          <cache enabled="true">
+          <cache enabled="true" class="org.exoplatform.services.jcr.impl.dataflow.persistent.jbosscache.JBossCacheWorkspaceStorageCache">
             <properties>
-              <property name="max-size" value="20000"/>
-              <property name="live-time" value="30000"/>
+              <property name="jbosscache-configuration" value="conf/jcr/jbosscache/local/config.xml" />
             </properties>
           </cache>
           <query-handler class="org.exoplatform.services.jcr.impl.core.query.lucene.SearchIndex">
@@ -66,14 +65,12 @@
               <property name="index-dir" value="${gatein.jcr.data.dir}/jcrlucenedb/system${container.name.suffix}"/>
             </properties>
           </query-handler>
-          <lock-manager>
-            <time-out>15m</time-out><!-- 15min -->
-            <persister class="org.exoplatform.services.jcr.impl.core.lock.FileSystemLockPersister">
-              <properties>
-                <property name="path" value="${gatein.jcr.data.dir}/lock/system${container.name.suffix}"/>
-              </properties>
-            </persister>
-           </lock-manager>
+          <lock-manager class="org.exoplatform.services.jcr.impl.core.lock.jbosscache.CacheableLockManager">
+            <properties>
+              <property name="time-out" value="15m" />
+              <property name="jbosscache-configuration" value="conf/jcr/jbosscache/local/lockconfig-system.xml" />
+            </properties>
+          </lock-manager>
         </workspace>
 
         <!-- Portal system data -->
@@ -104,10 +101,9 @@
               <property name="root-permissions" value="any read;*:/platform/administrators read;*:/platform/administrators add_node;*:/platform/administrators set_property;*:/platform/administrators remove"/>
             </properties>
           </initializer>
-          <cache enabled="true">
+          <cache enabled="true" class="org.exoplatform.services.jcr.impl.dataflow.persistent.jbosscache.JBossCacheWorkspaceStorageCache">
             <properties>
-              <property name="max-size" value="20000"/>
-              <property name="live-time" value="30000"/>
+              <property name="jbosscache-configuration" value="conf/jcr/jbosscache/local/config.xml" />
             </properties>
           </cache>
           <query-handler class="org.exoplatform.services.jcr.impl.core.query.lucene.SearchIndex">
@@ -115,13 +111,11 @@
               <property name="index-dir" value="${gatein.jcr.data.dir}/jcrlucenedb/portal-system${container.name.suffix}"/>
             </properties>
           </query-handler>
-          <lock-manager>
-            <time-out>15m</time-out><!-- 15min -->
-            <persister class="org.exoplatform.services.jcr.impl.core.lock.FileSystemLockPersister">
-              <properties>
-                <property name="path" value="${gatein.jcr.data.dir}/lock/portal-system${container.name.suffix}"/>
-              </properties>
-            </persister>
+          <lock-manager class="org.exoplatform.services.jcr.impl.core.lock.jbosscache.CacheableLockManager">
+            <properties>
+              <property name="time-out" value="15m" />
+              <property name="jbosscache-configuration" value="conf/jcr/jbosscache/local/lockconfig-portal-system.xml" />
+            </properties>
           </lock-manager>
         </workspace>
 
@@ -153,26 +147,24 @@
               <property name="root-permissions" value="any read;*:/platform/administrators read;*:/platform/administrators add_node;*:/platform/administrators set_property;*:/platform/administrators remove"/>
             </properties>
           </initializer>
-         <cache enabled="true">
-          <properties>
-            <property name="max-size" value="20000"/>
-            <property name="live-time" value="30000"/>
-          </properties>
-         </cache>
+          <cache enabled="true" class="org.exoplatform.services.jcr.impl.dataflow.persistent.jbosscache.JBossCacheWorkspaceStorageCache">
+            <properties>
+              <property name="jbosscache-configuration" value="conf/jcr/jbosscache/local/config.xml" />
+            </properties>
+          </cache>
          <query-handler class="org.exoplatform.services.jcr.impl.core.query.lucene.SearchIndex">
           <properties>
             <property name="index-dir" value="${gatein.jcr.data.dir}/jcrlucenedb/portal-work${container.name.suffix}"/>
           </properties>
          </query-handler>
-         <lock-manager>
-          <time-out>15m</time-out><!-- 15min -->
-           <persister class="org.exoplatform.services.jcr.impl.core.lock.FileSystemLockPersister">
-             <properties>
-               <property name="path" value="${gatein.jcr.data.dir}/lock/portal-work${container.name.suffix}"/>
-             </properties>
-           </persister>
+         <lock-manager class="org.exoplatform.services.jcr.impl.core.lock.jbosscache.CacheableLockManager">
+           <properties>
+             <property name="time-out" value="15m" />
+             <property name="jbosscache-configuration" value="conf/jcr/jbosscache/local/lockconfig-portal-work.xml" />
+           </properties>
          </lock-manager>
        </workspace>
+
        <!-- Workspace for WSRP -->
        <workspace name="wsrp-system">
          <container class="org.exoplatform.services.jcr.impl.storage.jdbc.JDBCWorkspaceDataContainer">
@@ -199,14 +191,12 @@
            <initializer class="org.exoplatform.services.jcr.impl.core.ScratchWorkspaceInitializer">
              <properties>
                <property name="root-nodetype" value="nt:unstructured"/>
-                 <property name="root-permissions"
-                       value="any read;*:/platform/administrators read;*:/platform/administrators add_node;*:/platform/administrators set_property;*:/platform/administrators remove"/>
+                 <property name="root-permissions" value="any read;*:/platform/administrators read;*:/platform/administrators add_node;*:/platform/administrators set_property;*:/platform/administrators remove"/>
              </properties>
            </initializer>
-           <cache enabled="true">
+           <cache enabled="true" class="org.exoplatform.services.jcr.impl.dataflow.persistent.jbosscache.JBossCacheWorkspaceStorageCache">
              <properties>
-               <property name="max-size" value="20000"/>
-               <property name="live-time" value="30000"/>
+               <property name="jbosscache-configuration" value="conf/jcr/jbosscache/local/config.xml" />
              </properties>
            </cache>
            <query-handler class="org.exoplatform.services.jcr.impl.core.query.lucene.SearchIndex">
@@ -214,15 +204,14 @@
                <property name="index-dir" value="${gatein.jcr.data.dir}/jcrlucenedb/wsrp${container.name.suffix}"/>
              </properties>
            </query-handler>
-           <lock-manager>
-             <time-out>15m</time-out>
-             <persister class="org.exoplatform.services.jcr.impl.core.lock.FileSystemLockPersister">
-               <properties>
-                 <property name="path" value="${gatein.jcr.data.dir}/lock/wsrp${container.name.suffix}"/>
-               </properties>
-             </persister>
+           <lock-manager class="org.exoplatform.services.jcr.impl.core.lock.jbosscache.CacheableLockManager">
+             <properties>
+               <property name="time-out" value="15m" />
+               <property name="jbosscache-configuration" value="conf/jcr/jbosscache/local/lockconfig-wsrp-system.xml" />
+             </properties>
            </lock-manager>
          </workspace>
+
       </workspaces>
     </repository>
   </repositories>

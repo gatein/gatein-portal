@@ -20,6 +20,7 @@
 package org.exoplatform.services.organization.idm;
 
 import org.exoplatform.commons.utils.LazyPageList;
+import org.exoplatform.commons.utils.ListAccess;
 import org.exoplatform.services.cache.CacheService;
 import org.exoplatform.services.cache.ExoCache;
 import org.exoplatform.services.organization.Query;
@@ -208,7 +209,12 @@ public class UserDAOImpl implements UserHandler
       return new LazyPageList(new IDMUserListAccess(this, service_, qb, pageSize, true), pageSize);
    }
 
-   //
+   public ListAccess<User> findAllUsers() throws Exception
+   {
+      throw new UnsupportedOperationException();
+   }
+
+//
    public boolean authenticate(String username, String password) throws Exception
    {
       User user = findUserByName(username);
@@ -269,6 +275,12 @@ public class UserDAOImpl implements UserHandler
    }
 
    //
+
+   public ListAccess<User> findUsersByQuery(Query query) throws Exception
+   {
+      throw new UnsupportedOperationException();
+   }
+
    public LazyPageList findUsersByGroup(String groupId) throws Exception
    {
       UserQueryBuilder qb = service_.getIdentitySession().createUserQueryBuilder();
@@ -280,7 +292,12 @@ public class UserDAOImpl implements UserHandler
       return new LazyPageList(new IDMUserListAccess(this, service_, qb, 20, false), 20);
    }
 
-   //
+   public ListAccess<User> findUsersByGroupId(String groupId) throws Exception
+   {
+      throw new UnsupportedOperationException();
+   }
+
+//
 
    private void preSave(User user, boolean isNew) throws Exception
    {

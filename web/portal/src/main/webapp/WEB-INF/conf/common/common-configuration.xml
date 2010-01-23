@@ -31,9 +31,6 @@
       <properties-param>
         <name>default-properties</name>
         <description>Default initial context properties</description>
-        <!--
-        <property name="java.naming.factory.initial" value="org.exoplatform.services.naming.SimpleContextFactory"/>
-        -->
       </properties-param>
     </init-params>
   </component>
