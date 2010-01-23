@@ -39,7 +39,7 @@
         <!--CHANGEME HashtableCacheProvider shold not be used in production env-->
         <property name="hibernate.cache.provider_class" value="org.hibernate.cache.HashtableCacheProvider"/>
         <property name="hibernate.cglib.use_reflection_optimizer" value="true"/>
-        <property name="hibernate.connection.datasource" value="jdbcexo${container.name.suffix}"/>
+        <property name="hibernate.connection.datasource" value="${gatein.datasource.name}${container.name.suffix}"/>
         <property name="hibernate.connection.autocommit" value="true"/>
         <property name="hibernate.dialect" value="org.hibernate.dialect.HSQLDialect"/>
         <property name="hibernate.c3p0.min_size" value="5"/>
@@ -59,7 +59,7 @@
       <init-params>
         <value-param>
           <name>bind-name</name>
-          <value>jdbcexo${container.name.suffix}</value>
+          <value>${gatein.datasource.name}${container.name.suffix}</value>
         </value-param>
         <value-param>
           <name>class-name</name>

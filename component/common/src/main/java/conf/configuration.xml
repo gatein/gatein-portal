@@ -29,7 +29,7 @@
     <key>org.exoplatform.container.PropertyConfigurator</key>
     <type>org.exoplatform.container.PropertyConfigurator</type>
     <init-params>
-      <value-param>
+      <value-param profiles="tomcat">
         <name>properties.url</name>
         <value>jar:/conf/configuration.properties</value>
       </value-param>

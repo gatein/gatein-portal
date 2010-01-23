@@ -31,7 +31,7 @@
         <workspace name="system">
           <container class="org.exoplatform.services.jcr.impl.storage.jdbc.JDBCWorkspaceDataContainer">
             <properties>
-              <property name="source-name" value="jdbcexo${container.name.suffix}"/>
+              <property name="source-name" value="${gatein.datasource.name}${container.name.suffix}"/>
               <property name="dialect" value="hsqldb"/>
               <property name="multi-db" value="false"/>
               <property name="update-storage" value="true"/>
@@ -77,7 +77,7 @@
         <workspace name="portal-system">
           <container class="org.exoplatform.services.jcr.impl.storage.jdbc.JDBCWorkspaceDataContainer">
             <properties>
-              <property name="source-name" value="jdbcexo${container.name.suffix}"/>
+              <property name="source-name" value="${gatein.datasource.name}${container.name.suffix}"/>
               <property name="dialect" value="hsqldb"/>
               <property name="multi-db" value="false"/>
               <property name="update-storage" value="true"/>
@@ -123,7 +123,7 @@
         <workspace name="portal-work">
           <container class="org.exoplatform.services.jcr.impl.storage.jdbc.JDBCWorkspaceDataContainer">
             <properties>
-              <property name="source-name" value="jdbcexo${container.name.suffix}"/>
+              <property name="source-name" value="${gatein.datasource.name}${container.name.suffix}"/>
               <property name="dialect" value="hsqldb"/>
               <property name="multi-db" value="false"/>
               <property name="update-storage" value="true"/>
@@ -169,7 +169,7 @@
        <workspace name="wsrp-system">
          <container class="org.exoplatform.services.jcr.impl.storage.jdbc.JDBCWorkspaceDataContainer">
            <properties>
-             <property name="source-name" value="jdbcexo${container.name.suffix}"/>
+             <property name="source-name" value="${gatein.datasource.name}${container.name.suffix}"/>
                <property name="dialect" value="hsqldb"/>
                <property name="multi-db" value="false"/>
                <property name="update-storage" value="true"/>

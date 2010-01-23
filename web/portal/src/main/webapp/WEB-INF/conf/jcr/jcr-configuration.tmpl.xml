@@ -37,7 +37,7 @@
         <name>working-conf</name>
         <description>working-conf</description>
         <property name="persister-class-name" value="org.exoplatform.services.jcr.impl.config.JDBCConfigurationPersister"/>
-        <property name="source-name" value="jdbcexo${container.name.suffix}"/>
+        <property name="source-name" value="${gatein.datasource.name}${container.name.suffix}"/>
         <property name="dialect" value="${dialect}"/>
       </properties-param>
     </init-params>
