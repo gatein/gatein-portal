@@ -125,7 +125,7 @@
 		<section id="sect-Reference_Guide-How_to_Configure_a_Portal_Skin-SkinService">
 			<title>SkinService</title>
 			<para>
-				The <ulink url="http://fisheye.exoplatform.org/browse/projects/portal/trunk/webui/portal/src/main/java/org/exoplatform/portal/webui/skin/SkinService.java">SkinService</ulink> is an GateIn service that manages portal skin, portlet styles and portlet themes (windows borders). The code snippet below is an excerpt of the API offered by this service.
+				The <ulink url="http://fisheye.exoplatform.org/browse/projects/portal/trunk/webui/portal/src/main/java/org/exoplatform/portal/webui/skin/SkinService.java">SkinService</ulink> is an &PRODUCT; service that manages portal skin, portlet styles and portlet themes (windows borders). The code snippet below is an excerpt of the API offered by this service.
 			</para>
 			
 <programlisting role="JAVA">/**
@@ -174,7 +174,7 @@
 		<section id="sect-Reference_Guide-How_to_Configure_a_Portal_Skin-SkinConfigListener">
 			<title>SkinConfigListener</title>
 			<para>
-				GateIn provides a servlet listener that allows you to register your own skins and styles when your webapp starts up. Your first step is to add the listener to your portlet app <literal>web.xml</literal>.
+				&PRODUCT; provides a servlet listener that allows you to register your own skins and styles when your webapp starts up. The first step is to add the listener to your portlet app <literal>web.xml</literal>.
 			</para>
 			
 <programlisting role="XML">&lt;web-app&gt;
@@ -190,10 +190,10 @@
 		<section id="sect-Reference_Guide-How_to_Configure_a_Portal_Skin-SkinConfigScript.groovy">
 			<title>SkinConfigScript.groovy</title>
 			<para>
-				The <literal>SkinListener</literal> looks for the groovy script file located in your war under: <filename>/WEB-INF/conf/script/groovy/SkinConfigScript.groovy</filename>
+				The <literal>SkinListener</literal> looks for the groovy script file located in the <filename>war</filename> under: <filename>/WEB-INF/conf/script/groovy/SkinConfigScript.groovy</filename>
 			</para>
 			<para>
-				In this script, you have full access to the <literal>SkinService</literal> and <literal>ServletContext</literal> which are bound as scripting variables under the same name. As an example, take a look at the following script. It can be found in the <literal>GateInResources.war</literal> and is used by GateIn to register the <literal>Default</literal> portal skin and some portlet themes.
+				This script allows full access to the <literal>SkinService</literal> and <literal>ServletContext</literal> which are bound as scripting variables under the same name. The following script is an example. It can be found in the <literal>GateInResources.war</literal> and is used by &PRODUCT; to register the <literal>Default</literal> portal skin and some portlet themes.
 			</para>
 			
 <programlisting>SkinService.addPortalSkin("CoreSkin","Default", "/GateInResources/skin/Stylesheet.css", ServletContext);
@@ -222,10 +222,10 @@ SkinService.addTheme("VistaStyle", ["VistaTheme","VistaBlue"]);
 </programlisting>
 			</para>
 			<para>
-				<literal>overwrite</literal> is optional, its default value is "false". If its value is true, the later call of addSkin() for the same skin key (combination of module + skinName) replaces the skin of the previous call.
+				'<literal>overwrite</literal>' is optional, its default value is "<parameter>false</parameter>". If its value is <parameter>true</parameter>, the later call of <parameter>addSkin()</parameter> for the same skin key (combination of module + skinName) replaces the skin of the previous call.
 			</para>
 			<para>
-				Similarly, to configure a particular portal you can use the following :
+				Similarly, use the following to configure a particular portal:
 			</para>
 			
 <programlisting>SkinService.addSkin("myportalname", "skin", "/path/to/skin/Stylesheet.css", ServletContext);
@@ -242,18 +242,18 @@ SkinService.addTheme("VistaStyle", ["VistaTheme","VistaBlue"]);
 	<section id="sect-Reference_Guide-Skin_Configuration-Tips_and_Tricks">
 		<title>Tips and Tricks</title>
 		<section id="sect-Reference_Guide-Tips_and_Tricks-Easier_css_debuggin">
-			<title>Easier css debuggin</title>
+			<title>Easier css debugging</title>
 			<para>
-				By default, CSS files are cached and their imports are merged, at the server side, into a single CSS file to reduce the number of HTTP requests from the browser to the server.
+				By default, CSS files are cached and their imports are merged into a single CSS file at the server side. This reduces the number of HTTP requests from the browser to the server.
 			</para>
 			<para>
-				The <literal>ServletContext</literal> parameter is there to allow the direct access to the CSS files from the <literal>SkinService</literal>. The optimization code is quite simple as all the CSS files are parsed at the server startup time and all the @import and url(...) references are rewritten to support a single flat file. The result is stored in a cache directly used from the <literal>ResourceRequestFilter</literal>.
+				The <literal>ServletContext</literal> parameter allows direct access to the CSS files from the <literal>SkinService</literal>. The optimization code is quite simple as all the CSS files are parsed at the server startup time and all the @import and url(...) references are rewritten to support a single flat file. The result is stored in a cache directly used from the <literal>ResourceRequestFilter</literal>.
 			</para>
 			<para>
-				Although the optimization is useful for a production environments, you may find it easier to deactivate this optimization while debugging your stylesheets. For that, you simply need to set the java system property <literal>exo.product.developing</literal> to <literal>true</literal>.
+				Although the optimization is useful for a production environments, it may be easier to deactivate this optimization while debugging  stylesheets. To do so, set the java system property <literal>exo.product.developing</literal> to <literal>true</literal>.
 			</para>
 			<para>
-				For example, you can pass the property as a JVM parameter with the <literal>-D</literal> option in your <literal>GateIn.sh</literal> startup script: {code} EXO{code}
+				For example, the property can passed as a JVM parameter with the <literal>-D</literal> option in the <literal>GateIn.sh</literal> startup script: {code} EXO{code}
 			</para>
 			<orderedlist numeration="arabic">
 				<listitem>
@@ -267,31 +267,31 @@ SkinService.addTheme("VistaStyle", ["VistaTheme","VistaBlue"]);
 		<section id="sect-Reference_Guide-Tips_and_Tricks-Change_portlet_icons">
 			<title> Change portlet icons </title>
 			<para>
-				Each portlet is represented by an icon that you can see in the portlet registry, or the webos dock. You can change this icon by adding an image in the directory :
+				Each portlet is represented by an icon that you can see in the portlet registry, or the webos dock. This icon can be changed by adding an image to the directory:
 			</para>
 			<itemizedlist>
 				<listitem>
 					<para>
-						$project/portlet/myportlets/src/main/webapp/skin/DefaultSkin/portletIcons/<emphasis role="bold">and by naming the icon after the portlet, eg:</emphasis>ExoPortlet.png
+						<filename>$project/portlet/myportlets/src/main/webapp/skin/DefaultSkin/portletIcons<replaceable>icon_name.png</replaceable></filename>. To be used correctly the icon must be named after the portlet. 
 					</para>
 				</listitem>
 			</itemizedlist>
 			<para>
-				For example, in portal we have an account portlet named AccountPortlet, the icon is located in :
+				For example,the icon for an account portlet named AccountPortlet would be located at:
 			</para>
 			<itemizedlist>
 				<listitem>
 					<para>
-						portal/tags/2.1.1/portlet/exoadmin/src/main/webapp/skin/DefaultSkin/portletIcons/AccountPortlet.png
+						<filename>portal/tags/2.1.1/portlet/exoadmin/src/main/webapp/skin/DefaultSkin/portletIcons/AccountPortlet.png</filename>
 					</para>
 				</listitem>
 			</itemizedlist>
 		</section>
 		
-		<section id="sect-Reference_Guide-Tips_and_Tricks-Set_the_default_skin_for_Portal">
-			<title> Set the default skin for Portal </title>
+		<section id="sect-Reference_Guide-Tips_and_Tricks-Set_the_default_skin">
+			<title>Set the default skin</title>
 			<para>
-				When not configured, the default skin of portal is Default. If you want to change this value (to Mac skin, Vista skin, or your own), add a skin tag in the <literal>portal.xml</literal> that defines your portal:
+				The default skin of portal is called Default. To change this value (to a Mac-like skin, a Windows Vista-like skin, or an original skin), add a skin tag in the <literal>portal.xml</literal> that defines your portal:
 			</para>
 			
 <programlisting role="XML">&lt;portal-config&gt;
@@ -308,10 +308,10 @@ SkinService.addTheme("VistaStyle", ["VistaTheme","VistaBlue"]);
 		<section id="sect-Reference_Guide-Tips_and_Tricks-Some_CSS_techniques">
 			<title>Some CSS techniques</title>
 			<para>
-				Before studying GateIn CSS, make sure you already have some experience with css and read the css spec at http://www.w3.org/TR/REC-CSS2/selector.html
+				It is recommended that users have some experience with CSS before studying &PRODUCT; CSS. ALso, pleased read the CSS specification at <ulink type="http" url="http://www.w3.org/TR/REC-CSS2/selector.html"></ulink>
 			</para>
 			<para>
-				GateIn relies heavily on CSS to create the layout and special effects for the UI. Below we explain some common techniques you may find often inside GateIn's markup. We explain them here to help you better understand GateIn generated markup, ease css issues fixing or get inspration for styling your own apps.
+				&PRODUCT; relies heavily on CSS to create the layout and effects for the UI. Some common techniques for customizing &PRODUCT;'s CSS are explained below. 
 			</para>
 			<section id="sect-Reference_Guide-Some_CSS_techniques-Decorator_pattern">
 				<title>Decorator pattern</title>
@@ -383,28 +383,54 @@ SkinService.addTheme("VistaStyle", ["VistaTheme","VistaBlue"]);
 	
 	<section id="sect-Reference_Guide-Skin_Configuration-How_to_create_a_new_skin">
 		<title>How to create a new skin</title>
-		<para>
-			New skin can be created by the configuration. Firstly, you have to definy the new skin in <literal>WEB-INF/conf/script/groovy/SkinConfigScript.groovy</literal> in your <literal>Ressource</literal> (for example, in the project MyPortal, you can put it in <literal>GateInResourcesMyPortal</literal>).
-		</para>
-		
+		<procedure>
+			<step>
+				<para>
+					Define the new skin in the <literal>WEB-INF/conf/script/groovy/SkinConfigScript.groovy</literal> file as a <literal>Resource</literal> (for example, in the project <replaceable>MyPortal</replaceable>, the resource would read; <literal>GateInResourcesMyPortal</literal>).
+				</para>
+<warning>
+<para>
+	The <literal>WEB-INF/conf/script/groovy/SkinConfigScript.groovy</literal> file mentioned above does not exist in EPP-5.0.ER2. The closest match is <literal>./jboss-as/server/default/tmp/<replaceable>instance</replaceable>/02portal.war/WEB-INF/conf/uiconf/portal/webui/portal/SkinConfigOption.groovy
+</literal> 
+</para>
+</warning>
 <programlisting>
 SkinService.addPortalSkin("MyPortalSkin","MyPortal","/GateInResourcesMyPortal/skin/Stylesheet.css",ServletContext);
 </programlisting>
-		<para>
-			Secondly, you put all your new skin into <literal>folder skinyourSkin</literal> and create new file <literal>Stylesheet.css</literal> here. In this file, you will import all links to your CSS. For example in MyPortal project.
-		</para>
+			</step>
+			<step>
+				<para>
+					Place the new skin files into the <replaceable>skinyourSkin</replaceable> folder and create a new <literal>Stylesheet.css</literal> file in the same directory. This file should include lines to import all links to your CSS. For example in <replaceable>MyPortal</replaceable> project:
+			</para>
 		
 <programlisting>
 @import url(MyPortalSkin/portal/webui/component/UIPortalApplicationSkin.css) ;
 @import url(MyPortalSkin/webui/component/Stylesheet.css) ;
 </programlisting>
-		<para>
-			Finally, you have to definy the name of new skin and the image preview for the <emphasis>Skin Settings</emphasis> action in <emphasis> "User Workspace" </emphasis> <!--     <link linkend="User Workspace">User Workspace</link>     -->.
-		</para>
-		<para>
-			By default, if you don not set new name for skin, its name is <literal>label&gt;</literal>. Looking in the file and add yout new name here.
-		</para>
+			</step>
+			<step>
+				<para>
+					Finally, define the name of new skin and the image preview for the <emphasis>Skin Settings</emphasis> action. The image preview can be set in the file:<filename>ressource/skin/DefaultSkin/portal/webui/component/customization/UIChangeSkinForm/Stylesheet.css</filename>
+
+<programlisting>
+.UIChangeSkinForm .UIItemSelector .TemplateContainer .MyPortalImage {
+	margin: auto;
+	width: 329px; height:204px;
+	background: url('background/MyPortal.jpg') no-repeat top;
+	cursor: pointer ;
+}
+</programlisting>
+				</para>
+				<para>
+					If no name is set for the new skin, it will be named <literal>label&gt;</literal>. The skin name is defined in the <literal>./jboss-as/server/default/tmp<replaceable>instance</replaceable>/<replaceable>resource</replaceable>/skin/DefaultSkin/portal/webui/component/customization/UIChangeSkinForm/Stylesheet.css</literal>.
+				</para>
+<warning>
+<para>
+	The program listing below is in French. This should be translated into en-US before publication.
+</para>
+</warning>
 		
+
 <programlisting>
 #############################################################################
 #                              Change Skin                                  #
@@ -420,40 +446,38 @@ UIChangeSkin.Vista.label=Style Vista
 Skin.title=Liste des styles
 Skin.left.title=Voir et s?lectionner un style
 </programlisting>
-		<para>
-			The image peeview can be set in file <literal>ressource/skin/DefaultSkin/portal/webui/component/customization/UIChangeSkinForm/Stylesheet.css</literal> of Portal.
-		</para>
-		
-<programlisting>
-.UIChangeSkinForm .UIItemSelector .TemplateContainer .MyPortalImage {
-	margin: auto;
-	width: 329px; height:204px;
-	background: url('background/MyPortal.jpg') no-repeat top;
-	cursor: pointer ;
-}
-</programlisting>
-		<para>
-			And now, you copy your image <literal>MyPortal.jpg</literal> (that you defined above) to the folder <literal>ressource/skin/DefaultSkin/portal/webui/component/customization/UIChangeSkinForm/background</literal> and test your new skin.
-		</para>
+
+			</step>
+			<step>
+				<para>
+					Copy the image defined above (<literal>MyPortal.jpg</literal>) to the folder <literal>ressource/skin/DefaultSkin/portal/webui/component/customization/UIChangeSkinForm/background</literal> and test your new skin.
+				</para>
+			</step>
+		</procedure>
 	</section>
 	
 	<section id="sect-Reference_Guide-Skin_Configuration-How_to_create_new_themes">
 		<title>How to create new themes</title>
-		<para>
-			Firstly, you have to definy the new theme in <literal>WEB-INF/conf/script/groovy/SkinConfigScript.groovy</literal> in your <literal>Ressource</literal> (for example, in the project MyPortal, you can put it in <literal>GateInResourcesCp060508</literal>).
-		</para>
-		
+			<procedure>		
+				<step>
+					<para>
+						Define the new theme in <literal>WEB-INF/conf/script/groovy/SkinConfigScript.groovy</literal> in your <literal>Resource</literal> (for example, in the project MyPortal: <literal>GateInResourcesCp060508</literal>).
+					</para>
 <programlisting>SkinService.addTheme("MyPortal-MacTheme", ["MacGray","MacBlue","MacBlack"]);
 </programlisting>
-		<para>
-			Secondly, you put all your new theme into <literal>folder skinyourSkin</literal> and create new file <literal>Stylesheet.css</literal> here. In this file, you will import all links to your CSS. For example in MyPortal project.
-		</para>
-		
+				</step>
+				<step>
+					<para>
+						Place new theme files into <literal>folder skinyourSkin</literal> and create a new <literal>Stylesheet.css</literal> file in the same directory. This file should include lines to import all links to all CSS resources. For example, in the <replaceable>MyPortal</replaceable> project:
+					</para>
+			
 <programlisting>@import url(MyPortalSkin/PortletThemes/Stylesheet.css) ;
 </programlisting>
-		<para>
-			You can see here, in the <literal>GateInResourcesCp060508/skin/MyPortalSkin/PortletThemes/Stylesheet.css</literal>, you put all your CSS of new theme.
-		</para>
+				</step>
+			</procedure>
+			<para>
+				The code below illustrates the inclusion of all CSS resoucres for a new theme from the example file <literal>GateInResourcesCp060508/skin/MyPortalSkin/PortletThemes/Stylesheet.css</literal>.
+			</para>
 		
 <programlisting>
 /*---- MyPortalTheme ----*/
@@ -583,6 +607,7 @@ Skin.left.title=Voir et s?lectionner un style
 	height: 30px;
 }
 </programlisting>
+
 	</section>
 
 </section>
