@@ -4,6 +4,12 @@
 
    String[] beanFields = uicomponent.getBeanFields();
    String[] beanActions = uicomponent.getBeanActions();
+   int colnum = 0;
+   if(beanFields != null && beanFields.length > 0 && beanActions != null && beanActions.length > 0)
+      colnum = beanFields.length + 1;
+   else if(beanFields != null && beanFields.length > 0)
+      colnum = beanFields.length;
+      
    UIComponent uiParent = uicomponent.getParent();
    String name = uicomponent.getLabel();
    UIForm uiForm = uicomponent.getAncestorOfType(UIForm.class);
@@ -13,34 +19,33 @@
       <thead>
       <tr>
          <% if (name != null)
-         { %>
-         <% for (field in beanFields)
-         { %>
-         <th><%=_ctx.appRes(name + ".header." + field)%></th>
-         <% } %>
-         <% if (beanActions != null)
-         { %>
-         <th><%=_ctx.appRes(name + ".header.action")%></th>
-         <% } %>
-         <% } %>
-         <% if (name == null)
-         { %>
-         <% for (field in beanFields)
-         { %>
-         <th><%=_ctx.appRes(uiParent.getName() + ".header." + field)%></th>
-         <% } %>
-         <% if (beanActions != null && beanActions.length > 0)
-         { %>
-         <th><%=_ctx.appRes(uiParent.getName() + ".header.action")%></th>
-         <% } %>
-         <% } %>
+         		{ for (field in beanFields)
+         			{ %>
+         				<th><%=_ctx.appRes(name + ".header." + field)%></th>
+         		<% }
+         			if (beanActions != null)
+         			{ %>
+         				<th><%=_ctx.appRes(name + ".header.action")%></th>
+         		<% }
+         		}
+         		if (name == null)
+         		{
+         			for (field in beanFields)
+         			{ %>
+         				<th><%=_ctx.appRes(uiParent.getName() + ".header." + field)%></th>
+         	 <% }
+         			if (beanActions != null && beanActions.length > 0)
+         			{ %>
+         				<th><%=_ctx.appRes(uiParent.getName() + ".header.action")%></th>
+         	 <% }
+         		} %>
       </tr>
       </thead>
       <tbody>
       <% if (uicomponent.getUIPageIterator().getAvailable() < 1)
       { %>
       <tr>
-         <td style="font-style:italic; color: #FF5604; text-align: center;" colspan="<%=beanFields.length + 1%>">
+      	 <td style="font-style:italic; color: #FF5604; text-align: center;" colspan="<%=colnum%>">
             <%=_ctx.appRes("UIGrid.msg.empty")%>
          </td>
       </tr>
