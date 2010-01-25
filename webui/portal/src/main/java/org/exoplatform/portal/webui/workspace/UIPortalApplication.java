@@ -19,10 +19,15 @@
 
 package org.exoplatform.portal.webui.workspace;
 
+import org.exoplatform.container.ExoContainer;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.DataStorage;
+import org.exoplatform.portal.config.NoSuchDataException;
 import org.exoplatform.portal.config.UserPortalConfig;
+import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Container;
+import org.exoplatform.portal.config.model.Page;
+import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.resource.Skin;
 import org.exoplatform.portal.resource.SkinConfig;
 import org.exoplatform.portal.resource.SkinService;
@@ -376,20 +381,21 @@ public class UIPortalApplication extends UIApplication
    }
 
    /**
-    * The processDecode() method is doing 3 actions: 1) if the nodePath is null
-    * (case of the first request) a call to super.processDecode(context) is made
-    * and we end the method here 2) if the nodePath exist but is equals to the
-    * current one then we also call super and stops here 3) if the requested
-    * nodePath is not equals to the current one , then an event of type
-    * PageNodeEvent.CHANGE_PAGE_NODE is sent to the asociated EventListener; a
-    * call to super is then done
+    * The processDecode() method is doing 3 actions: 
+    * 1) if the nodePath is null (case of the first request) a call to 
+    * super.processDecode(context) is made and we end the method here 
+    * 2) if the nodePath exist but is equals to the current one 
+    * then we also call super and stops here 
+    * 3) if the requested nodePath is not equals to the current one or current 
+    * page no longer exists, then an event of type PageNodeEvent.CHANGE_PAGE_NODE 
+    * is sent to the associated EventListener; a call to super is then done
     */
    public void processDecode(WebuiRequestContext context) throws Exception
    {
       PortalRequestContext pcontext = (PortalRequestContext)context;
       String nodePath = pcontext.getNodePath().trim();
-
-      if (!nodePath.equals(nodePath_))
+      
+      if (!nodePath.equals(nodePath_) || !isPageExist())
       {
          nodePath_ = nodePath;
          UIPortal uiPortal = findFirstComponentOfType(UIPortal.class);
@@ -556,6 +562,31 @@ public class UIPortalApplication extends UIApplication
    public void setUserPortalConfig(UserPortalConfig userPortalConfig)
    {
       this.userPortalConfig_ = userPortalConfig;
+   }
+   
+   private boolean isPageExist() throws Exception 
+   {
+      WebuiRequestContext context = Util.getPortalRequestContext();
+      ExoContainer appContainer = context.getApplication().getApplicationServiceContainer();
+      UserPortalConfigService userPortalConfigService =
+         (UserPortalConfigService)appContainer.getComponentInstanceOfType(UserPortalConfigService.class);
+      Page page = null;
+      PageNode pageNode = Util.getUIPortal().getSelectedNode();
+      if (pageNode != null)
+      {
+         try
+         {
+            if (pageNode.getPageReference() != null)
+            {
+               page = userPortalConfigService.getPage(pageNode.getPageReference(), context.getRemoteUser());
+            }
+         }
+         catch (NoSuchDataException nsde)
+         {
+            return false;
+         }         
+      }
+      return (page != null);
    }
 
 }
