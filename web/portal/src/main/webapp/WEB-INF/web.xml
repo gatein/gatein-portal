@@ -28,8 +28,8 @@
 
   <!--Uncomment for clustered setup-->
   <!--
-  <distributable/>
   -->
+  <distributable/>
 
   <context-param>
     <param-name>org.exoplatform.frameworks.jcr.command.web.fckeditor.digitalAssetsWorkspace</param-name>

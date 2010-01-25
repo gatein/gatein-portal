@@ -39,7 +39,7 @@
 						<value-storages>
 							<value-storage id="sample-ws" class="org.exoplatform.services.jcr.impl.storage.value.fs.TreeFileValueStorage">
 								<properties>
-									<property name="path" value="${gatein.jcr.data.dir}/values/sample-ws${container.name.suffix}" />
+									<property name="path" value="${gatein.jcr.storage.data.dir}/sample-ws${container.name.suffix}" />
 								</properties>
 								<filters>
 									<filter property-type="Binary" />
@@ -62,7 +62,7 @@
 					</cache>
 					<query-handler class="org.exoplatform.services.jcr.impl.core.query.lucene.SearchIndex">
 						<properties>
-							<property name="index-dir" value="${gatein.jcr.data.dir}/jcrlucenedb/sample-ws${container.name.suffix}" />
+							<property name="index-dir" value="${gatein.jcr.index.data.dir}/sample-ws${container.name.suffix}" />
 						</properties>
 					</query-handler>
 					<lock-manager>

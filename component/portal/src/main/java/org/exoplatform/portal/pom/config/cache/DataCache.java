@@ -18,6 +18,7 @@
  */
 package org.exoplatform.portal.pom.config.cache;
 
+import org.exoplatform.container.ExoContainer;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.POMTask;
 import org.exoplatform.portal.pom.config.TaskExecutor;
@@ -36,6 +37,9 @@ public class DataCache extends TaskExecutionDecorator
    /** . */
    private final AtomicLong readCount = new AtomicLong();
 
+   /** . */
+   private boolean cluster = ExoContainer.getProfiles().contains("cluster");
+
    public DataCache(TaskExecutor next)
    {
       super(next);
@@ -43,7 +47,7 @@ public class DataCache extends TaskExecutionDecorator
 
    public <V> V execute(POMSession session, POMTask<V> task) throws Exception
    {
-      if (task instanceof CacheableDataTask)
+      if (task instanceof CacheableDataTask && !cluster)
       {
          CacheableDataTask<?, V> loadTask = (CacheableDataTask<?, V>)task;
          switch (loadTask.getAccessMode())

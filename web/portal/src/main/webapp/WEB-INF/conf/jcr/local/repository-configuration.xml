@@ -57,18 +57,21 @@
           </initializer>
           <cache enabled="true" class="org.exoplatform.services.jcr.impl.dataflow.persistent.jbosscache.JBossCacheWorkspaceStorageCache">
             <properties>
-              <property name="jbosscache-configuration" value="conf/jcr/jbosscache/local/config.xml" />
+              <property name="jbosscache-configuration" value="conf/jcr/jbosscache/${gatein.jcr.config.type}/config-system.xml" />
             </properties>
           </cache>
           <query-handler class="org.exoplatform.services.jcr.impl.core.query.lucene.SearchIndex">
             <properties>
               <property name="index-dir" value="${gatein.jcr.index.data.dir}/system${container.name.suffix}"/>
+              <property name="changesfilter-class" value="${gatein.jcr.changefilterclass}" />
+              <property name="changesfilter-config-path" value="conf/jcr/jbosscache/cluster/indexer-config-system.xml" />
+              <property name="max-volatile-time" value="60" />
             </properties>
           </query-handler>
           <lock-manager class="org.exoplatform.services.jcr.impl.core.lock.jbosscache.CacheableLockManager">
             <properties>
               <property name="time-out" value="15m" />
-              <property name="jbosscache-configuration" value="conf/jcr/jbosscache/local/lock-config-system.xml" />
+              <property name="jbosscache-configuration" value="conf/jcr/jbosscache/${gatein.jcr.config.type}/lock-config-system.xml" />
             </properties>
           </lock-manager>
         </workspace>
@@ -103,18 +106,21 @@
           </initializer>
           <cache enabled="true" class="org.exoplatform.services.jcr.impl.dataflow.persistent.jbosscache.JBossCacheWorkspaceStorageCache">
             <properties>
-              <property name="jbosscache-configuration" value="conf/jcr/jbosscache/local/config.xml" />
+              <property name="jbosscache-configuration" value="conf/jcr/jbosscache/${gatein.jcr.config.type}/config-portal-system.xml" />
             </properties>
           </cache>
           <query-handler class="org.exoplatform.services.jcr.impl.core.query.lucene.SearchIndex">
             <properties>
               <property name="index-dir" value="${gatein.jcr.index.data.dir}/portal-system${container.name.suffix}"/>
+              <property name="changesfilter-class" value="${gatein.jcr.changefilterclass}" />
+              <property name="changesfilter-config-path" value="conf/jcr/jbosscache/cluster/indexer-config-portal-system.xml" />
+              <property name="max-volatile-time" value="60" />
             </properties>
           </query-handler>
           <lock-manager class="org.exoplatform.services.jcr.impl.core.lock.jbosscache.CacheableLockManager">
             <properties>
               <property name="time-out" value="15m" />
-              <property name="jbosscache-configuration" value="conf/jcr/jbosscache/local/lock-config-portal-system.xml" />
+              <property name="jbosscache-configuration" value="conf/jcr/jbosscache/${gatein.jcr.config.type}/lock-config-portal-system.xml" />
             </properties>
           </lock-manager>
         </workspace>
@@ -149,18 +155,21 @@
           </initializer>
           <cache enabled="true" class="org.exoplatform.services.jcr.impl.dataflow.persistent.jbosscache.JBossCacheWorkspaceStorageCache">
             <properties>
-              <property name="jbosscache-configuration" value="conf/jcr/jbosscache/local/config.xml" />
+              <property name="jbosscache-configuration" value="conf/jcr/jbosscache/${gatein.jcr.config.type}/config-portal-work.xml" />
             </properties>
           </cache>
          <query-handler class="org.exoplatform.services.jcr.impl.core.query.lucene.SearchIndex">
           <properties>
             <property name="index-dir" value="${gatein.jcr.index.data.dir}/portal-work${container.name.suffix}"/>
+            <property name="changesfilter-class" value="${gatein.jcr.changefilterclass}" />
+            <property name="changesfilter-config-path" value="conf/jcr/jbosscache/cluster/indexer-config-portal-work.xml" />
+            <property name="max-volatile-time" value="60" />
           </properties>
          </query-handler>
          <lock-manager class="org.exoplatform.services.jcr.impl.core.lock.jbosscache.CacheableLockManager">
            <properties>
              <property name="time-out" value="15m" />
-             <property name="jbosscache-configuration" value="conf/jcr/jbosscache/local/lock-config-portal-work.xml" />
+             <property name="jbosscache-configuration" value="conf/jcr/jbosscache/${gatein.jcr.config.type}/lock-config-portal-work.xml" />
            </properties>
          </lock-manager>
        </workspace>
@@ -196,18 +205,21 @@
            </initializer>
            <cache enabled="true" class="org.exoplatform.services.jcr.impl.dataflow.persistent.jbosscache.JBossCacheWorkspaceStorageCache">
              <properties>
-               <property name="jbosscache-configuration" value="conf/jcr/jbosscache/local/config.xml" />
+               <property name="jbosscache-configuration" value="conf/jcr/jbosscache/${gatein.jcr.config.type}/config-wsrp-system.xml" />
              </properties>
            </cache>
            <query-handler class="org.exoplatform.services.jcr.impl.core.query.lucene.SearchIndex">
              <properties>
                <property name="index-dir" value="${gatein.jcr.index.data.dir}/wsrp${container.name.suffix}"/>
+               <property name="changesfilter-class" value="${gatein.jcr.changefilterclass}" />
+               <property name="changesfilter-config-path" value="conf/jcr/jbosscache/cluster/indexer-config-wsrp-system.xml" />
+               <property name="max-volatile-time" value="60" />
              </properties>
            </query-handler>
            <lock-manager class="org.exoplatform.services.jcr.impl.core.lock.jbosscache.CacheableLockManager">
              <properties>
                <property name="time-out" value="15m" />
-               <property name="jbosscache-configuration" value="conf/jcr/jbosscache/local/lock-config-wsrp-system.xml" />
+               <property name="jbosscache-configuration" value="conf/jcr/jbosscache/${gatein.jcr.config.type}/lock-config-wsrp-system.xml" />
              </properties>
            </lock-manager>
          </workspace>
