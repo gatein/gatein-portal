@@ -30,12 +30,14 @@ import org.exoplatform.resolver.ApplicationResourceResolver;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.portletcontainer.PortletContainerException;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.lifecycle.Lifecycle;
 import org.exoplatform.webui.core.lifecycle.WebuiBindingContext;
 import org.exoplatform.webui.event.Event;
+import org.exoplatform.webui.exception.MessageException;
 import org.gatein.common.util.MultiValuedPropertyMap;
 import org.gatein.pc.api.invocation.RenderInvocation;
 import org.gatein.pc.api.invocation.response.ErrorResponse;
@@ -74,70 +76,75 @@ public class UIPortletLifecycle<S, C extends Serializable, I> extends Lifecycle<
     */
    public void processAction(UIPortlet<S, C> uicomponent, WebuiRequestContext context) throws Exception
    {
-      String action = context.getRequestParameter(PortalRequestContext.UI_COMPONENT_ACTION);
-      if (action != null)
+      try
       {
-         Event<UIComponent> event = uicomponent.createEvent(action, Event.Phase.PROCESS, context);
-         if (event != null)
-            event.broadcast();
-         return;
-      }
-
-      boolean addUpdateComponent = false;
-      String portletMode = context.getRequestParameter("portal:portletMode");
-      if (portletMode != null)
-      {
-         Event<UIComponent> event = uicomponent.createEvent("ChangePortletMode", Event.Phase.PROCESS, context);
-         if (event != null)
-            event.broadcast();
-         addUpdateComponent = true;
-      }
-
-      String windowState = context.getRequestParameter("portal:windowState");
-      if (windowState != null)
-      {
-         Event<UIComponent> event = uicomponent.createEvent("ChangeWindowState", Event.Phase.PROCESS, context);
-         if (event != null)
-            event.broadcast();
-         addUpdateComponent = true;
-      }
-
-      /*
-       * Check the type of the incoming request, can be either an ActionURL or a
-       * RenderURL one
-       * 
-       * In case of a RenderURL, the parameter state map must be invalidated and
-       * ths is done in the associated ActionListener
-       * 
-       * If no action type is specified we assume the default, which is to render
-       */
-      String portletActionType = context.getRequestParameter(Constants.TYPE_PARAMETER);
-      if (portletActionType != null)
-      {
-         if (portletActionType.equals(Constants.PORTAL_PROCESS_ACTION))
+         String action = context.getRequestParameter(PortalRequestContext.UI_COMPONENT_ACTION);
+         if (action != null)
          {
-            Event<UIComponent> event = uicomponent.createEvent("ProcessAction", Event.Phase.PROCESS, context);
+            Event<UIComponent> event = uicomponent.createEvent(action, Event.Phase.PROCESS, context);
             if (event != null)
                event.broadcast();
-            addUpdateComponent = true;
+            return;
          }
-         else if (portletActionType.equals(Constants.PORTAL_SERVE_RESOURCE))
+
+         String portletMode = context.getRequestParameter("portal:portletMode");
+         if (portletMode != null)
          {
-            Event<UIComponent> event = uicomponent.createEvent("ServeResource", Event.Phase.PROCESS, context);
+            Event<UIComponent> event = uicomponent.createEvent("ChangePortletMode", Event.Phase.PROCESS, context);
             if (event != null)
                event.broadcast();
          }
-      }
-      else
-      {
-    	  Event<UIComponent> event = uicomponent.createEvent("Render", Event.Phase.PROCESS, context);
-    	  if (event != null)
-    		  event.broadcast();
-    	  addUpdateComponent = true;
-      }
 
-      if (addUpdateComponent)
+         String windowState = context.getRequestParameter("portal:windowState");
+         if (windowState != null)
+         {
+            Event<UIComponent> event = uicomponent.createEvent("ChangeWindowState", Event.Phase.PROCESS, context);
+            if (event != null)
+               event.broadcast();
+         }
+
+         /*
+          * Check the type of the incoming request, can be either an ActionURL or a
+          * RenderURL one
+          * 
+          * In case of a RenderURL, the parameter state map must be invalidated and
+          * this is done in the associated ActionListener
+          * 
+          * If no action type is specified we assume the default, which is to render
+          */
+         String portletActionType = context.getRequestParameter(Constants.TYPE_PARAMETER);
+         if (portletActionType != null)
+         {
+            if (portletActionType.equals(Constants.PORTAL_PROCESS_ACTION))
+            {
+               Event<UIComponent> event = uicomponent.createEvent("ProcessAction", Event.Phase.PROCESS, context);
+               if (event != null)
+                  event.broadcast();
+            }
+            else if (portletActionType.equals(Constants.PORTAL_SERVE_RESOURCE))
+            {
+               Event<UIComponent> event = uicomponent.createEvent("ServeResource", Event.Phase.PROCESS, context);
+               if (event != null)
+                  event.broadcast();
+            }
+         }
+         else
+         {
+            Event<UIComponent> event = uicomponent.createEvent("Render", Event.Phase.PROCESS, context);
+            if (event != null)
+               event.broadcast();
+         }
+
          context.addUIComponentToUpdateByAjax(uicomponent);
+      }
+      catch (Exception e)
+      {
+         log.error(e.getMessage());
+         Object[] args = {e.getMessage()};
+         context.addUIComponentToUpdateByAjax(uicomponent);
+         throw new MessageException(new ApplicationMessage("UIPortletLifecycle.msg.process-error", args, ApplicationMessage.ERROR));
+      }
+      
    }
 
    /**
