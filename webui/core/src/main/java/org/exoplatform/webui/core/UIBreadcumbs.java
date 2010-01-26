@@ -59,6 +59,22 @@ public class UIBreadcumbs extends UIComponent
     */
    private String styleBread = "default";
 
+   /**
+    * The runtime template.
+    */
+   private String template;
+
+   @Override
+   public String getTemplate()
+   {
+      return template != null ? template : super.getTemplate();
+   }
+
+   public void setTemplate(String template)
+   {
+      this.template = template;
+   }
+
    public List<LocalPath> getPath()
    {
       return path_;

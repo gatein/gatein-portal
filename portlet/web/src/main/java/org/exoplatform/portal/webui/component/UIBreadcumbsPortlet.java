@@ -59,7 +59,7 @@ public class UIBreadcumbsPortlet extends UIPortletApplication
       String template = prefers.getValue("template", "system:/groovy/webui/core/UIBreadcumbs.gtmpl");
 
       UIBreadcumbs uiBreadCumbs = addChild(UIBreadcumbs.class, null, null);
-      uiBreadCumbs.getComponentConfig().setTemplate(template);
+      uiBreadCumbs.setTemplate(template);
    }
 
    public void loadSelectedPath()

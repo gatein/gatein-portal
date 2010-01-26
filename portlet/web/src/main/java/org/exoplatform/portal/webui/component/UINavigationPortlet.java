@@ -46,7 +46,7 @@ public class UINavigationPortlet extends UIPortletApplication
       UIPortalNavigation portalNavigation = addChild(UIPortalNavigation.class, "UIHorizontalNavigation", null);
       portalNavigation.setUseAjax(Boolean.valueOf(prefers.getValue("useAJAX", "true")));
       portalNavigation.setShowUserNavigation(Boolean.valueOf(prefers.getValue("showUserNavigation", "true")));
-      portalNavigation.getComponentConfig().setTemplate(template);
+      portalNavigation.setTemplate(template);
 
       portalNavigation.setCssClassName(prefers.getValue("CSSClassName", ""));
    }

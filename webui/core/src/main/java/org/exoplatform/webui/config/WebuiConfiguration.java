@@ -19,6 +19,8 @@
 
 package org.exoplatform.webui.config;
 
+import org.exoplatform.webui.config.metadata.ComponentMetaData;
+
 import java.util.ArrayList;
 
 /**
@@ -30,7 +32,7 @@ public class WebuiConfiguration
 
    private ArrayList<String> annotationClasses;
 
-   private ArrayList<Component> components;
+   private ArrayList<ComponentMetaData> components;
 
    private Application application;
 
@@ -39,7 +41,7 @@ public class WebuiConfiguration
       return annotationClasses;
    }
 
-   public ArrayList<Component> getComponents()
+   public ArrayList<ComponentMetaData> getComponents()
    {
       return components;
    }

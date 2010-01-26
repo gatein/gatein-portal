@@ -19,19 +19,16 @@
 
 package org.exoplatform.webui.application;
 
-import org.exoplatform.webui.config.Component;
-import org.exoplatform.webui.config.Event;
-import org.exoplatform.webui.config.EventInterceptor;
-import org.exoplatform.webui.config.InitParams;
-import org.exoplatform.webui.config.Param;
-import org.exoplatform.webui.config.Validator;
-import org.exoplatform.webui.config.WebuiConfiguration;
+import org.exoplatform.webui.config.*;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.ComponentConfigs;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.config.annotation.EventInterceptorConfig;
 import org.exoplatform.webui.config.annotation.ParamConfig;
 import org.exoplatform.webui.config.annotation.ValidatorConfig;
+import org.exoplatform.webui.config.metadata.ComponentMetaData;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 import org.jibx.runtime.BindingDirectory;
 import org.jibx.runtime.IBindingFactory;
 import org.jibx.runtime.IUnmarshallingContext;
@@ -60,6 +57,10 @@ public class ConfigurationManager
     */
    private Map<String, Component> configs_ = new HashMap<String, Component>();
 
+   /** The logger. */
+   private final Logger log;
+
+   /** . */
    private org.exoplatform.webui.config.Application application_;
 
    /**
@@ -68,6 +69,9 @@ public class ConfigurationManager
     */
    public ConfigurationManager(InputStream inputStream) throws Exception
    {
+      // Logger first
+      log = LoggerFactory.getLogger(ConfigurationManager.class);
+
       IBindingFactory bfact = BindingDirectory.getFactory(WebuiConfiguration.class);
       IUnmarshallingContext uctx = bfact.createUnmarshallingContext();
       WebuiConfiguration config = (WebuiConfiguration)uctx.unmarshalDocument(inputStream, null);
@@ -83,14 +87,14 @@ public class ConfigurationManager
       }
       if (config.getComponents() != null)
       {
-         for (Component component : config.getComponents())
+         for (ComponentMetaData componentMetaData : config.getComponents())
          {
-            String key = component.getType();
-            if (component.getId() != null)
+            String key = componentMetaData.getType();
+            if (componentMetaData.getId() != null)
             {
-               key = key + ":" + component.getId();
+               key = key + ":" + componentMetaData.getId();
             }
-            configs_.put(key, component);
+            configs_.put(key, new Component(componentMetaData));
          }
       }
 
@@ -106,12 +110,7 @@ public class ConfigurationManager
    {
       for (Component component : configs)
       {
-         String key = component.getType();
-         if (component.getId() != null)
-         {
-            key = key + ":" + component.getId();
-         }
-         configs_.put(key, component);
+         configs_.put(component.getKey(), component);
       }
    }
 
@@ -136,6 +135,38 @@ public class ConfigurationManager
       return configs;
    }
 
+   public Component getComponentConfig(ComponentHandle handle)
+   {
+      Component component = configs_.get(handle.getKey());
+
+      //
+      if (component == null)
+      {
+         Class<?> owner = handle.getOwner();
+         process(owner);
+      }
+
+      //
+      return configs_.get(handle.getKey());
+   }
+
+   private void process(Class<?> owner)
+   {
+      if (owner == null)
+      {
+         throw new NullPointerException("Cannot process a null owner");
+      }
+      try
+      {
+         Component[] components = annotationToComponents(owner);
+         setComponentConfigs(components);
+      }
+      catch (Exception e)
+      {
+         log.error("Could not create component configuration for owner " + owner.getName(), e);
+      }
+   }
+
    /**
     * Gets a component of a given class and identified by id
     *
@@ -150,21 +181,19 @@ public class ConfigurationManager
       {
          key = key + ":" + id;
       }
+
+      //
       Component config = configs_.get(key);
       if (config != null)
       {
          return config;
       }
-      try
-      {
-         Component[] components = annotationToComponents(type);
-         setComponentConfigs(components);
-         return configs_.get(key);
-      }
-      catch (Exception e)
-      {
-         return null;
-      }
+
+      //
+      process(type);
+
+      //
+      return configs_.get(key);
    }
 
    public org.exoplatform.webui.config.Application getApplication()
@@ -218,28 +247,37 @@ public class ConfigurationManager
 
    private Component toComponentConfig(ComponentConfig annotation, Class<?> clazz) throws Exception
    {
-      Component config = new Component();
-      if (annotation.id().length() > 0)
-      {
-         config.setId(annotation.id());
-      }
-
-      Class<?> type = annotation.type() == void.class ? clazz : annotation.type();
-      config.setType(type.getName());
+      String template = null;
       if (annotation.template().length() > 0)
       {
-         config.setTemplate(annotation.template());
+         template = annotation.template();
       }
+
+      //
+      String id = null;
+      if (annotation.id().length() > 0)
+      {
+         id = annotation.id();
+      }
+
+      //
+      Class<?> type = annotation.type() == void.class ? clazz : annotation.type();
+
+      //
+      String lifecycle = null;
       if (annotation.lifecycle() != void.class)
       {
-         config.setLifecycle(annotation.lifecycle().getName());
+         lifecycle = annotation.lifecycle().getName();
       }
+
+      //
+      String decorator = null;
       if (annotation.decorator().length() > 0)
       {
-         config.setDecorator(annotation.decorator());
+         decorator = annotation.decorator();
       }
-      config.setInitParams(toInitParams(annotation.initParams()));
 
+      //
       EventConfig[] eventAnnotations = annotation.events();
       ArrayList<Event> events;
       if (eventAnnotations.length != 0)
@@ -254,8 +292,8 @@ public class ConfigurationManager
       {
          events = new ArrayList<Event>();
       }
-      config.setEvents(events);
 
+      //
       EventInterceptorConfig[] eventInterceptorAnnotations = annotation.eventInterceptors();
       ArrayList<EventInterceptor> eventInterceptors;
       if (eventInterceptorAnnotations.length != 0)
@@ -270,8 +308,8 @@ public class ConfigurationManager
       {
          eventInterceptors =  new ArrayList<EventInterceptor>();
       }
-      config.setEventInterceptors(eventInterceptors);
 
+      //
       ValidatorConfig[] validatorAnnotations = annotation.validators();
       ArrayList<Validator> validators;
       if (validatorAnnotations.length != 0)
@@ -286,9 +324,19 @@ public class ConfigurationManager
       {
          validators = new ArrayList<Validator>();
       }
-      config.setValidators(validators);
 
-      return config;
+      //
+      return new Component(
+         clazz,
+         id,
+         type.getName(),
+         lifecycle,
+         template,
+         decorator,
+         toInitParams(annotation.initParams()),
+         validators,
+         events,
+         eventInterceptors);
    }
 
    private Event toEventConfig(EventConfig annotation) throws Exception

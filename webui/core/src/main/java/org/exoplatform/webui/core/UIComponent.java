@@ -58,9 +58,7 @@ abstract public class UIComponent
 
    protected UIComponent uiparent;
 
-   private String configId;
-
-   protected transient Component config;
+   protected Component config;
 
    private transient ValueRendererRegistry rendererRegistry = new ValueRendererRegistry();
    private static final Lifecycle DEFAULT_LIFECYCLE = new Lifecycle();
@@ -183,7 +181,6 @@ abstract public class UIComponent
    public void setComponentConfig(String componentId, Component config) throws Exception
    {
       this.config = config;
-      this.configId = config.getId();
       if (componentId == null || componentId.length() == 0)
       {
          componentId = config.getId();

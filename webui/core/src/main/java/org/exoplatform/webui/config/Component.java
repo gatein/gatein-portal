@@ -20,6 +20,8 @@
 package org.exoplatform.webui.config;
 
 import org.exoplatform.webui.Util;
+import org.exoplatform.webui.application.replication.api.annotations.Converted;
+import org.exoplatform.webui.config.metadata.ComponentMetaData;
 import org.exoplatform.webui.core.lifecycle.Lifecycle;
 import org.exoplatform.webui.event.EventListener;
 
@@ -29,32 +31,102 @@ import java.util.List;
 import java.util.Map;
 
 /** Created by The eXo Platform SARL Author : Tuan Nguyen tuan08@users.sourceforge.net May 4, 2006 */
+@Converted(ComponentConfigConverter.class)
 public class Component
 {
 
-   private String id;
+   final ComponentHandle handle;
 
-   private String type;
+   private final String id;
 
-   private String lifecycle;
+   private final String type;
 
-   private String template;
+   private final String lifecycle;
 
-   private String decorator;
+   private final String template;
 
-   private InitParams initParams;
+   private final String decorator;
 
-   // Note: Specific List implementations are required by JiBX :/
+   private final InitParams initParams;
 
-   private ArrayList<Validator> validators;
+   private final List<Validator> validators;
 
-   private ArrayList<Event> events;
+   private final List<Event> events;
 
-   private ArrayList<EventInterceptor> eventInterceptors;
+   private final List<EventInterceptor> eventInterceptors;
 
-   transient private Map<String, Event> eventMap;
+   private Map<String, Event> eventMap;
 
-   transient private Lifecycle componentLifecycle;
+   private Lifecycle componentLifecycle;
+
+   public Component(ComponentMetaData metaData)
+   {
+      this(
+         new ComponentHandle(null, metaData.getId() == null ? metaData.getType() : metaData.getType() + metaData.getId()),
+         metaData.getId(),
+         metaData.getType(),
+         metaData.getLifecycle(),
+         metaData.getTemplate(),
+         metaData.getDecorator(),
+         metaData.getInitParams(),
+         metaData.getValidators(),
+         metaData.getEvents(),
+         metaData.getEventInterceptors());
+   }
+
+   public Component(
+      Class<?> owner,
+      String id,
+      String type,
+      String lifecycle,
+      String template,
+      String decorator,
+      InitParams initParams,
+      List<Validator> validators,
+      List<Event> events,
+      List<EventInterceptor> eventInterceptors)
+   {
+      this(
+         new ComponentHandle(owner, id == null ? type : type + ":" + id),
+         id,
+         type,
+         lifecycle,
+         template,
+         decorator,
+         initParams,
+         validators,
+         events,
+         eventInterceptors);
+   }
+
+   private Component(
+      ComponentHandle handle,
+      String id,
+      String type,
+      String lifecycle,
+      String template,
+      String decorator,
+      InitParams initParams,
+      List<Validator> validators,
+      List<Event> events,
+      List<EventInterceptor> eventInterceptors)
+   {
+      this.handle = handle;
+      this.id = id;
+      this.type = type;
+      this.lifecycle = lifecycle;
+      this.template = template;
+      this.decorator = decorator;
+      this.initParams = initParams;
+      this.validators = validators;
+      this.events = events;
+      this.eventInterceptors = eventInterceptors;
+   }
+
+   public String getKey()
+   {
+      return handle.getKey();
+   }
 
    public String getId()
    {
@@ -81,69 +153,24 @@ public class Component
       return decorator;
    }
 
-   public void setId(String id)
-   {
-      this.id = id;
-   }
-
-   public void setType(String type)
-   {
-      this.type = type;
-   }
-
-   public void setLifecycle(String lifecycle)
-   {
-      this.lifecycle = lifecycle;
-   }
-
-   public void setTemplate(String template)
-   {
-      this.template = template;
-   }
-
-   public void setDecorator(String decorator)
-   {
-      this.decorator = decorator;
-   }
-
    public InitParams getInitParams()
    {
       return initParams;
    }
 
-   public void setInitParams(InitParams initParams)
-   {
-      this.initParams = initParams;
-   }
-
-   public ArrayList<Validator> getValidators()
+   public List<Validator> getValidators()
    {
       return validators;
    }
 
-   public void setValidators(ArrayList<Validator> validators)
-   {
-      this.validators = validators;
-   }
-
-   public ArrayList<Event> getEvents()
+   public List<Event> getEvents()
    {
       return events;
    }
 
-   public void setEvents(ArrayList<Event> events)
-   {
-      this.events = events;
-   }
-
-   public ArrayList<EventInterceptor> getEventInterceptors()
+   public List<EventInterceptor> getEventInterceptors()
    {
       return eventInterceptors;
-   }
-
-   public void setEventInterceptors(ArrayList<EventInterceptor> events)
-   {
-      eventInterceptors = events;
    }
 
    public Event getUIComponentEventConfig(String eventName) throws Exception

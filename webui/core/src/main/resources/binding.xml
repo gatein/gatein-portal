@@ -55,7 +55,7 @@
 
   <!-- component object mapping -->  
   
-  <mapping name="ui-component-config"  class="org.exoplatform.webui.config.Component">
+  <mapping name="ui-component-config"  class="org.exoplatform.webui.config.metadata.ComponentMetaData">
     <value name="id"  field="id" style="attribute" usage="optional" />
     <value name="type"  field="type"  />
     <value name="lifecycle"  field="lifecycle" usage="optional" />    
@@ -93,7 +93,7 @@
       <value name="class" style="element"/>
     </collection>
 
-    <collection item-type="org.exoplatform.webui.config.Component" 
+    <collection item-type="org.exoplatform.webui.config.metadata.ComponentMetaData"
                 field="components" usage="optional" />
               
     <structure usage="optional" field="application"/>    

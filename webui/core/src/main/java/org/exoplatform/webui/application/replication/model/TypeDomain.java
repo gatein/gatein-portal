@@ -26,6 +26,8 @@ import org.exoplatform.webui.application.replication.model.metadata.ClassTypeMet
 import org.exoplatform.webui.application.replication.model.metadata.ConvertedTypeMetaData;
 import org.exoplatform.webui.application.replication.model.metadata.DomainMetaData;
 import org.exoplatform.webui.application.replication.model.metadata.TypeMetaData;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
@@ -40,6 +42,9 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public final class TypeDomain
 {
+
+   /** . */
+   private static final Logger log = LoggerFactory.getLogger(TypeDomain.class);
 
    /** . */
    private static final Map<Class<?>, Class<?>> primitiveToWrapperMap = new HashMap<Class<?>, Class<?>>();

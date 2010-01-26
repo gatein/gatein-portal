@@ -1,16 +1,16 @@
-/**
+/*
  * Copyright (C) 2009 eXo Platform SAS.
- * 
+ *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation; either version 2.1 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this software; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
@@ -19,56 +19,34 @@
 
 package org.exoplatform.webui.config;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.io.Serializable;
 
 /**
- * Author : Nhu Dinh Thuan
- *          nhudinhthuan@yahoo.com
- * May 19, 2006
+ * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
+ * @version $Revision$
  */
-public class Container extends Component
+public class ComponentHandle implements Serializable
 {
 
-   protected String title;
+   /** The owner type of the component that may be null if no owner exists. */
+   private final Class<?> owner;
 
-   protected List<Component> children = new ArrayList<Component>(5);
+   /** The component key. */
+   private final String key;
 
-   public String getTitle()
+   public ComponentHandle(Class<?> owner, String key)
    {
-      return title;
+      this.owner = owner;
+      this.key = key;
    }
 
-   public void setTitle(String s)
+   public Class<?> getOwner()
    {
-      title = s;
+      return owner;
    }
 
-   public List getChildren()
+   public String getKey()
    {
-      return children;
+      return key;
    }
-
-   @SuppressWarnings("unchecked")
-   public void setChildren(List l)
-   {
-      children = l;
-   }
-
-   public void addChild(Component comp)
-   {
-      children.add(comp);
-   }
-
-   public void addComponent(Component comp)
-   {
-      children.add(comp);
-   }
-
-   public Iterator<Component> getChildIterator()
-   {
-      return children.iterator();
-   }
-
 }

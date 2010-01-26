@@ -62,7 +62,7 @@ public class UIGroupManagement extends UIContainer
    public UIGroupManagement() throws Exception
    {
       UIBreadcumbs uiBreadcum = addChild(UIBreadcumbs.class, null, "BreadcumbsGroupManagement");
-      uiBreadcum.getComponentConfig().setTemplate("system:/groovy/webui/core/UIBreadcumbs.gtmpl");
+      uiBreadcum.setTemplate("system:/groovy/webui/core/UIBreadcumbs.gtmpl");
       addChild(UIGroupExplorer.class, null, null);
       addChild(UIGroupDetail.class, null, null);
       uiBreadcum.setBreadcumbsStyle("UIExplorerHistoryPath");

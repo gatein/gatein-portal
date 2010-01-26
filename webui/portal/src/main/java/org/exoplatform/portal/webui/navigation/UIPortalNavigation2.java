@@ -40,6 +40,19 @@ public class UIPortalNavigation2 extends UIComponent
 
    protected Object selectedParent_;
 
+   private String template;
+
+   @Override
+   public String getTemplate()
+   {
+      return template != null ? template : super.getTemplate();
+   }
+
+   public void setTemplate(String template)
+   {
+      this.template = template;
+   }
+
    public UIComponent getViewModeUIComponent()
    {
       return null;

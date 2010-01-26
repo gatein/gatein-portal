@@ -38,8 +38,6 @@ import java.util.Map;
 public class UIComponentFactory extends ObjectFactory<UIComponent>
 {
 
-
-
    private <S extends UIComponent> Object getFieldValue(String fieldName, Map<FieldModel<? super S, ?>, ?> state)
    {
       for (Map.Entry<FieldModel<? super S, ?>, ?> entry : state.entrySet())
@@ -56,30 +54,12 @@ public class UIComponentFactory extends ObjectFactory<UIComponent>
    @Override
    public <S extends UIComponent> S create(Class<S> type, Map<FieldModel<? super S, ?>, ?> state) throws CreateException
    {
-      // Get config id
-      String configId = (String)getFieldValue("configId", state);
-      String id = (String)getFieldValue("id", state);
-
       //
       try
       {
-         WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
-         WebuiApplication webuiApp = (WebuiApplication) context.getApplication();
-         ConfigurationManager configMgr = webuiApp.getConfigurationManager();
-         Component config = configMgr.getComponentConfig(type, configId);
+         Component config = (Component)getFieldValue("config", state);
 
-         //
-         S instance;
-         if (config != null)
-         {
-            instance = Util.createObject(type, config.getInitParams());
-            instance.setComponentConfig(id, config);
-         }
-         else
-         {
-            instance = Util.createObject(type, null);
-            instance.setId(id);
-         }
+         S instance = Util.createObject(type, config != null ? config.getInitParams() : null);
 
          // Now set state
          for (Map.Entry<FieldModel<? super S, ?>, ?> entry : state.entrySet())

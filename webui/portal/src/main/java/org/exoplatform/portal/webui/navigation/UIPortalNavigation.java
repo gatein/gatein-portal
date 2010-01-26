@@ -52,6 +52,19 @@ public class UIPortalNavigation extends UIComponent
 
    private String cssClassName = "";
 
+   private String template;
+
+   @Override
+   public String getTemplate()
+   {
+      return template != null ? template : super.getTemplate();
+   }
+
+   public void setTemplate(String template)
+   {
+      this.template = template;
+   }
+
    public UIComponent getViewModeUIComponent()
    {
       return null;

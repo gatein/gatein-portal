@@ -58,7 +58,7 @@ public class UISitemapPortlet extends UIPortletApplication
 
       UIPortalNavigation uiPortalNavigation = addChild(UIPortalNavigation.class, "UISiteMap", null);
       uiPortalNavigation.loadTreeNodes();
-      uiPortalNavigation.getComponentConfig().setTemplate(template);
+      uiPortalNavigation.setTemplate(template);
    }
 
    public boolean isUseAjax()
