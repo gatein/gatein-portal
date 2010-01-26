@@ -108,25 +108,24 @@ public class UIGroupForm extends UIForm
          if (currentGroupId != null)
          {
             Group currentGroup = service.getGroupHandler().findGroupById(currentGroupId);
-            uiGroupForm.invokeSetBindingBean(currentGroup);
-            if (currentGroup.getLabel() == null || currentGroup.getLabel().trim().length() == 0)
-            {
-               currentGroup.setLabel(currentGroup.getGroupName());
-            }
 
-            Group updateGroup = service.getGroupHandler().findGroupById(currentGroup.getGroupName());
-            if (updateGroup == null)
+            if (currentGroup == null)
             {
-               Object[] args = {"GroupName", currentGroup.getGroupName()};
+               Object[] args = {uiGroupForm.getUIStringInput(GROUP_NAME).getValue()};
                UIApplication uiApp = event.getRequestContext().getUIApplication();
                uiApp.addMessage(new ApplicationMessage("UIGroupForm.msg.group-not-exist", args));
-               String parentId = currentGroup.getParentId();
-               uiGroupExplorer.changeGroup(parentId);
+               uiGroupExplorer.changeGroup(null);
                uiGroupDetail.getChild(UIGroupForm.class).setGroup(null);
                uiGroupDetail.setRenderedChild(UIGroupInfo.class);
                return;
             }
 
+            uiGroupForm.invokeSetBindingBean(currentGroup);
+            if (currentGroup.getLabel() == null || currentGroup.getLabel().trim().length() == 0)
+            {
+               currentGroup.setLabel(currentGroup.getGroupName());
+            }
+            
             service.getGroupHandler().saveGroup(currentGroup, false);
             uiGroupForm.reset();
             uiGroupForm.setGroup(null);
@@ -157,7 +156,7 @@ public class UIGroupForm extends UIForm
          Group newGroup = groupHandler.findGroupById(groupName);
          if (newGroup != null)
          {
-            Object[] args = {"GroupName", groupName};
+            Object[] args = {groupName};
             UIApplication uiApp = event.getRequestContext().getUIApplication();
             uiApp.addMessage(new ApplicationMessage("UIGroupForm.msg.group-exist", args));
             return;
