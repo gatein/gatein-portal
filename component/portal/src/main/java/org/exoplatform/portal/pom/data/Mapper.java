@@ -688,6 +688,14 @@ public class Mapper
                // We manufacture one name
                name = UUID.randomUUID().toString();
             }
+            
+            // Remove to prevent DuplicateNameException (GTNPORTAL-398) 
+            UIComponent uiComponent = dst.get(name);
+            if (uiComponent != null) {
+               dst.remove(uiComponent);
+            }
+            
+            
             if (srcChild instanceof ContainerData)
             {
                dstChild = dst.add(ObjectType.CONTAINER, name);
