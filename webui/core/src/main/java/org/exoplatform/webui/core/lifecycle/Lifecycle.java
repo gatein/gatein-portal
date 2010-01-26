@@ -69,6 +69,15 @@ public class Lifecycle<E extends UIComponent>
    public void processRender(E uicomponent, WebuiRequestContext context) throws Exception
    {
       String template = uicomponent.getTemplate();
+
+      // Fail if we have no template
+      if (template == null)
+      {
+         throw new IllegalStateException("uicomponent " + uicomponent + " with class " + uicomponent.getClass().getName() +
+         " has no template for rendering");
+      }
+
+      //
       ResourceResolver resolver = uicomponent.getTemplateResourceResolver(context, template);
       WebuiBindingContext bcontext = new WebuiBindingContext(resolver, context.getWriter(), uicomponent, context);
       bcontext.put(UIComponent.UICOMPONENT, uicomponent);

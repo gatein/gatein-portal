@@ -205,7 +205,7 @@ abstract public class UIComponent
 
    public String getTemplate()
    {
-      return config.getTemplate();
+      return config != null ? config.getTemplate() : null;
    }
 
    public ResourceResolver getTemplateResourceResolver(WebuiRequestContext context, String template)
