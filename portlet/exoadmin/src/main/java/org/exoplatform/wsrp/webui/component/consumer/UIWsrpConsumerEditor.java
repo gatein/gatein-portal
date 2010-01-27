@@ -1,6 +1,6 @@
 /*
  * JBoss, a division of Red Hat
- * Copyright 2009, Red Hat Middleware, LLC, and individual
+ * Copyright 2010, Red Hat Middleware, LLC, and individual
  * contributors as indicated by the @authors tag. See the
  * copyright.txt in the distribution for a full listing of
  * individual contributors.
@@ -45,6 +45,7 @@ import org.gatein.wsrp.WSRPConsumer;
 import org.gatein.wsrp.consumer.ConsumerException;
 import org.gatein.wsrp.consumer.ProducerInfo;
 import org.gatein.wsrp.consumer.RegistrationInfo;
+import org.gatein.wsrp.consumer.RegistrationProperty;
 import org.gatein.wsrp.consumer.registry.ConsumerRegistry;
 import org.gatein.wsrp.services.ManageableServiceFactory;
 
@@ -92,8 +93,8 @@ public class UIWsrpConsumerEditor extends UIForm
       setActions(ACTIONS);
 
       // set property value popup
-      setValuePopup = addChild(UIPopupWindow.class, null, null);
-      setValuePopup.setWindowSize(200, 0);
+      setValuePopup = addChild(UIPopupWindow.class, null, "SetPropertyPopup");
+      setValuePopup.setWindowSize(400, 0);
       setPropertyForm = createUIComponent(UISetPropertyValueForm.class, null, "SetProperty");
       setValuePopup.setUIComponent(setPropertyForm);
       setValuePopup.setRendered(false);
@@ -162,11 +163,13 @@ public class UIWsrpConsumerEditor extends UIForm
 
       RegistrationInfo local = producerInfo.getRegistrationInfo();
       localRegistration.resetProps(local.getRegistrationProperties());
+      localRegistration.setActive(false);
 
       RegistrationInfo expected = producerInfo.getExpectedRegistrationInfo();
       if (local != expected && expected != null)
       {
          expectedRegistration.resetProps(expected.getRegistrationProperties());
+         expectedRegistration.setActive(true);
       }
       else
       {
@@ -279,6 +282,17 @@ public class UIWsrpConsumerEditor extends UIForm
          String name = event.getRequestContext().getRequestParameter(OBJECTID);
          UIWsrpConsumerEditor editor = event.getSource();
 
+         RegistrationProperty property = editor.expectedRegistration.getProperty(name);
+         editor.displayPropertyValueEditor(property);
       }
+   }
+
+   private void displayPropertyValueEditor(RegistrationProperty prop) throws Exception
+   {
+      setPropertyForm.reset();
+      setPropertyForm.setProperty(prop);
+
+      setValuePopup.setRendered(true);
+      setValuePopup.setShow(true);
    }
 }

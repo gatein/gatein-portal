@@ -26,10 +26,7 @@ package org.exoplatform.wsrp.webui.component;
 import org.exoplatform.commons.utils.LazyPageList;
 import org.exoplatform.commons.utils.ListAccessImpl;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
-import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIPageIterator;
-import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIFormGrid;
 import org.gatein.common.util.ParameterValidation;
 import org.gatein.wsrp.consumer.RegistrationProperty;
@@ -43,15 +40,14 @@ import java.util.Map;
  * @version $Revision$
  */
 @ComponentConfig(
-   template = "system:/groovy/webui/core/UIGrid.gtmpl",
-   events = {
-      @EventConfig(listeners = UIRegistrationPropertiesGrid.EditPropertyActionListener.class)
-   })
+   template = "system:/groovy/webui/core/UIGrid.gtmpl"
+)
 public class UIRegistrationPropertiesGrid extends UIFormGrid
 {
    private static final String NAME = "name";
    static String[] FIELDS = {NAME, "description", "status", "value"};
    static String[] PROPERTIES_ACTIONS = {"EditProperty", "DeleteProperty"};
+   static String[] INACTIVE_ACTIONS = {};
    private Map<String, RegistrationProperty> props;
 
    public UIRegistrationPropertiesGrid() throws Exception
@@ -96,13 +92,15 @@ public class UIRegistrationPropertiesGrid extends UIFormGrid
       return props.get(name);
    }
 
-   static public class EditPropertyActionListener extends EventListener<UIRegistrationPropertiesGrid>
+   public void setActive(boolean active)
    {
-      @Override
-      public void execute(Event<UIRegistrationPropertiesGrid> event) throws Exception
+      if (active)
       {
-         String name = event.getRequestContext().getRequestParameter(OBJECTID);
-         UIRegistrationPropertiesGrid registrationPropertiesGrid = event.getSource();
+         configure(NAME, FIELDS, PROPERTIES_ACTIONS);
+      }
+      else
+      {
+         configure(NAME, FIELDS, INACTIVE_ACTIONS);
       }
    }
 }

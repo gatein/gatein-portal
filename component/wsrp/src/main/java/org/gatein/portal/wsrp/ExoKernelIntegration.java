@@ -75,8 +75,9 @@ public class ExoKernelIntegration implements Startable
    private final String consumersConfigLocation;
    private ConsumerRegistry consumerRegistry;
    private static final String REMOTE_INVOKERS_INVOKER_ID = "remote";
+   private ExoContainer container;
 
-   public ExoKernelIntegration(InitParams params, ConfigurationManager configurationManager,
+   public ExoKernelIntegration(ExoContainerContext context, InitParams params, ConfigurationManager configurationManager,
                                org.exoplatform.portal.pc.ExoKernelIntegration pc) throws Exception
    {
       // IMPORTANT: even though PC ExoKernelIntegration is not used anywhere in the code, it's still needed for pico
@@ -94,16 +95,17 @@ public class ExoKernelIntegration implements Startable
       }
 
       configurationIS = configurationManager.getInputStream(CLASSPATH + producerConfigLocation);
+
+      container = context.getContainer();
    }
 
    public void start()
    {
-      ExoContainer container = ExoContainerContext.getCurrentContainer();
-      startProducer(container);
-      startConsumers(container);
+      startProducer();
+      startConsumers();
    }
 
-   private void startProducer(ExoContainer container)
+   private void startProducer()
    {
 
       JCRProducerConfigurationService producerConfigurationService;
@@ -167,7 +169,7 @@ public class ExoKernelIntegration implements Startable
       producer.start();
    }
 
-   private void startConsumers(ExoContainer container)
+   private void startConsumers()
    {
       // retrieve federating portlet invoker from container
       FederatingPortletInvoker federatingPortletInvoker =
