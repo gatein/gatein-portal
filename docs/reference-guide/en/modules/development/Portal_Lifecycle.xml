@@ -15,10 +15,13 @@
 	<section id="sect-Reference_Guide-Portal_Lifecycle-Application_Server_start_and_stop">
 		<title>Application Server start and stop</title>
 		<para>
-			A GateIn Portal instance is simply a web application deployed as a WAR in an application server. Portlets are also part of an enhanced WAR that we call a portlet application.
+			A portal instance is simply a web application deployed as a WAR in an application server. Portlets are also part of an enhanced WAR called a portlet application.
 		</para>
 		<para>
-			GateIn doesn't require any particular setup for your portlet in most common scenario and the web.xml file can remain without any GateIn specific configuration. During deployment, GateIn will automatically and transparently inject a servlet into the portlet application to be able to interact with it. This feature is dependent on the underlying servlet container but will work out of the box on the proposed bundles.
+			&PRODUCT; doesn't require any particular setup for your portlet in most common scenarios and the <filename>web.xml</filename> file can remain without any &PRODUCT; specific configuration. 
+		</para>
+		<para>
+			During deployment, &PRODUCT; will automatically and transparently inject a servlet into the portlet application to be able to interact with it. This feature is dependent on the underlying servlet container but will work out of the box on the proposed bundles.
 		</para>
 	</section>
 	
@@ -88,12 +91,16 @@
 	<section id="sect-Reference_Guide-Portal_Lifecycle-The_Command_Servlet">
 		<title>The Command Servlet</title>
 		<para>
-			The servlet is the main entry point for incoming requests, it also includes some interesting init code when the portal is launched. This servlet (<literal>org.gatein.wci.command.CommandServlet</literal>) is automatically added during deployment and mapped to <literal>/tomcatgateinservlet</literal>.
+			The servlet is the main entry point for incoming requests, it also includes some init code when the portal is launched. This servlet (<literal>org.gatein.wci.command.CommandServlet</literal>) is automatically added during deployment and mapped to <literal>/tomcatgateinservlet</literal>.
 		</para>
 		<para>
-			In other words, this is equivalent to adding the following into web.xml (But this is for information only, the servlet is already configured)
+			This is equivalent to adding the following into <filename>web.xml</filename>.
 		</para>
-		
+		<note>
+			<para>
+				As the servlet is already configured this example is for information only.
+			</para>
+		</note>
 <programlisting role="XML">
 &lt;servlet&gt;
   &lt;servlet-name&gt;TomcatGateInServlet&lt;/servlet-name&gt;
@@ -107,7 +114,10 @@
 &lt;/servlet-mapping&gt;
 </programlisting>
 		<para>
-			With this in mind it's possible to filter on the CommandServlet by filtering on the URL pattern used by the Servlet mapping. As an example below we will create a servlet filter that calculates the time of execution of a portlet request.
+			It is possible to filter on the CommandServlet by filtering the URL pattern used by the Servlet mapping.
+		</para>	
+		<para>
+			The example below would create a servlet filter that calculates the time of execution of a portlet request.
 		</para>
 		<para>
 			The filter class:
@@ -146,7 +156,7 @@ public class MyFilter implements javax.servlet.Filter {
 }
 </programlisting>
 		<para>
-			The Java EE web application configuration file (web.xml) of the portlet on which we want to know the time to serve a portlet request. As mentioned above nothing specific to GateIn needs to be included, only the URL pattern to set has to be known.
+			The Java EE web application configuration file (<filename>web.xml</filename>) of the portlet on which we want to know the time to serve a portlet request. As mentioned above nothing specific to &PRODUCT; needs to be included, only the URL pattern to set has to be known.
 		</para>
 		
 <programlisting role="XML">
@@ -172,7 +182,7 @@ public class MyFilter implements javax.servlet.Filter {
 			<note>
 				<title>INCLUDE dispatcher</title>
 				<para>
-					Here it's important to set INCLUDE as dispatcher as the portal will always hit the CommandServlet through a request dispatcher. Without this, the filter will not be triggered, unless direct access to a resource (such as an image).
+					It is important to set <literal>INCLUDE</literal> as dispatcher as the portal will always hit the CommandServlet through a request dispatcher. Without this, the filter will not be triggered, unless direct access to a resource (such as an image).
 				</para>
 			</note>
 		</para>

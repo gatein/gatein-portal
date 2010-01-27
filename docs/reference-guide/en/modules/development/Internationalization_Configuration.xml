@@ -8,7 +8,7 @@
 	<section id="sect-Reference_Guide-Internationalization_Configuration-Overview">
 		<title>Overview</title>
 		<para>
-			All aspects of internationalization in GateIn products are covered. You should have a general knowledge of Internationalization in Java products. Sun created a <ulink url="http://java.sun.com/docs/books/tutorial/i18n/TOC.html">good internationalization tutorial</ulink> .
+			All aspects of internationalization in &PRODUCT; are covered. You should have a general knowledge of Internationalization in Java products. Sun created a <ulink url="http://java.sun.com/docs/books/tutorial/i18n/TOC.html">good internationalization tutorial</ulink> .
 		</para>
 		<para>
 			All embedded applications contains property files for various languages. They are packaged with the portlets applications in a WEB-INF/classes/locale/ directory.
