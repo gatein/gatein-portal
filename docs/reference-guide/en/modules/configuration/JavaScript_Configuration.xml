@@ -12,7 +12,10 @@
 		Every portlet can have its own javscript code but in many cases it is more convenient to reuse some existing shared libraries. For that reason, &PRODUCT; has a mechanism to easily register the libraries that will be loaded when the first page will be rendered.
 	</para>	
 	<para>
-		To do so, every WAR deployed in &PRODUCT; can register the <filename>js</filename> files thanks to a groovy script "<filename>WEB-INF/conf/script/groovy/JavascriptScript.groovy</filename>". The example file below is found in the 01eXoResources.war
+		To do so, every WAR deployed in &PRODUCT; can register the <filename>js</filename> files with the groovy script "<filename>WEB-INF/conf/script/groovy/JavascriptScript.groovy</filename>". 
+	</para>
+	<para>
+		The example file below is found in the 01eXoResources.war
 	</para>
 	
 <programlisting>JavascriptService.addJavascript("eXo", "/javascript/eXo.js", ServletContext);

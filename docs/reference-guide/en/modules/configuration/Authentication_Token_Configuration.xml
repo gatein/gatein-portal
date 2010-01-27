@@ -5,47 +5,24 @@
 ]>
 <section id="sect-Reference_Guide-Authentication_Token_Configuration">
 	<title>Authentication Token Configuration</title>
-	<section id="sect-Reference_Guide-Authentication_Token_Configuration-Overview">
-		<title>Overview</title>
-		<para>
-			In this article, you will learn:
-		</para>
-		<itemizedlist>
-			<listitem>
-				<para>
-					What token services are.
-				</para>
-			</listitem>
-			<listitem>
-				<para>
-					Implement a token service for using in GateIn portal.
-				</para>
-			</listitem>
-			<listitem>
-				<para>
-					Configure a token service with a token's life-time.
-				</para>
-			</listitem>
-		</itemizedlist>
-	</section>
 	
 	<section id="sect-Reference_Guide-Authentication_Token_Configuration-What_is_token_service">
 		<title>What is token service</title>
 		<para>
-			Token service is used in authentication.
+			<emphasis>Token service</emphasis> is used in authentication.
 		</para>
 		<para>
-			Using token helps preventing information such as user name, password into user request so the system will become more secure.
+			The token system prevents user account information being sent in clear text mode for inbound requests.  This increases authentication security.
 		</para>
 		<para>
-			Token service provides the way to manipulate tokens such as create, delete, retrieve, clean ... Token service also defines the life-time of token. After the life-time, token has no more effect. The life-time definition must be configured.
+			Token service allows adminitrators to create, delete, retrieve and clean tokens as required. The service also defines the validity period of any given token. The token becomes invalid once this period has expired, . The life-time definition must be configured.
 		</para>
 	</section>
 	
 	<section id="sect-Reference_Guide-Authentication_Token_Configuration-Implement_token_services_API">
 		<title>Implement token service's API</title>
 		<para>
-			All token services used in GateIn portal's authentication must be a subclass of an abstract class <emphasis role="bold">AbstractTokenService</emphasis> . So they must have these following methods:
+			All token services used in &PRODUCT;'s authentication must be a subclass of an abstract class <emphasis role="bold">AbstractTokenService</emphasis>. The following example shows how the token-service manipulates its tokens.
 		</para>
 		
 <programlisting role="JAVA">
@@ -57,19 +34,31 @@
 		public Credentials validateToken(String tokenKey, boolean remove) throws NullPointerException;
 </programlisting>
 		<para>
-			These methods show how the token-service manipulates its tokens.
+			
 		</para>
 	</section>
 	
 	<section id="sect-Reference_Guide-Authentication_Token_Configuration-Configure_token_services">
 		<title>Configure token services</title>
 		<para>
-			Token services configuration is also known as specifying the life-time of token in the configuration file. The token service is configured as a portal component.
+			Token services configuration includes specifying the validity period time of token in the configuration file. The token service is configured as a portal component.
 		</para>
 		<para>
-			Examples:
+		In the example below, <emphasis>CookieTokenService</emphasis> is a subclass of <emphasis role="bold">AbstractTokenService</emphasis> so it has a property which specifies the validity period of the token.
 		</para>
-		
+		<para>
+			The token service will initiate this validity property by looking for an <parameter>init-param</parameter> named "<emphasis role="bold">service.configuration</emphasis>". 
+		</para>
+		<para>
+			This property must have three values.
+		</para>
+		<programlistingco>
+			<areaspec>
+				<area coords="7" id="area-Reference_Guide-Authentication_Token_Configuration-Configure_token_services-name" />
+				<area coords="8" id="area-Reference_Guide-Authentication_Token_Configuration-Configure_token_services-time" />
+				<area coords="9" id="area-Reference_Guide-Authentication_Token_Configuration-Configure_token_services-unit" />
+			</areaspec>
+
 <programlisting role="XML">&lt;component&gt;
   &lt;key&gt;org.exoplatform.web.security.security.CookieTokenService&lt;/key&gt;
   &lt;type&gt;org.exoplatform.web.security.security.CookieTokenService&lt;/type&gt;
@@ -83,17 +72,54 @@
   &lt;/init-params&gt;
 &lt;/component&gt;
 </programlisting>
-		<para>
-			In this example, <emphasis>CookieTokenService</emphasis> is a subclass of <emphasis role="bold">AbstractTokenService</emphasis> so it has a property which specifies <emphasis>how long token can live</emphasis> .
-		</para>
-		<para>
-			Service will initiate this property by looking for an init-param named as " <emphasis role="bold">service.configuration</emphasis> ". This property must have 3 values (service's name, amount of time, unit of time). In this case, we can see the service's name is "jcr-token", the token's expiration time is a week.
-		</para>
-		<para>
-			At this time, GateIn Portal supports <emphasis>four</emphasis> timing units: <emphasis role="bold">SECOND</emphasis> , <emphasis role="bold">MINUTE</emphasis> , <emphasis role="bold">HOUR</emphasis> and <emphasis role="bold">DAY</emphasis> .
-		</para>
-	</section>
 
+		<calloutlist>
+				<callout arearefs="area-Reference_Guide-Authentication_Token_Configuration-Configure_token_services-name">
+					<para>
+						Service name
+					</para>
+				</callout>
+				<callout arearefs="area-Reference_Guide-Authentication_Token_Configuration-Configure_token_services-time">
+					<para>
+						Amount of time
+					</para>
+				</callout>
+				<callout arearefs="area-Reference_Guide-Authentication_Token_Configuration-Configure_token_services-unit">
+					<para>
+						Unit of time
+					</para>
+				</callout>
+		</calloutlist>
+		</programlistingco>
+		<para>
+			In this case, the service's name is "<emphasis role="bold">jcr-token</emphasis>" and the token's expiration time is a week.
+		</para>
+		<para>
+			&PRODUCT; supports <emphasis>four</emphasis> timing units: 
+		</para>
+		<orderedlist numeration="arabic">
+			<listitem>
+				<para>
+					<parameter>SECOND</parameter>
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					<parameter>MINUTE</parameter>
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					<parameter>HOUR</parameter>
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					<parameter>DAY</parameter>
+				</para>
+			</listitem>
+		</orderedlist>
+	</section>
 </section>
 
 
