@@ -201,6 +201,16 @@ public class UIFormMultiValueInputSet extends UIFormInputContainer<List>
    {
       Class[] classes = constructor_.getParameterTypes();
       Object[] params = new Object[classes.length];
+      for (int i = 0; i < classes.length; i++)
+      {
+         if (classes[i].isPrimitive())
+         {
+            if (classes[i] == boolean.class)
+               params[i] = false;
+            else
+               params[i] = 0;
+         }
+      }
       params[0] = getId() + String.valueOf(idx);
       UIFormInputBase inputBase = (UIFormInputBase)constructor_.newInstance(params);
       List<Validator> validators = this.getValidators();
