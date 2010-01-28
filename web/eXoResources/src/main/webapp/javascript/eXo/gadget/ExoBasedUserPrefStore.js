@@ -41,13 +41,14 @@ gadgets.ExoBasedUserPrefStore.prototype.savePrefs = function(gadget, newPrefs) {
 			var href = eXo.env.server.portalBaseURL + "?portal:componentId=" + compId;
 			href += "&portal:type=action&uicomponent=" + uiGadget.id.replace(/^content-/,"");
 			href += "&op=SaveUserPref";
+			href += "&ajaxRequest=true";
 			href += "&userPref=" + prefs;
-			ajaxAsyncGetRequest(href,true);
+			ajaxGet(href,true);
 		} else {
 			var params = [
 			 {name : "userPref", value : prefs}
 			] ;
-			ajaxAsyncGetRequest(eXo.env.server.createPortalURL(uiGadget.id.replace(/^content-/,""), "SaveUserPref", true, params),true) ;
+			ajaxGet(eXo.env.server.createPortalURL(uiGadget.id.replace(/^content-/,""), "SaveUserPref", true, params),true) ;
 		}
 	}
 };
