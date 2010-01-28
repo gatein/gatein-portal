@@ -125,7 +125,7 @@ public class UIPortalNavigation extends UIComponent
    {
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
       treeNode_ = new TreeNode(new PageNode(), new PageNavigation(), true);
-      for (PageNavigation nav : Util.getUIPortal().getNavigations())
+      for (PageNavigation nav : Util.getUIPortalApplication().getNavigations())
       {
          if (!showUserNavigation && nav.getOwnerType().equals("user"))
          {
@@ -224,7 +224,8 @@ public class UIPortalNavigation extends UIComponent
          else
          {
             String navId = uri.substring(0, index);
-            selectNav = uiPortal.getPageNavigation(Integer.parseInt(navId));
+            //selectNav = uiPortal.getPageNavigation(Integer.parseInt(navId));
+            selectNav = uiPortal.getSelectedNavigation();
          }
          PageNode selectNode = PageNavigationUtils.searchPageNodeByUri(selectNav, id);
          uiNavigation.selectedNode_ = selectNode;
@@ -271,8 +272,11 @@ public class UIPortalNavigation extends UIComponent
          PageNavigation selectNav = null;
 
          String navId = uri.substring(0, index);
-         selectNav = uiPortal.getPageNavigation(Integer.parseInt(navId));
-
+         
+         //TODO: Minh Hoang TO
+         //selectNav = uiPortal.getPageNavigation(Integer.parseInt(navId));
+         selectNav = uiPortal.getSelectedNavigation();
+         
          // get PageNode by uri
          PageNode expandNode = PageNavigationUtils.searchPageNodeByUri(selectNav, id);
 
@@ -307,8 +311,11 @@ public class UIPortalNavigation extends UIComponent
          PageNavigation selectNav = null;
 
          String navId = uri.substring(0, index);
-         selectNav = uiPortal.getPageNavigation(Integer.parseInt(navId));
-
+         
+         //TODO: Minh Hoang TO
+         //selectNav = uiPortal.getPageNavigation(Integer.parseInt(navId));
+         selectNav = uiPortal.getSelectedNavigation();
+         
          // get PageNode by uri
          PageNode expandNode = PageNavigationUtils.searchPageNodeByUri(selectNav, id);
 

@@ -62,8 +62,9 @@ public class Util
 
    static public UIPortal getUIPortal()
    {
-      return getUIPortalApplication().<UIWorkingWorkspace> getChildById(UIPortalApplication.UI_WORKING_WS_ID)
-         .findFirstComponentOfType(UIPortal.class);
+      //return getUIPortalApplication().<UIWorkingWorkspace> getChildById(UIPortalApplication.UI_WORKING_WS_ID)
+      //   .findFirstComponentOfType(UIPortal.class);
+      return getUIPortalApplication().getShowedUIPortal();
    }
 
    static public UIPortalToolPanel getUIPortalToolPanel()

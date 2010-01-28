@@ -207,7 +207,8 @@ public class UIPortalComposer extends UIContainer
          if (!portalAppLanguage.equals(userLanguage) && !portalAppLanguage.equals(browserLanguage))
          {
             uiPortalApp.setLocale(localeConfig.getLocale());
-            editPortal.refreshNavigation(localeConfig.getLocale());
+            //editPortal.refreshNavigation(localeConfig.getLocale());
+            uiPortalApp.localizeNavigations();
          }
          uiPortalApp.setSkin(editPortal.getSkin());
       }
@@ -587,18 +588,20 @@ public class UIPortalComposer extends UIContainer
       public void execute(Event<UIPortalComposer> event) throws Exception
       {
          UIPortalApplication uiPortalApp = Util.getUIPortalApplication();
-         UIPortal uiPortal = Util.getUIPortal();
+         UIPortal uiPortal = uiPortalApp.getShowedUIPortal();
          UIEditInlineWorkspace editInlineWS = event.getSource().getParent();
          UIWorkingWorkspace uiWorkingWS = editInlineWS.getParent();
          UIPortalToolPanel uiToolPanel = uiWorkingWS.findFirstComponentOfType(UIPortalToolPanel.class);
+         
          UIPage uiPage = uiToolPanel.findFirstComponentOfType(UIPage.class);
          Page page = (Page)PortalDataMapper.buildModelObject(uiPage);
+         String pageId = page.getPageId();
+         
          UserPortalConfigService portalConfigService =
             uiWorkingWS.getApplicationComponent(UserPortalConfigService.class);
-         if (page.getStorageId() != null && portalConfigService.getPage(page.getPageId()) == null)
+         if (page.getStorageId() != null && portalConfigService.getPage(pageId) == null)
          {
-            uiPortalApp.addMessage(new ApplicationMessage("UIPageBrowser.msg.PageNotExist", new String[]{page
-               .getPageId()}, 1));
+            uiPortalApp.addMessage(new ApplicationMessage("UIPageBrowser.msg.PageNotExist", new String[]{pageId}, 1));
             uiPortalApp.setModeState(UIPortalApplication.NORMAL_MODE);
             PageNodeEvent<UIPortal> pnevent =
                new PageNodeEvent<UIPortal>(uiPortal, PageNodeEvent.CHANGE_PAGE_NODE,
@@ -624,6 +627,10 @@ public class UIPortalComposer extends UIContainer
          // Perform mop update
          portalConfigService.update(page);
          uiToolPanel.setUIComponent(null);
+         
+         // Update UIPage cache on UIPortal
+         uiPortal.setUIPage(pageId, uiPage);
+         
          if (PortalProperties.SESSION_ALWAYS.equals(uiPortal.getSessionAlive()))
          {
             uiPortalApp.setSessionOpen(true);

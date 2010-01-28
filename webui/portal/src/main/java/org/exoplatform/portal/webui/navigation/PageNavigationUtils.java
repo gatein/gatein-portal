@@ -23,10 +23,14 @@ import org.exoplatform.container.ExoContainer;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
+import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.services.resources.ResourceBundleManager;
 import org.exoplatform.webui.application.WebuiRequestContext;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 /**
  * Created by The eXo Platform SARL
@@ -172,5 +176,27 @@ public class PageNavigationUtils
          && (copyNode.getPageReference() == null))
          return null;
       return copyNode;
+   }
+   
+   public static void localizePageNavigation(PageNavigation nav,Locale locale, ResourceBundleManager i18nManager)
+   {
+      if (nav.getOwnerType().equals(PortalConfig.USER_TYPE))
+         return;
+      ResourceBundle res = i18nManager.getNavigationResourceBundle(locale.getLanguage(), nav.getOwnerType(), nav.getOwnerId());
+      for (PageNode node : nav.getNodes())
+      {
+         resolveLabel(res, node);
+      }
+   }
+   
+   private static void resolveLabel(ResourceBundle res, PageNode node)
+   {
+      node.setResolvedLabel(res);
+      if (node.getChildren() == null)
+         return;
+      for (PageNode childNode : node.getChildren())
+      {
+         resolveLabel(res, childNode);
+      }
    }
 }

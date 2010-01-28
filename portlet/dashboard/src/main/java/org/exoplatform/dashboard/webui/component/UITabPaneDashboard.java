@@ -24,7 +24,6 @@ import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
-import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.webui.page.UIPageBody;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
@@ -87,10 +86,13 @@ public class UITabPaneDashboard extends UIContainer
 
    private void initPageNavigation() throws Exception
    {
-      String remoteUser = Util.getPortalRequestContext().getRemoteUser();
-      pageNavigation = getPageNavigation(PortalConfig.USER_TYPE + "::" + remoteUser);
+      //String remoteUser = Util.getPortalRequestContext().getRemoteUser();
+      //pageNavigation = getPageNavigation(PortalConfig.USER_TYPE + "::" + remoteUser);
+      //TODO: Check this part carefully
+      this.pageNavigation = uiPortal.getSelectedNavigation();
    }
 
+   /*
    private PageNavigation getPageNavigation(String owner) throws Exception
    {
       List<PageNavigation> allNavigations = uiPortal.getNavigations();
@@ -102,6 +104,8 @@ public class UITabPaneDashboard extends UIContainer
       return null;
    }
 
+   */
+   
    public int getCurrentNumberOfTabs() throws Exception
    {
 
@@ -128,7 +132,7 @@ public class UITabPaneDashboard extends UIContainer
    public List<PageNode> getSameSiblingsNode() throws Exception
    {
       List<PageNode> siblings = getPageNavigation().getNodes();
-      List<PageNode> selectedPath = Util.getUIPortal().getSelectedPaths();
+      List<PageNode> selectedPath = Util.getUIPortal().getSelectedPath();
       if (selectedPath != null && selectedPath.size() > 1)
       {
          PageNode currentParent = selectedPath.get(selectedPath.size() - 2);
@@ -223,7 +227,7 @@ public class UITabPaneDashboard extends UIContainer
                pageNavigation.getOwnerId());
          page.setTitle(nodeLabel);
 
-         List<PageNode> selectedPath = uiPortal.getSelectedPaths();
+         List<PageNode> selectedPath = uiPortal.getSelectedPath();
          PageNode parentNode = null;
          if (selectedPath != null && selectedPath.size() > 1)
          {
@@ -308,7 +312,7 @@ public class UITabPaneDashboard extends UIContainer
       try
       {
          List<PageNode> nodes = pageNavigation.getNodes();
-         List<PageNode> selectedPath = uiPortal.getSelectedPaths();
+         List<PageNode> selectedPath = uiPortal.getSelectedPath();
          PageNode parentNode = null;
          if (selectedPath != null && selectedPath.size() > 1)
          {

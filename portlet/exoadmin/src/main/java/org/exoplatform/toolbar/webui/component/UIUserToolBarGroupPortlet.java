@@ -48,7 +48,8 @@ public class UIUserToolBarGroupPortlet extends UIPortletApplication
    public List<PageNavigation> getGroupNavigations() throws Exception
    {
       String remoteUser = Util.getPortalRequestContext().getRemoteUser();
-      List<PageNavigation> allNavigations = Util.getUIPortal().getNavigations();
+      //List<PageNavigation> allNavigations = Util.getUIPortal().getNavigations();
+      List<PageNavigation> allNavigations = Util.getUIPortalApplication().getNavigations();
       List<PageNavigation> navigations = new ArrayList<PageNavigation>();
       for (PageNavigation navigation : allNavigations)
       {

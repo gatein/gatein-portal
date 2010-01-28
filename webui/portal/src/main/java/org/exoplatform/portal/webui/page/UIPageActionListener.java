@@ -57,285 +57,254 @@ public class UIPageActionListener
 
    static public class ChangePageNodeActionListener extends EventListener<UIPortal>
    {
+      @Override
       public void execute(Event<UIPortal> event) throws Exception
       {
-         PageNodeEvent<UIPortal> pnevent = (PageNodeEvent<UIPortal>)event;
-         UIPortal uiPortal = pnevent.getSource();
-         UIPageBody uiPageBody = uiPortal.findFirstComponentOfType(UIPageBody.class);
-         UIPortalApplication uiPortalApp = uiPortal.getAncestorOfType(UIPortalApplication.class);
-         if (uiPortalApp.getModeState() != UIPortalApplication.NORMAL_MODE)
-         {
-            UserPortalConfigService configService = uiPortalApp.getApplicationComponent(UserPortalConfigService.class);
-            String remoteUser = Util.getPortalRequestContext().getRemoteUser();
-            UserPortalConfig portalConfig =
-               configService.getUserPortalConfig(Util.getPortalRequestContext().getPortalOwner(), remoteUser);
-            uiPortal.getChildren().clear();
-            PortalDataMapper.toUIPortal(uiPortal, portalConfig);
-            uiPortalApp.setModeState(UIPortalApplication.NORMAL_MODE);
-            uiPortal.broadcast(event, event.getExecutionPhase());
-            return;
-         }
+         UIPortal showedUIPortal = event.getSource();
+         UIPortalApplication uiPortalApp = showedUIPortal.getAncestorOfType(UIPortalApplication.class);
+         
+         //This code snippet is to make sure that Javascript/Skin is fully loaded at the first request
          UIWorkingWorkspace uiWorkingWS = uiPortalApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
          PortalRequestContext pcontext = Util.getPortalRequestContext();
          pcontext.addUIComponentToUpdateByAjax(uiWorkingWS);
          uiWorkingWS.setRenderedChild(UIPortalApplication.UI_VIEWING_WS_ID);
          pcontext.setFullRender(true);
-
-         String currentUri = (uiPortal.getSelectedNode() == null) ? null : uiPortal.getSelectedNode().getUri();
-         PageNavigation currentNav = uiPortal.getSelectedNavigation();
-
-         uiPortal.setSelectedNavigation(null);
-         uiPortal.setSelectedNode(null);
-         List<PageNode> selectedPaths_ = new ArrayList<PageNode>(5);
-
-         List<PageNavigation> navigations = uiPortal.getNavigations();
-         String uri = pnevent.getTargetNodeUri();
-         if (uri == null || (uri = uri.trim()).length() < 1)
+         
+         PageNavigation currentNav = showedUIPortal.getSelectedNavigation();
+         String currentUri = showedUIPortal.getSelectedNode().getUri();
+         if(currentUri.startsWith("/"))
+         {
+            currentUri = currentUri.substring(1);
+         }
+         
+         //This if branche is to make sure that the first time user logs in, showedUIPortal has selectedPaths
+         //Otherwise, there will be NPE on BreadcumbsPortlet
+         if(showedUIPortal.getSelectedPath() == null)
+         {
+            List<PageNode> currentSelectedPath = findPath(currentNav, currentUri.split("/"));
+            showedUIPortal.setSelectedPath(currentSelectedPath);
+         }
+         
+         String targetedUri = ((PageNodeEvent<UIPortal>)event).getTargetNodeUri();
+         if(targetedUri.startsWith("/"))
+         {
+            targetedUri = targetedUri.substring(1);
+         }
+         
+         PageNavigation targetedNav = getTargetedNav(uiPortalApp, targetedUri);
+         
+         if(targetedNav == null)
          {
             return;
          }
-         if (uri.length() == 1 && uri.charAt(0) == '/')
+       
+         String formerNavType = currentNav.getOwnerType();
+         String formerNavId = currentNav.getOwnerId();
+         String newNavType = targetedNav.getOwnerType();
+         String newNavId = targetedNav.getOwnerId();
+         
+         String[] targetPath = targetedUri.split("/");
+         PageNode targetPageNode = getTargetedNode(targetedNav, targetPath);
+         List<PageNode> targetedPathNodes = findPath(targetedNav, targetPath);
+         
+         if(formerNavType.equals(newNavType) && formerNavId.equals(newNavId))
          {
-            for (PageNavigation nav : navigations)
+            //Case 1: Both navigation type and id are not changed, but current page node is changed
+            if(!currentUri.equals(targetedUri))
             {
-               for (PageNode child : nav.getNodes())
-               {
-                  if (PageNavigationUtils.filter(child, pcontext.getRemoteUser()) != null)
-                  {
-                     selectedPaths_.add(child);
-                     uiPortal.setSelectedNode(child);
-                     uiPortal.setSelectedPaths(selectedPaths_);
-                     String selectedUri =
-                        (uiPortal.getSelectedNode() == null) ? null : uiPortal.getSelectedNode().getUri();
-
-                     if (!currentUri.equals(selectedUri))
-                     {
-                        updateLayout(uiPortal, currentNav, uiPortal.getSelectedNavigation(), uiPortalApp);
-                        uiPageBody = uiPortal.findFirstComponentOfType(UIPageBody.class);
-                        if (uiPageBody.getMaximizedUIComponent() != null)
-                        {
-                           UIPortlet currentPortlet = (UIPortlet)uiPageBody.getMaximizedUIComponent();
-                           currentPortlet.setCurrentWindowState(WindowState.NORMAL);
-                           uiPageBody.setMaximizedUIComponent(null);
-                        }
-                     }
-                     uiPageBody.setPageBody(uiPortal.getSelectedNode(), uiPortal);
-                     return;
-                  }
-               }
+               showedUIPortal.setSelectedNode(targetPageNode);
+               showedUIPortal.setSelectedPath(targetedPathNodes);
+               showedUIPortal.refreshUIPage();
+               return;
             }
          }
-         if (uri.charAt(0) == '/')
+         else
          {
-            uri = uri.substring(1);
-         }
-
-         int idx = uri.lastIndexOf("::");
-         if (idx < 0)
-         {
-            PageNode selectedNode = null;
-            for (PageNavigation nav : navigations)
+            // Case 2: Either navigation type or id has been changed
+            // First, we try to find a cached UIPortal
+            UIPortal cachedUIPortal = uiPortalApp.getCachedUIPortal(newNavType, newNavId);
+            if (cachedUIPortal != null)
             {
-               String[] nodeNames = uri.split("/");
-               int i = 0;
-               PageNode tempNode = nav.getNode(nodeNames[i]);
-               selectedNode = tempNode;
-               while (tempNode != null && ++i < nodeNames.length)
-               {
-                  selectedPaths_.add(selectedNode = tempNode);
-                  tempNode = tempNode.getChild(nodeNames[i]);
-               }
-               if (tempNode != null)
-               {
-                  selectedPaths_.add(selectedNode = tempNode);
-               }
-
-               if (selectedNode != null)
-               {
-                  uiPortal.setSelectedNavigation(nav);
-                  break;
-               }
+               System.out.println("Found UIPortal with OWNERTYPE: " + newNavType + " OWNERID " + newNavId);
+               cachedUIPortal.setSelectedNode(targetPageNode);
+               cachedUIPortal.setSelectedPath(targetedPathNodes);
+               uiPortalApp.setShowedUIPortal(cachedUIPortal);
+               cachedUIPortal.refreshUIPage();
+               return;
             }
-            // TODO tam.nguyen: filter navigation, select navigation up to user
-            if (selectedNode == null)
+            else
             {
-               filter : for (PageNavigation nav : navigations)
+               UIPortal newUIPortal = buildUIPortal(targetedNav, uiPortalApp, uiPortalApp.getUserPortalConfig());
+               if(newUIPortal == null)
                {
-                  for (PageNode child : nav.getNodes())
-                  {
-                     if (PageNavigationUtils.filter(child, pcontext.getRemoteUser()) != null)
-                     {
-                        selectedNode = child;
-                        break filter;
-                     }
-                  }
+                  return;
                }
-            }
-            uiPortal.setSelectedNode(selectedNode);
-            if (selectedNode == null)
-            {
-               selectedPaths_.add(uiPortal.getSelectedNode());
-            }
-            uiPortal.setSelectedPaths(selectedPaths_);
-            String selectedUri = (uiPortal.getSelectedNode() == null) ? null : uiPortal.getSelectedNode().getUri();
-            if (currentUri != null && !currentUri.equals(selectedUri))
-            {
-               updateLayout(uiPortal, currentNav, uiPortal.getSelectedNavigation(), uiPortalApp);
-               uiPageBody = uiPortal.findFirstComponentOfType(UIPageBody.class);
-               if (uiPageBody.getMaximizedUIComponent() != null)
-               {
-                  UIPortlet currentPortlet = (UIPortlet)uiPageBody.getMaximizedUIComponent();
-                  currentPortlet.setCurrentWindowState(WindowState.NORMAL);
-                  uiPageBody.setMaximizedUIComponent(null);
-               }
-            }
-
-            uiPageBody.setPageBody(uiPortal.getSelectedNode(), uiPortal);
-            return;
-         }
-         String navId = uri.substring(0, idx);
-         uri = uri.substring(idx + 2, uri.length());
-         PageNavigation nav = null;
-         for (PageNavigation ele : navigations)
-         {
-            if (ele.getId() == Integer.parseInt(navId))
-            {
-               nav = ele;
-               break;
+               newUIPortal.setSelectedNode(targetPageNode);
+               newUIPortal.setSelectedPath(targetedPathNodes);
+               uiPortalApp.setShowedUIPortal(newUIPortal);
+               uiPortalApp.addUIPortal(newUIPortal);
+               newUIPortal.refreshUIPage();
+               return;
             }
          }
-         if (nav != null)
-         {
-            String[] nodeNames = uri.split("/");
-            int i = 0;
-            PageNode tempNode = nav.getNode(nodeNames[i]);
-            PageNode selecttedNode = tempNode;
-            while (tempNode != null && ++i < nodeNames.length)
-            {
-               selectedPaths_.add(selecttedNode = tempNode);
-               tempNode = tempNode.getChild(nodeNames[i]);
-            }
-            if (tempNode != null)
-            {
-               selectedPaths_.add(selecttedNode = tempNode);
-            }
-
-            uiPortal.setSelectedNode(selecttedNode);
-            uiPortal.setSelectedNavigation(nav);
-         }
-
-         pcontext.getJavascriptManager().addCustomizedOnLoadScript(
-            "document.title='" + uiPortal.getSelectedNode().getResolvedLabel().replaceAll("'", "\\\\'") + "';");
-         uiPortal.setSelectedPaths(selectedPaths_);
-         String selectedUri = (uiPortal.getSelectedNode() == null) ? null : uiPortal.getSelectedNode().getUri();
-
-         if (!currentUri.equals(selectedUri))
-         {
-            if (uiPageBody.getMaximizedUIComponent() != null)
-            {
-               UIPortlet currentPortlet = (UIPortlet)uiPageBody.getMaximizedUIComponent();
-               currentPortlet.setCurrentWindowState(WindowState.NORMAL);
-               uiPageBody.setMaximizedUIComponent(null);
-            }
-         }
-         uiPageBody.setPageBody(uiPortal.getSelectedNode(), uiPortal);
       }
-
+      
       /**
-       * Update the layout of UIPortal if both ownerType and ownerId of
-       * navigation are changed
+       * Get the targeted <code>PageNavigation</code>
        * 
-       * @param uiPortal
-       * @param formerNav
-       * @param newNav
        * @param uiPortalApp
-       * @throws Exception
+       * @param targetedUri
+       * @return
        */
-      private void updateLayout(UIPortal uiPortal, PageNavigation formerNav, PageNavigation newNav,
-         UIPortalApplication uiPortalApp) throws Exception
+      private PageNavigation getTargetedNav(UIPortalApplication uiPortalApp, String targetedUri)
       {
-         if (formerNav == null || newNav == null)
+         List<PageNavigation> allNavs = uiPortalApp.getUserPortalConfig().getNavigations();
+         
+         //That happens when user browses to an empty-nodeUri URL like ../portal/public/classic/
+         //In this case, we returns default navigation
+         if(targetedUri.length() == 0)
          {
-            return;
+            return uiPortalApp.getNavigations().get(0);
          }
-         String newOwnerType = newNav.getOwnerType();
-         String newOwnerId = newNav.getOwnerId();
-         String formerOwnerType = formerNav.getOwnerType();
-         String formerOwnerId = formerNav.getOwnerId();
+         
+         String[] pathNodes = targetedUri.split("/");
+         
+         //We check the first navigation in the list containing all descendants corresponding to pathNodes
+         for(PageNavigation nav : allNavs)
+         {
+            if(containingDescendantNodes(nav, pathNodes))
+            {
+               return nav;
+            }
+         }
+         return null;
+      }
+      
+      /**
+       *  Check if a given <code>PageNavigation</code> contains all the descendants corresponding to the pathNodes
+       * 
+       * @param navigation
+       * @param pathNodes
+       * @return
+       */
+      private static boolean containingDescendantNodes(PageNavigation navigation, String[] pathNodes)
+      {
+        PageNode firstLevelNode = navigation.getNode(pathNodes[0]);
+        if(firstLevelNode == null)
+        {
+           return false;
+        }
+        
+        //Recursive code snippet with two variables
+        PageNode tempNode = firstLevelNode;
+        PageNode currentNode;
+        
+        for(int i = 1; i < pathNodes.length; i++)
+        {
+           currentNode = tempNode.getChild(pathNodes[i]);
+           
+           //If the navigation does not support an intermediate pathNode, then returns false
+           if (currentNode == null)
+            {
+               return false;
+            }
+            else
+            {
+               tempNode = currentNode;
+            }
+        }
+         return true;
+      }
+      
+      /**
+       * Fetch the currently selected pageNode under a PageNavigation. It is the last node encountered
+       * while descending the pathNodes
+       * 
+       * @param targetedNav
+       * @param pathNodes
+       * @return
+       */
+      private static PageNode getTargetedNode(PageNavigation targetedNav, String[] pathNodes)
+      {
+         //Case users browses to a URL of the form  */portal/public/classic
+         if(pathNodes.length == 0)
+         {
+            return targetedNav.getNodes().get(0);
+         }
+         
+         PageNode currentNode = targetedNav.getNode(pathNodes[0]);
+         PageNode tempNode = null;
+         
+         for(int i = 1; i < pathNodes.length; i++)
+         {
+            tempNode = currentNode.getChild(pathNodes[i]);
+            if (tempNode == null)
+            {
+               return null;
+            }
+            else
+            {
+               currentNode = tempNode;
+            }
+         }
+         
+         return currentNode;
+      }
+      
+      private static List<PageNode> findPath(PageNavigation nav, String[] pathNodes)
+      {
+         List<PageNode> nodes = new ArrayList<PageNode>(4);
+         
+         //That happens when user browses to a URL like */portal/public/classic
+         if(pathNodes.length == 0)
+         {
+            nodes.add(nav.getNodes().get(0));
+            return nodes;
+         }
+         PageNode startNode = nav.getNode(pathNodes[0]);
+         if (startNode == null)
+         {
+            return nodes;
+         }
+         nodes.add(startNode);
 
-         if (newOwnerId.equals(formerOwnerId) && formerOwnerType.equals(newOwnerType))
+         for (int i = 1; i < pathNodes.length; i++)
          {
-            return;
+            startNode = startNode.getChild(pathNodes[i]);
+            if (startNode == null)
+            {
+               return nodes;
+            }
+            else
+            {
+               nodes.add(startNode);
+            }
          }
-
-         DataStorage storage = uiPortalApp.getApplicationComponent(DataStorage.class);
-         PortalConfig pConfig = storage.getPortalConfig(newOwnerType, newOwnerId);
-         Container container = pConfig.getPortalLayout();
-         if (container != null)
-         {
-            UserPortalConfig portalConfig = uiPortalApp.getUserPortalConfig();
-            portalConfig.setPortal(pConfig);
-            rebuildUIPortal(uiPortal, portalConfig);
-         }
+         return nodes;
       }
 
-      /**
-       * Rebuild UIPortal with updated UserPortalConfig
-       * 
-       * @param uiPortal
-       * @param portalConfig
-       * @throws Exception
-       */
-      private void rebuildUIPortal(UIPortal uiPortal, UserPortalConfig portalConfig) throws Exception
+      private static UIPortal buildUIPortal(PageNavigation newPageNav, UIPortalApplication uiPortalApp, UserPortalConfig userPortalConfig) throws Exception
       {
-         PageNode backupSelectedNode = uiPortal.getSelectedNode();
-         PageNavigation backupSelectedNavigation = uiPortal.getSelectedNavigation();
-         List<PageNode> backupSelectedPaths = uiPortal.getSelectedPaths();
-         uiPortal.getChildren().clear();
-         PortalDataMapper.toUIPortal(uiPortal, portalConfig);
-         uiPortal.setSelectedNode(backupSelectedNode);
-         uiPortal.setSelectedNavigation(backupSelectedNavigation);
-         uiPortal.setSelectedPaths(backupSelectedPaths);
+         DataStorage storage = uiPortalApp.getApplicationComponent(DataStorage.class);
+         if(storage == null){
+            return null;
+         }
+         PortalConfig portalConfig = storage.getPortalConfig(newPageNav.getOwnerType(), newPageNav.getOwnerId());
+         Container layout = portalConfig.getPortalLayout();
+         if(layout != null)
+         {
+            userPortalConfig.setPortal(portalConfig);
+         }
+         UIPortal uiPortal = uiPortalApp.createUIComponent(UIPortal.class, null, null);
+         //Reset selected navigation on userPortalConfig
+         userPortalConfig.setSelectedNavigation(newPageNav);
+         System.out.println("Build new UIPortal with OWNERTYPE: " + newPageNav.getOwnerType() + " OWNERID: " + newPageNav.getOwnerId());
+         PortalDataMapper.toUIPortal(uiPortal, userPortalConfig);
+         return uiPortal;
       }
    }
 
-   //  
-   // static public class DeleteWidgetActionListener extends
-   // EventListener<UIPage> {
-   // public void execute(Event<UIPage> event) throws Exception {
-   // WebuiRequestContext pContext = event.getRequestContext();
-   // String id = pContext.getRequestParameter(UIComponent.OBJECTID);
-   // UIPage uiPage = event.getSource();
-   // List<UIWidget> uiWidgets = new ArrayList<UIWidget>();
-   // uiPage.findComponentOfType(uiWidgets, UIWidget.class);
-   // for(UIWidget uiWidget : uiWidgets) {
-   // if(uiWidget.getApplicationInstanceUniqueId().equals(id)) {
-   // uiPage.getChildren().remove(uiWidget);
-   // String userName = pContext.getRemoteUser() ;
-   // if(userName != null && userName.trim().length() > 0) {
-   // UserWidgetStorage widgetDataService =
-   // uiPage.getApplicationComponent(UserWidgetStorage.class) ;
-   // widgetDataService.delete(userName, uiWidget.getApplicationName(),
-   // uiWidget.getApplicationInstanceUniqueId()) ;
-   // }
-   // if(uiPage.isModifiable()) {
-   // Page page = PortalDataMapper.toPageModel(uiPage);
-   // UserPortalConfigService configService =
-   // uiPage.getApplicationComponent(UserPortalConfigService.class);
-   // if(page.getChildren() == null) page.setChildren(new ArrayList<Object>());
-   // configService.update(page);
-   // }
-   // break;
-   // }
-   // }
-   // PortalRequestContext pcontext =
-   // (PortalRequestContext)event.getRequestContext();
-   // pcontext.setFullRender(false);
-   // pcontext.setResponseComplete(true) ;
-   // pcontext.getWriter().write(EventListener.RESULT_OK) ;
-   // }
-   // }
-   //  
+  
    static public class DeleteGadgetActionListener extends EventListener<UIPage>
    {
       public void execute(Event<UIPage> event) throws Exception

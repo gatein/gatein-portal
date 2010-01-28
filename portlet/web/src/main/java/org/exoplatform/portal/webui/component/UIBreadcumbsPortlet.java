@@ -64,7 +64,7 @@ public class UIBreadcumbsPortlet extends UIPortletApplication
 
    public void loadSelectedPath()
    {
-      List<PageNode> nodes = Util.getUIPortal().getSelectedPaths();
+      List<PageNode> nodes = Util.getUIPortal().getSelectedPath();
       List<LocalPath> paths = new ArrayList<LocalPath>();
       for (PageNode node : nodes)
       {

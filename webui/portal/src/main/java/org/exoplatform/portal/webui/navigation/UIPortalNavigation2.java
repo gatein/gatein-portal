@@ -162,7 +162,10 @@ public class UIPortalNavigation2 extends UIComponent
          else
          {
             String navId = uri.substring(0, index);
-            selectNav = uiPortal.getPageNavigation(Integer.parseInt(navId));
+            
+            //TODO: Minh Hoang TO
+            //selectNav = uiPortal.getPageNavigation(Integer.parseInt(navId));
+            selectNav = uiPortal.getSelectedNavigation();
          }
          PageNode selectNode = PageNavigationUtils.searchPageNodeByUri(selectNav, id);
          uiNavigation.selectedNode_ = selectNode;

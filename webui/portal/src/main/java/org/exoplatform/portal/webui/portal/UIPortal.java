@@ -29,6 +29,7 @@ import org.exoplatform.portal.config.model.PortalProperties;
 import org.exoplatform.portal.config.model.Properties;
 import org.exoplatform.portal.webui.application.UIPortlet;
 import org.exoplatform.portal.webui.container.UIContainer;
+import org.exoplatform.portal.webui.page.UIPage;
 import org.exoplatform.portal.webui.page.UIPageBody;
 import org.exoplatform.portal.webui.page.UIPageActionListener.ChangePageNodeActionListener;
 import org.exoplatform.portal.webui.portal.UIPortalComponentActionListener.ChangeApplicationListActionListener;
@@ -60,6 +61,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import javax.portlet.WindowState;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
@@ -67,8 +69,6 @@ import javax.servlet.http.HttpServletRequest;
    @EventConfig(listeners = ChangePageNodeActionListener.class),
    @EventConfig(listeners = ChangeApplicationListActionListener.class),
    @EventConfig(listeners = MoveChildActionListener.class),
-   // @EventConfig(listeners =
-   // RemoveJSApplicationToDesktopActionListener.class),
    @EventConfig(listeners = UIPortal.ChangeWindowStateActionListener.class),
    @EventConfig(listeners = UIPortal.LogoutActionListener.class),
    @EventConfig(listeners = ShowLoginFormActionListener.class),
@@ -98,14 +98,19 @@ public class UIPortal extends UIContainer
 
    private Properties properties;
 
-   private List<PageNavigation> navigations;
+   //private List<PageNavigation> navigations;
 
-   private List<PageNode> selectedPaths_;
+   private PageNavigation navigation;
+   
+   private List<PageNode> selectedPath;
 
    private PageNode selectedNode_;
-
-   private PageNavigation selectedNavigation_;
-
+   
+   private UIPage showedUIPage;
+   
+   //private Map<UIPageKey, UIPage> all_UIPages;
+   private Map<String, UIPage> all_UIPages;
+   
    private Map<String, String[]> publicParameters_ = new HashMap<String, String[]>();
 
    private UIComponent maximizedUIComponent;
@@ -189,7 +194,35 @@ public class UIPortal extends UIContainer
    {
       publicParameters_ = publicParams;
    }
+   
+   /** At the moment, this method ensure compatibility with legacy code */
+   public List<PageNavigation> getNavigations() throws Exception
+   {
+      List<PageNavigation> listNavs = new ArrayList<PageNavigation>();
+      listNavs.add(navigation);
+      return listNavs;
+   }
+   
+   public UIPage getUIPage(String pageReference)
+   {
+      if(all_UIPages == null)
+      {
+         this.all_UIPages = new HashMap<String, UIPage>(5);
+         return null;
+      }
+      return this.all_UIPages.get(pageReference);
+   }
+   
+   public void setUIPage(String pageReference, UIPage uiPage)
+   {
+      if(this.all_UIPages == null)
+      {
+         this.all_UIPages = new HashMap<String, UIPage>(5);
+      }
+      this.all_UIPages.put(pageReference, uiPage);
+   }
 
+   /*
    public List<PageNavigation> getNavigations() throws Exception
    {
       UserPortalConfigService serv = getApplicationComponent(UserPortalConfigService.class);
@@ -205,7 +238,9 @@ public class UIPortal extends UIContainer
 
       return navigations;
    }
-
+   */
+   
+   /*
    public void setNavigation(List<PageNavigation> navs) throws Exception
    {
       navigations = navs;
@@ -241,11 +276,46 @@ public class UIPortal extends UIContainer
       refreshNavigation(uiApp.getLocale());
    }
 
-   public void setSelectedNode(PageNode node)
+   */
+   
+   public void setNavigation(PageNavigation _navigation)
+   {
+      this.navigation = _navigation;
+   }
+   
+   /** Refresh the UIPage under UIPortal */
+   public void refreshUIPage() throws Exception
+   {
+      if(selectedNode_ == null)
+      {
+         selectedNode_ = navigation.getNodes().get(0);
+      }
+      
+      UIPageBody uiPageBody = findFirstComponentOfType(UIPageBody.class);
+      if(uiPageBody == null)
+      {
+         return;
+      }
+      
+      if (uiPageBody.getMaximizedUIComponent() != null)
+      {
+         UIPortlet currentPortlet = (UIPortlet)uiPageBody.getMaximizedUIComponent();
+         currentPortlet.setCurrentWindowState(WindowState.NORMAL);
+         uiPageBody.setMaximizedUIComponent(null);
+      }
+      uiPageBody.setPageBody(selectedNode_, this);
+      
+      //Refresh locale
+      Locale locale = Util.getUIPortalApplication().getLocale();
+      refreshNavigation(locale);
+   }
+   
+   public synchronized void setSelectedNode(PageNode node)
    {
       selectedNode_ = node;
    }
 
+   /*
    public PageNode getSelectedNode() throws Exception
    {
       if (selectedNode_ != null)
@@ -256,17 +326,32 @@ public class UIPortal extends UIContainer
       selectedNode_ = selectedNavigation_.getNodes().get(0);
       return selectedNode_;
    }
-
-   public List<PageNode> getSelectedPaths()
+   */
+   
+   public PageNode getSelectedNode() throws Exception
    {
-      return selectedPaths_;
+      if(selectedNode_ != null)
+      {
+         return selectedNode_;
+      }
+      if(navigation == null || navigation.getNodes() == null || navigation.getNodes().size() < 1)
+      {
+         return null;
+      }
+      return navigation.getNodes().get(0);
    }
 
-   public void setSelectedPaths(List<PageNode> nodes)
+   public List<PageNode> getSelectedPath()
    {
-      selectedPaths_ = nodes;
+      return selectedPath;
    }
 
+   public void setSelectedPath(List<PageNode> nodes)
+   {
+      selectedPath = nodes;
+   }
+
+   /*
    public PageNavigation getSelectedNavigation() throws Exception
    {
       if (selectedNavigation_ != null && selectedNavigation_.getNodes() != null
@@ -292,7 +377,19 @@ public class UIPortal extends UIContainer
       setSelectedNavigation(pNav);
       return pNav;
    }
+   */
+   
+   public PageNavigation getSelectedNavigation() throws Exception
+   {
+      return navigation;
+   }
+   
+   public void setSelectedNavigation(PageNavigation _navigation)
+   {
+      this.navigation = _navigation;
+   }
 
+   /**
    public PageNavigation getPageNavigation(int id)
    {
       for (PageNavigation nav : navigations)
@@ -303,11 +400,15 @@ public class UIPortal extends UIContainer
       return null;
    }
 
+*/
+   /*
    public void setSelectedNavigation(PageNavigation selectedNavigation)
    {
       selectedNavigation_ = selectedNavigation;
    }
 
+   */
+   
    public UIComponent getMaximizedUIComponent()
    {
       return maximizedUIComponent;
@@ -372,6 +473,7 @@ public class UIPortal extends UIContainer
       setProperty(PortalProperties.SESSION_ALIVE, type);
    }
 
+   /*
    @Deprecated
    public void refreshNavigation()
    {
@@ -387,13 +489,20 @@ public class UIPortal extends UIContainer
          }
       }
    }
-
+   */
+   
+   /*
    public void refreshNavigation(Locale locale)
    {
       for (PageNavigation nav : navigations)
       {
          localizePageNavigation(nav,locale);
       }
+   }
+   */
+   public void refreshNavigation(Locale locale)
+   {
+      localizePageNavigation(navigation, locale);
    }
 
    private void localizePageNavigation(PageNavigation nav,Locale locale)
@@ -488,6 +597,33 @@ public class UIPortal extends UIContainer
          uiMaskWS.setUIComponent(uiAccountForm);
          uiMaskWS.setShow(true);
          event.getRequestContext().addUIComponentToUpdateByAjax(uiMaskWS);
+      }
+   }
+   
+   private static class UIPageKey
+   {
+      private String ownerType;
+      
+      private String ownerId;
+      
+      UIPageKey(String _ownerType, String _ownerId)
+      {
+         this.ownerType = _ownerType;
+         this.ownerId = _ownerId;
+      }
+      
+      @Override
+      public boolean equals(Object obj)
+      {
+         if(this == null || obj == null)
+         {
+            return this == null && obj == null;
+         }
+         if(!(obj instanceof UIPageKey))
+         {
+            return false;
+         }
+         return this.ownerType.equals(((UIPageKey)obj).ownerType) && this.ownerId.equals(((UIPageKey)obj).ownerId);
       }
    }
 

@@ -369,7 +369,8 @@ public class PortalDataMapper
             buildUIContainer(uiPortal, child, false);
          }
       }
-      uiPortal.setNavigation(userPortalConfig.getNavigations());
+      //uiPortal.setNavigation(userPortalConfig.getNavigations());
+      uiPortal.setNavigation(userPortalConfig.getSelectedNavigation());
    }
 
    private static void buildUIContainer(UIContainer uiContainer, Object model, boolean dashboard) throws Exception
@@ -422,4 +423,5 @@ public class PortalDataMapper
       }
       uiContainer.addChild(uiComponent);
    }
+   
 }

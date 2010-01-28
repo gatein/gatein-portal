@@ -72,7 +72,8 @@ public class UIUserToolBarSitePortlet extends UIPortletApplication
 
    private PageNavigation getPageNavigation(String owner) throws Exception
    {
-      List<PageNavigation> allNavigations = Util.getUIPortal().getNavigations();
+      //List<PageNavigation> allNavigations = Util.getUIPortal().getNavigations();
+      List<PageNavigation> allNavigations = Util.getUIPortalApplication().getUserPortalConfig().getNavigations();
       for (PageNavigation nav : allNavigations)
       {
          if (nav.getOwner().equals(owner))

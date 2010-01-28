@@ -122,8 +122,8 @@ public class UIMainActionListener
    {
       public void execute(Event<UIWorkingWorkspace> event) throws Exception
       {
-         UIPortal uiPortal = Util.getUIPortal();
          UIPortalApplication uiApp = Util.getUIPortalApplication();
+         UIPortal uiPortal = uiApp.getShowedUIPortal();
          PortalConfig portalConfig = uiApp.getUserPortalConfig().getPortalConfig();
          UserACL userACL = uiPortal.getApplicationComponent(UserACL.class);
          if (!userACL.hasEditPermission(portalConfig))
@@ -141,7 +141,7 @@ public class UIMainActionListener
          PortalDataMapper.toUIPortal(newPortal, uiApp.getUserPortalConfig());
          newPortal.setSelectedNode(uiPortal.getSelectedNode());
          newPortal.setSelectedNavigation(uiPortal.getSelectedNavigation());
-         newPortal.setSelectedPaths(uiPortal.getSelectedPaths());
+         newPortal.setSelectedPath(uiPortal.getSelectedPath());
 
          UIEditInlineWorkspace uiEditWS = uiWorkingWS.getChild(UIEditInlineWorkspace.class);
          uiEditWS.setUIComponent(newPortal);

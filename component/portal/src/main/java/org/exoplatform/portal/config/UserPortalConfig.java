@@ -31,6 +31,9 @@ public class UserPortalConfig
    private PortalConfig portal;
 
    private List<PageNavigation> navigations;
+   
+   /** Added by Minh Hoang TO */
+   private PageNavigation selectedNavigation;
 
    public UserPortalConfig()
    {
@@ -52,7 +55,21 @@ public class UserPortalConfig
    {
       this.portal = portal;
    }
+   
+   public void setSelectedNavigation(PageNavigation _selectedNavigation)
+   {
+      this.selectedNavigation = _selectedNavigation;
+   }
 
+   public PageNavigation getSelectedNavigation()
+   {
+      if(this.selectedNavigation != null)
+      {
+         return this.selectedNavigation;
+      }
+      return navigations.get(0);
+   }
+   
    public void setNavigations(List<PageNavigation> navs)
    {
       navigations = navs;

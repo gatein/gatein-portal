@@ -80,14 +80,18 @@ public class UIPageBody extends UIComponentDecorator
       UserPortalConfigService userPortalConfigService =
          (UserPortalConfigService)appContainer.getComponentInstanceOfType(UserPortalConfigService.class);
       Page page = null;
-      UIPage uiPage = null;
+      UIPage uiPage;
+      
+      String pageReference = null;
+      
       if (pageNode != null)
       {
+         pageReference = pageNode.getPageReference();
          try
          {
-            if (pageNode.getPageReference() != null)
+            if (pageReference != null)
             {
-               page = userPortalConfigService.getPage(pageNode.getPageReference(), context.getRemoteUser());
+               page = userPortalConfigService.getPage(pageReference, context.getRemoteUser());
             }
          }
          catch (Exception e)
@@ -96,41 +100,66 @@ public class UIPageBody extends UIComponentDecorator
             uiApp.addMessage(new ApplicationMessage(e.getMessage(), new Object[]{}));
          }
       }
-
+      
       uiPortal.setMaximizedUIComponent(null);
-      if (page != null)
+      
+      uiPage = getUIPage(pageReference, page, uiPortal, context);
+      
+      if (uiPage.isShowMaxWindow())
       {
-         if (Page.DESKTOP_PAGE.equals(page.getFactoryId()))
+         uiPortal.setMaximizedUIComponent(uiPage);
+      }
+      else
+      {
+         UIComponent maximizedComponent = uiPortal.getMaximizedUIComponent();
+         if (maximizedComponent != null && maximizedComponent instanceof UIPage)
          {
-            uiPage = createUIComponent(context, UIDesktopPage.class, null, null);
+            uiPortal.setMaximizedUIComponent(null);
          }
-         else
+         maximizedComponent = this.getMaximizedUIComponent();
+         if (maximizedComponent != null && maximizedComponent instanceof UIPage)
          {
-            uiPage = createUIComponent(context, UIPage.class, null, null);
+            this.setMaximizedUIComponent(null);
          }
-         PortalDataMapper.toUIPage(uiPage, page);
-         if (uiPage.isShowMaxWindow())
-         {
-            uiPortal.setMaximizedUIComponent(uiPage);
-         }
-         else
-         {
-            UIComponent maximizedComponent = uiPortal.getMaximizedUIComponent();
-            if (maximizedComponent != null && maximizedComponent instanceof UIPage)
-            {
-               uiPortal.setMaximizedUIComponent(null);
-            }
-            maximizedComponent = this.getMaximizedUIComponent();
-            if (maximizedComponent != null && maximizedComponent instanceof UIPage)
-            {
-               this.setMaximizedUIComponent(null);
-            }
-         }
-
       }
       setUIComponent(uiPage);
    }
 
+   /**
+    * Return cached UIPage or a newly built UIPage
+    * 
+    * @param pageReference
+    * @param page
+    * @param uiPortal
+    * @return
+    */
+   private UIPage getUIPage(String pageReference, Page page, UIPortal uiPortal, WebuiRequestContext context)
+      throws Exception
+   {
+      UIPage uiPage = uiPortal.getUIPage(pageReference);
+      if (uiPage != null)
+      {
+         return uiPage;
+      }
+      
+      if(page == null)
+      {
+         return null;
+      }
+
+      if (Page.DESKTOP_PAGE.equals(page.getFactoryId()))
+      {
+         uiPage = createUIComponent(context, UIDesktopPage.class, null, null);
+      }
+      else
+      {
+         uiPage = createUIComponent(context, UIPage.class, null, null);
+      }
+      PortalDataMapper.toUIPage(uiPage, page);
+
+      return uiPage;
+   }
+   
    public void renderChildren() throws Exception
    {
       uicomponent_.processRender((WebuiRequestContext)WebuiRequestContext.getCurrentInstance());

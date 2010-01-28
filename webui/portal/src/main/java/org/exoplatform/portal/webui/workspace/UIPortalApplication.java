@@ -26,6 +26,9 @@ import org.exoplatform.portal.config.NoSuchDataException;
 import org.exoplatform.portal.config.UserPortalConfig;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Container;
+import org.exoplatform.portal.config.model.PageNavigation;
+import org.exoplatform.portal.config.model.PageNode;
+import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.resource.Skin;
@@ -33,6 +36,7 @@ import org.exoplatform.portal.resource.SkinConfig;
 import org.exoplatform.portal.resource.SkinService;
 import org.exoplatform.portal.resource.SkinURL;
 import org.exoplatform.portal.webui.application.UIPortlet;
+import org.exoplatform.portal.webui.navigation.PageNavigationUtils;
 import org.exoplatform.portal.webui.page.UISiteBody;
 import org.exoplatform.portal.webui.portal.PageNodeEvent;
 import org.exoplatform.portal.webui.portal.UIPortal;
@@ -44,6 +48,7 @@ import org.exoplatform.services.organization.UserProfile;
 import org.exoplatform.services.resources.LocaleConfig;
 import org.exoplatform.services.resources.LocaleConfigService;
 import org.exoplatform.services.resources.Orientation;
+import org.exoplatform.services.resources.ResourceBundleManager;
 import org.exoplatform.web.application.javascript.JavascriptConfigService;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -56,19 +61,23 @@ import org.exoplatform.webui.event.Event;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.Set;
+
 
 /**
  * This extends the UIApplication and hence is a sibling of UIPortletApplication
  * (used by any eXo Portlets as the Parent class to build the portlet component
  * tree). The UIPortalApplication is responsible to build its subtree according
  * to some configuration parameters. If all components are displayed it is
- * composed of 2 UI components: -UIWorkingWorkSpace: the right part that can 
- * display the normal or webos portal layouts 
- * - UIPopupWindow: a popup window that display or not
+ * composed of 2 UI components: -UIWorkingWorkSpace: the right part that can
+ * display the normal or webos portal layouts - UIPopupWindow: a popup window
+ * that display or not
  */
 @ComponentConfig(lifecycle = UIPortalApplicationLifecycle.class, template = "system:/groovy/portal/webui/workspace/UIPortalApplication.gtmpl")
 public class UIPortalApplication extends UIApplication
@@ -104,17 +113,23 @@ public class UIPortalApplication extends UIApplication
    private UserPortalConfig userPortalConfig_;
 
    private boolean isSessionOpen = false;
-
+   
+   private Map<UIPortalKey, UIPortal> all_UIPortals;
+   
+   private List<PageNavigation> all_Navigations;
+   
+   private UIPortal showedUIPortal;
+   
    /**
     * The constructor of this class is used to build the tree of UI components
     * that will be aggregated in the portal page. 1) The component is stored in
     * the current PortalRequestContext ThreadLocal 2) The configuration for the
     * portal associated with the current user request is extracted from the
-    * PortalRequestContext 3) Then according to the context path, either a public
-    * or private portal is initiated. Usually a public portal does not contain
-    * the left column and only the private one has it. 4) The skin to use is
-    * setup 5) Finally, the current component is associated with the current
-    * portal owner
+    * PortalRequestContext 3) Then according to the context path, either a
+    * public or private portal is initiated. Usually a public portal does not
+    * contain the left column and only the private one has it. 4) The skin to
+    * use is setup 5) Finally, the current component is associated with the
+    * current portal owner
     * 
     * @throws Exception
     */
@@ -122,11 +137,17 @@ public class UIPortalApplication extends UIApplication
    {
       log = ExoLogger.getLogger("portal:UIPortalApplication");
       PortalRequestContext context = PortalRequestContext.getCurrentInstance();
+      
       userPortalConfig_ = (UserPortalConfig)context.getAttribute(UserPortalConfig.class);
       if (userPortalConfig_ == null)
          throw new Exception("Can't load user portal config");
 
-      // dang.tung - set portal language by user preference -> browser -> default
+      //TODO: Check if we need to clone page node
+      this.all_Navigations = userPortalConfig_.getNavigations();
+      localizeNavigations();
+      
+      // dang.tung - set portal language by user preference -> browser ->
+      // default
       // ------------------------------------------------------------------------------
       String portalLanguage = null;
       LocaleConfigService localeConfigService = getApplicationComponent(LocaleConfigService.class);
@@ -149,7 +170,8 @@ public class UIPortalApplication extends UIApplication
       localeConfig = localeConfigService.getLocaleConfig(portalLanguage);
       if (portalLanguage == null || !portalLanguage.equals(localeConfig.getLanguage()))
       {
-         // if user language no support by portal -> get browser language if no ->
+         // if user language no support by portal -> get browser language if no
+         // ->
          // get portal
          portalLanguage = context.getRequest().getLocale().getLanguage();
          localeConfig = localeConfigService.getLocaleConfig(portalLanguage);
@@ -163,6 +185,7 @@ public class UIPortalApplication extends UIApplication
       // -------------------------------------------------------------------------------
       context.setUIApplication(this);
 
+      setupUIPortalCache();
       addWorkingWorkspace();
 
       String currentSkin = userPortalConfig_.getPortalConfig().getSkin();
@@ -171,6 +194,52 @@ public class UIPortalApplication extends UIApplication
       setOwner(context.getPortalOwner());
    }
 
+   public void setShowedUIPortal(UIPortal uiPortal)
+   {
+      this.showedUIPortal = uiPortal;
+      
+      UISiteBody siteBody = this.findFirstComponentOfType(UISiteBody.class);
+      if(siteBody != null)
+      {
+         //TODO: Check this part carefully
+         siteBody.setUIComponent(uiPortal);
+      }
+   }
+   
+   public UIPortal getShowedUIPortal()
+   {
+      return showedUIPortal;
+   }
+   
+   public UIPortal getCachedUIPortal(String ownerType, String ownerId)
+   {
+      if(ownerType == null || ownerId == null)
+      {
+         return null;
+      }
+      return this.all_UIPortals.get(new UIPortalKey(ownerType, ownerId));
+   }
+   
+   public void addUIPortal(UIPortal uiPortal)
+   {
+      String ownerType = uiPortal.getOwnerType();
+      String ownerId = uiPortal.getOwner();
+      
+      if(ownerType != null && ownerId != null)
+      {
+         this.all_UIPortals.put(new UIPortalKey(ownerType, ownerId), uiPortal);
+      }
+   }
+   
+   public void removeUIPortal(String ownerType, String ownerId)
+   {
+      if(ownerType == null || ownerId == null)
+      {
+         return;
+      }
+      this.all_UIPortals.remove(new UIPortalKey(ownerType, ownerId));
+   }
+   
    public boolean isSessionOpen()
    {
       return isSessionOpen;
@@ -286,12 +355,12 @@ public class UIPortalApplication extends UIApplication
    }
 
    /**
-    * Returns a list of portlets skin that have to be added in the HTML head tag.
-    * The skin can directly point to a real css file (this is the case of all the
-    * porlet included in a page) or point to a servlet that agregates different
-    * portlet CSS files into one to lower the number of HTTP calls (this is the
-    * case in production as all the portlets included in a portal, and hence
-    * there on everypage are merged into a single CSS file)
+    * Returns a list of portlets skin that have to be added in the HTML head
+    * tag. The skin can directly point to a real css file (this is the case of
+    * all the porlet included in a page) or point to a servlet that agregates
+    * different portlet CSS files into one to lower the number of HTTP calls
+    * (this is the case in production as all the portlets included in a portal,
+    * and hence there on everypage are merged into a single CSS file)
     * 
     * @return the portlet skins
     */
@@ -311,7 +380,8 @@ public class UIPortalApplication extends UIApplication
          toolPanel.findComponentOfType(uiportlets, UIPortlet.class);
       }
 
-      // Get portal portlets to filter since they are already in the portal skins
+      // Get portal portlets to filter since they are already in the portal
+      // skins
       Set<SkinConfig> portletConfigs = getPortalPortletSkins();
 
       //
@@ -340,7 +410,22 @@ public class UIPortalApplication extends UIApplication
          return null;
       }
    }
-
+   
+   private void setupUIPortalCache()
+   {
+      this.all_UIPortals = new HashMap<UIPortalKey, UIPortal>(5);
+   }
+   
+   private void setupSkin()
+   {
+      
+   }
+   
+   private void setupLocale()
+   {
+      
+   }
+   
    /**
     * The central area is called the WorkingWorkspace. It is composed of: 1) A
     * UIPortal child which is filled with portal data using the PortalDataMapper
@@ -359,6 +444,10 @@ public class UIPortalApplication extends UIApplication
       Container container = dataStorage.getSharedLayout();
       UIPortal uiPortal = createUIComponent(UIPortal.class, null, null);
       PortalDataMapper.toUIPortal(uiPortal, userPortalConfig_);
+      
+      this.addUIPortal(uiPortal);
+      this.showedUIPortal = uiPortal;
+      
       uiWorkingWorkspace.addChild(UIEditInlineWorkspace.class, null, UI_EDITTING_WS_ID).setRendered(false);
       if (container != null)
       {
@@ -367,16 +456,20 @@ public class UIPortalApplication extends UIApplication
          uiContainer.setStorageId(container.getStorageId());
          PortalDataMapper.toUIContainer(uiContainer, container);
          UISiteBody uiSiteBody = uiContainer.findFirstComponentOfType(UISiteBody.class);
-         uiSiteBody.setUIComponent(uiPortal);
+         //uiSiteBody.setUIComponent(uiPortal);
+         uiSiteBody.setUIComponent(this.showedUIPortal);
          uiContainer.setRendered(true);
          uiViewWS.setUIComponent(uiContainer);
       }
       else
       {
-         uiViewWS.setUIComponent(uiPortal);
+         //uiViewWS.setUIComponent(uiPortal);
+         uiViewWS.setUIComponent(this.showedUIPortal);
       }
-      //uiWorkingWorkspace.addChild(UIPortalToolPanel.class, null, null).setRendered(false);
-      //editInlineWS.addChild(UIPortalToolPanel.class, null, null).setRendered(false);
+      // uiWorkingWorkspace.addChild(UIPortalToolPanel.class, null,
+      // null).setRendered(false);
+      // editInlineWS.addChild(UIPortalToolPanel.class, null,
+      // null).setRendered(false);
       addChild(UIMaskWorkspace.class, UIPortalApplication.UI_MASK_WS_ID, null);
    }
 
@@ -398,33 +491,31 @@ public class UIPortalApplication extends UIApplication
       if (!nodePath.equals(nodePath_) || !isPageExist())
       {
          nodePath_ = nodePath;
-         UIPortal uiPortal = findFirstComponentOfType(UIPortal.class);
-         PageNodeEvent<UIPortal> pnevent =
-            new PageNodeEvent<UIPortal>(uiPortal, PageNodeEvent.CHANGE_PAGE_NODE, nodePath_);
-         uiPortal.broadcast(pnevent, Event.Phase.PROCESS);
+         PageNodeEvent<UIPortal> pnevent = new PageNodeEvent<UIPortal>(showedUIPortal, PageNodeEvent.CHANGE_PAGE_NODE, nodePath_);
+         showedUIPortal.broadcast(pnevent, Event.Phase.PROCESS);
       }
       super.processDecode(context);
    }
 
    /**
-    * The processrender() method handles the creation of the returned HTML either
-    * for a full page render or in the case of an AJAX call The first request,
-    * Ajax is not enabled (means no ajaxRequest parameter in the request) and
-    * hence the super.processRender() method is called. This will hence call the
-    * processrender() of the Lifecycle object as this method is not overidden in
-    * UIPortalApplicationLifecycle. There we simply render the bounded template
-    * (groovy usually). Note that bounded template are also defined in component
-    * annotations, so for the current class it is UIPortalApplication.gtmpl On
-    * second calls, request have the "ajaxRequest" parameter set to true in the
-    * URL. In that case the algorithm is a bit more complex: a) The list of
-    * components that should be updated is extracted using the
-    * context.getUIComponentToUpdateByAjax() method. That list was setup during
-    * the process action phase b) Portlets and other UI components to update are
-    * split in 2 different lists c) Portlets full content are returned and set
-    * with the tag <div class="PortalResponse"> d) Block to updates (which are UI
-    * components) are set within the <div class="PortalResponseData"> tag e) Then
-    * the scripts and the skins to reload are set in the <div
-    * class="PortalResponseScript">
+    * The processrender() method handles the creation of the returned HTML
+    * either for a full page render or in the case of an AJAX call The first
+    * request, Ajax is not enabled (means no ajaxRequest parameter in the
+    * request) and hence the super.processRender() method is called. This will
+    * hence call the processrender() of the Lifecycle object as this method is
+    * not overidden in UIPortalApplicationLifecycle. There we simply render the
+    * bounded template (groovy usually). Note that bounded template are also
+    * defined in component annotations, so for the current class it is
+    * UIPortalApplication.gtmpl On second calls, request have the "ajaxRequest"
+    * parameter set to true in the URL. In that case the algorithm is a bit more
+    * complex: a) The list of components that should be updated is extracted
+    * using the context.getUIComponentToUpdateByAjax() method. That list was
+    * setup during the process action phase b) Portlets and other UI components
+    * to update are split in 2 different lists c) Portlets full content are
+    * returned and set with the tag <div class="PortalResponse"> d) Block to
+    * updates (which are UI components) are set within the <div
+    * class="PortalResponseData"> tag e) Then the scripts and the skins to
+    * reload are set in the <div class="PortalResponseScript">
     */
    public void processRender(WebuiRequestContext context) throws Exception
    {
@@ -483,10 +574,10 @@ public class UIPortalApplication extends UIApplication
                w.append("<div class=\"PortletResponseData\">");
 
                /*
-                * If the portlet is using our UI framework or supports it then it
-                * will return a set of block to updates. If there is not block to
-                * update the javascript client will see that as a full refresh of the
-                * content part
+                * If the portlet is using our UI framework or supports it then
+                * it will return a set of block to updates. If there is not
+                * block to update the javascript client will see that as a full
+                * refresh of the content part
                 */
                uiPortlet.processRender(context);
 
@@ -587,6 +678,69 @@ public class UIPortalApplication extends UIApplication
          }         
       }
       return (page != null);
+   }
+
+   public void localizeNavigations()
+   {
+      ResourceBundleManager i18nManager = getApplicationComponent(ResourceBundleManager.class);
+      Locale locale = getLocale();
+      
+      for(PageNavigation nav : this.getNavigations())
+      {
+         PageNavigationUtils.localizePageNavigation(nav, locale, i18nManager);
+      }
+   }
+   
+   public void setNavigations(List<PageNavigation> navs)
+   {
+      this.all_Navigations = navs;
+   }
+   
+   public List<PageNavigation> getNavigations()
+   {
+      return this.all_Navigations;
+   }
+   
+   private static class UIPortalKey
+   {
+      private String ownerType;
+
+      private String ownerId;
+
+      private final int hashCode;
+      
+      UIPortalKey(String _ownerType, String _ownerId)
+      {
+         this.ownerType = _ownerType;
+         this.ownerId = _ownerId;
+         this.hashCode = this.ownerType.hashCode() * 2 + this.ownerId.hashCode();
+      }
+
+      @Override
+      public boolean equals(Object obj)
+      {
+         if (this == null || obj == null)
+         {
+            return this == null && obj == null;
+         }
+         if (!(obj instanceof UIPortalKey))
+         {
+            return false;
+         }
+         return this.ownerType.equals(((UIPortalKey)obj).ownerType) && this.ownerId.equals(((UIPortalKey)obj).ownerId);
+      }
+      
+      @Override
+      public int hashCode()
+      {
+         return this.hashCode;
+      }
+      
+      @Override
+      public String toString()
+      {
+        return "OWNERTYPE: " + ownerType + " OWNERID: " + ownerId;  
+      }
    }
 
 }
