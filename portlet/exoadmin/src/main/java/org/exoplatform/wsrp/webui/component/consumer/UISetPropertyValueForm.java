@@ -29,8 +29,9 @@ import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
-import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormStringInput;
+import org.exoplatform.wsrp.webui.component.UIMappedForm;
+import org.gatein.wsrp.consumer.RegistrationProperty;
 
 /**
  * @author <a href="mailto:chris.laprun@jboss.com">Chris Laprun</a>
@@ -43,15 +44,29 @@ import org.exoplatform.webui.form.UIFormStringInput;
       @EventConfig(listeners = UISetPropertyValueForm.SaveActionListener.class),
       @EventConfig(listeners = UISetPropertyValueForm.CancelActionListener.class)
    })
-public class UISetPropertyValueForm extends UIForm
+public class UISetPropertyValueForm extends UIMappedForm
 {
    private UIFormStringInput value;
    private static final String[] ACTIONS = new String[]{"Save", "Cancel"};
+   private RegistrationProperty prop;
 
    public UISetPropertyValueForm()
    {
       value = new UIFormStringInput("value", null);
       setActions(ACTIONS);
+   }
+
+   public void setProperty(RegistrationProperty prop)
+   {
+      this.prop = prop;
+      try
+      {
+         setBackingBean(prop);
+      }
+      catch (Exception e)
+      {
+         e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+      }
    }
 
    static public class CancelActionListener extends EventListener<UISetPropertyValueForm>
