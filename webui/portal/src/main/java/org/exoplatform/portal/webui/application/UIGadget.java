@@ -26,20 +26,22 @@ import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.model.ApplicationState;
 import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.config.model.Properties;
-import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.data.ModelDataStorage;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.WebAppController;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.web.application.gadget.GadgetApplication;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIComponent;
+import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.exception.MessageException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Iterator;
 import java.util.Random;
 import java.util.UUID;
 
@@ -419,7 +421,14 @@ public class UIGadget extends UIComponent
          UIGadget uiGadget = event.getSource();
 
          //
-         uiGadget.addUserPref(event.getRequestContext().getRequestParameter("userPref"));
+         try{
+            uiGadget.addUserPref(event.getRequestContext().getRequestParameter("userPref"));
+         } catch(Exception e){
+            WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
+            UIPortletApplication uiPortlet = uiGadget.getAncestorOfType(UIPortletApplication.class);
+            context.addUIComponentToUpdateByAjax(uiPortlet);
+            throw new MessageException(new ApplicationMessage("UIDashboard.msg.ApplicationNotExisted", null, ApplicationMessage.ERROR));
+         }
 
          //
          if (uiGadget.isLossData())
