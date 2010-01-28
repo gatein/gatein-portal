@@ -22,7 +22,7 @@ package org.exoplatform.organization.webui.component;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.webui.application.WebuiRequestContext;
-import org.exoplatform.webui.application.replication.api.annotations.Serialized;
+import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIBreadcumbs;

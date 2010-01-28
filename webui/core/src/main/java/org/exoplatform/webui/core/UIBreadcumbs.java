@@ -21,7 +21,7 @@ package org.exoplatform.webui.core;
 
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
-import org.exoplatform.webui.application.replication.api.annotations.Serialized;
+import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIBreadcumbs.SelectPathActionListener;

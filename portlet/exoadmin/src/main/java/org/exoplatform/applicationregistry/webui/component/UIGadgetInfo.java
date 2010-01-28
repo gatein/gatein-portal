@@ -33,7 +33,7 @@ import org.exoplatform.web.WebAppController;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.web.application.gadget.GadgetApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
-import org.exoplatform.webui.application.replication.api.annotations.Serialized;
+import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;

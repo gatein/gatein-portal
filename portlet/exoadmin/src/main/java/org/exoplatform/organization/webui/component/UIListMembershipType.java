@@ -19,13 +19,12 @@
 
 package org.exoplatform.organization.webui.component;
 
-import org.exoplatform.commons.utils.*;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.services.organization.MembershipType;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
-import org.exoplatform.webui.application.replication.api.annotations.Serialized;
+import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -36,7 +35,6 @@ import org.exoplatform.webui.core.UIPageIterator;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
-import java.io.Serializable;
 import java.io.Writer;
 import java.util.List;
 

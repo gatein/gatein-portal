@@ -21,7 +21,7 @@ package org.exoplatform.webui.core;
 
 import org.exoplatform.commons.utils.EmptySerializablePageList;
 import org.exoplatform.commons.utils.PageList;
-import org.exoplatform.webui.application.replication.api.annotations.Serialized;
+import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.event.Event;

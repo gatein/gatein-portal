@@ -19,7 +19,7 @@
 
 package org.exoplatform.webui.core.model;
 
-import org.exoplatform.webui.application.replication.api.annotations.Serialized;
+import org.exoplatform.commons.serialization.api.annotations.Serialized;
 
 /**
  * Created by The eXo Platform SARL

@@ -20,7 +20,7 @@
 package org.exoplatform.webui.core;
 
 import org.exoplatform.util.ReflectionUtil;
-import org.exoplatform.webui.application.replication.api.annotations.Serialized;
+import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 
 import java.lang.reflect.Method;

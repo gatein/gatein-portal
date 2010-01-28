@@ -20,7 +20,7 @@
 package org.exoplatform.webui.form;
 
 import org.exoplatform.webui.application.WebuiRequestContext;
-import org.exoplatform.webui.application.replication.api.annotations.Serialized;
+import org.exoplatform.commons.serialization.api.annotations.Serialized;
 
 import java.io.Writer;
 

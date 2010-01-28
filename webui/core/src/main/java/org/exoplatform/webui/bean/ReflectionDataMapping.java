@@ -20,7 +20,6 @@
 package org.exoplatform.webui.bean;
 
 import org.exoplatform.util.ReflectionUtil;
-import org.exoplatform.webui.application.replication.api.annotations.Converted;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormInput;

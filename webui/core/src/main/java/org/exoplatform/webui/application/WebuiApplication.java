@@ -110,7 +110,6 @@ abstract public class WebuiApplication extends Application
          throw new Exception("Cannot find the configuration for the component " + type.getName() + ", configId "
             + configId);
       }
-      System.out.println("Created component " + type.getName() + " with configId=" + configId + " and id=" + id + " and config=" + config);
       T uicomponent = Util.createObject(type, config.getInitParams());
       uicomponent.setComponentConfig(id, config);
       return uicomponent;

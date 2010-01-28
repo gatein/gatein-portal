@@ -20,7 +20,7 @@
 package org.exoplatform.webui.config;
 
 import org.exoplatform.webui.Util;
-import org.exoplatform.webui.application.replication.api.annotations.Converted;
+import org.exoplatform.commons.serialization.api.annotations.Converted;
 import org.exoplatform.webui.config.metadata.ComponentMetaData;
 import org.exoplatform.webui.core.lifecycle.Lifecycle;
 import org.exoplatform.webui.event.EventListener;

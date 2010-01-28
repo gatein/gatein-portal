@@ -22,7 +22,7 @@ package org.exoplatform.webui.config;
 import org.exoplatform.webui.application.ConfigurationManager;
 import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
-import org.exoplatform.webui.application.replication.api.TypeConverter;
+import org.exoplatform.commons.serialization.api.TypeConverter;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>

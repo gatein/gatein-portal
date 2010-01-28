@@ -27,7 +27,7 @@ import org.exoplatform.web.application.Parameter;
 import org.exoplatform.web.application.URLBuilder;
 import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
-import org.exoplatform.webui.application.replication.api.annotations.Serialized;
+import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.webui.config.Component;
 import org.exoplatform.webui.core.lifecycle.Lifecycle;
 import org.exoplatform.webui.core.renderers.ValueRenderer;

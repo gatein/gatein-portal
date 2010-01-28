@@ -20,9 +20,9 @@
 package org.exoplatform.portal.application.replication;
 
 import org.exoplatform.services.organization.Query;
-import org.exoplatform.webui.application.replication.SerializationContext;
-import org.exoplatform.webui.application.replication.model.TypeDomain;
-import org.exoplatform.webui.application.replication.model.metadata.DomainMetaData;
+import org.exoplatform.commons.serialization.SerializationContext;
+import org.exoplatform.commons.serialization.model.TypeDomain;
+import org.exoplatform.commons.serialization.model.metadata.DomainMetaData;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>

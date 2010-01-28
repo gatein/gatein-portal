@@ -20,7 +20,7 @@
 package org.exoplatform.applicationregistry.webui.component;
 
 import org.exoplatform.applicationregistry.webui.component.UIPortletManagement.PortletExtra;
-import org.exoplatform.webui.application.replication.api.annotations.Serialized;
+import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIComponent;
 

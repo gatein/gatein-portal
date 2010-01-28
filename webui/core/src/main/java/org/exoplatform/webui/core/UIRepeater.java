@@ -22,7 +22,7 @@ package org.exoplatform.webui.core;
 import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.portal.config.NoSuchDataException;
 import org.exoplatform.util.ReflectionUtil;
-import org.exoplatform.webui.application.replication.api.annotations.Serialized;
+import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.webui.bean.UIDataFeed;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 

@@ -19,8 +19,8 @@
 
 package org.exoplatform.portal.application.replication;
 
-import org.exoplatform.webui.application.replication.SerializationContext;
-import org.exoplatform.webui.application.replication.api.annotations.Serialized;
+import org.exoplatform.commons.serialization.SerializationContext;
+import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.webui.core.UIApplication;
 
 import java.io.*;

@@ -20,12 +20,9 @@
 package org.exoplatform.portal.application.replication;
 
 import org.exoplatform.webui.Util;
-import org.exoplatform.webui.application.ConfigurationManager;
-import org.exoplatform.webui.application.WebuiApplication;
-import org.exoplatform.webui.application.WebuiRequestContext;
-import org.exoplatform.webui.application.replication.api.factory.CreateException;
-import org.exoplatform.webui.application.replication.api.factory.ObjectFactory;
-import org.exoplatform.webui.application.replication.model.FieldModel;
+import org.exoplatform.commons.serialization.api.factory.CreateException;
+import org.exoplatform.commons.serialization.api.factory.ObjectFactory;
+import org.exoplatform.commons.serialization.model.FieldModel;
 import org.exoplatform.webui.config.Component;
 import org.exoplatform.webui.core.UIComponent;
 
