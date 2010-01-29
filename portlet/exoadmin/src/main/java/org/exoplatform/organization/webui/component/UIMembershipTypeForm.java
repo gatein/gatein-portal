@@ -85,8 +85,9 @@ public class UIMembershipTypeForm extends UIForm
          UIMembershipTypeForm uiForm = event.getSource();
          UIMembershipManagement uiMembershipManagement = uiForm.getParent();
          OrganizationService service = uiForm.getApplicationComponent(OrganizationService.class);
+         String msTypeName = uiForm.getUIStringInput(MEMBERSHIP_TYPE_NAME).getValue();
 
-         MembershipType mt = service.getMembershipTypeHandler().findMembershipType(uiForm.membershipTypeName);
+         MembershipType mt = service.getMembershipTypeHandler().findMembershipType(msTypeName);
 
          if (mt != null)
          {
