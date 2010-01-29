@@ -161,7 +161,7 @@ public class UIUserProfileInputSet extends UIFormInputSet
             displayLanguage = language;
          }
          option = new SelectItemOption<String>(displayLanguage, language, displayName);
-         if (lang.equals(selectedLang))
+         if (language.equals(selectedLang))
          {
             option.setSelected(true);
          }
