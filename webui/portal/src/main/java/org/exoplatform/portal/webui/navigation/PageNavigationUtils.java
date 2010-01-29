@@ -199,4 +199,16 @@ public class PageNavigationUtils
          resolveLabel(res, childNode);
       }
    }
+   
+   public static PageNavigation findNavigationByID(List<PageNavigation> all_Navigations, int id)
+   {
+      for(PageNavigation nav : all_Navigations)
+      {
+         if(nav.getId() == id)
+         {
+            return nav;
+         }
+      }
+      return null;
+   }
 }

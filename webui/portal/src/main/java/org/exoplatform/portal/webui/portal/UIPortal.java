@@ -98,8 +98,6 @@ public class UIPortal extends UIContainer
 
    private Properties properties;
 
-   //private List<PageNavigation> navigations;
-
    private PageNavigation navigation;
    
    private List<PageNode> selectedPath;
@@ -108,7 +106,6 @@ public class UIPortal extends UIContainer
    
    private UIPage showedUIPage;
    
-   //private Map<UIPageKey, UIPage> all_UIPages;
    private Map<String, UIPage> all_UIPages;
    
    private Map<String, String[]> publicParameters_ = new HashMap<String, String[]>();
@@ -221,62 +218,6 @@ public class UIPortal extends UIContainer
       }
       this.all_UIPages.put(pageReference, uiPage);
    }
-
-   /*
-   public List<PageNavigation> getNavigations() throws Exception
-   {
-      UserPortalConfigService serv = getApplicationComponent(UserPortalConfigService.class);
-      for (int i = 0; i < navigations.size(); i++)
-      {
-         PageNavigation ele = navigations.get(i);
-         if (serv.getPageNavigation(ele.getOwnerType(), ele.getOwnerId()) == null)
-         {
-            navigations.remove(i);
-            --i;
-         }
-      }
-
-      return navigations;
-   }
-   */
-   
-   /*
-   public void setNavigation(List<PageNavigation> navs) throws Exception
-   {
-      navigations = navs;
-      selectedPaths_ = new ArrayList<PageNode>();
-      if (navigations == null || navigations.size() < 1)
-         return;
-      // PageNavigation pNav = navigations.get(0);
-      // if(pNav.getNodes() == null || pNav.getNodes().size() < 1) return;
-
-      // TODO dang.tung: get suitable navigation
-      // ----------------------------------------------------------
-      PageNavigation pNav = null;
-      for (PageNavigation nav : navs)
-      {
-         if (nav.getNodes() != null && nav.getNodes().size() > 0)
-         {
-            pNav = nav;
-            break;
-         }
-      }
-      if (pNav == null)
-         return;
-      // ----------------------------------------------------------
-      if(selectedNode_ == null){
-         selectedNode_ = pNav.getNodes().get(0);
-         selectedPaths_.add(selectedNode_);
-      }
-      UIPageBody uiPageBody = findFirstComponentOfType(UIPageBody.class);
-      if (uiPageBody == null)
-         return;
-      uiPageBody.setPageBody(selectedNode_, this);
-      UIPortalApplication uiApp = Util.getUIPortalApplication();
-      refreshNavigation(uiApp.getLocale());
-   }
-
-   */
    
    public void setNavigation(PageNavigation _navigation)
    {

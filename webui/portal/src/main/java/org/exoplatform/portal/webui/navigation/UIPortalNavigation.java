@@ -111,7 +111,7 @@ public class UIPortalNavigation extends UIComponent
       }
       else
       {
-         for (PageNavigation nav : Util.getUIPortal().getNavigations())
+         for (PageNavigation nav : Util.getUIPortalApplication().getNavigations())
          {
             if (!showUserNavigation && nav.getOwnerType().equals("user"))
                continue;
@@ -260,11 +260,10 @@ public class UIPortalNavigation extends UIComponent
          UIPortalNavigation uiNavigation = event.getSource();
 
          TreeNode treeNode = uiNavigation.getTreeNodes();
-         UIPortal uiPortal = Util.getUIPortal();
-
+         List<PageNavigation> all_Navigations = Util.getUIPortalApplication().getNavigations();
+         
          // get URI
          String uri = event.getRequestContext().getRequestParameter(OBJECTID);
-
          int index = uri.lastIndexOf("::");
          String id = uri.substring(index + 2);
 
@@ -272,10 +271,11 @@ public class UIPortalNavigation extends UIComponent
          PageNavigation selectNav = null;
 
          String navId = uri.substring(0, index);
-         
-         //TODO: Minh Hoang TO
-         //selectNav = uiPortal.getPageNavigation(Integer.parseInt(navId));
-         selectNav = uiPortal.getSelectedNavigation();
+         selectNav = PageNavigationUtils.findNavigationByID(all_Navigations, Integer.parseInt(navId));
+         if(selectNav == null)
+         {
+            return;
+         }
          
          // get PageNode by uri
          PageNode expandNode = PageNavigationUtils.searchPageNodeByUri(selectNav, id);
