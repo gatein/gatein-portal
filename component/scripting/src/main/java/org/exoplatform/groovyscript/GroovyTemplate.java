@@ -70,6 +70,8 @@ public class GroovyTemplate
       if (templateName == null)
       {
          templateName = "fic";
+      } else {
+         templateName = templateName.replaceAll("-", "_");
       }
 
       //
