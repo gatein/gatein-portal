@@ -135,7 +135,15 @@ public class UIForgetPassword extends UIForm
             "?portal:componentId=UIPortal&portal:action=RecoveryPasswordAndUsername&datesend=" + now.toString()
                + "&email=" + email;
          activeLink = headerMail + activeLink + footerMail;
-         mailSrc.sendMessage("exoservice@gmail.com", email, "Remind password and username", activeLink);
+         try{
+            mailSrc.sendMessage("exoservice@gmail.com", email, "Remind password and username", activeLink);
+         } catch(Exception e){
+            requestContext.getUIApplication().addMessage(
+               new ApplicationMessage("Can't send mail to mail server.", null, ApplicationMessage.ERROR));
+            requestContext.addUIComponentToUpdateByAjax(uilogin);
+            return;
+         }
+         
          uilogin.getChild(UILoginForm.class).setRendered(true);
          uilogin.getChild(UIForgetPasswordWizard.class).setRendered(false);
          uilogin.getChild(UIForgetPassword.class).setRendered(false);
