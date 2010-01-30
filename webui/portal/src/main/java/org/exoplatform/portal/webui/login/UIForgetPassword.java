@@ -139,7 +139,7 @@ public class UIForgetPassword extends UIForm
             mailSrc.sendMessage("exoservice@gmail.com", email, "Remind password and username", activeLink);
          } catch(Exception e){
             requestContext.getUIApplication().addMessage(
-               new ApplicationMessage("Can't send mail to mail server.", null, ApplicationMessage.ERROR));
+               new ApplicationMessage("UIForgetPassword.msg.send-mail-fail", null));
             requestContext.addUIComponentToUpdateByAjax(uilogin);
             return;
          }
