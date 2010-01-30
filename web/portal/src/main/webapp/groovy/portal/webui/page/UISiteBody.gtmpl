@@ -5,11 +5,6 @@
 %>
 <div class="UISiteBody" id="${uicomponent.id}">		
 	<div class="UIComponent UIComponentBlock">
-		<div class="META-DATA-BLOCK" style="display: none">
-			<div class="id">$uicomponent.id</div>
-			<div class="title"><%=_ctx.appRes("UIPage.label.title")%></div>
-			<div class="description"><%=_ctx.appRes("UIPage.label.description")%></div>
-		</div>
 	
 	<%if(portalMode == UIPortalApplication.APP_BLOCK_EDIT_MODE || portalMode == UIPortalApplication.CONTAINER_BLOCK_EDIT_MODE) {%>
 		<div class="LAYOUT-BLOCK LAYOUT-SITEBODY DragControlArea">
@@ -74,9 +69,11 @@
 			<% } else { uicomponent.renderChildren(); } %>
 		</div>
 	<%}%>
+	<%if(portalMode != UIPortalApplication.NORMAL_MODE){%>
 		<div class="EDITION-BLOCK EDITION-SITEBODY">
 			<div class="CONTROL-SITEBODY CONTROL-BLOCK" style="display: none"><span></span></div>
 		</div>
 		<div class="UISiteBodyMask" style="position:absolute; display:none;"><span></span></div>
+	<%} %>
 	</div>
 </div>

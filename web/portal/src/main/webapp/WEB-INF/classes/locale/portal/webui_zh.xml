@@ -1135,9 +1135,6 @@
    </UIDecoratorConfigOptions>
    <UIPortlet>
       <label>
-         <portlet>Portlet</portlet>
-         <title>Portlet</title>
-         <description>GateIn portlet</description>
          <portletContent>Portlet描述</portletContent>
          <View>查看</View>
       </label>
@@ -1395,9 +1392,6 @@
          <Container>容器</Container>
          <DragControlArea>保持这个区域，拖动容器。</DragControlArea>
       </title>
-      <label>
-         <Thecontainer>容器</Thecontainer>
-      </label>
       <deleteContainer>您确定要删除此容器？</deleteContainer>
       <tooltip>
          <closeContainer>删除容器</closeContainer>
@@ -1407,8 +1401,6 @@
    </UIContainer>
    <UIPage>
       <label>
-         <title>门户页面</title>
-         <description>门户页面正文</description>
          <pageContent>页面描述</pageContent>
       </label>
       <msg>
@@ -1465,10 +1457,6 @@
    </UIPageDesktop>
   
    <UIPageBody>
-      <label>
-         <title>门户页面正文</title>
-         <description>门户页面正文</description>
-      </label>
       <msg>
          <pageNotFoundLine1>未找到页面</pageNotFoundLine1>
          <pageNotFoundLine2>您无权查看这个网页。</pageNotFoundLine2>
@@ -1477,19 +1465,6 @@
       </msg>
    </UIPageBody>
 
-   <UIPortal>
-      <label>
-         <title>UIPortal 容器</title>
-         <description>UIPortal 容器</description>
-      </label>
-   </UIPortal>
-   <UITableColumnContainer>
-      <label>
-         <title>导航容器</title>
-         <description>导航容器</description>
-      </label>
-   </UITableColumnContainer>
-  
    <UISearch>
       <label>
          <AdvancedSearch>高级搜索</AdvancedSearch>

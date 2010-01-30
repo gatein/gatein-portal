@@ -1286,9 +1286,6 @@
    </UIDecoratorConfigOptions>
    <UIPortlet>
       <label>
-         <portlet>Portlet</portlet>
-         <title>Portlet</title>
-         <description>GateIn portlet</description>
          <portletContent>Portlet描述</portletContent>
          <View>查看</View>
       </label>
@@ -1564,9 +1561,6 @@
          <Container>容器</Container>
          <DragControlArea>保持這個區域，拖動容器。</DragControlArea>
       </title>
-      <label>
-         <Thecontainer>容器</Thecontainer>
-      </label>
       <deleteContainer>您確定要刪除此容器？</deleteContainer>
       <tooltip>
          <closeContainer>刪除容器</closeContainer>
@@ -1576,8 +1570,6 @@
    </UIContainer>
    <UIPage>
       <label>
-         <title>Portal頁面</title>
-         <description>Portal頁面正文</description>
          <pageContent>頁面描述</pageContent>
       </label>
       <msg>
@@ -1637,10 +1629,6 @@
    </UIPageDesktop>
 
    <UIPageBody>
-      <label>
-         <title>Portal頁面正文</title>
-         <description>Portal頁面正文</description>
-      </label>
       <msg>
          <pageNotFoundLine1>未找到頁面</pageNotFoundLine1>
          <pageNotFoundLine2>您無權查看這個網頁。</pageNotFoundLine2>
@@ -1648,19 +1636,6 @@
          <pageNotFoundLine4>此節點沒有網頁。</pageNotFoundLine4>
       </msg>
    </UIPageBody>
-
-   <UIPortal>
-      <label>
-         <title>UIPortal容器</title>
-         <description>UIPortal容器</description>
-      </label>
-   </UIPortal>
-   <UITableColumnContainer>
-      <label>
-         <title>導覽器容器</title>
-         <description>導覽器容器</description>
-      </label>
-   </UITableColumnContainer>
 
    <UISearch>
       <label>

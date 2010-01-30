@@ -16,13 +16,6 @@
 		<div class="LeftContainerBlock">
 			<div class="RightContainerBlock UIComponentBlock">
 			
-				<div class="META-DATA-BLOCK" style="display: none">
-					<div class="id">$uicomponent.id</div>
-					<div class="title"><%=_ctx.appRes("UITableColumnContainer.label.title")%></div>
-					<div class="description"><%=_ctx.appRes("UITableColumnContainer.label.description")%></div>
-				</div>
-				
-				
 			<%
 				int portalMode = uiPortalApp.getModeState();
 				String style = "";
@@ -49,9 +42,11 @@
 				</div>
 				<%/*Debug On IE	-----For DND */%>
 				
+			<%if(portalMode != UIPortalApplication.NORMAL_MODE){%>
 				<div class="EDITION-BLOCK EDITION-CONTAINER" style="display: none;">
 					<div style="position: relative;">
 						<div style="position: absolute; top: -86px;">
+							
 							<div class="NewLayer" style="display: none; visibility: hidden;"><span></span></div>
 							<div class="CONTROL-CONTAINER CONTROL-BLOCK" style="position: absolute; top: -6px;">
 								<%/*Begin InfoBar*/%>
@@ -87,6 +82,7 @@
 						</div>
 					</div>
 				</div>
+			<%} %>
 				
 			</div>
 		</div>

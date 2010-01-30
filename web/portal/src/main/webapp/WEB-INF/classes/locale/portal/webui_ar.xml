@@ -1332,9 +1332,6 @@
   -->
   <UIPortlet>
     <label>
-      <portlet>مدخل</portlet>
-      <title>مدخل</title>
-      <description>مدخل إكزو</description>
       <portletContent>وصف المدخل</portletContent>
       <View>عرض</View>
     </label>
@@ -1671,9 +1668,6 @@
       <Container>الحاويات</Container>
       <DragControlArea>هذا المجال لجر هذه الحاوية</DragControlArea>
     </title>
-    <label>
-      <Thecontainer>الحاوية</Thecontainer>
-    </label>
     <deleteContainer>هل أنت متأكد من حذف هذه الحاوية؟</deleteContainer>
     <tooltip>
       <closeContainer>إغلاق الحاوية</closeContainer>
@@ -1688,8 +1682,6 @@
   -->
   <UIPage>
     <label>
-      <title>صفحة البوابة</title>
-      <description>صفحة البوابة</description>
       <pageContent>وصف الصفحة</pageContent>
     </label>
     <msg>
@@ -1754,10 +1746,6 @@
   ############################################################################
   -->
   <UIPageBody>
-    <label>
-      <title>صفحة البوابة</title>
-      <description>صفحة البوابة</description>
-    </label>
     <msg>
       <pageNotFoundLine1>!لم يتم العثور على الصفحة</pageNotFoundLine1>
       <pageNotFoundLine2>ليس لديك الحق في مشاهدة هذه الصفحة</pageNotFoundLine2>
@@ -1765,29 +1753,6 @@
       <pageNotFoundLine4>.هذه العقدة ليست لديها أي صفحة</pageNotFoundLine4>
     </msg>
   </UIPageBody>
-  <!--
-  ############################################################################
-  #              org.exoplatform.portal.component.view.UIPortal              #
-  ############################################################################
-  -->
-  <UIPortal>
-    <label>
-      <title>حاوية واجهة مستخدم البوابة</title>
-      <description>حاوية واجهة مستخدم البوابة</description>
-    </label>
-  </UIPortal>
-  <!--
-  ############################################################################
-  #              org.exoplatform.portal.component.view.UITableColumnContainer#
-  ############################################################################
-  -->
-  <UITableColumnContainer>
-    <label>
-      <title>حاوية التصفح</title>
-      <description>حاوية التصفح</description>
-    </label>
-  </UITableColumnContainer>
-  
   <!--
   ###############################################################################
   #                    org.exoplatform.portal.webui.component.UISearchForm      #

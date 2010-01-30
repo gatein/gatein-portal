@@ -18,33 +18,29 @@
  */
 
 function UIComponent(node) {
+	if(!node) return null;
   this.node = node ;
-  if(node) this.type = node.className ;
-  componentBlock = eXo.core.DOMUtil.findFirstDescendantByClass(node, "div", "UIComponentBlock");
-  var children =  eXo.core.DOMUtil.getChildrenByTagName(componentBlock, "div") ;
+  this.type = node.className ;
+  var DOMUtil = eXo.core.DOMUtil;
+  componentBlock = DOMUtil.findFirstDescendantByClass(node, "div", "UIComponentBlock");
+  var children =  DOMUtil.getChildrenByTagName(componentBlock, "div") ;
   
   for(var i=0; i<children.length; i++) {
-		if(eXo.core.DOMUtil.hasClass(children[i], "META-DATA-BLOCK")) this.metaData = children[i];
-  	else if(eXo.core.DOMUtil.hasClass(children[i], "LAYOUT-BLOCK")) this.layout = children[i];
-  	else if(eXo.core.DOMUtil.hasClass(children[i], "VIEW-BLOCK")) this.view = children[i];
-  	else if(eXo.core.DOMUtil.hasClass(children[i], "EDITION-BLOCK")) this.control = children[i];
+  	if(DOMUtil.hasClass(children[i], "LAYOUT-BLOCK")) this.layout = children[i];
+  	else if(DOMUtil.hasClass(children[i], "VIEW-BLOCK")) this.view = children[i];
+  	else if(DOMUtil.hasClass(children[i], "EDITION-BLOCK")) this.control = children[i];
   }
 	
   this.component = "";
   
-  var div = eXo.core.DOMUtil.getChildrenByTagName(this.metaData, "div");
-  if(div.length > 0) {
-  	this.id = div[0].firstChild.nodeValue ;
-  	this.title = div[1].firstChild.nodeValue ;
-  }
-	//minh.js.exo
- //bug PORTAL-1161.
-	//this.description = div[2].firstChild.nodeValue ;
+  if(DOMUtil.hasClass(node, "UIPortal")) this.id = node.id.replace("UIPortal-", "");
+  else if(DOMUtil.hasClass(node, "UIPortlet")) this.id = node.id.replace("UIPortlet-", "");
+  else if(DOMUtil.hasClass(node, "UIContainer")) this.id = node.id.replace("UIContainer-", "");
+  else this.id = node.id;
+  
 };
-//UIComponent.prototype.getDescription = function() { return this.description ; };
 
 UIComponent.prototype.getId = function() { return this.id ; };
-UIComponent.prototype.getTitle = function() { return this.title ; };
 UIComponent.prototype.getElement = function() { return this.node ; };
 UIComponent.prototype.getUIComponentType = function() { return this.type ; };
 

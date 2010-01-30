@@ -26,18 +26,6 @@
 		style="top: 0px; left:0px;">
 				<div class="UIComponentBlock">
 				
-					<div class="META-DATA-BLOCK" style="display: none">
-						<div class="id"><%=uicomponent.getId();%></div>
-						<div class="title"><%=_ctx.appRes("UIPortlet.label.title");%></div>
-						<div class="description">
-							<%if(uicomponent.getDescription() != null) {%>
-								<%=uicomponent.getDescription();%>
-							<%} else {%>
-								<%=_ctx.appRes("UIPortlet.label.description");%>
-							<%}%>
-						</div>
-					</div>
-					
 				<%if(portalMode == uiPortalApp.CONTAINER_BLOCK_EDIT_MODE || portalMode == uiPortalApp.APP_BLOCK_EDIT_MODE) { %>	
 					<div class="LAYOUT-BLOCK LAYOUT-PORTLET">
 						<div class="PortletLayoutDecorator">

@@ -1186,9 +1186,6 @@
    </UIDecoratorConfigOptions>
    <UIPortlet>
       <label>
-         <portlet>포틀릿</portlet>
-         <title>포틀릿</title>
-         <description>GateIn 포틀릿</description>
          <portletContent>포틀릿 설명</portletContent>
          <View>보기</View>
       </label>
@@ -1460,9 +1457,6 @@
          <Container>컨테이너</Container>
          <DragControlArea>컨테이너에 드래그하는 영역 유지</DragControlArea>
       </title>
-      <label>
-         <Thecontainer>컨테이너</Thecontainer>
-      </label>
       <deleteContainer>이 컨테이너를 삭제하시겠습니까?</deleteContainer>
       <tooltip>
          <closeContainer>컨테이너 삭제</closeContainer>
@@ -1472,8 +1466,6 @@
    </UIContainer>
    <UIPage>
       <label>
-         <title>포탈 페이지</title>
-         <description>포탈 페이지 설명</description>
          <pageContent>페이지 설명</pageContent>
       </label>
       <msg>
@@ -1532,10 +1524,6 @@
 <!--  #		          org.exoplatform.portal.component.view.UIPageBody             #-->
 <!--  ############################################################################-->
    <UIPageBody>
-      <label>
-         <title>포탈 페이지 몸체</title>
-         <description>포탈의 페이지 몸체</description>
-      </label>
       <msg>
          <pageNotFoundLine1>페이지를 찾을 수 없습니다.</pageNotFoundLine1>
          <pageNotFoundLine2>이 페이지를 볼 수 있는 권한이 없습니다.</pageNotFoundLine2>
@@ -1543,24 +1531,6 @@
          <pageNotFoundLine4>이 노드에 페이지가 존재하지 않습니다.</pageNotFoundLine4>
       </msg>
    </UIPageBody>
-<!--     ############################################################################-->
-<!--  #		           org.exoplatform.portal.component.view.UIPortal              #-->
-<!--  ############################################################################-->
-   <UIPortal>
-      <label>
-         <title>UIPortal 컨테이너</title>
-         <description>UIPortal 컨테이너</description>
-      </label>
-   </UIPortal>
-   <UITableColumnContainer>
-      <label>
-         <title>내비게이션 컨테이너</title>
-         <description>내비게이션 컨테이너</description>
-      </label>
-   </UITableColumnContainer>
-<!--  ############################################################################-->
-<!--  #		           org.exoplatform.portal.component.view.UITableColumnContainer#-->
-<!--  ############################################################################-->
 
    <UISearch>
       <label>
