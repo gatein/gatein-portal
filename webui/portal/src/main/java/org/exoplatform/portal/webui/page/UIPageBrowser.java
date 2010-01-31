@@ -19,6 +19,7 @@
 
 package org.exoplatform.portal.webui.page;
 
+import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.commons.utils.LazyPageList;
 import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.commons.utils.PageListAccess;
@@ -42,7 +43,6 @@ import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.portal.webui.workspace.UIWorkingWorkspace;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
-import org.exoplatform.webui.application.replication.api.annotations.Serialized;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.ComponentConfigs;
 import org.exoplatform.webui.config.annotation.EventConfig;
