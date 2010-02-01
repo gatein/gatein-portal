@@ -16,5 +16,9 @@
          <lastName>Họ</lastName>
          <emailAddress>Địa chỉ email</emailAddress>
       </label>
+      <action>
+         	<Subscribe>Đăng ký</Subscribe>
+            <Reset>Nhập lại</Reset>
+      </action>
    </UIRegisterForm>
 </bundle>
