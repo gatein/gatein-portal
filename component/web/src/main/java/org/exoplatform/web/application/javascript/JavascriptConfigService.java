@@ -53,7 +53,7 @@ public class JavascriptConfigService implements Startable
    private JavascriptDeployer deployer;
 
    private JavascriptRemoval removal;
-   
+
    /** Used to clear merged Javascript on undeploying an webapp */
    private Map<String, List<String>> object_view_of_merged_JS;
 
@@ -91,23 +91,25 @@ public class JavascriptConfigService implements Startable
       availableScriptsPaths_.add(path);
       extendedJavascripts.put(path, scriptData);
    }
-   
-   public void addJavascript(JavascriptKey key, ServletContext scontext){
-      addJavascript(key.getModule(), key.getScriptPath(), scontext);
+
+   public void addJavascript(JavascriptKey key, ServletContext scontext)
+   {
+      addJavascript(key.getModule(), key.getScriptPath(), key.getPriority(), scontext);
    }
 
-   public void addJavascript(String module, String scriptPath, ServletContext scontext)
+   public void addJavascript(String module, String scriptPath, Integer priority, ServletContext scontext)
    {
       String servletContextName = scontext.getServletContextName();
       availableScripts_.add(module);
       availableScriptsPaths_.add("/" + servletContextName + scriptPath);
-      
+
       List<String> mergedJS_list = object_view_of_merged_JS.get("/" + servletContextName);
-      if(mergedJS_list == null){
+      if (mergedJS_list == null)
+      {
          mergedJS_list = new ArrayList<String>();
          object_view_of_merged_JS.put("/" + servletContextName, mergedJS_list);
       }
-      
+
       StringBuffer sB = new StringBuffer();
       String line = "";
       try
@@ -137,23 +139,27 @@ public class JavascriptConfigService implements Startable
       }
       sB.append("\n");
       mergedJS_list.add("\n");
-      
+
       mergedJavascript = mergedJavascript.concat(sB.toString());
    }
-   
-   public void removeJavascript(JavascriptKey key, ServletContext scontext){
+
+   public void removeJavascript(JavascriptKey key, ServletContext scontext)
+   {
       String contextPath = scontext.getContextPath();
       availableScripts_.remove(key.getModule());
       availableScriptsPaths_.remove(contextPath + key.getScriptPath());
       object_view_of_merged_JS.remove(contextPath);
    }
-   
+
    /** Refresh the mergedJavascript **/
-   public void refreshMergedJavascript(){
+   public void refreshMergedJavascript()
+   {
       mergedJavascript = "";
       StringBuffer buffer = new StringBuffer();
-      for(String webApp : object_view_of_merged_JS.keySet()){
-         for(String jsPath : object_view_of_merged_JS.get(webApp)){
+      for (String webApp : object_view_of_merged_JS.keySet())
+      {
+         for (String jsPath : object_view_of_merged_JS.get(webApp))
+         {
             buffer.append(jsPath);
          }
       }
@@ -211,5 +217,5 @@ public class JavascriptConfigService implements Startable
       DefaultServletContainerFactory.getInstance().getServletContainer().removeWebAppListener(deployer);
       DefaultServletContainerFactory.getInstance().getServletContainer().removeWebAppListener(removal);
    }
-   
+
 }

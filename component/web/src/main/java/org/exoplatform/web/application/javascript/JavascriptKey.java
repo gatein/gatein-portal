@@ -25,40 +25,56 @@ package org.exoplatform.web.application.javascript;
  */
 public class JavascriptKey
 {
-   
+
    private String module;
-   
+
    private String scriptPath;
-   
-   public JavascriptKey(String _module, String _scriptPath) throws IllegalArgumentException{
-      if(_module == null || _scriptPath == null){
+
+   private int priority;
+
+   public JavascriptKey(String _module, String _scriptPath, Integer priority) throws IllegalArgumentException
+   {
+      if (_module == null || _scriptPath == null)
+      {
          throw new IllegalArgumentException("Module and scriptPath are mandatory for JavascriptKey");
       }
       this.module = _module;
       this.scriptPath = _scriptPath;
+      this.priority = (priority != null ? priority.intValue() : -1);
    }
-   
+
    @Override
    public boolean equals(Object obj)
    {
-      if(this == null || obj == null){
+      if (this == null || obj == null)
+      {
          return this == null && obj == null;
       }
-      
-      if(!(obj instanceof JavascriptKey)){
+
+      if (!(obj instanceof JavascriptKey))
+      {
          return false;
-      }else{
+      }
+      else
+      {
          JavascriptKey target = (JavascriptKey)obj;
          return module.equals(target.module) && scriptPath.equals(target.scriptPath);
       }
-    
+
    }
-   
-   public String getModule(){
+
+   public String getModule()
+   {
       return module;
    }
-   
-   public String getScriptPath(){
+
+   public String getScriptPath()
+   {
       return scriptPath;
+   }
+
+   public int getPriority()
+   {
+      return priority;
    }
 }

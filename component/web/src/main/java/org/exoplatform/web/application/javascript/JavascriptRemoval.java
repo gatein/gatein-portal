@@ -18,15 +18,15 @@
  */
 package org.exoplatform.web.application.javascript;
 
-import java.util.List;
-
-import javax.servlet.ServletContext;
-
 import org.gatein.wci.WebAppEvent;
 import org.gatein.wci.WebAppLifeCycleEvent;
 import org.gatein.wci.WebAppListener;
 import org.gatein.wci.impl.DefaultServletContainerFactory;
 import org.picocontainer.Startable;
+
+import java.util.List;
+
+import javax.servlet.ServletContext;
 
 /**
  * @author <a href="mailto:hoang281283@gmail.com">Minh Hoang TO</a>

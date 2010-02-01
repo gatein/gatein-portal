@@ -18,6 +18,11 @@
  */
 package org.exoplatform.web.application.javascript;
 
+import org.exoplatform.web.resource.config.xml.GateinResource;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,11 +30,6 @@ import java.util.List;
 import javax.servlet.ServletContext;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-
-import org.exoplatform.web.resource.config.xml.GateinResource;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 
 /**
  * @author <a href="mailto:hoang281283@gmail.com">Minh Hoang TO</a>
@@ -100,7 +100,18 @@ public class JavascriptConfigParser
                param_ele.getElementsByTagName(GateinResource.JAVA_SCRIPT_MODULE).item(0).getFirstChild().getNodeValue();
             String js_path =
                param_ele.getElementsByTagName(GateinResource.JAVA_SCRIPT_PATH).item(0).getFirstChild().getNodeValue();
-            task.addJSKey(js_module, js_path);
+            Integer js_priority = null;
+            try
+            {
+               js_priority =
+                  Integer.valueOf(param_ele.getElementsByTagName(GateinResource.JAVA_SCRIPT_PRIORITY).item(0)
+                     .getFirstChild().getNodeValue());
+            }
+            catch (Exception e)
+            {
+               //Js_priority still is null;
+            }
+            task.addJSKey(js_module, js_path, js_priority);
          }
          return task;
       }

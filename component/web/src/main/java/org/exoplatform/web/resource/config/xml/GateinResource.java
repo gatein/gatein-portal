@@ -61,4 +61,6 @@ public interface GateinResource
    final public static String JAVA_SCRIPT_MODULE = "js-module";
 
    final public static String JAVA_SCRIPT_PATH = "js-path";
+   
+   final public static String JAVA_SCRIPT_PRIORITY = "js-priority";
 }

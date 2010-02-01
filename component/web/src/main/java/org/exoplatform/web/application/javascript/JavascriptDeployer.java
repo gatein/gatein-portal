@@ -43,7 +43,7 @@ public class JavascriptDeployer implements WebAppListener, Startable
 {
 
    private static final String GATEIN_CONFIG_RESOURCE = "/WEB-INF/gatein-resources.xml";
-   
+
    /**
     * Logger
     */
