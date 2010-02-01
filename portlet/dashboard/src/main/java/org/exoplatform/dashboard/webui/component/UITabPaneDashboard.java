@@ -204,6 +204,7 @@ public class UITabPaneDashboard extends UIContainer
          } else {
             getAncestorOfType(UIApplication.class).addMessage(
                new ApplicationMessage("UITabPaneDashboard.msg.cannotDeleteLastTab", null));
+            return null;
          }
          
          return selectedNode;
