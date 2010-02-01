@@ -8,13 +8,16 @@
 	<section id="sect-Reference_Guide-Dynamic_Layouts-Overview">
 		<title>Overview</title>
 		<para>
-			The traditional way of rendering a portal page is a static one where you need a template, usually a jsp page, for each layout (2 columns, 3 columns and so on). That makes you depend on the integrator or developers as for each new layout you will need to ask for a custom development.
+			The traditional way of rendering a portal page is static, using a templat (usually a jsp page) for each layout (2 columns, 3 columns and so on). This method depends on the integrator or developers as each new layout will need a custom development.
 		</para>
 		<para>
-			GateIn has a dynamic way which creates a tree of nested UI containers that contain portlets as shown in the picture below. Each container is responsible for rendering its children. In the picture, the main container renders its children in several rows while the nested container displays them as columns.
+			&PRODUCT; has a dynamic rendering method which creates a tree of nested UI containers that contain portlets (as shown in the image below).
 		</para>
 		<para>
-			Furthermore, by manipulating the tree using the WYSIWYG editor, it allows you to create new containers, define how they will render their children, add new portlets.
+			Each container is responsible for rendering its children. In the below example the main container renders its children in several rows while the nested container displays them as columns.
+		</para>
+		<para>
+			By manipulating the tree using a WYSIWYG editor new containers can be added, their child rendering can be defined and new portlets can be nested.
 		</para>
 		<mediaobject>
 			<imageobject>
@@ -26,23 +29,16 @@
 	<section id="sect-Reference_Guide-Dynamic_Layouts-Advanced_Drag_and_Drop_mechanism">
 		<title>Advanced Drag and Drop mechanism</title>
 		<para>
-			As most portal use the static layout mechanism, they can only drag portlets from one static location, let's say a column, to another one.
+			As most portals use the static layout mechanism, portlets can only be dragged from one static location, such as a column, to another static location.
 		</para>
 		<para>
-			With GateIn Portal, it is possible to also drag the UI containers and the portlets and drop them in containers that are deeper or upper in the Portal component tree. This feature is unique and not just a tool!
+			In &PRODUCT;, it is possible to drag UI containers (and their portlets) and drop them in containers that are higher or lower in the Portal component tree. This feature is unique to &PRODUCT;
 		</para>
 		<mediaobject>
 			<imageobject>
 				<imagedata fileref="images/image3.jpg" format="JPG" width="444" />
 			</imageobject>
 		</mediaobject>
-	</section>
-	
-	<section id="sect-Reference_Guide-Dynamic_Layouts-Summary">
-		<title>Summary</title>
-		<para>
-			With this innovative concept of dynamic layout, you can easily create portal pages with complex layout.
-		</para>
 	</section>
 
 </section>

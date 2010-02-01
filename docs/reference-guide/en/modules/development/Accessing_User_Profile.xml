@@ -6,7 +6,7 @@
 <section id="sect-Reference_Guide-Accessing_User_Profile">
 	<title>Accessing User Profile</title>
 	<para>
-		To retrieve the logged in user you can do as follows :
+		The following code retrieves the details for a logged-in user:
 	</para>
 	
 <programlisting role="JAVA">// Alternative context: WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
@@ -27,7 +27,7 @@ if (userId != null)
 }
 </programlisting>
 	<para>
-		Alternatives for retrieving the Organization Service
+		Below are two alternatives for retrieving the Organization Service:
 	</para>
 	<orderedlist>
 		<listitem>

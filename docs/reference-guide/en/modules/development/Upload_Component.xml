@@ -5,7 +5,7 @@
 ]>
 <section id="sect-Reference_Guide-Upload_Component">
 	<title>Upload Component</title>
-	<section id="sect-Reference_Guide-Upload_Component-Overview">
+<!--	<section id="sect-Reference_Guide-Upload_Component-Overview">
 		<title>Overview</title>
 		<para>
 			In this article, you will learn how to :
@@ -32,15 +32,15 @@
 				</para>
 			</listitem>
 		</itemizedlist>
-	</section>
+	</section> -->
 	
 	<section id="sect-Reference_Guide-Upload_Component-Upload_Service">
 		<title>Upload Service</title>
 		<para>
-			The service is defined by the class : org.exoplatform.upload.UploadService;
+			The service is defined by the class: <literal>org.exoplatform.upload.UploadService</literal>;
 		</para>
 		<para>
-			You can configure it with the following xml code :
+			This can be configured with the following xml code:
 		</para>
 		
 <programlisting role="XML">&lt;component&gt;
@@ -55,40 +55,48 @@
   &lt;/component&gt;
 </programlisting>
 		<para>
-			As you can see, you can configure a default upload size limit for the service. The value unit is in MegaBytes. This limit will be used by default by all applications if no specific limit is set. You will see in the next chapter how to set a different limit for your application.
+			This code allows for a default upload size limit for the service to be configured. The value unit is in MegaBytes.
+		</para>	
+		<para>
+			This limit will be used by default by all applications if no application-specific limit is set. Setting a different limit for applications is discussed in a later section.
 		</para>
 		<para>
-			If you set the value at 0, the upload size will be unlimited.
+			If the value is set at <parameter>0</parameter> the upload size is unlimited.
 		</para>
-	</section>
-	
-	<section id="sect-Reference_Guide-Upload_Component-How_to_use_the_upload_component_in_your_application_">
-		<title>How to use the upload component in your application </title>
-		<para>
-			To use the component, you must create an object of type org.exoplatform.webui.form.UIFormUploadInput, using one of the two available constructors :
-		</para>
-		
+
+		<procedure id="proc-Reference_Guide-Upload_Component-How_to_use_the_upload_component">
+			<title>How to use the upload component</title>
+			<step>
+				<para>
+				Create an object type <literal>org.exoplatform.webui.form.UIFormUploadInput</literal>.
+				</para>
+				<para>
+					Two constructors are available for this:
+				</para>
+						
 <programlisting>public UIFormUploadInput(String name, String bindingExpression)
 </programlisting>
-		<para>
-			or:
-		</para>
-		
+				<para>
+					or:
+				</para>
+						
 <programlisting>public UIFormUploadInput(String name, String bindingExpression, int limit)
 </programlisting>
-		<para>
-			Here is an example using the second form :
-		</para>
-		
+				<para>
+					This is an example using the second form :
+				</para>
+						
 <programlisting role="JAVA">PortletRequestContext pcontext = (PortletRequestContext)WebuiRequestContext.getCurrentInstance();
 PortletPreferences portletPref = pcontext.getRequest().getPreferences();
 int limitMB = Integer.parseInt(portletPref.getValue("uploadFileSizeLimitMB", "").trim());
 UIFormUploadInput uiInput = new UIFormUploadInput("upload", "upload", limitMB);
 </programlisting>
-		<para>
-			To get the limit from the xml configuration, you can add this piece of code in the files portlet.xml or portlet-preferences.xml :
-		</para>
-		
+			</step>
+			<step>
+				<para>
+					To obtain the limit from the <literal>xml</literal> configuration, this piece of code can be added to the either <filename>portlet.xml</filename> or <filename>portlet-preferences.xml</filename> :
+				</para>
+
 <programlisting role="XML">&lt;preference&gt;
   &lt;name&gt;uploadFileSizeLimitMB&lt;/name&gt;
   &lt;value&gt;30&lt;/value&gt;
@@ -96,46 +104,52 @@ UIFormUploadInput uiInput = new UIFormUploadInput("upload", "upload", limitMB);
 &lt;/preference&gt;
 </programlisting>
 		<para>
-			Again, a 0 value means unlimited upload size, and the value unit is set in MegaBytes.
+			Again, a <parameter>0</parameter> value means an unlimited upload size, and the value unit is set in MegaBytes.
 		</para>
-		<para>
-			To get the uploaded data use the <literal>getUploadDataAsStream()</literal> method:
-		</para>
+			</step>
+			<step>
+				<para>
+					Use the <literal>getUploadDataAsStream()</literal> method to get the uploaded data:
+				</para>
 		
 <programlisting role="JAVA">UIFormUploadInput input = (UIFormUploadInput)uiForm.getUIInput("upload");
 InputStream inputStream = input.getUploadDataAsStream();
 ...
 jcrData.setValue(inputStream);
 </programlisting>
-		<para>
-			Clean the uploaded file
-		</para>
-		<para>
-			The upload service stores a temporary file on the filesystem during the process. When the upload is finished, you must clean the service in order to :
-		</para>
-		<itemizedlist>
-			<listitem>
+			</step>
+			<step>
 				<para>
-					delete the temporary file
+					The upload service stores a temporary file on the filesystem during the upload process. When the upload is finished, the service must be cleaned in order to:
 				</para>
-			</listitem>
-			<listitem>
+				<orderedlist numeration="arabic">
+					<listitem>
+						<para>
+							Delete the temporary file.
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							Delete the classes used for the upload.
+						</para>
+					</listitem>
+				</orderedlist>
 				<para>
-					delete the classes used for the upload
+					Use the<literal>removeUpload()</literal> method defined in the upload service to purge the file:
 				</para>
-			</listitem>
-		</itemizedlist>
-		<para>
-			To do that, use the<literal>removeUpload()</literal> method defined in the upload service, like this :
-		</para>
 		
 <programlisting role="JAVA">UploadService uploadService = uiForm.getApplicationComponent(UploadService.class) ;
 UIFormUploadInput uiChild = uiForm.getChild(UIFormUploadInput.class) ;
 uploadService.removeUpload(uiChild.getUploadId()) ;
 </programlisting>
-		<para>
-			Be sure to get and save the file <emphasis role="bold">before</emphasis> you clean the service
-		</para>
+<note>
+	<title>Saving the uploaded file</title>
+	<para>
+		Ensure the file is saved <emphasis role="bold">before</emphasis> the service is cleaned.
+	</para>
+</note>
+			</step>
+		</procedure>
 	</section>
 
 </section>
