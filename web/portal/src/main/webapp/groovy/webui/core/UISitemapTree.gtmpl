@@ -101,8 +101,12 @@
 
 <div id="UISiteMap" class="UISitemap" >
 	<div class="ClearFix">
-		<div class="CollapseAll FloatLeft" onclick="eXo.portal.UIPortal.collapseExpand(this);$actionCollapseAll">Collapse All</div> 
-		<div class="ExpandAll FloatLeft" onclick="if(!eXo.portal.UIPortal.expandAll(this)){$actionExpandAll}">Expand All</div>
+		<div class="CollapseAll FloatLeft" onclick="eXo.portal.UIPortal.collapseExpand(this);$actionCollapseAll">
+			<%=_ctx.appRes(siteMapPortlet.getName() + ".label.CollapseAll")%>
+		</div> 
+		<div class="ExpandAll FloatLeft" onclick="if(!eXo.portal.UIPortal.expandAll(this)){$actionExpandAll}">
+			<%=_ctx.appRes(siteMapPortlet.getName() + ".label.ExpandAll")%>
+		</div>
 	</div>
 	<div class="SitemapContent">
 		<div class="UISiteTree">
