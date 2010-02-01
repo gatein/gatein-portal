@@ -19,18 +19,25 @@
 
 package org.exoplatform.organization.webui.component;
 
+import org.exoplatform.commons.serialization.api.annotations.Serialized;
+import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.portal.webui.workspace.UIPortalApplication;
+import org.exoplatform.portal.webui.workspace.UIWorkingWorkspace;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.Query;
 import org.exoplatform.services.organization.User;
+import org.exoplatform.services.organization.UserProfile;
+import org.exoplatform.services.organization.UserProfileHandler;
+import org.exoplatform.services.resources.LocaleConfig;
+import org.exoplatform.services.resources.LocaleConfigService;
 import org.exoplatform.webui.application.WebuiRequestContext;
-import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIFormInputContainer;
 import org.exoplatform.webui.form.UIFormInputSet;
 import org.exoplatform.webui.form.UIFormTabPane;
@@ -111,6 +118,29 @@ public class UIUserInfo extends UIFormTabPane
             return;
          }
          uiUserInfo.getChild(UIUserProfileInputSet.class).save(service, uiUserInfo.getUserName(), false);
+
+         if (uiUserInfo.getUserName().equals(event.getRequestContext().getRemoteUser()))
+         {
+            UserProfileHandler hanlder = service.getUserProfileHandler();
+            UserProfile userProfile = hanlder.findUserProfileByName(event.getRequestContext().getRemoteUser());
+            String language = userProfile.getAttribute("user.language");
+
+            UIPortalApplication uiApp = Util.getUIPortalApplication();            
+            if (language == null || language.trim().length() < 1)
+               return;
+            LocaleConfigService localeConfigService =
+               event.getSource().getApplicationComponent(LocaleConfigService.class);
+            LocaleConfig localeConfig = localeConfigService.getLocaleConfig(language);
+            if (localeConfig == null)
+               localeConfig = localeConfigService.getDefaultLocaleConfig();
+            uiApp.setLocale(localeConfig.getLocale());
+            uiApp.setOrientation(localeConfig.getOrientation());
+            uiApp.localizeNavigations();
+
+            Util.getPortalRequestContext().addUIComponentToUpdateByAjax(
+               uiApp.findFirstComponentOfType(UIWorkingWorkspace.class));
+            Util.getPortalRequestContext().setFullRender(true);
+         }
       }
    }
 

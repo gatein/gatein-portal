@@ -19,6 +19,7 @@
 
 package org.exoplatform.webui.organization;
 
+import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.UserProfile;
 import org.exoplatform.services.organization.UserProfileHandler;
@@ -27,7 +28,6 @@ import org.exoplatform.services.resources.LocaleConfigService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
-import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIComponent;
@@ -150,15 +150,15 @@ public class UIUserProfileInputSet extends UIFormInputSet
          LocaleConfig config = i.next();
          Locale locale = config.getLocale();
          displayName = locale.getDisplayName(currentLocale);
-         language = locale.getDisplayLanguage(currentLocale);
+         language = locale.getLanguage();
          country = locale.getCountry();
          if (country != null && country.length() > 0)
          {
-            displayLanguage = language + " (" + locale.getDisplayCountry(currentLocale) + ")";
+            displayLanguage = displayName + " (" + locale.getDisplayCountry(currentLocale) + ")";
          }
          else
          {
-            displayLanguage = language;
+            displayLanguage = displayName;
          }
          option = new SelectItemOption<String>(displayLanguage, language, displayName);
          if (language.equals(selectedLang))

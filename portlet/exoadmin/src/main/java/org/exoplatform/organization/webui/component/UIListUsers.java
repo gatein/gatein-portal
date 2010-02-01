@@ -19,12 +19,13 @@
 
 package org.exoplatform.organization.webui.component;
 
+import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.Query;
 import org.exoplatform.web.application.ApplicationMessage;
-import org.exoplatform.commons.serialization.api.annotations.Serialized;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -72,12 +73,10 @@ public class UIListUsers extends UISearch
 
    private static final String[] USER_ACTION = {"ViewUserInfo", "DeleteUser"};
 
-   private final static List<SelectItemOption<String>> OPTIONS_ = Collections.unmodifiableList(Arrays.asList(
-         new SelectItemOption<String>(USER_NAME, USER_NAME),
-         new SelectItemOption<String>(LAST_NAME, LAST_NAME),
-         new SelectItemOption<String>(FIRST_NAME, FIRST_NAME),
-         new SelectItemOption<String>(EMAIL, EMAIL)
-      ));
+   private final static List<SelectItemOption<String>> OPTIONS_ =
+      Collections.unmodifiableList(Arrays.asList(new SelectItemOption<String>(USER_NAME, USER_NAME),
+         new SelectItemOption<String>(LAST_NAME, LAST_NAME), new SelectItemOption<String>(FIRST_NAME, FIRST_NAME),
+         new SelectItemOption<String>(EMAIL, EMAIL)));
 
    private Query lastQuery_;
 
@@ -93,6 +92,21 @@ public class UIListUsers extends UISearch
       grid_.getUIPageIterator().setId("UIListUsersIterator");
       grid_.getUIPageIterator().setParent(this);
       search(new Query());
+   }
+
+   /**
+    * @see org.exoplatform.webui.core.UIComponent#processRender(org.exoplatform.webui.application.WebuiRequestContext)
+    */
+   @Override
+   public void processRender(WebuiRequestContext context) throws Exception
+   {
+      int curPage = grid_.getUIPageIterator().getCurrentPage();
+      if (lastQuery_ == null)
+         lastQuery_ = new Query();
+      search(lastQuery_);
+      grid_.getUIPageIterator().setCurrentPage(curPage);
+      grid_.getUIPageIterator().getCurrentPageData();
+      super.processRender(context);
    }
 
    public void setUserSelected(String userName)
