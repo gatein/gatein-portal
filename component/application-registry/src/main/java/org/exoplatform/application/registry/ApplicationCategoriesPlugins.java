@@ -52,8 +52,6 @@ public class ApplicationCategoriesPlugins extends BaseComponentPlugin
    {
       if (configs == null)
          return;
-      if (pdcService_.getApplicationCategories().size() > 0)
-         return;
       for (Object ele : configs)
       {
          ApplicationCategory category = (ApplicationCategory)ele;

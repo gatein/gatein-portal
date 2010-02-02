@@ -610,9 +610,12 @@ public class ApplicationRegistryServiceImpl implements ApplicationRegistryServic
          boolean save = false;
          try
          {
-            for (ApplicationCategoriesPlugins plugin : plugins)
+            if (this.getApplicationCategories().size() < 1)
             {
-               plugin.run();
+               for (ApplicationCategoriesPlugins plugin : plugins)
+               {
+                  plugin.run();
+               }
             }
             save = true;
          }
