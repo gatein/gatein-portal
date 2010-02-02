@@ -20,12 +20,12 @@
 		  <td class="Image"><img src="/exoadmin/skin/navigation/webui/component/background/GroupImage.png" alt="" /></td>
    		<td class="Content">
    			<div class="Label" title="$navigation.ownerId"><%= OrganizationUtils.getGroupLabel(navigation.ownerId) %></div>
-   			<div>Description: <%= description%></div>
+   			<div><%=_ctx.appRes("UIGroupNavigationManagement.Label.Description")%>: <%= description%></div>
    		</td>	
      	<td class="ActionBlock">
-     		<a href="<%=editLink%>" class="EditNavIcon">Edit Navigation</a> 
-     		<a href="<%=editProperties%>" class="EditProIcon">Edit Properties</a> 
-     		<a href="<%=deleteLink%>" class="DeleteIcon">Delete Navigation</a>
+     		<a href="<%=editLink%>" class="EditNavIcon"><%=_ctx.appRes("UIGroupNavigationManagement.Label.EditNavigation")%></a> 
+     		<a href="<%=editProperties%>" class="EditProIcon"><%=_ctx.appRes("UIGroupNavigationManagement.Label.EditProperties")%></a> 
+     		<a href="<%=deleteLink%>" class="DeleteIcon"><%=_ctx.appRes("UIGroupNavigationManagement.Label.DeleteNavigation")%></a>
 	  	</td>	
     </tr>								
   </table>  

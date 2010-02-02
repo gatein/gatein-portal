@@ -26,10 +26,10 @@
   		<addNewPortal>Tạo Portal</addNewPortal>
   	</action>
   	<label>
-  		<editLayout>Edit Layout</editLayout>
-  		<editNav>Edit Navigation</editNav>
-  		<editPortalProp>Edit Portal's Properties</editPortalProp>
-  		<deletePortal>Delete Portal</deletePortal>
+  		<editLayout>Sửa Layout</editLayout>
+  		<editNav>Sửa Navigation</editNav>
+  		<editPortalProp>Sửa thuộc tính Portal</editPortalProp>
+  		<deletePortal>Xóa Portal</deletePortal>
   	</label>
   </UISiteManagement>
 </bundle>
