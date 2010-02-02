@@ -32,8 +32,10 @@ import org.picketlink.idm.api.RoleType;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import javax.naming.InvalidNameException;
 
@@ -96,18 +98,28 @@ public class MembershipDAOImpl implements MembershipHandler
             + " because membership type is null");
       }
 
-      if (getIdentitySession().getRoleManager().getRoleType(mt.getName()) == null)
+      String groupId =
+            getIdentitySession().getPersistenceManager().
+               createGroupKey(g.getGroupName(), orgService.getConfiguration().getGroupType(g.getParentId()));
+
+
+      if (isCreateMembership(mt.getName()))
       {
-         getIdentitySession().getRoleManager().createRoleType(mt.getName());
+         if (getIdentitySession().getRoleManager().getRoleType(mt.getName()) == null)
+         {
+            getIdentitySession().getRoleManager().createRoleType(mt.getName());
+         }
+
+
+         if (getIdentitySession().getRoleManager().hasRole(user.getUserName(), groupId, mt.getName()))
+         {
+            return;
+         }
       }
 
-      String groupId =
-         getIdentitySession().getPersistenceManager().
-            createGroupKey(g.getGroupName(), orgService.getConfiguration().getGroupType(g.getParentId()));
-
-      if (getIdentitySession().getRoleManager().hasRole(user.getUserName(), groupId, mt.getName()))
+      if (isAssociationMapped() && getAssociationMapping().equals(mt.getName()))
       {
-         return;
+         getIdentitySession().getRelationshipManager().associateUserByKeys(groupId, user.getUserName());
       }
 
       MembershipImpl membership = new MembershipImpl();
@@ -145,7 +157,15 @@ public class MembershipDAOImpl implements MembershipHandler
          preSave(m, false);
       }
 
-      getIdentitySession().getRoleManager().createRole(m.getMembershipType(), m.getUserName(), groupId);
+      if (isCreateMembership(m.getMembershipType()))
+      {
+
+         getIdentitySession().getRoleManager().createRole(m.getMembershipType(), m.getUserName(), groupId);
+      }
+      if (isAssociationMapped() && getAssociationMapping().equals(m.getMembershipType()))
+      {
+         getIdentitySession().getRelationshipManager().associateUserByKeys(groupId, m.getUserName());
+      }
 
       if (broadcast)
       {
@@ -172,7 +192,19 @@ public class MembershipDAOImpl implements MembershipHandler
          preDelete(m);
       }
 
-      getIdentitySession().getRoleManager().removeRole(m.getMembershipType(), m.getUserName(), groupId);
+      if (isCreateMembership(m.getMembershipType()))
+      {
+
+         getIdentitySession().getRoleManager().removeRole(m.getMembershipType(), m.getUserName(), groupId);
+      }
+
+      if (isAssociationMapped() && getAssociationMapping().equals(m.getMembershipType()) &&
+          getIdentitySession().getRelationshipManager().isAssociatedByKeys(m.getGroupId(), m.getUserName()))
+      {
+         Set<String> keys = new HashSet<String>();
+         keys.add(m.getUserName());
+         getIdentitySession().getRelationshipManager().disassociateUsersByKeys(groupId, keys);
+      }
 
       if (broadcast)
       {
@@ -186,8 +218,7 @@ public class MembershipDAOImpl implements MembershipHandler
 
       Collection<Role> roles = getIdentitySession().getRoleManager().findRoles(userName, null);
 
-      //TODO: Exo UI has hardcoded casts to List
-      List<Membership> memberships = new LinkedList<Membership>();
+      HashSet<MembershipImpl> memberships = new HashSet<MembershipImpl>();
 
       for (Role role : roles)
       {
@@ -212,7 +243,24 @@ public class MembershipDAOImpl implements MembershipHandler
 
       }
 
-      return memberships;
+      if (isAssociationMapped())
+      {
+
+         Collection<org.picketlink.idm.api.Group> groups =
+            getIdentitySession().getRelationshipManager().findAssociatedGroups(userName, null);
+
+         Set<String> keys = new HashSet<String>();
+         keys.add(userName);
+         
+         for (org.picketlink.idm.api.Group group : groups)
+         {
+            getIdentitySession().getRelationshipManager().disassociateUsersByKeys(group.getKey(), keys);
+         }
+
+      }
+
+      //TODO: Exo UI has hardcoded casts to List
+      return new LinkedList(memberships);
 
    }
 
@@ -222,19 +270,38 @@ public class MembershipDAOImpl implements MembershipHandler
          getIdentitySession().getPersistenceManager().
             createGroupKey(getGroupNameFromId(groupId), getGroupTypeFromId(groupId));
 
-      Role role = getIdentitySession().getRoleManager().getRole(type, userName, gid);
+      boolean hasMembership = false;
 
-      if (role == null)
+      if (isAssociationMapped() && getAssociationMapping().equals(type) &&
+         getIdentitySession().getRelationshipManager().isAssociatedByKeys(gid, userName))
       {
-         return null;
+         hasMembership = true;
       }
 
-      MembershipImpl m = new MembershipImpl();
-      m.setGroupId(groupId);
-      m.setUserName(userName);
-      m.setMembershipType(type);
 
-      return m;
+      Role role = getIdentitySession().getRoleManager().getRole(type, userName, gid);
+
+      if (role != null &&
+          (!isAssociationMapped() ||
+           !getAssociationMapping().equals(role.getRoleType()) ||
+           !ignoreMappedMembershipType())
+         )
+      {
+         hasMembership = true;
+      }
+
+      if (hasMembership)
+      {
+
+      
+         MembershipImpl m = new MembershipImpl();
+         m.setGroupId(groupId);
+         m.setUserName(userName);
+         m.setMembershipType(type);
+
+         return m;
+      }
+      return null;
    }
 
    public Collection findMembershipsByUserAndGroup(String userName, String groupId) throws Exception
@@ -251,54 +318,90 @@ public class MembershipDAOImpl implements MembershipHandler
 
       Collection<RoleType> roleTypes = getIdentitySession().getRoleManager().findRoleTypes(userName, gid, null);
 
-      //TODO: Exo UI has hardcoded casts to List
-      List<Membership> memberships = new LinkedList<Membership>();
+      HashSet<MembershipImpl> memberships = new HashSet<MembershipImpl>();
 
       for (RoleType roleType : roleTypes)
+      {
+         if (isCreateMembership(roleType.getName()))
+         {
+            MembershipImpl m = new MembershipImpl();
+            m.setGroupId(groupId);
+            m.setUserName(userName);
+            m.setMembershipType(roleType.getName());
+            memberships.add(m);
+         }   
+      }
+
+      if (isAssociationMapped() &&
+          getIdentitySession().getRelationshipManager().isAssociatedByKeys(gid, userName))
       {
          MembershipImpl m = new MembershipImpl();
          m.setGroupId(groupId);
          m.setUserName(userName);
-         m.setMembershipType(roleType.getName());
+         m.setMembershipType(getAssociationMapping());
          memberships.add(m);
       }
 
-      return memberships;
+      //TODO: Exo UI has hardcoded casts to List
+      return new LinkedList(memberships);
    }
 
    public Collection findMembershipsByUser(String userName) throws Exception
    {
       Collection<Role> roles = getIdentitySession().getRoleManager().findRoles(userName, null);
 
-      //TODO: Exo UI has hardcoded casts to List
-      List<Membership> memberships = new LinkedList<Membership>();
+      HashSet<MembershipImpl> memberships = new HashSet<MembershipImpl>();
 
       for (Role role : roles)
       {
-         MembershipImpl m = new MembershipImpl();
-         Group g = ((GroupDAOImpl)orgService.getGroupHandler()).convertGroup(role.getGroup());
-         m.setGroupId(g.getId());
-         m.setUserName(role.getUser().getId());
-         m.setMembershipType(role.getRoleType().getName());
-         memberships.add(m);
+         if (isCreateMembership(role.getRoleType().getName()))
+         {
+            MembershipImpl m = new MembershipImpl();
+            Group g = ((GroupDAOImpl)orgService.getGroupHandler()).convertGroup(role.getGroup());
+            m.setGroupId(g.getId());
+            m.setUserName(role.getUser().getId());
+            m.setMembershipType(role.getRoleType().getName());
+            memberships.add(m);
+         }
       }
-
-      return memberships;
-   }
-
-   static void removeMembershipEntriesOfGroup(PicketLinkIDMOrganizationServiceImpl orgService, Group group,
-      IdentitySession session) throws Exception
-   {
-      String gid = session.getPersistenceManager().
-         createGroupKey(group.getGroupName(), orgService.getConfiguration().getGroupType(group.getParentId()));
-
-      Collection<Role> roles = session.getRoleManager().findRoles(gid, null);
-
-      for (Role role : roles)
+      
+      if (isAssociationMapped())
       {
-         session.getRoleManager().removeRole(role);
+
+         Collection<org.picketlink.idm.api.Group> groups =
+            getIdentitySession().getRelationshipManager().findAssociatedGroups(userName, null);
+
+         for (org.picketlink.idm.api.Group group : groups)
+         {
+            MembershipImpl m = new MembershipImpl();
+            Group g = ((GroupDAOImpl)orgService.getGroupHandler()).convertGroup(group);
+            m.setGroupId(g.getId());
+            m.setUserName(userName);
+            m.setMembershipType(getAssociationMapping());
+            memberships.add(m);
+         }
+                 
       }
+
+
+      return new LinkedList(memberships);
    }
+
+//   static void removeMembershipEntriesOfGroup(PicketLinkIDMOrganizationServiceImpl orgService, Group group,
+//      IdentitySession session) throws Exception
+//   {
+//      String gid = session.getPersistenceManager().
+//         createGroupKey(group.getGroupName(), orgService.getConfiguration().getGroupType(group.getParentId()));
+//
+//      Collection<Role> roles = session.getRoleManager().findRoles(gid, null);
+//
+//      for (Role role : roles)
+//      {
+//         session.getRoleManager().removeRole(role);
+//      }
+//
+//
+//   }
 
    public Collection findMembershipsByGroup(Group group) throws Exception
    {
@@ -313,20 +416,40 @@ public class MembershipDAOImpl implements MembershipHandler
 
       Collection<Role> roles = getIdentitySession().getRoleManager().findRoles(gid, null);
 
-      //TODO: Exo UI has hardcoded casts to List
-      List<Membership> memberships = new LinkedList<Membership>();
+      HashSet<MembershipImpl> memberships = new HashSet<MembershipImpl>();
 
       for (Role role : roles)
       {
-         MembershipImpl m = new MembershipImpl();
-         Group g = ((GroupDAOImpl)orgService.getGroupHandler()).convertGroup(role.getGroup());
-         m.setGroupId(g.getId());
-         m.setUserName(role.getUser().getId());
-         m.setMembershipType(role.getRoleType().getName());
-         memberships.add(m);
+         if (isCreateMembership(role.getRoleType().getName()))
+         {
+            MembershipImpl m = new MembershipImpl();
+            Group g = ((GroupDAOImpl)orgService.getGroupHandler()).convertGroup(role.getGroup());
+            m.setGroupId(g.getId());
+            m.setUserName(role.getUser().getId());
+            m.setMembershipType(role.getRoleType().getName());
+            memberships.add(m);
+         }
       }
 
-      return memberships;
+      if (isAssociationMapped())
+      {
+
+         Collection<org.picketlink.idm.api.User> users =
+            getIdentitySession().getRelationshipManager().findAssociatedUsers(gid, false, null);
+
+         for (org.picketlink.idm.api.User user : users)
+         {
+            MembershipImpl m = new MembershipImpl();
+            m.setGroupId(groupId);
+            m.setUserName(user.getId());
+            m.setMembershipType(getAssociationMapping());
+            memberships.add(m);
+         }
+
+      }
+
+      //TODO: Exo UI has harcoded casts to List
+      return new LinkedList(memberships);
 
    }
 
@@ -338,10 +461,20 @@ public class MembershipDAOImpl implements MembershipHandler
          getIdentitySession().getPersistenceManager().createGroupKey(getGroupNameFromId(m.getGroupId()),
             getGroupTypeFromId(m.getGroupId()));
 
-      if (getIdentitySession().getRoleManager().hasRole(m.getUserName(), groupId, m.getMembershipType()))
+      if (isCreateMembership(m.getMembershipType()) &&
+          getIdentitySession().getRoleManager().hasRole(m.getUserName(), groupId, m.getMembershipType()))
       {
          return m;
       }
+
+      if (isAssociationMapped() && getAssociationMapping().equals(m.getMembershipType()) &&
+          getIdentitySession().getRelationshipManager().isAssociatedByKeys(groupId, m.getUserName()))
+      {
+         return m;
+      }
+
+
+
 
       return null;
    }
@@ -400,5 +533,37 @@ public class MembershipDAOImpl implements MembershipHandler
       String parentId = groupId.substring(0, groupId.lastIndexOf("/"));
 
       return orgService.getConfiguration().getGroupType(parentId);
+   }
+
+   protected boolean isAssociationMapped()
+   {
+      String mapping = orgService.getConfiguration().getAssociationMembershipType();
+
+      if (mapping != null && mapping.length() > 0)
+      {
+         return true;
+      }
+      return false;
+   }
+
+   protected String getAssociationMapping()
+   {
+      return orgService.getConfiguration().getAssociationMembershipType();
+   }
+
+   protected boolean ignoreMappedMembershipType()
+   {
+      return orgService.getConfiguration().isIgnoreMappedMembershipType();
+   }
+
+   protected boolean isCreateMembership(String typeName)
+   {
+      if (isAssociationMapped() &&
+          getAssociationMapping().equals(typeName) &&
+          ignoreMappedMembershipType())
+      {
+         return false;
+      }
+      return true;
    }
 }

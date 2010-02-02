@@ -103,4 +103,43 @@ public class MembershipImpl implements Membership
    {
       this.groupId = groupId;
    }
+
+   @Override
+   public boolean equals(Object o)
+   {
+      if (this == o)
+      {
+         return true;
+      }
+      if (!(o instanceof MembershipImpl))
+      {
+         return false;
+      }
+
+      MembershipImpl that = (MembershipImpl)o;
+
+      if (groupId != null ? !groupId.equals(that.groupId) : that.groupId != null)
+      {
+         return false;
+      }
+      if (membershipType != null ? !membershipType.equals(that.membershipType) : that.membershipType != null)
+      {
+         return false;
+      }
+      if (userName != null ? !userName.equals(that.userName) : that.userName != null)
+      {
+         return false;
+      }
+
+      return true;
+   }
+
+   @Override
+   public int hashCode()
+   {
+      int result = membershipType != null ? membershipType.hashCode() : 0;
+      result = 31 * result + (userName != null ? userName.hashCode() : 0);
+      result = 31 * result + (groupId != null ? groupId.hashCode() : 0);
+      return result;
+   }
 }

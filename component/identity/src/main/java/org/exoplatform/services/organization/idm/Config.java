@@ -43,6 +43,11 @@ public class Config
 
    private boolean forceMembershipOfMappedTypes = false;
 
+   private String associationMembershipType;
+
+   private boolean ignoreMappedMembershipType = true;
+
+
    public Config()
    {
    }
@@ -226,5 +231,25 @@ public class Config
    public void setForceMembershipOfMappedTypes(boolean forceMembershipOfMappedTypes)
    {
       this.forceMembershipOfMappedTypes = forceMembershipOfMappedTypes;
+   }
+
+   public String getAssociationMembershipType()
+   {
+      return associationMembershipType;
+   }
+
+   public void setAssociationMembershipType(String associationMembershipType)
+   {
+      this.associationMembershipType = associationMembershipType;
+   }
+
+   public boolean isIgnoreMappedMembershipType()
+   {
+      return ignoreMappedMembershipType;
+   }
+
+   public void setIgnoreMappedMembershipType(boolean ignoreMappedMembershipType)
+   {
+      this.ignoreMappedMembershipType = ignoreMappedMembershipType;
    }
 }

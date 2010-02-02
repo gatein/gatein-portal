@@ -94,15 +94,29 @@
               </entry>
 
               <!-- Uncomment for sample LDAP configuration -->
-              <!--<entry>-->
-                <!--<key><string>/platform/*</string></key>-->
-                <!--<value><string>platform_type</string></value>-->
-              <!--</entry>-->
-              <!--<entry>-->
-                <!--<key><string>/organization/*</string></key>-->
-                <!--<value><string>organization_type</string></value>-->
-              <!--</entry>-->
+              <!--
+              <entry>
+                <key><string>/platform/*</string></key>
+                <value><string>platform_type</string></value>
+              </entry>
+              <entry>
+                <key><string>/organization/*</string></key>
+                <value><string>organization_type</string></value>
+              </entry>
+              -->
             </map>
+          </field>
+          <!-- If this option is used then each Membership created with MembrshipType that is
+               equal to value specified here will be stored in PicketLink IDM as simple
+               Group-User association-->
+          <field name="associationMembershipType">
+            <string>member</string>
+          </field>
+          <!-- if "associationMembershipType" option is used and this option is set to true
+                then Membership with MembershipType configured to be stored as PicketLink IDM association
+                will not be stored as PicketLink IDM Role -->
+          <field name="ignoreMappedMembershipType">
+            <boolean>false</boolean>
           </field>
         </object>
       </object-param>

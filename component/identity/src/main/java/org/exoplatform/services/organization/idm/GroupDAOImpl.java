@@ -176,9 +176,25 @@ public class GroupDAOImpl implements GroupHandler
 
       Set<Group> exoGroups = new HashSet<Group>();
 
+      MembershipDAOImpl mmm = (MembershipDAOImpl)orgService.getMembershipHandler();
+
       for (org.picketlink.idm.api.Role role : allRoles)
       {
-         exoGroups.add(convertGroup(role.getGroup()));
+         if (mmm.isCreateMembership(role.getRoleType().getName()))                            
+         {
+            exoGroups.add(convertGroup(role.getGroup()));
+         }
+      }
+
+      if (mmm.isAssociationMapped() && mmm.getAssociationMapping().equals(membershipType))
+      {
+         Collection<org.picketlink.idm.api.Group> groups =
+            getIdentitySession().getRelationshipManager().findAssociatedGroups(userName, null);
+
+         for (org.picketlink.idm.api.Group group : groups)
+         {
+            exoGroups.add(convertGroup(group));
+         }
 
       }
 
@@ -427,8 +443,12 @@ public class GroupDAOImpl implements GroupHandler
             return id + jbidGroup.getName();
          }
 
-         //As there is special root group this shouldn't happen:
-         throw new IllegalStateException("Group present that is not connected to the root: " + jbidGroup.getName());
+
+         // All groups not connected to the root should be just below the root
+         return "/" + jbidGroup.getName();
+
+         //TODO: make it configurable
+         // throw new IllegalStateException("Group present that is not connected to the root: " + jbidGroup.getName());
 
       }
 
