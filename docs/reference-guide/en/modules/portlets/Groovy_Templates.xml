@@ -11,7 +11,7 @@
 			This article gives a glance at the Groovy language, and explains how to configure the portlet and and the groovy template.
 		</para>
 		<para>
-			It's recommended to read also <xref linkend="sect-Reference_Guide-AJAX_in_GateIn_Framework" /> in order to understand better the communication between the Groovy Template and the portlet.
+			It's recommended to read also <xref linkend="sect-Reference_Guide-AJAX_Framework" /> in order to understand better the communication between the Groovy Template and the portlet.
 		</para>
 	</section>
 	
@@ -140,7 +140,7 @@ import org.exoplatform.portal.config.model.PageNode;
 &lt;/a&gt;
 </programlisting>
 			<para>
-				This example shows that <literal>uicomponent</literal> can be used to make Ajax calls, thanks to the <literal>event</literal> method. See <xref linkend="sect-Reference_Guide-AJAX_in_GateIn_Framework" /> for more details.
+				This example shows that <literal>uicomponent</literal> can be used to make Ajax calls, thanks to the <literal>event</literal> method. See <xref linkend="sect-Reference_Guide-AJAX_Framework" /> for more details.
 			</para>
 			<para>
 				Another variable that you can use is <literal>ctx</literal>. It gives access to the context in which the template is processed. Hence, you can get some elements like the request, the Javscript manager, or the resource resolver (ctx.appRes). Examples :

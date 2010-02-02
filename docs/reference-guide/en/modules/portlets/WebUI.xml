@@ -6,7 +6,13 @@
 <section id="sect-Reference_Guide-Web_User_Interface_WebUI">
 	<title>Web User Interface - WebUI</title>
 	<para>
-		WebUI is the name of GateIn's own webframework. GateIn Portal is built with it and also many applications available in the GateIn platform suites. Using its own framework means that the way the portal is build will not interfere with any web technology used by the portlet deployed. Using a particular technology would have make it more difficult for a user to use a different version (newer or older) of the same technology. If one choose to create WebUI portlets, here is some documentation. In general we recommend to use JSF as the framework of choice to develop new portlets.
+		WebUI is the name of &PRODUCT;'s webframework.
+	</para>	
+	<para>
+		Using a self-contained framework ensures that the portal's architecture does not interfere with other web technologies deployed by the portlets.
+	</para>	
+	<para>
+		Using a particular technology raises potential difficulties for users with a differing version (either newer or older) of the same technology.
 	</para>
 	<para>
 		The WebUI framework is a component tree based framework. The key aspects of WebUI are :
@@ -14,7 +20,7 @@
 	<itemizedlist>
 		<listitem>
 			<para>
-				Events based flow
+				Events based flow.
 			</para>
 		</listitem>
 		<listitem>
@@ -29,31 +35,31 @@
 		</listitem>
 		<listitem>
 			<para>
-				<xref linkend="sect-Reference_Guide-AJAX_in_GateIn_Framework" /> support
+				<xref linkend="sect-Reference_Guide-AJAX_Framework" /> support
 			</para>
 		</listitem>
 		<listitem>
 			<para>
-				Portlet API friendly
+				Portlet API friendly.
 			</para>
 		</listitem>
 	</itemizedlist>
-	<section id="sect-Reference_Guide-Web_User_Interface_WebUI-Resources">
-		<title>Resources</title>
+	<section id="sect-Reference_Guide-Web_User_Interface_WebUI-Relevant_Sections">
+		<title>Relevant Sections</title>
 		<itemizedlist>
 			<listitem>
 				<para>
-					<xref linkend="sect-Reference_Guide-Portlet_Lifecycle" /> : GateIn portlets are built with WebUI
+					<xref linkend="sect-Reference_Guide-Portlet_Lifecycle" />: &PRODUCT; portlets are built with WebUI
 				</para>
 			</listitem>
 			<listitem>
 				<para>
-					<xref linkend="sect-Reference_Guide-Portlet_Lifecycle" /> : GateIn portal itself is a WebUI application
+					<xref linkend="sect-Reference_Guide-Portlet_Lifecycle" />: &PRODUCT; portal itself is a WebUI application
 				</para>
 			</listitem>
 			<listitem>
 				<para>
-					How-to: <xref linkend="sect-Reference_Guide-Create_a_WebUI_Portlet" /> : Learn how to write your own app with WebUI
+					<xref linkend="sect-Reference_Guide-Create_a_WebUI_Portlet" />: Learn how to write your own app with WebUI
 				</para>
 			</listitem>
 		</itemizedlist>
