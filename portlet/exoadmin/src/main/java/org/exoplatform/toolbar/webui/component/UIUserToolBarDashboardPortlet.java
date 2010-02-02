@@ -20,6 +20,7 @@
 package org.exoplatform.toolbar.webui.component;
 
 import org.exoplatform.portal.application.PortalRequestContext;
+import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
@@ -88,11 +89,25 @@ public class UIUserToolBarDashboardPortlet extends UIPortletApplication
       {
          UIUserToolBarDashboardPortlet toolBarPortlet = event.getSource();
          String nodeName = event.getRequestContext().getRequestParameter(UIComponent.OBJECTID);
-         PageNavigation userNavigation = toolBarPortlet.getCurrentUserNavigation();
+
+         PageNavigation cachedNavigation = toolBarPortlet.getCurrentUserNavigation();
+         
+         // Update navigation for prevent create first node which already existed
+         DataStorage dataStorage = toolBarPortlet.getApplicationComponent(DataStorage.class);         
+         PageNavigation userNavigation =
+            dataStorage.getPageNavigation(cachedNavigation.getOwnerType(), cachedNavigation.getOwnerId());
+         cachedNavigation.merge(userNavigation);
+
          UserPortalConfigService configService = toolBarPortlet.getApplicationComponent(UserPortalConfigService.class);
-         if (userNavigation != null && configService != null && userNavigation.getNodes().size() < 1)
+         if (cachedNavigation != null && configService != null && cachedNavigation.getNodes().size() < 1)
          {
-            createDashboard(nodeName, userNavigation, configService);
+            createDashboard(nodeName, cachedNavigation, configService);
+         }
+         else
+         {
+            PortalRequestContext prContext = Util.getPortalRequestContext();
+            prContext.getResponse().sendRedirect(
+               prContext.getPortalURI() + cachedNavigation.getNodes().get(0).getName());
          }
       }
 
