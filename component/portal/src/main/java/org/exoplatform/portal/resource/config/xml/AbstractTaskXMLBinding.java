@@ -55,7 +55,7 @@ public abstract class AbstractTaskXMLBinding
          bindingCSSPath(pTask, element);
          bindingSkinName(pTask, element);
          bindingModuleName(pTask, element);
-
+         bindingOverwrite(pTask, element);
          return pTask;
       }
 
@@ -90,6 +90,17 @@ public abstract class AbstractTaskXMLBinding
          }
          String skinModule = nodes.item(0).getFirstChild().getNodeValue();
          task.setModuleName(skinModule);
+      }
+      
+      private void bindingOverwrite(PortalSkinTask task, Element element)
+      {
+         NodeList nodes = element.getElementsByTagName(GateinResource.OVERWRITE);
+         if (nodes == null || nodes.getLength() < 1)
+         {
+            return;
+         }
+         String overwrite = nodes.item(0).getFirstChild().getNodeValue();
+         task.setOverwrite("true".equals(overwrite));
       }
 
    }
@@ -150,6 +161,7 @@ public abstract class AbstractTaskXMLBinding
          bindingPortletName(pTask, element);
          bindingCSSPath(pTask, element);
          bindingSkinName(pTask, element);
+         bindingOverwrite(pTask, element);
          return pTask;
       }
 
@@ -195,6 +207,17 @@ public abstract class AbstractTaskXMLBinding
          }
          String skinName = nodes.item(0).getFirstChild().getNodeValue();
          task.setSkinName(skinName);
+      }
+      
+      private void bindingOverwrite(PortletSkinTask task, Element element)
+      {
+         NodeList nodes = element.getElementsByTagName(GateinResource.OVERWRITE);
+         if (nodes == null || nodes.getLength() < 1)
+         {
+            return;
+         }
+         String overwrite = nodes.item(0).getFirstChild().getNodeValue();
+         task.setOverwrite("true".equals(overwrite));
       }
    }
 

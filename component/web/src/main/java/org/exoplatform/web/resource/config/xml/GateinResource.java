@@ -29,7 +29,6 @@ package org.exoplatform.web.resource.config.xml;
  */
 public interface GateinResource
 {
-
    final public static String SKIN_DEF_TAG = "skin-def";
 
    final public static String SKIN_NAME_TAG = "skin-name";
@@ -61,6 +60,8 @@ public interface GateinResource
    final public static String JAVA_SCRIPT_MODULE = "js-module";
 
    final public static String JAVA_SCRIPT_PATH = "js-path";
+   
+   final public static String OVERWRITE = "overwrite";
    
    final public static String JAVA_SCRIPT_PRIORITY = "js-priority";
 }

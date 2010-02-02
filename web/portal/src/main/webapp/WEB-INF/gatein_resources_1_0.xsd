@@ -41,6 +41,7 @@
 		<xs:sequence>
 			<xs:element name="skin-name" type="xs:string" />
 			<xs:element name="css-path" type="xs:string" />
+			<xs:element name="overwrite" type="xs:string" />
 		</xs:sequence>
 	</xs:complexType>
 	
@@ -50,6 +51,7 @@
 			<xs:element name="portlet-name" type="xs:string" />
 			<xs:element name="skin-name" type="xs:string" />
 			<xs:element name="css-path" type="xs:string" />
+			<xs:element name="overwrite" type="xs:string" />
 		</xs:sequence>
 	</xs:complexType>
 	
