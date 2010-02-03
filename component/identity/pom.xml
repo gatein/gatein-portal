@@ -52,7 +52,12 @@
       <artifactId>exo.core.component.organization.api</artifactId>
     </dependency>
 
-     <dependency>
+    <dependency>
+      <groupId>org.gatein.common</groupId>
+      <artifactId>common-logging</artifactId>
+    </dependency>
+    
+    <dependency>
         <groupId>org.picketlink.idm</groupId>
         <artifactId>picketlink-idm-core</artifactId>
      </dependency>

@@ -24,6 +24,7 @@ import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.mail.MailService;
 import org.exoplatform.services.organization.OrganizationService;
+import org.exoplatform.services.organization.PasswordGeneratorService;
 import org.exoplatform.services.organization.Query;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -41,7 +42,6 @@ import org.exoplatform.webui.form.validator.MandatoryValidator;
 
 import java.net.URLEncoder;
 import java.util.Date;
-import java.util.List;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
@@ -78,41 +78,53 @@ public class UIForgetPassword extends UIForm
          String url = portalContext.getRequest().getRequestURL().toString();
          MailService mailSrc = uiForm.getApplicationComponent(MailService.class);
          OrganizationService orgSrc = uiForm.getApplicationComponent(OrganizationService.class);
+         PasswordGeneratorService passwordGenSrc = uiForm.getApplicationComponent(PasswordGeneratorService.class);
          String userName = uiForm.getUIStringInput(Username).getValue();
          String email = uiForm.getUIStringInput(Email).getValue();
          uiForm.reset();
+         
+         User user = null;
+         
+         // User provided his username
          if (userName != null)
          {
-            if (orgSrc.getUserHandler().findUserByName(userName) == null)
+            user = orgSrc.getUserHandler().findUserByName(userName);
+            if (user == null)
             {
                requestContext.getUIApplication().addMessage(
                   new ApplicationMessage("UIForgetPassword.msg.user-not-exist", null));
                return;
             }
-            email = orgSrc.getUserHandler().findUserByName(userName).getEmail();
          }
-         //get user
-         PageList userPageList = orgSrc.getUserHandler().findUsers(new Query());
-         List userList = userPageList.currentPage();
-         User user = null;
-         for (int i = 0; i < userList.size(); i++)
+         
+         // User provided his email address
+         if (user == null && email != null)
          {
-            User tmpUser = (User)userList.get(i);
-            if (tmpUser.getEmail().equals(email))
+            Query query = new Query();
+            // Querying on email won't work. PLIDM-12
+            // Note that querying on email is inefficient as it loops over all users... 
+            // query.setEmail(email);
+            PageList<User> users = orgSrc.getUserHandler().findUsers(query);
+            for (User tmpUser : users.currentPage().toArray(new User[]{}))
             {
-               user = tmpUser;
-               break;
+               if (email.equals(tmpUser.getEmail()))
+         	   {
+            	   user = tmpUser;
+            	   break;
+         	   }
+            }
+            if (user == null)
+            {
+               requestContext.getUIApplication().addMessage(
+                  new ApplicationMessage("UIForgetPassword.msg.email-not-exist", null));
+               return;
             }
          }
-         if (user == null)
-         {
-            requestContext.getUIApplication().addMessage(
-               new ApplicationMessage("UIForgetPassword.msg.email-not-exist", null));
-            return;
-         }
+         
+         email = user.getEmail();
+         
          String portalName = URLEncoder.encode(Util.getUIPortal().getName(), "UTF-8");
-         Long now = new Date().getTime();
-         user.setPassword(now.toString());
+         user.setPassword(passwordGenSrc.generatePassword());
          orgSrc.getUserHandler().saveUser(user, true);
          ResourceBundle res = requestContext.getApplicationResourceBundle();
          String headerMail = "headermail";
@@ -130,14 +142,18 @@ public class UIForgetPassword extends UIForm
             e.printStackTrace();
          }
          String host = url.substring(0, url.indexOf(requestContext.getRequestContextPath()));
+         Long now = new Date().getTime();
          String activeLink = host + requestContext.getRequestContextPath() + "/public/" + portalName;
          activeLink +=
             "?portal:componentId=UIPortal&portal:action=RecoveryPasswordAndUsername&datesend=" + now.toString()
                + "&email=" + email;
          activeLink = headerMail + activeLink + footerMail;
-         try{
-            mailSrc.sendMessage("exoservice@gmail.com", email, "Remind password and username", activeLink);
-         } catch(Exception e){
+         try
+         {
+            mailSrc.sendMessage(res.getString("UIForgetPassword.mail.from"), email, res.getString("UIForgetPassword.mail.subject"), activeLink);
+         }
+         catch(Exception e)
+         {
             requestContext.getUIApplication().addMessage(
                new ApplicationMessage("UIForgetPassword.msg.send-mail-fail", null));
             requestContext.addUIComponentToUpdateByAjax(uilogin);
