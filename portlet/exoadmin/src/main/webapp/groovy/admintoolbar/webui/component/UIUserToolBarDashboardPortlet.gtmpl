@@ -27,7 +27,7 @@
 		String clazz = "";
 		
 		print """
-			<div style="position: absolute; display:none" class="MenuItemContainer">
+			<div style="display:none" class="MenuItemContainer">
 				<div class="SubBlock">
 		""";
 					for(int i = 0; i < size; i++) {
@@ -71,7 +71,7 @@
 		""" ;
 		if(hasChild) {
 			print """
-				<div class="MenuItemContainer" style="position: absolute; display:none">			
+				<div class="MenuItemContainer">			
 					<div class="SubBlock">
 			""" ;
 				for(int j = 0; j < node.getChildren().size(); j++) {
@@ -96,7 +96,7 @@
 %>
 	<div class="UIUserToolBarDashboardPortlet" id="$uicomponent.id">	
 		<div class="UIHorizontalTabs">
-			<div class="TabsContainer" style="position: relative">
+			<div class="TabsContainer">
 				<div class="UITab NormalToolbarTab">
 					<div class="">
 						<a class="DashboardIcon TBIcon" href="<%= uicomponent.url("AddDefaultDashboard", defaultDashboardPage); %>">Dashboard</a>
@@ -109,9 +109,9 @@
 	}else{
 		defaultDashboardPage = currentUserNavigation.getNodes().get(0).getName();	
 %>
-	<div class="UIUserToolBarDashboardPortlet" id="$uicomponent.id">	
+	<div class="UIUserToolBarDashboardPortlet" id="$uicomponent.id" >	
 		<div class="UIHorizontalTabs">
-			<div class="TabsContainer" style="position: relative">
+			<div class="TabsContainer" >
 				<div class="UITab NormalToolbarTab">
 						<div class="">
 								<a class="DashboardIcon TBIcon" href="<%= portalURI + defaultDashboardPage %>">Dashboard</a>

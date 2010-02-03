@@ -31,14 +31,14 @@
 	}
 	String accountSetting = "javascript:if(document.getElementById('UIMaskWorkspace')) ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'AccountSettings', true));"
 %>
-<div class="UIAdminToolbarPortlet" id="$uicomponent.id">
+<div class="UIAdminToolbarPortlet" id="$uicomponent.id" >
 	<div class="UIHorizontalTabs">
-		<div class="TabsContainer" style="position: relative">
+		<div class="TabsContainer" >
 			<div class="UITab NormalToolbarTab">
 				<div class="">
 					<a class="EditorIcon TBIcon" href="#">$editorLabel</a>
 				</div>
-				<div class="MenuItemContainer" style="position: absolute; display:none;">
+				<div class="MenuItemContainer" style="display:none;">
 					<div class="SubBlock">
 						<% if(userCouldEditNavigation){ %>
 							<div class="MenuItem">	

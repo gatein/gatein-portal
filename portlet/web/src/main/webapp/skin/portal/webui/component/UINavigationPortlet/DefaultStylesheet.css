@@ -205,7 +205,7 @@
 
 .UINavigationPortlet .MenuItemContainer {
 	white-space: nowrap;
-	border: solid #b7b7b7 1px;
+	border: solid #b7b7b7 1px; /*fix for IE*/
 	text-align: left; /* orientation=lt */
 	text-align: right; /* orientation=rt */
 }

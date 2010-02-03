@@ -10,12 +10,12 @@
 	String accountSetting = "if(document.getElementById('UIMaskWorkspace')) ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'AccountSettings', true));";
 	String changeSkinAction = "if(document.getElementById('UIMaskWorkspace')) ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'ChangeSkin', true));";
 %>
-<div class="UIStarToolBarPortlet" id="$uicomponent.id">
+<div class="UIStarToolBarPortlet" id="$uicomponent.id" >
 	<div class="UIHorizontalTabs">
-		<div class="TabsContainer" style="position: relative">
+		<div class="TabsContainer">
 			<div class="UITab" style="width: 62px">
 				<div class=""></div>
-				<div class="MenuItemContainer" style="position: absolute; display:none;">
+				<div class="MenuItemContainer" style="display:none;">
 					<div class="MenuItem" onclick="$changeLanguageAction">
 						<a href="#" class="ChangeLanguageIcon"><%=_ctx.appRes("UIStarToolbarPortlet.item.ChangeLanguage")%></a>
 					</div>

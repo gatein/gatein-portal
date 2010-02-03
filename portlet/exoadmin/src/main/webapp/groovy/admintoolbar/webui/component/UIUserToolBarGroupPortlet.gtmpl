@@ -79,15 +79,15 @@
 		""" ;			
 	}	
 %> 	
-<div class="UIUserToolBarGroupPortlet" id="$uicomponent.id">
+<div class="UIUserToolBarGroupPortlet" id="$uicomponent.id" >
 	<div class="UIHorizontalTabs">
-		<div class="TabsContainer" style="position: relative">	
+		<div class="TabsContainer">	
 			<div class="UITab NormalToolbarTab">
 				<div class="">
 							<a class="GroupIcon TBIcon" href="<%= portalURI + "groupnavigation" %>">Group</a>
 				</div>
 				<% if (!groupNavigations.isEmpty()) { %>
-				<div style="position: absolute; display:none" class="MenuItemContainer">
+				<div style="display:none" class="MenuItemContainer">
 				<% for(navigation in groupNavigations) {
 						renderGroupPageNavigation(navigation);
 				} %>
