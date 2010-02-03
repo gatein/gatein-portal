@@ -88,6 +88,7 @@ UIMaskLayer.prototype.removeMasks = function(maskLayer) {
 	eXo.core.UIMaskLayer.removeMask(maskLayer) ;
 };
 
+
 /**
  * Creates and returns the dom element that contains the mask layer, with these parameters
  *  . the mask layer is a child of blockContainerId
@@ -126,8 +127,8 @@ UIMaskLayer.prototype.createMask = function(blockContainerId, object, opacity, p
 		maskLayer.className = "MaskLayer" ;
 		maskLayer.id = "MaskLayer" ;
 		maskLayer.maxZIndex = 4; //3 ;
-		maskLayer.style.width = eXo.core.Browser.getBrowserWidth() + "px";
-		maskLayer.style.height = eXo.core.Browser.getBrowserHeight() + "px";
+		maskLayer.style.width = Browser.getBrowserWidth() + "px";
+		maskLayer.style.height = Browser.getBrowserHeight() + "px";
 		maskLayer.style.top = "0px" ;
 		maskLayer.style.left = "0px" ;
 		maskLayer.style.zIndex = maskLayer.maxZIndex ;
@@ -165,6 +166,7 @@ UIMaskLayer.prototype.createMask = function(blockContainerId, object, opacity, p
 	}catch(err) {
 		alert(err) ;
 	}
+	Browser.addOnResizeCallback(maskLayer.id, eXo.core.UIMaskLayer.resizeMaskLayer);
 	return maskLayer ;
 };
 
@@ -306,7 +308,9 @@ UIMaskLayer.prototype.enablePageDesktop = function(enabled) {
 };
 
 UIMaskLayer.prototype.resizeMaskLayer = function() {
-	return ;
-} ;
+	var maskLayer = document.getElementById("MaskLayer");
+	maskLayer.style.width = eXo.core.Browser.getBrowserWidth() + "px";
+	maskLayer.style.height = eXo.core.Browser.getBrowserHeight() + "px";
+};
 
 eXo.core.UIMaskLayer = new UIMaskLayer() ;
