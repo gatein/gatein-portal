@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
+	<classpathentry kind="src" output="component/test/core/target/classes" path="component/test/core/src/main/java"/>
+	<classpathentry excluding="**" kind="src" output="component/test/core/target/classes" path="component/test/core/src/main/resources"/>
+	<classpathentry kind="src" output="component/test/core/target/test-classes" path="component/test/core/src/test/java"/>
+	<classpathentry excluding="**" kind="src" output="component/test/core/target/test-classes" path="component/test/core/src/test/resources"/>
+	<classpathentry kind="src" output="component/test/jcr/target/classes" path="component/test/jcr/src/main/java"/>
+	<classpathentry excluding="**" kind="src" output="component/test/jcr/target/classes" path="component/test/jcr/src/main/resources"/>
+	<classpathentry kind="src" output="component/test/jcr/target/test-classes" path="component/test/jcr/src/test/java"/>
+	<classpathentry excluding="**" kind="src" output="component/test/jcr/target/test-classes" path="component/test/jcr/src/test/resources"/>
+	<classpathentry kind="src" output="component/identity/target/classes" path="component/identity/src/main/java"/>
+	<classpathentry kind="src" output="component/identity/target/test-classes" path="component/identity/src/test/java"/>
+	<classpathentry kind="src" output="component/test/organization/target/classes" path="component/test/organization/src/main/java"/>
+	<classpathentry excluding="**" kind="src" output="component/test/organization/target/classes" path="component/test/organization/src/main/resources"/>
+	<classpathentry kind="src" output="component/test/organization/target/test-classes" path="component/test/organization/src/test/java"/>
 	<classpathentry kind="src" output="component/common/target/classes" path="component/common/src/main/java"/>
 	<classpathentry kind="src" output="component/common/target/test-classes" path="component/common/src/test/java"/>
 	<classpathentry excluding="**" kind="src" output="component/common/target/test-classes" path="component/common/src/test/resources"/>
@@ -12,14 +25,14 @@
 	<classpathentry kind="src" output="component/xml-parser/target/test-classes" path="component/xml-parser/src/test/java"/>
 	<classpathentry excluding="**" kind="src" output="component/xml-parser/target/test-classes" path="component/xml-parser/src/test/resources"/>
 	<classpathentry kind="src" output="component/wsrp/target/classes" path="component/wsrp/src/main/java"/>
+	<classpathentry kind="src" output="component/wsrp/target/test-classes" path="component/wsrp/src/test/java"/>
+	<classpathentry excluding="**" kind="src" output="component/wsrp/target/test-classes" path="component/wsrp/src/test/resources"/>
 	<classpathentry kind="src" output="component/scripting/target/classes" path="component/scripting/src/main/java"/>
 	<classpathentry kind="src" output="component/scripting/target/test-classes" path="component/scripting/src/test/java"/>
 	<classpathentry excluding="**" kind="src" output="component/scripting/target/test-classes" path="component/scripting/src/test/resources"/>
 	<classpathentry kind="src" output="component/web/target/classes" path="component/web/src/main/java"/>
 	<classpathentry kind="src" output="component/web/target/test-classes" path="component/web/src/test/java"/>
 	<classpathentry excluding="**" kind="src" output="component/web/target/test-classes" path="component/web/src/test/resources"/>
-	<classpathentry kind="src" output="component/identity/target/classes" path="component/identity/src/main/java"/>
-	<classpathentry kind="src" output="component/identity/target/test-classes" path="component/identity/src/test/java"/>
 	<classpathentry kind="src" output="component/portal/target/classes" path="component/portal/src/main/java"/>
 	<classpathentry kind="src" output="component/portal/target/test-classes" path="component/portal/src/test/java"/>
 	<classpathentry excluding="**" kind="src" output="component/portal/target/test-classes" path="component/portal/src/test/resources"/>
@@ -39,6 +52,19 @@
 	<classpathentry excluding="**" kind="src" output="server/tomcat/patch/target/classes" path="server/tomcat/patch/src/main/tomcat"/>
 	<classpathentry kind="src" output="server/tomcat/plugin/target/classes" path="server/tomcat/plugin/src/main/java"/>
 	<classpathentry kind="src" output="server/jboss/plugin/target/classes" path="server/jboss/plugin/src/main/java"/>
+	<classpathentry kind="src" output="examples/extension/config/target/classes" path="examples/extension/config/src/main/java"/>
+	<classpathentry kind="src" output="examples/extension/jar/target/classes" path="examples/extension/jar/src/main/java"/>
+	<classpathentry kind="src" output="examples/portal/config/target/classes" path="examples/portal/config/src/main/java"/>
+	<classpathentry kind="src" output="examples/portal/jar/target/classes" path="examples/portal/jar/src/main/java"/>
+	<classpathentry kind="src" output="examples/portlets/jsfhellouser/target/classes" path="examples/portlets/jsfhellouser/src/main/java"/>
+	<classpathentry kind="src" output="examples/portlets/jsfhellouser/target/test-classes" path="examples/portlets/jsfhellouser/src/test/java"/>
+	<classpathentry excluding="**" kind="src" output="examples/portlets/jsfhellouser/target/test-classes" path="examples/portlets/jsfhellouser/src/test/resources"/>
+	<classpathentry kind="src" output="examples/portlets/jsphellouser/target/classes" path="examples/portlets/jsphellouser/src/main/java"/>
+	<classpathentry kind="src" output="examples/portlets/jsphellouser/target/test-classes" path="examples/portlets/jsphellouser/src/test/java"/>
+	<classpathentry excluding="**" kind="src" output="examples/portlets/jsphellouser/target/test-classes" path="examples/portlets/jsphellouser/src/test/resources"/>
+	<classpathentry kind="src" output="examples/portlets/simplesthelloworld/target/classes" path="examples/portlets/simplesthelloworld/src/main/java"/>
+	<classpathentry kind="src" output="examples/portlets/simplesthelloworld/target/test-classes" path="examples/portlets/simplesthelloworld/src/test/java"/>
+	<classpathentry excluding="**" kind="src" output="examples/portlets/simplesthelloworld/target/test-classes" path="examples/portlets/simplesthelloworld/src/test/resources"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.maven.ide.eclipse.MAVEN2_CLASSPATH_CONTAINER"/>
 	<classpathentry kind="output" path="target/classes"/>
