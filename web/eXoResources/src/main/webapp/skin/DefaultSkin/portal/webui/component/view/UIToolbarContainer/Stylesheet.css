@@ -84,8 +84,29 @@
 	padding-left: 2px; /* orientation=rt */
 	text-align: left; /* orientation=lt */
 	text-align: right; /* orientation=rt */
-	float: none; /* orientation=lt */
-	!float: left; /* orientation=rt */ /* fix for IE7 */
+	float: none; 
+	!float: left;/* orientation=rt */
+	_float: none;/* orientation=rt */
+}
+
+.UserToolBarSitePortletTDContainer {
+	position: relative;
+}
+
+.UserToolBarGroupPortletTDContainer {
+	position: relative;
+}
+
+.UserToolBarGroupPortletTDContainer {
+	position: relative;
+}
+
+.UserToolBarDashboardPortletTDContainer {
+	position: relative;
+}
+
+.AdminToolBarPortletTDContainer {
+	position: relative;
 }
 
 /****************************/
@@ -93,6 +114,7 @@
 .UIToolbarContainer .MenuItemContainer {	
 	position: absolute;
 	border: 1px solid #9e9fa3;
+	display: none;
 }
 
 .UIToolbarContainer .TitleBar {
