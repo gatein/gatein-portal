@@ -30,7 +30,9 @@
 		<%		    
 		  }
 		%> 
-	
+	<%
+		if(uicomponent.getPortalConfigs().size() > 0){
+	%>
 	<div class="UIAction"> 
     <table class="ActionContainer">
 	    <tr>
@@ -48,7 +50,9 @@
       </tr>
  	  </table>
 	</div>
-	
+	<%
+		}
+	%>
 	<%uicomponent.renderChildren();%>
 </div>
 
