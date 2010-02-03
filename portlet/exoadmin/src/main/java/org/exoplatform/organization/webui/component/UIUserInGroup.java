@@ -21,6 +21,7 @@ package org.exoplatform.organization.webui.component;
 
 import org.exoplatform.commons.utils.EmptySerializablePageList;
 import org.exoplatform.commons.utils.PageList;
+import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.Membership;
 import org.exoplatform.services.organization.MembershipHandler;
@@ -146,8 +147,11 @@ public class UIUserInGroup extends UIContainer
       if (group != null)
       {
          String groupId = group.getId();
-         // show action if is administrator
-         boolean showAction = GroupManagement.isAdministrator(null);
+         String currentUser = Util.getPortalRequestContext().getRemoteUser();
+
+         // show action if user is administrator or manager of current group
+         boolean showAction =
+            GroupManagement.isAdministrator(currentUser) || GroupManagement.isManagerOfGroup(currentUser, groupId);
 
          if (!showAction)
          {
