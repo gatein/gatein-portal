@@ -28,11 +28,15 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStreamReader;
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.AbstractMap.SimpleEntry;
 
 import javax.servlet.ServletContext;
 
@@ -42,6 +46,8 @@ public class JavascriptConfigService implements Startable
    private Collection<String> availableScripts_;
 
    private Collection<String> availableScriptsPaths_;
+
+   private List<AbstractMap.SimpleEntry<JavascriptKey, ServletContext>> availableScriptsKey_;
 
    private String mergedJavascript = "";
 
@@ -61,6 +67,7 @@ public class JavascriptConfigService implements Startable
    {
       availableScripts_ = new ArrayList<String>();
       availableScriptsPaths_ = new ArrayList<String>();
+      availableScriptsKey_ = new ArrayList<AbstractMap.SimpleEntry<JavascriptKey, ServletContext>>();
       extendedJavascripts = new HashMap<String, String>();
       deployer = new JavascriptDeployer(context.getPortalContainerName(), this);
       removal = new JavascriptRemoval(context.getPortalContainerName(), this);
@@ -75,11 +82,13 @@ public class JavascriptConfigService implements Startable
     */
    public Collection<String> getAvailableScripts()
    {
+      serializeKeyPath();
       return availableScripts_;
    }
 
    public Collection<String> getAvailableScriptsPaths()
    {
+      serializeKeyPath();
       return availableScriptsPaths_;
    }
 
@@ -94,10 +103,42 @@ public class JavascriptConfigService implements Startable
 
    public void addJavascript(JavascriptKey key, ServletContext scontext)
    {
-      addJavascript(key.getModule(), key.getScriptPath(), key.getPriority(), scontext);
+      availableScriptsKey_.add(new SimpleEntry<JavascriptKey, ServletContext>(key, scontext));
    }
 
-   public void addJavascript(String module, String scriptPath, Integer priority, ServletContext scontext)
+   private void serializeKeyPath()
+   {
+      Collections.sort(availableScriptsKey_, new Comparator<SimpleEntry<JavascriptKey, ServletContext>>()
+      {
+         public int compare(SimpleEntry<JavascriptKey, ServletContext> entry1,
+            SimpleEntry<JavascriptKey, ServletContext> entry2)
+         {
+            JavascriptKey js1 = entry1.getKey();
+            JavascriptKey js2 = entry2.getKey();
+
+            if (js1.getPriority() == js2.getPriority())
+               return js1.getModule().compareTo(js2.getModule());
+            else if (js1.getPriority() < 0)
+               return 1;
+            else if (js2.getPriority() < 0)
+               return -1;
+            else
+               return js1.getPriority() - js2.getPriority();
+         }
+      });
+      
+      availableScripts_.clear();
+      availableScriptsPaths_.clear();
+      mergedJavascript = "";
+
+      for (SimpleEntry<JavascriptKey, ServletContext> entry : availableScriptsKey_)
+      {
+         JavascriptKey key = entry.getKey();
+         addJavascript(key.getModule(), key.getScriptPath(), entry.getValue());
+      }
+   }
+
+   private void addJavascript(String module, String scriptPath, ServletContext scontext)
    {
       String servletContextName = scontext.getServletContextName();
       availableScripts_.add(module);

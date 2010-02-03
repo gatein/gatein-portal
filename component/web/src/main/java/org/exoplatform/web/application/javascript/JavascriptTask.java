@@ -19,8 +19,6 @@
 package org.exoplatform.web.application.javascript;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import javax.servlet.ServletContext;
@@ -42,20 +40,6 @@ public class JavascriptTask
 
    public void execute(JavascriptConfigService service, ServletContext scontext)
    {
-      Collections.sort(jsKeys, new Comparator<JavascriptKey>()
-      {
-         public int compare(JavascriptKey js1, JavascriptKey js2)
-         {
-            if (js1.getPriority() == js2.getPriority())
-               return js1.getModule().compareTo(js2.getModule());
-            else if (js1.getPriority() < 0)
-               return 1;
-            else if (js2.getPriority() < 0)
-               return -1;
-            else
-               return js1.getPriority() - js2.getPriority();
-         }
-      });
       for (JavascriptKey key : jsKeys)
       {
          service.addJavascript(key, scontext);
