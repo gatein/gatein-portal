@@ -31,7 +31,7 @@
 		  }
 		%> 
 	<%
-		if(uicomponent.getPortalConfigs().size() > 0){
+		if(uicomponent.getPortalConfigs() != null && uicomponent.getPortalConfigs().size() > 0){
 	%>
 	<div class="UIAction"> 
     <table class="ActionContainer">
