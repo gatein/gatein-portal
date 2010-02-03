@@ -28,7 +28,6 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStreamReader;
-import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -37,6 +36,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.AbstractMap.SimpleEntry;
+import java.util.Map.Entry;
 
 import javax.servlet.ServletContext;
 
@@ -47,7 +47,7 @@ public class JavascriptConfigService implements Startable
 
    private Collection<String> availableScriptsPaths_;
 
-   private List<AbstractMap.SimpleEntry<JavascriptKey, ServletContext>> availableScriptsKey_;
+   private List<Entry<JavascriptKey, ServletContext>> availableScriptsKey_;
 
    private String mergedJavascript = "";
 
@@ -67,7 +67,7 @@ public class JavascriptConfigService implements Startable
    {
       availableScripts_ = new ArrayList<String>();
       availableScriptsPaths_ = new ArrayList<String>();
-      availableScriptsKey_ = new ArrayList<AbstractMap.SimpleEntry<JavascriptKey, ServletContext>>();
+      availableScriptsKey_ = new ArrayList<Entry<JavascriptKey, ServletContext>>();
       extendedJavascripts = new HashMap<String, String>();
       deployer = new JavascriptDeployer(context.getPortalContainerName(), this);
       removal = new JavascriptRemoval(context.getPortalContainerName(), this);
@@ -82,40 +82,39 @@ public class JavascriptConfigService implements Startable
     */
    public Collection<String> getAvailableScripts()
    {
-      serializeKeyPath();
       return availableScripts_;
    }
 
    public Collection<String> getAvailableScriptsPaths()
    {
-      serializeKeyPath();
       return availableScriptsPaths_;
    }
 
-   public void addExtendedJavascript(String module, String scriptPath, ServletContext scontext, String scriptData)
+   /*
+    * TANPD: This method no longer needed
+    * public void addExtendedJavascript(String module, String scriptPath, ServletContext scontext, String scriptData)
    {
       String servletContextName = scontext.getServletContextName();
       String path = "/" + servletContextName + scriptPath;
       availableScripts_.add(module);
       availableScriptsPaths_.add(path);
       extendedJavascripts.put(path, scriptData);
-   }
+   }*/
 
-   public void addJavascript(JavascriptKey key, ServletContext scontext)
+   @SuppressWarnings("unchecked")
+   public void addJavascripts(List<JavascriptKey> jsKeys, ServletContext scontext)
    {
-      availableScriptsKey_.add(new SimpleEntry<JavascriptKey, ServletContext>(key, scontext));
-   }
-
-   private void serializeKeyPath()
-   {
-      Collections.sort(availableScriptsKey_, new Comparator<SimpleEntry<JavascriptKey, ServletContext>>()
+      for (JavascriptKey key : jsKeys)
       {
-         public int compare(SimpleEntry<JavascriptKey, ServletContext> entry1,
-            SimpleEntry<JavascriptKey, ServletContext> entry2)
-         {
-            JavascriptKey js1 = entry1.getKey();
-            JavascriptKey js2 = entry2.getKey();
+         availableScriptsKey_.add(new SimpleEntry(key, scontext));
+      }
 
+      Collections.sort(availableScriptsKey_, new Comparator<Entry<JavascriptKey, ServletContext>>()
+      {
+         public int compare(Entry<JavascriptKey, ServletContext> e1, Entry<JavascriptKey, ServletContext> e2)
+         {
+            JavascriptKey js1 = e1.getKey();
+            JavascriptKey js2 = e2.getKey();
             if (js1.getPriority() == js2.getPriority())
                return js1.getModule().compareTo(js2.getModule());
             else if (js1.getPriority() < 0)
@@ -126,15 +125,14 @@ public class JavascriptConfigService implements Startable
                return js1.getPriority() - js2.getPriority();
          }
       });
-      
+
+      mergedJavascript = "";
       availableScripts_.clear();
       availableScriptsPaths_.clear();
-      mergedJavascript = "";
-
-      for (SimpleEntry<JavascriptKey, ServletContext> entry : availableScriptsKey_)
+      object_view_of_merged_JS.clear();
+      for (Entry<JavascriptKey, ServletContext> e : availableScriptsKey_)
       {
-         JavascriptKey key = entry.getKey();
-         addJavascript(key.getModule(), key.getScriptPath(), entry.getValue());
+         addJavascript(e.getKey().getModule(), e.getKey().getScriptPath(), e.getValue());
       }
    }
 
@@ -190,6 +188,13 @@ public class JavascriptConfigService implements Startable
       availableScripts_.remove(key.getModule());
       availableScriptsPaths_.remove(contextPath + key.getScriptPath());
       object_view_of_merged_JS.remove(contextPath);
+
+      for (Entry<JavascriptKey, ServletContext> entry : availableScriptsKey_)
+      {
+         if (key.equals(entry.getKey())
+            && scontext.getServletContextName().equals(entry.getValue().getServletContextName()))
+            availableScriptsKey_.remove(entry);
+      }
    }
 
    /** Refresh the mergedJavascript **/

@@ -40,10 +40,7 @@ public class JavascriptTask
 
    public void execute(JavascriptConfigService service, ServletContext scontext)
    {
-      for (JavascriptKey key : jsKeys)
-      {
-         service.addJavascript(key, scontext);
-      }
+      service.addJavascripts(jsKeys, scontext);
       JavascriptDependentManager.addJavascriptDependent(scontext.getContextPath(), jsKeys);
    }
 
