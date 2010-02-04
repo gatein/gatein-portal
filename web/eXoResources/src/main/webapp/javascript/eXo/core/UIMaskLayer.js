@@ -309,8 +309,10 @@ UIMaskLayer.prototype.enablePageDesktop = function(enabled) {
 
 UIMaskLayer.prototype.resizeMaskLayer = function() {
 	var maskLayer = document.getElementById("MaskLayer");
-	maskLayer.style.width = eXo.core.Browser.getBrowserWidth() + "px";
-	maskLayer.style.height = eXo.core.Browser.getBrowserHeight() + "px";
+	if (maskLayer) {
+		maskLayer.style.width = eXo.core.Browser.getBrowserWidth() + "px";
+		maskLayer.style.height = eXo.core.Browser.getBrowserHeight() + "px";
+	}
 };
 
 eXo.core.UIMaskLayer = new UIMaskLayer() ;
