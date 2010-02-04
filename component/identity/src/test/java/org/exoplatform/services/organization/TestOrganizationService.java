@@ -23,6 +23,7 @@ import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.component.ComponentRequestLifecycle;
 import org.exoplatform.container.component.RequestLifeCycle;
+import org.exoplatform.services.organization.idm.UserDAOImpl;
 import org.exoplatform.test.BasicTestCase;
 
 import java.util.ArrayList;
@@ -182,6 +183,36 @@ public class TestOrganizationService extends BasicTestCase
       assertEquals(1, piterator.currentPage().size());
       assertNull("User: USER is removed: ", userHandler_.findUserByName(USER));
       assertNull(" user's profile of USER was removed:", profileHandler_.findUserProfileByName(USER));
+   }
+
+   public void testUniqueAttribute() throws Exception
+   {
+      if (userHandler_ instanceof UserDAOImpl)
+      {
+         UserDAOImpl ud = (UserDAOImpl)userHandler_;
+
+         User user = userHandler_.createUserInstance("toto");
+         user.setEmail("toto@gatein.org");
+         userHandler_.createUser(user, true);
+
+         user = userHandler_.createUserInstance("lolo");
+         user.setEmail("lolo@gatein.org");
+         userHandler_.createUser(user, true);
+
+         // Find by unique attribute
+         assertNull(ud.findUserByEmail("foobar"));
+         user = ud.findUserByEmail("toto@gatein.org");
+         assertNotNull(user);
+         assertEquals("toto", user.getUserName());
+
+         user = ud.findUserByEmail("lolo@gatein.org");
+         assertNotNull(user);
+         assertEquals("lolo", user.getUserName());
+
+         ud.removeUser("toto", false);
+         ud.removeUser("lolo", false);
+
+      }
    }
 
    //

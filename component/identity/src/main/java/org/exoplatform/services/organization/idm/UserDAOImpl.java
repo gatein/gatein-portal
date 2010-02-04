@@ -292,6 +292,25 @@ public class UserDAOImpl implements UserHandler
       return new LazyPageList(new IDMUserListAccess(this, service_, qb, 20, false), 20);
    }
 
+   public User findUserByEmail(String email) throws Exception
+   {
+      IdentitySession session = service_.getIdentitySession();
+
+
+      org.picketlink.idm.api.User plUser;
+      plUser = session.getAttributesManager().findUserByUniqueAttribute(USER_EMAIL, email);
+      User user = null;
+
+      if (plUser != null)
+      {
+         user = new UserImpl(plUser.getId());
+         populateUser(user, session);
+
+      }
+
+      return user;
+   }
+
    public ListAccess<User> findUsersByGroupId(String groupId) throws Exception
    {
       throw new UnsupportedOperationException();
@@ -387,16 +406,24 @@ public class UserDAOImpl implements UserHandler
          return null;
       }
 
+      User user = new UserImpl(userName);
+
+      populateUser(user, session);
+
+      return user;
+
+   }
+
+   public static void populateUser(User user, IdentitySession session) throws Exception
+   {
+
       AttributesManager am = session.getAttributesManager();
 
-      Map<String, Attribute> attrs = am.getAttributes(userName);
-
-      User user = new UserImpl(userName);
+      Map<String, Attribute> attrs = am.getAttributes(user.getUserName());
 
       if (attrs == null)
       {
-
-         return user;
+         return;
       }
       else
       {
@@ -429,9 +456,6 @@ public class UserDAOImpl implements UserHandler
             user.setPassword(attrs.get(USER_PASSWORD).getValue().toString());
          }
       }
-
-      return user;
-
    }
 
 }
