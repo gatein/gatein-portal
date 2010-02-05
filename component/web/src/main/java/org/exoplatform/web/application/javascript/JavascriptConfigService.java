@@ -90,16 +90,14 @@ public class JavascriptConfigService implements Startable
       return availableScriptsPaths_;
    }
 
-   /*
-    * TANPD: This method no longer needed
-    * public void addExtendedJavascript(String module, String scriptPath, ServletContext scontext, String scriptData)
+   public void addExtendedJavascript(String module, String scriptPath, ServletContext scontext, String scriptData)
    {
       String servletContextName = scontext.getServletContextName();
       String path = "/" + servletContextName + scriptPath;
       availableScripts_.add(module);
       availableScriptsPaths_.add(path);
       extendedJavascripts.put(path, scriptData);
-   }*/
+   }
 
    @SuppressWarnings("unchecked")
    public void addJavascripts(List<JavascriptKey> jsKeys, ServletContext scontext)
