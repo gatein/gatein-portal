@@ -19,11 +19,8 @@
 
 package org.exoplatform.portal.pom.spi.portlet;
 
-import org.chromattic.api.annotations.Create;
-import org.chromattic.api.annotations.PrimaryType;
-import org.chromattic.api.annotations.OneToMany;
-import org.chromattic.api.annotations.OneToOne;
-import org.chromattic.api.annotations.RelatedMappedBy;
+import org.chromattic.api.annotations.*;
+import org.gatein.mop.core.api.MOPFormatter;
 import org.gatein.mop.core.api.workspace.content.AbstractCustomization;
 
 import java.util.Map;
@@ -33,6 +30,7 @@ import java.util.Map;
  * @version $Revision$
  */
 @PrimaryType(name = PortletState.MOP_NODE_NAME)
+@FormattedBy(MOPFormatter.class)
 public abstract class PortletState
 {
 
@@ -47,7 +45,7 @@ public abstract class PortletState
    public abstract PreferenceState create();
 
    @OneToOne
-   @RelatedMappedBy("state")
+   @RelatedMappedBy("mop:state")
    public abstract AbstractCustomization getCustomization();
 
    private void setPayload(Portlet payload)

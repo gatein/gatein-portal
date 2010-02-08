@@ -40,10 +40,10 @@
         <supertype>mix:referenceable</supertype>
       </supertypes>
       <propertyDefinitions>
-        <propertyDefinition name="value" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
+        <propertyDefinition name="mop:value" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
           <valueConstraints/>
         </propertyDefinition>
-        <propertyDefinition name="readonly" requiredType="Boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+        <propertyDefinition name="mop:readonly" requiredType="Boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
           <valueConstraints/>
         </propertyDefinition>
       </propertyDefinitions>
@@ -54,7 +54,7 @@
         <supertype>mop:customizationstate</supertype>
       </supertypes>
       <propertyDefinitions>
-        <propertyDefinition name="prefs" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+        <propertyDefinition name="mop:prefs" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
           <valueConstraints/>
         </propertyDefinition>
       </propertyDefinitions>
@@ -65,13 +65,13 @@
           <supertype>mop:customizationstate</supertype>
        </supertypes>
        <propertyDefinitions>
-          <propertyDefinition name="portletid" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+          <propertyDefinition name="mop:portletid" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
              <valueConstraints/>
           </propertyDefinition>
-          <propertyDefinition name="state" requiredType="Binary" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+          <propertyDefinition name="mop:state" requiredType="Binary" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
              <valueConstraints/>
           </propertyDefinition>
-          <propertyDefinition name="cloned" requiredType="Boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+          <propertyDefinition name="mop:cloned" requiredType="Boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
              <valueConstraints/>
           </propertyDefinition>
        </propertyDefinitions>

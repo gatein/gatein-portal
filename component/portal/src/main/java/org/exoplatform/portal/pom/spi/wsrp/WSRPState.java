@@ -36,17 +36,17 @@ public abstract class WSRPState
 {
    static final String MOP_NODE_NAME = "mop:wsrpstate";
 
-   @Property(name = "portletid")
+   @Property(name = "mop:portletid")
    public abstract String getPortletId();
 
    public abstract void setPortletId(String portletHandle);
 
-   @Property(name = "state")
+   @Property(name = "mop:state")
    public abstract InputStream getState();
 
    public abstract void setState(InputStream state);
 
-   @Property(name = "cloned")
+   @Property(name = "mop:cloned")
    public abstract boolean getCloned();
 
    public abstract void setCloned(boolean cloned);

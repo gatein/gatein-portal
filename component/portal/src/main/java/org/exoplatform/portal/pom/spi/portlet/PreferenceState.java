@@ -40,17 +40,17 @@ public abstract class PreferenceState
    @Name
    public abstract String getName();
 
-   @Property(name = "value")
+   @Property(name = "mop:value")
    public abstract List<String> getValue();
 
    public abstract void setValue(List<String> value);
 
-   @Property(name = "value")
+   @Property(name = "mop:value")
    public abstract List<String> getValues();
 
    public abstract void setValues(List<String> value);
 
-   @Property(name = "readonly")
+   @Property(name = "mop:readonly")
    public abstract boolean getReadOnly();
 
    public abstract void setReadOnly(boolean readOnly);

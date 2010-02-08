@@ -31,7 +31,7 @@ public abstract class GadgetState
 {
    static final String MOP_NODE_NAME = "mop:gadget";
 
-   @Property(name = "prefs")
+   @Property(name = "mop:prefs")
    public abstract String getUserPrefs();
 
    public abstract void setUserPrefs(String userPrefs);
