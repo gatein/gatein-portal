@@ -156,10 +156,15 @@ public class Mapper
                pageReference = getOwnerType(siteType) + "::" + site.getName() + "::" + target.getName();
             }
          }
+
+         //
+         Described described = src.adapt(Described.class);
+
+         //
          NavigationNodeData dstNode = new NavigationNodeData(
             src.getObjectId(),
             attrs.getValue(MappedAttributes.URI),
-            attrs.getValue(MappedAttributes.LABEL),
+            described.getName(),
             attrs.getValue(MappedAttributes.ICON),
             src.getName(),
             attrs.getValue(MappedAttributes.START_PUBLICATION_DATE),
@@ -204,9 +209,12 @@ public class Mapper
          }
 
          //
+         Described described = dst.adapt(Described.class);
+         described.setName(node.getLabel());
+
+         //
          Attributes attrs = dst.getAttributes();
          attrs.setValue(MappedAttributes.URI, node.getURI());
-         attrs.setValue(MappedAttributes.LABEL, node.getLabel());
          attrs.setValue(MappedAttributes.ICON, node.getIcon());
          attrs.setValue(MappedAttributes.START_PUBLICATION_DATE, node.getStartPublicationDate());
          attrs.setValue(MappedAttributes.END_PUBLICATION_DATE, node.getEndPublicationDate());

@@ -108,9 +108,10 @@ public class TestSavedPOM extends AbstractPortalTest
       assertNotNull(nodeNavigation);
       assertEquals(0, nodeNavigation.getChildren().size());
       assertEquals("node_name", nodeNavigation.getName());
+      Described nodeDescribed = nodeNavigation.adapt(Described.class);
+      assertEquals("node_label", nodeDescribed.getName());
       Attributes nodeAttrs = nodeNavigation.getAttributes();
       assertEquals("node_uri", nodeAttrs.getString("uri"));
-      assertEquals("node_label", nodeAttrs.getString("label"));
       assertEquals("node_icon", nodeAttrs.getString("icon"));
       GregorianCalendar start = new GregorianCalendar(2000, 2, 21, 1, 33, 0);
       start.setTimeZone(TimeZone.getTimeZone("UTC"));
