@@ -31,8 +31,8 @@
         <workspace name="system">
           <container class="org.exoplatform.services.jcr.impl.storage.jdbc.JDBCWorkspaceDataContainer">
             <properties>
-              <property name="source-name" value="${gatein.datasource.name}${container.name.suffix}"/>
-              <property name="dialect" value="${gatein.datasource.dialect.jcr}"/>
+              <property name="source-name" value="${gatein.jcr.datasource.name}${container.name.suffix}"/>
+              <property name="dialect" value="${gatein.jcr.datasource.dialect}"/>
               <property name="multi-db" value="false"/>
               <property name="update-storage" value="true"/>
               <property name="max-buffer-size" value="204800"/>
@@ -92,7 +92,7 @@
               <property name="jbosscache-cl-cache.jdbc.node.type" value="LONGBLOB" />
 -->
               <property name="jbosscache-cl-cache.jdbc.parent.column" value="parent" />
-              <property name="jbosscache-cl-cache.jdbc.datasource" value="${gatein.datasource.name}${container.name.suffix}" />
+              <property name="jbosscache-cl-cache.jdbc.datasource" value="${gatein.jcr.datasource.name}${container.name.suffix}" />
             </properties>
           </lock-manager>
         </workspace>
@@ -101,8 +101,8 @@
         <workspace name="portal-system">
           <container class="org.exoplatform.services.jcr.impl.storage.jdbc.JDBCWorkspaceDataContainer">
             <properties>
-              <property name="source-name" value="${gatein.datasource.name}${container.name.suffix}"/>
-              <property name="dialect" value="${gatein.datasource.dialect.jcr}"/>
+              <property name="source-name" value="${gatein.jcr.datasource.name}${container.name.suffix}"/>
+              <property name="dialect" value="${gatein.jcr.datasource.dialect}"/>
               <property name="multi-db" value="false"/>
               <property name="update-storage" value="true"/>
               <property name="max-buffer-size" value="204800"/>
@@ -162,7 +162,7 @@
               <property name="jbosscache-cl-cache.jdbc.node.type" value="LONGBLOB" />
 -->
               <property name="jbosscache-cl-cache.jdbc.parent.column" value="parent" />
-              <property name="jbosscache-cl-cache.jdbc.datasource" value="${gatein.datasource.name}${container.name.suffix}" />
+              <property name="jbosscache-cl-cache.jdbc.datasource" value="${gatein.jcr.datasource.name}${container.name.suffix}" />
             </properties>
           </lock-manager>
         </workspace>
@@ -171,8 +171,8 @@
         <workspace name="portal-work">
           <container class="org.exoplatform.services.jcr.impl.storage.jdbc.JDBCWorkspaceDataContainer">
             <properties>
-              <property name="source-name" value="${gatein.datasource.name}${container.name.suffix}"/>
-              <property name="dialect" value="${gatein.datasource.dialect.jcr}"/>
+              <property name="source-name" value="${gatein.jcr.datasource.name}${container.name.suffix}"/>
+              <property name="dialect" value="${gatein.jcr.datasource.dialect}"/>
               <property name="multi-db" value="false"/>
               <property name="update-storage" value="true"/>
               <property name="max-buffer-size" value="204800"/>
@@ -232,7 +232,7 @@
              <property name="jbosscache-cl-cache.jdbc.node.type" value="LONGBLOB" />
 -->
              <property name="jbosscache-cl-cache.jdbc.parent.column" value="parent" />
-             <property name="jbosscache-cl-cache.jdbc.datasource" value="${gatein.datasource.name}${container.name.suffix}" />
+             <property name="jbosscache-cl-cache.jdbc.datasource" value="${gatein.jcr.datasource.name}${container.name.suffix}" />
            </properties>
          </lock-manager>
        </workspace>
@@ -241,8 +241,8 @@
        <workspace name="wsrp-system">
          <container class="org.exoplatform.services.jcr.impl.storage.jdbc.JDBCWorkspaceDataContainer">
            <properties>
-             <property name="source-name" value="${gatein.datasource.name}${container.name.suffix}"/>
-               <property name="dialect" value="${gatein.datasource.dialect.jcr}"/>
+             <property name="source-name" value="${gatein.jcr.datasource.name}${container.name.suffix}"/>
+               <property name="dialect" value="${gatein.jcr.datasource.dialect}"/>
                <property name="multi-db" value="false"/>
                <property name="update-storage" value="true"/>
                <property name="max-buffer-size" value="204800"/>
@@ -303,7 +303,7 @@
                <property name="jbosscache-cl-cache.jdbc.node.type" value="LONGBLOB" />
 -->
                <property name="jbosscache-cl-cache.jdbc.parent.column" value="parent" />
-               <property name="jbosscache-cl-cache.jdbc.datasource" value="${gatein.datasource.name}${container.name.suffix}" />
+               <property name="jbosscache-cl-cache.jdbc.datasource" value="${gatein.jcr.datasource.name}${container.name.suffix}" />
              </properties>
            </lock-manager>
          </workspace>
