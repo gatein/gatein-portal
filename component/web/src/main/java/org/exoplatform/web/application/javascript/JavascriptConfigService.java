@@ -187,18 +187,20 @@ public class JavascriptConfigService implements Startable
       availableScriptsPaths_.remove(contextPath + key.getScriptPath());
       object_view_of_merged_JS.remove(contextPath);
 
-      //Minh Hoang TO: Use 2 loops to avoid concurrent exception on fail-fast iterator
-      List<Entry<JavascriptKey, ServletContext>> entries_to_remove = new ArrayList<Entry<JavascriptKey, ServletContext>>();
-      
-      //TODO: We sould not use directly java.util.Map.Entry here, as it is impossible to define an array of java.util.Map.Entry
+      // Minh Hoang TO: Use 2 loops to avoid concurrent exception on fail-fast
+      // iterator
+      List<Entry<JavascriptKey, ServletContext>> entries_to_remove =
+         new ArrayList<Entry<JavascriptKey, ServletContext>>();
+
+      // Enlist entries to be removed
       for (Entry<JavascriptKey, ServletContext> entry : availableScriptsKey_)
       {
          if (key.equals(entry.getKey())
             && scontext.getServletContextName().equals(entry.getValue().getServletContextName()))
             entries_to_remove.add(entry);
       }
-      
-      //Remove the entries
+
+      // Remove the entries
       for (Entry<JavascriptKey, ServletContext> entry_to_remove : entries_to_remove)
       {
          availableScriptsKey_.remove(entry_to_remove);
