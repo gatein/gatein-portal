@@ -30,8 +30,6 @@ import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.webui.application.UIGadget;
-import org.exoplatform.portal.webui.application.UIPortlet;
-import org.exoplatform.portal.webui.navigation.PageNavigationUtils;
 import org.exoplatform.portal.webui.portal.PageNodeEvent;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.PortalDataMapper;
@@ -44,7 +42,6 @@ import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
-import javax.portlet.WindowState;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -125,7 +122,7 @@ public class UIPageActionListener
             UIPortal cachedUIPortal = uiPortalApp.getCachedUIPortal(newNavType, newNavId);
             if (cachedUIPortal != null)
             {
-               System.out.println("Found UIPortal with OWNERTYPE: " + newNavType + " OWNERID " + newNavId);
+//               System.out.println("Found UIPortal with OWNERTYPE: " + newNavType + " OWNERID " + newNavId);
                cachedUIPortal.setSelectedNode(targetPageNode);
                cachedUIPortal.setSelectedPath(targetedPathNodes);
                uiPortalApp.setShowedUIPortal(cachedUIPortal);
@@ -298,7 +295,7 @@ public class UIPageActionListener
          UIPortal uiPortal = uiPortalApp.createUIComponent(UIPortal.class, null, null);
          //Reset selected navigation on userPortalConfig
          userPortalConfig.setSelectedNavigation(newPageNav);
-         System.out.println("Build new UIPortal with OWNERTYPE: " + newPageNav.getOwnerType() + " OWNERID: " + newPageNav.getOwnerId());
+//         System.out.println("Build new UIPortal with OWNERTYPE: " + newPageNav.getOwnerType() + " OWNERID: " + newPageNav.getOwnerId());
          PortalDataMapper.toUIPortal(uiPortal, userPortalConfig);
          return uiPortal;
       }
