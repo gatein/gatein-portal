@@ -16,25 +16,20 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.exoplatform.application.gadget.impl;
 
-import org.chromattic.api.annotations.FormattedBy;
-import org.chromattic.api.annotations.PrimaryType;
-import org.chromattic.api.annotations.Property;
-import org.exoplatform.application.AppFormatter;
+package org.exoplatform.application;
+
+import org.chromattic.ext.format.AbstractEncodingObjectFormatter;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-@PrimaryType(name = "app:remotegadgetdata")
-@FormattedBy(AppFormatter.class)
-public abstract class RemoteGadgetData extends GadgetData
+public class AppFormatter extends AbstractEncodingObjectFormatter
 {
 
-   @Property(name = "app:url")
-   public abstract String getURL();
-
-   public abstract void setURL(String url);
-
+   public String getPrefix()
+   {
+      return "app:";
+   }
 }

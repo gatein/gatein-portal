@@ -91,10 +91,10 @@ public class ApplicationRegistryServiceImpl implements ApplicationRegistryServic
    public ContentRegistry getContentRegistry()
    {
       ChromatticSession session = lifeCycle.getChromattic().openSession();
-      ContentRegistry registry = session.findByPath(ContentRegistry.class, "contents");
+      ContentRegistry registry = session.findByPath(ContentRegistry.class, "app:applications");
       if (registry == null)
       {
-         registry = session.insert(ContentRegistry.class, "contents");
+         registry = session.insert(ContentRegistry.class, "app:applications");
       }
       return registry;
    }

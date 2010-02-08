@@ -18,42 +18,39 @@
  */
 package org.exoplatform.application.gadget.impl;
 
-import org.chromattic.api.annotations.Create;
-import org.chromattic.api.annotations.MappedBy;
-import org.chromattic.api.annotations.Name;
+import org.chromattic.api.annotations.*;
 import org.chromattic.api.annotations.PrimaryType;
-import org.chromattic.api.annotations.OneToOne;
-import org.chromattic.api.annotations.PrimaryType;
-import org.chromattic.api.annotations.Property;
 import org.chromattic.ext.ntdef.NTFolder;
+import org.exoplatform.application.AppFormatter;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
 @PrimaryType(name = "app:gadgetdefinition")
+@FormattedBy(AppFormatter.class)
 public abstract class GadgetDefinition
 {
 
    @Name
    public abstract String getName();
 
-   @Property(name = "title")
+   @Property(name = "app:title")
    public abstract String getTitle();
 
    public abstract void setTitle(String title);
 
-   @Property(name = "description")
+   @Property(name = "app:description")
    public abstract String getDescription();
 
    public abstract void setDescription(String description);
 
-   @Property(name = "thumbnail")
+   @Property(name = "app:thumbnail")
    public abstract String getThumbnail();
 
    public abstract void setThumbnail(String thumbnail);
 
-   @Property(name = "referenceurl")
+   @Property(name = "app:referenceurl")
    public abstract String getReferenceURL();
 
    public abstract void setReferenceURL(String referenceURL);

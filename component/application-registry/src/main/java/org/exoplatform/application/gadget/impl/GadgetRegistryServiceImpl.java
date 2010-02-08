@@ -110,10 +110,10 @@ public class GadgetRegistryServiceImpl implements GadgetRegistryService
    {
       Chromattic chromattic = chromatticLifeCycle.getChromattic();
       ChromatticSession session = chromattic.openSession();
-      GadgetRegistry registry = session.findByPath(GadgetRegistry.class, "gadgets");
+      GadgetRegistry registry = session.findByPath(GadgetRegistry.class, "app:gadgets");
       if (registry == null)
       {
-         registry = session.insert(GadgetRegistry.class, "gadgets");
+         registry = session.insert(GadgetRegistry.class, "app:gadgets");
       }
       return registry;
    }
@@ -238,7 +238,7 @@ public class GadgetRegistryServiceImpl implements GadgetRegistryService
       if (data instanceof LocalGadgetData)
       {
          LocalGadgetData localData = (LocalGadgetData)data;
-         url = "jcr/repository/portal-system/gadgets/" + def.getName() + "/data/resources/" + localData.getFileName();
+         url = "jcr/repository/portal-system/production/app:gadgets/app:" + def.getName() + "/app:data/app:resources/" + localData.getFileName();
       }
       else
       {

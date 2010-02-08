@@ -24,6 +24,7 @@ import org.chromattic.api.annotations.Name;
 import org.chromattic.api.annotations.PrimaryType;
 import org.chromattic.api.annotations.OneToMany;
 import org.chromattic.api.annotations.Property;
+import org.exoplatform.application.AppFormatter;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.gatein.mop.api.content.ContentType;
 import org.gatein.mop.api.content.Customization;
@@ -38,8 +39,8 @@ import java.util.Map;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-@PrimaryType(name = "app:contentcategory")
-@FormattedBy(MOPFormatter.class)
+@PrimaryType(name = "app:category")
+@FormattedBy(AppFormatter.class)
 public abstract class CategoryDefinition
 {
 
@@ -49,27 +50,27 @@ public abstract class CategoryDefinition
    @Name
    public abstract String getName();
 
-   @Property(name = "displayname")
+   @Property(name = "app:displayname")
    public abstract String getDisplayName();
 
    public abstract void setDisplayName(String displayName);
 
-   @Property(name = "description")
+   @Property(name = "app:description")
    public abstract String getDescription();
 
    public abstract void setDescription(String description);
 
-   @Property(name = "creationdate")
+   @Property(name = "app:creationdate")
    public abstract Date getCreationDate();
 
    public abstract void setCreationDate(Date date);
 
-   @Property(name = "lastmodificationdate")
+   @Property(name = "app:lastmodificationdate")
    public abstract Date getLastModificationDate();
 
    public abstract void setLastModificationDate(Date date);
 
-   @Property(name = "accesspermissions")
+   @Property(name = "app:accesspermissions")
    public abstract List<String> getAccessPermissions();
 
    public abstract void setAccessPermissions(List<String> accessPermissions);

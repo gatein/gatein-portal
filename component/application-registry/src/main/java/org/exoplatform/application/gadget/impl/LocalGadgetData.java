@@ -21,15 +21,12 @@ package org.exoplatform.application.gadget.impl;
 import org.apache.shindig.common.uri.Uri;
 import org.apache.shindig.gadgets.spec.GadgetSpec;
 import org.apache.shindig.gadgets.spec.ModulePrefs;
-import org.chromattic.api.annotations.ManyToOne;
-import org.chromattic.api.annotations.MappedBy;
+import org.chromattic.api.annotations.*;
 import org.chromattic.api.annotations.PrimaryType;
-import org.chromattic.api.annotations.OneToOne;
-import org.chromattic.api.annotations.PrimaryType;
-import org.chromattic.api.annotations.Property;
 import org.chromattic.ext.ntdef.NTFile;
 import org.chromattic.ext.ntdef.Resource;
 import org.chromattic.ext.ntdef.NTFolder;
+import org.exoplatform.application.AppFormatter;
 import org.exoplatform.application.gadget.EncodingDetector;
 
 
@@ -42,6 +39,7 @@ import java.util.Date;
  * @version $Revision$
  */
 @PrimaryType(name = "app:localgadgetdata")
+@FormattedBy(AppFormatter.class)
 public abstract class LocalGadgetData extends GadgetData
 {
 
@@ -51,7 +49,7 @@ public abstract class LocalGadgetData extends GadgetData
    @ManyToOne
    public abstract GadgetDefinition getDefinition();
 
-   @Property(name = "filename")
+   @Property(name = "app:filename")
    public abstract String getFileName();
 
    public abstract void setFileName(String fileName);
