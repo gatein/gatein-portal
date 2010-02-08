@@ -111,7 +111,7 @@ function getModule(params)
       addDependency(new Project("org.chromattic", "chromattic.spi", "jar", chromatticVersion)).
       addDependency(new Project("org.chromattic", "chromattic.core", "jar", chromatticVersion)).
       addDependency(new Project("org.chromattic", "chromattic.apt", "jar", chromatticVersion)).
-      addDependency(new Project("org.chromattic", "chromattic.ntdef", "jar", chromatticVersion)).
+      addDependency(new Project("org.chromattic", "chromattic.ext", "jar", chromatticVersion)).
       addDependency(new Project("org.reflext", "reflext.api", "jar", reflectVersion)).
       addDependency(new Project("org.reflext", "reflext.core", "jar", reflectVersion)).
       addDependency(new Project("org.reflext", "reflext.spi", "jar", reflectVersion)).

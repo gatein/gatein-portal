@@ -20,8 +20,7 @@ package org.exoplatform.application.gadget.impl;
 
 import org.chromattic.api.Chromattic;
 import org.chromattic.api.ChromatticSession;
-import org.chromattic.ntdef.NTFile;
-import org.chromattic.ntdef.Resource;
+import org.chromattic.ext.ntdef.Resource;
 import org.exoplatform.application.gadget.Gadget;
 import org.exoplatform.application.gadget.GadgetRegistryService;
 import org.exoplatform.application.registry.impl.ApplicationRegistryChromatticLifeCycle;

@@ -26,21 +26,24 @@ package org.exoplatform.web.application.javascript;
 public class JavascriptKey
 {
 
+   /** . */
    private final String module;
 
+   /** . */
    private final String scriptPath;
 
-   private final int priority;
+   /** . */
+   private final String contextPath;
 
-   public JavascriptKey(String module, String scriptPath, Integer priority) throws IllegalArgumentException
+   public JavascriptKey(String module, String scriptPath, String contextPath) throws IllegalArgumentException
    {
-      if (module == null || scriptPath == null)
+      if (module == null || scriptPath == null || contextPath == null)
       {
          throw new IllegalArgumentException("Module and scriptPath are mandatory for JavascriptKey");
       }
       this.module = module;
       this.scriptPath = scriptPath;
-      this.priority = (priority != null ? priority : -1);
+      this.contextPath = contextPath;
    }
 
    @Override
@@ -53,7 +56,7 @@ public class JavascriptKey
       if (obj instanceof JavascriptKey)
       {
          JavascriptKey that = (JavascriptKey)obj;
-         return module.equals(that.module) && scriptPath.equals(that.scriptPath);
+         return module.equals(that.module) && scriptPath.equals(that.scriptPath) && contextPath.equals(that.contextPath);
       }
       return false;
    }
@@ -68,8 +71,8 @@ public class JavascriptKey
       return scriptPath;
    }
 
-   public int getPriority()
+   public String getContextPath()
    {
-      return priority;
+      return contextPath;
    }
 }

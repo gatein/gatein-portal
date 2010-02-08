@@ -50,7 +50,7 @@
     
     <dependency>
        <groupId>org.chromattic</groupId>
-       <artifactId>chromattic.ntdef</artifactId>
+       <artifactId>chromattic.ext</artifactId>
     </dependency>
 
     <dependency>

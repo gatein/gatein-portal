@@ -545,9 +545,9 @@
           <value>org.exoplatform.application.gadget.impl.GadgetDefinition</value>
           <value>org.exoplatform.application.gadget.impl.LocalGadgetData</value>
           <value>org.exoplatform.application.gadget.impl.RemoteGadgetData</value>
-          <value>org.chromattic.ntdef.NTFile</value>
-          <value>org.chromattic.ntdef.NTFolder</value>
-          <value>org.chromattic.ntdef.NTResource</value>
+          <value>org.chromattic.ext.ntdef.NTFile</value>
+          <value>org.chromattic.ext.ntdef.NTFolder</value>
+          <value>org.chromattic.ext.ntdef.NTResource</value>
         </values-param>
       </init-params>
     </component-plugin>

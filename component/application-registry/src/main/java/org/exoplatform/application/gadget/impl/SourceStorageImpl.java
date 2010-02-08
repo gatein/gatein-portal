@@ -21,7 +21,7 @@ package org.exoplatform.application.gadget.impl;
 import org.apache.shindig.common.uri.Uri;
 import org.apache.shindig.gadgets.spec.GadgetSpec;
 import org.apache.shindig.gadgets.spec.ModulePrefs;
-import org.chromattic.ntdef.Resource;
+import org.chromattic.ext.ntdef.Resource;
 import org.exoplatform.application.gadget.Gadget;
 import org.exoplatform.application.gadget.GadgetRegistryService;
 import org.exoplatform.application.gadget.Source;

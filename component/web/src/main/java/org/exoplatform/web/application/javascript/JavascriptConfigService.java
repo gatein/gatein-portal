@@ -27,16 +27,7 @@ import org.picocontainer.Startable;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.AbstractMap.SimpleEntry;
-import java.util.Map.Entry;
+import java.util.*;
 
 import javax.servlet.ServletContext;
 
@@ -47,7 +38,7 @@ public class JavascriptConfigService implements Startable
 
    private Collection<String> availableScriptsPaths_;
 
-   private List<Entry<JavascriptKey, ServletContext>> availableScriptsKey_;
+   private List<Javascript> availableScriptsKey_;
 
    private String mergedJavascript = "";
 
@@ -67,7 +58,7 @@ public class JavascriptConfigService implements Startable
    {
       availableScripts_ = new ArrayList<String>();
       availableScriptsPaths_ = new ArrayList<String>();
-      availableScriptsKey_ = new ArrayList<Entry<JavascriptKey, ServletContext>>();
+      availableScriptsKey_ = new ArrayList<Javascript>();
       extendedJavascripts = new HashMap<String, String>();
       deployer = new JavascriptDeployer(context.getPortalContainerName(), this);
       removal = new JavascriptRemoval(context.getPortalContainerName(), this);
@@ -90,7 +81,7 @@ public class JavascriptConfigService implements Startable
       return availableScriptsPaths_;
    }
 
-   public void addExtendedJavascript(String module, String scriptPath, ServletContext scontext, String scriptData)
+   public synchronized void addExtendedJavascript(String module, String scriptPath, ServletContext scontext, String scriptData)
    {
       String servletContextName = scontext.getServletContextName();
       String path = "/" + servletContextName + scriptPath;
@@ -100,27 +91,23 @@ public class JavascriptConfigService implements Startable
    }
 
    @SuppressWarnings("unchecked")
-   public void addJavascripts(List<JavascriptKey> jsKeys, ServletContext scontext)
+   public synchronized void addJavascripts(List<Javascript> jsKeys)
    {
-      for (JavascriptKey key : jsKeys)
-      {
-         availableScriptsKey_.add(new SimpleEntry(key, scontext));
-      }
+      availableScriptsKey_.addAll(jsKeys);
 
-      Collections.sort(availableScriptsKey_, new Comparator<Entry<JavascriptKey, ServletContext>>()
+
+      Collections.sort(availableScriptsKey_, new Comparator<Javascript>()
       {
-         public int compare(Entry<JavascriptKey, ServletContext> e1, Entry<JavascriptKey, ServletContext> e2)
+         public int compare(Javascript o1, Javascript o2)
          {
-            JavascriptKey js1 = e1.getKey();
-            JavascriptKey js2 = e2.getKey();
-            if (js1.getPriority() == js2.getPriority())
-               return js1.getModule().compareTo(js2.getModule());
-            else if (js1.getPriority() < 0)
+            if (o1.getPriority() == o2.getPriority())
+               return o1.getKey().getModule().compareTo(o2.getKey().getModule());
+            else if (o1.getPriority() < 0)
                return 1;
-            else if (js2.getPriority() < 0)
+            else if (o2.getPriority() < 0)
                return -1;
             else
-               return js1.getPriority() - js2.getPriority();
+               return o1.getPriority() - o2.getPriority();
          }
       });
 
@@ -128,30 +115,30 @@ public class JavascriptConfigService implements Startable
       availableScripts_.clear();
       availableScriptsPaths_.clear();
       object_view_of_merged_JS.clear();
-      for (Entry<JavascriptKey, ServletContext> e : availableScriptsKey_)
-      {
-         addJavascript(e.getKey().getModule(), e.getKey().getScriptPath(), e.getValue());
+
+      //
+      for (Javascript script : availableScriptsKey_) {
+         addJavascript(script);
       }
    }
 
-   private void addJavascript(String module, String scriptPath, ServletContext scontext)
+   private void addJavascript(Javascript javascript)
    {
-      String servletContextName = scontext.getServletContextName();
-      availableScripts_.add(module);
-      availableScriptsPaths_.add("/" + servletContextName + scriptPath);
+      availableScripts_.add(javascript.getKey().getModule());
+      availableScriptsPaths_.add(javascript.getPath());
 
-      List<String> mergedJS_list = object_view_of_merged_JS.get("/" + servletContextName);
+      List<String> mergedJS_list = object_view_of_merged_JS.get(javascript.getKey().getContextPath());
       if (mergedJS_list == null)
       {
          mergedJS_list = new ArrayList<String>();
-         object_view_of_merged_JS.put("/" + servletContextName, mergedJS_list);
+         object_view_of_merged_JS.put(javascript.getKey().getContextPath(), mergedJS_list);
       }
 
       StringBuffer sB = new StringBuffer();
       String line = "";
       try
       {
-         BufferedReader reader = new BufferedReader(new InputStreamReader(scontext.getResourceAsStream(scriptPath)));
+         BufferedReader reader = javascript.getReader();
          try
          {
             while ((line = reader.readLine()) != null)
@@ -180,30 +167,31 @@ public class JavascriptConfigService implements Startable
       mergedJavascript = mergedJavascript.concat(sB.toString());
    }
 
-   public void removeJavascript(JavascriptKey key, ServletContext scontext)
+   public synchronized void remove(ServletContext context)
    {
-      String contextPath = scontext.getContextPath();
-      availableScripts_.remove(key.getModule());
-      availableScriptsPaths_.remove(contextPath + key.getScriptPath());
-      object_view_of_merged_JS.remove(contextPath);
+      // We clone to avoid concurrent modification exception
+      for (Javascript script : new ArrayList<Javascript>(availableScriptsKey_))
+      {
+         if (script.getContext().getContextPath().equals(context.getContextPath())) {
+            removeJavascript(script);
+         }
+      }
+   }
 
-      // Minh Hoang TO: Use 2 loops to avoid concurrent exception on fail-fast
-      // iterator
-      List<Entry<JavascriptKey, ServletContext>> entries_to_remove =
-         new ArrayList<Entry<JavascriptKey, ServletContext>>();
+   public synchronized void removeJavascript(Javascript script)
+   {
+      availableScripts_.remove(script.getKey().getModule());
+      availableScriptsPaths_.remove(script.getPath());
+      object_view_of_merged_JS.remove(script.getKey().getContextPath());
 
       // Enlist entries to be removed
-      for (Entry<JavascriptKey, ServletContext> entry : availableScriptsKey_)
+      for (Iterator<Javascript> i = availableScriptsKey_.iterator();i.hasNext();)
       {
-         if (key.equals(entry.getKey())
-            && scontext.getServletContextName().equals(entry.getValue().getServletContextName()))
-            entries_to_remove.add(entry);
-      }
-
-      // Remove the entries
-      for (Entry<JavascriptKey, ServletContext> entry_to_remove : entries_to_remove)
-      {
-         availableScriptsKey_.remove(entry_to_remove);
+         Javascript _script = i.next();
+         if (script.getKey().equals(_script.getKey()))
+         {
+            i.remove();
+         }
       }
    }
 

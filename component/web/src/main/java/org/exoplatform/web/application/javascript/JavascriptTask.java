@@ -31,21 +31,20 @@ import javax.servlet.ServletContext;
 public class JavascriptTask
 {
 
-   private List<JavascriptKey> jsKeys;
+   private List<Javascript> scripts;
 
    public JavascriptTask()
    {
-      jsKeys = new ArrayList<JavascriptKey>();
+      scripts = new ArrayList<Javascript>();
    }
 
    public void execute(JavascriptConfigService service, ServletContext scontext)
    {
-      service.addJavascripts(jsKeys, scontext);
-      JavascriptDependentManager.addJavascriptDependent(scontext.getContextPath(), jsKeys);
+      service.addJavascripts(scripts);
    }
 
-   public void addJSKey(String moduleName, String scriptPath, Integer priority)
+   public void addScript(Javascript script)
    {
-      jsKeys.add(new JavascriptKey(moduleName, scriptPath, priority));
+      scripts.add(script);
    }
 }

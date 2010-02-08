@@ -25,7 +25,7 @@ import org.chromattic.api.annotations.PrimaryType;
 import org.chromattic.api.annotations.OneToOne;
 import org.chromattic.api.annotations.PrimaryType;
 import org.chromattic.api.annotations.Property;
-import org.chromattic.ntdef.NTFolder;
+import org.chromattic.ext.ntdef.NTFolder;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>

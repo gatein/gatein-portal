@@ -22,10 +22,11 @@ import org.chromattic.api.Chromattic;
 import org.chromattic.api.ChromatticBuilder;
 import org.exoplatform.container.component.BaseComponentPlugin;
 import org.exoplatform.container.xml.InitParams;
+import org.exoplatform.container.xml.PropertiesParam;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 
-import java.util.List;
+import java.util.*;
 
 /**
  * <p>The chromattic life cycle objets is a plugin that allow to bootstrap a chromattic builder and make
@@ -56,6 +57,23 @@ public class ChromatticLifeCycle extends BaseComponentPlugin
 {
 
    /** . */
+   private static final Map<String, ChromatticBuilder.Option<?>> RECOGNIZED_OPTIONS;
+
+   static
+   {
+      Map<String, ChromatticBuilder.Option<?>> options = new HashMap<String, ChromatticBuilder.Option<?>>();
+      for (ChromatticBuilder.Option<?> option : new ChromatticBuilder.Option<?>[]{ChromatticBuilder.JCR_OPTIMIZE_ENABLED,
+         ChromatticBuilder.JCR_OPTIMIZE_HAS_NODE_ENABLED,
+         ChromatticBuilder.JCR_OPTIMIZE_HAS_PROPERTY_ENABLED,
+         ChromatticBuilder.OBJECT_FORMATTER_CLASSNAME,
+         ChromatticBuilder.ROOT_NODE_PATH})
+      {
+         options.put(option.getName(), option);
+      }
+      RECOGNIZED_OPTIONS = options;
+   }
+
+   /** . */
    private final String domainName;
 
    /** . */
@@ -79,11 +97,22 @@ public class ChromatticLifeCycle extends BaseComponentPlugin
    /** . */
    final Logger log = LoggerFactory.getLogger(ChromatticLifeCycle.class);
 
+   /** . */
+   private final Map<String, String> optionMap;
+
    public ChromatticLifeCycle(InitParams params)
    {
+      Map<String, String> options = new HashMap<String, String>();
+      PropertiesParam pp = params.getPropertiesParam("options");
+      if (pp != null)
+      {
+         options.putAll(pp.getProperties());
+      }
+
       this.domainName = params.getValueParam("domain-name").getValue();
       this.workspaceName = params.getValueParam("workspace-name").getValue();
       this.entityClassNames = params.getValuesParam("entities").getValues();
+      this.optionMap = options;
    }
 
    public String getDomainName()
@@ -290,8 +319,18 @@ public class ChromatticLifeCycle extends BaseComponentPlugin
       //
       try
       {
+         for (Map.Entry<String, String> optionEntry : optionMap.entrySet())
+         {
+            ChromatticBuilder.Option<?> option = RECOGNIZED_OPTIONS.get(optionEntry.getKey());
+            if (option != null)
+            {
+               log.debug("Setting Chromattic option " + optionEntry);
+               builder.setOptionStringValue(option, optionEntry.getValue());
+            }
+         }
+
          // Set it now, so we are sure that it will be the correct life cycle
-         builder.setOption(ChromatticBuilder.SESSION_LIFECYCLE_CLASSNAME, PortalSessionLifeCycle.class.getName());
+         builder.setOptionValue(ChromatticBuilder.SESSION_LIFECYCLE_CLASSNAME, PortalSessionLifeCycle.class.getName());
 
          //
          log.debug("Building Chromattic " + domainName);

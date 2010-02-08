@@ -56,8 +56,8 @@ public class JCRPersister
    public void initializeBuilderFor(List<Class> mappingClasses) throws Exception
    {
       ChromatticBuilder builder = ChromatticBuilder.create();
-      builder.setOption(ChromatticBuilder.INSTRUMENTOR_CLASSNAME, "org.chromattic.apt.InstrumentorImpl");
-      builder.setOption(ChromatticBuilder.SESSION_LIFECYCLE_CLASSNAME, WSRPSessionLifeCycle.class.getName());
+      builder.setOptionValue(ChromatticBuilder.INSTRUMENTOR_CLASSNAME, "org.chromattic.apt.InstrumentorImpl");
+      builder.setOptionValue(ChromatticBuilder.SESSION_LIFECYCLE_CLASSNAME, WSRPSessionLifeCycle.class.getName());
 
       for (Class mappingClass : mappingClasses)
       {

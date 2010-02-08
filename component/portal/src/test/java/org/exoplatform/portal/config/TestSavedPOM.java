@@ -20,6 +20,7 @@
 package org.exoplatform.portal.config;
 
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.portal.mop.ProtectedResource;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.test.BasicTestCase;
@@ -34,10 +35,7 @@ import org.gatein.mop.api.workspace.ui.UIComponent;
 import org.gatein.mop.api.workspace.ui.UIContainer;
 import org.gatein.mop.api.workspace.ui.UIWindow;
 
-import java.util.Collection;
-import java.util.GregorianCalendar;
-import java.util.Iterator;
-import java.util.TimeZone;
+import java.util.*;
 
 /**
  * Created by The eXo Platform SARL Author : Tung Pham thanhtungty@gmail.com Nov
@@ -135,11 +133,16 @@ public class TestSavedPOM extends AbstractPortalTest
       Site portal = session.getWorkspace().getSite(ObjectType.PORTAL_SITE, "test");
       assertNotNull(portal);
 
+      //
+      assertTrue(portal.isAdapted(ProtectedResource.class));
+      ProtectedResource pr = portal.adapt(ProtectedResource.class);
+      assertEquals(Arrays.asList("test_access_permissions"), pr.getAccessPermissions());
+      assertEquals("test_edit_permission", pr.getEditPermission());
+
+      //
       assertEquals("test", portal.getName());
       Attributes attrs = portal.getAttributes();
       assertEquals("en", attrs.getString("locale"));
-      assertEquals("test_access_permissions", attrs.getString("access-permissions"));
-      assertEquals("test_edit_permission", attrs.getString("edit-permission"));
       assertEquals("test_skin", attrs.getString("skin"));
       assertEquals("test_title", attrs.getString("title"));
       assertEquals("test_creator", attrs.getString("creator"));
@@ -170,11 +173,15 @@ public class TestSavedPOM extends AbstractPortalTest
       assertNotNull(testPage);
 
       //
+      assertTrue(testPage.isAdapted(ProtectedResource.class));
+      ProtectedResource pr = testPage.adapt(ProtectedResource.class);
+      assertEquals(Arrays.asList("test_access_permissions"), pr.getAccessPermissions());
+      assertEquals("test_edit_permission", pr.getEditPermission());
+
+      //
       Attributes testPageAttrs = testPage.getAttributes();
       assertEquals("test_title", testPageAttrs.getString("title"));
       assertEquals("test_factory_id", testPageAttrs.getString("factory-id"));
-      assertEquals("test_access_permissions", testPageAttrs.getString("access-permissions"));
-      assertEquals("test_edit_permission", testPageAttrs.getString("edit-permission"));
       assertEquals(true, (boolean)testPageAttrs.getBoolean("show-max-window"));
       assertEquals("test_creator", testPageAttrs.getString("creator"));
       assertEquals("test_modifier", testPageAttrs.getString("modifier"));

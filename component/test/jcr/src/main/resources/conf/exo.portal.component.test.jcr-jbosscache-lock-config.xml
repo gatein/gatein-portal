@@ -16,29 +16,8 @@
   ~ Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   ~ 02110-1301 USA, or see the FSF site: http://www.fsf.org.
   -->
-<jbosscache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="urn:jboss:jbosscache-core:config:3.2">
+<jbosscache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="urn:jboss:jbosscache-core:config:3.1">
 
 	<locking useLockStriping="false" concurrencyLevel="50000" lockParentForChildInsertRemove="false" lockAcquisitionTimeout="20000" />
 
-<!--
-	<loaders passivation="false" shared="true">
-		<preload>
-			<node fqn="/" />
-		</preload>
-		<loader class="org.jboss.cache.loader.JDBCCacheLoader" async="false" fetchPersistentState="true" ignoreModifications="false" purgeOnStartup="false">
-			<properties>
-				cache.jdbc.table.name=jcr_lock_portal_work
-				cache.jdbc.table.create=true
-				cache.jdbc.table.drop=false
-				cache.jdbc.table.primarykey=exojcr_pk
-				cache.jdbc.fqn.column=fqn
-				cache.jdbc.fqn.type=VARCHAR(512)
-				cache.jdbc.node.column=node
-				cache.jdbc.node.type=OBJECT
-				cache.jdbc.parent.column=parent
-				cache.jdbc.datasource=jdbcexo_portal
-       </properties>
-		</loader>
-	</loaders>
--->
 </jbosscache>

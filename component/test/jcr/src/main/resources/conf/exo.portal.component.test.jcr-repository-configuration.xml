@@ -66,7 +66,7 @@
           <lock-manager class="org.exoplatform.services.jcr.impl.core.lock.jbosscache.CacheableLockManager">
             <properties>
               <property name="time-out" value="15m" />
-              <property name="jbosscache-configuration" value="conf/exo.portal.component.test.jcr-jbosscache-lock-config-system.xml" />
+              <property name="jbosscache-configuration" value="conf/exo.portal.component.test.jcr-jbosscache-lock-config.xml" />
             </properties>
           </lock-manager>
         </workspace>
@@ -112,7 +112,7 @@
           <lock-manager class="org.exoplatform.services.jcr.impl.core.lock.jbosscache.CacheableLockManager">
             <properties>
               <property name="time-out" value="15m" />
-              <property name="jbosscache-configuration" value="conf/exo.portal.component.test.jcr-jbosscache-lock-config-portal-test.xml" />
+              <property name="jbosscache-configuration" value="conf/exo.portal.component.test.jcr-jbosscache-lock-config.xml" />
             </properties>
           </lock-manager>
         </workspace>

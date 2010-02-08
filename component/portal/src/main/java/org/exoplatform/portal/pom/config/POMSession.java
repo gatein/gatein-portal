@@ -343,7 +343,7 @@ public class POMSession
          throw new Error(e);
       }
       Class<O> mappedClass = (Class<O>)mapping.get(type);
-      return session.createQueryBuilder().from(mappedClass).<O> where(statement).get().objects();
+      return session.createQueryBuilder(mappedClass).where(statement).get().objects();
    }
 
    private final SynchronizationListener listener = new SynchronizationListener()

@@ -56,7 +56,7 @@ class MappedAttributes
    public static final Key<String> ACCESS_PERMISSIONS = Key.create("access-permissions", ValueType.STRING);
 
    /** . */
-   public static final Key<String> EDIT_PERMISSION = Key.create("edit-permission", ValueType.STRING);
+   public static final Key<String> EDIT_PERMISSION = Key.create("edit-permissions", ValueType.STRING);
 
    /** . */
    public static final Key<String> CREATOR = Key.create("creator", ValueType.STRING);

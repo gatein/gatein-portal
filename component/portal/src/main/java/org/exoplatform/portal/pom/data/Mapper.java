@@ -24,6 +24,7 @@ import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.model.ApplicationState;
 import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.config.model.CloneApplicationState;
+import org.exoplatform.portal.mop.ProtectedResource;
 import org.exoplatform.portal.pom.data.ModelChange;
 import org.exoplatform.portal.config.model.PersistentApplicationState;
 import org.exoplatform.portal.config.model.PortalConfig;
@@ -45,6 +46,7 @@ import org.gatein.mop.api.workspace.ui.UIBody;
 import org.gatein.mop.api.workspace.ui.UIComponent;
 import org.gatein.mop.api.workspace.ui.UIContainer;
 import org.gatein.mop.api.workspace.ui.UIWindow;
+import org.gatein.mop.core.util.Tools;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -70,19 +72,34 @@ public class Mapper
 {
 
    /** . */
+   private static final Set<String> propertiesBlackList = Tools.set(
+      "jcr:uuid",
+      "jcr:primaryType",
+      MappedAttributes.ACCESS_PERMISSIONS.getName(),
+      MappedAttributes.EDIT_PERMISSION.getName());
+
+   /** . */
    private static final Set<String> portalPropertiesBlackList =
-      new HashSet<String>(Arrays.asList("jcr:uuid", "jcr:primaryType", MappedAttributes.LOCALE.getName(),
-         MappedAttributes.ACCESS_PERMISSIONS.getName(), MappedAttributes.EDIT_PERMISSION.getName(),
-         MappedAttributes.SKIN.getName(), MappedAttributes.TITLE.getName(), MappedAttributes.CREATOR.getName(),
-         MappedAttributes.MODIFIER.getName()));
+      Tools.set(
+         MappedAttributes.LOCALE.getName(),
+         MappedAttributes.SKIN.getName(),
+         MappedAttributes.TITLE.getName(),
+         MappedAttributes.CREATOR.getName(),
+         MappedAttributes.MODIFIER.getName());
 
    /** . */
    private static final Set<String> windowPropertiesBlackList =
-      new HashSet<String>(Arrays.asList("jcr:uuid", "jcr:primaryType", MappedAttributes.TYPE.getName(),
-         MappedAttributes.THEME.getName(), MappedAttributes.TITLE.getName(), MappedAttributes.ACCESS_PERMISSIONS
-            .getName(), MappedAttributes.SHOW_INFO_BAR.getName(), MappedAttributes.SHOW_STATE.getName(),
-         MappedAttributes.SHOW_MODE.getName(), MappedAttributes.DESCRIPTION.getName(), MappedAttributes.ICON.getName(),
-         MappedAttributes.WIDTH.getName(), MappedAttributes.HEIGHT.getName()));
+      Tools.set(
+         MappedAttributes.TYPE.getName(),
+         MappedAttributes.THEME.getName(),
+         MappedAttributes.TITLE.getName(),
+         MappedAttributes.SHOW_INFO_BAR.getName(),
+         MappedAttributes.SHOW_STATE.getName(),
+         MappedAttributes.SHOW_MODE.getName(),
+         MappedAttributes.DESCRIPTION.getName(),
+         MappedAttributes.ICON.getName(),
+         MappedAttributes.WIDTH.getName(),
+         MappedAttributes.HEIGHT.getName());
 
    /** . */
    private final POMSession session;
@@ -284,13 +301,22 @@ public class Mapper
       ContainerData layout = load(srcLayout, layoutChildren);
 
       //
+      List<String> accessPermissions = Collections.emptyList();
+      String editPermission = null;
+      if (src.isAdapted(ProtectedResource.class)) {
+         ProtectedResource pr = src.adapt(ProtectedResource.class);
+         accessPermissions = pr.getAccessPermissions();
+         editPermission = pr.getEditPermission();
+      }
+
+      //
       return new PortalData(
          src.getObjectId(),
          src.getName(),
          type,
          attrs.getValue(MappedAttributes.LOCALE),
-         Collections.unmodifiableList(Arrays.asList(split("|", attrs.getValue(MappedAttributes.ACCESS_PERMISSIONS, "")))),
-         attrs.getValue(MappedAttributes.EDIT_PERMISSION),
+         accessPermissions,
+         editPermission,
          Collections.unmodifiableMap(properties),
          attrs.getValue(MappedAttributes.SKIN),
          attrs.getValue(MappedAttributes.TITLE),
@@ -312,16 +338,18 @@ public class Mapper
       //
       Attributes attrs = dst.getAttributes();
       attrs.setValue(MappedAttributes.LOCALE, src.getLocale());
-      attrs.setValue(MappedAttributes.ACCESS_PERMISSIONS, join("|", src.getAccessPermissions()));
-      attrs.setValue(MappedAttributes.EDIT_PERMISSION, src.getEditPermission());
       attrs.setValue(MappedAttributes.SKIN, src.getSkin());
       attrs.setValue(MappedAttributes.TITLE, src.getTitle());
       attrs.setValue(MappedAttributes.CREATOR, src.getCreator());
       attrs.setValue(MappedAttributes.MODIFIER, src.getModifier());
       if (src.getProperties() != null)
       {
-         save(src.getProperties(), attrs);
+         save(src.getProperties(), attrs, portalPropertiesBlackList);
       }
+
+      ProtectedResource pr = dst.adapt(ProtectedResource.class);
+      pr.setAccessPermissions(src.getAccessPermissions());
+      pr.setEditPermission(src.getEditPermission());
 
       //
       org.gatein.mop.api.workspace.Page templates = dst.getRootPage().getChild("templates");
@@ -353,6 +381,16 @@ public class Mapper
       Attributes attrs = src.getAttributes();
 
       //
+      List<String> accessPermissions = Collections.emptyList();
+      String editPermission = null;
+      if (src.isAdapted(ProtectedResource.class))
+      {
+         ProtectedResource pr = src.adapt(ProtectedResource.class);
+         accessPermissions = pr.getAccessPermissions();
+         editPermission = pr.getEditPermission();
+      }
+
+      //
       return new PageData(
          src.getObjectId(),
          null,
@@ -365,11 +403,11 @@ public class Mapper
          null,
          null,
          null,
-         Utils.safeImmutableList(split("|", attrs.getValue(MappedAttributes.ACCESS_PERMISSIONS))),
+         Utils.safeImmutableList(accessPermissions),
          children,
          ownerType,
          ownerId,
-         attrs.getValue(MappedAttributes.EDIT_PERMISSION),
+         editPermission,
          attrs.getValue(MappedAttributes.SHOW_MAX_WINDOW, false),
          attrs.getValue(MappedAttributes.CREATOR),
          attrs.getValue(MappedAttributes.MODIFIER)
@@ -378,6 +416,14 @@ public class Mapper
 
    private ContainerData load(UIContainer src, List<ComponentData> children)
    {
+
+      List<String> accessPermissions = Collections.emptyList();
+      if (src.isAdapted(ProtectedResource.class))
+      {
+         ProtectedResource pr = src.adapt(ProtectedResource.class);
+         accessPermissions = pr.getAccessPermissions();
+      }
+
       Attributes attrs = src.getAttributes();
       return new ContainerData(
          src.getObjectId(),
@@ -391,7 +437,7 @@ public class Mapper
          attrs.getValue(MappedAttributes.DESCRIPTION),
          attrs.getValue(MappedAttributes.WIDTH),
          attrs.getValue(MappedAttributes.HEIGHT),
-         Utils.safeImmutableList(split("|", attrs.getValue(MappedAttributes.ACCESS_PERMISSIONS))),
+         Utils.safeImmutableList(accessPermissions),
          children
       );
    }
@@ -489,11 +535,14 @@ public class Mapper
       }
 
       //
+      ProtectedResource pr = dst.adapt(ProtectedResource.class);
+      pr.setAccessPermissions(src.getAccessPermissions());
+      pr.setEditPermission(src.getEditPermission());
+
+      //
       Attributes attrs = dst.getAttributes();
       attrs.setValue(MappedAttributes.TITLE, src.getTitle());
       attrs.setValue(MappedAttributes.FACTORY_ID, src.getFactoryId());
-      attrs.setValue(MappedAttributes.ACCESS_PERMISSIONS, join("|", src.getAccessPermissions()));
-      attrs.setValue(MappedAttributes.EDIT_PERMISSION, src.getEditPermission());
       attrs.setValue(MappedAttributes.SHOW_MAX_WINDOW, src.isShowMaxWindow());
       attrs.setValue(MappedAttributes.CREATOR, src.getCreator());
       attrs.setValue(MappedAttributes.MODIFIER, src.getModifier());
@@ -511,13 +560,16 @@ public class Mapper
 
    private void save(ContainerData src, UIContainer dst)
    {
+
+      ProtectedResource pr = dst.adapt(ProtectedResource.class);
+      pr.setAccessPermissions(src.getAccessPermissions());
+
       Attributes dstAttrs = dst.getAttributes();
       dstAttrs.setValue(MappedAttributes.ID, src.getId());
       dstAttrs.setValue(MappedAttributes.TYPE, src instanceof DashboardData ? "dashboard" : null);
       dstAttrs.setValue(MappedAttributes.TITLE, src.getTitle());
       dstAttrs.setValue(MappedAttributes.ICON, src.getIcon());
       dstAttrs.setValue(MappedAttributes.TEMPLATE, src.getTemplate());
-      dstAttrs.setValue(MappedAttributes.ACCESS_PERMISSIONS, join("|", src.getAccessPermissions()));
       dstAttrs.setValue(MappedAttributes.FACTORY_ID, src.getFactoryId());
       dstAttrs.setValue(MappedAttributes.DECORATOR, src.getDecorator());
       dstAttrs.setValue(MappedAttributes.DESCRIPTION, src.getDescription());
@@ -795,6 +847,14 @@ public class Mapper
       load(attrs, properties, windowPropertiesBlackList);
 
       //
+      List<String> accessPermissions = Collections.emptyList();
+      if (src.isAdapted(ProtectedResource.class))
+      {
+         ProtectedResource pr = src.adapt(ProtectedResource.class);
+         accessPermissions = pr.getAccessPermissions();
+      }
+
+      //
       return new ApplicationData<S>(
          src.getObjectId(),
          src.getName(),
@@ -811,16 +871,19 @@ public class Mapper
          attrs.getValue(MappedAttributes.WIDTH),
          attrs.getValue(MappedAttributes.HEIGHT),
          Utils.safeImmutableMap(properties),
-         Utils.safeImmutableList(split("|", attrs.getValue(MappedAttributes.ACCESS_PERMISSIONS)))
+         Utils.safeImmutableList(accessPermissions)
       );
    }
 
    public <S> void save(ApplicationData<S> src, UIWindow dst)
    {
+
+      ProtectedResource pr = dst.adapt(ProtectedResource.class);
+      pr.setAccessPermissions(src.getAccessPermissions());
+
       Attributes attrs = dst.getAttributes();
       attrs.setValue(MappedAttributes.THEME, src.getTheme());
       attrs.setValue(MappedAttributes.TITLE, src.getTitle());
-      attrs.setValue(MappedAttributes.ACCESS_PERMISSIONS, join("|", src.getAccessPermissions()));
       attrs.setValue(MappedAttributes.SHOW_INFO_BAR, src.isShowInfoBar());
       attrs.setValue(MappedAttributes.SHOW_STATE, src.isShowApplicationState());
       attrs.setValue(MappedAttributes.SHOW_MODE, src.isShowApplicationMode());
@@ -828,7 +891,7 @@ public class Mapper
       attrs.setValue(MappedAttributes.ICON, src.getIcon());
       attrs.setValue(MappedAttributes.WIDTH, src.getWidth());
       attrs.setValue(MappedAttributes.HEIGHT, src.getHeight());
-      save(src.getProperties(), attrs);
+      save(src.getProperties(), attrs, windowPropertiesBlackList);
 
       //
       ApplicationState<S> instanceState = src.getState();
@@ -987,6 +1050,14 @@ public class Mapper
 
    public DashboardData loadDashboard(UIContainer container)
    {
+
+      List<String> accessPermissions = Collections.emptyList();
+      if (container.isAdapted(ProtectedResource.class)) {
+         ProtectedResource pr = container.adapt(ProtectedResource.class);
+         accessPermissions = pr.getAccessPermissions();
+      }
+
+      //
       Attributes attrs = container.getAttributes();
       List<ComponentData> children = loadChildren(container);
       return new DashboardData(
@@ -1001,7 +1072,7 @@ public class Mapper
          attrs.getValue(MappedAttributes.DESCRIPTION),
          attrs.getValue(MappedAttributes.WIDTH),
          attrs.getValue(MappedAttributes.HEIGHT),
-         Utils.safeImmutableList(split("|", attrs.getValue(MappedAttributes.ACCESS_PERMISSIONS))),
+         Utils.safeImmutableList(accessPermissions),
          children
       );
    }
@@ -1029,7 +1100,7 @@ public class Mapper
    {
       for (String name : src.getKeys())
       {
-         if (!blackList.contains(name))
+         if (!blackList.contains(name) && !propertiesBlackList.contains(name))
          {
             Object value = src.getObject(name);
             if (value instanceof String)
@@ -1040,11 +1111,14 @@ public class Mapper
       }
    }
 
-   public static void save(Map<String, String> src, Attributes dst)
+   public static void save(Map<String, String> src, Attributes dst, Set<String> blackList)
    {
       for (Map.Entry<String, String> property : src.entrySet())
       {
-         dst.setString(property.getKey(), property.getValue());
+         String name = property.getKey();
+         if (!blackList.contains(name) && !propertiesBlackList.contains(name)) {
+            dst.setString(name, property.getValue());
+         }
       }
    }
 

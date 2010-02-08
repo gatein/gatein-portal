@@ -39,9 +39,18 @@ import javax.xml.parsers.DocumentBuilderFactory;
 public class JavascriptConfigParser
 {
 
+   /** . */
+   private ServletContext context;
+
+   private JavascriptConfigParser(ServletContext context)
+   {
+      this.context = context;
+   }
+
    public static void processConfigResource(InputStream is, JavascriptConfigService service, ServletContext scontext)
    {
-      List<JavascriptTask> tasks = fetchTasks(is);
+      JavascriptConfigParser parser = new JavascriptConfigParser(scontext);
+      List<JavascriptTask> tasks = parser.fetchTasks(is);
       if (tasks != null)
       {
          for (JavascriptTask task : tasks)
@@ -51,7 +60,7 @@ public class JavascriptConfigParser
       }
    }
 
-   private static List<JavascriptTask> fetchTasks(InputStream is)
+   private List<JavascriptTask> fetchTasks(InputStream is)
    {
       try
       {
@@ -65,7 +74,7 @@ public class JavascriptConfigParser
       }
    }
 
-   private static List<JavascriptTask> fetchTasksFromXMLConfig(Document document)
+   private List<JavascriptTask> fetchTasksFromXMLConfig(Document document)
    {
       List<JavascriptTask> tasks = new ArrayList<JavascriptTask>();
       Element element = document.getDocumentElement();
@@ -82,7 +91,7 @@ public class JavascriptConfigParser
       return tasks;
    }
 
-   private static JavascriptTask xmlToTask(Element element)
+   private JavascriptTask xmlToTask(Element element)
    {
       if (!GateinResource.JAVA_SCRIPT_TAG.equals(element.getTagName()))
       {
@@ -111,7 +120,9 @@ public class JavascriptConfigParser
             {
                //Js_priority still is null;
             }
-            task.addJSKey(js_module, js_path, js_priority);
+            JavascriptKey key = new JavascriptKey(js_module, js_path, context.getContextPath());
+            Javascript js = new Javascript(key, context, js_priority);
+            task.addScript(js);
          }
          return task;
       }

@@ -20,6 +20,17 @@
 -->
 <nodeTypes xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0">
 
+    <nodeType name="mop:protectedresource" isMixin="true" hasOrderableChildNodes="false" primaryItemName="">
+      <propertyDefinitions>
+        <propertyDefinition name="mop:access-permissions" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
+          <valueConstraints/>
+        </propertyDefinition>
+        <propertyDefinition name="mop:edit-permissions" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
+          <valueConstraints/>
+        </propertyDefinition>
+      </propertyDefinitions>
+    </nodeType>
+
     <nodeType name="mop:portletpreferences" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
       <supertypes>
         <supertype>mop:customizationstate</supertype>

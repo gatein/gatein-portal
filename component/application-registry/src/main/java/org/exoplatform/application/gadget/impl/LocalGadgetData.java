@@ -27,11 +27,11 @@ import org.chromattic.api.annotations.PrimaryType;
 import org.chromattic.api.annotations.OneToOne;
 import org.chromattic.api.annotations.PrimaryType;
 import org.chromattic.api.annotations.Property;
-import org.chromattic.ntdef.NTFile;
-import org.chromattic.ntdef.Resource;
+import org.chromattic.ext.ntdef.NTFile;
+import org.chromattic.ext.ntdef.Resource;
+import org.chromattic.ext.ntdef.NTFolder;
 import org.exoplatform.application.gadget.EncodingDetector;
 
-import org.chromattic.ntdef.NTFolder;
 
 import java.io.ByteArrayInputStream;
 import java.util.Date;

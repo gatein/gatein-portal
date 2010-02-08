@@ -62,20 +62,15 @@ public class JavascriptRemoval implements WebAppListener, Startable
       }
    }
 
-   /** Remove javascript deployed in this web app * */
+   /**
+    * Removes javascript deployed in this web app.
+    *
+    * @param scontext the servlet context
+    */
    private void removeJavascript(ServletContext scontext)
    {
       String webApp = scontext.getContextPath();
-      List<JavascriptKey> jsKeys = JavascriptDependentManager.getDeployedJScripts(webApp);
-      if (jsKeys == null)
-      {
-         return;
-      }
-      for (JavascriptKey key : jsKeys)
-      {
-         javascriptService.removeJavascript(key, scontext);
-      }
-      JavascriptDependentManager.clearAssociatedJScripts(webApp);
+      javascriptService.remove(scontext);
    }
 
    private void refreshJavascript()
