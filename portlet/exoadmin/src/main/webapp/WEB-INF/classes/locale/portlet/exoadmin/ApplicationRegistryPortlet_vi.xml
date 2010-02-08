@@ -100,7 +100,7 @@
   -->
   <UIPermissionForm>
     <label>
-      <UIListPermissionSelector />
+      <UIListPermissionSelector>Lựa chọn quyền</UIListPermissionSelector>
     </label>
   </UIPermissionForm>
   <UIApplicationInfo>
@@ -160,7 +160,7 @@
       <name>Tên danh mục:</name>
       <displayName>#{label.displayName}</displayName>
       <description>#{label.description}</description>
-      <UIListPermissionSelector />
+      <UIListPermissionSelector>Lựa chọn quyền</UIListPermissionSelector>
     </label>
     <action>
       <Save>#{word.save}</Save>
@@ -283,7 +283,7 @@
   </UIListPermissionSelector>
 	<UIListPermissionSelectorPopup>
 		<title>
-			<ListPermissionSelector>Select Permission</ListPermissionSelector>
+			<ListPermissionSelector>Lựa chọn quyền</ListPermissionSelector>
 		</title>
 	</UIListPermissionSelectorPopup>
 </bundle>
