@@ -66,7 +66,8 @@ public class ChromatticLifeCycle extends BaseComponentPlugin
          ChromatticBuilder.JCR_OPTIMIZE_HAS_NODE_ENABLED,
          ChromatticBuilder.JCR_OPTIMIZE_HAS_PROPERTY_ENABLED,
          ChromatticBuilder.OBJECT_FORMATTER_CLASSNAME,
-         ChromatticBuilder.ROOT_NODE_PATH})
+         ChromatticBuilder.ROOT_NODE_PATH,
+         ChromatticBuilder.CREATE_ROOT_NODE})
       {
          options.put(option.getName(), option);
       }

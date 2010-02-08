@@ -549,6 +549,11 @@
           <value>org.chromattic.ext.ntdef.NTFolder</value>
           <value>org.chromattic.ext.ntdef.NTResource</value>
         </values-param>
+        <properties-param>
+          <name>options</name>
+          <property name="org.chromattic.api.Option.root_node.path" value="/production"/>
+          <property name="org.chromattic.api.Option.root_node.create" value="true"/>
+        </properties-param>
       </init-params>
     </component-plugin>
   </external-component-plugins>

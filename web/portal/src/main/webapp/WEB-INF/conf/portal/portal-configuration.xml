@@ -219,6 +219,11 @@
           <value>org.exoplatform.portal.pom.spi.wsrp.WSRPState</value>
           <value>org.exoplatform.portal.mop.ProtectedResource</value>
         </values-param>
+        <properties-param>
+          <name>options</name>
+          <property name="org.chromattic.api.Option.root_node.path" value="/production"/>
+          <property name="org.chromattic.api.Option.root_node.create" value="true"/>
+        </properties-param>
       </init-params>
     </component-plugin>
   </external-component-plugins>
