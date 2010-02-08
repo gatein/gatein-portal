@@ -138,10 +138,6 @@ public class UIPortalApplication extends UIApplication
       userPortalConfig_ = (UserPortalConfig)context.getAttribute(UserPortalConfig.class);
       if (userPortalConfig_ == null)
          throw new Exception("Can't load user portal config");
-
-      //TODO: Check if we need to clone page node
-      this.all_Navigations = userPortalConfig_.getNavigations();
-      localizeNavigations();
       
       // dang.tung - set portal language by user preference -> browser ->
       // default
@@ -189,6 +185,10 @@ public class UIPortalApplication extends UIApplication
       if (currentSkin != null && currentSkin.trim().length() > 0)
          skin_ = currentSkin;
       setOwner(context.getPortalOwner());
+      
+      //Minh Hoang TO: Localizes navigations, need to put this code snippet below 'setLocale' block
+      this.all_Navigations = userPortalConfig_.getNavigations();
+      localizeNavigations();
    }
 
    public void setShowedUIPortal(UIPortal uiPortal)
