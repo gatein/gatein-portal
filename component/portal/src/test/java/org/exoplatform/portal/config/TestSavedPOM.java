@@ -95,8 +95,6 @@ public class TestSavedPOM extends AbstractPortalTest
       //
       Attributes defaultAttrs = defaultNav.getAttributes();
       assertEquals(1, (int)defaultAttrs.getInteger("priority"));
-      assertEquals("navigation_creator", defaultAttrs.getString("creator"));
-      assertEquals("navigation_modifier", defaultAttrs.getString("modifier"));
 
       //
       Collection<? extends Navigation> childrenNavigations = defaultNav.getChildren();
@@ -144,8 +142,6 @@ public class TestSavedPOM extends AbstractPortalTest
       Attributes attrs = portal.getAttributes();
       assertEquals("en", attrs.getString("locale"));
       assertEquals("test_skin", attrs.getString("skin"));
-      assertEquals("test_creator", attrs.getString("creator"));
-      assertEquals("test_modifier", attrs.getString("modifier"));
       assertEquals("test_prop_value", attrs.getString("prop_key"));
 
       //
@@ -186,8 +182,6 @@ public class TestSavedPOM extends AbstractPortalTest
       Attributes testPageAttrs = testPage.getAttributes();
       assertEquals("test_factory_id", testPageAttrs.getString("factory-id"));
       assertEquals(true, (boolean)testPageAttrs.getBoolean("show-max-window"));
-      assertEquals("test_creator", testPageAttrs.getString("creator"));
-      assertEquals("test_modifier", testPageAttrs.getString("modifier"));
 
       //
       UIContainer c = testPage.getRootComponent();

@@ -25,8 +25,7 @@
   <locale>en</locale>
   <access-permissions>Everyone</access-permissions>
   <edit-permission>*:/platform/administrators</edit-permission>
-  <creator>root</creator>
-
+  
  	<portal-layout>
 		<application>
 	    <instance-id>portal#classic:/web/BannerPortlet/banner</instance-id>

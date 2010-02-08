@@ -36,12 +36,6 @@ public class PageData extends ContainerData
    /** . */
    private final boolean showMaxWindow;
 
-   /** . */
-   private final String creator;
-
-   /** . */
-   private final String modifier;
-
    public PageData(
       String storageId,
       String id,
@@ -59,9 +53,7 @@ public class PageData extends ContainerData
       String ownerType,
       String ownerId,
       String editPermission,
-      boolean showMaxWindow,
-      String creator,
-      String modifier)
+      boolean showMaxWindow)
    {
       super(storageId, id, name, icon, decorator, template, factoryId, title, description, width, height, accessPermissions, children);
 
@@ -69,8 +61,6 @@ public class PageData extends ContainerData
       this.key = new PageKey(ownerType, ownerId, name);
       this.editPermission = editPermission;
       this.showMaxWindow = showMaxWindow;
-      this.creator = creator;
-      this.modifier = modifier;
    }
 
    public PageKey getKey()
@@ -96,15 +86,5 @@ public class PageData extends ContainerData
    public boolean isShowMaxWindow()
    {
       return showMaxWindow;
-   }
-
-   public String getCreator()
-   {
-      return creator;
-   }
-
-   public String getModifier()
-   {
-      return modifier;
    }
 }

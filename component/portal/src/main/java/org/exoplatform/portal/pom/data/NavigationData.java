@@ -31,12 +31,6 @@ public class NavigationData extends NavigationNodeContainerData
    private final NavigationKey key;
 
    /** . */
-   private final String creator;
-
-   /** . */
-   private final String modifier;
-
-   /** . */
    private final int priority;
 
    public NavigationData(
@@ -47,15 +41,13 @@ public class NavigationData extends NavigationNodeContainerData
       Integer priority,
       List<NavigationNodeData> children)
    {
-      this(null, ownerType, ownerId, creator, modifier, priority, children);
+      this(null, ownerType, ownerId, priority, children);
    }
 
    public NavigationData(
       String storageId,
       String ownerType,
       String ownerId,
-      String creator,
-      String modifier,
       Integer priority,
       List<NavigationNodeData> children)
    {
@@ -73,8 +65,6 @@ public class NavigationData extends NavigationNodeContainerData
 
       //
       this.key = new NavigationKey(ownerType, ownerId);
-      this.creator = creator;
-      this.modifier = modifier;
       this.priority = priority != null ? priority : 1;
    }
 
@@ -91,16 +81,6 @@ public class NavigationData extends NavigationNodeContainerData
    public String getOwnerId()
    {
       return key.getId();
-   }
-
-   public String getCreator()
-   {
-      return creator;
-   }
-
-   public String getModifier()
-   {
-      return modifier;
    }
 
    public int getPriority()

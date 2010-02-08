@@ -51,10 +51,6 @@ public class UIContainer extends UIPortalComponent
 
    protected String description;
 
-   protected String creator;
-
-   protected String modifier;
-
    public UIContainer()
    {
    }
@@ -67,26 +63,6 @@ public class UIContainer extends UIPortalComponent
    public void setStorageId(String storageId)
    {
       this.storageId = storageId;
-   }
-
-   public String getCreator()
-   {
-      return creator;
-   }
-
-   public void setCreator(String s)
-   {
-      creator = s;
-   }
-
-   public String getModifier()
-   {
-      return modifier;
-   }
-
-   public void setModifier(String s)
-   {
-      modifier = s;
    }
 
    public String getIcon()

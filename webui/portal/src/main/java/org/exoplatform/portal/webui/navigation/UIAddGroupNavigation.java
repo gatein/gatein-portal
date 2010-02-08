@@ -133,7 +133,6 @@ public class UIAddGroupNavigation extends UIContainer
          // set properties for navigation
          pageNav.setPriority(1);
          pageNav.setModifiable(true);
-         pageNav.setCreator(ctx.getRemoteUser());
          pageNav.setOwnerId(ownerId);
          pageNav.setOwnerType(PortalConfig.GROUP_TYPE);
          //UIPortalApplication uiPortalApp = uiForm.getAncestorOfType(UIPortalApplication.class);      

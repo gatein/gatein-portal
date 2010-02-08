@@ -129,8 +129,6 @@ public class TestLoadedPOM extends AbstractPortalTest
 
       //
       assertEquals(1, nav.getPriority());
-      assertEquals("navigation_creator", nav.getCreator());
-      assertEquals("navigation_modifier", nav.getModifier());
 
       //
       assertEquals(2, nav.getNodes().size());
@@ -162,8 +160,6 @@ public class TestLoadedPOM extends AbstractPortalTest
       assertTrue(Arrays.equals(new String[]{"test_access_permissions"}, portal.getAccessPermissions()));
       assertEquals("test_edit_permission", portal.getEditPermission());
       assertEquals("test_skin", portal.getSkin());
-      assertEquals("test_creator", portal.getCreator());
-      assertEquals("test_modifier", portal.getModifier());
       assertEquals("test_prop_value", portal.getProperty("prop_key"));
    }
 
@@ -188,8 +184,6 @@ public class TestLoadedPOM extends AbstractPortalTest
       assertTrue(Arrays.equals(new String[]{"test_access_permissions"}, page.getAccessPermissions()));
       assertEquals("test_edit_permission", page.getEditPermission());
       assertEquals(true, page.isShowMaxWindow());
-      assertEquals("test_creator", page.getCreator());
-      assertEquals("test_modifier", page.getModifier());
 
       //
       List<ModelObject> children = page.getChildren();

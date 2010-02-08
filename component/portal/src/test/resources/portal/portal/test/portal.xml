@@ -26,8 +26,6 @@
   <access-permissions>test_access_permissions</access-permissions>
   <edit-permission>test_edit_permission</edit-permission>
   <skin>test_skin</skin>
-  <creator>test_creator</creator>
-  <modifier>test_modifier</modifier>
   
   <properties>
     <entry key="prop_key">test_prop_value</entry>

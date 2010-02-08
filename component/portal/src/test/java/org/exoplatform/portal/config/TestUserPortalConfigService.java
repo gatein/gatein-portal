@@ -517,7 +517,6 @@ public class TestUserPortalConfigService extends AbstractPortalTest
             page.setOwnerType("group");
             page.setOwnerId("/platform/administrators");
             page.setName("newAccount");
-            page.setCreator("someone");
             page.setShowMaxWindow(true);
             page.setTitle("newAccount title");
             assertTrue(events.isEmpty());
@@ -529,7 +528,6 @@ public class TestUserPortalConfigService extends AbstractPortalTest
             assertEquals("group", p.getOwnerType());
             assertEquals("/platform/administrators", p.getOwnerId());
             assertEquals("newAccount", p.getName());
-            assertEquals("someone", p.getCreator());
             assertEquals("newAccount title", p.getTitle());
             assertTrue(p.isShowMaxWindow());
             
@@ -554,7 +552,6 @@ public class TestUserPortalConfigService extends AbstractPortalTest
             assertEquals("group", p2.getOwnerType());
             assertEquals("/platform/administrators", p2.getOwnerId());
             assertEquals("newAccount", p2.getName());
-            assertEquals("someone", p2.getCreator());
 //            assertFalse(p2.isShowMaxWindow());
             p2.setTitle("newAccount title 1");
             p2.setShowMaxWindow(true);

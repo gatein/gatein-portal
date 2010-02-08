@@ -49,12 +49,6 @@ public class PortalData extends ModelData
    /** . */
    private final ContainerData portalLayout;
 
-   /** . */
-   private final String creator;
-
-   /** . */
-   private final String modifier;
-
    public PortalData(
       String storageId,
       String name,
@@ -64,9 +58,7 @@ public class PortalData extends ModelData
       String editPermission,
       Map<String, String> properties,
       String skin,
-      ContainerData portalLayout,
-      String creator,
-      String modifier)
+      ContainerData portalLayout)
    {
       super(storageId, null);
 
@@ -78,8 +70,6 @@ public class PortalData extends ModelData
       this.properties = properties;
       this.skin = skin;
       this.portalLayout = portalLayout;
-      this.creator = creator;
-      this.modifier = modifier;
    }
 
    public PortalKey getKey()
@@ -125,15 +115,5 @@ public class PortalData extends ModelData
    public ContainerData getPortalLayout()
    {
       return portalLayout;
-   }
-
-   public String getCreator()
-   {
-      return creator;
-   }
-
-   public String getModifier()
-   {
-      return modifier;
    }
 }

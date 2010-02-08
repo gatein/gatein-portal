@@ -136,8 +136,6 @@ public class Mapper
             src.getObjectId(),
             ownerType,
             ownerId,
-            attrs.getValue(MappedAttributes.CREATOR),
-            attrs.getValue(MappedAttributes.MODIFIER),
             attrs.getValue(MappedAttributes.PRIORITY, 1),
             children);
          dst = (T)dstNav;
@@ -222,8 +220,6 @@ public class Mapper
          //
          Attributes attrs = dst.getAttributes();
          attrs.setValue(MappedAttributes.PRIORITY, pageNav.getPriority());
-         attrs.setValue(MappedAttributes.CREATOR, pageNav.getCreator());
-         attrs.setValue(MappedAttributes.MODIFIER, pageNav.getModifier());
       }
       else
       {
@@ -316,9 +312,7 @@ public class Mapper
          editPermission,
          Collections.unmodifiableMap(properties),
          attrs.getValue(MappedAttributes.SKIN),
-         layout,
-         attrs.getValue(MappedAttributes.CREATOR),
-         attrs.getValue(MappedAttributes.MODIFIER));
+         layout);
    }
 
    public void save(PortalData src, Site dst)
@@ -335,8 +329,6 @@ public class Mapper
       Attributes attrs = dst.getAttributes();
       attrs.setValue(MappedAttributes.LOCALE, src.getLocale());
       attrs.setValue(MappedAttributes.SKIN, src.getSkin());
-      attrs.setValue(MappedAttributes.CREATOR, src.getCreator());
-      attrs.setValue(MappedAttributes.MODIFIER, src.getModifier());
       if (src.getProperties() != null)
       {
          save(src.getProperties(), attrs, portalPropertiesBlackList);
@@ -406,9 +398,7 @@ public class Mapper
          ownerType,
          ownerId,
          editPermission,
-         attrs.getValue(MappedAttributes.SHOW_MAX_WINDOW, false),
-         attrs.getValue(MappedAttributes.CREATOR),
-         attrs.getValue(MappedAttributes.MODIFIER)
+         attrs.getValue(MappedAttributes.SHOW_MAX_WINDOW, false)
       );
    }
 
@@ -549,8 +539,6 @@ public class Mapper
       Attributes attrs = dst.getAttributes();
       attrs.setValue(MappedAttributes.FACTORY_ID, src.getFactoryId());
       attrs.setValue(MappedAttributes.SHOW_MAX_WINDOW, src.isShowMaxWindow());
-      attrs.setValue(MappedAttributes.CREATOR, src.getCreator());
-      attrs.setValue(MappedAttributes.MODIFIER, src.getModifier());
 
       //
       UIContainer rootContainer = dst.getRootComponent();

@@ -44,10 +44,6 @@ public class Page extends Container
 
    private boolean showMaxWindow = false;
 
-   private String creator;
-
-   private String modifier;
-
    private transient boolean modifiable;
 
    public Page()
@@ -63,8 +59,6 @@ public class Page extends Container
       this.ownerId = data.getOwnerId();
       this.editPermission = data.getEditPermission();
       this.showMaxWindow = data.isShowMaxWindow();
-      this.creator = data.getCreator();
-      this.modifier = data.getModifier();
    }
 
    public Page(String storageId)
@@ -155,26 +149,6 @@ public class Page extends Container
       modifiable = b;
    }
 
-   public String getCreator()
-   {
-      return creator;
-   }
-
-   public void setCreator(String s)
-   {
-      creator = s;
-   }
-
-   public String getModifier()
-   {
-      return modifier;
-   }
-
-   public void setModifier(String s)
-   {
-      modifier = s;
-   }
-
    @Override
    public PageData build()
    {
@@ -196,9 +170,7 @@ public class Page extends Container
          ownerType,
          ownerId,
          editPermission,
-         showMaxWindow,
-         creator,
-         modifier);
+         showMaxWindow);
    }
 
    static public class PageSet

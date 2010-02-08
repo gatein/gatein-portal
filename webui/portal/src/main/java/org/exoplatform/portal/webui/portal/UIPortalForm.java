@@ -335,8 +335,6 @@ public class UIPortalForm extends UIFormTabPane
          PortalConfig pconfig = userPortalConfig.getPortalConfig();
          uiForm.invokeSetBindingBean(pconfig);
          PageNavigation navigation = service.getPageNavigation(PortalConfig.PORTAL_TYPE, portalName);
-         navigation.setCreator(pcontext.getRemoteUser());
-         pconfig.setCreator(pcontext.getRemoteUser());
          service.update(pconfig);
          service.update(navigation);
          UIPortalApplication uiPortalApp = event.getSource().getAncestorOfType(UIPortalApplication.class);

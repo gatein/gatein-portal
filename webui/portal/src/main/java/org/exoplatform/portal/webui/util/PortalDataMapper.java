@@ -178,8 +178,6 @@ public class PortalDataMapper
    {
       Page model = new Page(uiPage.getStorageId());
       toContainer(model, uiPage);
-      model.setCreator(uiPage.getCreator());
-      model.setModifier(uiPage.getModifier());
       model.setOwnerId(uiPage.getOwnerId());
       model.setOwnerType(uiPage.getOwnerType());
       model.setIcon(uiPage.getIcon());
@@ -196,8 +194,6 @@ public class PortalDataMapper
    static private PortalConfig toPortal(UIPortal uiPortal)
    {
       PortalConfig model = new PortalConfig(uiPortal.getOwnerType(), uiPortal.getName(), uiPortal.getStorageId());
-      model.setCreator(uiPortal.getCreator());
-      model.setModifier(uiPortal.getModifier());
       model.setAccessPermissions(uiPortal.getAccessPermissions());
       model.setEditPermission(uiPortal.getEditPermission());
       model.setLocale(uiPortal.getLocale());
@@ -318,8 +314,6 @@ public class PortalDataMapper
    static public void toUIPage(UIPage uiPage, Page model) throws Exception
    {
       toUIContainer(uiPage, model);
-      uiPage.setCreator(model.getCreator());
-      uiPage.setModifier(model.getModifier());
       uiPage.setOwnerId(model.getOwnerId());
       uiPage.setOwnerType(model.getOwnerType());
       uiPage.setIcon(model.getIcon());
@@ -347,8 +341,6 @@ public class PortalDataMapper
       uiPortal.setStorageId(model.getStorageId());
       uiPortal.setName(model.getName());
       uiPortal.setId("UIPortal");
-      uiPortal.setCreator(model.getCreator());
-      uiPortal.setModifier(model.getModifier());
       // uiPortal.setFactoryId(model.getFactoryId());
       uiPortal.setOwner(model.getName());
       uiPortal.setModifiable(model.isModifiable());

@@ -262,7 +262,6 @@ public class UIPageNodeForm2 extends UIFormTabPane
          if (selectedParent instanceof PageNavigation)
          {
             pageNav = (PageNavigation)selectedParent;
-            pageNav.setModifier(remoteUser);
             pageNode.setUri(pageNode.getName());
             if (!pageNav.getNodes().contains(pageNode))
             {
@@ -406,7 +405,6 @@ public class UIPageNodeForm2 extends UIFormTabPane
 
          userACL.hasPermission(page);
 
-         page.setCreator(pcontext.getRemoteUser());
          page.setModifiable(true);
          if (page.getChildren() == null)
             page.setChildren(new ArrayList<ModelObject>());

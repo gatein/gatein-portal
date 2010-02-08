@@ -414,7 +414,6 @@ public class UIPageBrowser extends UISearch
                pcontext.addUIComponentToUpdateByAjax(uiPortalApp.getUIPopupMessages());
                return;
             }
-            page.setCreator(pcontext.getRemoteUser());
             page.setModifiable(true);
             if (page.getChildren() == null)
                page.setChildren(new ArrayList<ModelObject>());
@@ -437,7 +436,6 @@ public class UIPageBrowser extends UISearch
             page.setShowMaxWindow(false);
             uiPage.getChildren().clear();
             page.setChildren(applications);
-            page.setModifier(pcontext.getRemoteUser());
             PortalDataMapper.toUIPage(uiPage, page);
             // if (page.getTemplate() == null)
             // page.setTemplate(uiPage.getTemplate());
@@ -461,7 +459,6 @@ public class UIPageBrowser extends UISearch
          page.setChildren(children);
          uiPage.getChildren().clear();
 
-         page.setModifier(pcontext.getRemoteUser());
          PortalDataMapper.toUIPage(uiPage, page);
          // if (page.getTemplate() == null) page.setTemplate(uiPage.getTemplate());
          if (page.getChildren() == null)

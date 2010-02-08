@@ -330,13 +330,11 @@ public class TestDataStorage extends AbstractPortalTest
       assertNotNull(pageNavi);
 
       //
-      pageNavi.setModifier("trong.tran");
       storage_.save(pageNavi);
       assertEquals(1, events.size());
 
       //
       PageNavigation newPageNavi = storage_.getPageNavigation(pageNavi.getOwnerType(), pageNavi.getOwnerId());
-      assertEquals("trong.tran", newPageNavi.getModifier());
    }
 
    public void testRemoveNavigation() throws Exception

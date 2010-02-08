@@ -36,10 +36,6 @@ public class PageNavigation extends PageNodeContainer
 
    private transient boolean modifiable;
 
-   private String creator;
-
-   private String modifier;
-
    private ArrayList<PageNode> pageNodes;
 
    private int priority = 1;
@@ -71,8 +67,6 @@ public class PageNavigation extends PageNodeContainer
       //
       this.ownerType = nav.getOwnerType();
       this.ownerId = nav.getOwnerId();
-      this.creator = nav.getCreator();
-      this.modifier = nav.getModifier();
       this.priority = nav.getPriority();
       this.pageNodes = children;
    }
@@ -122,26 +116,6 @@ public class PageNavigation extends PageNodeContainer
       priority = i;
    }
 
-   public String getCreator()
-   {
-      return creator;
-   }
-
-   public void setCreator(String s)
-   {
-      creator = s;
-   }
-
-   public String getModifier()
-   {
-      return modifier;
-   }
-
-   public void setModifier(String s)
-   {
-      modifier = s;
-   }
-
    public String getOwner()
    {
       return ownerType + "::" + ownerId;
@@ -180,12 +154,7 @@ public class PageNavigation extends PageNodeContainer
       newNav.setOwnerId(ownerId);
       newNav.setOwnerType(ownerType);
       newNav.setPriority(priority);
-      // newNav.setAccessPermissions(accessPermissions);
-      // newNav.setEditPermission(editPermission);
       newNav.setModifiable(modifiable);
-      // newNav.setDescription(description);
-      newNav.setCreator(creator);
-      newNav.setModifier(modifier);
 
       if (pageNodes == null || pageNodes.isEmpty())
          return newNav;
@@ -206,10 +175,6 @@ public class PageNavigation extends PageNodeContainer
          setPriority(nav.priority);
       if (!modifiable)
          setModifiable(nav.modifiable);
-      if (creator == null)
-         setCreator(nav.creator);
-      if (modifier == null)
-         setModifier(nav.modifier);
 
       if (nav.pageNodes == null || nav.pageNodes.isEmpty())
       {
@@ -245,6 +210,6 @@ public class PageNavigation extends PageNodeContainer
    public NavigationData build()
    {
       List<NavigationNodeData> children = buildNavigationChildren();
-      return new NavigationData(storageId, ownerType, ownerId, creator, modifier, priority, children);
+      return new NavigationData(storageId, ownerType, ownerId, priority, children);
    }
 }

@@ -60,10 +60,6 @@ public class PortalConfig extends ModelObject
 
    private Container portalLayout;
 
-   private String creator;
-
-   private String modifier;
-
    private transient boolean modifiable;
 
    public PortalConfig()
@@ -101,8 +97,6 @@ public class PortalConfig extends ModelObject
       this.properties = new Properties(data.getProperties());
       this.skin = data.getSkin();
       this.portalLayout = new Container(data.getPortalLayout());
-      this.creator = data.getCreator();
-      this.modifier = data.getModifier();
    }
 
    PortalConfig(String storageId, String type)
@@ -193,26 +187,6 @@ public class PortalConfig extends ModelObject
    public void setModifiable(boolean b)
    {
       modifiable = b;
-   }
-
-   public String getCreator()
-   {
-      return creator;
-   }
-
-   public void setCreator(String s)
-   {
-      creator = s;
-   }
-
-   public String getModifier()
-   {
-      return modifier;
-   }
-
-   public void setModifier(String s)
-   {
-      modifier = s;
    }
 
    public Properties getProperties()
@@ -316,8 +290,6 @@ public class PortalConfig extends ModelObject
          editPermission,
          properties,
          skin,
-         portalLayout.build(),
-         creator,
-         modifier);
+         portalLayout.build());
    }
 }

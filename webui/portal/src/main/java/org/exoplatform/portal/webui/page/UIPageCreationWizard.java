@@ -127,7 +127,6 @@ public class UIPageCreationWizard extends UIPageWizard
       {
          pageNav.addNode(pageNode);
       }
-      pageNav.setModifier(RequestContext.<WebuiRequestContext> getCurrentInstance().getRemoteUser());
       uiNodeSelector.selectPageNodeByUri(pageNode.getUri());
 
       service.create(page);
@@ -315,7 +314,6 @@ public class UIPageCreationWizard extends UIPageWizard
 
          PageNode pageNode = uiPageInfo.getPageNode();
          Page page = uiPageTemplateOptions.createPageFromSelectedOption(ownerType, ownerId);
-         page.setCreator(context.getRemoteUser());
          page.setName("page" + page.hashCode());
          String pageId = pageNavi.getOwnerType() + "::" + pageNavi.getOwnerId() + "::" + page.getName();
          DataStorage storage = uiWizard.getApplicationComponent(DataStorage.class);

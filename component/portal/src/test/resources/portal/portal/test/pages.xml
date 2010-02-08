@@ -32,8 +32,6 @@
 	  <access-permissions>test_access_permissions</access-permissions>
 	  <edit-permission>test_edit_permission</edit-permission>
     <show-max-window>true</show-max-window>
-    <creator>test_creator</creator>
-    <modifier>test_modifier</modifier>
     <container
         template="container_1_template"
         decorator="container_1_decorator"

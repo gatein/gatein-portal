@@ -93,7 +93,7 @@ public class UIPageNavigationForm extends UIForm
       setPageNav(pageNavigation);
       invokeGetBindingBean(pageNavigation);
       removeChildById("ownerId");
-      getUIStringInput("creator").setValue(pageNavigation.getCreator());
+      // getUIStringInput("creator").setValue(pageNavigation.getCreator());
       UIFormStringInput ownerId = new UIFormStringInput("ownerId", "ownerId", pageNavigation.getOwnerId());
       ownerId.setEditable(false);
       ownerId.setParent(this);
@@ -187,7 +187,6 @@ public class UIPageNavigationForm extends UIForm
             UIFormSelectBox uiSelectBox = uiForm.findComponentById("priority");
             int priority = Integer.parseInt(uiSelectBox.getValue());
             pageNav.setPriority(priority);
-            pageNav.setModifier(pcontext.getRemoteUser());
 
             // update navigation
             service.update(pageNav);
@@ -209,7 +208,6 @@ public class UIPageNavigationForm extends UIForm
          int priority = Integer.parseInt(uiSelectBox.getValue());
          pageNav.setPriority(priority);
          pageNav.setModifiable(true);
-         pageNav.setCreator(pcontext.getRemoteUser());
          pageNav.setOwnerId(uiOwnerId.getValue());
          pageNav.setOwnerType(uiOwnerType.getValue());
          //UIPortalApplication uiPortalApp = uiForm.getAncestorOfType(UIPortalApplication.class);      

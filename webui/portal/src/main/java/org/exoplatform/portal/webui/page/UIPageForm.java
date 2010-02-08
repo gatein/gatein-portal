@@ -299,7 +299,6 @@ public class UIPageForm extends UIFormTabPane
             uiPage.getChildren().clear();
             page.setChildren(applications);
 
-            page.setModifier(pcontext.getRemoteUser());
             PortalDataMapper.toUIPage(uiPage, page);
             //        if(page.getTemplate() == null) page.setTemplate(uiPage.getTemplate()) ;
             if (page.getChildren() == null)
@@ -322,7 +321,6 @@ public class UIPageForm extends UIFormTabPane
             uiPage.getChildren().clear();
             page.setChildren(applications);
 
-            page.setModifier(pcontext.getRemoteUser());
             PortalDataMapper.toUIPage(uiPage, page);
             //        if(page.getTemplate() == null) page.setTemplate(uiPage.getTemplate()) ;
             if (page.getChildren() == null)
@@ -354,7 +352,6 @@ public class UIPageForm extends UIFormTabPane
          page.setChildren(children);
          uiPage.getChildren().clear();
 
-         page.setModifier(pcontext.getRemoteUser());
          PortalDataMapper.toUIPage(uiPage, page);
          uiPage.setStorageId(storageId);
          //      if(page.getTemplate() == null) page.setTemplate(uiPage.getTemplate()) ;
