@@ -21,6 +21,7 @@ package org.exoplatform.commons.utils;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
+import org.gatein.common.io.UndeclaredIOException;
 
 import java.io.IOException;
 import java.io.OutputStream;

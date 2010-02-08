@@ -18,7 +18,7 @@
  */
 package org.exoplatform.groovyscript;
 
-import org.exoplatform.commons.utils.UndeclaredIOException;
+import org.gatein.common.io.UndeclaredIOException;
 
 import java.io.IOException;
 import java.io.PushbackReader;

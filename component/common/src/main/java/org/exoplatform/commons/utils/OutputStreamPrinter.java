@@ -19,6 +19,8 @@
 
 package org.exoplatform.commons.utils;
 
+import org.gatein.common.io.UndeclaredIOException;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
@@ -38,7 +40,7 @@ import java.nio.charset.Charset;
  * <li>The {@link IOFailureFlow#IGNORE} value ignores the exception.</li>
  * <li>The {@link IOFailureFlow#RETHROW} value rethrows the exception.</li>
  * <li>The {@link IOFailureFlow#THROW_UNDECLARED} value throws instead a
- * {@link org.exoplatform.commons.utils.UndeclaredIOException} exception wrapping the original exception.</li>
+ * {@link UndeclaredIOException} exception wrapping the original exception.</li>
  * </ul>
  *
  * </p>

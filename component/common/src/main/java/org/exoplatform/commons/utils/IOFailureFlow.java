@@ -39,7 +39,7 @@ public enum IOFailureFlow {
    IGNORE,
 
    /**
-    * Wraps and rethrows the exception with an instance of {@link org.exoplatform.commons.utils.UndeclaredIOException}.
+    * Wraps and rethrows the exception with an instance of {@link org.gatein.common.io.UndeclaredIOException}.
     */
    THROW_UNDECLARED
 
