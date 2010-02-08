@@ -200,8 +200,11 @@ public class UITabPaneDashboard extends UIContainer
                   Page page = configService.getPage(pageRef);
                   if (page != null)
                      configService.remove(page);
+                  UIPortal uiPortal = Util.getUIPortal();
+                  // Remove from cache
+                  uiPortal.setUIPage(pageRef, null);
                }
-               uiPortal.setSelectedNode(selectedNode);
+               //uiPortal.setSelectedNode(selectedNode);
                configService.update(pageNavigation);
             }
          }
@@ -264,7 +267,7 @@ public class UITabPaneDashboard extends UIContainer
             parentNode.getChildren().add(pageNode);
          }
 
-         uiPortal.setSelectedNode(pageNode);
+         //uiPortal.setSelectedNode(pageNode);
 
          configService.create(page);
          configService.update(pageNavigation);
@@ -425,7 +428,7 @@ public class UITabPaneDashboard extends UIContainer
             return;
          }
          String uri = tabPane.createNewPageNode(newTabLabel);
-
+         
          //If new node is created with success, then redirect to it
          if (uri != null)
          {

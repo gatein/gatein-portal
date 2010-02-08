@@ -156,6 +156,7 @@ public class UIPageBody extends UIComponentDecorator
          uiPage = createUIComponent(context, UIPage.class, null, null);
       }
       PortalDataMapper.toUIPage(uiPage, page);
+      uiPortal.setUIPage(page.getId(), uiPage);
 
       return uiPage;
    }
