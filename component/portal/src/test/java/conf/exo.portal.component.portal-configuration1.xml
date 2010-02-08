@@ -114,6 +114,7 @@
  		  <init-params>
  		    <properties-param>
  		      <name>namespaces</name>
+          <property name="gtn" value="http://www.gatein.org/jcr/gatein/1.0/"/>
           <property name="mop" value="http://www.gatein.org/jcr/mop/1.0/"/>
  		      </properties-param>
  		  </init-params>
@@ -126,8 +127,9 @@
  		    <values-param>
  		      <name>autoCreatedInNewRepository</name>
  		      <description>Node types configuration file</description>
-          <value>jar:/conf/mop-nodetypes.xml</value>
-          <value>jar:/conf/content-nodetypes.xml</value>
+           <value>jar:/conf/gatein-nodetypes.xml</value>
+           <value>jar:/conf/mop-nodetypes.xml</value>
+           <value>jar:/conf/content-nodetypes.xml</value>
  		    </values-param>
  		  </init-params>
  		</component-plugin>

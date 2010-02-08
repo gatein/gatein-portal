@@ -39,14 +39,9 @@
     <supertypes>
       <supertype>nt:base</supertype>
       <supertype>mix:referenceable</supertype>
+      <supertype>gtn:described</supertype>
     </supertypes>
     <propertyDefinitions>
-      <propertyDefinition name="app:title" requiredType="String" autoCreated="false" mandatory="true" onParentVersion="COPY" protected="false" multiple="false">
-        <valueConstraints/>
-      </propertyDefinition>
-      <propertyDefinition name="app:description" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-        <valueConstraints/>
-      </propertyDefinition>
       <propertyDefinition name="app:thumbnail" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
         <valueConstraints/>
       </propertyDefinition>
@@ -120,21 +115,14 @@
     <supertypes>
       <supertype>nt:base</supertype>
       <supertype>mix:referenceable</supertype>
+      <supertype>gtn:protectedresource</supertype>
+      <supertype>gtn:described</supertype>
     </supertypes>
     <propertyDefinitions>
-      <propertyDefinition name="app:displayname" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
-        <valueConstraints/>
-      </propertyDefinition>
-      <propertyDefinition name="app:description" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-        <valueConstraints/>
-      </propertyDefinition>
       <propertyDefinition name="app:creationdate" requiredType="Date" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
         <valueConstraints/>
       </propertyDefinition>
       <propertyDefinition name="app:lastmodificationdate" requiredType="Date" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-        <valueConstraints/>
-      </propertyDefinition>
-      <propertyDefinition name="app:accesspermissions" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
         <valueConstraints/>
       </propertyDefinition>
     </propertyDefinitions>
@@ -152,21 +140,14 @@
     <supertypes>
       <supertype>nt:base</supertype>
       <supertype>mix:referenceable</supertype>
+      <supertype>gtn:protectedresource</supertype>
+      <supertype>gtn:described</supertype>
     </supertypes>
       <propertyDefinitions>
-        <propertyDefinition name="app:displayname" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
-          <valueConstraints/>
-        </propertyDefinition>
-        <propertyDefinition name="app:description" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-          <valueConstraints/>
-        </propertyDefinition>
         <propertyDefinition name="app:creationdate" requiredType="Date" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
           <valueConstraints/>
         </propertyDefinition>
         <propertyDefinition name="app:lastmodificationdate" requiredType="Date" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-          <valueConstraints/>
-        </propertyDefinition>
-        <propertyDefinition name="app:accesspermissions" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
           <valueConstraints/>
         </propertyDefinition>
       </propertyDefinitions>

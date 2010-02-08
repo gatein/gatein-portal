@@ -22,26 +22,26 @@ package org.exoplatform.portal.mop;
 import org.chromattic.api.annotations.MixinType;
 import org.chromattic.api.annotations.Property;
 
-import java.util.List;
-
 /**
- * Describe an object that can be secured
+ * Something having a human readable name and a description. The semantic of the name is to be human readable, it
+ * can be expressed under various ways : name, display name, label, title, etc...
  *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-@MixinType(name = "gtn:protectedresource")
-public abstract class ProtectedResource
+@MixinType(name = "gtn:described")
+public abstract class Described
 {
 
-   @Property(name = "gtn:access-permissions")
-   public abstract List<String> getAccessPermissions();
+   @Property(name = "gtn:name")
+   public abstract String getName();
 
-   public abstract void setAccessPermissions(List<String> accessPermissions);
+   public abstract void setName(String name);
 
-   @Property(name = "gtn:edit-permissions")
-   public abstract String getEditPermission();
+   @Property(name = "gtn:description")
+   public abstract String getDescription();
 
-   public abstract void setEditPermission(String editPermission);
+   public abstract void setDescription(String description);
+
 
 }

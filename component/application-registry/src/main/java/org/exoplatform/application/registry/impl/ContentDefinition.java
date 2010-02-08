@@ -42,12 +42,12 @@ public abstract class ContentDefinition
    @Name
    public abstract String getName();
 
-   @Property(name = "app:displayname")
+   @Property(name = "gtn:name")
    public abstract String getDisplayName();
 
    public abstract void setDisplayName(String displayName);
 
-   @Property(name = "app:description")
+   @Property(name = "gtn:description")
    public abstract String getDescription();
 
    public abstract void setDescription(String description);
@@ -62,7 +62,7 @@ public abstract class ContentDefinition
 
    public abstract void setLastModificationDate(Date date);
 
-   @Property(name = "app:accesspermissions")
+   @Property(name = "gtn:access-permissions")
    public abstract List<String> getAccessPermissions();
 
    public abstract void setAccessPermissions(List<String> accessPermissions);

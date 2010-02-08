@@ -35,12 +35,12 @@ public abstract class GadgetDefinition
    @Name
    public abstract String getName();
 
-   @Property(name = "app:title")
+   @Property(name = "gtn:name")
    public abstract String getTitle();
 
    public abstract void setTitle(String title);
 
-   @Property(name = "app:description")
+   @Property(name = "gtn:description")
    public abstract String getDescription();
 
    public abstract void setDescription(String description);

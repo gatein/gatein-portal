@@ -262,6 +262,7 @@
  		  <init-params>
  		    <properties-param>
  		      <name>namespaces</name>
+          <property name="gtn" value="http://www.gatein.org/jcr/gatein/1.0/"/>
  		      <property name="app" value="http://www.gatein.org/jcr/application-registry/1.0/"/>
  		      </properties-param>
  		  </init-params>

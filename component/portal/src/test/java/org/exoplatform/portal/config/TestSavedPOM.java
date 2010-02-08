@@ -194,12 +194,14 @@ public class TestSavedPOM extends AbstractPortalTest
 
       //
       UIContainer container1 = (UIContainer)it.next();
+      assertTrue(container1.isAdapted(ProtectedResource.class));
+      ProtectedResource container1PR = container1.adapt(ProtectedResource.class);
+      assertEquals(Collections.singletonList("container_1_access_permissions"), container1PR.getAccessPermissions());
       Attributes container1Attrs = container1.getAttributes();
       assertEquals("container_1", container1Attrs.getString("name"));
       assertEquals("container_1_title", container1Attrs.getString("title"));
       assertEquals("container_1_icon", container1Attrs.getString("icon"));
       assertEquals("container_1_template", container1Attrs.getString("template"));
-      assertEquals("container_1_access_permissions", container1Attrs.getString("access-permissions"));
       assertEquals("container_1_factory_id", container1Attrs.getString("factory-id"));
       assertEquals("container_1_decorator", container1Attrs.getString("decorator"));
       assertEquals("container_1_description", container1Attrs.getString("description"));
@@ -208,10 +210,12 @@ public class TestSavedPOM extends AbstractPortalTest
 
       //
       UIWindow application1 = (UIWindow)it.next();
+      assertTrue(application1.isAdapted(ProtectedResource.class));
+      ProtectedResource application1PR = application1.adapt(ProtectedResource.class);
+      assertEquals(Collections.singletonList("application_1_access_permissions"), application1PR.getAccessPermissions());
       Attributes application1Attrs = application1.getAttributes();
       assertEquals("application_1_theme", application1Attrs.getString("theme"));
       assertEquals("application_1_title", application1Attrs.getString("title"));
-      assertEquals("application_1_access_permissions", application1Attrs.getString("access-permissions"));
       assertEquals(true, (boolean)application1Attrs.getBoolean("show-info-bar"));
       assertEquals(true, (boolean)application1Attrs.getBoolean("show-state"));
       assertEquals(true, (boolean)application1Attrs.getBoolean("show-mode"));
