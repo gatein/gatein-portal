@@ -189,7 +189,6 @@
     <value name="priority" field="priority" usage="optional"/>
     <value name="creator" field="creator" usage="optional"/>
     <value name="modifier" field="modifier" usage="optional"/>
-    <value name="description" field="description" usage="optional"/>
     <collection name="page-nodes" field="pageNodes" usage="optional"
                 item-type="org.exoplatform.portal.config.model.PageNode"/>
   </mapping>

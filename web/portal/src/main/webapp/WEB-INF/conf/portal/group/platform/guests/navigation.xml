@@ -22,7 +22,6 @@
 
 <node-navigation>
 	<priority>9</priority>
-  <description>description for node navigation </description>
   
   <page-nodes> 
   	<!-- 

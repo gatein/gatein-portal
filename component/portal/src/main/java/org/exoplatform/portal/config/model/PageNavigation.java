@@ -34,8 +34,6 @@ public class PageNavigation extends PageNodeContainer
 
    private String ownerId;
 
-   private String description;
-
    private transient boolean modifiable;
 
    private String creator;
@@ -73,7 +71,6 @@ public class PageNavigation extends PageNodeContainer
       //
       this.ownerType = nav.getOwnerType();
       this.ownerId = nav.getOwnerId();
-      this.description = nav.getDescription();
       this.creator = nav.getCreator();
       this.modifier = nav.getModifier();
       this.priority = nav.getPriority();
@@ -113,16 +110,6 @@ public class PageNavigation extends PageNodeContainer
    public void setModifiable(boolean b)
    {
       modifiable = b;
-   }
-
-   public void setDescription(String des)
-   {
-      description = des;
-   }
-
-   public String getDescription()
-   {
-      return description;
    }
 
    public int getPriority()
@@ -219,8 +206,6 @@ public class PageNavigation extends PageNodeContainer
          setPriority(nav.priority);
       if (!modifiable)
          setModifiable(nav.modifiable);
-      if (description == null)
-         setDescription(nav.description);
       if (creator == null)
          setCreator(nav.creator);
       if (modifier == null)
@@ -260,6 +245,6 @@ public class PageNavigation extends PageNodeContainer
    public NavigationData build()
    {
       List<NavigationNodeData> children = buildNavigationChildren();
-      return new NavigationData(storageId, ownerType, ownerId, description, creator, modifier, priority, children);
+      return new NavigationData(storageId, ownerType, ownerId, creator, modifier, priority, children);
    }
 }

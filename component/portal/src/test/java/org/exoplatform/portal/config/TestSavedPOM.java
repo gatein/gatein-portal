@@ -96,7 +96,6 @@ public class TestSavedPOM extends AbstractPortalTest
       assertEquals(1, (int)defaultAttrs.getInteger("priority"));
       assertEquals("navigation_creator", defaultAttrs.getString("creator"));
       assertEquals("navigation_modifier", defaultAttrs.getString("modifier"));
-      assertEquals("navigation_description", defaultAttrs.getString("description"));
 
       //
       Collection<? extends Navigation> childrenNavigations = defaultNav.getChildren();

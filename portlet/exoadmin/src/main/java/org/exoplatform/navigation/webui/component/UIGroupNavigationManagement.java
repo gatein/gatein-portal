@@ -239,7 +239,6 @@ public class UIGroupNavigationManagement extends UIContainer
          UIPageNavigationForm pageNavigation = popUp.createUIComponent(UIPageNavigationForm.class, null, null, popUp);
          pageNavigation.setOwnerId(navigation.getOwnerId());
          pageNavigation.setOwnerType(navigation.getOwnerType());
-         pageNavigation.setDescription(navigation.getDescription());
          pageNavigation.setPriority(String.valueOf(navigation.getPriority()));
          pageNavigation.addFormInput();
          pageNavigation.setPageNav(navigation);

@@ -31,9 +31,6 @@ public class NavigationData extends NavigationNodeContainerData
    private final NavigationKey key;
 
    /** . */
-   private final String description;
-
-   /** . */
    private final String creator;
 
    /** . */
@@ -45,20 +42,18 @@ public class NavigationData extends NavigationNodeContainerData
    public NavigationData(
       String ownerType,
       String ownerId,
-      String description,
       String creator,
       String modifier,
       Integer priority,
       List<NavigationNodeData> children)
    {
-      this(null, ownerType, ownerId, description, creator, modifier, priority, children);
+      this(null, ownerType, ownerId, creator, modifier, priority, children);
    }
 
    public NavigationData(
       String storageId,
       String ownerType,
       String ownerId,
-      String description,
       String creator,
       String modifier,
       Integer priority,
@@ -78,7 +73,6 @@ public class NavigationData extends NavigationNodeContainerData
 
       //
       this.key = new NavigationKey(ownerType, ownerId);
-      this.description = description;
       this.creator = creator;
       this.modifier = modifier;
       this.priority = priority != null ? priority : 1;
@@ -97,11 +91,6 @@ public class NavigationData extends NavigationNodeContainerData
    public String getOwnerId()
    {
       return key.getId();
-   }
-
-   public String getDescription()
-   {
-      return description;
    }
 
    public String getCreator()

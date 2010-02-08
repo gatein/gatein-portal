@@ -131,7 +131,6 @@ public class TestLoadedPOM extends AbstractPortalTest
       assertEquals(1, nav.getPriority());
       assertEquals("navigation_creator", nav.getCreator());
       assertEquals("navigation_modifier", nav.getModifier());
-      assertEquals("navigation_description", nav.getDescription());
 
       //
       assertEquals(2, nav.getNodes().size());

@@ -24,7 +24,6 @@
   <owner-type>group</owner-type>  
 	<owner-id>/platform/users</owner-id>
 	<priority>8</priority>
-  <description>description for node navigation </description>
     
   <page-nodes>
     <node>

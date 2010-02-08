@@ -25,7 +25,6 @@ import org.exoplatform.portal.config.model.ApplicationState;
 import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.config.model.CloneApplicationState;
 import org.exoplatform.portal.mop.ProtectedResource;
-import org.exoplatform.portal.pom.data.ModelChange;
 import org.exoplatform.portal.config.model.PersistentApplicationState;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.TransientApplicationState;
@@ -61,7 +60,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-import static org.exoplatform.portal.pom.config.Utils.join;
 import static org.exoplatform.portal.pom.config.Utils.split;
 
 /**
@@ -137,7 +135,6 @@ public class Mapper
             src.getObjectId(),
             ownerType,
             ownerId,
-            attrs.getValue(MappedAttributes.DESCRIPTION),
             attrs.getValue(MappedAttributes.CREATOR),
             attrs.getValue(MappedAttributes.MODIFIER),
             attrs.getValue(MappedAttributes.PRIORITY, 1),
@@ -226,7 +223,6 @@ public class Mapper
          attrs.setValue(MappedAttributes.PRIORITY, pageNav.getPriority());
          attrs.setValue(MappedAttributes.CREATOR, pageNav.getCreator());
          attrs.setValue(MappedAttributes.MODIFIER, pageNav.getModifier());
-         attrs.setValue(MappedAttributes.DESCRIPTION, pageNav.getDescription());
       }
       else
       {

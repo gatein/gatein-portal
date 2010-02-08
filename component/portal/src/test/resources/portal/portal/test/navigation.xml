@@ -26,7 +26,6 @@
   <priority>1</priority>
   <creator>navigation_creator</creator>
   <modifier>navigation_modifier</modifier>
-  <description>navigation_description</description>
 
   <page-nodes>
 	  <node>
