@@ -20,6 +20,7 @@
 package org.exoplatform.portal.pom.config.tasks;
 
 import org.exoplatform.portal.config.NoSuchDataException;
+import org.exoplatform.portal.mop.Described;
 import org.exoplatform.portal.pom.config.POMTask;
 import org.exoplatform.portal.pom.config.cache.DataAccessMode;
 import org.exoplatform.portal.pom.config.cache.CacheableDataTask;
@@ -148,8 +149,7 @@ public abstract class PageTask
          //
          org.gatein.mop.api.workspace.Page dstPage = dstPages.addChild(cloneName);
 
-         //
-         
+         // Copy all attributes
          Attributes srcAttrs = srcPage.getAttributes();
          Attributes dstAttrs = dstPage.getAttributes();
          for (String key : srcAttrs.getKeys())
@@ -157,7 +157,13 @@ public abstract class PageTask
             Object value = srcAttrs.getObject(key);
             dstAttrs.setObject(key, value);
          }
-         
+
+         // Copy described
+         Described srcDescribed = srcPage.adapt(Described.class);
+         Described dstDescribed = dstPage.adapt(Described.class);
+         dstDescribed.setName(srcDescribed.getName());
+         dstDescribed.setDescription(srcDescribed.getDescription());
+
          copy(srcPage, dstPage, srcPage.getRootComponent(), dstPage.getRootComponent());
 
          //

@@ -58,8 +58,6 @@ public class PortalConfig extends ModelObject
 
    private String skin;
 
-   private String title;
-
    private Container portalLayout;
 
    private String creator;
@@ -102,7 +100,6 @@ public class PortalConfig extends ModelObject
       this.editPermission = data.getEditPermission();
       this.properties = new Properties(data.getProperties());
       this.skin = data.getSkin();
-      this.title = data.getTitle();
       this.portalLayout = new Container(data.getPortalLayout());
       this.creator = data.getCreator();
       this.modifier = data.getModifier();
@@ -218,16 +215,6 @@ public class PortalConfig extends ModelObject
       modifier = s;
    }
 
-   public String getTitle()
-   {
-      return title;
-   }
-
-   public void setTitle(String value)
-   {
-      title = value;
-   }
-
    public Properties getProperties()
    {
       return properties;
@@ -329,7 +316,6 @@ public class PortalConfig extends ModelObject
          editPermission,
          properties,
          skin,
-         title,
          portalLayout.build(),
          creator,
          modifier);

@@ -20,6 +20,7 @@
 package org.exoplatform.portal.config;
 
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.portal.mop.Described;
 import org.exoplatform.portal.mop.ProtectedResource;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.POMSessionManager;
@@ -143,7 +144,6 @@ public class TestSavedPOM extends AbstractPortalTest
       Attributes attrs = portal.getAttributes();
       assertEquals("en", attrs.getString("locale"));
       assertEquals("test_skin", attrs.getString("skin"));
-      assertEquals("test_title", attrs.getString("title"));
       assertEquals("test_creator", attrs.getString("creator"));
       assertEquals("test_modifier", attrs.getString("modifier"));
       assertEquals("test_prop_value", attrs.getString("prop_key"));
@@ -178,8 +178,12 @@ public class TestSavedPOM extends AbstractPortalTest
       assertEquals("test_edit_permission", pr.getEditPermission());
 
       //
+      Described testPageDescribed = testPage.adapt(Described.class);
+      assertEquals("test_title", testPageDescribed.getName());
+      assertEquals(null, testPageDescribed.getDescription());
+
+      //
       Attributes testPageAttrs = testPage.getAttributes();
-      assertEquals("test_title", testPageAttrs.getString("title"));
       assertEquals("test_factory_id", testPageAttrs.getString("factory-id"));
       assertEquals(true, (boolean)testPageAttrs.getBoolean("show-max-window"));
       assertEquals("test_creator", testPageAttrs.getString("creator"));
@@ -196,14 +200,15 @@ public class TestSavedPOM extends AbstractPortalTest
       assertTrue(container1.isAdapted(ProtectedResource.class));
       ProtectedResource container1PR = container1.adapt(ProtectedResource.class);
       assertEquals(Collections.singletonList("container_1_access_permissions"), container1PR.getAccessPermissions());
+      Described container1Described = container1.adapt(Described.class);
+      assertEquals("container_1_title", container1Described.getName());
+      assertEquals("container_1_description", container1Described.getDescription());
       Attributes container1Attrs = container1.getAttributes();
       assertEquals("container_1", container1Attrs.getString("name"));
-      assertEquals("container_1_title", container1Attrs.getString("title"));
       assertEquals("container_1_icon", container1Attrs.getString("icon"));
       assertEquals("container_1_template", container1Attrs.getString("template"));
       assertEquals("container_1_factory_id", container1Attrs.getString("factory-id"));
       assertEquals("container_1_decorator", container1Attrs.getString("decorator"));
-      assertEquals("container_1_description", container1Attrs.getString("description"));
       assertEquals("container_1_width", container1Attrs.getString("width"));
       assertEquals("container_1_height", container1Attrs.getString("height"));
 
@@ -212,13 +217,14 @@ public class TestSavedPOM extends AbstractPortalTest
       assertTrue(application1.isAdapted(ProtectedResource.class));
       ProtectedResource application1PR = application1.adapt(ProtectedResource.class);
       assertEquals(Collections.singletonList("application_1_access_permissions"), application1PR.getAccessPermissions());
+      Described application1Described = application1.adapt(Described.class);
+      assertEquals("application_1_title", application1Described.getName());
+      assertEquals("application_1_description", application1Described.getDescription());
       Attributes application1Attrs = application1.getAttributes();
       assertEquals("application_1_theme", application1Attrs.getString("theme"));
-      assertEquals("application_1_title", application1Attrs.getString("title"));
       assertEquals(true, (boolean)application1Attrs.getBoolean("show-info-bar"));
       assertEquals(true, (boolean)application1Attrs.getBoolean("show-state"));
       assertEquals(true, (boolean)application1Attrs.getBoolean("show-mode"));
-      assertEquals("application_1_description", application1Attrs.getString("description"));
       assertEquals("application_1_icon", application1Attrs.getString("icon"));
       assertEquals("application_1_width", application1Attrs.getString("width"));
       assertEquals("application_1_height", application1Attrs.getString("height"));

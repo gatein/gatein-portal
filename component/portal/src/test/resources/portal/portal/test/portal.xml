@@ -26,7 +26,6 @@
   <access-permissions>test_access_permissions</access-permissions>
   <edit-permission>test_edit_permission</edit-permission>
   <skin>test_skin</skin>
-  <title>test_title</title>
   <creator>test_creator</creator>
   <modifier>test_modifier</modifier>
   

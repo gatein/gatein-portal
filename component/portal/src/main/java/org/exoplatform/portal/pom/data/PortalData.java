@@ -47,9 +47,6 @@ public class PortalData extends ModelData
    private final String skin;
 
    /** . */
-   private final String title;
-
-   /** . */
    private final ContainerData portalLayout;
 
    /** . */
@@ -67,7 +64,6 @@ public class PortalData extends ModelData
       String editPermission,
       Map<String, String> properties,
       String skin,
-      String title,
       ContainerData portalLayout,
       String creator,
       String modifier)
@@ -81,7 +77,6 @@ public class PortalData extends ModelData
       this.editPermission = editPermission;
       this.properties = properties;
       this.skin = skin;
-      this.title = title;
       this.portalLayout = portalLayout;
       this.creator = creator;
       this.modifier = modifier;
@@ -125,11 +120,6 @@ public class PortalData extends ModelData
    public String getSkin()
    {
       return skin;
-   }
-
-   public String getTitle()
-   {
-      return title;
    }
 
    public ContainerData getPortalLayout()

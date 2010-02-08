@@ -34,28 +34,6 @@
       class="org.exoplatform.portal.config.model.Application"
       marshaller="org.exoplatform.portal.config.serialize.ApplicationHandler"
       unmarshaller="org.exoplatform.portal.config.serialize.ApplicationHandler">
-<!--
-    <value name="instance-id"
-           field="instanceState"
-           deserializer="org.exoplatform.portal.config.serialize.JiBX.unserializePortletState"
-           serializer="org.exoplatform.portal.config.serialize.JiBX.serializePortletState"
-           usage="optional"/>
--->
-<!--
-    <value name="id" usage="optional" field="id" style="attribute"/>
-    <structure name="application-type" usage="optional"/>
-    <value name="theme" usage="optional" field="theme"/>
-    <value name="title" usage="optional" field="title"/>
-    <value name="access-permissions" field="accessPermissions" usage="optional"/>
-    <value name="show-info-bar" field="showInfoBar" usage="optional" />
-    <value name="show-application-state" field="showApplicationState" usage="optional" />
-    <value name="show-application-mode" field="showApplicationMode" usage="optional" />
-    <value name="description" field="description" usage="optional"/>
-    <value name="icon" field="icon" usage="optional"/>
-    <value name="width" usage="optional" field="width"  />
-    <value name="height" usage="optional" field="height" />
-    <structure field="properties" usage="optional"/>
--->
   </mapping>
 
   <mapping name="portlet-application"
@@ -63,48 +41,7 @@
            class="org.exoplatform.portal.config.serialize.PortletApplication"
            marshaller="org.exoplatform.portal.config.serialize.PortletApplicationHandler"
            unmarshaller="org.exoplatform.portal.config.serialize.PortletApplicationHandler">
-<!--
-    <structure
-        get-method="getInstanceState"
-        set-method="setInstanceState">
-    </structure>
-    <value name="theme" usage="optional" get-method="getTheme" set-method="setTheme"/>
-    <value name="title" usage="optional" get-method="getTitle" set-method="setTitle"/>
-    <value name="access-permissions" get-method="getAccessPermissions" set-method="setAccessPermissions" usage="optional"/>
-    <value name="show-info-bar" get-method="getShowInfoBar" set-method="setShowInfoBar" usage="optional"/>
-    <value name="show-application-state" get-method="getShowApplicationState" set-method="setShowApplicationState" usage="optional"/>
-    <value name="show-application-mode" get-method="getShowApplicationMode" set-method="setShowApplicationMode" usage="optional" />
-    <value name="description" get-method="getDescription" set-method="setDescription" usage="optional"/>
-    <value name="icon" get-method="getIcon" set-method="setIcon" usage="optional"/>
-    <value name="width" get-method="getWidth"  set-method="setWidth" usage="optional"/>
-    <value name="height" get-method="getHeight" set-method="setHeight" usage="optional"/>
-    <structure get-method="getProperties" set-method="setProperties" usage="optional"/>
--->
   </mapping>
-
-<!--
-  <mapping
-      abstract="true"
-      class="org.exoplatform.portal.config.model.ApplicationState">
-    <value name="application-ref" get-method="getApplicationName" set-method="setApplicationName"/>
-    <value name="portlet-ref" get-method="getPortletName" set-method="setPortletName"/>
-  </mapping>
-
-  <mapping
-      name="portlet"
-      class="org.exoplatform.portal.config.model.TransientApplicationState"
-      extends="org.exoplatform.portal.config.model.ApplicationState"
-      factory="org.exoplatform.portal.config.serialize.JiBX.createTransientApplicationState">
-    <structure map-as="org.exoplatform.portal.config.model.ApplicationState"/>
-    <structure
-        name="preferences"
-        get-method="getState"
-        set-method="setState"
-        marshaller="org.exoplatform.portal.config.serialize.PreferencesHandler"
-        unmarshaller="org.exoplatform.portal.config.serialize.PreferencesHandler"
-        usage="optional"/>
-  </mapping>
--->
 
   <mapping name="page-body" label="pageBody" class="org.exoplatform.portal.config.model.PageBody">
   </mapping>
@@ -172,7 +109,6 @@
     <value name="access-permissions" field="accessPermissions" usage="optional"/>
     <value name="edit-permission" field="editPermission" usage="optional"/>
     <value name="skin" field="skin" usage="optional"/>
-    <value name="title" field="title" usage="optional"/>
     <value name="creator" field="creator" usage="optional"/>
     <value name="modifier" field="modifier" usage="optional"/>
     <structure field="properties" usage="optional"/>

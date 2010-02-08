@@ -24,6 +24,7 @@ import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.model.ApplicationState;
 import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.config.model.CloneApplicationState;
+import org.exoplatform.portal.mop.Described;
 import org.exoplatform.portal.mop.ProtectedResource;
 import org.exoplatform.portal.config.model.PersistentApplicationState;
 import org.exoplatform.portal.config.model.PortalConfig;
@@ -315,7 +316,6 @@ public class Mapper
          editPermission,
          Collections.unmodifiableMap(properties),
          attrs.getValue(MappedAttributes.SKIN),
-         attrs.getValue(MappedAttributes.TITLE),
          layout,
          attrs.getValue(MappedAttributes.CREATOR),
          attrs.getValue(MappedAttributes.MODIFIER));
@@ -335,7 +335,6 @@ public class Mapper
       Attributes attrs = dst.getAttributes();
       attrs.setValue(MappedAttributes.LOCALE, src.getLocale());
       attrs.setValue(MappedAttributes.SKIN, src.getSkin());
-      attrs.setValue(MappedAttributes.TITLE, src.getTitle());
       attrs.setValue(MappedAttributes.CREATOR, src.getCreator());
       attrs.setValue(MappedAttributes.MODIFIER, src.getModifier());
       if (src.getProperties() != null)
@@ -387,6 +386,9 @@ public class Mapper
       }
 
       //
+      Described described = src.adapt(Described.class);
+
+      //
       return new PageData(
          src.getObjectId(),
          null,
@@ -395,8 +397,8 @@ public class Mapper
          null,
          null,
          attrs.getValue(MappedAttributes.FACTORY_ID),
-         attrs.getValue(MappedAttributes.TITLE),
-         null,
+         described.getName(),
+         described.getDescription(),
          null,
          null,
          Utils.safeImmutableList(accessPermissions),
@@ -412,13 +414,16 @@ public class Mapper
 
    private ContainerData load(UIContainer src, List<ComponentData> children)
    {
-
+      //
       List<String> accessPermissions = Collections.emptyList();
       if (src.isAdapted(ProtectedResource.class))
       {
          ProtectedResource pr = src.adapt(ProtectedResource.class);
          accessPermissions = pr.getAccessPermissions();
       }
+
+      //
+      Described described = src.adapt(Described.class);
 
       Attributes attrs = src.getAttributes();
       return new ContainerData(
@@ -429,8 +434,8 @@ public class Mapper
          attrs.getValue(MappedAttributes.DECORATOR),
          attrs.getValue(MappedAttributes.TEMPLATE),
          attrs.getValue(MappedAttributes.FACTORY_ID),
-         attrs.getValue(MappedAttributes.TITLE),
-         attrs.getValue(MappedAttributes.DESCRIPTION),
+         described.getName(),
+         described.getDescription(),
          attrs.getValue(MappedAttributes.WIDTH),
          attrs.getValue(MappedAttributes.HEIGHT),
          Utils.safeImmutableList(accessPermissions),
@@ -536,8 +541,12 @@ public class Mapper
       pr.setEditPermission(src.getEditPermission());
 
       //
+      Described described = dst.adapt(Described.class);
+      described.setName(src.getTitle());
+      described.setDescription(src.getDescription());
+
+      //
       Attributes attrs = dst.getAttributes();
-      attrs.setValue(MappedAttributes.TITLE, src.getTitle());
       attrs.setValue(MappedAttributes.FACTORY_ID, src.getFactoryId());
       attrs.setValue(MappedAttributes.SHOW_MAX_WINDOW, src.isShowMaxWindow());
       attrs.setValue(MappedAttributes.CREATOR, src.getCreator());
@@ -560,15 +569,17 @@ public class Mapper
       ProtectedResource pr = dst.adapt(ProtectedResource.class);
       pr.setAccessPermissions(src.getAccessPermissions());
 
+      Described described = dst.adapt(Described.class);
+      described.setName(src.getTitle());
+      described.setDescription(src.getDescription());
+
       Attributes dstAttrs = dst.getAttributes();
       dstAttrs.setValue(MappedAttributes.ID, src.getId());
       dstAttrs.setValue(MappedAttributes.TYPE, src instanceof DashboardData ? "dashboard" : null);
-      dstAttrs.setValue(MappedAttributes.TITLE, src.getTitle());
       dstAttrs.setValue(MappedAttributes.ICON, src.getIcon());
       dstAttrs.setValue(MappedAttributes.TEMPLATE, src.getTemplate());
       dstAttrs.setValue(MappedAttributes.FACTORY_ID, src.getFactoryId());
       dstAttrs.setValue(MappedAttributes.DECORATOR, src.getDecorator());
-      dstAttrs.setValue(MappedAttributes.DESCRIPTION, src.getDescription());
       dstAttrs.setValue(MappedAttributes.WIDTH, src.getWidth());
       dstAttrs.setValue(MappedAttributes.HEIGHT, src.getHeight());
       dstAttrs.setValue(MappedAttributes.NAME, src.getName());
@@ -851,15 +862,18 @@ public class Mapper
       }
 
       //
+      Described described = src.adapt(Described.class);
+
+      //
       return new ApplicationData<S>(
          src.getObjectId(),
          src.getName(),
          type,
          instanceState,
          null,
-         attrs.getValue(MappedAttributes.TITLE),
+         described.getName(),
          attrs.getValue(MappedAttributes.ICON),
-         attrs.getValue(MappedAttributes.DESCRIPTION),
+         described.getDescription(),
          attrs.getValue(MappedAttributes.SHOW_INFO_BAR),
          attrs.getValue(MappedAttributes.SHOW_STATE),
          attrs.getValue(MappedAttributes.SHOW_MODE),
@@ -877,13 +891,15 @@ public class Mapper
       ProtectedResource pr = dst.adapt(ProtectedResource.class);
       pr.setAccessPermissions(src.getAccessPermissions());
 
+      Described described = dst.adapt(Described.class);
+      described.setName(src.getTitle());
+      described.setDescription(src.getDescription());
+
       Attributes attrs = dst.getAttributes();
       attrs.setValue(MappedAttributes.THEME, src.getTheme());
-      attrs.setValue(MappedAttributes.TITLE, src.getTitle());
       attrs.setValue(MappedAttributes.SHOW_INFO_BAR, src.isShowInfoBar());
       attrs.setValue(MappedAttributes.SHOW_STATE, src.isShowApplicationState());
       attrs.setValue(MappedAttributes.SHOW_MODE, src.isShowApplicationMode());
-      attrs.setValue(MappedAttributes.DESCRIPTION, src.getDescription());
       attrs.setValue(MappedAttributes.ICON, src.getIcon());
       attrs.setValue(MappedAttributes.WIDTH, src.getWidth());
       attrs.setValue(MappedAttributes.HEIGHT, src.getHeight());
@@ -1054,6 +1070,9 @@ public class Mapper
       }
 
       //
+      Described described = container.adapt(Described.class);
+
+      //
       Attributes attrs = container.getAttributes();
       List<ComponentData> children = loadChildren(container);
       return new DashboardData(
@@ -1064,8 +1083,8 @@ public class Mapper
          attrs.getValue(MappedAttributes.DECORATOR),
          attrs.getValue(MappedAttributes.TEMPLATE),
          attrs.getValue(MappedAttributes.FACTORY_ID),
-         attrs.getValue(MappedAttributes.TITLE),
-         attrs.getValue(MappedAttributes.DESCRIPTION),
+         described.getName(),
+         described.getDescription(),
          attrs.getValue(MappedAttributes.WIDTH),
          attrs.getValue(MappedAttributes.HEIGHT),
          Utils.safeImmutableList(accessPermissions),

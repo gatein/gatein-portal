@@ -179,6 +179,7 @@
           <value>org.exoplatform.portal.pom.spi.gadget.GadgetState</value>
           <value>org.exoplatform.portal.pom.spi.wsrp.WSRPState</value>
           <value>org.exoplatform.portal.mop.ProtectedResource</value>
+          <value>org.exoplatform.portal.mop.Described</value>
         </values-param>
       </init-params>
     </component-plugin>

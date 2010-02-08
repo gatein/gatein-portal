@@ -306,7 +306,7 @@ public class POMSession
             {
                statement =
                   "jcr:path LIKE '" + workspaceChunk + "/" + ownerTypeChunk + "/" + ownerIdChunk
-                     + "/mop:rootpage/mop:children/mop:pages/mop:children/%' AND mop:title='" + title + "'";
+                     + "/mop:rootpage/mop:children/mop:pages/mop:children/%' AND gtn:name='" + title + "'";
             }
             else
             {

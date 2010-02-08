@@ -202,7 +202,6 @@ public class PortalDataMapper
       model.setEditPermission(uiPortal.getEditPermission());
       model.setLocale(uiPortal.getLocale());
       model.setSkin(uiPortal.getSkin());
-      model.setTitle(uiPortal.getTitle());
       model.setModifiable(uiPortal.isModifiable());
       model.setProperties(uiPortal.getProperties());
 
@@ -352,7 +351,6 @@ public class PortalDataMapper
       uiPortal.setModifier(model.getModifier());
       // uiPortal.setFactoryId(model.getFactoryId());
       uiPortal.setOwner(model.getName());
-      uiPortal.setTitle(model.getTitle());
       uiPortal.setModifiable(model.isModifiable());
 
       uiPortal.setLocale(model.getLocale());

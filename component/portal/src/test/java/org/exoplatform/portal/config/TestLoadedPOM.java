@@ -162,7 +162,6 @@ public class TestLoadedPOM extends AbstractPortalTest
       assertTrue(Arrays.equals(new String[]{"test_access_permissions"}, portal.getAccessPermissions()));
       assertEquals("test_edit_permission", portal.getEditPermission());
       assertEquals("test_skin", portal.getSkin());
-      assertEquals("test_title", portal.getTitle());
       assertEquals("test_creator", portal.getCreator());
       assertEquals("test_modifier", portal.getModifier());
       assertEquals("test_prop_value", portal.getProperty("prop_key"));
