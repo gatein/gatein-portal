@@ -100,9 +100,12 @@ public class UINavigationManagement extends UIContainer
          UINavigationNodeSelector uiNodeSelector = uiManagement.getChild(UINavigationNodeSelector.class);
          UserPortalConfigService portalConfigService =
             uiManagement.getApplicationComponent(UserPortalConfigService.class);
+         
          PageNavigation navigation = uiNodeSelector.getSelectedNavigation();
+         String editedOwnerType = navigation.getOwnerType();
+         String editedOwnerId = navigation.getOwnerId();
          // Check existed
-         PageNavigation persistNavigation =  portalConfigService.getPageNavigation(navigation.getOwnerType(), navigation.getOwnerId());
+         PageNavigation persistNavigation =  portalConfigService.getPageNavigation(editedOwnerType, editedOwnerId);
          if (persistNavigation == null) {
             UIApplication uiApp = Util.getPortalRequestContext().getUIApplication();
             uiApp.addMessage(new ApplicationMessage("UINavigationManagement.msg.NavigationNotExistAnymore", null));
@@ -137,11 +140,19 @@ public class UINavigationManagement extends UIContainer
          {
             portalConfigService.update(navigation);
          }
-         UIPortal uiPortal = Util.getUIPortal();
-         setNavigation(uiPortal.getNavigations(), navigation);
+         
+         UIPortalApplication uiPortalApp = Util.getUIPortalApplication();
+         setNavigation(uiPortalApp.getNavigations(), navigation);
+         
+         //Update UIPortal corredponding to edited navigation
+         UIPortal targetedUIPortal = uiPortalApp.getCachedUIPortal(editedOwnerType, editedOwnerId);
+         if(targetedUIPortal != null)
+         {
+            targetedUIPortal.setNavigation(navigation);
+         }
+         
          UIPopupWindow uiPopup = uiManagement.getParent();
          uiPopup.setShow(false);
-         UIPortalApplication uiPortalApp = Util.getUIPortalApplication();
          UIWorkingWorkspace uiWorkingWS = uiPortalApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
          prContext.addUIComponentToUpdateByAjax(uiWorkingWS);
          prContext.setFullRender(true);
