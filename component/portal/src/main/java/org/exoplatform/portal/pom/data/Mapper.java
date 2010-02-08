@@ -73,29 +73,22 @@ public class Mapper
    /** . */
    private static final Set<String> propertiesBlackList = Tools.set(
       "jcr:uuid",
-      "jcr:primaryType",
-      MappedAttributes.ACCESS_PERMISSIONS.getName(),
-      MappedAttributes.EDIT_PERMISSION.getName());
+      "jcr:primaryType");
 
    /** . */
    private static final Set<String> portalPropertiesBlackList =
       Tools.set(
          MappedAttributes.LOCALE.getName(),
-         MappedAttributes.SKIN.getName(),
-         MappedAttributes.TITLE.getName(),
-         MappedAttributes.CREATOR.getName(),
-         MappedAttributes.MODIFIER.getName());
+         MappedAttributes.SKIN.getName());
 
    /** . */
    private static final Set<String> windowPropertiesBlackList =
       Tools.set(
          MappedAttributes.TYPE.getName(),
          MappedAttributes.THEME.getName(),
-         MappedAttributes.TITLE.getName(),
          MappedAttributes.SHOW_INFO_BAR.getName(),
          MappedAttributes.SHOW_STATE.getName(),
          MappedAttributes.SHOW_MODE.getName(),
-         MappedAttributes.DESCRIPTION.getName(),
          MappedAttributes.ICON.getName(),
          MappedAttributes.WIDTH.getName(),
          MappedAttributes.HEIGHT.getName());

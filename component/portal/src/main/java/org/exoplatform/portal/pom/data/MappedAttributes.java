@@ -47,34 +47,13 @@ class MappedAttributes
    public static final Key<Boolean> SHOW_MAX_WINDOW = Key.create("show-max-window", ValueType.BOOLEAN);
 
    /** . */
-   public static final Key<String> TITLE = Key.create("title", ValueType.STRING);
-
-   /** . */
    public static final Key<String> FACTORY_ID = Key.create("factory-id", ValueType.STRING);
-
-   /** . */
-   public static final Key<String> ACCESS_PERMISSIONS = Key.create("access-permissions", ValueType.STRING);
-
-   /** . */
-   public static final Key<String> EDIT_PERMISSION = Key.create("edit-permissions", ValueType.STRING);
-
-   /** . */
-   public static final Key<String> CREATOR = Key.create("creator", ValueType.STRING);
-
-   /** . */
-   public static final Key<String> MODIFIER = Key.create("modifier", ValueType.STRING);
-
-   /** . */
-   public static final Key<String> DESCRIPTION = Key.create("description", ValueType.STRING);
 
    /** . */
    public static final Key<String> DECORATOR = Key.create("decorator", ValueType.STRING);
 
    /** . */
    public static final Key<Integer> PRIORITY = Key.create("priority", ValueType.INTEGER);
-
-   /** . */
-   public static final Key<String> LABEL = Key.create("label", ValueType.STRING);
 
    /** . */
    public static final Key<String> ICON = Key.create("icon", ValueType.STRING);
