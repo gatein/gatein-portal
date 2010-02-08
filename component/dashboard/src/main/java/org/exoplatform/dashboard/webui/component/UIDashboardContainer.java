@@ -123,12 +123,13 @@ public class UIDashboardContainer extends org.exoplatform.webui.core.UIContainer
       UIPortlet currentUIPortlet = UIPortlet.getCurrentUIPortlet();
 
       // Get dashboard for merging
-      Container dashboard;
+      Container dashboard = null;
       if (currentUIPortlet.getStorageId() != null)
       {
          dashboard = service.loadDashboard(currentUIPortlet.getStorageId());
       }
-      else
+      
+      if (dashboard == null)
       {
          dashboard = createContainer(COLUMN_CONTAINER, null);
       }

@@ -105,7 +105,7 @@ public class UITabPaneDashboard extends UIContainer
    }
 
    */
-   
+
    public int getCurrentNumberOfTabs() throws Exception
    {
 
@@ -162,51 +162,56 @@ public class UITabPaneDashboard extends UIContainer
          List<PageNode> nodes = pageNavigation.getNodes();
          PageNode tobeRemoved = nodes.get(nodeIndex);
          PageNode selectedNode = uiPortal.getSelectedNode();
-         
-         // Refresh Node List to prevent session conflict
-         nodes.clear();
-         PageNavigation updateNav = configService.getPageNavigation(pageNavigation.getOwnerType(), pageNavigation.getOwnerId());
-         int count = 0;
+
+         boolean isRemoved = true; // To check 
+         PageNavigation updateNav =
+            configService.getPageNavigation(pageNavigation.getOwnerType(), pageNavigation.getOwnerId());
          for (PageNode pageNode : updateNav.getNodes())
          {
-            nodes.add(pageNode);
-            if (pageNode.getUri().equals(tobeRemoved.getUri())) {
-               nodeIndex = count;
-               tobeRemoved = pageNode;
-            }
-            if (pageNode.getUri().equals(selectedNode.getUri())) {
-               selectedNode = pageNode;
-            }
-            count ++;
-         }
-         
-         if (tobeRemoved.getUri().equals(selectedNode.getUri()))
-         {
-            selectedNode = nodes.get(Math.max(0, nodeIndex - 1));
-            
-         } else if (!nodes.contains(selectedNode)) {
-            selectedNode = nodes.get(0);
-         }
-         
-         if (nodes.size() >= 2)
-         {            
-            nodes.remove(tobeRemoved);
-            String pageRef = tobeRemoved.getPageReference();
-            if (pageRef != null && pageRef.length() > 0)
+            if (pageNode.getUri().equals(tobeRemoved.getUri()))
             {
-               Page page = configService.getPage(pageRef);
-               if (page != null)
-                  configService.remove(page);
+               isRemoved = false;
+               break;
             }
-            
-            uiPortal.setSelectedNode(selectedNode);
-            configService.update(pageNavigation);
-         } else {
+         }
+
+         if (nodes.size() >= 2)
+         {
+            // Remove node
+            nodes.remove(tobeRemoved);
+
+            // Choose selected Node
+            if (tobeRemoved.getUri().equals(selectedNode.getUri()))
+            {
+               selectedNode = nodes.get(Math.max(0, nodeIndex - 1));
+
+            }
+            else if (!nodes.contains(selectedNode))
+            {
+               selectedNode = nodes.get(0);
+            }
+
+            // Update
+            if (!isRemoved)
+            {
+               String pageRef = tobeRemoved.getPageReference();
+               if (pageRef != null && pageRef.length() > 0)
+               {
+                  Page page = configService.getPage(pageRef);
+                  if (page != null)
+                     configService.remove(page);
+               }
+               uiPortal.setSelectedNode(selectedNode);
+               configService.update(pageNavigation);
+            }
+         }
+         else
+         {
             getAncestorOfType(UIApplication.class).addMessage(
                new ApplicationMessage("UITabPaneDashboard.msg.cannotDeleteLastTab", null));
             return null;
          }
-         
+
          return selectedNode;
       }
       catch (Exception ex)
@@ -385,20 +390,21 @@ public class UITabPaneDashboard extends UIContainer
       public void execute(Event<UITabPaneDashboard> event) throws Exception
       {
          UITabPaneDashboard source = event.getSource();
-         WebuiRequestContext context = event.getRequestContext();         
+         WebuiRequestContext context = event.getRequestContext();
          int removedNodeIndex = Integer.parseInt(context.getRequestParameter(UIComponent.OBJECTID));
          PageNode selectedNode = source.removePageNode(removedNodeIndex);
 
          //If the node is removed successfully, then redirect to the node specified by tab on the left
          if (selectedNode != null)
          {
-           // set maximizedUIComponent of UIPageBody is null if it is maximized portlet of removed page
-           UIPortal uiPortal = Util.getUIPortal();
-           UIPageBody uiPageBody = uiPortal.findFirstComponentOfType(UIPageBody.class);
-           if(uiPageBody != null && uiPageBody.getMaximizedUIComponent() != null){
-             uiPageBody.setMaximizedUIComponent(null);
-           }
-           
+            // set maximizedUIComponent of UIPageBody is null if it is maximized portlet of removed page
+            UIPortal uiPortal = Util.getUIPortal();
+            UIPageBody uiPageBody = uiPortal.findFirstComponentOfType(UIPageBody.class);
+            if (uiPageBody != null && uiPageBody.getMaximizedUIComponent() != null)
+            {
+               uiPageBody.setMaximizedUIComponent(null);
+            }
+
             PortalRequestContext prContext = Util.getPortalRequestContext();
             prContext.setResponseComplete(true);
             prContext.getResponse().sendRedirect(prContext.getPortalURI() + selectedNode.getUri());

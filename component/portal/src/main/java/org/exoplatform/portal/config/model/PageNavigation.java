@@ -21,7 +21,6 @@ package org.exoplatform.portal.config.model;
 
 import org.exoplatform.portal.pom.data.NavigationData;
 import org.exoplatform.portal.pom.data.NavigationNodeData;
-import org.gatein.mop.core.api.workspace.NavigationContainer;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
