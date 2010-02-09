@@ -126,47 +126,50 @@ public class UIPageBrowser extends UISearch
       return lastQuery_;
    }
 
-   public void defaultValue(Query<Page> query) throws Exception
+   /**
+    * Update data feed in UIRepeater with a given query.
+    * Returns false if no result is found, true other wise
+    * 
+    * @param query
+    * @return
+    * @throws Exception
+    */
+   public boolean feedDataWithQuery(Query<Page> query) throws Exception
    {
       lastQuery_ = query;
-      // UIGrid uiGrid = findFirstComponentOfType(UIGrid.class);
-      // UIPageIterator pageIterator = uiGrid.getUIPageIterator();
+      
       UIVirtualList virtualList = getChild(UIVirtualList.class);
-      DataStorage service = getApplicationComponent(DataStorage.class);
-      if (lastQuery_ == null)
+      DataStorage dataStorage = getApplicationComponent(DataStorage.class);
+      if(lastQuery_ == null)
       {
          lastQuery_ = new Query<Page>(null, null, null, null, Page.class);
       }
-/*
-      try
-      {
-*/
-         //pagelist.setPageSize(10);
-         //pageIterator.setPageList(pagelist);
       virtualList.dataBind(new PageQueryAccessList(lastQuery_, 10));
-/*
-      }
-      catch (RepositoryException e)
-      {
-         //pageIterator.setPageList(new ObjectPageList(new ArrayList<String>(), 0));
-         virtualList.dataBind(new ObjectPageList(new ArrayList<String>(), 0));
-         UIApplication uiApp = Util.getPortalRequestContext().getUIApplication();
-         uiApp.addMessage(new ApplicationMessage("UISearchForm.msg.empty", null));
-         Util.getPortalRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
-         return;
-      }
-*/
-
-
+      
       UIRepeater repeater = (UIRepeater)virtualList.getDataFeed();
       PageList datasource = repeater.getDataSource();
+      
       if (datasource.getAvailable() > 0)
-         return;
+      {
+         return true;
+      }
+      else
+      {
+         return false;
+      }
+   }
+   
+   /**
+    * Show a popup informing that no result available for the last query
+    *
+    */
+   public static void showNoResultMessagePopup()
+   {
       UIApplication uiApp = Util.getPortalRequestContext().getUIApplication();
       uiApp.addMessage(new ApplicationMessage("UISearchForm.msg.empty", null));
       Util.getPortalRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
    }
-
+   
    public void quickSearch(UIFormInputSet quickSearchInput) throws Exception
    {
       UIFormStringInput input = (UIFormStringInput)quickSearchInput.getChild(0);
@@ -181,8 +184,14 @@ public class UIPageBrowser extends UISearch
       else if (selectBoxValue.equals("ownerId"))
          query.setOwnerId(value);
       query.setName(null);
+      
       lastQuery_ = query;
-      defaultValue(lastQuery_);
+      boolean dataAvailable = feedDataWithQuery(lastQuery_);
+      if(!dataAvailable)
+      {
+         showNoResultMessagePopup();
+      }
+      
       if (this.<UIComponent> getParent() instanceof UIPopupWindow)
       {
          UIPopupWindow popupWindow = getParent();
@@ -224,19 +233,21 @@ public class UIPageBrowser extends UISearch
    {
    }
 
-   void reset() throws Exception
+   /*
+   public void reset() throws Exception
    {
       UIVirtualList virtualList = getChild(UIVirtualList.class);
       UIRepeater repeater = (UIRepeater)virtualList.getDataFeed();
       LazyPageList datasource = (LazyPageList)repeater.getDataSource();
       int currentPage = datasource.getCurrentPage();
-      defaultValue(null);
+      feedDataWithQuery(null);
       if (currentPage > datasource.getAvailablePage())
          currentPage = datasource.getAvailablePage();
       if (currentPage > 0)
          datasource.getPage(currentPage);
    }
-
+  */
+   
    static public class DeleteActionListener extends EventListener<UIPageBrowser>
    {
       public void execute(Event<UIPageBrowser> event) throws Exception
@@ -277,7 +288,11 @@ public class UIPageBrowser extends UISearch
          }
          else
          {
-            uiPageBrowser.defaultValue(uiPageBrowser.getLastQuery());
+            boolean dataAvailable = uiPageBrowser.feedDataWithQuery(uiPageBrowser.getLastQuery());
+            if(!dataAvailable)
+            {
+               showNoResultMessagePopup();
+            }
             if (currentPage > datasource.getAvailablePage())
                currentPage = datasource.getAvailablePage();
             datasource.getPage(currentPage);

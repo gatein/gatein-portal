@@ -1,4 +1,4 @@
-<% uicomponent.defaultValue(uicomponent.getLastQuery()); %>
+<% uicomponent.feedDataWithQuery(uicomponent.getLastQuery()); %>
 <div class="UIPageBrowser" id="<%=uicomponent.getId();%>">
 	
 	<%/*Begin UIPageBrowser Content*/%>

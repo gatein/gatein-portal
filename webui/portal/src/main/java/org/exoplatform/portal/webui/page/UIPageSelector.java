@@ -137,7 +137,7 @@ public class UIPageSelector extends UIFormInputContainer<String>
             uiApp.addMessage(new ApplicationMessage("UIPageBrowser.msg.NoPermission", new String[]{id}));;
          }
          uiPageSelector.setValue(id);
-         uiPageBrowser.defaultValue(null);
+         uiPageBrowser.feedDataWithQuery(null);
 
          UIForm uiForm = uiPageSelector.getAncestorOfType(UIForm.class);
          if (uiForm != null)
