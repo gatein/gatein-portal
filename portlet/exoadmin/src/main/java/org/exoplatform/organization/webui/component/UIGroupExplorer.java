@@ -123,8 +123,7 @@ public class UIGroupExplorer extends UIContainer
       sibblingsGroup_ = service.getGroupHandler().findGroups(parentGroup);
 
       // if not administrator
-      String username = org.exoplatform.portal.webui.util.Util.getPortalRequestContext().getRemoteUser();
-      if (!GroupManagement.isSuperUserOfGroup(username, groupId))
+      if (!GroupManagement.isAdministrator(null))
       {
          childrenGroup_ = GroupManagement.getRelatedGroups(null, childrenGroup_);
          sibblingsGroup_ = GroupManagement.getRelatedGroups(null, sibblingsGroup_);
