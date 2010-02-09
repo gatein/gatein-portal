@@ -115,7 +115,9 @@
   float: left; /* orientation=rt */
   cursor: nw-resize; /* orientation=lt */
   cursor: ne-resize; /* orientation=rt */
-  margin-top:-29px;
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
 }
 
 .UIPopupWindow .BottomLeftCornerDecorator {
