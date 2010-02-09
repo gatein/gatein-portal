@@ -44,7 +44,7 @@
 	response.addCookie(cookie);
 	
   response.setCharacterEncoding("UTF-8"); 
-
+  response.setContentType("text/html; charset=UTF-8");
 %>
 <!DOCTYPE html 
     PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"

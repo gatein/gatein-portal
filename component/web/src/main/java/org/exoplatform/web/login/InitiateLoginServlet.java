@@ -55,6 +55,7 @@ public class InitiateLoginServlet extends AbstractHttpServlet
    @Override
    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
    {
+      resp.setContentType("text/html; charset=UTF-8");
       HttpSession session = req.getSession();
       Credentials credentials = (Credentials)session.getAttribute(InitiateLoginServlet.CREDENTIALS);
       session.setAttribute("initialURI", req.getAttribute("javax.servlet.forward.request_uri"));
