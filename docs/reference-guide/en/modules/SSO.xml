@@ -73,7 +73,7 @@
           </listitem>
 
           <listitem>
-            <para>Replace: <programlisting role="XML"> &lt;!--
+            <para>Replace: <programlisting> &lt;!--
   | Whereas CredentialsToPrincipalResolvers identify who it is some Credentials might authenticate, 
   | AuthenticationHandlers actually authenticate credentials.  Here we declare the AuthenticationHandlers that
   | authenticate the Principals that the CredentialsToPrincipalResolvers identified.  CAS will try these handlers in turn
@@ -104,7 +104,7 @@
             <para>With the following (Make sure to set the host, port and
             context with the values corresponding to your portal)</para>
 
-            <para><programlisting role="XML">&lt;!--
+            <para><programlisting>&lt;!--
  | Whereas CredentialsToPrincipalResolvers identify who it is some Credentials might authenticate, 
  | AuthenticationHandlers actually authenticate credentials.  Here we declare the AuthenticationHandlers that
  | authenticate the Principals that the CredentialsToPrincipalResolvers identified.  CAS will try these handlers in turn
@@ -170,6 +170,11 @@
             <para>Now you should be able to start Tomcat and access
             http://localhost:8888/cas but at this stage you won't be able to
             login.</para>
+            <mediaobject>
+               <imageobject>
+                  <imagedata fileref="images/sso.png" format="PNG" />
+               </imageobject>
+            </mediaobject>
           </listitem>
         </orderedlist>
       </section>
@@ -189,7 +194,7 @@
             <para>In JBoss AS, edit gatein.ear/META-INF/gatein-jboss-beans.xml
             and uncomment the section for CAS</para>
 
-            <para><programlisting role="XML">&lt;authentication&gt;
+            <para><programlisting>&lt;authentication&gt;
   &lt;login-module code="org.gatein.sso.agent.login.SSOLoginModule" flag="required"&gt;
   &lt;/login-module&gt;      
   &lt;login-module code="org.exoplatform.services.security.j2ee.JbossLoginModule" flag="required"&gt;
