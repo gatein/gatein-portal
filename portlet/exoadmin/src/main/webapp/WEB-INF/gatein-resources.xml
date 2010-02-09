@@ -83,15 +83,5 @@
 		<skin-name>Default</skin-name>
 		<css-path>/skin/register/webui/component/DefaultStylesheet.css</css-path>
 	</portlet-skin>
-
-    <!-- WSRP Admin Portlet skins -->
-
-	<portlet-skin>
-		<application-name>exoadmin</application-name>
-		<portlet-name>WSRPAdminPortlet</portlet-name>
-		<skin-name>Default</skin-name>
-		<css-path>/skin/wsrp/webui/component/DefaultStylesheet.css</css-path>
-	</portlet-skin>
-			
 </gatein-resources>
 

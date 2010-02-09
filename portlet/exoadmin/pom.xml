@@ -45,25 +45,6 @@
       <version>3.0.0-CR01-SNAPSHOT</version>
       <scope>provided</scope>
     </dependency>
-
-      <dependency>
-         <groupId>org.gatein.wsrp</groupId>
-         <artifactId>wsrp-producer-lib</artifactId>
-         <version>${org.gatein.wsrp.version}</version>
-         <scope>provided</scope>
-      </dependency>
-      <dependency>
-         <groupId>org.gatein.wsrp</groupId>
-         <artifactId>wsrp-consumer</artifactId>
-         <version>${org.gatein.wsrp.version}</version>
-         <scope>provided</scope>
-      </dependency>
-      <dependency>
-         <groupId>org.gatein.wsrp</groupId>
-         <artifactId>wsrp-integration-api</artifactId>
-         <version>${org.gatein.wsrp.version}</version>
-         <scope>provided</scope>
-      </dependency>
   </dependencies> 
   
   <build>
