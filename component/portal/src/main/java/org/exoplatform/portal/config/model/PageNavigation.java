@@ -71,6 +71,12 @@ public class PageNavigation extends PageNodeContainer
       this.pageNodes = children;
    }
 
+   // Make gtmpl happy with that for now
+   public String getDescription()
+   {
+      return null;
+   }
+
    public int getId()
    {
       return getOwner().hashCode();
