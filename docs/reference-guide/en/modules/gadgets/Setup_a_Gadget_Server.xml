@@ -71,7 +71,7 @@
 		<section id="sect-Reference_Guide-Configuration-Proxy">
 			<title>Proxy</title>
 			<para>
-				To allow external gadgets when the server is behind a proxy, add the following code to the beginning of the JVM :
+				To allow external gadgets when the server is behind a proxy, add the following code to the beginning of the JVM:
 			</para>
 			
 <programlisting>-Dhttp.proxyHost=proxyhostURL -Dhttp.proxyPort=proxyPortNumber -Dhttp.proxyUser=someUserName -Dhttp.proxyPassword=somePassword
