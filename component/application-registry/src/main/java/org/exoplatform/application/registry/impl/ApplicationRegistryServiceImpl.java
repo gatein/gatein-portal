@@ -541,7 +541,10 @@ public class ApplicationRegistryServiceImpl implements ApplicationRegistryServic
 
    private Application load(ContentDefinition contentDef)
    {
-      ContentType<?> contentType = contentDef.getCustomization().getType();
+      Customization customization = contentDef.getCustomization();
+
+      //
+      ContentType<?> contentType = customization.getType();
       ApplicationType<?> applicationType = ApplicationType.getType(contentType);
 
       //
@@ -556,8 +559,8 @@ public class ApplicationRegistryServiceImpl implements ApplicationRegistryServic
       application.setAccessPermissions(new ArrayList<String>(contentDef.getAccessPermissions()));
       application.setCreatedDate(contentDef.getCreationDate());
       application.setModifiedDate(contentDef.getLastModificationDate());
-      application.setStorageId(contentDef.getCustomization().getId());
-      application.setContentId(contentDef.getCustomization().getContentId());
+      application.setStorageId(customization.getId());
+      application.setContentId(customization.getContentId());
       return application;
    }
 
