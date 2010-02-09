@@ -5,16 +5,17 @@
 ]>
 <section id="sect-Reference_Guide-Setup_a_Gadget_Server">
 	<title>Setup a Gadget Server</title>
-	<section id="sect-Reference_Guide-Setup_a_Gadget_Server-Setup_virtual_servers_for_the_gadget_rendering">
-		<title>Setup virtual servers for the gadget rendering</title>
+	<section id="sect-Reference_Guide-Setup_a_Gadget_Server-Virtual_servers_for_gadget_rendering">
+		<title>Virtual servers for gadget rendering</title>
 		<para>
-			GateIn recommend you to setup 2 different virtual hosts because it's the basis of the security model of gadgets. Having the gadget running on a different domain than the container (the website that 'contains' the app), the gadget can't read / modify / do anything nasty to GateIn Portal (like adding spam messages, stealing your cookies, whatever).
+			&PRODUCT; recommends using two virtual hosts for security. If the gadget is running on a different domain than the container (the website that 'contains' the app), it is unable to interfere with the portal by modifying code or cookies.
 		</para>
 		<para>
-			For example you can server the portal from <emphasis role="bold">http://www.sample.com</emphasis> and the gadgets from <emphasis role="bold">http://www.samplemodules.com</emphasis>
+			An example would hosting the portal from <emphasis role="bold">http://www.sample.com</emphasis> and the gadgets from <emphasis role="bold">http://www.samplemodules.com</emphasis>.
 		</para>
 		<para>
-			To do this, we need to configure a parameter with the name is <emphasis>gadgets.hostName</emphasis> , the value is the <emphasis>path/to/gadgetServer</emphasis> in GadgetRegisteryService service like following: 
+			To do this, configure a parameter called <emphasis>gadgets.hostName</emphasis>. The value is the <emphasis>path/to/gadgetServer</emphasis> in <literal>GadgetRegisteryService</literal>:
+		</para>
 <programlisting>&lt;component&gt;
   &lt;key&gt;org.exoplatform.application.gadget.GadgetRegistryService&lt;/key&gt;
   &lt;type&gt;org.exoplatform.application.gadget.jcr.GadgetRegistryServiceImpl&lt;/type&gt;
@@ -27,12 +28,12 @@
   &lt;/init-params&gt;
 &lt;/component&gt;
 </programlisting>
+
+		<para>
+			It is also possible to have multiple rendering servers. This helps to balance the rendering load across multiple servers.
 		</para>
 		<para>
-			It's possible to have multiple rendering servers. That would help to balance the load across multiple servers.
-		</para>
-		<para>
-			If you still want to deploy it on the same server, make sure that it starts before anything that use the gadgets (for example the webapp GateInGadgets that use org.exoplatform.application.gadget.GadgetRegister)
+			When deploying on the same server ensure the gadget initiates before anything that calls it (for example; the webapp <literal>GateInGadgets</literal> which uses <literal>org.exoplatform.application.gadget.GadgetRegister</literal>).
 		</para>
 	</section>
 	
@@ -41,17 +42,21 @@
 		<section id="sect-Reference_Guide-Configuration-Security_key">
 			<title>Security key</title>
 			<para>
-				A file <emphasis role="bold">key.txt</emphasis> has to be generated <emphasis role="bold">for every installation of GateIn to be secure</emphasis> . This file contains a secret key used to crypt the security token used for authenticating the user. On Linux this can be generated such as:
+				A file called <emphasis role="bold">key.txt</emphasis> has to be generated for every installation of &PRODUCT; to be secure. This file contains a secret key used to encrypt the security token used for authenticating the user.
+			</para>
+			<para>
+				In Linux systems this file can be generated with:
 			</para>
 			
-<programlisting>dd if=/dev/random bs=32 count=1  | openssl base64 &gt; /tmp/key.txt
+<programlisting><command>dd if=/dev/random bs=32 count=1  | openssl base64 &gt; /tmp/key.txt</command>
 </programlisting>
 		</section>
 		
 		<section id="sect-Reference_Guide-Configuration-Gadget_proxy_and_concat_configuration">
 			<title>Gadget proxy and concat configuration</title>
 			<para>
-				These servers have to be on the same domain as the gadget server. You can configure it in: <filename>eXoGadgetServer:/WEB-INF/classes/containers/default/container.js</filename>. 
+				These servers have to be on the same domain as the gadget server. You can configure the container in <filename>eXoGadgetServer:/WEB-INF/classes/containers/default/container.js</filename>.
+			</para>
 <programlisting>"gadgets.content-rewrite" : {
   "include-urls": ".*",
   "exclude-urls": "",
@@ -61,13 +66,12 @@
   "concat-url": "http://localhost:8080/eXoGadgetServer/gadgets/concat?"
 },
 </programlisting>
-			</para>
 		</section>
 		
 		<section id="sect-Reference_Guide-Configuration-Proxy">
 			<title>Proxy</title>
 			<para>
-				if your server is behind a proxy and you want to allow external gadgets, you should configure the proxy of your JVM adding this code at the begining.
+				To allow external gadgets when the server is behind a proxy, add the following code to the beginning of the JVM :
 			</para>
 			
 <programlisting>-Dhttp.proxyHost=proxyhostURL -Dhttp.proxyPort=proxyPortNumber -Dhttp.proxyUser=someUserName -Dhttp.proxyPassword=somePassword

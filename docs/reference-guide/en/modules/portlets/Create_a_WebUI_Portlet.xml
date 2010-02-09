@@ -6,12 +6,15 @@
 <section id="sect-Reference_Guide-Create_a_WebUI_Portlet">
 	<title>Create a WebUI Portlet</title>
 	<section id="sect-Reference_Guide-Create_a_WebUI_Portlet-Overview">
-		<title>Overview</title>
+	<title>Overview</title>
+	<important>
+		<title>TODO</title>
 		<para>
-			TODO: Create example (This one doesn't exist anymore). Overall this chapter need to be reviewed, any taker ? :)
+			Create example (This one doesn't exist anymore). Overall this chapter need to be reviewed, any taker ? :)
 		</para>
+	</important>
 		<para>
-			This example is based on the testPortlet in portal/trunk/portlet/test.
+			This example is based on the <literal>testPortlet</literal> in <filename>portal/trunk/portlet/test</filename>.
 		</para>
 	</section>
 	

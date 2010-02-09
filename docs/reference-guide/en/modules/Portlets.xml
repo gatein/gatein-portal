@@ -10,6 +10,6 @@
 	<xi:include href="portlets/Groovy_Templates.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 	<xi:include href="portlets/Portlet_Lifecycle.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 	<xi:include href="portlets/Standard.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
-	<xi:include href="portlets/Create_a_WebUI_Portlet.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+<!-- Unedited pending new example -->	<xi:include href="portlets/Create_a_WebUI_Portlet.xml" xmlns:xi="http://www.w3.org/2001/XInclude" /> 
 </chapter>
 

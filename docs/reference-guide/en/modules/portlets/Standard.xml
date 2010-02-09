@@ -531,13 +531,13 @@ public class JSPHelloUserPortlet extends GenericPortlet
 				</programlistingco>
 				
 				<para>
-					As well as the <literal>VIEW</literal> portlet mode, the spec defines two other modes; <literal>EDIT</literal> and <literal>HELP</literal>.
+					As well as the <literal>VIEW</literal> portlet mode, the specification defines two other modes; <literal>EDIT</literal> and <literal>HELP</literal>.
 				</para>
 				<para>
-					These modes need to be defined in the <filename>portlet.xml</filename> descriptor. Having those modes defined will enable the corresponding buttons on the portlet's window.
+					These modes need to be defined in the <filename>portlet.xml</filename> descriptor. This will enable the corresponding buttons on the portlet's window.
 				</para>
 				<para>
-					The generic portlet that is inherited dispatches the different views to methods named: <literal>doView</literal> , <literal>doHelp</literal> and <literal>doEdit</literal> . Let's watch the code for those two last portlet modes.
+					The generic portlet that is inherited dispatches the different views to the methods: <literal>doView</literal> , <literal>doHelp</literal> and <literal>doEdit</literal>.
 				</para>
 				
 <programlisting role="JAVA">...
@@ -559,7 +559,10 @@ public class JSPHelloUserPortlet extends GenericPortlet
 ...
 </programlisting>
 				<para>
-					If you have read the portlet specification carefully you should have notice that portlet calls happen in one or two phases. One when the portlet is just rendered, two when the portlet is actionned then rendered. An action phase is a phase where some state change. The render phase will have access to render parameters that will be passed each time the portlet is refreshed (with the exception of caching capabilities).
+					Portlet calls happen in one or two phases. One when the portlet is rendered and two when the portlet is actioned <emphasis>then</emphasis> rendered.
+				</para>
+				<para>
+					An action phase is a phase where some state changes. The render phase will have access to render parameters that will be passed each time the portlet is refreshed (with the exception of caching capabilities).
 				</para>
 				<para>
 					The code to be executed during an action has to be implemented in the <emphasis>processAction</emphasis> method of the portlet.
@@ -583,17 +586,17 @@ public class JSPHelloUserPortlet extends GenericPortlet
 					<calloutlist>
 						<callout arearefs="area-Reference_Guide-tutorials.jsphello.processAction">
 							<para>
-								<literal>processAction</literal> is the method from GernericPorlet to override for the <emphasis>action</emphasis> phase.
+								<literal>processAction</literal> is the method from <literal>GernericPorlet</literal> to override for the <emphasis>action</emphasis> phase.
 							</para>
 						</callout>
 						<callout arearefs="area-Reference_Guide-tutorials.jsphello.getActionParameter">
 							<para>
-								Here we retrieve the parameter obtained through an <emphasis>action URL</emphasis> .
+								Here the parameter is retrieved through an <emphasis>action URL</emphasis> .
 							</para>
 						</callout>
 						<callout arearefs="area-Reference_Guide-tutorials.jsphello.setRenderParameter">
 							<para>
-								Here we need to keep the value of <literal>yourname</literal> to make it available in the rendering phase. With the previous line, we are simply copying an action parameter to a render parameter for the sake of this example.
+								The value of <literal>yourname</literal> is kept to make it available in the rendering phase. The previous line simply copies an action parameters to a render parameter for this example.
 							</para>
 						</callout>
 					</calloutlist>
@@ -602,10 +605,9 @@ public class JSPHelloUserPortlet extends GenericPortlet
 			</section>
 			
 			<section id="sect-Reference_Guide-_JavaServer_Pages_Portlet_Example_-_JSP_files_and_the_Portlet_Tag_Library_">
-				<title><trademark class="trade">JSP</trademark> files and the Portlet Tag Library </title>
-				<bridgehead>Let's have a look inside the JSP pages. </bridgehead>
+				<title>JSP files and the Portlet Tag Library</title>
 				<para>
-					The <filename>help.jsp</filename> and <filename>edit.jsp</filename> files are very simple, they simply display some text. Note that we used CSS styles as defined in the portlet specification. It ensures that the portlet will look "good" within the theme and accross portal vendors.
+					The <filename>help.jsp</filename> and <filename>edit.jsp</filename> files are very simple. Note that CSS styles are used as defined in the portlet specification. This ensures that the portlet will render well within the theme and across portal vendors.
 				</para>
 				
 <programlisting role="XHTML">&lt;div class="portlet-section-header"&gt;Help mode&lt;/div&gt;
@@ -616,7 +618,7 @@ public class JSPHelloUserPortlet extends GenericPortlet
 &lt;div class="portlet-section-body"&gt;This is the edit mode, a convenient place to let the user change his portlet preferences.&lt;/div&gt;
 </programlisting>
 				<para>
-					Now let's have a look at the landing page, it contains the links and form to call our portlet:
+					The landing page contains the links and form to call our portlet:
 				</para>
 				<programlistingco>
 					<areaspec>
@@ -668,17 +670,17 @@ Please check the source code to see the difference with Method 1.
 					<calloutlist>
 						<callout arearefs="area-Reference_Guide-tutorials.jsphello.taglib">
 							<para>
-								Since we will use the portlet taglib, we first need to declare it.
+								The portlet taglib, needs to be declared.
 							</para>
 						</callout>
 						<callout arearefs="area-Reference_Guide-tutorials.jsphello.method1">
 							<para>
-								The first method showed here is the simplest one, <literal>portlet:renderURL</literal> will create a URL that will call the render phase of the current portlet and append the result at the place of the markup (Here within a tag...). We also added a parameter directly on the URL.
+								The first method showed here is the simplest one. <literal>portlet:renderURL</literal> will create a URL that calls the render phase of the current portlet and append the result at the place of the markup (within a tag). A parameter is  also added directly to the URL.
 							</para>
 						</callout>
 						<callout arearefs="area-Reference_Guide-tutorials.jsphello.method2.1">
 							<para>
-								In this method instead of having a tag within another tag, which is not XML valid, we use the <literal>var</literal> attribute. Instead of printing the url the <literal>portlet:renderURL</literal> tag will store the result in the referenced variable ( <literal>myRenderURL</literal> in our case).
+								In this method the <literal>var</literal> attribute is used. This avoids having one XML tag within another. Instead of printing the url the <literal>portlet:renderURL</literal> tag will store the result in the referenced variable ( <literal>myRenderURL</literal>).
 							</para>
 						</callout>
 						<callout arearefs="area-Reference_Guide-tutorials.jsphello.method2.2">
@@ -688,19 +690,19 @@ Please check the source code to see the difference with Method 1.
 						</callout>
 						<callout arearefs="area-Reference_Guide-tutorials.jsphello.method3.1">
 							<para>
-								The third method mixes form submission and action request. Like in the second method, we used a temporary variable to put the created URL into.
+								The third method mixes form submission and action request. Again, a temporary variable is used to put the created URL into.
 							</para>
 						</callout>
 						<callout arearefs="area-Reference_Guide-tutorials.jsphello.method3.2">
 							<para>
-								The action URL is used in the HTML form.
+								The action URL is used in HTML form.
 							</para>
 						</callout>
 					</calloutlist>
 				</programlistingco>
 				
 				<para>
-					On the third method, first the action phase is triggered then later in the request, the render phase is triggered, which output some content back to the web browser based on the available render parameters. 
+					In the third method the action phase is triggered first then the render phase is triggered, which outputs some content back to the web browser based on the available render parameters. 
 					<mediaobject>
 						<imageobject>
 							<imagedata fileref="images/tutorials/jsp_portlet/process.png" format="PNG" scalefit="1" width="444" />
@@ -710,13 +712,15 @@ Please check the source code to see the difference with Method 1.
 			</section>
 			
 			<section id="sect-Reference_Guide-_JavaServer_Pages_Portlet_Example_-_JSF_example_using_the_JBoss_Portlet_Bridge_">
-				<title><trademark class="trade">JSF</trademark> example using the JBoss Portlet Bridge </title>
-				<bridgehead>In order to write a portlet using JSF we need a piece of software called 'bridge' that lets us write a portlet application as if it was a JSF application, the bridge takes care of the interactions between the two layers.</bridgehead>
+				<title>JSF example using the JBoss Portlet Bridge </title>
 				<para>
-					Such an example is available in examples/JSFHelloUser, it uses the JBoss Portlet Bridge. The configuration is slightly different from a JSP application, since it is a bit tricky it is usally a good idea to copy an existing application that starting from scratch.
+					In order to write a portlet using JSF a 'bridge' is needed. This software allows developers to write a portlet application as if it was a JSF application. The bridge then negotiates the interactions between the two layers.
 				</para>
 				<para>
-					First, as any JSF application, the file <literal>faces-config.xml</literal> is required. It includes the following required information in it:
+					An example of the JBoss Portlet Bridge is available in <filename>examples/JSFHelloUser</filename>. The configuration is slightly different from a JSP application. This example can be used as a base to configure instead of creating a new application.
+				</para>
+				<para>
+					As in any JSF application, the file <literal>faces-config.xml</literal> is required. It must contain the following information:
 				</para>
 				
 <programlisting role="XML">&lt;faces-config&gt;
