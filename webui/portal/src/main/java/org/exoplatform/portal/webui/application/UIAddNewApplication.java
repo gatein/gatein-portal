@@ -25,6 +25,7 @@ import org.exoplatform.application.registry.ApplicationRegistryService;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.application.PortalRequestContext;
+import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.config.model.CloneApplicationState;
@@ -250,12 +251,12 @@ public class UIAddNewApplication extends UIContainer
       if (uiPage.isModifiable())
       {
          Page page = (Page)PortalDataMapper.buildModelObject(uiPage);
-         UserPortalConfigService configService = uiPortalApp.getApplicationComponent(UserPortalConfigService.class);
          if (page.getChildren() == null)
          {
             page.setChildren(new ArrayList<ModelObject>());
          }
-         configService.update(page);
+         DataStorage dataService = uiPortalApp.getApplicationComponent(DataStorage.class);
+         dataService.save(page);
       }
 
       PortalRequestContext pcontext = Util.getPortalRequestContext();

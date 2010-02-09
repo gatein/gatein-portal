@@ -22,6 +22,7 @@ package org.exoplatform.portal.webui.page;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.application.PortalRequestContext;
+import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.UserPortalConfig;
 import org.exoplatform.portal.config.UserPortalConfigService;
@@ -331,8 +332,8 @@ public class UIPageForm extends UIFormTabPane
             pcontext.setFullRender(true);
             UIWorkingWorkspace uiWorkingWS = uiPortalApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
             pcontext.addUIComponentToUpdateByAjax(uiWorkingWS);
-            UserPortalConfigService service = uiPageForm.getApplicationComponent(UserPortalConfigService.class);
-            service.update(page);
+            DataStorage dataService = uiPageForm.getApplicationComponent(DataStorage.class);
+            dataService.save(page);
             return;
          }
 

@@ -20,6 +20,7 @@
 package org.exoplatform.dashboard.webui.component;
 
 import org.exoplatform.portal.application.PortalRequestContext;
+import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
@@ -69,6 +70,8 @@ public class UITabPaneDashboard extends UIContainer
 
    private UserPortalConfigService configService;
 
+   private DataStorage dataService;
+
    private PageNavigation pageNavigation;
 
    private UIPortal uiPortal;
@@ -80,6 +83,7 @@ public class UITabPaneDashboard extends UIContainer
    public UITabPaneDashboard() throws Exception
    {
       configService = getApplicationComponent(UserPortalConfigService.class);
+      dataService = getApplicationComponent(DataStorage.class);
       uiPortal = Util.getUIPortal();
       initPageNavigation();
    }
@@ -165,7 +169,7 @@ public class UITabPaneDashboard extends UIContainer
 
          boolean isRemoved = true; // To check 
          PageNavigation updateNav =
-            configService.getPageNavigation(pageNavigation.getOwnerType(), pageNavigation.getOwnerId());
+            dataService.getPageNavigation(pageNavigation.getOwnerType(), pageNavigation.getOwnerId());
          for (PageNode pageNode : updateNav.getNodes())
          {
             if (pageNode.getUri().equals(tobeRemoved.getUri()))
@@ -199,13 +203,13 @@ public class UITabPaneDashboard extends UIContainer
                {
                   Page page = configService.getPage(pageRef);
                   if (page != null)
-                     configService.remove(page);
+                     dataService.remove(page);
                   UIPortal uiPortal = Util.getUIPortal();
                   // Remove from cache
                   uiPortal.setUIPage(pageRef, null);
                }
                //uiPortal.setSelectedNode(selectedNode);
-               configService.update(pageNavigation);
+               dataService.save(pageNavigation);
             }
          }
          else
@@ -269,8 +273,8 @@ public class UITabPaneDashboard extends UIContainer
 
          //uiPortal.setSelectedNode(pageNode);
 
-         configService.create(page);
-         configService.update(pageNavigation);
+         dataService.create(page);
+         dataService.save(pageNavigation);
 
          return fullName;
       }
@@ -348,7 +352,7 @@ public class UITabPaneDashboard extends UIContainer
 
          renamedNode.setUri(newUri);
 
-         configService.update(pageNavigation);
+         dataService.save(pageNavigation);
          return newUri;
       }
       catch (Exception ex)
@@ -379,7 +383,7 @@ public class UITabPaneDashboard extends UIContainer
          nodes.set(firstIndex, secondNode);
          nodes.set(secondIndex, firstNode);
 
-         configService.update(pageNavigation);
+         dataService.save(pageNavigation);
          return true;
       }
       catch (Exception ex)
@@ -428,7 +432,7 @@ public class UITabPaneDashboard extends UIContainer
             return;
          }
          String uri = tabPane.createNewPageNode(newTabLabel);
-         
+
          //If new node is created with success, then redirect to it
          if (uri != null)
          {

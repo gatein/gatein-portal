@@ -93,7 +93,7 @@ public class UserPortalConfigListener extends UserEventListener
             pageNav.setOwnerId(userName);
             pageNav.setPriority(5);
             pageNav.setNodes(new ArrayList<PageNode>());
-            portalConfigService.create(pageNav);
+            dataStorage.create(pageNav);
          }
       }
       finally

@@ -22,7 +22,6 @@ package org.exoplatform.portal.webui.page;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserACL;
-import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.ModelObject;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
@@ -409,11 +408,9 @@ public class UIPageNodeForm2 extends UIFormTabPane
          if (page.getChildren() == null)
             page.setChildren(new ArrayList<ModelObject>());
 
-         UserPortalConfigService service = uiForm.getApplicationComponent(UserPortalConfigService.class);
-
          // check page is exist
-         DataStorage dataStorage = uiForm.getApplicationComponent(DataStorage.class);
-         Page existPage = dataStorage.getPage(page.getPageId());
+         DataStorage dataService = uiForm.getApplicationComponent(DataStorage.class);
+         Page existPage = dataService.getPage(page.getPageId());
          if (existPage != null)
          {
             uiPortalApp.addMessage(new ApplicationMessage("UIPageForm.msg.sameName", null));
@@ -422,7 +419,7 @@ public class UIPageNodeForm2 extends UIFormTabPane
          }
 
          // save page to database
-         service.create(page);
+         dataService.create(page);
          pageSelector.setValue(page.getPageId());
       }
    }

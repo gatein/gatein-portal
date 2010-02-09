@@ -167,10 +167,11 @@ public class UIPortalComposer extends UIContainer
 
       PortalConfig portalConfig = (PortalConfig)PortalDataMapper.buildModelObject(editPortal);
       UserPortalConfigService configService = getApplicationComponent(UserPortalConfigService.class);
+      DataStorage dataStorage = getApplicationComponent(DataStorage.class);
 
       if (isPortalExist(editPortal))
       {
-         configService.update(portalConfig);
+         dataStorage.save(portalConfig);
       }
       else
       {
@@ -639,7 +640,8 @@ public class UIPortalComposer extends UIContainer
          }
 
          // Perform mop update
-         portalConfigService.update(page);
+         DataStorage dataService = uiWorkingWS.getApplicationComponent(DataStorage.class);
+         dataService.save(page);
          uiToolPanel.setUIComponent(null);
 
          // Update UIPage cache on UIPortal

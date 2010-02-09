@@ -20,7 +20,6 @@
 package org.exoplatform.portal.webui.page;
 
 import org.exoplatform.commons.serialization.api.annotations.Serialized;
-import org.exoplatform.commons.utils.LazyPageList;
 import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.commons.utils.PageListAccess;
 import org.exoplatform.portal.application.PortalRequestContext;
@@ -137,18 +136,17 @@ public class UIPageBrowser extends UISearch
    public boolean feedDataWithQuery(Query<Page> query) throws Exception
    {
       lastQuery_ = query;
-      
+
       UIVirtualList virtualList = getChild(UIVirtualList.class);
-      DataStorage dataStorage = getApplicationComponent(DataStorage.class);
-      if(lastQuery_ == null)
+      if (lastQuery_ == null)
       {
          lastQuery_ = new Query<Page>(null, null, null, null, Page.class);
       }
       virtualList.dataBind(new PageQueryAccessList(lastQuery_, 10));
-      
+
       UIRepeater repeater = (UIRepeater)virtualList.getDataFeed();
       PageList datasource = repeater.getDataSource();
-      
+
       if (datasource.getAvailable() > 0)
       {
          return true;
@@ -158,7 +156,7 @@ public class UIPageBrowser extends UISearch
          return false;
       }
    }
-   
+
    /**
     * Show a popup informing that no result available for the last query
     *
@@ -169,7 +167,7 @@ public class UIPageBrowser extends UISearch
       uiApp.addMessage(new ApplicationMessage("UISearchForm.msg.empty", null));
       Util.getPortalRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
    }
-   
+
    public void quickSearch(UIFormInputSet quickSearchInput) throws Exception
    {
       UIFormStringInput input = (UIFormStringInput)quickSearchInput.getChild(0);
@@ -184,14 +182,14 @@ public class UIPageBrowser extends UISearch
       else if (selectBoxValue.equals("ownerId"))
          query.setOwnerId(value);
       query.setName(null);
-      
+
       lastQuery_ = query;
       boolean dataAvailable = feedDataWithQuery(lastQuery_);
-      if(!dataAvailable)
+      if (!dataAvailable)
       {
          showNoResultMessagePopup();
       }
-      
+
       if (this.<UIComponent> getParent() instanceof UIPopupWindow)
       {
          UIPopupWindow popupWindow = getParent();
@@ -246,8 +244,8 @@ public class UIPageBrowser extends UISearch
       if (currentPage > 0)
          datasource.getPage(currentPage);
    }
-  */
-   
+   */
+
    static public class DeleteActionListener extends EventListener<UIPageBrowser>
    {
       public void execute(Event<UIPageBrowser> event) throws Exception
@@ -256,6 +254,7 @@ public class UIPageBrowser extends UISearch
          PortalRequestContext pcontext = Util.getPortalRequestContext();
          String id = pcontext.getRequestParameter(OBJECTID);
          UserPortalConfigService service = uiPageBrowser.getApplicationComponent(UserPortalConfigService.class);
+         DataStorage dataService = uiPageBrowser.getApplicationComponent(DataStorage.class);
 
          UIPortalApplication uiPortalApp = (UIPortalApplication)pcontext.getUIApplication();
          if (service.getPage(id) == null)
@@ -276,7 +275,8 @@ public class UIPageBrowser extends UISearch
          UIRepeater repeater = (UIRepeater)virtualList.getDataFeed();
          PageListAccess datasource = (PageListAccess)repeater.getDataSource();
          int currentPage = datasource.getCurrentPage();
-         service.remove(page);
+
+         dataService.remove(page);
 
          UIPortal uiPortal = Util.getUIPortal();
          if (uiPortal.getSelectedNode().getPageReference().equals(page.getPageId()))
@@ -289,7 +289,7 @@ public class UIPageBrowser extends UISearch
          else
          {
             boolean dataAvailable = uiPageBrowser.feedDataWithQuery(uiPageBrowser.getLastQuery());
-            if(!dataAvailable)
+            if (!dataAvailable)
             {
                showNoResultMessagePopup();
             }
@@ -417,12 +417,11 @@ public class UIPageBrowser extends UISearch
          UIPage uiPage = uiPageForm.getUIPage();
          Page page = new Page();
          uiPageForm.invokeSetBindingBean(page);
-         UserPortalConfigService configService = uiPageForm.getApplicationComponent(UserPortalConfigService.class);
+         DataStorage dataService = uiPageForm.getApplicationComponent(DataStorage.class);
          // create new page
          if (uiPage == null)
          {
-            DataStorage dataStorage = uiPageForm.getApplicationComponent(DataStorage.class);
-            Page existPage = dataStorage.getPage(page.getPageId());
+            Page existPage = dataService.getPage(page.getPageId());
             if (existPage != null)
             {
                uiPortalApp.addMessage(new ApplicationMessage("UIPageForm.msg.sameName", null));
@@ -432,7 +431,7 @@ public class UIPageBrowser extends UISearch
             page.setModifiable(true);
             if (page.getChildren() == null)
                page.setChildren(new ArrayList<ModelObject>());
-            configService.create(page);
+            dataService.create(page);
             postSave(uiPortalApp, pcontext);
             return;
          }
@@ -456,7 +455,7 @@ public class UIPageBrowser extends UISearch
             // page.setTemplate(uiPage.getTemplate());
             if (page.getChildren() == null)
                page.setChildren(new ArrayList<ModelObject>());
-            configService.update(page);
+            dataService.save(page);
             postSave(uiPortalApp, pcontext);
             return;
          }
@@ -480,7 +479,7 @@ public class UIPageBrowser extends UISearch
             page.setChildren(new ArrayList<ModelObject>());
          if (Page.DESKTOP_PAGE.equals(uiPage.getFactoryId()))
          {
-            configService.update(page);
+            dataService.save(page);
             postSave(uiPortalApp, pcontext);
          }
       }

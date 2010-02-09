@@ -21,7 +21,6 @@ package org.exoplatform.portal.webui.page;
 
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserACL;
-import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
@@ -37,7 +36,6 @@ import org.exoplatform.portal.webui.workspace.UIPortalToolPanel;
 import org.exoplatform.portal.webui.workspace.UIWorkingWorkspace;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.web.application.JavascriptManager;
-import org.exoplatform.web.application.RequestContext;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.ComponentConfigs;
@@ -85,7 +83,7 @@ public class UIPageCreationWizard extends UIPageWizard
 
    private void saveData() throws Exception
    {
-      UserPortalConfigService service = getApplicationComponent(UserPortalConfigService.class);
+      DataStorage dataService = getApplicationComponent(DataStorage.class); 
       UIPagePreview uiPagePreview = getChild(UIPagePreview.class);
       UIPage uiPage = (UIPage)uiPagePreview.getUIComponent();
       UIPortal uiPortal = Util.getUIPortal();
@@ -129,8 +127,8 @@ public class UIPageCreationWizard extends UIPageWizard
       }
       uiNodeSelector.selectPageNodeByUri(pageNode.getUri());
 
-      service.create(page);
-      service.update(pageNav);
+      dataService.create(page);
+      dataService.save(pageNav);
       setNavigation(uiPortal.getNavigations(), uiNodeSelector.getSelectedNavigation());
       String uri = pageNav.getId() + "::" + pageNode.getUri();
       PageNodeEvent<UIPortal> pnevent = new PageNodeEvent<UIPortal>(uiPortal, PageNodeEvent.CHANGE_PAGE_NODE, uri);

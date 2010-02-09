@@ -309,6 +309,7 @@ public class UISiteManagement extends UIContainer
          UISiteManagement uicomp = event.getSource();
          String portalName = event.getRequestContext().getRequestParameter(OBJECTID);
          UserPortalConfigService service = uicomp.getApplicationComponent(UserPortalConfigService.class);
+         DataStorage dataService = uicomp.getApplicationComponent(DataStorage.class);
          PortalRequestContext prContext = Util.getPortalRequestContext();
          WebuiRequestContext context = event.getRequestContext();
          UIApplication uiApplication = context.getUIApplication();
@@ -336,7 +337,8 @@ public class UISiteManagement extends UIContainer
          naviManager.setOwner(portalName);
          naviManager.setOwnerType(PortalConfig.PORTAL_TYPE);
 
-         PageNavigation navi = service.getPageNavigation(PortalConfig.PORTAL_TYPE, portalName);
+         PageNavigation navi = dataService.getPageNavigation(PortalConfig.PORTAL_TYPE, portalName);
+         
          uicomp.setSelectedNavigation(navi);
          UINavigationNodeSelector selector = naviManager.getChild(UINavigationNodeSelector.class);
          ArrayList<PageNavigation> list = new ArrayList<PageNavigation>();

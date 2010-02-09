@@ -49,9 +49,7 @@ public class GroupPortalConfigListener extends GroupEventListener
    /** . */
    private final OrganizationService orgService;
 
-   public GroupPortalConfigListener(
-      UserPortalConfigService portalConfigService,
-      DataStorage dataStorage,
+   public GroupPortalConfigListener(UserPortalConfigService portalConfigService, DataStorage dataStorage,
       OrganizationService orgService)
    {
       this.portalConfigService = portalConfigService;
@@ -67,7 +65,7 @@ public class GroupPortalConfigListener extends GroupEventListener
          String groupId = group.getId().trim();
 
          // Remove all descendant navigations
-         removeGroupNavigation(group, portalConfigService);
+         removeGroupNavigation(group, dataStorage);
 
          portalConfigService.removeUserPortalConfig(PortalConfig.GROUP_TYPE, groupId);
       }
@@ -163,16 +161,16 @@ public class GroupPortalConfigListener extends GroupEventListener
       }
    }
 
-   private void removeGroupNavigation(Group group, UserPortalConfigService portalConfigService) throws Exception
+   private void removeGroupNavigation(Group group, DataStorage dataService) throws Exception
    {
       GroupHandler groupHandler = orgService.getGroupHandler();
       Collection<String> descendantGroups = getDescendantGroups(group, groupHandler);
       PageNavigation navigation = null;
       for (String childGroup : descendantGroups)
       {
-         navigation = portalConfigService.getPageNavigation(PortalConfig.GROUP_TYPE, childGroup);
+         navigation = dataService.getPageNavigation(PortalConfig.GROUP_TYPE, childGroup);
          if (navigation != null)
-            portalConfigService.remove(navigation);
+            dataService.remove(navigation);
       }
    }
 

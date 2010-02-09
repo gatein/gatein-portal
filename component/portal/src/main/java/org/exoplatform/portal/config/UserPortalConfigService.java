@@ -105,7 +105,7 @@ public class UserPortalConfigService implements Startable
       }
 
       List<PageNavigation> navigations = new ArrayList<PageNavigation>();
-      PageNavigation navigation = getPageNavigation(PortalConfig.PORTAL_TYPE, portalName);
+      PageNavigation navigation = storage_.getPageNavigation(PortalConfig.PORTAL_TYPE, portalName);
       if (navigation != null)
       {
          navigation.setModifiable(userACL_.hasPermission(portal.getEditPermission()));
@@ -121,7 +121,7 @@ public class UserPortalConfigService implements Startable
       }
       else
       {
-         navigation = getPageNavigation(PortalConfig.USER_TYPE, accessUser);
+         navigation = storage_.getPageNavigation(PortalConfig.USER_TYPE, accessUser);
          if (navigation != null)
          {
             navigation.setModifiable(true);
@@ -145,7 +145,7 @@ public class UserPortalConfigService implements Startable
             {
                continue;
             }
-            navigation = getPageNavigation(PortalConfig.GROUP_TYPE, groupId);
+            navigation = storage_.getPageNavigation(PortalConfig.GROUP_TYPE, groupId);
             if (navigation == null)
             {
                continue;
@@ -254,6 +254,7 @@ public class UserPortalConfigService implements Startable
     * @param portal
     * @throws Exception
     */
+   @Deprecated
    public void update(PortalConfig portal) throws Exception
    {
       storage_.save(portal);
@@ -302,6 +303,7 @@ public class UserPortalConfigService implements Startable
     * @param page the page to remove
     * @throws Exception any exception
     */
+   @Deprecated
    public void remove(Page page) throws Exception
    {
       storage_.remove(page);
@@ -314,6 +316,7 @@ public class UserPortalConfigService implements Startable
     * @param page the page to create
     * @throws Exception any exception
     */
+   @Deprecated
    public void create(Page page) throws Exception
    {
       storage_.create(page);
@@ -327,6 +330,7 @@ public class UserPortalConfigService implements Startable
     * @return the list of model changes that occured
     * @throws Exception any exception
     */
+   @Deprecated
    public List<ModelChange> update(Page page) throws Exception
    {
       List<ModelChange> changes = storage_.save(page);
@@ -340,6 +344,7 @@ public class UserPortalConfigService implements Startable
     * @param navigation the navigation to create
     * @throws Exception any exception
     */
+   @Deprecated
    public void create(PageNavigation navigation) throws Exception
    {
       storage_.create(navigation);
@@ -352,6 +357,7 @@ public class UserPortalConfigService implements Startable
     * @param navigation the navigation to update
     * @throws Exception any exception
     */
+   @Deprecated
    public void update(PageNavigation navigation) throws Exception
    {
       storage_.save(navigation);
@@ -364,11 +370,13 @@ public class UserPortalConfigService implements Startable
     * @param navigation the navigation to remove
     * @throws Exception any exception
     */
+   @Deprecated
    public void remove(PageNavigation navigation) throws Exception
    {
       storage_.remove(navigation);
    }
 
+   @Deprecated
    public PageNavigation getPageNavigation(String ownerType, String id) throws Exception
    {
       PageNavigation navigation = storage_.getPageNavigation(ownerType, id);
@@ -389,7 +397,7 @@ public class UserPortalConfigService implements Startable
    public PageNode createNodeFromPageTemplate(String nodeName, String nodeLabel, String pageId, String ownerType,
                                               String ownerId) throws Exception
    {
-      Page page = renewPage(pageId, nodeName, ownerType, ownerId);
+      Page page = storage_.clonePage(pageId, nodeName, ownerType, ownerId);
       PageNode pageNode = new PageNode();
       if (nodeLabel == null || nodeLabel.trim().length() < 1)
       {
@@ -411,6 +419,7 @@ public class UserPortalConfigService implements Startable
     * @return the newly created page
     * @throws Exception any exception
     */
+   @Deprecated
    public Page renewPage(String pageId, String pageName, String ownerType, String ownerId) throws Exception
    {
       return storage_.clonePage(pageId, ownerType, ownerId, pageName);

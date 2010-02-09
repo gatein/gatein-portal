@@ -19,6 +19,7 @@
 
 package org.exoplatform.portal.webui.page;
 
+import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
@@ -75,7 +76,9 @@ public class PageUtils
 
       node.setUri(node.getName());
       navi.addNode(node);
-      configService.update(navi);
+      
+      DataStorage dataService = uiPortal.getApplicationComponent(DataStorage.class);
+      dataService.save(navi);
       setNavigation(uiPortal.getNavigations(), navi);
    }
 

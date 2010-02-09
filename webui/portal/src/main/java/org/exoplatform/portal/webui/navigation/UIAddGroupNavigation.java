@@ -121,7 +121,6 @@ public class UIAddGroupNavigation extends UIContainer
       {
          WebuiRequestContext ctx = event.getRequestContext();
          UIAddGroupNavigation uicomp = event.getSource();
-         UserPortalConfigService service = uicomp.getApplicationComponent(UserPortalConfigService.class);
 
          // get navigation id
          String ownerId = event.getRequestContext().getRequestParameter(OBJECTID);
@@ -148,7 +147,7 @@ public class UIAddGroupNavigation extends UIContainer
          }
 
          // create navigation for group
-         service.create(pageNav);
+         dataService.create(pageNav);
 
          // add navigation to UIPortal 's navigations
          UIPortal uiPortal = Util.getUIPortal();

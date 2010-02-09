@@ -294,8 +294,7 @@ public class UIGroupNavigationManagement extends UIContainer
          UIPortal uiPortal = Util.getUIPortal();
          removeNavigationByID(uiPortal.getNavigations(), navigation);
 
-         UserPortalConfigService dataService = uicomp.getApplicationComponent(UserPortalConfigService.class);
-         dataService.remove(navigation);
+         service.remove(navigation);
          event.getRequestContext().addUIComponentToUpdateByAjax(uicomp);
 
          //Update UserToolbarGroupPortlet

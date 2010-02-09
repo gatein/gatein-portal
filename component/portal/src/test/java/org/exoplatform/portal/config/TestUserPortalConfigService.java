@@ -110,7 +110,8 @@ public class TestUserPortalConfigService extends AbstractPortalTest
       };
 
       PortalContainer container = getContainer();
-      userPortalConfigSer_ = (UserPortalConfigService)container.getComponentInstanceOfType(UserPortalConfigService.class);
+      userPortalConfigSer_ =
+         (UserPortalConfigService)container.getComponentInstanceOfType(UserPortalConfigService.class);
       orgService_ = (OrganizationService)container.getComponentInstanceOfType(OrganizationService.class);
       mgr = (POMSessionManager)container.getComponentInstanceOfType(POMSessionManager.class);
       authenticator = (Authenticator)container.getComponentInstanceOfType(Authenticator.class);
@@ -148,7 +149,8 @@ public class TestUserPortalConfigService extends AbstractPortalTest
       return map;
    }
 
-   public void testUpdatePortalConfig() {
+   public void testUpdatePortalConfig()
+   {
       new UnitTest()
       {
          public void execute() throws Exception
@@ -161,8 +163,8 @@ public class TestUserPortalConfigService extends AbstractPortalTest
             assertEquals("classic", portalCfg.getName());
             assertEquals("en", portalCfg.getLocale());
             portalCfg.setLocale("fr");
-            
-            userPortalConfigSer_.update(portalCfg);
+
+            storage_.save(portalCfg);
 
             userPortalCfg = userPortalConfigSer_.getUserPortalConfig("classic", "root");
             portalCfg = userPortalCfg.getPortalConfig();
@@ -170,7 +172,7 @@ public class TestUserPortalConfigService extends AbstractPortalTest
          }
       }.execute("root");
    }
-   
+
    public void testRootGetUserPortalConfig()
    {
       new UnitTest()
@@ -446,7 +448,7 @@ public class TestUserPortalConfigService extends AbstractPortalTest
             page.setOwnerId("/platform/administrators");
             page.setName("newAccount");
             assertTrue(events.isEmpty());
-            userPortalConfigSer_.remove(page);
+            storage_.remove(page);
             assertEquals(1, events.size());
             Event event = events.removeFirst();
             assertEquals(DataStorage.PAGE_REMOVED, event.getEventName());
@@ -470,7 +472,7 @@ public class TestUserPortalConfigService extends AbstractPortalTest
             page.setOwnerId("/platform/administrators");
             page.setName("whatever");
             assertTrue(events.isEmpty());
-            userPortalConfigSer_.create(page);
+            storage_.create(page);
             assertEquals(1, events.size());
             Event event = events.removeFirst();
             assertEquals(DataStorage.PAGE_CREATED, event.getEventName());
@@ -496,11 +498,11 @@ public class TestUserPortalConfigService extends AbstractPortalTest
             page.setOwnerId("/platform/administrators");
             page.setName("whatever");
             page.setTitle("testTitle");
-            userPortalConfigSer_.create(page);
+            storage_.create(page);
 
             String newName = "newPage";
-            Page newPage =
-               userPortalConfigSer_.renewPage(page.getPageId(), newName, page.getOwnerType(), page.getOwnerId());
+            Page newPage = storage_.clonePage(page.getPageId(), page.getOwnerType(), page.getOwnerId(), newName);
+            
             assertEquals(newName, newPage.getName());
             assertEquals(page.getTitle(), newPage.getTitle());
          }
@@ -520,7 +522,7 @@ public class TestUserPortalConfigService extends AbstractPortalTest
             page.setShowMaxWindow(true);
             page.setTitle("newAccount title");
             assertTrue(events.isEmpty());
-            userPortalConfigSer_.create(page);
+            storage_.create(page);
             assertEquals(1, events.size());
             Event event = events.removeFirst();
             assertEquals(DataStorage.PAGE_CREATED, event.getEventName());
@@ -530,38 +532,37 @@ public class TestUserPortalConfigService extends AbstractPortalTest
             assertEquals("newAccount", p.getName());
             assertEquals("newAccount title", p.getTitle());
             assertTrue(p.isShowMaxWindow());
-            
+
             p.setShowMaxWindow(false);
-            userPortalConfigSer_.update(p);
+            storage_.save(p);
             p = userPortalConfigSer_.getPage("group::/platform/administrators::newAccount");
             assertFalse(p.isShowMaxWindow());
             p.setShowMaxWindow(true);
-            userPortalConfigSer_.update(p);
+            storage_.save(p);
             p = userPortalConfigSer_.getPage("group::/platform/administrators::newAccount");
             assertTrue(p.isShowMaxWindow());
             p.setShowMaxWindow(false);
-            userPortalConfigSer_.update(p);
+            storage_.save(p);
             p = userPortalConfigSer_.getPage("group::/platform/administrators::newAccount");
             assertFalse(p.isShowMaxWindow());
             p.setShowMaxWindow(true);
-            userPortalConfigSer_.update(p);
+            storage_.save(p);
             p = userPortalConfigSer_.getPage("group::/platform/administrators::newAccount");
             assertTrue(p.isShowMaxWindow());
-            
+
             Page p2 = userPortalConfigSer_.getPage("group::/platform/administrators::newAccount");
             assertEquals("group", p2.getOwnerType());
             assertEquals("/platform/administrators", p2.getOwnerId());
             assertEquals("newAccount", p2.getName());
-//            assertFalse(p2.isShowMaxWindow());
+            //            assertFalse(p2.isShowMaxWindow());
             p2.setTitle("newAccount title 1");
             p2.setShowMaxWindow(true);
-            userPortalConfigSer_.update(p2);
-            
+            storage_.save(p2);
+
             Page p3 = userPortalConfigSer_.getPage("group::/platform/administrators::newAccount");
             assertEquals("newAccount title 1", p3.getTitle());
-//            assertTrue(p3.isShowMaxWindow());
-            
-           
+            //            assertTrue(p3.isShowMaxWindow());
+
          }
       }.execute(null);
    }
@@ -576,14 +577,14 @@ public class TestUserPortalConfigService extends AbstractPortalTest
             navigation.setOwnerType("group");
             navigation.setOwnerId("/platform/administrators");
             assertTrue(events.isEmpty());
-            userPortalConfigSer_.remove(navigation);
+            storage_.remove(navigation);
             assertEquals(1, events.size());
             Event event = events.removeFirst();
             assertEquals(DataStorage.NAVIGATION_REMOVED, event.getEventName());
             PageNavigation n = ((PageNavigation)event.getData());
             assertEquals("group", n.getOwnerType());
             assertEquals("/platform/administrators", n.getOwnerId());
-            assertEquals(null, userPortalConfigSer_.getPageNavigation("group", "/platform/administrators"));
+            assertEquals(null, storage_.getPageNavigation("group", "/platform/administrators"));
          }
       }.execute(null);
    }
@@ -597,82 +598,82 @@ public class TestUserPortalConfigService extends AbstractPortalTest
             PageNavigation navigation = new PageNavigation();
             navigation.setOwnerType("group");
             navigation.setOwnerId("/platform/administrators");
-            userPortalConfigSer_.remove(navigation);
+            storage_.remove(navigation);
             assertNotNull(events.removeLast());
             assertTrue(events.isEmpty());
-            userPortalConfigSer_.create(navigation);
+            storage_.create(navigation);
             assertEquals(1, events.size());
             Event event = events.removeFirst();
             assertEquals(DataStorage.NAVIGATION_CREATED, event.getEventName());
             PageNavigation n = ((PageNavigation)event.getData());
             assertEquals("group", n.getOwnerType());
             assertEquals("/platform/administrators", n.getOwnerId());
-            PageNavigation n2 = userPortalConfigSer_.getPageNavigation("group", "/platform/administrators");
+            PageNavigation n2 = storage_.getPageNavigation("group", "/platform/administrators");
             assertEquals("group", n2.getOwnerType());
             assertEquals("/platform/administrators", n2.getOwnerId());
          }
       }.execute(null);
    }
 
-/*
-   public void testCreateMultipleNavigations(){
-      for(int i =0; i < 10; i++){
-         createNavigation(null, "group", "/platform/administrators" + i);
+   /*
+      public void testCreateMultipleNavigations(){
+         for(int i =0; i < 10; i++){
+            createNavigation(null, "group", "/platform/administrators" + i);
+         }
       }
-   }
-   
-   private void createNavigation(final String user, final String ownerType, final String ownerId)
-   {
-      new UnitTest()
+      
+      private void createNavigation(final String user, final String ownerType, final String ownerId)
       {
-
-         public void execute() throws Exception
+         new UnitTest()
          {
-            createNavigationInSeperatedThread();
-         }
 
-         private void createNavigationInSeperatedThread()
-         {
-            Thread task = new Thread()
+            public void execute() throws Exception
             {
-               public void run()
+               createNavigationInSeperatedThread();
+            }
+
+            private void createNavigationInSeperatedThread()
+            {
+               Thread task = new Thread()
                {
-                  PageNavigation navigation = new PageNavigation();
-                  navigation.setOwnerType(ownerType);
-                  navigation.setOwnerId(ownerId);
-                  try
+                  public void run()
                   {
-                     userPortalConfigSer_.create(navigation);
-                     Event event = events.removeFirst();
-                     assertEquals(DataStorage.CREATE_NAVIGATION_EVENT, event.getEventName());
-                     PageNavigation n1 = (PageNavigation)event.getSource();
-                     assertEquals(ownerType, n1.getOwnerType());
-                     assertEquals(ownerId, n1.getOwnerId());
-                     PageNavigation n2 = userPortalConfigSer_.getPageNavigation(ownerType, ownerId);
-                     assertEquals(ownerType, n2.getOwnerType());
-                     assertEquals(ownerId, n2.getOwnerId());
+                     PageNavigation navigation = new PageNavigation();
+                     navigation.setOwnerType(ownerType);
+                     navigation.setOwnerId(ownerId);
+                     try
+                     {
+                        userPortalConfigSer_.create(navigation);
+                        Event event = events.removeFirst();
+                        assertEquals(DataStorage.CREATE_NAVIGATION_EVENT, event.getEventName());
+                        PageNavigation n1 = (PageNavigation)event.getSource();
+                        assertEquals(ownerType, n1.getOwnerType());
+                        assertEquals(ownerId, n1.getOwnerId());
+                        PageNavigation n2 = storage_.getPageNavigation(ownerType, ownerId);
+                        assertEquals(ownerType, n2.getOwnerType());
+                        assertEquals(ownerId, n2.getOwnerId());
+                     }
+                     catch (Exception ex)
+                     {
+                        assertTrue("Failed while create '" + ownerType + " ' navigation for owner: " + ownerId, false);
+                        ex.printStackTrace();
+                     }
                   }
-                  catch (Exception ex)
-                  {
-                     assertTrue("Failed while create '" + ownerType + " ' navigation for owner: " + ownerId, false);
-                     ex.printStackTrace();
-                  }
-               }
-            };
+               };
 
-            task.start();
-            try
-            {
-               task.sleep(200);
+               task.start();
+               try
+               {
+                  task.sleep(200);
+               }
+               catch (InterruptedException ex)
+               {
+                  ex.printStackTrace();
+               }
             }
-            catch (InterruptedException ex)
-            {
-               ex.printStackTrace();
-            }
-         }
-      }.execute(user);
-   }
-*/
+         }.execute(user);
+      }
+   */
 
    public void testUpdateNavigation()
    {
@@ -685,7 +686,7 @@ public class TestUserPortalConfigService extends AbstractPortalTest
             navigation.setOwnerId("/platform/administrators");
             navigation.setPriority(3);
             assertTrue(events.isEmpty());
-            userPortalConfigSer_.update(navigation);
+            storage_.save(navigation);
             assertEquals(1, events.size());
             Event event = events.removeFirst();
             assertEquals(DataStorage.NAVIGATION_UPDATED, event.getEventName());
@@ -693,7 +694,7 @@ public class TestUserPortalConfigService extends AbstractPortalTest
             assertEquals("group", n.getOwnerType());
             assertEquals("/platform/administrators", n.getOwnerId());
             assertEquals(3, n.getPriority());
-            PageNavigation n2 = userPortalConfigSer_.getPageNavigation("group", "/platform/administrators");
+            PageNavigation n2 = storage_.getPageNavigation("group", "/platform/administrators");
             assertEquals("group", n2.getOwnerType());
             assertEquals("/platform/administrators", n2.getOwnerId());
             assertEquals(3, n2.getPriority());
@@ -707,7 +708,7 @@ public class TestUserPortalConfigService extends AbstractPortalTest
       {
          public void execute() throws Exception
          {
-            Page clone = userPortalConfigSer_.renewPage("portal::test::test4", "test5", "portal", "test");
+            Page clone = storage_.clonePage("portal::test::test4", "portal", "test", "test5");
             assertNotNull(clone);
             assertEquals("portal", clone.getOwnerType());
             assertEquals("test", clone.getOwnerId());
@@ -769,7 +770,6 @@ public class TestUserPortalConfigService extends AbstractPortalTest
 
             PortalConfig cfg = storage_.getPortalConfig(PortalConfig.USER_TYPE, "overwritelayout");
             assertNotNull(cfg);
-
 
             Container container = cfg.getPortalLayout();
             assertNotNull(container);
@@ -863,10 +863,10 @@ public class TestUserPortalConfigService extends AbstractPortalTest
             mgr.clearCache();
             DataCache cache = mgr.getDecorator(DataCache.class);
             long readCount0 = cache.getReadCount();
-            userPortalConfigSer_.getPageNavigation("portal", "test");
+            storage_.getPageNavigation("portal", "test");
             long readCount1 = cache.getReadCount();
             assertTrue(readCount1 > readCount0);
-            userPortalConfigSer_.getPageNavigation("portal", "test");
+            storage_.getPageNavigation("portal", "test");
             long readCount2 = cache.getReadCount();
             assertEquals(readCount1, readCount2);
          }

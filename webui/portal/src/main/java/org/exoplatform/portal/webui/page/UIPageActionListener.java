@@ -22,7 +22,6 @@ package org.exoplatform.portal.webui.page;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserPortalConfig;
-import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Container;
 import org.exoplatform.portal.config.model.ModelObject;
 import org.exoplatform.portal.config.model.Page;
@@ -330,12 +329,12 @@ public class UIPageActionListener
                if (uiPage.isModifiable())
                {
                   Page page = (Page)PortalDataMapper.buildModelObject(uiPage);
-                  UserPortalConfigService configService = uiPage.getApplicationComponent(UserPortalConfigService.class);
                   if (page.getChildren() == null)
                   {
                      page.setChildren(new ArrayList<ModelObject>());
                   }
-                  configService.update(page);
+                  DataStorage dataService = uiPage.getApplicationComponent(DataStorage.class);
+                  dataService.save(page);
                }
                break;
             }
@@ -358,12 +357,12 @@ public class UIPageActionListener
          {
             uiPage.removeChildById(id);
             Page page = (Page)PortalDataMapper.buildModelObject(uiPage);
-            UserPortalConfigService configService = uiPage.getApplicationComponent(UserPortalConfigService.class);
             if (page.getChildren() == null)
             {
                page.setChildren(new ArrayList<ModelObject>());
             }
-            configService.update(page);
+            DataStorage dataService = uiPage.getApplicationComponent(DataStorage.class);
+            dataService.save(page);
             pcontext.setFullRender(false);
             pcontext.setResponseComplete(true);
             pcontext.getWriter().write(EventListener.RESULT_OK);

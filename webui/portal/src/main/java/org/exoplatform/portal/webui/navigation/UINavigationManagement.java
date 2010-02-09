@@ -20,6 +20,7 @@
 package org.exoplatform.portal.webui.navigation;
 
 import org.exoplatform.portal.application.PortalRequestContext;
+import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserPortalConfig;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.PageNavigation;
@@ -98,6 +99,7 @@ public class UINavigationManagement extends UIContainer
          PortalRequestContext prContext = Util.getPortalRequestContext();
          UINavigationManagement uiManagement = event.getSource();
          UINavigationNodeSelector uiNodeSelector = uiManagement.getChild(UINavigationNodeSelector.class);
+         DataStorage dataService = uiManagement.getApplicationComponent(DataStorage.class);
          UserPortalConfigService portalConfigService =
             uiManagement.getApplicationComponent(UserPortalConfigService.class);
          
@@ -105,7 +107,7 @@ public class UINavigationManagement extends UIContainer
          String editedOwnerType = navigation.getOwnerType();
          String editedOwnerId = navigation.getOwnerId();
          // Check existed
-         PageNavigation persistNavigation =  portalConfigService.getPageNavigation(editedOwnerType, editedOwnerId);
+         PageNavigation persistNavigation =  dataService.getPageNavigation(editedOwnerType, editedOwnerId);
          if (persistNavigation == null) {
             UIApplication uiApp = Util.getPortalRequestContext().getUIApplication();
             uiApp.addMessage(new ApplicationMessage("UINavigationManagement.msg.NavigationNotExistAnymore", null));
@@ -123,7 +125,7 @@ public class UINavigationManagement extends UIContainer
             UserPortalConfig portalConfig = portalConfigService.getUserPortalConfig(navigation.getOwnerId(), prContext.getRemoteUser());
             if(portalConfig != null)
             {
-               portalConfigService.update(navigation); 
+               dataService.save(persistNavigation);
             } else {
                UIApplication uiApp = Util.getPortalRequestContext().getUIApplication();
                uiApp.addMessage(new ApplicationMessage("UIPortalForm.msg.notExistAnymore", null));
@@ -138,7 +140,7 @@ public class UINavigationManagement extends UIContainer
          }
          else
          {
-            portalConfigService.update(navigation);
+            dataService.save(navigation);
          }
          
          UIPortalApplication uiPortalApp = Util.getUIPortalApplication();

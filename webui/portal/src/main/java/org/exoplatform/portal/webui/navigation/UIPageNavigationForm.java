@@ -21,7 +21,6 @@ package org.exoplatform.portal.webui.navigation;
 
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.DataStorage;
-import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
@@ -161,9 +160,8 @@ public class UIPageNavigationForm extends UIForm
 
          // Check existed
          PortalRequestContext prContext = Util.getPortalRequestContext();
-         UserPortalConfigService portalConfigService = uiForm.getApplicationComponent(UserPortalConfigService.class);
-         PageNavigation persistNavigation =
-            portalConfigService.getPageNavigation(pageNav.getOwnerType(), pageNav.getOwnerId());
+         DataStorage dataService = uiForm.getApplicationComponent(DataStorage.class);
+         PageNavigation persistNavigation = dataService.getPageNavigation(pageNav.getOwnerType(), pageNav.getOwnerId());
          if (persistNavigation == null)
          {
             UIApplication uiApp = Util.getPortalRequestContext().getUIApplication();
@@ -178,8 +176,6 @@ public class UIPageNavigationForm extends UIForm
 
          WebuiRequestContext pcontext = event.getRequestContext();
 
-         UserPortalConfigService service = uiForm.getApplicationComponent(UserPortalConfigService.class);
-
          // if edit navigation
          if (pageNav != null)
          {
@@ -189,7 +185,7 @@ public class UIPageNavigationForm extends UIForm
             pageNav.setPriority(priority);
 
             // update navigation
-            service.update(pageNav);
+            dataService.save(pageNav);
 
             UIPopupWindow uiPopup = uiForm.getParent();
             uiPopup.setShow(false);
@@ -214,7 +210,6 @@ public class UIPageNavigationForm extends UIForm
          UIPortalApplication uiPortalApp = Util.getUIPortal().getAncestorOfType(UIPortalApplication.class);
 
          // ensure this navigation is not exist
-         DataStorage dataService = uiForm.getApplicationComponent(DataStorage.class);
          if (dataService.getPageNavigation(pageNav.getOwnerType(), pageNav.getOwnerId()) != null)
          {
             uiPortalApp.addMessage(new ApplicationMessage("UIPageNavigationForm.msg.existPageNavigation",
@@ -223,8 +218,7 @@ public class UIPageNavigationForm extends UIForm
          }
 
          // create navigation for group
-
-         service.create(pageNav);
+         dataService.create(pageNav);
 
          // close popup window, update popup window
          UIPopupWindow uiPopup = uiForm.getParent();
