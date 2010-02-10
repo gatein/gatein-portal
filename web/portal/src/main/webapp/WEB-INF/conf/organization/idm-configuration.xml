@@ -57,6 +57,9 @@
 
         <!--Sample LDAP config-->
         <!--<value>war:/conf/organization/picketlink-idm/picketlink-idm-ldap-config.xml</value>-->
+
+        <!--ACME LDAP Example-->
+        <!--<value>war:/conf/organization/picketlink-idm/examples/picketlink-idm-ldap-acme-config.xml</value>-->
       </value-param>
       <value-param>
         <name>portalRealm</name>
@@ -88,7 +91,7 @@
                This option may be useful with LDAP config as it will make (if set to true) every entry
                added to LDAP (not via GateIn management UI) appear in GateIn-->
           <field name="forceMembershipOfMappedTypes">
-            <boolean>false</boolean>
+            <boolean>true</boolean>
           </field>
           <!-- When 'userParentIdAsGroupType is set to true this value will be used to
                replace all "/" chars in id. This is because "/" is not allowed to be
@@ -123,6 +126,19 @@
               <entry>
                 <key><string>/organization/*</string></key>
                 <value><string>organization_type</string></value>
+              </entry>
+              -->
+
+
+              <!-- Uncomment for ACME LDAP example -->
+              <!--
+              <entry>
+                <key><string>/acme/roles/*</string></key>
+                <value><string>acme_roles_type</string></value>
+              </entry>
+              <entry>
+                <key><string>/acme/organization_units/*</string></key>
+                <value><string>acme_ou_type</string></value>
               </entry>
               -->
             </map>

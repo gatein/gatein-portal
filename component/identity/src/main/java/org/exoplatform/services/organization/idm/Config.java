@@ -1,10 +1,5 @@
 package org.exoplatform.services.organization.idm;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
 /*
 * JBoss, a division of Red Hat
 * Copyright 2010, Red Hat Middleware, LLC, and individual contributors as indicated
@@ -26,6 +21,14 @@ import java.util.Set;
 * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
+/*
+ * @author <a href="mailto:boleslaw.dawidowicz at redhat.com">Boleslaw Dawidowicz</a>
+ */
 public class Config
 {
 
@@ -113,8 +116,24 @@ public class Config
 
       if (checkParents && !parentId.equals("/") && parentId.contains("/"))
       {
-         String newParentId = parentId.substring(0, parentId.lastIndexOf("/"));
-         return getGroupType(newParentId);
+         // Check if any mapping that contains '/*' match this id
+         for (String key : groupTypeMappings.keySet())
+         {
+            id = key;
+            if (id.endsWith("/*"))
+            {
+               id = id.substring(0, id.length() - 2);
+            }
+            else
+            {
+               continue;
+            }
+
+            if (parentId.startsWith(id))
+            {
+               return groupTypeMappings.get(key);
+            }
+         }
       }
 
       return null;
@@ -139,7 +158,7 @@ public class Config
 
       for (String key : groupTypeMappings.keySet())
       {
-         if (key.startsWith("id"))
+         if (key.equals(id) || key.equals(id + "/*"))
          {
             types.add(groupTypeMappings.get(key));
          }

@@ -21,6 +21,9 @@ package org.exoplatform.services.organization.idm;
 
 import org.exoplatform.services.organization.Membership;
 
+/*
+ * @author <a href="mailto:boleslaw.dawidowicz at redhat.com">Boleslaw Dawidowicz</a>
+ */
 public class MembershipImpl implements Membership
 {
    private String membershipType = "member";

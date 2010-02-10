@@ -33,6 +33,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+/*
+ * @author <a href="mailto:boleslaw.dawidowicz at redhat.com">Boleslaw Dawidowicz</a>
+ */
 public class MembershipTypeDAOImpl implements MembershipTypeHandler
 {
 

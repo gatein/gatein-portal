@@ -29,6 +29,8 @@ import org.exoplatform.services.organization.User;
 import org.picketlink.idm.api.IdentitySession;
 import org.picketlink.idm.api.Role;
 import org.picketlink.idm.api.RoleType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -39,10 +41,12 @@ import java.util.Set;
 
 import javax.naming.InvalidNameException;
 
-/**
+/*
+ * @author <a href="mailto:boleslaw.dawidowicz at redhat.com">Boleslaw Dawidowicz</a>
  */
 public class MembershipDAOImpl implements MembershipHandler
 {
+   private static Logger log = LoggerFactory.getLogger(MembershipDAOImpl.class);
 
    private PicketLinkIDMService service_;
 
@@ -147,7 +151,22 @@ public class MembershipDAOImpl implements MembershipHandler
          getIdentitySession().getPersistenceManager().
             createGroupKey(getGroupNameFromId(m.getGroupId()), getGroupTypeFromId(m.getGroupId()));
 
-      if (getIdentitySession().getRoleManager().hasRole(m.getUserName(), groupId, m.getMembershipType()))
+
+      boolean hasRole = false;
+
+
+      try
+      {
+         hasRole = getIdentitySession().getRoleManager().hasRole(m.getUserName(), groupId, m.getMembershipType());
+      }
+      catch (Exception e)
+      {
+         //TODO:
+         log.info("Identity operation error: ", e);
+
+      }
+
+      if (hasRole)
       {
          return;
       }
@@ -160,11 +179,29 @@ public class MembershipDAOImpl implements MembershipHandler
       if (isCreateMembership(m.getMembershipType()))
       {
 
-         getIdentitySession().getRoleManager().createRole(m.getMembershipType(), m.getUserName(), groupId);
+         try
+         {
+            getIdentitySession().getRoleManager().createRole(m.getMembershipType(), m.getUserName(), groupId);
+         }
+         catch (Exception e)
+         {
+            //TODO:
+            log.info("Identity operation error: ", e);
+
+         }
       }
       if (isAssociationMapped() && getAssociationMapping().equals(m.getMembershipType()))
       {
-         getIdentitySession().getRelationshipManager().associateUserByKeys(groupId, m.getUserName());
+         try
+         {
+            getIdentitySession().getRelationshipManager().associateUserByKeys(groupId, m.getUserName());
+         }
+         catch (Exception e)
+         {
+            //TODO:
+            log.info("Identity operation error: ", e);
+
+         }
       }
 
       if (broadcast)
@@ -182,7 +219,20 @@ public class MembershipDAOImpl implements MembershipHandler
          getIdentitySession().getPersistenceManager().
             createGroupKey(getGroupNameFromId(m.getGroupId()), getGroupTypeFromId(m.getGroupId()));
 
-      if (!getIdentitySession().getRoleManager().hasRole(m.getUserName(), groupId, m.getMembershipType()))
+      boolean hasRole = false;
+
+      try
+      {
+         hasRole = getIdentitySession().getRoleManager().hasRole(m.getUserName(), groupId, m.getMembershipType());
+      }
+      catch (Exception e)
+      {
+         //TODO:
+         log.info("Identity operation error: ", e);
+
+      }
+
+      if (!hasRole)
       {
          return m;
       }
@@ -195,15 +245,45 @@ public class MembershipDAOImpl implements MembershipHandler
       if (isCreateMembership(m.getMembershipType()))
       {
 
-         getIdentitySession().getRoleManager().removeRole(m.getMembershipType(), m.getUserName(), groupId);
+         try
+         {
+            getIdentitySession().getRoleManager().removeRole(m.getMembershipType(), m.getUserName(), groupId);
+         }
+         catch (Exception e)
+         {
+            //TODO:
+            log.info("Identity operation error: ", e);
+
+         }
       }
 
-      if (isAssociationMapped() && getAssociationMapping().equals(m.getMembershipType()) &&
-          getIdentitySession().getRelationshipManager().isAssociatedByKeys(m.getGroupId(), m.getUserName()))
+      boolean associated = false;
+
+      try
+      {
+         associated = getIdentitySession().getRelationshipManager().isAssociatedByKeys(m.getGroupId(), m.getUserName());
+      }
+      catch (Exception e)
+      {
+         //TODO:
+         log.info("Identity operation error: ", e);
+
+      }
+
+      if (isAssociationMapped() && getAssociationMapping().equals(m.getMembershipType()) && associated)
       {
          Set<String> keys = new HashSet<String>();
          keys.add(m.getUserName());
-         getIdentitySession().getRelationshipManager().disassociateUsersByKeys(groupId, keys);
+         try
+         {
+            getIdentitySession().getRelationshipManager().disassociateUsersByKeys(groupId, keys);
+         }
+         catch (Exception e)
+         {
+            //TODO:
+            log.info("Identity operation error: ", e);
+
+         }
       }
 
       if (broadcast)
@@ -216,7 +296,18 @@ public class MembershipDAOImpl implements MembershipHandler
    public Collection removeMembershipByUser(String userName, boolean broadcast) throws Exception
    {
 
-      Collection<Role> roles = getIdentitySession().getRoleManager().findRoles(userName, null);
+      Collection<Role> roles = new HashSet();
+
+      try
+      {
+         roles = getIdentitySession().getRoleManager().findRoles(userName, null);
+      }
+      catch (Exception e)
+      {
+         //TODO:
+         log.info("Identity operation error: ", e);
+
+      }
 
       HashSet<MembershipImpl> memberships = new HashSet<MembershipImpl>();
 
@@ -246,15 +337,34 @@ public class MembershipDAOImpl implements MembershipHandler
       if (isAssociationMapped())
       {
 
-         Collection<org.picketlink.idm.api.Group> groups =
-            getIdentitySession().getRelationshipManager().findAssociatedGroups(userName, null);
+         Collection<org.picketlink.idm.api.Group> groups = new HashSet();
+
+         try
+         {
+            groups = getIdentitySession().getRelationshipManager().findAssociatedGroups(userName, null);
+         }
+         catch (Exception e)
+         {
+            //TODO:
+            log.info("Identity operation error: ", e);
+
+         }
 
          Set<String> keys = new HashSet<String>();
          keys.add(userName);
          
          for (org.picketlink.idm.api.Group group : groups)
          {
-            getIdentitySession().getRelationshipManager().disassociateUsersByKeys(group.getKey(), keys);
+            try
+            {
+               getIdentitySession().getRelationshipManager().disassociateUsersByKeys(group.getKey(), keys);
+            }
+            catch (Exception e)
+            {
+               //TODO:
+               log.info("Identity operation error: ", e);
+
+            }
          }
 
       }
@@ -272,14 +382,37 @@ public class MembershipDAOImpl implements MembershipHandler
 
       boolean hasMembership = false;
 
-      if (isAssociationMapped() && getAssociationMapping().equals(type) &&
-         getIdentitySession().getRelationshipManager().isAssociatedByKeys(gid, userName))
+      boolean associated = false;
+
+      try
+      {
+         associated = getIdentitySession().getRelationshipManager().isAssociatedByKeys(gid, userName);
+      }
+      catch (Exception e)
+      {
+         //TODO:
+         log.info("Identity operation error: ", e);
+
+      }
+
+      if (isAssociationMapped() && getAssociationMapping().equals(type) && associated)
       {
          hasMembership = true;
       }
 
 
-      Role role = getIdentitySession().getRoleManager().getRole(type, userName, gid);
+      Role role = null;
+
+      try
+      {
+         role = getIdentitySession().getRoleManager().getRole(type, userName, gid);
+      }
+      catch (Exception e)
+      {
+         //TODO:
+         log.info("Identity operation error: ", e);
+
+      }
 
       if (role != null &&
           (!isAssociationMapped() ||
@@ -316,7 +449,18 @@ public class MembershipDAOImpl implements MembershipHandler
          getIdentitySession().getPersistenceManager().
             createGroupKey(getGroupNameFromId(groupId), getGroupTypeFromId(groupId));
 
-      Collection<RoleType> roleTypes = getIdentitySession().getRoleManager().findRoleTypes(userName, gid, null);
+      Collection<RoleType> roleTypes = new HashSet();
+
+      try
+      {
+         roleTypes = getIdentitySession().getRoleManager().findRoleTypes(userName, gid, null);
+      }
+      catch (Exception e)
+      {
+         //TODO:
+         log.info("Identity operation error: ", e);
+
+      }
 
       HashSet<MembershipImpl> memberships = new HashSet<MembershipImpl>();
 
@@ -332,8 +476,20 @@ public class MembershipDAOImpl implements MembershipHandler
          }   
       }
 
-      if (isAssociationMapped() &&
-          getIdentitySession().getRelationshipManager().isAssociatedByKeys(gid, userName))
+      boolean associated = false;
+
+      try
+      {
+         associated = getIdentitySession().getRelationshipManager().isAssociatedByKeys(gid, userName);
+      }
+      catch (Exception e)
+      {
+         //TODO:
+         log.info("Identity operation error: ", e);
+
+      }
+
+      if (isAssociationMapped() && associated)
       {
          MembershipImpl m = new MembershipImpl();
          m.setGroupId(groupId);
@@ -348,7 +504,18 @@ public class MembershipDAOImpl implements MembershipHandler
 
    public Collection findMembershipsByUser(String userName) throws Exception
    {
-      Collection<Role> roles = getIdentitySession().getRoleManager().findRoles(userName, null);
+      Collection<Role> roles = new HashSet();
+
+      try
+      {
+         roles = getIdentitySession().getRoleManager().findRoles(userName, null);
+      }
+      catch (Exception e)
+      {
+         //TODO:
+         log.info("Identity operation error: ", e);
+
+      }
 
       HashSet<MembershipImpl> memberships = new HashSet<MembershipImpl>();
 
@@ -368,8 +535,18 @@ public class MembershipDAOImpl implements MembershipHandler
       if (isAssociationMapped())
       {
 
-         Collection<org.picketlink.idm.api.Group> groups =
-            getIdentitySession().getRelationshipManager().findAssociatedGroups(userName, null);
+         Collection<org.picketlink.idm.api.Group> groups = new HashSet();
+
+         try
+         {
+            groups = getIdentitySession().getRelationshipManager().findAssociatedGroups(userName, null);
+         }
+         catch (Exception e)
+         {
+            //TODO:
+            log.info("Identity operation error: ", e);
+
+         }
 
          for (org.picketlink.idm.api.Group group : groups)
          {
@@ -387,22 +564,6 @@ public class MembershipDAOImpl implements MembershipHandler
       return new LinkedList(memberships);
    }
 
-//   static void removeMembershipEntriesOfGroup(PicketLinkIDMOrganizationServiceImpl orgService, Group group,
-//      IdentitySession session) throws Exception
-//   {
-//      String gid = session.getPersistenceManager().
-//         createGroupKey(group.getGroupName(), orgService.getConfiguration().getGroupType(group.getParentId()));
-//
-//      Collection<Role> roles = session.getRoleManager().findRoles(gid, null);
-//
-//      for (Role role : roles)
-//      {
-//         session.getRoleManager().removeRole(role);
-//      }
-//
-//
-//   }
-
    public Collection findMembershipsByGroup(Group group) throws Exception
    {
       return findMembershipsByGroupId(group.getId());
@@ -414,7 +575,18 @@ public class MembershipDAOImpl implements MembershipHandler
          getIdentitySession().getPersistenceManager().createGroupKey(getGroupNameFromId(groupId),
             getGroupTypeFromId(groupId));
 
-      Collection<Role> roles = getIdentitySession().getRoleManager().findRoles(gid, null);
+      Collection<Role> roles = new HashSet();
+
+      try
+      {
+         roles = getIdentitySession().getRoleManager().findRoles(gid, null);
+      }
+      catch (Exception e)
+      {
+         //TODO:
+         log.info("Identity operation error: ", e);
+
+      }
 
       HashSet<MembershipImpl> memberships = new HashSet<MembershipImpl>();
 
@@ -434,8 +606,18 @@ public class MembershipDAOImpl implements MembershipHandler
       if (isAssociationMapped())
       {
 
-         Collection<org.picketlink.idm.api.User> users =
-            getIdentitySession().getRelationshipManager().findAssociatedUsers(gid, false, null);
+         Collection<org.picketlink.idm.api.User> users = new HashSet();
+
+         try
+         {
+            users = getIdentitySession().getRelationshipManager().findAssociatedUsers(gid, false, null);
+         }
+         catch (Exception e)
+         {
+            //TODO:
+            log.info("Identity operation error: ", e);
+
+         }
 
          for (org.picketlink.idm.api.User user : users)
          {
@@ -461,19 +643,36 @@ public class MembershipDAOImpl implements MembershipHandler
          getIdentitySession().getPersistenceManager().createGroupKey(getGroupNameFromId(m.getGroupId()),
             getGroupTypeFromId(m.getGroupId()));
 
-      if (isCreateMembership(m.getMembershipType()) &&
-          getIdentitySession().getRoleManager().hasRole(m.getUserName(), groupId, m.getMembershipType()))
+
+      try
       {
-         return m;
+         if (isCreateMembership(m.getMembershipType()) &&
+             getIdentitySession().getRoleManager().hasRole(m.getUserName(), groupId, m.getMembershipType()))
+         {
+            return m;
+         }
+      }
+      catch (Exception e)
+      {
+         //TODO:
+         log.info("Identity operation error: ", e);
+
       }
 
-      if (isAssociationMapped() && getAssociationMapping().equals(m.getMembershipType()) &&
-          getIdentitySession().getRelationshipManager().isAssociatedByKeys(groupId, m.getUserName()))
+      try
       {
-         return m;
+         if (isAssociationMapped() && getAssociationMapping().equals(m.getMembershipType()) &&
+             getIdentitySession().getRelationshipManager().isAssociatedByKeys(groupId, m.getUserName()))
+         {
+            return m;
+         }
       }
+      catch (Exception e)
+      {
+         //TODO:
+         log.info("Identity operation error: ", e);
 
-
+      }
 
 
       return null;

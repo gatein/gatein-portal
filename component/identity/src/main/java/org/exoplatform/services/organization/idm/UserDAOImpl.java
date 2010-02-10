@@ -32,7 +32,9 @@ import org.picketlink.idm.api.Attribute;
 import org.picketlink.idm.api.AttributesManager;
 import org.picketlink.idm.api.IdentitySession;
 import org.picketlink.idm.api.query.UserQueryBuilder;
+import org.picketlink.idm.common.exception.IdentityException;
 import org.picketlink.idm.impl.api.SimpleAttribute;
+import org.slf4j.LoggerFactory;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -42,11 +44,15 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Logger;
 
-/**
+/*
+ * @author <a href="mailto:boleslaw.dawidowicz at redhat.com">Boleslaw Dawidowicz</a>
  */
 public class UserDAOImpl implements UserHandler
 {
+   private static org.slf4j.Logger log = LoggerFactory.getLogger(UserDAOImpl.class);
+
 
    private final PicketLinkIDMService service_;
 
@@ -124,7 +130,15 @@ public class UserDAOImpl implements UserHandler
          preSave(user, true);
       }
 
-      session.getPersistenceManager().createUser(user.getUserName());
+      try
+      {
+         session.getPersistenceManager().createUser(user.getUserName());
+      }
+      catch (IdentityException e)
+      {
+         log.info("Identity operation error: ", e);
+
+      }
 
       persistUserInfo(user, session);
 
@@ -156,7 +170,17 @@ public class UserDAOImpl implements UserHandler
    {
       IdentitySession session = service_.getIdentitySession();
 
-      org.picketlink.idm.api.User foundUser = session.getPersistenceManager().findUser(userName);
+      org.picketlink.idm.api.User foundUser = null;
+
+      try
+      {
+         foundUser = session.getPersistenceManager().findUser(userName);
+      }
+      catch (IdentityException e)
+      {
+         log.info("Cannot obtain user: " + userName + "; ", e);
+
+      }
 
       if (foundUser == null)
       {
@@ -164,10 +188,18 @@ public class UserDAOImpl implements UserHandler
          return null;
       }
 
-      // Remove all memberships and profile first
-      orgService.getMembershipHandler().removeMembershipByUser(userName, false);
-      orgService.getUserProfileHandler().removeUserProfile(userName, false);
-      
+      try
+      {
+         // Remove all memberships and profile first
+         orgService.getMembershipHandler().removeMembershipByUser(userName, false);
+         orgService.getUserProfileHandler().removeUserProfile(userName, false);
+      }
+      catch (Exception e)
+      {
+         log.info("Cannot cleanup user relationships: " + userName + "; ", e);
+
+      }
+
       User exoUser = getPopulatedUser(userName, session);
 
       if (broadcast)
@@ -175,7 +207,16 @@ public class UserDAOImpl implements UserHandler
          preDelete(exoUser);
       }
 
-      session.getPersistenceManager().removeUser(foundUser, true);
+      try
+      {
+         session.getPersistenceManager().removeUser(foundUser, true);
+      }
+      catch (IdentityException e)
+      {
+         log.info("Cannot remove user: " + userName + "; ", e);
+
+      }
+
       if (broadcast)
       {
          postDelete(exoUser);
@@ -231,10 +272,18 @@ public class UserDAOImpl implements UserHandler
       }
       else
       {
-         IdentitySession session = service_.getIdentitySession();
-         org.picketlink.idm.api.User idmUser = session.getPersistenceManager().findUser(user.getUserName());
+         try
+         {
+            IdentitySession session = service_.getIdentitySession();
+            org.picketlink.idm.api.User idmUser = session.getPersistenceManager().findUser(user.getUserName());
 
-         authenticated = session.getAttributesManager().validatePassword(idmUser, password);
+            authenticated = session.getAttributesManager().validatePassword(idmUser, password);
+         }
+         catch (Exception e)
+         {
+            log.info("Cannot authenticate user: " + username + "; ",  e);
+
+         }
       }
 
       if (authenticated)
@@ -285,7 +334,16 @@ public class UserDAOImpl implements UserHandler
    {
       UserQueryBuilder qb = service_.getIdentitySession().createUserQueryBuilder();
 
-      org.picketlink.idm.api.Group jbidGroup = orgService.getJBIDMGroup(groupId);
+      org.picketlink.idm.api.Group jbidGroup = null;
+      try
+      {
+         jbidGroup = orgService.getJBIDMGroup(groupId);
+      }
+      catch (Exception e)
+      {
+         log.info("Cannot obtain group: " + groupId + "; ", e);
+
+      }
 
       qb.addRelatedGroup(jbidGroup);
 
@@ -297,8 +355,18 @@ public class UserDAOImpl implements UserHandler
       IdentitySession session = service_.getIdentitySession();
 
 
-      org.picketlink.idm.api.User plUser;
-      plUser = session.getAttributesManager().findUserByUniqueAttribute(USER_EMAIL, email);
+      org.picketlink.idm.api.User plUser = null;
+
+      try
+      {
+         plUser = session.getAttributesManager().findUserByUniqueAttribute(USER_EMAIL, email);
+      }
+      catch (IdentityException e)
+      {
+         log.info("Cannot find user by email: " + email + "; ", e );
+
+      }
+
       User user = null;
 
       if (plUser != null)
@@ -389,19 +457,48 @@ public class UserDAOImpl implements UserHandler
          }
          else
          {
-            am.updatePassword(session.getPersistenceManager().findUser(user.getUserName()), user.getPassword());
+            try
+            {
+               am.updatePassword(session.getPersistenceManager().findUser(user.getUserName()), user.getPassword());
+            }
+            catch (IdentityException e)
+            {
+               log.info("Cannot update password: " + user.getUserName() + "; ", e);
+
+            }
          }
       }
 
       Attribute[] attrs = new Attribute[attributes.size()];
       attrs = (Attribute[])attributes.toArray(attrs);
-      am.addAttributes(user.getUserName(), attrs);
+
+      try
+      {
+         am.updateAttributes(user.getUserName(), attrs);
+      }
+      catch (IdentityException e)
+      {
+         log.info("Cannot update attributes for user: " + user.getUserName() + "; ", e);
+
+      }
+
    }
 
    public static User getPopulatedUser(String userName, IdentitySession session) throws Exception
    {
+      Object u = null;
 
-      if (session.getPersistenceManager().findUser(userName) == null)
+      try
+      {
+         u = session.getPersistenceManager().findUser(userName);
+      }
+      catch (IdentityException e)
+      {
+         log.info("Cannot obtain user: " + userName + "; ", e);
+
+      }
+
+      if (u == null)
       {
          return null;
       }
@@ -419,7 +516,18 @@ public class UserDAOImpl implements UserHandler
 
       AttributesManager am = session.getAttributesManager();
 
-      Map<String, Attribute> attrs = am.getAttributes(user.getUserName());
+      Map<String, Attribute> attrs = null;
+
+      try
+      {
+         attrs = am.getAttributes(user.getUserName());
+      }
+      catch (IdentityException e)
+      {
+
+         log.info("Cannot obtain attributes for user: " + user.getUserName() + "; ", e);
+
+      }
 
       if (attrs == null)
       {

@@ -26,6 +26,9 @@ import org.exoplatform.services.organization.Group;
 
 import java.io.Serializable;
 
+/*
+ * @author <a href="mailto:boleslaw.dawidowicz at redhat.com">Boleslaw Dawidowicz</a>
+ */
 public class ExtGroup implements Group, Serializable
 {
    private String id;

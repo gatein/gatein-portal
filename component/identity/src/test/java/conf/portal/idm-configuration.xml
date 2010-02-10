@@ -51,18 +51,22 @@
                 <key><string>/</string></key>
                 <value><string>root_type</string></value>
               </entry>
-              <!--<entry>-->
-                <!--<key><string>/platform</string></key>-->
-                <!--<value><string>platform_type</string></value>-->
-              <!--</entry>-->
-              <!--<entry>-->
-                <!--<key><string>/platform/users</string></key>-->
-                <!--<value><string>users_type</string></value>-->
-              <!--</entry>-->
-               <!--<entry>-->
-                <!--<key><string>/organization/acme/france</string></key>-->
-                <!--<value><string>france_type</string></value>-->
-              <!--</entry>-->
+              <entry>
+                <key><string>/platform/*</string></key>
+                <value><string>platform_type</string></value>
+              </entry>
+              <entry>
+                <key><string>/platform/users</string></key>
+                <value><string>users_type</string></value>
+              </entry>
+               <entry>
+                <key><string>/organization/acme/france</string></key>
+                <value><string>france_type</string></value>
+              </entry>
+              <entry>
+                <key><string>/toto/*</string></key>
+                <value><string>toto_type</string></value>
+              </entry>
             </map>
           </field>
           <!-- If this option is used then each Membership created with MembrshipType that is

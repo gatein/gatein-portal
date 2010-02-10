@@ -39,6 +39,9 @@ import java.net.URL;
 
 import javax.naming.InitialContext;
 
+/*
+ * @author <a href="mailto:boleslaw.dawidowicz at redhat.com">Boleslaw Dawidowicz</a>
+ */
 public class PicketLinkIDMServiceImpl implements PicketLinkIDMService, Startable
 {
 

@@ -33,6 +33,9 @@ import org.picocontainer.Startable;
 import java.util.LinkedList;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/*
+ * @author <a href="mailto:boleslaw.dawidowicz at redhat.com">Boleslaw Dawidowicz</a>
+ */
 public class PicketLinkIDMOrganizationServiceImpl extends BaseOrganizationService implements Startable,
    ComponentRequestLifecycle
 {

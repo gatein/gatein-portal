@@ -28,6 +28,8 @@ import org.exoplatform.services.organization.impl.UserProfileImpl;
 import org.picketlink.idm.api.Attribute;
 import org.picketlink.idm.api.IdentitySession;
 import org.picketlink.idm.impl.api.SimpleAttribute;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -37,8 +39,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+
+/*
+ * @author <a href="mailto:boleslaw.dawidowicz at redhat.com">Boleslaw Dawidowicz</a>
+ */
 public class UserProfileDAOImpl implements UserProfileHandler
 {
+
+   private static Logger log = LoggerFactory.getLogger(UserProfileDAOImpl.class);
 
    static private UserProfile NOT_FOUND = new UserProfileImpl();
 
@@ -136,7 +144,17 @@ public class UserProfileDAOImpl implements UserProfileHandler
    public UserProfile findUserProfileByName(String userName) throws Exception
    {
 
-      org.picketlink.idm.api.User foundUser = getIdentitySession().getPersistenceManager().findUser(userName);
+      org.picketlink.idm.api.User foundUser = null;
+
+      try
+      {
+         foundUser = getIdentitySession().getPersistenceManager().findUser(userName);
+      }
+      catch (Exception e)
+      {
+         //TODO:
+         log.info("Identity operation error: ", e);
+      }
 
       if (foundUser == null)
       {
@@ -214,12 +232,35 @@ public class UserProfileDAOImpl implements UserProfileHandler
 
    public UserProfile getProfile(String userName) throws Exception
    {
-      if (getIdentitySession().getPersistenceManager().findUser(userName) == null)
+
+      Object u = null;
+
+      try
+      {
+         u = getIdentitySession().getPersistenceManager().findUser(userName);
+      }
+      catch (Exception e)
+      {
+         //TODO:
+         log.info("Identity operation error: ", e);
+      }
+
+      if (u == null)
       {
          return null;
       }
 
-      Map<String, Attribute> attrs = getIdentitySession().getAttributesManager().getAttributes(userName);
+      Map<String, Attribute> attrs = new HashMap();
+
+      try
+      {
+         attrs = getIdentitySession().getAttributesManager().getAttributes(userName);
+      }
+      catch (Exception e)
+      {
+         //TODO:
+         log.info("Identity operation error: ", e);
+      }
 
       if (attrs == null || attrs.isEmpty())
       {
@@ -264,7 +305,15 @@ public class UserProfileDAOImpl implements UserProfileHandler
       Attribute[] attrArray = new Attribute[attrs.size()];
       attrArray = attrs.toArray(attrArray);
 
-      getIdentitySession().getAttributesManager().updateAttributes(userName, attrArray);
+      try
+      {
+         getIdentitySession().getAttributesManager().updateAttributes(userName, attrArray);
+      }
+      catch (Exception e)
+      {
+         //TODO:
+         log.info("Identity operation error: ", e);
+      }
 
    }
 
@@ -276,7 +325,15 @@ public class UserProfileDAOImpl implements UserProfileHandler
 
       attrKeys = profileAttrs.keySet().toArray(attrKeys);
 
-      getIdentitySession().getAttributesManager().removeAttributes(userName, attrKeys);
+      try
+      {
+         getIdentitySession().getAttributesManager().removeAttributes(userName, attrKeys);
+      }
+      catch (Exception e)
+      {
+         //TODO:
+         log.info("Identity operation error: ", e);
+      }
    }
 
    private IdentitySession getIdentitySession() throws Exception

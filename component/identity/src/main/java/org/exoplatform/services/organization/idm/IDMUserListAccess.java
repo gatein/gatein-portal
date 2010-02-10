@@ -26,6 +26,9 @@ import org.picketlink.idm.api.query.UserQueryBuilder;
 
 import java.util.List;
 
+/*
+ * @author <a href="mailto:boleslaw.dawidowicz at redhat.com">Boleslaw Dawidowicz</a>
+ */
 public class IDMUserListAccess implements ListAccess<User>
 {
    private final UserDAOImpl userDAO;
