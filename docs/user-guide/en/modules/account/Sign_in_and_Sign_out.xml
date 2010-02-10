@@ -26,141 +26,135 @@
        --><title>Sign In and Sign Out</title>
 
 		<para>
-			After registering your account, you can sign in to &PRODUCT; to go into your private mode.
+			After registering your account, you can sign in to &PRODUCT; to go into private mode.
 		</para>
-	<procedure>
-		<title>Sign In</title>
-			<step>
-				<para>
-					Go to a Portal in the public mode by inputting URL in the address bar (e.g: http://localhost:8080/portal)
-				</para>
-			</step>
-			<step>
-				<para>
-					Click the <emphasis role="bold">Sign in</emphasis> link at the top right of the page if you are current in the Classic portal. The <emphasis role="bold">Sign in</emphasis> form appears:
+		<para>
+			To sign in to a portal, users must complete the <emphasis role="bold">Sign in</emphasis> form. This form contains the following elements:
+		</para>
+		<variablelist>
+			<varlistentry>
+				<term>
+					User name
+				</term>
+				<listitem>
+					<para>
+						The registered user name.
+					</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>
+					Password
+				</term>
+				<listitem>
+					<para>
+						The registered password.
+					</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>
+					Remember My Login
+				</term>
+				<listitem>	
+					<para>
+						This option allows users to return to &PRODUCT; and be automatically authenticated based on the value of a cookie provided by the <literal>bvarlistentryser</literal>. Thus users do not have to perform an explicit authentication again.
+					</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>
+					Forgot your User Name/Password?
+				</term>
+				<listitem>
+					<para>
+						To follow some steps to get the forgotten user name or password. Please refer [Portal:Account and Password Retrieval] for more details.
+					</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>
+					Sign in
+				</term>
+				<listitem>
+					<para>
+						To sign into &PRODUCT; with user name and password.
+					</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>
+					Discard
+				</term>
+				<listitem>
+					<para>
+						Close the Sign In form without logging in.
+					</para>
+				</listitem>
+			</varlistentry>
+			</variablelist>
+			<procedure>
+				<title>Sign In</title>
+					<step>
+						<para>
+							Go to your Portal by entering the URL into the address bar of your browser (For example http://localhost:8080/portal).
+						</para>
+					</step>
+					<step>
+						<para>
+							Click the <emphasis role="bold">Sign in</emphasis> link at the top right of the page if you are current in the Classic portal. The <emphasis role="bold">Sign in</emphasis> form appears:
+					</para>
+					<mediaobject>
+						<imageobject>
+							<imagedata fileref="images/SignIn2.6.png" format="PNG" width="444" />
+						</imageobject>
+					</mediaobject>
+					</step>
+					<step>
+						<para>
+							Input your registered <emphasis role="bold">User name</emphasis> and <emphasis role="bold">Password</emphasis> .
+						</para>
+					</step>
+					<step>
+						<para>
+							Select the <emphasis role="bold">Remember My Login</emphasis> check box when you sign in &PRODUCT; at the first time if you want to automatically return to &PRODUCT; without signing in again. You can see <xref linkend="sect-User_Guide-Remember_User_Account" /> for more details.
+						</para>
+					</step>
+					<step>
+						<para>
+							Click the <emphasis role="bold">Sign in</emphasis> button to submit the form or <emphasis role="bold">Discard</emphasis> to escape.
+						</para>
+					</step>
+			</procedure>
+			<para>
+				If the user name does not exist or the user name and/or password is invalid an alert message will appear. To attempt the login again; click the <emphasis role="bold">OK</emphasis> button on the alert message to be returned to the Sign In form. Enter the user name and password again.
+			</para>
+			<para>
+				After signing in, you will be redirected to the homepage and welcomed with your full name in the top right corner of the page.
 			</para>
 			<mediaobject>
 				<imageobject>
-					<imagedata fileref="images/SignIn2.6.png" format="PNG" width="444" />
+					<imagedata fileref="images/PortalHome.png" format="PNG" width="444" />
 				</imageobject>
 			</mediaobject>
-			</step>
-			<step>
-				<para>
-					Input your registered <emphasis role="bold">User name</emphasis> and <emphasis role="bold">Password</emphasis> .
-				</para>
-			</step>
-			<step>
-				<para>
-					Select the <emphasis role="bold">Remember My Login</emphasis> check box when you sign in &PRODUCT; at the first time if you want to automatically return to &PRODUCT; without signing in again. You can see <xref linkend="sect-User_Guide-Remember_User_Account" /> for more details.
-				</para>
-			</step>
-			<step>
-				<para>
-					Click the <emphasis role="bold">Sign in</emphasis> button to submit the form or <emphasis role="bold">Discard</emphasis> to escape.
-				</para>
-			</step>
-			<step>
-				<para>
-					Details:
-				</para>
-				<variablelist>
-						<varlistentry>
-								<term>
-									User name
-								</term>
-								<listitem>
-								<para>
-									The registered user name.
-								</para>
-								</listitem>
-						</varlistentry>
-						<varlistentry>
-								<term>
-									Password
-								</term>
-								<listitem>
-								<para>
-									The registered password.
-								</para>
-								</listitem>
-						</varlistentry>
-						<varlistentry>
-								<term>
-									Remember My Login
-								</term>
-								<listitem>	
-								<para>
-									This option allows users to return to &PRODUCT; and be automatically authenticated based on the value of a cookie provided by the bvarlistentryser. Thus users do not have to perform an explicit authentication again.
-								</para>
-								</listitem>
-						</varlistentry>
-						<varlistentry>
-								<term>
-									Forgot your User Name/Password?
-								</term>
-								<listitem>
-								<para>
-									To follow some steps to get the forgotten user name or password. Please refer [Portal:Account and Password Retrieval] for more details.
-								</para>
-								</listitem>
-						</varlistentry>
-						<varlistentry>
-								<term>
-									Sign in
-								</term>
-								<listitem>
-								<para>
-									To sign into &PRODUCT; with user name and password.
-								</para>
-								</listitem>
-						</varlistentry>
-						<varlistentry>
-								<term>
-									Discard
-								</term>
-								<listitem>
-								<para>
-									To close the *Sign In* form.
-								</para>
-								</listitem>
-						</varlistentry>
-				</variablelist>
-				<para>
-					If <emphasis role="bold">User Name</emphasis> does not exist or the User name/Password is invalid an alert message will appear. This alert requires you to input a recognised value. To attempt the login again; click the <emphasis role="bold">OK</emphasis> button on the alert message to be returned to the Sign In form. Enter <emphasis role="bold">User Name</emphasis> and <emphasis role="bold">Password</emphasis> again.
-				</para>
-				<para>
-					After signing in, you will be redirected to the authenticated homepage:
-				</para>
-				<para>
-					After signing in, you will be redirected to the authenticated homepage and welcomed with your full First Name and Last Name:
-				</para>
-					<mediaobject>
-						<imageobject>
-							<imagedata fileref="images/PortalHome.png" format="PNG" width="444" />
-						</imageobject>
-					</mediaobject>
-			</step>
-	</procedure>
-	
-	<procedure>
-		<title>Sign Out</title>
-			<step>
-				<para>
-					This function lets you get back to the anonymous portal. It ends your current portal session.
-				</para>
-			</step>
-			<step>
-				<para>
-					In the upper left corner of the screen, click <emphasis role="bold">Sign out</emphasis> :
-				</para>
-				<mediaobject>
-					<imageobject>
-						<imagedata fileref="images/SignOut.png" format="PNG" />
-					</imageobject>
-				</mediaobject>
-			</step>
-	</procedure>
+			<procedure>
+				<title>Sign Out</title>
+					<step>
+						<para>
+							This function lets you get back to the anonymous portal. It ends your current portal session.
+						</para>
+					</step>
+					<step>
+						<para>
+							In the upper left corner of the screen, click <emphasis role="bold">Sign out</emphasis> :
+						</para>
+						<mediaobject>
+							<imageobject>
+								<imagedata fileref="images/SignOut.png" format="PNG" />
+							</imageobject>
+						</mediaobject>
+					</step>
+			</procedure>
 
 </section>
 

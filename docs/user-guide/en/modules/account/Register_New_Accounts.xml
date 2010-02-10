@@ -28,7 +28,7 @@
 		Users who visit the Portal and who are not registered are limited in the content they can see. Users who need access to deeper content or who need to undertake actions within the prtal should register themselves and then contact the portal administrator to have appropriate permissions added to their account.
 	</para>
 	<para>
-		Users can  quickly and easily register a new account by themselves. Just by completing the steps below, you will have a new account that helps you access more pages and take more actions in &PRODUCT;:
+		Users can quickly and easily register a new account for themselves. Complete the steps below:
 	</para>
 	<procedure>
 		<step>
@@ -58,7 +58,7 @@
 							<term>User Name</term> 
 							<listitem>
 								<para>
-									The name that the user uses to login.
+									The name used to login.
 								</para>
 							</listitem>
 						</varlistentry>
@@ -82,7 +82,7 @@
 							<term>First Name</term>
 							<listitem>
 								<para>
-									The first name of the user.
+									The user's first name.
 								</para>
 							</listitem>
 						</varlistentry>
@@ -90,7 +90,7 @@
 							<term>Last Name</term>
 							<listitem>
 								<para>
-									The last name of the user.
+									The user's last name.
 								</para>
 							</listitem>
 						</varlistentry>
@@ -98,7 +98,7 @@
 							<term>Email Address</term>
 							<listitem>
 								<para>
-									The email address of the user. It must be in the appropriate format, example: username@abc.com.
+									The user's email address. This must be in the appropriate format. For example: username@abc.com.
 								</para>
 							</listitem>
 						</varlistentry>
@@ -111,10 +111,10 @@
 		</step>
 		<step>
 			<para>
-				Click the magnifying glass icon to search and check if the chosen username is available.
+				Click the 'find' icon beside the user name field to check if the chosen username is available.
 			</para>
 		</step>
-		<step>
+<!--		<step>
 			<para>
 				Input values in the <emphasis role="bold">User Profile</emphasis> tab, include: Profile information, Home information, Business information. These fields are not required.
 			</para>
@@ -126,10 +126,10 @@
 					<imagedata fileref="images/UserProfile.png" format="PNG" width="444" />
 				</imageobject>
 			</mediaobject>
-		</step>
+		</step> -->
 		<step>
 			<para>
-				Click <emphasis role="bold">Save</emphasis> to register a new account or <emphasis role="bold">Reset</emphasis> to refresh all entered values. You cannot add a new account if one of these cases occurs:
+				Click <emphasis role="bold">Subscribe</emphasis> to register a new account or <emphasis role="bold">Reset</emphasis> to refresh all entered values. You cannot add a new account if one of these cases occurs:
 			</para>
 			<itemizedlist>
 				<listitem>
@@ -149,7 +149,7 @@
 				</listitem>
 				<listitem>
 					<para>
-						The <emphasis role="bold">Email Address</emphasis> format is not valid
+						The <emphasis role="bold">Email Address</emphasis> format is not valid.
 					</para>
 				</listitem>
 				<listitem>
@@ -165,7 +165,7 @@
 		<note>
 			<title>Note</title>
 			<para>
-				Be sure you enter your email address carefully. If you should forget your user name or password, you can recover it by using this email address.
+				Be sure you enter your email address carefully. If you should forget your user name or password, you can recover it with this email address.
 			</para>
 		</note>
 	</para>

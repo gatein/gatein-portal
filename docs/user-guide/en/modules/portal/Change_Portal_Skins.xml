@@ -77,6 +77,9 @@
 						</listitem>
 				</varlistentry>
 			</variablelist>
+			<para>
+				More information about adding skins to a portal see the &PRODUCT; Reference Guide at <ulink type="http" url="www.redhat.com/docs"></ulink>
+			</para>
 
 </section>
 

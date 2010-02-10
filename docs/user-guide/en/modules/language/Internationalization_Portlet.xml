@@ -91,7 +91,7 @@
 	<section id="sect-User_Guide-Internationalization_Portlet-View_and_Edit_a_Resource">
 		<title>View and Edit a Resource</title>
 		<para>
-			Click the magnifying glass icon corresponding to the resource which you want to view. On the view form, you also can edit information by clicking the <emphasis role="bold">Edit</emphasis> button. You can only edit the <emphasis role="bold">Resource</emphasis> field.
+			Click the 'find' icon corresponding to the resource which you want to view. On the view form, you also can edit information by clicking the <emphasis role="bold">Edit</emphasis> button. You can only edit the <emphasis role="bold">Resource</emphasis> field.
 		</para>
 		<para>
 			Click the <emphasis role="bold">Save</emphasis> button to submit your changes or click the <emphasis role="bold">Cancel</emphasis> button to quit without saving any changes.

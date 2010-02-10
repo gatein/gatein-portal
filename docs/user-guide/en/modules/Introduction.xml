@@ -6,19 +6,39 @@
 <chapter id="chap-User_Guide-Introduction">
         <title>Introduction</title>
 	<para>
-		GateIn is a merge of two mature projects; JBoss Portal and eXo Portal. It takes the best of both offerings and incorporates them into a single new project. The aim is to provide an intuitive portal for as-is use and a framework to build upon depending on your needs.
+		&PRODUCT; is a merge of two mature projects; JBoss Portal and eXo Portal. It takes the best of both offerings and incorporates them into a single new project. The aim is to provide an intuitive portal for as-is use and a framework to build upon depending on your needs.
 	</para>
 	<mediaobject>
 		<imageobject>
 			<imagedata fileref="images/Frontpage.png" format="PNG" scalefit="1" width="444" />
 		</imageobject>
 	</mediaobject>
+	<section>
+		<title>Getting Started</title>
+		<para>
+			For instructions on how to install and run &PRODUCT;, refer to the Installation guide available at <ulink type="http" url="www.redhat.com/docs"></ulink>
+		</para>
+	</section>
 	<section id="sect-User_Guide-Introduction-Links">
 		<title>Links</title>
+		<important>
+			<title>&PRODUCT; Download</title>
+			<para>
+				<emphasis role="bold">This link is a placeholder for the final download location:</emphasis>
+			</para>
+			<para>
+				<ulink type="http" url="http://download.devel.redhat.com/devel/candidates/JBEPP/5.0.0_ER2/"></ulink>
+			</para>
+		</important>
 		<itemizedlist>
 			<listitem>
 				<para>
-					GateIn project homepage. GateIn 3.0 is the community project that Enterprise Portal Platform 5.0 is based on. <ulink url="http://www.gatein.org"></ulink>
+					GateIn project homepage. GateIn 3.0 is the community project that &PRODUCT; is based on. <ulink url="http://www.gatein.org"></ulink>
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					GateIn downloads: <ulink url="http://www.jboss.org/gatein/downloads.html">www.jboss.org/gatein/downloads.html</ulink>
 				</para>
 			</listitem>
 			<listitem>
@@ -36,12 +56,7 @@
 				<para>
 					GateIn documentation: <ulink url="http://www.jboss.org/gatein/documentation.html">www.jboss.org/gatein/documentation.html</ulink>
 				</para>
-			</listitem>
-			<listitem>
-				<para>
-					GateIn downloads: <ulink url="http://www.jboss.org/gatein/downloads.html">www.jboss.org/gatein/downloads.html</ulink>
-				</para>
-			</listitem>  -->
+			</listitem> -->
 		</itemizedlist>
 	</section>
 

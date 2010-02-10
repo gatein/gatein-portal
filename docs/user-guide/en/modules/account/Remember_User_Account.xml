@@ -25,7 +25,7 @@
 
         --><title>Remember User Account</title>
 	<para>
-		This feature allows users to return to the &PRODUCT; and be automatically authenticated based on the value of a cookie provided by the browser. Thus users do not have to perform an explicit authentication again.
+		Users can return to the &PRODUCT; and be automatically authenticated with a cookie provided by their browser. Thus users do not have to perform an explicit authentication each time they access the portal.
 	</para>
 	<mediaobject>
 		<imageobject>
@@ -35,7 +35,7 @@
 	<procedure>
 		<step>
 			<para>
-				Input your registered <emphasis role="bold">User name</emphasis> and <emphasis role="bold">Password</emphasis> .
+				Input your registered user name and password.
 			</para>
 		</step>
 		<step>
@@ -50,8 +50,9 @@
 		</step>
 	</procedure>
 	<para>
-		You must remember to close your browser without signing out (as signing out will delete the cookie). The next time, you can automatically sign in the portal without signing in again with your first/last name welcome.
+		You must remember to close your browser without signing out (as signing out will delete the cookie). This will allow you to re-enter the portal without having to sign in again.
 	</para>
+
 </section>
 
 

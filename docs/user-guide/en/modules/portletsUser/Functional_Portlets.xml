@@ -6,7 +6,10 @@
 <section id="sect-User_Guide-Functional_Portlets">
 	<title>Functional Portlets</title>
 	<para>
-		Portlets are pluggable user interface components that are managed and displayed within a portal. Functional Portlets support all functions of a Portal. &PRODUCT; provides the following portlets by default:
+		Portlets are pluggable user interface components that are managed and displayed within a portal. Functional Portlets support all functions of a Portal. They are built into the portal and are accessed via toolbar links as required when actioning portal tasks. 
+	</para>
+	<para>
+		&PRODUCT; provides the following portlets by default. 
 	</para>
 
 	<variablelist>
