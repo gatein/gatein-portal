@@ -44,10 +44,10 @@ import org.jibx.runtime.JiBXException;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by The eXo Platform SARL Author : Tuan Nguyen
@@ -61,9 +61,11 @@ public class NewPortalConfigListener extends BaseComponentPlugin
 
    private DataStorage dataStorage_;
 
-   private volatile List<?> configs;
+   private volatile List<NewPortalConfig> configs;
 
-   private PageTemplateConfig pageTemplateConfig_;
+   private List<SiteConfigTemplates> templateConfigs;
+
+   private String pageTemplatesLocation_;
 
    private String defaultPortal;
 
@@ -77,17 +79,19 @@ public class NewPortalConfigListener extends BaseComponentPlugin
       cmanager_ = cmanager;
       dataStorage_ = dataStorage;
 
-      ObjectParameter objectParam = params.getObjectParam("page.templates");
-      if (objectParam != null)
-         pageTemplateConfig_ = (PageTemplateConfig)objectParam.getObject();
+      ValueParam valueParam = params.getValueParam("page.templates.location");
+      if (valueParam != null)
+         pageTemplatesLocation_ = valueParam.getValue();
 
       defaultPortal = "classic";
-      ValueParam valueParam = params.getValueParam("default.portal");
+      valueParam = params.getValueParam("default.portal");
       if (valueParam != null)
          defaultPortal = valueParam.getValue();
       if (defaultPortal == null || defaultPortal.trim().length() == 0)
          defaultPortal = "classic";
       configs = params.getObjectParamValues(NewPortalConfig.class);
+
+      templateConfigs = params.getObjectParamValues(SiteConfigTemplates.class);
 
       // get parameter
       valueParam = params.getValueParam("initializing.failure.ignore");
@@ -105,66 +109,61 @@ public class NewPortalConfigListener extends BaseComponentPlugin
 
    public void run() throws Exception
    {
-      if (isInitedDB(defaultPortal))
+      if (dataStorage_.getPortalConfig(defaultPortal) != null)
          return;
 
       if (isUseTryCatch)
       {
 
-         for (Object ele : configs)
+         for (NewPortalConfig ele : configs)
          {
             try
             {
-               NewPortalConfig portalConfig = (NewPortalConfig)ele;
-               initPortletPreferencesDB(portalConfig);
+               initPortletPreferencesDB(ele);
             }
             catch (Exception e)
             {
                log.error("NewPortalConfig error: " + e.getMessage(), e);
             }
          }
-         for (Object ele : configs)
+         for (NewPortalConfig ele : configs)
          {
             try
             {
-               NewPortalConfig portalConfig = (NewPortalConfig)ele;
-               initPortalConfigDB(portalConfig);
+               initPortalConfigDB(ele);
             }
             catch (Exception e)
             {
                log.error("NewPortalConfig error: " + e.getMessage(), e);
             }
          }
-         for (Object ele : configs)
+         for (NewPortalConfig ele : configs)
          {
             try
             {
-               NewPortalConfig portalConfig = (NewPortalConfig)ele;
-               initPageDB(portalConfig);
+               initPageDB(ele);
             }
             catch (Exception e)
             {
                log.error("NewPortalConfig error: " + e.getMessage(), e);
             }
          }
-         for (Object ele : configs)
+         for (NewPortalConfig ele : configs)
          {
             try
             {
-               NewPortalConfig portalConfig = (NewPortalConfig)ele;
-               initPageNavigationDB(portalConfig);
+               initPageNavigationDB(ele);
             }
             catch (Exception e)
             {
                log.error("NewPortalConfig error: " + e.getMessage(), e);
             }
          }
-         for (Object ele : configs)
+         for (NewPortalConfig ele : configs)
          {
             try
             {
-               NewPortalConfig portalConfig = (NewPortalConfig)ele;
-               portalConfig.getPredefinedOwner().clear();
+               ele.getPredefinedOwner().clear();
             }
             catch (Exception e)
             {
@@ -175,30 +174,25 @@ public class NewPortalConfigListener extends BaseComponentPlugin
       }
       else
       {
-         for (Object ele : configs)
+         for (NewPortalConfig ele : configs)
          {
-            NewPortalConfig portalConfig = (NewPortalConfig)ele;
-            initPortletPreferencesDB(portalConfig);
+            initPortletPreferencesDB(ele);
          }
-         for (Object ele : configs)
+         for (NewPortalConfig ele : configs)
          {
-            NewPortalConfig portalConfig = (NewPortalConfig)ele;
-            initPortalConfigDB(portalConfig);
+            initPortalConfigDB(ele);
          }
-         for (Object ele : configs)
+         for (NewPortalConfig ele : configs)
          {
-            NewPortalConfig portalConfig = (NewPortalConfig)ele;
-            initPageDB(portalConfig);
+            initPageDB(ele);
          }
-         for (Object ele : configs)
+         for (NewPortalConfig ele : configs)
          {
-            NewPortalConfig portalConfig = (NewPortalConfig)ele;
-            initPageNavigationDB(portalConfig);
+            initPageNavigationDB(ele);
          }
-         for (Object ele : configs)
+         for (NewPortalConfig ele : configs)
          {
-            NewPortalConfig portalConfig = (NewPortalConfig)ele;
-            portalConfig.getPredefinedOwner().clear();
+            ele.getPredefinedOwner().clear();
          }
       }
    }
@@ -213,13 +207,13 @@ public class NewPortalConfigListener extends BaseComponentPlugin
     * a copy of the original object.
     *
     * @param ownerType the owner type
+    * @param template 
     * @return the specified new portal config
     */
-   NewPortalConfig getPortalConfig(String ownerType)
+   NewPortalConfig getPortalConfig(String ownerType, String template)
    {
-      for (Object object : configs)
+      for (NewPortalConfig portalConfig : configs)
       {
-         NewPortalConfig portalConfig = (NewPortalConfig)object;
          if (portalConfig.getOwnerType().equals(ownerType))
          {
             // We are defensive, we make a deep copy
@@ -229,25 +223,35 @@ public class NewPortalConfigListener extends BaseComponentPlugin
       return null;
    }
 
-   @SuppressWarnings("unchecked")
-   synchronized void addPortalConfigs(NewPortalConfigListener listener)
+   /**
+    * This is used to merge an other NewPortalConfigListener to this one
+    * 
+    * @param other
+    */
+   public void mergePlugin(NewPortalConfigListener other)
    {
+      this.defaultPortal = other.defaultPortal;
       if (configs == null)
       {
-         this.configs = listener.configs;
+         this.configs = other.configs;
       }
-      else if (listener.configs != null && !listener.configs.isEmpty())
+      else if (other.configs != null && !other.configs.isEmpty())
       {
-         List result = new ArrayList(configs);
-         result.addAll(listener.configs);
+         List<NewPortalConfig> result = new ArrayList<NewPortalConfig>(configs);
+         result.addAll(other.configs);
          this.configs = Collections.unmodifiableList(result);
       }
-   }
 
-   private boolean isInitedDB(String portalName) throws Exception
-   {
-      PortalConfig pconfig = dataStorage_.getPortalConfig(portalName);
-      return pconfig != null;
+      if (templateConfigs == null)
+      {
+         this.templateConfigs = other.templateConfigs;
+      }
+      else if (other.templateConfigs != null && !other.templateConfigs.isEmpty())
+      {
+         List<SiteConfigTemplates> result = new ArrayList<SiteConfigTemplates>(templateConfigs);
+         result.addAll(other.templateConfigs);
+         this.templateConfigs = Collections.unmodifiableList(result);
+      }
    }
 
    public void initPortalConfigDB(NewPortalConfig config) throws Exception
@@ -285,19 +289,16 @@ public class NewPortalConfigListener extends BaseComponentPlugin
       }
    }
 
-   private void createPortalConfig(NewPortalConfig config, String owner) throws Exception
+   public void createPortalConfig(NewPortalConfig config, String owner) throws Exception
    {
       String type = config.getOwnerType();
 
-      // get path of xml file, check if path in template folder and if path not in
-      // template folder
-      boolean notTemplate = (config.getTemplateOwner() == null || config.getTemplateOwner().trim().length() < 1);
-      String path = getPathConfig(config, owner, type, notTemplate);
+      boolean isTemplate = (config.getTemplateName() != null && config.getTemplateName().trim().length() > 0);
+      String path = getPathConfig(config, owner, type, isTemplate);
 
-      // get xml content and parse xml content
       try
       {
-         String xml = getDefaultConfigIfExists(config.getTemplateLocation(), path);
+         String xml = getDefaultConfig(config.getTemplateLocation(), path);
 
          if (xml == null)
          {
@@ -314,7 +315,7 @@ public class NewPortalConfigListener extends BaseComponentPlugin
             }
             return;
          }
-         if (!notTemplate)
+         if (isTemplate)
          {
             xml = StringUtils.replace(xml, "@owner@", owner);
          }
@@ -346,15 +347,12 @@ public class NewPortalConfigListener extends BaseComponentPlugin
       }
    }
 
-   private void createPage(NewPortalConfig config, String owner) throws Exception
+   public void createPage(NewPortalConfig config, String owner) throws Exception
    {
 
-      // get path of xml file, check if path in template folder and if path not in
-      // template folder
-      boolean notTemplate = (config.getTemplateOwner() == null || config.getTemplateOwner().trim().length() < 1);
-      String path = getPathConfig(config, owner, "pages", notTemplate);
+      boolean isTemplate = (config.getTemplateName() != null && config.getTemplateName().trim().length() > 0);
+      String path = getPathConfig(config, owner, "pages", isTemplate);
 
-      // get xml content and parse xml content
       try
       {
          String xml = getDefaultConfig(config.getTemplateLocation(), path);
@@ -363,7 +361,7 @@ public class NewPortalConfigListener extends BaseComponentPlugin
             return;
          }
 
-         if (!notTemplate)
+         if (isTemplate)
          {
             xml = StringUtils.replace(xml, "@owner@", owner);
          }
@@ -382,14 +380,11 @@ public class NewPortalConfigListener extends BaseComponentPlugin
       }
    }
 
-   private void createPageNavigation(NewPortalConfig config, String owner) throws Exception
+   public void createPageNavigation(NewPortalConfig config, String owner) throws Exception
    {
-      // get path of xml file, check if path in template folder and if path not in
-      // template folder
-      boolean notTemplate = (config.getTemplateOwner() == null || config.getTemplateOwner().trim().length() < 1);
-      String path = getPathConfig(config, owner, "navigation", notTemplate);
+      boolean isTemplate = (config.getTemplateName() != null && config.getTemplateName().trim().length() > 0);
+      String path = getPathConfig(config, owner, "navigation", isTemplate);
 
-      // get xml content and parse xml content
       try
       {
          String xml = getDefaultConfig(config.getTemplateLocation(), path);
@@ -398,7 +393,7 @@ public class NewPortalConfigListener extends BaseComponentPlugin
             return;
          }
 
-         if (!notTemplate)
+         if (isTemplate)
          {
             xml = StringUtils.replace(xml, "@owner@", owner);
          }
@@ -421,14 +416,11 @@ public class NewPortalConfigListener extends BaseComponentPlugin
       }
    }
 
-   private void createPortletPreferences(NewPortalConfig config, String owner) throws Exception
+   public void createPortletPreferences(NewPortalConfig config, String owner) throws Exception
    {
-      // get path of xml file, check if path in template folder and if path not in
-      // template folder
-      boolean notTemplate = (config.getTemplateOwner() == null || config.getTemplateOwner().trim().length() < 1);
-      String path = getPathConfig(config, owner, "portlet-preferences", notTemplate);
+      boolean isTemplate = (config.getTemplateName() != null && config.getTemplateName().trim().length() > 0);
+      String path = getPathConfig(config, owner, "portlet-preferences", isTemplate);
 
-      // get xml content and parse xml content
       try
       {
          String xml = getDefaultConfig(config.getTemplateLocation(), path);
@@ -437,7 +429,7 @@ public class NewPortalConfigListener extends BaseComponentPlugin
             return;
          }
 
-         if (!notTemplate)
+         if (isTemplate)
          {
             xml = StringUtils.replace(xml, "@owner@", owner);
          }
@@ -456,18 +448,12 @@ public class NewPortalConfigListener extends BaseComponentPlugin
       }
    }
 
-   private String getDefaultConfigIfExists(String location, String path) throws Exception
-   {
-      URL url = cmanager_.getURL(location + path);
-      return url == null ? null : IOUtil.getStreamContentAsString(url.openStream());
-   }
-
    private String getDefaultConfig(String location, String path) throws Exception
    {
       String s = location + path;
       try
       {
-         return IOUtil.getStreamContentAsString(cmanager_.getInputStream(s));
+         return IOUtil.getStreamContentAsString(cmanager_.getInputStream(location + path));
       }
       catch (Exception ignore)
       {
@@ -476,32 +462,39 @@ public class NewPortalConfigListener extends BaseComponentPlugin
       }
    }
 
-   private String getPathConfig(NewPortalConfig portalConfig, String owner, String dataType, boolean notTemplate)
+   private String getPathConfig(NewPortalConfig portalConfig, String owner, String fileName, boolean isTemplate)
    {
       String path = "";
-      if (!notTemplate)
+      if (isTemplate)
       {
          String ownerType = portalConfig.getOwnerType();
-         path = "/" + ownerType + "/template/" + portalConfig.getTemplateOwner() + "/" + dataType + ".xml";
+         path = "/" + ownerType + "/template/" + portalConfig.getTemplateName() + "/" + fileName + ".xml";
       }
       else
       {
          String ownerType = portalConfig.getOwnerType();
-         path = "/" + ownerType + "/" + owner + "/" + dataType + ".xml";
+         path = "/" + ownerType + "/" + owner + "/" + fileName + ".xml";
       }
       return path;
    }
 
    public Page createPageFromTemplate(String ownerType, String owner, String temp) throws Exception
    {
-      return fromXML(ownerType, owner, getTemplateConfig(temp, "page"), Page.class);
+      String path = pageTemplatesLocation_ + "/" + temp + "/page.xml";
+      InputStream is = cmanager_.getInputStream(path);
+      String xml = IOUtil.getStreamContentAsString(is);
+      return fromXML(ownerType, owner, xml, Page.class);
    }
 
-   private String getTemplateConfig(String name, String dataType) throws Exception
+   public String getTemplateConfig(String type, String name)
    {
-      String path = pageTemplateConfig_.getLocation() + "/" + name + "/" + dataType + ".xml";
-      InputStream is = cmanager_.getInputStream(path);
-      return IOUtil.getStreamContentAsString(is);
+      for (SiteConfigTemplates tempConfig : templateConfigs)
+      {
+         Set<String> templates = tempConfig.getTemplates(type);
+         if (templates != null && templates.contains(name))
+            return tempConfig.getLocation();
+      }
+      return null;
    }
 
    // Deserializing code

@@ -40,6 +40,8 @@ import org.exoplatform.portal.pom.spi.portlet.PortletBuilder;
 import org.exoplatform.services.listener.Event;
 import org.exoplatform.services.listener.Listener;
 import org.exoplatform.services.listener.ListenerService;
+import org.exoplatform.services.organization.Group;
+import org.exoplatform.services.organization.GroupHandler;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.UserHandler;
@@ -816,6 +818,36 @@ public class TestUserPortalConfigService extends AbstractPortalTest
       }.execute(null);
    }
 
+   public void testGroupTemplate()
+   {
+      new UnitTest()
+      {
+         public void execute() throws Exception
+         {
+            String groupName = "groupTest";
+            assertNull(storage_.getPortalConfig(PortalConfig.GROUP_TYPE, groupName));
+
+            //
+            GroupHandler groupHandler = orgService_.getGroupHandler();
+            Group group = groupHandler.createGroupInstance();
+            group.setGroupName(groupName);
+            group.setDescription("this is a group for test");
+            groupHandler.addChild(null, group, true);
+
+            //
+            PortalConfig cfg = storage_.getPortalConfig(PortalConfig.GROUP_TYPE, "/" + groupName);
+            assertNotNull(cfg);
+            Container container = cfg.getPortalLayout();
+            assertNotNull(container);
+            assertEquals(4, container.getChildren().size());
+            assertTrue(container.getChildren().get(2) instanceof PageBody);
+            assertTrue(((Application)container.getChildren().get(1)).getType() == ApplicationType.PORTLET);
+            
+            groupHandler.removeGroup(group, true);
+         }
+      }.execute(null);
+   }
+   
    public void testCacheUserPortalConfig()
    {
       new UnitTest()

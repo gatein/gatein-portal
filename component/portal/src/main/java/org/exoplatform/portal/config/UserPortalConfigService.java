@@ -59,7 +59,7 @@ public class UserPortalConfigService implements Startable
    private OrganizationService orgService_;
 
    private NewPortalConfigListener newPortalConfigListener_;
-
+   
    private Log log = ExoLogger.getLogger("Portal:UserPortalConfigService");
 
    public UserPortalConfigService(
@@ -201,24 +201,25 @@ public class UserPortalConfigService implements Startable
    /**
     * This method should create a the portal config, pages and navigation according to the template name.
     *
-    * @param portalName the portal name
+    * @param siteName the Site name
     * @param template   the template to use
     * @throws Exception any exception
     */
-   public void createUserPortalConfig(String ownerType, String portalName, String template) throws Exception
+   public void createUserPortalConfig(String ownerType, String siteName, String template) throws Exception
    {
-      NewPortalConfig portalConfig = newPortalConfigListener_.getPortalConfig(ownerType);
+      String templatePath = newPortalConfigListener_.getTemplateConfig(ownerType, template);
 
-      //
-      portalConfig.setTemplateOwner(template);
-      portalConfig.getPredefinedOwner().clear();
-      portalConfig.getPredefinedOwner().add(portalName);
+      NewPortalConfig portalConfig = new NewPortalConfig(templatePath);
+      portalConfig.setTemplateName(template);
+      portalConfig.setOwnerType(ownerType);
 
-      //
-      newPortalConfigListener_.initPortletPreferencesDB(portalConfig);
-      newPortalConfigListener_.initPortalConfigDB(portalConfig);
-      newPortalConfigListener_.initPageDB(portalConfig);
-      newPortalConfigListener_.initPageNavigationDB(portalConfig);
+      if (!portalConfig.getOwnerType().equals(PortalConfig.USER_TYPE))
+      {
+         newPortalConfigListener_.createPortletPreferences(portalConfig, siteName);
+      }
+      newPortalConfigListener_.createPortalConfig(portalConfig, siteName);
+      newPortalConfigListener_.createPage(portalConfig, siteName);
+      newPortalConfigListener_.createPageNavigation(portalConfig, siteName);
    }
 
    /**
@@ -229,7 +230,7 @@ public class UserPortalConfigService implements Startable
     */
    public void removeUserPortalConfig(String portalName) throws Exception
    {
-      removeUserPortalConfig("portal", portalName);
+      removeUserPortalConfig(PortalConfig.PORTAL_TYPE, portalName);
    }
 
    /**
@@ -497,7 +498,7 @@ public class UserPortalConfigService implements Startable
    public List<String> getAllPortalNames() throws Exception
    {
       List<String> list = new ArrayList<String>();
-      Query<PortalConfig> query = new Query<PortalConfig>("portal", null, null, null, PortalConfig.class);
+      Query<PortalConfig> query = new Query<PortalConfig>(PortalConfig.PORTAL_TYPE, null, null, null, PortalConfig.class);
       PageList<PortalConfig> pageList = storage_.find(query);
       List<PortalConfig> configs = pageList.getAll();
       for (PortalConfig ele : configs)
@@ -558,7 +559,7 @@ public class UserPortalConfigService implements Startable
             }
             else
             {
-               newPortalConfigListener_.addPortalConfigs((NewPortalConfigListener)listener);
+               newPortalConfigListener_.mergePlugin((NewPortalConfigListener)listener);
             }
          }
       }
@@ -576,7 +577,6 @@ public class UserPortalConfigService implements Startable
          //
          RequestLifeCycle.begin(PortalContainer.getInstance());
 
-         //
          newPortalConfigListener_.run();
       }
       catch (Exception e)

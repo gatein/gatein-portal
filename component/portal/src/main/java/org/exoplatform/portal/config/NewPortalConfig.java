@@ -33,8 +33,14 @@ public final class NewPortalConfig
 
    private String ownerType;
 
-   private String templateOwner;
+   private String templateName;
 
+   private String location;
+
+   /**
+    * @deprecated use the location instead
+    */
+   @Deprecated
    private String templateLocation;
 
    public NewPortalConfig()
@@ -45,8 +51,14 @@ public final class NewPortalConfig
    {
       this.ownerType = cfg.ownerType;
       this.templateLocation = cfg.templateLocation;
-      this.templateOwner = cfg.templateOwner;
+      this.location = cfg.location;
+      this.templateName = cfg.templateName;
       this.predefinedOwner = new HashSet<String>(cfg.predefinedOwner);
+   }
+
+   public NewPortalConfig(String path)
+   {
+      this.location = path;
    }
 
    public HashSet<String> getPredefinedOwner()
@@ -59,24 +71,44 @@ public final class NewPortalConfig
       this.predefinedOwner = s;
    }
 
+   /**
+    * @return the location
+    */
+   public String getLocation()
+   {
+      return location;
+   }
+
+   /**
+    * @param location the location to set
+    */
+   public void setLocation(String location)
+   {
+      this.location = location;
+   }
+   
    public String getTemplateLocation()
    {
-      return templateLocation;
+      if (location != null)
+         return location;
+      else
+         return templateLocation;
    }
 
    public void setTemplateLocation(String s)
    {
+      this.location = s;
       this.templateLocation = s;
    }
 
-   public String getTemplateOwner()
+   public String getTemplateName()
    {
-      return templateOwner;
+      return templateName;
    }
 
-   public void setTemplateOwner(String s)
+   public void setTemplateName(String s)
    {
-      this.templateOwner = s;
+      this.templateName = s;
    }
 
    public boolean isPredefinedOwner(String user)

@@ -1,39 +1,42 @@
 /**
- * Copyright (C) 2009 eXo Platform SAS.
- * 
+ * Copyright (C) 2010 eXo Platform SAS.
+ *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation; either version 2.1 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this software; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-
 package org.exoplatform.portal.config;
 
-import java.util.List;
+import org.exoplatform.portal.config.model.PortalConfig;
+
+import java.util.Set;
 
 /**
- * Created by The eXo Platform SAS
- * Author : Pham Thanh Tung
- *          thanhtungty@gmail.com
- * Mar 3, 2008  
+ * @author <a href="trong.tran@exoplatform.com">Trong Tran</a>
+ * @version $Revision$
  */
-public class PageTemplateConfig
+
+public class SiteConfigTemplates
 {
-
-   String location;
-
-   List<String> templates;
-
+   private String location;
+   
+   private Set<String> portalTemplates;
+   
+   private Set<String> groupTemplates;
+   
+   private Set<String> userTemplates;
+   
    /**
     * @return the location
     */
@@ -43,27 +46,29 @@ public class PageTemplateConfig
    }
 
    /**
-    * @param location the location to set
+    * @param location the locationPath to set
     */
-   public void setLocation(String location)
+   public void setLocation(String locationPath)
    {
-      this.location = location;
+      this.location = locationPath;
    }
 
    /**
-    * @return the templates
+    * @return the type
     */
-   public List<String> getTemplates()
+   public Set<String> getTemplates(String type)
    {
-      return templates;
+      if (type.equals(PortalConfig.PORTAL_TYPE))
+      {
+         return portalTemplates;
+      }
+      else if (type.equals(PortalConfig.GROUP_TYPE))
+      {
+         return groupTemplates;
+      }
+      else
+      {
+         return userTemplates;
+      }
    }
-
-   /**
-    * @param templates the templates to set
-    */
-   public void setTemplates(List<String> templates)
-   {
-      this.templates = templates;
-   }
-
 }

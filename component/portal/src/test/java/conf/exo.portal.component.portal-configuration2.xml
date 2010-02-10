@@ -42,6 +42,44 @@
           <description>In the run method, use try catch or not (value is true/false)</description>
           <value>true</value>
         </value-param>
+        <value-param>
+          <name>page.templates.location</name>
+          <description>the path to the location that contains Page templates</description>
+          <value>classpath:/portal/template/pages</value>
+        </value-param>
+				<object-param>
+          <name>site.templates.location</name>
+          <description>description</description>
+          <object type="org.exoplatform.portal.config.SiteConfigTemplates">
+						<field name="location">
+              <string>classpath:/portal</string>
+            </field>
+            <field name="portalTemplates">
+              <collection type="java.util.HashSet">
+								<value>
+                  <string>classic</string>
+                </value>
+                <value>
+                  <string>test</string>
+                </value>
+							</collection>
+            </field>
+            <field name="groupTemplates">
+              <collection type="java.util.HashSet">
+								<value>
+                  <string>group</string>
+                </value>
+							</collection>
+            </field>
+            <field name="userTemplates">
+              <collection type="java.util.HashSet">
+                <value>
+                  <string>user</string>
+                </value>
+							</collection>
+            </field>
+          </object>
+        </object-param>
         <object-param>
           <name>portal.configuration</name>
           <description>description</description>
@@ -126,18 +164,6 @@
             </field>
             <field name="templateLocation">
               <string>classpath:/portal</string>
-            </field>
-          </object>
-        </object-param>
-        <object-param>
-          <name>page.templates</name>
-          <description>List of page templates</description>
-          <object type="org.exoplatform.portal.config.PageTemplateConfig">
-            <field name="templates">
-              <collection type="java.util.ArrayList"></collection>
-            </field>
-            <field name="location">
-              <string>classpath:/portal/template/pages</string>
             </field>
           </object>
         </object-param>
