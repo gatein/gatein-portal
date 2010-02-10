@@ -23,6 +23,7 @@ import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.DataStorage;
+import org.exoplatform.portal.config.NoSuchDataException;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.UserPortalConfig;
 import org.exoplatform.portal.config.UserPortalConfigService;
@@ -31,12 +32,15 @@ import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.webui.application.UIPortlet;
 import org.exoplatform.portal.webui.container.UIContainer;
+import org.exoplatform.portal.webui.portal.UIPortalComponent;
+import org.exoplatform.portal.webui.portal.UIPortalComposer;
 import org.exoplatform.portal.webui.util.PortalDataMapper;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIMaskWorkspace;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.portal.webui.workspace.UIPortalToolPanel;
 import org.exoplatform.portal.webui.workspace.UIWorkingWorkspace;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.InitParams;
 import org.exoplatform.webui.config.Param;
@@ -353,7 +357,17 @@ public class UIPageForm extends UIFormTabPane
          page.setChildren(children);
          uiPage.getChildren().clear();
 
-         PortalDataMapper.toUIPage(uiPage, page);
+         try{
+            PortalDataMapper.toUIPage(uiPage, page);
+         } catch(NoSuchDataException de){
+            uiPortalApp.addMessage(new ApplicationMessage("UIPageForm.msg.notExistOrDeleted", null, ApplicationMessage.ERROR));
+            UIPortalComposer uiPortalComposer = (UIPortalComposer)uiPortalApp.findComponentById("UIPageEditor");
+            if(uiPortalComposer != null){
+               Event aboutEvent = new Event<UIPortalComposer>(uiPortalComposer, "Abort", event.getRequestContext());
+               uiPortalComposer.broadcast(aboutEvent, event.getExecutionPhase());
+            }
+         }
+         
          uiPage.setStorageId(storageId);
          //      if(page.getTemplate() == null) page.setTemplate(uiPage.getTemplate()) ;
          if (page.getChildren() == null)
