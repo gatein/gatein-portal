@@ -40,8 +40,6 @@ import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
-import org.exoplatform.webui.form.UIFormTextAreaInput;
-import org.exoplatform.webui.form.validator.StringLengthValidator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,8 +60,6 @@ public class UIPageNavigationForm extends UIForm
 
    private String ownerId;
 
-   private String description;
-
    private String ownerType;
 
    private String priority;
@@ -82,8 +78,6 @@ public class UIPageNavigationForm extends UIForm
       }
       addUIFormInput(new UIFormStringInput("ownerType", "ownerType", getOwnerType()).setEditable(false))
          .addUIFormInput(new UIFormStringInput("ownerId", "ownerId", ownerId).setEditable(false)).addUIFormInput(
-            new UIFormTextAreaInput("description", "description", getDescription()).addValidator(
-               StringLengthValidator.class, 0, 255)).addUIFormInput(
             new UIFormSelectBox("priority", null, priorties).setValue(getPriority()));
    }
 
@@ -91,8 +85,7 @@ public class UIPageNavigationForm extends UIForm
    {
       setPageNav(pageNavigation);
       invokeGetBindingBean(pageNavigation);
-      removeChildById("ownerId");
-      // getUIStringInput("creator").setValue(pageNavigation.getCreator());
+      removeChildById("ownerId");      
       UIFormStringInput ownerId = new UIFormStringInput("ownerId", "ownerId", pageNavigation.getOwnerId());
       ownerId.setEditable(false);
       ownerId.setParent(this);
@@ -109,16 +102,6 @@ public class UIPageNavigationForm extends UIForm
    public String getOwnerId()
    {
       return ownerId;
-   }
-
-   public void setDescription(String description)
-   {
-      this.description = description;
-   }
-
-   public String getDescription()
-   {
-      return description;
    }
 
    public void setOwnerType(String ownerType)

@@ -49,5 +49,18 @@ public class OrganizationUtils
       cachedGroupLabel = (label != null && label.trim().length() > 0 )? label : group.getGroupName();
       return cachedGroupLabel;
    }
+   
+   static public String getGroupDescription(String groupId) throws Exception {
+      WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
+      ExoContainer container = context.getApplication().getApplicationServiceContainer();
+      OrganizationService orgService =
+         (OrganizationService)container.getComponentInstanceOfType(OrganizationService.class);
+      String description = "";
+      Group group = orgService.getGroupHandler().findGroupById(groupId);
+      if (group != null) {
+         description = group.getDescription();
+      }
+      return description;
+   }
 
 }
