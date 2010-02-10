@@ -85,7 +85,9 @@ public class UIMainActionListener
          uiToolPanel.setShowMaskLayer(false);
          uiApp.setModeState(UIPortalApplication.APP_BLOCK_EDIT_MODE);
 
-         uiToolPanel.setWorkingComponent(pageBody.getUIComponent());
+         UIPage newUIPage = new UIPage();
+         PortalDataMapper.toUIPage(newUIPage, page);
+         uiToolPanel.setWorkingComponent(newUIPage);
          event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingWS);
          Util.getPortalRequestContext().setFullRender(true);
       }
