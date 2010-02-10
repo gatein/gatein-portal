@@ -1,5 +1,6 @@
 package org.exoplatform.portal.gadget.core;
 
+import org.apache.shindig.gadgets.oauth.BasicOAuthStoreTokenIndex;
 import org.chromattic.api.annotations.Destroy;
 import org.chromattic.api.annotations.PrimaryType;
 import org.chromattic.api.annotations.Property;
@@ -7,7 +8,18 @@ import org.chromattic.api.annotations.Property;
 @PrimaryType(name = "lgn:gadgettoken")
 public abstract class GadgetTokenEntry
 {
-   
+
+   public BasicOAuthStoreTokenIndex getKey()
+   {
+      BasicOAuthStoreTokenIndex key = new BasicOAuthStoreTokenIndex();
+      key.setGadgetUri(getGadgetUri());
+      key.setModuleId(getModuleId());
+      key.setServiceName(getServiceName());
+      key.setTokenName(getTokenName());
+      key.setUserId(getUserId());
+      return key;
+   }
+
    @Property(name = "userId")
    public abstract String getUserId();
 

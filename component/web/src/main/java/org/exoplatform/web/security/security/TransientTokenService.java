@@ -29,7 +29,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * Created by The eXo Platform SAS Author : liem.nguyen ncliam@gmail.com Jun 5,
  * 2009
  */
-public class TransientTokenService extends AbstractTokenService
+public class TransientTokenService extends AbstractTokenService<GateInToken, String>
 {
 
    protected final ConcurrentHashMap<String, GateInToken> tokens = new ConcurrentHashMap<String, GateInToken>();
@@ -56,13 +56,19 @@ public class TransientTokenService extends AbstractTokenService
    }
 
    @Override
-   public GateInToken getToken(Object id)
+   public GateInToken getToken(String id)
    {
       return tokens.get(id);
    }
 
    @Override
-   public GateInToken deleteToken(Object id)
+   protected String decodeKey(String stringKey)
+   {
+      return stringKey;
+   }
+
+   @Override
+   public GateInToken deleteToken(String id)
    {
       GateInToken token = tokens.get(id);
       tokens.remove(id);
@@ -76,7 +82,7 @@ public class TransientTokenService extends AbstractTokenService
    }
 
    @Override
-   public long getNumberTokens() throws Exception
+   public long size() throws Exception
    {
       return tokens.size();
    }

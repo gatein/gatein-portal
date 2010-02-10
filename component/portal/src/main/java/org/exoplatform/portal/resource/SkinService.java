@@ -22,6 +22,8 @@ package org.exoplatform.portal.resource;
 import org.exoplatform.commons.utils.PropertyManager;
 import org.exoplatform.commons.utils.Safe;
 import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.management.annotations.Impact;
+import org.exoplatform.management.annotations.ImpactType;
 import org.exoplatform.management.annotations.Managed;
 import org.exoplatform.management.annotations.ManagedDescription;
 import org.exoplatform.management.annotations.ManagedName;
@@ -56,6 +58,7 @@ import javax.servlet.ServletContext;
 @NameTemplate({@Property(key = "view", value = "portal"), @Property(key = "service", value = "management"),
    @Property(key = "type", value = "skin")})
 @ManagedDescription("Skin service")
+// @Rest("skinservice")
 public class SkinService implements Startable
 {
 
@@ -563,6 +566,7 @@ public class SkinService implements Startable
 
    @Managed
    @ManagedDescription("Reload all skins")
+   @Impact(ImpactType.WRITE)
    public void reloadSkins()
    {
       // remove all ltCache, rtCache

@@ -19,6 +19,8 @@
 
 package org.exoplatform.portal.application;
 
+import org.exoplatform.management.annotations.Impact;
+import org.exoplatform.management.annotations.ImpactType;
 import org.exoplatform.management.annotations.Managed;
 import org.exoplatform.management.annotations.ManagedDescription;
 import org.exoplatform.management.annotations.ManagedName;
@@ -38,9 +40,12 @@ import java.util.concurrent.ConcurrentMap;
  * @version $Revision$
  */
 @Managed
-@NameTemplate({@Property(key = "view", value = "portal"), @Property(key = "service", value = "statistic"),
-   @Property(key = "type", value = "application")})
 @ManagedDescription("Application statistic service")
+@NameTemplate({
+   @Property(key = "view", value = "portal"),
+   @Property(key = "service", value = "statistic"),
+   @Property(key = "type", value = "application")})
+// @Rest("applicationstatistic")
 public class ApplicationStatisticService implements Startable
 {
 
@@ -66,8 +71,7 @@ public class ApplicationStatisticService implements Startable
    /*
     * get ApplicationStatistic by application id, if it isn't exits, create a new one
     */
-   public ApplicationStatistic getApplicationStatistic(
-      @ManagedDescription("The application id") @ManagedName("applicationId") String appId)
+   public ApplicationStatistic getApplicationStatistic(String appId)
    {
       ApplicationStatistic app = apps.get(appId);
       if (app == null)
@@ -87,6 +91,7 @@ public class ApplicationStatisticService implements Startable
     */
    @Managed
    @ManagedDescription("The maximum execution time of a specified application in seconds")
+   @Impact(ImpactType.READ)
    public double getMaxTime(@ManagedDescription("The application id") @ManagedName("applicationId") String appId)
    {
       ApplicationStatistic app = getApplicationStatistic(appId);
@@ -98,6 +103,7 @@ public class ApplicationStatisticService implements Startable
     */
    @Managed
    @ManagedDescription("The minimum execution time of a specified application in seconds")
+   @Impact(ImpactType.READ)
    public double getMinTime(@ManagedDescription("The application id") @ManagedName("applicationId") String appId)
    {
       ApplicationStatistic app = getApplicationStatistic(appId);
@@ -109,6 +115,7 @@ public class ApplicationStatisticService implements Startable
     */
    @Managed
    @ManagedDescription("Return the average execution time of a specified application in seconds")
+   @Impact(ImpactType.READ)
    public double getAverageTime(@ManagedDescription("The application id") @ManagedName("applicationId") String appId)
    {
       ApplicationStatistic app = getApplicationStatistic(appId);
@@ -120,6 +127,7 @@ public class ApplicationStatisticService implements Startable
     */
    @Managed
    @ManagedDescription("The execution count of a specified application")
+   @Impact(ImpactType.READ)
    public long getExecutionCount(@ManagedDescription("The application id") @ManagedName("applicationId") String appId)
    {
       ApplicationStatistic app = getApplicationStatistic(appId);

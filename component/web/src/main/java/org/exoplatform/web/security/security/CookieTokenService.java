@@ -35,7 +35,7 @@ import java.util.Date;
  * Created by The eXo Platform SAS Author : liem.nguyen ncliam@gmail.com Jun 5,
  * 2009
  */
-public class CookieTokenService extends AbstractTokenService
+public class CookieTokenService extends AbstractTokenService<GateInToken, String>
 {
 
    /** . */
@@ -78,7 +78,7 @@ public class CookieTokenService extends AbstractTokenService
    }
 
    @Override
-   public GateInToken getToken(final Object id)
+   public GateInToken getToken(final String id)
    {
       return new TokenTask<GateInToken>() {
          @Override
@@ -90,7 +90,7 @@ public class CookieTokenService extends AbstractTokenService
    }
 
    @Override
-   public GateInToken deleteToken(final Object id)
+   public GateInToken deleteToken(final String id)
    {
       return new TokenTask<GateInToken>() {
          @Override
@@ -122,7 +122,7 @@ public class CookieTokenService extends AbstractTokenService
    }
 
    @Override
-   public long getNumberTokens() throws Exception
+   public long size() throws Exception
    {
       return new TokenTask<Long>() {
          @Override
@@ -133,6 +133,12 @@ public class CookieTokenService extends AbstractTokenService
             return (long)tokens.size();
          }
       }.executeWith(chromatticLifeCycle);
+   }
+
+   @Override
+   protected String decodeKey(String stringKey)
+   {
+      return stringKey;
    }
 
    /**

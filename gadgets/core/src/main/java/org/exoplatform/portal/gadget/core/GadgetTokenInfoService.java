@@ -32,7 +32,7 @@ import org.exoplatform.web.security.security.AbstractTokenService;
 
 import java.util.Collection;
 
-public class GadgetTokenInfoService extends AbstractTokenService
+public class GadgetTokenInfoService extends AbstractTokenService<GadgetToken, BasicOAuthStoreTokenIndex>
 {
 
    private ChromatticLifeCycle chromatticLifeCycle;
@@ -57,45 +57,45 @@ public class GadgetTokenInfoService extends AbstractTokenService
    }
 
    @Override
-   public GadgetToken getToken(final Object key)
+   public GadgetToken getToken(final BasicOAuthStoreTokenIndex key)
    {
       return new TokenTask<GadgetToken>()
       {
          @Override
          protected GadgetToken execute()
          {
-            return getGadgetTokenContainer().getToken((BasicOAuthStoreTokenIndex)key);
+            return getGadgetTokenContainer().getToken(key);
          }
       }.executeWith(chromatticLifeCycle);
    }
 
    @Override
-   public GadgetToken deleteToken(final Object key)
+   public GadgetToken deleteToken(final BasicOAuthStoreTokenIndex key)
    {
       return new TokenTask<GadgetToken>()
       {
          @Override
          protected GadgetToken execute()
          {
-            return getGadgetTokenContainer().removeToken((BasicOAuthStoreTokenIndex)key);
+            return getGadgetTokenContainer().removeToken(key);
          }
       }.executeWith(chromatticLifeCycle);
    }
    
    @Override
-   public GadgetToken[] getAllTokens()
+   public BasicOAuthStoreTokenIndex[] getAllTokens()
    {
-      return new TokenTask<GadgetToken[]>()
+      return new TokenTask<BasicOAuthStoreTokenIndex[]>()
       {
          @Override
-         protected GadgetToken[] execute()
+         protected BasicOAuthStoreTokenIndex[] execute()
          {
             GadgetTokenContainer container = getGadgetTokenContainer();
             Collection<GadgetTokenEntry> tokens = container.getGadgetTokens().values();
-            GadgetToken[] gadgetTokens = new GadgetToken[9];
+            BasicOAuthStoreTokenIndex[] gadgetTokens = new BasicOAuthStoreTokenIndex[9];
             int count = 0;
             for(GadgetTokenEntry tokenEntry : tokens) {
-               gadgetTokens[count++] = tokenEntry.getToken();
+               gadgetTokens[count++] = tokenEntry.getKey();
             }
             return gadgetTokens;
          }
@@ -103,7 +103,7 @@ public class GadgetTokenInfoService extends AbstractTokenService
    }
 
    @Override
-   public long getNumberTokens() throws Exception
+   public long size() throws Exception
    {
       return new TokenTask<Long>()
       {
@@ -123,6 +123,11 @@ public class GadgetTokenInfoService extends AbstractTokenService
       return null;
    }
 
+   @Override
+   protected BasicOAuthStoreTokenIndex decodeKey(String stringKey)
+   {
+      throw new UnsupportedOperationException();
+   }
 
    /**
     * Wraps token store logic conveniently.

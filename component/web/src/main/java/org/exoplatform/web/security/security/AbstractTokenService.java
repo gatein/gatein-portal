@@ -21,14 +21,11 @@ package org.exoplatform.web.security.security;
 
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.xml.InitParams;
-import org.exoplatform.management.annotations.Managed;
-import org.exoplatform.management.annotations.ManagedDescription;
-import org.exoplatform.management.annotations.ManagedName;
+import org.exoplatform.management.annotations.*;
 import org.exoplatform.management.jmx.annotations.NameTemplate;
 import org.exoplatform.management.jmx.annotations.Property;
 import org.exoplatform.web.login.InitiateLoginServlet;
 import org.exoplatform.web.security.Credentials;
-import org.exoplatform.web.security.GateInToken;
 import org.exoplatform.web.security.Token;
 import org.exoplatform.web.security.TokenStore;
 import org.picocontainer.Startable;
@@ -42,11 +39,21 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by The eXo Platform SAS Author : liem.nguyen ncliam@gmail.com Jun 5,
  * 2009
+ *
+ * todo julien :
+ * - make delay configuration from init param and @Managed setter
+ * - start/stop expiration daemon
+ * - manually invoke the daemon via @Managed
+ *
+ * @param <T> the token type
+ * @param <K> the token key type
  */
 @Managed
-@NameTemplate({@Property(key = "service", value = "TokenStore"), @Property(key = "name", value = "{Name}")})
 @ManagedDescription("Token Store Service")
-public abstract class AbstractTokenService implements Startable, TokenStore
+@NameTemplate({
+   @Property(key = "service", value = "TokenStore"),
+   @Property(key = "name", value = "{Name}")})
+public abstract class AbstractTokenService<T extends Token, K> implements Startable, TokenStore
 {
 
    protected static final String SERVICE_CONFIG = "service.configuration";
@@ -94,14 +101,17 @@ public abstract class AbstractTokenService implements Startable, TokenStore
       return classType.cast(container.getComponentInstanceOfType(classType));
    }
 
-   public Credentials validateToken(String tokenKey, boolean remove)
+   public Credentials validateToken(String stringKey, boolean remove)
    {
-      if (tokenKey == null)
+      if (stringKey == null)
       {
          throw new NullPointerException();
       }
 
-      GateInToken token;
+      //
+      K tokenKey = decodeKey(stringKey);
+
+      T token;
       try
       {
          if (remove)
@@ -135,49 +145,60 @@ public abstract class AbstractTokenService implements Startable, TokenStore
 
    @Managed
    @ManagedDescription("Clean all tokens are expired")
+   @Impact(ImpactType.IDEMPOTENT_WRITE)
    public void cleanExpiredTokens()
    {
-      String[] ids = getAllTokens();
-      for (String s : ids)
+      K[] ids = getAllTokens();
+      for (K id : ids)
       {
-         GateInToken token = getToken(s);
+         T token = getToken(id);
          if (token.isExpired())
          {
-            deleteToken(s);
+            deleteToken(id);
          }
       }
    }
 
    @Managed
-   @ManagedDescription("Get period time of expired token")
-   public long getExpiredPeriodTime()
+   @ManagedDescription("Get time for token expiration in seconds")
+   public long getValidityTime()
    {
-      return validityMillis;
+      return validityMillis / 1000;
    }
 
    @Managed
-   @ManagedName("Name")
+   @ManagedDescription("The expiration daemon period time in seconds")
+   public long getPeriodTime()
+   {
+      return DELAY_TIME;
+   }
+
+   @Managed
    @ManagedDescription("The token service name")
    public String getName()
    {
       return name;
    }
 
-   @Managed
-   @ManagedDescription("get a token by id")
-   public abstract <T extends Token> T getToken(Object id);
+   public abstract T getToken(K id);
 
-   @Managed
-   @ManagedDescription("Delete a token by id")
-   public abstract <T extends Token> T deleteToken(Object id);
+   public abstract T deleteToken(K id);
 
-   @Managed
-   @ManagedDescription("The list of all tokens")
-   public abstract  <T extends Object> T[] getAllTokens();
+   public abstract K[] getAllTokens();
 
+   /**
+    * Decode a key from its string representation.
+    *
+    * @param stringKey the key a s a string
+    * @return the typed key
+    */
+   protected abstract K decodeKey(String stringKey);
+
+   // We don't make it a property as retrieving the value can be an expensive operation
    @Managed
    @ManagedDescription("The number of tokens")
-   public abstract long getNumberTokens() throws Exception;
+   @Impact(ImpactType.READ)
+   public abstract long size() throws Exception;
 
    private enum TimeoutEnum {
       SECOND(1000), MINUTE(1000 * 60), HOUR(1000 * 60 * 60), DAY(1000 * 60 * 60 * 24);

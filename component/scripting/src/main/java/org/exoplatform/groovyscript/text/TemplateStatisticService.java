@@ -19,12 +19,15 @@
 
 package org.exoplatform.groovyscript.text;
 
+import org.exoplatform.management.annotations.Impact;
+import org.exoplatform.management.annotations.ImpactType;
 import org.exoplatform.management.annotations.Managed;
 import org.exoplatform.management.annotations.ManagedDescription;
 import org.exoplatform.management.annotations.ManagedName;
 import org.exoplatform.management.jmx.annotations.NameTemplate;
 import org.exoplatform.management.jmx.annotations.Property;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -40,9 +43,12 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 
 @Managed
-@NameTemplate({@Property(key = "view", value = "portal"), @Property(key = "service", value = "statistic"),
-   @Property(key = "type", value = "template")})
 @ManagedDescription("Template statistic service")
+@NameTemplate({
+   @Property(key = "view", value = "portal"),
+   @Property(key = "service", value = "statistic"),
+   @Property(key = "type", value = "template")})
+// @Rest("templatestatistics")
 public class TemplateStatisticService
 {
 
@@ -95,6 +101,7 @@ public class TemplateStatisticService
     */
    @Managed
    @ManagedDescription("The maximum rendering time of a specified template in seconds")
+   @Impact(ImpactType.READ)
    public double getMaxTime(@ManagedDescription("The template id") @ManagedName("templateId") String name)
    {
       TemplateStatistic app = apps.get(name);
@@ -106,6 +113,7 @@ public class TemplateStatisticService
     */
    @Managed
    @ManagedDescription("The minimum rendering time of a specified template in seconds")
+   @Impact(ImpactType.READ)
    public double getMinTime(@ManagedDescription("The template id") @ManagedName("templateId") String name)
    {
       TemplateStatistic app = apps.get(name);
@@ -117,6 +125,7 @@ public class TemplateStatisticService
     */
    @Managed
    @ManagedDescription("The rendering count of a specified template")
+   @Impact(ImpactType.READ)
    public long getExecutionCount(@ManagedDescription("The template id") @ManagedName("templateId") String name)
    {
       TemplateStatistic app = apps.get(name);
@@ -128,6 +137,7 @@ public class TemplateStatisticService
     */
    @Managed
    @ManagedDescription("The average rendering time of a specified template in seconds")
+   @Impact(ImpactType.READ)
    public double getAverageTime(@ManagedDescription("The template id") @ManagedName("templateId") String name)
    {
       TemplateStatistic app = apps.get(name);
@@ -142,12 +152,10 @@ public class TemplateStatisticService
    public String[] getSlowestTemplates()
    {
 
-      Map application = new HashMap();
-      List<Object> list = new LinkedList<Object>(apps.entrySet());
-      for (Iterator it = list.iterator(); it.hasNext();)
+      Map<String, Double> application = new HashMap<String, Double>();
+      for (Map.Entry<String, TemplateStatistic> entry : apps.entrySet())
       {
-         Map.Entry entry = (Map.Entry)it.next();
-         String url = (String)entry.getKey();
+         String url = entry.getKey();
          application.put(url, getAverageTime(url));
       }
 
@@ -162,12 +170,10 @@ public class TemplateStatisticService
    public String[] getMostExecutedTemplates()
    {
 
-      Map application = new HashMap();
-      List<Object> list = new LinkedList<Object>(apps.entrySet());
-      for (Iterator it = list.iterator(); it.hasNext();)
+      Map<String, Long> application = new HashMap<String, Long>();
+      for (Map.Entry<String, TemplateStatistic> entry : apps.entrySet())
       {
-         Map.Entry entry = (Map.Entry)it.next();
-         String url = (String)entry.getKey();
+         String url = entry.getKey();
          application.put(url, getExecutionCount(url));
       }
 
@@ -182,74 +188,39 @@ public class TemplateStatisticService
    public String[] getFastestTemplates()
    {
 
-      Map application = new HashMap();
-      List<Object> list = new LinkedList<Object>(apps.entrySet());
-      for (Iterator it = list.iterator(); it.hasNext();)
+      Map<String, Double> application = new HashMap<String, Double>();
+      for (Map.Entry<String, TemplateStatistic> entry : apps.entrySet())
       {
-         Map.Entry entry = (Map.Entry)it.next();
-         String url = (String)entry.getKey();
+         String url = entry.getKey();
          application.put(url, getAverageTime(url));
       }
 
       return sort(application, ASC);
    }
 
-   private String[] sort(Map source, String order)
+   private <T extends Comparable<T>> String[] sort(Map<String, T> source, final String order)
    {
       String[] app = new String[10];
-      List<Object> list = new LinkedList<Object>(source.entrySet());
-      if (order.equals(ASC))
+      List<Map.Entry<String, T>> list = new ArrayList<Map.Entry<String, T>>(source.entrySet());
+      Collections.sort(list, new Comparator<Map.Entry<String, T>>()
       {
-         Collections.sort(list, new Comparator<Object>()
+         public int compare(Map.Entry<String, T> o1, Map.Entry<String, T> o2)
          {
-            public int compare(Object o1, Object o2)
+            T value1 = o1.getValue();
+            T value2 = o2.getValue();
+            if (DESC.equals(order))
             {
-               double value1 = Double.parseDouble(((Map.Entry)(o1)).getValue().toString());
-               double value2 = Double.parseDouble(((Map.Entry)(o2)).getValue().toString());
-               if (value1 > value2)
-               {
-                  return 1;
-               }
-               else if (value1 < value2)
-               {
-                  return -1;
-               }
-               else
-               {
-                  return 0;
-               }
+               T tmp = value1;
+               value1 = value2;
+               value2 = tmp;
             }
-         });
-      }
-      else if (order.equals(DESC))
-      {
-         Collections.sort(list, new Comparator<Object>()
-         {
-            public int compare(Object o1, Object o2)
-            {
-               double value1 = Double.parseDouble(((Map.Entry)(o1)).getValue().toString());
-               double value2 = Double.parseDouble(((Map.Entry)(o2)).getValue().toString());
-               if (value2 > value1)
-               {
-                  return 1;
-               }
-               else if (value2 < value1)
-               {
-                  return -1;
-               }
-               else
-               {
-                  return 0;
-               }
-            }
-         });
-      }
-
+            return value1.compareTo(value2);
+         }
+      });
       int index = 0;
-      for (Iterator it = list.iterator(); it.hasNext();)
+      for (Map.Entry<String, T> entry : list)
       {
-         Map.Entry entry = (Map.Entry)it.next();
-         app[index] = (String)entry.getKey();
+         app[index] = entry.getKey();
          index++;
          if (index >= app.length)
          {
@@ -257,7 +228,6 @@ public class TemplateStatisticService
          }
       }
       return app;
-
    }
 
    private double toSeconds(double value)

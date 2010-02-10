@@ -26,6 +26,8 @@ import org.exoplatform.commons.utils.IOUtil;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.groovyscript.GroovyTemplate;
 import org.exoplatform.groovyscript.GroovyTemplateEngine;
+import org.exoplatform.management.annotations.Impact;
+import org.exoplatform.management.annotations.ImpactType;
 import org.exoplatform.management.annotations.Managed;
 import org.exoplatform.management.annotations.ManagedDescription;
 import org.exoplatform.management.annotations.ManagedName;
@@ -36,6 +38,7 @@ import org.exoplatform.services.cache.CacheService;
 import org.exoplatform.services.cache.ExoCache;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 
 /**
  * Created by The eXo Platform SAS Dec 26, 2005
@@ -44,6 +47,7 @@ import java.io.InputStream;
 @NameTemplate({@Property(key = "view", value = "portal"), @Property(key = "service", value = "management"),
    @Property(key = "type", value = "template")})
 @ManagedDescription("Template management service")
+// @Rest("templateservice")
 public class TemplateService
 {
 
@@ -172,6 +176,7 @@ public class TemplateService
     */
    @Managed
    @ManagedDescription("Clear the template cache for a specified template identifier")
+   @Impact(ImpactType.IDEMPOTENT_WRITE)
    public void reloadTemplate(@ManagedDescription("The template id") @ManagedName("templateId") String name)
    {
       try
@@ -183,6 +188,27 @@ public class TemplateService
       catch (Exception e)
       {
          e.printStackTrace();
+      }
+   }
+
+   @Managed
+   @ManagedDescription("List the identifiers of the cached templates")
+   @Impact(ImpactType.READ)
+   public String[] listCachedTemplates()
+   {
+      try
+      {
+         ArrayList<String> list = new ArrayList<String>();
+         for (GroovyTemplate template : templatesCache_.getCachedObjects())
+         {
+            list.add(template.getId());
+         }
+         return list.toArray(new String[list.size()]);
+      }
+      catch (Exception e)
+      {
+         e.printStackTrace();
+         return null;
       }
    }
 }

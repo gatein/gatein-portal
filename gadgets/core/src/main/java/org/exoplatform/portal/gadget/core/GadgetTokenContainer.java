@@ -20,18 +20,10 @@ public abstract class GadgetTokenContainer
    public GadgetToken getToken(BasicOAuthStoreTokenIndex tokenKey)
    {
       Map<String, GadgetTokenEntry> tokens = getGadgetTokens();
-      
       for (GadgetTokenEntry tokenEntry : tokens.values())
       {
-         {
-            BasicOAuthStoreTokenIndex key = new BasicOAuthStoreTokenIndex();
-            key.setGadgetUri(tokenEntry.getGadgetUri());
-            key.setModuleId(tokenEntry.getModuleId());
-            key.setServiceName(tokenEntry.getServiceName());
-            key.setTokenName(tokenEntry.getTokenName());
-            key.setUserId(tokenEntry.getUserId());
-            if (tokenKey.equals(key)) return tokenEntry.getToken();
-         }
+         BasicOAuthStoreTokenIndex key = tokenEntry.getKey();
+         if (tokenKey.equals(key)) return tokenEntry.getToken();
       }
       return null;
    }
@@ -42,14 +34,10 @@ public abstract class GadgetTokenContainer
       
       for (GadgetTokenEntry tokenEntry : tokens.values())
       {
+         BasicOAuthStoreTokenIndex key = tokenEntry.getKey();
+         if (tokenKey.equals(key))
          {
-            BasicOAuthStoreTokenIndex key = new BasicOAuthStoreTokenIndex();
-            key.setGadgetUri(tokenEntry.getGadgetUri());
-            key.setModuleId(tokenEntry.getModuleId());
-            key.setServiceName(tokenEntry.getServiceName());
-            key.setTokenName(tokenEntry.getTokenName());
-            key.setUserId(tokenEntry.getUserId());
-            if (tokenKey.equals(key)) tokenEntry.remove();
+            tokenEntry.remove();
             return tokenEntry.getToken();
          }
       }
@@ -62,17 +50,11 @@ public abstract class GadgetTokenContainer
       GadgetTokenEntry entry = null;
       for (GadgetTokenEntry item : tokens.values())
       {
+         BasicOAuthStoreTokenIndex key = item.getKey();
+         if (tokenKey.equals(key))
          {
-            BasicOAuthStoreTokenIndex key = new BasicOAuthStoreTokenIndex();
-            key.setGadgetUri(item.getGadgetUri());
-            key.setModuleId(item.getModuleId());
-            key.setServiceName(item.getServiceName());
-            key.setTokenName(item.getTokenName());
-            key.setUserId(item.getUserId());
-            if (tokenKey.equals(key))
-               entry = item;
+            entry = item;
          }
-
       }
       if (entry == null)
       {

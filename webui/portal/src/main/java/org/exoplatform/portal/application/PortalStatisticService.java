@@ -19,6 +19,8 @@
 
 package org.exoplatform.portal.application;
 
+import org.exoplatform.management.annotations.Impact;
+import org.exoplatform.management.annotations.ImpactType;
 import org.exoplatform.management.annotations.Managed;
 import org.exoplatform.management.annotations.ManagedDescription;
 import org.exoplatform.management.annotations.ManagedName;
@@ -36,9 +38,12 @@ import java.util.concurrent.ConcurrentMap;
  * @version $Revision$
  */
 @Managed
-@NameTemplate({@Property(key = "view", value = "portal"), @Property(key = "service", value = "statistic"),
-   @Property(key = "type", value = "portal")})
 @ManagedDescription("The portal statistic service")
+@NameTemplate({
+   @Property(key = "view", value = "portal"),
+   @Property(key = "service", value = "statistic"),
+   @Property(key = "type", value = "portal")})
+// @Rest("portalstatistic")
 public class PortalStatisticService implements Startable
 {
 
@@ -94,6 +99,7 @@ public class PortalStatisticService implements Startable
     */
    @Managed
    @ManagedDescription("The maximum execution time of a specified portal in seconds")
+   @Impact(ImpactType.READ)
    public double getMaxTime(@ManagedDescription("The portal id") @ManagedName("portalId") String id)
    {
       return toSeconds(getPortalStatistic(id).getMaxTime());
@@ -104,6 +110,7 @@ public class PortalStatisticService implements Startable
     */
    @Managed
    @ManagedDescription("The mininum execution time of a specified portal in seconds")
+   @Impact(ImpactType.READ)
    public double getMinTime(@ManagedDescription("The portal id") @ManagedName("portalId") String id)
    {
       return toSeconds(getPortalStatistic(id).getMinTime());
@@ -114,6 +121,7 @@ public class PortalStatisticService implements Startable
     */
    @Managed
    @ManagedDescription("The average execution time of a specified portal in seconds")
+   @Impact(ImpactType.READ)
    public double getAverageTime(@ManagedDescription("The portal id") @ManagedName("portalId") String id)
    {
       return toSeconds(getPortalStatistic(id).getAverageTime());
@@ -124,6 +132,7 @@ public class PortalStatisticService implements Startable
     */
    @Managed
    @ManagedDescription("The number of request per second of a specified portal")
+   @Impact(ImpactType.READ)
    public double getThroughput(@ManagedDescription("The portal id") @ManagedName("portalId") String id)
    {
       return getPortalStatistic(id).getThroughput();
@@ -134,6 +143,7 @@ public class PortalStatisticService implements Startable
     */
    @Managed
    @ManagedDescription("The execution count of a specified portal")
+   @Impact(ImpactType.READ)
    public long getExecutionCount(@ManagedDescription("The portal id") @ManagedName("portalId") String id)
    {
       return getPortalStatistic(id).viewCount();
