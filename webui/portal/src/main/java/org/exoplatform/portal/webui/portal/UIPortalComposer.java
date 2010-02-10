@@ -432,6 +432,11 @@ public class UIPortalComposer extends UIContainer
             uiPortal.getChildren().clear();
             PortalDataMapper.toUIPortal(uiPortal, uiPortalApp.getUserPortalConfig());
 
+            //To init the UIPage, that fixed a bug on AdminToolbarPortlet when edit the layout. Here is only a
+            //temporal solution. Complete solution is to avoid mapping UIPortal -- model, that requires
+            //multiple UIPortal (already available) and concept of SiteConfig
+            uiPortal.refreshUIPage();
+            
             PageNodeEvent<UIPortal> pnevent =
                new PageNodeEvent<UIPortal>(uiPortal, PageNodeEvent.CHANGE_PAGE_NODE, uri);
             uiPortal.broadcast(pnevent, Event.Phase.PROCESS);
