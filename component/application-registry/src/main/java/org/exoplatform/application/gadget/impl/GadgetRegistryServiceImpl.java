@@ -68,7 +68,8 @@ public class GadgetRegistryServiceImpl implements GadgetRegistryService
 
    public GadgetRegistryServiceImpl(ChromatticManager chromatticManager, InitParams params)
    {
-      ApplicationRegistryChromatticLifeCycle lifeCycle = (ApplicationRegistryChromatticLifeCycle)chromatticManager.getLifeCycle("app");
+      ApplicationRegistryChromatticLifeCycle lifeCycle =
+         (ApplicationRegistryChromatticLifeCycle)chromatticManager.getLifeCycle("app");
 
       //
       String gadgetDeveloperGroup = null;
@@ -101,7 +102,7 @@ public class GadgetRegistryServiceImpl implements GadgetRegistryService
       this.language = language;
       this.moduleId = moduleId;
       this.hostName = hostName;
-      this.gadgetDeveloperGroup  = gadgetDeveloperGroup;
+      this.gadgetDeveloperGroup = gadgetDeveloperGroup;
       this.chromatticManager = chromatticManager;
       this.chromatticLifeCycle = lifeCycle;
    }
@@ -124,7 +125,6 @@ public class GadgetRegistryServiceImpl implements GadgetRegistryService
    }
 
    // ***************
-
 
    public Gadget getGadget(String name) throws Exception
    {
@@ -179,14 +179,11 @@ public class GadgetRegistryServiceImpl implements GadgetRegistryService
             LocalGadgetData data = (LocalGadgetData)def.getData();
             String fileName = gadget.getName() + ".xml";
             data.setFileName(fileName);
-            data.getResources().createFile(fileName, new Resource(
-               "application.xml",
-               "UTF-8",
-               ("<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
-                "<Module><ModulePrefs title=\"\" />" +
-                "<Content type=\"html\"> <![CDATA[]]>" +
-                "</Content>" +
-                "</Module>").getBytes("UTF-8")));
+            data.getResources().createFile(
+               fileName,
+               new Resource("application.xml", "UTF-8", ("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                  + "<Module><ModulePrefs title=\"\" />" + "<Content type=\"html\"> <![CDATA[]]>" + "</Content>"
+                  + "</Module>").getBytes("UTF-8")));
          }
          else
          {
@@ -238,7 +235,9 @@ public class GadgetRegistryServiceImpl implements GadgetRegistryService
       if (data instanceof LocalGadgetData)
       {
          LocalGadgetData localData = (LocalGadgetData)data;
-         url = "jcr/repository/portal-system/production/app:gadgets/app:" + def.getName() + "/app:data/app:resources/" + localData.getFileName();
+         url =
+            "jcr/repository/" + chromatticLifeCycle.getWorkspaceName() + "/app:gadgets/app:" + def.getName()
+               + "/app:data/app:resources/" + localData.getFileName();
       }
       else
       {
@@ -265,12 +264,12 @@ public class GadgetRegistryServiceImpl implements GadgetRegistryService
 
    public String getCountry()
    {
-      return country ;
+      return country;
    }
 
    public String getLanguage()
    {
-      return language ;
+      return language;
    }
 
    public String getModuleId()
@@ -280,6 +279,6 @@ public class GadgetRegistryServiceImpl implements GadgetRegistryService
 
    public String getHostName()
    {
-      return hostName ;
+      return hostName;
    }
 }
