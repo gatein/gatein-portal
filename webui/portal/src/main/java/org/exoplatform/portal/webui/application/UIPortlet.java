@@ -24,6 +24,7 @@ import org.exoplatform.container.ExoContainer;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.application.UserProfileLifecycle;
 import org.exoplatform.portal.config.DataStorage;
+import org.exoplatform.portal.config.NoSuchDataException;
 import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.pom.spi.portlet.Portlet;
 import org.exoplatform.portal.pom.spi.wsrp.WSRP;
@@ -817,6 +818,9 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
             this.producerOfferedPortletContext = producerOfferedPortletContext;
             this.producedOfferedPortlet = producedOfferedPortlet;
             this.applicationId = applicationId;
+         } catch(NoSuchDataException de){
+            log.error(de.getMessage());
+            throw de;
          }
          catch (Exception e)
          {
