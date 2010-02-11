@@ -649,10 +649,12 @@ public class UIPortalComposer extends UIContainer
          dataService.save(page);
          uiToolPanel.setUIComponent(null);
 
+         uiPage.getChildren().clear();
          PortalDataMapper.toUIPage(uiPage, page);
          // Update UIPage cache on UIPortal
          uiPortal.setUIPage(pageId, uiPage);
-
+         uiPortal.refreshUIPage();
+         
          if (PortalProperties.SESSION_ALWAYS.equals(uiPortal.getSessionAlive()))
          {
             uiPortalApp.setSessionOpen(true);
