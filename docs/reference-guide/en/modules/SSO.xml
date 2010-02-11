@@ -5,93 +5,127 @@
 %BOOK_ENTITIES;
 ]>
 <chapter>
-  <title>Single Sign On</title>
+	<title>Single Sign On</title>
 
-  <section>
-    <title>Overview of SSO</title>
+	<section>
+		<title>Overview of SSO</title>
 
-    <para>Portal as an integration and aggregation platform provides some form
-    of SSO by itself. When you log into the portal you gain access to many
-    systems through portlets using a single identity. Still in many cases you
-    need to integrate the portal infrastructure with other SSO enabled
-    systems. There are many different Identity Management solutions on the
-    market. In most cases each SSO framework provides its own way to plug into
-    Java EE application.</para>
+		<para>Portal as an integration and aggregation platform provides
+			some form
+			of SSO by itself. When you log into the portal you gain
+			access to many
+			systems through portlets using a single identity. Still
+			in many cases
+			you
+			need to integrate the portal infrastructure with
+			other SSO enabled
+			systems. There are many different Identity
+			Management solutions on
+			the
+			market. In most cases each SSO framework
+			provides its own way to plug into
+			Java EE application.</para>
 
-    <section>
-      <title>Prerequisite</title>
+		<section>
+			<title>Prerequisite</title>
 
-      <para>In this tutorial, the SSO server is installed in a Tomcat
-      installation, you can obtain Tomcat from:
-      http://tomcat.apache.org</para>
+			<para>In this tutorial, the SSO server is installed in a Tomcat
+				installation, you can obtain Tomcat from:
+				http://tomcat.apache.org
+			</para>
 
-      <para>Various files are required to setup the integration, all the
-      packages can be found in a zip file located at:
-      http://repository.jboss.org/maven2/org/gatein/sso/sso-packaging</para>
+			<para>Various files are required to setup the integration, all
+				the
+				packages can be found in a zip file located at:
+				http://repository.jboss.org/maven2/org/gatein/sso/sso-packaging
+			</para>
 
-      <para>As we are manipulating gatein.ear directly it's better to not run
-      any portal extension that could override some of the data, make sure you
-      remove $JBOSS_HOME/server/default/deploy/gatein-sample-extension.ear and
-      $JBOSS_HOME/server/default/deploy/gatein-sample-portal.ear as they ship
-      by default with GateIn.</para>
-    </section>
-  </section>
+			<para>As we are manipulating gatein.ear directly it's better to not
+				run
+				any portal extension that could override some of the data, make
+				sure
+				you
+				remove
+				$JBOSS_HOME/server/default/deploy/gatein-sample-extension.ear and
+				$JBOSS_HOME/server/default/deploy/gatein-sample-portal.ear as they
+				ship
+				by default with GateIn.</para>
+		</section>
+	</section>
 
-  <section>
-    <title>CAS - Central Authentication Service</title>
+	<section>
+		<title>CAS - Central Authentication Service</title>
 
-    <para>This Single Sign On plugin enables seamless integration between
-    GateIn Portal and the CAS Single Sign On Framework. Details about CAS can
-    be found <ulink
-    url="http://www.ja-sig.org/products/cas/">here.</ulink></para>
+		<para>
+			This Single Sign On plugin enables seamless integration between
+			GateIn Portal and the CAS Single Sign On Framework. Details about CAS
+			can
+			be found
+			<ulink url="http://www.ja-sig.org/products/cas/">here.</ulink>
+		</para>
 
-    <para>The integration consitsts in two parts, the first part consists of
-    installing or configuring a CAS server, the second part consists of
-    setting up the portal to use the CAS server.</para>
+		<para>The integration consitsts in two parts, the first part
+			consists of
+			installing or configuring a CAS server, the second part
+			consists of
+			setting up the portal to use the CAS server.</para>
 
-    <section>
-      <title>CAS server</title>
+		<section>
+			<title>CAS server</title>
 
-      <para>First we will set up the server to authenticate against the portal
-      login module. You can find more information about setting up the server
-      by reading the official CAS documentation, here we will install the CAS
-      server on Tomcat</para>
+			<para>First we will set up the server to authenticate against
+				the portal
+				login module. You can find more information about setting
+				up the server
+				by reading the official CAS documentation, here we will
+				install the
+				CAS
+				server on Tomcat</para>
 
-      <section>
-        <title>Obtaining CAS</title>
+			<section>
+				<title>Obtaining CAS</title>
 
-        <para>You can download CAS from
-        http://www.jasig.org/cas/download.</para>
+				<para>You can download CAS from
+					http://www.jasig.org/cas/download.</para>
 
-        <para>Once downloaded extract it in what we will call $CAS_HOME from
-        now.</para>
-      </section>
+				<para>Once downloaded extract it in what we will call $CAS_HOME
+					from
+					now.</para>
+			</section>
 
-      <section>
-        <title>Modifying CAS server</title>
+			<section>
+				<title>Modifying CAS server</title>
 
-        <para>To simplify we will directly modify the sources so that the
-        produced web archive is configured the way we want.</para>
+				<para>To simplify we will directly modify the sources so that the
+					produced web archive is configured the way we want.</para>
 
-        <para>First we will want to change the authenticaton handler to use
-        the portal authentication handler:</para>
+				<para>First we will want to change the authenticaton handler to
+					use
+					the portal authentication handler:</para>
 
-        <para>The CAS Server Plugin makes secure authentication callbacks to a
-        RESTful service installed on the remote GateIn server in order to
-        authenticate a user. In order for the plugin to function correctly, it
-        needs to be properly configured to connect to this service. This
-        configuration is done via the
-        <emphasis>cas.war/WEB-INF/deployerConfigContext.xml</emphasis>
-        file.</para>
+				<para>
+					The CAS Server Plugin makes secure authentication callbacks to a
+					RESTful service installed on the remote GateIn server in order to
+					authenticate a user. In order for the plugin to function correctly,
+					it
+					needs to be properly configured to connect to this service. This
+					configuration is done via the
+					<emphasis>cas.war/WEB-INF/deployerConfigContext.xml
+					</emphasis>
+					file.
+				</para>
 
-        <orderedlist>
-          <listitem>
-            <para>Open
-            $CAS_HOME/cas-server-webapp/src/main/webapp/WEB-INF/deployerConfigContext.xml</para>
-          </listitem>
+				<orderedlist>
+					<listitem>
+						<para>Open
+							$CAS_HOME/cas-server-webapp/src/main/webapp/WEB-INF/deployerConfigContext.xml
+						</para>
+					</listitem>
 
-          <listitem>
-            <para>Replace: <programlisting> &lt;!--
+					<listitem>
+						<para>
+							Replace:
+							<programlisting> &lt;!--
   | Whereas CredentialsToPrincipalResolvers identify who it is some Credentials might authenticate, 
   | AuthenticationHandlers actually authenticate credentials.  Here e declare the AuthenticationHandlers that
   | authenticate the Principals that the CredentialsToPrincipalResolvers identified.  CAS will try these handlers in turn
@@ -477,6 +511,230 @@ realmName=gatein-domain</programlisting>At this point, you can test the
 
       <para>From now on, all links redirecting to the user authentication
       pages will redirect to the JOSSO centralized authentication form.</para>
+    </section>
+    </section>
+    
+    <section>
+    <title>OpenSSO - The Open Web SSO project</title>
+
+    <para>This Single Sign On plugin enables seamless integration between
+    GateIn Portal and the OpenSSO Single Sign On Framework. Details about OpenSSO can
+    be found <ulink
+    url="https://opensso.dev.java.net/">here.</ulink></para>
+
+    <para>The integration consitsts in two parts, the first part consists of
+    installing or configuring an OpenSSO server, the second part consists of
+    setting up the portal to use the OpenSSO server.</para>
+
+    <section>
+      <title>OpenSSO server</title>
+
+      <para>First we will set up the server to authenticate against the portal
+      login module. You can find more information about setting up the server
+      by reading the official OpenSSO documentation, here we will install the OpenSSO
+      server on Tomcat</para>
+
+      <section>
+        <title>Obtaining OpenSSO</title>
+
+        <para>You can download OpenSSO from
+        https://opensso.dev.java.net/public/use/index.html.</para>
+
+        <para>Once downloaded extract it in what we will call $OPENSSO_HOME from
+        now.</para>
+      </section>
+
+      <section>
+        <title>Modifying OpenSSO server</title>
+
+        <para>To simplify we will directly modify the sources so that the
+        produced web archive is configured the way we want.</para>
+
+        <para>First we will want to add the GateIn Authentication Plugin:</para>
+
+        <para>The plugin makes secure authentication callbacks to a
+        RESTful service installed on the remote GateIn server in order to
+        authenticate a user. In order for the plugin to function correctly, it
+        needs to be properly configured to connect to this service. This
+        configuration is done via the
+        <emphasis>opensso.war/config/auth/default/AuthenticationPlugin.xml</emphasis>
+        file.</para>
+
+        <orderedlist>
+          <listitem>
+            <para>Get an installation of Tomcat and extract it in what we will
+            call $TOMCAT_HOME. Change the default port to avoid a conflict
+            with the default GateIn (for testing purposes). Edit
+            $TOMCAT_HOME/conf/server.xml and replace the 8080 port to
+            8888.<note>
+                <para>If you are running GateIn with Tomcat on the same
+                machine you will also need to change the port 8005 to
+                something else to avoid port conflicts.</para>
+              </note></para>
+          </listitem>
+          
+          <listitem>
+            <para>This is what the $TOMCAT_HOME/webapps/opensso/config/auth/default/AuthenticationPlugin.xml file should look like:
+            <programlisting><![CDATA[
+<?xml version='1.0' encoding="UTF-8"?>
+
+<!DOCTYPE ModuleProperties PUBLIC "=//iPlanet//Authentication Module Properties XML Interface 1.0 DTD//EN"
+          "jar://com/sun/identity/authentication/Auth_Module_Properties.dtd">
+
+<ModuleProperties moduleName="AuthenticationPlugin" version="1.0" >
+  <Callbacks length="2" order="1" timeout="60"
+             header="GateIn OpenSSO Login" >    
+    <NameCallback>
+      <Prompt>
+		Username
+      </Prompt>
+    </NameCallback>
+    <PasswordCallback echoPassword="false" >
+      <Prompt>
+		Password
+      </Prompt>
+    </PasswordCallback>
+  </Callbacks>
+</ModuleProperties>
+            ]]></programlisting>
+            </para>
+          </listitem>
+          
+          
+
+          <listitem>
+            <para>Copy
+            $GATEIN_SSO/opensso/plugin/WEB-INF/lib/sso-opensso-plugin-&lt;VERSION&gt;.jar
+            , 
+            $GATEIN_SSO/opensso/plugin/WEB-INF/lib/commons-httpclient-&lt;VERSION&gt;.jar, and
+            $GATEIN_SSO/opensso/plugin/WEB-INF/lib/commons-logging-&lt;VERSION&gt;.jar
+            into the Tomcat Installation at:
+            $TOMCAT_HOME/webapps/opensso/WEB-INF/lib</para>
+          </listitem>
+          
+          <listitem>
+            <para>Copy
+            $GATEIN_SSO/opensso/plugin/WEB-INF/classes/gatein.properties
+            into the Tomcat Installation at:
+            $TOMCAT_HOME/webapps/opensso/WEB-INF/classes</para>
+          </listitem>
+          
+          <listitem>
+            <para>Now you should be able to start Tomcat and access
+            http://localhost:8888/opensso/UI/Login?realm=gatein but at this stage you won't be able to
+            login.</para>
+
+            <mediaobject>
+              <imageobject>
+              
+                <imagedata fileref="images/opensso-shot.png" format="PNG" />
+              </imageobject>
+            </mediaobject>
+          </listitem>
+        </orderedlist>
+      </section>
+    </section>
+
+    <section>
+      <title>Setup the OpenSSO client</title>
+
+      <orderedlist>
+        <listitem>
+          <para>Copy all libraries from $GATEIN_SSO/opensso/gatein.ear/lib into
+          $JBOSS_HOME/server/default/deploy/gatein.ear/lib (Or if you are
+          running GateIn in Tomcat, in $GATEIN_HOME/lib)</para>
+        </listitem>
+
+        <listitem>
+          <para>In JBoss AS, edit gatein.ear/META-INF/gatein-jboss-beans.xml
+          and uncomment this section</para>
+
+          <para><programlisting>&lt;authentication&gt;
+  &lt;login-module code="org.gatein.sso.agent.login.SSOLoginModule" flag="required"&gt;
+  &lt;/login-module&gt;      
+  &lt;login-module code="org.exoplatform.services.security.j2ee.JbossLoginModule" flag="required"&gt;
+    &lt;module-option name="portalContainerName"&gt;portal&lt;/module-option&gt;
+    &lt;module-option name="realmName"&gt;gatein-domain&lt;/module-option&gt;
+  &lt;/login-module&gt;
+&lt;/authentication&gt;</programlisting></para>
+
+          <para>If you are running GateIn in Tomcat, edit
+          $GATEIN_HOME/conf/jaas.conf and uncomment this section</para>
+
+          <para><programlisting>org.gatein.sso.agent.login.SSOLoginModule required
+org.exoplatform.services.security.j2ee.JbossLoginModule required
+portalContainerName=portal
+realmName=gatein-domain</programlisting>At this point, you can test the
+          installation, start GateIn (assuming that the OpenSSO server using
+          Tomcat is still running) by going to http://localhost:8888/opensso/UI/Login?realm=gatein you
+          should be able to login with username 'root' and password 'gtn' or
+          any account created through the portal.</para>
+        </listitem>
+      </orderedlist>
+    </section>
+
+    <section>
+      <title>Setup the portal to redirect to OpenSSO</title>
+
+      <para>Now we want to tell GateIn to redirect all user authentication to
+      the OpenSSO server.</para>
+
+      <para>The OpenSSO server can be located anywhere on the Internet, and this
+      information must be properly configured within the GateIn instance. This
+      configuration needs to be done in 3 files <itemizedlist>
+          <listitem>
+            <emphasis>In
+            gatein.ear/02portal.war/groovy/portal/webui/UILoginForm.gtmpl
+            replace the javascript at the bottom by:</emphasis>
+
+            <para>
+              <programlisting>&lt;script&gt;
+&lt;%=uicomponent.event("Close");%&gt;
+  window.location = 'http://localhost:8888/opensso/UI/Login?realm=gatein&amp;goto=http://localhost:8080/portal/private/classic';
+&lt;/script&gt;</programlisting>
+            </para>
+          </listitem>
+
+          <listitem>
+            <emphasis>In gatein.ear/02portal.war/login/jsp/login.jsp replace
+            everything by:</emphasis>
+
+            <para>
+              <programlisting>&lt;html&gt;
+  &lt;head&gt;
+    &lt;script type="text/javascript"&gt;
+       window.location = 'http://localhost:8888/opensso/UI/Login?realm=gatein&amp;goto=http://localhost:8080/portal/private/classic';
+    &lt;/script&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</programlisting>
+            </para>
+          </listitem>
+
+          <listitem>
+            <emphasis>In gatein.ear/02portal.war/WEB-INF/web.xml replace the
+            InitiateLoginServlet declaration by:</emphasis>
+
+            <para>
+              <programlisting>&lt;servlet&gt;
+  &lt;servlet-name&gt;InitiateLoginServlet&lt;/servlet-name&gt;
+  &lt;servlet-class&gt;org.gatein.sso.agent.GenericSSOAgent&lt;/servlet-class&gt;
+  &lt;init-param&gt;
+    &lt;param-name&gt;ssoServerUrl&lt;/param-name&gt;
+    &lt;param-value&gt;http://localhost:8888/opensso&lt;/param-value&gt;
+  &lt;/init-param&gt;
+  &lt;init-param&gt;
+    &lt;param-name&gt;ssoCookieName&lt;/param-name&gt;
+    &lt;param-value&gt;iPlanetDirectoryPro&lt;/param-value&gt;
+  &lt;/init-param&gt;    
+&lt;/servlet&gt;</programlisting>
+            </para>
+          </listitem>
+        </itemizedlist></para>
+
+      <para>From now on, all links redirecting to the user authentication
+      pages will redirect to the OpenSSO centralized authentication form.</para>
     </section>
   </section>
 </chapter>
