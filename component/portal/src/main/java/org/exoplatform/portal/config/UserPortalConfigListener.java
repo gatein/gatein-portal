@@ -23,12 +23,17 @@ import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.component.RequestLifeCycle;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.UserEventListener;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 
 /**
  * Created by The eXo Platform SAS May 29, 2007
  */
 public class UserPortalConfigListener extends UserEventListener
 {
+
+   /** . */
+   private final Logger log = LoggerFactory.getLogger(UserPortalConfigListener.class);
 
    /** . */
    private final UserPortalConfigService portalConfigService;
@@ -58,15 +63,22 @@ public class UserPortalConfigListener extends UserEventListener
       }
    }
 
-   public void preSave(User user, boolean isNew) throws Exception
+   public void preSave(User user, boolean isNew)
    {
+      String userName = user.getUserName();
+
+      //
       RequestLifeCycle.begin(PortalContainer.getInstance());
       try
       {
-         String userName = user.getUserName();
+         log.debug("About to create user site for user " + userName);
 
          // Create the portal from the template
          portalConfigService.createUserSite(userName);
+      }
+      catch (Exception e)
+      {
+         log.error("Could not create user site for user " + userName, e);
       }
       finally
       {

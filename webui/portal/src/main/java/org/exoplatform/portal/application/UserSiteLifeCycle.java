@@ -25,6 +25,8 @@ import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.web.application.Application;
 import org.exoplatform.web.application.ApplicationLifecycle;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -33,26 +35,25 @@ import org.exoplatform.web.application.ApplicationLifecycle;
 public class UserSiteLifeCycle implements ApplicationLifecycle<PortalRequestContext>
 {
 
+   /** . */
+   private final Logger log = LoggerFactory.getLogger(UserSiteLifeCycle.class);
+
    public void onInit(Application app) throws Exception
    {
-
    }
 
    public void onStartRequest(Application app, PortalRequestContext context) throws Exception
    {
       String userName = context.getRemoteUser();
-
-      //
       if (userName != null)
       {
          DataStorage storage = (DataStorage)PortalContainer.getComponent(DataStorage.class);
-
-         //
          PortalConfig portalConfig = storage.getPortalConfig("user", userName);
 
          //
          if (portalConfig == null)
          {
+            log.debug("About to create user site for user " + userName);
             UserPortalConfigService configService = (UserPortalConfigService)PortalContainer.getComponent(UserPortalConfigService.class);
             configService.createUserSite(userName);
          }
@@ -61,11 +62,9 @@ public class UserSiteLifeCycle implements ApplicationLifecycle<PortalRequestCont
 
    public void onEndRequest(Application app, PortalRequestContext context) throws Exception
    {
-
    }
 
    public void onDestroy(Application app) throws Exception
    {
-
    }
 }
