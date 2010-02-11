@@ -172,10 +172,11 @@ public class UserPortalConfigService implements Startable
     * membership is configured from the value returned by {@link org.exoplatform.portal.config.UserACL#getMakableMT()}
     *
     * @param remoteUser the user to get the makable navigations
+    * @param withSite true if a site must exist 
     * @return the list of groups
     * @throws Exception any exception
     */
-   public List<String> getMakableNavigations(String remoteUser) throws Exception
+   public List<String> getMakableNavigations(String remoteUser, boolean withSite) throws Exception
    {
       Collection<Group> groups;
       if (remoteUser.equals(userACL_.getSuperUser()))
@@ -191,19 +192,23 @@ public class UserPortalConfigService implements Startable
       List<String> list = new ArrayList<String>();
       if (groups != null)
       {
-         Query<PortalConfig> q = new Query<PortalConfig>("group", null, PortalConfig.class);
-         LazyPageList<PortalConfig> lpl = storage_.find(q);
-         Set<String> existingNames = new HashSet<String>();
-         for (PortalConfig groupSite : lpl.getAll())
+         Set<String> existingNames = null;
+         if (withSite)
          {
-            existingNames.add(groupSite.getName());
+            existingNames = new HashSet<String>();
+            Query<PortalConfig> q = new Query<PortalConfig>("group", null, PortalConfig.class);
+            LazyPageList<PortalConfig> lpl = storage_.find(q);
+            for (PortalConfig groupSite : lpl.getAll())
+            {
+               existingNames.add(groupSite.getName());
+            }
          }
 
          //
          for (Group group : groups)
          {
             String groupId = group.getId().trim();
-            if (existingNames.contains(groupId))
+            if (existingNames == null || existingNames.contains(groupId))
             {
                list.add(groupId);
             }
@@ -223,8 +228,8 @@ public class UserPortalConfigService implements Startable
     * <li>if not navigation exists for the user site then it creates an empty navigation</li>
     * </ul>
     *
-    * @param userName
-    * @throws Exception
+    * @param userName the user name
+    * @throws Exception a nasty exception
     */
    public void createUserSite(String userName) throws Exception 
    {
@@ -251,6 +256,33 @@ public class UserPortalConfigService implements Startable
          pageNav.setPriority(5);
          pageNav.setNodes(new ArrayList<PageNode>());
          storage_.create(pageNav);
+      }
+   }
+
+   /**
+    * Create a group site for the specified group. It will perform the following:
+    * <ul>
+    * <li>create the group site by calling {@link #createUserPortalConfig(String, String, String)} which may create
+    * a site or not according to the default configuration</li>
+    * <li>if not site exists then it creates a site then it creates an empty site</li>
+    * </ul>
+    *
+    * @param groupId the group id
+    * @throws Exception a nasty exception
+    */
+   public void createGroupSite(String groupId) throws Exception
+   {
+      // Create the portal from the template
+      createUserPortalConfig(PortalConfig.GROUP_TYPE, groupId, "group");
+
+      // Need to insert the corresponding group site
+      PortalConfig cfg = storage_.getPortalConfig(PortalConfig.GROUP_TYPE, groupId);
+      if (cfg == null)
+      {
+         cfg = new PortalConfig(PortalConfig.GROUP_TYPE);
+         cfg.setPortalLayout(new Container());
+         cfg.setName(groupId);
+         storage_.create(cfg);
       }
    }
 

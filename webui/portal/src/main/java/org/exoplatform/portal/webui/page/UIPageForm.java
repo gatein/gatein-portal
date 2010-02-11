@@ -153,7 +153,7 @@ public class UIPageForm extends UIFormTabPane
       //TODO: This following line is fixed for bug PORTAL-2127
       uiListPermissionSelector.getChild(UIFormPopupWindow.class).setId("UIPageFormPopupGroupMembershipSelector");
 
-      List<String> groups = configService.getMakableNavigations(pcontext.getRemoteUser());
+      List<String> groups = configService.getMakableNavigations(pcontext.getRemoteUser(), true);
       if (groups.size() > 0)
       {
          ownerTypes.add(new SelectItemOption<String>(PortalConfig.GROUP_TYPE));

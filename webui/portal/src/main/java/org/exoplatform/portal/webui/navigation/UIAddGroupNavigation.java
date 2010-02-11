@@ -99,7 +99,7 @@ public class UIAddGroupNavigation extends UIContainer
       }
       else
       {
-         listGroup = dataService.getMakableNavigations(pContext.getRemoteUser());
+         listGroup = dataService.getMakableNavigations(pContext.getRemoteUser(), false);
       }
 
       if (listGroup == null)
@@ -144,6 +144,13 @@ public class UIAddGroupNavigation extends UIContainer
             uiPortalApp.addMessage(new ApplicationMessage("UIPageNavigationForm.msg.existPageNavigation",
                new String[]{pageNav.getOwnerId()}));
             return;
+         }
+
+         // Create group when it does not exist
+         if (dataService.getPortalConfig("group", ownerId) == null)
+         {
+            UserPortalConfigService configService = uicomp.getApplicationComponent(UserPortalConfigService.class);
+            configService.createGroupSite(ownerId);
          }
 
          // create navigation for group

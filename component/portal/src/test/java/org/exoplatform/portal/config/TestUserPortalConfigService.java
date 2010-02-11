@@ -347,7 +347,7 @@ public class TestUserPortalConfigService extends AbstractPortalTest
       {
          public void execute() throws Exception
          {
-            Set<String> navigations = new HashSet<String>(userPortalConfigSer_.getMakableNavigations("root"));
+            Set<String> navigations = new HashSet<String>(userPortalConfigSer_.getMakableNavigations("root", false));
             Set<String> expectedNavigations =
                new HashSet<String>(Arrays.asList("/platform/users", "/organization/management/human-resources",
                   "/partners", "/customers", "/organization/communication", "/organization/management/executive-board",
@@ -366,7 +366,7 @@ public class TestUserPortalConfigService extends AbstractPortalTest
       {
          public void execute() throws Exception
          {
-            Set<String> navigations = new HashSet<String>(userPortalConfigSer_.getMakableNavigations("john"));
+            Set<String> navigations = new HashSet<String>(userPortalConfigSer_.getMakableNavigations("john", false));
             Set<String> expectedNavigations = Collections.singleton("/organization/management/executive-board");
             assertEquals(expectedNavigations, navigations);
          }
@@ -379,7 +379,7 @@ public class TestUserPortalConfigService extends AbstractPortalTest
       {
          public void execute() throws Exception
          {
-            Set<String> navigations = new HashSet<String>(userPortalConfigSer_.getMakableNavigations("mary"));
+            Set<String> navigations = new HashSet<String>(userPortalConfigSer_.getMakableNavigations("mary", false));
             Set<String> expectedNavigations = Collections.emptySet();
             assertEquals(expectedNavigations, navigations);
          }
