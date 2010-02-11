@@ -19,6 +19,7 @@
 
 package org.exoplatform.portal.config;
 
+import org.exoplatform.commons.utils.LazyPageList;
 import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.component.ComponentPlugin;
@@ -176,8 +177,7 @@ public class UserPortalConfigService implements Startable
     */
    public List<String> getMakableNavigations(String remoteUser) throws Exception
    {
-      List<String> list = new ArrayList<String>();
-      Collection<?> groups = null;
+      Collection<Group> groups;
       if (remoteUser.equals(userACL_.getSuperUser()))
       {
          groups = orgService_.getGroupHandler().getAllGroups();
@@ -186,15 +186,31 @@ public class UserPortalConfigService implements Startable
       {
          groups = orgService_.getGroupHandler().findGroupByMembership(remoteUser, userACL_.getMakableMT());
       }
+
+      //
+      List<String> list = new ArrayList<String>();
       if (groups != null)
       {
-         for (Object group : groups)
+         Query<PortalConfig> q = new Query<PortalConfig>("group", null, PortalConfig.class);
+         LazyPageList<PortalConfig> lpl = storage_.find(q);
+         Set<String> existingNames = new HashSet<String>();
+         for (PortalConfig groupSite : lpl.getAll())
          {
-            Group m = (Group)group;
-            String groupId = m.getId().trim();
-            list.add(groupId);
+            existingNames.add(groupSite.getName());
+         }
+
+         //
+         for (Group group : groups)
+         {
+            String groupId = group.getId().trim();
+            if (existingNames.contains(groupId))
+            {
+               list.add(groupId);
+            }
          }
       }
+
+      //
       return list;
    }
 
