@@ -103,7 +103,16 @@ public class UIPageBody extends UIComponentDecorator
       
       uiPortal.setMaximizedUIComponent(null);
       
-      uiPage = getUIPage(pageReference, page, uiPortal, context);
+      try
+      {
+         uiPage = getUIPage(pageReference, page, uiPortal, context);
+      }
+      catch (Exception ex)
+      {
+         // TODO: Print evokable message
+         setUIComponent(null);
+         return;
+      }
       
       if (uiPage.isShowMaxWindow())
       {
@@ -136,17 +145,20 @@ public class UIPageBody extends UIComponentDecorator
    private UIPage getUIPage(String pageReference, Page page, UIPortal uiPortal, WebuiRequestContext context)
       throws Exception
    {
+      //The page has been deleted
+      if(page == null)
+      {
+         //Clear the UIPage from cache in UIPortal
+         uiPortal.clearUIPage(pageReference);
+         throw new Exception("The page with id " + pageReference + " has been removed");
+      }
+      
       UIPage uiPage = uiPortal.getUIPage(pageReference);
       if (uiPage != null)
       {
          return uiPage;
       }
       
-      if(page == null)
-      {
-         return null;
-      }
-
       if (Page.DESKTOP_PAGE.equals(page.getFactoryId()))
       {
          uiPage = createUIComponent(context, UIDesktopPage.class, null, null);
@@ -173,6 +185,8 @@ public class UIPageBody extends UIComponentDecorator
          maximizedUIComponent.processRender((WebuiRequestContext)WebuiRequestContext.getCurrentInstance());
          return;
       }
+      
+      //TODO: Remove beneath block
       if (uicomponent_ == null)
       {
          setPageBody(Util.getUIPortal().getSelectedNode(), Util.getUIPortal());

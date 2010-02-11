@@ -219,6 +219,11 @@ public class UIPortal extends UIContainer
       this.all_UIPages.put(pageReference, uiPage);
    }
    
+   public void clearUIPage(String pageReference)
+   {
+      this.all_UIPages.remove(pageReference);
+   }
+   
    public void setNavigation(PageNavigation _navigation)
    {
       this.navigation = _navigation;

@@ -277,7 +277,11 @@ public class UIPageBrowser extends UISearch
          int currentPage = datasource.getCurrentPage();
 
          dataService.remove(page);
-
+         //Minh Hoang TO: The cached UIPage objects corresponding to removed Page should be removed here.
+         //As we have multiple UIPortal, which means multiple caches of UIPage. It 's unwise to garbage
+         // all UIPage caches at once. Better solution is to clear UIPage on browsing to PageNode having Page
+         //removed
+         
          UIPortal uiPortal = Util.getUIPortal();
          if (uiPortal.getSelectedNode().getPageReference().equals(page.getPageId()))
          {
