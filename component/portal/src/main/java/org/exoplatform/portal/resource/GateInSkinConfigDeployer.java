@@ -40,21 +40,21 @@ import javax.servlet.ServletContext;
  *
  *      Sep 16, 2009
  */
-public class GateinSkinConfigDeployer extends AbstractResourceHandler
+public class GateInSkinConfigDeployer extends AbstractResourceHandler
 {
 
    private final SkinService skinService;
 
    private static final String GATEIN_CONFIG_RESOURCE = "/WEB-INF/gatein-resources.xml";
 
-   private static Log LOG = ExoLogger.getExoLogger(GateinSkinConfigDeployer.class);
+   private static Log LOG = ExoLogger.getExoLogger(GateInSkinConfigDeployer.class);
 
    /**
     * The name of the portal container
     */
    private final String portalContainerName;
 
-   public GateinSkinConfigDeployer(String portalContainerName, SkinService _skinService)
+   public GateInSkinConfigDeployer(String portalContainerName, SkinService _skinService)
    {
       this.skinService = _skinService;
       this.portalContainerName = portalContainerName;

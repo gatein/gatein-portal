@@ -29,14 +29,14 @@ import org.gatein.wci.WebAppLifeCycleEvent;
  * @version $Id$
  * 
  */
-public class GateinSkinConfigRemoval extends AbstractResourceHandler
+public class GateInSkinConfigRemoval extends AbstractResourceHandler
 {
 
    private SkinService service;
 
    private String portalContainerName;
 
-   public GateinSkinConfigRemoval(String _portalContainerName, SkinService _service)
+   public GateInSkinConfigRemoval(String _portalContainerName, SkinService _service)
    {
       this.portalContainerName = _portalContainerName;
       this.service = _service;
