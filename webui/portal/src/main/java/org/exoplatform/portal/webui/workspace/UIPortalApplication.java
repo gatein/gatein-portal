@@ -345,10 +345,10 @@ public class UIPortalApplication extends UIApplication
       this.skin_ = skin;
    }
 
-   private SkinConfig getSkin(String module)
+   private SkinConfig getSkin(String module, String skin)
    {
       SkinService skinService = getApplicationComponent(SkinService.class);
-      return skinService.getSkin(module, skin_);
+      return skinService.getSkin(module, skin);
    }
 
    /**
@@ -385,6 +385,10 @@ public class UIPortalApplication extends UIApplication
       for (UIPortlet uiPortlet : uiportlets)
       {
          SkinConfig skinConfig = getPortletSkinConfig(uiPortlet);
+         if (skinConfig == null)
+         {
+            skinConfig = getDefaultPortletSkinConfig(uiPortlet);
+         }
          if (skinConfig != null && !portletConfigs.contains(skinConfig))
          {
             skins.add(skinConfig);
@@ -395,12 +399,25 @@ public class UIPortalApplication extends UIApplication
       return skins;
    }
 
+   private SkinConfig getDefaultPortletSkinConfig(UIPortlet portlet)
+   {
+      String portletId = portlet.getSkinId();
+      if (portletId != null)
+      {
+         return getSkin(portletId, "Default");
+      }
+      else
+      {
+         return null;
+      }
+   }
+ 
    private SkinConfig getPortletSkinConfig(UIPortlet portlet)
    {
       String portletId = portlet.getSkinId();
       if (portletId != null)
       {
-         return getSkin(portletId);
+         return getSkin(portletId, skin_);
       }
       else
       {
