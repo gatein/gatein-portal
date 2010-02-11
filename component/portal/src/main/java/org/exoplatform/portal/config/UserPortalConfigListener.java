@@ -21,14 +21,8 @@ package org.exoplatform.portal.config;
 
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.component.RequestLifeCycle;
-import org.exoplatform.portal.config.model.Container;
-import org.exoplatform.portal.config.model.PageNavigation;
-import org.exoplatform.portal.config.model.PageNode;
-import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.UserEventListener;
-
-import java.util.ArrayList;
 
 /**
  * Created by The eXo Platform SAS May 29, 2007
@@ -72,29 +66,7 @@ public class UserPortalConfigListener extends UserEventListener
          String userName = user.getUserName();
 
          // Create the portal from the template
-         portalConfigService.createUserPortalConfig(PortalConfig.USER_TYPE, userName, "user");
-
-         // Need to insert the corresponding user site if needed
-         PortalConfig cfg = dataStorage.getPortalConfig(PortalConfig.USER_TYPE, userName);
-         if (cfg == null)
-         {
-            cfg = new PortalConfig(PortalConfig.USER_TYPE);
-            cfg.setPortalLayout(new Container());
-            cfg.setName(userName);
-            dataStorage.create(cfg);
-         }
-
-         // Create a blank navigation if needed
-         PageNavigation navigation = dataStorage.getPageNavigation(PortalConfig.USER_TYPE, userName);
-         if (navigation == null)
-         {
-            PageNavigation pageNav = new PageNavigation();
-            pageNav.setOwnerType(PortalConfig.USER_TYPE);
-            pageNav.setOwnerId(userName);
-            pageNav.setPriority(5);
-            pageNav.setNodes(new ArrayList<PageNode>());
-            dataStorage.create(pageNav);
-         }
+         portalConfigService.createUserSite(userName);
       }
       finally
       {

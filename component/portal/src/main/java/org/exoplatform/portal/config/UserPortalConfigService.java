@@ -199,19 +199,60 @@ public class UserPortalConfigService implements Startable
    }
 
    /**
+    * Create a user site for the specified user. It will perform the following:
+    * <ul>
+    * <li>create the user site by calling {@link #createUserPortalConfig(String, String, String)} which may create
+    * a site or not according to the default configuration</li>
+    * <li>if not site exists then it creates a site then it creates an empty site</li>
+    * <li>if not navigation exists for the user site then it creates an empty navigation</li>
+    * </ul>
+    *
+    * @param userName
+    * @throws Exception
+    */
+   public void createUserSite(String userName) throws Exception 
+   {
+      // Create the portal from the template
+      createUserPortalConfig(PortalConfig.USER_TYPE, userName, "user");
+
+      // Need to insert the corresponding user site if needed
+      PortalConfig cfg = storage_.getPortalConfig(PortalConfig.USER_TYPE, userName);
+      if (cfg == null)
+      {
+         cfg = new PortalConfig(PortalConfig.USER_TYPE);
+         cfg.setPortalLayout(new Container());
+         cfg.setName(userName);
+         storage_.create(cfg);
+      }
+
+      // Create a blank navigation if needed
+      PageNavigation navigation = storage_.getPageNavigation(PortalConfig.USER_TYPE, userName);
+      if (navigation == null)
+      {
+         PageNavigation pageNav = new PageNavigation();
+         pageNav.setOwnerType(PortalConfig.USER_TYPE);
+         pageNav.setOwnerId(userName);
+         pageNav.setPriority(5);
+         pageNav.setNodes(new ArrayList<PageNode>());
+         storage_.create(pageNav);
+      }
+   }
+
+   /**
     * This method should create a the portal config, pages and navigation according to the template name.
     *
+    * @param siteType the site type
     * @param siteName the Site name
     * @param template   the template to use
     * @throws Exception any exception
     */
-   public void createUserPortalConfig(String ownerType, String siteName, String template) throws Exception
+   public void createUserPortalConfig(String siteType, String siteName, String template) throws Exception
    {
-      String templatePath = newPortalConfigListener_.getTemplateConfig(ownerType, template);
+      String templatePath = newPortalConfigListener_.getTemplateConfig(siteType, template);
 
       NewPortalConfig portalConfig = new NewPortalConfig(templatePath);
       portalConfig.setTemplateName(template);
-      portalConfig.setOwnerType(ownerType);
+      portalConfig.setOwnerType(siteType);
 
       if (!portalConfig.getOwnerType().equals(PortalConfig.USER_TYPE))
       {
