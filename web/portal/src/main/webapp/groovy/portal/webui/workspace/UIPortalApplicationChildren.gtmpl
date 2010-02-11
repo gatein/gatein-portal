@@ -1,0 +1,4 @@
+          <%uicomponent.renderChildren();%>
+        </div>
+  </body>
+</html>

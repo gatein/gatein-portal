@@ -37,4 +37,9 @@ public class PortalPrinter extends OutputStreamPrinter
    {
       super(encoder, out, flushOnClose, bufferSize);
    }
+   
+   public PortalPrinter(OutputStream out, boolean flushOnClose, int bufferSize, boolean growing) throws IllegalArgumentException
+   {
+	   super(encoder, out, flushOnClose, bufferSize, growing);
+   }
 }

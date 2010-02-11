@@ -77,7 +77,7 @@ public class OutputStreamPrinter extends Printer implements BinaryOutput
     */
    public OutputStreamPrinter(TextEncoder encoder, OutputStream out, boolean flushOnClose) throws IllegalArgumentException
    {
-      this(encoder, out, IOFailureFlow.RETHROW, false, flushOnClose, 0);
+      this(encoder, out, IOFailureFlow.RETHROW, false, flushOnClose, 0, false);
    }
 
    /**
@@ -92,9 +92,25 @@ public class OutputStreamPrinter extends Printer implements BinaryOutput
     */
    public OutputStreamPrinter(TextEncoder encoder, OutputStream out, boolean flushOnClose, int bufferSize) throws IllegalArgumentException
    {
-      this(encoder, out, IOFailureFlow.RETHROW, false, flushOnClose, bufferSize);
+      this(encoder, out, IOFailureFlow.RETHROW, false, flushOnClose, bufferSize, false);
    }
 
+   /**
+    * Builds an instance with the failureFlow being {@link IOFailureFlow#RETHROW} and
+    * a the ignoreOnFailure property set to false.
+    *
+    * @param encoder the encoder
+    * @param out the output
+    * @param flushOnClose flush when stream is closed
+    * @param bufferSize the initial size of the buffer
+    * @param growing if the buffer should grow in size once full
+    * @throws IllegalArgumentException if any argument is null
+    */
+   public OutputStreamPrinter(TextEncoder encoder, OutputStream out, boolean flushOnClose, int bufferSize, boolean growing) throws IllegalArgumentException
+   {
+      this(encoder, out, IOFailureFlow.RETHROW, false, flushOnClose, bufferSize, growing);
+   }
+   
    /**
     * Builds an instance with the failureFlow being {@link IOFailureFlow#RETHROW} and
     * a the ignoreOnFailure property set to false.
@@ -105,7 +121,7 @@ public class OutputStreamPrinter extends Printer implements BinaryOutput
     */
    public OutputStreamPrinter(TextEncoder encoder, OutputStream out) throws IllegalArgumentException
    {
-      this(encoder, out, IOFailureFlow.RETHROW, false, false, 0);
+      this(encoder, out, IOFailureFlow.RETHROW, false, false, 0, false);
    }
 
    /**
@@ -120,12 +136,27 @@ public class OutputStreamPrinter extends Printer implements BinaryOutput
     * @throws IllegalArgumentException if any argument is null
     */
    public OutputStreamPrinter(
+		      TextEncoder encoder,
+		      OutputStream out,
+		      IOFailureFlow failureFlow,
+		      boolean ignoreOnFailure,
+		      boolean flushOnClose,
+		      int bufferSize)
+		      throws IllegalArgumentException
+   {
+	   this(encoder, out, failureFlow, ignoreOnFailure, flushOnClose, bufferSize, false);
+   }
+   
+   
+   public OutputStreamPrinter(
       TextEncoder encoder,
       OutputStream out,
       IOFailureFlow failureFlow,
       boolean ignoreOnFailure,
       boolean flushOnClose,
-      int bufferSize)
+      int bufferSize,
+      boolean growing
+      )
       throws IllegalArgumentException
    {
       if (encoder == null)
@@ -146,9 +177,13 @@ public class OutputStreamPrinter extends Printer implements BinaryOutput
       }
 
       //
-      if (bufferSize > 0)
+      if (bufferSize > 0 && !growing)
       {
          out = new BufferingOutputStream(out, bufferSize);
+      }
+      else if (growing)
+      {
+    	 out = new GrowingOutputStream(out, bufferSize);
       }
 
       //
@@ -364,5 +399,14 @@ public class OutputStreamPrinter extends Printer implements BinaryOutput
          case RETHROW :
             throw e;
       }
+   }
+   
+   /**
+    * Flush the output stream. This allows for the outputstream
+    * to be independently flushed regardless of the flushOnClose setting.
+    */
+   public void flushOutputStream() throws IOException
+   {
+	   out.flush();
    }
 }

@@ -19,9 +19,17 @@
 
 package org.exoplatform.portal.webui.workspace;
 
+import java.io.CharArrayWriter;
+import java.io.OutputStream;
+import java.io.Writer;
+
+import org.exoplatform.commons.utils.PortalPrinter;
+import org.exoplatform.portal.application.PortalRequestContext;
+import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.lifecycle.Lifecycle;
+import org.exoplatform.webui.core.lifecycle.WebuiBindingContext;
 
 /**
  * Created by The eXo Platform SAS
@@ -65,5 +73,52 @@ public class UIPortalApplicationLifecycle extends Lifecycle<UIPortalApplication>
          super.processAction(uicomponent, context);
       uiTarget.processAction(context);
    }
+   
+	public void processRender(UIPortalApplication uicomponent,
+			WebuiRequestContext context) throws Exception
+	{	
+		/* We need to render the child elements of the portal first since portlets can set the markup headers
+		 * during there render call.
+		 * We cannot render the page in the order of the UIPortalApplication since this will create the headers 
+		 * before the portlets are rendered. To get around this we need to render the portlets and UIPortalApplication
+		 * childrens to a separate writer first, then render the UIPortalApplication page as normal, outputting 
+		 * the contents of the separate writer where the child elements should be rendered.
+		 * Its messy but required for portlet markup header setting.
+		 */
+		
+		PortalRequestContext prc = (PortalRequestContext) context;
+		OutputStream responseOutputStream = prc.getResponse().getOutputStream();
+		
+		PortalPrinter parentWriter = new PortalPrinter(responseOutputStream, true, 5000);
+		PortalPrinter childWriter = new PortalPrinter(responseOutputStream, true, 25000, true);
+		
+		context.setWriter(childWriter);
+		processRender(uicomponent, context, "system:/groovy/portal/webui/workspace/UIPortalApplicationChildren.gtmpl");
+
+		context.setWriter(parentWriter);
+		processRender(uicomponent, context, "system:/groovy/portal/webui/workspace/UIPortalApplication.gtmpl");
+
+		//flush the parent writer to the output stream so that we are really to accept the child content
+		parentWriter.flushOutputStream();
+		//now that the parent has been flushed, we can flush the contents of the child to the output
+		childWriter.flushOutputStream();
+	}
+	
+	public void processRender(UIPortalApplication uicomponent, WebuiRequestContext context, String template) throws Exception
+	{
+	      // Fail if we have no template
+	      if (template == null)
+	      {
+	         throw new IllegalStateException("uicomponent " + uicomponent + " with class " + uicomponent.getClass().getName() +
+	         " has no template for rendering");
+	      }
+
+	      //
+	      ResourceResolver resolver = uicomponent.getTemplateResourceResolver(context, template);
+	      WebuiBindingContext bcontext = new WebuiBindingContext(resolver, context.getWriter(), uicomponent, context);
+	      bcontext.put(UIComponent.UICOMPONENT, uicomponent);
+	      bcontext.put(uicomponent.getUIComponentName(), uicomponent);
+	      renderTemplate(template, bcontext);
+	}
 
 }

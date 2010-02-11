@@ -646,6 +646,7 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
       HashMap<String, String[]> allParams = new HashMap<String, String[]>();
       allParams.putAll(servletRequest.getParameterMap());
       allParams.putAll(this.getPublicParameters());
+      //allParams.remove(ExoPortletInvocationContext.NAVIGATIONAL_STATE_PARAM_NAME);
       if (type.equals(ActionInvocation.class))
       {
          ActionInvocation actionInvocation = new ActionInvocation(pic);
@@ -758,7 +759,7 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
       invocation.setUserContext(new ExoUserContext(servletRequest, userProfile));
       invocation.setWindowContext(new ExoWindowContext(storageName));
       invocation.setPortalContext(new AbstractPortalContext(Collections.singletonMap(
-         "javax.portlet.markup.head.element.support", "false")));
+         "javax.portlet.markup.head.element.support", "true")));
       invocation.setSecurityContext(new AbstractSecurityContext(servletRequest));
 
       //

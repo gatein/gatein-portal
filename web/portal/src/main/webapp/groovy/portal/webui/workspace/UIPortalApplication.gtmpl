@@ -87,6 +87,17 @@
     </script>
     <script type="text/javascript" src="/eXoResources/javascript/eXo/i18n/I18NMessage.js"></script>
     <script type="text/javascript" src="/eXoResources/javascript/eXo/i18n/MessageResource_<%=lang%>.js"></script>
+
+    <% 
+     def headerElements = rcontext.getExtraMarkupHeaders();
+     if (headerElements != null) 
+     {
+       for (element in headerElements)
+       { %>
+        <%=element%>  
+    <% }
+     }     
+    %>
   </head>
 
   <body style="height: 100%;">
@@ -95,7 +106,13 @@
       rcontext.getJavascriptManager().addOnLoadJavascript('eXo.core.DOMUtil.hideElements');
       //rcontext.getJavascriptManager().addOnResizeJavascript('eXo.core.UIMaskLayer.resizeMaskLayer');
     %>
-    
+   <script type="text/javascript">
+      <%=rcontext.getJavascriptManager().getJavascript()%>
+        eXo.core.Browser.onLoad();
+      <%=rcontext.getJavascriptManager().getCustomizedOnLoadScript();%>
+      <%if(canKeepState && uicomponent.isSessionOpen) {%> eXo.session.itvInit() ;<%}%>
+    </script>
+ 
 	<div class="$uicomponent.skin" id="UIPortalApplication" style="!height: 100%;">
     	
 		<div class="AjaxLoadingMask" id="AjaxLoadingMask" style="display: none; margin: auto;">
@@ -125,17 +142,3 @@
         </div>
       </div>
 	  </div>
-	    
-	  <%uicomponent.renderChildren();%>
-	</div>
-    
-
-    
-    <script type="text/javascript">
-      <%=rcontext.getJavascriptManager().getJavascript()%>
-        eXo.core.Browser.onLoad();
-      <%=rcontext.getJavascriptManager().getCustomizedOnLoadScript();%>
-      <%if(canKeepState && uicomponent.isSessionOpen) {%> eXo.session.itvInit() ;<%}%>
-    </script>
-  </body>
-</html>
