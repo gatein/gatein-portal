@@ -26,7 +26,19 @@
 						<div class="$itemSelected" onmouseover="$onMouseOver" onmouseout="$onMouseOut" onclick="$onClick">
 							<div class="LeftItem">
 								<div class="RightItem">	
-									<div class="ItemTitle"><%=_ctx.appRes(uicontainer.getName() + "." + category.getName() + ".label")%></div>
+								<%
+									String label = null;
+									try
+								    {
+								       ResourceBundle res = _ctx.getRequestContext().getApplicationResourceBundle();
+								       label = res.getString(uicontainer.getName() + "." + category.getName() + ".label");
+								    }
+								    catch (MissingResourceException ex)
+								    {
+								       label = category.getName();
+								    }
+								%>
+									<div class="ItemTitle"><%=label%></div>
 								</div>
 							</div>
 						</div>
