@@ -52,6 +52,7 @@
 	cursor: move;
 	overflow: hidden;
 	white-space: nowrap;
+	width: 200px;
 }
 
 .UIDashboard .UIDashboardEditForm {
