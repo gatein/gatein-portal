@@ -14,9 +14,11 @@
 
 	<properties>
 		<org.selenium.server.version>1.0.1</org.selenium.server.version>
+		<selenium.port>4444</selenium.port>
+		<selenium.browser>firefox</selenium.browser>
 		<org.selenium.maven-plugin.version>1.0</org.selenium.maven-plugin.version>
 	</properties>
-	
+
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
@@ -106,6 +108,7 @@
 									<logFile>${project.build.directory}/server.log</logFile>
 									<logOutput>true</logOutput>
 									<userExtensions>${pom.basedir}/src/suite/user-extensions.js</userExtensions>
+									<port>${selenium.port}</port>
 								</configuration>
 							</execution>
 						</executions>
@@ -123,8 +126,20 @@
 								<configuration>
 									<skip>false</skip>
 									<!--
-										<includes><include>**/Test_SNF_PRL_26.java</include></includes>
 									-->
+									<includes>
+										<include>**/Test_UserExtensions.java</include>
+									</includes>
+									<systemProperties>
+										<property>
+											<name>selenium.port</name>
+											<value>${selenium.port}</value>
+										</property>
+										<property>
+											<name>selenium.browser</name>
+											<value>${selenium.browser}</value>
+										</property>
+									</systemProperties>
 								</configuration>
 							</execution>
 						</executions>

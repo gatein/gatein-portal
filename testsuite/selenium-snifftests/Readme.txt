@@ -8,6 +8,12 @@ From mvn command line:
 * Launch the tests:
 ** mvn install -Pselenium to run the html recorded Scripts generated in Java during the process
 
+Changing the port (JBoss is using 4444 in default config):
+** mvn install -Pselenium -Dselenium.port=6666
+
+Changing the browser (firefox, safari, iexplorer, opera):
+** mvn install -Pselenium -Dselenium.browser=safari
+
 From Eclipse:
 * Start a GateIn server (Tomcat or JBoss)
 * Start the Selenium server ( GateIn server (Tomcat or JBoss)
@@ -63,3 +69,4 @@ Index: server-coreless/src/main/java/org/openqa/selenium/server/browserlaunchers
 Then in this project you can force the use of those versions:
 * mvn install -Pselenium -Denforcer.skip=true -Dorg.selenium.maven-plugin.version=1.1-SNAPSHOT -Dorg.selenium.server.version=1.0.2-SNAPSHOT
 * mvn eclipse:eclipse -Pselenium -Denforcer.skip=true -Dorg.selenium.maven-plugin.version=1.1-SNAPSHOT -Dorg.selenium.server.version=1.0.2-SNAPSHOT
+
