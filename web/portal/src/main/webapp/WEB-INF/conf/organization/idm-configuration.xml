@@ -56,13 +56,17 @@
         <value>war:/conf/organization/picketlink-idm/picketlink-idm-config.xml</value>
 
         <!--Sample LDAP config-->
-        <!--<value>war:/conf/organization/picketlink-idm/picketlink-idm-ldap-config.xml</value>-->
+        <!--<value>war:/conf/organization/picketlink-idm/examples/picketlink-idm-ldap-config.xml</value>-->
 
         <!--ACME LDAP Example-->
         <!--<value>war:/conf/organization/picketlink-idm/examples/picketlink-idm-ldap-acme-config.xml</value>-->
 
+        <!--MSAD LDAP Example-->
+        <!--<value>war:/conf/organization/picketlink-idm/examples/picketlink-idm-msad-config.xml</value>-->
+
         <!--MSAD Read Only LDAP Example-->
         <!--<value>war:/conf/organization/picketlink-idm/examples/picketlink-idm-msad-readonly-config.xml</value>-->
+        
       </value-param>
       <value-param>
         <name>portalRealm</name>
