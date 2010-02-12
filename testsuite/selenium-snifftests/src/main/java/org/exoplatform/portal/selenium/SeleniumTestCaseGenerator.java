@@ -254,7 +254,7 @@ public class SeleniumTestCaseGenerator {
 				sb.append("\", selenium.getTitle());\n");
 			} else if (param1.equals("waitForElementNotPresent") || param1.equals("waitForTextNotPresent")) {
 				sb.append("for (int second = 0;; second++) {\n");
-				sb.append("if (second >= 30) fail(\"timeout\");\n");
+				sb.append(getTimeoutMessage(param1));
 				sb.append("try {\nif (!selenium.isElementPresent(\"");
 				sb.append(param2);
 				sb.append("\"))\n break;\n }\n catch (Exception e) {}\n");
@@ -262,7 +262,7 @@ public class SeleniumTestCaseGenerator {
 				sb.append("}\n");
 			} else if (param1.equals("waitForElementPresent")) {
 				sb.append("for (int second = 0;; second++) {\n");
-				sb.append("if (second >= 30) fail(\"timeout\");\n");
+				sb.append(getTimeoutMessage(param1));
 				sb.append("try {\n if (selenium.isElementPresent(\"");
 				sb.append(param2);
 				sb.append("\")) \nbreak; }\n catch (Exception e) {}\n");
@@ -270,7 +270,7 @@ public class SeleniumTestCaseGenerator {
 				sb.append("}\n");
 			} else if (param1.equals("waitForTextPresent")) {
 				sb.append("for (int second = 0;; second++) {\n");
-				sb.append("if (second >= 30) fail(\"timeout\");\n");
+				sb.append(getTimeoutMessage(param1));
 				sb.append("try {\n if (selenium.isTextPresent(\"");
 				sb.append(param2);
 				sb.append("\")) \nbreak; }\n catch (Exception e) {}\n");
@@ -278,7 +278,7 @@ public class SeleniumTestCaseGenerator {
 				sb.append("}\n");
 			} else if (param1.equals("waitForTable")) {
 				sb.append("for (int second = 0;; second++) {\n");
-				sb.append("if (second >= 30) fail(\"timeout\");\n");
+				sb.append(getTimeoutMessage(param1));
 				sb.append("try {\n");
 				sb.append("if (StringPool.BLANK.equals(selenium.getTable(\"");
 				sb.append(param2);
@@ -305,7 +305,7 @@ public class SeleniumTestCaseGenerator {
 				sb.append("\");\n");
 			} else if (param1.equals("waitForConfirmation")) {
 				sb.append("for (int second = 0;; second++) {\n");
-				sb.append("if (second >= 30) fail(\"timeout\");\n");
+				sb.append(getTimeoutMessage(param1));
 				sb.append("try {\n");
 				sb.append("if (selenium.getConfirmation().equals(\"");
 				sb.append(param2);
@@ -365,7 +365,7 @@ public class SeleniumTestCaseGenerator {
 				sb.append("selenium.deleteCookie(\"").append(param2).append("\",\"").append(param3).append("\");\n");
 			} else if (param1.equals("waitForText")) {
 				sb.append("for (int second = 0;; second++) {\n");
-				sb.append("if (second >= 30) fail(\"timeout\");\n");
+				sb.append(getTimeoutMessage(param1));
 				sb.append("try {\nif (selenium.isElementPresent(\"");
 				sb.append(param2);
 				sb.append("\"))\n break;\n }\n catch (Exception e) {}\n");
@@ -400,6 +400,10 @@ public class SeleniumTestCaseGenerator {
 		sb.append("}\n\n");
 	}
 
+	private String getTimeoutMessage(String param1) {
+		return "if (second >= 30) fail(\"" +param1+" reached a timeout.\");\n";
+	}
+	
 	public static void writeFile(String file, String content) throws IOException {
 		System.out.println("[INFO] Writing file : " + file);
 		FileUtils.writeStringToFile(new File(file), content);
