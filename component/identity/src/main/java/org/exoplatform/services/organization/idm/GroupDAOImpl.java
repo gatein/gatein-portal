@@ -355,7 +355,23 @@ public class GroupDAOImpl implements GroupHandler
       {
          if (!group.equals(root))
          {
-            exoGroups.add(convertGroup(group));
+            Group g = convertGroup(group);
+
+            // If membership of mapped types is forced then we need to exclude those that are not direct child
+            if (orgService.getConfiguration().isForceMembershipOfMappedTypes())
+            {
+               String id = g.getParentId();
+               if ((parent == null && id == null)
+                   || (id != null && id.equals(parent.getId())))
+               {
+                  exoGroups.add(g);
+                  continue;
+               }
+            }
+            else
+            {
+               exoGroups.add(g);
+            }
          }
       }
 
@@ -560,13 +576,16 @@ public class GroupDAOImpl implements GroupHandler
          log.info("Identity operation error: ", e);
       }
 
-      if (parents.size() > 1)
-      {
-         throw new IllegalStateException("Group has more than one parent: " + jbidGroup.getName());
-      }
 
-      if (parents.size() == 0)
+      if (parents.size() == 0 || parents.size() > 1)
       {
+
+         if (parents.size() > 1)
+         {
+            log.info("PLIDM Group has more than one parent: " + jbidGroup.getName() + "; Will try to use parent path " +
+               "defined by type mappings or just place it under root /");
+         }
+
 
          String id = orgService.getConfiguration().getParentId(jbidGroup.getGroupType());
 

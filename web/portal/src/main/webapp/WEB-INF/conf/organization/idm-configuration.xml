@@ -60,6 +60,9 @@
 
         <!--ACME LDAP Example-->
         <!--<value>war:/conf/organization/picketlink-idm/examples/picketlink-idm-ldap-acme-config.xml</value>-->
+
+        <!--MSAD Read Only LDAP Example-->
+        <!--<value>war:/conf/organization/picketlink-idm/examples/picketlink-idm-msad-readonly-config.xml</value>-->
       </value-param>
       <value-param>
         <name>portalRealm</name>
@@ -139,6 +142,14 @@
               <entry>
                 <key><string>/acme/organization_units/*</string></key>
                 <value><string>acme_ou_type</string></value>
+              </entry>
+              -->
+
+              <!-- Uncomment for MSAD ReadOnly LDAP example -->
+              <!--
+              <entry>
+                <key><string>/acme/roles/*</string></key>
+                <value><string>msad_roles_type</string></value>
               </entry>
               -->
             </map>

@@ -21,6 +21,7 @@ package org.exoplatform.services.organization.idm;
 
 import org.exoplatform.commons.utils.ListAccess;
 import org.exoplatform.services.organization.User;
+import org.picketlink.idm.api.SortOrder;
 import org.picketlink.idm.api.query.UserQuery;
 import org.picketlink.idm.api.query.UserQueryBuilder;
 
@@ -54,7 +55,7 @@ public class IDMUserListAccess implements ListAccess<User>
    public User[] load(int index, int length) throws Exception, IllegalArgumentException
    {
       userQueryBuilder.page(index, length);
-      UserQuery query = userQueryBuilder.createQuery();
+      UserQuery query = userQueryBuilder.sort(SortOrder.ASCENDING).createQuery();
       List<org.picketlink.idm.api.User> users = idmService.getIdentitySession().list(query);
 
       User[] exoUsers = new User[users.size()];

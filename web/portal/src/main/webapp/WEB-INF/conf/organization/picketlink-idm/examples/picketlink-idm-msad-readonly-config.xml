@@ -58,8 +58,7 @@
           <identity-store-id>PortalLDAPStore</identity-store-id>
           <identity-object-types>
             <identity-object-type>USER</identity-object-type>
-            <identity-object-type>acme_roles_type</identity-object-type>
-            <identity-object-type>acme_ou_type</identity-object-type>
+            <identity-object-type>msad_roles_type</identity-object-type>
           </identity-object-types>
           <options>
             <option>
@@ -150,7 +149,7 @@
             <attributes>
               <attribute>
                 <name>firstName</name>
-                <mapping>cn</mapping>
+                <mapping>givenName</mapping>
                 <type>text</type>
                 <isRequired>false</isRequired>
                 <isMultivalued>false</isMultivalued>
@@ -177,15 +176,27 @@
             <options>
               <option>
                 <name>idAttributeName</name>
-                <value>uid</value>
+                <value>sAMAccountName</value>
+              </option>
+              <option>
+                <name>entrySearchFilter</name>
+                <value><![CDATA[(&(sAMAccountName={0})(objectClass=User))]]></value>
               </option>
               <option>
                 <name>passwordAttributeName</name>
-                <value>userPassword</value>
+                <value>unicodePwd</value>
+              </option>
+              <option>
+                <name>enclosePasswordWith</name>
+                <value>"</value>
+              </option>
+              <option>
+                <name>passwordEncoding</name>
+                <value>UTF-16LE</value>
               </option>
               <option>
                 <name>ctxDNs</name>
-                <value>ou=People,o=acme,dc=example,dc=com</value>
+                <value>CN=Users,DC=test,DC=domain</value>
               </option>
               <option>
                 <name>allowCreateEntry</name>
@@ -196,12 +207,17 @@
                 <value>objectClass=top</value>
                 <value>objectClass=inetOrgPerson</value>
                 <value>sn= </value>
-                <value>cn= </value>
+                <value>userAccountControl=514</value>
+                <!--<value>cn= </value>-->
+              </option>
+              <option>
+                <name>passwordUpdateAttributeValues</name>
+                <value>userAccountControl=512</value>
               </option>
             </options>
           </identity-object-type>
           <identity-object-type>
-            <name>acme_roles_type</name>
+            <name>msad_roles_type</name>
             <relationships>
               <relationship>
                 <relationship-type-ref>JBOSS_IDENTITY_MEMBERSHIP</relationship-type-ref>
@@ -209,7 +225,7 @@
               </relationship>
               <relationship>
                 <relationship-type-ref>JBOSS_IDENTITY_MEMBERSHIP</relationship-type-ref>
-                <identity-object-type-ref>acme_roles_type</identity-object-type-ref>
+                <identity-object-type-ref>msad_roles_type</identity-object-type-ref>
               </relationship>
             </relationships>
             <credentials/>
@@ -238,12 +254,12 @@
               </option>
               <option>
                 <name>ctxDNs</name>
-                <value>ou=Roles,o=acme,dc=example,dc=com</value>
+                <value>CN=Users,DC=test,DC=domain</value>
               </option>
-              <!--<option>-->
-              <!--<name>entrySearchFilter</name>-->
-              <!--<value></value>-->
-              <!--</option>-->
+              <option>
+                <name>entrySearchFilter</name>
+                <value><![CDATA[(&(sAMAccountName={0})(objectClass=group))]]></value>
+              </option>
               <option>
                 <name>allowCreateEntry</name>
                 <value>true</value>
@@ -263,74 +279,8 @@
               <option>
                 <name>createEntryAttributeValues</name>
                 <value>objectClass=top</value>
-                <value>objectClass=groupOfNames</value>
-              </option>
-            </options>
-          </identity-object-type>
-          <identity-object-type>
-            <name>acme_ou_type</name>
-            <relationships>
-              <relationship>
-                <relationship-type-ref>JBOSS_IDENTITY_MEMBERSHIP</relationship-type-ref>
-                <identity-object-type-ref>USER</identity-object-type-ref>
-              </relationship>
-              <relationship>
-                <relationship-type-ref>JBOSS_IDENTITY_MEMBERSHIP</relationship-type-ref>
-                <identity-object-type-ref>acme_ou_type</identity-object-type-ref>
-              </relationship>
-            </relationships>
-            <credentials/>
-            <attributes>
-              <attribute>
-                <name>label</name>
-                <mapping>cn</mapping>
-                <type>text</type>
-                <isRequired>false</isRequired>
-                <isMultivalued>false</isMultivalued>
-                <isReadOnly>true</isReadOnly>
-              </attribute>
-              <attribute>
-                <name>description</name>
-                <mapping>description</mapping>
-                <type>text</type>
-                <isRequired>false</isRequired>
-                <isMultivalued>false</isMultivalued>
-                <isReadOnly>false</isReadOnly>
-              </attribute>
-            </attributes>
-            <options>
-              <option>
-                <name>idAttributeName</name>
-                <value>cn</value>
-              </option>
-              <option>
-                <name>ctxDNs</name>
-                <value>ou=OrganizationUnits,o=acme,dc=example,dc=com</value>
-              </option>
-              <!--<option>-->
-              <!--<name>entrySearchFilter</name>-->
-              <!--<value></value>-->
-              <!--</option>-->
-              <option>
-                <name>allowCreateEntry</name>
-                <value>true</value>
-              </option>
-              <option>
-                <name>parentMembershipAttributeName</name>
-                <value>member</value>
-              </option>
-              <option>
-                <name>isParentMembershipAttributeDN</name>
-                <value>true</value>
-              </option>
-              <option>
-                <name>allowEmptyMemberships</name>
-                <value>true</value>
-              </option>
-              <option>
-                <name>createEntryAttributeValues</name>
-                <value>objectClass=top</value>
-                <value>objectClass=groupOfNames</value>
+                <value>objectClass=group</value>
+                <value>groupType=8</value>
               </option>
             </options>
           </identity-object-type>
@@ -338,23 +288,36 @@
         <options>
           <option>
             <name>providerURL</name>
-            <value>ldap://localhost:1389</value>
+            <value>ldap://192.168.0.12:389</value>
           </option>
+          <!--<option>-->
+            <!--<name>providerURL</name>-->
+            <!--<value>ldaps://msad-host:636</value>-->
+          <!--</option>-->
           <option>
             <name>adminDN</name>
-            <value>cn=Directory Manager</value>
+            <value>TEST\Administrator</value>
           </option>
           <option>
             <name>adminPassword</name>
-            <value>password</value>
+            <value>!Q@W3e4r</value>
           </option>
+          <option>
+            <name>authenticationMethod</name>
+            <value>simple</value>
+          </option>
+          <!--<option>-->
+          <!--<name>customSystemProperties</name>-->
+          <!--<value>javax.net.ssl.trustStore=/home/root/msad.truststore</value>-->
+          <!--<value>javax.net.ssl.trustStorePassword=password</value>-->
+          <!--</option>-->
           <option>
             <name>searchTimeLimit</name>
             <value>10000</value>
           </option>
           <option>
             <name>createMissingContexts</name>
-            <value>true</value>
+            <value>false</value>
           </option>
         </options>
       </identity-store>
