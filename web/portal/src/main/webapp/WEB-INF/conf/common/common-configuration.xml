@@ -130,4 +130,9 @@
    <type>org.exoplatform.portal.application.ResourceBundleDelegateImpl</type>
   </component>
 
+  <component>
+    <key>org.exoplatform.management.RestManagementProvider</key>
+    <type>org.exoplatform.management.RestManagementProvider</type>
+  </component>
+
 </configuration>

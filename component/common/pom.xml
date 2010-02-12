@@ -63,10 +63,6 @@
       <groupId>org.chromattic</groupId>
       <artifactId>chromattic.spi</artifactId>
     </dependency>
-    <dependency>
-      <groupId>org.exoplatform.ws</groupId>
-      <artifactId>exo.ws.rest.core</artifactId>
-    </dependency>
 
     <dependency>
       <groupId>org.exoplatform.portal</groupId>

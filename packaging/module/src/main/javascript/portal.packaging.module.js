@@ -97,6 +97,9 @@ function getModule(params)
       addDependency(new Project("rhino", "js", "jar", rhinoVersion)).
       addDependency(new Project("org.codehaus.groovy", "groovy-all", "jar", groovyVersion));
 
+   module.component.management =
+   new Project("org.exoplatform.portal", "exo.portal.component.management", "jar", module.version);
+
    module.component.web =
    new Project("org.exoplatform.portal", "exo.portal.component.web", "jar", module.version).
       addDependency(module.component.scripting);
@@ -146,6 +149,7 @@ function getModule(params)
    module.webui.portal =
    new Project("org.exoplatform.portal", "exo.portal.webui.portal", "jar", module.version).
       addDependency(module.component.common).
+      addDependency(module.component.management).
       addDependency(module.component.resources).
       addDependency(module.component.identity).
       addDependency(module.component.pc).
