@@ -19,10 +19,12 @@
 
 package org.exoplatform.management;
 
+import org.exoplatform.commons.management.Rest;
 import org.exoplatform.management.data.RestResource;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.management.spi.ManagedResource;
 import org.exoplatform.management.spi.ManagementProvider;
+import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.services.rest.resource.ResourceContainer;
 
 import javax.ws.rs.GET;
@@ -30,6 +32,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -49,15 +52,26 @@ public class RestManagementProvider implements ResourceContainer, ManagementProv
    /** . */
    private final Map<ResourceKey, RestResource> resourceMap = new HashMap<ResourceKey, RestResource>();
 
-   public RestManagementProvider(ExoContainerContext context)
+   /** . */
+   private final UserACL acl;
+
+   public RestManagementProvider(ExoContainerContext context, UserACL acl)
    {
       this.context = context;
+      this.acl = acl;
    }
 
    @GET
    @Produces(MediaType.APPLICATION_JSON)
-   public ValueWrapper list()
+   public Object list()
    {
+      // Apply security here
+      if (!acl.hasPermission("*:/platform/administrators"))
+      {
+         return Response.status(Response.Status.FORBIDDEN);
+      }
+
+      //
       List<String> list = new ArrayList<String>();
       for (RestResource mr : resourceMap.values())
       {
@@ -67,8 +81,15 @@ public class RestManagementProvider implements ResourceContainer, ManagementProv
    }
 
    @Path("{resource}")
-   public RestResource dispatch(@PathParam("resource") String resourceName)
+   public Object dispatch(@PathParam("resource") String resourceName)
    {
+      // Apply security here
+      if (!acl.hasPermission("*:/platform/administrators"))
+      {
+         return Response.status(Response.Status.FORBIDDEN);
+      }
+
+      //
       return resourceMap.get(new ResourceKey(resourceName));
    }
 

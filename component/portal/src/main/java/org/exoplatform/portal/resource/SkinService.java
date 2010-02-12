@@ -19,6 +19,7 @@
 
 package org.exoplatform.portal.resource;
 
+import org.exoplatform.commons.management.Rest;
 import org.exoplatform.commons.utils.PropertyManager;
 import org.exoplatform.commons.utils.Safe;
 import org.exoplatform.container.ExoContainerContext;
@@ -58,7 +59,7 @@ import javax.servlet.ServletContext;
 @NameTemplate({@Property(key = "view", value = "portal"), @Property(key = "service", value = "management"),
    @Property(key = "type", value = "skin")})
 @ManagedDescription("Skin service")
-// @Rest("skinservice")
+@Rest("skinservice")
 public class SkinService implements Startable
 {
 

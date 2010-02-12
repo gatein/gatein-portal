@@ -172,6 +172,7 @@ public class RestResource
    /**
     * Try to invoke a method with matching parameters from the query string
     *
+    * @param methodName the method name to invoke
     * @param info the uri info
     * @param impact the expected impact
     * @return a suitable response
