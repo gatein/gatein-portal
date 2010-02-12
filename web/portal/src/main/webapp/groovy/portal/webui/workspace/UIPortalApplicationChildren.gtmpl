@@ -1,4 +1,34 @@
+<%
+  import org.exoplatform.portal.application.PortalRequestContext ;
+        import org.exoplatform.webui.core.UIComponent;
+        import java.util.Iterator;
+        import org.exoplatform.portal.webui.portal.UIPortal ;
+        import org.exoplatform.portal.config.model.PortalProperties ;
+
+  def rcontext = _ctx.getRequestContext() ;
+  String docBase =  rcontext.getRequestContextPath() ;
+  String skin = uicomponent.getSkin();
+  def portalSkins = uicomponent.getPortalSkins() ;
+  def portletSkins = uicomponent.getPortletSkins() ;
+  def scriptsPaths = uicomponent.getJavascriptURLs();
+  def lang = uicomponent.getLocale().getLanguage();
+  def title = rcontext.getTitle();
+  def metaInformation = rcontext.getMetaInformation();
+%>
+
+      <% 
+        UIPortal portal = uicomponent.findFirstComponentOfType(UIPortal.class);
+        String sessionAliveLevel = (portal == null ? null : portal.sessionAlive) ;
+        boolean canKeepState = sessionAliveLevel == null ? false : !sessionAliveLevel.equals(PortalProperties.SESSION_NEVER) ;
+      %>
+
           <%uicomponent.renderChildren();%>
         </div>
+        <script type="text/javascript">
+      <%=rcontext.getJavascriptManager().getJavascript()%>
+        eXo.core.Browser.onLoad();
+      <%=rcontext.getJavascriptManager().getCustomizedOnLoadScript();%>
+      <%if(canKeepState && uicomponent.isSessionOpen) {%> eXo.session.itvInit() ;<%}%>
+    </script>
   </body>
 </html>

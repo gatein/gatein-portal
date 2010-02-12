@@ -106,12 +106,6 @@
       rcontext.getJavascriptManager().addOnLoadJavascript('eXo.core.DOMUtil.hideElements');
       //rcontext.getJavascriptManager().addOnResizeJavascript('eXo.core.UIMaskLayer.resizeMaskLayer');
     %>
-   <script type="text/javascript">
-      <%=rcontext.getJavascriptManager().getJavascript()%>
-        eXo.core.Browser.onLoad();
-      <%=rcontext.getJavascriptManager().getCustomizedOnLoadScript();%>
-      <%if(canKeepState && uicomponent.isSessionOpen) {%> eXo.session.itvInit() ;<%}%>
-    </script>
  
 	<div class="$uicomponent.skin" id="UIPortalApplication" style="!height: 100%;">
     	
