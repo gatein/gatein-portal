@@ -151,7 +151,7 @@ UIForm.prototype.serializeForm = function (formElement) {
         break;
       case "select-multiple":
         for(var j = 0; j < element.options.length; j++) {
-        	if(element.options[j].selected) this.addField(element.name, element.options[j].value);
+        	if(element.options[j].selected) this.addField(element.name, element.options[j].value);
         }
         break;
     } // switch
