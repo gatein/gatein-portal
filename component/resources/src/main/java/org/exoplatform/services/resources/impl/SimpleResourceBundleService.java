@@ -30,7 +30,6 @@ import org.exoplatform.services.resources.ExoResourceBundle;
 import org.exoplatform.services.resources.LocaleConfigService;
 import org.exoplatform.services.resources.Query;
 import org.exoplatform.services.resources.ResourceBundleData;
-import org.exoplatform.services.resources.impl.BaseResourceBundleService;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -141,6 +140,6 @@ public class SimpleResourceBundleService extends BaseResourceBundleService
       {
          return null;
       }
-      return new MapResourceBundle(new ExoResourceBundle(data.getData(), parent), locale);
+      return new MapResourceBundle(new ExoResourceBundle(data, parent), locale);
    }
 }

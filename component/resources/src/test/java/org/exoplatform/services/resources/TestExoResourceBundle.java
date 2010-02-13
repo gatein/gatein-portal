@@ -65,20 +65,20 @@ public class TestExoResourceBundle extends TestCase
          {
             value = "0" + value;
          }
-         assertEquals((char)i, ExoResourceBundle.unicode2Char("\\u" + value));
+         assertEquals((char)i, ResourceBundleData.unicode2Char("\\u" + value));
       }
    }
 
    public void testConvert()
    {
-      assertEquals("Normal Value", ExoResourceBundle.convert("Normal Value"));
-      assertEquals("\u00E9\u00E7\u00E0\u00F9\u0194\u0BF5", ExoResourceBundle
+      assertEquals("Normal Value", ResourceBundleData.convert("Normal Value"));
+      assertEquals("\u00E9\u00E7\u00E0\u00F9\u0194\u0BF5", ResourceBundleData
          .convert("\\u00E9\\u00E7\\u00E0\\u00F9\\u0194\\u0BF5"));
-      assertEquals("before \u00E9\u00E7\u00E0\u00F9\u0194\u0BF5", ExoResourceBundle
+      assertEquals("before \u00E9\u00E7\u00E0\u00F9\u0194\u0BF5", ResourceBundleData
          .convert("before \\u00E9\\u00E7\\u00E0\\u00F9\\u0194\\u0BF5"));
-      assertEquals("\u00E9\u00E7\u00E0\u00F9\u0194\u0BF5 after", ExoResourceBundle
+      assertEquals("\u00E9\u00E7\u00E0\u00F9\u0194\u0BF5 after", ResourceBundleData
          .convert("\\u00E9\\u00E7\\u00E0\\u00F9\\u0194\\u0BF5 after"));
-      assertEquals("before \u00E9\u00E7\u00E0 between \u00F9\u0194\u0BF5 after", ExoResourceBundle
+      assertEquals("before \u00E9\u00E7\u00E0 between \u00F9\u0194\u0BF5 after", ResourceBundleData
          .convert("before \\u00E9\\u00E7\\u00E0 between \\u00F9\\u0194\\u0BF5 after"));
    }
 }

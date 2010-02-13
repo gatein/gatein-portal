@@ -40,36 +40,26 @@ import java.util.regex.Pattern;
 public class ExoResourceBundle extends ListResourceBundle implements Serializable
 {
 
-   private static Pattern LINE_SEPARATOR = Pattern.compile("[\\r]?\\n");
-
-   private static Pattern UNICODE_CHARACTER = Pattern.compile("\\\\u[\\p{XDigit}]{4}+");
-
-   private Object[][] contents;
+   /** . */
+   private final ResourceBundleData data;
 
    public ExoResourceBundle(String data)
    {
-      String[] tokens = LINE_SEPARATOR.split(data);
-      List<String[]> properties = new ArrayList<String[]>();
-      for (String token : tokens)
-      {
-         int idx = token.indexOf('=');
-         if (idx < 0 || idx >= token.length() - 1)
-         {
-            continue;
-         }
-         String key = token.substring(0, idx);
-         if (key.trim().startsWith("#"))
-         {
-            continue;
-         }
-         String value = convert(token.substring(idx + 1, token.length()));
-         properties.add(new String[]{key, value});
-      }
-      String[][] aProperties = new String[properties.size()][2];
-      contents = (String[][])properties.toArray(aProperties);
+      this.data = new ResourceBundleData(data);
    }
 
-   public ExoResourceBundle(String data, ResourceBundle parent)
+   public ExoResourceBundle(ResourceBundleData data)
+   {
+      if (data == null)
+      {
+         throw new NullPointerException();
+      }
+
+      //
+      this.data = data;
+   }
+
+   public ExoResourceBundle(ResourceBundleData data, ResourceBundle parent)
    {
       this(data);
       setParent(parent);
@@ -77,7 +67,7 @@ public class ExoResourceBundle extends ListResourceBundle implements Serializabl
 
    public Object[][] getContents()
    {
-      return contents;
+      return data.contents;
    }
 
    public void putAll(Map<? super Object, ? super Object> map)
@@ -93,69 +83,4 @@ public class ExoResourceBundle extends ListResourceBundle implements Serializabl
       }
    }
 
-   static String convert(String content)
-   {
-      Matcher matcher = UNICODE_CHARACTER.matcher(content);
-      StringBuilder buffer = new StringBuilder(content.length());
-      int start = 0;
-      while (matcher.find(start))
-      {
-         buffer.append(content.substring(start, matcher.start()));
-         buffer.append(unicode2Char(matcher.group()));
-         start = matcher.end();
-      }
-      if (start >= 0 && start < content.length())
-      {
-         buffer.append(content.substring(start));
-      }
-      return buffer.toString();
-   }
-
-   static char unicode2Char(String unicodeChar)
-   {
-      int value = 0;
-      char aChar;
-      for (int i = 0; i < 4; i++)
-      {
-         aChar = unicodeChar.charAt(i + 2);
-         switch (aChar)
-         {
-            case '0' :
-            case '1' :
-            case '2' :
-            case '3' :
-            case '4' :
-            case '5' :
-            case '6' :
-            case '7' :
-            case '8' :
-            case '9' : {
-               value = (value << 4) + aChar - '0';
-               break;
-            }
-            case 'a' :
-            case 'b' :
-            case 'c' :
-            case 'd' :
-            case 'e' :
-            case 'f' : {
-               value = (value << 4) + 10 + aChar - 'a';
-               break;
-            }
-            case 'A' :
-            case 'B' :
-            case 'C' :
-            case 'D' :
-            case 'E' :
-            case 'F' : {
-               value = (value << 4) + 10 + aChar - 'A';
-               break;
-            }
-            default : {
-               throw new IllegalArgumentException("Malformed \\uxxxx encoding.");
-            }
-         }
-      }
-      return (char)value;
-   }
 }
