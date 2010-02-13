@@ -58,9 +58,11 @@ public class JavascriptServlet extends HttpServlet
       JavascriptConfigService service =
          (JavascriptConfigService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(
             JavascriptConfigService.class);
+
+      // Julien: should we also set charset along with the content type ?
       response.setContentType("application/x-javascript");
       ServletOutputStream stream = response.getOutputStream();
-      stream.write(service.getMergedJavascript());
+      service.writeMergedJavascript(stream);
    }
 
 }

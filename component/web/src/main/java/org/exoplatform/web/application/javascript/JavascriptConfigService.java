@@ -21,18 +21,21 @@ package org.exoplatform.web.application.javascript;
 
 import org.exoplatform.commons.utils.Safe;
 import org.exoplatform.container.ExoContainerContext;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 import org.gatein.wci.impl.DefaultServletContainerFactory;
 import org.picocontainer.Startable;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
+import java.io.*;
 import java.util.*;
 
 import javax.servlet.ServletContext;
 
 public class JavascriptConfigService implements Startable
 {
+
+   /** Our logger. */
+   private final Logger log = LoggerFactory.getLogger(JavascriptConfigService.class);
 
    private Collection<String> availableScripts_;
 
@@ -44,7 +47,7 @@ public class JavascriptConfigService implements Startable
 
    private HashMap<String, String> extendedJavascripts;
 
-   private ByteArrayOutputStream jsStream_ = null;
+   private byte[] jsBytes = null;
 
    /** . */
    private JavascriptDeployer deployer;
@@ -210,29 +213,53 @@ public class JavascriptConfigService implements Startable
       mergedJavascript = buffer.toString();
    }
 
-   public byte[] getMergedJavascript()
+   /**
+    * Write the merged javascript in a provided output stream.
+    *
+    * @param out the output stream
+    * @throws IOException any io exception
+    */
+   public void writeMergedJavascript(OutputStream out) throws IOException
    {
-      if (jsStream_ == null)
+      if (jsBytes == null)
       {
-         jsStream_ = new ByteArrayOutputStream();
+         // Generate javascript in a buffer
          StringBuffer allJavascript = new StringBuffer();
          allJavascript.append(mergedJavascript);
          for (String script : extendedJavascripts.values())
          {
             allJavascript.append(script);
          }
-         ByteArrayInputStream input = new ByteArrayInputStream(allJavascript.toString().getBytes());
-         JSMin jsMin = new JSMin(input, jsStream_);
+
+         // Get bytes
+         byte[] bytes;
          try
          {
+            bytes = allJavascript.toString().getBytes("UTF-8");
+         }
+         catch (UnsupportedEncodingException e)
+         {
+            throw new AssertionError("No access to UTF-8, e");
+         }
+
+         // Minify
+         try
+         {
+            ByteArrayInputStream input = new ByteArrayInputStream(bytes);
+            ByteArrayOutputStream jsStream = new ByteArrayOutputStream();
+            JSMin jsMin = new JSMin(input, jsStream);
             jsMin.jsmin();
+            jsBytes = jsStream.toByteArray();
          }
          catch (Exception e)
          {
-            e.printStackTrace();
+            log.error("Error when generating minified javascript, will use normal javascript instead", e);
+            jsBytes = bytes;
          }
       }
-      return jsStream_.toByteArray();
+
+      //
+      out.write(jsBytes);
    }
 
    public boolean isModuleLoaded(CharSequence module)
@@ -247,7 +274,7 @@ public class JavascriptConfigService implements Startable
       String path = "/" + servletContextName + scriptPath;
       availableScriptsPaths_.remove(path);
       extendedJavascripts.remove(path);
-      jsStream_ = null;
+      jsBytes = null;
    }
 
    public void start()
