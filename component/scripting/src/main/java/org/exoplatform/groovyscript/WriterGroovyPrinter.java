@@ -43,6 +43,12 @@ public class WriterGroovyPrinter extends GroovyPrinter
    }
 
    @Override
+   protected Writer getWriter()
+   {
+      return writer;
+   }
+
+   @Override
    protected void write(char c) throws IOException
    {
       writer.write(c);

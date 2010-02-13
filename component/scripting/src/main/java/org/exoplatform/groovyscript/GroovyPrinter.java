@@ -104,6 +104,8 @@ abstract class GroovyPrinter extends GroovyObjectSupport implements GroovyInterc
       }
    }
 
+   protected abstract Writer getWriter();
+
    protected abstract void write(char c) throws IOException;
 
    protected abstract void write(String s) throws IOException;

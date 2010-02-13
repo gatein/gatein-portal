@@ -230,12 +230,13 @@ public class JavascriptConfigService implements Startable
          {
             allJavascript.append(script);
          }
+         String s = allJavascript.toString();
 
          // Get bytes
          byte[] bytes;
          try
          {
-            bytes = allJavascript.toString().getBytes("UTF-8");
+            bytes = s.getBytes("UTF-8");
          }
          catch (UnsupportedEncodingException e)
          {

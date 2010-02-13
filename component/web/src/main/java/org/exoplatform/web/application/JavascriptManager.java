@@ -23,6 +23,10 @@ import org.exoplatform.commons.utils.PropertyManager;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.web.application.javascript.JavascriptConfigService;
 
+import java.io.IOException;
+import java.io.Writer;
+import java.util.ArrayList;
+
 /**
  * Created by The eXo Platform SAS
  * Mar 27, 2007  
@@ -30,10 +34,13 @@ import org.exoplatform.web.application.javascript.JavascriptConfigService;
 public class JavascriptManager
 {
 
-   private StringBuilder javascript = new StringBuilder(1000);
+   /** . */
+   private ArrayList<String> data = new ArrayList<String>(100);
 
-   private StringBuilder customizedOnloadJavascript;
+   /** . */
+   private ArrayList<String> customizedOnloadJavascript = null;
 
+   /** . */
    private JavascriptConfigService jsSrevice_;
 
    public JavascriptManager()
@@ -45,61 +52,115 @@ public class JavascriptManager
 
    public void addJavascript(CharSequence s)
    {
-      javascript.append(s).append(" \n");
+      if (s != null)
+      {
+         data.add(s instanceof String ? (String)s : s.toString());
+         data.add(" \n");
+      }
    }
 
    public void importJavascript(CharSequence s)
    {
-      if (!jsSrevice_.isModuleLoaded(s) || PropertyManager.isDevelopping())
+      if (s != null)
       {
-         javascript.append("eXo.require('").append(s).append("'); \n");
+         if (!jsSrevice_.isModuleLoaded(s) || PropertyManager.isDevelopping())
+         {
+            data.add("eXo.require('");
+            data.add(s instanceof String ? (String)s : s.toString());
+            data.add("'); \n");
+         }
       }
    }
 
    public void importJavascript(String s, String location)
    {
-      if (!location.endsWith("/"))
-         location = location + '/';
-      if (!jsSrevice_.isModuleLoaded(s) || PropertyManager.isDevelopping())
+      if (s != null && location != null)
       {
-         javascript.append("eXo.require('").append(s).append("', '").append(location).append("'); \n");
+         if (!jsSrevice_.isModuleLoaded(s) || PropertyManager.isDevelopping())
+         {
+            data.add("eXo.require('");
+            data.add(s);
+            data.add("', '");
+            data.add(location);
+            if (!location.endsWith("/"))
+            {
+               data.add("/");
+            }
+            data.add("', '");
+         }
       }
    }
 
    public void addOnLoadJavascript(CharSequence s)
    {
-      String id = Integer.toString(Math.abs(s.hashCode()));
-      javascript.append("eXo.core.Browser.addOnLoadCallback('mid").append(id).append("',").append(s).append("); \n");
+      if (s != null)
+      {
+         String id = Integer.toString(Math.abs(s.hashCode()));
+         data.add("eXo.core.Browser.addOnLoadCallback('mid");
+         data.add(id);
+         data.add("',");
+         data.add(s instanceof String ? (String)s : s.toString());
+         data.add("); \n");
+      }
    }
 
    public void addOnResizeJavascript(CharSequence s)
    {
-      String id = Integer.toString(Math.abs(s.hashCode()));
-      javascript.append("eXo.core.Browser.addOnResizeCallback('mid").append(id).append("',").append(s).append("); \n");
+      if (s != null)
+      {
+         String id = Integer.toString(Math.abs(s.hashCode()));
+         data.add("eXo.core.Browser.addOnResizeCallback('mid");
+         data.add(id);
+         data.add("',");
+         data.add(s instanceof String ? (String)s : s.toString());
+         data.add("); \n");
+      }
    }
 
    public void addOnScrollJavascript(CharSequence s)
    {
-      String id = Integer.toString(Math.abs(s.hashCode()));
-      javascript.append("eXo.core.Browser.addOnScrollCallback('mid").append(id).append("',").append(s).append("); \n");
+      if (s != null)
+      {
+         String id = Integer.toString(Math.abs(s.hashCode()));
+         data.add("eXo.core.Browser.addOnScrollCallback('mid");
+         data.add(id);
+         data.add("',");
+         data.add(s instanceof String ? (String)s : s.toString());
+         data.add("); \n");
+      }
    }
 
-   public String getJavascript()
+   public void writeJavascript(Writer writer) throws IOException
    {
-      return javascript.toString();
+      for (int i = 0;i < data.size();i++)
+      {
+         String s = data.get(i);
+         writer.write(s);
+      }
    }
 
    public void addCustomizedOnLoadScript(CharSequence s)
    {
-      if (customizedOnloadJavascript == null)
-         customizedOnloadJavascript = new StringBuilder();
-      customizedOnloadJavascript.append(s).append("\n");
+      if (s != null)
+      {
+         if (customizedOnloadJavascript == null)
+         {
+            customizedOnloadJavascript = new ArrayList<String>(30);
+         }
+         customizedOnloadJavascript.add(s instanceof String ? (String)s : s.toString());
+         customizedOnloadJavascript.add("\n");
+      }
    }
 
-   public String getCustomizedOnLoadScript()
+   public void writeCustomizedOnLoadScript(Writer writer) throws IOException
    {
-      if (customizedOnloadJavascript == null)
-         return "";
-      return customizedOnloadJavascript.toString();
+      if (customizedOnloadJavascript != null)
+      {
+         for (int i = 0;i < customizedOnloadJavascript.size();i++)
+         {
+            String s = customizedOnloadJavascript.get(i);
+            writer.write(s);
+         }
+      }
    }
 }

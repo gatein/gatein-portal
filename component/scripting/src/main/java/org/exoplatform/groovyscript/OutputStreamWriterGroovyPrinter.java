@@ -23,6 +23,7 @@ import org.exoplatform.commons.utils.OutputStreamPrinter;
 import org.exoplatform.commons.utils.Text;
 
 import java.io.IOException;
+import java.io.Writer;
 import java.nio.charset.Charset;
 
 /**
@@ -42,6 +43,12 @@ public class OutputStreamWriterGroovyPrinter extends GroovyPrinter implements Bi
          throw new NullPointerException();
       }
       this.out = out;
+   }
+
+   @Override
+   protected Writer getWriter()
+   {
+      return out;
    }
 
    @Override

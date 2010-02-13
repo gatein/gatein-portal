@@ -23,9 +23,7 @@ import org.exoplatform.commons.utils.CharsetTextEncoder;
 import org.exoplatform.commons.utils.OutputStreamPrinter;
 
 import java.awt.*;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.EmptyStackException;
 import java.util.HashMap;
 import java.util.Map;
@@ -243,6 +241,17 @@ public class TestTemplateRendering extends TestCase
       assertLineNumber(1, "throw new Exception('b')", "foo" + prolog + "throw new Exception('b')%>");
       assertLineNumber(2, "throw new Exception('c')", "foo\n" + prolog + "throw new Exception('c')%>");
       assertLineNumber(1, "throw new Exception('d')", "<%;%>foo" + prolog + "throw new Exception('d')%>");
+   }
+
+   public static Object out;
+
+   public void testWriterAccess() throws Exception
+   {
+      out = null;
+      Writer writer = new StringWriter();
+      GroovyTemplate template = new GroovyTemplate("<% " + TestTemplateRendering.class.getName() + ".out = out; %>");
+      template.render(writer);
+      assertNotNull(out);
    }
 
    private void assertLineNumber(int expectedLineNumber, String expectedText, String script) throws TemplateCompilationException, IOException

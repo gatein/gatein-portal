@@ -25,9 +25,11 @@
           <%uicomponent.renderChildren();%>
         </div>
         <script type="text/javascript">
-      <%=rcontext.getJavascriptManager().getJavascript()%>
+
+      <%rcontext.getJavascriptManager().writeJavascript(out.writer)%>
+      
         eXo.core.Browser.onLoad();
-      <%=rcontext.getJavascriptManager().getCustomizedOnLoadScript();%>
+      <% rcontext.getJavascriptManager().writeCustomizedOnLoadScript(out.writer); %>
       <%if(canKeepState && uicomponent.isSessionOpen) {%> eXo.session.itvInit() ;<%}%>
     </script>
   </body>
