@@ -126,10 +126,8 @@
 								<configuration>
 									<skip>false</skip>
 									<!--
+									<includes><include>**/Test_UserExtensions.java</include></includes>
 									-->
-									<includes>
-										<include>**/Test_UserExtensions.java</include>
-									</includes>
 									<systemProperties>
 										<property>
 											<name>selenium.port</name>
