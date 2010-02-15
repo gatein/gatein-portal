@@ -45,14 +45,6 @@
 			<keywords>Integration</keywords>
 		</portlet-info>
 		<portlet-preferences>
-      <preference>
-				<name>isPrivate</name>
-				<value>1</value>
-			</preference>
-      <preference>
-				<name>owner</name>
-				<value>__CURRENT_USER__</value>
-			</preference>
 			<preference>
 				<name>template</name>
 				<value>three-columns</value>

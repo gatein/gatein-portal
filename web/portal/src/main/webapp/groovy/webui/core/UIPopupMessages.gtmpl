@@ -17,6 +17,7 @@
 	def errors = uicomponent.getErrors();
 	def warnings = uicomponent.getWarnings();
 	def infos = uicomponent.getInfos();
+
 	boolean printTab(List messages, String title, boolean isSelected) {
 		String cssClass = "NormalTab";
 		if(messages.size() == 0) cssClass = "DisabledTab";
@@ -73,6 +74,7 @@
 		println " </div>";
 		return isSelected;
 	}
+
 %>
 	<div class="UIPopupWindow UIDragObject" id="$popupId" style="width: 550px; display: none;">
 		<div class="ExoMessageDecorator">

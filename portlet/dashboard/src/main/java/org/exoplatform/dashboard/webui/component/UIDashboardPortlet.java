@@ -19,7 +19,13 @@
 
 package org.exoplatform.dashboard.webui.component;
 
+import org.exoplatform.portal.application.PortalRequestContext;
+import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.webui.container.UIContainer;
+import org.exoplatform.portal.webui.page.UIPage;
+import org.exoplatform.portal.webui.page.UIPageBody;
+import org.exoplatform.portal.webui.portal.UIPortal;
+import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -31,10 +37,6 @@ import javax.portlet.PortletPreferences;
 @ComponentConfig(lifecycle = UIApplicationLifecycle.class, template = "app:/groovy/dashboard/webui/component/UIDashboardPortlet.gtmpl", events = {})
 public class UIDashboardPortlet extends UIPortletApplication implements DashboardParent
 {
-   private boolean isPrivate;
-
-   private String owner;
-
    public UIDashboardPortlet() throws Exception
    {
       PortletRequestContext context = (PortletRequestContext)WebuiRequestContext.getCurrentInstance();
@@ -48,9 +50,6 @@ public class UIDashboardPortlet extends UIPortletApplication implements Dashboar
 
       String aggregatorId = pref.getValue("aggregatorId", "rssAggregator");
       dashboard.setAggregatorId(aggregatorId);
-
-      isPrivate = pref.getValue(ISPRIVATE, "0").equals(1);
-      owner = pref.getValue(OWNER, null);
    }
 
    public int getNumberOfCols()
@@ -59,36 +58,28 @@ public class UIDashboardPortlet extends UIPortletApplication implements Dashboar
       return dbCont.getChild(UIContainer.class).getChildren().size();
    }
 
+   /**
+    * The implementation returns true if the current user has edit permission on the page owning the dashboard
+    * portlet. Later it will be implemented with a finer granilarity.
+    */
    public boolean canEdit()
    {
       PortletRequestContext context = (PortletRequestContext)WebuiRequestContext.getCurrentInstance();
-      String accessUser = context.getRemoteUser();
-      if (accessUser == null || accessUser.equals(""))
-      {
-         return false;
-      }
-      if ("__CURRENT_USER__".equals(owner))
-      {
-         return true;
-      }
-      if (isPrivate)
-      {
-         if (accessUser.equals(owner))
-         {
-            return true;
-         }
-      }
-      return false;
+      PortalRequestContext prc = (PortalRequestContext)context.getParentAppRequestContext();
+      UIPortalApplication portalApp = (UIPortalApplication)prc.getUIApplication();
+      UIPortal portal = portalApp.getShowedUIPortal();
+      UIPageBody body = portal.findFirstComponentOfType(UIPageBody.class);
+      UIPage page = body.findFirstComponentOfType(UIPage.class);
+      UserACL userACL = portal.getApplicationComponent(UserACL.class);
+      return userACL.hasPermission(page.getEditPermission());
    }
 
+   /**
+    * For now returns null.  
+    */
    public String getDashboardOwner()
    {
-      if ("__CURRENT_USER__".equals(owner))
-      {
-         PortletRequestContext context = (PortletRequestContext)WebuiRequestContext.getCurrentInstance();
-         return context.getRemoteUser();
-      }
-      return owner;
+      return null;
    }
 
 }
