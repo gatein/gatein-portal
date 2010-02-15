@@ -38,10 +38,10 @@
    <name>GateIn - Portal</name>
 
    <properties>
-      <org.exoplatform.kernel.version>2.2.0-CR1</org.exoplatform.kernel.version>
-      <org.exoplatform.core.version>2.3.0-CR1</org.exoplatform.core.version>
-      <org.exoplatform.ws.version>2.1.0-CR1</org.exoplatform.ws.version>
-      <org.exoplatform.jcr.version>1.12.0-CR1</org.exoplatform.jcr.version>
+      <org.exoplatform.kernel.version>2.2.0-CR2</org.exoplatform.kernel.version>
+      <org.exoplatform.core.version>2.3.0-CR2</org.exoplatform.core.version>
+      <org.exoplatform.ws.version>2.1.0-CR2</org.exoplatform.ws.version>
+      <org.exoplatform.jcr.version>1.12.0-CR2</org.exoplatform.jcr.version>
       <org.jibx.version>1.2.1</org.jibx.version>
       <org.shindig.version>SNAPSHOT-r790473</org.shindig.version>
       <org.gatein.common.version>2.0.0-CR03</org.gatein.common.version>
@@ -49,12 +49,12 @@
       <org.gatein.pc.version>2.1.0-CR02</org.gatein.pc.version>
       <org.picketlink.idm>1.1.0.Beta5</org.picketlink.idm>
       <org.gatein.wsrp.version>1.0.0-Beta06</org.gatein.wsrp.version>
-      <org.gatein.mop.version>1.0.0-Beta16</org.gatein.mop.version>
+      <org.gatein.mop.version>1.0.0-CR01</org.gatein.mop.version>
       <org.slf4j.version>1.5.6</org.slf4j.version>
       <rhino.version>1.6R5</rhino.version>
       <org.codehaus.groovy.version>1.6.5</org.codehaus.groovy.version>
       <javax.servlet.version>2.5</javax.servlet.version>
-      <version.chromattic>1.0.0-beta17</version.chromattic>
+      <version.chromattic>1.0.0-cr1</version.chromattic>
       <version.reflect>1.0.0-beta5</version.reflect>
 
       <!-- ************** -->

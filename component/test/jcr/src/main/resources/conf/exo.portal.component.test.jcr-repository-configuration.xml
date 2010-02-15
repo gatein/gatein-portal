@@ -27,10 +27,10 @@
       <!-- System --> 
       <workspaces>
         <workspace name="system">
-          <container class="org.exoplatform.services.jcr.impl.storage.jdbc.JDBCWorkspaceDataContainer">
+          <container class="org.exoplatform.services.jcr.impl.storage.jdbc.optimisation.CQJDBCWorkspaceDataContainer">
             <properties>
               <property name="source-name" value="jdbcexo"/>
-              <property name="dialect" value="hsqldb"/>
+              <property name="dialect" value="auto"/>
               <property name="multi-db" value="false"/>
               <property name="update-storage" value="true"/>
               <property name="max-buffer-size" value="204800"/>
@@ -63,7 +63,7 @@
               <property name="index-dir" value="${gatein.tmp.dir}/jcr/jcrlucenedb/system"/>
             </properties>
           </query-handler>
-          <lock-manager class="org.exoplatform.services.jcr.impl.core.lock.jbosscache.CacheableLockManager">
+          <lock-manager class="org.exoplatform.services.jcr.impl.core.lock.jbosscache.CacheableLockManagerImpl">
             <properties>
               <property name="time-out" value="15m" />
               <property name="jbosscache-configuration" value="conf/exo.portal.component.test.jcr-jbosscache-lock-config.xml" />
@@ -73,10 +73,10 @@
 
         <!-- Portal system data -->
         <workspace name="portal-test">
-          <container class="org.exoplatform.services.jcr.impl.storage.jdbc.JDBCWorkspaceDataContainer">
+          <container class="org.exoplatform.services.jcr.impl.storage.jdbc.optimisation.CQJDBCWorkspaceDataContainer">
             <properties>
               <property name="source-name" value="jdbcexo"/>
-              <property name="dialect" value="hsqldb"/>
+              <property name="dialect" value="auto"/>
               <property name="multi-db" value="false"/>
               <property name="update-storage" value="true"/>
               <property name="max-buffer-size" value="204800"/>
@@ -109,7 +109,7 @@
               <property name="index-dir" value="${gatein.tmp.dir}/jcr/jcrlucenedb/portal-test"/>
             </properties>
           </query-handler>
-          <lock-manager class="org.exoplatform.services.jcr.impl.core.lock.jbosscache.CacheableLockManager">
+          <lock-manager class="org.exoplatform.services.jcr.impl.core.lock.jbosscache.CacheableLockManagerImpl">
             <properties>
               <property name="time-out" value="15m" />
               <property name="jbosscache-configuration" value="conf/exo.portal.component.test.jcr-jbosscache-lock-config.xml" />

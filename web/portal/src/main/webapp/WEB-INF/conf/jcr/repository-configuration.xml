@@ -29,7 +29,7 @@
       <!-- System --> 
       <workspaces>
         <workspace name="system">
-          <container class="org.exoplatform.services.jcr.impl.storage.jdbc.JDBCWorkspaceDataContainer">
+          <container class="org.exoplatform.services.jcr.impl.storage.jdbc.optimisation.CQJDBCWorkspaceDataContainer">
             <properties>
               <property name="source-name" value="${gatein.jcr.datasource.name}${container.name.suffix}"/>
               <property name="dialect" value="${gatein.jcr.datasource.dialect}"/>
@@ -74,7 +74,7 @@
               <property name="max-volatile-time" value="60" />
             </properties>
           </query-handler>
-          <lock-manager class="org.exoplatform.services.jcr.impl.core.lock.jbosscache.CacheableLockManager">
+          <lock-manager class="org.exoplatform.services.jcr.impl.core.lock.jbosscache.CacheableLockManagerImpl">
             <properties>
               <property name="time-out" value="15m" />
               <property name="jbosscache-configuration" value="conf/jcr/jbosscache/${gatein.jcr.config.type}/lock-config.xml" />
@@ -86,11 +86,7 @@
               <property name="jbosscache-cl-cache.jdbc.table.drop" value="false" />
               <property name="jbosscache-cl-cache.jdbc.table.primarykey" value="jcrlocks_repositoty_system_pk" />
               <property name="jbosscache-cl-cache.jdbc.fqn.column" value="fqn" />
-              <property name="jbosscache-cl-cache.jdbc.fqn.type" value="VARCHAR(512)" />
               <property name="jbosscache-cl-cache.jdbc.node.column" value="node" />
-<!--
-              <property name="jbosscache-cl-cache.jdbc.node.type" value="LONGBLOB" />
--->
               <property name="jbosscache-cl-cache.jdbc.parent.column" value="parent" />
               <property name="jbosscache-cl-cache.jdbc.datasource" value="${gatein.jcr.datasource.name}${container.name.suffix}" />
             </properties>
@@ -99,7 +95,7 @@
 
         <!-- Portal system data -->
         <workspace name="portal-system">
-          <container class="org.exoplatform.services.jcr.impl.storage.jdbc.JDBCWorkspaceDataContainer">
+          <container class="org.exoplatform.services.jcr.impl.storage.jdbc.optimisation.CQJDBCWorkspaceDataContainer">
             <properties>
               <property name="source-name" value="${gatein.jcr.datasource.name}${container.name.suffix}"/>
               <property name="dialect" value="${gatein.jcr.datasource.dialect}"/>
@@ -144,7 +140,7 @@
               <property name="max-volatile-time" value="60" />
             </properties>
           </query-handler>
-          <lock-manager class="org.exoplatform.services.jcr.impl.core.lock.jbosscache.CacheableLockManager">
+          <lock-manager class="org.exoplatform.services.jcr.impl.core.lock.jbosscache.CacheableLockManagerImpl">
             <properties>
               <property name="time-out" value="15m" />
               <property name="jbosscache-configuration" value="conf/jcr/jbosscache/${gatein.jcr.config.type}/lock-config.xml" />
@@ -156,11 +152,7 @@
               <property name="jbosscache-cl-cache.jdbc.table.drop" value="false" />
               <property name="jbosscache-cl-cache.jdbc.table.primarykey" value="jcrlocks_repositoty_portal_system_pk" />
               <property name="jbosscache-cl-cache.jdbc.fqn.column" value="fqn" />
-              <property name="jbosscache-cl-cache.jdbc.fqn.type" value="VARCHAR(512)" />
               <property name="jbosscache-cl-cache.jdbc.node.column" value="node" />
-<!--
-              <property name="jbosscache-cl-cache.jdbc.node.type" value="LONGBLOB" />
--->
               <property name="jbosscache-cl-cache.jdbc.parent.column" value="parent" />
               <property name="jbosscache-cl-cache.jdbc.datasource" value="${gatein.jcr.datasource.name}${container.name.suffix}" />
             </properties>
@@ -169,7 +161,7 @@
 
         <!-- Portal work data -->
         <workspace name="portal-work">
-          <container class="org.exoplatform.services.jcr.impl.storage.jdbc.JDBCWorkspaceDataContainer">
+          <container class="org.exoplatform.services.jcr.impl.storage.jdbc.optimisation.CQJDBCWorkspaceDataContainer">
             <properties>
               <property name="source-name" value="${gatein.jcr.datasource.name}${container.name.suffix}"/>
               <property name="dialect" value="${gatein.jcr.datasource.dialect}"/>
@@ -214,7 +206,7 @@
             <property name="max-volatile-time" value="60" />
           </properties>
          </query-handler>
-         <lock-manager class="org.exoplatform.services.jcr.impl.core.lock.jbosscache.CacheableLockManager">
+         <lock-manager class="org.exoplatform.services.jcr.impl.core.lock.jbosscache.CacheableLockManagerImpl">
            <properties>
              <property name="time-out" value="15m" />
              <property name="jbosscache-configuration" value="conf/jcr/jbosscache/${gatein.jcr.config.type}/lock-config.xml" />
@@ -226,20 +218,16 @@
              <property name="jbosscache-cl-cache.jdbc.table.drop" value="false" />
              <property name="jbosscache-cl-cache.jdbc.table.primarykey" value="jcrlocks_repositoty_portal_work_pk" />
              <property name="jbosscache-cl-cache.jdbc.fqn.column" value="fqn" />
-             <property name="jbosscache-cl-cache.jdbc.fqn.type" value="VARCHAR(512)" />
              <property name="jbosscache-cl-cache.jdbc.node.column" value="node" />
-<!--
-             <property name="jbosscache-cl-cache.jdbc.node.type" value="LONGBLOB" />
--->
              <property name="jbosscache-cl-cache.jdbc.parent.column" value="parent" />
              <property name="jbosscache-cl-cache.jdbc.datasource" value="${gatein.jcr.datasource.name}${container.name.suffix}" />
            </properties>
          </lock-manager>
        </workspace>
 
-       <!-- Workspace for WSRP -->
+       <!-- WSRP -->
        <workspace name="wsrp-system">
-         <container class="org.exoplatform.services.jcr.impl.storage.jdbc.JDBCWorkspaceDataContainer">
+         <container class="org.exoplatform.services.jcr.impl.storage.jdbc.optimisation.CQJDBCWorkspaceDataContainer">
            <properties>
              <property name="source-name" value="${gatein.jcr.datasource.name}${container.name.suffix}"/>
                <property name="dialect" value="${gatein.jcr.datasource.dialect}"/>
@@ -285,7 +273,7 @@
                <property name="max-volatile-time" value="60" />
              </properties>
            </query-handler>
-           <lock-manager class="org.exoplatform.services.jcr.impl.core.lock.jbosscache.CacheableLockManager">
+           <lock-manager class="org.exoplatform.services.jcr.impl.core.lock.jbosscache.CacheableLockManagerImpl">
              <properties>
                <property name="time-out" value="15m" />
                <property name="jbosscache-configuration" value="conf/jcr/jbosscache/${gatein.jcr.config.type}/lock-config.xml" />
@@ -297,11 +285,7 @@
                <property name="jbosscache-cl-cache.jdbc.table.drop" value="false" />
                <property name="jbosscache-cl-cache.jdbc.table.primarykey" value="jcrlocks_repositoty_wsrp_system_pk" />
                <property name="jbosscache-cl-cache.jdbc.fqn.column" value="fqn" />
-               <property name="jbosscache-cl-cache.jdbc.fqn.type" value="VARCHAR(512)" />
                <property name="jbosscache-cl-cache.jdbc.node.column" value="node" />
-<!--
-               <property name="jbosscache-cl-cache.jdbc.node.type" value="LONGBLOB" />
--->
                <property name="jbosscache-cl-cache.jdbc.parent.column" value="parent" />
                <property name="jbosscache-cl-cache.jdbc.datasource" value="${gatein.jcr.datasource.name}${container.name.suffix}" />
              </properties>
