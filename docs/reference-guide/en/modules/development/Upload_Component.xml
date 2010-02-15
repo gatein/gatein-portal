@@ -1,11 +1,9 @@
 <?xml version='1.0' encoding='utf-8' ?>
 <!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
-<!ENTITY % BOOK_ENTITIES SYSTEM "../../Reference_Guide.ent">
-%BOOK_ENTITIES;
 ]>
 <section id="sect-Reference_Guide-Upload_Component">
 	<title>Upload Component</title>
-<!--	<section id="sect-Reference_Guide-Upload_Component-Overview">
+	<!-- 	<section id="sect-Reference_Guide-Upload_Component-Overview">
 		<title>Overview</title>
 		<para>
 			In this article, you will learn how to :
@@ -32,8 +30,7 @@
 				</para>
 			</listitem>
 		</itemizedlist>
-	</section> -->
-	
+	</section>  -->
 	<section id="sect-Reference_Guide-Upload_Component-Upload_Service">
 		<title>Upload Service</title>
 		<para>
@@ -43,76 +40,75 @@
 			This can be configured with the following xml code:
 		</para>
 		
-<programlisting role="XML">&lt;component&gt;
-   &lt;type&gt;org.exoplatform.upload.UploadService&lt;/type&gt;
-     &lt;init-params&gt;
-       &lt;value-param&gt;
-        &lt;name&gt;upload.limit.size&lt;/name&gt;
-        &lt;description&gt;Maximum size of the file to upload in MB&lt;/description&gt;
-        &lt;value&gt;10&lt;/value&gt;
-      &lt;/value-param&gt;
-    &lt;/init-params&gt;  
-  &lt;/component&gt;
+<programlisting role="XML">&#60;component&#62;
+   &#60;type&#62;org.exoplatform.upload.UploadService&#60;/type&#62;
+     &#60;init-params&#62;
+       &#60;value-param&#62;
+        &#60;name&#62;upload.limit.size&#60;/name&#62;
+        &#60;description&#62;Maximum size of the file to upload in MB&#60;/description&#62;
+        &#60;value&#62;10&#60;/value&#62;
+      &#60;/value-param&#62;
+    &#60;/init-params&#62;  
+  &#60;/component&#62;
 </programlisting>
 		<para>
 			This code allows for a default upload size limit for the service to be configured. The value unit is in MegaBytes.
-		</para>	
+		</para>
 		<para>
 			This limit will be used by default by all applications if no application-specific limit is set. Setting a different limit for applications is discussed in a later section.
 		</para>
 		<para>
 			If the value is set at <parameter>0</parameter> the upload size is unlimited.
 		</para>
-
-		<procedure id="proc-Reference_Guide-Upload_Component-How_to_use_the_upload_component">
+		<procedure id="proc-Reference_Guide-Upload_Service-How_to_use_the_upload_component">
 			<title>How to use the upload component</title>
 			<step>
 				<para>
-				Create an object type <literal>org.exoplatform.webui.form.UIFormUploadInput</literal>.
+					Create an object type <literal>org.exoplatform.webui.form.UIFormUploadInput</literal>.
 				</para>
 				<para>
 					Two constructors are available for this:
 				</para>
-						
+				
 <programlisting>public UIFormUploadInput(String name, String bindingExpression)
 </programlisting>
 				<para>
 					or:
 				</para>
-						
+				
 <programlisting>public UIFormUploadInput(String name, String bindingExpression, int limit)
 </programlisting>
 				<para>
 					This is an example using the second form :
 				</para>
-						
+				
 <programlisting role="JAVA">PortletRequestContext pcontext = (PortletRequestContext)WebuiRequestContext.getCurrentInstance();
 PortletPreferences portletPref = pcontext.getRequest().getPreferences();
-int limitMB = Integer.parseInt(portletPref.getValue("uploadFileSizeLimitMB", "").trim());
-UIFormUploadInput uiInput = new UIFormUploadInput("upload", "upload", limitMB);
+int limitMB = Integer.parseInt(portletPref.getValue(&#34;uploadFileSizeLimitMB&#34;, &#34;&#34;).trim());
+UIFormUploadInput uiInput = new UIFormUploadInput(&#34;upload&#34;, &#34;upload&#34;, limitMB);
 </programlisting>
 			</step>
 			<step>
 				<para>
 					To obtain the limit from the <literal>xml</literal> configuration, this piece of code can be added to the either <filename>portlet.xml</filename> or <filename>portlet-preferences.xml</filename> :
 				</para>
-
-<programlisting role="XML">&lt;preference&gt;
-  &lt;name&gt;uploadFileSizeLimitMB&lt;/name&gt;
-  &lt;value&gt;30&lt;/value&gt;
-  &lt;read-only&gt;false&lt;/read-only&gt;
-&lt;/preference&gt;
+				
+<programlisting role="XML">&#60;preference&#62;
+  &#60;name&#62;uploadFileSizeLimitMB&#60;/name&#62;
+  &#60;value&#62;30&#60;/value&#62;
+  &#60;read-only&#62;false&#60;/read-only&#62;
+&#60;/preference&#62;
 </programlisting>
-		<para>
-			Again, a <parameter>0</parameter> value means an unlimited upload size, and the value unit is set in MegaBytes.
-		</para>
+				<para>
+					Again, a <parameter>0</parameter> value means an unlimited upload size, and the value unit is set in MegaBytes.
+				</para>
 			</step>
 			<step>
 				<para>
 					Use the <literal>getUploadDataAsStream()</literal> method to get the uploaded data:
 				</para>
-		
-<programlisting role="JAVA">UIFormUploadInput input = (UIFormUploadInput)uiForm.getUIInput("upload");
+				
+<programlisting role="JAVA">UIFormUploadInput input = (UIFormUploadInput)uiForm.getUIInput(&#34;upload&#34;);
 InputStream inputStream = input.getUploadDataAsStream();
 ...
 jcrData.setValue(inputStream);
@@ -137,19 +133,20 @@ jcrData.setValue(inputStream);
 				<para>
 					Use the<literal>removeUpload()</literal> method defined in the upload service to purge the file:
 				</para>
-		
+				
 <programlisting role="JAVA">UploadService uploadService = uiForm.getApplicationComponent(UploadService.class) ;
 UIFormUploadInput uiChild = uiForm.getChild(UIFormUploadInput.class) ;
 uploadService.removeUpload(uiChild.getUploadId()) ;
 </programlisting>
-<note>
-	<title>Saving the uploaded file</title>
-	<para>
-		Ensure the file is saved <emphasis role="bold">before</emphasis> the service is cleaned.
-	</para>
-</note>
+				<note>
+					<title>Saving the uploaded file</title>
+					<para>
+						Ensure the file is saved <emphasis role="bold">before</emphasis> the service is cleaned.
+					</para>
+				</note>
 			</step>
 		</procedure>
+
 	</section>
 
 </section>

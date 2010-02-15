@@ -1,19 +1,16 @@
 <?xml version='1.0' encoding='utf-8' ?>
 <!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
-<!ENTITY % BOOK_ENTITIES SYSTEM "../../Reference_Guide.ent">
-%BOOK_ENTITIES;
 ]>
 <section id="sect-Reference_Guide-AJAX_Framework">
 	<title>AJAX Framework</title>
-		<para>
-			Ajax calls are easily managed in &PRODUCT;'s framework. Lines can be added to the relevant template file and java class. A simple Ajax update of a component does not require any JavaScript code to be written.
-		</para>
-	
+	<para>
+		Ajax calls are easily managed in &PRODUCT;&#39;s framework. Lines can be added to the relevant template file and java class. A simple Ajax update of a component does not require any JavaScript code to be written.
+	</para>
 	<section id="sect-Reference_Guide-AJAX_Framework-Portlet_Preparation">
 		<title>Portlet Preparation</title>
 		<para>
 			&PRODUCT; portlets can use specific <literal>ActionListener</literal>s to receive and process Ajax calls. To set a portlet up to recieve Ajax calls, follow this procedure:
-		</para>	
+		</para>
 		<procedure>
 			<step>
 				<para>
@@ -22,15 +19,15 @@
 				<para>
 					Example : <literal>ParentClass</literal> is the class being wrtitten in.
 				</para>
-						
-<programlisting>static public class SaveActionListener extends EventListener&lt;ParentClass&gt;
+				
+<programlisting>static public class SaveActionListener extends EventListener&#60;ParentClass&#62;
 </programlisting>
 			</step>
 			<step>
 				<para>
 					Declare this listener in the configuration of the portlet:
 				</para>
-					
+				
 <programlisting>listeners = ParentClass.SaveActionListener.class
 </programlisting>
 			</step>
@@ -41,19 +38,19 @@
 				<para>
 					For example; the configuration below is for <literal>UIAccountForm</literal>:
 				</para>
-						
+				
 <programlisting role="JAVA">...
 @ComponentConfig(
   lifecycle = UIFormLifecycle.class,
-  template =  "system:/groovy/webui/form/UIFormTabPane.gtmpl",
+  template =  &#34;system:/groovy/webui/form/UIFormTabPane.gtmpl&#34;,
   initParams = {   
     @ParamConfig(
-      name = "AccountTemplateConfigOption", 
-      value = "app:/WEB-INF/conf/uiconf/account/webui/component/model/AccountTemplateConfigOption.groovy"
+      name = &#34;AccountTemplateConfigOption&#34;, 
+      value = &#34;app:/WEB-INF/conf/uiconf/account/webui/component/model/AccountTemplateConfigOption.groovy&#34;
     ),
     @ParamConfig(
-      name = "help.UIAccountFormQuickHelp",
-      value = "app:/WEB-INF/conf/uiconf/account/webui/component/model/UIAccountFormQuickHelp.xhtml"
+      name = &#34;help.UIAccountFormQuickHelp&#34;,
+      value = &#34;app:/WEB-INF/conf/uiconf/account/webui/component/model/UIAccountFormQuickHelp.xhtml&#34;
     )
   },
   events = {
@@ -69,10 +66,9 @@
 				<para>
 					Create an <literal>execute</literal> method inside this class:
 				</para>
-					
-<programlisting>public void execute(Event&lt;ParentClass&gt; event) throws Exception
+				
+<programlisting>public void execute(Event&#60;ParentClass&#62; event) throws Exception
 </programlisting>
-
 				<para>
 					This method is called every time the listener gets an event from the client. Hence you can process this event in it, using the even attribute. Use it to get parameters from a form in your client, to modify the status of your portlet, etc.,
 				</para>
@@ -81,17 +77,17 @@
 				</para>
 				<itemizedlist>
 					<listitem>
-				
-<programlisting role="XML">String value = event.getRequestContext().getRequestParameter("name"); // to get a value from a form
+						
+<programlisting role="XML">String value = event.getRequestContext().getRequestParameter(&#34;name&#34;); // to get a value from a form
 </programlisting>
 					</listitem>
 					<listitem>
-				
+						
 <programlisting role="XML">ParentClass parent = event.getSource(); // to get the parent object (the portlet that threw and caugth the event)
 </programlisting>
 					</listitem>
 					<listitem>
-				
+						
 <programlisting role="XML">UIMyComponent portal = parent.getAncestorOfType(UIMyComponent.class); // to get  any node in the hierarchy of UIComponents
 </programlisting>
 					</listitem>
@@ -99,9 +95,9 @@
 			</step>
 			<step>
 				<para>
-					If your action has to update an element on your client's interface, you must call <emphasis role="bold">addUIComponentToUpdateByAjax() </emphasis> at the end of the <literal>execute</literal> method:
+					If your action has to update an element on your client&#39;s interface, you must call <emphasis role="bold">addUIComponentToUpdateByAjax() </emphasis> at the end of the <literal>execute</literal> method:
 				</para>
-						
+				
 <programlisting>event.getRequestContext().addUIComponentToUpdateByAjax(uicomponent);
 </programlisting>
 				<para>
@@ -119,6 +115,7 @@
 				</para>
 			</step>
 		</procedure>
+
 	</section>
 	
 	<section id="sect-Reference_Guide-AJAX_Framework-AJAX_in_Groovy">
@@ -131,8 +128,8 @@
 				<para>
 					Add the following code to the groovy template file associated with the appropriate portlet class ( <literal>ParentClass</literal> here):
 				</para>
-						
-<programlisting>uicomponent.event("YourOperation");
+				
+<programlisting>uicomponent.event(&#34;YourOperation&#34;);
 </programlisting>
 				<para>
 					<literal>YourOperation</literal> is the same as in the <literal>ActionListener</literal> class (save in our example above).
@@ -147,7 +144,7 @@
 				<para>
 					If your operation must update the content of a component, make sure that the target component is well rendered. The following is recommended:
 				</para>
-					
+				
 <programlisting>uicomponent.renderChild(UITargetComponent.class) ;
 </programlisting>
 			</step>
@@ -155,19 +152,20 @@
 				<para>
 					The <literal>uicomponent</literal> must be of the <literal>UITargetComponent</literal> type as the component class; 
 <programlisting>event.getRequestContext().addUIComponentToUpdateByAjax(uicomponent) ;
-</programlisting> 
-					will be updated when <literal>UITargetComponent</literal> is called. 
-				</para>	
-			</step>	
+</programlisting>
+					 will be updated when <literal>UITargetComponent</literal> is called.
+				</para>
+			</step>
 			<step>
 				<para>
 					If this component is not rendered by default, set its <literal>rendered</literal> attribute (in the constructor of the portlet) to false when the portlet loads:
 				</para>
-						
+				
 <programlisting>mycomponent.setRendered(false);
 </programlisting>
 			</step>
 		</procedure>
+
 	</section>
 	
 	<section id="sect-Reference_Guide-AJAX_Framework-How_JavaScript_works">
@@ -176,23 +174,27 @@
 			All javascript in &PRODUCT; is managed by the file <filename>02eXoresources:javascript/eXo/portal/PortalHttpRequest.js</filename>.
 		</para>
 		<para>
-			In this class, there are four functions/classes: 
+			In this class, there are four functions/classes:
 		</para>
-		<formalpara>
+		<formalpara id="form-Reference_Guide-How_JavaScript_works-PortletResponse">
 			<title>PortletResponse</title>
-			<para></para>
+			<para>
+			</para>
 		</formalpara>
-		<formalpara>
+		<formalpara id="form-Reference_Guide-How_JavaScript_works-PortalResponse">
 			<title>PortalResponse</title>
-			<para></para>
+			<para>
+			</para>
 		</formalpara>
-		<formalpara>
+		<formalpara id="form-Reference_Guide-How_JavaScript_works-AjaxRequest">
 			<title>AjaxRequest</title>
-			<para></para>
+			<para>
+			</para>
 		</formalpara>
-		<formalpara>
+		<formalpara id="form-Reference_Guide-How_JavaScript_works-HttpResponseHandler">
 			<title>HttpResponseHandler</title>
-			<para></para>
+			<para>
+			</para>
 		</formalpara>
 		<para>
 			and 6 functions:
@@ -200,25 +202,25 @@
 		<variablelist>
 			<varlistentry>
 				<term>ajaxGet(url, callback)</term>
-					<listitem>
-						<para>
-							This is the main entry method for every Ajax calls to the portal It is simply a dispatcher method that completes some <parameter>init</parameter> fields before calling the <literal>doRequest()</literal> method.
-						</para>
-					</listitem>
+				<listitem>
+					<para>
+						This is the main entry method for every Ajax calls to the portal It is simply a dispatcher method that completes some <parameter>init</parameter> fields before calling the <literal>doRequest()</literal> method.
+					</para>
+				</listitem>
 			</varlistentry>
 			<varlistentry>
 				<term>ajaxPost(formElement, callback)</term>
-					<listitem>
-						<para>
-							This method is called instead of an <literal>HTTP POST</literal> when, in an AJAX case, some manipulations are needed. Once the content of the form is placed into a string object, the call is delegated to the <literal>doRequest()</literal> method
-						</para>
-					</listitem>
+				<listitem>
+					<para>
+						This method is called instead of an <literal>HTTP POST</literal> when, in an AJAX case, some manipulations are needed. Once the content of the form is placed into a string object, the call is delegated to the <literal>doRequest()</literal> method
+					</para>
+				</listitem>
 			</varlistentry>
 			<varlistentry>
 				<term>doRequest(method, url, queryString, callback)</term>
-					<listitem>
-						<para>
-							The <literal>doRequest()</literal> method takes incoming request from <literal>ajaxGet</literal> and <literal>ajaxPost</literal> calls. The second argument is the URL to target on the server The third argument is the query string object which is created out of a form element, this value is null except when there is a POST request. 
+				<listitem>
+					<para>
+						The <literal>doRequest()</literal> method takes incoming request from <literal>ajaxGet</literal> and <literal>ajaxPost</literal> calls. The second argument is the URL to target on the server The third argument is the query string object which is created out of a form element, this value is null except when there is a POST request. 
 						<orderedlist>
 							<listitem>
 								<para>
@@ -227,36 +229,36 @@
 							</listitem>
 							<listitem>
 								<para>
-									An <literal>HttpResponseHandler</literal> object is instantiated and its methods  (<literal>ajaxResponse</literal>, <literal>ajaxLoading</literal>, <literal>ajaxTimeout</literal>) are associated with the one from the <literal>AjaxRequest</literal> and will be called by the XHR during the process method.
+									An <literal>HttpResponseHandler</literal> object is instantiated and its methods (<literal>ajaxResponse</literal>, <literal>ajaxLoading</literal>, <literal>ajaxTimeout</literal>) are associated with the one from the <literal>AjaxRequest</literal> and will be called by the XHR during the process method.
 								</para>
 							</listitem>
 						</orderedlist>
-						</para>
-					</listitem>
+					</para>
+				</listitem>
 			</varlistentry>
 			<varlistentry>
 				<term>ajaxAbort()</term>
-					<listitem>
-						<para>
-							Cancels the current request.
-						</para>
-					</listitem>
+				<listitem>
+					<para>
+						Cancels the current request.
+					</para>
+				</listitem>
 			</varlistentry>
 			<varlistentry>
 				<term>ajaxAsyncGetRequest(url, async)</term>
-					<listitem>
-						<para>
-							Allows to create and execute a sync or async GET request.
-						</para>
-					</listitem>
+				<listitem>
+					<para>
+						Allows to create and execute a sync or async GET request.
+					</para>
+				</listitem>
 			</varlistentry>
 			<varlistentry>
 				<term>ajaxRedirect(url)</term>
-					<listitem>
-						<para>
-							A simple javascript redirection with <literal>window.location.href</literal> that are the entry points of these classes. These functions need not be called explicitly, as the template file and the portlet class manage everything.
-						</para>
-					</listitem>
+				<listitem>
+					<para>
+						A simple javascript redirection with <literal>window.location.href</literal> that are the entry points of these classes. These functions need not be called explicitly, as the template file and the portlet class manage everything.
+					</para>
+				</listitem>
 			</varlistentry>
 		</variablelist>
 	</section>
@@ -264,7 +266,7 @@
 	<section id="sect-Reference_Guide-AJAX_Framework-PortletResponse">
 		<title>PortletResponse</title>
 		<para>
-			This class doesn't contain any methods. On creation, it retrieves the response elements from the xml returned by Ajax, and stores them in the corresponding attributes :
+			This class doesn&#39;t contain any methods. On creation, it retrieves the response elements from the xml returned by Ajax, and stores them in the corresponding attributes :
 		</para>
 		<variablelist>
 			<varlistentry>
@@ -285,43 +287,43 @@
 			</varlistentry>
 			<varlistentry>
 				<term>portletMode</term>
-					<listitem>
-						<para>
-							The mode the component runs in. The options are: View, Edit, Help or Config.
-						</para>
-					</listitem>
+				<listitem>
+					<para>
+						The mode the component runs in. The options are: View, Edit, Help or Config.
+					</para>
+				</listitem>
 			</varlistentry>
 			<varlistentry>
 				<term>portletState</term>
-					<listitem>
-						<para>
-							The processing state of the component. The options are: Decode, Render.
-						</para>
-					</listitem>
+				<listitem>
+					<para>
+						The processing state of the component. The options are: Decode, Render.
+					</para>
+				</listitem>
 			</varlistentry>
 			<varlistentry>
 				<term>portletData</term>
-					<listitem>
-						<para>
-							The updated data to put in the component.
-						</para>
-					</listitem>
+				<listitem>
+					<para>
+						The updated data to put in the component.
+					</para>
+				</listitem>
 			</varlistentry>
 			<varlistentry>
 				<term>script</term>
-					<listitem>
-						<para>
-							The javascript code to update the component.
-						</para>
-					</listitem>
+				<listitem>
+					<para>
+						The javascript code to update the component.
+					</para>
+				</listitem>
 			</varlistentry>
 			<varlistentry>
-				<term>blocksToUpdate</term> 
-					<listitem>
-						<para>
-							An array containing the containers to update with this script.
-						</para>
-					</listitem>
+				<term>blocksToUpdate</term>
+				<listitem>
+					<para>
+						An array containing the containers to update with this script.
+					</para>
+				</listitem>
 			</varlistentry>
 		</variablelist>
 		<para>
@@ -335,22 +337,22 @@
 			This is an array of <literal>PortletResponse</literal>s (<literal>portletResponses</literal>) and two other attributes:
 		</para>
 		<variablelist>
-		  <varlistentry>
-			<term>data</term>
-			<listitem>
-				<para>
-					Data to update.
-				</para>
-			</listitem>
-		</varlistentry>
-		<varlistentry>
-			<term>script</term>
-			<listitem>
-				<para>
-					Javascript code to update.
-				</para>
-			</listitem>
-		</varlistentry>
+			<varlistentry>
+				<term>data</term>
+				<listitem>
+					<para>
+						Data to update.
+					</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>script</term>
+				<listitem>
+					<para>
+						Javascript code to update.
+					</para>
+				</listitem>
+			</varlistentry>
 		</variablelist>
 	</section>
 	
@@ -367,78 +369,78 @@
 			This class provides methods to handle the Ajax response.
 		</para>
 		<variablelist>
-		  <varlistentry>
-			<term>executeScript</term>
-			<listitem>
-				<para>
-					Used to execute javascript code.
-				</para>
-			</listitem>
-		</varlistentry>
-		<varlistentry>
-			<term>updateBlocks</term>
-			<listitem>
-				<para>
-					Updates <literal>html</literal> components.
-				</para>
-			</listitem>
-		</varlistentry>
-		<varlistentry>
-			<term>ajaxTimeout</term>
-			<listitem>
-				<para>
-					This function is called when the timeout of the ajax call exceeds its set limit.
-				</para>
-			</listitem>
-		</varlistentry>
-		<varlistentry>
-			<term>ajaxResponse</term>
-			<listitem>
-				<para>
-					This function creates a <literal>PortalResponse</literal> object from the data in the Ajax request.
-				</para>
-			</listitem>
-		</varlistentry>
-		<varlistentry>
-			<term>ajaxLoading</term>
-			<listitem>
-				<para>
-					This function shows the loading pop-up and mask layer.
-				</para>
-			</listitem>
-		</varlistentry>
+			<varlistentry>
+				<term>executeScript</term>
+				<listitem>
+					<para>
+						Used to execute javascript code.
+					</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>updateBlocks</term>
+				<listitem>
+					<para>
+						Updates <literal>html</literal> components.
+					</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>ajaxTimeout</term>
+				<listitem>
+					<para>
+						This function is called when the timeout of the ajax call exceeds its set limit.
+					</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>ajaxResponse</term>
+				<listitem>
+					<para>
+						This function creates a <literal>PortalResponse</literal> object from the data in the Ajax request.
+					</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>ajaxLoading</term>
+				<listitem>
+					<para>
+						This function shows the loading pop-up and mask layer.
+					</para>
+				</listitem>
+			</varlistentry>
 		</variablelist>
-
-		<formalpara>
-		<title>Portal Ajax Response Data Structure:</title>
+		<formalpara id="form-Reference_Guide-HttpResponseHandler-Portal_Ajax_Response_Data_Structure">
+			<title>Portal Ajax Response Data Structure:</title>
 			<para>
+				
 <programlisting>{PortalResponse}
   |
-  |---&gt;{PortletResponse}
+  |---&#62;{PortletResponse}
   |
-  |---&gt;{PortletResponse}
-  |          |--&gt;{portletId}
-  |          |--&gt;{portletTitle}
-  |          |--&gt;{portletMode}
-  |          |--&gt;{portletState}
+  |---&#62;{PortletResponse}
+  |          |--&#62;{portletId}
+  |          |--&#62;{portletTitle}
+  |          |--&#62;{portletMode}
+  |          |--&#62;{portletState}
   |          |
-  |          |--&gt;{Data}
+  |          |--&#62;{Data}
   |          |      |
-  |          |      |---&gt;{BlockToUpdate}
-  |          |      |         |--&gt;{blockId}
-  |          |      |         |--&gt;{data}
+  |          |      |---&#62;{BlockToUpdate}
+  |          |      |         |--&#62;{blockId}
+  |          |      |         |--&#62;{data}
   |          |      |
-  |          |      |---&gt;{BlockToUpdate}
-  |          |---&gt;{Script}
+  |          |      |---&#62;{BlockToUpdate}
+  |          |---&#62;{Script}
   |
-  |---&gt;{Data}
+  |---&#62;{Data}
   |      |
-  |      |---&gt;{BlockToUpdate}
-  |      |         |--&gt;{blockId}
-  |      |         |--&gt;{data}
+  |      |---&#62;{BlockToUpdate}
+  |      |         |--&#62;{blockId}
+  |      |         |--&#62;{data}
   |      |
-  |      |---&gt;{BlockToUpdate}
-  |---&gt;{Script}
+  |      |---&#62;{BlockToUpdate}
+  |---&#62;{Script}
 </programlisting>
 			</para>
 		</formalpara>
@@ -454,6 +456,7 @@
 				<para>
 					Create a <literal>UIPopupAction</literal> in the main portlet class:
 				</para>
+				
 <programlisting>addChild(UIPopupAction.class, null, null);
 </programlisting>
 			</step>
@@ -461,9 +464,9 @@
 				<para>
 					Render this action in your template file:
 				</para>
+				
 <programlisting>uicomponent.renderChild(UIPopupAction.class) ;
 </programlisting>
-
 				<para>
 					(This creates an empty container (pop-up) that will receive the new content by Ajax)
 				</para>
@@ -472,12 +475,13 @@
 				<para>
 					Put this component in your action listener class and update its content:
 				</para>
+				
 <programlisting>UIPopupAction uiPopupAction = uiMainPortlet.getChild(UIPopupAction.class) ;
 uiPopupAction.activate(UIReferencesList.class, 600) ;
 </programlisting>
 				<para>
-					<literal>UIReferenceList</literal> is the component that will appear in the pop-up. It does not have to declared in the main portlet class. 
-				</para>	
+					<literal>UIReferenceList</literal> is the component that will appear in the pop-up. It does not have to declared in the main portlet class.
+				</para>
 				<para>
 					The activate method creates the component and its rendering in the pop-up window.
 				</para>
@@ -486,6 +490,7 @@ uiPopupAction.activate(UIReferencesList.class, 600) ;
 				<para>
 					Allow this component to be updated by Ajax:
 				</para>
+				
 <programlisting>event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
 </programlisting>
 			</step>
@@ -495,6 +500,7 @@ uiPopupAction.activate(UIReferencesList.class, 600) ;
 				</para>
 			</step>
 		</procedure>
+
 	</section>
 
 </section>

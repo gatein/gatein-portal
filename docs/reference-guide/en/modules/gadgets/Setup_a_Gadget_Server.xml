@@ -1,14 +1,12 @@
 <?xml version='1.0' encoding='utf-8' ?>
 <!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
-<!ENTITY % BOOK_ENTITIES SYSTEM "../../Reference_Guide.ent">
-%BOOK_ENTITIES;
 ]>
 <section id="sect-Reference_Guide-Setup_a_Gadget_Server">
 	<title>Setup a Gadget Server</title>
 	<section id="sect-Reference_Guide-Setup_a_Gadget_Server-Virtual_servers_for_gadget_rendering">
 		<title>Virtual servers for gadget rendering</title>
 		<para>
-			&PRODUCT; recommends using two virtual hosts for security. If the gadget is running on a different domain than the container (the website that 'contains' the app), it is unable to interfere with the portal by modifying code or cookies.
+			&PRODUCT; recommends using two virtual hosts for security. If the gadget is running on a different domain than the container (the website that &#39;contains&#39; the app), it is unable to interfere with the portal by modifying code or cookies.
 		</para>
 		<para>
 			An example would hosting the portal from <emphasis role="bold">http://www.sample.com</emphasis> and the gadgets from <emphasis role="bold">http://www.samplemodules.com</emphasis>.
@@ -16,19 +14,19 @@
 		<para>
 			To do this, configure a parameter called <emphasis>gadgets.hostName</emphasis>. The value is the <emphasis>path/to/gadgetServer</emphasis> in <literal>GadgetRegisteryService</literal>:
 		</para>
-<programlisting>&lt;component&gt;
-  &lt;key&gt;org.exoplatform.application.gadget.GadgetRegistryService&lt;/key&gt;
-  &lt;type&gt;org.exoplatform.application.gadget.jcr.GadgetRegistryServiceImpl&lt;/type&gt;
-  &lt;init-params&gt;
-    &lt;value-param&gt;
-      &lt;name&gt;gadgets.hostName&lt;/name&gt;
-      &lt;description&gt;Gadget server url&lt;/description&gt;
-      &lt;value&gt;http://localhost:8080/GateInGadgetServer/gadgets/&lt;/value&gt;
-    &lt;/value-param&gt;
-  &lt;/init-params&gt;
-&lt;/component&gt;
+		
+<programlisting>&#60;component&#62;
+  &#60;key&#62;org.exoplatform.application.gadget.GadgetRegistryService&#60;/key&#62;
+  &#60;type&#62;org.exoplatform.application.gadget.jcr.GadgetRegistryServiceImpl&#60;/type&#62;
+  &#60;init-params&#62;
+    &#60;value-param&#62;
+      &#60;name&#62;gadgets.hostName&#60;/name&#62;
+      &#60;description&#62;Gadget server url&#60;/description&#62;
+      &#60;value&#62;http://localhost:8080/GateInGadgetServer/gadgets/&#60;/value&#62;
+    &#60;/value-param&#62;
+  &#60;/init-params&#62;
+&#60;/component&#62;
 </programlisting>
-
 		<para>
 			It is also possible to have multiple rendering servers. This helps to balance the rendering load across multiple servers.
 		</para>
@@ -48,7 +46,7 @@
 				In Linux systems this file can be generated with:
 			</para>
 			
-<programlisting><command>dd if=/dev/random bs=32 count=1  | openssl base64 &gt; /tmp/key.txt</command>
+<programlisting><command>dd if=/dev/random bs=32 count=1 | openssl base64 &#62; /tmp/key.txt</command>
 </programlisting>
 		</section>
 		
@@ -57,13 +55,14 @@
 			<para>
 				These servers have to be on the same domain as the gadget server. You can configure the container in <filename>eXoGadgetServer:/WEB-INF/classes/containers/default/container.js</filename>.
 			</para>
-<programlisting>"gadgets.content-rewrite" : {
-  "include-urls": ".*",
-  "exclude-urls": "",
-  "include-tags": ["link", "script", "embed", "img", "style"],
-  "expires": "86400",
-  "proxy-url": "http://localhost:8080/eXoGadgetServer/gadgets/proxy?url=",
-  "concat-url": "http://localhost:8080/eXoGadgetServer/gadgets/concat?"
+			
+<programlisting>&#34;gadgets.content-rewrite&#34; : {
+  &#34;include-urls&#34;: &#34;.*&#34;,
+  &#34;exclude-urls&#34;: &#34;&#34;,
+  &#34;include-tags&#34;: [&#34;link&#34;, &#34;script&#34;, &#34;embed&#34;, &#34;img&#34;, &#34;style&#34;],
+  &#34;expires&#34;: &#34;86400&#34;,
+  &#34;proxy-url&#34;: &#34;http://localhost:8080/eXoGadgetServer/gadgets/proxy?url=&#34;,
+  &#34;concat-url&#34;: &#34;http://localhost:8080/eXoGadgetServer/gadgets/concat?&#34;
 },
 </programlisting>
 		</section>

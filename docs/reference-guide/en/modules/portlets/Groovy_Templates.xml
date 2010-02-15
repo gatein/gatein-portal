@@ -1,14 +1,11 @@
 <?xml version='1.0' encoding='utf-8' ?>
 <!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
-<!ENTITY % BOOK_ENTITIES SYSTEM "../../Reference_Guide.ent">
-%BOOK_ENTITIES;
 ]>
 <section id="sect-Reference_Guide-Groovy_Templates">
 	<title>Groovy Templates</title>
-		<para>
-			In addition to the content in this chapter, refer also to <xref linkend="sect-Reference_Guide-AJAX_Framework" /> in order to better understand the communication between the Groovy Template and the portlet.
-		</para>
-	
+	<para>
+		In addition to the content in this chapter, refer also to <xref linkend="sect-Reference_Guide-AJAX_Framework" /> in order to better understand the communication between the Groovy Template and the portlet.
+	</para>
 	<section id="sect-Reference_Guide-Groovy_Templates-Basic_structure">
 		<title>Basic structure</title>
 		<para>
@@ -22,77 +19,76 @@
 			</listitem>
 			<listitem>
 				<para>
-					zero or more groovy language code blocks, enclosed by &lt;% ... %&gt; enclosures.
+					zero or more groovy language code blocks, enclosed by &#60;% ... %&#62; enclosures.
 				</para>
 			</listitem>
 		</orderedlist>
 		<para>
-			The HTML code in the template doesn't have to contain the <literal>html</literal>, or <literal>body</literal> tags. This allows groovy templates for one component to also be rendered in another component.
+			The HTML code in the template doesn&#39;t have to contain the <literal>html</literal>, or <literal>body</literal> tags. This allows groovy templates for one component to also be rendered in another component.
 		</para>
 		<para>
 			For example:
 		</para>
 		
-<programlisting role="HTML">&lt;!DOCTYPE html 
-    PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-           "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"&gt;
-&lt;%
+<programlisting role="HTML">&#60;!DOCTYPE html 
+    PUBLIC &#34;-//W3C//DTD XHTML 1.0 Strict//EN&#34;
+           &#34;http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd&#34;&#62;
+&#60;%
   import org.exoplatform.webui.core.UIComponent;
   def currentPage = uicomponent.getCurrentPage();
   ... 
-%&gt;
+%&#62;
   ...
-  &lt;div class="$uicomponent.skin" id="UIPortalApplication"&gt;
-    &lt;%uicomponent.renderChildren();%&gt;
-  &lt;/div&gt;
+  &#60;div class=&#34;$uicomponent.skin&#34; id=&#34;UIPortalApplication&#34;&#62;
+    &#60;%uicomponent.renderChildren();%&#62;
+  &#60;/div&#62;
 </programlisting>
 	</section>
 	
 	<section id="sect-Reference_Guide-Groovy_Templates-Groovy_language">
 		<title>Groovy language</title>
 		<para>
-			Groovy is a scripting language for Java. Some usage examples are included in this section, however further information is available at <ulink url="http://groovy.codehaus.org/Documentation"></ulink> .
+			Groovy is a scripting language for Java. Some usage examples are included in this section, however further information is available at <ulink url="http://groovy.codehaus.org/Documentation" /> .
 		</para>
-		<variablelist>
+		<variablelist id="vari-Reference_Guide-Groovy_language-Some_examples_of_Groovy">
 			<title>Some examples of Groovy</title>
-		<varlistentry>
-			<term>Variables definition</term>
-			<listitem>
-				<para>
+			<varlistentry>
+				<term>Variables definition</term>
+				<listitem>
+					<para>
+						
 <programlisting>int min = 1;
 def totalPage = uicomponent.getAvailablePage();
-String name = "uiPortlet";
+String name = &#34;uiPortlet&#34;;
 categories = uicomponent.getItemCategories();
 String columns = uicomponent.getColumns();
 </programlisting>
-				</para>
-			</listitem>
-		</varlistentry>
-		<varlistentry>
-			<term>Other expressions</term>
-			<listitem>
-				<para>
+					</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>Other expressions</term>
+				<listitem>
+					<para>
+						
 <programlisting>for(category in categories) { ... }
 for(i in min..max) { ... } // min and max are int variables
-println "&lt;/div&gt;" ;
-println """
-  &lt;div class="Item"&gt;
-    &lt;div class="OverflowContainer"&gt;
-""";
-&lt;%=uicomponent.getToolbarStyle();%&gt; // &lt;%= to avoid a call of println method
+println &#34;&#60;/div&#62;&#34; ;
+println &#34;&#34;&#34;
+  &#60;div class=&#34;Item&#34;&#62;
+    &#60;div class=&#34;OverflowContainer&#34;&#62;
+&#34;&#34;&#34;;
+&#60;%=uicomponent.getToolbarStyle();%&#62; // &#60;%= to avoid a call of println method
 import org.exoplatform.portal.config.model.PageNode;
 </programlisting>
-
-				</para>
-			</listitem>
-		</varlistentry>
-		</variablelist>	
-
+					</para>
+				</listitem>
+			</varlistentry>
+		</variablelist>
 	</section>
 	
 	<section id="sect-Reference_Guide-Groovy_Templates-Linking_a_portlet_with_a_template">
 		<title>Linking a portlet with a template</title>
-
 		<section id="sect-Reference_Guide-Linking_a_portlet_with_a_template-Portlet_configuration">
 			<title>Portlet configuration</title>
 			<para>
@@ -110,7 +106,7 @@ import org.exoplatform.portal.config.model.PageNode;
 			
 <programlisting>@ComponentConfig(
   lifecycle = UIFormLifecycle.class,
-  template =  "system:/groovy/webui/form/UIFormWithTitle.gtmpl",
+  template =  &#34;system:/groovy/webui/form/UIFormWithTitle.gtmpl&#34;,
   events = {
     @EventConfig(listeners = UIApplicationForm.SaveActionListener.class),
     @EventConfig(phase = Phase.DECODE, listeners = UIApplicationForm.CancelActionListener.class)
@@ -118,13 +114,13 @@ import org.exoplatform.portal.config.model.PageNode;
 )
 </programlisting>
 			<para>
-				The path is in the "<literal>system</literal>" namespace. This is a reference to the portal webapp.
+				The path is in the &#34;<literal>system</literal>&#34; namespace. This is a reference to the portal webapp.
 			</para>
 			<para>
 				This webapp contains reusable groovy templates in the folder; <emphasis role="bold">src:/web/portal/src/main/webapp/groovy/webui/form/ </emphasis>.
 			</para>
 			<para>
-				Use the following steps to create a new template; 
+				Use the following steps to create a new template;
 			</para>
 			<procedure>
 				<step>
@@ -134,24 +130,26 @@ import org.exoplatform.portal.config.model.PageNode;
 				</step>
 				<step>
 					<para>
-						Use the namespace "app" for refering to the same webapp as the component.
+						Use the namespace &#34;app&#34; for refering to the same webapp as the component.
 					</para>
 				</step>
 				<step>
 					<para>
-						&PRODUCT; stores the component templates in a folder that follows this placement convention: "<filename>/webapp/groovy/<literal>your_portlet_name</literal>/webui/component</filename>".
+						&PRODUCT; stores the component templates in a folder that follows this placement convention: &#34;<filename>/webapp/groovy/<literal>your_portlet_name</literal>/webui/component</filename>&#34;.
 					</para>
 					<para>
-<programlisting>template = "app:/groovy/your_portlet_name/webui/component/your_component.gtmpl"
+						
+<programlisting>template = &#34;app:/groovy/your_portlet_name/webui/component/your_component.gtmpl&#34;
 </programlisting>
 					</para>
 				</step>
 				<step>
 					<para>
-						Edit the template file according to the information in the <xref linkend="sect-Reference_Guide-Linking_a_portlet_with_a_template-The_template_file"/>.
+						Edit the template file according to the information in the <xref linkend="sect-Reference_Guide-Linking_a_portlet_with_a_template-The_template_file" />.
 					</para>
 				</step>
 			</procedure>
+
 		</section>
 		
 		<section id="sect-Reference_Guide-Linking_a_portlet_with_a_template-The_template_file">
@@ -174,15 +172,16 @@ import org.exoplatform.portal.config.model.PageNode;
 						Using the <literal>uicomponent</literal> variable, you can access all the attributes and functions of a component to use them in your template.
 					</para>
 					<para>
-						 Take, for example <literal>UIPageIterator.gtmpl</literal>:
-					</para>			
-<programlisting>&lt;%
+						Take, for example <literal>UIPageIterator.gtmpl</literal>:
+					</para>
+					
+<programlisting>&#60;%
   def currentPage = uicomponent.getCurrentPage();
-%&gt;
+%&#62;
 ...
-&lt;a href="&lt;%=uicomponent.event("ShowPage","$currentPage")%&gt;" class="Icon LastTopPageIcon"&gt;
-  &lt;span&gt;&lt;/span&gt;
-&lt;/a&gt;
+&#60;a href=&#34;&#60;%=uicomponent.event(&#34;ShowPage&#34;,&#34;$currentPage&#34;)%&#62;&#34; class=&#34;Icon LastTopPageIcon&#34;&#62;
+  &#60;span&#62;&#60;/span&#62;
+&#60;/a&#62;
 </programlisting>
 					<para>
 						The following example shows how <literal>uicomponent</literal> can be used to make Ajax calls using the <literal>event</literal> method. See <xref linkend="sect-Reference_Guide-AJAX_Framework" /> for more details.
@@ -198,22 +197,23 @@ import org.exoplatform.portal.config.model.PageNode;
 					<para>
 						Some usage examples are:
 					</para>
-<programlisting>&lt;%
+					
+<programlisting>&#60;%
   def rcontext = ctx.getRequestContext() ;
-  context.getJavascriptManager().importJavascript('GateIn.webui.UIPopupWindow');
-  ctx.appRes(popupId + ".title."+ title);
-%&gt;
+  context.getJavascriptManager().importJavascript(&#39;GateIn.webui.UIPopupWindow&#39;);
+  ctx.appRes(popupId + &#34;.title.&#34;+ title);
+%&#62;
 </programlisting>
 				</listitem>
 				<listitem>
 					<para>
-						If the template defines the user interface of a component that includes a form use an instance of <literal>UIForm</literal> in a variable named <literal>uiform</literal>. 
+						If the template defines the user interface of a component that includes a form use an instance of <literal>UIForm</literal> in a variable named <literal>uiform</literal>.
 					</para>
 					<para>
-						The <literal>UIForm</literal> class provides the methods <literal>begin()</literal> and <literal>end()</literal> which write the HTML tags of the form. 
+						The <literal>UIForm</literal> class provides the methods <literal>begin()</literal> and <literal>end()</literal> which write the HTML tags of the form.
 					</para>
 					<para>
-						The form class must inherit from <literal>UIForm</literal>. In this class add the input elements (fields, checkboxes, lists) which are required in the form. 
+						The form class must inherit from <literal>UIForm</literal>. In this class add the input elements (fields, checkboxes, lists) which are required in the form.
 					</para>
 					<para>
 						Render the input elements in the groovy template using <literal>uiform.renderField(field)</literal>.

@@ -1,7 +1,5 @@
 <?xml version='1.0' encoding='utf-8' ?>
 <!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
-<!ENTITY % BOOK_ENTITIES SYSTEM "../../Reference_Guide.ent">
-%BOOK_ENTITIES;
 ]>
 <section id="sect-Reference_Guide-Skin_Configuration">
 	<title>Skin Configuration</title>
@@ -30,7 +28,7 @@
 	<section id="sect-Reference_Guide-Skin_Configuration-Skins_in_Page_Markups">
 		<title>Skins in Page Markups</title>
 		<para>
-			A &PRODUCT; skin contains css styles for the portal's components but also shares components that may be reused in portlets. When &PRODUCT; generates a portal page markup, it inserts stylesheet links in the page's <literal>head</literal> tag.
+			A &PRODUCT; skin contains css styles for the portal&#39;s components but also shares components that may be reused in portlets. When &PRODUCT; generates a portal page markup, it inserts stylesheet links in the page&#39;s <literal>head</literal> tag.
 		</para>
 		<para>
 			In the snipped code below you can see two types of links:
@@ -40,21 +38,21 @@
 				<area coords="3" id="area-Reference_Guide-Skin_Configuration-Coreskin" />
 				<area coords="4" id="area-Reference_Guide-Skin_Configuration-Stylesheets" />
 			</areaspec>
-<programlisting>&lt;head&gt;
+			
+<programlisting>&#60;head&#62;
 ...   
-&lt;link id="CoreSkin" rel="stylesheet" type="text/css" href="/eXoResources/skin/Stylesheet.css" /&gt;
-&lt;link id="web_FooterPortlet" rel="stylesheet" type="text/css" href= "/web/skin/portal/webui/component/UIFooterPortlet/DefaultStylesheet.css" /&gt;
-&lt;link id="web_NavigationPortlet" rel="stylesheet" type="text/css" href= "/web/skin/portal/webui/component/UINavigationPortlet/DefaultStylesheet.css" /&gt;
-&lt;link id="web_HomePagePortlet" rel="stylesheet" type="text/css" href= "/portal/templates/skin/webui/component/UIHomePagePortlet/DefaultStylesheet.css" /&gt;
-&lt;link id="web_BannerPortlet" rel="stylesheet" type="text/css" href= "/web/skin/portal/webui/component/UIBannerPortlet/DefaultStylesheet.css" /&gt;
+&#60;link id=&#34;CoreSkin&#34; rel=&#34;stylesheet&#34; type=&#34;text/css&#34; href=&#34;/eXoResources/skin/Stylesheet.css&#34; /&#62;
+&#60;link id=&#34;web_FooterPortlet&#34; rel=&#34;stylesheet&#34; type=&#34;text/css&#34; href= &#34;/web/skin/portal/webui/component/UIFooterPortlet/DefaultStylesheet.css&#34; /&#62;
+&#60;link id=&#34;web_NavigationPortlet&#34; rel=&#34;stylesheet&#34; type=&#34;text/css&#34; href= &#34;/web/skin/portal/webui/component/UINavigationPortlet/DefaultStylesheet.css&#34; /&#62;
+&#60;link id=&#34;web_HomePagePortlet&#34; rel=&#34;stylesheet&#34; type=&#34;text/css&#34; href= &#34;/portal/templates/skin/webui/component/UIHomePagePortlet/DefaultStylesheet.css&#34; /&#62;
+&#60;link id=&#34;web_BannerPortlet&#34; rel=&#34;stylesheet&#34; type=&#34;text/css&#34; href= &#34;/web/skin/portal/webui/component/UIBannerPortlet/DefaultStylesheet.css&#34; /&#62;
 ...
-&lt;/head&gt;
+&#60;/head&#62;
 </programlisting>
-
-		<calloutlist>
+			<calloutlist>
 				<callout arearefs="area-Reference_Guide-Skin_Configuration-Coreskin">
 					<para>
-						Portal skin stylesheet (<literal>id="CoreSkin"</literal>).
+						Portal skin stylesheet (<literal>id=&#34;CoreSkin&#34;</literal>).
 					</para>
 				</callout>
 				<callout arearefs="area-Reference_Guide-Skin_Configuration-Stylesheets">
@@ -62,39 +60,40 @@
 						Portlets skin stylesheets (<emphasis role="bold">all others</emphasis>). Each portlet within the page may contribute its own style(s).
 					</para>
 				</callout>
-		</calloutlist>
+			</calloutlist>
 		</programlistingco>
+
 	</section>
 	
 	<section id="sect-Reference_Guide-Skin_Configuration-Types_of_Styles">
 		<title>Types of Styles</title>
-			<para>
-				The portal skin is typically made of 3 types of styles:
-			</para>
+		<para>
+			The portal skin is typically made of 3 types of styles:
+		</para>
 		<variablelist>
 			<varlistentry>
 				<term>Portlet themes</term>
-					<listitem>
-						<para>
-							 Decorations for portlet windows.
-						</para>
-					</listitem>
+				<listitem>
+					<para>
+						Decorations for portlet windows.
+					</para>
+				</listitem>
 			</varlistentry>
 			<varlistentry>
 				<term>Portal styles</term>
-					<listitem>
-						<para>
-							 Default styles for html tags (ex div,th,td...) and the portal UI (including the sidebar and portal admin screens).
-						</para>
-					</listitem>
+				<listitem>
+					<para>
+						Default styles for html tags (ex div,th,td...) and the portal UI (including the sidebar and portal admin screens).
+					</para>
+				</listitem>
 			</varlistentry>
 			<varlistentry>
 				<term>Shared styles</term>
-					<listitem>
-						<para>
-							&PRODUCT; WebUI components styles are reused among different portlets.
-						</para>
-					</listitem>
+				<listitem>
+					<para>
+						&PRODUCT; WebUI components styles are reused among different portlets.
+					</para>
+				</listitem>
 			</varlistentry>
 		</variablelist>
 		<para>
@@ -113,11 +112,9 @@
 			Portlets often require additionnal styles that may not be defined by the portal skin. &PRODUCT; allows portlets to define additional stylesheets for each portlet and will append the corresponding <literal>link</literal> tags to the <literal>head</literal>.
 		</para>
 		<para>
-			The link ID will be of the form <parameter>{portletAppName}{}$$PortletName</parameter>. For example: <literal>ContentPortlet</literal> in <literal>content.war</literal>, will give <parameter>id="content<literal>ContentPortlet"</literal></parameter>
+			The link ID will be of the form <parameter>{portletAppName}{}$$PortletName</parameter>. For example: <literal>ContentPortlet</literal> in <literal>content.war</literal>, will give <parameter>id=&#34;content<literal>ContentPortlet&#34;</literal></parameter>
 		</para>
-
-<!-- #################### TODO: give some rules to follow in order to avoid overriding portal styles #####################-->
-
+		<!--  #################### TODO: give some rules to follow in order to avoid overriding portal styles ##################### -->
 	</section>
 	
 	<section id="sect-Reference_Guide-Skin_Configuration-How_to_Configure_a_Portal_Skin">
@@ -132,18 +129,18 @@
    * Register the stylesheet for a portal Skin.
    * @param module skin module identifier
    * @param skinName skin name
-   * @param cssPath path uri to the css file. This is relative to the root context, use leading '/'
-   * @param scontext the webapp's {@link ServletContext}
+   * @param cssPath path uri to the css file. This is relative to the root context, use leading &#39;/&#39;
+   * @param scontext the webapp&#39;s {@link ServletContext}
    */
   public void addPortalSkin(String module, String skinName, String cssPath, ServletContext scontext) {
     [...]
   }
   /**
    * Register a portlet stylesheet for a Skin.
-   * @param module skin module. Typically of the form 'portletAppName/portletName' .
+   * @param module skin module. Typically of the form &#39;portletAppName/portletName&#39; .
    * @param skinName Name of the skin
-   * @param cssPath path uri to the css file. This is relative to the root context, use leading '/'
-   * @param scontext the webapp's {@link ServletContext}
+   * @param cssPath path uri to the css file. This is relative to the root context, use leading &#39;/&#39;
+   * @param scontext the webapp&#39;s {@link ServletContext}
    */
   public void addSkin(String module, String skinName, String cssPath, ServletContext scontext) {
     [...]
@@ -162,7 +159,7 @@
    * @param categoryName portlet theme category
    * @param themesName names of the themes
    */
-  public void addTheme(String categoryName, List&lt;String&gt; themesName) {
+  public void addTheme(String categoryName, List&#60;String&#62; themesName) {
     [...]
   }
 </programlisting>
@@ -177,13 +174,13 @@
 				&PRODUCT; provides a servlet listener that allows you to register your own skins and styles when your webapp starts up. The first step is to add the listener to your portlet app <literal>web.xml</literal>.
 			</para>
 			
-<programlisting role="XML">&lt;web-app&gt;
+<programlisting role="XML">&#60;web-app&#62;
     [::]
-    &lt;listener&gt;
-      &lt;listener-class&gt;org.exoplatform.portal.webui.skin.SkinConfigListener&lt;/listener-class&gt;
-    &lt;/listener&gt;
+    &#60;listener&#62;
+      &#60;listener-class&#62;org.exoplatform.portal.webui.skin.SkinConfigListener&#60;/listener-class&#62;
+    &#60;/listener&#62;
     [::]
-  &lt;/web-app&gt;
+  &#60;/web-app&#62;
 </programlisting>
 		</section>
 		
@@ -196,21 +193,21 @@
 				This script allows full access to the <literal>SkinService</literal> and <literal>ServletContext</literal> which are bound as scripting variables under the same name. The following script is an example. It can be found in the <literal>GateInResources.war</literal> and is used by &PRODUCT; to register the <literal>Default</literal> portal skin and some portlet themes.
 			</para>
 			
-<programlisting>SkinService.addPortalSkin("CoreSkin","Default", "/GateInResources/skin/Stylesheet.css", ServletContext);
-SkinService.addTheme("Simple", ["SimpleBlue","SimpleViolet","SimpleOrange","SimplePink","SimpleGreen"]);
-SkinService.addTheme("RoundConer", ["RoundConerBlue","RoundConerViolet","RoundConerOrange","RoundConerPink","RoundConerGreen"]);
-SkinService.addTheme("Shadow", ["ShadowBlue","ShadowViolet","ShadowOrange","ShadowPink","ShadowGreen"]);
-SkinService.addTheme("MacStyle", ["MacTheme","MacGray","MacGreenSteel","MacBlack"]);
-SkinService.addTheme("VistaStyle", ["VistaTheme","VistaBlue"]);
+<programlisting>SkinService.addPortalSkin(&#34;CoreSkin&#34;,&#34;Default&#34;, &#34;/GateInResources/skin/Stylesheet.css&#34;, ServletContext);
+SkinService.addTheme(&#34;Simple&#34;, [&#34;SimpleBlue&#34;,&#34;SimpleViolet&#34;,&#34;SimpleOrange&#34;,&#34;SimplePink&#34;,&#34;SimpleGreen&#34;]);
+SkinService.addTheme(&#34;RoundConer&#34;, [&#34;RoundConerBlue&#34;,&#34;RoundConerViolet&#34;,&#34;RoundConerOrange&#34;,&#34;RoundConerPink&#34;,&#34;RoundConerGreen&#34;]);
+SkinService.addTheme(&#34;Shadow&#34;, [&#34;ShadowBlue&#34;,&#34;ShadowViolet&#34;,&#34;ShadowOrange&#34;,&#34;ShadowPink&#34;,&#34;ShadowGreen&#34;]);
+SkinService.addTheme(&#34;MacStyle&#34;, [&#34;MacTheme&#34;,&#34;MacGray&#34;,&#34;MacGreenSteel&#34;,&#34;MacBlack&#34;]);
+SkinService.addTheme(&#34;VistaStyle&#34;, [&#34;VistaTheme&#34;,&#34;VistaBlue&#34;]);
 </programlisting>
 			<para>
 				The syntax of addTheme() is: 
-<programlisting>addTheme(String categoryName, List&lt;String&gt; themesName)
+<programlisting>addTheme(String categoryName, List&#60;String&#62; themesName)
 </programlisting>
 			</para>
 			<para>
 				So, to provide your own skin you could use the following: 
-<programlisting>SkinService.addSkin("mywebapp/MyPortlet", "MyPortalSkin", "/mywebapp/skin/Stylesheet.css", ServletContext);
+<programlisting>SkinService.addSkin(&#34;mywebapp/MyPortlet&#34;, &#34;MyPortalSkin&#34;, &#34;/mywebapp/skin/Stylesheet.css&#34;, ServletContext);
 </programlisting>
 			</para>
 			<para>
@@ -222,13 +219,13 @@ SkinService.addTheme("VistaStyle", ["VistaTheme","VistaBlue"]);
 </programlisting>
 			</para>
 			<para>
-				'<literal>overwrite</literal>' is optional, its default value is "<parameter>false</parameter>". If its value is <parameter>true</parameter>, the later call of <parameter>addSkin()</parameter> for the same skin key (combination of module + skinName) replaces the skin of the previous call.
+				&#39;<literal>overwrite</literal>&#39; is optional, its default value is &#34;<parameter>false</parameter>&#34;. If its value is <parameter>true</parameter>, the later call of <parameter>addSkin()</parameter> for the same skin key (combination of module + skinName) replaces the skin of the previous call.
 			</para>
 			<para>
 				Similarly, use the following to configure a particular portal:
 			</para>
 			
-<programlisting>SkinService.addSkin("myportalname", "skin", "/path/to/skin/Stylesheet.css", ServletContext);
+<programlisting>SkinService.addSkin(&#34;myportalname&#34;, &#34;skin&#34;, &#34;/path/to/skin/Stylesheet.css&#34;, ServletContext);
 </programlisting>
 			<para>
 				The syntax of addPortalSkin() is: 
@@ -241,7 +238,7 @@ SkinService.addTheme("VistaStyle", ["VistaTheme","VistaBlue"]);
 	
 	<section id="sect-Reference_Guide-Skin_Configuration-Tips_and_Tricks">
 		<title>Tips and Tricks</title>
-		<section id="sect-Reference_Guide-Tips_and_Tricks-Easier_css_debuggin">
+		<section id="sect-Reference_Guide-Tips_and_Tricks-Easier_css_debugging">
 			<title>Easier css debugging</title>
 			<para>
 				By default, CSS files are cached and their imports are merged into a single CSS file at the server side. This reduces the number of HTTP requests from the browser to the server.
@@ -250,7 +247,7 @@ SkinService.addTheme("VistaStyle", ["VistaTheme","VistaBlue"]);
 				The <literal>ServletContext</literal> parameter allows direct access to the CSS files from the <literal>SkinService</literal>. The optimization code is quite simple as all the CSS files are parsed at the server startup time and all the @import and url(...) references are rewritten to support a single flat file. The result is stored in a cache directly used from the <literal>ResourceRequestFilter</literal>.
 			</para>
 			<para>
-				Although the optimization is useful for a production environments, it may be easier to deactivate this optimization while debugging  stylesheets. To do so, set the java system property <literal>exo.product.developing</literal> to <literal>true</literal>.
+				Although the optimization is useful for a production environments, it may be easier to deactivate this optimization while debugging stylesheets. To do so, set the java system property <literal>exo.product.developing</literal> to <literal>true</literal>.
 			</para>
 			<para>
 				For example, the property can passed as a JVM parameter with the <literal>-D</literal> option in the <literal>GateIn.sh</literal> startup script: {code} EXO{code}
@@ -258,13 +255,13 @@ SkinService.addTheme("VistaStyle", ["VistaTheme","VistaBlue"]);
 			<orderedlist numeration="arabic">
 				<listitem>
 					<para>
-						warning("This is option may cause display bugs with certain browsers like Internet Explorer")
+						warning(&#34;This is option may cause display bugs with certain browsers like Internet Explorer&#34;)
 					</para>
 				</listitem>
 			</orderedlist>
 		</section>
 		
-		<section id="sect-Reference_Guide-Tips_and_Tricks-Change_portlet_icons">
+		<section id="sect-Reference_Guide-Tips_and_Tricks-_Change_portlet_icons_">
 			<title> Change portlet icons </title>
 			<para>
 				Each portlet is represented by an icon that you can see in the portlet registry, or the webos dock. This icon can be changed by adding an image to the directory:
@@ -272,7 +269,7 @@ SkinService.addTheme("VistaStyle", ["VistaTheme","VistaBlue"]);
 			<itemizedlist>
 				<listitem>
 					<para>
-						<filename>$project/portlet/myportlets/src/main/webapp/skin/DefaultSkin/portletIcons<replaceable>icon_name.png</replaceable></filename>. To be used correctly the icon must be named after the portlet. 
+						<filename>$project/portlet/myportlets/src/main/webapp/skin/DefaultSkin/portletIcons<replaceable>icon_name.png</replaceable></filename>. To be used correctly the icon must be named after the portlet.
 					</para>
 				</listitem>
 			</itemizedlist>
@@ -294,13 +291,13 @@ SkinService.addTheme("VistaStyle", ["VistaTheme","VistaBlue"]);
 				The default skin of portal is called Default. To change this value (to a Mac-like skin, a Windows Vista-like skin, or an original skin), add a skin tag in the <literal>portal.xml</literal> that defines your portal:
 			</para>
 			
-<programlisting role="XML">&lt;portal-config&gt;
-  &lt;portal-name&gt;classic&lt;/portal-name&gt;
-  &lt;locale&gt;en&lt;/locale&gt;
-  &lt;access-permissions&gt;Everyone&lt;/access-permissions&gt;
-  &lt;edit-permission&gt;*:/platform/administrators&lt;/edit-permission&gt;
-  &lt;skin&gt;Mac&lt;/skin&gt;
-  &lt;creator&gt;root&lt;/creator&gt;
+<programlisting role="XML">&#60;portal-config&#62;
+  &#60;portal-name&#62;classic&#60;/portal-name&#62;
+  &#60;locale&#62;en&#60;/locale&#62;
+  &#60;access-permissions&#62;Everyone&#60;/access-permissions&#62;
+  &#60;edit-permission&#62;*:/platform/administrators&#60;/edit-permission&#62;
+  &#60;skin&#62;Mac&#60;/skin&#62;
+  &#60;creator&#62;root&#60;/creator&#62;
 ...
 </programlisting>
 		</section>
@@ -308,10 +305,10 @@ SkinService.addTheme("VistaStyle", ["VistaTheme","VistaBlue"]);
 		<section id="sect-Reference_Guide-Tips_and_Tricks-Some_CSS_techniques">
 			<title>Some CSS techniques</title>
 			<para>
-				It is recommended that users have some experience with CSS before studying &PRODUCT; CSS. ALso, pleased read the CSS specification at <ulink type="http" url="http://www.w3.org/TR/REC-CSS2/selector.html"></ulink>
+				It is recommended that users have some experience with CSS before studying &PRODUCT; CSS. ALso, pleased read the CSS specification at <ulink type="http" url="http://www.w3.org/TR/REC-CSS2/selector.html" />
 			</para>
 			<para>
-				&PRODUCT; relies heavily on CSS to create the layout and effects for the UI. Some common techniques for customizing &PRODUCT;'s CSS are explained below. 
+				&PRODUCT; relies heavily on CSS to create the layout and effects for the UI. Some common techniques for customizing &PRODUCT;&#39;s CSS are explained below.
 			</para>
 			<section id="sect-Reference_Guide-Some_CSS_techniques-Decorator_pattern">
 				<title>Decorator pattern</title>
@@ -333,23 +330,23 @@ SkinService.addTheme("VistaStyle", ["VistaTheme","VistaBlue"]);
 | BottomLeft |              BottomCenter                | BottomRight |
 |            |                                          |             |
 -----------------------------------------------------------------------
-&lt;div class="Parent"&gt;
-  &lt;div class="TopLeft"&gt;
-    &lt;div class="TopRight"&gt;
-      &lt;div class="TopCenter"&gt;&lt;span&gt;&lt;/span&gt;&lt;/div&gt;
-    &lt;/div&gt;
-  &lt;/div&gt;
-  &lt;div class="CenterLeft"&gt;
-    &lt;div class="CenterRight"&gt;
-      &lt;div class="CenterCenter"&gt;BODY&lt;/div&gt;
-    &lt;/div&gt;
-  &lt;/div&gt;
-  &lt;div class="BottomLeft"&gt;
-    &lt;div class="BottomRight"&gt;
-      &lt;div class="BottomCenter"&gt;&lt;span&gt;&lt;/span&gt;&lt;/div&gt;
-    &lt;/div&gt;
-  &lt;div&gt;
-&lt;/div&gt;
+&#60;div class=&#34;Parent&#34;&#62;
+  &#60;div class=&#34;TopLeft&#34;&#62;
+    &#60;div class=&#34;TopRight&#34;&#62;
+      &#60;div class=&#34;TopCenter&#34;&#62;&#60;span&#62;&#60;/span&#62;&#60;/div&#62;
+    &#60;/div&#62;
+  &#60;/div&#62;
+  &#60;div class=&#34;CenterLeft&#34;&#62;
+    &#60;div class=&#34;CenterRight&#34;&#62;
+      &#60;div class=&#34;CenterCenter&#34;&#62;BODY&#60;/div&#62;
+    &#60;/div&#62;
+  &#60;/div&#62;
+  &#60;div class=&#34;BottomLeft&#34;&#62;
+    &#60;div class=&#34;BottomRight&#34;&#62;
+      &#60;div class=&#34;BottomCenter&#34;&#62;&#60;span&#62;&#60;/span&#62;&#60;/div&#62;
+    &#60;/div&#62;
+  &#60;div&#62;
+&#60;/div&#62;
 </programlisting>
 			</section>
 			
@@ -362,18 +359,18 @@ SkinService.addTheme("VistaStyle", ["VistaTheme","VistaBlue"]);
 <programlisting role="HTML">
 |                         |                                                |      
 |                         |                                                |      
-| |&lt;--- fixed width ---&gt;| |                   will expand to right ----&gt;   |      
+| |&#60;--- fixed width ---&#62;| |                   will expand to right ----&#62;   |      
 |                         |                                                |      
 |                         |                                                |      
 |                         |                                                |      
 ----
-&lt;div class="Parent"&gt;
-  &lt;div style="float: left; width: 100px"&gt;
-  &lt;/div&gt;
-  &lt;div style="margin-left: 105px;"&gt;
-  &lt;div&gt;
-  &lt;div style="clear: left"&gt;&lt;span&gt;&lt;/span&gt;&lt;/div&gt;
-&lt;/div&gt;
+&#60;div class=&#34;Parent&#34;&#62;
+  &#60;div style=&#34;float: left; width: 100px&#34;&#62;
+  &#60;/div&#62;
+  &#60;div style=&#34;margin-left: 105px;&#34;&#62;
+  &#60;div&#62;
+  &#60;div style=&#34;clear: left&#34;&#62;&#60;span&#62;&#60;/span&#62;&#60;/div&#62;
+&#60;/div&#62;
 </programlisting>
 			</section>
 
@@ -388,21 +385,21 @@ SkinService.addTheme("VistaStyle", ["VistaTheme","VistaBlue"]);
 				<para>
 					Define the new skin in the <literal>WEB-INF/conf/script/groovy/SkinConfigScript.groovy</literal> file as a <literal>Resource</literal> (for example, in the project <replaceable>MyPortal</replaceable>, the resource would read; <literal>GateInResourcesMyPortal</literal>).
 				</para>
-<warning>
-<para>
-	The <literal>WEB-INF/conf/script/groovy/SkinConfigScript.groovy</literal> file mentioned above does not exist in EPP-5.0.ER2. The closest match is <literal>./jboss-as/server/default/tmp/<replaceable>instance</replaceable>/02portal.war/WEB-INF/conf/uiconf/portal/webui/portal/SkinConfigOption.groovy
-</literal> 
-</para>
-</warning>
+				<warning>
+					<para>
+						The <literal>WEB-INF/conf/script/groovy/SkinConfigScript.groovy</literal> file mentioned above does not exist in EPP-5.0.ER2. The closest match is <literal>./jboss-as/server/default/tmp/<replaceable>instance</replaceable>/02portal.war/WEB-INF/conf/uiconf/portal/webui/portal/SkinConfigOption.groovy </literal>
+					</para>
+				</warning>
+				
 <programlisting>
-SkinService.addPortalSkin("MyPortalSkin","MyPortal","/GateInResourcesMyPortal/skin/Stylesheet.css",ServletContext);
+SkinService.addPortalSkin(&#34;MyPortalSkin&#34;,&#34;MyPortal&#34;,&#34;/GateInResourcesMyPortal/skin/Stylesheet.css&#34;,ServletContext);
 </programlisting>
 			</step>
 			<step>
 				<para>
 					Place the new skin files into the <replaceable>skinyourSkin</replaceable> folder and create a new <literal>Stylesheet.css</literal> file in the same directory. This file should include lines to import all links to your CSS. For example in <replaceable>MyPortal</replaceable> project:
-			</para>
-		
+				</para>
+				
 <programlisting>
 @import url(MyPortalSkin/portal/webui/component/UIPortalApplicationSkin.css) ;
 @import url(MyPortalSkin/webui/component/Stylesheet.css) ;
@@ -411,26 +408,24 @@ SkinService.addPortalSkin("MyPortalSkin","MyPortal","/GateInResourcesMyPortal/sk
 			<step>
 				<para>
 					Finally, define the name of new skin and the image preview for the <emphasis>Skin Settings</emphasis> action. The image preview can be set in the file:<filename>ressource/skin/DefaultSkin/portal/webui/component/customization/UIChangeSkinForm/Stylesheet.css</filename>
-
 <programlisting>
 .UIChangeSkinForm .UIItemSelector .TemplateContainer .MyPortalImage {
 	margin: auto;
 	width: 329px; height:204px;
-	background: url('background/MyPortal.jpg') no-repeat top;
+	background: url(&#39;background/MyPortal.jpg&#39;) no-repeat top;
 	cursor: pointer ;
 }
 </programlisting>
 				</para>
 				<para>
-					If no name is set for the new skin, it will be named <literal>label&gt;</literal>. The skin name is defined in the <literal>./jboss-as/server/default/tmp<replaceable>instance</replaceable>/<replaceable>resource</replaceable>/skin/DefaultSkin/portal/webui/component/customization/UIChangeSkinForm/Stylesheet.css</literal>.
+					If no name is set for the new skin, it will be named <literal>label&#62;</literal>. The skin name is defined in the <literal>./jboss-as/server/default/tmp<replaceable>instance</replaceable>/<replaceable>resource</replaceable>/skin/DefaultSkin/portal/webui/component/customization/UIChangeSkinForm/Stylesheet.css</literal>.
 				</para>
-<warning>
-<para>
-	The program listing below is in French. This should be translated into en-US before publication.
-</para>
-</warning>
-		
-
+				<warning>
+					<para>
+						The program listing below is in French. This should be translated into en-US before publication.
+					</para>
+				</warning>
+				
 <programlisting>
 #############################################################################
 #                              Change Skin                                  #
@@ -446,7 +441,6 @@ UIChangeSkin.Vista.label=Style Vista
 Skin.title=Liste des styles
 Skin.left.title=Voir et s?lectionner un style
 </programlisting>
-
 			</step>
 			<step>
 				<para>
@@ -454,30 +448,33 @@ Skin.left.title=Voir et s?lectionner un style
 				</para>
 			</step>
 		</procedure>
+
 	</section>
 	
 	<section id="sect-Reference_Guide-Skin_Configuration-How_to_create_new_themes">
 		<title>How to create new themes</title>
-			<procedure>		
-				<step>
-					<para>
-						Define the new theme in <literal>WEB-INF/conf/script/groovy/SkinConfigScript.groovy</literal> in your <literal>Resource</literal> (for example, in the project MyPortal: <literal>GateInResourcesCp060508</literal>).
-					</para>
-<programlisting>SkinService.addTheme("MyPortal-MacTheme", ["MacGray","MacBlue","MacBlack"]);
+		<procedure>
+			<step>
+				<para>
+					Define the new theme in <literal>WEB-INF/conf/script/groovy/SkinConfigScript.groovy</literal> in your <literal>Resource</literal> (for example, in the project MyPortal: <literal>GateInResourcesCp060508</literal>).
+				</para>
+				
+<programlisting>SkinService.addTheme(&#34;MyPortal-MacTheme&#34;, [&#34;MacGray&#34;,&#34;MacBlue&#34;,&#34;MacBlack&#34;]);
 </programlisting>
-				</step>
-				<step>
-					<para>
-						Place new theme files into <literal>folder skinyourSkin</literal> and create a new <literal>Stylesheet.css</literal> file in the same directory. This file should include lines to import all links to all CSS resources. For example, in the <replaceable>MyPortal</replaceable> project:
-					</para>
-			
+			</step>
+			<step>
+				<para>
+					Place new theme files into <literal>folder skinyourSkin</literal> and create a new <literal>Stylesheet.css</literal> file in the same directory. This file should include lines to import all links to all CSS resources. For example, in the <replaceable>MyPortal</replaceable> project:
+				</para>
+				
 <programlisting>@import url(MyPortalSkin/PortletThemes/Stylesheet.css) ;
 </programlisting>
-				</step>
-			</procedure>
-			<para>
-				The code below illustrates the inclusion of all CSS resoucres for a new theme from the example file <literal>GateInResourcesCp060508/skin/MyPortalSkin/PortletThemes/Stylesheet.css</literal>.
-			</para>
+			</step>
+		</procedure>
+		
+		<para>
+			The code below illustrates the inclusion of all CSS resoucres for a new theme from the example file <literal>GateInResourcesCp060508/skin/MyPortalSkin/PortletThemes/Stylesheet.css</literal>.
+		</para>
 		
 <programlisting>
 /*---- MyPortalTheme ----*/
@@ -491,7 +488,7 @@ Skin.left.title=Voir et s?lectionner un style
 	width: 24px; 
 	height: 17px;
 	cursor: pointer;
-	background-image: url('background/MyPortalTheme.png');
+	background-image: url(&#39;background/MyPortalTheme.png&#39;);
 }
 .MyPortalTheme .ArrowDownIcon {
 	background-position: center 20px;
@@ -528,8 +525,8 @@ Skin.left.title=Voir et s?lectionner un style
 	float: left;/* orientation=rt */
 	width: 18px; height: 18px;
 	cursor: nw-resize;
-	background: url('background/ResizeArea18x18.gif') no-repeat left top; /* orientation=lt */
-	background: url('background/ResizeArea18x18-rt.gif') no-repeat right top; /* orientation=rt */
+	background: url(&#39;background/ResizeArea18x18.gif&#39;) no-repeat left top; /* orientation=lt */
+	background: url(&#39;background/ResizeArea18x18-rt.gif&#39;) no-repeat right top; /* orientation=rt */
 }
 .MyPortalTheme .Information {
 	height: 18px; line-height: 18px;
@@ -556,18 +553,18 @@ Skin.left.title=Voir et s?lectionner un style
 }
 .MyPortalTheme .WindowBarLeft {
 	padding-left: 12px;
-	background-image: url('background/MyPortalTheme.png');
+	background-image: url(&#39;background/MyPortalTheme.png&#39;);
 	background-repeat: no-repeat;
 	background-position: left -148px;
 }
 .MyPortalTheme .WindowBarRight {
 	padding-right: 11px;
-	background-image: url('background/MyPortalTheme.png');
+	background-image: url(&#39;background/MyPortalTheme.png&#39;);
 	background-repeat: no-repeat;
 	background-position: right -119px;
 }
 .MyPortalTheme .WindowBarCenter {
-	background-image: url('background/MyPortalTheme.png');
+	background-image: url(&#39;background/MyPortalTheme.png&#39;);
 	background-repeat: repeat-x;
 	background-position: left -90px;
 }
@@ -577,29 +574,29 @@ Skin.left.title=Voir et s?lectionner un style
 }
 .MyPortalTheme .MiddleDecoratorLeft {
 	padding-left: 12px;
-	background: url('background/MMyPortalTheme.png') repeat-y left;
+	background: url(&#39;background/MMyPortalTheme.png&#39;) repeat-y left;
 }
 .MyPortalTheme .MiddleDecoratorRight {
 	padding-right: 11px;
-	background: url('background/MMyPortalTheme.png') repeat-y right;
+	background: url(&#39;background/MMyPortalTheme.png&#39;) repeat-y right;
 }
 .MyPortalTheme .MiddleDecoratorCenter {
 	background: #ffffff;
 }
 .MyPortalTheme .BottomDecoratorLeft {
 	padding-left: 12px;
-	background-image: url('background/MyPortalTheme.png');
+	background-image: url(&#39;background/MyPortalTheme.png&#39;);
 	background-repeat: no-repeat;
 	background-position: left -60px;
 }
 .MyPortalTheme .BottomDecoratorRight {
 	padding-right: 11px;
-	background-image: url('background/MyPortalTheme.png');
+	background-image: url(&#39;background/MyPortalTheme.png&#39;);
 	background-repeat: no-repeat;
 	background-position: right -30px;
 }
 .MyPortalTheme .BottomDecoratorCenter {
-	background-image: url('background/MyPortalTheme.png');
+	background-image: url(&#39;background/MyPortalTheme.png&#39;);
 	background-repeat: repeat-x;
 	background-position: left top;
 }
@@ -607,7 +604,6 @@ Skin.left.title=Voir et s?lectionner un style
 	height: 30px;
 }
 </programlisting>
-
 	</section>
 
 </section>

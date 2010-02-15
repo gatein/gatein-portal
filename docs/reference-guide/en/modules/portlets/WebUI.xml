@@ -1,16 +1,14 @@
 <?xml version='1.0' encoding='utf-8' ?>
 <!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
-<!ENTITY % BOOK_ENTITIES SYSTEM "../../Reference_Guide.ent">
-%BOOK_ENTITIES;
 ]>
 <section id="sect-Reference_Guide-Web_User_Interface_WebUI">
 	<title>Web User Interface - WebUI</title>
 	<para>
-		WebUI is the name of &PRODUCT;'s webframework.
-	</para>	
+		WebUI is the name of &PRODUCT;&#39;s webframework.
+	</para>
 	<para>
-		Using a self-contained framework ensures that the portal's architecture does not interfere with other web technologies deployed by the portlets.
-	</para>	
+		Using a self-contained framework ensures that the portal&#39;s architecture does not interfere with other web technologies deployed by the portlets.
+	</para>
 	<para>
 		Using a particular technology raises potential difficulties for users with a differing version (either newer or older) of the same technology.
 	</para>

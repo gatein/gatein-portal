@@ -1,7 +1,5 @@
 <?xml version='1.0' encoding='utf-8' ?>
 <!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
-<!ENTITY % BOOK_ENTITIES SYSTEM "../../Reference_Guide.ent">
-%BOOK_ENTITIES;
 ]>
 <section id="sect-Reference_Guide-Database_Configuration">
 	<title>Database Configuration</title>
@@ -21,73 +19,73 @@
 	<section id="sect-Reference_Guide-Database_Configuration-DB_and_datasource_configuration">
 		<title>DB and datasource configuration</title>
 		<para>
-			You can find the database configuration in the portal/WEB-INF/conf/database/database-configuration.xml file (located in your application server's web application directory).
+			You can find the database configuration in the portal/WEB-INF/conf/database/database-configuration.xml file (located in your application server&#39;s web application directory).
 		</para>
 		
-<programlisting role="XML">&lt;?xml version="1.0" encoding="ISO-8859-1"?&gt;
-&lt;configuration&gt;
+<programlisting role="XML">&#60;?xml version=&#34;1.0&#34; encoding=&#34;ISO-8859-1&#34;?&#62;
+&#60;configuration&#62;
   [...]
-  &lt;component&gt;
-    &lt;key&gt;org.exoplatform.services.database.HibernateService&lt;/key&gt;
-    &lt;jmx-name&gt;database:type=HibernateService&lt;/jmx-name&gt;
-    &lt;type&gt;org.exoplatform.services.database.impl.HibernateServiceImpl&lt;/type&gt;
-    &lt;init-params&gt;
-      &lt;properties-param&gt;
-        &lt;name&gt;hibernate.properties&lt;/name&gt;
-        &lt;description&gt;Default Hibernate Service&lt;/description&gt;
-        &lt;property name="hibernate.show_sql" value="false"/&gt;
-        &lt;property name="hibernate.cglib.use_reflection_optimizer" value="true"/&gt;
-        &lt;property name="hibernate.connection.url" value="jdbc:hsqldb:file:../temp/data/exodb"/&gt;
-        &lt;property name="hibernate.connection.driver_class" value="org.hsqldb.jdbcDriver"/&gt;
-        &lt;property name="hibernate.connection.autocommit" value="true"/&gt;
-        &lt;property name="hibernate.connection.username" value="sa"/&gt;
-        &lt;property name="hibernate.connection.password" value=""/&gt;
-        &lt;property name="hibernate.dialect" value="org.hibernate.dialect.HSQLDialect"/&gt;
-        &lt;property name="hibernate.c3p0.min_size" value="5"/&gt;
-        &lt;property name="hibernate.c3p0.max_size" value="20"/&gt;
-        &lt;property name="hibernate.c3p0.timeout" value="1800"/&gt;
-        &lt;property name="hibernate.c3p0.max_statements" value="50"/&gt;
-      &lt;/properties-param&gt;
-    &lt;/init-params&gt;
-  &lt;/component&gt;
-  &lt;external-component-plugins&gt;
-    &lt;target-component&gt;org.exoplatform.services.naming.InitialContextInitializer&lt;/target-component&gt;
-    &lt;component-plugin&gt;
-      &lt;name&gt;bind.datasource&lt;/name&gt;
-      &lt;set-method&gt;addPlugin&lt;/set-method&gt;
-      &lt;type&gt;org.exoplatform.services.naming.BindReferencePlugin&lt;/type&gt;
-      &lt;init-params&gt;
-        &lt;value-param&gt;
-          &lt;name&gt;bind-name&lt;/name&gt;
-          &lt;value&gt;jdbcexo&lt;/value&gt;
-        &lt;/value-param&gt;
-        &lt;value-param&gt;
-          &lt;name&gt;class-name&lt;/name&gt;
-          &lt;value&gt;javax.sql.DataSource&lt;/value&gt;
-        &lt;/value-param&gt;
-        &lt;value-param&gt;
-          &lt;name&gt;factory&lt;/name&gt;
-          &lt;value&gt;org.apache.commons.dbcp.BasicDataSourceFactory&lt;/value&gt;
-        &lt;/value-param&gt;
-        &lt;properties-param&gt;
-          &lt;name&gt;ref-addresses&lt;/name&gt;
-          &lt;description&gt;ref-addresses&lt;/description&gt;
-          &lt;property name="driverClassName" value="org.hsqldb.jdbcDriver"/&gt;
-          &lt;property name="url" value="jdbc:hsqldb:file:../temp/data/exodb"/&gt;
-          &lt;property name="username" value="sa"/&gt;
-          &lt;property name="password" value=""/&gt;
-        &lt;/properties-param&gt;
-      &lt;/init-params&gt;
-    &lt;/component-plugin&gt;
-  &lt;/external-component-plugins&gt;
+  &#60;component&#62;
+    &#60;key&#62;org.exoplatform.services.database.HibernateService&#60;/key&#62;
+    &#60;jmx-name&#62;database:type=HibernateService&#60;/jmx-name&#62;
+    &#60;type&#62;org.exoplatform.services.database.impl.HibernateServiceImpl&#60;/type&#62;
+    &#60;init-params&#62;
+      &#60;properties-param&#62;
+        &#60;name&#62;hibernate.properties&#60;/name&#62;
+        &#60;description&#62;Default Hibernate Service&#60;/description&#62;
+        &#60;property name=&#34;hibernate.show_sql&#34; value=&#34;false&#34;/&#62;
+        &#60;property name=&#34;hibernate.cglib.use_reflection_optimizer&#34; value=&#34;true&#34;/&#62;
+        &#60;property name=&#34;hibernate.connection.url&#34; value=&#34;jdbc:hsqldb:file:../temp/data/exodb&#34;/&#62;
+        &#60;property name=&#34;hibernate.connection.driver_class&#34; value=&#34;org.hsqldb.jdbcDriver&#34;/&#62;
+        &#60;property name=&#34;hibernate.connection.autocommit&#34; value=&#34;true&#34;/&#62;
+        &#60;property name=&#34;hibernate.connection.username&#34; value=&#34;sa&#34;/&#62;
+        &#60;property name=&#34;hibernate.connection.password&#34; value=&#34;&#34;/&#62;
+        &#60;property name=&#34;hibernate.dialect&#34; value=&#34;org.hibernate.dialect.HSQLDialect&#34;/&#62;
+        &#60;property name=&#34;hibernate.c3p0.min_size&#34; value=&#34;5&#34;/&#62;
+        &#60;property name=&#34;hibernate.c3p0.max_size&#34; value=&#34;20&#34;/&#62;
+        &#60;property name=&#34;hibernate.c3p0.timeout&#34; value=&#34;1800&#34;/&#62;
+        &#60;property name=&#34;hibernate.c3p0.max_statements&#34; value=&#34;50&#34;/&#62;
+      &#60;/properties-param&#62;
+    &#60;/init-params&#62;
+  &#60;/component&#62;
+  &#60;external-component-plugins&#62;
+    &#60;target-component&#62;org.exoplatform.services.naming.InitialContextInitializer&#60;/target-component&#62;
+    &#60;component-plugin&#62;
+      &#60;name&#62;bind.datasource&#60;/name&#62;
+      &#60;set-method&#62;addPlugin&#60;/set-method&#62;
+      &#60;type&#62;org.exoplatform.services.naming.BindReferencePlugin&#60;/type&#62;
+      &#60;init-params&#62;
+        &#60;value-param&#62;
+          &#60;name&#62;bind-name&#60;/name&#62;
+          &#60;value&#62;jdbcexo&#60;/value&#62;
+        &#60;/value-param&#62;
+        &#60;value-param&#62;
+          &#60;name&#62;class-name&#60;/name&#62;
+          &#60;value&#62;javax.sql.DataSource&#60;/value&#62;
+        &#60;/value-param&#62;
+        &#60;value-param&#62;
+          &#60;name&#62;factory&#60;/name&#62;
+          &#60;value&#62;org.apache.commons.dbcp.BasicDataSourceFactory&#60;/value&#62;
+        &#60;/value-param&#62;
+        &#60;properties-param&#62;
+          &#60;name&#62;ref-addresses&#60;/name&#62;
+          &#60;description&#62;ref-addresses&#60;/description&#62;
+          &#60;property name=&#34;driverClassName&#34; value=&#34;org.hsqldb.jdbcDriver&#34;/&#62;
+          &#60;property name=&#34;url&#34; value=&#34;jdbc:hsqldb:file:../temp/data/exodb&#34;/&#62;
+          &#60;property name=&#34;username&#34; value=&#34;sa&#34;/&#62;
+          &#60;property name=&#34;password&#34; value=&#34;&#34;/&#62;
+        &#60;/properties-param&#62;
+      &#60;/init-params&#62;
+    &#60;/component-plugin&#62;
+  &#60;/external-component-plugins&#62;
   [...]
-&lt;/configuration&gt;
+&#60;/configuration&#62;
 </programlisting>
 		<para>
-			The first component configuration is for the Hibernate service. You can enter any additional properties in a <literal>hibernate.properties</literal> file, but &PRODUCT; will override <literal>hibernate.properties</literal>  with values read in from this configuration file.
+			The first component configuration is for the Hibernate service. You can enter any additional properties in a <literal>hibernate.properties</literal> file, but &PRODUCT; will override <literal>hibernate.properties</literal> with values read in from this configuration file.
 		</para>
 		<para>
-			The second component configuration is for the JCR datasource. The <literal>InitialContextInitializer</literal> component will load the factory class, use the factory object to create a datasource, and bind that datasource in the JNDI tree with the value of the "bind-name" parameter. If you want to change the bind-name, for example "<parameter>jdbcexo</parameter>" to "<parameter>myjdbc</parameter>", you also need to change JCR repository configuration in order that the service picks up the right datasource.
+			The second component configuration is for the JCR datasource. The <literal>InitialContextInitializer</literal> component will load the factory class, use the factory object to create a datasource, and bind that datasource in the JNDI tree with the value of the &#34;bind-name&#34; parameter. If you want to change the bind-name, for example &#34;<parameter>jdbcexo</parameter>&#34; to &#34;<parameter>myjdbc</parameter>&#34;, you also need to change JCR repository configuration in order that the service picks up the right datasource.
 		</para>
 		<para>
 			Make sure you update the database connection properties and dialect for both of these component configurations.
@@ -104,24 +102,24 @@
 		</para>
 		
 <programlisting>[...]
- &lt;component&gt;
-   &lt;key&gt;org.exoplatform.services.jcr.config.RepositoryServiceConfiguration&lt;/key&gt;
-   &lt;type&gt;org.exoplatform.services.jcr.impl.config.RepositoryServiceConfigurationImpl&lt;/type&gt;
-   &lt;init-params&gt;
-     &lt;value-param&gt;
-       &lt;name&gt;conf-path&lt;/name&gt;
-       &lt;description&gt;JCR configuration file&lt;/description&gt;
-       &lt;value&gt;war:/conf/jcr/repository-configuration.xml&lt;/value&gt;
-     &lt;/value-param&gt;
-     &lt;properties-param&gt;
-       &lt;name&gt;working-conf&lt;/name&gt;
-       &lt;description&gt;working-conf&lt;/description&gt;
-       &lt;property name="persisterClassName" value="org.exoplatform.services.jcr.impl.config.JDBCConfigurationPersister"/&gt;
-       &lt;property name="sourceName" value="jdbcexo"/&gt;
-       &lt;property name="dialect" value="hsqldb"/&gt;
-     &lt;/properties-param&gt;
-   &lt;/init-params&gt;
- &lt;/component&gt;
+ &#60;component&#62;
+   &#60;key&#62;org.exoplatform.services.jcr.config.RepositoryServiceConfiguration&#60;/key&#62;
+   &#60;type&#62;org.exoplatform.services.jcr.impl.config.RepositoryServiceConfigurationImpl&#60;/type&#62;
+   &#60;init-params&#62;
+     &#60;value-param&#62;
+       &#60;name&#62;conf-path&#60;/name&#62;
+       &#60;description&#62;JCR configuration file&#60;/description&#62;
+       &#60;value&#62;war:/conf/jcr/repository-configuration.xml&#60;/value&#62;
+     &#60;/value-param&#62;
+     &#60;properties-param&#62;
+       &#60;name&#62;working-conf&#60;/name&#62;
+       &#60;description&#62;working-conf&#60;/description&#62;
+       &#60;property name=&#34;persisterClassName&#34; value=&#34;org.exoplatform.services.jcr.impl.config.JDBCConfigurationPersister&#34;/&#62;
+       &#60;property name=&#34;sourceName&#34; value=&#34;jdbcexo&#34;/&#62;
+       &#60;property name=&#34;dialect&#34; value=&#34;hsqldb&#34;/&#62;
+     &#60;/properties-param&#62;
+   &#60;/init-params&#62;
+ &#60;/component&#62;
 [...]
 </programlisting>
 		<para>
@@ -129,52 +127,52 @@
 		</para>
 		
 <programlisting role="XML"> ...]     
-     &lt;workspaces&gt;
-       &lt;workspace name="system" auto-init-root-nodetype="nt:unstructured" 
-                  auto-init-permissions="*:/platform/administrators read;*:/platform/administrators add_node;*:/platform/administrators set_property;*:/platform/administrators remove" &gt;
-          &lt;!-- for system storage --&gt;
-          &lt;container class="org.exoplatform.services.jcr.impl.storage.jdbc.JDBCWorkspaceDataContainer"&gt;
-            &lt;properties&gt;
-              &lt;property name="sourceName" value="jdbcexo"/&gt;
-              &lt;property name="dialect" value="hsql"/&gt;
-              &lt;!-- property name="db-type" value="mysql"/ --&gt;
-              &lt;property name="multi-db" value="false"/&gt;
-              &lt;property name="update-storage" value="true"/&gt;
-              &lt;property name="max-buffer-size" value="204800"/&gt;
-              &lt;property name="swap-directory" value="../temp/swap/system"/&gt;
-            &lt;/properties&gt;
+     &#60;workspaces&#62;
+       &#60;workspace name=&#34;system&#34; auto-init-root-nodetype=&#34;nt:unstructured&#34; 
+                  auto-init-permissions=&#34;*:/platform/administrators read;*:/platform/administrators add_node;*:/platform/administrators set_property;*:/platform/administrators remove&#34; &#62;
+          &#60;!-- for system storage --&#62;
+          &#60;container class=&#34;org.exoplatform.services.jcr.impl.storage.jdbc.JDBCWorkspaceDataContainer&#34;&#62;
+            &#60;properties&#62;
+              &#60;property name=&#34;sourceName&#34; value=&#34;jdbcexo&#34;/&#62;
+              &#60;property name=&#34;dialect&#34; value=&#34;hsql&#34;/&#62;
+              &#60;!-- property name=&#34;db-type&#34; value=&#34;mysql&#34;/ --&#62;
+              &#60;property name=&#34;multi-db&#34; value=&#34;false&#34;/&#62;
+              &#60;property name=&#34;update-storage&#34; value=&#34;true&#34;/&#62;
+              &#60;property name=&#34;max-buffer-size&#34; value=&#34;204800&#34;/&#62;
+              &#60;property name=&#34;swap-directory&#34; value=&#34;../temp/swap/system&#34;/&#62;
+            &#60;/properties&#62;
 [...]
-       &lt;/workspace&gt;
-       &lt;workspace name="collaboration" auto-init-root-nodetype="nt:unstructured" 
-                  auto-init-permissions="any read;*:/platform/administrators read;*:/platform/administrators add_node;*:/platform/administrators set_property;*:/platform/administrators remove" &gt;
-          &lt;!-- for system storage --&gt;
-          &lt;container class="org.exoplatform.services.jcr.impl.storage.jdbc.JDBCWorkspaceDataContainer"&gt;
-            &lt;properties&gt;
-              &lt;property name="sourceName" value="jdbcexo"/&gt;
-              &lt;property name="dialect" value="hsqldb"/&gt;
-              &lt;property name="multi-db" value="false"/&gt;
-              &lt;property name="update-storage" value="true"/&gt;
-              &lt;property name="max-buffer-size" value="204800"/&gt;
-              &lt;property name="swap-directory" value="../temp/swap/collaboration"/&gt;
-            &lt;/properties&gt;
+       &#60;/workspace&#62;
+       &#60;workspace name=&#34;collaboration&#34; auto-init-root-nodetype=&#34;nt:unstructured&#34; 
+                  auto-init-permissions=&#34;any read;*:/platform/administrators read;*:/platform/administrators add_node;*:/platform/administrators set_property;*:/platform/administrators remove&#34; &#62;
+          &#60;!-- for system storage --&#62;
+          &#60;container class=&#34;org.exoplatform.services.jcr.impl.storage.jdbc.JDBCWorkspaceDataContainer&#34;&#62;
+            &#60;properties&#62;
+              &#60;property name=&#34;sourceName&#34; value=&#34;jdbcexo&#34;/&#62;
+              &#60;property name=&#34;dialect&#34; value=&#34;hsqldb&#34;/&#62;
+              &#60;property name=&#34;multi-db&#34; value=&#34;false&#34;/&#62;
+              &#60;property name=&#34;update-storage&#34; value=&#34;true&#34;/&#62;
+              &#60;property name=&#34;max-buffer-size&#34; value=&#34;204800&#34;/&#62;
+              &#60;property name=&#34;swap-directory&#34; value=&#34;../temp/swap/collaboration&#34;/&#62;
+            &#60;/properties&#62;
 [...]
-       &lt;/workspace&gt;
-       &lt;workspace name="backup" auto-init-root-nodetype="nt:unstructured" 
-                  auto-init-permissions="any read;*:/platform/administrators read;*:/platform/administrators add_node;*:/platform/administrators set_property;*:/platform/administrators remove" &gt;
-          &lt;!-- for system storage --&gt;
-          &lt;container class="org.exoplatform.services.jcr.impl.storage.jdbc.JDBCWorkspaceDataContainer"&gt;
-            &lt;properties&gt;
-              &lt;property name="sourceName" value="jdbcexo"/&gt;
-              &lt;property name="dialect" value="mysql"/&gt;
-              &lt;!-- property name="db-type" value="mysql"/ --&gt;
-              &lt;property name="multi-db" value="false"/&gt;
-              &lt;property name="update-storage" value="true"/&gt;
-              &lt;property name="max-buffer-size" value="204800"/&gt;
-              &lt;property name="swap-directory" value="../temp/swap/backup"/&gt;
-            &lt;/properties&gt;
-       &lt;/workspace&gt;
+       &#60;/workspace&#62;
+       &#60;workspace name=&#34;backup&#34; auto-init-root-nodetype=&#34;nt:unstructured&#34; 
+                  auto-init-permissions=&#34;any read;*:/platform/administrators read;*:/platform/administrators add_node;*:/platform/administrators set_property;*:/platform/administrators remove&#34; &#62;
+          &#60;!-- for system storage --&#62;
+          &#60;container class=&#34;org.exoplatform.services.jcr.impl.storage.jdbc.JDBCWorkspaceDataContainer&#34;&#62;
+            &#60;properties&#62;
+              &#60;property name=&#34;sourceName&#34; value=&#34;jdbcexo&#34;/&#62;
+              &#60;property name=&#34;dialect&#34; value=&#34;mysql&#34;/&#62;
+              &#60;!-- property name=&#34;db-type&#34; value=&#34;mysql&#34;/ --&#62;
+              &#60;property name=&#34;multi-db&#34; value=&#34;false&#34;/&#62;
+              &#60;property name=&#34;update-storage&#34; value=&#34;true&#34;/&#62;
+              &#60;property name=&#34;max-buffer-size&#34; value=&#34;204800&#34;/&#62;
+              &#60;property name=&#34;swap-directory&#34; value=&#34;../temp/swap/backup&#34;/&#62;
+            &#60;/properties&#62;
+       &#60;/workspace&#62;
 [...]
-      &lt;/workspaces&gt;
+      &#60;/workspaces&#62;
 [...]
 </programlisting>
 	</section>

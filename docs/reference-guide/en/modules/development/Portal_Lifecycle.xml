@@ -1,7 +1,5 @@
 <?xml version='1.0' encoding='utf-8' ?>
 <!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
-<!ENTITY % BOOK_ENTITIES SYSTEM "../../Reference_Guide.ent">
-%BOOK_ENTITIES;
 ]>
 <section id="sect-Reference_Guide-Portal_Lifecycle">
 	<title>Portal Lifecycle</title>
@@ -18,16 +16,16 @@
 			A portal instance is simply a web application deployed as a WAR in an application server. Portlets are also part of an enhanced WAR called a portlet application.
 		</para>
 		<para>
-			&PRODUCT; doesn't require any particular setup for your portlet in most common scenarios and the <filename>web.xml</filename> file can remain without any &PRODUCT; specific configuration. 
+			&PRODUCT; doesn&#39;t require any particular setup for your portlet in most common scenarios and the <filename>web.xml</filename> file can remain without any &PRODUCT; specific configuration.
 		</para>
 		<para>
 			During deployment, &PRODUCT; will automatically and transparently inject a servlet into the portlet application to be able to interact with it. This feature is dependent on the underlying servlet container but will work out of the box on the proposed bundles.
 		</para>
 	</section>
 	
-	<!--  
+	<!--   
 	   TODO: Define the added listener
-	  --><!--  
+	   --><!--   
 	<section id="sect-Reference_Guide-Portal_Lifecycle-The_Listener">
 		<title>The Listener</title>
 		<para>
@@ -87,7 +85,7 @@
     }
   }
 </programlisting>
-  -->
+   -->
 	<section id="sect-Reference_Guide-Portal_Lifecycle-The_Command_Servlet">
 		<title>The Command Servlet</title>
 		<para>
@@ -101,21 +99,22 @@
 				As the servlet is already configured this example is for information only.
 			</para>
 		</note>
+		
 <programlisting role="XML">
-&lt;servlet&gt;
-  &lt;servlet-name&gt;TomcatGateInServlet&lt;/servlet-name&gt;
-  &lt;servlet-class&gt;org.gatein.wci.command.CommandServlet&lt;/servlet-class&gt;
-  &lt;load-on-startup&gt;0&lt;/load-on-startup&gt;
-&lt;/servlet&gt;
+&#60;servlet&#62;
+  &#60;servlet-name&#62;TomcatGateInServlet&#60;/servlet-name&#62;
+  &#60;servlet-class&#62;org.gatein.wci.command.CommandServlet&#60;/servlet-class&#62;
+  &#60;load-on-startup&#62;0&#60;/load-on-startup&#62;
+&#60;/servlet&#62;
   
-&lt;servlet-mapping&gt;
-  &lt;servlet-name&gt;TomcatGateInServlet&lt;/servlet-name&gt;
-  &lt;url-pattern&gt;/tomcatgateinservlet&lt;/url-pattern&gt;
-&lt;/servlet-mapping&gt;
+&#60;servlet-mapping&#62;
+  &#60;servlet-name&#62;TomcatGateInServlet&#60;/servlet-name&#62;
+  &#60;url-pattern&#62;/tomcatgateinservlet&#60;/url-pattern&#62;
+&#60;/servlet-mapping&#62;
 </programlisting>
 		<para>
 			It is possible to filter on the CommandServlet by filtering the URL pattern used by the Servlet mapping.
-		</para>	
+		</para>
 		<para>
 			The example below would create a servlet filter that calculates the time of execution of a portlet request.
 		</para>
@@ -142,7 +141,7 @@ public class MyFilter implements javax.servlet.Filter {
     long beforeTime = System.currentTimeMillis();
     chain.doFilter(request, response);
     long afterTime = System.currentTimeMillis();
-    System.out.println("Time to execute the portlet request (in ms): " + (afterTime - beforeTime));
+    System.out.println(&#34;Time to execute the portlet request (in ms): &#34; + (afterTime - beforeTime));
   }
 
   public void init(FilterConfig config) throws ServletException
@@ -160,23 +159,23 @@ public class MyFilter implements javax.servlet.Filter {
 		</para>
 		
 <programlisting role="XML">
-&lt;?xml version="1.0"?&gt;
-&lt;web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
-    version="2.5"&gt;
+&#60;?xml version=&#34;1.0&#34;?&#62;
+&#60;web-app xmlns:xsi=&#34;http://www.w3.org/2001/XMLSchema-instance&#34;
+    xsi:schemaLocation=&#34;http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd&#34;
+    version=&#34;2.5&#34;&#62;
         
-  &lt;filter&gt;
-    &lt;filter-name&gt;MyFilter&lt;/filter-name&gt;
-    &lt;filter-class&gt;org.example.MyFilter&lt;/filter-class&gt;        
-  &lt;/filter&gt;
+  &#60;filter&#62;
+    &#60;filter-name&#62;MyFilter&#60;/filter-name&#62;
+    &#60;filter-class&#62;org.example.MyFilter&#60;/filter-class&#62;        
+  &#60;/filter&#62;
 
-  &lt;filter-mapping&gt;
-    &lt;filter-name&gt;MyFilter&lt;/filter-name&gt;
-    &lt;url-pattern&gt;/tomcatgateinservlet&lt;/url-pattern&gt;
-    &lt;dispatcher&gt;INCLUDE&lt;/dispatcher&gt;  
-  &lt;/filter-mapping&gt;    
+  &#60;filter-mapping&#62;
+    &#60;filter-name&#62;MyFilter&#60;/filter-name&#62;
+    &#60;url-pattern&#62;/tomcatgateinservlet&#60;/url-pattern&#62;
+    &#60;dispatcher&#62;INCLUDE&#60;/dispatcher&#62;  
+  &#60;/filter-mapping&#62;    
     
-&lt;/web-app&gt;
+&#60;/web-app&#62;
 </programlisting>
 		<para>
 			<note>
@@ -188,7 +187,7 @@ public class MyFilter implements javax.servlet.Filter {
 		</para>
 	</section>
 	
-	<!--  
+	<!--   
 		<para>
 			Here is its definition in the web.xml file:
 		</para>
@@ -1033,7 +1032,7 @@ abstract public class WebuiRequestContext extends RequestContext {
   }
 </programlisting>
 	</section>
- -->
+  -->
 </section>
 
 

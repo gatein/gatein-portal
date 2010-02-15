@@ -1,84 +1,82 @@
 <?xml version='1.0' encoding='utf-8' ?>
 <!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
-<!ENTITY % BOOK_ENTITIES SYSTEM "../../Reference_Guide.ent">
-%BOOK_ENTITIES;
 ]>
 <section id="sect-Reference_Guide-Gadgets">
 	<title>Gadgets</title>
-		<para>
-			A gadget is a mini web application, embedded in a web page and running on an application server platform. These small applications help users perform various tasks.
-		</para>
-		<para>
-			&PRODUCT; supports gadgets such as: Todo gadget, Calendar gadget, Calculator gadget, Weather Forecasts and and RSS Reader.
-		</para>
-		<variablelist id="vari-User_Guide-Using_the_Dashboard_Workspace-Default_Gadgets">
-			<title>Default Gadgets:</title>
-			<varlistentry>
-				<term>Calendar</term>
-				<listitem>
-					<para>
-						The calendar gadget allows users to switch easily between daily, monthly and yearly view and, again, is customizable to match your portal's theme.
-					</para>
-					<mediaobject>
-						<imageobject>
-							<imagedata fileref="images/Calendar.png" format="PNG" />
-						</imageobject>
-					</mediaobject>
-				</listitem>
-			</varlistentry>
-			<varlistentry>
-				<term>ToDo</term>
-				<listitem>
-					<para>
-						This application helps you organize your day and work group. It is designed to keep track of your tasks in a convenient and transparent way. Tasks can be highlighted with different colors.
-					</para>
-					<mediaobject>
-						<imageobject>
-							<imagedata fileref="images/Todo.png" format="PNG" />
-						</imageobject>
-					</mediaobject>
-				</listitem>
-			</varlistentry>
-			<varlistentry>
-				<term>Calculator</term>
-				<listitem>
-					<para>
-						This mini-application lets you perform most basic arithmetic operations and can be themed to match the rest of your portal.
-					</para>
-					<mediaobject>
-						<imageobject>
-							<imagedata fileref="images/Calculator.png" format="PNG" />
-						</imageobject>
-					</mediaobject>
-				</listitem>
-			</varlistentry>
-			<varlistentry>
-				<term>RSS Reader</term>
-				<listitem>
-					<para>
-						An RSS reader, or aggregator, collates content from various, user-specified feed sources and displays them in one location. This content can include, but isn't limited to, news headlines, blog posts or email. The RSS Reader gadget displays this content in a single window on your Portal page.
-					</para>
-					<!--  <mediaobject>
+	<para>
+		A gadget is a mini web application, embedded in a web page and running on an application server platform. These small applications help users perform various tasks.
+	</para>
+	<para>
+		&PRODUCT; supports gadgets such as: Todo gadget, Calendar gadget, Calculator gadget, Weather Forecasts and and RSS Reader.
+	</para>
+	<variablelist id="vari-Reference_Guide-Gadgets-Default_Gadgets">
+		<title>Default Gadgets:</title>
+		<varlistentry>
+			<term>Calendar</term>
+			<listitem>
+				<para>
+					The calendar gadget allows users to switch easily between daily, monthly and yearly view and, again, is customizable to match your portal&#39;s theme.
+				</para>
+				<mediaobject>
+					<imageobject>
+						<imagedata fileref="images/Calendar.png" format="PNG" />
+					</imageobject>
+				</mediaobject>
+			</listitem>
+		</varlistentry>
+		<varlistentry>
+			<term>ToDo</term>
+			<listitem>
+				<para>
+					This application helps you organize your day and work group. It is designed to keep track of your tasks in a convenient and transparent way. Tasks can be highlighted with different colors.
+				</para>
+				<mediaobject>
+					<imageobject>
+						<imagedata fileref="images/Todo.png" format="PNG" />
+					</imageobject>
+				</mediaobject>
+			</listitem>
+		</varlistentry>
+		<varlistentry>
+			<term>Calculator</term>
+			<listitem>
+				<para>
+					This mini-application lets you perform most basic arithmetic operations and can be themed to match the rest of your portal.
+				</para>
+				<mediaobject>
+					<imageobject>
+						<imagedata fileref="images/Calculator.png" format="PNG" />
+					</imageobject>
+				</mediaobject>
+			</listitem>
+		</varlistentry>
+		<varlistentry>
+			<term>RSS Reader</term>
+			<listitem>
+				<para>
+					An RSS reader, or aggregator, collates content from various, user-specified feed sources and displays them in one location. This content can include, but isn&#39;t limited to, news headlines, blog posts or email. The RSS Reader gadget displays this content in a single window on your Portal page.
+				</para>
+				<!--   <mediaobject>
 						<imageobject>
 							<imagedata fileref="images/RSS.png" format="PNG"></imagedata>
 						</imageobject>
-					</mediaobject>  -->
-				</listitem>
-			</varlistentry>
-			<varlistentry>
-				<term>More Gadgets</term>
-				<listitem>
-					<para>
-						Further gadgets can be obtained from the <ulink type="http" url="http://www.google.com/ig/directory?synd=open">Google Gadget</ulink> site. &PRODUCT; is compatible with most of the gadgets available here.
-					</para>
-				</listitem>
-			</varlistentry>
-		</variablelist>
-<important>
-	<para>
-		The following sections require more textual information.
-	</para>
-</important>
+					</mediaobject>   -->
+			</listitem>
+		</varlistentry>
+		<varlistentry>
+			<term>More Gadgets</term>
+			<listitem>
+				<para>
+					Further gadgets can be obtained from the <ulink type="http" url="http://www.google.com/ig/directory?synd=open">Google Gadget</ulink> site. &PRODUCT; is compatible with most of the gadgets available here.
+				</para>
+			</listitem>
+		</varlistentry>
+	</variablelist>
+	<important>
+		<para>
+			The following sections require more textual information.
+		</para>
+	</important>
 	<section id="sect-Reference_Guide-Gadgets-Existing_Gadgets">
 		<title>Existing Gadgets</title>
 		<mediaobject>

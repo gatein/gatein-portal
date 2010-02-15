@@ -1,66 +1,63 @@
 <?xml version='1.0' encoding='utf-8' ?>
 <!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
-<!ENTITY % BOOK_ENTITIES SYSTEM "../../Reference_Guide.ent">
-%BOOK_ENTITIES;
 ]>
 <section id="sect-Reference_Guide-Portlet_Lifecycle">
 	<title>Portlet Lifecycle</title>
+	<para>
+		This chapter does not to refer to the Portlet API specification lifecycle but focuses on the &PRODUCT; UI framework.
+	</para>
+	<para>
+		This web framework has been developed specifically for &PRODUCT; and, while it is not necessary to use the native web framework to build portlets, all portlets packaged with &PRODUCT; are developed using this framework.
+	</para>
+	<para>
+		This consistency allows portlets to use several UI components that can be used in different abstracted contexts (such as the portal itself or some portlets).
+	</para>
+	<note>
+		<title>Recommended Reading</title>
 		<para>
-			This chapter does not to refer to the Portlet API specification lifecycle but focuses on the &PRODUCT; UI framework.
+			This chapter is intended for advanced developers. It covers code implementation and logic. It is not a tutorial on how to write portlets.
 		</para>
 		<para>
-			This web framework has been developed specifically for &PRODUCT; and, while it is not necessary to use the native web framework to build portlets, all portlets packaged with &PRODUCT; are developed using this framework.
+			Refer to <xref linkend="sect-Reference_Guide-Portal_Lifecycle" /> for information on concepts that are similar and top hierarchy classes that are shared.
 		</para>
-		<para>	
-			This consistency allows portlets to use several UI components that can be used in different abstracted contexts (such as the portal itself or some portlets).
-		</para>
-		<note>
-			<title>Recommended Reading</title>
-			<para>
-				This chapter is intended for advanced developers. It covers code implementation and logic. It is not a tutorial on how to write portlets.
-			</para>
-			<para>
-				Refer to <xref linkend="sect-Reference_Guide-Portal_Lifecycle" /> for information on concepts that are similar and top hierarchy classes that are shared.
-			</para>
-		</note>
-
+	</note>
 	<section id="sect-Reference_Guide-Portlet_Lifecycle-Portlet_init">
 		<title>Portlet init</title>
 		<para>
-			The main entry point for configuring a portlet is in the <emphasis role="bold">portlet.xml</emphasis> file located in the portlet application WAR. 
+			The main entry point for configuring a portlet is in the <emphasis role="bold">portlet.xml</emphasis> file located in the portlet application WAR.
 		</para>
 		<para>
-			Each portlet built using the &PRODUCT; web framework must reference the <emphasis role="bold">PortletApplicationController</emphasis> . 
+			Each portlet built using the &PRODUCT; web framework must reference the <emphasis role="bold">PortletApplicationController</emphasis> .
 		</para>
 		<para>
-			The portlet configuration (such as the root component) is defined in <filename>configuration.xml</filename>. The path to this file is defined in the init-param "<emphasis role="bold">webui.configuration</emphasis>" of <filename>portlet.xml</filename>.
+			The portlet configuration (such as the root component) is defined in <filename>configuration.xml</filename>. The path to this file is defined in the init-param &#34;<emphasis role="bold">webui.configuration</emphasis>&#34; of <filename>portlet.xml</filename>.
 		</para>
 		
-<programlisting>&lt;portlet&gt;
-  &lt;description xml:lang="EN"&gt;Content Portlet&lt;/description&gt;
-  &lt;portlet-name&gt;ContentPortlet&lt;/portlet-name&gt;
-  &lt;display-name xml:lang="EN"&gt;Content Portlet&lt;/display-name&gt;
-  &lt;portlet-class&gt;org.exoplatform.webui.application.portlet.PortletApplicationController&lt;/portlet-class&gt;    
+<programlisting>&#60;portlet&#62;
+  &#60;description xml:lang=&#34;EN&#34;&#62;Content Portlet&#60;/description&#62;
+  &#60;portlet-name&#62;ContentPortlet&#60;/portlet-name&#62;
+  &#60;display-name xml:lang=&#34;EN&#34;&#62;Content Portlet&#60;/display-name&#62;
+  &#60;portlet-class&#62;org.exoplatform.webui.application.portlet.PortletApplicationController&#60;/portlet-class&#62;    
     
-  &lt;init-param&gt;
-    &lt;name&gt;webui.configuration&lt;/name&gt;
-    &lt;value&gt;/WEB-INF/conf/portlet/content/ContentPortlet/webui/configuration.xml&lt;/value&gt;
-  &lt;/init-param&gt;
-&lt;/portlet&gt;
+  &#60;init-param&#62;
+    &#60;name&#62;webui.configuration&#60;/name&#62;
+    &#60;value&#62;/WEB-INF/conf/portlet/content/ContentPortlet/webui/configuration.xml&#60;/value&#62;
+  &#60;/init-param&#62;
+&#60;/portlet&#62;
 </programlisting>
 		<para>
-			The structure of the <filename>configuration.xml</filename> file is exactly the same as the <filename>webui-configuration.xml</filename> which was introduced in <xref linkend="sect-Reference_Guide-Portal_Lifecycle" />. 
+			The structure of the <filename>configuration.xml</filename> file is exactly the same as the <filename>webui-configuration.xml</filename> which was introduced in <xref linkend="sect-Reference_Guide-Portal_Lifecycle" />.
 		</para>
 		<para>
 			In the case of the content portlet it is formatted as:
 		</para>
 		
-<programlisting>&lt;webui-configuration&gt;
-  &lt;application&gt; 
-    &lt;ui-component-root&gt;org.exoplatform.content.webui.component.UIContentPortlet&lt;/ui-component-root&gt;
-    &lt;state-manager&gt;org.exoplatform.webui.application.portlet.ParentAppStateManager&lt;/state-manager&gt;
-  &lt;/application&gt;
-&lt;/webui-configuration&gt;
+<programlisting>&#60;webui-configuration&#62;
+  &#60;application&#62; 
+    &#60;ui-component-root&#62;org.exoplatform.content.webui.component.UIContentPortlet&#60;/ui-component-root&#62;
+    &#60;state-manager&#62;org.exoplatform.webui.application.portlet.ParentAppStateManager&#60;/state-manager&#62;
+  &#60;/application&#62;
+&#60;/webui-configuration&#62;
 </programlisting>
 		<para>
 			The <literal>PortletApplicationController</literal> class extends the <literal>GenericPortlet</literal> class defined in the Portlet API specification.
@@ -133,7 +130,7 @@ public void processAction(ActionRequest req, ActionResponse res) throws Exceptio
     UIApplication uiApp = getStateManager().restoreUIRootComponent(context) ;
     context.setUIApplication(uiApp) ;
     processDecode(uiApp, context) ;
-    if(!images/context.isResponseComplete() &amp;&amp;!images/ context.getProcessRender()) {
+    if(!images/context.isResponseComplete() &#38;&#38;!images/ context.getProcessRender()) {
       processAction(uiApp, context) ;
     }
   } finally {
@@ -158,13 +155,13 @@ public void processAction(ActionRequest req, ActionResponse res) throws Exceptio
  */
 private PortletRequestContext createRequestContext(PortletRequest req, PortletResponse res,
                                                   WebuiRequestContext parentAppRequestContext) throws IOException {
-  String attributeName = getApplicationId() + "$PortletRequest" ;
+  String attributeName = getApplicationId() + &#34;$PortletRequest&#34; ;
   PortletRequestContext context = 
     (PortletRequestContext) parentAppRequestContext.getAttribute(attributeName) ;
   Writer w  = null ;       
   if(res instanceof  RenderResponse){
     RenderResponse renderRes = (RenderResponse)res;
-    renderRes.setContentType("text/html; charset=UTF-8");      
+    renderRes.setContentType(&#34;text/html; charset=UTF-8&#34;);      
     w = renderRes.getWriter() ; 
   }
   if(context!images/= null) {
@@ -180,10 +177,11 @@ private PortletRequestContext createRequestContext(PortletRequest req, PortletRe
 		<para>
 			In the <literal>PortletApplication</literal>, the line;
 		</para>
+		
 <programlisting>UIApplication uiApp = getStateManager().restoreUIRootComponent(context);
 </programlisting>
 		<para>
-			 asks the <literal>StateManager</literal> defined for the portlet to get the UI root component. In the case of a portlet the root component must extend <literal>UIPortletApplication</literal>.
+			asks the <literal>StateManager</literal> defined for the portlet to get the UI root component. In the case of a portlet the root component must extend <literal>UIPortletApplication</literal>.
 		</para>
 		
 <programlisting>public class ParentAppStateManager extends StateManager {
@@ -191,7 +189,7 @@ private PortletRequestContext createRequestContext(PortletRequest req, PortletRe
   /**
    * This method simply delegate the call to the same method of the parent WebuiRequestContext
    */
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings(&#34;unchecked&#34;)
   public UIApplication restoreUIRootComponent(WebuiRequestContext context) throws Exception {
     WebuiRequestContext pcontext = (WebuiRequestContext)  context.getParentAppRequestContext() ;
     return pcontext.getStateManager().restoreUIRootComponent(context) ;
@@ -274,7 +272,7 @@ public  void render(RenderRequest req,  RenderResponse res) throws Exception {
         lifecycle.onEndRequest(this, context) ;
       }
     } catch (Exception exception){
-  	log.error("Error while trying to call onEndRequest of the portlet ApplicationLifecycle", 
+  	log.error(&#34;Error while trying to call onEndRequest of the portlet ApplicationLifecycle&#34;, 
   		exception);
     }
     WebuiRequestContext.setCurrentInstance(parentAppRequestContext) ;
@@ -302,10 +300,10 @@ public  void render(RenderRequest req,  RenderResponse res) throws Exception {
  */
 public void  processRender(WebuiApplication app, WebuiRequestContext context) throws Exception {
   WebuiRequestContext pContext = (WebuiRequestContext)context.getParentAppRequestContext();
-  if(context.useAjax() &amp;&amp;!images/pContext.getFullRender()) {
+  if(context.useAjax() &#38;&#38;!images/pContext.getFullRender()) {
     Writer w =  context.getWriter() ;
     
-    Set&lt;UIComponent&gt; list = context.getUIComponentToUpdateByAjax() ;
+    Set&#60;UIComponent&#62; list = context.getUIComponentToUpdateByAjax() ;
     if(list!images/= null) {
       if(getUIPopupMessages().hasMessage()) context.addUIComponentToUpdateByAjax(getUIPopupMessages()) ;
       for(UIComponent uicomponent : list) {

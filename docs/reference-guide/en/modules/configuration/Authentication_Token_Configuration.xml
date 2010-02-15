@@ -1,18 +1,15 @@
 <?xml version='1.0' encoding='utf-8' ?>
 <!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
-<!ENTITY % BOOK_ENTITIES SYSTEM "../../Reference_Guide.ent">
-%BOOK_ENTITIES;
 ]>
 <section id="sect-Reference_Guide-Authentication_Token_Configuration">
 	<title>Authentication Token Configuration</title>
-	
 	<section id="sect-Reference_Guide-Authentication_Token_Configuration-What_is_token_service">
 		<title>What is token service</title>
 		<para>
 			<emphasis>Token service</emphasis> is used in authentication.
 		</para>
 		<para>
-			The token system prevents user account information being sent in clear text mode for inbound requests.  This increases authentication security.
+			The token system prevents user account information being sent in clear text mode for inbound requests. This increases authentication security.
 		</para>
 		<para>
 			Token service allows adminitrators to create, delete, retrieve and clean tokens as required. The service also defines the validity period of any given token. The token becomes invalid once this period has expired, . The life-time definition must be configured.
@@ -20,9 +17,9 @@
 	</section>
 	
 	<section id="sect-Reference_Guide-Authentication_Token_Configuration-Implement_token_services_API">
-		<title>Implement token service's API</title>
+		<title>Implement token service&#39;s API</title>
 		<para>
-			All token services used in &PRODUCT;'s authentication must be a subclass of an abstract class <emphasis role="bold">AbstractTokenService</emphasis>. The following example shows how the token-service manipulates its tokens.
+			All token services used in &PRODUCT;&#39;s authentication must be a subclass of an abstract class <emphasis role="bold">AbstractTokenService</emphasis>. The following example shows how the token-service manipulates its tokens.
 		</para>
 		
 <programlisting role="JAVA">
@@ -34,7 +31,6 @@
 		public Credentials validateToken(String tokenKey, boolean remove) throws NullPointerException;
 </programlisting>
 		<para>
-			
 		</para>
 	</section>
 	
@@ -44,10 +40,10 @@
 			Token services configuration includes specifying the validity period time of token in the configuration file. The token service is configured as a portal component.
 		</para>
 		<para>
-		In the example below, <emphasis>CookieTokenService</emphasis> is a subclass of <emphasis role="bold">AbstractTokenService</emphasis> so it has a property which specifies the validity period of the token.
+			In the example below, <emphasis>CookieTokenService</emphasis> is a subclass of <emphasis role="bold">AbstractTokenService</emphasis> so it has a property which specifies the validity period of the token.
 		</para>
 		<para>
-			The token service will initiate this validity property by looking for an <parameter>init-param</parameter> named "<emphasis role="bold">service.configuration</emphasis>". 
+			The token service will initiate this validity property by looking for an <parameter>init-param</parameter> named &#34;<emphasis role="bold">service.configuration</emphasis>&#34;.
 		</para>
 		<para>
 			This property must have three values.
@@ -58,22 +54,21 @@
 				<area coords="8" id="area-Reference_Guide-Authentication_Token_Configuration-Configure_token_services-time" />
 				<area coords="9" id="area-Reference_Guide-Authentication_Token_Configuration-Configure_token_services-unit" />
 			</areaspec>
-
-<programlisting role="XML">&lt;component&gt;
-  &lt;key&gt;org.exoplatform.web.security.security.CookieTokenService&lt;/key&gt;
-  &lt;type&gt;org.exoplatform.web.security.security.CookieTokenService&lt;/type&gt;
-  &lt;init-params&gt;
-  	&lt;values-param&gt;
-      &lt;name&gt;tokenTimeout&lt;/name&gt;          
-      &lt;value&gt;jcr-token&lt;/value&gt;
-      &lt;value&gt;7&lt;/value&gt;
-      &lt;value&gt;DAY&lt;/value&gt;
-    &lt;/values-param&gt;    	
-  &lt;/init-params&gt;
-&lt;/component&gt;
+			
+<programlisting role="XML">&#60;component&#62;
+  &#60;key&#62;org.exoplatform.web.security.security.CookieTokenService&#60;/key&#62;
+  &#60;type&#62;org.exoplatform.web.security.security.CookieTokenService&#60;/type&#62;
+  &#60;init-params&#62;
+  	&#60;values-param&#62;
+      &#60;name&#62;tokenTimeout&#60;/name&#62;          
+      &#60;value&#62;jcr-token&#60;/value&#62;
+      &#60;value&#62;7&#60;/value&#62;
+      &#60;value&#62;DAY&#60;/value&#62;
+    &#60;/values-param&#62;    	
+  &#60;/init-params&#62;
+&#60;/component&#62;
 </programlisting>
-
-		<calloutlist>
+			<calloutlist>
 				<callout arearefs="area-Reference_Guide-Authentication_Token_Configuration-Configure_token_services-name">
 					<para>
 						Service name
@@ -89,13 +84,14 @@
 						Unit of time
 					</para>
 				</callout>
-		</calloutlist>
+			</calloutlist>
 		</programlistingco>
+		
 		<para>
-			In this case, the service's name is "<emphasis role="bold">jcr-token</emphasis>" and the token's expiration time is a week.
+			In this case, the service&#39;s name is &#34;<emphasis role="bold">jcr-token</emphasis>&#34; and the token&#39;s expiration time is a week.
 		</para>
 		<para>
-			&PRODUCT; supports <emphasis>four</emphasis> timing units: 
+			&PRODUCT; supports <emphasis>four</emphasis> timing units:
 		</para>
 		<orderedlist numeration="arabic">
 			<listitem>
@@ -120,6 +116,7 @@
 			</listitem>
 		</orderedlist>
 	</section>
+
 </section>
 
 

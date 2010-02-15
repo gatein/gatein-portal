@@ -1,7 +1,5 @@
 <?xml version='1.0' encoding='utf-8' ?>
 <!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
-<!ENTITY % BOOK_ENTITIES SYSTEM "../../Reference_Guide.ent">
-%BOOK_ENTITIES;
 ]>
 <section id="sect-Reference_Guide-Portal_Default_Permission_Configuration">
 	<title>Portal Default Permission Configuration</title>
@@ -14,107 +12,108 @@
 			It defines 5 permissions types:
 		</para>
 		<variablelist>
-		  <varlistentry>
-			<term>super.user</term>
-			<listitem>
-				<para>
-					The super user has all the rights on the platform, this user is referred to as <emphasis>root</emphasis>.
-				</para>
-			</listitem>
-		</varlistentry>
-		<varlistentry>
-			<term>portal.creator.groups</term>
-			<listitem>
-				<para>
-					This list defines all groups that will be able to manage the different portals. Members of this group also have the permission to create new portals. The format is "<literal>membership:/group/subgroup</literal> ".
-				</para>
-			</listitem>
-		</varlistentry>
-		<varlistentry>
-			<term>navigation.creator.membership.type</term>
-			<listitem>
-				<para>
-					Defines the membership type of the group managers. The group managers have the permission to create and edit group pages and they can modify the group navigation.
-				</para>
-			</listitem>
-		</varlistentry>
-		<varlistentry>
-			<term>guests.group</term>
-			<listitem>
-				<para>
-					Any anonymous user automatically becomes a member of this group whent they enter the public pages.
-				</para>
-			</listitem>
-		</varlistentry>
-		<varlistentry>
-			<term>access.control.workspace</term>
-			<listitem>
-				<para>
-					Defines the users that have access to the control workspace. In the demo version the control workspace is accessible only to 'root' and 'john'. They can expand/collapse the workspace at the left hand side. The format is "membership:/group/subgroup", An asterisk '' gives permission to all memberships.
-				</para>
-			</listitem>
-		</varlistentry>
+			<varlistentry>
+				<term>super.user</term>
+				<listitem>
+					<para>
+						The super user has all the rights on the platform, this user is referred to as <emphasis>root</emphasis>.
+					</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>portal.creator.groups</term>
+				<listitem>
+					<para>
+						This list defines all groups that will be able to manage the different portals. Members of this group also have the permission to create new portals. The format is &#34;<literal>membership:/group/subgroup</literal> &#34;.
+					</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>navigation.creator.membership.type</term>
+				<listitem>
+					<para>
+						Defines the membership type of the group managers. The group managers have the permission to create and edit group pages and they can modify the group navigation.
+					</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>guests.group</term>
+				<listitem>
+					<para>
+						Any anonymous user automatically becomes a member of this group whent they enter the public pages.
+					</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>access.control.workspace</term>
+				<listitem>
+					<para>
+						Defines the users that have access to the control workspace. In the demo version the control workspace is accessible only to &#39;root&#39; and &#39;john&#39;. They can expand/collapse the workspace at the left hand side. The format is &#34;membership:/group/subgroup&#34;, An asterisk &#39;&#39; gives permission to all memberships.
+					</para>
+				</listitem>
+			</varlistentry>
 		</variablelist>
-<programlisting role="XML">&lt;component&gt;
-  &lt;key&gt;org.exoplatform.portal.config.UserACL&lt;/key&gt;
-  &lt;type&gt;org.exoplatform.portal.config.UserACL&lt;/type&gt;   
-  &lt;init-params&gt;      
-    &lt;value-param&gt;
-      &lt;name&gt;super.user&lt;/name&gt;
-      &lt;description&gt;administrator&lt;/description&gt;
-      &lt;value&gt;root&lt;/value&gt;     
-    &lt;/value-param&gt;
+		
+<programlisting role="XML">&#60;component&#62;
+  &#60;key&#62;org.exoplatform.portal.config.UserACL&#60;/key&#62;
+  &#60;type&#62;org.exoplatform.portal.config.UserACL&#60;/type&#62;   
+  &#60;init-params&#62;      
+    &#60;value-param&#62;
+      &#60;name&#62;super.user&#60;/name&#62;
+      &#60;description&#62;administrator&#60;/description&#62;
+      &#60;value&#62;root&#60;/value&#62;     
+    &#60;/value-param&#62;
       
-    &lt;value-param&gt;
-      &lt;name&gt;portal.creator.groups&lt;/name&gt;
-      &lt;description&gt;groups with membership type have permission to manage portal&lt;/description&gt;
-      &lt;value&gt;*:/platform/administrators,*:/organization/management/executive-board&lt;/value&gt;     
-    &lt;/value-param&gt;
+    &#60;value-param&#62;
+      &#60;name&#62;portal.creator.groups&#60;/name&#62;
+      &#60;description&#62;groups with membership type have permission to manage portal&#60;/description&#62;
+      &#60;value&#62;*:/platform/administrators,*:/organization/management/executive-board&#60;/value&#62;     
+    &#60;/value-param&#62;
       
-    &lt;value-param&gt;
-      &lt;name&gt;navigation.creator.membership.type&lt;/name&gt;
-      &lt;description&gt;specific membership type have full permission with group navigation&lt;/description&gt;
-      &lt;value&gt;manager&lt;/value&gt;     
-    &lt;/value-param&gt;
-    &lt;value-param&gt;
-      &lt;name&gt;guests.group&lt;/name&gt;
-      &lt;description&gt;guests group&lt;/description&gt;
-      &lt;value&gt;/platform/guests&lt;/value&gt;     
-    &lt;/value-param&gt;     
-    &lt;value-param&gt;
-      &lt;name&gt;access.control.workspace&lt;/name&gt;
-      &lt;description&gt;groups with memberships that have the right to access the User Control Workspace&lt;/description&gt;
-      &lt;value&gt;*:/platform/administrators,*:/organization/management/executive-board&lt;/value&gt;     
-    &lt;/value-param&gt;           
-  &lt;/init-params&gt;   
-&lt;/component&gt;
+    &#60;value-param&#62;
+      &#60;name&#62;navigation.creator.membership.type&#60;/name&#62;
+      &#60;description&#62;specific membership type have full permission with group navigation&#60;/description&#62;
+      &#60;value&#62;manager&#60;/value&#62;     
+    &#60;/value-param&#62;
+    &#60;value-param&#62;
+      &#60;name&#62;guests.group&#60;/name&#62;
+      &#60;description&#62;guests group&#60;/description&#62;
+      &#60;value&#62;/platform/guests&#60;/value&#62;     
+    &#60;/value-param&#62;     
+    &#60;value-param&#62;
+      &#60;name&#62;access.control.workspace&#60;/name&#62;
+      &#60;description&#62;groups with memberships that have the right to access the User Control Workspace&#60;/description&#62;
+      &#60;value&#62;*:/platform/administrators,*:/organization/management/executive-board&#60;/value&#62;     
+    &#60;/value-param&#62;           
+  &#60;/init-params&#62;   
+&#60;/component&#62;
 </programlisting>
 	</section>
 	
 	<section id="sect-Reference_Guide-Portal_Default_Permission_Configuration-Overwrite_Portal_Default_Permissions">
 		<title>Overwrite Portal Default Permissions</title>
 		
-<programlisting role="XML">&lt;external-component-plugins&gt;
-    &lt;target-component&gt;org.exoplatform.portal.config.UserACL&lt;/target-component&gt;
-    &lt;component-plugin&gt;
-      &lt;name&gt;addPortalACLPlugin&lt;/name&gt;
-      &lt;set-method&gt;addPortalACLPlugin&lt;/set-method&gt;
-      &lt;type&gt;org.exoplatform.portal.config.PortalACLPlugin&lt;/type&gt;
-      &lt;description&gt;setting some permission for portal&lt;/description&gt;
-      &lt;init-params&gt;     
-        &lt;values-param&gt;
-          &lt;name&gt;access.control.workspace.roles&lt;/name&gt;
-          &lt;value&gt;*:/platform/administrators&lt;/value&gt;
-          &lt;value&gt;*:/organization/management/executive-board&lt;/value&gt;       
-        &lt;/values-param&gt;
-        &lt;values-param&gt;
-          &lt;name&gt;portal.creation.roles&lt;/name&gt;
-          &lt;value&gt;*:/platform/administrators&lt;/value&gt;
-          &lt;value&gt;*:/organization/management/executive-board&lt;/value&gt;      
-        &lt;/values-param&gt;
-      &lt;/init-params&gt;
-    &lt;/component-plugin&gt;
-  &lt;/external-component-plugins&gt;
+<programlisting role="XML">&#60;external-component-plugins&#62;
+    &#60;target-component&#62;org.exoplatform.portal.config.UserACL&#60;/target-component&#62;
+    &#60;component-plugin&#62;
+      &#60;name&#62;addPortalACLPlugin&#60;/name&#62;
+      &#60;set-method&#62;addPortalACLPlugin&#60;/set-method&#62;
+      &#60;type&#62;org.exoplatform.portal.config.PortalACLPlugin&#60;/type&#62;
+      &#60;description&#62;setting some permission for portal&#60;/description&#62;
+      &#60;init-params&#62;     
+        &#60;values-param&#62;
+          &#60;name&#62;access.control.workspace.roles&#60;/name&#62;
+          &#60;value&#62;*:/platform/administrators&#60;/value&#62;
+          &#60;value&#62;*:/organization/management/executive-board&#60;/value&#62;       
+        &#60;/values-param&#62;
+        &#60;values-param&#62;
+          &#60;name&#62;portal.creation.roles&#60;/name&#62;
+          &#60;value&#62;*:/platform/administrators&#60;/value&#62;
+          &#60;value&#62;*:/organization/management/executive-board&#60;/value&#62;      
+        &#60;/values-param&#62;
+      &#60;/init-params&#62;
+    &#60;/component-plugin&#62;
+  &#60;/external-component-plugins&#62;
 </programlisting>
 	</section>
 

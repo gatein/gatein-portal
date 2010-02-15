@@ -1,43 +1,41 @@
 <?xml version='1.0' encoding='utf-8' ?>
 <!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
-<!ENTITY % BOOK_ENTITIES SYSTEM "../../Reference_Guide.ent">
-%BOOK_ENTITIES;
 ]>
 <section id="sect-Reference_Guide-Default_Portal_Configuration">
 	<title>Default Portal Configuration</title>
 	<section id="sect-Reference_Guide-Default_Portal_Configuration-Overview">
 		<title>Overview</title>
 		<para>
-			The default portal will be accessed if the user doesn't specify another portal. For example: <literal>http://hostname:port/portal/</literal>. The default portal also be used at startup to determine if the tomcat database is empty or not.
+			The default portal will be accessed if the user doesn&#39;t specify another portal. For example: <literal>http://hostname:port/portal/</literal>. The default portal also be used at startup to determine if the tomcat database is empty or not.
 		</para>
 	</section>
 	
 	<section id="sect-Reference_Guide-Default_Portal_Configuration-Configuration">
 		<title>Configuration</title>
 		<para>
-			The example configuration file below is found at: "<filename>02portal.war:/WEB-INF/conf/portal/portal-configuration.xml</filename>".
+			The example configuration file below is found at: &#34;<filename>02portal.war:/WEB-INF/conf/portal/portal-configuration.xml</filename>&#34;.
 		</para>
 		
-<programlisting role="XML">&lt;component&gt;
-    &lt;key&gt;org.exoplatform.portal.config.UserPortalConfigService&lt;/key&gt;
-    &lt;type&gt;org.exoplatform.portal.config.UserPortalConfigService&lt;/type&gt;
-    &lt;component-plugins&gt;           
-     &lt;component-plugin&gt;
-       &lt;name&gt;new.portal.config.user.listener&lt;/name&gt;
-       &lt;set-method&gt;initListener&lt;/set-method&gt;
-       &lt;type&gt;org.exoplatform.portal.config.NewPortalConfigListener&lt;/type&gt;
-       &lt;description&gt;this listener init the portal configuration&lt;/description&gt;
-       &lt;init-params&gt;
-         &lt;value-param&gt;
-           &lt;name&gt;default.portal&lt;/name&gt;
-           &lt;description&gt;The default portal for checking db is empty or not&lt;/description&gt;
-           &lt;value&gt;classic&lt;/value&gt;
-         &lt;/value-param&gt; 
+<programlisting role="XML">&#60;component&#62;
+    &#60;key&#62;org.exoplatform.portal.config.UserPortalConfigService&#60;/key&#62;
+    &#60;type&#62;org.exoplatform.portal.config.UserPortalConfigService&#60;/type&#62;
+    &#60;component-plugins&#62;           
+     &#60;component-plugin&#62;
+       &#60;name&#62;new.portal.config.user.listener&#60;/name&#62;
+       &#60;set-method&#62;initListener&#60;/set-method&#62;
+       &#60;type&#62;org.exoplatform.portal.config.NewPortalConfigListener&#60;/type&#62;
+       &#60;description&#62;this listener init the portal configuration&#60;/description&#62;
+       &#60;init-params&#62;
+         &#60;value-param&#62;
+           &#60;name&#62;default.portal&#60;/name&#62;
+           &#60;description&#62;The default portal for checking db is empty or not&#60;/description&#62;
+           &#60;value&#62;classic&#60;/value&#62;
+         &#60;/value-param&#62; 
          ..........
-       &lt;/init-params&gt;
-     &lt;/component-plugin&gt;
-    &lt;/component-plugins&gt; 
-  &lt;/component&gt;
+       &#60;/init-params&#62;
+     &#60;/component-plugin&#62;
+    &#60;/component-plugins&#62; 
+  &#60;/component&#62;
 </programlisting>
 		<para>
 			In this example the <emphasis role="bold">classic</emphasis> portal has been set as the default. Note that the definition should be as a initial parameter of the NewPortalConfigListener component-plugin.

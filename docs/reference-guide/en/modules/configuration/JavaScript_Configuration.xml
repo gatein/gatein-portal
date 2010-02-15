@@ -1,7 +1,5 @@
 <?xml version='1.0' encoding='utf-8' ?>
 <!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
-<!ENTITY % BOOK_ENTITIES SYSTEM "../../Reference_Guide.ent">
-%BOOK_ENTITIES;
 ]>
 <section id="sect-Reference_Guide-Javascript_Configuration">
 	<title>Javascript Configuration</title>
@@ -10,77 +8,77 @@
 	</para>
 	<para>
 		Every portlet can have its own javscript code but in many cases it is more convenient to reuse some existing shared libraries. For that reason, &PRODUCT; has a mechanism to easily register the libraries that will be loaded when the first page will be rendered.
-	</para>	
+	</para>
 	<para>
-		To do so, every WAR deployed in &PRODUCT; can register the <filename>js</filename> files with the groovy script "<filename>WEB-INF/conf/script/groovy/JavascriptScript.groovy</filename>". 
+		To do so, every WAR deployed in &PRODUCT; can register the <filename>js</filename> files with the groovy script &#34;<filename>WEB-INF/conf/script/groovy/JavascriptScript.groovy</filename>&#34;.
 	</para>
 	<para>
 		The example file below is found in the 01eXoResources.war
 	</para>
 	
-<programlisting>JavascriptService.addJavascript("eXo", "/javascript/eXo.js", ServletContext);
+<programlisting>JavascriptService.addJavascript(&#34;eXo&#34;, &#34;/javascript/eXo.js&#34;, ServletContext);
 /* Animation Javascripts */
-JavascriptService.addJavascript("eXo.animation.ImplodeExplode", "/javascript/eXo/animation/ImplodeExplode.js", ServletContext);
+JavascriptService.addJavascript(&#34;eXo.animation.ImplodeExplode&#34;, &#34;/javascript/eXo/animation/ImplodeExplode.js&#34;, ServletContext);
 /* Application descriptor */
-JavascriptService.addJavascript("eXo.application.ApplicationDescriptor", "/javascript/eXo/application/ApplicationDescriptor.js", ServletContext);
+JavascriptService.addJavascript(&#34;eXo.application.ApplicationDescriptor&#34;, &#34;/javascript/eXo/application/ApplicationDescriptor.js&#34;, ServletContext);
 /* CORE Javascripts */
-JavascriptService.addJavascript("eXo.core.Utils", "/javascript/eXo/core/Util.js", ServletContext);
-JavascriptService.addJavascript("eXo.core.DOMUtil", "/javascript/eXo/core/DOMUtil.js", ServletContext);
-JavascriptService.addJavascript("eXo.core.Browser", "/javascript/eXo/core/Browser.js", ServletContext);
-JavascriptService.addJavascript("eXo.core.MouseEventManager", "/javascript/eXo/core/MouseEventManager.js", ServletContext);
-JavascriptService.addJavascript("eXo.core.UIMaskLayer", "/javascript/eXo/core/UIMaskLayer.js", ServletContext);
-JavascriptService.addJavascript("eXo.core.Skin", "/javascript/eXo/core/Skin.js", ServletContext);
-JavascriptService.addJavascript("eXo.core.DragDrop", "/javascript/eXo/core/DragDrop.js", ServletContext);
-JavascriptService.addJavascript("eXo.core.TemplateEngine", "/javascript/eXo/core/TemplateEngine.js", ServletContext);
+JavascriptService.addJavascript(&#34;eXo.core.Utils&#34;, &#34;/javascript/eXo/core/Util.js&#34;, ServletContext);
+JavascriptService.addJavascript(&#34;eXo.core.DOMUtil&#34;, &#34;/javascript/eXo/core/DOMUtil.js&#34;, ServletContext);
+JavascriptService.addJavascript(&#34;eXo.core.Browser&#34;, &#34;/javascript/eXo/core/Browser.js&#34;, ServletContext);
+JavascriptService.addJavascript(&#34;eXo.core.MouseEventManager&#34;, &#34;/javascript/eXo/core/MouseEventManager.js&#34;, ServletContext);
+JavascriptService.addJavascript(&#34;eXo.core.UIMaskLayer&#34;, &#34;/javascript/eXo/core/UIMaskLayer.js&#34;, ServletContext);
+JavascriptService.addJavascript(&#34;eXo.core.Skin&#34;, &#34;/javascript/eXo/core/Skin.js&#34;, ServletContext);
+JavascriptService.addJavascript(&#34;eXo.core.DragDrop&#34;, &#34;/javascript/eXo/core/DragDrop.js&#34;, ServletContext);
+JavascriptService.addJavascript(&#34;eXo.core.TemplateEngine&#34;, &#34;/javascript/eXo/core/TemplateEngine.js&#34;, ServletContext);
 /* Widget Javascripts */
-JavascriptService.addJavascript("eXo.widget.UIWidget", "/javascript/eXo/widget/UIWidget.js", ServletContext);
-JavascriptService.addJavascript("eXo.widget.UIAddWidget", "/javascript/eXo/widget/UIAddWidget.js", ServletContext);
-JavascriptService.addJavascript("eXo.widget.UIExoWidget", "/javascript/eXo/widget/UIExoWidget.js", ServletContext);
+JavascriptService.addJavascript(&#34;eXo.widget.UIWidget&#34;, &#34;/javascript/eXo/widget/UIWidget.js&#34;, ServletContext);
+JavascriptService.addJavascript(&#34;eXo.widget.UIAddWidget&#34;, &#34;/javascript/eXo/widget/UIAddWidget.js&#34;, ServletContext);
+JavascriptService.addJavascript(&#34;eXo.widget.UIExoWidget&#34;, &#34;/javascript/eXo/widget/UIExoWidget.js&#34;, ServletContext);
 /* Desktop Javascripts */
-JavascriptService.addJavascript("eXo.desktop.UIDockbar", "/javascript/eXo/desktop/UIDockbar.js", ServletContext);
-JavascriptService.addJavascript("eXo.desktop.UIDesktop", "/javascript/eXo/desktop/UIDesktop.js", ServletContext);
+JavascriptService.addJavascript(&#34;eXo.desktop.UIDockbar&#34;, &#34;/javascript/eXo/desktop/UIDockbar.js&#34;, ServletContext);
+JavascriptService.addJavascript(&#34;eXo.desktop.UIDesktop&#34;, &#34;/javascript/eXo/desktop/UIDesktop.js&#34;, ServletContext);
 /* WebUI Javascripts */ 
-JavascriptService.addJavascript("eXo.webui.UIItemSelector", "/javascript/eXo/webui/UIItemSelector.js", ServletContext);
-JavascriptService.addJavascript("eXo.webui.UIForm", "/javascript/eXo/webui/UIForm.js", ServletContext);
-JavascriptService.addJavascript("eXo.webui.UIPopup", "/javascript/eXo/webui/UIPopup.js", ServletContext);
-JavascriptService.addJavascript("eXo.webui.UIPopupSelectCategory", "/javascript/eXo/webui/UIPopupSelectCategory.js", ServletContext);
-JavascriptService.addJavascript("eXo.webui.UIPopupWindow", "/javascript/eXo/webui/UIPopupWindow.js", ServletContext);
-JavascriptService.addJavascript("eXo.webui.UIVerticalScroller", "/javascript/eXo/webui/UIVerticalScroller.js", ServletContext);
-JavascriptService.addJavascript("eXo.webui.UIHorizontalTabs", "/javascript/eXo/webui/UIHorizontalTabs.js", ServletContext);
-JavascriptService.addJavascript("eXo.webui.UIPopupMenu", "/javascript/eXo/webui/UIPopupMenu.js", ServletContext);
-JavascriptService.addJavascript("eXo.webui.UIDropDownControl", "/javascript/eXo/webui/UIDropDownControl.js", ServletContext);
+JavascriptService.addJavascript(&#34;eXo.webui.UIItemSelector&#34;, &#34;/javascript/eXo/webui/UIItemSelector.js&#34;, ServletContext);
+JavascriptService.addJavascript(&#34;eXo.webui.UIForm&#34;, &#34;/javascript/eXo/webui/UIForm.js&#34;, ServletContext);
+JavascriptService.addJavascript(&#34;eXo.webui.UIPopup&#34;, &#34;/javascript/eXo/webui/UIPopup.js&#34;, ServletContext);
+JavascriptService.addJavascript(&#34;eXo.webui.UIPopupSelectCategory&#34;, &#34;/javascript/eXo/webui/UIPopupSelectCategory.js&#34;, ServletContext);
+JavascriptService.addJavascript(&#34;eXo.webui.UIPopupWindow&#34;, &#34;/javascript/eXo/webui/UIPopupWindow.js&#34;, ServletContext);
+JavascriptService.addJavascript(&#34;eXo.webui.UIVerticalScroller&#34;, &#34;/javascript/eXo/webui/UIVerticalScroller.js&#34;, ServletContext);
+JavascriptService.addJavascript(&#34;eXo.webui.UIHorizontalTabs&#34;, &#34;/javascript/eXo/webui/UIHorizontalTabs.js&#34;, ServletContext);
+JavascriptService.addJavascript(&#34;eXo.webui.UIPopupMenu&#34;, &#34;/javascript/eXo/webui/UIPopupMenu.js&#34;, ServletContext);
+JavascriptService.addJavascript(&#34;eXo.webui.UIDropDownControl&#34;, &#34;/javascript/eXo/webui/UIDropDownControl.js&#34;, ServletContext);
 /* Portal Javascripts */ 
-JavascriptService.addJavascript("eXo.portal.PortalHttpRequest", "/javascript/eXo/portal/PortalHttpRequest.js", ServletContext);
-JavascriptService.addJavascript("eXo.portal.UIPortal", "/javascript/eXo/portal/UIPortal.js", ServletContext);
-JavascriptService.addJavascript("eXo.portal.UIWorkspace", "/javascript/eXo/portal/UIWorkspace.js", ServletContext);
-JavascriptService.addJavascript("eXo.portal.UIPortalControl", "/javascript/eXo/portal/UIPortalControl.js", ServletContext);
-JavascriptService.addJavascript("eXo.portal.PortalDragDrop", "/javascript/eXo/portal/PortalDragDrop.js", ServletContext);
-JavascriptService.addJavascript("eXo.portal.UIPortalNavigation", "/javascript/eXo/portal/UIPortalNavigation.js", ServletContext);
-JavascriptService.addJavascript("eXo.portal.UIMaskWorkspace", "/javascript/eXo/portal/UIMaskWorkspace.js", ServletContext);
-JavascriptService.addJavascript("eXo.portal.UIExoStartMenu", "/javascript/eXo/portal/UIExoStartMenu.js", ServletContext);
+JavascriptService.addJavascript(&#34;eXo.portal.PortalHttpRequest&#34;, &#34;/javascript/eXo/portal/PortalHttpRequest.js&#34;, ServletContext);
+JavascriptService.addJavascript(&#34;eXo.portal.UIPortal&#34;, &#34;/javascript/eXo/portal/UIPortal.js&#34;, ServletContext);
+JavascriptService.addJavascript(&#34;eXo.portal.UIWorkspace&#34;, &#34;/javascript/eXo/portal/UIWorkspace.js&#34;, ServletContext);
+JavascriptService.addJavascript(&#34;eXo.portal.UIPortalControl&#34;, &#34;/javascript/eXo/portal/UIPortalControl.js&#34;, ServletContext);
+JavascriptService.addJavascript(&#34;eXo.portal.PortalDragDrop&#34;, &#34;/javascript/eXo/portal/PortalDragDrop.js&#34;, ServletContext);
+JavascriptService.addJavascript(&#34;eXo.portal.UIPortalNavigation&#34;, &#34;/javascript/eXo/portal/UIPortalNavigation.js&#34;, ServletContext);
+JavascriptService.addJavascript(&#34;eXo.portal.UIMaskWorkspace&#34;, &#34;/javascript/eXo/portal/UIMaskWorkspace.js&#34;, ServletContext);
+JavascriptService.addJavascript(&#34;eXo.portal.UIExoStartMenu&#34;, &#34;/javascript/eXo/portal/UIExoStartMenu.js&#34;, ServletContext);
 /* Desktop Javascripts 2 */
-JavascriptService.addJavascript("eXo.desktop.UIWindow", "/javascript/eXo/desktop/UIWindow.js", ServletContext);
+JavascriptService.addJavascript(&#34;eXo.desktop.UIWindow&#34;, &#34;/javascript/eXo/desktop/UIWindow.js&#34;, ServletContext);
 </programlisting>
 	<para>
 		Note that even registered dedicated javascripts will be merged into a single <literal>merged.js</literal> file when the server loads. This reduces the number of HTTP calls as seen in the home page source code:
 	</para>
 	
-<programlisting>&lt;script type="text/javascript" src="/portal/javascript/merged.js"&gt;&lt;/script&gt;
+<programlisting>&#60;script type=&#34;text/javascript&#34; src=&#34;/portal/javascript/merged.js&#34;&#62;&#60;/script&#62;
 </programlisting>
 	<para>
-		Although this optimization is useful for a production environment, it may be easier to deactivate this optimization while debugging javascript problems. 
+		Although this optimization is useful for a production environment, it may be easier to deactivate this optimization while debugging javascript problems.
 	</para>
 	<para>
-		To do this, set the java system property <literal>exo.product.developing</literal> to <literal>true</literal>. 
+		To do this, set the java system property <literal>exo.product.developing</literal> to <literal>true</literal>.
 	</para>
 	<para>
-		To see or use the merged file set this property to <literal>false</literal>. 
+		To see or use the merged file set this property to <literal>false</literal>.
 	</para>
 	<para>
 		The property can be passed as a JVM parameter with the <literal>-D</literal> option in your <literal>GateIn.sh</literal> or <literal>GateIn.bat</literal> startup script.
 	</para>
 	<para>
-		Every javascript file is referenced with a module name of "<literal>eXo.core.DragDrop</literal>" which acts as a namespace. Inside the associated files, global javascript functions are used following the same namespace convention:
+		Every javascript file is referenced with a module name of &#34;<literal>eXo.core.DragDrop</literal>&#34; which acts as a namespace. Inside the associated files, global javascript functions are used following the same namespace convention:
 	</para>
 	
 <programlisting>eXo.core.DragDrop = new DragDrop() ;

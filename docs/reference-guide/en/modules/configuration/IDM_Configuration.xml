@@ -1,7 +1,5 @@
 <?xml version='1.0' encoding='utf-8' ?>
 <!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
-<!ENTITY % BOOK_ENTITIES SYSTEM "../../Reference_Guide.ent">
-%BOOK_ENTITIES;
 ]>
 <section id="sect-Reference_Guide-PicketLink_IDM_integration">
 	<title>PicketLink IDM integration</title>
@@ -9,7 +7,7 @@
 		&PRODUCT; uses the PicketLink IDM component to retain necessary identity information (user, groups, memberships, etc.). While legacy interfaces are still used (org.exoplatform.services.organization) for identity management, the wrapper implementation delegates to the PicketLink IDM framework.
 	</para>
 	<para>
-		This section doesn't provide information about PicketLink IDM and its configuration. Please refer to the appropriate project documentation (<ulink url="http://jboss.org/picketlink/IDM.html" />) for further information.
+		This section doesn&#39;t provide information about PicketLink IDM and its configuration. Please refer to the appropriate project documentation (<ulink url="http://jboss.org/picketlink/IDM.html" />) for further information.
 	</para>
 	<note>
 		<para>
@@ -17,8 +15,8 @@
 		</para>
 	</note>
 	<para>
-		The identity model represented in '<emphasis role="bold">org.exoplatform.services.organization</emphasis>' interfaces and the one used in <emphasis role="bold">JBoss Identity IDM</emphasis> have some major differences.
-	</para>	
+		The identity model represented in &#39;<emphasis role="bold">org.exoplatform.services.organization</emphasis>&#39; interfaces and the one used in <emphasis role="bold">JBoss Identity IDM</emphasis> have some major differences.
+	</para>
 	<para>
 		For example: the <emphasis role="bold">JBoss Identity IDM</emphasis> provides greater abstraction. It is possible for groups in the <emphasis role="bold">IDM</emphasis> framework to form memberships with many parents (which requires recursive ID translation) while the GateIn model allows only pure tree like membership structures.
 	</para>
@@ -32,79 +30,77 @@
 		</para>
 		<programlistingco>
 			<areaspec>
-				<area coords="7" id="area-Reference_Guide--PicketLink_IDM_integration-Configuration_files-JBossIDMServiceImpl" />
-				<area coords="52" id="area-Reference_Guide--PicketLink_IDM_integration-Configuration_files-JBossIDMOrganizationServiceImpl" />
+				<area coords="7" id="area-Reference_Guide-PicketLink_IDM_integration-Configuration_files-JBossIDMServiceImpl" />
+				<area coords="52" id="area-Reference_Guide-PicketLink_IDM_integration-Configuration_files-JBossIDMOrganizationServiceImpl" />
 			</areaspec>
+			
+<programlisting role="XML">&#60;configuration xmlns:xsi=&#34;http://www.w3.org/2001/XMLSchema-instance&#34;
+               xsi:schemaLocation=&#34;http://www.exoplaform.org/xml/ns/kernel_1_0.xsd http://www.exoplaform.org/xml/ns/kernel_1_0.xsd&#34;
+               xmlns=&#34;http://www.exoplaform.org/xml/ns/kernel_1_0.xsd&#34;&#62;
 
-<programlisting role="XML">&lt;configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-               xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd http://www.exoplaform.org/xml/ns/kernel_1_0.xsd"
-               xmlns="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd"&gt;
+   &#60;component&#62;
+      &#60;key&#62;org.exoplatform.services.organization.jbidm.JBossIDMService&#60;/key&#62;
+      &#60;type&#62;org.exoplatform.services.organization.jbidm.JBossIDMServiceImpl&#60;/type&#62;
+      &#60;init-params&#62;
+         &#60;value-param&#62;
+            &#60;name&#62;config&#60;/name&#62;
+            &#60;value&#62;war:/conf/organization/idm-config.xml&#60;/value&#62;
+         &#60;/value-param&#62;
+         &#60;values-param&#62;
+            &#60;name&#62;hibernate.annotations&#60;/name&#62;
+            &#60;value&#62;org.jboss.identity.idm.impl.model.hibernate.HibernateIdentityObject&#60;/value&#62;
+            &#60;value&#62;org.jboss.identity.idm.impl.model.hibernate.HibernateIdentityObjectAttribute&#60;/value&#62;
+            &#60;value&#62;org.jboss.identity.idm.impl.model.hibernate.HibernateIdentityObjectBinaryAttribute&#60;/value&#62;
+            &#60;value&#62;org.jboss.identity.idm.impl.model.hibernate.HibernateIdentityObjectBinaryAttributeValue&#60;/value&#62;
+            &#60;value&#62;org.jboss.identity.idm.impl.model.hibernate.HibernateIdentityObjectCredential&#60;/value&#62;
+            &#60;value&#62;org.jboss.identity.idm.impl.model.hibernate.HibernateIdentityObjectCredentialType&#60;/value&#62;
+            &#60;value&#62;org.jboss.identity.idm.impl.model.hibernate.HibernateIdentityObjectRelationship&#60;/value&#62;
+            &#60;value&#62;org.jboss.identity.idm.impl.model.hibernate.HibernateIdentityObjectRelationshipName&#60;/value&#62;
+            &#60;value&#62;org.jboss.identity.idm.impl.model.hibernate.HibernateIdentityObjectRelationshipType&#60;/value&#62;
+            &#60;value&#62;org.jboss.identity.idm.impl.model.hibernate.HibernateIdentityObjectTextAttribute&#60;/value&#62;
+            &#60;value&#62;org.jboss.identity.idm.impl.model.hibernate.HibernateIdentityObjectType&#60;/value&#62;
+            &#60;value&#62;org.jboss.identity.idm.impl.model.hibernate.HibernateRealm&#60;/value&#62;
+         &#60;/values-param&#62;
+         &#60;properties-param&#62;
+            &#60;name&#62;hibernate.properties&#60;/name&#62;
+            &#60;property name=&#34;hibernate.hbm2ddl.auto&#34; value=&#34;update&#34;/&#62;
+            &#60;property name=&#34;hibernate.current_session_context_class&#34; value=&#34;thread&#34;/&#62;
+            &#60;property name=&#34;hibernate.show_sql&#34; value=&#34;false&#34;/&#62;
+            &#60;property name=&#34;hibernate.cglib.use_reflection_optimizer&#34; value=&#34;true&#34;/&#62;
+            &#60;property name=&#34;hibernate.connection.url&#34; value=&#34;jdbc:hsqldb:file:../temp/data/exodb${container.name.suffix}&#34;/&#62;
+            &#60;property name=&#34;hibernate.connection.driver_class&#34; value=&#34;org.hsqldb.jdbcDriver&#34;/&#62;
+            &#60;property name=&#34;hibernate.connection.autocommit&#34; value=&#34;true&#34;/&#62;
+            &#60;property name=&#34;hibernate.connection.username&#34; value=&#34;sa&#34;/&#62;
+            &#60;property name=&#34;hibernate.connection.password&#34; value=&#34;&#34;/&#62;
+            &#60;property name=&#34;hibernate.dialect&#34; value=&#34;org.hibernate.dialect.HSQLDialect&#34;/&#62;
+            &#60;property name=&#34;hibernate.c3p0.min_size&#34; value=&#34;5&#34;/&#62;
+            &#60;property name=&#34;hibernate.c3p0.max_size&#34; value=&#34;20&#34;/&#62;
+            &#60;property name=&#34;hibernate.c3p0.timeout&#34; value=&#34;1800&#34;/&#62;
+            &#60;property name=&#34;hibernate.c3p0.max_statements&#34; value=&#34;50&#34;/&#62;
+            &#60;property name=&#34;hibernate.connection.provider_class&#34; value=&#34;org.hibernate.connection.C3P0ConnectionProvider&#34; /&#62;
+         &#60;/properties-param&#62;
 
-   &lt;component&gt;
-      &lt;key&gt;org.exoplatform.services.organization.jbidm.JBossIDMService&lt;/key&gt;
-      &lt;type&gt;org.exoplatform.services.organization.jbidm.JBossIDMServiceImpl&lt;/type&gt;
-      &lt;init-params&gt;
-         &lt;value-param&gt;
-            &lt;name&gt;config&lt;/name&gt;
-            &lt;value&gt;war:/conf/organization/idm-config.xml&lt;/value&gt;
-         &lt;/value-param&gt;
-         &lt;values-param&gt;
-            &lt;name&gt;hibernate.annotations&lt;/name&gt;
-            &lt;value&gt;org.jboss.identity.idm.impl.model.hibernate.HibernateIdentityObject&lt;/value&gt;
-            &lt;value&gt;org.jboss.identity.idm.impl.model.hibernate.HibernateIdentityObjectAttribute&lt;/value&gt;
-            &lt;value&gt;org.jboss.identity.idm.impl.model.hibernate.HibernateIdentityObjectBinaryAttribute&lt;/value&gt;
-            &lt;value&gt;org.jboss.identity.idm.impl.model.hibernate.HibernateIdentityObjectBinaryAttributeValue&lt;/value&gt;
-            &lt;value&gt;org.jboss.identity.idm.impl.model.hibernate.HibernateIdentityObjectCredential&lt;/value&gt;
-            &lt;value&gt;org.jboss.identity.idm.impl.model.hibernate.HibernateIdentityObjectCredentialType&lt;/value&gt;
-            &lt;value&gt;org.jboss.identity.idm.impl.model.hibernate.HibernateIdentityObjectRelationship&lt;/value&gt;
-            &lt;value&gt;org.jboss.identity.idm.impl.model.hibernate.HibernateIdentityObjectRelationshipName&lt;/value&gt;
-            &lt;value&gt;org.jboss.identity.idm.impl.model.hibernate.HibernateIdentityObjectRelationshipType&lt;/value&gt;
-            &lt;value&gt;org.jboss.identity.idm.impl.model.hibernate.HibernateIdentityObjectTextAttribute&lt;/value&gt;
-            &lt;value&gt;org.jboss.identity.idm.impl.model.hibernate.HibernateIdentityObjectType&lt;/value&gt;
-            &lt;value&gt;org.jboss.identity.idm.impl.model.hibernate.HibernateRealm&lt;/value&gt;
-         &lt;/values-param&gt;
-         &lt;properties-param&gt;
-            &lt;name&gt;hibernate.properties&lt;/name&gt;
-            &lt;property name="hibernate.hbm2ddl.auto" value="update"/&gt;
-            &lt;property name="hibernate.current_session_context_class" value="thread"/&gt;
-            &lt;property name="hibernate.show_sql" value="false"/&gt;
-            &lt;property name="hibernate.cglib.use_reflection_optimizer" value="true"/&gt;
-            &lt;property name="hibernate.connection.url" value="jdbc:hsqldb:file:../temp/data/exodb${container.name.suffix}"/&gt;
-            &lt;property name="hibernate.connection.driver_class" value="org.hsqldb.jdbcDriver"/&gt;
-            &lt;property name="hibernate.connection.autocommit" value="true"/&gt;
-            &lt;property name="hibernate.connection.username" value="sa"/&gt;
-            &lt;property name="hibernate.connection.password" value=""/&gt;
-            &lt;property name="hibernate.dialect" value="org.hibernate.dialect.HSQLDialect"/&gt;
-            &lt;property name="hibernate.c3p0.min_size" value="5"/&gt;
-            &lt;property name="hibernate.c3p0.max_size" value="20"/&gt;
-            &lt;property name="hibernate.c3p0.timeout" value="1800"/&gt;
-            &lt;property name="hibernate.c3p0.max_statements" value="50"/&gt;
-            &lt;property name="hibernate.connection.provider_class" value="org.hibernate.connection.C3P0ConnectionProvider" /&gt;
-         &lt;/properties-param&gt;
+      &#60;/init-params&#62;
+   &#60;/component&#62;
 
-      &lt;/init-params&gt;
-   &lt;/component&gt;
+   &#60;component&#62;
+      &#60;key&#62;org.exoplatform.services.organization.OrganizationService&#60;/key&#62;
+      &#60;type&#62;org.exoplatform.services.organization.jbidm.JBossIDMOrganizationServiceImpl&#60;/type&#62;
+   &#60;/component&#62;
 
-   &lt;component&gt;
-      &lt;key&gt;org.exoplatform.services.organization.OrganizationService&lt;/key&gt;
-      &lt;type&gt;org.exoplatform.services.organization.jbidm.JBossIDMOrganizationServiceImpl&lt;/type&gt;
-   &lt;/component&gt;
-
-&lt;/configuration&gt;
+&#60;/configuration&#62;
 </programlisting>
 			<calloutlist>
-				<callout arearefs="area-Reference_Guide--PicketLink_IDM_integration-Configuration_files-JBossIDMServiceImpl">
+				<callout arearefs="area-Reference_Guide-PicketLink_IDM_integration-Configuration_files-JBossIDMServiceImpl">
 					<para>
 						The <emphasis role="bold">org.exoplatform.services.organization.jbidm.JBossIDMServiceImpl</emphasis> service has following options:
 					</para>
-
-
-<!-- Included in calloutlist <para>
+					<!--  Included in calloutlist <para>
 			The <emphasis role="bold">org.exoplatform.services.organization.jbidm.JBossIDMOrganizationServiceImpl</emphasis> is a main entrypoint implementing <emphasis role="bold">org.exoplatform.services.organization.OrganizationService</emphasis> and is dependant on <emphasis role="bold">org.exoplatform.services.organization.jbidm.JBossIDMService</emphasis>
 		</para> 
 		<para>
 			The <emphasis role="bold">org.exoplatform.services.organization.jbidm.JBossIDMServiceImpl</emphasis> service has following options:
-		</para> -->
+		</para>  -->
 					<itemizedlist>
 						<listitem>
 							<para>
@@ -128,17 +124,17 @@
 						</listitem>
 						<listitem>
 							<para>
-								<emphasis role="bold">jndiName</emphasis> - (value-param) - in case 'config' parameter is not provided this will be used to perform JNDI lookup for IdentitySessionFactory
+								<emphasis role="bold">jndiName</emphasis> - (value-param) - in case &#39;config&#39; parameter is not provided this will be used to perform JNDI lookup for IdentitySessionFactory
 							</para>
 						</listitem>
 						<listitem>
 							<para>
-								<emphasis role="bold">PortalRealm</emphasis> - (value-param) - name of a realm that should be used to obtain proper IdentitySession - default is 'PortalRealm'.
+								<emphasis role="bold">PortalRealm</emphasis> - (value-param) - name of a realm that should be used to obtain proper IdentitySession - default is &#39;PortalRealm&#39;.
 							</para>
 						</listitem>
 					</itemizedlist>
 				</callout>
-				<callout arearefs="area-Reference_Guide--PicketLink_IDM_integration-Configuration_files-JBossIDMOrganizationServiceImpl">
+				<callout arearefs="area-Reference_Guide-PicketLink_IDM_integration-Configuration_files-JBossIDMOrganizationServiceImpl">
 					<para>
 						The <emphasis role="bold">org.exoplatform.services.organization.jbidm.JBossIDMOrganizationServiceImpl</emphasis> key is a main entrypoint implementing <emphasis role="bold">org.exoplatform.services.organization.OrganizationService</emphasis> and is dependant on <emphasis role="bold">org.exoplatform.services.organization.jbidm.JBossIDMService</emphasis>
 					</para>
@@ -148,17 +144,17 @@
 					<itemizedlist>
 						<listitem>
 							<para>
-								<emphasis role="bold">exoGroupTypeName</emphasis> - (value-param) - Name of JBoss Identity IDM GroupType that will be used to store groups. Default is 'EXO_GROUP_TYPE'
+								<emphasis role="bold">exoGroupTypeName</emphasis> - (value-param) - Name of JBoss Identity IDM GroupType that will be used to store groups. Default is &#39;EXO_GROUP_TYPE&#39;
 							</para>
 						</listitem>
 						<listitem>
 							<para>
-								<emphasis role="bold">exoRootGroupName</emphasis> - (value-param) - Name of JBoss Identity IDM Group that will be used as a root parent. Default is 'EXO_ROOT_GROUP'
+								<emphasis role="bold">exoRootGroupName</emphasis> - (value-param) - Name of JBoss Identity IDM Group that will be used as a root parent. Default is &#39;EXO_ROOT_GROUP&#39;
 							</para>
 						</listitem>
 						<listitem>
 							<para>
-								<emphasis role="bold">exoRootGroupTypeName</emphasis> - (value-param) - Name of JBoss Identity IDM GroupType of a Group used as a parent root. Default is 'EXO_GROUP_TYPE'
+								<emphasis role="bold">exoRootGroupTypeName</emphasis> - (value-param) - Name of JBoss Identity IDM GroupType of a Group used as a parent root. Default is &#39;EXO_GROUP_TYPE&#39;
 							</para>
 						</listitem>
 						<listitem>
@@ -189,9 +185,9 @@
 					</itemizedlist>
 				</callout>
 			</calloutlist>
-	</programlistingco>
-
-<!--	In calloutlist above	<para>
+		</programlistingco>
+		
+		<!-- 	In calloutlist above	<para>
 			<emphasis role="bold">org.exoplatform.services.organization.jbidm.JBossIDMOrganizationServiceImpl</emphasis> service has following options:
 		</para>
 		<itemizedlist>
@@ -235,85 +231,84 @@
 					GateIn MembershipType interface properties fields are persisted in JBoss Identity IDM using those RoleType properties: description, owner, create_date, modified_date
 				</para>
 			</listitem>
-		</itemizedlist> -->
-
+		</itemizedlist>  -->
 		<para>
 			A sample <emphasis role="bold">JBoss Identity IDM</emphasis> configuration file is shown below. To understand all the options present in it please refer to the JBoss Identity IDM Reference Guide
 		</para>
 		
-<programlisting>&lt;jboss-identity xmlns="urn:jboss:identity:idm:config:v1_0_beta"
-                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                xsi:schemaLocation="urn:jboss:identity:idm:config:v1_0_alpha identity-config.xsd"&gt;
-    &lt;realms&gt;
-        &lt;realm&gt;
-            &lt;id&gt;PortalRealm&lt;/id&gt;
-            &lt;repository-id-ref&gt;PortalRepository&lt;/repository-id-ref&gt;
-            &lt;identity-type-mappings&gt;
-                &lt;user-mapping&gt;USER&lt;/user-mapping&gt;
-            &lt;/identity-type-mappings&gt;
-        &lt;/realm&gt;
-    &lt;/realms&gt;
-    &lt;repositories&gt;
-        &lt;repository&gt;
-            &lt;id&gt;PortalRepository&lt;/id&gt;
-            &lt;class&gt;org.jboss.identity.idm.impl.repository.WrapperIdentityStoreRepository&lt;/class&gt;
-            &lt;external-config/&gt;
-            &lt;default-identity-store-id&gt;HibernateStore&lt;/default-identity-store-id&gt;
-            &lt;default-attribute-store-id&gt;HibernateStore&lt;/default-attribute-store-id&gt;
-        &lt;/repository&gt;
-    &lt;/repositories&gt;
-    &lt;stores&gt;
-        &lt;attribute-stores/&gt;
-        &lt;identity-stores&gt;
-            &lt;identity-store&gt;
-                &lt;id&gt;HibernateStore&lt;/id&gt;
-                &lt;class&gt;org.jboss.identity.idm.impl.store.hibernate.HibernateIdentityStoreImpl&lt;/class&gt;
-                &lt;external-config/&gt;
-                &lt;supported-relationship-types&gt;
-                    &lt;relationship-type&gt;JBOSS_IDENTITY_MEMBERSHIP&lt;/relationship-type&gt;
-                    &lt;relationship-type&gt;JBOSS_IDENTITY_ROLE&lt;/relationship-type&gt;
-                &lt;/supported-relationship-types&gt;
-                &lt;supported-identity-object-types&gt;
-                    &lt;identity-object-type&gt;
-                        &lt;name&gt;USER&lt;/name&gt;
-                        &lt;relationships/&gt;
-                        &lt;credentials&gt;
-                            &lt;credential-type&gt;PASSWORD&lt;/credential-type&gt;
-                        &lt;/credentials&gt;
-                        &lt;attributes/&gt;
-                        &lt;options/&gt;
-                    &lt;/identity-object-type&gt;
-                &lt;/supported-identity-object-types&gt;
-                &lt;options&gt;
-                    &lt;option&gt;
-                        &lt;name&gt;hibernateSessionFactoryRegistryName&lt;/name&gt;
-                        &lt;value&gt;hibernateSessionFactory&lt;/value&gt;
-                    &lt;/option&gt;
-                    &lt;option&gt;
-                        &lt;name&gt;allowNotDefinedIdentityObjectTypes&lt;/name&gt;
-                        &lt;value&gt;true&lt;/value&gt;
-                    &lt;/option&gt;
-                    &lt;option&gt;
-                        &lt;name&gt;populateRelationshipTypes&lt;/name&gt;
-                        &lt;value&gt;true&lt;/value&gt;
-                    &lt;/option&gt;
-                    &lt;option&gt;
-                        &lt;name&gt;populateIdentityObjectTypes&lt;/name&gt;
-                        &lt;value&gt;true&lt;/value&gt;
-                    &lt;/option&gt;
-                    &lt;option&gt;
-                        &lt;name&gt;allowNotDefinedAttributes&lt;/name&gt;
-                        &lt;value&gt;true&lt;/value&gt;
-                    &lt;/option&gt;
-                    &lt;option&gt;
-                        &lt;name&gt;isRealmAware&lt;/name&gt;
-                        &lt;value&gt;true&lt;/value&gt;
-                    &lt;/option&gt;
-                &lt;/options&gt;
-            &lt;/identity-store&gt;
-        &lt;/identity-stores&gt;
-    &lt;/stores&gt;
-&lt;/jboss-identity&gt;
+<programlisting>&#60;jboss-identity xmlns=&#34;urn:jboss:identity:idm:config:v1_0_beta&#34;
+                xmlns:xsi=&#34;http://www.w3.org/2001/XMLSchema-instance&#34;
+                xsi:schemaLocation=&#34;urn:jboss:identity:idm:config:v1_0_alpha identity-config.xsd&#34;&#62;
+    &#60;realms&#62;
+        &#60;realm&#62;
+            &#60;id&#62;PortalRealm&#60;/id&#62;
+            &#60;repository-id-ref&#62;PortalRepository&#60;/repository-id-ref&#62;
+            &#60;identity-type-mappings&#62;
+                &#60;user-mapping&#62;USER&#60;/user-mapping&#62;
+            &#60;/identity-type-mappings&#62;
+        &#60;/realm&#62;
+    &#60;/realms&#62;
+    &#60;repositories&#62;
+        &#60;repository&#62;
+            &#60;id&#62;PortalRepository&#60;/id&#62;
+            &#60;class&#62;org.jboss.identity.idm.impl.repository.WrapperIdentityStoreRepository&#60;/class&#62;
+            &#60;external-config/&#62;
+            &#60;default-identity-store-id&#62;HibernateStore&#60;/default-identity-store-id&#62;
+            &#60;default-attribute-store-id&#62;HibernateStore&#60;/default-attribute-store-id&#62;
+        &#60;/repository&#62;
+    &#60;/repositories&#62;
+    &#60;stores&#62;
+        &#60;attribute-stores/&#62;
+        &#60;identity-stores&#62;
+            &#60;identity-store&#62;
+                &#60;id&#62;HibernateStore&#60;/id&#62;
+                &#60;class&#62;org.jboss.identity.idm.impl.store.hibernate.HibernateIdentityStoreImpl&#60;/class&#62;
+                &#60;external-config/&#62;
+                &#60;supported-relationship-types&#62;
+                    &#60;relationship-type&#62;JBOSS_IDENTITY_MEMBERSHIP&#60;/relationship-type&#62;
+                    &#60;relationship-type&#62;JBOSS_IDENTITY_ROLE&#60;/relationship-type&#62;
+                &#60;/supported-relationship-types&#62;
+                &#60;supported-identity-object-types&#62;
+                    &#60;identity-object-type&#62;
+                        &#60;name&#62;USER&#60;/name&#62;
+                        &#60;relationships/&#62;
+                        &#60;credentials&#62;
+                            &#60;credential-type&#62;PASSWORD&#60;/credential-type&#62;
+                        &#60;/credentials&#62;
+                        &#60;attributes/&#62;
+                        &#60;options/&#62;
+                    &#60;/identity-object-type&#62;
+                &#60;/supported-identity-object-types&#62;
+                &#60;options&#62;
+                    &#60;option&#62;
+                        &#60;name&#62;hibernateSessionFactoryRegistryName&#60;/name&#62;
+                        &#60;value&#62;hibernateSessionFactory&#60;/value&#62;
+                    &#60;/option&#62;
+                    &#60;option&#62;
+                        &#60;name&#62;allowNotDefinedIdentityObjectTypes&#60;/name&#62;
+                        &#60;value&#62;true&#60;/value&#62;
+                    &#60;/option&#62;
+                    &#60;option&#62;
+                        &#60;name&#62;populateRelationshipTypes&#60;/name&#62;
+                        &#60;value&#62;true&#60;/value&#62;
+                    &#60;/option&#62;
+                    &#60;option&#62;
+                        &#60;name&#62;populateIdentityObjectTypes&#60;/name&#62;
+                        &#60;value&#62;true&#60;/value&#62;
+                    &#60;/option&#62;
+                    &#60;option&#62;
+                        &#60;name&#62;allowNotDefinedAttributes&#60;/name&#62;
+                        &#60;value&#62;true&#60;/value&#62;
+                    &#60;/option&#62;
+                    &#60;option&#62;
+                        &#60;name&#62;isRealmAware&#60;/name&#62;
+                        &#60;value&#62;true&#60;/value&#62;
+                    &#60;/option&#62;
+                &#60;/options&#62;
+            &#60;/identity-store&#62;
+        &#60;/identity-stores&#62;
+    &#60;/stores&#62;
+&#60;/jboss-identity&#62;
 </programlisting>
 	</section>
 

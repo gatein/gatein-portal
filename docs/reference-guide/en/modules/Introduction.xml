@@ -1,10 +1,8 @@
 <?xml version='1.0' encoding='utf-8' ?>
 <!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
-<!ENTITY % BOOK_ENTITIES SYSTEM "../Reference_Guide.ent">
-%BOOK_ENTITIES;
 ]>
 <chapter id="chap-Reference_Guide-Introduction">
-	<!--             
+	<!--              
 
     Copyright (C) 2009 eXo Platform SAS.
     
@@ -23,7 +21,7 @@
     Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
     02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
-             --><title>Introduction</title>
+              --><title>Introduction</title>
 	<mediaobject>
 		<imageobject>
 			<imagedata fileref="images/Frontpage.png" format="PNG" scalefit="1" width="444" />
@@ -45,7 +43,7 @@
 					Further documentation about the Red Hat &PRODUCT; and other Red Hat products can be found at <ulink type="http" url="www.redhat.com/docs" />
 				</para>
 			</listitem>
-			<!-- 		<listitem>
+			<!--  		<listitem>
 				<para>
 					GateIn videos: <ulink url="http://www.jboss.org/gatein/videos.html">www.jboss.org/gatein/videos.html</ulink>
 				</para>
@@ -59,7 +57,7 @@
 				<para>
 					GateIn downloads: <ulink url="http://www.jboss.org/gatein/downloads.html">www.jboss.org/gatein/downloads.html</ulink>
 				</para>
-			</listitem>  -->
+			</listitem>   -->
 		</itemizedlist>
 	</section>
 

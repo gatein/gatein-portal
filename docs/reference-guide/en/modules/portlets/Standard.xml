@@ -1,14 +1,12 @@
 <?xml version='1.0' encoding='utf-8' ?>
 <!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
-<!ENTITY % BOOK_ENTITIES SYSTEM "../../Reference_Guide.ent">
-%BOOK_ENTITIES;
 ]>
 <section id="sect-Reference_Guide-Portlet_Primer">
 	<title>Portlet Primer</title>
 	<section id="sect-Reference_Guide-Portlet_Primer-JSR_168_and_JSR_286_overview">
 		<title>JSR-168 and JSR-286 overview</title>
 		<para>
-			The Java Community Process (<literal>JCP</literal>) uses Java Specification Requests (<literal>JSR</literal>s) to define proposed specifications and technologies designed for the Java platform. 
+			The Java Community Process (<literal>JCP</literal>) uses Java Specification Requests (<literal>JSR</literal>s) to define proposed specifications and technologies designed for the Java platform.
 		</para>
 		<para>
 			The Portlet Specifications aim at defining portlets that can be used by any <ulink url="http://www.jcp.org/en/jsr/detail?id=168">JSR-168 (Portlet 1.0)</ulink> or <ulink url="http://www.jcp.org/en/jsr/detail?id=286">JSR-286 (Portlet 2.0)</ulink> portlet container.
@@ -45,31 +43,31 @@
 				A portlet can have different view modes. Three modes are defined by the JSR-286 specification:
 			</para>
 			<variablelist>
-			  <varlistentry>
-				<term>View</term>
-				<listitem>
-					<para>
-						Generates markup reflecting the current state of the portlet.
-					</para>
-				</listitem>
-			</varlistentry>
-			<varlistentry>
-				<term>Edit</term>
-				<listitem>
-					<para>
-						Allows a user to customize the behavior of the portlet.
-					</para>
-				</listitem>
-			</varlistentry>
-			<varlistentry>
-				<term>Help</term>
-				<listitem>
-					<para>
-						Provides information to the user as to how to use the portlet.
-					</para>
-				</listitem>
-			</varlistentry>
-			</variablelist>				
+				<varlistentry>
+					<term>View</term>
+					<listitem>
+						<para>
+							Generates markup reflecting the current state of the portlet.
+						</para>
+					</listitem>
+				</varlistentry>
+				<varlistentry>
+					<term>Edit</term>
+					<listitem>
+						<para>
+							Allows a user to customize the behavior of the portlet.
+						</para>
+					</listitem>
+				</varlistentry>
+				<varlistentry>
+					<term>Help</term>
+					<listitem>
+						<para>
+							Provides information to the user as to how to use the portlet.
+						</para>
+					</listitem>
+				</varlistentry>
+			</variablelist>
 		</section>
 		
 		<section id="sect-Reference_Guide-JSR_168_and_JSR_286_overview-Window_States">
@@ -78,30 +76,30 @@
 				Window states are an indicator of how much page space a portlet consumes on any given page. The three states defined by the JSR-168 specification are:
 			</para>
 			<variablelist>
-			  <varlistentry>
-				<term>Normal</term>
-				<listitem>
-					<para>
-						A portlet shares this page with other portlets.
-					</para>
-				</listitem>
-			</varlistentry>
-			<varlistentry>
-				<term>Minimized</term>
-				<listitem>
-					<para>
-						A portlet may show very little information, or none at all.
-					</para>
-				</listitem>
-			</varlistentry>
-			<varlistentry>
-				<term>Maximized</term>
-				<listitem>
-					<para>
-						A portlet may be the only portlet displayed on this page.
-					</para>
-				</listitem>
-			</varlistentry>
+				<varlistentry>
+					<term>Normal</term>
+					<listitem>
+						<para>
+							A portlet shares this page with other portlets.
+						</para>
+					</listitem>
+				</varlistentry>
+				<varlistentry>
+					<term>Minimized</term>
+					<listitem>
+						<para>
+							A portlet may show very little information, or none at all.
+						</para>
+					</listitem>
+				</varlistentry>
+				<varlistentry>
+					<term>Maximized</term>
+					<listitem>
+						<para>
+							A portlet may be the only portlet displayed on this page.
+						</para>
+					</listitem>
+				</varlistentry>
 			</variablelist>
 		</section>
 
@@ -114,18 +112,15 @@
 		</para>
 		<note>
 			<title>Maven</title>
-				<para>
-					This example is using Maven to compile and build the web archive. Maven versions can be downloaded from <ulink url="http://maven.apache.org/download.html">maven.apache.org</ulink>
-				</para>
+			<para>
+				This example is using Maven to compile and build the web archive. Maven versions can be downloaded from <ulink url="http://maven.apache.org/download.html">maven.apache.org</ulink>
+			</para>
 		</note>
-
 		<section id="sect-Reference_Guide-Tutorials-Deploying_your_first_Portlet">
 			<title>Deploying your first Portlet</title>
-
-				<para>
-					This section describes how to deploy a portlet in &PRODUCT;. A sample portlet called <filename>SimplestHelloWorld</filename> is located in the <literal>examples</literal> directory at the root of your &PRODUCT; binary package. This sample is used in the following examples.
-				</para>
-		
+			<para>
+				This section describes how to deploy a portlet in &PRODUCT;. A sample portlet called <filename>SimplestHelloWorld</filename> is located in the <literal>examples</literal> directory at the root of your &PRODUCT; binary package. This sample is used in the following examples.
+			</para>
 			<section id="sect-Reference_Guide-Deploying_your_first_Portlet-Compiling">
 				<title>Compiling</title>
 				<para>
@@ -134,19 +129,20 @@
 				<procedure>
 					<step>
 						<para>
-							 Navigate to the <filename>SimplestHelloWorld</filename> directory and execute:
+							Navigate to the <filename>SimplestHelloWorld</filename> directory and execute:
 						</para>
+						
 <programlisting>mvn package
 </programlisting>
 					</step>
 					<step>
 						<para>
-							If the compile is successfully packaged the result will be available in: <filename>SimplestHelloWorld/target/SimplestHelloWorld-0.0.1.war </filename>. 
+							If the compile is successfully packaged the result will be available in: <filename>SimplestHelloWorld/target/SimplestHelloWorld-0.0.1.war </filename>.
 						</para>
 					</step>
 					<step>
 						<para>
-							Copy the package file into <literal>JBOSS_HOME/server/default/deploy</literal>. 
+							Copy the package file into <literal>JBOSS_HOME/server/default/deploy</literal>.
 						</para>
 					</step>
 					<step>
@@ -166,21 +162,22 @@
 						</mediaobject>
 					</step>
 				</procedure>
+
 			</section>
 			
 			<section id="sect-Reference_Guide-Deploying_your_first_Portlet-Package_Structure">
 				<title>Package Structure</title>
 				<para>
-					Like other Java EE applications, &PRODUCT; portlets are packaged in WAR files. A typical portlet WAR file can include servlets, resource bundles, images, HTML, JavaServer Pages (JSP), and other static or dynamic files. 
-				</para>	
+					Like other Java EE applications, &PRODUCT; portlets are packaged in WAR files. A typical portlet WAR file can include servlets, resource bundles, images, HTML, JavaServer Pages (JSP), and other static or dynamic files.
+				</para>
 				<para>
 					The following is an example of the directory structure of the <filename>SimplestHelloWorld</filename> portlet:
 				</para>
 				<programlistingco>
 					<areaspec>
-						<area coords="9" id="area-Reference_Guide-tutorials.simplest.javaclass" />
-						<area coords="10" id="area-Reference_Guide-tutorials.simplest.portlet" />
-						<area coords="11" id="area-Reference_Guide-tutorials.simplest.web" />
+						<area coords="9" id="area-Reference_Guide-Deploying_your_first_Portlet-Package_Structure.javaclass" />
+						<area coords="10" id="area-Reference_Guide-Deploying_your_first_Portlet-Package_Structure.portlet" />
+						<area coords="11" id="area-Reference_Guide-Deploying_your_first_Portlet-Package_Structure.web" />
 					</areaspec>
 					
 <programlisting>|-- SimplestHelloWorld-0.0.1.war
@@ -196,17 +193,17 @@
 |       `-- web.xml
 </programlisting>
 					<calloutlist>
-						<callout arearefs="area-Reference_Guide-tutorials.simplest.javaclass">
+						<callout arearefs="area-Reference_Guide-Deploying_your_first_Portlet-Package_Structure.javaclass">
 							<para>
 								The compiled Java class implementing <emphasis>javax.portlet.Portlet</emphasis> (through <emphasis>javax.portlet.GenericPortlet </emphasis> )
 							</para>
 						</callout>
-						<callout arearefs="area-Reference_Guide-tutorials.simplest.portlet">
+						<callout arearefs="area-Reference_Guide-Deploying_your_first_Portlet-Package_Structure.portlet">
 							<para>
 								This is the mandatory descriptor files for portlets. It is used during deployment..
 							</para>
 						</callout>
-						<callout arearefs="area-Reference_Guide-tutorials.simplest.web">
+						<callout arearefs="area-Reference_Guide-Deploying_your_first_Portlet-Package_Structure.web">
 							<para>
 								This is the mandatory descriptor for web applications.
 							</para>
@@ -223,11 +220,11 @@
 				</para>
 				<programlistingco>
 					<areaspec>
-						<area coords="10" id="area-Reference_Guide-tutorials.simplest.extends" />
-						<area coords="13" id="area-Reference_Guide-tutorials.simplest.doview" />
-						<area coords="15" id="area-Reference_Guide-tutorials.simplest.writer" />
-						<area coords="16" id="area-Reference_Guide-tutorials.simplest.write" />
-						<area coords="17" id="area-Reference_Guide-tutorials.simplest.close" />
+						<area coords="10" id="area-Reference_Guide-Deploying_your_first_Portlet-Portlet_Class.extends" />
+						<area coords="13" id="area-Reference_Guide-Deploying_your_first_Portlet-Portlet_Class.doview" />
+						<area coords="15" id="area-Reference_Guide-Deploying_your_first_Portlet-Portlet_Class.writer" />
+						<area coords="16" id="area-Reference_Guide-Deploying_your_first_Portlet-Portlet_Class.write" />
+						<area coords="17" id="area-Reference_Guide-Deploying_your_first_Portlet-Portlet_Class.close" />
 					</areaspec>
 					
 <programlisting role="JAVA">package org.gatein.portal.examples.portlets;
@@ -245,39 +242,39 @@ public class SimplestHelloWorldPortlet extends GenericPortlet
                        RenderResponse response) throws IOException
    {
       PrintWriter writer = response.getWriter();
-      writer.write("Hello World !");
+      writer.write(&#34;Hello World !&#34;);
       writer.close();
    }
 }
 </programlisting>
 					<calloutlist>
-						<callout arearefs="area-Reference_Guide-tutorials.simplest.extends">
+						<callout arearefs="area-Reference_Guide-Deploying_your_first_Portlet-Portlet_Class.extends">
 							<para>
-								All portlets must implement the <literal>javax.portlet.Portlet</literal> interface. The portlet API provides a convenient implementation of this interface. 
+								All portlets must implement the <literal>javax.portlet.Portlet</literal> interface. The portlet API provides a convenient implementation of this interface.
 							</para>
 							<para>
-								The <literal>javax.portlet.Portlet</literal> interface uses the <literal>javax.portlet.GenericPortlet</literal> class which implements the <literal>Portlet render</literal> method to dispatch to abstract mode-specific methods. This makes it easier to support the standard portlet modes. 
+								The <literal>javax.portlet.Portlet</literal> interface uses the <literal>javax.portlet.GenericPortlet</literal> class which implements the <literal>Portlet render</literal> method to dispatch to abstract mode-specific methods. This makes it easier to support the standard portlet modes.
 							</para>
 							<para>
 								<literal>Portlet render</literal> also provides a default implementation for the <literal>processAction</literal>, <literal>init</literal> and <literal>destroy</literal> methods. It is recommended to extend <literal>GenericPortlet</literal> for most cases.
 							</para>
 						</callout>
-						<callout arearefs="area-Reference_Guide-tutorials.simplest.doview">
+						<callout arearefs="area-Reference_Guide-Deploying_your_first_Portlet-Portlet_Class.doview">
 							<para>
 								If only the <literal>view</literal> mode is required, then only the <literal>doView</literal> method needs to be implemented. The <literal>GenericPortlet</literal><literal>render</literal> implementation calls our implementation when the <literal>view</literal> mode is requested.
 							</para>
 						</callout>
-						<callout arearefs="area-Reference_Guide-tutorials.simplest.writer">
+						<callout arearefs="area-Reference_Guide-Deploying_your_first_Portlet-Portlet_Class.writer">
 							<para>
 								Use the <emphasis>RenderResponse</emphasis> to obtain a writer to be used to produce content.
 							</para>
 						</callout>
-						<callout arearefs="area-Reference_Guide-tutorials.simplest.write">
+						<callout arearefs="area-Reference_Guide-Deploying_your_first_Portlet-Portlet_Class.write">
 							<para>
 								Write the markup to display.
 							</para>
 						</callout>
-						<callout arearefs="area-Reference_Guide-tutorials.simplest.close">
+						<callout arearefs="area-Reference_Guide-Deploying_your_first_Portlet-Portlet_Class.close">
 							<para>
 								Closing the writer.
 							</para>
@@ -289,7 +286,7 @@ public class SimplestHelloWorldPortlet extends GenericPortlet
 					<note>
 						<title>Markup Fragments</title>
 						<para>
-							Portlets are responsible for generating markup fragments, as they are included on a page and are surrounded by other portlets. This means that a portlet outputting HTML must not output any markup that cannot be found in a <literal>&lt;body&gt;</literal> element.
+							Portlets are responsible for generating markup fragments, as they are included on a page and are surrounded by other portlets. This means that a portlet outputting HTML must not output any markup that cannot be found in a <literal>&#60;body&#62;</literal> element.
 						</para>
 					</note>
 				</para>
@@ -305,60 +302,60 @@ public class SimplestHelloWorldPortlet extends GenericPortlet
 				</para>
 				<programlistingco>
 					<areaspec>
-						<area coords="8" id="area-Reference_Guide-tutorials.simplest.portletname" />
-						<area coords="9" id="area-Reference_Guide-tutorials.simplest.portletclass" />
-						<area coords="12" id="area-Reference_Guide-tutorials.simplest.supports" />
-						<area coords="15" id="area-Reference_Guide-tutorials.simplest.portletinfo" />
+						<area coords="8" id="area-Reference_Guide-Deploying_your_first_Portlet-Application_Descriptors.portletname" />
+						<area coords="9" id="area-Reference_Guide-Deploying_your_first_Portlet-Application_Descriptors.portletclass" />
+						<area coords="12" id="area-Reference_Guide-Deploying_your_first_Portlet-Application_Descriptors.supports" />
+						<area coords="15" id="area-Reference_Guide-Deploying_your_first_Portlet-Application_Descriptors.portletinfo" />
 					</areaspec>
 					
 <programlisting>
-&lt;portlet-app xmlns="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd"
-   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd 
-                                         http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd"
-   version="2.0"&gt;
-   &lt;portlet&gt;
-      &lt;portlet-name&gt;SimplestHelloWorldPortlet&lt;/portlet-name&gt;
-      &lt;portlet-class&gt;
+&#60;portlet-app xmlns=&#34;http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd&#34;
+   xmlns:xsi=&#34;http://www.w3.org/2001/XMLSchema-instance&#34;
+   xsi:schemaLocation=&#34;http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd 
+                                         http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd&#34;
+   version=&#34;2.0&#34;&#62;
+   &#60;portlet&#62;
+      &#60;portlet-name&#62;SimplestHelloWorldPortlet&#60;/portlet-name&#62;
+      &#60;portlet-class&#62;
          org.gatein.portal.examples.portlets.SimplestHelloWorldPortlet
-      &lt;/portlet-class&gt;
-      &lt;supports&gt;
-        &lt;mime-type&gt;text/html&lt;/mime-type&gt;
-      &lt;/supports&gt;
-      &lt;portlet-info&gt;
-          &lt;title&gt;Simplest Hello World Portlet&lt;/title&gt;
-      &lt;/portlet-info&gt;
-   &lt;/portlet&gt;
-&lt;/portlet-app&gt;
+      &#60;/portlet-class&#62;
+      &#60;supports&#62;
+        &#60;mime-type&#62;text/html&#60;/mime-type&#62;
+      &#60;/supports&#62;
+      &#60;portlet-info&#62;
+          &#60;title&#62;Simplest Hello World Portlet&#60;/title&#62;
+      &#60;/portlet-info&#62;
+   &#60;/portlet&#62;
+&#60;/portlet-app&#62;
 </programlisting>
 					<calloutlist>
-						<callout arearefs="area-Reference_Guide-tutorials.simplest.portletname">
+						<callout arearefs="area-Reference_Guide-Deploying_your_first_Portlet-Application_Descriptors.portletname">
 							<para>
 								Define the portlet name. It does not have to be the class name.
 							</para>
 						</callout>
-						<callout arearefs="area-Reference_Guide-tutorials.simplest.portletclass">
+						<callout arearefs="area-Reference_Guide-Deploying_your_first_Portlet-Application_Descriptors.portletclass">
 							<para>
 								The Fully Qualified Name (<literal>FQN</literal>) of your portlet class must be declared here.
 							</para>
 						</callout>
-						<callout arearefs="area-Reference_Guide-tutorials.simplest.supports">
+						<callout arearefs="area-Reference_Guide-Deploying_your_first_Portlet-Application_Descriptors.supports">
 							<para>
-								The <literal>&lt;supports&gt; </literal> element declares all of the markup types that a portlet supports in the <literal>render</literal> method. This is accomplished via the <literal>&lt;mime-type&gt; </literal> element, which is required for every portlet.
+								The <literal>&#60;supports&#62; </literal> element declares all of the markup types that a portlet supports in the <literal>render</literal> method. This is accomplished via the <literal>&#60;mime-type&#62; </literal> element, which is required for every portlet.
 							</para>
 							<para>
 								The declared MIME types must match the capability of the portlet. It allows administrators to pair which modes and window states are supported for each markup type.
 							</para>
 							<para>
-								This does not have to be declared as all portlets must support the <literal>view</literal> portlet mode. 
+								This does not have to be declared as all portlets must support the <literal>view</literal> portlet mode.
 							</para>
 							<para>
-								Use the <literal>&lt;mime-type&gt; </literal> element to define which markup type the portlet supports. In the example above this is <literal>text/html</literal>. This section tells the portal to only output HTML.
+								Use the <literal>&#60;mime-type&#62; </literal> element to define which markup type the portlet supports. In the example above this is <literal>text/html</literal>. This section tells the portal to only output HTML.
 							</para>
 						</callout>
-						<callout arearefs="area-Reference_Guide-tutorials.simplest.portletinfo">
+						<callout arearefs="area-Reference_Guide-Deploying_your_first_Portlet-Application_Descriptors.portletinfo">
 							<para>
-								When rendered, the portlet's title is displayed as the header in the portlet window, unless it is overridden programmatically. In the example above the title would be <literal>Simplest Hello World Portlet</literal> .
+								When rendered, the portlet&#39;s title is displayed as the header in the portlet window, unless it is overridden programmatically. In the example above the title would be <literal>Simplest Hello World Portlet</literal> .
 							</para>
 						</callout>
 					</calloutlist>
@@ -368,67 +365,67 @@ public class SimplestHelloWorldPortlet extends GenericPortlet
 
 		</section>
 		
-		<section id="sect-Reference_Guide-Tutorials-_JavaServer_Pages_Portlet_Example_">
+		<section id="sect-Reference_Guide-Tutorials-JavaServer_Pages_Portlet_Example">
 			<title>JavaServer Pages Portlet Example</title>
-				<para>
-					This section discusses:
-				</para>
-				<orderedlist>
-					<listitem>
-						<para>
-							Adding more features to the previous example.
-						</para>
-					</listitem>
-					<listitem>
-						<para>
-							Using a JSP page to render the markup.
-						</para>
-					</listitem>
-					<listitem>
-						<para>
-							Using the portlet tag library to generate links to the portlet in different ways.
-						</para>
-					</listitem>
-					<listitem>
-						<para>
-							 Using the other standard portlet modes.
-						</para>
-					</listitem>
-				</orderedlist>
-				<procedure>
-					<step>
-						<para>
-							The example used in this section can be found in the <literal>JSPHelloUser</literal> directory.
-						</para>
-					</step>
-					<step>
-						<para>
-							Execute <command>mvn package</command> in this directory.
-						</para>
-					</step>
-					<step>
-						<para>
-							Copy <filename>JSPHelloUser/target/JSPHelloUser-0.0.1.war </filename> to the <literal>deploy</literal> directory of JBoss Application Server.
-						</para>
-					</step>
-					<step>
-						<para>
-							Select the new <literal>JSPHelloUser</literal> tab in your portal.
-						</para>
-					</step>
-				</procedure>
-					<mediaobject>
-						<imageobject>
-							<imagedata align="center" fileref="images/tutorials/jsp_portlet/output.png" format="PNG" scalefit="1" width="444" />
-						</imageobject>
-					</mediaobject>
-					<note>
-						<para>
-							The <literal>EDIT</literal> button only appears with logged-in users, which is not the case in the screenshot.
-						</para>
-					</note>
+			<para>
+				This section discusses:
+			</para>
+			<orderedlist>
+				<listitem>
+					<para>
+						Adding more features to the previous example.
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						Using a JSP page to render the markup.
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						Using the portlet tag library to generate links to the portlet in different ways.
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						Using the other standard portlet modes.
+					</para>
+				</listitem>
+			</orderedlist>
+			<procedure>
+				<step>
+					<para>
+						The example used in this section can be found in the <literal>JSPHelloUser</literal> directory.
+					</para>
+				</step>
+				<step>
+					<para>
+						Execute <command>mvn package</command> in this directory.
+					</para>
+				</step>
+				<step>
+					<para>
+						Copy <filename>JSPHelloUser/target/JSPHelloUser-0.0.1.war </filename> to the <literal>deploy</literal> directory of JBoss Application Server.
+					</para>
+				</step>
+				<step>
+					<para>
+						Select the new <literal>JSPHelloUser</literal> tab in your portal.
+					</para>
+				</step>
+			</procedure>
 			
-			<section id="sect-Reference_Guide-_JavaServer_Pages_Portlet_Example_-Package_Structure">
+			<mediaobject>
+				<imageobject>
+					<imagedata align="center" fileref="images/tutorials/jsp_portlet/output.png" format="PNG" scalefit="1" width="444" />
+				</imageobject>
+			</mediaobject>
+			<note>
+				<para>
+					The <literal>EDIT</literal> button only appears with logged-in users, which is not the case in the screenshot.
+				</para>
+			</note>
+			<section id="sect-Reference_Guide-JavaServer_Pages_Portlet_Example-Package_Structure">
 				<title>Package Structure</title>
 				<para>
 					The package structure in this tutorial does not differ greatly from the previous example, with the exception of adding some JSP files detailed later.
@@ -458,17 +455,17 @@ public class SimplestHelloWorldPortlet extends GenericPortlet
 </programlisting>
 			</section>
 			
-			<section id="sect-Reference_Guide-_JavaServer_Pages_Portlet_Example_-Portlet_Class">
+			<section id="sect-Reference_Guide-JavaServer_Pages_Portlet_Example-Portlet_Class">
 				<title>Portlet Class</title>
 				<para>
 					The code below is from the <filename> JSPHelloUser/src/main/java/org/gatein/portal/examples/portlets/JSPHelloUserPortlet.java </filename> Java source. It is split in different pieces.
 				</para>
 				<programlistingco>
 					<areaspec>
-						<area coords="18" id="area-Reference_Guide-tutorials.jsphello.doView" />
-						<area coords="21" id="area-Reference_Guide-tutorials.jsphello.renderParameter" />
-						<area coords="25" id="area-Reference_Guide-tutorials.jsphello.requestDispatcher" />
-						<area coords="26" id="area-Reference_Guide-tutorials.jsphello.include" />
+						<area coords="18" id="area-Reference_Guide-JavaServer_Pages_Portlet_Example-Portlet_Class.doView" />
+						<area coords="21" id="area-Reference_Guide-JavaServer_Pages_Portlet_Example-Portlet_Class.renderParameter" />
+						<area coords="25" id="area-Reference_Guide-JavaServer_Pages_Portlet_Example-Portlet_Class.requestDispatcher" />
+						<area coords="26" id="area-Reference_Guide-JavaServer_Pages_Portlet_Example-Portlet_Class.include" />
 					</areaspec>
 					
 <programlisting role="JAVA">package org.gatein.portal.examples.portlets;
@@ -490,39 +487,39 @@ public class JSPHelloUserPortlet extends GenericPortlet
    public void doView(RenderRequest request, RenderResponse response)
        throws PortletException, IOException
    {
-      String sYourName = (String) request.getParameter("yourname");
+      String sYourName = (String) request.getParameter(&#34;yourname&#34;);
       if (sYourName != null)
       {
-         request.setAttribute("yourname", sYourName);
+         request.setAttribute(&#34;yourname&#34;, sYourName);
          PortletRequestDispatcher prd = 
-            getPortletContext().getRequestDispatcher("/jsp/hello.jsp");
+            getPortletContext().getRequestDispatcher(&#34;/jsp/hello.jsp&#34;);
          prd.include(request, response);
       }
       else
       {
-         PortletRequestDispatcher prd = getPortletContext().getRequestDispatcher("/jsp/welcome.jsp");
+         PortletRequestDispatcher prd = getPortletContext().getRequestDispatcher(&#34;/jsp/welcome.jsp&#34;);
          prd.include(request, response);
       }
    }
 ...
 </programlisting>
 					<calloutlist>
-						<callout arearefs="area-Reference_Guide-tutorials.jsphello.doView">
+						<callout arearefs="area-Reference_Guide-JavaServer_Pages_Portlet_Example-Portlet_Class.doView">
 							<para>
 								Override the <emphasis>doView</emphasis> method (as in the first tutorial).
 							</para>
 						</callout>
-						<callout arearefs="area-Reference_Guide-tutorials.jsphello.renderParameter">
+						<callout arearefs="area-Reference_Guide-JavaServer_Pages_Portlet_Example-Portlet_Class.renderParameter">
 							<para>
 								This entry attempts to obtain the value of the render parameter named <literal>yourname</literal>. If defined it should redirect to the <filename>hello.jsp</filename> JSP page, otherwise to the <filename>welcome.jsp</filename> JSP page.
 							</para>
 						</callout>
-						<callout arearefs="area-Reference_Guide-tutorials.jsphello.requestDispatcher">
+						<callout arearefs="area-Reference_Guide-JavaServer_Pages_Portlet_Example-Portlet_Class.requestDispatcher">
 							<para>
 								Get a request dispatcher on a file located within the web archive.
 							</para>
 						</callout>
-						<callout arearefs="area-Reference_Guide-tutorials.jsphello.include">
+						<callout arearefs="area-Reference_Guide-JavaServer_Pages_Portlet_Example-Portlet_Class.include">
 							<para>
 								Perform the inclusion of the markup obtained from the JSP.
 							</para>
@@ -534,7 +531,7 @@ public class JSPHelloUserPortlet extends GenericPortlet
 					As well as the <literal>VIEW</literal> portlet mode, the specification defines two other modes; <literal>EDIT</literal> and <literal>HELP</literal>.
 				</para>
 				<para>
-					These modes need to be defined in the <filename>portlet.xml</filename> descriptor. This will enable the corresponding buttons on the portlet's window.
+					These modes need to be defined in the <filename>portlet.xml</filename> descriptor. This will enable the corresponding buttons on the portlet&#39;s window.
 				</para>
 				<para>
 					The generic portlet that is inherited dispatches the different views to the methods: <literal>doView</literal> , <literal>doHelp</literal> and <literal>doEdit</literal>.
@@ -544,16 +541,16 @@ public class JSPHelloUserPortlet extends GenericPortlet
    protected void doHelp(RenderRequest rRequest, RenderResponse rResponse) throws PortletException, IOException,
          UnavailableException
    {
-      rResponse.setContentType("text/html");
-      PortletRequestDispatcher prd = getPortletContext().getRequestDispatcher("/jsp/help.jsp");
+      rResponse.setContentType(&#34;text/html&#34;);
+      PortletRequestDispatcher prd = getPortletContext().getRequestDispatcher(&#34;/jsp/help.jsp&#34;);
       prd.include(rRequest, rResponse);
    }
 
    protected void doEdit(RenderRequest rRequest, RenderResponse rResponse) throws PortletException, IOException,
          UnavailableException
    {
-      rResponse.setContentType("text/html");
-      PortletRequestDispatcher prd = getPortletContext().getRequestDispatcher("/jsp/edit.jsp");
+      rResponse.setContentType(&#34;text/html&#34;);
+      PortletRequestDispatcher prd = getPortletContext().getRequestDispatcher(&#34;/jsp/edit.jsp&#34;);
       prd.include(rRequest, rResponse);
    }
 ...
@@ -569,32 +566,32 @@ public class JSPHelloUserPortlet extends GenericPortlet
 				</para>
 				<programlistingco>
 					<areaspec>
-						<area coords="2" id="area-Reference_Guide-tutorials.jsphello.processAction" />
-						<area coords="5" id="area-Reference_Guide-tutorials.jsphello.getActionParameter" />
-						<area coords="6" id="area-Reference_Guide-tutorials.jsphello.setRenderParameter" />
+						<area coords="2" id="area-Reference_Guide-JavaServer_Pages_Portlet_Example-Portlet_Class.processAction" />
+						<area coords="5" id="area-Reference_Guide-JavaServer_Pages_Portlet_Example-Portlet_Class.getActionParameter" />
+						<area coords="6" id="area-Reference_Guide-JavaServer_Pages_Portlet_Example-Portlet_Class.setRenderParameter" />
 					</areaspec>
 					
 <programlisting role="JAVA">...
          public void processAction(ActionRequest aRequest, ActionResponse aResponse) throws PortletException, IOException,
          UnavailableException
    {
-      String sYourname = (String) aRequest.getParameter("yourname");
-      aResponse.setRenderParameter("yourname", sYourname);
+      String sYourname = (String) aRequest.getParameter(&#34;yourname&#34;);
+      aResponse.setRenderParameter(&#34;yourname&#34;, sYourname);
    }
 ...
 </programlisting>
 					<calloutlist>
-						<callout arearefs="area-Reference_Guide-tutorials.jsphello.processAction">
+						<callout arearefs="area-Reference_Guide-JavaServer_Pages_Portlet_Example-Portlet_Class.processAction">
 							<para>
 								<literal>processAction</literal> is the method from <literal>GernericPorlet</literal> to override for the <emphasis>action</emphasis> phase.
 							</para>
 						</callout>
-						<callout arearefs="area-Reference_Guide-tutorials.jsphello.getActionParameter">
+						<callout arearefs="area-Reference_Guide-JavaServer_Pages_Portlet_Example-Portlet_Class.getActionParameter">
 							<para>
 								Here the parameter is retrieved through an <emphasis>action URL</emphasis> .
 							</para>
 						</callout>
-						<callout arearefs="area-Reference_Guide-tutorials.jsphello.setRenderParameter">
+						<callout arearefs="area-Reference_Guide-JavaServer_Pages_Portlet_Example-Portlet_Class.setRenderParameter">
 							<para>
 								The value of <literal>yourname</literal> is kept to make it available in the rendering phase. The previous line simply copies an action parameters to a render parameter for this example.
 							</para>
@@ -604,96 +601,96 @@ public class JSPHelloUserPortlet extends GenericPortlet
 
 			</section>
 			
-			<section id="sect-Reference_Guide-_JavaServer_Pages_Portlet_Example_-_JSP_files_and_the_Portlet_Tag_Library_">
+			<section id="sect-Reference_Guide-JavaServer_Pages_Portlet_Example-JSP_files_and_the_Portlet_Tag_Library">
 				<title>JSP files and the Portlet Tag Library</title>
 				<para>
 					The <filename>help.jsp</filename> and <filename>edit.jsp</filename> files are very simple. Note that CSS styles are used as defined in the portlet specification. This ensures that the portlet will render well within the theme and across portal vendors.
 				</para>
 				
-<programlisting role="XHTML">&lt;div class="portlet-section-header"&gt;Help mode&lt;/div&gt;
-&lt;div class="portlet-section-body"&gt;This is the help mode, a convenient place to give the user some help information.&lt;/div&gt;
+<programlisting role="XHTML">&#60;div class=&#34;portlet-section-header&#34;&#62;Help mode&#60;/div&#62;
+&#60;div class=&#34;portlet-section-body&#34;&#62;This is the help mode, a convenient place to give the user some help information.&#60;/div&#62;
 </programlisting>
 				
-<programlisting role="XHTML">&lt;div class="portlet-section-header"&gt;Edit mode&lt;/div&gt;
-&lt;div class="portlet-section-body"&gt;This is the edit mode, a convenient place to let the user change his portlet preferences.&lt;/div&gt;
+<programlisting role="XHTML">&#60;div class=&#34;portlet-section-header&#34;&#62;Edit mode&#60;/div&#62;
+&#60;div class=&#34;portlet-section-body&#34;&#62;This is the edit mode, a convenient place to let the user change his portlet preferences.&#60;/div&#62;
 </programlisting>
 				<para>
 					The landing page contains the links and form to call our portlet:
 				</para>
 				<programlistingco>
 					<areaspec>
-						<area coords="1" id="area-Reference_Guide-tutorials.jsphello.taglib" />
-						<area coords="13" id="area-Reference_Guide-tutorials.jsphello.method1" />
-						<area coords="20" id="area-Reference_Guide-tutorials.jsphello.method2.1" />
-						<area coords="24" id="area-Reference_Guide-tutorials.jsphello.method2.2" />
-						<area coords="30" id="area-Reference_Guide-tutorials.jsphello.method3.1" />
-						<area coords="31" id="area-Reference_Guide-tutorials.jsphello.method3.2" />
+						<area coords="1" id="area-Reference_Guide-JavaServer_Pages_Portlet_Example-JSP_files_and_the_Portlet_Tag_Library.taglib" />
+						<area coords="13" id="area-Reference_Guide-JavaServer_Pages_Portlet_Example-JSP_files_and_the_Portlet_Tag_Library.method1" />
+						<area coords="20" id="area-Reference_Guide-JavaServer_Pages_Portlet_Example-JSP_files_and_the_Portlet_Tag_Library.method2.1" />
+						<area coords="24" id="area-Reference_Guide-JavaServer_Pages_Portlet_Example-JSP_files_and_the_Portlet_Tag_Library.method2.2" />
+						<area coords="30" id="area-Reference_Guide-JavaServer_Pages_Portlet_Example-JSP_files_and_the_Portlet_Tag_Library.method3.1" />
+						<area coords="31" id="area-Reference_Guide-JavaServer_Pages_Portlet_Example-JSP_files_and_the_Portlet_Tag_Library.method3.2" />
 					</areaspec>
 					
-<programlisting>&lt;%@ taglib uri="http://java.sun.com/portlet" prefix="portlet" %&gt;
+<programlisting>&#60;%@ taglib uri=&#34;http://java.sun.com/portlet&#34; prefix=&#34;portlet&#34; %&#62;
 
-&lt;div class="portlet-section-header"&gt;Welcome !&lt;/div&gt;
+&#60;div class=&#34;portlet-section-header&#34;&#62;Welcome !&#60;/div&#62;
 
-&lt;br/&gt;
+&#60;br/&#62;
 
-&lt;div class="portlet-font"&gt;Welcome on the JSP Hello User portlet,
-my name is GateIn Portal. What's yours ?&lt;/div&gt;
+&#60;div class=&#34;portlet-font&#34;&#62;Welcome on the JSP Hello User portlet,
+my name is GateIn Portal. What&#39;s yours ?&#60;/div&#62;
 
-&lt;br/&gt;
+&#60;br/&#62;
 
-&lt;div class="portlet-font"&gt;Method 1: We simply pass the parameter to the render phase:&lt;br/&gt;
-&lt;a href="&lt;portlet:renderURL&gt;&lt;portlet:param name="yourname" value="John Doe"/&gt;
-                &lt;/portlet:renderURL&gt;"&gt;John Doe&lt;/a&gt;&lt;/div&gt;
+&#60;div class=&#34;portlet-font&#34;&#62;Method 1: We simply pass the parameter to the render phase:&#60;br/&#62;
+&#60;a href=&#34;&#60;portlet:renderURL&#62;&#60;portlet:param name=&#34;yourname&#34; value=&#34;John Doe&#34;/&#62;
+                &#60;/portlet:renderURL&#62;&#34;&#62;John Doe&#60;/a&#62;&#60;/div&#62;
 
-&lt;br/&gt;
+&#60;br/&#62;
 
-&lt;div class="portlet-font"&gt;Method 2: We pass the parameter to the render phase, using valid XML:
+&#60;div class=&#34;portlet-font&#34;&#62;Method 2: We pass the parameter to the render phase, using valid XML:
 Please check the source code to see the difference with Method 1.
-&lt;portlet:renderURL var="myRenderURL"&gt;
-    &lt;portlet:param name="yourname" value='John Doe'/&gt;
-&lt;/portlet:renderURL&gt;
-&lt;br/&gt;
-&lt;a href="&lt;%= myRenderURL %&gt;"&gt;John Doe&lt;/a&gt;&lt;/div&gt;
+&#60;portlet:renderURL var=&#34;myRenderURL&#34;&#62;
+    &#60;portlet:param name=&#34;yourname&#34; value=&#39;John Doe&#39;/&#62;
+&#60;/portlet:renderURL&#62;
+&#60;br/&#62;
+&#60;a href=&#34;&#60;%= myRenderURL %&#62;&#34;&#62;John Doe&#60;/a&#62;&#60;/div&#62;
 
-&lt;br/&gt;
+&#60;br/&#62;
 
-&lt;div class="portlet-font"&gt;Method 3: We use a form:&lt;br/&gt;
+&#60;div class=&#34;portlet-font&#34;&#62;Method 3: We use a form:&#60;br/&#62;
 
-&lt;portlet:actionURL var="myActionURL"/&gt;
-&lt;form action="&lt;%= myActionURL %&gt;" method="POST"&gt;
-         &lt;span class="portlet-form-field-label"&gt;Name:&lt;/span&gt;
-         &lt;input class="portlet-form-input-field" type="text" name="yourname"/&gt;
-         &lt;input class="portlet-form-button" type="Submit"/&gt;
-&lt;/form&gt;
-&lt;/div&gt;
+&#60;portlet:actionURL var=&#34;myActionURL&#34;/&#62;
+&#60;form action=&#34;&#60;%= myActionURL %&#62;&#34; method=&#34;POST&#34;&#62;
+         &#60;span class=&#34;portlet-form-field-label&#34;&#62;Name:&#60;/span&#62;
+         &#60;input class=&#34;portlet-form-input-field&#34; type=&#34;text&#34; name=&#34;yourname&#34;/&#62;
+         &#60;input class=&#34;portlet-form-button&#34; type=&#34;Submit&#34;/&#62;
+&#60;/form&#62;
+&#60;/div&#62;
 </programlisting>
 					<calloutlist>
-						<callout arearefs="area-Reference_Guide-tutorials.jsphello.taglib">
+						<callout arearefs="area-Reference_Guide-JavaServer_Pages_Portlet_Example-JSP_files_and_the_Portlet_Tag_Library.taglib">
 							<para>
 								The portlet taglib, needs to be declared.
 							</para>
 						</callout>
-						<callout arearefs="area-Reference_Guide-tutorials.jsphello.method1">
+						<callout arearefs="area-Reference_Guide-JavaServer_Pages_Portlet_Example-JSP_files_and_the_Portlet_Tag_Library.method1">
 							<para>
-								The first method showed here is the simplest one. <literal>portlet:renderURL</literal> will create a URL that calls the render phase of the current portlet and append the result at the place of the markup (within a tag). A parameter is  also added directly to the URL.
+								The first method showed here is the simplest one. <literal>portlet:renderURL</literal> will create a URL that calls the render phase of the current portlet and append the result at the place of the markup (within a tag). A parameter is also added directly to the URL.
 							</para>
 						</callout>
-						<callout arearefs="area-Reference_Guide-tutorials.jsphello.method2.1">
+						<callout arearefs="area-Reference_Guide-JavaServer_Pages_Portlet_Example-JSP_files_and_the_Portlet_Tag_Library.method2.1">
 							<para>
 								In this method the <literal>var</literal> attribute is used. This avoids having one XML tag within another. Instead of printing the url the <literal>portlet:renderURL</literal> tag will store the result in the referenced variable ( <literal>myRenderURL</literal>).
 							</para>
 						</callout>
-						<callout arearefs="area-Reference_Guide-tutorials.jsphello.method2.2">
+						<callout arearefs="area-Reference_Guide-JavaServer_Pages_Portlet_Example-JSP_files_and_the_Portlet_Tag_Library.method2.2">
 							<para>
 								The variable <literal>myRenderURL</literal> is used like any other JSP variable.
 							</para>
 						</callout>
-						<callout arearefs="area-Reference_Guide-tutorials.jsphello.method3.1">
+						<callout arearefs="area-Reference_Guide-JavaServer_Pages_Portlet_Example-JSP_files_and_the_Portlet_Tag_Library.method3.1">
 							<para>
 								The third method mixes form submission and action request. Again, a temporary variable is used to put the created URL into.
 							</para>
 						</callout>
-						<callout arearefs="area-Reference_Guide-tutorials.jsphello.method3.2">
+						<callout arearefs="area-Reference_Guide-JavaServer_Pages_Portlet_Example-JSP_files_and_the_Portlet_Tag_Library.method3.2">
 							<para>
 								The action URL is used in HTML form.
 							</para>
@@ -711,10 +708,10 @@ Please check the source code to see the difference with Method 1.
 				</para>
 			</section>
 			
-			<section id="sect-Reference_Guide-_JavaServer_Pages_Portlet_Example_-_JSF_example_using_the_JBoss_Portlet_Bridge_">
+			<section id="sect-Reference_Guide-JavaServer_Pages_Portlet_Example-JSF_example_using_the_JBoss_Portlet_Bridge">
 				<title>JSF example using the JBoss Portlet Bridge </title>
 				<para>
-					In order to write a portlet using JSF a 'bridge' is needed. This software allows developers to write a portlet application as if it was a JSF application. The bridge then negotiates the interactions between the two layers.
+					In order to write a portlet using JSF a &#39;bridge&#39; is needed. This software allows developers to write a portlet application as if it was a JSF application. The bridge then negotiates the interactions between the two layers.
 				</para>
 				<para>
 					An example of the JBoss Portlet Bridge is available in <filename>examples/JSFHelloUser</filename>. The configuration is slightly different from a JSP application. This example can be used as a base to configure instead of creating a new application.
@@ -723,14 +720,14 @@ Please check the source code to see the difference with Method 1.
 					As in any JSF application, the file <literal>faces-config.xml</literal> is required. It must contain the following information:
 				</para>
 				
-<programlisting role="XML">&lt;faces-config&gt;
+<programlisting role="XML">&#60;faces-config&#62;
 ...
-    &lt;application&gt;
-      &lt;view-handler&gt;org.jboss.portletbridge.application.PortletViewHandler&lt;/view-handler&gt;
-      &lt;state-manager&gt;org.jboss.portletbridge.application.PortletStateManager&lt;/state-manager&gt;
-   &lt;/application&gt;
+    &#60;application&#62;
+      &#60;view-handler&#62;org.jboss.portletbridge.application.PortletViewHandler&#60;/view-handler&#62;
+      &#60;state-manager&#62;org.jboss.portletbridge.application.PortletStateManager&#60;/state-manager&#62;
+   &#60;/application&#62;
 ...
-&lt;/faces-config&gt;
+&#60;/faces-config&#62;
 </programlisting>
 				<para>
 					The portlet bridge libraries must be available and are usually bundled with the <literal>WEB-INF/lib</literal> directory of the web archive.
@@ -740,68 +737,68 @@ Please check the source code to see the difference with Method 1.
 				</para>
 				<programlistingco>
 					<areaspec>
-						<area coords="9" id="area-Reference_Guide-tutorials.jsf.portlet" />
-						<area coords="21" id="area-Reference_Guide-tutorials.jsf.view" />
-						<area coords="26" id="area-Reference_Guide-tutorials.jsf.edit" />
-						<area coords="31" id="area-Reference_Guide-tutorials.jsf.help" />
+						<area coords="9" id="area-Reference_Guide-JavaServer_Pages_Portlet_Example-JSF_example_using_the_JBoss_Portlet_Bridge.portlet" />
+						<area coords="21" id="area-Reference_Guide-JavaServer_Pages_Portlet_Example-JSF_example_using_the_JBoss_Portlet_Bridge.view" />
+						<area coords="26" id="area-Reference_Guide-JavaServer_Pages_Portlet_Example-JSF_example_using_the_JBoss_Portlet_Bridge.edit" />
+						<area coords="31" id="area-Reference_Guide-JavaServer_Pages_Portlet_Example-JSF_example_using_the_JBoss_Portlet_Bridge.help" />
 					</areaspec>
 					
-<programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
-&lt;portlet-app xmlns="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd"
-   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd 
-                                         http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd"
-   version="2.0"&gt;
-   &lt;portlet&gt;
-      &lt;portlet-name&gt;JSFHelloUserPortlet&lt;/portlet-name&gt;
-      &lt;portlet-class&gt;javax.portlet.faces.GenericFacesPortlet&lt;/portlet-class&gt;
-      &lt;supports&gt;
-         &lt;mime-type&gt;text/html&lt;/mime-type&gt;
-         &lt;portlet-mode&gt;view&lt;/portlet-mode&gt;
-         &lt;portlet-mode&gt;edit&lt;/portlet-mode&gt;
-         &lt;portlet-mode&gt;help&lt;/portlet-mode&gt;
-      &lt;/supports&gt;
-      &lt;portlet-info&gt;
-         &lt;title&gt;JSF Hello User Portlet&lt;/title&gt;
-      &lt;/portlet-info&gt;
+<programlisting>&#60;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&#62;
+&#60;portlet-app xmlns=&#34;http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd&#34;
+   xmlns:xsi=&#34;http://www.w3.org/2001/XMLSchema-instance&#34;
+   xsi:schemaLocation=&#34;http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd 
+                                         http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd&#34;
+   version=&#34;2.0&#34;&#62;
+   &#60;portlet&#62;
+      &#60;portlet-name&#62;JSFHelloUserPortlet&#60;/portlet-name&#62;
+      &#60;portlet-class&#62;javax.portlet.faces.GenericFacesPortlet&#60;/portlet-class&#62;
+      &#60;supports&#62;
+         &#60;mime-type&#62;text/html&#60;/mime-type&#62;
+         &#60;portlet-mode&#62;view&#60;/portlet-mode&#62;
+         &#60;portlet-mode&#62;edit&#60;/portlet-mode&#62;
+         &#60;portlet-mode&#62;help&#60;/portlet-mode&#62;
+      &#60;/supports&#62;
+      &#60;portlet-info&#62;
+         &#60;title&#62;JSF Hello User Portlet&#60;/title&#62;
+      &#60;/portlet-info&#62;
       
-      &lt;init-param&gt;
-         &lt;name&gt;javax.portlet.faces.defaultViewId.view&lt;/name&gt;
-         &lt;value&gt;/jsf/welcome.jsp&lt;/value&gt;
-      &lt;/init-param&gt;
+      &#60;init-param&#62;
+         &#60;name&#62;javax.portlet.faces.defaultViewId.view&#60;/name&#62;
+         &#60;value&#62;/jsf/welcome.jsp&#60;/value&#62;
+      &#60;/init-param&#62;
 
-      &lt;init-param&gt;
-         &lt;name&gt;javax.portlet.faces.defaultViewId.edit&lt;/name&gt;
-         &lt;value&gt;/jsf/edit.jsp&lt;/value&gt;
-      &lt;/init-param&gt;
+      &#60;init-param&#62;
+         &#60;name&#62;javax.portlet.faces.defaultViewId.edit&#60;/name&#62;
+         &#60;value&#62;/jsf/edit.jsp&#60;/value&#62;
+      &#60;/init-param&#62;
 
-      &lt;init-param&gt;
-         &lt;name&gt;javax.portlet.faces.defaultViewId.help&lt;/name&gt;
-         &lt;value&gt;/jsf/help.jsp&lt;/value&gt;
-      &lt;/init-param&gt;
+      &#60;init-param&#62;
+         &#60;name&#62;javax.portlet.faces.defaultViewId.help&#60;/name&#62;
+         &#60;value&#62;/jsf/help.jsp&#60;/value&#62;
+      &#60;/init-param&#62;
 
-   &lt;/portlet&gt;
-&lt;/portlet-app&gt;
+   &#60;/portlet&#62;
+&#60;/portlet-app&#62;
 </programlisting>
 					<calloutlist>
-						<callout arearefs="area-Reference_Guide-tutorials.jsf.portlet">
+						<callout arearefs="area-Reference_Guide-JavaServer_Pages_Portlet_Example-JSF_example_using_the_JBoss_Portlet_Bridge.portlet">
 							<para>
 								All JSF portlets define <literal>javax.portlet.faces.GenericFacesPortlet </literal> as portlet class. This class is part of the JBoss Portlet Bridge
 							</para>
 						</callout>
-						<callout arearefs="area-Reference_Guide-tutorials.jsf.view">
+						<callout arearefs="area-Reference_Guide-JavaServer_Pages_Portlet_Example-JSF_example_using_the_JBoss_Portlet_Bridge.view">
 							<para>
-								This is a mandatory parameter to define what's the default page to display.
+								This is a mandatory parameter to define what&#39;s the default page to display.
 							</para>
 						</callout>
-						<callout arearefs="area-Reference_Guide-tutorials.jsf.edit">
+						<callout arearefs="area-Reference_Guide-JavaServer_Pages_Portlet_Example-JSF_example_using_the_JBoss_Portlet_Bridge.edit">
 							<para>
-								This parameter defines which page to display on the 'edit' mode.
+								This parameter defines which page to display on the &#39;edit&#39; mode.
 							</para>
 						</callout>
-						<callout arearefs="area-Reference_Guide-tutorials.jsf.help">
+						<callout arearefs="area-Reference_Guide-JavaServer_Pages_Portlet_Example-JSF_example_using_the_JBoss_Portlet_Bridge.help">
 							<para>
-								This parameter defines which page to display on the 'help' mode.
+								This parameter defines which page to display on the &#39;help&#39; mode.
 							</para>
 						</callout>
 					</calloutlist>

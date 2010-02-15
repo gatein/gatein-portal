@@ -1,7 +1,5 @@
 <?xml version='1.0' encoding='utf-8' ?>
 <!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
-<!ENTITY % BOOK_ENTITIES SYSTEM "../../Reference_Guide.ent">
-%BOOK_ENTITIES;
 ]>
 <section id="sect-Reference_Guide-XML_Resources_Bundles">
 	<title>XML Resources Bundles</title>
@@ -32,7 +30,7 @@
 	<section id="sect-Reference_Guide-XML_Resources_Bundles-XML_format">
 		<title>XML format</title>
 		<para>
-			The XML format is very simple and has been developed based on the <emphasis>DRY</emphasis> (Don't Repeat Yourself) principle. Usually resource bundle keys are hierarchically defined and we can leverage the hierarchic nature of the XML for that purpose. Here is an example of turning a property file into an XML resource bundle file:
+			The XML format is very simple and has been developed based on the <emphasis>DRY</emphasis> (Don&#39;t Repeat Yourself) principle. Usually resource bundle keys are hierarchically defined and we can leverage the hierarchic nature of the XML for that purpose. Here is an example of turning a property file into an XML resource bundle file:
 		</para>
 		
 <programlisting>UIAccountForm.tab.label.AccountInputSet = ...
@@ -46,28 +44,28 @@ UIAccountForm.label.email= ...
 UIAccountForm.action.Reset= ...
 </programlisting>
 		
-<programlisting role="XML">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
-&lt;bundle&gt;
-  &lt;UIAccountForm&gt;
-    &lt;tab&gt;
-      &lt;label&gt;
-        &lt;AccountInputSet&gt;...&lt;/AccountInputSet&gt;
-        &lt;UIUserProfileInputSet&gt;...&lt;/UIUserProfileInputSet&gt;
-      &lt;/label&gt;
-    &lt;/tab&gt;
-    &lt;label&gt;
-      &lt;Profile&gt;...&lt;/Profile&gt;
-      &lt;HomeInfo&gt;...&lt;/HomeInfo&gt;
-      &lt;BusinessInfo&gt;...&lt;/BusinessInfo&gt;
-      &lt;password&gt;...&lt;/password&gt;
-      &lt;Confirmpassword&gt;...&lt;/Confirmpassword&gt;
-      &lt;email&gt;...&lt;/email&gt;
-    &lt;/label&gt;
-    &lt;action&gt;
-      &lt;Reset&gt;...&lt;/Reset&gt;
-    &lt;/action&gt;
-  &lt;/UIAccountForm&gt;
-&lt;/bundle&gt;
+<programlisting role="XML">&#60;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&#62;
+&#60;bundle&#62;
+  &#60;UIAccountForm&#62;
+    &#60;tab&#62;
+      &#60;label&#62;
+        &#60;AccountInputSet&#62;...&#60;/AccountInputSet&#62;
+        &#60;UIUserProfileInputSet&#62;...&#60;/UIUserProfileInputSet&#62;
+      &#60;/label&#62;
+    &#60;/tab&#62;
+    &#60;label&#62;
+      &#60;Profile&#62;...&#60;/Profile&#62;
+      &#60;HomeInfo&#62;...&#60;/HomeInfo&#62;
+      &#60;BusinessInfo&#62;...&#60;/BusinessInfo&#62;
+      &#60;password&#62;...&#60;/password&#62;
+      &#60;Confirmpassword&#62;...&#60;/Confirmpassword&#62;
+      &#60;email&#62;...&#60;/email&#62;
+    &#60;/label&#62;
+    &#60;action&#62;
+      &#60;Reset&#62;...&#60;/Reset&#62;
+    &#60;/action&#62;
+  &#60;/UIAccountForm&#62;
+&#60;/bundle&#62;
 </programlisting>
 	</section>
 	
@@ -75,9 +73,9 @@ UIAccountForm.action.Reset= ...
 		<title>Portal support</title>
 		<para>
 			In order to be loaded by the portal at runtime (actually the resource bundle service), the name of the file must be the same as a property file and it must use the <emphasis role="bold">.xml</emphasis> suffix.
-		</para>	
+		</para>
 		<para>
-			For example; for the Account Portlet to be displayed in Arabic, the resource bundle would be  <emphasis role="bold"> AccountPortlet_ar.xml</emphasis> rather than <emphasis role="bold">AccountPortlet_ar.properties</emphasis>.
+			For example; for the Account Portlet to be displayed in Arabic, the resource bundle would be <emphasis role="bold"> AccountPortlet_ar.xml</emphasis> rather than <emphasis role="bold">AccountPortlet_ar.properties</emphasis>.
 		</para>
 	</section>
 
