@@ -1,23 +1,29 @@
 <?xml version='1.0' encoding='utf-8' ?>
 <!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
 ]>
-<chapter id="chap-Reference_Guide-Single_Sign_On">
-	<title>Single Sign On</title>
-	<section id="sect-Reference_Guide-Single_Sign_On-Overview_of_SSO">
-		<title>Overview of SSO</title>
+<chapter id="chap-Reference_Guide-SSO_Single_Sign_On">
+	<title>SSO - Single Sign On</title>
+	<section id="sect-Reference_Guide-Single_Sign_On-Overview">
+		<title>Overview</title>
 		<para>
-			Portal as an integration and aggregation platform provides some form of Single Sign On (<literal>SSO</literal>) by itself. When you log into the portal you gain access to many systems through portlets using a single identity. Still in many cases you need to integrate the portal infrastructure with other SSO enabled systems. There are many different Identity Management solutions on the market. In most cases each SSO framework provides its own way to plug into Java EE application.
+			&PRODUCT;, as an integration and aggregation platform provides some form of Single Sign On (<literal>SSO</literal>). 
+		</para>
+		<para>
+			When logging into the portal users gain access to many systems through portlets using a single identity. In many cases, however, the portal infrastructure must be integrated with other SSO enabled systems. There are many different Identity Management solutions available. In most cases each SSO framework provides a unique way to plug into a Java EE application.
 		</para>
 		<section id="sect-Reference_Guide-Overview_of_SSO-Prerequisite">
 			<title>Prerequisite</title>
 			<para>
-				In this tutorial, the SSO server is installed in a Tomcat installation, you can obtain Tomcat from: http://tomcat.apache.org
+				In this tutorial, the SSO server is installed in a Tomcat installation. Tomcat can be obtained from <ulink type="http" url="http://tomcat.apache.org">http://tomcat.apache.org</ulink>.
 			</para>
 			<para>
-				Various files are required to setup the integration, all the packages can be found in a zip file located at: http://repository.jboss.org/maven2/org/gatein/sso/sso-packaging
+				All the packages required for setup can be found in a zip file located at: <filename>http://repository.jboss.org/maven2/org/gatein/sso/sso-packaging</filename>
 			</para>
 			<para>
-				As we are manipulating gatein.ear directly it&#39;s better to not run any portal extension that could override some of the data, make sure you remove $JBOSS_HOME/server/default/deploy/gatein-sample-extension.ear and $JBOSS_HOME/server/default/deploy/gatein-sample-portal.ear as they ship by default with GateIn.
+				When manipulating <filename>gatein.ear</filename> directly it is better to not run any portal extensions that could override the data.
+			</para>
+			<para>
+				Remove <literal>$JBOSS_HOME/server/default/deploy/gatein-sample-extension.ear</literal> and <literal>$JBOSS_HOME/server/default/deploy/gatein-sample-portal.ear</literal> which are packaged by default with &PRODUCT;.
 			</para>
 		</section>
 
@@ -26,10 +32,10 @@
 	<section id="sect-Reference_Guide-Single_Sign_On-CAS_Central_Authentication_Service">
 		<title>CAS - Central Authentication Service</title>
 		<para>
-			This Single Sign On plugin enables seamless integration between GateIn Portal and the CAS Single Sign On Framework. Details about CAS can be found <ulink url="http://www.ja-sig.org/products/cas/">here.</ulink>
+			This Single Sign On plugin enables seamless integration between &PRODUCT; and the CAS Single Sign On Framework. Details about CAS can be found <ulink url="http://www.ja-sig.org/products/cas/">here</ulink>.
 		</para>
 		<para>
-			The integration consitsts in two parts, the first part consists of installing or configuring a CAS server, the second part consists of setting up the portal to use the CAS server.
+			The integration consists of two parts; the first part consists of installing or configuring a CAS server, the second part consists of setting up the portal to use the CAS server.
 		</para>
 		<section id="sect-Reference_Guide-CAS_Central_Authentication_Service-CAS_server">
 			<title>CAS server</title>

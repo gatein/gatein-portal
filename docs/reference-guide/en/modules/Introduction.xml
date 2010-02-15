@@ -22,20 +22,32 @@
     02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
               --><title>Introduction</title>
+
+	<para>
+		&PRODUCT; is a merge of two mature projects; JBoss Portal and eXo Portal. It takes the best of both offerings and incorporates them into a single new project. The aim is to provide an intuitive portal for as-is use and a framework to build upon depending on your needs.
+	</para>
 	<mediaobject>
 		<imageobject>
 			<imagedata fileref="images/Frontpage.png" format="PNG" scalefit="1" width="444" />
 		</imageobject>
 	</mediaobject>
 	<para>
-		&PRODUCT; comes from a merge of two mature projects; the JBoss Portal and the eXo Portal. It takes the best of both into a single new project. The aim is to provide both an intuitive portal to use as-is and a portal framework to build upon depending on your needs.
+		This book explains how to configure various aspects of &PRODUCT;, including navigation, skins and database variables.
 	</para>
-	<section id="sect-Reference_Guide-Introduction-Links">
-		<title>Links</title>
+	<para>
+		Refer to the <ulink type="http" url="http://redhat.com/docs">&PRODUCT; Installation Guide</ulink> for information on downloading and installing the product or the <ulink type="http" url="http://redhat.com/docs">&PRODUCT; User Guide</ulink> for information on basic usage.
+	</para>
+	<section id="sect-Install_Guide-Introduction-Related_Links">
+		<title>Related Links</title>
 		<itemizedlist>
 			<listitem>
 				<para>
-					GateIn homepage: <ulink url="http://www.gatein.org">www.gatein.org</ulink>
+					GateIn project homepage. GateIn 3.0 is the community project that &PRODUCT; is based on. <ulink url="http://www.gatein.org" />
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					GateIn downloads: <ulink url="http://www.jboss.org/gatein/downloads.html">www.jboss.org/gatein/downloads.html</ulink>
 				</para>
 			</listitem>
 			<listitem>
@@ -43,21 +55,6 @@
 					Further documentation about the Red Hat &PRODUCT; and other Red Hat products can be found at <ulink type="http" url="www.redhat.com/docs" />
 				</para>
 			</listitem>
-			<!--  		<listitem>
-				<para>
-					GateIn videos: <ulink url="http://www.jboss.org/gatein/videos.html">www.jboss.org/gatein/videos.html</ulink>
-				</para>
-			</listitem>
-			<listitem>
-				<para>
-					GateIn documentation: <ulink url="http://www.jboss.org/gatein/documentation.html">www.jboss.org/gatein/documentation.html</ulink>
-				</para>
-			</listitem>
-			<listitem>
-				<para>
-					GateIn downloads: <ulink url="http://www.jboss.org/gatein/downloads.html">www.jboss.org/gatein/downloads.html</ulink>
-				</para>
-			</listitem>   -->
 		</itemizedlist>
 	</section>
 
