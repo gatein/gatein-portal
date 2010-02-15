@@ -197,10 +197,10 @@
         <properties-param>
           <name>ref-addresses</name>
           <description>ref-addresses</description>
-          <property name="driverClassName" value="org.hsqldb.jdbcDriver"/>
-          <property name="url" value="jdbc:hsqldb:file:${gatein.db.data.dir}/data/jdbcidm${container.name.suffix}"/>
-          <property name="username" value="sa"/>
-          <property name="password" value=""/>
+          <property name="driverClassName" value="${gatein.idm.datasource.driver}"/>
+          <property name="url" value="${gatein.idm.datasource.url}${container.name.suffix}"/>
+          <property name="username" value="${gatein.idm.datasource.username}"/>
+          <property name="password" value="${gatein.idm.datasource.password}"/>
         </properties-param>
       </init-params>
     </component-plugin>

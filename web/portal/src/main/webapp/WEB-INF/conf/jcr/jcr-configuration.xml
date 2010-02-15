@@ -148,10 +148,10 @@
         <properties-param>
           <name>ref-addresses</name>
           <description>ref-addresses</description>
-          <property name="driverClassName" value="org.hsqldb.jdbcDriver"/>
-          <property name="url" value="jdbc:hsqldb:file:${gatein.db.data.dir}/data/jdbcjcr${container.name.suffix}"/>
-          <property name="username" value="sa"/>
-          <property name="password" value=""/>
+          <property name="driverClassName" value="${gatein.jcr.datasource.driver}"/>
+          <property name="url" value="${gatein.jcr.datasource.url}${container.name.suffix}"/>
+          <property name="username" value="${gatein.jcr.datasource.username}"/>
+          <property name="password" value="${gatein.jcr.datasource.password}"/>
         </properties-param>
       </init-params>
     </component-plugin>
