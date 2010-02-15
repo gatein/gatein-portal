@@ -60,7 +60,7 @@
               <property name="jbosscache-configuration" value="conf/jcr/jbosscache/${gatein.jcr.config.type}/config.xml" />
               <property name="jgroups-configuration" value="jar:/conf/jcr/jbosscache/cluster/udp-mux.xml" />
               <property name="jgroups-multiplexer-stack" value="true" />
-              <property name="jbosscache-cluster-name" value="JCR-cluster-repository-system" />
+              <property name="jbosscache-cluster-name" value="jcr-${container.name.suffix}-system" />
             </properties>
           </cache>
           <query-handler class="org.exoplatform.services.jcr.impl.core.query.lucene.SearchIndex">
@@ -70,7 +70,7 @@
               <property name="jbosscache-configuration" value="conf/jcr/jbosscache/cluster/indexer-config.xml" />
               <property name="jgroups-configuration" value="jar:/conf/jcr/jbosscache/cluster/udp-mux.xml" />
               <property name="jgroups-multiplexer-stack" value="true" />
-              <property name="jbosscache-cluster-name" value="JCR-cluster-indexer-repository-system" />
+              <property name="jbosscache-cluster-name" value="jcrindexer-${container.name.suffix}-system" />
               <property name="max-volatile-time" value="60" />
             </properties>
           </query-handler>
@@ -80,11 +80,11 @@
               <property name="jbosscache-configuration" value="conf/jcr/jbosscache/${gatein.jcr.config.type}/lock-config.xml" />
               <property name="jgroups-configuration" value="jar:/conf/jcr/jbosscache/cluster/udp-mux.xml" />
               <property name="jgroups-multiplexer-stack" value="true" />
-              <property name="jbosscache-cluster-name" value="JCR-cluster-locks-repository-system" />
-              <property name="jbosscache-cl-cache.jdbc.table.name" value="jcrlocks_repository_system" />
+              <property name="jbosscache-cluster-name" value="jcrlock-${container.name.suffix}-system" />
+              <property name="jbosscache-cl-cache.jdbc.table.name" value="jcrlock_system" />
               <property name="jbosscache-cl-cache.jdbc.table.create" value="true" />
               <property name="jbosscache-cl-cache.jdbc.table.drop" value="false" />
-              <property name="jbosscache-cl-cache.jdbc.table.primarykey" value="jcrlocks_repositoty_system_pk" />
+              <property name="jbosscache-cl-cache.jdbc.table.primarykey" value="pk" />
               <property name="jbosscache-cl-cache.jdbc.fqn.column" value="fqn" />
               <property name="jbosscache-cl-cache.jdbc.node.column" value="node" />
               <property name="jbosscache-cl-cache.jdbc.parent.column" value="parent" />
@@ -126,7 +126,7 @@
               <property name="jbosscache-configuration" value="conf/jcr/jbosscache/${gatein.jcr.config.type}/config.xml" />
               <property name="jgroups-configuration" value="jar:/conf/jcr/jbosscache/cluster/udp-mux.xml" />
               <property name="jgroups-multiplexer-stack" value="true" />
-              <property name="jbosscache-cluster-name" value="JCR-cluster-repository-portal-system" />
+              <property name="jbosscache-cluster-name" value="jcr-${container.name.suffix}-portal-system" />
             </properties>
           </cache>
           <query-handler class="org.exoplatform.services.jcr.impl.core.query.lucene.SearchIndex">
@@ -136,7 +136,7 @@
               <property name="jbosscache-configuration" value="conf/jcr/jbosscache/cluster/indexer-config.xml" />
               <property name="jgroups-configuration" value="jar:/conf/jcr/jbosscache/cluster/udp-mux.xml" />
               <property name="jgroups-multiplexer-stack" value="true" />
-              <property name="jbosscache-cluster-name" value="JCR-cluster-indexer-repository-portal-system" />
+              <property name="jbosscache-cluster-name" value="jcrindexer-${container.name.suffix}-portal-system" />
               <property name="max-volatile-time" value="60" />
             </properties>
           </query-handler>
@@ -146,11 +146,11 @@
               <property name="jbosscache-configuration" value="conf/jcr/jbosscache/${gatein.jcr.config.type}/lock-config.xml" />
               <property name="jgroups-configuration" value="jar:/conf/jcr/jbosscache/cluster/udp-mux.xml" />
               <property name="jgroups-multiplexer-stack" value="true" />
-              <property name="jbosscache-cluster-name" value="JCR-cluster-locks-repository-system" />
-              <property name="jbosscache-cl-cache.jdbc.table.name" value="jcrlocks_repository_portal_system" />
+              <property name="jbosscache-cluster-name" value="jcrlock-${container.name.suffix}-system" />
+              <property name="jbosscache-cl-cache.jdbc.table.name" value="jcrlock_portal_system" />
               <property name="jbosscache-cl-cache.jdbc.table.create" value="true" />
               <property name="jbosscache-cl-cache.jdbc.table.drop" value="false" />
-              <property name="jbosscache-cl-cache.jdbc.table.primarykey" value="jcrlocks_repositoty_portal_system_pk" />
+              <property name="jbosscache-cl-cache.jdbc.table.primarykey" value="pk" />
               <property name="jbosscache-cl-cache.jdbc.fqn.column" value="fqn" />
               <property name="jbosscache-cl-cache.jdbc.node.column" value="node" />
               <property name="jbosscache-cl-cache.jdbc.parent.column" value="parent" />
@@ -192,7 +192,7 @@
               <property name="jbosscache-configuration" value="conf/jcr/jbosscache/${gatein.jcr.config.type}/config.xml" />
               <property name="jgroups-configuration" value="jar:/conf/jcr/jbosscache/cluster/udp-mux.xml" />
               <property name="jgroups-multiplexer-stack" value="true" />
-              <property name="jbosscache-cluster-name" value="JCR-cluster-repository-portal-work" />
+              <property name="jbosscache-cluster-name" value="jcr-${container.name.suffix}-portal-work" />
             </properties>
           </cache>
          <query-handler class="org.exoplatform.services.jcr.impl.core.query.lucene.SearchIndex">
@@ -202,7 +202,7 @@
             <property name="jbosscache-configuration" value="conf/jcr/jbosscache/cluster/indexer-config.xml" />
             <property name="jgroups-configuration" value="jar:/conf/jcr/jbosscache/cluster/udp-mux.xml" />
             <property name="jgroups-multiplexer-stack" value="true" />
-            <property name="jbosscache-cluster-name" value="JCR-cluster-indexer-repository-portal-work" />
+            <property name="jbosscache-cluster-name" value="jcrindexer-${container.name.suffix}-portal-work" />
             <property name="max-volatile-time" value="60" />
           </properties>
          </query-handler>
@@ -212,11 +212,11 @@
              <property name="jbosscache-configuration" value="conf/jcr/jbosscache/${gatein.jcr.config.type}/lock-config.xml" />
              <property name="jgroups-configuration" value="jar:/conf/jcr/jbosscache/cluster/udp-mux.xml" />
              <property name="jgroups-multiplexer-stack" value="true" />
-             <property name="jbosscache-cluster-name" value="JCR-cluster-locks-repository-system" />
-             <property name="jbosscache-cl-cache.jdbc.table.name" value="jcrlocks_repository_portal_work" />
+             <property name="jbosscache-cluster-name" value="jcrlock-${container.name.suffix}-system" />
+             <property name="jbosscache-cl-cache.jdbc.table.name" value="jcrlock_portal_work" />
              <property name="jbosscache-cl-cache.jdbc.table.create" value="true" />
              <property name="jbosscache-cl-cache.jdbc.table.drop" value="false" />
-             <property name="jbosscache-cl-cache.jdbc.table.primarykey" value="jcrlocks_repositoty_portal_work_pk" />
+             <property name="jbosscache-cl-cache.jdbc.table.primarykey" value="pk" />
              <property name="jbosscache-cl-cache.jdbc.fqn.column" value="fqn" />
              <property name="jbosscache-cl-cache.jdbc.node.column" value="node" />
              <property name="jbosscache-cl-cache.jdbc.parent.column" value="parent" />
@@ -259,7 +259,7 @@
                <property name="jbosscache-configuration" value="conf/jcr/jbosscache/${gatein.jcr.config.type}/config.xml" />
                <property name="jgroups-configuration" value="jar:/conf/jcr/jbosscache/cluster/udp-mux.xml" />
                <property name="jgroups-multiplexer-stack" value="true" />
-               <property name="jbosscache-cluster-name" value="JCR-cluster-repository-wsrp-system" />
+               <property name="jbosscache-cluster-name" value="jcr-${container.name.suffix}-wsrp-system" />
              </properties>
            </cache>
            <query-handler class="org.exoplatform.services.jcr.impl.core.query.lucene.SearchIndex">
@@ -269,7 +269,7 @@
                <property name="jbosscache-configuration" value="conf/jcr/jbosscache/cluster/indexer-config.xml" />
                <property name="jgroups-configuration" value="jar:/conf/jcr/jbosscache/cluster/udp-mux.xml" />
                <property name="jgroups-multiplexer-stack" value="true" />
-               <property name="jbosscache-cluster-name" value="JCR-cluster-indexer-repository-wsrp-system" />
+               <property name="jbosscache-cluster-name" value="jcrindexer-${container.name.suffix}-wsrp-system" />
                <property name="max-volatile-time" value="60" />
              </properties>
            </query-handler>
@@ -279,11 +279,11 @@
                <property name="jbosscache-configuration" value="conf/jcr/jbosscache/${gatein.jcr.config.type}/lock-config.xml" />
                <property name="jgroups-configuration" value="jar:/conf/jcr/jbosscache/cluster/udp-mux.xml" />
                <property name="jgroups-multiplexer-stack" value="true" />
-               <property name="jbosscache-cluster-namejbosscache-cluster-name" value="JCR-cluster-locks-repository-system" />
-               <property name="jbosscache-cl-cache.jdbc.table.name" value="jcrlocks_wsrp_system_system" />
+               <property name="jbosscache-cluster-namejbosscache-cluster-name" value="jcrlock-${container.name.suffix}-system" />
+               <property name="jbosscache-cl-cache.jdbc.table.name" value="jcrlock_wsrp_system" />
                <property name="jbosscache-cl-cache.jdbc.table.create" value="true" />
                <property name="jbosscache-cl-cache.jdbc.table.drop" value="false" />
-               <property name="jbosscache-cl-cache.jdbc.table.primarykey" value="jcrlocks_repositoty_wsrp_system_pk" />
+               <property name="jbosscache-cl-cache.jdbc.table.primarykey" value="pk" />
                <property name="jbosscache-cl-cache.jdbc.fqn.column" value="fqn" />
                <property name="jbosscache-cl-cache.jdbc.node.column" value="node" />
                <property name="jbosscache-cl-cache.jdbc.parent.column" value="parent" />

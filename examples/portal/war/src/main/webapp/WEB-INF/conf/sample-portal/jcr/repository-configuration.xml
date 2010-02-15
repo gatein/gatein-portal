@@ -27,10 +27,10 @@
 			<authentication-policy>org.exoplatform.services.jcr.impl.core.access.JAASAuthenticator</authentication-policy>
 			<workspaces>
 				<workspace name="sample-ws">
-					<container class="org.exoplatform.services.jcr.impl.storage.jdbc.JDBCWorkspaceDataContainer">
+					<container class="org.exoplatform.services.jcr.impl.storage.jdbc.optimisation.CQJDBCWorkspaceDataContainer">
 						<properties>
 							<property name="source-name" value="${gatein.jcr.datasource.name}${container.name.suffix}" />
-							<property name="dialect" value="hsqldb" />
+							<property name="dialect" value="auto" />
 							<property name="multi-db" value="false" />
 							<property name="update-storage" value="true" />
 							<property name="max-buffer-size" value="204800" />
@@ -50,29 +50,45 @@
 					<initializer class="org.exoplatform.services.jcr.impl.core.ScratchWorkspaceInitializer">
 						<properties>
 							<property name="root-nodetype" value="nt:unstructured" />
-							<property name="root-permissions"
-								value="any read;*:/platform/administrators read;*:/platform/administrators add_node;*:/platform/administrators set_property;*:/platform/administrators remove" />
+							<property name="root-permissions" value="any read;*:/platform/administrators read;*:/platform/administrators add_node;*:/platform/administrators set_property;*:/platform/administrators remove" />
 						</properties>
 					</initializer>
-					<cache enabled="true">
-						<properties>
-							<property name="max-size" value="20000" />
-							<property name="live-time" value="30000" />
-						</properties>
-					</cache>
-					<query-handler class="org.exoplatform.services.jcr.impl.core.query.lucene.SearchIndex">
-						<properties>
-							<property name="index-dir" value="${gatein.jcr.index.data.dir}/sample-ws${container.name.suffix}" />
-						</properties>
-					</query-handler>
-					<lock-manager>
-						<time-out>15m</time-out><!-- 15min -->
-						<persister class="org.exoplatform.services.jcr.impl.core.lock.FileSystemLockPersister">
-							<properties>
-								<property name="path" value="${gatein.jcr.data.dir}/lock/sample-ws${container.name.suffix}" />
-							</properties>
-						</persister>
-					</lock-manager>
+          <cache enabled="true" class="org.exoplatform.services.jcr.impl.dataflow.persistent.jbosscache.JBossCacheWorkspaceStorageCache">
+            <properties>
+              <property name="jbosscache-configuration" value="conf/jcr/jbosscache/${gatein.jcr.config.type}/config.xml" />
+              <property name="jgroups-configuration" value="jar:/conf/jcr/jbosscache/cluster/udp-mux.xml" />
+              <property name="jgroups-multiplexer-stack" value="true" />
+              <property name="jbosscache-cluster-name" value="jcr-${container.name.suffix}-sample-ws" />
+            </properties>
+          </cache>
+          <query-handler class="org.exoplatform.services.jcr.impl.core.query.lucene.SearchIndex">
+            <properties>
+              <property name="index-dir" value="${gatein.jcr.index.data.dir}/sample-ws${container.name.suffix}"/>
+              <property name="changesfilter-class" value="${gatein.jcr.index.changefilterclass}" />
+              <property name="jbosscache-configuration" value="conf/jcr/jbosscache/cluster/indexer-config.xml" />
+              <property name="jgroups-configuration" value="jar:/conf/jcr/jbosscache/cluster/udp-mux.xml" />
+              <property name="jgroups-multiplexer-stack" value="true" />
+              <property name="jbosscache-cluster-name" value="jcrindexer-${container.name.suffix}-sample-ws" />
+              <property name="max-volatile-time" value="60" />
+            </properties>
+          </query-handler>
+          <lock-manager class="org.exoplatform.services.jcr.impl.core.lock.jbosscache.CacheableLockManagerImpl">
+            <properties>
+              <property name="time-out" value="15m" />
+              <property name="jbosscache-configuration" value="conf/jcr/jbosscache/${gatein.jcr.config.type}/lock-config.xml" />
+              <property name="jgroups-configuration" value="jar:/conf/jcr/jbosscache/cluster/udp-mux.xml" />
+              <property name="jgroups-multiplexer-stack" value="true" />
+              <property name="jbosscache-cluster-name" value="jcrlock-${container.name.suffix}-sample-ws" />
+              <property name="jbosscache-cl-cache.jdbc.table.name" value="jcrlock_sample_ws" />
+              <property name="jbosscache-cl-cache.jdbc.table.create" value="true" />
+              <property name="jbosscache-cl-cache.jdbc.table.drop" value="false" />
+              <property name="jbosscache-cl-cache.jdbc.table.primarykey" value="pk" />
+              <property name="jbosscache-cl-cache.jdbc.fqn.column" value="fqn" />
+              <property name="jbosscache-cl-cache.jdbc.node.column" value="node" />
+              <property name="jbosscache-cl-cache.jdbc.parent.column" value="parent" />
+              <property name="jbosscache-cl-cache.jdbc.datasource" value="${gatein.jcr.datasource.name}${container.name.suffix}" />
+            </properties>
+          </lock-manager>
 				</workspace>
 			</workspaces>
 		</repository>
