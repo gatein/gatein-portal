@@ -114,6 +114,9 @@ public abstract class RegistrationInfoMapping
          }
 
          prop.setStatus(rpm.getStatus());
+
+         // set RegistrationInfo as listener of property changes
+         prop.setListener(initial);
       }
 
       return initial;
