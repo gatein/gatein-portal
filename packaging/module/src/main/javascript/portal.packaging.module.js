@@ -80,6 +80,7 @@ function getModule(params)
 
    module.component.wsrp = new Project("org.exoplatform.portal", "exo.portal.component.wsrp", "jar", module.version)
       .addDependency(new Project("org.gatein.wsrp", "wsrp-producer", "war", wsrpVersion))
+      .addDependency(new Project("org.gatein.wsrp", "wsrp-admin-gui", "war", wsrpVersion))
       .addDependency(new Project("org.gatein.wsrp", "wsrp-producer-lib", "jar",wsrpVersion))
       .addDependency(new Project("org.gatein.wsrp", "wsrp-common", "jar", wsrpVersion))
       .addDependency(new Project("org.gatein.wsrp", "wsrp-wsrp1-ws", "jar", wsrpVersion))
