@@ -13,27 +13,18 @@
 			<imagedata fileref="images/Frontpage.png" format="PNG" scalefit="1" width="444" />
 		</imageobject>
 	</mediaobject>
-	<section>
-		<title>Getting Started</title>
-		<para>
-			For instructions on how to install and run &PRODUCT;, refer to the Installation guide available at <ulink type="http" url="www.redhat.com/docs"></ulink>
-		</para>
-	</section>
-	<section id="sect-User_Guide-Introduction-Links">
-		<title>Links</title>
-		<important>
-			<title>&PRODUCT; Download</title>
-			<para>
-				<emphasis role="bold">This link is a placeholder for the final download location:</emphasis>
-			</para>
-			<para>
-				<ulink type="http" url="http://download.devel.redhat.com/devel/candidates/JBEPP/5.0.0_ER2/"></ulink>
-			</para>
-		</important>
+	<para>
+		This book explains various apsects of &PRODUCT;, such as managing users and access permissions, using portlets and changing simple interface features such as skins, langauage and page orientation.
+	</para>
+	<para>
+		Refer to the <ulink type="http" url="http://redhat.com/docs">&PRODUCT; Installation Guide</ulink> for information on downloading and installing the product  or see the <ulink type="http" url="http://redhat.com/docs">&PRODUCT; Reference Guide</ulink> for information on more advances topics.
+	</para>
+	<section id="sect-Install_Guide-Introduction-Related_Links">
+		<title>Related Links</title>
 		<itemizedlist>
 			<listitem>
 				<para>
-					GateIn project homepage. GateIn 3.0 is the community project that &PRODUCT; is based on. <ulink url="http://www.gatein.org"></ulink>
+					GateIn 3.0 is the community project that &PRODUCT; is based on. GateIn project homepage. <ulink url="http://www.gatein.org" />
 				</para>
 			</listitem>
 			<listitem>
@@ -43,20 +34,9 @@
 			</listitem>
 			<listitem>
 				<para>
-					Further documentation about the Red Hat &PRODUCT; and other Red Hat products can be found at <ulink type="http" url="www.redhat.com/docs"></ulink>
+					Further documentation about the Red Hat &PRODUCT; and other Red Hat products can be found at <ulink type="http" url="www.redhat.com/docs" />
 				</para>
 			</listitem>
-			
-			<!-- 			<listitem>
-				<para>
-					GateIn videos. Various video clips created by the GateIn community leads that provide a guide to the usage and features of the GateIn portal, many of wh <ulink url="http://www.jboss.org/gatein/videos.html">www.jboss.org/gatein/videos.html</ulink>
-				</para>
-			</listitem>
-			<listitem>
-				<para>
-					GateIn documentation: <ulink url="http://www.jboss.org/gatein/documentation.html">www.jboss.org/gatein/documentation.html</ulink>
-				</para>
-			</listitem> -->
 		</itemizedlist>
 	</section>
 
