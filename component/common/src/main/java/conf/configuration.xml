@@ -35,7 +35,7 @@
       </value-param>
       <value-param profiles="jboss">
         <name>properties.url</name>
-        <value>jar:/conf/configuration-jboss.properties</value>
+        <value>${jboss.server.config.url}/gatein/configuration.properties</value>
       </value-param>
     </init-params>
   </component>
