@@ -46,6 +46,7 @@ import org.gatein.registration.impl.RegistrationManagerImpl;
 import org.gatein.wsrp.api.SessionEvent;
 import org.gatein.wsrp.api.SessionEventBroadcaster;
 import org.gatein.wsrp.api.SessionEventListener;
+import org.gatein.wsrp.consumer.registry.ActivatingNullInvokerHandler;
 import org.gatein.wsrp.consumer.registry.ConsumerRegistry;
 import org.gatein.wsrp.producer.ProducerHolder;
 import org.gatein.wsrp.producer.WSRPProducer;
@@ -67,16 +68,12 @@ public class ExoKernelIntegration implements Startable
    private static final String CLASSPATH = "classpath:/";
    private static final String PRODUCER_CONFIG_LOCATION = "producerConfigLocation";
    private static final String CONSUMERS_CONFIG_LOCATION = "consumersConfigLocation";
-   private static final String WORKSPACE_NAME = "workspaceName";
-   private static final String REPOSITORY_NAME = "repositoryName";
 
    private final InputStream configurationIS;
    private final String producerConfigLocation;
    private WSRPProducer producer;
 
-   private final String consumersConfigLocation;
    private ConsumerRegistry consumerRegistry;
-   private static final String REMOTE_INVOKERS_INVOKER_ID = "remote";
    private ExoContainer container;
    private final boolean bypass;
 
@@ -88,6 +85,7 @@ public class ExoKernelIntegration implements Startable
 
       // todo: we currently only allow the service to go through initialization if we are running in the default portal
       // as this service is not meant to work with extensions yet...
+      String consumersConfigLocation;
       if ("portal".equals(context.getName()))
       {
          if (params != null)
@@ -109,7 +107,7 @@ public class ExoKernelIntegration implements Startable
       }
       else
       {
-         log.warn("The WSRP service can only be started in the default portal context. WSRP was not started for '"
+         log.info("The WSRP service can only be started in the default portal context. WSRP was not started for '"
             + context.getName() + "'");
 
          producerConfigLocation = null;
@@ -192,19 +190,17 @@ public class ExoKernelIntegration implements Startable
       FederatingPortletInvoker federatingPortletInvoker =
          (FederatingPortletInvoker)container.getComponentInstanceOfType(PortletInvoker.class);
 
-      // set up a second level federating portlet invoker so that when a remote producer is queried, we can start it if needed
-      ActivatingFederatingPortletInvoker remoteInvokers = new ActivatingFederatingPortletInvoker();
-      federatingPortletInvoker.registerInvoker(REMOTE_INVOKERS_INVOKER_ID, remoteInvokers);
-
       try
       {
          consumerRegistry = new JCRConsumerRegistry(container);
-         consumerRegistry.setFederatingPortletInvoker(remoteInvokers);
+         consumerRegistry.setFederatingPortletInvoker(federatingPortletInvoker);
          consumerRegistry.setSessionEventBroadcaster(new SimpleSessionEventBroadcaster());
          consumerRegistry.start();
 
-         // set the consumer registry on the second level federating invoker
-         remoteInvokers.setConsumerRegistry(consumerRegistry);
+         // set up a NullInvokerHandler so that when a remote producer is queried, we can start it if needed
+         ActivatingNullInvokerHandler handler = new ActivatingNullInvokerHandler();
+         handler.setConsumerRegistry(consumerRegistry);
+         federatingPortletInvoker.setNullInvokerHandler(handler);
       }
       catch (Exception e)
       {
@@ -215,8 +211,11 @@ public class ExoKernelIntegration implements Startable
 
    public void stop()
    {
-      stopProducer();
-      stopConsumers();
+      if (!bypass)
+      {
+         stopProducer();
+         stopConsumers();
+      }
    }
 
    private void stopProducer()
