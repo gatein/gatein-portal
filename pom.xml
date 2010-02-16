@@ -19,8 +19,7 @@
 
 -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
    <modelVersion>4.0.0</modelVersion>
 
@@ -32,7 +31,7 @@
 
    <groupId>org.exoplatform.portal</groupId>
    <artifactId>exo.portal.parent</artifactId>
-   <version>3.0.0-CR01-SNAPSHOT</version>
+   <version>3.0.0-CR01</version>
    <packaging>pom</packaging>
 
    <name>GateIn - Portal</name>
@@ -70,9 +69,9 @@
    </properties>
 
    <scm>
-      <connection>scm:svn:http://anonsvn.jboss.org/repos/gatein/portal/trunk</connection>
-      <developerConnection>scm:svn:http://svn.jboss.org/repos/gatein/portal/trunk</developerConnection>
-      <url>http://fisheye.jboss.org/browse/gatein/portal/trunk</url>
+      <connection>scm:svn:http://anonsvn.jboss.org/repos/gatein/portal/tags/3.0.0-CR01</connection>
+      <developerConnection>scm:svn:http://svn.jboss.org/repos/gatein/portal/tags/3.0.0-CR01</developerConnection>
+      <url>http://fisheye.jboss.org/browse/gatein/portal/tags/3.0.0-CR01</url>
    </scm>
 
    <modules>
@@ -565,12 +564,11 @@
                   <phase>compile</phase>
                   <configuration>
                      <tasks>
-                        <copy failonerror="false"
-                              todir="${project.build.directory}/${project.build.finalName}/WEB-INF/classes">
+                        <copy failonerror="false" todir="${project.build.directory}/${project.build.finalName}/WEB-INF/classes">
                            <fileset dir="${basedir}/src/main/webapp/WEB-INF/classes">
-                              <include name="**/*_en.properties"/>
+                              <include name="**/*_en.properties" />
                            </fileset>
-                           <globmapper from="*_en.properties" to="*.properties"/>
+                           <globmapper from="*_en.properties" to="*.properties" />
                         </copy>
                      </tasks>
                   </configuration>
