@@ -185,7 +185,7 @@
                              onParentVersion="COPY" protected="false" multiple="true">
             <valueConstraints/>
          </propertyDefinition>
-         <propertyDefinition name="userprofiledate" requiredType="String" autoCreated="false" mandatory="false"
+         <propertyDefinition name="userprofiledata" requiredType="String" autoCreated="false" mandatory="false"
                              onParentVersion="COPY" protected="false" multiple="true">
             <valueConstraints/>
          </propertyDefinition>
