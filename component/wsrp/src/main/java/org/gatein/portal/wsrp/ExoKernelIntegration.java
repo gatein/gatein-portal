@@ -27,6 +27,8 @@ import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.configuration.ConfigurationManager;
 import org.exoplatform.container.xml.InitParams;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 import org.gatein.pc.api.PortletInvoker;
 import org.gatein.pc.federation.FederatingPortletInvoker;
 import org.gatein.pc.portlet.container.ContainerPortletInvoker;
@@ -60,6 +62,8 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class ExoKernelIntegration implements Startable
 {
+   private static final Logger log = LoggerFactory.getLogger(ExoKernelIntegration.class);
+
    private static final String CLASSPATH = "classpath:/";
    private static final String PRODUCER_CONFIG_LOCATION = "producerConfigLocation";
    private static final String CONSUMERS_CONFIG_LOCATION = "consumersConfigLocation";
@@ -105,7 +109,13 @@ public class ExoKernelIntegration implements Startable
       }
       else
       {
-         throw new IllegalStateException("The WSRP service can only be started in the default portal context.");
+         log.warn("The WSRP service can only be started in the default portal context. WSRP was not started for '"
+            + context.getName() + "'");
+
+         producerConfigLocation = null;
+         consumersConfigLocation = null;
+         configurationIS = null;
+         bypass = true;
       }
    }
 
