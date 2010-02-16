@@ -69,9 +69,10 @@
 								<value>
 									<string>web</string>
 								</value>
+								<!-- Do not start WSRP in extensions for now...
 								<value profiles="jboss">
 									<string>wsrp-producer</string>
-								</value>						
+								</value>-->
 								<value>
 									<string>sample-ext</string>
 								</value>
