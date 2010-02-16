@@ -42,7 +42,10 @@
         <property name="hibernate.cglib.use_reflection_optimizer" value="true"/>
         <property name="hibernate.connection.datasource" value="${gatein.idm.datasource.name}${container.name.suffix}"/>
         <property name="hibernate.connection.autocommit" value="true"/>
-        <property name="hibernate.dialect" value="${gatein.idm.datasource.dialect}"/>
+        <!--
+        	Should be automatically detected. Force otherwise 
+        <property name="hibernate.dialect" value="org.hibernate.dialect.XXXDialect"/>
+         -->
       </properties-param>
     </init-params>
   </component>
@@ -197,10 +200,10 @@
         <properties-param>
           <name>ref-addresses</name>
           <description>ref-addresses</description>
-          <property name="driverClassName" value="${gatein.idm.datasource.driver}"/>
-          <property name="url" value="${gatein.idm.datasource.url}${container.name.suffix}"/>
-          <property name="username" value="${gatein.idm.datasource.username}"/>
-          <property name="password" value="${gatein.idm.datasource.password}"/>
+          <property name="driverClassName" value="org.hsqldb.jdbcDriver"/>
+          <property name="url" value="jdbc:hsqldb:file:${gatein.db.data.dir}/data/jdbcidm${container.name.suffix}"/>
+          <property name="username" value="sa"/>
+          <property name="password" value=""/>
         </properties-param>
       </init-params>
     </component-plugin>
