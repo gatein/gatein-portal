@@ -42,7 +42,7 @@ public abstract class RegistrationPropertiesMapping
 {
    public static final String NODE_NAME = "wsrp:registrationproperties";
 
-   /** Need to ignore JCR properties for now until scoping mechanism exists on @Properties… */
+   /** Need to ignore JCR properties for now until scoping mechanism exists on @Properties */
    private static final Set<String> propertiesBlackList = Tools.set("jcr:uuid", "jcr:primaryType");
 
    @Properties

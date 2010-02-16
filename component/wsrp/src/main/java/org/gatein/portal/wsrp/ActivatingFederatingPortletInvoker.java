@@ -261,7 +261,7 @@ public class ActivatingFederatingPortletInvoker implements FederatingPortletInvo
       String invokerId = compoundPortletId.substring(0, pos);
       FederatedPortletInvoker federated = registry.get(invokerId);
 
-      // if we didn't find the invoker, ask the ConsumerRegistry…
+      // if we didn't find the invoker, ask the ConsumerRegistry
       if (federated == null)
       {
          WSRPConsumer consumer = consumerRegistry.getConsumer(invokerId);
