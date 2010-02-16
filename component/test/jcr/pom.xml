@@ -22,7 +22,7 @@
   <parent>
     <groupId>org.exoplatform.portal</groupId>
     <artifactId>exo.portal.component.test</artifactId>
-    <version>3.0.0-CR01</version>
+    <version>3.0.0-CR02-SNAPSHOT</version>
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
@@ -35,7 +35,7 @@
     <dependency>
       <groupId>org.exoplatform.portal</groupId>
       <artifactId>exo.portal.component.test.core</artifactId>
-      <version>3.0.0-CR01</version>
+      <version>3.0.0-CR02-SNAPSHOT</version>
     </dependency>
 
     <dependency>
