@@ -41,8 +41,6 @@ import org.gatein.portal.wsrp.state.producer.registrations.JCRRegistrationPersis
 import org.gatein.registration.RegistrationManager;
 import org.gatein.registration.RegistrationPersistenceManager;
 import org.gatein.registration.impl.RegistrationManagerImpl;
-import org.gatein.registration.policies.DefaultRegistrationPolicy;
-import org.gatein.registration.policies.DefaultRegistrationPropertyValidator;
 import org.gatein.wsrp.api.SessionEvent;
 import org.gatein.wsrp.api.SessionEventBroadcaster;
 import org.gatein.wsrp.api.SessionEventListener;
@@ -76,6 +74,7 @@ public class ExoKernelIntegration implements Startable
    private ConsumerRegistry consumerRegistry;
    private static final String REMOTE_INVOKERS_INVOKER_ID = "remote";
    private ExoContainer container;
+   private final boolean bypass;
 
    public ExoKernelIntegration(ExoContainerContext context, InitParams params, ConfigurationManager configurationManager,
                                org.exoplatform.portal.pc.ExoKernelIntegration pc) throws Exception
@@ -83,26 +82,40 @@ public class ExoKernelIntegration implements Startable
       // IMPORTANT: even though PC ExoKernelIntegration is not used anywhere in the code, it's still needed for pico
       // to properly make sure that this service is started after the PC one. Yes, Pico is crap. :/
 
-      if (params != null)
+      // todo: we currently only allow the service to go through initialization if we are running in the default portal
+      // as this service is not meant to work with extensions yet...
+      if ("portal".equals(context.getName()))
       {
-         producerConfigLocation = params.getValueParam(PRODUCER_CONFIG_LOCATION).getValue();
-         consumersConfigLocation = params.getValueParam(CONSUMERS_CONFIG_LOCATION).getValue();
+         if (params != null)
+         {
+            producerConfigLocation = params.getValueParam(PRODUCER_CONFIG_LOCATION).getValue();
+            consumersConfigLocation = params.getValueParam(CONSUMERS_CONFIG_LOCATION).getValue();
+         }
+         else
+         {
+            throw new IllegalArgumentException("Improperly configured service: missing values for "
+               + PRODUCER_CONFIG_LOCATION + "and " + CONSUMERS_CONFIG_LOCATION);
+         }
+
+         configurationIS = configurationManager.getInputStream(CLASSPATH + producerConfigLocation);
+
+         container = context.getContainer();
+
+         bypass = false;
       }
       else
       {
-         throw new IllegalArgumentException("Improperly configured service: missing values for "
-            + PRODUCER_CONFIG_LOCATION + "and " + CONSUMERS_CONFIG_LOCATION);
+         throw new IllegalStateException("The WSRP service can only be started in the default portal context.");
       }
-
-      configurationIS = configurationManager.getInputStream(CLASSPATH + producerConfigLocation);
-
-      container = context.getContainer();
    }
 
    public void start()
    {
-      startProducer();
-      startConsumers();
+      if (!bypass)
+      {
+         startProducer();
+         startConsumers();
+      }
    }
 
    private void startProducer()
@@ -132,12 +145,6 @@ public class ExoKernelIntegration implements Startable
       }
       RegistrationManager registrationManager = new RegistrationManagerImpl();
       registrationManager.setPersistenceManager(registrationPersistenceManager);
-
-      // todo: the multiple instantiation of WSRP service causes the registration policy to not be properly initialized
-      // so we end up forcing its instantiation here.
-      DefaultRegistrationPolicy registrationPolicy = new DefaultRegistrationPolicy();
-      registrationPolicy.setValidator(new DefaultRegistrationPropertyValidator());
-      registrationManager.setPolicy(registrationPolicy);
 
       // retrieve container portlet invoker from eXo kernel
       ContainerPortletInvoker containerPortletInvoker =
