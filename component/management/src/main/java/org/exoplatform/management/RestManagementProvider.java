@@ -19,9 +19,9 @@
 
 package org.exoplatform.management;
 
-import org.exoplatform.commons.management.Rest;
 import org.exoplatform.management.data.RestResource;
 import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.management.management.annotations.RESTEndpoint;
 import org.exoplatform.management.spi.ManagedResource;
 import org.exoplatform.management.spi.ManagementProvider;
 import org.exoplatform.portal.config.UserACL;
@@ -100,12 +100,12 @@ public class RestManagementProvider implements ResourceContainer, ManagementProv
       Object resource = managedResource.getResource();
 
       //
-      Rest annotation = resource.getClass().getAnnotation(Rest.class);
+      RESTEndpoint annotation = resource.getClass().getAnnotation(RESTEndpoint.class);
 
       //
       if (annotation != null)
       {
-         String name = annotation.value();
+         String name = annotation.path();
          ResourceKey key = new ResourceKey(name);
          resourceMap.put(key, new RestResource(name, managedResource));
          return key;

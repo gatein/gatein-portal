@@ -19,7 +19,6 @@
 
 package org.exoplatform.portal.resource;
 
-import org.exoplatform.commons.management.Rest;
 import org.exoplatform.commons.utils.PropertyManager;
 import org.exoplatform.commons.utils.Safe;
 import org.exoplatform.container.ExoContainerContext;
@@ -30,6 +29,7 @@ import org.exoplatform.management.annotations.ManagedDescription;
 import org.exoplatform.management.annotations.ManagedName;
 import org.exoplatform.management.jmx.annotations.NameTemplate;
 import org.exoplatform.management.jmx.annotations.Property;
+import org.exoplatform.management.management.annotations.RESTEndpoint;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.resources.Orientation;
@@ -59,7 +59,7 @@ import javax.servlet.ServletContext;
 @NameTemplate({@Property(key = "view", value = "portal"), @Property(key = "service", value = "management"),
    @Property(key = "type", value = "skin")})
 @ManagedDescription("Skin service")
-@Rest("skinservice")
+@RESTEndpoint(path = "skinservice")
 public class SkinService implements Startable
 {
 

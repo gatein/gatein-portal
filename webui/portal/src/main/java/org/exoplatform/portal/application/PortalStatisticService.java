@@ -19,7 +19,6 @@
 
 package org.exoplatform.portal.application;
 
-import org.exoplatform.commons.management.Rest;
 import org.exoplatform.management.annotations.Impact;
 import org.exoplatform.management.annotations.ImpactType;
 import org.exoplatform.management.annotations.Managed;
@@ -27,6 +26,7 @@ import org.exoplatform.management.annotations.ManagedDescription;
 import org.exoplatform.management.annotations.ManagedName;
 import org.exoplatform.management.jmx.annotations.NameTemplate;
 import org.exoplatform.management.jmx.annotations.Property;
+import org.exoplatform.management.management.annotations.RESTEndpoint;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.picocontainer.Startable;
 
@@ -44,7 +44,7 @@ import java.util.concurrent.ConcurrentMap;
    @Property(key = "view", value = "portal"),
    @Property(key = "service", value = "statistic"),
    @Property(key = "type", value = "portal")})
-@Rest("portalstatistic")
+@RESTEndpoint(path = "portalstatistic")
 public class PortalStatisticService implements Startable
 {
 

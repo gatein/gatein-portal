@@ -22,7 +22,6 @@ package org.exoplatform.groovyscript.text;
 import groovy.lang.Writable;
 import groovy.text.Template;
 
-import org.exoplatform.commons.management.Rest;
 import org.exoplatform.commons.utils.IOUtil;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.groovyscript.GroovyTemplate;
@@ -34,6 +33,7 @@ import org.exoplatform.management.annotations.ManagedDescription;
 import org.exoplatform.management.annotations.ManagedName;
 import org.exoplatform.management.jmx.annotations.NameTemplate;
 import org.exoplatform.management.jmx.annotations.Property;
+import org.exoplatform.management.management.annotations.RESTEndpoint;
 import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.cache.CacheService;
 import org.exoplatform.services.cache.ExoCache;
@@ -48,7 +48,7 @@ import java.util.ArrayList;
 @NameTemplate({@Property(key = "view", value = "portal"), @Property(key = "service", value = "management"),
    @Property(key = "type", value = "template")})
 @ManagedDescription("Template management service")
-@Rest("templateservice")
+@RESTEndpoint(path = "templateservice")
 public class TemplateService
 {
 

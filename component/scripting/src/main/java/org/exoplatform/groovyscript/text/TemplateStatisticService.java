@@ -19,7 +19,6 @@
 
 package org.exoplatform.groovyscript.text;
 
-import org.exoplatform.commons.management.Rest;
 import org.exoplatform.management.annotations.Impact;
 import org.exoplatform.management.annotations.ImpactType;
 import org.exoplatform.management.annotations.Managed;
@@ -27,6 +26,7 @@ import org.exoplatform.management.annotations.ManagedDescription;
 import org.exoplatform.management.annotations.ManagedName;
 import org.exoplatform.management.jmx.annotations.NameTemplate;
 import org.exoplatform.management.jmx.annotations.Property;
+import org.exoplatform.management.management.annotations.RESTEndpoint;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -49,7 +49,7 @@ import java.util.concurrent.ConcurrentHashMap;
    @Property(key = "view", value = "portal"),
    @Property(key = "service", value = "statistic"),
    @Property(key = "type", value = "template")})
-@Rest("templatestatistics")
+@RESTEndpoint(path = "templatestatistics")
 public class TemplateStatisticService
 {
 
