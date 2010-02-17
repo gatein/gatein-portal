@@ -240,7 +240,7 @@
       <portlet-info>
          <title>Administration Toolbar Portlet</title>
          <short-title>Administration Toolbar</short-title>
-         <keywords>System</keywords>
+         <keywords>gatein_internal</keywords>
       </portlet-info>
    </portlet>
 
@@ -265,7 +265,7 @@
       <portlet-info>
          <title>User Info Portlet</title>
          <short-title>UserInfo</short-title>
-         <keywords>System, UserInfo</keywords>
+         <keywords>gatein_internal</keywords>
       </portlet-info>
 
       <security-role-ref>
@@ -295,7 +295,7 @@
       <portlet-info>
          <title>User Toolbar Site Portlet</title>
          <short-title>UserToolbarSite</short-title>
-         <keywords>System</keywords>
+         <keywords>gatein_internal</keywords>
       </portlet-info>
 
       <security-role-ref>
@@ -325,7 +325,7 @@
       <portlet-info>
          <title>User Toolbar Dashboard Portlet</title>
          <short-title>UserToolbarDashboard</short-title>
-         <keywords>System</keywords>
+         <keywords>gatein_internal</keywords>
       </portlet-info>
 
       <security-role-ref>
@@ -355,7 +355,7 @@
       <portlet-info>
          <title>User Toolbar Group Portlet</title>
          <short-title>UserToolbarGroup</short-title>
-         <keywords>System</keywords>
+         <keywords>gatein_internal</keywords>
       </portlet-info>
 
       <security-role-ref>
@@ -384,7 +384,7 @@
       <portlet-info>
          <title>Star Toolbar Portlet</title>
          <short-title>Star Toolbar</short-title>
-         <keywords>System</keywords>
+         <keywords>gatein_internal</keywords>
       </portlet-info>
    </portlet>
 

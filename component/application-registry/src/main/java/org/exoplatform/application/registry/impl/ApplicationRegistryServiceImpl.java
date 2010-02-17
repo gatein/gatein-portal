@@ -37,7 +37,8 @@ import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.portal.pom.spi.portlet.Portlet;
 import org.exoplatform.portal.pom.spi.wsrp.WSRP;
 import org.gatein.common.i18n.LocalizedString;
-import org.gatein.common.util.Tools;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 import org.gatein.mop.api.content.ContentType;
 import org.gatein.mop.api.content.Customization;
 import org.gatein.pc.api.PortletInvoker;
@@ -45,11 +46,7 @@ import org.gatein.pc.api.info.MetaInfo;
 import org.gatein.pc.api.info.PortletInfo;
 import org.picocontainer.Startable;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * The fundamental reason that motives to use tasks is because of the JMX access that does not
@@ -63,6 +60,9 @@ public class ApplicationRegistryServiceImpl implements ApplicationRegistryServic
 {
 
    /** . */
+   private static final String INTERNAL_PORTLET_TAG = "gatein_internal";
+
+   /** . */
    private static final String REMOTE_CATEGORY_NAME = "remote";
 
    /** . */
@@ -73,6 +73,9 @@ public class ApplicationRegistryServiceImpl implements ApplicationRegistryServic
 
    /** . */
    private final ChromatticLifeCycle lifeCycle;
+
+   /** . */
+   private final Logger log = LoggerFactory.getLogger(ApplicationRegistryServiceImpl.class);
 
    /** . */
    final POMSessionManager mopManager;
@@ -393,11 +396,15 @@ public class ApplicationRegistryServiceImpl implements ApplicationRegistryServic
       ContentRegistry registry = getContentRegistry();
 
       //
+      log.info("About to import portlets in application registry");
+
+      //
       ExoContainer manager = ExoContainerContext.getCurrentContainer();
       PortletInvoker portletInvoker = (PortletInvoker)manager.getComponentInstance(PortletInvoker.class);
       Set<org.gatein.pc.api.Portlet> portlets = portletInvoker.getPortlets();
 
       //
+      portlet:
       for (org.gatein.pc.api.Portlet portlet : portlets)
       {
          PortletInfo info = portlet.getInfo();
@@ -411,32 +418,46 @@ public class ApplicationRegistryServiceImpl implements ApplicationRegistryServic
 
          LocalizedString keywordsLS = info.getMeta().getMetaValue(MetaInfo.KEYWORDS);
 
-         String[] categoryNames = null;
+         //
+         Set<String> categoryNames = new HashSet<String>();
+
+         // Process keywords
          if (keywordsLS != null)
          {
             String keywords = keywordsLS.getDefaultString();
             if (keywords != null && keywords.length() != 0)
             {
-               categoryNames = keywords.split(",");
+               for (String categoryName : keywords.split(",")) {
+                  // Trim name
+                  categoryName = categoryName.trim();
+                  if (INTERNAL_PORTLET_TAG.equalsIgnoreCase(categoryName)) {
+                     log.debug("Skipping portlet (" + portletApplicationName + "," + portletName + ") + tagged as internal");
+                     continue portlet;
+                  } else {
+                     categoryNames.add(categoryName);
+                  }
+               }
             }
          }
 
-         if (categoryNames == null || categoryNames.length == 0)
+         // If no keywords, use the portlet application name
+         if (categoryNames.isEmpty())
          {
-            categoryNames = new String[]{portletApplicationName};
+            categoryNames.add(portletApplicationName.trim());
          }
 
+         // Additionally categorise the portlet as remote
          if (portlet.isRemote())
          {
-            categoryNames = Tools.appendTo(categoryNames, REMOTE_CATEGORY_NAME);
+            categoryNames.add(REMOTE_CATEGORY_NAME);
          }
 
          //
+         log.info("Importing portlet (" + portletApplicationName + "," + portletName + ") in categories " + categoryNames);
+
+         // Process categoriy names
          for (String categoryName : categoryNames)
          {
-            categoryName = categoryName.trim();
-
-            //
             CategoryDefinition category = registry.getCategory(categoryName);
 
             //
@@ -452,10 +473,6 @@ public class ApplicationRegistryServiceImpl implements ApplicationRegistryServic
             {
                LocalizedString descriptionLS = portlet.getInfo().getMeta().getMetaValue(MetaInfo.DESCRIPTION);
                LocalizedString displayNameLS = portlet.getInfo().getMeta().getMetaValue(MetaInfo.DISPLAY_NAME);
-
-               // julien: ????
-               // getLocalizedStringValue(descriptionLS, portletName);
-
                ContentType<?> contentType;
                String contentId;
                if (portlet.isRemote())
@@ -468,7 +485,6 @@ public class ApplicationRegistryServiceImpl implements ApplicationRegistryServic
                   contentType = Portlet.CONTENT_TYPE;
                   contentId = info.getApplicationName() + "/" + info.getName();
                }
-
 
                //
                app = category.createContent(portletName, contentType, contentId);
