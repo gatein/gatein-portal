@@ -14,7 +14,7 @@
 		<term>Banner Portlet</term>
 		<listitem>
 			<para>
-				This Portlet is considered the welcome gateway of a Portal. It contains the organization's slogan, logo, and icons etc.
+				This Portlet contains the organization's slogan, logo, and icons.
 			</para>
 		<!--    <mediaobject>
 				<imageobject>
@@ -27,7 +27,7 @@
 		<term>HomePage Portlet</term>
 		<listitem>
 			<para>
-				This Portlet is used to provide the home page for a portal. The home page is the first page displayed when you visit the site.
+				This Portlet is the home page for a portal. The home page is the first page displayed when you visit the site.
 			</para>
 		<!--    <mediaobject>
 				<imageobject>
@@ -40,7 +40,7 @@
 		<term>Navigation Portlet</term>
 		<listitem>
 			<para>
-				This Portlet provides a navigation bar. A is a menu that helps users to visualize the structure of a site and provide links to quickly move from page to page.
+				This Portlet provides a navigation bar. A navigation is a menu that helps users to visualize the structure of a site and provide links to quickly move from page to page.
 			</para>
 		<!--    <mediaobject>
 				<imageobject>

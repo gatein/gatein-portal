@@ -97,7 +97,7 @@
 				<title>Sign In</title>
 					<step>
 						<para>
-							Go to your Portal by entering the URL into the address bar of your browser (For example http://localhost:8080/portal).
+							Go to your portal by entering the URL into the address bar of your browser (For example http://localhost:8080/portal).
 						</para>
 					</step>
 					<step>
@@ -127,7 +127,7 @@
 					</step>
 			</procedure>
 			<para>
-				If the user name does not exist or the user name and/or password is invalid an alert message will appear. To attempt the login again; click the <emphasis role="bold">OK</emphasis> button on the alert message to be returned to the Sign In form. Enter the user name and password again.
+				If the user name does not exist or the user name and/or password is invalid an alert message will appear. To attempt the log in again; click the <emphasis role="bold">OK</emphasis> button on the alert message to be returned to the Sign In form. Enter the user name and password again.
 			</para>
 			<para>
 				After signing in, you will be redirected to the homepage and welcomed with your full name in the top right corner of the page.

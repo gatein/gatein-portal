@@ -8,7 +8,6 @@
 	<para>
 		A gadget is a mini web application that a portal user can add to their web page. Some useful gadgets that are packaged by default with &PRODUCT;:
 	</para>
-
 	<para>
 		See the <emphasis role="bold">Default Gadgets</emphasis> section of <xref linkend="sect-User_Guide-Dashboard_Portlet-Using_the_Dashboard_Workspace" /> for more information about these gadgets.
 	</para>

@@ -6,7 +6,10 @@
 <section id="sect-User_Guide-Dashboard_Portlet">
 	<title>Dashboard Portlet</title>
 	<para>
-		The Dashboard portlet is used for hosting mini applications known as gadgets. The Dashboard uses a variety of graphical effects for displaying, opening and using gadgets. Gadgets can be moved, rearranged, created and deleted. More than one instance of the same gadget can be opened at the same time and each instance of the same gadget can have different settings. The gadgets instances are as independent as different portlets instances.
+		The Dashboard portlet is used for hosting mini applications known as gadgets. The Dashboard uses a variety of graphical effects for displaying, opening and using gadgets.
+	</para>
+	<para>
+		Gadgets within the Dashboard portlet can be moved and rearranged. New gadgets can be created and unnecessary ones deleted. More than one instance of the same gadget can be opened at the same time and each instance of the same gadget can have different settings. The gadgets instances are completely independent.
 	</para>
 	<mediaobject>
 		<imageobject>
@@ -128,7 +131,7 @@
 				<note>
 					<title>URL Types</title>
 					<para>
-						Remote gadgets can be only created using an .xml link or RSS URL. However, if you use a link that generates an RSS feed (for example: http://feeds.feedburner.com/gatein), a new RSS reader gadget will be created automatically.
+						Remote gadgets can be only created using an .xml link or RSS URL. However, if you use a link that generates an RSS feed (for example: <ulink type="http" url="http://feeds.feedburner.com/gatein">http://feeds.feedburner.com/gatein</ulink>), a new RSS reader gadget will be created automatically even if the URL does not end in <literal>.rss</literal>.
 					</para>
 				</note>
 			</step>

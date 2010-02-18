@@ -25,7 +25,7 @@
 
         --><title>Remember User Account</title>
 	<para>
-		Users can return to the &PRODUCT; and be automatically authenticated with a cookie provided by their browser. Thus users do not have to perform an explicit authentication each time they access the portal.
+		Users can return to the &PRODUCT; and be automatically authenticated with a cookie provided by their browser. This means users do not have to perform an explicit authentication each time they access the portal.
 	</para>
 	<mediaobject>
 		<imageobject>

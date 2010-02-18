@@ -17,7 +17,7 @@
 		This book explains various apsects of &PRODUCT;, such as managing users and access permissions, using portlets and changing simple interface features such as skins, langauage and page orientation.
 	</para>
 	<para>
-		Refer to the <ulink type="http" url="http://redhat.com/docs">&PRODUCT; Installation Guide</ulink> for information on downloading and installing the product  or see the <ulink type="http" url="http://redhat.com/docs">&PRODUCT; Reference Guide</ulink> for information on more advances topics.
+		Refer to the <ulink type="http" url="http://redhat.com/docs">&PRODUCT; Installation Guide</ulink> for information on downloading and installing the product  or the <ulink type="http" url="http://redhat.com/docs">&PRODUCT; Reference Guide</ulink> for information on more advanced topics.
 	</para>
 	<section id="sect-Install_Guide-Introduction-Related_Links">
 		<title>Related Links</title>

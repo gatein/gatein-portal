@@ -6,7 +6,10 @@
 <section id="sect-User_Guide-Toolbar-Concept">
 	<title>Toolbar</title>
 	<para>
-		This bar contains all user and administration actions. It helps users and the administrator access and perform actions easily, quickly and effectively. You can see the toolbar below as it appears in the Portal:
+		The Toolbar spans the top of the portal application and contains links to user and administrative actions. It helps users and the administrator access and perform actions easily, quickly and effectively. 
+	</para>
+	<para>
+		You can see the toolbar below as it appears in the Portal:
 	</para>
 	<mediaobject>
 		<imageobject>
