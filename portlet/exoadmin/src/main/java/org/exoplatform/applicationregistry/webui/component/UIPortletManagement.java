@@ -262,20 +262,29 @@ public class UIPortletManagement extends UIContainer
       private PortletInfo portletInfo_;
 
       final PortletContext context;
+      private static final String SEPARATOR = "/";
+      private static final int SEPARATOR_LENGTH = SEPARATOR.length();
 
       public PortletExtra(Portlet portlet)
       {
          PortletInfo info = portlet.getInfo();
          String portletName = info.getName();
          String appName = info.getApplicationName();
-         String portletId = appName + "/" + portletName;
-         String type = portlet.isRemote() ? REMOTE : LOCAL;
+         boolean remote = portlet.isRemote();
+
+         // if the portlet is remote, we might have an extra '/' at the beginning of the portlet name
+         if(remote && portletName.startsWith(SEPARATOR))
+         {
+            portletName = portletName.substring(SEPARATOR_LENGTH);
+         }
+         
+         String portletId = appName + SEPARATOR + portletName;
+         String type = remote ? REMOTE : LOCAL;
 
          //
          id_ = portletId;
-         String[] fragments = portletId.split("/");
-         group_ = fragments[0];
-         name_ = fragments[1];
+         group_ = appName;
+         name_ = portletName;
          type_ = type;
          portletInfo_ = info;
          context = portlet.getContext();
