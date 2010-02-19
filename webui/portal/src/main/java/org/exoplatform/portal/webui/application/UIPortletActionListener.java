@@ -366,8 +366,24 @@ public class UIPortletActionListener
             else
             {
                response.setContentType(contentType);
-               OutputStream stream = response.getOutputStream();
-               stream.write(piResponse.getBytes());
+               if (piResponse.getBytes() != null)
+               {
+                   OutputStream stream = response.getOutputStream();
+            	   stream.write(piResponse.getBytes());
+               }
+               else
+               {
+            	   if (piResponse.getChars() != null)
+            	   {
+            		   log.error("Received a content type of " + contentType + " but it contains no bytes of data. Chars were unexpectantly returned instead : " + piResponse.getChars());
+            	   }
+            	   else
+            	   {
+            		   log.error("Received a content type of " + contentType + " but it contains no bytes of data.");
+            	   }
+               }
+            	
+               
             }
             context.getResponse().flushBuffer();
 
