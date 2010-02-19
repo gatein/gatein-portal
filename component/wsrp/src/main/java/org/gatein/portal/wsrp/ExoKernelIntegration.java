@@ -43,6 +43,13 @@ import org.gatein.portal.wsrp.state.producer.registrations.JCRRegistrationPersis
 import org.gatein.registration.RegistrationManager;
 import org.gatein.registration.RegistrationPersistenceManager;
 import org.gatein.registration.impl.RegistrationManagerImpl;
+import org.gatein.wci.ServletContainer;
+import org.gatein.wci.ServletContainerFactory;
+import org.gatein.wci.WebApp;
+import org.gatein.wci.WebAppEvent;
+import org.gatein.wci.WebAppLifeCycleEvent;
+import org.gatein.wci.WebAppListener;
+import org.gatein.wci.impl.DefaultServletContainerFactory;
 import org.gatein.wsrp.api.SessionEvent;
 import org.gatein.wsrp.api.SessionEventBroadcaster;
 import org.gatein.wsrp.api.SessionEventListener;
@@ -53,6 +60,7 @@ import org.gatein.wsrp.producer.WSRPProducer;
 import org.gatein.wsrp.producer.config.ProducerConfigurationService;
 import org.picocontainer.Startable;
 
+import javax.servlet.ServletContext;
 import java.io.InputStream;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -61,7 +69,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author <a href="mailto:chris.laprun@jboss.com">Chris Laprun</a>
  * @version $Revision$
  */
-public class ExoKernelIntegration implements Startable
+public class ExoKernelIntegration implements Startable, WebAppListener
 {
    private static final Logger log = LoggerFactory.getLogger(ExoKernelIntegration.class);
 
@@ -76,6 +84,7 @@ public class ExoKernelIntegration implements Startable
    private ConsumerRegistry consumerRegistry;
    private ExoContainer container;
    private final boolean bypass;
+   private static final String WSRP_ADMIN_GUI_CONTEXT_PATH = "/wsrp-admin-gui";
 
    public ExoKernelIntegration(ExoContainerContext context, InitParams params, ConfigurationManager configurationManager,
                                org.exoplatform.portal.pc.ExoKernelIntegration pc) throws Exception
@@ -123,6 +132,12 @@ public class ExoKernelIntegration implements Startable
       {
          startProducer();
          startConsumers();
+
+         // listen for web app events so that we can inject services into WSRP admin UI "cleanly"
+         // todo: this service injection should really be done using CDI... :/
+         ServletContainerFactory factory = DefaultServletContainerFactory.getInstance();
+         ServletContainer servletContainer = factory.getServletContainer();
+         servletContainer.addWebAppListener(this);
       }
    }
 
@@ -213,6 +228,11 @@ public class ExoKernelIntegration implements Startable
    {
       if (!bypass)
       {
+         // stop listening to web app events
+         ServletContainerFactory factory = DefaultServletContainerFactory.getInstance();
+         ServletContainer servletContainer = factory.getServletContainer();
+         servletContainer.removeWebAppListener(this);
+
          stopProducer();
          stopConsumers();
       }
@@ -237,6 +257,33 @@ public class ExoKernelIntegration implements Startable
       }
 
       consumerRegistry = null;
+   }
+
+   public void onEvent(WebAppEvent event)
+   {
+      if (event instanceof WebAppLifeCycleEvent)
+      {
+         WebAppLifeCycleEvent lifeCycleEvent = (WebAppLifeCycleEvent)event;
+         WebApp webApp = event.getWebApp();
+         ServletContext context = webApp.getServletContext();
+
+         // if we see the WSRP admin GUI being deployed or undeployed, inject or remove services 
+         if (WSRP_ADMIN_GUI_CONTEXT_PATH.equals(webApp.getContextPath()))
+         {
+            switch (lifeCycleEvent.getType())
+            {
+               case WebAppLifeCycleEvent.ADDED:
+
+                  context.setAttribute("ConsumerRegistry", consumerRegistry);
+                  context.setAttribute("ProducerConfigurationService", producer.getConfigurationService());
+                  break;
+               case WebAppLifeCycleEvent.REMOVED:
+                  context.removeAttribute("ConsumerRegistry");
+                  context.removeAttribute("ProducerConfigurationService");
+                  break;
+            }
+         }
+      }
    }
 
    private static class SimpleSessionEventBroadcaster implements SessionEventBroadcaster
