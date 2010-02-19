@@ -251,7 +251,7 @@ realmName=gatein-domain
 				To utilize the Central Authentication Service, &PRODUCT; needs to redirect all user authentication to the CAS server.
 			</para>
 			<para>
-				Information about where the CAS is hosted must be properly configured within the &PRODUCT; instance. The required configuration is done in three files: 
+				Information about where the CAS is hosted must be properly configured within the &PRODUCT; instance. The required configuration is done by modifying three files: 
 				<itemizedlist>
 					<listitem>
 						<para>
@@ -417,7 +417,7 @@ realmName=gatein-domain
 								In Tomcat, edit <filename>GATEIN_HOME/conf/jaas.conf</filename> and uncomment this section:
 							</para>
 <programlisting>org.gatein.sso.agent.login.SSOLoginModule required
-org.exoplatform.services.security.j2ee.JbossLoginModule required
+org.exoplatform.services.security.j2ee.JbossLoginModule requiredtm	
 portalContainerName=portal
 realmName=gatein-domain
 </programlisting>
@@ -447,28 +447,26 @@ realmName=gatein-domain
 		<section id="sect-Reference_Guide-JOSSO-Setup_the_portal_to_redirect_to_JOSSO">
 			<title>Setup the portal to redirect to JOSSO</title>
 			<para>
-				Now we want to tell GateIn to redirect all user authentication to the CAS server.
+				The next part of the process is to redirect all user authentication to the JOSSO server.
 			</para>
 			<para>
-				The CAS server can be located anywhere on the Internet, and this information must be properly configured within the GateIn instance. This configuration needs to be done in 3 files 
+				Information about where the JOSSO server is hosted must be properly configured within the &PRODUCT; instance. The required configuration is done by modifying four files: 
 				<itemizedlist>
 					<listitem>
 						<para>
-						<emphasis>In gatein.ear/02portal.war/groovy/portal/webui/UILoginForm.gtmpl replace the javascript at the bottom by:</emphasis>
-
-							
+							Replace the javascript at the bottom <filename>gatein.ear/02portal.war/groovy/portal/webui/UILoginForm.gtmpl</filename>  with:
+						</para>
 <programlisting>&#60;script&#62;
  &#60;%=uicomponent.event(&#34;Close&#34;);%&#62;
  window.location = &#39;http://localhost:8888/josso/signon/login.do?josso_back_to=http://localhost:8080/portal/private/classic&#39;;
 &#60;/script&#62;
 </programlisting>
-						</para>
+
 					</listitem>
 					<listitem>
 						<para>
-						<emphasis>In gatein.ear/02portal.war/login/jsp/login.jsp replace everything by:</emphasis>
-
-							
+							Replace the entire contents of <filename>gatein.ear/02portal.war/login/jsp/login.jsp</filename> with:
+						</para>							
 <programlisting>&#60;html&#62;
   &#60;head&#62;
     &#60;script type=&#34;text/javascript&#34;&#62;
@@ -479,13 +477,11 @@ realmName=gatein-domain
   &#60;/body&#62;
 &#60;/html&#62;
 </programlisting>
-						</para>
 					</listitem>
 					<listitem>
 						<para>
-						<emphasis>In gatein.ear/02portal.war/WEB-INF/web.xml replace the InitiateLoginServlet declaration by:</emphasis>
-
-							
+						Replace the <literal>InitiateLoginServlet</literal> declaration in <filename>gatein.ear/02portal.war/WEB-INF/web.xml</filename> with:
+						</para>					
 <programlisting>&#60;servlet&#62;
   &#60;servlet-name&#62;InitiateLoginServlet&#60;/servlet-name&#62;
   &#60;servlet-class&#62;org.gatein.sso.agent.GenericSSOAgent&#60;/servlet-class&#62;
@@ -495,11 +491,10 @@ realmName=gatein-domain
   &#60;/init-param&#62;    
 &#60;/servlet&#62;
 </programlisting>
-						</para>
 					</listitem>
 					<listitem>
 						<para>
-							In gatein.ear/02portal.war/WEB-INF/web.xml remove the PortalLoginController servlet declaration and mapping
+							Remove the <literal>PortalLoginController</literal> servlet declaration and mapping in <filename>gatein.ear/02portal.war/WEB-INF/web.xml</filename>
 						</para>
 					</listitem>
 				</itemizedlist>
@@ -514,51 +509,62 @@ realmName=gatein-domain
 	<section id="sect-Reference_Guide-Single_Sign_On-OpenSSO_The_Open_Web_SSO_project">
 		<title>OpenSSO - The Open Web SSO project</title>
 		<para>
-			This Single Sign On plugin enables seamless integration between GateIn Portal and the OpenSSO Single Sign On Framework. Details about OpenSSO can be found <ulink url="https://opensso.dev.java.net/">here.</ulink>
+			This Single Sign On plugin enables seamless integration between &PRODUCT; and the OpenSSO Single Sign On Framework. Details about OpenSSO can be found <ulink url="https://opensso.dev.java.net/">here</ulink>.
 		</para>
 		<para>
-			The integration consitsts in two parts, the first part consists of installing or configuring an OpenSSO server, the second part consists of setting up the portal to use the OpenSSO server.
+			Setting up this integration happens in two distinct actions. The first part is installing or configuring an OpenSSO server and the second involves setting up the portal to use the OpenSSO server. 
 		</para>
 		<section id="sect-Reference_Guide-OpenSSO_The_Open_Web_SSO_project-OpenSSO_server">
 			<title>OpenSSO server</title>
 			<para>
-				First we will set up the server to authenticate against the portal login module. You can find more information about setting up the server by reading the official OpenSSO documentation, here we will install the OpenSSO server on Tomcat
+				 This section details setting up the OpenSSO server to authenticate against the Enterprise Portal Platform login module.
+			</para>
+			<para>
+				In this example the JOSSO server will be installed on Tomcat. 
 			</para>
 			<section id="sect-Reference_Guide-OpenSSO_server-Obtaining_OpenSSO">
 				<title>Obtaining OpenSSO</title>
 				<para>
-					You can download OpenSSO from https://opensso.dev.java.net/public/use/index.html.
+					OpenSSO can be downloaded from <ulink type="http" url="https://opensso.dev.java.net/public/use/index.html">https://opensso.dev.java.net/public/use/index.html</ulink>.
 				</para>
 				<para>
-					Once downloaded extract it in what we will call $OPENSSO_HOME from now.
+					Once downloaded, extract the package into a suitable location. This location will be referred to as <filename>OPENSSO_HOME</filename> in this example.
 				</para>
 			</section>
 			
 			<section id="sect-Reference_Guide-OpenSSO_server-Modifying_OpenSSO_server">
 				<title>Modifying OpenSSO server</title>
 				<para>
-					To simplify we will directly modify the sources so that the produced web archive is configured the way we want.
+					 To configure the web server as desired, it is simpler to directly modify the sources. 
 				</para>
 				<para>
-					First we will want to add the GateIn Authentication Plugin:
+					The first step is to add the &PRODUCT; Authentication Plugin:
 				</para>
 				<para>
-					The plugin makes secure authentication callbacks to a RESTful service installed on the remote GateIn server in order to authenticate a user. In order for the plugin to function correctly, it needs to be properly configured to connect to this service. This configuration is done via the <emphasis>opensso.war/config/auth/default/AuthenticationPlugin.xml</emphasis> file.
+					The plugin makes secure authentication callbacks to a RESTful service installed on the remote &PRODUCT; server in order to authenticate a user.
 				</para>
-				<orderedlist>
-					<listitem>
+				<para>
+					In order for the plugin to function correctly, it needs to be properly configured to connect to this service. This configuration is done via the <filename>opensso.war/config/auth/default/AuthenticationPlugin.xml</filename> file.
+				</para>
+				<procedure>
+					<step>
 						<para>
-							Get an installation of Tomcat and extract it in what we will call $TOMCAT_HOME. Change the default port to avoid a conflict with the default GateIn (for testing purposes). Edit $TOMCAT_HOME/conf/server.xml and replace the 8080 port to 8888.
+							Obtain a copy of Tomcat and extract it into a suitable location (this location will be referred to as <filename>TOMCAT_HOME</filename> in this example).
+						</para>
+					</step>
+					<step>
+						<para>
+							Change the default port to avoid a conflict with the default &PRODUCT; port (for testing purposes). Do this by editing <filename>TOMCAT_HOME/conf/server.xml</filename> and replacing the 8080 port to 8888.
 							<note>
 								<para>
-									If you are running GateIn with Tomcat on the same machine you will also need to change the port 8005 to something else to avoid port conflicts.
+									If &PRODUCT; is running on the same machine as Tomcat, the port 8005 will also need to be changed to avoid port conflicts.
 								</para>
 							</note>
 						</para>
-					</listitem>
-					<listitem>
+					</step>
+					<step>
 						<para>
-							This is what the $TOMCAT_HOME/webapps/opensso/config/auth/default/AuthenticationPlugin.xml file should look like: 
+							Ensure the <filename>TOMCAT_HOME/webapps/opensso/config/auth/default/AuthenticationPlugin.xml</filename> file looks like this: 
 <programlisting>
 &#60;?xml version=&#39;1.0&#39; encoding=&#34;UTF-8&#34;?&#62;
 
@@ -582,46 +588,46 @@ realmName=gatein-domain
 &#60;/ModuleProperties&#62;
 </programlisting>
 						</para>
-					</listitem>
-					<listitem>
+					</step>
+					<step>
 						<para>
-							Copy $GATEIN_SSO/opensso/plugin/WEB-INF/lib/sso-opensso-plugin-&#60;VERSION&#62;.jar , $GATEIN_SSO/opensso/plugin/WEB-INF/lib/commons-httpclient-&#60;VERSION&#62;.jar, and $GATEIN_SSO/opensso/plugin/WEB-INF/lib/commons-logging-&#60;VERSION&#62;.jar into the Tomcat Installation at: $TOMCAT_HOME/webapps/opensso/WEB-INF/lib
+							Copy <filename>GATEIN_SSO/opensso/plugin/WEB-INF/lib/sso-opensso-plugin-&#60;VERSION&#62;.jar</filename>, <filename>GATEIN_SSO/opensso/plugin/WEB-INF/lib/commons-httpclient-&#60;VERSION&#62;.jar</filename>, and <filename>GATEIN_SSO/opensso/plugin/WEB-INF/lib/commons-logging-&#60;VERSION&#62;.jar</filename> into the Tomcat directory at <filename>TOMCAT_HOME/webapps/opensso/WEB-INF/lib</filename>.
 						</para>
-					</listitem>
-					<listitem>
+					</step>
+					<step>
 						<para>
-							Copy $GATEIN_SSO/opensso/plugin/WEB-INF/classes/gatein.properties into the Tomcat Installation at: $TOMCAT_HOME/webapps/opensso/WEB-INF/classes
+							Copy <filename>GATEIN_SSO/opensso/plugin/WEB-INF/classes/gatein.properties</filename> into <filename>TOMCAT_HOME/webapps/opensso/WEB-INF/classes</filename>
 						</para>
-					</listitem>
-					<listitem>
+					</step>
+					<step>
 						<para>
-							Now you should be able to start Tomcat and access http://localhost:8888/opensso/UI/Login?realm=gatein but at this stage you won&#39;t be able to login.
+							Tomcat should start and be able to access <ulink type="http" url="http://localhost:8888/opensso/UI/Login?realm=gatein">http://localhost:8888/opensso/UI/Login?realm=gatein</ulink>. Login will not be available at this point.
 						</para>
 						<mediaobject>
 							<imageobject>
 								<imagedata fileref="images/opensso-shot.png" format="PNG" />
 							</imageobject>
 						</mediaobject>
-					</listitem>
-				</orderedlist>
+					</step>
+				</procedure>
 			</section>
 
 		</section>
 		
 		<section id="sect-Reference_Guide-OpenSSO_The_Open_Web_SSO_project-Setup_the_OpenSSO_client">
 			<title>Setup the OpenSSO client</title>
-			<orderedlist>
-				<listitem>
+			<procedure>
+				<step>
 					<para>
-						Copy all libraries from $GATEIN_SSO/opensso/gatein.ear/lib into $JBOSS_HOME/server/default/deploy/gatein.ear/lib (Or if you are running GateIn in Tomcat, in $GATEIN_HOME/lib)
+						Copy all libraries from <filename>GATEIN_SSO/opensso/gatein.ear/lib</filename> into <filename>JBOSS_HOME/server/default/deploy/gatein.ear/lib</filename> (Or, in Tomcat, into <filename>GATEIN_HOME/lib</filename>)
 					</para>
-				</listitem>
-				<listitem>
-					<para>
-						In JBoss AS, edit gatein.ear/META-INF/gatein-jboss-beans.xml and uncomment this section
-					</para>
-					<para>
-						
+				</step>
+				<step>
+					<itemizedlist>
+						<listitem>
+							<para>
+								In JBoss AS, edit gatein.ear/META-INF/gatein-jboss-beans.xml and uncomment this section
+							</para>
 <programlisting>&#60;authentication&#62;
   &#60;login-module code=&#34;org.gatein.sso.agent.login.SSOLoginModule&#34; flag=&#34;required&#34;&#62;
   &#60;/login-module&#62;      
@@ -631,48 +637,62 @@ realmName=gatein-domain
   &#60;/login-module&#62;
 &#60;/authentication&#62;
 </programlisting>
-					</para>
-					<para>
-						If you are running GateIn in Tomcat, edit $GATEIN_HOME/conf/jaas.conf and uncomment this section
-					</para>
-					<para>
-						
+
+						</listitem>
+						<listitem>
+							<para>
+								If you are running GateIn in Tomcat, edit $GATEIN_HOME/conf/jaas.conf and uncomment this section
+							</para>
 <programlisting>org.gatein.sso.agent.login.SSOLoginModule required
 org.exoplatform.services.security.j2ee.JbossLoginModule required
 portalContainerName=portal
 realmName=gatein-domain
 </programlisting>
-						At this point, you can test the installation, start GateIn (assuming that the OpenSSO server using Tomcat is still running) by going to http://localhost:8888/opensso/UI/Login?realm=gatein you should be able to login with username &#39;root&#39; and password &#39;gtn&#39; or any account created through the portal.
+
+						</listitem>
+					</itemizedlist>
+					<para>
+						At this point the installation can be tested: 
 					</para>
-				</listitem>
-			</orderedlist>
+					<procedure>
+						<step>
+							<para>
+								Access &PRODUCT; by going to <ulink type="http" url="http://localhost:8888/opensso/UI/Login?realm=gatein">http://localhost:8888/opensso/UI/Login?realm=gatein</ulink> (assuming that the OpenSSO server using Tomcat is still running).
+							</para>
+						</step>
+						<step>
+							<para>
+								Login with the username <literal>root</literal> and the password <literal>gtn</literal> or any account created through the portal.
+							</para>
+						</step>
+					</procedure>
+					</step>
+			</procedure>
 		</section>
 		
 		<section id="sect-Reference_Guide-OpenSSO_The_Open_Web_SSO_project-Setup_the_portal_to_redirect_to_OpenSSO">
 			<title>Setup the portal to redirect to OpenSSO</title>
 			<para>
-				Now we want to tell GateIn to redirect all user authentication to the OpenSSO server.
+				The next part of the process is to redirect all user authentication to the OpenSSO server.
 			</para>
 			<para>
-				The OpenSSO server can be located anywhere on the Internet, and this information must be properly configured within the GateIn instance. This configuration needs to be done in 3 files 
+				Information about where the OpenSSO server is hosted must be properly configured within the Enterprise Portal Platform instance. The required configuration is done by modifying three files:
 				<itemizedlist>
 					<listitem>
 						<para>
-						<emphasis>In gatein.ear/02portal.war/groovy/portal/webui/UILoginForm.gtmpl replace the javascript at the bottom by:</emphasis>
-
-							
+							Replace the javascript at the bottom of <filename>gatein.ear/02portal.war/groovy/portal/webui/UILoginForm.gtmpl</filename>  with:
+						</para>
 <programlisting>&#60;script&#62;
 &#60;%=uicomponent.event(&#34;Close&#34;);%&#62;
   window.location = &#39;http://localhost:8888/opensso/UI/Login?realm=gatein&#38;goto=http://localhost:8080/portal/private/classic&#39;;
 &#60;/script&#62;
 </programlisting>
-						</para>
+
 					</listitem>
 					<listitem>
 						<para>
-						<emphasis>In gatein.ear/02portal.war/login/jsp/login.jsp replace everything by:</emphasis>
-
-							
+							Replace the contents of <filename>gatein.ear/02portal.war/login/jsp/login.jsp</filename> with:
+						</para>		
 <programlisting>&#60;html&#62;
   &#60;head&#62;
     &#60;script type=&#34;text/javascript&#34;&#62;
@@ -683,13 +703,11 @@ realmName=gatein-domain
   &#60;/body&#62;
 &#60;/html&#62;
 </programlisting>
-						</para>
 					</listitem>
 					<listitem>
 						<para>
-						<emphasis>In gatein.ear/02portal.war/WEB-INF/web.xml replace the InitiateLoginServlet declaration by:</emphasis>
-
-							
+							Replace the <literal>InitiateLoginServlet</literal> declaration in <filename>gatein.ear/02portal.war/WEB-INF/web.xml</filename> with:
+						</para>
 <programlisting>&#60;servlet&#62;
   &#60;servlet-name&#62;InitiateLoginServlet&#60;/servlet-name&#62;
   &#60;servlet-class&#62;org.gatein.sso.agent.GenericSSOAgent&#60;/servlet-class&#62;
@@ -703,7 +721,7 @@ realmName=gatein-domain
   &#60;/init-param&#62;    
 &#60;/servlet&#62;
 </programlisting>
-						</para>
+
 					</listitem>
 				</itemizedlist>
 			</para>
