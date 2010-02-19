@@ -125,7 +125,7 @@ public class UINavigationManagement extends UIContainer
             UserPortalConfig portalConfig = portalConfigService.getUserPortalConfig(navigation.getOwnerId(), prContext.getRemoteUser());
             if(portalConfig != null)
             {
-               dataService.save(persistNavigation);
+               dataService.save(navigation);
             } else {
                UIApplication uiApp = Util.getPortalRequestContext().getUIApplication();
                uiApp.addMessage(new ApplicationMessage("UIPortalForm.msg.notExistAnymore", null));
