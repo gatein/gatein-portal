@@ -120,7 +120,7 @@ public class SeleniumTestCaseGenerator {
 
 		if (xml.indexOf("&quot;") != -1) {
 			xml = replace(xml, "&quot;", "\"");
-			writeFile(outputdir + "/" + scriptFile, xml);
+			//writeFile(outputdir + "/" + scriptFile, xml);
 		}
 
 		int x = xml.indexOf("<tbody>");

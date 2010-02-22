@@ -16,8 +16,8 @@
 		<org.selenium.server.version>1.0.1</org.selenium.server.version>
 		<selenium.port>4444</selenium.port>
 		<selenium.browser>firefox</selenium.browser>
-		<selenium.timeout>30000</selenium.timeout>
-		<selenium.speed>150</selenium.speed>
+		<selenium.timeout>10000</selenium.timeout>
+		<selenium.speed>300</selenium.speed>
 		<org.selenium.maven-plugin.version>1.0</org.selenium.maven-plugin.version>
 	</properties>
 
