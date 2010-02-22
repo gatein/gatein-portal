@@ -79,6 +79,7 @@ public class ApplicationRegistryServiceImpl implements ApplicationRegistryServic
 
    /** . */
    final POMSessionManager mopManager;
+   private static final String REMOTE_DISPLAY_NAME_SUFFIX = " (remote)";
 
    public ApplicationRegistryServiceImpl(ChromatticManager manager, POMSessionManager mopManager)
    {
@@ -447,7 +448,8 @@ public class ApplicationRegistryServiceImpl implements ApplicationRegistryServic
          }
 
          // Additionally categorise the portlet as remote
-         if (portlet.isRemote())
+         boolean remote = portlet.isRemote();
+         if (remote)
          {
             categoryNames.add(REMOTE_CATEGORY_NAME);
          }
@@ -471,14 +473,19 @@ public class ApplicationRegistryServiceImpl implements ApplicationRegistryServic
             ContentDefinition app = category.getContentMap().get(portletName);
             if (app == null)
             {
-               LocalizedString descriptionLS = portlet.getInfo().getMeta().getMetaValue(MetaInfo.DESCRIPTION);
-               LocalizedString displayNameLS = portlet.getInfo().getMeta().getMetaValue(MetaInfo.DISPLAY_NAME);
+               MetaInfo metaInfo = portlet.getInfo().getMeta();
+               LocalizedString descriptionLS = metaInfo.getMetaValue(MetaInfo.DESCRIPTION);
+
+               LocalizedString displayNameLS = metaInfo.getMetaValue(MetaInfo.DISPLAY_NAME);
+               String displayName = getLocalizedStringValue(displayNameLS, portletName);
+
                ContentType<?> contentType;
                String contentId;
-               if (portlet.isRemote())
+               if (remote)
                {
                   contentType = WSRP.CONTENT_TYPE;
                   contentId = portlet.getContext().getId();
+                  displayName += REMOTE_DISPLAY_NAME_SUFFIX;  // add remote to display name to make it more obvious that the portlet is remote
                }
                else
                {
@@ -488,7 +495,7 @@ public class ApplicationRegistryServiceImpl implements ApplicationRegistryServic
 
                //
                app = category.createContent(portletName, contentType, contentId);
-               app.setDisplayName(getLocalizedStringValue(displayNameLS, portletName));
+               app.setDisplayName(displayName);
                app.setDescription(getLocalizedStringValue(descriptionLS, portletName));
             }
          }
