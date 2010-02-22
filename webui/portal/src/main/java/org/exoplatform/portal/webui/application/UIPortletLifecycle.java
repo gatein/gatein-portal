@@ -142,8 +142,9 @@ public class UIPortletLifecycle<S, C extends Serializable, I> extends Lifecycle<
       }
       catch (Exception e)
       {
-         log.error(e.getMessage());
-         Object[] args = {e.getMessage()};
+         String message = e.getLocalizedMessage();
+         log.error("Error processing the action: " + message, e);
+         Object[] args = {message};
          context.addUIComponentToUpdateByAjax(uicomponent);
          throw new MessageException(new ApplicationMessage("UIPortletLifecycle.msg.process-error", args, ApplicationMessage.ERROR));
       }
