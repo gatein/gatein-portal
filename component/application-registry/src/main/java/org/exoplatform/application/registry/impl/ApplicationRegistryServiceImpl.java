@@ -457,7 +457,7 @@ public class ApplicationRegistryServiceImpl implements ApplicationRegistryServic
          //
          log.info("Importing portlet (" + portletApplicationName + "," + portletName + ") in categories " + categoryNames);
 
-         // Process categoriy names
+         // Process category names
          for (String categoryName : categoryNames)
          {
             CategoryDefinition category = registry.getCategory(categoryName);
