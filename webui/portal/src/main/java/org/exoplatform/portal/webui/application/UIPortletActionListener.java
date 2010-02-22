@@ -36,6 +36,7 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.event.EventListener;
 import org.gatein.common.util.MultiValuedPropertyMap;
+import org.gatein.common.util.ParameterValidation;
 import org.gatein.pc.api.Mode;
 import org.gatein.pc.api.ParametersStateString;
 import org.gatein.pc.api.PortletContext;
@@ -617,9 +618,7 @@ public class UIPortletActionListener
          setupPublicRenderParams(uiPortlet, request.getParameterMap());
 
          //set render params
-         String navState =
-            ((PortalRequestContext)event.getRequestContext())
-               .getRequestParameter(ExoPortletInvocationContext.NAVIGATIONAL_STATE_PARAM_NAME);
+         String navState = event.getRequestContext().getRequestParameter(ExoPortletInvocationContext.NAVIGATIONAL_STATE_PARAM_NAME);
          uiPortlet.setNavigationalState(ParametersStateString.create(navState));
       }
    }
@@ -633,23 +632,26 @@ public class UIPortletActionListener
     */
    static public void setupPublicRenderParams(UIPortlet uiPortlet, Map<String, String[]> requestParams)
    {
-      UIPortal uiPortal = Util.getUIPortal();
-      Map<String, String[]> publicParams = uiPortal.getPublicParameters();
-
-      for (String key : requestParams.keySet())
+      if (ParameterValidation.existsAndIsNotEmpty(requestParams))
       {
-    	  String[] value = requestParams.get(key);
-    	  if (uiPortlet.supportsPublicParam(key))
-    	  {
-    		  if (value.length > 0)
-    		  {
-    			  publicParams.put(key, value);
-    		  }
-    		  else
-    		  {
-    			  publicParams.remove(key);
-    		  }
-    	  }
+         UIPortal uiPortal = Util.getUIPortal();
+         Map<String, String[]> publicParams = uiPortal.getPublicParameters();
+
+         for (String key : requestParams.keySet())
+         {
+            String[] value = requestParams.get(key);
+            if (uiPortlet.supportsPublicParam(key))
+            {
+               if (value.length > 0)
+               {
+                  publicParams.put(key, value);
+               }
+               else
+               {
+                  publicParams.remove(key);
+               }
+            }
+         }
       }
 
    }
