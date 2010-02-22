@@ -140,6 +140,14 @@
 											<name>selenium.browser</name>
 											<value>${selenium.browser}</value>
 										</property>
+										<property>
+											<name>selenium.speed</name>
+											<value>${selenium.speed}</value>
+										</property>
+										<property>
+											<name>selenium.timeout</name>
+											<value>${selenium.timeout}</value>
+										</property>
 									</systemProperties>
 								</configuration>
 							</execution>
