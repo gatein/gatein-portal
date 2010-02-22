@@ -90,10 +90,15 @@ public class SeleniumTestCaseGenerator {
 
 	private void appendCommonMethods(StringBuffer sb) {
 		sb.append("public String speed = \"100\";\n");
+		sb.append("public String timeout = \"30000\";\n");
+		sb.append("public int timeoutSecInt = 30;\n");
 		sb.append("public String browser = \"firefox\";\n");
 		sb.append("public void setSpeed() {\n  selenium.setSpeed(speed);\n}\n\n");
 		sb.append("public void setUp() throws Exception {\n");
 		sb.append("  browser = System.getProperty(\"selenium.browser\", browser);\n");
+		sb.append("  timeout = System.getProperty(\"selenium.timeout\", timeout);\n");
+		sb.append("  timeoutSecInt = Integer.parseInt(timeout)/1000;\n");		
+		sb.append("  speed = System.getProperty(\"selenium.speed\", speed);\n");
 		sb.append("  super.setUp(\"http://localhost:8080/portal/\", \"*\" + browser);\n");
 		sb.append("}\n\n");
 	}
@@ -186,7 +191,7 @@ public class SeleniumTestCaseGenerator {
 				sb.append("selenium.click(\"");
 				sb.append(param2);
 				sb.append("\");\n");
-				sb.append("selenium.waitForPageToLoad(\"30000\");\n");
+				sb.append("selenium.waitForPageToLoad(timeout);\n");
 			} else if (param1.equals("clickAt")) {
 				sb.append("selenium.");
 				sb.append(param1);
@@ -197,7 +202,7 @@ public class SeleniumTestCaseGenerator {
 				sb.append("selenium.clickAt(\"");
 				sb.append(param2);
 				sb.append("\", \"1,1\");\n");
-				sb.append("selenium.waitForPageToLoad(\"30000\");\n");
+				sb.append("selenium.waitForPageToLoad(timeout);\n");
 			} else if (param1.equals("close")) {
 				sb.append("selenium.");
 				sb.append(param1);
@@ -221,7 +226,7 @@ public class SeleniumTestCaseGenerator {
 				sb.append("\", \"");
 				sb.append(param3);
 				sb.append("\");\n");
-				sb.append("selenium.waitForPageToLoad(\"30000\");\n");
+				sb.append("selenium.waitForPageToLoad(timeout);\n");
 			} else if (param1.equals("storeText")) {
 				sb.append("String ");
 				sb.append(param3);
@@ -390,7 +395,7 @@ public class SeleniumTestCaseGenerator {
 				sb.append("selenium.check(\"");
 				sb.append(param2);
 				sb.append("\");\n");
-				sb.append("selenium.waitForPageToLoad(\"30000\");\n");
+				sb.append("selenium.waitForPageToLoad(timeout);\n");
 			} else if (param1.equals("echo")) {
 				sb.append("System.out.println(\"" + param2 + "\");\n");
 			} else if (!param1.isEmpty()) {
@@ -404,7 +409,7 @@ public class SeleniumTestCaseGenerator {
 	}
 
 	private String getTimeoutMessage(String param1) {
-		return "if (second >= 30) fail(\"" +param1+" reached a timeout.\");\n";
+		return "if (second >= timeoutSecInt)\n fail(\"" + param1 +" reached a timeout (\" + timeoutSecInt + \"s)\");\n";
 	}
 	
 	public static void writeFile(String file, String content) throws IOException {
