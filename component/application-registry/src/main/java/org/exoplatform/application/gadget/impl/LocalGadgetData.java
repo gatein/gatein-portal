@@ -55,7 +55,7 @@ public abstract class LocalGadgetData extends GadgetData
    public abstract void setFileName(String fileName);
 
    @OneToOne
-   @MappedBy("resources")
+   @MappedBy("app:resources")
    public abstract NTFolder getResources();
 
    protected abstract void setResources(NTFolder resources);

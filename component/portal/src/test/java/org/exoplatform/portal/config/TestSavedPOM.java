@@ -187,8 +187,8 @@ public class TestSavedPOM extends AbstractPortalTest
       //
       UIContainer c = testPage.getRootComponent();
       assertNotNull(c);
-      assertEquals(2, c.size());
-      Iterator<? extends UIComponent> it = c.iterator();
+      assertEquals(2, c.getComponents().size());
+      Iterator<? extends UIComponent> it = c.getComponents().iterator();
 
       //
       UIContainer container1 = (UIContainer)it.next();

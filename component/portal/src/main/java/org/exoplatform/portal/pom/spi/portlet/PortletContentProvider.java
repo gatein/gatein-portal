@@ -19,8 +19,6 @@
 
 package org.exoplatform.portal.pom.spi.portlet;
 
-import org.exoplatform.portal.pom.spi.ContentProviderHelper;
-import org.exoplatform.portal.pom.spi.HelpableContentProvider;
 import org.gatein.mop.spi.content.ContentProvider;
 import org.gatein.mop.spi.content.StateContainer;
 
@@ -32,8 +30,7 @@ import java.util.Map;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class PortletContentProvider implements ContentProvider<Portlet>,
-   HelpableContentProvider<PortletState, Portlet>
+public class PortletContentProvider implements ContentProvider<Portlet, PortletState>
 {
 
    public PortletContentProvider()
@@ -61,33 +58,52 @@ public class PortletContentProvider implements ContentProvider<Portlet>,
       return new Portlet(entries);
    }
 
-   public void setState(StateContainer container, Portlet state)
+   public void setState(StateContainer<PortletState> container, Portlet state)
    {
-      ContentProviderHelper.setState(container, state, this);
+      PortletState prefs = container.getState();
+
+      //
+      if (prefs != null)
+      {
+         if (state == null)
+         {
+            container.setState(null);
+         }
+         else
+         {
+            prefs.setPayload(state);
+         }
+      }
+      else
+      {
+         if (state != null)
+         {
+            prefs = container.create();
+            prefs.setPayload(state);
+         }
+      }
    }
 
-   public Portlet getState(StateContainer container)
+   public Portlet getState(StateContainer<PortletState> container)
    {
-      return ContentProviderHelper.getState(container, this);
+      PortletState prefs = container.getState();
+      if (prefs != null)
+      {
+         return prefs.getPayload();
+      }
+      else
+      {
+         return null;
+      }
    }
 
-   public Class<Portlet> getStateType()
+   public Class<Portlet> getExternalType()
    {
       return Portlet.class;
    }
 
-   public String getNodeName()
+   public Class<PortletState> getInternalType()
    {
-      return PortletState.MOP_NODE_NAME;
-   }
-
-   public void setInternalState(PortletState portletPreferencesState, Portlet preferences)
-   {
-      portletPreferencesState.setPayload(preferences);
-   }
-
-   public Portlet getState(PortletState portletPreferencesState)
-   {
-      return (Portlet)portletPreferencesState.getPayload();
+      return PortletState.class;
    }
 }

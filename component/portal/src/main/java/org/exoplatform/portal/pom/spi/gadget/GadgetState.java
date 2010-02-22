@@ -21,16 +21,15 @@ package org.exoplatform.portal.pom.spi.gadget;
 
 import org.chromattic.api.annotations.PrimaryType;
 import org.chromattic.api.annotations.Property;
+import org.gatein.mop.core.api.workspace.content.AbstractCustomizationState;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-@PrimaryType(name = GadgetState.MOP_NODE_NAME)
-public abstract class GadgetState
+@PrimaryType(name = "mop:gadget")
+public abstract class GadgetState extends AbstractCustomizationState
 {
-   static final String MOP_NODE_NAME = "mop:gadget";
-
    @Property(name = "mop:prefs")
    public abstract String getUserPrefs();
 

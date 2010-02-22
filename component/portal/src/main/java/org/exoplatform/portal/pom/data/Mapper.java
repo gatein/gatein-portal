@@ -437,8 +437,8 @@ public class Mapper
    private List<ComponentData> loadChildren(UIContainer src)
    {
       if (src == null) throw new NoSuchDataException("Can not load children");
-      ArrayList<ComponentData> children = new ArrayList<ComponentData>(src.size());
-      for (UIComponent component : src)
+      ArrayList<ComponentData> children = new ArrayList<ComponentData>();
+      for (UIComponent component : src.getComponents())
       {
 
          // Obtain a model object from the ui component
@@ -696,7 +696,7 @@ public class Mapper
                     }
             */
             boolean found = false;
-            for (UIComponent child : dst)
+            for (UIComponent child : dst.getComponents())
             {
                if (child.getObjectId().equals(srcChildId))
                {
@@ -713,7 +713,7 @@ public class Mapper
                   String srcId = hierarchyRelationships.get(srcChildId);
 
                   // It's a move operation, so we move the node first
-                  dst.add(dstChild);
+                  dst.getComponents().add(dstChild);
 
                   //
                   changes.add(new ModelChange.Move(srcId, dst.getObjectId(), srcChildId));
@@ -765,7 +765,7 @@ public class Mapper
       }
 
       // Take care of move operation that could be seen as a remove otherwise
-      for (UIComponent dstChild : dst)
+      for (UIComponent dstChild : dst.getComponents())
       {
          String dstChildId = dstChild.getObjectId();
          if (!modelObjectMap.containsKey(dstChildId))
@@ -777,7 +777,7 @@ public class Mapper
                UIContainer parent = session.findObjectById(ObjectType.CONTAINER, parentId);
 
                // Perform the move
-               parent.add(dstChild);
+               parent.getComponents().add(dstChild);
 
                //
                changes.add(new ModelChange.Move(dst.getObjectId(), parentId, dstChildId));
@@ -790,7 +790,7 @@ public class Mapper
       }
 
       // Delete removed children
-      for (Iterator<UIComponent> i = dst.iterator(); i.hasNext();)
+      for (Iterator<UIComponent> i = dst.getComponents().iterator(); i.hasNext();)
       {
          UIComponent dstChild = i.next();
          String dstChildId = dstChild.getObjectId();
@@ -803,7 +803,7 @@ public class Mapper
 
       // Now sort children according to the order provided by the container
       // need to replace that with Collections.sort once the set(int index, E element) is implemented in Chromattic lists
-      UIComponent[] a = dst.toArray(new UIComponent[dst.size()]);
+      UIComponent[] a = dst.getComponents().toArray(new UIComponent[dst.getComponents().size()]);
       Arrays.sort(a, new Comparator<UIComponent>()
       {
          public int compare(UIComponent o1, UIComponent o2)
@@ -815,7 +815,7 @@ public class Mapper
       });
       for (int j = 0; j < a.length; j++)
       {
-         dst.add(j, a[j]);
+         dst.getComponents().add(j, a[j]);
       }
    }
 
@@ -961,16 +961,16 @@ public class Mapper
                   // then we get its customization
                   if (site != null)
                   {
-                     customization = site.getCustomization(uniqueId);
+                     customization = site.getCustomizationContext().getCustomization(uniqueId);
                   }
                   else
                   {
-                     customization = currentSite.getCustomization(uniqueId);
+                     customization = currentSite.getCustomizationContext().getCustomization(uniqueId);
 
                      // If it does not exist we create it
                      if (customization == null)
                      {
-                        customization = currentSite.customize(uniqueId, contentType, contentId, null);
+                        customization = currentSite.getCustomizationContext().customize(uniqueId, contentType, contentId, null);
                      }
                   }
                }
@@ -981,7 +981,7 @@ public class Mapper
                   String a = uniqueId.substring(0, pos);
                   String b = uniqueId.substring(pos + 1);
                   org.gatein.mop.api.workspace.Page page = site.getRootPage().getChild("pages").getChild(b);
-                  customization = page.getCustomization(a);
+                  customization = page.getCustomizationContext().getCustomization(a);
                }
             }
          }

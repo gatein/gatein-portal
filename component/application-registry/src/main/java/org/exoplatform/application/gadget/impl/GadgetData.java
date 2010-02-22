@@ -18,10 +18,13 @@
  */
 package org.exoplatform.application.gadget.impl;
 
+import org.chromattic.api.annotations.PrimaryType;
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
+@PrimaryType(name = "app:gadgetdata")
 public abstract class GadgetData
 {
 }

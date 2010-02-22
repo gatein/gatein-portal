@@ -76,7 +76,7 @@ public abstract class ContentDefinition
       POMSession session = category.registry.mopManager.getSession();
       Workspace workspace = session.getWorkspace();
       String name = getName();
-      return workspace.getCustomization(name);
+      return workspace.getCustomizationContext().getCustomization(name);
    }
 
    

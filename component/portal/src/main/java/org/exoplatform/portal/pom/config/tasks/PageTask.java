@@ -173,7 +173,7 @@ public abstract class PageTask
       private void copy(org.gatein.mop.api.workspace.Page srcPage, org.gatein.mop.api.workspace.Page dstPage,
          UIContainer src, UIContainer dst)
       {
-         for (UIComponent srcChild : src)
+         for (UIComponent srcChild : src.getComponents())
          {
             UIComponent dstChild = dst.add(srcChild.getObjectType(), srcChild.getObjectId());
 
@@ -202,11 +202,11 @@ public abstract class PageTask
                   String name = parentCtx.nameOf(parent);
                   if (parentCtx == srcPage)
                   {
-                     dstParent = dstPage.getCustomization(name);
+                     dstParent = dstPage.getCustomizationContext().getCustomization(name);
                      if (dstParent == null)
                      {
                         Object state = parent.getVirtualState();
-                        dstParent = dstPage.customize(name, contentType, contentId, state);
+                        dstParent = dstPage.getCustomizationContext().customize(name, contentType, contentId, state);
                      }
                   }
                   if (dstParent != null)

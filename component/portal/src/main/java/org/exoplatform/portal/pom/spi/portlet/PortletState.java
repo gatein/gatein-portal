@@ -21,7 +21,7 @@ package org.exoplatform.portal.pom.spi.portlet;
 
 import org.chromattic.api.annotations.*;
 import org.gatein.mop.core.api.MOPFormatter;
-import org.gatein.mop.core.api.workspace.content.AbstractCustomization;
+import org.gatein.mop.core.api.workspace.content.AbstractCustomizationState;
 
 import java.util.Map;
 
@@ -29,14 +29,13 @@ import java.util.Map;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-@PrimaryType(name = PortletState.MOP_NODE_NAME)
+@PrimaryType(name = "mop:portletpreferences")
 @FormattedBy(MOPFormatter.class)
-public abstract class PortletState
+public abstract class PortletState extends AbstractCustomizationState
 {
 
    /** . */
    private Portlet payload;
-   static final String MOP_NODE_NAME = "mop:portletpreferences";
 
    @OneToMany
    public abstract Map<String, PreferenceState> getChildren();
@@ -44,13 +43,8 @@ public abstract class PortletState
    @Create
    public abstract PreferenceState create();
 
-   @OneToOne
-   @RelatedMappedBy("mop:state")
-   public abstract AbstractCustomization getCustomization();
-
-   private void setPayload(Portlet payload)
+   public void setPayload(Portlet payload)
    {
-
       this.payload = payload;
 
       //
@@ -66,12 +60,7 @@ public abstract class PortletState
       }
    }
 
-   public void setPayload(Object payload)
-   {
-      setPayload((Portlet)payload);
-   }
-
-   public Object getPayload()
+   public Portlet getPayload()
    {
       if (payload == null)
       {

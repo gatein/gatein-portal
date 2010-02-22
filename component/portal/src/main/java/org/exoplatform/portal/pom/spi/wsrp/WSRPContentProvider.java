@@ -20,8 +20,6 @@
 package org.exoplatform.portal.pom.spi.wsrp;
 
 import org.exoplatform.commons.utils.Safe;
-import org.exoplatform.portal.pom.spi.ContentProviderHelper;
-import org.exoplatform.portal.pom.spi.HelpableContentProvider;
 import org.gatein.mop.spi.content.ContentProvider;
 import org.gatein.mop.spi.content.StateContainer;
 
@@ -32,7 +30,7 @@ import java.util.List;
  * @author <a href="mailto:chris.laprun@jboss.com">Chris Laprun</a>
  * @version $Revision$
  */
-public class WSRPContentProvider implements ContentProvider<WSRP>, HelpableContentProvider<WSRPState, WSRP>
+public class WSRPContentProvider implements ContentProvider<WSRP, WSRPState>
 {
 
    public WSRP combine(List<WSRP> wsrpStates)
@@ -40,27 +38,54 @@ public class WSRPContentProvider implements ContentProvider<WSRP>, HelpableConte
       throw new UnsupportedOperationException("todo");
    }
 
-   public void setState(StateContainer stateContainer, WSRP wsrpState)
+   public void setState(StateContainer<WSRPState> container, WSRP state)
    {
-      ContentProviderHelper.setState(stateContainer, wsrpState, this);
+      WSRPState wsrpState = container.getState();
+      if (wsrpState != null)
+      {
+         if (state == null)
+         {
+            container.setState(null);
+         }
+         else
+         {
+            setInternalState(wsrpState, state);
+         }
+      }
+      else
+      {
+         if (state != null)
+         {
+            wsrpState = container.create();
+            setInternalState(wsrpState, state);
+         }
+      }
    }
 
-   public WSRP getState(StateContainer stateContainer)
+   public WSRP getState(StateContainer<WSRPState> container)
    {
-      return ContentProviderHelper.getState(stateContainer, this);
+      WSRPState wsrpState  = container.getState();
+      if (wsrpState != null)
+      {
+         return getState(wsrpState);
+      }
+      else
+      {
+         return null;
+      }
    }
 
-   public Class<WSRP> getStateType()
+   public Class<WSRP> getExternalType()
    {
       return WSRP.class;
    }
 
-   public String getNodeName()
+   public Class<WSRPState> getInternalType()
    {
-      return WSRPState.MOP_NODE_NAME;
+      return WSRPState.class;
    }
 
-   public void setInternalState(WSRPState persistedState, WSRP updatedState)
+   private void setInternalState(WSRPState persistedState, WSRP updatedState)
    {
       byte[] bytes = updatedState.getState();
       if (bytes != null && bytes.length > 0)
@@ -72,7 +97,7 @@ public class WSRPContentProvider implements ContentProvider<WSRP>, HelpableConte
       persistedState.setCloned(updatedState.isCloned());
    }
 
-   public WSRP getState(WSRPState state)
+   private WSRP getState(WSRPState state)
    {
       WSRP wsrp = new WSRP();
       byte[] bytes = Safe.getBytes(state.getState());

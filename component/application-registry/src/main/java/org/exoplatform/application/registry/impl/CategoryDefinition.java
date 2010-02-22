@@ -29,7 +29,6 @@ import org.exoplatform.portal.pom.config.POMSession;
 import org.gatein.mop.api.content.ContentType;
 import org.gatein.mop.api.content.Customization;
 import org.gatein.mop.api.workspace.Workspace;
-import org.gatein.mop.core.api.MOPFormatter;
 
 import java.util.Date;
 import java.util.List;
@@ -117,12 +116,12 @@ public abstract class CategoryDefinition
       Workspace workspace = session.getWorkspace();
 
       //
-      Customization customization = workspace.getCustomization(definitionName);
+      Customization customization = workspace.getCustomizationContext().getCustomization(definitionName);
 
       //
       if (customization == null)
       {
-         workspace.customize(definitionName, contentType, contentId, null);
+         workspace.getCustomizationContext().customize(definitionName, contentType, contentId, null);
       }
       else if (customization.getContentId().equals(contentId))
       {

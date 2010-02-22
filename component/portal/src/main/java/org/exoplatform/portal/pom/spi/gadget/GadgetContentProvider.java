@@ -19,8 +19,6 @@
 
 package org.exoplatform.portal.pom.spi.gadget;
 
-import org.exoplatform.portal.pom.spi.ContentProviderHelper;
-import org.exoplatform.portal.pom.spi.HelpableContentProvider;
 import org.gatein.mop.spi.content.ContentProvider;
 import org.gatein.mop.spi.content.StateContainer;
 
@@ -30,7 +28,7 @@ import java.util.List;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class GadgetContentProvider implements ContentProvider<Gadget>, HelpableContentProvider<GadgetState, Gadget>
+public class GadgetContentProvider implements ContentProvider<Gadget, GadgetState>
 {
 
    public Gadget combine(List<Gadget> states)
@@ -38,35 +36,52 @@ public class GadgetContentProvider implements ContentProvider<Gadget>, HelpableC
       throw new UnsupportedOperationException();
    }
 
-   public void setState(StateContainer container, Gadget state)
+   public void setState(StateContainer<GadgetState> container, Gadget state)
    {
-      ContentProviderHelper.setState(container, state, this);
+      GadgetState prefs = container.getState();
+      if (prefs != null)
+      {
+         if (state == null)
+         {
+            container.setState(null);
+         }
+         else
+         {
+            prefs.setUserPrefs(state.getUserPref());
+         }
+      }
+      else
+      {
+         if (state != null)
+         {
+            prefs = container.create();
+            prefs.setUserPrefs(state.getUserPref());
+         }
+      }
    }
 
-   public Gadget getState(StateContainer container)
+   public Gadget getState(StateContainer<GadgetState> container)
    {
-      return ContentProviderHelper.getState(container, this);
+      GadgetState prefs = container.getState();
+      if (prefs != null)
+      {
+         Gadget gadget = new Gadget();
+         gadget.setUserPref(prefs.getUserPrefs());
+         return gadget;
+      }
+      else
+      {
+         return null;
+      }
    }
 
-   public Class<Gadget> getStateType()
+   public Class<Gadget> getExternalType()
    {
       return Gadget.class;
    }
 
-   public String getNodeName()
+   public Class<GadgetState> getInternalType()
    {
-      return GadgetState.MOP_NODE_NAME;
-   }
-
-   public void setInternalState(GadgetState gadgetState, Gadget gadget)
-   {
-      gadgetState.setUserPrefs(gadget.getUserPref());
-   }
-
-   public Gadget getState(GadgetState gadgetState)
-   {
-      Gadget gadget = new Gadget();
-      gadget.setUserPref(gadgetState.getUserPrefs());
-      return gadget;
+      return GadgetState.class;
    }
 }

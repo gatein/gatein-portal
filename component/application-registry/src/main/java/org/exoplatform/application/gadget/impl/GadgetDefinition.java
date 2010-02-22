@@ -56,7 +56,7 @@ public abstract class GadgetDefinition
    public abstract void setReferenceURL(String referenceURL);
 
    @OneToOne
-   @MappedBy("data")
+   @MappedBy("app:data")
    public abstract GadgetData getData();
 
    public abstract void setData(GadgetData data);

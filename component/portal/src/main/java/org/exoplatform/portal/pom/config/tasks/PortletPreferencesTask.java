@@ -136,24 +136,24 @@ public abstract class PortletPreferencesTask
                   String a = instanceName.substring(0, pos);
                   String b = instanceName.substring(pos + 1);
                   Page page = site.getRootPage().getChild("pages").getChild(b);
-                  Customization c = page.getCustomization(a);
+                  Customization c = page.getCustomizationContext().getCustomization(a);
                   if (c != null)
                   {
                      c.destroy();
                   }
                   customization =
-                     page.customize(a, Portlet.CONTENT_TYPE, applicationName + "/" + portletName,
+                     page.getCustomizationContext().customize(a, Portlet.CONTENT_TYPE, applicationName + "/" + portletName,
                         new PortletBuilder().build());
                }
                else
                {
-                  Customization c = site.getCustomization(instanceName);
+                  Customization c = site.getCustomizationContext().getCustomization(instanceName);
                   if (c != null)
                   {
                      c.destroy();
                   }
                   customization =
-                     site.customize(instanceName, Portlet.CONTENT_TYPE, applicationName + "/" + portletName,
+                     site.getCustomizationContext().customize(instanceName, Portlet.CONTENT_TYPE, applicationName + "/" + portletName,
                         new PortletBuilder().build());
                }
             }
@@ -221,14 +221,14 @@ public abstract class PortletPreferencesTask
                int pos = instanceName.indexOf('#');
                if (pos == -1)
                {
-                  customization = (Customization<Portlet>)site.getCustomization(instanceName);
+                  customization = (Customization<Portlet>)site.getCustomizationContext().getCustomization(instanceName);
                }
                else
                {
                   String a = instanceName.substring(0, pos);
                   String b = instanceName.substring(pos + 1);
                   Page page = site.getRootPage().getChild("pages").getChild(b);
-                  customization = (Customization<Portlet>)page.getCustomization(a);
+                  customization = (Customization<Portlet>)page.getCustomizationContext().getCustomization(a);
                }
             }
 

@@ -113,6 +113,7 @@ function getModule(params)
       addDependency(new Project("org.chromattic", "chromattic.api", "jar", chromatticVersion)).
       addDependency(new Project("org.chromattic", "chromattic.common", "jar", chromatticVersion)).
       addDependency(new Project("org.chromattic", "chromattic.spi", "jar", chromatticVersion)).
+      addDependency(new Project("org.chromattic", "chromattic.metamodel", "jar", chromatticVersion)).
       addDependency(new Project("org.chromattic", "chromattic.core", "jar", chromatticVersion)).
       addDependency(new Project("org.chromattic", "chromattic.apt", "jar", chromatticVersion)).
       addDependency(new Project("org.chromattic", "chromattic.ext", "jar", chromatticVersion)).
