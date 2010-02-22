@@ -22,14 +22,14 @@
 	<td></td>
 </tr>
 <tr>
-	<td>setSpeed</td>
-	<td>150</td>
-	<td></td>
-</tr>
-<tr>
 	<td>click</td>
 	<td>link=Sign in</td>
 	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>username</td>
+	<td>root</td>
 </tr>
 <tr>
 	<td>type</td>
@@ -48,7 +48,7 @@
 </tr>
 <tr>
 	<td>echo</td>
-	<td>--Select "Users and groups management" in menu</td>
+	<td>--Select &quot;Users and groups management&quot; in menu</td>
 	<td></td>
 </tr>
 <tr>
@@ -57,7 +57,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>click</td>
+	<td>clickAndWait</td>
 	<td>link=Group</td>
 	<td></td>
 </tr>
@@ -73,7 +73,7 @@
 </tr>
 <tr>
 	<td>echo</td>
-	<td>--Choose "Memebership Management" tab</td>
+	<td>--Choose &quot;Memebership Management&quot; tab</td>
 	<td></td>
 </tr>
 <tr>
@@ -142,14 +142,9 @@
 	<td>1,1</td>
 </tr>
 <tr>
-	<td>waitForTextPresent</td>
-	<td>test_description_edit_08</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>test_description_edit_08</td>
-	<td></td>
+	<td>clickAt</td>
+	<td>//table[@class='UIGrid']//tbody/tr[1]/td[5]//img[@class='EditMembershipIcon']</td>
+	<td>1,1</td>
 </tr>
 <tr>
 	<td>echo</td>

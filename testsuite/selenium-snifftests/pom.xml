@@ -96,7 +96,6 @@
 					<plugin>
 						<groupId>org.codehaus.mojo</groupId>
 						<artifactId>selenium-maven-plugin</artifactId>
-						<version>${org.selenium.maven-plugin.version}</version>
 						<executions>
 							<execution>
 								<phase>pre-integration-test</phase>
@@ -128,6 +127,7 @@
 									<!--
 									<includes><include>**/Test_UserExtensions.java</include></includes>
 									-->
+									<includes><include>**/selenium/Test_*.java</include></includes>
 									<systemProperties>
 										<property>
 											<name>selenium.port</name>

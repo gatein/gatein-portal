@@ -22,11 +22,6 @@
 	<td></td>
 </tr>
 <tr>
-	<td>setSpeed</td>
-	<td>150</td>
-	<td></td>
-</tr>
-<tr>
 	<td>clickAt</td>
 	<td>link=Sign in</td>
 	<td></td>
@@ -177,18 +172,23 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>waitForElementPresent</td>
 	<td>//div[@id='UISiteManagement']/table[2]//a[@class='DeleteIcon']</td>
 	<td></td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
-	<td>//div[@id='UISiteManagement']/table/tbody/tr/td[2]/div</td>
+	<td>clickAndWait</td>
+	<td>//div[@id='UISiteManagement']/table[2]//a[@class='DeleteIcon']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForConfirmation</td>
 	<td>Are you sure you want to delete this portal?</td>
+	<td></td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>/portal/public/classic/</td>
 	<td></td>
 </tr>
 <tr>

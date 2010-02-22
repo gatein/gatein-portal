@@ -3,6 +3,8 @@ package org.exoplatform.portal.selenium;
 import java.io.File;
 import java.io.IOException;
 
+import junit.framework.TestCase;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringEscapeUtils;
 
@@ -69,6 +71,7 @@ public class SeleniumTestCaseGenerator {
 		StringBuffer sb = new StringBuffer();
 		sb.append("package " + testPackagePath + ";\n\n");
 		// sb.append("import org.exoplatform.util.selenium.BaseTestCase;\n");
+		sb.append("import junit.framework.TestCase;\n");
 		sb.append("import com.thoughtworks.selenium.*;\n");
 		sb.append("public class " + testName + " extends SeleneseTestCase {\n");
 
@@ -151,23 +154,23 @@ public class SeleniumTestCaseGenerator {
 			sb.append("\n  //" + count + ": " + param1 + " | " + param2 + " | " + param3 + "\n");
 			if (param1.equals("assertConfirmation")) {
 				param2 = replace(param2, "?", "[\\\\s\\\\S]");
-				sb.append("assertTrue(selenium.getConfirmation().matches(\"^");
+				sb.append("TestCase.assertTrue(selenium.getConfirmation().matches(\"^");
 				sb.append(param2);
 				sb.append("$\"));\n");
 			} else if (param1.equals("assertElementPresent") || param1.equals("assertElementNotPresent")) {
 				if (param1.equals("assertElementPresent")) {
-					sb.append("assertTrue");
+					sb.append("TestCase.assertTrue");
 				} else if (param1.equals("assertElementNotPresent")) {
-					sb.append("assertFalse");
+					sb.append("TestCase.assertFalse");
 				}
 				sb.append("(selenium.isElementPresent(\"");
 				sb.append(param2);
 				sb.append("\"));\n");
 			} else if (param1.equals("assertTextPresent") || param1.equals("assertTextNotPresent")) {
 				if (param1.equals("assertTextPresent")) {
-					sb.append("assertTrue");
+					sb.append("TestCase.assertTrue");
 				} else if (param1.equals("assertTextNotPresent")) {
-					sb.append("assertFalse");
+					sb.append("TestCase.assertFalse");
 				}
 				sb.append("(selenium.isTextPresent(\"");
 				sb.append(param2);
@@ -232,24 +235,24 @@ public class SeleniumTestCaseGenerator {
 				sb.append(");\n");
 			} else if (param1.equals("verifyElementPresent") || param1.equals("verifyElementNotPresent")) {
 				if (param1.equals("verifyElementPresent")) {
-					sb.append("assertTrue");
+					sb.append("TestCase.assertTrue");
 				} else if (param1.equals("verifyElementNotPresent")) {
-					sb.append("assertFalse");
+					sb.append("TestCase.assertFalse");
 				}
 				sb.append("(selenium.isElementPresent(\"");
 				sb.append(param2);
 				sb.append("\"));\n");
 			} else if (param1.equals("verifyTextPresent") || param1.equals("verifyTextNotPresent")) {
 				if (param1.equals("verifyTextPresent")) {
-					sb.append("assertTrue");
+					sb.append("TestCase.assertTrue");
 				} else if (param1.equals("verifyTextNotPresent")) {
-					sb.append("assertFalse");
+					sb.append("TestCase.assertFalse");
 				}
 				sb.append("(selenium.isTextPresent(\"");
 				sb.append(param2);
 				sb.append("\"));\n");
 			} else if (param1.equals("verifyTitle")) {
-				sb.append("assertEquals(\"");
+				sb.append("TestCase.assertEquals(\"");
 				sb.append(param2);
 				sb.append("\", selenium.getTitle());\n");
 			} else if (param1.equals("waitForElementNotPresent") || param1.equals("waitForTextNotPresent")) {
@@ -294,7 +297,7 @@ public class SeleniumTestCaseGenerator {
 				sb.append(param3);
 				sb.append("\");\n");
 			} else if (param1.equals("verifyValue")) {
-				sb.append("assertEquals(\"");
+				sb.append("TestCase.assertEquals(\"");
 				sb.append(param3);
 				sb.append("\", selenium.getValue(\"");
 				sb.append(param2);
@@ -313,7 +316,7 @@ public class SeleniumTestCaseGenerator {
 				sb.append("Thread.sleep(1000);\n");
 				sb.append("}\n");
 			} else if (param1.equals("verifyEval")) {
-				sb.append("assertEquals(\"");
+				sb.append("TestCase.assertEquals(\"");
 				sb.append(param3);
 				sb.append("\", selenium.getEval(\"");
 				sb.append(param2);
@@ -325,7 +328,7 @@ public class SeleniumTestCaseGenerator {
 				sb.append(param2);
 				sb.append("\");\n");
 			} else if (param1.equals("assertVisible")) {
-				sb.append("assertTrue(selenium.isVisible");
+				sb.append("TestCase.assertTrue(selenium.isVisible");
 				sb.append("(\"");
 				sb.append(param2);
 				sb.append("\"));\n");
@@ -335,14 +338,14 @@ public class SeleniumTestCaseGenerator {
 				sb.append(param2);
 				sb.append("\"));\n");
 			} else if (param1.equals("assertNotVisible")) {
-				sb.append("assertFalse(selenium.isVisible");
+				sb.append("TestCase.assertFalse(selenium.isVisible");
 				sb.append("(\"");
 				sb.append(param2);
 				sb.append("\"));\n");
 			} else if (param1.equals("waitForNotSpeed")) {
 				sb.append("waitForNotSpeed();\n");
 			} else if (param1.equals("assertValue")) {
-				sb.append("assertEquals(\"");
+				sb.append("TestCase.assertEquals(\"");
 				sb.append(param3);
 				sb.append("\", selenium.getValue(\"");
 				sb.append(param2);

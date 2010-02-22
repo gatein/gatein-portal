@@ -3,13 +3,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<link rel="selenium.base" href="" />
-<title>SNF_PRL_20</title>
+<link rel="selenium.base" href="http://localhost:8080/portal" />
+<title>SNF_PRL_22</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">SNF_PRL_20</td></tr>
+<tr><td rowspan="1" colspan="3">SNF_PRL_22</td></tr>
 </thead><tbody>
 <tr>
 	<td>open</td>
@@ -18,12 +18,7 @@
 </tr>
 <tr>
 	<td>echo</td>
-	<td>-DeletePortal-</td>
-	<td></td>
-</tr>
-<tr>
-	<td>setSpeed</td>
-	<td>150</td>
+	<td>-EditPortalLayout-</td>
 	<td></td>
 </tr>
 <tr>
@@ -52,67 +47,42 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>clickAndWait</td>
 	<td>link=Site</td>
 	<td></td>
 </tr>
 <tr>
-	<td>echo</td>
-	<td>--Add new portal</td>
-	<td></td>
+	<td>clickAt</td>
+	<td>link=Edit Layout</td>
+	<td>1,1</td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>link=Add New Portal</td>
+	<td>link=Portal Properties</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAt</td>
-	<td>link=Add New Portal</td>
+	<td>link=Portal Properties</td>
+	<td>1,1</td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>locale</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>locale</td>
+	<td>label=French (France)</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='UIMaskWorkspace']//div[@class='TabsContainer']//div[3]//div[@class='MiddleTab']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@onclick="eXo.webui.UIHorizontalTabs.changeTabForUIFormTabpane(this, 'UIPortalForm', 'PortalSetting');javascript:eXo.webui.UIForm.submitEvent('UIPortalForm','SelectTab','&amp;objectId=PortalSetting')"]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
-	<td>//div[@onclick="eXo.webui.UIHorizontalTabs.changeTabForUIFormTabpane(this, 'UIPortalForm', 'PortalSetting');javascript:eXo.webui.UIForm.submitEvent('UIPortalForm','SelectTab','&amp;objectId=PortalSetting')"]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>name</td>
-	<td></td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>name</td>
-	<td>test_portal_name_20</td>
-</tr>
-<tr>
-	<td>clickAt</td>
-	<td>//div[@onclick="eXo.webui.UIHorizontalTabs.changeTabForUIFormTabpane(this, 'UIPortalForm', 'Properties');javascript:eXo.webui.UIForm.submitEvent('UIPortalForm','SelectTab','&amp;objectId=Properties')"]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>document.forms[0].elements[6]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
-	<td>//div[@onclick="eXo.webui.UIHorizontalTabs.changeTabForUIFormTabpane(this, 'UIPortalForm', 'PermissionSetting');javascript:eXo.webui.UIForm.submitEvent('UIPortalForm','SelectTab','&amp;objectId=PermissionSetting')"]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>publicMode</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
 	<td>publicMode</td>
 	<td></td>
 </tr>
@@ -132,13 +102,23 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>waitForElementPresent</td>
 	<td>link=Platform</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAt</td>
 	<td>link=Platform</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Users</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>link=Users</td>
 	<td></td>
 </tr>
 <tr>
@@ -162,49 +142,89 @@
 	<td></td>
 </tr>
 <tr>
+	<td>clickAt</td>
+	<td>//div[@id='UIPortalComposer']//a[@class='EdittedSaveButton']</td>
+	<td>1,1</td>
+</tr>
+<tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UISiteManagement']/table[2]/tbody/tr/td[3]/a[4]</td>
+	<td>link=classic</td>
 	<td></td>
 </tr>
 <tr>
-	<td>verifyTextPresent</td>
-	<td>test_portal_name_20</td>
+	<td>clickAt</td>
+	<td>link=classic</td>
 	<td>1,1</td>
 </tr>
 <tr>
 	<td>echo</td>
-	<td>--Delete portal</td>
+	<td>--Verify</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Site</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAt</td>
-	<td>//div[@id='UISiteManagement']/table[2]/tbody/tr/td[3]/a[4]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForConfirmation</td>
-	<td>Are you sure you want to delete this portal?</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForTextNotPresent</td>
-	<td>test_portal_name_20</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextNotPresent</td>
-	<td>test_portal_name_20</td>
+	<td>link=Edit Layout</td>
 	<td>1,1</td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>link=Sign out</td>
+	<td>link=Portal Properties</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAt</td>
-	<td>link=Sign out</td>
+	<td>link=Portal Properties</td>
+	<td>1,1</td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>locale</td>
 	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>French (France)</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>locale</td>
+	<td>label=French (France)</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='UIMaskWorkspace']//div[@class='TabsContainer']//div[3]//div[@class='MiddleTab']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>publicMode</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>//div[@id='UIPortalComposer']//a[@class='EdittedSaveButton']</td>
+	<td>1,1</td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=classic</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>link=classic</td>
+	<td>1,1</td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>link=Sign out</td>
+	<td>1,1</td>
 </tr>
 
 </tbody></table>
