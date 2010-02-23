@@ -22,7 +22,7 @@
 
 <gatein-resources
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   	xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_resources_1_0.xsd"
+   	xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_resources_1_0.xsd http://www.gatein.org/xml/ns/gatein_resources_1_0.xsd"
    	xmlns="http://www.gatein.org/xml/ns/gatein_resources_1_0.xsd">  
 
 	<portlet-skin>

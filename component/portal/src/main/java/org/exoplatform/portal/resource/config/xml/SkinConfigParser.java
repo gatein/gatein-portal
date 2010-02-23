@@ -19,6 +19,8 @@
 
 package org.exoplatform.portal.resource.config.xml;
 
+import org.exoplatform.commons.xml.DocumentSource;
+import org.exoplatform.commons.xml.XMLValidator;
 import org.exoplatform.portal.resource.SkinService;
 import org.exoplatform.portal.resource.config.tasks.AbstractSkinTask;
 import org.exoplatform.web.resource.config.xml.GateinResource;
@@ -26,15 +28,12 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletContext;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 
 /**
  * 
@@ -47,6 +46,18 @@ import javax.xml.parsers.DocumentBuilderFactory;
 public class SkinConfigParser
 {
 
+   /** . */
+   public static final String GATEIN_RESOURCES_1_0_SYSTEM_ID = "http://www.gatein.org/xml/ns/gatein_resources_1_0.xsd";
+
+   /** . */
+   private static final String GATEIN_RESOURCE_1_0_XSD_PATH = "gatein_resources_1_0.xsd";
+
+   /** . */
+   private static final XMLValidator VALIDATOR = new XMLValidator(
+      SkinConfigParser.class,
+      GATEIN_RESOURCES_1_0_SYSTEM_ID,
+      GATEIN_RESOURCE_1_0_XSD_PATH);
+
    private final static Map<String, AbstractTaskXMLBinding> allBindings = new HashMap<String, AbstractTaskXMLBinding>();
 
    static
@@ -56,9 +67,9 @@ public class SkinConfigParser
       allBindings.put(GateinResource.WINDOW_STYLE_TAG, new AbstractTaskXMLBinding.ThemeTaskXMLBinding());
    }
 
-   public static void processConfigResource(InputStream is, SkinService skinService, ServletContext scontext)
+   public static void processConfigResource(DocumentSource source, SkinService skinService, ServletContext scontext)
    {
-      List<AbstractSkinTask> allTasks = fetchTasks(is);
+      List<AbstractSkinTask> allTasks = fetchTasks(source);
       if (allTasks != null)
       {
          for (AbstractSkinTask task : allTasks)
@@ -68,12 +79,11 @@ public class SkinConfigParser
       }
    }
 
-   private static List<AbstractSkinTask> fetchTasks(InputStream is)
+   private static List<AbstractSkinTask> fetchTasks(DocumentSource source)
    {
       try
       {
-         DocumentBuilder docBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-         Document document = docBuilder.parse(is);
+         Document document = VALIDATOR.validate(source);
          return fetchTasksFromXMLConfig(document);
       }
       catch (Exception ex)
@@ -94,12 +104,6 @@ public class SkinConfigParser
       return tasks;
    }
 
-   /**
-    * 
-    * @param tagName
-    * @param rootElement
-    * @param tasks
-    */
    private static void fetchTasksByTagName(String tagName, Element rootElement, List<AbstractSkinTask> tasks)
    {
       AbstractTaskXMLBinding binding = allBindings.get(tagName);

@@ -19,16 +19,17 @@
 
 package org.exoplatform.portal.resource;
 
+import org.exoplatform.commons.xml.DocumentSource;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.RootContainer.PortalContainerPostInitTask;
 import org.exoplatform.portal.resource.config.xml.SkinConfigParser;
-import org.exoplatform.services.log.ExoLogger;
-import org.exoplatform.services.log.Log;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 import org.gatein.wci.WebAppEvent;
 import org.gatein.wci.WebAppLifeCycleEvent;
 
-import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 
 import javax.servlet.ServletContext;
 
@@ -43,11 +44,14 @@ import javax.servlet.ServletContext;
 public class GateInSkinConfigDeployer extends AbstractResourceHandler
 {
 
+   /** . */
+   private static final Logger log = LoggerFactory.getLogger(GateInSkinConfigDeployer.class);
+
+   /** . */
    private final SkinService skinService;
 
+   /** . */
    private static final String GATEIN_CONFIG_RESOURCE = "/WEB-INF/gatein-resources.xml";
-
-   private static Log LOG = ExoLogger.getExoLogger(GateInSkinConfigDeployer.class);
 
    /**
     * The name of the portal container
@@ -96,7 +100,7 @@ public class GateInSkinConfigDeployer extends AbstractResourceHandler
             }
             catch (Exception ex)
             {
-               LOG.error("An error occurs while registering '" + GATEIN_CONFIG_RESOURCE + "' from the context '"
+               log.error("An error occurs while registering '" + GATEIN_CONFIG_RESOURCE + "' from the context '"
                   + (scontext == null ? "unknown" : scontext.getServletContextName()) + "'", ex);
             }
          }
@@ -105,30 +109,23 @@ public class GateInSkinConfigDeployer extends AbstractResourceHandler
 
    private void register(ServletContext scontext, PortalContainer container)
    {
-      InputStream is = null;
+      URL url;
       try
       {
-         is = scontext.getResourceAsStream(GATEIN_CONFIG_RESOURCE);
-         SkinConfigParser.processConfigResource(is, skinService, scontext);
+         url = scontext.getResource(GATEIN_CONFIG_RESOURCE);
+         if (url != null)
+         {
+            SkinConfigParser.processConfigResource(DocumentSource.create(url), skinService, scontext);
+         }
+         else
+         {
+            log.debug("No " + GATEIN_CONFIG_RESOURCE + " found in web application " + scontext.getContextPath());
+         }
       }
       catch (Exception ex)
       {
-         LOG.error("An error occurs while registering '" + GATEIN_CONFIG_RESOURCE + "' from the context '"
+         log.error("An error occurs while registering '" + GATEIN_CONFIG_RESOURCE + "' from the context '"
             + (scontext == null ? "unknown" : scontext.getServletContextName()) + "'", ex);
-      }
-      finally
-      {
-         if (is != null)
-         {
-            try
-            {
-               is.close();
-            }
-            catch (IOException e)
-            {
-               // ignore me
-            }
-         }
       }
    }
 }
