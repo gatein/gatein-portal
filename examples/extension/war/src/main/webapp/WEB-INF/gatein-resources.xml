@@ -28,9 +28,9 @@
 		<application-name>web</application-name>
 		<portlet-name>HomePagePortlet</portlet-name>
 		<skin-name>Default</skin-name>
-		<overwrite>false</overwrite>
 		<css-path>/templates/skin/webui/component/UIHomePagePortlet/DefaultStylesheet.css</css-path>
-	</portlet-skin>
+    <overwrite>false</overwrite>
+  </portlet-skin>
 	
 </gatein-resources>
 
