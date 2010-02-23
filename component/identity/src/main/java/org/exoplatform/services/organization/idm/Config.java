@@ -50,6 +50,8 @@ public class Config
 
    private boolean ignoreMappedMembershipType = true;
 
+   private boolean useJTA = false;
+
 
    public Config()
    {
@@ -270,5 +272,15 @@ public class Config
    public void setIgnoreMappedMembershipType(boolean ignoreMappedMembershipType)
    {
       this.ignoreMappedMembershipType = ignoreMappedMembershipType;
+   }
+
+   public boolean isUseJTA()
+   {
+      return useJTA;
+   }
+
+   public void setUseJTA(boolean useJTA)
+   {
+      this.useJTA = useJTA;
    }
 }

@@ -30,6 +30,8 @@ import org.exoplatform.services.cache.CacheService;
 import org.exoplatform.services.organization.BaseOrganizationService;
 import org.picocontainer.Startable;
 
+import javax.naming.InitialContext;
+import javax.transaction.UserTransaction;
 import java.util.LinkedList;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -136,7 +138,15 @@ public class PicketLinkIDMOrganizationServiceImpl extends BaseOrganizationServic
    {
       try
       {
-         idmService_.getIdentitySession().beginTransaction();
+         if (configuration.isUseJTA())
+         {
+            UserTransaction tx = (UserTransaction)new InitialContext().lookup("java:comp/UserTransaction");
+            tx.begin();
+         }
+         else
+         {
+            idmService_.getIdentitySession().beginTransaction();
+         }
       }
       catch (Exception e)
       {
@@ -148,7 +158,15 @@ public class PicketLinkIDMOrganizationServiceImpl extends BaseOrganizationServic
    {
       try
       {
-         idmService_.getIdentitySession().getTransaction().commit();
+         if (configuration.isUseJTA())
+         {
+            UserTransaction tx = (UserTransaction)new InitialContext().lookup("java:comp/UserTransaction");
+            tx.commit();
+         }            
+         else
+         {
+            idmService_.getIdentitySession().getTransaction().commit();
+         }
       }
       catch (Exception e)
       {

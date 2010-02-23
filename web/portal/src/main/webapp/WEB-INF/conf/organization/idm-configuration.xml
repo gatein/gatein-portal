@@ -173,6 +173,10 @@
           <field name="ignoreMappedMembershipType">
             <boolean>false</boolean>
           </field>
+          <!-- If 'true' will use JTA UserTransaction. If 'false' will use IDM transaction API -->
+          <field name="useJTA">
+            <boolean>false</boolean>
+          </field>
         </object>
       </object-param>
     </init-params>
