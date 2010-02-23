@@ -114,6 +114,7 @@ public class UIPortletActionListener
             {
                WSRP wsrp = new WSRP();
                wsrp.setPortletId(clonedContext.getId());
+               wsrp.setCloned(true); // mark the state as cloned
 
                // if we have an associated state, record it as well...
                if (clonedContext instanceof StatefulPortletContext)

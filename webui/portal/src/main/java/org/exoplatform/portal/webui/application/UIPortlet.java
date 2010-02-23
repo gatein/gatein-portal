@@ -742,6 +742,8 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
       {
          WSRP wsrp = (WSRP)preferencesPortletContext.getState();
          AccessMode accessMode = AccessMode.CLONE_BEFORE_WRITE;
+
+         // if the portlet is a cloned one already, we can modify it directly instead of requesting a clone
          if (wsrp.isCloned())
          {
             accessMode = AccessMode.READ_WRITE;

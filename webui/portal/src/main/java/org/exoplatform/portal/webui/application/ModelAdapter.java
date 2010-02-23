@@ -24,7 +24,6 @@ import org.exoplatform.container.ExoContainer;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.model.ApplicationState;
 import org.exoplatform.portal.config.model.ApplicationType;
-import org.exoplatform.portal.config.model.PersistentApplicationState;
 import org.exoplatform.portal.config.model.TransientApplicationState;
 import org.exoplatform.portal.pc.ExoPortletState;
 import org.exoplatform.portal.pc.ExoPortletStateType;
@@ -200,6 +199,13 @@ public abstract class ModelAdapter<S, C extends Serializable>
       }
    };
 
+   /**
+    * todo: this ModelAdapter is not quite good, what is really needed is a ModelAdapter<WSRP, byte[]> so that the
+    * StatefulPortletContext returned by getPortletContext is actually of type PortletStateType.OPAQUE so that it
+    * can be properly handled in WSRP...
+    * This model needs to be revisited if we want to properly support consumer-side state management.
+    * See GTNPORTAL-736.
+    */
    private static final ModelAdapter<WSRP, WSRP> WSRP = new ModelAdapter<WSRP, WSRP>()
    {
       @Override
@@ -222,8 +228,10 @@ public abstract class ModelAdapter<S, C extends Serializable>
          WSRP wsrp = dataStorage.load(state, ApplicationType.WSRP_PORTLET);
          if (wsrp == null)
          {
+            // create and save state
             wsrp = new WSRP();
             wsrp.setPortletId(applicationId);
+            dataStorage.save(state, wsrp);
          }
          return StatefulPortletContext.create(wsrp.getPortletId(), WSRPPortletStateType.instance, wsrp);
       }
@@ -240,9 +248,10 @@ public abstract class ModelAdapter<S, C extends Serializable>
          }
          else
          {
-            PersistentApplicationState<WSRP> persistentState = (PersistentApplicationState<WSRP>)state;
+            //todo: it is possible to get a CloneApplicationState for some reason, need to investigate
+
             DataStorage dataStorage = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
-            return dataStorage.save(persistentState, updateState);
+            return dataStorage.save(state, updateState);
          }
       }
    };
