@@ -27,6 +27,7 @@ import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.configuration.ConfigurationManager;
 import org.exoplatform.container.xml.InitParams;
+import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 import org.gatein.pc.api.PortletInvoker;
@@ -87,9 +88,9 @@ public class ExoKernelIntegration implements Startable, WebAppListener
    private static final String WSRP_ADMIN_GUI_CONTEXT_PATH = "/wsrp-admin-gui";
 
    public ExoKernelIntegration(ExoContainerContext context, InitParams params, ConfigurationManager configurationManager,
-                               org.exoplatform.portal.pc.ExoKernelIntegration pc) throws Exception
+                               org.exoplatform.portal.pc.ExoKernelIntegration pc, NodeHierarchyCreator nhc) throws Exception
    {
-      // IMPORTANT: even though PC ExoKernelIntegration is not used anywhere in the code, it's still needed for pico
+      // IMPORTANT: even though PC ExoKernelIntegration and NodeHierarchyCreator is not used anywhere in the code, it's still needed for pico
       // to properly make sure that this service is started after the PC one. Yes, Pico is crap. :/
 
       // todo: we currently only allow the service to go through initialization if we are running in the default portal
