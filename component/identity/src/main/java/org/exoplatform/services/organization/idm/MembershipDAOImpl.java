@@ -232,7 +232,20 @@ public class MembershipDAOImpl implements MembershipHandler
 
       }
 
-      if (!hasRole)
+      boolean associated = false;
+
+      try
+      {
+         associated = getIdentitySession().getRelationshipManager().isAssociatedByKeys(groupId, m.getUserName());
+      }
+      catch (Exception e)
+      {
+         //TODO:
+         log.info("Identity operation error: ", e);
+      }
+
+      if (!hasRole &&
+          !(isAssociationMapped() && getAssociationMapping().equals(m.getMembershipType()) && associated))
       {
          return m;
       }
@@ -255,19 +268,6 @@ public class MembershipDAOImpl implements MembershipHandler
             log.info("Identity operation error: ", e);
 
          }
-      }
-
-      boolean associated = false;
-
-      try
-      {
-         associated = getIdentitySession().getRelationshipManager().isAssociatedByKeys(m.getGroupId(), m.getUserName());
-      }
-      catch (Exception e)
-      {
-         //TODO:
-         log.info("Identity operation error: ", e);
-
       }
 
       if (isAssociationMapped() && getAssociationMapping().equals(m.getMembershipType()) && associated)
