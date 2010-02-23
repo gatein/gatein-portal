@@ -68,6 +68,12 @@ public class NewPortalConfigListener extends BaseComponentPlugin
    private String pageTemplatesLocation_;
 
    private String defaultPortal;
+   
+   /**
+    * If true the default portal name has been explicitly set.
+    * If false the name has not been set and we are using the default.
+    */
+   private boolean defaultPortalSpecified = false;
 
    private boolean isUseTryCatch;
 
@@ -83,12 +89,21 @@ public class NewPortalConfigListener extends BaseComponentPlugin
       if (valueParam != null)
          pageTemplatesLocation_ = valueParam.getValue();
 
-      defaultPortal = "classic";
       valueParam = params.getValueParam("default.portal");
       if (valueParam != null)
+      {
          defaultPortal = valueParam.getValue();
+      }
+      
       if (defaultPortal == null || defaultPortal.trim().length() == 0)
+      {
          defaultPortal = "classic";
+      }
+      else
+      {
+         defaultPortalSpecified = true;
+      }
+      
       configs = params.getObjectParamValues(NewPortalConfig.class);
 
       templateConfigs = params.getObjectParamValues(SiteConfigTemplates.class);
@@ -230,7 +245,14 @@ public class NewPortalConfigListener extends BaseComponentPlugin
     */
    public void mergePlugin(NewPortalConfigListener other)
    {
-      this.defaultPortal = other.defaultPortal;
+      //if other didn't actually set anything for the default portal name
+      //then we should continue to use the current value. This way if an extension
+      //doesn't set it, it wont override the parent's set value.
+      if (other.defaultPortalSpecified)
+      {
+         this.defaultPortal = other.defaultPortal;
+      }
+      
       if (configs == null)
       {
          this.configs = other.configs;
