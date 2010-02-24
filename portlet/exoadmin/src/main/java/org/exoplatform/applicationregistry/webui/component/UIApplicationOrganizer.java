@@ -132,6 +132,7 @@ public class   UIApplicationOrganizer extends UIContainer
    public void setSelectedCategory(ApplicationCategory category) throws Exception
    {
       selectedCategory = category;
+      if (category == null) return;
       applications = category.getApplications();
       if (applications == null || applications.isEmpty())
       {
