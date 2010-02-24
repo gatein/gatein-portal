@@ -33,7 +33,6 @@
 	background: url('background/ViewPage-rt.gif') no-repeat right -113px; /* orientation=rt */
 	padding: 0px 0px 0px 143px; /* orientation=lt */
 	padding: 0px 143px 0px 0px; /* orientation=rt */
-	height: 100%;
 }
 
 .UIPageBody .PageLayoutDecorator .TopRightPage {
