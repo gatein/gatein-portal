@@ -145,9 +145,6 @@
 /*----------------------UIGadgetsSelectorForm-------------------*/
 
 .UIDashboardSelectContainer {
-	float: left; /* orientation=lt */
-	float: right; /* orientation=rt */
-	width: 209px;
 	height: 100%;
 }
 
@@ -184,10 +181,10 @@
 }
 
 .UIDashboardSelectContainer .DashboardItemContainer .InputContainer input {
-	margin: 0 3px 0 10px;
+	margin: 0 3px 0 0px;
 	border: 1px solid #b8babf;
 	font-size: 11px; 
-	width: 160px;
+	width: 165px;
 }
 
 .UIDashboardSelectContainer .DashboardItemContainer .GadgetItemsContainer {
@@ -428,6 +425,10 @@
 .UIDashboard .Dragging {
 	margin: 3px 0px 0px 3px; /* orientation=lt */
 	margin: 3px 3px 0px 0px; /* orientation=rt */
+}
+
+.UIDashboard .UIPopupWindow {
+	width: 240px;
 }
 
 #UIAddGadgetPopup {
