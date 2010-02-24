@@ -20,6 +20,9 @@
 -->
 
 <binding>  
+
+  <!--<namespace uri="http://www.gatein.org/xml/ns/gatein_objects_1_0.xsd" default="none" prefix=""/>-->
+
   <format type="java.lang.String[]" 
           serializer="org.exoplatform.portal.config.serialize.JibxArraySerialize.serializeStringArray"
           deserializer="org.exoplatform.portal.config.serialize.JibxArraySerialize.deserializeStringArray"/>
@@ -65,8 +68,8 @@
       <structure map-as="org.exoplatform.portal.config.model.Container" usage="optional"/>
       <structure map-as="org.exoplatform.portal.config.model.Application" usage="optional"/>
       <structure map-as="org.exoplatform.portal.config.model.PageBody" usage="optional"/>
-			<structure map-as="org.exoplatform.portal.config.model.SiteBody" usage="optional"/>
-			<structure map-as="org.exoplatform.portal.config.serialize.PortletApplication" usage="optional"/>
+	    <structure map-as="org.exoplatform.portal.config.model.SiteBody" usage="optional"/>
+      <structure map-as="org.exoplatform.portal.config.serialize.PortletApplication" usage="optional"/>
     </collection>
   </mapping>
   
@@ -146,5 +149,6 @@
     <collection field="preferences"
                 item-type="org.exoplatform.portal.application.Preference"/>    
     <structure name="preferences-validator" usage="optional"/>
-  </mapping>  
+  </mapping>
+
 </binding>

@@ -36,14 +36,17 @@ import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.Page.PageSet;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
-import org.jibx.runtime.BindingDirectory;
-import org.jibx.runtime.IBindingFactory;
-import org.jibx.runtime.IUnmarshallingContext;
-import org.jibx.runtime.JiBXException;
+import org.jibx.runtime.*;
+import org.jibx.runtime.impl.IXMLReaderFactory;
+import org.jibx.runtime.impl.RuntimeSupport;
+import org.jibx.runtime.impl.UnmarshallingContext;
+import org.jibx.runtime.impl.XMLPullReaderFactory;
+import org.xmlpull.v1.XmlPullParserFactory;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -525,8 +528,9 @@ public class NewPortalConfigListener extends BaseComponentPlugin
    {
       ByteArrayInputStream is = new ByteArrayInputStream(xml.getBytes("UTF-8"));
       IBindingFactory bfact = BindingDirectory.getFactory(clazz);
-      IUnmarshallingContext uctx = bfact.createUnmarshallingContext();
-      T o = clazz.cast(uctx.unmarshalDocument(is, "UTF-8"));
+      UnmarshallingContext uctx = (UnmarshallingContext)bfact.createUnmarshallingContext();
+      uctx.setDocument(is, null, "UTF-8", false);
+      T o = clazz.cast(uctx.unmarshalElement());
       if (o instanceof PageNavigation)
       {
          PageNavigation nav = (PageNavigation)o;

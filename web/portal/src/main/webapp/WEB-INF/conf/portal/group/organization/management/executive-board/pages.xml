@@ -20,8 +20,11 @@
 
 -->
 
-<page-set>
-    
+<page-set
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_0.xsd http://www.gatein.org/xml/ns/gatein_objects_1_0.xsd"
+    xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_0.xsd">
+
   <page>
     <name>newStaff</name>
     <title>New Staff</title>
