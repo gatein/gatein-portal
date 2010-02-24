@@ -90,6 +90,10 @@ public class UIMainActionListener
          UIPage newUIPage = uiWorkingWS.createUIComponent(UIPage.class, null, null);
          PortalDataMapper.toUIPage(newUIPage, page);
          uiToolPanel.setWorkingComponent(newUIPage);
+         
+         // Remove current UIPage from UIPageBody
+         pageBody.setUIComponent(null);
+         
          event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingWS);
          Util.getPortalRequestContext().setFullRender(true);
       }
