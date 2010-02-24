@@ -22,7 +22,7 @@ function UIComponent(node) {
   this.node = node ;
   this.type = node.className ;
   var DOMUtil = eXo.core.DOMUtil;
-  componentBlock = DOMUtil.findFirstDescendantByClass(node, "div", "UIComponentBlock");
+  var componentBlock = DOMUtil.findFirstDescendantByClass(node, "div", "UIComponentBlock");
   var children =  DOMUtil.getChildrenByTagName(componentBlock, "div") ;
   
   for(var i=0; i<children.length; i++) {

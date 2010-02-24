@@ -1333,6 +1333,7 @@
   <UIPortlet>
     <label>
       <portletContent>وصف المدخل</portletContent>
+      <protectedContent>Protected Content</protectedContent>
       <View>عرض</View>
     </label>
     <lable>

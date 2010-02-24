@@ -5,13 +5,17 @@
 	def rcontext = _ctx.getRequestContext();
 
 	UIPortalApplication uiPortalApp = rcontext.getUIApplication();
-	if(!uiPortalApp.isEditing() && !uicomponent.hasPermission()) return;
+	boolean hasPermission = uicomponent.hasPermission();
+	if(!uiPortalApp.isEditing() && !hasPermission) return;
 	
 	JavascriptManager jsmanager = rcontext.getJavascriptManager();
 	jsmanager.importJavascript('eXo.portal.PortalDragDrop');
 	
 %>
-<div class="UIContainer UIToolbarContainer <%=uiPortalApp.isEditing()?"EdittingContainer":""%>" id="UIContainer-${uicomponent.id}" onmouseover="eXo.portal.UIPortal.blockOnMouseOver(event, this, true);" onmouseout="eXo.portal.UIPortal.blockOnMouseOver(event, this, false);">
+<div class="UIContainer UIToolbarContainer <%=uiPortalApp.isEditing()?"EdittingContainer":""%> <%=hasPermission?"": "ProtectedContainer"%>" 
+				id="UIContainer-${uicomponent.id}" 
+				onmouseover="eXo.portal.UIPortal.blockOnMouseOver(event, this, true);" 
+				onmouseout="eXo.portal.UIPortal.blockOnMouseOver(event, this, false);">
 	<div class="NormalContainerBlock">
 		<div class="LeftContainerBlock">
 			<div class="RightContainerBlock UIComponentBlock">
@@ -29,7 +33,8 @@
 			<%} else {%>
 				<div class="VIEW-CONTAINER ToolbarContainer VIEW-BLOCK">
 			<%} %>
-					<div id="$uicomponent.id">		
+					<div id="$uicomponent.id">
+						<%if(hasPermission) {%>
 						<div class="UITableColumnContainer" style="margin: 0px auto; $style">
 							<div class="TRContainer" style="zoom: 100%;">
 								<% for(uiChild in uicomponent.getChildren()) {%>
@@ -38,6 +43,7 @@
 								<div class="ClearLeft" style="width: 0px; height: 0px;"><span></span></div>
 						 </div>
 						</div>
+						<%}%>
 					</div>		
 				</div>
 				<%/*Debug On IE	-----For DND */%>
@@ -57,18 +63,16 @@
 												<div class="MiddleBar">
 													<div class="FixHeight">
 														<div class="DragControlArea" title="<%=_ctx.appRes("UIContainer.tooltip.drag")%>" onmousedown="eXo.portal.PortalDragDrop.init.call(this,event);"><span></span></div>
-														<div class="ContainerIcon DefaultContainer16x16Icon">
-															<% 
-																if(uicomponent.getTitle() != null) {
-																	println(uicomponent.getTitle()); 
-																} else {
-															%>
-																	<%=_ctx.appRes("UIContainer.title.Container")%>
-															<%}%>
-														</div>
-														
-														<a href="<%=uicomponent.event('DeleteComponent', uicomponent.id);%>" class="DeleteContainerIcon" title="<%=_ctx.appRes("UIContainer.tooltip.closeContainer")%>"><span></span></a>
-														<a href="<%=uicomponent.event("EditContainer","$uicomponent.id")%>;eXo.portal.UIPortal.changeComposerSaveButton()" class="EditContainerIcon" title="<%=_ctx.appRes("UIContainer.tooltip.editContainer")%>"></a>
+														<% 
+															String strTitle = uicomponent.getTitle() != null ?
+																		ExpressionUtil.getExpressionValue(res, uicomponent.getTitle()) :
+																		_ctx.appRes("UIContainer.title.Container");
+														%>
+														<div class="ContainerIcon DefaultContainer16x16Icon"><%=hasPermission ? strTitle : _ctx.appRes("UIPortlet.label.protectedContent")%></div>
+														<%if(hasPermission) {%>
+															<a href="<%=uicomponent.event("DeleteComponent","$uicomponent.id")%>" class="DeleteContainerIcon" title="<%=_ctx.appRes("UIContainer.tooltip.closeContainer")%>"><span></span></a>
+															<a href="<%=uicomponent.event("EditContainer","$uicomponent.id")%>;eXo.portal.UIPortal.changeComposerSaveButton()" class="EditContainerIcon" title="<%=_ctx.appRes("UIContainer.tooltip.editContainer")%>"><span></span></a>
+														<%}%>
 														<div class="ClearBoth"><span></span></div>
 													</div>
 												</div>

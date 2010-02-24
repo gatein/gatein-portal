@@ -196,11 +196,11 @@ PortalDragDrop.prototype.init = function(e) {
     if(dndEvent.foundTargetObject != null || (dndEvent.backupMouseEvent && dndEvent.backupMouseEvent.keyCode != 27)) {
       eXo.portal.PortalDragDrop.doDropCallback(dndEvent) ;
     } else {
-      if(!dndEvent.dragObject.isComponent) {
-				dndEvent.dragObject.parentNode.removeChild(dndEvent.dragObject) ;
-			}
 			if(dndEvent.dragObject.parentNode.nodeName.toLowerCase() == "td") {
 				dndEvent.dragObject.parentNode.style.width = "auto";
+			}
+      if(!dndEvent.dragObject.isComponent) {
+				dndEvent.dragObject.parentNode.removeChild(dndEvent.dragObject) ;
 			}
 			// fix bug WEBOS-196	
 			dndEvent.dragObject.style.width = "auto" ; 
@@ -288,19 +288,22 @@ PortalDragDrop.prototype.doDropCallback = function(dndEvent) {
 
 /* Find components in dropable target */
 PortalDragDrop.prototype.findDropableTargets = function(dragBlock) {
+	var DOMUtil = eXo.core.DOMUtil;
   var dropableTargets = new Array() ;
   var uiWorkingWorkspace = document.getElementById("UIWorkingWorkspace") ;
-  var uiPortal = eXo.core.DOMUtil.findFirstDescendantByClass(uiWorkingWorkspace, "div", "UIPortal") ;
+  
+  var uiPortal = DOMUtil.findFirstDescendantByClass(uiWorkingWorkspace, "div", "UIPortal") ;
   var pagebody = document.getElementById("UIPageBody");
-  var uiContainers = eXo.core.DOMUtil.findDescendantsByClass(uiWorkingWorkspace, "div", "UIContainer") ;
+  var uiContainers = DOMUtil.findDescendantsByClass(uiWorkingWorkspace, "div", "UIContainer") ;
   if(eXo.portal.portalMode && pagebody) {
     dropableTargets.push(uiPortal) ;
   } else {
-  	var uiPage = eXo.core.DOMUtil.findFirstDescendantByClass(uiWorkingWorkspace, "div", "UIPage") ;
+  	var uiPage = DOMUtil.findFirstDescendantByClass(uiWorkingWorkspace, "div", "UIPage") ;
     if(uiPage) dropableTargets.push(uiPage) ;
   }
   for(var i = 0; i < uiContainers.length; i++) {
-  	if (eXo.core.DOMUtil.hasAncestor(uiContainers[i], dragBlock)) continue;
+  	if (DOMUtil.hasAncestor(uiContainers[i], dragBlock)) continue;
+  	if(DOMUtil.hasClass(uiContainers[i], "ProtectedContainer")) continue;
     dropableTargets.push(uiContainers[i]) ;
   }
   return dropableTargets ;

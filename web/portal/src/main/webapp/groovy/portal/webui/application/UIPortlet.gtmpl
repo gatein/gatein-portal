@@ -7,7 +7,8 @@
 	def rcontext = _ctx.getRequestContext();
 	
 	UIPortalApplication uiPortalApp = rcontext.getUIApplication();
-	if(!uiPortalApp.isEditing() && !uicomponent.hasPermission()) return;
+	boolean hasPermission = uicomponent.hasPermission();
+	if(!uiPortalApp.isEditing() && !hasPermission) return;
 	int portalMode = uiPortalApp.getModeState(); 
 	
 	JavascriptManager jsmanager = rcontext.getJavascriptManager();
@@ -47,12 +48,15 @@
 									<div class="CenterBackground">
 										<div class="GardientBackground">
 										<%
-										try {
-											String portletName = uicomponent.getProducedOfferedPortlet().getInfo().getName();
-											print _ctx.getRequestContext().getApplicationResourceBundle().getString("UIPortlet.description." + portletName);
-										} catch(Exception e){
-											print uicomponent.getDisplayName();
-										}%>
+											if(hasPermission) {
+												try {
+													String portletName = uicomponent.getProducedOfferedPortlet().getInfo().getName();
+													print _ctx.getRequestContext().getApplicationResourceBundle().getString("UIPortlet.description." + portletName);
+												} catch(Exception e){
+													print uicomponent.getDisplayName();
+												}
+											} else print "<div class='ProtectedContent'>"+_ctx.appRes("UIPortlet.label.protectedContent")+"</div>";
+										%>
 										</div>
 									</div>
 								</div>
@@ -230,7 +234,12 @@
 									<div class="MiddleDecoratorCenter">
 										<div id="<%=portalMode == UIPortalApplication.NORMAL_MODE ? portletId : "EditMode-"+ portletId%>" style="width: 100%">
 											<div class="PORTLET-FRAGMENT UIResizableBlock UIApplication" style="width: 100%; height: $windowHeight;">
-												<% if(windowState != WindowState.MINIMIZED) out.println(portletContent) %>
+												<% 
+													if(windowState != WindowState.MINIMIZED) {
+														if(hasPermission) println portletContent;
+														else println _ctx.appRes("UIPortlet.label.protectedContent");
+													}
+												%>
 											</div>		
 										</div>
 									</div>
@@ -264,7 +273,10 @@
 		%>
 						<div id="<%=portalMode == UIPortalApplication.NORMAL_MODE ? portletId : "EditMode-"+ portletId%>">
 							<div class="PORTLET-FRAGMENT"	${cssStyle}>
-								<% out.println(portletContent); %>
+								<% 
+									if(hasPermission) println portletContent; 
+									else println _ctx.appRes("UIPortlet.label.protectedContent");
+								%>
 							</div>
 						</div>	
 		<%
@@ -298,9 +310,11 @@
 																String title = uicomponent.getDisplayTitle();
 																if(title.length() > 30) title = title.substring(0,27) + "...";
 															%>
-															<div class="PortletIcon $portletIcon">$title</div>
-															<a href="<%=uicomponent.event("DeleteComponent","$uicomponent.id")%>" class="DeletePortletIcon" title="<%=_ctx.appRes("UIPortlet.tooltip.deletePortlet");%>"></a>
-															<a href="<%=uicomponent.event("EditPortlet","$uicomponent.id")%>;eXo.portal.UIPortal.changeComposerSaveButton()" class="EditPortletPropertiesIcon" title="<%=_ctx.appRes("UIPortlet.tooltip.editPortlet");%>"></a>
+															<div class="PortletIcon $portletIcon"><%=hasPermission ? title : _ctx.appRes("UIPortlet.label.protectedContent")%></div>
+															<%if(hasPermission) {%>
+																<a href="<%=uicomponent.event("DeleteComponent","$uicomponent.id")%>" class="DeletePortletIcon" title="<%=_ctx.appRes("UIPortlet.tooltip.deletePortlet");%>"></a>
+																<a href="<%=uicomponent.event("EditPortlet","$uicomponent.id")%>;eXo.portal.UIPortal.changeComposerSaveButton()" class="EditPortletPropertiesIcon" title="<%=_ctx.appRes("UIPortlet.tooltip.editPortlet");%>"></a>
+															<%}%>
 														</div>
 													</div>
 												</div>

@@ -1287,6 +1287,7 @@
    <UIPortlet>
       <label>
          <portletContent>Portlet描述</portletContent>
+         <protectedContent>Protected Content</protectedContent>
          <View>查看</View>
       </label>
       <lable>
