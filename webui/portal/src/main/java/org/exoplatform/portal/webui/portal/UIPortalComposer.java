@@ -644,13 +644,17 @@ public class UIPortalComposer extends UIContainer
             return;
          }
 
-         // Perform mop update
+         // Perform model update
          DataStorage dataService = uiWorkingWS.getApplicationComponent(DataStorage.class);
          dataService.save(page);
          uiToolPanel.setUIComponent(null);
 
+         // Synchronize model object with UIPage object, that seems  redundant but in fact
+         // mandatory to have consequent edit actions (on the same page) work properly
+         page = dataService.getPage(page.getPageId());
          uiPage.getChildren().clear();
          PortalDataMapper.toUIPage(uiPage, page);
+         
          // Update UIPage cache on UIPortal
          uiPortal.setUIPage(pageId, uiPage);
          uiPortal.refreshUIPage();

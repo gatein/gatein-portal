@@ -85,7 +85,9 @@ public class UIMainActionListener
          uiToolPanel.setShowMaskLayer(false);
          uiApp.setModeState(UIPortalApplication.APP_BLOCK_EDIT_MODE);
 
-         UIPage newUIPage = new UIPage();
+         // We clone the edited UIPage object, that is required for Abort action
+         //UIPage newUIPage = new UIPage();
+         UIPage newUIPage = uiWorkingWS.createUIComponent(UIPage.class, null, null);
          PortalDataMapper.toUIPage(newUIPage, page);
          uiToolPanel.setWorkingComponent(newUIPage);
          event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingWS);
