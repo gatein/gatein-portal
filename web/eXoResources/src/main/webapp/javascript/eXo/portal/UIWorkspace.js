@@ -30,7 +30,6 @@ if(eXo.portal.UIWorkingWorkspace == undefined) {
 };
 
 eXo.portal.UIWorkingWorkspace.onResize = function() {
-	throw new Error("Test");
 	var uiWorkspace = document.getElementById(eXo.portal.UIWorkingWorkspace.id) ;
 	if(eXo.core.Browser.isIE6()) {
 		var tabs = eXo.core.DOMUtil.findFirstDescendantByClass(uiWorkspace, "div", "UIHorizontalTabs") ;
