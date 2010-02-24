@@ -335,7 +335,13 @@ public class UIPageBrowser extends UISearch
 
          //Switch portal application to edit mode
          uiPortalApp.setModeState(UIPortalApplication.APP_BLOCK_EDIT_MODE);
-         UIPage uiPage = Util.toUIPage(page, uiPageBrowser);
+         UIWorkingWorkspace uiWorkingWS = uiPortalApp.findFirstComponentOfType(UIWorkingWorkspace.class);
+         UIEditInlineWorkspace editInlineWS = uiWorkingWS.getChild(UIEditInlineWorkspace.class);
+         
+         //Clone a UIPage object, that is required for Abort action
+         UIPage uiPage = editInlineWS.createUIComponent(UIPage.class, null, null);
+         PortalDataMapper.toUIPage(uiPage, page);
+         
          UIPageBody uiPageBody = uiPortalApp.findFirstComponentOfType(UIPageBody.class);
          if (uiPageBody.getUIComponent() != null)
             uiPageBody.setUIComponent(null);
@@ -351,9 +357,6 @@ public class UIPageBrowser extends UISearch
             return;
          }
 
-         uiPortalApp.setModeState(UIPortalApplication.APP_BLOCK_EDIT_MODE);
-         UIWorkingWorkspace uiWorkingWS = uiPortalApp.findFirstComponentOfType(UIWorkingWorkspace.class);
-         UIEditInlineWorkspace editInlineWS = uiWorkingWS.getChild(UIEditInlineWorkspace.class);
          editInlineWS.setRendered(true);
          editInlineWS.setUIComponent(uiPage);
 
