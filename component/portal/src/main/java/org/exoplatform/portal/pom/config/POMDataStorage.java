@@ -51,6 +51,7 @@ import org.exoplatform.portal.pom.data.PortalKey;
 import org.jibx.runtime.BindingDirectory;
 import org.jibx.runtime.IBindingFactory;
 import org.jibx.runtime.IUnmarshallingContext;
+import org.jibx.runtime.impl.UnmarshallingContext;
 
 import java.io.ByteArrayInputStream;
 import java.util.Comparator;
@@ -294,8 +295,9 @@ public class POMDataStorage implements ModelDataStorage
       String out = IOUtil.getStreamContentAsString(confManager_.getInputStream(path));
       ByteArrayInputStream is = new ByteArrayInputStream(out.getBytes("UTF-8"));
       IBindingFactory bfact = BindingDirectory.getFactory(Container.class);
-      IUnmarshallingContext uctx = bfact.createUnmarshallingContext();
-      Container container = Container.class.cast(uctx.unmarshalDocument(is, null));
+      UnmarshallingContext uctx = (UnmarshallingContext)bfact.createUnmarshallingContext();
+      uctx.setDocument(is, null, "UTF-8", false);
+      Container container = (Container)uctx.unmarshalElement();
       generateStorageName(container);
       return container;
    }
