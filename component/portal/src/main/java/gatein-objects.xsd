@@ -112,7 +112,6 @@
   <xs:group name="containerChildrenGroup">
     <xs:sequence>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element name="application" type="portletApplicationType" minOccurs="1" maxOccurs="1"/>
         <xs:element name="portlet-application" type="portletApplicationType" minOccurs="1" maxOccurs="1"/>
         <xs:element name="container" type="containerType" minOccurs="1" maxOccurs="1"/>
         <xs:element name="page-body" type="xs:string" minOccurs="1" maxOccurs="1"/>
@@ -148,13 +147,6 @@
     <xs:attribute name="id" type="xs:string"/>
     <xs:attribute name="template" type="xs:string"/>
     <xs:attribute name="attribute" type="xs:string"/>
-  </xs:complexType>
-
-  <xs:complexType name="applicationType">
-    <xs:sequence>
-      <xs:element name="instance-id" type="xs:string" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="show-info-bar" type="xs:boolean" minOccurs="1" maxOccurs="1"/>
-    </xs:sequence>
   </xs:complexType>
 
   <xs:complexType name="portletApplicationType">
