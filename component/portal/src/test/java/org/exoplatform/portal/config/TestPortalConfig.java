@@ -20,8 +20,7 @@
 package org.exoplatform.portal.config;
 
 import org.exoplatform.container.PortalContainer;
-import org.exoplatform.container.component.ComponentRequestLifecycle;
-import org.exoplatform.container.component.RequestLifeCycle;
+import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.POMSessionManager;
@@ -30,6 +29,9 @@ import org.exoplatform.services.organization.GroupHandler;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.UserHandler;
+
+import java.util.Comparator;
+import java.util.List;
 
 /**
  * Author : TrongTT
@@ -135,5 +137,28 @@ public class TestPortalConfig extends AbstractPortalTest
 
       PortalConfig pConfig = storage.getPortalConfig(PortalConfig.USER_TYPE, "testing");
       assertNotNull("the User's PortalConfig is not null", pConfig);
+   }
+
+   public void testGetAllOrder() throws Exception
+   {
+      // Query with comparator to make sure returned list is ordered
+      Query<PageNavigation> query = new Query<PageNavigation>(PortalConfig.GROUP_TYPE, null, PageNavigation.class);
+      Comparator<PageNavigation> sortComparator = new Comparator<PageNavigation>()
+      {
+         public int compare(PageNavigation pconfig1, PageNavigation pconfig2)
+         {
+            return pconfig1.getOwnerId().compareTo(pconfig2.getOwnerId());
+         }
+      };
+
+      // First query
+      List<PageNavigation> navis = storage.find(query, sortComparator).getAll();
+      storage.save(navis.get(0)); // Modify
+      // Second query
+      List<PageNavigation> navis2 = storage.find(query, sortComparator).getAll();
+      for (int i = 0; i < navis.size(); i++)
+      {
+         assertEquals(true, navis.get(i).getOwnerId().equals(navis2.get(i).getOwnerId()));
+      }
    }
 }

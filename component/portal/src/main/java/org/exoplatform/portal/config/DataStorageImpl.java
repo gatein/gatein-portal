@@ -42,7 +42,10 @@ import org.exoplatform.portal.pom.data.PortalKey;
 import org.exoplatform.services.listener.ListenerService;
 
 import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -175,11 +178,21 @@ public class DataStorageImpl implements DataStorage
       final Query<O> q;
 
       final Class<D> dataType;
+      
+      final Comparator<O> cp;
 
       Bilto(Query<O> q, Class<D> dataType)
       {
          this.q = q;
          this.dataType = dataType;
+         this.cp = null;
+      }
+      
+      Bilto(Query<O> q, Class<D> dataType, Comparator<O> cp)
+      {
+         this.q = q;
+         this.dataType = dataType;
+         this.cp = cp;
       }
 
       protected abstract O create(D d);
@@ -188,7 +201,9 @@ public class DataStorageImpl implements DataStorage
       {
          Query<D> delegateQ = new Query<D>(q, dataType);
          LazyPageList<D> r = delegate.find(delegateQ, null);
-         final List<D> list = r.getAll();
+         List<D> tmp = r.getAll();
+         tmp = sort(tmp, this.cp);
+         final List<D> list = tmp;
          return new ListAccess<O>()
          {
             public int getSize() throws Exception
@@ -206,8 +221,30 @@ public class DataStorageImpl implements DataStorage
                return pages;
             }
          };
-      }
+      }      
+      
 
+      private List<D> sort(List<D> list, final Comparator<O> comparator) {
+         List<D> tmpList = new ArrayList<D>();
+         for (int i=0; i<list.size();i++) {
+            tmpList.add(list.get(i));
+         }
+         Collections.sort(tmpList, new Comparator<D>() {
+
+            @Override
+            public int compare(D d1, D d2)
+            {
+               if (comparator == null) {
+                  return d1.getStorageId().compareTo(d2.getStorageId());
+               }
+               O o1 = create(d1);
+               O o2 = create(d2);
+               return comparator.compare(o1, o2);
+            }
+            
+         });
+         return tmpList;         
+      }
    }
 
    public <T> ListAccess<T> find2(Query<T> q) throws Exception
@@ -225,7 +262,7 @@ public class DataStorageImpl implements DataStorage
       Class<T> type = q.getClassType();
       if (type == Page.class)
       {
-         Bilto<Page, PageData> bilto = new Bilto<Page, PageData>((Query<Page>)q, PageData.class)
+         Bilto<Page, PageData> bilto = new Bilto<Page, PageData>((Query<Page>)q, PageData.class, (Comparator<Page>)sortComparator)
          {
             @Override
             protected Page create(PageData pageData)
@@ -237,7 +274,7 @@ public class DataStorageImpl implements DataStorage
       }
       else if (type == PageNavigation.class)
       {
-         Bilto<PageNavigation, NavigationData> bilto = new Bilto<PageNavigation, NavigationData>((Query<PageNavigation>)q, NavigationData.class)
+         Bilto<PageNavigation, NavigationData> bilto = new Bilto<PageNavigation, NavigationData>((Query<PageNavigation>)q, NavigationData.class, (Comparator<PageNavigation>)sortComparator)
          {
             @Override
             protected PageNavigation create(NavigationData page)
@@ -249,7 +286,7 @@ public class DataStorageImpl implements DataStorage
       }
       else if (type == PortalConfig.class)
       {
-         Bilto<PortalConfig, PortalData> bilto = new Bilto<PortalConfig, PortalData>((Query<PortalConfig>)q, PortalData.class)
+         Bilto<PortalConfig, PortalData> bilto = new Bilto<PortalConfig, PortalData>((Query<PortalConfig>)q, PortalData.class, (Comparator<PortalConfig>)sortComparator)
          {
             @Override
             protected PortalConfig create(PortalData portalData)
