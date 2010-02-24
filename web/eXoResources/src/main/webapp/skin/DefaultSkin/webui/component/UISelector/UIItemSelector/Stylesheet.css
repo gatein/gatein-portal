@@ -151,7 +151,8 @@
 }
 
 .UIItemSelector .RightColumnStyle .Title {
-	line-height: 22px;
+	line-height: 22px; white-space: nowrap; 
+	width: 300px; overflow: hidden;
 	font-weight: bold; color: #5c5c5c; 
 	float: left; /* orientation=lt */
 	float: right; /* orientation=rt */
