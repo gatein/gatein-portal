@@ -21,8 +21,6 @@
 
 <binding>  
 
-  <!--<namespace uri="http://www.gatein.org/xml/ns/gatein_objects_1_0.xsd" default="none" prefix=""/>-->
-
   <format type="java.lang.String[]" 
           serializer="org.exoplatform.portal.config.serialize.JibxArraySerialize.serializeStringArray"
           deserializer="org.exoplatform.portal.config.serialize.JibxArraySerialize.deserializeStringArray"/>
