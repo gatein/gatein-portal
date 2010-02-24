@@ -21,8 +21,8 @@
 -->
 
 <xs:schema
-   targetNamespace="http://www.gatein.org/xml/ns/gatein_resources_1_0.xsd"
-   xmlns="http://www.gatein.org/xml/ns/gatein_resources_1_0.xsd"
+   targetNamespace="http://www.gatein.org/xml/ns/gatein_resources_1_0"
+   xmlns="http://www.gatein.org/xml/ns/gatein_resources_1_0"
    xmlns:xs="http://www.w3.org/2001/XMLSchema"
    elementFormDefault="qualified"
    attributeFormDefault="unqualified"

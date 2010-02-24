@@ -204,7 +204,7 @@
       
     <para>Default portal skin and window styles are defined in
     01eXoResources.war:/WEB-INF/gatein-resources.xml and the part dedicated to
-    skinning is defined like:<programlisting>&lt;gatein-resources xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_resources_1_0.xsd" xmlns="http://www.ga
+    skinning is defined like:<programlisting>&lt;gatein-resources xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_resources_1_0" xmlns="http://www.ga
 tein.org/xml/ns/gatein_resources_1_0.xsd"&gt;
   &lt;portal-skin&gt;
     &lt;skin-name&gt;Default&lt;/skin-name&gt;
