@@ -154,7 +154,8 @@ public class ReplicatingStateManager extends StateManager
       else
       {
          PortalRequestContext portalRC = (PortalRequestContext)webuiRC;
-         return "portal";
+         String portalOwner = portalRC.getPortalOwner();
+         return "portal_" + portalOwner;
       }
    }
 
