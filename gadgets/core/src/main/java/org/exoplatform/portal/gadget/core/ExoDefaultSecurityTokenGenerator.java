@@ -19,15 +19,16 @@
 
 package org.exoplatform.portal.gadget.core;
 
+import java.io.File;
+import java.io.IOException;
+
 import org.apache.shindig.auth.BlobCrypterSecurityToken;
 import org.apache.shindig.common.crypto.BasicBlobCrypter;
 import org.apache.shindig.common.crypto.BlobCrypter;
 import org.apache.shindig.common.crypto.BlobCrypterException;
 import org.apache.shindig.common.util.TimeSource;
+import org.exoplatform.container.monitor.jvm.J2EEServerInfo;
 import org.exoplatform.web.application.RequestContext;
-
-import java.io.File;
-import java.io.IOException;
 
 public class ExoDefaultSecurityTokenGenerator implements SecurityTokenGenerator
 {
@@ -39,7 +40,7 @@ public class ExoDefaultSecurityTokenGenerator implements SecurityTokenGenerator
    {
       // TODO should be moved to config
       // generateKeys("RSA", 1024);
-      this.containerKey = "key.txt";
+      this.containerKey =  getKeyFilePath();
       this.timeSource = new TimeSource();
    }
 
@@ -129,4 +130,25 @@ public class ExoDefaultSecurityTokenGenerator implements SecurityTokenGenerator
       return c;
    }
 
+   /**
+    * Method returns a path to the file containing the encryption key
+    */
+   private String getKeyFilePath(){
+       J2EEServerInfo info = new J2EEServerInfo();
+       String confPath = info.getExoConfigurationDirectory();
+       File keyFile = null;
+       
+       if (confPath != null) {
+          File confDir = new File(confPath);
+          if (confDir != null && confDir.exists() && confDir.isDirectory()) {
+             keyFile = new File(confDir, "gadgets/key.txt");
+          }
+       }
+
+       if (keyFile == null) {
+          keyFile = new File("key.txt");
+       }
+       
+       return keyFile.getAbsolutePath();
+   }
 }
