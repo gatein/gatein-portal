@@ -114,7 +114,7 @@ public class UIAccountEditInputSet extends UIFormInputSet
       String oldEmail = user.getEmail();
       if (user == null)
       {
-         uiApp.addMessage(new ApplicationMessage("UIAccountInputSet.msg.user-is-deleted", null));
+         uiApp.addMessage(new ApplicationMessage("UIAccountInputSet.msg.user-is-deleted", null, ApplicationMessage.WARNING));
          UIUserInfo userInfo = getParent();
          if (userInfo != null)
          {
@@ -137,7 +137,7 @@ public class UIAccountEditInputSet extends UIFormInputSet
          String pass2x = getUIStringInput(PASSWORD2X).getValue();
          if (!pass1x.equals(pass2x))
          {
-            uiApp.addMessage(new ApplicationMessage("UIAccountForm.msg.password-is-not-match", null));
+            uiApp.addMessage(new ApplicationMessage("UIAccountForm.msg.password-is-not-match", null, ApplicationMessage.WARNING));
             return false;
          }
          user.setPassword(pass1x);
@@ -153,7 +153,7 @@ public class UIAccountEditInputSet extends UIFormInputSet
          user.setEmail(oldEmail);
          query.setEmail(oldEmail);
          Object[] args = {username};
-         uiApp.addMessage(new ApplicationMessage("UIAccountInputSet.msg.email-exist", args));
+         uiApp.addMessage(new ApplicationMessage("UIAccountInputSet.msg.email-exist", args, ApplicationMessage.WARNING));
          return false;
       }
       service.getUserHandler().saveUser(user, true);

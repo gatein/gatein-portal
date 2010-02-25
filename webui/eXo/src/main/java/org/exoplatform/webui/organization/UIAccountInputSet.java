@@ -19,13 +19,13 @@
 
 package org.exoplatform.webui.organization;
 
+import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.portal.pom.config.Utils;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.Query;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
-import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.form.UIFormInputWithActions;
 import org.exoplatform.webui.form.UIFormStringInput;
@@ -103,7 +103,7 @@ public class UIAccountInputSet extends UIFormInputWithActions
       String pass2x = getUIStringInput(PASSWORD2X).getValue();
       if (!pass1x.equals(pass2x))
       {
-         uiApp.addMessage(new ApplicationMessage("UIAccountForm.msg.password-is-not-match", null));
+         uiApp.addMessage(new ApplicationMessage("UIAccountForm.msg.password-is-not-match", null, ApplicationMessage.ERROR));
          return false;
       }
       String username = getUIStringInput(USERNAME).getValue();
@@ -115,7 +115,7 @@ public class UIAccountInputSet extends UIFormInputWithActions
          if (service.getUserHandler().findUserByName(user.getUserName()) != null)
          {
             Object[] args = {user.getUserName()};
-            uiApp.addMessage(new ApplicationMessage("UIAccountInputSet.msg.user-exist", args));
+            uiApp.addMessage(new ApplicationMessage("UIAccountInputSet.msg.user-exist", args, ApplicationMessage.ERROR));
             return false;
          }
 
@@ -124,7 +124,7 @@ public class UIAccountInputSet extends UIFormInputWithActions
          if (service.getUserHandler().findUsers(query).getAll().size() > 0)
          {
             Object[] args = {user.getUserName()};
-            uiApp.addMessage(new ApplicationMessage("UIAccountInputSet.msg.email-exist", args));
+            uiApp.addMessage(new ApplicationMessage("UIAccountInputSet.msg.email-exist", args, ApplicationMessage.ERROR));
             return false;
          }
 
