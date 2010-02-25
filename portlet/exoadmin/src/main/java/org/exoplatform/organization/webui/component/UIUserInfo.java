@@ -141,6 +141,16 @@ public class UIUserInfo extends UIFormTabPane
                uiApp.findFirstComponentOfType(UIWorkingWorkspace.class));
             Util.getPortalRequestContext().setFullRender(true);
          }
+         
+         UIUserManagement userManagement = uiUserInfo.getParent();
+         UIListUsers listUser = userManagement.getChild(UIListUsers.class);
+         UIAccountEditInputSet accountInput = uiUserInfo.getChild(UIAccountEditInputSet.class);
+         UIUserProfileInputSet userProfile = uiUserInfo.getChild(UIUserProfileInputSet.class);
+         uiUserInfo.setRenderSibling(UIListUsers.class);
+         listUser.search(new Query());
+         accountInput.reset();
+         userProfile.reset();
+         event.getRequestContext().setProcessRender(true);
       }
    }
 
