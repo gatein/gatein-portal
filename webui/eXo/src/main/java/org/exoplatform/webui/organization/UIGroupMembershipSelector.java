@@ -19,25 +19,25 @@
 
 package org.exoplatform.webui.organization;
 
+import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.MembershipType;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
-import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.ComponentConfigs;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIBreadcumbs;
-import org.exoplatform.webui.core.UIBreadcumbs.LocalPath;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.UITree;
+import org.exoplatform.webui.core.UIBreadcumbs.LocalPath;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 
 import java.util.ArrayList;
@@ -102,6 +102,28 @@ public class UIGroupMembershipSelector extends UIContainer
       if(event != null) event.broadcast()  ;  
     }
    }*/
+
+   /**
+    * @see org.exoplatform.webui.core.UIComponent#processRender(org.exoplatform.webui.application.WebuiRequestContext)
+    */
+   @Override
+   public void processRender(WebuiRequestContext context) throws Exception
+   {
+      OrganizationService service = getApplicationComponent(OrganizationService.class);
+      Collection<?> sibblingsGroup = service.getGroupHandler().findGroups(null);
+      UITree tree = getChild(UITree.class);
+      if (tree != null)
+         tree.setSibbling((List)sibblingsGroup);
+
+      Collection<?> collection = service.getMembershipTypeHandler().findMembershipTypes();
+      listMemberhip = new ArrayList<String>(5);
+      for (Object obj : collection)
+      {
+         listMemberhip.add(((MembershipType)obj).getName());
+      }
+      listMemberhip.add("*");
+      super.processRender(context);
+   }
 
    public Group getCurrentGroup()
    {
@@ -192,7 +214,7 @@ public class UIGroupMembershipSelector extends UIContainer
          UIComponent uiComp = event.getSource();
          UIGroupMembershipSelector uiSelector = uiComp.getParent();
          uiSelector.changeGroup(groupId);
-         UIComponent uiPermission = uiSelector.<UIComponent>getParent().getParent();
+         UIComponent uiPermission = uiSelector.<UIComponent> getParent().getParent();
          uiPermission.setRenderSibling(uiPermission.getClass());
          uiPermission.broadcast(event, Event.Phase.PROCESS);
          UIPopupWindow uiPopup = uiSelector.getParent();
@@ -214,7 +236,7 @@ public class UIGroupMembershipSelector extends UIContainer
       public void execute(Event<UIGroupMembershipSelector> event) throws Exception
       {
          UIGroupMembershipSelector uiSelector = event.getSource();
-         UIComponent uiPermission = uiSelector.<UIComponent>getParent().getParent();
+         UIComponent uiPermission = uiSelector.<UIComponent> getParent().getParent();
          uiPermission.setRenderSibling(uiPermission.getClass());
          WebuiRequestContext pcontext = event.getRequestContext();
 
@@ -235,7 +257,7 @@ public class UIGroupMembershipSelector extends UIContainer
          {
             UIApplication uiApp = pcontext.getUIApplication();
             uiApp.addMessage(new ApplicationMessage("UIGroupMembershipSelector.msg.selectGroup", null));
-//            pcontext.addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+            //            pcontext.addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
             uiPopup.setShow(true);
             return;
          }
