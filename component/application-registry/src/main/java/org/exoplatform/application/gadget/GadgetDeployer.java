@@ -21,6 +21,8 @@ package org.exoplatform.application.gadget;
 import org.exoplatform.application.gadget.impl.GadgetRegistryServiceImpl;
 import org.exoplatform.commons.chromattic.ChromatticLifeCycle;
 import org.exoplatform.commons.chromattic.SessionContext;
+import org.exoplatform.commons.xml.DocumentSource;
+import org.exoplatform.commons.xml.XMLValidator;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.RootContainer;
@@ -50,6 +52,9 @@ import java.net.URL;
  */
 public class GadgetDeployer implements WebAppListener, Startable
 {
+
+   /** . */
+   private static final XMLValidator validator = new XMLValidator(GadgetDeployer.class, "http://www.gatein.org/xml/ns/gadgets_1_0", "gadgets_1_0.xsd");
 
    /** . */
    private final Logger log = LoggerFactory.getLogger(GadgetDeployer.class);
@@ -112,12 +117,9 @@ public class GadgetDeployer implements WebAppListener, Startable
    {
       ChromatticLifeCycle lifeCycle = gadgetRegistryService.getChromatticLifeCycle();
       lifeCycle.openContext();
-      InputStream in;
       try
       {
-         in = gadgetsURL.openStream();
-         DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-         Document docXML = db.parse(in);
+         Document docXML = validator.validate(DocumentSource.create(gadgetsURL));
          NodeList nodeList = docXML.getElementsByTagName("gadget");
          for (int i = 0; i < nodeList.getLength(); i++)
          {

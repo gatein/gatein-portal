@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<!--
+  ~ Copyright (C) 2009 eXo Platform SAS.
+  ~
+  ~ This is free software; you can redistribute it and/or modify it
+  ~ under the terms of the GNU Lesser General Public License as
+  ~ published by the Free Software Foundation; either version 2.1 of
+  ~ the License, or (at your option) any later version.
+  ~
+  ~ This software is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+  ~ Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public
+  ~ License along with this software; if not, write to the Free
+  ~ Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+  ~ 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+  -->
+
+<xs:schema
+   targetNamespace="http://www.gatein.org/xml/ns/gadgets_1_0"
+   xmlns="http://www.gatein.org/xml/ns/gadgets_1_0"
+   xmlns:xs="http://www.w3.org/2001/XMLSchema"
+   elementFormDefault="qualified"
+   attributeFormDefault="unqualified"
+   version="1.0">
+
+  <xs:element name="gadgets" type="gadgets"/>
+
+  <xs:complexType name="gadgets">
+    <xs:sequence minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="gadget" type="gadget"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="gadget">
+    <xs:sequence>
+      <xs:choice>
+        <xs:element name="path" type="xs:string" minOccurs="1" maxOccurs="1"/>
+        <xs:element name="url" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      </xs:choice>
+    </xs:sequence>
+    <xs:attribute name="name" type="xs:string"/>
+  </xs:complexType>
+</xs:schema>
