@@ -4,26 +4,7 @@
 %BOOK_ENTITIES;
 ]>
 <section id="sect-User_Guide-Change_Account_Settings">
-	<!--        
-
-    Copyright (C) 2009 eXo Platform SAS.
-    
-    This is free software; you can redistribute it and/or modify it
-    under the terms of the GNU Lesser General Public License as
-    published by the Free Software Foundation; either version 2.1 of
-    the License, or (at your option) any later version.
-    
-    This software is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-    Lesser General Public License for more details.
-    
-    You should have received a copy of the GNU Lesser General Public
-    License along with this software; if not, write to the Free
-    Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
-    02110-1301 USA, or see the FSF site: http://www.fsf.org.
-
-        --><title>Change Account Settings</title>
+	<title>Change Account Settings</title>
 
 	<para>
 		To change your account information, click on the account name in the top navigation bar:
@@ -36,18 +17,26 @@
 	<para>
 		The <emphasis role="bold">Account Profiles</emphasis> form will appear:
 	</para>
+
+
+<note>
+<title>DOC TODO</title>
+<para>
+please redo the screenshot without "Click Save to..." and using a smaller window, it is too big right now
+</para>
+</note>
 	<mediaobject>
 		<imageobject>
 			<imagedata fileref="images/AccountProfiles3.png" format="PNG" width="444" />
 		</imageobject>
 	</mediaobject>
 	<para>
-		If you want to change your Account Profile information:
+		To change your Account Profile information:
 	</para>
 	<procedure>
 		<step>
 			<para>
-				Select the <emphasis role="bold">Account Profiles</emphasis> tab. This will display your current basic information.
+				Select the <emphasis role="bold">Account Profiles</emphasis> tab.
 			</para>
 		</step>
 		<step>
@@ -69,6 +58,12 @@
 			<para>
 				Select the <emphasis role="bold">Change Password</emphasis> tab, it will display the following form:
 			</para>
+<note>
+<title>DOC TODO</title>
+<para>
+please redo the screenshot without "Click Save to..." and using a smaller window, it is too big right now
+</para>
+</note>
 			<mediaobject>
 				<imageobject>
 					<imagedata fileref="images/ChangePassword.png" format="PNG" width="444" />

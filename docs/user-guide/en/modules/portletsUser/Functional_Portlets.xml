@@ -9,15 +9,15 @@
 		Portlets are pluggable user interface components that are managed and displayed within a portal. Functional Portlets support all functions of a Portal. They are built into the portal and are accessed via toolbar links as required when actioning portal tasks. 
 	</para>
 	<para>
-		&PRODUCT; provides the following portlets by default. 
+		&PRODUCT; provides the following portlets by default:
 	</para>
 
 	<variablelist>
 	  <varlistentry>
-		<term>Account Portlet</term>
+		<term><emphasis role="bold">Account Portlet</emphasis></term>
 		<listitem>
 			<para>
-				This Portlet allows users to register a new account and choose a preferred language for displaying the Portal interface.
+				The Account Portlet allows users to register a new account and choose a preferred language for displaying the Portal interface.
 			</para>
 			<mediaobject>
 				<imageobject>
@@ -27,10 +27,10 @@
 		</listitem>
 	</varlistentry>
 	<varlistentry>
-		<term>Organization Portlet</term>
+		<term><emphasis role="bold">Organization Portlet</emphasis></term>
 		<listitem>
 			<para>
-				This Portlet is used to manage user information, groups of users and groups memberships.
+				The Organization Portlet is used to manage user information, groups of users and groups memberships.
 			</para>
 			<mediaobject>
 				<imageobject>
@@ -40,11 +40,18 @@
 		</listitem>
 	</varlistentry>
 	<varlistentry>
-		<term>Application Registry Portlet</term>
+		<term><emphasis role="bold">Application Registry Portlet</emphasis></term>
 		<listitem>
 			<para>
-				This Portlet is used to manage different application categories. You can add, edit, set permissions and delete a category and its applications.
+				The Application Registry  Portlet is used to manage different application categories. You can add, edit, set permissions and delete a category and its applications.
 			</para>
+
+<note>
+<title>DOC TODO</title>
+<para>
+please redo screenshot, it is not up-to-date
+</para>
+</note>
 			<mediaobject>
 				<imageobject>
 					<imagedata fileref="images/ApplicationRegistry.png" format="PNG" width="444" />
@@ -52,8 +59,9 @@
 			</mediaobject>
 		</listitem>
 	</varlistentry>
+<!--
 	<varlistentry>
-		<term>Internationalization Portlet</term>
+		<term><emphasis role="bold">Internationalization Portlet</emphasis></term>
 		<listitem>
 			<para>
 				This Portlet is used to translate a word or a phrase from the current language to another language.
@@ -65,6 +73,7 @@
 			</mediaobject>
 		</listitem>
 	</varlistentry>
+-->
     <!-- Doesn't exist anymore AFAIK
 	<varlistentry>
 		<term>Administration Toolbar Portlet</term>
@@ -84,13 +93,13 @@
 		<term>Star Toolbar Portlet</term>
 		<listitem>
 			<para>
-				The Star Toolbar Portlet is used to change language and skin of the portal or to sign out.
+				The Star Toolbar Portlet is used to change the default language, the skin of the portal or to sign out.
 			</para>
-		<!--  	<mediaobject>
+                        <mediaobject>
 				<imageobject>
 					<imagedata fileref="images/StarPortlet.png" format="PNG"></imagedata>
 				</imageobject>
-			</mediaobject>       -->
+			</mediaobject>
 		</listitem>
 	</varlistentry>
 	<!--<varlistentry>

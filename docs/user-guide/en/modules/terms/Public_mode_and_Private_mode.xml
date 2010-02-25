@@ -6,7 +6,7 @@
 <section id="sect-User_Guide-Modes">
 	<title>Modes</title>
 	<para>
-		&PRODUCT; has two <emphasis role="bold">modes</emphasis>:
+		By default &PRODUCT; offers two access <emphasis role="bold">modes</emphasis>:
 	</para>
 	<variablelist>
 	  <varlistentry>
@@ -21,7 +21,7 @@
 		<term>Private</term>
 		<listitem>
 			<para>
-				This mode is for registered users. Users set a username and password during registration which they can use to sign in. This mode allows users more site privileges. Registered users can manage private resources (creating, editing or deleting private pages), "borrow" pages from other users by creating hyperlinks and change the language for individual needs.
+				This mode is for registered users only. Users set a username and password during registration which they can then use to sign in. This mode offers users more site privileges. Registered users can manage private resources (creating, editing or deleting private pages), "borrow" pages from other users by creating hyperlinks and change the language for individual needs.
 			</para>
 		</listitem>
 	</varlistentry>

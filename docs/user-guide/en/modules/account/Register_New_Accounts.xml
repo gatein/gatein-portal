@@ -4,47 +4,34 @@
 %BOOK_ENTITIES;
 ]>
 <section id="sect-User_Guide-Register_New_Accounts">
-	<!--        
-
-    Copyright (C) 2009 eXo Platform SAS.
-    
-    This is free software; you can redistribute it and/or modify it
-    under the terms of the GNU Lesser General Public License as
-    published by the Free Software Foundation; either version 2.1 of
-    the License, or (at your option) any later version.
-    
-    This software is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-    Lesser General Public License for more details.
-    
-    You should have received a copy of the GNU Lesser General Public
-    License along with this software; if not, write to the Free
-    Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
-    02110-1301 USA, or see the FSF site: http://www.fsf.org.
-
-        --><title>Register New Accounts</title>
+	<title>Register New Accounts</title>
 	<para>
 		Unregistered users who visit the portal are limited in the content they can see.
 	</para>
 	<para>
-		Users who need access to deeper content or who need to undertake actions within the portal should register themselves and then contact the portal administrator to have appropriate permissions added to their account.
+		Users who need access to deeper content or who need to perform actions within the portal should register themselves and then contact the portal administrator to gain appropriate access permissions to their account.
 	</para>
 	<para>
-		Users can quickly and easily register a new account for themselves. Complete the steps below:
+		Users can quickly and easily register a new account for themselves.
 	</para>
 	<procedure>
 		<step>
 			<para>
 				Click <emphasis role="bold">Register</emphasis> on the Navigation bar.
 			</para>
+<note>
+<title>DOC TODO</title>
+<para>
+please update with latest display + mouse pointer on "Register"
+</para>
+</note>
 				<mediaobject>
 					<imageobject>
 						<imagedata fileref="images/Frontpage.png" format="PNG" width="444" />
 					</imageobject>
 				</mediaobject>
 				<para>
-					The Register page will appear: 
+					The Register page appears: 
 				</para>
 				<mediaobject>
 					<imageobject>
@@ -114,7 +101,7 @@
 		</step>
 		<step>
 			<para>
-				Click the 'find' icon beside the user name field to check if the chosen username is available.
+				Click the 'find' icon beside the user name field to check whether the chosen username is available.
 			</para>
 		</step>
 <!--		<step>
@@ -142,7 +129,7 @@
 				</listitem>
 				<listitem>
 					<para>
-						The nominated <emphasis role="bold">Password</emphasis> has less than 6 characters or more than 30 characters.
+						The <emphasis role="bold">Password</emphasis> has less than 6 characters or more than 30 characters.
 					</para>
 				</listitem>
 				<listitem>
@@ -164,11 +151,11 @@
 		</step>
 	</procedure>
 	<para>
-		After adding a new account, you should contact the administrator to get appropriate permissions added to your account. 
+		After adding a new account, you should contact the administrator to set appropriate permissions on your account. 
 		<note>
 			<title>Note</title>
 			<para>
-				Be sure you enter your email address carefully. If you should forget your user name or password, you can recover it from this email address.
+				Be sure you enter your email address carefully. Should you forget your user name or password, you can recover it from this email address.
 			</para>
 		</note>
 	</para>

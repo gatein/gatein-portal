@@ -6,7 +6,7 @@
 <section id="sect-User_Guide-Interface_Portlets">
 	<title>Interface Portlets</title>
 	<para>
-		The Interface Portlets are the face of the Portal. They provide the means for users to interact with the portal. &PRODUCT; consists of the following Interface Portlets:
+		The Interface Portlets are the front-end components of the Portal. They provide ways for users to interact with the portal. &PRODUCT; provides the following Interface Portlets:
 	</para>
 
 	<variablelist>
@@ -40,7 +40,7 @@
 		<term>Navigation Portlet</term>
 		<listitem>
 			<para>
-				This Portlet provides a navigation bar. A navigation is a menu that helps users to visualize the structure of a site and provide links to quickly move from page to page.
+				This Portlet provides a navigation bar. A navigation bar is a menu that helps users to visualize the structure of a site and provide links to quickly move from page to page.
 			</para>
 		<!--    <mediaobject>
 				<imageobject>
@@ -53,7 +53,7 @@
 		<term>Sitemap Portlet</term>
 		<listitem>
 			<para>
-				This Portlet is used to provide a site map page of a web site. It lists pages on a website, typically organized in hierarchical fashion.
+				This Portlet displays a site map page of a web site. It lists pages on a website, typically organized in hierarchical fashion.
 			</para>
 		<!--    <mediaobject>
 				<imageobject>
@@ -94,11 +94,13 @@
 			<para>
 				This portlet is used for hosting mini-applications known as gadgets. The dashboard uses a variety of graphical effects for displaying, opening, and using gadgets.
 			</para>
+<!--
 			<mediaobject>
 				<imageobject>
 					<imagedata fileref="images/Dashboard1.png" format="PNG" width="444" />
 				</imageobject>
 			</mediaobject>
+-->
 			<para>
 				Refer to <xref linkend="sect-User_Guide-Dashboard_Portlet" /> or <xref linkend="chap-User_Guide-Gadgets_Administration" /> for more information.
 			</para>

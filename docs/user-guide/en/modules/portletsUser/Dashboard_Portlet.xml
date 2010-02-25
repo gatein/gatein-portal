@@ -17,7 +17,6 @@
 		</imageobject>
 	</mediaobject>
 
-
 	<section id="sect-User_Guide-Dashboard_Portlet-Using_the_Dashboard_Workspace">
 		<title>Using the Dashboard Workspace</title>
 		<procedure>
@@ -34,7 +33,7 @@
 			
 		</procedure>
 		<para>
-			The active Dashboard can be individually named by clicking on the default name ("<emphasis>Click and Type Page Name</emphasis>") where it appears below the current user name (see image below) and entering a new name.
+			The active Dashboard can be individually named by clicking on the default name ("<emphasis>Click and Type Page Name</emphasis>") where it appears below the current user name and entering a new name.
 		</para>
 		<mediaobject>
 			<imageobject>
@@ -43,7 +42,7 @@
 		</mediaobject>
 
 		<para>
-			The Dashboard Workspace lists all available gadgets. There are four gadgets built into &PRODUCT; by default, however you can add many more.
+			The Dashboard Workspace lists all available gadgets. Four gadgets are provided by default with &PRODUCT;, however you can add many more.
 		</para>
 		<mediaobject>
 			<imageobject>
@@ -56,7 +55,7 @@
 				<term>Calendar</term>
 				<listitem>
 					<para>
-						The calendar gadget allows users to switch easily between daily, monthly and yearly view and, again, is customizable to match your portal's theme.
+						The calendar gadget allows users to switch easily between daily, monthly and yearly view and, is customizable to match your portal's theme.
 					</para>
 					<mediaobject>
 						<imageobject>
@@ -108,7 +107,7 @@
 				<term>More Gadgets</term>
 				<listitem>
 					<para>
-						Further gadgets can be obtained from the <ulink type="http" url="http://www.google.com/ig/directory?synd=open">Google Gadget</ulink> site. &PRODUCT; is compatible with most of the gadgets available here.
+						Many more gadgets can be found at <ulink type="http" url="http://www.google.com/ig/directory?synd=open">Google Gadget</ulink>. &PRODUCT; is compatible with most of the gadgets available there.
 					</para>
 				</listitem>
 			</varlistentry>
@@ -117,6 +116,13 @@
 		
 	<section id="sect-User_Guide-Dashboard_Portlet-Add_Gadgets">
 		<title>Add Gadgets</title>
+
+<note>
+<title>DOC TODO</title>
+<para>
+please redo this section wich screenshots to demonstrate the addition of an external gadget provided by Google
+</para>
+</note>
 		<para>
 			To add more gadgets from external sources:
 		</para>
@@ -126,12 +132,12 @@
 					Obtain the URL (.xml or .rss) of the gadget you wish to add from the gadget source.
 				</para>
 				<para>
-					For example; the gadgets available at <ulink type="http" url="http://www.google.com/ig/directory?synd=open">Google Gadget</ulink> provide a link to <emphasis role="bold">View source</emphasis>. Clicking on this will open a page showing the gadget's XML source. Use the URL of this page in the Dashboard Workspace. The URL should end in <literal>.xml</literal>
+					For example; the gadgets available at <ulink type="http" url="http://www.google.com/ig/directory?synd=open">Google Gadget</ulink> provide a link to <emphasis role="bold">View source</emphasis>. Clicking on this will open a page showing the gadget's XML source. Use the URL of this page in the Dashboard Workspace. The URL should end with <literal>.xml</literal>
 				</para>
 				<note>
 					<title>URL Types</title>
 					<para>
-						Remote gadgets can be only created using an .xml link or RSS URL. However, if you use a link that generates an RSS feed (for example: <ulink type="http" url="http://feeds.feedburner.com/gatein">http://feeds.feedburner.com/gatein</ulink>), a new RSS reader gadget will be created automatically even if the URL does not end in <literal>.rss</literal>.
+						Remote gadgets can be only created using an .xml link or RSS URL. However, if you use a link that generates an RSS feed (for example: <ulink type="http" url="http://feeds.feedburner.com/gatein">http://feeds.feedburner.com/gatein</ulink>), a new RSS reader gadget will be created automatically even if the URL does not end with <literal>.rss</literal>.
 					</para>
 				</note>
 			</step>

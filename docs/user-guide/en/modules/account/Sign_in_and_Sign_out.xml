@@ -4,29 +4,10 @@
 %BOOK_ENTITIES;
 ]>
 <section id="sect-User_Guide-Sign_In_and_Sign_Out">
-	<!--       
-
-    Copyright (C) 2009 eXo Platform SAS.
-    
-    This is free software; you can redistribute it and/or modify it
-    under the terms of the GNU Lesser General Public License as
-    published by the Free Software Foundation; either version 2.1 of
-    the License, or (at your option) any later version.
-    
-    This software is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-    Lesser General Public License for more details.
-    
-    You should have received a copy of the GNU Lesser General Public
-    License along with this software; if not, write to the Free
-    Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
-    02110-1301 USA, or see the FSF site: http://www.fsf.org.
-
-       --><title>Sign In and Sign Out</title>
+	<title>Sign In and Sign Out</title>
 
 		<para>
-			After registering your account, you can sign in to &PRODUCT; to go into private mode.
+			In order to enter the portal in private mode, you should use the account previously registered.
 		</para>
 		<para>
 			To sign in to a portal, users must complete the <emphasis role="bold">Sign in</emphasis> form. This form contains the following elements:
@@ -58,7 +39,7 @@
 				</term>
 				<listitem>	
 					<para>
-						This option allows users to return to &PRODUCT; and be automatically authenticated based on the value of a cookie provided by the <literal>bvarlistentryser</literal>. Thus users do not have to perform an explicit authentication again.
+						Check this box to avoid log in every time
 					</para>
 				</listitem>
 			</varlistentry>
@@ -93,8 +74,10 @@
 				</listitem>
 			</varlistentry>
 			</variablelist>
+
+                     <section id="sect-User_Guide-Sign_In">
+		        <title>Sign In</title>
 			<procedure>
-				<title>Sign In</title>
 					<step>
 						<para>
 							Go to your portal by entering the URL into the address bar of your browser (For example http://localhost:8080/portal).
@@ -132,16 +115,21 @@
 			<para>
 				After signing in, you will be redirected to the homepage and welcomed with your full name in the top right corner of the page.
 			</para>
+<!--
 			<mediaobject>
 				<imageobject>
 					<imagedata fileref="images/PortalHome.png" format="PNG" width="444" />
 				</imageobject>
 			</mediaobject>
+-->
+                     </section>
+
+                     <section id="sect-User_Guide-Sign_Out">
+		        <title>Sign Out</title>
 			<procedure>
-				<title>Sign Out</title>
 					<step>
 						<para>
-							This function lets you get back to the anonymous portal. It ends your current portal session.
+							This feature lets you get back to the anonymous portal. It ends your current portal session.
 						</para>
 					</step>
 					<step>
@@ -155,6 +143,7 @@
 						</mediaobject>
 					</step>
 			</procedure>
+                     </section>
 
 </section>
 

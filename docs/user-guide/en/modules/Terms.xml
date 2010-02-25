@@ -4,7 +4,7 @@
 %BOOK_ENTITIES;
 ]>
 <chapter id="chap-User_Guide-Terms">
-	<title>Terms &PRODUCT;</title>
+	<title>Glossary</title>
 	<xi:include href="terms/Portal_concept.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 	<xi:include href="terms/Portlet_concept.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 	<xi:include href="terms/Toolbar_concept.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />

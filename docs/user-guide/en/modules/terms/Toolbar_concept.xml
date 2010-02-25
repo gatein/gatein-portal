@@ -6,18 +6,15 @@
 <section id="sect-User_Guide-Toolbar-Concept">
 	<title>Toolbar</title>
 	<para>
-		The Toolbar spans the top of the portal application and contains links to user and administrative actions. It helps users and the administrator access and perform actions easily, quickly and effectively. 
-	</para>
-	<para>
-		You can see the toolbar below as it appears in the Portal:
-	</para>
+	The Toolbar spans the top of the portal application and provides links to user and administrative actions. 
+        </para>
 	<mediaobject>
 		<imageobject>
 			<imagedata fileref="images/Toolbar.png" format="PNG" width="444" />
 		</imageobject>
 	</mediaobject>
 	<para>
-		In this image you can see the three Navigations referred to in <xref linkend="sect-User_Guide-Navigation" /> as well as the main Menu button (on the far left of the toolbar) and the name of the current user (on the far right).
+		This screenshot displays three Navigations referred to in <xref linkend="sect-User_Guide-Navigation" /> as well as the main Menu button (on the far left of the toolbar) and the name of the current user (on the far right).
 	</para>
 	<para>
 		In this example the current user is the site administrator, hence the extra "Site Editor" menu.

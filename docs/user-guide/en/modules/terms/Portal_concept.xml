@@ -6,35 +6,8 @@
 <section id="sect-User_Guide-Portal">
 	<title>Portal</title>
 		<para>
-			&PRODUCT; is a web-based application that provides users with a personalized User Interface (UI). This interface allows users to easily search applications and information or communicate with other users.
+An enterprise portal is a Web application that provides means to aggregate and personalize information via application-specific portlets. The users and administrators are able via a web-based user interface to integrate information, people and processes across organizational boundaries. The framework enables aggregation of enterprise content and business applications with flexible management and personalization options.
 		</para>
-		<para>
-			The Portal provides a graphical aggregation of enterprise content and business applications with flexible management and personalization options.
-		</para>
-        <!-- 
-		<para>
-			Portal has two main components:
-		</para>
-
-		<variablelist>
-		  <varlistentry>
-			<term>Portal Engine</term>
-			<listitem>
-				<para>
-					The engine renders and runs pages, navigations and preferences.
-				</para>
-			</listitem>
-		</varlistentry>
-		<varlistentry>
-			<term>WebUI Framework</term>
-			<listitem>
-				<para>
-					The WebUI Framework has <ulink type="http" url="http://www.xul.fr/en-xml-ajax.html">AJAX</ulink> support and is designed for easy screen composition.
-				</para>
-			</listitem>
-		</varlistentry>
-		</variablelist>
-       -->
 </section>
 
 

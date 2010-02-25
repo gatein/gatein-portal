@@ -6,7 +6,7 @@
 <chapter id="chap-User_Guide-Introduction">
         <title>Introduction</title>
 	<para>
-		&PRODUCT; is a merge of two mature projects; JBoss Portal and eXo Portal. It takes the best of both offerings and incorporates them into a single new project. The aim is to provide an intuitive portal for as-is use and a framework to build upon depending on your needs.
+		&PRODUCT; is the merge of two mature Java projects; JBoss Portal and eXo Portal. This new community project takes the best of both offerings and incorporates them into a single j2ee deployment archive. The aim is to provide an intuitive user-friendly portal and a framework to address the needs of today's Web 2.0 applications.
 	</para>
 	<mediaobject>
 		<imageobject>
@@ -14,27 +14,36 @@
 		</imageobject>
 	</mediaobject>
 	<para>
-		This book explains various apsects of &PRODUCT;, such as managing users and access permissions, using portlets and changing simple interface features such as skins, langauage and page orientation.
+		This book introduces and provides detailed information about most features and capabilities of &PRODUCT; such as user/group management and access permissions, using portlets and changing basic interface objects such as skins, language and page orientation.
 	</para>
 	<para>
-		Refer to the <ulink type="http" url="http://redhat.com/docs">&PRODUCT; Installation Guide</ulink> for information on downloading and installing the product  or the <ulink type="http" url="http://redhat.com/docs">&PRODUCT; Reference Guide</ulink> for information on more advanced topics.
+		Refer to <ulink type="http" url="http://www.jboss.org/gatein/documentation.html">&PRODUCT; Installation Guide</ulink> for information on downloading and installing the project or <ulink type="http" url="http://www.jboss.org/gatein/documentation.html">&PRODUCT; Reference Guide</ulink> for detailed information on all aspects of the project.
 	</para>
 	<section id="sect-Install_Guide-Introduction-Related_Links">
 		<title>Related Links</title>
 		<itemizedlist>
 			<listitem>
 				<para>
-					GateIn 3.0 is the community project that &PRODUCT; is based on. GateIn project homepage. <ulink url="http://www.gatein.org" />
+					GateIn homepage:
+					<ulink url="http://www.gatein.org">www.gatein.org</ulink>
 				</para>
 			</listitem>
 			<listitem>
 				<para>
-					GateIn downloads: <ulink url="http://www.jboss.org/gatein/downloads.html">www.jboss.org/gatein/downloads.html</ulink>
+					GateIn videos:
+					<ulink url="http://www.jboss.org/gatein/videos.html">www.jboss.org/gatein/videos.html</ulink>
 				</para>
 			</listitem>
 			<listitem>
 				<para>
-					Further documentation about the Red Hat &PRODUCT; and other Red Hat products can be found at <ulink type="http" url="www.redhat.com/docs" />
+					GateIn documentation:
+					<ulink url="http://www.jboss.org/gatein/documentation.html">www.jboss.org/gatein/documentation.html</ulink>
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					GateIn downloads:
+					<ulink url="http://www.jboss.org/gatein/downloads.html">www.jboss.org/gatein/downloads.html</ulink>
 				</para>
 			</listitem>
 		</itemizedlist>

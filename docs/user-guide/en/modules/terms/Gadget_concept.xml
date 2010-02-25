@@ -6,10 +6,10 @@
 <section id="sect-User_Guide-Gadgets">
 	<title>Gadgets</title>
 	<para>
-		A gadget is a mini web application that a portal user can add to their web page. Some useful gadgets that are packaged by default with &PRODUCT;:
+		A gadget is a customizable mini web application that portal users may add to their web pages. 
 	</para>
 	<para>
-		See the <emphasis role="bold">Default Gadgets</emphasis> section of <xref linkend="sect-User_Guide-Dashboard_Portlet-Using_the_Dashboard_Workspace" /> for more information about these gadgets.
+		For more information about the gadgets shipped by default with &PRODUCT;, please check out <xref linkend="sect-User_Guide-Dashboard_Portlet-Using_the_Dashboard_Workspace" /> 
 	</para>
 </section>
 
