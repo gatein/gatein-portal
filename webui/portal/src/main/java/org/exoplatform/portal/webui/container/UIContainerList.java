@@ -59,7 +59,7 @@ public class UIContainerList extends UIContainer
          return;
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
       Param param = initParams.getParam("ContainerConfigOption");
-      categories_ = param.getMapGroovyObject(context);
+      categories_ = (List<SelectItemCategory>)param.getMapGroovyObject(context);
       if (categories_ == null)
          return;
       setSelectedCategory(categories_.get(0));

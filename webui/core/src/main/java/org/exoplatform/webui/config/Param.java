@@ -25,11 +25,16 @@ import groovy.lang.GroovyShell;
 import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.xml.object.XMLObject;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 
 import java.io.InputStream;
 
 public class Param
 {
+
+   /** . */
+   private static final Logger log = LoggerFactory.getLogger(Param.class);
 
    private String name;
 
@@ -69,12 +74,12 @@ public class Param
    }
 
    @SuppressWarnings("unchecked")
-   public <T> T getMapGroovyObject(WebuiRequestContext context) throws Exception
+   public Object getMapGroovyObject(WebuiRequestContext context) throws Exception
    {
       try
       {
          if (object != null)
-            return (T)object;
+            return object;
          ResourceResolver resolver = context.getResourceResolver(value);
          InputStream is = resolver.getInputStream(value);
          //TODO if is == null throw an exception saying the it's impossible to find the file
@@ -82,17 +87,16 @@ public class Param
          GroovyShell shell = new GroovyShell(Thread.currentThread().getContextClassLoader(), binding);
          object = shell.evaluate(is);
          is.close();
-         return (T)object;
+         return object;
       }
-      catch (Exception ex)
+      catch (Exception e)
       {
-         System.out.println("A  problem in the groovy script : " + value);
-         ex.printStackTrace();
-         throw ex;
+         log.error("A  problem in the groovy script : " + value, e);
+         throw e;
       }
    }
 
-   public <T> T getFreshObject(WebuiRequestContext context) throws Exception
+   public Object getFreshObject(WebuiRequestContext context) throws Exception
    {
       try
       {
@@ -102,13 +106,12 @@ public class Param
          GroovyShell shell = new GroovyShell(Thread.currentThread().getContextClassLoader(), binding);
          object = shell.evaluate(is);
          is.close();
-         return (T)object;
+         return object;
       }
-      catch (Exception ex)
+      catch (Exception e)
       {
-         System.out.println("A  problem in the groovy script : " + value);
-         ex.printStackTrace();
-         throw ex;
+         log.error("A  problem in the groovy script : " + value, e);
+         throw e;
       }
    }
 }

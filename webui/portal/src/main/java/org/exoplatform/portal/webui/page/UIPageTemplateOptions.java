@@ -54,7 +54,7 @@ public class UIPageTemplateOptions extends UIFormInputItemSelector
          return;
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
       Param param = initParams.getParam("PageLayout");
-      categories_ = param.getFreshObject(context);
+      categories_ = (List<SelectItemCategory>)param.getFreshObject(context);
       selectedItemOption_ = getDefaultItemOption();
       List<SelectItemOption<String>> itemOptions = new ArrayList<SelectItemOption<String>>();
 

@@ -31,6 +31,8 @@ import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.core.UIApplication;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -46,6 +48,12 @@ import javax.servlet.http.HttpSession;
 public class ReplicatingStateManager extends StateManager
 {
 
+   /** . */
+   private static final String APPLICATION_ATTRIBUTE_PREFIX = "rsm.";
+
+   /** . */
+   private static final Logger log = LoggerFactory.getLogger(ReplicatingStateManager.class);
+
    @Override
    public UIApplication restoreUIRootComponent(WebuiRequestContext context) throws Exception
    {
@@ -59,7 +67,7 @@ public class ReplicatingStateManager extends StateManager
       String key = getKey(context);
 
       //
-      ApplicationState appState = (ApplicationState)session.getAttribute("bilto_" + key);
+      ApplicationState appState = (ApplicationState)session.getAttribute(APPLICATION_ATTRIBUTE_PREFIX + key);
 
       //
       UIApplication uiapp = null;
@@ -74,11 +82,11 @@ public class ReplicatingStateManager extends StateManager
       //
       if (appState != null)
       {
-         System.out.println("Found application " + key + " :" + appState.getApplication());
+         log.debug("Found application " + key + " :" + appState.getApplication());
       }
       else
       {
-         System.out.println("Application " + key + " not found");
+         log.debug("Application " + key + " not found");
       }
 
       // Looks like some necessary hacking
@@ -123,8 +131,8 @@ public class ReplicatingStateManager extends StateManager
       String key = getKey(context);
 
       //
-      System.out.println("Storing application " + key);
-      session.setAttribute("bilto_" + key, new ApplicationState(uiapp, context.getRemoteUser()));
+      log.debug("Storing application " + key);
+      session.setAttribute(APPLICATION_ATTRIBUTE_PREFIX + key, new ApplicationState(uiapp, context.getRemoteUser()));
    }
 
    @Override

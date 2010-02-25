@@ -27,6 +27,8 @@ import org.exoplatform.commons.chromattic.SynchronizationStatus;
 import org.exoplatform.portal.application.PortletPreferences;
 import org.exoplatform.portal.config.NoSuchDataException;
 import org.exoplatform.portal.pom.data.Mapper;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 import org.gatein.mop.api.Model;
 import org.gatein.mop.api.content.Customization;
 import org.gatein.mop.api.workspace.ObjectType;
@@ -55,6 +57,9 @@ import java.util.Set;
  */
 public class POMSession
 {
+
+   /** . */
+   private static final Logger log = LoggerFactory.getLogger(POMSession.class);
 
    /** . */
    private static final Map<ObjectType<?>, Class> mapping = new HashMap<ObjectType<?>, Class>();
@@ -396,7 +401,7 @@ public class POMSession
          }
          else
          {
-            System.out.println("Will not save session that is marked for rollback");
+            log.debug("Will not save session that is marked for rollback");
          }
       }
    }

@@ -111,7 +111,7 @@ public class UIFormInputIconSelector extends UIFormInputBase<String>
       {
          if (param.getName().equals(paramName))
          {
-            CategoryIcon categoryIconSet = param.getMapGroovyObject(context);
+            CategoryIcon categoryIconSet = (CategoryIcon)param.getMapGroovyObject(context);
             if (selectedIconCategory == null)
                selectedIconCategory = categoryIconSet;
             for (IconSet iconset : categoryIconSet.getCategory())

@@ -109,18 +109,18 @@ public class UIFormInputWithActions extends UIFormInputSet
                catch (MissingResourceException ex)
                {
                   actionLabel = action.getActionName();
-                  System.out.println("\n Key: '" + uiForm.getId() + ".label.action." + action.getActionName()
+                  log.debug("Key: '" + uiForm.getId() + ".label.action." + action.getActionName()
                      + "' not found");
                }
                String actionLink;
                if (action.getActionParameter() != null)
                {
                   actionLink =
-                     ((UIComponent)getParent()).event(action.getActionListener(), action.getActionParameter());
+                     getParent().event(action.getActionListener(), action.getActionParameter());
                }
                else
                {
-                  actionLink = ((UIComponent)getParent()).event(action.getActionListener());
+                  actionLink = getParent().event(action.getActionListener());
                }
 
                if (action.getActionType() == ActionData.TYPE_ICON)

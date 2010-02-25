@@ -21,6 +21,8 @@ package org.exoplatform.upload;
 
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.container.xml.PortalContainerInfo;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -39,6 +41,9 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class UploadService
 {
+
+   /** . */
+   private static final Logger log = LoggerFactory.getLogger(UploadService.class);
 
    private Map<String, UploadResource> uploadResources = new LinkedHashMap<String, UploadResource>();
 
@@ -78,7 +83,7 @@ public class UploadService
          upResource.setStatus(UploadResource.FAILED_STATUS);
          //upResource.setLimitMB(limitMB);
          uploadResources.put(uploadId, upResource);
-         System.out.println("Upload cancelled because file bigger than size limit : " + estimatedSizeMB + " MB > "
+         log.debug("Upload cancelled because file bigger than size limit : " + estimatedSizeMB + " MB > "
             + limitMB + " MB");
          //    	WebuiRequestContext ctx = WebuiRequestContext.getCurrentInstance();
          //        UIApplication uiApp = ctx.getUIApplication();
@@ -129,7 +134,7 @@ public class UploadService
       { // a limit set to 0 means unlimited
          upResource.setStatus(UploadResource.FAILED_STATUS);
          uploadResources.put(uploadId, upResource);
-         System.out.println("Upload cancelled because file bigger than size limit : " + estimatedSizeMB + " MB > "
+         log.debug("Upload cancelled because file bigger than size limit : " + estimatedSizeMB + " MB > "
             + limitMB + " MB");
          return;
       }

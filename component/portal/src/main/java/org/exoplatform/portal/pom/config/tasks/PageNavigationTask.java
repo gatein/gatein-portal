@@ -26,6 +26,8 @@ import org.exoplatform.portal.pom.data.Mapper;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.data.NavigationData;
 import org.exoplatform.portal.pom.data.NavigationKey;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 import org.gatein.mop.api.workspace.Navigation;
 import org.gatein.mop.api.workspace.ObjectType;
 import org.gatein.mop.api.workspace.Site;
@@ -37,6 +39,9 @@ import org.gatein.mop.api.workspace.Workspace;
  */
 public abstract class PageNavigationTask
 {
+
+   /** . */
+   private static final Logger log = LoggerFactory.getLogger(PageNavigationTask.class);
 
    /** . */
    protected final ObjectType<? extends Site> siteType;
@@ -88,7 +93,7 @@ public abstract class PageNavigationTask
          }
          else
          {
-            System.out.println("Cannot load page navigation as the corresponding portal " + key.getId()
+            log.debug("Cannot load page navigation as the corresponding portal " + key.getId()
                + " with type " + siteType + " does not exist");
          }
 

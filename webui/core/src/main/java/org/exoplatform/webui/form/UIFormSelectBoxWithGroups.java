@@ -24,6 +24,8 @@ import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.model.SelectItem;
 import org.exoplatform.webui.core.model.SelectOption;
 import org.exoplatform.webui.core.model.SelectOptionGroup;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 
 import java.io.Writer;
 import java.util.ArrayList;
@@ -37,6 +39,9 @@ import java.util.ResourceBundle;
  */
 public class UIFormSelectBoxWithGroups extends UIFormStringInput
 {
+
+   /** . */
+   private static final Logger log = LoggerFactory.getLogger(UIFormSelectBoxWithGroups.class);
 
    /**
     * It make SelectBox's ability to select multiple values
@@ -339,7 +344,7 @@ public class UIFormSelectBoxWithGroups extends UIFormStringInput
             }
             catch (MissingResourceException ex)
             {
-               System.out.println("Could not find: " + getFrom().getId() + ".optionGroup.label." + label);
+               log.debug("Could not find: " + getFrom().getId() + ".optionGroup.label." + label);
             }
             w.write("<optgroup label=\"");
             w.write(label);

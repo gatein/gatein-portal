@@ -105,7 +105,7 @@ public class UIDashboardContainer extends org.exoplatform.webui.core.UIContainer
       windowId = ((PortletRequestContext)context).getRequest().getWindowID();
 
       Param param = initParams.getParam("ContainerConfigs");
-      containerOptions = param.getMapGroovyObject(context);
+      containerOptions = (List<SelectItemOption<String>>)param.getMapGroovyObject(context);
       if (containerOptions == null)
       {
          return;

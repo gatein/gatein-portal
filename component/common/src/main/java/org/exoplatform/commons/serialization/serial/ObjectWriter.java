@@ -22,6 +22,8 @@ package org.exoplatform.commons.serialization.serial;
 import org.exoplatform.commons.serialization.SerializationContext;
 import org.exoplatform.commons.serialization.api.TypeConverter;
 import org.exoplatform.commons.serialization.model.*;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 
 import java.io.*;
 import java.util.IdentityHashMap;
@@ -32,6 +34,9 @@ import java.util.IdentityHashMap;
  */
 public class ObjectWriter extends ObjectOutputStream
 {
+
+   /** . */
+   private static final Logger log = LoggerFactory.getLogger(ObjectWriter.class);
 
    /** . */
    private final SerializationContext context;
@@ -188,7 +193,7 @@ public class ObjectWriter extends ObjectOutputStream
             case FULL:
                break;
             case PARTIAL:
-               System.out.println("Partial serialization of object " + obj);
+               log.debug("Partial serialization of object " + obj);
                break;
             case NONE:
                throw new NotSerializableException("Type " + typeModel + " is not serializable");

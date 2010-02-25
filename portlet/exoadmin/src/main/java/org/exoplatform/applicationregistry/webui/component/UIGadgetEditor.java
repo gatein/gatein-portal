@@ -72,7 +72,7 @@ public class UIGadgetEditor extends UIForm
    {
       Param param = initParams.getParam("SampleGadget");
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
-      String sample = param.getMapGroovyObject(context);
+      String sample = (String)param.getMapGroovyObject(context);
       addUIFormInput(new UIFormTextAreaInput(FIELD_SOURCE, null, sample).addValidator(MandatoryValidator.class)
          .addValidator(GadgetSpecValidator.class));
    }

@@ -131,7 +131,7 @@ public class UIPageForm extends UIFormTabPane
 
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
       Param param = initParams.getParam("PageTemplate");
-      List<SelectItemCategory> itemCategories = param.getMapGroovyObject(context);
+      List<SelectItemCategory> itemCategories = (List<SelectItemCategory>)param.getMapGroovyObject(context);
 
       UIFormInputItemSelector uiTemplate = new UIFormInputItemSelector("Template", "template");
       uiTemplate.setItemCategories(itemCategories);
