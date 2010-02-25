@@ -88,6 +88,10 @@
                              onParentVersion="COPY" protected="false" multiple="false">
             <valueConstraints/>
          </propertyDefinition>
+         <propertyDefinition name="timeout" requiredType="Integer" autoCreated="false" mandatory="false"
+                             onParentVersion="COPY" protected="false" multiple="false">
+            <valueConstraints/>
+         </propertyDefinition>
       </propertyDefinitions>
    </nodeType>
 

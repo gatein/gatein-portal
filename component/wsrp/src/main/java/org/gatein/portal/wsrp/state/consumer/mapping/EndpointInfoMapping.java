@@ -41,14 +41,21 @@ public abstract class EndpointInfoMapping
 
    public abstract void setWSDLURL(String wsdlURL);
 
+   @Property(name = "timeout")
+   public abstract Integer getWSTimeoutMilliseconds();
+
+   public abstract void setWSTimeoutMilliseconds(Integer expiration);
+
    public void initFrom(EndpointConfigurationInfo info)
    {
       setWSDLURL(info.getWsdlDefinitionURL());
+      setWSTimeoutMilliseconds(info.getWSOperationTimeOut());
    }
 
    EndpointConfigurationInfo toEndpointConfigurationInfo(EndpointConfigurationInfo initial)
    {
       initial.setWsdlDefinitionURL(getWSDLURL());
+      initial.setWSOperationTimeOut(getWSTimeoutMilliseconds());
       return initial;
    }
 }
