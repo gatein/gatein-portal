@@ -84,6 +84,7 @@
       <module>examples</module>
       <module>starter</module>
       <module>packaging</module>
+      <module>testsuite</module>
    </modules>
 
    <dependencyManagement>
