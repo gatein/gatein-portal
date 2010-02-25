@@ -22,6 +22,7 @@ package org.exoplatform.portal.webui.workspace;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.UserPortalConfig;
+import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.webui.page.UIPage;
@@ -90,10 +91,10 @@ public class UIMainActionListener
          UIPage newUIPage = uiWorkingWS.createUIComponent(UIPage.class, null, null);
          PortalDataMapper.toUIPage(newUIPage, page);
          uiToolPanel.setWorkingComponent(newUIPage);
-         
+
          // Remove current UIPage from UIPageBody
          pageBody.setUIComponent(null);
-         
+
          event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingWS);
          Util.getPortalRequestContext().setFullRender(true);
       }
@@ -131,8 +132,15 @@ public class UIMainActionListener
       public void execute(Event<UIWorkingWorkspace> event) throws Exception
       {
          UIPortalApplication uiApp = Util.getUIPortalApplication();
+
          UIPortal uiPortal = uiApp.getShowedUIPortal();
-         PortalConfig portalConfig = uiApp.getUserPortalConfig().getPortalConfig();
+         
+         UserPortalConfigService service = uiApp.getApplicationComponent(UserPortalConfigService.class);
+         UserPortalConfig userConfig =
+            service.getUserPortalConfig(uiPortal.getName(), event.getRequestContext().getRemoteUser());
+        
+         PortalConfig portalConfig = userConfig.getPortalConfig();         
+         
          UserACL userACL = uiPortal.getApplicationComponent(UserACL.class);
          if (!userACL.hasEditPermission(portalConfig))
          {
@@ -146,7 +154,7 @@ public class UIMainActionListener
          uiApp.setModeState(UIPortalApplication.APP_BLOCK_EDIT_MODE);
 
          UIPortal newPortal = uiWorkingWS.createUIComponent(UIPortal.class, null, null);
-         PortalDataMapper.toUIPortal(newPortal, uiApp.getUserPortalConfig());
+         PortalDataMapper.toUIPortal(newPortal, userConfig);
          newPortal.setSelectedNode(uiPortal.getSelectedNode());
          newPortal.setSelectedNavigation(uiPortal.getSelectedNavigation());
          newPortal.setSelectedPath(uiPortal.getSelectedPath());
@@ -155,7 +163,7 @@ public class UIMainActionListener
          uiEditWS.setUIComponent(newPortal);
          UISiteBody siteBody = uiWorkingWS.findFirstComponentOfType(UISiteBody.class);
          siteBody.setUIComponent(null);
-         
+
          UIPortalComposer uiComposer = uiEditWS.getComposer().setRendered(true);
          uiComposer.setComponentConfig(UIPortalComposer.class, null);
          uiComposer.setShowControl(true);
