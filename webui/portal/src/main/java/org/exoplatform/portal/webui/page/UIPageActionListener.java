@@ -125,6 +125,12 @@ public class UIPageActionListener
                cachedUIPortal.setSelectedNode(targetPageNode);
                cachedUIPortal.setSelectedPath(targetedPathNodes);
                uiPortalApp.setShowedUIPortal(cachedUIPortal);
+               
+               //Temporary solution to fix edit inline error while switching between navigations
+               DataStorage storageService = uiPortalApp.getApplicationComponent(DataStorage.class);
+               PortalConfig associatedPortalConfig = storageService.getPortalConfig(newNavType, newNavId);
+               uiPortalApp.getUserPortalConfig().setPortal(associatedPortalConfig);
+
                cachedUIPortal.refreshUIPage();
                return;
             }
