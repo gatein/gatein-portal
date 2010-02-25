@@ -589,11 +589,13 @@ public class UIPortalComposer extends UIContainer
          UIPortalApplication uiPortalApp = Util.getUIPortalApplication();
          uiPortalApp.setModeState(UIPortalApplication.NORMAL_MODE);
 
-         UIPortal uiPortal = Util.getUIPortal();
+         UIPortal uiPortal = uiPortalApp.getShowedUIPortal();
          uiPortal.setRenderSibling(UIPortal.class);
          UIPortalComposer composer = uiWorkingWS.findFirstComponentOfType(UIPortalComposer.class).setRendered(false);
          composer.setEditted(false);
 
+         uiPortal.refreshUIPage();
+         
          PageNodeEvent<UIPortal> pnevent =
             new PageNodeEvent<UIPortal>(uiPortal, PageNodeEvent.CHANGE_PAGE_NODE, (uiPortal.getSelectedNode() != null
                ? uiPortal.getSelectedNode().getUri() : null));
