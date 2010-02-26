@@ -74,15 +74,6 @@ class MappedAttributes
    public static final Key<String> VISIBILITY = Key.create("visibility", ValueType.STRING);
 
    /** . */
-   public static final Key<Boolean> SHOW_INFO_BAR = Key.create("show-info-bar", ValueType.BOOLEAN);
-
-   /** . */
-   public static final Key<Boolean> SHOW_STATE = Key.create("show-state", ValueType.BOOLEAN);
-
-   /** . */
-   public static final Key<Boolean> SHOW_MODE = Key.create("show-mode", ValueType.BOOLEAN);
-
-   /** . */
    public static final Key<String> LOCALE = Key.create("locale", ValueType.STRING);
 
    /** . */
@@ -96,7 +87,4 @@ class MappedAttributes
 
    /** . */
    public static final Key<String> TYPE = Key.create("type", ValueType.STRING);
-
-   /** . */
-   public static final Key<String> THEME = Key.create("theme", ValueType.STRING);
 }

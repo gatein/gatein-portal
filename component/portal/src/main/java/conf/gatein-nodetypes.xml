@@ -40,4 +40,21 @@
       </propertyDefinitions>
     </nodeType>
 
+  <nodeType name="gtn:decorated" isMixin="true" hasOrderableChildNodes="false" primaryItemName="">
+    <propertyDefinitions>
+      <propertyDefinition name="gtn:showinfobar" requiredType="Boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition>
+      <propertyDefinition name="gtn:showwindowstate" requiredType="Boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition>
+      <propertyDefinition name="gtn:showmode" requiredType="Boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition>
+      <propertyDefinition name="gtn:theme" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition>
+    </propertyDefinitions>
+  </nodeType>
+
 </nodeTypes>

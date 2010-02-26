@@ -265,6 +265,7 @@
           <value>org.exoplatform.portal.pom.spi.wsrp.WSRPState</value>
           <value>org.exoplatform.portal.mop.ProtectedResource</value>
           <value>org.exoplatform.portal.mop.Described</value>
+          <value>org.exoplatform.portal.mop.Decorated</value>
         </values-param>
         <properties-param>
           <name>options</name>

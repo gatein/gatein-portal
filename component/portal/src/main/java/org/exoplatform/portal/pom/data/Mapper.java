@@ -24,6 +24,7 @@ import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.model.ApplicationState;
 import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.config.model.CloneApplicationState;
+import org.exoplatform.portal.mop.Decorated;
 import org.exoplatform.portal.mop.Described;
 import org.exoplatform.portal.mop.ProtectedResource;
 import org.exoplatform.portal.config.model.PersistentApplicationState;
@@ -86,10 +87,6 @@ public class Mapper
    private static final Set<String> windowPropertiesBlackList =
       Tools.set(
          MappedAttributes.TYPE.getName(),
-         MappedAttributes.THEME.getName(),
-         MappedAttributes.SHOW_INFO_BAR.getName(),
-         MappedAttributes.SHOW_STATE.getName(),
-         MappedAttributes.SHOW_MODE.getName(),
          MappedAttributes.ICON.getName(),
          MappedAttributes.WIDTH.getName(),
          MappedAttributes.HEIGHT.getName());
@@ -853,6 +850,20 @@ public class Mapper
       Described described = src.adapt(Described.class);
 
       //
+      boolean showInfoBar = false;
+      boolean showWindowState = false;
+      boolean showMode = false;
+      String theme = null;
+      if (src.isAdapted(Decorated.class))
+      {
+         Decorated decorated = src.adapt(Decorated.class);
+         showInfoBar = decorated.getShowInfoBar();
+         showWindowState = decorated.getShowWindowState();
+         showMode = decorated.getShowMode();
+         theme = decorated.getTheme();
+      }
+
+      //
       return new ApplicationData<S>(
          src.getObjectId(),
          src.getName(),
@@ -862,10 +873,10 @@ public class Mapper
          described.getName(),
          attrs.getValue(MappedAttributes.ICON),
          described.getDescription(),
-         attrs.getValue(MappedAttributes.SHOW_INFO_BAR),
-         attrs.getValue(MappedAttributes.SHOW_STATE),
-         attrs.getValue(MappedAttributes.SHOW_MODE),
-         attrs.getValue(MappedAttributes.THEME),
+         showInfoBar,
+         showWindowState,
+         showMode,
+         theme,
          attrs.getValue(MappedAttributes.WIDTH),
          attrs.getValue(MappedAttributes.HEIGHT),
          Utils.safeImmutableMap(properties),
@@ -883,11 +894,14 @@ public class Mapper
       described.setName(src.getTitle());
       described.setDescription(src.getDescription());
 
+      Decorated decorated = dst.adapt(Decorated.class);
+      decorated.setShowInfoBar(src.isShowInfoBar());
+      decorated.setShowMode(src.isShowApplicationMode());
+      decorated.setShowWindowState(src.isShowApplicationState());
+      decorated.setTheme(src.getTheme());
+
+      //
       Attributes attrs = dst.getAttributes();
-      attrs.setValue(MappedAttributes.THEME, src.getTheme());
-      attrs.setValue(MappedAttributes.SHOW_INFO_BAR, src.isShowInfoBar());
-      attrs.setValue(MappedAttributes.SHOW_STATE, src.isShowApplicationState());
-      attrs.setValue(MappedAttributes.SHOW_MODE, src.isShowApplicationMode());
       attrs.setValue(MappedAttributes.ICON, src.getIcon());
       attrs.setValue(MappedAttributes.WIDTH, src.getWidth());
       attrs.setValue(MappedAttributes.HEIGHT, src.getHeight());
