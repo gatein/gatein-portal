@@ -106,15 +106,11 @@ UIPortal.prototype.blockOnMouseOver = function(event, portlet, isOver) {
 		}
 	}
 	
-	// Don't displat portlet control when View Container
-		var controlPortlet =	DOMUtil.findFirstDescendantByClass(editBlock, "div", "CONTROL-PORTLET");
-		if (controlPortlet) {
-			if(eXo.portal.portalMode == 4) {
-				controlPortlet.style.display = "none";
-			} else {				
-				controlPortlet.style.display = "block";
-			}
-		}
+	// Don't display portlet control when View Container
+	var controlPortlet =	DOMUtil.findFirstDescendantByClass(editBlock, "div", "CONTROL-PORTLET");
+	if (controlPortlet) {
+		controlPortlet.style.display = eXo.portal.portalMode == 4 ? "none" : "block";
+	}
 };
 
 UIPortal.prototype.getUIPortlets = function() {
@@ -351,8 +347,8 @@ UIPortal.prototype.showViewMode = function() {
   this.showUIComponentControl(portal, false) ;
   
   var uiPageDesktop = document.getElementById("UIPageDesktop") ;
+	var pageBody = this.getUIPageBody() ;
   if(!uiPageDesktop) {
-  	var pageBody = this.getUIPageBody() ;
   	this.switchLayoutModeToViewMode(pageBody, true) ;
   	this.showUIComponentControl(pageBody, false) ;
   }
@@ -369,7 +365,7 @@ UIPortal.prototype.showViewMode = function() {
     this.showUIComponentControl(portlet[i], true) ;
     var component = portlet[i].getUIComponentBlock();
     var mask = eXo.core.DOMUtil.findFirstDescendantByClass(component, "div", "UIPortletMask");
-    if(eXo.portal.portalMode && mask) {
+    if(eXo.portal.portalMode && mask && !eXo.core.DOMUtil.hasAncestor(portlet[i].getElement(), pageBody.getElement())) {
       mask.style.display = "block";
       mask.style.height = component.offsetHeight + "px";
       mask.style.width  = component.offsetWidth + "px";
@@ -393,14 +389,9 @@ UIPortal.prototype.showViewMode = function() {
   	var pageBodyBlock = pageBody.getUIComponentBlock();
   	var mask = eXo.core.DOMUtil.findFirstDescendantByClass(pageBodyBlock, "div", "UIPageBodyMask");
   	if(mask) {
-	  	if(!(eXo.portal.portalMode%2)) {
-	  		mask.style.top = - pageBodyBlock.offsetHeight + "px";
-				mask.style.height = pageBodyBlock.offsetHeight + "px";
-				mask.style.width = pageBodyBlock.offsetWidth + "px";
-	  		mask.style.display = "block";
-	  	} else if(mask) {
-	  		mask.style.display = "none";
-	  	}
+  		mask.style.top = - pageBodyBlock.offsetHeight + "px";
+			mask.style.height = pageBodyBlock.offsetHeight + "px";
+			mask.style.width = pageBodyBlock.offsetWidth + "px";
   	}
   }
 };
@@ -428,17 +419,6 @@ UIPortal.prototype.showLayoutModeForPortal = function(control) {
   for(var i = 0; i < portlet.length; i++) {
     this.switchViewModeToLayoutMode(portlet[i], false) ;
     this.showUIComponentControl(portlet[i], this.component == 'UIPortlet') ;
-    var component = portlet[i].getUIComponentBlock();
-    var mask = eXo.core.DOMUtil.findFirstDescendantByClass(component, "div", "UIPortletMask");
-    if(eXo.portal.portalMode && mask) {
-    	mask.style.display = "block";
-    	mask.style.height = component.offsetHeight + "px";
-    	mask.style.width  = component.offsetWidth + "px";
-      mask.style.top = eXo.core.Browser.findPosY(component) + "px";
-      mask.style.left = eXo.core.Browser.findPosX(component) + "px";
-    } else if(mask) {
-    	mask.style.display = "none";
-    }
   }  
 } ;
 

@@ -72,11 +72,16 @@
 					<div class="BMPagebody"><span></span></div>
 				</div>
 			</div>
+			
+			<%if(portalMode != UIPortalApplication.NORMAL_MODE) {%>
+			<div class="MaskParent" style="height: 0px;position:relative;">
+				<div class="UIPageBodyMask" style="position:absolute;" onmousedown="eXo.portal.PortalDragDrop.init.call(this, event);"><span></span></div>
+			</div>
+			<%}%>
 		</div>
 	<%}%>
 	<%if(portalMode != UIPortalApplication.NORMAL_MODE){%>
 		<div class="EDITION-BLOCK EDITION-PAGEBODY" style="position:relative">
-			<div class="UIPageBodyMask" style="position:absolute; display:none;" onmousedown="eXo.portal.PortalDragDrop.init.call(this, event);"><span></span></div>
 			<div class="CONTROL-PAGEBODY CONTROL-BLOCK" style="display: none"><span></span></div>
 		</div>
 	<%} %>

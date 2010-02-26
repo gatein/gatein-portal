@@ -249,7 +249,6 @@ PortalDragDrop.prototype.doDropCallback = function(dndEvent) {
   if(!targetElement) {
   	if(!dndEvent.dragObject.isComponent) {
 	    dndEvent.dragObject.parentNode.removeChild(dndEvent.dragObject) ;
-	    newComponent = true;
   	}
   	dndEvent.dragObject.style.width = "auto";
   	return;
