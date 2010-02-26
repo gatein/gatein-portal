@@ -27,12 +27,12 @@ public enum Visibility
 {
 
    /**
-    * The object is visible.
+    * The object is displayed.
     */
    DISPLAYED,
 
    /**
-    * The object is not visible.
+    * The object is hidden.
     */
    HIDDEN,
 
