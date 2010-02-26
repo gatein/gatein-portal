@@ -47,7 +47,7 @@ public class DataCache extends TaskExecutionDecorator
 
    public <V> V execute(POMSession session, POMTask<V> task) throws Exception
    {
-      if (task instanceof CacheableDataTask && !cluster)
+      if (task instanceof CacheableDataTask)
       {
          CacheableDataTask<?, V> loadTask = (CacheableDataTask<?, V>)task;
          switch (loadTask.getAccessMode())
