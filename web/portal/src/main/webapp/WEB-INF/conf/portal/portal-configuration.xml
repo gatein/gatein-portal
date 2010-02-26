@@ -313,10 +313,10 @@
 							<string>PomSessionManager</string>
 						</field>
 						<field name="maxNodes">
-							<int>-1</int>
+							<int>10000</int>
 						</field>
 						<field name="minTimeToLive">
-							<long>0</long>
+							<long>60000</long>
 						</field>
 					</object>
 				</object-param>
