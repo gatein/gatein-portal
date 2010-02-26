@@ -95,62 +95,31 @@
 .PortletLayoutDecorator {
 }
 
-.PortletLayoutDecorator .TopLeft {
+.PortletLayoutDecorator .LPortletLayoutDecorator {
 	background: url('background/PortletLayoutDecorator.gif') no-repeat left top;
-	padding-left: 7px;
+	padding: 0px 0px 0px 12px;
 }
 
-.PortletLayoutDecorator .TopMiddle {
-	background: url('background/PortletLayoutDecorator.gif') repeat-x center -6px;
-}
-
-.PortletLayoutDecorator .TopRight {
+.PortletLayoutDecorator .RPortletLayoutDecorator {
 	background: url('background/PortletLayoutDecorator.gif') no-repeat right top;
-	padding-right: 7px;
+	padding-right: 12px;
 }
 
-.PortletLayoutDecorator .TopLeft .FixHeight {
-	height: 6px;
+.PortletLayoutDecorator .CPortletLayoutDecorator {
+	background: url('background/PortletLayoutDecorator.gif') repeat-x center -89px;
 }
 
-.PortletLayoutDecorator .MiddleLeft {
-	background: url('background/MiddlePortletLayout.gif') repeat-y left -22px;
-	padding: 0px 0px 0px 7px;
+.PortletLayoutDecorator .FixHeight {
+	height: 69px;
+	padding: 10px 0;
 }
-
-.PortletLayoutDecorator .MiddleRight {
-	background: url('background/MiddlePortletLayout.gif') repeat-y right -22px;
-	padding-right: 7px;
-}
-
-.PortletLayoutDecorator .CenterBackground {
+.ProtectedPortlet .PortletLayoutDecorator {
 	background: white;
 }
-
-.PortletLayoutDecorator .GardientBackground {
-	height: 64px;
-	background: url('background/LayoutCBg1x56.gif') repeat-x bottom;
-	padding: 6px;
+.ProtectedPortlet .PortletLayoutDecorator .LPortletLayoutDecorator {
+	opacity: 0.3;
+	filter: alpha(opacity=30);
 }
-
-.PortletLayoutDecorator .BottomLeft {
-	background: url('background/PortletLayoutDecorator.gif') no-repeat left -12px;
-	padding-left:7px;
-}
-
-.PortletLayoutDecorator .BottomMiddle {
-	background: url('background/PortletLayoutDecorator.gif') repeat-x center -17px;
-}
-
-.PortletLayoutDecorator .BottomRight {
-	background: url('background/PortletLayoutDecorator.gif') no-repeat right -12px;
-	padding-right: 7px;
-}
-
-.PortletLayoutDecorator .BottomLeft .FixHeight {
-	height: 5px;
-}
-
 /*############### End Decorator ###################################################*/
 
 .LAYOUT-CONTAINER .UIContainer {
@@ -308,10 +277,22 @@
 }
 
 .EdittingContainer .OverContainerBlock .LeftContainerBlock {
-	background: none;
+	background: white;
 }
 
 .EdittingContainer .OverContainerBlock .RightContainerBlock {
 	background: none;
 	padding: 2px;
+}
+
+.ProtectedContainer .ProtectedContent {
+	opacity: 0.3;
+	filter: alpha(opacity=80);
+	height: 70px;
+	padding: 6px 10px;
+}
+
+.UIPageBodyMask {
+	opacity: 0.3;
+	filter: alpha(opacity=30);
 }
