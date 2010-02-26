@@ -15,7 +15,7 @@
 		<variablelist>
 			<varlistentry>
 				<term>
-					User name
+					<emphasis role="bold">User name</emphasis>
 				</term>
 				<listitem>
 					<para>
@@ -25,7 +25,7 @@
 			</varlistentry>
 			<varlistentry>
 				<term>
-					Password
+					<emphasis role="bold">Password</emphasis>
 				</term>
 				<listitem>
 					<para>
@@ -35,7 +35,7 @@
 			</varlistentry>
 			<varlistentry>
 				<term>
-					Remember My Login
+					<emphasis role="bold">Remember My Login</emphasis>
 				</term>
 				<listitem>	
 					<para>
@@ -45,7 +45,7 @@
 			</varlistentry>
 			<varlistentry>
 				<term>
-					Forgot your User Name/Password?
+					<emphasis role="bold">Forgot your User Name/Password?</emphasis>
 				</term>
 				<listitem>
 					<para>
@@ -55,7 +55,7 @@
 			</varlistentry>
 			<varlistentry>
 				<term>
-					Sign in
+					<emphasis role="bold">Sign in</emphasis>
 				</term>
 				<listitem>
 					<para>
@@ -65,7 +65,7 @@
 			</varlistentry>
 			<varlistentry>
 				<term>
-					Discard
+					<emphasis role="bold">Discard</emphasis>
 				</term>
 				<listitem>
 					<para>
@@ -89,7 +89,7 @@
 					</para>
 					<mediaobject>
 						<imageobject>
-							<imagedata fileref="images/SignIn2.6.png" format="PNG" width="444" />
+							<imagedata fileref="images/Signin.png" format="PNG" width="444" />
 						</imageobject>
 					</mediaobject>
 					</step>
@@ -115,34 +115,37 @@
 			<para>
 				After signing in, you will be redirected to the homepage and welcomed with your full name in the top right corner of the page.
 			</para>
-<!--
 			<mediaobject>
 				<imageobject>
-					<imagedata fileref="images/PortalHome.png" format="PNG" width="444" />
+					<imagedata fileref="images/Toolbar.png" format="PNG" width="444" />
 				</imageobject>
 			</mediaobject>
--->
+
                      </section>
 
                      <section id="sect-User_Guide-Sign_Out">
 		        <title>Sign Out</title>
-			<procedure>
+				<para>
+					This feature ends the authenticated session and returns the user to the anonymous portal.
+				</para>
+				<procedure>
 					<step>
 						<para>
-							This feature lets you get back to the anonymous portal. It ends your current portal session.
+							In the upper left corner of the screen, hover your cursor over the &PRODUCT; icon. A drop down menu will appear.
 						</para>
 					</step>
 					<step>
 						<para>
-							In the upper left corner of the screen, click <emphasis role="bold">Sign out</emphasis> :
+							Click <emphasis role="bold">Sign out</emphasis> :
 						</para>
-						<mediaobject>
-							<imageobject>
-								<imagedata fileref="images/SignOut.png" format="PNG" />
-							</imageobject>
-						</mediaobject>
 					</step>
-			</procedure>
+				</procedure>
+					<mediaobject>
+						<imageobject>
+							<imagedata fileref="images/StarPortlet.png" format="PNG" />
+						</imageobject>
+					</mediaobject>
+
                      </section>
 
 </section>

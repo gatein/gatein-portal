@@ -6,7 +6,7 @@
 <section id="sect-User_Guide-Register_New_Accounts">
 	<title>Register New Accounts</title>
 	<para>
-		Unregistered users who visit the portal are limited in the content they can see.
+		Unregistered users visiting the portal are limited in the content they can see.
 	</para>
 	<para>
 		Users who need access to deeper content or who need to perform actions within the portal should register themselves and then contact the portal administrator to gain appropriate access permissions to their account.
@@ -19,19 +19,14 @@
 			<para>
 				Click <emphasis role="bold">Register</emphasis> on the Navigation bar.
 			</para>
-<note>
-<title>DOC TODO</title>
-<para>
-please update with latest display + mouse pointer on "Register"
-</para>
-</note>
+
 				<mediaobject>
 					<imageobject>
-						<imagedata fileref="images/Frontpage.png" format="PNG" width="444" />
+						<imagedata fileref="images/Register.png" format="PNG" width="444" />
 					</imageobject>
 				</mediaobject>
 				<para>
-					The Register page appears: 
+					The <emphasis role="bold">Register New Account</emphasis> page appears: 
 				</para>
 				<mediaobject>
 					<imageobject>
@@ -40,12 +35,12 @@ please update with latest display + mouse pointer on "Register"
 				</mediaobject>
 
 			<para>
-				The <emphasis role="bold">Account Setting</emphasis> information includes:
+				The required information includes:
 			</para>
 
 					<variablelist>
 						<varlistentry>
-							<term>User Name</term> 
+							<term><emphasis role="bold">User Name</emphasis></term> 
 							<listitem>
 								<para>
 									The name used to log in.
@@ -53,7 +48,7 @@ please update with latest display + mouse pointer on "Register"
 							</listitem>
 						</varlistentry>
 						<varlistentry>
-							<term>Password</term>
+							<term><emphasis role="bold">Password</emphasis></term>
 							<listitem>
 								<para>
 									The password must be between 6 and 30 characters and can contain spaces.
@@ -61,7 +56,7 @@ please update with latest display + mouse pointer on "Register"
 							</listitem>
 						</varlistentry>
 						<varlistentry>
-							<term>Confirm Password</term>
+							<term><emphasis role="bold">Confirm Password</emphasis></term>
 							<listitem>
 								<para>
 									Re-type the password above. The <emphasis>Password</emphasis> and <emphasis>Confirm Password</emphasis> fields must be the same.
@@ -69,7 +64,7 @@ please update with latest display + mouse pointer on "Register"
 							</listitem>
 						</varlistentry>
 						<varlistentry>
-							<term>First Name</term>
+							<term><emphasis role="bold">First Name</emphasis></term>
 							<listitem>
 								<para>
 									The user's first name.
@@ -77,7 +72,7 @@ please update with latest display + mouse pointer on "Register"
 							</listitem>
 						</varlistentry>
 						<varlistentry>
-							<term>Last Name</term>
+							<term><emphasis role="bold">Last Name</emphasis></term>
 							<listitem>
 								<para>
 									The user's last name.
@@ -85,7 +80,7 @@ please update with latest display + mouse pointer on "Register"
 							</listitem>
 						</varlistentry>
 						<varlistentry>
-							<term>Email Address</term>
+							<term><emphasis role="bold">Email Address</emphasis></term>
 							<listitem>
 								<para>
 									The user's email address. This must be in the appropriate format. For example: <replaceable>username@abc.com</replaceable>.
@@ -119,7 +114,7 @@ please update with latest display + mouse pointer on "Register"
 		</step> -->
 		<step>
 			<para>
-				Click <emphasis role="bold">Subscribe</emphasis> to register a new account or <emphasis role="bold">Reset</emphasis> to refresh all entered values. You cannot add a new account if one of these cases occurs:
+				Click <emphasis role="bold">Subscribe</emphasis> to register a new account or <emphasis role="bold">Reset</emphasis> to refresh all entered values. You cannot add a new account if one of the following cases occurs:
 			</para>
 			<itemizedlist>
 				<listitem>

@@ -6,7 +6,13 @@
 <section id="sect-User_Guide-Portal">
 	<title>Portal</title>
 		<para>
-An enterprise portal is a Web application that provides means to aggregate and personalize information via application-specific portlets. The users and administrators are able via a web-based user interface to integrate information, people and processes across organizational boundaries. The framework enables aggregation of enterprise content and business applications with flexible management and personalization options.
+An enterprise portal is a Web application that provides means to aggregate and personalize information via application-specific portlets.
+		</para>
+		<para>
+			Users and administrators are able to integrate information, people and processes across organizational boundaries via a web-based user interface.
+		</para>
+		<para>
+			The framework enables aggregation of enterprise content and business applications with flexible management and personalization options.
 		</para>
 </section>
 

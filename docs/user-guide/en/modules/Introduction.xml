@@ -27,12 +27,23 @@
 					GateIn homepage:
 					<ulink url="http://www.gatein.org">www.gatein.org</ulink>
 				</para>
+				<mediaobject>
+					<imageobject>
+						<imagedata fileref="images/GateIn.png" format="PNG"/>
+					</imageobject>
+				</mediaobject>
 			</listitem>
 			<listitem>
 				<para>
 					GateIn videos:
 					<ulink url="http://www.jboss.org/gatein/videos.html">www.jboss.org/gatein/videos.html</ulink>
 				</para>
+				<mediaobject>
+					<imageobject>
+						<imagedata fileref="images/Videos.png" format="PNG" />
+					</imageobject>
+				</mediaobject>
+
 			</listitem>
 			<listitem>
 				<para>
@@ -45,6 +56,12 @@
 					GateIn downloads:
 					<ulink url="http://www.jboss.org/gatein/downloads.html">www.jboss.org/gatein/downloads.html</ulink>
 				</para>
+				<mediaobject>
+					<imageobject>
+						<imagedata fileref="images/Downloads.png" format="PNG" />
+					</imageobject>
+				</mediaobject>
+
 			</listitem>
 		</itemizedlist>
 	</section>

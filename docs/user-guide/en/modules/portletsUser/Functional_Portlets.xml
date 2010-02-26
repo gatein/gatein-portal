@@ -45,13 +45,6 @@
 			<para>
 				The Application Registry  Portlet is used to manage different application categories. You can add, edit, set permissions and delete a category and its applications.
 			</para>
-
-<note>
-<title>DOC TODO</title>
-<para>
-please redo screenshot, it is not up-to-date
-</para>
-</note>
 			<mediaobject>
 				<imageobject>
 					<imagedata fileref="images/ApplicationRegistry.png" format="PNG" width="444" />
@@ -90,7 +83,7 @@ please redo screenshot, it is not up-to-date
 	</varlistentry>
     -->
 	<varlistentry>
-		<term>Star Toolbar Portlet</term>
+		<term><emphasis role="bold">Star Toolbar Portlet</emphasis></term>
 		<listitem>
 			<para>
 				The Star Toolbar Portlet is used to change the default language, the skin of the portal or to sign out.

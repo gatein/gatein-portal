@@ -11,68 +11,68 @@
 
 	<variablelist>
 	  <varlistentry>
-		<term>Banner Portlet</term>
+		<term><emphasis role="bold">Banner Portlet</emphasis></term>
 		<listitem>
-			<para>
-				This Portlet contains the organization's slogan, logo, and icons.
-			</para>
-		<!--    <mediaobject>
+			<mediaobject>
 				<imageobject>
 					<imagedata fileref="images/BannerPortlet.png" format="PNG"></imagedata>
 				</imageobject>
-			</mediaobject>	          -->
+			</mediaobject>
+			<para>
+				This Portlet contains the organization's slogan, logo, and icons.
+			</para>
 		</listitem>
 	</varlistentry>
 	<varlistentry>
-		<term>HomePage Portlet</term>
+		<term><emphasis role="bold">HomePage Portlet</emphasis></term>
 		<listitem>
 			<para>
 				This Portlet is the home page for a portal. The home page is the first page displayed when you visit the site.
 			</para>
-		<!--    <mediaobject>
+			<mediaobject>
 				<imageobject>
-					<imagedata fileref="images/PortletHome2.png" format="PNG"></imagedata>
+					<imagedata fileref="images/PortalHome.png" format="PNG"></imagedata>
 				</imageobject>
-			</mediaobject>          -->
+			</mediaobject>
 		</listitem>
 	</varlistentry>
 	<varlistentry>
-		<term>Navigation Portlet</term>
+		<term><emphasis role="bold">Navigation Portlet</emphasis></term>
 		<listitem>
 			<para>
 				This Portlet provides a navigation bar. A navigation bar is a menu that helps users to visualize the structure of a site and provide links to quickly move from page to page.
 			</para>
-		<!--    <mediaobject>
+			<mediaobject>
 				<imageobject>
 					<imagedata fileref="images/NavigationPortlet.png" format="PNG"></imagedata>
 				</imageobject>
-			</mediaobject> -->
+			</mediaobject>
 		</listitem>
 	</varlistentry>
 	<varlistentry>
-		<term>Sitemap Portlet</term>
+		<term><emphasis role="bold">Sitemap Portlet</emphasis></term>
 		<listitem>
 			<para>
 				This Portlet displays a site map page of a web site. It lists pages on a website, typically organized in hierarchical fashion.
 			</para>
-		<!--    <mediaobject>
+			<mediaobject>
 				<imageobject>
-					<imagedata fileref="images/SiteMap3.png" format="PNG"></imagedata>
+					<imagedata fileref="images/SiteMap.png" format="PNG"></imagedata>
 				</imageobject>
-			</mediaobject>         -->
+			</mediaobject>
 		</listitem>
 	</varlistentry>
 	<varlistentry>
-		<term>Breadcumbs Portlet</term>
+		<term><emphasis role="bold">Breadcumbs Portlet</emphasis></term>
 		<listitem>
 			<para>
 				This Portlet displays the 'path' the user has taken from the home page to arrive at the currrent page.
 			</para>
-		<!--    <mediaobject>
+			<mediaobject>
 				<imageobject>
-					<imagedata fileref="images/Breadcumbs.png" format="PNG"></imagedata>
+					<imagedata fileref="images/Breadcrumbs.png" format="PNG"></imagedata>
 				</imageobject>
-			</mediaobject>          -->
+			</mediaobject>
 		</listitem>
 	</varlistentry>
 <!--  	<varlistentry>
@@ -89,25 +89,23 @@
 		</listitem>
 	</varlistentry> -->
 	<varlistentry>
-		<term>Dashboard Portlet</term>
+		<term><emphasis role="bold">Dashboard Portlet</emphasis></term>
 		<listitem>
 			<para>
 				This portlet is used for hosting mini-applications known as gadgets. The dashboard uses a variety of graphical effects for displaying, opening, and using gadgets.
 			</para>
-<!--
 			<mediaobject>
 				<imageobject>
-					<imagedata fileref="images/Dashboard1.png" format="PNG" width="444" />
+					<imagedata fileref="images/Dashboard.png" format="PNG" width="444" />
 				</imageobject>
 			</mediaobject>
--->
 			<para>
 				Refer to <xref linkend="sect-User_Guide-Dashboard_Portlet" /> or <xref linkend="chap-User_Guide-Gadgets_Administration" /> for more information.
 			</para>
 		</listitem>
 	</varlistentry>
 	<varlistentry>
-		<term>Iframe Portlet</term>
+		<term><emphasis role="bold">Iframe Portlet</emphasis></term>
 		<listitem>
 			<para>
 				This Portlet is used to create inline frames (IFrame) elements for a site. An Iframe is a HTML element which can embed another document into a parent HTML document. By using IFrames, embedded data is displayed inside a sub-window of browser.
@@ -135,7 +133,7 @@
 	</varlistentry>
     -->
 	<varlistentry>
-		<term>Gadget Wrapper Portlet</term>
+		<term><emphasis role="bold">Gadget Wrapper Portlet</emphasis></term>
 		<listitem>
 			<para>
 				This Portlet allows users to view a gadget in canvas mode. 
@@ -163,16 +161,16 @@
 	</varlistentry>
     -->
 	<varlistentry>
-		<term>Footer Portlet</term>
+		<term><emphasis role="bold">Footer Portlet</emphasis></term>
 		<listitem>
 			<para>
 				This Portlet provides the footer for a site. This footer provides information or links about the site's author/institutional sponsor, the date of the last revision made to the site, copyright information, comments form and navigational links.
 			</para>
-		<!--    <mediaobject>
+			<mediaobject>
 				<imageobject>
 					<imagedata fileref="images/Footer.png" format="PNG"></imagedata>
 				</imageobject>
-			</mediaobject>       -->
+			</mediaobject>
 		</listitem>
 	</varlistentry>
 	</variablelist>

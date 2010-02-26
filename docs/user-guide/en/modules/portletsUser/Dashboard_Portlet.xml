@@ -13,7 +13,7 @@
 	</para>
 	<mediaobject>
 		<imageobject>
-			<imagedata fileref="images/Dashboard1.png" format="PNG" width="444" />
+			<imagedata fileref="images/Dashboard1.png" format="PNG"   />
 		</imageobject>
 	</mediaobject>
 
@@ -33,11 +33,11 @@
 			
 		</procedure>
 		<para>
-			The active Dashboard can be individually named by clicking on the default name ("<emphasis>Click and Type Page Name</emphasis>") where it appears below the current user name and entering a new name.
+			The active Dashboard can be individually named by clicking on the default name ("<emphasis>Click and Type Page Name</emphasis>") and entering a new name.
 		</para>
 		<mediaobject>
 			<imageobject>
-				<imagedata fileref="images/Dashname.png" format="PNG" width="444" />
+				<imagedata fileref="images/Dashname.png" format="PNG"   />
 			</imageobject>
 		</mediaobject>
 
@@ -46,52 +46,52 @@
 		</para>
 		<mediaobject>
 			<imageobject>
-				<imagedata fileref="images/Dash2.png" format="PNG" width="444" />
+				<imagedata fileref="images/Dash2.png" format="PNG"   />
 			</imageobject>
 		</mediaobject>
 		<variablelist id="vari-User_Guide-Using_the_Dashboard_Workspace-Default_Gadgets">
 			<title>Default Gadgets:</title>
 			<varlistentry>
-				<term>Calendar</term>
+				<term><emphasis role="bold">Calendar</emphasis></term>
 				<listitem>
 					<para>
 						The calendar gadget allows users to switch easily between daily, monthly and yearly view and, is customizable to match your portal's theme.
 					</para>
 					<mediaobject>
 						<imageobject>
-							<imagedata fileref="images/Calendar.png" format="PNG" />
+							<imagedata fileref="images/Calendar.png" format="PNG" width="444" />
 						</imageobject>
 					</mediaobject>
 				</listitem>
 			</varlistentry>
 			<varlistentry>
-				<term>ToDo</term>
+				<term><emphasis role="bold">ToDo</emphasis></term>
 				<listitem>
 					<para>
 						This application helps you organize your day and work group. It is designed to keep track of your tasks in a convenient and transparent way. Tasks can be highlighted with different colors.
 					</para>
 					<mediaobject>
 						<imageobject>
-							<imagedata fileref="images/Todo.png" format="PNG" />
+							<imagedata fileref="images/Todo.png" format="PNG"   />
 						</imageobject>
 					</mediaobject>
 				</listitem>
 			</varlistentry>
 			<varlistentry>
-				<term>Calculator</term>
+				<term><emphasis role="bold">Calculator</emphasis></term>
 				<listitem>
 					<para>
 						This mini-application lets you perform most basic arithmetic operations and can be themed to match the rest of your portal.
 					</para>
 					<mediaobject>
 						<imageobject>
-							<imagedata fileref="images/Calculator.png" format="PNG" />
+							<imagedata fileref="images/Calculator.png" format="PNG"   />
 						</imageobject>
 					</mediaobject>
 				</listitem>
 			</varlistentry>
 			<varlistentry>
-				<term>RSS Reader</term>
+				<term><emphasis role="bold">RSS Reader</emphasis></term>
 				<listitem>
 					<para>
 						An RSS reader, or aggregator, collates content from various, user-specified feed sources and displays them in one location. This content can include, but isn't limited to, news headlines, blog posts or email. The RSS Reader gadget displays this content in a single window on your Portal page.
@@ -104,11 +104,16 @@
 				</listitem>
 			</varlistentry>
 			<varlistentry>
-				<term>More Gadgets</term>
+				<term><emphasis role="bold">More Gadgets</emphasis></term>
 				<listitem>
 					<para>
 						Many more gadgets can be found at <ulink type="http" url="http://www.google.com/ig/directory?synd=open">Google Gadget</ulink>. &PRODUCT; is compatible with most of the gadgets available there.
 					</para>
+					<mediaobject>
+						<imageobject>
+							<imagedata fileref="images/GoogleGadgets.png" format="PNG" />
+						</imageobject>
+					</mediaobject>				
 				</listitem>
 			</varlistentry>
 		</variablelist>
@@ -116,13 +121,6 @@
 		
 	<section id="sect-User_Guide-Dashboard_Portlet-Add_Gadgets">
 		<title>Add Gadgets</title>
-
-<note>
-<title>DOC TODO</title>
-<para>
-please redo this section wich screenshots to demonstrate the addition of an external gadget provided by Google
-</para>
-</note>
 		<para>
 			To add more gadgets from external sources:
 		</para>
@@ -130,10 +128,18 @@ please redo this section wich screenshots to demonstrate the addition of an exte
 			<step>
 				<para>
 					Obtain the URL (.xml or .rss) of the gadget you wish to add from the gadget source.
+				</para>				
+				<para>
+					The gadgets available at <ulink type="http" url="http://www.google.com/ig/directory?synd=open">Google Gadget</ulink> provide a link to <emphasis role="bold">View source</emphasis>. Clicking on this link will open a page showing the gadget's XML source. Use the URL of this page in the Dashboard Workspace. The URL should end with <literal>.xml</literal>
 				</para>
 				<para>
-					For example; the gadgets available at <ulink type="http" url="http://www.google.com/ig/directory?synd=open">Google Gadget</ulink> provide a link to <emphasis role="bold">View source</emphasis>. Clicking on this will open a page showing the gadget's XML source. Use the URL of this page in the Dashboard Workspace. The URL should end with <literal>.xml</literal>
+					For example:
 				</para>
+				<mediaobject>
+					<imageobject>
+						<imagedata fileref="images/XMLURL.png" format="PNG" width="444" />
+					</imageobject>
+				</mediaobject>
 				<note>
 					<title>URL Types</title>
 					<para>
@@ -145,6 +151,12 @@ please redo this section wich screenshots to demonstrate the addition of an exte
 				<para>
 					Return to your portal and click the Dashboard link in the toolbar.
 				</para>
+				<mediaobject>
+					<imageobject>
+						<imagedata fileref="images/DashboardLink.png" format="PNG" />
+					</imageobject>
+				</mediaobject>
+				
 			</step>
 			<step>
 				<para>
@@ -152,10 +164,9 @@ please redo this section wich screenshots to demonstrate the addition of an exte
 				</para>
 					<mediaobject>
 						<imageobject>
-							<imagedata fileref="images/Dashboard1.png" format="PNG" width="444" />
+							<imagedata fileref="images/Dashboard1.png" format="PNG" />
 						</imageobject>
 					</mediaobject>
-
 			</step>
 			<step>
 				<para>
@@ -171,11 +182,23 @@ please redo this section wich screenshots to demonstrate the addition of an exte
 				<para>
 					Paste the URL obtained in step 1 into the text box above the gadget list.
 				</para>
+				<mediaobject>
+					<imageobject>
+						<imagedata fileref="images/CodePaste.png" format="PNG" />
+					</imageobject>
+				</mediaobject>
+				
 			</step>
 			<step>
 				<para>
 					Click on the <emphasis role="bold">plus</emphasis> icon to add the new gadget to the page.
 				</para>
+				<mediaobject>
+					<imageobject>
+						<imagedata fileref="images/NewGadget.png" format="PNG" />
+					</imageobject>
+				</mediaobject>
+				
 			</step>
 		</procedure>
 

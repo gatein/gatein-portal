@@ -10,7 +10,7 @@
 	</para>
 	<variablelist>
 	  <varlistentry>
-		<term>Public</term>
+		<term><emphasis role="bold">Public</emphasis></term>
 		<listitem>
 			<para>
 				This mode is for guest users who are not registered with the Portal. It does not require a log in and restricts the visitor to the public pages in the portal. Visitors can register an account to gain access to the restricted pages. After being registered, they can use the Private mode but must still contact the Portal administrator to get more rights or a group manager to become a member and gain access a group.
@@ -18,7 +18,7 @@
 		</listitem>
 	</varlistentry>
 	<varlistentry>
-		<term>Private</term>
+		<term><emphasis role="bold">Private</emphasis></term>
 		<listitem>
 			<para>
 				This mode is for registered users only. Users set a username and password during registration which they can then use to sign in. This mode offers users more site privileges. Registered users can manage private resources (creating, editing or deleting private pages), "borrow" pages from other users by creating hyperlinks and change the language for individual needs.
