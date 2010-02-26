@@ -119,8 +119,7 @@ public class TestSavedPOM extends AbstractPortalTest
       GregorianCalendar end = new GregorianCalendar(2009, 2, 21, 1, 33, 0);
       end.setTimeZone(TimeZone.getTimeZone("UTC"));
       assertEquals(end.getTime(), nodeAttrs.getDate("end-publication-date"));
-      assertEquals(true, (boolean)nodeAttrs.getBoolean("show-publication-date"));
-      assertEquals(true, (boolean)nodeAttrs.getBoolean("visible"));
+      assertEquals("TEMPORAL", nodeAttrs.getString("visibility"));
 
       //
       Link link = nodeNavigation.getLink();

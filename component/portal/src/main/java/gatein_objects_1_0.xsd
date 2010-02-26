@@ -66,12 +66,20 @@
       <xs:element name="icon" type="xs:string" minOccurs="0" maxOccurs="1"/>
       <xs:element name="start-publication-date" type="xs:string" minOccurs="0" maxOccurs="1"/>
       <xs:element name="end-publication-date" type="xs:string" minOccurs="0" maxOccurs="1"/>
-      <xs:element name="show-publication-date" type="xs:boolean" minOccurs="0" maxOccurs="1"/>
-      <xs:element name="visible" type="xs:boolean" default="true" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="visibility" type="visibility" default="VISIBLE" minOccurs="0" maxOccurs="1"/>
       <xs:element name="page-reference" type="xs:string" minOccurs="0" maxOccurs="1"/>
       <xs:element name="node" type="nodeType" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
   </xs:complexType>
+
+  <xs:simpleType name="visibility">
+    <xs:restriction base='xs:string'>
+      <xs:enumeration value="DISPLAYED"/>
+      <xs:enumeration value="HIDDEN"/>
+      <xs:enumeration value="TEMPORAL"/>
+      <xs:enumeration value="SYSTEM"/>
+    </xs:restriction>
+  </xs:simpleType>
 
   <xs:complexType name="pageSetType">
     <xs:sequence>

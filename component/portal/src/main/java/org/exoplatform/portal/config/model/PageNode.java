@@ -20,6 +20,7 @@
 package org.exoplatform.portal.config.model;
 
 import org.exoplatform.commons.utils.ExpressionUtil;
+import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.pom.data.NavigationNodeData;
 
 import java.util.ArrayList;
@@ -46,9 +47,7 @@ public class PageNode extends PageNodeContainer
 
    private Date endPublicationDate;
 
-   private boolean showPublicationDate = false;
-
-   private boolean visible = true;
+   private Visibility visibility = Visibility.DISPLAYED;
 
    private String pageReference;
 
@@ -74,8 +73,7 @@ public class PageNode extends PageNodeContainer
       this.name = nav.getName();
       this.startPublicationDate = nav.getStartPublicationDate();
       this.endPublicationDate = nav.getEndPublicationDate();
-      this.showPublicationDate = nav.getShowPublicationDate();
-      this.visible = nav.isVisible();
+      this.visibility = nav.getVisibility();
       this.pageReference = nav.getPageReference();
       this.children = children;
    }
@@ -203,26 +201,56 @@ public class PageNode extends PageNodeContainer
 
    public boolean isDisplay()
    {
-      if (visible && showPublicationDate)
+      switch (visibility)
       {
-         return isInPublicationDate();
+         case DISPLAYED:
+            return true;
+         case HIDDEN:
+            return false;
+         case TEMPORAL:
+            return isInPublicationDate();
+         case SYSTEM:
+            return false;
+         default:
+            throw new AssertionError();
       }
-      return visible;
    }
 
    public boolean isVisible()
    {
-      return visible;
-   }
-
-   public boolean getVisible()
-   {
-      return visible;
+      switch (visibility)
+      {
+         case DISPLAYED:
+         case TEMPORAL:
+            return true;
+         case SYSTEM:
+         case HIDDEN:
+            return false;
+         default:
+            throw new AssertionError();
+      }
    }
 
    public void setVisible(Boolean b)
    {
-      visible = b.booleanValue();
+      if (b != null)
+      {
+         switch (visibility)
+         {
+            case SYSTEM:
+               break;
+            case HIDDEN:
+            case DISPLAYED:
+            case TEMPORAL:
+               visibility = b ? Visibility.DISPLAYED : Visibility.HIDDEN;
+               break;
+         }
+      }
+   }
+
+   public void setVisibility(Visibility visibility)
+   {
+      this.visibility = visibility;
    }
 
    private boolean isInPublicationDate()
@@ -230,22 +258,33 @@ public class PageNode extends PageNodeContainer
       if (startPublicationDate != null && endPublicationDate != null)
       {
          Date currentDate = new Date();
-         if (currentDate.compareTo(startPublicationDate) >= 0 && currentDate.compareTo(endPublicationDate) <= 0)
-            return true;
+
+         //
+         return currentDate.compareTo(startPublicationDate) >= 0 && currentDate.compareTo(endPublicationDate) <= 0;
       }
-      else if (startPublicationDate == null && endPublicationDate == null)
-         return true;
-      return false;
+      else return startPublicationDate == null && endPublicationDate == null;
    }
 
    public void setShowPublicationDate(Boolean show)
    {
-      showPublicationDate = show.booleanValue();
+      if (show != null)
+      {
+         switch (visibility)
+         {
+            case SYSTEM:
+            case HIDDEN:
+               break;
+            case TEMPORAL:
+            case DISPLAYED:
+               visibility = show ? Visibility.TEMPORAL : Visibility.DISPLAYED;
+               break;
+         }
+      }
    }
 
    public boolean isShowPublicationDate()
    {
-      return showPublicationDate;
+      return visibility == Visibility.TEMPORAL;
    }
 
    public PageNode getChild(String name)
@@ -275,10 +314,9 @@ public class PageNode extends PageNodeContainer
       newNode.setResolvedLabel(resolvedLabel);
       newNode.setPageReference(pageReference);
       newNode.setModifiable(modifiable);
-      newNode.setShowPublicationDate(showPublicationDate);
       newNode.setStartPublicationDate(startPublicationDate);
       newNode.setEndPublicationDate(endPublicationDate);
-      newNode.setVisible(visible);
+      newNode.setVisibility(visibility);
       if (children == null || children.size() < 1)
          return newNode;
       for (PageNode ele : children)
@@ -300,8 +338,7 @@ public class PageNode extends PageNodeContainer
          name,
          startPublicationDate,
          endPublicationDate,
-         showPublicationDate,
-         visible,
+         visibility,
          pageReference,
          children
       );

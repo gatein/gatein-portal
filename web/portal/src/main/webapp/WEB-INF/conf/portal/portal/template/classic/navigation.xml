@@ -37,21 +37,21 @@
       <uri>groupnavigation</uri>
       <name>groupnavigation</name>
       <label>Group Navigation</label>
-      <visible>false</visible>
+      <visibility>SYSTEM</visibility>
       <page-reference>portal::@owner@::groupnavigation</page-reference>
     </node>
     <node>
       <uri>portalnavigation</uri>
       <name>portalnavigation</name>
       <label>Portal Navigation</label>
-      <visible>false</visible>
+      <visibility>SYSTEM</visibility>
       <page-reference>portal::@owner@::portalnavigation</page-reference>
     </node> 
     <node>
 	   <uri>register</uri>
 	   <name>register</name>
 	   <label>Register</label>
-	   <visible>false</visible>
+      <visibility>SYSTEM</visibility>
 	   <page-reference>portal::@owner@::register</page-reference>	    
 	 </node>
   </page-nodes>

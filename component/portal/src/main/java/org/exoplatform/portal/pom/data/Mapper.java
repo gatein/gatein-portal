@@ -29,6 +29,7 @@ import org.exoplatform.portal.mop.ProtectedResource;
 import org.exoplatform.portal.config.model.PersistentApplicationState;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.TransientApplicationState;
+import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.Utils;
 import org.exoplatform.portal.pom.spi.portlet.Portlet;
@@ -162,8 +163,7 @@ public class Mapper
             src.getName(),
             attrs.getValue(MappedAttributes.START_PUBLICATION_DATE),
             attrs.getValue(MappedAttributes.END_PUBLICATION_DATE),
-            attrs.getValue(MappedAttributes.SHOW_PUBLICATION_DATE, false),
-            attrs.getValue(MappedAttributes.VISIBLE, true),
+            Visibility.valueOf(attrs.getValue(MappedAttributes.VISIBILITY, Visibility.DISPLAYED.toString())),
             pageReference,
             children
          );
@@ -211,8 +211,7 @@ public class Mapper
          attrs.setValue(MappedAttributes.ICON, node.getIcon());
          attrs.setValue(MappedAttributes.START_PUBLICATION_DATE, node.getStartPublicationDate());
          attrs.setValue(MappedAttributes.END_PUBLICATION_DATE, node.getEndPublicationDate());
-         attrs.setValue(MappedAttributes.SHOW_PUBLICATION_DATE, node.getShowPublicationDate());
-         attrs.setValue(MappedAttributes.VISIBLE, node.isVisible());
+         attrs.setValue(MappedAttributes.VISIBILITY, node.getVisibility().name());
       }
       else if (src instanceof NavigationData)
       {

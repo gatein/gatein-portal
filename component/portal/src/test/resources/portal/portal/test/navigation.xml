@@ -33,8 +33,7 @@
       <icon>node_icon</icon>
       <start-publication-date>2000-03-21T01:33:00</start-publication-date>
       <end-publication-date>2009-03-21T01:33:00</end-publication-date>
-      <show-publication-date>true</show-publication-date>
-      <visible>true</visible>
+      <visibility>TEMPORAL</visibility>
 	    <page-reference>portal::test::test</page-reference>
 	  </node>    
     <node>

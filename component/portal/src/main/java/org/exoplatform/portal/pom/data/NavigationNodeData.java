@@ -18,6 +18,8 @@
  */
 package org.exoplatform.portal.pom.data;
 
+import org.exoplatform.portal.mop.Visibility;
+
 import java.util.Date;
 import java.util.List;
 
@@ -47,10 +49,7 @@ public class NavigationNodeData extends NavigationNodeContainerData
    private final Date endPublicationDate;
 
    /** . */
-   private final boolean showPublicationDate;
-
-   /** . */
-   private final boolean visible;
+   private final Visibility visibility;
 
    /** . */
    private final String pageReference;
@@ -62,12 +61,11 @@ public class NavigationNodeData extends NavigationNodeContainerData
       String name,
       Date startPublicationDate,
       Date endPublicationDate,
-      Boolean showPublicationDate,
-      Boolean visible,
+      Visibility visibility,
       String pageReference,
       List<NavigationNodeData> children)
    {
-      this(null, uri, label, icon, name, startPublicationDate, endPublicationDate, showPublicationDate, visible, pageReference, children);
+      this(null, uri, label, icon, name, startPublicationDate, endPublicationDate, visibility, pageReference, children);
    }
 
    public NavigationNodeData(
@@ -78,8 +76,7 @@ public class NavigationNodeData extends NavigationNodeContainerData
       String name,
       Date startPublicationDate,
       Date endPublicationDate,
-      Boolean showPublicationDate,
-      Boolean visible,
+      Visibility visibility,
       String pageReference,
       List<NavigationNodeData> children)
    {
@@ -92,8 +89,7 @@ public class NavigationNodeData extends NavigationNodeContainerData
       this.name = name;
       this.startPublicationDate = startPublicationDate;
       this.endPublicationDate = endPublicationDate;
-      this.showPublicationDate = showPublicationDate != null ? showPublicationDate : false;
-      this.visible = visible != null ? visible : true;
+      this.visibility = visibility;
       this.pageReference = pageReference;
    }
    public String getURI()
@@ -126,14 +122,9 @@ public class NavigationNodeData extends NavigationNodeContainerData
       return endPublicationDate;
    }
 
-   public boolean getShowPublicationDate()
+   public Visibility getVisibility()
    {
-      return showPublicationDate;
-   }
-
-   public boolean isVisible()
-   {
-      return visible;
+      return visibility;
    }
 
    public String getPageReference()
