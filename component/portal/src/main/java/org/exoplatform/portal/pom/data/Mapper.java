@@ -452,6 +452,21 @@ public class Mapper
                   owner.getName(),
                   null
                );
+
+               //
+               boolean showInfoBar = false;
+               boolean showMode = false;
+               boolean showWindowState = false;
+               String theme = null;
+               if (srcContainer.isAdapted(Decorated.class))
+               {
+                  Decorated decorated = srcContainer.adapt(Decorated.class);
+                  showInfoBar = decorated.getShowInfoBar();
+                  showMode = decorated.getShowMode();
+                  showWindowState = decorated.getShowInfoBar();
+                  theme = decorated.getTheme();
+               }
+
                mo = new ApplicationData<Portlet>(
                   srcContainer.getObjectId(),
                   component.getName(),
@@ -461,10 +476,10 @@ public class Mapper
                   null,
                   null,
                   null,
-                  false,
-                  false,
-                  false,
-                  null,
+                  showInfoBar,
+                  showWindowState,
+                  showMode,
+                  theme,
                   null,
                   null,
                   Collections.<String, String>emptyMap(),
@@ -661,6 +676,11 @@ public class Mapper
                   {
                      UIContainer dstDashboard = session.findObjectById(ObjectType.CONTAINER, app.getStorageId());
                      srcChild = loadDashboard(dstDashboard);
+                     Decorated decorated = dstDashboard.adapt(Decorated.class);
+                     decorated.setShowWindowState(app.isShowApplicationState());
+                     decorated.setShowInfoBar(app.isShowInfoBar());
+                     decorated.setShowMode(app.isShowApplicationMode());
+                     decorated.setTheme(app.getTheme());
                   }
                   else
                   {
