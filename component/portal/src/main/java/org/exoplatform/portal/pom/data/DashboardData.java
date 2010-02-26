@@ -34,7 +34,6 @@ public class DashboardData extends ContainerData
       String id,
       String name,
       String icon,
-      String decorator,
       String template,
       String factoryId,
       String title,
@@ -49,7 +48,6 @@ public class DashboardData extends ContainerData
          id,
          name,
          icon,
-         decorator,
          template,
          factoryId,
          title,
@@ -73,7 +71,6 @@ public class DashboardData extends ContainerData
             null,
             null,
             null,
-            null,
             "classpath:groovy/dashboard/webui/component/UIContainer.gtmpl",
             null,
             null,
@@ -86,7 +83,6 @@ public class DashboardData extends ContainerData
       }
 
       INITIAL_DASHBOARD = new DashboardData(
-         null,
          null,
          null,
          null,

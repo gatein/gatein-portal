@@ -158,7 +158,6 @@ public class Page extends Container
          id,
          name,
          icon,
-         decorator,
          template,
          factoryId,
          title,

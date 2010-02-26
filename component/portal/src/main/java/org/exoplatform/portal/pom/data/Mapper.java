@@ -384,7 +384,6 @@ public class Mapper
          name,
          null,
          null,
-         null,
          attrs.getValue(MappedAttributes.FACTORY_ID),
          described.getName(),
          described.getDescription(),
@@ -418,7 +417,6 @@ public class Mapper
          attrs.getValue(MappedAttributes.ID),
          attrs.getValue(MappedAttributes.NAME),
          attrs.getValue(MappedAttributes.ICON),
-         attrs.getValue(MappedAttributes.DECORATOR),
          attrs.getValue(MappedAttributes.TEMPLATE),
          attrs.getValue(MappedAttributes.FACTORY_ID),
          described.getName(),
@@ -564,7 +562,6 @@ public class Mapper
       dstAttrs.setValue(MappedAttributes.ICON, src.getIcon());
       dstAttrs.setValue(MappedAttributes.TEMPLATE, src.getTemplate());
       dstAttrs.setValue(MappedAttributes.FACTORY_ID, src.getFactoryId());
-      dstAttrs.setValue(MappedAttributes.DECORATOR, src.getDecorator());
       dstAttrs.setValue(MappedAttributes.WIDTH, src.getWidth());
       dstAttrs.setValue(MappedAttributes.HEIGHT, src.getHeight());
       dstAttrs.setValue(MappedAttributes.NAME, src.getName());
@@ -1082,7 +1079,6 @@ public class Mapper
          attrs.getValue(MappedAttributes.ID),
          attrs.getValue(MappedAttributes.NAME),
          attrs.getValue(MappedAttributes.ICON),
-         attrs.getValue(MappedAttributes.DECORATOR),
          attrs.getValue(MappedAttributes.TEMPLATE),
          attrs.getValue(MappedAttributes.FACTORY_ID),
          described.getName(),

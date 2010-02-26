@@ -55,7 +55,6 @@ public class Dashboard extends Container
          id,
          name,
          icon,
-         decorator,
          template,
          factoryId,
          title,

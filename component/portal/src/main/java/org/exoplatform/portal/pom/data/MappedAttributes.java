@@ -50,9 +50,6 @@ class MappedAttributes
    public static final Key<String> FACTORY_ID = Key.create("factory-id", ValueType.STRING);
 
    /** . */
-   public static final Key<String> DECORATOR = Key.create("decorator", ValueType.STRING);
-
-   /** . */
    public static final Key<Integer> PRIORITY = Key.create("priority", ValueType.INTEGER);
 
    /** . */

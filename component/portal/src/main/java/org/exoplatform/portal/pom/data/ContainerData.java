@@ -37,9 +37,6 @@ public class ContainerData extends ComponentData
    private final String icon;
 
    /** . */
-   private final String decorator;
-
-   /** . */
    private final String template;
 
    /** . */
@@ -68,7 +65,6 @@ public class ContainerData extends ComponentData
       String id,
       String name,
       String icon,
-      String decorator,
       String template,
       String factoryId,
       String title,
@@ -84,7 +80,6 @@ public class ContainerData extends ComponentData
       this.id = id;
       this.name = name;
       this.icon = icon;
-      this.decorator = decorator;
       this.template = template;
       this.factoryId = factoryId;
       this.title = title;
@@ -108,11 +103,6 @@ public class ContainerData extends ComponentData
    public String getIcon()
    {
       return icon;
-   }
-
-   public String getDecorator()
-   {
-      return decorator;
    }
 
    public String getTemplate()

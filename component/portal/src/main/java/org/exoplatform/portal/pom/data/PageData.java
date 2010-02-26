@@ -41,7 +41,6 @@ public class PageData extends ContainerData
       String id,
       String name,
       String icon,
-      String decorator,
       String template,
       String factoryId,
       String title,
@@ -55,7 +54,7 @@ public class PageData extends ContainerData
       String editPermission,
       boolean showMaxWindow)
    {
-      super(storageId, id, name, icon, decorator, template, factoryId, title, description, width, height, accessPermissions, children);
+      super(storageId, id, name, icon, template, factoryId, title, description, width, height, accessPermissions, children);
 
       //
       this.key = new PageKey(ownerType, ownerId, name);

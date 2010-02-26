@@ -25,7 +25,6 @@ import org.exoplatform.portal.mop.Described;
 import org.exoplatform.portal.mop.ProtectedResource;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.POMSessionManager;
-import org.exoplatform.test.BasicTestCase;
 import org.gatein.mop.api.Attributes;
 import org.gatein.mop.api.content.Customization;
 import org.gatein.mop.api.workspace.Navigation;
@@ -203,7 +202,6 @@ public class TestSavedPOM extends AbstractPortalTest
       assertEquals("container_1_icon", container1Attrs.getString("icon"));
       assertEquals("container_1_template", container1Attrs.getString("template"));
       assertEquals("container_1_factory_id", container1Attrs.getString("factory-id"));
-      assertEquals("container_1_decorator", container1Attrs.getString("decorator"));
       assertEquals("container_1_width", container1Attrs.getString("width"));
       assertEquals("container_1_height", container1Attrs.getString("height"));
 

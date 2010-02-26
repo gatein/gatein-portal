@@ -197,7 +197,6 @@ public class TestLoadedPOM extends AbstractPortalTest
       assertEquals("container_1_template", container1.getTemplate());
       assertTrue(Arrays.equals(new String[]{"container_1_access_permissions"}, container1.getAccessPermissions()));
       assertEquals("container_1_factory_id", container1.getFactoryId());
-      assertEquals("container_1_decorator", container1.getDecorator());
       assertEquals("container_1_description", container1.getDescription());
       assertEquals("container_1_width", container1.getWidth());
       assertEquals("container_1_height", container1.getHeight());

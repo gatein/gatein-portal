@@ -29,10 +29,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * May 13, 2004
- * @author: Tuan Nguyen
- * @email:   tuan08@users.sourceforge.net
- * @version: $Id: Container.java,v 1.8 2004/11/03 01:23:55 tuan08 Exp $
+ * @author Tuan Nguyen
  **/
 public class Container extends ModelObject
 {
@@ -42,8 +39,6 @@ public class Container extends ModelObject
    protected String name;
 
    protected String icon;
-
-   protected String decorator;
 
    protected String template;
 
@@ -56,6 +51,9 @@ public class Container extends ModelObject
    protected String width;
 
    protected String height;
+
+   // Here to please jibx binding but not used anymore
+   protected String decorator;
 
    protected String[] accessPermissions;
 
@@ -89,7 +87,6 @@ public class Container extends ModelObject
       this.id = data.getId();
       this.name = data.getName();
       this.icon = data.getIcon();
-      this.decorator = data.getDecorator();
       this.template = data.getTemplate();
       this.factoryId = data.getFactoryId();
       this.title = data.getTitle();
@@ -160,16 +157,6 @@ public class Container extends ModelObject
       this.width = width;
    }
 
-   public String getDecorator()
-   {
-      return decorator;
-   }
-
-   public void setDecorator(String s)
-   {
-      decorator = s;
-   }
-
    public String getDescription()
    {
       return description;
@@ -220,6 +207,18 @@ public class Container extends ModelObject
       this.accessPermissions = accessPermissions;
    }
 
+   public String getDecorator()
+   {
+      // Here to please jibx binding but not used anymore
+      return null;
+   }
+
+   // Here to please jibx binding but not used anymore
+   public void setDecorator(String decorator)
+   {
+      // Here to please jibx binding but not used anymore
+   }
+
    @Override
    public ContainerData build()
    {
@@ -229,7 +228,6 @@ public class Container extends ModelObject
          id,
          name,
          icon,
-         decorator,
          template,
          factoryId,
          title,
