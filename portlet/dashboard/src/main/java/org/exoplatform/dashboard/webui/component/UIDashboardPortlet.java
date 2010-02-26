@@ -20,7 +20,10 @@
 package org.exoplatform.dashboard.webui.component;
 
 import org.exoplatform.portal.application.PortalRequestContext;
+import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserACL;
+import org.exoplatform.portal.config.model.Page;
+import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.portal.webui.page.UIPage;
 import org.exoplatform.portal.webui.page.UIPageBody;
@@ -68,10 +71,31 @@ public class UIDashboardPortlet extends UIPortletApplication implements Dashboar
       PortalRequestContext prc = (PortalRequestContext)context.getParentAppRequestContext();
       UIPortalApplication portalApp = (UIPortalApplication)prc.getUIApplication();
       UIPortal portal = portalApp.getShowedUIPortal();
-      UIPageBody body = portal.findFirstComponentOfType(UIPageBody.class);
-      UIPage page = body.findFirstComponentOfType(UIPage.class);
-      UserACL userACL = portal.getApplicationComponent(UserACL.class);
-      return userACL.hasPermission(page.getEditPermission());
+
+      //
+      try
+      {
+         PageNode node = portal.getSelectedNode();
+         if (node != null)
+         {
+            String pageRef = node.getPageReference();
+            DataStorage storage = portal.getApplicationComponent(DataStorage.class);
+            Page page = storage.getPage(pageRef);
+            if (page != null)
+            {
+               UserACL userACL = portal.getApplicationComponent(UserACL.class);
+               return userACL.hasPermission(page.getEditPermission());
+            }
+         }
+      }
+      catch (Exception e)
+      {
+         log.error("Could not check dashboard edition" ,e);
+      }
+
+
+      //
+      return false;
    }
 
    /**
