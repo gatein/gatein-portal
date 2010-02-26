@@ -55,7 +55,7 @@ public class UIDashboard extends UIContainer
    {
       UIPopupWindow popup = addChild(UIPopupWindow.class, null, GADGET_POPUP_ID + "-" + hashCode());
       popup.setUIComponent(createUIComponent(UIDashboardSelectContainer.class, null, null));
-      addChild(UIDashboardContainer.class, null, null).setColumns(3);
+      addChild(UIDashboardContainer.class, null, null);
    }
 
    public void setColumns(int num) throws Exception

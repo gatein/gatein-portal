@@ -111,7 +111,17 @@ public class UIDashboardContainer extends org.exoplatform.webui.core.UIContainer
          return;
       }
 
-      addChild(UIContainer.class, null, null);
+      //
+      UIContainer uicontainer = addChild(UIContainer.class, null, null);
+
+      //
+      Container container = createContainer(COLUMN_CONTAINER, null);
+
+      //
+      PortalDataMapper.toUIContainer(uicontainer, container);
+
+      //
+      setColumns(3);
    }
 
    @Override
@@ -128,20 +138,18 @@ public class UIDashboardContainer extends org.exoplatform.webui.core.UIContainer
       {
          dashboard = service.loadDashboard(currentUIPortlet.getStorageId());
       }
-      
-      if (dashboard == null)
-      {
-         dashboard = createContainer(COLUMN_CONTAINER, null);
-      }
 
       //
-      UIContainer uiRoot = getChild(UIContainer.class);
+      if (dashboard != null)
+      {
+         UIContainer uiRoot = getChild(UIContainer.class);
 
-      // Clear the children created by default as we get state from the storage
-      uiRoot.getChildren().clear();
+         // Clear the children created by default as we get state from the storage
+         uiRoot.getChildren().clear();
 
-      // Assemble the dashboard
-      PortalDataMapper.toUIContainer(uiRoot, dashboard);
+         // Assemble the dashboard
+         PortalDataMapper.toUIContainer(uiRoot, dashboard);
+      }
 
       //
       super.processRender(context);
@@ -451,20 +459,27 @@ public class UIDashboardContainer extends org.exoplatform.webui.core.UIContainer
          return;
       }
 
-      //
-      DataStorage service = getApplicationComponent(DataStorage.class);
-
       // Get current ui portlet containing this dashboard
       UIPortlet currentUIPortlet = UIPortlet.getCurrentUIPortlet();
 
-      // Build dashboard
-      Dashboard dashboard = new Dashboard(currentUIPortlet.getStorageId());
+      // We save only if we have an existing storage id
+      // we would not have a storage id in the case where
+      // the dashboard portlet is initially dropped in the
+      // page 
+      if (currentUIPortlet.getStorageId() != null)
+      {
+         // Build dashboard
+         Dashboard dashboard = new Dashboard(currentUIPortlet.getStorageId());
 
-      // Assemble the dashboard
-      PortalDataMapper.toContainer(dashboard, uiRoot);
+         // Assemble the dashboard
+         PortalDataMapper.toContainer(dashboard, uiRoot);
 
-      // Get dashboard for merging
-      service.saveDashboard(dashboard);
+         // Get data storage
+         DataStorage service = getApplicationComponent(DataStorage.class);
+
+         // Save
+         service.saveDashboard(dashboard);
+      }
    }
 
    public static class AddNewGadgetActionListener extends EventListener<UIDashboard>
