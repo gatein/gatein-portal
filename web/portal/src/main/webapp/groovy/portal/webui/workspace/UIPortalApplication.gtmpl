@@ -89,7 +89,7 @@
     <script type="text/javascript" src="/eXoResources/javascript/eXo/i18n/MessageResource_<%=lang%>.js"></script>
 
     <% 
-     def headerElements = rcontext.getExtraMarkupHeaders();
+     def headerElements = rcontext.getExtraMarkupHeadersAsStrings();
      if (headerElements != null) 
      {
        for (element in headerElements)

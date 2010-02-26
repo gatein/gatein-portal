@@ -42,7 +42,14 @@ import org.w3c.dom.Element;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
 import java.io.IOException;
+import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.net.URLDecoder;
@@ -353,6 +360,27 @@ public class PortalRequestContext extends WebuiRequestContext
          String key = iter.next();
          response_.setHeader(key, headers.get(key));
       }
+   }
+   
+   public List<String> getExtraMarkupHeadersAsStrings() throws Exception
+   {
+      List<String> markupHeaders = new ArrayList<String>();
+      
+      if (extraMarkupHeaders != null && !extraMarkupHeaders.isEmpty())
+      {
+         Transformer transformer = TransformerFactory.newInstance().newTransformer();
+         transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+
+         for (Element element : extraMarkupHeaders)
+         {
+            DOMSource source = new DOMSource(element);
+            StreamResult result = new StreamResult(new StringWriter());
+            transformer.transform(source, result);
+            markupHeaders.add(result.getWriter().toString());
+         }
+      }
+      
+       return markupHeaders;
    }
    
    /**
