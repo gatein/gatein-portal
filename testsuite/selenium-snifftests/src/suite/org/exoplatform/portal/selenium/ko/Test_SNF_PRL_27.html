@@ -4,12 +4,12 @@
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="selenium.base" href="" />
-<title>SNF_PRL_27</title>
+<title>Test_SNF_PRL_27</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">SNF_PRL_27</td></tr>
+<tr><td rowspan="1" colspan="3">Test_SNF_PRL_27</td></tr>
 </thead><tbody>
 <tr>
 	<td>open</td>
@@ -172,14 +172,29 @@
 	<td></td>
 </tr>
 <tr>
+	<td>setSpeed</td>
+	<td>300</td>
+	<td></td>
+</tr>
+<tr>
 	<td>clickAt</td>
 	<td>link=Edit Page</td>
+	<td></td>
+</tr>
+<tr>
+	<td>setSpeed</td>
+	<td>0</td>
 	<td></td>
 </tr>
 <tr>
 	<td>echo</td>
 	<td>--Show form to edit page by wizard</td>
 	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=View Page properties</td>
+	<td>1,1</td>
 </tr>
 <tr>
 	<td>clickAt</td>
@@ -207,13 +222,28 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>waitForElementPresent</td>
 	<td>link=Platform</td>
 	<td>1,1</td>
 </tr>
 <tr>
 	<td>clickAt</td>
+	<td>link=Platform</td>
+	<td>1,1</td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
 	<td>link=Administrators</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>link=Administrators</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='UIPageFormPopupGroupMembershipSelector']//div[@class='MembershipSelector']//a</td>
 	<td></td>
 </tr>
 <tr>
@@ -225,6 +255,11 @@
 	<td>clickAt</td>
 	<td>link=Save</td>
 	<td>1,1</td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='UIPageEditor']/div[1]/div/div/div/a[2]</td>
+	<td></td>
 </tr>
 <tr>
 	<td>clickAt</td>
@@ -262,9 +297,14 @@
 	<td>1,1</td>
 </tr>
 <tr>
+	<td>waitForElementPresent</td>
+	<td>locale</td>
+	<td></td>
+</tr>
+<tr>
 	<td>select</td>
 	<td>locale</td>
-	<td>label=French (France)</td>
+	<td>label=French</td>
 </tr>
 <tr>
 	<td>clickAt</td>
@@ -297,8 +337,13 @@
 	<td>1,1</td>
 </tr>
 <tr>
+	<td>waitForElementPresent</td>
+	<td>locale</td>
+	<td></td>
+</tr>
+<tr>
 	<td>verifyTextPresent</td>
-	<td>French (France)</td>
+	<td>French</td>
 	<td></td>
 </tr>
 <tr>
@@ -317,73 +362,78 @@
 	<td></td>
 </tr>
 <tr>
+	<td>waitForElementPresent</td>
+	<td>link=Group</td>
+	<td></td>
+</tr>
+<tr>
 	<td>clickAt</td>
 	<td>link=Group</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@class='UIComponentBlock']//a[@class='EditNavIcon']</td>
+	<td>xpath=//div[@class='UIComponentBlock']//a[@class='EditNavIcon']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAt</td>
-	<td>//div[@class='UIComponentBlock']//a[@class='EditNavIcon']</td>
+	<td>xpath=//div[@class='UIComponentBlock']//a[@class='EditNavIcon']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UIGroupNavigationGrid']/table[4]/tbody/tr/td[3]/a[1]</td>
+	<td>xpath=//div[@id='UIGroupNavigationGrid']/table[2]/tbody/tr/td[3]/a[1]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAt</td>
-	<td>//div[@id='UIGroupNavigationGrid']/table[4]/tbody/tr/td[3]/a[1]</td>
+	<td>xpath=//div[@id='UIGroupNavigationGrid']/table[2]/tbody/tr/td[3]/a[1]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@class='TreeContainer JSContainer']/div/div[2]//a</td>
+	<td>xpath=//div[@class='TreeContainer JSContainer']/div/div[2]//a</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAt</td>
-	<td>//div[@class='TreeContainer JSContainer']/div/div[2]//a</td>
+	<td>xpath=//div[@class='TreeContainer JSContainer']/div/div[2]//a</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@class='TreeContainer JSContainer']/div/div[2]//a[@title='Page Management']</td>
+	<td>xpath=//div[@class='TreeContainer JSContainer']/div/div[2]//a[@title='Page Management']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAt</td>
-	<td>//div[@class='TreeContainer JSContainer']/div/div[2]//a[@title='Page Management']</td>
+	<td>xpath=//div[@class='TreeContainer JSContainer']/div/div[2]//a[@title='Page Management']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>xpath=//a[@title='test_page_name_27']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>verifyElementPresent</td>
-	<td>//a[@title='test_page_name_27']</td>
+	<td>xpath=//a[@title='test_page_name_27']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>componentExoContextMenu</td>
-	<td>//a[@title='test_page_name_27']</td>
-	<td></td>
-</tr>
-<tr>
-	<td>echo</td>
-	<td>--------To fast</td>
+	<td>xpath=//a[@title='test_page_name_27']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UINavigationNodeSelector']//div[@id='NavigationNodePopupMenu']//a[@class='ItemIcon DeleteNode16x16Icon']</td>
+	<td>xpath=//div[@id='UINavigationNodeSelector']//div[@id='NavigationNodePopupMenu']//a[@class='ItemIcon DeleteNode16x16Icon']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAt</td>
-	<td>//div[@id='UINavigationNodeSelector']//div[@id='NavigationNodePopupMenu']//a[@class='ItemIcon DeleteNode16x16Icon']</td>
+	<td>xpath=//div[@id='UINavigationNodeSelector']//div[@id='NavigationNodePopupMenu']//a[@class='ItemIcon DeleteNode16x16Icon']</td>
 	<td></td>
 </tr>
 <tr>

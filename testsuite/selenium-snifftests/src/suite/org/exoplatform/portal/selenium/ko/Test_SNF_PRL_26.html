@@ -4,12 +4,12 @@
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="selenium.base" href="" />
-<title>SNF_PRL_26</title>
+<title>Test_SNF_PRL_26</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">SNF_PRL_26</td></tr>
+<tr><td rowspan="1" colspan="3">Test_SNF_PRL_26</td></tr>
 </thead><tbody>
 <tr>
 	<td>open</td>
@@ -103,12 +103,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//img[@title='Select Page']</td>
+	<td>xpath=//img[@title='Select Page']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAt</td>
-	<td>//img[@title='Select Page']</td>
+	<td>xpath=//img[@title='Select Page']</td>
 	<td></td>
 </tr>
 <tr>
@@ -124,6 +124,11 @@
 <tr>
 	<td>clickAt</td>
 	<td>link=Save</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=test_grp_label_26</td>
 	<td></td>
 </tr>
 <tr>
@@ -133,7 +138,7 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='PortalNavigationTopContainer']/div[2]/div/div/div/div/div/div/a</td>
+	<td>xpath=//div[@id='PortalNavigationTopContainer']/div[2]/div/div/div/div/div/div/a</td>
 	<td></td>
 </tr>
 <tr>
@@ -153,17 +158,17 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@ID='UIGroupNavigationGrid']//table[4]//a[@class='EditNavIcon']</td>
+	<td>xpath=//div[@ID='UIGroupNavigationGrid']//table[1]//a[@class='EditNavIcon']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAt</td>
-	<td>//div[@ID='UIGroupNavigationGrid']//table[4]//a[@class='EditNavIcon']</td>
+	<td>xpath=//div[@ID='UIGroupNavigationGrid']//table[1]//a[@class='EditNavIcon']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>verifyElementPresent</td>
-	<td>//a[@title='test_grp_label_26']</td>
+	<td>xpath=//a[@title='test_grp_label_26']</td>
 	<td></td>
 </tr>
 <tr>
@@ -177,23 +182,33 @@
 	<td></td>
 </tr>
 <tr>
+	<td>waitForElementPresent</td>
+	<td>link=test_grp_label_26</td>
+	<td></td>
+</tr>
+<tr>
 	<td>componentExoContextMenu</td>
-	<td>//a[@title='test_grp_label_26']</td>
+	<td>xpath=//a[@title='test_grp_label_26']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UINavigationNodeSelector']//div[@id='NavigationNodePopupMenu']//a[@class='ItemIcon MoveUp16x16Icon']</td>
+	<td>xpath=//div[@id='UINavigationNodeSelector']//div[@id='NavigationNodePopupMenu']//a[@class='ItemIcon MoveUp16x16Icon']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>setSpeed</td>
+	<td>300</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAt</td>
-	<td>//div[@id='UINavigationNodeSelector']//div[@id='NavigationNodePopupMenu']//a[@class='ItemIcon MoveUp16x16Icon']</td>
+	<td>xpath=//div[@id='UINavigationNodeSelector']//div[@id='NavigationNodePopupMenu']//a[@class='ItemIcon MoveUp16x16Icon']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>verifyElementNotPresent</td>
-	<td>//div[@class='TreeContainer JSContainer']/div/div[${nodeLvl}]/div/a[@title='test_grp_label_26']</td>
+	<td>xpath=//div[@class='TreeContainer JSContainer']/div/div[${nodeLvl}]/div/a[@title='test_grp_label_26']</td>
 	<td></td>
 </tr>
 <tr>
@@ -208,22 +223,22 @@
 </tr>
 <tr>
 	<td>componentExoContextMenu</td>
-	<td>//a[@title='test_grp_label_26']</td>
+	<td>xpath=//a[@title='test_grp_label_26']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UINavigationNodeSelector']//div[@id='NavigationNodePopupMenu']//a[@class='ItemIcon MoveDown16x16Icon']</td>
+	<td>xpath=//div[@id='UINavigationNodeSelector']//div[@id='NavigationNodePopupMenu']//a[@class='ItemIcon MoveDown16x16Icon']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAt</td>
-	<td>//div[@id='UINavigationNodeSelector']//div[@id='NavigationNodePopupMenu']//a[@class='ItemIcon MoveDown16x16Icon']</td>
+	<td>xpath=//div[@id='UINavigationNodeSelector']//div[@id='NavigationNodePopupMenu']//a[@class='ItemIcon MoveDown16x16Icon']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>verifyElementPresent</td>
-	<td>//div[@class='TreeContainer JSContainer']/div/div[${nodeLvl}]/div/a[@title='test_grp_label_26']</td>
+	<td>xpath=//div[@class='TreeContainer JSContainer']/div/div[${nodeLvl}]/div/a[@title='test_grp_label_26']</td>
 	<td></td>
 </tr>
 <tr>
@@ -243,32 +258,32 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@ID='UIGroupNavigationGrid']//table[4]//a[@class='EditNavIcon']</td>
+	<td>xpath=//div[@ID='UIGroupNavigationGrid']//table[1]//a[@class='EditNavIcon']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAt</td>
-	<td>//div[@ID='UIGroupNavigationGrid']//table[4]//a[@class='EditNavIcon']</td>
+	<td>xpath=//div[@ID='UIGroupNavigationGrid']//table[1]//a[@class='EditNavIcon']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>verifyElementPresent</td>
-	<td>//a[@title='test_grp_label_26']</td>
+	<td>xpath=//a[@title='test_grp_label_26']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>componentExoContextMenu</td>
-	<td>//a[@title='test_grp_label_26']</td>
+	<td>xpath=//a[@title='test_grp_label_26']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UINavigationNodeSelector']//div[@id='NavigationNodePopupMenu']//a[@class='ItemIcon DeleteNode16x16Icon']</td>
+	<td>xpath=//div[@id='UINavigationNodeSelector']//div[@id='NavigationNodePopupMenu']//a[@class='ItemIcon DeleteNode16x16Icon']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAt</td>
-	<td>//div[@id='UINavigationNodeSelector']//div[@id='NavigationNodePopupMenu']//a[@class='ItemIcon DeleteNode16x16Icon']</td>
+	<td>xpath=//div[@id='UINavigationNodeSelector']//div[@id='NavigationNodePopupMenu']//a[@class='ItemIcon DeleteNode16x16Icon']</td>
 	<td></td>
 </tr>
 <tr>
@@ -294,6 +309,11 @@
 <tr>
 	<td>verifyElementNotPresent</td>
 	<td>link=test_grp_label_26</td>
+	<td></td>
+</tr>
+<tr>
+	<td>setSpeed</td>
+	<td>0</td>
 	<td></td>
 </tr>
 <tr>

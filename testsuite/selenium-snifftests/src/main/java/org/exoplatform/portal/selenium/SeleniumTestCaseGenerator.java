@@ -379,6 +379,8 @@ public class SeleniumTestCaseGenerator {
 				sb.append("\"))\n break;\n }\n catch (Exception e) {}\n");
 				sb.append("Thread.sleep(1000);\n");
 				sb.append("}\n");
+			} else if (param1.equals("refresh")) {
+				sb.append("selenium.refresh();\n");
 			} else if (param1.equals("storeXpathCount")) {
 				sb.append("String ").append(param3).append(" = selenium.getXpathCount(\"").append(param2).append(
 				      "\").toString();\n");

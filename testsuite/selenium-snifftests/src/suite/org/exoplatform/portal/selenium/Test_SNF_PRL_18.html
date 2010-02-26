@@ -43,7 +43,7 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>//div[@id='UIPortalLoginFormAction']/div/div/div</td>
+	<td>xpath=//div[@id='UIPortalLoginFormAction']/div/div/div</td>
 	<td></td>
 </tr>
 <tr>
@@ -58,7 +58,7 @@
 </tr>
 <tr>
 	<td>clickAt</td>
-	<td>//div[@id='UISiteManagement']//div[@class='UIAction']//div[@class='ActionButton BlueButton']</td>
+	<td>xpath=//div[@id='UISiteManagement']//div[@class='UIAction']//div[@class='ActionButton BlueButton']</td>
 	<td></td>
 </tr>
 <tr>
@@ -68,12 +68,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UIMaskWorkspace']//div[@class='TabsContainer']/div[2]//div[@class='MiddleTab']</td>
+	<td>xpath=//div[@id='UIMaskWorkspace']//div[@class='TabsContainer']/div[2]//div[@class='MiddleTab']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAt</td>
-	<td>//div[@id='UIMaskWorkspace']//div[@class='TabsContainer']/div[2]//div[@class='MiddleTab']</td>
+	<td>xpath=//div[@id='UIMaskWorkspace']//div[@class='TabsContainer']/div[2]//div[@class='MiddleTab']</td>
 	<td></td>
 </tr>
 <tr>
@@ -88,7 +88,7 @@
 </tr>
 <tr>
 	<td>clickAt</td>
-	<td>//div[@id='UIMaskWorkspace']//div[@class='TabsContainer']/div[4]//div[@class='MiddleTab']</td>
+	<td>xpath=//div[@id='UIMaskWorkspace']//div[@class='TabsContainer']/div[4]//div[@class='MiddleTab']</td>
 	<td></td>
 </tr>
 <tr>
@@ -113,22 +113,22 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='PermissionSelector']//a[@title='Administrators']</td>
+	<td>xpath=//div[@id='PermissionSelector']//a[@title='Administrators']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAt</td>
-	<td>//div[@id='PermissionSelector']//a[@title='Administrators']</td>
+	<td>xpath=//div[@id='PermissionSelector']//a[@title='Administrators']</td>
 	<td>1,1</td>
 </tr>
 <tr>
 	<td>clickAt</td>
-	<td>//div[@id='PermissionSelector']//a[@title='manager']</td>
+	<td>xpath=//div[@id='PermissionSelector']//a[@title='manager']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAt</td>
-	<td>//div[@id='PermissionSelector']//a[@title='manager']</td>
+	<td>xpath=//div[@id='PermissionSelector']//a[@title='manager']</td>
 	<td></td>
 </tr>
 <tr>
@@ -138,7 +138,7 @@
 </tr>
 <tr>
 	<td>clickAt</td>
-	<td>//form[@id='UIPortalForm']//div[@class='UIAction']//div[@class='ActionButton LightBlueStyle']//div[@class='ButtonMiddle']/a</td>
+	<td>xpath=//form[@id='UIPortalForm']//div[@class='UIAction']//div[@class='ActionButton LightBlueStyle']//div[@class='ButtonMiddle']/a</td>
 	<td>1,1</td>
 </tr>
 <tr>
@@ -172,23 +172,18 @@
 	<td></td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
-	<td>//div[@id='UISiteManagement']/table[2]//a[@class='DeleteIcon']</td>
+	<td>clickAt</td>
+	<td>xpath=//div[@id='UISiteManagement']/table[2]//a[@class='DeleteIcon']</td>
 	<td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>//div[@id='UISiteManagement']/table[2]//a[@class='DeleteIcon']</td>
+	<td>waitForElementPresent</td>
+	<td>xpath=//div[@id='UISiteManagement']/table/tbody/tr/td[2]/div</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForConfirmation</td>
 	<td>Are you sure you want to delete this portal?</td>
-	<td></td>
-</tr>
-<tr>
-	<td>open</td>
-	<td>/portal/public/classic/</td>
 	<td></td>
 </tr>
 <tr>
@@ -199,6 +194,21 @@
 <tr>
 	<td>waitForTextPresent</td>
 	<td>Portal Navigation</td>
+	<td></td>
+</tr>
+<tr>
+	<td>refresh</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForTextPresent</td>
+	<td>Portal Navigation</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForTextNotPresent</td>
+	<td>test_portal_18</td>
 	<td></td>
 </tr>
 <tr>

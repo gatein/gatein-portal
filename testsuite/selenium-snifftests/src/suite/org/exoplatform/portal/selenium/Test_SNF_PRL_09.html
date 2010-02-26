@@ -43,7 +43,7 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>//div[@id='UIPortalLoginFormAction']/div/div/div</td>
+	<td>xpath=//div[@id='UIPortalLoginFormAction']/div/div/div</td>
 	<td></td>
 </tr>
 <tr>
@@ -52,7 +52,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
+	<td>clickAt</td>
 	<td>link=Application Registry</td>
 	<td>1,1</td>
 </tr>
@@ -68,7 +68,27 @@
 </tr>
 <tr>
 	<td>clickAt</td>
-	<td>//div[@id='UIApplicationOrganizer']//div[@class='UIControlbar']//div[@class='IconControl ImportIcon']</td>
+	<td>xpath=//a[contains(@onclick,'op=RemoveApplication&amp;objectId=GroupNavigationPortlet&amp;ajaxRequest=true')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForConfirmation</td>
+	<td>Are you sure to delete this application?</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForTextNotPresent</td>
+	<td>Group Navigation Portlet</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextNotPresent</td>
+	<td>Group Navigation Portlet</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>xpath=//div[@id='UIApplicationOrganizer']//div[@class='UIControlbar']//div[@class='IconControl ImportIcon']</td>
 	<td>1,1</td>
 </tr>
 <tr>
@@ -78,22 +98,22 @@
 </tr>
 <tr>
 	<td>waitForTextPresent</td>
-	<td>Register Portlet</td>
+	<td>Group Navigation Portlet</td>
 	<td></td>
 </tr>
 <tr>
 	<td>verifyTextPresent</td>
-	<td>Register Portlet</td>
+	<td>Group Navigation Portlet</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//a[contains(@onclick,'op=RemoveApplication&amp;objectId=RegisterPortlet&amp;ajaxRequest=true')]</td>
+	<td>xpath=//a[contains(@onclick,'op=RemoveApplication&amp;objectId=GroupNavigationPortlet&amp;ajaxRequest=true')]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAt</td>
-	<td>//a[contains(@onclick,'op=RemoveApplication&amp;objectId=RegisterPortlet&amp;ajaxRequest=true')]</td>
+	<td>xpath=//a[contains(@onclick,'op=RemoveApplication&amp;objectId=GroupNavigationPortlet&amp;ajaxRequest=true')]</td>
 	<td></td>
 </tr>
 <tr>
@@ -102,8 +122,23 @@
 	<td></td>
 </tr>
 <tr>
+	<td>waitForTextNotPresent</td>
+	<td>Group Navigation Portlet</td>
+	<td></td>
+</tr>
+<tr>
 	<td>verifyTextNotPresent</td>
-	<td>Register Portlet</td>
+	<td>Group Navigation Portlet</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>xpath=//div[@id='UIApplicationOrganizer']//div[@class='UIControlbar']//div[@class='IconControl ImportIcon']</td>
+	<td>1,1</td>
+</tr>
+<tr>
+	<td>storeConfirmation</td>
+	<td>clean</td>
 	<td></td>
 </tr>
 <tr>

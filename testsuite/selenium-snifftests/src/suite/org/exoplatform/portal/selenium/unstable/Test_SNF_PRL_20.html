@@ -4,12 +4,12 @@
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="selenium.base" href="" />
-<title>SNF_PRL_20</title>
+<title>Test_SNF_PRL_20</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">SNF_PRL_20</td></tr>
+<tr><td rowspan="1" colspan="3">Test_SNF_PRL_20</td></tr>
 </thead><tbody>
 <tr>
 	<td>open</td>
@@ -43,7 +43,7 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>//div[@id='UIPortalLoginFormAction']/div/div/div</td>
+	<td>xpath=//div[@id='UIPortalLoginFormAction']/div/div/div</td>
 	<td></td>
 </tr>
 <tr>
@@ -68,12 +68,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@onclick=&quot;eXo.webui.UIHorizontalTabs.changeTabForUIFormTabpane(this, 'UIPortalForm', 'PortalSetting');javascript:eXo.webui.UIForm.submitEvent('UIPortalForm','SelectTab','&amp;objectId=PortalSetting')&quot;]</td>
+	<td>xpath=//div[@onclick=&quot;eXo.webui.UIHorizontalTabs.changeTabForUIFormTabpane(this, 'UIPortalForm', 'PortalSetting');javascript:eXo.webui.UIForm.submitEvent('UIPortalForm','SelectTab','&amp;objectId=PortalSetting')&quot;]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAt</td>
-	<td>//div[@onclick=&quot;eXo.webui.UIHorizontalTabs.changeTabForUIFormTabpane(this, 'UIPortalForm', 'PortalSetting');javascript:eXo.webui.UIForm.submitEvent('UIPortalForm','SelectTab','&amp;objectId=PortalSetting')&quot;]</td>
+	<td>xpath=//div[@onclick=&quot;eXo.webui.UIHorizontalTabs.changeTabForUIFormTabpane(this, 'UIPortalForm', 'PortalSetting');javascript:eXo.webui.UIForm.submitEvent('UIPortalForm','SelectTab','&amp;objectId=PortalSetting')&quot;]</td>
 	<td></td>
 </tr>
 <tr>
@@ -87,8 +87,13 @@
 	<td>test_portal_name_20</td>
 </tr>
 <tr>
+	<td>waitForElementPresent</td>
+	<td>xpath=//div[@onclick=&quot;eXo.webui.UIHorizontalTabs.changeTabForUIFormTabpane(this, 'UIPortalForm', 'Properties');javascript:eXo.webui.UIForm.submitEvent('UIPortalForm','SelectTab','&amp;objectId=Properties')&quot;]</td>
+	<td></td>
+</tr>
+<tr>
 	<td>clickAt</td>
-	<td>//div[@onclick=&quot;eXo.webui.UIHorizontalTabs.changeTabForUIFormTabpane(this, 'UIPortalForm', 'Properties');javascript:eXo.webui.UIForm.submitEvent('UIPortalForm','SelectTab','&amp;objectId=Properties')&quot;]</td>
+	<td>xpath=//div[@onclick=&quot;eXo.webui.UIHorizontalTabs.changeTabForUIFormTabpane(this, 'UIPortalForm', 'Properties');javascript:eXo.webui.UIForm.submitEvent('UIPortalForm','SelectTab','&amp;objectId=Properties')&quot;]</td>
 	<td></td>
 </tr>
 <tr>
@@ -98,7 +103,7 @@
 </tr>
 <tr>
 	<td>clickAt</td>
-	<td>//div[@onclick=&quot;eXo.webui.UIHorizontalTabs.changeTabForUIFormTabpane(this, 'UIPortalForm', 'PermissionSetting');javascript:eXo.webui.UIForm.submitEvent('UIPortalForm','SelectTab','&amp;objectId=PermissionSetting')&quot;]</td>
+	<td>xpath=//div[@onclick=&quot;eXo.webui.UIHorizontalTabs.changeTabForUIFormTabpane(this, 'UIPortalForm', 'PermissionSetting');javascript:eXo.webui.UIForm.submitEvent('UIPortalForm','SelectTab','&amp;objectId=PermissionSetting')&quot;]</td>
 	<td></td>
 </tr>
 <tr>
@@ -109,6 +114,11 @@
 <tr>
 	<td>clickAt</td>
 	<td>publicMode</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Edit Permission Setting</td>
 	<td></td>
 </tr>
 <tr>
@@ -127,6 +137,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>waitForElementPresent</td>
+	<td>link=Platform</td>
+	<td></td>
+</tr>
+<tr>
 	<td>clickAt</td>
 	<td>link=Platform</td>
 	<td></td>
@@ -147,13 +162,8 @@
 	<td></td>
 </tr>
 <tr>
-	<td>setSpeed</td>
-	<td>1000</td>
-	<td></td>
-</tr>
-<tr>
 	<td>waitForText</td>
-	<td>//div[@id='UIPermissionSelector']/div/div[2]/div[1]/div[3]/div[2]</td>
+	<td>xpath=//div[@id='UIPermissionSelector']/div/div[2]/div[1]/div[3]/div[2]</td>
 	<td>exact:*</td>
 </tr>
 <tr>
@@ -163,7 +173,7 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UISiteManagement']/table[2]/tbody/tr/td[3]/a[4]</td>
+	<td>xpath=//div[@id='UISiteManagement']/table[2]/tbody/tr/td[3]/a[4]</td>
 	<td></td>
 </tr>
 <tr>
@@ -177,8 +187,13 @@
 	<td></td>
 </tr>
 <tr>
+	<td>waitForElementPresent</td>
+	<td>xpath=//div[@id='UISiteManagement']/table[2]/tbody/tr/td[3]/a[4]</td>
+	<td></td>
+</tr>
+<tr>
 	<td>clickAt</td>
-	<td>//div[@id='UISiteManagement']/table[2]/tbody/tr/td[3]/a[4]</td>
+	<td>xpath=//div[@id='UISiteManagement']/table[2]/tbody/tr/td[3]/a[4]</td>
 	<td></td>
 </tr>
 <tr>
