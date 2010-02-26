@@ -134,13 +134,15 @@ public class UIMainActionListener
          UIPortalApplication uiApp = Util.getUIPortalApplication();
 
          UIPortal uiPortal = uiApp.getShowedUIPortal();
-         
+
          UserPortalConfigService service = uiApp.getApplicationComponent(UserPortalConfigService.class);
          UserPortalConfig userConfig =
             service.getUserPortalConfig(uiPortal.getName(), event.getRequestContext().getRemoteUser());
-        
-         PortalConfig portalConfig = userConfig.getPortalConfig();         
+         if (userConfig == null)
+            userConfig = uiApp.getUserPortalConfig();
          
+         PortalConfig portalConfig = userConfig.getPortalConfig();
+
          UserACL userACL = uiPortal.getApplicationComponent(UserACL.class);
          if (!userACL.hasEditPermission(portalConfig))
          {
