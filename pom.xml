@@ -668,7 +668,7 @@
                   </property>
                   <property>
                      <name>gatein.test.datasource.url</name>
-                     <value>jdbc:mysql://10.37.129.4/bilto?createDatabaseIfNotExist=true&amp;useUnicode=true&amp;characterEncoding=utf-8</value>
+                     <value>jdbc:mysql://10.37.129.4/gatein?createDatabaseIfNotExist=true&amp;useUnicode=true&amp;characterEncoding=utf-8</value>
                   </property>
                   <property>
                      <name>gatein.test.datasource.username</name>
