@@ -139,6 +139,9 @@ public class JCRPersister
       private static final String OPEN_BRACE_REPLACEMENT = "-__";
       private static final String CLOSE_BRACE_REPLACEMENT = "__-";
       private static final String COLON_REPLACEMENT = "_-_";
+      private static final String CLOSE_BRACE = "}";
+      private static final String OPEN_BRACE = "{";
+      private static final String COLON = ":";
 
       public String decodeNodeName(FormatterContext formatterContext, String s)
       {
@@ -162,12 +165,33 @@ public class JCRPersister
 
       private String decode(String s)
       {
-         return s.replace(CLOSE_BRACE_REPLACEMENT, "}").replace(OPEN_BRACE_REPLACEMENT, "{").replace(COLON_REPLACEMENT, ":");
+         return s.replace(CLOSE_BRACE_REPLACEMENT, CLOSE_BRACE).replace(OPEN_BRACE_REPLACEMENT, OPEN_BRACE).replace(COLON_REPLACEMENT, COLON);
       }
 
       private String encode(String s)
       {
-         return s.replace("{", OPEN_BRACE_REPLACEMENT).replace("}", CLOSE_BRACE_REPLACEMENT).replace(":", COLON_REPLACEMENT);
+         return s.replace(OPEN_BRACE, OPEN_BRACE_REPLACEMENT).replace(CLOSE_BRACE, CLOSE_BRACE_REPLACEMENT).replace(COLON, COLON_REPLACEMENT);
+      }
+   }
+
+   public static class PortletNameFormatter implements ObjectFormatter
+   {
+      public static final String SLASH_REPLACEMENT = "___";
+      private static final String SLASH = "/";
+
+      public String decodeNodeName(FormatterContext formatterContext, String s)
+      {
+         return s.replace(SLASH_REPLACEMENT, SLASH);
+      }
+
+      public String encodeNodeName(FormatterContext formatterContext, String s) throws IllegalArgumentException, NullPointerException
+      {
+         return encode(s);
+      }
+
+      public static String encode(String s)
+      {
+         return s.replace(SLASH, SLASH_REPLACEMENT);
       }
    }
 }

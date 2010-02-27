@@ -100,6 +100,7 @@
  		      <property name="app" value="http://www.gatein.org/jcr/application-registry/1.0/"/>
  		      <property name="lgn" value="http://www.gatein.org/jcr/autologin/1.0/"/>
           <property name="wsrp" value="http://www.gatein.org/jcr/wsrp/1.0/"/>
+          <property name="portlet" value="http://www.gatein.org/jcr/portlet/1.0/"/>
         </properties-param>
  		  </init-params>
  		</component-plugin>
@@ -121,6 +122,7 @@
           <value>war:/conf/wsrp/consumers-configuration-nodetypes.xml</value>
           <value>war:/conf/wsrp/producer-configuration-nodetypes.xml</value>
           <value>war:/conf/wsrp/producer-registrations-nodetypes.xml</value>
+          <value>war:/conf/wsrp/producer-portlet-states-nodetypes.xml</value>
  		    </values-param>
  		  </init-params>
  		</component-plugin>

@@ -37,10 +37,12 @@ import org.gatein.pc.portlet.impl.state.StateConverterV0;
 import org.gatein.pc.portlet.impl.state.StateManagementPolicyService;
 import org.gatein.pc.portlet.impl.state.producer.PortletStatePersistenceManagerService;
 import org.gatein.pc.portlet.state.StateConverter;
+import org.gatein.pc.portlet.state.producer.PortletStatePersistenceManager;
 import org.gatein.pc.portlet.state.producer.ProducerPortletInvoker;
 import org.gatein.portal.wsrp.state.consumer.JCRConsumerRegistry;
 import org.gatein.portal.wsrp.state.producer.configuration.JCRProducerConfigurationService;
 import org.gatein.portal.wsrp.state.producer.registrations.JCRRegistrationPersistenceManager;
+import org.gatein.portal.wsrp.state.producer.state.JCRPortletStatePersistenceManager;
 import org.gatein.registration.RegistrationManager;
 import org.gatein.registration.RegistrationPersistenceManager;
 import org.gatein.registration.impl.RegistrationManagerImpl;
@@ -175,7 +177,15 @@ public class ExoKernelIntegration implements Startable, WebAppListener
          (ContainerPortletInvoker)container.getComponentInstanceOfType(ContainerPortletInvoker.class);
 
       // The producer persistence manager
-      PortletStatePersistenceManagerService producerPersistenceManager = new PortletStatePersistenceManagerService();
+      PortletStatePersistenceManager producerPersistenceManager;
+      try
+      {
+         producerPersistenceManager = new JCRPortletStatePersistenceManager(container);
+      }
+      catch (Exception e)
+      {
+         throw new RuntimeException("Couldn't instantiate PortletStatePersistenceManager", e);
+      }
 
       // The producer state management policy
       StateManagementPolicyService producerStateManagementPolicy = new StateManagementPolicyService();
@@ -274,7 +284,6 @@ public class ExoKernelIntegration implements Startable, WebAppListener
             switch (lifeCycleEvent.getType())
             {
                case WebAppLifeCycleEvent.ADDED:
-
                   context.setAttribute("ConsumerRegistry", consumerRegistry);
                   context.setAttribute("ProducerConfigurationService", producer.getConfigurationService());
                   break;

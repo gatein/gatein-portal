@@ -20,6 +20,7 @@
 package org.exoplatform.portal.pom.spi.wsrp;
 
 import org.exoplatform.commons.utils.Safe;
+import org.gatein.common.util.ParameterValidation;
 import org.gatein.mop.spi.content.ContentProvider;
 import org.gatein.mop.spi.content.StateContainer;
 
@@ -35,7 +36,19 @@ public class WSRPContentProvider implements ContentProvider<WSRP, WSRPState>
 
    public WSRP combine(List<WSRP> wsrpStates)
    {
-      throw new UnsupportedOperationException("todo");
+      WSRP result = null;
+      if(ParameterValidation.existsAndIsNotEmpty(wsrpStates))
+      {
+         for (WSRP state : wsrpStates)
+         {
+            result = state;
+            if(state.isCloned())
+            {
+               return state;
+            }
+         }
+      }
+      return result;
    }
 
    public void setState(StateContainer<WSRPState> container, WSRP state)
