@@ -34,12 +34,12 @@
               <property name="multi-db" value="false"/>
               <property name="update-storage" value="true"/>
               <property name="max-buffer-size" value="204800"/>
-              <property name="swap-directory" value="${gatein.tmp.dir}/jcr/swap/system"/>
+              <property name="swap-directory" value="${gatein.test.tmp.dir}/jcr/swap/system"/>
             </properties>
             <value-storages>
               <value-storage id="system" class="org.exoplatform.services.jcr.impl.storage.value.fs.TreeFileValueStorage">
                 <properties>
-                  <property name="path" value="${gatein.tmp.dir}/jcr/values/system"/>
+                  <property name="path" value="${gatein.test.tmp.dir}/jcr/values/system"/>
                 </properties>
                 <filters>
                   <filter property-type="Binary"/>
@@ -60,7 +60,7 @@
           </cache>
           <query-handler class="org.exoplatform.services.jcr.impl.core.query.lucene.SearchIndex">
             <properties>
-              <property name="index-dir" value="${gatein.tmp.dir}/jcr/jcrlucenedb/system"/>
+              <property name="index-dir" value="${gatein.test.tmp.dir}/jcr/jcrlucenedb/system"/>
             </properties>
           </query-handler>
           <lock-manager class="org.exoplatform.services.jcr.impl.core.lock.jbosscache.CacheableLockManagerImpl">
@@ -80,12 +80,12 @@
               <property name="multi-db" value="false"/>
               <property name="update-storage" value="true"/>
               <property name="max-buffer-size" value="204800"/>
-              <property name="swap-directory" value="${gatein.tmp.dir}/jcr/swap/portal-test"/>
+              <property name="swap-directory" value="${gatein.test.tmp.dir}/jcr/swap/portal-test"/>
             </properties>
             <value-storages>
               <value-storage id="portal-test" class="org.exoplatform.services.jcr.impl.storage.value.fs.TreeFileValueStorage">
                 <properties>
-                  <property name="path" value="${gatein.tmp.dir}/jcr/values/portal-test"/>
+                  <property name="path" value="${gatein.test.tmp.dir}/jcr/values/portal-test"/>
                 </properties>
                 <filters>
                   <filter property-type="Binary"/>
@@ -106,7 +106,7 @@
           </cache>
           <query-handler class="org.exoplatform.services.jcr.impl.core.query.lucene.SearchIndex">
             <properties>
-              <property name="index-dir" value="${gatein.tmp.dir}/jcr/jcrlucenedb/portal-test"/>
+              <property name="index-dir" value="${gatein.test.tmp.dir}/jcr/jcrlucenedb/portal-test"/>
             </properties>
           </query-handler>
           <lock-manager class="org.exoplatform.services.jcr.impl.core.lock.jbosscache.CacheableLockManagerImpl">

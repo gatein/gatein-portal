@@ -24,6 +24,7 @@
   xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd http://www.exoplaform.org/xml/ns/kernel_1_0.xsd"
   xmlns="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd">
 
+<!--
   <component>
      <key>org.jboss.cache.transaction.TransactionManagerLookup</key>
      <type>org.jboss.cache.transaction.JBossStandaloneJTAManagerLookup</type>
@@ -39,6 +40,7 @@
       </value-param>
     </init-params>
   </component>
+-->
 
   <component>
     <key>org.exoplatform.services.naming.InitialContextInitializer</key>
@@ -74,10 +76,10 @@
         <properties-param>
           <name>ref-addresses</name>
           <description>ref-addresses</description>
-          <property name="driverClassName" value="org.hsqldb.jdbcDriver"/>
-          <property name="url" value="jdbc:hsqldb:file:${gatein.tmp.dir}/hsqldb"/>
-          <property name="username" value="sa"/>
-          <property name="password" value=""/>
+          <property name="driverClassName" value="${gatein.test.datasource.driver}"/>
+          <property name="url" value="${gatein.test.datasource.url}"/>
+          <property name="username" value="${gatein.test.datasource.username}"/>
+          <property name="password" value="${gatein.test.datasource.password}"/>
         </properties-param>
       </init-params>
     </component-plugin>

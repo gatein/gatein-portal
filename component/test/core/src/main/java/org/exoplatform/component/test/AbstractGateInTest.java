@@ -22,14 +22,12 @@ import junit.framework.AssertionFailedError;
 import junit.framework.TestCase;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.component.RequestLifeCycle;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 
 import java.io.File;
 import java.io.FilenameFilter;
-import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * An abstract test that takes care of running the unit tests with the semantic described by the
@@ -42,7 +40,10 @@ public abstract class AbstractGateInTest extends TestCase
 {
 
    /** The system property for gatein tmp dir. */
-   private static final String TMP_DIR = "gatein.tmp.dir";
+   private static final String TMP_DIR = "gatein.test.tmp.dir";
+
+   /** . */
+   protected final Logger log = LoggerFactory.getLogger(getClass());
 
    /** . */
    private PortalContainer container;
@@ -76,6 +77,27 @@ public abstract class AbstractGateInTest extends TestCase
    public void runBare() throws Throwable
    {
       ClassLoader realClassLoader = Thread.currentThread().getContextClassLoader();
+
+      // Patch a bug with maven that does not pass properly the system property
+      // with an empty value
+      if ("org.hsqldb.jdbcDriver".equals(System.getProperty("gatein.test.datasource.driver")))
+      {
+         System.setProperty("gatein.test.datasource.password", "");
+      }
+
+      //
+      log.info("Listing gatein system properties:");
+      for (Map.Entry<?, ?> entry : System.getProperties().entrySet())
+      {
+         if (entry.getKey() instanceof String)
+         {
+            String key = (String)entry.getKey();
+            if (key.startsWith("gatein."))
+            {
+               log.info(key + "=" + entry.getValue());
+            }
+         }
+      }
 
       //
       Set<String> rootConfigPaths = new HashSet<String>();

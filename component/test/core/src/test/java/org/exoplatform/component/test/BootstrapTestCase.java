@@ -25,6 +25,8 @@ import org.exoplatform.services.naming.InitialContextInitializer;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
 import java.io.File;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -58,6 +60,14 @@ public class BootstrapTestCase extends AbstractGateInTest
       container.getComponentInstanceOfType(InitialContextInitializer.class);
       DataSource ds = (DataSource)new InitialContext().lookup("jdbcexo");
       assertNotNull(ds);
+      Connection conn = ds.getConnection();
+      DatabaseMetaData databaseMD = conn.getMetaData();
+      String db = databaseMD.getDatabaseProductName() + " " + databaseMD.getDatabaseProductVersion() + "." +
+         databaseMD.getDatabaseMajorVersion() + "." +  databaseMD.getDatabaseMinorVersion();
+      String driver = databaseMD.getDriverName() + " " + databaseMD.getDriverVersion() + "." +
+         databaseMD.getDriverMajorVersion() + "." +  databaseMD.getDriverMinorVersion();
+      log.info("Using database " + db + " with driver " + driver);
+      conn.close();
    }
 
    public void testTmpDir1() throws Exception
@@ -72,7 +82,7 @@ public class BootstrapTestCase extends AbstractGateInTest
 
    private void ensureTmpDir() throws Exception
    {
-      String tmpDirPath = System.getProperty("gatein.tmp.dir");
+      String tmpDirPath = System.getProperty("gatein.test.tmp.dir");
       assertNotNull(tmpDirPath);
 
       //

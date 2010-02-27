@@ -77,14 +77,7 @@
             <!--CHANGEME HashtableCacheProvider shold not be used in production env-->
             <property name="hibernate.cache.provider_class" value="org.hibernate.cache.HashtableCacheProvider"/>
             <property name="hibernate.cglib.use_reflection_optimizer" value="true"/>
-<!--
-            <property name="hibernate.connection.url" value="jdbc:hsqldb:file:${basedir}/target/temp/organization"/>
-            <property name="hibernate.connection.driver_class" value="org.hsqldb.jdbcDriver"/>
-            <property name="hibernate.connection.autocommit" value="true"/>
-            <property name="hibernate.connection.username" value="sa"/>
-            <property name="hibernate.connection.password" value=""/>
--->
-            <property name="hibernate.connection.datasource" value="jdbcexo"/>
+            <property name="hibernate.connection.datasource" value="jdbcidm"/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.HSQLDialect"/>
             <property name="hibernate.c3p0.min_size" value="5"/>
             <property name="hibernate.c3p0.max_size" value="20"/>
@@ -119,4 +112,34 @@
       </component-plugin>
    </external-component-plugins>
 
+  <external-component-plugins>
+    <target-component>org.exoplatform.services.naming.InitialContextInitializer</target-component>
+    <component-plugin>
+      <name>bind.datasource</name>
+      <set-method>addPlugin</set-method>
+      <type>org.exoplatform.services.naming.BindReferencePlugin</type>
+      <init-params>
+        <value-param>
+          <name>bind-name</name>
+          <value>jdbcidm</value>
+        </value-param>
+        <value-param>
+          <name>class-name</name>
+          <value>javax.sql.DataSource</value>
+        </value-param>
+        <value-param>
+          <name>factory</name>
+          <value>org.apache.commons.dbcp.BasicDataSourceFactory</value>
+        </value-param>
+        <properties-param>
+          <name>ref-addresses</name>
+          <description>ref-addresses</description>
+          <property name="driverClassName" value="org.hsqldb.jdbcDriver"/>
+          <property name="url" value="jdbc:hsqldb:file:${gatein.test.tmp.dir}/idm"/>
+          <property name="username" value="sa"/>
+          <property name="password" value=""/>
+        </properties-param>
+      </init-params>
+    </component-plugin>
+  </external-component-plugins>
 </configuration>
