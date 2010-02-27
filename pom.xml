@@ -625,7 +625,7 @@
                   </property>
                   <property>
                      <name>gatein.test.datasource.url</name>
-                     <value>jdbc:hsqldb:file:${gatein.test.tmp.dir}/idm</value>
+                     <value>jdbc:hsqldb:file:${project.build.directory}/idm</value>
                   </property>
                   <property>
                      <name>gatein.test.datasource.username</name>
