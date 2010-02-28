@@ -621,12 +621,6 @@
                         <name>java.naming.factory.initial</name>
                         <value>org.exoplatform.services.naming.SimpleContextFactory</value>
                      </property>
-
-                    <property>
-                       <name>java.util.logging.config.class</name>
-                       <value>org.exoplatform.component.test.LogConfigurator</value>
-                    </property>
-
                   </systemProperties>
                </configuration>
             </plugin>
