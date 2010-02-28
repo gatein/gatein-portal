@@ -24,24 +24,6 @@
   xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd http://www.exoplaform.org/xml/ns/kernel_1_0.xsd"
   xmlns="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd">
 
-<!--
-  <component>
-     <key>org.jboss.cache.transaction.TransactionManagerLookup</key>
-     <type>org.jboss.cache.transaction.JBossStandaloneJTAManagerLookup</type>
-  </component>
-
-  <component>
-    <key>org.exoplatform.services.transaction.TransactionService</key>
-    <type>org.exoplatform.services.transaction.jbosscache.ArjunaTransactionService</type>
-    <init-params>
-      <value-param>
-        <name>timeout</name>
-        <value>300</value>
-      </value-param>
-    </init-params>
-  </component>
--->
-
   <component>
     <key>org.exoplatform.services.naming.InitialContextInitializer</key>
     <type>org.exoplatform.services.naming.InitialContextInitializer</type>
