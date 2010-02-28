@@ -110,6 +110,16 @@
             <groupId>org.exoplatform.kernel</groupId>
             <artifactId>exo.kernel.commons</artifactId>
             <version>${org.exoplatform.kernel.version}</version>
+            <exclusions>
+             <exclusion>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-log4j12</artifactId>
+             </exclusion>
+             <exclusion>
+                <groupId>log4j</groupId>
+                <artifactId>log4j</artifactId>
+             </exclusion>
+            </exclusions>
          </dependency>
          <dependency>
             <groupId>org.exoplatform.kernel</groupId>
@@ -125,11 +135,31 @@
             <groupId>org.exoplatform.kernel</groupId>
             <artifactId>exo.kernel.component.common</artifactId>
             <version>${org.exoplatform.kernel.version}</version>
+            <exclusions>
+              <exclusion>
+                 <groupId>org.slf4j</groupId>
+                 <artifactId>slf4j-log4j12</artifactId>
+              </exclusion>
+              <exclusion>
+                 <groupId>log4j</groupId>
+                 <artifactId>log4j</artifactId>
+              </exclusion>
+            </exclusions>
          </dependency>
          <dependency>
             <groupId>org.exoplatform.kernel</groupId>
             <artifactId>exo.kernel.container</artifactId>
             <version>${org.exoplatform.kernel.version}</version>
+            <exclusions>
+             <exclusion>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-log4j12</artifactId>
+             </exclusion>
+             <exclusion>
+                <groupId>log4j</groupId>
+                <artifactId>log4j</artifactId>
+             </exclusion>
+            </exclusions>
          </dependency>
          <dependency>
             <groupId>org.exoplatform.core</groupId>
@@ -140,6 +170,16 @@
             <groupId>org.exoplatform.core</groupId>
             <artifactId>exo.core.component.database</artifactId>
             <version>${org.exoplatform.core.version}</version>
+            <exclusions>
+             <exclusion>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-log4j12</artifactId>
+             </exclusion>
+             <exclusion>
+                <groupId>log4j</groupId>
+                <artifactId>log4j</artifactId>
+             </exclusion>
+            </exclusions>
          </dependency>
          <dependency>
             <groupId>org.exoplatform.core</groupId>
@@ -150,6 +190,16 @@
             <groupId>org.exoplatform.core</groupId>
             <artifactId>exo.core.component.organization.jdbc</artifactId>
             <version>${org.exoplatform.core.version}</version>
+            <exclusions>
+              <exclusion>
+                 <groupId>org.slf4j</groupId>
+                 <artifactId>slf4j-log4j12</artifactId>
+              </exclusion>
+              <exclusion>
+                 <groupId>log4j</groupId>
+                 <artifactId>log4j</artifactId>
+              </exclusion>
+            </exclusions>
          </dependency>
          <dependency>
             <groupId>org.exoplatform.core</groupId>
@@ -170,6 +220,16 @@
             <groupId>org.exoplatform.jcr</groupId>
             <artifactId>exo.jcr.component.ext</artifactId>
             <version>${org.exoplatform.jcr.version}</version>
+            <exclusions>
+             <exclusion>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-log4j12</artifactId>
+             </exclusion>
+             <exclusion>
+                <groupId>log4j</groupId>
+                <artifactId>log4j</artifactId>
+             </exclusion>
+            </exclusions>
          </dependency>
          <dependency>
             <groupId>org.exoplatform.ws</groupId>
@@ -292,6 +352,16 @@
             <groupId>org.picketlink.idm</groupId>
             <artifactId>picketlink-idm-hibernate</artifactId>
             <version>${org.picketlink.idm}</version>
+            <exclusions>
+              <exclusion>
+                 <groupId>org.slf4j</groupId>
+                 <artifactId>slf4j-log4j12</artifactId>
+              </exclusion>
+              <exclusion>
+                 <groupId>log4j</groupId>
+                 <artifactId>log4j</artifactId>
+              </exclusion>
+            </exclusions>
          </dependency>
          <dependency>
             <groupId>org.picketlink.idm</groupId>
@@ -483,7 +553,7 @@
    <dependencies>
       <dependency>
          <groupId>org.slf4j</groupId>
-         <artifactId>slf4j-simple</artifactId>
+         <artifactId>slf4j-jdk14</artifactId>
          <version>${org.slf4j.version}</version>
          <scope>test</scope>
       </dependency>
@@ -551,6 +621,12 @@
                         <name>java.naming.factory.initial</name>
                         <value>org.exoplatform.services.naming.SimpleContextFactory</value>
                      </property>
+
+                    <property>
+                       <name>java.util.logging.config.class</name>
+                       <value>org.exoplatform.component.test.LogConfigurator</value>
+                    </property>
+
                   </systemProperties>
                </configuration>
             </plugin>
@@ -580,18 +656,6 @@
                </execution>
             </executions>
          </plugin>
-         <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-surefire-plugin</artifactId>
-            <configuration>
-               <systemProperties>
-                  <property>
-                     <name>com.arjuna.ats.arjuna.objectstore.objectStoreDir</name>
-                     <value>${project.build.directory}</value>
-                  </property>
-               </systemProperties>
-            </configuration>
-         </plugin>
       </plugins>
    </build>
 
@@ -616,6 +680,10 @@
              <configuration>
                 <systemProperties>
                   <property>
+                     <name>java.util.logging.config.class</name>
+                     <value>org.exoplatform.component.test.logging.LogConfigurator</value>
+                  </property>
+                  <property>
                     <name>com.arjuna.ats.arjuna.objectstore.objectStoreDir</name>
                     <value>${project.build.directory}</value>
                   </property>
@@ -625,7 +693,7 @@
                   </property>
                   <property>
                      <name>gatein.test.datasource.url</name>
-                     <value>jdbc:hsqldb:file:${project.build.directory}/idm</value>
+                     <value>jdbc:hsqldb:file:${project.build.directory}/gateindb</value>
                   </property>
                   <property>
                      <name>gatein.test.datasource.username</name>
@@ -658,6 +726,10 @@
              <artifactId>maven-surefire-plugin</artifactId>
              <configuration>
                 <systemProperties>
+                  <property>
+                     <name>java.util.logging.config.class</name>
+                     <value>org.exoplatform.component.test.logging.LogConfigurator</value>
+                  </property>
                   <property>
                     <name>com.arjuna.ats.arjuna.objectstore.objectStoreDir</name>
                     <value>${project.build.directory}</value>

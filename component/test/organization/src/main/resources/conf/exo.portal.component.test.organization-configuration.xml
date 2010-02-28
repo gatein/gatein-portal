@@ -135,7 +135,7 @@
           <name>ref-addresses</name>
           <description>ref-addresses</description>
           <property name="driverClassName" value="org.hsqldb.jdbcDriver"/>
-          <property name="url" value="jdbc:hsqldb:file:${gatein.test.tmp.dir}/idm"/>
+          <property name="url" value="jdbc:hsqldb:file:${gatein.test.tmp.dir}/idmdb"/>
           <property name="username" value="sa"/>
           <property name="password" value=""/>
         </properties-param>
