@@ -19,7 +19,7 @@
 
 package org.exoplatform.web.filter;
 
-import junit.framework.TestCase;
+import org.exoplatform.component.test.AbstractGateInTest;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -47,7 +47,7 @@ import javax.servlet.http.HttpSession;
  *          nicolas.filotto@exoplatform.com
  * 25 sept. 2009  
  */
-public class TestExtensibleFilter extends TestCase
+public class TestExtensibleFilter extends AbstractGateInTest
 {
 
    public void testDoFilter() throws IOException, ServletException

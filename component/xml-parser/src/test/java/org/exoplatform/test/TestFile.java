@@ -25,8 +25,7 @@ package org.exoplatform.test;
  *          laivankhoi46pm1@yahoo.com
  * Nov 27, 2006  
  */
-import junit.framework.TestCase;
-
+import org.exoplatform.component.test.AbstractGateInTest;
 import org.exoplatform.services.chars.chardet.Detector;
 import org.exoplatform.services.chars.chardet.ICharsetDetectionObserver;
 import org.exoplatform.services.chars.chardet.PSMDetector;
@@ -35,7 +34,7 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 
-public class TestFile extends TestCase
+public class TestFile extends AbstractGateInTest
 {
    public static boolean found = false;
 

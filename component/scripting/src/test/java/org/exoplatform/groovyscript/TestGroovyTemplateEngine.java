@@ -18,7 +18,7 @@
  */
 package org.exoplatform.groovyscript;
 
-import junit.framework.TestCase;
+import org.exoplatform.component.test.AbstractGateInTest;
 
 import java.io.IOException;
 
@@ -26,7 +26,7 @@ import java.io.IOException;
  * @author <a href="mailto:trong.tran@exoplatform.com">Trong Tran</a>
  * @version $Revision$
  */
-public class TestGroovyTemplateEngine extends TestCase
+public class TestGroovyTemplateEngine extends AbstractGateInTest
 {
    public void testFileName() throws IOException, TemplateCompilationException
    {

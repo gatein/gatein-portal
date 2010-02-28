@@ -30,7 +30,6 @@ import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.POMSessionManager;
-import org.exoplatform.test.BasicTestCase;
 
 import java.util.Arrays;
 import java.util.GregorianCalendar;

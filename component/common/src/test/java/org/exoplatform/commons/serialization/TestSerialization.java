@@ -19,9 +19,8 @@
 
 package org.exoplatform.commons.serialization;
 
-import junit.framework.TestCase;
-import org.exoplatform.commons.serialization.SerializationContext;
 import org.exoplatform.commons.serialization.model.TypeDomain;
+import org.exoplatform.component.test.AbstractGateInTest;
 
 import java.io.ByteArrayInputStream;
 import java.io.NotSerializableException;
@@ -30,7 +29,7 @@ import java.io.NotSerializableException;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class TestSerialization extends TestCase
+public class TestSerialization extends AbstractGateInTest
 {
 
    public void testState() throws Exception

@@ -21,7 +21,6 @@ package org.exoplatform.portal.config;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.POMSessionManager;
-import org.exoplatform.test.BasicTestCase;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>

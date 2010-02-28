@@ -19,9 +19,8 @@
 
 package org.exoplatform.services.resources;
 
-import junit.framework.TestCase;
-
 import org.exoplatform.commons.utils.PropertyManager;
+import org.exoplatform.component.test.AbstractGateInTest;
 import org.exoplatform.container.configuration.ConfigurationManagerImpl;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.container.xml.ValueParam;
@@ -36,7 +35,7 @@ import java.util.Map;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class TestLocaleConfigService extends TestCase
+public class TestLocaleConfigService extends AbstractGateInTest
 {
 
    public TestLocaleConfigService()

@@ -20,7 +20,7 @@
 package org.exoplatform.commons.utils;
 
 import junit.framework.Assert;
-import junit.framework.TestCase;
+import org.exoplatform.component.test.AbstractGateInTest;
 import org.gatein.common.io.UndeclaredIOException;
 
 import java.io.IOException;
@@ -31,7 +31,7 @@ import java.util.LinkedList;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class TestOutputStreamPrinter extends TestCase
+public class TestOutputStreamPrinter extends AbstractGateInTest
 {
 
    static final int NOOP = -1;

@@ -19,7 +19,7 @@
 
 package org.exoplatform.web.command;
 
-import org.exoplatform.test.BasicTestCase;
+import org.exoplatform.component.test.AbstractGateInTest;
 import org.exoplatform.web.WebAppController;
 
 import java.util.HashMap;
@@ -34,7 +34,7 @@ import javax.servlet.http.HttpServletResponse;
  *          nhudinhthuan@exoplatform.com
  * Mar 26, 2007  
  */
-public class TestCommandHandler extends BasicTestCase
+public class TestCommandHandler extends AbstractGateInTest
 {
 
    public TestCommandHandler(String name)

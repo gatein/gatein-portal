@@ -18,10 +18,7 @@
  */
 package org.exoplatform.groovyscript;
 
-import junit.framework.TestCase;
-import org.exoplatform.groovyscript.TemplateSection;
-import org.exoplatform.groovyscript.SectionType;
-import org.exoplatform.groovyscript.TemplateParser;
+import org.exoplatform.component.test.AbstractGateInTest;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -32,7 +29,7 @@ import java.util.List;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class TestTemplateParser extends TestCase
+public class TestTemplateParser extends AbstractGateInTest
 {
 
    /** . */

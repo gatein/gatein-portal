@@ -19,6 +19,7 @@
 
 package org.exoplatform.portal.config;
 
+import org.exoplatform.component.test.AbstractGateInTest;
 import org.exoplatform.portal.application.PortletPreferences.PortletPreferencesSet;
 import org.exoplatform.portal.config.model.Application;
 import org.exoplatform.portal.config.model.Page;
@@ -28,7 +29,6 @@ import org.exoplatform.portal.config.model.TransientApplicationState;
 import org.exoplatform.portal.config.model.Page.PageSet;
 import org.exoplatform.portal.pom.spi.portlet.Portlet;
 import org.exoplatform.portal.pom.spi.portlet.PortletBuilder;
-import org.exoplatform.test.BasicTestCase;
 import org.jibx.runtime.BindingDirectory;
 import org.jibx.runtime.IBindingFactory;
 import org.jibx.runtime.IMarshallingContext;
@@ -44,7 +44,7 @@ import java.io.FileOutputStream;
  * @since: 0.0
  * @email: tuan08@yahoo.com
  */
-public class TestJIBXXmlMapping extends BasicTestCase
+public class TestJIBXXmlMapping extends AbstractGateInTest
 {
 
    public TestJIBXXmlMapping(String name)

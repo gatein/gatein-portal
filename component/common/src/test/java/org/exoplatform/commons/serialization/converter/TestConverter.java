@@ -20,10 +20,10 @@
 package org.exoplatform.commons.serialization.converter;
 
 import junit.framework.AssertionFailedError;
-import junit.framework.TestCase;
 import org.exoplatform.commons.serialization.SerializationContext;
 import org.exoplatform.commons.serialization.api.TypeConverter;
 import org.exoplatform.commons.serialization.model.TypeDomain;
+import org.exoplatform.component.test.AbstractGateInTest;
 
 import java.io.InvalidObjectException;
 
@@ -31,7 +31,7 @@ import java.io.InvalidObjectException;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class TestConverter extends TestCase
+public class TestConverter extends AbstractGateInTest
 {
 
    public void testConvertSerializedType() throws Exception

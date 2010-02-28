@@ -19,7 +19,7 @@
 
 package org.exoplatform.portal.config.security;
 
-import junit.framework.TestCase;
+import org.exoplatform.component.test.AbstractGateInTest;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.UserACLMetaData;
 import org.exoplatform.portal.config.model.Page;
@@ -39,7 +39,7 @@ import java.util.Set;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public abstract class AbstractTestUserACL extends TestCase
+public abstract class AbstractTestUserACL extends AbstractGateInTest
 {
 
    protected UserACL ua;

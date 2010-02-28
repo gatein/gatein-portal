@@ -19,6 +19,7 @@
 
 package org.exoplatform.services.parser.html.test;
 
+import org.exoplatform.component.test.AbstractGateInTest;
 import org.exoplatform.services.html.HTMLDocument;
 import org.exoplatform.services.html.HTMLNode;
 import org.exoplatform.services.html.Name;
@@ -27,7 +28,6 @@ import org.exoplatform.services.html.parser.NodeImpl;
 import org.exoplatform.services.html.path.NodePath;
 import org.exoplatform.services.html.path.NodePathParser;
 import org.exoplatform.services.html.path.NodePathUtil;
-import org.exoplatform.test.BasicTestCase;
 
 import java.io.File;
 
@@ -37,7 +37,7 @@ import java.io.File;
  *          nhudinhthuan@exoplatform.com
  * Nov 29, 2006  
  */
-public class TestNodeParser extends BasicTestCase
+public class TestNodeParser extends AbstractGateInTest
 {
 
    private File file_;

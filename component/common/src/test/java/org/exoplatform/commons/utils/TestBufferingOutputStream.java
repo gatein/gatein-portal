@@ -18,18 +18,17 @@
  */
 package org.exoplatform.commons.utils;
 
-import junit.framework.TestCase;
+import org.exoplatform.component.test.AbstractGateInTest;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class TestBufferingOutputStream extends TestCase
+public class TestBufferingOutputStream extends AbstractGateInTest
 {
 
    private ByteArrayOutputStream bytes = new ByteArrayOutputStream();

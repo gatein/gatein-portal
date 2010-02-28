@@ -19,8 +19,8 @@
 
 package org.exoplatform.download.test;
 
+import org.exoplatform.component.test.AbstractGateInTest;
 import org.exoplatform.download.DownloadService;
-import org.exoplatform.test.BasicTestCase;
 
 /**
  * Created by The eXo Platform SARL
@@ -28,7 +28,7 @@ import org.exoplatform.test.BasicTestCase;
  *          tuan08@users.sourceforge.net
  * Dec 26, 2005
  */
-public class TestDownloadService extends BasicTestCase
+public class TestDownloadService extends AbstractGateInTest
 {
 
    private DownloadService service_;

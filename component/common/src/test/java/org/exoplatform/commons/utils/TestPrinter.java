@@ -19,7 +19,7 @@
 
 package org.exoplatform.commons.utils;
 
-import junit.framework.TestCase;
+import org.exoplatform.component.test.AbstractGateInTest;
 
 import java.io.IOException;
 
@@ -27,7 +27,7 @@ import java.io.IOException;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class TestPrinter extends TestCase
+public class TestPrinter extends AbstractGateInTest
 {
 
    private MyPrinter printer;

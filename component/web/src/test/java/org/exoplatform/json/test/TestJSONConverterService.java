@@ -19,11 +19,11 @@
 
 package org.exoplatform.json.test;
 
+import org.exoplatform.component.test.AbstractGateInTest;
 import org.exoplatform.json.BeanToJSONPlugin;
 import org.exoplatform.json.JSONMap;
 import org.exoplatform.json.JSONService;
 import org.exoplatform.json.MapToJSONPlugin;
-import org.exoplatform.test.BasicTestCase;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,7 +36,7 @@ import java.util.Map;
  *          nhudinhthuan@exoplatform.com
  * Mar 26, 2007  
  */
-public class TestJSONConverterService extends BasicTestCase
+public class TestJSONConverterService extends AbstractGateInTest
 {
 
    private JSONService service_;

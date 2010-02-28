@@ -18,10 +18,7 @@
  */
 package org.exoplatform.component.test.jcr;
 
-import org.exoplatform.component.test.AbstractGateInTest;
-import org.exoplatform.component.test.ConfigurationUnit;
-import org.exoplatform.component.test.ConfiguredBy;
-import org.exoplatform.component.test.ContainerScope;
+import org.exoplatform.component.test.*;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
@@ -33,7 +30,7 @@ import javax.jcr.Session;
  * @version $Revision$
  */
 @ConfiguredBy({@ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.test.jcr-configuration.xml")})
-public class BootstrapTestCase extends AbstractGateInTest
+public class BootstrapTestCase extends AbstractKernelTest
 {
 
    public void testWorkspace() throws Exception

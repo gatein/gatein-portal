@@ -23,10 +23,7 @@
 
 package org.exoplatform.component.test.organization;
 
-import org.exoplatform.component.test.AbstractGateInTest;
-import org.exoplatform.component.test.ConfigurationUnit;
-import org.exoplatform.component.test.ConfiguredBy;
-import org.exoplatform.component.test.ContainerScope;
+import org.exoplatform.component.test.*;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.services.database.HibernateService;
 import org.exoplatform.services.organization.OrganizationService;
@@ -34,7 +31,7 @@ import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.impl.UserImpl;
 
 @ConfiguredBy({@ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.test.organization-configuration.xml")})
-public class BootstrapTestCase extends AbstractGateInTest
+public class BootstrapTestCase extends AbstractKernelTest
 {
 
    public void testWorkspace() throws Exception

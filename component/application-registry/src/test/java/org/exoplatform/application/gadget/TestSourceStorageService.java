@@ -19,7 +19,7 @@
 
 package org.exoplatform.application.gadget;
 
-import org.exoplatform.test.BasicTestCase;
+import org.exoplatform.component.test.AbstractGateInTest;
 
 /**
  * todo julien : fix or remove
@@ -30,7 +30,7 @@ import org.exoplatform.test.BasicTestCase;
  * @since: 0.0
  * @email: tuan08@yahoo.com
  */
-public class TestSourceStorageService extends BasicTestCase
+public class TestSourceStorageService extends AbstractGateInTest
 {
 
    private SourceStorage service_;

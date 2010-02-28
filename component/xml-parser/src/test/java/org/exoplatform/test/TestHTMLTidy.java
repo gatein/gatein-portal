@@ -25,13 +25,12 @@ package org.exoplatform.test;
  *          laivankhoi46pm1@yahoo.com
  * Nov 27, 2006  
  */
-import junit.framework.TestCase;
-
+import org.exoplatform.component.test.AbstractGateInTest;
 import org.exoplatform.services.html.tidy.HTMLTidy;
 
 import java.util.List;
 
-public class TestHTMLTidy extends TestCase
+public class TestHTMLTidy extends AbstractGateInTest
 {
 
    public void testText() throws Exception

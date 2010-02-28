@@ -19,6 +19,7 @@
 
 package org.exoplatform.services.parser.html.test;
 
+import org.exoplatform.component.test.AbstractGateInTest;
 import org.exoplatform.services.html.HTMLDocument;
 import org.exoplatform.services.html.HTMLNode;
 import org.exoplatform.services.html.Name;
@@ -26,7 +27,6 @@ import org.exoplatform.services.html.parser.HTMLParser;
 import org.exoplatform.services.html.path.NodePath;
 import org.exoplatform.services.html.path.NodePathParser;
 import org.exoplatform.services.html.path.NodePathUtil;
-import org.exoplatform.test.BasicTestCase;
 
 import java.io.File;
 import java.net.URL;
@@ -35,7 +35,7 @@ import java.net.URL;
  * Created by The eXo Platform SARL Author : Nhu Dinh Thuan
  * nhudinhthuan@exoplatform.com Nov 29, 2006
  */
-public class TestFileDetect extends BasicTestCase
+public class TestFileDetect extends AbstractGateInTest
 {
    private File file_;
 

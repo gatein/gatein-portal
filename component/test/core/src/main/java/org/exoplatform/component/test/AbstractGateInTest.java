@@ -18,20 +18,13 @@
  */
 package org.exoplatform.component.test;
 
-import junit.framework.AssertionFailedError;
 import junit.framework.TestCase;
-import org.exoplatform.container.PortalContainer;
-import org.exoplatform.container.component.RequestLifeCycle;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 
-import java.io.File;
-import java.io.FilenameFilter;
 import java.util.*;
 
 /**
- * An abstract test that takes care of running the unit tests with the semantic described by the
- * {#link GateInTestClassLoader}.
  *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
@@ -39,18 +32,11 @@ import java.util.*;
 public abstract class AbstractGateInTest extends TestCase
 {
 
-   /** The system property for gatein tmp dir. */
-   private static final String TMP_DIR = "gatein.test.tmp.dir";
-
    /** . */
    protected final Logger log = LoggerFactory.getLogger(getClass());
 
-   /** . */
-   private PortalContainer container;
-
    protected AbstractGateInTest()
    {
-      super();
    }
 
    protected AbstractGateInTest(String name)
@@ -58,26 +44,22 @@ public abstract class AbstractGateInTest extends TestCase
       super(name);
    }
 
-   public PortalContainer getContainer()
+   protected void beforeRunBare() throws Exception
    {
-      return container;
+      //
    }
 
-   protected void begin()
+   /**
+    * After the run base, it should not throw anything as it is executed in a finally clause.
+    */
+   protected void afterRunBare()
    {
-      RequestLifeCycle.begin(container);
-   }
-
-   protected void end()
-   {
-      RequestLifeCycle.end();
+      //
    }
 
    @Override
-   public void runBare() throws Throwable
+   public final void runBare() throws Throwable
    {
-      ClassLoader realClassLoader = Thread.currentThread().getContextClassLoader();
-
       // Patch a bug with maven that does not pass properly the system property
       // with an empty value
       if ("org.hsqldb.jdbcDriver".equals(System.getProperty("gatein.test.datasource.driver")))
@@ -86,7 +68,7 @@ public abstract class AbstractGateInTest extends TestCase
       }
 
       //
-      log.info("Listing gatein system properties:");
+      log.info("Running unit test:" + getName());
       for (Map.Entry<?, ?> entry : System.getProperties().entrySet())
       {
          if (entry.getKey() instanceof String)
@@ -96,118 +78,32 @@ public abstract class AbstractGateInTest extends TestCase
             {
                log.info(key + "=" + entry.getValue());
             }
-         }
-      }
-
-      //
-      Set<String> rootConfigPaths = new HashSet<String>();
-      rootConfigPaths.add("conf/root-configuration.xml");
-
-      //
-      Set<String> portalConfigPaths = new HashSet<String>();
-      portalConfigPaths.add("conf/portal-configuration.xml");
-
-      //
-      EnumMap<ContainerScope, Set<String>> configs = new EnumMap<ContainerScope, Set<String>>(ContainerScope.class);
-      configs.put(ContainerScope.ROOT, rootConfigPaths);
-      configs.put(ContainerScope.PORTAL, portalConfigPaths);
-
-      //
-      ConfiguredBy cfBy = getClass().getAnnotation(ConfiguredBy.class);
-      if (cfBy != null)
-      {
-         for (ConfigurationUnit src : cfBy.value())
-         {
-            configs.get(src.scope()).add(src.path());
-         }
-      }
-
-      // Take care of creating tmp directory for unit test
-      if (System.getProperty(TMP_DIR) == null)
-      {
-         // Get base dir set by maven or die
-         File targetDir = new File(new File(System.getProperty("basedir")), "target");
-         if (!targetDir.exists())
-         {
-            throw new AssertionFailedError("Target dir for unit test does not exist");
-         }
-         if (!targetDir.isDirectory())
-         {
-            throw new AssertionFailedError("Target dir is not a directory");
-         }
-         if (!targetDir.canWrite())
-         {
-            throw new AssertionFailedError("Target dir is not writable");
-         }
-
-         //
-         Set<String> fileNames = new HashSet<String>();
-         for (File child : targetDir.listFiles(new FilenameFilter()
-         {
-            public boolean accept(File dir, String name)
+            else
             {
-               return name.startsWith("gateintest-");
+               log.debug(key + "=" + entry.getValue());
             }
-         })) 
-         {
-            fileNames.add(child.getName());
          }
-
-         //
-         String fileName;
-         int count = 0;
-         while (true)
-         {
-            fileName = "gateintest-" + count;
-            if (!fileNames.contains(fileName)) {
-               break;
-            }
-            count++;
-         }
-
-         //
-         File tmp = new File(targetDir, fileName);
-         if (!tmp.mkdirs())
-         {
-            throw new AssertionFailedError("Could not create directory " + tmp.getCanonicalPath());
-         }
-
-         //
-         System.setProperty(TMP_DIR, tmp.getCanonicalPath());
       }
 
       //
-//      List<Throwable> failures = new ArrayList<Throwable>();
+      beforeRunBare();
 
       //
       try
       {
-         ClassLoader testClassLoader = new GateInTestClassLoader(realClassLoader, rootConfigPaths, portalConfigPaths);
-         Thread.currentThread().setContextClassLoader(testClassLoader);
-
-         // Boot the container
-         container = PortalContainer.getInstance();
-
-         // Execute test
          super.runBare();
+         log.info("Unit test " + getName() + " completed");
+      }
+      catch (Throwable throwable)
+      {
+         log.error("Unit test " + getName() + " did not complete", throwable);
+
+         //
+         throw throwable;
       }
       finally
       {
-         container = null;
-
-         //
-         Thread.currentThread().setContextClassLoader(realClassLoader);
+         afterRunBare();
       }
-
-      //
-/*
-      if (failures.size() > 0)
-      {
-         Throwable failure = failures.get(0);
-         AssertionFailedError afe = new AssertionFailedError();
-         afe.initCause(failure);
-         throw afe;
-      }
-*/
    }
 }

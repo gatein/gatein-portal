@@ -24,6 +24,7 @@
  */
 package org.exoplatform.test;
 
+import org.exoplatform.component.test.AbstractGateInTest;
 import org.exoplatform.services.chars.chardet.Detector;
 import org.exoplatform.services.chars.chardet.ICharsetDetectionObserver;
 import org.exoplatform.services.chars.chardet.PSMDetector;
@@ -37,7 +38,7 @@ import java.net.URL;
  *          laivankhoi46pm1@yahoo.com
  * Nov 27, 2006  
  */
-public class HtmlCharsetDetector extends BasicTestCase
+public class HtmlCharsetDetector extends AbstractGateInTest
 {
 
    public static boolean found = false;

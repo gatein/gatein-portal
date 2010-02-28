@@ -18,10 +18,7 @@
  */
 package org.exoplatform.application;
 
-import org.exoplatform.component.test.AbstractGateInTest;
-import org.exoplatform.component.test.ConfigurationUnit;
-import org.exoplatform.component.test.ConfiguredBy;
-import org.exoplatform.component.test.ContainerScope;
+import org.exoplatform.component.test.*;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -33,7 +30,7 @@ import org.exoplatform.component.test.ContainerScope;
    @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.application-registry-configuration.xml"),
    @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.portal-configuration1.xml")
 })
-public abstract class AbstractApplicationRegistryTest extends AbstractGateInTest
+public abstract class AbstractApplicationRegistryTest extends AbstractKernelTest
 {
 
 /*

@@ -20,7 +20,7 @@
 package org.exoplatform.commons.utils;
 
 import junit.framework.AssertionFailedError;
-import junit.framework.TestCase;
+import org.exoplatform.component.test.AbstractGateInTest;
 
 import java.io.*;
 import java.util.List;
@@ -29,7 +29,7 @@ import java.util.List;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class TestPageListAccess extends TestCase
+public class TestPageListAccess extends AbstractGateInTest
 {
 
    private final String[] l = {"0", "1", "2", "3", "4", "5", "6"};

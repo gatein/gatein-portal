@@ -19,10 +19,7 @@
 package org.exoplatform.portal.config;
 
 import org.exoplatform.commons.chromattic.ChromatticManager;
-import org.exoplatform.component.test.AbstractGateInTest;
-import org.exoplatform.component.test.ConfigurationUnit;
-import org.exoplatform.component.test.ConfiguredBy;
-import org.exoplatform.component.test.ContainerScope;
+import org.exoplatform.component.test.*;
 import org.exoplatform.container.PortalContainer;
 
 /**
@@ -35,7 +32,7 @@ import org.exoplatform.container.PortalContainer;
    @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.portal-configuration1.xml"),
    @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.portal-configuration2.xml")
 })
-public abstract class AbstractPortalTest extends AbstractGateInTest
+public abstract class AbstractPortalTest extends AbstractKernelTest
 {
 
    public AbstractPortalTest()

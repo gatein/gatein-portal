@@ -19,7 +19,7 @@
 
 package org.exoplatform.webui.test;
 
-import org.exoplatform.test.BasicTestCase;
+import org.exoplatform.component.test.AbstractGateInTest;
 
 import java.io.File;
 import java.net.URL;
@@ -31,7 +31,7 @@ import java.util.Map;
  *          nhudinhthuan@yahoo.com
  * May 5, 2006
  */
-public class TestApplication extends BasicTestCase
+public class TestApplication extends AbstractGateInTest
 {
 
    public void testApplication() throws Exception

@@ -18,9 +18,9 @@
  */
 package org.exoplatform.groovyscript;
 
-import junit.framework.TestCase;
 import org.exoplatform.commons.utils.CharsetTextEncoder;
 import org.exoplatform.commons.utils.OutputStreamPrinter;
+import org.exoplatform.component.test.AbstractGateInTest;
 
 import java.awt.*;
 import java.io.*;
@@ -32,7 +32,7 @@ import java.util.Map;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class TestTemplateRendering extends TestCase
+public class TestTemplateRendering extends AbstractGateInTest
 {
 
    public void testOutputStreamWriter() throws Exception

@@ -23,10 +23,7 @@
 
 package org.gatein.portal.wsrp.state.consumer;
 
-import org.exoplatform.component.test.AbstractGateInTest;
-import org.exoplatform.component.test.ConfigurationUnit;
-import org.exoplatform.component.test.ConfiguredBy;
-import org.exoplatform.component.test.ContainerScope;
+import org.exoplatform.component.test.*;
 import org.gatein.pc.federation.impl.FederatingPortletInvokerService;
 import org.gatein.wsrp.WSRPConsumer;
 import org.gatein.wsrp.consumer.ConsumerException;
@@ -47,7 +44,7 @@ import java.util.Collection;
    @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.test.jcr-configuration.xml"),
    @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.wsrp-configuration.xml")
 })
-public class ConsumerRegistryTestCase extends AbstractGateInTest
+public class ConsumerRegistryTestCase extends AbstractKernelTest
 {
    private JCRConsumerRegistry registry;
 

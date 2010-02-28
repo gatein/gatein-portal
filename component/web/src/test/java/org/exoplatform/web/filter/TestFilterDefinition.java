@@ -19,7 +19,7 @@
 
 package org.exoplatform.web.filter;
 
-import junit.framework.TestCase;
+import org.exoplatform.component.test.AbstractGateInTest;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,7 +30,7 @@ import java.util.Arrays;
  *          nicolas.filotto@exoplatform.com
  * 25 sept. 2009  
  */
-public class TestFilterDefinition extends TestCase
+public class TestFilterDefinition extends AbstractGateInTest
 {
 
    public void testMatch()

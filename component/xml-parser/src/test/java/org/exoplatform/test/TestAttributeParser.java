@@ -19,6 +19,7 @@
 
 package org.exoplatform.test;
 
+import org.exoplatform.component.test.AbstractGateInTest;
 import org.exoplatform.services.token.Node;
 import org.exoplatform.services.token.attribute.Attribute;
 import org.exoplatform.services.token.attribute.AttributeParser;
@@ -30,7 +31,7 @@ import org.exoplatform.services.token.attribute.Attributes;
  *          laivankhoi46pm1@yahoo.com
  * Nov 28, 2006  
  */
-public class TestAttributeParser extends BasicTestCase
+public class TestAttributeParser extends AbstractGateInTest
 {
    public void testAttributes()
    {

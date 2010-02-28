@@ -36,7 +36,7 @@ import java.sql.DatabaseMetaData;
    @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/jcr/jcr-configuration.xml"),
    @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/test-configuration.xml")
 })
-public class BootstrapTestCase extends AbstractGateInTest
+public class BootstrapTestCase extends AbstractKernelTest
 {
 
    /** . */

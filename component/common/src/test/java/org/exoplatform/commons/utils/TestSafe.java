@@ -20,7 +20,7 @@
 package org.exoplatform.commons.utils;
 
 import junit.framework.AssertionFailedError;
-import junit.framework.TestCase;
+import org.exoplatform.component.test.AbstractGateInTest;
 
 import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
@@ -30,7 +30,7 @@ import java.io.IOException;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class TestSafe extends TestCase
+public class TestSafe extends AbstractGateInTest
 {
 
    public TestSafe()

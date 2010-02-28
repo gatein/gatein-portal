@@ -25,6 +25,7 @@ package org.exoplatform.services.parser.html.test;
  *          laivankhoi46pm1@yahoo.com
  * Nov 28, 2006  
  */
+import org.exoplatform.component.test.AbstractGateInTest;
 import org.exoplatform.services.html.HTMLDocument;
 import org.exoplatform.services.html.HTMLNode;
 import org.exoplatform.services.html.Name;
@@ -35,13 +36,12 @@ import org.exoplatform.services.html.path.NodePathUtil;
 import org.exoplatform.services.token.attribute.Attribute;
 import org.exoplatform.services.token.attribute.AttributeParser;
 import org.exoplatform.services.token.attribute.Attributes;
-import org.exoplatform.test.BasicTestCase;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TestHTMLParser extends BasicTestCase
+public class TestHTMLParser extends AbstractGateInTest
 {
 
    private File file_;

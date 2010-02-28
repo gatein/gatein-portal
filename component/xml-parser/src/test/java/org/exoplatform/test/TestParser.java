@@ -25,13 +25,14 @@ package org.exoplatform.test;
  *          laivankhoi46pm1@yahoo.com
  * Nov 28, 2006  
  */
+import org.exoplatform.component.test.AbstractGateInTest;
 import org.exoplatform.services.html.HTMLNode;
 import org.exoplatform.services.html.parser.HTMLParser;
 
 import java.io.File;
 import java.util.List;
 
-public class TestParser extends BasicTestCase
+public class TestParser extends AbstractGateInTest
 {
 
    public static void print(String text, HTMLNode element)

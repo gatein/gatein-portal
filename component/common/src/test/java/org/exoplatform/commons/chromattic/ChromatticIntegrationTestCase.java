@@ -20,10 +20,7 @@ package org.exoplatform.commons.chromattic;
 
 import org.chromattic.api.Chromattic;
 import org.chromattic.api.ChromatticSession;
-import org.exoplatform.component.test.AbstractGateInTest;
-import org.exoplatform.component.test.ConfigurationUnit;
-import org.exoplatform.component.test.ConfiguredBy;
-import org.exoplatform.component.test.ContainerScope;
+import org.exoplatform.component.test.*;
 import org.exoplatform.container.PortalContainer;
 
 import javax.jcr.Session;
@@ -37,7 +34,7 @@ import javax.jcr.Workspace;
    @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.test.jcr-configuration.xml"),
    @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.common-configuration.xml")
 })
-public class ChromatticIntegrationTestCase extends AbstractGateInTest
+public class ChromatticIntegrationTestCase extends AbstractKernelTest
 {
 
    /** . */

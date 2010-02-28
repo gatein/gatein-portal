@@ -22,12 +22,12 @@
 package org.exoplatform.services.organization;
 
 import org.exoplatform.commons.utils.PageList;
+import org.exoplatform.component.test.AbstractGateInTest;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.component.ComponentRequestLifecycle;
 import org.exoplatform.container.component.RequestLifeCycle;
 import org.exoplatform.services.organization.idm.Config;
 import org.exoplatform.services.organization.idm.PicketLinkIDMOrganizationServiceImpl;
-import org.exoplatform.test.BasicTestCase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +37,7 @@ import java.util.List;
  * Oct 27, 2005
  */
 
-public class TestConfigOrganizationService extends BasicTestCase
+public class TestConfigOrganizationService extends AbstractGateInTest
 {
 
    static String Group1 = "Group1";

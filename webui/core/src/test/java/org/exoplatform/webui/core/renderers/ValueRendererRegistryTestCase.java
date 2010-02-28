@@ -23,7 +23,7 @@
 
 package org.exoplatform.webui.core.renderers;
 
-import junit.framework.TestCase;
+import org.exoplatform.component.test.AbstractGateInTest;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -32,7 +32,7 @@ import java.util.Date;
  * @author <a href="mailto:chris.laprun@jboss.com">Chris Laprun</a>
  * @version $Revision$
  */
-public class ValueRendererRegistryTestCase extends TestCase
+public class ValueRendererRegistryTestCase extends AbstractGateInTest
 {
    private ValueRendererRegistry registry;
 

@@ -105,6 +105,13 @@
      </dependency>
 
      <dependency>
+       <groupId>org.exoplatform.portal</groupId>
+       <artifactId>exo.portal.component.test.core</artifactId>
+       <version>3.0.0-CR02-SNAPSHOT</version>
+       <scope>test</scope>
+     </dependency>
+
+     <dependency>
         <groupId>org.jboss.jbossas</groupId>
         <artifactId>jboss-as-tomcat</artifactId>
         <version>5.1.0.GA</version>

@@ -19,12 +19,12 @@
 
 package org.exoplatform.commons.serialization.metadata;
 
-import junit.framework.TestCase;
 import org.exoplatform.commons.serialization.model.ClassTypeModel;
 import org.exoplatform.commons.serialization.model.ConvertedTypeModel;
 import org.exoplatform.commons.serialization.model.SerializationMode;
 import org.exoplatform.commons.serialization.model.TypeDomain;
 import org.exoplatform.commons.serialization.model.metadata.DomainMetaData;
+import org.exoplatform.component.test.AbstractGateInTest;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -33,7 +33,7 @@ import java.util.LinkedList;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class TestMetaData extends TestCase
+public class TestMetaData extends AbstractGateInTest
 {
 
    public void testSerializedObjectClassType() throws Exception

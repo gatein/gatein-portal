@@ -19,8 +19,8 @@
 
 package org.exoplatform.application.gadget;
 
+import org.exoplatform.component.test.AbstractGateInTest;
 import org.exoplatform.container.PortalContainer;
-import org.exoplatform.test.BasicTestCase;
 
 import java.util.List;
 
@@ -32,7 +32,7 @@ import java.util.List;
  *          thanhtungty@gmail.com
  * Jul 11, 2008  
  */
-public abstract class TestGadgetRegistryService extends BasicTestCase
+public abstract class TestGadgetRegistryService extends AbstractGateInTest
 {
 
    private GadgetRegistryService service_;

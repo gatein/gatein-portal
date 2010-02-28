@@ -19,6 +19,7 @@
 
 package org.exoplatform.services.parser.html.test;
 
+import org.exoplatform.component.test.AbstractGateInTest;
 import org.exoplatform.services.html.HTMLDocument;
 import org.exoplatform.services.html.HTMLNode;
 import org.exoplatform.services.html.Name;
@@ -27,7 +28,6 @@ import org.exoplatform.services.html.path.NodePathParser;
 import org.exoplatform.services.html.path.NodePathUtil;
 import org.exoplatform.services.html.util.HyperLinkUtil;
 import org.exoplatform.services.html.util.URLCreator;
-import org.exoplatform.test.BasicTestCase;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -39,7 +39,7 @@ import java.util.List;
  *          nhudinhthuan@exoplatform.com
  * Nov 30, 2006  
  */
-public class TestURL extends BasicTestCase
+public class TestURL extends AbstractGateInTest
 {
    //test ContentBuilder.java
    private URL url_;

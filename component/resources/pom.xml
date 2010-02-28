@@ -79,10 +79,17 @@
       <version>3.0.0-CR02-SNAPSHOT</version>
     </dependency>
 
-      <dependency>
-        <groupId>junit</groupId>
-        <artifactId>junit</artifactId>
-        <scope>test</scope>
-      </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.exoplatform.portal</groupId>
+      <artifactId>exo.portal.component.test.core</artifactId>
+      <version>3.0.0-CR02-SNAPSHOT</version>
+      <scope>test</scope>
+    </dependency>
+
   </dependencies>
 </project>

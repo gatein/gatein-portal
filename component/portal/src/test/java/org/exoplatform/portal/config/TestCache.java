@@ -22,7 +22,6 @@ import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.POMSessionManager;
-import org.exoplatform.test.BasicTestCase;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 

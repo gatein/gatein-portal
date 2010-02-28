@@ -19,13 +19,12 @@
 
 package org.exoplatform.services.resources.test;
 
+import org.exoplatform.component.test.AbstractGateInTest;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.services.resources.LocaleConfig;
 import org.exoplatform.services.resources.LocaleConfigService;
-import org.exoplatform.test.BasicTestCase;
 
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.Locale;
 
 /**
@@ -34,7 +33,7 @@ import java.util.Locale;
  * @version: $Id: TestLocaleConfig.java 5799 2006-05-28 17:55:42Z geaz $
  * @email: tuan08@yahoo.com
  */
-public class TestLocaleConfig extends BasicTestCase
+public class TestLocaleConfig extends AbstractGateInTest
 {
 
    private LocaleConfigService service_;
@@ -76,21 +75,20 @@ public class TestLocaleConfig extends BasicTestCase
       assertTrue(locales.size() == 4);
 
       Locale vnlocale = service_.getLocaleConfig("vi").getLocale();
-      hasObjectInCollection(vnlocale, locales, new LocaleComparator());
-      hasObjectInCollection(Locale.ENGLISH, locales, new LocaleComparator());
-      hasObjectInCollection(Locale.FRENCH, locales, new LocaleComparator());
+      assertContains(locales, vnlocale);
+      assertContains(locales, Locale.ENGLISH);
+      assertContains(locales, Locale.FRENCH);
    }
 
-   public static class LocaleComparator implements Comparator
+   private void assertContains(Collection<LocaleConfig> configs, Locale locale)
    {
-
-      public int compare(Object o1, Object o2)
+      for (LocaleConfig config : configs)
       {
-         Locale locale1 = (Locale)o1;
-         LocaleConfig localse2 = (LocaleConfig)o2;
-         if (locale1.equals(localse2.getLocale()))
-            return 0;
-         return -1;
+         if (config.getLocale().equals(locale))
+         {
+            return;
+         }
       }
+      fail("Was expecting locale " + locale + " to be present in " + configs);
    }
 }

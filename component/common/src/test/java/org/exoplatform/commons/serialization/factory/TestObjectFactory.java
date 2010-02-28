@@ -19,9 +19,9 @@
 
 package org.exoplatform.commons.serialization.factory;
 
-import junit.framework.TestCase;
 import org.exoplatform.commons.serialization.SerializationContext;
 import org.exoplatform.commons.serialization.model.TypeDomain;
+import org.exoplatform.component.test.AbstractGateInTest;
 
 import java.io.InvalidClassException;
 
@@ -29,7 +29,7 @@ import java.io.InvalidClassException;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class TestObjectFactory extends TestCase
+public class TestObjectFactory extends AbstractGateInTest
 {
 
    public void testCustomFactory() throws Exception

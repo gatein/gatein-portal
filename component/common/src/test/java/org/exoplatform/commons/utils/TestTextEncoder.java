@@ -19,7 +19,7 @@
 
 package org.exoplatform.commons.utils;
 
-import junit.framework.TestCase;
+import org.exoplatform.component.test.AbstractGateInTest;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -31,7 +31,7 @@ import java.util.List;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class TestTextEncoder extends TestCase
+public class TestTextEncoder extends AbstractGateInTest
 {
 
    public void testA() throws IOException

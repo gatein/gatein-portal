@@ -19,13 +19,13 @@
 
 package org.exoplatform.services.parser.rss.test;
 
+import org.exoplatform.component.test.AbstractGateInTest;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.services.rss.parser.DefaultRSSChannel;
 import org.exoplatform.services.rss.parser.DefaultRSSItem;
 import org.exoplatform.services.rss.parser.IRSSChannel;
 import org.exoplatform.services.rss.parser.RSSDocument;
 import org.exoplatform.services.rss.parser.RSSParser;
-import org.exoplatform.test.BasicTestCase;
 
 import java.net.URL;
 import java.util.List;
@@ -35,7 +35,7 @@ import java.util.List;
  * hoa.nguyen@exoplatform.com Jul 20, 2006
  */
 
-public class TestRSSParser extends BasicTestCase
+public class TestRSSParser extends AbstractGateInTest
 {
 
    private RSSParser parser_;
