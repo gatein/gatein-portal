@@ -25,6 +25,7 @@ import org.exoplatform.commons.chromattic.SessionContext;
 import org.exoplatform.portal.pom.config.cache.DataCache;
 import org.exoplatform.services.cache.CacheService;
 import org.exoplatform.services.cache.ExoCache;
+import org.exoplatform.services.jcr.RepositoryService;
 import org.gatein.mop.core.api.MOPService;
 import org.picocontainer.Startable;
 
@@ -42,7 +43,7 @@ public class POMSessionManager implements Startable
    private MOPService pomService;
 
    /** . */
-   final ExoCache<Serializable, Object> cache;
+   private final ExoCache<GlobalKey, Object> cache;
 
    /** . */
    final ChromatticManager manager;
@@ -53,13 +54,32 @@ public class POMSessionManager implements Startable
    /** . */
    private final TaskExecutionDecorator executor;
 
-   public POMSessionManager(ChromatticManager manager, CacheService cacheService)
+   /** . */
+   private final RepositoryService repositoryService;
+
+   public POMSessionManager(RepositoryService repositoryService, ChromatticManager manager, CacheService cacheService)
    {
       //
+      this.repositoryService = repositoryService;
       this.manager = manager;
       this.cache = cacheService.getCacheInstance(POMSessionManager.class.getSimpleName());
       this.pomService = null;
       this.executor = new DataCache(new ExecutorDispatcher());
+   }
+
+   public void cachePut(Serializable key, Object value)
+   {
+      cache.put(GlobalKey.wrap(repositoryService, key), value);
+   }
+
+   public Object cacheGet(Serializable key)
+   {
+      return cache.get(GlobalKey.wrap(repositoryService, key));
+   }
+
+   public void cacheRemove(Serializable key)
+   {
+      cache.remove(GlobalKey.wrap(repositoryService, key));
    }
 
    public void start()

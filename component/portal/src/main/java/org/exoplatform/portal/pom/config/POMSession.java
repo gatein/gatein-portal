@@ -117,7 +117,7 @@ public class POMSession
       {
          throw new IllegalStateException("Cannot read object in shared cache from a modified session");
       }
-      return mgr.cache.get(key);
+      return mgr.cacheGet(key);
    }
 
    public void putInCache(Serializable key, Object value)
@@ -126,7 +126,7 @@ public class POMSession
       {
          throw new IllegalStateException("Cannot put object in shared cache from a modified session");
       }
-      mgr.cache.put(key, value);
+      mgr.cachePut(key, value);
    }
 
    public void scheduleForEviction(Serializable key)
@@ -362,7 +362,7 @@ public class POMSession
          {
             for (Serializable key : staleKeys)
             {
-               mgr.cache.remove(key);
+               mgr.cacheRemove(key);
             }
          }
       }

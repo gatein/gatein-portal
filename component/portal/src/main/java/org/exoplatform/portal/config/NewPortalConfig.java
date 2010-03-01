@@ -126,4 +126,10 @@ public final class NewPortalConfig
       this.ownerType = ownerType;
    }
 
+   @Override
+   public String toString()
+   {
+      return "PortalConfig[predefinedOwner=" + predefinedOwner + ",ownerType=" + ownerType + ",templateName=" + templateName + 
+         "location=" + location + "]";
+   }
 }

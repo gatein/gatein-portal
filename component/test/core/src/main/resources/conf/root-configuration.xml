@@ -28,17 +28,4 @@
     <type>org.exoplatform.container.definition.PortalContainerConfig</type>
   </component>
 
-<!--
-  <component>
-    <key>org.exoplatform.container.PropertyConfigurator</key>
-    <type>org.exoplatform.container.PropertyConfigurator</type>
-    <init-params>
-      <value-param>
-        <name>properties.url</name>
-        <value>jar:/conf/test-configuration.properties</value>
-      </value-param>
-    </init-params>
-  </component>
--->
-
 </configuration>

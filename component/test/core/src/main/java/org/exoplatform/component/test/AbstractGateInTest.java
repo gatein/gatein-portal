@@ -74,14 +74,7 @@ public abstract class AbstractGateInTest extends TestCase
          if (entry.getKey() instanceof String)
          {
             String key = (String)entry.getKey();
-            if (key.startsWith("gatein."))
-            {
-               log.info(key + "=" + entry.getValue());
-            }
-            else
-            {
-               log.debug(key + "=" + entry.getValue());
-            }
+            log.debug(key + "=" + entry.getValue());
          }
       }
 
