@@ -100,6 +100,17 @@ public class MappedMap<Key, Value>
    {
       if (ParameterValidation.existsAndIsNotEmpty(externalMap))
       {
+         // remove existing values (apart from blacklisted ones that we shouldn't touch)
+         Set<String> keys = new HashSet<String>(internalMap.keySet());
+         for (String key : keys)
+         {
+            if (!blacklistedPropertyKeys.contains(key))
+            {
+               internalMap.remove(key);
+            }
+         }
+
+         // put the new values in
          for (Map.Entry<Key, Value> entry : externalMap.entrySet())
          {
             internalMap.put(keyConverter.toInternal(entry.getKey()), valueConverter.toInternal(entry.getValue()));

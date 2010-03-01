@@ -117,7 +117,7 @@
             <artifactId>maven-surefire-plugin</artifactId>
             <configuration>
                <excludes>
-                  <exclude>org/gatein/portal/wsrp/**</exclude>
+                  <exclude>org/gatein/portal/wsrp/state/consumer/**</exclude>
                </excludes>
             </configuration>
          </plugin>
