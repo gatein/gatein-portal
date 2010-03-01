@@ -24,15 +24,12 @@
 package org.gatein.portal.wsrp.state.mapping;
 
 import org.exoplatform.commons.utils.Tools;
-import org.gatein.common.util.AbstractTypedMap;
 import org.gatein.common.util.ParameterValidation;
 
-import javax.xml.namespace.QName;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -68,7 +65,7 @@ public class MappedMap<Key, Value>
       this.valueConverter = valueConverter;
 
       int blacklistedNumber = blacklistedPropertyNames.length;
-      if(blacklistedNumber > 0)
+      if (blacklistedNumber > 0)
       {
          blacklistedPropertyKeys = new HashSet<String>(jcrBlacklistedPropertyKeys);
          blacklistedPropertyKeys.addAll(Arrays.asList(blacklistedPropertyNames));
@@ -113,6 +110,7 @@ public class MappedMap<Key, Value>
    public static interface Converter<Internal, External>
    {
       External fromInternal(Internal internal);
+
       Internal toInternal(External external);
    }
 }

@@ -1,16 +1,16 @@
 /**
  * Copyright (C) 2009 eXo Platform SAS.
- * 
+ *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation; either version 2.1 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this software; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
@@ -36,6 +36,14 @@ public class Utils
 
    public final static String FIRST_CHARACTER_NAME_VALIDATOR_REGEX = "^[\\p{L}][\\p{L}._'\\- \\d]+$";
 
+
+   /**
+    * todo: move to common module
+    *
+    * @param separator
+    * @param strings
+    * @return
+    */
    public static String join(String separator, String... strings)
    {
       if (strings == null)
@@ -65,6 +73,13 @@ public class Utils
       return join(separator, array);
    }
 
+   /**
+    * todo: move to common module
+    *
+    * @param separator
+    * @param s
+    * @return
+    */
    public static String[] split(String separator, String s)
    {
       if (s == null)
@@ -130,13 +145,13 @@ public class Utils
 
    /**
     * Splits a string according to a string separator.
-    *
-    * The provided index defines the beginning of the splitted chunks in the returned array. The values
-    * from the beginning up to the value index - 1 will be null values.
+    * <p/>
+    * The provided index defines the beginning of the splitted chunks in the returned array. The values from the
+    * beginning up to the value index - 1 will be null values.
     *
     * @param separator the string separator
-    * @param index the index to which the chunks begin
-    * @param s the string to split
+    * @param index     the index to which the chunks begin
+    * @param s         the string to split
     * @return an array containing the splitted chunks plus extra leading pad
     */
    public static String[] split(String separator, int index, String s)
