@@ -35,13 +35,11 @@
     <dependency>
       <groupId>org.exoplatform.portal</groupId>
       <artifactId>exo.portal.webui.core</artifactId>
-      <version>3.0.0-CR02-SNAPSHOT</version>
-    </dependency> 
+    </dependency>
     
     <dependency>
       <groupId>org.exoplatform.portal</groupId>
       <artifactId>exo.portal.component.application-registry</artifactId>
-      <version>3.0.0-CR02-SNAPSHOT</version>
-    </dependency> 
+    </dependency>
   </dependencies>
 </project>

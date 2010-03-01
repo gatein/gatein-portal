@@ -42,13 +42,11 @@
     <dependency>
       <groupId>org.exoplatform.portal</groupId>
       <artifactId>exo.portal.webui.eXo</artifactId>
-      <version>3.0.0-CR02-SNAPSHOT</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.exoplatform.portal</groupId>
       <artifactId>exo.portal.component.dashboard</artifactId>
-      <version>3.0.0-CR02-SNAPSHOT</version>
       <scope>provided</scope>
     </dependency>
   </dependencies> 

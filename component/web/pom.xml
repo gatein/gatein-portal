@@ -36,85 +36,66 @@
   </properties>
 
   <dependencies>
+
     <dependency>
         <groupId>org.exoplatform.kernel</groupId>
         <artifactId>exo.kernel.container</artifactId>
-        <version>${org.exoplatform.kernel.version}</version>
     </dependency>
-
     <dependency>
       <groupId>org.exoplatform.core</groupId>
       <artifactId>exo.core.component.organization.api</artifactId>
     </dependency>
-    
     <dependency>
       <groupId>org.exoplatform.jcr</groupId>
       <artifactId>exo.jcr.component.ext</artifactId>
     </dependency>
-        
     <dependency>
       <groupId>org.exoplatform.portal</groupId>
       <artifactId>exo.portal.component.common</artifactId>
-      <version>3.0.0-CR02-SNAPSHOT</version>
     </dependency>
-
     <dependency>
       <groupId>org.exoplatform.portal</groupId>
       <artifactId>exo.portal.component.resources</artifactId>
-      <version>3.0.0-CR02-SNAPSHOT</version>
     </dependency>
-
     <dependency>
       <groupId>org.gatein.wci</groupId>
       <artifactId>wci-wci</artifactId>
     </dependency>
-
     <dependency>
       <groupId>org.chromattic</groupId>
       <artifactId>chromattic.apt</artifactId>
       <scope>compile</scope>
     </dependency>
-
     <dependency>
       <groupId>org.exoplatform.portal</groupId>
       <artifactId>exo.portal.component.scripting</artifactId>
-      <version>3.0.0-CR02-SNAPSHOT</version>
     </dependency>
-
     <dependency>
 	    <groupId>org.apache.shindig</groupId>
 		  <artifactId>shindig-gadgets</artifactId>
     </dependency>
-
     <dependency>
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
       <type>jar</type>
     </dependency>
-		
 		<dependency>
     	<groupId>org.json</groupId>
     	<artifactId>json</artifactId>
     	<type>jar</type>
     </dependency>
-
      <dependency>
         <groupId>javax.security</groupId>
         <artifactId>jacc</artifactId>
-        <version>1.0</version>
      </dependency>
-
      <dependency>
        <groupId>org.exoplatform.portal</groupId>
        <artifactId>exo.portal.component.test.core</artifactId>
-       <version>3.0.0-CR02-SNAPSHOT</version>
        <scope>test</scope>
      </dependency>
-
      <dependency>
         <groupId>org.jboss.jbossas</groupId>
         <artifactId>jboss-as-tomcat</artifactId>
-        <version>5.1.0.GA</version>
         <scope>provided</scope>
      </dependency>
   </dependencies>
