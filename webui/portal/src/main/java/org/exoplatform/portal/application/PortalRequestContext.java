@@ -370,6 +370,7 @@ public class PortalRequestContext extends WebuiRequestContext
       {
          Transformer transformer = TransformerFactory.newInstance().newTransformer();
          transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+         transformer.setOutputProperty(OutputKeys.METHOD, "html");
 
          for (Element element : extraMarkupHeaders)
          {
