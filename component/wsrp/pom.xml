@@ -32,7 +32,6 @@
    <modelVersion>4.0.0</modelVersion>
    <artifactId>gatein.portal.component.wsrp</artifactId>
    <packaging>jar</packaging>
-   <version>3.0.0-CR02-SNAPSHOT</version>
    <name>GateIn Portal Component WSRP integration</name>
 
    <dependencies>

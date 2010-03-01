@@ -29,7 +29,6 @@
   <modelVersion>4.0.0</modelVersion>
   <artifactId>exo.portal.component.pc</artifactId>
   <packaging>jar</packaging>
-  <version>3.0.0-CR02-SNAPSHOT</version>
   <name>GateIn Portal Component PC integration</name>
   
   <dependencies>
