@@ -50,11 +50,10 @@ public abstract class RegistrationPropertiesMapping
 
    public Map<QName, Object> toPropMap()
    {
-      Map<QName, Object> properties = Collections.emptyMap();
       Map<String, String> propMap = getProperties();
       if (!propMap.isEmpty())
       {
-         properties = new HashMap<QName, Object>(propMap.size());
+         Map<QName, Object> properties = new HashMap<QName, Object>(propMap.size());
          for (Map.Entry<String, String> entry : propMap.entrySet())
          {
             String key = entry.getKey();
@@ -64,9 +63,13 @@ public abstract class RegistrationPropertiesMapping
                properties.put(QName.valueOf(key), entry.getValue());
             }
          }
-      }
 
-      return properties;
+         return properties;
+      }
+      else
+      {
+         return Collections.emptyMap();
+      }
    }
 
    public void initFrom(Map<QName, Object> properties)
