@@ -442,8 +442,7 @@ public class UIGadget extends UIComponent
             return;
          }
 
-         //
-         event.getRequestContext().setResponseComplete(true);
+         //event.getRequestContext().setResponseComplete(true);
       }
    }
 
