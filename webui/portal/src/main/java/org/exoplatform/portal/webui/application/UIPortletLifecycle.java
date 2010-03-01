@@ -53,6 +53,7 @@ import java.util.Map;
 import javax.portlet.MimeResponse;
 import javax.portlet.PortletMode;
 import javax.portlet.WindowState;
+import javax.servlet.http.Cookie;
 
 /**
  * Created by The eXo Platform SAS May 8, 2006
@@ -230,6 +231,16 @@ public class UIPortletLifecycle<S, C extends Serializable, I> extends Lifecycle<
                 					  prcontext.getResponse().setHeader(key, value);
                 				  }
                 			  }
+                		  }
+                		  
+                		  //setup up portlet cookies
+                		  if (fragmentResponse.getProperties().getCookies() != null)
+                		  {
+                		     List<Cookie> cookies = fragmentResponse.getProperties().getCookies();
+                		     for (Cookie cookie : cookies)
+                		     {
+                		        prcontext.getResponse().addCookie(cookie);
+                		     }
                 		  }
 
                 		  //setup markup headers
