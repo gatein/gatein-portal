@@ -1,6 +1,6 @@
 /*
  * JBoss, a division of Red Hat
- * Copyright 2009, Red Hat Middleware, LLC, and individual
+ * Copyright 2010, Red Hat Middleware, LLC, and individual
  * contributors as indicated by the @authors tag. See the
  * copyright.txt in the distribution for a full listing of
  * individual contributors.
@@ -23,7 +23,10 @@
 
 package org.gatein.portal.wsrp.state.consumer;
 
-import org.exoplatform.component.test.*;
+import org.exoplatform.component.test.AbstractKernelTest;
+import org.exoplatform.component.test.ConfigurationUnit;
+import org.exoplatform.component.test.ConfiguredBy;
+import org.exoplatform.component.test.ContainerScope;
 import org.gatein.pc.federation.impl.FederatingPortletInvokerService;
 import org.gatein.wsrp.WSRPConsumer;
 import org.gatein.wsrp.consumer.ConsumerException;
@@ -42,7 +45,7 @@ import java.util.Collection;
  */
 @ConfiguredBy({
    @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.test.jcr-configuration.xml"),
-   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.wsrp-configuration.xml")
+   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/gatein.portal.component.wsrp-configuration.xml")
 })
 public class ConsumerRegistryTestCase extends AbstractKernelTest
 {
