@@ -63,8 +63,6 @@ public class UIPageActionListener
          UIWorkingWorkspace uiWorkingWS = uiPortalApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
          PortalRequestContext pcontext = Util.getPortalRequestContext();
          pcontext.addUIComponentToUpdateByAjax(uiWorkingWS);
-         uiWorkingWS.setRenderedChild(UIPortalApplication.UI_VIEWING_WS_ID);
-         pcontext.setFullRender(true);
 
          PageNavigation currentNav = showedUIPortal.getSelectedNavigation();
          String currentUri = showedUIPortal.getSelectedNode().getUri();
@@ -111,6 +109,7 @@ public class UIPageActionListener
                showedUIPortal.setSelectedNode(targetPageNode);
                showedUIPortal.setSelectedPath(targetedPathNodes);
                showedUIPortal.refreshUIPage();
+               pcontext.setFullRender(true);
                return;
             }
          }
@@ -118,6 +117,9 @@ public class UIPageActionListener
          {
             // Case 2: Either navigation type or id has been changed
             // First, we try to find a cached UIPortal
+            uiWorkingWS.setRenderedChild(UIPortalApplication.UI_VIEWING_WS_ID);
+            uiPortalApp.setModeState(UIPortalApplication.NORMAL_MODE);
+            pcontext.setFullRender(true);
             UIPortal cachedUIPortal = uiPortalApp.getCachedUIPortal(newNavType, newNavId);
             if (cachedUIPortal != null)
             {
