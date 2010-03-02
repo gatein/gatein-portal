@@ -26,6 +26,10 @@ import org.exoplatform.commons.utils.PortalPrinter;
 import org.exoplatform.commons.utils.TableCharEncoder;
 import org.exoplatform.commons.utils.TextEncoder;
 import org.exoplatform.commons.utils.WriterPrinter;
+import org.exoplatform.container.ExoContainer;
+import org.exoplatform.portal.config.UserPortalConfigService;
+import org.exoplatform.portal.config.model.Page;
+import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
@@ -184,14 +188,35 @@ public class PortalRequestContext extends WebuiRequestContext
    public String getTitle() throws Exception
    {
       String title = (String)request_.getAttribute(REQUEST_TITLE);
-      if (title != null)
+
+      //
+      if (title == null)
       {
-         return title;
+         UIPortal uiportal = Util.getUIPortal();
+
+         //
+         PageNode node = uiportal.getSelectedNode();
+         if (node != null)
+         {
+            ExoContainer container = getApplication().getApplicationServiceContainer();
+            container.getComponentInstanceOfType(UserPortalConfigService.class);
+            UserPortalConfigService configService = (UserPortalConfigService)container.getComponentInstanceOfType(UserPortalConfigService.class);
+            Page page = configService.getPage(node.getPageReference(), getRemoteUser());
+
+            //
+            if (page != null)
+            {
+               title = page.getTitle();
+            }
+            else
+            {
+               title = node.getResolvedLabel();
+            }
+         }
       }
-      UIPortal uiportal = Util.getUIPortal();
-      String resolvedLabel =
-         (uiportal.getSelectedNode() == null) ? null : uiportal.getSelectedNode().getResolvedLabel();
-      return resolvedLabel;
+
+      //
+      return title;
    }
 
    public Orientation getOrientation()
