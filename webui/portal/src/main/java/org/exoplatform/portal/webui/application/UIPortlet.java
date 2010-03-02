@@ -779,8 +779,7 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
       PortletInvoker portletInvoker = getApplicationComponent(PortletInvoker.class);
 
       // Get marshalled version
-      StatefulPortletContext<C> updatedCtx =
-         (StatefulPortletContext<C>)portletInvoker.setProperties(portletContext, changes);
+      StatefulPortletContext<C> updatedCtx = (StatefulPortletContext<C>)portletInvoker.setProperties(portletContext, changes);
 
       //
       C updateState = updatedCtx.getState();

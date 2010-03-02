@@ -31,8 +31,18 @@ public class ExoWindowContext implements WindowContext
    /** . */
    private final String windowId;
 
-   public ExoWindowContext(String windowId)
+   /**
+    * Create a new window context.
+    *
+    * @param windowId the window id
+    * @throws NullPointerException thrown when the windowId parameter is null
+    */
+   public ExoWindowContext(String windowId) throws NullPointerException
    {
+      if (windowId == null)
+      {
+         throw new NullPointerException();
+      }
       this.windowId = windowId;
    }
 

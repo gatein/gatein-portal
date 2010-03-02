@@ -41,7 +41,7 @@ public class PortalStateManager extends StateManager
 {
 
    /** . */
-   private static final String APPLICATION_ATTRIBUTE_PREFIX = "rsm.";
+   private static final String APPLICATION_ATTRIBUTE_PREFIX = "psm.";
 
    /** . */
    private static final Logger log = LoggerFactory.getLogger(PortalStateManager.class);
@@ -152,9 +152,7 @@ public class PortalStateManager extends StateManager
       if (webuiRC instanceof PortletRequestContext)
       {
          PortletRequestContext portletRC = (PortletRequestContext)webuiRC;
-
-         // We are temporarily not using the window id as it changes when the back end is not the same
-         return portletRC.getApplication().getApplicationId()/* + "/" + portletRC.getWindowId()*/;
+         return portletRC.getApplication().getApplicationId() + "/" + portletRC.getWindowId();
       }
       else
       {
