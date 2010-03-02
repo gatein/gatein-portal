@@ -3,8 +3,6 @@ package org.exoplatform.portal.selenium;
 import java.io.File;
 import java.io.IOException;
 
-import junit.framework.TestCase;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringEscapeUtils;
 
@@ -400,7 +398,7 @@ public class SeleniumTestCaseGenerator {
 				sb.append("selenium.waitForPageToLoad(timeout);\n");
 			} else if (param1.equals("echo")) {
 				sb.append("System.out.println(\"" + param2 + "\");\n");
-			} else if (!param1.isEmpty()) {
+			} else if (param1.length() > 0) {
 				String message = param1 + " was not translated \"" + param2 + "\"";
 				System.err.println("[ERROR] " + message);
 				sb.append("// NOT GENERATED " + message);
