@@ -358,6 +358,7 @@ public class UIPortalComposer extends UIContainer
          uiEditWS.getComposer().setEditted(false);
          uiEditWS.setRendered(false);
          uiWorkingWS.setRenderedChild(UIPortalApplication.UI_VIEWING_WS_ID);
+         prContext.setFullRender(true);
          UISiteBody siteBody = uiWorkingWS.findFirstComponentOfType(UISiteBody.class);
 
          UIPortal uiPortal = uiWorkingWS.getBackupUIPortal();
@@ -412,6 +413,7 @@ public class UIPortalComposer extends UIContainer
          }
          uiPortalApp.setModeState(UIPortalApplication.NORMAL_MODE);
          uiWorkingWS.setRenderedChild(UIPortalApplication.UI_VIEWING_WS_ID);
+         prContext.setFullRender(true);
 
          if (uri == null)
          {
@@ -592,6 +594,7 @@ public class UIPortalComposer extends UIContainer
          UIPortalApplication uiPortalApp = Util.getUIPortalApplication();
          uiPortalApp.setModeState(UIPortalApplication.NORMAL_MODE);
          uiWorkingWS.setRenderedChild(UIPortalApplication.UI_VIEWING_WS_ID);
+         Util.getPortalRequestContext().setFullRender(true);
 
          UIPortal uiPortal = uiPortalApp.getShowedUIPortal();
          uiPortal.setRenderSibling(UIPortal.class);
@@ -630,6 +633,7 @@ public class UIPortalComposer extends UIContainer
             uiPortalApp.addMessage(new ApplicationMessage("UIPageBrowser.msg.PageNotExist", new String[]{pageId}, 1));
             uiPortalApp.setModeState(UIPortalApplication.NORMAL_MODE);
             uiWorkingWS.setRenderedChild(UIPortalApplication.UI_VIEWING_WS_ID);
+            Util.getPortalRequestContext().setFullRender(true);
             PageNodeEvent<UIPortal> pnevent =
                new PageNodeEvent<UIPortal>(uiPortal, PageNodeEvent.CHANGE_PAGE_NODE,
                   (uiPortal.getSelectedNode() != null ? uiPortal.getSelectedNode().getUri() : null));
@@ -676,6 +680,7 @@ public class UIPortalComposer extends UIContainer
          }
          uiPortalApp.setModeState(UIPortalApplication.NORMAL_MODE);
          uiWorkingWS.setRenderedChild(UIPortalApplication.UI_VIEWING_WS_ID);
+         Util.getPortalRequestContext().setFullRender(true);
          PageNodeEvent<UIPortal> pnevent =
             new PageNodeEvent<UIPortal>(uiPortal, PageNodeEvent.CHANGE_PAGE_NODE, (uiPortal.getSelectedNode() != null
                ? uiPortal.getSelectedNode().getUri() : null));
