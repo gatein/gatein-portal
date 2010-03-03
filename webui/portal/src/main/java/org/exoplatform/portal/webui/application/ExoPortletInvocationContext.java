@@ -23,6 +23,7 @@ import org.exoplatform.Constants;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.gatein.common.net.media.MediaType;
 import org.gatein.common.util.MarkupInfo;
+import org.gatein.common.util.ParameterValidation;
 import org.gatein.pc.api.ActionURL;
 import org.gatein.pc.api.ContainerURL;
 import org.gatein.pc.api.Mode;
@@ -204,7 +205,7 @@ class ExoPortletInvocationContext extends AbstractPortletInvocationContext
          }
 
          Map<String, String[]> publicNSChanges = renderURL.getPublicNavigationalStateChanges();
-         if (publicNSChanges != null)
+         if (ParameterValidation.existsAndIsNotEmpty(publicNSChanges))
          {
             for (String key : publicNSChanges.keySet())
             {
