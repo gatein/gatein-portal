@@ -41,19 +41,22 @@
 
 	<section id="sect-User_Guide-Manage_Portlets_and_Gadgets-Add_a_new_Category">
 		<title>Add a new Category</title>
-		<para>
-			You easily add a new category by following these guides:
-		</para>
 		<procedure>
 			<step>
 				<para>
-					Go to <emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Application Registry</emphasis> page -&gt; <emphasis role="bold">Organize</emphasis> item.
+					In the <emphasis role="bold">Group</emphasis> menu, select <emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Application Registry</emphasis>.
 				</para>
 			</step>
 			<step>
 				<para>
-					Open a form to add a new category on the right pane by clicking the <emphasis role="bold">Add Category</emphasis> button on the action bar: 
+					Click the <emphasis role="bold">Add Category</emphasis> button on the action bar: 
 				</para>
+<note>
+<title>DOC TODO</title>
+<para>
+redo screenshot with mouse pointer
+</para>
+</note>
 				<mediaobject>
 					<imageobject>
 						<imagedata fileref="images/AddCategory1.png" format="PNG" width="444" />
@@ -68,7 +71,7 @@
 						<term>Category name</term>
 						<listitem>
 							<para>
-								The name of the category which you want to add. This field is required and its length must be between 3 and 30 characters.
+								The name of the category. This field is required and its length must be between 3 and 30 characters. Only alpha, digit, dash and underscore characters are allowed. 
 							</para>
 						</listitem>
 					</varlistentry>
@@ -76,7 +79,7 @@
 						<term>Display name</term>
 						<listitem>
 							<para>
-								The display name of the category in list and its length must be between 3 and 30 characters.
+								The display name of the category and its length must be between 3 and 30 characters.
 							</para>
 						</listitem>
 					</varlistentry>
@@ -90,9 +93,9 @@
 					</varlistentry>
 				</variablelist>
 				<para>
-					The <emphasis role="bold">Permission Setting</emphasis> tab: used to set the access permission for a category.
+					The <emphasis role="bold">Permission Setting</emphasis> tab provides access to the Permission manager.
 				</para>
-				<para>This access permission enters the game whenever a user creates or modifies a page. In that moment the user only can see and use portlets in those categories on which he or she has access permission (defined by groups and memberships).
+				<para>The permission criteria are used whenever a user creates or modifies a page. In that case the user can only see and use portlets in those categories on which he or she has access to (as defined by groups and memberships).
 				</para>
 				<mediaobject>
 					<imageobject>
@@ -100,6 +103,7 @@
 					</imageobject>
 				</mediaobject>
 			</step>
+<!--
 			<step>
 				<para>
 					Enter values for required fields in this form.
@@ -110,28 +114,26 @@
 					Click the <emphasis role="bold">Save</emphasis> button to accept adding a new category into a category list. The new category will be added into a list on the left pane.
 				</para>
 			</step>
+-->
 		</procedure>
 	</section>
 	
 	<section id="sect-User_Guide-Manage_Portlets_and_Gadgets-Edit_a_Category">
 		<title>Edit a Category</title>
-		<para>
-			You can edit a category in list by following:
-		</para>
 		<procedure>
 			<step>
 				<para>
-					Click the edit icon on the title bar of a category that you want to edit.
+					Click the Edit icon located next to the title bar.
 				</para>
 			</step>
 			<step>
 				<para>
-					Change the information of the selected category.
+					Update the category information.
 				</para>
 			</step>
 			<step>
 				<para>
-					Click the <emphasis role="bold">Save</emphasis> button to accept changes.
+					Click the <emphasis role="bold">Save</emphasis> button to apply changes.
 				</para>
 			</step>
 		</procedure>
@@ -139,33 +141,33 @@
 	
 	<section id="sect-User_Guide-Manage_Portlets_and_Gadgets-Delete_a_Category">
 		<title>Delete a Category</title>
-		<para>
-			You also easily remove a category from a list:
-		</para>
 		<procedure>
 			<step>
 				<para>
-					Click the trash can icon on the Title bar of the category that you want to delete.
+					Click the Trash can icon located next to the title bar.
 				</para>
 			</step>
 			<step>
 				<para>
-					Click on the <emphasis role="bold">OK</emphasis> button on the message to accept deleting or click on the <emphasis role="bold">Cancel</emphasis> button to quit.
+					Accept the deletion by clicking  <emphasis role="bold">OK</emphasis>
 				</para>
 			</step>
 		</procedure>
 	</section>
 	
 	<section id="sect-User_Guide-Manage_Portlets_and_Gadgets-Add_PortletsGadgets_to_the_specific_Category">
-		<title>Add Portlets/Gadgets to the specific Category</title>
-		<para>
-			You can follow these steps to add a portlet/gadget to your prefered category :
-		</para>
+		<title>Add Portlets/Gadgets to a Category</title>
 		<procedure>
 			<step>
 				<para>
-					Click the "add" icon on the title bar of a category to which you want to add portlets. An interface will appear in the right pane as you can see below: 
+					Click the "Plus" icon located next to the category name to which you want to add portlets/gadgets.  
 				</para>
+<note>
+<title>DOC TODO</title>
+<para>
+redo screenshot 
+</para>
+</note>	
 				<mediaobject>
 					<imageobject>
 						<imagedata fileref="images/AddPortlet2.png" format="PNG" width="444" />
@@ -176,7 +178,7 @@
 						<term>Display name</term>
 							<listitem>
 								<para>
-									The display name of a portlet/gadget that you want to add to a category.
+									The display name of a portlet/gadget.
 								</para>
 							</listitem>
 					</varlistentry>
@@ -184,7 +186,7 @@
 						<term>Application Type</term> 
 						<listitem>
 							<para>
-								the type of selected object.
+								Either Portlet or Gadget.
 							</para>
 						</listitem>
 					</varlistentry>
@@ -192,7 +194,7 @@
 			</step>
 			<step>
 				<para>
-					Enter the display name and select a type for the selected portlet/gadget.
+					Enter the display name and select a type
 				</para>
 			</step>
 			<step>
@@ -202,7 +204,7 @@
 			</step>
 			<step>
 				<para>
-					Click the <emphasis role="bold">Save</emphasis> button to accept adding a portlet/gadget to a category.
+					Click the <emphasis role="bold">Save</emphasis> button to add the selected portlet/gadget to the category.
 				</para>
 			</step>
 		</procedure>
@@ -210,23 +212,27 @@
 	
 	<section id="sect-User_Guide-Manage_Portlets_and_Gadgets-Set_Access_Permission_on_Portlets">
 		<title>Set Access Permission on Portlets</title>
-		<para>
-			You easily set an access permission on a portlet by following these guides:
-		</para>
+
 		<procedure>
 			<step>
 				<para>
-					Go to <emphasis role="bold">Group</emphasis> in the Toolbar, highlight <emphasis role="bold">Administration</emphasis> and then click on <emphasis role="bold">Application Registry</emphasis>.
+					In the <emphasis role="bold">Group</emphasis> menu, select <emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Application Registry</emphasis>.
 				</para>
+<note>
+<title>DOC TODO</title>
+<para>
+redo screenshot 
+</para>
+</note>	
 				<mediaobject>
 					<imageobject>
-						<imagedata fileref="images/PortletPermission.png" format="PNG" width="444" />
+						<imagedata fileref="images/PortletPermission.png" format="PNG" />
 					</imageobject>
 				</mediaobject>
 			</step>
 			<step>
 				<para>
-					Select a category on the left pane that includes the portlet you want to set right. Then all portlets of the selected category are listed immediately and detail information of each portlet is displayed on the right pane.
+					Select a category in the Category pane that includes the portlet you want to set permissions on. All portlets of that category will be listed underneath.
 				</para>
 			</step>
 			<step>
@@ -241,38 +247,46 @@
 					</listitem>
 					<listitem>
 						<para>
-							Or check the <emphasis role="bold">Make it public</emphasis> check box to allow everyone to access.
+							Or check <emphasis role="bold">Make it public</emphasis> to allow everyone to access.
 						</para>
 					</listitem>
 				</itemizedlist>
 				<para>
-					Whenever the user creates or modifies a page he or she can only see and use portlets that fulfill two conditions: the portlet is in a <emphasis role="bold">category</emphasis> on which the user has access permission (see category section above) and the user has access permission on the <emphasis role="bold">portlet</emphasis>
+					Whenever the user creates or modifies a page, he or she can only see and use gadgets/portlets that fulfill two conditions: the portlet is in a <emphasis role="bold">category</emphasis> which the user has access permission too and the user has access permission on the <emphasis role="bold">portlet</emphasis>
 				</para>
 			</step>
 		</procedure>	
 	</section>
 	
 	<section id="sect-User_Guide-Manage_Portlets_and_Gadgets-View_detail_information_of_the_specific_Portlets">
-		<title>View detail information of the specific Portlets</title>
-		<para>
-			You easily view detail information of all specific portlets by following these guides:
-		</para>
+		<title>View/Edit portlet/gadget information</title>
 		<procedure>
 			<step>
 				<para>
-					Go to <emphasis role="bold">Group</emphasis> in the Toolbar, highlight <emphasis role="bold">Administration</emphasis> and then click <emphasis role="bold">Application Registry</emphasis>. On the <emphasis role="bold">Application Registry</emphasis> page, click the <emphasis role="bold">Portlet</emphasis> item. A form to view all portlets will appear:
+					In the <emphasis role="bold">Group</emphasis> menu, select <emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Application Registry</emphasis>.
 				</para>
-				<mediaobject>
+
+<note>
+<title>DOC TODO</title>
+<para>
+redo screenshot 
+</para>
+</note>				<mediaobject>
 					<imageobject>
 						<imagedata fileref="images/Portlet.png" format="PNG" width="444" />
 					</imageobject>
 				</mediaobject>
-				<variablelist>
+<note>
+<title>DOC TODO</title>
+<para>
+add screenshot with a gadget/portlet in Edit mode ("Edit application information")
+</para>
+</note>				<variablelist>
 					<varlistentry>
 						<term>Left pane</term>
 							<listitem>
 								<para>
-									lists all portlets in two parts: Local and Remote
+									All portlets and gadgets grouped by categories
 								</para>
 							</listitem>
 					</varlistentry>
@@ -286,35 +300,33 @@
 						</varlistentry>
 				</variablelist>
 			</step>	
-			<step>
-				<para>
-					Select one portlet in the list on the left pane. The detail information of that portlet appears on the right pane.
-				</para>
-			</step>
 		</procedure>
 	</section>
 	
 	<section id="sect-User_Guide-Manage_Portlets_and_Gadgets-Add_a_Gadget">
 		<title>Add a Gadget</title>
 		<para>
-			You can follow these steps to add a gadget to the gadget list :
+			In the <emphasis role="bold">Group</emphasis> menu, select <emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Application Registry</emphasis>. Then click on the <emphasis role="bold">Gadget</emphasis> icon.
 		</para>
-		<para>
-			Go to <emphasis role="bold">Group</emphasis> in the Toolbar, highlight <emphasis role="bold">Administration</emphasis> and then click <emphasis role="bold">Application Registry</emphasis>. On the <emphasis role="bold">Application Registry</emphasis> page, click the <emphasis role="bold">Gadget</emphasis> item
-		</para>
+<note>
+<title>DOC TODO</title>
+<para>
+redo screenshot 
+</para>
+</note>	
 		<mediaobject>
 			<imageobject>
 				<imagedata fileref="images/Gadgetnew.png" format="PNG" width="444" />
 			</imageobject>
 		</mediaobject>
 		<para>
-			There are two ways to add gadgets:
+			You may add a remote gadget using its URL or create a brand-new one:
 		</para>
-			<procedure id="proc-User_Guide-Manage_Portlets_and_Gadgets-Add_a_remote_Gadget">
+			<section id="sect-User_Guide-Manage_Portlets_and_Gadgets-Add_a_remote_Gadget">
 				<title>Add a remote Gadget</title>
 					<step>
 						<para>
-							Open the form to add a remote gadget by clicking <emphasis role="bold">Add a remote gadget</emphasis> :
+							Click on <emphasis role="bold">Add a remote gadget</emphasis>:
 						</para>
 						<mediaobject>
 							<imageobject>
@@ -324,21 +336,21 @@
 					</step>
 					<step>
 						<para>
-							Enter a link to an .xml file in the <emphasis role="bold">URL</emphasis> field.
+							Enter the url of the remote gadget in the <emphasis role="bold">URL</emphasis> field.
 						</para>
 					</step>
 					<step>
 						<para>
-							Click on the <emphasis role="bold">Add</emphasis> button to accept the entered URL or on the <emphasis role="bold">Cancel</emphasis> button to quit. The added gadget will be added into gadget list on left pane of the Dashboard portlet.
+							Click <emphasis role="bold">Add</emphasis>. The new remote gadget will be appear in gadget list on left pane of the Dashboard portlet.
 						</para>
 					</step>
-			</procedure>
+			</section>
 	
-			<procedure id="sect-User_Guide-Manage_Portlets_and_Gadgets-Create_a_new_Gadget">
+			<section id="sect-User_Guide-Manage_Portlets_and_Gadgets-Create_a_new_Gadget">
 				<title>Create a new Gadget</title>
 					<step>
 						<para>
-							Show the form to add a new gadget by clicking <emphasis role="bold">Create a new gadget</emphasis> :
+							Click on <emphasis role="bold">Create a new gadget</emphasis>:
 						</para>
 						<mediaobject>
 							<imageobject>
@@ -350,25 +362,15 @@
 							<term>Source</term>
 								<listitem>
 									<para>
-										The source code to create a new gadget. This source will be a .xml file.
+										The xml descriptor of the gadget.
 									</para>
 								</listitem>
 							</varlistentry>
 						</variablelist>
 					</step>
-					<step>
-						<para>
-							Enter a value for the <emphasis role="bold">Source</emphasis> field in this form.
-						</para>
-					</step>
-					<step>
-						<para>
-							Click the <emphasis role="bold">Save</emphasis> button to create a new gadget. The created gadget will be added to the gadget list on the left pane of the Dashboard Portlet.
-						</para>
-					</step>
-			</procedure>
+			</section>
 			<para>
-				You also edit, refresh and delete a local gadget as well as a remote gadget:
+				You may also edit, refresh and delete a local gadget as well as a remote gadget:
 			</para>
 			<mediaobject>
 				<imageobject>
@@ -380,13 +382,19 @@
 	<section id="sect-User_Guide-Manage_Portlets_and_Gadgets-Add_a_new_Gadget_to_the_Dashboard_Portlet">
 		<title>Add a new Gadget to the Dashboard Portlet</title>
 		<para>
-			You can add a new gadget to the gadget list in the Dashboard portlet :
+			You can add new gadgets to the Dashboard portlet:
 		</para>
 		<procedure>
 			<step>
 				<para>
-					Go to the Dashboard on the navigation bar. Click on the <emphasis role="bold">Add Gadgets</emphasis> link :
+					Click <emphasis role="bold">Dashboard</emphasis> on the navigation bar. Click on the <emphasis role="bold">Add Gadgets</emphasis> link :
 				</para>
+<note>
+<title>DOC TODO</title>
+<para>
+redo screenshot
+</para>
+</note>
 				<mediaobject>
 					<imageobject>
 						<imagedata fileref="images/Add.png" format="PNG" width="444" />
@@ -395,6 +403,12 @@
 				<para>
 					The dialog to add a new gadget will appear :
 				</para>
+<note>
+<title>DOC TODO</title>
+<para>
+redo screenshot
+</para>
+</note>
 				<mediaobject>
 					<imageobject>
 						<imagedata fileref="images/Add3.png" format="PNG" width="444" />
@@ -403,12 +417,8 @@
 			</step>
 			<step>
 				<para>
-					Enter a link (a .xml file or RSS) in the text box on the left pane.
-				</para>
-			</step>
-			<step>
-				<para>
-					Click on the icon!images/PlusIcon.png! to add a new gadget to the gadget list beneath.
+					Either enter a valid link (XML or RSS) to a gadget and click the "+" icon
+or pick an existing gadget in the categories listed below
 				</para>
 			</step>
 		</procedure>
@@ -416,29 +426,12 @@
 	
 	<section id="sect-User_Guide-Manage_Portlets_and_Gadgets-Manage_Gadgets">
 		<title>Manage Gadgets</title>
-			<itemizedlist>
-				<listitem>
-					<para>
-						<xref linkend="proc-User_Guide-Manage_Gadgets-Edit_a_Gadget"/>
-					</para>
-				</listitem>
-				<listitem>
-					<para>
-						<xref linkend="proc-User_Guide-Manage_Gadgets-Refresh_a_Gadget"/>
-					</para>
-				</listitem>
-				<listitem>
-					<para>
-						<xref linkend="proc-User_Guide-Manage_Gadgets-Delete_a_Gadget"/>
-					</para>
-				</listitem>				
-			</itemizedlist>
 
-		<procedure id="proc-User_Guide-Manage_Gadgets-Edit_a_Gadget">
+		<section id="sect-User_Guide-Manage_Gadgets-Edit_a_Gadget">
 			<title>Edit a Gadget</title>
 			<step>
 				<para>
-					Click the edit icon. This will display a dialog: 
+					Click the <emphasis role="bold">Edit Gadget</emphasis> icon located in the header of the <emphasis role="bold">Gadget Details</emphasis> page to display the following window: 
 				</para>
 				<mediaobject>
 					<imageobject>
@@ -446,37 +439,23 @@
 					</imageobject>
 				</mediaobject>
 			</step>
-			<step>
-				<para>
-					After editing , click the <emphasis role="bold">Save</emphasis> button to accept changing or <emphasis role="bold">Cancel</emphasis> button to quit.
-				</para>
-			</step>
-		</procedure>
+
+		</section>
 		
-		<procedure id="proc-User_Guide-Manage_Gadgets-Refresh_a_Gadget">
+		<section id="sect-User_Guide-Manage_Gadgets-Refresh_a_Gadget">
 			<title>Refresh a Gadget</title>
 				<step>
-					<formalpara>
-						<title>Local gadget</title>
-							<para>
-								After editing information about the gadget that you want to, click the icon!images/Refresh.png! to refresh all information of that gadget.	
-							</para>
-					</formalpara>
-
-					<formalpara>
-						<title>Remote gadget</title>
-							<para>
-								When information of a remote gadget has been changed by another server, click the icon!images/Refresh.png! means it will update information of a remote gadget from that server.
-							</para>
-					</formalpara>
+					<para>
+					Click the <emphasis role="bold">Refresh information</emphasis> icon located in the header of the <emphasis role="bold">Gadget Details</emphasis> page to display the following window: 
+				</para>
 				</step>	
-		</procedure>
+		</section>
 		
-		<procedure id="proc-User_Guide-Manage_Gadgets-Delete_a_Gadget">
+		<section id="sect-User_Guide-Manage_Gadgets-Delete_a_Gadget">
 			<title>Delete a Gadget</title>
 			<step>
 				<para>
-					Click the trash can icon on the row of the gadget that you want to delete. this will prompt an alert message : 
+					Click the trash can icon located next to the name of the gadget. An alert message should pop up asking for confirmation: 
 				</para>
 				<mediaobject>
 					<imageobject>
@@ -484,12 +463,7 @@
 					</imageobject>
 				</mediaobject>
 			</step>
-			<step>
-				<para>
-					Click the <emphasis role="bold">OK</emphasis> button to accept deleting or <emphasis role="bold">Cancel</emphasis> button to quit without deleting.
-				</para>
-			</step>
-		</procedure>
+		</section>
 
 	</section>
 

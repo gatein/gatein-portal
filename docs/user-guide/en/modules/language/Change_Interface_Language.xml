@@ -6,7 +6,7 @@
 <section id="sect-User_Guide-Change_Interface_Language">
 	<title>Change Interface Language</title>
 	<para>
-		&PRODUCT; allows users to choose their interface language to work with.
+		&PRODUCT; allows users to pick the language of the user interface.
 	</para>
 	<para>
 		The priority of the interface language setting is:
@@ -29,14 +29,60 @@
 		</listitem>
 	</orderedlist>
 	<para>
-		 Users should pay attention to this order to change the language type appropriately.
+		 Note that users should pay attention to this order in order to change the language type appropriately.
 	</para>
 
 	<para>
-		You can change the interface language permanently in three ways :
+		You may switch the interface language in various places as follows:
 	</para>
-	<section id="sect-User_Guide-Change_Interface_Language-The_1st_way">
-		<title>Method One</title>
+	<section id="sect-User_Guide-Change_Interface_Language_User">
+		<title>Language for the user</title>
+		<para>
+			You may set the interface language for your account alone and not for the entire Portal as follows:
+		</para>
+			<procedure> 
+				<step>
+					<para>
+						Open up the Start menu and click on <emphasis role="bold">Change Language</emphasis> :
+					</para>
+					<mediaobject>
+						<imageobject>
+							<imagedata fileref="images/StarPortlet.png" format="PNG" />
+						</imageobject>
+					</mediaobject>
+				</step>
+				<step>
+					<para>
+						The <emphasis role="bold">Interface Language Setting</emphasis> window lists all available languages installed in the Portal:
+					</para>
+					<mediaobject>
+						<imageobject>
+							<imagedata fileref="images/InterfaceLanguage.png" format="PNG" width="444" />
+						</imageobject>
+					</mediaobject>
+				</step>
+				<step>
+					<para>
+						Click on the desired language. The associated native word is highlighted.
+					</para>
+				</step>
+				<step>
+					<para>
+						Click <emphasis role="bold">Apply</emphasis> to save your change. The site should refresh and display its attributes in the language you've just chosen.
+					</para>
+				</step>
+			</procedure>
+	</section>
+
+	<section id="sect-User_Guide-Change_Interface_Language-Portal">
+		<title>Language of the Portal</title>
+
+<note>
+<title>DOC TODO</title>
+<para>
+This feature does not seem to exist anymore. Please investigate.
+</para>
+</note>
 			<para>
 				This methods allows you to change the interface language of the current Portal.
 			</para>
@@ -71,7 +117,7 @@
 		<procedure>
 			<step>
 				<para>
-					Go to <emphasis role="bold">Editor</emphasis> on the Toolbar and click <emphasis role="bold">Edit Page</emphasis>. The <emphasis role="bold">Edit Inline Composer</emphasis> popup will appear:
+					Open up the <emphasis role="bold">Site Editor</emphasis> menu on the Toolbar and choose <emphasis role="bold">Edit Page</emphasis>. The <emphasis role="bold">Edit Inline Composer</emphasis> popup will appear:
 				</para>
 				<mediaobject>
 					<imageobject>
@@ -99,6 +145,15 @@
 	
 	<section id="sect-User_Guide-Change_Interface_Language-The_2nd_way">
 		<title>Method Two</title>
+
+<note>
+<title>DOC TODO</title>
+<para>
+This section seems to be identical to section <xref linkend="sect-User_Guide-Change_Interface_Language_User" />. Please investigate.
+</para>
+</note>
+
+
 <!--			<para>
 				If you can access &PRODUCT; Start, you can do this way to set interface language for yourself, not for interface language of Portal by these following steps:
 			</para>
@@ -162,44 +217,7 @@
 		</procedure>
 	</section>
 	
-	<section id="sect-User_Guide-Change_Interface_Language-The_3rd_way">
-		<title>Method Three</title>
-		<para>
-			You can also set the interface language for yourself alone (and not for the entire Portal) this way:
-		</para>
-			<procedure> 
-				<step>
-					<para>
-						Click on the GateIn Logo on the left corner to show the <emphasis role="bold">Interface Language Setting</emphasis> form:
-					</para>
-					<mediaobject>
-						<imageobject>
-							<imagedata fileref="images/StarPortlet.png" format="PNG" />
-						</imageobject>
-					</mediaobject>
-				</step>
-				<step>
-					<para>
-						The <emphasis role="bold">Interface Language Setting</emphasis> form will appear:
-					</para>
-					<mediaobject>
-						<imageobject>
-							<imagedata fileref="images/InterfaceLanguage.png" format="PNG" width="444" />
-						</imageobject>
-					</mediaobject>
-				</step>
-				<step>
-					<para>
-						Select another language in list. The selected language will be marked with an icon.
-					</para>
-				</step>
-				<step>
-					<para>
-						Click the <emphasis role="bold">Apply</emphasis> button to change the interface language or click the <emphasis role="bold">Cancel</emphasis> button to quit without changes.
-					</para>
-				</step>
-			</procedure>
-	</section>
+
 	
 	<section id="sect-User_Guide-Change_Interface_Language-Set_language_for_a_user">
 		<title>Set language for a user</title>

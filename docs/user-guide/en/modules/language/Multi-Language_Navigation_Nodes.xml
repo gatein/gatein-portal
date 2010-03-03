@@ -21,7 +21,7 @@
 			The resource key format is: <emphasis role="bold">#{key}</emphasis>
 		</para>
 		<para>
-			The resource key can contain any text that you consider to be reasonable. It should, however, be human-readable and must not contain spaces.
+			The resource key can contain any text that you consider appropriate to satisfy your business needs. It should, however, be human-readable and must not contain spaces.
 		</para>
 	</section>
 	
@@ -51,19 +51,17 @@
 	</section>
 	
 	<section id="sect-User_Guide-Multi_Language_Navigation_Nodes-Creating_Keys_using_the_Create_Page_Wizard">
-		<title>Creating Keys using the <emphasis role="bold">Create Page Wizard</emphasis></title>
-		<para>
-			To use a guided wizard to create keys, follow these steps:
-		</para>
+		<title>Creating Keys using <emphasis role="bold">Create Page Wizard</emphasis></title>
+
 		<procedure>
 			<step>
 				<para>
-					Go to <emphasis role="bold">Group</emphasis> and click on <emphasis role="bold">Add New Page</emphasis>. This will activate the <emphasis role="bold">Create Page Wizard</emphasis>.
+					Open the <emphasis role="bold">Site Editor</emphasis> menu and pick <emphasis role="bold">Add New Page</emphasis>.
 				</para>
 			</step>
 			<step>
 				<para>
-					Click the <emphasis role="bold">Next</emphasis> button.
+					Enter a name for this new page
 				</para>
 			</step>
 			<step>
@@ -78,15 +76,28 @@
 			</step>
 			<step>
 				<para>
-					Click on the <emphasis role="bold">Next</emphasis> button to continue and click on the <emphasis role="bold">Save</emphasis> button.
+					Click <emphasis role="bold">Next</emphasis> to get on the next screen where you may define a page layout out of existing templates.
 				</para>
+			</step>
+			<step>
+				<para>
+					Click <emphasis role="bold">Next</emphasis> to finalize the page creation with portlets for instance. 
+      			       </para>
 			</step>
 		</procedure>
 
 	</section>
 	
 	<section id="sect-User_Guide-Multi_Language_Navigation_Nodes-CreatingEditing_Keys_by_Edit_Page_Wizard">
-		<title>Creating/Editing Keys by <emphasis role="bold">Edit Page Wizard</emphasis></title>
+		<title>Creating/Editing Keys using <emphasis role="bold">Edit Page Wizard</emphasis></title>
+
+<note>
+<title>DOC TODO</title>
+<para>
+broken right now
+https://jira.jboss.org/jira/browse/GTNPORTAL-787
+</para>
+</note>
 			<procedure>
 				<step>
 					<para>
@@ -107,27 +118,45 @@
 	</section>
 	
 	<section id="sect-User_Guide-Multi_Language_Navigation_Nodes-CreatingEditing_Keys_using_the_Edit_Page_and_Navigation">
-		<title>Creating/Editing Keys using the <emphasis role="bold">Edit Page and Navigation</emphasis></title>
+		<title>Creating/Editing Keys using <emphasis role="bold">Navigation MAnagement</emphasis></title>
 			<procedure>
 				<step>
 					<para>
-						Go to <emphasis role="bold">GateIn Start</emphasis> -&gt; <emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Advanced</emphasis> --&gt; <emphasis role="bold">Edit Page and Navigation</emphasis>.
+						Click on <emphasis role="bold">Site</emphasis> in the Toolbar then <emphasis role="bold">Edit Navigation</emphasis>
 					</para>
 				</step>
+<note>
+<title>DOC TODO</title>
+<para>
+we need a screenshot here with the Navigation Management window
+</para>
+</note>
 				<step>
 					<para>
-						There are two alternatives:
+						Two alternatives are available at this point:
 					</para>
 					<orderedlist numeration="arabic">
 						<listitem>
 							<para>
-								Create a new node: Select the parent path, right click and click on <emphasis role="bold">Add new node</emphasis> option .
+								Create a new node: Select the parent path, right click and click on <emphasis role="bold">Add new Node</emphasis> option .
 							</para>
-						</listitem>
+<note>
+<title>DOC TODO</title>
+<para>
+missing screenshot
+</para>
+</note>						
+                                                </listitem>
 						<listitem>
 							<para>
-								Edit an existing node: Right click on the node you want to create/edit key and click on <emphasis role="bold">Edit this node</emphasis> in the pop-up menu.
+								Edit an existing node: Right-click on the node you want to create/edit and pick <emphasis role="bold">Edit this Node</emphasis> in the pop-up menu.
 							</para>
+<note>
+<title>DOC TODO</title>
+<para>
+missing screenshot
+</para>
+</note>
 						</listitem>
 					</orderedlist>
 				</step>
