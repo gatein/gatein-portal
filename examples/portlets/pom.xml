@@ -17,6 +17,7 @@
       <module>jsfhellouser</module>
       <module>jsphellouser</module>
       <module>simplesthelloworld</module>
+      <module>webuibasedsamples</module>
    </modules>
 
 </project>
