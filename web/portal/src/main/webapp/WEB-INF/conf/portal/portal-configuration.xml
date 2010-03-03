@@ -205,47 +205,6 @@
     </init-params>
   </component>
 
- <component>
-<type>org.exoplatform.container.definition.PortalContainerConfig</type>
-<component-plugins>
-    <component-plugin> <!-- The name of the plugin --> <name>Add PortalContainer Definitions</name> <!-- The name of the method to call on the PortalContainerConfig in order to register the PortalContainerDefinitions --> <set-method>registerPlugin</set-method>   <!-- The full qualified name of the PortalContainerDefinitionPlugin -->
-  <type>org.exoplatform.container.definition.PortalContainerDefinitionPlugin</type>
-  <init-params>
-  <object-param>
-  <name>portal</name>
-  <object type="org.exoplatform.container.definition.PortalContainerDefinition">
-  <!-- The name of the portal container -->
-  <field name="name"><string>portal</string></field>
-  <!-- The name of the context name of the rest web application -->
-  <field name="restContextName"><string>rest</string></field>
-  <!-- The name of the realm -->
-  <field name="realmName"><string>gatein-domain</string></field>
-  <!-- All the dependencies of the portal container ordered by loading priority -->
-            <field name="settings"> 
-              <map type="java.util.HashMap"> 
-                <entry> 
-                  <key> 
-                    <string>url</string> 
-                  </key> 
-		  <value> 
-                    <string>value</string>
-                  </value> 
-                </entry> 
-              </map>
-            </field>
-            <field name="externalSettingsPath">
-              <string>file://tmp/configuration.properties</string>
-            </field>
-
-
-  <field name="dependencies">
-  <collection type="java.util.ArrayList">
-  <value>
-  <string>eXoResources</string>
-</value> <value> <string>portal</string> </value> <value> <string>dashboard</string> </value> <value> <string>exoadmin</string> </value> <value> <string>eXoGadgets</string> </value> <value> <string>eXoGadgetServer</string> </value> <value> <string>rest</string> </value> <value> <string>web</string> </value> </collection> </field> </object> </object-param> </init-params> </component-plugin>
-</component-plugins>
-</component>
-
   <external-component-plugins>
     <target-component>org.exoplatform.services.organization.OrganizationService</target-component>
     <component-plugin>
