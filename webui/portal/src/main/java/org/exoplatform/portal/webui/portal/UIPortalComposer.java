@@ -588,6 +588,7 @@ public class UIPortalComposer extends UIContainer
          uiToolPanel.setUIComponent(null);
          UIPortalApplication uiPortalApp = Util.getUIPortalApplication();
          uiPortalApp.setModeState(UIPortalApplication.NORMAL_MODE);
+         uiWorkingWS.setRenderedChild(UIPortalApplication.UI_VIEWING_WS_ID);
 
          UIPortal uiPortal = uiPortalApp.getShowedUIPortal();
          uiPortal.setRenderSibling(UIPortal.class);
@@ -625,6 +626,7 @@ public class UIPortalComposer extends UIContainer
          {
             uiPortalApp.addMessage(new ApplicationMessage("UIPageBrowser.msg.PageNotExist", new String[]{pageId}, 1));
             uiPortalApp.setModeState(UIPortalApplication.NORMAL_MODE);
+            uiWorkingWS.setRenderedChild(UIPortalApplication.UI_VIEWING_WS_ID);
             PageNodeEvent<UIPortal> pnevent =
                new PageNodeEvent<UIPortal>(uiPortal, PageNodeEvent.CHANGE_PAGE_NODE,
                   (uiPortal.getSelectedNode() != null ? uiPortal.getSelectedNode().getUri() : null));
@@ -670,6 +672,7 @@ public class UIPortalComposer extends UIContainer
             uiPortalApp.setSessionOpen(false);
          }
          uiPortalApp.setModeState(UIPortalApplication.NORMAL_MODE);
+         uiWorkingWS.setRenderedChild(UIPortalApplication.UI_VIEWING_WS_ID);
          PageNodeEvent<UIPortal> pnevent =
             new PageNodeEvent<UIPortal>(uiPortal, PageNodeEvent.CHANGE_PAGE_NODE, (uiPortal.getSelectedNode() != null
                ? uiPortal.getSelectedNode().getUri() : null));
