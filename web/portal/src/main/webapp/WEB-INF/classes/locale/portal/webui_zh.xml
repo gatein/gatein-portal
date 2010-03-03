@@ -981,12 +981,6 @@
          <pageReference>页面选项</pageReference>
       </label>
    </UIPageNodeWizardPreview>
-   <UIPageCreateDescription>
-      <title>
-         <create>页面创建向导</create>
-         <edit>页面编辑向导</edit>
-      </title>
-   </UIPageCreateDescription>
    <UIPageTemplateOptions>
       <UIDropDown>
          <title>页面配置</title>

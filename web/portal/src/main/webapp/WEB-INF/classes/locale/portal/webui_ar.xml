@@ -1144,12 +1144,6 @@
       <pageReference>مراجع الصفحة</pageReference>
     </label>
   </UIPageNodeWizardPreview>
-  <UIPageCreateDescription>
-    <title>
-      <create>معالج إنشاء الصحف</create>
-      <edit>معالج تحرير الصحف</edit>
-    </title>
-  </UIPageCreateDescription>
   
   <UIPageTemplateOptions>
     <UIDropDown>

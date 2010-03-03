@@ -1129,12 +1129,6 @@
          <pageReference>頁面選項</pageReference>
       </label>
    </UIPageNodeWizardPreview>
-   <UIPageCreateDescription>
-      <title>
-         <create>頁面建立導覽器</create>
-         <edit>頁面編輯導覽器</edit>
-      </title>
-   </UIPageCreateDescription>
    <UIPageTemplateOptions>
       <UIDropDown>
          <title>頁面配置</title>

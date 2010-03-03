@@ -1025,12 +1025,6 @@
          <pageReference>페이지 레퍼런스</pageReference>
       </label>
    </UIPageNodeWizardPreview>
-   <UIPageCreateDescription>
-      <title>
-         <create>페이지 생성 마법사</create>
-         <edit>페이지 편집 마법사</edit>
-      </title>
-   </UIPageCreateDescription>
    <UIPageTemplateOptions>
       <UIDropDown>
          <title>페이지 배치</title>

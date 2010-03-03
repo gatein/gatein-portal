@@ -382,6 +382,7 @@ public class UIPageCreationWizard extends UIPageWizard
             return;
          }
          uiPortalApp.setModeState(UIPortalApplication.NORMAL_MODE);
+         uiWorkingWS.setRenderedChild(UIPortalApplication.UI_VIEWING_WS_ID);
          uiWizard.saveData();
          UIPortalToolPanel toolPanel = uiWorkingWS.findFirstComponentOfType(UIPortalToolPanel.class);
          toolPanel.setUIComponent(null);
