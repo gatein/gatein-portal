@@ -48,21 +48,31 @@ public class PortalLoginController extends AbstractHttpServlet
       //
       String username = req.getParameter("username");
       String password = req.getParameter("password");
-      Credentials credentials = new Credentials(username, password);
-      req.getSession().setAttribute(InitiateLoginServlet.CREDENTIALS, credentials);
 
-      String uri = (String)req.getSession().getAttribute("initialURI");
-      if (uri == null || uri.length() == 0)
+      //
+      if (username == null)
       {
-         String pathInfo = req.getPathInfo();
-         if (pathInfo == null)
-         {
-            pathInfo = "/";
-         }
-         uri = req.getContextPath() + "/private" + pathInfo;
+         resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "No username provided");
+      }
+      if (password == null)
+      {
+         resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "No password provided");
       }
 
       //
+      Credentials credentials = new Credentials(username, password);
+      req.getSession().setAttribute(InitiateLoginServlet.CREDENTIALS, credentials);
+
+      // Obtain initial URI
+      String uri = req.getParameter("initialURI");
+
+      // otherwise compute one
+      if (uri == null || uri.length() == 0)
+      {
+         uri = req.getContextPath() + "/private/classic";
+      }
+
+      // if we do have a remember me
       String rememberme = req.getParameter("rememberme");
       if ("true".equals(rememberme))
       {
@@ -78,6 +88,8 @@ public class PortalLoginController extends AbstractHttpServlet
             resp.addCookie(cookie);
          }
       }
+
+      //
       resp.sendRedirect(uri);
    }
 

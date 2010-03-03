@@ -48,8 +48,10 @@ public class InitiateLoginServlet extends AbstractHttpServlet
     */
    private static final long serialVersionUID = -2553824531076121642L;
 
+   /** . */
    public static final String COOKIE_NAME = "rememberme";
 
+   /** . */
    public static final String CREDENTIALS = "credentials";
 
    @Override
