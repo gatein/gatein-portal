@@ -54,7 +54,12 @@ public class PortalLoginController extends AbstractHttpServlet
       String uri = (String)req.getSession().getAttribute("initialURI");
       if (uri == null || uri.length() == 0)
       {
-         uri = req.getContextPath() + "/private" + req.getPathInfo();
+         String pathInfo = req.getPathInfo();
+         if (pathInfo == null)
+         {
+            pathInfo = "/";
+         }
+         uri = req.getContextPath() + "/private" + pathInfo;
       }
 
       //
