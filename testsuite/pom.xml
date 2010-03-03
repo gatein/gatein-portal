@@ -13,6 +13,7 @@
 
   <modules>
     <module>selenium-snifftests</module>
+    <module>webuibasedsamples</module>
   </modules>
   
 </project>
