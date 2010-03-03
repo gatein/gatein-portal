@@ -691,6 +691,8 @@ gadgets.IfrGadget.prototype.generateForm = function(gadget) {
       this.id +').handleSaveUserPrefs()"> <input type="button" value="'+eXo.gadget.UIGadget.CancelTitle+'" onclick="gadgets.container.getGadget(' +
       this.id +').handleCancelUserPrefs()">';
     parentEl.appendChild(saveEl);
+    
+    /** Minh Hoang TO: Instantly remove the noCache and Debug boxes
     if(gadget.isdev) {
       //Are we in a portlet ? if not, we don't had  this code because we can't save the value
       var gadgetEl = document.getElementById("gadget_" + gadget.id) ;
@@ -706,6 +708,7 @@ gadgets.IfrGadget.prototype.generateForm = function(gadget) {
         parentEl.appendChild(devEl);
       }
     }
+    */
 
 
 };
