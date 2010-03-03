@@ -116,14 +116,14 @@ class ExoPortletInvocationContext extends AbstractPortletInvocationContext
 
       if (!type.equals(Constants.PORTAL_RENDER))
       {
-      appendParameter(baseURL, Constants.TYPE_PARAMETER, type);
+         appendParameter(baseURL, Constants.TYPE_PARAMETER, type);
       }
-      
+
       if (format != null && format.getWantSecure() != null)
       {
-      appendParameter(baseURL, Constants.SECURE_PARAMETER, format.getWantSecure().toString());
+         appendParameter(baseURL, Constants.SECURE_PARAMETER, format.getWantSecure().toString());
       }
-      
+
       if (containerURL instanceof ActionURL)
       {
          ActionURL actionURL = (ActionURL)containerURL;
@@ -133,9 +133,9 @@ class ExoPortletInvocationContext extends AbstractPortletInvocationContext
          {
             appendParameter(baseURL, INTERACTION_STATE_PARAM_NAME, state.getStringValue());
          }
-         
+
          state = actionURL.getNavigationalState();
-         if (state != null && !state.getStringValue().equals(StateString.JBPNS_PREFIX) )
+         if (state != null && !state.getStringValue().equals(StateString.JBPNS_PREFIX))
          {
             appendParameter(baseURL, NAVIGATIONAL_STATE_PARAM_NAME, state.getStringValue());
          }
@@ -209,18 +209,18 @@ class ExoPortletInvocationContext extends AbstractPortletInvocationContext
          {
             for (String key : publicNSChanges.keySet())
             {
-            	String[] values = publicNSChanges.get(key);
-            	if (values != null && values.length > 0)
-            	{
-            		for (String value : values)
-            		{
-            			appendParameter(baseURL, key, value);
-            		}
-            	}
-            	else
-            	{
-            		appendParameter(baseURL, "removePP", key);
-            	}
+               String[] values = publicNSChanges.get(key);
+               if (values != null && values.length > 0)
+               {
+                  for (String value : values)
+                  {
+                     appendParameter(baseURL, key, value);
+                  }
+               }
+               else
+               {
+                  appendParameter(baseURL, "removePP", key);
+               }
             }
          }
 
