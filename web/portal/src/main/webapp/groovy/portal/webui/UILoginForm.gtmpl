@@ -84,9 +84,7 @@
 <script>
 	function login(ele) {
 		var formEle = eXo.core.DOMUtil.findAncestorByTagName(ele,'form');
-		var originalAction = formEle.action;
 		formEle.action = eXo.env.portal.context + "/login";
 		formEle.submit();
-		formEle.action = originalAction;
 	}
 </script>
