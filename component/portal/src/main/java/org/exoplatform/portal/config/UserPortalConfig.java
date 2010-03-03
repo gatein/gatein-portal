@@ -61,6 +61,25 @@ public class UserPortalConfig
       this.selectedNavigation = _selectedNavigation;
    }
 
+   /** Fetch navigation (specified by ownerType, ownerId) from the list of all navigations and set it as selected navigation **/
+   public void updateSelectedNavigation(String ownerType, String ownerId)
+   {
+      PageNavigation targetNavigation = null;
+      for (PageNavigation nav : navigations)
+      {
+         if (nav.getOwnerType().equals(ownerType) && nav.getOwnerId().equals(ownerId))
+         {
+            targetNavigation = nav;
+            break;
+         }
+      }
+
+      if (targetNavigation != null)
+      {
+         this.setSelectedNavigation(targetNavigation);
+      }
+   }
+   
    public PageNavigation getSelectedNavigation()
    {
       if(this.selectedNavigation != null)

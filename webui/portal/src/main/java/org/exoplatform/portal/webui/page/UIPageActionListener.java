@@ -131,8 +131,15 @@ public class UIPageActionListener
                //Temporary solution to fix edit inline error while switching between navigations
                DataStorage storageService = uiPortalApp.getApplicationComponent(DataStorage.class);
                PortalConfig associatedPortalConfig = storageService.getPortalConfig(newNavType, newNavId);
-               uiPortalApp.getUserPortalConfig().setPortal(associatedPortalConfig);
+               UserPortalConfig userPortalConfig = uiPortalApp.getUserPortalConfig();
+               
+               //Update layout-related data on UserPortalConfig
+               userPortalConfig.setPortal(associatedPortalConfig);
 
+               //Update selected navigation on UserPortalConfig, that is mandatory as at the moment the PortalConfig
+               //does not hold any navigation data.
+               userPortalConfig.updateSelectedNavigation(newNavType, newNavId);
+               
                cachedUIPortal.refreshUIPage();
                return;
             }
@@ -146,7 +153,7 @@ public class UIPageActionListener
                newUIPortal.setSelectedNode(targetPageNode);
                newUIPortal.setSelectedPath(targetedPathNodes);
                uiPortalApp.setShowedUIPortal(newUIPortal);
-               uiPortalApp.addUIPortal(newUIPortal);
+               uiPortalApp.addCachedUIPortal(newUIPortal);
                newUIPortal.refreshUIPage();
                return;
             }

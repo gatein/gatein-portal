@@ -217,7 +217,7 @@ public class UIPortalApplication extends UIApplication
       return this.all_UIPortals.get(new UIPortalKey(ownerType, ownerId));
    }
    
-   public void addUIPortal(UIPortal uiPortal)
+   public void addCachedUIPortal(UIPortal uiPortal)
    {
       String ownerType = uiPortal.getOwnerType();
       String ownerId = uiPortal.getOwner();
@@ -228,7 +228,7 @@ public class UIPortalApplication extends UIApplication
       }
    }
    
-   public void removeUIPortal(String ownerType, String ownerId)
+   public void removeCachedUIPortal(String ownerType, String ownerId)
    {
       if(ownerType == null || ownerId == null)
       {
@@ -236,6 +236,19 @@ public class UIPortalApplication extends UIApplication
       }
       this.all_UIPortals.remove(new UIPortalKey(ownerType, ownerId));
    }
+   
+   /** Update the UIPortal in the cache **/
+   public void updateCachedUIPortal(UIPortal uiPortal)
+   {
+      String ownerType = uiPortal.getOwnerType();
+      String ownerId = uiPortal.getOwner();
+      
+      if(ownerType != null && ownerId != null)
+      {
+         this.all_UIPortals.put(new UIPortalKey(ownerType, ownerId), uiPortal);
+      }
+   }
+   
    
    public boolean isSessionOpen()
    {
@@ -459,7 +472,7 @@ public class UIPortalApplication extends UIApplication
       UIPortal uiPortal = createUIComponent(UIPortal.class, null, null);
       PortalDataMapper.toUIPortal(uiPortal, userPortalConfig_);
       
-      this.addUIPortal(uiPortal);
+      this.addCachedUIPortal(uiPortal);
       this.showedUIPortal = uiPortal;
       
       uiWorkingWorkspace.addChild(UIEditInlineWorkspace.class, null, UI_EDITTING_WS_ID).setRendered(false);
