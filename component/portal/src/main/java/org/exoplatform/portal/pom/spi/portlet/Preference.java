@@ -56,13 +56,6 @@ public final class Preference
       {
          throw new IllegalArgumentException();
       }
-      for (String value : values)
-      {
-         if (value == null)
-         {
-            throw new IllegalArgumentException();
-         }
-      }
 
       //
       this.name = name;
@@ -73,10 +66,6 @@ public final class Preference
    public Preference(String name, String value, boolean readOnly)
    {
       if (name == null)
-      {
-         throw new NullPointerException();
-      }
-      if (value == null)
       {
          throw new NullPointerException();
       }

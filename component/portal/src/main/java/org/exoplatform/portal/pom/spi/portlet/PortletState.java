@@ -23,6 +23,8 @@ import org.chromattic.api.annotations.*;
 import org.gatein.mop.core.api.MOPFormatter;
 import org.gatein.mop.core.api.workspace.content.AbstractCustomizationState;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -45,19 +47,36 @@ public abstract class PortletState extends AbstractCustomizationState
 
    public void setPayload(Portlet payload)
    {
-      this.payload = payload;
-
-      //
       Map<String, PreferenceState> entries = getChildren();
       entries.clear();
 
       for (Preference pref : payload)
       {
          PreferenceState prefState = create();
+
+         //
          entries.put(pref.getName(), prefState);
-         prefState.setValue(pref.getValues());
+
+         // Compute values
+         List<String> toCopyValues = pref.getValues();
+         ArrayList<String> copiedValues = new ArrayList<String>(toCopyValues.size());
+         for (int i = 0;i < toCopyValues.size();i++)
+         {
+            String value = toCopyValues.get(i);
+            if (value == null)
+            {
+               value = "";
+            }
+            copiedValues.add(value);
+         }
+
+         //
+         prefState.setValue(copiedValues);
          prefState.setReadOnly(pref.isReadOnly());
       }
+
+      // Invalidate payload that will be reloaded next time
+      payload = null;
    }
 
    public Portlet getPayload()

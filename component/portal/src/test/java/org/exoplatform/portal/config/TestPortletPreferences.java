@@ -87,4 +87,23 @@ public class TestPortletPreferences extends AbstractPortalTest
       assertNotNull(prefs);
       assertEquals(new PortletBuilder().add("template", "someanothervalue").build(), prefs);
    }
+
+   public void testNullPreferenceValue() throws Exception
+   {
+      Page page = storage_.getPage("portal::test::test4");
+      Application<Portlet> app = (Application<Portlet>)page.getChildren().get(0);
+      PersistentApplicationState<Portlet> state = (PersistentApplicationState)app.getState();
+
+      //
+      Portlet prefs = storage_.load(state, ApplicationType.PORTLET);
+
+      //
+      prefs.setValue("template", null);
+      storage_.save(state, prefs);
+
+      //
+      prefs = storage_.load(state, ApplicationType.PORTLET);
+      assertNotNull(prefs);
+      assertEquals(new PortletBuilder().add("template", "").build(), prefs);
+   }
 }
