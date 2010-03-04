@@ -60,13 +60,11 @@ public class TemplateService
 
    private boolean cacheTemplate_ = true;
 
-   public TemplateService(InitParams params, TemplateStatisticService statisticService, CacheService cservice)
-      throws Exception
+   public TemplateService(TemplateStatisticService statisticService, CacheService cservice) throws Exception
    {
-      engine_ = new GroovyTemplateEngine();
+      this.engine_ = new GroovyTemplateEngine();
       this.statisticService = statisticService;
-      templatesCache_ = cservice.getCacheInstance(TemplateService.class.getName());
-      getTemplatesCache().setLiveTime(10000);
+      this.templatesCache_ = cservice.getCacheInstance(TemplateService.class.getSimpleName());
    }
 
    public void merge(String name, BindingContext context) throws Exception

@@ -44,6 +44,10 @@
       <artifactId>exo.kernel.commons</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.exoplatform.kernel</groupId>
+      <artifactId>exo.kernel.component.ext.cache.impl.jboss.v3</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.exoplatform.core</groupId>
       <artifactId>exo.core.component.database</artifactId>
     </dependency>
