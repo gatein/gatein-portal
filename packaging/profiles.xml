@@ -29,7 +29,7 @@
              ex: On Windows 'c:/AS'
              ex: On Linux '/home/user/AS'
         -->
-        <exo.projects.directory.dependencies>d:/java/exo-dependencies</exo.projects.directory.dependencies>
+        <exo.projects.directory.dependencies>REPLACE_WITH_YOUR_OWN_DIRECTORY</exo.projects.directory.dependencies>
 
         <!-- 
              If you want that the server is deployed always at the same place (not in packaging/pkg/target/<server> dir)
