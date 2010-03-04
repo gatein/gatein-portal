@@ -86,7 +86,7 @@ public class JavascriptManager
             {
                data.add("/");
             }
-            data.add("', '");
+            data.add("'); \n");
          }
       }
    }
