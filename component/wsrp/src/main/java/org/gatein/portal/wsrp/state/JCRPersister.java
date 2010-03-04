@@ -242,7 +242,7 @@ public class JCRPersister
 
    public static class PortletNameFormatter implements ObjectFormatter
    {
-      public static final String SLASH_REPLACEMENT = "___";
+      public static final String SLASH_REPLACEMENT = "-_-";
       private static final String SLASH = "/";
 
       public String decodeNodeName(FormatterContext formatterContext, String s)
