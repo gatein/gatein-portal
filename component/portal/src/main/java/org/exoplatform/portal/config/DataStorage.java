@@ -136,4 +136,12 @@ public interface DataStorage
    public Dashboard loadDashboard(String dashboardId) throws Exception;
 
    public void saveDashboard(Dashboard dashboard) throws Exception;
+
+   /**
+    * Returns the list of all portal names.
+    *
+    * @return the portal names
+    * @throws Exception any exception
+    */
+   public List<String> getAllPortalNames() throws Exception;
 }

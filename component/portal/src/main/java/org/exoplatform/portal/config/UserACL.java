@@ -253,14 +253,14 @@ public class UserACL
    }
    
    /**
-    *  This method is equivalent to <code>hasEditPermission(PortalConfig)</code>. That allows us
+    * This method is equivalent to <code>hasEditPermission(PortalConfig)</code>. That allows us
     * to check edit permission on a UIPortal, without converting UIPortal into PortalConfig via
     * PortalDataMapper.
     * 
-    * @param ownerType
-    * @param ownerId
-    * @param editPermExpression
-    * @return
+    * @param ownerType the owner type
+    * @param ownerId the owner id
+    * @param editPermExpression the permission expression
+    * @return true or false
     */
    public boolean hasEditPermissionOnPortal(String ownerType, String ownerId, String editPermExpression)
    {

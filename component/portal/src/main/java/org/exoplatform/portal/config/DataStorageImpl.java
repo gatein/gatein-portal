@@ -42,11 +42,7 @@ import org.exoplatform.portal.pom.data.PortalKey;
 import org.exoplatform.services.listener.ListenerService;
 
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -230,8 +226,6 @@ public class DataStorageImpl implements DataStorage
             tmpList.add(list.get(i));
          }
          Collections.sort(tmpList, new Comparator<D>() {
-
-            @Override
             public int compare(D d1, D d2)
             {
                if (comparator == null) {
@@ -245,6 +239,18 @@ public class DataStorageImpl implements DataStorage
          });
          return tmpList;         
       }
+   }
+
+   public List<String> getAllPortalNames() throws Exception {
+
+      Query<PortalKey> q = new Query<PortalKey>("portal", null,PortalKey.class);
+      List<PortalKey> keys = delegate.find(q).getAll();
+      LinkedList<String> list = new LinkedList<String>();
+      for (PortalKey key : keys)
+      {
+         list.add(key.getId());
+      }
+      return list;
    }
 
    public <T> ListAccess<T> find2(Query<T> q) throws Exception

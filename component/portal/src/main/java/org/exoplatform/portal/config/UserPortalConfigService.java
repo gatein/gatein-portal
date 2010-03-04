@@ -20,7 +20,6 @@
 package org.exoplatform.portal.config;
 
 import org.exoplatform.commons.utils.LazyPageList;
-import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.component.ComponentPlugin;
 import org.exoplatform.container.component.RequestLifeCycle;
@@ -39,13 +38,7 @@ import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.OrganizationService;
 import org.picocontainer.Startable;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by The eXo Platform SAS Apr 19, 2007 This service is used to load the PortalConfig, Page config and
@@ -586,15 +579,14 @@ public class UserPortalConfigService implements Startable
     */
    public List<String> getAllPortalNames() throws Exception
    {
-      List<String> list = new ArrayList<String>();
-      Query<PortalConfig> query = new Query<PortalConfig>(PortalConfig.PORTAL_TYPE, null, null, null, PortalConfig.class);
-      PageList<PortalConfig> pageList = storage_.find(query);
-      List<PortalConfig> configs = pageList.getAll();
-      for (PortalConfig ele : configs)
+      List<String> list = storage_.getAllPortalNames();
+      for (Iterator<String> i = list.iterator();i.hasNext();)
       {
-         if (userACL_.hasPermission(ele))
+         String name = i.next();
+         PortalConfig config = storage_.getPortalConfig(name);
+         if (config == null || !userACL_.hasPermission(config))
          {
-            list.add(ele.getName());
+            i.remove();
          }
       }
       return list;

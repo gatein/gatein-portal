@@ -99,10 +99,17 @@ public class DataCache extends TaskExecutionDecorator
          V v = null;
          if (o != null)
          {
-            Class<V> type = task.getValueType();
-            if (type.isInstance(o))
+            if (o == NullObject.get())
             {
-               v = type.cast(o);
+               return null;
+            }
+            else
+            {
+               Class<V> type = task.getValueType();
+               if (type.isInstance(o))
+               {
+                  v = type.cast(o);
+               }
             }
          }
 
@@ -119,7 +126,11 @@ public class DataCache extends TaskExecutionDecorator
             v = super.execute(session, task);
 
             //
-            if (v != null)
+            if (v == null)
+            {
+               session.putInCache(key, NullObject.get());
+            }
+            else
             {
                session.putInCache(key, v);
             }

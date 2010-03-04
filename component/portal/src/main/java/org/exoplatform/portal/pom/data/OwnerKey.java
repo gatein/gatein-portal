@@ -70,11 +70,15 @@ public abstract class OwnerKey implements Serializable
       {
          return true;
       }
-      if (getClass().isInstance(obj))
+
+      // We need to use class equality here
+      if (obj != null && getClass().equals(obj.getClass()))
       {
          OwnerKey that = (OwnerKey)obj;
          return type.equals(that.type) && id.equals(that.id);
       }
+
+      //
       return false;
    }
 }
