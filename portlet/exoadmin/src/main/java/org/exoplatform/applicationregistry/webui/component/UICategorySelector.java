@@ -137,6 +137,9 @@ public class UICategorySelector extends UIForm
          }
          UIGadgetInfo gadgetInfo = selector.getParent();
          gadgetInfo.getChild(UICategorySelector.class).setRendered(false);
+         UIApplicationRegistryPortlet uiPortlet = gadgetInfo.getAncestorOfType(UIApplicationRegistryPortlet.class);
+         UIApplicationOrganizer uiOrganizer = uiPortlet.getChild(UIApplicationOrganizer.class);
+         uiOrganizer.reload();
          event.getRequestContext().addUIComponentToUpdateByAjax(gadgetInfo);
       }
 
