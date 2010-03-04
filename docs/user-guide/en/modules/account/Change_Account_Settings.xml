@@ -10,24 +10,22 @@
 		To change your account information, click on the account name in the top navigation bar:
 	</para>
 	<mediaobject>
-		<imageobject>
+		<imageobject role="html">
 			<imagedata fileref="images/ChangeAccount.png" format="PNG" />
+		</imageobject>
+		<imageobject role="fo">
+			<imagedata fileref="images/ChangeAccount.png" format="PNG" contentwidth="150mm"/>
 		</imageobject>
 	</mediaobject>
 	<para>
 		The <emphasis role="bold">Account Profiles</emphasis> form will appear:
 	</para>
-
-
-<note>
-<title>DOC TODO</title>
-<para>
-please redo the screenshot without "Click Save to..." and using a smaller window, it is too big right now
-</para>
-</note>
 	<mediaobject>
-		<imageobject>
+		<imageobject role="html">
 			<imagedata fileref="images/AccountProfiles3.png" format="PNG" width="444" />
+		</imageobject>
+		<imageobject role="fo">
+			<imagedata fileref="images/AccountProfiles3.png" format="PNG" contentwidth="150mm" />
 		</imageobject>
 	</mediaobject>
 	<para>
@@ -58,15 +56,13 @@ please redo the screenshot without "Click Save to..." and using a smaller window
 			<para>
 				Select the <emphasis role="bold">Change Password</emphasis> tab, it will display the following form:
 			</para>
-<note>
-<title>DOC TODO</title>
-<para>
-please redo the screenshot without "Click Save to..." and using a smaller window, it is too big right now
-</para>
-</note>
+
 			<mediaobject>
-				<imageobject>
+				<imageobject role="html">
 					<imagedata fileref="images/ChangePassword.png" format="PNG" width="444" />
+				</imageobject>
+				<imageobject role="fo">
+					<imagedata fileref="images/ChangePassword.png" format="PNG" contentwidth="110mm" />
 				</imageobject>
 			</mediaobject>
 		 </step>

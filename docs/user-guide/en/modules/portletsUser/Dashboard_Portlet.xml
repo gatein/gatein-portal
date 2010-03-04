@@ -13,7 +13,7 @@
 	</para>
 	<mediaobject>
 		<imageobject>
-			<imagedata fileref="images/Dashboard1.png" format="PNG"   />
+			<imagedata fileref="images/Dashboard1.png" format="PNG" />
 		</imageobject>
 	</mediaobject>
 
@@ -33,11 +33,25 @@
 			
 		</procedure>
 		<para>
-			The active Dashboard can be individually named by clicking on the default name ("<emphasis>Click and Type Page Name</emphasis>") and entering a new name.
+			The active Dashboard can be individually named by clicking on the default name ("<emphasis>Click and Type Page Name</emphasis>")...
 		</para>
 		<mediaobject>
-			<imageobject>
-				<imagedata fileref="images/Dashname.png" format="PNG"   />
+			<imageobject role="html">
+				<imagedata fileref="images/Dashname.png" format="PNG" />
+			</imageobject>
+			<imageobject role="fo">
+				<imagedata fileref="images/Dashname.png" format="PNG" contentwidth="150mm" />
+			</imageobject>
+		</mediaobject>
+		<para>
+			...and entering a new name:
+		</para>
+		<mediaobject>
+			<imageobject role="html">
+				<imagedata fileref="images/Dashname1.png" format="PNG" />
+			</imageobject>
+			<imageobject role="fo">
+				<imagedata fileref="images/Dashname1.png" format="PNG" contentwidth="150mm" />
 			</imageobject>
 		</mediaobject>
 
@@ -45,10 +59,14 @@
 			The Dashboard Workspace lists all available gadgets. Four gadgets are provided by default with &PRODUCT;, however you can add many more.
 		</para>
 		<mediaobject>
-			<imageobject>
-				<imagedata fileref="images/Dash2.png" format="PNG"   />
+			<imageobject role="html">
+				<imagedata fileref="images/Dash2.png" format="PNG" />
+			</imageobject>
+			<imageobject role="fo">
+				<imagedata fileref="images/Dash2.png" format="PNG" contentwidth="150mm" />
 			</imageobject>
 		</mediaobject>
+
 		<variablelist id="vari-User_Guide-Using_the_Dashboard_Workspace-Default_Gadgets">
 			<title>Default Gadgets:</title>
 			<varlistentry>
@@ -58,8 +76,11 @@
 						The calendar gadget allows users to switch easily between daily, monthly and yearly view and, is customizable to match your portal's theme.
 					</para>
 					<mediaobject>
-						<imageobject>
-							<imagedata fileref="images/Calendar.png" format="PNG" width="444" />
+						<imageobject role="html">
+							<imagedata fileref="images/Calendar.png" format="PNG" />
+						</imageobject>
+						<imageobject role="fo">
+							<imagedata fileref="images/Calendar.png" format="PNG" contentwidth="70mm"/>
 						</imageobject>
 					</mediaobject>
 				</listitem>
@@ -71,8 +92,11 @@
 						This application helps you organize your day and work group. It is designed to keep track of your tasks in a convenient and transparent way. Tasks can be highlighted with different colors.
 					</para>
 					<mediaobject>
-						<imageobject>
-							<imagedata fileref="images/Todo.png" format="PNG"   />
+						<imageobject role="html">
+							<imagedata fileref="images/Todo.png" format="PNG" />
+						</imageobject>
+						<imageobject role="fo">
+							<imagedata fileref="images/Todo.png" format="PNG" contentwidth="70mm" />
 						</imageobject>
 					</mediaobject>
 				</listitem>
@@ -84,8 +108,11 @@
 						This mini-application lets you perform most basic arithmetic operations and can be themed to match the rest of your portal.
 					</para>
 					<mediaobject>
-						<imageobject>
-							<imagedata fileref="images/Calculator.png" format="PNG"   />
+						<imageobject role="html">
+							<imagedata fileref="images/Calculator.png" format="PNG" />
+						</imageobject>
+						<imageobject role="fo">
+							<imagedata fileref="images/Calculator.png" format="PNG" contentwidth="70mm"/>
 						</imageobject>
 					</mediaobject>
 				</listitem>
@@ -96,22 +123,28 @@
 					<para>
 						An RSS reader, or aggregator, collates content from various, user-specified feed sources and displays them in one location. This content can include, but isn't limited to, news headlines, blog posts or email. The RSS Reader gadget displays this content in a single window on your Portal page.
 					</para>
-					<!--  <mediaobject>
-						<imageobject>
-							<imagedata fileref="images/RSS.png" format="PNG"></imagedata>
+					<mediaobject>
+						<imageobject role="html">
+							<imagedata fileref="images/RSSReader.png" format="PNG" />
 						</imageobject>
-					</mediaobject>  -->
+						<imageobject role="fo">
+							<imagedata fileref="images/RSSReader.png" format="PNG" contentwidth="70mm"/>
+						</imageobject>
+					</mediaobject> 
 				</listitem>
 			</varlistentry>
 			<varlistentry>
 				<term><emphasis role="bold">More Gadgets</emphasis></term>
 				<listitem>
 					<para>
-						Many more gadgets can be found at <ulink type="http" url="http://www.google.com/ig/directory?synd=open">Google Gadget</ulink>. &PRODUCT; is compatible with most of the gadgets available there.
+						Many more gadgets can be found at <ulink type="http" url="http://www.google.com/ig/directory?synd=open">Google Gadgets</ulink>. &PRODUCT; is compatible with most of the gadgets available there.
 					</para>
 					<mediaobject>
-						<imageobject>
+						<imageobject role="html">
 							<imagedata fileref="images/GoogleGadgets.png" format="PNG" />
+						</imageobject>
+						<imageobject role="fo">
+							<imagedata fileref="images/GoogleGadgets.png" format="PNG" contentwidth="150mm"/>
 						</imageobject>
 					</mediaobject>				
 				</listitem>
@@ -136,8 +169,11 @@
 					For example:
 				</para>
 				<mediaobject>
-					<imageobject>
-						<imagedata fileref="images/XMLURL.png" format="PNG" width="444" />
+					<imageobject role="html">
+						<imagedata fileref="images/XMLURL.png" format="PNG" />
+					</imageobject>
+					<imageobject role="fo">
+						<imagedata fileref="images/XMLURL.png" format="PNG" contentwidth="150mm"/>
 					</imageobject>
 				</mediaobject>
 				<note>
@@ -153,7 +189,7 @@
 				</para>
 				<mediaobject>
 					<imageobject>
-						<imagedata fileref="images/DashboardLink.png" format="PNG" />
+						<imagedata fileref="images/DashboardLink.png" format="PNG" contentwidth="150mm"/>
 					</imageobject>
 				</mediaobject>
 				
@@ -163,8 +199,11 @@
 					Click on <emphasis role="bold">Add Gadgets</emphasis> in the Dashboard to open the Dashboard Workspace.
 				</para>
 					<mediaobject>
-						<imageobject>
-							<imagedata fileref="images/Dashboard1.png" format="PNG" />
+						<imageobject role="html">
+							<imagedata fileref="images/Dashboard1.png" format="PNG"/>
+						</imageobject>
+						<imageobject role="fo">
+							<imagedata fileref="images/Dashboard1.png" format="PNG" contentwidth="100mm"/>
 						</imageobject>
 					</mediaobject>
 			</step>
@@ -172,8 +211,11 @@
 				<para>
 					The Dashboard Workspace dialog appears: 
 					<mediaobject>
-						<imageobject>
+						<imageobject role="html"> 
 							<imagedata fileref="images/EnterLink.png" format="PNG" />
+						</imageobject>
+						<imageobject role="fo"> 
+							<imagedata fileref="images/EnterLink.png" format="PNG" contentwidth="50mm"/>
 						</imageobject>
 					</mediaobject>
 				</para>
@@ -183,8 +225,11 @@
 					Paste the URL obtained in step 1 into the text box above the gadget list.
 				</para>
 				<mediaobject>
-					<imageobject>
+					<imageobject role="html">
 						<imagedata fileref="images/CodePaste.png" format="PNG" />
+					</imageobject>
+					<imageobject role="fo">
+						<imagedata fileref="images/CodePaste.png" format="PNG" contentwidth="120mm"/>
 					</imageobject>
 				</mediaobject>
 				
@@ -194,9 +239,12 @@
 					Click on the <emphasis role="bold">plus</emphasis> icon to add the new gadget to the page.
 				</para>
 				<mediaobject>
-					<imageobject>
+					<imageobject role="html">
 						<imagedata fileref="images/NewGadget.png" format="PNG" />
-					</imageobject>
+					</imageobject> 
+					<imageobject role="fo">
+						<imagedata fileref="images/NewGadget.png" format="PNG" contentwidth="120mm" />
+					</imageobject> 
 				</mediaobject>
 				
 			</step>

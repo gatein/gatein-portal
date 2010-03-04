@@ -10,7 +10,7 @@
 	</para>
 	<mediaobject>
 		<imageobject>
-			<imagedata fileref="images/Frontpage.png" format="PNG" scalefit="1" width="444" />
+			<imagedata fileref="images/Frontpage.png" format="PNG" />
 		</imageobject>
 	</mediaobject>
 	<para>
@@ -28,8 +28,11 @@
 					<ulink url="http://www.gatein.org">www.gatein.org</ulink>
 				</para>
 				<mediaobject>
-					<imageobject>
-						<imagedata fileref="images/GateIn.png" format="PNG"/>
+					<imageobject role="html">
+						<imagedata fileref="images/GateIn.png" format="PNG" />
+					</imageobject>
+					<imageobject role="fo">
+						<imagedata fileref="images/GateIn.png" format="PNG" contentwidth="150mm"/>
 					</imageobject>
 				</mediaobject>
 			</listitem>
@@ -39,8 +42,11 @@
 					<ulink url="http://www.jboss.org/gatein/videos.html">www.jboss.org/gatein/videos.html</ulink>
 				</para>
 				<mediaobject>
-					<imageobject>
+					<imageobject role="html">
 						<imagedata fileref="images/Videos.png" format="PNG" />
+					</imageobject>
+					<imageobject role="fo">
+						<imagedata fileref="images/Videos.png" format="PNG" contentwidth="150mm"/>
 					</imageobject>
 				</mediaobject>
 
@@ -57,8 +63,11 @@
 					<ulink url="http://www.jboss.org/gatein/downloads.html">www.jboss.org/gatein/downloads.html</ulink>
 				</para>
 				<mediaobject>
-					<imageobject>
+					<imageobject role="html">
 						<imagedata fileref="images/Downloads.png" format="PNG" />
+					</imageobject>
+					<imageobject role="fo">
+						<imagedata fileref="images/Downloads.png" format="PNG" contentwidth="150mm"/>
 					</imageobject>
 				</mediaobject>
 

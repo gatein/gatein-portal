@@ -5,12 +5,6 @@
 ]>
 <section id="sect-User_Guide-Manage_Navigation_Nodes">
 	<title>Manage Navigation Nodes</title>
-<warning>
-<para>The <emphasis role="bold">User Workspace</emphasis> has been deprecated in GateIn 3.0 Beta 3. The introductory paragraph below may be obsolete.
-<emphasis role="bold">Also</emphasis>
-The <emphasis role="bold">Administration</emphasis> menu entry reported to be under the <emphasis role="bold">GateIn Start</emphasis> button does not exist in GateIn 3.0 Beta 3. Therefore some of the instructions in this section may be incomplete or inaccurate.
-</para>
-</warning>
 		<para>
 			With enough privileges you can take all actions related to a node such as : add a new node, edit, copy, cut, delete and clone node.
 		</para>
@@ -22,8 +16,11 @@ The <emphasis role="bold">Administration</emphasis> menu entry reported to be un
 							Click on <emphasis role="bold">Site</emphasis> then click on <emphasis role="bold">Edit Navigation</emphasis> of the portal you want to modify.
 						</para>
 						<mediaobject>
-							<imageobject>
-								<imagedata fileref="images/EditNavigation.png" format="PNG" width="444" />
+							<imageobject role="html">
+								<imagedata fileref="images/EditNavigation.png" format="PNG"/>
+							</imageobject>
+							<imageobject role="fo">
+								<imagedata fileref="images/EditNavigation.png" format="PNG" contentwidth="150mm" />
 							</imageobject>
 						</mediaobject>
 					</step>
@@ -37,8 +34,11 @@ The <emphasis role="bold">Administration</emphasis> menu entry reported to be un
 							Right-click on the selected navigation or node and select <emphasis role="bold">Add new Node</emphasis> option. The <emphasis role="bold">Add new node</emphasis> form appears:
 						</para>
 						<mediaobject>
-							<imageobject>
+							<imageobject role="html">
 								<imagedata fileref="images/AddNode4.png" format="PNG" width="444" />
+							</imageobject>
+							<imageobject role="fo">
+								<imagedata fileref="images/AddNode4.png" format="PNG" contentwidth="150mm" />
 							</imageobject>
 						</mediaobject>
 						<para>
@@ -48,7 +48,7 @@ The <emphasis role="bold">Administration</emphasis> menu entry reported to be un
 
 							<variablelist>
 								<varlistentry>
-									<term>Uri</term>
+									<term><emphasis role="bold">Uri</emphasis></term>
 									<listitem>
 									<para>
 										An identification of the node. The Uri is automatically created after adding a new node
@@ -56,7 +56,7 @@ The <emphasis role="bold">Administration</emphasis> menu entry reported to be un
 									</listitem>
 								</varlistentry>
 								<varlistentry>
-									<term>Node name</term>
+									<term><emphasis role="bold">Node name</emphasis></term>
 									<listitem>
 									<para>
 										The name of the node. This field is required and must be unique. Only alpha, digit and underscore characters are allowed for this field and it must have at least 3 characters.
@@ -64,7 +64,7 @@ The <emphasis role="bold">Administration</emphasis> menu entry reported to be un
 									</listitem>
 								</varlistentry>
 								<varlistentry>
-									<term>Label</term>
+									<term><emphasis role="bold">Label</emphasis></term>
 									<listitem>
 									<para>
 										The display name of the node on the screen. This field is not required and may be changed. This field must have a length between 3 and 120 characters.
@@ -72,7 +72,7 @@ The <emphasis role="bold">Administration</emphasis> menu entry reported to be un
 									</listitem>
 								</varlistentry>
 								<varlistentry>
-									<term>Visible</term>
+									<term><emphasis role="bold">Visible</emphasis></term>
 									<listitem>
 									<para>
 										This check box allow to hide (and show) the page and its node at the navigation bar, the page navigation and the site map
@@ -80,7 +80,7 @@ The <emphasis role="bold">Administration</emphasis> menu entry reported to be un
 									</listitem>
 								</varlistentry>
 								<varlistentry>
-									<term>Publication date &amp; time</term>
+									<term><emphasis role="bold">Publication date &amp; time</emphasis></term>
 									<listitem>
 									<para>
 										This option allows publishing this node for a period of time. <emphasis>Start Publication Date</emphasis> and <emphasis>End Publication Date</emphasis> only appear when this option is selected.
@@ -88,7 +88,7 @@ The <emphasis role="bold">Administration</emphasis> menu entry reported to be un
 									</listitem>
 								</varlistentry>
 								<varlistentry>
-									<term>Start Publication Date</term>
+									<term><emphasis role="bold">Start Publication Date</emphasis></term>
 									<listitem>
 									<para>
 										The start date and time to publish the node.
@@ -96,7 +96,7 @@ The <emphasis role="bold">Administration</emphasis> menu entry reported to be un
 									</listitem>
 								</varlistentry>
 								<varlistentry>
-									<term>End Publication Date</term>
+									<term><emphasis role="bold">End Publication Date</emphasis></term>
 									<listitem>
 									<para>
 										The end date and time to publish the node.
@@ -108,13 +108,16 @@ The <emphasis role="bold">Administration</emphasis> menu entry reported to be un
 						In the <emphasis role="bold">Page Selector</emphasis> tab, you can select a page or not for this node.
 					</para>
 					<mediaobject>
-						<imageobject>
+						<imageobject role="html">
 							<imagedata fileref="images/PageSelector.png" format="PNG" width="444" />
+						</imageobject>
+						<imageobject role="fo">
+							<imagedata fileref="images/PageSelector.png" format="PNG" contentwidth="150mm"/>
 						</imageobject>
 					</mediaobject>
 						<variablelist>
 							<varlistentry>
-								<term>Page Id</term>
+								<term><emphasis role="bold">Page Id</emphasis></term>
 								<listitem>
 								<para>
 									The identification string of the page.
@@ -122,7 +125,7 @@ The <emphasis role="bold">Administration</emphasis> menu entry reported to be un
 								</listitem>
 							</varlistentry>
 							<varlistentry>
-								<term>Name</term>
+								<term><emphasis role="bold">Name</emphasis></term>
 								<listitem>
 								<para>
 									The selected page's name.
@@ -130,7 +133,7 @@ The <emphasis role="bold">Administration</emphasis> menu entry reported to be un
 								</listitem>
 							</varlistentry>
 							<varlistentry>
-								<term>Title</term>
+								<term><emphasis role="bold">Title</emphasis></term>
 								<listitem>
 								<para>
 									The selected page's title.
@@ -242,11 +245,11 @@ The <emphasis role="bold">Administration</emphasis> menu entry reported to be un
 						<para>
 							After you finish making the desired changes, click the <emphasis role="bold">Save</emphasis> button to accept changes or <emphasis role="bold">Cancel</emphasis> button to exit without change.
 						</para>
-						<mediaobject>
+					<!--	<mediaobject>
 							<imageobject>
 								<imagedata fileref="images/PageSelector6.png" format="PNG" width="444" />
 							</imageobject>
-						</mediaobject>
+						</mediaobject> -->
 					</step>
 					<step>
 						<para>
@@ -322,21 +325,21 @@ Therefore there will be a new page that has the same name as the cloned node's p
 					</step>
 					<step>
 						<para>
-							Select the position that you want to paste this node and select <emphasis role="bold">Paste Node</emphasis> option. Click the mark  icon to <emphasis role="bold">Save</emphasis>.
+							Select the position that you want to paste this node and select <emphasis role="bold">Paste Node</emphasis> option. Click the mark icon to <emphasis role="bold">Save</emphasis>.
 						</para>
 						<mediaobject>
 							<imageobject>
-								<imagedata fileref="images/PasteCloneNode2.png" format="PNG" />
+								<imagedata fileref="images/PasteNode3.png" format="PNG" />
 							</imageobject>
 						</mediaobject>
 						<para>
-							In <emphasis role="bold">Manage Pages</emphasis> you will see:
+							You will see the new pages appear in the in page lists
 						</para>
-						<mediaobject>
+				<!--		<mediaobject>
 							<imageobject>
 								<imagedata fileref="images/ManagePage2.png" format="PNG" width="444" />
 							</imageobject>
-						</mediaobject>
+						</mediaobject> -->
 					</step>
 				</procedure>
 		</section>
@@ -365,7 +368,7 @@ Therefore there will be a new page that has the same name as the cloned node's p
 						</para>
 						<mediaobject>
 							<imageobject>
-								<imagedata fileref="images/PasteCutNode4.png" format="PNG" />
+								<imagedata fileref="images/PasteNode3.png" format="PNG" />
 							</imageobject>
 						</mediaobject>
 					</step>

@@ -52,19 +52,17 @@
 				<term>New portals</term>
 				<listitem>
 					<para>
-						On the Toolbar click on <emphasis role="bold">Site</emphasis> then click on the <emphasis role="bold">Add New Portal</emphasis> button, select the <emphasis role="bold">Permission Setting</emphasis> tab then the <emphasis role="bold">Access Permission Setting</emphasis> sub tab.
+						On the Toolbar <emphasis>click</emphasis> on <emphasis role="bold">Site</emphasis> (hovering will present the <emphasis role="bold">Site</emphasis> menu) then click on the <emphasis role="bold">Add New Portal</emphasis> button, select the <emphasis role="bold">Permission Setting</emphasis> tab then the <emphasis role="bold">Access Permission Setting</emphasis> sub tab.
 					</para>
 					<mediaobject>
-						<imageobject>
-							<imagedata fileref="images/AddPortal.png" format="PNG" width="444" />
+						<imageobject role="html">
+							<imagedata fileref="images/AddPortal.png" format="PNG" />
+						</imageobject>
+						<imageobject role="fo">
+							<imagedata fileref="images/AddPortal.png" format="PNG" contentwidth="120mm"/>
 						</imageobject>
 					</mediaobject>
-<warning>
-<para>
-	EDIT_WARNING: The <emphasis role="bold">Add New Portal</emphasis> button mentioned in the above paragraph is not present in GateIn 3.0 Beta 3
-	TH: In fact it is there but not so intuitive, i added a screenshot, and explained to explicitely *click* on "Site"
-</para>
-</warning> 
+
 					<mediaobject>
 						<imageobject>
 							<imagedata fileref="images/PortalAccessPermissions.png" format="PNG" width="444" />
@@ -114,8 +112,11 @@
 					<para>
 						After selecting a membership type, the selected permission is displayed in the access permission list. You can only select one group with one membership type at a time. If you want to add more, click <emphasis role="bold">Add Permission</emphasis> and select again. Repeat the process for as many permission settings as you require. 
 						<mediaobject>
-							<imageobject>
+							<imageobject role="html">
 								<imagedata fileref="images/PermissionSetting2.png" format="PNG" width="444" />
+							</imageobject>
+							<imageobject role="fo">
+								<imagedata fileref="images/PermissionSetting2.png" format="PNG" contentwidth="150mm" />
 							</imageobject>
 						</mediaobject>
 					</para>
@@ -134,7 +135,7 @@
 		<procedure>
 			<step>
 				<para>
-					On the Toolbar select <emphasis role="bold">Site</emphasis> and click on <emphasis role="bold">Add New Portal</emphasis>.
+					On the Toolbar <emphasis>click</emphasis> (don't hover) <emphasis role="bold">Site</emphasis> and click on <emphasis role="bold">Add New Portal</emphasis>.
 				</para>				
 			</step>
 			<step>
@@ -143,12 +144,6 @@
 				</para>
 			</step>
 		</procedure>
-<warning>
-<para>
-	EDIT_WARNING: The <emphasis role="bold">Add New Portal</emphasis> button mentioned in the above procedure is not present in GateIn 3.0 Beta 3
-	TH: Same as before, it is there, just not intuitively placed :-/
-</para>
-</warning> 
 		<para>
 			Or for an existing portal;
 		</para>
@@ -170,8 +165,11 @@
 				</step>
 			</procedure>
 			<mediaobject>
-				<imageobject>
+				<imageobject role="html">
 					<imagedata fileref="images/Edit2.6.png" format="PNG" width="444" />
+				</imageobject>
+				<imageobject role="fo">
+					<imagedata fileref="images/Edit2.6.png" format="PNG" contentwidth="150mm" />
 				</imageobject>
 			</mediaobject>
 			<para>
@@ -208,7 +206,7 @@
 		</para>
 		<variablelist>
 			<varlistentry>
-				<term>User</term>
+				<term><emphasis role="bold">User</emphasis></term>
 					<listitem>
 						<para>
 							If the owner type of a page is "user", you don't have to set permissions, no one except the creator has access and edit permissions.
@@ -216,7 +214,7 @@
 					</listitem>
 			</varlistentry>
 			<varlistentry>
-				<term>Group</term>
+				<term><emphasis role="bold">Group</emphasis></term>
 					<listitem>
 						<para>
 							If the Owner type of a page is "group", initial permissions on page are:
@@ -236,7 +234,7 @@
 					</listitem>
 			</varlistentry>
 			<varlistentry>
-				<term>Portal</term>
+				<term><emphasis role="bold">Portal</emphasis></term>
 					<listitem>
 						<para>
 							If the Owner type of a page is portal, initial permissions are:
@@ -436,8 +434,11 @@
 					<para>
 						Select <emphasis role="bold">Group</emphasis> from the Toolbar. Highlight the <emphasis role="bold">Administration</emphasis> entry and click on <emphasis role="bold">Application Registry</emphasis>.
 						<mediaobject>
-							<imageobject>
+							<imageobject role="html">
 								<imagedata fileref="images/Application1.png" format="PNG" width="444" />
+							</imageobject>
+							<imageobject role="fo">
+								<imagedata fileref="images/Application1.png" format="PNG" contentwidth="150mm" />
 							</imageobject>
 						</mediaobject>
 					</para>

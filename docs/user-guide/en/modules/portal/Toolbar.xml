@@ -9,8 +9,11 @@
 		The Toolbar offers a convenient way for users and administrators to undertake portal actions quickly and easily.
 	</para>
 	<mediaobject>
-		<imageobject>
+		<imageobject role="html">
 			<imagedata fileref="images/Toolbar.png" format="PNG" />
+		</imageobject>
+		<imageobject role="fo">
+			<imagedata fileref="images/Toolbar.png" format="PNG" contentwidth="150mm"/>
 		</imageobject>
 	</mediaobject>
 	<section>
@@ -18,55 +21,70 @@
 
 			<variablelist>
 				<varlistentry>
-					<term>User Menu</term>
+					<term><emphasis role="bold">User Menu</emphasis></term>
 					<listitem>
 						<para>
 							You can use the main menu (located under the product icon) to change the language or skin used in the portal or to sign out.
 						</para>
 						<mediaobject>
-							<imageobject>
+							<imageobject role="html">
 								<imagedata fileref="images/StarPortlet.png" format="PNG" />
+							</imageobject>
+							<imageobject role="fo">
+								<imagedata fileref="images/StarPortlet.png" format="PNG" contentwidth="150mm"/>
 							</imageobject>
 						</mediaobject>
 					</listitem>
 				</varlistentry>
 				<varlistentry>
-					<term>Site</term>
+					<term><emphasis role="bold">Site</emphasis></term>
 						<listitem>
 							<para>
 								The Site navigation function shows the different sites available in this Portal and allows users to directly edit the navigation tree.
 							</para>
 							<mediaobject>
-								<imageobject>
+								<imageobject role="html">
 									<imagedata fileref="images/SitePortlet.png" format="PNG" />
+								</imageobject>
+								<imageobject role="fo">
+									<imagedata fileref="images/SitePortlet.png" format="PNG" contentwidth="150mm"/>
 								</imageobject>
 							</mediaobject>
 						</listitem>
 				</varlistentry>
 				<varlistentry>
-					<term>Group</term>
+					<term><emphasis role="bold">Group</emphasis></term>
 						<listitem>
 							<para>
 								Using the Group navigation function users can easily see and access pages in the Portal.
 							</para>
 							<mediaobject>
-								<imageobject>
+								<imageobject role="html">
 									<imagedata fileref="images/GroupPortlet.png" format="PNG" />
+								</imageobject>
+								<imageobject role="fo">
+									<imagedata fileref="images/GroupPortlet.png" format="PNG" contentwidth="150mm" />
 								</imageobject>
 							</mediaobject>
 						</listitem>
 				</varlistentry>
 				<varlistentry>
-					<term>Dashboard</term>
+					<term><emphasis role="bold">Dashboard</emphasis></term>
 						<listitem>
 							<para>
 								You can use the Dashboard to create your own pages of gadgets.
 							</para>
 							<mediaobject>
-								<imageobject>
+								<imageobject role="html">
 									<imagedata fileref="images/DashboardPortlet.png" format="PNG" />
 								</imageobject>
+								<imageobject role="fo">
+									<imagedata fileref="images/DashboardPortlet.png" format="PNG" contentwidth="150mm"/>
+								</imageobject>
 							</mediaobject>
+							<para>
+								The name shown in the image above is the default and can easily be overtyped when the Dashboard is open.
+							</para>
 						</listitem>
 				</varlistentry>
 			</variablelist>
@@ -76,14 +94,17 @@
 		<title>Administration Actions in the Toolbar</title>
 			<variablelist>
 				<varlistentry>
-					<term> Editor</term>
+					<term> <emphasis role="bold">Editor</emphasis></term>
 					<listitem>
 						<para>
-							Portal Administrators have access to another navigation that allows them to; add a new page to the current portal, edit a particular page's properties or to change a page's layout. This navigation appears next to the Dashboard navigation in the Toolbar and is contextually-named. It will appear as either <emphasis role="bold">Site Editor</emphasis> or <emphasis role="bold">Group Editor</emphasis> depending on the user's location within the portal.
+							Portal Administrators have access to another navigation that allows them to; add a new page to the current portal, edit a particular page's properties or to change a page's layout. This navigation appears next to the Dashboard navigation in the Toolbar and is contextually-named. It will appear as either <emphasis role="bold">Site Editor</emphasis>, <emphasis role="bold">Dashboard Editor</emphasis> or <emphasis role="bold">Group Editor</emphasis> depending on the user's location within the portal.
 						</para>
 						<mediaobject>
-							<imageobject>
+							<imageobject role="html">
 								<imagedata fileref="images/EditorPortlet.png" format="PNG" />
+							</imageobject>
+							<imageobject role="fo">
+								<imagedata fileref="images/EditorPortlet.png" format="PNG" contentwidth="150mm"/>
 							</imageobject>
 						</mediaobject>
 					</listitem>

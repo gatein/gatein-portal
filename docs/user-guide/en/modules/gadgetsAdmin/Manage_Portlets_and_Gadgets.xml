@@ -41,6 +41,9 @@
 
 	<section id="sect-User_Guide-Manage_Portlets_and_Gadgets-Add_a_new_Category">
 		<title>Add a new Category</title>
+		<para>
+			You easily add a new category by following these guides:
+		</para>
 		<procedure>
 			<step>
 				<para>
@@ -308,21 +311,22 @@ add screenshot with a gadget/portlet in Edit mode ("Edit application information
 		<para>
 			In the <emphasis role="bold">Group</emphasis> menu, select <emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Application Registry</emphasis>. Then click on the <emphasis role="bold">Gadget</emphasis> icon.
 		</para>
+		<mediaobject>
+			<imageobject>
+				<imagedata fileref="images/Gadgetnew.png" format="PNG" width="444" />
+			</imageobject>
+		</mediaobject>
 <note>
 <title>DOC TODO</title>
 <para>
 redo screenshot 
 </para>
 </note>	
-		<mediaobject>
-			<imageobject>
-				<imagedata fileref="images/Gadgetnew.png" format="PNG" width="444" />
-			</imageobject>
-		</mediaobject>
 		<para>
 			You may add a remote gadget using its URL or create a brand-new one:
 		</para>
-			<section id="sect-User_Guide-Manage_Portlets_and_Gadgets-Add_a_remote_Gadget">
+
+			<procedure>
 				<title>Add a remote Gadget</title>
 					<step>
 						<para>
@@ -344,31 +348,25 @@ redo screenshot
 							Click <emphasis role="bold">Add</emphasis>. The new remote gadget will be appear in gadget list on left pane of the Dashboard portlet.
 						</para>
 					</step>
-			</section>
-	
-			<section id="sect-User_Guide-Manage_Portlets_and_Gadgets-Create_a_new_Gadget">
-				<title>Create a new Gadget</title>
-					<step>
-						<para>
-							Click on <emphasis role="bold">Create a new gadget</emphasis>:
-						</para>
+					</procedure>
+					<procedure>
+						<title>Create a new Gadget</title>
+						<step>
+							<para>
+								Click on <emphasis role="bold">Create a new gadget</emphasis>:
+							</para>
 						<mediaobject>
 							<imageobject>
 								<imagedata fileref="images/CreateGadget1.png" format="PNG" width="444" />
 							</imageobject>
 						</mediaobject>
-						<variablelist>
-						  <varlistentry>
-							<term>Source</term>
-								<listitem>
-									<para>
-										The xml descriptor of the gadget.
-									</para>
-								</listitem>
-							</varlistentry>
-						</variablelist>
-					</step>
-			</section>
+						</step>
+						<step>
+							<para>
+								<literal>Source</literal> The xml descriptor of the gadget.
+							</para>
+						</step>
+					</procedure>
 			<para>
 				You may also edit, refresh and delete a local gadget as well as a remote gadget:
 			</para>
@@ -429,7 +427,6 @@ or pick an existing gadget in the categories listed below
 
 		<section id="sect-User_Guide-Manage_Gadgets-Edit_a_Gadget">
 			<title>Edit a Gadget</title>
-			<step>
 				<para>
 					Click the <emphasis role="bold">Edit Gadget</emphasis> icon located in the header of the <emphasis role="bold">Gadget Details</emphasis> page to display the following window: 
 				</para>
@@ -438,22 +435,19 @@ or pick an existing gadget in the categories listed below
 						<imagedata fileref="images/Source.png" format="PNG" width="444" />
 					</imageobject>
 				</mediaobject>
-			</step>
-
 		</section>
 		
 		<section id="sect-User_Guide-Manage_Gadgets-Refresh_a_Gadget">
 			<title>Refresh a Gadget</title>
-				<step>
-					<para>
+				<para>
 					Click the <emphasis role="bold">Refresh information</emphasis> icon located in the header of the <emphasis role="bold">Gadget Details</emphasis> page to display the following window: 
 				</para>
-				</step>	
+
 		</section>
 		
 		<section id="sect-User_Guide-Manage_Gadgets-Delete_a_Gadget">
 			<title>Delete a Gadget</title>
-			<step>
+
 				<para>
 					Click the trash can icon located next to the name of the gadget. An alert message should pop up asking for confirmation: 
 				</para>
@@ -462,7 +456,6 @@ or pick an existing gadget in the categories listed below
 						<imagedata fileref="images/Delete.png" format="PNG" />
 					</imageobject>
 				</mediaobject>
-			</step>
 		</section>
 
 	</section>

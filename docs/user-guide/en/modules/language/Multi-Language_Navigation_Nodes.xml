@@ -119,18 +119,18 @@ https://jira.jboss.org/jira/browse/GTNPORTAL-787
 	
 	<section id="sect-User_Guide-Multi_Language_Navigation_Nodes-CreatingEditing_Keys_using_the_Edit_Page_and_Navigation">
 		<title>Creating/Editing Keys using <emphasis role="bold">Navigation MAnagement</emphasis></title>
-			<procedure>
-				<step>
-					<para>
-						Click on <emphasis role="bold">Site</emphasis> in the Toolbar then <emphasis role="bold">Edit Navigation</emphasis>
-					</para>
-				</step>
 <note>
 <title>DOC TODO</title>
 <para>
 we need a screenshot here with the Navigation Management window
 </para>
 </note>
+			<procedure>
+				<step>
+					<para>
+						Click on <emphasis role="bold">Site</emphasis> in the Toolbar then <emphasis role="bold">Edit Navigation</emphasis>
+					</para>
+				</step>
 				<step>
 					<para>
 						Two alternatives are available at this point:

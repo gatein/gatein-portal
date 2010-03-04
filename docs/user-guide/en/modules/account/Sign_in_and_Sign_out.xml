@@ -88,8 +88,11 @@
 							Click the <emphasis role="bold">Sign in</emphasis> link at the top right of the page if you are current in the Classic portal. The <emphasis role="bold">Sign in</emphasis> form appears:
 					</para>
 					<mediaobject>
-						<imageobject>
-							<imagedata fileref="images/Signin.png" format="PNG" width="444" />
+						<imageobject role="html">
+							<imagedata fileref="images/Signin.png" format="PNG" />
+						</imageobject>
+						<imageobject role="fo">
+							<imagedata fileref="images/Signin.png" format="PNG" contentwidth="150mm"/>
 						</imageobject>
 					</mediaobject>
 					</step>
@@ -116,8 +119,11 @@
 				After signing in, you will be redirected to the homepage and welcomed with your full name in the top right corner of the page.
 			</para>
 			<mediaobject>
-				<imageobject>
+				<imageobject role="html">
 					<imagedata fileref="images/Toolbar.png" format="PNG" width="444" />
+				</imageobject>
+				<imageobject role="fo">
+					<imagedata fileref="images/Toolbar.png" format="PNG" contentwidth="150mm" />
 				</imageobject>
 			</mediaobject>
 
@@ -141,8 +147,11 @@
 					</step>
 				</procedure>
 					<mediaobject>
-						<imageobject>
+						<imageobject role="html">
 							<imagedata fileref="images/StarPortlet.png" format="PNG" />
+						</imageobject>
+						<imageobject role="fo">
+							<imagedata fileref="images/StarPortlet.png" format="PNG" contentwidth="150mm"/>
 						</imageobject>
 					</mediaobject>
 

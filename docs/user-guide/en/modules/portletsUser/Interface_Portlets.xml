@@ -14,8 +14,11 @@
 		<term><emphasis role="bold">Banner Portlet</emphasis></term>
 		<listitem>
 			<mediaobject>
-				<imageobject>
-					<imagedata fileref="images/BannerPortlet.png" format="PNG"></imagedata>
+				<imageobject role="html">
+					<imagedata fileref="images/BannerPortlet.png" format="PNG" scale="110"/>
+				</imageobject>
+				<imageobject role="fo">
+					<imagedata fileref="images/BannerPortlet.png" format="PNG" contentwidth="150mm"/>
 				</imageobject>
 			</mediaobject>
 			<para>
@@ -30,8 +33,11 @@
 				This Portlet is the home page for a portal. The home page is the first page displayed when you visit the site.
 			</para>
 			<mediaobject>
-				<imageobject>
-					<imagedata fileref="images/PortalHome.png" format="PNG"></imagedata>
+				<imageobject role="html">
+					<imagedata fileref="images/PortalHome.png" format="PNG" />
+				</imageobject>
+				<imageobject role="fo">
+					<imagedata fileref="images/PortalHome.png" format="PNG" contentwidth="150mm" />
 				</imageobject>
 			</mediaobject>
 		</listitem>
@@ -43,8 +49,11 @@
 				This Portlet provides a navigation bar. A navigation bar is a menu that helps users to visualize the structure of a site and provide links to quickly move from page to page.
 			</para>
 			<mediaobject>
-				<imageobject>
-					<imagedata fileref="images/NavigationPortlet.png" format="PNG"></imagedata>
+				<imageobject role="html">
+					<imagedata fileref="images/NavigationPortlet.png" format="PNG" scale="110"/>
+				</imageobject>
+				<imageobject role="fo">
+					<imagedata fileref="images/NavigationPortlet.png" format="PNG" contentwidth="150mm"/>
 				</imageobject>
 			</mediaobject>
 		</listitem>
@@ -56,8 +65,11 @@
 				This Portlet displays a site map page of a web site. It lists pages on a website, typically organized in hierarchical fashion.
 			</para>
 			<mediaobject>
-				<imageobject>
-					<imagedata fileref="images/SiteMap.png" format="PNG"></imagedata>
+				<imageobject role="html">
+					<imagedata fileref="images/SiteMap.png" format="PNG" />
+				</imageobject>
+				<imageobject role="fo">
+					<imagedata fileref="images/SiteMap.png" format="PNG" contentwidth="150mm"/>
 				</imageobject>
 			</mediaobject>
 		</listitem>
@@ -69,8 +81,11 @@
 				This Portlet displays the 'path' the user has taken from the home page to arrive at the currrent page.
 			</para>
 			<mediaobject>
-				<imageobject>
-					<imagedata fileref="images/Breadcrumbs.png" format="PNG"></imagedata>
+				<imageobject role="html">
+					<imagedata fileref="images/Breadcrumbs.png" format="PNG" />
+				</imageobject>
+				<imageobject role="fo">
+					<imagedata fileref="images/Breadcrumbs.png" format="PNG" contentwidth="150mm"/>
 				</imageobject>
 			</mediaobject>
 		</listitem>
@@ -95,8 +110,11 @@
 				This portlet is used for hosting mini-applications known as gadgets. The dashboard uses a variety of graphical effects for displaying, opening, and using gadgets.
 			</para>
 			<mediaobject>
-				<imageobject>
-					<imagedata fileref="images/Dashboard.png" format="PNG" width="444" />
+				<imageobject role="html">
+					<imagedata fileref="images/Dashboard.png" format="PNG" />
+				</imageobject>
+				<imageobject role="fo">
+					<imagedata fileref="images/Dashboard.png" format="PNG" contentwidth="150mm" />
 				</imageobject>
 			</mediaobject>
 			<para>
@@ -126,7 +144,7 @@
 			</para>
 			<mediaobject>
 				<imageobject>
-					<imagedata fileref="images/WebExplorer1.png" format="PNG" width="444" />
+					<imagedata fileref="images/WebExplorer1.png" format="PNG" contentwidth="400" align="center"/>
 				</imageobject>
 			</mediaobject>
 		</listitem>
@@ -139,8 +157,11 @@
 				This Portlet allows users to view a gadget in canvas mode. 
 			</para>
 			<mediaobject>
-				<imageobject>
-					<imagedata fileref="images/GadgetWrapper.png" format="PNG" width="444" />
+				<imageobject role="html">
+					<imagedata fileref="images/GadgetWrapper.png" format="PNG" />
+				</imageobject>
+				<imageobject role="fo">
+					<imagedata fileref="images/GadgetWrapper.png" format="PNG" contentwidth="150mm"/>
 				</imageobject>
 			</mediaobject>
 		</listitem>
@@ -154,7 +175,7 @@
 			</para>
 			<mediaobject>
 			<imageobject>
-				<imagedata fileref="images/FCK1.png" format="PNG" width="444" />
+				<imagedata fileref="images/FCK1.png" format="PNG" contentwidth="400" align="center"/>
 			</imageobject>
 		</mediaobject>
 		</listitem>
@@ -166,9 +187,13 @@
 			<para>
 				This Portlet provides the footer for a site. This footer provides information or links about the site's author/institutional sponsor, the date of the last revision made to the site, copyright information, comments form and navigational links.
 			</para>
+
 			<mediaobject>
-				<imageobject>
-					<imagedata fileref="images/Footer.png" format="PNG"></imagedata>
+				<imageobject role="html">
+					<imagedata fileref="images/Footer.png" format="PNG" />
+				</imageobject>
+				<imageobject role="fo">
+					<imagedata fileref="images/Footer.png" format="PNG" contentwidth="150mm"/>
 				</imageobject>
 			</mediaobject>
 		</listitem>

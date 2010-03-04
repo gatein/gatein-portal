@@ -175,8 +175,11 @@
 							Choose the path to create a new group by selecting the groups from list on the left pane or clicking the arrow icon if you want to create a group in a higher level. The selected path is displayed in the path bar.
 						</para>
 						<mediaobject>
-							<imageobject>
+							<imageobject role="html">
 								<imagedata fileref="images/Admin1.png" format="PNG" />
+							</imageobject>
+							<imageobject role="fo">
+								<imagedata fileref="images/Admin1.png" format="PNG" contentwidth="50mm"/>
 							</imageobject>
 						</mediaobject>
 					</step>
@@ -185,13 +188,16 @@
 							Click the <emphasis role="bold">Add New Group</emphasis> icon. The <emphasis role="bold">Add New Group</emphasis> form will be displayed on the right pane:
 						</para>
 						<mediaobject>
-							<imageobject>
+							<imageobject role="html">
 								<imagedata fileref="images/AddGroup.png" format="PNG" width="444" />
+							</imageobject>
+							<imageobject role="fo">
+								<imagedata fileref="images/AddGroup.png" format="PNG" contentwidth="110mm"/>
 							</imageobject>
 						</mediaobject>
 						<variablelist>
 							<varlistentry>
-								<term>Group Name</term>
+								<term><emphasis role="bold">Group Name</emphasis></term>
 								<listitem>
 									<para>
 										The name of the new group. This field is required and any length from 3 to 30 characters is allowed. Once saved this name cannot be edited.
@@ -199,7 +205,7 @@
 									</listitem>
 							</varlistentry>
 							<varlistentry>
-								<term>Label</term>
+								<term><emphasis role="bold">Label</emphasis></term>
 								<listitem>
 									<para>
 										The display name of the group. Any length from 3 to 30 characters is allowed.
@@ -207,10 +213,10 @@
 								</listitem>
 							</varlistentry>
 							<varlistentry>
-								<term>Description</term>
+								<term><emphasis role="bold">Description</emphasis></term>
 								<listitem>
 									<para>
-										a description of the group. Any length from 3 to 30 characters is allowed.
+										A description of the group. Any length from 3 to 30 characters is allowed.
 									</para>
 								</listitem>
 							</varlistentry>
@@ -303,8 +309,11 @@
 							Click the edit icon corresponding to a specific user with a membership in the <emphasis role="bold">Group Info</emphasis> table to open the <emphasis role="bold">Edit Membership</emphasis> form :
 						</para>
 						<mediaobject>
-							<imageobject>
+							<imageobject role="html">
 								<imagedata fileref="images/EditMember1.png" format="PNG" />
+							</imageobject>
+							<imageobject role="fo">
+								<imagedata fileref="images/EditMember1.png" format="PNG" contentwidth="90mm"/>
 							</imageobject>
 						</mediaobject>
 					</step>

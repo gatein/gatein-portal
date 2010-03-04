@@ -5,12 +5,6 @@
 ]>
 <section id="sect-User_Guide-Change_Portal_Skins">
 	<title>Change Portal Skins</title>
-<warning>
-<para>
- EDIT_WARNING: The <emphasis role="bold">Administration</emphasis> menu entry reported to be under the <emphasis role="bold">GateIn Start</emphasis> button does not exist in GateIn 3.0 Beta 3. Therefore some of the instructions in this section may be incomplete or inaccurate.
- TH: Same :) Click on Site.
-</para>
-</warning>
 		<para>
 			Skins are graphic styles that display an attractive user interface. Each skin has its own characteristics with different backgrounds, icons, and other visual elements. In order to be user-friendly and flexible, users are allowed to change the skin they use on the portal without having edit rights.
 		</para>
@@ -32,8 +26,11 @@
 										Select a new skin from the list on the left of the <emphasis role="bold">Skin Settings</emphasis> box. When you highlight a skin in the list a preview will appear in the pane on the right of the box.
 									</para>
 									<mediaobject>
-										<imageobject>
+										<imageobject role="html">
 											<imagedata fileref="images/SkinSet1.png" format="PNG" width="444" />
+										</imageobject>
+										<imageobject role="fo">
+											<imagedata fileref="images/SkinSet1.png" format="PNG" contentwidth="120mm" />
 										</imageobject>
 									</mediaobject>
 								</step>
@@ -63,8 +60,11 @@
 										In the <emphasis role="bold">Portal Setting</emphasis> tab: select one skin type in the <emphasis role="bold">Skin</emphasis> list field to change and display a skin.
 									</para>
 									<mediaobject>
-										<imageobject>
+										<imageobject role="html">
 											<imagedata fileref="images/Skin1.png" format="PNG" width="444" />
+										</imageobject>
+										<imageobject role="fo">
+											<imagedata fileref="images/Skin1.png" format="PNG" contentwidth="120mm"/>
 										</imageobject>
 									</mediaobject>
 								</step>

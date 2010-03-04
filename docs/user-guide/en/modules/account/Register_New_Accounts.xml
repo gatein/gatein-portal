@@ -21,16 +21,22 @@
 			</para>
 
 				<mediaobject>
-					<imageobject>
-						<imagedata fileref="images/Register.png" format="PNG" width="444" />
+					<imageobject role="html">
+						<imagedata fileref="images/Register.png" format="PNG" />
+					</imageobject>
+					<imageobject role="fo">
+						<imagedata fileref="images/Register.png" format="PNG" contentwidth="150mm" />
 					</imageobject>
 				</mediaobject>
 				<para>
 					The <emphasis role="bold">Register New Account</emphasis> page appears: 
 				</para>
 				<mediaobject>
-					<imageobject>
-						<imagedata fileref="images/AccountSetting.png" format="PNG" width="444" />
+					<imageobject role="html">
+						<imagedata fileref="images/AccountSetting.png" format="PNG" />
+					</imageobject>
+					<imageobject role="fo">
+						<imagedata fileref="images/AccountSetting.png" format="PNG" contentwidth="110mm"/>
 					</imageobject>
 				</mediaobject>
 
@@ -148,7 +154,6 @@
 	<para>
 		After adding a new account, you should contact the administrator to set appropriate permissions on your account. 
 		<note>
-			<title>Note</title>
 			<para>
 				Be sure you enter your email address carefully. Should you forget your user name or password, you can recover it from this email address.
 			</para>

@@ -21,7 +21,7 @@
 			</para>
 			<mediaobject>
 				<imageobject>
-					<imagedata fileref="images/Account.png" format="PNG" width="444" />
+					<imagedata fileref="images/Account.png" format="PNG" contentwidth="150mm" />
 				</imageobject>
 			</mediaobject>
 		</listitem>
@@ -34,7 +34,7 @@
 			</para>
 			<mediaobject>
 				<imageobject>
-					<imagedata fileref="images/OrganizationPortlet1.png" format="PNG" width="444" />
+					<imagedata fileref="images/OrganizationPortlet1.png" format="PNG" contentwidth="150mm"/>
 				</imageobject>
 			</mediaobject>
 		</listitem>
@@ -47,7 +47,7 @@
 			</para>
 			<mediaobject>
 				<imageobject>
-					<imagedata fileref="images/ApplicationRegistry.png" format="PNG" width="444" />
+					<imagedata fileref="images/ApplicationRegistry.png" format="PNG" contentwidth="150mm"/>
 				</imageobject>
 			</mediaobject>
 		</listitem>
@@ -61,7 +61,7 @@
 			</para>
 			<mediaobject>
 				<imageobject>
-					<imagedata fileref="images/InternationalizationPortlet1.png" format="PNG" width="444" />
+					<imagedata fileref="images/InternationalizationPortlet1.png" format="PNG" contentwidth="400" align="center"/>
 				</imageobject>
 			</mediaobject>
 		</listitem>
@@ -76,7 +76,7 @@
 			</para>
 			<mediaobject>
 				<imageobject>
-					<imagedata fileref="images/Administration.png" format="PNG" width="444" />
+					<imagedata fileref="images/Administration.png" format="PNG" contentwidth="400" align="center"/>
 				</imageobject>
 			</mediaobject>
 		</listitem>
@@ -89,8 +89,11 @@
 				The Star Toolbar Portlet is used to change the default language, the skin of the portal or to sign out.
 			</para>
                         <mediaobject>
-				<imageobject>
-					<imagedata fileref="images/StarPortlet.png" format="PNG"></imagedata>
+				<imageobject role="html">
+					<imagedata fileref="images/StarPortlet.png" format="PNG" scale="110"/>
+				</imageobject>
+				<imageobject role="fo">
+					<imagedata fileref="images/StarPortlet.png" format="PNG" contentwidth="150mm"/>
 				</imageobject>
 			</mediaobject>
 		</listitem>

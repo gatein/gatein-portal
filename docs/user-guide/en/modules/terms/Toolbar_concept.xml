@@ -9,8 +9,11 @@
 		The Toolbar spans the top of the portal application and provides links to user and administrative actions. 
         </para>
 	<mediaobject>
-		<imageobject>
-			<imagedata fileref="images/Toolbar.png" format="PNG" width="444" />
+		<imageobject role="html">
+			<imagedata fileref="images/Toolbar.png" format="PNG" scale="110"/>
+		</imageobject>
+		<imageobject role="fo">
+			<imagedata fileref="images/Toolbar.png" format="PNG" contentwidth="150mm"/>
 		</imageobject>
 	</mediaobject>
 	<para>

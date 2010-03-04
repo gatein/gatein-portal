@@ -9,8 +9,11 @@
 		Users who return to &PRODUCT; regularly can be automatically authenticated to avoid performing an explicit authentication each time they access the portal.
 	</para>
 	<mediaobject>
-		<imageobject>
-			<imagedata fileref="images/RememberMe.png" format="PNG" width="444" />
+		<imageobject role="html">
+			<imagedata fileref="images/RememberMe.png" format="PNG" />
+		</imageobject>
+		<imageobject role="fo">
+			<imagedata fileref="images/RememberMe.png" format="PNG" contentwidth="150mm" />
 		</imageobject>
 	</mediaobject>
 	<procedure>
