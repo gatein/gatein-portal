@@ -19,9 +19,8 @@
 
 package org.exoplatform.portal.webui.workspace;
 
-import java.io.CharArrayWriter;
+import java.io.IOException;
 import java.io.OutputStream;
-import java.io.Writer;
 
 import org.exoplatform.commons.utils.PortalPrinter;
 import org.exoplatform.portal.application.PortalRequestContext;
@@ -98,10 +97,23 @@ public class UIPortalApplicationLifecycle extends Lifecycle<UIPortalApplication>
 		context.setWriter(parentWriter);
 		processRender(uicomponent, context, "system:/groovy/portal/webui/workspace/UIPortalApplication.gtmpl");
 
-		//flush the parent writer to the output stream so that we are really to accept the child content
-		parentWriter.flushOutputStream();
-		//now that the parent has been flushed, we can flush the contents of the child to the output
-		childWriter.flushOutputStream();
+      try
+      {
+         //flush the parent writer to the output stream so that we are really to accept the child content
+         parentWriter.flushOutputStream();
+         //now that the parent has been flushed, we can flush the contents of the child to the output
+         childWriter.flushOutputStream();
+      }
+      catch (IOException ioe)
+      {
+         //We want to ignore the ClientAbortException since this is caused by the users
+         //browser closing the connection and is not something we should be logging.
+         if (!ioe.getClass().toString().contains("ClientAbortException"))
+         {
+            throw ioe;
+         }
+
+      }
 	}
 	
 	public void processRender(UIPortalApplication uicomponent, WebuiRequestContext context, String template) throws Exception

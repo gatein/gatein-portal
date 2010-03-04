@@ -407,6 +407,16 @@ public class OutputStreamPrinter extends Printer implements BinaryOutput
     */
    public void flushOutputStream() throws IOException
    {
-	   out.flush();
+      if (!failed)
+      {
+         try
+         {
+            out.flush();
+         }
+         catch (IOException e)
+         {
+            handle(e);
+         }
+      }
    }
 }
