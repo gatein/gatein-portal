@@ -30,6 +30,16 @@
       <identity-type-mappings>
         <user-mapping>USER</user-mapping>
       </identity-type-mappings>
+      <options>
+        <option>
+          <name>cache.providerClass</name>
+          <value>org.picketlink.idm.impl.cache.JBossCacheAPICacheProviderImpl</value>
+        </option>
+        <option>
+          <name>cache.configFile</name>
+          <value>picketlink-idm/jboss-cache.xml</value>
+        </option>
+      </options>
     </realm>
     <realm>
       <id>realm_portal</id>
@@ -37,6 +47,16 @@
       <identity-type-mappings>
         <user-mapping>USER</user-mapping>
       </identity-type-mappings>
+      <options>
+        <option>
+          <name>cache.providerClass</name>
+          <value>org.picketlink.idm.impl.cache.JBossCacheAPICacheProviderImpl</value>
+        </option>
+        <option>
+          <name>cache.configFile</name>
+          <value>picketlink-idm/jboss-cache.xml</value>
+        </option>
+      </options>
     </realm>
     <realm>
       <id>realm_sample-portal</id>
@@ -44,6 +64,16 @@
       <identity-type-mappings>
         <user-mapping>USER</user-mapping>
       </identity-type-mappings>
+      <options>
+        <option>
+          <name>cache.providerClass</name>
+          <value>org.picketlink.idm.impl.cache.JBossCacheAPICacheProviderImpl</value>
+        </option>
+        <option>
+          <name>cache.configFile</name>
+          <value>picketlink-idm/jboss-cache.xml</value>
+        </option>
+      </options>
     </realm>
   </realms>
   <repositories>
