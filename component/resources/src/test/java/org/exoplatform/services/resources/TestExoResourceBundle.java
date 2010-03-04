@@ -19,9 +19,7 @@
 
 package org.exoplatform.services.resources;
 
-import org.exoplatform.component.test.AbstractGateInTest;
-
-public class TestExoResourceBundle extends AbstractGateInTest
+public class TestExoResourceBundle extends AbstractResourceBundleTest
 {
 
    public void testConstructor()

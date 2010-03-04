@@ -26,10 +26,6 @@
     <version>3.0.0-CR02-SNAPSHOT</version>
   </parent>
 
-    <properties>
-        <maven.test.skip>true</maven.test.skip>
-    </properties>
-
   <modelVersion>4.0.0</modelVersion>
   <artifactId>exo.portal.component.resources</artifactId>
   <packaging>jar</packaging>

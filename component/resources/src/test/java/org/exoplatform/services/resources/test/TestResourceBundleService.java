@@ -19,12 +19,8 @@
 
 package org.exoplatform.services.resources.test;
 
-import org.exoplatform.component.test.AbstractGateInTest;
 import org.exoplatform.container.PortalContainer;
-import org.exoplatform.services.resources.LocaleConfigService;
-import org.exoplatform.services.resources.Query;
-import org.exoplatform.services.resources.ResourceBundleData;
-import org.exoplatform.services.resources.ResourceBundleService;
+import org.exoplatform.services.resources.*;
 
 import java.util.List;
 import java.util.Locale;
@@ -37,7 +33,7 @@ import java.util.ResourceBundle;
  * @since: 0.0
  * @email: tuan08@yahoo.com
  */
-public class TestResourceBundleService extends AbstractGateInTest
+public class TestResourceBundleService extends AbstractResourceBundleTest
 {
 
    final static private String PROPERTIES = "language=en\nproperty=property";

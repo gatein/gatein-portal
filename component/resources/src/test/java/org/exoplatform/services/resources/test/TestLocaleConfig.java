@@ -19,8 +19,8 @@
 
 package org.exoplatform.services.resources.test;
 
-import org.exoplatform.component.test.AbstractGateInTest;
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.services.resources.AbstractResourceBundleTest;
 import org.exoplatform.services.resources.LocaleConfig;
 import org.exoplatform.services.resources.LocaleConfigService;
 
@@ -33,7 +33,7 @@ import java.util.Locale;
  * @version: $Id: TestLocaleConfig.java 5799 2006-05-28 17:55:42Z geaz $
  * @email: tuan08@yahoo.com
  */
-public class TestLocaleConfig extends AbstractGateInTest
+public class TestLocaleConfig extends AbstractResourceBundleTest
 {
 
    private LocaleConfigService service_;
@@ -45,8 +45,7 @@ public class TestLocaleConfig extends AbstractGateInTest
 
    public void setUp() throws Exception
    {
-      service_ =
-         (LocaleConfigService)PortalContainer.getInstance().getComponentInstanceOfType(LocaleConfigService.class);
+      service_ = (LocaleConfigService)PortalContainer.getInstance().getComponentInstanceOfType(LocaleConfigService.class);
    }
 
    public void tearDown() throws Exception
