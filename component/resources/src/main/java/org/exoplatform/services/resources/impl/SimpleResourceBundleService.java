@@ -113,7 +113,7 @@ public class SimpleResourceBundleService extends BaseResourceBundleService
             }
             else
             {
-               return l1 == null ? -1 : l1.compareTo(l2);
+               return l1.compareTo(l2);
             }
          }
       });
