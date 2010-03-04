@@ -225,7 +225,7 @@ class ExoPortletInvocationContext extends AbstractPortletInvocationContext
          }
 
          StateString state = renderURL.getNavigationalState();
-         if (state != null)
+         if (state != null && !state.getStringValue().equals(StateString.JBPNS_PREFIX))
          {
             appendParameter(baseURL, NAVIGATIONAL_STATE_PARAM_NAME, state.getStringValue());
          }
