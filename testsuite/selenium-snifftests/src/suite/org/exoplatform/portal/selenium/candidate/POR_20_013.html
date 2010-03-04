@@ -102,6 +102,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>echo</td>
+	<td>-- Add new page with same name</td>
+	<td></td>
+</tr>
+<tr>
 	<td>clickAt</td>
 	<td>xpath=//div[@id='UIPageBrowser']/div[2]/table/tbody/tr/td/div/div/div/div/a</td>
 	<td></td>
@@ -137,13 +142,23 @@
 	<td></td>
 </tr>
 <tr>
+	<td>echo</td>
+	<td>--Verify Error message</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>This page name already exists. </td>
+	<td></td>
+</tr>
+<tr>
 	<td>waitForElementPresent</td>
-	<td>xpath=//div[@id='UIPortalApplication']//div[@class='ExoMessageDecorator']//div[@class='MiddleLeftSideDecorator']//div[@class='UIPopupMessages']/div[3]//a[@href='javascript:void(0);']</td>
+	<td>xpath=//div[@id='UIPortalApplication']/div[@class='UIPopupWindow UIDragObject']//div[@class='MiddleLeftSideDecorator']//div[@class='UIPopupMessages']/div[@class='MessageActionBar']//a</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAt</td>
-	<td>xpath=//div[@id='UIPortalApplication']//div[@class='ExoMessageDecorator']//div[@class='MiddleLeftSideDecorator']//div[@class='UIPopupMessages']/div[3]//a[@href='javascript:void(0);']</td>
+	<td>xpath=//div[@id='UIPortalApplication']/div[@class='UIPopupWindow UIDragObject']//div[@class='MiddleLeftSideDecorator']//div[@class='UIPopupMessages']/div[@class='MessageActionBar']//a</td>
 	<td></td>
 </tr>
 <tr>
@@ -203,12 +218,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>xpath=//div[@id='UIPortalApplication']//div[@class='ExoMessageDecorator']//div[@class='MiddleLeftSideDecorator']//div[@class='UIPopupMessages']/div[3]//a[@href='javascript:void(0);']</td>
+	<td>xpath=//div[@id='UIPortalApplication']/div[@class='UIPopupWindow UIDragObject']//div[@class='MiddleLeftSideDecorator']//div[@class='UIPopupMessages']/div[@class='MessageActionBar']//a</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAt</td>
-	<td>xpath=//div[@id='UIPortalApplication']//div[@class='ExoMessageDecorator']//div[@class='MiddleLeftSideDecorator']//div[@class='UIPopupMessages']/div[3]//a[@href='javascript:void(0);']</td>
+	<td>xpath=//div[@id='UIPortalApplication']/div[@class='UIPopupWindow UIDragObject']//div[@class='MiddleLeftSideDecorator']//div[@class='UIPopupMessages']/div[@class='MessageActionBar']//a</td>
 	<td></td>
 </tr>
 <tr>
