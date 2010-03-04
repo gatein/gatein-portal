@@ -237,7 +237,6 @@
     <title>
       <refresh>تحديث المعلومات</refresh>
       <editGadget>تحرير الأداة</editGadget>
-      <copy>نسخ هذه الأداة في الموقع المحلي</copy>
     </title>
     <msg>
       <gadgetNotExist>.لا يمكن تغيير الأداة لأنها لم تعد في قاعدة البيانات</gadgetNotExist>

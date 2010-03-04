@@ -242,7 +242,6 @@
     <title>
       <refresh>정보 초기화</refresh>
       <editGadget>가젯 수정</editGadget>
-      <copy>이 가젯을 로컬 저장소로 복사합니다.</copy>
     </title>
     <msg>
       <gadgetNotExist>데이터베이스에 없는 가젯상의 액션을 수행할 수 없습니다.</gadgetNotExist>

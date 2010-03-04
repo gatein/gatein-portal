@@ -19,7 +19,6 @@
 
 package org.exoplatform.applicationregistry.webui.component;
 
-import org.apache.commons.io.IOUtils;
 import org.exoplatform.application.gadget.Gadget;
 import org.exoplatform.application.gadget.GadgetRegistryService;
 import org.exoplatform.application.gadget.Source;
@@ -27,13 +26,11 @@ import org.exoplatform.application.gadget.SourceStorage;
 import org.exoplatform.application.registry.Application;
 import org.exoplatform.application.registry.ApplicationCategory;
 import org.exoplatform.application.registry.ApplicationRegistryService;
+import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.webui.application.GadgetUtil;
-import org.exoplatform.web.WebAppController;
 import org.exoplatform.web.application.ApplicationMessage;
-import org.exoplatform.web.application.gadget.GadgetApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
-import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -41,11 +38,7 @@ import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
-import java.io.InputStream;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -56,7 +49,6 @@ import java.util.List;
  */
 @ComponentConfig(template = "app:/groovy/applicationregistry/webui/component/UIGadgetInfo.gtmpl", events = {
    @EventConfig(listeners = UIGadgetInfo.RefreshActionListener.class),
-   @EventConfig(listeners = UIGadgetInfo.CopyActionListener.class),
    @EventConfig(listeners = UIGadgetInfo.EditActionListener.class),
    @EventConfig(listeners = UIGadgetInfo.ShowCategoriesActionListener.class)})
 @Serialized
@@ -136,48 +128,6 @@ public class UIGadgetInfo extends UIContainer
          uiManagement.initData();
          uiManagement.setSelectedGadget(gadget.getName());
          ctx.addUIComponentToUpdateByAjax(uiManagement);
-      }
-
-   }
-
-   static public class CopyActionListener extends EventListener<UIGadgetInfo>
-   {
-
-      public void execute(Event<UIGadgetInfo> event) throws Exception
-      {
-         UIGadgetInfo uiInfo = event.getSource();
-         UIGadgetManagement uiManagement = uiInfo.getParent();
-         String url = uiInfo.getGadget().getUrl();
-         String name = uiInfo.getGadget().getName();
-         GadgetRegistryService service = uiInfo.getApplicationComponent(GadgetRegistryService.class);
-         if (service.getGadget(name) == null)
-         {
-            UIApplication uiApp = event.getRequestContext().getUIApplication();
-            uiApp.addMessage(new ApplicationMessage("UIGadgetInfo.msg.gadgetNotExist", null));
-            uiManagement.reload();
-            return;
-         }
-         URL urlObj = new URL(url);
-         URLConnection conn = urlObj.openConnection();
-         InputStream is = conn.getInputStream();
-         SourceStorage sourceStorage = uiInfo.getApplicationComponent(SourceStorage.class);
-         String fileName = name + ".xml";
-         Source source = new Source(fileName, "application/xml");
-         source.setTextContent(IOUtils.toString(is, "UTF-8"));
-         source.setLastModified(Calendar.getInstance());
-
-         // This will update the source and also update the gadget related cached meta data
-         // from the source
-         sourceStorage.saveSource(uiInfo.getGadget(), source);
-
-         //
-         // service.saveGadget(GadgetUtil.toGadget(name, sourceStorage.getSourceURI(name + "/" + fileName), true));
-         
-         WebAppController webController = uiManagement.getApplicationComponent(WebAppController.class);
-         webController.removeApplication(GadgetApplication.EXO_GADGET_GROUP + "/" + name);
-         uiManagement.initData();
-         uiManagement.setSelectedGadget(name);
-         event.getRequestContext().addUIComponentToUpdateByAjax(uiManagement);
       }
 
    }

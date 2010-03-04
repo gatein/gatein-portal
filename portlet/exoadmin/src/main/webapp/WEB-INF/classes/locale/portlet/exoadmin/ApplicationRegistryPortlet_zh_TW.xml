@@ -186,7 +186,6 @@
       <title>
          <refresh>重整資訊</refresh>
          <editGadget>編輯 Gadget</editGadget>
-         <copy>複製這個 Gadget 到網站</copy>
       </title>
       <msg>
          <gadgetNotExist>Gadget 已不存在,無法執行. </gadgetNotExist>

@@ -186,7 +186,6 @@
       <title>
          <refresh>刷新信息</refresh>
          <editGadget>编辑小工具</editGadget>
-         <copy>复制此小工具到本地库中</copy>
       </title>
       <msg>
          <gadgetNotExist>此小工具在数据库中不存在，不能在此小工具上执行操作。 </gadgetNotExist>

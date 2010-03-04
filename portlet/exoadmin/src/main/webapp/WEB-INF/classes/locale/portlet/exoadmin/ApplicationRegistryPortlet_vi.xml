@@ -237,7 +237,6 @@
     <title>
       <refresh>	Làm mới thông tin</refresh>
       <editGadget>Chỉnh sửa Gadget</editGadget>
-      <copy> Copy Gadget này về máy</copy>
     </title>
     <msg>
       <gadgetNotExist>Gadget này không còn tồn tại trong cơ sở dữ liệu nữa.</gadgetNotExist>
