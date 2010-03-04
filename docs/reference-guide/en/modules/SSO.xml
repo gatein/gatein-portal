@@ -17,7 +17,7 @@
 				In this tutorial, the SSO server is installed in a Tomcat installation. Tomcat can be obtained from <ulink type="http" url="http://tomcat.apache.org">http://tomcat.apache.org</ulink>.
 			</para>
 			<para>
-				All the packages required for setup can be found in a zip file located at: <filename>http://repository.jboss.org/maven2/org/gatein/sso/sso-packaging</filename>
+				All the packages required for setup can be found in a zip file located at: <filename>http://repository.jboss.org/maven2/org/gatein/sso/sso-packaging</filename>. In this document we will call $SSO_HOME the directory where the file is extracted.
 			</para>
 			<para>
 				Users are advised to not run any portal extensions that could override the data when manipulating the <filename>gatein.ear</filename> file directly.
