@@ -29,6 +29,7 @@ import org.exoplatform.portal.config.UserPortalConfig;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.webui.navigation.PageNavigationUtils;
 import org.exoplatform.portal.webui.navigation.UINavigationManagement;
 import org.exoplatform.portal.webui.navigation.UINavigationNodeSelector;
 import org.exoplatform.portal.webui.page.UIPageNodeForm2;
@@ -338,6 +339,8 @@ public class UISiteManagement extends UIContainer
          naviManager.setOwnerType(PortalConfig.PORTAL_TYPE);
 
          PageNavigation navi = dataService.getPageNavigation(PortalConfig.PORTAL_TYPE, portalName);
+         //Filter the navigation
+         navi = PageNavigationUtils.filterNavigation(navi, context.getRemoteUser(), true);
          
          uicomp.setSelectedNavigation(navi);
          UINavigationNodeSelector selector = naviManager.getChild(UINavigationNodeSelector.class);

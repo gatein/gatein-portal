@@ -252,6 +252,11 @@ public class PageNode extends PageNodeContainer
    {
       this.visibility = visibility;
    }
+   
+   public Visibility getVisibility()
+   {
+      return this.visibility;
+   }
 
    private boolean isInPublicationDate()
    {
