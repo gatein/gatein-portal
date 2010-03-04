@@ -954,7 +954,7 @@
     </tooltip>
     <label>
       <navigation>"(تصفح الصفحة "(0</navigation>
-      <titleBar>"(صفحة "(0</titleBar>
+      <titleBar>صفحة "{0}"</titleBar>
     </label>
   </UIPageNavigation>
   <!--
