@@ -150,9 +150,16 @@
 	margin: 0px 5px 0px 5px;
 }
 
+.UIItemSelector .RightColumnStyle .ItemDetailList .Title {
+	width: 300px; overflow: hidden;
+}	
+	
+.UIItemSelector .RightColumnStyle .ItemListContainer .Title {
+	width: 145px; overflow: hidden;
+}
+
 .UIItemSelector .RightColumnStyle .Title {
 	line-height: 22px; white-space: nowrap; 
-	width: 300px; overflow: hidden;
 	font-weight: bold; color: #5c5c5c; 
 	float: left; /* orientation=lt */
 	float: right; /* orientation=rt */
