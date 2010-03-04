@@ -202,8 +202,6 @@ PortalDragDrop.prototype.init = function(e) {
       if(!dndEvent.dragObject.isComponent) {
 				dndEvent.dragObject.parentNode.removeChild(dndEvent.dragObject) ;
 			}
-			// fix bug WEBOS-196	
-			dndEvent.dragObject.style.width = "auto" ; 
     }
     
     if(dndEvent.dragObject.isComponent) {
@@ -218,6 +216,8 @@ PortalDragDrop.prototype.init = function(e) {
     
     eXo.portal.isInDragging = false;
   	eXo.portal.UIPortal.changeComposerSaveButton();
+		// fix bug WEBOS-196	
+		dndEvent.dragObject.style.width = "auto" ; 
   };
   
   DragDrop.cancelCallback = function(dndEvent) {

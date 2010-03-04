@@ -265,7 +265,9 @@
 			if(!isDesktop && uiPortalApp.isEditing()) {
 				if(portalMode != uiPortalApp.CONTAINER_BLOCK_EDIT_MODE && portalMode != uiPortalApp.APP_BLOCK_EDIT_MODE) {
 		%>
-						<div class="UIPortlet-$portletId UIPortletMask" style="position: absolute; display:none;"><span></span></div>
+						<div class="UIPortletMaskParent" style="height: 0px;position:relative;">
+							<div class="UIPortlet-$portletId UIPortletMask" style="position: absolute;"><span></span></div>
+						</div>
 					</div>
 				<%} %>
 					

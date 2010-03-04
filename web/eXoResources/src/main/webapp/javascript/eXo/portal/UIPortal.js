@@ -369,8 +369,7 @@ UIPortal.prototype.showViewMode = function() {
       mask.style.display = "block";
       mask.style.height = component.offsetHeight + "px";
       mask.style.width  = component.offsetWidth + "px";
-      mask.style.top = eXo.core.Browser.findPosYInContainer(component, uiWorkingWS) + "px";
-      mask.style.left = eXo.core.Browser.findPosXInContainer(component, uiWorkingWS, isRTL) + "px";
+      mask.style.top = -component.offsetHeight + "px";
     } else if(mask) {
     	mask.style.display = "none";
     }

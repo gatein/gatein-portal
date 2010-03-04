@@ -270,6 +270,12 @@
 	padding: 0px;
 }
 
+.UIPortletMask {
+	opacity: 0;
+	filter: alpha(opacity=0);
+	background: #ffffff;
+}
+
 .EdittingContainer .OverContainerBlock {
 	border: 1px solid #b8babf;
 	background: none;
@@ -293,6 +299,7 @@
 }
 
 .UIPageBodyMask {
-	opacity: 0.3;
-	filter: alpha(opacity=30);
+	opacity: 0;
+	filter: alpha(opacity=0);
+	background: #ffffff;
 }
