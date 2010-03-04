@@ -935,26 +935,27 @@ public class TestUserPortalConfigService extends AbstractPortalTest
          //
          if (failure == null)
          {
-            mopSession = mgr.openSession();
-            if (failure == null)
-            {
-               ConversationState.setCurrent(conversationState);
-               try
-               {
+            // Clear cache for test
+            mgr.clearCache();
 
-                  //
-                  execute();
-               }
-               catch (Exception e)
-               {
-                  failure = e;
-               }
-               finally
-               {
-                  ConversationState.setCurrent(null);
-                  mopSession.close(false);
-                  end();
-               }
+            //
+            mopSession = mgr.openSession();
+
+            //
+            ConversationState.setCurrent(conversationState);
+            try
+            {
+               execute();
+            }
+            catch (Exception e)
+            {
+               failure = e;
+            }
+            finally
+            {
+               ConversationState.setCurrent(null);
+               mopSession.close(false);
+               end();
             }
          }
 

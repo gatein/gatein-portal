@@ -126,13 +126,16 @@ public class DataCache extends TaskExecutionDecorator
             v = super.execute(session, task);
 
             //
-            if (v == null)
+            if (!session.isModified())
             {
-               session.putInCache(key, NullObject.get());
-            }
-            else
-            {
-               session.putInCache(key, v);
+               if (v == null)
+               {
+                  session.putInCache(key, NullObject.get());
+               }
+               else
+               {
+                  session.putInCache(key, v);
+               }
             }
 
             //
