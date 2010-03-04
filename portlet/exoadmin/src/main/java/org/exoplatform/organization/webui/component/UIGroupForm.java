@@ -79,6 +79,7 @@ public class UIGroupForm extends UIForm
       }
       else
       {
+         this.groupId = null;
          getUIStringInput(GROUP_NAME).setEditable(UIFormStringInput.ENABLE);
          reset();
       }

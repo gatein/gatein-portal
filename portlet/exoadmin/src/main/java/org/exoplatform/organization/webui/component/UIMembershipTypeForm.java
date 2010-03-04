@@ -62,6 +62,7 @@ public class UIMembershipTypeForm extends UIForm
    {
       if (membershipType == null)
       {
+         membershipTypeName = null;
          getUIStringInput(MEMBERSHIP_TYPE_NAME).setEditable(UIFormStringInput.ENABLE);
          return;
       }
