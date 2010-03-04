@@ -56,7 +56,7 @@ public class JCRProducerConfigurationService extends AbstractProducerConfigurati
       Collections.addAll(mappingClasses, ProducerConfigurationMapping.class, RegistrationRequirementsMapping.class,
          RegistrationPropertyDescriptionMapping.class);
 
-      persister = new JCRPersister(container);
+      persister = new JCRPersister(container, JCRPersister.WSRP_WORKSPACE_NAME);
       persister.initializeBuilderFor(mappingClasses);
 
 //      persister = NewJCRPersister.getInstance(container);

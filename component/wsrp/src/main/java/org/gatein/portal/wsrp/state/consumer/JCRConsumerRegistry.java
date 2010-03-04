@@ -59,7 +59,7 @@ public class JCRConsumerRegistry extends AbstractConsumerRegistry
          EndpointInfoMapping.class, RegistrationInfoMapping.class, RegistrationPropertyMapping.class,
          RegistrationPropertyDescriptionMapping.class);
 
-      persister = new JCRPersister(container);
+      persister = new JCRPersister(container, JCRPersister.WSRP_WORKSPACE_NAME);
       persister.initializeBuilderFor(mappingClasses);
 //      persister = NewJCRPersister.getInstance(container);
    }

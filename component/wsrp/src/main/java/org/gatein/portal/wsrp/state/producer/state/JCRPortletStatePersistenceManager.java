@@ -51,7 +51,7 @@ public class JCRPortletStatePersistenceManager extends AbstractPortletStatePersi
 
    public JCRPortletStatePersistenceManager(ExoContainer container) throws Exception
    {
-      persister = new JCRPersister(container);
+      persister = new JCRPersister(container, JCRPersister.PORTLET_STATES_WORKSPACE_NAME);
 
       List<Class> mappingClasses = new ArrayList<Class>(6);
       Collections.addAll(mappingClasses, PortletStateContextsMapping.class, PortletStateContextMapping.class, PortletStateMapping.class);
@@ -83,7 +83,7 @@ public class JCRPortletStatePersistenceManager extends AbstractPortletStatePersi
       PortletStateMapping psm = pscm.getState();
       psm.setProperties(propertyMap);
 
-      persister.closeSession(session, false);
+      persister.closeSession(session, true);
    }
 
 
@@ -94,7 +94,7 @@ public class JCRPortletStatePersistenceManager extends AbstractPortletStatePersi
 
       PortletStateContextMapping pscm = getPortletStateContextMapping(session, stateId);
       PortletStateContext context;
-      if(pscm == null)
+      if (pscm == null)
       {
          context = null;
       }
@@ -116,7 +116,7 @@ public class JCRPortletStatePersistenceManager extends AbstractPortletStatePersi
       String encodedForPath = JCRPersister.PortletNameFormatter.encode(portletId);
 
       PortletStateContextMapping pscm = session.findByPath(PortletStateContextMapping.class, PATH + encodedForPath);
-      if(pscm == null)
+      if (pscm == null)
       {
          PortletStateContextsMapping portletStateContexts = getContexts(session);
          pscm = portletStateContexts.createPortletStateContext(portletId);

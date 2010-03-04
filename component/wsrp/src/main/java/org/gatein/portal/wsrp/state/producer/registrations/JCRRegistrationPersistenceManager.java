@@ -57,7 +57,7 @@ public class JCRRegistrationPersistenceManager extends RegistrationPersistenceMa
 
    public JCRRegistrationPersistenceManager(ExoContainer container) throws Exception
    {
-      persister = new JCRPersister(container);
+      persister = new JCRPersister(container, JCRPersister.WSRP_WORKSPACE_NAME);
 
       List<Class> mappingClasses = new ArrayList<Class>(6);
       Collections.addAll(mappingClasses, ConsumersAndGroupsMapping.class, ConsumerMapping.class, ConsumerGroupMapping.class,

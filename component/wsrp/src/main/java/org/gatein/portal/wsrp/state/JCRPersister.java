@@ -46,18 +46,32 @@ import java.util.List;
 public class JCRPersister
 {
    private Chromattic chrome;
-   private static final String WORKSPACE_NAME = "wsrp-system";
+   public static final String WSRP_WORKSPACE_NAME = "wsrp-system";
+   public static final String PORTLET_STATES_WORKSPACE_NAME = "portlet-states-system";
    private static final String REPOSITORY_NAME = "repository";
+   private String workspaceName;
 
-   public JCRPersister(ExoContainer container)
+   public JCRPersister(ExoContainer container, String workspaceName)
    {
+      this.workspaceName = workspaceName;
    }
 
    public void initializeBuilderFor(List<Class> mappingClasses) throws Exception
    {
       ChromatticBuilder builder = ChromatticBuilder.create();
       builder.setOptionValue(ChromatticBuilder.INSTRUMENTOR_CLASSNAME, "org.chromattic.apt.InstrumentorImpl");
-      builder.setOptionValue(ChromatticBuilder.SESSION_LIFECYCLE_CLASSNAME, WSRPSessionLifeCycle.class.getName());
+      if (PORTLET_STATES_WORKSPACE_NAME.equals(workspaceName))
+      {
+         builder.setOptionValue(ChromatticBuilder.SESSION_LIFECYCLE_CLASSNAME, PortletStatesSessionLifeCycle.class.getName());
+      }
+      else if (WSRP_WORKSPACE_NAME.equals(workspaceName))
+      {
+         builder.setOptionValue(ChromatticBuilder.SESSION_LIFECYCLE_CLASSNAME, WSRPSessionLifeCycle.class.getName());
+      }
+      else
+      {
+         throw new IllegalArgumentException("Unknown workspace name: '" + workspaceName + "'");
+      }
 
       for (Class mappingClass : mappingClasses)
       {
@@ -105,7 +119,59 @@ public class JCRPersister
 
       public Session login() throws RepositoryException
       {
-         return provider.getSession(WORKSPACE_NAME, repository);
+         return provider.getSession(WSRP_WORKSPACE_NAME, repository);
+      }
+
+      public Session login(String s) throws RepositoryException
+      {
+         throw new UnsupportedOperationException();
+      }
+
+      public Session login(Credentials credentials, String s) throws RepositoryException
+      {
+         throw new UnsupportedOperationException();
+      }
+
+      public Session login(Credentials credentials) throws RepositoryException
+      {
+         throw new UnsupportedOperationException();
+      }
+
+      public void save(Session session) throws RepositoryException
+      {
+         session.save();
+      }
+
+      public void close(Session session)
+      {
+         session.logout();
+      }
+   }
+
+   public static class PortletStatesSessionLifeCycle implements SessionLifeCycle
+   {
+      private ManageableRepository repository;
+      private SessionProvider provider;
+
+      public PortletStatesSessionLifeCycle()
+      {
+         try
+         {
+            ExoContainer container = ExoContainerContext.getCurrentContainer();
+            RepositoryService repoService = (RepositoryService)container.getComponentInstanceOfType(RepositoryService.class);
+            repository = repoService.getRepository(REPOSITORY_NAME);
+         }
+         catch (Exception e)
+         {
+            throw new RuntimeException(e);
+         }
+
+         provider = SessionProvider.createSystemProvider();
+      }
+
+      public Session login() throws RepositoryException
+      {
+         return provider.getSession(PORTLET_STATES_WORKSPACE_NAME, repository);
       }
 
       public Session login(String s) throws RepositoryException
