@@ -19,6 +19,8 @@
 
 package org.exoplatform.portal.gadget.core;
 
+import com.google.inject.Singleton;
+
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import sun.misc.BASE64Encoder;
@@ -57,6 +59,8 @@ import java.security.SecureRandom;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
+
+@Singleton
 public class
    ExoContainerConfig extends JsonContainerConfig
 {
