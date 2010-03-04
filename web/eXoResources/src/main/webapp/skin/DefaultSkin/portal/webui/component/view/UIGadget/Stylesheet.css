@@ -146,8 +146,8 @@
 	height: 10px;
 }
 
-.UIControlWorkspace .UIGadget iframe {
-	width: 210px;
+.UIGadget iframe {
+	width: 299px;
 }
 
 .UIGadgetContent .gadgets-gadget-user-prefs-dialog {
@@ -175,4 +175,6 @@
 
 .gadgets-gadget-content {
 	padding: 10px 0;
+	background: white;
+	border: 1px solid white;
 }

@@ -52,7 +52,7 @@
 	cursor: move;
 	overflow: hidden;
 	white-space: nowrap;
-	width: 200px;
+	width: 195px;
 }
 
 .UIDashboard .UIDashboardEditForm {
@@ -67,16 +67,19 @@
 .UITabPaneDashboard .LtTabDashboard {
 	background: #ffcf01 url('background/NavUser.gif') no-repeat left top;
 	padding-left: 3px;
+	height: 32px;
 }
 
 .UITabPaneDashboard .RtTabDashboard {
 	background: #ffcf01 url('background/NavUser.gif') no-repeat right top;
 	padding-right: 3px;
+	height: 32px;
 }
 
 .UITabPaneDashboard .CtTabDashboard {
 	background: #ffcf01 url('background/NavUser.gif') repeat-x center -32px;
 	padding: 0px 6px; 
+	height: 32px;
 }
 
 .UITabPaneDashboard .UIHorizontalTabs {
@@ -584,4 +587,5 @@
 
 .Maximized iframe {
 	width: 100%;
+	_width: 98%;
 }
