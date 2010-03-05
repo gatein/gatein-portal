@@ -29,7 +29,7 @@
              ex: On Windows 'c:/AS'
              ex: On Linux '/home/user/AS'
         -->
-        <exo.projects.directory.dependencies>REPLACE_WITH_YOUR_OWN_DIRECTORY</exo.projects.directory.dependencies>
+        <exo.projects.directory.dependencies>/home/theute/Portal/Development/workspace_GateIn/portal/packaging</exo.projects.directory.dependencies>
 
         <!-- 
              If you want that the server is deployed always at the same place (not in packaging/pkg/target/<server> dir)
@@ -41,7 +41,7 @@
         <!--
              Replace with the name of the directory containing Tomcat 6
         -->        
-        <exo.projects.app.tomcat.version>tomcat-6.0.16</exo.projects.app.tomcat.version>
+        <exo.projects.app.tomcat.version>apache-tomcat-6.0.20</exo.projects.app.tomcat.version>
         <!--
              Replace with the name of the directory containing JBoss AS 5.1
         -->

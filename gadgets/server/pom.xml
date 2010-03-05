@@ -48,18 +48,18 @@
     <dependencies>
         <!-- project dependencies -->
         <dependency>
-            <groupId>org.apache.shindig</groupId>
+            <groupId>org.gatein.shindig</groupId>
             <artifactId>shindig-server</artifactId>
             <type>war</type>
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.apache.shindig</groupId>
+            <groupId>org.gatein.shindig</groupId>
             <artifactId>shindig-features</artifactId>
             <scope>provided</scope>
         </dependency>
 				<dependency>
-            <groupId>org.apache.shindig</groupId>
+            <groupId>org.gatein.shindig</groupId>
             <artifactId>shindig-social-api</artifactId>
             <scope>provided</scope>
         </dependency>

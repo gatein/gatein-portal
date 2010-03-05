@@ -76,11 +76,13 @@
       <groupId>org.exoplatform.jcr</groupId>
       <artifactId>exo.jcr.component.ext</artifactId>
     </dependency>
+
     <dependency>
-	  <groupId>org.apache.shindig</groupId>
-	  <artifactId>shindig-common</artifactId>
-	  <type>jar</type>
-	</dependency>
+      <groupId>org.gatein.shindig</groupId>
+      <artifactId>shindig-common</artifactId>
+      <type>jar</type>
+    </dependency>
+
     <dependency>
       <groupId>org.exoplatform.portal</groupId>
       <artifactId>exo.portal.gadgets-core</artifactId>

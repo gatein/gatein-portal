@@ -205,10 +205,10 @@ function getModule(params)
       addDependency(new Project("rome", "rome", "jar", "0.9")).
       addDependency(new Project("joda-time", "joda-time", "jar", "1.6")).
       addDependency(new Project("org.json", "json", "jar", "20070829")).
-      addDependency(new Project("org.apache.shindig", "shindig-common", "jar", shindigVersion)).
-      addDependency(new Project("org.apache.shindig", "shindig-gadgets", "jar", shindigVersion)).
-      addDependency(new Project("org.apache.shindig", "shindig-features", "jar", shindigVersion)).
-      addDependency(new Project("org.apache.shindig", "shindig-social-api", "jar", shindigVersion)).
+      addDependency(new Project("org.gatein.shindig", "shindig-common", "jar", shindigVersion)).
+      addDependency(new Project("org.gatein.shindig", "shindig-gadgets", "jar", shindigVersion)).
+      addDependency(new Project("org.gatein.shindig", "shindig-features", "jar", shindigVersion)).
+      addDependency(new Project("org.gatein.shindig", "shindig-social-api", "jar", shindigVersion)).
       addDependency(new Project("jdom", "jdom", "jar", "1.0")).
       addDependency(new Project("commons-httpclient", "commons-httpclient", "jar", "3.1")).
       addDependency(new Project("commons-collections", "commons-collections", "jar", "3.2.1")).

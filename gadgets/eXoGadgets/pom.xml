@@ -47,10 +47,11 @@
       <artifactId>exo.portal.webui.portal</artifactId>
       <scope>provided</scope>
     </dependency>
+
     <dependency>
-          <groupId>org.apache.shindig</groupId>
-          <artifactId>shindig-common</artifactId>
-	  <scope>provided</scope>
+      <groupId>org.gatein.shindig</groupId>
+      <artifactId>shindig-common</artifactId>
+      <scope>provided</scope>
     </dependency>
     
   </dependencies>
