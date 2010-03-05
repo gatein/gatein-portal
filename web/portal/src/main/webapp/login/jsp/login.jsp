@@ -70,7 +70,7 @@
           %>
           <font color="red"><%=res.getString("UILoginForm.label.SigninFail")%></font><%}%>
           <form name="loginForm" action="<%= contextPath + "/login"%>" method="post" style="margin: 0px;">    
-          		<input type="hidden" name="uri" value="<%=session.getAttribute("initialURI") %>"/>
+          		<input type="hidden" name="initialURI" value="<%=request.getAttribute("javax.servlet.forward.request_uri")%>"/>
           		<table> 
 	              <tr class="FieldContainer">
 		              <td class="FieldLabel"><%=res.getString("UILoginForm.label.UserName")%></td>

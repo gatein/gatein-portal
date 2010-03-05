@@ -23,6 +23,8 @@ import org.exoplatform.container.web.AbstractHttpServlet;
 import org.exoplatform.web.security.Credentials;
 import org.exoplatform.web.security.security.AbstractTokenService;
 import org.exoplatform.web.security.security.CookieTokenService;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 
 import java.io.IOException;
 
@@ -38,28 +40,28 @@ import javax.servlet.http.HttpServletResponse;
 public class PortalLoginController extends AbstractHttpServlet
 {
 
-   /**
-    * Serial version ID.
-    */
-   private static final long serialVersionUID = -9167273087235951389L;
+   /** . */
+   private static final Logger log = LoggerFactory.getLogger(PortalLoginController.class);
 
    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
    {
-      //
       String username = req.getParameter("username");
       String password = req.getParameter("password");
 
       //
       if (username == null)
       {
+         log.error("Tried to access the portal login controller without username provided");
          resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "No username provided");
       }
       if (password == null)
       {
+         log.error("Tried to access the portal login controller without password provided");
          resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "No password provided");
       }
 
       //
+      log.debug("Found username and password and set credentials in http session");
       Credentials credentials = new Credentials(username, password);
       req.getSession().setAttribute(InitiateLoginServlet.CREDENTIALS, credentials);
 
@@ -70,6 +72,11 @@ public class PortalLoginController extends AbstractHttpServlet
       if (uri == null || uri.length() == 0)
       {
          uri = req.getContextPath() + "/private/classic";
+         log.debug("No initial URI found, will use default " + uri + " instead ");
+      }
+      else
+      {
+         log.debug("Found initial URI " + uri);
       }
 
       // if we do have a remember me
@@ -82,6 +89,9 @@ public class PortalLoginController extends AbstractHttpServlet
             //Create token
             AbstractTokenService tokenService = AbstractTokenService.getInstance(CookieTokenService.class);
             String cookieToken = tokenService.createToken(credentials);
+
+            log.debug("Found a remember me request parameter, created a persistent token " + cookieToken + " for it and set it up " +
+               "in the next response");
             Cookie cookie = new Cookie(InitiateLoginServlet.COOKIE_NAME, cookieToken);
             cookie.setPath(req.getContextPath());
             cookie.setMaxAge((int)tokenService.getValidityTime() / 1000);

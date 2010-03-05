@@ -25,6 +25,8 @@ import org.exoplatform.web.security.Credentials;
 import org.exoplatform.web.security.security.AbstractTokenService;
 import org.exoplatform.web.security.security.CookieTokenService;
 import org.exoplatform.web.security.security.TransientTokenService;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 
 import java.io.IOException;
 
@@ -43,10 +45,9 @@ import javax.servlet.http.HttpSession;
  */
 public class InitiateLoginServlet extends AbstractHttpServlet
 {
-   /**
-    * Serial version ID
-    */
-   private static final long serialVersionUID = -2553824531076121642L;
+
+   /** . */
+   private static final Logger log = LoggerFactory.getLogger(InitiateLoginServlet.class);
 
    /** . */
    public static final String COOKIE_NAME = "rememberme";
@@ -59,62 +60,64 @@ public class InitiateLoginServlet extends AbstractHttpServlet
    {
       resp.setContentType("text/html; charset=UTF-8");
       HttpSession session = req.getSession();
-      Credentials credentials = (Credentials)session.getAttribute(InitiateLoginServlet.CREDENTIALS);
-      session.setAttribute("initialURI", req.getAttribute("javax.servlet.forward.request_uri"));
 
+      // Looking for credentials stored in the session
+      Credentials credentials = (Credentials)session.getAttribute(InitiateLoginServlet.CREDENTIALS);
+
+      //
       if (credentials == null)
       {
-         String token = getTokenCookie(req);
          PortalContainer pContainer = PortalContainer.getInstance();
          ServletContext context = pContainer.getPortalContext();
+
+         //
+         String token = getRememberMeTokenCookie(req);
          if (token != null)
          {
             AbstractTokenService tokenService = AbstractTokenService.getInstance(CookieTokenService.class);
             credentials = tokenService.validateToken(token, false);
             if (credentials == null)
             {
+               log.debug("Login initiated with no credentials in session but found token an invalid " + token + " " +
+                  "that will be cleared in next response");
+
+               // We clear the cookie in the next response as it was not valid
                Cookie cookie = new Cookie(InitiateLoginServlet.COOKIE_NAME, "");
                cookie.setPath(req.getContextPath());
                cookie.setMaxAge(0);
                resp.addCookie(cookie);
+
                // This allows the customer to define another login page without
                // changing the portal
                context.getRequestDispatcher("/login/jsp/login.jsp").include(req, resp);
-               return;
+            }
+            else
+            {
+               // Send authentication request
+               log.debug("Login initiated with no credentials in session but found token " + token + " with existing credentials, " +
+                  "performing authentication");
+               sendAuth(resp, credentials.getUsername(), token);
             }
          }
          else
          {
             // This allows the customer to define another login page without
             // changing the portal
+            log.debug("Login initiated with no credentials in session and no token cookie, redirecting to login page");
             context.getRequestDispatcher("/login/jsp/login.jsp").include(req, resp);
-            return;
          }
       }
       else
       {
-         req.getSession().removeAttribute(InitiateLoginServlet.CREDENTIALS);
-      }
-      String token = null;
-      for (Cookie cookie : req.getCookies())
-      {
-         if (InitiateLoginServlet.COOKIE_NAME.equals(cookie.getName()))
-         {
-            String rememberme = req.getParameter(COOKIE_NAME);
-            if (rememberme != null)
-            {
-               token = cookie.getValue();
-               break;
-            }
-         }
-      }
-      if (token == null)
-      {
+         // We create a temporary token just for the login time
          TransientTokenService tokenService = AbstractTokenService.getInstance(TransientTokenService.class);
-         token = tokenService.createToken(credentials);
-      }
+         String token = tokenService.createToken(credentials);
+         req.getSession().removeAttribute(InitiateLoginServlet.CREDENTIALS);
 
-      sendAuth(resp, credentials.getUsername(), token);
+         // Send authentication request
+         log.debug("Login initiated with credentials in session, performing authentication");
+         sendAuth(resp, credentials.getUsername(), token);
+      }
    }
 
    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
@@ -126,11 +129,16 @@ public class InitiateLoginServlet extends AbstractHttpServlet
    {
       String url = "j_security_check?j_username=" + jUsername + "&j_password=" + jPassword;
       url = resp.encodeRedirectURL(url);
-
       resp.sendRedirect(url);
    }
 
-   private String getTokenCookie(HttpServletRequest req)
+   /**
+    * Extract the remember me token from the request or returns null.
+    *
+    * @param req the incoming request
+    * @return the token
+    */
+   private String getRememberMeTokenCookie(HttpServletRequest req)
    {
       Cookie[] cookies = req.getCookies();
       if (cookies != null)
