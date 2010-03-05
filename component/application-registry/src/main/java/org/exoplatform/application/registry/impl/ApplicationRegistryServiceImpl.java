@@ -46,12 +46,17 @@ import org.gatein.pc.api.info.MetaInfo;
 import org.gatein.pc.api.info.PortletInfo;
 import org.picocontainer.Startable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
- * The fundamental reason that motives to use tasks is because of the JMX access that does not
- * setup a context and therefore the task either reuse the existing context setup by the portal
- * or create a temporary context when accessed by JMX.
+ * The fundamental reason that motives to use tasks is because of the JMX access that does not setup a context and
+ * therefore the task either reuse the existing context setup by the portal or create a temporary context when accessed
+ * by JMX.
  *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
@@ -80,6 +85,10 @@ public class ApplicationRegistryServiceImpl implements ApplicationRegistryServic
    /** . */
    final POMSessionManager mopManager;
    private static final String REMOTE_DISPLAY_NAME_SUFFIX = " (remote)";
+
+   /** Should match WSRPPortletInfo.PRODUCER_NAME_META_INFO_KEY */
+   private static final String PRODUCER_NAME_META_INFO_KEY = "producer-name";
+   public static final String PRODUCER_CATEGORY_NAME_SUFFIX = " Producer";
 
    public ApplicationRegistryServiceImpl(ChromatticManager manager, POMSessionManager mopManager)
    {
@@ -417,7 +426,8 @@ public class ApplicationRegistryServiceImpl implements ApplicationRegistryServic
          portletApplicationName = portletApplicationName.replace('/', '_');
          portletName = portletName.replace('/', '_');
 
-         LocalizedString keywordsLS = info.getMeta().getMetaValue(MetaInfo.KEYWORDS);
+         MetaInfo metaInfo = portlet.getInfo().getMeta();
+         LocalizedString keywordsLS = metaInfo.getMetaValue(MetaInfo.KEYWORDS);
 
          //
          Set<String> categoryNames = new HashSet<String>();
@@ -428,13 +438,17 @@ public class ApplicationRegistryServiceImpl implements ApplicationRegistryServic
             String keywords = keywordsLS.getDefaultString();
             if (keywords != null && keywords.length() != 0)
             {
-               for (String categoryName : keywords.split(",")) {
+               for (String categoryName : keywords.split(","))
+               {
                   // Trim name
                   categoryName = categoryName.trim();
-                  if (INTERNAL_PORTLET_TAG.equalsIgnoreCase(categoryName)) {
+                  if (INTERNAL_PORTLET_TAG.equalsIgnoreCase(categoryName))
+                  {
                      log.debug("Skipping portlet (" + portletApplicationName + "," + portletName + ") + tagged as internal");
                      continue portlet;
-                  } else {
+                  }
+                  else
+                  {
                      categoryNames.add(categoryName);
                   }
                }
@@ -452,6 +466,13 @@ public class ApplicationRegistryServiceImpl implements ApplicationRegistryServic
          if (remote)
          {
             categoryNames.add(REMOTE_CATEGORY_NAME);
+
+            // add producer name to categories for easier finding of portlets for GTNPORTAL-823
+            LocalizedString producerNameLS = metaInfo.getMetaValue(PRODUCER_NAME_META_INFO_KEY);
+            if (producerNameLS != null)
+            {
+               categoryNames.add(producerNameLS.getDefaultString() + PRODUCER_CATEGORY_NAME_SUFFIX);
+            }
          }
 
          //
@@ -473,9 +494,7 @@ public class ApplicationRegistryServiceImpl implements ApplicationRegistryServic
             ContentDefinition app = category.getContentMap().get(portletName);
             if (app == null)
             {
-               MetaInfo metaInfo = portlet.getInfo().getMeta();
                LocalizedString descriptionLS = metaInfo.getMetaValue(MetaInfo.DESCRIPTION);
-
                LocalizedString displayNameLS = metaInfo.getMetaValue(MetaInfo.DISPLAY_NAME);
                String displayName = getLocalizedStringValue(displayNameLS, portletName);
 
@@ -616,7 +635,7 @@ public class ApplicationRegistryServiceImpl implements ApplicationRegistryServic
          }
          else if (type == WSRP.CONTENT_TYPE)
          {
-        	 return "/eXoResources/skin/sharedImages/Icon80x80/DefaultPortlet.png";
+            return "/eXoResources/skin/sharedImages/Icon80x80/DefaultPortlet.png";
          }
          else if (type == org.exoplatform.portal.pom.spi.gadget.Gadget.CONTENT_TYPE)
          {
