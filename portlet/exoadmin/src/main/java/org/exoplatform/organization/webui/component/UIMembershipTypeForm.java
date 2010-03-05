@@ -19,10 +19,10 @@
 
 package org.exoplatform.organization.webui.component;
 
+import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.services.organization.MembershipType;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.web.application.ApplicationMessage;
-import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -90,37 +90,34 @@ public class UIMembershipTypeForm extends UIForm
 
          MembershipType mt = service.getMembershipTypeHandler().findMembershipType(msTypeName);
 
-         if (mt != null)
+         if (uiForm.getMembershipTypeName() == null)
          {
-            MembershipType existMembershipType = service.getMembershipTypeHandler().findMembershipType(mt.getName());
-            if (existMembershipType == null)
+            //For create new membershipType case
+            if (mt != null)
             {
                UIApplication uiApp = event.getRequestContext().getUIApplication();
-               uiApp.addMessage(new ApplicationMessage("UIMembershipTypeForm.msg.MembershipNotExist", new String[]{mt
-                  .getName()}));
+               uiApp.addMessage(new ApplicationMessage("UIMembershipTypeForm.msg.SameName", null));
+               return;
+            }
+            mt = service.getMembershipTypeHandler().createMembershipTypeInstance();
+            uiForm.invokeSetBindingBean(mt);
+            service.getMembershipTypeHandler().createMembershipType(mt, true);
+            uiMembershipManagement.addOptions(mt);
+         }
+         else
+         {
+            //For edit a membershipType case
+            if (mt == null)
+            {
+               UIApplication uiApp = event.getRequestContext().getUIApplication();
+               uiApp.addMessage(new ApplicationMessage("UIMembershipTypeForm.msg.MembershipNotExist",
+                  new String[]{msTypeName}));
             }
             else
             {
                uiForm.invokeSetBindingBean(mt);
                service.getMembershipTypeHandler().saveMembershipType(mt, true);
             }
-         }
-         else
-         {
-            mt = service.getMembershipTypeHandler().createMembershipTypeInstance();
-            uiForm.invokeSetBindingBean(mt);
-            MembershipType existMembershipType = service.getMembershipTypeHandler().findMembershipType(mt.getName());
-
-            if (existMembershipType != null)
-            {
-               UIApplication uiApp = event.getRequestContext().getUIApplication();
-               uiApp.addMessage(new ApplicationMessage("UIMembershipTypeForm.msg.SameName", null));
-               return;
-            }
-            service.getMembershipTypeHandler().createMembershipType(mt, true);
-
-            // Update the list of membership under GroupManagment if any
-            uiMembershipManagement.addOptions(mt);
          }
 
          uiMembershipManagement.getChild(UIListMembershipType.class).loadData();
