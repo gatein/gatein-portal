@@ -83,6 +83,7 @@
       <module>server</module>
       <module>examples</module>
       <module>starter</module>
+      <module>skins</module>
       <module>packaging</module>
       <module>testsuite</module>
    </modules>
