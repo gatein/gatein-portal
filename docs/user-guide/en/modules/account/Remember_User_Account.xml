@@ -10,10 +10,10 @@
 	</para>
 	<mediaobject>
 		<imageobject role="html">
-			<imagedata fileref="images/RememberMe.png" format="PNG" />
+			<imagedata fileref="images/RememberMe.png" format="PNG" align="center" />
 		</imageobject>
 		<imageobject role="fo">
-			<imagedata fileref="images/RememberMe.png" format="PNG" contentwidth="150mm" />
+			<imagedata fileref="images/RememberMe.png" format="PNG" align="center" contentwidth="150mm" />
 		</imageobject>
 	</mediaobject>
 	<procedure>

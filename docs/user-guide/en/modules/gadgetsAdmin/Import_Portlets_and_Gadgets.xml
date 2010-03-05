@@ -17,18 +17,14 @@
 	<procedure>
 		<step>
 			<para>
-				In the <emphasis role="bold">Group</emphasis> menu, select <emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Application Registry</emphasis>:
+				In the <emphasis role="bold">Group</emphasis> menu, select <emphasis role="bold">Administration</emphasis> then <emphasis role="bold">Application Registry</emphasis>:
 			</para>
-<note>
-<title>DOC TODO</title>
-<para>
-redo screenshot
-</para>
-</note>
-
 			<mediaobject>
-				<imageobject>
-					<imagedata fileref="images/Org1.png" format="PNG" width="444" />
+				<imageobject role="html">
+					<imagedata fileref="images/Org1.png" format="PNG" align="center"  scale="100" />
+				</imageobject>
+				<imageobject role="fo">
+					<imagedata fileref="images/Org1.png" format="PNG" align="center" contentwidth="150mm" />
 				</imageobject>
 			</mediaobject>
 		</step>
@@ -37,8 +33,11 @@ redo screenshot
 				Click <emphasis role="bold">Import Applications</emphasis> on the right hand side. A confirmation message should appear as such:
 			</para>
 			<mediaobject>
-				<imageobject>
-					<imagedata fileref="images/local.png" format="PNG" width="444" />
+				<imageobject role="html">
+					<imagedata fileref="images/local.png" format="PNG" align="center" scale="110" />
+				</imageobject>
+				<imageobject role="fo">
+					<imagedata fileref="images/local.png" format="PNG" align="center" contentwidth="150mm" />
 				</imageobject>
 			</mediaobject>
 		</step>

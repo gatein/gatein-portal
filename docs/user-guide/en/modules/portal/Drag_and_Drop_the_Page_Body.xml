@@ -14,8 +14,11 @@
 					Go to <emphasis role="bold">Site Editor</emphasis> in the toolbar and click on <emphasis role="bold">Edit Layout</emphasis> It will display :
 				</para>
 				<mediaobject>
-					<imageobject>
-						<imagedata fileref="images/DragPage1.png" format="PNG" width="444" />
+					<imageobject role="html">
+						<imagedata fileref="images/DragPage1.png" format="PNG" align="center" scale="110" />
+					</imageobject>
+					<imageobject role="fo">
+						<imagedata fileref="images/DragPage1.png" format="PNG" align="center" />
 					</imageobject>
 				</mediaobject>
 			</step>
@@ -24,8 +27,11 @@
 					Click on the <emphasis role="bold">Portal Page</emphasis>, drag and drop within the portal page.
 				</para>
 				<mediaobject>
-					<imageobject>
-						<imagedata fileref="images/DragPage3.png" format="PNG" width="444" />
+					<imageobject role="html">
+						<imagedata fileref="images/DragPage3.png" format="PNG" align="center" scale="110" />
+					</imageobject>
+					<imageobject role="fo">
+						<imagedata fileref="images/DragPage3.png" format="PNG" align="center" />
 					</imageobject>
 				</mediaobject>
 			</step>

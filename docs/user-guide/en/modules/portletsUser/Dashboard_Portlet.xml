@@ -13,7 +13,7 @@
 	</para>
 	<mediaobject>
 		<imageobject>
-			<imagedata fileref="images/Dashboard1.png" format="PNG" />
+			<imagedata fileref="images/Dashboard1.png" format="PNG" align="center" />
 		</imageobject>
 	</mediaobject>
 
@@ -37,10 +37,10 @@
 		</para>
 		<mediaobject>
 			<imageobject role="html">
-				<imagedata fileref="images/Dashname.png" format="PNG" />
+				<imagedata fileref="images/Dashname.png" format="PNG" align="center" />
 			</imageobject>
 			<imageobject role="fo">
-				<imagedata fileref="images/Dashname.png" format="PNG" contentwidth="150mm" />
+				<imagedata fileref="images/Dashname.png" format="PNG" align="center" contentwidth="150mm" />
 			</imageobject>
 		</mediaobject>
 		<para>
@@ -48,10 +48,10 @@
 		</para>
 		<mediaobject>
 			<imageobject role="html">
-				<imagedata fileref="images/Dashname1.png" format="PNG" />
+				<imagedata fileref="images/Dashname1.png" format="PNG" align="center" />
 			</imageobject>
 			<imageobject role="fo">
-				<imagedata fileref="images/Dashname1.png" format="PNG" contentwidth="150mm" />
+				<imagedata fileref="images/Dashname1.png" format="PNG" align="center" contentwidth="150mm" />
 			</imageobject>
 		</mediaobject>
 
@@ -60,10 +60,10 @@
 		</para>
 		<mediaobject>
 			<imageobject role="html">
-				<imagedata fileref="images/Dash2.png" format="PNG" />
+				<imagedata fileref="images/Dash2.png" format="PNG" align="center" />
 			</imageobject>
 			<imageobject role="fo">
-				<imagedata fileref="images/Dash2.png" format="PNG" contentwidth="150mm" />
+				<imagedata fileref="images/Dash2.png" format="PNG" align="center" contentwidth="150mm" />
 			</imageobject>
 		</mediaobject>
 
@@ -77,10 +77,10 @@
 					</para>
 					<mediaobject>
 						<imageobject role="html">
-							<imagedata fileref="images/Calendar.png" format="PNG" />
+							<imagedata fileref="images/Calendar.png" format="PNG" align="center" />
 						</imageobject>
 						<imageobject role="fo">
-							<imagedata fileref="images/Calendar.png" format="PNG" contentwidth="70mm"/>
+							<imagedata fileref="images/Calendar.png" format="PNG" align="center" contentwidth="70mm"/>
 						</imageobject>
 					</mediaobject>
 				</listitem>
@@ -93,10 +93,10 @@
 					</para>
 					<mediaobject>
 						<imageobject role="html">
-							<imagedata fileref="images/Todo.png" format="PNG" />
+							<imagedata fileref="images/Todo.png" format="PNG" align="center" />
 						</imageobject>
 						<imageobject role="fo">
-							<imagedata fileref="images/Todo.png" format="PNG" contentwidth="70mm" />
+							<imagedata fileref="images/Todo.png" format="PNG" align="center" contentwidth="70mm" />
 						</imageobject>
 					</mediaobject>
 				</listitem>
@@ -109,10 +109,10 @@
 					</para>
 					<mediaobject>
 						<imageobject role="html">
-							<imagedata fileref="images/Calculator.png" format="PNG" />
+							<imagedata fileref="images/Calculator.png" format="PNG" align="center" />
 						</imageobject>
 						<imageobject role="fo">
-							<imagedata fileref="images/Calculator.png" format="PNG" contentwidth="70mm"/>
+							<imagedata fileref="images/Calculator.png" format="PNG" align="center" contentwidth="70mm"/>
 						</imageobject>
 					</mediaobject>
 				</listitem>
@@ -125,10 +125,10 @@
 					</para>
 					<mediaobject>
 						<imageobject role="html">
-							<imagedata fileref="images/RSSReader.png" format="PNG" />
+							<imagedata fileref="images/RSSReader.png" format="PNG" align="center" />
 						</imageobject>
 						<imageobject role="fo">
-							<imagedata fileref="images/RSSReader.png" format="PNG" contentwidth="70mm"/>
+							<imagedata fileref="images/RSSReader.png" format="PNG" align="center" contentwidth="70mm"/>
 						</imageobject>
 					</mediaobject> 
 				</listitem>
@@ -141,10 +141,10 @@
 					</para>
 					<mediaobject>
 						<imageobject role="html">
-							<imagedata fileref="images/GoogleGadgets.png" format="PNG" />
+							<imagedata fileref="images/GoogleGadgets.png" format="PNG" align="center" />
 						</imageobject>
 						<imageobject role="fo">
-							<imagedata fileref="images/GoogleGadgets.png" format="PNG" contentwidth="150mm"/>
+							<imagedata fileref="images/GoogleGadgets.png" format="PNG" align="center" contentwidth="150mm"/>
 						</imageobject>
 					</mediaobject>				
 				</listitem>
@@ -170,10 +170,10 @@
 				</para>
 				<mediaobject>
 					<imageobject role="html">
-						<imagedata fileref="images/XMLURL.png" format="PNG" />
+						<imagedata fileref="images/XMLURL.png" format="PNG" align="center" />
 					</imageobject>
 					<imageobject role="fo">
-						<imagedata fileref="images/XMLURL.png" format="PNG" contentwidth="150mm"/>
+						<imagedata fileref="images/XMLURL.png" format="PNG" align="center" contentwidth="150mm"/>
 					</imageobject>
 				</mediaobject>
 				<note>
@@ -189,7 +189,7 @@
 				</para>
 				<mediaobject>
 					<imageobject>
-						<imagedata fileref="images/DashboardLink.png" format="PNG" contentwidth="150mm"/>
+						<imagedata fileref="images/DashboardLink.png" format="PNG" align="center" contentwidth="150mm"/>
 					</imageobject>
 				</mediaobject>
 				
@@ -200,10 +200,10 @@
 				</para>
 					<mediaobject>
 						<imageobject role="html">
-							<imagedata fileref="images/Dashboard1.png" format="PNG"/>
+							<imagedata fileref="images/Dashboard1.png" format="PNG" align="center"/>
 						</imageobject>
 						<imageobject role="fo">
-							<imagedata fileref="images/Dashboard1.png" format="PNG" contentwidth="100mm"/>
+							<imagedata fileref="images/Dashboard1.png" format="PNG" align="center" contentwidth="100mm"/>
 						</imageobject>
 					</mediaobject>
 			</step>
@@ -212,10 +212,10 @@
 					The Dashboard Workspace dialog appears: 
 					<mediaobject>
 						<imageobject role="html"> 
-							<imagedata fileref="images/EnterLink.png" format="PNG" />
+							<imagedata fileref="images/EnterLink.png" format="PNG" align="center" />
 						</imageobject>
 						<imageobject role="fo"> 
-							<imagedata fileref="images/EnterLink.png" format="PNG" contentwidth="50mm"/>
+							<imagedata fileref="images/EnterLink.png" format="PNG" align="center" contentwidth="50mm"/>
 						</imageobject>
 					</mediaobject>
 				</para>
@@ -226,10 +226,10 @@
 				</para>
 				<mediaobject>
 					<imageobject role="html">
-						<imagedata fileref="images/CodePaste.png" format="PNG" />
+						<imagedata fileref="images/CodePaste.png" format="PNG" align="center" />
 					</imageobject>
 					<imageobject role="fo">
-						<imagedata fileref="images/CodePaste.png" format="PNG" contentwidth="120mm"/>
+						<imagedata fileref="images/CodePaste.png" format="PNG" align="center" contentwidth="120mm"/>
 					</imageobject>
 				</mediaobject>
 				
@@ -240,10 +240,10 @@
 				</para>
 				<mediaobject>
 					<imageobject role="html">
-						<imagedata fileref="images/NewGadget.png" format="PNG" />
+						<imagedata fileref="images/NewGadget.png" format="PNG" align="center" />
 					</imageobject> 
 					<imageobject role="fo">
-						<imagedata fileref="images/NewGadget.png" format="PNG" contentwidth="120mm" />
+						<imagedata fileref="images/NewGadget.png" format="PNG" align="center" contentwidth="120mm" />
 					</imageobject> 
 				</mediaobject>
 				

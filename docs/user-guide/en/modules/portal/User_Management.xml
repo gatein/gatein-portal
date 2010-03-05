@@ -19,7 +19,7 @@
 					</para>
 					<mediaobject>
 						<imageobject>
-							<imagedata fileref="images/UserManage.png" format="PNG" width="444" />
+							<imagedata fileref="images/UserManage.png" format="PNG" align="center" width="444" />
 						</imageobject>
 					</mediaobject>
 					<para>
@@ -39,7 +39,7 @@
 						</para>
 						<mediaobject>
 							<imageobject>
-								<imagedata fileref="images/SearchUser.png" format="PNG" width="444" />
+								<imagedata fileref="images/SearchUser.png" format="PNG" align="center" width="444" />
 							</imageobject>
 						</mediaobject>					
 					</step>
@@ -70,7 +70,7 @@
 					</para>
 					<mediaobject>
 						<imageobject>
-							<imagedata fileref="images/Demo1.png" format="PNG" width="444" />
+							<imagedata fileref="images/Demo1.png" format="PNG" align="center" width="444" />
 						</imageobject>
 					</mediaobject>
 				</step>
@@ -108,7 +108,7 @@
 					</para>
 					<mediaobject>
 						<imageobject>
-							<imagedata fileref="images/Demo3.png" format="PNG" width="444" />
+							<imagedata fileref="images/Demo3.png" format="PNG" align="center" width="444" />
 						</imageobject>
 					</mediaobject>
 					<variablelist>
@@ -162,7 +162,7 @@
 				</para>
 				<mediaobject>
 					<imageobject>
-						<imagedata fileref="images/GroupManage.png" format="PNG" width="444" />
+						<imagedata fileref="images/GroupManage.png" format="PNG" align="center" width="444" />
 					</imageobject>
 				</mediaobject>
 		</section>
@@ -176,10 +176,10 @@
 						</para>
 						<mediaobject>
 							<imageobject role="html">
-								<imagedata fileref="images/Admin1.png" format="PNG" />
+								<imagedata fileref="images/Admin1.png" format="PNG" align="center" />
 							</imageobject>
 							<imageobject role="fo">
-								<imagedata fileref="images/Admin1.png" format="PNG" contentwidth="50mm"/>
+								<imagedata fileref="images/Admin1.png" format="PNG" align="center" contentwidth="50mm"/>
 							</imageobject>
 						</mediaobject>
 					</step>
@@ -189,10 +189,10 @@
 						</para>
 						<mediaobject>
 							<imageobject role="html">
-								<imagedata fileref="images/AddGroup.png" format="PNG" width="444" />
+								<imagedata fileref="images/AddGroup.png" format="PNG" align="center" width="444" />
 							</imageobject>
 							<imageobject role="fo">
-								<imagedata fileref="images/AddGroup.png" format="PNG" contentwidth="110mm"/>
+								<imagedata fileref="images/AddGroup.png" format="PNG" align="center" contentwidth="110mm"/>
 							</imageobject>
 						</mediaobject>
 						<variablelist>
@@ -270,7 +270,7 @@
 						</para>
 						<mediaobject>
 							<imageobject>
-								<imagedata fileref="images/AddMember1.png" format="PNG" width="444" />
+								<imagedata fileref="images/AddMember1.png" format="PNG" align="center" width="444" />
 							</imageobject>
 						</mediaobject>
 					</step>
@@ -310,10 +310,10 @@
 						</para>
 						<mediaobject>
 							<imageobject role="html">
-								<imagedata fileref="images/EditMember1.png" format="PNG" />
+								<imagedata fileref="images/EditMember1.png" format="PNG" align="center" />
 							</imageobject>
 							<imageobject role="fo">
-								<imagedata fileref="images/EditMember1.png" format="PNG" contentwidth="90mm"/>
+								<imagedata fileref="images/EditMember1.png" format="PNG" align="center" contentwidth="90mm"/>
 							</imageobject>
 						</mediaobject>
 					</step>
@@ -367,7 +367,7 @@
 				</para>
 				<mediaobject>
 					<imageobject>
-						<imagedata fileref="images/MembershipManage1.png" format="PNG" width="444" />
+						<imagedata fileref="images/MembershipManage1.png" format="PNG" align="center" width="444" />
 					</imageobject>
 				</mediaobject>
 		</section>

@@ -69,14 +69,17 @@
 					Enter a resource key in the <emphasis role="bold">Display Name</emphasis> field. 
 				</para>
 					<mediaobject>
-						<imageobject>
-							<imagedata fileref="images/PageWizard.png" format="PNG" width="444" />
+						<imageobject role="html">
+							<imagedata fileref="images/PageWizard.png" format="PNG" align="center" scale="100" />
+						</imageobject>
+						<imageobject role="fo">
+							<imagedata fileref="images/PageWizard.png" format="PNG" align="center" contentwidth="150mm" />
 						</imageobject>
 					</mediaobject>
 			</step>
 			<step>
 				<para>
-					Click <emphasis role="bold">Next</emphasis> to get on the next screen where you may define a page layout out of existing templates.
+					Click <emphasis role="bold">Next</emphasis>. On the next screen you may define a page layout out of existing templates.
 				</para>
 			</step>
 			<step>
@@ -91,13 +94,15 @@
 	<section id="sect-User_Guide-Multi_Language_Navigation_Nodes-CreatingEditing_Keys_by_Edit_Page_Wizard">
 		<title>Creating/Editing Keys using <emphasis role="bold">Edit Page Wizard</emphasis></title>
 
-<note>
+<warning>
 <title>DOC TODO</title>
 <para>
 broken right now
 https://jira.jboss.org/jira/browse/GTNPORTAL-787
+SM: The menu path described below does not exist. Not sure if this is related to the JIRA listed here.
 </para>
-</note>
+</warning>
+
 			<procedure>
 				<step>
 					<para>
@@ -118,55 +123,42 @@ https://jira.jboss.org/jira/browse/GTNPORTAL-787
 	</section>
 	
 	<section id="sect-User_Guide-Multi_Language_Navigation_Nodes-CreatingEditing_Keys_using_the_Edit_Page_and_Navigation">
-		<title>Creating/Editing Keys using <emphasis role="bold">Navigation MAnagement</emphasis></title>
-<note>
-<title>DOC TODO</title>
-<para>
-we need a screenshot here with the Navigation Management window
-</para>
-</note>
+		<title>Creating/Editing Keys using <emphasis role="bold">Navigation Management</emphasis></title>
 			<procedure>
 				<step>
 					<para>
 						Click on <emphasis role="bold">Site</emphasis> in the Toolbar then <emphasis role="bold">Edit Navigation</emphasis>
 					</para>
+					<mediaobject>
+						<imageobject role="html">
+							<imagedata fileref="images/NavigationManagement.png" format="PNG" align="center" scale="110" />
+						</imageobject>
+						<imageobject role="fo">
+							<imagedata fileref="images/NavigationManagement.png" format="PNG" align="center" contentwidth="150" />
+						</imageobject>
+					</mediaobject>
 				</step>
 				<step>
 					<para>
-						Two alternatives are available at this point:
+						Click on <emphasis role="bold">Add Node</emphasis>
 					</para>
-					<orderedlist numeration="arabic">
-						<listitem>
-							<para>
-								Create a new node: Select the parent path, right click and click on <emphasis role="bold">Add new Node</emphasis> option .
-							</para>
-<note>
-<title>DOC TODO</title>
-<para>
-missing screenshot
-</para>
-</note>						
-                                                </listitem>
-						<listitem>
-							<para>
-								Edit an existing node: Right-click on the node you want to create/edit and pick <emphasis role="bold">Edit this Node</emphasis> in the pop-up menu.
-							</para>
-<note>
-<title>DOC TODO</title>
-<para>
-missing screenshot
-</para>
-</note>
-						</listitem>
-					</orderedlist>
 				</step>
 				<step>
 					<para>
-						A Create/Edit node dialog appears. Enter a resource key in the <emphasis role="bold">Label</emphasis> field
+						The Create/Edit node dialog appears. Enter a resource key in the <emphasis role="bold">Label</emphasis> field
 					</para>
+					<mediaobject>
+						<imageobject role="html">
+							<imagedata fileref="images/CreateEditNode.png" format="PNG" align="center" scale="100" />
+						</imageobject>
+						<imageobject role="fo">
+							<imagedata fileref="images/CreateEditNode.png" format="PNG" align="center" contentwidth="150" />
+						</imageobject>
+					</mediaobject>
 				</step>
 			</procedure>
-			<note> 
+			<note>
+				<title>Reusing Keys</title>
 				<para>
 					You can reuse the same resource key in several nodes.
 				</para>
@@ -175,8 +167,13 @@ missing screenshot
 	
 	<section>
 		<title>Providing translation</title>
-		<para>To provide a translation for the resource key used as page name, resource bundles must be provided within the web archive. Property files (or XML resource bundles) must be located in: 
-		<emphasis role="bold">WEB-INF/classes/locale/navigation/portal/[portalName]_[2letterCode].properties</emphasis></para>
+		<para>
+			To provide a translation for the resource key used as page name, resource bundles must be provided within the web archive.
+		</para>
+		<para>
+			 Property files (or XML resource bundles) must be located in: 
+		<emphasis role="bold">WEB-INF/classes/locale/navigation/portal/[portalName]_[2letterCode].properties</emphasis>
+		</para>
 	</section>
 	
 	<!-- 
@@ -199,7 +196,7 @@ missing screenshot
 				</para>
 				<mediaobject>
 					<imageobject>
-						<imagedata fileref="images/Internal2.png" format="PNG" width="444" />
+						<imagedata fileref="images/Internal2.png" format="PNG" align="center" width="444" />
 					</imageobject>
 				</mediaobject>
 			</step>
@@ -273,7 +270,7 @@ missing screenshot
 				</para>
 				<mediaobject>
 					<imageobject>
-						<imagedata fileref="images/PageWizard.png" format="PNG" width="444" />
+						<imagedata fileref="images/PageWizard.png" format="PNG" align="center" width="444" />
 					</imageobject>
 				</mediaobject>
 			</step>
@@ -288,7 +285,7 @@ missing screenshot
 				</para>
 				<mediaobject>
 					<imageobject>
-						<imagedata fileref="images/AAANavi.png" format="PNG" width="444" />
+						<imagedata fileref="images/AAANavi.png" format="PNG" align="center" width="444" />
 					</imageobject>
 				</mediaobject>
 			</step>
@@ -308,7 +305,7 @@ missing screenshot
 				</para>
 				<mediaobject>
 					<imageobject>
-						<imagedata fileref="images/Search.png" format="PNG" width="444" />
+						<imagedata fileref="images/Search.png" format="PNG" align="center" width="444" />
 					</imageobject>
 				</mediaobject>
 			</step>
@@ -318,7 +315,7 @@ missing screenshot
 				</para>
 				<mediaobject>
 					<imageobject>
-						<imagedata fileref="images/ResourceData1.png" format="PNG" width="444" />
+						<imagedata fileref="images/ResourceData1.png" format="PNG" align="center" width="444" />
 					</imageobject>
 				</mediaobject>
 			</step>
@@ -328,7 +325,7 @@ missing screenshot
 				</para>
 				<mediaobject>
 					<imageobject>
-						<imagedata fileref="images/AfterEdit1.png" format="PNG" width="444" />
+						<imagedata fileref="images/AfterEdit1.png" format="PNG" align="center" width="444" />
 					</imageobject>
 				</mediaobject>
 			</step>
@@ -348,7 +345,7 @@ missing screenshot
 				</para>
 				<mediaobject>
 					<imageobject>
-						<imagedata fileref="images/Nouvel.png" format="PNG" width="444" />
+						<imagedata fileref="images/Nouvel.png" format="PNG" align="center" width="444" />
 					</imageobject>
 				</mediaobject>
 			</step>

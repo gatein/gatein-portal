@@ -9,8 +9,11 @@
 		&PRODUCT; is the merge of two mature Java projects; JBoss Portal and eXo Portal. This new community project takes the best of both offerings and incorporates them into a single j2ee deployment archive. The aim is to provide an intuitive user-friendly portal and a framework to address the needs of today's Web 2.0 applications.
 	</para>
 	<mediaobject>
-		<imageobject>
-			<imagedata fileref="images/Frontpage.png" format="PNG" />
+		<imageobject role="html">
+			<imagedata fileref="images/Frontpage.png" format="PNG" align="center" scale="110" />
+		</imageobject>
+		<imageobject role="fo">
+			<imagedata fileref="images/Frontpage.png" format="PNG" align="center" contentwidth="150mm" />
 		</imageobject>
 	</mediaobject>
 	<para>
@@ -29,10 +32,10 @@
 				</para>
 				<mediaobject>
 					<imageobject role="html">
-						<imagedata fileref="images/GateIn.png" format="PNG" />
+						<imagedata fileref="images/GateIn.png" format="PNG" align="center" scale="110"/>
 					</imageobject>
 					<imageobject role="fo">
-						<imagedata fileref="images/GateIn.png" format="PNG" contentwidth="150mm"/>
+						<imagedata fileref="images/GateIn.png" format="PNG" align="center" contentwidth="150mm"/>
 					</imageobject>
 				</mediaobject>
 			</listitem>
@@ -43,10 +46,10 @@
 				</para>
 				<mediaobject>
 					<imageobject role="html">
-						<imagedata fileref="images/Videos.png" format="PNG" />
+						<imagedata fileref="images/Videos.png" format="PNG" align="center" scale="110" />
 					</imageobject>
 					<imageobject role="fo">
-						<imagedata fileref="images/Videos.png" format="PNG" contentwidth="150mm"/>
+						<imagedata fileref="images/Videos.png" format="PNG" align="center" contentwidth="150mm"/>
 					</imageobject>
 				</mediaobject>
 
@@ -64,10 +67,10 @@
 				</para>
 				<mediaobject>
 					<imageobject role="html">
-						<imagedata fileref="images/Downloads.png" format="PNG" />
+						<imagedata fileref="images/Downloads.png" format="PNG" align="center" scale="110" />
 					</imageobject>
 					<imageobject role="fo">
-						<imagedata fileref="images/Downloads.png" format="PNG" contentwidth="150mm"/>
+						<imagedata fileref="images/Downloads.png" format="PNG" align="center" contentwidth="150mm"/>
 					</imageobject>
 				</mediaobject>
 

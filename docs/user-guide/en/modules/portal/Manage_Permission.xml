@@ -56,16 +56,16 @@
 					</para>
 					<mediaobject>
 						<imageobject role="html">
-							<imagedata fileref="images/AddPortal.png" format="PNG" />
+							<imagedata fileref="images/AddPortal.png" format="PNG" align="center" />
 						</imageobject>
 						<imageobject role="fo">
-							<imagedata fileref="images/AddPortal.png" format="PNG" contentwidth="120mm"/>
+							<imagedata fileref="images/AddPortal.png" format="PNG" align="center" contentwidth="120mm"/>
 						</imageobject>
 					</mediaobject>
 
 					<mediaobject>
 						<imageobject>
-							<imagedata fileref="images/PortalAccessPermissions.png" format="PNG" width="444" />
+							<imagedata fileref="images/PortalAccessPermissions.png" format="PNG" align="center" width="444" />
 						</imageobject>
 					</mediaobject>
 				</listitem>
@@ -79,7 +79,7 @@
 					</para>
 					<mediaobject>
 						<imageobject>
-							<imagedata fileref="images/PortalPermission.png" format="PNG" width="444" />
+							<imagedata fileref="images/PortalPermission.png" format="PNG" align="center" width="444" />
 						</imageobject>
 					</mediaobject>
 
@@ -113,10 +113,10 @@
 						After selecting a membership type, the selected permission is displayed in the access permission list. You can only select one group with one membership type at a time. If you want to add more, click <emphasis role="bold">Add Permission</emphasis> and select again. Repeat the process for as many permission settings as you require. 
 						<mediaobject>
 							<imageobject role="html">
-								<imagedata fileref="images/PermissionSetting2.png" format="PNG" width="444" />
+								<imagedata fileref="images/PermissionSetting2.png" format="PNG" align="center" width="444" />
 							</imageobject>
 							<imageobject role="fo">
-								<imagedata fileref="images/PermissionSetting2.png" format="PNG" contentwidth="150mm" />
+								<imagedata fileref="images/PermissionSetting2.png" format="PNG" align="center" contentwidth="150mm" />
 							</imageobject>
 						</mediaobject>
 					</para>
@@ -166,10 +166,10 @@
 			</procedure>
 			<mediaobject>
 				<imageobject role="html">
-					<imagedata fileref="images/Edit2.6.png" format="PNG" width="444" />
+					<imagedata fileref="images/Edit2.6.png" format="PNG" align="center" width="444" />
 				</imageobject>
 				<imageobject role="fo">
-					<imagedata fileref="images/Edit2.6.png" format="PNG" contentwidth="150mm" />
+					<imagedata fileref="images/Edit2.6.png" format="PNG" align="center" contentwidth="150mm" />
 				</imageobject>
 			</mediaobject>
 			<para>
@@ -191,7 +191,7 @@
 						Click on the <emphasis role="bold">Save</emphasis> button to accept. 
 						<mediaobject>
 							<imageobject>
-								<imagedata fileref="images/PermissionSetting1.png" format="PNG" width="444" />
+								<imagedata fileref="images/PermissionSetting1.png" format="PNG" align="center" width="444" />
 							</imageobject>
 						</mediaobject>
 					</para>
@@ -394,7 +394,7 @@
 						Select <emphasis role="bold">Group</emphasis> from the Toolbar. Highlight the <emphasis role="bold">Administration</emphasis> entry and click on <emphasis role="bold">Application Registry</emphasis>.
 						<mediaobject>
 							<imageobject>
-								<imagedata fileref="images/EditCategoryPermissions.png" format="PNG" width="444" />
+								<imagedata fileref="images/EditCategoryPermissions.png" format="PNG" align="center" width="444" />
 							</imageobject>
 						</mediaobject>
 					</para>
@@ -435,10 +435,10 @@
 						Select <emphasis role="bold">Group</emphasis> from the Toolbar. Highlight the <emphasis role="bold">Administration</emphasis> entry and click on <emphasis role="bold">Application Registry</emphasis>.
 						<mediaobject>
 							<imageobject role="html">
-								<imagedata fileref="images/Application1.png" format="PNG" width="444" />
+								<imagedata fileref="images/Application1.png" format="PNG" align="center" width="444" />
 							</imageobject>
 							<imageobject role="fo">
-								<imagedata fileref="images/Application1.png" format="PNG" contentwidth="150mm" />
+								<imagedata fileref="images/Application1.png" format="PNG" align="center" contentwidth="150mm" />
 							</imageobject>
 						</mediaobject>
 					</para>

@@ -18,16 +18,22 @@
 			<para>
 				Click the <emphasis role="bold">Add New Portal</emphasis> button. By default, the <emphasis role="bold">Create New Portal</emphasis> form is shown with the <emphasis role="bold">Portal Templates</emphasis> tab. 
 				<mediaobject>
-					<imageobject>
-						<imagedata fileref="images/PortalTemplate2.6.png" format="PNG" width="444" />
+					<imageobject role="html">
+						<imagedata fileref="images/PortalTemplate.png" format="PNG" align="center" scale="100" />
+					</imageobject>
+					<imageobject role="fo">
+						<imagedata fileref="images/PortalTemplate.png" format="PNG" align="center" contentwidth="150mm" />
 					</imageobject>
 				</mediaobject>
 			</para>
 			<para>
 				By default, Portal template is Classic. Select the <emphasis role="bold">Portal Setting</emphasis> tab. 
 				<mediaobject>
-					<imageobject>
-						<imagedata fileref="images/PortalSetting2.5.png" format="PNG" width="444" />
+					<imageobject role="html">
+						<imagedata fileref="images/PortalSetting2.5.png" format="PNG" align="center" scale="100" />
+					</imageobject>
+					<imageobject role="fo">
+						<imagedata fileref="images/PortalSetting2.5.png" format="PNG" align="center" contentwidth="150mm" />
 					</imageobject>
 				</mediaobject>
 			</para>
@@ -52,7 +58,7 @@
 				Click on the <emphasis role="bold">Properties</emphasis> tab to fill in the <emphasis role="bold">Keep session alive</emphasis> property. There are 3 options: 
 				<variablelist>
 					<varlistentry>
-						<term>Never</term> 
+						<term><emphasis role="bold">Never</emphasis></term> 
 							<listitem>
 								<para>
 									The session will never timeout, even if an application requests it.
@@ -60,7 +66,7 @@
 							</listitem>
 					</varlistentry>
 					<varlistentry>
-						<term>On-demand</term> 
+						<term><emphasis role="bold">On-demand</emphasis></term> 
 							<listitem>
 								<para>
 									The session will timeout if an application requests it
@@ -68,7 +74,7 @@
 							</listitem>
 					</varlistentry>
 					<varlistentry>
-						<term>Always</term> 
+						<term><emphasis role="bold">Always</emphasis></term> 
 							<listitem>
 								<para>
 									The session will time out after a set period.

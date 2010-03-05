@@ -9,7 +9,7 @@
 		&PRODUCT; allows users to pick the language of the user interface.
 	</para>
 	<para>
-		The priority of the interface language setting is:
+		The priority of the interface language setting follows this hierarchy:
 	</para>
 	<orderedlist numeration="arabic">
 		<listitem>
@@ -46,8 +46,11 @@
 						Open up the Start menu and click on <emphasis role="bold">Change Language</emphasis> :
 					</para>
 					<mediaobject>
-						<imageobject>
-							<imagedata fileref="images/StarPortlet.png" format="PNG" />
+						<imageobject role="html">
+							<imagedata fileref="images/StarPortlet.png" format="PNG" align="center" scale="100" />
+						</imageobject>
+						<imageobject role="fo">
+							<imagedata fileref="images/StarPortlet.png" format="PNG" align="center" contentwidth="150mm" />
 						</imageobject>
 					</mediaobject>
 				</step>
@@ -56,8 +59,11 @@
 						The <emphasis role="bold">Interface Language Setting</emphasis> window lists all available languages installed in the Portal:
 					</para>
 					<mediaobject>
-						<imageobject>
-							<imagedata fileref="images/InterfaceLanguage.png" format="PNG" width="444" />
+						<imageobject role="html">
+							<imagedata fileref="images/InterfaceLanguage.png" format="PNG" align="center" scale="100"/>
+						</imageobject>
+						<imageobject role="fo">
+							<imagedata fileref="images/InterfaceLanguage.png" format="PNG" align="center" contentwidth="150mm" />
 						</imageobject>
 					</mediaobject>
 				</step>
@@ -74,7 +80,7 @@
 			</procedure>
 	</section>
 
-	<section id="sect-User_Guide-Change_Interface_Language-Portal">
+<!--Deprecated	<section id="sect-User_Guide-Change_Interface_Language-Portal">
 		<title>Language of the Portal</title>
 
 <note>
@@ -86,7 +92,7 @@ This feature does not seem to exist anymore. Please investigate.
 			<para>
 				This methods allows you to change the interface language of the current Portal.
 			</para>
-	<!--			<procedure>
+				<procedure>
 					<step>
 						<para>
 							Go to <emphasis role="bold">&PRODUCT; Start</emphasis> -&gt; <emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Advanced</emphasis> &gt; <emphasis role="bold">Edit Current portal</emphasis>.
@@ -110,7 +116,7 @@ This feature does not seem to exist anymore. Please investigate.
 				</procedure>
 		<para>
 			For Portal 2.6
-		</para>  -->
+		</para> 
 		<para>
 			You easily change the interface language of the current Portal by following guides:
 		</para>
@@ -121,7 +127,7 @@ This feature does not seem to exist anymore. Please investigate.
 				</para>
 				<mediaobject>
 					<imageobject>
-						<imagedata fileref="images/EditInline.png" format="PNG" />
+						<imagedata fileref="images/EditInline.png" format="PNG" align="center" />
 					</imageobject>
 				</mediaobject>
 			</step>
@@ -141,9 +147,9 @@ This feature does not seem to exist anymore. Please investigate.
 				</para>
 			</step>
 		</procedure>
-	</section>
+	</section>  -->
 	
-	<section id="sect-User_Guide-Change_Interface_Language-The_2nd_way">
+	<!-- <section id="sect-User_Guide-Change_Interface_Language-The_2nd_way">
 		<title>Method Two</title>
 
 <note>
@@ -154,7 +160,7 @@ This section seems to be identical to section <xref linkend="sect-User_Guide-Cha
 </note>
 
 
-<!--			<para>
+			<para>
 				If you can access &PRODUCT; Start, you can do this way to set interface language for yourself, not for interface language of Portal by these following steps:
 			</para>
 			<procedure>
@@ -164,7 +170,7 @@ This section seems to be identical to section <xref linkend="sect-User_Guide-Cha
 					</para>
 					<mediaobject>
 						<imageobject>
-							<imagedata fileref="images/InterfaceLanguage.png" format="PNG" width="444" />
+							<imagedata fileref="images/InterfaceLanguage.png" format="PNG" align="center" width="444" />
 						</imageobject>
 					</mediaobject>
 				</step>
@@ -186,7 +192,7 @@ This section seems to be identical to section <xref linkend="sect-User_Guide-Cha
 		</procedure> 
 		<para>
 			For Portal 2.6
-		</para> -->
+		</para> 
 		<para>
 			You can set the interface language for yourself by doing the following:
 		</para>
@@ -197,7 +203,7 @@ This section seems to be identical to section <xref linkend="sect-User_Guide-Cha
 				</para>
 				<mediaobject>
 					<imageobject>
-						<imagedata fileref="images/InterfaceLanguage2.6.png" format="PNG" width="444" />
+						<imagedata fileref="images/InterfaceLanguage2.6.png" format="PNG" align="center" width="444" />
 					</imageobject>
 				</mediaobject>
 				<para>
@@ -215,7 +221,7 @@ This section seems to be identical to section <xref linkend="sect-User_Guide-Cha
 				</para>
 			</step>
 		</procedure>
-	</section>
+	</section> -->
 	
 
 	
@@ -226,7 +232,7 @@ This section seems to be identical to section <xref linkend="sect-User_Guide-Cha
 			</para>
 			<variablelist>
 			  <varlistentry>
-				<term>Public Mode</term>
+				<term><emphasis role="bold">Public Mode</emphasis></term>
 				<listitem>
 					<para>
 						When accessing the portal in <emphasis role="bold">Public Mode</emphasis>, the interface language is dictated by the language setting of your web browser.
@@ -237,7 +243,7 @@ This section seems to be identical to section <xref linkend="sect-User_Guide-Cha
 				</listitem>
 			</varlistentry>
 			<varlistentry>
-				<term>Private Mode</term>
+				<term><emphasis role="bold">Private Mode</emphasis></term>
 				<listitem>
 					<para>
 						The interface language in <emphasis role="bold">Private Mode</emphasis> is set when registering each user. See step four of the process to register a new account <xref linkend="sect-User_Guide-Register_New_Accounts" />.

@@ -17,10 +17,10 @@
 						</para>
 						<mediaobject>
 							<imageobject role="html">
-								<imagedata fileref="images/EditNavigation.png" format="PNG"/>
+								<imagedata fileref="images/EditNavigation.png" format="PNG" align="center" scale="110"/>
 							</imageobject>
 							<imageobject role="fo">
-								<imagedata fileref="images/EditNavigation.png" format="PNG" contentwidth="150mm" />
+								<imagedata fileref="images/EditNavigation.png" format="PNG" align="center" contentwidth="150mm" />
 							</imageobject>
 						</mediaobject>
 					</step>
@@ -35,10 +35,10 @@
 						</para>
 						<mediaobject>
 							<imageobject role="html">
-								<imagedata fileref="images/AddNode4.png" format="PNG" width="444" />
+								<imagedata fileref="images/AddNode4.png" format="PNG" align="center" scale="110" />
 							</imageobject>
 							<imageobject role="fo">
-								<imagedata fileref="images/AddNode4.png" format="PNG" contentwidth="150mm" />
+								<imagedata fileref="images/AddNode4.png" format="PNG" align="center" contentwidth="150mm" />
 							</imageobject>
 						</mediaobject>
 						<para>
@@ -109,10 +109,10 @@
 					</para>
 					<mediaobject>
 						<imageobject role="html">
-							<imagedata fileref="images/PageSelector.png" format="PNG" width="444" />
+							<imagedata fileref="images/PageSelector.png" format="PNG" align="center" scale="110" />
 						</imageobject>
 						<imageobject role="fo">
-							<imagedata fileref="images/PageSelector.png" format="PNG" contentwidth="150mm"/>
+							<imagedata fileref="images/PageSelector.png" format="PNG" align="center" contentwidth="150mm"/>
 						</imageobject>
 					</mediaobject>
 						<variablelist>
@@ -145,8 +145,11 @@
 					You do not have to input values in these fields. It is automatically displayed after selecting an existing page by clicking the <emphasis role="bold">Search and Select Page</emphasis> button. The <emphasis role="bold">Select a page</emphasis> form appears:
 				</para>
 				<mediaobject>
-					<imageobject>
-						<imagedata fileref="images/SelectPage1.png" format="PNG" width="444" />
+					<imageobject role="html">
+						<imagedata fileref="images/SelectPage1.png" format="PNG" align="center" scale="110" />
+					</imageobject>
+					<imageobject role="fo">
+						<imagedata fileref="images/SelectPage1.png" format="PNG" align="center" contentwidth="150mm"/>
 					</imageobject>
 				</mediaobject>
 						<para>
@@ -161,8 +164,11 @@
 										Enter a search term related to the page which you want to search:
 									</para>
 									<mediaobject>
-										<imageobject>
-											<imagedata fileref="images/NewSearch1.png" format="PNG" />
+										<imageobject role="html">
+											<imagedata fileref="images/NewSearch1.png" format="PNG" align="center" scale="130"/>
+										</imageobject>
+										<imageobject role="fo">
+											<imagedata fileref="images/NewSearch1.png" format="PNG" align="center" contentwidth="150mm"/>
 										</imageobject>
 									</mediaobject>
 								</step>
@@ -171,8 +177,11 @@
 										Choose the field you wish to search in:
 									</para>
 									<mediaobject>
-										<imageobject>
-											<imagedata fileref="images/NewSearch2.png" format="PNG" />
+										<imageobject role="html">
+											<imagedata fileref="images/NewSearch2.png" format="PNG" align="center" scale="130"/>
+										</imageobject>
+										<imageobject role="fo">
+											<imagedata fileref="images/NewSearch2.png" format="PNG" contentwidth="150mm"/>
 										</imageobject>
 									</mediaobject>
 								</step>
@@ -213,7 +222,7 @@
 						</para>
 						<mediaobject>
 							<imageobject>
-								<imagedata fileref="images/EditNode1.png" format="PNG" />
+								<imagedata fileref="images/EditNode1.png" format="PNG" align="center" />
 							</imageobject>
 						</mediaobject>
 						<para>
@@ -221,7 +230,7 @@
 						</para>
 						<mediaobject>
 							<imageobject>
-								<imagedata fileref="images/PageNodeSetting.png" format="PNG" width="444" />
+								<imagedata fileref="images/PageNodeSetting.png" format="PNG" align="center" width="444" />
 							</imageobject>
 						</mediaobject>
 					</step>
@@ -247,7 +256,7 @@
 						</para>
 					<!--	<mediaobject>
 							<imageobject>
-								<imagedata fileref="images/PageSelector6.png" format="PNG" width="444" />
+								<imagedata fileref="images/PageSelector6.png" format="PNG" align="center" width="444" />
 							</imageobject>
 						</mediaobject> -->
 					</step>
@@ -278,8 +287,11 @@ You can see more details on how to select a page for a node in <xref linkend="se
 							Right-click on the selected node and select <emphasis role="bold">Copy node</emphasis> option.
 						</para>
 						<mediaobject>
-							<imageobject>
-								<imagedata fileref="images/CopyNode3.png" format="PNG" />
+							<imageobject role="html">
+								<imagedata fileref="images/CopyNode3.png" format="PNG" align="center" />
+							</imageobject>
+							<imageobject role="fo">
+								<imagedata fileref="images/CopyNode3.png" format="PNG" align="center" contentwidth="130mm"/>
 							</imageobject>
 						</mediaobject>
 					</step>
@@ -288,8 +300,11 @@ You can see more details on how to select a page for a node in <xref linkend="se
 							Select the position that you want to paste this node and select <emphasis role="bold">Paste Node</emphasis> option. Click the mark icon to <emphasis role="bold">Save</emphasis>.
 						</para>
 						<mediaobject>
-							<imageobject>
-								<imagedata fileref="images/PasteNode3.png" format="PNG" />
+							<imageobject role="html">
+								<imagedata fileref="images/PasteNode3.png" format="PNG" align="center" />
+							</imageobject>
+							<imageobject role="fo">
+								<imagedata fileref="images/PasteNode3.png" format="PNG" align="center" contentwidth="130mm"/>
 							</imageobject>
 						</mediaobject>
 					</step>
@@ -318,8 +333,11 @@ Therefore there will be a new page that has the same name as the cloned node's p
 							Right-click on selected node and select <emphasis role="bold">Clone node</emphasis> option.
 						</para>
 						<mediaobject>
-							<imageobject>
-								<imagedata fileref="images/CloneNode2.png" format="PNG" />
+							<imageobject role="html">
+								<imagedata fileref="images/CloneNode2.png" format="PNG" align="center" />
+							</imageobject>
+							<imageobject role="fo">
+								<imagedata fileref="images/CloneNode2.png" format="PNG" align="center" contentwidth="130mm"/>
 							</imageobject>
 						</mediaobject>
 					</step>
@@ -328,8 +346,11 @@ Therefore there will be a new page that has the same name as the cloned node's p
 							Select the position that you want to paste this node and select <emphasis role="bold">Paste Node</emphasis> option. Click the mark icon to <emphasis role="bold">Save</emphasis>.
 						</para>
 						<mediaobject>
-							<imageobject>
-								<imagedata fileref="images/PasteNode3.png" format="PNG" />
+							<imageobject role="html">
+								<imagedata fileref="images/PasteNode3.png" format="PNG" align="center" />
+							</imageobject>
+							<imageobject role="fo">
+								<imagedata fileref="images/PasteNode3.png" format="PNG" align="center" contentwidth="130mm"/>
 							</imageobject>
 						</mediaobject>
 						<para>
@@ -337,7 +358,7 @@ Therefore there will be a new page that has the same name as the cloned node's p
 						</para>
 				<!--		<mediaobject>
 							<imageobject>
-								<imagedata fileref="images/ManagePage2.png" format="PNG" width="444" />
+								<imagedata fileref="images/ManagePage2.png" format="PNG" align="center" width="444" />
 							</imageobject>
 						</mediaobject> -->
 					</step>
@@ -357,8 +378,11 @@ Therefore there will be a new page that has the same name as the cloned node's p
 							Right-click on the selected node and select <emphasis role="bold">Cut node</emphasis> option.
 						</para>
 						<mediaobject>
-							<imageobject>
-								<imagedata fileref="images/CutNode4.png" format="PNG" />
+							<imageobject role="html">
+								<imagedata fileref="images/CutNode4.png" format="PNG" align="center" />
+							</imageobject>
+							<imageobject role="fo">
+								<imagedata fileref="images/CutNode4.png" format="PNG" align="center" contentwidth="130mm"/>
 							</imageobject>
 						</mediaobject>
 					</step>
@@ -367,8 +391,11 @@ Therefore there will be a new page that has the same name as the cloned node's p
 							Select the position that you want to paste this node and select <emphasis role="bold">Paste Node</emphasis> option. mark icon to <emphasis role="bold">Save</emphasis>.
 						</para>
 						<mediaobject>
-							<imageobject>
-								<imagedata fileref="images/PasteNode3.png" format="PNG" />
+							<imageobject role="html">
+								<imagedata fileref="images/PasteNode3.png" format="PNG" align="center"  />
+							</imageobject>
+							<imageobject role="fo">
+								<imagedata fileref="images/PasteNode3.png" format="PNG" align="center" contentwidth="130mm" />
 							</imageobject>
 						</mediaobject>
 					</step>
@@ -388,8 +415,11 @@ Therefore there will be a new page that has the same name as the cloned node's p
 							Right-click on the selected node and select <emphasis role="bold">Delete node</emphasis> option.
 						</para>
 						<mediaobject>
-							<imageobject>
-								<imagedata fileref="images/DeleteNode2.png" format="PNG" />
+							<imageobject role="html">
+								<imagedata fileref="images/DeleteNode2.png" format="PNG" align="center" />
+							</imageobject>
+							<imageobject role="fo">
+								<imagedata fileref="images/DeleteNode2.png" format="PNG" align="center" contentwidth="130mm" />
 							</imageobject>
 						</mediaobject>
 						<para>
@@ -397,7 +427,7 @@ Therefore there will be a new page that has the same name as the cloned node's p
 						</para>
 						<mediaobject>
 							<imageobject>
-								<imagedata fileref="images/http.png" format="PNG" />
+								<imagedata fileref="images/http.png" format="PNG" align="center" />
 							</imageobject>
 						</mediaobject>
 					</step>

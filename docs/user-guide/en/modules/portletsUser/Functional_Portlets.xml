@@ -21,7 +21,7 @@
 			</para>
 			<mediaobject>
 				<imageobject>
-					<imagedata fileref="images/Account.png" format="PNG" contentwidth="150mm" />
+					<imagedata fileref="images/Account.png" format="PNG" align="center" contentwidth="150mm" />
 				</imageobject>
 			</mediaobject>
 		</listitem>
@@ -34,7 +34,7 @@
 			</para>
 			<mediaobject>
 				<imageobject>
-					<imagedata fileref="images/OrganizationPortlet1.png" format="PNG" contentwidth="150mm"/>
+					<imagedata fileref="images/OrganizationPortlet1.png" format="PNG" align="center" contentwidth="150mm"/>
 				</imageobject>
 			</mediaobject>
 		</listitem>
@@ -47,7 +47,7 @@
 			</para>
 			<mediaobject>
 				<imageobject>
-					<imagedata fileref="images/ApplicationRegistry.png" format="PNG" contentwidth="150mm"/>
+					<imagedata fileref="images/ApplicationRegistry.png" format="PNG" align="center" contentwidth="150mm"/>
 				</imageobject>
 			</mediaobject>
 		</listitem>
@@ -61,7 +61,7 @@
 			</para>
 			<mediaobject>
 				<imageobject>
-					<imagedata fileref="images/InternationalizationPortlet1.png" format="PNG" contentwidth="400" align="center"/>
+					<imagedata fileref="images/InternationalizationPortlet1.png" format="PNG" align="center" contentwidth="400" align="center"/>
 				</imageobject>
 			</mediaobject>
 		</listitem>
@@ -76,7 +76,7 @@
 			</para>
 			<mediaobject>
 				<imageobject>
-					<imagedata fileref="images/Administration.png" format="PNG" contentwidth="400" align="center"/>
+					<imagedata fileref="images/Administration.png" format="PNG" align="center" contentwidth="400" align="center"/>
 				</imageobject>
 			</mediaobject>
 		</listitem>
@@ -90,10 +90,10 @@
 			</para>
                         <mediaobject>
 				<imageobject role="html">
-					<imagedata fileref="images/StarPortlet.png" format="PNG" scale="110"/>
+					<imagedata fileref="images/StarPortlet.png" format="PNG" align="center" scale="110"/>
 				</imageobject>
 				<imageobject role="fo">
-					<imagedata fileref="images/StarPortlet.png" format="PNG" contentwidth="150mm"/>
+					<imagedata fileref="images/StarPortlet.png" format="PNG" align="center" contentwidth="150mm"/>
 				</imageobject>
 			</mediaobject>
 		</listitem>
@@ -106,7 +106,7 @@
 			</para>
 			<mediaobject>
 			<imageobject>
-				<imagedata fileref="images/UserToolbar.png" format="PNG"></imagedata>
+				<imagedata fileref="images/UserToolbar.png" format="PNG" align="center"></imagedata>
 				</imageobject>
 			</mediaobject>
 		</listitem>

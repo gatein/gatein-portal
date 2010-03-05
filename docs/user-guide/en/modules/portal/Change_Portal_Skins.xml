@@ -27,10 +27,10 @@
 									</para>
 									<mediaobject>
 										<imageobject role="html">
-											<imagedata fileref="images/SkinSet1.png" format="PNG" width="444" />
+											<imagedata fileref="images/SkinSet1.png" format="PNG" align="center" scale="110" />
 										</imageobject>
 										<imageobject role="fo">
-											<imagedata fileref="images/SkinSet1.png" format="PNG" contentwidth="120mm" />
+											<imagedata fileref="images/SkinSet1.png" format="PNG" align="center" contentwidth="120mm" />
 										</imageobject>
 									</mediaobject>
 								</step>
@@ -61,10 +61,10 @@
 									</para>
 									<mediaobject>
 										<imageobject role="html">
-											<imagedata fileref="images/Skin1.png" format="PNG" width="444" />
+											<imagedata fileref="images/Skin1.png" format="PNG" align="center" scale="110" />
 										</imageobject>
 										<imageobject role="fo">
-											<imagedata fileref="images/Skin1.png" format="PNG" contentwidth="120mm"/>
+											<imagedata fileref="images/Skin1.png" format="PNG" align="center" contentwidth="120mm"/>
 										</imageobject>
 									</mediaobject>
 								</step>

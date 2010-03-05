@@ -19,8 +19,11 @@
 					Select the node that you want to move. Right click on the selected node and then click on <emphasis role="bold">Move up</emphasis> or <emphasis role="bold">Move down</emphasis>
 				</para>
 				<mediaobject>
-					<imageobject>
-						<imagedata fileref="images/MoveUpDown.png" format="PNG" />
+					<imageobject role="html">
+						<imagedata fileref="images/MoveUpDown.png" format="PNG" align="center" />
+					</imageobject>
+					<imageobject role="fo">
+						<imagedata fileref="images/MoveUpDown.png" format="PNG" align="center" contentwidth="130mm" />
 					</imageobject>
 				</mediaobject>
 			</step>

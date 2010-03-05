@@ -9,16 +9,22 @@
 		&PRODUCT; supports Right to Left (RTL) languages.
 	</para>
 	<mediaobject>
-		<imageobject>
-			<imagedata fileref="images/HomePage2.png" format="PNG" width="444" />
+		<imageobject role="html">
+			<imagedata fileref="images/HomePage2.png" format="PNG" align="center" scale="100" />
+		</imageobject>
+		<imageobject role="fo">
+			<imagedata fileref="images/HomePage2.png" format="PNG" align="center" contentwidth="150mm" />
 		</imageobject>
 	</mediaobject>
 	<formalpara>
 		<title>The Account Portlet</title>
 		<para>
 		<mediaobject>
-			<imageobject>
-				<imagedata fileref="images/NewAccount3.png" format="PNG" width="444" />
+			<imageobject role="html">
+				<imagedata fileref="images/NewAccount3.png" format="PNG" align="center" scale="100" />
+			</imageobject>
+			<imageobject role="fo">
+				<imagedata fileref="images/NewAccount3.png" format="PNG" align="center" contentwidth="150mm" />
 			</imageobject>
 		</mediaobject>
 		</para>
@@ -28,8 +34,11 @@
 		<title>The Application Registry Portlet</title>
 		<para>
 		<mediaobject>
-			<imageobject>
-				<imagedata fileref="images/ApplicationRegistry2.png" format="PNG" width="444" />
+			<imageobject role="html">
+				<imagedata fileref="images/ApplicationRegistry2.png" format="PNG" align="center" scale="100"/>
+			</imageobject>
+			<imageobject role="fo">
+				<imagedata fileref="images/ApplicationRegistry2.png" format="PNG" align="center" contentwidth="150mm" />
 			</imageobject>
 		</mediaobject>
 		</para>
@@ -40,8 +49,11 @@
 		<title>The Organization Portlet:</title>
 		<para>
 		<mediaobject>
-			<imageobject>
-				<imagedata fileref="images/Organization5.png" format="PNG" width="444" />
+			<imageobject role="html">
+				<imagedata fileref="images/Organization5.png" format="PNG" align="center" scale="120" />
+			</imageobject>
+			<imageobject role="fo">
+				<imagedata fileref="images/Organization5.png" format="PNG" align="center" contentwidth="150mm" />
 			</imageobject>
 		</mediaobject>
 		</para>
@@ -51,7 +63,7 @@
 		<title>The User Workspace</title>
 		<mediaobject>
 			<imageobject>
-				<imagedata fileref="images/UserWorkspace2.png" format="PNG" width="444" />
+				<imagedata fileref="images/UserWorkspace2.png" format="PNG" align="center" width="444" />
 			</imageobject>
 		</mediaobject>
 	</section> -->

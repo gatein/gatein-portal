@@ -10,10 +10,10 @@
 	</para>
 	<mediaobject>
 		<imageobject role="html">
-			<imagedata fileref="images/Toolbar.png" format="PNG" />
+			<imagedata fileref="images/Toolbar.png" format="PNG" align="center" />
 		</imageobject>
 		<imageobject role="fo">
-			<imagedata fileref="images/Toolbar.png" format="PNG" contentwidth="150mm"/>
+			<imagedata fileref="images/Toolbar.png" format="PNG" align="center" contentwidth="150mm"/>
 		</imageobject>
 	</mediaobject>
 	<section>
@@ -28,10 +28,10 @@
 						</para>
 						<mediaobject>
 							<imageobject role="html">
-								<imagedata fileref="images/StarPortlet.png" format="PNG" />
+								<imagedata fileref="images/StarPortlet.png" format="PNG" align="center" />
 							</imageobject>
 							<imageobject role="fo">
-								<imagedata fileref="images/StarPortlet.png" format="PNG" contentwidth="150mm"/>
+								<imagedata fileref="images/StarPortlet.png" format="PNG" align="center" contentwidth="150mm"/>
 							</imageobject>
 						</mediaobject>
 					</listitem>
@@ -44,10 +44,10 @@
 							</para>
 							<mediaobject>
 								<imageobject role="html">
-									<imagedata fileref="images/SitePortlet.png" format="PNG" />
+									<imagedata fileref="images/SitePortlet.png" format="PNG" align="center" />
 								</imageobject>
 								<imageobject role="fo">
-									<imagedata fileref="images/SitePortlet.png" format="PNG" contentwidth="150mm"/>
+									<imagedata fileref="images/SitePortlet.png" format="PNG" align="center" contentwidth="150mm"/>
 								</imageobject>
 							</mediaobject>
 						</listitem>
@@ -60,10 +60,10 @@
 							</para>
 							<mediaobject>
 								<imageobject role="html">
-									<imagedata fileref="images/GroupPortlet.png" format="PNG" />
+									<imagedata fileref="images/GroupPortlet.png" format="PNG" align="center" />
 								</imageobject>
 								<imageobject role="fo">
-									<imagedata fileref="images/GroupPortlet.png" format="PNG" contentwidth="150mm" />
+									<imagedata fileref="images/GroupPortlet.png" format="PNG" align="center" contentwidth="150mm" />
 								</imageobject>
 							</mediaobject>
 						</listitem>
@@ -76,10 +76,10 @@
 							</para>
 							<mediaobject>
 								<imageobject role="html">
-									<imagedata fileref="images/DashboardPortlet.png" format="PNG" />
+									<imagedata fileref="images/DashboardPortlet.png" format="PNG" align="center" />
 								</imageobject>
 								<imageobject role="fo">
-									<imagedata fileref="images/DashboardPortlet.png" format="PNG" contentwidth="150mm"/>
+									<imagedata fileref="images/DashboardPortlet.png" format="PNG" align="center" contentwidth="150mm"/>
 								</imageobject>
 							</mediaobject>
 							<para>
@@ -101,10 +101,10 @@
 						</para>
 						<mediaobject>
 							<imageobject role="html">
-								<imagedata fileref="images/EditorPortlet.png" format="PNG" />
+								<imagedata fileref="images/EditorPortlet.png" format="PNG" align="center" />
 							</imageobject>
 							<imageobject role="fo">
-								<imagedata fileref="images/EditorPortlet.png" format="PNG" contentwidth="150mm"/>
+								<imagedata fileref="images/EditorPortlet.png" format="PNG" align="center" contentwidth="150mm"/>
 							</imageobject>
 						</mediaobject>
 					</listitem>

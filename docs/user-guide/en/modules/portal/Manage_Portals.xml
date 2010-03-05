@@ -22,8 +22,11 @@
 						Go to <emphasis role="bold">Editor</emphasis> on the Toolbar and click <emphasis role="bold">Edit Site Layout</emphasis>.
 				</para>
 				<mediaobject>
-					<imageobject>
-						<imagedata fileref="images/EditPortal.png" format="PNG" width="444" />
+					<imageobject role="html">
+						<imagedata fileref="images/EditPortal.png" format="PNG" align="center" scale="100"/>
+					</imageobject>
+					<imageobject role="fo">
+						<imagedata fileref="images/EditPortal.png" format="PNG" align="center" contentwidth="130mm" />
 					</imageobject>
 				</mediaobject>
 				</step>
@@ -32,8 +35,11 @@
 					Click the Properties button in the <emphasis role="bold">Edit Inline Composer</emphasis>. The edit Form of the portal will be shown:
 				</para>
 				<mediaobject>
-					<imageobject>
-						<imagedata fileref="images/EditPortal2.6New.png" format="PNG" width="444" />
+					<imageobject role="html">
+						<imagedata fileref="images/EditPortal2.6New.png" format="PNG" align="center" scale="100" />
+					</imageobject>
+					<imageobject role="fo">
+						<imagedata fileref="images/EditPortal2.6New.png" format="PNG" align="center" contentwidth="150mm" />
 					</imageobject>
 				</mediaobject>
 				</step>
@@ -54,7 +60,7 @@
 				</para>
 				<variablelist>
 					<varlistentry>
-						<term>Never</term> 
+						<term><emphasis role="bold">Never</emphasis></term> 
 							<listitem>
 								<para>
 									The session will never timeout, even if an application requests it.
@@ -62,7 +68,7 @@
 							</listitem>
 					</varlistentry>
 					<varlistentry>
-						<term>On-demand</term> 
+						<term><emphasis role="bold">On-demand</emphasis></term> 
 							<listitem>
 								<para>
 									The session will timeout if an application requests it
@@ -70,7 +76,7 @@
 							</listitem>
 					</varlistentry>
 					<varlistentry>
-						<term>Always</term> 
+						<term><emphasis role="bold">Always</emphasis></term> 
 							<listitem>
 								<para>
 									The session will time out after a set period.
@@ -116,7 +122,7 @@
 				</para>
 				<mediaobject>
 					<imageobject>
-						<imagedata fileref="images/EditCurrentPortal.png" format="PNG" width="444" />
+						<imagedata fileref="images/EditCurrentPortal.png" format="PNG" align="center" width="444" />
 					</imageobject>
 				</mediaobject>
 				<variablelist>
@@ -212,7 +218,7 @@
 	
 	<section id="sect-User_Guide-Manage_Portals-Delete_a_Portal">
 		<title>Delete a Portal</title>
-					<procedure>
+			<procedure>
 			<title>Method One:</title>
 			<step>
 				<para>
@@ -228,6 +234,14 @@
 				<para>
 					Click the <emphasis role="bold">OK</emphasis> button in the confirmation message to delete.
 				</para>
+				<mediaobject>
+					<imageobject role="html">
+						<imagedata fileref="images/SureDelete.png" format="PNG" align="center" scale="100"/>
+					</imageobject>
+					<imageobject role="fo">
+						<imagedata fileref="images/SureDelete.png" format="PNG" align="center" contentwidth="70mm"/>
+					</imageobject>
+				</mediaobject>
 			</step>
 		</procedure>
 
@@ -249,8 +263,11 @@
 					Click <emphasis role="bold">OK</emphasis> to accept deleting a portal or <emphasis role="bold">Cancel</emphasis> to quit without deleting it.
 				</para>
 				<mediaobject>
-					<imageobject>
-						<imagedata fileref="images/SureDelete.png" format="PNG" />
+					<imageobject role="html">
+						<imagedata fileref="images/SureDelete.png" format="PNG" align="center" scale="100"/>
+					</imageobject>
+					<imageobject role="fo">
+						<imagedata fileref="images/SureDelete.png" format="PNG" align="center" contentwidth="70mm"/>
 					</imageobject>
 				</mediaobject>
 			</step>

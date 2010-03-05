@@ -12,16 +12,16 @@
 		<section id="sect-User_Guide-Manage_Pages-Add_a_new_Page_in_the_Page_List">
 			<title>Add a new Page in the Page List</title>
 				<para>
-					You easily add a new page by following these simple steps:
+					You easily add a new page by following these steps:
 				</para>
 				<procedure>
 					<step>
 						<para>
-							Go to <emphasis role="bold">Group</emphasis> -&gt;<emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Page Management</emphasis>.
+							Hover over <emphasis role="bold">Group</emphasis> in the Toolbar, highlight <emphasis role="bold">Administration</emphasis> and click <emphasis role="bold">Page Management</emphasis>.
 						</para>
 					<mediaobject>
 						<imageobject>
-							<imagedata fileref="images/ManagePage.png" format="PNG" width="444" />
+							<imagedata fileref="images/ManagePage.png" format="PNG" align="center" scale="110"/>
 						</imageobject>
 					</mediaobject>
 					</step>
@@ -35,13 +35,13 @@
 							Enter values for fields in the <emphasis role="bold">Page Setting</emphasis> tab
 						</para>
 						<mediaobject>
-							<imageobject>
-							<imagedata fileref="images/PageSetting.png" format="PNG" width="444" />
+						<imageobject>
+							<imagedata fileref="images/PageSetting.png" format="PNG" align="center" scale="110" />
 						</imageobject>
-					</mediaobject>
+						</mediaobject>
 					<variablelist>
 						<varlistentry>
-							<term>Page Id</term>
+							<term><emphasis role="bold">Page Id</emphasis></term>
 								<listitem>
 									<para>
 										A string that identifies the page. It is automatically generated when you finish creating the page.
@@ -49,7 +49,7 @@
 								</listitem>
 						</varlistentry>
 						<varlistentry>
-							<term>Owner type</term>
+							<term><emphasis role="bold">Owner type</emphasis></term>
 								<listitem>
 									<para>
 										If the page <emphasis role="bold">Owner type</emphasis> is <emphasis>portal</emphasis> the page is created for a portal. Therefore only users who have edit permissions on the portal level can create this page type. 
@@ -61,14 +61,17 @@
 										If the page <emphasis role="bold">Owner type</emphasis> is <emphasis>group</emphasis> the page  is created for a group. Therefore only users who have <emphasis>manager</emphasis> permissions for that group can create this page type.
 									</para>
 									<mediaobject>
-										<imageobject>
-											<imagedata fileref="images/PageSetting1.png" format="PNG" width="444" />
+										<imageobject role="html">
+											<imagedata fileref="images/PageSetting1.png" format="PNG" align="center" scale="110" />
+										</imageobject>
+										<imageobject role="fo">
+											<imagedata fileref="images/PageSetting1.png" format="PNG" align="center" contentwidth="150mm" />
 										</imageobject>
 									</mediaobject>
 								</listitem>
 						</varlistentry>
 						<varlistentry>
-							<term>Owner Id</term>
+							<term><emphasis role="bold">Owner Id</emphasis></term>
 								<listitem>
 									<para>
 										The name of the page owner. When the owner type is set to <emphasis>group</emphasis>, a list of groups will allow you to select one user as the 'owner'.	
@@ -76,7 +79,7 @@
 								</listitem>
 						</varlistentry>
 						<varlistentry>
-							<term>Page Name</term>
+							<term><emphasis role="bold">Page Name</emphasis></term>
 								<listitem>
 									<para>
 										The name of the page. This is a required field and must be unique. Only alphabetical, numerical and underscore characters are allowed to be used for this field and the name must be at least 3 and no more than 30 characters in length.
@@ -84,7 +87,7 @@
 								</listitem>
 						</varlistentry>
 						<varlistentry>
-							<term>Page title</term>
+							<term><emphasis role="bold">Page title</emphasis></term>
 								<listitem>
 									<para>
 										The title of the the page. This is an optional field. If you choose to add a title to the page it must be at least 3 and no more than 30 characters in length.
@@ -92,7 +95,7 @@
 								</listitem>
 						</varlistentry>
 						<varlistentry>
-							<term>Show Max Window</term>
+							<term><emphasis role="bold">Show Max Window</emphasis></term>
 								<listitem>
 									<para>
 										The option allows users to choose whether the page is shown at maximum size or not.
@@ -107,12 +110,12 @@
 						</para>
 							<mediaobject>
 								<imageobject>
-									<imagedata fileref="images/PermissionSetting1.png" format="PNG" width="444" />
+									<imagedata fileref="images/PermissionSetting1.png" format="PNG" align="center" scale="110" />
 								</imageobject>
 							</mediaobject>
 						<variablelist>
 						  <varlistentry>
-							<term>Access Permission</term>
+							<term><emphasis role="bold">Access Permission</emphasis></term>
 							<listitem>
 								<para>
 									The content of this tab is identical to the <emphasis role="bold">Owner type</emphasis> field in the <emphasis role="bold">Page Setting</emphasis> tab. Therefore, all users having access rights for the type selected in the <emphasis role="bold">Owner type</emphasis> field will appear in this tab. But users can also change the value of this tab.
@@ -121,8 +124,11 @@
 								Check the check box if you want to share access with everyone or click the <emphasis role="bold">Add Permission</emphasis> button to assign permission on group level, then select a group and membership or click the trash can icon to remove a group from the list.
 								</para>
 								<mediaobject>
-									<imageobject>
-										<imagedata fileref="images/EditPermission1.png" format="PNG" width="444" />
+									<imageobject role="html">
+										<imagedata fileref="images/EditPermission1.png" format="PNG" align="center" scale="110" />
+									</imageobject>
+									<imageobject role="fo">
+										<imagedata fileref="images/EditPermission1.png" format="PNG" align="center" contentwidth="150mm"/>
 									</imageobject>
 								</mediaobject>
 							</listitem>
@@ -137,8 +143,11 @@
 								If the <emphasis role="bold">Owner type</emphasis> is "group", edit permission is assigned to users who are "manager" of the group that is selected in <emphasis role="bold">Owner id</emphasis>. You can only change this value when editing the page.
 								</para>
 								<mediaobject>
-									<imageobject>
-										<imagedata fileref="images/EditPermission2.png" format="PNG" width="444" />
+									<imageobject role="html">
+										<imagedata fileref="images/EditPermission2.png" format="PNG" align="center" width="444" />
+									</imageobject>
+									<imageobject role="fo">
+										<imagedata fileref="images/EditPermission2.png" format="PNG" align="center" contentwidth="150mm"/>
 									</imageobject>
 								</mediaobject> 
 							</listitem>
@@ -257,7 +266,7 @@
 					</para>
 					<mediaobject>
 						<imageobject>
-							<imagedata fileref="images/http.png" format="PNG" />
+							<imagedata fileref="images/http.png" format="PNG" align="center" />
 						</imageobject>
 					</mediaobject>		
 				</step>	

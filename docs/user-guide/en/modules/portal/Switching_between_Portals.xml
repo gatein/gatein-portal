@@ -12,8 +12,11 @@
 		Go to <emphasis role="bold">Site</emphasis> on the Toolbar for a list all portals in which you have at least the access right
 	</para>
 	<mediaobject>
-		<imageobject>
-			<imagedata fileref="images/SitePortlet.png" format="PNG" />
+		<imageobject role="html">
+			<imagedata fileref="images/SitePortlet.png" format="PNG" align="center" scale="110"/>
+		</imageobject>
+		<imageobject role="fo">
+			<imagedata fileref="images/SitePortlet.png" format="PNG" align="center" contentwidth="150mm"/>
 		</imageobject>
 	</mediaobject>
 	<para>
