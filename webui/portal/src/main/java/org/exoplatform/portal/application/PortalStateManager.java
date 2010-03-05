@@ -119,16 +119,19 @@ public class PortalStateManager extends StateManager
       UIApplication uiapp = context.getUIApplication();
 
       //
-      HttpSession session = getSession(context);
-
-      // At this point if it returns null it means that it was not possible to create a session
-      // because the session might be invalidated and the response is already commited to the client.
-      // That situation happens during a logout that invalidates the HttpSession 
-      if (session != null)
+      if (uiapp != null)
       {
-         String key = getKey(context);
-         log.debug("Storing application " + key);
-         session.setAttribute(APPLICATION_ATTRIBUTE_PREFIX + key, new ApplicationState(uiapp, context.getRemoteUser()));
+         HttpSession session = getSession(context);
+
+         // At this point if it returns null it means that it was not possible to create a session
+         // because the session might be invalidated and the response is already commited to the client.
+         // That situation happens during a logout that invalidates the HttpSession
+         if (session != null)
+         {
+            String key = getKey(context);
+            log.debug("Storing application " + key);
+            session.setAttribute(APPLICATION_ATTRIBUTE_PREFIX + key, new ApplicationState(uiapp, context.getRemoteUser()));
+         }
       }
    }
 

@@ -138,7 +138,7 @@ public class InitiateLoginServlet extends AbstractHttpServlet
     * @param req the incoming request
     * @return the token
     */
-   private String getRememberMeTokenCookie(HttpServletRequest req)
+   public static String getRememberMeTokenCookie(HttpServletRequest req)
    {
       Cookie[] cookies = req.getCookies();
       if (cookies != null)
