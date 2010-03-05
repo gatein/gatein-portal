@@ -47,6 +47,8 @@ function getProduct(version) {
   product.addDependencies(portal.web.portal) ;
   product.addDependencies(portal.sample.extension) ;
 
+  product.addDependencies(portal.ibm.jdk.support);
+
   product.addServerPatch("tomcat", portal.server.tomcat.patch) ;
   product.addServerPatch("jboss",  portal.server.jboss.patch) ;
   product.addServerPatch("jbossear",  portal.server.jbossear.patch) ;

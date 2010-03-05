@@ -193,7 +193,6 @@
                               <argument>-Dexo.m2.repos=file:${settings.localRepository}</argument>
                               <argument>-Dclean.server=${exo.projects.app.tomcat.version}</argument>
                               <argument>-Dexo.m2.home=${maven.home}</argument>
-                              <argument>-Xshare:auto</argument>
                               <argument>-Xms128m</argument>
                               <argument>-Xmx512m</argument>
                               <argument>-classpath</argument>
@@ -294,7 +293,6 @@
                               <argument>-Dexo.m2.repos=file:${settings.localRepository},http://maven2.exoplatform.org/rest/maven2,http://repository.jboss.org/maven2</argument>
                               <argument>-Dclean.server=${exo.projects.app.jboss.version}</argument>
                               <argument>-Dexo.m2.home=${maven.home}</argument>
-                              <argument>-Xshare:auto</argument>
                               <argument>-Xms128m</argument>
                               <argument>-Xmx512m</argument>
                               <argument>-classpath</argument>
@@ -394,7 +392,6 @@
                               <argument>-Dexo.m2.repos=file:${settings.localRepository}</argument>
                               <argument>-Dclean.server=${exo.projects.app.tomcat.version}</argument>
                               <argument>-Dexo.m2.home=${maven.home}</argument>
-                              <argument>-Xshare:auto</argument>
                               <argument>-Xms128m</argument>
                               <argument>-Xmx512m</argument>
                               <argument>-classpath</argument>
@@ -496,7 +493,6 @@
                               <argument>-Dexo.m2.repos=file:${settings.localRepository},http://maven2.exoplatform.org/rest/maven2,http://repository.jboss.org/maven2</argument>
                               <argument>-Dclean.server=${exo.projects.app.jboss.version}</argument>
                               <argument>-Dexo.m2.home=${maven.home}</argument>
-                              <argument>-Xshare:auto</argument>
                               <argument>-Xms128m</argument>
                               <argument>-Xmx512m</argument>
                               <argument>-classpath</argument>

@@ -116,6 +116,16 @@ public class TestPortalConfig extends AbstractPortalTest
       PortalConfig pConfig = storage.getPortalConfig(PortalConfig.GROUP_TYPE, "/groupTest");
       assertNotNull("the Group's PortalConfig is not null", pConfig);
       assertTrue(pConfig.getPortalLayout().getChildren() == null || pConfig.getPortalLayout().getChildren().size() == 4);
+      
+      /**
+       * We need to remove the /groupTest from the groupHandler as the
+       * handler is shared between the tests and can cause other tests
+       * to fail.
+       * TODO: make the tests fully independent
+       */
+      groupHandler.removeGroup(group, false);
+      group = groupHandler.findGroupById("/groupTest");
+      assertNull(group);
    }
 
    public void testUserLayout() throws Exception

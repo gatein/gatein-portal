@@ -55,6 +55,7 @@
       <javax.servlet.version>2.5</javax.servlet.version>
       <version.chromattic>1.0.0-cr2</version.chromattic>
       <version.reflect>1.0.0-beta5</version.reflect>
+      <jcip.version>1.0</jcip.version>
 
       <!-- ************** -->
       <!-- Build settings -->
@@ -65,7 +66,6 @@
 
       <!-- maven-release-plugin -->
       <arguments>-Prelease,pkg-tomcat,pkg-jbossas -Dmaven.test.skip=true</arguments>
-
    </properties>
 
    <scm>
@@ -673,6 +673,13 @@
             <artifactId>junit</artifactId>
             <version>3.8.1</version>
          </dependency>
+         
+         <!-- needed for the IBM jdk, should be remove in the future when IBM fixes its jdk (see GTNPORTAL-636) --> 
+         <dependency>
+         	<groupId>net.jcip</groupId>
+         	<artifactId>jcip-annotations</artifactId>
+         	<version>${jcip.version}</version>
+         </dependency>
 
       </dependencies>
 
@@ -751,6 +758,18 @@
                      </property>
                   </systemProperties>
                </configuration>
+            </plugin>
+            <!-- we shouldn't need to specify this plugin here, but the maven compiler plugin is not accepting its 
+                 memory option properties. This should be removed when we can just set the compiler properties -->
+            <!-- we need to specify this as building GateIn can cause memory problems with some JDKs (ie IBM) -->
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-compiler-plugin</artifactId>
+              <configuration>
+                <fork>true</fork>
+                <meminitial>256m</meminitial>
+                <maxmem>1024m</maxmem>
+              </configuration>
             </plugin>
          </plugins>
       </pluginManagement>

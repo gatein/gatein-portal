@@ -28,7 +28,7 @@ rem Sets some variables
 set LOG_OPTS="-Dorg.apache.commons.logging.Log=org.apache.commons.logging.impl.SimpleLog"
 set SECURITY_OPTS="-Djava.security.auth.login.config=..\conf\jaas.conf"
 set EXO_OPTS="-Dexo.product.developing=false -Dexo.conf.dir=..\gatein\conf"
-set JAVA_OPTS=-Xshare:auto -Xms128m -Xmx512m %LOG_OPTS% %SECURITY_OPTS% %EXO_OPTS%%
+set JAVA_OPTS=-Xms128m -Xmx512m %LOG_OPTS% %SECURITY_OPTS% %EXO_OPTS%%
 
 rem Launches the server
 call catalina.bat %*

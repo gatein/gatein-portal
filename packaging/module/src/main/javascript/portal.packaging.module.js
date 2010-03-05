@@ -45,6 +45,7 @@ function getModule(params)
    var shindigVersion = "${org.shindig.version}";
    var groovyVersion = "${org.codehaus.groovy.version}";
    var rhinoVersion = "${rhino.version}";
+   var jcipVersion = "${jcip.version}";
 
    //TODO versions for gatein components
    
@@ -260,6 +261,11 @@ function getModule(params)
    new Project("org.exoplatform.portal", "gatein-sample-extension", "ear", module.version).
    addDependency(new Project("org.exoplatform.portal", "gatein-sample-portal", "ear", module.version)).
    addDependency(new Project("org.exoplatform.portal", "starter-gatein", "ear", module.version));
+
+   <!-- needed so that GTN can be run on the IBM jdk, to be removed when the IBM jdk no longer needs this hack -->
+   module.ibm = {};
+   module.ibm.jdk = {};
+   module.ibm.jdk.support =new Project("net.jcip", "jcip-annotations", "jar", jcipVersion);
 
    return module;
 }
