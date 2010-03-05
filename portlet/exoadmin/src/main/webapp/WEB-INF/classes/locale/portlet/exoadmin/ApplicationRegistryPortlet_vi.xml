@@ -63,7 +63,7 @@
   <UIOrganizer>
     <label>
       <addCategory>Thêm danh mục</addCategory>
-      <autoImport>Tự động Import</autoImport>
+      <autoImport>Truy nhập ứng dụng</autoImport>
       <categories>Danh mục</categories>
     </label>
     <title>
@@ -73,8 +73,8 @@
       <deleteApplication>Xóa ứng dụng</deleteApplication>
     </title>
     <msg>
-      <importAll>Việc làm này sẽ tự động tạo ra các danh mục và nhập tất cả các Gadget và portlet vào trong các danh mục.</importAll>
-      <deleteCategory>Bạn có chắc chắn là muốn xóa danh mục này và tất cả các ứng dụng trong nó?</deleteCategory>
+      <importAll>Việc truy nhập ứng dụng sẽ tự động tạo các Danh mục và nhập tất cả các ứng dụng Gadget và Portlet bên trong danh mục tương ứng.</importAll>
+      <deleteCategory>Bạn có chắc chắn là muốn xóa Danh mục này và tất cả các ứng dụng đi kèm bên trong?</deleteCategory>
       <deleteApplication>Bạn có chắc chắn là muốn xóa ứng dụng này?</deleteApplication>
       <emptyCategory>Danh mục này không chứa bất kỳ ứng dụng nào, click vào nút (+) để thêm ứng dụng.</emptyCategory>
       <noCategory>Không có danh mục. Bạn có thể bấm vào nút "Thêm danh mục" hoặc "tự động Import" để thêm danh mục.</noCategory>
@@ -171,8 +171,8 @@
     </msg>
     <tab>
       <label>
-        <categoryPermission>Thiết định phân quyền</categoryPermission>
-        <categorySetting>Thiết định cho danh mục</categorySetting>
+        <categoryPermission>Phân quyền</categoryPermission>
+        <categorySetting>Định nghĩa danh mục</categorySetting>
       </label>
     </tab>
   </UICategoryForm>

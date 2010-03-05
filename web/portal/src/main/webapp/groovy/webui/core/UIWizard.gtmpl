@@ -44,7 +44,7 @@
 												i++;
 												continue;
 											}
-											strStep = _ctx.appRes(uicomponent.getId() + ".label.step") + String.valueOf(j);
+											strStep = _ctx.appRes(uicomponent.getId() + ".label.step") + " " + String.valueOf(j);
 											if(i != step) {
 												actionLink = uicomponent.url("ViewStep" + String.valueOf(i));0
 												print "<a href=\"$actionLink\" title=\"$strStep\">";
