@@ -25,13 +25,11 @@ package org.exoplatform.web.login;
 
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.web.AbstractFilter;
-import org.exoplatform.services.security.IdentityRegistry;
 import org.exoplatform.web.security.Credentials;
 import org.exoplatform.web.security.PortalLoginModule;
 
 import org.jboss.web.tomcat.security.login.WebAuthentication;
 
-import javax.security.auth.login.LoginException;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
