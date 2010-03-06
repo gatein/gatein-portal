@@ -476,18 +476,18 @@ public class NewPortalConfigListener extends BaseComponentPlugin
    private String getDefaultConfig(String location, String path) throws Exception
    {
       String s = location + path;
-      log.debug("Attempt to load file " + s);
+      String content = null;
       try
       {
-         String content = IOUtil.getStreamContentAsString(cmanager_.getInputStream(s));
+         log.debug("Attempt to load file " + s);
+         content = IOUtil.getStreamContentAsString(cmanager_.getInputStream(s));
          log.debug("Loaded file from path " + s + " with content " + content);
-         return content;
       }
       catch (Exception ignore)
       {
-         log.debug("Could not get file " + s + " will return null instead", ignore);
-         return null;
+         log.debug("Could not get file " + s + " will return null instead");
       }
+      return content;
    }
 
    public Page createPageFromTemplate(String ownerType, String owner, String temp) throws Exception
