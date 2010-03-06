@@ -298,6 +298,12 @@
             <groupId>org.gatein.wsrp</groupId>
             <artifactId>wsrp-consumer</artifactId>
             <version>${org.gatein.wsrp.version}</version>
+            <exclusions>
+              <exclusion>
+                <groupId>org.hibernate</groupId>
+                <artifactId>hibernate-core</artifactId>
+              </exclusion>
+            </exclusions>
          </dependency>
          <dependency>
             <groupId>org.gatein.wsrp</groupId>
