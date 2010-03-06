@@ -728,7 +728,7 @@ public class UIPortalApplication extends UIApplication
       return this.all_Navigations;
    }
    
-   private static class UIPortalKey
+   private class UIPortalKey
    {
       private String ownerType;
 

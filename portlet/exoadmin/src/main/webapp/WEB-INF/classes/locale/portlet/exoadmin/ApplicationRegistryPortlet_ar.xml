@@ -98,11 +98,6 @@
   <!--
   ##org.exoplatform.applicationregistry.webui.component.UIApplicationInfo
   -->
-  <UIPermissionForm>
-    <label>
-      <UIListPermissionSelector />
-    </label>
-  </UIPermissionForm>
   <UIApplicationInfo>
     <label>
       <name>:الاسم</name>
@@ -160,7 +155,6 @@
       <name>:اسم الفئة</name>
       <displayName>#{label.displayName}</displayName>
       <description>#{label.description}</description>
-      <UIListPermissionSelector />
     </label>
     <action>
       <Save>#{word.save}</Save>

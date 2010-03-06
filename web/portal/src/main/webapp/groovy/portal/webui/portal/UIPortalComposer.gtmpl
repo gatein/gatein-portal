@@ -12,7 +12,7 @@
 		<div class="TRPortalComposer">
 			<div class="TCPortalComposer">
 				<div class="OverflowContainer">
-					<div class="<%=uicomponent.isCollapse ? "CollapseIcon" : "ExpandIcon"%>" onclick="eXo.portal.UIPortal.toggleComposer(this)"><span></span></div>
+					<div class="<%=uicomponent.isCollapsed ? "CollapseIcon" : "ExpandIcon"%>" onclick="eXo.portal.UIPortal.toggleComposer(this)"><span></span></div>
 						<% if(uicomponent.isShowControl) { %>
 						<a class="CloseButton" title="<%=_ctx.appRes("word.abort")%>" href="<%=uicomponent.event("Abort")%>"><span></span></a>
 						<a class="<%= isEditted ? "EdittedSaveButton" : "SaveButton" %>" title="<%=_ctx.appRes("word.finish")%>" href="<%=uicomponent.event("Finish")%>"><span></span></a>
@@ -28,7 +28,7 @@
 		</div>
 	</div>
 
-	<div class="MLPortalComposer" style="display: <%=uicomponent.isCollapse ? "none": "block"%>">
+	<div class="MLPortalComposer" style="display: <%=uicomponent.isCollapsed ? "none": "block"%>">
 		<div class="MRPortalComposer">
 			<div class="MCPortalComposer">
 				<div class="UIWindowContent">
@@ -42,7 +42,7 @@
 		</div>
 	</div>
 
-	<div class="BLPortalComposer" style="display: <%=uicomponent.isCollapse ? "none": "block"%>">
+	<div class="BLPortalComposer" style="display: <%=uicomponent.isCollapsed ? "none": "block"%>">
 		<div class="BRPortalComposer">
 			<div class="BCPortalComposer">
 				<div class="UIAction"> 

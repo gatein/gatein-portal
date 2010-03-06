@@ -86,7 +86,7 @@ public class UIPortalComposer extends UIContainer
 
    private boolean isEditted = false;
 
-   private boolean isCollapse = false;
+   private boolean isCollapsed = false;
 
    private boolean isShowControl = true;
 
@@ -98,6 +98,7 @@ public class UIPortalComposer extends UIContainer
       uiTabPane.setSelectedTab(1);
    }
 
+   //TODO: this seems not to be used
    public void setPortalMode(int mode)
    {
       if (mode < 0 || mode > 4)
@@ -112,6 +113,15 @@ public class UIPortalComposer extends UIContainer
       return getAncestorOfType(UIPortalApplication.class).getModeState();
    }
 
+   /**
+    * Returns <code>true</code> there was at least one change
+    * has been done in this edition time.
+    * 
+    * <p>This value is used in the template of this component 
+    * to notice the user if there was something has been changed
+    * 
+    * @return
+    */
    public boolean isEditted()
    {
       return isEditted;
@@ -122,14 +132,19 @@ public class UIPortalComposer extends UIContainer
       isEditted = b;
    }
 
+   /**
+    * Return a value of <code>boolean</code> to tell current state of the composer
+    * 
+    * @return <code>true</code> if the composer is collapsed currently
+    */
    public boolean isCollapse()
    {
-      return isCollapse;
+      return isCollapsed;
    }
 
    public void setCollapse(boolean isCollapse)
    {
-      this.isCollapse = isCollapse;
+      this.isCollapsed = isCollapse;
    }
 
    public boolean isShowControl()
@@ -142,7 +157,7 @@ public class UIPortalComposer extends UIContainer
       isShowControl = state;
    }
 
-   public boolean isUsedInWizard()
+   private boolean isUsedInWizard()
    {
       UIWorkingWorkspace uiWorkingWS = getAncestorOfType(UIWorkingWorkspace.class);
       UIPortalToolPanel uiToolPanel = uiWorkingWS.findFirstComponentOfType(UIPortalToolPanel.class);
@@ -154,7 +169,12 @@ public class UIPortalComposer extends UIContainer
       return false;
    }
 
-   public void save() throws Exception
+   /**
+    * Perform saving changes of the edition of SiteConfig into database
+    * 
+    * @throws Exception if there is anything wrong in saving process
+    */
+   private void save() throws Exception
    {
       PortalRequestContext prContext = Util.getPortalRequestContext();
       UIPortalApplication uiPortalApp = (UIPortalApplication)prContext.getUIApplication();
@@ -169,14 +189,12 @@ public class UIPortalComposer extends UIContainer
       UserPortalConfigService configService = getApplicationComponent(UserPortalConfigService.class);
       DataStorage dataStorage = getApplicationComponent(DataStorage.class);
 
-      if (isPortalExist(editPortal))
-      {
-         dataStorage.save(portalConfig);
-      }
-      else
+      if (!isPortalExist(editPortal))
       {
          return;
       }
+      
+      dataStorage.save(portalConfig);
 
       uiPortalApp.getUserPortalConfig().setPortal(portalConfig);
       UserPortalConfig userPortalConfig = configService.getUserPortalConfig(ownerUser, remoteUser);
@@ -219,7 +237,14 @@ public class UIPortalComposer extends UIContainer
       skinService.invalidatePortalSkinCache(editPortal.getName(), editPortal.getSkin());
    }
 
-   public boolean isPortalExist(UIPortal editPortal) throws Exception
+   /**
+    * Check the <code>editPortal</code> whether it is existing in database or not
+    * 
+    * @param editPortal
+    * @return
+    * @throws Exception
+    */
+   private boolean isPortalExist(UIPortal editPortal) throws Exception
    {
       String remoteUser = Util.getPortalRequestContext().getRemoteUser();
 
@@ -238,6 +263,11 @@ public class UIPortalComposer extends UIContainer
       return configService.getUserPortalConfig(portalOwner, remoteUser) != null;
    }
 
+   /**
+    * Updates the availability children of the UIEditInlineWorkspace except to the UIPortalComposer
+    * 
+    * @throws Exception
+    */
    public void updateWorkspaceComponent() throws Exception
    {
       UIPortalApplication uiApp = Util.getUIPortalApplication();
@@ -374,6 +404,12 @@ public class UIPortalComposer extends UIContainer
 
    }
 
+   /**
+    * Listens the <code>save</code> action of the composer while editing SiteConfig
+    * 
+    * @author <a href="trong.tran@exoplatform.com">Trong Tran</a>
+    * @version $Revision$
+    */
    static public class FinishActionListener extends EventListener<UIPortalComposer>
    {
 
@@ -403,14 +439,8 @@ public class UIPortalComposer extends UIContainer
          uiWorkingWS.getChild(UIEditInlineWorkspace.class).setRendered(false);
          uiPortal = (UIPortal)siteBody.getUIComponent();
 
-         if (PortalProperties.SESSION_ALWAYS.equals(uiPortal.getSessionAlive()))
-         {
-            uiPortalApp.setSessionOpen(true);
-         }
-         else
-         {
-            uiPortalApp.setSessionOpen(false);
-         }
+         uiPortalApp.setSessionOpen(PortalProperties.SESSION_ALWAYS.equals(uiPortal.getSessionAlive()));
+         
          uiPortalApp.setModeState(UIPortalApplication.NORMAL_MODE);
          uiWorkingWS.setRenderedChild(UIPortalApplication.UI_VIEWING_WS_ID);
          prContext.setFullRender(true);

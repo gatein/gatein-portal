@@ -60,11 +60,6 @@
          <showImport>修改显示导入</showImport>
       </label>
    </UIApplicationRegistryEditMode>
-   <UIPermissionForm>
-      <label>
-         <UIListPermissionSelector></UIListPermissionSelector>
-      </label>
-   </UIPermissionForm>
    <UIApplicationInfo>
       <label>
          <name>名称： </name>
@@ -116,7 +111,6 @@
          <name>分类名称：</name>
          <displayName>#{label.displayName}</displayName>
          <description>#{label.description}</description>
-         <UIListPermissionSelector></UIListPermissionSelector>
       </label>
       <action>
          <Save>#{word.save}</Save>

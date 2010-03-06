@@ -20,11 +20,7 @@
 package org.exoplatform.portal.application;
 
 import org.exoplatform.Constants;
-import org.exoplatform.commons.utils.CharsetCharEncoder;
-import org.exoplatform.commons.utils.CharsetTextEncoder;
 import org.exoplatform.commons.utils.PortalPrinter;
-import org.exoplatform.commons.utils.TableCharEncoder;
-import org.exoplatform.commons.utils.TextEncoder;
 import org.exoplatform.commons.utils.WriterPrinter;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.portal.config.UserPortalConfigService;
@@ -44,8 +40,6 @@ import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.lifecycle.HtmlValidator;
 import org.w3c.dom.Element;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
@@ -65,10 +59,13 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * This class extends the abstract WebuiRequestContext which itself extends the RequestContext one
- * <p/>
- * It mainly implements the abstract methods and overide some.
+ * 
+ * <p>It mainly implements the abstract methods and overide some.
  */
 public class PortalRequestContext extends WebuiRequestContext
 {

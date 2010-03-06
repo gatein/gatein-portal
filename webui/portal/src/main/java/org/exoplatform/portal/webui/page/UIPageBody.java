@@ -194,11 +194,21 @@ public class UIPageBody extends UIComponentDecorator
       super.processRender(context);
    }
 
+   /**
+    * Retrieve the UIApplication which is maximized to cover whole the PageBody
+    * 
+    * @return the maximized portlet
+    */
    public UIPortalComponent getMaximizedUIComponent()
    {
       return maximizedUIComponent;
    }
 
+   /**
+    * Store the portlet maximized into the current PageBody
+    * 
+    * @param uiMaximizedComponent the portlet to be stored in UIPageBody
+    */
    public void setMaximizedUIComponent(UIPortalComponent uiMaximizedComponent)
    {
       this.maximizedUIComponent = uiMaximizedComponent;

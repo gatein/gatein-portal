@@ -98,11 +98,6 @@
   <!--
   ##org.exoplatform.applicationregistry.webui.component.UIApplicationInfo
   -->
-  <UIPermissionForm>
-    <label>
-      <UIListPermissionSelector>Lựa chọn quyền</UIListPermissionSelector>
-    </label>
-  </UIPermissionForm>
   <UIApplicationInfo>
     <label>
       <name>Tên:</name>
@@ -160,7 +155,6 @@
       <name>Tên danh mục:</name>
       <displayName>#{label.displayName}</displayName>
       <description>#{label.description}</description>
-      <UIListPermissionSelector>Lựa chọn quyền</UIListPermissionSelector>
     </label>
     <action>
       <Save>#{word.save}</Save>

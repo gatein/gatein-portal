@@ -229,7 +229,11 @@ public class UIPortal extends UIContainer
       this.navigation = _navigation;
    }
    
-   /** Refresh the UIPage under UIPortal */
+   /**
+    * Refresh the UIPage under UIPortal 
+    * 
+    * @throws Exception
+    */
    public void refreshUIPage() throws Exception
    {
       if(selectedNode_ == null)
