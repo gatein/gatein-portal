@@ -86,7 +86,8 @@ public class DataCache extends TaskExecutionDecorator
 
    private <K extends Serializable, V> V create(POMSession session, CacheableDataTask<K, V> task) throws Exception
    {
-      // Nothing to do for now
+      K key = task.getKey();
+      session.scheduleForEviction(key);
       return super.execute(session, task);
    }
 

@@ -49,6 +49,21 @@ public class TestCache extends AbstractPortalTest
       mgr = (POMSessionManager)container.getComponentInstanceOfType(POMSessionManager.class);
    }
 
+   public void testGetNullInvalidation() throws Exception
+   {
+      begin();
+      session = mgr.openSession();
+      assertNull(storage_.getPage("portal::test::nonexisting"));
+      Page page = new Page();
+      page.setPageId("portal::test::nonexisting");
+      storage_.create(page);
+      end(true);
+      begin();
+      session = mgr.openSession();
+      assertNotNull(storage_.getPage("portal::test::nonexisting"));
+      end();
+   }
+
    public void testDirtyWrite() throws Exception
    {
       begin();
