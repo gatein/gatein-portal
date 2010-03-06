@@ -19,6 +19,8 @@
 
 package org.exoplatform.web.login;
 
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 import org.gatein.common.text.FastURLEncoder;
 
 import javax.servlet.*;
@@ -39,6 +41,9 @@ public class RememberMeFilter implements Filter
    /** . */
    private static final FastURLEncoder CONVERTER = FastURLEncoder.getUTF8Instance();
 
+   /** . */
+   private static final Logger log = LoggerFactory.getLogger(RememberMeFilter.class);
+
    public void init(FilterConfig filterConfig) throws ServletException
    {
    }
@@ -52,7 +57,8 @@ public class RememberMeFilter implements Filter
    {
       if (req.getRemoteUser() == null && "GET".equals(req.getMethod()))
       {
-         if (InitiateLoginServlet.getRememberMeTokenCookie(req) != null)
+         String token = InitiateLoginServlet.getRememberMeTokenCookie(req);
+         if (token != null)
          {
             StringBuilder builder = new StringBuilder();
             builder.append(req.getContextPath());
@@ -76,6 +82,7 @@ public class RememberMeFilter implements Filter
                }
             }
             String s = builder.toString();
+            log.debug("Redirecting unauthenticated request with token " + token + " to URL " + s);
             resp.sendRedirect(s);
             return;
          }
