@@ -91,9 +91,9 @@ public class OutputStreamWriterGroovyPrinter extends GroovyPrinter implements Bi
       out.write(bytes);
    }
 
-   public void write(byte[] b, int off, int len) throws IOException
+   public void write(byte[] bytes, int off, int len) throws IOException
    {
-      out.write(b, off, len);
+      out.write(bytes, off, len);
    }
 
    public void write(byte b) throws IOException

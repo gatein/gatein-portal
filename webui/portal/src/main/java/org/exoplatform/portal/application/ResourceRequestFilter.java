@@ -19,17 +19,11 @@
 
 package org.exoplatform.portal.application;
 
-import org.exoplatform.commons.utils.CharsetCharEncoder;
-import org.exoplatform.commons.utils.CharsetTextEncoder;
-import org.exoplatform.commons.utils.PropertyManager;
-import org.exoplatform.commons.utils.TableCharEncoder;
-import org.exoplatform.commons.utils.TextEncoder;
+import org.exoplatform.commons.utils.*;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.web.AbstractFilter;
 import org.exoplatform.portal.resource.ResourceRenderer;
 import org.exoplatform.portal.resource.SkinService;
-import org.exoplatform.services.cache.ExoCache;
-import org.exoplatform.services.cache.concurrent.ConcurrentFIFOExoCache;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 
@@ -41,6 +35,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URLDecoder;
+import java.nio.charset.Charset;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -59,26 +54,21 @@ import javax.servlet.http.HttpServletResponse;
 public class ResourceRequestFilter extends AbstractFilter
 {
 
-   protected static Log log = ExoLogger.getLogger("portal:ResourceRequestFilter");
+   protected static Log log = ExoLogger.getLogger(ResourceRequestFilter.class);
+
+   private static final Charset UTF_8 = Charset.forName("UTF-8");
 
    private FilterConfig cfg;
 
    private ImageType[] imageTypes = ImageType.values();
 
-   private ConcurrentMap<String, FutureTask<Image>> mirroredImageCache =
-      new ConcurrentHashMap<String, FutureTask<Image>>();
-
-   private ExoCache cssCache = new ConcurrentFIFOExoCache(50);
+   private ConcurrentMap<String, FutureTask<Image>> mirroredImageCache = new ConcurrentHashMap<String, FutureTask<Image>>();
 
    public void afterInit(FilterConfig filterConfig)
    {
       cfg = filterConfig;
       log.info("Cache eXo Resource at client: " + !PropertyManager.isDevelopping());
    }
-
-   /** The optimized encoder. */
-   private static final TextEncoder encoder =
-      new CharsetTextEncoder(new TableCharEncoder(CharsetCharEncoder.getUTF8()));
 
    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException,
       ServletException
@@ -93,75 +83,31 @@ public class ResourceRequestFilter extends AbstractFilter
       if (uri.endsWith(".css"))
       {
          final OutputStream out = response.getOutputStream();
-         final Appendable app = new Appendable()
+         final BinaryOutput output = new BinaryOutput()
          {
-            public Appendable append(CharSequence csq) throws IOException
+            public Charset getCharset()
             {
-               // julien : yeah there is a nasty cast but for now it is ok as we know it is a string
-               // need to work on an optimized appender for
-               String s = (String)csq;
-
-               // Get existing bytes
-               byte[] bytes = null;
-               try
-               {
-                  bytes = (byte[])cssCache.get(s);
-               }
-               catch (Exception e)
-               {
-                  e.printStackTrace();
-               }
-
-               // Get bytes if needed
-               if (bytes == null)
-               {
-                  ByteArrayOutputStream baos = new ByteArrayOutputStream(s.length() * 2);
-                  encoder.encode(s, 0, s.length(), baos);
-                  baos.flush();
-                  bytes = baos.toByteArray();
-                  try
-                  {
-                     cssCache.put(s, bytes);
-                  }
-                  catch (Exception e)
-                  {
-                     e.printStackTrace();
-                  }
-               }
-
-               //
-               try
-               {
-                  out.write(bytes);
-               }
-               catch (IOException ignore)
-               {
-               }
-
-               //
-               return this;
+               return UTF_8;
             }
-
-            public Appendable append(CharSequence csq, int start, int end) throws IOException
+            public void write(byte b) throws IOException
             {
-               throw new UnsupportedOperationException("Should no be called");
+               out.write(b);
             }
-
-            public Appendable append(char c) throws IOException
+            public void write(byte[] bytes) throws IOException
             {
-               encoder.encode(c, out);
-               return this;
+               out.write(bytes);
+            }
+            public void write(byte[] bytes, int off, int len) throws IOException
+            {
+               out.write(bytes, off, len);
             }
          };
-
          ResourceRenderer renderer = new ResourceRenderer()
          {
-            public Appendable getAppendable()
+            public BinaryOutput getOutput() throws IOException
             {
-               //
-               return app;
+               return output;
             }
-
             public void setExpiration(long seconds)
             {
                if (seconds > 0)

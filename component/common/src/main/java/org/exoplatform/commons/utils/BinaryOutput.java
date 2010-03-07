@@ -34,6 +34,6 @@ public interface BinaryOutput
 
    void write(byte[] bytes) throws IOException;
 
-   void write(byte[] b, int off, int len) throws IOException;
+   void write(byte[] bytes, int off, int len) throws IOException;
 
 }

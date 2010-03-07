@@ -257,13 +257,13 @@ public class OutputStreamPrinter extends Printer implements BinaryOutput
       }
    }
 
-   public final void write(byte[] b, int off, int len) throws IOException
+   public final void write(byte[] bytes, int off, int len) throws IOException
    {
       if (!failed)
       {
          try
          {
-            out.write(b, off, len);
+            out.write(bytes, off, len);
          }
          catch (IOException e)
          {

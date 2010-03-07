@@ -19,6 +19,8 @@
 
 package org.exoplatform.portal.resource;
 
+import org.exoplatform.commons.utils.BinaryOutput;
+import org.exoplatform.commons.utils.ByteArrayOutput;
 import org.exoplatform.commons.utils.PropertyManager;
 import org.exoplatform.commons.utils.Safe;
 import org.exoplatform.container.ExoContainerContext;
@@ -111,9 +113,9 @@ public class SkinService implements Startable
 
    private final HashSet<String> availableSkins_;
 
-   private final Map<String, String> ltCache;
+   private final Map<String, CachedStylesheet> ltCache;
 
-   private final Map<String, String> rtCache;
+   private final Map<String, CachedStylesheet> rtCache;
 
    private final Map<String, Set<String>> portletThemes_;
 
@@ -137,8 +139,8 @@ public class SkinService implements Startable
       portalSkins_ = new LinkedHashMap<SkinKey, SkinConfig>();
       skinConfigs_ = new LinkedHashMap<SkinKey, SkinConfig>(20);
       availableSkins_ = new HashSet<String>(5);
-      ltCache = new ConcurrentHashMap<String, String>();
-      rtCache = new ConcurrentHashMap<String, String>();
+      ltCache = new ConcurrentHashMap<String, CachedStylesheet>();
+      rtCache = new ConcurrentHashMap<String, CachedStylesheet>();
       portletThemes_ = new HashMap<String, Set<String>>();
       portalContainerName = context.getPortalContainerName();
       mainResolver = new MainResourceResolver(portalContainerName, skinConfigs_);
@@ -174,10 +176,6 @@ public class SkinService implements Startable
     */
    public void addPortalSkin(String module, String skinName, String cssPath, ServletContext scontext, boolean overwrite)
    {
-
-      //      // Triggers a put if absent
-      //      mainResolver.registerContext(scontext);
-
       availableSkins_.add(skinName);
       SkinKey key = new SkinKey(module, skinName);
       SkinConfig skinConfig = portalSkins_.get(key);
@@ -196,8 +194,8 @@ public class SkinService implements Startable
       {
          portalSkins_.put(key, new SimpleSkin(this, module, skinName, cssPath));
       }
-      ltCache.put(cssPath, cssData);
-      rtCache.put(cssPath, cssData);
+      ltCache.put(cssPath, new CachedStylesheet(cssData));
+      rtCache.put(cssPath, new CachedStylesheet(cssData));
    }
 
    public void addSkin(String module, String skinName, String cssPath, ServletContext scontext)
@@ -230,9 +228,6 @@ public class SkinService implements Startable
 
    public void addSkin(String module, String skinName, String cssPath, ServletContext scontext, boolean overwrite)
    {
-      //      // Triggers a put if absent
-      //      mainResolver.registerContext(scontext);
-
       availableSkins_.add(skinName);
       SkinKey key = new SkinKey(module, skinName);
       SkinConfig skinConfig = skinConfigs_.get(key);
@@ -245,7 +240,6 @@ public class SkinService implements Startable
 
    public void addSkin(String module, String skinName, String cssPath, String cssData)
    {
-      //
       availableSkins_.add(skinName);
       SkinKey key = new SkinKey(module, skinName);
       SkinConfig skinConfig = skinConfigs_.get(key);
@@ -253,8 +247,8 @@ public class SkinService implements Startable
       {
          skinConfigs_.put(key, new SimpleSkin(this, module, skinName, cssPath));
       }
-      ltCache.put(cssPath, cssData);
-      rtCache.put(cssPath, cssData);
+      ltCache.put(cssPath, new CachedStylesheet(cssData));
+      rtCache.put(cssPath, new CachedStylesheet(cssData));
    }
 
    public void addTheme(String categoryName, List<String> themesName)
@@ -287,20 +281,18 @@ public class SkinService implements Startable
    {
       try
       {
-         final StringBuilder sb = new StringBuilder();
+         final ByteArrayOutput output = new ByteArrayOutput();
          renderCSS(new ResourceRenderer()
          {
-            public Appendable getAppendable()
+            public BinaryOutput getOutput() throws IOException
             {
-               return sb;
+               return output;
             }
-
             public void setExpiration(long seconds)
             {
-
             }
          }, cssPath);
-         return sb.toString();
+         return output.toString();
       }
       catch (IOException e)
       {
@@ -341,26 +333,30 @@ public class SkinService implements Startable
          }
 
          //
-         Map<String, String> cache = orientation == Orientation.LT ? ltCache : rtCache;
-         String css = cache.get(path);
+         Map<String, CachedStylesheet> cache = orientation == Orientation.LT ? ltCache : rtCache;
+         CachedStylesheet css = cache.get(path);
          if (css == null)
          {
             StringBuilder sb = new StringBuilder();
             processCSS(sb, path, orientation, true);
-            css = sb.toString();
+            css = new CachedStylesheet(sb.toString());
             cache.put(path, css);
          }
-         renderer.getAppendable().append(css);
+         css.writeTo(renderer.getOutput());
       }
       else
       {
-         processCSS(renderer.getAppendable(), path, orientation, false);
+         StringBuffer sb = new StringBuffer();
+         processCSS(sb, path, orientation, false);
+         byte[] bytes = sb.toString().getBytes("UTF-8");
+         renderer.getOutput().write(bytes);
       }
    }
 
    public String getMergedCSS(String cssPath)
    {
-      return ltCache.get(cssPath);
+      CachedStylesheet stylesheet = ltCache.get(cssPath);
+      return stylesheet != null ? stylesheet.getText() : null;
    }
 
    public Collection<SkinConfig> getPortalSkins(String skinName)

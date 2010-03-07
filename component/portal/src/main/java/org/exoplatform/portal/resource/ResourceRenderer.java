@@ -19,6 +19,10 @@
 
 package org.exoplatform.portal.resource;
 
+import org.exoplatform.commons.utils.BinaryOutput;
+
+import java.io.IOException;
+
 /**
  * An interface defining the renderer contract for a resource.
  *
@@ -29,11 +33,12 @@ public interface ResourceRenderer
 {
 
    /**
-    * Returns an appendable for the performing the rendering of the resource.
+    * Returns an output stream for performing resource rendering.
     *
-    * @return the appendable
+    * @return a stream
+    * @throws IOException any io exception
     */
-   Appendable getAppendable();
+   BinaryOutput getOutput() throws IOException;
 
    /**
     * Instruct the renderer about the expiration time in seconds. A non positive value
