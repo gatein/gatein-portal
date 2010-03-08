@@ -466,6 +466,7 @@ public class UIPortalComposer extends UIContainer
 
             //Update the cache of UIPortal from UIPortalApplication
             uiPortalApp.updateCachedUIPortal(uiPortal);
+            uiPortalApp.setShowedUIPortal(uiPortal);
             
             //To init the UIPage, that fixed a bug on AdminToolbarPortlet when edit the layout. Here is only a
             //temporal solution. Complete solution is to avoid mapping UIPortal -- model, that requires

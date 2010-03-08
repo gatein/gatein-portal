@@ -257,7 +257,7 @@ public class UIPortal extends UIContainer
       
       //Refresh locale
       Locale locale = Util.getUIPortalApplication().getLocale();
-      refreshNavigation(locale);
+      localizePageNavigation(navigation, locale);
    }
    
    public synchronized void setSelectedNode(PageNode node)
@@ -422,39 +422,7 @@ public class UIPortal extends UIContainer
    {
       setProperty(PortalProperties.SESSION_ALIVE, type);
    }
-
-   /*
-   @Deprecated
-   public void refreshNavigation()
-   {
-      ResourceBundleManager mgr = getApplicationComponent(ResourceBundleManager.class);
-      for (PageNavigation nav : navigations)
-      {
-         if (nav.getOwnerType().equals(PortalConfig.USER_TYPE))
-            continue;
-         ResourceBundle res = mgr.getNavigationResourceBundle(locale, nav.getOwnerType(), nav.getOwnerId());
-         for (PageNode node : nav.getNodes())
-         {
-            resolveLabel(res, node);
-         }
-      }
-   }
-   */
    
-   /*
-   public void refreshNavigation(Locale locale)
-   {
-      for (PageNavigation nav : navigations)
-      {
-         localizePageNavigation(nav,locale);
-      }
-   }
-   */
-   public void refreshNavigation(Locale locale)
-   {
-      localizePageNavigation(navigation, locale);
-   }
-
    private void localizePageNavigation(PageNavigation nav,Locale locale)
    {
       ResourceBundleManager mgr = getApplicationComponent(ResourceBundleManager.class);
