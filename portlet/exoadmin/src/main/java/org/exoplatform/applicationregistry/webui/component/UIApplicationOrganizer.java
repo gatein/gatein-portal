@@ -40,6 +40,7 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.MonitorEvent;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.portlet.PortletPreferences;
@@ -55,7 +56,7 @@ import javax.portlet.PortletPreferences;
    @EventConfig(listeners = UIApplicationOrganizer.AddApplicationActionListener.class),
    @EventConfig(listeners = UIApplicationOrganizer.RemoveApplicationActionListener.class, confirm = "UIOrganizer.msg.deleteApplication")})
 @Serialized
-public class   UIApplicationOrganizer extends UIContainer
+public class UIApplicationOrganizer extends UIContainer
 {
 
    private ApplicationCategory selectedCategory;
@@ -132,13 +133,15 @@ public class   UIApplicationOrganizer extends UIContainer
    public void setSelectedCategory(ApplicationCategory category) throws Exception
    {
       selectedCategory = category;
-      if (category == null) return;
+      if (category == null)
+         return;
       applications = category.getApplications();
       if (applications == null || applications.isEmpty())
       {
          setSelectedApplication(null);
          return;
       }
+      Collections.sort(applications, new Util.ApplicationComparator());
 
       //Correct IconUrl of gadget
       GadgetRegistryService gadgetService = getApplicationComponent(GadgetRegistryService.class);

@@ -64,31 +64,34 @@ public class UIApplicationList extends UIContainer
       UserACL userACL = Util.getUIPortalApplication().getApplicationComponent(UserACL.class);
       IdentityRegistry identityRegistry = Util.getUIPortalApplication().getApplicationComponent(IdentityRegistry.class);
       Identity identity = identityRegistry.getIdentity(remoteUser);
-      if (identity == null) return;
-      
+      if (identity == null)
+         return;
+
       PortletComparator portletComparator = new PortletComparator();
       categories = service.getApplicationCategories(remoteUser);
-      Collections.sort(categories, new PortletCategoryComparator());
-      Iterator<ApplicationCategory> cateItr = categories.iterator();      
+
+      Iterator<ApplicationCategory> cateItr = categories.iterator();
       while (cateItr.hasNext())
       {
-         ApplicationCategory cate = cateItr.next();         
+         ApplicationCategory cate = cateItr.next();
          List<Application> applications = cate.getApplications();
-         
          boolean hasPermission = false;
          List<String> accessPermission = cate.getAccessPermissions();
-         if (accessPermission == null) {
-            accessPermission = new ArrayList<String>();            
+         if (accessPermission == null)
+         {
+            accessPermission = new ArrayList<String>();
          }
-         if (accessPermission.size() == 0) {
+         if (accessPermission.size() == 0)
+         {
             accessPermission.add(null);
          }
          for (String permssion : accessPermission)
          {
             hasPermission = userACL.hasPermission(identity, permssion);
-            if (hasPermission) break;
+            if (hasPermission)
+               break;
          }
-         
+
          if (!hasPermission || applications.size() < 1)
             cateItr.remove();
          else
@@ -96,6 +99,8 @@ public class UIApplicationList extends UIContainer
       }
       if (categories.size() > 0)
          setSelectedCategory(categories.get(0).getName());
+
+      Collections.sort(categories, new PortletCategoryComparator());
    }
 
    public Application getApplication(String id) throws Exception
@@ -164,7 +169,7 @@ public class UIApplicationList extends UIContainer
    {
       public int compare(ApplicationCategory cat1, ApplicationCategory cat2)
       {
-         return cat1.getDisplayName().compareTo(cat2.getDisplayName());
+         return cat1.getDisplayName().compareToIgnoreCase(cat2.getDisplayName());
       }
    }
 
@@ -172,7 +177,7 @@ public class UIApplicationList extends UIContainer
    {
       public int compare(Application p1, Application p2)
       {
-         return p1.getDisplayName().compareTo(p2.getDisplayName());
+         return p1.getDisplayName().compareToIgnoreCase(p2.getDisplayName());
       }
    }
 
