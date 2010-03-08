@@ -47,6 +47,7 @@ import org.gatein.pc.api.invocation.EventInvocation;
 import org.gatein.pc.api.invocation.ResourceInvocation;
 import org.gatein.pc.api.invocation.response.ContentResponse;
 import org.gatein.pc.api.invocation.response.ErrorResponse;
+import org.gatein.pc.api.invocation.response.HTTPRedirectionResponse;
 import org.gatein.pc.api.invocation.response.PortletInvocationResponse;
 import org.gatein.pc.api.invocation.response.UpdateNavigationalStateResponse;
 
@@ -55,6 +56,8 @@ import javax.portlet.WindowState;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.namespace.QName;
+
+import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -125,25 +128,35 @@ public class UIPortletActionListener
                uiPortlet.update((C)wsrp);
             }
          }
-
-         // todo: handle the error response better than this.
-         if (!(portletResponse instanceof UpdateNavigationalStateResponse))
+         
+         if (portletResponse instanceof UpdateNavigationalStateResponse)
          {
-            if (portletResponse instanceof ErrorResponse)
-            {
-               ErrorResponse errorResponse = (ErrorResponse)portletResponse;
-               throw (Exception)errorResponse.getCause();
-            }
-            else
-            {
-               throw new Exception("Unexpected response type [" + portletResponse
-                  + "]. Expected a UpdateNavigationResponse or an ErrorResponse.");
-            }
+            handleUpdateNavigationalStateResponse((UpdateNavigationalStateResponse)portletResponse, uiPortlet, prcontext);
          }
-
-         //
-         UpdateNavigationalStateResponse navStateResponse = (UpdateNavigationalStateResponse)portletResponse;
-
+         else if (portletResponse instanceof HTTPRedirectionResponse)
+         {
+            handleRedirectionResponse((HTTPRedirectionResponse)portletResponse, prcontext.getResponse());
+         }
+         else if (portletResponse instanceof ErrorResponse)
+         {
+            handleErrorResponse((ErrorResponse)portletResponse);
+         }
+         else
+         {
+            throw new Exception("Unexpected response type [" + portletResponse + "]. Expected an UpdateNavigationResponse" +
+            		", a HTTPRedirectionResponse or an ErrorResponse.");
+         }
+      }
+      
+      
+      private void handleRedirectionResponse(HTTPRedirectionResponse redirectionResponse, HttpServletResponse response) throws IOException
+      {
+         String redirectionURL = redirectionResponse.getLocation();
+         response.sendRedirect(redirectionURL);
+      }
+      
+      private void handleUpdateNavigationalStateResponse(UpdateNavigationalStateResponse navStateResponse, UIPortlet<S, C> uiPortlet, PortalRequestContext prcontext) throws Exception
+      {
          /*
           * Update the portlet window state according to the action output
           * information
@@ -227,6 +240,11 @@ public class UIPortletActionListener
             uiPortlet.createEvent("ProcessEvents", Phase.PROCESS, prcontext).broadcast();
          }
 
+      }
+      
+      private void handleErrorResponse(ErrorResponse response) throws Exception
+      {
+         throw (Exception)response.getCause();  
       }
    }
 
