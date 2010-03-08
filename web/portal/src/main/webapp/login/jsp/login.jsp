@@ -80,7 +80,7 @@
 		              <td class="FieldLabel"><%=res.getString("UILoginForm.label.password")%></td>
 		              <td><input class="Password" type="password" name="password" value=""/></td>
 		            </tr>
-		            <tr class="FieldContainer">
+		            <tr class="FieldContainer" onkeypress="eXo.portal.UIPortalControl.onEnterPress(event);">
 		              <td class="FieldLabel"><input type="checkbox" name="rememberme" value="true"/></td>
 		              <td><%=res.getString("UILoginForm.label.RememberOnComputer")%></td>
 		            </tr>
