@@ -38,6 +38,7 @@
       <module>extension</module>
       <module>portal</module>
       <module>portlets</module>
+      <module>skins</module>
    </modules>
 
 </project>

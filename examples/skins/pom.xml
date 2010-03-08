@@ -8,7 +8,7 @@
       <version>3.0.0-CR02-SNAPSHOT</version>
    </parent>
 
-   <groupId>org.gatein.portal.skins</groupId>
+   <groupId>org.gatein.portal.examples.skins</groupId>
    <artifactId>parent</artifactId>
    <packaging>pom</packaging>
    <name>GateIn Skins</name>
