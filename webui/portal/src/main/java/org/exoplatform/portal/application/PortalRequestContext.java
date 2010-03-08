@@ -267,6 +267,12 @@ public class PortalRequestContext extends WebuiRequestContext
       return request_.getContextPath();
    }
 
+   @Override
+   public String getPortalContextPath()
+   {
+      return getRequestContextPath();
+   }
+
    public String getActionParameterName()
    {
       return PortalRequestContext.UI_COMPONENT_ACTION;

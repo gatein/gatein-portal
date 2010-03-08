@@ -122,7 +122,15 @@ abstract public class WebuiRequestContext extends RequestContext
    @Override
    public abstract URLBuilder<UIComponent> getURLBuilder();
 
-   abstract public String getRequestContextPath();
+   public abstract String getRequestContextPath();
+
+   /**
+    * Returns the context path of the portal or null if it does not execute in the context
+    * of an aggregated portal request.
+    *
+    * @return the portal context path
+    */
+   public abstract String getPortalContextPath();
 
    abstract public <T> T getRequest() throws Exception;
 

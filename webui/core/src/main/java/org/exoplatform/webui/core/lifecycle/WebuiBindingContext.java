@@ -69,6 +69,16 @@ public class WebuiBindingContext extends BindingContext
       return rcontext_;
    }
 
+   public String getContextPath()
+   {
+      return rcontext_.getRequestContextPath();
+   }
+
+   public String getPortalContextPath()
+   {
+      return rcontext_.getPortalContextPath();
+   }
+
    public BindingContext clone()
    {
       BindingContext newContext = new WebuiBindingContext(resolver_, writer_, uicomponent_, rcontext_);

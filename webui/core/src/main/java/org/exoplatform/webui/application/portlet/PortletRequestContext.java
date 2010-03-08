@@ -107,6 +107,19 @@ public class PortletRequestContext extends WebuiRequestContext
       return request_.getContextPath();
    }
 
+   @Override
+   public String getPortalContextPath()
+   {
+      if (parentAppRequestContext_ instanceof WebuiRequestContext)
+      {
+         return ((WebuiRequestContext)parentAppRequestContext_).getPortalContextPath();
+      }
+      else
+      {
+         return null;
+      }
+   }
+
    @SuppressWarnings("unchecked")
    public PortletRequest getRequest()
    {
