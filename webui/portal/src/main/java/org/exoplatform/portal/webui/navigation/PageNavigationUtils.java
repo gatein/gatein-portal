@@ -225,8 +225,8 @@ public class PageNavigationUtils
          }
       }
 
-      //If the node has no child and it does not point to any Page, then null is return
-      if (filteredChildren.size() == 0 && cloneStartNode.getPageReference() == null)
+      //If are only accepting displayed nodes and If the node has no child and it does not point to any Page, then null is return
+      if (!acceptNonDisplayedNode && filteredChildren.size() == 0 && cloneStartNode.getPageReference() == null)
       {
          return null;
       }
