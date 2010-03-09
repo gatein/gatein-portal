@@ -25,60 +25,26 @@
                 xsi:schemaLocation="urn:picketlink:idm:config:v1_0_0_ga identity-config.xsd">
   <realms>
     <realm>
-      <id>realm</id>
-      <repository-id-ref>PortalRepository</repository-id-ref>
+      <id>idm_realm</id>
+      <repository-id-ref>DefaultPortalRepository</repository-id-ref>
       <identity-type-mappings>
         <user-mapping>USER</user-mapping>
       </identity-type-mappings>
       <options>
         <option>
-          <name>cache.providerClass</name>
-          <value>org.picketlink.idm.impl.cache.JBossCacheAPICacheProviderImpl</value>
+          <name>template</name>
+          <value>true</value>
         </option>
         <option>
-          <name>cache.configFile</name>
-          <value>picketlink-idm/jboss-cache.xml</value>
-        </option>
-      </options>
-    </realm>
-    <realm>
-      <id>realm_portal</id>
-      <repository-id-ref>PortalRepository</repository-id-ref>
-      <identity-type-mappings>
-        <user-mapping>USER</user-mapping>
-      </identity-type-mappings>
-      <options>
-        <option>
-          <name>cache.providerClass</name>
-          <value>org.picketlink.idm.impl.cache.JBossCacheAPICacheProviderImpl</value>
-        </option>
-        <option>
-          <name>cache.configFile</name>
-          <value>picketlink-idm/jboss-cache.xml</value>
-        </option>
-      </options>
-    </realm>
-    <realm>
-      <id>realm_sample-portal</id>
-      <repository-id-ref>PortalRepository</repository-id-ref>
-      <identity-type-mappings>
-        <user-mapping>USER</user-mapping>
-      </identity-type-mappings>
-      <options>
-        <option>
-          <name>cache.providerClass</name>
-          <value>org.picketlink.idm.impl.cache.JBossCacheAPICacheProviderImpl</value>
-        </option>
-        <option>
-          <name>cache.configFile</name>
-          <value>picketlink-idm/jboss-cache.xml</value>
+          <name>cache.providerRegistryName</name>
+          <value>apiCacheProvider</value>
         </option>
       </options>
     </realm>
   </realms>
   <repositories>
     <repository>
-      <id>PortalRepository</id>
+      <id>DefaultPortalRepository</id>
       <class>org.picketlink.idm.impl.repository.WrapperIdentityStoreRepository</class>
       <external-config/>
       <default-identity-store-id>HibernateStore</default-identity-store-id>
@@ -136,4 +102,10 @@
       </identity-store>
     </identity-stores>
   </stores>
+  <options>
+      <option>
+         <name>defaultTemplate</name>
+         <value>idm_realm</value>
+      </option>
+  </options>
 </jboss-identity>

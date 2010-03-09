@@ -25,6 +25,11 @@
                xmlns="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd">
 
   <component>
+    <key>org.exoplatform.services.organization.idm.IdentityCacheService</key>
+    <type>org.exoplatform.services.organization.idm.IdentityCacheServiceImpl</type>
+  </component> 
+
+  <component>
     <key>org.exoplatform.services.organization.idm.PicketLinkIDMService</key>
     <type>org.exoplatform.services.organization.idm.PicketLinkIDMServiceImpl</type>
     <init-params>

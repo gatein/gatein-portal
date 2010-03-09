@@ -29,12 +29,15 @@ import org.exoplatform.services.naming.InitialContextInitializer;
 import org.picketlink.idm.api.IdentitySession;
 import org.picketlink.idm.api.IdentitySessionFactory;
 import org.picketlink.idm.api.cfg.IdentityConfiguration;
+import org.picketlink.idm.cache.APICacheProvider;
 import org.picketlink.idm.common.exception.IdentityConfigurationException;
+import org.picketlink.idm.impl.cache.JBossCacheAPICacheProviderImpl;
 import org.picketlink.idm.impl.configuration.IdentityConfigurationImpl;
 import org.picketlink.idm.impl.configuration.jaxb2.JAXB2IdentityConfiguration;
 import org.picketlink.idm.spi.configuration.metadata.IdentityConfigurationMetaData;
 import org.picocontainer.Startable;
 
+import java.io.InputStream;
 import java.net.URL;
 
 import javax.naming.InitialContext;
@@ -59,13 +62,15 @@ public class PicketLinkIDMServiceImpl implements PicketLinkIDMService, Startable
 
    public static final String REALM_NAME_OPTION = "portalRealm";
 
-   // We may have several portal containers thus we need one indentitySessionFactory per portal container
-   //   private static IdentitySessionFactory identitySessionFactory;
+   public static final String CACHE_CONFIG_OPTION = "cacheConfig";
+
    private IdentitySessionFactory identitySessionFactory;
 
    private String config;
 
-   private String realmName = "PortalRealm";
+   private String realmName = "idm_realm";
+
+   private String cacheConfig;
 
    private IdentityConfiguration identityConfiguration;
 
@@ -77,11 +82,13 @@ public class PicketLinkIDMServiceImpl implements PicketLinkIDMService, Startable
       InitParams initParams,
       HibernateService hibernateService,
       ConfigurationManager confManager,
+      IdentityCacheService identityCache,
       InitialContextInitializer dependency) throws Exception
    {
       ValueParam config = initParams.getValueParam(PARAM_CONFIG_OPTION);
       ValueParam jndiName = initParams.getValueParam(PARAM_JNDI_NAME_OPTION);
       ValueParam realmName = initParams.getValueParam(REALM_NAME_OPTION);
+      ValueParam cacheConfig = initParams.getValueParam(CACHE_CONFIG_OPTION);
 
       if (config == null && jndiName == null)
       {
@@ -103,12 +110,23 @@ public class PicketLinkIDMServiceImpl implements PicketLinkIDMService, Startable
             throw new IllegalStateException("Cannot fine resource: " + this.config);
          }
 
+
+
          IdentityConfigurationMetaData configMD =
             JAXB2IdentityConfiguration.createConfigurationMetaData(confManager.getInputStream(this.config));
 
          identityConfiguration = new IdentityConfigurationImpl().configure(configMD);
 
          identityConfiguration.getIdentityConfigurationRegistry().register(hibernateService.getSessionFactory(), "hibernateSessionFactory");
+
+         if (cacheConfig != null)
+         {
+            InputStream configStream = confManager.getInputStream(cacheConfig.getValue());
+            JBossCacheAPICacheProviderImpl cacheProvider = new JBossCacheAPICacheProviderImpl();
+            cacheProvider.initialize(configStream);
+            identityCache.register(cacheProvider);
+            identityConfiguration.getIdentityConfigurationRegistry().register(cacheProvider, "apiCacheProvider");
+         }
       }
       else
       {

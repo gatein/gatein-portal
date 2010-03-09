@@ -25,7 +25,7 @@
                 xsi:schemaLocation="urn:picketlink:idm:config:v1_0_0_ga identity-config.xsd">
     <realms>
         <realm>
-            <id>PortalRealm</id>
+            <id>idm_realm</id>
             <repository-id-ref>PortalRepository</repository-id-ref>
             <identity-type-mappings>
                 <user-mapping>USER</user-mapping>

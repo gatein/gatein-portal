@@ -23,7 +23,12 @@
 <configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd http://www.exoplaform.org/xml/ns/kernel_1_0.xsd"
                xmlns="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd">
-   
+
+
+  <component>
+    <key>org.exoplatform.services.organization.idm.IdentityCacheService</key>
+    <type>org.exoplatform.services.organization.idm.IdentityCacheServiceImpl</type>
+  </component>
 
   <component>
     <key>org.exoplatform.services.database.HibernateService</key>
@@ -70,9 +75,17 @@
         <!--<value>war:/conf/organization/picketlink-idm/examples/picketlink-idm-msad-readonly-config.xml</value>-->
         
       </value-param>
+
+      <!-- In default PicketLink IDM configuration hibernate store will namespace identity objects using this realm name
+           if you want to share DB between portal and also share the same identity data remove the "${container.name.suffix}" part-->
       <value-param>
         <name>portalRealm</name>
-        <value>realm${container.name.suffix}</value>
+        <value>idm_realm${container.name.suffix}</value>
+      </value-param>
+
+      <value-param>
+        <name>cacheConfig</name>
+        <value>war:/conf/organization/picketlink-idm/jboss-cache.xml</value>
       </value-param>
 
     </init-params>
