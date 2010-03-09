@@ -14,7 +14,7 @@
 	
 	ArrayList children = uicomponent.getChildren();
 	
-	if(children != null && children.size > 0){
+	if(children != null && children.size() > 0){
 		boolean hasRenderedChild = false; 
 		for(uiChild in children) {
 			if(uiChild.isRendered()) {
@@ -35,7 +35,7 @@
 	
 	String id = uicomponent.getId();
 %>
-<% if(children != null && children.size > 0) { %>
+<% if(children != null && children.size() > 0) { %>
 <div class="UITabContainer">
 	<div class="UIHorizontalTabs">
 		<div class="LeftHorizontalTabs">
