@@ -4,12 +4,12 @@
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="selenium.base" href="" />
-<title>SNF_PRL_12</title>
+<title>Test_SNF_PRL_12</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">SNF_PRL_12</td></tr>
+<tr><td rowspan="1" colspan="3">Test_SNF_PRL_12</td></tr>
 </thead><tbody>
 <tr>
 	<td>open</td>
@@ -78,7 +78,12 @@
 </tr>
 <tr>
 	<td>echo</td>
-	<td>--Verify details of Administration&gt;&gt;Organisation Management</td>
+	<td>--Verify details of Administration&gt;&gt;NewAccount</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>xpath=//div[@class='UIVerticalSlideTabs']//div[@class='UIVTabContent']//div[2]//a</td>
 	<td></td>
 </tr>
 <tr>
@@ -88,17 +93,22 @@
 </tr>
 <tr>
 	<td>waitForTextPresent</td>
-	<td>OrganizationPortlet</td>
+	<td>AccountPortlet</td>
 	<td></td>
 </tr>
 <tr>
 	<td>verifyTextPresent</td>
-	<td>OrganizationPortlet</td>
+	<td>AccountPortlet</td>
 	<td></td>
 </tr>
 <tr>
 	<td>echo</td>
-	<td>--Verify details of Administration&gt;&gt;NewAccount</td>
+	<td>--Verify details of Administration&gt;&gt;Organisation Management</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>xpath=//div[@class='UIVerticalSlideTabs']//div[@class='UIVTabContent']//div[3]//a</td>
 	<td></td>
 </tr>
 <tr>
@@ -108,12 +118,12 @@
 </tr>
 <tr>
 	<td>waitForTextPresent</td>
-	<td>AccountPortlet</td>
+	<td>OrganizationPortlet</td>
 	<td></td>
 </tr>
 <tr>
 	<td>verifyTextPresent</td>
-	<td>AccountPortlet</td>
+	<td>OrganizationPortlet</td>
 	<td></td>
 </tr>
 <tr>
@@ -122,8 +132,23 @@
 	<td></td>
 </tr>
 <tr>
+	<td>waitForElementPresent</td>
+	<td>xpath=//div[@class='UIVerticalSlideTabs']/div[2]//a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>xpath=//div[@class='UIVerticalSlideTabs']/div[2]//a</td>
+	<td></td>
+</tr>
+<tr>
 	<td>clickAt</td>
 	<td>xpath=//div[@class='UIVerticalSlideTabs']/div[2]//a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>xpath=//div[@class='UIVerticalSlideTabs']//div[@class='UIVTabContent']//div[1]//a</td>
 	<td></td>
 </tr>
 <tr>
@@ -144,6 +169,11 @@
 <tr>
 	<td>echo</td>
 	<td>--Verify details of Dashboard&gt;&gt;Gadget Wrapper Portlet</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>xpath=//div[@class='UIVerticalSlideTabs']//div[@class='UIVTabContent']//div[2]//a</td>
 	<td></td>
 </tr>
 <tr>
