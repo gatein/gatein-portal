@@ -55,3 +55,6 @@ rem # Sample JPDA settings for shared memory debugging
 rem set "JAVA_OPTS=%JAVA_OPTS% -Xrunjdwp:transport=dt_shmem,address=jboss,server=y,suspend=n"
 
 :JAVA_OPTS_SET
+
+rem # GateIn configuration directory
+set "JAVA_OPTS=%JAVA_OPTS% -Dexo.conf.dir.name=gatein"
