@@ -25,8 +25,21 @@
                 xsi:schemaLocation="urn:picketlink:idm:config:v1_0_0_ga identity-config.xsd">
   <realms>
     <realm>
-      <id>idm_realm</id>
+      <id>idm_realm_sample-portal</id>
       <repository-id-ref>DefaultPortalRepository</repository-id-ref>
+      <identity-type-mappings>
+        <user-mapping>USER</user-mapping>
+      </identity-type-mappings>
+      <options>
+        <option>
+          <name>cache.providerRegistryName</name>
+          <value>apiCacheProvider</value>
+        </option>
+      </options>
+    </realm>
+    <realm>
+      <id>idm_realm</id>
+      <repository-id-ref>PortalRepository</repository-id-ref>
       <identity-type-mappings>
         <user-mapping>USER</user-mapping>
       </identity-type-mappings>
@@ -35,19 +48,6 @@
           <name>template</name>
           <value>true</value>
         </option>
-        <option>
-          <name>cache.providerRegistryName</name>
-          <value>apiCacheProvider</value>
-        </option>
-      </options>
-    </realm>
-    <realm>
-      <id>idm_realm_portal</id>
-      <repository-id-ref>PortalRepository</repository-id-ref>
-      <identity-type-mappings>
-        <user-mapping>USER</user-mapping>
-      </identity-type-mappings>
-      <options>
         <option>
           <name>cache.providerRegistryName</name>
           <value>apiCacheProvider</value>
