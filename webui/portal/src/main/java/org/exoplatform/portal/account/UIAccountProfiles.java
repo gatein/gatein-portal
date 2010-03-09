@@ -21,9 +21,12 @@ package org.exoplatform.portal.account;
 
 import org.exoplatform.portal.pom.config.Utils;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.portal.webui.workspace.UIWorkingWorkspace;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.Query;
 import org.exoplatform.services.organization.User;
+import org.exoplatform.services.security.ConversationState;
+import org.exoplatform.web.CacheUserProfileFilter;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -104,7 +107,7 @@ public class UIAccountProfiles extends UIForm
          User user = service.getUserHandler().findUserByName(userName);
          String oldEmail = user.getEmail();
          String newEmail = uiForm.getUIStringInput("email").getValue();
-         
+
          // Check if mail address is already used
          Query query = new Query();
          query.setEmail(newEmail);
@@ -121,7 +124,15 @@ public class UIAccountProfiles extends UIForm
          user.setEmail(newEmail);
          uiApp.addMessage(new ApplicationMessage("UIAccountProfiles.msg.update.success", null));
          service.getUserHandler().saveUser(user, true);
-         return;
+
+         UIWorkingWorkspace uiWorkingWS = Util.getUIPortalApplication().getChild(UIWorkingWorkspace.class);
+         ConversationState state = ConversationState.getCurrent();
+         if (userName.equals(((User)state.getAttribute(CacheUserProfileFilter.USER_PROFILE)).getUserName()))
+         {
+            state.setAttribute(CacheUserProfileFilter.USER_PROFILE, user);
+            uiWorkingWS.updatePortletsByName("UserInfoPortlet");
+         }
+         uiWorkingWS.updatePortletsByName("OrganizationPortlet");
       }
    }
 }
