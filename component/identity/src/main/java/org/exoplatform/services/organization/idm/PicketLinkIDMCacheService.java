@@ -22,21 +22,37 @@
 
 package org.exoplatform.services.organization.idm;
 
-import org.picketlink.idm.cache.APICacheProvider;
+import org.exoplatform.management.annotations.Impact;
+import org.exoplatform.management.annotations.ImpactType;
+import org.exoplatform.management.annotations.Managed;
+import org.exoplatform.management.annotations.ManagedDescription;
+import org.exoplatform.management.annotations.ManagedName;
+import org.exoplatform.management.jmx.annotations.NameTemplate;
+import org.exoplatform.management.jmx.annotations.Property;
+import org.exoplatform.management.management.annotations.RESTEndpoint;
 
 import java.util.LinkedList;
 import java.util.List;
+
+import org.picketlink.idm.cache.APICacheProvider;
 
 
 /*
  * @author <a href="mailto:boleslaw.dawidowicz at redhat.com">Boleslaw Dawidowicz</a>
  */
-public class IdentityCacheServiceImpl implements IdentityCacheService
+@Managed
+@ManagedDescription("PicketLink IDM Cache Service")
+@NameTemplate({
+   @Property(key = "name", value = "plidmcache"),
+   @Property(key = "service", value = "PicketLinkIDMCacheService")
+})
+@RESTEndpoint(path = "plidmcache")
+public class PicketLinkIDMCacheService
 {
 
    private final List<APICacheProvider> cacheProviders = new LinkedList<APICacheProvider>();
 
-   public IdentityCacheServiceImpl()
+   public PicketLinkIDMCacheService()
    {
    }
 
@@ -50,7 +66,10 @@ public class IdentityCacheServiceImpl implements IdentityCacheService
 
    }
 
-   public void invalidate(String namespace)
+   @Managed
+   @ManagedDescription("Ivalidate cache namespace")
+   @Impact(ImpactType.WRITE)
+   public void invalidate(@ManagedDescription("Cache namespace") @ManagedName("namespace")String namespace)
    {
       for (APICacheProvider cacheProvider : cacheProviders)
       {
@@ -58,6 +77,9 @@ public class IdentityCacheServiceImpl implements IdentityCacheService
       }
    }
 
+   @Managed
+   @ManagedDescription("Ivalidate all caches")
+   @Impact(ImpactType.WRITE)
    public void invalidateAll()
    {
       for (APICacheProvider cacheProvider : cacheProviders)

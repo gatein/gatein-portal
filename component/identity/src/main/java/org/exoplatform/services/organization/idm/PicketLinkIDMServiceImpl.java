@@ -29,7 +29,6 @@ import org.exoplatform.services.naming.InitialContextInitializer;
 import org.picketlink.idm.api.IdentitySession;
 import org.picketlink.idm.api.IdentitySessionFactory;
 import org.picketlink.idm.api.cfg.IdentityConfiguration;
-import org.picketlink.idm.cache.APICacheProvider;
 import org.picketlink.idm.common.exception.IdentityConfigurationException;
 import org.picketlink.idm.impl.cache.JBossCacheAPICacheProviderImpl;
 import org.picketlink.idm.impl.configuration.IdentityConfigurationImpl;
@@ -82,7 +81,7 @@ public class PicketLinkIDMServiceImpl implements PicketLinkIDMService, Startable
       InitParams initParams,
       HibernateService hibernateService,
       ConfigurationManager confManager,
-      IdentityCacheService identityCache,
+      PicketLinkIDMCacheService picketLinkIDMCache,
       InitialContextInitializer dependency) throws Exception
    {
       ValueParam config = initParams.getValueParam(PARAM_CONFIG_OPTION);
@@ -124,7 +123,7 @@ public class PicketLinkIDMServiceImpl implements PicketLinkIDMService, Startable
             InputStream configStream = confManager.getInputStream(cacheConfig.getValue());
             JBossCacheAPICacheProviderImpl cacheProvider = new JBossCacheAPICacheProviderImpl();
             cacheProvider.initialize(configStream);
-            identityCache.register(cacheProvider);
+            picketLinkIDMCache.register(cacheProvider);
             identityConfiguration.getIdentityConfigurationRegistry().register(cacheProvider, "apiCacheProvider");
          }
       }

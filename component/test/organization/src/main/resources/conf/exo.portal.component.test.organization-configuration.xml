@@ -26,8 +26,8 @@
 
 
    <component>
-     <key>org.exoplatform.services.organization.idm.IdentityCacheService</key>
-     <type>org.exoplatform.services.organization.idm.IdentityCacheServiceImpl</type>
+     <key>org.exoplatform.services.organization.idm.PicketLinkIDMCacheService</key>
+     <type>org.exoplatform.services.organization.idm.PicketLinkIDMCacheService</type>
    </component> 
 
    <component>
