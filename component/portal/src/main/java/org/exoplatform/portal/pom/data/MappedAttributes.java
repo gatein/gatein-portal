@@ -59,16 +59,7 @@ class MappedAttributes
    public static final Key<String> URI = Key.create("uri", ValueType.STRING);
 
    /** . */
-   public static final Key<Date> START_PUBLICATION_DATE = Key.create("start-publication-date", ValueType.DATE);
-
-   /** . */
-   public static final Key<Date> END_PUBLICATION_DATE = Key.create("end-publication-date", ValueType.DATE);
-
-   /** . */
    public static final Key<String> TEMPLATE = Key.create("template", ValueType.STRING);
-
-   /** . */
-   public static final Key<String> VISIBILITY = Key.create("visibility", ValueType.STRING);
 
    /** . */
    public static final Key<String> LOCALE = Key.create("locale", ValueType.STRING);

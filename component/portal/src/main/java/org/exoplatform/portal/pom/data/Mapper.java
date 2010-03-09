@@ -24,13 +24,10 @@ import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.model.ApplicationState;
 import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.config.model.CloneApplicationState;
-import org.exoplatform.portal.mop.Decorated;
-import org.exoplatform.portal.mop.Described;
-import org.exoplatform.portal.mop.ProtectedResource;
+import org.exoplatform.portal.mop.*;
 import org.exoplatform.portal.config.model.PersistentApplicationState;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.TransientApplicationState;
-import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.Utils;
 import org.exoplatform.portal.pom.spi.portlet.Portlet;
@@ -152,15 +149,18 @@ public class Mapper
          Described described = src.adapt(Described.class);
 
          //
+         Visible visible = src.adapt(Visible.class);
+
+         //
          NavigationNodeData dstNode = new NavigationNodeData(
             src.getObjectId(),
             attrs.getValue(MappedAttributes.URI),
             described.getName(),
             attrs.getValue(MappedAttributes.ICON),
             src.getName(),
-            attrs.getValue(MappedAttributes.START_PUBLICATION_DATE),
-            attrs.getValue(MappedAttributes.END_PUBLICATION_DATE),
-            Visibility.valueOf(attrs.getValue(MappedAttributes.VISIBILITY, Visibility.DISPLAYED.toString())),
+            visible.getStartPublicationDate(),
+            visible.getEndPublicationDate(),
+            visible.getVisibility() != null ? visible.getVisibility() : Visibility.DISPLAYED,
             pageReference,
             children
          );
@@ -203,12 +203,15 @@ public class Mapper
          described.setName(node.getLabel());
 
          //
+         Visible visible = dst.adapt(Visible.class);
+         visible.setVisibility(node.getVisibility());
+         visible.setStartPublicationDate(node.getStartPublicationDate());
+         visible.setEndPublicationDate(node.getEndPublicationDate());
+
+         //
          Attributes attrs = dst.getAttributes();
          attrs.setValue(MappedAttributes.URI, node.getURI());
          attrs.setValue(MappedAttributes.ICON, node.getIcon());
-         attrs.setValue(MappedAttributes.START_PUBLICATION_DATE, node.getStartPublicationDate());
-         attrs.setValue(MappedAttributes.END_PUBLICATION_DATE, node.getEndPublicationDate());
-         attrs.setValue(MappedAttributes.VISIBILITY, node.getVisibility().name());
       }
       else if (src instanceof NavigationData)
       {

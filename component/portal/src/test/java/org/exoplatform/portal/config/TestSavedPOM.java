@@ -20,9 +20,7 @@
 package org.exoplatform.portal.config;
 
 import org.exoplatform.container.PortalContainer;
-import org.exoplatform.portal.mop.Decorated;
-import org.exoplatform.portal.mop.Described;
-import org.exoplatform.portal.mop.ProtectedResource;
+import org.exoplatform.portal.mop.*;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.gatein.mop.api.Attributes;
@@ -113,13 +111,17 @@ public class TestSavedPOM extends AbstractPortalTest
       Attributes nodeAttrs = nodeNavigation.getAttributes();
       assertEquals("node_uri", nodeAttrs.getString("uri"));
       assertEquals("node_icon", nodeAttrs.getString("icon"));
+
+      //
+      assertTrue(nodeNavigation.isAdapted(Visible.class));
+      Visible visible = nodeNavigation.adapt(Visible.class);
       GregorianCalendar start = new GregorianCalendar(2000, 2, 21, 1, 33, 0);
       start.setTimeZone(TimeZone.getTimeZone("UTC"));
-      assertEquals(start.getTime(), nodeAttrs.getDate("start-publication-date"));
+      assertEquals(start.getTime(), visible.getStartPublicationDate());
       GregorianCalendar end = new GregorianCalendar(2009, 2, 21, 1, 33, 0);
       end.setTimeZone(TimeZone.getTimeZone("UTC"));
-      assertEquals(end.getTime(), nodeAttrs.getDate("end-publication-date"));
-      assertEquals("TEMPORAL", nodeAttrs.getString("visibility"));
+      assertEquals(end.getTime(), visible.getEndPublicationDate());
+      assertEquals(Visibility.TEMPORAL, visible.getVisibility());
 
       //
       Link link = nodeNavigation.getLink();

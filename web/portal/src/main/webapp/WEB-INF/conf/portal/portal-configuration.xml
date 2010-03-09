@@ -254,6 +254,7 @@
           <value>org.exoplatform.portal.mop.ProtectedResource</value>
           <value>org.exoplatform.portal.mop.Described</value>
           <value>org.exoplatform.portal.mop.Decorated</value>
+          <value>org.exoplatform.portal.mop.Visible</value>
         </values-param>
         <properties-param>
           <name>options</name>
