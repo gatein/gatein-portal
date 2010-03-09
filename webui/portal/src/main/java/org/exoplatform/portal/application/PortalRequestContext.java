@@ -398,12 +398,24 @@ public class PortalRequestContext extends WebuiRequestContext
       {
          Transformer transformer = TransformerFactory.newInstance().newTransformer();
          transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
-         transformer.setOutputProperty(OutputKeys.METHOD, "html");
 
          for (Element element : extraMarkupHeaders)
          {
             DOMSource source = new DOMSource(element);
             StreamResult result = new StreamResult(new StringWriter());
+
+            // we want to ouput xhtml text that will still work on html browsers.
+            // In order to do this we need to have the script tag be not self closing
+            // which it will try and do with the xml or xhtml method. If we just use
+            // the html method then the other tags will not be closed.
+            if (element.getNodeName().equalsIgnoreCase("script"))
+            {
+               transformer.setOutputProperty(OutputKeys.METHOD, "html");
+            }
+            else
+            {
+               transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+            }
             transformer.transform(source, result);
             markupHeaders.add(result.getWriter().toString());
          }
