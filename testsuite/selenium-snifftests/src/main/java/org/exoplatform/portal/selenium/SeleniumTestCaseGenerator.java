@@ -254,6 +254,13 @@ public class SeleniumTestCaseGenerator {
 				sb.append("(selenium.isTextPresent(\"");
 				sb.append(param2);
 				sb.append("\"));\n");
+			} else if (param1.equals("verifyText")) {
+				sb.append("TestCase.assertTrue");
+				sb.append("(selenium.getText(\"");
+				sb.append(param2);
+				sb.append("\").equals(\"");
+				sb.append(param3);
+				sb.append("\"));\n");
 			} else if (param1.equals("verifyTitle")) {
 				sb.append("TestCase.assertEquals(\"");
 				sb.append(param2);
