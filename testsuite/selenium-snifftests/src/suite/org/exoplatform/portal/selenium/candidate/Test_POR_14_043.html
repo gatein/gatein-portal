@@ -18,11 +18,6 @@
 </tr>
 <tr>
 	<td>echo</td>
-	<td>-New Account-</td>
-	<td></td>
-</tr>
-<tr>
-	<td>echo</td>
 	<td>--Register New Account-</td>
 	<td></td>
 </tr>
@@ -98,17 +93,17 @@
 </tr>
 <tr>
 	<td>clickAt</td>
-	<td>//div[@id='UIPortalLoginFormAction']//a</td>
+	<td>xpath=//div[@id='UIPortalLoginFormAction']//a</td>
 	<td></td>
 </tr>
 <tr>
 	<td>echo</td>
-	<td>-GroupManagement-</td>
+	<td>--GroupManagement--</td>
 	<td></td>
 </tr>
 <tr>
 	<td>echo</td>
-	<td>-Select User and group managent in menu</td>
+	<td>--Select User and group managent in menu--</td>
 	<td></td>
 </tr>
 <tr>
@@ -133,17 +128,17 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UIOrganizationPortlet']//div[@class='ManagementIconContainer']/a[@class='GroupButton']</td>
+	<td>xpath=//div[@id='UIOrganizationPortlet']//div[@class='ManagementIconContainer']/a[@class='GroupButton']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAt</td>
-	<td>//div[@id='UIOrganizationPortlet']//div[@class='ManagementIconContainer']/a[@class='GroupButton']</td>
+	<td>xpath=//div[@id='UIOrganizationPortlet']//div[@class='ManagementIconContainer']/a[@class='GroupButton']</td>
 	<td>1,1</td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UIOrganizationPortlet']/div[2]/div[2]/div[1]/div[2]/div[1]/div[2]/div/div/div/div[3]/div/a</td>
+	<td>xpath=//div[@id='UIOrganizationPortlet']/div[2]/div[2]/div[1]/div[2]/div[1]/div[2]/div/div/div/div[3]/div/a</td>
 	<td></td>
 </tr>
 <tr>
@@ -178,17 +173,17 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//form[@id='UIGroupMembershipForm']//div[@class='HorizontalLayout']//table[@class='UIFormGrid']//td[@class='FieldComponent']/a</td>
+	<td>xpath=//form[@id='UIGroupMembershipForm']//div[@class='HorizontalLayout']//table[@class='UIFormGrid']//td[@class='FieldComponent']/a</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAt</td>
-	<td>//td[2]/a</td>
+	<td>xpath=//td[2]/a</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//form[@id='UIUserSelector']/div[2]/div[2]/table/tbody/tr/td/a[1]/div/div/div</td>
+	<td>xpath=//form[@id='UIUserSelector']/div[2]/div[2]/table/tbody/tr/td/a[1]/div/div/div</td>
 	<td></td>
 </tr>
 <tr>
@@ -198,17 +193,17 @@
 </tr>
 <tr>
 	<td>echo</td>
-	<td>-Click add button-</td>
+	<td>--Click add button--</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//form[@id='UIUserSelector']//div[@class='UIAction']//a[@class='ActionButton LightBlueStyle']</td>
+	<td>xpath=//form[@id='UIUserSelector']//div[@class='UIAction']//a[@class='ActionButton LightBlueStyle']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAt</td>
-	<td>//form[@id='UIUserSelector']//div[@class='UIAction']//a[@class='ActionButton LightBlueStyle']</td>
+	<td>xpath=//form[@id='UIUserSelector']//div[@class='UIAction']//a[@class='ActionButton LightBlueStyle']</td>
 	<td></td>
 </tr>
 <tr>
@@ -223,7 +218,7 @@
 </tr>
 <tr>
 	<td>echo</td>
-	<td>-Page Management-</td>
+	<td>--Page Management--</td>
 	<td></td>
 </tr>
 <tr>
@@ -244,6 +239,11 @@
 <tr>
 	<td>clickAt</td>
 	<td>link=Page Management</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>--Add new page--</td>
 	<td></td>
 </tr>
 <tr>
@@ -268,7 +268,7 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//option[@value='portal']</td>
+	<td>xpath=//option[@value='portal']</td>
 	<td></td>
 </tr>
 <tr>
@@ -358,7 +358,7 @@
 </tr>
 <tr>
 	<td>echo</td>
-	<td>-- Choose Page Selector</td>
+	<td>-- Choose Page Selector--</td>
 	<td></td>
 </tr>
 <tr>
@@ -367,7 +367,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>click</td>
+	<td>clickAt</td>
 	<td>link=Search and Select Page</td>
 	<td></td>
 </tr>
@@ -377,18 +377,18 @@
 	<td></td>
 </tr>
 <tr>
-	<td>click</td>
+	<td>clickAt</td>
 	<td>link=Search and Select Page</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//img[contains(@onclick,'por_14_043')]</td>
+	<td>xpath=//img[contains(@onclick,'por_14_043')]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAt</td>
-	<td>//img[contains(@onclick,'por_14_043')]</td>
+	<td>xpath=//img[contains(@onclick,'por_14_043')]</td>
 	<td></td>
 </tr>
 <tr>
@@ -400,10 +400,20 @@
 	<td>clickAt</td>
 	<td>link=Save</td>
 	<td>1,1</td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>--Sign out--</td>
+	<td></td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
 	<td>link=Sign out</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>--Sign In with new accout--</td>
 	<td></td>
 </tr>
 <tr>
@@ -423,7 +433,12 @@
 </tr>
 <tr>
 	<td>clickAt</td>
-	<td>//div[@id='UIPortalLoginFormAction']/div/div/div/a</td>
+	<td>xpath=//div[@id='UIPortalLoginFormAction']/div/div/div/a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>--Sign out--</td>
 	<td></td>
 </tr>
 <tr>
@@ -437,7 +452,12 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>echo</td>
+	<td>--Sign In by root--</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
 	<td>link=Sign in</td>
 	<td></td>
 </tr>
@@ -449,6 +469,11 @@
 <tr>
 	<td>open</td>
 	<td>/portal/public/classic</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Sign in</td>
 	<td></td>
 </tr>
 <tr>
@@ -472,8 +497,13 @@
 	<td>gtn</td>
 </tr>
 <tr>
+	<td>waitForElementPresent</td>
+	<td>xpath=//div[@id='UIPortalLoginFormAction']//a</td>
+	<td></td>
+</tr>
+<tr>
 	<td>clickAt</td>
-	<td>//div[@id='UIPortalLoginFormAction']//a</td>
+	<td>xpath=//div[@id='UIPortalLoginFormAction']//a</td>
 	<td></td>
 </tr>
 <tr>
@@ -518,7 +548,7 @@
 </tr>
 <tr>
 	<td>click</td>
-	<td>//form[@id='UIPageSearch']/div[2]/a</td>
+	<td>xpath=//form[@id='UIPageSearch']/div[2]/a</td>
 	<td></td>
 </tr>
 <tr>
@@ -593,12 +623,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//img[@alt='DeleteUser']</td>
+	<td>xpath=//img[@alt='DeleteUser']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAt</td>
-	<td>//img[@alt='DeleteUser']</td>
+	<td>xpath=//img[@alt='DeleteUser']</td>
 	<td></td>
 </tr>
 <tr>
