@@ -19,7 +19,7 @@
 			</div>
 			<div class="MiddleItemContainer UIResizableBlock">
 			<% List categories = uicomponent.getCategories();
-				 if(categories != null && categories.size > 0){
+				 if(categories != null && categories.size() > 0){
 					for(category in categories){
 			%>
 							<div class="GadgetCategory" id="${category.getName()}">
