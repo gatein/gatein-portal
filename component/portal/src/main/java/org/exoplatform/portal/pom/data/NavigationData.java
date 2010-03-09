@@ -36,8 +36,6 @@ public class NavigationData extends NavigationNodeContainerData
    public NavigationData(
       String ownerType,
       String ownerId,
-      String creator,
-      String modifier,
       Integer priority,
       List<NavigationNodeData> children)
    {
