@@ -4,60 +4,69 @@
 %BOOK_ENTITIES;
 ]>
 <section id="sect-User_Guide-Manage_Portals">
-	<title>Manage Portals</title>
-	<para>
-		Portals can easily be managed by editing or deleting.
-	</para>
-	<section id="sect-User_Guide-Manage_Portals-Edit_a_Portal">
-		<title>Edit a Portal</title>
-		<para>
-			You can change aspects of the current using portal, such as properties or layout if you have the edit right (granted by an Admininstrator).
-		</para>
-		<para>
-			If you have edit rights, follow these steps to edit the current portal:
-		</para>
-		<procedure>
-				<step>
-					<para>
-						Go to <emphasis role="bold">Editor</emphasis> on the Toolbar and click <emphasis role="bold">Edit Site Layout</emphasis>.
-				</para>
-				<mediaobject>
-					<imageobject role="html">
-						<imagedata fileref="images/EditPortal.png" format="PNG" align="center" scale="100"/>
-					</imageobject>
-					<imageobject role="fo">
-						<imagedata fileref="images/EditPortal.png" format="PNG" align="center" contentwidth="130mm" />
-					</imageobject>
-				</mediaobject>
-				</step>
-				<step>
-				<para>
-					Click the Properties button in the <emphasis role="bold">Edit Inline Composer</emphasis>. The edit Form of the portal will be shown:
-				</para>
-				<mediaobject>
-					<imageobject role="html">
-						<imagedata fileref="images/EditPortal2.6New.png" format="PNG" align="center" scale="100" />
-					</imageobject>
-					<imageobject role="fo">
-						<imagedata fileref="images/EditPortal2.6New.png" format="PNG" align="center" contentwidth="150mm" />
-					</imageobject>
-				</mediaobject>
-				</step>
-		</procedure>
-		<para>
-			This form is where you can change portal settings.
-		</para>
-		
+    <title>Manage Portals</title>
 
-		<procedure id="proc-User_Guide-Manage_Portals-Edit_a_Portal-Change_Timeout_Settings">
-			<title>Change Timeout Settings</title>
-				<step> 
-				<para>
-					Click the <emphasis role="bold">Propertites</emphasis> tab of the edit form. Select an option for <emphasis role="bold">Keep session alive</emphasis>
-				</para>
-				<para>
-					This option controls how long your session is kept alive. There are 3 options:
-				</para>
+
+<section id="sect-User_Guide-Create_a_New_Portal">
+	<title>Create a New Portal</title>
+	<para>
+		Creating a new portal requires proper access credentials that only an administrator may set up.
+	</para>
+	<procedure>
+		<step>
+			<para>
+				Click on <emphasis role="bold">Site</emphasis> in the toolbar.
+			</para>
+		</step>
+		<step>
+			<para>
+				Click the <emphasis role="bold">Add New Portal</emphasis> button. By default, the <emphasis role="bold">Create New Portal</emphasis> window is shown with the <emphasis role="bold">Portal Templates</emphasis> tab. 
+				<mediaobject>
+					<imageobject role="html">
+						<imagedata fileref="images/PortalTemplate.png" format="PNG" align="center" scale="100" />
+					</imageobject>
+					<imageobject role="fo">
+						<imagedata fileref="images/PortalTemplate.png" format="PNG" align="center" contentwidth="150mm" />
+					</imageobject>
+				</mediaobject>
+			</para>
+			<para>
+				By default, Portal template is Classic. Select the <emphasis role="bold">Portal Setting</emphasis> tab. 
+
+<note>
+<title>DOC TODO</title>
+<para>
+please redo screenshot
+</para>
+</note>	
+				<mediaobject>
+					<imageobject role="html">
+						<imagedata fileref="images/PortalSetting2.5.png" format="PNG" align="center" scale="100" />
+					</imageobject>
+					<imageobject role="fo">
+						<imagedata fileref="images/PortalSetting2.5.png" format="PNG" align="center" contentwidth="150mm" />
+					</imageobject>
+				</mediaobject>
+			</para>
+		</step>
+		<step>
+			<para>
+				Enter a string for the <emphasis role="bold">Portal Name</emphasis> field. This field is required and must be unique. Only alphabetical, numerical and underscore characters are allowed for this field and the name must have at least 3 characters.
+			</para>
+		</step>
+		<step>
+			<para>
+				Select the default display language for the portal
+			</para>
+		</step>
+		<step>
+			<para>
+				Select a skin for a portal
+			</para>
+		</step>
+		<step>
+			<para>
+				Click on the <emphasis role="bold">Properties</emphasis> tab to fill in the <emphasis role="bold">Keep session alive</emphasis> property. There are 3 options: 
 				<variablelist>
 					<varlistentry>
 						<term><emphasis role="bold">Never</emphasis></term> 
@@ -84,195 +93,210 @@
 							</listitem>
 					</varlistentry>
 				</variablelist>
-				</step>
-				<step>
-					<para>
-						Select the option that best suits your needs.
-					</para>
-				</step>
-				<step>
-				<para>
-					Click the <emphasis role="bold">Save</emphasis> button to accept changes or the <emphasis role="bold">Cancel</emphasis> button to quit.
-				</para>
-				</step>
-		</procedure>
-		<procedure id="proc-User_Guide-Manage_Portals-Edit_a_Portal-Set_permissions_for_the_portal">
-				<title>Set permissions for the portal</title>
-				<step>
-				<para>
-					Go to the <emphasis role="bold">Permission Setting</emphasis> tab of the edit form and then the <emphasis role="bold">Edit Permission Setting</emphasis> sub-tab. 
-				</para>
-				</step>
-				<step>
-					<para>
-						Click the <emphasis role="bold">Select Permission</emphasis> button and then select a group with the Membership type you want. Only one group can have the Edit Permission of the portal.
-					</para>
-				</step>
+			</para>
+		</step>
+		<step>
+			<para>
+				Click on the <emphasis role="bold">Permission Setting</emphasis> tab and set the permissions for the Portal.
+			</para>
+			<para>
+				By default the access permissions list for the portal is empty. You have to select at least one or tick on the <emphasis role="bold">Make it public</emphasis> check box to assign access permission to everyone.
+			</para>
+		</step>
+		<step>
+			<para>
+				Click <emphasis role="bold">Save</emphasis>
+			</para>
+		</step>
+	</procedure>
+	<para>
+		You also can edit or delete a portal. See more details in <xref linkend="sect-User_Guide-Manage_Portals" />
+	</para>
+</section>
 
-				<step>
-				<para>
-					Click the <emphasis role="bold">Save</emphasis> button to accept changes or the <emphasis role="bold">Cancel</emphasis> button to quit.
-				</para>
-				</step>
-		</procedure>
-<!--		<procedure>
-			<step>
-				<para>
-					Go to <emphasis role="bold">GateIn Start</emphasis> -&gt; <emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Advanced</emphasis> &gt; <emphasis role="bold">Edit Current Portal</emphasis>. A form to edit the current portal will appear:
-				</para>
-				<mediaobject>
-					<imageobject>
-						<imagedata fileref="images/EditCurrentPortal.png" format="PNG" align="center" width="444" />
-					</imageobject>
-				</mediaobject>
-				<variablelist>
-				  <varlistentry>
-					<term>Preview page</term>
-					<listitem>
-						<para>
-							allows viewing node's page in preview mode.
-						</para>
-					</listitem>
-				</varlistentry>
-				<varlistentry>
-					<term>Edit page properties</term>
-					<listitem>
-						<para>
-							Allows editing node's page properties.
-						</para>
-					</listitem>
-				</varlistentry>
-				<varlistentry>
-					<term>Show container</term>
-					<listitem>
-						<para>
-							Allows listing all existing containers when editing node's page.
-						</para>
-					</listitem>
-				</varlistentry>
-				<varlistentry>
-					<term>Show portlet</term>
-					<listitem>
-						<para>
-							Allows listing all existing portlets when editing node's page.
-						</para>
-					</listitem>
-				</varlistentry>
-				<varlistentry>
-					<term>Save page</term>
-					<listitem>
-						<para>
-							Allows saving changes of page when editing node's page.
-						</para>
-					</listitem>
-				</varlistentry>
-				<varlistentry>
-					<term>Rollback</term>
-					<listitem>
-						<para>
-							Allows canceling all changes that have not been saved.
-						</para>
-					</listitem>
-				</varlistentry>
-				<varlistentry>
-					<term>Abort</term>
-					<listitem>
-						<para>
-							Allows canceling all changes that have not been saved and escaping Edit page and navigation form.
-						</para>
-					</listitem>
-				</varlistentry>
-				<varlistentry>
-					<term>Finish</term>
-					<listitem>
-						<para>
-							Allows saving all changes and escaping Edit page and navigation form.
-						</para>
-					</listitem>
-				</varlistentry>
-			</variablelist>
-			</step>
-			<step>
-				<para>
-					Click!images/EditPage.png! icon to edit portal properties.
-				</para>
-			</step>
-			<step>
-				<para>
-					Click!images/ShowContainer.png! icon to edit portal container layout.
-				</para>
-			</step>
-			<step>
-				<para>
-					Click!images/ShowPortlet.png! icon to edit portal portlet layout.
-				</para>
-			</step>
-			<step>
-				<para>
-					Click!images/Savepage.png! icon to save changes.
-				</para>
-			</step>
-	</procedure> -->
 
+     <section id="sect-User_Guide-Manage_Portals-Edit_a_Portal">
+		<title>Edit a Portal</title>
+		<para>
+			An administrater is allowed to alter many aspects of a portal:
+		</para>
+		<para>
+			Click <emphasis role="bold">Site</emphasis> on the Toolbar. A list of active portals will appear as such:
+		</para>
+<note>
+<title>DOC TODO</title>
+<para>
+please add screenshot
+</para>
+</note>				
+		
+        </section>
+	<section id="proc-User_Guide-Manage_Portals-Edit_Layout">
+		<title>Edit Layout</title>
+<note>
+<title>DOC TODO</title>
+<para>
+please add screenshot
+</para>
+</note>				
+		
 	</section>
+
 	
+	<section id="proc-User_Guide-Manage_Portals-Edit_Navigation">
+		<title>Edit Navigation</title>
+<note>
+<title>DOC TODO</title>
+<para>
+please add screenshot
+</para>
+</note>				
+		
+	</section>
+
+	<section id="proc-User_Guide-Manage_Portals-Edit_Properties">
+		<title>Edit Properties</title>
+<note>
+<title>DOC TODO</title>
+<para>
+please add screenshot
+</para>
+</note>				
+		
+	</section>
+
 	<section id="sect-User_Guide-Manage_Portals-Delete_a_Portal">
 		<title>Delete a Portal</title>
-			<procedure>
-			<title>Method One:</title>
-			<step>
-				<para>
-					Go to <emphasis role="bold">Group</emphasis> on the Toolbar and highlight <emphasis role="bold">Administration</emphasis>. Click on <emphasis role="bold">Portal Management</emphasis>. List of all portals will be shown.
-				</para>
-			</step>
-			<step>
-				<para>
-					Click the trash can icon in the row of the portal you want to delete in the portal list.
-				</para>
-			</step>
-			<step>
-				<para>
-					Click the <emphasis role="bold">OK</emphasis> button in the confirmation message to delete.
-				</para>
-				<mediaobject>
-					<imageobject role="html">
-						<imagedata fileref="images/SureDelete.png" format="PNG" align="center" scale="100"/>
-					</imageobject>
-					<imageobject role="fo">
-						<imagedata fileref="images/SureDelete.png" format="PNG" align="center" contentwidth="70mm"/>
-					</imageobject>
-				</mediaobject>
-			</step>
-		</procedure>
-
 		<procedure>
-			<title>Method Two:</title>
-			<step>
-				<para>
-					Click on <emphasis role="bold">Site</emphasis> in the Toolbar 
-
-				</para>
-			</step>
 			<step>
 				<para>
 					Click on the Delete icon.The confirmation message will appear.
 				</para>
 			</step>
-			<step>
-				<para>
-					Click <emphasis role="bold">OK</emphasis> to accept deleting a portal or <emphasis role="bold">Cancel</emphasis> to quit without deleting it.
-				</para>
 				<mediaobject>
-					<imageobject role="html">
-						<imagedata fileref="images/SureDelete.png" format="PNG" align="center" scale="100"/>
-					</imageobject>
-					<imageobject role="fo">
-						<imagedata fileref="images/SureDelete.png" format="PNG" align="center" contentwidth="70mm"/>
+					<imageobject>
+						<imagedata fileref="images/SureDelete.png" format="PNG" />
 					</imageobject>
 				</mediaobject>
+			<step>
+				<para>
+					Click <emphasis role="bold">OK</emphasis>
+				</para>
 			</step>
 		</procedure>
 	</section>
+
+        <section id="sect-User_Guide-Change_Portal_Skins">
+		<title>Change Portal Skins</title>
+			<para>
+				Skins are graphic styles used to provide an attractive user interface. Each skin has its own characteristics with different backgrounds, icons, and other visual elements.
+			</para>
+			<para>
+				Skins can be changed temporarily (and are reset at log-out) or permanently.
+			</para>
+				<variablelist>
+					<varlistentry>
+						<term>Change the skin temporarily</term>
+							<listitem>
+								<procedure>
+									<step>
+										<para>
+											Mouse over the Start menu and click on <emphasis role="bold">Change Skin</emphasis>.
+										</para>
+									</step>
+									<step>
+										<para>
+											Select a new skin from the Skin list. By clicking on the skin name a picture will appear in the preview pane.
+										</para>
+<note>
+<title>DOC TODO</title>
+<para>
+please redo screenshot
+</para>
+</note>	
+										<mediaobject>
+											<imageobject role="html">
+												<imagedata fileref="images/SkinSet1.png" format="PNG" width="444" />
+											</imageobject>
+											<imageobject role="fo">
+												<imagedata fileref="images/SkinSet1.png" format="PNG" contentwidth="120mm" />
+											</imageobject>
+										</mediaobject>
+									</step>
+									<step>
+										<para>
+											lick <emphasis role="bold">Apply</emphasis> to apply to the portal. 
+										</para>
+									</step>
+								</procedure>
+							</listitem>
+					</varlistentry>
+					<varlistentry>
+						<term>Change the skin permanently</term>
+							<listitem>
+								<procedure>
+									<step>
+										<para>
+											Click on <emphasis role="bold">Site</emphasis>, then <emphasis role="bold">Edit Portal's Properties</emphasis>.
+										</para>
+									</step>
+
+									<step>
+										<para>
+											In the <emphasis role="bold">Portal Setting</emphasis> tab, select another skin <emphasis role="bold">Skin</emphasis> list
+										</para>
+<note>
+<title>DOC TODO</title>
+<para>
+please redo screenshot
+</para>
+</note>	
+										<mediaobject>
+											<imageobject role="html">
+												<imagedata fileref="images/Skin1.png" format="PNG" width="444" />
+											</imageobject>
+											<imageobject role="fo">
+												<imagedata fileref="images/Skin1.png" format="PNG" contentwidth="120mm"/>
+											</imageobject>
+										</mediaobject>
+									</step>
+									<step>
+										<para>
+											Click <emphasis role="bold">Save</emphasis> then <emphasis role="bold">Finish</emphasis>.
+										</para>
+									</step>
+								</procedure>
+							</listitem>
+					</varlistentry>
+				</variablelist>
+				<para>
+					More information about adding skins to a portal check out the &PRODUCT; Reference Guide at <ulink type="http" url="www.redhat.com/docs"></ulink>
+				</para>
+
+	</section>
+
+        <section id="sect-User_Guide-Switching_between_Portals">
+		<title>Switching between Portals</title>
+		<para>
+			Mouse over <emphasis role="bold">Site</emphasis> on the Toolbar for a list all portals in which you have at least access right
+		</para>
+	<note>
+	<title>DOC TODO</title>
+	<para>
+	please redo screenshot
+	</para>
+	</note>				
+
+		<mediaobject>
+			<imageobject>
+				<imagedata fileref="images/SitePortlet.png" format="PNG" />
+			</imageobject>
+		</mediaobject>
+		<para>
+			Users switch between Portals by clicking on the desired portal. Please wait a few seconds for the change to take effect.
+		</para>
+	</section>
+
 
 </section>
 

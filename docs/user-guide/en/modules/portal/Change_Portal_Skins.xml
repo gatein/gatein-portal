@@ -3,84 +3,8 @@
 <!ENTITY % BOOK_ENTITIES SYSTEM "../../User_Guide.ent">
 %BOOK_ENTITIES;
 ]>
-<section id="sect-User_Guide-Change_Portal_Skins">
-	<title>Change Portal Skins</title>
-		<para>
-			Skins are graphic styles that display an attractive user interface. Each skin has its own characteristics with different backgrounds, icons, and other visual elements. In order to be user-friendly and flexible, users are allowed to change the skin they use on the portal without having edit rights.
-		</para>
-		<para>
-			Skins can be changed temporarily (and are reset at log-out) or permanently.
-		</para>
-			<variablelist>
-				<varlistentry>
-					<term>Change the skin temporarily</term>
-						<listitem>
-							<procedure>
-								<step>
-									<para>
-										Go to <emphasis role="bold">&PRODUCT; Start</emphasis> and click on <emphasis role="bold">Change Skin</emphasis>.
-									</para>
-								</step>
-								<step>
-									<para>
-										Select a new skin from the list on the left of the <emphasis role="bold">Skin Settings</emphasis> box. When you highlight a skin in the list a preview will appear in the pane on the right of the box.
-									</para>
-									<mediaobject>
-										<imageobject role="html">
-											<imagedata fileref="images/SkinSet1.png" format="PNG" align="center" scale="110" />
-										</imageobject>
-										<imageobject role="fo">
-											<imagedata fileref="images/SkinSet1.png" format="PNG" align="center" contentwidth="120mm" />
-										</imageobject>
-									</mediaobject>
-								</step>
-								<step>
-									<para>
-										If you are happy with your choice, click the <emphasis role="bold">Apply</emphasis> button to have it applied to the portal. 
-									</para>
-									<para>
-										Or, if you decide not to change the skin, click <emphasis role="bold">Cancel</emphasis> to close the dialogue box without making any changes to the portal.
-									</para>
-								</step>
-							</procedure>
-						</listitem>
-				</varlistentry>
-				<varlistentry>
-					<term>Change the skin permanently</term>
-						<listitem>
-							<procedure>
-								<step>
-									<para>
-										Click on <emphasis role="bold">Site</emphasis>, then <emphasis role="bold">Edit Portal's Properties</emphasis> for the portal of your choice.
-									</para>
-								</step>
 
-								<step>
-									<para>
-										In the <emphasis role="bold">Portal Setting</emphasis> tab: select one skin type in the <emphasis role="bold">Skin</emphasis> list field to change and display a skin.
-									</para>
-									<mediaobject>
-										<imageobject role="html">
-											<imagedata fileref="images/Skin1.png" format="PNG" align="center" scale="110" />
-										</imageobject>
-										<imageobject role="fo">
-											<imagedata fileref="images/Skin1.png" format="PNG" align="center" contentwidth="120mm"/>
-										</imageobject>
-									</mediaobject>
-								</step>
-								<step>
-									<para>
-										Click <emphasis role="bold">Save</emphasis> and <emphasis role="bold">Finish</emphasis> icon so that the modification can take effect.
-									</para>
-								</step>
-							</procedure>
-						</listitem>
-				</varlistentry>
-			</variablelist>
-			<para>
-				More information about adding skins to a portal see the &PRODUCT; Reference Guide at <ulink type="http" url="www.redhat.com/docs"></ulink>
-			</para>
 
-</section>
+TO DELETE
 
 

@@ -3,25 +3,9 @@
 <!ENTITY % BOOK_ENTITIES SYSTEM "../../User_Guide.ent">
 %BOOK_ENTITIES;
 ]>
-<section id="sect-User_Guide-Switching_between_Portals">
-	<title>Switching between Portals</title>
-	<para>
-		&PRODUCT; allows users to switch between portals simply and easily.
-	</para>
-	<para>
-		Go to <emphasis role="bold">Site</emphasis> on the Toolbar for a list all portals in which you have at least the access right
-	</para>
-	<mediaobject>
-		<imageobject role="html">
-			<imagedata fileref="images/SitePortlet.png" format="PNG" align="center" scale="110"/>
-		</imageobject>
-		<imageobject role="fo">
-			<imagedata fileref="images/SitePortlet.png" format="PNG" align="center" contentwidth="150mm"/>
-		</imageobject>
-	</mediaobject>
-	<para>
-		You easily switch between Portals by simply clicking on the portal that you wish to switch to and waiting for few seconds for the change to take effect.
-	</para>
-</section>
 
+
+TO DELETE
+
+	
 

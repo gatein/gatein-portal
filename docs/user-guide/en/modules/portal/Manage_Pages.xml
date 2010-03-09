@@ -5,19 +5,200 @@
 ]>
 <section id="sect-User_Guide-Manage_Pages">
 	<title>Manage Pages</title>
-		<para>
-			&PRODUCT; users can quickly add, edit, delete and view pages effectively in a comprehensive list. Follow the guide below to manage portal pages:
-		</para>
+
+
+            <section id="sect-User_Guide-Manage_Pages-Adding_a_new_Page">
+		<title>Adding a new Page</title>
+
+		 <section id="sect-User_Guide-Page_Creation_Wizard">
+			<title>Adding a new Page using Page Creation Wizard</title>
+			<para>
+				A page creation wizard is available to administrators in order to create and publish a page quickly and easily.
+			</para>
+			<procedure>
+				<step>
+					<para>
+						Click on <emphasis role="bold">Site Editor</emphasis> then select  <emphasis role="bold">Add New Page</emphasis>. 
+					</para>
+<note>
+<title>DOC TODO</title>
+<para>
+please redo screenshot
+</para>
+</note>	
+					<mediaobject>
+						<imageobject>
+							<imagedata fileref="images/Wizard1.png" format="PNG" width="444" />
+						</imageobject>
+					</mediaobject>
+				</step>
+				<step>
+					<para>
+						The wizard window is divided in two sections: the left pane contains the existing page/node hierarchy and the right pane displays the Page editor.
+					</para>
+
+				</step>
+				<step>
+					<para>
+						In the left pane, you may navigate the node/page structure up and down
+					</para>
+				</step>
+				<step>
+<note>
+<title>DOC TODO</title>
+<para>
+please redo screenshot
+</para>
+</note>	
+					<mediaobject>
+						<imageobject>
+							<imagedata fileref="images/Pagewizard1.png" format="PNG" width="444" />
+						</imageobject>
+					</mediaobject>
+					<variablelist>
+					  <varlistentry>
+						<term>Current Selected Page Node</term>
+						<listitem>
+							<para>
+								The path of the selected node to add a new sub page
+							</para>
+						</listitem>
+					</varlistentry>
+					<varlistentry>
+						<term>Node Name</term>
+						<listitem>
+							<para>
+								The node name of the added page. It is required field. This field must start with a character and must have a length between 3 and 30 characters.
+							</para>
+						</listitem>
+					</varlistentry>
+					<varlistentry>
+						<term>Display Name</term>
+						<listitem>
+							<para>
+								The display name of the node which contains the added page and must have a length between 3 and 30 characters.
+							</para>
+						</listitem>
+					</varlistentry>
+					<varlistentry>
+						<term>Visible</term>
+						<listitem>
+							<para>
+								This checkbox toggles the global visibility of this page. If not checked the page is under no circumstances shown, even if the publication period is OK. If checked the page or the page node appears on on the navigation bar, the page navigation and the site map. If "visible" is checked the visibility depends on the "publication date &amp; time" attribute if set.
+							</para>
+						</listitem>
+					</varlistentry>
+					<varlistentry>
+						<term>Publication date &amp;time</term>
+						<listitem>
+							<para>
+								This option allows publishing the page for a period of time. If this option is checked the visibility of the page depends on the publication period start and end date.
+							</para>
+						</listitem>
+					</varlistentry>
+					<varlistentry>
+						<term>Start Publication Date</term>
+						<listitem>
+							<para>
+								The start date and time to publish the page
+							</para>
+						</listitem>
+					</varlistentry>
+					<varlistentry>
+						<term>End Publication Date</term>
+						<listitem>
+							<para>
+								The end date and time to publish the page.
+							</para>
+						</listitem>
+					</varlistentry>
+				</variablelist>
+					<note>
+					<title>Setting Time and Date</title>
+						<para>
+							You can set date and time by clicking the <emphasis role="bold">Start Publication Date</emphasis> field and <emphasis role="bold">End Publication Date</emphasis> field and select a date in the calendar pop up
+						</para>
+					</note>
+<!--
+					<mediaobject>
+						<imageobject>
+							<imagedata fileref="images/Calendar.png" format="PNG" />
+						</imageobject>
+					</mediaobject>
+-->
+
+				</step>
+				<step>
+					<para>
+						Click <emphasis role="bold">Next</emphasis> or number '2' of the wizard steps to go to step 2.
+					</para>
+					<mediaobject>
+						<imageobject>
+							<imagedata fileref="images/PageWizard2.png" format="PNG" width="444" />
+						</imageobject>
+					</mediaobject>
+				</step>
+				<step>
+					<para>
+						Select <emphasis role="bold">Empty Layout</emphasis> or click the icon to see more templates to select.
+					</para>
+				</step>
+				<step>
+					<para>
+						Click the <emphasis role="bold">Next</emphasis> button or number '3' of the wizard step to go to step 3. You can drag portlets from the popup panel into the main pane to create the content of this page.
+					</para>
+					<mediaobject>
+						<imageobject>
+							<imagedata fileref="images/PageWizard3.png" format="PNG" width="444" />
+						</imageobject>
+					</mediaobject>
+					<variablelist>
+						<varlistentry>
+							<term>Applications</term>
+								<listitem>
+									<para>
+										Allows listing all existing portlets
+									</para>
+								</listitem>
+						</varlistentry>
+						<varlistentry>
+							<term>Containers</term>
+								<listitem>
+									<para>
+										Allows listing all existing containers
+									</para>
+								</listitem>
+						</varlistentry>
+						<varlistentry>
+							<term>Switch View mode</term>
+								<listitem>
+									<para>
+										Allows viewing a page in preview mode
+									</para>
+								</listitem>
+						</varlistentry>
+					</variablelist>
+				</step>
+				<step>
+					<para>
+						Click the <emphasis role="bold">Show Container</emphasis> icon if you want to see the existing containers and re-select the layout of the page. You can click on the <emphasis role="bold">Switch</emphasis> icon to view the content of this page.
+					</para>
+				</step>
+				<step>
+					<para>
+				Click <emphasis role="bold">Save</emphasis> to accept creating a new page, <emphasis role="bold">Back</emphasis> button to return the previous step or <emphasis role="bold">Abort</emphasis> button to quit without creating a new page.
+					</para>
+				</step>
+			</procedure>
+		</section>
+
 
 		<section id="sect-User_Guide-Manage_Pages-Add_a_new_Page_in_the_Page_List">
-			<title>Add a new Page in the Page List</title>
-				<para>
-					You easily add a new page by following these steps:
-				</para>
+			<title>Adding a new Page using Page Management</title>
 				<procedure>
 					<step>
 						<para>
-							Hover over <emphasis role="bold">Group</emphasis> in the Toolbar, highlight <emphasis role="bold">Administration</emphasis> and click <emphasis role="bold">Page Management</emphasis>.
+							Mouse over <emphasis role="bold">Group</emphasis> in the Toolbar, highlight <emphasis role="bold">Administration</emphasis> then select <emphasis role="bold">Page Management</emphasis>.
 						</para>
 					<mediaobject>
 						<imageobject>
@@ -31,9 +212,7 @@
 						</para>
 					</step>
 					<step>
-						<para>
-							Enter values for fields in the <emphasis role="bold">Page Setting</emphasis> tab
-						</para>
+						
 						<mediaobject>
 						<imageobject>
 							<imagedata fileref="images/PageSetting.png" format="PNG" align="center" scale="110" />
@@ -60,6 +239,12 @@
 									<para>
 										If the page <emphasis role="bold">Owner type</emphasis> is <emphasis>group</emphasis> the page  is created for a group. Therefore only users who have <emphasis>manager</emphasis> permissions for that group can create this page type.
 									</para>
+<note>
+<title>DOC TODO</title>
+<para>
+please redo screenshot
+</para>
+</note>
 									<mediaobject>
 										<imageobject role="html">
 											<imagedata fileref="images/PageSetting1.png" format="PNG" align="center" scale="110" />
@@ -156,23 +341,24 @@
 					</step>
 					<step>
 						<para>
-							Click the <emphasis role="bold">Save</emphasis> button to accept creating a new page or the <emphasis role="bold">Cancel</emphasis> button to quit the form.
+							Click <emphasis role="bold">Save</emphasis>.
 						</para>
 					</step>
 			</procedure>
 		</section>
-	
+	</section>
+
 		<section id="sect-User_Guide-Manage_Pages-Edit_a_Page">
 			<title>Edit a Page</title>
 				<procedure>
 					<step>
 						<para>
-							Go to <emphasis role="bold">Group</emphasis> in the Toolbar. Highlight <emphasis role="bold">Administration</emphasis> and then click on <emphasis role="bold">Page Management</emphasis>.
+							Mouse over <emphasis role="bold">Group</emphasis> in the Toolbar. Highlight <emphasis role="bold">Administration</emphasis> and then click on <emphasis role="bold">Page Management</emphasis>.
 						</para>
 					</step>
 					<step>
 						<para>
-							Click the edit icon on the row of page you want to edit in the existing pages list.
+							Click the edit icon on the row of page you want to edit in the existing page list.
 						</para>
 						<para>
 							Click the edit icon to show a form to edit page properties.
@@ -187,7 +373,7 @@
 								<term>Permission Setting</term> 
 								<listitem>
 									<para>
-										This form is supported for pages with <emphasis>group</emphasis> or <emphasis>portal</emphasis> ownershuip types. Because a user's page is private, no user, other than the creator, can access or edit it.
+										This form is supported for pages with <emphasis>group</emphasis> or <emphasis>portal</emphasis> ownership types. Because a user page is private, no user, other than the creator, can access or edit it.
 									</para>	
 									<para>
 										Permission on each page is set in two levels: <emphasis role="bold">Access right</emphasis> and <emphasis role="bold">Edit right</emphasis>.
@@ -277,6 +463,36 @@
 				</step>
 			</procedure>
 	</section>
+
+        <section id="sect-User_Guide-Drag_and_Drop_the_Page_Body">
+		<title>Drag and Drop the Page Body</title>
+		<para>
+			To assist administrators to modify or personalize their portal &PRODUCT; allows you to easily drag and drop page content within the page.
+		</para>
+			<procedure>
+				<step>
+					<para>
+						Go to <emphasis role="bold">Site Editor</emphasis> in the toolbar and click on <emphasis role="bold">Edit Layout</emphasis> It will display :
+					</para>
+					<mediaobject>
+						<imageobject>
+							<imagedata fileref="images/DragPage1.png" format="PNG" width="444" />
+						</imageobject>
+					</mediaobject>
+				</step>
+				<step>
+					<para>
+						Click on the <emphasis role="bold">Portal Page</emphasis>, drag and drop within the portal page.
+					</para>
+					<mediaobject>
+						<imageobject>
+							<imagedata fileref="images/DragPage3.png" format="PNG" width="444" />
+						</imageobject>
+					</mediaobject>
+				</step>
+		</procedure> 
+	</section>
+
 
 </section>
 

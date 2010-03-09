@@ -3,39 +3,8 @@
 <!ENTITY % BOOK_ENTITIES SYSTEM "../../User_Guide.ent">
 %BOOK_ENTITIES;
 ]>
-<section id="sect-User_Guide-Drag_and_Drop_the_Page_Body">
-	<title>Drag and Drop the Page Body</title>
-	<para>
-		To assist administrators to modify or personalize their portal &PRODUCT; allows you to easily drag and drop page content within the page.
-	</para>
-		<procedure>
-			<step>
-				<para>
-					Go to <emphasis role="bold">Site Editor</emphasis> in the toolbar and click on <emphasis role="bold">Edit Layout</emphasis> It will display :
-				</para>
-				<mediaobject>
-					<imageobject role="html">
-						<imagedata fileref="images/DragPage1.png" format="PNG" align="center" scale="110" />
-					</imageobject>
-					<imageobject role="fo">
-						<imagedata fileref="images/DragPage1.png" format="PNG" align="center" />
-					</imageobject>
-				</mediaobject>
-			</step>
-			<step>
-				<para>
-					Click on the <emphasis role="bold">Portal Page</emphasis>, drag and drop within the portal page.
-				</para>
-				<mediaobject>
-					<imageobject role="html">
-						<imagedata fileref="images/DragPage3.png" format="PNG" align="center" scale="110" />
-					</imageobject>
-					<imageobject role="fo">
-						<imagedata fileref="images/DragPage3.png" format="PNG" align="center" />
-					</imageobject>
-				</mediaobject>
-			</step>
-	</procedure> 
-</section>
 
+TO DELETE
+
+	
 

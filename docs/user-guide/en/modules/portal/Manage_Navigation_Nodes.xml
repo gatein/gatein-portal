@@ -433,6 +433,36 @@ Therefore there will be a new page that has the same name as the cloned node's p
 					</step>
 				</procedure>
 		</section>
+
+	        <section id="sect-User_Guide-Change_Node_Order">
+		<title>Change Node Order</title>
+			<para>
+				You can easily change the position of nodes in the navigation bar following these steps:
+			</para>
+			<procedure>
+				<step>	
+					<para>
+						Click on <emphasis role="bold">Site</emphasis> then click on <emphasis role="bold">Edit Navigation</emphasis> of the portal you want to modify.
+					</para>
+				</step>
+				<step>
+					<para>
+						Select the node that you want to move. Right click on the selected node and then click on <emphasis role="bold">Move up</emphasis> or <emphasis role="bold">Move down</emphasis>
+					</para>
+					<mediaobject>
+						<imageobject>
+							<imagedata fileref="images/MoveUpDown.png" format="PNG" />
+						</imageobject>
+					</mediaobject>
+				</step>
+				<step>
+					<para>
+						The selected node will be moved up or down within the list.
+					</para>
+				</step>
+			</procedure>
+	</section>
+
 </section>
 
 
