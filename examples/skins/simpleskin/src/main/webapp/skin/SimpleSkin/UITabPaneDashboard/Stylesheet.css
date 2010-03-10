@@ -1,0 +1,89 @@
+#UITabbedDashboardPortlet {
+	padding: 0 8px;
+}
+
+.UITabPaneDashboard {
+	background: #f9f9f9;
+	border-bottom: 1px solid #e5e5e5;
+	padding: 0px 9px;
+}
+
+.UITabPaneDashboard .LtTabDashboard {
+	padding: 0;
+	background: none;
+}
+
+.UITabPaneDashboard .RtTabDashboard {
+	padding: 0;
+	background: none;
+}
+
+.UITabPaneDashboard .CtTabDashboard {
+	padding: 0;
+	background: none;
+}
+
+.UITabPaneDashboard .UIHorizontalTabs {
+	padding: 5px 0px 4px 0px;
+}
+
+.UITabPaneDashboard .UIHorizontalTabs .TabsContainer {
+	height: auto;
+}
+
+.UITabPaneDashboard .UIHorizontalTabs .GrayTabStyle {
+	margin-right: 4px;
+}
+
+.UITabPaneDashboard .UIHorizontalTabs .GrayTabStyle .NormalTab .MiddleTab,
+.UITabPaneDashboard .UIHorizontalTabs .GrayTabStyle .SelectedTab .MiddleTab {
+	padding: 0px;
+}
+
+.UITabPaneDashboard .UIHorizontalTabs .UITab span {
+	margin: 3px 10px;
+}
+
+.UITabPaneDashboard .UIHorizontalTabs .UITab .CloseIcon {
+	background: url('background/IconClose.gif') no-repeat left top;
+	width: 16px; height: 16px;
+	cursor: pointer;
+}
+
+.UITabPaneDashboard .UIHorizontalTabs .AddDashboard {
+	background: url('background/AddDashboard.gif') no-repeat left top;
+	width: 22px; height: 22px;
+	float: left; /* orientation=lt */
+	float: right; /* orientation=rt */
+	cursor: pointer;
+}
+
+.UITabPaneDashboard .UIHorizontalTabs .GrayTabStyle .NormalTab .LeftTab {
+	background: url(background/TabDashboard.gif) no-repeat left -44px;
+}
+
+.UITabPaneDashboard .UIHorizontalTabs .GrayTabStyle .NormalTab .RightTab {
+	background: url(background/TabDashboard.gif) no-repeat right -44px;
+}
+
+.UITabPaneDashboard .UIHorizontalTabs .GrayTabStyle .NormalTab .MiddleTab {
+	background: url(background/TabDashboard.gif) repeat-x left -66px;
+	line-height: 22px;
+}
+
+.UITabPaneDashboard .UIHorizontalTabs .GrayTabStyle .SelectedTab .LeftTab {
+	background: #fff;
+	border: 1px solid #e5e5e5;
+	padding: 0px;
+}
+
+.UITabPaneDashboard .UIHorizontalTabs .GrayTabStyle .SelectedTab .RightTab {
+	background: #fff;
+	padding: 0px;
+}
+
+.UITabPaneDashboard .UIHorizontalTabs .GrayTabStyle .SelectedTab .MiddleTab {
+	background: #fff;
+	padding: 0px;
+	line-height: 20px;
+}
