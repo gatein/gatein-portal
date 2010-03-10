@@ -638,7 +638,10 @@ public class UIPortletActionListener
 
          //set render params
          String navState = event.getRequestContext().getRequestParameter(ExoPortletInvocationContext.NAVIGATIONAL_STATE_PARAM_NAME);
-         uiPortlet.setNavigationalState(ParametersStateString.create(navState));
+         if (navState != null)
+         {
+            uiPortlet.setNavigationalState(ParametersStateString.create(navState));
+         }
       }
    }
 
