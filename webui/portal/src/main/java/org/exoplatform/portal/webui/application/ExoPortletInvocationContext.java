@@ -193,7 +193,7 @@ class ExoPortletInvocationContext extends AbstractPortletInvocationContext
          RenderURL renderURL = (RenderURL)containerURL;
 
          WindowState windowState = renderURL.getWindowState();
-         if (windowState != null && !windowState.equals(WindowState.NORMAL))
+         if (windowState != null)//&& !windowState.equals(WindowState.NORMAL))
          {
             appendParameter(baseURL, Constants.WINDOW_STATE_PARAMETER, windowState.toString());
          }
