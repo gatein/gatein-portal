@@ -293,7 +293,7 @@ public class SeleniumTestCaseGenerator {
 				sb.append("for (int second = 0;; second++) {\n");
 				sb.append(getTimeoutMessage(param1));
 				sb.append("try {\n");
-				sb.append("if (StringPool.BLANK.equals(selenium.getTable(\"");
+				sb.append("if (\"\".equals(selenium.getTable(\"");
 				sb.append(param2);
 				sb.append("\"))) {\nbreak;\n}\n}\ncatch (Exception e) {\n}\n");
 				sb.append("Thread.sleep(1000);\n");
