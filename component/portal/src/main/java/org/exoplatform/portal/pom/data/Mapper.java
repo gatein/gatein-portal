@@ -457,19 +457,12 @@ public class Mapper
                );
 
                //
-               boolean showInfoBar = false;
-               boolean showMode = false;
-               boolean showWindowState = false;
-               String theme = null;
-               if (srcContainer.isAdapted(Decorated.class))
-               {
-                  Decorated decorated = srcContainer.adapt(Decorated.class);
-                  showInfoBar = decorated.getShowInfoBar();
-                  showMode = decorated.getShowMode();
-                  showWindowState = decorated.getShowInfoBar();
-                  theme = decorated.getTheme();
-               }
+               boolean showInfoBar = attrs.getValue(MappedAttributes.SHOW_INFO_BAR, false);
+               boolean showMode = attrs.getValue(MappedAttributes.SHOW_MODE, false);
+               boolean showWindowState = attrs.getValue(MappedAttributes.SHOW_WINDOW_STATE, false);
+               String theme = attrs.getValue(MappedAttributes.THEME, null);
 
+               //
                mo = new ApplicationData<Portlet>(
                   srcContainer.getObjectId(),
                   component.getName(),
@@ -679,11 +672,11 @@ public class Mapper
                   {
                      UIContainer dstDashboard = session.findObjectById(ObjectType.CONTAINER, app.getStorageId());
                      srcChild = loadDashboard(dstDashboard);
-                     Decorated decorated = dstDashboard.adapt(Decorated.class);
-                     decorated.setShowWindowState(app.isShowApplicationState());
-                     decorated.setShowInfoBar(app.isShowInfoBar());
-                     decorated.setShowMode(app.isShowApplicationMode());
-                     decorated.setTheme(app.getTheme());
+                     Attributes attrs = dstDashboard.getAttributes();
+                     attrs.setValue(MappedAttributes.SHOW_INFO_BAR, app.isShowInfoBar());
+                     attrs.setValue(MappedAttributes.SHOW_MODE, app.isShowApplicationMode());
+                     attrs.setValue(MappedAttributes.SHOW_WINDOW_STATE, app.isShowApplicationState());
+                     attrs.setValue(MappedAttributes.THEME, app.getTheme());
                   }
                   else
                   {
@@ -870,18 +863,10 @@ public class Mapper
       Described described = src.adapt(Described.class);
 
       //
-      boolean showInfoBar = false;
-      boolean showWindowState = false;
-      boolean showMode = false;
-      String theme = null;
-      if (src.isAdapted(Decorated.class))
-      {
-         Decorated decorated = src.adapt(Decorated.class);
-         showInfoBar = decorated.getShowInfoBar();
-         showWindowState = decorated.getShowWindowState();
-         showMode = decorated.getShowMode();
-         theme = decorated.getTheme();
-      }
+      boolean showInfoBar = attrs.getValue(MappedAttributes.SHOW_INFO_BAR, false);
+      boolean showWindowState = attrs.getValue(MappedAttributes.SHOW_WINDOW_STATE, false);
+      boolean showMode = attrs.getValue(MappedAttributes.SHOW_MODE, false);
+      String theme = attrs.getValue(MappedAttributes.THEME, null);
 
       //
       return new ApplicationData<S>(
@@ -914,14 +899,12 @@ public class Mapper
       described.setName(src.getTitle());
       described.setDescription(src.getDescription());
 
-      Decorated decorated = dst.adapt(Decorated.class);
-      decorated.setShowInfoBar(src.isShowInfoBar());
-      decorated.setShowMode(src.isShowApplicationMode());
-      decorated.setShowWindowState(src.isShowApplicationState());
-      decorated.setTheme(src.getTheme());
-
       //
       Attributes attrs = dst.getAttributes();
+      attrs.setValue(MappedAttributes.SHOW_INFO_BAR, src.isShowInfoBar());
+      attrs.setValue(MappedAttributes.SHOW_WINDOW_STATE, src.isShowApplicationState());
+      attrs.setValue(MappedAttributes.SHOW_MODE, src.isShowApplicationMode());
+      attrs.setValue(MappedAttributes.THEME, src.getTheme());
       attrs.setValue(MappedAttributes.ICON, src.getIcon());
       attrs.setValue(MappedAttributes.WIDTH, src.getWidth());
       attrs.setValue(MappedAttributes.HEIGHT, src.getHeight());

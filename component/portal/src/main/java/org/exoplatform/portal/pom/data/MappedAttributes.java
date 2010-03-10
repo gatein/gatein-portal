@@ -75,4 +75,16 @@ class MappedAttributes
 
    /** . */
    public static final Key<String> TYPE = Key.create("type", ValueType.STRING);
+
+   /** . */
+   public static final Key<Boolean> SHOW_INFO_BAR = Key.create("showinfobar", ValueType.BOOLEAN);
+
+   /** . */
+   public static final Key<Boolean> SHOW_MODE = Key.create("showmode", ValueType.BOOLEAN);
+
+   /** . */
+   public static final Key<Boolean> SHOW_WINDOW_STATE = Key.create("showwindowstate", ValueType.BOOLEAN);
+
+   /** . */
+   public static final Key<String> THEME = Key.create("theme", ValueType.STRING);
 }

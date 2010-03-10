@@ -215,12 +215,11 @@ public class TestSavedPOM extends AbstractPortalTest
       Described application1Described = application1.adapt(Described.class);
       assertEquals("application_1_title", application1Described.getName());
       assertEquals("application_1_description", application1Described.getDescription());
-      Decorated application1Decorated = application1.adapt(Decorated.class);
-      assertEquals("application_1_theme", application1Decorated.getTheme());
-      assertEquals(true, application1Decorated.getShowInfoBar());
-      assertEquals(true, application1Decorated.getShowMode());
-      assertEquals(true, application1Decorated.getShowWindowState());
       Attributes application1Attrs = application1.getAttributes();
+      assertEquals("application_1_theme", application1Attrs.getString("theme"));
+      assertEquals(true, (boolean)application1Attrs.getBoolean("showinfobar"));
+      assertEquals(true, (boolean)application1Attrs.getBoolean("showmode"));
+      assertEquals(true, (boolean)application1Attrs.getBoolean("showwindowstate"));
       assertEquals("application_1_icon", application1Attrs.getString("icon"));
       assertEquals("application_1_width", application1Attrs.getString("width"));
       assertEquals("application_1_height", application1Attrs.getString("height"));
