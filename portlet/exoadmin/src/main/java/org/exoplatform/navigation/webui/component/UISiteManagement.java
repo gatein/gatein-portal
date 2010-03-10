@@ -199,8 +199,17 @@ public class UISiteManagement extends UIContainer
          UISiteManagement uicomp = event.getSource();
          String portalName = event.getRequestContext().getRequestParameter(OBJECTID);
          UserPortalConfigService service = event.getSource().getApplicationComponent(UserPortalConfigService.class);
+         String defaultPortalName = service.getDefaultPortal();
+
          PortalRequestContext prContext = Util.getPortalRequestContext();
          UIPortalApplication uiPortalApp = Util.getUIPortalApplication();
+
+         if (defaultPortalName.equals(portalName))
+         {
+            uiPortalApp.addMessage(new ApplicationMessage("UISiteManagement.msg.delete-default-portal",
+               new String[]{defaultPortalName}, ApplicationMessage.WARNING));
+            return;
+         }
 
          UserPortalConfig config = service.getUserPortalConfig(portalName, prContext.getRemoteUser());
          if (config != null && config.getPortalConfig().isModifiable())
@@ -284,8 +293,8 @@ public class UISiteManagement extends UIContainer
 
          UIPortal editPortal = uiWorkingWS.createUIComponent(UIPortal.class, null, null);
          PortalDataMapper.toUIPortal(editPortal, userConfig);
-         uiEditWS.setUIComponent(editPortal);         
-         
+         uiEditWS.setUIComponent(editPortal);
+
          if (uiPortal.getName().equals(editPortal.getName()))
          {
             editPortal.setSelectedNode(uiPortal.getSelectedNode());
@@ -341,7 +350,7 @@ public class UISiteManagement extends UIContainer
          PageNavigation navi = dataService.getPageNavigation(PortalConfig.PORTAL_TYPE, portalName);
          //Filter the navigation
          navi = PageNavigationUtils.filterNavigation(navi, context.getRemoteUser(), true);
-         
+
          uicomp.setSelectedNavigation(navi);
          UINavigationNodeSelector selector = naviManager.getChild(UINavigationNodeSelector.class);
          ArrayList<PageNavigation> list = new ArrayList<PageNavigation>();
