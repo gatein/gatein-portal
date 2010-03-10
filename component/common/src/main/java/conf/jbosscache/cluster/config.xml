@@ -20,7 +20,7 @@
 <jbosscache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="urn:jboss:jbosscache-core:config:3.1">
 
   <!-- The cluster name should be changed by the kernel cache configuration -->
-  <clustering mode="replication" clusterName="changeme">
+  <clustering mode="replication" clusterName="gatein">
   </clustering>
 
   <eviction wakeUpInterval="5000">
