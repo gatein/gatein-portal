@@ -64,6 +64,7 @@
 	width: 80px;
 	margin: 20px auto;
 	cursor: pointer;
+	display: block;
 }
 
 .UIHomePagePortlet .TRContainer .ContactIcon {
@@ -72,6 +73,7 @@
 	width: 80px;
 	margin: 20px auto;
 	cursor: pointer;
+	display: block;
 }
 
 .UIHomePagePortlet  .TLContainer {
