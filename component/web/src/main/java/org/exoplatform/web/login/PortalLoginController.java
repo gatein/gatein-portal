@@ -53,11 +53,13 @@ public class PortalLoginController extends AbstractHttpServlet
       {
          log.error("Tried to access the portal login controller without username provided");
          resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "No username provided");
+         return;
       }
       if (password == null)
       {
          log.error("Tried to access the portal login controller without password provided");
          resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "No password provided");
+         return;
       }
 
       //
