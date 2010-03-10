@@ -31,7 +31,7 @@
 
    <groupId>org.exoplatform.portal</groupId>
    <artifactId>exo.portal.parent</artifactId>
-   <version>3.0.0-CR02-SNAPSHOT</version>
+   <version>3.0.0-GA</version>
    <packaging>pom</packaging>
 
    <name>GateIn - Portal</name>
@@ -44,8 +44,8 @@
       <org.jibx.version>1.2.1</org.jibx.version>
       <org.shindig.version>1.0-r790473-Patch01</org.shindig.version>
       <org.gatein.common.version>2.0.0-GA</org.gatein.common.version>
-      <org.gatein.wci.version>2.0.0-CR02</org.gatein.wci.version>
-      <org.gatein.pc.version>2.1.0-CR05</org.gatein.pc.version>
+      <org.gatein.wci.version>2.0.0-GA</org.gatein.wci.version>
+      <org.gatein.pc.version>2.1.0-GA</org.gatein.pc.version>
       <org.picketlink.idm>1.1.0.GA</org.picketlink.idm>
       <org.gatein.wsrp.version>1.0.0-Beta09</org.gatein.wsrp.version>
       <org.gatein.mop.version>1.0.0-CR03</org.gatein.mop.version>
@@ -63,9 +63,6 @@
 
       <!-- maven-enforcer-plugin -->
       <jdk.min.version>1.6</jdk.min.version>
-
-      <!-- maven-release-plugin -->
-      <arguments>-Prelease,pkg-tomcat,pkg-jbossas -Dmaven.test.skip=true</arguments>
    </properties>
 
    <scm>
