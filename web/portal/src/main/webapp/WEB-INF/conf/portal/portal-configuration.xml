@@ -22,8 +22,8 @@
 
 <configuration
    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd http://www.exoplaform.org/xml/ns/kernel_1_0.xsd"
-   xmlns="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd">
+   xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_1.xsd http://www.exoplaform.org/xml/ns/kernel_1_1.xsd"
+   xmlns="http://www.exoplaform.org/xml/ns/kernel_1_1.xsd">
 				  
   <component>
     <key>org.exoplatform.portal.pom.config.POMSessionManager</key>
@@ -285,6 +285,9 @@
             </field>
             <field name="minTimeToLive">
               <long>60000</long>
+            </field>
+            <field name="distributed" profiles="cluster">
+              <boolean>true</boolean>
             </field>
           </object>
         </object-param>
