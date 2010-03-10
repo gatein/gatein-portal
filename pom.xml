@@ -26,7 +26,7 @@
    <parent>
       <groupId>org.gatein</groupId>
       <artifactId>gatein-parent</artifactId>
-      <version>1.0.0-Beta04</version>
+      <version>1.0.0-GA</version>
    </parent>
 
    <groupId>org.exoplatform.portal</groupId>
@@ -43,7 +43,7 @@
       <org.exoplatform.jcr.version>1.12.0-CR2</org.exoplatform.jcr.version>
       <org.jibx.version>1.2.1</org.jibx.version>
       <org.shindig.version>1.0-r790473-Patch01</org.shindig.version>
-      <org.gatein.common.version>2.0.0-CR03</org.gatein.common.version>
+      <org.gatein.common.version>2.0.0-GA</org.gatein.common.version>
       <org.gatein.wci.version>2.0.0-CR02</org.gatein.wci.version>
       <org.gatein.pc.version>2.1.0-CR05</org.gatein.pc.version>
       <org.picketlink.idm>1.1.0.GA</org.picketlink.idm>
