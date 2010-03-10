@@ -88,10 +88,10 @@
         <value>war:/conf/organization/picketlink-idm/jboss-cache.xml</value>
       </value-param>
       
-      <!--<value-param profiles="cluster">
+      <value-param profiles="cluster">
         <name>cacheConfig</name>
         <value>war:/conf/organization/picketlink-idm/jboss-cache-cluster.xml</value>
-      </value-param>-->
+      </value-param>
 
     </init-params>
   </component>

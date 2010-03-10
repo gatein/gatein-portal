@@ -1,6 +1,6 @@
 <jbosscache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="urn:jboss:jbosscache-core:config:3.1">
 
-  <clustering mode="replication" clusterName="${jbosscache-cluster-name}">
+  <clustering mode="replication" clusterName="idm-cluster">
     <stateRetrieval timeout="20000" fetchInMemoryState="false" />
     <jgroupsConfig multiplexerStack="jcr.stack" />
     <sync />
