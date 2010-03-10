@@ -302,4 +302,5 @@
 	opacity: 0;
 	filter: alpha(opacity=0);
 	background: #ffffff;
+	cursor:move;
 }

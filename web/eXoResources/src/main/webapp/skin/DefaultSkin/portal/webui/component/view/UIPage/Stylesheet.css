@@ -19,7 +19,7 @@
 
 /*##############################-Page Layout Decorator-################################*/
 
-.DragControlArea {
+.LAYOUT-BLOCK .PageLayoutDecorator {
 	cursor: move;
 }
 
