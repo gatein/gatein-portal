@@ -26,7 +26,7 @@ import javax.jcr.Session;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public interface LoginContext
+interface LoginContext
 {
 
    void loggedIn(Session session);
