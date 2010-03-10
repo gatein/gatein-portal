@@ -18,6 +18,11 @@
  */
 
 /*##############################-Page Layout Decorator-################################*/
+
+.DragControlArea {
+	cursor: move;
+}
+
 .UIPageBody .PageLayoutDecorator	{
 	padding: 0px;
 	margin: 0px 2px auto 2px;
