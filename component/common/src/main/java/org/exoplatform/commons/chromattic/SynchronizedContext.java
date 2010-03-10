@@ -24,7 +24,7 @@ package org.exoplatform.commons.chromattic;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class SynchronizedContext extends AbstractContext
+class SynchronizedContext extends AbstractContext
 {
 
    /** The related synchronization when it is not null. */

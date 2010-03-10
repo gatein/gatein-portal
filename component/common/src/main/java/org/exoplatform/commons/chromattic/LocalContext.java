@@ -26,7 +26,7 @@ import javax.jcr.Session;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class LocalContext extends AbstractContext implements LoginContext
+class LocalContext extends AbstractContext implements LoginContext
 {
 
    /** The related JCR session. */
