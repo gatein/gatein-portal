@@ -21,8 +21,8 @@
 -->
 
 <configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-               xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd http://www.exoplaform.org/xml/ns/kernel_1_0.xsd"
-               xmlns="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd">
+               xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_1.xsd http://www.exoplaform.org/xml/ns/kernel_1_1.xsd"
+               xmlns="http://www.exoplaform.org/xml/ns/kernel_1_1.xsd">
 
 
   <component>
@@ -87,6 +87,11 @@
         <name>cacheConfig</name>
         <value>war:/conf/organization/picketlink-idm/jboss-cache.xml</value>
       </value-param>
+      
+      <!--<value-param profiles="cluster">
+        <name>cacheConfig</name>
+        <value>war:/conf/organization/picketlink-idm/jboss-cache-cluster.xml</value>
+      </value-param>-->
 
     </init-params>
   </component>

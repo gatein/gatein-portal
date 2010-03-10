@@ -52,17 +52,14 @@ public class UserProfileDAOImpl implements UserProfileHandler
 
    private PicketLinkIDMService service_;
 
-   private ExoCache cache_;
-
    private List<UserProfileEventListener> listeners_;
 
    private PicketLinkIDMOrganizationServiceImpl orgService;
 
-   public UserProfileDAOImpl(PicketLinkIDMOrganizationServiceImpl orgService, PicketLinkIDMService service, CacheService cservice)
+   public UserProfileDAOImpl(PicketLinkIDMOrganizationServiceImpl orgService, PicketLinkIDMService service)
       throws Exception
    {
       service_ = service;
-      cache_ = cservice.getCacheInstance(getClass().getName());
       listeners_ = new ArrayList<UserProfileEventListener>(3);
       this.orgService = orgService;
    }
@@ -106,8 +103,6 @@ public class UserProfileDAOImpl implements UserProfileHandler
          postSave(profile, true);
       }
 
-      cache_.put(profile.getUserName(), profile);
-
    }
 
    public UserProfile removeUserProfile(String userName, boolean broadcast) throws Exception
@@ -129,7 +124,6 @@ public class UserProfileDAOImpl implements UserProfileHandler
             {
                postDelete(profile);
             }
-            cache_.remove(userName);
             return profile;
          }
          catch (Exception exp)
@@ -137,7 +131,6 @@ public class UserProfileDAOImpl implements UserProfileHandler
             return null;
          }
       }
-      cache_.remove(userName);
       return null;
    }
 
@@ -161,11 +154,7 @@ public class UserProfileDAOImpl implements UserProfileHandler
          return null;
       }
 
-      UserProfile up = (UserProfile)cache_.get(userName);
-      if (up == null)
-      {
-         up = getProfile(userName);
-      }
+      UserProfile up = getProfile(userName);
 
       //
       if (up == null)
@@ -173,9 +162,7 @@ public class UserProfileDAOImpl implements UserProfileHandler
          up = NOT_FOUND;
       }
 
-      //
-      cache_.put(userName, up);
-
+      
       // Just to avoid to return a shared object between many threads
       // that would not be thread safe nor corrct
       if (up == NOT_FOUND)

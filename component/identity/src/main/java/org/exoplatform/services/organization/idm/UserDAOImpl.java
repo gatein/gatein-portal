@@ -53,10 +53,7 @@ public class UserDAOImpl implements UserHandler
 {
    private static org.slf4j.Logger log = LoggerFactory.getLogger(UserDAOImpl.class);
 
-
    private final PicketLinkIDMService service_;
-
-   private ExoCache cache_;
 
    private List<UserEventListener> listeners_ = new ArrayList<UserEventListener>(3);
 
@@ -94,11 +91,10 @@ public class UserDAOImpl implements UserHandler
       USER_NON_PROFILE_KEYS = Collections.unmodifiableSet(keys);
    }
 
-   public UserDAOImpl(PicketLinkIDMOrganizationServiceImpl orgService, PicketLinkIDMService idmService, CacheService cservice)
+   public UserDAOImpl(PicketLinkIDMOrganizationServiceImpl orgService, PicketLinkIDMService idmService)
       throws Exception
    {
       service_ = idmService;
-      cache_ = cservice.getCacheInstance(UserImpl.class.getName());
       this.orgService = orgService;
    }
 
@@ -163,7 +159,6 @@ public class UserDAOImpl implements UserHandler
       {
          postSave(user, false);
       }
-      cache_.put(user.getUserName(), user);
    }
 
    public User removeUser(String userName, boolean broadcast) throws Exception
@@ -184,7 +179,6 @@ public class UserDAOImpl implements UserHandler
 
       if (foundUser == null)
       {
-         cache_.remove(userName);
          return null;
       }
 
@@ -221,7 +215,6 @@ public class UserDAOImpl implements UserHandler
       {
          postDelete(exoUser);
       }
-      cache_.remove(userName);
       return exoUser;
    }
 
@@ -230,16 +223,8 @@ public class UserDAOImpl implements UserHandler
    {
       IdentitySession session = service_.getIdentitySession();
 
-      User user = (User)cache_.get(userName);
-      if (user != null)
-      {
-         return user;
-      }
-      user = getPopulatedUser(userName, session);
-      if (user != null)
-      {
-         cache_.put(userName, user);
-      }
+      User user = getPopulatedUser(userName, session);
+
       return user;
    }
 

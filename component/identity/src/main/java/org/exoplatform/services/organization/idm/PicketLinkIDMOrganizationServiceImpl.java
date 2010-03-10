@@ -50,12 +50,12 @@ public class PicketLinkIDMOrganizationServiceImpl extends BaseOrganizationServic
 
    private Config configuration = new Config();
 
-   public PicketLinkIDMOrganizationServiceImpl(InitParams params, CacheService cservice, PicketLinkIDMService idmService)
+   public PicketLinkIDMOrganizationServiceImpl(InitParams params, PicketLinkIDMService idmService)
       throws Exception
    {
       groupDAO_ = new GroupDAOImpl(this, idmService);
-      userDAO_ = new UserDAOImpl(this, idmService, cservice);
-      userProfileDAO_ = new UserProfileDAOImpl(this, idmService, cservice);
+      userDAO_ = new UserDAOImpl(this, idmService);
+      userProfileDAO_ = new UserProfileDAOImpl(this, idmService);
       membershipDAO_ = new MembershipDAOImpl(this, idmService);
       membershipTypeDAO_ = new MembershipTypeDAOImpl(this, idmService);
 

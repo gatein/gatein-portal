@@ -79,7 +79,7 @@ public class IDMUserListAccess implements ListAccess<User>
       else
       {
          userQueryBuilder.page(0, 0);
-         UserQuery query = userQueryBuilder.createQuery();
+         UserQuery query = userQueryBuilder.sort(SortOrder.ASCENDING).createQuery();
          return idmService.getIdentitySession().execute(query).size();
       }
 
