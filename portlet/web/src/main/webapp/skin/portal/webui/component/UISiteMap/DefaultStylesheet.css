@@ -36,7 +36,7 @@
 
 .UISitemap {
 	background: white;
-  padding: 10px 30px;
+	padding: 10px 30px;
 	color: #4e4e4e;
 }
 
@@ -60,25 +60,22 @@
 
 .UISitemap .CollapseAll {
 	background: url('DefaultSkin/background/CollapseAllIcon.gif') no-repeat left center; /* orientation=lt */
-	background: url('DefaultSkin/background/CollapseAllIcon.gif') no-repeat right center; /* orientation=rt */
+	background: url('DefaultSkin/background/CollapseAllIcon-rt.gif') no-repeat right center; /* orientation=rt */
 	padding: 0px 20px;
 	cursor: pointer;
 }
 
 .UISitemap .ExpandAll {
 	background:  url('DefaultSkin/background/ExpandAllIcon.gif') no-repeat left center; /* orientation=lt */
-	background:  url('DefaultSkin/background/ExpandAllIcon.gif') no-repeat right center; /* orientation=rt */
+	background:  url('DefaultSkin/background/ExpandAllIcon-rt.gif') no-repeat right center; /* orientation=rt */
 	padding: 0px 20px;
 	cursor: pointer;
 }
 
 .UISitemap .SitemapContent {
-	background:  url('DefaultSkin/background/GateInLogo.gif') no-repeat left top; /* orientation=lt */
-	background:  url('DefaultSkin/background/GateInLogo_rt.gif') no-repeat right top; /* orientation=rt */
-	padding-left: 236px; /* orientation=lt */
-	padding-right: 236px; /* orientation=rt */
-	padding-top: 53px; /* orientation=lt */
-	padding-top: 59px; /* orientation=rt */
+	background:  url('DefaultSkin/background/RootTree.gif') no-repeat left top; /* orientation=lt */
+	background:  url('DefaultSkin/background/RootTree-rt.gif') no-repeat right top; /* orientation=rt */
+	padding-top: 8px; 
 	margin: 20px 0px;
 }
 
@@ -92,37 +89,37 @@
 }
 
 .UISitemap .UISiteTree .Node {
-	line-height: 20px;
+	line-height: 25px;
 	background: url('DefaultSkin/background/Dotted.gif') repeat-y 4px top; /* orientation=lt */
-	background: url('DefaultSkin/background/Dotted_rt.gif') repeat-y 100% top; /* orientation=rt */
+	background: url('DefaultSkin/background/Dotted-rt.gif') repeat-y 99.6% top; /* orientation=rt */
 }
 
 .UISitemap .UISiteTree .LastNode {
 	line-height: 14px;
 	background: url('DefaultSkin/background/LastNode.gif') no-repeat 4px top; /* orientation=lt */
-	background: url('DefaultSkin/background/LastNode_rt.gif') no-repeat 100% top; /* orientation=rt */
+	background: url('DefaultSkin/background/LastNode-rt.gif') no-repeat 99.6% top; /* orientation=rt */
 }
 
 .UISitemap .CollapseIcon {
 	background: url('DefaultSkin/background/CollapseIcon.gif') no-repeat left center; /* orientation=lt */
 	background: url('DefaultSkin/background/CollapseIcon-rt.gif') no-repeat right center; /* orientation=rt */
-	padding: 0px 5px 0px 25px; /* orientation=lt */
-	padding: 0px 25px 0px 5px; /* orientation=rt */
+	padding: 0px 5px 0px 35px; /* orientation=lt */
+	padding: 0px 35px 0px 5px; /* orientation=rt */
 	cursor: pointer;
 }
 
 .UISitemap .ExpandIcon {
 	background: url('DefaultSkin/background/ExpandIcon.gif') no-repeat left center; /* orientation=lt */
 	background: url('DefaultSkin/background/ExpandIcon-rt.gif') no-repeat right center; /* orientation=rt */
-	padding: 0px 5px 0px 25px; /* orientation=lt */
-	padding: 0px 25px 0px 5px; /* orientation=rt */
+	padding: 0px 5px 0px 35px; /* orientation=lt */
+	padding: 0px 35px 0px 5px; /* orientation=rt */
 	cursor: pointer;
 }
 
 .UISitemap .NullItem {
 	background: url('DefaultSkin/background/NullItem.gif') no-repeat left center; /* orientation=lt */
 	background: url('DefaultSkin/background/NullItem-rt.gif') no-repeat right center; /* orientation=rt */
-	padding: 0px 25px;
+	padding: 0px 35px;
 }
 
 .UISitemap .DefaultPageIcon {
@@ -135,10 +132,8 @@
 }
 
 .UISitemap .ChildrenContainer {
-	margin-top: 5px;
-	padding-top: 10px;
-	padding-left: 16px; /* orientation=lt */
-	padding-right: 16px; /* orientation=rt */
-	background: url('DefaultSkin/background/NullItem.gif') no-repeat left 0px; /* orientation=lt */
-	background: url('DefaultSkin/background/NullItem-rt.gif') no-repeat right 0px; /* orientation=rt */
+	padding-top: 33px;
+	padding-left: 31px; /* orientation=lt */
+	padding-right: 31px; /* orientation=rt */
+	float: none;
 }
