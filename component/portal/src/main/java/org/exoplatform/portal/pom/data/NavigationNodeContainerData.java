@@ -18,15 +18,13 @@
  */
 package org.exoplatform.portal.pom.data;
 
-import org.exoplatform.portal.pom.data.ModelData;
-
 import java.util.List;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class NavigationNodeContainerData extends ModelData
+public abstract class NavigationNodeContainerData extends ModelData
 {
 
    /** . */

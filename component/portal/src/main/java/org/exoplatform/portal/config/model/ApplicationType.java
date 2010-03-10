@@ -24,6 +24,9 @@ import org.exoplatform.portal.pom.spi.portlet.Portlet;
 import org.exoplatform.portal.pom.spi.wsrp.WSRP;
 import org.gatein.mop.api.content.ContentType;
 
+import java.io.ObjectStreamException;
+import java.io.Serializable;
+
 /**
  * The type of an application.
  *
@@ -31,7 +34,7 @@ import org.gatein.mop.api.content.ContentType;
  * @version $Revision$
  * @param <S> the content state type of the application
  */
-public class ApplicationType<S>
+public class ApplicationType<S> implements Serializable
 {
 
    public static ApplicationType<?> getType(String name)
@@ -84,7 +87,7 @@ public class ApplicationType<S>
    public static final ApplicationType<WSRP> WSRP_PORTLET = new ApplicationType<WSRP>(WSRP.CONTENT_TYPE, "wsrp");
 
    /** . */
-   private final ContentType<S> contentType;
+   private transient final ContentType<S> contentType;
 
    /** . */
    private final String name;
@@ -103,5 +106,16 @@ public class ApplicationType<S>
    public String getName()
    {
       return name;
+   }
+
+   /**
+    * This is needed to preserve the enumation aspect of this class.
+    *
+    * @return the correct instance
+    * @throws ObjectStreamException never thrown
+    */
+   private Object readResolve() throws ObjectStreamException
+   {
+      return getType(name);
    }
 }
