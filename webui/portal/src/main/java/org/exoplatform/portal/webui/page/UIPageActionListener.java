@@ -300,14 +300,14 @@ public class UIPageActionListener
 
          for (int i = 1; i < pathNodes.length; i++)
          {
-            if (startNode == null)
+            startNode = startNode.getChild(pathNodes[i]);
+            if(startNode == null)
             {
                break;
             }
             else
             {
                nodes.add(startNode);
-               startNode = startNode.getChild(pathNodes[i]);
             }
          }
          return nodes;
