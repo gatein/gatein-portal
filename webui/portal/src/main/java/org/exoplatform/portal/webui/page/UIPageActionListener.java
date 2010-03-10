@@ -123,7 +123,6 @@ public class UIPageActionListener
             UIPortal cachedUIPortal = uiPortalApp.getCachedUIPortal(newNavType, newNavId);
             if (cachedUIPortal != null)
             {
-//               System.out.println("Found UIPortal with OWNERTYPE: " + newNavType + " OWNERID " + newNavId);
                cachedUIPortal.setSelectedNode(targetPageNode);
                cachedUIPortal.setSelectedPath(targetedPathNodes);
                uiPortalApp.setShowedUIPortal(cachedUIPortal);
@@ -180,51 +179,66 @@ public class UIPageActionListener
          
          String[] pathNodes = targetedUri.split("/");
          
-         //We check the first navigation in the list containing all descendants corresponding to pathNodes
-         for(PageNavigation nav : allNavs)
-         {
-            if(containingDescendantNodes(nav, pathNodes))
-            {
-               return nav;
-            }
-         }
-         return null;
+         return getBestMatchNavigation(allNavs, pathNodes);
       }
       
       /**
-       *  Check if a given <code>PageNavigation</code> contains all the descendants corresponding to the pathNodes
+       * Get the navigation containing longest subpath of 'pathNodes'
        * 
-       * @param navigation
+       * @param listNav
        * @param pathNodes
        * @return
        */
-      private static boolean containingDescendantNodes(PageNavigation navigation, String[] pathNodes)
+      private PageNavigation getBestMatchNavigation(List<PageNavigation> listNav, String[] pathNodes)
       {
-        PageNode firstLevelNode = navigation.getNode(pathNodes[0]);
-        if(firstLevelNode == null)
-        {
-           return false;
-        }
-        
-        //Recursive code snippet with two variables
-        PageNode tempNode = firstLevelNode;
-        PageNode currentNode;
-        
-        for(int i = 1; i < pathNodes.length; i++)
-        {
-           currentNode = tempNode.getChild(pathNodes[i]);
-           
-           //If the navigation does not support an intermediate pathNode, then returns false
-           if (currentNode == null)
+         int temporalMaximalMatching = 0;
+         PageNavigation temporalBestNavigation = listNav.get(0);
+         
+         for(PageNavigation nav : listNav)
+         {
+            int currentNumberOfMatching = countNumberOfMatchedPathNodes(nav, pathNodes);
+            
+            //The whole pathNodes matches current navigation
+            if(currentNumberOfMatching == pathNodes.length)
             {
-               return false;
+               return nav;
             }
-            else
+            
+            if(currentNumberOfMatching > temporalMaximalMatching)
             {
-               tempNode = currentNode;
+               temporalMaximalMatching = currentNumberOfMatching;
+               temporalBestNavigation = nav;
             }
-        }
-         return true;
+         }
+         return temporalBestNavigation;
+      }
+      
+      /**
+       * Count the maximal number of nodes matching the pathNodes while descending the navigation 'nav'
+       * 
+       * @param nav
+       * @param pathNodes
+       * @return
+       */
+      private int countNumberOfMatchedPathNodes(PageNavigation nav, String[] pathNodes)
+      {
+         if(pathNodes.length == 0)
+         {
+            return 0;
+         }
+         
+         PageNode currentNode = nav.getNode(pathNodes[0]);
+         int numberOfMatch = (currentNode != null)? 1 : 0 ;
+         
+         for(int i = 1; i < pathNodes.length; i++)
+         {
+            if(currentNode == null)
+            {
+               break;
+            }
+            currentNode = currentNode.getChild(pathNodes[i]);
+         }
+         return numberOfMatch;
       }
       
       /**
@@ -244,6 +258,11 @@ public class UIPageActionListener
          }
          
          PageNode currentNode = targetedNav.getNode(pathNodes[0]);
+         if(currentNode == null)
+         {
+            return null;//Not found any node here
+         }
+         
          PageNode tempNode = null;
          
          for(int i = 1; i < pathNodes.length; i++)
@@ -251,7 +270,7 @@ public class UIPageActionListener
             tempNode = currentNode.getChild(pathNodes[i]);
             if (tempNode == null)
             {
-               return null;
+               break;
             }
             else
             {
@@ -281,14 +300,14 @@ public class UIPageActionListener
 
          for (int i = 1; i < pathNodes.length; i++)
          {
-            startNode = startNode.getChild(pathNodes[i]);
             if (startNode == null)
             {
-               return nodes;
+               break;
             }
             else
             {
                nodes.add(startNode);
+               startNode = startNode.getChild(pathNodes[i]);
             }
          }
          return nodes;
@@ -309,7 +328,6 @@ public class UIPageActionListener
          UIPortal uiPortal = uiPortalApp.createUIComponent(UIPortal.class, null, null);
          //Reset selected navigation on userPortalConfig
          userPortalConfig.setSelectedNavigation(newPageNav);
-//         System.out.println("Build new UIPortal with OWNERTYPE: " + newPageNav.getOwnerType() + " OWNERID: " + newPageNav.getOwnerId());
          PortalDataMapper.toUIPortal(uiPortal, userPortalConfig);
          return uiPortal;
       }
