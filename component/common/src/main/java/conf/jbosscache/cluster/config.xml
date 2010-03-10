@@ -23,11 +23,4 @@
   <clustering mode="replication" clusterName="gatein">
   </clustering>
 
-  <eviction wakeUpInterval="5000">
-    <default algorithmClass="org.jboss.cache.eviction.LRUAlgorithm" eventQueueSize="1000000">
-      <property name="maxNodes" value="1000" />
-      <property name="timeToLive" value="120000" />
-    </default>
-  </eviction>
-
 </jbosscache>

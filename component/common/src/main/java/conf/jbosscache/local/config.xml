@@ -19,11 +19,4 @@
 
 <jbosscache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="urn:jboss:jbosscache-core:config:3.1">
 
-  <eviction wakeUpInterval="5000">
-    <default algorithmClass="org.jboss.cache.eviction.LRUAlgorithm" eventQueueSize="1000000">
-      <property name="maxNodes" value="1000" />
-      <property name="timeToLive" value="120000" />
-    </default>
-  </eviction>
-
 </jbosscache>
