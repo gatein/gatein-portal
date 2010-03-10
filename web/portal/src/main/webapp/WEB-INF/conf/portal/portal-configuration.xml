@@ -273,7 +273,7 @@
       <type>org.exoplatform.services.cache.ExoCacheConfigPlugin</type>
       <description>add Exo Cache Config</description>
       <init-params>
-        <object-param>
+        <object-param profiles="cluster">
           <name>cache.config.POMSessionManager</name>
           <description>The JBoss Cache LRU configuration</description>
           <object type="org.exoplatform.services.cache.impl.jboss.lru.LRUExoCacheConfig">

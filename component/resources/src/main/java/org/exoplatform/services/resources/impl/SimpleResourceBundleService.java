@@ -55,7 +55,7 @@ public class SimpleResourceBundleService extends BaseResourceBundleService
    {
       log_ = ExoLogger.getLogger("org.exoplatform.services.resources");
       localeService_ = localeService;
-      cache_ = cService.getCacheInstance(ResourceBundleData.class.getName());
+      cache_ = cService.getCacheInstance(ResourceBundleData.class.getSimpleName());
       initParams(params);
    }
 

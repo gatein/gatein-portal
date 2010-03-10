@@ -22,8 +22,8 @@
 
 <configuration
    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd http://www.exoplaform.org/xml/ns/kernel_1_0.xsd"
-   xmlns="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd">
+   xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_1.xsd http://www.exoplaform.org/xml/ns/kernel_1_1.xsd"
+   xmlns="http://www.exoplaform.org/xml/ns/kernel_1_1.xsd">
 
   <component>
      <key>org.jboss.cache.transaction.TransactionManagerLookup</key>
@@ -113,7 +113,7 @@
         <object type="org.exoplatform.services.cache.ExoCacheConfig">
           <field name="name"><string>default</string></field>
           <field name="maxSize"><int>300</int></field>
-          <field name="liveTime"><long>60</long></field>
+          <field name="liveTime"><long>600</long></field>
           <field name="distributed"><boolean>false</boolean></field>
           <field name="implementation"><string>org.exoplatform.services.cache.concurrent.ConcurrentFIFOExoCache</string></field> 
         </object>
@@ -127,7 +127,11 @@
     <init-params>
       <value-param>
         <name>cache.config.template</name>
-        <value>classpath:/conf/jcr/jbosscache/cluster/config.xml</value>
+        <value>classpath:/conf/jbosscache/cluster/config.xml</value>
+      </value-param>
+      <value-param profiles="cluster">
+        <name>cache.config.template</name>
+        <value>classpath:/conf/jbosscache/cluster/config.xml</value>
       </value-param>
     </init-params>
   </component>
@@ -188,33 +192,6 @@
           <name>simple</name>
           <description>The Simple cache creator</description>
           <object type="org.exoplatform.commons.cache.SimpleExoCacheCreator"></object>
-        </object-param>
-      </init-params>
-    </component-plugin>
-  </external-component-plugins>
-
-  <external-component-plugins>
-    <target-component>org.exoplatform.services.cache.CacheService</target-component>
-    <component-plugin>
-      <name>addExoCacheConfig</name>
-      <set-method>addExoCacheConfig</set-method>
-      <type>org.exoplatform.services.cache.ExoCacheConfigPlugin</type>
-      <description>add Exo Cache Config</description>
-      <init-params>
-        <object-param>
-          <name>cache.config.TemplateService</name>
-          <description>The JBoss Cache LRU configuration</description>
-          <object type="org.exoplatform.services.cache.ExoCacheConfig">
-            <field name="name">
-              <string>TemplateService</string>
-            </field>
-            <field name="liveTime">
-              <long>600000</long>
-            </field>
-            <field name="maxSize">
-              <int>1000</int>
-            </field>
-          </object>
         </object-param>
       </init-params>
     </component-plugin>
