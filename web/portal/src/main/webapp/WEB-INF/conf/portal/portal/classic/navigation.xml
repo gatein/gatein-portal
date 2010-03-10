@@ -60,5 +60,13 @@
       <visibility>SYSTEM</visibility>
 	    <page-reference>portal::classic::register</page-reference>	    
 	  </node>
+	  
+	  <!-- NOT FOUND node -->
+	  <node>
+	    <uri>notfound</uri>
+	    <name>notfound</name>
+	    <label>NotFound</label>
+      <visibility>SYSTEM</visibility>
+	  </node>
   </page-nodes>
 </node-navigation>

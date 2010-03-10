@@ -40,6 +40,7 @@ import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.event.Event.Phase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -100,6 +101,14 @@ public class UIPageActionListener
          String[] targetPath = targetedUri.split("/");
          PageNode targetPageNode = getTargetedNode(targetedNav, targetPath);
          List<PageNode> targetedPathNodes = findPath(targetedNav, targetPath);
+         
+         //If targetPageNode is null, which happens only if the navigation contains only 'notfound' node,
+         //we send a change page node event for redirecting to 'notfound' node
+         if(targetPageNode == null)
+         {
+            redirectToNotFoundNode(showedUIPortal);
+            return;
+         }
          
          if(formerNavType.equals(newNavType) && formerNavId.equals(newNavId))
          {
@@ -245,6 +254,8 @@ public class UIPageActionListener
        * Fetch the currently selected pageNode under a PageNavigation. It is the last node encountered
        * while descending the pathNodes
        * 
+       * This method returns <code>null</code> iff only 'notfound' node remains in the navigation
+       * 
        * @param targetedNav
        * @param pathNodes
        * @return
@@ -254,13 +265,13 @@ public class UIPageActionListener
          //Case users browses to a URL of the form  */portal/public/classic
          if(pathNodes.length == 0)
          {
-            return targetedNav.getNodes().get(0);
+           return getDefaultNode(targetedNav);
          }
          
          PageNode currentNode = targetedNav.getNode(pathNodes[0]);
          if(currentNode == null)
          {
-            return null;//Not found any node here
+            return getDefaultNode(targetedNav);
          }
          
          PageNode tempNode = null;
@@ -277,15 +288,46 @@ public class UIPageActionListener
                currentNode = tempNode;
             }
          }
-         
          return currentNode;
+      }
+      
+      /**
+       * Default node of a navigation. This method returns
+       * 
+       * 1. The first node in the list of 'nav' 's children if the list contains
+       * at least one child other than 'notfound'
+       * 
+       * 2. <code>null</code> otherwise
+       * 
+       * @param nav
+       * @return
+       */
+      private static PageNode getDefaultNode(PageNavigation nav)
+      {
+         PageNode defaultNode;
+         try
+         {
+            defaultNode = nav.getNodes().get(0);
+         }
+         catch (IndexOutOfBoundsException ex)
+         {
+            return null;
+         }
+         if (defaultNode != null && !("notfound".equals(defaultNode.getName())))
+         {
+            return defaultNode;
+         }
+         else
+         {
+            return null;
+         }
       }
       
       private static List<PageNode> findPath(PageNavigation nav, String[] pathNodes)
       {
          List<PageNode> nodes = new ArrayList<PageNode>(4);
          
-         //That happens when user browses to a URL like */portal/public/classic
+         //That happens when user browses to a URL like /portal/public/classic
          if(pathNodes.length == 0)
          {
             nodes.add(nav.getNodes().get(0));
@@ -330,6 +372,12 @@ public class UIPageActionListener
          userPortalConfig.setSelectedNavigation(newPageNav);
          PortalDataMapper.toUIPortal(uiPortal, userPortalConfig);
          return uiPortal;
+      }
+      
+      private static void redirectToNotFoundNode(UIPortal uiPortal) throws Exception
+      {
+         PageNodeEvent<UIPortal> changePageNodeEvent = new PageNodeEvent<UIPortal>(uiPortal, PageNodeEvent.CHANGE_PAGE_NODE, "/notfound");
+         uiPortal.broadcast(changePageNodeEvent, Event.Phase.PROCESS);
       }
    }
 

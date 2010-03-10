@@ -54,5 +54,12 @@
       <visibility>SYSTEM</visibility>
 	   <page-reference>portal::@owner@::register</page-reference>	    
 	 </node>
+	 
+	 <node>
+	   <uri>notfound</uri>
+	   <name>notfound</name>
+	   <label>NotFound</label>
+      <visibility>SYSTEM</visibility>
+	 </node>
   </page-nodes>
 </node-navigation>
