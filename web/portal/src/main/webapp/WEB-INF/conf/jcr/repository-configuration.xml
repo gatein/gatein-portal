@@ -352,7 +352,7 @@
                   <property name="jgroups-multiplexer-stack" value="true"/>
                   <property name="jbosscache-cluster-namejbosscache-cluster-name"
                             value="jcrlock-${container.name.suffix}-system"/>
-                  <property name="jbosscache-cl-cache.jdbc.table.name" value="jcrlock_portlet_states_system"/>
+                  <property name="jbosscache-cl-cache.jdbc.table.name" value="jcrlock_portlet_state_system"/>
                   <property name="jbosscache-cl-cache.jdbc.table.create" value="true"/>
                   <property name="jbosscache-cl-cache.jdbc.table.drop" value="false"/>
                   <property name="jbosscache-cl-cache.jdbc.table.primarykey" value="pk"/>
