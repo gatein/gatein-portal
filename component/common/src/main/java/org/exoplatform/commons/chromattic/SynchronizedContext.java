@@ -19,18 +19,18 @@
 package org.exoplatform.commons.chromattic;
 
 /**
- * The global context is associated with a {@link org.exoplatform.commons.chromattic.Synchronization} object.
+ * The synchronized context is associated with a {@link org.exoplatform.commons.chromattic.Synchronization} object.
  *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class GlobalContext extends AbstractContext
+public class SynchronizedContext extends AbstractContext
 {
 
-   /** The related global synchronization when it is not null. */
+   /** The related synchronization when it is not null. */
    final Synchronization synchronization;
 
-   public GlobalContext(ChromatticLifeCycle configurator, Synchronization synchronization)
+   public SynchronizedContext(ChromatticLifeCycle configurator, Synchronization synchronization)
    {
       super(configurator);
 

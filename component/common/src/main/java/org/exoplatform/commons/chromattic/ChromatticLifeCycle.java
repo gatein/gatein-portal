@@ -23,9 +23,12 @@ import org.chromattic.api.ChromatticBuilder;
 import org.exoplatform.container.component.BaseComponentPlugin;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.container.xml.PropertiesParam;
+import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 
+import javax.jcr.RepositoryException;
+import javax.jcr.Session;
 import java.util.*;
 
 /**
@@ -136,6 +139,20 @@ public class ChromatticLifeCycle extends BaseComponentPlugin
       return manager;
    }
 
+   LoginContext getLoginContext()
+   {
+      Synchronization sync = manager.getSynchronization();
+
+      //
+      if (sync != null)
+      {
+         return sync;
+      }
+
+      //
+      return currentContext.get();
+   }
+
    /**
     * Returns <code>#getContext(false)</code>.
     *
@@ -162,7 +179,7 @@ public class ChromatticLifeCycle extends BaseComponentPlugin
       if (sync != null)
       {
          log.trace("Found synchronization about to get the current context for chromattic " + domainName);
-         GlobalContext context = sync.getContext(domainName);
+         SynchronizedContext context = sync.getContext(domainName);
 
          //
          if (context == null && !peek)
@@ -188,21 +205,7 @@ public class ChromatticLifeCycle extends BaseComponentPlugin
       return localContext;
    }
 
-   LoginContext getLoginContext()
-   {
-      Synchronization sync = manager.getSynchronization();
-
-      //
-      if (sync != null)
-      {
-         return sync;
-      }
-
-      //
-      return currentContext.get();
-   }
-
-   final SessionContext openGlobalContext()
+   final SessionContext openSynchronizedContext()
    {
       log.trace("Opening a global context");
       AbstractContext context = (AbstractContext)getContext(true);
@@ -299,6 +302,29 @@ public class ChromatticLifeCycle extends BaseComponentPlugin
    {
    }
 
+   Session doLogin() throws RepositoryException
+   {
+      LoginContext loginContext = getLoginContext();
+
+      //
+      if (loginContext == null)
+      {
+         throw new IllegalStateException("Could not obtain a login context");
+      }
+
+      //
+      ManageableRepository repo = manager.repositoryService.getCurrentRepository();
+
+      //
+      Session session = repo.getSystemSession(workspaceName);
+
+      //
+      loginContext.loggedIn(session);
+
+      //
+      return session;
+   }
+
    public final void start() throws Exception
    {
       log.debug("About to setup Chromattic life cycle " + domainName);
@@ -315,7 +341,7 @@ public class ChromatticLifeCycle extends BaseComponentPlugin
       }
 
       // Set up boot context
-      LifeCycleContext.bootContext.set(new LifeCycleContext(this, manager, workspaceName));
+      PortalSessionLifeCycle.bootContext.set(this);
 
       //
       try
@@ -344,7 +370,7 @@ public class ChromatticLifeCycle extends BaseComponentPlugin
       }
       finally
       {
-         LifeCycleContext.bootContext.set(null);
+         PortalSessionLifeCycle.bootContext.set(null);
       }
    }
 

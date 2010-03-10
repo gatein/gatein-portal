@@ -35,7 +35,7 @@ public class Synchronization implements LoginContext
    private final Map<String, Session> repositorySessions = new HashMap<String, Session>();
    
    /** . */
-   private final Map<String, GlobalContext> contexts = new HashMap<String, GlobalContext>();
+   private final Map<String, SynchronizedContext> contexts = new HashMap<String, SynchronizedContext>();
 
    /** . */
    private boolean saveOnClose = true;
@@ -46,7 +46,7 @@ public class Synchronization implements LoginContext
     * @param name the global context name
     * @return the global context or null if no such context exists
     */
-   public GlobalContext getContext(String name)
+   public SynchronizedContext getContext(String name)
    {
       if (name == null)
       {
@@ -62,19 +62,19 @@ public class Synchronization implements LoginContext
     * @return the global context related to life cycle
     * @throws IllegalStateException if a context is already created for the specified life cycle
     */
-   public GlobalContext openContext(ChromatticLifeCycle lifeCycle) throws IllegalStateException
+   public SynchronizedContext openContext(ChromatticLifeCycle lifeCycle) throws IllegalStateException
    {
       if (lifeCycle == null)
       {
          throw new NullPointerException();
       }
       String name = lifeCycle.getDomainName();
-      GlobalContext context = contexts.get(name);
+      SynchronizedContext context = contexts.get(name);
       if (context != null)
       {
          throw new IllegalStateException();
       }
-      context = new GlobalContext(lifeCycle, this);
+      context = new SynchronizedContext(lifeCycle, this);
       contexts.put(name, context);
       lifeCycle.onOpenSession(context);
       return context;
@@ -88,7 +88,7 @@ public class Synchronization implements LoginContext
    public void close(boolean save)
    {
       // First save all global contexts (sessions)
-      for (GlobalContext context : contexts.values())
+      for (SynchronizedContext context : contexts.values())
       {
          context.close(save);
       }

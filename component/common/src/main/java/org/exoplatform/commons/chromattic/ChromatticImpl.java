@@ -48,7 +48,7 @@ public class ChromatticImpl implements Chromattic
       //
       if (sessionContext == null)
       {
-         sessionContext = configurator.openGlobalContext();
+         sessionContext = configurator.openSynchronizedContext();
       }
 
       //

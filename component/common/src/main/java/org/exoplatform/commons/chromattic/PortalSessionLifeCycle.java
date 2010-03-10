@@ -27,23 +27,28 @@ import javax.jcr.Session;
 
 /**
  * The implementation of the {@link org.chromattic.spi.jcr.SessionLifeCycle} chromattic interface that
- * delegates all the job to a {@link org.exoplatform.commons.chromattic.LifeCycleContext} interface
- * that is obtained at build time. The life cycle context is obtained by invoking the <code>get</code> method
- * on the {@link org.exoplatform.commons.chromattic.LifeCycleContext#bootContext} thread local. That
- * thread local is setup by the {@link org.exoplatform.commons.chromattic.ChromatticLifeCycle} object
- * around the invocation of the {@link org.chromattic.api.ChromatticBuilder#build()} method.
- *
+ * delegates all the job to a {@link org.exoplatform.commons.chromattic.ChromatticLifeCycle#doLogin()} method.
+ * 
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
 public class PortalSessionLifeCycle implements SessionLifeCycle
 {
+
    /** . */
-   LifeCycleContext context = LifeCycleContext.bootContext.get();
+   static final ThreadLocal<ChromatticLifeCycle> bootContext = new ThreadLocal<ChromatticLifeCycle>();
+
+   /** . */
+   private final ChromatticLifeCycle chromatticLifeCycle;
+
+   public PortalSessionLifeCycle()
+   {
+      chromatticLifeCycle = bootContext.get();
+   }
 
    public final Session login() throws RepositoryException
    {
-      return context.doLogin();
+      return chromatticLifeCycle.doLogin();
    }
 
    public void save(Session session) throws RepositoryException

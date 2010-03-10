@@ -38,7 +38,10 @@ public class ChromatticIntegrationTestCase extends AbstractKernelTest
 {
 
    /** . */
-   private ChromatticLifeCycle testLF;
+   private ChromatticLifeCycle test1LF;
+
+   /** . */
+   private ChromatticLifeCycle test2LF;
 
    /** . */
    private ChromatticManager chromatticManager;
@@ -52,15 +55,16 @@ public class ChromatticIntegrationTestCase extends AbstractKernelTest
    {
       PortalContainer container = PortalContainer.getInstance();
       chromatticManager = (ChromatticManager)container.getComponent(ChromatticManager.class);
-      testLF = chromatticManager.getLifeCycle("test");
+      test1LF = chromatticManager.getLifeCycle("test1");
+      test2LF = chromatticManager.getLifeCycle("test2");
    }
 
    public void testConfiguratorInitialized() throws Exception
    {
-      assertNotNull(testLF);
-      assertEquals("portal-test", testLF.getWorkspaceName());
-      assertNotNull(testLF.getChromattic());
-      assertSame(chromatticManager, testLF.getManager());
+      assertNotNull(test1LF);
+      assertEquals("portal-test", test1LF.getWorkspaceName());
+      assertNotNull(test1LF.getChromattic());
+      assertSame(chromatticManager, test1LF.getManager());
    }
 
    public void testCannotInitiateMoreThanOneRequest()
@@ -98,7 +102,7 @@ public class ChromatticIntegrationTestCase extends AbstractKernelTest
    {
       try
       {
-         testLF.getChromattic().openSession();
+         test1LF.getChromattic().openSession();
          fail();
       }
       catch (IllegalStateException e)
@@ -111,10 +115,10 @@ public class ChromatticIntegrationTestCase extends AbstractKernelTest
       Session jcrSession;
 
       //
-      SessionContext context = testLF.openContext();
+      SessionContext context = test1LF.openContext();
       try
       {
-         ChromatticSession session = testLF.getChromattic().openSession();
+         ChromatticSession session = test1LF.getChromattic().openSession();
          FooEntity foo = session.create(FooEntity.class);
          assertEquals("portal-test", foo.getWorkspace());
          jcrSession = session.getJCRSession();
@@ -127,7 +131,7 @@ public class ChromatticIntegrationTestCase extends AbstractKernelTest
       }
       finally
       {
-         testLF.closeContext(false);
+         test1LF.closeContext(false);
       }
 
       // Assert JCR session was properly closed
@@ -136,8 +140,8 @@ public class ChromatticIntegrationTestCase extends AbstractKernelTest
 
    public void testLocalRequestNoSessionAccess()
    {
-      SessionContext context = testLF.openContext();
-      testLF.closeContext(false);
+      SessionContext context = test1LF.openContext();
+      test1LF.closeContext(false);
    }
 
    public void testGlobalSession() throws Exception
@@ -151,16 +155,16 @@ public class ChromatticIntegrationTestCase extends AbstractKernelTest
       chromatticManager.beginRequest();
       try
       {
-         Chromattic chromattic = testLF.getChromattic();
+         Chromattic chromattic = test1LF.getChromattic();
 
          // No context should be open
-         assertNull(testLF.getContext(true));
+         assertNull(test1LF.getContext(true));
 
          // Opens a session with the provided Chromattic
          ChromatticSession session = chromattic.openSession();
 
          // Now we should have a context
-         SessionContext context = testLF.getContext(true);
+         SessionContext context = test1LF.getContext(true);
          assertNotNull(context);
 
          // Register synchronzation with event queue
@@ -201,11 +205,11 @@ public class ChromatticIntegrationTestCase extends AbstractKernelTest
       chromatticManager.beginRequest();
       try
       {
-         SessionContext context = testLF.getContext(true);
+         SessionContext context = test1LF.getContext(true);
          assertNull(context);
 
          //
-         context = testLF.getContext(false);
+         context = test1LF.getContext(false);
          assertNotNull(context);
       }
       finally
@@ -217,20 +221,31 @@ public class ChromatticIntegrationTestCase extends AbstractKernelTest
    public void testPersistence() throws Exception {
 
       chromatticManager.beginRequest();
-      ChromatticSession session = testLF.getChromattic().openSession();
+      ChromatticSession session = test1LF.getChromattic().openSession();
       FooEntity foo = session.create(FooEntity.class);
       String fooId = session.persist(foo, "testPersistence");
       session.save();
       chromatticManager.endRequest(true);
 
       chromatticManager.beginRequest();
-      session = testLF.getChromattic().openSession();
+      session = test1LF.getChromattic().openSession();
       foo = session.findById(FooEntity.class, fooId);
       session.close();
       chromatticManager.endRequest(false);
 
       assertNotNull(foo);
+   }
 
+   public void testTwoLifeCycleWithSameRepository() {
+      chromatticManager.beginRequest();
+
+      SessionContext ctx1 = test1LF.openContext();
+      Session session1 = ctx1.getSession().getJCRSession();
+      SessionContext ctx2 = test2LF.openContext();
+      Session session2 = ctx2.getSession().getJCRSession();
+//      assertSame(session1, session2);
+
+      chromatticManager.endRequest(false);
    }
 
 }
