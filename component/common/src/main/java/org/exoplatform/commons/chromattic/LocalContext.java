@@ -18,6 +18,7 @@
  */
 package org.exoplatform.commons.chromattic;
 
+import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 
 /**
@@ -26,7 +27,7 @@ import javax.jcr.Session;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-class LocalContext extends AbstractContext implements LoginContext
+class LocalContext extends AbstractContext 
 {
 
    /** The related JCR session. */
@@ -37,9 +38,14 @@ class LocalContext extends AbstractContext implements LoginContext
       super(configurator);
    }
 
-   public void loggedIn(Session session)
+   public Session doLogin() throws RepositoryException
    {
-      this.jcrSession = session;
+      if (jcrSession != null)
+      {
+         throw new IllegalStateException("Already logged in");
+      }
+      jcrSession = openSession();
+      return jcrSession;
    }
 
    @Override

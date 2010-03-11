@@ -19,7 +19,10 @@
 package org.exoplatform.commons.chromattic;
 
 import org.chromattic.api.ChromatticSession;
+import org.exoplatform.services.jcr.core.ManageableRepository;
 
+import javax.jcr.RepositoryException;
+import javax.jcr.Session;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -31,7 +34,7 @@ import java.util.Map;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-class AbstractContext implements SessionContext
+abstract class AbstractContext implements SessionContext
 {
 
    /** . */
@@ -41,7 +44,7 @@ class AbstractContext implements SessionContext
    private Map<String, Object> attributes;
 
    /** The related life cycle. */
-   private final ChromatticLifeCycle lifeCycle;
+   final ChromatticLifeCycle lifeCycle;
 
    /** . */
    private HashSet<SynchronizationListener> listeners;
@@ -85,6 +88,20 @@ class AbstractContext implements SessionContext
       {
          attributes.remove(name);
       }
+   }
+
+   public abstract Session doLogin() throws RepositoryException;
+
+   /**
+    * Open and returns a session. Should be used by subclasses.
+    *
+    * @return a session
+    * @throws RepositoryException any repository exception
+    */
+   protected final Session openSession() throws RepositoryException
+   {
+      ManageableRepository repo = lifeCycle.manager.repositoryService.getCurrentRepository();
+      return repo.getSystemSession(lifeCycle.getWorkspaceName());
    }
 
    public void close(boolean save)

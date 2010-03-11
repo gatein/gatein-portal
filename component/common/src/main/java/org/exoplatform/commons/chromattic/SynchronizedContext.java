@@ -18,6 +18,9 @@
  */
 package org.exoplatform.commons.chromattic;
 
+import javax.jcr.RepositoryException;
+import javax.jcr.Session;
+
 /**
  * The synchronized context is associated with a {@link org.exoplatform.commons.chromattic.Synchronization} object.
  *
@@ -36,5 +39,10 @@ class SynchronizedContext extends AbstractContext
 
       //
       this.synchronization = synchronization;
+   }
+
+   public Session doLogin() throws RepositoryException
+   {
+      return synchronization.doLogin(this);
    }
 }

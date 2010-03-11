@@ -23,7 +23,6 @@ import org.chromattic.api.ChromatticBuilder;
 import org.exoplatform.container.component.BaseComponentPlugin;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.container.xml.PropertiesParam;
-import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 
@@ -139,14 +138,14 @@ public class ChromatticLifeCycle extends BaseComponentPlugin
       return manager;
    }
 
-   LoginContext getLoginContext()
+   AbstractContext getLoginContext()
    {
       Synchronization sync = manager.getSynchronization();
 
       //
       if (sync != null)
       {
-         return sync;
+         return sync.getContext(domainName);
       }
 
       //
@@ -304,7 +303,7 @@ public class ChromatticLifeCycle extends BaseComponentPlugin
 
    Session doLogin() throws RepositoryException
    {
-      LoginContext loginContext = getLoginContext();
+      AbstractContext loginContext = getLoginContext();
 
       //
       if (loginContext == null)
@@ -313,16 +312,7 @@ public class ChromatticLifeCycle extends BaseComponentPlugin
       }
 
       //
-      ManageableRepository repo = manager.repositoryService.getCurrentRepository();
-
-      //
-      Session session = repo.getSystemSession(workspaceName);
-
-      //
-      loginContext.loggedIn(session);
-
-      //
-      return session;
+      return loginContext.doLogin();
    }
 
    public final void start() throws Exception

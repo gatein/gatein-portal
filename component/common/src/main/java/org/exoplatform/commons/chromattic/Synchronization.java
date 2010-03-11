@@ -18,6 +18,7 @@
  */
 package org.exoplatform.commons.chromattic;
 
+import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,7 +29,7 @@ import java.util.Map;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class Synchronization implements LoginContext
+public class Synchronization
 {
 
    /** The sessions mapped by workspace name. */
@@ -80,9 +81,24 @@ public class Synchronization implements LoginContext
       return context;
    }
 
-   public void loggedIn(Session session)
+   public Session doLogin(SynchronizedContext ctx) throws RepositoryException
    {
-      repositorySessions.put(session.getWorkspace().getName(), session);
+      if (ctx == null)
+      {
+         throw new NullPointerException();
+      }
+      if (ctx.synchronization != this)
+      {
+         throw new IllegalArgumentException();
+      }
+      String workspaceName = ctx.lifeCycle.getWorkspaceName();
+      Session session = repositorySessions.get(workspaceName);
+      if (session == null)
+      {
+         session = ctx.openSession();
+         repositorySessions.put(workspaceName, session);
+      }
+      return session;
    }
 
    public void close(boolean save)

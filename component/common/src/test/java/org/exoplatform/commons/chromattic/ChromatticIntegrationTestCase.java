@@ -237,17 +237,12 @@ public class ChromatticIntegrationTestCase extends AbstractKernelTest
    }
 
    public void testTwoLifeCycleWithSameRepository() {
-/*
       chromatticManager.beginRequest();
-
       SessionContext ctx1 = test1LF.openContext();
       Session session1 = ctx1.getSession().getJCRSession();
       SessionContext ctx2 = test2LF.openContext();
       Session session2 = ctx2.getSession().getJCRSession();
-//      assertSame(session1, session2);
-
+      assertSame(session1, session2);
       chromatticManager.endRequest(false);
-*/
    }
-
 }
