@@ -51,7 +51,7 @@ import javax.portlet.RenderResponse;
 public class PortletApplicationController extends GenericPortlet
 {
 
-   protected static Log log = ExoLogger.getLogger("portlet:PortletApplicationController");
+   protected static Log log = ExoLogger.getLogger(PortletApplicationController.class);
 
    private String applicationId_;
 
