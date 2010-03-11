@@ -175,4 +175,15 @@ public class Utils
       chunks[index] = s.substring(fromIndex, toIndex);
       return chunks;
    }
+
+   /**
+    * Escape the provided string for being usable as a query litteral.
+    *
+    * @param s the string to escpae
+    * @return the escaped result
+    */
+   public static String queryEscape(String s)
+   {
+      return s.replaceAll("[\\\\%_'\"]", "\\\\$0");
+   }
 }

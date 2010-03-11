@@ -307,11 +307,15 @@ public class POMSession
       {
          if (title != null)
          {
+            title = Utils.queryEscape(title);
             if (type == ObjectType.PAGE)
             {
                statement =
                   "jcr:path LIKE '" + workspaceChunk + "/" + ownerTypeChunk + "/" + ownerIdChunk
-                     + "/mop:rootpage/mop:children/mop:pages/mop:children/%' AND gtn:name='" + title + "'";
+                     + "/mop:rootpage/mop:children/mop:pages/mop:children/%' AND " +
+                     "(" +
+                     "LOWER(gtn:name) LIKE '%" + title + "%' OR CONTAINS(gtn:name,'" + title + "')" +
+                     ")";
             }
             else
             {
