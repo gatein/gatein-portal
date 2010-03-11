@@ -81,6 +81,7 @@
 	<!-- Web_Services -->
 	<!-- GateIn_Core -->
 	<!-- GateIn_Kernel -->
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="modules/Foundations.xml" />
 
 	<!-- 10_Development_ -->
 

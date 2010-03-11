@@ -1,0 +1,525 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+]>
+<chapter id="chap-Reference_Guide-Foundations" xmlns:x="http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+   <!--
+
+    Copyright (C) 2009 eXo Platform SAS.
+    
+    This is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Lesser General Public License as
+    published by the Free Software Foundation; either version 2.1 of
+    the License, or (at your option) any later version.
+    
+    This software is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+    Lesser General Public License for more details.
+    
+    You should have received a copy of the GNU Lesser General Public
+    License along with this software; if not, write to the Free
+    Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+    02110-1301 USA, or see the FSF site: http://www.fsf.org.
+
+     -->
+   <title>Foundations</title>
+   <section id="sect-Reference_Guide-Foundations-Kernel">
+      <title>GateIn Kernel</title>
+      <para>
+         GateIn is built on top of eXo platform, which is composed of a kernel, and a set of services that exist in two
+         scopes.
+         First scope is represented by RootContainer - it contains services that exist independently of any portal, and can be
+         accessed by all portals.
+      </para>
+      <para>
+         Second scope is portal-private in the form of PortalContainer. For each configured portal, an instance of
+         PortalContainer is created.
+         This scope contains services that have portal specific configuration, and services which should not be shared by
+         multiple portals.
+      </para>
+
+      <para>
+         RootContainer and PortalContainer classes are part of the same class hierarchy - they both inherit from ExoContainer,
+         which provides ExoContainerContext handling, and they also inherit methods for looking up registered services.
+      </para>
+      <para>
+         Whenever a specific service is looked up through PortalContainer, and service is not available, the lookup is
+         delegated further up to RootContainer. We can therefore have default instance of a certain component in
+         RootContainer and portal specific instances in some, or all PortalContainers, that override the default
+         instance.
+      </para>
+      <para>
+         Whenever your portal application has to be integrated more closely with GateIn services, the way to do it is by
+         looking up these services through PortalContainer. Be careful though - only officially documented services
+         should be accessed this way, and used according to documentation, as most of the services are an implementation
+         detail of GateIn, and subject to change without notice.
+      </para>
+   </section>
+
+   <section id="sect-Reference_Guide-Foundations-Configuring_services">
+      <title>Configuring services</title>
+
+      <para>GateIn Kernel uses dependency injection to create services based on configuration.xml configuration files.
+         The location of the configuration files determines if services are placed into RootContainer scope, or into PortalContainer scope.
+         All configuration.xml files located at conf/configuration.xml in the classpath (any directory, or any jar in the classpath) will have their
+      services configured at RootContainer scope.
+      All configuration.xml files located at conf/portal/configuration.xml in the classpath will have their services configured at PortalContainer scope.
+      Additionally, portal extensions can contain configuration in WEB-INF/conf/configuration.xml, and will also have their services configured at PortalContainer scope.
+      </para>
+      <note>
+         Portal extensions are described later on.
+      </note>
+
+   </section>
+
+   <section id="sect-Reference_Guide-Foundations-Configuration_syntax">
+      <title>Configuration syntax</title>
+
+      <section id="sect-Reference_Guide-Foundations-Configuration_syntax-Component">
+         <title>Components</title>
+         <para>A service component is defined in configuration.xml by using &lt;component&gt; element.</para>
+         <para>There is only one required information when defining a service - the service implementation class, specified using &lt;type&gt;</para>
+         <para>Every component has a &lt;key&gt; that identifies it. If not explicitly set, a key defaults to the value of &lt;type&gt;.
+         If key can be loaded as a class, a Class object is used as a key, otherwise a String is used.</para>
+         <para>The usual approach is to specify an interface as a key.</para>
+
+         <note>Example of service component configuration:</note>
+
+         <programlisting role="XML"><![CDATA[
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<configuration
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd
+                          http://www.exoplaform.org/xml/ns/kernel_1_0.xsd"
+      xmlns="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd">
+   <component>
+      <key>org.exoplatform.services.database.HibernateService</key>
+      <type>org.exoplatform.services.database.impl.HibernateServiceImpl</type>
+
+      ...
+
+   </component>
+</configuration>
+      ]]></programlisting>
+      </section>
+      <section id="sect-Reference_Guide-Foundations-Configuration_syntax-External_plugins">
+         <title>External Plugins</title>
+         <para>GateIn Kernel supports non-component objects that can be configured, instantiated, and injected into registered components, using method calls.
+         The mechanism is called 'plugins', and allows portal extensions to add additional configurations to core services.</para>
+         <para>External plugin is defined by using &lt;external-component-plugins&gt; wrapper element which contains one or more
+            &lt;component-plugin&gt; definitions. &lt;external-component-plugins&gt; uses &lt;target-component&gt; to specify a target service component that will receive injected objects.</para>
+         <para>Every &lt;component-plugin&gt; defines an implementation type, and a method on target component
+            to use for injection (&lt;set-method&gt;). </para>
+         <para>A plugin implementation class has to implement org.exoplatform.container.component.ComponentPlugin interface.</para>
+         <para>In the following example PortalContainerDefinitionPlugin implements ComponentPlugin:</para>
+
+         <programlisting role="XML"><![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd
+                          http://www.exoplaform.org/xml/ns/kernel_1_0.xsd"
+      xmlns="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd">
+
+   <external-component-plugins>
+      <target-component>org.exoplatform.container.definition.PortalContainerConfig</target-component>
+      <component-plugin>
+         <!-- The name of the plugin -->
+         <name>Add PortalContainer Definitions</name>
+
+         <!-- The name of the method to call on the PortalContainerConfig
+              in order to register the PortalContainerDefinitions -->
+         <set-method>registerPlugin</set-method>
+
+         <!-- The fully qualified name of the PortalContainerDefinitionPlugin -->
+         <type>org.exoplatform.container.definition.PortalContainerDefinitionPlugin</type>
+
+         ...
+
+      </component-plugin>
+   </external-component-plugins>
+</configuration>
+         ]]></programlisting>
+      </section>
+
+      <section id="sect-Reference_Guide-Foundations-Configuration_syntax-Includes">
+         <title>Includes, and special URLs</title>
+         <para>It is possible to break configuration.xml file into many smaller files, that are then included into a 'master' configuration file.
+         The included files are complete configuration xml documents by themselves - they are not fragments of text.</para>
+         <para>An example configuration.xml that 'outsources' its content into several files:</para>
+         <programlisting role="XML"><![CDATA[
+<configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd
+                          http://www.exoplaform.org/xml/ns/kernel_1_0.xsd"
+      xmlns="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd">
+
+   <import>war:/conf/sample-ext/jcr/jcr-configuration.xml</import>
+   <import>war:/conf/sample-ext/portal/portal-configuration.xml</import>
+
+</configuration>
+         ]]></programlisting>
+
+         <para>We see a special URL being used to reference another configuration file.
+            URL schema 'war:' means, that the path that follows is resolved relative to current PortalContainer's servlet context resource path, starting at WEB-INF as a root.</para>
+         <note>Current PortalContainer is really a newly created PortalContainer, as war: URLs only make sense for PortalContainer scoped configuration.</note>
+         <para>Also, thanks to extension mechanism, the servlet context used for resource loading is a unified servlet context (as explaned in a later section).</para>
+         <para>To have include path resolved relative to current classpath (context classloader), use 'jar:' URL schema.</para>
+      </section>
+
+      <section id="sect-Reference_Guide-Foundations-Configuration_syntax-Special_vars">
+         <title>Special variables</title>
+         <para>Configuration files may contain a special variable reference ${container.name.suffix}. This variable resolves to the name of the current portal container, prefixed by underscore (_).
+         This facilitates reuse of configuration files in situations where portal specific unique names need to be assigned to some resources
+         (i.e. JNDI names, Database / DataSource names, JCR repository names, etc ...).</para>
+         <para>This variable is only defined when there is a current PortalContainer available - only for PortalContainer scoped services.</para>
+         <para>A good example for this is HibernateService:</para>
+         <programlisting role="XML"><![CDATA[
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<configuration
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd
+                       http://www.exoplaform.org/xml/ns/kernel_1_0.xsd"
+   xmlns="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd">
+
+   <component>
+      <key>org.exoplatform.services.database.HibernateService</key>
+      <jmx-name>database:type=HibernateService</jmx-name>
+      <type>org.exoplatform.services.database.impl.HibernateServiceImpl</type>
+      <init-params>
+         <properties-param>
+            <name>hibernate.properties</name>
+            <description>Default Hibernate Service</description>
+            <property name="hibernate.show_sql" value="false" />
+            <property name="hibernate.cglib.use_reflection_optimizer" value="true" />
+            <property name="hibernate.connection.url"
+                            value="jdbc:hsqldb:file:../temp/data/exodb${container.name.suffix}" />
+            <property name="hibernate.connection.driver_class" value="org.hsqldb.jdbcDriver" />
+            <property name="hibernate.connection.autocommit" value="true" />
+            <property name="hibernate.connection.username" value="sa" />
+            <property name="hibernate.connection.password" value="" />
+            <property name="hibernate.dialect" value="org.hibernate.dialect.HSQLDialect" />
+            <property name="hibernate.c3p0.min_size" value="5" />
+            <property name="hibernate.c3p0.max_size" value="20" />
+            <property name="hibernate.c3p0.timeout" value="1800" />
+            <property name="hibernate.c3p0.max_statements" value="50" />
+         </properties-param>
+      </init-params>
+   </component>
+</configuration>
+         ]]></programlisting>
+
+      </section>
+   </section>
+
+   <section id="sect-Reference_Guide-Foundations-Configuring_portal">
+      <title>Configuring a portal</title>
+
+      <para>
+         A portal is defined by several attributes.
+      </para>
+
+      <para>
+         First, there is a portal name, which is always equal to URL context to which the current portal is bound.
+      </para>
+
+      <para>
+         Second, there is a REST context name, which is used for REST access to portal application - every portal has
+         exactly one (unique) REST context name.
+      </para>
+
+      <para>
+         Then, there is a realm name which is the name of security realm used for authentication when users log into the
+         portal.
+      </para>
+
+      <para>
+         Finally, there is a list of dependencies - other web applications, whose resources are visible to current
+         portal (via extension mechanism described later), and are searched in the specified order.
+      </para>
+
+      <programlisting role="XML"><![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd
+                       http://www.exoplaform.org/xml/ns/kernel_1_0.xsd"
+   xmlns="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd">
+
+   <external-component-plugins>
+      <!-- The full qualified name of the PortalContainerConfig -->
+      <target-component>org.exoplatform.container.definition.PortalContainerConfig</target-component>
+
+      <component-plugin>
+         <!-- The name of the plugin -->
+         <name>Add PortalContainer Definitions</name>
+
+         <!-- The name of the method to call on the PortalContainerConfig
+              in order to register the PortalContainerDefinitions -->
+         <set-method>registerPlugin</set-method>
+
+         <!-- The full qualified name of the PortalContainerDefinitionPlugin -->
+         <type>org.exoplatform.container.definition.PortalContainerDefinitionPlugin</type>
+
+         <init-params>
+            <object-param>
+               <name>portal</name>
+               <object type="org.exoplatform.container.definition.PortalContainerDefinition">
+                  <!-- The name of the portal container -->
+                  <field name="name"><string>portal</string></field>
+
+                  <!-- The name of the context name of the rest web application -->
+                  <field name="restContextName"><string>rest</string></field>
+
+                  <!-- The name of the realm -->
+                  <field name="realmName"><string>exo-domain</string></field>
+
+                  <!-- All the dependencies of the portal container ordered by loading priority -->
+                  <field name="dependencies">
+                     <collection type="java.util.ArrayList">
+                        <value>
+                           <string>eXoResources</string>
+                        </value>
+                        <value>
+                           <string>portal</string>
+                        </value>
+                        <value>
+                           <string>dashboard</string>
+                        </value>
+                        <value>
+                           <string>exoadmin</string>
+                        </value>
+                        <value>
+                           <string>eXoGadgets</string>
+                        </value>
+                        <value>
+                           <string>eXoGadgetServer</string>
+                        </value>
+                        <value>
+                           <string>rest</string>
+                        </value>
+                        <value>
+                           <string>web</string>
+                        </value>
+                        <value>
+                           <string>wsrp-producer</string>
+                        </value>
+                        <!-- The sample-ext has been added at the end of the dependency list
+                             in order to have the highest priority -->
+                        <value>
+                           <string>sample-ext</string>
+                        </value>
+                     </collection>
+                  </field>
+               </object>
+            </object-param>
+         </init-params>
+      </component-plugin>
+   </external-component-plugins>
+</configuration>
+      ]]>
+</programlisting>
+
+
+      <para>
+         Dependencies are part of the extension mechanism.
+      </para>
+
+      <para>
+         Every portal is represented by PortalContainer instance, which contains:
+         <itemizedlist>
+            <listitem>associated ExoContainerContext, which contains information about the portal</listitem>
+            <listitem>unified servlet context, for web-archive-relative resource loading</listitem>
+            <listitem>unified classloader, for classpath based resource loading</listitem>
+            <listitem>methods for retrieving services</listitem>
+         </itemizedlist>
+      </para>
+
+      <para>
+         Unified servlet context, and unified classloader are part of the extension mechanism (explained in next section),
+         and provide standard API (ServletContext, ClassLoader) with specific resource loading behavior - visibility into associated web application archives,
+         configured with Dependencies property of PortalContainerDefinition. Resources from other web applications are queried in the order specified by Dependencies.
+         The later entries in the list override the previous ones.
+      </para>
+   </section>
+
+   <section id="sect-Reference_Guide-Foundations-Extension_mechanism">
+      <title>GateIn Extension Mechanism</title>
+
+      <para>
+         Extension mechanism is a functionality that makes it possible to override portal resources in an almost
+         plug-and-play fashion - just drop in a .war archive with the resources, and configure its position on the
+         classpath.
+         This way any customizations of the portal don't have to involve unpacking and repacking the original portal
+         .war archives. Instead, you create your own .war archive with changed resources, that override the resources in
+         the original archive.
+      </para>
+
+      <para>
+         TODO: Configuring the classpath via PortalContainerDefinition's Dependencies property.
+      </para>
+      <para>
+         TODO: Using PortalConfigOwner servlet context listener to announce resource availability.
+      </para>
+   </section>
+
+   <section id="sect-Reference_Guide-Foundations-Multiple_portals">
+      <title>Running Multiple Portals</title>
+
+      <para>
+         It is possible to run several independent portal containers - each bound to a different URL context - within
+         the same JVM instance. This kind of setup is very efficient from administration and resource consumption
+         aspect. The most elegant way to reuse configuration for different coexisting portals is by way of extension
+         mechanism - by inheriting resources and configuration from existing web archives, and just adding extra resources to it,
+         and overriding those that need to be changed by including modified copies of specific resources.
+      </para>
+
+      <para>
+         In order for a portal application to correctly function when deployed in multiple portals, the application may
+         have to dynamically query the information about the current portal container. The application should not make
+         any assumptions about the name of the current portal, as there are now multiple different portals in play.
+      </para>
+
+      <para>
+         At any point during request processing, or lifecycle event processing, your application can retrieve this
+         information through org.exoplatform.container.ExoContainerContext.
+         Sometimes your application needs to make sure that the proper PortalContainer - the source of ExoContainerContext - is associated with the
+         current call.
+      </para>
+
+      <para>
+         If you ship servlets or servlet filters as part of your portal application, and if you need to access portal
+         specific resources at any time during the processing of the servlet or filter request, then you need to make
+         sure the servlet/filter is associated with the current container.
+      </para>
+      <para>
+         The proper way to do that is to make your servlet extend org.exoplatform.container.web.AbstractHttpServlet
+         class.
+         This will not only properly initialize current PortalContainer for you, but will also set the current thread's
+         context classloader to one that looks for resources in associated web applications in the order specified by
+         Dependencies configuration (as explained in Extension mechanism section).
+      </para>
+      <para>
+         Similarly for filters, make sure your filter class extends org.exoplatform.container.web.AbstractFilter.
+         Both AbstractHttpServlet, and AbstractFilter have a method getContainer(), which returns the current
+         PortalContainer.
+
+         If your servlet handles the requests by implementing a service() method, you need to rename that method to match
+         the following signature:
+         <programlisting role="JAVA"><![CDATA[
+/**
+ * Use this method instead of Servlet.service()
+ */
+protected void onService(ExoContainer container, HttpServletRequest req,
+      HttpServletResponse res) throws ServletException, IOException;
+         ]]></programlisting>
+
+      </para>
+      <para>
+         The reason is that AbstractHttpServlet implements service() to perform its interception, and you don't want to
+         overwrite (by overriding) this functionality.
+      </para>
+      <para>
+         You may also need to access portal information within your HttpSessionListener. Again, make sure to extend the
+         provided abstract class - org.exoplatform.container.web.AbstractHttpSessionListener.
+         Also, modify your method signitures as follows:
+         <programlisting role="JAVA"><![CDATA[
+/**
+ * Use this method instead of HttpSessionListener.sessionCreated()
+ */
+protected void onSessionCreated(ExoContainer container, HttpSessionEvent event);
+
+/**
+ * Use this method instead of HttpSessionListener.sessionDestroyed()
+ */
+protected void onSessionDestroyed(ExoContainer container, HttpSessionEvent event);
+         ]]></programlisting>
+      </para>
+      <para>
+         There is another method you have to implement in this case:
+         <programlisting role="JAVA"><![CDATA[
+protected boolean requirePortalEnvironment();
+         ]]></programlisting>
+
+         If this method returns true, current thread's context classloader is set up according to Dependencies
+         configuration, and availability of the associated web applications. If it returns false, the standard
+         application separation rules are used for resource loading (effectively turning off the
+         extension mechanism). This method exists on AbstractHttpServlet and AbstractFilter as well, where there is a
+         default implementation that automatically returns true, when it detects there is a current PortalContainer
+         present, otherwise it returns false.
+
+      </para>
+
+      <para>
+         We still have to explain how to properly perform ServletContextListener based initialization, when you need
+         access to current PortalContainer.
+      </para>
+
+      <para>
+         GateIn has no direct control over the deployment of application archives (.war, .ear files) - it is the
+         application server that performs the deployment. For extension mechanism to work properly, the applications,
+         associated with the portal via Dependencies configuration, have to be deployed before the portal, that depends
+         on them, is initialized. On the other hand, these applications may require an already initialized PortalContainer
+         to properly initialize themselves - we have a recursive dependency problem. To resolve this problem, a
+         mechanism of initialization tasks, and task queues, was put in place. Web applications that depend on current
+         PortalContainer for their initialization have to avoid performing their initialization directly in some
+         ServletContextListener executed during their deployment (before any PortalContainer was initialized). Instead,
+         a web application should package its initialization logic into an init task of appropriate type, and only use
+         ServletContextListener to insert the init task instance into the proper init tasks queue.
+      </para>
+
+      <para>An example of this is Gadgets application which registers Google gadgets with the current PortalContainer:
+      </para>
+
+      <programlisting role="JAVA"><![CDATA[
+public class GadgetRegister implements ServletContextListener
+{
+   public void contextInitialized(ServletContextEvent event)
+   {
+      // Create a new post-init task
+      final PortalContainerPostInitTask task = new PortalContainerPostInitTask() {
+
+         public void execute(ServletContext context, PortalContainer portalContainer)
+         {
+            try
+            {
+               SourceStorage sourceStorage =
+               (SourceStorage) pcontainer.getComponentInstanceOfType(SourceStorage.class);
+               ...
+            }
+            catch (RuntimeException e)
+            {
+               throw e;
+            }
+            catch (Exception e)
+            {
+               throw new RuntimeException("Initialization failed: ", e);
+            }
+         }
+      };
+
+      // Add post-init task for execution on all the portal containers that depend on the given ServletContext
+      // according to the PortalContainerDefinitions (via Dependencies configuration)
+      PortalContainer.addInitTask(event.getServletContext(), task);
+   }
+}
+      ]]></programlisting>
+
+      <para>
+         The above example uses PortalContainerPostInitTask, which gets executed after the portal container has been
+         initialized. In some situations you may want to execute initialization after portal container was instantiated
+         but before it was initialized - use PortalContainerPreInitTask in that case. Or, you may want to execute
+         initialization after all the post-init tasks have been executed - use PortalContainerPostCreateTask in that
+         case.
+      </para>
+
+      <para>
+         One more area that may need your attention are LoginModules. If you use custom LoginModules, that require
+         current ExoContainer, make sure they extend org.exoplatform.services.security.jaas.AbstractLoginModule for
+         proper initialization. AbstractLoginModule also takes care of the basic configuration - it recognizes two
+         initialization options - portalContainerName, and realmName whose values you can access via protected fields of
+         the same name.
+      </para>
+
+   </section>
+
+</chapter>
