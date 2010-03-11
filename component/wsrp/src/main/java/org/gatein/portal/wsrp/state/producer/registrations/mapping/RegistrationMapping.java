@@ -23,13 +23,8 @@
 
 package org.gatein.portal.wsrp.state.producer.registrations.mapping;
 
-import org.chromattic.api.annotations.Create;
-import org.chromattic.api.annotations.Id;
-import org.chromattic.api.annotations.ManyToOne;
-import org.chromattic.api.annotations.MappedBy;
-import org.chromattic.api.annotations.OneToOne;
-import org.chromattic.api.annotations.PrimaryType;
-import org.chromattic.api.annotations.Property;
+import org.chromattic.api.RelationshipType;
+import org.chromattic.api.annotations.*;
 import org.gatein.common.util.ParameterValidation;
 import org.gatein.portal.wsrp.state.producer.registrations.JCRRegistrationPersistenceManager;
 import org.gatein.registration.Registration;
@@ -54,7 +49,7 @@ public abstract class RegistrationMapping
    @Id
    public abstract String getPersistentKey();
 
-   @ManyToOne
+   @ManyToOne(type = RelationshipType.PATH)
    @MappedBy("consumer")
    public abstract ConsumerMapping getConsumer();
 
@@ -69,6 +64,7 @@ public abstract class RegistrationMapping
    public abstract void setRegistrationHandle(String handle);
 
    @OneToOne
+   @Owner
    @MappedBy("properties")
    public abstract RegistrationPropertiesMapping getProperties();
 

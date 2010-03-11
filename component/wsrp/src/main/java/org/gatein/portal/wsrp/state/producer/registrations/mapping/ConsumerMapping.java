@@ -23,16 +23,7 @@
 package org.gatein.portal.wsrp.state.producer.registrations.mapping;
 
 import org.chromattic.api.RelationshipType;
-import org.chromattic.api.annotations.Create;
-import org.chromattic.api.annotations.FindById;
-import org.chromattic.api.annotations.Id;
-import org.chromattic.api.annotations.ManyToOne;
-import org.chromattic.api.annotations.MappedBy;
-import org.chromattic.api.annotations.OneToMany;
-import org.chromattic.api.annotations.OneToOne;
-import org.chromattic.api.annotations.PrimaryType;
-import org.chromattic.api.annotations.Property;
-import org.chromattic.api.annotations.RelatedMappedBy;
+import org.chromattic.api.annotations.*;
 import org.gatein.portal.wsrp.state.producer.registrations.JCRRegistrationPersistenceManager;
 import org.gatein.registration.Consumer;
 import org.gatein.registration.ConsumerGroup;
@@ -69,8 +60,8 @@ public abstract class ConsumerMapping
 
    public abstract void setConsumerAgent(String consumerAgent);
 
-   @OneToMany
-   @RelatedMappedBy("consumer")
+   @OneToMany(type = RelationshipType.PATH)
+   @MappedBy("consumer")
    public abstract List<RegistrationMapping> getRegistrations();
 
    @Create
@@ -83,6 +74,7 @@ public abstract class ConsumerMapping
    public abstract void setGroup(ConsumerGroupMapping group);
 
    @OneToOne
+   @Owner
    @MappedBy("capabilities")
    public abstract ConsumerCapabilitiesMapping getCapabilities();
 

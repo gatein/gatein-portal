@@ -23,11 +23,7 @@
 
 package org.gatein.portal.wsrp.state.consumer.mapping;
 
-import org.chromattic.api.annotations.Create;
-import org.chromattic.api.annotations.MappedBy;
-import org.chromattic.api.annotations.OneToOne;
-import org.chromattic.api.annotations.PrimaryType;
-import org.chromattic.api.annotations.Property;
+import org.chromattic.api.annotations.*;
 import org.gatein.portal.wsrp.state.mapping.RegistrationPropertyDescriptionMapping;
 import org.gatein.wsrp.consumer.RegistrationProperty;
 import org.gatein.wsrp.registration.RegistrationPropertyDescription;
@@ -52,6 +48,7 @@ public abstract class RegistrationPropertyMapping
    public abstract void setValue(String value);
 
    @OneToOne
+   @Owner
    @MappedBy("description")
    public abstract RegistrationPropertyDescriptionMapping getDescription();
 

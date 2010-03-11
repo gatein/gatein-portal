@@ -34,11 +34,7 @@ import org.exoplatform.portal.pom.spi.portlet.Portlet;
 import org.gatein.mop.api.Attributes;
 import org.gatein.mop.api.content.ContentType;
 import org.gatein.mop.api.content.Customization;
-import org.gatein.mop.api.workspace.Navigation;
-import org.gatein.mop.api.workspace.ObjectType;
-import org.gatein.mop.api.workspace.Site;
-import org.gatein.mop.api.workspace.Workspace;
-import org.gatein.mop.api.workspace.WorkspaceObject;
+import org.gatein.mop.api.workspace.*;
 import org.gatein.mop.api.workspace.link.Link;
 import org.gatein.mop.api.workspace.link.PageLink;
 import org.gatein.mop.api.workspace.ui.UIBody;
@@ -282,7 +278,8 @@ public class Mapper
       Attributes attrs = src.getAttributes();
 
       //
-      org.gatein.mop.api.workspace.Page template = src.getRootNavigation().getTemplate();
+      Templatized templarized = src.getRootNavigation().getTemplatized();
+      org.gatein.mop.api.workspace.Page template = templarized.getTemplate();
       UIContainer srcLayout = template.getRootComponent();
 
       //
@@ -355,7 +352,15 @@ public class Mapper
       saveChildren(srcContainer, dstContainer);
 
       //
-      dst.getRootNavigation().setTemplate(template);
+      Templatized templatized = dst.getRootNavigation().getTemplatized();
+      if (templatized != null)
+      {
+         templatized.setTemplate(template);
+      }
+      else
+      {
+         template.templatize(dst.getRootNavigation());
+      }
    }
 
    public PageData load(org.gatein.mop.api.workspace.Page src)

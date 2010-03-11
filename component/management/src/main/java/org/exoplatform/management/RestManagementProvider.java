@@ -21,7 +21,7 @@ package org.exoplatform.management;
 
 import org.exoplatform.management.data.RestResource;
 import org.exoplatform.container.ExoContainerContext;
-import org.exoplatform.management.management.annotations.RESTEndpoint;
+import org.exoplatform.management.rest.annotations.RESTEndpoint;
 import org.exoplatform.management.spi.ManagedResource;
 import org.exoplatform.management.spi.ManagementProvider;
 import org.exoplatform.portal.config.UserACL;

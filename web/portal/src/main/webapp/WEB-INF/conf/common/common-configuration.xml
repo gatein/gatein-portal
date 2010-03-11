@@ -32,7 +32,7 @@
 
   <component>
     <key>org.exoplatform.services.transaction.TransactionService</key>
-    <type>org.exoplatform.services.transaction.jbosscache.ArjunaTransactionService</type>
+    <type>org.exoplatform.services.transaction.jbosscache.JBossTransactionsService</type>
     <init-params>
       <value-param>
         <name>timeout</name>

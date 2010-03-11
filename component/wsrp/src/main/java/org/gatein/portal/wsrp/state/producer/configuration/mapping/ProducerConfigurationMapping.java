@@ -22,10 +22,7 @@
 
 package org.gatein.portal.wsrp.state.producer.configuration.mapping;
 
-import org.chromattic.api.annotations.MappedBy;
-import org.chromattic.api.annotations.PrimaryType;
-import org.chromattic.api.annotations.OneToOne;
-import org.chromattic.api.annotations.Property;
+import org.chromattic.api.annotations.*;
 import org.gatein.wsrp.producer.config.ProducerConfiguration;
 import org.gatein.wsrp.producer.config.ProducerRegistrationRequirements;
 import org.gatein.wsrp.producer.config.impl.ProducerConfigurationImpl;
@@ -45,6 +42,7 @@ public abstract class ProducerConfigurationMapping
    public abstract void setUsingStrictMode(boolean strict);
 
    @OneToOne
+   @Owner
    @MappedBy("registrationrequirements")
    public abstract RegistrationRequirementsMapping getRegistrationRequirements();
 

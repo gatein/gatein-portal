@@ -168,6 +168,14 @@
           <value>org.gatein.mop.core.api.workspace.GroupSite</value>
           <value>org.gatein.mop.core.api.workspace.UserSiteContainer</value>
           <value>org.gatein.mop.core.api.workspace.UserSite</value>
+          <value>org.gatein.mop.core.api.workspace.TemplatizedImpl</value>
+          <value>org.gatein.mop.core.api.AttributesImpl</value>
+          <value>org.gatein.mop.core.api.Attribute</value>
+          <value>org.gatein.mop.core.api.PathAttribute</value>
+          <value>org.gatein.mop.core.api.StringAttribute</value>
+          <value>org.gatein.mop.core.api.BooleanAttribute</value>
+          <value>org.gatein.mop.core.api.IntegerAttribute</value>
+          <value>org.gatein.mop.core.api.DateAttribute</value>
           <value>org.gatein.mop.core.api.workspace.content.CustomizationContainer</value>
           <value>org.gatein.mop.core.api.workspace.content.ContextTypeContainer</value>
           <value>org.gatein.mop.core.api.workspace.content.ContextType</value>

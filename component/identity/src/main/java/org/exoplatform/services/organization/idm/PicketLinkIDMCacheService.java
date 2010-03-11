@@ -29,7 +29,7 @@ import org.exoplatform.management.annotations.ManagedDescription;
 import org.exoplatform.management.annotations.ManagedName;
 import org.exoplatform.management.jmx.annotations.NameTemplate;
 import org.exoplatform.management.jmx.annotations.Property;
-import org.exoplatform.management.management.annotations.RESTEndpoint;
+import org.exoplatform.management.rest.annotations.RESTEndpoint;
 
 import java.util.LinkedList;
 import java.util.List;

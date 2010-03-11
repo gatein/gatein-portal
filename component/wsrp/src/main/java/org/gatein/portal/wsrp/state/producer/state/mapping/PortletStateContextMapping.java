@@ -23,11 +23,7 @@
 
 package org.gatein.portal.wsrp.state.producer.state.mapping;
 
-import org.chromattic.api.annotations.Id;
-import org.chromattic.api.annotations.MappedBy;
-import org.chromattic.api.annotations.Name;
-import org.chromattic.api.annotations.OneToOne;
-import org.chromattic.api.annotations.PrimaryType;
+import org.chromattic.api.annotations.*;
 import org.gatein.pc.portlet.impl.state.producer.PortletStateContextImpl;
 import org.gatein.pc.portlet.state.producer.PortletStateContext;
 
@@ -47,6 +43,7 @@ public abstract class PortletStateContextMapping
    public abstract String getPortletId();
 
    @OneToOne
+   @Owner
    @MappedBy("state")
    public abstract PortletStateMapping getState();
 

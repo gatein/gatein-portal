@@ -147,7 +147,7 @@ public class TestSavedPOM extends AbstractPortalTest
       assertEquals("test_prop_value", attrs.getString("prop_key"));
 
       //
-      Page layout = portal.getRootNavigation().getTemplate();
+      Page layout = portal.getRootNavigation().getTemplatized().getTemplate();
       assertNotNull(layout);
       assertSame(portal.getRootPage().getChild("templates").getChild("default"), layout);
    }

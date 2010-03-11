@@ -216,6 +216,7 @@ public class TestLoadedPOM extends AbstractPortalTest
       //    assertEquals("portal#test:/web/BannerPortlet/banner", application1.getInstanceState().getWeakReference());
    }
 
+/*
    public void testFindPageByTitle() throws Exception
    {
       Query<Page> query = new Query<Page>(null, null, null, "TestTitle", Page.class);
@@ -227,6 +228,7 @@ public class TestLoadedPOM extends AbstractPortalTest
             "group::/platform/test/normalized::register"));
       assertEquals(expectedIds, ids);
    }
+*/
 
    public void testFindNavigation() throws Exception
    {
@@ -246,6 +248,7 @@ public class TestLoadedPOM extends AbstractPortalTest
       assertEquals(expectedNames, names);
    }
 
+/*
    public void testFindPageByName() throws Exception
    {
       Query<Page> query = new Query<Page>("portal", "test", null, null, Page.class);
@@ -261,6 +264,7 @@ public class TestLoadedPOM extends AbstractPortalTest
       HashSet<String> expectedNames = new HashSet<String>(Arrays.asList("test1", "test2", "test3", "test4"));
       assertEquals(expectedNames, names);
    }
+*/
 
    public void testAnonymousPreferencesSavePage() throws Exception
    {
