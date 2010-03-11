@@ -22,7 +22,6 @@ package org.exoplatform.webui.organization;
 import java.io.Serializable;
 import java.util.*;
 
-import org.exoplatform.commons.utils.LazyPageList;
 import org.exoplatform.commons.utils.SerializablePageList;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.UserACL.Permission;
@@ -66,7 +65,7 @@ public class UIListPermissionSelector extends UISelector<String[]>
       uiGrid.setLabel("UIListPermissionSelector");
       uiGrid.configure("expression", new String[]{"groupId", "membership"}, new String[]{"Delete"});
       UIFormPageIterator uiIterator = (UIFormPageIterator)uiGrid.getUIPageIterator();
-      uiIterator.setPageList(new SerializablePageList(Permission.class, Collections.emptyList(), 10));
+      uiIterator.setPageList(new SerializablePageList<Permission>(Permission.class, Collections.<Permission>emptyList(), 10));
       addChild(uiIterator);
       uiIterator.setRendered(false);
       UIFormPopupWindow uiPopup = addChild(UIFormPopupWindow.class, null, null);
@@ -107,9 +106,8 @@ public class UIListPermissionSelector extends UISelector<String[]>
 
    public void clearGroups() throws Exception
    {
-      List<Object> list = new ArrayList<Object>();
       UIPageIterator uiIterator = getChild(UIGrid.class).getUIPageIterator();
-      uiIterator.setPageList(new LazyPageList(new AccessGroupListAccess(list), 10));
+      uiIterator.setPageList(new SerializablePageList<Permission>(Permission.class, new ArrayList<Permission>(), 10));
    }
 
    @SuppressWarnings("unchecked")
@@ -156,7 +154,7 @@ public class UIListPermissionSelector extends UISelector<String[]>
          list.add(permission);
       }
       UIPageIterator uiIterator = getChild(UIGrid.class).getUIPageIterator();
-      uiIterator.setPageList(new SerializablePageList(Permission.class, list, 10));
+      uiIterator.setPageList(new SerializablePageList<Permission>(Permission.class, list, 10));
       return this;
    }
 
@@ -175,7 +173,7 @@ public class UIListPermissionSelector extends UISelector<String[]>
             break;
          }
       }
-      uiIterator.setPageList(new LazyPageList(new AccessGroupListAccess(list), 10));
+      uiIterator.setPageList(new SerializablePageList(Permission.class, list, 10));
    }
 
    @SuppressWarnings("unchecked")
@@ -197,7 +195,7 @@ public class UIListPermissionSelector extends UISelector<String[]>
          return;
       }
       list.add(permission);
-      uiIterator.setPageList(new LazyPageList(new AccessGroupListAccess(list), 10));
+      uiIterator.setPageList(new SerializablePageList(Permission.class, list, 10));
    }
 
    public Class<String[]> getTypeValue()
@@ -236,7 +234,7 @@ public class UIListPermissionSelector extends UISelector<String[]>
       uiGrid.setRendered(!publicMode_);
       if (publicMode_)
       {
-         uiGrid.getUIPageIterator().setPageList(new LazyPageList(new AccessGroupListAccess(null), 10));
+         uiGrid.getUIPageIterator().setPageList(new SerializablePageList<Permission>(Permission.class, new ArrayList<Permission>(), 10));
       }
    }
 
@@ -283,12 +281,11 @@ public class UIListPermissionSelector extends UISelector<String[]>
          {
             uiPermission.setRendered(false);
          }
-         if (uiForm != null)
-         {
-            uiForm.broadcast(event, event.getExecutionPhase());
-            //event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()); 
-            event.getRequestContext().addUIComponentToUpdateByAjax(uicom);
-         }
+
+         // julien: UIForm cannot be null otherwise the uiForm.findFirstComponentOfType would have thrown an NPE
+         uiForm.broadcast(event, event.getExecutionPhase());
+         //event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent());
+         event.getRequestContext().addUIComponentToUpdateByAjax(uicom);
       }
 
    }
