@@ -25,6 +25,7 @@ import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.PageNavigation;
+import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.webui.navigation.UIAddGroupNavigation;
 import org.exoplatform.portal.webui.navigation.UINavigationManagement;
 import org.exoplatform.portal.webui.navigation.UINavigationNodeSelector;
@@ -356,6 +357,12 @@ public class UIGroupNavigationManagement extends UIContainer
          ArrayList<PageNavigation> navis = new ArrayList<PageNavigation>();
          navis.add(selectedNavigation);
          selector.initNavigations(navis);
+         
+         if (uiPageNodeForm.getSelectedParent() instanceof PageNode)
+         {
+            PageNode selectedParent = (PageNode)uiPageNodeForm.getSelectedParent();
+            selector.selectPageNodeByUri(selectedParent.getUri());
+         }
          //selector.removeChild(UIRightClickPopupMenu.class);
          uiNavigationPopup.setUIComponent(pageManager);
          uiNavigationPopup.setWindowSize(400, 400);

@@ -3,10 +3,13 @@
   import org.exoplatform.webui.form.UIForm;
   import java.text.DateFormat;
   import java.text.SimpleDateFormat;
+  import org.exoplatform.portal.config.UserPortalConfigService;
    
   String[] actions =  uicomponent.getActions();
   uicomponent.loadPortalConfigs();
   def rcontext = _ctx.getRequestContext();
+  def userPortalConfigService = uicomponent.getApplicationComponent(UserPortalConfigService.class);
+  def defaultPortalName = userPortalConfigService.getDefaultPortal();
 %>
 <div class="UISiteManagement UIManagement" id="<%=uicomponent.getId();%>">
 	  <%
@@ -23,7 +26,10 @@
 					        	<a href="<%=uicomponent.event("EditPortalLayout", portalConfig.getName());%>" class="EditLayoutIcon"><%=_ctx.appRes("UISiteManagement.label.editLayout")%></a>
 					        	<a href="<%=uicomponent.event("EditNavigation", portalConfig.getName());%>" class="EditNavIcon"><%=_ctx.appRes("UISiteManagement.label.editNav")%></a>
 					        	<a href="javascript:ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'EditPortalProperties', true, [{name:'portalName',value:'<%=portalConfig.getName()%>'}]))" class="EditNavIcon"><%=_ctx.appRes("UISiteManagement.label.editPortalProp")%></a>
-					        	<a href="<%=uicomponent.url("DeletePortal", portalConfig.getName());%>" class="DeleteIcon"><%=_ctx.appRes("UISiteManagement.label.deletePortal")%></a>
+					        	
+					        	<% if(defaultPortalName != null && !defaultPortalName.equals(portalConfig.getName())) {%>
+					        		<a href="<%=uicomponent.url("DeletePortal", portalConfig.getName());%>" class="DeleteIcon"><%=_ctx.appRes("UISiteManagement.label.deletePortal")%></a>
+					        	<% } %>
 				        </td>
 				      </tr>
 				    </table>    
