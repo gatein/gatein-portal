@@ -89,10 +89,10 @@
 					</para>
 					<mediaobject>
 						<imageobject role="html">
-							<imagedata fileref="images/Signin.png" format="PNG" align="center" />
+							<imagedata fileref="images/Signin.png" format="PNG" align="center" scale="110"/>
 						</imageobject>
 						<imageobject role="fo">
-							<imagedata fileref="images/Signin.png" format="PNG" align="center" contentwidth="150mm"/>
+							<imagedata fileref="images/Signin.png" format="PNG" align="center"  scalefit="1" contentwidth="150mm"/>
 						</imageobject>
 					</mediaobject>
 					</step>
@@ -120,10 +120,10 @@
 			</para>
 			<mediaobject>
 				<imageobject role="html">
-					<imagedata fileref="images/Toolbar.png" format="PNG" align="center" width="444" />
+					<imagedata fileref="images/Toolbar.png" format="PNG" align="center" scale="110"/>
 				</imageobject>
 				<imageobject role="fo">
-					<imagedata fileref="images/Toolbar.png" format="PNG" align="center" contentwidth="150mm" />
+					<imagedata fileref="images/Toolbar.png" format="PNG" align="center"  scalefit="1" contentwidth="150mm" />
 				</imageobject>
 			</mediaobject>
 
@@ -148,10 +148,10 @@
 				</procedure>
 					<mediaobject>
 						<imageobject role="html">
-							<imagedata fileref="images/StarPortlet.png" format="PNG" align="center" />
+							<imagedata fileref="images/StarPortlet.png" format="PNG" align="center" scale="110" />
 						</imageobject>
 						<imageobject role="fo">
-							<imagedata fileref="images/StarPortlet.png" format="PNG" align="center" contentwidth="150mm"/>
+							<imagedata fileref="images/StarPortlet.png" format="PNG" align="center"  scalefit="1" contentwidth="150mm"/>
 						</imageobject>
 					</mediaobject>
 

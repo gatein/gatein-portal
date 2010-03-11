@@ -26,14 +26,48 @@
 
 		<section id="sect-User_Guide-User_Management-Add_a_user">
 		<title>Add a user</title>
-
-
-<note>
-<title>DOC TODO</title>
-<para>
-add Group/Organization/New Staff workflow
-</para>
-</note>		
+			<para>
+				To add a new user to the portal user lists follow these steps:
+			</para>
+			<procedure>
+				<step>
+					<para>
+						Mouse-over <emphasis role="bold">Group</emphasis> in the <emphasis role="bold">Toolbar</emphasis>.
+					</para>
+				</step>
+				<step>
+					<para>
+						Highlight <emphasis role="bold">Organization</emphasis> and then click on <emphasis role="bold">New Staff</emphasis>.
+					</para>
+					<para>
+						The <emphasis role="bold">New Staff</emphasis> window will open:
+					</para>
+					<mediaobject>
+						<imageobject role="html">
+							<imagedata fileref="images/NewStaff.png" format="PNG" align="center" scale="110" />
+						</imageobject>
+						<imageobject role="fo">
+							<imagedata fileref="images/NewStaff.png" format="PNG" align="center" contentwidth="150mm" />
+						</imageobject>
+					</mediaobject>
+					<para>
+						This window has two tabs; <emphasis role="bold">Account Settings</emphasis> and <emphasis role="bold">User Profile</emphasis>.
+					</para>
+				</step>
+				<step>
+					<para>
+						To create a new user all of the fields in the <emphasis role="bold">Account Settings</emphasis> tab must be completed. 
+					</para>
+					<para>
+						Further information about the user (such as nickname and birthday) can be added in the <emphasis role="bold">User Profile</emphasis> tab. This information is not required for the creation of the account.
+					</para>
+				</step>
+				<step>
+					<para>
+						Click either <emphasis role="bold">Save</emphasis> or <emphasis role="bold">Reset</emphasis> to create or discard the new account.
+					</para>
+				</step>
+			</procedure>
 		</section>
 
 		<section id="sect-User_Guide-User_Management-Search_a_user">
@@ -350,12 +384,14 @@ add Group/Organization/New Staff workflow
 						<para>
 							Click the trash icon.
 						</para>
-<note>
-<title>DOC TODO</title>
-<para>
-missing screenshot
-</para>
-</note>	
+						<mediaobject>
+							<imageobject role="html">
+								<imagedata fileref="images/DeleteGroup.png" format="PNG" align="center" scale="110" />
+							</imageobject>
+							<imageobject role="fo">
+								<imagedata fileref="images/DeleteGroup.png" format="PNG" align="center" contentwidth="150mm" />
+							</imageobject>
+						</mediaobject>
 					</step>
 					<step>
 						<para>

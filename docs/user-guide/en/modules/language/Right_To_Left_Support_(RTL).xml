@@ -10,10 +10,10 @@
 	</para>
 	<mediaobject>
 		<imageobject role="html">
-			<imagedata fileref="images/HomePage2.png" format="PNG" align="center" scale="100" />
+			<imagedata fileref="images/HomePage2.png" format="PNG" align="center" scale="110" />
 		</imageobject>
 		<imageobject role="fo">
-			<imagedata fileref="images/HomePage2.png" format="PNG" align="center" contentwidth="150mm" />
+			<imagedata fileref="images/HomePage2.png" format="PNG" align="center"  scalefit="1" contentwidth="150mm" />
 		</imageobject>
 	</mediaobject>
 	<formalpara>
@@ -21,10 +21,10 @@
 		<para>
 		<mediaobject>
 			<imageobject role="html">
-				<imagedata fileref="images/NewAccount3.png" format="PNG" align="center" scale="100" />
+				<imagedata fileref="images/NewAccount3.png" format="PNG" align="center" scale="110" />
 			</imageobject>
 			<imageobject role="fo">
-				<imagedata fileref="images/NewAccount3.png" format="PNG" align="center" contentwidth="150mm" />
+				<imagedata fileref="images/NewAccount3.png" format="PNG" align="center"  scalefit="1" contentwidth="150mm" />
 			</imageobject>
 		</mediaobject>
 		</para>
@@ -35,10 +35,10 @@
 		<para>
 		<mediaobject>
 			<imageobject role="html">
-				<imagedata fileref="images/ApplicationRegistry2.png" format="PNG" align="center" scale="100"/>
+				<imagedata fileref="images/ApplicationRegistry2.png" format="PNG" align="center" scale="110"/>
 			</imageobject>
 			<imageobject role="fo">
-				<imagedata fileref="images/ApplicationRegistry2.png" format="PNG" align="center" contentwidth="150mm" />
+				<imagedata fileref="images/ApplicationRegistry2.png" format="PNG" align="center"  scalefit="1" contentwidth="150mm" />
 			</imageobject>
 		</mediaobject>
 		</para>
@@ -53,7 +53,7 @@
 				<imagedata fileref="images/Organization5.png" format="PNG" align="center" scale="120" />
 			</imageobject>
 			<imageobject role="fo">
-				<imagedata fileref="images/Organization5.png" format="PNG" align="center" contentwidth="150mm" />
+				<imagedata fileref="images/Organization5.png" format="PNG" align="center"  scalefit="1" contentwidth="150mm" />
 			</imageobject>
 		</mediaobject>
 		</para>

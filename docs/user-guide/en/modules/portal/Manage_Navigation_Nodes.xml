@@ -6,7 +6,7 @@
 <section id="sect-User_Guide-Manage_Navigation_Nodes">
 	<title>Manage Navigation Nodes</title>
 		<para>
-			With enough privileges you can take all actions related to a node such as : add a new node, edit, copy, cut, delete and clone node.
+			If you are the portal administrator (or the administrator has granted you the appropriate permission privileges) you can execute all actions related to portal nodes. These actions include adding new nodes or editing, copying, moving, deleting or cloning existing nodes.
 		</para>
 		<section id="sect-User_Guide-Manage_Navigation_Nodes-Add_a_new_node">
 			<title>Add a new node</title>
@@ -142,7 +142,10 @@
 							</varlistentry>
 						</variablelist>
 				<para>
-					You do not have to input values in these fields. It is automatically displayed after selecting an existing page by clicking the <emphasis role="bold">Search and Select Page</emphasis> button. The <emphasis role="bold">Select a page</emphasis> form appears:
+					You do not have to enter values in these fields. They are automatically populated after selecting an existing page by clicking the <emphasis role="bold">Search and Select Page</emphasis> button.
+				</para>
+				<para>
+					The <emphasis role="bold">Select a page</emphasis> form appears:
 				</para>
 				<mediaobject>
 					<imageobject role="html">
@@ -153,7 +156,7 @@
 					</imageobject>
 				</mediaobject>
 						<para>
-							This window lists of all existing pages is displayed with basic information. You can follow these guides to select a page for creating a node:
+							This window lists of all existing pages, each displayed with basic information. You can follow this guide to select a page for creating a node:
 						</para>
 						<para>
 							Select a page from list or search a specific page :
@@ -161,7 +164,7 @@
 							<procedure id="proc-User_Guide-Manage_Navigation_Nodes-Search_for_a_page">
 								<step>
 									<para>
-										Enter a search term related to the page which you want to search:
+										Enter a search term related to the page which you want to search for:
 									</para>
 									<mediaobject>
 										<imageobject role="html">
@@ -202,7 +205,7 @@
 								</step>
 							</procedure>
 							<para>
-							After configuring the page node settings, the page selector and the node's icon, click the <emphasis role="bold">Save</emphasis> button to accept or the <emphasis role="bold">Cancel</emphasis> button to quit without creating a new node.
+								After configuring the page node settings, the page selector and the node's icon, click the <emphasis role="bold">Save</emphasis> button to accept or the <emphasis role="bold">Cancel</emphasis> button to quit without creating a new node.
 							</para>
 				</step>
 			</procedure>
@@ -320,7 +323,7 @@ You can see more details on how to select a page for a node in <xref linkend="se
 					The differences between <emphasis role="bold">clone node</emphasis> and <emphasis role="bold">copy node</emphasis> is that the clone node has its own page and which has the same content as the selected node.
 				</para>
 				<para>
-Therefore there will be a new page that has the same name as the cloned node's page shown in the page list when you access <emphasis role="bold">Manage Pages</emphasis>.
+					Therefore there will be a new page that has the same name as the cloned node's page shown in the page list when you access <emphasis role="bold">Manage Pages</emphasis>.
 				</para>
 				<procedure>
 					<step>
@@ -354,7 +357,7 @@ Therefore there will be a new page that has the same name as the cloned node's p
 							</imageobject>
 						</mediaobject>
 						<para>
-							You will see the new pages appear in the in page lists
+							The new pages will appear in the page lists:
 						</para>
 				<!--		<mediaobject>
 							<imageobject>

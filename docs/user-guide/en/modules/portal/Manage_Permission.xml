@@ -38,13 +38,14 @@
 						<para>
 							On the Toolbar click <emphasis role="bold">Site</emphasis> then <emphasis role="bold">Edit Portal's Properties</emphasis>. Last select the <emphasis role="bold">Permission Setting</emphasis> tab. 
 						</para>
-
-<note>
-<title>DOC TODO</title>
-<para>
-please redo screenshot with mouse on "edit portal's properties"
-</para>
-</note>	
+					<mediaobject>
+						<imageobject role="html">
+							<imagedata fileref="images/EditActivePortals.png" format="PNG" align="center" scale="110" />
+						</imageobject>
+						<imageobject role="fo">
+							<imagedata fileref="images/EditActivePortals.png" format="PNG" align="center" contentwidth="150mm" />
+						</imageobject>
+					</mediaobject>
 					</listitem>
 				</varlistentry>
 			</variablelist>

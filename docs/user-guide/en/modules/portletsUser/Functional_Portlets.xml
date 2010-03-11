@@ -21,7 +21,7 @@
 			</para>
 			<mediaobject>
 				<imageobject>
-					<imagedata fileref="images/Account.png" format="PNG" align="center" contentwidth="150mm" />
+					<imagedata fileref="images/Account.png" format="PNG" align="center"  scalefit="1" contentwidth="150mm" />
 				</imageobject>
 			</mediaobject>
 		</listitem>
@@ -34,7 +34,7 @@
 			</para>
 			<mediaobject>
 				<imageobject>
-					<imagedata fileref="images/OrganizationPortlet1.png" format="PNG" align="center" contentwidth="150mm"/>
+					<imagedata fileref="images/OrganizationPortlet1.png" format="PNG" align="center"  scalefit="1" contentwidth="150mm"/>
 				</imageobject>
 			</mediaobject>
 		</listitem>
@@ -47,7 +47,7 @@
 			</para>
 			<mediaobject>
 				<imageobject>
-					<imagedata fileref="images/ApplicationRegistry.png" format="PNG" align="center" contentwidth="150mm"/>
+					<imagedata fileref="images/ApplicationRegistry.png" format="PNG" align="center"  scalefit="1" contentwidth="150mm"/>
 				</imageobject>
 			</mediaobject>
 		</listitem>
@@ -93,7 +93,7 @@
 					<imagedata fileref="images/StarPortlet.png" format="PNG" align="center" scale="110"/>
 				</imageobject>
 				<imageobject role="fo">
-					<imagedata fileref="images/StarPortlet.png" format="PNG" align="center" contentwidth="150mm"/>
+					<imagedata fileref="images/StarPortlet.png" format="PNG" align="center"  scalefit="1" contentwidth="150mm"/>
 				</imageobject>
 			</mediaobject>
 		</listitem>

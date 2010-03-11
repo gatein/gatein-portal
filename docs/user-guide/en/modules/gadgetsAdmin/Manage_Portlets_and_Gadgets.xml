@@ -29,7 +29,7 @@
 						<imagedata fileref="images/Column.png" format="PNG" align="center" scale="110"/>
 					</imageobject>
 					<imageobject role="fo">
-						<imagedata fileref="images/Column.png" format="PNG" align="center" contentwidth="150mm" />
+						<imagedata fileref="images/Column.png" format="PNG" align="center"  scalefit="1" contentwidth="120mm" />
 					</imageobject>
 				</mediaobject>
 			</step>
@@ -59,10 +59,10 @@
 				</para>
 				<mediaobject>
 					<imageobject role="html">
-						<imagedata fileref="images/AddCategory1.png" format="PNG" align="center" scale="100" />
+						<imagedata fileref="images/AddCategory1.png" format="PNG" align="center" scale="110" />
 					</imageobject>
 					<imageobject role="fo">
-						<imagedata fileref="images/AddCategory1.png" format="PNG" align="center" contentwidth="150mm" />
+						<imagedata fileref="images/AddCategory1.png" format="PNG" align="center"  scalefit="1" contentwidth="150mm" />
 					</imageobject>
 				</mediaobject>
 				<para>
@@ -105,7 +105,7 @@
 						<imagedata fileref="images/Permission2.png" format="PNG" align="center" scale="110" />
 					</imageobject>
 					<imageobject role="fo">
-						<imagedata fileref="images/Permission2.png" format="PNG" align="center" contentwidth="150mm" />
+						<imagedata fileref="images/Permission2.png" format="PNG" align="center"  scalefit="1" contentwidth="130mm" />
 					</imageobject>
 				</mediaobject>
 			</step>
@@ -170,10 +170,10 @@
 				</para>
 				<mediaobject>
 					<imageobject role="html">
-						<imagedata fileref="images/AddPortlet2.png" format="PNG" align="center" scale="100" />
+						<imagedata fileref="images/AddPortlet2.png" format="PNG" align="center" scale="110" />
 					</imageobject>
 					<imageobject role="fo">
-						<imagedata fileref="images/AddPortlet2.png" format="PNG" align="center" contentwidth="150mm" />
+						<imagedata fileref="images/AddPortlet2.png" format="PNG" align="center"  scalefit="1" contentwidth="160mm" />
 					</imageobject>
 				</mediaobject>
 				<variablelist>
@@ -223,10 +223,10 @@
 				</para>
 				<mediaobject>
 					<imageobject role="html">
-						<imagedata fileref="images/PortletPermission.png" format="PNG" align="center" scale="100"/>
+						<imagedata fileref="images/PortletPermission.png" format="PNG" align="center" scale="110"/>
 					</imageobject>
 					<imageobject role="fo">
-						<imagedata fileref="images/PortletPermission.png" format="PNG" align="center" contentwidth="150mm"/>
+						<imagedata fileref="images/PortletPermission.png" format="PNG" align="center"  scalefit="1" contentwidth="160mm"/>
 					</imageobject>
 				</mediaobject>
 			</step>
@@ -249,7 +249,7 @@
 								<imagedata fileref="images/AddPermission.png" format="PNG" align="center" scale="110" />
 							</imageobject>
 							<imageobject role="fo">
-								<imagedata fileref="images/AddPermission.png" format="PNG" align="center" contentwidth="150" />
+								<imagedata fileref="images/AddPermission.png" format="PNG" align="center"  scalefit="1" contentwidth="150mm" />
 							</imageobject>
 						</mediaobject>
 					</listitem>
@@ -273,10 +273,10 @@
 				</para>
 				<mediaobject>
 					<imageobject role="html">
-						<imagedata fileref="images/Org1.png" format="PNG" align="center" scale="100" />
+						<imagedata fileref="images/Org1.png" format="PNG" align="center" scale="110" />
 					</imageobject>
 					<imageobject role="fo">
-						<imagedata fileref="images/Org1.png" format="PNG" align="center" contentwidth="150mm" />
+						<imagedata fileref="images/Org1.png" format="PNG" align="center"  scalefit="1" contentwidth="150mm" />
 					</imageobject>
 				</mediaobject>
 			<variablelist>
@@ -305,18 +305,18 @@
 				</para>
 				<mediaobject>
 					<imageobject role="html">
-						<imagedata fileref="images/EditApplication.png" format="PNG" align="center" scale="100" />
+						<imagedata fileref="images/EditApplication.png" format="PNG" align="center" scale="110" />
 					</imageobject>
 					<imageobject role="fo">
-						<imagedata fileref="images/EditApplication.png" format="PNG" align="center" contentwidth="150mm" />
+						<imagedata fileref="images/EditApplication.png" format="PNG" align="center"  scalefit="1" contentwidth="150mm" />
 					</imageobject>
 				</mediaobject>
 				<mediaobject>
 					<imageobject role="html">
-						<imagedata fileref="images/EditApplicationInformation.png" format="PNG" align="center" scale="100" />
+						<imagedata fileref="images/EditApplicationInformation.png" format="PNG" align="center" scale="110" />
 					</imageobject>
 					<imageobject role="fo">
-						<imagedata fileref="images/EditApplicationInformation.png" format="PNG" align="center" contentwidth="150mm" />
+						<imagedata fileref="images/EditApplicationInformation.png" format="PNG" align="center"  scalefit="1" contentwidth="90mm" />
 					</imageobject>
 				</mediaobject>
 	</section>
@@ -324,14 +324,14 @@
 	<section id="sect-User_Guide-Manage_Portlets_and_Gadgets-Add_a_Gadget">
 		<title>Add a Gadget</title>
 		<para>
-			In the <emphasis role="bold">Group</emphasis> menu, select <emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Application Registry</emphasis>. Then click on the <emphasis role="bold">Gadget</emphasis> icon.
+			In the <emphasis role="bold">Group</emphasis> menu, select <emphasis role="bold">Administration</emphasis> then <emphasis role="bold">Application Registry</emphasis>. Click on the <emphasis role="bold">Gadget</emphasis> icon.
 		</para>
 		<mediaobject>
 			<imageobject role="html">
-				<imagedata fileref="images/Gadgetnew.png" format="PNG" align="center" scale="100" />
+				<imagedata fileref="images/Gadgetnew.png" format="PNG" align="center" scale="110" />
 			</imageobject>
 			<imageobject role="fo">
-				<imagedata fileref="images/Gadgetnew.png" format="PNG" align="center" contentwidth="150mm" />
+				<imagedata fileref="images/Gadgetnew.png" format="PNG" align="center"  scalefit="1" contentwidth="150mm" />
 			</imageobject>
 		</mediaobject>
 		<para>
@@ -356,10 +356,10 @@
 						</para>
 						<mediaobject>
 							<imageobject role="html">
-								<imagedata fileref="images/AddGadgetnewUrl.png" format="PNG" align="center" scale="100" />
+								<imagedata fileref="images/AddGadgetnewUrl.png" format="PNG" align="center" scale="110" />
 							</imageobject>
 							<imageobject role="fo">
-								<imagedata fileref="images/AddGadgetnewUrl.png" format="PNG" align="center" contentwidth="150mm" />
+								<imagedata fileref="images/AddGadgetnewUrl.png" format="PNG" align="center"  scalefit="1" contentwidth="150mm" />
 							</imageobject>
 						</mediaobject>
 					</step>
@@ -377,10 +377,10 @@
 							</para>
 						<mediaobject>
 							<imageobject role="html">
-								<imagedata fileref="images/CreateGadget1.png" format="PNG" align="center" scale="100"/>
+								<imagedata fileref="images/CreateGadget1.png" format="PNG" align="center" scale="110"/>
 							</imageobject>
 							<imageobject role="fo">
-								<imagedata fileref="images/CreateGadget1.png" format="PNG" align="center" contentwidth="150mm"/>
+								<imagedata fileref="images/CreateGadget1.png" format="PNG" align="center"  scalefit="1" contentwidth="150mm"/>
 							</imageobject>
 						</mediaobject>
 						</step>
@@ -408,47 +408,6 @@
 			<para>
 				See <xref linkend="sect-User_Guide-Dashboard_Portlet-Add_Gadgets"/> for instructions on how to add new gadgets to the dashboard.
 			</para>
-<!--		<para>
-			You can add new gadgets to the Dashboard portlet:
-		</para>
-		<procedure>
-			<step>
-				<para>
-					Click <emphasis role="bold">Dashboard</emphasis> on the navigation bar. Click on the <emphasis role="bold">Add Gadgets</emphasis> link :
-				</para>
-<note>
-<title>DOC TODO</title>
-<para>
-redo screenshot
-</para>
-</note>
-				<mediaobject>
-					<imageobject>
-						<imagedata fileref="images/Add.png" format="PNG" align="center" width="444" />
-					</imageobject>
-				</mediaobject>
-				<para>
-					The dialog to add a new gadget will appear :
-				</para>
-<note>
-<title>DOC TODO</title>
-<para>
-redo screenshot
-</para>
-</note>
-				<mediaobject>
-					<imageobject>
-						<imagedata fileref="images/Add3.png" format="PNG" align="center" width="444" />
-					</imageobject>
-				</mediaobject>
-			</step>
-			<step>
-				<para>
-					Either enter a valid link (XML or RSS) to a gadget and click the "+" icon
-or pick an existing gadget in the categories listed below
-				</para>
-			</step>
-		</procedure> -->
 	</section>
 	
 	<section id="sect-User_Guide-Manage_Portlets_and_Gadgets-Manage_Gadgets">

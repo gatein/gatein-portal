@@ -13,7 +13,7 @@
 			<imagedata fileref="images/Toolbar.png" format="PNG" align="center" scale="110"/>
 		</imageobject>
 		<imageobject role="fo">
-			<imagedata fileref="images/Toolbar.png" format="PNG" align="center" contentwidth="150mm"/>
+			<imagedata fileref="images/Toolbar.png" format="PNG" align="center"  scalefit="1" contentwidth="150mm"/>
 		</imageobject>
 	</mediaobject>
 	<para>

@@ -6,11 +6,11 @@
 <section id="sect-User_Guide-Toolbar">
 	<title>Toolbar</title>
 	<para>
-		The Toolbar offers a convenient way for users and administrators to undertake portal actions quickly and easily.
+		The Toolbar offers a convenient way for users and administrators to execute tasks within the portal quickly and easily.
 	</para>
 	<mediaobject>
 		<imageobject role="html">
-			<imagedata fileref="images/Toolbar.png" format="PNG" align="center" />
+			<imagedata fileref="images/Toolbar.png" format="PNG" align="center" scale="110"/>
 		</imageobject>
 		<imageobject role="fo">
 			<imagedata fileref="images/Toolbar.png" format="PNG" align="center" contentwidth="150mm"/>
@@ -28,7 +28,7 @@
 						</para>
 						<mediaobject>
 							<imageobject role="html">
-								<imagedata fileref="images/StarPortlet.png" format="PNG" align="center" />
+								<imagedata fileref="images/StarPortlet.png" format="PNG" align="center" scale="110"/>
 							</imageobject>
 							<imageobject role="fo">
 								<imagedata fileref="images/StarPortlet.png" format="PNG" align="center" contentwidth="150mm"/>
@@ -44,7 +44,7 @@
 							</para>
 							<mediaobject>
 								<imageobject role="html">
-									<imagedata fileref="images/SitePortlet.png" format="PNG" align="center" />
+									<imagedata fileref="images/SitePortlet.png" format="PNG" align="center" scale="110"/>
 								</imageobject>
 								<imageobject role="fo">
 									<imagedata fileref="images/SitePortlet.png" format="PNG" align="center" contentwidth="150mm"/>
@@ -60,7 +60,7 @@
 							</para>
 							<mediaobject>
 								<imageobject role="html">
-									<imagedata fileref="images/GroupPortlet.png" format="PNG" align="center" />
+									<imagedata fileref="images/GroupPortlet.png" format="PNG" align="center" scale="110"/>
 								</imageobject>
 								<imageobject role="fo">
 									<imagedata fileref="images/GroupPortlet.png" format="PNG" align="center" contentwidth="150mm" />
@@ -76,7 +76,7 @@
 							</para>
 							<mediaobject>
 								<imageobject role="html">
-									<imagedata fileref="images/DashboardPortlet.png" format="PNG" align="center" />
+									<imagedata fileref="images/DashboardPortlet.png" format="PNG" align="center" scale="110"/>
 								</imageobject>
 								<imageobject role="fo">
 									<imagedata fileref="images/DashboardPortlet.png" format="PNG" align="center" contentwidth="150mm"/>
@@ -97,11 +97,14 @@
 					<term> <emphasis role="bold">Editor</emphasis></term>
 					<listitem>
 						<para>
-							Portal Administrators have access to another navigation that allows them to; add a new page to the current portal, edit a particular page's properties or to change a page's layout. This navigation appears next to the Dashboard navigation in the Toolbar and is contextually-named. It will appear as either <emphasis role="bold">Site Editor</emphasis>, <emphasis role="bold">Dashboard Editor</emphasis> or <emphasis role="bold">Group Editor</emphasis> depending on the user's location within the portal.
+							Portal Administrators have access to another navigation that allows them to; add a new page to the current portal, edit a particular page's properties or to change a page's layout.
+						</para>
+						<para>
+							This navigation appears next to the Dashboard navigation in the Toolbar and is contextually-named. It will appear as either <emphasis role="bold">Site Editor</emphasis>, <emphasis role="bold">Dashboard Editor</emphasis> or <emphasis role="bold">Group Editor</emphasis> depending on the user's location within the portal.
 						</para>
 						<mediaobject>
 							<imageobject role="html">
-								<imagedata fileref="images/EditorPortlet.png" format="PNG" align="center" />
+								<imagedata fileref="images/EditorPortlet.png" format="PNG" align="center" scale="110"/>
 							</imageobject>
 							<imageobject role="fo">
 								<imagedata fileref="images/EditorPortlet.png" format="PNG" align="center" contentwidth="150mm"/>

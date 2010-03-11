@@ -13,51 +13,46 @@
 		 <section id="sect-User_Guide-Page_Creation_Wizard">
 			<title>Adding a new Page using Page Creation Wizard</title>
 			<para>
-				A page creation wizard is available to administrators in order to create and publish a page quickly and easily.
+				A page creation wizard is available to administrators in order to create and publish portal pages quickly and easily.
 			</para>
 			<procedure>
 				<step>
 					<para>
-						Click on <emphasis role="bold">Site Editor</emphasis> then select  <emphasis role="bold">Add New Page</emphasis>. 
+						Mouse over <emphasis role="bold">Site Editor</emphasis> then select  <emphasis role="bold">Add New Page</emphasis>. 
 					</para>
-<note>
-<title>DOC TODO</title>
-<para>
-please redo screenshot
-</para>
-</note>	
 					<mediaobject>
-						<imageobject>
-							<imagedata fileref="images/Wizard1.png" format="PNG" width="444" />
+						<imageobject role="html">
+							<imagedata fileref="images/Wizard1.png" format="PNG" align="center" scale="110" />
+						</imageobject>
+						<imageobject role="fo">
+							<imagedata fileref="images/Wizard1.png" format="PNG" align="center" contentwidth="150mm" />
 						</imageobject>
 					</mediaobject>
 				</step>
 				<step>
 					<para>
-						The wizard window is divided in two sections: the left pane contains the existing page/node hierarchy and the right pane displays the Page editor.
+						The wizard window is divided into two sections: the left pane contains the existing page/node hierarchy and the right pane displays the <emphasis role="bold">Page Editor</emphasis>.
 					</para>
 
 				</step>
 				<step>
 					<para>
-						In the left pane, you may navigate the node/page structure up and down
+						In the left pane, you can navigate up and down the node/page structure:
 					</para>
-				</step>
-				<step>
-<note>
-<title>DOC TODO</title>
-<para>
-please redo screenshot
-</para>
-</note>	
 					<mediaobject>
 						<imageobject>
-							<imagedata fileref="images/Pagewizard1.png" format="PNG" width="444" />
+							<imagedata fileref="images/Pagewizard1.png" format="PNG" />
 						</imageobject>
 					</mediaobject>
-					<variablelist>
+
+				</step>
+				<step>
+				<para>
+					In the right pane are the required paramters for a new page:
+				</para>
+				<variablelist>
 					  <varlistentry>
-						<term>Current Selected Page Node</term>
+						<term><emphasis role="bold">Current Selected Page Node</emphasis></term>
 						<listitem>
 							<para>
 								The path of the selected node to add a new sub page
@@ -65,7 +60,7 @@ please redo screenshot
 						</listitem>
 					</varlistentry>
 					<varlistentry>
-						<term>Node Name</term>
+						<term><emphasis role="bold">Node Name</emphasis></term>
 						<listitem>
 							<para>
 								The node name of the added page. It is required field. This field must start with a character and must have a length between 3 and 30 characters.
@@ -73,7 +68,7 @@ please redo screenshot
 						</listitem>
 					</varlistentry>
 					<varlistentry>
-						<term>Display Name</term>
+						<term><emphasis role="bold">Display Name</emphasis></term>
 						<listitem>
 							<para>
 								The display name of the node which contains the added page and must have a length between 3 and 30 characters.
@@ -81,15 +76,21 @@ please redo screenshot
 						</listitem>
 					</varlistentry>
 					<varlistentry>
-						<term>Visible</term>
+						<term><emphasis role="bold">Visible</emphasis></term>
 						<listitem>
 							<para>
-								This checkbox toggles the global visibility of this page. If not checked the page is under no circumstances shown, even if the publication period is OK. If checked the page or the page node appears on on the navigation bar, the page navigation and the site map. If "visible" is checked the visibility depends on the "publication date &amp; time" attribute if set.
+								This checkbox toggles the global visibility of this page. 
+							</para>
+							<para>
+								If checked the page or the page node appears on on the navigation bar, the page navigation and the site map. If "visible" is checked the visibility depends on the "publication date &amp; time" attribute.
+							</para>
+							<para>
+								If unchecked the page is not shown under any circumstances, even if the publication period valid.
 							</para>
 						</listitem>
 					</varlistentry>
 					<varlistentry>
-						<term>Publication date &amp;time</term>
+						<term><emphasis role="bold">Publication date &amp;time</emphasis></term>
 						<listitem>
 							<para>
 								This option allows publishing the page for a period of time. If this option is checked the visibility of the page depends on the publication period start and end date.
@@ -97,7 +98,7 @@ please redo screenshot
 						</listitem>
 					</varlistentry>
 					<varlistentry>
-						<term>Start Publication Date</term>
+						<term><emphasis role="bold">Start Publication Date</emphasis></term>
 						<listitem>
 							<para>
 								The start date and time to publish the page
@@ -105,7 +106,7 @@ please redo screenshot
 						</listitem>
 					</varlistentry>
 					<varlistentry>
-						<term>End Publication Date</term>
+						<term><emphasis role="bold">End Publication Date</emphasis></term>
 						<listitem>
 							<para>
 								The end date and time to publish the page.
@@ -114,7 +115,7 @@ please redo screenshot
 					</varlistentry>
 				</variablelist>
 					<note>
-					<title>Setting Time and Date</title>
+					<title><emphasis role="bold">Setting Time and Date</emphasis></title>
 						<para>
 							You can set date and time by clicking the <emphasis role="bold">Start Publication Date</emphasis> field and <emphasis role="bold">End Publication Date</emphasis> field and select a date in the calendar pop up
 						</para>
@@ -208,7 +209,7 @@ please redo screenshot
 					</step>
 					<step>
 						<para>
-							Click on Add New Page
+							Click on <emphasis role="bold">Add New Page</emphasis>.
 						</para>
 					</step>
 					<step>
@@ -231,7 +232,7 @@ please redo screenshot
 							<term><emphasis role="bold">Owner type</emphasis></term>
 								<listitem>
 									<para>
-										If the page <emphasis role="bold">Owner type</emphasis> is <emphasis>portal</emphasis> the page is created for a portal. Therefore only users who have edit permissions on the portal level can create this page type. 
+										If the page <emphasis role="bold">Owner type</emphasis> is <emphasis>portal</emphasis> the page is created for a portal. Therefore only users who have <emphasis>edit</emphasis> permissions on the portal level can create this page type. 
 									</para>
 									<para>
 										The name of the current portal is automatically selected for <emphasis role="bold">Owner id</emphasis> ensuring the edit permissions are assigned to users who can edit the current portal.
@@ -239,12 +240,6 @@ please redo screenshot
 									<para>
 										If the page <emphasis role="bold">Owner type</emphasis> is <emphasis>group</emphasis> the page  is created for a group. Therefore only users who have <emphasis>manager</emphasis> permissions for that group can create this page type.
 									</para>
-<note>
-<title>DOC TODO</title>
-<para>
-please redo screenshot
-</para>
-</note>
 									<mediaobject>
 										<imageobject role="html">
 											<imagedata fileref="images/PageSetting1.png" format="PNG" align="center" scale="110" />
@@ -384,7 +379,13 @@ please redo screenshot
 								<term>Access right</term> 
 								<listitem>
 									<para>
-										The page <emphasis role="bold">Access right</emphasis> can be set to specific user groups or set to everyone (this includes unregistered users). Current access permissions on page are listed and you can remove permissions (by clicking the delete icon) or add further permission (by click the <emphasis role="bold">Add Permission</emphasis> button). Populating the <emphasis role="bold">Make it public</emphasis> check box will allow all users (registered or unregistered) to access the page.
+										The page <emphasis role="bold">Access right</emphasis> can be set to specific user groups or set to everyone (this includes unregistered users).
+									</para>
+									<para>
+										Current access permissions on page are listed and you can remove permissions (by clicking the delete icon) or add further permission (by click the <emphasis role="bold">Add Permission</emphasis> button).
+									</para>
+									<para>
+										Populating the <emphasis role="bold">Make it public</emphasis> check box will allow all users (registered or unregistered) to access the page.
 									</para>
 								</listitem>
 							</varlistentry>
@@ -392,7 +393,10 @@ please redo screenshot
 								<term>Edit right</term> 
 								<listitem>
 									<para>
-										The <emphasis role="bold">Edit right</emphasis> allows users to change information on a page. <emphasis role="bold">Edit right</emphasis> only is set for a group of users. <emphasis role="bold">Edit right</emphasis> can be set for  one specific membership type within a particular group (<emphasis role="bold">*</emphasis> allows every membership type in a group). If you want to re-assign this right to another group, click <emphasis role="bold">Select Permission</emphasis> to choose another one.
+										The <emphasis role="bold">Edit right</emphasis> allows users to change information on a page. <emphasis role="bold">Edit right</emphasis> only is set for a group of users.
+									</para>
+									<para>
+										<emphasis role="bold">Edit right</emphasis> can be set for  one specific membership type within a particular group (<emphasis role="bold">*</emphasis> allows every membership type in a group). If you want to re-assign this right to another group, click <emphasis role="bold">Select Permission</emphasis> to choose another one.
 									</para>
 								</listitem>
 							</varlistentry>
@@ -407,7 +411,10 @@ please redo screenshot
 										Click the Show Container icon to show current container layout of selected page on your right and all the container layouts list on the left pane.
 									</para>
 									<para>
-										If you want to change the current layout, select a layout type from the list on the left pane, then drag the template you want into the right pane. The new container will be displayed on the right pane. You can change the position of the current container by dragging it to another place on the right pane or remove it completely by clicking the delete icon in the right corner.
+										If you want to change the current layout, select a layout type from the list on the left pane, then drag the template you want into the right pane. The new container will be displayed on the right pane.
+									</para>
+									<para>
+										You can change the position of the current container by dragging it to another place on the right pane or remove it completely by clicking the delete icon in the right corner.
 									</para>
 								</listitem>
 							</varlistentry>
@@ -458,7 +465,7 @@ please redo screenshot
 				</step>	
 				<step>
 					<para>
-						Click the <emphasis role="bold">OK</emphasis> button to process the deletion or <emphasis role="bold">Cancel</emphasis> button to quit without deleting the page.
+						Click the <emphasis role="bold">OK</emphasis> button to complete the deletion or <emphasis role="bold">Cancel</emphasis> button to quit without deleting the page.
 					</para>
 				</step>
 			</procedure>

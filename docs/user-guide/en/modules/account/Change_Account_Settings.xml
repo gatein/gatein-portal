@@ -11,10 +11,10 @@
 	</para>
 	<mediaobject>
 		<imageobject role="html">
-			<imagedata fileref="images/ChangeAccount.png" format="PNG" align="center" />
+			<imagedata fileref="images/ChangeAccount.png" format="PNG" align="center" scale="110"/>
 		</imageobject>
 		<imageobject role="fo">
-			<imagedata fileref="images/ChangeAccount.png" format="PNG" align="center" contentwidth="150mm"/>
+			<imagedata fileref="images/ChangeAccount.png" format="PNG" align="center"  scalefit="1" contentwidth="120mm"/>
 		</imageobject>
 	</mediaobject>
 	<para>
@@ -22,10 +22,10 @@
 	</para>
 	<mediaobject>
 		<imageobject role="html">
-			<imagedata fileref="images/AccountProfiles3.png" format="PNG" align="center" width="444" />
+			<imagedata fileref="images/AccountProfiles3.png" format="PNG" align="center" scale="110" />
 		</imageobject>
 		<imageobject role="fo">
-			<imagedata fileref="images/AccountProfiles3.png" format="PNG" align="center" contentwidth="150mm" />
+			<imagedata fileref="images/AccountProfiles3.png" format="PNG" align="center"  scalefit="1" contentwidth="100mm" />
 		</imageobject>
 	</mediaobject>
 	<para>
@@ -59,10 +59,10 @@
 
 			<mediaobject>
 				<imageobject role="html">
-					<imagedata fileref="images/ChangePassword.png" format="PNG" align="center" width="444" />
+					<imagedata fileref="images/ChangePassword.png" format="PNG" align="center" scale="110" />
 				</imageobject>
 				<imageobject role="fo">
-					<imagedata fileref="images/ChangePassword.png" format="PNG" align="center" contentwidth="110mm" />
+					<imagedata fileref="images/ChangePassword.png" format="PNG" align="center"  scalefit="1" contentwidth="100mm" />
 				</imageobject>
 			</mediaobject>
 		 </step>

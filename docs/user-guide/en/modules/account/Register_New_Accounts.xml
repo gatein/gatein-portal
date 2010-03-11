@@ -22,10 +22,10 @@
 
 				<mediaobject>
 					<imageobject role="html">
-						<imagedata fileref="images/Register.png" format="PNG" align="center" />
+						<imagedata fileref="images/Register.png" format="PNG" align="center" scale="110"/>
 					</imageobject>
 					<imageobject role="fo">
-						<imagedata fileref="images/Register.png" format="PNG" align="center" contentwidth="150mm" />
+						<imagedata fileref="images/Register.png" format="PNG" align="center"  scalefit="1" contentwidth="150mm" />
 					</imageobject>
 				</mediaobject>
 				<para>
@@ -33,10 +33,10 @@
 				</para>
 				<mediaobject>
 					<imageobject role="html">
-						<imagedata fileref="images/AccountSetting.png" format="PNG" align="center" />
+						<imagedata fileref="images/AccountSetting.png" format="PNG" align="center" scale="110"/>
 					</imageobject>
 					<imageobject role="fo">
-						<imagedata fileref="images/AccountSetting.png" format="PNG" align="center" contentwidth="110mm"/>
+						<imagedata fileref="images/AccountSetting.png" format="PNG" align="center"  scalefit="1" contentwidth="150mm"/>
 					</imageobject>
 				</mediaobject>
 

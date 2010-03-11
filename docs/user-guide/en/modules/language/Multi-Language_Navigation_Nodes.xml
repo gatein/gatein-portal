@@ -28,19 +28,19 @@
 	<section id="sect-User_Guide-Multi_Language_Navigation_Nodes-Creating_Keys">
 		<title>Creating Keys</title>
 		<para>
-			There are three ways to create a key for a node: 
+			There are two <!--three--> ways to create a key for a node: 
 		</para>
 		<orderedlist numeration="arabic">
 			<listitem>
 				<para>
-					<xref linkend="sect-User_Guide-Multi_Language_Navigation_Nodes-Creating_Keys_using_the_Create_Page_Wizard"/>;
+					<xref linkend="sect-User_Guide-Multi_Language_Navigation_Nodes-Creating_Keys_using_the_Create_Page_Wizard"/>
 				</para> 
 			</listitem>
-			 <listitem>
+<!--			 <listitem>
 			 	<para>
 			 		<xref linkend="sect-User_Guide-Multi_Language_Navigation_Nodes-CreatingEditing_Keys_by_Edit_Page_Wizard"/>
 			 	</para>
-			 </listitem>
+			 </listitem> -->
 			 <listitem>
 			 	<para>
 			 		<xref linkend="sect-User_Guide-Multi_Language_Navigation_Nodes-CreatingEditing_Keys_using_the_Edit_Page_and_Navigation"/>
@@ -70,10 +70,10 @@
 				</para>
 					<mediaobject>
 						<imageobject role="html">
-							<imagedata fileref="images/PageWizard.png" format="PNG" align="center" scale="100" />
+							<imagedata fileref="images/PageWizard.png" format="PNG" align="center" scale="110" />
 						</imageobject>
 						<imageobject role="fo">
-							<imagedata fileref="images/PageWizard.png" format="PNG" align="center" contentwidth="150mm" />
+							<imagedata fileref="images/PageWizard.png" format="PNG" align="center"  scalefit="1" contentwidth="160mm" />
 						</imageobject>
 					</mediaobject>
 			</step>
@@ -91,7 +91,7 @@
 
 	</section>
 	
-	<section id="sect-User_Guide-Multi_Language_Navigation_Nodes-CreatingEditing_Keys_by_Edit_Page_Wizard">
+<!--	<section id="sect-User_Guide-Multi_Language_Navigation_Nodes-CreatingEditing_Keys_by_Edit_Page_Wizard">
 		<title>Creating/Editing Keys using <emphasis role="bold">Edit Page Wizard</emphasis></title>
 
 <warning>
@@ -106,7 +106,7 @@ SM: The menu path described below does not exist. Not sure if this is related to
 			<procedure>
 				<step>
 					<para>
-						Go to <emphasis role="bold">GateIn Start</emphasis> -&gt; <emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Basic</emphasis> --&gt; <emphasis role="bold">Edit Page Wizard</emphasis>
+						Go to <emphasis role="bold">GateIn Start</emphasis> -&gt; <emphasis role="bold">Administration</emphasis> -&gt; <emphasis role="bold">Basic</emphasis> &gt; <emphasis role="bold">Edit Page Wizard</emphasis>
 					</para>
 				</step>
 				<step>
@@ -120,7 +120,7 @@ SM: The menu path described below does not exist. Not sure if this is related to
 					</para>
 				</step>
 		</procedure>
-	</section>
+	</section> -->
 	
 	<section id="sect-User_Guide-Multi_Language_Navigation_Nodes-CreatingEditing_Keys_using_the_Edit_Page_and_Navigation">
 		<title>Creating/Editing Keys using <emphasis role="bold">Navigation Management</emphasis></title>
@@ -131,10 +131,10 @@ SM: The menu path described below does not exist. Not sure if this is related to
 					</para>
 					<mediaobject>
 						<imageobject role="html">
-							<imagedata fileref="images/NavigationManagement.png" format="PNG" align="center" scale="110" />
+							<imagedata fileref="images/NavigationManagement.png" format="PNG" align="center" scale="100" />
 						</imageobject>
 						<imageobject role="fo">
-							<imagedata fileref="images/NavigationManagement.png" format="PNG" align="center" contentwidth="150" />
+							<imagedata fileref="images/NavigationManagement.png" format="PNG" align="center"  scalefit="1" contentwidth="90mm" />
 						</imageobject>
 					</mediaobject>
 				</step>
@@ -149,10 +149,10 @@ SM: The menu path described below does not exist. Not sure if this is related to
 					</para>
 					<mediaobject>
 						<imageobject role="html">
-							<imagedata fileref="images/CreateEditNode.png" format="PNG" align="center" scale="100" />
+							<imagedata fileref="images/CreateEditNode.png" format="PNG" align="center" scale="110" />
 						</imageobject>
 						<imageobject role="fo">
-							<imagedata fileref="images/CreateEditNode.png" format="PNG" align="center" contentwidth="150" />
+							<imagedata fileref="images/CreateEditNode.png" format="PNG" align="center"  scalefit="1" contentwidth="160mm" />
 						</imageobject>
 					</mediaobject>
 				</step>
