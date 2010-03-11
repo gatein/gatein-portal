@@ -89,7 +89,7 @@ public class InitiateLoginServlet extends AbstractHttpServlet
 
                // This allows the customer to define another login page without
                // changing the portal
-               context.getRequestDispatcher("/login/jsp/login.jsp").include(req, resp);
+               showLoginForm(req, resp);
             }
             else
             {
@@ -104,7 +104,7 @@ public class InitiateLoginServlet extends AbstractHttpServlet
             // This allows the customer to define another login page without
             // changing the portal
             log.debug("Login initiated with no credentials in session and no token cookie, redirecting to login page");
-            context.getRequestDispatcher("/login/jsp/login.jsp").include(req, resp);
+            showLoginForm(req, resp);
          }
       }
       else
@@ -117,6 +117,19 @@ public class InitiateLoginServlet extends AbstractHttpServlet
          // Send authentication request
          log.debug("Login initiated with credentials in session, performing authentication");
          sendAuth(resp, credentials.getUsername(), token);
+      }
+   }
+
+   private void showLoginForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
+   {
+      try
+      {
+         req.setAttribute("org.gatein.portal.login.initial_uri", "javax.servlet.forward.request_uri");
+         getServletContext().getRequestDispatcher("/login/jsp/login.jsp").include(req, resp);
+      }
+      finally
+      {
+         req.removeAttribute("org.gatein.portal.login.initial_uri");
       }
    }
 

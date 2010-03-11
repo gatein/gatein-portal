@@ -39,6 +39,8 @@
   ResourceBundleService service = (ResourceBundleService) portalContainer.getComponentInstanceOfType(ResourceBundleService.class);
   ResourceBundle res = service.getResourceBundle(service.getSharedResourceBundleNames(), request.getLocale()) ;
   
+  String uri = (String)request.getAttribute("org.gatein.portal.login.initial_uri");
+
   Cookie cookie = new Cookie(InitiateLoginServlet.COOKIE_NAME, "");
 	cookie.setPath(request.getContextPath());
 	cookie.setMaxAge(0);
@@ -68,8 +70,10 @@
           %>
             <font color="red">Sign in failed. Wrong username or password.</font><%}%>
           <form name="loginForm" action="<%= contextPath + "/login"%>" method="post" style="margin: 0px;">    
-          		<input type="hidden" name="uri" value="<%=session.getAttribute("initialURI") %>"/>   
-          		<table> 
+                <% if (uri != null) { %>
+                <input type="hidden" name="initialURI" value="<%=uri%>"/>
+                <% } %>
+          		<table>
 	              <tr class="FieldContainer">
 		              <td class="FieldLabel"><%=res.getString("UILoginForm.label.UserName")%></td>
 		              <td><input class="UserName" name="username" value="<%=username%>"/></td>

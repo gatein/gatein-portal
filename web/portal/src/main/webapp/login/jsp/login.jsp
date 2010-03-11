@@ -29,9 +29,9 @@
 <%
   String contextPath = request.getContextPath() ;
 
-  String username = (String)request.getParameter("j_username");
+  String username = request.getParameter("j_username");
   if(username == null) username = "";
- 	String password = (String)request.getParameter("j_password");
+ 	String password = request.getParameter("j_password");
  	if(password == null) password = "";
 
   ResourceBundleService service = (ResourceBundleService) PortalContainer.getCurrentInstance(session.getServletContext())
@@ -42,7 +42,9 @@
 	cookie.setPath(request.getContextPath());
 	cookie.setMaxAge(0);
 	response.addCookie(cookie);
-	
+
+  String uri = (String)request.getAttribute("org.gatein.portal.login.initial_uri");
+
   response.setCharacterEncoding("UTF-8"); 
   response.setContentType("text/html; charset=UTF-8");
 %>
@@ -69,8 +71,10 @@
             if(username.length() > 0 || password.length() > 0) {
           %>
           <font color="red"><%=res.getString("UILoginForm.label.SigninFail")%></font><%}%>
-          <form name="loginForm" action="<%= contextPath + "/login"%>" method="post" style="margin: 0px;">    
-          		<input type="hidden" name="initialURI" value="<%=request.getAttribute("javax.servlet.forward.request_uri")%>"/>
+          <form name="loginForm" action="<%= contextPath + "/login"%>" method="post" style="margin: 0px;">
+                <% if (uri != null) { %>
+          		<input type="hidden" name="initialURI" value="<%=uri%>"/>
+                <% } %>
           		<table> 
 	              <tr class="FieldContainer">
 		              <td class="FieldLabel"><%=res.getString("UILoginForm.label.UserName")%></td>
