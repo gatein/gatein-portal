@@ -55,9 +55,9 @@
     -->
 
    <!-- 6_Integration -->
-
+<!--
    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="modules/Integration.xml"/>
-
+-->
    <!-- 7_SSO -->
 
    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="modules/SSO.xml"/>
