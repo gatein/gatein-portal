@@ -25,7 +25,7 @@
 						<% uiform.begin(); %>
 						<!--<form class="UIForm" id="$uicomponent.id" name="loginForm" action="<%= rcontext.getRequestContextPath() + "/login"%>" method="post" style="margin: 0px;">
 							<input type="hidden" name="<%= uiform.ACTION %>" value=""/>-->
-							<input type="hidden" name="uri" value="<%=session.getAttribute("initialURI"); %>"/>
+							<input type="hidden" name="initialURI" value="<%=session.getAttribute("initialURI"); %>"/>
 							<div class="VerticalLayout">
 								<table class="UIFormGrid">
 									<tr class="UserNameField">
