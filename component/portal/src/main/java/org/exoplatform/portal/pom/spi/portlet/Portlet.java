@@ -21,6 +21,7 @@ package org.exoplatform.portal.pom.spi.portlet;
 
 import org.gatein.mop.api.content.ContentType;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -31,7 +32,7 @@ import java.util.Map;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public final class Portlet implements Iterable<Preference>
+public final class Portlet implements Iterable<Preference>, Serializable
 {
 
    /** . */

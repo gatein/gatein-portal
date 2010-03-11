@@ -19,6 +19,7 @@
 
 package org.exoplatform.portal.pom.spi.portlet;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -27,7 +28,7 @@ import java.util.List;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public final class Preference
+public final class Preference implements Serializable
 {
 
    /** . */

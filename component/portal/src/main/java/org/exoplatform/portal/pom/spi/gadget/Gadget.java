@@ -23,13 +23,14 @@ import org.gatein.mop.api.content.ContentType;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.Iterator;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class Gadget
+public class Gadget implements Serializable
 {
 
    /** . */
