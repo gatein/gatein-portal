@@ -323,7 +323,7 @@ public class UIPortletActionListener
       public void execute(Event<UIPortlet<S, C>> event) throws Exception
       {
          UIPortlet<S, C> uiPortlet = event.getSource();
-         log.info("Serve Resource for portlet: " + uiPortlet.getPortletContext());
+         log.trace("Serve Resource for portlet: " + uiPortlet.getPortletContext());
          try
          {
             PortalRequestContext context = (PortalRequestContext)event.getRequestContext();
@@ -376,7 +376,7 @@ public class UIPortletActionListener
                return;
             }
 
-            log.info("Try to get a resource of type: " + contentType + " for the portlet: "
+            log.trace("Try to get a resource of type: " + contentType + " for the portlet: "
                + uiPortlet.getPortletContext());
             if (contentType.startsWith("text"))
             {
@@ -471,7 +471,7 @@ public class UIPortletActionListener
                   }
                   if (newEvents != null && !newEvents.isEmpty())
                   {
-                     log.info("The portlet: " + uiPortletInPage.getPortletContext().getId()
+                     log.trace("The portlet: " + uiPortletInPage.getPortletContext().getId()
                         + " processEvent() method has generated new events itself");
                      events.addAll(newEvents);
                   }
@@ -491,7 +491,7 @@ public class UIPortletActionListener
    public static <S, C extends Serializable, I> List<javax.portlet.Event> processEvent(UIPortlet<S, C> uiPortlet,
       javax.portlet.Event event)
    {
-      log.info("Process Event: " + event.getName() + " for portlet: " + uiPortlet.getState());
+      log.trace("Process Event: " + event.getName() + " for portlet: " + uiPortlet.getState());
       try
       {
          PortalRequestContext context = (PortalRequestContext)WebuiRequestContext.getCurrentInstance();
@@ -761,7 +761,7 @@ public class UIPortletActionListener
             portletMode = event.getRequestContext().getRequestParameter(UIComponent.OBJECTID);
          }
 
-         log.info("Change portlet mode of " + uiPortlet.getPortletContext().getId() + " to " + portletMode);
+         log.trace("Change portlet mode of " + uiPortlet.getPortletContext().getId() + " to " + portletMode);
          if (portletMode.equals(PortletMode.HELP.toString()))
          {
             uiPortlet.setCurrentPortletMode(PortletMode.HELP);
@@ -772,7 +772,7 @@ public class UIPortletActionListener
          }
          else if (portletMode.equals(PortletMode.VIEW.toString()))
          {
-        	 uiPortlet.setCurrentPortletMode(PortletMode.VIEW);
+        	   uiPortlet.setCurrentPortletMode(PortletMode.VIEW);
          }
          else
          {
