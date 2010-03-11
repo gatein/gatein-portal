@@ -293,7 +293,7 @@
          </workspace>
 
          <!-- Producer portlet states -->
-         <workspace name="portlet-states-system">
+         <workspace name="pc-system">
             <container class="org.exoplatform.services.jcr.impl.storage.jdbc.optimisation.CQJDBCWorkspaceDataContainer">
                <properties>
                   <property name="source-name" value="${gatein.jcr.datasource.name}${container.name.suffix}"/>
@@ -301,13 +301,12 @@
                   <property name="multi-db" value="false"/>
                   <property name="update-storage" value="true"/>
                   <property name="max-buffer-size" value="204800"/>
-                  <property name="swap-directory" value="${gatein.jcr.data.dir}/swap/portlet-states${container.name.suffix}"/>
+                  <property name="swap-directory" value="${gatein.jcr.data.dir}/swap/pc${container.name.suffix}"/>
                </properties>
                <value-storages>
-                  <value-storage id="gadgets"
-                                 class="org.exoplatform.services.jcr.impl.storage.value.fs.TreeFileValueStorage">
+                  <value-storage id="gadgets" class="org.exoplatform.services.jcr.impl.storage.value.fs.TreeFileValueStorage">
                      <properties>
-                        <property name="path" value="${gatein.jcr.storage.data.dir}/portlet-states${container.name.suffix}"/>
+                        <property name="path" value="${gatein.jcr.storage.data.dir}/pc${container.name.suffix}"/>
                      </properties>
                      <filters>
                         <filter property-type="Binary"/>
@@ -318,40 +317,36 @@
             <initializer class="org.exoplatform.services.jcr.impl.core.ScratchWorkspaceInitializer">
                <properties>
                   <property name="root-nodetype" value="nt:unstructured"/>
-                  <property name="root-permissions"
-                            value="any read;*:/platform/administrators read;*:/platform/administrators add_node;*:/platform/administrators set_property;*:/platform/administrators remove"/>
+                  <property name="root-permissions" value="any read;*:/platform/administrators read;*:/platform/administrators add_node;*:/platform/administrators set_property;*:/platform/administrators remove"/>
                </properties>
             </initializer>
             <cache enabled="true"
                    class="org.exoplatform.services.jcr.impl.dataflow.persistent.jbosscache.JBossCacheWorkspaceStorageCache">
                <properties>
-                  <property name="jbosscache-configuration"
-                            value="conf/jcr/jbosscache/${gatein.jcr.config.type}/config.xml"/>
+                  <property name="jbosscache-configuration" value="conf/jcr/jbosscache/${gatein.jcr.config.type}/config.xml"/>
                   <property name="jgroups-configuration" value="jar:/conf/jcr/jbosscache/cluster/udp-mux.xml"/>
                   <property name="jgroups-multiplexer-stack" value="true"/>
-                  <property name="jbosscache-cluster-name" value="jcr-${container.name.suffix}-portlet-states-system"/>
+                  <property name="jbosscache-cluster-name" value="jcr-${container.name.suffix}-pc-system"/>
                </properties>
             </cache>
             <query-handler class="org.exoplatform.services.jcr.impl.core.query.lucene.SearchIndex">
                <properties>
-                  <property name="index-dir" value="${gatein.jcr.index.data.dir}/portlet-states-system${container.name.suffix}"/>
+                  <property name="index-dir" value="${gatein.jcr.index.data.dir}/pc-system${container.name.suffix}"/>
                   <property name="changesfilter-class" value="${gatein.jcr.index.changefilterclass}"/>
                   <property name="jbosscache-configuration" value="conf/jcr/jbosscache/cluster/indexer-config.xml"/>
                   <property name="jgroups-configuration" value="jar:/conf/jcr/jbosscache/cluster/udp-mux.xml"/>
                   <property name="jgroups-multiplexer-stack" value="true"/>
-                  <property name="jbosscache-cluster-name" value="jcrindexer-${container.name.suffix}-portlet-states-system"/>
+                  <property name="jbosscache-cluster-name" value="jcrindexer-${container.name.suffix}-pc-system"/>
                   <property name="max-volatile-time" value="60"/>
                </properties>
             </query-handler>
             <lock-manager class="org.exoplatform.services.jcr.impl.core.lock.jbosscache.CacheableLockManagerImpl">
                <properties>
                   <property name="time-out" value="15m"/>
-                  <property name="jbosscache-configuration"
-                            value="conf/jcr/jbosscache/${gatein.jcr.config.type}/lock-config.xml"/>
+                  <property name="jbosscache-configuration" value="conf/jcr/jbosscache/${gatein.jcr.config.type}/lock-config.xml"/>
                   <property name="jgroups-configuration" value="jar:/conf/jcr/jbosscache/cluster/udp-mux.xml"/>
                   <property name="jgroups-multiplexer-stack" value="true"/>
-                  <property name="jbosscache-cluster-namejbosscache-cluster-name"
-                            value="jcrlock-${container.name.suffix}-system"/>
+                  <property name="jbosscache-cluster-namejbosscache-cluster-name" value="jcrlock-${container.name.suffix}-system"/>
                   <property name="jbosscache-cl-cache.jdbc.table.name" value="jcrlock_portlet_state_system"/>
                   <property name="jbosscache-cl-cache.jdbc.table.create" value="true"/>
                   <property name="jbosscache-cl-cache.jdbc.table.drop" value="false"/>
@@ -359,8 +354,7 @@
                   <property name="jbosscache-cl-cache.jdbc.fqn.column" value="fqn"/>
                   <property name="jbosscache-cl-cache.jdbc.node.column" value="node"/>
                   <property name="jbosscache-cl-cache.jdbc.parent.column" value="parent"/>
-                  <property name="jbosscache-cl-cache.jdbc.datasource"
-                            value="${gatein.jcr.datasource.name}${container.name.suffix}"/>
+                  <property name="jbosscache-cl-cache.jdbc.datasource" value="${gatein.jcr.datasource.name}${container.name.suffix}"/>
                </properties>
             </lock-manager>
          </workspace>

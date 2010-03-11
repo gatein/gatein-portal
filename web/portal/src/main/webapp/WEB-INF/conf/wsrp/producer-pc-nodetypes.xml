@@ -24,7 +24,7 @@
 
 <nodeTypes xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0"
            xmlns:jcr="http://www.jcp.org/jcr/1.0">
-   <nodeType name="portlet:producerstates" isMixin="false" hasOrderableChildNodes="false">
+   <nodeType name="pc:producerstates" isMixin="false" hasOrderableChildNodes="false">
       <supertypes>
          <supertype>nt:base</supertype>
          <supertype>mix:referenceable</supertype>
@@ -34,13 +34,13 @@
          <childNodeDefinition name="*" defaultPrimaryType="" autoCreated="false" mandatory="false"
                               onParentVersion="COPY" protected="false" sameNameSiblings="false">
             <requiredPrimaryTypes>
-               <requiredPrimaryType>portlet:statecontext</requiredPrimaryType>
+               <requiredPrimaryType>pc:statecontext</requiredPrimaryType>
             </requiredPrimaryTypes>
          </childNodeDefinition>
       </childNodeDefinitions>
    </nodeType>
 
-   <nodeType name="portlet:statecontext" isMixin="false" hasOrderableChildNodes="false">
+   <nodeType name="pc:statecontext" isMixin="false" hasOrderableChildNodes="false">
       <supertypes>
          <supertype>nt:base</supertype>
          <supertype>mix:referenceable</supertype>
@@ -52,26 +52,26 @@
          </propertyDefinition>
       </propertyDefinitions>
       <childNodeDefinitions>
-         <childNodeDefinition name="state" defaultPrimaryType="portlet:state" autoCreated="true" mandatory="false"
+         <childNodeDefinition name="state" defaultPrimaryType="pc:state" autoCreated="true" mandatory="false"
                               onParentVersion="COPY" protected="false" sameNameSiblings="false">
             <requiredPrimaryTypes>
-               <requiredPrimaryType>portlet:state</requiredPrimaryType>
+               <requiredPrimaryType>pc:state</requiredPrimaryType>
             </requiredPrimaryTypes>
          </childNodeDefinition>
       </childNodeDefinitions>
    </nodeType>
 
-   <nodeType name="portlet:state" isMixin="false" hasOrderableChildNodes="false">
+   <nodeType name="pc:state" isMixin="false" hasOrderableChildNodes="false">
       <supertypes>
          <supertype>nt:base</supertype>
          <supertype>mix:referenceable</supertype>
       </supertypes>
       <propertyDefinitions>
-         <propertyDefinition name="portlet:portletid" requiredType="String" autoCreated="false" mandatory="false"
+         <propertyDefinition name="pc:portletid" requiredType="String" autoCreated="false" mandatory="false"
                              onParentVersion="COPY" protected="false" multiple="false">
             <valueConstraints/>
          </propertyDefinition>
-         <propertyDefinition name="portlet:terminationtime" requiredType="Date" autoCreated="false" mandatory="false"
+         <propertyDefinition name="pc:terminationtime" requiredType="Date" autoCreated="false" mandatory="false"
                              onParentVersion="COPY" protected="false" multiple="false">
             <valueConstraints/>
          </propertyDefinition>

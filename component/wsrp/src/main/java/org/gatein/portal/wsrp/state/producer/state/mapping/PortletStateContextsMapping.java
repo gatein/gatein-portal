@@ -40,7 +40,7 @@ import java.util.Collection;
 @FormattedBy(JCRPersister.PortletNameFormatter.class)
 public abstract class PortletStateContextsMapping
 {
-   public static final String NODE_NAME = "portlet:producerstates";
+   public static final String NODE_NAME = "pc:producerstates";
 
    @OneToMany
    public abstract Collection<PortletStateContextMapping> getPortletStateContexts();

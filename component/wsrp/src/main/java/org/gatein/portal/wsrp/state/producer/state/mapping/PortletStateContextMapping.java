@@ -38,7 +38,7 @@ import org.gatein.pc.portlet.state.producer.PortletStateContext;
 @PrimaryType(name = PortletStateContextMapping.NODE_NAME)
 public abstract class PortletStateContextMapping
 {
-   public static final String NODE_NAME = "portlet:statecontext";
+   public static final String NODE_NAME = "pc:statecontext";
 
    @Id
    public abstract String getPersistentKey();

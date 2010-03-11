@@ -46,10 +46,10 @@ import java.util.Set;
 @PrimaryType(name = PortletStateMapping.NODE_NAME)
 public abstract class PortletStateMapping
 {
-   public static final String NODE_NAME = "portlet:state";
+   public static final String NODE_NAME = "pc:state";
 
-   private static final String PORTLET_ID = "portlet:portletid";
-   private static final String TERMINATION_TIME = "portlet:terminationtime";
+   private static final String PORTLET_ID = "pc:portletid";
+   private static final String TERMINATION_TIME = "pc:terminationtime";
 
    private static final ObjectToStringListConverter VALUE_CONVERTER = new ObjectToStringListConverter();
    private static final MappedMap<String, List<String>> mappedMap =

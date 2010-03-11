@@ -47,7 +47,7 @@ public class JCRPersister
 {
    private Chromattic chrome;
    public static final String WSRP_WORKSPACE_NAME = "wsrp-system";
-   public static final String PORTLET_STATES_WORKSPACE_NAME = "portlet-states-system";
+   public static final String PORTLET_STATES_WORKSPACE_NAME = "pc-system";
    private static final String REPOSITORY_NAME = "repository";
    private String workspaceName;
 
