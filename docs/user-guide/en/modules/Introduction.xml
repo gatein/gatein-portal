@@ -20,7 +20,7 @@
 		This book introduces and provides detailed information about most features and capabilities of &PRODUCT; such as user/group management and access permissions, using portlets and changing basic interface objects such as skins, language and page orientation.
 	</para>
 	<para>
-		Refer to <ulink type="http" url="http://www.jboss.org/gatein/documentation.html">&PRODUCT; Installation Guide</ulink> for information on downloading and installing the project or <ulink type="http" url="http://www.jboss.org/gatein/documentation.html">&PRODUCT; Reference Guide</ulink> for detailed information on all aspects of the project.
+		Refer to <ulink type="http" url="http://www.jboss.org/gatein/documentation.html">&PRODUCT; Reference Guide</ulink> for detailed information on all aspects of the project.
 	</para>
 	<section id="sect-Install_Guide-Introduction-Related_Links">
 		<title>Related Links</title>
