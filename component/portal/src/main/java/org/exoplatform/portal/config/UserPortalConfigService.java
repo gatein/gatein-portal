@@ -333,7 +333,10 @@ public class UserPortalConfigService implements Startable
 
    /**
     * This method should update the PortalConfig object
-    *
+    * 
+    * @deprecated This method is not useful anymore. The preferred way to do this is 
+    * using directly {@link org.exoplatform.portal.config.DataStorage#save(PortalConfig)}
+    * 
     * @param portal
     * @throws Exception
     */
@@ -382,6 +385,10 @@ public class UserPortalConfigService implements Startable
    /**
     * Removes a page and broadcast an event labelled as {@link org.exoplatform.portal.config.UserPortalConfigService#PAGE_REMOVED}
     * when the removal is successful.
+    * 
+    * @deprecated This method is not useful anymore. The preferred way to do this is 
+    * using directly {@link org.exoplatform.portal.config.DataStorage#remove(Page)}
+
     *
     * @param page the page to remove
     * @throws Exception any exception
@@ -395,6 +402,9 @@ public class UserPortalConfigService implements Startable
    /**
     * Creates a page and broadcast an event labelled as {@link org.exoplatform.portal.config.UserPortalConfigService#CREATE_PAGE_EVENT}
     * when the creation is successful.
+    * 
+    * @deprecated This method is not useful anymore. The preferred way to do this is 
+    * using directly {@link org.exoplatform.portal.config.DataStorage#create(Page)}
     *
     * @param page the page to create
     * @throws Exception any exception
@@ -408,6 +418,10 @@ public class UserPortalConfigService implements Startable
    /**
     * Updates a page and broadcast an event labelled as {@link org.exoplatform.portal.config.UserPortalConfigService#PAGE_UPDATED}
     * when the creation is successful.
+    * 
+    * @deprecated This method is not useful anymore. The preferred way to do this is 
+    * using directly {@link org.exoplatform.portal.config.DataStorage#save(Page)}
+
     *
     * @param page the page to update
     * @return the list of model changes that occured
@@ -423,6 +437,9 @@ public class UserPortalConfigService implements Startable
    /**
     * Creates a navigation and broadcast an event labelled as {@link org.exoplatform.portal.config.UserPortalConfigService#CREATE_NAVIGATION_EVENT}
     * when the creation is successful.
+    * 
+    * @deprecated This method is not useful anymore. The preferred way to do this is 
+    * using directly {@link org.exoplatform.portal.config.DataStorage#create(PageNavigation)}
     *
     * @param navigation the navigation to create
     * @throws Exception any exception
@@ -436,6 +453,9 @@ public class UserPortalConfigService implements Startable
    /**
     * Updates a page navigation broadcast an event labelled as {@link org.exoplatform.portal.config.UserPortalConfigService#NAVIGATION_UPDATED}
     * when the creation is successful.
+    * 
+    * @deprecated This method is not useful anymore. The preferred way to do this is 
+    * using directly {@link org.exoplatform.portal.config.DataStorage#save(PageNavigation)}
     *
     * @param navigation the navigation to update
     * @throws Exception any exception
@@ -449,6 +469,9 @@ public class UserPortalConfigService implements Startable
    /**
     * Removes a navigation and broadcast an event labelled as {@link org.exoplatform.portal.config.UserPortalConfigService#NAVIGATION_REMOVED}
     * when the removal is successful.
+    * 
+    * @deprecated This method is not useful anymore. The preferred way to do this is 
+    * using directly {@link org.exoplatform.portal.config.DataStorage#remove(PageNavigation)}
     *
     * @param navigation the navigation to remove
     * @throws Exception any exception
@@ -459,6 +482,15 @@ public class UserPortalConfigService implements Startable
       storage_.remove(navigation);
    }
 
+   /**
+    * @deprecated This method is not useful anymore. The preferred way to do this is 
+    * using directly {@link org.exoplatform.portal.config.DataStorage#getPageNavigation(String, String)}
+    * 
+    * @param ownerType
+    * @param id
+    * @return
+    * @throws Exception
+    */
    @Deprecated
    public PageNavigation getPageNavigation(String ownerType, String id) throws Exception
    {
@@ -494,6 +526,9 @@ public class UserPortalConfigService implements Startable
 
    /**
     * Clones a page.
+    * 
+    * @deprecated This method is not useful anymore. The preferred way to do this is 
+    * using directly {@link org.exoplatform.portal.config.DataStorage#clonePage(String, String, String, String)}
     *
     * @param pageId    the id of the page to clone
     * @param pageName  the new page name

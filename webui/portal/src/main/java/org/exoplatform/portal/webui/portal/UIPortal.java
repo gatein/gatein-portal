@@ -262,6 +262,7 @@ public class UIPortal extends UIContainer
    
    public synchronized void setSelectedNode(PageNode node)
    {
+      System.out.println("\n\n\nSetting the selected node : " + node);
       selectedNode_ = node;
    }
 
@@ -300,34 +301,6 @@ public class UIPortal extends UIContainer
    {
       selectedPath = nodes;
    }
-
-   /*
-   public PageNavigation getSelectedNavigation() throws Exception
-   {
-      if (selectedNavigation_ != null && selectedNavigation_.getNodes() != null
-         && selectedNavigation_.getNodes().size() > 0)
-      {
-         return selectedNavigation_;
-      }
-      if (getNavigations().size() < 1)
-         return null;
-      // TODO dang.tung: get right selectedNavigation 
-      // -------------------------------------------
-      List<PageNavigation> navs = getNavigations();
-      PageNavigation pNav = navs.get(0);
-      for (PageNavigation nav : navs)
-      {
-         if (nav.getNodes() != null && nav.getNodes().size() > 0)
-         {
-            pNav = nav;
-            break;
-         }
-      }
-      // -------------------------------------------
-      setSelectedNavigation(pNav);
-      return pNav;
-   }
-   */
    
    public PageNavigation getSelectedNavigation() throws Exception
    {

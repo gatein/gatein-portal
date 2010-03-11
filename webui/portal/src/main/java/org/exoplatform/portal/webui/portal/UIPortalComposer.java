@@ -157,6 +157,11 @@ public class UIPortalComposer extends UIContainer
       isShowControl = state;
    }
 
+   /**
+    * Return true if the edition is in the page creation wizard
+    * 
+    * @return
+    */
    private boolean isUsedInWizard()
    {
       UIWorkingWorkspace uiWorkingWS = getAncestorOfType(UIWorkingWorkspace.class);
@@ -465,7 +470,7 @@ public class UIPortalComposer extends UIContainer
             PortalDataMapper.toUIPortal(uiPortal, uiPortalApp.getUserPortalConfig());
 
             //Update the cache of UIPortal from UIPortalApplication
-            uiPortalApp.updateCachedUIPortal(uiPortal);
+            uiPortalApp.putCachedUIPortal(uiPortal);
             uiPortalApp.setShowedUIPortal(uiPortal);
             
             //To init the UIPage, that fixed a bug on AdminToolbarPortlet when edit the layout. Here is only a
@@ -643,6 +648,12 @@ public class UIPortalComposer extends UIContainer
       }
    }
 
+   /**
+    * This action listener is for the page edition
+    * 
+    * @author <a href="trong.tran@exoplatform.com">Trong Tran</a>
+    * @version $Revision$
+    */
    static public class Finish2ActionListener extends EventListener<UIPortalComposer>
    {
       public void execute(Event<UIPortalComposer> event) throws Exception
@@ -659,6 +670,10 @@ public class UIPortalComposer extends UIContainer
 
          UserPortalConfigService portalConfigService =
             uiWorkingWS.getApplicationComponent(UserPortalConfigService.class);
+         
+         /*
+          * if it is a edition of the current page
+          */
          if (page.getStorageId() != null && portalConfigService.getPage(pageId) == null)
          {
             uiPortalApp.addMessage(new ApplicationMessage("UIPageBrowser.msg.PageNotExist", new String[]{pageId}, 1));
@@ -675,6 +690,8 @@ public class UIPortalComposer extends UIContainer
          }
          UIPortalComposer composer = uiWorkingWS.findFirstComponentOfType(UIPortalComposer.class).setRendered(false);
          composer.setEditted(false);
+         
+         // If it is a page creation wizard
          if (composer.isUsedInWizard())
          {
             UIWizard wizard = (UIWizard)uiToolPanel.getUIComponent();

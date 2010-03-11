@@ -237,16 +237,7 @@ public class UIPortalNavigation extends UIComponent
             uiNavigation.selectedParent_ = selectNav;
          else
             uiNavigation.selectedParent_ = PageNavigationUtils.searchPageNodeByUri(selectNav, parentUri);
-         // UIPageBody uiPageBody =
-         // uiPortal.findFirstComponentOfType(UIPageBody.class);
-         // if(uiPageBody != null) {
-         // if(uiPageBody.getMaximizedUIComponent() != null) {
-         // UIPortlet currentPortlet = (UIPortlet)
-         // uiPageBody.getMaximizedUIComponent();
-         // currentPortlet.setCurrentWindowState(WindowState.NORMAL);
-         // uiPageBody.setMaximizedUIComponent(null);
-         // }
-         // }
+
          PageNodeEvent<UIPortal> pnevent;
          pnevent = new PageNodeEvent<UIPortal>(uiPortal, PageNodeEvent.CHANGE_PAGE_NODE, uri);
          uiPortal.broadcast(pnevent, Event.Phase.PROCESS);

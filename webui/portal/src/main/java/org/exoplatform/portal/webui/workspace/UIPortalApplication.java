@@ -119,14 +119,15 @@ public class UIPortalApplication extends UIApplication
    
    /**
     * The constructor of this class is used to build the tree of UI components
-    * that will be aggregated in the portal page. 1) The component is stored in
-    * the current PortalRequestContext ThreadLocal 2) The configuration for the
-    * portal associated with the current user request is extracted from the
-    * PortalRequestContext 3) Then according to the context path, either a
-    * public or private portal is initiated. Usually a public portal does not
-    * contain the left column and only the private one has it. 4) The skin to
-    * use is setup 5) Finally, the current component is associated with the
-    * current portal owner
+    * that will be aggregated in the portal page.<br/>
+    * 1) The component is stored in the current PortalRequestContext ThreadLocal<br/>
+    * 2) The configuration for the portal associated with the current user request 
+    *    is extracted from the PortalRequestContext<br/>
+    * 3) Then according to the context path, either a public or private portal is initiated.
+    *    Usually a public portal does not contain the left column and only the private one has it.<br/>
+    * 4) The skin to use is setup <br/>
+    * 5) Finally, the current component is associated with the
+    *    current portal owner
     * 
     * @throws Exception
     */
@@ -178,7 +179,8 @@ public class UIPortalApplication extends UIApplication
       // -------------------------------------------------------------------------------
       context.setUIApplication(this);
 
-      setupUIPortalCache();
+      this.all_UIPortals = new HashMap<UIPortalKey, UIPortal>(5);
+      
       addWorkingWorkspace();
 
       String currentSkin = userPortalConfig_.getPortalConfig().getSkin();
@@ -191,6 +193,11 @@ public class UIPortalApplication extends UIApplication
       localizeNavigations();
    }
 
+   /**
+    * Sets the specified portal to be showed in the normal mode currently
+    * 
+    * @param uiPortal
+    */
    public void setShowedUIPortal(UIPortal uiPortal)
    {
       this.showedUIPortal = uiPortal;
@@ -203,11 +210,23 @@ public class UIPortalApplication extends UIApplication
       }
    }
    
+   /**
+    * Returns current UIPortal which being showed in normal mode
+    * 
+    * @return
+    */
    public UIPortal getShowedUIPortal()
    {
       return showedUIPortal;
    }
    
+   /**
+    * Returns a cached UIPortal matching to OwnerType and OwnerId if any
+    * 
+    * @param ownerType
+    * @param ownerId
+    * @return
+    */
    public UIPortal getCachedUIPortal(String ownerType, String ownerId)
    {
       if(ownerType == null || ownerId == null)
@@ -217,7 +236,12 @@ public class UIPortalApplication extends UIApplication
       return this.all_UIPortals.get(new UIPortalKey(ownerType, ownerId));
    }
    
-   public void addCachedUIPortal(UIPortal uiPortal)
+   /**
+    * Associates the specified UIPortal to a cache map with specified key which bases on OwnerType and OwnerId
+    * 
+    * @param uiPortal
+    */
+   public void putCachedUIPortal(UIPortal uiPortal)
    {
       String ownerType = uiPortal.getOwnerType();
       String ownerId = uiPortal.getOwner();
@@ -228,6 +252,12 @@ public class UIPortalApplication extends UIApplication
       }
    }
    
+   /**
+    * Remove the UIPortal from the cache map
+    * 
+    * @param ownerType
+    * @param ownerId
+    */
    public void removeCachedUIPortal(String ownerType, String ownerId)
    {
       if(ownerType == null || ownerId == null)
@@ -236,19 +266,6 @@ public class UIPortalApplication extends UIApplication
       }
       this.all_UIPortals.remove(new UIPortalKey(ownerType, ownerId));
    }
-   
-   /** Update the UIPortal in the cache **/
-   public void updateCachedUIPortal(UIPortal uiPortal)
-   {
-      String ownerType = uiPortal.getOwnerType();
-      String ownerId = uiPortal.getOwner();
-      
-      if(ownerType != null && ownerId != null)
-      {
-         this.all_UIPortals.put(new UIPortalKey(ownerType, ownerId), uiPortal);
-      }
-   }
-   
    
    public boolean isSessionOpen()
    {
@@ -438,21 +455,6 @@ public class UIPortalApplication extends UIApplication
       }
    }
    
-   private void setupUIPortalCache()
-   {
-      this.all_UIPortals = new HashMap<UIPortalKey, UIPortal>(5);
-   }
-   
-   private void setupSkin()
-   {
-      
-   }
-   
-   private void setupLocale()
-   {
-      
-   }
-   
    /**
     * The central area is called the WorkingWorkspace. It is composed of: 1) A
     * UIPortal child which is filled with portal data using the PortalDataMapper
@@ -472,7 +474,7 @@ public class UIPortalApplication extends UIApplication
       UIPortal uiPortal = createUIComponent(UIPortal.class, null, null);
       PortalDataMapper.toUIPortal(uiPortal, userPortalConfig_);
       
-      this.addCachedUIPortal(uiPortal);
+      this.putCachedUIPortal(uiPortal);
       this.showedUIPortal = uiPortal;
       
       uiWorkingWorkspace.addChild(UIEditInlineWorkspace.class, null, UI_EDITTING_WS_ID).setRendered(false);
@@ -734,13 +736,10 @@ public class UIPortalApplication extends UIApplication
 
       private String ownerId;
 
-      private final int hashCode;
-      
       UIPortalKey(String _ownerType, String _ownerId)
       {
          this.ownerType = _ownerType;
          this.ownerId = _ownerId;
-         this.hashCode = this.ownerType.hashCode() * 2 + this.ownerId.hashCode();
       }
 
       @Override
@@ -760,7 +759,7 @@ public class UIPortalApplication extends UIApplication
       @Override
       public int hashCode()
       {
-         return this.hashCode;
+         return this.ownerType.hashCode() * 2 + this.ownerId.hashCode();
       }
       
       @Override

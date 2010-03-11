@@ -83,24 +83,10 @@ public class UIPageCreationWizard extends UIPageWizard
 
    private void saveData() throws Exception
    {
-      DataStorage dataService = getApplicationComponent(DataStorage.class); 
       UIPagePreview uiPagePreview = getChild(UIPagePreview.class);
       UIPage uiPage = (UIPage)uiPagePreview.getUIComponent();
       UIPortal uiPortal = Util.getUIPortal();
-      /*if (PortalConfig.PORTAL_TYPE.equals(uiPage.getOwnerType()))
-      {
-         uiPage.setAccessPermissions(uiPortal.getAccessPermissions());
-         uiPage.setEditPermission(uiPortal.getEditPermission());
-      }
-      else if (PortalConfig.GROUP_TYPE.equals(uiPage.getOwnerType()))
-      {
-         UserACL acl = getApplicationComponent(UserACL.class);
-         String ownerId = uiPage.getOwnerId();
-         ownerId = ownerId.startsWith("/") ? ownerId : "/" + ownerId;
-         uiPage.setAccessPermissions(new String[]{"*:" + ownerId});
-         uiPage.setEditPermission(acl.getMakableMT() + ":" + ownerId);
-      }
-       */
+
       UIWizardPageSetInfo uiPageInfo = getChild(UIWizardPageSetInfo.class);
       UIPageNodeSelector uiNodeSelector = uiPageInfo.getChild(UIPageNodeSelector.class);
       PageNode selectedNode = uiNodeSelector.getSelectedPageNode();
@@ -127,11 +113,11 @@ public class UIPageCreationWizard extends UIPageWizard
       }
       uiNodeSelector.selectPageNodeByUri(pageNode.getUri());
 
+      DataStorage dataService = getApplicationComponent(DataStorage.class); 
       dataService.create(page);
       dataService.save(pageNav);
       setNavigation(uiPortal.getNavigations(), uiNodeSelector.getSelectedNavigation());
-      String uri = pageNav.getId() + "::" + pageNode.getUri();
-      PageNodeEvent<UIPortal> pnevent = new PageNodeEvent<UIPortal>(uiPortal, PageNodeEvent.CHANGE_PAGE_NODE, uri);
+      PageNodeEvent<UIPortal> pnevent = new PageNodeEvent<UIPortal>(uiPortal, PageNodeEvent.CHANGE_PAGE_NODE, pageNode.getUri());
       uiPortal.broadcast(pnevent, Event.Phase.PROCESS);
    }
 
@@ -147,7 +133,14 @@ public class UIPageCreationWizard extends UIPageWizard
       }
    }
 
-   public boolean isSelectedNodeExist() throws Exception
+   /**
+    * Returns <code>true</code> if the creating node is existing already.
+    * Otherwise it returns <code>false</code>
+    * 
+    * @return true if the creating node is existing, otherwise it's false
+    * @throws Exception
+    */
+   private boolean isSelectedNodeExist() throws Exception
    {
       UIWizardPageSetInfo uiPageSetInfo = getChild(UIWizardPageSetInfo.class);
       PageNavigation navigation = uiPageSetInfo.getChild(UIPageNodeSelector.class).getSelectedNavigation();
@@ -181,7 +174,6 @@ public class UIPageCreationWizard extends UIPageWizard
       public void execute(Event<UIPageWizard> event) throws Exception
       {
          UIPageWizard uiWizard = event.getSource();
-         uiWizard.setDescriptionWizard(FIRST_STEP);
 
          uiWizard.updateWizardComponent();
          uiWizard.viewStep(FIRST_STEP);
@@ -207,7 +199,6 @@ public class UIPageCreationWizard extends UIPageWizard
          if (uiWizard.getSelectedStep() < SECONDE_STEP)
          {
             uiPortalApp.addMessage(new ApplicationMessage("UIPageCreationWizard.msg.StepByStep", null));
-            uiWizard.setDescriptionWizard(FIRST_STEP);
             uiWizard.viewStep(FIRST_STEP);
             uiWizard.updateWizardComponent();
             return;
@@ -223,7 +214,6 @@ public class UIPageCreationWizard extends UIPageWizard
 
          UIWizardPageSetInfo uiPageSetInfo = uiWizard.getChild(UIWizardPageSetInfo.class);
          UIPageNodeSelector uiNodeSelector = uiPageSetInfo.getChild(UIPageNodeSelector.class);
-         uiWizard.setDescriptionWizard(SECONDE_STEP);
          uiWizard.updateWizardComponent();
          PageNavigation navigation = uiNodeSelector.getSelectedNavigation();
          if (navigation == null)
@@ -284,7 +274,6 @@ public class UIPageCreationWizard extends UIPageWizard
          if (uiWizard.isSelectedNodeExist())
          {
             uiPortalApp.addMessage(new ApplicationMessage("UIPageCreationWizard.msg.NameNotSame", null));
-            uiWizard.setDescriptionWizard(FIRST_STEP);
             uiWizard.viewStep(FIRST_STEP);
             uiWizard.updateWizardComponent();
             return;
@@ -294,7 +283,6 @@ public class UIPageCreationWizard extends UIPageWizard
          if (uiWizard.getSelectedStep() < THIRD_STEP)
          {
             uiWizard.setShowActions(true);
-            uiWizard.setDescriptionWizard(uiWizard.getSelectedStep());
             uiWizard.updateWizardComponent();
             uiPortalApp.addMessage(new ApplicationMessage("UIPageCreationWizard.msg.StepByStep", null));
             return;
@@ -318,7 +306,6 @@ public class UIPageCreationWizard extends UIPageWizard
          if (storage.getPage(pageId) != null)
          {
             uiPortalApp.addMessage(new ApplicationMessage("UIPageCreationWizard.msg.NameNotSame", null));
-            uiWizard.setDescriptionWizard(FIRST_STEP);
             uiWizard.viewStep(FIRST_STEP);
             uiWizard.updateWizardComponent();
          }
@@ -376,14 +363,12 @@ public class UIPageCreationWizard extends UIPageWizard
          if (uiWizard.isSelectedNodeExist())
          {
             uiPortalApp.addMessage(new ApplicationMessage("UIPageCreationWizard.msg.NameNotSame", null));
-            uiWizard.setDescriptionWizard(FIRST_STEP);
             uiWizard.viewStep(FIRST_STEP);
             uiWizard.updateWizardComponent();
             return;
          }
          uiPortalApp.setModeState(UIPortalApplication.NORMAL_MODE);
          uiWorkingWS.setRenderedChild(UIPortalApplication.UI_VIEWING_WS_ID);
-         Util.getPortalRequestContext().setFullRender(true);
          uiWizard.saveData();
          UIPortalToolPanel toolPanel = uiWorkingWS.findFirstComponentOfType(UIPortalToolPanel.class);
          toolPanel.setUIComponent(null);

@@ -114,50 +114,6 @@ public abstract class UIPageWizard extends UIWizard
       pcontext.setFullRender(true);
    }
 
-   // TODO: Need to place UIPageCreateDescription component in other component
-
-   public void setDescriptionWizard() throws Exception
-   {
-      // UIPortalApplication uiPortalApp =
-      // getAncestorOfType(UIPortalApplication.class);
-      // UIExoStart uiExoStart =
-      // uiPortalApp.findFirstComponentOfType(UIExoStart.class);
-      // uiExoStart.setUIControlWSWorkingComponent(UIPageCreateDescription.class);
-      // UIPageCreateDescription uiPageDescription =
-      // uiExoStart.getUIControlWSWorkingComponent();
-      // if (this.getClass() == UIPageEditWizard.class) {
-      // uiPageDescription.setTitleKey("UIPageCreateDescription.title.edit");
-      // uiPageDescription.addChild(UIDescription.class, null, "pageEditWizard");
-      // return;
-      // }
-      // uiPageDescription.setTitleKey("UIPageCreateDescription.title.create");
-      // uiPageDescription.addChild(UIDescription.class, null, "pageWizard");
-   }
-
-   // TODO: Need to place UIPageCreateDescription component in other component
-
-   public void setDescriptionWizard(int step) throws Exception
-   {
-      // UIPortalApplication uiPortalApp =
-      // getAncestorOfType(UIPortalApplication.class);
-      // UIExoStart uiExoStart =
-      // uiPortalApp.findFirstComponentOfType(UIExoStart.class);
-      // uiExoStart.setUIControlWSWorkingComponent(UIPageCreateDescription.class);
-      // UIPageCreateDescription uiPageDescription =
-      // uiExoStart.getUIControlWSWorkingComponent();
-      //
-      // if (this.getClass() == UIPageEditWizard.class) {
-      // uiPageDescription.setTitleKey("UIPageCreateDescription.title.edit");
-      // uiPageDescription.addChild(UIDescription.class, null, "pageEditWizard"
-      // + Integer.toString(step));
-      // return;
-      // }
-      //
-      // uiPageDescription.setTitleKey("UIPageCreateDescription.title.create");
-      // uiPageDescription.addChild(UIDescription.class, null, "pageWizard" +
-      // Integer.toString(step));
-   }
-
    static public class AbortActionListener extends EventListener<UIPageWizard>
    {
       public void execute(Event<UIPageWizard> event) throws Exception

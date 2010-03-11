@@ -161,7 +161,7 @@ public class UIPageActionListener
                newUIPortal.setSelectedNode(targetPageNode);
                newUIPortal.setSelectedPath(targetedPathNodes);
                uiPortalApp.setShowedUIPortal(newUIPortal);
-               uiPortalApp.addCachedUIPortal(newUIPortal);
+               uiPortalApp.putCachedUIPortal(newUIPortal);
                newUIPortal.refreshUIPage();
                return;
             }
@@ -260,7 +260,7 @@ public class UIPageActionListener
        * @param pathNodes
        * @return
        */
-      private static PageNode getTargetedNode(PageNavigation targetedNav, String[] pathNodes)
+      private PageNode getTargetedNode(PageNavigation targetedNav, String[] pathNodes)
       {
          //Case users browses to a URL of the form  */portal/public/classic
          if(pathNodes.length == 0)
@@ -302,7 +302,7 @@ public class UIPageActionListener
        * @param nav
        * @return
        */
-      private static PageNode getDefaultNode(PageNavigation nav)
+      private PageNode getDefaultNode(PageNavigation nav)
       {
          PageNode defaultNode;
          try
@@ -323,7 +323,7 @@ public class UIPageActionListener
          }
       }
       
-      private static List<PageNode> findPath(PageNavigation nav, String[] pathNodes)
+      private List<PageNode> findPath(PageNavigation nav, String[] pathNodes)
       {
          List<PageNode> nodes = new ArrayList<PageNode>(4);
          
@@ -355,7 +355,7 @@ public class UIPageActionListener
          return nodes;
       }
 
-      private static UIPortal buildUIPortal(PageNavigation newPageNav, UIPortalApplication uiPortalApp, UserPortalConfig userPortalConfig) throws Exception
+      private UIPortal buildUIPortal(PageNavigation newPageNav, UIPortalApplication uiPortalApp, UserPortalConfig userPortalConfig) throws Exception
       {
          DataStorage storage = uiPortalApp.getApplicationComponent(DataStorage.class);
          if(storage == null){
@@ -374,7 +374,7 @@ public class UIPageActionListener
          return uiPortal;
       }
       
-      private static void redirectToNotFoundNode(UIPortal uiPortal) throws Exception
+      private void redirectToNotFoundNode(UIPortal uiPortal) throws Exception
       {
          PageNodeEvent<UIPortal> changePageNodeEvent = new PageNodeEvent<UIPortal>(uiPortal, PageNodeEvent.CHANGE_PAGE_NODE, "/notfound");
          uiPortal.broadcast(changePageNodeEvent, Event.Phase.PROCESS);

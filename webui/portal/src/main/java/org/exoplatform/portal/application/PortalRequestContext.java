@@ -19,6 +19,8 @@
 
 package org.exoplatform.portal.application;
 
+import com.sun.syndication.feed.atom.Link;
+
 import org.exoplatform.Constants;
 import org.exoplatform.commons.utils.PortalPrinter;
 import org.exoplatform.commons.utils.WriterPrinter;
@@ -364,11 +366,26 @@ public class PortalRequestContext extends WebuiRequestContext
       return response_;
    }
 
+   /**
+    * 
+    * @see org.exoplatform.web.application.RequestContext#getFullRender()
+    */
    final public boolean getFullRender()
    {
       return forceFullUpdate;
    }
 
+   /**
+    * Sets a boolean value to force whether portal will be fully rendered
+    * and it is only effective to an Ajax request.<p/>
+    * 
+    * if the value is set to <code>true</code>, it means :<br/>
+    *
+    * 1) Only portal ui components are rendered <br/>
+    * 2) Portlets will be fully rendered if are inner of the portal ui components being updated
+    * 
+    * @param forceFullUpdate
+    */
    final public void setFullRender(boolean forceFullUpdate)
    {
       this.forceFullUpdate = forceFullUpdate;

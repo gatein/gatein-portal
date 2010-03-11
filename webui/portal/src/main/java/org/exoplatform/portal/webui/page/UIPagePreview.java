@@ -37,22 +37,6 @@ import org.exoplatform.webui.core.UIComponentDecorator;
    )})
 public class UIPagePreview extends UIComponentDecorator
 {
-   //  private UIComponent uiBackComponent ;
-   //  
-   //  public UIComponent getBackComponent() { return uiBackComponent ; }
-   //  public void setBackComponent(UIComponent uiComp) { uiBackComponent = uiComp ; }
-   //  
-   //  public boolean hasBackEvent(){ return uiBackComponent != null; }
-
-   //  static public class BackActionListener extends EventListener<UIPagePreview> {
-   //    public void execute(Event<UIPagePreview> event) throws Exception {
-   //      UIPagePreview uiPreview = event.getSource() ;
-   //      UIPortalToolPanel uiToolPanel = Util.getUIPortalToolPanel();      
-   //      UIComponent uiComp = uiPreview.getBackComponent() ;
-   //      uiToolPanel.setUIComponent(uiComp) ;
-   //      event.getRequestContext().addUIComponentToUpdateByAjax(uiToolPanel) ;
-   //    }
-   //  }
    public boolean isPageHasApplication()
    {
       if (uicomponent_ == null)
