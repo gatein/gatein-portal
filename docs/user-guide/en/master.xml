@@ -9,9 +9,10 @@
 	<bookinfo>
 		<title>GateIn Documentation</title>
 		<subtitle>GateIn</subtitle>
-		<releaseinfo>This is a very rough documentation issued from the merge,
-				content still has to be validated, we still hope that it can help the
-				beta testers. Thanks !</releaseinfo>
+		<releaseinfo>This document provides an easy to follow guide to the functions and
+options available in &PRODUCT;. It is intended to
+be accessible and useful to both experienced and novice portal
+users.</releaseinfo>
 	</bookinfo>
 	<toc />
 
