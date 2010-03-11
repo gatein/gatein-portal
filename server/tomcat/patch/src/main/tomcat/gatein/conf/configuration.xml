@@ -1,0 +1,65 @@
+<configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_1.xsd http://www.exoplaform.org/xml/ns/kernel_1_1.xsd"
+	xmlns="http://www.exoplaform.org/xml/ns/kernel_1_1.xsd">
+
+	<component>
+		<!-- The full qualified name of the PortalContainerConfig -->
+		<type>org.exoplatform.container.definition.PortalContainerConfig</type>
+		<init-params>
+			<!-- The name of the default portal container -->
+			<value-param>
+				<name>default.portal.container</name>
+				<value>portal</value>
+			</value-param>
+			<!-- The name of the default rest ServletContext -->
+			<value-param>
+				<name>default.rest.context</name>
+				<value>rest</value>
+			</value-param>
+			<!-- The name of the default realm -->
+			<value-param>
+				<name>default.realm.name</name>
+				<value>gatein-domain</value>
+			</value-param>
+			<!-- The default portal container definition -->
+			<!-- It cans be used to avoid duplicating configuration -->
+			<object-param>
+				<name>default.portal.definition</name>
+				<object type="org.exoplatform.container.definition.PortalContainerDefinition">
+					<!-- The path to the external properties file -->
+					<field name="externalSettingsPath">
+						<string>configuration.properties</string>
+					</field>
+					<field name="dependencies">
+						<collection type="java.util.ArrayList">
+							<value>
+								<string>eXoResources</string>
+							</value>
+							<value>
+								<string>portal</string>
+							</value>
+							<value>
+								<string>dashboard</string>
+							</value>
+							<value>
+								<string>exoadmin</string>
+							</value>
+							<value>
+								<string>eXoGadgets</string>
+							</value>
+							<value>
+								<string>eXoGadgetServer</string>
+							</value>
+							<value>
+								<string>rest</string>
+							</value>
+							<value>
+								<string>web</string>
+							</value>
+						</collection>
+					</field>                    
+				</object>
+			</object-param>
+		</init-params>
+	</component>
+</configuration>
