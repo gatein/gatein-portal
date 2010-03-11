@@ -27,9 +27,9 @@ cd %BIN_DIR%
 rem Sets some variables
 set LOG_OPTS="-Dorg.apache.commons.logging.Log=org.apache.commons.logging.impl.SimpleLog"
 set SECURITY_OPTS="-Djava.security.auth.login.config=..\conf\jaas.conf"
-set EXO_OPTS="-Dexo.product.developing=false -Dexo.conf.dir=..\gatein\conf"
+set EXO_OPTS="-Dexo.product.developing=false -Dexo.conf.dir.name=gatein\conf"
 set EXO_CONFIG_OPTS="-Dorg.exoplatform.container.configuration.debug"
-set JAVA_OPTS=-Xms128m -Xmx512m %LOG_OPTS% %SECURITY_OPTS% %EXO_OPTS% %EXO_CONFIG_OPTS%
+set JAVA_OPTS=-Xms128m -Xmx512m -XX:MaxPermSize=256m %LOG_OPTS% %SECURITY_OPTS% %EXO_OPTS% %EXO_CONFIG_OPTS%
 set JPDA_TRANSPORT=dt_socket
 set JPDA_ADDRESS=8000
 
