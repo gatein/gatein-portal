@@ -37,7 +37,7 @@ import javax.portlet.PortletContext;
 public class PortletResourceResolver extends ResourceResolver
 {
 
-   protected static Log log = ExoLogger.getLogger("portlet:PortletResourceResolver");
+   protected static Log log = ExoLogger.getLogger(PortletResourceResolver.class);
 
    private PortletContext pcontext_;
 
