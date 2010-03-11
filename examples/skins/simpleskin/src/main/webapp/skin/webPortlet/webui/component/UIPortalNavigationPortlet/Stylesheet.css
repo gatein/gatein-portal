@@ -50,6 +50,7 @@
 
 .UINavigationPortlet .UINavigationBar .MiddleNavigationBar {
 	padding: 0px 24px;
+	background: #f9f9f9;
 }
 
 .UINavigationPortlet .UITab a.TabLabel {
