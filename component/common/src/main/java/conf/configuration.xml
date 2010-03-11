@@ -29,13 +29,9 @@
     <key>org.exoplatform.container.PropertyConfigurator</key>
     <type>org.exoplatform.container.PropertyConfigurator</type>
     <init-params>
-      <value-param profiles="tomcat">
+      <value-param>
         <name>properties.url</name>
-        <value>file:///${catalina.base}/gatein/conf/configuration.properties</value>
-      </value-param>
-      <value-param profiles="jboss">
-        <name>properties.url</name>
-        <value>${jboss.server.config.url}/gatein/configuration.properties</value>
+        <value>configuration.properties</value>
       </value-param>
     </init-params>
   </component>

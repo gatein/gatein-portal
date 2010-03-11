@@ -124,11 +124,6 @@
             <version>${org.exoplatform.kernel.version}</version>
          </dependency>
          <dependency>
-           <groupId>org.exoplatform.kernel</groupId>
-           <artifactId>exo.kernel.component.ext.cache.impl.jboss.v3</artifactId>
-           <version>${org.exoplatform.kernel.version}</version>
-         </dependency>
-         <dependency>
             <groupId>org.exoplatform.kernel</groupId>
             <artifactId>exo.kernel.component.command</artifactId>
             <version>${org.exoplatform.kernel.version}</version>
@@ -162,6 +157,11 @@
                 <artifactId>log4j</artifactId>
              </exclusion>
             </exclusions>
+         </dependency>
+         <dependency>
+           <groupId>org.exoplatform.kernel</groupId>
+           <artifactId>exo.kernel.component.ext.cache.impl.jboss.v3</artifactId>
+           <version>${org.exoplatform.kernel.version}</version>
          </dependency>
          <dependency>
             <groupId>org.exoplatform.core</groupId>

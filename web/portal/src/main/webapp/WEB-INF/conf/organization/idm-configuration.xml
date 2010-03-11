@@ -221,10 +221,11 @@
         <properties-param>
           <name>ref-addresses</name>
           <description>ref-addresses</description>
-          <property name="driverClassName" value="org.hsqldb.jdbcDriver"/>
-          <property name="url" value="jdbc:hsqldb:file:${gatein.db.data.dir}/data/jdbcidm${container.name.suffix}"/>
-          <property name="username" value="sa"/>
-          <property name="password" value=""/>
+          <property name="driverClassName" value="${portal.container.gatein.idm.datasource.driver}"/>
+          <property name="url" value="${portal.container.gatein.idm.datasource.url}"/>
+          <property name="username" value="${portal.container.gatein.idm.datasource.username}"/>
+          <property name="password" value="${portal.container.gatein.idm.datasource.password}"/>
+
         </properties-param>
       </init-params>
     </component-plugin>

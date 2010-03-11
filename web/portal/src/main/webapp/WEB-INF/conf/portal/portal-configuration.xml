@@ -193,7 +193,7 @@
 	    </component-plugin>
   	</component-plugins>  
   </component>
-
+  
   <external-component-plugins>
     <target-component>org.exoplatform.services.organization.OrganizationService</target-component>
     <component-plugin>
