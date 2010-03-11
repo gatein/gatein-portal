@@ -262,7 +262,6 @@ public class UIPortal extends UIContainer
    
    public synchronized void setSelectedNode(PageNode node)
    {
-      System.out.println("\n\n\nSetting the selected node : " + node);
       selectedNode_ = node;
    }
 
