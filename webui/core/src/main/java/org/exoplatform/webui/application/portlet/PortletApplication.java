@@ -61,7 +61,7 @@ import javax.portlet.RenderResponse;
 public class PortletApplication extends WebuiApplication
 {
 
-   protected static Log log = ExoLogger.getLogger("portlet:PortletApplication");
+   protected static Log log = ExoLogger.getLogger(PortletApplication.class);
 
    public final static String PORTLET_EVENT_VALUE = "portletEventValue";
 
