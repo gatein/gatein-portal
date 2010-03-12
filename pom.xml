@@ -42,7 +42,7 @@
       <org.exoplatform.ws.version>2.1.0-GA</org.exoplatform.ws.version>
       <org.exoplatform.jcr.version>1.12.0-GA</org.exoplatform.jcr.version>
       <org.jibx.version>1.2.1</org.jibx.version>
-      <org.shindig.version>1.0-r790473-Patch01</org.shindig.version>
+      <org.shindig.version>1.0-r790473-Patch02</org.shindig.version>
       <org.gatein.common.version>2.0.0-GA</org.gatein.common.version>
       <org.gatein.wci.version>2.0.0-GA</org.gatein.wci.version>
       <org.gatein.pc.version>2.1.0-GA</org.gatein.pc.version>
