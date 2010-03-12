@@ -45,6 +45,7 @@
 .UIToolbarContainer .UIHorizontalTabs .UITab {
 	line-height: 30px;
 	background: none;
+	font-weight: normal;
 }
 
 
@@ -57,7 +58,9 @@
 
 .UIToolbarContainer .TitleBar {
 	color: #232d36;
-	background: none;
+	background: #cccccc;
+	font-weight: normal;
+	padding: 0px 5px;
 }
 
 .UIToolbarContainer .MenuItem {	
@@ -70,18 +73,18 @@
 }
 
 .UIToolbarContainer .MenuItem a {	
-	padding-right: 25px; /* orientation=lt */
-	padding-left: 25px; /* orientation=rt */
+	padding: 0px 25px 0px 30px; /* orientation=lt */
+	padding: 0px 30px 0px 25px; /* orientation=rt */
 	color: #232d36;
 }
 
 .UIToolbarContainer .MenuItem a:hover {
 	color: #000;
-	background-color: #c2c3c9;
+	background-color: #d7d7d7;
 }
 
 .UIToolbarContainer .ItemIcon {	
-	background-position: 10px center; /* orientation=lt */
+	background-position: 5px center; /* orientation=lt */
 	background-position: 95% center; /* orientation=rt */
 }
 
@@ -110,27 +113,27 @@
 }
 
 .UIToolbarContainer .AddPageIcon {
-	background: url('background/ToolbarContainer.gif') no-repeat 5px -320px; /* orientation=lt */
+	background: url('background/ToolbarContainer.gif') no-repeat 0px -320px; /* orientation=lt */
 	background: url('background/ToolbarContainer.gif') no-repeat 100% -320px; /* orientation=rt */	
 }
 
 .UIToolbarContainer .EditPageIcon {
-	background: url('background/ToolbarContainer.gif') no-repeat 5px -352px; /* orientation=lt */
+	background: url('background/ToolbarContainer.gif') no-repeat 0px -352px; /* orientation=lt */
 	background: url('background/ToolbarContainer.gif') no-repeat 100% -352px; /* orientation=rt */
 }
 
 .UIToolbarContainer .EditSiteIcon {
-	background: url('background/ToolbarContainer.gif') no-repeat 5px -384px; /* orientation=lt */
+	background: url('background/ToolbarContainer.gif') no-repeat 0px -384px; /* orientation=lt */
 	background: url('background/ToolbarContainer.gif') no-repeat 100% -384px; /* orientation=rt */	
 }
 
 .UIToolbarContainer .ChangeLanguageIcon {
-	background: url('background/ToolbarContainer.gif') no-repeat 5px -192px; /* orientation=lt */
+	background: url('background/ToolbarContainer.gif') no-repeat 0px -192px; /* orientation=lt */
 	background: url('background/ToolbarContainer.gif') no-repeat 100% -192px; /* orientation=rt */
 }
 
 .UIToolbarContainer .ChangeSkinIcon {
-	background: url('background/ToolbarContainer.gif') no-repeat 5px -224px; /* orientation=lt */
+	background: url('background/ToolbarContainer.gif') no-repeat 0px -224px; /* orientation=lt */
 	background: url('background/ToolbarContainer.gif') no-repeat 100% -224px; /* orientation=rt */
 }
 
@@ -140,7 +143,7 @@
 }
 
 .UIToolbarContainer .SignOutIcon {
-	background: url('background/ToolbarContainer.gif') no-repeat 5px -288px; /* orientation=lt */
+	background: url('background/ToolbarContainer.gif') no-repeat 0px -288px; /* orientation=lt */
 	background: url('background/ToolbarContainer.gif') no-repeat 100% -288px; /* orientation=rt */
 }
 
