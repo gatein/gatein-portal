@@ -35,7 +35,6 @@ import org.gatein.pc.federation.FederatingPortletInvoker;
 import org.gatein.pc.portlet.container.ContainerPortletInvoker;
 import org.gatein.pc.portlet.impl.state.StateConverterV0;
 import org.gatein.pc.portlet.impl.state.StateManagementPolicyService;
-import org.gatein.pc.portlet.impl.state.producer.PortletStatePersistenceManagerService;
 import org.gatein.pc.portlet.state.StateConverter;
 import org.gatein.pc.portlet.state.producer.PortletStatePersistenceManager;
 import org.gatein.pc.portlet.state.producer.ProducerPortletInvoker;
@@ -264,7 +263,7 @@ public class ExoKernelIntegration implements Startable, WebAppListener
       }
       catch (Exception e)
       {
-         throw new RuntimeException("Couldn't stop WSRP consumers registry.");
+         throw new RuntimeException("Couldn't stop WSRP consumers registry.", e);
       }
 
       consumerRegistry = null;
