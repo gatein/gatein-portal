@@ -95,6 +95,11 @@ public class JCRPersister
       session.close();
    }
 
+   public void save(ChromatticSession session)
+   {
+      session.save();
+   }
+
 
    public static class WSRPSessionLifeCycle implements SessionLifeCycle
    {

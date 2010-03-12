@@ -73,7 +73,7 @@ public class JCRRegistrationPersistenceManager extends RegistrationPersistenceMa
       {
          mappings = session.insert(ConsumersAndGroupsMapping.class, ConsumersAndGroupsMapping.NODE_NAME);
       }
-      persister.closeSession(session, true);
+      persister.save(session); // needed right now as the session must still be open to iterate over nodes
 
       for (ConsumerGroupMapping cgm : mappings.getConsumerGroups())
       {
@@ -91,6 +91,8 @@ public class JCRRegistrationPersistenceManager extends RegistrationPersistenceMa
             internalAddRegistration((RegistrationSPI)registration);
          }
       }
+
+      persister.closeSession(session, false);
    }
 
    @Override
