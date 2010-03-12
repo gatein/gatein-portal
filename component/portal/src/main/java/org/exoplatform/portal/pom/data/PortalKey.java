@@ -45,4 +45,10 @@ public class PortalKey extends OwnerKey
       }
       return new PortalKey(components[0], components[1]);
    }
+
+   @Override
+   public String toString()
+   {
+      return "PortalKey[type=" + getType() + ",id=" + getId() + "]";
+   }
 }

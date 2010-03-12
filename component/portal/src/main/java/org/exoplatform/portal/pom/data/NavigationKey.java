@@ -45,4 +45,10 @@ public class NavigationKey extends OwnerKey
       }
       return new NavigationKey(components[0], components[1]);
    }
+
+   @Override
+   public String toString()
+   {
+      return "NavigationKey[type=" + getType() + ",id=" + getId() + "]";
+   }
 }

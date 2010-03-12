@@ -83,4 +83,10 @@ public class PageKey extends OwnerKey
       }
       return new PageKey(components[0], components[1], components[2]);
    }
+
+   @Override
+   public String toString()
+   {
+      return "PageKey[type=" + getType() + ",id=" + getId() + ",name=" + name + "]";
+   }
 }
