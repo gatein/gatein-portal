@@ -4,12 +4,12 @@
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="selenium.base" href="" />
-<title>SNF_PRL_18</title>
+<title>Test_SNF_PRL_18</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">SNF_PRL_18</td></tr>
+<tr><td rowspan="1" colspan="3">Test_SNF_PRL_18</td></tr>
 </thead><tbody>
 <tr>
 	<td>open</td>
@@ -122,7 +122,17 @@
 	<td>1,1</td>
 </tr>
 <tr>
+	<td>waitForElementPresent</td>
+	<td>xpath=//div[@id='PermissionSelector']//a[@title='manager']</td>
+	<td></td>
+</tr>
+<tr>
 	<td>clickAt</td>
+	<td>xpath=//div[@id='PermissionSelector']//a[@title='manager']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
 	<td>xpath=//div[@id='PermissionSelector']//a[@title='manager']</td>
 	<td></td>
 </tr>
@@ -172,13 +182,13 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
-	<td>xpath=//div[@id='UISiteManagement']/table[2]//a[@class='DeleteIcon']</td>
+	<td>waitForElementPresent</td>
+	<td>xpath=//div[@id='UISiteManagement']/table/tbody/tr/td[2]/div</td>
 	<td></td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
-	<td>xpath=//div[@id='UISiteManagement']/table/tbody/tr/td[2]/div</td>
+	<td>clickAt</td>
+	<td>xpath=//div[@id='UISiteManagement']/table[2]//a[@class='DeleteIcon']</td>
 	<td></td>
 </tr>
 <tr>
@@ -204,16 +214,6 @@
 <tr>
 	<td>waitForTextPresent</td>
 	<td>Portal Navigation</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForTextNotPresent</td>
-	<td>test_portal_18</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextNotPresent</td>
-	<td>test_portal_18</td>
 	<td></td>
 </tr>
 <tr>
