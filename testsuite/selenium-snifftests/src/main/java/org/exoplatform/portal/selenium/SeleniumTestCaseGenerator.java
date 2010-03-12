@@ -386,6 +386,9 @@ public class SeleniumTestCaseGenerator {
 				sb.append("}\n");
 			} else if (param1.equals("refresh")) {
 				sb.append("selenium.refresh();\n");
+			} else if (param1.equals("refreshAndWait")) {
+				sb.append("selenium.refresh();\n");
+				sb.append("selenium.waitForPageToLoad(timeout);\n");
 			} else if (param1.equals("storeXpathCount")) {
 				sb.append("String ").append(param3).append(" = selenium.getXpathCount(\"").append(param2).append(
 				      "\").toString();\n");
