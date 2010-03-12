@@ -19,6 +19,8 @@
 
 package org.exoplatform.portal.config.model;
 
+import java.io.Serializable;
+
 /**
  * The state of an application which can be either transient of persistent.
  *
@@ -26,6 +28,6 @@ package org.exoplatform.portal.config.model;
  * @version $Revision$
  * @param <S> the content state type
  */
-public abstract class ApplicationState<S>
+public abstract class ApplicationState<S> implements Serializable
 {
 }
