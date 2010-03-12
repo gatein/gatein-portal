@@ -35,7 +35,7 @@
 }
 
 .UISitemap {
-	background: white;
+	background: #fff url('DefaultSkin/background/default_sitemap.gif') no-repeat 95% 90%;
 	padding: 10px 30px;
 	color: #4e4e4e;
 }
