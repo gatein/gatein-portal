@@ -274,7 +274,7 @@
 
   <external-component-plugins>
     <target-component>org.exoplatform.services.cache.CacheService</target-component>
-    <component-plugin>
+    <component-plugin profiles="cluster">
       <name>addExoCacheConfig</name>
       <set-method>addExoCacheConfig</set-method>
       <type>org.exoplatform.services.cache.ExoCacheConfigPlugin</type>
@@ -287,13 +287,10 @@
             <field name="name">
               <string>MOPSessionManager</string>
             </field>
-            <field name="maxNodes">
-              <int>10000</int>
+            <field name="expirationTimeout">
+              <long>600</long>
             </field>
-            <field name="minTimeToLive">
-              <long>60000</long>
-            </field>
-            <field name="distributed" profiles="cluster">
+            <field name="distributed">
               <boolean>true</boolean>
             </field>
           </object>
