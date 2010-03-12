@@ -43,6 +43,7 @@ function getProduct(version) {
   product.addDependencies(portal.webui.portal);
   
   product.addDependencies(portal.web.eXoResources);
+  product.addDependencies(portal.examples.skins.simpleSkin);
 
   product.addDependencies(portal.web.portal) ;
   product.addDependencies(portal.sample.extension) ;
