@@ -23,7 +23,6 @@
 
 package org.gatein.portal.wsrp.state.producer.registrations.mapping;
 
-import org.chromattic.api.RelationshipType;
 import org.chromattic.api.annotations.*;
 import org.gatein.common.util.ParameterValidation;
 import org.gatein.portal.wsrp.state.producer.registrations.JCRRegistrationPersistenceManager;
@@ -49,8 +48,7 @@ public abstract class RegistrationMapping
    @Id
    public abstract String getPersistentKey();
 
-   @ManyToOne(type = RelationshipType.PATH)
-   @MappedBy("consumer")
+   @ManyToOne
    public abstract ConsumerMapping getConsumer();
 
    @Property(name = "status")

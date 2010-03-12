@@ -60,8 +60,7 @@ public abstract class ConsumerMapping
 
    public abstract void setConsumerAgent(String consumerAgent);
 
-   @OneToMany(type = RelationshipType.PATH)
-   @MappedBy("consumer")
+   @OneToMany
    public abstract List<RegistrationMapping> getRegistrations();
 
    @Create

@@ -111,10 +111,6 @@
                              onParentVersion="COPY" protected="false" multiple="false">
             <valueConstraints/>
          </propertyDefinition>
-         <propertyDefinition name="consumer" requiredType="Path" autoCreated="false" mandatory="false"
-                             onParentVersion="COPY" protected="false" multiple="false">
-            <valueConstraints/>
-         </propertyDefinition>
       </propertyDefinitions>
       <childNodeDefinitions>
          <childNodeDefinition name="properties" defaultPrimaryType="wsrp:registrationproperties" autoCreated="false"
