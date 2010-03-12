@@ -238,11 +238,6 @@ function getModule(params)
    new Project("org.exoplatform.portal", "exo.portal.web.rest", "war", module.version).
       addDependency(ws.frameworks.servlet);
 
-   module.examples = {}
-   module.examples.skins = {}
-   module.examples.skins.simpleSkin = new Project("org.gatein.portal.examples.skins", "gatein-sample-skin", "war", module.version);
-   //module.examples.skins.simpleSkin.deployName = "gatein-sample-skin";
-   
    module.web.portal =
    new Project("org.exoplatform.portal", "exo.portal.web.portal", "exo-portal", module.version).
       addDependency(jcr.frameworks.web).

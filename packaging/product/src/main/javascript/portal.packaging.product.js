@@ -43,7 +43,6 @@ function getProduct(version) {
   product.addDependencies(portal.webui.portal);
   
   product.addDependencies(portal.web.eXoResources);
-  product.addDependencies(portal.examples.skins.simpleSkin);
 
   product.addDependencies(portal.web.portal) ;
   product.addDependencies(portal.sample.extension) ;
@@ -57,7 +56,7 @@ function getProduct(version) {
   /* cleanup duplicated lib */
   product.removeDependency(new Project("commons-httpclient", "commons-httpclient", "jar", "3.0"));
   product.removeDependency(new Project("commons-collections", "commons-collections", "jar", "3.1"));
-  product.removeDependency(new Project("commons-collections", "commons-collections", "jar", "3.1"));
+  product.removeDependency(new Project("commons-collections", "commons-collections", "jar", "3.2"));
   product.removeDependency(new Project("c3p0", "c3p0", "jar", "0.9.1.2"));
 
   product.module = portal ;
