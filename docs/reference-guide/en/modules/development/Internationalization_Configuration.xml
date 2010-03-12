@@ -1,5 +1,7 @@
 <?xml version='1.0' encoding='utf-8' ?>
 <!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+<!ENTITY % BOOK_ENTITIES SYSTEM "../../Reference_Guide.ent">
+%BOOK_ENTITIES;
 ]>
 <section id="sect-Reference_Guide-Internationalization_Configuration">
 	<title>Internationalization Configuration</title>
@@ -93,7 +95,6 @@ NavigationPortlet_ar.xml
 				<area coords="7" id="area-Reference_Guide-i18n.locales.configuration.description" />
 				<area coords="22" id="area-Reference_Guide-i18n.locales.configuration.orientation" />
 			</areaspec>
-			
 <programlisting>&#60;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&#62;
 &#60;locales-config&#62;
   &#60;locale-config&#62;
@@ -102,14 +103,14 @@ NavigationPortlet_ar.xml
     &#60;input-encoding&#62;UTF-8&#60;/input-encoding&#62;
     &#60;description&#62;Default configuration for english locale&#60;/description&#62;
   &#60;/locale-config&#62;
-
+ 
   &#60;locale-config&#62;
     &#60;locale&#62;fr&#60;/locale&#62;
     &#60;output-encoding&#62;UTF-8&#60;/output-encoding&#62;
     &#60;input-encoding&#62;UTF-8&#60;/input-encoding&#62;
     &#60;description&#62;Default configuration for the french locale&#60;/description&#62;
   &#60;/locale-config&#62;
-
+ 
   &#60;locale-config&#62;
     &#60;locale&#62;ar&#60;/locale&#62;
     &#60;output-encoding&#62;UTF-8&#60;/output-encoding&#62;
@@ -161,7 +162,6 @@ NavigationPortlet_ar.xml
 				<area coords="11" id="area-Reference_Guide-i18n.rb.service.init_resources" />
 				<area coords="24" id="area-Reference_Guide-i18n.rb.service.portal_resource_names" />
 			</areaspec>
-			
 <programlisting>&#60;component&#62;
   &#60;key&#62;org.exoplatform.services.resources.ResourceBundleService&#60;/key&#62;
   &#60;type&#62;org.exoplatform.services.resources.impl.SimpleResourceBundleService&#60;/type&#62;

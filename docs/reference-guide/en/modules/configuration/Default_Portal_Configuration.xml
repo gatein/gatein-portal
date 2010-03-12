@@ -1,12 +1,14 @@
 <?xml version='1.0' encoding='utf-8' ?>
 <!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+<!ENTITY % BOOK_ENTITIES SYSTEM "../../Reference_Guide.ent">
+%BOOK_ENTITIES;
 ]>
 <section id="sect-Reference_Guide-Default_Portal_Configuration">
 	<title>Default Portal Configuration</title>
 	<section id="sect-Reference_Guide-Default_Portal_Configuration-Overview">
 		<title>Overview</title>
 		<para>
-			The default portal will be accessed if the user doesn&#39;t specify another portal. For example: <literal>http://hostname:port/portal/</literal>. The default portal also be used at startup to determine if the tomcat database is empty or not.
+			The default portal will be accessed if the user doesn&#39;t specify another portal. For example: <literal>http://hostname:port/portal/</literal>. The default portal also be used at startup to determine if the database is empty.
 		</para>
 	</section>
 	

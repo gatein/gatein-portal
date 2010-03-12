@@ -1,5 +1,7 @@
 <?xml version='1.0' encoding='utf-8' ?>
 <!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+<!ENTITY % BOOK_ENTITIES SYSTEM "../../Reference_Guide.ent">
+%BOOK_ENTITIES;
 ]>
 <section id="sect-Reference_Guide-Portlet_Primer">
 	<title>Portlet Primer</title>
@@ -179,7 +181,6 @@
 						<area coords="10" id="area-Reference_Guide-Deploying_your_first_Portlet-Package_Structure.portlet" />
 						<area coords="11" id="area-Reference_Guide-Deploying_your_first_Portlet-Package_Structure.web" />
 					</areaspec>
-					
 <programlisting>|-- SimplestHelloWorld-0.0.1.war
 |   `-- WEB-INF
 |       |-- classes
@@ -226,16 +227,15 @@
 						<area coords="16" id="area-Reference_Guide-Deploying_your_first_Portlet-Portlet_Class.write" />
 						<area coords="17" id="area-Reference_Guide-Deploying_your_first_Portlet-Portlet_Class.close" />
 					</areaspec>
-					
 <programlisting role="JAVA">package org.gatein.portal.examples.portlets;
-
+ 
 import java.io.IOException;
 import java.io.PrintWriter;
-
+ 
 import javax.portlet.GenericPortlet;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
-
+ 
 public class SimplestHelloWorldPortlet extends GenericPortlet
 {
    public void doView(RenderRequest request, 
@@ -307,7 +307,6 @@ public class SimplestHelloWorldPortlet extends GenericPortlet
 						<area coords="12" id="area-Reference_Guide-Deploying_your_first_Portlet-Application_Descriptors.supports" />
 						<area coords="15" id="area-Reference_Guide-Deploying_your_first_Portlet-Application_Descriptors.portletinfo" />
 					</areaspec>
-					
 <programlisting>
 &#60;portlet-app xmlns=&#34;http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd&#34;
    xmlns:xsi=&#34;http://www.w3.org/2001/XMLSchema-instance&#34;
@@ -467,11 +466,10 @@ public class SimplestHelloWorldPortlet extends GenericPortlet
 						<area coords="25" id="area-Reference_Guide-JavaServer_Pages_Portlet_Example-Portlet_Class.requestDispatcher" />
 						<area coords="26" id="area-Reference_Guide-JavaServer_Pages_Portlet_Example-Portlet_Class.include" />
 					</areaspec>
-					
 <programlisting role="JAVA">package org.gatein.portal.examples.portlets;
-
+ 
 import java.io.IOException;
-
+ 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.GenericPortlet;
@@ -480,10 +478,10 @@ import javax.portlet.PortletRequestDispatcher;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 import javax.portlet.UnavailableException;
-
+ 
 public class JSPHelloUserPortlet extends GenericPortlet
 {
-   
+    
    public void doView(RenderRequest request, RenderResponse response)
        throws PortletException, IOException
    {
@@ -570,7 +568,6 @@ public class JSPHelloUserPortlet extends GenericPortlet
 						<area coords="5" id="area-Reference_Guide-JavaServer_Pages_Portlet_Example-Portlet_Class.getActionParameter" />
 						<area coords="6" id="area-Reference_Guide-JavaServer_Pages_Portlet_Example-Portlet_Class.setRenderParameter" />
 					</areaspec>
-					
 <programlisting role="JAVA">...
          public void processAction(ActionRequest aRequest, ActionResponse aResponse) throws PortletException, IOException,
          UnavailableException
@@ -626,24 +623,23 @@ public class JSPHelloUserPortlet extends GenericPortlet
 						<area coords="30" id="area-Reference_Guide-JavaServer_Pages_Portlet_Example-JSP_files_and_the_Portlet_Tag_Library.method3.1" />
 						<area coords="31" id="area-Reference_Guide-JavaServer_Pages_Portlet_Example-JSP_files_and_the_Portlet_Tag_Library.method3.2" />
 					</areaspec>
-					
 <programlisting>&#60;%@ taglib uri=&#34;http://java.sun.com/portlet&#34; prefix=&#34;portlet&#34; %&#62;
-
+ 
 &#60;div class=&#34;portlet-section-header&#34;&#62;Welcome !&#60;/div&#62;
-
+ 
 &#60;br/&#62;
-
+ 
 &#60;div class=&#34;portlet-font&#34;&#62;Welcome on the JSP Hello User portlet,
 my name is GateIn Portal. What&#39;s yours ?&#60;/div&#62;
-
+ 
 &#60;br/&#62;
-
+ 
 &#60;div class=&#34;portlet-font&#34;&#62;Method 1: We simply pass the parameter to the render phase:&#60;br/&#62;
 &#60;a href=&#34;&#60;portlet:renderURL&#62;&#60;portlet:param name=&#34;yourname&#34; value=&#34;John Doe&#34;/&#62;
                 &#60;/portlet:renderURL&#62;&#34;&#62;John Doe&#60;/a&#62;&#60;/div&#62;
-
+ 
 &#60;br/&#62;
-
+ 
 &#60;div class=&#34;portlet-font&#34;&#62;Method 2: We pass the parameter to the render phase, using valid XML:
 Please check the source code to see the difference with Method 1.
 &#60;portlet:renderURL var=&#34;myRenderURL&#34;&#62;
@@ -651,11 +647,11 @@ Please check the source code to see the difference with Method 1.
 &#60;/portlet:renderURL&#62;
 &#60;br/&#62;
 &#60;a href=&#34;&#60;%= myRenderURL %&#62;&#34;&#62;John Doe&#60;/a&#62;&#60;/div&#62;
-
+ 
 &#60;br/&#62;
-
+ 
 &#60;div class=&#34;portlet-font&#34;&#62;Method 3: We use a form:&#60;br/&#62;
-
+ 
 &#60;portlet:actionURL var=&#34;myActionURL&#34;/&#62;
 &#60;form action=&#34;&#60;%= myActionURL %&#62;&#34; method=&#34;POST&#34;&#62;
          &#60;span class=&#34;portlet-form-field-label&#34;&#62;Name:&#60;/span&#62;
@@ -742,7 +738,6 @@ Please check the source code to see the difference with Method 1.
 						<area coords="26" id="area-Reference_Guide-JavaServer_Pages_Portlet_Example-JSF_example_using_the_JBoss_Portlet_Bridge.edit" />
 						<area coords="31" id="area-Reference_Guide-JavaServer_Pages_Portlet_Example-JSF_example_using_the_JBoss_Portlet_Bridge.help" />
 					</areaspec>
-					
 <programlisting>&#60;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&#62;
 &#60;portlet-app xmlns=&#34;http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd&#34;
    xmlns:xsi=&#34;http://www.w3.org/2001/XMLSchema-instance&#34;
@@ -766,17 +761,17 @@ Please check the source code to see the difference with Method 1.
          &#60;name&#62;javax.portlet.faces.defaultViewId.view&#60;/name&#62;
          &#60;value&#62;/jsf/welcome.jsp&#60;/value&#62;
       &#60;/init-param&#62;
-
+ 
       &#60;init-param&#62;
          &#60;name&#62;javax.portlet.faces.defaultViewId.edit&#60;/name&#62;
          &#60;value&#62;/jsf/edit.jsp&#60;/value&#62;
       &#60;/init-param&#62;
-
+ 
       &#60;init-param&#62;
          &#60;name&#62;javax.portlet.faces.defaultViewId.help&#60;/name&#62;
          &#60;value&#62;/jsf/help.jsp&#60;/value&#62;
       &#60;/init-param&#62;
-
+ 
    &#60;/portlet&#62;
 &#60;/portlet-app&#62;
 </programlisting>

@@ -3,6 +3,8 @@
 "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
 <!ENTITY % BOOK_ENTITIES SYSTEM "../../Reference_Guide.ent">
 %BOOK_ENTITIES;
+<!ENTITY % BOOK_ENTITIES SYSTEM "../../Reference_Guide.ent">
+%BOOK_ENTITIES;
 ]>
 <section id="sect-Reference_Guide-Skin_Configuration">
   <title>Skin Configuration</title>
@@ -97,12 +99,10 @@
     <programlistingco>
       <areaspec>
         <area coords="3" id="area-Reference_Guide-Skin_Configuration-Coreskin" />
-
         <area coords="4"
               id="area-Reference_Guide-Skin_Configuration-Stylesheets" />
       </areaspec>
-
-      <programlisting>&lt;head&gt;
+<programlisting>&lt;head&gt;
 ...   
 &lt;link id="CoreSkin" rel="stylesheet" type="text/css" href="/eXoResources/skin/Stylesheet.css" /&gt;
 &lt;link id="web_FooterPortlet" rel="stylesheet" type="text/css" href= "/web/skin/portal/webui/component/UIFooterPortlet/DefaultStylesheet.css" /&gt;
@@ -112,13 +112,11 @@
 ...
 &lt;/head&gt;
 </programlisting>
-
       <calloutlist>
         <callout arearefs="area-Reference_Guide-Skin_Configuration-Coreskin">
           <para>Portal skin stylesheet
           (<literal>id="CoreSkin"</literal>).</para>
         </callout>
-
         <callout arearefs="area-Reference_Guide-Skin_Configuration-Stylesheets">
           <para>Portlets skins stylesheets (all
           others). Each portlet within the page may contribute its

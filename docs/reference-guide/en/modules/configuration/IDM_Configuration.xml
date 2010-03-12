@@ -2,6 +2,8 @@
 <!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
 <!ENTITY % BOOK_ENTITIES SYSTEM "../../Reference_Guide.ent">
 %BOOK_ENTITIES;
+<!ENTITY % BOOK_ENTITIES SYSTEM "../../Reference_Guide.ent">
+%BOOK_ENTITIES;
 ]>
 <section id="sect-Reference_Guide-PicketLink_IDM_integration">
 	<title>PicketLink IDM integration</title>
@@ -35,11 +37,10 @@
 				<area coords="5" id="area-Reference_Guide-PicketLink_IDM_integration-Configuration_files-JBossIDMServiceImpl" />
 				<area coords="22" id="area-Reference_Guide-PicketLink_IDM_integration-Configuration_files-JBossIDMOrganizationServiceImpl" />
 			</areaspec>
-			
 <programlisting role="XML">&#60;configuration xmlns:xsi=&#34;http://www.w3.org/2001/XMLSchema-instance&#34;
                xsi:schemaLocation=&#34;http://www.exoplaform.org/xml/ns/kernel_1_0.xsd http://www.exoplaform.org/xml/ns/kernel_1_0.xsd&#34;
                xmlns=&#34;http://www.exoplaform.org/xml/ns/kernel_1_0.xsd&#34;&#62;
-
+ 
    &#60;component&#62;
         &#60;key&#62;org.exoplatform.services.organization.idm.PicketLinkIDMService&#60;/key&#62;
       &#60;type&#62;org.exoplatform.services.organization.idm.PicketLinkIDMServiceImpl&#60;/type&#62;
@@ -54,8 +55,8 @@
          &#60;/value-param&#62;
        &#60;/init-params&#62;
    &#60;/component&#62;
-
-
+ 
+ 
    &#60;component&#62;
       &#60;key&#62;org.exoplatform.services.organization.OrganizationService&#60;/key&#62;
       &#60;type&#62;org.exoplatform.services.organization.idm.PicketLinkIDMOrganizationServiceImpl&#60;/type&#62;
@@ -66,26 +67,26 @@
           &#60;field name="useParentIdAsGroupType"&#62;
             &#60;boolean&#62;true&#60;/boolean&#62;
           &#60;/field&#62;
-
+ 
           &#60;field name="forceMembershipOfMappedTypes"&#62;
             &#60;boolean&#62;true&#60;/boolean&#62;
           &#60;/field&#62;
-
+ 
           &#60;field name="pathSeparator"&#62;
             &#60;string&#62;.&#60;/string&#62;
           &#60;/field&#62;
-
+ 
           &#60;field name="rootGroupName"&#62;
             &#60;string&#62;GTN_ROOT_GROUP&#60;/string&#62;
           &#60;/field&#62;
-
+ 
           &#60;field name="groupTypeMappings"&#62;
             &#60;map type="java.util.HashMap"&#62;
               &#60;entry&#62;
                 &#60;key&#62;&#60;string&#62;/&#60;/string&#62;&#60;/key&#62;
                 &#60;value&#62;&#60;string&#62;root_type&#60;/string&#62;&#60;/value&#62;
               &#60;/entry&#62;
-
+ 
               &#60;!-- Sample mapping --&#62;
               &#60;!--
               &#60;entry&#62;
@@ -97,24 +98,24 @@
                 &#60;value&#62;&#60;string&#62;organization_type&#60;/string&#62;&#60;/value&#62;
               &#60;/entry&#62;
               --&#62;
-
+ 
             &#60;/map&#62;
           &#60;/field&#62;
-
+ 
           &#60;field name="associationMembershipType"&#62;
             &#60;string&#62;member&#60;/string&#62;
           &#60;/field&#62;
-
+ 
           &#60;field name="ignoreMappedMembershipType"&#62;
             &#60;boolean&#62;false&#60;/boolean&#62;
           &#60;/field&#62;
         &#60;/object&#62;
       &#60;/object-param&#62;
     &#60;/init-params&#62;
-
-
+ 
+ 
    &#60;/component&#62;
-
+ 
 &#60;/configuration&#62;
 </programlisting>
 			<calloutlist>
@@ -122,25 +123,68 @@
 					<para>
 						The <emphasis role="bold">org.exoplatform.services.organization.idm.PicketLinkIDMServiceImpl</emphasis> service has following options:
 					</para>
-					<itemizedlist>
+					<variablelist>
+					<varlistentry>
+						<term>config</term>
 						<listitem>
 							<para>
-								<emphasis role="bold">config</emphasis> - (value-param) - PicketLink IDM configuration file
+								(value-param)
+							</para>
+							<para>
+								PicketLink IDM configuration file
 							</para>
 						</listitem>
+					</varlistentry>
+					<varlistentry>
+						<term>hibernate.properties</term>
 						<listitem>
 							<para>
-								<emphasis role="bold">jndiName</emphasis> - (value-param) - in case &#39;config&#39; parameter is not
-                provided this will be used to perform JNDI lookup for IdentitySessionFactory
+								(properties-param)
+							</para>
+							<para>
+								A list of hibernate properties used to create SessionFactory that will be injected to JBoss Identity IDM configuration registry.
 							</para>
 						</listitem>
+					</varlistentry>
+					<varlistentry>
+						<term>hibernate.annotations</term>
 						<listitem>
 							<para>
-								<emphasis role="bold">portalRealm</emphasis> - (value-param) - name of a realm that should be used to
-                obtain proper IdentitySession - default is &#39;PortalRealm&#39;.
+								A list of annotated classes that will be added to hibernate configuration.
 							</para>
 						</listitem>
-					</itemizedlist>
+					</varlistentry>
+					<varlistentry>
+						<term>hibernate.mappings</term>
+						<listitem>							
+							<para>
+								A list of xml files that will be added to hibernate configuration as mapping files.
+							</para>
+						</listitem>
+					</varlistentry>
+					<varlistentry>
+						<term>jndiName</term>
+						<listitem>
+							<para>
+								(value-param)
+							</para>
+							<para>
+								If the &#39;config&#39; parameter is not provided this parameter will be used to perform JNDI lookup for IdentitySessionFactory
+							</para>
+						</listitem>
+					</varlistentry>
+					<varlistentry>
+						<term>portalRealm</term>
+						<listitem>
+							<para>
+								(value-param)
+							</para>
+							<para>
+								The name of a realm that should be used to obtain proper IdentitySession. The default is &#39;PortalRealm&#39;.
+							</para>
+						</listitem>
+					</varlistentry>
+					</variablelist>
 				</callout>
 				<callout arearefs="area-Reference_Guide-PicketLink_IDM_integration-Configuration_files-JBossIDMOrganizationServiceImpl">
 					<para>
@@ -153,96 +197,106 @@
             service has following options defined as fields of object-param type
             <emphasis role="bold">org.exoplatform.services.organization.idm.Config</emphasis>:
 					</para>
-
-          <itemizedlist>
+      					<variablelist>
+					<varlistentry>
+						<term>defaultGroupType</term>
 						<listitem>
 							<para>
-								<emphasis role="bold">defaultGroupType</emphasis> - Name of PicketLink IDM GroupType that will be used to store groups.
-                Default is &#39;GTN_GROUP_TYPE&#39;
+								The name of the PicketLink IDM GroupType that will be used to store groups. The default is &#39;GTN_GROUP_TYPE&#39;.
 							</para>
 						</listitem>
-						<listitem>
+					</varlistentry>
+					<varlistentry>
+						<term>rootGroupName</term>
+							<listitem>
+								<para>
+									 The name of the PicketLink IDM Group that will be used as a root parent. The default is &#39;GTN_ROOT_GROUP&#39;
+								</para>
+							</listitem>
+						</varlistentry>
+						<varlistentry>
+							<term>passwordAsAttribute</term>
+							<listitem>
+								<para>
+									This parameter specifies if a password should be stored using PicketLink IDM Credential object or as a plain attribute. The default is false.
+								</para>
+							</listitem>
+						</varlistentry>
+						<varlistentry>
+							<term>useParentIdAsGroupType</term>
+							<listitem>
 							<para>
-								<emphasis role="bold">rootGroupName</emphasis> - Name of PicketLink IDM Group that will be used as a root parent.
-                Default is &#39;GTN_ROOT_GROUP&#39;
+								This parameter stores the parent ID path as a group type in PicketLink IDM for any IDs not mapped with a specific type in 'groupTypeMappings'. If this option is set to false and no mappings are provided under 'groupTypeMappings'  only one group with a given name can exist in the &PRODUCT; group tree.
 							</para>
-						</listitem>
-            <listitem>
-							<para>
-								<emphasis role="bold">passwordAsAttribute</emphasis> - (default false) - Specifies if password should be stored using
-                PicketLink IDM Credential object or as a plain attribute
-							</para>
-						</listitem>
-						<listitem>
-							<para>
-								<emphasis role="bold">useParentIdAsGroupType</emphasis> - For all ids not mapped with type in 'groupTypeMappings'
-                option use parent id path
-               as a group type to store group in PicketLink IDM. The effect of setting
-               this option to false and not providing any mappings under 'groupTypeMappings' option
-               is that there can be only one group with a given name in whole GateIn group tree
-							</para>
-						</listitem>
-            <listitem>
-							<para>
-								<emphasis role="bold">pathSeparator</emphasis> - When 'userParentIdAsGroupType is set to true this value will be used to
-               replace all "/" chars in id. This is because "/" is not allowed to be
-               used in group type name in PicketLink IDM
-							</para>
-						</listitem>
-            <listitem>
-							<para>
-								<emphasis role="bold">associationMembershipType</emphasis> - If this option is used then each Membership created with
-                MembrshipType that is equal to value specified here will be stored in PicketLink IDM as simple
-               Group-User association
-							</para>
-						</listitem>
-            <listitem>
-							<para>
-								<emphasis role="bold">groupTypeMappings</emphasis> - Map groups added with GateIn API as a childs of a given group ID to be stored with a given
-               group type name in PicketLink IDM. If parent ID ends with "/*" then all child groups will
-               have the mapped group type. Otherwise only direct (first level) children will use this type.
-
-               This can be leveraged by LDAP setup. Given LDAP DN configured in PicketLink IDM to
-               store specific group type will then store one given branch in GateIn group tree while
-               all other groups will remain in DB.
-							</para>
-						</listitem>
-            <listitem>
-							<para>
-								<emphasis role="bold">forceMembershipOfMappedTypes</emphasis> - Group stored in PicketLink IDM with a type mapped in 'groupTypeMappings' will
-               automatically be member under mapped parent. Normally groups are linked by
-               PicketLink IDM group association - such relationship won't be needed then. It can
-               be set to false if all groups are added via GateIn APIs
-               This option may be useful with LDAP config as it will make (if set to true) every entry
-               added to LDAP (not via GateIn management UI) appear in GateIn
-							</para>
-						</listitem>
-            <listitem>
-							<para>
-								<emphasis role="bold">ignoreMappedMembershipType</emphasis> - if "associationMembershipType" option is used and this option is set to true
-                then Membership with MembershipType configured to be stored as PicketLink IDM association
-                will not be stored as PicketLink IDM Role
-							</para>
-						</listitem>
-					</itemizedlist>
-
+							</listitem>
+						</varlistentry>
+						<varlistentry>
+							<term>pathSeparator</term>
+							<listitem>
+								<para>
+									When 'userParentIdAsGroupType is set to true, this value will be used to replace all "/" characters in IDs. The "/" character is not allowed to be used in group type name in PicketLink IDM.
+								</para>
+							</listitem>
+						</varlistentry>
+						<varlistentry>
+							<term>associationMembershipType</term>
+							<listitem>
+								<para>
+									If this option is used then each Membership created with MembrshipType that is equal to the value specified here will be stored in PicketLink IDM as simple Group-User association.
+								</para>
+							</listitem>
+						</varlistentry>
+						<varlistentry>
+							<term>groupTypeMappings</term>
+							<listitem>
+								<para>
+									This parameter maps groups added with the &PRODUCT; API as a child of a given group ID and stores them with a given group type name in PicketLink IDM. 
+								</para>
+								<para>
+									If the parent ID ends with "/*" then all child groups will have the mapped group type. Otherwise only direct (first level) children will use this type. 
+								</para>
+								<para>
+									This can be leveraged by LDAP if LDAP DN is configured in PicketLink IDM to only store a specific group type. This will then store the given branch in the &PRODUCT; group tree while all other groups will remain in the database.
+								</para>
+							</listitem>
+						</varlistentry>
+						<varlistentry>
+							<term>forceMembershipOfMappedTypes</term>
+							<listitem>
+								<para>
+									Groups stored in PicketLink IDM with a type mapped in 'groupTypeMappings' will automatically be a member under the mapped parent. Group relationships linked by PicketLink IDM group association will not be necessary. 
+								</para>
+								<para>
+									This parameter can be set to false if all groups are added via &PRODUCT; APIs. This may be useful with LDAP configuration as, when set to true, it will make every entry added to LDAP appear in &PRODUCT;. This is not true for entries added via the &PRODUCT; management UI, however.
+								</para>
+							</listitem>
+						</varlistentry>
+						<varlistentry>
+							<term>ignoreMappedMembershipType</term>
+							<listitem>
+								<para>
+									If "associationMembershipType" option is used and this option is set to true then Membership with MembershipType configured to be stored as PicketLink IDM association will not be stored as PicketLink IDM Role.
+								</para>
+							</listitem>
+						</varlistentry>
+  				</variablelist>
 					<para>
 						Additionally <emphasis role="bold">JBossIDMOrganizationServiceImpl</emphasis> uses those defaults to perform identity management operations
 					</para>
 					<itemizedlist>
 						<listitem>
 							<para>
-								GateIn User interface properties fields are persisted in JBoss Identity IDM using those attributes names: firstName, lastName, email, createdDate, lastLoginTime, organizationId, password (if password is configured to be stored as attribute)
+								&PRODUCT; User interface properties fields are persisted in JBoss Identity IDM using those attributes names: firstName, lastName, email, createdDate, lastLoginTime, organizationId, password (if password is configured to be stored as attribute)
 							</para>
 						</listitem>
 						<listitem>
 							<para>
-								GateIn Group interface properties fields are persisted in JBoss Identity IDM using those attributes names: label, description
+								&PRODUCT; Group interface properties fields are persisted in JBoss Identity IDM using those attributes names: label, description
 							</para>
 						</listitem>
 						<listitem>
 							<para>
-								GateIn MembershipType interface properties fields are persisted in JBoss Identity IDM using those RoleType properties: description, owner, create_date, modified_date
+								&PRODUCT; MembershipType interface properties fields are persisted in JBoss Identity IDM using those RoleType properties: description, owner, create_date, modified_date
 							</para>
 						</listitem>
 					</itemizedlist>

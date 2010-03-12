@@ -1,5 +1,7 @@
 <?xml version='1.0' encoding='utf-8' ?>
 <!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+<!ENTITY % BOOK_ENTITIES SYSTEM "../Reference_Guide.ent">
+%BOOK_ENTITIES;
 ]>
 <chapter id="chap-Reference_Guide-SSO_Single_Sign_On">
 	<title>SSO - Single Sign On</title>
@@ -12,7 +14,7 @@
 			When logging into the portal users gain access to many systems through portlets using a single identity. In many cases, however, the portal infrastructure must be integrated with other SSO enabled systems. There are many different Identity Management solutions available. In most cases each SSO framework provides a unique way to plug into a Java EE application.
 		</para>
 		<section id="sect-Reference_Guide-Overview_of_SSO-Prerequisite">
-			<title>Prerequisite</title>
+			<title>Prerequisites</title>
 			<para>
 				In this tutorial, the SSO server is installed in a Tomcat installation. Tomcat can be obtained from <ulink type="http" url="http://tomcat.apache.org">http://tomcat.apache.org</ulink>.
 			</para>
