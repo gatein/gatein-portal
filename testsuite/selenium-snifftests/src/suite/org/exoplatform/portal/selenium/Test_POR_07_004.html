@@ -27,6 +27,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>waitForElementPresent</td>
+	<td>username</td>
+	<td>root</td>
+</tr>
+<tr>
 	<td>type</td>
 	<td>username</td>
 	<td>root</td>
@@ -74,6 +79,11 @@
 <tr>
 	<td>echo</td>
 	<td>--Verify</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForTextPresent</td>
+	<td>Accueil</td>
 	<td></td>
 </tr>
 <tr>
@@ -127,18 +137,28 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
-	<td>link=Déconnexion</td>
-	<td></td>
-</tr>
-<tr>
 	<td>echo</td>
 	<td>--Verify</td>
 	<td></td>
 </tr>
 <tr>
+	<td>waitForTextPresent</td>
+	<td>Accueil</td>
+	<td></td>
+</tr>
+<tr>
 	<td>verifyTextPresent</td>
 	<td>Accueil</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Déconnexion</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>link=Déconnexion</td>
 	<td></td>
 </tr>
 <tr>
@@ -192,8 +212,13 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
+	<td>clickAt</td>
 	<td>link=Appliquer</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForTextPresent</td>
+	<td>Home</td>
 	<td></td>
 </tr>
 <tr>
@@ -204,11 +229,6 @@
 <tr>
 	<td>clickAt</td>
 	<td>link=Sign out</td>
-	<td></td>
-</tr>
-<tr>
-	<td>refresh</td>
-	<td></td>
 	<td></td>
 </tr>
 <tr>
@@ -272,13 +292,18 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
+	<td>clickAt</td>
 	<td>link=Apply</td>
 	<td></td>
 </tr>
 <tr>
 	<td>echo</td>
 	<td>--Verify</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForTextPresent</td>
+	<td>Startseite</td>
 	<td></td>
 </tr>
 <tr>
@@ -317,6 +342,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>waitForElementPresent</td>
+	<td>username</td>
+	<td></td>
+</tr>
+<tr>
 	<td>type</td>
 	<td>username</td>
 	<td>john</td>
@@ -332,18 +362,23 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
-	<td>link=Abmelden</td>
-	<td></td>
-</tr>
-<tr>
 	<td>echo</td>
 	<td>--Verify</td>
 	<td></td>
 </tr>
 <tr>
+	<td>waitForTextPresent</td>
+	<td>Startseite</td>
+	<td></td>
+</tr>
+<tr>
 	<td>verifyTextPresent</td>
 	<td>Startseite</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>link=Abmelden</td>
 	<td></td>
 </tr>
 <tr>
@@ -397,8 +432,13 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
+	<td>clickAt</td>
 	<td>link=Anwenden</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForTextPresent</td>
+	<td>Home</td>
 	<td></td>
 </tr>
 <tr>
@@ -409,11 +449,6 @@
 <tr>
 	<td>clickAt</td>
 	<td>link=Sign out</td>
-	<td></td>
-</tr>
-<tr>
-	<td>refresh</td>
-	<td></td>
 	<td></td>
 </tr>
 <tr>
@@ -477,13 +512,18 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
+	<td>clickAt</td>
 	<td>link=Apply</td>
 	<td></td>
 </tr>
 <tr>
 	<td>echo</td>
 	<td>--Verify</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForTextPresent</td>
+	<td>Home</td>
 	<td></td>
 </tr>
 <tr>
@@ -522,6 +562,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>waitForElementPresent</td>
+	<td>username</td>
+	<td>demo</td>
+</tr>
+<tr>
 	<td>type</td>
 	<td>username</td>
 	<td>demo</td>
@@ -547,6 +592,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>waitForTextPresent</td>
+	<td>Home</td>
+	<td></td>
+</tr>
+<tr>
 	<td>verifyTextPresent</td>
 	<td>Home</td>
 	<td></td>
@@ -567,6 +617,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>waitForElementPresent</td>
+	<td>username</td>
+	<td></td>
+</tr>
+<tr>
 	<td>type</td>
 	<td>username</td>
 	<td>demo</td>
@@ -577,13 +632,18 @@
 	<td>gtn</td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
+	<td>clickAt</td>
 	<td>xpath=//div[@id='UIPortalLoginFormAction']/div/div/div/a</td>
 	<td></td>
 </tr>
 <tr>
 	<td>echo</td>
 	<td>--Change back to English</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Cambia Lingua</td>
 	<td></td>
 </tr>
 <tr>
@@ -602,8 +662,13 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=Inglese</td>
+	<td>clickAt</td>
+	<td>link=Applica</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForTextPresent</td>
+	<td>Home</td>
 	<td></td>
 </tr>
 <tr>
