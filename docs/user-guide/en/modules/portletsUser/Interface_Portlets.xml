@@ -34,10 +34,10 @@
 			</para>
 			<mediaobject>
 				<imageobject role="html">
-					<imagedata fileref="images/PortalHome.png" format="PNG" align="center" scale="110"/>
+					<imagedata fileref="images/Frontpage.png" format="PNG" align="center" scale="110"/>
 				</imageobject>
 				<imageobject role="fo">
-					<imagedata fileref="images/PortalHome.png" format="PNG" align="center"  scalefit="1" contentwidth="150mm" />
+					<imagedata fileref="images/Frontpage.png" format="PNG" align="center"  scalefit="1" contentwidth="150mm" />
 				</imageobject>
 			</mediaobject>
 		</listitem>

@@ -7,14 +7,78 @@
 
 <book lang="en">
 	<bookinfo>
-		<title>GateIn Documentation</title>
-		<subtitle>GateIn</subtitle>
-		<releaseinfo>This document provides an easy to follow guide to the functions and
-options available in &PRODUCT;. It is intended to
-be accessible and useful to both experienced and novice portal
-users.</releaseinfo>
-	</bookinfo>
-	<toc />
+		<title>GateIn User Guide</title>
+		<subtitle>
+<!--
+LT 20010312: could not find a way to configure image scaling properly (tried width, scale, etc...). Feel free to investigate.
+-->
+			<mediaobject>
+				<imageobject role="html">
+					<imagedata fileref="images/gatein_logo.png" format="PNG" align="center"/>
+				</imageobject>
+				<imageobject role="fo">
+					<imagedata fileref="images/gatein_logo.png" format="PNG" align="center"/>
+				</imageobject>
+			</mediaobject>
+
+               </subtitle>
+
+
+		<authorgroup>
+			   <author>
+			      <firstname>the GateIn community</firstname>
+			      <surname></surname>
+			   </author>
+			   <author>
+			      <firstname>JBoss by Red Hat</firstname>
+			      <surname></surname>
+			   </author>
+			   <author>
+			      <firstname>eXo Platform</firstname>
+			      <surname></surname>
+			   </author>
+
+			<editor>
+				<firstname>Scott</firstname>
+				<surname>Mumford</surname>
+				<affiliation>
+					<shortaffil>Red Hat</shortaffil>
+					<orgdiv>Engineering Content Services</orgdiv>
+				</affiliation>
+				<email>smumford@redhat.com</email>
+			</editor>
+			<editor>
+				<firstname>Thomas</firstname>
+				<surname>Heute</surname>
+				<affiliation>
+					<shortaffil>Red Hat</shortaffil>
+					<orgdiv>JBoss Engineering</orgdiv>
+				</affiliation>
+				<email>theute@redhat.com</email>
+			</editor>
+			<editor>
+				<firstname>Luc</firstname>
+				<surname>Texier</surname>
+				<affiliation>
+					<shortaffil>Red Hat</shortaffil>
+                                        <orgdiv>JBoss Engineering, Management</orgdiv>
+				</affiliation>
+				<email>ltexier@redhat.com</email>
+			</editor>
+<!--
+			<othercredit>
+				<affiliation>
+					<orgname><emphasis role="bold"><ulink type="http" url="http://www.jboss.org/gatein/">GateIn Portal</ulink></emphasis> and <emphasis role="bold"><ulink type="http" url="http://www.exoplatform.com/portal/public/website/">Exo Platform</ulink></emphasis> teams</orgname>
+				</affiliation>
+				<contrib>Original product documentation by:</contrib>
+			</othercredit>
+-->
+		</authorgroup>
+
+
+        </bookinfo>
+
+
 
 	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="modules/Introduction.xml" />
 	<!--
@@ -50,22 +114,5 @@ users.</releaseinfo>
 	<!-- GadgetsAdmin -->
 	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="modules/GadgetsAdmin.xml" />
 
-	<!--
-		11_Support
-		http://www.exoplatform.com/portal/public/en/forum?portal:componentId=forum&portal:type=action&portal:isSecure=false&uicomponent=UIBreadcumbs&op=ChangePath&objectId=forumCategory88afa455c0a8020100a6752323da4b60
-		http://faq.exoplatform.com/ http://jira.exoplatform.org/browse/Portal
-	-->
-
-
-	<!--
-		Deprecated <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
-		href="modules/Advanced_User_Guide.xml" /> <xi:include
-		xmlns:xi="http://www.w3.org/2001/XInclude"
-		href="modules/Create_a_predefined_Portal_Navigation.xml" />
-		<xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
-		href="modules/RTL.xml" /> Was in HowTo <xi:include
-		xmlns:xi="http://www.w3.org/2001/XInclude"
-		href="modules/Skin_Config.xml" />
-	-->
 
 </book>

@@ -188,8 +188,9 @@
 			</step>
 			<step>
 				<para>
-					Return to your portal and click the Dashboard link in the toolbar.
+					Return to your portal and click <emphasis role="bold">Dashboard</emphasis> in the toolbar.
 				</para>
+<!--
 				<mediaobject>
 					<imageobject role="html">
 						<imagedata fileref="images/DashboardLink.png" format="PNG" align="center" scale="110"/>
@@ -198,7 +199,7 @@
 						<imagedata fileref="images/DashboardLink.png" format="PNG" align="center" scalefit="1"  contentwidth="150mm"/>
 					</imageobject>
 				</mediaobject>
-				
+-->				
 			</step>
 			<step>
 				<para>
