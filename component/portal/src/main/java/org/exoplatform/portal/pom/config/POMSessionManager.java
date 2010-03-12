@@ -62,7 +62,7 @@ public class POMSessionManager implements Startable
       //
       this.repositoryService = repositoryService;
       this.manager = manager;
-      this.cache = cacheService.getCacheInstance(POMSessionManager.class.getSimpleName());
+      this.cache = cacheService.getCacheInstance("MOPSessionManager");
       this.pomService = null;
       this.executor = new DataCache(new ExecutorDispatcher());
    }

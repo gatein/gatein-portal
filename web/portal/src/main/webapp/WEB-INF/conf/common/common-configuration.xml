@@ -177,6 +177,11 @@
           <object type="org.exoplatform.services.cache.impl.jboss.lru.LRUExoCacheCreator"></object>
         </object-param>
         <object-param>
+          <name>EA</name>
+          <description>The EA cache creator</description>
+          <object type="org.exoplatform.services.cache.impl.jboss.ea.EAExoCacheCreator"></object>
+        </object-param>
+        <object-param>
           <name>simple</name>
           <description>The Simple cache creator</description>
           <object type="org.exoplatform.commons.cache.SimpleExoCacheCreator"></object>

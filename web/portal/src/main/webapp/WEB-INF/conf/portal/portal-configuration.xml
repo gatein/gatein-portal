@@ -280,12 +280,12 @@
       <type>org.exoplatform.services.cache.ExoCacheConfigPlugin</type>
       <description>add Exo Cache Config</description>
       <init-params>
-        <object-param profiles="cluster">
-          <name>cache.config.POMSessionManager</name>
-          <description>The JBoss Cache LRU configuration</description>
-          <object type="org.exoplatform.services.cache.impl.jboss.lru.LRUExoCacheConfig">
+        <object-param>
+          <name>cache.config.MOPSessionManager</name>
+          <description>The JBoss Cache configuration for the MOP session Manager</description>
+          <object type="org.exoplatform.services.cache.impl.jboss.ea.EAExoCacheConfig">
             <field name="name">
-              <string>POMSessionManager</string>
+              <string>MOPSessionManager</string>
             </field>
             <field name="maxNodes">
               <int>10000</int>
