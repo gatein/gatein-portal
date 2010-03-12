@@ -208,6 +208,7 @@
 	border: solid #b7b7b7 1px; /*fix for IE*/
 	text-align: left; /* orientation=lt */
 	text-align: right; /* orientation=rt */
+   z-index: 1;
 }
 
 .UINavigationPortlet .MenuItemContainer .MenuItemDecorator {

@@ -57,6 +57,7 @@
 	background: #f3f3f3;
 	text-align: left; /* orientation=lt */
 	text-align: right; /* orientation=rt */
+   z-index: 1;
 }
 
 .UIPortalNavigationPortlet .MenuItemContainer .MenuItemDecorator {
