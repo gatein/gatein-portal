@@ -37,7 +37,7 @@
          <groupId>org.gatein.tools</groupId>
          <artifactId>packager</artifactId>
          <type>zip</type>
-         <version>1.0.0-Beta08</version>
+         <version>1.0.0-CR01</version>
       </dependency>
 
       <dependency>

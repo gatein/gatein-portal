@@ -54,6 +54,9 @@
 								<string>rest</string>
 							</value>
 							<value>
+								<string>wsrp-producer</string>
+							</value>
+							<value>
 								<string>web</string>
 							</value>
 						</collection>
