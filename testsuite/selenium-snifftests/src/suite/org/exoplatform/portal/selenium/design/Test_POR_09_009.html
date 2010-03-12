@@ -43,7 +43,7 @@
 </tr>
 <tr>
 	<td>clickAt</td>
-	<td>//div[@id='UIPortalLoginFormAction']//a</td>
+	<td>xpath=//div[@id='UIPortalLoginFormAction']//a</td>
 	<td></td>
 </tr>
 <tr>
@@ -147,11 +147,6 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
-	<td>link=Platform</td>
-	<td></td>
-</tr>
-<tr>
 	<td>waitForElementPresent</td>
 	<td>link=Administrators</td>
 	<td></td>
@@ -217,7 +212,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
+	<td>clickAt</td>
 	<td>xpath=//div[@id='UIMaskWorkspace']//div[@class='TabsContainer']/div[2]//div[@class='MiddleTab']</td>
 	<td></td>
 </tr>
@@ -292,7 +287,7 @@
 	<td>exact:*</td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
+	<td>clickAt</td>
 	<td>link=Save</td>
 	<td></td>
 </tr>
@@ -317,6 +312,56 @@
 	<td></td>
 </tr>
 <tr>
+	<td>clickAt</td>
+	<td>link=Home</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForTextPresent</td>
+	<td>The Best of eXo and JBoss Portal</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>link=Site</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForTextPresent</td>
+	<td>Portal Navigation</td>
+	<td></td>
+</tr>
+<tr>
+	<td>refreshAndWait</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForTextPresent</td>
+	<td>test_por_09_009</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>test_por_09_009</td>
+	<td></td>
+</tr>
+<tr>
+	<td>refreshAndWait</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForTextPresent</td>
+	<td>Test_POR_09_009</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Test_POR_09_009</td>
+	<td></td>
+</tr>
+<tr>
 	<td>echo</td>
 	<td>--Delete portal with name is lower case--</td>
 	<td></td>
@@ -337,12 +382,12 @@
 	<td></td>
 </tr>
 <tr>
-	<td>waitForTextPresent</td>
+	<td>waitForTextNotPresent</td>
 	<td>test_por_09_009</td>
 	<td></td>
 </tr>
 <tr>
-	<td>verifyTextPresent</td>
+	<td>verifyTextNotPresent</td>
 	<td>test_por_09_009</td>
 	<td>1,1</td>
 </tr>
@@ -352,13 +397,18 @@
 	<td></td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
-	<td>xpath=//div[@id='UISiteManagement']/table[3]/tbody/tr/td[3]/a[4]</td>
+	<td>clickAt</td>
+	<td>link=Site</td>
 	<td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>xpath=//div[@id='UISiteManagement']/table[3]/tbody/tr/td[3]/a[4]</td>
+	<td>waitForElementPresent</td>
+	<td>xpath=//div[@id='UISiteManagement']/table[2]/tbody/tr/td[3]/a[4]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>xpath=//div[@id='UISiteManagement']/table[2]/tbody/tr/td[3]/a[4]</td>
 	<td></td>
 </tr>
 <tr>
@@ -374,7 +424,7 @@
 <tr>
 	<td>verifyTextNotPresent</td>
 	<td>Test_POR_09_009</td>
-	<td>1,1</td>
+	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
