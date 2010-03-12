@@ -28,13 +28,13 @@
     <version>3.0.0-CR02-SNAPSHOT</version>
   </parent> 
 
-  <artifactId>gatein-simple-deployable-skin</artifactId>
+  <artifactId>gatein-sample-skin</artifactId>
   <packaging>war</packaging> 
   <name>GateIn Simple Deployable Skin</name>
   <description/>
 
   <build>
-    <finalName>simpleDeployableSkin</finalName>
+    <finalName>gatein-sample-skin</finalName>
   </build>
  <reporting>  
     <plugins>  
