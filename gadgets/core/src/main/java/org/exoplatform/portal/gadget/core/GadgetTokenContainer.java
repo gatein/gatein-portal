@@ -8,7 +8,7 @@ import org.chromattic.api.annotations.PrimaryType;
 
 import java.util.Map;
 
-@PrimaryType(name = "lgn:gadgettokencontainer")
+@PrimaryType(name = "tkn:gadgettokencontainer")
 public abstract class GadgetTokenContainer
 {
    @Create

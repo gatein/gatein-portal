@@ -94,14 +94,14 @@
  		  <init-params>
  		    <properties-param>
  		      <name>namespaces</name>
- 		      <property name="dc" value="http://purl.org/dc/elements/1.1/"/>
- 		      <property name="gtn" value="http://www.gatein.org/jcr/gatein/1.0/"/>
- 		      <property name="mop" value="http://www.gatein.org/jcr/mop/1.0/"/>
- 		      <property name="app" value="http://www.gatein.org/jcr/application-registry/1.0/"/>
- 		      <property name="lgn" value="http://www.gatein.org/jcr/autologin/1.0/"/>
-          <property name="wsrp" value="http://www.gatein.org/jcr/wsrp/1.0/"/>
-          <property name="pc" value="http://www.gatein.org/jcr/pc/1.0/"/>
-        </properties-param>
+              <property name="dc" value="http://purl.org/dc/elements/1.1/"/>
+              <property name="gtn" value="http://www.gatein.org/jcr/gatein/1.0/"/>
+              <property name="mop" value="http://www.gatein.org/jcr/mop/1.0/"/>
+              <property name="app" value="http://www.gatein.org/jcr/application-registry/1.0/"/>
+              <property name="tkn" value="http://www.gatein.org/jcr/token/1.0/"/>
+              <property name="wsrp" value="http://www.gatein.org/jcr/wsrp/1.0/"/>
+              <property name="pc" value="http://www.gatein.org/jcr/pc/1.0/"/>
+            </properties-param>
  		  </init-params>
  		</component-plugin>
  		<component-plugin>

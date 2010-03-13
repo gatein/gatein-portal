@@ -31,7 +31,7 @@ import java.util.Date;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-@PrimaryType(name = "lgn:tokenentry")
+@PrimaryType(name = "tkn:tokenentry")
 public abstract class TokenEntry
 {
 

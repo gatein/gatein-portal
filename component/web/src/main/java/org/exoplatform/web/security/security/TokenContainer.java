@@ -32,7 +32,7 @@ import java.util.Map;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-@PrimaryType(name = "lgn:tokencontainer")
+@PrimaryType(name = "tkn:tokencontainer")
 public abstract class TokenContainer
 {
 

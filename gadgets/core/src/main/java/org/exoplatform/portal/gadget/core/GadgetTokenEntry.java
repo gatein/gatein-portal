@@ -5,7 +5,7 @@ import org.chromattic.api.annotations.Destroy;
 import org.chromattic.api.annotations.PrimaryType;
 import org.chromattic.api.annotations.Property;
 
-@PrimaryType(name = "lgn:gadgettoken")
+@PrimaryType(name = "tkn:gadgettoken")
 public abstract class GadgetTokenEntry
 {
 

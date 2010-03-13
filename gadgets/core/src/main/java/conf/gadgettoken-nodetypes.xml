@@ -20,22 +20,22 @@
 -->
 <nodeTypes xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0">
 
-  <nodeType name="lgn:gadgettokencontainer" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
+  <nodeType name="tkn:gadgettokencontainer" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
     <supertypes>
       <supertype>nt:base</supertype>
       <supertype>mix:referenceable</supertype>
     </supertypes>
     <childNodeDefinitions>
-      <childNodeDefinition name="*" defaultPrimaryType="lgn:gadgettoken" autoCreated="false" mandatory="false"
+      <childNodeDefinition name="*" defaultPrimaryType="tkn:gadgettoken" autoCreated="false" mandatory="false"
         onParentVersion="COPY" protected="false" sameNameSiblings="false">
         <requiredPrimaryTypes>
-          <requiredPrimaryType>lgn:gadgettoken</requiredPrimaryType>
+          <requiredPrimaryType>tkn:gadgettoken</requiredPrimaryType>
         </requiredPrimaryTypes>
       </childNodeDefinition>
     </childNodeDefinitions>
   </nodeType>
 
-  <nodeType name="lgn:gadgettoken" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
+  <nodeType name="tkn:gadgettoken" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
     <supertypes>
       <supertype>nt:base</supertype>
       <supertype>mix:referenceable</supertype>
