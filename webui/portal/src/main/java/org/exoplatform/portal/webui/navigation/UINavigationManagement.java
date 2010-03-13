@@ -144,9 +144,16 @@ public class UINavigationManagement extends UIContainer
          {
             dataService.save(navigation);
          }
-         
+
+         // Reload navigation here as some navigation could exist in the back end such as system navigations
+         // that would not be in the current edited UI navigation
+         navigation = dataService.getPageNavigation(navigation.getOwnerType(), navigation.getOwnerId());
+
          UIPortalApplication uiPortalApp = Util.getUIPortalApplication();
          setNavigation(uiPortalApp.getNavigations(), navigation);
+
+         // Need to relocalize as it was loaded from storage
+         uiPortalApp.localizeNavigations();
          
          //Update UIPortal corredponding to edited navigation
          UIPortal targetedUIPortal = uiPortalApp.getCachedUIPortal(editedOwnerType, editedOwnerId);

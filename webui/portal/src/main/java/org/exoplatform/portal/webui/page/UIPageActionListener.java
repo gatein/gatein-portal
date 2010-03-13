@@ -102,14 +102,6 @@ public class UIPageActionListener
          PageNode targetPageNode = getTargetedNode(targetedNav, targetPath);
          List<PageNode> targetedPathNodes = findPath(targetedNav, targetPath);
          
-         //If targetPageNode is null, which happens only if the navigation contains only 'notfound' node,
-         //we send a change page node event for redirecting to 'notfound' node
-         if(targetPageNode == null)
-         {
-            redirectToNotFoundNode(showedUIPortal);
-            return;
-         }
-         
          if(formerNavType.equals(newNavType) && formerNavId.equals(newNavId))
          {
             //Case 1: Both navigation type and id are not changed, but current page node is changed
@@ -372,12 +364,6 @@ public class UIPageActionListener
          userPortalConfig.setSelectedNavigation(newPageNav);
          PortalDataMapper.toUIPortal(uiPortal, userPortalConfig);
          return uiPortal;
-      }
-      
-      private void redirectToNotFoundNode(UIPortal uiPortal) throws Exception
-      {
-         PageNodeEvent<UIPortal> changePageNodeEvent = new PageNodeEvent<UIPortal>(uiPortal, PageNodeEvent.CHANGE_PAGE_NODE, "/notfound");
-         uiPortal.broadcast(changePageNodeEvent, Event.Phase.PROCESS);
       }
    }
 
