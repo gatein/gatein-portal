@@ -50,6 +50,7 @@ import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.web.application.JavascriptManager;
 import org.exoplatform.web.security.GateInToken;
 import org.exoplatform.web.security.security.RemindPasswordTokenService;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.UITabPane;
@@ -438,6 +439,14 @@ public class UIPortalComponentActionListener
          String tokenId = event.getRequestContext().getRequestParameter("tokenId");
 
          GateInToken token = tokenService.getToken(tokenId);
+         if (token == null)
+         {
+            WebuiRequestContext requestContext = event.getRequestContext();
+            requestContext.getUIApplication().addMessage(
+                     new ApplicationMessage("UIForgetPassword.msg.expration", null));
+            requestContext.addUIComponentToUpdateByAjax(uiPortal.getParent());
+            return;
+         }
          
          UIPortalApplication uiApp = uiPortal.getAncestorOfType(UIPortalApplication.class);
          UIMaskWorkspace uiMaskWS = uiApp.getChildById(UIPortalApplication.UI_MASK_WS_ID);
