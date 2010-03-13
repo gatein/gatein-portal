@@ -24,10 +24,11 @@ import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.mail.MailService;
 import org.exoplatform.services.organization.OrganizationService;
-import org.exoplatform.services.organization.PasswordGeneratorService;
 import org.exoplatform.services.organization.Query;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.web.security.Credentials;
+import org.exoplatform.web.security.security.RemindPasswordTokenService;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -78,10 +79,15 @@ public class UIForgetPassword extends UIForm
          String url = portalContext.getRequest().getRequestURL().toString();
          MailService mailSrc = uiForm.getApplicationComponent(MailService.class);
          OrganizationService orgSrc = uiForm.getApplicationComponent(OrganizationService.class);
-         PasswordGeneratorService passwordGenSrc = uiForm.getApplicationComponent(PasswordGeneratorService.class);
          String userName = uiForm.getUIStringInput(Username).getValue();
          String email = uiForm.getUIStringInput(Email).getValue();
          uiForm.reset();
+         
+         RemindPasswordTokenService tokenService = uiForm.getApplicationComponent(RemindPasswordTokenService.class);
+
+         Credentials credentials = new Credentials(userName, "");
+         String tokenId = tokenService.createToken(credentials);
+         
          
          User user = null;
          
@@ -124,8 +130,7 @@ public class UIForgetPassword extends UIForm
          email = user.getEmail();
          
          String portalName = URLEncoder.encode(Util.getUIPortal().getName(), "UTF-8");
-         user.setPassword(passwordGenSrc.generatePassword());
-         orgSrc.getUserHandler().saveUser(user, true);
+
          ResourceBundle res = requestContext.getApplicationResourceBundle();
          String headerMail = "headermail";
          String footerMail = "footer";
@@ -133,8 +138,7 @@ public class UIForgetPassword extends UIForm
          {
             headerMail =
                res.getString(uiForm.getId() + ".mail.header") + "\n\n" + res.getString(uiForm.getId() + ".mail.user")
-                  + user.getUserName() + "\n" + res.getString(uiForm.getId() + ".mail.password") + user.getPassword()
-                  + "\n\n\n" + res.getString(uiForm.getId() + ".mail.link");
+                  + user.getUserName() + "\n"+ res.getString(uiForm.getId() + ".mail.link");
             footerMail = "\n\n\n" + res.getString(uiForm.getId() + ".mail.footer");
          }
          catch (MissingResourceException e)
@@ -145,8 +149,7 @@ public class UIForgetPassword extends UIForm
          Long now = new Date().getTime();
          String activeLink = host + requestContext.getRequestContextPath() + "/public/" + portalName;
          activeLink +=
-            "?portal:componentId=UIPortal&portal:action=RecoveryPasswordAndUsername&datesend=" + now.toString()
-               + "&email=" + email;
+            "?portal:componentId=UIPortal&portal:action=RecoveryPasswordAndUsername&tokenId=" + tokenId;
          activeLink = headerMail + activeLink + footerMail;
          try
          {
@@ -157,9 +160,14 @@ public class UIForgetPassword extends UIForm
             requestContext.getUIApplication().addMessage(
                new ApplicationMessage("UIForgetPassword.msg.send-mail-fail", null));
             requestContext.addUIComponentToUpdateByAjax(uilogin);
+            
             return;
          }
-         
+
+         // Don't save the new password if we couldn't send the email
+//         user.setPassword(newPassword);
+         orgSrc.getUserHandler().saveUser(user, true);
+
          uilogin.getChild(UILoginForm.class).setRendered(true);
          uilogin.getChild(UIForgetPasswordWizard.class).setRendered(false);
          uilogin.getChild(UIForgetPassword.class).setRendered(false);

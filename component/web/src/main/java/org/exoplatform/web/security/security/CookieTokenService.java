@@ -39,18 +39,23 @@ public class CookieTokenService extends AbstractTokenService<GateInToken, String
 {
 
    /** . */
-   private ChromatticManager chromatticManager;
-
+   public static final String LIFECYCLE_NAME="lifecycle-name";
+	
    /** . */
    private ChromatticLifeCycle chromatticLifeCycle;
+   
+   /** . */
+   private String lifecycleName="autologin";
 
    public CookieTokenService(InitParams initParams, ChromatticManager chromatticManager)
    {
       super(initParams);
 
-      //
-      this.chromatticManager = chromatticManager;
-      this.chromatticLifeCycle = chromatticManager.getLifeCycle("autologin");
+      if (initParams.getValuesParam(SERVICE_CONFIG).getValues().size() > 3)
+      {
+    	  lifecycleName = (String)initParams.getValuesParam(SERVICE_CONFIG).getValues().get(3);
+      }
+      this.chromatticLifeCycle = chromatticManager.getLifeCycle(lifecycleName);
    }
 
    public String createToken(final Credentials credentials)
@@ -149,16 +154,13 @@ public class CookieTokenService extends AbstractTokenService<GateInToken, String
    private abstract class TokenTask<V> extends ContextualTask<V>
    {
 
-      /** . */
-      private SessionContext context;
-
       protected final TokenContainer getTokenContainer() {
          SessionContext ctx = chromatticLifeCycle.getContext();
          ChromatticSession session = ctx.getSession();
-         TokenContainer container = session.findByPath(TokenContainer.class, "autologin");
+         TokenContainer container = session.findByPath(TokenContainer.class, lifecycleName);
          if (container == null)
          {
-            container = session.insert(TokenContainer.class, "autologin");
+            container = session.insert(TokenContainer.class, lifecycleName);
          }
          return container;
       }
@@ -166,17 +168,7 @@ public class CookieTokenService extends AbstractTokenService<GateInToken, String
       @Override
       protected V execute(SessionContext context)
       {
-         this.context = context;
-
-         //
-         try
-         {
-            return execute();
-         }
-         finally
-         {
-            this.context = null;
-         }
+         return execute();
       }
 
       protected abstract V execute();

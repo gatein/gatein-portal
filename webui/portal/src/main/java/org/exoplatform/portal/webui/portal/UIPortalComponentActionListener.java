@@ -19,9 +19,9 @@
 
 package org.exoplatform.portal.webui.portal;
 
-import org.exoplatform.application.gadget.GadgetRegistryService;
+import java.util.List;
+
 import org.exoplatform.application.registry.Application;
-import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.UserPortalConfigService;
@@ -29,12 +29,8 @@ import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.config.model.CloneApplicationState;
 import org.exoplatform.portal.config.model.Container;
 import org.exoplatform.portal.config.model.TransientApplicationState;
-import org.exoplatform.portal.pom.spi.gadget.Gadget;
-import org.exoplatform.portal.pom.spi.portlet.Portlet;
-import org.exoplatform.portal.pom.spi.portlet.Preference;
 import org.exoplatform.portal.webui.application.PortletState;
 import org.exoplatform.portal.webui.application.UIApplicationList;
-import org.exoplatform.portal.webui.application.UIGadget;
 import org.exoplatform.portal.webui.application.UIPortlet;
 import org.exoplatform.portal.webui.container.UIContainerList;
 import org.exoplatform.portal.webui.login.UILogin;
@@ -49,24 +45,16 @@ import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.portal.webui.workspace.UIPortalToolPanel;
 import org.exoplatform.portal.webui.workspace.UIWorkingWorkspace;
 import org.exoplatform.services.organization.OrganizationService;
-import org.exoplatform.services.organization.Query;
 import org.exoplatform.services.organization.User;
-import org.exoplatform.services.rss.parser.DefaultRSSChannel;
-import org.exoplatform.services.rss.parser.DefaultRSSItem;
-import org.exoplatform.services.rss.parser.RSSDocument;
-import org.exoplatform.services.rss.parser.RSSParser;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.web.application.JavascriptManager;
+import org.exoplatform.web.security.GateInToken;
+import org.exoplatform.web.security.security.RemindPasswordTokenService;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.UITabPane;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
-import org.exoplatform.webui.exception.MessageException;
-
-import java.net.URI;
-import java.util.Date;
-import java.util.List;
 
 /** Author : Nhu Dinh Thuan nhudinhthuan@yahoo.com Jun 14, 2006 */
 public class UIPortalComponentActionListener
@@ -446,38 +434,20 @@ public class UIPortalComponentActionListener
       public void execute(Event<UIPortal> event) throws Exception
       {
          UIPortal uiPortal = event.getSource();
+         RemindPasswordTokenService tokenService = uiPortal.getApplicationComponent(RemindPasswordTokenService.class);
+         String tokenId = event.getRequestContext().getRequestParameter("tokenId");
+
+         GateInToken token = tokenService.getToken(tokenId);
+         
          UIPortalApplication uiApp = uiPortal.getAncestorOfType(UIPortalApplication.class);
          UIMaskWorkspace uiMaskWS = uiApp.getChildById(UIPortalApplication.UI_MASK_WS_ID);
-         String date = event.getRequestContext().getRequestParameter("datesend");
-         String email = event.getRequestContext().getRequestParameter("email");
+
          OrganizationService orgSrc = uiPortal.getApplicationComponent(OrganizationService.class);
          // get user
-         PageList userPageList = orgSrc.getUserHandler().findUsers(new Query());
-         List userList = userPageList.currentPage();
-         User user = null;
-         for (int i = 0; i < userList.size(); i++)
-         {
-            User tmpUser = (User)userList.get(i);
-            if (tmpUser.getEmail().equals(email))
-            {
-               user = tmpUser;
-               break;
-            }
-         }
-         if (user == null)
-         {
-            throw new MessageException(new ApplicationMessage("UIForgetPassword.msg.user-delete", null));
-         }
-         // delete link active by one day
-         long now = new Date().getTime();
-         if (now - Long.parseLong(date) > 86400000)
-         {
-            user.setPassword(Long.toString(now));
-            orgSrc.getUserHandler().saveUser(user, true);
-            throw new MessageException(new ApplicationMessage("UIForgetPassword.msg.expration", null));
-         }
+         User user = orgSrc.getUserHandler().findUserByName(token.getPayload().getUsername());
+
          UIResetPassword uiReset = uiMaskWS.createUIComponent(UIResetPassword.class, null, null);
-         uiReset.setData(user);
+         uiReset.setUser(user);
          uiMaskWS.setUIComponent(uiReset);
          uiMaskWS.setWindowSize(630, -1);
          event.getRequestContext().addUIComponentToUpdateByAjax(uiMaskWS);

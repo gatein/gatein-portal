@@ -45,21 +45,25 @@ import org.exoplatform.webui.form.validator.StringLengthValidator;
  * Jul 09, 2008
  */
 @ComponentConfig(lifecycle = UIFormLifecycle.class, template = "system:/groovy/webui/form/UIFormWithTitle.gtmpl", events = {
-   @EventConfig(listeners = UIResetPassword.SaveActionListener.class),
+   @EventConfig(listeners = UIChangePassword.SaveActionListener.class),
    @EventConfig(phase = Phase.DECODE, listeners = UIMaskWorkspace.CloseActionListener.class)})
-public class UIResetPassword extends UIForm
+public class UIChangePassword extends UIForm
 {
    final static String USER_NAME = "username";
+
+   final static String PASSWORD = "password";
 
    final static String NEW_PASSWORD = "newpassword";
 
    final static String CONFIRM_NEW_PASSWORD = "confirmnewpassword";
 
    static User user_;
-
-   public UIResetPassword() throws Exception
+   
+   public UIChangePassword() throws Exception
    {
       addUIFormInput(new UIFormStringInput(USER_NAME, USER_NAME, null).setEditable(false));
+      addUIFormInput(new UIFormStringInput(PASSWORD, PASSWORD, null).setType(UIFormStringInput.PASSWORD_TYPE)
+         .addValidator(MandatoryValidator.class));
       addUIFormInput(((UIFormStringInput)new UIFormStringInput(NEW_PASSWORD, NEW_PASSWORD, null)).setType(
          UIFormStringInput.PASSWORD_TYPE).addValidator(MandatoryValidator.class).addValidator(
          StringLengthValidator.class, 6, 30));
@@ -68,7 +72,7 @@ public class UIResetPassword extends UIForm
             StringLengthValidator.class, 6, 30));
    }
 
-   public void setUser(User user)
+   public void setData(User user)
    {
       user_ = user;
       getUIStringInput(USER_NAME).setValue(user.getUserName());
@@ -77,17 +81,20 @@ public class UIResetPassword extends UIForm
    @Override
    public void reset()
    {
+      UIFormStringInput passwordForm = getUIStringInput(PASSWORD);
+      passwordForm.reset();
       UIFormStringInput newPasswordForm = getUIStringInput(NEW_PASSWORD);
       newPasswordForm.reset();
       UIFormStringInput confirmPasswordForm = getUIStringInput(CONFIRM_NEW_PASSWORD);
       confirmPasswordForm.reset();
    }
 
-   static public class SaveActionListener extends EventListener<UIResetPassword>
+   static public class SaveActionListener extends EventListener<UIChangePassword>
    {
-      public void execute(Event<UIResetPassword> event) throws Exception
+      public void execute(Event<UIChangePassword> event) throws Exception
       {
-         UIResetPassword uiForm = event.getSource();
+         UIChangePassword uiForm = event.getSource();
+         String password = uiForm.getUIStringInput(PASSWORD).getValue();
          String newpassword = uiForm.getUIStringInput(NEW_PASSWORD).getValue();
          String confirmnewpassword = uiForm.getUIStringInput(CONFIRM_NEW_PASSWORD).getValue();
          WebuiRequestContext request = event.getRequestContext();
@@ -96,13 +103,16 @@ public class UIResetPassword extends UIForm
          OrganizationService orgService = uiForm.getApplicationComponent(OrganizationService.class);
          uiForm.reset();
          boolean isNew = true;
-         
+         if (!orgService.getUserHandler().authenticate(user_.getUserName(), password))
+         {
+            uiApp.addMessage(new ApplicationMessage("UIResetPassword.msg.Invalid-account", null));
+            isNew = false;
+         }
          if (!newpassword.equals(confirmnewpassword))
          {
             uiApp.addMessage(new ApplicationMessage("UIResetPassword.msg.password-is-not-match", null));
             isNew = false;
          }
-
          if (isNew)
          {
             user_.setPassword(newpassword);

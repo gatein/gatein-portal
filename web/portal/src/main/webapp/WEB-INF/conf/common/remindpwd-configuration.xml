@@ -26,29 +26,16 @@
    xmlns="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd">
 
   <component>
-    <key>org.exoplatform.web.security.security.CookieTokenService</key>
-    <type>org.exoplatform.web.security.security.CookieTokenService</type>
+    <key>org.exoplatform.web.security.security.RemindPasswordTokenService</key>
+    <type>org.exoplatform.web.security.security.RemindPasswordTokenService</type>
     <init-params>
       <values-param>
         <name>service.configuration</name>
         <value>jcr-token</value>
-        <value>7</value>
+        <value>1</value>
         <value>DAY</value>
-        <value>autologin</value>
+        <value>remindpwd</value>
       </values-param>
-    </init-params>
-  </component>
-
-  <component>
-    <key>org.exoplatform.web.security.security.TransientTokenService</key>
-    <type>org.exoplatform.web.security.security.TransientTokenService</type>
-    <init-params>
-    		<values-param>
-          <name>service.configuration</name>
-          <value>memory-token</value>
-          <value>1</value>
-        	<value>MINUTE</value>
-        </values-param>
     </init-params>
   </component>
 
@@ -61,7 +48,7 @@
       <init-params>
         <value-param>
           <name>domain-name</name>
-          <value>autologin</value>
+          <value>remindpwd</value>
         </value-param>
         <value-param>
           <name>workspace-name</name>
@@ -75,5 +62,4 @@
       </init-params>
     </component-plugin>
   </external-component-plugins>
-
 </configuration>
