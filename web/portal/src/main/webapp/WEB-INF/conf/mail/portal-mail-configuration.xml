@@ -38,10 +38,10 @@
           <property name="mail.smtp.host" value="${gatein.email.smtp.host}" />
           <property name="mail.smtp.port" value="${gatein.email.smtp.port}" />
           <property name="mail.smtp.starttls.enable" value="${gatein.email.smtp.starttls.enable}" />
-          <property name="mail.smtp.auth" value="true" />
+          <property name="mail.smtp.auth" value="${gatein.email.smtp.auth}" />
           <property name="mail.smtp.debug" value="false" />
-          <property name="mail.smtp.socketFactory.port" value="465" />
-          <property name="mail.smtp.socketFactory.class" value="javax.net.ssl.SSLSocketFactory" />
+          <property name="mail.smtp.socketFactory.port" value="${gatein.email.smtp.socketFactory.port}" />
+          <property name="mail.smtp.socketFactory.class" value="${gatein.email.smtp.socketFactory.class}" />
           <property name="mail.smtp.socketFactory.fallback" value="false" />
         </properties-param>
       </init-params>
