@@ -92,6 +92,9 @@
                 <value>
                   <string>test</string>
                 </value>
+                <value>
+                  <string>system</string>
+                </value>
               </collection>
             </field>
             <field name="ownerType">

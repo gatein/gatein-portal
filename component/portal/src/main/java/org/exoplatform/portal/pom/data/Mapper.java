@@ -251,7 +251,11 @@ public class Mapper
          Navigation dstChild = i.next();
          if (!savedSet.contains(dstChild.getObjectId()))
          {
-            i.remove();
+            Visible visible = dstChild.adapt(Visible.class);
+            if (visible.getVisibility() != Visibility.SYSTEM)
+            {
+               i.remove();
+            }
          }
       }
       // Now sort children according to the order provided by the container
