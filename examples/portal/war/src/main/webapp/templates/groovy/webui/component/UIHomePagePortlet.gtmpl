@@ -1,4 +1,3 @@
-
 <div class="UIHomePagePortlet" id="$uicomponent.id">
 	<div class="TRContainer">
 		<div class="PortletDecoration">					
@@ -8,10 +7,10 @@
 					<li><b><%=_ctx.appRes("UIHomePagePortlet.Label.SampleRB.SampleKey")%></b></li>
 				</ul>
 			</div>
-			<div class="VersionIcon"><span></span></div>
+			<a class="VersionIcon" href="http://www.jboss.org/gatein/" target="_blank"></a>
 			<div class="DotLine"><span></span></div>
-			<div class="GuideText">For more information, please contact us.</div>
-			<div class="ContactIcon"><span></span></div>
+			<div class="GuideText"><%=_ctx.appRes("UIHomePagePortlet.Label.GuideText")%></div>
+			<a class="ContactIcon" href="http://community.jboss.org/en/gatein?view=discussions" target="_blank"></a>
 			
 		</div>
 	</div>
@@ -21,7 +20,7 @@
 			<div class="HomePortletAdBackround">
 				<div class="AdImageLeft">
 					<div class="AdImageRight">
-						<div class="EmptyBlock"><span></span></div>
+						<div class="EmptyBlock"><%=_ctx.appRes("UIHomePagePortlet.Label.Slogan")%></div>
 					</div>
 				</div>
 			</div>
@@ -30,12 +29,11 @@
 				<div class="LeftAccountsContainer">
 					<div class="RightAccountsContainer">
 						<div class="MiddleAccountsContainer">
-							<div class="InstructionTitle">Try GateIn 3.0 with one of these user accounts
-							</div>
+							<div class="InstructionTitle"><%=_ctx.appRes("UIHomePagePortlet.Label.Title")%></div>
 							<div class="AccountsContainerDeco">
 								<div class="AccountBlock AdministratorUser">
 									<div class="AccountInfos">
-										<div class="AccountTitle">Administrator</div>
+										<div class="AccountTitle"><a href="${_ctx.getPortalContextPath()}/login?username=root&amp;password=gtn"><%=_ctx.appRes("UIHomePagePortlet.Label.Administrator")%></a></div>
 										<div class="Username">
 											<div class="Lable"><%=_ctx.appRes("UIHomePagePortlet.Label.Username")%></div><span>root</span>
 											<div class="ClearBoth"><span></span></div>
@@ -49,7 +47,7 @@
 								<div class="SeparatorLine"><span></span></div>
 								<div class="AccountBlock ManagerUser">
 									<div class="AccountInfos">
-										<div class="AccountTitle">Manager</div>
+										<div class="AccountTitle"><a href="${_ctx.getPortalContextPath()}/login?username=john&amp;password=gtn"><%=_ctx.appRes("UIHomePagePortlet.Label.Manager")%></a></div>
 										<div class="Username">
 											<div class="Lable"><%=_ctx.appRes("UIHomePagePortlet.Label.Username")%></div><span>john</span>
 											<div class="ClearBoth"><span></span></div>
@@ -63,7 +61,7 @@
 								<div class="SeparatorLine"><span></span></div>
 								<div class="AccountBlock NormalUser">
 									<div class="AccountInfos">
-										<div class="AccountTitle">User</div>
+										<div class="AccountTitle"><a href="${_ctx.getPortalContextPath()}/login?username=mary&amp;password=gtn"><%=_ctx.appRes("UIHomePagePortlet.Label.User")%></a></div>
 										<div class="Username">
 											<div class="Lable"><%=_ctx.appRes("UIHomePagePortlet.Label.Username")%></div><span>mary</span>
 											<div class="ClearBoth"><span></span></div>
@@ -77,7 +75,7 @@
 								<div class="SeparatorLine"><span></span></div>
 								<div class="AccountBlock DemoUser" style="margin-right: 0px;">
 									<div class="AccountInfos">
-										<div class="AccountTitle">Demo</div>
+										<div class="AccountTitle"><a href="${_ctx.getPortalContextPath()}/login?username=demo&amp;password=gtn"><%=_ctx.appRes("UIHomePagePortlet.Label.Demo")%></a></div>
 										<div class="Username">
 											<div class="Lable"><%=_ctx.appRes("UIHomePagePortlet.Label.Username")%></div><span>demo</span>
 											<div class="ClearBoth"><span></span></div>
