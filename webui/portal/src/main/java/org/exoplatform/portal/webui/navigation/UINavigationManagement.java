@@ -100,15 +100,15 @@ public class UINavigationManagement extends UIContainer
          UINavigationManagement uiManagement = event.getSource();
          UINavigationNodeSelector uiNodeSelector = uiManagement.getChild(UINavigationNodeSelector.class);
          DataStorage dataService = uiManagement.getApplicationComponent(DataStorage.class);
-         UserPortalConfigService portalConfigService =
-            uiManagement.getApplicationComponent(UserPortalConfigService.class);
+         UserPortalConfigService portalConfigService = uiManagement.getApplicationComponent(UserPortalConfigService.class);
          
          PageNavigation navigation = uiNodeSelector.getSelectedNavigation();
          String editedOwnerType = navigation.getOwnerType();
          String editedOwnerId = navigation.getOwnerId();
          // Check existed
          PageNavigation persistNavigation =  dataService.getPageNavigation(editedOwnerType, editedOwnerId);
-         if (persistNavigation == null) {
+         if (persistNavigation == null)
+         {
             UIApplication uiApp = Util.getPortalRequestContext().getUIApplication();
             uiApp.addMessage(new ApplicationMessage("UINavigationManagement.msg.NavigationNotExistAnymore", null));
             UIPopupWindow uiPopup = uiManagement.getParent();
