@@ -33,11 +33,11 @@
       <init-params>
         <properties-param>
           <name>config</name>
-          <property name="mail.smtp.auth.username" value="exoservice@gmail.com" />
-          <property name="mail.smtp.auth.password" value="exoadmin" />
-          <property name="mail.smtp.host" value="smtp.gmail.com" />
-          <property name="mail.smtp.port" value="465" />
-					<property name="mail.smtp.starttls.enable" value="true" />
+          <property name="mail.smtp.auth.username" value="${gatein.email.smtp.username}" />
+          <property name="mail.smtp.auth.password" value="${gatein.email.smtp.password}" />
+          <property name="mail.smtp.host" value="${gatein.email.smtp.host}" />
+          <property name="mail.smtp.port" value="${gatein.email.smtp.port}" />
+          <property name="mail.smtp.starttls.enable" value="${gatein.email.smtp.starttls.enable}" />
           <property name="mail.smtp.auth" value="true" />
           <property name="mail.smtp.debug" value="false" />
           <property name="mail.smtp.socketFactory.port" value="465" />
