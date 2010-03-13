@@ -457,6 +457,7 @@ public class UIPortalComponentActionListener
 
          UIResetPassword uiReset = uiMaskWS.createUIComponent(UIResetPassword.class, null, null);
          uiReset.setUser(user);
+         uiReset.setToken(token);
          uiMaskWS.setUIComponent(uiReset);
          uiMaskWS.setWindowSize(630, -1);
          event.getRequestContext().addUIComponentToUpdateByAjax(uiMaskWS);

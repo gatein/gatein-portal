@@ -57,6 +57,8 @@ public class UIResetPassword extends UIForm
 
    static User user_;
 
+   private static GateInToken token;
+
    public UIResetPassword() throws Exception
    {
       addUIFormInput(new UIFormStringInput(USER_NAME, USER_NAME, null).setEditable(false));
@@ -72,6 +74,11 @@ public class UIResetPassword extends UIForm
    {
       user_ = user;
       getUIStringInput(USER_NAME).setValue(user.getUserName());
+   }
+
+   public void setToken(GateInToken token)
+   {
+	  UIResetPassword.token = token;
    }
 
    @Override
@@ -95,23 +102,33 @@ public class UIResetPassword extends UIForm
          UIMaskWorkspace uiMaskWorkspace = uiApp.getChildById(UIPortalApplication.UI_MASK_WS_ID);
          OrganizationService orgService = uiForm.getApplicationComponent(OrganizationService.class);
          uiForm.reset();
-         boolean isNew = true;
+         boolean setPassword = true;
          
          if (!newpassword.equals(confirmnewpassword))
          {
             uiApp.addMessage(new ApplicationMessage("UIResetPassword.msg.password-is-not-match", null));
-            isNew = false;
+            setPassword = false;
          }
-
-         if (isNew)
+         
+         // Making sure a token exist
+         if (token == null || token.isExpired())
+         {
+            uiApp.addMessage(new ApplicationMessage("UIForgetPassword.msg.expration", null));
+            setPassword = false;
+         }
+         
+         if (setPassword)
          {
             user_.setPassword(newpassword);
             orgService.getUserHandler().saveUser(user_, true);
             uiMaskWorkspace.setUIComponent(null);
             uiMaskWorkspace.setWindowSize(-1, -1);
             uiApp.addMessage(new ApplicationMessage("UIResetPassword.msg.change-password-successfully", null));
+
+            // Should invalidate the token here...
          }
          event.getRequestContext().addUIComponentToUpdateByAjax(uiMaskWorkspace);
       }
    }
+
 }
