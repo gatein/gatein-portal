@@ -126,7 +126,9 @@ public class UINavigationManagement extends UIContainer
             if(portalConfig != null)
             {
                dataService.save(navigation);
-            } else {
+            }
+            else
+            {
                UIApplication uiApp = Util.getPortalRequestContext().getUIApplication();
                uiApp.addMessage(new ApplicationMessage("UIPortalForm.msg.notExistAnymore", null));
                UIPopupWindow uiPopup = uiManagement.getParent();
