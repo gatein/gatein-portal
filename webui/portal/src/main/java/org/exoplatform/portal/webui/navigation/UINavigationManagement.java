@@ -120,7 +120,7 @@ public class UINavigationManagement extends UIContainer
             return;
          }
          
-         if(navigation.getOwnerType() == PortalConfig.PORTAL_TYPE)
+         if(PortalConfig.PORTAL_TYPE.equals(navigation.getOwnerType()))
          {
             UserPortalConfig portalConfig = portalConfigService.getUserPortalConfig(navigation.getOwnerId(), prContext.getRemoteUser());
             if(portalConfig != null)
