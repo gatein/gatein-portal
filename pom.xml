@@ -31,7 +31,7 @@
 
    <groupId>org.exoplatform.portal</groupId>
    <artifactId>exo.portal.parent</artifactId>
-   <version>3.0.0-GA</version>
+   <version>3.0.1-GA-SNAPSHOT</version>
    <packaging>pom</packaging>
 
    <name>GateIn - Portal</name>
@@ -66,9 +66,9 @@
    </properties>
 
    <scm>
-      <connection>scm:svn:http://anonsvn.jboss.org/repos/gatein/portal/tags/3.0.0-GA</connection>
-      <developerConnection>scm:svn:http://svn.jboss.org/repos/gatein/portal/tags/3.0.0-GA</developerConnection>
-      <url>http://fisheye.jboss.org/browse/gatein/portal/tags/3.0.0-GA</url>
+      <connection>scm:svn:http://anonsvn.jboss.org/repos/gatein/portal/trunk</connection>
+      <developerConnection>scm:svn:http://svn.jboss.org/repos/gatein/portal/trunk</developerConnection>
+      <url>http://fisheye.jboss.org/browse/gatein/portal/trunk</url>
    </scm>
 
    <modules>
@@ -326,110 +326,110 @@
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.component.common</artifactId>
-          <version>3.0.0-GA</version>
+          <version>3.0.1-GA-SNAPSHOT</version>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.component.web</artifactId>
-          <version>3.0.0-GA</version>
+          <version>3.0.1-GA-SNAPSHOT</version>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.component.portal</artifactId>
-          <version>3.0.0-GA</version>
+          <version>3.0.1-GA-SNAPSHOT</version>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.component.portal</artifactId>
-          <version>3.0.0-GA</version>
+          <version>3.0.1-GA-SNAPSHOT</version>
           <type>test-jar</type>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.component.pc</artifactId>
-          <version>3.0.0-GA</version>
+          <version>3.0.1-GA-SNAPSHOT</version>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.component.identity</artifactId>
-          <version>3.0.0-GA</version>
+          <version>3.0.1-GA-SNAPSHOT</version>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.component.resources</artifactId>
-          <version>3.0.0-GA</version>
+          <version>3.0.1-GA-SNAPSHOT</version>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.component.application-registry</artifactId>
-          <version>3.0.0-GA</version>
+          <version>3.0.1-GA-SNAPSHOT</version>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.component.xml-parser</artifactId>
-          <version>3.0.0-GA</version>
+          <version>3.0.1-GA-SNAPSHOT</version>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.component.scripting</artifactId>
-          <version>3.0.0-GA</version>
+          <version>3.0.1-GA-SNAPSHOT</version>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.component.dashboard</artifactId>
-          <version>3.0.0-GA</version>
+          <version>3.0.1-GA-SNAPSHOT</version>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.webui.portal</artifactId>
-          <version>3.0.0-GA</version>
+          <version>3.0.1-GA-SNAPSHOT</version>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.webui.eXo</artifactId>
-          <version>3.0.0-GA</version>
+          <version>3.0.1-GA-SNAPSHOT</version>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.webui.core</artifactId>
-          <version>3.0.0-GA</version>
+          <version>3.0.1-GA-SNAPSHOT</version>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.gadgets-core</artifactId>
-          <version>3.0.0-GA</version>
+          <version>3.0.1-GA-SNAPSHOT</version>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.component.test.core</artifactId>
-          <version>3.0.0-GA</version>
+          <version>3.0.1-GA-SNAPSHOT</version>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.component.test.core</artifactId>
-          <version>3.0.0-GA</version>
+          <version>3.0.1-GA-SNAPSHOT</version>
           <type>test-jar</type>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.component.test.jcr</artifactId>
-          <version>3.0.0-GA</version>
+          <version>3.0.1-GA-SNAPSHOT</version>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.component.test.jcr</artifactId>
-          <version>3.0.0-GA</version>
+          <version>3.0.1-GA-SNAPSHOT</version>
           <type>test-jar</type>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.component.test.organization</artifactId>
-          <version>3.0.0-GA</version>
+          <version>3.0.1-GA-SNAPSHOT</version>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.component.test.organization</artifactId>
-          <version>3.0.0-GA</version>
+          <version>3.0.1-GA-SNAPSHOT</version>
           <type>test-jar</type>
         </dependency>
 
