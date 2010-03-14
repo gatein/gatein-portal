@@ -5,16 +5,19 @@
 ]>
 <chapter id="chap-Reference_Guide-Configuration">
 	<title>Configuration</title>
-	<xi:include href="configuration/IDM_Configuration.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+	<xi:include href="configuration/Database_Configuration.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+	<xi:include href="configuration/EMailService_Configuration.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 	<xi:include href="configuration/Default_Portal_Configuration.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+	<xi:include href="configuration/IDM_Configuration.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 	<xi:include href="configuration/Portal_Navigation_Configuration.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+	<xi:include href="configuration/Authentication_Token_Configuration.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 	<xi:include href="configuration/Predefined_User_Configuration.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 	<xi:include href="configuration/Portal_Default_Permission_Configuration.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
-	<!--       Kernel/Service_Configuration_for_Beginners        --><!--       Kernel/Service_Configuration_in_Detail       --><xi:include href="configuration/Database_Configuration.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+	<!--       Kernel/Service_Configuration_for_Beginners        -->
+	<!--       Kernel/Service_Configuration_in_Detail       -->
 	<xi:include href="configuration/Data_Injector_Configuration.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 	<!--        Core/LDAP_Configuration       --><xi:include href="configuration/Skin_Configuration.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 	<xi:include href="configuration/JavaScript_Configuration.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 	<xi:include href="configuration/Dashboard_Configuration.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
-	<xi:include href="configuration/Authentication_Token_Configuration.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 </chapter>
 

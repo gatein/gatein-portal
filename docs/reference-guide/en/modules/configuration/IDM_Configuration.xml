@@ -37,7 +37,7 @@
 				<area coords="5" id="area-Reference_Guide-PicketLink_IDM_integration-Configuration_files-JBossIDMServiceImpl" />
 				<area coords="22" id="area-Reference_Guide-PicketLink_IDM_integration-Configuration_files-JBossIDMOrganizationServiceImpl" />
 			</areaspec>
-<programlisting role="XML">&#60;configuration xmlns:xsi=&#34;http://www.w3.org/2001/XMLSchema-instance&#34;
+<programlisting>&#60;configuration xmlns:xsi=&#34;http://www.w3.org/2001/XMLSchema-instance&#34;
                xsi:schemaLocation=&#34;http://www.exoplaform.org/xml/ns/kernel_1_0.xsd http://www.exoplaform.org/xml/ns/kernel_1_0.xsd&#34;
                xmlns=&#34;http://www.exoplaform.org/xml/ns/kernel_1_0.xsd&#34;&#62;
  

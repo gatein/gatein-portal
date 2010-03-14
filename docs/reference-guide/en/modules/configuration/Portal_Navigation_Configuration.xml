@@ -107,7 +107,7 @@
 			The portal navigation incorporates the pages that can be accessed when the user is not logged in (if the applicable permissions allow public access). For example; several portal navigations are used when a company has multiple trademarks and each trade has its own website.
 		</para>
 		<para>
-			The <emphasis role="bold">classic</emphasis> portal is configured by four XML files in the <filename>portal/WEBINF/conf/portal/portal/classic</filename> directory:
+			The <emphasis role="bold">classic</emphasis> portal is configured by four XML files in the <filename>02portal.war:/WEB-INF/conf/portal/portal/classic</filename> directory:
 		</para>
 		<variablelist>
 			<varlistentry>

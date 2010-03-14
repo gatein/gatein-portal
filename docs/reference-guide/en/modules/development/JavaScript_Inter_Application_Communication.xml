@@ -246,7 +246,7 @@ Topic.prototype.initCometdBridge = function() { ... }
 	</section>
 	
 	<section id="sect-Reference_Guide-JavaScript_Inter_Application_Communication-Example_of_what">
-		<title>Example [of what?]</title>
+		<title>Example of Javascript events usage</title>
 		
 <programlisting role="HTML">&#60;%@ taglib uri=&#34;http://java.sun.com/portlet&#34; prefix=&#34;portlet&#34; %&#62;
 &#60;portlet:defineObjects/&#62;

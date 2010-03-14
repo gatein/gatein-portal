@@ -2,8 +2,6 @@
 <!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
 <!ENTITY % BOOK_ENTITIES SYSTEM "../Reference_Guide.ent">
 %BOOK_ENTITIES;
-<!ENTITY % BOOK_ENTITIES SYSTEM "../Reference_Guide.ent">
-%BOOK_ENTITIES;
 ]>
 <chapter id="chap-Reference_Guide-Foundations" xmlns:x="http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
 
@@ -429,7 +427,7 @@
          which returns the current <emphasis role="bold">PortalContainer</emphasis>.
 
          If your servlet handles the requests by implementing a <emphasis role="bold">service()</emphasis> method, you need to rename that method to match
-         the following signature:
+         the following signature:</para>
          <programlisting role="JAVA"><![CDATA[
 /**
  * Use this method instead of Servlet.service()
@@ -437,8 +435,6 @@
 protected void onService(ExoContainer container, HttpServletRequest req,
       HttpServletResponse res) throws ServletException, IOException;
          ]]></programlisting>
-
-      </para>
       <note>
          The reason is that AbstractHttpServlet implements service() to perform its interception, and you don't want to
          overwrite (by overriding) this functionality.
@@ -446,7 +442,7 @@ protected void onService(ExoContainer container, HttpServletRequest req,
       <para>
          You may also need to access portal information within your <emphasis role="bold">HttpSessionListener</emphasis>. Again, make sure to extend the
          provided abstract class - <emphasis role="bold">org.exoplatform.container.web. AbstractHttpSessionListener</emphasis>.
-         Also, modify your method signitures as follows:
+         Also, modify your method signitures as follows:</para>
          <programlisting role="JAVA"><![CDATA[
 /**
  * Use this method instead of HttpSessionListener.sessionCreated()
@@ -458,9 +454,8 @@ protected void onSessionCreated(ExoContainer container, HttpSessionEvent event);
  */
 protected void onSessionDestroyed(ExoContainer container, HttpSessionEvent event);
          ]]></programlisting>
-      </para>
       <para>
-         There is another method you have to implement in this case:
+         There is another method you have to implement in this case:</para>
          <programlisting role="JAVA"><![CDATA[
 /**
  * Method should return true if unified servlet context,
@@ -468,7 +463,7 @@ protected void onSessionDestroyed(ExoContainer container, HttpSessionEvent event
  */
 protected boolean requirePortalEnvironment();
          ]]></programlisting>
-
+       <para>
          If this method returns true, current thread's context classloader is set up according to <emphasis role="bold">Dependencies</emphasis>
          configuration, and availability of the associated web applications. If it returns false, the standard
          application separation rules are used for resource loading (effectively turning off the

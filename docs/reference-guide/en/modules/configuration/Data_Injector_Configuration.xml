@@ -24,7 +24,7 @@
 			<title>Service configuration file</title>
 			<para>
 				
-<programlisting role="XML">&#60;configuration&#62;
+<programlisting>&#60;configuration&#62;
   &#60;component&#62;
   &#60;key&#62;org.exoplatform.portal.initializer.organization.OrganizationInitializer&#60;/key&#62;
   &#60;type&#62;org.exoplatform.portal.initializer.organization.OrganizationInitializer&#60;/type&#62;
