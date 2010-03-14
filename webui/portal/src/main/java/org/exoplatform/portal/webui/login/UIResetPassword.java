@@ -25,6 +25,8 @@ import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.web.security.GateInToken;
+import org.exoplatform.web.security.Token;
+import org.exoplatform.web.security.security.RemindPasswordTokenService;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -57,7 +59,7 @@ public class UIResetPassword extends UIForm
 
    static User user_;
 
-   private static GateInToken token;
+   private static String tokenId;
 
    public UIResetPassword() throws Exception
    {
@@ -76,9 +78,9 @@ public class UIResetPassword extends UIForm
       getUIStringInput(USER_NAME).setValue(user.getUserName());
    }
 
-   public void setToken(GateInToken token)
+   public void setTokenId(String tokenId)
    {
-	  UIResetPassword.token = token;
+	  UIResetPassword.tokenId = tokenId;
    }
 
    @Override
@@ -101,6 +103,8 @@ public class UIResetPassword extends UIForm
          UIApplication uiApp = request.getUIApplication();
          UIMaskWorkspace uiMaskWorkspace = uiApp.getChildById(UIPortalApplication.UI_MASK_WS_ID);
          OrganizationService orgService = uiForm.getApplicationComponent(OrganizationService.class);
+         RemindPasswordTokenService tokenService = uiForm.getApplicationComponent(RemindPasswordTokenService.class);
+         
          uiForm.reset();
          boolean setPassword = true;
          
@@ -110,6 +114,7 @@ public class UIResetPassword extends UIForm
             setPassword = false;
          }
          
+         Token token = tokenService.getToken(tokenId);
          // Making sure a token exist
          if (token == null || token.isExpired())
          {
@@ -125,7 +130,7 @@ public class UIResetPassword extends UIForm
             uiMaskWorkspace.setWindowSize(-1, -1);
             uiApp.addMessage(new ApplicationMessage("UIResetPassword.msg.change-password-successfully", null));
 
-            // Should invalidate the token here...
+            tokenService.deleteToken(tokenId);
          }
          event.getRequestContext().addUIComponentToUpdateByAjax(uiMaskWorkspace);
       }
