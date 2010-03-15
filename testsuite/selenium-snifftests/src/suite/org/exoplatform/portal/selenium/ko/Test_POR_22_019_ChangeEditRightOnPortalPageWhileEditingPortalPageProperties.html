@@ -4,12 +4,12 @@
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="selenium.base" href="http://localhost:8080/portal" />
-<title>Test_POR_22_019</title>
+<title>Test_POR_22_019_ChangeEditRightOnPortalPageWhileEditingPortalPageProperties</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">Test_POR_22_019</td></tr>
+<tr><td rowspan="1" colspan="3">Test_POR_22_019_ChangeEditRightOnPortalPageWhileEditingPortalPageProperties</td></tr>
 </thead><tbody>
 <tr>
 	<td>open</td>
@@ -142,13 +142,23 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>waitForElementPresent</td>
 	<td>link=POR_22_019_label</td>
 	<td></td>
 </tr>
 <tr>
+	<td>open</td>
+	<td>/portal/private/classic/POR_22_019_name</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementNotPresent</td>
+	<td>link=Add New Portal</td>
+	<td></td>
+</tr>
+<tr>
 	<td>waitForElementPresent</td>
-	<td>xpath=//div[@class='SelectedNavigationTab']//a[contains(@href,'POR_22_019_name')]</td>
+	<td>xpath=//div[@class='SelectedNavigationTab']//a[contains(@href,'POR_22_019')]</td>
 	<td></td>
 </tr>
 <tr>
@@ -257,6 +267,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>waitForElementPresent</td>
+	<td>link=Sign out</td>
+	<td></td>
+</tr>
+<tr>
 	<td>clickAt</td>
 	<td>link=Sign out</td>
 	<td></td>
@@ -274,6 +289,11 @@
 <tr>
 	<td>clickAt</td>
 	<td>link=Sign in</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>username</td>
 	<td></td>
 </tr>
 <tr>
@@ -303,7 +323,7 @@
 </tr>
 <tr>
 	<td>clickAt</td>
-	<td>link=Edit Page</td>
+	<td>xpath=//a[@class='ItemIcon EditPageIcon']</td>
 	<td></td>
 </tr>
 <tr>
@@ -352,8 +372,18 @@
 	<td></td>
 </tr>
 <tr>
+	<td>waitForElementPresent</td>
+	<td>link=Platform</td>
+	<td></td>
+</tr>
+<tr>
 	<td>clickAt</td>
 	<td>link=Platform</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Guests</td>
 	<td></td>
 </tr>
 <tr>
@@ -422,6 +452,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>waitForElementPresent</td>
+	<td>username</td>
+	<td></td>
+</tr>
+<tr>
 	<td>type</td>
 	<td>username</td>
 	<td>demo</td>
@@ -487,6 +522,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>waitForElementPresent</td>
+	<td>username</td>
+	<td></td>
+</tr>
+<tr>
 	<td>type</td>
 	<td>username</td>
 	<td>root</td>
@@ -497,7 +537,7 @@
 	<td>gtn</td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
+	<td>clickAt</td>
 	<td>xpath=//div[@id='UIPortalLoginFormAction']/div/div/div</td>
 	<td></td>
 </tr>

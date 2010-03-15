@@ -4,12 +4,12 @@
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="selenium.base" href="" />
-<title>Test_POR_09_008</title>
+<title>Test_POR_09_008_CreateNewPortalWithNameIsTheSameWithExistingOne</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">Test_POR_09_008</td></tr>
+<tr><td rowspan="1" colspan="3">Test_POR_09_008_CreateNewPortalWithNameIsTheSameWithExistingOne</td></tr>
 </thead><tbody>
 <tr>
 	<td>open</td>
@@ -94,6 +94,11 @@
 <tr>
 	<td>clickAt</td>
 	<td>xpath=//div[@id='UIMaskWorkspace']//div[@class='TabsContainer']/div[2]//div[@class='MiddleTab']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>name</td>
 	<td></td>
 </tr>
 <tr>
@@ -212,8 +217,13 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
+	<td>clickAt</td>
 	<td>xpath=//div[@id='UIMaskWorkspace']//div[@class='TabsContainer']/div[2]//div[@class='MiddleTab']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>name</td>
 	<td></td>
 </tr>
 <tr>
@@ -282,7 +292,7 @@
 	<td>exact:*</td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
+	<td>clickAt</td>
 	<td>link=Save</td>
 	<td></td>
 </tr>
@@ -312,6 +322,16 @@
 	<td></td>
 </tr>
 <tr>
+	<td>waitForTextPresent</td>
+	<td>test_por_09_008</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>test_por_09_008</td>
+	<td>1,1</td>
+</tr>
+<tr>
 	<td>waitForElementPresent</td>
 	<td>xpath=//div[@id='UISiteManagement']/table[2]/tbody/tr/td[3]/a[4]</td>
 	<td></td>
@@ -327,12 +347,12 @@
 	<td></td>
 </tr>
 <tr>
-	<td>waitForTextPresent</td>
+	<td>waitForTextNotPresent</td>
 	<td>test_por_09_008</td>
 	<td></td>
 </tr>
 <tr>
-	<td>verifyTextPresent</td>
+	<td>verifyTextNotPresent</td>
 	<td>test_por_09_008</td>
 	<td>1,1</td>
 </tr>
@@ -357,7 +377,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
+	<td>clickAt</td>
 	<td>xpath=//div[@id='UISiteManagement']/table[2]/tbody/tr/td[3]/a[4]</td>
 	<td></td>
 </tr>
