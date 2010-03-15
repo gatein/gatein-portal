@@ -131,7 +131,7 @@ public class PortalRequestContext extends WebuiRequestContext
       
       
       //The encoding needs to be set before reading any of the parameters since the parameters's encoding
-      //is set at the first access.
+      //is set at the first acces.
       
       //TODO use the encoding from the locale-config.xml file
       response_.setContentType("text/html; charset=UTF-8");
@@ -152,15 +152,8 @@ public class PortalRequestContext extends WebuiRequestContext
       }
 
       requestURI_ = URLDecoder.decode(req.getRequestURI(), "UTF-8");
-      
-      // req.getPathInfo will already have the encoding set from the server.
-      // We need to use the UTF-8 value since this is how we store the portal name.
-      // Reconstructing the getPathInfo from the non server decoded values.
-      String servletPath = URLDecoder.decode(req.getServletPath(), "UTF-8");
-      String contextPath = URLDecoder.decode(req.getContextPath(), "UTF-8");
-      String pathInfo = requestURI_.substring((servletPath + contextPath).length());
-      
-      if (pathInfo == null || pathInfo.isEmpty())
+      String pathInfo = req.getPathInfo();
+      if (pathInfo == null)
       {
          pathInfo = "/";
       }

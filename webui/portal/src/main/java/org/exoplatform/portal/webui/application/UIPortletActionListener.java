@@ -49,8 +49,6 @@ import org.gatein.pc.api.invocation.response.ContentResponse;
 import org.gatein.pc.api.invocation.response.ErrorResponse;
 import org.gatein.pc.api.invocation.response.HTTPRedirectionResponse;
 import org.gatein.pc.api.invocation.response.PortletInvocationResponse;
-import org.gatein.pc.api.invocation.response.SecurityErrorResponse;
-import org.gatein.pc.api.invocation.response.SecurityResponse;
 import org.gatein.pc.api.invocation.response.UpdateNavigationalStateResponse;
 
 import javax.portlet.PortletMode;
@@ -142,10 +140,6 @@ public class UIPortletActionListener
          else if (portletResponse instanceof ErrorResponse)
          {
             handleErrorResponse((ErrorResponse)portletResponse);
-         }
-         else if (portletResponse instanceof SecurityResponse)
-         {
-            handleSecurityResponse((SecurityResponse)portletResponse);
          }
          else
          {
@@ -251,19 +245,6 @@ public class UIPortletActionListener
       private void handleErrorResponse(ErrorResponse response) throws Exception
       {
          throw (Exception)response.getCause();  
-      }
-      
-      private void handleSecurityResponse(SecurityResponse response) throws Exception
-      {
-         if (response instanceof SecurityErrorResponse)
-         {
-            SecurityErrorResponse securityErrorResponse = (SecurityErrorResponse)response;
-            throw new Exception("SecurityErrorResponse Returned while trying to process portlet action. ", securityErrorResponse.getThrowable());
-         }
-         else
-         {
-            throw new Exception("Security Response of type " + response.getClass() + " encountered while trying to process portlet action.");
-         }
       }
    }
 
