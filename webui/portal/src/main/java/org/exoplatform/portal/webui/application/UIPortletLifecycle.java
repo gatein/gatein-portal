@@ -290,7 +290,8 @@ public class UIPortletLifecycle<S, C extends Serializable, I> extends Lifecycle<
                      PortletExceptionHandleService portletExceptionService =
                         (PortletExceptionHandleService)container
                            .getComponentInstanceOfType(PortletExceptionHandleService.class);
-                     portletExceptionService.handle(pcException);
+                     if (portletExceptionService != null)
+                        portletExceptionService.handle(pcException);
 
                      markup = Text.create("This portlet encountered an error and could not be displayed.");
                   }
