@@ -84,7 +84,6 @@ public class ApplicationRegistryServiceImpl implements ApplicationRegistryServic
 
    /** . */
    final POMSessionManager mopManager;
-   private static final String REMOTE_DISPLAY_NAME_SUFFIX = " (remote)";
 
    /** Should match WSRPPortletInfo.PRODUCER_NAME_META_INFO_KEY */
    private static final String PRODUCER_NAME_META_INFO_KEY = "producer-name";

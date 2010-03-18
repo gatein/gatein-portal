@@ -25,21 +25,21 @@ import org.exoplatform.application.registry.Application;
 import org.exoplatform.application.registry.ApplicationCategory;
 import org.exoplatform.application.registry.ApplicationRegistryService;
 import org.exoplatform.applicationregistry.webui.Util;
+import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.commons.utils.SerializablePageList;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
-import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
+import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormInputInfo;
 import org.exoplatform.webui.form.UIFormInputSet;
@@ -84,9 +84,10 @@ public class UIAddApplicationForm extends UIForm
    public UIAddApplicationForm() throws Exception
    {
       addUIFormInput(new UIFormStringInput(FIELD_NAME, null, null).addValidator(StringLengthValidator.class, 3, 30));
-      List<SelectItemOption<String>> types = new ArrayList<SelectItemOption<String>>(2);
+      List<SelectItemOption<String>> types = new ArrayList<SelectItemOption<String>>(3);
       types.add(new SelectItemOption<String>(ApplicationType.PORTLET.getName()));
       types.add(new SelectItemOption<String>(ApplicationType.GADGET.getName()));
+      types.add(new SelectItemOption<String>(ApplicationType.WSRP_PORTLET.getName()));
       UIFormSelectBox uiSelectBox = new UIFormSelectBox(FIELD_TYPE, null, types);
       uiSelectBox.setOnChange("ChangeType");
       addUIFormInput(uiSelectBox);
@@ -200,10 +201,12 @@ public class UIAddApplicationForm extends UIForm
          //         app.setApplicationGroup(info.getApplicationName());
          ApplicationType appType;
          String contentId;
+         String displayName = Util.getLocalizedStringValue(displayNameLS, portletName);
          if (remote)
          {
             appType = ApplicationType.WSRP_PORTLET;
             contentId = portlet.getContext().getId();
+            displayName += ApplicationRegistryService.REMOTE_DISPLAY_NAME_SUFFIX;  // add remote to display name to make it more obvious that the portlet is remote
          }
          else
          {
@@ -211,7 +214,7 @@ public class UIAddApplicationForm extends UIForm
             contentId = info.getApplicationName() + "/" + info.getName();
          }
          app.setType(appType);
-         app.setDisplayName(Util.getLocalizedStringValue(displayNameLS, portletName));
+         app.setDisplayName(displayName);
          app.setDescription(Util.getLocalizedStringValue(descriptionLS, portletName));
          app.setAccessPermissions(new ArrayList<String>());
          app.setContentId(contentId);
