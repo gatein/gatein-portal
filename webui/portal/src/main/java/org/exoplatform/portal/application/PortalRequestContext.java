@@ -173,7 +173,7 @@ public class PortalRequestContext extends WebuiRequestContext
       String contextPath = URLDecoder.decode(req.getContextPath(), "UTF-8");
       String pathInfo = requestURI_.substring((servletPath + contextPath).length());
       
-      if (pathInfo == null || pathInfo.isEmpty())
+      if (pathInfo == null || pathInfo.length() == 0)
       {
          pathInfo = "/";
       }
