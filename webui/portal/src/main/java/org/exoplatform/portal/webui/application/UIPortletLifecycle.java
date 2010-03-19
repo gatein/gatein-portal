@@ -292,7 +292,7 @@ public class UIPortletLifecycle<S, C extends Serializable, I> extends Lifecycle<
                            .getComponentInstanceOfType(PortletExceptionHandleService.class);
                      portletExceptionService.handle(pcException);
 
-                     markup = Text.create("This portlet encountered an error and could not be displayed.");
+                     markup = Text.create(context.getApplicationResourceBundle().getString("UIPortlet.message.RuntimeError"));
                   }
                }
             }
@@ -312,7 +312,7 @@ public class UIPortletLifecycle<S, C extends Serializable, I> extends Lifecycle<
         	 log.warn("Could not find the PortletExceptionHandleService in the exo container");
          }
 
-         markup = Text.create("This portlet encountered an error and could not be displayed.");
+         markup = Text.create(context.getApplicationResourceBundle().getString("UIPortlet.message.RuntimeError"));
       }
 
       //

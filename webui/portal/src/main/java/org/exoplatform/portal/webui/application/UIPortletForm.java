@@ -247,7 +247,8 @@ public class UIPortletForm extends UIFormTabPane
       }
       catch (Throwable ex)
       {
-         portletContent.append("This portlet encountered an error and could not be displayed.");
+         WebuiRequestContext webuiRequest = WebuiRequestContext.getCurrentInstance();
+         portletContent.append(webuiRequest.getApplicationResourceBundle().getString("UIPortlet.message.RuntimeError"));
          log.error("The portlet " + uiPortlet_.getName() + " could not be loaded. Check if properly deployed.",
             ExceptionUtil.getRootCause(ex));
       }
