@@ -644,7 +644,7 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
       I invocation;
       HttpServletRequest servletRequest = prc.getRequest();
       HashMap<String, String[]> allParams = new HashMap<String, String[]>();
-      allParams.putAll(servletRequest.getParameterMap());
+      allParams.putAll(prc.getPortletParameters());
       allParams.putAll(this.getPublicParameters());
       allParams.remove(ExoPortletInvocationContext.NAVIGATIONAL_STATE_PARAM_NAME);
       if (type.equals(ActionInvocation.class))

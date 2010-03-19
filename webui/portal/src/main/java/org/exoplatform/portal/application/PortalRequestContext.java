@@ -19,8 +19,6 @@
 
 package org.exoplatform.portal.application;
 
-import com.sun.syndication.feed.atom.Link;
-
 import org.exoplatform.Constants;
 import org.exoplatform.commons.utils.PortalPrinter;
 import org.exoplatform.commons.utils.WriterPrinter;
@@ -40,6 +38,7 @@ import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.lifecycle.HtmlValidator;
+import org.gatein.common.http.QueryStringParser;
 import org.w3c.dom.Element;
 
 import javax.xml.transform.OutputKeys;
@@ -54,6 +53,7 @@ import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -115,6 +115,8 @@ public class PortalRequestContext extends WebuiRequestContext
    private List<Element> extraMarkupHeaders;
 
    private final PortalURLBuilder urlBuilder;
+   
+   private Map<String, String[]> parameterMap;
 
    public JavascriptManager getJavascriptManager()
    {
@@ -142,6 +144,17 @@ public class PortalRequestContext extends WebuiRequestContext
       catch (UnsupportedEncodingException e)
       {
          log.error("Encoding not supported", e);
+      }
+      
+      // Query parameters from the request will be set in the servlet container url encoding and not
+      // necessarly in utf-8 format. So we need to directly parse the parameters from the query string.
+      parameterMap = new HashMap<String, String[]>();
+      parameterMap.putAll(request_.getParameterMap());
+      String queryString = req.getQueryString();
+      if (queryString != null)
+      {
+         Map<String, String[]> queryParams = QueryStringParser.getInstance().parseQueryString(queryString);
+         parameterMap.putAll(queryParams);
       }
       
       ajaxRequest_ = "true".equals(req.getParameter("ajaxRequest"));
@@ -248,17 +261,24 @@ public class PortalRequestContext extends WebuiRequestContext
 
    public String getRequestParameter(String name)
    {
-      return request_.getParameter(name);
+      if (parameterMap.get(name) != null && parameterMap.get(name).length > 0)
+      {
+         return parameterMap.get(name)[0];
+      }
+      else
+      {
+         return null;
+      }
    }
 
    public String[] getRequestParameterValues(String name)
    {
-      return request_.getParameterValues(name);
+      return parameterMap.get(name);
    }
 
    public Map<String, String[]> getPortletParameters()
    {
-      Map<String, String[]> unsortedParams = getRequest().getParameterMap();
+      Map<String, String[]> unsortedParams = parameterMap;
       Map<String, String[]> sortedParams = new HashMap<String, String[]>();
       Set<String> keys = unsortedParams.keySet();
       for (String key : keys)
