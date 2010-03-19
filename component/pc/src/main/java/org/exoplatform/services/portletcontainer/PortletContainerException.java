@@ -32,8 +32,6 @@ public class PortletContainerException extends Exception
    public PortletContainerException(final Throwable cause)
    {
       super(cause);
-      if (cause != null)
-         cause.printStackTrace();
    }
 
    /**
@@ -51,8 +49,6 @@ public class PortletContainerException extends Exception
    public PortletContainerException(final String message, final Throwable cause)
    {
       super(message, cause);
-      if (cause != null)
-         cause.printStackTrace();
    }
 
 }
