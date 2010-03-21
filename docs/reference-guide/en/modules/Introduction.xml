@@ -35,28 +35,28 @@
 					GateIn homepage:
 					<ulink url="http://www.gatein.org">www.gatein.org</ulink>
 				</para>
-				<mediaobject>
+<!--				<mediaobject>
 					<imageobject role="html">
 						<imagedata fileref="images/GateIn.png" format="PNG" align="center" scale="110"/>
 					</imageobject>
 					<imageobject role="fo">
 						<imagedata fileref="images/GateIn.png" format="PNG" align="center" contentwidth="150mm"/>
 					</imageobject>
-				</mediaobject>
+				</mediaobject> -->
 			</listitem>
 			<listitem>
 				<para>
 					GateIn videos:
 					<ulink url="http://www.jboss.org/gatein/videos.html">www.jboss.org/gatein/videos.html</ulink>
 				</para>
-				<mediaobject>
+<!--				<mediaobject>
 					<imageobject role="html">
 						<imagedata fileref="images/Videos.png" format="PNG" align="center" scale="110" />
 					</imageobject>
 					<imageobject role="fo">
 						<imagedata fileref="images/Videos.png" format="PNG" align="center" contentwidth="150mm"/>
 					</imageobject>
-				</mediaobject>
+				</mediaobject> -->
 
 			</listitem>
 			<listitem>
@@ -70,14 +70,14 @@
 					GateIn downloads:
 					<ulink url="http://www.jboss.org/gatein/downloads.html">www.jboss.org/gatein/downloads.html</ulink>
 				</para>
-				<mediaobject>
+<!--				<mediaobject>
 					<imageobject role="html">
 						<imagedata fileref="images/Downloads.png" format="PNG" align="center" scale="110" />
 					</imageobject>
 					<imageobject role="fo">
 						<imagedata fileref="images/Downloads.png" format="PNG" align="center" contentwidth="150mm"/>
 					</imageobject>
-				</mediaobject>
+				</mediaobject> -->
 
 			</listitem>
 		</itemizedlist>
