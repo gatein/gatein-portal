@@ -2,9 +2,7 @@
 <!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
 <!ENTITY % BOOK_ENTITIES SYSTEM "../Reference_Guide.ent">
 %BOOK_ENTITIES;
-   <!ENTITY % entities SYSTEM "../Reference_Guide.ent">
-   %entities;
-   ]>
+]>
 <chapter id="wsrp">
    <title>Web Services for Remote Portlets (WSRP)</title>
 
@@ -37,7 +35,7 @@
    </sect1>
 
    <sect1 id="wsrp_support">
-      <title>Level of support in GateIn</title>
+      <title>Level of support in &PRODUCT;</title>
       <para>The WSRP Technical Committee defined
          <ulink url="http://www.oasis-open.org/committees/download.php/3073">WSRP Use Profiles</ulink>
          to help with WSRP interoperability. We will refer to terms defined in that document in
