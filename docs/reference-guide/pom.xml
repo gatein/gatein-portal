@@ -25,65 +25,15 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <!-- FIXME parent not in sync with current hierarchy -->
     <parent>
         <groupId>org.gatein.doc</groupId>
-        <artifactId>doc-parent</artifactId>
-        <version>1.0.0-CR1</version>
+        <artifactId>docs-aggregator</artifactId>
+        <version>3.0.1-GA-SNAPSHOT</version>
     </parent> 
     
     <groupId>org.gatein.doc</groupId>
     <artifactId>gatein-reference-guide-en</artifactId>
-    <version>3.0.0-GA</version>
     <packaging>jdocbook</packaging>
     <name>GateIn Reference Guide en</name>
 
-    <!-- TODO Remove when repositories are configured once for all -->
-    <repositories>
-      <repository>
-         <id>repository.jboss.org</id>
-         <name>JBoss Repository</name>
-         <layout>default</layout>
-         <url>http://repository.jboss.org/maven2/</url>
-         <snapshots>
-            <enabled>false</enabled>
-         </snapshots>
-      </repository>
-      <repository>
-         <id>snapshots.jboss.org</id>
-         <name>JBoss Snapshots Repository</name>
-         <layout>default</layout>
-         <url>http://snapshots.jboss.org/maven2/</url>
-         <snapshots>
-            <enabled>true</enabled>
-         </snapshots>
-         <releases>
-            <enabled>false</enabled>
-         </releases>
-      </repository>
-   </repositories>
-
-   <pluginRepositories>
-      <pluginRepository>
-         <id>repository.jboss.org</id>
-         <name>JBoss Repository</name>
-         <layout>default</layout>
-         <url>http://repository.jboss.org/maven2/</url>
-         <snapshots>
-            <enabled>false</enabled>
-         </snapshots>
-      </pluginRepository>
-      <pluginRepository>
-         <id>snapshots.jboss.org</id>
-         <name>JBoss Snapshots Repository</name>
-         <layout>default</layout>
-         <url>http://snapshots.jboss.org/maven2/</url>
-         <snapshots>
-            <enabled>true</enabled>
-         </snapshots>
-         <releases>
-            <enabled>false</enabled>
-         </releases>
-      </pluginRepository>
-   </pluginRepositories>  
 </project>
