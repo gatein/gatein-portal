@@ -17,7 +17,7 @@
   </section>
 
   <section id="sect-Reference_Guide-EMail_Service_Configuration-Parameters">
-    <title>Configuring the database for JCR</title>
+    <title>Configuring the e-mail outgoing account</title>
 
     <para>The e-mail service can use any SMTP account that needs to be configured in
     $JBOSS_HOME/server/default/conf/gatein/configuration.properties
