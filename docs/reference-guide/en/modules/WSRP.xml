@@ -16,11 +16,11 @@
 
       <para>Scenarios that motivate WSRP functionality include:
          <itemizedlist>
-            <listitem>Content hosts, such as portal servers, providing Portlets as presentation-oriented web services
-               that can be used by aggregation engines.
+            <listitem><para>Content hosts, such as portal servers, providing Portlets as presentation-oriented web services
+               that can be used by aggregation engines.</para>
             </listitem>
-            <listitem>Aggregating frameworks, including portal servers, consuming presentation-oriented web services
-               offered by content providers and integrating them into the framework.
+            <listitem><para>Aggregating frameworks, including portal servers, consuming presentation-oriented web services
+               offered by content providers and integrating them into the framework.</para>
             </listitem>
          </itemizedlist>
       </para>
@@ -136,6 +136,7 @@
          element is optional.
       </para>
       <example>
+         <title>BasicPortlet</title>
          <programlisting><![CDATA[
 <?xml version="1.0" standalone="yes"?>
 <!DOCTYPE portlet-app PUBLIC "-//&PRODUCT;//DTD JBoss Portlet 2.6//EN"
@@ -158,6 +159,7 @@
          several portlets without having to specify the status for all the declared portlets. Let's look at an example:
       </para>
       <example>
+         <title>All portlets set remotable</title>
          <programlisting><![CDATA[
 <?xml version="1.0" standalone="yes"?>
 <!DOCTYPE portlet-app PUBLIC
@@ -212,16 +214,16 @@
          at:
          <itemizedlist>
             <listitem>
-               <filename>http://{hostname}:{port}/portal-wsrp/ServiceDescriptionService</filename>
+               <para><filename>http://{hostname}:{port}/portal-wsrp/ServiceDescriptionService</filename></para>
             </listitem>
             <listitem>
-               <filename>http://{hostname}:{port}/portal-wsrp/MarkupService</filename>
+               <para><filename>http://{hostname}:{port}/portal-wsrp/MarkupService</filename></para>
             </listitem>
             <listitem>
-               <filename>http://{hostname}:{port}/portal-wsrp/RegistrationService</filename>
+               <para><filename>http://{hostname}:{port}/portal-wsrp/RegistrationService</filename></para>
             </listitem>
             <listitem>
-               <filename>http://{hostname}:{port}/portal-wsrp/PortletManagementService</filename>
+               <para><filename>http://{hostname}:{port}/portal-wsrp/PortletManagementService</filename></para>
             </listitem>
          </itemizedlist>
          The default hostname is
@@ -322,10 +324,10 @@
                                 scalefit="1"/>
                   </imageobject>
                </mediaobject>
-               <note>At this point, there is no automated way to learn about which possible values (if any) are
+               <note><para>At this point, there is no automated way to learn about which possible values (if any) are
                   expected by the remote Producer. In the case of BEA's public producer, the possible values are
                   indicated in the registration property description. This is not always the case... Please refer to
-                  the specific Producer's documentation.
+                  the specific Producer's documentation.</para>
                </note>
                Enter "<literal>public</literal>" as the value for the registration property and press "Save &amp;
                Refresh" once more. You should now
@@ -390,10 +392,10 @@
                (with &PRODUCT; and its WSRP service deployed).
             </para>
             <para>
-               <note>A DTD and an XML Schema for WSRP Producer XML descriptors are available in
+               <note><para>A DTD and an XML Schema for WSRP Producer XML descriptors are available in
                   <filename>jboss-portal.sar/portal-wsrp.sar/dtd/jboss-wsrp-consumer_2_6.dtd</filename>
                   and
-                  <filename>jboss-portal.sar/portal-wsrp.sar/xsd/jboss-wsrp-consumer_2_6.xsd</filename>
+                  <filename>jboss-portal.sar/portal-wsrp.sar/xsd/jboss-wsrp-consumer_2_6.xsd</filename></para>
                </note>
             </para>
          </sect3>
@@ -458,7 +460,7 @@
             <filename>jboss-portal.sar/portal-wsrp.sar/xsd/jboss-wsrp-consumer_2_6.xsd</filename>, while a (legacy) DTD
             can be found at<filename>jboss-portal.sar/portal-wsrp.sar/dtd/jboss-wsrp-consumer_2_6.dtd</filename>.
 
-            <note>It is important to note how WSRP Producer descriptors are processed. They are read the first time the
+            <note><para>It is important to note how WSRP Producer descriptors are processed. They are read the first time the
                WSRP service starts and the associated information is then put in the Portal database. Subsequent launch
                of the WSRP service will use the database-stored information for all producers which identifier is
                already known to Portal. More specifically, all the descriptors are scanned for producer identifiers.
@@ -470,7 +472,7 @@
                <emphasis>AND</emphasis>
                remove the associated information in any WSRP Producer descriptor (if such
                information exists) as the producer will be re-created the next time the WSRP is launched if that
-               information is not removed.
+               information is not removed.</para>
             </note>
          </para>
 
@@ -495,7 +497,7 @@
 
             <para>
                <itemizedlist>
-                  <listitem>You can provide the URLs for each of the different WSRP interfaces offered by the remote
+                  <listitem><para>You can provide the URLs for each of the different WSRP interfaces offered by the remote
                      producer via the
                      <literal>&lt;endpoint-config&gt;</literal>
                      element and its
@@ -507,19 +509,19 @@
                      children. These URLs are
                      producer-specific so you will need to refer to your producer documentation or WSDL file to
                      determine
-                     the appropriate values.
+                     the appropriate values.</para>
                   </listitem>
-                  <listitem>Alternatively, and this is the easiest way to configure your producer, you can provide a URL
+                  <listitem><para>Alternatively, and this is the easiest way to configure your producer, you can provide a URL
                      pointing to the WSDL description of the producer's WSRP services. This is accomplished via the
                      <literal>&lt;endpoint-wsdl-url&gt;</literal>
                      element. &PRODUCT; will then
                      heuristically determine, from the information contained in the WSDL file, how to connect
                      appropriately
-                     to the remote WSRP services.
-                     <note>It is important to note that, when using this method, &PRODUCT; will try to match a port
+                     to the remote WSRP services.</para>
+                     <note><para>It is important to note that, when using this method, &PRODUCT; will try to match a port
                         name to an interface based solely on the provided name. There are no standard names for these
                         ports so it is possible (though rare) that this matching process fails. In this case, you should
-                        look at the WSDL file and provide the endpoint URLs manually, as per the previous method.
+                        look at the WSDL file and provide the endpoint URLs manually, as per the previous method.</para>
                      </note>
                   </listitem>
                </itemizedlist>
@@ -564,8 +566,9 @@
                registration
                information in the producer configuration so that the Portal consumer can register with the remote
                producer when required.
-               <note>At this time, though, only simple String properties are supported and it is not possible to
-                  configure complex registration data. This should however be sufficient for most cases.
+               <note>
+                  <para>At this time, though, only simple String properties are supported and it is not possible to
+                  configure complex registration data. This should however be sufficient for most cases.</para>
                </note>
             </para>
 
@@ -601,6 +604,7 @@
          </para>
 
          <example>
+            <title>self producer configuration</title>
             <programlisting><![CDATA[
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE deployments PUBLIC "-//&PRODUCT;//DTD WSRP Remote Producer Configuration 2.6//EN"
@@ -633,11 +637,12 @@
             </programlisting>
          </example>
 
-         <para>Here is an example of a WSRP descriptor with a 2 minute caching time and manual definition of the
+         <para>Here is an example of a WSRP descriptor with a 2 minutes caching time and manual definition of the
             endpoint URLs:
          </para>
 
          <example>
+            <title>WSRP descriptor with 2 minutes caching time</title>
             <programlisting><![CDATA[
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE deployments PUBLIC "-//&PRODUCT;//DTD WSRP Remote Producer Configuration 2.6//EN"
@@ -670,6 +675,7 @@
          </para>
 
          <example>
+            <title>WSRP descriptor</title>
             <programlisting><![CDATA[
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE deployments PUBLIC "-//&PRODUCT;//DTD WSRP Remote Producer Configuration 2.6//EN"
@@ -821,7 +827,7 @@
                   </imageobject>
                </mediaobject>
 
-               <note>As of WSRP 1, it is rather difficult to ascertain for sure what caused an
+               <note><para>As of WSRP 1, it is rather difficult to ascertain for sure what caused an
                   <exceptionname>OperationFailedFault</exceptionname>
                   as it is the generic exception returned by
                   producers if something didn't quite happen as expected during a method invocation. This means that
@@ -829,7 +835,7 @@
                   can be caused by several different reasons, one
                   of them being a request to modify the registration data. Please take a look at the log files to see
                   if you can gather more information as to what happened. WSRP 2 introduces an exception that is
-                  specific to a request to modify registrations thus reducing the ambiguity that currently exists.
+                  specific to a request to modify registrations thus reducing the ambiguity that currently exists.</para>
                </note>
             </para>
          </sect3>
@@ -849,20 +855,20 @@
          <para>
             The available operations are:
             <itemizedlist>
-               <listitem>Configure: displays the consumer details and allows user to edit them</listitem>
+               <listitem><para>Configure: displays the consumer details and allows user to edit them</para></listitem>
                <listitem>
-                  Refresh: forces the consumer to retrieve the service description from the remote producer to refresh
-                  the local information (offered portlets, registration information, etc.)
+                  <para>Refresh: forces the consumer to retrieve the service description from the remote producer to refresh
+                  the local information (offered portlets, registration information, etc.)</para>
                </listitem>
                <listitem>
-                  Activate/Deactivate: activates/deactivates a consumer, governing whether it will be available to
-                  provide portlets and receive portlet invocations
+                  <para>Activate/Deactivate: activates/deactivates a consumer, governing whether it will be available to
+                  provide portlets and receive portlet invocations</para>
                </listitem>
                <listitem>
-                  Register/Deregister: registers/deregisters a consumer based on whether registration is required
-                  and/or acquired
+                  <para>Register/Deregister: registers/deregisters a consumer based on whether registration is required
+                  and/or acquired</para>
                </listitem>
-               <listitem>Delete: destroys the consumer, after deregisterting it if it was registered</listitem>
+               <listitem><para>Delete: destroys the consumer, after deregisterting it if it was registered</para></listitem>
             </itemizedlist>
          </para>
       </sect2>
@@ -992,16 +998,16 @@
             Press "Save" to record your modifications.
 
             <note>
-               At this time, only String (xsd:string) properties are supported. If your application requires more
-               complex properties, please let us know.
+               <para>At this time, only String (xsd:string) properties are supported. If your application requires more
+               complex properties, please let us know.</para>
             </note>
 
             <note>
-               If consumers are already registered with the producer, modifying the configuration of required
+               <para>If consumers are already registered with the producer, modifying the configuration of required
                registration
                information will trigger the invalidation of held registrations, requiring consumers to modify their
                registration before being able to access the producer again. We saw the consumer side of that process
-               in<xref linkend="reg_mod_error"/>.
+               in<xref linkend="reg_mod_error"/>.</para>
             </note>
          </para>
 
@@ -1038,11 +1044,11 @@
                name of your custom property validator instead to customize the default registration policy behavior.
                Note that property validators are only used by the default policy.
 
-               <note>Since the policy or the validator are defined via their class name and dynamically loaded, it is
+               <note><para>Since the policy or the validator are defined via their class name and dynamically loaded, it is
                   important that you make sure that the identified class is available to the application server. One way
                   to accomplish that is to deploy your policy implementation as JAR file in your AS instance deploy
                   directory. Note also that, since both policies and validators are dynamically instantiated, they must
-                  provide a default, no-argument constructor.
+                  provide a default, no-argument constructor.</para>
                </note>
             </para>
          </sect3>

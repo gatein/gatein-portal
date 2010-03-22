@@ -9,7 +9,9 @@
 	<xi:include href="development/Right_To_Left_Framework.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 	<xi:include href="development/Internationalization_Configuration.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 	<xi:include href="development/XML_Resource_Bundles.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+    <!-- 
 	<xi:include href="development/Dynamic_Layouts.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+	 -->
 	<xi:include href="development/JavaScript_Inter_Application_Communication.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 	<xi:include href="development/Upload_Component.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 	<xi:include href="development/Ajax_Loading_Mask_Layer_Deactivation.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />

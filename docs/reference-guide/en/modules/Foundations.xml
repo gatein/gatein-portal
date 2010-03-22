@@ -3,27 +3,31 @@
 <!ENTITY % BOOK_ENTITIES SYSTEM "../Reference_Guide.ent">
 %BOOK_ENTITIES;
 ]>
-<chapter id="chap-Reference_Guide-Foundations" xmlns:x="http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+<chapter id="chap-Reference_Guide-Foundations">
 
    <title>Foundations</title>
    <section id="sect-Reference_Guide-Foundations-Kernel">
       <title>GateIn Kernel</title>
       <para>
          &PRODUCT; is built on top of a kernel, and a set of services that exist in two scopes.
-         First scope is represented by <emphasis role="bold">RootContainer</emphasis> - it contains services that exist independently of any portal, and can be accessed by all portals.
+         First scope is represented by <emphasis role="bold">RootContainer</emphasis> - it contains services that exist independently of any portal container, and can be accessed by all portals.
       </para>
       <para>
-         Second scope is portal-private in the form of <emphasis role="bold">PortalContainer</emphasis>. For each configured portal, an instance of PortalContainer is created.
-         This scope contains services that have portal specific configuration, and services which should not be shared by
-         multiple portals.
-      </para>
-
-      <para>
-         RootContainer and PortalContainer classes are part of the same class hierarchy - they both inherit from <emphasis role="bold">ExoContainer</emphasis>,
-         and they also inherit methods for looking up registered services.
+         Second scope is portal-private in the form of <emphasis role="bold">PortalContainer</emphasis>. Each portal live in an instance of PortalContainer.
+         This scope contains services that are common for a set of portals, and services which should not be shared by all portals.
       </para>
       <para>
-         Whenever a specific service is looked up through PortalContainer, and service is not available, the lookup is
+         <mediaobject>
+            <imageobject role="html">
+               <imagedata fileref="images/foundations/PortalContainers.png" format="PNG" align="center" scale="100" />
+            </imageobject>
+            <imageobject role="fo">
+               <imagedata fileref="images/foundations/PortalContainers.png" format="PNG" align="center" contentwidth="150mm" />
+            </imageobject>
+         </mediaobject>
+      </para>
+      <para>
+         Whenever a specific service is looked up through PortalContainer, and the service is not available, the lookup is
          delegated further up to RootContainer. We can therefore have default instance of a certain component in
          RootContainer, and portal specific instances in some or all PortalContainers, that override the default
          instance.
@@ -47,7 +51,7 @@
       Additionally, <emphasis role="bold">portal extensions</emphasis> can contain configuration in <emphasis role="bold">WEB-INF/conf/configuration.xml</emphasis>, and will also have their services configured at PortalContainer scope.
       </para>
       <note>
-         Portal extensions are described later on.
+         <para>Portal extensions are described later on.</para>
       </note>
 
    </section>
@@ -63,8 +67,8 @@
          If key can be loaded as a class, a Class object is used as a key, otherwise a String is used.</para>
          <para>The usual approach is to specify an interface as a key.</para>
 
-         <note>Example of service component configuration:</note>
-
+         <example>
+            <title>Example of service component configuration:</title>
          <programlisting role="XML"><![CDATA[
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <configuration
@@ -81,6 +85,7 @@
    </component>
 </configuration>
       ]]></programlisting>
+         </example>
       </section>
       <section id="sect-Reference_Guide-Foundations-Configuration_syntax-External_plugins">
          <title>External Plugins</title>
@@ -92,7 +97,8 @@
             to use for injection (<emphasis role="bold">&lt;set-method&gt;</emphasis>). </para>
          <para>A plugin implementation class has to implement <emphasis role="bold">org.exoplatform.container.component. ComponentPlugin</emphasis> interface.</para>
          <para>In the following example <emphasis role="bold">PortalContainerDefinitionPlugin</emphasis> implements ComponentPlugin:</para>
-
+         <example>
+            <title>PortalContainerDefinitionPlugin</title>
          <programlisting role="XML"><![CDATA[
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration
@@ -120,6 +126,7 @@
    </external-component-plugins>
 </configuration>
          ]]></programlisting>
+         </example>
       </section>
 
       <section id="sect-Reference_Guide-Foundations-Configuration_syntax-Includes">
@@ -141,7 +148,9 @@
 
          <para>We see a special URL being used to reference another configuration file.
             URL schema <emphasis role="bold">'war:'</emphasis> means, that the path that follows is resolved relative to current PortalContainer's servlet context resource path, starting at <emphasis role="bold">WEB-INF</emphasis> as a root.</para>
-         <note>Current PortalContainer is really a newly created PortalContainer, as war: URLs only make sense for PortalContainer scoped configuration.</note>
+         <note>
+            <para>Current PortalContainer is really a newly created PortalContainer, as war: URLs only make sense for PortalContainer scoped configuration.</para>
+         </note>
          <para>Also, thanks to extension mechanism, the servlet context used for resource loading is a <emphasis role="bold">unified servlet context</emphasis> (as explaned in a later section).</para>
          <para>To have include path resolved relative to current classpath (context classloader), use <emphasis role="bold">'jar:'</emphasis> URL schema.</para>
       </section>
@@ -153,6 +162,8 @@
          (i.e. JNDI names, Database / DataSource names, JCR repository names, etc ...).</para>
          <para>This variable is only defined when there is a current PortalContainer available - only for PortalContainer scoped services.</para>
          <para>A good example for this is <emphasis role="bold">HibernateService</emphasis>:</para>
+         <example>
+            <title>HibernateService using variables</title>
          <programlisting role="XML"><![CDATA[
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <configuration
@@ -187,19 +198,20 @@
    </component>
 </configuration>
          ]]></programlisting>
+         </example>
 
       </section>
    </section>
 
    <section id="sect-Reference_Guide-Foundations-Configuring_portal">
-      <title>Configuring a portal</title>
+      <title>Configuring a portal container</title>
 
       <para>
-         A <emphasis role="bold">portal</emphasis> is defined by several attributes.
+         A <emphasis role="bold">portal container</emphasis> is defined by several attributes.
       </para>
 
       <para>
-         First, there is a <emphasis role="bold">portal name</emphasis>, which is always equal to URL context to which the current portal is bound.
+         First, there is a <emphasis role="bold">portal container name</emphasis>, which is always equal to URL context to which the current portal is bound.
       </para>
 
       <para>
@@ -217,6 +229,8 @@
          portal (via extension mechanism described later), and are searched in the specified order.
       </para>
 
+      <example>
+         <title>Portal container declaration example</title>
       <programlisting role="XML"><![CDATA[
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration
@@ -298,14 +312,15 @@
 </configuration>
       ]]>
 </programlisting>
+      </example>
 
 
       <note>
-         Dependencies are part of the extension mechanism.
+         <para>Dependencies are part of the extension mechanism.</para>
       </note>
 
       <para>
-         Every <emphasis role="bold">portal</emphasis> is represented by <emphasis role="bold">PortalContainer instance</emphasis>, which contains:
+         Every <emphasis role="bold">portal container</emphasis> is represented by a <emphasis role="bold">PortalContainer instance</emphasis>, which contains:
          <itemizedlist>
             <listitem>
                <para>associated <emphasis role="bold">ExoContainerContext</emphasis>, which contains information about the portal</para>
@@ -351,7 +366,7 @@
       <para>
          First, declare <emphasis role="bold">PortalConfigOwner</emphasis> servlet context listener in web.xml of your web application.
       </para>
-      <para>An example of a portal extension called sample-ext:</para>
+      <example><title>Example of a portal extension called sample-ext:</title>
 
          <programlisting role="XML"><![CDATA[
 <?xml version="1.0" encoding="ISO-8859-1" ?>
@@ -369,6 +384,7 @@
 
 </web-app>
       ]]></programlisting>
+      </example>
       <para>
          Then, add the servlet context name of this web application in proper place in the list of Dependencies of the PortalContainerDefinition
          of all the portal containers that you want to have access to its resources.
@@ -379,7 +395,7 @@
       </para>
 
       <note>
-         See 'Configuring a portal' section for example of PortalContainerDefinition, that has sample-ext at the end of its list of Dependencies.
+         <para>See 'Configuring a portal' section for example of PortalContainerDefinition, that has sample-ext at the end of its list of Dependencies.</para>
       </note>
 
    </section>
@@ -436,13 +452,15 @@ protected void onService(ExoContainer container, HttpServletRequest req,
       HttpServletResponse res) throws ServletException, IOException;
          ]]></programlisting>
       <note>
+         <para>
          The reason is that AbstractHttpServlet implements service() to perform its interception, and you don't want to
          overwrite (by overriding) this functionality.
+         </para>
       </note>
       <para>
          You may also need to access portal information within your <emphasis role="bold">HttpSessionListener</emphasis>. Again, make sure to extend the
          provided abstract class - <emphasis role="bold">org.exoplatform.container.web. AbstractHttpSessionListener</emphasis>.
-         Also, modify your method signitures as follows:</para>
+         Also, modify your method signatures as follows:</para>
          <programlisting role="JAVA"><![CDATA[
 /**
  * Use this method instead of HttpSessionListener.sessionCreated()

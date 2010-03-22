@@ -143,7 +143,7 @@ NavigationPortlet_ar.xml
 				</callout>
 				<callout arearefs="area-Reference_Guide-i18n.locales.configuration.orientation">
 					<para>
-						<emphasis>description</emphasis> The default orientation of text and images is Left-To-Right. &PRODUCT; supports <emphasis role="bold">Right-To-Left</emphasis> orientation. Modifying text orientation is explained in <xref linkend="sect-Reference_Guide-RTL_Right_To_Left_Framework" />.
+						<emphasis>orientation</emphasis> The default orientation of text and images is Left-To-Right. &PRODUCT; supports <emphasis role="bold">Right-To-Left</emphasis> orientation. Modifying text orientation is explained in <xref linkend="sect-Reference_Guide-RTL_Right_To_Left_Framework" />.
 					</para>
 				</callout>
 			</calloutlist>
