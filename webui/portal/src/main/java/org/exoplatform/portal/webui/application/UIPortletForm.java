@@ -221,6 +221,7 @@ public class UIPortletForm extends UIFormTabPane
          {
             PortletContainerException pcException;
 
+            //
             if (portletResponse instanceof ErrorResponse)
             {
                ErrorResponse errorResponse = (ErrorResponse)portletResponse;
@@ -233,17 +234,24 @@ public class UIPortletForm extends UIFormTabPane
                      + "]. Expected a FragmentResponse or an ErrorResponse");
             }
 
-            PortletExceptionHandleService portletExceptionService =
-               (PortletExceptionHandleService)uiPortlet_.getApplicationComponent(PortletExceptionHandleService.class);
-            portletExceptionService.handle(pcException);
+            //
+            PortletExceptionHandleService portletExceptionService = uiPortlet_.getApplicationComponent(PortletExceptionHandleService.class);
+            if (portletExceptionService != null)
+            {
+                portletExceptionService.handle(pcException);
+            }
+            else
+            {
+               log.warn("Could not find the PortletExceptionHandleService in the exo container");
+            }
 
+            //
+            log.error("Portlet render in edit mode threw an exception", pcException);
             content = "An error has occured. Please see the logs for details.";
          }
 
          portletContent.setLength(0);
          portletContent.append(content);
-         //
-
       }
       catch (Throwable ex)
       {
