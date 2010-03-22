@@ -287,10 +287,15 @@ public class UIPortletLifecycle<S, C extends Serializable, I> extends Lifecycle<
                               + "]. Expected a FragmentResponse or an ErrorResponse");
                      }
 
-                     PortletExceptionHandleService portletExceptionService =
-                        (PortletExceptionHandleService)container
-                           .getComponentInstanceOfType(PortletExceptionHandleService.class);
-                     portletExceptionService.handle(pcException);
+                     //
+                     PortletExceptionHandleService portletExceptionService = uicomponent.getApplicationComponent(PortletExceptionHandleService.class);
+                     if (portletExceptionService != null)
+                     {
+                        portletExceptionService.handle(pcException);
+                     }
+
+                     // Log the error
+                     log.error("Portlet render threw an exception", pcException);
 
                      markup = Text.create(context.getApplicationResourceBundle().getString("UIPortlet.message.RuntimeError"));
                   }
@@ -301,17 +306,16 @@ public class UIPortletLifecycle<S, C extends Serializable, I> extends Lifecycle<
       catch (Exception e)
       {
          PortletContainerException pcException = new PortletContainerException(e);
-         PortletExceptionHandleService portletExceptionService =
-            (PortletExceptionHandleService)container.getComponentInstanceOfType(PortletExceptionHandleService.class);
+         PortletExceptionHandleService portletExceptionService = uicomponent.getApplicationComponent(PortletExceptionHandleService.class);
          if (portletExceptionService != null)
          {
-             portletExceptionService.handle(pcException);
-         }
-         else
-         {
-        	 log.warn("Could not find the PortletExceptionHandleService in the exo container");
+            portletExceptionService.handle(pcException);
          }
 
+         // Log the error
+         log.error("Portlet render threw an exception", pcException);
+
+         //
          markup = Text.create(context.getApplicationResourceBundle().getString("UIPortlet.message.RuntimeError"));
       }
 
