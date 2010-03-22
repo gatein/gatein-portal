@@ -261,7 +261,15 @@ public class UserProfileDAOImpl implements UserProfileHandler
          // Check if attribute is part of User interface data
          if (!UserDAOImpl.USER_NON_PROFILE_KEYS.contains(key))
          {
-            filteredAttrs.put(key, attrs.get(key).getValue().toString());
+            Object value = attrs.get(key).getValue();
+            if (value != null)
+            {
+               filteredAttrs.put(key, value.toString());
+            }
+            else
+            {
+               filteredAttrs.put(key, null);
+            }
          }
 
       }
