@@ -24,9 +24,9 @@ import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.RootContainer;
 import org.exoplatform.container.RootContainer.PortalContainerPostCreateTask;
 import org.exoplatform.container.web.AbstractHttpServlet;
-import org.exoplatform.services.log.ExoLogger;
-import org.exoplatform.services.log.Log;
 import org.exoplatform.web.WebAppController;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 
 import java.io.IOException;
 import java.util.Enumeration;
@@ -50,7 +50,7 @@ import javax.servlet.http.HttpServletResponse;
 public class PortalController extends AbstractHttpServlet
 {
 
-   protected static Log log = ExoLogger.getLogger("portal:PortalController");
+   protected static Logger log = LoggerFactory.getLogger("org.gatein.portal.application.PortalController");
 
    /**
     * The onInit() method is used to prepare the portal to receive requests. 
@@ -82,7 +82,7 @@ public class PortalController extends AbstractHttpServlet
       }
       catch (Throwable t)
       {
-         log.fatal("The WebAppController could not be initialized for the portal '" + portalContainer.getName() + "'",
+         log.error("The WebAppController could not be initialized for the portal '" + portalContainer.getName() + "'",
             t);
       }
       finally
