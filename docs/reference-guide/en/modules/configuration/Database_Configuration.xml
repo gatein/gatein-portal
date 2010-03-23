@@ -13,9 +13,9 @@
     <title>Overview</title>
 
     <para>&PRODUCT; has two different database dependencies. One is the
-    identity service configuration, which depends on the Hibernate. The other
+    identity service configuration, which depends on Hibernate. The other
     database dependency is Java content repository (JCR) service, which
-    depends on the native JDBC API and it can integrate with any existing
+    depends on JDBC API, and can integrate with any existing
     datasource implementation.</para>
 
     <para>When you change the database configuration for the first time,
@@ -23,8 +23,8 @@
     database user has the appropriate permissions).</para>
 
     <para>&PRODUCT; assumes the default encoding for your database is
-    <literal>latin1</literal> . You will need to change this parameter for
-    your database in order to work properly.</para>
+    <literal>latin1</literal>. You may need to change this parameter for
+    your database in order for &PRODUCT; to work properly.</para>
   </section>
 
   <section id="sect-Reference_Guide-Database_Configuration-JCR_database_configuration">
@@ -36,7 +36,7 @@
     <para>For Tomcat, the file is located at <programlisting>$TOMCAT_HOME/gatein/conf/configuration.properties</programlisting></para>
 
     <para>And edit the values of driver, url, username and password with the
-    values for your JDBC connection (Please refer to your database JDBC driver
+    values for your JDBC connection (please, refer to your database JDBC driver
     documentation).</para>
 
     <programlisting role="XML">gatein.jcr.datasource.driver=org.hsqldb.jdbcDriver
@@ -45,37 +45,36 @@ gatein.jcr.datasource.username=sa
 gatein.jcr.datasource.password=
 </programlisting>
 
-    <para>In that case, the name of the database is "jdbcjcr_${name}", ${name}
-    should be part of the database name, as it is dynamically replaced by the
-    name of the portal container extension (for instance
+    <para>By default, the name of the database is "jdbcjcr_${name}" - ${name}
+    should be a part of the database name, as it is dynamically replaced by the
+    name of the portal container extension (for instance,
     gatein-sample-portal.ear defines "sample-portal" as container name and the
     default portal defines "portal" as container name).</para>
 
-    <para>In the case of HSQL the databases are created automatically, for any
+    <para>In the case of HSQL the databases are created automatically. For any
     other database you will need to create a database named jdbcjcr_portal
-    (and "jdbcjcr_sample-portal" if you kept gatein-sample-portal.ear in
-    $JBOSS_HOME/server/default/deploy. Note that some database wont accept '-'
-    in a database name and you will have to delete
+    (and "jdbcjcr_sample-portal" if you have gatein-sample-portal.ear in
+    $JBOSS_HOME/server/default/deploy - note that some databases don't accept '-'
+    in the database name, so you may have to remove
     $JBOSS_HOME/server/default/deploy/gatein-sample-portal.ear)</para>
 
-    <para>Make sure the user has rights to create tables on jdbcjcr_portal and
-    to update them as during the first startup they will be automatically
-    created.</para>
+    <para>Make sure the user has rights to create tables on jdbcjcr_portal, and
+    to update them as they will be automatically created during the first startup .</para>
 
-    <para>Also add the JDBC driver into the classpath, for instance in
-    $JBOSS_HOME/server/default/lib (or $TOMCAT_HOME/lib if you are running on
+    <para>Also add your database's JDBC driver into the classpath - you can put it in
+    $JBOSS_HOME/server/default/lib (or $TOMCAT_HOME/lib, if you are running on
     Tomcat)</para>
 
     <para>MySQL example:</para>
 
-    <para>Let's configure our JCR to store data in MySQL, let's pretend we
+    <para>Let's configure our JCR to store data in MySQL. Let's pretend we
     have a user named "gateinuser" with a password "gateinpassword". We would
-    create a database "mygateindb_portal" (Remember that _portal is required)
-    and assign him the rights to create tables.</para>
+    create a database "mygateindb_portal" (remember that _portal is required),
+    and assign our user the rights to create tables.</para>
 
-    <para>Then we need to add the MySQL JDBC connector in the classpath and
+    <para>Then we need to add MySQL's JDBC driver to the classpath, and
     finally edit gatein.ear/02portal.war/WEB-INF/conf/jcr/jcr-configuration
-    with:<programlisting>gatein.jcr.datasource.driver=com.mysql.jdbc.Driver
+    to contain the following:<programlisting>gatein.jcr.datasource.driver=com.mysql.jdbc.Driver
 gatein.jcr.datasource.url=jdbc:mysql://localhost:3306/mygateindb${container.name.suffix}
 gatein.jcr.datasource.username=gateinuser
 gatein.jcr.datasource.password=gateinpassword
@@ -85,13 +84,13 @@ gatein.jcr.datasource.password=gateinpassword
   <section>
     <title>Configuring the database for the default identity store</title>
 
-    <para>By default users are stored in database. To change the database to
+    <para>By default, users are stored in a database. To change the database in which to
     store users, you will need to edit the file:</para>
 
     <para><programlisting>$JBOSS_HOME/server/default/conf/gatein/configuration.properties</programlisting>For
     Tomcat, the file is located at <programlisting>$TOMCAT_HOME/gatein/conf/configuration.properties</programlisting></para>
 
-    <para>You will find the same configuration as in
+    <para>You will find the same kind of configuration as in
     jcr-configuration.xml:<programlisting>gatein.idm.datasource.driver=org.hsqldb.jdbcDriver
 gatein.idm.datasource.url=jdbc:hsqldb:file:${gatein.db.data.dir}/data/jdbcidm_${name}
 gatein.idm.datasource.username=sa

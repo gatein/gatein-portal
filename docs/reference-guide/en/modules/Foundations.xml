@@ -9,11 +9,14 @@
    <section id="sect-Reference_Guide-Foundations-Kernel">
       <title>GateIn Kernel</title>
       <para>
-         &PRODUCT; is built on top of a kernel, and a set of services that exist in two scopes.
-         First scope is represented by <emphasis role="bold">RootContainer</emphasis> - it contains services that exist independently of any portal container, and can be accessed by all portals.
+         &PRODUCT; is built as a set of services on top of a dependency injection kernel. The kernel provides configuration, lifecycle handling, component scopes, and some core services.
       </para>
       <para>
-         Second scope is portal-private in the form of <emphasis role="bold">PortalContainer</emphasis>. Each portal live in an instance of PortalContainer.
+         Service components exist in two scopes. First scope is represented by <emphasis role="bold">RootContainer</emphasis> - it contains services that exist independently of any portal, and can be
+         accessed by all portals.
+      </para>
+      <para>
+         Second scope is portal-private in the form of <emphasis role="bold">PortalContainer</emphasis>. Each portal lives in an instance of PortalContainer.
          This scope contains services that are common for a set of portals, and services which should not be shared by all portals.
       </para>
       <para>
@@ -525,7 +528,7 @@ public class GadgetRegister implements ServletContextListener
             try
             {
                SourceStorage sourceStorage =
-               (SourceStorage) pcontainer.getComponentInstanceOfType(SourceStorage.class);
+               (SourceStorage) portalContainer.getComponentInstanceOfType(SourceStorage.class);
                ...
             }
             catch (RuntimeException e)

@@ -8,7 +8,7 @@
 	<section id="sect-Reference_Guide-Portal_Navigation_Configuration-Overview">
 		<title>Overview</title>
 		<para>
-			Three types of navigation are available to portal users:
+			There are three types of navigation available to portal users:
 		</para>
 		<itemizedlist>
 			<listitem>
@@ -28,7 +28,7 @@
 			</listitem>
 		</itemizedlist>
 		<para>
-			These navigations are configured with standard XML syntax in the file; &#34;<filename>02portal.war:/WEB-INF/conf/portal/portal-configuration.xml</filename>&#34;.
+			These navigations are configured using standard XML syntax in the file; &#34;<filename>02portal.war:/WEB-INF/conf/portal/portal-configuration.xml</filename>&#34;.
 		</para>
 		
 <programlisting role="XML">&#60;component&#62;
@@ -97,24 +97,29 @@
 &#60;/component-plugins&#62;
 </programlisting>
 		<para>
-			This XML file defines, for the three navigations, which sets of portals, groups or users will have XML files inside the apprpriate <literal>war</literal>. Those files will be used to create an initial navigation the first time the portal is launched. That information will then be stored in the JCR and is then modifiable from the portal UI.
-		</para>
+			This XML configuration defines where in the portal's war to look for configuration, and what portals, groups, and user specific views
+         to include in portal/group/user navigation. Those files will be used to create an initial navigation, the first time the portal is launched.
+         That information will then be stored in JCR content repository, and can then be modified, and managed from the portal UI.
+      </para>
 	</section>
 	
 	<section id="sect-Reference_Guide-Portal_Navigation_Configuration-Portal_Navigation">
 		<title>Portal Navigation</title>
 		<para>
-			The portal navigation incorporates the pages that can be accessed when the user is not logged in (if the applicable permissions allow public access). For example; several portal navigations are used when a company has multiple trademarks and each trade has its own website.
+			The portal navigation incorporates the pages that can be accessed even when a user is not logged in
+         (assuming the applicable permissions allow public access). For example; several portal navigations are used
+         when a company owns multiple trademarks, and sets up a web site for each of them.
 		</para>
 		<para>
-			The <emphasis role="bold">classic</emphasis> portal is configured by four XML files in the <filename>02portal.war:/WEB-INF/conf/portal/portal/classic</filename> directory:
+			The <emphasis role="bold">classic</emphasis> portal is configured by four XML files in <filename>02portal.war:/WEB-INF/conf/portal/portal/classic</filename> directory:
 		</para>
 		<variablelist>
 			<varlistentry>
-				<term>Portal.xml</term>
+				<term>portal.xml</term>
 				<listitem>
 					<para>
-						This file describes the layout and portlets that will be shown on all pages. Usually the layout contains the banner, footer, menu and breadcrumbs portlets. &PRODUCT; is extremely configurable as every area (even the banner and footer) is a portlet.
+						This file describes the layout and portlets that will be shown on all pages. Usually the layout contains the banner, footer, menu and breadcrumbs portlets.
+                  &PRODUCT; is extremely configurable as every view element (even the banner and footer) is a portlet.
 					</para>
 					
 <programlisting role="XML">&#60;?xml version=&#34;1.0&#34; encoding=&#34;ISO-8859-1&#34;?&#62;
@@ -153,7 +158,7 @@
 &#60;/portal-config&#62;
 </programlisting>
 					<para>
-						It is also possible to apply a nested container that can also contain portlets. Row, column or tab containers are then responsible of the layout of their child portlets.
+						It is also possible to apply a nested container that can also contain portlets. Row, column or tab containers are then responsible for the layout of their child portlets.
 					</para>
 					<para>
 						Each application references a portlet using the id <literal>portal#{portalName}:/{portletWarName}/{portletName}/{uniqueId}</literal>
@@ -167,13 +172,14 @@
 				</listitem>
 			</varlistentry>
 			<varlistentry>
-				<term>Navigation.xml</term>
+				<term>navigation.xml</term>
 				<listitem>
 					<para>
-						This file defines all the navigation nodes the portal will have. The syntax is simple, using nested node tags. Each node references a page that is defined in the next XML file.
+						This file defines all the navigation nodes the portal will have. The syntax is simple, using nested node tags. Each node references a page defined in pages.xml file (explained next).
 					</para>
 					<para>
-						If the label <literal>#{}</literal> node label is used, the internationalization mechanism is activated and the actual label to render is taken from an associated properties file for the current locale.
+						When <literal>#{...}</literal> syntax is used, the enclosed property name serves as a key that is automatically passed to internationalization mechanism
+                  so the literal property name is replaced by a localized value taken from the associated properties file matching the current locale.
 					</para>
 					
 <programlisting role="XML">&#60;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&#62;
@@ -202,16 +208,18 @@
 					</para>
 					<warning>
 						<para>
-							For top nodes, the <emphasis role="bold">uri</emphasis> and the <emphasis role="bold">name</emphasis> of your navigation nodes must have the <emphasis>same</emphasis> value. For the other nodes the <emphasis role="bold">uri</emphasis> is composed like <emphasis><uri>contentmanagement/fileexplorer</uri></emphasis> where &#39;<literal>contentmanagement</literal> &#39; is the name of the parent node and &#39;<literal>fileexplorer</literal>&#39; is the name of the node ( <emphasis>&#60;name&#62;fileexplorer&#60;/name&#62; </emphasis> ).
+							For top nodes, the <emphasis role="bold">uri</emphasis> and the <emphasis role="bold">name</emphasis> of your navigation nodes must have the <emphasis>same</emphasis> value.
+                     For other nodes the <emphasis role="bold">uri</emphasis> is a relative path. For example, <emphasis><uri>contentmanagement/fileexplorer</uri></emphasis> where &#39;<literal>contentmanagement</literal> &#39; is the name of the parent node and &#39;<literal>fileexplorer</literal>&#39; is the name of the node ( <emphasis>&#60;name&#62;fileexplorer&#60;/name&#62; </emphasis> ).
 						</para>
 					</warning>
 				</listitem>
 			</varlistentry>
 			<varlistentry>
-				<term>Pages.xml</term>
+				<term>pages.xml</term>
 				<listitem>
 					<para>
-						This XML file structure is very similar to <filename>portal.xml</filename> and it can also contain container tags. Each application can decide whether to render the portlet border, the window state icons or the mode.
+						This configuration file structure is very similar to <filename>portal.xml</filename> and it can also contain container tags.
+                  Each application can decide whether to render the portlet border, the window state, the icons or portlet's mode.
 					</para>
 					
 <programlisting role="XML">&#60;?xml version=&#34;1.0&#34; encoding=&#34;ISO-8859-1&#34;?&#62;
@@ -252,10 +260,10 @@
 				</listitem>
 			</varlistentry>
 			<varlistentry>
-				<term>Portlet-preferences.xml</term>
+				<term>portlet-preferences.xml</term>
 				<listitem>
 					<para>
-						Porlet instances can be associated with <literal>portlet-preferences</literal> that override the one defined in <filename>portlet.xml </filename>file of the portlet application <literal>war</literal> .
+						Porlet instances can be associated with <literal>portlet-preferences</literal> that override the ones defined in <filename>portlet.xml</filename> of the portlet application <literal>war</literal>  (TODO: clarify which file in which war).
 					</para>
 					
 <programlisting role="XML">&#60;?xml version=&#34;1.0&#34; encoding=&#34;ISO-8859-1&#34;?&#62;
@@ -503,29 +511,29 @@
 	<section id="sect-Reference_Guide-Portal_Navigation_Configuration-Group_Navigation">
 		<title>Group Navigation</title>
 		<para>
-			Group navigations are dynamically added to the user navigation at login. This allows users to see all the pages assigned to any groups they belong to in the menu.
+			Group navigations are dynamically added to the user navigation at login. This allows users to see in the menu all the pages assigned to any groups they belong to.
 		</para>
 		<para>
 			The group navigation menu is configured by three XML files (<filename>navigation.xml</filename>, <filename>pages.xml</filename> and <filename>portlet-preferences.xml</filename>). The syntax used in these files is the same as those covered in <xref linkend="sect-Reference_Guide-Portal_Navigation_Configuration-Portal_Navigation" />.
 		</para>
 		<para>
-			They are located in the <filename>portal/WEB-INF/conf/portal/group<replaceable>/group-name-path/</replaceable></filename> directory (For example; <filename>portal/WEB-INF/conf/portal/group/platform/administrators/</filename>).
+			They are located in <filename>portal.war/WEB-INF/conf/portal/group<replaceable>/group-name-path/</replaceable></filename> directory (For example; <filename>portal.war/WEB-INF/conf/portal/group/platform/administrators/</filename>).
 		</para>
 	</section>
 	
 	<section id="sect-Reference_Guide-Portal_Navigation_Configuration-User_Navigation">
 		<title>User Navigation</title>
 		<para>
-			The user navigation is the set of nodes and pages that are owned by a user. They are part of the user dashboard.
+			User navigation is the set of nodes and pages that are owned by a user. They are part of the user's dashboard.
 		</para>
 		<para>
-			Three files configure the user navigation (<filename>navigation.xml</filename>, <filename>pages.xml</filename> and <filename>portlet-preferences.xml</filename>). They are located in the directory &#34;<filename>portal/WEB-INF/conf/portal/users/{userName}</filename>&#34;.
+			Three files configure the user navigation (<filename>navigation.xml</filename>, <filename>pages.xml</filename> and <filename>portlet-preferences.xml</filename>). They are located in the directory &#34;<filename>portal.war/WEB-INF/conf/portal/users/{userName}</filename>&#34;.
 		</para>
 		<para>
-			This directory also contains a <filename>gadgets.xml</filename> file (which was formerly called <filename>widgets.xml</filename>). This file defines the gadgets located in the user workspace.
+			This directory also contains a <filename>gadgets.xml</filename> file (formerly called <filename>widgets.xml</filename>). This file defines the gadgets located in the user's workspace.
 		</para>
 		<para>
-			The user workspace is located at the left hand side of the page and access is restricted to some privileged users, see <xref linkend="sect-Reference_Guide-Predefined_User_Configuration" />
+			The user's workspace is located at the left hand side of the page and access is restricted to some privileged users, see <xref linkend="sect-Reference_Guide-Predefined_User_Configuration" />
 		</para>
 		
 <programlisting role="XML">&#60;?xml version=&#34;1.0&#34; encoding=&#34;ISO-8859-1&#34;?&#62;
@@ -573,7 +581,8 @@
 		<section id="sect-Reference_Guide-Tips-Direct_External_Links">
 			<title>Direct External Links</title>
 			<para>
-				If you wish to add a link to a URL outside the portal you you first have to define a &#34;page&#34; which will not be used. Then add the URL to the navigation.
+				If you wish to add a link to a URL outside the portal you first have to define a &#34;page&#34; that will only serve as a navigation placeholder for external redirect - it will not be used for any portlets.
+            Then add the URL to the navigation. (TODO: check for correctness)
 			</para>
 			<variablelist>
 				<varlistentry>

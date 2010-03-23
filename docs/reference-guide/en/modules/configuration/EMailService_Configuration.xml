@@ -10,18 +10,18 @@
   <section id="sect-Reference_Guide-EMail_Service_Configuration-Overview">
     <title>Overview</title>
 
-    <para>&PRODUCT; has a service to send e-mails that requires to be configured
-    before it can work properly. This service is used to send e-mails to users who forgot
-    their username or password for instance.</para>
+    <para>&PRODUCT; includes an e-mail sending service that needs to be configured
+    before it can function properly. This service, for instance, is used to send e-mails to users who forgot
+    their password or username.</para>
 
   </section>
 
   <section id="sect-Reference_Guide-EMail_Service_Configuration-Parameters">
-    <title>Configuring the e-mail outgoing account</title>
+    <title>Configuring the outgoing e-mail account</title>
 
-    <para>The e-mail service can use any SMTP account that needs to be configured in
+    <para>The e-mail service can use any SMTP account configured in
     $JBOSS_HOME/server/default/conf/gatein/configuration.properties
-    (Or $TOMCAT_HOME/gatein/conf/configuration.properties if you are using Tomcat).</para>
+    (or $TOMCAT_HOME/gatein/conf/configuration.properties if you are using Tomcat).</para>
 
     <para>The relevant section looks like:</para>
     
@@ -35,7 +35,12 @@ gatein.email.smtp.auth=true
 gatein.email.smtp.socketFactory.port=465
 gatein.email.smtp.socketFactory.class=javax.net.ssl.SSLSocketFactory</programlisting>
 
-    <para>It is preconfigured for GMail so that any GMail account can be easily used (Just use a full gmail address
-    as username and fill-in the password.</para>
+    <para>It is preconfigured for GMail, so that any GMail account can easily be used (simply use the full GMail address
+    as username, and fill-in the password.</para>
+
+    <para>In corporate environments you will want to use your corporate SMTP gateway. When using it over SSL,
+       like in default configuration, you may need to configure a certificate truststore, containing your SMTP server's
+       public certificate. Depending on the key sizes, you may then also need to install Java Cryptography Extension (JCE) 
+       Unlimited Strength Jurisdiction Policy Files for your Java Runtime Environment.</para>
   </section>
 </section>

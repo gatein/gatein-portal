@@ -7,7 +7,7 @@
 <title>Introduction</title>
 
 	<para>
-		&PRODUCT; is the merge of two mature Java projects; JBoss Portal and eXo Portal. This new community project takes the best of both offerings and incorporates them into a single j2ee deployment archive. The aim is to provide an intuitive user-friendly portal and a framework to address the needs of today's Web 2.0 applications.
+		&PRODUCT; is the merge of two mature Java projects; JBoss Portal and eXo Portal. This new community project takes the best of both offerings and incorporates them into a single portal framework. The aim is to provide an intuitive user-friendly portal, and a framework to address the needs of today's Web 2.0 applications.
 	</para>
 	<mediaobject>
 		<imageobject role="html">
@@ -18,7 +18,7 @@
 		</imageobject>
 	</mediaobject>
 	<para>
-		This book provides deep-dive information about the installation and configuration of the services provide by GateIn.
+		This book provides a deep-dive information about installation and configuration of the services provided by GateIn.
 	</para>
 <!--
 	<para>

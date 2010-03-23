@@ -8,14 +8,23 @@
 	<section id="sect-Reference_Guide-Default_Portal_Configuration-Overview">
 		<title>Overview</title>
 		<para>
-			The default portal will be accessed if the user doesn&#39;t specify another portal. For example: <literal>http://hostname:port/portal/</literal>. The default portal also be used at startup to determine if the database is empty.
+			&PRODUCT;'s default home page URL is <literal>http://${hostname}:${port}/portal/</literal>.
+         There may be multiple independent portals deployed in parallel at any given time, each of which has its root
+         context (i.e.: <literal>http://${hostname}:${port}/sample-portal/</literal>).
+         Each portal is internally composed of one or more, what we again call 'portals'. There needs to be at least
+         one such portal - the default one is called 'classic'. When accessing &PRODUCT;'s default home page URL, you
+         are automatically redirected to 'classic' portal.
+
+         The default portal performs another important task. When starting up &PRODUCT; for the first time, its
+         JCR database will be empty (that's where portals keep their runtime-configurable settings).
+         It's the default portal that's used to detect this, and to trigger automatic data initialization.
 		</para>
 	</section>
 	
 	<section id="sect-Reference_Guide-Default_Portal_Configuration-Configuration">
 		<title>Configuration</title>
 		<para>
-			The example configuration file below is found at: &#34;<filename>02portal.war:/WEB-INF/conf/portal/portal-configuration.xml</filename>&#34;.
+			The following example configuration can be found at: &#34;<filename>02portal.war:/WEB-INF/conf/portal/portal-configuration.xml</filename>&#34;.
 		</para>
 		
 <programlisting role="XML">&#60;component&#62;
@@ -33,15 +42,23 @@
            &#60;description&#62;The default portal for checking db is empty or not&#60;/description&#62;
            &#60;value&#62;classic&#60;/value&#62;
          &#60;/value-param&#62; 
-         ..........
+         ...
        &#60;/init-params&#62;
      &#60;/component-plugin&#62;
     &#60;/component-plugins&#62; 
   &#60;/component&#62;
 </programlisting>
 		<para>
-			In this example the <emphasis role="bold">classic</emphasis> portal has been set as the default. Note that the definition should be as a initial parameter of the NewPortalConfigListener component-plugin.
+			In this example the <emphasis role="bold">classic</emphasis> portal has been set as the default.
 		</para>
+      <note>
+         <para>
+         Components, component-plugins, and init-params are explained in Foundations chapter. For now just note how
+         <literal>NewPortalConfigListener</literal> component-plugin is used to add configuration to
+         <literal>UserPortalConfigService</literal>, which is designed in this way to allow other components
+         to add configuration to it.
+         </para>
+      </note>
 	</section>
 
 </section>
