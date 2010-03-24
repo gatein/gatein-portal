@@ -252,6 +252,20 @@
           <value>picketlink-idm/mappings/HibernateIdentityObjectRelationshipType.hbm.xml</value>
           <value>picketlink-idm/mappings/HibernateIdentityObjectRelationshipName.hbm.xml</value>
         </values-param>
+        <values-param profiles="sybase">
+          <name>hibernate.mapping</name>
+          <value>picketlink-idm/sybase-mappings/HibernateRealm.hbm.xml</value>
+          <value>picketlink-idm/sybase-mappings/HibernateIdentityObjectCredentialBinaryValue.hbm.xml</value>
+          <value>picketlink-idm/sybase-mappings/HibernateIdentityObjectAttributeBinaryValue.hbm.xml</value>
+          <value>picketlink-idm/sybase-mappings/HibernateIdentityObject.hbm.xml</value>
+          <value>picketlink-idm/sybase-mappings/HibernateIdentityObjectCredential.hbm.xml</value>
+          <value>picketlink-idm/sybase-mappings/HibernateIdentityObjectCredentialType.hbm.xml</value>
+          <value>picketlink-idm/sybase-mappings/HibernateIdentityObjectAttribute.hbm.xml</value>
+          <value>picketlink-idm/sybase-mappings/HibernateIdentityObjectType.hbm.xml</value>
+          <value>picketlink-idm/sybase-mappings/HibernateIdentityObjectRelationship.hbm.xml</value>
+          <value>picketlink-idm/sybase-mappings/HibernateIdentityObjectRelationshipType.hbm.xml</value>
+          <value>picketlink-idm/sybase-mappings/HibernateIdentityObjectRelationshipName.hbm.xml</value>
+        </values-param>
       </init-params>
     </component-plugin>
   </external-component-plugins>
