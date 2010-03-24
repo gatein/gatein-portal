@@ -8,7 +8,7 @@
 	<section id="sect-Reference_Guide-Data_Injector_Configuration-Data_Injector">
 		<title>Data Injector</title>
 		<para>
-			<emphasis>Data-injector</emphasis> is a utility to initialize enterprise data for &PRODUCT;. It is packed as a .jar. <!--  
+			<emphasis>Data-injector</emphasis> is a utility used to initialize enterprise data for &PRODUCT;. It is packed as a .jar. <!--
             and deployed under $TOMCATHOME/lib. It is started
             automatically when Tomcat starts.
            -->
@@ -18,7 +18,8 @@
 	<section id="sect-Reference_Guide-Data_Injector_Configuration-OrganizationInitializer">
 		<title>OrganizationInitializer</title>
 		<para>
-			<emphasis>OrganizationInitializer</emphasis> is the service that allows creating a large organization with many groups and users. It also creates portal navigation and page(s) for each group and each user.
+			<emphasis>OrganizationInitializer</emphasis> is the service that allows creating a large organization with many groups and users.
+         It also creates portal navigation and page(s) for each group and each user.
 		</para>
 		<formalpara id="form-Reference_Guide-OrganizationInitializer-Service_configuration_file">
 			<title>Service configuration file</title>
@@ -162,6 +163,7 @@
 				<term>FirstName</term>
 				<listitem>
 					<para>
+                  The user&#39;s given name.
 					</para>
 				</listitem>
 			</varlistentry>
@@ -169,7 +171,7 @@
 				<term>LastName</term>
 				<listitem>
 					<para>
-						last name.
+						The user&#39;s family name.
 					</para>
 				</listitem>
 			</varlistentry>
@@ -185,7 +187,7 @@
 				<term>Groups</term>
 				<listitem>
 					<para>
-						A list of the groups that user belongs to.
+						A list of groups that the user belongs to.
 					</para>
 				</listitem>
 			</varlistentry>
@@ -203,10 +205,10 @@
 	<section id="sect-Reference_Guide-Data_Injector_Configuration-Automatic_Navigation_Creation">
 		<title>Automatic Navigation Creation</title>
 		<para>
-			The &#34; <literal>auto.create.group.page.navigation</literal>&#34; parameter value is <parameter>true</parameter> or <parameter>false</parameter>. If this value is set to <parameter>true</parameter> it automatically creates portal navigations and pages for each group. If <parameter>false</parameter> it does not.
+			The <literal>auto.create.group.page.navigation</literal> parameter can have a value of either <parameter>true</parameter> or <parameter>false</parameter>. If this value is set to <parameter>true</parameter> it automatically creates portal navigations and pages for each group. If the value is <parameter>false</parameter> it does not.
 		</para>
 		<para>
-			The &#34;<literal>auto.create.user.page.navigation</literal>&#34; parameter value is the number of pages that are automatically created for each user.
+			The <literal>auto.create.user.page.navigation</literal> parameter value specifies the number of pages that are automatically created for each user.
 		</para>
 	</section>
 

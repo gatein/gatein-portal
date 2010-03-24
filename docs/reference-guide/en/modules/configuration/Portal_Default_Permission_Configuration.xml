@@ -8,7 +8,8 @@
 	<section id="sect-Reference_Guide-Portal_Default_Permission_Configuration-Overview">
 		<title>Overview</title>
 		<para>
-			The permission configuration for the portal is defined in the file <filename>02portal.war:/WEB-INF/conf/portal/portal-configuration.xml </filename> . The component UserACL is described there along with other portal component configurations.
+			The default permission configuration for the portal is defined through <literal>org.exoplatform.portal.config.UserACL</literal>
+         component configuration in the file <filename>02portal.war:/WEB-INF/conf/portal/portal-configuration.xml</filename>.
 		</para>
 		<para>
 			It defines 5 permissions types:
@@ -26,7 +27,8 @@
 				<term>portal.creator.groups</term>
 				<listitem>
 					<para>
-						This list defines all groups that will be able to manage the different portals. Members of this group also have the permission to create new portals. The format is &#34;<literal>membership:/group/subgroup</literal> &#34;.
+						This list defines all groups that will be able to manage the different portals. Members of this group
+                  also have the permission to create new portals. The format is <literal>membership:/group/subgroup</literal>.
 					</para>
 				</listitem>
 			</varlistentry>
@@ -34,7 +36,7 @@
 				<term>navigation.creator.membership.type</term>
 				<listitem>
 					<para>
-						Defines the membership type of the group managers. The group managers have the permission to create and edit group pages and they can modify the group navigation.
+						Defines the membership type of group managers. The group managers have the permission to create and edit group pages and they can modify the group navigation.
 					</para>
 				</listitem>
 			</varlistentry>
@@ -42,7 +44,7 @@
 				<term>guests.group</term>
 				<listitem>
 					<para>
-						Any anonymous user automatically becomes a member of this group whent they enter the public pages.
+						Any anonymous user automatically becomes a member of this group when they enter the public pages.
 					</para>
 				</listitem>
 			</varlistentry>
@@ -50,7 +52,10 @@
 				<term>access.control.workspace</term>
 				<listitem>
 					<para>
-						Defines the users that have access to the control workspace. In the demo version the control workspace is accessible only to &#39;root&#39; and &#39;john&#39;. They can expand/collapse the workspace at the left hand side. The format is &#34;membership:/group/subgroup&#34;, An asterisk &#39;&#39; gives permission to all memberships.
+						Defines the users that have access to the control workspace. In the demo version the control workspace
+                  is accessible only to <emphasis>root</emphasis> and <emphasis>john</emphasis>. They can expand/collapse
+                  the workspace at the left hand side. The format is <literal>membership:/group/subgroup</literal> -
+                  an asterisk &#39;*&#39; gives permission to all memberships.
 					</para>
 				</listitem>
 			</varlistentry>
@@ -94,7 +99,11 @@
 	
 	<section id="sect-Reference_Guide-Portal_Default_Permission_Configuration-Overwrite_Portal_Default_Permissions">
 		<title>Overwrite Portal Default Permissions</title>
-		
+
+      <para>When creating custom portals and portal extensions it's possible to override the default configuration by
+      using <literal>org.exoplatform.portal.config.PortalACLPlugin</literal>, configuring it as an external-plugin of
+      <literal>org.exoplatform.portal.config.UserACL</literal> service:</para>
+
 <programlisting role="XML">&#60;external-component-plugins&#62;
     &#60;target-component&#62;org.exoplatform.portal.config.UserACL&#60;/target-component&#62;
     &#60;component-plugin&#62;

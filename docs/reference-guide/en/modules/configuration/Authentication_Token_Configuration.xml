@@ -11,18 +11,18 @@
 			<emphasis>Token Service</emphasis> is used in authentication.
 		</para>
 		<para>
-			The token system prevents user account information being sent in clear text mode for inbound requests. This increases authentication security.
+			The token system prevents user account information being sent in clear text mode within inbound requests. This increases authentication security.
 		</para>
 		<para>
-			Token service allows administrators to create, delete, retrieve and clean tokens as required. The service also defines a validity period of any given token.
-         The token becomes invalid once this period expires. This period can be configured through <emphasis>life-time</emphasis> configuration property.
+			Token service allows administrators to create, delete, retrieve and clean tokens as required.
+         The service also defines a validity period of any given token. The token becomes invalid once this period expires.
 		</para>
 	</section>
 	
 	<section id="sect-Reference_Guide-Authentication_Token_Configuration-Implement_token_services_API">
 		<title>Implementing the Token Service API</title>
 		<para>
-			All token services used in &PRODUCT;&#39;s authentication must be implemented by subclassing an <emphasis role="bold">AbstractTokenService</emphasis> abstract class.
+			All token services used in &PRODUCT; authentication must be implemented by subclassing an <emphasis role="bold">AbstractTokenService</emphasis> abstract class.
          The following <emphasis role="bold">AbstractTokenService</emphasis> methods represent the contract between authentication runtime, and a token service implementation.
 		</para>
 		
@@ -47,7 +47,7 @@
 			In the example below, <emphasis>CookieTokenService</emphasis> is a subclass of <emphasis role="bold">AbstractTokenService</emphasis> so it has a property which specifies the validity period of the token.
 		</para>
 		<para>
-			The token service will initialize this validity property by looking for an <parameter>init-param</parameter> named &#34;<emphasis role="bold">service.configuration</emphasis>&#34;.
+			The token service will initialize this validity property by looking for an <parameter>init-param</parameter> named <emphasis role="bold">service.configuration</emphasis>.
 		</para>
 		<para>
 			This property must have three values.
@@ -63,7 +63,7 @@
   &#60;type&#62;org.exoplatform.web.security.security.CookieTokenService&#60;/type&#62;
   &#60;init-params&#62;
   	&#60;values-param&#62;
-      &#60;name&#62;tokenTimeout&#60;/name&#62;          
+      &#60;name&#62;service.configuration&#60;/name&#62;
       &#60;value&#62;jcr-token&#60;/value&#62;
       &#60;value&#62;7&#60;/value&#62;
       &#60;value&#62;DAY&#60;/value&#62;
@@ -91,10 +91,10 @@
 		</programlistingco>
 		
 		<para>
-			In this case, the service&#39;s name is &#34;<emphasis role="bold">jcr-token</emphasis>&#34; and the token&#39;s expiration time is one week.
+			In this case, the service name is <emphasis role="bold">jcr-token</emphasis> and the token expiration time is one week.
 		</para>
 		<para>
-			&PRODUCT; supports <emphasis>four</emphasis> timing units:
+			&PRODUCT; supports <emphasis>four</emphasis> time units:
 		</para>
 		<orderedlist numeration="arabic">
 			<listitem>

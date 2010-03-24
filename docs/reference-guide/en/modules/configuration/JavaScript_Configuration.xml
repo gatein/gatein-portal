@@ -6,19 +6,23 @@
 <section id="sect-Reference_Guide-Javascript_Configuration">
 	<title>Javascript Configuration</title>
 	<para>
-		Managing Javascript scripts in an application like &PRODUCT; is a critical part of the configuration work. Configuring the scripts correctly will result in a faster response time from the portal.
+		Managing Javascript scripts in an application like &PRODUCT; is a critical part of the configuration work.
+      Configuring the scripts correctly will result in a faster response time from the portal.
 	</para>
 	<para>
-		Every portlet can have its own javscript code but in many cases it is more convenient to reuse some existing shared libraries. For that reason, &PRODUCT; has a mechanism to easily register the libraries that will be loaded when the first page will be rendered.
+		Every portlet can have its own javscript code but in many cases it is more convenient to reuse some existing
+      shared libraries. For that reason, &PRODUCT; has a mechanism to easily register the libraries that will be loaded
+      when the first page will be rendered.
 	</para>
 	<para>
-		To do so, every WAR deployed in &PRODUCT; can register the <filename>js</filename> files with the groovy script &#34;<filename>WEB-INF/conf/script/groovy/JavascriptScript.groovy</filename>&#34;.
+		To do so, every WAR deployed in &PRODUCT; can register the <filename>.js</filename> files with the groovy script
+      <filename>WEB-INF/conf/script/groovy/JavascriptScript.groovy</filename>. (TODO: this file doesn't seem to exist)
 	</para>
 	<para>
 		The example file below is found in the 01eXoResources.war
 	</para>
 	
-<programlisting>JavascriptService.addJavascript(&#34;eXo&#34;, &#34;/javascript/eXo.js&#34;, ServletContext);
+<programlisting role="JAVA">JavascriptService.addJavascript(&#34;eXo&#34;, &#34;/javascript/eXo.js&#34;, ServletContext);
 /* Animation Javascripts */
 JavascriptService.addJavascript(&#34;eXo.animation.ImplodeExplode&#34;, &#34;/javascript/eXo/animation/ImplodeExplode.js&#34;, ServletContext);
 /* Application descriptor */
@@ -65,7 +69,7 @@ JavascriptService.addJavascript(&#34;eXo.desktop.UIWindow&#34;, &#34;/javascript
 		Note that even registered dedicated javascripts will be merged into a single <literal>merged.js</literal> file when the server loads. This reduces the number of HTTP calls as seen in the home page source code:
 	</para>
 	
-<programlisting>&#60;script type=&#34;text/javascript&#34; src=&#34;/portal/javascript/merged.js&#34;&#62;&#60;/script&#62;
+<programlisting role="XML">&#60;script type=&#34;text/javascript&#34; src=&#34;/portal/javascript/merged.js&#34;&#62;&#60;/script&#62;
 </programlisting>
 	<para>
 		Although this optimization is useful for a production environment, it may be easier to deactivate this optimization while debugging javascript problems.
@@ -80,13 +84,25 @@ JavascriptService.addJavascript(&#34;eXo.desktop.UIWindow&#34;, &#34;/javascript
 		The property can be passed as a JVM parameter with the <literal>-D</literal> option in your <literal>GateIn.sh</literal> or <literal>GateIn.bat</literal> startup script.
 	</para>
 	<para>
-		Every javascript file is referenced with a module name of &#34;<literal>eXo.core.DragDrop</literal>&#34; which acts as a namespace. Inside the associated files, global javascript functions are used following the same namespace convention:
+		Every javascript file is associated with a module name which acts as a namespace.
+
+      The module name is passed as a first parameter to JavascriptService.addJavascript() function as in the following example:
+   </para>
+   <programlisting role="JAVA">
+JavascriptService.addJavascript(&#34;eXo.core.DragDrop&#34;,
+      &#34;/javascript/eXo/core/DragDrop.js&#34;, ServletContext);
+   </programlisting>
+   <para>
+      Inside the associated javascript files, functions are exposed as global javascript function variables using the module name.
 	</para>
-	
-<programlisting>eXo.core.DragDrop = new DragDrop() ;
-</programlisting>
+	<para> For example:</para>
+   <programlisting role="JAVA">
+eXo.core.DragDrop = new DragDrop();
+   </programlisting>
 	<para>
-		It is also possible to use the eXo.require() javascript method to lazy load and evaluate some javascript code. This is quite useful from the portlet or widget applications that will use this javascript only once. Otherwise, if the library is reusable in several places it is better to reference it in the groovy file.
+		It is also possible to use <literal>eXo.require()</literal> javascript method to lazy load and evaluate some javascript code.
+      This is quite useful for the portlet or widget applications that will use this javascript only once. Otherwise,
+      if the library is reusable in several places it is better to reference it in the groovy file.
 	</para>
 </section>
 

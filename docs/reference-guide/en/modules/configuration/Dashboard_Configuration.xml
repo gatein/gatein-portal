@@ -6,7 +6,7 @@
 <section id="sect-Reference_Guide-Dashboard_configuration">
 	<title>Dashboard configuration</title>
 	<para>
-		The following parameters are available controll the Dashboard configuration (when in edit mode):
+		The following parameters are available to control the Dashboard configuration (when in edit mode):
 	</para>
 	<formalpara id="form-Reference_Guide-Dashboard_configuration-owner">
 		<title>owner</title>
@@ -14,17 +14,17 @@
 			<orderedlist numeration="arabic">
 				<listitem>
 					<para>
-						if empty, everyone share the same dashboard and can edit it
+						if empty, everyone shares the same dashboard and can edit it
 					</para>
 				</listitem>
 				<listitem>
 					<para>
-						if set to <emphasis>CURRENTUSER</emphasis> , every user has his own dashboard
+						if set to <emphasis>CURRENTUSER</emphasis>, every user has his own dashboard
 					</para>
 				</listitem>
 				<listitem>
 					<para>
-						if set to a username, everyone will see the dashboard of this person
+						if set to a username, everyone shares that user's dashboard
 					</para>
 				</listitem>
 			</orderedlist>

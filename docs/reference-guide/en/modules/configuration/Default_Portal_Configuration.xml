@@ -8,11 +8,11 @@
 	<section id="sect-Reference_Guide-Default_Portal_Configuration-Overview">
 		<title>Overview</title>
 		<para>
-			&PRODUCT;'s default home page URL is <literal>http://${hostname}:${port}/portal/</literal>.
+			&PRODUCT; default home page URL is <literal>http://{hostname}:{port}/portal/</literal>.
          There may be multiple independent portals deployed in parallel at any given time, each of which has its root
-         context (i.e.: <literal>http://${hostname}:${port}/sample-portal/</literal>).
+         context (i.e.: <literal>http://{hostname}:{port}/sample-portal/</literal>).
          Each portal is internally composed of one or more, what we again call 'portals'. There needs to be at least
-         one such portal - the default one is called 'classic'. When accessing &PRODUCT;'s default home page URL, you
+         one such portal - the default one is called 'classic'. When accessing &PRODUCT; default home page URL, you
          are automatically redirected to 'classic' portal.
 
          The default portal performs another important task. When starting up &PRODUCT; for the first time, its

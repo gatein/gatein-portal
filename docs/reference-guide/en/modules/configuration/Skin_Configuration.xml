@@ -3,8 +3,6 @@
 "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
 <!ENTITY % BOOK_ENTITIES SYSTEM "../../Reference_Guide.ent">
 %BOOK_ENTITIES;
-<!ENTITY % BOOK_ENTITIES SYSTEM "../../Reference_Guide.ent">
-%BOOK_ENTITIES;
 ]>
 <section id="sect-Reference_Guide-Skin_Configuration">
   <title>Skin Configuration</title>
@@ -50,10 +48,10 @@
       </varlistentry>
 
       <varlistentry>
-        <term>Portlets skins</term>
+        <term>Portlet skins</term>
 
         <listitem>
-          <para>CSS styles for each portlet. Used when a portlet want to
+          <para>CSS styles for each portlet. Used when a portlet wants to
           define it's own CSS.</para>
         </listitem>
       </varlistentry>
@@ -62,8 +60,8 @@
         <term>Window styles</term>
 
         <listitem>
-          <para>CSS styles for the surrounding of windows (Which embed either
-          gadgets or portlets).</para>
+          <para>CSS styles for portlet windows (which surround either
+          gadgets or portlets, and add control buttons and decorations).</para>
         </listitem>
       </varlistentry>
 
@@ -71,7 +69,7 @@
         <term>Shared styles</term>
 
         <listitem>
-          <para>&PRODUCT; WebUI components styles are reused among most of the
+          <para>&PRODUCT; WebUI component styles are reused among most of the
           shipped-in portlets.</para>
         </listitem>
       </varlistentry>
@@ -94,7 +92,7 @@
     generates a portal page markup, it inserts stylesheet links in the page's
     <literal>head</literal> tag.</para>
 
-    <para>In the snipped code below you can see two types of links:</para>
+    <para>In the snippet code below you can see two types of links:</para>
 
     <programlistingco>
       <areaspec>
@@ -118,7 +116,7 @@
           (<literal>id="CoreSkin"</literal>).</para>
         </callout>
         <callout arearefs="area-Reference_Guide-Skin_Configuration-Stylesheets">
-          <para>Portlets skins stylesheets (all
+          <para>Portlet skins stylesheets (all
           others). Each portlet within the page may contribute its
           own style(s)</para>
         </callout>
@@ -133,9 +131,9 @@
     <section id="sect-Reference_Guide-Tips_and_Tricks-Set_the_default_skin">
       <title>Set the default skin</title>
 
-      <para>The default skin of portal is called Default. To change this value
-      add a skin tag in the <literal>portal.xml</literal> that defines your
-      portal:</para>
+      <para>The default skin of the portal is called Default. To change this value
+      add a <literal>skin</literal> tag in <literal>portal.xml</literal> configuration file,
+      where your portal is defined:</para>
 
       <programlisting role="XML">&lt;portal-config&gt;
   &lt;portal-name&gt;classic&lt;/portal-name&gt;
@@ -155,19 +153,19 @@
     <section id="sect-Reference_Guide-How_to_Configure_a_Portal_Skin-SkinService">
       <title>SkinService</title>
 
-      <para>The SkinService is an &PRODUCT; service that manages portal skin,
-      portlet styles and portlet themes (windows borders).</para>
+      <para>The SkinService is a &PRODUCT; service that manages the portal skin,
+      portlet styles and portlet themes (window borders).</para>
     </section>
 
     <section id="sect-Reference_Guide-How_to_Configure_a_Portal_Skin-SkinConfigListener">
       <title>ResourceRequestFilter</title>
 
-      <para>&PRODUCT; automatically discovers web archives that contains a
-      file descriptor for skins (WEB-INF/gatein-resources.xml).</para>
+      <para>&PRODUCT; automatically discovers web archives that contain a
+      file descriptor for skins (<filename>WEB-INF/gatein-resources.xml</filename>).</para>
 
       <para>Because of the Right-To-Left support all CSS files need to be
-      retrieved through a Servlet filter and the web application need to be
-      configured to activate this filter. This is already done for the
+      retrieved through a Servlet filter and the web application needs to be
+      configured to activate this filter. This is already done for
       01eXoResources.war web application.</para>
 
       <programlisting role="XML">&lt;filter&gt;
@@ -184,25 +182,30 @@
     <section>
       <title>Skin configuration</title>
 
-      <para>&PRODUCT; automatically discovers web archives that contains a
-      file descriptor for skins (WEB-INF/gatein-resources.xml).The
+      <para>&PRODUCT; automatically discovers web archives that contain a
+      file descriptor for skins (<filename>WEB-INF/gatein-resources.xml</filename>).The
     full schema can be found in
-    02portal.war:/WEB-INF/gatein_resources_1-0.xsd</para>
+    <filename>02portal.war:/WEB-INF/gatein_resources_1-0.xsd</filename></para>
 
-      <para>Here is an example:<programlisting>&lt;gatein-resources&gt;
+      <para>Here is an example:
+      </para>
+      <programlisting role="XML">&lt;gatein-resources&gt;
   &lt;portal-skin&gt;
     &lt;skin-name&gt;MySkin&lt;/skin-name&gt;
     &lt;css-path&gt;/skin/myskin.css&lt;/css-path&gt;
     &lt;overwrite&gt;false&lt;/overwrite&gt;
   &lt;/portal-skin&gt;
-&lt;/gatein-resources&gt;</programlisting></para>
+&lt;/gatein-resources&gt;
+      </programlisting>
 
       <para>Here we defined a skin (MySkin) and the CSS location within the
       same web archive.</para>
       
     <para>Default portal skin and window styles are defined in
-    01eXoResources.war:/WEB-INF/gatein-resources.xml and the part dedicated to
-    skinning is defined like:<programlisting>&lt;gatein-resources xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_resources_1_0" xmlns="http://www.ga
+    <filename>01eXoResources.war:/WEB-INF/gatein-resources.xml</filename> and the part dedicated to
+    skinning is defined like:
+    </para>
+       <programlisting role="XML">&lt;gatein-resources xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_resources_1_0" xmlns="http://www.ga
 tein.org/xml/ns/gatein_resources_1_0.xsd"&gt;
   &lt;portal-skin&gt;
     &lt;skin-name&gt;Default&lt;/skin-name&gt;
@@ -227,26 +230,28 @@ tein.org/xml/ns/gatein_resources_1_0.xsd"&gt;
     &lt;style-theme&gt;
       &lt;theme-name&gt;SimpleGreen&lt;/theme-name&gt;
     &lt;/style-theme&gt;
-  &lt;/window-style&gt;</programlisting></para>
+  &lt;/window-style&gt;</programlisting>
     </section>
 
     <section>
       <title>Skin icon</title>
 
-      <para>When selecting a skin, an overview of the skin is possible. It has
+      <para>When selecting a skin, a preview of the skin is possible. It has
       to be defined in the current skin used to display the form to change
       skins.</para>
 
-      <para>Put the screeshot of the skin in:
-      <literal>01eXoResources.war:/skin/DefaultSkin/portal/webui/component/customization/UIChangeSkinForm/background</literal>
+      <para>Put the screenshot of the skin in:
+      <filename>01eXoResources.war:/skin/DefaultSkin/portal/webui/component/customization/UIChangeSkinForm/background</filename>
       and add the following in
-      01eXoResources.war:/skin/DefaultSkin/portal/webui/component/customization/UIChangeSkinForm/Stylesheet.css:<programlisting>.UIChangeSkinForm .UIItemSelector .TemplateContainer .<emphasis
+      <filename>01eXoResources.war:/skin/DefaultSkin/portal/webui/component/customization/UIChangeSkinForm/Stylesheet.css:</filename>
+      </para>
+      <programlisting>.UIChangeSkinForm .UIItemSelector .TemplateContainer .<emphasis
             role="bold">MySkin</emphasis>Image {
   margin: auto; 
   width: 329px; height:204px; 
   background: url('background/<emphasis role="bold">MySkin</emphasis>.jpg') no-repeat top; 
   cursor: pointer ; 
-}</programlisting></para>
+}</programlisting>
     </section>
   </section>
 
@@ -264,13 +269,13 @@ tein.org/xml/ns/gatein_resources_1_0.xsd"&gt;
         </imageobject>
       </mediaobject></para>
 
-    <para>The code below illustrates the inclusion of all CSS resoucres for a
+    <para>The code below illustrates the inclusion of all CSS resources for a
     new theme from the example file
     <literal>GateInResourcesCp060508/skin/MyPortalSkin/PortletThemes/Stylesheet.css</literal>.</para>
 
     <orderedlist>
       <listitem>
-        <para>In 01eXoResources:/WEB-INF/gatein-resources.xml add the
+        <para>In <filename>01eXoResources:/WEB-INF/gatein-resources.xml</filename> add the
         following snippet:<programlisting>&lt;window-style&gt;
   &lt;style-name&gt;MyTheme&lt;/style-name&gt;
   &lt;style-theme&gt;
@@ -423,7 +428,7 @@ tein.org/xml/ns/gatein_resources_1_0.xsd"&gt;
     <section id="sect-Reference_Guide-Skin_Configuration-Portlet_Styles">
     <title>How to create new Portlet skins</title>
 
-    <para>Portlets often require additionnal styles that may not be defined by
+    <para>Portlets often require additional styles that may not be defined by
     the portal skin. &PRODUCT; allows portlets to define additional
     stylesheets for each portlet and will append the corresponding
     <literal>link</literal> tags to the <literal>head</literal>.</para>
@@ -435,7 +440,7 @@ tein.org/xml/ns/gatein_resources_1_0.xsd"&gt;
     <parameter>id="content<literal>ContentPortlet"</literal></parameter></para>
 
     <para>To define a new CSS file to include whenever a portlet is added, the
-    following snippet need to be added in gatein-resources.xml<programlisting>&lt;portlet-skin&gt;
+    following snippet needs to be added in gatein-resources.xml<programlisting>&lt;portlet-skin&gt;
   &lt;application-name&gt;portletAppName&lt;/application-name&gt;
   &lt;portlet-name&gt;PortletName&lt;/portlet-name&gt;
   &lt;skin-name&gt;Default&lt;/skin-name&gt;
@@ -450,7 +455,7 @@ tein.org/xml/ns/gatein_resources_1_0.xsd"&gt;
 &lt;/portlet-skin&gt;</programlisting></para>
 
     <para>The portal framework will include the CSS file corresponding to the
-    skin in used.</para>
+    skin used.</para>
     
     
     <section id="sect-Reference_Guide-Tips_and_Tricks-Change_portlet_icons">
@@ -462,13 +467,13 @@ tein.org/xml/ns/gatein_resources_1_0.xsd"&gt;
 
       <itemizedlist>
         <listitem>
-          <para><filename>skin/DefaultSkin/portletIcons<replaceable>icon_name.png</replaceable></filename>.
+          <para><filename>skin/DefaultSkin/portletIcons/<replaceable>icon_name.png</replaceable></filename>.
           To be used correctly the icon must be named after the
           portlet.</para>
         </listitem>
       </itemizedlist>
 
-      <para>For example,the icon for an account portlet named AccountPortlet
+      <para>For example, the icon for an account portlet named AccountPortlet
       would be located at:</para>
 
       <itemizedlist>
@@ -503,12 +508,13 @@ tein.org/xml/ns/gatein_resources_1_0.xsd"&gt;
       <literal>exo.product.developing</literal> to
       <literal>true</literal>.</para>
 
-      <para>For example, the property can passed as a JVM parameter with the
-      <literal>-D</literal> option when running GateIn.<programlisting>sh $JBOSS_HOME/bin/run.sh -Dexo.product.developing=true</programlisting></para>
+      <para>For example, the property can be passed as a JVM parameter with
+      <literal>-D</literal> option when running GateIn.</para>
+      <programlisting>sh $JBOSS_HOME/bin/run.sh -Dexo.product.developing=true</programlisting>
 
       <orderedlist numeration="arabic">
         <listitem>
-          <para>warning("This is option may cause display bugs with certain
+          <para>warning("This option may cause display bugs with certain
           browsers like Internet Explorer")</para>
         </listitem>
       </orderedlist>
@@ -520,7 +526,7 @@ tein.org/xml/ns/gatein_resources_1_0.xsd"&gt;
       studying &PRODUCT; CSS.</para>
 
       <para>&PRODUCT; relies heavily on CSS to create the layout and effects
-      for the UI. Some common techniques for customizing &PRODUCT;'s CSS are
+      for the UI. Some common techniques for customizing &PRODUCT; CSS are
       explained below.</para>
 
       <section id="sect-Reference_Guide-Some_CSS_techniques-Decorator_pattern">
