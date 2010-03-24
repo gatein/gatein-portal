@@ -39,3 +39,21 @@
 .UIBannerPortlet .MiddleBanner {
 	height: 50px;
 }
+
+.UIBannerPortlet .MiddleBanner .Signin {
+	text-align: right;
+	padding: 25px 20px 0px 0px;
+}
+
+.UIBannerPortlet .MiddleBanner .Signin a {
+	background: none;
+	margin-left: 8px;
+	color: #5a5a5a;
+}
+
+.UIBannerPortlet .MiddleBanner .Signin a:hover {
+	color: #000;
+}
+
+
+
