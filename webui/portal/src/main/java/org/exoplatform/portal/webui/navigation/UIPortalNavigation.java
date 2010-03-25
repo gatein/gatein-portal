@@ -330,9 +330,6 @@ public class UIPortalNavigation extends UIComponent
 
          uiNavigation.loadTreeNodes();
 
-         JavascriptManager jsManager = prContext.getJavascriptManager();
-         jsManager.addJavascript("eXo.portal.UIPortal.isExpandAll=false;");
-
          event.getRequestContext().addUIComponentToUpdateByAjax(uiNavigation);
       }
    }
@@ -348,9 +345,6 @@ public class UIPortalNavigation extends UIComponent
          TreeNode treeNode = uiNavigation.getTreeNodes();
 
          expandAllNode(treeNode);
-
-         JavascriptManager jsManager = prContext.getJavascriptManager();
-         jsManager.addJavascript("eXo.portal.UIPortal.isExpandAll=true;");
 
          event.getRequestContext().addUIComponentToUpdateByAjax(uiNavigation);
       }

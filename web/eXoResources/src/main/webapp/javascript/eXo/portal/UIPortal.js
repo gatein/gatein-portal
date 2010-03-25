@@ -558,10 +558,6 @@ UIPortal.prototype.collapseExpand = function(element) {
 	return true;
 };
 	
-UIPortal.prototype.expandAll = function(element) {
-	if (this.isExpandAll==true) return true;
-	return false;
-};	
 /*
 * This method will start the creation of a new javascript application such as a widget
 *

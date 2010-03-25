@@ -104,7 +104,7 @@
 		<div class="CollapseAll FloatLeft" onclick="eXo.portal.UIPortal.collapseExpand(this);$actionCollapseAll">
 			<%=_ctx.appRes(siteMapPortlet.getName() + ".label.CollapseAll")%>
 		</div> 
-		<div class="ExpandAll FloatLeft" onclick="if(!eXo.portal.UIPortal.expandAll(this)){$actionExpandAll}">
+		<div class="ExpandAll FloatLeft" onclick="{$actionExpandAll}">
 			<%=_ctx.appRes(siteMapPortlet.getName() + ".label.ExpandAll")%>
 		</div>
 	</div>
