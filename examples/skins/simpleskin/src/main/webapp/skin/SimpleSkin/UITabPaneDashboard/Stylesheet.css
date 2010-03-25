@@ -41,12 +41,14 @@
 }
 
 .UITabPaneDashboard .UIHorizontalTabs .UITab span {
-	margin: 3px 10px;
+	margin: 0px 10px;
+	font-weight: normal;
 }
 
 .UITabPaneDashboard .UIHorizontalTabs .UITab .CloseIcon {
 	background: url('background/IconClose.gif') no-repeat left top;
-	width: 16px; height: 16px;
+	width: 16px; 
+	height: 16px;
 	cursor: pointer;
 }
 
@@ -60,21 +62,26 @@
 }
 
 .UITabPaneDashboard .UIHorizontalTabs .GrayTabStyle .NormalTab .LeftTab {
-	background: url(background/TabDashboard.gif) no-repeat left -44px;
+	background: #E6E6E6;
+	border: 1px solid #DADADA;
 }
 
 .UITabPaneDashboard .UIHorizontalTabs .GrayTabStyle .NormalTab .RightTab {
-	background: url(background/TabDashboard.gif) no-repeat right -44px;
+	background: none;
 }
 
 .UITabPaneDashboard .UIHorizontalTabs .GrayTabStyle .NormalTab .MiddleTab {
-	background: url(background/TabDashboard.gif) repeat-x left -66px;
-	line-height: 22px;
+	background: none;
+	line-height: 20px;
+}
+
+.UITabPaneDashboard .UIHorizontalTabs .GrayTabStyle .NormalTab .MiddleTab span  {
+	color: #999999;
 }
 
 .UITabPaneDashboard .UIHorizontalTabs .GrayTabStyle .SelectedTab .LeftTab {
 	background: #fff;
-	border: 1px solid #e5e5e5;
+	border: 1px solid #dadada;
 	padding: 0px;
 }
 
