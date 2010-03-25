@@ -17,6 +17,7 @@
 		<selenium.browser>firefox</selenium.browser>
 		<selenium.timeout>10000</selenium.timeout>
 		<selenium.speed>300</selenium.speed>
+		<selenium.host>localhost</selenium.host>
 		<org.selenium.maven-plugin.version>1.0</org.selenium.maven-plugin.version>
 	</properties>
 
@@ -146,6 +147,10 @@
 										<property>
 											<name>selenium.timeout</name>
 											<value>${selenium.timeout}</value>
+										</property>
+										<property>
+											<name>selenium.host</name>
+											<value>${selenium.host}</value>
 										</property>
 									</systemProperties>
 								</configuration>

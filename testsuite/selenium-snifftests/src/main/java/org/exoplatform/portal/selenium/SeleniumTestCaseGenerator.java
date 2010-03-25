@@ -91,13 +91,15 @@ public class SeleniumTestCaseGenerator {
 		sb.append("public String timeout = \"30000\";\n");
 		sb.append("public int timeoutSecInt = 30;\n");
 		sb.append("public String browser = \"firefox\";\n");
+		sb.append("public String host = \"localhost\";\n");		
 		sb.append("public void setSpeed() {\n  selenium.setSpeed(speed);\n}\n\n");
 		sb.append("public void setUp() throws Exception {\n");
 		sb.append("  browser = System.getProperty(\"selenium.browser\", browser);\n");
 		sb.append("  timeout = System.getProperty(\"selenium.timeout\", timeout);\n");
 		sb.append("  timeoutSecInt = Integer.parseInt(timeout)/1000;\n");		
 		sb.append("  speed = System.getProperty(\"selenium.speed\", speed);\n");
-		sb.append("  super.setUp(\"http://localhost:8080/portal/\", \"*\" + browser);\n");
+		sb.append("  host = System.getProperty(\"selenium.host\", host);\n");
+		sb.append("  super.setUp(\"http://\" + host + \":8080/portal/\", \"*\" + browser);\n");
 		sb.append("}\n\n");
 	}
 
