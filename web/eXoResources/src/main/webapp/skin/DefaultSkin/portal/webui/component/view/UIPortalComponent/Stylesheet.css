@@ -51,21 +51,21 @@
 }
 
 .UIPortlet .EditPortletPropertiesIcon {
-	float: right;	/* orientation=lt */
-	float: left;	/* orientation=rt */
+	float: right; /* orientation=lt */
+	float: left; /* orientation=rt */
 	width: 20px; height: 20px;
 	background: url('background/Pen.gif') no-repeat top;
-	margin: 4px 3px 0px 5px; /* orientation=lt */
-	margin: 4px 5px 0px 3px; /* orientation=rt */
+	margin: 4px 0px 0px 5px; /* orientation=lt */
+	margin: 4px 5px 0px 0px; /* orientation=rt */
 }
 
 .UIPortlet .DeletePortletIcon {
-	float: right;	/* orientation=lt */
-	float: left;	/* orientation=rt */
+	float: right; /* orientation=lt */
+	float: left; /* orientation=rt */
 	width: 20px; height:20px; 
 	background: url('background/Close.gif') no-repeat bottom;
-	margin: 0px 4px 0px 0px; /* orientation=lt */
-	margin: 0px 0px 0px 4px; /* orientation=rt */
+	margin: 0px 0px 0px 2px; /* orientation=lt */
+	margin: 0px 2px 0px 0px; /* orientation=rt */
 }
 
 .UIPortlet .SelectedContainerBlock {
@@ -140,20 +140,21 @@
 }
 
 .UIContainer .EditPortletPropertiesIcon {
-	float: left; /* orientation=lt */
-	float: right; /* orientation=rt */
+	float: right; /* orientation=lt */
+	float: left; /* orientation=rt */
 	width: 20px; height: 20px;
 	background: url('background/Pen.png') no-repeat top;
-	margin: 4px 3px 2px 5px;
+	margin: 2px 0px 0px 5px; /* orientation=lt */
+	margin: 2px 5px 0px 0px; /* orientation=rt */
 }
 
 .UIContainer .DeletePortletIcon {
-	float: left; /* orientation=lt */
-	float: right; /* orientation=rt */
+	float: right; /* orientation=lt */
+	float: left; /* orientation=rt */
 	width: 20px; height:20px; 
 	background: url('background/close.png') no-repeat bottom;
-	margin: 4px 4px 2px 0px; /* orientation=lt */
-	margin: 4px 0px 2px 4px; /* orientation=rt */
+	margin: 1px 0px 0px 2px; /* orientation=lt */
+	margin: 1px 2px 0px 0px; /* orientation=rt */
 }
 
 .UIContainer .NewLayer {
