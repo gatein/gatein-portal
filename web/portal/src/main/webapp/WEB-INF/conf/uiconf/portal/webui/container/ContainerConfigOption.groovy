@@ -69,6 +69,27 @@ import org.exoplatform.webui.core.model.SelectItemOption ;
         "</container>",
         "ThreeColumnContainerLayout")) ;
   templates.add(column);  
+
+  SelectItemCategory autofitColumn = new SelectItemCategory("autofitColumn") ;
+    autofitColumn.addSelectItemOption(new SelectItemOption("autofitOneColumns","" +
+        "<container template=\"system:/groovy/portal/webui/container/UITableAutofitColumnContainer.gtmpl\">" +
+        "  <container template=\"system:/groovy/portal/webui/container/UIContainer.gtmpl\"></container>" +
+        "</container>", 
+        "OneRowContainerLayout")) ;
+    autofitColumn.addSelectItemOption(new SelectItemOption("autofitTwoColumns",
+        "<container template=\"system:/groovy/portal/webui/container/UITableAutofitColumnContainer.gtmpl\">" +
+        "  <container template=\"system:/groovy/portal/webui/container/UIContainer.gtmpl\"></container>" +
+        "  <container template=\"system:/groovy/portal/webui/container/UIContainer.gtmpl\"></container>" +
+        "</container>",
+        "TwoColumnContainerLayout")) ;
+    autofitColumn.addSelectItemOption(new SelectItemOption("autofitThreeColumns",
+        "<container template=\"system:/groovy/portal/webui/container/UITableAutofitColumnContainer.gtmpl\">" +
+        "  <container template=\"system:/groovy/portal/webui/container/UIContainer.gtmpl\"></container>" +
+        "  <container template=\"system:/groovy/portal/webui/container/UIContainer.gtmpl\"></container>" +
+        "  <container template=\"system:/groovy/portal/webui/container/UIContainer.gtmpl\"></container>" +
+        "</container>",
+        "ThreeColumnContainerLayout")) ;
+  templates.add(autofitColumn);  
   
   SelectItemCategory tabs = new SelectItemCategory("tabs") ;
     tabs.addSelectItemOption(new SelectItemOption("twoTabs",
