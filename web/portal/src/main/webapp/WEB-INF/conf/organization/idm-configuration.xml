@@ -65,13 +65,19 @@
         <!--Sample LDAP config-->
         <!--<value>war:/conf/organization/picketlink-idm/examples/picketlink-idm-ldap-config.xml</value>-->
 
-        <!--ACME LDAP Example-->
+        <!--Read Only "ACME" LDAP Example-->
         <!--<value>war:/conf/organization/picketlink-idm/examples/picketlink-idm-ldap-acme-config.xml</value>-->
+
+        <!--OpenLDAP LDAP config-->
+        <!--<value>war:/conf/organization/picketlink-idm/examples/picketlink-idm-openldap-config.xml</value>-->
+
+        <!--OpenLDAP ReadOnly "ACME" LDAP Example-->
+        <!--<value>war:/conf/organization/picketlink-idm/examples/picketlink-idm-openldap-acme-config.xml</value>-->
 
         <!--MSAD LDAP Example-->
         <!--<value>war:/conf/organization/picketlink-idm/examples/picketlink-idm-msad-config.xml</value>-->
 
-        <!--MSAD Read Only LDAP Example-->
+        <!--MSAD Read Only "ACME" LDAP Example-->
         <!--<value>war:/conf/organization/picketlink-idm/examples/picketlink-idm-msad-readonly-config.xml</value>-->
         
       </value-param>

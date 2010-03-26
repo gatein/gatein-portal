@@ -67,10 +67,15 @@
           <identity-store-id>PortalLDAPStore</identity-store-id>
           <identity-object-types>
             <identity-object-type>USER</identity-object-type>
-            <identity-object-type>platform_type</identity-object-type>
-            <identity-object-type>organization_type</identity-object-type>
+            <identity-object-type>acme_roles_type</identity-object-type>
+            <identity-object-type>acme_ou_type</identity-object-type>
           </identity-object-types>
-          <options/>
+          <options>
+            <option>
+              <name>readOnly</name>
+              <value>true</value>
+            </option>
+          </options>
         </identity-store-mapping>
       </identity-store-mappings>
       <options>
@@ -189,7 +194,7 @@
               </option>
               <option>
                 <name>ctxDNs</name>
-                <value>ou=People,o=portal,o=gatein,dc=example,dc=com</value>
+                <value>ou=People,o=acme,dc=my-domain,dc=com</value>
               </option>
               <option>
                 <name>allowCreateEntry</name>
@@ -205,7 +210,7 @@
             </options>
           </identity-object-type>
           <identity-object-type>
-            <name>platform_type</name>
+            <name>acme_roles_type</name>
             <relationships>
               <relationship>
                 <relationship-type-ref>JBOSS_IDENTITY_MEMBERSHIP</relationship-type-ref>
@@ -213,11 +218,28 @@
               </relationship>
               <relationship>
                 <relationship-type-ref>JBOSS_IDENTITY_MEMBERSHIP</relationship-type-ref>
-                <identity-object-type-ref>platform_type</identity-object-type-ref>
+                <identity-object-type-ref>acme_roles_type</identity-object-type-ref>
               </relationship>
             </relationships>
             <credentials/>
-            <attributes/>
+            <attributes>
+              <attribute>
+                <name>label</name>
+                <mapping>cn</mapping>
+                <type>text</type>
+                <isRequired>false</isRequired>
+                <isMultivalued>false</isMultivalued>
+                <isReadOnly>true</isReadOnly>
+              </attribute>
+              <attribute>
+                <name>description</name>
+                <mapping>description</mapping>
+                <type>text</type>
+                <isRequired>false</isRequired>
+                <isMultivalued>false</isMultivalued>
+                <isReadOnly>false</isReadOnly>
+              </attribute>
+            </attributes>
             <options>
               <option>
                 <name>idAttributeName</name>
@@ -225,12 +247,16 @@
               </option>
               <option>
                 <name>ctxDNs</name>
-                <value>ou=Platform,o=portal,o=gatein,dc=example,dc=com</value>
+                <value>ou=Roles,o=acme,dc=my-domain,dc=com</value>
               </option>
               <!--<option>-->
               <!--<name>entrySearchFilter</name>-->
               <!--<value></value>-->
               <!--</option>-->
+              <option>
+                <name>parentMembershipAttributePlaceholder</name>
+                <value>ou=placeholder,o=acme,dc=my-domain,dc=com</value>
+              </option>
               <option>
                 <name>allowCreateEntry</name>
                 <value>true</value>
@@ -251,11 +277,12 @@
                 <name>createEntryAttributeValues</name>
                 <value>objectClass=top</value>
                 <value>objectClass=groupOfNames</value>
+                <value>member=ou=placeholder,o=acme,dc=my-domain,dc=com</value>
               </option>
             </options>
           </identity-object-type>
           <identity-object-type>
-            <name>organization_type</name>
+            <name>acme_ou_type</name>
             <relationships>
               <relationship>
                 <relationship-type-ref>JBOSS_IDENTITY_MEMBERSHIP</relationship-type-ref>
@@ -263,11 +290,28 @@
               </relationship>
               <relationship>
                 <relationship-type-ref>JBOSS_IDENTITY_MEMBERSHIP</relationship-type-ref>
-                <identity-object-type-ref>organization_type</identity-object-type-ref>
+                <identity-object-type-ref>acme_ou_type</identity-object-type-ref>
               </relationship>
             </relationships>
             <credentials/>
-            <attributes/>
+            <attributes>
+              <attribute>
+                <name>label</name>
+                <mapping>cn</mapping>
+                <type>text</type>
+                <isRequired>false</isRequired>
+                <isMultivalued>false</isMultivalued>
+                <isReadOnly>true</isReadOnly>
+              </attribute>
+              <attribute>
+                <name>description</name>
+                <mapping>description</mapping>
+                <type>text</type>
+                <isRequired>false</isRequired>
+                <isMultivalued>false</isMultivalued>
+                <isReadOnly>false</isReadOnly>
+              </attribute>
+            </attributes>
             <options>
               <option>
                 <name>idAttributeName</name>
@@ -275,12 +319,13 @@
               </option>
               <option>
                 <name>ctxDNs</name>
-                <value>ou=Organization,o=portal,o=gatein,dc=example,dc=com</value>
+                <value>ou=OrganizationUnits,o=acme,dc=my-domain,dc=com</value>
               </option>
               <!--<option>-->
               <!--<name>entrySearchFilter</name>-->
               <!--<value></value>-->
               <!--</option>-->
+
               <option>
                 <name>allowCreateEntry</name>
                 <value>true</value>
@@ -288,6 +333,10 @@
               <option>
                 <name>parentMembershipAttributeName</name>
                 <value>member</value>
+              </option>
+              <option>
+                <name>parentMembershipAttributePlaceholder</name>
+                <value>ou=placeholder,o=acme,dc=my-domain,dc=com</value>
               </option>
               <option>
                 <name>isParentMembershipAttributeDN</name>
@@ -301,6 +350,7 @@
                 <name>createEntryAttributeValues</name>
                 <value>objectClass=top</value>
                 <value>objectClass=groupOfNames</value>
+                <value>member=ou=placeholder,o=acme,dc=my-domain,dc=com</value>
               </option>
             </options>
           </identity-object-type>
@@ -312,11 +362,11 @@
           </option>
           <option>
             <name>adminDN</name>
-            <value>cn=Directory Manager</value>
+            <value>cn=Manager,dc=my-domain,dc=com</value>
           </option>
           <option>
             <name>adminPassword</name>
-            <value>password</value>
+            <value>secret</value>
           </option>
           <option>
             <name>searchTimeLimit</name>
@@ -325,6 +375,10 @@
           <option>
             <name>createMissingContexts</name>
             <value>true</value>
+          </option>
+          <option>
+            <name>sortExtensionSupported</name>
+            <value>false</value>
           </option>
         </options>
       </identity-store>

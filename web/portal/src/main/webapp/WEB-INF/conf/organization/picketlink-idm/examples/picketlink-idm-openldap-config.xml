@@ -189,7 +189,7 @@
               </option>
               <option>
                 <name>ctxDNs</name>
-                <value>ou=People,o=portal,o=gatein,dc=example,dc=com</value>
+                <value>ou=People,o=portal,o=gatein,dc=my-domain,dc=com</value>
               </option>
               <option>
                 <name>allowCreateEntry</name>
@@ -225,7 +225,7 @@
               </option>
               <option>
                 <name>ctxDNs</name>
-                <value>ou=Platform,o=portal,o=gatein,dc=example,dc=com</value>
+                <value>ou=Platform,o=portal,o=gatein,dc=my-domain,dc=com</value>
               </option>
               <!--<option>-->
               <!--<name>entrySearchFilter</name>-->
@@ -240,6 +240,10 @@
                 <value>member</value>
               </option>
               <option>
+                <name>parentMembershipAttributePlaceholder</name>
+                <value>ou=placeholder,o=portal,o=gatein,dc=my-domain,dc=com</value>
+              </option>
+              <option>
                 <name>isParentMembershipAttributeDN</name>
                 <value>true</value>
               </option>
@@ -251,6 +255,7 @@
                 <name>createEntryAttributeValues</name>
                 <value>objectClass=top</value>
                 <value>objectClass=groupOfNames</value>
+                <value>member=ou=placeholder,o=portal,o=gatein,dc=my-domain,dc=com</value>
               </option>
             </options>
           </identity-object-type>
@@ -275,7 +280,7 @@
               </option>
               <option>
                 <name>ctxDNs</name>
-                <value>ou=Organization,o=portal,o=gatein,dc=example,dc=com</value>
+                <value>ou=Organization,o=portal,o=gatein,dc=my-domain,dc=com</value>
               </option>
               <!--<option>-->
               <!--<name>entrySearchFilter</name>-->
@@ -290,6 +295,10 @@
                 <value>member</value>
               </option>
               <option>
+                <name>parentMembershipAttributePlaceholder</name>
+                <value>ou=placeholder,o=portal,o=gatein,dc=my-domain,dc=com</value>
+              </option>
+              <option>
                 <name>isParentMembershipAttributeDN</name>
                 <value>true</value>
               </option>
@@ -301,6 +310,7 @@
                 <name>createEntryAttributeValues</name>
                 <value>objectClass=top</value>
                 <value>objectClass=groupOfNames</value>
+                <value>member=ou=placeholder,o=portal,o=gatein,dc=my-domain,dc=com</value>
               </option>
             </options>
           </identity-object-type>
@@ -312,11 +322,11 @@
           </option>
           <option>
             <name>adminDN</name>
-            <value>cn=Directory Manager</value>
+            <value>cn=Manager,dc=my-domain,dc=com</value>
           </option>
           <option>
             <name>adminPassword</name>
-            <value>password</value>
+            <value>secret</value>
           </option>
           <option>
             <name>searchTimeLimit</name>
@@ -325,6 +335,10 @@
           <option>
             <name>createMissingContexts</name>
             <value>true</value>
+          </option>
+          <option>
+            <name>sortExtensionSupported</name>
+            <value>false</value>
           </option>
         </options>
       </identity-store>
