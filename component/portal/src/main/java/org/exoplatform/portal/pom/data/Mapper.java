@@ -193,6 +193,11 @@ public class Mapper
             PageLink link = dst.linkTo(ObjectType.PAGE_LINK);
             link.setPage(target);
          }
+         else
+         {
+            PageLink link = dst.linkTo(ObjectType.PAGE_LINK);
+            link.setPage(null);
+         }
 
          //
          Described described = dst.adapt(Described.class);
