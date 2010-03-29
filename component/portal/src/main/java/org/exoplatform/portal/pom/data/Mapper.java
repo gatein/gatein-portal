@@ -79,6 +79,7 @@ public class Mapper
    /** . */
    private static final Set<String> windowPropertiesBlackList =
       Tools.set(
+         MappedAttributes.THEME.getName(),
          MappedAttributes.TYPE.getName(),
          MappedAttributes.ICON.getName(),
          MappedAttributes.WIDTH.getName(),

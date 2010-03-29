@@ -227,6 +227,27 @@ public class TestDataStorage extends AbstractPortalTest
       assertEquals(0, page2.getChildren().size());
       assertEquals(true, page2.isShowMaxWindow());
    }
+   
+   public void testChangingPortletThemeInPage() throws Exception {
+      Page page;
+      Application<?> app;
+      
+      page = storage_.getPage("portal::classic::homepage");
+      app = (Application<?>)page.getChildren().get(0);
+      assertEquals(1, page.getChildren().size());
+      app.setTheme("Theme1");
+      storage_.save(page);
+      
+      page = storage_.getPage("portal::classic::homepage");
+      app = (Application<?>)page.getChildren().get(0);
+      assertEquals("Theme1", app.getTheme());
+      app.setTheme("Theme2");
+      storage_.save(page);
+      
+      page = storage_.getPage("portal::classic::homepage");
+      app = (Application<?>)page.getChildren().get(0);
+      assertEquals("Theme2", app.getTheme());
+   }
 
    public void testPageRemove() throws Exception
    {
