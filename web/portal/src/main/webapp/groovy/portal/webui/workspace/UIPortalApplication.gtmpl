@@ -62,25 +62,21 @@
         <script type="text/javascript" src="<%=docBase%>/javascript/merged.js"></script>
     <%}%>
     <script type="text/javascript">
-      eXo.env.portal.context = '<%=docBase%>' ;
-      <%if(rcontext.getAccessPath() == 0) {%>
-          eXo.env.portal.accessMode = 'public' ;
-      <%} else {%>
-          eXo.env.portal.accessMode = 'private' ;
-      <%}%>
-      eXo.env.portal.portalName = '<%=rcontext.getPortalOwner()%>' ;
-      eXo.env.server.context = '<%=docBase%>' ;
-      eXo.env.server.portalBaseURL = '<%=rcontext.getURLBuilder().getBaseURL()%>' ;
-      eXo.env.client.skin = '$skin' ;
+      eXo.env.portal.context = "<%=docBase%>" ;
+      <%if(rcontext.getAccessPath() == 0) {%>eXo.env.portal.accessMode = "public" ;<%}
+      else
+      {%>eXo.env.portal.accessMode = "private" ;<%}%>
+      eXo.env.portal.portalName = "<%=rcontext.getPortalOwner()%>" ;
+      eXo.env.server.context = "<%=docBase%>" ;
+      eXo.env.server.portalBaseURL = "<%=rcontext.getRequest().getRequestURI()%>" ;
+      eXo.env.client.skin = "$skin" ;
       <% 
         UIPortal portal = uicomponent.findFirstComponentOfType(UIPortal.class);
         String sessionAliveLevel = (portal == null ? null : portal.sessionAlive) ;
         boolean canKeepState = sessionAliveLevel == null ? false : !sessionAliveLevel.equals(PortalProperties.SESSION_NEVER) ;
       %>
-      
       eXo.portal.portalMode = <%= uicomponent.getModeState() %>;
-      
-      eXo.session.level = '$sessionAliveLevel';
+      eXo.session.level = "$sessionAliveLevel";
       eXo.session.canKeepState = $canKeepState;
       eXo.session.isOpen = $uicomponent.isSessionOpen ;
       eXo.session.itvTime = ${((PortalRequestContext)rcontext).getRequest().getSession().getMaxInactiveInterval()} ;
