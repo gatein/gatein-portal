@@ -31,6 +31,7 @@ import org.exoplatform.webui.core.UITree;
 import org.exoplatform.webui.core.UIBreadcumbs.LocalPath;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.organization.UIGroup;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -67,12 +68,12 @@ public class UIGroupExplorer extends UIContainer
       if (!GroupManagement.isAdministrator(null))
          sibblingsGroup_ = GroupManagement.getRelatedGroups(null, sibblingsGroup_);
 
-      tree.setSibbling((List)sibblingsGroup_);
+      tree.setSibbling((List)convertGroups(sibblingsGroup_));
       tree.setIcon("GroupAdminIcon");
       tree.setSelectedIcon("PortalIcon");
       tree.setBeanIdField("id");
       //tree.setBeanLabelField("groupName");
-      tree.setBeanLabelField("label");
+      tree.setBeanLabelField("encodedLabel");
       tree.setMaxTitleCharacter(25);
    }
 
@@ -95,7 +96,7 @@ public class UIGroupExplorer extends UIContainer
          //    if not administrator
          if (!GroupManagement.isAdministrator(null))
             sibblingsGroup_ = GroupManagement.getRelatedGroups(null, sibblingsGroup_);
-         uiTree.setSibbling((List)sibblingsGroup_);
+         uiTree.setSibbling((List)convertGroups(sibblingsGroup_));
          uiTree.setSelected(null);
          uiTree.setChildren(null);
          uiTree.setParentSelected(null);
@@ -139,9 +140,9 @@ public class UIGroupExplorer extends UIContainer
       }
       uiGroupInfo.setGroup(selectedGroup_);
 
-      uiTree.setSibbling((List)sibblingsGroup_);
-      uiTree.setChildren((List)childrenGroup_);
-      uiTree.setSelected(selectedGroup_);
+      uiTree.setSibbling((List)convertGroups(sibblingsGroup_));
+      uiTree.setChildren((List)convertGroups(childrenGroup_));
+      uiTree.setSelected(new UIGroup(selectedGroup_));
       uiTree.setParentSelected(parentGroup);
    }
 
@@ -207,6 +208,16 @@ public class UIGroupExplorer extends UIContainer
          uiGroupDetail.getChild(UIGroupForm.class).setGroup(null);
          uiGroupDetail.setRenderedChild(UIGroupInfo.class);
       }
+   }
+   
+   private Collection<UIGroup> convertGroups(Collection<Group> groups)
+   {
+	   Collection<UIGroup> result = new ArrayList();
+	   for (Group group: groups)
+	   {
+		   result.add(new UIGroup(group));
+	   }
+	   return result;
    }
 
 }
