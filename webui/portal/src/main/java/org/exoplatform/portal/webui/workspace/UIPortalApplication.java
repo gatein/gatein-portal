@@ -148,12 +148,15 @@ public class UIPortalApplication extends UIApplication
       OrganizationService orgService = getApplicationComponent(OrganizationService.class);
       LocaleConfig localeConfig = localeConfigService.getLocaleConfig(userPortalConfig_.getPortalConfig().getLocale());
       String user = context.getRemoteUser();
+      String portalSkin = null;
+      
       if (user != null)
       {
          UserProfile userProfile = orgService.getUserProfileHandler().findUserProfileByName(user);
          if (userProfile != null)
          {
             portalLanguage = userProfile.getUserInfoMap().get("user.language");
+            portalSkin = userProfile.getUserInfoMap().get("user.skin");
          }
          else
          {
@@ -183,9 +186,18 @@ public class UIPortalApplication extends UIApplication
       
       addWorkingWorkspace();
 
-      String currentSkin = userPortalConfig_.getPortalConfig().getSkin();
-      if (currentSkin != null && currentSkin.trim().length() > 0)
-         skin_ = currentSkin;
+      // use the skin from the user profile if available, otherwise use from the portal config
+      if (portalSkin != null && portalSkin.trim().length() > 0)
+      {
+         skin_ = portalSkin;
+      }
+      else
+      {
+         String userPortalConfigSkin = userPortalConfig_.getPortalConfig().getSkin();
+         if (userPortalConfigSkin != null && userPortalConfigSkin.trim().length() > 0)
+            skin_ = userPortalConfigSkin;
+      }
+      
       setOwner(context.getPortalOwner());
       
       //Minh Hoang TO: Localizes navigations, need to put this code snippet below 'setLocale' block

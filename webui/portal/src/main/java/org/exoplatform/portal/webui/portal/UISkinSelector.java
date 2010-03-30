@@ -23,6 +23,9 @@ import org.exoplatform.portal.resource.SkinService;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIMaskWorkspace;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
+import org.exoplatform.services.organization.OrganizationService;
+import org.exoplatform.services.organization.UserProfile;
+import org.exoplatform.services.organization.UserProfileHandler;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIContainer;
@@ -107,6 +110,17 @@ public class UISkinSelector extends UIContainer
          if (skin == null || skin.trim().length() < 1)
             return;
          uiApp.setSkin(skin);
+         String remoteUser = event.getRequestContext().getRemoteUser();
+         
+         //Save the skin selection to the User Profile
+         OrganizationService orgService = event.getSource().getApplicationComponent(OrganizationService.class);
+         if (remoteUser != null)
+         {
+            UserProfile userProfile = orgService.getUserProfileHandler().findUserProfileByName(remoteUser);
+            userProfile.getUserInfoMap().put("user.skin", skin);
+            UserProfileHandler hanlder = orgService.getUserProfileHandler();
+            hanlder.saveUserProfile(userProfile, true);
+         }
       }
    }
 
