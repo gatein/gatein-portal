@@ -25,6 +25,7 @@
 <%@ page import="org.exoplatform.services.resources.ResourceBundleService"%>
 <%@ page import="java.util.ResourceBundle"%>
 <%@ page import="org.exoplatform.web.login.InitiateLoginServlet"%>
+<%@ page import="org.gatein.common.text.EntityEncoder"%>
 <%@ page language="java" %>
 <%@ page contentType="text/html; charset=utf-8" %>
 <%
@@ -67,6 +68,8 @@
           <%/*Begin form*/%>
           <%
             if(username.length() > 0 || password.length() > 0) {
+               EntityEncoder encoder = EntityEncoder.FULL;
+               username = encoder.encode(username);
           %>
             <font color="red">Sign in failed. Wrong username or password.</font><%}%>
           <form name="loginForm" action="<%= contextPath + "/login"%>" method="post" style="margin: 0px;">    
