@@ -29,8 +29,7 @@
 			
 			node = treeNode.getNode();
 			nav = treeNode.getNavigation();
-			String label = node.resolvedLabel;	
-			String title = label;
+			String label = node.encodedResolvedLabel;	
 			actionExpand = uicomponent.event("ExpandNode", nav.getId() + "::" + node.getUri());				
 			def actionCollapse = "ajaxAsyncGetRequest('" + uicomponent.url("CollapseNode",nav.getId() + "::" + node.getUri()) + "', true)";	
 			

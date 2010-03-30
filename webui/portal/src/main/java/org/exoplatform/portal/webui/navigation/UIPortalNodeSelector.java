@@ -83,7 +83,7 @@ public class UIPortalNodeSelector extends UIContainer
       uiTree.setIcon("DefaultPageIcon");
       uiTree.setSelectedIcon("DefaultPageIcon");
       uiTree.setBeanIdField("uri");
-      uiTree.setBeanLabelField("resolvedLabel");
+      uiTree.setBeanLabelField("encodedResolvedLabel");
       uiTree.setBeanIconField("icon");
 
       UIRightClickPopupMenu uiPopupMenu = createUIComponent(UIRightClickPopupMenu.class, "PortalNodePopupMenu", null);

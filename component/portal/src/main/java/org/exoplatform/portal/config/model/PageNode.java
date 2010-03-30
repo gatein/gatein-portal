@@ -22,6 +22,7 @@ package org.exoplatform.portal.config.model;
 import org.exoplatform.commons.utils.ExpressionUtil;
 import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.pom.data.NavigationNodeData;
+import org.gatein.common.text.EntityEncoder;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -42,6 +43,8 @@ public class PageNode extends PageNodeContainer
    private String name;
 
    private String resolvedLabel;
+   
+   private String encodedResolvedLabel;
 
    private Date startPublicationDate;
 
@@ -69,6 +72,7 @@ public class PageNode extends PageNodeContainer
       this.uri = nav.getURI();
       this.label = nav.getLabel();
       this.resolvedLabel = nav.getLabel();
+      this.encodedResolvedLabel = null;
       this.icon = nav.getIcon();
       this.name = nav.getName();
       this.startPublicationDate = nav.getStartPublicationDate();
@@ -110,6 +114,7 @@ public class PageNode extends PageNodeContainer
    {
       label = s;
       resolvedLabel = s;
+      encodedResolvedLabel = null;
    }
 
    public String getIcon()
@@ -146,10 +151,21 @@ public class PageNode extends PageNodeContainer
    {
       return resolvedLabel;
    }
+   
+   public String getEncodedResolvedLabel()
+   {
+	   EntityEncoder encoder = EntityEncoder.FULL;
+	   if (encodedResolvedLabel == null)
+	   {
+		   encodedResolvedLabel = encoder.encode(resolvedLabel);
+	   }
+	   return encodedResolvedLabel;
+   }
 
    public void setResolvedLabel(String res)
    {
       resolvedLabel = res;
+      encodedResolvedLabel = null;
    }
 
    public void setResolvedLabel(ResourceBundle res)
@@ -157,6 +173,7 @@ public class PageNode extends PageNodeContainer
       resolvedLabel = ExpressionUtil.getExpressionValue(res, label);
       if (resolvedLabel == null)
          resolvedLabel = getName();
+      encodedResolvedLabel = null;
    }
 
    public List<PageNode> getChildren()

@@ -4,6 +4,7 @@
 	import org.exoplatform.web.application.JavascriptManager;
 	import org.exoplatform.portal.webui.util.Util ;
 	import org.exoplatform.webui.organization.OrganizationUtils;
+	import org.gatein.common.text.EntityEncoder;
 	
 	def rcontext = _ctx.getRequestContext() ;
 	JavascriptManager jsmanager = rcontext.getJavascriptManager();
@@ -29,9 +30,11 @@
 				if(isCurrent) clazz = "class='ArrowIcon'";
 				else clazz = "";
 				href = uicomponent.getPortalURI(portal);
+                EntityEncoder entityEncoder = EntityEncoder.FULL;
+				portal = entityEncoder.encode(portal);
 				print """
 					<div class="MenuItem">
-						<div $clazz>						
+						<div $clazz>
 							<a href="$href" class="ItemIcon SiteIcon">$portal</a>
 						</div>
 				""";
@@ -82,6 +85,8 @@
 		String title = "";
 		if(toolong) title = "title='$node.resolvedLabel'";
 		else title = "";
+        EntityEncoder entityEncoder = EntityEncoder.FULL;
+		label = entityEncoder.encode(label);
 		print """
 			<div class="MenuItem $tabStyleNavigation">
 				<div class="$clazz">

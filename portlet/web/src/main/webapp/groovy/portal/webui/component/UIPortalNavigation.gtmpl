@@ -3,6 +3,7 @@
 	import org.exoplatform.portal.config.model.PageNavigation;
 	import org.exoplatform.web.application.JavascriptManager;
 	import org.exoplatform.portal.webui.util.Util;
+	import org.gatein.common.text.EntityEncoder;
 	
 	def rcontext = _ctx.getRequestContext();
 	JavascriptManager jsmanager = rcontext.getJavascriptManager();
@@ -65,7 +66,8 @@
 			title = label;
 			label = label.substring(0,37) + "...";
 		}
-		
+		EntityEncoder entityEncoder = EntityEncoder.FULL;
+		label = entityEncoder.encode(label);
 		String pageURI = Util.getPortalRequestContext().getPortalURI() + node.getUri();
 		if(node.pageReference != null) {
 			if(uicomponent.isUseAjax()) {

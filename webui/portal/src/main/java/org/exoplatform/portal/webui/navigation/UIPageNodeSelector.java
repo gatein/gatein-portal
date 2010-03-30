@@ -59,7 +59,7 @@ public class UIPageNodeSelector extends UIContainer
       uiTree.setIcon("DefaultPageIcon");
       uiTree.setSelectedIcon("DefaultPageIcon");
       uiTree.setBeanIdField("uri");
-      uiTree.setBeanLabelField("resolvedLabel");
+      uiTree.setBeanLabelField("encodedResolvedLabel");
       uiTree.setBeanIconField("icon");
 
       loadNavigations();
