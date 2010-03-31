@@ -19,6 +19,10 @@
 
 package org.exoplatform.account.webui.component;
 
+import org.exoplatform.portal.application.PortalRequestContext;
+import org.exoplatform.portal.webui.CaptchaValidator;
+import org.exoplatform.portal.webui.UICaptcha;
+import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.UserHandler;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -39,6 +43,11 @@ import org.exoplatform.webui.form.validator.MandatoryValidator;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import nl.captcha.Captcha;
 
 /**
  * 
@@ -83,6 +92,12 @@ public class UIRegisterForm extends UIForm
       @Override
       public void execute(Event<UIRegisterForm> event) throws Exception
       {
+         // Invalidate the captcha image
+         PortalRequestContext prContext = Util.getPortalRequestContext();
+         HttpServletRequest request = prContext.getRequest();
+         HttpSession session = request.getSession();
+         session.removeAttribute(Captcha.NAME);
+ 
          UIRegisterForm registerForm = event.getSource();
          OrganizationService orgService = registerForm.getApplicationComponent(OrganizationService.class);
          UserHandler userHandler = orgService.getUserHandler();

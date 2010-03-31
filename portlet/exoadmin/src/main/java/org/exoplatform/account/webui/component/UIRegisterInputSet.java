@@ -18,11 +18,16 @@
  */
 package org.exoplatform.account.webui.component;
 
+import javax.portlet.PortletPreferences;
+
+import org.exoplatform.portal.webui.CaptchaValidator;
+import org.exoplatform.portal.webui.UICaptcha;
 import org.exoplatform.services.organization.Query;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.UserHandler;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.form.UIFormInputWithActions;
 import org.exoplatform.webui.form.UIFormStringInput;
@@ -51,7 +56,9 @@ public class UIRegisterInputSet extends UIFormInputWithActions
    protected static String LAST_NAME = "lastName";
    
    protected static String EMAIL_ADDRESS = "emailAddress";
-   
+
+   protected static String CAPTCHA = "captcha";
+
    public UIRegisterInputSet(String name) throws Exception{
       super(name);
       
@@ -76,7 +83,16 @@ public class UIRegisterInputSet extends UIFormInputWithActions
          "ResourceValidator.msg.Invalid-char"));
       
       addUIFormInput(new UIFormStringInput(EMAIL_ADDRESS, EMAIL_ADDRESS, null).addValidator(MandatoryValidator.class).addValidator(
-         EmailAddressValidator.class));      
+         EmailAddressValidator.class));
+   
+      PortletRequestContext pcontext = (PortletRequestContext)WebuiRequestContext.getCurrentInstance();
+      PortletPreferences pref = pcontext.getRequest().getPreferences();
+      boolean useCaptcha = Boolean.parseBoolean(pref.getValue(UIRegisterEditMode.USE_CAPTCHA,"true"));
+
+      if (useCaptcha)
+      {
+         addUIFormInput(new UICaptcha(CAPTCHA, CAPTCHA, null).addValidator(MandatoryValidator.class).addValidator(CaptchaValidator.class));
+      }
    }
    
    private String getUserName(){

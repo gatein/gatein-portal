@@ -46,6 +46,7 @@ function getModule(params)
    var groovyVersion = "${org.codehaus.groovy.version}";
    var rhinoVersion = "${rhino.version}";
    var jcipVersion = "${jcip.version}";
+   var simplecapthaVersion = "${nl.captcha.simplecaptcha.version}";
 
    //TODO versions for gatein components
    
@@ -175,7 +176,10 @@ function getModule(params)
       addDependency(core.component.xmlProcessing).
       addDependency(core.component.documents).
 
-      addDependency(jcr.services.jcr);
+      addDependency(jcr.services.jcr).
+      addDependency(new Project("org.gatein.captcha", "simplecaptcha", "jar", simplecapthaVersion)).
+      addDependency(new Project("com.jhlabs", "filters", "jar", "2.0.235")); 
+
 
    module.portlet = {};
 

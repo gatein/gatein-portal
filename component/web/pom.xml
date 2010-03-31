@@ -84,9 +84,13 @@
     	<artifactId>json</artifactId>
     	<type>jar</type>
     </dependency>
-     <dependency>
+    <dependency>
         <groupId>javax.security</groupId>
         <artifactId>jacc</artifactId>
+    </dependency>
+     <dependency>
+       <groupId>org.gatein.captcha</groupId>
+       <artifactId>simplecaptcha</artifactId>
      </dependency>
      <dependency>
        <groupId>org.exoplatform.portal</groupId>

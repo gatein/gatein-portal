@@ -1,0 +1,20 @@
+<%	
+	import org.exoplatform.account.webui.component.UIRegisterEditMode;
+	import javax.portlet.PortletMode ;
+%>
+<%
+if(_ctx.getRequestContext().getApplicationMode() == PortletMode.VIEW)
+{
+  uicomponent.renderChildren();
+}
+else
+{
+  for (inputEntry in uicomponent.getChildren())
+  {
+    if (inputEntry instanceof UIRegisterEditMode)
+    {
+      uicomponent.renderUIComponent(inputEntry);	
+    }
+  }
+}
+%>
