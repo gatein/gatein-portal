@@ -63,6 +63,7 @@ public class UIPageActionListener
          //This code snippet is to make sure that Javascript/Skin is fully loaded at the first request
          UIWorkingWorkspace uiWorkingWS = uiPortalApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
          PortalRequestContext pcontext = Util.getPortalRequestContext();
+         pcontext.addUIComponentToUpdateByAjax(uiWorkingWS);
          
          PageNavigation currentNav = showedUIPortal.getSelectedNavigation();
          String currentUri = showedUIPortal.getSelectedNode().getUri();
