@@ -25,6 +25,7 @@ import org.exoplatform.application.registry.Application;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.UserPortalConfigService;
+import org.exoplatform.portal.config.model.ApplicationState;
 import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.config.model.CloneApplicationState;
 import org.exoplatform.portal.config.model.Container;
@@ -376,7 +377,18 @@ public class UIPortalComponentActionListener
                }
                else
                {
-                  CloneApplicationState state = new CloneApplicationState<Object>(app.getStorageId());
+                  ApplicationState state;
+                  // if we have a new portlet added to the page we need for it to have its own state.
+                  // otherwise all new portlets added to a page will have the same state.
+                  if (newComponent)
+                  {
+                     state = new TransientApplicationState<Object>(app.getContentId());
+                  }
+                  // if the portlet is not new, then we should clone it from the original portlet
+                  else
+                  {
+                     state = new CloneApplicationState<Object>(app.getStorageId());
+                  }
                   uiPortlet.setState(new PortletState(state, applicationType));
                }
                uiPortlet.setPortletInPortal(uiTarget instanceof UIPortal);
