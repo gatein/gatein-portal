@@ -19,9 +19,11 @@
 
 package org.exoplatform.portal.webui.page;
 
+import org.exoplatform.container.ExoContainer;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserPortalConfig;
+import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Container;
 import org.exoplatform.portal.config.model.ModelObject;
 import org.exoplatform.portal.config.model.Page;
@@ -40,7 +42,6 @@ import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
-import org.exoplatform.webui.event.Event.Phase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -296,13 +297,33 @@ public class UIPageActionListener
        */
       private PageNode getDefaultNode(PageNavigation nav)
       {
-         PageNode defaultNode;
+         PageNode defaultNode = null;
          try
          {
-            defaultNode = nav.getNodes().get(0);
+            if (nav != null && nav.getNodes().size() > 0)
+            {
+               WebuiRequestContext context = Util.getPortalRequestContext();
+               ExoContainer appContainer = context.getApplication().getApplicationServiceContainer();
+               UserPortalConfigService userPortalConfigService = (UserPortalConfigService)appContainer.getComponentInstanceOfType(UserPortalConfigService.class);
+               
+               for (PageNode pageNode : nav.getNodes())
+               {
+                  Page page = userPortalConfigService.getPage(pageNode.getPageReference(), context.getRemoteUser());
+                  if (page != null)
+                  {
+                     defaultNode = pageNode;
+                     break;
+                  }
+               }
+            }
+            else
+            {
+               return null;
+            }
          }
-         catch (IndexOutOfBoundsException ex)
+         catch (Exception e)
          {
+            e.printStackTrace();
             return null;
          }
          if (defaultNode != null && !("notfound".equals(defaultNode.getName())))
