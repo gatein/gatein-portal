@@ -23,6 +23,8 @@ import org.exoplatform.portal.pom.config.Utils;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.Query;
 import org.exoplatform.services.organization.User;
+import org.exoplatform.services.security.ConversationState;
+import org.exoplatform.web.CacheUserProfileFilter;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.commons.serialization.api.annotations.Serialized;
@@ -158,6 +160,12 @@ public class UIAccountEditInputSet extends UIFormInputSet
       }
       service.getUserHandler().saveUser(user, true);
       enableChangePassword(false);
+      
+      ConversationState state = ConversationState.getCurrent();
+      if (username.equals(((User)state.getAttribute(CacheUserProfileFilter.USER_PROFILE)).getUserName()))
+      {
+         state.setAttribute(CacheUserProfileFilter.USER_PROFILE, user);
+      }
       return true;
    }
 
