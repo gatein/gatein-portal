@@ -358,6 +358,54 @@ public class TestDataStorage extends AbstractPortalTest
       PageNavigation newPageNavi = storage_.getPageNavigation(pageNavi.getOwnerType(), pageNavi.getOwnerId());
    }
 
+   /**
+    * Test that setting a page reference to null will actually remove the page reference from the PageNode
+    * @throws Exception
+    */
+   public void testNullPageReferenceDeletes() throws Exception
+   {
+      // create portal
+      PortalConfig portal = new PortalConfig();
+      portal.setName("foo");
+      portal.setLocale("en");
+      portal.setAccessPermissions(new String[]{UserACL.EVERYONE});
+      storage_.create(portal);
+      
+      // create page
+      Page page = new Page();
+      page.setOwnerType(PortalConfig.PORTAL_TYPE);
+      page.setOwnerId("test");
+      page.setName("foo");
+      storage_.create(page);
+      
+      //create a page node and add page
+      PageNode pageNode = new PageNode();
+      pageNode.setName("testPage");
+      pageNode.setPageReference(page.getPageId());
+      pageNode.build();
+      
+      // create a new page navigation and add node
+      PageNavigation navigation = new PageNavigation();
+      navigation.setOwnerId("foo");
+      navigation.setOwnerType("portal");
+      navigation.addNode(pageNode);
+      storage_.create(navigation);
+      
+      // get the page reference from the created page and check that it exists
+      PageNavigation pageNavigationWithPageReference = storage_.getPageNavigation("portal", navigation.getOwnerId());
+      assertNotNull("Expected page reference should not be null.", pageNavigationWithPageReference.getNodes().get(0).getPageReference());
+      
+      // set the page reference to null and save.
+      ArrayList<PageNode> nodes = navigation.getNodes();
+      nodes.get(0).setPageReference(null);
+      navigation.setNodes(nodes);
+      storage_.save(navigation);
+      
+      // check that setting the page reference to null actually removes the page reference
+      PageNavigation pageNavigationWithoutPageReference = storage_.getPageNavigation("portal", navigation.getOwnerId());
+      assertNull("Expected page reference should be null.", pageNavigationWithoutPageReference.getNodes().get(0).getPageReference());
+   }
+   
    public void testRemoveNavigation() throws Exception
    {
       PageNavigation navigation = storage_.getPageNavigation("portal", "test");
