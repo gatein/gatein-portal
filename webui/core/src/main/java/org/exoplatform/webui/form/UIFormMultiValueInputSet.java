@@ -53,7 +53,7 @@ public class UIFormMultiValueInputSet extends UIFormInputContainer<List>
    /**
     * The type of items in the selector
     */
-   private Class<? extends UIFormInput> clazz_;
+   private Class<? extends UIFormInputBase> clazz_;
 
    private Constructor constructor_ = null;
 
@@ -83,7 +83,7 @@ public class UIFormMultiValueInputSet extends UIFormInputContainer<List>
       return List.class;
    }
 
-   public void setType(Class<? extends UIFormInput> clazz)
+   public void setType(Class<? extends UIFormInputBase> clazz)
    {
       this.clazz_ = clazz;
       Constructor[] constructors = clazz_.getConstructors();
@@ -91,7 +91,7 @@ public class UIFormMultiValueInputSet extends UIFormInputContainer<List>
          constructor_ = constructors[0];
    }
 
-   public Class<? extends UIFormInput> getUIFormInputBase()
+   public Class<? extends UIFormInputBase> getUIFormInputBase()
    {
       return clazz_;
    }
@@ -199,6 +199,8 @@ public class UIFormMultiValueInputSet extends UIFormInputContainer<List>
 
    public UIFormInputBase createUIFormInput(int idx) throws Exception
    {
+	   
+	  if(constructor_  == null) return  null;
       Class[] classes = constructor_.getParameterTypes();
       Object[] params = new Object[classes.length];
       for (int i = 0; i < classes.length; i++)
