@@ -5,8 +5,13 @@
    ]>
 <chapter id="wsrp">
    <title>Web Services for Remote Portlets (WSRP)</title>
-
-   <sect1>
+	<para>
+		Commented WSRP section out - not ready and breaking Publican builds.
+	</para>
+	<para>
+		Will re-include once completed.
+	</para>
+<!-- Commented as section not ready. Breaking Publican build.   <sect1>
       <title>Introduction</title>
       <para>The Web Services for Remote Portlets specification defines a web service interface for accessing and
          interacting with interactive presentation-oriented web services. It has been produced through the efforts of
@@ -640,12 +645,17 @@
 <deployments>
    <deployment>
       <wsrp-producer id="self" expiration-cache="300">
-         <!--
-         we need to use the individual endpoint configuration because the configuration via
-         wsdl forces an immediate attempt to access the web service description which is not
-         available yet at this point of deployment
-         -->
-         <endpoint-config>
+
+	<important>
+	<title>Was commented out</title>
+	<para>
+		we need to use the individual endpoint configuration because the configuration via
+	         wsdl forces an immediate attempt to access the web service description which is not
+	         available yet at this point of deployment
+	</para>
+	</important>
+
+        <endpoint-config>
             <service-description-url>
               http://localhost:8080/portal-wsrp/ServiceDescriptionService
             </service-description-url>
@@ -1094,5 +1104,5 @@
          </para>
       </sect2>
 
-   </sect1>
+   </sect1> -->
 </chapter>
