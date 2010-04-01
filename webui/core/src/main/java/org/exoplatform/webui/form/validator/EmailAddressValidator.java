@@ -48,15 +48,12 @@ public class EmailAddressValidator implements Validator
       String label;
       try
       {
-         label = uiForm.getLabel(uiInput.getName());
+    	  label = uiForm.getId() + ".label." + uiInput.getName();
       }
       catch (Exception e)
       {
          label = uiInput.getName();
       }
-      label = label.trim();
-      if (label.charAt(label.length() - 1) == ':')
-         label = label.substring(0, label.length() - 1);
       if (uiInput.getValue() == null || ((String)uiInput.getValue()).trim().length() == 0)
          return;
       String s = (String)uiInput.getValue();

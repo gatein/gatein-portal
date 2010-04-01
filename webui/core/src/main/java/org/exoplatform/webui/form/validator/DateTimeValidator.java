@@ -61,7 +61,7 @@ public class DateTimeValidator implements Validator
       String label;
       try
       {
-         label = uiForm.getLabel(uiInput.getName());
+    	  label = uiForm.getId() + ".label." + uiInput.getName();
       }
       catch (Exception e)
       {
