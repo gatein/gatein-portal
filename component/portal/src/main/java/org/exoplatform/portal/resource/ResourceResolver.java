@@ -29,11 +29,13 @@ public interface ResourceResolver
 {
 
    /**
-    * Returns a reader for the provided path or null if the resource cannot be resolved.
+    * Returns a {@link org.exoplatform.portal.resource.Resource} for the provided path or null if the resource cannot be resolved.
     *
     * @param path the path
-    * @return a reader 
+    * @return a reader
+    * @throws NullPointerException if the path argument is null
+    * @throws IllegalStateException when
     */
-   Resource resolve(String path);
+   Resource resolve(String path) throws NullPointerException;
 
 }

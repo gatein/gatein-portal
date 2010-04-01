@@ -19,6 +19,9 @@
 
 package org.exoplatform.portal.resource;
 
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -32,11 +35,17 @@ import javax.servlet.ServletContext;
 class MainResourceResolver implements ResourceResolver
 {
 
+   /** . */
    final Map<String, SimpleResourceContext> contexts;
 
+   /** . */
    final CopyOnWriteArrayList<ResourceResolver> resolvers;
 
+   /** . */
    final Map<SkinKey, SkinConfig> skins;
+
+   /** . */
+   private final Logger log = LoggerFactory.getLogger(MainResourceResolver.class);
 
    public MainResourceResolver(String portalContainerName, Map<SkinKey, SkinConfig> skins)
    {
@@ -62,6 +71,12 @@ class MainResourceResolver implements ResourceResolver
 
    public Resource resolve(String path)
    {
+      if (path == null)
+      {
+         throw new NullPointerException("No null path is accepted");
+      }
+
+      //
       for (ResourceResolver resolver : resolvers)
       {
          Resource res = resolver.resolve(path);
@@ -75,6 +90,16 @@ class MainResourceResolver implements ResourceResolver
       int i1 = path.indexOf("/", 2);
       String targetedContextPath = path.substring(0, i1);
       SimpleResourceContext context = contexts.get(targetedContextPath);
-      return context.getResource(path.substring(i1));
+
+      //
+      if (context == null)
+      {
+         log.warn("Could not resolve " + targetedContextPath + " resource for path " + path);
+         return null;
+      }
+      else
+      {
+         return context.getResource(path.substring(i1));
+      }
    }
 }

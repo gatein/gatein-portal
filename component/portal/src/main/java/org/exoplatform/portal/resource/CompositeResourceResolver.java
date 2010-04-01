@@ -19,8 +19,11 @@
 
 package org.exoplatform.portal.resource;
 
+import org.apache.commons.io.input.CharSequenceReader;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
+
 import java.io.Reader;
-import java.io.StringReader;
 import java.util.Map;
 
 /**
@@ -38,18 +41,31 @@ class CompositeResourceResolver implements ResourceResolver
     */
    private final String portalContainerName;
 
+   /** . */
+   private final String prefix;
+
+   /** . */
+   private final Logger log = LoggerFactory.getLogger(CompositeResourceResolver.class);
+
    public CompositeResourceResolver(String portalContainerName, Map<SkinKey, SkinConfig> skins)
    {
       this.portalContainerName = portalContainerName;
       this.skins = skins;
+      this.prefix = "/" + portalContainerName + "/resource/";
    }
 
    public Resource resolve(String path)
    {
-      if (path.startsWith("/" + portalContainerName + "/resource/") && path.endsWith(".css"))
+      if (path == null)
       {
-         final StringBuffer sb = new StringBuffer();
-         String encoded = path.substring(("/" + portalContainerName + "/resource/").length());
+         throw new NullPointerException("No null path is accepted");
+      }
+
+      //
+      if (path.startsWith(prefix) && path.endsWith(".css"))
+      {
+         final StringBuilder sb = new StringBuilder();
+         String encoded = path.substring(prefix.length());
          String blah[] = encoded.split("/");
          int len = (blah.length >> 1) << 1;
          for (int i = 0; i < len; i += 2)
@@ -68,12 +84,16 @@ class CompositeResourceResolver implements ResourceResolver
             @Override
             public Reader read()
             {
-               return new StringReader(sb.toString());
+               return new CharSequenceReader(sb);
             }
          };
       }
       else
       {
+         if (log.isDebugEnabled())
+         {
+            log.debug("Could not resolve path value");
+         }
          return null;
       }
    }
