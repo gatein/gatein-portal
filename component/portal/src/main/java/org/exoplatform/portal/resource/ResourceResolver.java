@@ -34,7 +34,6 @@ public interface ResourceResolver
     * @param path the path
     * @return a reader
     * @throws NullPointerException if the path argument is null
-    * @throws IllegalStateException when
     */
    Resource resolve(String path) throws NullPointerException;
 
