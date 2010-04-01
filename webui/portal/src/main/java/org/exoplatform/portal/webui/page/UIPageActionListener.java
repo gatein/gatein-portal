@@ -64,6 +64,7 @@ public class UIPageActionListener
          //This code snippet is to make sure that Javascript/Skin is fully loaded at the first request
          UIWorkingWorkspace uiWorkingWS = uiPortalApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
          PortalRequestContext pcontext = Util.getPortalRequestContext();
+         pcontext.setFullRender(true);
          pcontext.addUIComponentToUpdateByAjax(uiWorkingWS);
          
          PageNavigation currentNav = showedUIPortal.getSelectedNavigation();
@@ -111,7 +112,6 @@ public class UIPageActionListener
                showedUIPortal.setSelectedNode(targetPageNode);
                showedUIPortal.setSelectedPath(targetedPathNodes);
                showedUIPortal.refreshUIPage();
-               pcontext.setFullRender(true);
                return;
             }
          }
@@ -121,7 +121,6 @@ public class UIPageActionListener
             // First, we try to find a cached UIPortal
             uiWorkingWS.setRenderedChild(UIPortalApplication.UI_VIEWING_WS_ID);
             uiPortalApp.setModeState(UIPortalApplication.NORMAL_MODE);
-            pcontext.setFullRender(true);
             UIPortal cachedUIPortal = uiPortalApp.getCachedUIPortal(newNavType, newNavId);
             if (cachedUIPortal != null)
             {
