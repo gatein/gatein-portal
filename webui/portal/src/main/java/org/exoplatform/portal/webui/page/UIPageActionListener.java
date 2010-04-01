@@ -342,12 +342,13 @@ public class UIPageActionListener
          //That happens when user browses to a URL like /portal/public/classic
          if(pathNodes.length == 0)
          {
-            nodes.add(nav.getNodes().get(0));
+            nodes.add(getDefaultNode(nav));
             return nodes;
          }
          PageNode startNode = nav.getNode(pathNodes[0]);
          if (startNode == null)
          {
+            nodes.add(getDefaultNode(nav));
             return nodes;
          }
          nodes.add(startNode);
