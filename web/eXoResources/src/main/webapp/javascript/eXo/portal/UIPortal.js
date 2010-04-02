@@ -421,6 +421,10 @@ UIPortal.prototype.showLayoutModeForPortal = function(control) {
   }  
 } ;
 
+/**
+ * Return the closest container of the element.
+ * It might be one of these : UIPortlet, UIContainer, UIPageBody, UIPortal
+ */
 UIPortal.prototype.findUIComponentOf = function(element) {
   var DOMUtil = eXo.core.DOMUtil;
   var parent = element.parentNode ;
@@ -503,7 +507,11 @@ UIPortal.prototype.popupButton = function(url, action) {
 UIPortal.prototype.removeComponent = function(componentId) {
 		var comp = document.getElementById(componentId);
 		var viewPage = eXo.core.DOMUtil.findAncestorByClass(comp, "VIEW-PAGE");
-		eXo.core.DOMUtil.removeElement(comp);
+		
+		//Check if the removing component is a column
+		if (comp.parentNode.nodeName.toUpperCase() == "TD") eXo.core.DOMUtil.removeElement(comp.parentNode);
+		else eXo.core.DOMUtil.removeElement(comp);
+		
 		if(viewPage && eXo.portal.UIPortal.getUIContainers().length == 0 
 				&& eXo.portal.UIPortal.getUIPortlets().length == 0) {
 			viewPage.style.paddingTop = "50px" ;

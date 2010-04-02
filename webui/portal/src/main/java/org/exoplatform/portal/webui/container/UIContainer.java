@@ -19,30 +19,19 @@
 
 package org.exoplatform.portal.webui.container;
 
-import org.exoplatform.portal.webui.container.UIContainerActionListener.EditContainerActionListener;
 import org.exoplatform.portal.webui.portal.UIPortalComponent;
 import org.exoplatform.portal.webui.portal.UIPortalComponentActionListener.DeleteComponentActionListener;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
-import org.exoplatform.webui.config.annotation.ComponentConfigs;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIComponent;
-import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.EventListener;
-
-import java.util.List;
 
 /**
  * May 19, 2006
  */
-@ComponentConfigs({
-   @ComponentConfig(events = {@EventConfig(listeners = UIContainerActionListener.EditContainerActionListener.class),
-      @EventConfig(listeners = DeleteComponentActionListener.class, confirm = "UIContainer.deleteContainer")}),
-   @ComponentConfig(id = "TabContainer", template = "system:/groovy/portal/webui/container/UITabContainer.gtmpl", events = {
-      @EventConfig(listeners = EditContainerActionListener.class),
-      @EventConfig(listeners = DeleteComponentActionListener.class, confirm = "UIContainer.deleteContainer"),
-      @EventConfig(listeners = UIContainer.SelectTabActionListener.class)})})
+@ComponentConfig(events = {@EventConfig(listeners = UIContainerActionListener.EditContainerActionListener.class),
+   @EventConfig(listeners = DeleteComponentActionListener.class, confirm = "UIContainer.deleteContainer")})
 public class UIContainer extends UIPortalComponent
 {
+   public static final String TABLE_COLUMN_CONTAINER = "TableColumnContainer";
 
    /** Storage id. */
    private String storageId;
@@ -83,30 +72,5 @@ public class UIContainer extends UIPortalComponent
    public void setDescription(String desc)
    {
       this.description = desc;
-   }
-
-   static public class SelectTabActionListener extends EventListener<UIContainer>
-   {
-      public void execute(Event<UIContainer> event) throws Exception
-      {
-         String objectId = event.getRequestContext().getRequestParameter(OBJECTID);
-         UIContainer container = event.getSource();
-         UIComponent goal = container.findComponentById(objectId);
-         if (goal == null)
-         {
-            return;
-         }
-         UIContainer parent = goal.getParent();
-         List<UIComponent> children = parent.getChildren();
-         for (UIComponent child : children)
-         {
-            if (child.getId().equals(objectId))
-            {
-               child.setRendered(true);
-               continue;
-            }
-            child.setRendered(false);
-         }
-      }
    }
 }

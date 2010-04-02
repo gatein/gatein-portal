@@ -34,6 +34,7 @@ import org.exoplatform.portal.webui.application.PortletState;
 import org.exoplatform.portal.webui.application.UIGadget;
 import org.exoplatform.portal.webui.application.UIPortlet;
 import org.exoplatform.portal.webui.container.UIContainer;
+import org.exoplatform.portal.webui.container.UITabContainer;
 import org.exoplatform.portal.webui.page.UIPage;
 import org.exoplatform.portal.webui.page.UIPageBody;
 import org.exoplatform.portal.webui.page.UISiteBody;
@@ -406,8 +407,16 @@ public class PortalDataMapper
       else if (model instanceof Container)
       {
          Container container = (Container)model;
-         UIContainer uiTempContainer =
-            uiContainer.createUIComponent(context, UIContainer.class, container.getFactoryId(), null);
+         UIContainer uiTempContainer ;
+         if(UITabContainer.TAB_CONTAINER.equals(container.getFactoryId()))
+         {
+            uiTempContainer = uiContainer.createUIComponent(context, UITabContainer.class, null, null);
+         }
+         else
+         {
+            uiTempContainer = uiContainer.createUIComponent(context, UIContainer.class, null, null);
+         }
+         
          toUIContainer(uiTempContainer, (Container)model, dashboard);
          uiComponent = uiTempContainer;
       }

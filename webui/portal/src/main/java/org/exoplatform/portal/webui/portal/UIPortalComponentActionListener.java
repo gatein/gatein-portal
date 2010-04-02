@@ -19,8 +19,6 @@
 
 package org.exoplatform.portal.webui.portal;
 
-import java.util.List;
-
 import org.exoplatform.application.registry.Application;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.UserACL;
@@ -34,6 +32,7 @@ import org.exoplatform.portal.webui.application.PortletState;
 import org.exoplatform.portal.webui.application.UIApplicationList;
 import org.exoplatform.portal.webui.application.UIPortlet;
 import org.exoplatform.portal.webui.container.UIContainerList;
+import org.exoplatform.portal.webui.container.UITabContainer;
 import org.exoplatform.portal.webui.login.UILogin;
 import org.exoplatform.portal.webui.login.UIResetPassword;
 import org.exoplatform.portal.webui.page.UIPage;
@@ -58,10 +57,13 @@ import org.exoplatform.webui.core.UITabPane;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
+import java.util.List;
+
 /** Author : Nhu Dinh Thuan nhudinhthuan@yahoo.com Jun 14, 2006 */
 public class UIPortalComponentActionListener
 {
-
+   private final static String UI_PORTLET_PREFIX = "UIPortlet-";
+   
    static public class ViewChildActionListener extends EventListener<UIContainer>
    {
       public void execute(Event<UIContainer> event) throws Exception
@@ -88,29 +90,22 @@ public class UIPortalComponentActionListener
 
    static public class DeleteComponentActionListener extends EventListener<UIComponent>
    {
-      private final static String UI_CONTAINER_PREFIX = "UIContainer-";
-
-      private final static String UI_PORTLET_PREFIX = "UIPortlet-";
-
       public void execute(Event<UIComponent> event) throws Exception
       {
-         String id = event.getRequestContext().getRequestParameter(UIComponent.OBJECTID);
-         UIComponent uiComponent = event.getSource();
-         UIPortalComponent uiParent = (UIPortalComponent)uiComponent.getParent();
-         UIComponent uiRemoveComponent = uiParent.findComponentById(id);
+         UIComponent uiComponentTobeRemoved = event.getSource();
+         String id = uiComponentTobeRemoved.getId();
          UIPortalApplication uiApp = Util.getUIPortalApplication();
-         if (uiRemoveComponent.findFirstComponentOfType(UIPageBody.class) != null)
+         if (uiComponentTobeRemoved.findFirstComponentOfType(UIPageBody.class) != null)
          {
             uiApp.addMessage(new ApplicationMessage("UIPortalApplication.msg.deletePageBody", new Object[]{},
                ApplicationMessage.WARNING));
             return;
          }
 
-         uiParent.removeChildById(id);
          UIPortalComposer portalComposer = uiApp.findFirstComponentOfType(UIPortalComposer.class);
          portalComposer.setEditted(true);
 
-         UIPage uiPage = uiParent.getAncestorOfType(UIPage.class);
+         UIPage uiPage = uiComponentTobeRemoved.getAncestorOfType(UIPage.class);
          if (uiPage != null && uiPage.getMaximizedUIPortlet() != null)
          {
             if (id.equals(uiPage.getMaximizedUIPortlet().getId()))
@@ -140,128 +135,66 @@ public class UIPortalComponentActionListener
                }
             }
          }
-         Util.showComponentLayoutMode(uiRemoveComponent.getClass());
+         Util.showComponentLayoutMode(uiComponentTobeRemoved.getClass());
 
          PortalRequestContext pcontext = (PortalRequestContext)event.getRequestContext();
 
-         // Case1: current component is a portlet
-         if (uiComponent instanceof UIPortlet)
+         org.exoplatform.portal.webui.container.UIContainer uiParent = uiComponentTobeRemoved.getParent();
+         if (UITabContainer.TAB_CONTAINER.equals(uiParent.getFactoryId()))
          {
-            removeComponent(id, UI_PORTLET_PREFIX, pcontext);
-            return;
-         }
-
-         // Case 2: current component is a container
-         if (uiComponent instanceof org.exoplatform.portal.webui.container.UIContainer)
-         {
-            org.exoplatform.portal.webui.container.UIContainer topAncestor =
-               getTopBlockContainer((org.exoplatform.portal.webui.container.UIContainer)uiParent);
-
-            /**
-             * topAncestor is null if the uiParent is either UIPortal or UIPage,
-             * that happens when our container is a simple container
+            /* 
+             * Check if it is removing the last tab then we will remove the TabContainer as well
+             * 
+             * Indeed, a TabContainer is nested into a normal container so
+             * we should remove the its parent instead of itself when we delete the last tab
              */
-            if (topAncestor == null)
+            if (uiParent.getChildren().size() == 1)
             {
-               removeComponent(id, UI_CONTAINER_PREFIX, pcontext);
-               return;
+               uiComponentTobeRemoved = uiParent.getParent();
             }
-            /** Case of nested container like tab container, mixed container */
             else
             {
-               String topAncestorId = topAncestor.getId();
-
-               /** If the topAncestor has no child, then it is removed */
-               if (topAncestor.getChildren().size() == 0)
-               {
-                  /** Update server-side */
-                  UIContainer parentOfTopAncestor = topAncestor.getParent();
-                  parentOfTopAncestor.removeChildById(topAncestorId);
-
-                  /** Update client side */
-                  if (topAncestorId.startsWith(UI_CONTAINER_PREFIX))
-                  {
-                     topAncestorId = topAncestorId.substring(UI_CONTAINER_PREFIX.length());
-                     topAncestor.setId(topAncestorId);
-                  }
-                  removeComponent(topAncestorId, UI_CONTAINER_PREFIX, pcontext);
-                  return;
-               }
-
-               /**
-                * If the uiParent is not the topAncestor and having no child,
-                * then it is removed
-                */
-               if (uiParent.getChildren().size() == 0)
-               {
-                  /** Update server-side */
-                  UIContainer itsParent = uiParent.getParent();
-                  itsParent.removeChildById(uiParent.getId());
-               }
-
-               /**
-                * Update the topAncestor by Ajax
-                */
-               if (!topAncestorId.startsWith(UI_CONTAINER_PREFIX))
-               {
-                  topAncestor.setId(UI_CONTAINER_PREFIX + topAncestorId);
-               }
-               pcontext.addUIComponentToUpdateByAjax(topAncestor);
+               removeUIComponent(uiComponentTobeRemoved, pcontext, true);
                return;
             }
          }
-
-      }
-
-      /** Add Javascript script to remove component */
-      private void removeComponent(String componentId, String componentType, PortalRequestContext pcontext)
-      {
-         String scriptRemovingComponent = scriptRemovingComponent(componentId, componentType);
-         JavascriptManager jsManager = pcontext.getJavascriptManager();
-         jsManager.addJavascript(scriptRemovingComponent);
-         jsManager.addJavascript("eXo.portal.UIPortal.changeComposerSaveButton();");
-      }
-
-      private String scriptRemovingComponent(String componentId, String prefix)
-      {
-         StringBuffer buffer = new StringBuffer();
-         buffer.append("eXo.portal.UIPortal.removeComponent('");
-         buffer.append(prefix);
-         buffer.append(componentId);
-         buffer.append("');");
-         return buffer.toString();
-      }
-
-      /**
-       * Returns the top ancestor( of type
-       * org.exoplatform.portal.webui.container.UIContainer but not of type
-       * UIPortal or UIPage) of a given container
-       */
-      private static org.exoplatform.portal.webui.container.UIContainer getTopBlockContainer(
-         org.exoplatform.portal.webui.container.UIContainer container)
-      {
-         if (container instanceof UIPortal || container instanceof UIPage)
+         else if (org.exoplatform.portal.webui.container.UIContainer.TABLE_COLUMN_CONTAINER.equals(uiParent.getFactoryId()))
          {
-            return null;
-         }
-         org.exoplatform.portal.webui.container.UIContainer topAncestor = container;
-         org.exoplatform.portal.webui.container.UIContainer intermediateCont;
-         try
-         {
-            intermediateCont = topAncestor.getParent();
-            while (intermediateCont != null && !(intermediateCont instanceof UIPortal)
-               && !(intermediateCont instanceof UIPage))
+            if (uiParent.getChildren().size() == 1)
             {
-               topAncestor = intermediateCont;
-               intermediateCont = topAncestor.getParent();
+               uiComponentTobeRemoved = uiParent;
             }
          }
-         catch (ClassCastException ex)
-         {
-
-         }
-         return topAncestor;
+         
+         removeUIComponent(uiComponentTobeRemoved, pcontext, false);
       }
+
+   }
+   
+   /**
+    * Remove an UIComponent from server side and 
+    * adding removing behaviors in javascript to clients if necessary
+    */
+   private static void removeUIComponent(UIComponent uiComponent, PortalRequestContext pcontext, boolean isUpdate)
+   {
+      UIContainer uiParent = uiComponent.getParent();
+      uiParent.getChildren().remove(uiComponent);
+      
+      JavascriptManager jsManager = pcontext.getJavascriptManager();
+      if(isUpdate) {
+         pcontext.addUIComponentToUpdateByAjax(uiParent);
+      } else {
+         StringBuffer buffer = new StringBuffer();
+         buffer.append("eXo.portal.UIPortal.removeComponent('");
+         if (uiComponent instanceof UIPortlet)
+         {
+            buffer.append(UI_PORTLET_PREFIX);
+         }
+         buffer.append(uiComponent.getId());
+         buffer.append("');");
+         jsManager.addJavascript(buffer.toString());
+      }
+      jsManager.addJavascript("eXo.portal.UIPortal.changeComposerSaveButton();");
    }
 
    static public class MoveChildActionListener extends EventListener<UIContainer>
@@ -281,7 +214,7 @@ public class UIPortalComponentActionListener
          }
 
          boolean newComponent = false;
-         String paramNewComponent = pcontext.getRequestParameter("newComponent");
+         String paramNewComponent = pcontext.getRequestParameter("isAddingNewly");
 
          if (paramNewComponent != null)
             newComponent = Boolean.valueOf(paramNewComponent).booleanValue();
@@ -401,7 +334,7 @@ public class UIPortalComponentActionListener
             return;
          }
 
-         UIContainer uiParent = uiSource.getParent();
+         org.exoplatform.portal.webui.container.UIContainer uiParent = uiSource.getParent();
          if (uiParent == uiTarget)
          {
             int currentIdx = uiTarget.getChildren().indexOf(uiSource);
@@ -420,9 +353,31 @@ public class UIPortalComponentActionListener
             uiTarget.getChildren().add(position, uiSource);
             return;
          }
-         uiParent.getChildren().remove(uiSource);
+         
          uiTarget.getChildren().add(position, uiSource);
          uiSource.setParent(uiTarget);
+
+         if (UITabContainer.TAB_CONTAINER.equals(uiParent.getFactoryId()))
+         {
+            if (uiParent.getChildren().size() == 1)
+            {
+               removeUIComponent(uiParent.getParent(), pcontext, false);
+            }
+            else
+            {
+               uiParent.getChildren().remove(uiSource);
+               pcontext.addUIComponentToUpdateByAjax(uiParent);
+            }
+         }
+         else if (org.exoplatform.portal.webui.container.UIContainer.TABLE_COLUMN_CONTAINER.equals(uiParent
+            .getFactoryId()) && uiParent.getChildren().size() == 1)
+         {
+            removeUIComponent(uiParent, pcontext, false);
+         }
+         else
+         {
+            uiParent.getChildren().remove(uiSource);
+         }
       }
    }
 
@@ -454,12 +409,12 @@ public class UIPortalComponentActionListener
          if (token == null)
          {
             WebuiRequestContext requestContext = event.getRequestContext();
-            requestContext.getUIApplication().addMessage(
-                     new ApplicationMessage("UIForgetPassword.msg.expration", null));
+            requestContext.getUIApplication()
+               .addMessage(new ApplicationMessage("UIForgetPassword.msg.expration", null));
             requestContext.addUIComponentToUpdateByAjax(uiPortal.getParent());
             return;
          }
-         
+
          UIPortalApplication uiApp = uiPortal.getAncestorOfType(UIPortalApplication.class);
          UIMaskWorkspace uiMaskWS = uiApp.getChildById(UIPortalApplication.UI_MASK_WS_ID);
 

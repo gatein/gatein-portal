@@ -23,7 +23,6 @@ import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIMaskWorkspace;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
-import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
@@ -40,29 +39,14 @@ public class UIContainerActionListener
       {
 
          UIContainer uiContainer = event.getSource();
-         String id = event.getRequestContext().getRequestParameter(UIComponent.OBJECTID);
-
          UIPortal uiPortal = Util.getUIPortal();
          UIPortalApplication uiApp = uiPortal.getAncestorOfType(UIPortalApplication.class);
          UIMaskWorkspace uiMaskWS = uiApp.getChildById(UIPortalApplication.UI_MASK_WS_ID);
          UIContainerForm containerForm = uiMaskWS.createUIComponent(UIContainerForm.class, null, null);
-         if (uiContainer.getId().equals(id))
-         {
-            containerForm.setValues(uiContainer);
-         }
-         else
-         {
-            if (uiContainer.getChildById(id) != null)
-            {
-               containerForm.setValues((UIContainer)uiContainer.getChildById(id));
-            }
-            else
-               return;
-         }
+         containerForm.setValues(uiContainer);
          uiMaskWS.setUIComponent(containerForm);
          uiMaskWS.setShow(true);
          event.getRequestContext().addUIComponentToUpdateByAjax(uiMaskWS);
-         //      Util.updateUIApplication(event);
       }
    }
 }

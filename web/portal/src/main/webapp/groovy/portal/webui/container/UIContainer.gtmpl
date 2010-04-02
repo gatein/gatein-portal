@@ -26,7 +26,7 @@
 %>
 
 <div class="UIContainer <%=uiPortalApp.isEditing()?"EdittingContainer":""%> <%=hasPermission?"": "ProtectedContainer"%>" 
-				id="UIContainer-${uicomponent.id}" ${cssStyle} 
+				id="${uicomponent.id}" ${cssStyle} 
 				onmouseover="eXo.portal.UIPortal.blockOnMouseOver(event, this, true);" 
 				onmouseout="eXo.portal.UIPortal.blockOnMouseOver(event, this, false);">
 	<div class="NormalContainerBlock">
@@ -41,13 +41,13 @@
 			<%} else {%>
 				<div class="VIEW-CONTAINER VIEW-BLOCK">
 			<%} %> 
-					<div id="$uicomponent.id">
-						<%if(hasPermission) {%>
+					<%if(hasPermission) {%>
 						<div class="UIRowContainer">
+							<div>
 								<%uicomponent.renderChildren();%>
+							</div>
 						</div>
 						<%} else out.print("<div class='ProtectedContent'>"+_ctx.appRes("UIPortlet.label.protectedContent")+"</div>");%>
-					</div>
 				</div>
 				
 			<%if(portalMode != UIPortalApplication.NORMAL_MODE){%>
@@ -72,8 +72,8 @@
 														%>
 														<div class="ContainerIcon"><%=hasPermission ? strTitle : _ctx.appRes("UIPortlet.label.protectedContent")%></div>
 														<%if(hasPermission) {%>
-															<a href="<%=uicomponent.event("DeleteComponent","$uicomponent.id")%>" class="DeleteContainerIcon" title="<%=_ctx.appRes("UIContainer.tooltip.closeContainer")%>"><span></span></a>
-															<a href="<%=uicomponent.event("EditContainer","$uicomponent.id")%>;eXo.portal.UIPortal.changeComposerSaveButton()" class="EditContainerIcon" title="<%=_ctx.appRes("UIContainer.tooltip.editContainer")%>"><span></span></a>
+															<a href="<%=uicomponent.event("DeleteComponent")%>" class="DeleteContainerIcon" title="<%=_ctx.appRes("UIContainer.tooltip.closeContainer")%>"><span></span></a>
+															<a href="<%=uicomponent.event("EditContainer")%>;eXo.portal.UIPortal.changeComposerSaveButton()" class="EditContainerIcon" title="<%=_ctx.appRes("UIContainer.tooltip.editContainer")%>"><span></span></a>
 														<%}%>
 														<div class="ClearBoth"><span></span></div>
 													</div>

@@ -36,7 +36,7 @@
 	String id = uicomponent.getId();
 %>
 <% if(children != null && children.size() > 0) { %>
-<div class="UITabContainer">
+<div class="UITabContainer" id="$id">
 	<div class="UIHorizontalTabs">
 		<div class="LeftHorizontalTabs">
 			<div class="RightHorizontalTabs">

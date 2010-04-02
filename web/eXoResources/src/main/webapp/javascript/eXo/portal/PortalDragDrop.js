@@ -52,17 +52,17 @@ PortalDragDrop.prototype.init = function(e) {
     var properties = ["top", eXo.core.I18n.isLT() ? "left" : "right", "zIndex", "opacity", "filter", "position"] ;
     this.origDragObjectStyle.copyProperties(properties, dragObject.style) ;
     
-    var isComponent = !!DOMUtil.findFirstDescendantByClass(dragObject, "div", "UIComponentBlock");
+    var isAddingNewly = !DOMUtil.findFirstDescendantByClass(dragObject, "div", "UIComponentBlock");
    	
    	var uiWorkingWS = document.getElementById("UIWorkingWorkspace");
-		PortalDragDrop.positionRootObj = isComponent ? uiWorkingWS : 
+		PortalDragDrop.positionRootObj = !isAddingNewly ? uiWorkingWS : 
 					DOMUtil.findFirstDescendantByClass(uiWorkingWS, "div", "UIPortalComposer");
 		
 		var originalDragObjectTop = Browser.findPosYInContainer(dragObject, PortalDragDrop.positionRootObj);
 		var originalDragObjectLeft = Browser.findPosXInContainer(dragObject, PortalDragDrop.positionRootObj);
 		PortalDragDrop.deltaYDragObjectAndMouse = Browser.findMouseRelativeY(dragObject, e);
 		PortalDragDrop.deltaXDragObjectAndMouse = Browser.findMouseRelativeX(dragObject, e);
-    if(!isComponent) {
+    if(isAddingNewly) {
       var contentContainer = DOMUtil.findAncestorByClass(dragObject, "PopupContent");
       originalDragObjectTop -= contentContainer.scrollTop;
       PortalDragDrop.deltaYDragObjectAndMouse += contentContainer.scrollTop;
@@ -72,13 +72,15 @@ PortalDragDrop.prototype.init = function(e) {
     PortalDragDrop.backupDragObjectWidth = dragObject.offsetWidth ;
         
     /*Case: dragObject out of UIPortal*/
-    if(!isComponent) {
+    
+    if(isAddingNewly) {
       var cloneObject = dragObject.cloneNode(true) ;
       dragObject.parentNode.insertBefore(cloneObject, dragObject) ;
       cloneObject.style.opacity = 0.5 ;
       cloneObject.style.filter = "alpha(opacity=50)" ;
       cloneObject.style.width = PortalDragDrop.backupDragObjectWidth + "px" ;
       dndEvent.dragObject = cloneObject ;
+      dndEvent.dragObject.isAddingNewly = isAddingNewly;
     } else {
     	previewBlock = PortalDragDrop.createPreview();
     	dragObject.parentNode.insertBefore(previewBlock, dragObject);
@@ -90,8 +92,7 @@ PortalDragDrop.prototype.init = function(e) {
 	    	if(newLayer) newLayer.style.width = "300px";
 	    }
     }
-    dragObject.isComponent = isComponent;
-    
+    dragObject.isAddingNewly = isAddingNewly;
     dragObject = dndEvent.dragObject;
     dragObject.style.position = "absolute" ;
     if(eXo.core.I18n.isLT()) dragObject.style.left = originalDragObjectLeft + "px" ;
@@ -110,11 +111,11 @@ PortalDragDrop.prototype.init = function(e) {
     if(dndEvent.foundTargetObject.className == "UIPage") {
 			uiComponentLayout = DOMUtil.findFirstDescendantByClass(dndEvent.foundTargetObject, "div", "VIEW-PAGE");
     } else if(dndEvent.foundTargetObject.className == "UIPortal") {
-      if(eXo.portal.portalMode%2) uiComponentLayout = DOMUtil.findFirstDescendantByClass(dndEvent.foundTargetObject, "div", "LAYOUT-PORTAL") ;
+      if(eXo.portal.portalMode % 2) uiComponentLayout = DOMUtil.findFirstDescendantByClass(dndEvent.foundTargetObject, "div", "LAYOUT-PORTAL") ;
       else uiComponentLayout = DOMUtil.findFirstDescendantByClass(dndEvent.foundTargetObject, "div", "VIEW-PORTAL");
     } else {
       var foundUIComponent = new eXo.portal.UIPortalComponent(dndEvent.foundTargetObject) ;
-      if(eXo.portal.portalMode%2) uiComponentLayout = foundUIComponent.getLayoutBlock() ;
+      if(eXo.portal.portalMode % 2) uiComponentLayout = foundUIComponent.getLayoutBlock() ;
       else uiComponentLayout = foundUIComponent.getViewBlock();
       uiComponentLayout.style.height = "auto";
     }
@@ -178,10 +179,9 @@ PortalDragDrop.prototype.init = function(e) {
       dndEvent.foundTargetObject.foundIndex = insertPosition ;
       
       /* Insert preview block */
-      var tdBlock = document.createElement("td");
-      tdBlock.id = tdBlock.className = "PreviewTDBlock";
-      tdBlock.appendChild(previewBlock);
-      previewTD = tdBlock;
+      previewTD = document.createElement("td");
+      previewTD.id = previewTD.className = "PreviewTDBlock";
+      previewTD.appendChild(previewBlock);
       if(insertPosition >= 0) {
         trContainer.insertBefore(previewTD, listComponent[insertPosition]) ;
       } else {
@@ -199,12 +199,12 @@ PortalDragDrop.prototype.init = function(e) {
 			if(dndEvent.dragObject.parentNode.nodeName.toLowerCase() == "td") {
 				dndEvent.dragObject.parentNode.style.width = "auto";
 			}
-      if(!dndEvent.dragObject.isComponent) {
+      if(dndEvent.dragObject.isAddingNewly) {
 				dndEvent.dragObject.parentNode.removeChild(dndEvent.dragObject) ;
 			}
     }
     
-    if(dndEvent.dragObject.isComponent) {
+    if(!dndEvent.dragObject.isAddingNewly) {
 			var componentBlock = eXo.core.DOMUtil.findFirstDescendantByClass(dndEvent.dragObject, "div", "UIComponentBlock") ;
 	  	var editBlock = eXo.core.DOMUtil.findFirstChildByClass(componentBlock, "div", "EDITION-BLOCK");
 	    if(editBlock) editBlock.style.display = "none";
@@ -229,12 +229,15 @@ PortalDragDrop.prototype.init = function(e) {
   var clickObject = this;
   var componentBlock = DOMUtil.findAncestorByClass(clickObject, "UIComponentBlock") ;
 
+	//Check if it is dragging the object existing in the current layout or from the popup composer to add newly
   if(componentBlock != null) {
     var dragBlock = eXo.portal.UIPortal.findUIComponentOf(componentBlock) ;
     DragDrop.init(eXo.portal.PortalDragDrop.findDropableTargets(dragBlock), clickObject, dragBlock, e) ;
   } else {
   	var dragBlock = DOMUtil.findAncestorByClass(clickObject, "DragObjectPortlet") ;
+  	//TODO: Seems the dragBlock is always null 
 		if(dragBlock) {
+			eXo.debug("The dragBlock is not null");
   		DragDrop.init(eXo.portal.PortalDragDrop.findDropableTargets(dragBlock), clickObject, dragBlock, e) ;
 		} else {
     	DragDrop.init(eXo.portal.PortalDragDrop.findDropableTargets(dragBlock), clickObject, clickObject, e) ;
@@ -242,20 +245,25 @@ PortalDragDrop.prototype.init = function(e) {
   }
 };
 
+/**
+ * Perform following works after dropping :
+ * 
+ * 1. Remove the dragging object if any
+ * 2. Send an request to server side to update the changes
+ */
 PortalDragDrop.prototype.doDropCallback = function(dndEvent) {
 	var srcElement = dndEvent.dragObject ;
   var targetElement = dndEvent.foundTargetObject;
   
   if(!targetElement) {
-  	if(!dndEvent.dragObject.isComponent) {
+  	if(dndEvent.dragObject.isAddingNewly) {
 	    dndEvent.dragObject.parentNode.removeChild(dndEvent.dragObject) ;
   	}
   	dndEvent.dragObject.style.width = "auto";
   	return;
   }
   
-  var newComponent = false;
-  if(srcElement.isComponent && (targetElement.foundIndex != null)) {
+  if(!srcElement.isAddingNewly && (targetElement.foundIndex != null)) {
     if(eXo.portal.PortalDragDrop.layoutTypeElementNode != null) {
       eXo.portal.PortalDragDrop.divRowContainerAddChild(srcElement, targetElement, targetElement.foundIndex) ;
     } else {
@@ -263,17 +271,16 @@ PortalDragDrop.prototype.doDropCallback = function(dndEvent) {
       eXo.portal.PortalDragDrop.tableColumnContainerAddChild(srcElement, targetElement, targetElement.foundIndex) ;
     }
   }
-  
-  if(!dndEvent.dragObject.isComponent) {
-    dndEvent.dragObject.parentNode.removeChild(dndEvent.dragObject) ;
-    newComponent = true;
+
+  if(srcElement.isAddingNewly) {
+    eXo.core.DOMUtil.removeElement(srcElement) ;
   }
   
   var params = [
-    {name: "srcID", value: (srcElement.id.replace(/^UIPortlet-/, "")).replace(/^UIContainer-/,"")},
+    {name: "srcID", value: (srcElement.id.replace(/^UIPortlet-/, ""))},
     {name: "targetID", value: targetElement.id.replace(/^.*-/, "")},
     {name: "insertPosition", value: targetElement.foundIndex},
-    {name: "newComponent", value: newComponent}
+    {name: "isAddingNewly", value: srcElement.isAddingNewly}
   ] ;
   
   try {
@@ -285,23 +292,28 @@ PortalDragDrop.prototype.doDropCallback = function(dndEvent) {
   ajaxGet(eXo.env.server.createPortalURL("UIPortal", "MoveChild", true, params)) ;
 };
 
-/* Find components in dropable target */
+/**
+ * Return an array of droppable target objects
+ * 
+ * @param the dragging object
+ */
 PortalDragDrop.prototype.findDropableTargets = function(dragBlock) {
 	var DOMUtil = eXo.core.DOMUtil;
   var dropableTargets = new Array() ;
   var uiWorkingWorkspace = document.getElementById("UIWorkingWorkspace") ;
   
-  var uiPortal = DOMUtil.findFirstDescendantByClass(uiWorkingWorkspace, "div", "UIPortal") ;
   var pagebody = document.getElementById("UIPageBody");
-  var uiContainers = DOMUtil.findDescendantsByClass(uiWorkingWorkspace, "div", "UIContainer") ;
   if(eXo.portal.portalMode && pagebody) {
+	  var uiPortal = DOMUtil.findFirstDescendantByClass(uiWorkingWorkspace, "div", "UIPortal") ;
     dropableTargets.push(uiPortal) ;
   } else {
   	var uiPage = DOMUtil.findFirstDescendantByClass(uiWorkingWorkspace, "div", "UIPage") ;
     if(uiPage) dropableTargets.push(uiPage) ;
   }
+  
+  var uiContainers = DOMUtil.findDescendantsByClass(uiWorkingWorkspace, "div", "UIContainer") ;
   for(var i = 0; i < uiContainers.length; i++) {
-  	if (DOMUtil.hasAncestor(uiContainers[i], dragBlock)) continue;
+  	if(DOMUtil.hasAncestor(uiContainers[i], dragBlock)) continue;
   	if(DOMUtil.hasClass(uiContainers[i], "ProtectedContainer")) continue;
     dropableTargets.push(uiContainers[i]) ;
   }
@@ -324,6 +336,12 @@ PortalDragDrop.prototype.scrollOnDrag = function(dndEvent) {
   }
 };
 
+/**
+ * Return a most suiable position among the <code>components</code> objects
+ * that the dragging object should be at
+ * 
+ * @param layout {string} the layout type which is "row" or "column"
+ */
 PortalDragDrop.prototype.findInsertPosition = function(components, dragObject, layout) {
   if(layout == "row") {
     for(var i = 0; i < components.length; i++) {
@@ -349,6 +367,9 @@ PortalDragDrop.prototype.findInsertPosition = function(components, dragObject, l
   }  
 };
 
+/**
+ * Create a div block which show the preview block
+ */
 PortalDragDrop.prototype.createPreview = function(layoutType) {
 	var previewBlock = document.createElement("div") ;
 	previewBlock.className = "DragAndDropPreview" ;
@@ -356,25 +377,38 @@ PortalDragDrop.prototype.createPreview = function(layoutType) {
 	return previewBlock;
 };
 
-PortalDragDrop.prototype.divRowContainerAddChild = function(insertBlock, targetElement, insertPosition) {
+/**
+ * Add the <code>srcElement</code> dragging object to a container.
+ * If the dragging object is a column then let remove it from the table column container
+ */
+PortalDragDrop.prototype.divRowContainerAddChild = function(srcElement, targetElement, insertPosition) {
   var listComponent = eXo.core.DragDrop.dndEvent.foundTargetObject.listComponentInTarget ;
   var uiRowContainer = eXo.core.DOMUtil.findFirstDescendantByClass(targetElement, "div", "UIRowContainer") ;
-  insertBlock.style.width = "auto" ;
+  srcElement.style.width = "auto" ;
   
+	var parentNode = srcElement.parentNode;
   if(insertPosition >= 0) {
-    uiRowContainer.insertBefore(insertBlock, listComponent[insertPosition]) ;
+    uiRowContainer.insertBefore(srcElement, listComponent[insertPosition]) ;
   } else {
-    uiRowContainer.appendChild(insertBlock) ;
+    uiRowContainer.appendChild(srcElement) ;
+  }
+	
+  if(parentNode.nodeName.toLowerCase() == "td") {
+  	eXo.core.DOMUtil.removeElement(parentNode) ;
   }
 };
 
-PortalDragDrop.prototype.tableColumnContainerAddChild = function(insertBlock, targetElement, insertPosition) {
+/**
+ * Add the <code>srcElement</code> to be a column of the <code>targetElement</code> table column container
+ * at the position <code>insertPosition</code>
+ */
+PortalDragDrop.prototype.tableColumnContainerAddChild = function(srcElement, targetElement, insertPosition) {
   var listComponent = eXo.core.DragDrop.dndEvent.foundTargetObject.listComponentInTarget ;
   var DOMUtil = eXo.core.DOMUtil ;
   var trContainer = DOMUtil.findFirstDescendantByClass(targetElement, "tr", "TRContainer") ;
   
   var tdInserted = document.createElement('td') ;
-  tdInserted.appendChild(insertBlock) ;
+  tdInserted.appendChild(srcElement) ;
   
   if(insertPosition >= 0) {
     trContainer.insertBefore(tdInserted, listComponent[insertPosition]) ;
@@ -382,7 +416,7 @@ PortalDragDrop.prototype.tableColumnContainerAddChild = function(insertBlock, ta
     trContainer.appendChild(tdInserted) ;
   }
 
-  insertBlock.style.width = "auto" ;
+  srcElement.style.width = "auto" ;
   
 	if(eXo.portal.PortalDragDrop.parentDragObject.nodeName.toLowerCase() == "td") {
     DOMUtil.removeElement(eXo.portal.PortalDragDrop.parentDragObject) ;
