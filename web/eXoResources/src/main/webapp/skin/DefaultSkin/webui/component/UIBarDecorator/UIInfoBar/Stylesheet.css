@@ -80,7 +80,6 @@
 	
 .UIInfoBar .BlueRoundedStyle .FixHeight {
 	height: 26px;
-	*width: 270px;
 	white-space: nowrap;
 }
 

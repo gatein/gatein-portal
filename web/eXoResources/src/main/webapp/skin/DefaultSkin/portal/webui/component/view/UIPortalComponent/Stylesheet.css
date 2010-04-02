@@ -51,8 +51,8 @@
 }
 
 .UIPortlet .EditPortletPropertiesIcon {
-	float: right; /* orientation=lt */
-	float: left; /* orientation=rt */
+	float: left; /* orientation=lt */
+	float: right; /* orientation=rt */
 	width: 20px; height: 20px;
 	background: url('background/Pen.gif') no-repeat top;
 	margin: 4px 0px 0px 5px; /* orientation=lt */
@@ -60,8 +60,8 @@
 }
 
 .UIPortlet .DeletePortletIcon {
-	float: right; /* orientation=lt */
-	float: left; /* orientation=rt */
+	float: left; /* orientation=lt */
+	float: right; /* orientation=rt */
 	width: 20px; height:20px; 
 	background: url('background/Close.gif') no-repeat bottom;
 	margin: 0px 0px 0px 2px; /* orientation=lt */
@@ -139,24 +139,6 @@
 	_height: 86px;
 }
 
-.UIContainer .EditPortletPropertiesIcon {
-	float: right; /* orientation=lt */
-	float: left; /* orientation=rt */
-	width: 20px; height: 20px;
-	background: url('background/Pen.png') no-repeat top;
-	margin: 2px 0px 0px 5px; /* orientation=lt */
-	margin: 2px 5px 0px 0px; /* orientation=rt */
-}
-
-.UIContainer .DeletePortletIcon {
-	float: right; /* orientation=lt */
-	float: left; /* orientation=rt */
-	width: 20px; height:20px; 
-	background: url('background/close.png') no-repeat bottom;
-	margin: 1px 0px 0px 2px; /* orientation=lt */
-	margin: 1px 2px 0px 0px; /* orientation=rt */
-}
-
 .UIContainer .NewLayer {
 	background: #93c0e2; 
 	filter: alpha(opacity=40);
@@ -200,8 +182,8 @@
 }
 
 .UIContainer .EditContainerIcon {
-	float: right; /* orientation=lt */
-	float: left; /* orientation=rt */
+	float: left; /* orientation=lt */
+	float: right; /* orientation=rt */
 	width: 22px; height: 16px;
 	background: url('background/Pen.gif') no-repeat top;
 	margin: 4px 2px 0px 0px; /* orientation=lt */
@@ -209,8 +191,8 @@
 }
 
 .UIContainer .DeleteContainerIcon {
-	float: right; /* orientation=lt */
-	float: left; /* orientation=rt */
+	float: left; /* orientation=lt */
+	float: right; /* orientation=rt */
 	width: 22px; height: 16px; 
 	background: url('background/Close.gif') no-repeat bottom;
 	margin: 4px 0px 0px 0px; /* orientation=lt */
