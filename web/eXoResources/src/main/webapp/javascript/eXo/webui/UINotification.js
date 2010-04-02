@@ -84,7 +84,6 @@ UINotification.prototype.slideTick = function(objectName){
   if (elapsed > this.slideAniLen)
     this.endSlide(objectName);
   else {
-	var before = "before:" + this.object[objectName].id + "-" + this.object[objectName].style.height + "-";
     var d =Math.round(elapsed / this.slideAniLen * this.endHeight[objectName]);
     if(this.dir[objectName] == "up")
             d = this.endHeight[objectName] - d;
@@ -161,16 +160,16 @@ UINotification.prototype.addMessage = function(messageContent, flag) {
 	var UIMessageContent = document.createElement('div');
 	this.totalCurrentMessage++;	
 	
-	this.flagNoti[currMessageBoxId] = flag;
-	if(!flag) {
+	this.flagNoti[currMessageBoxId] = !flag;
+	if(flag) {
 		this.importantNoti[this.numImptNoti] = currMessageBoxId;
 		this.numImptNoti++;
 	}
 	UIMessageContent.id = currMessageBoxId;
-	UIMessageContent.style.height = "75px";
+	UIMessageContent.style.height = "35px";
 	UIMessageContent.style.display = "none";
 	UIMessageContent.className = "Item";
-	UIMessageContent.innerHTML = "<div id='UIMessageContent'>" + messageContent + "</div>";	
+	UIMessageContent.innerHTML = "<div>" + messageContent + "</div>";	
 	var UINotification = document.getElementById("UINotification");
 	if (UINotification == null) {
 		document.body.appendChild(document.createElement('div')).id = "UINotification";

@@ -132,3 +132,11 @@ eXo.session.itvDestroy = function() {
 	window.clearTimeout(eXo.session.itvObj) ;
 	eXo.session.itvObj = null ;
 } ;
+
+eXo.debug = function(message) {
+	if(!eXo.developing) return;
+	if(eXo.webui.UINotification) {
+		message = "DEBUG: " + message;
+		eXo.webui.UINotification.addMessage(message);
+	}
+}

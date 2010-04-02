@@ -56,9 +56,12 @@
     <%if(org.exoplatform.commons.utils.PropertyManager.isDevelopping()) {
         for(path in scriptsPaths) { %>
           <script type="text/javascript" src="<%=path%>"></script>
-    <%  }
-      } else {
-    %>
+    	<%}%>
+          <script type="text/javascript">
+            eXo.developing = true ;
+          </script>
+			
+    <%} else {%>
         <script type="text/javascript" src="<%=docBase%>/javascript/merged.js"></script>
     <%}%>
     <script type="text/javascript">
