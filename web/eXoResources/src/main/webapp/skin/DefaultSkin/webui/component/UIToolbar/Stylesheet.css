@@ -75,6 +75,8 @@
 	font-weight: bold;
 	padding: 0px 3px 0px 3px;
 	cursor: pointer;
+	white-space: nowrap;
+	overflow: hidden;
 }
 
 .UIToolbar .LargeToolbar a:hover{
@@ -98,7 +100,7 @@
 	float: right; /* orientation=rt */
 	padding-top: 3px;
 	cursor: pointer;
-	width: 120px;
+	width: 130px;
 }
 
 .UIToolbar .LargeToolbar .GroupButton {
@@ -106,7 +108,7 @@
 	float: right; /* orientation=rt */
 	padding-top: 3px;
 	cursor: pointer;
-	width: 130px;
+	width: 140px;
 }
 
 .UIToolbar .LargeToolbar .MembershipButton {
@@ -114,7 +116,7 @@
 	float: right; /* orientation=rt */
 	padding-top: 3px;
 	cursor: pointer;
-	width: 170px;
+	width: 180px;
 }
 
 .UIToolbar .LargeToolbar .ButtonLabel {
