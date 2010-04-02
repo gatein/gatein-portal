@@ -111,11 +111,14 @@ public class JCRConsumerRegistry extends AbstractConsumerRegistry
       {
          throw new IllegalArgumentException("Couldn't find ProducerInfoMapping associated with key " + key);
       }
+      String oldId = pim.getId();
+      String newId = producerInfo.getId();
       pim.initFrom(producerInfo);
 
       persister.closeSession(session, true);
 
-      return null;
+      // if the consumer's id has changed, return the old one so that state can be updated
+      return (oldId.equals(newId)) ? null : oldId;
    }
 
    @Override
