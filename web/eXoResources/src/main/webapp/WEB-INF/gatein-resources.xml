@@ -297,10 +297,6 @@
 			<js-path>/javascript/eXo/portal/UIPortalNavigation.js</js-path>
 		</param>
 		<param>
-			<js-module>eXo.portal.UIPortalNavigation2</js-module>
-			<js-path>/javascript/eXo/portal/UIPortalNavigation2.js</js-path>
-		</param>
-		<param>
 			<js-module>eXo.portal.UIMaskWorkspace</js-module>
 			<js-path>/javascript/eXo/portal/UIMaskWorkspace.js</js-path>
 		</param>
