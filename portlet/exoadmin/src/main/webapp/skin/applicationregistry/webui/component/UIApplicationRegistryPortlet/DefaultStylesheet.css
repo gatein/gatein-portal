@@ -430,6 +430,8 @@
 	background: #b7b7b7 url(DefaultSkin/background/ControlIcon-rt.gif) no-repeat scroll right -196px; /* orientation=rt */
 	color: white;
 	font-weight: bold;
+	white-space: nowrap;
+	overflow: hidden;
 }
 
 .UIPortletManagement .ListCategory .ListItem {
