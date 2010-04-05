@@ -169,6 +169,10 @@
 	margin-left: 101px;
 }
 
+.UIGadgetContent .gadgets-gadget-user-prefs-dialog-action-bar input {
+	cursor: pointer;
+}
+
 .UIGadgetContent .devToolbar {
 	width: 56%;
 }

@@ -154,7 +154,7 @@
 	padding-left: 16px; /* orientation=rt */
 	background: url('DefaultSkin/background/NavDownArrow.gif') no-repeat right; /* orientation=lt */
 	background: url('DefaultSkin/background/NavDownArrow.gif') no-repeat left; /* orientation=rt */
-	cursor: pointer;
+	cursor: default;
 }
 
 /*###############-Selected Navigation Tab-################*/
@@ -208,7 +208,7 @@
 	border: solid #b7b7b7 1px; /*fix for IE*/
 	text-align: left; /* orientation=lt */
 	text-align: right; /* orientation=rt */
-   z-index: 1;
+  z-index: 1;
 }
 
 .UINavigationPortlet .MenuItemContainer .MenuItemDecorator {

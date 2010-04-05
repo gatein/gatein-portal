@@ -330,6 +330,7 @@
 	padding: 0 9px;
 	border: 1px solid #dbdbdb;
 	border-top: none;
+	cursor: move;
 }
 
 .UIDashboard .UIGadget .GadgetControl .GadgetDragHandleArea {

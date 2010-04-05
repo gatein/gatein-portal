@@ -268,6 +268,7 @@
 .UIApplicationRegistryPortlet .UIVerticalSlideTabs .UIVTabContent .ControlIcon {
 	float: right; /* orientation=lt */
 	float: left; /* orientation=rt */
+	cursor: pointer;
 }
 
 /**************************** AppWorkingArea *****************************/
@@ -311,6 +312,7 @@
 	float: right; /* orientation=lt */
 	float: left; /* orientation=rt */
 	margin: 0px 5px;
+	cursor: pointer;
 }
 
 .UIApplicationRegistryPortlet .ApplicationContainer {
