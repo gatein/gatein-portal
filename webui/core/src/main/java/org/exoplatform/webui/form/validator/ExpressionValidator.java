@@ -85,7 +85,7 @@ public class ExpressionValidator implements Validator
       {
          label = uiInput.getName();
       }
-      Object[] args = {label,};
+      Object[] args = {label};
       throw new MessageException(new ApplicationMessage(key_, args, ApplicationMessage.WARNING));
    }
 }

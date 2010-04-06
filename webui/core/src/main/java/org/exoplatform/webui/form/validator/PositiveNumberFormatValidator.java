@@ -69,7 +69,7 @@ public class PositiveNumberFormatValidator implements Validator
       }
       if (error == true && s.charAt(0) == '-')
       {
-         Object[] args = {label, uiInput.getBindingField()};
+         Object[] args = {label};
          throw new MessageException(new ApplicationMessage("PositiveNumberFormatValidator.msg.Invalid-number", args));
       }
    }

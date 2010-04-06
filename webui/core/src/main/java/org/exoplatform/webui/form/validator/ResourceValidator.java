@@ -68,7 +68,7 @@ public class ResourceValidator implements Validator
          {
             continue;
          }
-         Object[] args = {label, uiInput.getBindingField()};
+         Object[] args = {label};
          throw new MessageException(new ApplicationMessage("ResourceValidator.msg.Invalid-char", args,
             ApplicationMessage.WARNING));
       }

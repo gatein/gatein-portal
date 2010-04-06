@@ -61,7 +61,7 @@ public class NumberFormatValidator implements Validator
          {
             continue;
          }
-         Object[] args = {label, uiInput.getBindingField()};
+         Object[] args = {label};
          throw new MessageException(new ApplicationMessage("NumberFormatValidator.msg.Invalid-number", args));
       }
    }

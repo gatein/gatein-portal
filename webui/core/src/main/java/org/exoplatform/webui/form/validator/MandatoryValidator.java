@@ -61,7 +61,7 @@ public class MandatoryValidator implements Validator, Serializable
          label = uiInput.getName();
       }
       label = label.trim();
-      Object[] args = {label, uiInput.getBindingField()};
+      Object[] args = {label};
       throw new MessageException(new ApplicationMessage("EmptyFieldValidator.msg.empty-input", args,
          ApplicationMessage.WARNING));
    }

@@ -60,7 +60,7 @@ public class SpecialCharacterValidator implements Validator
          {
             continue;
          }
-         Object[] args = {label, uiInput.getBindingField()};
+         Object[] args = {label};
          throw new MessageException(new ApplicationMessage("SpecialCharacterValidator.msg.Invalid-char", args,
             ApplicationMessage.WARNING));
       }

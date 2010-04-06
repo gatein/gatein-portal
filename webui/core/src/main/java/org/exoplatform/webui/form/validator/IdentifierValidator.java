@@ -68,7 +68,7 @@ public class IdentifierValidator implements Validator, Serializable
          {
             continue;
          }
-         Object[] args = {label, uiInput.getBindingField()};
+         Object[] args = {label};
          throw new MessageException(new ApplicationMessage("IdentifierValidator.msg.Invalid-char", args,
             ApplicationMessage.WARNING));
       }

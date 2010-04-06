@@ -59,7 +59,7 @@ public class EmailAddressValidator implements Validator
       String s = (String)uiInput.getValue();
       if (s.matches(EMAIL_REGEX))
          return;
-      Object[] args = {label, uiInput.getBindingField()};
+      Object[] args = {label};
       throw new MessageException(new ApplicationMessage("EmailAddressValidator.msg.Invalid-input", args,
          ApplicationMessage.WARNING));
    }

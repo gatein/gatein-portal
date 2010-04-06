@@ -52,7 +52,7 @@ public class NullFieldValidator implements Validator
       {
          label = uiInput.getName();
       }
-      Object[] args = {label, uiInput.getBindingField()};
+      Object[] args = {label};
       throw new MessageException(new ApplicationMessage("EmptyFieldValidator.msg.empty-input", args));
    }
 }

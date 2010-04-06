@@ -42,7 +42,10 @@ import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.exception.MessageException;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormInput;
+import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
+import org.exoplatform.webui.form.validator.ExpressionValidator;
+import org.exoplatform.webui.form.validator.IdentifierValidator;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
 import org.exoplatform.webui.form.validator.Validator;
 
@@ -61,19 +64,24 @@ public class UIGadgetEditor extends UIForm
 {
 
    final static public String FIELD_SOURCE = "source";
+   final static public String FIELD_NAME = "name";
 
    private Source source_;
 
    private String fullName_;
 
    private String dirPath;
+   
+   private String gadgetName_;
 
    public UIGadgetEditor(InitParams initParams) throws Exception
    {
       Param param = initParams.getParam("SampleGadget");
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
       String sample = (String)param.getMapGroovyObject(context);
-      addUIFormInput(new UIFormTextAreaInput(FIELD_SOURCE, null, sample).addValidator(MandatoryValidator.class)
+      addUIFormInput(new UIFormStringInput(FIELD_NAME, null, null).addValidator(MandatoryValidator.class).addValidator(ExpressionValidator.class, "^[\\p{L}][\\p{ASCII}]+$",
+      "UIGadgetEditor.msg.Invalid"));
+      addUIFormInput(new UIFormTextAreaInput(FIELD_SOURCE, FIELD_SOURCE, sample).addValidator(MandatoryValidator.class)
          .addValidator(GadgetSpecValidator.class));
    }
 
@@ -89,6 +97,11 @@ public class UIGadgetEditor extends UIForm
       UIFormTextAreaInput uiInputSource = getUIFormTextAreaInput(FIELD_SOURCE);
       uiInputSource.setValue(source_.getTextContent());
    }
+   
+   public void setGadgetName(String name) {
+	   UIFormStringInput uiInputName = getUIStringInput(FIELD_NAME);
+	   uiInputName.setValue(name);
+   }
 
    public String getSourceFullName()
    {
@@ -103,8 +116,13 @@ public class UIGadgetEditor extends UIForm
    public void processRender(WebuiRequestContext context) throws Exception
    {
       UIFormTextAreaInput uiInputSource = getUIFormTextAreaInput(FIELD_SOURCE);
+      UIFormStringInput uiInputName = getUIStringInput(FIELD_NAME);
       String encoded = StringEscapeUtils.escapeHtml(StringEscapeUtils.unescapeHtml(uiInputSource.getValue()));
       uiInputSource.setValue(encoded);
+      if(this.isEdit()) {
+    	  uiInputName.setEditable(false);
+      }
+      
       super.processRender(context);
    }
 
@@ -137,56 +155,57 @@ public class UIGadgetEditor extends UIForm
       {
          UIGadgetEditor uiForm = event.getSource();
          UIGadgetManagement uiManagement = uiForm.getParent();
-         String name, fileName, dirPath;
+         String gadgetName;
          String text = uiForm.getUIFormTextAreaInput(UIGadgetEditor.FIELD_SOURCE).getValue();
          GadgetRegistryService service = uiForm.getApplicationComponent(GadgetRegistryService.class);
          SourceStorage sourceStorage = uiForm.getApplicationComponent(SourceStorage.class);
-         boolean isEdit = uiForm.getSource() != null;
+         boolean isEdit = uiForm.isEdit();
          if (isEdit)
          {
-            fileName = uiForm.getSourceFullName();
-            name = uiForm.getSourceName();
-            dirPath = uiForm.getDirPath();
+        	 gadgetName = uiForm.getSourceFullName();
          }
          else
          {
-            name = "gadget" + Calendar.getInstance().hashCode();
-            fileName = name + ".xml";
-            dirPath = name;
+        	 gadgetName = uiForm.getUIStringInput(UIGadgetEditor.FIELD_NAME).getValue();
          }
 
          //
-         Gadget gadget = service.getGadget(name);
-         if (isEdit)
-         {
-            if (gadget == null)
-            {
-               UIApplication uiApp = event.getRequestContext().getUIApplication();
-               uiApp.addMessage(new ApplicationMessage("gadget.msg.changeNotExist", null));
-               uiManagement.reload();
-               return;
-            }
+         Gadget gadget = service.getGadget(gadgetName);
+         
+         if(isEdit) {
+        	 if (gadget == null)
+             {
+                UIApplication uiApp = event.getRequestContext().getUIApplication();
+                uiApp.addMessage(new ApplicationMessage("gadget.msg.changeNotExist", null, ApplicationMessage.WARNING));
+                uiManagement.reload();
+                return;
+             }
          }
+         else {
+        	// If gadget is null we need to create it first
+             if (gadget == null)
+             {
+                gadget = new Gadget();
+                gadget.setName(gadgetName);
 
-         // If gadget is null we need to create it first
-         if (gadget == null)
-         {
-            gadget = new Gadget();
-            gadget.setName("CHANGME");
+                // Those data will be taken from the gadget XML anyway
+                gadget.setDescription("");
+                gadget.setThumbnail("");
+                gadget.setLocal(true);
+                gadget.setTitle("");
+                gadget.setReferenceUrl("");
 
-            // Those data will be taken from the gadget XML anyway
-            gadget.setDescription("");
-            gadget.setThumbnail("");
-            gadget.setLocal(true);
-            gadget.setTitle("");
-            gadget.setReferenceUrl("");
-
-            // Save gadget with empty data first
-            service.saveGadget(gadget);
+                // Save gadget with empty data first
+                service.saveGadget(gadget);
+             }
+             else {
+        		 UIApplication uiApp = event.getRequestContext().getUIApplication();
+                 uiApp.addMessage(new ApplicationMessage("UIGadgetEditor.gadget.msg.gadgetIsExist", null, ApplicationMessage.WARNING));
+                 return;
+        	 }
          }
-
          //
-         Source source = new Source(fileName, "application/xml");
+         Source source = new Source(gadgetName, "application/xml");
          source.setTextContent(text);
          source.setLastModified(Calendar.getInstance());
 
@@ -201,6 +220,10 @@ public class UIGadgetEditor extends UIForm
          event.getRequestContext().addUIComponentToUpdateByAjax(uiManagement);
       }
 
+   }
+   
+   private boolean isEdit() {
+	   return (this.getSource() != null);
    }
 
    public static class CancelActionListener extends EventListener<UIGadgetEditor>

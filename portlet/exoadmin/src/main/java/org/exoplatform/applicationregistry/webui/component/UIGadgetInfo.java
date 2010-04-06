@@ -160,6 +160,7 @@ public class UIGadgetInfo extends UIContainer
          // get gadget's source: path = dir path + file name
          Source source = sourceStorage.getSource(gadget);
          uiEditor.setSource(source);
+         uiEditor.setGadgetName(gadget.getName());
          uiEditor.setDirPath(dirPath);
          uiManagement.getChildren().clear();
          uiManagement.addChild(uiEditor);

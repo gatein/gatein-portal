@@ -62,7 +62,7 @@ public class NameValidator implements Validator, Serializable
          {
             continue;
          }
-         Object[] args = {label, uiInput.getBindingField()};
+         Object[] args = {label};
          throw new MessageException(new ApplicationMessage("NameValidator.msg.Invalid-char", args));
       }
    }
