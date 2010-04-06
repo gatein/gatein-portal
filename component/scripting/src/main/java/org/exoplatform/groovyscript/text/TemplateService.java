@@ -22,8 +22,11 @@ package org.exoplatform.groovyscript.text;
 import groovy.lang.Writable;
 import groovy.text.Template;
 
+import org.exoplatform.commons.cache.future.Entry;
+import org.exoplatform.commons.cache.future.FutureCache;
+import org.exoplatform.commons.cache.future.FutureExoCache;
+import org.exoplatform.commons.cache.future.Loader;
 import org.exoplatform.commons.utils.IOUtil;
-import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.groovyscript.GroovyTemplate;
 import org.exoplatform.groovyscript.GroovyTemplateEngine;
 import org.exoplatform.management.annotations.Impact;
@@ -34,9 +37,11 @@ import org.exoplatform.management.annotations.ManagedName;
 import org.exoplatform.management.jmx.annotations.NameTemplate;
 import org.exoplatform.management.jmx.annotations.Property;
 import org.exoplatform.management.rest.annotations.RESTEndpoint;
+import org.exoplatform.resolver.ResourceKey;
 import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.cache.CacheService;
 import org.exoplatform.services.cache.ExoCache;
+import org.gatein.common.io.IOTools;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -54,17 +59,52 @@ public class TemplateService
 
    private GroovyTemplateEngine engine_;
 
-   private ExoCache<String, GroovyTemplate> templatesCache_;
+   private ExoCache<ResourceKey, Entry<GroovyTemplate>> templatesCache_;
 
    private TemplateStatisticService statisticService;
 
    private boolean cacheTemplate_ = true;
+
+   private final Loader<ResourceKey, GroovyTemplate, ResourceResolver> loader = new Loader<ResourceKey, GroovyTemplate, ResourceResolver>()
+   {
+      public GroovyTemplate retrieve(ResourceResolver context, ResourceKey key) throws Exception
+      {
+         byte[] bytes;
+         InputStream is = context.getInputStream(key.getURL());
+         try
+         {
+            bytes = IOUtil.getStreamContentAsBytes(is);
+            is.close();
+         }
+         finally
+         {
+            IOTools.safeClose(is);
+         }
+
+         // The template class name
+         int pos = key.getURL().lastIndexOf('/');
+         if (pos == -1)
+         {
+            pos = 0;
+         }
+         String name = key.getURL().substring(pos);
+
+         // Julien: it's a bit dangerious here, with respect to the file encoding...
+         String text = new String(bytes);
+
+         // Finally do the expensive template creation
+         return engine_.createTemplate(key.getURL(), name, text);
+      }
+   };
+
+   private FutureCache<ResourceKey, GroovyTemplate, ResourceResolver> futureCache;
 
    public TemplateService(TemplateStatisticService statisticService, CacheService cservice) throws Exception
    {
       this.engine_ = new GroovyTemplateEngine();
       this.statisticService = statisticService;
       this.templatesCache_ = cservice.getCacheInstance(TemplateService.class.getSimpleName());
+      this.futureCache = new FutureExoCache<ResourceKey, GroovyTemplate, ResourceResolver>(loader, templatesCache_);
    }
 
    public void merge(String name, BindingContext context) throws Exception
@@ -108,37 +148,18 @@ public class TemplateService
 
    final public GroovyTemplate getTemplate(String url, ResourceResolver resolver, boolean cacheable) throws Exception
    {
-      GroovyTemplate template = null;
+      GroovyTemplate template;
+      ResourceKey resourceId = resolver.createResourceKey(url);
       if (cacheable)
       {
-         String resourceId = resolver.createResourceId(url);
-         template = getTemplatesCache().get(resourceId);
+         template = futureCache.get(resolver, resourceId);
       }
-      if (template != null)
-         return template;
-      InputStream is;
-      byte[] bytes = null;
-      is = resolver.getInputStream(url);
-      bytes = IOUtil.getStreamContentAsBytes(is);
-      is.close();
-
-      // The template class name
-      int pos = url.lastIndexOf('/');
-      if (pos == -1)
+      else
       {
-         pos = 0;
-      }
-      String name = url.substring(pos);
-
-      String text = new String(bytes);
-      template = engine_.createTemplate(url, name, text);
-
-      if (cacheable)
-      {
-         String resourceId = resolver.createResourceId(url);
-         getTemplatesCache().put(resourceId, template);
+         template = loader.retrieve(resolver, resourceId);
       }
 
+      //
       return template;
    }
 
@@ -148,7 +169,7 @@ public class TemplateService
       getTemplatesCache().remove(resourceId);
    }
 
-   public ExoCache<String, GroovyTemplate> getTemplatesCache()
+   public ExoCache<ResourceKey, Entry<GroovyTemplate>> getTemplatesCache()
    {
       return templatesCache_;
    }
@@ -198,9 +219,13 @@ public class TemplateService
       try
       {
          ArrayList<String> list = new ArrayList<String>();
-         for (GroovyTemplate template : templatesCache_.getCachedObjects())
+         for (Entry<GroovyTemplate> entry : templatesCache_.getCachedObjects())
          {
-            list.add(template.getId());
+            GroovyTemplate template = entry.getValue();
+            if (template != null)
+            {
+               list.add(template.getId());
+            }
          }
          return list.toArray(new String[list.size()]);
       }

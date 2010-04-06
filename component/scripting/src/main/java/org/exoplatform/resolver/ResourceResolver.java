@@ -54,6 +54,11 @@ abstract public class ResourceResolver
       throw new RuntimeException("unsupported method");
    }
 
+   public ResourceKey createResourceKey(String url)
+   {
+      return new ResourceKey(hashCode(), url);
+   }
+
    public String createResourceId(String url)
    {
       return hashCode() + ":" + url;
