@@ -228,10 +228,14 @@ public abstract class ModelAdapter<S, C extends Serializable>
          WSRP wsrp = dataStorage.load(state, ApplicationType.WSRP_PORTLET);
          if (wsrp == null)
          {
-            // create and save state
+            // create
             wsrp = new WSRP();
             wsrp.setPortletId(applicationId);
-            dataStorage.save(state, wsrp);
+            if (!(state instanceof TransientApplicationState))
+            {
+               // only save state if it's not transient
+               dataStorage.save(state, wsrp);
+            }
          }
          return StatefulPortletContext.create(wsrp.getPortletId(), WSRPPortletStateType.instance, wsrp);
       }
