@@ -55,4 +55,10 @@ public class IdentityResourceBundle extends ResourceBundle
    {
       return EMPTY_KEYS.elements();
    }
+
+   @Override
+   public Locale getLocale()
+   {
+      return MAGIC_LOCALE;
+   }
 }
