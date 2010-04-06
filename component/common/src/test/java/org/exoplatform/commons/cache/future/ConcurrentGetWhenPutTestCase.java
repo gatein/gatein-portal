@@ -39,7 +39,7 @@ public class ConcurrentGetWhenPutTestCase extends TestCase
    private AssertionFailedError failure;
 
    /** . */
-   private LinkedList<String> events = new LinkedList<String>();
+   private List<String> events = Collections.synchronizedList(new LinkedList<String>());
 
    FutureCache<String, String, Callable<String>> futureCache = new FutureCache<String, String, Callable<String>>(new StringLoader()) {
 
@@ -53,7 +53,7 @@ public class ConcurrentGetWhenPutTestCase extends TestCase
             {
                failure = new AssertionFailedError();
             }
-            events.addLast("get/key1");
+            events.add("get/key1");
          }
          else if (key == key2)
          {
@@ -61,7 +61,7 @@ public class ConcurrentGetWhenPutTestCase extends TestCase
             {
                failure = new AssertionFailedError();
             }
-            events.addLast("get/key2");
+            events.add("get/key2");
          }
          else
          {
@@ -77,7 +77,7 @@ public class ConcurrentGetWhenPutTestCase extends TestCase
          {
             if (Thread.currentThread() == thread1)
             {
-               events.addLast("begin_put/key1/" + entry);
+               events.add("begin_put/key1/" + entry);
 
                //
                thread2.start();
@@ -89,7 +89,7 @@ public class ConcurrentGetWhenPutTestCase extends TestCase
                }
 
                //
-               events.addLast("end_put/key1");
+               events.add("end_put/key1");
             }
             else
             {
@@ -118,11 +118,11 @@ public class ConcurrentGetWhenPutTestCase extends TestCase
          {
             public String call() throws Exception
             {
-               events.addLast("call/key1");
+               events.add("call/key1");
                return "foo_value_1";
             }
          }, key1);
-         events.addLast("retrieved/key1/" + v);
+         events.add("retrieved/key1/" + v);
       }
    };
 
@@ -139,7 +139,7 @@ public class ConcurrentGetWhenPutTestCase extends TestCase
                return "foo_value_2";
             }
          }, key2);
-         events.addLast("retrieved/key2/" + v);
+         events.add("retrieved/key2/" + v);
       }
    };
 
