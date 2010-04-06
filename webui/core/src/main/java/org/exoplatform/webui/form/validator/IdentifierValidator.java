@@ -58,7 +58,7 @@ public class IdentifierValidator implements Validator, Serializable
       if (Character.isDigit(s.charAt(0)) || s.charAt(0) == '-')
       {
          Object[] args = {label, uiInput.getBindingField()};
-         throw new MessageException(new ApplicationMessage("FirstCharacterNameValidator.msg", args,
+         throw new MessageException(new ApplicationMessage("FirstAndSpecialCharacterNameValidator.msg", args,
             ApplicationMessage.WARNING));
       }
       for (int i = 0; i < s.length(); i++)

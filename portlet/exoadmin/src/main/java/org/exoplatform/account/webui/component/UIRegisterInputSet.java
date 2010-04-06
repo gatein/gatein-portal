@@ -20,6 +20,7 @@ package org.exoplatform.account.webui.component;
 
 import javax.portlet.PortletPreferences;
 
+import org.exoplatform.portal.pom.config.Utils;
 import org.exoplatform.portal.webui.CaptchaValidator;
 import org.exoplatform.portal.webui.UICaptcha;
 import org.exoplatform.services.organization.Query;
@@ -73,14 +74,12 @@ public class UIRegisterInputSet extends UIFormInputWithActions
          .addValidator(MandatoryValidator.class).addValidator(PasswordStringLengthValidator.class, 6, 30));
       
       addUIFormInput(new UIFormStringInput(FIRST_NAME, FIRST_NAME, null).addValidator(StringLengthValidator.class, 3,
-         45).addValidator(MandatoryValidator.class).addValidator(ExpressionValidator.class, "^[\\p{L}][\\p{ASCII}]+$",
-         "FirstCharacterNameValidator.msg").addValidator(ExpressionValidator.class, "^[\\p{L}][\\p{L}._\\- \\d]+$",
-         "ResourceValidator.msg.Invalid-char"));
+         45).addValidator(MandatoryValidator.class).addValidator(ExpressionValidator.class, Utils.FIRST_CHARACTER_NAME_VALIDATOR_REGEX,
+         "FirstCharacterNameValidator.msg"));
       
       addUIFormInput(new UIFormStringInput(LAST_NAME, LAST_NAME, null).addValidator(StringLengthValidator.class, 3,
-         45).addValidator(MandatoryValidator.class).addValidator(ExpressionValidator.class, "^[\\p{L}][\\p{ASCII}]+$",
-         "FirstCharacterNameValidator.msg").addValidator(ExpressionValidator.class, "^[\\p{L}][\\p{L}._\\- \\d]+$",
-         "ResourceValidator.msg.Invalid-char"));
+         45).addValidator(MandatoryValidator.class).addValidator(ExpressionValidator.class, Utils.FIRST_CHARACTER_NAME_VALIDATOR_REGEX,
+         "FirstCharacterNameValidator.msg"));
       
       addUIFormInput(new UIFormStringInput(EMAIL_ADDRESS, EMAIL_ADDRESS, null).addValidator(MandatoryValidator.class).addValidator(
          EmailAddressValidator.class));
