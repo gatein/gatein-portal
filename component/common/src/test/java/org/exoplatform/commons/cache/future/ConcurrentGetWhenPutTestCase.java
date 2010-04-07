@@ -21,8 +21,6 @@ package org.exoplatform.commons.cache.future;
 
 import junit.framework.AssertionFailedError;
 import junit.framework.TestCase;
-import org.exoplatform.commons.cache.future.Entry;
-import org.exoplatform.commons.cache.future.FutureCache;
 import org.gatein.common.util.Tools;
 
 import java.util.*;
@@ -45,7 +43,7 @@ public class ConcurrentGetWhenPutTestCase extends TestCase
 
 
       @Override
-      protected Entry<String> get(String key)
+      protected String get(String key)
       {
          if (key == key1)
          {
@@ -71,13 +69,13 @@ public class ConcurrentGetWhenPutTestCase extends TestCase
       }
 
       @Override
-      protected void put(String key, Entry<String> entry)
+      protected void put(String key, String value)
       {
          if (key == key1)
          {
             if (Thread.currentThread() == thread1)
             {
-               events.add("begin_put/key1/" + entry);
+               events.add("begin_put/key1/" + value);
 
                //
                thread2.start();
@@ -161,7 +159,7 @@ public class ConcurrentGetWhenPutTestCase extends TestCase
       List<String> expectedEvents = Arrays.asList(
          "get/key1",
          "call/key1",
-         "begin_put/key1/Entry[foo_value_1]",
+         "begin_put/key1/foo_value_1",
          "get/key2",
          "end_put/key1"
       );

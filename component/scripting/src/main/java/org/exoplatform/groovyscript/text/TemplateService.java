@@ -22,7 +22,6 @@ package org.exoplatform.groovyscript.text;
 import groovy.lang.Writable;
 import groovy.text.Template;
 
-import org.exoplatform.commons.cache.future.Entry;
 import org.exoplatform.commons.cache.future.FutureCache;
 import org.exoplatform.commons.cache.future.FutureExoCache;
 import org.exoplatform.commons.cache.future.Loader;
@@ -59,7 +58,7 @@ public class TemplateService
 
    private GroovyTemplateEngine engine_;
 
-   private ExoCache<ResourceKey, Entry<GroovyTemplate>> templatesCache_;
+   private ExoCache<ResourceKey, GroovyTemplate> templatesCache_;
 
    private TemplateStatisticService statisticService;
 
@@ -169,7 +168,7 @@ public class TemplateService
       getTemplatesCache().remove(resourceId);
    }
 
-   public ExoCache<ResourceKey, Entry<GroovyTemplate>> getTemplatesCache()
+   public ExoCache<ResourceKey, GroovyTemplate> getTemplatesCache()
    {
       return templatesCache_;
    }
@@ -219,13 +218,9 @@ public class TemplateService
       try
       {
          ArrayList<String> list = new ArrayList<String>();
-         for (Entry<GroovyTemplate> entry : templatesCache_.getCachedObjects())
+         for (GroovyTemplate template : templatesCache_.getCachedObjects())
          {
-            GroovyTemplate template = entry.getValue();
-            if (template != null)
-            {
-               list.add(template.getId());
-            }
+            list.add(template.getId());
          }
          return list.toArray(new String[list.size()]);
       }

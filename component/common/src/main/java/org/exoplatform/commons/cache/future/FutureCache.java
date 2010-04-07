@@ -30,6 +30,9 @@ import java.util.concurrent.*;
  *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
+ * @param <K> the key type parameter
+ * @param <V> the value type parameter
+ * @param <C> the context type parameter
  */
 public abstract class FutureCache<K, V, C>
 {
@@ -38,7 +41,7 @@ public abstract class FutureCache<K, V, C>
    private final Loader<K, V, C> loader;
 
    /** . */
-   private final ConcurrentMap<K, FutureTask<Entry<V>>> local;
+   private final ConcurrentMap<K, FutureTask<V>> futureEntries;
 
    /** . */
    private final Logger log = LoggerFactory.getLogger(FutureCache.class);
@@ -46,26 +49,35 @@ public abstract class FutureCache<K, V, C>
    public FutureCache(Loader<K, V, C> loader)
    {
       this.loader = loader;
-      this.local = new ConcurrentHashMap<K, FutureTask<Entry<V>>>();
+      this.futureEntries = new ConcurrentHashMap<K, FutureTask<V>>();
    }
 
-   protected abstract Entry<V> get(K key);
+   protected abstract V get(K key);
 
-   protected abstract void put(K key, Entry<V> entry);
+   protected abstract void put(K key, V value);
 
-   public V get(final C context, final K key)
+   /**
+    * Perform a cache lookup for the specified key within the specified context.
+    * When the value cannot be loaded (because it does not exist or it failed or anything else that
+    * does not come to my mind), the value null is returned.
+    *
+    * @param context the context in which the resource is accessed
+    * @param key the key identifying the resource
+    * @return the value
+    */
+   public final V get(final C context, final K key)
    {
       // First we try a simple cache get
-      Entry<V> entry = get(key);
+      V value = get(key);
 
       // If it does not succeed then we go through a process that will avoid to load
       // the same resource concurrently
-      if (entry == null)
+      if (value == null)
       {
          // Create our future
-         FutureTask<Entry<V>> future = new FutureTask<Entry<V>>(new Callable<Entry<V>>()
+         FutureTask<V> future = new FutureTask<V>(new Callable<V>()
          {
-            public Entry<V> call() throws Exception
+            public V call() throws Exception
             {
                // Retrieve the value from the loader
                V value = loader.retrieve(context, key);
@@ -73,14 +85,11 @@ public abstract class FutureCache<K, V, C>
                //
                if (value != null)
                {
-                  // Create the entry
-                  Entry<V> entry = Entry.create(value);
-
                   // Cache it, it is made available to other threads (unless someone removes it)
-                  put(key, entry);
+                  put(key, value);
 
-                  // Return entry
-                  return entry;
+                  // Return value
+                  return value;
                }
                else
                {
@@ -89,15 +98,15 @@ public abstract class FutureCache<K, V, C>
             }
          });
 
-         // Was our means that we inserted in the local
+         // This boolean means we inserted in the local
          boolean inserted = true;
 
          //
          try
          {
-            FutureTask<Entry<V>> phantom = local.putIfAbsent(key, future);
+            FutureTask<V> phantom = futureEntries.putIfAbsent(key, future);
 
-            // Use the entry that could have been inserted by another thread
+            // Use the value that could have been inserted by another thread
             if (phantom != null)
             {
                future = phantom;
@@ -108,8 +117,8 @@ public abstract class FutureCache<K, V, C>
                future.run();
             }
 
-            // Returns the entry
-            entry = future.get();
+            // Returns the value
+            value = future.get();
          }
          catch (ExecutionException e)
          {
@@ -124,12 +133,12 @@ public abstract class FutureCache<K, V, C>
             // Clean up the per key map but only if our insertion succeeded and with our future
             if (inserted)
             {
-               local.remove(key, future);
+               futureEntries.remove(key, future);
             }
          }
       }
 
       //
-      return entry != null ? entry.getValue() : null;
+      return value;
    }
 }

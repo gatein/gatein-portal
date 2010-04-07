@@ -19,15 +19,27 @@
 
 package org.exoplatform.commons.cache.future;
 
-import java.io.Serializable;
-
 /**
+ * The loader interface is used by the future cache to retrieves the value from the key when it does not exist.
+ *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
+ * @param <K> the key type parameter
+ * @param <V> the value type parameter
+ * @param <C> the context type parameter
  */
 public interface Loader<K, V, C>
 {
 
+   /**
+    * Retrieves the value from the key within the specified context. If the resource is not found then the value
+    * null must be returned.
+    *
+    * @param context the context
+    * @param key the key
+    * @return the value
+    * @throws Exception any exception that would prevent the value to be loaded
+    */
    V retrieve(C context, K key) throws Exception;
 
 }

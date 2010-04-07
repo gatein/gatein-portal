@@ -40,7 +40,7 @@ public class GetTestCase extends TestCase
             return "foo_value";
          }
       }, "foo"));
-      Assert.assertEquals("foo_value", futureCache.data.get("foo").getValue());
+      Assert.assertEquals("foo_value", futureCache.data.get("foo"));
    }
 
    public void testNullValue()

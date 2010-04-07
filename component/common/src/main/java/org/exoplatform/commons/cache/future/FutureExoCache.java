@@ -31,9 +31,9 @@ public class FutureExoCache<K extends Serializable, V, C> extends FutureCache<K,
 {
 
    /** . */
-   private final ExoCache<K, Entry<V>> cache;
+   private final ExoCache<K, V> cache;
 
-   public FutureExoCache(Loader<K, V, C> loader, ExoCache<K, Entry<V>> cache)
+   public FutureExoCache(Loader<K, V, C> loader, ExoCache<K, V> cache)
    {
       super(loader);
 
@@ -42,13 +42,13 @@ public class FutureExoCache<K extends Serializable, V, C> extends FutureCache<K,
    }
 
    @Override
-   protected Entry<V> get(K key)
+   protected V get(K key)
    {
       return cache.get(key);
    }
 
    @Override
-   protected void put(K key, Entry<V> entry)
+   protected void put(K key, V entry)
    {
       cache.put(key, entry);
    }

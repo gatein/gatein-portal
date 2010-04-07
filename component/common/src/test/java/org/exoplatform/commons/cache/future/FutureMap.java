@@ -19,10 +19,6 @@
 
 package org.exoplatform.commons.cache.future;
 
-import org.exoplatform.commons.cache.future.Entry;
-import org.exoplatform.commons.cache.future.FutureCache;
-import org.exoplatform.commons.cache.future.Loader;
-
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -35,25 +31,25 @@ public class FutureMap<C> extends FutureCache<String, String, C>
 {
 
    /** . */
-   final Map<String, Entry<String>> data;
+   final Map<String, String> data;
 
    public FutureMap(Loader<String, String, C> loader)
    {
       super(loader);
 
       //
-      this.data = Collections.synchronizedMap(new HashMap<String, Entry<String>>());
+      this.data = Collections.synchronizedMap(new HashMap<String, String>());
    }
 
    @Override
-   protected Entry<String> get(String key)
+   protected String get(String key)
    {
       return data.get(key);
    }
 
    @Override
-   protected void put(String key, Entry<String> entry)
+   protected void put(String key, String value)
    {
-      data.put(key, entry);
+      data.put(key, value);
    }
 }
