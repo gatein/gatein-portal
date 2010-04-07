@@ -94,7 +94,7 @@ public abstract class UIPageWizard extends UIWizard
       return uiHelpWindow;
    }
 
-   void updateUIPortal(UIPortalApplication uiPortalApp, Event<? extends UIPageWizard> event) throws Exception
+   protected void updateUIPortal(Event<? extends UIPageWizard> event) throws Exception
    {
       PortalRequestContext pcontext = (PortalRequestContext)event.getRequestContext();
 

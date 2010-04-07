@@ -76,40 +76,12 @@ public class UIPageBody extends UIComponentDecorator
    public void setPageBody(PageNode pageNode, UIPortal uiPortal) throws Exception
    {
       WebuiRequestContext context = Util.getPortalRequestContext();
-      ExoContainer appContainer = context.getApplication().getApplicationServiceContainer();
-      UserPortalConfigService userPortalConfigService =
-         (UserPortalConfigService)appContainer.getComponentInstanceOfType(UserPortalConfigService.class);
-      Page page = null;
-      UIPage uiPage;
-      
-      String pageReference = null;
-      
-      if (pageNode != null)
-      {
-         pageReference = pageNode.getPageReference();
-         try
-         {
-            if (pageReference != null)
-            {
-               page = userPortalConfigService.getPage(pageReference, context.getRemoteUser());
-            }
-         }
-         catch (Exception e)
-         {
-            UIPortalApplication uiApp = getAncestorOfType(UIPortalApplication.class);
-            uiApp.addMessage(new ApplicationMessage(e.getMessage(), new Object[]{}));
-         }
-      }
-      
       uiPortal.setMaximizedUIComponent(null);
       
-      try
+      UIPage uiPage;
+      uiPage = getUIPage(pageNode, uiPortal, context);
+      if (uiPage == null)
       {
-         uiPage = getUIPage(pageReference, page, uiPortal, context);
-      }
-      catch (Exception ex)
-      {
-         // TODO: Print evokable message
          setUIComponent(null);
          return;
       }
@@ -142,15 +114,30 @@ public class UIPageBody extends UIComponentDecorator
     * @param uiPortal
     * @return
     */
-   private UIPage getUIPage(String pageReference, Page page, UIPortal uiPortal, WebuiRequestContext context)
+   private UIPage getUIPage(PageNode pageNode, UIPortal uiPortal, WebuiRequestContext context)
       throws Exception
    {
+      Page page = null;
+      String pageReference = null;
+      
+      if (pageNode != null)
+      {
+         pageReference = pageNode.getPageReference();
+         if (pageReference != null)
+         {
+            ExoContainer appContainer = context.getApplication().getApplicationServiceContainer();
+            UserPortalConfigService userPortalConfigService =
+               (UserPortalConfigService)appContainer.getComponentInstanceOfType(UserPortalConfigService.class);
+            page = userPortalConfigService.getPage(pageReference, context.getRemoteUser());
+         }
+      }
+      
       //The page has been deleted
       if(page == null)
       {
          //Clear the UIPage from cache in UIPortal
          uiPortal.clearUIPage(pageReference);
-         throw new Exception("The page with id " + pageReference + " has been removed");
+         return null;
       }
       
       UIPage uiPage = uiPortal.getUIPage(pageReference);
@@ -173,11 +160,6 @@ public class UIPageBody extends UIComponentDecorator
       return uiPage;
    }
    
-   public void renderChildren() throws Exception
-   {
-      uicomponent_.processRender((WebuiRequestContext)WebuiRequestContext.getCurrentInstance());
-   }
-
    public void processRender(WebuiRequestContext context) throws Exception
    {
       if (maximizedUIComponent != null && Util.getUIPortalApplication().getModeState() % 2 == 0)
@@ -186,11 +168,6 @@ public class UIPageBody extends UIComponentDecorator
          return;
       }
       
-      //TODO: Remove beneath block
-      if (uicomponent_ == null)
-      {
-         setPageBody(Util.getUIPortal().getSelectedNode(), Util.getUIPortal());
-      }
       super.processRender(context);
    }
 

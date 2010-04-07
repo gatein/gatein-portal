@@ -199,6 +199,12 @@ public class UIPortal extends UIContainer
       return listNavs;
    }
    
+   /**
+    * Return cached UIPage associated to the specified pageReference
+    * 
+    * @param pageReference key whose associated UIPage is to be returned
+    * @return the UIPage associated to the specified pageReference or null if not any
+    */
    public UIPage getUIPage(String pageReference)
    {
       if(all_UIPages == null)

@@ -19,6 +19,7 @@
 
 package org.exoplatform.portal.webui.page;
 
+import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.model.Page;
@@ -85,7 +86,7 @@ public class UIPageCreationWizard extends UIPageWizard
    {
       UIPagePreview uiPagePreview = getChild(UIPagePreview.class);
       UIPage uiPage = (UIPage)uiPagePreview.getUIComponent();
-      UIPortal uiPortal = Util.getUIPortal();
+      
 
       UIWizardPageSetInfo uiPageInfo = getChild(UIWizardPageSetInfo.class);
       UIPageNodeSelector uiNodeSelector = uiPageInfo.getChild(UIPageNodeSelector.class);
@@ -116,9 +117,8 @@ public class UIPageCreationWizard extends UIPageWizard
       DataStorage dataService = getApplicationComponent(DataStorage.class); 
       dataService.create(page);
       dataService.save(pageNav);
+      UIPortal uiPortal = Util.getUIPortal();
       setNavigation(uiPortal.getNavigations(), uiNodeSelector.getSelectedNavigation());
-      PageNodeEvent<UIPortal> pnevent = new PageNodeEvent<UIPortal>(uiPortal, PageNodeEvent.CHANGE_PAGE_NODE, pageNode.getUri());
-      uiPortal.broadcast(pnevent, Event.Phase.PROCESS);
    }
 
    private void setNavigation(List<PageNavigation> navs, PageNavigation nav)
@@ -342,7 +342,11 @@ public class UIPageCreationWizard extends UIPageWizard
          if (isDesktopPage)
          {
             uiWizard.saveData();
-            uiWizard.updateUIPortal(uiPortalApp, event);
+            PageNode selectedNode = uiNodeSelector.getSelectedPageNode();
+            UIPortal uiPortal = Util.getUIPortal();
+            PageNodeEvent<UIPortal> pnevent = new PageNodeEvent<UIPortal>(uiPortal, PageNodeEvent.CHANGE_PAGE_NODE, selectedNode.getUri());
+            uiPortal.broadcast(pnevent, Event.Phase.PROCESS);
+            uiWizard.updateUIPortal(event);
             return;
          }
 
@@ -372,17 +376,14 @@ public class UIPageCreationWizard extends UIPageWizard
          uiWizard.saveData();
          UIPortalToolPanel toolPanel = uiWorkingWS.findFirstComponentOfType(UIPortalToolPanel.class);
          toolPanel.setUIComponent(null);
-         uiWizard.updateUIPortal(uiPortalApp, event);
-         JavascriptManager jsManager = event.getRequestContext().getJavascriptManager();
-         jsManager.addJavascript("eXo.portal.portalMode=" + UIPortalApplication.NORMAL_MODE + ";");
-
+         uiWizard.updateUIPortal(event);
          UIWizardPageSetInfo uiPageInfo = uiWizard.getChild(UIWizardPageSetInfo.class);
          UIPageNodeSelector uiNodeSelector = uiPageInfo.getChild(UIPageNodeSelector.class);
          PageNode selectedNode = uiNodeSelector.getSelectedPageNode();
-
-         String uri = Util.getPortalRequestContext().getPortalURI() + selectedNode.getUri();
-         //Util.getPortalRequestContext().sendRedirect(uri);
-         jsManager.addJavascript("window.location = '" + uri + "';");
+         
+         PortalRequestContext pcontext = Util.getPortalRequestContext();
+         String uri = pcontext.getPortalURI() + selectedNode.getUri();
+         pcontext.getResponse().sendRedirect(uri);
       }
    }
 
