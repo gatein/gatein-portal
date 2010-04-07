@@ -15,13 +15,15 @@
 					<div class="<%=uicomponent.isCollapsed ? "CollapseIcon" : "ExpandIcon"%>" onclick="eXo.portal.UIPortal.toggleComposer(this)"><span></span></div>
 						<% if(uicomponent.isShowControl) { %>
 						<a class="CloseButton" title="<%=_ctx.appRes("word.abort")%>" href="<%=uicomponent.event("Abort")%>"><span></span></a>
-						<a class="<%= isEditted ? "EdittedSaveButton" : "SaveButton" %>" title="<%=_ctx.appRes("word.finish")%>" href="<%=uicomponent.event("Finish")%>"><span></span></a>
 							<% if (uicomponent.isUsedInWizard()) { %>
+								<a class="<%= isEditted ? "EdittedSaveButton" : "SaveButton" %>" title="<%=_ctx.appRes("word.finish")%>" href="<%=uicomponent.url("Finish")%>"><span></span></a>
 								<a class="BackButton"" title="<%=_ctx.appRes("word.back")%>" href="<%=uicomponent.event("Back")%>">
 									<span></span>
 								</a>
-							<% } %>
-						<% } %>
+							<% } else {%>
+								<a class="<%= isEditted ? "EdittedSaveButton" : "SaveButton" %>" title="<%=_ctx.appRes("word.finish")%>" href="<%=uicomponent.event("Finish")%>"><span></span></a>
+						<%	 }
+							 } %>
 					<div class="PopupTitle"><%=_ctx.appRes(popupId + ".title."+ popupId)%></div>
 				</div>
 			</div>
