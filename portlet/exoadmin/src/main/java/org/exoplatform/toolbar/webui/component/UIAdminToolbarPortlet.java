@@ -19,8 +19,11 @@
 
 package org.exoplatform.toolbar.webui.component;
 
+import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserACL;
+import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
+import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.webui.page.UIPage;
 import org.exoplatform.portal.webui.page.UIPageBody;
@@ -48,15 +51,6 @@ public class UIAdminToolbarPortlet extends UIPortletApplication
    public PageNavigation getSelectedNavigation() throws Exception
    {
       return Util.getUIPortal().getSelectedNavigation();
-      
-      /*
-      PageNavigation nav = Util.getUIPortal().getSelectedNavigation();
-      if (nav != null)
-         return nav;
-      if (Util.getUIPortal().getNavigations().size() < 1)
-         return null;
-      return Util.getUIPortal().getNavigations().get(0);
-      */
    }
 
    @Override
@@ -100,16 +94,34 @@ public class UIAdminToolbarPortlet extends UIPortletApplication
       UIWorkingWorkspace uiWorkingWS = portalApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
       UIPageBody pageBody = uiWorkingWS.findFirstComponentOfType(UIPageBody.class);
       UIPage uiPage = (UIPage)pageBody.getUIComponent();
+      UserACL userACL = portalApp.getApplicationComponent(UserACL.class);
 
-      if (uiPage == null)
+      if(uiPage != null)
       {
-         return false;
+         return userACL.hasEditPermissionOnPage(uiPage.getOwnerType(), uiPage.getOwnerId(), uiPage.getEditPermission());
       }
       else
       {
-         UserACL userACL = portalApp.getApplicationComponent(UserACL.class);
-         return userACL.hasEditPermissionOnPage(uiPage.getOwnerType(), uiPage.getOwnerId(), uiPage.getEditPermission());
+         UIPortal currentUIPortal = portalApp.<UIWorkingWorkspace>findComponentById(UIPortalApplication.UI_WORKING_WS_ID).findFirstComponentOfType(UIPortal.class);
+         PageNode currentNode = currentUIPortal.getSelectedNode();
+         String pageReference = currentNode.getPageReference();
+         if(pageReference == null)
+         {
+            return false;
+         }
+         else
+         {
+            DataStorage dataStorage = portalApp.getApplicationComponent(DataStorage.class);
+            Page page = dataStorage.getPage(pageReference);
+            if(page == null)
+            {
+               return false;
+            }
+            else
+            {
+               return userACL.hasEditPermission(page);
+            }
+         }
       }
    }
-
 }
