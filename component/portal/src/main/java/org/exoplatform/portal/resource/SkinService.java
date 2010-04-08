@@ -421,11 +421,42 @@ public class SkinService implements Startable
    {
       return skinConfigs_.size();
    }
+   
+   /**
+    *  Add this method to catch <code>ResourceNotFoundException</code>
+    * and to log evoquant message
+    * 
+    * @param cssPath
+    * @return
+    */
+   private Resource getCSSResource(String cssPath)
+   {
+      try{
+         return mainResolver.resolve(cssPath);
+      }
+      catch(ResourceNotFoundException NotFoundEx)
+      {
+         String notFoundResourcePath = NotFoundEx.getResourcePath();
+         String logMessage;
+         if(!cssPath.equals(notFoundResourcePath))
+         {
+            logMessage =
+               "Invalid <CSS FILE> configuration, please check the @import url(" + notFoundResourcePath + ") in "
+                  + cssPath + " , SkinService could not load the skin " + cssPath;
+         }
+         else
+         {
+            logMessage = "Not found <CSS FILE> " + cssPath + " , SkinService could not load the skin " + cssPath;
+         }
+         log.error(logMessage);
+         return null;
+      }
+   }
 
    private void processCSS(Appendable appendable, String cssPath, Orientation orientation, boolean merge)
       throws RenderingException, IOException
    {
-      Resource skin = mainResolver.resolve(cssPath);
+      Resource skin = getCSSResource(cssPath);
       processCSSRecursively(appendable, merge, skin, orientation);
    }
 
@@ -456,7 +487,7 @@ public class SkinService implements Startable
                {
                   if (merge)
                   {
-                     Resource ssskin = mainResolver.resolve(includedPath);
+                     Resource ssskin = getCSSResource(includedPath);
                      processCSSRecursively(appendable, merge, ssskin, orientation);
                   }
                   else
@@ -471,7 +502,7 @@ public class SkinService implements Startable
                   if (merge)
                   {
                      String path = skin.getContextPath() + skin.getParentPath() + includedPath;
-                     Resource ssskin = mainResolver.resolve(path);
+                     Resource ssskin = getCSSResource(path);
                      processCSSRecursively(appendable, merge, ssskin, orientation);
                   }
                   else
