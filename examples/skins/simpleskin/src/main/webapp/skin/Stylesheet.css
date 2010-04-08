@@ -18,3 +18,5 @@
  */
 
 @import url(SimpleSkin/UIPortalApplicationSkin.css);
+@import url(PortletThemes/Stylesheet.css);
+@import url(Portlet/Stylesheet.css);
