@@ -47,6 +47,8 @@ import org.exoplatform.webui.form.UIFormTextAreaInput;
 import org.exoplatform.webui.form.validator.ExpressionValidator;
 import org.exoplatform.webui.form.validator.IdentifierValidator;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
+import org.exoplatform.webui.form.validator.ResourceValidator;
+import org.exoplatform.webui.form.validator.StringLengthValidator;
 import org.exoplatform.webui.form.validator.Validator;
 
 import java.io.Serializable;
@@ -79,8 +81,10 @@ public class UIGadgetEditor extends UIForm
       Param param = initParams.getParam("SampleGadget");
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
       String sample = (String)param.getMapGroovyObject(context);
-      addUIFormInput(new UIFormStringInput(FIELD_NAME, null, null).addValidator(MandatoryValidator.class).addValidator(ExpressionValidator.class, "^[\\p{L}][\\p{ASCII}]+$",
-      "UIGadgetEditor.msg.Invalid"));
+      addUIFormInput(new UIFormStringInput(FIELD_NAME, FIELD_NAME, null).addValidator(MandatoryValidator.class)
+    		  	.addValidator(StringLengthValidator.class, 2, 50)
+    		  	.addValidator(ResourceValidator.class)
+    		  	.addValidator(ExpressionValidator.class, "^[\\p{L}][\\p{L}._\\-\\d]+$","UIGadgetEditor.msg.Invalid-firstChar"));
       addUIFormInput(new UIFormTextAreaInput(FIELD_SOURCE, FIELD_SOURCE, sample).addValidator(MandatoryValidator.class)
          .addValidator(GadgetSpecValidator.class));
    }
