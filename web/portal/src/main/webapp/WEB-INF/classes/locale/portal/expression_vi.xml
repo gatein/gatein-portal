@@ -66,7 +66,7 @@
 	  -->
     <editPermission>Sửa quyền</editPermission>
     <email>Hộp thư</email>
-    <employer>Nhà tuyển dụng</employer>
+    <employer>Người Quản lý</employer>
     <!--
 	  ###################################################################
 	  #                  EXPRESSION START  WITH 'f'                     #
@@ -83,7 +83,7 @@
 	  -->
     <groupId>Mã Nhóm</groupId>
     <gender>Giới tính</gender>
-    <givenName>Tên khai sinh</givenName>
+    <givenName>Tên</givenName>
     <!--
 		###################################################################
 		#                  EXPRESSION START  WITH 'h'                     #
@@ -101,7 +101,7 @@
 	  #                  EXPRESSION START  WITH ''                     #
 	  ###################################################################
 	  -->
-    <jobTitle>Tên việc làm</jobTitle>
+    <jobTitle>Chức vụ</jobTitle>
     <!--
 		###################################################################
 		#                  EXPRESSION START  WITH 'l'                     #
@@ -184,7 +184,7 @@
 	  ###################################################################
 	  -->
     <width>Chiều rộng</width>
-    <website>Trang web</website>
+    <website>Website</website>
   </word>
 </bundle>
 

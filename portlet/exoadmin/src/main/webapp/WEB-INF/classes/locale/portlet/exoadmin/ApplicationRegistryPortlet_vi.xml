@@ -63,7 +63,7 @@
   <UIOrganizer>
     <label>
       <addCategory>Thêm danh mục</addCategory>
-      <autoImport>Truy nhập ứng dụng</autoImport>
+      <autoImport>Truy cập ứng dụng</autoImport>
       <categories>Danh mục</categories>
     </label>
     <title>
@@ -73,7 +73,7 @@
       <deleteApplication>Xóa ứng dụng</deleteApplication>
     </title>
     <msg>
-      <importAll>Việc truy nhập ứng dụng sẽ tự động tạo các Danh mục và nhập tất cả các ứng dụng Gadget và Portlet bên trong danh mục tương ứng.</importAll>
+      <importAll>Việc truy cập ứng dụng sẽ tự động tạo các Danh mục và nhập tất cả các ứng dụng Gadget và Portlet bên trong danh mục tương ứng.</importAll>
       <deleteCategory>Bạn có chắc chắn là muốn xóa Danh mục này và tất cả các ứng dụng đi kèm bên trong?</deleteCategory>
       <deleteApplication>Bạn có chắc chắn là muốn xóa ứng dụng này?</deleteApplication>
       <emptyCategory>Danh mục này không chứa bất kỳ ứng dụng nào, click vào nút (+) để thêm ứng dụng.</emptyCategory>
@@ -103,7 +103,7 @@
       <name>Tên:</name>
       <displayName>#{label.displayName}</displayName>
       <description>#{label.description}</description>
-      <accessPermissions>Phân quyền truy nhâp:</accessPermissions>
+      <accessPermissions>Phân quyền truy cập:</accessPermissions>
     </label>
     <title>
       <editApplication>Chỉnh sửa ứng dụng</editApplication>

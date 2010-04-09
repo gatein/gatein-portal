@@ -23,8 +23,8 @@
 <bundle>
   <organization>
   	<title>Tổ chức</title>
-    <newstaff>Nhân viên mới</newstaff>
-    <management>Quản lý</management>
+    <newstaff>Thêm nhân viên mới</newstaff>
+    <management>Quản lý nhóm, thành viên</management>
   </organization>
 </bundle>
 

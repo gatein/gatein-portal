@@ -26,18 +26,18 @@
   -->
   <UIOrganizationPortlet>
     <label>
-      <userManagement>Quản lí người dùng</userManagement>
-      <groupManagement>Quản lí nhóm</groupManagement>
-      <membershipManagement>Quản lí thành viên</membershipManagement>
+      <userManagement>Quản lý Thành viên</userManagement>
+      <groupManagement>Quản lý Nhóm</groupManagement>
+      <membershipManagement>Quản lý Vai trò</membershipManagement>
     </label>
   </UIOrganizationPortlet>
   <!--
   ##org.exoplatform.organization.webui.component.UIMembershipTypeForm
   -->
   <UIMembershipTypeForm>
-    <title>Thêm/Sửa Thành viên</title>
+    <title>Thêm/Sửa Vai trò</title>
     <label>
-      <name>Kiểu thành viên:</name>
+      <name>Tên Vai trò:</name>
       <description>Mô tả:</description>
     </label>
     <action>
@@ -54,36 +54,36 @@
   -->
   <UIGroupEditMembershipForm>
     <label>
-      <username>Tên người dùng:</username>
-      <membership>Thành viên:</membership>
+      <username>Tên tài khoản:</username>
+      <membership>Vai trò:</membership>
     </label>
     <action>
       <Save>Lưu</Save>
       <Cancel>Hủy</Cancel>
     </action>
     <msg>
-      <membership-delete>Không thể lưu thành viên này, nó đã bị xóa!.</membership-delete>
-      <membership-exist>Thành viên này đã tồn tại, xin vui lòng chọn thành viên khác!</membership-exist>
+      <membership-delete>Không thể lưu vai trò này, nó đã bị xóa!.</membership-delete>
+      <membership-exist>Vai trò này đã tồn tại, xin vui lòng chọn vai trò khác!</membership-exist>
     </msg>
   </UIGroupEditMembershipForm>
   <EditMembership>
     <title>
-      <UIGroupEditMembershipForm>Sửa thành viên</UIGroupEditMembershipForm>
-      <EditMembership>Sửa Thành viên</EditMembership>
+      <UIGroupEditMembershipForm>Sửa vai trò</UIGroupEditMembershipForm>
+      <EditMembership>Sửa vai trò</EditMembership>
     </title>
   </EditMembership>
   <UIGroupMembershipForm>
     <label>
       <title>Thành viên nhóm</title>
-      <username>Tên người dùng:</username>
-      <membership>Kiểu thành viên:</membership>
-      <SearchUser>Chọn người dùng</SearchUser>
-      <Refresh>Refresh</Refresh>
+      <username>Tên tài khoản:</username>
+      <membership>Vai trò:</membership>
+      <SearchUser>Chọn tài khỏan người dùng</SearchUser>
+      <Refresh>Cập nhật mới</Refresh>
     </label>
     <action>
       <Save>#{word.save}</Save>
     </action>
-    <title>Thêm thành viên</title>
+    <title>Thêm vai trò</title>
   </UIGroupMembershipForm>
   <SearchUserForm>
     <label>
@@ -107,7 +107,7 @@
   -->
   <UIMemberShipForm>
     <msg>
-      <membershipType-exist>Loại thành viên {0} đã  tồn tại</membershipType-exist>
+      <membershipType-exist>Loại vai trò {0} đã  tồn tại</membershipType-exist>
     </msg>
   </UIMemberShipForm>
   <!--
@@ -116,7 +116,7 @@
   <UIMembershipForm>
     <label>
       <username>Tên người dùng</username>
-      <membership>Thành viên</membership>
+      <membership>Vai trò</membership>
       <name>Kiểu thành viên</name>
       <description>#{word.description}</description>
     </label>
@@ -157,7 +157,7 @@
     <deleteUser>Bạn có chắc chắn muốn xóa người dùng {0} không?</deleteUser>
   </UIListUsers>
   <UIListMembershipType>
-    <deleteMemberShip>Bạn có chắc chắn muốn xóa kiểu thành viên này không?</deleteMemberShip>
+    <deleteMemberShip>Bạn có chắc chắn muốn xóa vai trò này không?</deleteMemberShip>
   </UIListMembershipType>
   <!--
   ##org.exoplatform.organization.webui.component.UIUserInfo
@@ -270,7 +270,7 @@
       <firstName>#{word.firstName}</firstName>
       <email>#{word.email}</email>
       <action>#{word.action}</action>
-      <membershipType>Kiểu thành viên</membershipType>
+      <membershipType>Vai trò</membershipType>
       <lastLoginTime>Lần cuối cùng đăng nhập</lastLoginTime>
     </header>
     <label>
@@ -303,7 +303,7 @@
   -->
   <UIMembershipList>
     <header>
-      <name>Kiểu thành viên</name>
+      <name>Tên Vai trò</name>
       <createdDate>Ngày tạo</createdDate>
       <modifiedDate>Ngày sửa</modifiedDate>
       <action>#{word.action}</action>
@@ -311,8 +311,8 @@
     </header>
     <action>
       <title>
-        <EditMembership>Sửa thành viên</EditMembership>
-        <DeleteMembership>Xóa thành viên</DeleteMembership>
+        <EditMembership>Sửa vai trò</EditMembership>
+        <DeleteMembership>Xóa vai trò</DeleteMembership>
       </title>
     </action>
     <msg>

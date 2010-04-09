@@ -26,7 +26,7 @@
   -->
   <UIAccountForm>
     <label>
-      <Profile>Tiểu sử người dùng</Profile>
+      <Profile>Thông tin Người dùng</Profile>
       <username>#{word.userName}:</username>
       <SearchUser>Tìm kiếm người dùng</SearchUser>
       <password1x>Mật khẩu:</password1x>
@@ -123,8 +123,8 @@
     <tab>
       <label>
         <AccountTemplate>Mẫu tài khoản</AccountTemplate>
-        <UIUserProfileInputSet>Tiểu sử người dùng</UIUserProfileInputSet>
-        <AccountInputSet>Thiết lập tài khoản</AccountInputSet>
+        <UIUserProfileInputSet>Thông tin Người dùng</UIUserProfileInputSet>
+        <AccountInputSet>Thông tin Tài khoản</AccountInputSet>
         <UIUserMembershipSelector>Người dùng thành viên</UIUserMembershipSelector>
       </label>
     </tab>
