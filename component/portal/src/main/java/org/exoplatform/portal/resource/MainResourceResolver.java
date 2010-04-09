@@ -94,21 +94,13 @@ class MainResourceResolver implements ResourceResolver
       //
       if (context == null)
       {
-         String message = "Could not resolve " + targetedContextPath + " resource for path " + path;
-         log.warn(message);
-         throw new ResourceNotFoundException(path, message);
+         log.warn("Could not resolve " + targetedContextPath + " resource for path " + path);
+         return null;
       }
       else
       {
-         Resource resource = context.getResource(path.substring(i1));
-         if(resource == null)
-         {
-            throw new ResourceNotFoundException(path, "Could not resolve resource with path " + path.substring(i1) + " under context path " + targetedContextPath);
-         }
-         else
-         {
-            return resource;
-         }
+         return context.getResource(path.substring(i1));
       }
+
    }
 }
