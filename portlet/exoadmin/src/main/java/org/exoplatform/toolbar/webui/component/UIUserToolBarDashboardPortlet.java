@@ -130,7 +130,7 @@ public class UIUserToolBarDashboardPortlet extends UIPortletApplication
 
             PageNode pageNode = new PageNode();
             pageNode.setName(_nodeName);
-            pageNode.setLabel("Click & Type Page Name");
+            pageNode.setLabel(prContext.getApplicationResourceBundle().getString("UIUserToolBarDashboard.page.ClickAndType"));
             pageNode.setResolvedLabel(prContext.getApplicationResourceBundle());
             pageNode.setUri(_nodeName);
             pageNode.setPageReference(page.getPageId());
