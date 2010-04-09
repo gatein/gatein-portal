@@ -114,12 +114,12 @@
     "jsonProxyUrl" : "http://%host%/eXoGadgetServer/gadgets/makeRequest"
   },
   "views" : {
-    "home" : {
+    "HOME" : {
       "isOnlyVisible" : false,
       "urlTemplate" : "http://%host%/eXoGadgetServer/gadgets/home?{var}",
       "aliases": ["DASHBOARD", "default"]
     },
-    "canvas" : {
+    "CANVAS" : {
       "isOnlyVisible" : true,
       "urlTemplate" : "http://%host%/eXoGadgetServer/gadgets/canvas?{var}",
       "aliases" : ["FULL_PAGE"]

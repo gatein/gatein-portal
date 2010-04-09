@@ -276,10 +276,10 @@ gadgets.IfrGadgetService.prototype.requestNavigateTo = function(view,
  */
 gadgets.IfrGadgetService.prototype.getUrlForView = function(
     view) {
-  if (view === 'canvas') {
-    return 'canvas';
-  } else if (view === 'home') {
-    return 'home';
+  if (view === 'CANVAS') {
+    return 'CANVAS';
+  } else if (view === 'HOME') {
+    return 'HOME';
   } else {
     return null;
   }
