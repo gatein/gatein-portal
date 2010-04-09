@@ -52,6 +52,7 @@ import org.gatein.wci.WebAppEvent;
 import org.gatein.wci.WebAppLifeCycleEvent;
 import org.gatein.wci.WebAppListener;
 import org.gatein.wci.impl.DefaultServletContainerFactory;
+import org.gatein.wsrp.WSRPConstants;
 import org.gatein.wsrp.api.SessionEvent;
 import org.gatein.wsrp.api.SessionEventBroadcaster;
 import org.gatein.wsrp.api.SessionEventListener;
@@ -140,6 +141,8 @@ public class ExoKernelIntegration implements Startable, WebAppListener
          ServletContainerFactory factory = DefaultServletContainerFactory.getInstance();
          ServletContainer servletContainer = factory.getServletContainer();
          servletContainer.addWebAppListener(this);
+         
+         log.info("WSRP Service version '" + WSRPConstants.WSRP_SERVICE_VERSION + "' started");
       }
    }
 
