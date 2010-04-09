@@ -38,7 +38,6 @@ Used for the display of non-accentuated information */
    font-size: 11px;
 }
 
-
 /** MESSAGES **/
 
 /* Status of the current operation. */
@@ -116,26 +115,48 @@ Used for the display of non-accentuated information */
    font-style: italic;
 }
 
-
 /** TABLE **/
 
-/* Table header */
-.portlet-table-header {
-   background-color: #eef;
-   padding: 0 5px 5px 5px;
-   font-weight: bold;
-   color: #333333;
-   font-size: 12px;
-   border-bottom: 1px solid #d5d5d5;
+table {
+   border: 1px solid #b7b7b7;
+   border-collapse: collapse;
+   padding-left: 1px;
+   margin: auto;
+   table-layout: fixed;
+}
+
+thead {
+   border: 1px solid #b7b7b7;
+}
+
+tbody {
+   padding-bottom: 1px;
+}
+
+/* Table header and footer */
+.portlet-table-header, .portlet-table-footer {
+   line-height: 19px;
+   border: 1px solid #b7b7b7;
+   background: #d2ddf1 url('/eXoResources/skin/DefaultSkin/webui/component/UIGrid/background/ThGridRepeatBg1x19.jpg') repeat-x;
+   font-weight: normal;
+   padding: 0px 4px;
+   vertical-align: middle;
 }
 
 /* Normal text in a table cell */
-.portlet-table-body {}
+.portlet-table-body {
+   height: 20px;
+   line-height: 20px;
+   border-right: 1px solid #cccccc;
+   border-left: 1px solid #cccccc;
+   border-top: 1px solid white;
+   padding: 4px;
+   background: #f0f0f0;
+}
 
 /* Text in every other row in the table */
 .portlet-table-alternate {
-   background-color: #E6E8E5;
-   border-bottom: 1px solid #d5d5d5;
+   background: #f5f5f5;
 }
 
 /* Text in a selected cell range */
@@ -150,16 +171,6 @@ Used for the display of non-accentuated information */
    font-weight: bold;
    color: #000;
    font-size: 12px;
-}
-
-/* Table footer */
-.portlet-table-footer {
-   padding: 5px 5px 0 5px;
-   font-weight: bold;
-   color: #333333;
-   font-size: 12px;
-   border: none;
-   border-top: 1px solid #d5d5d5;
 }
 
 /* Text that belongs to the table but does not fall in one of the other categories (e.g. explanatory or help text that is associated with the table). */
@@ -182,28 +193,37 @@ Used for the display of non-accentuated information */
 
 /* Form Button Style */
 .portlet-form-button {
-   font-size: 10px;
-   font-weight: bold;
-   color: #FFFFFF;
-   background-color: #5078aa;
-   border-top: 1px solid #97B7C6;
-   border-left: 1px solid #97B7C6;
-   border-bottom: 1px solid #254869;
-   border-right: 1px solid #254869;
+   line-height: 22px;
+   text-align: center;
+   background: url('/eXoResources/skin/DefaultSkin/webui/component/UIBarDecorator/UIAction/background/LightBlueStyle.gif') repeat-x bottom;
+   white-space: nowrap;
+   display: table-cell;
+   padding: 0 12px;
+   border: 1px solid #aaa;
+   border-right-color: #555;
+   border-bottom-color: #555;
+   -moz-border-radius: 4px;
+   -webkit-border-radius: 4px;
+   margin: 1px;
 }
 
 /* Text that appears beside a context dependent action icon */
-.portlet-icon-label { }
+.portlet-icon-label {
+}
 
 /* Text that appears beside a "standard" icon (e.g Ok, or Cancel)
 not sure if we need this one?.. */
-.portlet-dlg-icon-label { }
+.portlet-dlg-icon-label {
+}
 
 /* Text for form field labels */
 .portlet-form-field-label {
    font-family: Verdana, Arial, Helvetica, Sans-Serif, sans-serif;
    color: #000;
-   white-space: nowrap
+   white-space: nowrap;
+   text-align: left;
+   vertical-align: top;
+   font-weight: bold;
 }
 
 /* Text for a form field */
@@ -212,26 +232,12 @@ not sure if we need this one?.. */
    font-size: 10px;
    color: #000; /*margin-top: 10px;*/
 }
-
-/* Text for form field labels */
-.portlet-form-field-label {
-   font-family: Verdana, Arial, Helvetica, Sans-Serif, sans-serif;
-   color: #000;
-   white-space: nowrap
-}
-
-/* Text for a form field */
-.portlet-form-field {
-   font-family: Verdana, Arial, Helvetica, Sans-Serif, sans-serif;
-   font-size: 10px;
-   color: #000; /*margin-top: 10px;*/
-}
-
 
 /** MENUS **/
 
 /*General menu settings such as background color, margins, etc. */
-.portlet-menu {}
+.portlet-menu {
+}
 
 /* Normal, unselected menu item. */
 .portlet-menu-item {
@@ -242,7 +248,8 @@ not sure if we need this one?.. */
 }
 
 /* Selected menu item. */
-.portlet-menu-item-selected {}
+.portlet-menu-item-selected {
+}
 
 .portlet-menu-item-hover {
    color: #5699B7;
@@ -252,41 +259,59 @@ not sure if we need this one?.. */
 }
 
 /* Selected menu item when the mouse hovers over it. */
-.portlet-menu-item-hover-selected {}
+.portlet-menu-item-hover-selected {
+}
 
 /* Normal, unselected menu item that has sub-menus. */
-.portlet-menu-cascade-item {}
+.portlet-menu-cascade-item {
+}
 
 /* Selected sub-menu item that has sub-menus */
-.portlet-menu-cascade-item-selected {}
+.portlet-menu-cascade-item-selected {
+}
 
-.porlet-menu-cascade {}
+.porlet-menu-cascade {
+}
 
-.portlet-menu-cascade-item-hover {}
+.portlet-menu-cascade-item-hover {
+}
 
-.portlet-menu-cascade-item-hover-selected {}
+.portlet-menu-cascade-item-hover-selected {
+}
 
-.portlet-menu-separator {}
+.portlet-menu-separator {
+}
 
-.portlet-menu-cascade-separator {}
+.portlet-menu-cascade-separator {
+}
 
-.portlet-menu-content {}
+.portlet-menu-content {
+}
 
-.portlet-menu-content-selected {}
+.portlet-menu-content-selected {
+}
 
-.portlet-menu-content-hover {}
+.portlet-menu-content-hover {
+}
 
-.portlet-menu-content-hover-selected {}
+.portlet-menu-content-hover-selected {
+}
 
-.portlet-menu-indicator {}
+.portlet-menu-indicator {
+}
 
-.portlet-menu-indicator-selected {}
+.portlet-menu-indicator-selected {
+}
 
-.portlet-menu-indicator-hover {}
+.portlet-menu-indicator-hover {
+}
 
-.portlet-menu-indicator-hover-selected {}
+.portlet-menu-indicator-hover-selected {
+}
 
-.portlet-menu-description {}
+.portlet-menu-description {
+}
 
-.portlet-menu-caption {}
+.portlet-menu-caption {
+}
 
