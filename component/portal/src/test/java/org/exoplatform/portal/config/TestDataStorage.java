@@ -24,16 +24,7 @@ import static org.exoplatform.portal.pom.config.Utils.split;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.application.PortletPreferences;
 import org.exoplatform.portal.application.Preference;
-import org.exoplatform.portal.config.model.Application;
-import org.exoplatform.portal.config.model.ApplicationState;
-import org.exoplatform.portal.config.model.ApplicationType;
-import org.exoplatform.portal.config.model.Container;
-import org.exoplatform.portal.config.model.Dashboard;
-import org.exoplatform.portal.config.model.Page;
-import org.exoplatform.portal.config.model.PageNavigation;
-import org.exoplatform.portal.config.model.PageNode;
-import org.exoplatform.portal.config.model.PortalConfig;
-import org.exoplatform.portal.config.model.TransientApplicationState;
+import org.exoplatform.portal.config.model.*;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.portal.pom.data.ModelChange;
@@ -627,6 +618,26 @@ public class TestDataStorage extends AbstractPortalTest
       //
       Application banner2 = (Application)container.getChildren().get(0);
       // assertEquals(banner2.getInstanceId(), banner1.getInstanceId());
+
+      //
+      Page srcPage = storage_.getPage("portal::test::test4");
+      srcPage.setEditPermission("Administrator");
+      Application<Portlet>portlet = (Application<Portlet>)srcPage.getChildren().get(0);
+      portlet.setDescription("NewPortlet");
+
+      ArrayList<ModelObject> modelObject = srcPage.getChildren();
+      modelObject.set(0, portlet);
+
+      srcPage.setChildren(modelObject);
+
+      storage_.save(srcPage);
+      Page dstPage = storage_.clonePage(srcPage.getPageId(), srcPage.getOwnerType(), srcPage.getOwnerId(), "_PageTest1234");
+      Application<Portlet>portlet1 = (Application<Portlet>)dstPage.getChildren().get(0);
+      // Check src's edit permission and dst's edit permission
+      assertEquals(srcPage.getEditPermission(), dstPage.getEditPermission());
+
+      // Check src's children and dst's children
+      assertEquals(portlet.getDescription(), portlet1.getDescription());
    }
 
    public void testDashboard() throws Exception

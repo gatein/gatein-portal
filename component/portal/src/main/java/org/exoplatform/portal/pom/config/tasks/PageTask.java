@@ -21,6 +21,7 @@ package org.exoplatform.portal.pom.config.tasks;
 
 import org.exoplatform.portal.config.NoSuchDataException;
 import org.exoplatform.portal.mop.Described;
+import org.exoplatform.portal.mop.ProtectedResource;
 import org.exoplatform.portal.pom.config.POMTask;
 import org.exoplatform.portal.pom.config.cache.DataAccessMode;
 import org.exoplatform.portal.pom.config.cache.CacheableDataTask;
@@ -164,6 +165,12 @@ public abstract class PageTask
          dstDescribed.setName(srcDescribed.getName());
          dstDescribed.setDescription(srcDescribed.getDescription());
 
+         // Copy src permissions to dst permission
+         PageData srcPageData = new Mapper(session).load(srcPage);
+         ProtectedResource pr = dstPage.adapt(ProtectedResource.class);
+         pr.setAccessPermissions(srcPageData.getAccessPermissions());
+         pr.setEditPermission(srcPageData.getEditPermission());
+
          copy(srcPage, dstPage, srcPage.getRootComponent(), dstPage.getRootComponent());
 
          //
@@ -176,6 +183,24 @@ public abstract class PageTask
          for (UIComponent srcChild : src.getComponents())
          {
             UIComponent dstChild = dst.add(srcChild.getObjectType(), srcChild.getObjectId());
+
+            //
+            if (srcChild.isAdapted(Described.class))
+            {
+               Described srcDescribed = srcChild.adapt(Described.class);
+               Described dstDescribed = dstChild.adapt(Described.class);
+               dstDescribed.setName(srcDescribed.getName());
+               dstDescribed.setDescription(srcDescribed.getDescription());
+            }
+
+            //
+            if (srcChild.isAdapted(ProtectedResource.class))
+            {
+               ProtectedResource srcPR = srcChild.adapt(ProtectedResource.class);
+               ProtectedResource dstPR = dstChild.adapt(ProtectedResource.class);
+               dstPR.setAccessPermissions(srcPR.getAccessPermissions());
+               dstPR.setEditPermission(srcPR.getEditPermission());
+            }
 
             //
             Attributes srcAttrs = srcChild.getAttributes();

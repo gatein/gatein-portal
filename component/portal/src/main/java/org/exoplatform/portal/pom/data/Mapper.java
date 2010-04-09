@@ -20,6 +20,7 @@
 package org.exoplatform.portal.pom.data;
 
 import org.exoplatform.portal.config.NoSuchDataException;
+import org.exoplatform.portal.config.StaleModelException;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.model.ApplicationState;
 import org.exoplatform.portal.config.model.ApplicationType;
@@ -708,7 +709,7 @@ public class Mapper
             dstChild = session.findObjectById(ObjectType.COMPONENT, srcChildId);
             if (dstChild == null)
             {
-               throw new AssertionError("Could not find supposed present child with id " + srcChildId);
+               throw new StaleModelException("Could not find supposed present child with id " + srcChildId);
             }
 
             // julien : this can fail due to a bug in chromattic not implementing equals method properly
@@ -774,7 +775,7 @@ public class Mapper
             }
             else
             {
-               throw new AssertionError("Was not expecting child " + srcChild);
+               throw new StaleModelException("Was not expecting child " + srcChild);
             }
             changes.add(new ModelChange.Create(dst.getObjectId(), srcChild));
          }
