@@ -117,22 +117,6 @@ Used for the display of non-accentuated information */
 
 /** TABLE **/
 
-table {
-   border: 1px solid #b7b7b7;
-   border-collapse: collapse;
-   padding-left: 1px;
-   margin: auto;
-   table-layout: fixed;
-}
-
-thead {
-   border: 1px solid #b7b7b7;
-}
-
-tbody {
-   padding-bottom: 1px;
-}
-
 /* Table header and footer */
 .portlet-table-header, .portlet-table-footer {
    line-height: 19px;
