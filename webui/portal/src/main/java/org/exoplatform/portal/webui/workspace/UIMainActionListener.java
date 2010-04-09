@@ -160,9 +160,7 @@ public class UIMainActionListener
          newPortal.setSelectedNode(uiPortal.getSelectedNode());
          newPortal.setSelectedNavigation(uiPortal.getSelectedNavigation());
          newPortal.setSelectedPath(uiPortal.getSelectedPath());
-         
-         // Get instance of UIPage
-         newPortal.getChild(UIPageBody.class).setPageBody(newPortal.getSelectedNode(), newPortal);
+         newPortal.refreshUIPage();
 
          UIEditInlineWorkspace uiEditWS = uiWorkingWS.getChild(UIEditInlineWorkspace.class);
          uiEditWS.setUIComponent(newPortal);

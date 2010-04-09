@@ -111,8 +111,6 @@ public class UIPageActionListener
             {
                showedUIPortal.setSelectedNode(targetPageNode);
                showedUIPortal.setSelectedPath(targetedPathNodes);
-               showedUIPortal.refreshUIPage();
-               return;
             }
          }
          else
@@ -121,12 +119,12 @@ public class UIPageActionListener
             // First, we try to find a cached UIPortal
             uiWorkingWS.setRenderedChild(UIPortalApplication.UI_VIEWING_WS_ID);
             uiPortalApp.setModeState(UIPortalApplication.NORMAL_MODE);
-            UIPortal cachedUIPortal = uiPortalApp.getCachedUIPortal(newNavType, newNavId);
-            if (cachedUIPortal != null)
+            showedUIPortal = uiPortalApp.getCachedUIPortal(newNavType, newNavId);
+            if (showedUIPortal != null)
             {
-               cachedUIPortal.setSelectedNode(targetPageNode);
-               cachedUIPortal.setSelectedPath(targetedPathNodes);
-               uiPortalApp.setShowedUIPortal(cachedUIPortal);
+               showedUIPortal.setSelectedNode(targetPageNode);
+               showedUIPortal.setSelectedPath(targetedPathNodes);
+               uiPortalApp.setShowedUIPortal(showedUIPortal);
                
                //Temporary solution to fix edit inline error while switching between navigations
                DataStorage storageService = uiPortalApp.getApplicationComponent(DataStorage.class);
@@ -139,25 +137,21 @@ public class UIPageActionListener
                //Update selected navigation on UserPortalConfig, that is mandatory as at the moment the PortalConfig
                //does not hold any navigation data.
                userPortalConfig.updateSelectedNavigation(newNavType, newNavId);
-               
-               cachedUIPortal.refreshUIPage();
-               return;
             }
             else
             {
-               UIPortal newUIPortal = buildUIPortal(targetedNav, uiPortalApp, uiPortalApp.getUserPortalConfig());
-               if(newUIPortal == null)
+               showedUIPortal = buildUIPortal(targetedNav, uiPortalApp, uiPortalApp.getUserPortalConfig());
+               if(showedUIPortal == null)
                {
                   return;
                }
-               newUIPortal.setSelectedNode(targetPageNode);
-               newUIPortal.setSelectedPath(targetedPathNodes);
-               uiPortalApp.setShowedUIPortal(newUIPortal);
-               uiPortalApp.putCachedUIPortal(newUIPortal);
-               newUIPortal.refreshUIPage();
-               return;
+               showedUIPortal.setSelectedNode(targetPageNode);
+               showedUIPortal.setSelectedPath(targetedPathNodes);
+               uiPortalApp.setShowedUIPortal(showedUIPortal);
+               uiPortalApp.putCachedUIPortal(showedUIPortal);
             }
          }
+         showedUIPortal.refreshUIPage();
       }
       
       /**
