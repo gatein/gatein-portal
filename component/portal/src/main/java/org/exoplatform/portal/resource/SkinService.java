@@ -423,40 +423,57 @@ public class SkinService implements Startable
    }
    
    /**
-    *  Add this method to catch <code>ResourceNotFoundException</code>
-    * and to log evoquant message
+    *
+    * This method delegates the resource resolving to MainResourceResolver and prints out appropriated log messages 
+    * 
+    * Consider the two cases the method is invoked 
+    * 
+    * Case 1: Resolve nested .css file 
+    * 
+    *  In Stylesheet.css we have the statement 
+    * 
+    *  @import url(xyzt.css);
+    * 
+    *  To resolve the resource from xyzt.css, getCSSResource("xyzt.css", "Stylesheet.css") is called
+    *  
+    * Case 2: Resolve top root .css file
+    * 
+    *  To resolve a top root Stylesheet.css file, getCSSResource("Stylesheet.css", "Stylesheet.css") is called
     * 
     * @param cssPath
+    * @param outerCssFile
     * @return
+    * 
     */
-   private Resource getCSSResource(String cssPath)
+   private Resource getCSSResource(String cssPath, String outerCssFile)
    {
-      try{
-         return mainResolver.resolve(cssPath);
-      }
-      catch(ResourceNotFoundException NotFoundEx)
+      Resource resource = mainResolver.resolve(cssPath);
+      if (resource == null)
       {
-         String notFoundResourcePath = NotFoundEx.getResourcePath();
          String logMessage;
-         if(!cssPath.equals(notFoundResourcePath))
+         if (!cssPath.equals(outerCssFile))
          {
+            int lastIndexOfSlash = cssPath.lastIndexOf('/');
+            String loadedCssFile = (lastIndexOfSlash >= 0)?(cssPath.substring(lastIndexOfSlash + 1)) : cssPath;
             logMessage =
-               "Invalid <CSS FILE> configuration, please check the @import url(" + notFoundResourcePath + ") in "
-                  + cssPath + " , SkinService could not load the skin " + cssPath;
+               "Invalid <CSS FILE> configuration, please check the @import url(" + loadedCssFile + ") in "
+                  + outerCssFile + " , SkinService could not load the skin " + cssPath;
          }
          else
          {
-            logMessage = "Not found <CSS FILE> " + cssPath + " , SkinService could not load the skin " + cssPath;
+            logMessage =
+               "Not found <CSS FILE>, the path " + cssPath + " is invalid, SkinService could not load the skin "
+                  + cssPath;
          }
          log.error(logMessage);
-         return null;
       }
+      return resource;
    }
 
    private void processCSS(Appendable appendable, String cssPath, Orientation orientation, boolean merge)
       throws RenderingException, IOException
    {
-      Resource skin = getCSSResource(cssPath);
+      Resource skin = getCSSResource(cssPath, cssPath);
       processCSSRecursively(appendable, merge, skin, orientation);
    }
 
@@ -487,7 +504,7 @@ public class SkinService implements Startable
                {
                   if (merge)
                   {
-                     Resource ssskin = getCSSResource(includedPath);
+                     Resource ssskin = getCSSResource(includedPath, basePath + skin.getFileName());
                      processCSSRecursively(appendable, merge, ssskin, orientation);
                   }
                   else
@@ -502,7 +519,7 @@ public class SkinService implements Startable
                   if (merge)
                   {
                      String path = skin.getContextPath() + skin.getParentPath() + includedPath;
-                     Resource ssskin = getCSSResource(path);
+                     Resource ssskin = getCSSResource(path, basePath + skin.getFileName());
                      processCSSRecursively(appendable, merge, ssskin, orientation);
                   }
                   else
