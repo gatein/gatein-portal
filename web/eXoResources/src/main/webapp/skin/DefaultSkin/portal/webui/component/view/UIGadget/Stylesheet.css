@@ -87,11 +87,11 @@
 }
 
 .UIGadget .GadgetControl .MinimizeGadget {
-	background-position: 31px top;
+	background-position: 48px top;
 }
 
 .UIGadget .GadgetControl .RestoreGadget {
-	background-position: 48px top;
+	background-position: 31px top;
 }
 
 .UIGadget .GadgetControl .EditGadget {
@@ -99,7 +99,7 @@
 }
 
 .UIGadget .GadgetControl .MaximizeGadget {
-	background-position: 48px top;
+	background-position: 65px top;
 }
 
 .UIGadget .TLGadget {

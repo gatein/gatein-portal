@@ -38,8 +38,9 @@
 									onclick="eXo.gadget.UIGadget.minimizeGadget(this)" onmousedown="event.cancelBubble=true;" style="display:none;" 
 									title="<%=isMini ? unminiTitle : miniTitle%>" miniTitle="$miniTitle" unminiTitle="$unminiTitle"><span></span></div>
 					<div class="EditGadget IconControl" onclick="eXo.gadget.UIGadget.editGadget('$id')" onmousedown="event.cancelBubble=true;" title="<%=_ctx.appRes("UIGadget.tooltip.editGadget")%>"><span></span></div>
-					<div class="MaximizeGadget IconControl" onclick="eXo.gadget.UIGadget.maximizeGadget(this)" onmousedown="event.cancelBubble=true;" 
-									title="<%=view.equals(uicomponent.HOME_VIEW) ? maxiTitle : unmaxiTitle%>"><span></span></div>
+					<div class="<%=view.equals(uicomponent.HOME_VIEW) ? "MaximizeGadget" : "RestoreGadget";%> IconControl"
+                                    onclick="eXo.gadget.UIGadget.maximizeGadget(this)" onmousedown="event.cancelBubble=true;"
+                                    title="<%=view.equals(uicomponent.HOME_VIEW) ? maxiTitle : unmaxiTitle%>"><span></span></div>
 					<div class="GadgetDragHandleArea"><span></span></div>
 				 	<div style="clear: both;"><span></span></div>
 				</div>
