@@ -481,6 +481,10 @@ public class SkinService implements Startable
       throws RenderingException, IOException
    {
 
+      if(skin == null)
+      {
+         return;
+      }
       // The root URL for the entry
       String basePath = skin.getContextPath() + skin.getParentPath();
 
