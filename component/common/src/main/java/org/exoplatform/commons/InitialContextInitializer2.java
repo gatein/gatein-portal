@@ -27,6 +27,8 @@ import org.exoplatform.services.naming.InitialContextInitializer;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import javax.xml.stream.XMLStreamException;
+import java.io.FileNotFoundException;
 
 /**
  * This code should be moved in the core, for now it is here as it is needed here.
@@ -40,7 +42,7 @@ import javax.naming.NamingException;
 public class InitialContextInitializer2 extends InitialContextInitializer
 {
 
-   public InitialContextInitializer2(InitParams params) throws NamingException, ConfigurationException
+   public InitialContextInitializer2(InitParams params) throws NamingException, ConfigurationException, FileNotFoundException, XMLStreamException
    {
       super(params);
    }
