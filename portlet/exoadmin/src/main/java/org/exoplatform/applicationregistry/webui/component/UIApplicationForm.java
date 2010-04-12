@@ -21,6 +21,8 @@ package org.exoplatform.applicationregistry.webui.component;
 
 import org.exoplatform.application.registry.Application;
 import org.exoplatform.application.registry.ApplicationRegistryService;
+import org.exoplatform.portal.application.PortalRequestContext;
+import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.commons.serialization.api.annotations.Serialized;
@@ -30,6 +32,7 @@ import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.event.MonitorEvent;
 import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormStringInput;
@@ -110,9 +113,11 @@ public class UIApplicationForm extends UIForm
          }
          service.update(application);
          //uiOrganizer.setSelectedApplication(uiOrganizer.getSelectedApplication());
+         uiOrganizer.reload();
          uiOrganizer.setSelectedApplication(application);
          ctx.addUIComponentToUpdateByAjax(uiOrganizer);
       }
+      
    }
 
    static public class CancelActionListener extends EventListener<UIApplicationForm>
