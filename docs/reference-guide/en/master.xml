@@ -143,6 +143,9 @@ LT 20010312: could not find a way to configure image scaling properly (tried wid
    <!-- WSRP -->
    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="modules/WSRP.xml"/>
 
+   <!-- APIs -->
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="modules/APIs.xml"/>
+
    <!--
        11_Support
        http://www.exoplatform.com/portal/public/en/forum?portal:componentId=forum&portal:type=action&portal:isSecure=false&uicomponent=UIBreadcumbs&op=ChangePath&objectId=forumCategory88afa455c0a8020100a6752323da4b60
