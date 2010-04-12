@@ -150,7 +150,15 @@ public class UIPortalComponentActionListener
              */
             if (uiParent.getChildren().size() == 1)
             {
-               uiComponentTobeRemoved = uiParent.getParent();
+               UIContainer uiTabParent = uiParent.getParent();
+               if(uiTabParent.getChildren().size() > 1)
+               {
+                  uiComponentTobeRemoved = uiParent;
+               }
+               else
+               {
+                  uiComponentTobeRemoved = uiTabParent;
+               }
             }
             else
             {
@@ -361,7 +369,15 @@ public class UIPortalComponentActionListener
          {
             if (uiParent.getChildren().size() == 1)
             {
-               removeUIComponent(uiParent.getParent(), pcontext, false);
+               UIContainer uiTabParent = uiParent.getParent();
+               if (uiTabParent.getChildren().size() > 1)
+               {
+                  removeUIComponent(uiParent, pcontext, false);
+               }
+               else
+               {
+                  removeUIComponent(uiTabParent, pcontext, false);
+               }
             }
             else
             {
