@@ -119,7 +119,7 @@
       "urlTemplate" : "http://%host%/eXoGadgetServer/gadgets/home?{var}",
       "aliases": ["DASHBOARD", "default"]
     },
-    "HOME" : {
+    "CANVAS" : {
       "isOnlyVisible" : true,
       "urlTemplate" : "http://%host%/eXoGadgetServer/gadgets/canvas?{var}",
       "aliases" : ["FULL_PAGE"]

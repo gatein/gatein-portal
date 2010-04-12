@@ -88,7 +88,7 @@ public class UIGadget extends UIComponent
 
    public static final String HOME_VIEW = "HOME";
 
-   public static final String CANVAS_VIEW = "HOME";
+   public static final String CANVAS_VIEW = "CANVAS";
 
    public String view = HOME_VIEW;
 
