@@ -295,35 +295,7 @@ organization.management=Management
  javax.portlet.keywords=Breadcrumbs, Breadcrumb
 </programlisting>
 		</section>
-		
-		<section id="sect-Reference_Guide-_Portlets_-Access">
-			<title>Access</title>
-			<para>
-				These <emphasis>key</emphasis>s are used to display a property in the user language.
-			</para>
-			<para>
-				The following access method enables translation to the preferred language for the connected user:
-			</para>
-			<itemizedlist>
-				<listitem>
-					<para>
-						Groovy Template 
-<programlisting>TODO
-</programlisting>
-					</para>
-				</listitem>
-				<listitem>
-					<para>
-						Java 
-<programlisting>WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
-ResourceBundle res = context.getApplicationResourceBundle() ;
-String translatedString = res.getString(key);
-</programlisting>
-					</para>
-				</listitem>
-			</itemizedlist>
-		</section>
-		
+				
 		<section id="sect-Reference_Guide-_Portlets_-Debugging_resource_bundle_usage">
 			<title>Debugging resource bundle usage</title>
 			<para>

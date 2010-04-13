@@ -17,6 +17,16 @@
 		that provides handling functionality for the five components.
 	</para>
 	<para>
+		<mediaobject>
+			<imageobject role="html">
+				<imagedata fileref="images/AuthenticationAndIdentity/OrganizationServiceClassDiagram.png" format="PNG" align="center"/>
+			</imageobject>
+			<imageobject role="fo">
+				<imagedata fileref="images/AuthenticationAndIdentity/OrganizationServiceClassDiagram.png" scalefit="1" format="PNG" align="center"/>
+			</imageobject>
+		</mediaobject>
+	</para>
+	<para>
 		The
 		<literal>User</literal>
 		component contains basic information about a user - such as
