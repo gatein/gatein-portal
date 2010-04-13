@@ -579,13 +579,46 @@ public class UINavigationNodeSelector extends UIContainer
    {
       public void execute(Event<UIRightClickPopupMenu> event) throws Exception
       {
-         super.execute(event);
-         UINavigationNodeSelector uiNodeSelector = event.getSource().getAncestorOfType(UINavigationNodeSelector.class);
-         if (uiNodeSelector.getCopyNode() == null)
-         {
-            return;
-         }
-         uiNodeSelector.getCopyNode().setDeleteNode(true);
+    	  String uri = event.getRequestContext().getRequestParameter(UIComponent.OBJECTID);
+    	  WebuiRequestContext pcontext = event.getRequestContext();
+          UIApplication uiApp = pcontext.getUIApplication();
+          UINavigationNodeSelector uiNodeSelector = event.getSource().getAncestorOfType(UINavigationNodeSelector.class);
+          UINavigationManagement uiManagement = uiNodeSelector.getParent();
+          Class<?>[] childrenToRender = new Class<?>[]{UINavigationNodeSelector.class};
+          uiManagement.setRenderedChildrenOfTypes(childrenToRender);
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiManagement);
+
+          PageNavigation nav = uiNodeSelector.getSelectedNavigation();
+          if (nav == null)
+          {
+             return;
+          }
+          
+          PageNode[] pageNodes = PageNavigationUtils.searchPageNodesByUri(nav, uri);
+          if (pageNodes == null)
+          {
+             return;
+          }
+          
+          for (PageNode pageNode : pageNodes) {
+  			 if(pageNode != null && pageNode.isSystem()) {
+  				 uiApp.addMessage(new ApplicationMessage("UINavigationNodeSelector.msg.systemnode-move", null, ApplicationMessage.ERROR));
+  				 return;
+  			 }
+          }
+          
+          SelectedNode selectedNode = new SelectedNode(nav, pageNodes[0], pageNodes[1]);
+          selectedNode.setDeleteNode(false);
+          uiNodeSelector.setCopyNode(selectedNode);
+          event.getSource().setActions(
+             new String[]{"AddNode", "EditPageNode", "EditSelectedNode", "CopyNode", "CloneNode", "CutNode",
+                "PasteNode", "DeleteNode", "MoveUp", "MoveDown"});         
+
+          if (uiNodeSelector.getCopyNode() == null)
+          {
+             return;
+          }
+          uiNodeSelector.getCopyNode().setDeleteNode(true);
       }
    }
 
@@ -806,6 +839,7 @@ public class UINavigationNodeSelector extends UIContainer
       {
          String uri = event.getRequestContext().getRequestParameter(UIComponent.OBJECTID);
          WebuiRequestContext pcontext = event.getRequestContext();
+         UIApplication uiApp = pcontext.getUIApplication();
          UINavigationNodeSelector uiNodeSelector = event.getSource().getAncestorOfType(UINavigationNodeSelector.class);
          pcontext.addUIComponentToUpdateByAjax(uiNodeSelector);
 
@@ -823,8 +857,20 @@ public class UINavigationNodeSelector extends UIContainer
 
          if (pageNodes[0] == null)
          {
+        	if(pageNodes[1].isSystem()) {
+        		uiApp.addMessage(new ApplicationMessage("UINavigationNodeSelector.msg.systemnode-delete", null, ApplicationMessage.ERROR));
+        		return;
+        	}
+        		
             nav.getNodes().remove(pageNodes[1]);
             return;
+         }
+         
+         for (PageNode pageNode : pageNodes) {
+			if(pageNode.isSystem()) {
+				uiApp.addMessage(new ApplicationMessage("UINavigationNodeSelector.msg.systemnode-delete", null, ApplicationMessage.ERROR));
+				return;
+			}
          }
          pageNodes[0].getChildren().remove(pageNodes[1]);
          uiNodeSelector.selectPageNodeByUri(pageNodes[0].getUri());

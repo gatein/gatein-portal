@@ -248,6 +248,18 @@ public class PageNode extends PageNodeContainer
       }
    }
 
+   public boolean isSystem() {
+	  switch(visibility) {
+	   	 case SYSTEM:
+	   		 return true;
+	   	 case TEMPORAL:
+	   	 case HIDDEN:
+	   	 case DISPLAYED:
+	   		 return false;
+	   	 default:
+	   		 throw new AssertionError();
+	  }
+   }
    public void setVisible(Boolean b)
    {
       if (b != null)
