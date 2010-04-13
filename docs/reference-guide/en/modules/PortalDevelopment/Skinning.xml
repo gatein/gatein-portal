@@ -264,7 +264,7 @@ tein.org/xml/ns/gatein_resources_1_0.xsd"&gt;
 
     <para><mediaobject>
         <imageobject>
-          <imagedata fileref="images/windowStyles.png" format="PNG"
+          <imagedata fileref="images/PortalDevelopment/Skinning/windowStyles.png" format="PNG"
                      width="444" />
         </imageobject>
       </mediaobject></para>

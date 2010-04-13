@@ -188,7 +188,7 @@
 						</para>
 						<mediaobject>
 							<imageobject>
-								<imagedata fileref="images/cas.png" format="PNG" width="444" />
+								<imagedata fileref="images/AuthenticationAndIdentity/SSO/cas.png" format="PNG" width="444" />
 							</imageobject>
 						</mediaobject>
 					</step>
@@ -389,7 +389,7 @@ realmName=gatein-domain
 						</para>
 						<mediaobject>
 							<imageobject>
-								<imagedata fileref="images/opensso.png" format="PNG" width="444" />
+								<imagedata fileref="images/AuthenticationAndIdentity/SSO/opensso.png" format="PNG" width="444" />
 							</imageobject>
 						</mediaobject>
 					</step>
@@ -622,7 +622,7 @@ realmName=gatein-domain
 						</para>
 						<mediaobject>
 							<imageobject>
-								<imagedata fileref="images/opensso-shot.png" format="PNG" />
+								<imagedata fileref="images/AuthenticationAndIdentity/SSO/opensso-shot.png" format="PNG" />
 							</imageobject>
 						</mediaobject>
 					</step>

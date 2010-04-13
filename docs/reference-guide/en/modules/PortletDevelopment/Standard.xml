@@ -33,7 +33,7 @@
 			<para>
 				<mediaobject>
 					<imageobject>
-						<imagedata fileref="images/tutorials/SpecPortalDef.png" format="PNG" scalefit="1" width="444" />
+						<imagedata fileref="images/PortletDevelopment/Standard/SpecPortalDef.png" format="PNG" scalefit="1" width="444" />
 					</imageobject>
 				</mediaobject>
 			</para>
@@ -159,7 +159,7 @@
 						<mediaobject>
 							<imageobject>
 								<objectinfo id="obje-Reference_Guide-Compiling-SimplestHelloWorldPortlet_deployed_on_a_new_page"><title>SimplestHelloWorldPortlet deployed on a new page</title>
-								</objectinfo><imagedata fileref="images/tutorials/first_portlet/deployed.png" format="PNG" width="444" />
+								</objectinfo><imagedata fileref="images/PortletDevelopment/Standard/first_portlet/deployed.png" format="PNG" width="444" />
 							</imageobject>
 						</mediaobject>
 					</step>
@@ -416,7 +416,7 @@ public class SimplestHelloWorldPortlet extends GenericPortlet
 			
 			<mediaobject>
 				<imageobject>
-					<imagedata align="center" fileref="images/tutorials/jsp_portlet/output.png" format="PNG" scalefit="1" width="444" />
+					<imagedata align="center" fileref="images/PortletDevelopment/Standard/jsp_portlet/output.png" format="PNG" scalefit="1" width="444" />
 				</imageobject>
 			</mediaobject>
 			<note>
@@ -698,7 +698,7 @@ Please check the source code to see the difference with Method 1.
 					In the third method the action phase is triggered first then the render phase is triggered, which outputs some content back to the web browser based on the available render parameters. 
 					<mediaobject>
 						<imageobject>
-							<imagedata fileref="images/tutorials/jsp_portlet/process.png" format="PNG" scalefit="1" width="444" />
+							<imagedata fileref="images/PortletDevelopment/Standard/jsp_portlet/process.png" format="PNG" scalefit="1" width="444" />
 						</imageobject>
 					</mediaobject>
 				</para>

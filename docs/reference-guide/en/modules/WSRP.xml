@@ -316,7 +316,7 @@
                well, you should see something similar to this:
                <mediaobject>
                   <imageobject>
-                     <imagedata fileref="images/wsrp/config_init.png" format="PNG" align="center" valign="middle"
+                     <imagedata fileref="images/WSRP/config_init.png" format="PNG" align="center" valign="middle"
                                 scalefit="1"/>
                   </imageobject>
                </mediaobject>
@@ -335,7 +335,7 @@
                the "Create a consumer named:" field then click on "Create consumer":
                <mediaobject>
                   <imageobject>
-                     <imagedata fileref="images/wsrp/config_create.png" format="PNG" align="center" valign="middle"
+                     <imagedata fileref="images/WSRP/config_create.png" format="PNG" align="center" valign="middle"
                                 scalefit="1"/>
                   </imageobject>
                </mediaobject>
@@ -344,7 +344,7 @@
                and press the "Refresh &amp; Save" button:
                <mediaobject>
                   <imageobject>
-                     <imagedata fileref="images/wsrp/config_usewsdl.png" format="PNG" align="center" valign="middle"
+                     <imagedata fileref="images/WSRP/config_usewsdl.png" format="PNG" align="center" valign="middle"
                                 scalefit="1"/>
                   </imageobject>
                </mediaobject>
@@ -354,7 +354,7 @@
                property named<literal>registration/consumerRole</literal>:
                <mediaobject>
                   <imageobject>
-                     <imagedata fileref="images/wsrp/config_refresh.png" format="PNG" align="center" valign="middle"
+                     <imagedata fileref="images/WSRP/config_refresh.png" format="PNG" align="center" valign="middle"
                                 scalefit="1"/>
                   </imageobject>
                </mediaobject>
@@ -368,7 +368,7 @@
                see something similar to:
                <mediaobject>
                   <imageobject>
-                     <imagedata fileref="images/wsrp/config_end.png" format="PNG" align="center" valign="middle"
+                     <imagedata fileref="images/WSRP/config_end.png" format="PNG" align="center" valign="middle"
                                 scalefit="1"/>
                   </imageobject>
                </mediaobject>
@@ -385,7 +385,7 @@
                producer:
                <mediaobject>
                   <imageobject>
-                     <imagedata fileref="images/wsrp/config_self.png" format="PNG" align="center" valign="middle"
+                     <imagedata fileref="images/WSRP/config_self.png" format="PNG" align="center" valign="middle"
                                 scalefit="1"/>
                   </imageobject>
                </mediaobject>
@@ -443,7 +443,7 @@
                you should see something similar to this:
                <mediaobject>
                   <imageobject>
-                     <imagedata fileref="images/wsrp/portlets.png" format="PNG" align="center" valign="middle"
+                     <imagedata fileref="images/WSRP/portlets.png" format="PNG" align="center" valign="middle"
                                 scalefit="1"/>
                   </imageobject>
                </mediaobject>
@@ -463,7 +463,7 @@
                we just configured. Select it and click on "View portlets". You should now see something similar to:
                <mediaobject>
                   <imageobject>
-                     <imagedata fileref="images/wsrp/bea.png" format="PNG" align="center" valign="middle" scalefit="1"/>
+                     <imagedata fileref="images/WSRP/bea.png" format="PNG" align="center" valign="middle" scalefit="1"/>
                   </imageobject>
                </mediaobject>
             </para>
@@ -474,7 +474,7 @@
                you should see something similar to below for this portlet:
                <mediaobject>
                   <imageobject>
-                     <imagedata fileref="images/wsrp/result.png" format="PNG" align="center" valign="middle"/>
+                     <imagedata fileref="images/WSRP/result.png" format="PNG" align="center" valign="middle"/>
                   </imageobject>
                </mediaobject>
             </para>
@@ -765,7 +765,7 @@
                service level. This gave us access to three portlets as shown here:
                <mediaobject>
                   <imageobject>
-                     <imagedata fileref="images/wsrp/bea.png" format="png" align="center" valign="middle" scalefit="1"/>
+                     <imagedata fileref="images/WSRP/bea.png" format="png" align="center" valign="middle" scalefit="1"/>
                   </imageobject>
                </mediaobject>
             </para>
@@ -782,7 +782,7 @@
                instead of<literal>public</literal>:
                <mediaobject>
                   <imageobject>
-                     <imagedata fileref="images/wsrp/modify_reg_start.png" format="png" align="center" valign="middle"
+                     <imagedata fileref="images/WSRP/modify_reg_start.png" format="png" align="center" valign="middle"
                                 scalefit="1"/>
                   </imageobject>
                </mediaobject>
@@ -790,7 +790,7 @@
                let you send this new data to the remote producer:
                <mediaobject>
                   <imageobject>
-                     <imagedata fileref="images/wsrp/modify_reg_modify.png" format="png" align="center"
+                     <imagedata fileref="images/WSRP/modify_reg_modify.png" format="png" align="center"
                                 valign="middle" scalefit="1"/>
                   </imageobject>
                </mediaobject>
@@ -798,7 +798,7 @@
                the remote producer, you should see something similar to:
                <mediaobject>
                   <imageobject>
-                     <imagedata fileref="images/wsrp/modify_reg_end.png" format="png" align="center" valign="middle"
+                     <imagedata fileref="images/WSRP/modify_reg_end.png" format="png" align="center" valign="middle"
                                 scalefit="1"/>
                   </imageobject>
                </mediaobject>
@@ -808,7 +808,7 @@
                new portlets are now available:
                <mediaobject>
                   <imageobject>
-                     <imagedata fileref="images/wsrp/bea_insider.png" format="png" align="center" valign="middle"
+                     <imagedata fileref="images/WSRP/bea_insider.png" format="png" align="center" valign="middle"
                                 scalefit="1"/>
                   </imageobject>
                </mediaobject>
@@ -830,7 +830,7 @@
                the configuration screen for this producer, you should see:
                <mediaobject>
                   <imageobject>
-                     <imagedata fileref="images/wsrp/config_self.png" format="png" align="center" valign="middle"
+                     <imagedata fileref="images/WSRP/config_self.png" format="png" align="center" valign="middle"
                                 scalefit="1"/>
                   </imageobject>
                </mediaobject>
@@ -844,7 +844,7 @@
                the consumer by pressing "Refresh &amp; Save":
                <mediaobject>
                   <imageobject>
-                     <imagedata fileref="images/wsrp/modify_reg_self.png" format="png" align="center" valign="middle"
+                     <imagedata fileref="images/WSRP/modify_reg_self.png" format="png" align="center" valign="middle"
                                 scalefit="1"/>
                   </imageobject>
                </mediaobject>
@@ -857,7 +857,7 @@
                data, you should see something similar to:
                <mediaobject>
                   <imageobject>
-                     <imagedata fileref="images/wsrp/modify_reg_self_end.png" format="png" align="center"
+                     <imagedata fileref="images/WSRP/modify_reg_self_end.png" format="png" align="center"
                                 valign="middle" scalefit="1"/>
                   </imageobject>
                </mediaobject>
@@ -882,7 +882,7 @@
             Several operations are available from the consumer list view of the WSRP configuration portlet:
             <mediaobject>
                <imageobject>
-                  <imagedata fileref="images/wsrp/consumer_operations.png" format="png" align="center" valign="middle"
+                  <imagedata fileref="images/WSRP/consumer_operations.png" format="png" align="center" valign="middle"
                              scalefit="1"/>
                </imageobject>
             </mediaobject>
@@ -920,7 +920,7 @@
          </para>
          <mediaobject>
             <imageobject>
-               <imagedata fileref="images/wsrp/erase_registration.png" format="png" align="center" valign="middle"/>
+               <imagedata fileref="images/WSRP/erase_registration.png" format="png" align="center" valign="middle"/>
             </imageobject>
          </mediaobject>
          <para>
@@ -930,7 +930,7 @@
          </para>
          <mediaobject>
             <imageobject>
-               <imagedata fileref="images/wsrp/erase_registration_warning.png" format="png" align="center"
+               <imagedata fileref="images/WSRP/erase_registration_warning.png" format="png" align="center"
                           valign="middle"/>
             </imageobject>
          </mediaobject>
@@ -975,7 +975,7 @@
             should see with the default configuration:
             <mediaobject>
                <imageobject>
-                  <imagedata fileref="images/wsrp/producer_default.png" format="png" align="center" valign="middle"
+                  <imagedata fileref="images/WSRP/producer_default.png" format="png" align="center" valign="middle"
                              scalefit="1"/>
                </imageobject>
             </mediaobject>
@@ -999,7 +999,7 @@
             state:
             <mediaobject>
                <imageobject>
-                  <imagedata fileref="images/wsrp/producer_blank.png" format="png" align="center" valign="middle"
+                  <imagedata fileref="images/WSRP/producer_blank.png" format="png" align="center" valign="middle"
                              scalefit="1"/>
                </imageobject>
             </mediaobject>
@@ -1010,7 +1010,7 @@
             registrations."). The screen should now refresh and display:
             <mediaobject>
                <imageobject>
-                  <imagedata fileref="images/wsrp/producer_registration.png" format="png" align="center"
+                  <imagedata fileref="images/WSRP/producer_registration.png" format="png" align="center"
                              valign="middle" scalefit="1"/>
                </imageobject>
             </mediaobject>
@@ -1026,7 +1026,7 @@
             purpose:
             <mediaobject>
                <imageobject>
-                  <imagedata fileref="images/wsrp/producer_email.png" format="png" align="center" valign="middle"
+                  <imagedata fileref="images/WSRP/producer_email.png" format="png" align="center" valign="middle"
                              scalefit="1"/>
                </imageobject>
             </mediaobject>

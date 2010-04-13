@@ -21,7 +21,7 @@
 				</para>
 				<mediaobject>
 					<imageobject>
-						<imagedata fileref="images/Calendar.png" format="PNG" />
+						<imagedata fileref="images/GadgetDevelopment/Calendar.png" format="PNG" />
 					</imageobject>
 				</mediaobject>
 			</listitem>
@@ -34,7 +34,7 @@
 				</para>
 				<mediaobject>
 					<imageobject>
-						<imagedata fileref="images/Todo.png" format="PNG" />
+						<imagedata fileref="images/GadgetDevelopment/Todo.png" format="PNG" />
 					</imageobject>
 				</mediaobject>
 			</listitem>
@@ -47,7 +47,7 @@
 				</para>
 				<mediaobject>
 					<imageobject>
-						<imagedata fileref="images/Calculator.png" format="PNG" />
+						<imagedata fileref="images/GadgetDevelopment/Calculator.png" format="PNG" />
 					</imageobject>
 				</mediaobject>
 			</listitem>
@@ -60,7 +60,7 @@
 				</para>
 				<!--   <mediaobject>
 						<imageobject>
-							<imagedata fileref="images/RSS.png" format="PNG"></imagedata>
+							<imagedata fileref="images/GadgetDevelopment/RSS.png" format="PNG"></imagedata>
 						</imageobject>
 					</mediaobject>   -->
 			</listitem>
@@ -83,7 +83,7 @@
 		<title>Existing Gadgets</title>
 		<mediaobject>
 			<imageobject>
-				<imagedata fileref="images/Liste.png" format="PNG" width="444" />
+				<imagedata fileref="images/GadgetDevelopment/Liste.png" format="PNG" width="444" />
 			</imageobject>
 		</mediaobject>
 	</section>
@@ -92,7 +92,7 @@
 		<title>Create a new Gadget</title>
 		<mediaobject>
 			<imageobject>
-				<imagedata fileref="images/New.png" format="PNG" width="444" />
+				<imagedata fileref="images/GadgetDevelopment/New.png" format="PNG" width="444" />
 			</imageobject>
 		</mediaobject>
 	</section>
@@ -104,7 +104,7 @@
 		</para>
 		<mediaobject>
 			<imageobject>
-				<imagedata fileref="images/Import.png" format="PNG" width="444" />
+				<imagedata fileref="images/GadgetDevelopment/Import.png" format="PNG" width="444" />
 			</imageobject>
 		</mediaobject>
 	</section>
@@ -116,7 +116,7 @@
 		</para>
 		<mediaobject>
 			<imageobject>
-				<imagedata fileref="images/Imported.png" format="PNG" width="444" />
+				<imagedata fileref="images/GadgetDevelopment/Imported.png" format="PNG" width="444" />
 			</imageobject>
 		</mediaobject>
 	</section>
@@ -128,7 +128,7 @@
 		</para>
 		<mediaobject>
 			<imageobject>
-				<imagedata fileref="images/EditImportedOnline.png" format="PNG" width="444" />
+				<imagedata fileref="images/GadgetDevelopment/EditImportedOnline.png" format="PNG" width="444" />
 			</imageobject>
 		</mediaobject>
 	</section>
@@ -140,7 +140,7 @@
 		</para>
 		<mediaobject>
 			<imageobject>
-				<imagedata fileref="images/EditImportedWebDAV.png" format="PNG" width="444" />
+				<imagedata fileref="images/GadgetDevelopment/EditImportedWebDAV.png" format="PNG" width="444" />
 			</imageobject>
 		</mediaobject>
 	</section>
@@ -152,7 +152,7 @@
 		</para>
 		<mediaobject>
 			<imageobject>
-				<imagedata fileref="images/Dashboard.png" format="PNG" width="444" />
+				<imagedata fileref="images/GadgetDevelopment/Dashboard.png" format="PNG" width="444" />
 			</imageobject>
 		</mediaobject>
 	</section>
