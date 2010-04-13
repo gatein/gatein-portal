@@ -78,90 +78,13 @@ LT 20010312: could not find a way to configure image scaling properly (tried wid
 
         </bookinfo>
 
-   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="modules/Introduction.xml"/>
-   <!--
-       Table of content in Wiki Format <xi:include
-       xmlns:xi="http://www.w3.org/2001/XInclude"
-       href="modules/Portal_Manual.xml" />
-    -->
+    <!--  Only in the project  -->
+	<xi:include href="modules/Configuration.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 
-   <!-- 4_Configuration -->
-   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="modules/Configuration.xml"/>
-
-
-   <!-- 5_Security -->
-
-   <!-- Core/Security_Service -->
-   <!--
-       Outdated <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
-       href="modules/Security.xml" />
-    -->
-
-   <!-- 6_Integration -->
-<!--
-   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="modules/Integration.xml"/>
--->
-   <!-- 7_SSO -->
-
-   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="modules/SSO.xml"/>
-
-
-   <!-- 8_Migration -->
-   <!--
-       Archived <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
-       href="modules/Migration_from_2-1_to_2-2.xml" /> <xi:include
-       xmlns:xi="http://www.w3.org/2001/XInclude"
-       href="modules/Migration_from_2-2_to_2-5.xml" /> <xi:include
-       xmlns:xi="http://www.w3.org/2001/XInclude"
-       href="modules/Export-Import_Portal_Configuration.xml" />
-    -->
-
-   <!-- 9_Technical_Foundations -->
-
-   <!--  Main/Overall_Architecture -->
-   <!--  Kernel/Inversion_of_Control -->
-   <!--  Portlet_Container -->
-   <!-- Java_Content_Repository -->
-   <!-- Web_Services -->
-   <!-- GateIn_Core -->
-   <!-- GateIn_Kernel -->
-   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="modules/Foundations.xml"/>
-
-   <!-- 10_Development_ -->
-
-   <!-- Main/Developers -->
-   <!-- http://docs.exoplatform.org -->
-   <!-- Products_Tech_Overview/Components_Registry -->
-   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="modules/Development.xml"/>
-
-   <!--  Portlets -->
-   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="modules/Portlets.xml"/>
-
-   <!-- Gadgets -->
-   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="modules/Gadgets.xml"/>
-
-   <!-- WSRP -->
-   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="modules/WSRP.xml"/>
-
-   <!-- APIs -->
-   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="modules/APIs.xml"/>
-
-   <!--
-       11_Support
-       http://www.exoplatform.com/portal/public/en/forum?portal:componentId=forum&portal:type=action&portal:isSecure=false&uicomponent=UIBreadcumbs&op=ChangePath&objectId=forumCategory88afa455c0a8020100a6752323da4b60
-       http://faq.exoplatform.com/ http://jira.exoplatform.org/browse/Portal
-    -->
-
-
-   <!--
-       Deprecated <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
-       href="modules/Advanced_User_Guide.xml" /> <xi:include
-       xmlns:xi="http://www.w3.org/2001/XInclude"
-       href="modules/Create_a_predefined_Portal_Navigation.xml" />
-       <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
-       href="modules/RTL.xml" /> Was in HowTo <xi:include
-       xmlns:xi="http://www.w3.org/2001/XInclude"
-       href="modules/Skin_Config.xml" />
-    -->
-
+	<xi:include href="modules/Introduction.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+	<xi:include href="modules/PortalDevelopment.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+ 	<xi:include href="modules/PortletDevelopment.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+	<xi:include href="modules/GadgetDevelopment.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+	<xi:include href="modules/AuthenticationAndIdentity.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+	<xi:include href="modules/WSRP.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 </book>

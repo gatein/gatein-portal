@@ -11,20 +11,15 @@
 	</para>
 	<mediaobject>
 		<imageobject role="html">
-			<imagedata fileref="images/Frontpage.png" format="PNG" align="center" scale="110" />
+			<imagedata fileref="images/Common/Frontpage.png" format="PNG" align="center" scale="110" />
 		</imageobject>
 		<imageobject role="fo">
-			<imagedata fileref="images/Frontpage.png" format="PNG" align="center" contentwidth="150mm" />
+			<imagedata fileref="images/Common/Frontpage.png" format="PNG" align="center" contentwidth="150mm" />
 		</imageobject>
 	</mediaobject>
 	<para>
 		This book provides a deep-dive information about installation and configuration of the services provided by GateIn.
 	</para>
-<!--
-	<para>
-		Refer to the <ulink type="http" url="http://redhat.com/docs">&PRODUCT; Installation Guide</ulink> for information on downloading and installing the product or the <ulink type="http" url="http://redhat.com/docs">&PRODUCT; User Guide</ulink> for information on basic usage.
-	</para>
--->
 	<section id="sect-Install_Guide-Introduction-Related_Links">
 		<title>Related Links</title>
 		<itemizedlist>
@@ -33,29 +28,12 @@
 					GateIn homepage:
 					<ulink url="http://www.gatein.org">www.gatein.org</ulink>
 				</para>
-<!--				<mediaobject>
-					<imageobject role="html">
-						<imagedata fileref="images/GateIn.png" format="PNG" align="center" scale="110"/>
-					</imageobject>
-					<imageobject role="fo">
-						<imagedata fileref="images/GateIn.png" format="PNG" align="center" contentwidth="150mm"/>
-					</imageobject>
-				</mediaobject> -->
 			</listitem>
 			<listitem>
 				<para>
 					GateIn videos:
 					<ulink url="http://vimeo.com/channels/gatein">vimeo.com/channels/gatein</ulink>
 				</para>
-<!--				<mediaobject>
-					<imageobject role="html">
-						<imagedata fileref="images/Videos.png" format="PNG" align="center" scale="110" />
-					</imageobject>
-					<imageobject role="fo">
-						<imagedata fileref="images/Videos.png" format="PNG" align="center" contentwidth="150mm"/>
-					</imageobject>
-				</mediaobject> -->
-
 			</listitem>
 			<listitem>
 				<para>
@@ -68,15 +46,6 @@
 					GateIn downloads:
 					<ulink url="http://www.jboss.org/gatein/downloads.html">www.jboss.org/gatein/downloads.html</ulink>
 				</para>
-<!--				<mediaobject>
-					<imageobject role="html">
-						<imagedata fileref="images/Downloads.png" format="PNG" align="center" scale="110" />
-					</imageobject>
-					<imageobject role="fo">
-						<imagedata fileref="images/Downloads.png" format="PNG" align="center" contentwidth="150mm"/>
-					</imageobject>
-				</mediaobject> -->
-
 			</listitem>
 		</itemizedlist>
 	</section>

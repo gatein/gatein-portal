@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+<!ENTITY % BOOK_ENTITIES SYSTEM "../Reference_Guide.ent">
+%BOOK_ENTITIES;
+]>
+<chapter id="chap-Reference_Guide-Development">
+	<title>Development</title>
+	<xi:include href="PortalDevelopment/Foundations.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+	<xi:include href="PortalDevelopment/Skinning.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+	<xi:include href="PortalDevelopment/PortalLifecycle.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+	<xi:include href="PortalDevelopment/DefaultPortalConfiguration.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+	<xi:include href="PortalDevelopment/DefaultPortalPermissionConfiguration.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+	<xi:include href="PortalDevelopment/DefaultPortalNavigationConfiguration.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+	<xi:include href="PortalDevelopment/InternationalizationConfiguration.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+	<xi:include href="PortalDevelopment/RTLFramework.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+	<xi:include href="PortalDevelopment/XMLResourceBundles.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+	<xi:include href="PortalDevelopment/JavascriptInterApplicationCommunication.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+	<xi:include href="PortalDevelopment/UploadComponent.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+	<xi:include href="PortalDevelopment/AjaxLoadingMaskLayerDeactivation.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+	<xi:include href="PortalDevelopment/JavascriptConfiguration.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+</chapter>
+

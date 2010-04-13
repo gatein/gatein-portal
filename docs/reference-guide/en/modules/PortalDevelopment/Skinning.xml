@@ -4,8 +4,8 @@
 <!ENTITY % BOOK_ENTITIES SYSTEM "../../Reference_Guide.ent">
 %BOOK_ENTITIES;
 ]>
-<section id="sect-Reference_Guide-Skin_Configuration">
-  <title>Skin Configuration</title>
+<section id="sect-Reference_Guide-Skinning_Portal">
+  <title>Skinning the portal</title>
 
   <section id="sect-Reference_Guide-Skin_Configuration-Overview">
     <title>Overview</title>
@@ -22,7 +22,7 @@
 
     <mediaobject>
       <imageobject>
-        <imagedata fileref="images/portal-change-skin.png" format="PNG"
+        <imagedata fileref="images/PortalDevelopment/Skinning/portal-change-skin.png" format="PNG"
                    width="444" />
       </imageobject>
     </mediaobject>
