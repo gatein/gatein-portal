@@ -78,10 +78,12 @@ LT 20010312: could not find a way to configure image scaling properly (tried wid
 
         </bookinfo>
 
+
+	<xi:include href="modules/Introduction.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+
     <!--  Only in the project  -->
 	<xi:include href="modules/Configuration.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 
-	<xi:include href="modules/Introduction.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 	<xi:include href="modules/PortalDevelopment.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
  	<xi:include href="modules/PortletDevelopment.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 	<xi:include href="modules/GadgetDevelopment.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
