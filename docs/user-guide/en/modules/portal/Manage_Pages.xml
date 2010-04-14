@@ -22,7 +22,7 @@
 					</para>
 					<mediaobject>
 						<imageobject role="html">
-							<imagedata fileref="images/Wizard1.png" format="PNG" align="center" scale="110" />
+							<imagedata fileref="images/Wizard1.png" format="PNG" align="center" scale="100" />
 						</imageobject>
 						<imageobject role="fo">
 							<imagedata fileref="images/Wizard1.png" format="PNG" align="center" contentwidth="150mm" />
@@ -40,11 +40,13 @@
 						In the left pane, you can navigate up and down the node/page structure:
 					</para>
 					<mediaobject>
-						<imageobject>
-							<imagedata fileref="images/Pagewizard1.png" format="PNG" />
+						<imageobject role="html">
+							<imagedata fileref="images/Pagewizard1.png" format="PNG" align="center" scale="100" />
+						</imageobject>
+						<imageobject role="fo">
+							<imagedata fileref="images/Pagewizard1.png" format="PNG" align="center" contentwidth="150mm" />
 						</imageobject>
 					</mediaobject>
-
 				</step>
 				<step>
 				<para>
@@ -134,8 +136,11 @@
 						Click <emphasis role="bold">Next</emphasis> or number '2' of the wizard steps to go to step 2.
 					</para>
 					<mediaobject>
-						<imageobject>
-							<imagedata fileref="images/PageWizard2.png" format="PNG" width="444" />
+						<imageobject role="html">
+							<imagedata fileref="images/PageWizard2.png" format="PNG" align="center" scale="100" />
+						</imageobject>
+						<imageobject role="fo">
+							<imagedata fileref="images/PageWizard2.png" format="PNG" align="center" contentwidth="150mm" />
 						</imageobject>
 					</mediaobject>
 				</step>
@@ -149,8 +154,11 @@
 						Click the <emphasis role="bold">Next</emphasis> button or number '3' of the wizard step to go to step 3. You can drag portlets from the popup panel into the main pane to create the content of this page.
 					</para>
 					<mediaobject>
-						<imageobject>
-							<imagedata fileref="images/PageWizard3.png" format="PNG" width="444" />
+						<imageobject role="html">
+							<imagedata fileref="images/PageWizard3.png" format="PNG" align="center" scale="100" />
+						</imageobject>
+						<imageobject role="fo">
+							<imagedata fileref="images/PageWizard3.png" format="PNG" align="center" contentwidth="150mm" />
 						</imageobject>
 					</mediaobject>
 					<variablelist>
@@ -203,7 +211,7 @@
 						</para>
 					<mediaobject>
 						<imageobject>
-							<imagedata fileref="images/ManagePage.png" format="PNG" align="center" scale="110"/>
+							<imagedata fileref="images/ManagePage.png" format="PNG" align="center" scale="100"/>
 						</imageobject>
 					</mediaobject>
 					</step>
@@ -216,7 +224,7 @@
 						
 						<mediaobject>
 						<imageobject>
-							<imagedata fileref="images/PageSetting.png" format="PNG" align="center" scale="110" />
+							<imagedata fileref="images/PageSetting.png" format="PNG" align="center" scale="100" />
 						</imageobject>
 						</mediaobject>
 					<variablelist>
@@ -242,7 +250,7 @@
 									</para>
 									<mediaobject>
 										<imageobject role="html">
-											<imagedata fileref="images/PageSetting1.png" format="PNG" align="center" scale="110" />
+											<imagedata fileref="images/PageSetting1.png" format="PNG" align="center" scale="100" />
 										</imageobject>
 										<imageobject role="fo">
 											<imagedata fileref="images/PageSetting1.png" format="PNG" align="center" contentwidth="150mm" />
@@ -290,7 +298,7 @@
 						</para>
 							<mediaobject>
 								<imageobject>
-									<imagedata fileref="images/PermissionSetting1.png" format="PNG" align="center" scale="110" />
+									<imagedata fileref="images/PermissionSetting1.png" format="PNG" align="center" scale="100" />
 								</imageobject>
 							</mediaobject>
 						<variablelist>
@@ -305,7 +313,7 @@
 								</para>
 								<mediaobject>
 									<imageobject role="html">
-										<imagedata fileref="images/EditPermission1.png" format="PNG" align="center" scale="110" />
+										<imagedata fileref="images/EditPermission1.png" format="PNG" align="center" scale="100" />
 									</imageobject>
 									<imageobject role="fo">
 										<imagedata fileref="images/EditPermission1.png" format="PNG" align="center" contentwidth="150mm"/>
@@ -324,7 +332,7 @@
 								</para>
 								<mediaobject>
 									<imageobject role="html">
-										<imagedata fileref="images/EditPermission2.png" format="PNG" align="center" width="444" />
+										<imagedata fileref="images/EditPermission2.png" format="PNG" align="center" scale="100" />
 									</imageobject>
 									<imageobject role="fo">
 										<imagedata fileref="images/EditPermission2.png" format="PNG" align="center" contentwidth="150mm"/>
@@ -482,8 +490,11 @@
 						Go to <emphasis role="bold">Site Editor</emphasis> in the toolbar and click on <emphasis role="bold">Edit Layout</emphasis> It will display :
 					</para>
 					<mediaobject>
-						<imageobject>
-							<imagedata fileref="images/DragPage1.png" format="PNG" width="444" />
+						<imageobject role="html">
+							<imagedata fileref="images/DragPage1.png" format="PNG" align="center" scale="100" />
+						</imageobject>
+						<imageobject role="fo">
+							<imagedata fileref="images/DragPage1.png" format="PNG" align="center" contentwidth="150mm" />
 						</imageobject>
 					</mediaobject>
 				</step>
@@ -492,8 +503,11 @@
 						Click on the <emphasis role="bold">Portal Page</emphasis>, drag and drop within the portal page.
 					</para>
 					<mediaobject>
-						<imageobject>
-							<imagedata fileref="images/DragPage3.png" format="PNG" width="444" />
+						<imageobject role="html">
+							<imagedata fileref="images/DragPage3.png" format="PNG" align="center" scale="100" />
+						</imageobject>
+						<imageobject role="fo">
+							<imagedata fileref="images/DragPage3.png" format="PNG" align="center" contentwidth="150mm" />
 						</imageobject>
 					</mediaobject>
 				</step>

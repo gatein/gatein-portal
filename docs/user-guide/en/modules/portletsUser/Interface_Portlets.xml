@@ -15,7 +15,7 @@
 		<listitem>
 			<mediaobject>
 				<imageobject role="html">
-					<imagedata fileref="images/BannerPortlet.png" format="PNG" align="center" scale="110"/>
+					<imagedata fileref="images/BannerPortlet.png" format="PNG" align="center" scale="100"/>
 				</imageobject>
 				<imageobject role="fo">
 					<imagedata fileref="images/BannerPortlet.png" format="PNG" align="center"  scalefit="1" contentwidth="150mm"/>
@@ -34,7 +34,7 @@
 			</para>
 			<mediaobject>
 				<imageobject role="html">
-					<imagedata fileref="images/Frontpage.png" format="PNG" align="center" scale="110"/>
+					<imagedata fileref="images/Frontpage.png" format="PNG" align="center" scale="130"/>
 				</imageobject>
 				<imageobject role="fo">
 					<imagedata fileref="images/Frontpage.png" format="PNG" align="center"  scalefit="1" contentwidth="150mm" />
@@ -50,7 +50,7 @@
 			</para>
 			<mediaobject>
 				<imageobject role="html">
-					<imagedata fileref="images/NavigationPortlet.png" format="PNG" align="center" scale="110"/>
+					<imagedata fileref="images/NavigationPortlet.png" format="PNG" align="center" scale="90"/>
 				</imageobject>
 				<imageobject role="fo">
 					<imagedata fileref="images/NavigationPortlet.png" format="PNG" align="center"  scalefit="1" contentwidth="100mm"/>
@@ -66,10 +66,10 @@
 			</para>
 			<mediaobject>
 				<imageobject role="html">
-					<imagedata fileref="images/SiteMap.png" format="PNG" align="center" scale="110"/>
+					<imagedata fileref="images/SiteMap.png" format="PNG" align="center" scale="90"/>
 				</imageobject>
 				<imageobject role="fo">
-					<imagedata fileref="images/SiteMap.png" format="PNG" align="center"  scalefit="1" contentwidth="130mm"/>
+					<imagedata fileref="images/SiteMap.png" format="PNG" align="center"  scalefit="1" contentwidth="100mm"/>
 				</imageobject>
 			</mediaobject>
 		</listitem>
@@ -82,10 +82,10 @@
 			</para>
 			<mediaobject>
 				<imageobject role="html">
-					<imagedata fileref="images/Breadcrumbs.png" format="PNG" align="center" scale="110"/>
+					<imagedata fileref="images/Breadcrumbs.png" format="PNG" align="center" scale="90"/>
 				</imageobject>
 				<imageobject role="fo">
-					<imagedata fileref="images/Breadcrumbs.png" format="PNG" align="center"  scalefit="1" contentwidth="150mm"/>
+					<imagedata fileref="images/Breadcrumbs.png" format="PNG" align="center"  scalefit="1" contentwidth="100mm"/>
 				</imageobject>
 			</mediaobject>
 		</listitem>
@@ -111,7 +111,7 @@
 			</para>
 			<mediaobject>
 				<imageobject role="html">
-					<imagedata fileref="images/Dashboard.png" format="PNG" align="center" scale="110"/>
+					<imagedata fileref="images/Dashboard.png" format="PNG" align="center" scale="100"/>
 				</imageobject>
 				<imageobject role="fo">
 					<imagedata fileref="images/Dashboard.png" format="PNG" align="center"  scalefit="1" contentwidth="150mm" />
@@ -158,7 +158,7 @@
 			</para>
 			<mediaobject>
 				<imageobject role="html">
-					<imagedata fileref="images/GadgetWrapper.png" format="PNG" align="center" scale="110"/>
+					<imagedata fileref="images/GadgetWrapper.png" format="PNG" align="center" scale="100"/>
 				</imageobject>
 				<imageobject role="fo">
 					<imagedata fileref="images/GadgetWrapper.png" format="PNG" align="center"  scalefit="1" contentwidth="150mm"/>
@@ -190,10 +190,10 @@
 
 			<mediaobject>
 				<imageobject role="html">
-					<imagedata fileref="images/Footer.png" format="PNG" align="center" scale="110"/>
+					<imagedata fileref="images/Footer.png" format="PNG" align="center" scale="90"/>
 				</imageobject>
 				<imageobject role="fo">
-					<imagedata fileref="images/Footer.png" format="PNG" align="center"  scalefit="1" contentwidth="120mm"/>
+					<imagedata fileref="images/Footer.png" format="PNG" align="center"  scalefit="1" contentwidth="100mm"/>
 				</imageobject>
 			</mediaobject>
 		</listitem>

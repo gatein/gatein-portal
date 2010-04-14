@@ -26,7 +26,7 @@
 				</para>
 				<mediaobject>
 					<imageobject role="html">
-						<imagedata fileref="images/Column.png" format="PNG" align="center" scale="110"/>
+						<imagedata fileref="images/Column.png" format="PNG" align="center" scale="100"/>
 					</imageobject>
 					<imageobject role="fo">
 						<imagedata fileref="images/Column.png" format="PNG" align="center"  scalefit="1" contentwidth="120mm" />
@@ -59,7 +59,7 @@
 				</para>
 				<mediaobject>
 					<imageobject role="html">
-						<imagedata fileref="images/AddCategory1.png" format="PNG" align="center" scale="110" />
+						<imagedata fileref="images/AddCategory1.png" format="PNG" align="center" scale="100" />
 					</imageobject>
 					<imageobject role="fo">
 						<imagedata fileref="images/AddCategory1.png" format="PNG" align="center"  scalefit="1" contentwidth="150mm" />
@@ -102,7 +102,7 @@
 				</para>
 				<mediaobject>
 					<imageobject role="html">
-						<imagedata fileref="images/Permission2.png" format="PNG" align="center" scale="110" />
+						<imagedata fileref="images/Permission2.png" format="PNG" align="center" scale="100" />
 					</imageobject>
 					<imageobject role="fo">
 						<imagedata fileref="images/Permission2.png" format="PNG" align="center"  scalefit="1" contentwidth="130mm" />
@@ -170,7 +170,7 @@
 				</para>
 				<mediaobject>
 					<imageobject role="html">
-						<imagedata fileref="images/AddPortlet2.png" format="PNG" align="center" scale="110" />
+						<imagedata fileref="images/AddPortlet2.png" format="PNG" align="center" scale="100" />
 					</imageobject>
 					<imageobject role="fo">
 						<imagedata fileref="images/AddPortlet2.png" format="PNG" align="center"  scalefit="1" contentwidth="160mm" />
@@ -223,10 +223,10 @@
 				</para>
 				<mediaobject>
 					<imageobject role="html">
-						<imagedata fileref="images/PortletPermission.png" format="PNG" align="center" scale="110"/>
+						<imagedata fileref="images/PortletPermission.png" format="PNG" align="center" scale="100"/>
 					</imageobject>
 					<imageobject role="fo">
-						<imagedata fileref="images/PortletPermission.png" format="PNG" align="center"  scalefit="1" contentwidth="160mm"/>
+						<imagedata fileref="images/PortletPermission.png" format="PNG" align="center" contentwidth="160mm"/>
 					</imageobject>
 				</mediaobject>
 			</step>
@@ -246,7 +246,7 @@
 						</para>
 						<mediaobject>
 							<imageobject role="html">
-								<imagedata fileref="images/AddPermission.png" format="PNG" align="center" scale="110" />
+								<imagedata fileref="images/AddPermission.png" format="PNG" align="center" scale="100" />
 							</imageobject>
 							<imageobject role="fo">
 								<imagedata fileref="images/AddPermission.png" format="PNG" align="center"  scalefit="1" contentwidth="150mm" />
@@ -273,7 +273,7 @@
 				</para>
 				<mediaobject>
 					<imageobject role="html">
-						<imagedata fileref="images/Org1.png" format="PNG" align="center" scale="110" />
+						<imagedata fileref="images/Org1.png" format="PNG" align="center" scale="100" />
 					</imageobject>
 					<imageobject role="fo">
 						<imagedata fileref="images/Org1.png" format="PNG" align="center"  scalefit="1" contentwidth="150mm" />
@@ -305,7 +305,7 @@
 				</para>
 				<mediaobject>
 					<imageobject role="html">
-						<imagedata fileref="images/EditApplication.png" format="PNG" align="center" scale="110" />
+						<imagedata fileref="images/EditApplication.png" format="PNG" align="center" scale="100" />
 					</imageobject>
 					<imageobject role="fo">
 						<imagedata fileref="images/EditApplication.png" format="PNG" align="center"  scalefit="1" contentwidth="150mm" />
@@ -313,7 +313,7 @@
 				</mediaobject>
 				<mediaobject>
 					<imageobject role="html">
-						<imagedata fileref="images/EditApplicationInformation.png" format="PNG" align="center" scale="110" />
+						<imagedata fileref="images/EditApplicationInformation.png" format="PNG" align="center" scale="100" />
 					</imageobject>
 					<imageobject role="fo">
 						<imagedata fileref="images/EditApplicationInformation.png" format="PNG" align="center"  scalefit="1" contentwidth="90mm" />
@@ -328,7 +328,7 @@
 		</para>
 		<mediaobject>
 			<imageobject role="html">
-				<imagedata fileref="images/Gadgetnew.png" format="PNG" align="center" scale="110" />
+				<imagedata fileref="images/Gadgetnew.png" format="PNG" align="center" scale="100" />
 			</imageobject>
 			<imageobject role="fo">
 				<imagedata fileref="images/Gadgetnew.png" format="PNG" align="center"  scalefit="1" contentwidth="150mm" />
@@ -345,8 +345,11 @@
 							Click on <emphasis role="bold">Add a remote gadget</emphasis>:
 						</para>
 						<mediaobject>
-							<imageobject>
-								<imagedata fileref="images/AddGadgetnew.png" format="PNG" align="center" width="444" />
+							<imageobject role="html">
+								<imagedata fileref="images/AddGadgetnew.png" format="PNG" align="center" scale="100" />
+							</imageobject>
+							<imageobject role="fo">
+								<imagedata fileref="images/AddGadgetnew.png" format="PNG" align="center" contentwidth="150mm" />
 							</imageobject>
 						</mediaobject>
 					</step>
@@ -356,7 +359,7 @@
 						</para>
 						<mediaobject>
 							<imageobject role="html">
-								<imagedata fileref="images/AddGadgetnewUrl.png" format="PNG" align="center" scale="110" />
+								<imagedata fileref="images/AddGadgetnewUrl.png" format="PNG" align="center" scale="100" />
 							</imageobject>
 							<imageobject role="fo">
 								<imagedata fileref="images/AddGadgetnewUrl.png" format="PNG" align="center"  scalefit="1" contentwidth="150mm" />
@@ -377,7 +380,7 @@
 							</para>
 						<mediaobject>
 							<imageobject role="html">
-								<imagedata fileref="images/CreateGadget1.png" format="PNG" align="center" scale="110"/>
+								<imagedata fileref="images/CreateGadget1.png" format="PNG" align="center" scale="100"/>
 							</imageobject>
 							<imageobject role="fo">
 								<imagedata fileref="images/CreateGadget1.png" format="PNG" align="center"  scalefit="1" contentwidth="150mm"/>
@@ -397,8 +400,11 @@
 				You can delete a local gadget using the trashcan icon to the right of the appropriate gadget in the gadget list.
 			</para>
 			<mediaobject>
-				<imageobject>
-					<imagedata fileref="images/ActionGadget.png" format="PNG" align="center" width="444" />
+				<imageobject role="html">
+					<imagedata fileref="images/ActionGadget.png" format="PNG" align="center" scale="100" />
+				</imageobject>
+				<imageobject role="fo">
+					<imagedata fileref="images/ActionGadget.png" format="PNG" align="center" contentwidth="150mm" />
 				</imageobject>
 			</mediaobject>
 	</section>
@@ -419,8 +425,11 @@
 					Click the <emphasis role="bold">Edit Gadget</emphasis> icon located in the header of the <emphasis role="bold">Gadget Details</emphasis> page to display the following window: 
 				</para>
 				<mediaobject>
-					<imageobject>
-						<imagedata fileref="images/Source.png" format="PNG" align="center" width="444" />
+					<imageobject role="html">
+						<imagedata fileref="images/Source.png" format="PNG" align="center" scale="100" />
+					</imageobject>
+					<imageobject role="fo">
+						<imagedata fileref="images/Source.png" format="PNG" align="center" contentwidth="150mm" />
 					</imageobject>
 				</mediaobject>
 		</section>

@@ -15,8 +15,11 @@
 						Mouse over <emphasis role="bold">Group</emphasis> on the Toolbar. Highlight <emphasis role="bold">Organization</emphasis> and select <emphasis>Users and Groups Management</emphasis>
 					</para>
 					<mediaobject>
-						<imageobject>
-							<imagedata fileref="images/UserManage.png" format="PNG" align="center" width="444" />
+						<imageobject role="html">
+							<imagedata fileref="images/UserManage.png" format="PNG" align="center" scale="100" />
+						</imageobject>
+						<imageobject role="fo">
+							<imagedata fileref="images/UserManage.png" format="PNG" align="center" contentwidth="150mm" />
 						</imageobject>
 					</mediaobject>
 					<para>
@@ -44,7 +47,7 @@
 					</para>
 					<mediaobject>
 						<imageobject role="html">
-							<imagedata fileref="images/NewStaff.png" format="PNG" align="center" scale="110" />
+							<imagedata fileref="images/NewStaff.png" format="PNG" align="center" scale="100" />
 						</imageobject>
 						<imageobject role="fo">
 							<imagedata fileref="images/NewStaff.png" format="PNG" align="center" contentwidth="150mm" />
@@ -81,10 +84,13 @@
 							Select the information type  (name, email, etc) to search against
 						</para>
 						<mediaobject>
-							<imageobject>
-								<imagedata fileref="images/SearchUser.png" format="PNG" align="center" width="444" />
+							<imageobject role="html">
+								<imagedata fileref="images/SearchUser.png" format="PNG" align="center" scale="100" />
 							</imageobject>
-						</mediaobject>					
+							<imageobject role="fo">
+								<imagedata fileref="images/SearchUser.png" format="PNG" align="center" contentwidth="150mm" />
+							</imageobject>
+						</mediaobject>
 					</step>
 					<step>
 						<para>
@@ -112,8 +118,11 @@
 						Click the edit icon (next to the trash icon).
 					</para>
 					<mediaobject>
-						<imageobject>
-							<imagedata fileref="images/Demo1.png" format="PNG" align="center" width="444" />
+						<imageobject role="html">
+							<imagedata fileref="images/Demo1.png" format="PNG" align="center" scale="100" />
+						</imageobject>
+						<imageobject role="fo">
+							<imagedata fileref="images/Demo1.png" format="PNG" align="center" contentwidth="150mm" />
 						</imageobject>
 					</mediaobject>
 				</step>
@@ -150,8 +159,11 @@
 						Select the <emphasis role="bold">User Membership</emphasis> tab to see a user's group membership information.
 					</para>
 					<mediaobject>
-						<imageobject>
-							<imagedata fileref="images/Demo3.png" format="PNG" align="center" width="444" />
+						<imageobject role="html">
+							<imagedata fileref="images/Demo3.png" format="PNG" align="center" scale="100" />
+						</imageobject>
+						<imageobject role="fo">
+							<imagedata fileref="images/Demo3.png" format="PNG" align="center" contentwidth="150mm" />
 						</imageobject>
 					</mediaobject>
 					<variablelist>
@@ -207,11 +219,13 @@
 					By default, all existing groups will be displayed on the left pane. This tab is used to add new, edit or delete a group. The right pane shows information about the selected group including information about the members in the specific group along with a small form to add a new user to a group.
 				</para>
 				<mediaobject>
-					<imageobject>
-						<imagedata fileref="images/GroupManage.png" format="PNG" align="center" width="444" />
+					<imageobject role="html">
+						<imagedata fileref="images/GroupManage.png" format="PNG" align="center" scale="100" />
+					</imageobject>
+					<imageobject role="fo">
+						<imagedata fileref="images/GroupManage.png" format="PNG" align="center" contentwidth="150mm" />
 					</imageobject>
 				</mediaobject>
-
 		<section id="sect-User_Guide-User_Management-Add_a_new_group">
 			<title>Add a New Group</title>
 				<procedure>
@@ -234,7 +248,7 @@
 						</para>
 						<mediaobject>
 							<imageobject role="html">
-								<imagedata fileref="images/AddGroup.png" format="PNG" align="center" width="444" />
+								<imagedata fileref="images/AddGroup.png" format="PNG" align="center" scale="100" />
 							</imageobject>
 							<imageobject role="fo">
 								<imagedata fileref="images/AddGroup.png" format="PNG" align="center" contentwidth="110mm"/>
@@ -314,8 +328,11 @@
 							Find the group in the existing tree and click on its label. Existing group memberships are listed on the left hand side along with the <emphasis role="bold">Add Member</emphasis> window.
 						</para>
 						<mediaobject>
-							<imageobject>
-								<imagedata fileref="images/AddMember1.png" format="PNG" align="center" width="444" />
+							<imageobject role="html">
+								<imagedata fileref="images/AddMember1.png" format="PNG" align="center" scale="100" />
+							</imageobject>
+							<imageobject role="fo">
+								<imagedata fileref="images/AddMember1.png" format="PNG" align="center" contentwidth="150mm" />
 							</imageobject>
 						</mediaobject>
 					</step>
@@ -352,7 +369,7 @@
 						</para>
 						<mediaobject>
 							<imageobject role="html">
-								<imagedata fileref="images/EditMember1.png" format="PNG" align="center" />
+								<imagedata fileref="images/EditMember1.png" format="PNG" align="center" scale="100"/>
 							</imageobject>
 							<imageobject role="fo">
 								<imagedata fileref="images/EditMember1.png" format="PNG" align="center" contentwidth="90mm"/>
@@ -386,7 +403,7 @@
 						</para>
 						<mediaobject>
 							<imageobject role="html">
-								<imagedata fileref="images/DeleteGroup.png" format="PNG" align="center" scale="110" />
+								<imagedata fileref="images/DeleteGroup.png" format="PNG" align="center" scale="100" />
 							</imageobject>
 							<imageobject role="fo">
 								<imagedata fileref="images/DeleteGroup.png" format="PNG" align="center" contentwidth="150mm" />
@@ -416,8 +433,11 @@
 				</para>
 
 				<mediaobject>
-					<imageobject>
-						<imagedata fileref="images/MembershipManage1.png" format="PNG" align="center" width="444" />
+					<imageobject role="html">
+						<imagedata fileref="images/MembershipManage1.png" format="PNG" align="center" scale="100" />
+					</imageobject>
+					<imageobject role="fo">
+						<imagedata fileref="images/MembershipManage1.png" format="PNG" align="center" contentwidth="110mm"/>
 					</imageobject>
 				</mediaobject>
 

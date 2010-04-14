@@ -36,14 +36,14 @@
 					<term><emphasis role="bold">Existing portals</emphasis></term>
 					<listitem>
 						<para>
-							On the Toolbar click <emphasis role="bold">Site</emphasis> then <emphasis role="bold">Edit Portal's Properties</emphasis>. Last select the <emphasis role="bold">Permission Setting</emphasis> tab. 
+							On the Toolbar click <emphasis role="bold">Site</emphasis> then <emphasis role="bold">Edit Portal's Properties</emphasis>. Then select the <emphasis role="bold">Permission Setting</emphasis> tab. 
 						</para>
 					<mediaobject>
 						<imageobject role="html">
-							<imagedata fileref="images/EditActivePortals.png" format="PNG" align="center" scale="110" />
+							<imagedata fileref="images/PortalProperties.png" format="PNG" align="center" scale="100" />
 						</imageobject>
 						<imageobject role="fo">
-							<imagedata fileref="images/EditActivePortals.png" format="PNG" align="center" contentwidth="150mm" />
+							<imagedata fileref="images/PortalProperties.png" format="PNG" align="center" contentwidth="150mm" />
 						</imageobject>
 					</mediaobject>
 					</listitem>
@@ -53,15 +53,14 @@
 
 		<section id="sect-User_Guide-Manage_Permission-Set_the_Access_Permission_on_a_Portal">
 			<title>Set Access permissions</title>
-
-
-
 			<mediaobject>
-				<imageobject>
-					<imagedata fileref="images/PortalPermission.png" format="PNG" align="center" width="444" />
+				<imageobject role="html">
+					<imagedata fileref="images/PortalPermission.png" format="PNG" align="center" scale="100" />
+				</imageobject>
+				<imageobject role="fo">
+					<imagedata fileref="images/PortalPermission.png" format="PNG" align="center" contentwidth="150mm" />
 				</imageobject>
 			</mediaobject>
-
 			<note>
 			<title>Public access</title>
 				<para>
@@ -75,7 +74,7 @@
 
 			<mediaobject>
 				<imageobject role="html">
-					<imagedata fileref="images/PermissionSetting2.png" format="PNG" align="center" width="444" />
+					<imagedata fileref="images/PermissionSetting2.png" format="PNG" align="center" scale="100" />
 				</imageobject>
          			<imageobject role="fo">
 	       			       <imagedata fileref="images/PermissionSetting2.png" format="PNG" align="center" contentwidth="150mm" />
@@ -111,12 +110,14 @@
 			<para>
 				Only users members of the Editor group can edit that portal. Access rights can be given to several groups but edit rights can only be given to a group with a membership type. To assign an edit permission to a user, you must add him/her to the editor group of the respective portal.
 			</para>
-			
-				<mediaobject>
-				    <imageobject>
-				        <imagedata fileref="images/PermissionSetting1.png" format="PNG" align="center" width="444" />
-				    </imageobject>
-				</mediaobject>
+			<mediaobject>
+				<imageobject role="html">
+					<imagedata fileref="images/PermissionSetting1.png" format="PNG" align="center" scale="100" />
+				</imageobject>
+				<imageobject role="fo">
+					<imagedata fileref="images/PermissionSetting1.png" format="PNG" align="center" contentwidth="150mm" />
+				</imageobject>
+			</mediaobject>			
 
 				<procedure>
 					<step>
@@ -335,12 +336,15 @@
 				<step>
 					<para>
 						Mouse over <emphasis role="bold">Group</emphasis> on the Toolbar, highlight <emphasis role="bold">Administration</emphasis> then click on <emphasis role="bold">Application Registry</emphasis>.
-						<mediaobject>
-							<imageobject>
-								<imagedata fileref="images/EditCategoryPermissions.png" format="PNG" align="center" width="444" />
-							</imageobject>
-						</mediaobject>
 					</para>
+					<mediaobject>
+						<imageobject role="html">
+							<imagedata fileref="images/EditCategoryPermissions.png" format="PNG" align="center" scale="100" />
+						</imageobject>
+						<imageobject role="fo">
+							<imagedata fileref="images/EditCategoryPermissions.png" format="PNG" align="center" contentwidth="150mm" />
+						</imageobject>
+					</mediaobject>
 				</step>
 				<step>
 					<para>
@@ -375,7 +379,7 @@
 						Select <emphasis role="bold">Group</emphasis> on the Toolbar. Highlight the <emphasis role="bold">Administration</emphasis> entry and click on <emphasis role="bold">Application Registry</emphasis>.
 						<mediaobject>
 							<imageobject role="html">
-								<imagedata fileref="images/Application1.png" format="PNG" align="center" width="444" />
+								<imagedata fileref="images/Application1.png" format="PNG" align="center" scale="100" />
 							</imageobject>
 							<imageobject role="fo">
 								<imagedata fileref="images/Application1.png" format="PNG" align="center" contentwidth="150mm" />
