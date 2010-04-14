@@ -4,12 +4,12 @@
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="selenium.base" href="" />
-<title>Test_POR_25_05_001_CutPasteNodeToSamePlace</title>
+<title>Test_POR_25_04_003_CopyPasteNodeToSamePlace</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">Test_POR_25_05_001_CutPasteNodeToSamePlace</td></tr>
+<tr><td rowspan="1" colspan="3">Test_POR_25_04_003_CopyPasteNodeToSamePlace</td></tr>
 </thead><tbody>
 <tr>
 	<td>open</td>
@@ -73,7 +73,7 @@
 </tr>
 <tr>
 	<td>echo</td>
-	<td>--Cut node--</td>
+	<td>--Copy node--</td>
 	<td></td>
 </tr>
 <tr>
@@ -83,12 +83,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>link=Cut Node</td>
+	<td>link=Copy Node</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAt</td>
-	<td>link=Cut Node</td>
+	<td>link=Copy Node</td>
 	<td></td>
 </tr>
 <tr>
@@ -97,23 +97,18 @@
 	<td></td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
-	<td>xpath=//div[@id=&quot;UINavigationNodeSelector&quot;]/div/div/div/div[2]/div/div/div[6]//a</td>
-	<td></td>
-</tr>
-<tr>
 	<td>componentExoContextMenu</td>
 	<td>xpath=//div[@id=&quot;UINavigationNodeSelector&quot;]/div/div/div/div[2]/div/div/div[6]//a</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>link=Paste Node</td>
+	<td>//div[@id='NavigationNodePopupMenu']/div[@class='UIContextMenuContainer']/div[2]/div/div/div[7]//a</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAt</td>
-	<td>link=Paste Node</td>
+	<td>//div[@id='NavigationNodePopupMenu']/div/div[2]/div/div/div[7]//a</td>
 	<td></td>
 </tr>
 <tr>
@@ -123,7 +118,7 @@
 </tr>
 <tr>
 	<td>verifyTextPresent</td>
-	<td>This node name already exists.</td>
+	<td>The source and the destination must be different.</td>
 	<td></td>
 </tr>
 <tr>

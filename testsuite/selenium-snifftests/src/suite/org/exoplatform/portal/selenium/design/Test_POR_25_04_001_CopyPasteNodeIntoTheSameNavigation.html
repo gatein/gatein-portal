@@ -4,12 +4,12 @@
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="selenium.base" href="" />
-<title>Test_POR_25_05_001_CutPasteNodeToSamePlace</title>
+<title>Test_POR_25_04_001_CopyPasteNodeIntoTheSameNavigation</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">Test_POR_25_05_001_CutPasteNodeToSamePlace</td></tr>
+<tr><td rowspan="1" colspan="3">Test_POR_25_04_001_CopyPasteNodeIntoTheSameNavigation</td></tr>
 </thead><tbody>
 <tr>
 	<td>open</td>
@@ -48,7 +48,7 @@
 </tr>
 <tr>
 	<td>echo</td>
-	<td>--Open Navigation Management pop-up --</td>
+	<td>--Open Navigation Menu--</td>
 	<td></td>
 </tr>
 <tr>
@@ -73,7 +73,7 @@
 </tr>
 <tr>
 	<td>echo</td>
-	<td>--Cut node--</td>
+	<td>--Copy a node--</td>
 	<td></td>
 </tr>
 <tr>
@@ -83,57 +83,52 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>link=Cut Node</td>
+	<td>link=Copy Node</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAt</td>
-	<td>link=Cut Node</td>
+	<td>link=Copy Node</td>
 	<td></td>
 </tr>
 <tr>
 	<td>echo</td>
-	<td>-- Paste node to same place--</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>xpath=//div[@id=&quot;UINavigationNodeSelector&quot;]/div/div/div/div[2]/div/div/div[6]//a</td>
+	<td>--Paste node into another node in the same navigation--</td>
 	<td></td>
 </tr>
 <tr>
 	<td>componentExoContextMenu</td>
-	<td>xpath=//div[@id=&quot;UINavigationNodeSelector&quot;]/div/div/div/div[2]/div/div/div[6]//a</td>
+	<td>xpath=//div[@id=&quot;UINavigationNodeSelector&quot;]/div/div/div/div[2]/div/div/div[2]//a</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>link=Paste Node</td>
+	<td>//div[@id='NavigationNodePopupMenu']/div[@class='UIContextMenuContainer']/div[2]/div/div/div[4]//a</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAt</td>
-	<td>link=Paste Node</td>
+	<td>//div[@id='NavigationNodePopupMenu']/div/div[2]/div/div/div[7]//a</td>
 	<td></td>
 </tr>
 <tr>
 	<td>echo</td>
-	<td>--Verify text Message--</td>
+	<td>--Delete node--</td>
 	<td></td>
 </tr>
 <tr>
-	<td>verifyTextPresent</td>
-	<td>This node name already exists.</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>//div[@id='UIPortalApplication']//div[@class='ExoMessageDecorator']//div[@class='MiddleRightSideDecorator']//div[@class='UIPopupMessages']/div[@class='MessageActionBar']//a</td>
+	<td>componentExoContextMenu</td>
+	<td>xpath=//div[@id=&quot;UINavigationNodeSelector&quot;]/div/div/div/div[2]/div/div/div[2]/div[2]/div/div//a</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAt</td>
-	<td>//div[@id='UIPortalApplication']//div[@class='ExoMessageDecorator']//div[@class='MiddleRightSideDecorator']//div[@class='UIPopupMessages']/div[@class='MessageActionBar']//a</td>
+	<td>//div[@id='NavigationNodePopupMenu']/div/div[2]/div/div/div[7]//a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertConfirmation</td>
+	<td>Are you sure you want to delete this node?</td>
 	<td></td>
 </tr>
 <tr>
@@ -148,7 +143,7 @@
 </tr>
 <tr>
 	<td>echo</td>
-	<td>-- Sign out--</td>
+	<td>--Sign out --</td>
 	<td></td>
 </tr>
 <tr>
