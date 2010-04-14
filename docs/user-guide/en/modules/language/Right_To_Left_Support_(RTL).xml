@@ -10,7 +10,7 @@
 	</para>
 	<mediaobject>
 		<imageobject role="html">
-			<imagedata fileref="images/HomePage2.png" format="PNG" align="center" scale="130" />
+			<imagedata fileref="images/HomePage2.png" format="PNG" align="center" scale="110" />
 		</imageobject>
 		<imageobject role="fo">
 			<imagedata fileref="images/HomePage2.png" format="PNG" align="center"  scalefit="1" contentwidth="150mm" />
@@ -21,7 +21,7 @@
 		<para>
 		<mediaobject>
 			<imageobject role="html">
-				<imagedata fileref="images/NewAccount3.png" format="PNG" align="center" scale="100" />
+				<imagedata fileref="images/NewAccount3.png" format="PNG" align="center" scale="110" />
 			</imageobject>
 			<imageobject role="fo">
 				<imagedata fileref="images/NewAccount3.png" format="PNG" align="center"  scalefit="1" contentwidth="150mm" />
@@ -35,7 +35,7 @@
 		<para>
 		<mediaobject>
 			<imageobject role="html">
-				<imagedata fileref="images/ApplicationRegistry2.png" format="PNG" align="center" scale="100"/>
+				<imagedata fileref="images/ApplicationRegistry2.png" format="PNG" align="center" scale="110"/>
 			</imageobject>
 			<imageobject role="fo">
 				<imagedata fileref="images/ApplicationRegistry2.png" format="PNG" align="center"  scalefit="1" contentwidth="150mm" />

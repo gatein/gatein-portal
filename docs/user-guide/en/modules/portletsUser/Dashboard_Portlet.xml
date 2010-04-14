@@ -13,10 +13,10 @@
 	</para>
 	<mediaobject>
 		<imageobject role="html">
-			<imagedata fileref="images/Dashboard1.png" format="PNG" align="center" scale="90" />
+			<imagedata fileref="images/Dashboard1.png" format="PNG" align="center" scale="110" />
 		</imageobject>
 		<imageobject role="fo">
-			<imagedata fileref="images/Dashboard1.png" format="PNG" align="center"  scalefit="1" contentwidth="100mm" />
+			<imagedata fileref="images/Dashboard1.png" format="PNG" align="center"  scalefit="1" contentwidth="90mm" />
 		</imageobject>
 	</mediaobject>
 
@@ -40,7 +40,7 @@
 		</para>
 		<mediaobject>
 			<imageobject role="html">
-				<imagedata fileref="images/Dashname.png" format="PNG" align="center" scale="100"/>
+				<imagedata fileref="images/Dashname.png" format="PNG" align="center" scale="150"/>
 			</imageobject>
 			<imageobject role="fo">
 				<imagedata fileref="images/Dashname.png" format="PNG" align="center" scalefit="1" contentwidth="120mm"/>
@@ -51,7 +51,7 @@
 		</para>
 		<mediaobject>
 			<imageobject role="html">
-				<imagedata fileref="images/Dashname1.png" format="PNG" align="center" scale="100"/>
+				<imagedata fileref="images/Dashname1.png" format="PNG" align="center" scale="150"/>
 			</imageobject>
 			<imageobject role="fo">
 				<imagedata fileref="images/Dashname1.png" format="PNG" align="center" scalefit="1" contentwidth="120mm"/>
@@ -63,7 +63,7 @@
 		</para>
 		<mediaobject>
 			<imageobject role="html">
-				<imagedata fileref="images/Dash2.png" format="PNG" align="center" scale="100"/>
+				<imagedata fileref="images/Dash2.png" format="PNG" align="center" scale="110"/>
 			</imageobject>
 			<imageobject role="fo">
 				<imagedata fileref="images/Dash2.png" format="PNG" align="center" scalefit="1" contentwidth="150mm"/>
@@ -80,7 +80,7 @@
 					</para>
 					<mediaobject>
 						<imageobject role="html">
-							<imagedata fileref="images/Calendar.png" format="PNG" align="center" scale="100"/>
+							<imagedata fileref="images/Calendar.png" format="PNG" align="center" scale="110"/>
 						</imageobject>
 						<imageobject role="fo">
 							<imagedata fileref="images/Calendar.png" format="PNG" align="center" scalefit="1"  contentwidth="70mm"/>
@@ -96,7 +96,7 @@
 					</para>
 					<mediaobject>
 						<imageobject role="html">
-							<imagedata fileref="images/Todo.png" format="PNG" align="center" scale="100"/>
+							<imagedata fileref="images/Todo.png" format="PNG" align="center" scale="110"/>
 						</imageobject>
 						<imageobject role="fo">
 							<imagedata fileref="images/Todo.png" format="PNG" align="center" scalefit="1"  contentwidth="70mm"/>
@@ -112,7 +112,7 @@
 					</para>
 					<mediaobject>
 						<imageobject role="html">
-							<imagedata fileref="images/Calculator.png" format="PNG" align="center" scale="100"/>
+							<imagedata fileref="images/Calculator.png" format="PNG" align="center" scale="110"/>
 						</imageobject>
 						<imageobject role="fo">
 							<imagedata fileref="images/Calculator.png" format="PNG" align="center" scalefit="1"  contentwidth="70mm"/>
@@ -128,7 +128,7 @@
 					</para>
 					<mediaobject>
 						<imageobject role="html">
-							<imagedata fileref="images/RSSReader.png" format="PNG" align="center" scale="100"/>
+							<imagedata fileref="images/RSSReader.png" format="PNG" align="center" scale="110"/>
 						</imageobject>
 						<imageobject role="fo">
 							<imagedata fileref="images/RSSReader.png" format="PNG" align="center" scalefit="1"  contentwidth="70mm"/>
@@ -144,7 +144,7 @@
 					</para>
 					<mediaobject>
 						<imageobject role="html">
-							<imagedata fileref="images/GoogleGadgets.png" format="PNG" align="center" scale="100"/>
+							<imagedata fileref="images/GoogleGadgets.png" format="PNG" align="center" scale="110"/>
 						</imageobject>
 						<imageobject role="fo">
 							<imagedata fileref="images/GoogleGadgets.png" format="PNG" align="center" scalefit="1"  contentwidth="160mm"/>
@@ -173,7 +173,7 @@
 				</para>
 				<mediaobject>
 					<imageobject role="html">
-						<imagedata fileref="images/XMLURL.png" format="PNG" align="center" scale="100"/>
+						<imagedata fileref="images/XMLURL.png" format="PNG" align="center" scale="110"/>
 					</imageobject>
 					<imageobject role="fo">
 						<imagedata fileref="images/XMLURL.png" format="PNG" align="center" scalefit="1"  contentwidth="160mm"/>
@@ -193,7 +193,7 @@
 <!--
 				<mediaobject>
 					<imageobject role="html">
-						<imagedata fileref="images/DashboardLink.png" format="PNG" align="center" scale="100"/>
+						<imagedata fileref="images/DashboardLink.png" format="PNG" align="center" scale="110"/>
 					</imageobject>
 					<imageobject role="fo">
 						<imagedata fileref="images/DashboardLink.png" format="PNG" align="center" scalefit="1"  contentwidth="150mm"/>
@@ -207,7 +207,7 @@
 				</para>
 					<mediaobject>
 						<imageobject role="html">
-							<imagedata fileref="images/Dashboard1.png" format="PNG" align="center" scale="100"/>
+							<imagedata fileref="images/Dashboard1.png" format="PNG" align="center" scale="110"/>
 						</imageobject>
 						<imageobject role="fo">
 							<imagedata fileref="images/Dashboard1.png" format="PNG" align="center" scalefit="1"  contentwidth="90mm"/>
@@ -219,7 +219,7 @@
 					The Dashboard Workspace dialog appears: 
 					<mediaobject>
 						<imageobject role="html"> 
-							<imagedata fileref="images/EnterLink.png" format="PNG" align="center" scale="100"/>
+							<imagedata fileref="images/EnterLink.png" format="PNG" align="center" scale="110"/>
 						</imageobject>
 						<imageobject role="fo"> 
 							<imagedata fileref="images/EnterLink.png" format="PNG" align="center" scalefit="1"  contentwidth="50mm"/>
@@ -233,7 +233,7 @@
 				</para>
 				<mediaobject>
 					<imageobject role="html">
-						<imagedata fileref="images/CodePaste.png" format="PNG" align="center" scale="100"/>
+						<imagedata fileref="images/CodePaste.png" format="PNG" align="center" scale="110"/>
 					</imageobject>
 					<imageobject role="fo">
 						<imagedata fileref="images/CodePaste.png" format="PNG" align="center" scalefit="1"  contentwidth="100mm" />
@@ -247,7 +247,7 @@
 				</para>
 				<mediaobject>
 					<imageobject role="html">
-						<imagedata fileref="images/NewGadget.png" format="PNG" align="center" scale="100"/>
+						<imagedata fileref="images/NewGadget.png" format="PNG" align="center" scale="110"/>
 					</imageobject> 
 					<imageobject role="fo">
 						<imagedata fileref="images/NewGadget.png" format="PNG" align="center" scalefit="1"  contentwidth="150mm"/>

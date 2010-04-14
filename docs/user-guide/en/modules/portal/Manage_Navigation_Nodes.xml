@@ -17,7 +17,7 @@
 						</para>
 						<mediaobject>
 							<imageobject role="html">
-								<imagedata fileref="images/EditNavigation.png" format="PNG" align="center" scale="120"/>
+								<imagedata fileref="images/EditNavigation.png" format="PNG" align="center" scale="110"/>
 							</imageobject>
 							<imageobject role="fo">
 								<imagedata fileref="images/EditNavigation.png" format="PNG" align="center" contentwidth="150mm" />
@@ -35,7 +35,7 @@
 						</para>
 						<mediaobject>
 							<imageobject role="html">
-								<imagedata fileref="images/AddNode4.png" format="PNG" align="center" scale="100" />
+								<imagedata fileref="images/AddNode4.png" format="PNG" align="center" scale="110" />
 							</imageobject>
 							<imageobject role="fo">
 								<imagedata fileref="images/AddNode4.png" format="PNG" align="center" contentwidth="150mm" />
@@ -109,7 +109,7 @@
 					</para>
 					<mediaobject>
 						<imageobject role="html">
-							<imagedata fileref="images/PageSelector.png" format="PNG" align="center" scale="100" />
+							<imagedata fileref="images/PageSelector.png" format="PNG" align="center" scale="110" />
 						</imageobject>
 						<imageobject role="fo">
 							<imagedata fileref="images/PageSelector.png" format="PNG" align="center" contentwidth="150mm"/>
@@ -149,7 +149,7 @@
 				</para>
 				<mediaobject>
 					<imageobject role="html">
-						<imagedata fileref="images/SelectPage1.png" format="PNG" align="center" scale="100" />
+						<imagedata fileref="images/SelectPage1.png" format="PNG" align="center" scale="110" />
 					</imageobject>
 					<imageobject role="fo">
 						<imagedata fileref="images/SelectPage1.png" format="PNG" align="center" contentwidth="150mm"/>
@@ -232,11 +232,8 @@
 							This will display a form to edit this node:
 						</para>
 						<mediaobject>
-							<imageobject role="html">
-								<imagedata fileref="images/PageNodeSetting.png" format="PNG" align="center" scale="100" />
-							</imageobject>
-							<imageobject role="fo">
-								<imagedata fileref="images/PageNodeSetting.png" format="PNG" align="center" contentwidth="150mm" />
+							<imageobject>
+								<imagedata fileref="images/PageNodeSetting.png" format="PNG" align="center" width="444" />
 							</imageobject>
 						</mediaobject>
 					</step>
@@ -294,7 +291,7 @@ You can see more details on how to select a page for a node in <xref linkend="se
 						</para>
 						<mediaobject>
 							<imageobject role="html">
-								<imagedata fileref="images/CopyNode3.png" format="PNG" align="center" scale="100" />
+								<imagedata fileref="images/CopyNode3.png" format="PNG" align="center" />
 							</imageobject>
 							<imageobject role="fo">
 								<imagedata fileref="images/CopyNode3.png" format="PNG" align="center" contentwidth="130mm"/>
@@ -307,7 +304,7 @@ You can see more details on how to select a page for a node in <xref linkend="se
 						</para>
 						<mediaobject>
 							<imageobject role="html">
-								<imagedata fileref="images/PasteNode3.png" format="PNG" align="center" scale="100" />
+								<imagedata fileref="images/PasteNode3.png" format="PNG" align="center" />
 							</imageobject>
 							<imageobject role="fo">
 								<imagedata fileref="images/PasteNode3.png" format="PNG" align="center" contentwidth="130mm"/>
@@ -340,7 +337,7 @@ You can see more details on how to select a page for a node in <xref linkend="se
 						</para>
 						<mediaobject>
 							<imageobject role="html">
-								<imagedata fileref="images/CloneNode2.png" format="PNG" align="center" scale="100" />
+								<imagedata fileref="images/CloneNode2.png" format="PNG" align="center" />
 							</imageobject>
 							<imageobject role="fo">
 								<imagedata fileref="images/CloneNode2.png" format="PNG" align="center" contentwidth="130mm"/>
@@ -353,7 +350,7 @@ You can see more details on how to select a page for a node in <xref linkend="se
 						</para>
 						<mediaobject>
 							<imageobject role="html">
-								<imagedata fileref="images/PasteNode3.png" format="PNG" align="center" scale="100" />
+								<imagedata fileref="images/PasteNode3.png" format="PNG" align="center" />
 							</imageobject>
 							<imageobject role="fo">
 								<imagedata fileref="images/PasteNode3.png" format="PNG" align="center" contentwidth="130mm"/>
@@ -385,7 +382,7 @@ You can see more details on how to select a page for a node in <xref linkend="se
 						</para>
 						<mediaobject>
 							<imageobject role="html">
-								<imagedata fileref="images/CutNode4.png" format="PNG" align="center" scale="100"/>
+								<imagedata fileref="images/CutNode4.png" format="PNG" align="center" />
 							</imageobject>
 							<imageobject role="fo">
 								<imagedata fileref="images/CutNode4.png" format="PNG" align="center" contentwidth="130mm"/>
@@ -398,7 +395,7 @@ You can see more details on how to select a page for a node in <xref linkend="se
 						</para>
 						<mediaobject>
 							<imageobject role="html">
-								<imagedata fileref="images/PasteNode3.png" format="PNG" align="center" scale="100" />
+								<imagedata fileref="images/PasteNode3.png" format="PNG" align="center"  />
 							</imageobject>
 							<imageobject role="fo">
 								<imagedata fileref="images/PasteNode3.png" format="PNG" align="center" contentwidth="130mm" />
@@ -422,7 +419,7 @@ You can see more details on how to select a page for a node in <xref linkend="se
 						</para>
 						<mediaobject>
 							<imageobject role="html">
-								<imagedata fileref="images/DeleteNode2.png" format="PNG" align="center" scale="100"/>
+								<imagedata fileref="images/DeleteNode2.png" format="PNG" align="center" />
 							</imageobject>
 							<imageobject role="fo">
 								<imagedata fileref="images/DeleteNode2.png" format="PNG" align="center" contentwidth="130mm" />
@@ -456,11 +453,8 @@ You can see more details on how to select a page for a node in <xref linkend="se
 						Select the node that you want to move. Right click on the selected node and then click on <emphasis role="bold">Move up</emphasis> or <emphasis role="bold">Move down</emphasis>
 					</para>
 					<mediaobject>
-						<imageobject role="html">
-							<imagedata fileref="images/MoveUpDown.png" format="PNG" align="center" scale="100" />
-						</imageobject>
-						<imageobject role="fo">
-							<imagedata fileref="images/MoveUpDown.png" format="PNG" align="center" contentwidth="150mm" />
+						<imageobject>
+							<imagedata fileref="images/MoveUpDown.png" format="PNG" />
 						</imageobject>
 					</mediaobject>
 				</step>
