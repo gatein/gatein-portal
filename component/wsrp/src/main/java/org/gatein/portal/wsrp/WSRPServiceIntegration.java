@@ -72,9 +72,9 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author <a href="mailto:chris.laprun@jboss.com">Chris Laprun</a>
  * @version $Revision$
  */
-public class ExoKernelIntegration implements Startable, WebAppListener
+public class WSRPServiceIntegration implements Startable, WebAppListener
 {
-   private static final Logger log = LoggerFactory.getLogger(ExoKernelIntegration.class);
+   private static final Logger log = LoggerFactory.getLogger(WSRPServiceIntegration.class);
 
    private static final String CLASSPATH = "classpath:/";
    private static final String PRODUCER_CONFIG_LOCATION = "producerConfigLocation";
@@ -89,8 +89,8 @@ public class ExoKernelIntegration implements Startable, WebAppListener
    private final boolean bypass;
    private static final String WSRP_ADMIN_GUI_CONTEXT_PATH = "/wsrp-admin-gui";
 
-   public ExoKernelIntegration(ExoContainerContext context, InitParams params, ConfigurationManager configurationManager,
-                               org.exoplatform.portal.pc.ExoKernelIntegration pc, NodeHierarchyCreator nhc) throws Exception
+   public WSRPServiceIntegration(ExoContainerContext context, InitParams params, ConfigurationManager configurationManager,
+                                 org.exoplatform.portal.pc.ExoKernelIntegration pc, NodeHierarchyCreator nhc) throws Exception
    {
       // IMPORTANT: even though PC ExoKernelIntegration and NodeHierarchyCreator is not used anywhere in the code, it's still needed for pico
       // to properly make sure that this service is started after the PC one. Yes, Pico is crap. :/
@@ -141,7 +141,7 @@ public class ExoKernelIntegration implements Startable, WebAppListener
          ServletContainerFactory factory = DefaultServletContainerFactory.getInstance();
          ServletContainer servletContainer = factory.getServletContainer();
          servletContainer.addWebAppListener(this);
-         
+
          log.info("WSRP Service version '" + WSRPConstants.WSRP_SERVICE_VERSION + "' started");
       }
    }
@@ -169,7 +169,7 @@ public class ExoKernelIntegration implements Startable, WebAppListener
       }
       catch (Exception e)
       {
-         throw new RuntimeException("Couln't instantiate RegistrationPersistenceManager", e);
+         throw new RuntimeException("Couldn't instantiate RegistrationPersistenceManager", e);
       }
       RegistrationManager registrationManager = new RegistrationManagerImpl();
       registrationManager.setPersistenceManager(registrationPersistenceManager);
