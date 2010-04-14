@@ -143,7 +143,7 @@ public class PageNavigationUtils
    // Still keep this method to have compatibility with legacy code
    public static PageNavigation filter(PageNavigation nav, String userName) throws Exception
    {
-      return filterNavigation(nav, userName, false, true);
+      return filterNavigation(nav, userName, false, false);
    }
 
    /**
