@@ -19,6 +19,8 @@
 
 package org.exoplatform.web;
 
+import org.exoplatform.container.component.ComponentRequestLifecycle;
+import org.exoplatform.container.component.RequestLifeCycle;
 import org.exoplatform.container.web.AbstractFilter;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
@@ -59,7 +61,9 @@ public class CacheUserProfileFilter extends AbstractFilter
                OrganizationService orgService =
                   (OrganizationService)getContainer().getComponentInstanceOfType(OrganizationService.class);
 
+               begin(orgService);
                User user = orgService.getUserHandler().findUserByName(state.getIdentity().getUserId());
+               end(orgService);
                state.setAttribute(USER_PROFILE, user);
 
             }
@@ -76,5 +80,21 @@ public class CacheUserProfileFilter extends AbstractFilter
 
    public void destroy()
    {
+   }
+
+   public void begin(OrganizationService orgService) throws Exception
+   {
+      if (orgService instanceof ComponentRequestLifecycle)
+      {
+      	 RequestLifeCycle.begin((ComponentRequestLifecycle)orgService);
+      }
+   }
+
+   public void end(OrganizationService orgService) throws Exception
+   {
+      if (orgService instanceof ComponentRequestLifecycle)
+      {
+      	 RequestLifeCycle.end();
+      }
    }
 }

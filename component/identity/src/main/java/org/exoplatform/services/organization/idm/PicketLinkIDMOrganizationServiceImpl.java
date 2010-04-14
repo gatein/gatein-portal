@@ -31,6 +31,7 @@ import org.exoplatform.services.organization.BaseOrganizationService;
 import org.picocontainer.Startable;
 
 import javax.naming.InitialContext;
+import javax.transaction.Status;
 import javax.transaction.UserTransaction;
 import java.util.LinkedList;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -141,11 +142,17 @@ public class PicketLinkIDMOrganizationServiceImpl extends BaseOrganizationServic
          if (configuration.isUseJTA())
          {
             UserTransaction tx = (UserTransaction)new InitialContext().lookup("java:comp/UserTransaction");
-            tx.begin();
+            if (tx.getStatus() == Status.STATUS_NO_TRANSACTION)
+            {
+               tx.begin();
+            }
          }
          else
          {
-            idmService_.getIdentitySession().beginTransaction();
+            if (!idmService_.getIdentitySession().getTransaction().isActive())
+            {
+               idmService_.getIdentitySession().beginTransaction();
+            }
          }
       }
       catch (Exception e)
