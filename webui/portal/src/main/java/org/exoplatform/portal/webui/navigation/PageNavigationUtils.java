@@ -143,7 +143,7 @@ public class PageNavigationUtils
    // Still keep this method to have compatibility with legacy code
    public static PageNavigation filter(PageNavigation nav, String userName) throws Exception
    {
-      return filterNavigation(nav, userName, false);
+      return filterNavigation(nav, userName, false, true);
    }
 
    /**
@@ -151,10 +151,11 @@ public class PageNavigationUtils
     * @param nav
     * @param userName
     * @param acceptNonDisplayedNode
+    * @param acceptNodeWithoutPage
     * @return
     * @throws Exception
     */
-   public static PageNavigation filterNavigation(PageNavigation nav, String userName, boolean acceptNonDisplayedNode) throws Exception
+   public static PageNavigation filterNavigation(PageNavigation nav, String userName, boolean acceptNonDisplayedNode, boolean acceptNodeWithoutPage) throws Exception
    {
       PageNavigation filter = nav.clone();
       filter.setNodes(new ArrayList<PageNode>());
@@ -167,11 +168,43 @@ public class PageNavigationUtils
 
       for (PageNode node : nav.getNodes())
       {
-         PageNode newNode = filterNodeNavigation(node, userName, acceptNonDisplayedNode, userService, userACL);
+         PageNode newNode = filterNodeNavigation(node, userName, acceptNonDisplayedNode, acceptNodeWithoutPage, userService, userACL);
          if (newNode != null)
             filter.addNode(newNode);
       }
       return filter;
+   }
+   
+   /**
+    * use {@link #filterNavigation(PageNavigation, String, boolean, boolean)}
+    * 
+    * @param nav
+    * @param userName
+    * @param acceptNonDisplayedNode
+    * @return
+    * @throws Exception
+    */
+   @Deprecated
+   public static PageNavigation filterNavigation(PageNavigation nav, String userName, boolean acceptNonDisplayedNode) throws Exception
+   {
+	   return filterNavigation(nav, userName, acceptNonDisplayedNode, true);
+   }
+   
+   /**
+    * Use {@link #filterNodeNavigation(PageNode, String, boolean, boolean, UserPortalConfigService, UserACL)}
+    * @param startNode
+    * @param userName
+    * @param acceptNonDisplayedNode
+    * @param userService
+    * @param userACL
+    * @return
+    * @throws Exception
+    */
+   @Deprecated
+   private static PageNode filterNodeNavigation(PageNode startNode, String userName, boolean acceptNonDisplayedNode,
+		      UserPortalConfigService userService, UserACL userACL) throws Exception {
+	   PageNode cloneStartNode = filterNodeNavigation(startNode, userName, acceptNonDisplayedNode, false, userService, userACL);
+	   return cloneStartNode;
    }
 
    /**
@@ -181,16 +214,19 @@ public class PageNavigationUtils
     * 
     * Case 2: Node 's visibility is not SYSTEM but the node is not display and the acceptNonDisplayedNode = false
     * 
-    * Case 3: Node has non null pageReference but the associated Page does not exist
+    * Case 3: Node has non null pageReference but the associated Page does not exist and not accept this node is without page
     * 
     * 
     * @param startNode
     * @param userName
+    * @param acceptNonDisplayedNode
+    * @param acceptNodeWithoutPage
     * @param userService
+    * @param userACL
     * @return
     * @throws Exception
     */
-   private static PageNode filterNodeNavigation(PageNode startNode, String userName, boolean acceptNonDisplayedNode,
+   private static PageNode filterNodeNavigation(PageNode startNode, String userName, boolean acceptNonDisplayedNode, boolean acceptNodeWithoutPage,
       UserPortalConfigService userService, UserACL userACL) throws Exception
    {
     
@@ -199,7 +235,7 @@ public class PageNavigationUtils
 
       boolean doNothingCase_1 = nodeVisibility == Visibility.SYSTEM && (!userACL.getSuperUser().equals(userName) || !acceptNonDisplayedNode);
       boolean doNothingCase_2 = nodeVisibility != Visibility.SYSTEM && !startNode.isDisplay() && !acceptNonDisplayedNode;
-      boolean doNothingCase_3 = (pageReference != null) && (userService.getPage(pageReference, userName) == null);
+      boolean doNothingCase_3 = (pageReference != null) && (userService.getPage(pageReference, userName) == null) && !acceptNodeWithoutPage;
 
       
       
@@ -217,7 +253,7 @@ public class PageNavigationUtils
       {
          for (PageNode child : children)
          {
-            PageNode filteredChildNode = filterNodeNavigation(child, userName, acceptNonDisplayedNode, userService, userACL);
+            PageNode filteredChildNode = filterNodeNavigation(child, userName, acceptNonDisplayedNode, acceptNodeWithoutPage, userService, userACL);
             if (filteredChildNode != null)
             {
                filteredChildren.add(filteredChildNode);
