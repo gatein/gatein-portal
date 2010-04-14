@@ -165,7 +165,7 @@
          (i.e. JNDI names, Database / DataSource names, JCR repository names, etc ...).</para>
          <para>This variable is only defined when there is a current PortalContainer available - only for PortalContainer scoped services.</para>
          <para>A good example for this is <emphasis role="bold">HibernateService</emphasis>:</para>
-         <example>
+         <example id="sect-Reference_Guide-Foundations-Configuration_syntax-Special_vars-Example">
             <title>HibernateService using variables</title>
          <programlisting role="XML"><![CDATA[
 <?xml version="1.0" encoding="ISO-8859-1"?>
@@ -206,6 +206,169 @@
       </section>
    </section>
 
+
+   <section id="sect-Reference_Guide-Foundations-Init_params">
+      <title>InitParams configuration object</title>
+
+      <para>
+         <literal>InitParams</literal> is a configuration object that is essentially a map of key-value pairs,
+         where key is always a <literal>String</literal>, and value can be any type that can be described
+         using kernel configuration xml.
+      </para>
+
+      <para>
+         Service components that form the &PRODUCT; insfrastructure use <literal>InitParams</literal> object to configure themselves.
+         A component can have one instance of InitParams injected at most. If the service component's constructor takes InitParams
+         as any of the parameters it will automatically be injected at component instantiation time. The xml configuration
+         for a service component that expects InitParams object must include &lt;init-params&gt; element (even if an empty one).
+      </para>
+
+      <para>
+         Let's use an example to see how the kernel xml configuration syntax looks for creating <literal>InitParams</literal> instances.
+      </para>
+
+      <example>
+         <title>InitParams - properties-param</title>
+         <programlisting role="XML"><![CDATA[
+<component>
+   <key>org.exoplatform.services.naming.InitialContextInitializer</key>
+   <type>org.exoplatform.services.naming.InitialContextInitializer</type>
+   <init-params>
+      <properties-param>
+         <name>default-properties</name>
+         <description>Default initial context properties</description>
+         <property name="java.naming.factory.initial"
+                  value="org.exoplatform.services.naming.SimpleContextFactory" />
+      </properties-param>
+   </init-params>
+</component>
+         ]]></programlisting>
+      </example>
+
+      <para>
+         InitParams object description begins with &lt;init-params&gt; element. It can have zero or more children elements
+         each of which is one of &lt;value-param&gt;, &lt;values-param&gt;, &lt;properties-param&gt;, or &lt;object-param&gt;.
+         Each of these child elements takes a &lt;name&gt; that serves as a map entry key, and an optional &lt;description&gt;.
+         It also takes a type-specific value specification.
+      </para>
+
+      <para>
+         For &lt;properties-param&gt; the value specification is in the form of one or more &lt;property&gt; elements,
+         each of which specifies two strings - a property name, and a property value. Each &lt;properties-params&gt;
+         defines one <literal>java.util.Properties</literal> instance. Also see
+         <xref linkend="sect-Reference_Guide-Foundations-Configuration_syntax-Special_vars-Example"/> for an example.
+      </para>
+
+      <example>
+         <title>InitParams - value-param</title>
+         <programlisting role="XML"><![CDATA[
+<component>
+   <key>org.exoplatform.services.transaction.TransactionService</key>
+   <type>org.exoplatform.services.transaction.impl.jotm.TransactionServiceJotmImpl</type>
+   <init-params>
+      <value-param>
+         <name>timeout</name>
+         <value>5</value>
+      </value-param>
+   </init-params>
+</component>
+         ]]></programlisting>
+      </example>
+
+      <para>
+         For &lt;value-param&gt; the value specification is in the form of &lt;value&gt; element, which defines
+         one <literal>String</literal> instance.         
+      </para>
+
+      <example>
+         <title>InitParams - values-param</title>
+         <programlisting role="XML"><![CDATA[
+<component>
+  <key>org.exoplatform.services.resources.ResourceBundleService</key>
+  <type>org.exoplatform.services.resources.impl.SimpleResourceBundleService</type>
+    <init-params>
+      <values-param>
+        <name>classpath.resources</name>
+        <description>The resources  that start with the following package name should be load from file system</description>
+        <value>locale.portlet</value>
+      </values-param>
+
+      <values-param>
+        <name>init.resources</name>
+        <description>Store the following resources into the db for  the first launch </description>
+        <value>locale.test.resources.test</value>
+      </values-param>
+
+      <values-param>
+        <name>portal.resource.names</name>
+        <description>The properties files of  the portal ,  those file will be merged
+          into one ResourceBundle properties </description>
+        <value>local.portal.portal</value>
+        <value>local.portal.custom</value>
+      </values-param>
+    </init-params>
+</component>
+         ]]></programlisting>
+      </example>
+
+      <para>
+      For &lt;values-param&gt; the value specification is in the form of one or more &lt;value&gt; elements,
+         each of which represents one <literal>String</literal> instance, where all the <literal>String</literal> values
+         are then collected into a <literal>java.util.List</literal> instance.
+      </para>
+
+      <example>
+         <title>InitParams - object-param</title>
+         <programlisting role="XML"><![CDATA[
+<component>
+   <key>org.exoplatform.services.cache.CacheService</key>
+   <jmx-name>cache:type=CacheService</jmx-name>
+   <type>org.exoplatform.services.cache.impl.CacheServiceImpl</type>
+   <init-params>
+      <object-param>
+         <name>cache.config.default</name>
+         <description>The default cache configuration</description>
+         <object type="org.exoplatform.services.cache.ExoCacheConfig">
+            <field name="name">
+               <string>default</string>
+            </field>
+            <field name="maxSize">
+               <int>300</int>
+            </field>
+            <field name="liveTime">
+               <long>300</long>
+            </field>
+            <field name="distributed">
+               <boolean>false</boolean>
+            </field>
+            <field name="implementation">
+               <string>org.exoplatform.services.cache.concurrent.ConcurrentFIFOExoCache</string>
+            </field>
+         </object>
+      </object-param>
+   </init-params>
+</component>
+         ]]></programlisting>
+      </example>
+
+      <para>
+         For &lt;object-param&gt; in our case, the value specification comes in a form of &lt;object&gt; element, which is
+         used for POJO style object specification (you specify an implementation class - &lt;type&gt;, and property values - &lt;field&gt;).
+      </para>
+      
+      <para>
+         Also see <xref linkend="sect-Reference_Guide-Foundations-Configuring_portal_Container_declaration_example" />
+         for an example of specifying a field of <literal>Collection</literal> type. 
+      </para>
+
+      <para>
+      The <literal>InitParams</literal> structure - the names and types of entries is specific for each service,
+         as it is the code inside service components's class that decides what entry names to look up and what types
+         it expects to find.
+      </para>
+   </section>
+
+
    <section id="sect-Reference_Guide-Foundations-Configuring_portal">
       <title>Configuring a portal container</title>
 
@@ -232,7 +395,7 @@
          portal (via extension mechanism described later), and are searched in the specified order.
       </para>
 
-      <example>
+      <example id="sect-Reference_Guide-Foundations-Configuring_portal_Container_declaration_example">
          <title>Portal container declaration example</title>
       <programlisting role="XML"><![CDATA[
 <?xml version="1.0" encoding="UTF-8"?>
