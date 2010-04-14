@@ -3,5 +3,5 @@
 					
 		def uiPortalNavigation = uicomponent.getChild(UIPortalNavigation.class); 
 		uiPortalNavigation.loadTreeNodes();
-		uicomponent.renderChild(UIPortalNavigation.class);
+		uicomponent.renderChildren();
 %>

@@ -277,8 +277,11 @@ public class UIPortalNavigation extends UIComponent
             expandTree = treeNode.getChildByPath(uri, treeNode);
          }
 
-         expandTree.setChildren(expandNode.getChildren(), selectNav);
-
+         if(expandTree != null)
+         {
+            expandTree.setChildren(expandNode.getChildren(), selectNav);
+         }
+         
          event.getRequestContext().addUIComponentToUpdateByAjax(uiNavigation);
       }
    }
@@ -315,9 +318,13 @@ public class UIPortalNavigation extends UIComponent
          {
             expandTree = treeNode.getChildByPath(uri, treeNode);
          }
-
-         expandTree.setExpanded(false);
-
+         
+         if(expandTree != null) 
+         {
+            expandTree.setExpanded(false);
+         }
+         
+         event.getRequestContext().addUIComponentToUpdateByAjax(uiNavigation);
       }
    }
 
