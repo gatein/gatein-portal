@@ -132,6 +132,11 @@
 	<td>POR_20_023</td>
 </tr>
 <tr>
+	<td>echo</td>
+	<td>-- Go to Page Layout tab--</td>
+	<td></td>
+</tr>
+<tr>
 	<td>clickAt</td>
 	<td>xpath=//div[@onclick=&quot;eXo.webui.UIHorizontalTabs.changeTabForUIFormTabpane(this, 'UIPageForm', 'UIPageTemplateOptions');javascript:eXo.webui.UIForm.submitEvent('UIPageForm','SelectTab','&amp;objectId=UIPageTemplateOptions')&quot;]</td>
 	<td></td>
@@ -142,13 +147,33 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>echo</td>
+	<td>-- Go to Permission Setting tab--</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
 	<td>xpath=//div[@onclick=&quot;eXo.webui.UIHorizontalTabs.changeTabForUIFormTabpane(this, 'UIPageForm', 'PermissionSetting');javascript:eXo.webui.UIForm.submitEvent('UIPageForm','SelectTab','&amp;objectId=PermissionSetting')&quot;]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAt</td>
+	<td>xpath=//div[@onclick=&quot;eXo.webui.UIHorizontalTabs.changeTabForUIFormTabpane(this, 'UIPageForm', 'PermissionSetting');javascript:eXo.webui.UIForm.submitEvent('UIPageForm','SelectTab','&amp;objectId=PermissionSetting')&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>--Choose Access permission Setting--</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
 	<td>link=Access Permission Setting</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>--Choose Edit permission setting--</td>
 	<td></td>
 </tr>
 <tr>
@@ -168,6 +193,46 @@
 </tr>
 <tr>
 	<td>echo</td>
+	<td>--Search new page created--</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Page Management</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>link=Page Management</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>searchTerm</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>searchTerm</td>
+	<td>POR_20_023</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>searchOption</td>
+	<td>label=Title</td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>xpath=//form[@id='UIPageSearch']/div[2]/a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>xpath=//form[@id='UIPageSearch']/div[2]/a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
 	<td>--Edit page--</td>
 	<td></td>
 </tr>
@@ -182,6 +247,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>echo</td>
+	<td>--View page properties--</td>
+	<td></td>
+</tr>
+<tr>
 	<td>waitForElementPresent</td>
 	<td>link=View Page properties</td>
 	<td></td>
@@ -189,6 +259,11 @@
 <tr>
 	<td>clickAt</td>
 	<td>link=View Page properties</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>--Choose page template tab--</td>
 	<td></td>
 </tr>
 <tr>
@@ -202,8 +277,8 @@
 	<td></td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
-	<td>xpath=//div[@onclick=&quot;eXo.webui.UIHorizontalTabs.changeTabForUIFormTabpane(this, 'UIPageForm', 'PermissionSetting');javascript:eXo.webui.UIForm.submitEvent('UIPageForm','SelectTab','&amp;objectId=PermissionSetting')&quot;]</td>
+	<td>echo</td>
+	<td>--Choose Permission setting tab--</td>
 	<td></td>
 </tr>
 <tr>
@@ -307,6 +382,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>echo</td>
+	<td>--Save after edit page--</td>
+	<td></td>
+</tr>
+<tr>
 	<td>waitForElementPresent</td>
 	<td>link=Save</td>
 	<td></td>
@@ -314,51 +394,16 @@
 <tr>
 	<td>clickAt</td>
 	<td>link=Save</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>--Finish all action--</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAt</td>
 	<td>xpath=//div[@id='UIPageEditor']/div[1]/div/div/div/a[2]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>echo</td>
-	<td>--Search new page created--</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>link=Page Management</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
-	<td>link=Page Management</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>searchTerm</td>
-	<td></td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>searchTerm</td>
-	<td>POR_20_023</td>
-</tr>
-<tr>
-	<td>select</td>
-	<td>searchOption</td>
-	<td>label=Title</td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>xpath=//form[@id='UIPageSearch']/div[2]/a</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
-	<td>xpath=//form[@id='UIPageSearch']/div[2]/a</td>
 	<td></td>
 </tr>
 <tr>

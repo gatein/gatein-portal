@@ -77,6 +77,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>echo</td>
+	<td>--Choose Portal template--</td>
+	<td></td>
+</tr>
+<tr>
 	<td>clickAt</td>
 	<td>xpath=//div[@id='UISiteManagement']//div[@class='UIAction']//div[@class='ActionButton BlueButton']</td>
 	<td></td>
@@ -99,7 +104,32 @@
 <tr>
 	<td>type</td>
 	<td>name</td>
-	<td>Test_POR_10_002_01</td>
+	<td>Test_POR_10_002</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>locale</td>
+	<td>label=English</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>skin</td>
+	<td>label=Default</td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>--Choose Properties--</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>xpath=//div[@id='UIMaskWorkspace']//div[@class='TabsContainer']/div[2]//div[@class='LeftTab']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>xpath=//div[@id='UIMaskWorkspace']//div[@class='TabsContainer']/div[2]//div[@class='LeftTab']</td>
+	<td></td>
 </tr>
 <tr>
 	<td>echo</td>
@@ -183,122 +213,7 @@
 </tr>
 <tr>
 	<td>echo</td>
-	<td>-- Add new portal with name is the same with existing one but different with existing by upper case --</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>link=Add New Portal</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
-	<td>link=Add New Portal</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
-	<td>xpath=//div[@id='UISiteManagement']//div[@class='UIAction']//div[@class='ActionButton BlueButton']</td>
-	<td></td>
-</tr>
-<tr>
-	<td>echo</td>
-	<td>--Choose Portal Setting--</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>xpath=//div[@id='UIMaskWorkspace']//div[@class='TabsContainer']/div[2]//div[@class='MiddleTab']</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
-	<td>xpath=//div[@id='UIMaskWorkspace']//div[@class='TabsContainer']/div[2]//div[@class='MiddleTab']</td>
-	<td></td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>name</td>
-	<td>Test_POR_10_002_02</td>
-</tr>
-<tr>
-	<td>echo</td>
-	<td>--Select Permission Setting--</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
-	<td>xpath=//div[@id='UIMaskWorkspace']//div[@class='TabsContainer']/div[4]//div[@class='MiddleTab']</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
-	<td>publicMode</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>link=Edit Permission Setting</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
-	<td>link=Edit Permission Setting</td>
-	<td>1,1</td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>link=Select Permission</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
-	<td>link=Select Permission</td>
-	<td>1,1</td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>link=Platform</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
-	<td>link=Platform</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
-	<td>link=Platform</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>link=exact:*</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
-	<td>link=exact:*</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForText</td>
-	<td>xpath=//div[@id='UIPermissionSelector']/div/div[2]/div[1]/div[3]/div[2]</td>
-	<td>exact:*</td>
-</tr>
-<tr>
-	<td>clickAt</td>
-	<td>link=Save</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>xpath=//div[@id='UISiteManagement']/table[2]/tbody/tr/td[3]/a[4]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>echo</td>
-	<td>--Go to Site--</td>
+	<td>--Go to Site to check existing portal list to use--</td>
 	<td></td>
 </tr>
 <tr>
@@ -333,52 +248,17 @@
 </tr>
 <tr>
 	<td>waitForTextNotPresent</td>
-	<td>Test_POR_10_002_01</td>
+	<td>Test_POR_10_002</td>
 	<td></td>
 </tr>
 <tr>
 	<td>verifyTextNotPresent</td>
-	<td>Test_POR_10_002_01</td>
-	<td></td>
-</tr>
-<tr>
-	<td>refreshAndWait</td>
-	<td></td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
-	<td>xpath=//div[@id='UIPortalApplication']/div[@class='UIPopupWindow UIDragObject']//table[@class='ActionContainer']//a</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>xpath=//div[@id='UISiteManagement']/table[2]/tbody/tr/td[3]/a[4]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
-	<td>xpath=//div[@id='UISiteManagement']/table[2]/tbody/tr/td[3]/a[4]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForConfirmation</td>
-	<td>Are you sure you want to delete this portal?</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForTextNotPresent</td>
-	<td>Test_POR_10_002_02</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextNotPresent</td>
-	<td>Test_POR_10_002_02</td>
+	<td>Test_POR_10_002</td>
 	<td></td>
 </tr>
 <tr>
 	<td>echo</td>
-	<td>--Return to Site--</td>
+	<td>--Return to Site to check existing portals list after deleted--</td>
 	<td></td>
 </tr>
 <tr>
