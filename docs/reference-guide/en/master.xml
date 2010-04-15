@@ -89,4 +89,5 @@ LT 20010312: could not find a way to configure image scaling properly (tried wid
 	<xi:include href="modules/GadgetDevelopment.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 	<xi:include href="modules/AuthenticationAndIdentity.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 	<xi:include href="modules/WSRP.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+	<xi:include href="modules/Advanced.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 </book>

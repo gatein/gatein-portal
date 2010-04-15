@@ -5,7 +5,6 @@
 ]>
 <chapter id="chap-Reference_Guide-Development">
 	<title>Portal Development</title>
-	<xi:include href="PortalDevelopment/Foundations.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 	<xi:include href="PortalDevelopment/Skinning.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 	<xi:include href="PortalDevelopment/PortalLifecycle.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 	<xi:include href="PortalDevelopment/DefaultPortalConfiguration.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
