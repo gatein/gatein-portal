@@ -28,6 +28,7 @@ import org.exoplatform.services.organization.MembershipType;
 import org.exoplatform.services.organization.OrganizationService;
 import org.gatein.common.text.EntityEncoder;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import java.util.ArrayList;
@@ -64,7 +65,7 @@ public class FindMembershipTypesPageList extends StatelessPageList<FindMembershi
       return types;
    }
    
-   public class UIMembershipType
+   public class UIMembershipType implements Serializable
    {
       private MembershipType mType;
       
