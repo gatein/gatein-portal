@@ -300,6 +300,7 @@ public class UISiteManagement extends UIContainer
             editPortal.setSelectedNode(uiPortal.getSelectedNode());
             editPortal.setSelectedNavigation(uiPortal.getSelectedNavigation());
             editPortal.setSelectedPath(uiPortal.getSelectedPath());
+            editPortal.refreshUIPage();
             UISiteBody siteBody = uiWorkingWS.findFirstComponentOfType(UISiteBody.class);
             siteBody.setUIComponent(null);
          }
