@@ -1,9 +1,11 @@
 package org.exoplatform.webui.organization;
 
+import java.io.Serializable;
+
 import org.exoplatform.services.organization.Group;
 import org.gatein.common.text.EntityEncoder;
 
-public class UIGroup {
+public class UIGroup implements Serializable {
 
 	private Group group;
 	
