@@ -293,8 +293,8 @@
 															%>
 															<div class="PortletIcon $portletIcon"><%=hasPermission ? title : _ctx.appRes("UIPortlet.label.protectedContent")%></div>
 															<%if(hasPermission) {%>
-																<a href="<%=uicomponent.event("DeleteComponent","$uicomponent.id")%>" class="DeletePortletIcon" title="<%=_ctx.appRes("UIPortlet.tooltip.deletePortlet");%>"></a>
 																<a href="<%=uicomponent.event("EditPortlet","$uicomponent.id")%>;eXo.portal.UIPortal.changeComposerSaveButton()" class="EditPortletPropertiesIcon" title="<%=_ctx.appRes("UIPortlet.tooltip.editPortlet");%>"></a>
+																<a href="<%=uicomponent.event("DeleteComponent","$uicomponent.id")%>" class="DeletePortletIcon" title="<%=_ctx.appRes("UIPortlet.tooltip.deletePortlet");%>"></a>
 															<%}%>
 														</div>
 													</div>
