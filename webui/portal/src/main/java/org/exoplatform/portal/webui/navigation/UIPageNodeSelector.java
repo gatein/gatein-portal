@@ -67,11 +67,9 @@ public class UIPageNodeSelector extends UIContainer
 
    private void loadNavigations() throws Exception
    {
-	  WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
       PageNavigation portalSelectedNav = Util.getUIPortal().getSelectedNavigation();
       if (portalSelectedNav != null)
       {
-    	 portalSelectedNav = PageNavigationUtils.filterNavigation(portalSelectedNav, context.getRemoteUser(), true, true);
          selectNavigation(portalSelectedNav);
          PageNode portalSelectedNode = Util.getUIPortal().getSelectedNode();
          if (portalSelectedNode != null)
