@@ -25,6 +25,7 @@ import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.web.application.Application;
 import org.exoplatform.web.application.ApplicationLifecycle;
+import org.exoplatform.web.application.RequestFailure;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 
@@ -58,6 +59,10 @@ public class UserSiteLifeCycle implements ApplicationLifecycle<PortalRequestCont
             configService.createUserSite(userName);
          }
       }
+   }
+   
+   public void onFailRequest(Application app, PortalRequestContext context, RequestFailure failureType) throws Exception
+   {
    }
 
    public void onEndRequest(Application app, PortalRequestContext context) throws Exception

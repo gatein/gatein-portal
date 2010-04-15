@@ -24,6 +24,7 @@ import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.UserProfile;
 import org.exoplatform.web.application.Application;
 import org.exoplatform.web.application.ApplicationLifecycle;
+import org.exoplatform.web.application.RequestFailure;
 import org.exoplatform.webui.application.WebuiRequestContext;
 
 public class UserProfileLifecycle implements ApplicationLifecycle<WebuiRequestContext>
@@ -57,6 +58,12 @@ public class UserProfileLifecycle implements ApplicationLifecycle<WebuiRequestCo
 	   
 	   currentUserProfile.set(userProfile);
 	   context.setAttribute(this.USER_PROFILE_ATTRIBUTE_NAME, userProfile);
+   }
+   
+   @SuppressWarnings("unused")
+   public void onFailRequest(Application app, WebuiRequestContext context, RequestFailure failureType) throws Exception
+   {
+      
    }
 
    @SuppressWarnings("unused")

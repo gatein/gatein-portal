@@ -21,6 +21,7 @@ package org.exoplatform.webui.application;
 
 import org.exoplatform.web.application.Application;
 import org.exoplatform.web.application.ApplicationLifecycle;
+import org.exoplatform.web.application.RequestFailure;
 import org.exoplatform.webui.event.MonitorEvent;
 
 /**
@@ -57,6 +58,12 @@ public class MonitorApplicationLifecycle implements ApplicationLifecycle<WebuiRe
          new MonitorEvent<WebuiApplication>(webuiapp, MonitorEvent.PORTAL_EXECUTION_LIFECYCLE_EVENT, rcontext);
       event.setStartExecutionTime(System.currentTimeMillis());
       rcontext.setAttribute(MonitorEvent.PORTAL_EXECUTION_LIFECYCLE_EVENT, event);
+   }
+   
+   @SuppressWarnings("unchecked")
+   public void onFailRequest(Application app, WebuiRequestContext rcontext, RequestFailure failureType) throws Exception
+   {
+      
    }
 
    @SuppressWarnings("unchecked")

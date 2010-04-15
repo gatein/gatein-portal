@@ -32,8 +32,10 @@ public interface ApplicationLifecycle<E extends RequestContext>
 
    public void onStartRequest(Application app, E context) throws Exception;
 
+   public void onFailRequest(Application app, E context, RequestFailure failureType) throws Exception;
+   
    public void onEndRequest(Application app, E context) throws Exception;
-
+   
    public void onDestroy(Application app) throws Exception;
 
 }

@@ -25,6 +25,7 @@ import org.exoplatform.container.SessionContainer;
 import org.exoplatform.container.SessionManagerContainer;
 import org.exoplatform.web.application.Application;
 import org.exoplatform.web.application.ApplicationLifecycle;
+import org.exoplatform.web.application.RequestFailure;
 import org.exoplatform.webui.application.WebuiRequestContext;
 
 public class PortalApplicationLifecycle implements ApplicationLifecycle<WebuiRequestContext>
@@ -41,6 +42,12 @@ public class PortalApplicationLifecycle implements ApplicationLifecycle<WebuiReq
       ExoContainer pcontainer = ExoContainerContext.getCurrentContainer();
       SessionContainer.setInstance(((SessionManagerContainer)pcontainer).getSessionManager().getSessionContainer(
          rcontext.getSessionId()));
+   }
+   
+   @SuppressWarnings("unused")
+   public void onFailRequest(Application app, WebuiRequestContext rontext, RequestFailure failureType) throws Exception
+   {
+      
    }
 
    @SuppressWarnings("unused")

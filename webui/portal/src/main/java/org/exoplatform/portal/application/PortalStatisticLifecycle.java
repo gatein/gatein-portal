@@ -22,6 +22,7 @@ package org.exoplatform.portal.application;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.web.application.Application;
 import org.exoplatform.web.application.ApplicationLifecycle;
+import org.exoplatform.web.application.RequestFailure;
 import org.exoplatform.webui.application.WebuiRequestContext;
 
 public class PortalStatisticLifecycle implements ApplicationLifecycle<WebuiRequestContext>
@@ -40,6 +41,12 @@ public class PortalStatisticLifecycle implements ApplicationLifecycle<WebuiReque
       app.setAttribute(ATTRIBUTE_NAME, System.currentTimeMillis());
    }
 
+   @SuppressWarnings("unused")
+   public void onFailRequest(Application app, WebuiRequestContext rcontext, RequestFailure failureType) throws Exception
+   {
+      
+   }
+   
    @SuppressWarnings("unused")
    public void onEndRequest(Application app, WebuiRequestContext rcontext) throws Exception
    {

@@ -21,6 +21,7 @@ package org.exoplatform.webui.application.portlet;
 
 import org.exoplatform.web.application.Application;
 import org.exoplatform.web.application.ApplicationLifecycle;
+import org.exoplatform.web.application.RequestFailure;
 import org.exoplatform.webui.application.WebuiRequestContext;
 
 public class PortletApplicationLifecycle implements ApplicationLifecycle<WebuiRequestContext>
@@ -38,6 +39,12 @@ public class PortletApplicationLifecycle implements ApplicationLifecycle<WebuiRe
 
    }
 
+   @SuppressWarnings("unused")
+   public void onFailRequest(Application app, WebuiRequestContext rcontext, RequestFailure failureType) throws Exception
+   {
+      
+   }
+   
    @SuppressWarnings("unused")
    public void onEndRequest(Application app, WebuiRequestContext context) throws Exception
    {

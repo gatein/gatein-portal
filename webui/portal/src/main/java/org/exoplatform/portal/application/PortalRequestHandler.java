@@ -20,11 +20,13 @@
 package org.exoplatform.portal.application;
 
 import org.exoplatform.commons.utils.Safe;
+import org.exoplatform.portal.config.StaleModelException;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.web.WebAppController;
 import org.exoplatform.web.WebRequestHandler;
 import org.exoplatform.web.application.ApplicationLifecycle;
+import org.exoplatform.web.application.RequestFailure;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIApplication;
 
@@ -114,9 +116,19 @@ public class PortalRequestHandler extends WebRequestHandler
          // Store ui root
          app.getStateManager().storeUIRootComponent(context);
       }
-      catch (Exception ex)
+      catch (StaleModelException staleModelEx)
       {
-         log.error("Error while handling request", ex);
+         // Minh Hoang TO:
+         //At the moment, this catch block is never reached, as the StaleModelException is intercepted temporarily 
+         //in UI-related code
+         for(ApplicationLifecycle lifecycle : lifecycles)
+         {
+            lifecycle.onFailRequest(app, context, RequestFailure.CONCURRENCY_FAILURE);
+         }
+      }
+      catch (Exception NonStaleModelEx)
+      {
+         log.error("Error while handling request", NonStaleModelEx);
       }
       finally
       {
