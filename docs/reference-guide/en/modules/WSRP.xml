@@ -5,13 +5,8 @@
    ]>
 <chapter id="wsrp">
    <title>Web Services for Remote Portlets (WSRP)</title>
-	<para>
-		Commented WSRP section out - not ready and breaking Publican builds.
-	</para>
-	<para>
-		Will re-include once completed.
-	</para>
-<!-- Commented as section not ready. Breaking Publican build.   <sect1>
+
+   <sect1>
       <title>Introduction</title>
       <para>The Web Services for Remote Portlets specification defines a web service interface for accessing and
          interacting with interactive presentation-oriented web services. It has been produced through the efforts of
@@ -21,11 +16,15 @@
 
       <para>Scenarios that motivate WSRP functionality include:
          <itemizedlist>
-            <listitem>Content hosts, such as portal servers, providing Portlets as presentation-oriented web services
-               that can be used by aggregation engines.
+            <listitem>
+               <para>Content hosts, such as portal servers, providing Portlets as presentation-oriented web services
+                  that can be used by aggregation engines.
+               </para>
             </listitem>
-            <listitem>Aggregating frameworks, including portal servers, consuming presentation-oriented web services
-               offered by content providers and integrating them into the framework.
+            <listitem>
+               <para>Aggregating frameworks, including portal servers, consuming presentation-oriented web services
+                  offered by content providers and integrating them into the framework.
+               </para>
             </listitem>
          </itemizedlist>
       </para>
@@ -70,8 +69,10 @@
          Committee and Community at large).
       </para>
 
-      <note>At of version &PRODUCT_VERSION; of &PRODUCT_NAME;, WSRP is only activated and supported when GateIn is
-         deployed on JBoss Application Server.
+      <note>
+         <para>At of version &PRODUCT_VERSION; of &PRODUCT_NAME;, WSRP is only activated and supported when GateIn is
+            deployed on JBoss Application Server.
+         </para>
       </note>
    </sect1>
 
@@ -79,41 +80,64 @@
       <title>Deploying &PRODUCT_NAME;'s WSRP services</title>
       <para>
          &PRODUCT_NAME; provides a complete support of WSRP 1.0 standard interfaces and offers both consumer and
-         producer
-         services. WSRP support is provided by the following files, assuming
+         producer services. WSRP support is provided by the following files, assuming
          <code>$GATEIN_HOME</code>
          is
          where &PRODUCT_NAME; has been installed,
          <code>$WSRP_VERSION</code>
+         (at the time of the writing, it was &WSRP_VERSION;)
          is the version of the WSRP component and
          <code>$PORTAL_VERSION</code>
-         is the current &PRODUCT_NAME; version
+         (at the time of the writing, it was &PORTAL_VERSION;)
+         is the current &PRODUCT_NAME; version:
          <itemizedlist>
             <listitem>
-               <filename>$GATEIN_HOME/wsrp-admin-gui.war</filename>, which contains the WSRP Configuration portlet with
-               which you can configure consumers to access remote servers and how the WSRP producer is configured.
+               <para>
+                  <filename>$GATEIN_HOME/wsrp-admin-gui.war</filename>, which contains the WSRP Configuration portlet
+                  with which you can configure consumers to access remote servers and how the WSRP producer is
+                  configured.
+               </para>
             </listitem>
             <listitem>
-               <filename>$GATEIN_HOME/wsrp-producer.war</filename>, which contains the WSRP producer web application.
+               <para><filename>$GATEIN_HOME/wsrp-producer.war</filename>, which contains the WSRP producer web
+                  application.
+               </para>
             </listitem>
             <listitem>
-               <filename>$GATEIN_HOME/lib/wsrp-common-$WSRP_VERSION.jar</filename>, which contains common classes needed
-               by the different WSRP libraries.
+               <para><filename>$GATEIN_HOME/lib/wsrp-common-$WSRP_VERSION.jar</filename>, which contains common classes
+                  needed by the different WSRP libraries.
+               </para>
             </listitem>
             <listitem>
-               <filename>$GATEIN_HOME/lib/wsrp-consumer-$WSRP_VERSION.jar</filename>, which contains the WSRP consumer.
+               <para>
+                  <filename>$GATEIN_HOME/lib/wsrp-consumer-$WSRP_VERSION.jar</filename>, which contains the WSRP
+                  consumer.
+               </para>
             </listitem>
             <listitem>
-               <filename>$GATEIN_HOME/lib/wsrp-integration-api-$WSRP_VERSION.jar</filename>, which contains the API
-               classes needed to integrate the WSRP component into portals,
+               <para>
+                  <filename>$GATEIN_HOME/lib/wsrp-integration-api-$WSRP_VERSION.jar</filename>, which contains the
+                  API classes needed to integrate the WSRP component into portals.
+               </para>
+
             </listitem>
             <listitem>
-               <filename>$GATEIN_HOME/lib/wsrp-wsrp1-ws-$WSRP_VERSION.jar</filename>, which contains the generated
-               JAX-WS classes for WSRP version 1.
+               <para>
+                  <filename>$GATEIN_HOME/lib/wsrp-producer-lib-$WSRP_VERSION.jar</filename>, which contains the classes
+                  needed by the WSRP producer.
+               </para>
             </listitem>
             <listitem>
-               <filename>$GATEIN_HOME/lib/gatein.portal.component.wsrp-$PORTAL_VERSION.jar</filename>, which contains
-               the code to integrate the WSRP service into &PRODUCT_NAME;.
+               <para>
+                  <filename>$GATEIN_HOME/lib/wsrp-wsrp1-ws-$WSRP_VERSION.jar</filename>, which contains the generated
+                  JAX-WS classes for WSRP version 1.
+               </para>
+            </listitem>
+            <listitem>
+               <para>
+                  <filename>$GATEIN_HOME/lib/gatein.portal.component.wsrp-$PORTAL_VERSION.jar</filename>, which
+                  contains the code to integrate the WSRP service into &PRODUCT_NAME;.
+               </para>
             </listitem>
          </itemizedlist>
          If you're not going to use WSRP in &PRODUCT_NAME;, you can remove
@@ -153,10 +177,11 @@
 
    <sect1>
       <title>Making a portlet remotable</title>
-      <para>&PRODUCT_NAME; does<emphasis role="bold">NOT</emphasis>, by default, expose local portlets for consumption
-         by
-         remote WSRP consumers. In order to make a portlet remotely available, it must be made "remotable" by marking it
-         as such in the associated<filename>portlet.xml</filename>. This is accomplished by using a specific
+      <para>&PRODUCT_NAME; does
+         <emphasis role="bold">NOT</emphasis>, by default, expose local portlets for consumption
+         by remote WSRP consumers. In order to make a portlet remotely available, it must be made "remotable" by marking
+         it as such in the associated
+         <filename>portlet.xml</filename>. This is accomplished by using a specific
          <code>org.gatein.pc.remotable container-runtime-option</code>. Setting its value to
          <code>true</code>
          makes the portlet available for remote consumption, while setting its value to
@@ -281,14 +306,13 @@
             descriptors. Alternatively, a portlet is provided to configure remote producers.
          </para>
          <para>
-            Once a remote producer has been configured, it can be made available in the list of portlet providers in the
-            Management portlet on the Admin page of &PRODUCT_NAME;. You can then examine the list of portlets that are
-            exposed by this producer and configure the portlets just like you would for local portlets.
+            Once a remote producer has been configured, the portlets that it exposes are then available in the
+            Application Registry to be added to categories and then to pages.
          </para>
          <para>
             As a way to test the WSRP producer service and to check that the portlets that you want to expose remotely
             are correctly published via WSRP, a default consumer named
-            <literal>self</literal>
+            <literal>self</literal>, that consumes the portlets exposed by &PRODUCT_NAME;'s producer,
             has been configured.
          </para>
       </sect2>
@@ -306,14 +330,28 @@
             <title>Using the configuration portlet</title>
             <para>
                &PRODUCT_NAME; provides a portlet to configure access (among other functions) to remote WSRP Producers
-               grahically.
+               grahically. It isn't, however, installed by default, so the first thing we will need to do is to install
+               the WSRP configuration portlet using the Application Registry.
+            </para>
 
-               == TODO ==
-
-               You can access it at
-               <filename>http://{hostname}:{port}/portal/auth/portal/admin/WSRP</filename>
-               or by logging in as a Portal administrator and clicking on the WSRP tab in the Admin portal. If all went
-               well, you should see something similar to this:
+            <para>
+               Use the usual procedure to log in as a Portal administrator and go to the Application Registry.
+               With the default install, you can just go to
+               <ulink
+                  url="http://localhost:8080/portal/login?initialURI=%2Fportal%2Fprivate%2Fclassic%2Fadministration%2Fregistry&amp;username=root&amp;password=gtn">
+                  http://localhost:8080/portal/login?initialURI=%2Fportal%2Fprivate%2Fclassic%2Fadministration%2Fregistry&amp;username=root&amp;password=gtn
+               </ulink>
+               Add the WSRP Configuration portlet to the Administration category. If you use the Import Applications
+               functionality, the WSRP Configuration portlet will be automatically added to the Administration category.
+            </para>
+            <para>
+               Now that the portlet is added to a category, it can be added to a page and used. We recommend adding it
+               to the same page as the Application Registry as operations relating to WSRP and adding portlets to
+               categories are somewhat related as we will see. Go ahead and add the WSRP Configuration portlet to the
+               page using the standard procedure.
+            </para>
+            <para>
+               If all went well, you should see something similar to this:
                <mediaobject>
                   <imageobject>
                      <imagedata fileref="images/WSRP/config_init.png" format="PNG" align="center" valign="middle"
@@ -322,16 +360,16 @@
                </mediaobject>
                This screen presents all the configured producers associated with their status and possible actions on
                them. A Consumer can be active or inactive. Activating a Consumer means that it is ready to act as a
-               portlet provider. Deactivating it will remove it from the list of available portlet providers. Note also
-               that a Consumer can be marked as requiring refresh meaning that the information held about it might not
-               be up to date and refreshing it from the remote Producer might be a good idea. This can happen for
-               several reasons: the service description for that remote Producer has not been fetched yet, the cached
-               version has expired or modifications have been made to the configuration that could potentially
-               invalidate it, thus requiring re-validation of the information.
+               portlet provider. Note also that a Consumer can be marked as requiring refresh meaning that the
+               information held about it might not be up to date and refreshing it from the remote Producer might be a
+               good idea. This can happen for several reasons: the service description for that remote Producer has not
+               been fetched yet, the cached version has expired or modifications have been made to the configuration
+               that could potentially invalidate it, thus requiring re-validation of the information.
             </para>
 
             <para>
-               Next, we create a new Consumer which we will call<literal>bea</literal>. Type "<literal>bea</literal>" in
+               Next, we create a new Consumer which we will call<literal>oracle</literal>. Type "<literal>
+               oracle</literal>" in
                the "Create a consumer named:" field then click on "Create consumer":
                <mediaobject>
                   <imageobject>
@@ -340,52 +378,54 @@
                   </imageobject>
                </mediaobject>
                You should now see a form allowing you to enter/modify the information about the Consumer.
-               Set the cache expiration value to 300 seconds and enter the WSDL URL for the producer in the text field
+               Set the cache expiration value to 300 seconds, leave the default timeout value for web services (WS)
+               operations and enter the WSDL URL for the producer in the text field
                and press the "Refresh &amp; Save" button:
                <mediaobject>
                   <imageobject>
-                     <imagedata fileref="images/WSRP/config_usewsdl.png" format="PNG" align="center" valign="middle"
+                     <imagedata fileref="images/WSRP/config_wsdl.png" format="PNG" align="center" valign="middle"
                                 scalefit="1"/>
                   </imageobject>
                </mediaobject>
-               This will retrieve the service description associated with the Producer which WSRP is described by the
-               WSDL file found at the URL you just entered. In our case, querying the service description will allow us
-               to learn that the Producer requires registration and that it expects a value for the registration
-               property named<literal>registration/consumerRole</literal>:
+               This will retrieve the service description associated with the Producer which WSRP interface is described
+               by the WSDL file found at the URL you just entered. In our case, querying the service description will
+               allow us to learn that the Producer requires registration but didn't request any registration property:
                <mediaobject>
                   <imageobject>
                      <imagedata fileref="images/WSRP/config_refresh.png" format="PNG" align="center" valign="middle"
                                 scalefit="1"/>
                   </imageobject>
                </mediaobject>
-               <note>At this point, there is no automated way to learn about which possible values (if any) are
-                  expected by the remote Producer. In the case of BEA's public producer, the possible values are
-                  indicated in the registration property description. This is not always the case... Please refer to
-                  the specific Producer's documentation.
-               </note>
-               Enter "<literal>public</literal>" as the value for the registration property and press "Save &amp;
-               Refresh" once more. You should now
-               see something similar to:
+               The Consumer for the
+               <literal>oracle</literal>
+               Producer should now be available as a portlet provider and be ready to be used.
+            </para>
+            <para>
+               Now, assuming that the producer required a value for an
+               <literal>email</literal>
+               registration property, &PRODUCT_NAME;'s WSRP consumer would have informed you that you were missing some
+               information:
                <mediaobject>
                   <imageobject>
-                     <imagedata fileref="images/WSRP/config_end.png" format="PNG" align="center" valign="middle"
+                     <imagedata fileref="images/WSRP/config_missing.png" format="PNG" align="center" valign="middle"
                                 scalefit="1"/>
                   </imageobject>
                </mediaobject>
-               The Consumer for the
-               <literal>bea</literal>
-               Producer should now be available as a portlet provider and
-               is ready to be used.
-            </para>
-            <para>
-               A producer is configured, by default, by retrieving the producer's information via a WSDL URL. There are
-               rare cases, however, where URLs need to be provided for each of the producer's end points. You can do
-               exactly that by unchecking the "Use WSDL?" checkbox, as is the case for the
-               <literal>self</literal>
-               producer:
+               <note>
+                  <para>At this point, there is no automated way to learn about which possible values (if any) are
+                     expected by the remote Producer. Sometimes, the possible values will be indicated in the
+                     registration
+                     property description but this is not always the case... Please refer to the specific Producer's
+                     documentation.
+                  </para>
+
+               </note>
+               If you entered "<literal>example@example.com</literal>" as the value for the registration property and
+               press "Save &amp;
+               Refresh" once more, you would have seen something similar to:
                <mediaobject>
                   <imageobject>
-                     <imagedata fileref="images/WSRP/config_self.png" format="PNG" align="center" valign="middle"
+                     <imagedata fileref="images/WSRP/config_end.png" format="PNG" align="center" valign="middle"
                                 scalefit="1"/>
                   </imageobject>
                </mediaobject>
@@ -426,10 +466,13 @@
                (with &PRODUCT_NAME; and its WSRP service deployed).
             </para>
             <para>
-               <note>A DTD and an XML Schema for WSRP Producer XML descriptors are available in
-                  <filename>jboss-portal.sar/portal-wsrp.sar/dtd/jboss-wsrp-consumer_2_6.dtd</filename>
-                  and
-                  <filename>jboss-portal.sar/portal-wsrp.sar/xsd/jboss-wsrp-consumer_2_6.xsd</filename>
+               <note>
+                  <para>A DTD and an XML Schema for WSRP Producer XML descriptors are available in
+                     <filename>jboss-portal.sar/portal-wsrp.sar/dtd/jboss-wsrp-consumer_2_6.dtd</filename>
+                     and
+                     <filename>jboss-portal.sar/portal-wsrp.sar/xsd/jboss-wsrp-consumer_2_6.xsd</filename>
+                  </para>
+
                </note>
             </para>
          </sect3>
@@ -437,44 +480,33 @@
          <sect3>
             <title>Configuring access to a remote portlet</title>
             <para>
-               Let's now look at the Admin page and the Management portlet. Click on the "Portlet definitions" tab at
-               the
-               top. Once this is done, look at the list of available portlet providers. If all went well,
-               you should see something similar to this:
+               If we go back to the Application Registry and examine the available portlets by clicking on the
+               Portlet link, you will now be able to see the remote portlets if you click on the REMOTE tab in the left
+               column:
                <mediaobject>
                   <imageobject>
-                     <imagedata fileref="images/WSRP/portlets.png" format="PNG" align="center" valign="middle"
+                     <imagedata fileref="images/WSRP/remote_portlets.png" format="PNG" align="center" valign="middle"
                                 scalefit="1"/>
                   </imageobject>
                </mediaobject>
             </para>
+
             <para>
-               We have 3 available portlet providers:
-               <literal>local, self</literal>
-               and<literal>bea</literal>. The
-               <literal>local</literal>
-               portlet provider exposes all the portlets deployed in this particular instance of Portal. As
-               explained above, the
-               <literal>self</literal>
-               provider refers to the default WSRP consumer bundled with Portal that consumes
-               the portlets exposed by the default WSRP producer. The
-               <literal>bea</literal>
-               provider corresponds to BEA's public producer
-               we just configured. Select it and click on "View portlets". You should now see something similar to:
-               <mediaobject>
-                  <imageobject>
-                     <imagedata fileref="images/WSRP/bea.png" format="PNG" align="center" valign="middle" scalefit="1"/>
-                  </imageobject>
-               </mediaobject>
+               These portlets are, of course, available to be used such as regular portlets: they can be used in
+               categories and added to pages. If you use the Import Applications functionality, they will also be
+               automatically imported in categories based on the keywords they define.
             </para>
+
             <para>
-               From there on out, you should be able to configure WSRP portlets just as any other. In particular, you
-               can create an instance of one of the remote portlets offered by BEA's public producer just like you would
-               create an instance of a local portlet and then assign it to a window in a page. If you go to that page,
-               you should see something similar to below for this portlet:
+               More specifically, if you want to add a WSRP portlet to a category, you can access these portlets by
+               selecting
+               <literal>wsrp</literal>
+               in the Application Type drop-down menu:
                <mediaobject>
                   <imageobject>
-                     <imagedata fileref="images/WSRP/result.png" format="PNG" align="center" valign="middle"/>
+                     <imagedata fileref="images/WSRP/remote_portlets_category.png" format="PNG" align="center"
+                                valign="middle"
+                                scalefit="1"/>
                   </imageobject>
                </mediaobject>
             </para>
@@ -494,19 +526,25 @@
             <filename>jboss-portal.sar/portal-wsrp.sar/xsd/jboss-wsrp-consumer_2_6.xsd</filename>, while a (legacy) DTD
             can be found at<filename>jboss-portal.sar/portal-wsrp.sar/dtd/jboss-wsrp-consumer_2_6.dtd</filename>.
 
-            <note>It is important to note how WSRP Producer descriptors are processed. They are read the first time the
-               WSRP service starts and the associated information is then put in the Portal database. Subsequent launch
-               of the WSRP service will use the database-stored information for all producers which identifier is
-               already known to Portal. More specifically, all the descriptors are scanned for producer identifiers.
-               Any identifier that is already known will be bypassed and the configuration associated with this remote
-               producer in the database will be used. If a producer identifier is found that wasn't already in the
-               database, that producer information will be processed and recorded in the database. Therefore, if you
-               wish to delete a producer configuration, you need to delete the associated information in the database
-               (this can be accomplished using the configuration portlet as we saw in<xref linkend="consumer_gui"/>)
-               <emphasis>AND</emphasis>
-               remove the associated information in any WSRP Producer descriptor (if such
-               information exists) as the producer will be re-created the next time the WSRP is launched if that
-               information is not removed.
+            <note>
+               <para>It is important to note how WSRP Producer descriptors are processed. They are read the first time
+                  the WSRP service starts and the associated information is then put in the Portal database. Subsequent
+                  launch
+                  of the WSRP service will use the database-stored information for all producers which identifier is
+                  already known to Portal. More specifically, all the descriptors are scanned for producer identifiers.
+                  Any identifier that is already known will be bypassed and the configuration associated with this
+                  remote
+                  producer in the database will be used. If a producer identifier is found that wasn't already in the
+                  database, that producer information will be processed and recorded in the database. Therefore, if you
+                  wish to delete a producer configuration, you need to delete the associated information in the database
+                  (this can be accomplished using the configuration portlet as we saw in
+                  <xref linkend="consumer_gui"/>)
+                  <emphasis>AND</emphasis>
+                  remove the associated information in any WSRP Producer descriptor (if such
+                  information exists) as the producer will be re-created the next time the WSRP is launched if that
+                  information is not removed.
+               </para>
+
             </note>
          </para>
 
@@ -531,32 +569,45 @@
 
             <para>
                <itemizedlist>
-                  <listitem>You can provide the URLs for each of the different WSRP interfaces offered by the remote
-                     producer via the
-                     <literal>&lt;endpoint-config&gt;</literal>
-                     element and its
-                     <literal>&lt;service-description-url&gt;</literal>,
-                     <literal>&lt;markup-url&gt;</literal>,
-                     <literal>&lt;registration-url&gt;</literal>
-                     and
-                     <literal>&lt;portlet-management-url&gt;</literal>
-                     children. These URLs are
-                     producer-specific so you will need to refer to your producer documentation or WSDL file to
-                     determine
-                     the appropriate values.
+                  <listitem>
+                     <para>You can provide the URLs for each of the different WSRP interfaces offered by the remote
+                        producer via the
+                        <literal>&lt;endpoint-config&gt;</literal>
+                        element and its
+                        <literal>&lt;service-description-url&gt;</literal>,
+                        <literal>&lt;markup-url&gt;</literal>,
+                        <literal>&lt;registration-url&gt;</literal>
+                        and
+                        <literal>&lt;portlet-management-url&gt;</literal>
+                        children. These URLs are
+                        producer-specific so you will need to refer to your producer documentation or WSDL file to
+                        determine
+                        the appropriate values.
+                     </para>
+
                   </listitem>
-                  <listitem>Alternatively, and this is the easiest way to configure your producer, you can provide a URL
-                     pointing to the WSDL description of the producer's WSRP services. This is accomplished via the
-                     <literal>&lt;endpoint-wsdl-url&gt;</literal>
-                     element. &PRODUCT_NAME; will then
-                     heuristically determine, from the information contained in the WSDL file, how to connect
-                     appropriately
-                     to the remote WSRP services.
-                     <note>It is important to note that, when using this method, &PRODUCT_NAME; will try to match a port
-                        name to an interface based solely on the provided name. There are no standard names for these
-                        ports so it is possible (though rare) that this matching process fails. In this case, you should
-                        look at the WSDL file and provide the endpoint URLs manually, as per the previous method.
-                     </note>
+                  <listitem>
+                     <para>Alternatively, and this is the easiest way to configure your producer, you can provide a URL
+                        pointing to the WSDL description of the producer's WSRP services. This is accomplished via the
+                        <literal>&lt;endpoint-wsdl-url&gt;</literal>
+                        element. &PRODUCT_NAME; will then
+                        heuristically determine, from the information contained in the WSDL file, how to connect
+                        appropriately
+                        to the remote WSRP services.
+                        <note>
+                           <para>It is important to note that, when using this method, &PRODUCT_NAME; will try to match
+                              a
+                              port
+                              name to an interface based solely on the provided name. There are no standard names for
+                              these
+                              ports so it is possible (though rare) that this matching process fails. In this case, you
+                              should
+                              look at the WSDL file and provide the endpoint URLs manually, as per the previous method.
+                           </para>
+
+                        </note>
+                     </para>
+
                   </listitem>
                </itemizedlist>
             </para>
@@ -600,8 +651,10 @@
                registration
                information in the producer configuration so that the Portal consumer can register with the remote
                producer when required.
-               <note>At this time, though, only simple String properties are supported and it is not possible to
-                  configure complex registration data. This should however be sufficient for most cases.
+               <note>
+                  <para>At this time, though, only simple String properties are supported and it is not possible to
+                     configure complex registration data. This should however be sufficient for most cases.
+                  </para>
                </note>
             </para>
 
@@ -765,7 +818,7 @@
                service level. This gave us access to three portlets as shown here:
                <mediaobject>
                   <imageobject>
-                     <imagedata fileref="images/WSRP/bea.png" format="png" align="center" valign="middle" scalefit="1"/>
+                     <imagedata fileref="images/WSRP/bea.png" format="PNG" align="center" valign="middle" scalefit="1"/>
                   </imageobject>
                </mediaobject>
             </para>
@@ -782,7 +835,7 @@
                instead of<literal>public</literal>:
                <mediaobject>
                   <imageobject>
-                     <imagedata fileref="images/WSRP/modify_reg_start.png" format="png" align="center" valign="middle"
+                     <imagedata fileref="images/WSRP/modify_reg_start.png" format="PNG" align="center" valign="middle"
                                 scalefit="1"/>
                   </imageobject>
                </mediaobject>
@@ -790,7 +843,7 @@
                let you send this new data to the remote producer:
                <mediaobject>
                   <imageobject>
-                     <imagedata fileref="images/WSRP/modify_reg_modify.png" format="png" align="center"
+                     <imagedata fileref="images/WSRP/modify_reg_modify.png" format="PNG" align="center"
                                 valign="middle" scalefit="1"/>
                   </imageobject>
                </mediaobject>
@@ -798,7 +851,7 @@
                the remote producer, you should see something similar to:
                <mediaobject>
                   <imageobject>
-                     <imagedata fileref="images/WSRP/modify_reg_end.png" format="png" align="center" valign="middle"
+                     <imagedata fileref="images/WSRP/modify_reg_end.png" format="PNG" align="center" valign="middle"
                                 scalefit="1"/>
                   </imageobject>
                </mediaobject>
@@ -808,7 +861,7 @@
                new portlets are now available:
                <mediaobject>
                   <imageobject>
-                     <imagedata fileref="images/WSRP/bea_insider.png" format="png" align="center" valign="middle"
+                     <imagedata fileref="images/WSRP/bea_insider.png" format="PNG" align="center" valign="middle"
                                 scalefit="1"/>
                   </imageobject>
                </mediaobject>
@@ -830,7 +883,7 @@
                the configuration screen for this producer, you should see:
                <mediaobject>
                   <imageobject>
-                     <imagedata fileref="images/WSRP/config_self.png" format="png" align="center" valign="middle"
+                     <imagedata fileref="images/WSRP/config_self.png" format="PNG" align="center" valign="middle"
                                 scalefit="1"/>
                   </imageobject>
                </mediaobject>
@@ -844,7 +897,7 @@
                the consumer by pressing "Refresh &amp; Save":
                <mediaobject>
                   <imageobject>
-                     <imagedata fileref="images/WSRP/modify_reg_self.png" format="png" align="center" valign="middle"
+                     <imagedata fileref="images/WSRP/modify_reg_self.png" format="PNG" align="center" valign="middle"
                                 scalefit="1"/>
                   </imageobject>
                </mediaobject>
@@ -857,20 +910,23 @@
                data, you should see something similar to:
                <mediaobject>
                   <imageobject>
-                     <imagedata fileref="images/WSRP/modify_reg_self_end.png" format="png" align="center"
+                     <imagedata fileref="images/WSRP/modify_reg_self_end.png" format="PNG" align="center"
                                 valign="middle" scalefit="1"/>
                   </imageobject>
                </mediaobject>
 
-               <note>As of WSRP 1, it is rather difficult to ascertain for sure what caused an
-                  <exceptionname>OperationFailedFault</exceptionname>
-                  as it is the generic exception returned by
-                  producers if something didn't quite happen as expected during a method invocation. This means that
-                  <exceptionname>OperationFailedFault</exceptionname>
-                  can be caused by several different reasons, one
-                  of them being a request to modify the registration data. Please take a look at the log files to see
-                  if you can gather more information as to what happened. WSRP 2 introduces an exception that is
-                  specific to a request to modify registrations thus reducing the ambiguity that currently exists.
+               <note>
+                  <para>As of WSRP 1, it is rather difficult to ascertain for sure what caused an
+                     <exceptionname>OperationFailedFault</exceptionname>
+                     as it is the generic exception returned by
+                     producers if something didn't quite happen as expected during a method invocation. This means that
+                     <exceptionname>OperationFailedFault</exceptionname>
+                     can be caused by several different reasons, one
+                     of them being a request to modify the registration data. Please take a look at the log files to see
+                     if you can gather more information as to what happened. WSRP 2 introduces an exception that is
+                     specific to a request to modify registrations thus reducing the ambiguity that currently exists.
+                  </para>
+
                </note>
             </para>
          </sect3>
@@ -882,7 +938,7 @@
             Several operations are available from the consumer list view of the WSRP configuration portlet:
             <mediaobject>
                <imageobject>
-                  <imagedata fileref="images/WSRP/consumer_operations.png" format="png" align="center" valign="middle"
+                  <imagedata fileref="images/WSRP/consumer_operations.png" format="PNG" align="center" valign="middle"
                              scalefit="1"/>
                </imageobject>
             </mediaobject>
@@ -890,20 +946,28 @@
          <para>
             The available operations are:
             <itemizedlist>
-               <listitem>Configure: displays the consumer details and allows user to edit them</listitem>
                <listitem>
-                  Refresh: forces the consumer to retrieve the service description from the remote producer to refresh
-                  the local information (offered portlets, registration information, etc.)
+                  <para>Configure: displays the consumer details and allows user to edit them</para>
                </listitem>
                <listitem>
-                  Activate/Deactivate: activates/deactivates a consumer, governing whether it will be available to
-                  provide portlets and receive portlet invocations
+                  <para>Refresh: forces the consumer to retrieve the service description from the remote producer to
+                     refresh
+                     the local information (offered portlets, registration information, etc.)
+                  </para>
                </listitem>
                <listitem>
-                  Register/Deregister: registers/deregisters a consumer based on whether registration is required
-                  and/or acquired
+                  <para>Activate/Deactivate: activates/deactivates a consumer, governing whether it will be available to
+                     provide portlets and receive portlet invocations
+                  </para>
                </listitem>
-               <listitem>Delete: destroys the consumer, after deregisterting it if it was registered</listitem>
+               <listitem>
+                  <para>Register/Deregister: registers/deregisters a consumer based on whether registration is required
+                     and/or acquired
+                  </para>
+               </listitem>
+               <listitem>
+                  <para>Delete: destroys the consumer, after deregisterting it if it was registered</para>
+               </listitem>
             </itemizedlist>
          </para>
       </sect2>
@@ -920,7 +984,7 @@
          </para>
          <mediaobject>
             <imageobject>
-               <imagedata fileref="images/WSRP/erase_registration.png" format="png" align="center" valign="middle"/>
+               <imagedata fileref="images/WSRP/erase_registration.png" format="PNG" align="center" valign="middle"/>
             </imageobject>
          </mediaobject>
          <para>
@@ -930,7 +994,7 @@
          </para>
          <mediaobject>
             <imageobject>
-               <imagedata fileref="images/WSRP/erase_registration_warning.png" format="png" align="center"
+               <imagedata fileref="images/WSRP/erase_registration_warning.png" format="PNG" align="center"
                           valign="middle"/>
             </imageobject>
          </mediaobject>
@@ -970,12 +1034,12 @@
             is valid or not.
          </para>
          <para>
-            &PRODUCT_NAME; 2.6.3 introduces a web interface to configure the producer's behavior. You can access it
+            &PRODUCT_NAME; provides a web interface to configure the producer's behavior. You can access it
             by clicking on the "Producer Configuration" tab of the "WSRP" page of the "admin" portal. Here's what you
             should see with the default configuration:
             <mediaobject>
                <imageobject>
-                  <imagedata fileref="images/WSRP/producer_default.png" format="png" align="center" valign="middle"
+                  <imagedata fileref="images/WSRP/producer_default.png" format="PNG" align="center" valign="middle"
                              scalefit="1"/>
                </imageobject>
             </mediaobject>
@@ -999,7 +1063,7 @@
             state:
             <mediaobject>
                <imageobject>
-                  <imagedata fileref="images/WSRP/producer_blank.png" format="png" align="center" valign="middle"
+                  <imagedata fileref="images/WSRP/producer_blank.png" format="PNG" align="center" valign="middle"
                              scalefit="1"/>
                </imageobject>
             </mediaobject>
@@ -1010,7 +1074,7 @@
             registrations."). The screen should now refresh and display:
             <mediaobject>
                <imageobject>
-                  <imagedata fileref="images/WSRP/producer_registration.png" format="png" align="center"
+                  <imagedata fileref="images/WSRP/producer_registration.png" format="PNG" align="center"
                              valign="middle" scalefit="1"/>
                </imageobject>
             </mediaobject>
@@ -1026,23 +1090,27 @@
             purpose:
             <mediaobject>
                <imageobject>
-                  <imagedata fileref="images/WSRP/producer_email.png" format="png" align="center" valign="middle"
+                  <imagedata fileref="images/WSRP/producer_email.png" format="PNG" align="center" valign="middle"
                              scalefit="1"/>
                </imageobject>
             </mediaobject>
             Press "Save" to record your modifications.
 
             <note>
-               At this time, only String (xsd:string) properties are supported. If your application requires more
-               complex properties, please let us know.
+               <para>At this time, only String (xsd:string) properties are supported. If your application requires more
+                  complex properties, please let us know.
+               </para>
             </note>
 
             <note>
-               If consumers are already registered with the producer, modifying the configuration of required
-               registration
-               information will trigger the invalidation of held registrations, requiring consumers to modify their
-               registration before being able to access the producer again. We saw the consumer side of that process
-               in<xref linkend="reg_mod_error"/>.
+               <para>If consumers are already registered with the producer, modifying the configuration of required
+                  registration
+                  information will trigger the invalidation of held registrations, requiring consumers to modify their
+                  registration before being able to access the producer again. We saw the consumer side of that process
+                  in
+                  <xref linkend="reg_mod_error"/>.
+               </para>
+
             </note>
          </para>
 
@@ -1079,11 +1147,15 @@
                name of your custom property validator instead to customize the default registration policy behavior.
                Note that property validators are only used by the default policy.
 
-               <note>Since the policy or the validator are defined via their class name and dynamically loaded, it is
-                  important that you make sure that the identified class is available to the application server. One way
-                  to accomplish that is to deploy your policy implementation as JAR file in your AS instance deploy
-                  directory. Note also that, since both policies and validators are dynamically instantiated, they must
-                  provide a default, no-argument constructor.
+               <note>
+                  <para>Since the policy or the validator are defined via their class name and dynamically loaded, it is
+                     important that you make sure that the identified class is available to the application server. One
+                     way
+                     to accomplish that is to deploy your policy implementation as JAR file in your AS instance deploy
+                     directory. Note also that, since both policies and validators are dynamically instantiated, they
+                     must
+                     provide a default, no-argument constructor.
+                  </para>
                </note>
             </para>
          </sect3>
@@ -1104,5 +1176,5 @@
          </para>
       </sect2>
 
-   </sect1> -->
+   </sect1>
 </chapter>
