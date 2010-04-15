@@ -45,7 +45,7 @@ import java.util.List;
 public class UIListMembershipType extends UIContainer
 {
 
-   private static String[] USER_BEAN_FIELD = {"name", "createdDate", "modifiedDate", "description"};
+   private static String[] USER_BEAN_FIELD = {"name", "createdDate", "modifiedDate", "encodedDescription"};
 
    private static String[] USER_ACTION = {"EditMembership", "DeleteMembership"};
 

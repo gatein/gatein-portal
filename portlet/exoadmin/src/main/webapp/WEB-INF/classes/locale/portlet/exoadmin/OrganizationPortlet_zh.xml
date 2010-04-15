@@ -258,7 +258,7 @@
          <createdDate>创建日期</createdDate>
          <modifiedDate>修改日期</modifiedDate>
          <action>#{word.action}</action>
-         <description>#{word.description}</description>
+         <encodedDescription>#{word.description}</encodedDescription>
       </header>
       <action>
          <title>

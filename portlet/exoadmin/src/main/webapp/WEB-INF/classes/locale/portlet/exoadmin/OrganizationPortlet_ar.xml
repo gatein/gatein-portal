@@ -307,7 +307,7 @@
       <createdDate>تاريخ الإنشاء</createdDate>
       <modifiedDate>تاريخ التعديل</modifiedDate>
       <action>#{word.action}</action>
-      <description>#{word.description}</description>
+      <encodedDescription>#{word.description}</encodedDescription>
     </header>
     <action>
       <title>

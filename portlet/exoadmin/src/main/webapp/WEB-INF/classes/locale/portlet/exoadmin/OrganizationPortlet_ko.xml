@@ -259,7 +259,7 @@
          <createdDate>생성된 날짜</createdDate>
          <modifiedDate>수정된 날짜</modifiedDate>
          <action>#{word.action}</action>
-         <description>#{word.description}</description>
+         <encodedDescription>#{word.description}</encodedDescription>
       </header>
       <action>
          <title>

@@ -26,14 +26,17 @@ import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.services.organization.MembershipType;
 import org.exoplatform.services.organization.OrganizationService;
+import org.gatein.common.text.EntityEncoder;
 
+import java.util.Date;
 import java.util.List;
+import java.util.ArrayList;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class FindMembershipTypesPageList extends StatelessPageList<MembershipType>
+public class FindMembershipTypesPageList extends StatelessPageList<FindMembershipTypesPageList.UIMembershipType>
 {
 
    public FindMembershipTypesPageList(int pageSize)
@@ -42,11 +45,58 @@ public class FindMembershipTypesPageList extends StatelessPageList<MembershipTyp
    }
 
    @Override
-   protected ListAccess<MembershipType> connect() throws Exception
+   protected ListAccess<UIMembershipType> connect() throws Exception
    {
       ExoContainer container = PortalContainer.getInstance();
       OrganizationService service = (OrganizationService)container.getComponentInstance(OrganizationService.class);
       List<MembershipType> memberships = (List<MembershipType>)service.getMembershipTypeHandler().findMembershipTypes();
-      return new ListAccessImpl<MembershipType>(MembershipType.class, memberships);
+      
+      return new ListAccessImpl<UIMembershipType>(UIMembershipType.class, convertMembershipTypes(memberships));
+   }
+   
+   private List<UIMembershipType> convertMembershipTypes(List<MembershipType> memberships)
+   {
+      List<UIMembershipType> types = new ArrayList<UIMembershipType>(memberships.size());
+      for (MembershipType type: memberships)
+      {
+         types.add(new UIMembershipType(type));
+      }
+      return types;
+   }
+   
+   public class UIMembershipType
+   {
+      private MembershipType mType;
+      
+      public UIMembershipType(MembershipType mType)
+      {
+         this.mType = mType;
+      }
+      
+      public String getName()
+      {
+         return mType.getName();
+      }
+      
+      public Date getCreatedDate()
+      {
+         return mType.getCreatedDate();
+      }
+
+      public Date getModifiedDate()
+      {
+         return mType.getModifiedDate();
+      }
+
+      public String getDescription()
+      {
+         return mType.getDescription();
+      }
+      
+      public String getEncodedDescription()
+      {
+          EntityEncoder encoder = EntityEncoder.FULL;
+          return encoder.encode(getDescription());
+      }
    }
 }
