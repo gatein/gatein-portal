@@ -86,9 +86,9 @@ public class UIGadget extends UIComponent
 
    public static final String PREF_DEBUG = "_pref_debug_";
 
-   public static final String HOME_VIEW = "HOME";
+   public static final String HOME_VIEW = "home";
 
-   public static final String CANVAS_VIEW = "CANVAS";
+   public static final String CANVAS_VIEW = "canvas"; 
 
    public String view = HOME_VIEW;
 
