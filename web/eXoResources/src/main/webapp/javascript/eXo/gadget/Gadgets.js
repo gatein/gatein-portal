@@ -256,8 +256,8 @@ gadgets.IfrGadgetService.prototype.requestNavigateTo = function(view,
   var portletFrag = DOMUtil.findAncestorByClass(uiGadget, "PORTLET-FRAGMENT") ;
   if (!portletFrag) return;
   var maximize = "maximize";
-  if(view == 'CANVAS') maximize = "maximize";
-  else if(view == 'HOME') maximize = "unmaximize";
+  if(view == 'canvas') maximize = "maximize";
+  else if(view == 'home') maximize = "unmaximize";
   var compId = portletFrag.parentNode.id;
   var uicomp = DOMUtil.getChildrenByTagName(portletFrag, "div")[0];
   var href = eXo.env.server.portalBaseURL + "?portal:componentId=" + compId ;
@@ -276,10 +276,10 @@ gadgets.IfrGadgetService.prototype.requestNavigateTo = function(view,
  */
 gadgets.IfrGadgetService.prototype.getUrlForView = function(
     view) {
-  if (view === 'CANVAS') {
-    return 'CANVAS';
-  } else if (view === 'HOME') {
-    return 'HOME';
+  if (view === 'canvas') {
+    return 'canvas';
+  } else if (view === 'home') {
+    return 'home';
   } else {
     return null;
   }
