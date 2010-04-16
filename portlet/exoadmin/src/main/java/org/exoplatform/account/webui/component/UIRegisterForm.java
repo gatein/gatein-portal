@@ -94,9 +94,6 @@ public class UIRegisterForm extends UIForm
       {
          // Invalidate the captcha image
          PortalRequestContext prContext = Util.getPortalRequestContext();
-         HttpServletRequest request = prContext.getRequest();
-         HttpSession session = request.getSession();
-         session.removeAttribute(Captcha.NAME);
  
          UIRegisterForm registerForm = event.getSource();
          OrganizationService orgService = registerForm.getApplicationComponent(OrganizationService.class);
@@ -109,6 +106,9 @@ public class UIRegisterForm extends UIForm
             //TODO: Send email and add Account Activating feature
             UIApplication uiApp = context.getUIApplication();
             uiApp.addMessage(new ApplicationMessage("UIRegisterForm.registerWithSuccess.message", null));
+            HttpServletRequest request = prContext.getRequest();
+            HttpSession session = request.getSession();
+            session.removeAttribute(Captcha.NAME);
          }
       }
    }
