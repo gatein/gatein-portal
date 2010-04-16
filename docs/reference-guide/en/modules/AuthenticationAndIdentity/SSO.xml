@@ -264,28 +264,91 @@ realmName=gatein-domain
 				<itemizedlist>
 					<listitem>
 						<para>
-						In the <filename>gatein.ear/02portal.war/groovy/portal/webui/UILoginForm.gtmpl</filename> file replace the javascript code at the end with:
-<programlisting>&#60;script&#62;
-&#60;%=uicomponent.event(&#34;Close&#34;);%&#62;
-  window.location = &#39;http://localhost:8888/cas/login?service=http://localhost:8080/portal/private/classic&#39;;
-&#60;/script&#62;
+						In the <filename>gatein.ear/web.war/groovy/groovy/webui/component/UIBannerPortlet.gtml</filename> file modify the 'Sign In' link as follows:
+<programlisting>
+<![CDATA[
+<!--
+<a class="Login" onclick="$signInAction"><%=_ctx.appRes("UILoginForm.label.Signin")%></a>
+-->
+<a class="Login" href="/portal/sso"><%=_ctx.appRes("UILoginForm.label.Signin")%></a>
+]]>
 </programlisting>
 						</para>
 					</listitem>
 					<listitem>
 						<para>
-							Replace the contents of the <filename>gatein.ear/02portal.war/login/jsp/login.jsp</filename> file with:
-
-							
+						In the <filename>gatein.ear/web.war/groovy/portal/webui/component/UILogoPortlet.gtmpl</filename> file modify the 'Sign In' link as follows:
+<programlisting>
+<![CDATA[
+<!--
+<a onclick="$signInAction"><%=_ctx.appRes("UILogoPortlet.action.signin")%></a>
+-->
+<a href="/portal/sso"><%=_ctx.appRes("UILogoPortlet.action.signin")%></a> 
+]]>
+</programlisting>
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							Replace the entire contents of <filename>gatein.ear/02portal.war/login/jsp/login.jsp</filename> with:
+						</para>							
 <programlisting>&#60;html&#62;
   &#60;head&#62;
     &#60;script type=&#34;text/javascript&#34;&#62;
-       window.location = &#39;http://localhost:8888/cas/login?service=http://localhost:8080/portal/private/classic&#39;;
+     window.location = &#39;/portal/sso&#39;;
     &#60;/script&#62;
   &#60;/head&#62;
   &#60;body&#62;
   &#60;/body&#62;
 &#60;/html&#62;
+</programlisting>
+					</listitem>
+					<listitem>
+						<para>
+							Add the following Filters at the top of the filter chain in <filename>gatein.ear/02portal.war/WEB-INF/web.xml</filename>:
+
+							
+<programlisting>
+<![CDATA[
+	<filter>
+		<filter-name>LoginRedirectFilter</filter-name>
+		<filter-class>org.gatein.sso.agent.filter.LoginRedirectFilter</filter-class>
+		<init-param>                                 
+		  <!-- This should point to your SSO authentication server -->                                                                                              
+		  <param-name>LOGIN_URL</param-name>   
+		  <!--
+		      If casRenewTicket param value of InitiateLoginServlet is:  not specified or false
+		  -->
+		  <param-value>http://localhost:8888/cas/login?service=http://localhost:8080/portal/private/classic</param-value>
+		  <!--
+		      If casRenewTicket param value of InitiateLoginServlet is : true
+		  -->
+		  <!--
+		  <param-value>http://localhost:8888/cas/login?service=http://localhost:8080/portal/private
+		  /classic&amp;renew=true</param-value>      		  
+		  -->
+		</init-param>
+	</filter>
+	<filter>
+		<filter-name>CASLogoutFilter</filter-name>                                                                                              
+		<filter-class>org.gatein.sso.agent.filter.CASLogoutFilter</filter-class>                                                      
+		<init-param>                                 
+		  <!-- This should point to your JOSSO authentication server -->                                                                                              
+		  <param-name>LOGOUT_URL</param-name>                                                                                                
+		  <param-value>http://localhost:8888/cas/logout</param-value>                                                                                                         
+		</init-param>                                                                                                                              
+	</filter>   
+	
+	<!-- Mapping the filters at the very top of the filter chain -->
+	<filter-mapping>
+	  <filter-name>LoginRedirectFilter</filter-name>
+	  <url-pattern>/*</url-pattern>	         
+	</filter-mapping>
+	<filter-mapping>
+	  <filter-name>CASLogoutFilter</filter-name>
+	  <url-pattern>/*</url-pattern>
+	</filter-mapping>
+]]>  
 </programlisting>
 						</para>
 					</listitem>
@@ -299,6 +362,10 @@ realmName=gatein-domain
     &#60;param-name&#62;ssoServerUrl&#60;/param-name&#62;
     &#60;param-value&#62;http://localhost:8888/cas&#60;/param-value&#62;
   &#60;/init-param&#62;    
+  &#60;init-param&#62;
+    &#60;param-name&#62;casRenewTicket&#60;/param-name&#62;
+    &#60;param-value&#62;false&#60;/param-value&#62;
+  &#60;/init-param&#62;
 &#60;/servlet&#62;
 </programlisting>
 						</para>
@@ -469,14 +536,29 @@ realmName=gatein-domain
 				<itemizedlist>
 					<listitem>
 						<para>
-							Replace the javascript at the bottom <filename>gatein.ear/02portal.war/groovy/portal/webui/UILoginForm.gtmpl</filename>  with:
-						</para>
-<programlisting>&#60;script&#62;
- &#60;%=uicomponent.event(&#34;Close&#34;);%&#62;
- window.location = &#39;http://localhost:8888/josso/signon/login.do?josso_back_to=http://localhost:8080/portal/private/classic&#39;;
-&#60;/script&#62;
+						In the <filename>gatein.ear/web.war/groovy/groovy/webui/component/UIBannerPortlet.gtml</filename> file modify the 'Sign In' link as follows:
+<programlisting>
+<![CDATA[
+<!--
+<a class="Login" onclick="$signInAction"><%=_ctx.appRes("UILoginForm.label.Signin")%></a>
+-->
+<a class="Login" href="/portal/sso"><%=_ctx.appRes("UILoginForm.label.Signin")%></a>
+]]>
 </programlisting>
-
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+						In the <filename>gatein.ear/web.war/groovy/portal/webui/component/UILogoPortlet.gtmpl</filename> file modify the 'Sign In' link as follows:
+<programlisting>
+<![CDATA[
+<!--
+<a onclick="$signInAction"><%=_ctx.appRes("UILogoPortlet.action.signin")%></a>
+-->
+<a href="/portal/sso"><%=_ctx.appRes("UILogoPortlet.action.signin")%></a> 
+]]>
+</programlisting>
+						</para>
 					</listitem>
 					<listitem>
 						<para>
@@ -485,13 +567,53 @@ realmName=gatein-domain
 <programlisting>&#60;html&#62;
   &#60;head&#62;
     &#60;script type=&#34;text/javascript&#34;&#62;
-     window.location = &#39;http://localhost:8888/josso/signon/login.do?josso_back_to=http://localhost:8080/portal/private/classic&#39;;
+     window.location = &#39;/portal/sso&#39;;
     &#60;/script&#62;
   &#60;/head&#62;
   &#60;body&#62;
   &#60;/body&#62;
 &#60;/html&#62;
 </programlisting>
+					</listitem>
+					<listitem>
+						<para>
+							Add the following Filters at the top of the filter chain in <filename>gatein.ear/02portal.war/WEB-INF/web.xml</filename>:
+
+							
+<programlisting>
+<![CDATA[
+  <filter>
+      <filter-name>LoginRedirectFilter</filter-name>
+      <filter-class>org.gatein.sso.agent.filter.LoginRedirectFilter</filter-class>
+      <init-param>                                 
+		<!-- This should point to your SSO authentication server -->                                                                                              
+		<param-name>LOGIN_URL</param-name>                                                                                                
+		<param-value>http://localhost:8888/josso/signon/login.do?josso_back_to=http://localhost:8080/portal
+		/private/classic</param-value>                                                                                                         
+      </init-param>
+  </filter>
+  <filter>
+      <filter-name>JOSSOLogoutFilter</filter-name>                                                                                              
+      <filter-class>org.gatein.sso.agent.filter.JOSSOLogoutFilter</filter-class>                                                      
+      <init-param>                                 
+        <!-- This should point to your JOSSO authentication server -->                                                                                              
+        <param-name>LOGOUT_URL</param-name>                                                                                                
+        <param-value>http://localhost:8888/josso/signon/logout.do</param-value>                                                                                                         
+      </init-param>                                                                                                                              
+  </filter>   
+  
+  <!-- filters should be placed at the very top of the filter chain -->
+  <filter-mapping>
+	  <filter-name>LoginRedirectFilter</filter-name>
+	  <url-pattern>/*</url-pattern>	         
+  </filter-mapping>	
+  <filter-mapping>
+     <filter-name>JOSSOLogoutFilter</filter-name>
+     <url-pattern>/*</url-pattern>
+  </filter-mapping>
+]]> 
+</programlisting>
+						</para>
 					</listitem>
 					<listitem>
 						<para>
@@ -742,23 +864,38 @@ realmName=gatein-domain
 				<itemizedlist>
 					<listitem>
 						<para>
-							Replace the javascript at the bottom of <filename>gatein.ear/02portal.war/groovy/portal/webui/UILoginForm.gtmpl</filename>  with:
-						</para>
-<programlisting>&#60;script&#62;
-&#60;%=uicomponent.event(&#34;Close&#34;);%&#62;
-  window.location = &#39;http://localhost:8888/opensso/UI/Login?realm=gatein&#38;goto=http://localhost:8080/portal/private/classic&#39;;
-&#60;/script&#62;
+						In the <filename>gatein.ear/web.war/groovy/groovy/webui/component/UIBannerPortlet.gtml</filename> file modify the 'Sign In' link as follows:
+<programlisting>
+<![CDATA[
+<!--
+<a class="Login" onclick="$signInAction"><%=_ctx.appRes("UILoginForm.label.Signin")%></a>
+-->
+<a class="Login" href="/portal/sso"><%=_ctx.appRes("UILoginForm.label.Signin")%></a>
+]]>
 </programlisting>
-
+						</para>
 					</listitem>
 					<listitem>
 						<para>
-							Replace the contents of <filename>gatein.ear/02portal.war/login/jsp/login.jsp</filename> with:
-						</para>		
+						In the <filename>gatein.ear/web.war/groovy/portal/webui/component/UILogoPortlet.gtmpl</filename> file modify the 'Sign In' link as follows:
+<programlisting>
+<![CDATA[
+<!--
+<a onclick="$signInAction"><%=_ctx.appRes("UILogoPortlet.action.signin")%></a>
+-->
+<a href="/portal/sso"><%=_ctx.appRes("UILogoPortlet.action.signin")%></a> 
+]]>
+</programlisting>
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							Replace the entire contents of <filename>gatein.ear/02portal.war/login/jsp/login.jsp</filename> with:
+						</para>							
 <programlisting>&#60;html&#62;
   &#60;head&#62;
     &#60;script type=&#34;text/javascript&#34;&#62;
-       window.location = &#39;http://localhost:8888/opensso/UI/Login?realm=gatein&#38;goto=http://localhost:8080/portal/private/classic&#39;;
+     window.location = &#39;/portal/sso&#39;;
     &#60;/script&#62;
   &#60;/head&#62;
   &#60;body&#62;
@@ -768,22 +905,61 @@ realmName=gatein-domain
 					</listitem>
 					<listitem>
 						<para>
-							Replace the <literal>InitiateLoginServlet</literal> declaration in <filename>gatein.ear/02portal.war/WEB-INF/web.xml</filename> with:
+							Add the following Filters at the top of the filter chain in <filename>gatein.ear/02portal.war/WEB-INF/web.xml</filename>:
+
+							
+<programlisting>
+<![CDATA[
+  <filter>
+      <filter-name>LoginRedirectFilter</filter-name>
+      <filter-class>org.gatein.sso.agent.filter.LoginRedirectFilter</filter-class>
+      <init-param>                                 
+	<!-- This should point to your SSO authentication server -->                                                                                              
+	<param-name>LOGIN_URL</param-name>                                                                                                
+	<param-value>http://localhost:8888/opensso/UI/Login?realm=gatein&amp;goto=http://localhost:8080
+	/portal/private/classic</param-value>                                                                                                         
+      </init-param>
+  </filter>
+  <filter>	
+      <filter-name>OpenSSOLogoutFilter</filter-name>                                                                                              
+      <filter-class>org.gatein.sso.agent.filter.OpenSSOLogoutFilter</filter-class>                                                      
+      <init-param>                                 
+        <!-- This should point to your OpenSSO authentication server -->                                                                                              
+        <param-name>LOGOUT_URL</param-name>                                                                                                
+        <param-value>http://localhost:8888/opensso/UI/Logout</param-value>                                                                                                         
+      </init-param>                                                                                                                              
+  </filter>   
+  
+  <!-- place the filters at the top of the filter chain -->
+  <filter-mapping>
+	  <filter-name>LoginRedirectFilter</filter-name>
+	  <url-pattern>/*</url-pattern>	         
+  </filter-mapping>
+  <filter-mapping>
+     <filter-name>OpenSSOLogoutFilter</filter-name>
+     <url-pattern>/*</url-pattern>
+  </filter-mapping>
+]]> 
+</programlisting>
 						</para>
+					</listitem>
+					<listitem>
+						<para>
+						Replace the <literal>InitiateLoginServlet</literal> declaration in <filename>gatein.ear/02portal.war/WEB-INF/web.xml</filename> with:
+						</para>					
 <programlisting>&#60;servlet&#62;
   &#60;servlet-name&#62;InitiateLoginServlet&#60;/servlet-name&#62;
   &#60;servlet-class&#62;org.gatein.sso.agent.GenericSSOAgent&#60;/servlet-class&#62;
   &#60;init-param&#62;
     &#60;param-name&#62;ssoServerUrl&#60;/param-name&#62;
     &#60;param-value&#62;http://localhost:8888/opensso&#60;/param-value&#62;
-  &#60;/init-param&#62;
+  &#60;/init-param&#62; 
   &#60;init-param&#62;
     &#60;param-name&#62;ssoCookieName&#60;/param-name&#62;
     &#60;param-value&#62;iPlanetDirectoryPro&#60;/param-value&#62;
-  &#60;/init-param&#62;    
+  &#60;/init-param&#62;   
 &#60;/servlet&#62;
 </programlisting>
-
 					</listitem>
 				</itemizedlist>
 			</para>
