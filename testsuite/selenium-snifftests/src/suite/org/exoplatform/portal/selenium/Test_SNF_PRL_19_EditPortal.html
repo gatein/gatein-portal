@@ -182,9 +182,14 @@
 	<td>1,1</td>
 </tr>
 <tr>
+	<td>waitForElementPresent</td>
+	<td>link=test_node_label_19</td>
+	<td></td>
+</tr>
+<tr>
 	<td>clickAt</td>
 	<td>link=Save</td>
-	<td>1,1</td>
+	<td></td>
 </tr>
 <tr>
 	<td>echo</td>
@@ -257,8 +262,18 @@
 	<td></td>
 </tr>
 <tr>
+	<td>waitForTextNotPresent</td>
+	<td>Permission Selector</td>
+	<td></td>
+</tr>
+<tr>
 	<td>clickAt</td>
 	<td>//form[@id='UIPortalForm']//div[@class='UIAction']//div[@class='ActionButton LightBlueStyle']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForTextNotPresent</td>
+	<td>Portal Setting</td>
 	<td></td>
 </tr>
 <tr>
@@ -283,7 +298,7 @@
 </tr>
 <tr>
 	<td>verifyElementPresent</td>
-	<td>//div[@class='SelectedNavigationTab']//a</td>
+	<td>//div[@class='SelectedNavigationTab']//a[text()='test_node_label_19']</td>
 	<td></td>
 </tr>
 <tr>
@@ -339,6 +354,11 @@
 <tr>
 	<td>clickAt</td>
 	<td>link=Save</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementNotPresent</td>
+	<td>link=test_node_label_19</td>
 	<td></td>
 </tr>
 <tr>
