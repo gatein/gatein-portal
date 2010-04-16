@@ -21,6 +21,7 @@ package org.exoplatform.portal.webui.portal;
 
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.DataStorage;
+import org.exoplatform.portal.config.StaleModelException;
 import org.exoplatform.portal.config.UserPortalConfig;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Page;
@@ -199,8 +200,16 @@ public class UIPortalComposer extends UIContainer
          return;
       }
       
-      dataStorage.save(portalConfig);
-
+      try
+      {
+         dataStorage.save(portalConfig);
+      }
+      catch (StaleModelException ex)
+      {
+         //Temporary solution for concurrency-related issue. The StaleModelException should be
+         //caught in the ApplicationLifecycle
+         rebuildUIPortal(uiPortalApp, editPortal, dataStorage);
+      }
       uiPortalApp.getUserPortalConfig().setPortal(portalConfig);
       UserPortalConfig userPortalConfig = configService.getUserPortalConfig(ownerUser, remoteUser);
       if (userPortalConfig != null)
@@ -242,6 +251,17 @@ public class UIPortalComposer extends UIContainer
       skinService.invalidatePortalSkinCache(editPortal.getName(), editPortal.getSkin());
    }
 
+   private void rebuildUIPortal(UIPortalApplication uiPortalApp, UIPortal uiPortal, DataStorage storage) throws Exception
+   {
+      PortalConfig portalConfig = storage.getPortalConfig(uiPortal.getOwnerType(), uiPortal.getOwner());
+      UserPortalConfig userPortalConfig = uiPortalApp.getUserPortalConfig();
+      userPortalConfig.setPortal(portalConfig);
+      uiPortal.getChildren().clear();
+      PortalDataMapper.toUIPortal(uiPortal, userPortalConfig);
+      
+      uiPortalApp.putCachedUIPortal(uiPortal);
+      
+   }
    /**
     * Check the <code>editPortal</code> whether it is existing in database or not
     * 
@@ -434,30 +454,22 @@ public class UIPortalComposer extends UIContainer
          UISiteBody siteBody = uiWorkingWS.findFirstComponentOfType(UISiteBody.class);
          UIPortal uiPortal = (UIPortal)siteBody.getUIComponent();
 
-         String uri = null;
          if (uiPortal == null)
          {
             siteBody.setUIComponent(editPortal);
          }
-         // uiEditWS.setUIComponent(null);
-         // uiWorkingWS.removeChild(UIEditInlineWorkspace.class);
-         uiWorkingWS.getChild(UIEditInlineWorkspace.class).setRendered(false);
+         uiEditWS.setRendered(false);
          uiPortal = (UIPortal)siteBody.getUIComponent();
 
          uiPortalApp.setSessionOpen(PortalProperties.SESSION_ALWAYS.equals(uiPortal.getSessionAlive()));
-         
          uiPortalApp.setModeState(UIPortalApplication.NORMAL_MODE);
          uiWorkingWS.setRenderedChild(UIPortalApplication.UI_VIEWING_WS_ID);
          prContext.setFullRender(true);
 
-         if (uri == null)
-         {
-            uri = uiPortal.getSelectedNode() != null ? uiPortal.getSelectedNode().getUri() : null;
-         }
-
+         String uri = (uiPortal.getSelectedNode() != null)? (uiPortal.getSelectedNode().getUri()) : null;
+        
          if (uiComposer.isPortalExist(editPortal))
          {
-            // Update portalconfig from db
             DataStorage storage = uiPortalApp.getApplicationComponent(DataStorage.class);
             PortalConfig pConfig =
                storage.getPortalConfig(uiPortal.getSelectedNavigation().getOwnerType(), uiPortal
@@ -705,7 +717,15 @@ public class UIPortalComposer extends UIContainer
 
          // Perform model update
          DataStorage dataService = uiWorkingWS.getApplicationComponent(DataStorage.class);
-         dataService.save(page);
+         try
+         {
+            dataService.save(page);
+         }
+         catch (StaleModelException ex)
+         {
+            //Temporary solution to concurrency-related issue
+            //This catch block should be put in an appropriate ApplicationLifecyclec
+         }
          uiToolPanel.setUIComponent(null);
 
          // Synchronize model object with UIPage object, that seems  redundant but in fact
