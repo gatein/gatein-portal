@@ -49,28 +49,28 @@
 			if(treeNode.isHasChild()) {
 				if (treeNode.isExpanded()) {
 					println """
-						<div class="$lastNode Node ClearFix">
-							<div class="CollapseIcon FloatLeft" onclick="eXo.portal.UIPortal.collapseExpand(this);$actionCollapse">
+						<div class="$lastNode Node">
+							<div class="CollapseIcon ClearFix" onclick="eXo.portal.UIPortal.collapseExpand(this);$actionCollapse">
 					""";
 					      if(treeNode.getNode().getPageReference() == null) println "<a class='NodeIcon DefaultPageIcon' href='javascript:void(0);'>$label</a>";
 					      else println "<a class='NodeIcon DefaultPageIcon' href='$actionLink'>$label</a>";
 					println """
 							</div>
-							<div class="ChildrenContainer FloatLeft" style="display: block">
+							<div class="ChildrenContainer" style="display: block">
 					""";
 					
 					renderNodes(treeNode, portalUri, useAjax);
 					
 				} else {
 					println """
-						<div class="$lastNode Node ClearFix">
-							<div class="ExpandIcon FloatLeft" onclick="if(eXo.portal.UIPortal.collapseExpand(this)){$actionExpand}">
+						<div class="$lastNode Node">
+							<div class="ExpandIcon ClearFix" onclick="if(eXo.portal.UIPortal.collapseExpand(this)){$actionExpand}">
 					""";
 					      if(treeNode.getNode().getPageReference() == null) println "<a class='NodeIcon DefaultPageIcon' href='javascript:void(0);'>$label</a>";
 					      else println "<a class='NodeIcon DefaultPageIcon' href='$actionLink'>$label</a>";
 					println """
 							</div>
-							<div class="ChildrenContainer FloatLeft" style="display: none">
+							<div class="ChildrenContainer" style="display: none">
 					""";
 				}
 				
@@ -84,7 +84,7 @@
 				println """
 					<div class="$lastNode Node ClearFix">
 						<div class="NullItem">
-							<div class="">
+							<div class="ClearFix">
 								<a class="NodeIcon DefaultPageIcon" href="$actionLink">$label</a>
 							</div>
 						</div>

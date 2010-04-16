@@ -557,10 +557,10 @@ UIPortal.prototype.collapseExpand = function(element) {
 	var className = element.className;
 	if(!subGroup) return false;
 	if(subGroup.style.display == "none") {
-		if (className.indexOf("ExpandIcon") == 0) 	element.className = "CollapseIcon FloatLeft" ;
+		if (className.indexOf("ExpandIcon") == 0) 	element.className = "CollapseIcon ClearFix" ;
 		subGroup.style.display = "block" ;
 	} else {
-		if (className.indexOf("CollapseIcon") == 0) element.className = "ExpandIcon FloatLeft" ;
+		if (className.indexOf("CollapseIcon") == 0) element.className = "ExpandIcon ClearFix" ;
 		subGroup.style.display = "none" ;
 	}
 	return true;
