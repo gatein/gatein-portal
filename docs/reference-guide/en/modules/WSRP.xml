@@ -70,8 +70,8 @@
       </para>
 
       <note>
-         <para>At of version &PRODUCT_VERSION; of &PRODUCT_NAME;, WSRP is only activated and supported when GateIn is
-            deployed on JBoss Application Server.
+         <para>As of version &PRODUCT_VERSION; of &PRODUCT_NAME;, WSRP is only activated and supported
+            when &PRODUCT_NAME; is deployed on JBoss Application Server.
          </para>
       </note>
    </sect1>
@@ -147,7 +147,7 @@
       </para>
 
       <sect2 id="wsrp-ports">
-         <title>Considerations to use WSRP when running Portal on a non-default port or hostname</title>
+         <title>Considerations to use WSRP when running &PRODUCT_NAME; on a non-default port or hostname</title>
          <para>
             JBoss WS (the web service stack that &PRODUCT_NAME; uses) should take care of the details of updating the
             port and host name used in WSDL. See the
@@ -159,7 +159,8 @@
          <para>
             Of course, if you have modified you have modified the host name and port on which your server runs, you will
             need to
-            update the configuration for the consumer used to consume GateIn's 'self' producer. Please refer to the
+            update the configuration for the consumer used to consume &PRODUCT_NAME;'s 'self' producer. Please refer to
+            the
             <xref linkend="consumer_configuration"/>
             to learn how to do so.
          </para>
@@ -170,7 +171,7 @@
          <para>It is possible to use WSRP over SSL for secure exchange of data. Please refer to the
             <ulink url="http://community.jboss.org/wiki/ConfiguringWSRPforuseoverSSL">instructions</ulink>
             on how to do so from
-            <ulink url="http://community.jboss.org/wiki/GateIn">&PRODUCT_NAME;'s wiki</ulink>.
+            <ulink url="http://community.jboss.org/wiki/GateIn">GateIn's wiki</ulink>.
          </para>
       </sect2>
    </sect1>
@@ -192,7 +193,8 @@
       <para>In the following example, the "BasicPortlet" portlet is specified as being remotable.
       </para>
       <example>
-         <programlisting><![CDATA[
+         <para>
+            <programlisting><![CDATA[
 <?xml version="1.0" standalone="yes"?>
 <portlet-app xmlns="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd"
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -203,13 +205,15 @@
       <portlet-name>BasicPortlet</portlet-name>
 
       ...
-      
+
       <container-runtime-option>
          <name>org.gatein.pc.remotable</name>
          <value>true</value>
       </container-runtime-option>
    </portlet>
 </portlet-app>]]></programlisting>
+         </para>
+
       </example>
       <para>
          It is also possible to specify that all the portlets declared within a given portlet application to be
@@ -223,7 +227,8 @@
          example:
       </para>
       <example>
-         <programlisting><![CDATA[
+         <para>
+            <programlisting><![CDATA[
 <?xml version="1.0" standalone="yes"?>
 <portlet-app xmlns="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd"
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -249,7 +254,9 @@
       <value>true</value>
    </container-runtime-option>
 </portlet-app>]]>
-         </programlisting>
+            </programlisting>
+         </para>
+
       </example>
 
       <para>
@@ -433,48 +440,46 @@
          </sect3>
 
          <sect3>
-            <title>Using a WSRP Producer XML descriptor</title>
+            <title>Using XML</title>
 
-            <para>We will create a
-               <filename>public-bea-wsrp.xml</filename>
-               descriptor. Note that the actual name does not
-               matter as long as it ends with<filename>-wsrp.xml</filename>:
+            <para>While we recommend you use the WSRP Configuration portlet to configure Consumers, we provide an
+               alternative way to configure consumers by editing the XML file located at
+               <filename>$GATEIN_HOME/lib/wsrp-consumer-$WSRP_VERSION.jar/conf/wsrp-consumers-config.xml</filename>.
             </para>
             <programlisting role="XML"><![CDATA[
 <?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE deployments PUBLIC "-//&PRODUCT_NAME;//DTD WSRP Remote Producer Configuration 2.6//EN"
-   "http://www.jboss.org/portal/dtd/jboss-wsrp-consumer_2_6.dtd">
-<deployments>
-  <deployment>
-    <wsrp-producer id="bea" expiration-cache="300">
-      <endpoint-wsdl-url>http://wsrp.bea.com:7001/producer/producer?WSDL</endpoint-wsdl-url>
-      <registration-data>
-        <property>
-          <name>registration/consumerRole</name>
-          <lang>en</lang>
-          <value>public</value>
-        </property>
-      </registration-data>
-    </wsrp-producer>
-  </deployment>
+<deployments xmlns="http://www.gatein.org/xml/ns/gatein_wsrp_consumer_1_0"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_wsrp_consumer_1_0 http://www.jboss.org/portal/xsd/gatein_wsrp_consumer_1_0.xsd">
+   <deployment>
+      <wsrp-producer id="self" expiration-cache="300" ws-timeout="30000">
+         <endpoint-wsdl-url>http://localhost:8080/wsrp-producer/MarkupService?wsdl</endpoint-wsdl-url>
+         <registration-data>
+            <property>
+               <name>email</name>
+               <lang>en</lang>
+               <value>example@example.com</value>
+            </property>
+         </registration-data>
+      </wsrp-producer>
+   </deployment>
+   <deployment>
+      <wsrp-producer id="oracle" expiration-cache="300">
+         <endpoint-wsdl-url>http://portalstandards.oracle.com/portletapp/portlets?WSDL</endpoint-wsdl-url>
+         <registration-data/>
+      </wsrp-producer>
+   </deployment>
 </deployments>]]></programlisting>
             <para>
-               This producer descriptor gives access to BEA's public WSRP producer. We will look at the details of the
-               different elements later. Note for now the
-               <literal>producer-id</literal>
-               element with a "<literal>bea</literal>" value. Put this file in the deploy directory and start the server
-               (with &PRODUCT_NAME; and its WSRP service deployed).
+               The file as shown above specifies access to two producers:
+               <literal>self</literal>, which consumes &PRODUCT_NAME;'s own WSRP producer albeit in a version that
+               assumes that the producer requires a value for an
+               <literal>email</literal>
+               registration property, and
+               <literal>oracle</literal>, which consumes Oracle's public producer, both in configurations as shown in
+               the walk-through above.
             </para>
-            <para>
-               <note>
-                  <para>A DTD and an XML Schema for WSRP Producer XML descriptors are available in
-                     <filename>jboss-portal.sar/portal-wsrp.sar/dtd/jboss-wsrp-consumer_2_6.dtd</filename>
-                     and
-                     <filename>jboss-portal.sar/portal-wsrp.sar/xsd/jboss-wsrp-consumer_2_6.xsd</filename>
-                  </para>
-
-               </note>
-            </para>
+            <para>We will look at the details of the meaning of elements later on.</para>
          </sect3>
 
          <sect3>
@@ -514,37 +519,38 @@
       </sect2>
 
       <sect2>
-         <title>WSRP Producer descriptors</title>
+         <title>Configuring access to remote producers via XML</title>
 
-         <para>
-            A WSRP Producer descriptor is an XML file which name ends in
-            <filename>-wsrp.xml</filename>
-            and
-            which can be dropped in the deploy directory of the JBoss application server or nested in .sar files. It is
-            possible to configure access to several different producers within a single descriptor or use one file per
-            producer, depending on your needs. An XML Schema for the WSRP Producer descriptor format can be found at
-            <filename>jboss-portal.sar/portal-wsrp.sar/xsd/jboss-wsrp-consumer_2_6.xsd</filename>, while a (legacy) DTD
-            can be found at<filename>jboss-portal.sar/portal-wsrp.sar/dtd/jboss-wsrp-consumer_2_6.dtd</filename>.
-
+         <para>While we recommend you use the WSRP Configuration portlet to configure Consumers, we provide an
+            alternative way to configure consumers by editing the XML file located at
+            <filename>$GATEIN_HOME/lib/wsrp-consumer-$WSRP_VERSION.jar/conf/wsrp-consumers-config.xml</filename>.
             <note>
-               <para>It is important to note how WSRP Producer descriptors are processed. They are read the first time
-                  the WSRP service starts and the associated information is then put in the Portal database. Subsequent
-                  launch
-                  of the WSRP service will use the database-stored information for all producers which identifier is
-                  already known to Portal. More specifically, all the descriptors are scanned for producer identifiers.
-                  Any identifier that is already known will be bypassed and the configuration associated with this
-                  remote
-                  producer in the database will be used. If a producer identifier is found that wasn't already in the
-                  database, that producer information will be processed and recorded in the database. Therefore, if you
-                  wish to delete a producer configuration, you need to delete the associated information in the database
-                  (this can be accomplished using the configuration portlet as we saw in
+               <para>An XML Schema defining which elements are available to configure Consumers via XML can be found
+                  in
+                  <filename>
+                     $GATEIN_HOME/lib/wsrp-integration-api-$WSRP_VERSION.jar/xsd/gatein_wsrp_consumer_1_0.xsd
+                  </filename>
+               </para>
+            </note>
+            <note>
+               <para>It is important to note how the XML consumers configuration file is processed. It is read the first
+                  time the WSRP service starts and the associated information is then put under control of JCR (Java
+                  Content Repository). Subsequent launches of the WSRP service will use the JCR-stored information for
+                  all producers are already known to &PRODUCT_NAME;. More specifically,
+                  <filename>wsrp-consumers-config.xml</filename>
+                  file is scanned for producer identifiers.
+                  Any identifier that is already known will be bypassed and the JCR information associated with this
+                  remote producer will be used. The information defined at the XML level is only processed for producer
+                  definition for which no information is already present in JCR. Therefore, if you wish to delete a
+                  producer configuration, you need to delete the associated information in the database (this can be
+                  accomplished using the configuration portlet as we saw in
                   <xref linkend="consumer_gui"/>)
                   <emphasis>AND</emphasis>
-                  remove the associated information in any WSRP Producer descriptor (if such
-                  information exists) as the producer will be re-created the next time the WSRP is launched if that
-                  information is not removed.
+                  remove the associated information in
+                  <filename>wsrp-consumers-config.xml</filename>
+                  (if such information exists) as the producer will be re-created the next time the WSRP is launched if
+                  that information is not removed.
                </para>
-
             </note>
          </para>
 
@@ -563,63 +569,17 @@
             </para>
 
             <para>&PRODUCT_NAME; also needs to learn about the remote producer's endpoints to be able to connect to the
-               remote web services and perform WSRP invocations. Two options are currently supported to provide this
-               information:
-            </para>
-
-            <para>
-               <itemizedlist>
-                  <listitem>
-                     <para>You can provide the URLs for each of the different WSRP interfaces offered by the remote
-                        producer via the
-                        <literal>&lt;endpoint-config&gt;</literal>
-                        element and its
-                        <literal>&lt;service-description-url&gt;</literal>,
-                        <literal>&lt;markup-url&gt;</literal>,
-                        <literal>&lt;registration-url&gt;</literal>
-                        and
-                        <literal>&lt;portlet-management-url&gt;</literal>
-                        children. These URLs are
-                        producer-specific so you will need to refer to your producer documentation or WSDL file to
-                        determine
-                        the appropriate values.
-                     </para>
-
-                  </listitem>
-                  <listitem>
-                     <para>Alternatively, and this is the easiest way to configure your producer, you can provide a URL
-                        pointing to the WSDL description of the producer's WSRP services. This is accomplished via the
-                        <literal>&lt;endpoint-wsdl-url&gt;</literal>
-                        element. &PRODUCT_NAME; will then
-                        heuristically determine, from the information contained in the WSDL file, how to connect
-                        appropriately
-                        to the remote WSRP services.
-                        <note>
-                           <para>It is important to note that, when using this method, &PRODUCT_NAME; will try to match
-                              a
-                              port
-                              name to an interface based solely on the provided name. There are no standard names for
-                              these
-                              ports so it is possible (though rare) that this matching process fails. In this case, you
-                              should
-                              look at the WSDL file and provide the endpoint URLs manually, as per the previous method.
-                           </para>
-
-                        </note>
-                     </para>
-
-                  </listitem>
-               </itemizedlist>
+               remote web services and perform WSRP invocations. This is accomplished by specifying the URL for the
+               WSDL description for the remote WSRP service, using the
+               <literal>&lt;endpoint-wsdl-url&gt;</literal>
+               element.
             </para>
 
             <para>Both the
                <literal>id</literal>
-               attribute and either
-               <literal>&lt;endpoint-config&gt;</literal>
-               or
+               attribute and
                <literal>&lt;endpoint-wsdl-url&gt;</literal>
-               elements
-               are required for a functional remote producer configuration.
+               elements are required for a functional remote producer configuration.
             </para>
          </sect3>
 
@@ -631,29 +591,36 @@
 
             <para>One such optional configuration concerns caching. To prevent useless roundtrips between the local
                consumer and the remote producer, it is possible to cache some of the information sent by the producer
-               (such
-               as the list of offered portlets) for a given duration. The rate at which the information is refreshed is
+               (such as the list of offered portlets) for a given duration. The rate at which the information is
+               refreshed is
                defined by the
                <literal>expiration-cache</literal>
                attribute of the
                <literal>&lt;wsrp-producer&gt;</literal>
-               element which specifies the
-               refreshing period in seconds. For example, providing a value of 120 for expiration-cache means that the
-               producer information will not be refreshed for 2 minutes after it has been somehow accessed. If no value
-               is provided, &PRODUCT_NAME; will always access the remote producer regardless of whether the remote
-               information has changed or not. Since, in most instances, the information provided by the producer does
-               not
-               change often, we recommend that you use this caching facility to minimize bandwidth usage.
+               element which specifies the refreshing period in seconds. For example, providing a value of 120 for
+               expiration-cache means that the producer information will not be refreshed for 2 minutes after it has
+               been somehow accessed. If no value is provided, &PRODUCT_NAME; will always access the remote producer
+               regardless of whether the remote information has changed or not. Since, in most instances, the
+               information provided by the producer does not change often, we recommend that you use this caching
+               facility to minimize bandwidth usage.
+            </para>
+
+            <para>It is also possible to define a timeout after which WS operations are considered as failed. This is
+               helpful to avoid blocking the WSRP service, waiting forever on the service that doesn't answer. Use the
+               <literal>ws-timeout</literal>
+               attribute of the
+               <literal>&lt;wsrp-producer&gt;</literal>
+               element to specify how many milliseconds the WSRP service will wait for a response from the remote
+               producer before timing out and giving up.
             </para>
 
             <para>Additionally, some producers require consumers to register with them before authorizing them to access
                their offered portlets. If you know that information beforehand, you can provide the required
-               registration
-               information in the producer configuration so that the Portal consumer can register with the remote
+               registration information in the producer configuration so that the consumer can register with the remote
                producer when required.
                <note>
                   <para>At this time, though, only simple String properties are supported and it is not possible to
-                     configure complex registration data. This should however be sufficient for most cases.
+                     configure complex registration data. This should, however, be sufficient for most cases.
                   </para>
                </note>
             </para>
@@ -661,19 +628,16 @@
             <para>Registration configuration is done via the
                <literal>&lt;registration-data&gt;</literal>
                element. Since &PRODUCT_NAME; can generate the mandatory information for you, if the remote producer does
-               not
-               require any registration properties, you only need to provide an empty
+               not require any registration properties, you only need to provide an empty
                <literal>&lt;registration-data&gt;</literal>
                element. Values for the registration properties
                required by the remote producer can be provided via
                <literal>&lt;property&gt;</literal>
                elements. See the example below for more details. Additionally, you can override the default consumer
-               name
-               automatically provided by &PRODUCT_NAME; via the
+               name automatically provided by &PRODUCT_NAME; via the
                <literal>&lt;consumer-name&gt;</literal>
                element. If you choose to provide a consumer name, please remember that this should uniquely identify
-               your
-               consumer.
+               your consumer.
             </para>
          </sect3>
       </sect2>
@@ -686,89 +650,38 @@
             <literal>self</literal>
             producer as found in
             <filename>default-wsrp.xml</filename>
-            with a cache expiring every five minutes:
+            with a cache expiring every five minutes and with a 30 second timeout for web service operations.
          </para>
 
          <example>
-            <programlisting><![CDATA[
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE deployments PUBLIC "-//&PRODUCT_NAME;//DTD WSRP Remote Producer Configuration 2.6//EN"
-   "http://www.jboss.org/portal/dtd/jboss-wsrp-consumer_2_6.dtd">
-
-<deployments>
+            <para>
+               <programlisting><![CDATA[
+<?xml version='1.0' encoding='UTF-8' ?>
+<deployments xmlns="http://www.gatein.org/xml/ns/gatein_wsrp_consumer_1_0"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_wsrp_consumer_1_0 http://www.jboss.org/portal/xsd/gatein_wsrp_consumer_1_0.xsd">
    <deployment>
-      <wsrp-producer id="self" expiration-cache="300">
-
-	<important>
-	<title>Was commented out</title>
-	<para>
-		we need to use the individual endpoint configuration because the configuration via
-	         wsdl forces an immediate attempt to access the web service description which is not
-	         available yet at this point of deployment
-	</para>
-	</important>
-
-        <endpoint-config>
-            <service-description-url>
-              http://localhost:8080/portal-wsrp/ServiceDescriptionService
-            </service-description-url>
-            <markup-url>http://localhost:8080/portal-wsrp/MarkupService</markup-url>
-            <registration-url>
-              http://localhost:8080/portal-wsrp/RegistrationService
-            </registration-url>
-            <portlet-management-url>
-              http://localhost:8080/portal-wsrp/PortletManagementService
-            </portlet-management-url>
-         </endpoint-config>
+      <wsrp-producer id="self" expiration-cache="300" ws-timeout="30000">
+         <endpoint-wsdl-url>http://localhost:8080/wsrp-producer/MarkupService?wsdl</endpoint-wsdl-url>
          <registration-data/>
       </wsrp-producer>
    </deployment>
 </deployments>]]>
-            </programlisting>
+               </programlisting>
+            </para>
+
          </example>
 
-         <para>Here is an example of a WSRP descriptor with a 2 minute caching time and manual definition of the
-            endpoint URLs:
+         <para>Here is an example of a WSRP descriptor with registration data and cache expiring every minute:
          </para>
 
          <example>
-            <programlisting><![CDATA[
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE deployments PUBLIC "-//&PRODUCT_NAME;//DTD WSRP Remote Producer Configuration 2.6//EN"
-   "http://www.jboss.org/portal/dtd/jboss-wsrp-consumer_2_6.dtd">
-
-<deployments>
-   <deployment>
-      <wsrp-producer id="MyProducer" expiration-cache="120">
-         <endpoint-config>
-            <service-description-url>
-             http://www.someproducer.com/portal-wsrp/ServiceDescriptionService
-            </service-description-url>
-            <markup-url>
-             http://www.someproducer.com/portal-wsrp/MarkupService
-            </markup-url>
-            <registration-url>
-             http://www.someproducer.com/portal-wsrp/RegistrationService
-            </registration-url>
-            <portlet-management-url>
-             http://www.someproducer.com/portal-wsrp/PortletManagementService
-            </portlet-management-url>
-         </endpoint-config>
-      </wsrp-producer>
-   </deployment>
-</deployments>]]></programlisting>
-         </example>
-
-         <para>Here is an example of a WSRP descriptor with endpoint definition via remote WSDL file, registration
-            data and cache expiring every minute:
-         </para>
-
-         <example>
-            <programlisting><![CDATA[
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE deployments PUBLIC "-//&PRODUCT_NAME;//DTD WSRP Remote Producer Configuration 2.6//EN"
-   "http://www.jboss.org/portal/dtd/jboss-wsrp-consumer_2_6.dtd">
-
+            <para>
+               <programlisting><![CDATA[
+<?xml version='1.0' encoding='UTF-8' ?>
+<deployments xmlns="http://www.gatein.org/xml/ns/gatein_wsrp_consumer_1_0"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_wsrp_consumer_1_0 http://www.jboss.org/portal/xsd/gatein_wsrp_consumer_1_0.xsd">
 <deployments>
    <deployment>
       <wsrp-producer id="AnotherProducer" expiration-cache="60">
@@ -783,6 +696,7 @@
       </wsrp-producer>
    </deployment>
 </deployments>]]></programlisting>
+            </para>
          </example>
       </sect2>
    </sect1>
@@ -797,42 +711,35 @@
             <title>Registration modification for service upgrade</title>
             <para>
                Producers often offer several levels of service depending on consumers' subscription levels (for
-               example).
-               This is implemented at the WSRP level with the registration concept: producers assert which level of
-               service to provide to consumers based on the values of given registration properties.
+               example). This is implemented at the WSRP level with the registration concept: producers can assert which
+               level of service to provide to consumers based on the values of given registration properties.
+            </para>
+            <para>
+               There might also be cases where you just want to update the registration information because it has
+               changed. For example, the producer required you to provide a valid email and the previously email
+               address is not valid anymore and needs to be updated.
             </para>
             <para>
                It is therefore sometimes necessary to modify the registration that concretizes the service agreement
-               between a consumer and a producer. An example of easily available producer offering different level of
-               services is BEA's public producer. We configured access to that producer in
+               between a consumer and a producer. Let's take the example of the producer requiring an email we
+               configured in
                <xref linkend="consumer_gui"/>.
                If you recall, the producer was requiring registration and required a value to be provided for the
-               <literal>registration/consumerRole</literal>
-               property. The description of that property indicated that
-               three values were possible:<literal>public</literal>,
-               <literal>partner</literal>
-               or
-               <literal>insider</literal>
-               each corresponding to a different service level. We registered using the
-               <literal>public</literal>
-               service level. This gave us access to three portlets as shown here:
-               <mediaobject>
-                  <imageobject>
-                     <imagedata fileref="images/WSRP/bea.png" format="PNG" align="center" valign="middle" scalefit="1"/>
-                  </imageobject>
-               </mediaobject>
+               <literal>email</literal>
+               property.
             </para>
             <para>
-               Suppose now that we would like to upgrade our service level to the "insider" level. We will need to
-               tell BEA's producer that our registration data has been modified. Let's see how to do this. Assuming you
+               Suppose now that we would like to update the email address that we provided to the remote producer. We
+               will need to tell the producer that our registration data has been modified. Let's see how to do this.
+               Assuming you
                have configured access to the producer as previously described, please go to the configuration screen for
                the
-               <literal>bea</literal>
-               producer and modify the value of the
-               <literal>registration/consumerRole</literal>
+               <literal>self</literal>
+               producer and modify the value of
+               <literal>email</literal>
                to
-               <literal>insider</literal>
-               instead of<literal>public</literal>:
+               <literal>foo@example.com</literal>
+               instead of<literal>example@example.com</literal>:
                <mediaobject>
                   <imageobject>
                      <imagedata fileref="images/WSRP/modify_reg_start.png" format="PNG" align="center" valign="middle"
@@ -855,16 +762,6 @@
                                 scalefit="1"/>
                   </imageobject>
                </mediaobject>
-               You can now check the list of available portlets from the
-               <literal>bea</literal>
-               provider and verify that
-               new portlets are now available:
-               <mediaobject>
-                  <imageobject>
-                     <imagedata fileref="images/WSRP/bea_insider.png" format="PNG" align="center" valign="middle"
-                                scalefit="1"/>
-                  </imageobject>
-               </mediaobject>
             </para>
 
          </sect3>
@@ -873,14 +770,16 @@
             <title>Registration modification on producer error</title>
 
             <para>
-               It can also happen that a producer administrator decided to require more information from registered
+               It can also happen that a producer administrator decided to change its requirement forregistered
                consumers. In this case, invoking operations on the producer will fail with an
                <exceptionname>OperationFailedFault</exceptionname>. &PRODUCT_NAME; will attempt to help you in this
                situation. Let's walk through an example using the
                <literal>self</literal>
                producer. Let's assume that
-               registration is required without any registration properties (as is the case by default). If you go to
-               the configuration screen for this producer, you should see:
+               registration is requiring a valid value for an
+               <literal>email</literal>
+               registration property (as we have seen so far). If you go to the configuration screen for this producer,
+               you should see:
                <mediaobject>
                   <imageobject>
                      <imagedata fileref="images/WSRP/config_self.png" format="PNG" align="center" valign="middle"
@@ -888,10 +787,11 @@
                   </imageobject>
                </mediaobject>
 
-               Now suppose that the administrator of the producer now requires a value to be provided for an
-               <literal>email</literal>
+               Now suppose that the administrator of the producer now additionaly requires a value to be provided for a
+               <literal>name</literal>
                registration property. We will actually see how to do perform this operation
-               in &PRODUCT_NAME; when we examine how to configure Portal's producer in<xref linkend="producer_config"/>.
+               in &PRODUCT_NAME; when we examine how to configure &PRODUCT_NAME;'s producer in
+               <xref linkend="producer_config"/>.
                Operations with this producer will now fail. If you suspect that a registration modification is required,
                you should go to the configuration screen for this remote producer and refresh the information held by
                the consumer by pressing "Refresh &amp; Save":
@@ -904,7 +804,7 @@
 
                As you can see, the configuration screen now shows the currently held registration information and
                the expected information from the producer. Enter a value for the
-               <literal>email</literal>
+               <literal>name</literal>
                property
                and then click on "Modify registration". If all went well and the producer accepted your new registration
                data, you should see something similar to:
@@ -1008,14 +908,12 @@
          <para>
             You can configure the behavior of Portal's WSRP Producer by using the WSRP administration interface, which
             is the preferred way, or by editing the
-            <filename>conf/config.xml</filename>
-            file found in
-            <filename>portal-wsrp.sar</filename>. Several aspects can be modified with respects to whether
-            registration is required for consumers to access the Producer's services. An XML Schema for the
-            configuration
-            format is available at<filename>jboss-portal.sar/portal-wsrp.sar/xsd/jboss-wsrp-producer_2_6.xsd</filename>,
-            while a (legacy) DTD is available at
-            <filename>jboss-portal.sar/portal-wsrp.sar/dtd/jboss-wsrp-producer_2_6.dtd</filename>
+            <filename>$GATEIN_HOME/wsrp-producer.war/WEB-INF/conf/producer/config.xml</filename>
+            file. Several aspects can be modified with respects to whether registration is required for consumers to
+            access the Producer's services. An XML Schema for the configuration format is available at
+            <filename>
+               $GATEIN_HOME/lib/wsrp-integration-api-$WSRP_VERSION.jar/xsd/gatein_wsrp_producer_1_0.xsd
+            </filename>.
          </para>
       </sect2>
       <sect2>
@@ -1046,8 +944,8 @@
             As would be expected, you can specify whether or not the producer will send the full service description to
             unregistered consumers, and, if it requires registration, which
             <classname>RegistrationPolicy</classname>
-            to
-            use (and, if needed, which<classname>RegistrationPropertyValidator</classname>), along with required
+            to use (and, if needed, which
+            <classname>RegistrationPropertyValidator</classname>), along with required
             registration property description for which consumers must provide acceptable values to successfully
             register.
          </para>
