@@ -267,7 +267,7 @@ public class SeleniumTestCaseGenerator {
 				sb.append("TestCase.assertEquals(\"");
 				sb.append(param2);
 				sb.append("\", selenium.getTitle());\n");
-			} else if (param1.equals("waitForElementNotPresent") || param1.equals("waitForTextNotPresent")) {
+			} else if (param1.equals("waitForElementNotPresent")) {
 				sb.append("for (int second = 0;; second++) {\n");
 				sb.append(getTimeoutMessage(param1));
 				sb.append("try {\nif (!selenium.isElementPresent(\"");
@@ -287,6 +287,14 @@ public class SeleniumTestCaseGenerator {
 				sb.append("for (int second = 0;; second++) {\n");
 				sb.append(getTimeoutMessage(param1));
 				sb.append("try {\n if (selenium.isTextPresent(\"");
+				sb.append(param2);
+				sb.append("\")) \nbreak; }\n catch (Exception e) {}\n");
+				sb.append("Thread.sleep(1000);\n");
+				sb.append("}\n");
+			} else if (param1.equals("waitForTextNotPresent")) {
+				sb.append("for (int second = 0;; second++) {\n");
+				sb.append(getTimeoutMessage(param1));
+				sb.append("try {\n if (!selenium.isTextPresent(\"");
 				sb.append(param2);
 				sb.append("\")) \nbreak; }\n catch (Exception e) {}\n");
 				sb.append("Thread.sleep(1000);\n");
