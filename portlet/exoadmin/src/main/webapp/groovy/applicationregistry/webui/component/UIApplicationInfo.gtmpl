@@ -1,17 +1,24 @@
-<%	
+<%
+import org.gatein.common.text.EntityEncoder;	
 def application = uicomponent.getApplication();
 def category = uicomponent.getApplicationCategory();
 String name = application.getApplicationName();
 String srcBG = application.getIconURL();
 String srcBGError = "/eXoResources/skin/sharedImages/Icon80x80/DefaultPortlet.png";
+
+EntityEncoder encoder = EntityEncoder.FULL;
+
+String categoryDisplayName = encoder.encode(category.getDisplayName());
+String applicationDisplayName = encoder.encode(application.getDisplayName());
+String applicationDescription = encoder.encode(application.getDescription());
 %>
 <div class="$uicomponent.id" id="$uicomponent.id">
 	<div class="UIBreadcumb">
 		<div class="ControlIcon EditIcon" title="<%=_ctx.appRes("UIApplicationInfo.title.editApplication")%>" onclick="<%= uicomponent.event("EditApplication") %>"><span></span></div>
 		<div class="BreadcumbInfo">
-			<div class="LeftBlock" title="<%= category.getDisplayName() %>"><%= category.getDisplayName() %></div> 																
+			<div class="LeftBlock" title="<%= category.getDisplayName() %>"><%= categoryDisplayName %></div> 																
 			<div class="RightBlackGridArrow16x16Icon"><span></span></div>									
-			<div class="Selected" title="<%= application.getDisplayName() %> "><%= application.getDisplayName() %></div> 
+			<div class="Selected" title="<%= application.getDisplayName() %> "><%= applicationDisplayName %></div> 
 		</div>
 	</div>
 	<div class="Application">
@@ -22,7 +29,7 @@ String srcBGError = "/eXoResources/skin/sharedImages/Icon80x80/DefaultPortlet.pn
 			<div class="ApplicationContent">
 				<div class="TitleBarApplication">
 					<span class="LeftLabel"><%=_ctx.appRes("UIApplicationInfo.label.displayName")%></span>
-					<span class="RightLabel"><%= application.getDisplayName() %></span>				
+					<span class="RightLabel"><%= applicationDisplayName %></span>				
 				</div>
 				<div class="ApplicationContentLabel">
 					<div class="ContentLabel">
@@ -31,7 +38,7 @@ String srcBGError = "/eXoResources/skin/sharedImages/Icon80x80/DefaultPortlet.pn
 					</div>
 					<div class="ContentLabel">
 						<span class="LeftLabel"><%=_ctx.appRes("UIApplicationInfo.label.description")%></span>
-						<span class="RightLabel"><%= application.getDescription() %></span>
+						<span class="RightLabel"><%= applicationDescription %></span>
 					</div>
 				</div>
 			</div>
@@ -40,7 +47,7 @@ String srcBGError = "/eXoResources/skin/sharedImages/Icon80x80/DefaultPortlet.pn
 				<table class="TitleBarApplication">
 					<tr>
 						<td class="LeftLabel"><%=_ctx.appRes("UIApplicationInfo.label.displayName")%></td>
-						<td class="RightLabel" title=" <%= application.getDisplayName() %> "><%= application.getDisplayName() %></td>
+						<td class="RightLabel" title=" <%= application.getDisplayName() %> "><%= applicationDisplayName %></td>
 					</tr>
 				</table>
 				<table>
@@ -52,7 +59,7 @@ String srcBGError = "/eXoResources/skin/sharedImages/Icon80x80/DefaultPortlet.pn
 				<table>
 					<tr>
 						<td class="LeftLabel"><%=_ctx.appRes("UIApplicationInfo.label.description")%></td>
-						<td class="RightLabel" title=" <%= application.getDescription() %> "><%= application.getDescription() %></td>
+						<td class="RightLabel" title=" <%= application.getDescription() %> "><%= applicationDescription %></td>
 					</tr>
 				</table>
 			</div>

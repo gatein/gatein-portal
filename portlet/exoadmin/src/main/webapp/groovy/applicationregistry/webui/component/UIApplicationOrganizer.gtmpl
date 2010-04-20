@@ -1,4 +1,5 @@
 <%	
+import org.gatein.common.text.EntityEncoder;
 def categories = uicomponent.getCategories();
 def selectedCategory = uicomponent.getSelectedCategory();
 def apps = uicomponent.getApplications();
@@ -28,6 +29,8 @@ def selectedApp = uicomponent.getSelectedApplication();
 								cName	= category.getName();
 								displayName =category.getDisplayName();
 								if(displayName == null || displayName.length() < 1 ) displayName = cName;
+								EntityEncoder encoder = EntityEncoder.FULL;
+								displayName = encoder.encode(displayName);
 								if(selectedCategory != null && cName == selectedCategory.getName()) {
 									isSelected = true;
 									cTab = "SelectedTab";
@@ -64,8 +67,11 @@ def selectedApp = uicomponent.getSelectedApplication();
 									String appName= application.getApplicationName();
 								%>
 									<div class="ItemContent $cssClass">
-									<% def applicationLabel = application.getDisplayName() %>
-										<a onclick="<%= uicomponent.event("SelectApplication", "$appName") %>" class="ItemLabel" title="<%= application.getDisplayName() %>"><%= (applicationLabel.length() <= 30) ? applicationLabel : applicationLabel.substring(0, 27)+"..." %><span></span></a>
+									<% def applicationLabel = application.getDisplayName() 
+									String displayApplicationName = (applicationLabel.length() <= 30) ? applicationLabel : applicationLabel.substring(0, 27)+"...";
+                                                                        displayApplicationName = encoder.encode(displayApplicationName);
+									%>
+										<a onclick="<%= uicomponent.event("SelectApplication", "$appName") %>" class="ItemLabel" title="<%= application.getDisplayName() %>"><%= displayApplicationName %><span></span></a>
 										<a class="ControlIcon DeletePortalIcon" title="<%=_ctx.appRes("UIOrganizer.title.deleteApplication")%>" onclick="<%= uicomponent.event("RemoveApplication", appName) %>"><span></span></a>
 										<div class="ClearBoth"><span></span></div>
 									</div>
