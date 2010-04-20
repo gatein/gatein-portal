@@ -101,13 +101,15 @@ public class UIPortalForm extends UIFormTabPane
    {
       super("UIPortalForm");
       UIFormInputItemSelector uiTemplateInput = new UIFormInputItemSelector("PortalTemplate", null);
-      addUIFormInput(uiTemplateInput);
-      setSelectedTab(uiTemplateInput.getId());
+//      addUIFormInput(uiTemplateInput);
+//      setSelectedTab(uiTemplateInput.getId());
       createDefaultItem();
 
       UIFormInputSet uiPortalSetting = this.<UIFormInputSet> getChildById("PortalSetting");
       UIFormStringInput uiNameInput = uiPortalSetting.getUIStringInput(FIELD_NAME);
       uiNameInput.setEditable(true);
+
+      setSelectedTab(uiPortalSetting.getId());
 
       setActions(new String[]{"Save", "Close"});
 
@@ -319,7 +321,8 @@ public class UIPortalForm extends UIFormTabPane
       {
          UIPortalForm uiForm = event.getSource();
          PortalRequestContext pcontext = (PortalRequestContext)event.getRequestContext();
-         String template = uiForm.getChild(UIFormInputItemSelector.class).getSelectedItemOption().getValue().toString();
+	 String template = "classic";
+//         String template = uiForm.getChild(UIFormInputItemSelector.class).getSelectedItemOption().getValue().toString();
          String portalName = uiForm.getUIStringInput(FIELD_NAME).getValue();
          DataStorage dataService = uiForm.getApplicationComponent(DataStorage.class);
          PortalConfig config = dataService.getPortalConfig(portalName);
