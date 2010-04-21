@@ -57,6 +57,14 @@
 	cursor: pointer ; 
 }
 
+.UIChangeSkinForm .UIItemSelector .TemplateContainer .SimpleSkinImage {
+	margin: auto; 
+	width: 329px; height: 204px; 
+	background: url('background/ChangeSkinForm.jpg') no-repeat center -615px; 
+	cursor: pointer ; 
+}
+
+
 .UIChangeSkinForm .UIItemSelector .ItemListContainer .ItemList {
 	background: white url('background/ItemListBg167x127.gif') no-repeat bottom ; 
 }
