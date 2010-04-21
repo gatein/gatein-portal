@@ -3,13 +3,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<link rel="selenium.base" href="http://localhost:8080/" />
-<title>Test_SNF_PRL_25</title>
+<link rel="selenium.base" href="http://localhost:8080/portal" />
+<title>dung_editPageOfNode</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">Test_SNF_PRL_25</td></tr>
+<tr><td rowspan="1" colspan="3">dung_editPageOfNode</td></tr>
 </thead><tbody>
 <tr>
 	<td>open</td>
@@ -42,7 +42,7 @@
 	<td>gtn</td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
+	<td>clickAt</td>
 	<td>xpath=//div[@id='UIPortalLoginFormAction']/div/div/div/a</td>
 	<td></td>
 </tr>
@@ -77,6 +77,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>echo</td>
+	<td>xpath=/organization/management/executive-board <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> Add new Node <br /> Paste Node <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> Add new Node <br /> Edit Node's Page <br /> Edit this Node <br /> Copy Node <br /> Clone Node <br /> Cut Node <br /> Delete Node <br /> Move Up <br /> Move Down <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> Organization <br /> <br /> node27 <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> Add Node <br /> <br /> <br /> <br /> Save</td>
+	<td></td>
+</tr>
+<tr>
 	<td>clickAt</td>
 	<td>link=Add Node</td>
 	<td></td>
@@ -89,12 +94,12 @@
 <tr>
 	<td>type</td>
 	<td>name</td>
-	<td>test_grp_node_25</td>
+	<td>test_grp_node_27</td>
 </tr>
 <tr>
 	<td>type</td>
 	<td>label</td>
-	<td>test_grp_label_25</td>
+	<td>test_grp_label_27</td>
 </tr>
 <tr>
 	<td>clickAt</td>
@@ -132,18 +137,13 @@
 	<td></td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
-	<td>xpath=//div[@id='UIWorkingWorkspace']//div[@class='UIRowContainer']/div[@id='UISiteBody']//div[@id='UIPageBody']//div[@id='UIGroupNavigationManagement']/div[@class='UIPopupWindow UIDragObject']//div[@class='PopupContent']//div[@class='UIAction']//td[2]//a</td>
+	<td>clickAt</td>
+	<td>link=Save</td>
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
-	<td>xpath=//div[@id='UIWorkingWorkspace']//div[@class='UIRowContainer']/div[@id='UISiteBody']//div[@id='UIPageBody']//div[@id='UIGroupNavigationManagement']/div[@class='UIPopupWindow UIDragObject']//div[@class='PopupContent']//div[@class='UIAction']//td[2]//a</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
-	<td>link=test_grp_label_25</td>
+	<td>echo</td>
+	<td>--- OK den doan nay</td>
 	<td></td>
 </tr>
 <tr>
@@ -152,11 +152,6 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
-	<td>link=Group</td>
-	<td></td>
-</tr>
-<tr>
 	<td>waitForElementPresent</td>
 	<td>xpath=//div[@ID='UIGroupNavigationGrid']//table[1]//a[@class='EditNavIcon']</td>
 	<td></td>
@@ -168,12 +163,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>xpath=//div[@class='UIPopupWindow UIDragObject' and contains(@style,'width: 400px; display: block; visibility: visible')]//a[@title='test_grp_label_25']</td>
+	<td>xpath=//div[@class='UIPopupWindow UIDragObject' and contains(@style,'width: 400px; display: block; visibility: visible')]//a[@title='test_grp_label_27']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>componentExoContextMenu</td>
-	<td>xpath=//a[@title='test_grp_label_25']</td>
+	<td>xpath=//a[@title='test_grp_label_27']</td>
 	<td></td>
 </tr>
 <tr>
@@ -232,21 +227,6 @@
 	<td></td>
 </tr>
 <tr>
-	<td>echo</td>
-	<td>--Delete new group navigation and page edit</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>link=Group</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
-	<td>link=Group</td>
-	<td></td>
-</tr>
-<tr>
 	<td>waitForElementPresent</td>
 	<td>xpath=//div[@ID='UIGroupNavigationGrid']//table[1]//a[@class='EditNavIcon']</td>
 	<td></td>
@@ -258,92 +238,17 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>xpath=//div[@class='UIPopupWindow UIDragObject' and contains(@style,'width: 400px; display: block; visibility: visible')]//a[@title='test_grp_label_25']</td>
+	<td>xpath=//a[@title='test_grp_label_27']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>componentExoContextMenu</td>
-	<td>xpath=//a[@title='test_grp_label_25']</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
-	<td>xpath=//div[@id='UINavigationNodeSelector']//div[@id='NavigationNodePopupMenu']//a[@class='ItemIcon EditPageNode16x16Icon']</td>
+	<td>xpath=//a[@title='test_grp_label_27']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>link=View Page properties</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
-	<td>link=View Page properties</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>xpath=//input[@class='checkbox']</td>
-	<td></td>
-</tr>
-<tr>
-	<td>uncheck</td>
-	<td>xpath=//input[@class='checkbox']</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
-	<td>link=Save</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>xpath=//a[@class='EdittedSaveButton']</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
-	<td>xpath=//a[@class='EdittedSaveButton']</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>link=Save</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
-	<td>link=Save</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>link=Group</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
-	<td>link=Group</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>xpath=//div[@ID='UIGroupNavigationGrid']//table[1]//a[@class='EditNavIcon']</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
-	<td>xpath=//div[@ID='UIGroupNavigationGrid']//table[1]//a[@class='EditNavIcon']</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>xpath=//div[@class='UIPopupWindow UIDragObject' and contains(@style,'width: 400px; display: block; visibility: visible')]//a[@title='test_grp_label_25']</td>
-	<td></td>
-</tr>
-<tr>
-	<td>componentExoContextMenu</td>
-	<td>xpath=//a[@title='test_grp_label_25']</td>
+	<td>xpath=//div[@id='UINavigationNodeSelector']//div[@id='NavigationNodePopupMenu']//a[@class='ItemIcon DeleteNode16x16Icon']</td>
 	<td></td>
 </tr>
 <tr>
@@ -364,16 +269,6 @@
 <tr>
 	<td>clickAt</td>
 	<td>link=Save</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementNotPresent</td>
-	<td>link=test_grp_label_25</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyElementNotPresent</td>
-	<td>link=test_grp_label_25</td>
 	<td></td>
 </tr>
 <tr>

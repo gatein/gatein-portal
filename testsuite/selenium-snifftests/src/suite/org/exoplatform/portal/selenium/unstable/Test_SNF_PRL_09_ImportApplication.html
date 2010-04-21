@@ -3,13 +3,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<link rel="selenium.base" href="http://localhost:8080/" />
-<title>SNF_PRL_09</title>
+<link rel="selenium.base" href="" />
+<title>_09dung</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">SNF_PRL_09</td></tr>
+<tr><td rowspan="1" colspan="3">_09dung</td></tr>
 </thead><tbody>
 <tr>
 	<td>open</td>
@@ -17,19 +17,14 @@
 	<td></td>
 </tr>
 <tr>
-	<td>echo</td>
-	<td>-AutoImport-</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
+	<td>waitForElementPresent</td>
 	<td>link=Sign in</td>
 	<td></td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
-	<td>username</td>
-	<td>root</td>
+	<td>click</td>
+	<td>link=Sign in</td>
+	<td></td>
 </tr>
 <tr>
 	<td>type</td>
@@ -43,107 +38,22 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>xpath=//div[@id='UIPortalLoginFormAction']/div/div/div</td>
+	<td>//div[@id='UIPortalLoginFormAction']/div/div/div/a</td>
 	<td></td>
 </tr>
 <tr>
-	<td>echo</td>
-	<td>--Select &quot;Application Registry&quot;</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
+	<td>clickAndWait</td>
 	<td>link=Application Registry</td>
-	<td>1,1</td>
-</tr>
-<tr>
-	<td>waitForTextPresent</td>
-	<td>Import Applications</td>
 	<td></td>
 </tr>
 <tr>
-	<td>echo</td>
-	<td>--Auto Import</td>
+	<td>click</td>
+	<td>//div[@onclick=&quot;javascript:if(confirm('This action will automatically create categories and import all the gadgets and portlets on it.'))ajaxGet('/portal/private/classic/administration/registry?portal:componentId=6ab1d351-d18c-42c0-8c59-94bc2d12f83b&amp;portal:type=action&amp;uicomponent=UIApplicationOrganizer&amp;op=ImportAllApplications&amp;ajaxRequest=true')&quot;]</td>
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
-	<td>xpath=//a[contains(@onclick,'op=RemoveApplication&amp;objectId=GroupNavigationPortlet&amp;ajaxRequest=true')]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForConfirmation</td>
-	<td>Are you sure to delete this application?</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForTextNotPresent</td>
-	<td>Group Navigation Portlet</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextNotPresent</td>
-	<td>Group Navigation Portlet</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
-	<td>xpath=//div[@id='UIApplicationOrganizer']//div[@class='UIControlbar']//div[@class='IconControl ImportIcon']</td>
-	<td>1,1</td>
-</tr>
-<tr>
-	<td>storeConfirmation</td>
-	<td>autoimport</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForTextPresent</td>
-	<td>Group Navigation Portlet</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>Group Navigation Portlet</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>xpath=//a[contains(@onclick,'op=RemoveApplication&amp;objectId=GroupNavigationPortlet&amp;ajaxRequest=true')]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
-	<td>xpath=//a[contains(@onclick,'op=RemoveApplication&amp;objectId=GroupNavigationPortlet&amp;ajaxRequest=true')]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForConfirmation</td>
-	<td>Are you sure to delete this application?</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForTextNotPresent</td>
-	<td>Group Navigation Portlet</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextNotPresent</td>
-	<td>Group Navigation Portlet</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
-	<td>xpath=//div[@id='UIApplicationOrganizer']//div[@class='UIControlbar']//div[@class='IconControl ImportIcon']</td>
-	<td>1,1</td>
-</tr>
-<tr>
-	<td>storeConfirmation</td>
-	<td>clean</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>link=Sign out</td>
+	<td>assertConfirmation</td>
+	<td>This action will automatically create categories and import all the gadgets and portlets on it.</td>
 	<td></td>
 </tr>
 <tr>

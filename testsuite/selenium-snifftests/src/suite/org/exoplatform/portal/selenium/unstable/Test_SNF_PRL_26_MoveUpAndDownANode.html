@@ -4,12 +4,12 @@
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="selenium.base" href="" />
-<title>Test_SNF_PRL_26</title>
+<title>Test_SNF_PRL_26_MoveUpAndDownANode</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">Test_SNF_PRL_26</td></tr>
+<tr><td rowspan="1" colspan="3">Test_SNF_PRL_26_MoveUpAndDownANode</td></tr>
 </thead><tbody>
 <tr>
 	<td>open</td>
@@ -137,11 +137,6 @@
 	<td></td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
-	<td>xpath=//div[@id='PortalNavigationTopContainer']/div[2]/div/div/div/div/div/div/a</td>
-	<td></td>
-</tr>
-<tr>
 	<td>echo</td>
 	<td>--Edit node's position</td>
 	<td></td>
@@ -238,36 +233,6 @@
 </tr>
 <tr>
 	<td>verifyElementPresent</td>
-	<td>xpath=//div[@class='TreeContainer JSContainer']/div/div[${nodeLvl}]/div/a[@title='test_grp_label_26']</td>
-	<td></td>
-</tr>
-<tr>
-	<td>echo</td>
-	<td>Node is at level ${nodeLvl}</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
-	<td>link=Save</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
-	<td>link=Group</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>xpath=//div[@ID='UIGroupNavigationGrid']//table[1]//a[@class='EditNavIcon']</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
-	<td>xpath=//div[@ID='UIGroupNavigationGrid']//table[1]//a[@class='EditNavIcon']</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyElementPresent</td>
 	<td>xpath=//a[@title='test_grp_label_26']</td>
 	<td></td>
 </tr>
@@ -299,21 +264,6 @@
 <tr>
 	<td>clickAt</td>
 	<td>link=Save</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementNotPresent</td>
-	<td>link=test_grp_label_26</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyElementNotPresent</td>
-	<td>link=test_grp_label_26</td>
-	<td></td>
-</tr>
-<tr>
-	<td>setSpeed</td>
-	<td>0</td>
 	<td></td>
 </tr>
 <tr>
