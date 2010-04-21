@@ -113,7 +113,7 @@ public class UINavigationNodeSelector extends UIContainer
       navigations = navis;
       // set resolved label for navigations
       WebuiRequestContext requestContext = WebuiRequestContext.getCurrentInstance();
-      refreshNavigation(requestContext.getLocale());
+      localizeNavigation(requestContext.getLocale());
 
       updateUI();
       selectNavigation();
@@ -124,7 +124,7 @@ public class UINavigationNodeSelector extends UIContainer
       this.navigations = navigations;
       // set resolved label for navigations
       WebuiRequestContext requestContext = WebuiRequestContext.getCurrentInstance();
-      refreshNavigation(requestContext.getLocale());
+      localizeNavigation(requestContext.getLocale());
       selectNavigation(navId);
    }
 
@@ -159,7 +159,7 @@ public class UINavigationNodeSelector extends UIContainer
       }
    }
 
-   public void selectNavigation(int id)
+   private void selectNavigation(int id)
    {
       for (int i = 0; i < navigations.size(); i++)
       {
@@ -174,7 +174,7 @@ public class UINavigationNodeSelector extends UIContainer
       }
    }
 
-   public void refreshNavigation(Locale locale)
+   private void localizeNavigation(Locale locale)
    {
       LocaleConfig localeConfig =
          getApplicationComponent(LocaleConfigService.class).getLocaleConfig(locale.getLanguage());
