@@ -31,18 +31,17 @@
 	<div class="GadgetControl" style="visibility: visible;">
 		<div class="LeftControlBar">
 			<div class="RightControlBar">
-				<div class="CenterControlBar">
-					<div class="GadgetTitle" style="display: none"><%= uicomponent.getApplicationName() %></div>
+				<div class="CenterControlBar ClearFix">
 					<div class="CloseGadget IconControl" onclick="eXo.gadget.UIGadget.deleteGadget(this)" onmousedown="event.cancelBubble=true;" title="<%=_ctx.appRes("UIGadget.tooltip.deleteGadget")%>"><span></span></div>
+					<div class="<%=view.equals(uicomponent.HOME_VIEW) ? "MaximizeGadget" : "RestoreGadget";%> IconControl"
+                                    onclick="eXo.gadget.UIGadget.maximizeGadget(this)" onmousedown="event.cancelBubble=true;"
+                                    title="<%=view.equals(uicomponent.HOME_VIEW) ? maxiTitle : unmaxiTitle%>"><span></span></div>
 					<div class="<%=isMini ? "RestoreGadget": "MinimizeGadget";%> MinimizeAction IconControl" 
 									onclick="eXo.gadget.UIGadget.minimizeGadget(this)" onmousedown="event.cancelBubble=true;" style="display:none;" 
 									title="<%=isMini ? unminiTitle : miniTitle%>" miniTitle="$miniTitle" unminiTitle="$unminiTitle"><span></span></div>
 					<div class="EditGadget IconControl" onclick="eXo.gadget.UIGadget.editGadget('$id')" onmousedown="event.cancelBubble=true;" title="<%=_ctx.appRes("UIGadget.tooltip.editGadget")%>"><span></span></div>
-					<div class="<%=view.equals(uicomponent.HOME_VIEW) ? "MaximizeGadget" : "RestoreGadget";%> IconControl"
-                                    onclick="eXo.gadget.UIGadget.maximizeGadget(this)" onmousedown="event.cancelBubble=true;"
-                                    title="<%=view.equals(uicomponent.HOME_VIEW) ? maxiTitle : unmaxiTitle%>"><span></span></div>
 					<div class="GadgetDragHandleArea"><span></span></div>
-				 	<div style="clear: both;"><span></span></div>
+					<div class="GadgetTitle" style="display: none; float: none; width: auto; margin-right: 75px"><%= uicomponent.getApplicationName() %></div>
 				</div>
 			</div>
 		</div>
