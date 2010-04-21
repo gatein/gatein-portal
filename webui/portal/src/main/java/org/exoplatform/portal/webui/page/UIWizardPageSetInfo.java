@@ -60,6 +60,7 @@ import java.util.Date;
  */
 @ComponentConfigs({@ComponentConfig(lifecycle = UIFormLifecycle.class, template = "system:/groovy/portal/webui/page/UIWizardPageSetInfo.gtmpl", events = {
    @EventConfig(listeners = UIWizardPageSetInfo.ChangeNodeActionListener.class, phase = Phase.DECODE),
+   @EventConfig(listeners = UIWizardPageSetInfo.SwitchVisibleActionListener.class, phase = Phase.DECODE),
    @EventConfig(listeners = UIWizardPageSetInfo.SwitchPublicationDateActionListener.class, phase = Phase.DECODE)})})
 public class UIWizardPageSetInfo extends UIForm
 {
@@ -82,20 +83,21 @@ public class UIWizardPageSetInfo extends UIForm
 
    public UIWizardPageSetInfo() throws Exception
    {
+   	UIFormCheckBoxInput<Boolean> uiDateInputCheck =
+         new UIFormCheckBoxInput<Boolean>(SHOW_PUBLICATION_DATE, SHOW_PUBLICATION_DATE, false);
+   	UIFormCheckBoxInput<Boolean> uiVisibleCheck = new UIFormCheckBoxInput<Boolean>(VISIBLE, VISIBLE, false);
+   	uiDateInputCheck.setOnChange("SwitchPublicationDate");
+   	uiVisibleCheck.setOnChange("SwitchVisible");
+   	
       addChild(UIPageNodeSelector.class, null, null);
       addUIFormInput(new UIFormStringInput(PAGE_NAME, "name", null).addValidator(MandatoryValidator.class)
-         .addValidator(StringLengthValidator.class, 3, 30).addValidator(IdentifierValidator.class));
-      addUIFormInput(new UIFormStringInput(PAGE_DISPLAY_NAME, "label", null).setMaxLength(255).addValidator(
-         StringLengthValidator.class, 3, 120));
-      addUIFormInput(new UIFormCheckBoxInput<Boolean>(VISIBLE, VISIBLE, false).setChecked(true));
-      UIFormCheckBoxInput<Boolean> uiDateInputCheck =
-         new UIFormCheckBoxInput<Boolean>(SHOW_PUBLICATION_DATE, SHOW_PUBLICATION_DATE, false);
-      uiDateInputCheck.setOnChange("SwitchPublicationDate");
+                     .addValidator(StringLengthValidator.class, 3, 30).addValidator(IdentifierValidator.class));
+      addUIFormInput(new UIFormStringInput(PAGE_DISPLAY_NAME, "label", null)
+      		.setMaxLength(255).addValidator(StringLengthValidator.class, 3, 120));
+      addUIFormInput(uiVisibleCheck.setChecked(true));
       addUIFormInput(uiDateInputCheck);
-      addUIFormInput(new UIFormDateTimeInput(START_PUBLICATION_DATE, null, null).addValidator(DateTimeValidator.class)
-         .addValidator(MandatoryValidator.class));
-      addUIFormInput(new UIFormDateTimeInput(END_PUBLICATION_DATE, null, null).addValidator(DateTimeValidator.class)
-         .addValidator(MandatoryValidator.class));
+      addUIFormInput(new UIFormDateTimeInput(START_PUBLICATION_DATE, null, null).addValidator(DateTimeValidator.class));
+      addUIFormInput(new UIFormDateTimeInput(END_PUBLICATION_DATE, null, null).addValidator(DateTimeValidator.class));
    }
 
    public void setEditMode() throws Exception
@@ -114,7 +116,10 @@ public class UIWizardPageSetInfo extends UIForm
    {
       super.invokeSetBindingBean(bean);
       PageNode node = (PageNode)bean;
-      node.setVisible(getUIFormCheckBoxInput(VISIBLE).isChecked());
+      if(!getUIFormCheckBoxInput(SHOW_PUBLICATION_DATE).isChecked())
+      {
+      	node.setVisible(getUIFormCheckBoxInput(VISIBLE).isChecked());	
+      }
       Calendar cal = getUIFormDateTimeInput(START_PUBLICATION_DATE).getCalendar();
       Date date = (cal != null) ? cal.getTime() : null;
       node.setStartPublicationDate(date);
@@ -161,9 +166,16 @@ public class UIWizardPageSetInfo extends UIForm
       return pageNode;
    }
 
+   public void setShowCheckPublicationDate(boolean show)
+   {
+      getUIFormCheckBoxInput(VISIBLE).setChecked(show);
+      UIFormCheckBoxInput<Boolean> uiForm = getUIFormCheckBoxInput(SHOW_PUBLICATION_DATE);
+      uiForm.setRendered(show);
+      setShowPublicationDate(show && uiForm.isChecked());
+   }
+   
    public void setShowPublicationDate(boolean show)
    {
-      getUIFormCheckBoxInput(SHOW_PUBLICATION_DATE).setChecked(show);
       getUIFormDateTimeInput(START_PUBLICATION_DATE).setRendered(show);
       getUIFormDateTimeInput(END_PUBLICATION_DATE).setRendered(show);
    }
@@ -303,6 +315,18 @@ public class UIWizardPageSetInfo extends UIForm
          event.getRequestContext().addUIComponentToUpdateByAjax(uiWizard);
       }
 
+   }
+   
+   static public class SwitchVisibleActionListener extends EventListener<UIWizardPageSetInfo>
+   {
+		@Override
+		public void execute(Event<UIWizardPageSetInfo> event) throws Exception
+		{
+			UIWizardPageSetInfo uiForm = event.getSource();
+			boolean isCheck = uiForm.getUIFormCheckBoxInput(VISIBLE).isChecked();
+			uiForm.setShowCheckPublicationDate(isCheck);
+			event.getRequestContext().addUIComponentToUpdateByAjax(uiForm);
+		}
    }
 
 }

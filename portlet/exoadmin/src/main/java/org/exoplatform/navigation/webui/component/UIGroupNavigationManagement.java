@@ -72,6 +72,7 @@ import java.util.UUID;
       @EventConfig(listeners = UIPageNodeForm2.SaveActionListener.class),
       @EventConfig(listeners = UIGroupNavigationManagement.BackActionListener.class, phase = Phase.DECODE),
       @EventConfig(listeners = UIPageNodeForm2.SwitchPublicationDateActionListener.class, phase = Phase.DECODE),
+      @EventConfig(listeners = UIPageNodeForm2.SwitchVisibleActionListener.class, phase = Phase.DECODE),
       @EventConfig(listeners = UIPageNodeForm2.ClearPageActionListener.class, phase = Phase.DECODE),
       @EventConfig(listeners = UIPageNodeForm2.CreatePageActionListener.class, phase = Phase.DECODE)})})
 public class UIGroupNavigationManagement extends UIContainer

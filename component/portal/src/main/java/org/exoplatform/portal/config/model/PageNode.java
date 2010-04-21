@@ -289,14 +289,21 @@ public class PageNode extends PageNodeContainer
 
    private boolean isInPublicationDate()
    {
-      if (startPublicationDate != null && endPublicationDate != null)
-      {
-         Date currentDate = new Date();
-
-         //
-         return currentDate.compareTo(startPublicationDate) >= 0 && currentDate.compareTo(endPublicationDate) <= 0;
-      }
-      else return startPublicationDate == null && endPublicationDate == null;
+      Date currentDate = new Date();
+      
+      // Case 1: start date, end date are not null and current date is between start and end date
+      boolean case1 = (startPublicationDate != null) && (endPublicationDate != null) && (currentDate.compareTo(startPublicationDate) >= 0 && currentDate.compareTo(endPublicationDate) <= 0);
+      
+      // Case 2: start date is null, end date is not null and current date is before end date
+      boolean case2 = (startPublicationDate == null) && (endPublicationDate != null) && (currentDate.compareTo(endPublicationDate) <= 0);
+      
+      // Case 3: start date is not null, end date is null and current date is after start date
+      boolean case3 = (startPublicationDate != null) && (endPublicationDate == null) && (currentDate.compareTo(startPublicationDate) >= 0);
+      
+      // Case 4: start date and end date are null both
+      boolean case4 = (startPublicationDate == null) && (endPublicationDate == null);
+      
+      return case1 || case2 || case3 || case4;
    }
 
    public void setShowPublicationDate(Boolean show)

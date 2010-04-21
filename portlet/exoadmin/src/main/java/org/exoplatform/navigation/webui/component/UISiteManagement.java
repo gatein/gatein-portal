@@ -73,6 +73,7 @@ import javax.servlet.http.HttpServletRequest;
       @EventConfig(listeners = UIPageNodeForm2.SaveActionListener.class),
       @EventConfig(listeners = UISiteManagement.BackActionListener.class, phase = Phase.DECODE),
       @EventConfig(listeners = UIPageNodeForm2.SwitchPublicationDateActionListener.class, phase = Phase.DECODE),
+      @EventConfig(listeners = UIPageNodeForm2.SwitchVisibleActionListener.class, phase = Phase.DECODE),
       @EventConfig(listeners = UIPageNodeForm2.ClearPageActionListener.class, phase = Phase.DECODE),
       @EventConfig(listeners = UIPageNodeForm2.CreatePageActionListener.class, phase = Phase.DECODE)})})
 public class UISiteManagement extends UIContainer

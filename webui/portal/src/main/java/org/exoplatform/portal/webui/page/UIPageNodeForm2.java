@@ -77,6 +77,8 @@ public class UIPageNodeForm2 extends UIFormTabPane
    final private static String START_PUBLICATION_DATE = "startPublicationDate";
 
    final private static String END_PUBLICATION_DATE = "endPublicationDate";
+   
+   final private static String VISIBLE = "visible";
 
    public UIPageNodeForm2() throws Exception
    {
@@ -85,17 +87,18 @@ public class UIPageNodeForm2 extends UIFormTabPane
       UIFormInputSet uiSettingSet = new UIFormInputSet("PageNodeSetting");
       UIFormCheckBoxInput<Boolean> uiDateInputCheck =
          new UIFormCheckBoxInput<Boolean>(SHOW_PUBLICATION_DATE, SHOW_PUBLICATION_DATE, false);
+      UIFormCheckBoxInput<Boolean> uiVisibleCheck = new UIFormCheckBoxInput<Boolean>(VISIBLE, VISIBLE, true);
+      
       uiDateInputCheck.setOnChange("SwitchPublicationDate");
-      uiSettingSet.addUIFormInput(new UIFormStringInput("uri", "uri", null).setEditable(false)).addUIFormInput(
-         new UIFormStringInput("name", "name", null).addValidator(MandatoryValidator.class).addValidator(
-            StringLengthValidator.class, 3, 30).addValidator(IdentifierValidator.class)).addUIFormInput(
-         new UIFormStringInput("label", "label", null).addValidator(StringLengthValidator.class, 3, 120))
-         .addUIFormInput(new UIFormCheckBoxInput<Boolean>("visible", "visible", true).setChecked(true)).addUIFormInput(
-            uiDateInputCheck).addUIFormInput(
-            new UIFormDateTimeInput(START_PUBLICATION_DATE, null, null).addValidator(MandatoryValidator.class)
-               .addValidator(DateTimeValidator.class)).addUIFormInput(
-            new UIFormDateTimeInput(END_PUBLICATION_DATE, null, null).addValidator(MandatoryValidator.class)
-               .addValidator(DateTimeValidator.class));
+      uiVisibleCheck.setOnChange("SwitchVisible");
+      uiSettingSet.addUIFormInput(new UIFormStringInput("uri", "uri", null).setEditable(false))
+      				.addUIFormInput(new UIFormStringInput("name", "name", null).addValidator(MandatoryValidator.class).addValidator(StringLengthValidator.class, 3, 30).addValidator(IdentifierValidator.class))
+      				.addUIFormInput(new UIFormStringInput("label", "label", null).addValidator(StringLengthValidator.class, 3, 120))
+      				.addUIFormInput(uiVisibleCheck.setChecked(true))
+      				.addUIFormInput(uiDateInputCheck)
+      				.addUIFormInput(new UIFormDateTimeInput(START_PUBLICATION_DATE, null, null).addValidator(DateTimeValidator.class))
+      				.addUIFormInput(new UIFormDateTimeInput(END_PUBLICATION_DATE, null, null).addValidator(DateTimeValidator.class));
+      
       addUIFormInput(uiSettingSet);
       setSelectedTab(uiSettingSet.getId());
 
@@ -136,8 +139,9 @@ public class UIPageNodeForm2 extends UIFormTabPane
          icon = "Default";
       getChild(UIFormInputIconSelector.class).setSelectedIcon(icon);
       getUIStringInput("label").setValue(pageNode_.getLabel());
-      getUIFormCheckBoxInput("visible").setChecked(pageNode_.isVisible());
-      setShowPublicationDate(pageNode.isShowPublicationDate());
+      getUIFormCheckBoxInput(VISIBLE).setChecked(pageNode_.isVisible());
+      getUIFormCheckBoxInput(SHOW_PUBLICATION_DATE).setChecked(pageNode.isShowPublicationDate());
+      setShowCheckPublicationDate(pageNode_.isVisible());
       Calendar cal = Calendar.getInstance();
       if (pageNode.getStartPublicationDate() != null)
       {
@@ -167,9 +171,16 @@ public class UIPageNodeForm2 extends UIFormTabPane
       node.setEndPublicationDate(date);
    }
 
+   public void setShowCheckPublicationDate(boolean show)
+   {
+   	getUIFormCheckBoxInput(VISIBLE).setChecked(show);
+   	UIFormCheckBoxInput<Boolean> uiForm = getUIFormCheckBoxInput(SHOW_PUBLICATION_DATE);
+   	uiForm.setRendered(show);
+   	setShowPublicationDate(show && uiForm.isChecked());
+   }
+   
    public void setShowPublicationDate(boolean show)
    {
-      getUIFormCheckBoxInput(SHOW_PUBLICATION_DATE).setChecked(show);
       getUIFormDateTimeInput(START_PUBLICATION_DATE).setRendered(show);
       getUIFormDateTimeInput(END_PUBLICATION_DATE).setRendered(show);
    }
@@ -223,20 +234,42 @@ public class UIPageNodeForm2 extends UIFormTabPane
       {
          WebuiRequestContext ctx = event.getRequestContext();
          UIPageNodeForm2 uiPageNodeForm = event.getSource();
-         UIApplication uiApp = ctx.getUIApplication();
+         UIApplication uiPortalApp = ctx.getUIApplication();
          if (uiPageNodeForm.getUIFormCheckBoxInput(SHOW_PUBLICATION_DATE).isChecked())
          {
+            Calendar currentCalendar = Calendar.getInstance();
+            currentCalendar.set(currentCalendar.get(Calendar.YEAR), currentCalendar.get(Calendar.MONTH), currentCalendar.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
+            Date currentDate = currentCalendar.getTime();
+            
             Calendar startCalendar =
                uiPageNodeForm.getUIFormDateTimeInput(UIWizardPageSetInfo.START_PUBLICATION_DATE).getCalendar();
-            Date startDate = startCalendar.getTime();
+            Date startDate = startCalendar != null ? startCalendar.getTime() : currentDate;
             Calendar endCalendar =
                uiPageNodeForm.getUIFormDateTimeInput(UIWizardPageSetInfo.END_PUBLICATION_DATE).getCalendar();
-            Date endDate = endCalendar.getTime();
-            if (startDate.after(endDate))
+            Date endDate = endCalendar != null ? endCalendar.getTime() : null;
+            
+            // Case 1: current date after start date
+            if (currentDate.after(startDate))
             {
-               uiApp.addMessage(new ApplicationMessage("UIPageNodeForm2.msg.startDateBeforeEndDate", null));
+               Object[] args = {};
+               uiPortalApp.addMessage(new ApplicationMessage("UIPageNodeForm2.msg.currentDateBeforeStartDate", args, ApplicationMessage.WARNING));
                return;
             }
+            // Case 2: start date after end date
+            else if ((endCalendar != null) && (startCalendar != null) && (startDate.after(endDate)))
+            {
+               Object[] args = {};
+               uiPortalApp.addMessage(new ApplicationMessage("UIPageNodeForm2.msg.startDateBeforeEndDate", args, ApplicationMessage.WARNING));
+               return;
+            }
+            // Case 3: start date is null and current date after end date
+            else if((endCalendar != null) && (currentDate.after(endDate)))
+            {
+               Object[] args = {};
+               uiPortalApp.addMessage(new ApplicationMessage("UIPageNodeForm2.msg.currentDateBeforeEndDate", args, ApplicationMessage.WARNING));
+               return;
+            }
+            
          }
 
          PageNode pageNode = uiPageNodeForm.getPageNode();
@@ -254,7 +287,6 @@ public class UIPageNodeForm2 extends UIFormTabPane
          if (pageNode.getLabel() == null)
             pageNode.setLabel(pageNode.getName());
 
-         String remoteUser = ctx.getRemoteUser();
          Object selectedParent = uiPageNodeForm.getSelectedParent();
          PageNavigation pageNav = null;
 
@@ -266,7 +298,7 @@ public class UIPageNodeForm2 extends UIFormTabPane
             {
                if (PageNavigationUtils.searchPageNodeByUri(pageNav, pageNode.getUri()) != null)
                {
-                  uiApp.addMessage(new ApplicationMessage("UIPageNodeForm2.msg.SameName", null));
+                  uiPortalApp.addMessage(new ApplicationMessage("UIPageNodeForm2.msg.SameName", null));
                   return;
                }
                pageNav.addNode(pageNode);
@@ -286,7 +318,7 @@ public class UIPageNodeForm2 extends UIFormTabPane
             {
                if (PageNavigationUtils.searchPageNodeByUri(parentNode, pageNode.getUri()) != null)
                {
-                  uiApp.addMessage(new ApplicationMessage("UIPageNodeForm2.msg.SameName", null));
+                  uiPortalApp.addMessage(new ApplicationMessage("UIPageNodeForm2.msg.SameName", null));
                   return;
                }
                children.add(pageNode);
@@ -311,10 +343,21 @@ public class UIPageNodeForm2 extends UIFormTabPane
       {
          UIPageNodeForm2 uiForm = event.getSource();
          boolean isCheck = uiForm.getUIFormCheckBoxInput(SHOW_PUBLICATION_DATE).isChecked();
-         uiForm.getUIFormDateTimeInput(START_PUBLICATION_DATE).setRendered(isCheck);
-         uiForm.getUIFormDateTimeInput(END_PUBLICATION_DATE).setRendered(isCheck);
+         uiForm.setShowPublicationDate(isCheck);
          event.getRequestContext().addUIComponentToUpdateByAjax(uiForm);
       }
+   }
+   
+   static public class SwitchVisibleActionListener extends EventListener<UIPageNodeForm2>
+   {
+		@Override
+		public void execute(Event<UIPageNodeForm2> event) throws Exception
+		{
+			UIPageNodeForm2 uiForm = event.getSource();
+			boolean isCheck = uiForm.getUIFormCheckBoxInput(VISIBLE).isChecked();
+			uiForm.setShowCheckPublicationDate(isCheck);
+			event.getRequestContext().addUIComponentToUpdateByAjax(uiForm);
+		}
    }
 
    static public class ClearPageActionListener extends EventListener<UIPageNodeForm2>

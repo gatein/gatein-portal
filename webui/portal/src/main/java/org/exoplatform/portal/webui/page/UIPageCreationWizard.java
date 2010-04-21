@@ -61,7 +61,7 @@ public class UIPageCreationWizard extends UIPageWizard
 
    final public static int FIRST_STEP = 1;
 
-   final public static int SECONDE_STEP = 2;
+   final public static int SECOND_STEP = 2;
 
    final public static int THIRD_STEP = 3;
 
@@ -194,9 +194,9 @@ public class UIPageCreationWizard extends UIPageWizard
          UIPortalApplication uiPortalApp = uiWizard.getAncestorOfType(UIPortalApplication.class);
          UIWorkingWorkspace uiWorkingWS = uiWizard.getAncestorOfType(UIWorkingWorkspace.class);
          uiWorkingWS.findFirstComponentOfType(UIPortalComposer.class).setRendered(false);
-         uiWizard.viewStep(SECONDE_STEP);
+         uiWizard.viewStep(SECOND_STEP);
 
-         if (uiWizard.getSelectedStep() < SECONDE_STEP)
+         if (uiWizard.getSelectedStep() < SECOND_STEP)
          {
             uiPortalApp.addMessage(new ApplicationMessage("UIPageCreationWizard.msg.StepByStep", null));
             uiWizard.viewStep(FIRST_STEP);
@@ -226,21 +226,45 @@ public class UIPageCreationWizard extends UIPageWizard
 
          if (uiPageSetInfo.getUIFormCheckBoxInput(UIWizardPageSetInfo.SHOW_PUBLICATION_DATE).isChecked())
          {
+         	
+         	Calendar currentCalendar = Calendar.getInstance();
+            currentCalendar.set(currentCalendar.get(Calendar.YEAR), currentCalendar.get(Calendar.MONTH), currentCalendar.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
+            Date currentDate = currentCalendar.getTime();
+            
             Calendar startCalendar =
                uiPageSetInfo.getUIFormDateTimeInput(UIWizardPageSetInfo.START_PUBLICATION_DATE).getCalendar();
-            Date startDate = startCalendar.getTime();
+            Date startDate = (startCalendar != null) ? startCalendar.getTime() : currentDate;
             Calendar endCalendar =
                uiPageSetInfo.getUIFormDateTimeInput(UIWizardPageSetInfo.END_PUBLICATION_DATE).getCalendar();
-            Date endDate = endCalendar.getTime();
-            if (startDate.after(endDate))
+            Date endDate = (endCalendar != null) ? endCalendar.getTime() : null;
+            
+            // Case 1: current date after start date
+            if (currentDate.after(startDate))
             {
-               uiPortalApp.addMessage(new ApplicationMessage("UIPageNodeForm2.msg.startDateBeforeEndDate", null));
+            	Object[] args = {};
+            	uiPortalApp.addMessage(new ApplicationMessage("UIPageNodeForm2.msg.currentDateBeforeStartDate", args, ApplicationMessage.WARNING));
+               uiWizard.viewStep(FIRST_STEP);
+               return;
+            }
+            // Case 2: start date after end date
+            else if ((endCalendar != null) && (startCalendar != null) && (startDate.after(endDate)))
+            {
+            	Object[] args = {};
+               uiPortalApp.addMessage(new ApplicationMessage("UIPageNodeForm2.msg.startDateBeforeEndDate", args, ApplicationMessage.WARNING));
+               uiWizard.viewStep(FIRST_STEP);
+               return;
+            }
+            // Case 3: start date is null and current date after end date
+            else if((endCalendar != null) && (currentDate.after(endDate)))
+            {
+            	Object[] args = {};
+               uiPortalApp.addMessage(new ApplicationMessage("UIPageNodeForm2.msg.currentDateBeforeEndDate", args, ApplicationMessage.WARNING));
                uiWizard.viewStep(FIRST_STEP);
                return;
             }
          }
-
       }
+      
    }
 
    static public class ViewStep3ActionListener extends EventListener<UIPageCreationWizard>
