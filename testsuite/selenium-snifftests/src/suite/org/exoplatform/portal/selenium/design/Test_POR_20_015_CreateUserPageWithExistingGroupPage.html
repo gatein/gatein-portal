@@ -4,12 +4,12 @@
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="selenium.base" href="" />
-<title>Test_POR_20_015_CreateNewUser'sPageWithExistingGroup'sPage</title>
+<title>Test_POR_20_015_CreateUserPageWithExistingGroupPage</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">Test_POR_20_015_CreateNewUser'sPageWithExistingGroup'sPage</td></tr>
+<tr><td rowspan="1" colspan="3">Test_POR_20_015_CreateUserPageWithExistingGroupPage</td></tr>
 </thead><tbody>
 <tr>
 	<td>open</td>
@@ -77,6 +77,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>echo</td>
+	<td>--Page Setting--</td>
+	<td></td>
+</tr>
+<tr>
 	<td>waitForElementPresent</td>
 	<td>ownerType</td>
 	<td></td>
@@ -119,16 +124,31 @@
 <tr>
 	<td>type</td>
 	<td>name</td>
-	<td>POR_20_015</td>
+	<td>Test_POR_20_015</td>
 </tr>
 <tr>
 	<td>type</td>
 	<td>title</td>
-	<td>POR_20_015</td>
+	<td>Test_POR_20_015</td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>--Choose Page Layout</td>
+	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
 	<td>xpath=//div[@onclick=&quot;eXo.webui.UIHorizontalTabs.changeTabForUIFormTabpane(this, 'UIPageForm', 'UIPageTemplateOptions');javascript:eXo.webui.UIForm.submitEvent('UIPageForm','SelectTab','&amp;objectId=UIPageTemplateOptions')&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>xpath=//div[@onclick=&quot;eXo.webui.UIHorizontalTabs.changeTabForUIFormTabpane(this, 'UIPageForm', 'UIPageTemplateOptions');javascript:eXo.webui.UIForm.submitEvent('UIPageForm','SelectTab','&amp;objectId=UIPageTemplateOptions')&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>--Choose Permission Setting</td>
 	<td></td>
 </tr>
 <tr>
@@ -138,17 +158,27 @@
 </tr>
 <tr>
 	<td>clickAt</td>
+	<td>xpath=//div[@onclick=&quot;eXo.webui.UIHorizontalTabs.changeTabForUIFormTabpane(this, 'UIPageForm', 'PermissionSetting');javascript:eXo.webui.UIForm.submitEvent('UIPageForm','SelectTab','&amp;objectId=PermissionSetting')&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>--Choose Access permission Setting--</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
 	<td>link=Access Permission Setting</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>--Choose Edit permission Setting--</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAt</td>
 	<td>link=Edit Permission Setting</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
-	<td>xpath=//div[@onclick=&quot;eXo.webui.UIHorizontalTabs.changeTabForUIFormTabpane(this, 'UIPageForm', 'UIPageTemplateOptions');javascript:eXo.webui.UIForm.submitEvent('UIPageForm','SelectTab','&amp;objectId=UIPageTemplateOptions')&quot;]</td>
 	<td></td>
 </tr>
 <tr>
@@ -194,12 +224,17 @@
 <tr>
 	<td>type</td>
 	<td>name</td>
-	<td>POR_20_015</td>
+	<td>Test_POR_20_015</td>
 </tr>
 <tr>
 	<td>type</td>
 	<td>title</td>
-	<td>POR_20_015</td>
+	<td>Test_POR_20_015</td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>--Choose Page layout--</td>
+	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
@@ -248,7 +283,7 @@
 </tr>
 <tr>
 	<td>echo</td>
-	<td>--Delete page of user--</td>
+	<td>--Delete page of group--</td>
 	<td></td>
 </tr>
 <tr>
@@ -278,7 +313,7 @@
 </tr>
 <tr>
 	<td>echo</td>
-	<td>--Delete page of group--</td>
+	<td>--Delete page of user--</td>
 	<td></td>
 </tr>
 <tr>
