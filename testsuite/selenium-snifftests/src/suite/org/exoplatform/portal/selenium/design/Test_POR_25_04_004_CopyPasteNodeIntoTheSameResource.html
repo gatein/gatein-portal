@@ -4,12 +4,12 @@
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="selenium.base" href="" />
-<title>Test_POR_25_04_003_CopyPasteNodeToSamePlace</title>
+<title>Test_POR_25_04_004_CopyPasteNodeIntoTheSameResource</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">Test_POR_25_04_003_CopyPasteNodeToSamePlace</td></tr>
+<tr><td rowspan="1" colspan="3">Test_POR_25_04_004_CopyPasteNodeIntoTheSameResource</td></tr>
 </thead><tbody>
 <tr>
 	<td>open</td>
@@ -53,12 +53,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>link=Site</td>
+	<td>link=Group</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAt</td>
-	<td>link=Site</td>
+	<td>link=Group</td>
 	<td></td>
 </tr>
 <tr>
@@ -77,8 +77,13 @@
 	<td></td>
 </tr>
 <tr>
+	<td>clickAt</td>
+	<td>//div[@id='UINavigationNodeSelector']/div/div/div/div[2]/div/div/div[2]/div</td>
+	<td></td>
+</tr>
+<tr>
 	<td>componentExoContextMenu</td>
-	<td>xpath=//div[@id=&quot;UINavigationNodeSelector&quot;]/div/div/div/div[2]/div/div/div[6]//a</td>
+	<td>xpath=//div[@id=&quot;UINavigationNodeSelector&quot;]/div[3]/div/div/div/div/div/div[2]/div/div/div[2]/div[2]//a</td>
 	<td></td>
 </tr>
 <tr>
@@ -98,17 +103,17 @@
 </tr>
 <tr>
 	<td>componentExoContextMenu</td>
-	<td>xpath=//div[@id=&quot;UINavigationNodeSelector&quot;]/div/div/div/div[2]/div/div/div[6]//a</td>
+	<td>//div[@class='UINavigationNodeSelector']/div/div/div/div[2]/div/div/div[2]/div[2]/div/div/a</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='NavigationNodePopupMenu']/div[@class='UIContextMenuContainer']/div[2]/div/div/div[7]//a</td>
+	<td>xpath=//div[@id=&quot;UINavigationNodeSelector&quot;]/div/div/div/div/div/div[2]/div/div/div[7]/a</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAt</td>
-	<td>//div[@id='NavigationNodePopupMenu']/div/div[2]/div/div/div[7]//a</td>
+	<td>xpath=//div[@id=&quot;UINavigationNodeSelector&quot;]/div/div/div/div/div/div[2]/div/div/div[7]/a</td>
 	<td></td>
 </tr>
 <tr>
@@ -123,12 +128,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UIPortalApplication']//div[@class='ExoMessageDecorator']//div[@class='MiddleRightSideDecorator']//div[@class='UIPopupMessages']/div[@class='MessageActionBar']//a</td>
+	<td>//div[@id='UIPortalApplication']/div[@class='UIPopupWindow UIDragObject']//div[@class='MiddleLeftSideDecorator']//div[@class='UIPopupMessages']/div[@class='MessageActionBar']//a</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAt</td>
-	<td>//div[@id='UIPortalApplication']//div[@class='ExoMessageDecorator']//div[@class='MiddleRightSideDecorator']//div[@class='UIPopupMessages']/div[@class='MessageActionBar']//a</td>
+	<td>//div[@id='UIPortalApplication']/div[@class='UIPopupWindow UIDragObject']//div[@class='MiddleLeftSideDecorator']//div[@class='UIPopupMessages']/div[@class='MessageActionBar']//a</td>
 	<td></td>
 </tr>
 <tr>

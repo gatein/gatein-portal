@@ -43,22 +43,32 @@
 </tr>
 <tr>
 	<td>echo</td>
-	<td>--Open Site Menu Editor--</td>
+	<td>--Open Group Menu Editor--</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>link=Site</td>
+	<td>link=Group</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAt</td>
-	<td>link=Site</td>
+	<td>link=Group</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=New Staff</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>link=New Staff</td>
 	<td></td>
 </tr>
 <tr>
 	<td>echo</td>
-	<td>--Add new page for portal--</td>
+	<td>--Add new page --</td>
 	<td></td>
 </tr>
 <tr>
@@ -69,16 +79,6 @@
 <tr>
 	<td>clickAt</td>
 	<td>link=Add New Page</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>link=Home</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
-	<td>link=Home</td>
 	<td></td>
 </tr>
 <tr>
@@ -89,12 +89,12 @@
 <tr>
 	<td>type</td>
 	<td>pageName</td>
-	<td>POR_25_05_004</td>
+	<td>Test_POR_25_05_004</td>
 </tr>
 <tr>
 	<td>type</td>
 	<td>pageDisplayName</td>
-	<td>POR_25_05_004</td>
+	<td>Test_POR_25_05_004</td>
 </tr>
 <tr>
 	<td>echo</td>
@@ -143,12 +143,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>link=Site</td>
+	<td>link=Group</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAt</td>
-	<td>link=Site</td>
+	<td>link=Group</td>
 	<td></td>
 </tr>
 <tr>
@@ -169,6 +169,11 @@
 <tr>
 	<td>clickAt</td>
 	<td>//div[@id='UINavigationNodeSelector']/div/div/div/div[2]/div/div/div[2]//a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>//div[@id='UINavigationNodeSelector']/div/div/div/div[2]/div/div/div[2]/div[2]/div/div</td>
 	<td></td>
 </tr>
 <tr>
@@ -212,8 +217,13 @@
 	<td></td>
 </tr>
 <tr>
+	<td>clickAt</td>
+	<td>//div[@id='UINavigationNodeSelector']/div/div/div/div[2]/div/div/div[1]/a</td>
+	<td></td>
+</tr>
+<tr>
 	<td>componentExoContextMenu</td>
-	<td>//div[@id='UINavigationNodeSelector']/div/div/div/div[2]/div/div/div[8]/div//a</td>
+	<td>//div[@id='UINavigationNodeSelector']/div/div/div/div[2]/div/div/div[3]/div/a</td>
 	<td></td>
 </tr>
 <tr>

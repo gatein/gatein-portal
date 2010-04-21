@@ -42,7 +42,7 @@
 	<td>gtn</td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
+	<td>clickAt</td>
 	<td>xpath=//div[@id='UIPortalLoginFormAction']/div/div/div</td>
 	<td></td>
 </tr>
@@ -74,11 +74,6 @@
 <tr>
 	<td>clickAt</td>
 	<td>xpath=//div[@id='UIPageBrowser']/div[2]/table/tbody/tr/td/div/div/div/div/a</td>
-	<td></td>
-</tr>
-<tr>
-	<td>echo</td>
-	<td>--Page Setting--</td>
 	<td></td>
 </tr>
 <tr>
@@ -124,17 +119,12 @@
 <tr>
 	<td>type</td>
 	<td>name</td>
-	<td>Test_POR_20_015</td>
+	<td>POR_20_015</td>
 </tr>
 <tr>
 	<td>type</td>
 	<td>title</td>
-	<td>Test_POR_20_015</td>
-</tr>
-<tr>
-	<td>echo</td>
-	<td>--Choose Page Layout</td>
-	<td></td>
+	<td>POR_20_015</td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
@@ -143,27 +133,7 @@
 </tr>
 <tr>
 	<td>clickAt</td>
-	<td>xpath=//div[@onclick=&quot;eXo.webui.UIHorizontalTabs.changeTabForUIFormTabpane(this, 'UIPageForm', 'UIPageTemplateOptions');javascript:eXo.webui.UIForm.submitEvent('UIPageForm','SelectTab','&amp;objectId=UIPageTemplateOptions')&quot;]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>echo</td>
-	<td>--Choose Permission Setting</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
 	<td>xpath=//div[@onclick=&quot;eXo.webui.UIHorizontalTabs.changeTabForUIFormTabpane(this, 'UIPageForm', 'PermissionSetting');javascript:eXo.webui.UIForm.submitEvent('UIPageForm','SelectTab','&amp;objectId=PermissionSetting')&quot;]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
-	<td>xpath=//div[@onclick=&quot;eXo.webui.UIHorizontalTabs.changeTabForUIFormTabpane(this, 'UIPageForm', 'PermissionSetting');javascript:eXo.webui.UIForm.submitEvent('UIPageForm','SelectTab','&amp;objectId=PermissionSetting')&quot;]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>echo</td>
-	<td>--Choose Access permission Setting--</td>
 	<td></td>
 </tr>
 <tr>
@@ -172,13 +142,13 @@
 	<td></td>
 </tr>
 <tr>
-	<td>echo</td>
-	<td>--Choose Edit permission Setting--</td>
+	<td>clickAt</td>
+	<td>link=Edit Permission Setting</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAt</td>
-	<td>link=Edit Permission Setting</td>
+	<td>xpath=//div[@onclick=&quot;eXo.webui.UIHorizontalTabs.changeTabForUIFormTabpane(this, 'UIPageForm', 'UIPageTemplateOptions');javascript:eXo.webui.UIForm.submitEvent('UIPageForm','SelectTab','&amp;objectId=UIPageTemplateOptions')&quot;]</td>
 	<td></td>
 </tr>
 <tr>
@@ -224,17 +194,12 @@
 <tr>
 	<td>type</td>
 	<td>name</td>
-	<td>Test_POR_20_015</td>
+	<td>POR_20_015</td>
 </tr>
 <tr>
 	<td>type</td>
 	<td>title</td>
-	<td>Test_POR_20_015</td>
-</tr>
-<tr>
-	<td>echo</td>
-	<td>--Choose Page layout--</td>
-	<td></td>
+	<td>POR_20_015</td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
@@ -283,7 +248,7 @@
 </tr>
 <tr>
 	<td>echo</td>
-	<td>--Delete page of group--</td>
+	<td>--Delete page of user--</td>
 	<td></td>
 </tr>
 <tr>
@@ -313,7 +278,7 @@
 </tr>
 <tr>
 	<td>echo</td>
-	<td>--Delete page of user--</td>
+	<td>--Delete page of group--</td>
 	<td></td>
 </tr>
 <tr>
