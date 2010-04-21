@@ -290,7 +290,11 @@ function UIDashboard() {
 		colsContainer.style.width = "100%" ;
 
 		eXo.webui.UIDashboard.initHeight(windowId) ;
-		setTimeout("eXo.webui.UIDashboard.initDragDrop('" + windowId + "'," + canEdit + ");", 300) ;
+		
+		//Todo: nguyenanhkien2a@gmail.com
+		//We set and increase waiting time for initDragDrop function to make sure all UI (tag, div, iframe, etc) 
+		//was loaded and to avoid some potential bugs (ex: GTNPORTAL-1068)
+		setTimeout("eXo.webui.UIDashboard.initDragDrop('" + windowId + "'," + canEdit + ");", 400) ;
 	};
 	
 	UIDashboard.prototype.initDragDrop = function(windowId, canEdit) {
