@@ -229,7 +229,8 @@ public class UIPortal extends UIContainer
    
    public void clearUIPage(String pageReference)
    {
-      this.all_UIPages.remove(pageReference);
+      if (this.all_UIPages != null)
+         this.all_UIPages.remove(pageReference);
    }
    
    public void setNavigation(PageNavigation _navigation)
