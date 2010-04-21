@@ -69,6 +69,11 @@ class SimpleSkin implements SkinConfig
       return name_;
    }
 
+   public String toString()
+   {
+      return "SimpleSkin[id=" + id_ + ",module=" + module_ + ",name=" + name_ + ",cssPath=" + cssPath_ + "]";
+   }
+   
    public SkinURL createURL()
    {
       return new SkinURL()

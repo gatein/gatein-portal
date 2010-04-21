@@ -19,6 +19,8 @@
 
 package org.exoplatform.web.resource.config.xml;
 
+import org.w3c.dom.Element;
+
 /**
  * 
  * Created by eXoPlatform SAS
@@ -29,8 +31,6 @@ package org.exoplatform.web.resource.config.xml;
  */
 public interface GateinResource
 {
-   final public static String SKIN_DEF_TAG = "skin-def";
-
    final public static String SKIN_NAME_TAG = "skin-name";
 
    final public static String SKIN_MODULE_TAG = "skin-module";
@@ -64,4 +64,6 @@ public interface GateinResource
    final public static String OVERWRITE = "overwrite";
    
    final public static String JAVA_SCRIPT_PRIORITY = "js-priority";
+
+   public void binding(Element elemt);
 }

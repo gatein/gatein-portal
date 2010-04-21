@@ -24,26 +24,11 @@ import org.exoplatform.portal.resource.SkinService;
 import javax.servlet.ServletContext;
 
 /**
- * 
- * Created by eXoPlatform SAS
- *
- * Author: Minh Hoang TO - hoang281283@gmail.com
- *
- *      Sep 16, 2009
+ * @author <a href="trong.tran@exoplatform.com">Trong Tran</a>
+ * @version $Revision$
  */
-public class I18nTask extends AbstractSkinTask
+
+public interface SkinConfigTask
 {
-
-   public I18nTask()
-   {
-
-   }
-
-   @Override
-   public void execute(SkinService skinService, ServletContext scontext)
-   {
-      // TODO Auto-generated method stub
-
-   }
-
+   public void execute(SkinService skinService, ServletContext scontext);
 }

@@ -21,6 +21,9 @@ package org.exoplatform.portal.resource.config.tasks;
 
 import org.exoplatform.portal.resource.SkinDependentManager;
 import org.exoplatform.portal.resource.SkinService;
+import org.exoplatform.web.resource.config.xml.GateinResource;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 import javax.servlet.ServletContext;
 
@@ -32,23 +35,39 @@ import javax.servlet.ServletContext;
  * 
  * Sep 16, 2009
  */
-public class PortletSkinTask extends AbstractSkinTask
+public class PortletSkinTask extends AbstractSkinModule implements SkinConfigTask
 {
 
    private String applicationName;
 
    private String portletName;
 
-   private String skinName;
-
-   private String cssPath;
-
-   private boolean overwrite;
-
    public PortletSkinTask()
    {
-      this.skinName = "Default";
+      super("Default");
       this.overwrite = true;
+   }
+
+   private void bindingApplicationName(Element element)
+   {
+      NodeList nodes = element.getElementsByTagName(GateinResource.APPLICATION_NAME_TAG);
+      if (nodes == null || nodes.getLength() < 1)
+      {
+         return;
+      }
+      String applicationName = nodes.item(0).getFirstChild().getNodeValue();
+      setApplicationName(applicationName);
+   }
+
+   private void bindingPortletName(Element element)
+   {
+      NodeList nodes = element.getElementsByTagName(GateinResource.PORTLET_NAME_TAG);
+      if (nodes == null || nodes.getLength() < 1)
+      {
+         return;
+      }
+      String portletName = nodes.item(0).getFirstChild().getNodeValue();
+      setPortletName(portletName);
    }
 
    public void setApplicationName(String _applicationName)
@@ -59,21 +78,6 @@ public class PortletSkinTask extends AbstractSkinTask
    public void setPortletName(String _portletName)
    {
       this.portletName = _portletName;
-   }
-
-   public void setSkinName(String _skinName)
-   {
-      this.skinName = _skinName;
-   }
-
-   public void setCSSPath(String _cssPath)
-   {
-      this.cssPath = _cssPath;
-   }
-
-   public void setOverwrite(boolean _overwrite)
-   {
-      this.overwrite = _overwrite;
    }
 
    @Override
@@ -98,6 +102,16 @@ public class PortletSkinTask extends AbstractSkinTask
    {
       SkinDependentManager.addPortletSkin(webApp, moduleName, skinName);
       SkinDependentManager.addSkinDeployedInApp(webApp, skinName);
+   }
+
+   @Override
+   public void binding(Element elemt)
+   {
+      bindingApplicationName(elemt);
+      bindingPortletName(elemt);
+      bindingCSSPath(elemt);
+      bindingSkinName(elemt);
+      bindingOverwrite(elemt);      
    }
 
 }

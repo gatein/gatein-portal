@@ -183,6 +183,11 @@ public class SkinService implements Startable
       {
          skinConfig = new SimpleSkin(this, module, skinName, cssPath);
          portalSkins_.put(key, skinConfig);
+         
+         if (log.isDebugEnabled())
+         {
+            log.debug("Adding Portal skin : Bind " + key + " to " + skinConfig);
+         }
       }
    }
 
@@ -193,6 +198,11 @@ public class SkinService implements Startable
       if (skinConfig == null)
       {
          portalSkins_.put(key, new SimpleSkin(this, module, skinName, cssPath));
+
+         if (log.isDebugEnabled())
+         {
+            log.debug("Adding Portal skin : Bind " + key + " to " + skinConfig);
+         }
       }
       ltCache.put(cssPath, new CachedStylesheet(cssData));
       rtCache.put(cssPath, new CachedStylesheet(cssData));

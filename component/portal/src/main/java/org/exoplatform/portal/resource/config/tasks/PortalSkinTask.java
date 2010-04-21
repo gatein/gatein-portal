@@ -21,6 +21,9 @@ package org.exoplatform.portal.resource.config.tasks;
 
 import org.exoplatform.portal.resource.SkinDependentManager;
 import org.exoplatform.portal.resource.SkinService;
+import org.exoplatform.web.resource.config.xml.GateinResource;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 import javax.servlet.ServletContext;
 
@@ -32,7 +35,7 @@ import javax.servlet.ServletContext;
  * 
  * Sep 16, 2009
  */
-public class PortalSkinTask extends AbstractSkinTask
+public class PortalSkinTask extends AbstractSkinModule implements SkinConfigTask
 {
 
    private static final String DEFAULT_MODULE_NAME = "CoreSkin";
@@ -41,37 +44,30 @@ public class PortalSkinTask extends AbstractSkinTask
 
    private String moduleName;
 
-   private String skinName;
-
-   private String cssPath;
-
-   private boolean overwrite;
-
    public PortalSkinTask()
    {
+      super(DEFAULT_SKIN_NAME);
       this.overwrite = true;
       this.moduleName = DEFAULT_MODULE_NAME;
-      this.skinName = DEFAULT_SKIN_NAME;
    }
 
-   public void setModuleName(String _moduleName)
+   private void bindingModuleName(Element element)
    {
-      this.moduleName = _moduleName;
+      NodeList nodes = element.getElementsByTagName(GateinResource.SKIN_MODULE_TAG);
+      if (nodes == null || nodes.getLength() < 1)
+      {
+         return;
+      }
+      moduleName = nodes.item(0).getFirstChild().getNodeValue();
    }
-
-   public void setSkinName(String _skinName)
+   
+   @Override
+   public void binding(Element elemt)
    {
-      this.skinName = _skinName;
-   }
-
-   public void setCSSPath(String _cssPath)
-   {
-      this.cssPath = _cssPath;
-   }
-
-   public void setOverwrite(boolean _overwrite)
-   {
-      this.overwrite = _overwrite;
+      bindingCSSPath(elemt);
+      bindingSkinName(elemt);
+      bindingModuleName(elemt);
+      bindingOverwrite(elemt);
    }
 
    @Override

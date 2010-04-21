@@ -20,6 +20,9 @@
 package org.exoplatform.portal.resource.config.tasks;
 
 import org.exoplatform.portal.resource.SkinService;
+import org.exoplatform.web.resource.config.xml.GateinResource;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +37,7 @@ import javax.servlet.ServletContext;
  *
  *      Sep 16, 2009
  */
-public class ThemeTask extends AbstractSkinTask
+public class ThemeTask implements GateinResource, SkinConfigTask
 {
 
    private String styleName;
@@ -46,6 +49,30 @@ public class ThemeTask extends AbstractSkinTask
       this.themeNames = new ArrayList<String>();
    }
 
+   private void bindingStyleName(Element element)
+   {
+      NodeList nodes = element.getElementsByTagName(GateinResource.STYLE_NAME_TAG);
+      if (nodes == null || nodes.getLength() < 1)
+      {
+         return;
+      }
+      String styleName = nodes.item(0).getFirstChild().getNodeValue();
+      setStyleName(styleName);
+   }
+
+   private void bindingThemeNames(Element element)
+   {
+      NodeList nodes = element.getElementsByTagName(GateinResource.THEME_NAME_TAG);
+      if (nodes == null)
+      {
+         return;
+      }
+      for (int i = nodes.getLength() - 1; i >= 0; i--)
+      {
+         addThemeName(nodes.item(i).getFirstChild().getNodeValue());
+      }
+   }
+   
    public void addThemeName(String _themeName)
    {
       //TODO: Check duplicated theme name
@@ -55,6 +82,13 @@ public class ThemeTask extends AbstractSkinTask
    public void setStyleName(String _styleName)
    {
       this.styleName = _styleName;
+   }
+   
+   @Override
+   public void binding(Element elemt)
+   {
+      bindingStyleName(elemt);
+      bindingThemeNames(elemt);
    }
 
    @Override
@@ -66,5 +100,4 @@ public class ThemeTask extends AbstractSkinTask
       }
       skinService.addTheme(styleName, themeNames);
    }
-
 }
