@@ -91,7 +91,7 @@
   height: 18px;
   border: solid 1px #b7b7b7 ;
   padding-left: 18px;
-  background: #f7f7f7 url('../skin/images/LoginBackground.gif') no-repeat left -236px;
+  background: #f7f7f7 url('../skin/images/LoginBackground.gif') no-repeat left -266px;
 }
 
 .UILogin .LoginContent .FieldContainer input.Password {
@@ -100,7 +100,7 @@
   height: 18px;
   border: solid 1px #b7b7b7 ;
   padding-left: 18px;
-  background: #f7f7f7 url('../skin/images/LoginBackground.gif') no-repeat left -260px;
+  background: #f7f7f7 url('../skin/images/LoginBackground.gif') no-repeat left -290px;
 }
 
 .UILogin a.TextHelp {
@@ -161,17 +161,17 @@
 .UILogin .LoginContent .LoginButton .Button .LeftButton {
   line-height: 22px;
   padding-left: 11px;
-  background: url('../skin/images/LoginBackground.gif') no-repeat left -281px;
+  background: url('../skin/images/LoginBackground.gif') no-repeat left -311px;
 }
 
 .UILogin .LoginContent .LoginButton .Button .RightButton {
   line-height: 22px;
   padding-right: 11px;
-  background: url('../skin/images/LoginBackground.gif') no-repeat right -281px;
+  background: url('../skin/images/LoginBackground.gif') no-repeat right -311px;
 }
 
 .UILogin .LoginContent .LoginButton .Button .MiddleButton {
   height: 22px; 
   line-height: 21px; 
-  background: url('../skin/images/LoginBackground.gif') center -281px;
+  background: url('../skin/images/LoginBackground.gif') center -311px;
 }
