@@ -41,6 +41,8 @@ import org.exoplatform.portal.webui.portal.UIPortalComponentActionListener.ShowL
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIMaskWorkspace;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
+import org.exoplatform.services.organization.OrganizationService;
+import org.exoplatform.services.organization.User;
 import org.exoplatform.services.resources.ResourceBundleManager;
 import org.exoplatform.web.login.InitiateLoginServlet;
 import org.exoplatform.web.security.security.AbstractTokenService;
@@ -51,6 +53,7 @@ import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.web.application.JavascriptManager;
 
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -488,10 +491,28 @@ public class UIPortal extends UIContainer
          UIPortalApplication uiApp = uiPortal.getAncestorOfType(UIPortalApplication.class);
          UIMaskWorkspace uiMaskWS = uiApp.getChildById(UIPortalApplication.UI_MASK_WS_ID);
 
-         UIAccountSetting uiAccountForm = uiMaskWS.createUIComponent(UIAccountSetting.class, null, null);
-         uiMaskWS.setUIComponent(uiAccountForm);
-         uiMaskWS.setShow(true);
-         event.getRequestContext().addUIComponentToUpdateByAjax(uiMaskWS);
+         //Modified by nguyenanhkien2a@gmail.com
+         //We should check account for existing
+         String username = Util.getPortalRequestContext().getRemoteUser();
+         OrganizationService service = uiPortal.getApplicationComponent(OrganizationService.class);
+         User useraccount = service.getUserHandler().findUserByName(username);
+         
+         if(useraccount != null)
+         {        
+            UIAccountSetting uiAccountForm = uiMaskWS.createUIComponent(UIAccountSetting.class, null, null);
+            uiMaskWS.setUIComponent(uiAccountForm);
+            uiMaskWS.setShow(true);
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiMaskWS);
+         }
+         else 
+         {
+            //Show message detail to user and then logout if user press ok button
+            JavascriptManager jsManager = Util.getPortalRequestContext().getJavascriptManager();
+            jsManager.importJavascript("eXo");
+            jsManager.addJavascript("if(confirm('" + 
+               Util.getPortalRequestContext().getApplicationResourceBundle().getString("UIAccountProfiles.msg.NotExistingAccount") + 
+               "')) {eXo.portal.logout();}");
+         }
       }
    }
    
