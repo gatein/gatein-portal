@@ -65,6 +65,15 @@ LT 20010312: could not find a way to configure image scaling properly (tried wid
 				</affiliation>
 				<email>ltexier@redhat.com</email>
 			</editor>
+         <editor>
+            <firstname>Christophe</firstname>
+				<surname>Laprun</surname>
+				<affiliation>
+					<shortaffil>Red Hat</shortaffil>
+					<orgdiv>JBoss Engineering</orgdiv>
+				</affiliation>
+				<email>claprun@redhat.com</email>
+			</editor>
 <!--
 			<othercredit>
 				<affiliation>
