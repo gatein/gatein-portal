@@ -4,12 +4,12 @@
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="selenium.base" href="" />
-<title>SNF_PRL_32</title>
+<title>Test_SNF_PRL_32_ChangeSkin</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">SNF_PRL_32</td></tr>
+<tr><td rowspan="1" colspan="3">Test_SNF_PRL_32_ChangeSkin</td></tr>
 </thead><tbody>
 <tr>
 	<td>open</td>
@@ -19,6 +19,11 @@
 <tr>
 	<td>echo</td>
 	<td>-ChangeDisplaySkin-</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Sign in</td>
 	<td></td>
 </tr>
 <tr>
@@ -42,7 +47,7 @@
 	<td>gtn</td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
+	<td>clickAt</td>
 	<td>xpath=//div[@id='UIPortalLoginFormAction']/div/div/div/a</td>
 	<td></td>
 </tr>
@@ -54,7 +59,12 @@
 <tr>
 	<td>clickAt</td>
 	<td>link=Change Skin</td>
-	<td>1,1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>--Keep Default skin--</td>
+	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
@@ -64,11 +74,11 @@
 <tr>
 	<td>clickAt</td>
 	<td>xpath=//div[@id='UITabContent']//div[@class='ItemListContainer']//div[@class='ItemList']//div[@class='SelectedItem Item']</td>
-	<td>1,1</td>
+	<td></td>
 </tr>
 <tr>
-	<td>clickAtAndWait</td>
-	<td>xpath=//div[@id='UIMaskWorkspace']//div[@class='ActionButton LightBlueStyle']</td>
+	<td>clickAt</td>
+	<td>//div[@id='UIMaskWorkspace']//div[@class='UIChangeSkinForm']//div[@class='UIAction']//div</td>
 	<td></td>
 </tr>
 <tr>
@@ -79,6 +89,41 @@
 <tr>
 	<td>echo</td>
 	<td>---------</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Change Skin</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>link=Change Skin</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>--Change to Simple skin--</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='UITabContent']//div[@class='ItemListContainer']//div[@class='ItemList']/div[2]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>//div[@id='UITabContent']//div[@class='ItemListContainer']//div[@class='ItemList']/div[2]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>//div[@id='UIMaskWorkspace']//div[@class='UIChangeSkinForm']//div[@class='UIAction']//div</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Sign out</td>
 	<td></td>
 </tr>
 <tr>
