@@ -64,44 +64,13 @@ public class UIGroupMembershipSelector extends UIContainer
    {
       UIBreadcumbs uiBreadcumbs = addChild(UIBreadcumbs.class, "BreadcumbGroupSelector", "BreadcumbGroupSelector");
       UITree tree = addChild(UITree.class, "UITreeGroupSelector", "TreeGroupSelector");
-      OrganizationService service = getApplicationComponent(OrganizationService.class);
-      Collection<?> sibblingsGroup = service.getGroupHandler().findGroups(null);
-
-      Collection<?> collection = service.getMembershipTypeHandler().findMembershipTypes();
-      listMemberhip = new ArrayList<String>(5);
-      for (Object obj : collection)
-      {
-         listMemberhip.add(((MembershipType)obj).getName());
-      }
-      listMemberhip.add("*");
-
-      tree.setSibbling((List)sibblingsGroup);
       tree.setIcon("GroupAdminIcon");
       tree.setSelectedIcon("PortalIcon");
       tree.setBeanIdField("id");
-      //tree.setBeanLabelField("groupName");
       tree.setBeanLabelField("label");
       uiBreadcumbs.setBreadcumbsStyle("UIExplorerHistoryPath");
    }
 
-   /*public void processDecode(WebuiRequestContext context) throws Exception {   
-    super.processDecode(context);
-    UIForm uiForm  = getAncestorOfType(UIForm.class);
-    String action =  null;
-    if(uiForm != null){
-      action =  uiForm.getSubmitAction();
-    }else {
-      action = context.getRequestParameter(UIForm.ACTION);
-    }    
-    if(action == null)  return;    
-
-    String componentId =  context.getRequestParameter("selectorId") ;
-    System.out.println("\n\n\n\n == > tai day ta co "+componentId +"\n\n\n");
-    if(componentId != null && componentId.trim().length() > 0 && componentId.equals(getId())) {
-      Event<UIComponent> event = createEvent(action, Event.Phase.DECODE, context) ;   
-      if(event != null) event.broadcast()  ;  
-    }
-   }*/
 
    /**
     * @see org.exoplatform.webui.core.UIComponent#processRender(org.exoplatform.webui.application.WebuiRequestContext)
