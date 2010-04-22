@@ -141,15 +141,20 @@ public class UIMainActionListener
          if (userConfig == null)
             userConfig = uiApp.getUserPortalConfig();
          
-         PortalConfig portalConfig = userConfig.getPortalConfig();
-
-         UserACL userACL = uiPortal.getApplicationComponent(UserACL.class);
-         if (!userACL.hasEditPermission(portalConfig))
+         //Todo nguyenanhkien2a@gmail.com
+         //Check editing permission
+         UIPortalApplication portalApp = Util.getUIPortalApplication();
+         UIPortal currentUIPortal = portalApp.<UIWorkingWorkspace>findComponentById(
+            UIPortalApplication.UI_WORKING_WS_ID).findFirstComponentOfType(UIPortal.class);
+         UserACL userACL = portalApp.getApplicationComponent(UserACL.class);
+         if(!userACL.hasEditPermissionOnPortal(currentUIPortal.getOwnerType(), currentUIPortal.getOwner(), 
+                                                currentUIPortal.getEditPermission()))
          {
             uiApp.addMessage(new ApplicationMessage("UIPortalManagement.msg.Invalid-EditLayout-Permission",
                new String[]{uiPortal.getName()}));
             return;
          }
+         
          PortalRequestContext pcontext = (PortalRequestContext)event.getRequestContext();
          UIWorkingWorkspace uiWorkingWS = uiApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
          uiWorkingWS.setBackupUIPortal(uiPortal);
