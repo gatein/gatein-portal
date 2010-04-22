@@ -111,12 +111,11 @@ public class UINavigationNodeSelector extends UIContainer
    public void initNavigations(List<PageNavigation> navis) throws Exception
    {
       navigations = navis;
-      // set resolved label for navigations
       WebuiRequestContext requestContext = WebuiRequestContext.getCurrentInstance();
       localizeNavigation(requestContext.getLocale());
 
-      updateUI();
-      selectNavigation();
+      updateNodeTree();
+      initEditedData();
    }
 
    public void loadNavigationByNavId(Integer navId, List<PageNavigation> navigations) throws Exception
@@ -128,7 +127,7 @@ public class UINavigationNodeSelector extends UIContainer
       selectNavigation(navId);
    }
 
-   private void updateUI()
+   private void updateNodeTree()
    {
       if (navigations == null || navigations.size() < 1)
       {
@@ -137,7 +136,11 @@ public class UINavigationNodeSelector extends UIContainer
       }
    }
 
-   private void selectNavigation()
+   /**
+    * Init the edited node as well as its parent, navigation
+    *
+    */
+   private void initEditedData()
    {
       if (navigations == null || navigations.size() < 1)
       {
@@ -305,7 +308,7 @@ public class UINavigationNodeSelector extends UIContainer
          navigations = new ArrayList<PageNavigation>();
       }
       navigations.add(navigation);
-      updateUI();
+      updateNodeTree();
    }
 
    public void deletePageNavigation(PageNavigation navigation)
@@ -317,8 +320,8 @@ public class UINavigationNodeSelector extends UIContainer
       navigations.remove(navigation);
       deleteNavigations.add(navigation);
       selectedNode = null;
-      selectNavigation();
-      updateUI();
+      initEditedData();
+      updateNodeTree();
    }
 
    public PageNavigation getPageNavigation(int id)
