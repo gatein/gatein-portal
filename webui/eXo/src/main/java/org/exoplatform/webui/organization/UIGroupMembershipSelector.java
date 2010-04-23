@@ -90,7 +90,7 @@ public class UIGroupMembershipSelector extends UIContainer
       {
          listMemberhip.add(((MembershipType)obj).getName());
       }
-      if(listMemberhip.contains("*"))
+      if(!listMemberhip.contains("*"))
       {
          listMemberhip.add("*");
       }
