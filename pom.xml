@@ -815,7 +815,7 @@
                   </property>
                   <property>
                      <name>gatein.test.datasource.url</name>
-                     <value>jdbc:hsqldb:file:${project.build.directory}/gateindb</value>
+                     <value>jdbc:hsqldb:mem:gateindb</value>
                   </property>
                   <property>
                      <name>gatein.test.datasource.username</name>
