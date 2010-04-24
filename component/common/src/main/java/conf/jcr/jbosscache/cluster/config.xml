@@ -19,7 +19,7 @@
 
 <jbosscache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="urn:jboss:jbosscache-core:config:3.1">
 
-  <locking useLockStriping="false" concurrencyLevel="50000" lockParentForChildInsertRemove="false"
+  <locking useLockStriping="false" concurrencyLevel="64" lockParentForChildInsertRemove="false"
     lockAcquisitionTimeout="20000" />
 
   <clustering mode="replication" clusterName="${jbosscache-cluster-name}">
@@ -33,8 +33,8 @@
     <default algorithmClass="org.jboss.cache.eviction.LRUAlgorithm"
       actionPolicyClass="org.exoplatform.services.jcr.impl.dataflow.persistent.jbosscache.ParentNodeEvictionActionPolicy"
       eventQueueSize="1000000">
-      <property name="maxNodes" value="1000000" />
-      <property name="timeToLive" value="120000" />
+      <property name="maxNodes" value="5000" />
+      <property name="timeToLive" value="20000" />
     </default>
   </eviction>
 </jbosscache>

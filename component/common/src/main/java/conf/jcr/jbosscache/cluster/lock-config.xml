@@ -19,7 +19,7 @@
 
 <jbosscache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="urn:jboss:jbosscache-core:config:3.1">
 
-  <locking useLockStriping="false" concurrencyLevel="50000" lockParentForChildInsertRemove="false" lockAcquisitionTimeout="20000" />
+  <locking useLockStriping="false" concurrencyLevel="64" lockParentForChildInsertRemove="false" lockAcquisitionTimeout="20000" />
 
   <clustering mode="replication" clusterName="${jbosscache-cluster-name}">
     <stateRetrieval timeout="20000" fetchInMemoryState="false" />
