@@ -92,6 +92,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>echo</td>
+	<td>--Change to Simple skin--</td>
+	<td></td>
+</tr>
+<tr>
 	<td>waitForElementPresent</td>
 	<td>link=Change Skin</td>
 	<td></td>
@@ -103,8 +108,13 @@
 </tr>
 <tr>
 	<td>echo</td>
-	<td>--Change to Simple skin--</td>
+	<td>--Move from Defalut to Simple skin--</td>
 	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//div[@id='UITabContent']//div[@class='ItemListContainer']//div[@class='ItemList']/div[@class='SelectedItem Item']</td>
+	<td>Default Style Skin</td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
@@ -114,6 +124,51 @@
 <tr>
 	<td>clickAt</td>
 	<td>//div[@id='UITabContent']//div[@class='ItemListContainer']//div[@class='ItemList']/div[2]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>//div[@id='UIMaskWorkspace']//div[@class='UIChangeSkinForm']//div[@class='UIAction']//div</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>--Return to Default skin--</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Change Skin</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>link=Change Skin</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>--Move from Simple skin to Default skin--</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='UITabContent']//div[@class='ItemListContainer']//div[@class='ItemList']//div[@class='Item']</td>
+	<td>Default Style Skin</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//div[@id='UITabContent']//div[@class='ItemListContainer']//div[@class='ItemList']//div[@class='Item']</td>
+	<td>Default Style Skin</td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='UITabContent']//div[@class='ItemListContainer']//div[@class='ItemList']/div/div</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>//div[@id='UITabContent']//div[@class='ItemListContainer']//div[@class='ItemList']/div/div</td>
 	<td></td>
 </tr>
 <tr>
