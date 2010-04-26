@@ -209,16 +209,15 @@ public class UIGroupNavigationManagement extends UIContainer
          pageManager.setOwnerType(navigation.getOwnerType());
 
          UINavigationNodeSelector selector = pageManager.getChild(UINavigationNodeSelector.class);
-         ArrayList<PageNavigation> list = new ArrayList<PageNavigation>();
-         list.add(navigation);
-         selector.initNavigations(list);
-         selector.loadNavigationByNavId(navId, uicomp.navigations);
-         //selector.removeChild(UIRightClickPopupMenu.class);
+       
+         //TODO: Set correct value for filteredEdittedNavigation
+         selector.setOriginalEdittedNavigation(navigation);
+         selector.setFilteredEdittedNavigation(navigation);
+         selector.initTreeData();
          popUp.setUIComponent(pageManager);
          popUp.setWindowSize(400, 400);
          popUp.setShowMask(true);
          popUp.setShow(true);
-         // prContext.addUIComponentToUpdateByAjax(workingWS);
       }
    }
 

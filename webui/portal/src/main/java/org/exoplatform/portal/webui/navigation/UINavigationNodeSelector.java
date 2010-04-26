@@ -50,6 +50,8 @@ import org.exoplatform.webui.core.UITree;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
+import groovy.util.slurpersupport.FilteredNodeChildren;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -77,9 +79,14 @@ public class UINavigationNodeSelector extends UIContainer
 
    private List<PageNavigation> navigations;
 
-   private SelectedNode selectedNode;
+   private PageNavigation originalEdittedNavigation;
+   
+   private PageNavigation filteredEdittedNavigation;
+   
+   private TreeNodeData edittedTreeNodeData;
 
-   private SelectedNode copyNode;
+   /** This field holds transient copy of edittedTreeNodeData, which is used when user pastes the content to a new tree node */
+   private TreeNodeData copyOfTreeNodeData;
 
    private List<PageNavigation> deleteNavigations = new ArrayList<PageNavigation>();
 
@@ -108,60 +115,88 @@ public class UINavigationNodeSelector extends UIContainer
       return navigations;
    }
 
+   public void setOriginalEdittedNavigation(PageNavigation _originalEdittedNavigation) throws Exception
+   {
+      this.originalEdittedNavigation = _originalEdittedNavigation;
+   }
+   
+   public PageNavigation getOriginalEdittedNavigation()
+   {
+      return this.originalEdittedNavigation;
+   }
+   
+   public void setFilteredEdittedNavigation(PageNavigation _filteredEdittedNavigation) throws Exception
+   {
+      this.filteredEdittedNavigation = _filteredEdittedNavigation;
+   }
+   
+   public PageNavigation getFilteredEdittedNavigation()
+   {
+      return this.filteredEdittedNavigation;
+   }
+   
    public void initNavigations(List<PageNavigation> navis) throws Exception
    {
       navigations = navis;
       WebuiRequestContext requestContext = WebuiRequestContext.getCurrentInstance();
       localizeNavigation(requestContext.getLocale());
 
-      updateNodeTree();
-      initEditedData();
+      cleanTreeSibbling();
+      initEdittedTreeNodeData();
+   }
+   
+   /**
+    * Init the UITree wrapped in UINavigationNodeSelector and localize the label
+    * @throws Exception
+    */
+   public void initTreeData() throws Exception
+   {
+      WebuiRequestContext requestContext = WebuiRequestContext.getCurrentInstance();
+      localizeNavigation(requestContext.getLocale());
+      
+      cleanTreeSibbling();
+      initEdittedTreeNodeData();
    }
 
    public void loadNavigationByNavId(Integer navId, List<PageNavigation> navigations) throws Exception
    {
       this.navigations = navigations;
-      // set resolved label for navigations
       WebuiRequestContext requestContext = WebuiRequestContext.getCurrentInstance();
       localizeNavigation(requestContext.getLocale());
       selectNavigation(navId);
    }
 
-   private void updateNodeTree()
+   private void cleanTreeSibbling()
    {
-      if (navigations == null || navigations.size() < 1)
+      /*
+      if (filteredEdittedNavigation == null)
       {
          getChild(UITree.class).setSibbling(null);
          return;
       }
+      */
    }
 
    /**
     * Init the edited node as well as its parent, navigation
     *
     */
-   private void initEditedData()
+   private void initEdittedTreeNodeData()
    {
-      if (navigations == null || navigations.size() < 1)
+      if(filteredEdittedNavigation == null)
       {
          return;
       }
-      if (selectedNode == null)
+      if (edittedTreeNodeData == null)
       {
-         PageNavigation navigation = navigations.get(0);
-         selectedNode = new SelectedNode(navigation, null, null);
-         if (navigation.getNodes().size() > 0)
-         {
-            selectedNode.setNode(navigation.getNodes().get(0));
-         }
+         edittedTreeNodeData = new TreeNodeData(filteredEdittedNavigation);
+         selectPageNodeByUri(edittedTreeNodeData.getNode().getUri());//TODO: Check null
       }
-      selectNavigation(selectedNode.getPageNavigation().getId());
-      if (selectedNode.getNode() != null)
-      {
-         selectPageNodeByUri(selectedNode.getNode().getUri());
-      }
+      
+      UITree tree = getChild(UITree.class);
+      tree.setSibbling(filteredEdittedNavigation.getNodes());
    }
-
+   
    private void selectNavigation(int id)
    {
       for (int i = 0; i < navigations.size(); i++)
@@ -170,7 +205,7 @@ public class UINavigationNodeSelector extends UIContainer
          {
             continue;
          }
-         selectedNode = new SelectedNode(navigations.get(i), null, null);
+         edittedTreeNodeData = new TreeNodeData(navigations.get(i), null, null);
          selectPageNodeByUri(null);
          UITree uiTree = getChild(UITree.class);
          uiTree.setSibbling(navigations.get(i).getNodes());
@@ -181,20 +216,17 @@ public class UINavigationNodeSelector extends UIContainer
    {
       LocaleConfig localeConfig =
          getApplicationComponent(LocaleConfigService.class).getLocaleConfig(locale.getLanguage());
-      for (PageNavigation nav : navigations)
+      String ownerType = filteredEdittedNavigation.getOwnerType();
+      if (!PortalConfig.USER_TYPE.equals(ownerType))
       {
-         if (nav.getOwnerType().equals(PortalConfig.USER_TYPE))
-         {
-            continue;
-         }
-         String ownerId = nav.getOwnerId();
-         if (nav.getOwnerType().equals(PortalConfig.GROUP_TYPE))
+         String ownerId = filteredEdittedNavigation.getOwnerId();
+         if (PortalConfig.GROUP_TYPE.equals(ownerType))
          {
             // Remove the trailing '/' for a group
             ownerId = ownerId.substring(1);
          }
-         ResourceBundle res = localeConfig.getNavigationResourceBundle(nav.getOwnerType(), ownerId);
-         for (PageNode node : nav.getNodes())
+         ResourceBundle res = localeConfig.getNavigationResourceBundle(ownerType, ownerId);
+         for (PageNode node : filteredEdittedNavigation.getNodes())
          {
             resolveLabel(res, node);
          }
@@ -216,7 +248,7 @@ public class UINavigationNodeSelector extends UIContainer
 
    public void selectPageNodeByUri(String uri)
    {
-      if (selectedNode == null)
+      if (edittedTreeNodeData == null)
       {
          return;
       }
@@ -224,11 +256,11 @@ public class UINavigationNodeSelector extends UIContainer
       List<?> sibbling = tree.getSibbling();
       tree.setSibbling(null);
       tree.setParentSelected(null);
-      selectedNode.setNode(searchPageNodeByUri(selectedNode.getPageNavigation(), uri));
-      if (selectedNode.getNode() != null)
+      edittedTreeNodeData.setNode(searchPageNodeByUri(edittedTreeNodeData.getPageNavigation(), uri));
+      if (edittedTreeNodeData.getNode() != null)
       {
-         tree.setSelected(selectedNode.getNode());
-         tree.setChildren(selectedNode.getNode().getChildren());
+         tree.setSelected(edittedTreeNodeData.getNode());
+         tree.setChildren(edittedTreeNodeData.getNode().getChildren());
          return;
       }
       tree.setSelected(null);
@@ -286,7 +318,7 @@ public class UINavigationNodeSelector extends UIContainer
          {
             tree.setParentSelected(pageNode);
          }
-         selectedNode.setParentNode(pageNode);
+         edittedTreeNodeData.setParentNode(pageNode);
          return returnPageNode;
       }
       return null;
@@ -294,11 +326,9 @@ public class UINavigationNodeSelector extends UIContainer
 
    public List<PageNavigation> getPageNavigations()
    {
-      if (navigations == null)
-      {
-         navigations = new ArrayList<PageNavigation>();
-      }
-      return navigations;
+      List<PageNavigation> navs = new ArrayList<PageNavigation>(3);
+      navs.add(filteredEdittedNavigation);
+      return navs;
    }
 
    public void addPageNavigation(PageNavigation navigation)
@@ -308,7 +338,7 @@ public class UINavigationNodeSelector extends UIContainer
          navigations = new ArrayList<PageNavigation>();
       }
       navigations.add(navigation);
-      updateNodeTree();
+      cleanTreeSibbling();
    }
 
    public void deletePageNavigation(PageNavigation navigation)
@@ -319,9 +349,9 @@ public class UINavigationNodeSelector extends UIContainer
       }
       navigations.remove(navigation);
       deleteNavigations.add(navigation);
-      selectedNode = null;
-      initEditedData();
-      updateNodeTree();
+      edittedTreeNodeData = null;
+      initEdittedTreeNodeData();
+      cleanTreeSibbling();
    }
 
    public PageNavigation getPageNavigation(int id)
@@ -341,7 +371,7 @@ public class UINavigationNodeSelector extends UIContainer
       UIRightClickPopupMenu uiPopupMenu = getChild(UIRightClickPopupMenu.class);
       if (uiPopupMenu != null)
       {
-         if (navigations == null || navigations.size() < 1)
+         if (filteredEdittedNavigation == null)
          {
             uiPopupMenu.setRendered(false);
          }
@@ -353,14 +383,14 @@ public class UINavigationNodeSelector extends UIContainer
       super.processRender(context);
    }
 
-   public SelectedNode getCopyNode()
+   public TreeNodeData getCopyNode()
    {
-      return copyNode;
+      return copyOfTreeNodeData;
    }
 
-   public void setCopyNode(SelectedNode copyNode)
+   public void setCopyNode(TreeNodeData copyNode)
    {
-      this.copyNode = copyNode;
+      this.copyOfTreeNodeData = copyNode;
    }
 
    static public class ChangeNodeActionListener extends EventListener<UITree>
@@ -394,7 +424,8 @@ public class UINavigationNodeSelector extends UIContainer
          uiManagementPopup.setUIComponent(uiNodeForm);
 
          Object parent = null;
-         List<PageNode> pageNodes = uiNodeSelector.getSelectedNavigation().getNodes();
+         PageNavigation filteredEdittedNavigation = uiNodeSelector.getFilteredEdittedNavigation();
+         List<PageNode> pageNodes = filteredEdittedNavigation.getNodes();
          if (uri != null && uri.trim().length() > 0)
          {
             for (PageNode pageNode : pageNodes)
@@ -408,13 +439,14 @@ public class UINavigationNodeSelector extends UIContainer
          }
          if (parent == null)
          {
-            parent = uiNodeSelector.getSelectedNavigation();
+            parent = filteredEdittedNavigation;
          }
+         
          uiNodeForm.setSelectedParent(parent);
 
          // set navigation owner, navigation type
-         uiNodeForm.setOwner(uiNodeSelector.getSelectedNavigation().getOwnerId());
-         uiNodeForm.setOwnerType(uiNodeSelector.getSelectedNavigation().getOwnerType());
+         uiNodeForm.setOwner(uiNodeSelector.getFilteredEdittedNavigation().getOwnerId());
+         uiNodeForm.setOwnerType(uiNodeSelector.getFilteredEdittedNavigation().getOwnerType());
 
          uiManagementPopup.setWindowSize(800, 500);
          event.getRequestContext().addUIComponentToUpdateByAjax(uiManagementPopup.getParent());
@@ -435,7 +467,7 @@ public class UINavigationNodeSelector extends UIContainer
 
          // get Selected PageNode
          PageNode selectedPageNode = null;
-         List<PageNode> pageNodes = uiNodeSelector.getSelectedNavigation().getNodes();
+         List<PageNode> pageNodes = uiNodeSelector.getFilteredEdittedNavigation().getNodes();
          if (uri != null && uri.trim().length() > 0)
          {
             for (PageNode pageNode : pageNodes)
@@ -517,7 +549,7 @@ public class UINavigationNodeSelector extends UIContainer
          UIApplication uiApp = ctx.getUIApplication();
          String uri = event.getRequestContext().getRequestParameter(UIComponent.OBJECTID);
          UINavigationNodeSelector uiNodeSelector = popupMenu.getAncestorOfType(UINavigationNodeSelector.class);
-         PageNavigation selectedNav = uiNodeSelector.getSelectedNavigation();
+         PageNavigation selectedNav = uiNodeSelector.getFilteredEdittedNavigation();
          Object obj = PageNavigationUtils.searchParentNode(selectedNav, uri);
          PageNode selectedNode = PageNavigationUtils.searchPageNodeByUri(selectedNav, uri);
          String pageId = selectedNode.getPageReference();
@@ -538,8 +570,8 @@ public class UINavigationNodeSelector extends UIContainer
          uiManagementPopup.setUIComponent(uiNodeForm);
 
          // set navigation owner, navigation type
-         uiNodeForm.setOwner(uiNodeSelector.getSelectedNavigation().getOwnerId());
-         uiNodeForm.setOwnerType(uiNodeSelector.getSelectedNavigation().getOwnerType());
+         uiNodeForm.setOwner(uiNodeSelector.getFilteredEdittedNavigation().getOwnerId());
+         uiNodeForm.setOwnerType(uiNodeSelector.getFilteredEdittedNavigation().getOwnerType());
 
          uiNodeForm.setValues(selectedNode);
          uiNodeForm.setSelectedParent(obj);
@@ -559,7 +591,7 @@ public class UINavigationNodeSelector extends UIContainer
          uiManagement.setRenderedChildrenOfTypes(childrenToRender);
          event.getRequestContext().addUIComponentToUpdateByAjax(uiManagement);
 
-         PageNavigation nav = uiNodeSelector.getSelectedNavigation();
+         PageNavigation nav = uiNodeSelector.getFilteredEdittedNavigation();
          if (nav == null)
          {
             return;
@@ -569,7 +601,7 @@ public class UINavigationNodeSelector extends UIContainer
          {
             return;
          }
-         SelectedNode selectedNode = new SelectedNode(nav, pageNodes[0], pageNodes[1]);
+         TreeNodeData selectedNode = new TreeNodeData(nav, pageNodes[0], pageNodes[1]);
          selectedNode.setDeleteNode(false);
          uiNodeSelector.setCopyNode(selectedNode);
          event.getSource().setActions(
@@ -591,7 +623,7 @@ public class UINavigationNodeSelector extends UIContainer
           uiManagement.setRenderedChildrenOfTypes(childrenToRender);
           event.getRequestContext().addUIComponentToUpdateByAjax(uiManagement);
 
-          PageNavigation nav = uiNodeSelector.getSelectedNavigation();
+          PageNavigation nav = uiNodeSelector.getFilteredEdittedNavigation();
           if (nav == null)
           {
              return;
@@ -610,7 +642,7 @@ public class UINavigationNodeSelector extends UIContainer
   			 }
           }
           
-          SelectedNode selectedNode = new SelectedNode(nav, pageNodes[0], pageNodes[1]);
+          TreeNodeData selectedNode = new TreeNodeData(nav, pageNodes[0], pageNodes[1]);
           selectedNode.setDeleteNode(false);
           uiNodeSelector.setCopyNode(selectedNode);
           event.getSource().setActions(
@@ -646,14 +678,14 @@ public class UINavigationNodeSelector extends UIContainer
          Class<?>[] childrenToRender = new Class<?>[]{UINavigationNodeSelector.class};
          uiManagement.setRenderedChildrenOfTypes(childrenToRender);
          event.getRequestContext().addUIComponentToUpdateByAjax(uiManagement);
-         SelectedNode selectedNode = uiNodeSelector.getCopyNode();
+         TreeNodeData selectedNode = uiNodeSelector.getCopyNode();
          if (selectedNode == null)
          {
             return;
          }
 
          PageNode newNode = selectedNode.getNode().clone();
-         PageNavigation targetNav = uiNodeSelector.getSelectedNavigation();
+         PageNavigation targetNav = uiNodeSelector.getFilteredEdittedNavigation();
          PageNode targetNode = PageNavigationUtils.searchPageNodeByUri(targetNav, targetUri);
 
          if (targetNode != null && newNode.getUri().equals(targetNode.getUri()))
@@ -798,7 +830,7 @@ public class UINavigationNodeSelector extends UIContainer
          String uri = event.getRequestContext().getRequestParameter(UIComponent.OBJECTID);
          UINavigationNodeSelector uiNodeSelector = event.getSource().getAncestorOfType(UINavigationNodeSelector.class);
          event.getRequestContext().addUIComponentToUpdateByAjax(uiNodeSelector.getParent());
-         PageNavigation nav = uiNodeSelector.getSelectedNavigation();
+         PageNavigation nav = uiNodeSelector.getFilteredEdittedNavigation();
          PageNode targetNode = PageNavigationUtils.searchPageNodeByUri(nav, uri);
          Object parentNode = PageNavigationUtils.searchParentNode(nav, uri);
          List<PageNode> children = new ArrayList<PageNode>();
@@ -846,7 +878,7 @@ public class UINavigationNodeSelector extends UIContainer
          UINavigationNodeSelector uiNodeSelector = event.getSource().getAncestorOfType(UINavigationNodeSelector.class);
          pcontext.addUIComponentToUpdateByAjax(uiNodeSelector);
 
-         PageNavigation nav = uiNodeSelector.getSelectedNavigation();
+         PageNavigation nav = uiNodeSelector.getFilteredEdittedNavigation();
          if (nav == null)
          {
             return;
@@ -880,24 +912,24 @@ public class UINavigationNodeSelector extends UIContainer
       }
    }
 
-   public SelectedNode getSelectedNode()
+   public TreeNodeData getSelectedNode()
    {
-      return selectedNode;
+      return edittedTreeNodeData;
    }
 
    public PageNavigation getSelectedNavigation()
    {
-      return selectedNode == null ? null : selectedNode.getPageNavigation();
+      return edittedTreeNodeData == null ? null : edittedTreeNodeData.getPageNavigation();
    }
 
    public PageNode getSelectedPageNode()
    {
-      return selectedNode == null ? null : selectedNode.getNode();
+      return edittedTreeNodeData == null ? null : edittedTreeNodeData.getNode();
    }
 
    public String getUpLevelUri()
    {
-      return selectedNode.getParentNode().getUri();
+      return edittedTreeNodeData.getParentNode().getUri();
    }
 
    public List<PageNavigation> getDeleteNavigations()
@@ -905,7 +937,15 @@ public class UINavigationNodeSelector extends UIContainer
       return deleteNavigations;
    }
 
-   public static class SelectedNode
+   /**
+    *   This class encapsulate data bound to an editted tree node. It consists of a page node (to be added,
+    * removed, moved) its parent node and its navigation
+    * 
+    * @author <a href="mailto:hoang281283@gmail.com">Minh Hoang TO</a>
+    * @version $Id$
+    *
+    */
+   public static class TreeNodeData
    {
 
       private PageNavigation nav;
@@ -918,11 +958,21 @@ public class UINavigationNodeSelector extends UIContainer
 
       private boolean cloneNode = false;
 
-      public SelectedNode(PageNavigation nav, PageNode parentNode, PageNode node)
+      public TreeNodeData(PageNavigation nav, PageNode parentNode, PageNode node)
       {
          this.nav = nav;
          this.parentNode = parentNode;
          this.node = node;
+      }
+      
+      public TreeNodeData(PageNavigation nav)
+      {
+         this.nav = nav;
+         List<PageNode> children = nav.getNodes();
+         if(children != null && children.size() > 0)
+         {
+            this.node = children.get(0);
+         }
       }
 
       public PageNavigation getPageNavigation()

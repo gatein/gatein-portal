@@ -26,7 +26,6 @@ import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.Visibility;
-import org.exoplatform.services.organization.User;
 import org.exoplatform.services.resources.ResourceBundleManager;
 import org.exoplatform.webui.application.WebuiRequestContext;
 
@@ -58,6 +57,8 @@ public class PageNavigationUtils
       }
    }
 
+   // Minh Hoang TO
+   //TODO: Rewrite this method with a better algorithm by spliting the uri
    public static PageNode[] searchPageNodesByUri(PageNode node, String uri)
    {
       if (node.getUri().equals(uri))

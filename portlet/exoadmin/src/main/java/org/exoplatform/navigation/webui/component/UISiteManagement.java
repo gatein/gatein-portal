@@ -79,7 +79,6 @@ import javax.servlet.http.HttpServletRequest;
 public class UISiteManagement extends UIContainer
 {
 
-   //public static String[] SELECT_ACTIONS = {"EditPortalLayout", "EditNavigation", "DeletePortal"} ;
    public static String[] ACTIONS = {"EditNavigation", "DeletePortal", "EditPortalLayout"};
 
    private LazyPageList pageList;
@@ -91,7 +90,6 @@ public class UISiteManagement extends UIContainer
       UIPopupWindow editNavigation = addChild(UIPopupWindow.class, null, null);
       editNavigation.setWindowSize(400, 400);
       editNavigation.setId(editNavigation.getId() + "-" + UUID.randomUUID().toString().replaceAll("-", ""));
-      //loadPortalConfigs();
    }
 
    public List<PortalConfig> getPortalConfigs() throws Exception
@@ -183,12 +181,12 @@ public class UISiteManagement extends UIContainer
 
    }
 
-   public PageNavigation getSelectedNavigation()
+   public PageNavigation getOriginalSelectedNavigation()
    {
       return selectedNavigation;
    }
 
-   public void setSelectedNavigation(PageNavigation navigation)
+   public void setOriginalSelectedNavigation(PageNavigation navigation)
    {
       selectedNavigation = navigation;
    }
@@ -349,16 +347,26 @@ public class UISiteManagement extends UIContainer
          naviManager.setOwner(portalName);
          naviManager.setOwnerType(PortalConfig.PORTAL_TYPE);
 
-         PageNavigation navi = dataService.getPageNavigation(PortalConfig.PORTAL_TYPE, portalName);
-         //Filter the navigation
-         navi = PageNavigationUtils.filterNavigation(navi, context.getRemoteUser(), true);
-
-         uicomp.setSelectedNavigation(navi);
+         PageNavigation originalNavi = dataService.getPageNavigation(PortalConfig.PORTAL_TYPE, portalName);
+         PageNavigation filteredNavi = null;
+         try{
+            filteredNavi = PageNavigationUtils.filterNavigation(originalNavi, prContext.getRemoteUser(), true);
+         }
+         catch(Exception ex)
+         {
+            
+         }
+         
+         uicomp.setOriginalSelectedNavigation(originalNavi);
          UINavigationNodeSelector selector = naviManager.getChild(UINavigationNodeSelector.class);
-         ArrayList<PageNavigation> list = new ArrayList<PageNavigation>();
-         list.add(navi);
-         selector.initNavigations(list);
-         //selector.removeChild(UIRightClickPopupMenu.class);
+         //ArrayList<PageNavigation> list = new ArrayList<PageNavigation>();
+         //list.add(navi);
+         //selector.initNavigations(list);
+         selector.setOriginalEdittedNavigation(originalNavi);
+         //selector.setFilteredEdittedNavigation(filteredNavi);
+         selector.setFilteredEdittedNavigation(originalNavi);
+         selector.initTreeData();
+
          popUp.setUIComponent(naviManager);
          popUp.setShowMask(true);
          popUp.setShow(true);
@@ -373,7 +381,7 @@ public class UISiteManagement extends UIContainer
       {
          UIPageNodeForm2 uiPageNodeForm = event.getSource();
          UISiteManagement uiSiteManagement = uiPageNodeForm.getAncestorOfType(UISiteManagement.class);
-         PageNavigation selectedNavigation = uiSiteManagement.getSelectedNavigation();
+         PageNavigation selectedNavigation = uiSiteManagement.getOriginalSelectedNavigation();
          UIPopupWindow uiNavigationPopup = uiSiteManagement.getChild(UIPopupWindow.class);
          UINavigationManagement pageManager =
             uiPageNodeForm.createUIComponent(UINavigationManagement.class, null, null);
