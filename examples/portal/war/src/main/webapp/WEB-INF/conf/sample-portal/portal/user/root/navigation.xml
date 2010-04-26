@@ -31,7 +31,7 @@
 			<uri>sample-user</uri>
 			<name>sample-user</name>
 			<label>Sample-Portal Page User</label>
-			<page-reference>user::root::sales</page-reference>
+			<page-reference>user::root::sampledashboard</page-reference>
 		</node>
 	</page-nodes>
 </node-navigation>
