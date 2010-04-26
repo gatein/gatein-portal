@@ -77,11 +77,6 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
-	<td>xpath=//div[@id='UISiteManagement']//div[@class='UIAction']//div[@class='ActionButton BlueButton']</td>
-	<td></td>
-</tr>
-<tr>
 	<td>echo</td>
 	<td>--Choose Portal Setting--</td>
 	<td></td>
@@ -92,14 +87,34 @@
 	<td></td>
 </tr>
 <tr>
+	<td>type</td>
+	<td>name</td>
+	<td>test_por_09_009</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>locale</td>
+	<td>label=English</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>skin</td>
+	<td>label=Default</td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>--Choose Properties--</td>
+	<td></td>
+</tr>
+<tr>
 	<td>clickAt</td>
 	<td>xpath=//div[@id='UIMaskWorkspace']//div[@class='TabsContainer']/div[2]//div[@class='MiddleTab']</td>
 	<td></td>
 </tr>
 <tr>
-	<td>type</td>
-	<td>name</td>
-	<td>test_por_09_009</td>
+	<td>select</td>
+	<td>sessionAlive</td>
+	<td>label=On Demand</td>
 </tr>
 <tr>
 	<td>echo</td>
@@ -108,7 +123,12 @@
 </tr>
 <tr>
 	<td>clickAt</td>
-	<td>xpath=//div[@id='UIMaskWorkspace']//div[@class='TabsContainer']/div[4]//div[@class='MiddleTab']</td>
+	<td>xpath=//div[@id='UIMaskWorkspace']//div[@class='TabsContainer']/div[3]//div[@class='MiddleTab']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>--Choose Acess Permission Setting</td>
 	<td></td>
 </tr>
 <tr>
@@ -117,6 +137,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>echo</td>
+	<td>--Choose Edit Permission Setting</td>
+	<td></td>
+</tr>
+<tr>
 	<td>waitForElementPresent</td>
 	<td>link=Edit Permission Setting</td>
 	<td></td>
@@ -134,7 +159,7 @@
 <tr>
 	<td>clickAt</td>
 	<td>link=Select Permission</td>
-	<td></td>
+	<td>1,1</td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
@@ -222,18 +247,53 @@
 	<td>Test_POR_09_009</td>
 </tr>
 <tr>
+	<td>select</td>
+	<td>locale</td>
+	<td>label=English</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>skin</td>
+	<td>label=Default</td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>--Choose Properties--</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>xpath=//div[@id='UIMaskWorkspace']//div[@class='TabsContainer']/div[2]//div[@class='MiddleTab']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>sessionAlive</td>
+	<td>label=On Demand</td>
+</tr>
+<tr>
 	<td>echo</td>
 	<td>--Select Permission Setting--</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAt</td>
-	<td>xpath=//div[@id='UIMaskWorkspace']//div[@class='TabsContainer']/div[4]//div[@class='MiddleTab']</td>
+	<td>xpath=//div[@id='UIMaskWorkspace']//div[@class='TabsContainer']/div[3]//div[@class='MiddleTab']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>--Choose Acess Permission Setting</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAt</td>
 	<td>publicMode</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>--Choose Edit Permission Setting--</td>
 	<td></td>
 </tr>
 <tr>
@@ -324,6 +384,11 @@
 <tr>
 	<td>waitForTextPresent</td>
 	<td>The Best of eXo and JBoss Portal</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>--Return to Portal Navigation to detele portal--</td>
 	<td></td>
 </tr>
 <tr>
