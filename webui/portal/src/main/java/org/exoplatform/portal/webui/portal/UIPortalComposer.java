@@ -610,9 +610,6 @@ public class UIPortalComposer extends UIContainer
       }
    }
 
-   // -----------------------------Page's
-   // Listeners------------------------------------------//
-
    static public class ViewProperties2ActionListener extends EventListener<UIPortalComposer>
    {
       public void execute(Event<UIPortalComposer> event) throws Exception

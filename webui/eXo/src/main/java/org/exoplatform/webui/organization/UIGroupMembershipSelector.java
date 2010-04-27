@@ -208,23 +208,12 @@ public class UIGroupMembershipSelector extends UIContainer
          WebuiRequestContext pcontext = event.getRequestContext();
 
          UIPopupWindow uiPopup = uiSelector.getParent();
-         //TODO: Tung.Pham modified
-         //-----------------------------------
-         //UIForm uiForm = event.getSource().getAncestorOfType(UIForm.class);//TODO: Remove duplicated call to event.getSource()
          UIForm uiForm = uiSelector.getAncestorOfType(UIForm.class);
-         //-----------------------------------
-
-         //TODO: by Minh Hoang TO, retrieve the UIPermissionSelector and update this component
-         //UIPermissionSelector pSelector=uiPopup.getAncestorOfType(UIPermissionSelector.class);
-         //if(pSelector!=null){
-         //	event.getRequestContext().addUIComponentToUpdateByAjax(pSelector);
-         //}
 
          if (uiSelector.getCurrentGroup() == null)
          {
             UIApplication uiApp = pcontext.getUIApplication();
             uiApp.addMessage(new ApplicationMessage("UIGroupMembershipSelector.msg.selectGroup", null));
-            //            pcontext.addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
             uiPopup.setShow(true);
             return;
          }
@@ -233,12 +222,6 @@ public class UIGroupMembershipSelector extends UIContainer
          uiPermission.broadcast(event, event.getExecutionPhase());
          uiPopup.setShow(false);
 
-         //			UIForm uiForm = event.getSource().getAncestorOfType(UIForm.class) ;
-         //			if(uiForm != null) {
-         //			event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()); 
-         //			}else{
-         //			event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup);
-         //			}
       }
    }
 
@@ -257,14 +240,6 @@ public class UIGroupMembershipSelector extends UIContainer
          uiPopup.setShow(true);
 
          event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup);//TODO: Update relevant tab panes
-         /*
-         UIForm uiForm = event.getSource().getAncestorOfType(UIForm.class) ;
-         if(uiForm != null) {
-         event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()); 
-         }else{
-         event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup);
-         }
-          */
       }
    }
 
