@@ -22,8 +22,7 @@
 	
 	boolean userCouldEditNavigation = uicomponent.hasEditPermissionOnNavigation();
 	boolean userCouldEditPage = uicomponent.hasEditPermissionOnPage();
-	//boolean userCouldEditPortal = uicomponent.hasEditPermissionOnPortal();
-	boolean userCouldEditPortal = userCouldEditNavigation;
+	boolean userCouldEditPortal = uicomponent.hasEditPermissionOnPortal();
 	
 	PageNavigation selectedNav = uicomponent.getSelectedNavigation();
 	if (selectedNav != null) {
