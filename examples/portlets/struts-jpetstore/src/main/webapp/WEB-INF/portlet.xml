@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to You under the Apache License, Version 2.0
+(the "License"); you may not use this file except in compliance with
+the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+  $Id: portlet.xml 545676 2007-06-09 00:52:56Z ate $
+-->
+<portlet-app id="jpetstore"
+    xmlns="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd" version="1.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd">    
+  <portlet id="JPetStorePortlet">
+    <description>The JPetstore Portlet runs the JPetstore Struts application inside of a portlet. This is a good demo of how to develop Struts portlets.</description>      
+    <portlet-name>JPetstore</portlet-name>
+    <display-name>JPetstore Portlet</display-name>
+    <portlet-class>org.apache.portals.bridges.struts.StrutsPortlet</portlet-class>
+    <init-param>
+      <name>ServletContextProvider</name>
+      <value>org.gatein.pc.bridge.GateInServletContextProvider</value>
+    </init-param>
+    <init-param>
+      <name>PortletScopeStrutsSession</name>
+      <value>true</value>
+    </init-param>
+    <init-param>
+      <name>ViewPage</name>
+      <value>/index.shtml</value>
+    </init-param>
+    <init-param>
+      <name>HelpPage</name>
+      <value>/help.shtml</value>
+    </init-param>      
+    <expiration-cache>-1</expiration-cache>
+    <supports>
+      <mime-type>text/html</mime-type>
+      <portlet-mode>VIEW</portlet-mode>
+      <portlet-mode>HELP</portlet-mode>
+    </supports>
+    <portlet-info>
+      <title>JPetstore</title>
+      <!--keywords>Struts,pet,petstore,store,jpetstore,demo,bridge</keywords-->
+    </portlet-info>
+  </portlet>
+</portlet-app>
+
