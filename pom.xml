@@ -26,7 +26,7 @@
    <parent>
       <groupId>org.gatein</groupId>
       <artifactId>gatein-parent</artifactId>
-      <version>1.0.0-GA</version>
+      <version>1.0.1-GA</version>
    </parent>
 
    <groupId>org.exoplatform.portal</groupId>
@@ -37,24 +37,24 @@
    <name>GateIn - Portal</name>
 
    <properties>
-      <org.exoplatform.kernel.version>2.2.1-CR1</org.exoplatform.kernel.version>
-      <org.exoplatform.core.version>2.3.1-CR1</org.exoplatform.core.version>
-      <org.exoplatform.ws.version>2.1.1-CR1</org.exoplatform.ws.version>
-      <org.exoplatform.jcr.version>1.12.1-CR1</org.exoplatform.jcr.version>
+      <org.exoplatform.kernel.version>2.2.1-GA</org.exoplatform.kernel.version>
+      <org.exoplatform.core.version>2.3.1-GA</org.exoplatform.core.version>
+      <org.exoplatform.ws.version>2.1.1-GA</org.exoplatform.ws.version>
+      <org.exoplatform.jcr.version>1.12.1-GA</org.exoplatform.jcr.version>
       <org.jibx.version>1.2.1</org.jibx.version>
       <org.shindig.version>1.0-r790473-Patch02</org.shindig.version>
       <nl.captcha.simplecaptcha.version>1.1.1-GA-Patch01</nl.captcha.simplecaptcha.version>
-      <org.gatein.common.version>2.0.0-GA</org.gatein.common.version>
-      <org.gatein.wci.version>2.0.0-GA</org.gatein.wci.version>
-      <org.gatein.pc.version>2.1.0-GA</org.gatein.pc.version>
+      <org.gatein.common.version>2.0.2-GA</org.gatein.common.version>
+      <org.gatein.wci.version>2.0.1-GA</org.gatein.wci.version>
+      <org.gatein.pc.version>2.1.1-GA</org.gatein.pc.version>
       <org.picketlink.idm>1.1.2.CR01</org.picketlink.idm>
-      <org.gatein.wsrp.version>1.1.0-CR01</org.gatein.wsrp.version>
+      <org.gatein.wsrp.version>1.1.0-GA</org.gatein.wsrp.version>
       <org.gatein.mop.version>1.0.1-CR01</org.gatein.mop.version>
       <org.slf4j.version>1.5.6</org.slf4j.version>
       <rhino.version>1.6R5</rhino.version>
       <org.codehaus.groovy.version>1.6.5</org.codehaus.groovy.version>
       <javax.servlet.version>2.5</javax.servlet.version>
-      <version.chromattic>1.0.1-cr1</version.chromattic>
+      <version.chromattic>1.0.1</version.chromattic>
       <version.reflect>1.0.0</version.reflect>
       <jcip.version>1.0</jcip.version>
 
@@ -198,6 +198,17 @@
             <groupId>org.exoplatform.jcr</groupId>
             <artifactId>exo.jcr.component.core</artifactId>
             <version>${org.exoplatform.jcr.version}</version>
+            <exclusions>
+              <exclusion>
+                <groupId>org.jboss.cache</groupId>
+                <artifactId>jbosscache-core</artifactId>
+              </exclusion>
+            </exclusions>
+         </dependency>
+         <dependency>
+          <groupId>org.jboss.cache</groupId>
+          <artifactId>jbosscache-core</artifactId>
+          <version>3.2.4.GA</version>
          </dependency>
          <dependency>
             <groupId>org.exoplatform.jcr</groupId>
@@ -882,6 +893,20 @@
 
    <!-- To be removed and replaced by settings in user config -->
    <repositories>
+      <repository>
+        <id>jboss-public-repository-group</id>
+        <name>JBoss Public Maven Repository Group</name>
+        <url>https://repository.jboss.org/nexus/content/groups/public/</url>
+        <layout>default</layout>
+        <releases>
+          <enabled>true</enabled>
+          <updatePolicy>never</updatePolicy>
+        </releases>
+        <snapshots>
+          <enabled>true</enabled>
+          <updatePolicy>never</updatePolicy>
+        </snapshots>
+      </repository>
       <repository>
          <id>repository.jboss.org</id>
          <url>http://repository.jboss.org/maven2</url>
