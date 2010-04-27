@@ -4,12 +4,12 @@
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="selenium.base" href="" />
-<title>_09dung</title>
+<title>Test_SNF_PRL_09_ImportApplication</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">_09dung</td></tr>
+<tr><td rowspan="1" colspan="3">Test_SNF_PRL_09_ImportApplication</td></tr>
 </thead><tbody>
 <tr>
 	<td>open</td>
@@ -37,23 +37,53 @@
 	<td>gtn</td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>//div[@id='UIPortalLoginFormAction']/div/div/div/a</td>
+	<td>clickAt</td>
+	<td>xpath=//div[@id='UIPortalLoginFormAction']/div/div/div/a</td>
 	<td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
+	<td>echo</td>
+	<td>--Go to Application Registry--</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
 	<td>link=Application Registry</td>
 	<td></td>
 </tr>
 <tr>
-	<td>click</td>
-	<td>//div[@onclick=&quot;javascript:if(confirm('This action will automatically create categories and import all the gadgets and portlets on it.'))ajaxGet('/portal/private/classic/administration/registry?portal:componentId=6ab1d351-d18c-42c0-8c59-94bc2d12f83b&amp;portal:type=action&amp;uicomponent=UIApplicationOrganizer&amp;op=ImportAllApplications&amp;ajaxRequest=true')&quot;]</td>
+	<td>clickAt</td>
+	<td>link=Application Registry</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>--Click Import Application--</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>xpath=//div[@id='UIApplicationRegistryPortlet']/div[2]/div[2]/div/div/div[2]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>xpath=//div[@id='UIApplicationRegistryPortlet']/div[2]/div[2]/div/div/div[2]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>assertConfirmation</td>
 	<td>This action will automatically create categories and import all the gadgets and portlets on it.</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>--Sign out--</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Sign out</td>
 	<td></td>
 </tr>
 <tr>
