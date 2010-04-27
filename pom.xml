@@ -49,7 +49,7 @@
       <org.gatein.pc.version>2.1.1-GA</org.gatein.pc.version>
       <org.picketlink.idm>1.1.2.CR01</org.picketlink.idm>
       <org.gatein.wsrp.version>1.1.0-GA</org.gatein.wsrp.version>
-      <org.gatein.mop.version>1.0.1-CR01</org.gatein.mop.version>
+      <org.gatein.mop.version>1.0.2-GA</org.gatein.mop.version>
       <org.slf4j.version>1.5.6</org.slf4j.version>
       <rhino.version>1.6R5</rhino.version>
       <org.codehaus.groovy.version>1.6.5</org.codehaus.groovy.version>
