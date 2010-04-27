@@ -79,10 +79,12 @@ public class UIGroupMembershipSelector extends UIContainer
    public void processRender(WebuiRequestContext context) throws Exception
    {
       OrganizationService service = getApplicationComponent(OrganizationService.class);
-      Collection<?> sibblingsGroup = service.getGroupHandler().findGroups(null);
       UITree tree = getChild(UITree.class);
-      if (tree != null)
+      if (tree != null && tree.getSibbling() == null)
+      {
+         Collection<?> sibblingsGroup = service.getGroupHandler().findGroups(null);
          tree.setSibbling((List)sibblingsGroup);
+      }
 
       Collection<?> collection = service.getMembershipTypeHandler().findMembershipTypes();
       listMemberhip = new ArrayList<String>(5);
@@ -193,14 +195,6 @@ public class UIGroupMembershipSelector extends UIContainer
          UIPopupWindow uiPopup = uiSelector.getParent();
          uiPopup.setShow(true);
          event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup);//TODO: Update relevant tab panes
-         /*
-         UIForm uiForm = event.getSource().getAncestorOfType(UIForm.class) ;
-         if(uiForm != null) {
-         event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()); 
-         }else{
-         event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup);
-         }
-          */
       }
    }
 
