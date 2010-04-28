@@ -48,7 +48,7 @@
 </tr>
 <tr>
 	<td>clickAt</td>
-	<td>//div[@id='UIPortalLoginFormAction']/div/div/div</td>
+	<td>xpath=//div[@id='UIPortalLoginFormAction']/div/div/div</td>
 	<td></td>
 </tr>
 <tr>
@@ -83,12 +83,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@class='IconControl AddNewIcon']</td>
+	<td>xpath=//div[@class='IconControl AddNewIcon']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAt</td>
-	<td>//div[@class='IconControl AddNewIcon']</td>
+	<td>xpath=//div[@class='IconControl AddNewIcon']</td>
 	<td>1,1</td>
 </tr>
 <tr>
@@ -142,11 +142,6 @@
 	<td></td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
-	<td>//div[@class='SelectedItem ItemContent']/a[@title='Calculator']</td>
-	<td></td>
-</tr>
-<tr>
 	<td>verifyElementNotPresent</td>
 	<td>//a[@title='Date &amp; Time']</td>
 	<td></td>
@@ -158,12 +153,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@onclick=&quot;javascript:ajaxGet('/portal/private/classic/administration/registry?portal:componentId=bf8f4620-4e76-4423-b3b9-836883e47806&amp;portal:type=action&amp;uicomponent=UIGadgetManagement&amp;op=AddLocalGadget&amp;ajaxRequest=true')&quot;]</td>
+	<td>//div[@id='UIApplicationRegistryPortlet']/div[2]/div[2]/div/div/div[2]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAt</td>
-	<td>//div[@onclick=&quot;javascript:ajaxGet('/portal/private/classic/administration/registry?portal:componentId=bf8f4620-4e76-4423-b3b9-836883e47806&amp;portal:type=action&amp;uicomponent=UIGadgetManagement&amp;op=AddLocalGadget&amp;ajaxRequest=true')&quot;]</td>
+	<td>//div[@id='UIApplicationRegistryPortlet']/div[2]/div[2]/div/div/div[2]</td>
 	<td></td>
 </tr>
 <tr>
@@ -188,22 +183,17 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//a[@onclick=&quot;javascript:if(confirm('Are you sure to delete this gadget?'))ajaxGet('/portal/private/classic/administration/registry?portal:componentId=bf8f4620-4e76-4423-b3b9-836883e47806&amp;portal:type=action&amp;uicomponent=UIGadgetManagement&amp;op=RemoveGadget&amp;objectId=SNF_PRL_13&amp;ajaxRequest=true')&quot;]</td>
+	<td>//div[@class='SelectedItem ItemContent']//a[2]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAt</td>
-	<td>//a[@onclick=&quot;javascript:if(confirm('Are you sure to delete this gadget?'))ajaxGet('/portal/private/classic/administration/registry?portal:componentId=bf8f4620-4e76-4423-b3b9-836883e47806&amp;portal:type=action&amp;uicomponent=UIGadgetManagement&amp;op=RemoveGadget&amp;objectId=SNF_PRL_13&amp;ajaxRequest=true')&quot;]</td>
+	<td>//div[@class='SelectedItem ItemContent']//a[2]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForConfirmation</td>
 	<td>Are you sure to delete this gadget?</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>//div[@class='SelectedItem ItemContent']/a[@title='Calculator']</td>
 	<td></td>
 </tr>
 <tr>
