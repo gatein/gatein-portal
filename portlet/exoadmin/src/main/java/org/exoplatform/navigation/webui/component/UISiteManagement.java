@@ -337,36 +337,31 @@ public class UISiteManagement extends UIContainer
       {
          UISiteManagement uicomp = event.getSource();
          String portalName = event.getRequestContext().getRequestParameter(OBJECTID);
-         UserPortalConfigService service = uicomp.getApplicationComponent(UserPortalConfigService.class);
          DataStorage dataService = uicomp.getApplicationComponent(DataStorage.class);
          PortalRequestContext prContext = Util.getPortalRequestContext();
          WebuiRequestContext context = event.getRequestContext();
          UIApplication uiApplication = context.getUIApplication();
 
-         UserPortalConfig userConfig = service.getUserPortalConfig(portalName, prContext.getRemoteUser());
-         if (userConfig == null)
+         PageNavigation originalNavi = dataService.getPageNavigation(PortalConfig.PORTAL_TYPE, portalName);
+         if (originalNavi == null)
          {
             uiApplication.addMessage(new ApplicationMessage("UISiteManagement.msg.portal-not-exist",
                new String[]{portalName}));
             return;
          }
-         PortalConfig portalConfig = userConfig.getPortalConfig();
-
+         
          UserACL userACL = uicomp.getApplicationComponent(UserACL.class);
-         if (!userACL.hasEditPermission(portalConfig))
+         if (!userACL.hasEditPermission(originalNavi))
          {
             uiApplication.addMessage(new ApplicationMessage("UISiteManagement.msg.Invalid-editPermission", null));;
             return;
          }
 
          UIPopupWindow popUp = uicomp.getChild(UIPopupWindow.class);
-
          UINavigationManagement naviManager = popUp.createUIComponent(UINavigationManagement.class, null, null, popUp);
-
          naviManager.setOwner(portalName);
          naviManager.setOwnerType(PortalConfig.PORTAL_TYPE);
 
-         PageNavigation originalNavi = dataService.getPageNavigation(PortalConfig.PORTAL_TYPE, portalName);
          PageNavigation filteredNavi = null;
          try{
             filteredNavi = PageNavigationUtils.filterNavigation(originalNavi, prContext.getRemoteUser(), true);
@@ -378,11 +373,8 @@ public class UISiteManagement extends UIContainer
          
          uicomp.setOriginalSelectedNavigation(originalNavi);
          UINavigationNodeSelector selector = naviManager.getChild(UINavigationNodeSelector.class);
-         //ArrayList<PageNavigation> list = new ArrayList<PageNavigation>();
-         //list.add(navi);
-         //selector.initNavigations(list);
          selector.setOriginalEdittedNavigation(originalNavi);
-         //selector.setFilteredEdittedNavigation(filteredNavi);
+         //TODO: Set the filteredNavi instead
          selector.setFilteredEdittedNavigation(originalNavi);
          selector.initTreeData();
 
