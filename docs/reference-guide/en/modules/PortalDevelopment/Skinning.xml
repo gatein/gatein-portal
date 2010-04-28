@@ -489,7 +489,6 @@ skin/Stylesheet.css</programlisting>
     administrator choose a new application to add on a page he can decide
     which style of decoration would go around the window if any.</para>
 
-    <para><emphasis role="bold">TODO: replace french image with english one.</emphasis></para>
     <para><mediaobject>
         <imageobject>
           <imagedata fileref="images/PortalDevelopment/Skinning/windowStyles.png" format="PNG"
@@ -810,22 +809,15 @@ for a theme called <literal>DefaultTheme</literal>.
         cells are distributed around the BODY cell. You can use the width,
         height and background image properties to achieve any decoration
         effect that you want.</para>
+ 
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/PortalDevelopment/Skinning/decoratorPattern.png" format="PNG"
+                     width="418" />
+          </imageobject>
+        </mediaobject>
 
-        <para><emphasis role="bold">TODO: replace ascii art with diagram </emphasis></para>
         <programlisting role="HTML">
------------------------------------------------------------------------
-|            |                                          |             |
-| TopLeft    |               TopCenter                  |    TopRight |
-|            |                                          |             |
------------------------------------------------------------------------
-|            |                                          |             |
-| CenterLeft |                 BODY                     | CenterRight |
-|            |                                          |             |
------------------------------------------------------------------------
-|            |                                          |             |
-| BottomLeft |              BottomCenter                | BottomRight |
-|            |                                          |             |
------------------------------------------------------------------------
 &lt;div class="Parent"&gt;
   &lt;div class="TopLeft"&gt;
     &lt;div class="TopRight"&gt;
@@ -855,15 +847,14 @@ for a theme called <literal>DefaultTheme</literal>.
         browser the added or removed space will be taken from the right
         block.</para>
 
-		<para><emphasis role="bold">TODO: replace ascii art with diagram </emphasis></para>
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/PortalDevelopment/Skinning/leftMarginPattern.png" format="PNG"
+                     width="303" />
+          </imageobject>
+        </mediaobject>
+
         <programlisting role="HTML">
-|                         |                                                |      
-|                         |                                                |      
-| |&lt;--- fixed width ---&gt;| |                   will expand to right ----&gt;   |      
-|                         |                                                |      
-|                         |                                                |      
-|                         |                                                |      
-----
 &lt;div class="Parent"&gt;
   &lt;div style="float: left; width: 100px"&gt;
   &lt;/div&gt;
