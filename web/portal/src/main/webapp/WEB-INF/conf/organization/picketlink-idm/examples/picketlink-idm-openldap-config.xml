@@ -340,6 +340,16 @@
             <name>sortExtensionSupported</name>
             <value>false</value>
           </option>
+          <option>
+            <name>customJNDIConnectionParameters</name>
+            <value>com.sun.jndi.ldap.connect.pool=true</value>
+          </option>
+          <option>
+            <name>customSystemProperties</name>
+            <value>com.sun.jndi.ldap.connect.pool.maxsize=300000</value>
+            <value>com.sun.jndi.ldap.connect.pool.protocol=plain ssl</value>
+            <value>com.sun.jndi.ldap.connect.pool.debug=fine</value>
+          </option>
         </options>
       </identity-store>
     </identity-stores>
