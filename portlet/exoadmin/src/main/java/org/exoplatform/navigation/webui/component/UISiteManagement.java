@@ -191,14 +191,12 @@ public class UISiteManagement extends UIContainer
       selectedNavigation = navigation;
    }
 
-   public boolean isExistInPageList(String portalName) throws Exception {
+   private boolean stillKeptInPageList(String portalName) throws Exception {
       List<PortalConfig> portals = this.getPortalConfigs();
-     
       for(PortalConfig p : portals) {
          if(p.getName().equals(portalName))
             return true;            
       }
-      
       return false;
    }
    
@@ -208,14 +206,7 @@ public class UISiteManagement extends UIContainer
       {
          UISiteManagement uicomp = event.getSource();
          String portalName = event.getRequestContext().getRequestParameter(OBJECTID);
-         
-         //TODO nguyenanhkien2a@gmail.com (GTNPORTAL-1079)
-         //We should check portal is existing in current UI to ensure exactly request of Delete action, not be of Refresh(F5) or Malware
-         if(!uicomp.isExistInPageList(portalName))
-         {
-            return;
-         }
-         
+                  
          UserPortalConfigService service = event.getSource().getApplicationComponent(UserPortalConfigService.class);
          String defaultPortalName = service.getDefaultPortal();
 
@@ -242,9 +233,12 @@ public class UISiteManagement extends UIContainer
          }
          else
          {
-            uiPortalApp.addMessage(new ApplicationMessage("UISiteManagement.msg.portal-not-exist",
-               new String[]{portalName}));
-            return;
+            if (uicomp.stillKeptInPageList(portalName))
+            {
+               uiPortalApp.addMessage(new ApplicationMessage("UISiteManagement.msg.portal-not-exist",
+                  new String[]{portalName}));
+               return;
+            }
          }
 
          if (config == null && !Util.getUIPortal().getName().equals(portalName))
