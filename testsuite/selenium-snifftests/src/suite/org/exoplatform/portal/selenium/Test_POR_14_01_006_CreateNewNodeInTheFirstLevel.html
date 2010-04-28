@@ -4,13 +4,18 @@
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="selenium.base" href="" />
-<title>Test_POR_14_01_006</title>
+<title>Test_POR_14_01_006_CreateNewNodeInTheFirstLevel</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">Test_POR_14_01_006</td></tr>
+<tr><td rowspan="1" colspan="3">Test_POR_14_01_006_CreateNewNodeInTheFirstLevel</td></tr>
 </thead><tbody>
+<tr>
+	<td></td>
+	<td></td>
+	<td></td>
+</tr>
 <tr>
 	<td>open</td>
 	<td>/portal/public/classic</td>
@@ -42,12 +47,17 @@
 	<td>gtn</td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
+	<td>clickAt</td>
 	<td>xpath=//div[@id='UIPortalLoginFormAction']/div/div/div/a</td>
 	<td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
+	<td>waitForElementPresent</td>
+	<td>link=Group</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
 	<td>link=Group</td>
 	<td></td>
 </tr>
@@ -119,6 +129,11 @@
 <tr>
 	<td>clickAt</td>
 	<td>xpath=//div[@id='UIRepeater']//img[@class='SelectPageIcon']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>https://jira.jboss.org/jira/browse/GTNPORTAL-1129</td>
 	<td></td>
 </tr>
 <tr>
@@ -212,8 +227,23 @@
 	<td></td>
 </tr>
 <tr>
+	<td>echo</td>
+	<td>--Sign out--</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Sign out</td>
+	<td></td>
+</tr>
+<tr>
 	<td>clickAt</td>
 	<td>link=Sign out</td>
+	<td></td>
+</tr>
+<tr>
+	<td></td>
+	<td></td>
 	<td></td>
 </tr>
 
