@@ -35,6 +35,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.picketlink.idm.cache.APICacheProvider;
+import org.picketlink.idm.spi.cache.IdentityStoreCacheProvider;
 
 
 /*
@@ -50,7 +51,9 @@ import org.picketlink.idm.cache.APICacheProvider;
 public class PicketLinkIDMCacheService
 {
 
-   private final List<APICacheProvider> cacheProviders = new LinkedList<APICacheProvider>();
+   private final List<APICacheProvider> apiCacheProviders = new LinkedList<APICacheProvider>();
+
+   private final List<IdentityStoreCacheProvider> storeCacheProviders = new LinkedList<IdentityStoreCacheProvider>();
 
    public PicketLinkIDMCacheService()
    {
@@ -61,17 +64,33 @@ public class PicketLinkIDMCacheService
 
       if (cacheProvider != null)
       {
-         cacheProviders.add(cacheProvider);
+         apiCacheProviders.add(cacheProvider);
       }
 
    }
+
+   public void register(IdentityStoreCacheProvider cacheProvider)
+   {
+
+      if (cacheProvider != null)
+      {
+         storeCacheProviders.add(cacheProvider);
+      }
+
+   }
+
 
    @Managed
    @ManagedDescription("Ivalidate cache namespace")
    @Impact(ImpactType.WRITE)
    public void invalidate(@ManagedDescription("Cache namespace") @ManagedName("namespace")String namespace)
    {
-      for (APICacheProvider cacheProvider : cacheProviders)
+      for (APICacheProvider cacheProvider : apiCacheProviders)
+      {
+         cacheProvider.invalidate(namespace);
+      }
+
+      for (IdentityStoreCacheProvider cacheProvider : storeCacheProviders)
       {
          cacheProvider.invalidate(namespace);
       }
@@ -82,7 +101,12 @@ public class PicketLinkIDMCacheService
    @Impact(ImpactType.WRITE)
    public void invalidateAll()
    {
-      for (APICacheProvider cacheProvider : cacheProviders)
+      for (APICacheProvider cacheProvider : apiCacheProviders)
+      {
+         cacheProvider.invalidateAll();
+      }
+
+      for (IdentityStoreCacheProvider cacheProvider : storeCacheProviders)
       {
          cacheProvider.invalidateAll();
       }

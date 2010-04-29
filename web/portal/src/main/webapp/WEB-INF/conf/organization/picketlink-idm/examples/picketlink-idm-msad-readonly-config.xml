@@ -336,7 +336,10 @@
             <name>customSystemProperties</name>
             <value>com.sun.jndi.ldap.connect.pool.maxsize=300000</value>
             <value>com.sun.jndi.ldap.connect.pool.protocol=plain ssl</value>
-            <value>com.sun.jndi.ldap.connect.pool.debug=fine</value>
+          </option>
+          <option>
+            <name>cache.providerRegistryName</name>
+            <value>storeCacheProvider</value>
           </option>
         </options>
       </identity-store>

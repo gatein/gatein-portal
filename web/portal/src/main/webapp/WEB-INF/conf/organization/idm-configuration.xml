@@ -90,12 +90,22 @@
       </value-param>
 
       <value-param>
-        <name>cacheConfig</name>
+        <name>apiCacheConfig</name>
         <value>war:/conf/organization/picketlink-idm/jboss-cache.xml</value>
       </value-param>
       
       <value-param profiles="cluster">
-        <name>cacheConfig</name>
+        <name>apiCacheConfig</name>
+        <value>war:/conf/organization/picketlink-idm/jboss-cache-cluster.xml</value>
+      </value-param>
+
+      <value-param>
+        <name>storeCacheConfig</name>
+        <value>war:/conf/organization/picketlink-idm/jboss-cache.xml</value>
+      </value-param>
+
+      <value-param profiles="cluster">
+        <name>storeCacheConfig</name>
         <value>war:/conf/organization/picketlink-idm/jboss-cache-cluster.xml</value>
       </value-param>
 

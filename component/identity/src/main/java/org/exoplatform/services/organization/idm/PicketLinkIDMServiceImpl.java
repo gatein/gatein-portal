@@ -31,11 +31,13 @@ import org.picketlink.idm.api.IdentitySessionFactory;
 import org.picketlink.idm.api.cfg.IdentityConfiguration;
 import org.picketlink.idm.common.exception.IdentityConfigurationException;
 import org.picketlink.idm.impl.cache.JBossCacheAPICacheProviderImpl;
+import org.picketlink.idm.impl.cache.JBossCacheIdentityStoreCacheProviderImpl;
 import org.picketlink.idm.impl.configuration.IdentityConfigurationImpl;
 import org.picketlink.idm.impl.configuration.jaxb2.JAXB2IdentityConfiguration;
 import org.picketlink.idm.spi.configuration.metadata.IdentityConfigurationMetaData;
 import org.picocontainer.Startable;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
@@ -61,15 +63,15 @@ public class PicketLinkIDMServiceImpl implements PicketLinkIDMService, Startable
 
    public static final String REALM_NAME_OPTION = "portalRealm";
 
-   public static final String CACHE_CONFIG_OPTION = "cacheConfig";
+   public static final String CACHE_CONFIG_API_OPTION = "apiCacheConfig";
+
+   public static final String CACHE_CONFIG_STORE_OPTION = "storeCacheConfig";
 
    private IdentitySessionFactory identitySessionFactory;
 
    private String config;
 
    private String realmName = "idm_realm";
-
-   private String cacheConfig;
 
    private IdentityConfiguration identityConfiguration;
 
@@ -87,7 +89,8 @@ public class PicketLinkIDMServiceImpl implements PicketLinkIDMService, Startable
       ValueParam config = initParams.getValueParam(PARAM_CONFIG_OPTION);
       ValueParam jndiName = initParams.getValueParam(PARAM_JNDI_NAME_OPTION);
       ValueParam realmName = initParams.getValueParam(REALM_NAME_OPTION);
-      ValueParam cacheConfig = initParams.getValueParam(CACHE_CONFIG_OPTION);
+      ValueParam apiCacheConfig = initParams.getValueParam(CACHE_CONFIG_API_OPTION);
+      ValueParam storeCacheConfig = initParams.getValueParam(CACHE_CONFIG_STORE_OPTION);
 
       if (config == null && jndiName == null)
       {
@@ -118,13 +121,31 @@ public class PicketLinkIDMServiceImpl implements PicketLinkIDMService, Startable
 
          identityConfiguration.getIdentityConfigurationRegistry().register(hibernateService.getSessionFactory(), "hibernateSessionFactory");
 
-         if (cacheConfig != null)
+         if (apiCacheConfig != null)
          {
-            InputStream configStream = confManager.getInputStream(cacheConfig.getValue());
-            JBossCacheAPICacheProviderImpl cacheProvider = new JBossCacheAPICacheProviderImpl();
-            cacheProvider.initialize(configStream);
-            picketLinkIDMCache.register(cacheProvider);
-            identityConfiguration.getIdentityConfigurationRegistry().register(cacheProvider, "apiCacheProvider");
+            InputStream configStream = confManager.getInputStream(apiCacheConfig.getValue());
+
+
+            JBossCacheAPICacheProviderImpl apiCacheProvider = new JBossCacheAPICacheProviderImpl();
+            apiCacheProvider.initialize(configStream);
+            picketLinkIDMCache.register(apiCacheProvider);
+            identityConfiguration.getIdentityConfigurationRegistry().register(apiCacheProvider, "apiCacheProvider");
+
+            configStream.close();
+
+         }
+         if (storeCacheConfig != null)
+         {
+            InputStream configStream = confManager.getInputStream(storeCacheConfig.getValue());
+
+            JBossCacheIdentityStoreCacheProviderImpl storeCacheProvider = new JBossCacheIdentityStoreCacheProviderImpl();
+            storeCacheProvider.initialize(configStream);
+            picketLinkIDMCache.register(storeCacheProvider);
+            identityConfiguration.getIdentityConfigurationRegistry().register(storeCacheProvider, "storeCacheProvider");
+
+
+            configStream.close();
+
          }
       }
       else
