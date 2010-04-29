@@ -344,14 +344,19 @@ public class UIGroupNavigationManagement extends UIContainer
       public void execute(Event<UIPageNodeForm2> event) throws Exception
       {
          UIPageNodeForm2 uiPageNodeForm = event.getSource();
+         PageNavigation contextNavigation = uiPageNodeForm.getContextPageNavigation();
+         
          UIGroupNavigationManagement uiGroupNavigation =
             uiPageNodeForm.getAncestorOfType(UIGroupNavigationManagement.class);
          PageNavigation selectedNavigation = uiGroupNavigation.getSelectedNavigation();
          UIPopupWindow uiNavigationPopup = uiGroupNavigation.getChild(UIPopupWindow.class);
-         UINavigationManagement pageManager =
+         UINavigationManagement navigationManager =
             uiPageNodeForm.createUIComponent(UINavigationManagement.class, null, null);
-         pageManager.setOwner(selectedNavigation.getOwnerId());
-         UINavigationNodeSelector selector = pageManager.getChild(UINavigationNodeSelector.class);
+         navigationManager.setOwner(contextNavigation.getOwnerId());
+         navigationManager.setOwnerType(contextNavigation.getOwnerType());
+         UINavigationNodeSelector selector = navigationManager.getChild(UINavigationNodeSelector.class);
+         selector.setEdittedNavigation(contextNavigation);
+         selector.initTreeData();
          
          if (uiPageNodeForm.getSelectedParent() instanceof PageNode)
          {
@@ -359,7 +364,7 @@ public class UIGroupNavigationManagement extends UIContainer
             selector.selectPageNodeByUri(selectedParent.getUri());
          }
          
-         uiNavigationPopup.setUIComponent(pageManager);
+         uiNavigationPopup.setUIComponent(navigationManager);
          uiNavigationPopup.setWindowSize(400, 400);
          uiNavigationPopup.setRendered(true);
 

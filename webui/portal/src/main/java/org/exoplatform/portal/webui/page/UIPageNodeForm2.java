@@ -72,6 +72,8 @@ public class UIPageNodeForm2 extends UIFormTabPane
 
    private Object selectedParent;
 
+   private PageNavigation contextPageNavigation;
+   
    final private static String SHOW_PUBLICATION_DATE = "showPublicationDate";
 
    final private static String START_PUBLICATION_DATE = "startPublicationDate";
@@ -208,24 +210,24 @@ public class UIPageNodeForm2 extends UIFormTabPane
       uiPopupWindowPage.processRender(context);
    }
 
-   public void setOwner(String owner_)
-   {
-      this.owner_ = owner_;
-   }
-
    public String getOwner()
    {
-      return owner_;
-   }
-
-   public void setOwnerType(String ownerType_)
-   {
-      this.ownerType_ = ownerType_;
+      return contextPageNavigation.getOwnerId();
    }
 
    public String getOwnerType()
    {
-      return ownerType_;
+      return contextPageNavigation.getOwnerType();
+   }
+   
+   public void setContextPageNavigation(PageNavigation _contextPageNav)
+   {
+      this.contextPageNavigation = _contextPageNav;
+   }
+   
+   public PageNavigation getContextPageNavigation()
+   {
+      return this.contextPageNavigation;
    }
 
    static public class SaveActionListener extends EventListener<UIPageNodeForm2>

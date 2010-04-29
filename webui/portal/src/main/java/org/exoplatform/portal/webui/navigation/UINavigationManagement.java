@@ -198,9 +198,7 @@ public class UINavigationManagement extends UIContainer
          PageNavigation nav = uiNodeSelector.getEdittedNavigation();
          uiNodeForm.setSelectedParent(nav);
 
-         // set owner type, owner
-         uiNodeForm.setOwner(nav.getOwnerId());
-         uiNodeForm.setOwnerType(nav.getOwnerType());
+         uiNodeForm.setContextPageNavigation(nav);
 
          uiManagementPopup.setWindowSize(800, 500);
          event.getRequestContext().addUIComponentToUpdateByAjax(uiManagementPopup.getParent());

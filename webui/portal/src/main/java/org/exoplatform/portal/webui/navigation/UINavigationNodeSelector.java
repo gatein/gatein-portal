@@ -347,8 +347,8 @@ public class UINavigationNodeSelector extends UIContainer
          uiManagementPopup.setUIComponent(uiNodeForm);
 
          Object parent = null;
-         PageNavigation filteredEdittedNavigation = uiNodeSelector.getEdittedNavigation();
-         List<PageNode> pageNodes = filteredEdittedNavigation.getNodes();
+         PageNavigation edittedNavigation = uiNodeSelector.getEdittedNavigation();
+         List<PageNode> pageNodes = edittedNavigation.getNodes();
          if (uri != null && uri.trim().length() > 0)
          {
             for (PageNode pageNode : pageNodes)
@@ -362,15 +362,12 @@ public class UINavigationNodeSelector extends UIContainer
          }
          if (parent == null)
          {
-            parent = filteredEdittedNavigation;
+            parent = edittedNavigation;
          }
          
          uiNodeForm.setSelectedParent(parent);
 
-         // set navigation owner, navigation type
-         uiNodeForm.setOwner(uiNodeSelector.getEdittedNavigation().getOwnerId());
-         uiNodeForm.setOwnerType(uiNodeSelector.getEdittedNavigation().getOwnerType());
-
+         uiNodeForm.setContextPageNavigation(edittedNavigation);
          uiManagementPopup.setWindowSize(800, 500);
          event.getRequestContext().addUIComponentToUpdateByAjax(uiManagementPopup.getParent());
       }
@@ -472,9 +469,9 @@ public class UINavigationNodeSelector extends UIContainer
          UIApplication uiApp = ctx.getUIApplication();
          String uri = event.getRequestContext().getRequestParameter(UIComponent.OBJECTID);
          UINavigationNodeSelector uiNodeSelector = popupMenu.getAncestorOfType(UINavigationNodeSelector.class);
-         PageNavigation selectedNav = uiNodeSelector.getEdittedNavigation();
-         Object obj = PageNavigationUtils.searchParentNode(selectedNav, uri);
-         PageNode selectedNode = PageNavigationUtils.searchPageNodeByUri(selectedNav, uri);
+         PageNavigation edittedNav = uiNodeSelector.getEdittedNavigation();
+         Object obj = PageNavigationUtils.searchParentNode(edittedNav, uri);
+         PageNode selectedNode = PageNavigationUtils.searchPageNodeByUri(edittedNav, uri);
          String pageId = selectedNode.getPageReference();
 
          UserPortalConfigService service = uiApp.getApplicationComponent(UserPortalConfigService.class);
@@ -492,10 +489,7 @@ public class UINavigationNodeSelector extends UIContainer
          UIPageNodeForm2 uiNodeForm = uiApp.createUIComponent(UIPageNodeForm2.class, null, null);
          uiManagementPopup.setUIComponent(uiNodeForm);
 
-         // set navigation owner, navigation type
-         uiNodeForm.setOwner(uiNodeSelector.getEdittedNavigation().getOwnerId());
-         uiNodeForm.setOwnerType(uiNodeSelector.getEdittedNavigation().getOwnerType());
-
+         uiNodeForm.setContextPageNavigation(edittedNav);
          uiNodeForm.setValues(selectedNode);
          uiNodeForm.setSelectedParent(obj);
          uiManagementPopup.setWindowSize(800, 500);

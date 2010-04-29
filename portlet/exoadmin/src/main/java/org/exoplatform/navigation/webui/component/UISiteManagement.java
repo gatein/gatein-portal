@@ -372,14 +372,18 @@ public class UISiteManagement extends UIContainer
       public void execute(Event<UIPageNodeForm2> event) throws Exception
       {
          UIPageNodeForm2 uiPageNodeForm = event.getSource();
+         PageNavigation contextNavigation = uiPageNodeForm.getContextPageNavigation();
          UISiteManagement uiSiteManagement = uiPageNodeForm.getAncestorOfType(UISiteManagement.class);
-         PageNavigation selectedNavigation = uiSiteManagement.getOriginalSelectedNavigation();
          UIPopupWindow uiNavigationPopup = uiSiteManagement.getChild(UIPopupWindow.class);
-         UINavigationManagement pageManager =
-            uiPageNodeForm.createUIComponent(UINavigationManagement.class, null, null);
-         pageManager.setOwner(selectedNavigation.getOwnerId());
-         UINavigationNodeSelector selector = pageManager.getChild(UINavigationNodeSelector.class);
-         uiNavigationPopup.setUIComponent(pageManager);
+         UINavigationManagement navigationManager = uiPageNodeForm.createUIComponent(UINavigationManagement.class, null, null);
+         navigationManager.setOwner(contextNavigation.getOwnerId());
+         navigationManager.setOwnerType(contextNavigation.getOwnerType());
+         UINavigationNodeSelector selector = navigationManager.getChild(UINavigationNodeSelector.class);
+         
+         selector.setEdittedNavigation(uiPageNodeForm.getContextPageNavigation());
+         selector.initTreeData();
+         
+         uiNavigationPopup.setUIComponent(navigationManager);
          uiNavigationPopup.setWindowSize(400, 400);
          event.getRequestContext().addUIComponentToUpdateByAjax(uiNavigationPopup.getParent());
       }
