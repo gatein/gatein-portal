@@ -18,6 +18,8 @@
  */
 package org.exoplatform.webui.core;
 
+import java.util.List;
+
 import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -47,6 +49,61 @@ public class UIFilterableTree extends UITree
          return true;
       }
       return !nodeFilter.filterThisNode(nodeObject, context);
+   }
+   
+   /**
+    *   Method returns index ( relative to unfiltered list of sibblings ) of most right displayed node. The index
+    * is needed for a fine UI
+    *  
+    * @param sibblings
+    * @param context
+    * @return
+    */
+   public int getRightMostDisplayedNodeIndex(List<Object> sibblings, WebuiRequestContext context)
+   {
+      int numberOfSibblings = sibblings.size();
+      if (nodeFilter == null)
+      {
+         return (numberOfSibblings - 1);
+      }
+      else
+      {
+         for (int i = (numberOfSibblings - 1); i >= 0; i--)
+         {
+            if (!nodeFilter.filterThisNode(sibblings.get(i), context))
+            {
+               return i;
+            }
+         }
+         return -1;
+      }
+   }
+   
+   /**
+    *   Method returns index ( relative to unfiltered list of sibblings ) of most left displayed node.
+    *  
+    * @param sibblings
+    * @param context
+    * @return
+    */
+   public int getLeftMostDisplayedNodeIndex(List<Object> sibblings, WebuiRequestContext context)
+   {
+      int numberOfSibblings = sibblings.size();
+      if (nodeFilter == null)
+      {
+         return 0;
+      }
+      else
+      {
+         for (int i = 0; i < numberOfSibblings; i++)
+         {
+            if (!nodeFilter.filterThisNode(sibblings.get(i), context))
+            {
+               return i;
+            }
+         }
+         return numberOfSibblings;
+      }
    }
    
    public void setTreeNodeFilter(TreeNodeFilter _nodeFilter)

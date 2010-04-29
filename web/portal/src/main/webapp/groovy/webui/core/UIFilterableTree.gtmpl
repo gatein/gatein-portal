@@ -1,13 +1,15 @@
 <%
 	import org.exoplatform.webui.core.UIRightClickPopupMenu;
 	import org.exoplatform.webui.application.WebuiRequestContext;
+
+	UIRightClickPopupMenu uiPopupMenu = uicomponent.getUIRightClickPopupMenu();
+	WebuiRequestContext rcontext = _ctx.getRequestContext();
 	
 	def selected = uicomponent.getSelected();
 	def sibling = uicomponent.getSibbling();
 	def children = uicomponent.getChildren();	
-
-	UIRightClickPopupMenu uiPopupMenu = uicomponent.getUIRightClickPopupMenu();
-	WebuiRequestContext rcontext = _ctx.getRequestContext();
+	def indexOfRightMostDisplayedSibbling = uicomponent.getRightMostDisplayedNodeIndex(sibling, rcontext);
+	def indexOfRightMostDisplayedChild = uicomponent.getRightMostDisplayedNodeIndex(children, rcontext);
 	
 	if(uiPopupMenu != null){
 		String id = uicomponent.getParent().getId();
@@ -26,7 +28,7 @@
 			int count=0;
 			for(object in sibling) {
 			if(uicomponent.displayThisNode(object, rcontext)){
-				if(count==sibling.size()-1) {
+				if(count == indexOfRightMostDisplayedSibbling) {
 			%>
 				<div class="LastNode Node">
 					<% 
@@ -41,7 +43,7 @@
 						int countChild=0;
 						for(child in children) {
 						if(uicomponent.displayThisNode(child, rcontext)){
-						if(countChild==children.size()-1) {
+						if(countChild == indexOfRightMostDisplayedChild) {
 						%>
 						 		<div class="LastNode Node">
 									<%=uicomponent.renderNode(child);%>
@@ -70,7 +72,7 @@
 						int countChild=0;
 						for(child in children) {
 						if(uicomponent.displayThisNode(child, rcontext)){
-									if(countChild==children.size()-1) {
+									if(countChild == indexOfRightMostDisplayedChild) {
 						 %>
 						 		<div class="LastNode Node">
 									<%=uicomponent.renderNode(child);%>
