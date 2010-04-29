@@ -4,9 +4,6 @@
   import org.exoplatform.webui.core.UIRightClickPopupMenu ;
   import org.exoplatform.web.application.JavascriptManager;
 
-  navigations = uicomponent.getPageNavigations();
-  def selectedNav =  uicomponent.getSelectedNavigation();
-  
   UIRightClickPopupMenu uiPopupMenu = uicomponent.getChild(UIRightClickPopupMenu.class);
   String popupMenu = "";
 %>
@@ -40,13 +37,7 @@
 				  <div class="ContainerConfigOptions">						
 						<div class="UIVerticalSlideTabs ItemList CategoryContainer" style="padding: 1px;">
 							<%
-							  if(navigations != null) {
-					    	  for(nav in navigations) {
-									  if(selectedNav != null && nav == selectedNav) {
-										  uicomponent.renderChild(UITree.class);
-								    }
-					   		  }
-					   	  }
+								uicomponent.renderChild(UITree.class);
 							%>
 						</div>
 					</div>

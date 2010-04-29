@@ -332,12 +332,11 @@ public class UISiteManagement extends UIContainer
          UISiteManagement uicomp = event.getSource();
          String portalName = event.getRequestContext().getRequestParameter(OBJECTID);
          DataStorage dataService = uicomp.getApplicationComponent(DataStorage.class);
-         PortalRequestContext prContext = Util.getPortalRequestContext();
          WebuiRequestContext context = event.getRequestContext();
          UIApplication uiApplication = context.getUIApplication();
 
-         PageNavigation originalNavi = dataService.getPageNavigation(PortalConfig.PORTAL_TYPE, portalName);
-         if (originalNavi == null)
+         PageNavigation edittedNavigation = dataService.getPageNavigation(PortalConfig.PORTAL_TYPE, portalName);
+         if (edittedNavigation == null)
          {
             uiApplication.addMessage(new ApplicationMessage("UISiteManagement.msg.portal-not-exist",
                new String[]{portalName}));
@@ -345,7 +344,7 @@ public class UISiteManagement extends UIContainer
          }
          
          UserACL userACL = uicomp.getApplicationComponent(UserACL.class);
-         if (!userACL.hasEditPermission(originalNavi))
+         if (!userACL.hasEditPermission(edittedNavigation))
          {
             uiApplication.addMessage(new ApplicationMessage("UISiteManagement.msg.Invalid-editPermission", null));;
             return;
@@ -356,20 +355,8 @@ public class UISiteManagement extends UIContainer
          naviManager.setOwner(portalName);
          naviManager.setOwnerType(PortalConfig.PORTAL_TYPE);
 
-         PageNavigation filteredNavi = null;
-         try{
-            filteredNavi = PageNavigationUtils.filterNavigation(originalNavi, prContext.getRemoteUser(), true);
-         }
-         catch(Exception ex)
-         {
-            
-         }
-         
-         uicomp.setOriginalSelectedNavigation(originalNavi);
          UINavigationNodeSelector selector = naviManager.getChild(UINavigationNodeSelector.class);
-         selector.setOriginalEdittedNavigation(originalNavi);
-         //TODO: Set the filteredNavi instead
-         selector.setFilteredEdittedNavigation(originalNavi);
+         selector.setEdittedNavigation(edittedNavigation);
          selector.initTreeData();
 
          popUp.setUIComponent(naviManager);
@@ -392,10 +379,6 @@ public class UISiteManagement extends UIContainer
             uiPageNodeForm.createUIComponent(UINavigationManagement.class, null, null);
          pageManager.setOwner(selectedNavigation.getOwnerId());
          UINavigationNodeSelector selector = pageManager.getChild(UINavigationNodeSelector.class);
-         ArrayList<PageNavigation> navis = new ArrayList<PageNavigation>();
-         navis.add(selectedNavigation);
-         selector.initNavigations(navis);
-         //selector.removeChild(UIRightClickPopupMenu.class);
          uiNavigationPopup.setUIComponent(pageManager);
          uiNavigationPopup.setWindowSize(400, 400);
          event.getRequestContext().addUIComponentToUpdateByAjax(uiNavigationPopup.getParent());

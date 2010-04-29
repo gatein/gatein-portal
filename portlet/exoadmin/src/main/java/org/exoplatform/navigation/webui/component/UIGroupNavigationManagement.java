@@ -210,9 +210,7 @@ public class UIGroupNavigationManagement extends UIContainer
 
          UINavigationNodeSelector selector = pageManager.getChild(UINavigationNodeSelector.class);
        
-         //TODO: Set correct value for filteredEdittedNavigation
-         selector.setOriginalEdittedNavigation(navigation);
-         selector.setFilteredEdittedNavigation(navigation);
+         selector.setEdittedNavigation(navigation);
          selector.initTreeData();
          popUp.setUIComponent(pageManager);
          popUp.setWindowSize(400, 400);
@@ -354,16 +352,13 @@ public class UIGroupNavigationManagement extends UIContainer
             uiPageNodeForm.createUIComponent(UINavigationManagement.class, null, null);
          pageManager.setOwner(selectedNavigation.getOwnerId());
          UINavigationNodeSelector selector = pageManager.getChild(UINavigationNodeSelector.class);
-         ArrayList<PageNavigation> navis = new ArrayList<PageNavigation>();
-         navis.add(selectedNavigation);
-         selector.initNavigations(navis);
          
          if (uiPageNodeForm.getSelectedParent() instanceof PageNode)
          {
             PageNode selectedParent = (PageNode)uiPageNodeForm.getSelectedParent();
             selector.selectPageNodeByUri(selectedParent.getUri());
          }
-         //selector.removeChild(UIRightClickPopupMenu.class);
+         
          uiNavigationPopup.setUIComponent(pageManager);
          uiNavigationPopup.setWindowSize(400, 400);
          uiNavigationPopup.setRendered(true);

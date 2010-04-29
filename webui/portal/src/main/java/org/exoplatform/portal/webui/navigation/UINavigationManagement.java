@@ -102,7 +102,7 @@ public class UINavigationManagement extends UIContainer
          DataStorage dataService = uiManagement.getApplicationComponent(DataStorage.class);
          UserPortalConfigService portalConfigService = uiManagement.getApplicationComponent(UserPortalConfigService.class);
          
-         PageNavigation navigation = uiNodeSelector.getFilteredEdittedNavigation();
+         PageNavigation navigation = uiNodeSelector.getEdittedNavigation();
          String editedOwnerType = navigation.getOwnerType();
          String editedOwnerId = navigation.getOwnerId();
          // Check existed
@@ -195,7 +195,7 @@ public class UINavigationManagement extends UIContainer
          UIPageNodeForm2 uiNodeForm = uiManagementPopup.createUIComponent(UIPageNodeForm2.class, null, null);
          uiNodeForm.setValues(null);
          uiManagementPopup.setUIComponent(uiNodeForm);
-         PageNavigation nav = uiNodeSelector.getFilteredEdittedNavigation();
+         PageNavigation nav = uiNodeSelector.getEdittedNavigation();
          uiNodeForm.setSelectedParent(nav);
 
          // set owner type, owner
