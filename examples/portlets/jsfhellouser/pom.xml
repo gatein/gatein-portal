@@ -41,13 +41,13 @@
       <dependency>
          <groupId>org.jboss.portletbridge</groupId>
          <artifactId>portletbridge-api</artifactId>
-         <version>2.0.0.CR1</version>
+         <version>2.0.0.FINAL</version>
       </dependency>
 
       <dependency>
          <groupId>org.jboss.portletbridge</groupId>
          <artifactId>portletbridge-impl</artifactId>
-         <version>2.0.0.CR1</version>
+         <version>2.0.0.FINAL</version>
       </dependency>
 
    </dependencies>
