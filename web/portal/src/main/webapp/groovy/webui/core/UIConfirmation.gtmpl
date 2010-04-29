@@ -1,0 +1,144 @@
+<%
+	/**
+	 * Created by The eXo Platform SAS
+	 * Author : Nguyen Duc Khoi
+	 *          khoi.nguyen@exoplatform.com
+	 * Apr 22, 2010  
+	 */
+%>
+<%
+	import org.exoplatform.webui.core.UIConfirmation.ActionConfirm;
+	
+	String popupId = uicomponent.getId();
+	def rcontext = _ctx.getRequestContext();
+	rcontext.getJavascriptManager().importJavascript('eXo.webui.UIHorizontalTabs');
+	rcontext.getJavascriptManager().importJavascript('eXo.webui.UIPopupWindow');
+	
+	def message = uicomponent.getMessage();
+	def actions = uicomponent.getActions();
+	
+	void printTab(String messages, String title, boolean isSelected)
+	{
+		String cssClass = "NormalTab";
+		if(!isSelected) {
+			cssClass = "SelectedTab";
+			isSelected = true;
+		}
+		println """
+						<div class="UITab MessageTabDialog">
+							<div class="$cssClass">
+								<div class="LeftTab">
+									<div class="RightTab">
+		""";
+		println "<div class=\"MiddleTab\" onclick=\"eXo.webui.UIHorizontalTabs.displayTabContent(this)\"><div class=\"TabIcon ${title}Icon\">"+_ctx.appRes("UIPopupMessages.label."+"${title}") +"</div></div>";
+		println """
+									</div>
+								</div>
+							</div>
+						</div>
+		""";
+	}
+	
+	void printMessage(String message, String messageType)
+	{
+		println "<div class=\"UITabContent\"";
+		println "	<div class=\"PopupMessageBox\">";
+		println "		<div class=\"$messageType\">";
+		println "			<div class=\"PopupMessageContainer\">";
+		println "				<div class=\"MessageContainer\">";
+		println "				<div class=\"PopupIcon ${messageType}Icon\"><span></span></div>";
+		println "					<div class=\"PopupMessage\">";
+		println message;
+		println "					</div>";
+		println "					<div style=\"clear:left\"><span></span></div>";
+		println "				</div>";
+		println "			</div>";
+		println "		</div>";
+		println "	</div>";
+		println "</div>";
+	}
+	
+	void printAction(List actions)
+	{
+		for(act in actions)
+		{
+			println "<td>";
+			println "	<div onclick="+uicomponent.event("Click", act.getEventId())+" class=\"ActionButton LightBlueStyle\">";
+			println "		<div class=\"ButtonLeft\">";
+			println "			<div class=\"ButtonRight\">";
+			println "				<div class=\"ButtonMiddle\">";
+			println "					<a href=\"javascript:void(0);\"> ${act.getActionKey()} </a>";
+			println "				</div>";
+			println "			</div>";
+			println "		</div>";
+			println "	</div>";
+			println "</td>";			
+		}
+	}
+%>
+	<div class="UIPopupWindow" id="$popupId" style="width: 550px; display: none;">
+		<div class="ExoMessageDecorator">
+			<div class="TopLeftCornerDecorator">
+				<div class="TopRightCornerDecorator">
+					<div class="TopCenterDecorator">
+						<div class="OverflowContainer">
+							<div class="PopupTitleIcon"><span></span></div>
+							<div class="CloseButton" title="<%=_ctx.appRes("UIConfirmation.Close")%>" onclick="<%=uicomponent.event("Close")%>"><span></span></div>
+							<div class="PopupTitle"><%= _ctx.appRes("UIConfirmation.title.exoMessages") %></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="MiddleLeftSideDecorator">
+				<div class="MiddleRightSideDecorator">
+					<div class="MiddleCenterDecorator">
+						<div class="UIWindowContent">
+							<div class="PopupContent">
+								<div class="UIPopupMessages">	
+									<div class="UIHorizontalTabs">
+										<div class="TabsContainer">
+										<%	
+											boolean flag = true
+											flag = printTab(message, "Warning", flag);
+										%>
+										</div>
+									</div>
+									<div class="UITabContentContainer">
+										<%
+											printMessage(message, "ErrorMessage");
+										%>
+									</div>
+									<div class="MessageActionBar">
+										<div class="UIAction"> 
+											<table class="ActionContainer">
+												<tr>
+													<%
+														printAction(actions);
+													%>
+												</tr>
+									 		</table>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div><span></span></div>
+			<div class="BottomLeftCornerDecorator">
+				<div class="BottomRightCornerDecorator">
+					<div class="BottomCenterDecorator"><span></span></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<%
+		rcontext.getJavascriptManager().addJavascript("eXo.webui.UIPopupWindow.init('$popupId', false);");
+		if(uicomponent.hasMessage()){
+			rcontext.getJavascriptManager().addJavascript("eXo.webui.UIPopupWindow.show('$popupId');");
+			rcontext.getJavascriptManager().addJavascript("window.setTimeout(\"eXo.webui.UIPopupWindow.increasezIndex('$popupId')\", 100);");
+		}
+	%>
