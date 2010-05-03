@@ -296,7 +296,7 @@
       <para>
          &PRODUCT_NAME;'s Producer is automatically set up when you deploy a portal instance with the WSRP service.
          You can access the WSDL file at
-         <filename>http://{hostname}:{port}/portal-wsrp/MarkupService?wsdl</filename>.
+         <filename>http://{hostname}:{port}/wsrp-producer/MarkupService?wsdl</filename>.
          The default hostname is
          <literal>localhost</literal>
          and the default port is 8080.
