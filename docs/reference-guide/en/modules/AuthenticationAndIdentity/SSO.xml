@@ -227,7 +227,7 @@
 							In Tomcat, edit <filename>GATEIN_HOME/conf/jaas.conf</filename> and uncomment this section:
 							</para>			
 <programlisting>org.gatein.sso.agent.login.SSOLoginModule required
-org.exoplatform.services.security.j2ee.JbossLoginModule required
+org.exoplatform.services.security.j2ee.TomcatLoginModule required
 portalContainerName=portal
 realmName=gatein-domain
 </programlisting>
@@ -499,7 +499,7 @@ realmName=gatein-domain
 								In Tomcat, edit <filename>GATEIN_HOME/conf/jaas.conf</filename> and uncomment this section:
 							</para>
 <programlisting>org.gatein.sso.agent.login.SSOLoginModule required
-org.exoplatform.services.security.j2ee.JbossLoginModule requiredtm	
+org.exoplatform.services.security.j2ee.TomcatLoginModule requiredtm	
 portalContainerName=portal
 realmName=gatein-domain
 </programlisting>
@@ -828,7 +828,7 @@ realmName=gatein-domain
 								If you are running GateIn in Tomcat, edit $GATEIN_HOME/conf/jaas.conf and uncomment this section
 							</para>
 <programlisting>org.gatein.sso.agent.login.SSOLoginModule required
-org.exoplatform.services.security.j2ee.JbossLoginModule required
+org.exoplatform.services.security.j2ee.TomcatLoginModule required
 portalContainerName=portal
 realmName=gatein-domain
 </programlisting>
