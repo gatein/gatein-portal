@@ -4,12 +4,12 @@
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="selenium.base" href="" />
-<title>SNF_PRL_34</title>
+<title>Test_SNF_PRL_34_ChangeLogo</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">SNF_PRL_34</td></tr>
+<tr><td rowspan="1" colspan="3">Test_SNF_PRL_34_ChangeLogo</td></tr>
 </thead><tbody>
 <tr>
 	<td>open</td>
@@ -42,18 +42,28 @@
 	<td>gtn</td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
+	<td>clickAt</td>
 	<td>xpath=//div[@id='UIPortalLoginFormAction']/div/div/div/a</td>
 	<td></td>
 </tr>
 <tr>
-	<td>clickAtAndWait</td>
+	<td>waitForElementPresent</td>
+	<td>link=Dashboard</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
 	<td>link=Dashboard</td>
 	<td></td>
 </tr>
 <tr>
 	<td>echo</td>
 	<td>--Edit Logo Picture</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Edit Layout</td>
 	<td></td>
 </tr>
 <tr>
@@ -82,8 +92,18 @@
 	<td>http://ocs.inrialpes.fr/userfiles/image/logo/Picture%203.png</td>
 </tr>
 <tr>
+	<td>waitForElementPresent</td>
+	<td>link=Save</td>
+	<td></td>
+</tr>
+<tr>
 	<td>clickAt</td>
 	<td>link=Save</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Close</td>
 	<td></td>
 </tr>
 <tr>
@@ -107,8 +127,8 @@
 	<td></td>
 </tr>
 <tr>
-	<td>verifyElementPresent</td>
-	<td>xpath=//div[@id='UILogoPortlet']/a/img[@src='http://ocs.inrialpes.fr/userfiles/image/logo/Picture%203.png']</td>
+	<td>waitForElementPresent</td>
+	<td>link=Sign out</td>
 	<td></td>
 </tr>
 <tr>
