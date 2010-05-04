@@ -8,7 +8,6 @@
    <xi:include href="AuthenticationAndIdentity/PredefinedUserConfiguration.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
    <xi:include href="AuthenticationAndIdentity/AuthenticationTokenConfiguration.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
    <xi:include href="AuthenticationAndIdentity/BackendConfiguration.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
-   <xi:include href="AuthenticationAndIdentity/DataInjectorConfiguration.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
    <xi:include href="AuthenticationAndIdentity/OrganizationAPI.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
    <xi:include href="AuthenticationAndIdentity/AccessingUserProfile.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
    <xi:include href="AuthenticationAndIdentity/SSO.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
