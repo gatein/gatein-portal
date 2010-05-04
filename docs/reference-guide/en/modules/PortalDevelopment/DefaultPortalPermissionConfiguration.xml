@@ -12,7 +12,7 @@
          component configuration in the file <filename>02portal.war:/WEB-INF/conf/portal/portal-configuration.xml</filename>.
 		</para>
 		<para>
-			It defines 5 permissions types:
+			It defines 8 permissions types:
 		</para>
 		<variablelist>
 			<varlistentry>
@@ -20,6 +20,22 @@
 				<listitem>
 					<para>
 						The super user has all the rights on the platform, this user is referred to as <emphasis>root</emphasis>.
+					</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>portal.administrator.groups</term>
+				<listitem>
+					<para>
+						Any member of those groups are considered administrators. Default value is <literal>/platform/administrators</literal>.
+					</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>portal.administrator.mstype</term>
+				<listitem>
+					<para>
+						Any user with that membership type would be considered administrator or the associated group. Default value is <literal>manager</literal>.
 					</para>
 				</listitem>
 			</varlistentry>
@@ -49,13 +65,18 @@
 				</listitem>
 			</varlistentry>
 			<varlistentry>
-				<term>access.control.workspace</term>
+				<term>mandatory.groups</term>
 				<listitem>
 					<para>
-						Defines the users that have access to the control workspace. In the demo version the control workspace
-                  is accessible only to <emphasis>root</emphasis> and <emphasis>john</emphasis>. They can expand/collapse
-                  the workspace at the left hand side. The format is <literal>membership:/group/subgroup</literal> -
-                  an asterisk &#39;*&#39; gives permission to all memberships.
+						Groups that can't be deleted.
+					</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>mandatory.mstypes</term>
+				<listitem>
+					<para>
+						Membership types that can't be deleted.
 					</para>
 				</listitem>
 			</varlistentry>
