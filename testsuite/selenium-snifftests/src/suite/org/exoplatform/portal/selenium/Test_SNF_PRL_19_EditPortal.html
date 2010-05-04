@@ -4,12 +4,12 @@
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="selenium.base" href="" />
-<title>SNF_PRL_19</title>
+<title>Test_SNF_PRL_19_EditPortal</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">SNF_PRL_19</td></tr>
+<tr><td rowspan="1" colspan="3">Test_SNF_PRL_19_EditPortal</td></tr>
 </thead><tbody>
 <tr>
 	<td>open</td>
@@ -42,8 +42,13 @@
 	<td>gtn</td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
+	<td>clickAt</td>
 	<td>//div[@id='UIPortalLoginFormAction']/div/div/div</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Site</td>
 	<td></td>
 </tr>
 <tr>
@@ -169,6 +174,11 @@
 <tr>
 	<td>click</td>
 	<td>//div[@id='UIRepeater']//table//tbody/tr/td[5]/div[@class='ActionContainer']/img</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>https://jira.jboss.org/jira/browse/GTNPORTAL-1129</td>
 	<td></td>
 </tr>
 <tr>
@@ -389,6 +399,11 @@
 <tr>
 	<td>verifyTextNotPresent</td>
 	<td>test_node_label_19</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Sign out</td>
 	<td></td>
 </tr>
 <tr>
