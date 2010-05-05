@@ -237,8 +237,8 @@ public class UISiteManagement extends UIContainer
             {
                uiPortalApp.addMessage(new ApplicationMessage("UISiteManagement.msg.portal-not-exist",
                   new String[]{portalName}));
-               return;
             }
+            return;
          }
 
          if (config == null && !Util.getUIPortal().getName().equals(portalName))
