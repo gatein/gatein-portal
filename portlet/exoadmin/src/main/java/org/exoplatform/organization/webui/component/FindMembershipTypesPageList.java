@@ -96,8 +96,15 @@ public class FindMembershipTypesPageList extends StatelessPageList<FindMembershi
       
       public String getEncodedDescription()
       {
-          EntityEncoder encoder = EntityEncoder.FULL;
-          return encoder.encode(getDescription());
+         if (getDescription() != null)
+         {
+            EntityEncoder encoder = EntityEncoder.FULL;
+            return encoder.encode(getDescription());
+         }
+         else
+         {
+            return null;
+         }
       }
    }
 }
