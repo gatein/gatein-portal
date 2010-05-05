@@ -71,6 +71,7 @@ import org.exoplatform.webui.organization.UIPermissionSelector;
 import org.exoplatform.webui.organization.UIListPermissionSelector.EmptyIteratorValidator;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @ComponentConfigs({
@@ -148,6 +149,7 @@ public class UIPageForm extends UIFormTabPane
       List<String> groups = configService.getMakableNavigations(pcontext.getRemoteUser(), true);
       if (groups.size() > 0)
       {
+         Collections.sort(groups);
          ownerTypes.add(new SelectItemOption<String>(PortalConfig.GROUP_TYPE));
          List<SelectItemOption<String>> groupsItem = new ArrayList<SelectItemOption<String>>();
          for (String group : groups)
