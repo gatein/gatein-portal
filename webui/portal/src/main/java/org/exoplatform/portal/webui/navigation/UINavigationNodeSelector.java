@@ -169,7 +169,10 @@ public class UINavigationNodeSelector extends UIContainer
       if (edittedTreeNodeData == null)
       {
          edittedTreeNodeData = new TreeNodeData(edittedNavigation);
-         selectPageNodeByUri(edittedTreeNodeData.getNode().getUri());//TODO: Check null
+         if(edittedTreeNodeData.getNode() != null)
+         {
+            selectPageNodeByUri(edittedTreeNodeData.getNode().getUri());
+         }
       }
       
       UITree tree = getChild(UITree.class);

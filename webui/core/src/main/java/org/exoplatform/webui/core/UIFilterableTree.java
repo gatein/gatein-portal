@@ -61,6 +61,10 @@ public class UIFilterableTree extends UITree
     */
    public int getRightMostDisplayedNodeIndex(List<Object> sibblings, WebuiRequestContext context)
    {
+      if(sibblings == null)
+      {
+         return -1;
+      }
       int numberOfSibblings = sibblings.size();
       if (nodeFilter == null)
       {
@@ -88,6 +92,10 @@ public class UIFilterableTree extends UITree
     */
    public int getLeftMostDisplayedNodeIndex(List<Object> sibblings, WebuiRequestContext context)
    {
+      if(sibblings == null)
+      {
+         return -1;
+      }
       int numberOfSibblings = sibblings.size();
       if (nodeFilter == null)
       {
