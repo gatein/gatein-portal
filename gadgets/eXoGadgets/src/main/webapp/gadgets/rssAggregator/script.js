@@ -43,7 +43,7 @@ RssAggregator.prototype.timeToPrettyString = function(B) {
     if (isNaN(B)) {
         return "an indeterminate amount of time ago"
     }
-    time = (new Date().getTime() - B) / 1000;
+    time = new Date().getTime() / 1000 - B;
     if (time < 60) {
         return "less than a minute ago"
     } else {
@@ -118,7 +118,6 @@ RssAggregator.prototype.renderFeed = function(feed) {
 
                 item_title.innerHTML = bullet + "<a id='link_title_"+i+"' class='titlelink' href='" + feed.Entry[i].Link + "' onclick='rssAggregator.toggleDescription("+i+");return false;'>" + feed.Entry[i].Title + "</a>";
 				item_date.innerHTML = this.timeToPrettyString(feed.Entry[i].Date);
-
 
 				item_desc.innerHTML = feed.Entry[i].Summary;
 
