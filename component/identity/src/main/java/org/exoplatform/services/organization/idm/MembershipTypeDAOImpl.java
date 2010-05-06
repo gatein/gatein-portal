@@ -22,10 +22,13 @@ package org.exoplatform.services.organization.idm;
 import org.exoplatform.services.organization.MembershipType;
 import org.exoplatform.services.organization.MembershipTypeHandler;
 import org.exoplatform.services.organization.impl.MembershipTypeImpl;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 import org.picketlink.idm.api.IdentitySession;
 import org.picketlink.idm.api.RoleType;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -52,6 +55,8 @@ public class MembershipTypeDAOImpl implements MembershipTypeHandler
    private PicketLinkIDMService service_;
 
    private PicketLinkIDMOrganizationServiceImpl orgService;
+   
+   private static Logger log = LoggerFactory.getLogger(MembershipTypeDAOImpl.class);
 
    public MembershipTypeDAOImpl(PicketLinkIDMOrganizationServiceImpl orgService, PicketLinkIDMService service)
    {
@@ -142,9 +147,9 @@ public class MembershipTypeDAOImpl implements MembershipTypeHandler
       Map<String, String> props = new HashMap<String, String>();
 
       props.put(MEMBERSHIP_DESCRIPTION, mt.getDescription());
-      props.put(MEMBERSHIP_CREATE_DATE, mt.getCreatedDate() == null ? null : dateFormat.format(mt.getCreatedDate()));
+      props.put(MEMBERSHIP_CREATE_DATE, mt.getCreatedDate() == null ? null : "" + mt.getCreatedDate().getTime());
       props
-         .put(MEMBERSHIP_MODIFIED_DATE, mt.getModifiedDate() == null ? null : dateFormat.format(mt.getModifiedDate()));
+         .put(MEMBERSHIP_MODIFIED_DATE, mt.getModifiedDate() == null ? null : "" + mt.getModifiedDate().getTime());
       props.put(MEMBERSHIP_OWNER, mt.getOwner());
 
       getIdentitySession().getRoleManager().setProperties(rt, props);
@@ -167,12 +172,44 @@ public class MembershipTypeDAOImpl implements MembershipTypeHandler
 
       if (cd != null)
       {
-         mt.setCreatedDate(dateFormat.parse(cd));
+         try
+         {
+            long date = Long.parseLong(cd);
+            mt.setCreatedDate(new Date(date));
+         }
+         catch (NumberFormatException e)
+         {
+            try
+            {
+               // For backward compatibility with GateIn 3.0 and EPP 5 Beta
+               mt.setCreatedDate(dateFormat.parse(cd));
+            }
+            catch (ParseException e2)
+            {
+               log.error("Cannot parse the membership type creation date for: " + mt.getName());
+            }
+         }
       }
 
       if (md != null)
       {
-         mt.setModifiedDate(dateFormat.parse(md));
+         try
+         {
+            long date = Long.parseLong(md);
+            mt.setModifiedDate(new Date(date));
+         }
+         catch (NumberFormatException e)
+         {
+            // For backward compatibility with GateIn 3.0 and EPP 5 Beta
+            try
+            {
+               mt.setModifiedDate(dateFormat.parse(md));
+            }
+            catch (ParseException e2)
+            {
+               log.error("Cannot parse the membership type modification date for: " + mt.getName());
+            }
+         }
       }
 
       return;

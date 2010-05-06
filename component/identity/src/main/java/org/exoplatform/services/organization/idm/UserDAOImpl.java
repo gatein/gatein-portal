@@ -28,30 +28,32 @@ import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.UserEventListener;
 import org.exoplatform.services.organization.UserHandler;
 import org.exoplatform.services.organization.impl.UserImpl;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 import org.picketlink.idm.api.Attribute;
 import org.picketlink.idm.api.AttributesManager;
 import org.picketlink.idm.api.IdentitySession;
 import org.picketlink.idm.api.query.UserQueryBuilder;
 import org.picketlink.idm.common.exception.IdentityException;
 import org.picketlink.idm.impl.api.SimpleAttribute;
-import org.slf4j.LoggerFactory;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Logger;
 
 /*
  * @author <a href="mailto:boleslaw.dawidowicz at redhat.com">Boleslaw Dawidowicz</a>
  */
 public class UserDAOImpl implements UserHandler
 {
-   private static org.slf4j.Logger log = LoggerFactory.getLogger(UserDAOImpl.class);
+   private static Logger log = LoggerFactory.getLogger(UserDAOImpl.class);
 
    private final PicketLinkIDMService service_;
 
@@ -76,7 +78,7 @@ public class UserDAOImpl implements UserHandler
    public static final DateFormat dateFormat = DateFormat.getInstance();
 
    private PicketLinkIDMOrganizationServiceImpl orgService;
-
+   
    static
    {
       Set<String> keys = new HashSet<String>();
@@ -412,11 +414,11 @@ public class UserDAOImpl implements UserHandler
 
       if (user.getCreatedDate() != null)
       {
-         attributes.add(new SimpleAttribute(USER_CREATED_DATE, dateFormat.format(user.getCreatedDate())));
+         attributes.add(new SimpleAttribute(USER_CREATED_DATE, "" + user.getCreatedDate().getTime()));
       }
       if (user.getLastLoginTime() != null)
       {
-         attributes.add(new SimpleAttribute(USER_LAST_LOGIN_TIME, dateFormat.format(user.getLastLoginTime())));
+         attributes.add(new SimpleAttribute(USER_LAST_LOGIN_TIME, "" + user.getLastLoginTime().getTime()));
       }
       if (user.getEmail() != null)
       {
@@ -522,7 +524,23 @@ public class UserDAOImpl implements UserHandler
       {
          if (attrs.containsKey(USER_CREATED_DATE))
          {
-            user.setCreatedDate(dateFormat.parse(attrs.get(USER_CREATED_DATE).getValue().toString()));
+            try
+            {
+               long date = Long.parseLong(attrs.get(USER_CREATED_DATE).getValue().toString());
+               user.setCreatedDate(new Date(date));
+            }
+            catch (NumberFormatException e)
+            {
+               // For backward compatibility with GateIn 3.0 and EPP 5 Beta
+               try
+               {
+                  user.setCreatedDate(dateFormat.parse(attrs.get(USER_CREATED_DATE).getValue().toString()));
+               }
+               catch (ParseException e2)
+               {
+                  log.error("Cannot parse the creation date for: " + user.getUserName());
+               }
+            }
          }
          if (attrs.containsKey(USER_EMAIL))
          {
@@ -534,7 +552,23 @@ public class UserDAOImpl implements UserHandler
          }
          if (attrs.containsKey(USER_LAST_LOGIN_TIME))
          {
-            user.setLastLoginTime(dateFormat.parse(attrs.get(USER_LAST_LOGIN_TIME).getValue().toString()));
+            try
+            {
+               long date = Long.parseLong(attrs.get(USER_LAST_LOGIN_TIME).getValue().toString());
+               user.setLastLoginTime(new Date(date));
+            }
+            catch (NumberFormatException e)
+            {
+               // For backward compatibility with GateIn 3.0 and EPP 5 Beta
+               try
+               {
+                  user.setLastLoginTime(dateFormat.parse(attrs.get(USER_LAST_LOGIN_TIME).getValue().toString()));
+               }
+               catch (ParseException e2)
+               {
+                  log.error("Cannot parse the last login date for: " + user.getUserName());
+               }
+            }
          }
          if (attrs.containsKey(USER_LAST_NAME))
          {
