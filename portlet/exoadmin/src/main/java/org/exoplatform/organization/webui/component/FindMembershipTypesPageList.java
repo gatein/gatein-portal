@@ -91,7 +91,7 @@ public class FindMembershipTypesPageList extends StatelessPageList<FindMembershi
 
       public String getDescription()
       {
-         return mType.getDescription();
+         return (mType.getDescription() != null? mType.getDescription():"");
       }
       
       public String getEncodedDescription()
