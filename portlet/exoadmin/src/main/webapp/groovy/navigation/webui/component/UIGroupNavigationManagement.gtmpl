@@ -6,7 +6,7 @@
 				
 		uicomponent.loadNavigations();		
 		uicomponent.renderChild(UIVirtualList.class); 
-		if(uicomponent.getNavigations() != null && uicomponent.getNavigations().size() > 0){ %> 	  	
+		if(uicomponent.userHasRightToAddNavigation()){ %> 	  	
   
 	<div class="UIAction"> 
     <table class="ActionContainer">

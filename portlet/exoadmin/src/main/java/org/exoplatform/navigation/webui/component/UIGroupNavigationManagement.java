@@ -36,6 +36,7 @@ import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIMaskWorkspace;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.portal.webui.workspace.UIWorkingWorkspace;
+import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -52,6 +53,7 @@ import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -168,6 +170,50 @@ public class UIGroupNavigationManagement extends UIContainer
       selectedNavigation = navigation;
    }
 
+   /**
+    * User has right to add navigation to a group in below cases
+    * 
+    * 1. He/She is member of admin groups
+    * 
+    * 2. He/She is manager of the group
+    * 
+    * @param pcontext
+    * @return
+    */
+   private boolean userHasRightToAddNavigation()
+   {
+      PortalRequestContext pcontext = Util.getPortalRequestContext();
+      String remoteUser = pcontext.getRemoteUser();
+      if (remoteUser == null)
+      {
+         return false;
+      }
+
+      UserACL userACL = this.getApplicationComponent(UserACL.class);
+      if (userACL.isUserInGroup(userACL.getAdminGroups()))
+      {
+         return true;
+      }
+
+      OrganizationService orgService = this.getApplicationComponent(OrganizationService.class);
+      try
+      {
+         Collection<?> groups = orgService.getGroupHandler().findGroupByMembership(remoteUser, UserACL.MANAGER);
+         if (groups != null && groups.size() > 0)
+         {
+            return true;
+         }
+         else
+         {
+            return false;
+         }
+      }
+      catch (Exception ex)
+      {
+         return false;
+      }
+   }
+   
    static public class EditNavigationActionListener extends EventListener<UIGroupNavigationManagement>
    {
       public void execute(Event<UIGroupNavigationManagement> event) throws Exception
