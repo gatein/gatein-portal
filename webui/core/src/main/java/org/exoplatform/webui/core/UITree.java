@@ -101,6 +101,8 @@ public class UITree extends UIComponent
     */
    private Object parentSelected;
 
+   private NodeMetaDataManager nodeMetadataManager;
+   
    /**
     * A right click popup menu
     */
@@ -340,10 +342,6 @@ public class UITree extends UIComponent
    {
       public void execute(Event<UITree> event) throws Exception
       {
-         //      UITree tree = event.getSource();
-         //      String uri  = event.getRequestContext().getRequestParameter(OBJECTID);
-         //      System.out.println("\n\n\n--------------ParentNode " + tree.getParentSelected() + " selectNode " +uri);
-         //      if(tree.getParentSelected() == null && (uri == null || uri.length() < 1)) return;
          event.getSource().<UIComponent> getParent().broadcast(event, event.getExecutionPhase());
       }
    }
@@ -386,6 +384,35 @@ public class UITree extends UIComponent
    public void setColapseIcon(String colapseIcon)
    {
       this.colapseIcon = colapseIcon;
+   }
+   
+   public String getNodeMetaData(Object nodeObject, WebuiRequestContext context)
+   {
+      if (nodeMetadataManager == null)
+      {
+         return null;
+      }
+      else
+      {
+         return nodeMetadataManager.getNodeMetaData(nodeObject, context);
+      }
+   }
+   
+   public void setNodeMetaDataManager(NodeMetaDataManager _nodeMetadataManager)
+   {
+      this.nodeMetadataManager = _nodeMetadataManager;
+   }
+   
+   /**
+    * A node metadata manager. Node 's metadata is used for action informing/warning.
+    * 
+    * @author <a href="mailto:hoang281283@gmail.com">Minh Hoang TO</a>
+    * @version $Id$
+    *
+    */
+   public static interface NodeMetaDataManager
+   {
+      public String getNodeMetaData(Object nodeObject, WebuiRequestContext context);
    }
 
 }
