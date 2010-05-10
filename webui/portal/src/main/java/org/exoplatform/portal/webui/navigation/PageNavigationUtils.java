@@ -57,8 +57,18 @@ public class PageNavigationUtils
       }
    }
 
-   // Minh Hoang TO
-   //TODO: Rewrite this method with a better algorithm by spliting the uri
+   /**
+    *  This method returns a pair of PageNode, one is the PageNode specified by the uri, 
+    * another is its parent. Value return is 2-element array
+    * 
+    * 1. The element indexed 1 is the page node specified by the uri
+    * 
+    * 2. The element indexed 0 is its parent
+    * 
+    * @param node
+    * @param uri
+    * @return
+    */
    public static PageNode[] searchPageNodesByUri(PageNode node, String uri)
    {
       if (node.getUri().equals(uri))
