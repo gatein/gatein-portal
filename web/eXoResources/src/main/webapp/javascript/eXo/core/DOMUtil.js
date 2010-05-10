@@ -453,5 +453,9 @@ DOMUtil.prototype.get = function(el) {
   return el; // some other object, just pass it back
  }
 
+DOMUtil.prototype.disableOnClick = function(el) {
+	el.onClick = new Function("return false;");
+}
+
 /****************************************************************************/
 eXo.core.DOMUtil = new DOMUtil() ;
