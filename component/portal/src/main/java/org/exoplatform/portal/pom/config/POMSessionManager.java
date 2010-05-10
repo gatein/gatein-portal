@@ -26,6 +26,8 @@ import org.exoplatform.portal.pom.config.cache.DataCache;
 import org.exoplatform.services.cache.CacheService;
 import org.exoplatform.services.cache.ExoCache;
 import org.exoplatform.services.jcr.RepositoryService;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 import org.gatein.mop.core.api.MOPService;
 import org.picocontainer.Startable;
 
@@ -38,6 +40,9 @@ import java.lang.reflect.UndeclaredThrowableException;
  */
 public class POMSessionManager implements Startable
 {
+
+   /** . */
+   private final Logger log = LoggerFactory.getLogger(POMSessionManager.class);
 
    /** . */
    private MOPService pomService;
@@ -69,17 +74,47 @@ public class POMSessionManager implements Startable
 
    public void cachePut(Serializable key, Object value)
    {
-      cache.put(GlobalKey.wrap(repositoryService, key), value);
+      GlobalKey globalKey = GlobalKey.wrap(repositoryService, key);
+
+      //
+      if (log.isTraceEnabled())
+      {
+         log.trace("Updating cache key=" + globalKey + " with value=" + value);
+      }
+
+      //
+      cache.put(globalKey, value);
    }
 
    public Object cacheGet(Serializable key)
    {
-      return cache.get(GlobalKey.wrap(repositoryService, key));
+      GlobalKey globalKey = GlobalKey.wrap(repositoryService, key);
+
+      //
+      Object value = cache.get(globalKey);
+
+      //
+      if (log.isTraceEnabled())
+      {
+         log.trace("Obtained for cache key=" + globalKey + " value=" + value);
+      }
+
+      //
+      return value;
    }
 
    public void cacheRemove(Serializable key)
    {
-      cache.remove(GlobalKey.wrap(repositoryService, key));
+      GlobalKey globalKey = GlobalKey.wrap(repositoryService, key);
+
+      //
+      if (log.isTraceEnabled())
+      {
+         log.trace("Removing cache key=" + globalKey);
+      }
+
+      //
+      cache.remove(globalKey);
    }
 
    public void start()
@@ -109,6 +144,12 @@ public class POMSessionManager implements Startable
 
    public void clearCache()
    {
+      if (log.isTraceEnabled())
+      {
+         log.trace("Clearing cache");
+      }
+
+      //
       cache.clearCache();
    }
 
