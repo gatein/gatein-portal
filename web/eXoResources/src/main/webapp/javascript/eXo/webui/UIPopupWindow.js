@@ -194,7 +194,8 @@ var POPUP_WINDOW_BOTTOM_HEIGHT=50;
 UIPopupWindow.prototype.resize = function(evt) {
 	var targetPopup = document.getElementById(eXo.webui.UIPopupWindow.popupId) ;
 	var content = eXo.core.DOMUtil.findFirstDescendantByClass(targetPopup, "div", "PopupContent") ;
-	var pointerX = eXo.core.Browser.findMouseRelativeX(targetPopup, evt) ;
+	var isRTL = eXo.core.I18n.isRT();
+	var pointerX = eXo.core.Browser.findMouseRelativeX(targetPopup, evt, isRTL) ;
 	var pointerY = eXo.core.Browser.findMouseRelativeY(targetPopup, evt) ;
 	var delta = eXo.core.Browser.findPosYInContainer(content,targetPopup) +
 							content.style.borderWidth + content.style.padding + content.style.margin;
@@ -202,6 +203,11 @@ UIPopupWindow.prototype.resize = function(evt) {
 	//TODO: Check if the bottom is not null before assign new value to 'content.style.height'
 	if((pointerY-delta) > 0) content.style.height = (pointerY-delta-POPUP_WINDOW_BOTTOM_HEIGHT)+"px" ;
 	targetPopup.style.height = "auto";
+	
+	if(isRTL){
+	 pointerX = (-1) * pointerX
+	}
+	
 	if(pointerX > 200) targetPopup.style.width = (pointerX+5) + "px" ;
 } ;
 
