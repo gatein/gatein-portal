@@ -454,9 +454,9 @@ Browser.prototype.findMouseYInPage = function(e) {
 /**
  * find the x position of the mouse relative to object
  */
-Browser.prototype.findMouseRelativeX = function(object, e) {
+Browser.prototype.findMouseRelativeX = function(object, e, isRTL) {
   var posx = -1 ;
-  var posXObject = eXo.core.Browser.findPosX(object) ;
+  var posXObject = eXo.core.Browser.findPosX(object,isRTL) ;
   
   /*
    * posXObject is added more 3px on IE6
