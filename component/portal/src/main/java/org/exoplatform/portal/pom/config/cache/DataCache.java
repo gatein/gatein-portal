@@ -23,6 +23,8 @@ import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.POMTask;
 import org.exoplatform.portal.pom.config.TaskExecutor;
 import org.exoplatform.portal.pom.config.TaskExecutionDecorator;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 
 import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicLong;
@@ -33,6 +35,9 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 public class DataCache extends TaskExecutionDecorator
 {
+
+   /** . */
+   private final Logger log = LoggerFactory.getLogger(DataCache.class);
 
    /** . */
    private final AtomicLong readCount = new AtomicLong();
@@ -73,6 +78,10 @@ public class DataCache extends TaskExecutionDecorator
    private <K extends Serializable, V> V remove(POMSession session, CacheableDataTask<K, V> task) throws Exception
    {
       K key = task.getKey();
+      if (log.isTraceEnabled())
+      {
+         log.trace("Schedule " + key + " for eviction");
+      }
       session.scheduleForEviction(key);
       return super.execute(session, task);
    }
@@ -80,6 +89,10 @@ public class DataCache extends TaskExecutionDecorator
    private <K extends Serializable, V> V write(POMSession session, CacheableDataTask<K, V> task) throws Exception
    {
       K key = task.getKey();
+      if (log.isTraceEnabled())
+      {
+         log.trace("Schedule " + key + " for eviction");
+      }
       session.scheduleForEviction(key);
       return super.execute(session, task);
    }
@@ -87,21 +100,36 @@ public class DataCache extends TaskExecutionDecorator
    private <K extends Serializable, V> V create(POMSession session, CacheableDataTask<K, V> task) throws Exception
    {
       K key = task.getKey();
+      if (log.isTraceEnabled())
+      {
+         log.trace("Schedule " + key + " for eviction");
+      }
       session.scheduleForEviction(key);
       return super.execute(session, task);
    }
 
    private <K extends Serializable, V> V read(POMSession session, CacheableDataTask<K, V> task) throws Exception
    {
+      K key = task.getKey();
+
+      //
       if (!session.isModified())
       {
-         K key = task.getKey();
          Object o = session.getFromCache(key);
+         if (log.isTraceEnabled())
+         {
+            log.trace("Retrieved " + o + " for key " + key);
+         }
+
          V v = null;
          if (o != null)
          {
             if (o == NullObject.get())
             {
+               if (log.isTraceEnabled())
+               {
+                  log.trace("Returning null as found null object marker");
+               }
                return null;
             }
             else
@@ -111,12 +139,20 @@ public class DataCache extends TaskExecutionDecorator
                {
                   v = type.cast(o);
                }
+               else
+               {
+                  log.error("Object " + o + " was not of the expected type " + type);
+               }
             }
          }
 
          //
          if (v != null)
          {
+            if (log.isTraceEnabled())
+            {
+               log.trace("Returning object " + v + " for key " + key);
+            }
             return v;
          }
          else
@@ -124,17 +160,35 @@ public class DataCache extends TaskExecutionDecorator
             readCount.incrementAndGet();
 
             //
+            if (log.isTraceEnabled())
+            {
+               log.trace("Object not found in cache for key " + key + " about to retrieve it");
+            }
+
+            //
             v = super.execute(session, task);
+            if (log.isTraceEnabled())
+            {
+               log.trace("Retrieved object " + v + " key " + key + " that will be returned");
+            }
 
             //
             if (!session.isModified())
             {
                if (v == null)
                {
+                  if (log.isTraceEnabled())
+                  {
+                     log.trace("Updating cache with null object for key " + key);
+                  }
                   session.putInCache(key, NullObject.get());
                }
                else
                {
+                  if (log.isTraceEnabled())
+                  {
+                     log.trace("Updating cache with object " + v + " for key " + key);
+                  }
                   session.putInCache(key, v);
                }
             }
@@ -145,6 +199,12 @@ public class DataCache extends TaskExecutionDecorator
       }
       else
       {
+         if (log.isTraceEnabled())
+         {
+            log.trace("Session was modified, object for key " + key + " is directly retrieved");
+         }
+
+         //
          return super.execute(session, task);
       }
    }

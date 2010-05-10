@@ -364,6 +364,10 @@ public class POMSession
       {
          if (status == SynchronizationStatus.SAVED && staleKeys != null)
          {
+            if (log.isTraceEnabled())
+            {
+               log.trace("Session commit about to evict entries " + staleKeys);
+            }
             for (Serializable key : staleKeys)
             {
                mgr.cacheRemove(key);

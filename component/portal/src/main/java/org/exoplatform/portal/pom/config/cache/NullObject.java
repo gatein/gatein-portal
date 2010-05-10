@@ -52,4 +52,10 @@ public class NullObject implements Serializable
    {
       // Nothing to do
    }
+
+   @Override
+   public String toString()
+   {
+      return "NullObject[]";
+   }
 }
