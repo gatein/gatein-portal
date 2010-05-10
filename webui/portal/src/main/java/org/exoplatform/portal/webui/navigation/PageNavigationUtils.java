@@ -65,10 +65,14 @@ public class PageNavigationUtils
     * 
     * 2. The element indexed 0 is its parent
     * 
+    * @deprecated Returning 2-element array would makes it difficult to understand, handle the code. 
+    * Method searchParentChildPairByUri should be used instead.
+    * 
     * @param node
     * @param uri
     * @return
     */
+   @Deprecated
    public static PageNode[] searchPageNodesByUri(PageNode node, String uri)
    {
       if (node.getUri().equals(uri))
@@ -89,6 +93,7 @@ public class PageNavigationUtils
       return null;
    }
 
+   @Deprecated
    public static PageNode[] searchPageNodesByUri(PageNavigation nav, String uri)
    {
       if (nav.getNodes() == null)
@@ -102,7 +107,62 @@ public class PageNavigationUtils
       }
       return null;
    }
-
+   
+   /**
+    * This method returns a pair of a node matching the parsed uri and the parent of this node.
+    * 
+    * @param nav
+    * @param uri
+    * @return
+    */
+   public static ParentChildPair searchParentChildPairByUri(PageNavigation nav, String uri)
+   {
+      List<PageNode> nodes = nav.getNodes();
+      
+      if(nodes == null)
+      {
+         return null;
+      }
+      
+      for(PageNode ele : nodes)
+      {
+         ParentChildPair parentChildPair = searchParentChildPairUnderNode(ele, uri);
+         if(parentChildPair != null)
+         {
+            return parentChildPair;
+         }
+      }
+      
+      return null;
+   }
+   
+   public static ParentChildPair searchParentChildPairUnderNode(PageNode rootNode, String uri)
+   {
+      if(uri.equals(rootNode.getUri()))
+      {
+         return new ParentChildPair(null, rootNode);
+      }
+      
+      List<PageNode> nodes = rootNode.getNodes();
+      if(nodes == null)
+      {
+         return null;
+      }
+      
+      for(PageNode node : nodes)
+      {
+         ParentChildPair parentChildPair = searchParentChildPairUnderNode(node, uri);
+         if(parentChildPair != null)
+         {
+            parentChildPair.setParentNode(node);
+            return parentChildPair;
+         }
+      }
+      
+      return null;
+   }
+   
+   
    public static PageNode searchPageNodeByUri(PageNode node, String uri)
    {
       if (node.getUri().equals(uri))
@@ -325,5 +385,44 @@ public class PageNavigationUtils
          }
       }
       return null;
+   }
+   
+   /**
+    * 
+    * @author <a href="mailto:hoang281283@gmail.com">Minh Hoang TO</a>
+    * @version $Id$
+    *
+    */
+   public static class ParentChildPair
+   {
+      private PageNode parentNode;
+      
+      private PageNode childNode;
+      
+      public ParentChildPair(PageNode _parentNode, PageNode _childNode)
+      {
+         this.parentNode = _parentNode;
+         this.childNode = _childNode;
+      }
+      
+      public PageNode getParentNode()
+      {
+         return parentNode;
+      }
+      
+      public PageNode getChildNode()
+      {
+         return childNode;
+      }
+      
+      public void setParentNode(PageNode _parentNode)
+      {
+         this.parentNode = _parentNode;
+      }
+      
+      public void setChildNode(PageNode _childNode)
+      {
+         this.childNode = _childNode;
+      }
    }
 }

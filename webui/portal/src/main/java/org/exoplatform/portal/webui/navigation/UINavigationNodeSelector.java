@@ -26,6 +26,7 @@ import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.Visibility;
+import org.exoplatform.portal.webui.navigation.PageNavigationUtils.ParentChildPair;
 import org.exoplatform.portal.webui.page.UIPage;
 import org.exoplatform.portal.webui.page.UIPageNodeForm2;
 import org.exoplatform.portal.webui.portal.UIPortalComposer;
@@ -804,31 +805,29 @@ public class UINavigationNodeSelector extends UIContainer
             return;
          }
 
-         PageNode[] pageNodes = PageNavigationUtils.searchPageNodesByUri(nav, uri);
-         if (pageNodes == null)
+         ParentChildPair parentChildPair = PageNavigationUtils.searchParentChildPairByUri(nav, uri);
+         if (parentChildPair == null)
          {
             return;
          }
 
-         if (pageNodes[0] == null)
-         {
-        	if(pageNodes[1].isSystem()) {
+         PageNode parentNode = parentChildPair.getParentNode();
+         PageNode childNode = parentChildPair.getChildNode();
+         
+         if(childNode.isSystem()) {
         		uiApp.addMessage(new ApplicationMessage("UINavigationNodeSelector.msg.systemnode-delete", null, ApplicationMessage.ERROR));
         		return;
         	}
-        		
-            nav.getNodes().remove(pageNodes[1]);
-            return;
+        	
+         if(parentNode == null)
+         {
+            nav.getNodes().remove(childNode);
          }
-         
-         for (PageNode pageNode : pageNodes) {
-			if(pageNode.isSystem()) {
-				uiApp.addMessage(new ApplicationMessage("UINavigationNodeSelector.msg.systemnode-delete", null, ApplicationMessage.ERROR));
-				return;
-			}
+         else
+         {
+            parentNode.getNodes().remove(childNode);
+            uiNodeSelector.selectPageNodeByUri(parentNode.getUri());
          }
-         pageNodes[0].getChildren().remove(pageNodes[1]);
-         uiNodeSelector.selectPageNodeByUri(pageNodes[0].getUri());
       }
    }
 
