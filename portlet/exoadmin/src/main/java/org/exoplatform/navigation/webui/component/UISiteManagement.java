@@ -307,16 +307,17 @@ public class UISiteManagement extends UIContainer
          PortalDataMapper.toUIPortal(editPortal, userConfig);
          uiEditWS.setUIComponent(editPortal);
 
+         // Check if edit current portal
          if (uiPortal.getName().equals(editPortal.getName()))
          {
             editPortal.setSelectedNode(uiPortal.getSelectedNode());
             editPortal.setSelectedNavigation(uiPortal.getSelectedNavigation());
             editPortal.setSelectedPath(uiPortal.getSelectedPath());
-            editPortal.refreshUIPage();
             UISiteBody siteBody = uiWorkingWS.findFirstComponentOfType(UISiteBody.class);
             siteBody.setUIComponent(null);
          }
 
+         editPortal.refreshUIPage();
          portalApp.setModeState(UIPortalApplication.APP_BLOCK_EDIT_MODE);
          uiWorkingWS.setRenderedChild(UIPortalApplication.UI_EDITTING_WS_ID);
 
