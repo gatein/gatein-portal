@@ -45,21 +45,25 @@ abstract public class UIPortletApplication extends UIApplication
    {
    }
 
+   @Deprecated
    public int getMinWidth()
    {
       return minWidth;
    }
-
+   
+   @Deprecated
    public void setMinWidth(int minWidth)
    {
       this.minWidth = minWidth;
    }
-
+   
+   @Deprecated
    public int getMinHeight()
    {
       return minHeight;
    }
-
+   
+   @Deprecated
    public void setMinHeight(int minHeight)
    {
       this.minHeight = minHeight;
