@@ -40,6 +40,10 @@ eXo.gadget.UIGadget = {
         //-----------------------------------------
         var gadget;
         if (metadata != null) {
+        	// Check if gadget's height is not set and current view is canvas. By default, gadget's height is 800px
+        	if(metadata.gadgets[0].height == 0 && view == 'canvas') {
+        		metadata.gadgets[0].height = "800px";
+        	}
             gadget = gadgets.container.createGadget({specUrl: url,height: metadata.gadgets[0].height, secureToken: metadata.gadgets[0].secureToken, view: view});
             gadget.metadata = metadata.gadgets[0];
         } else {
