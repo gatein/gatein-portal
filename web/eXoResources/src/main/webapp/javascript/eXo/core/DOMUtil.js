@@ -454,7 +454,7 @@ DOMUtil.prototype.get = function(el) {
  }
 
 DOMUtil.prototype.disableOnClick = function(el) {
-	el.onClick = new Function("return false;");
+	el.onclick = new Function("return false;");
 }
 
 /****************************************************************************/
