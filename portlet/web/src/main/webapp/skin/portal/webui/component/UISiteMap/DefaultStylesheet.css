@@ -35,7 +35,8 @@
 }
 
 .UISitemap {
-	background: #fff url('DefaultSkin/background/default_sitemap.gif') no-repeat 95% 90%;
+	background: #fff url('DefaultSkin/background/default_sitemap.gif') no-repeat 95% 90%; /* orientation=lt */
+	background: #fff url('DefaultSkin/background/default_sitemap.gif') no-repeat 5% 90%; /* orientation=rt */
 	padding: 10px 30px;
 	color: #4e4e4e;
 }
@@ -82,7 +83,8 @@
 .UISitemap .SitemapContent .UISiteTree a {
 	font-weight: bold;
 	display: block;
-	float: left;
+	float: left; /* orientation=lt */
+	float: right; /* orientation=rt */
 }
 
 .UISitemap .SitemapContent .UISiteTree a:hover {
