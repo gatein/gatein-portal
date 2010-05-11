@@ -53,6 +53,8 @@
 	overflow: hidden;
 	white-space: nowrap;
 	width: 195px;
+	margin-right: 75px !important; /* orientation=lt */
+	margin: 0px 0px 0px 75px !important; /* orientation=rt */
 }
 
 .UIDashboard .UIDashboardEditForm {
@@ -274,7 +276,7 @@
 }
 
 .UIDashboardSelectContainer .GadgetCategory .ItemsContainer {
-	background: url('background/BGItemsContainer.gif') repeat-x left 1px;
+	background: #fff url('background/BGItemsContainer.gif') repeat-x left 1px;
 	border: 1px solid #b8babf;
 	border-top: none;
 	padding: 8px 8px 4px 8px;
@@ -293,6 +295,7 @@
 .UIDashboard .UIDashboardSelectContainer .GadgetTitle {
 	width: 150px;	
 	float: none;
+	margin: 0px !important;
 }
 
 /*----------------------UIGadgetsContainer-------------------*/
