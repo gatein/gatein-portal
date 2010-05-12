@@ -97,14 +97,15 @@
 }
 
 .UITabPaneDashboard .UIHorizontalTabs .GrayTabStyle .NormalTab .MiddleTab,
+.UITabPaneDashboard .UIHorizontalTabs .GrayTabStyle .HighlightNavigationTab .MiddleTab,
 .UITabPaneDashboard .UIHorizontalTabs .GrayTabStyle .SelectedTab .MiddleTab {
-	padding: 0px;
+	padding: 0px 10px;
+	_padding: 3px 10px;
+	white-space:nowrap;
+	font-weight: normal;
 }
 
-.UITabPaneDashboard .UIHorizontalTabs .UITab span {
-	margin: 3px 10px;
-	font-weight: bold;
-}
+
 
 .UITabPaneDashboard .UIHorizontalTabs .UITab .CloseIcon {
 	background: url('background/IconClose.gif') no-repeat center;
@@ -134,6 +135,21 @@
 	line-height: 22px;
 }
 
+.UITabPaneDashboard .UIHorizontalTabs .GrayTabStyle .HighlightNavigationTab .LeftTab {
+	background: url(background/TabDashboard.gif) no-repeat left -44px;
+	padding-left: 4px;
+}
+
+.UITabPaneDashboard .UIHorizontalTabs .GrayTabStyle .HighlightNavigationTab .RightTab {
+	background: url(background/TabDashboard.gif) no-repeat right -44px;
+	padding-right: 4px;
+}
+
+.UITabPaneDashboard .UIHorizontalTabs .GrayTabStyle .HighlightNavigationTab .MiddleTab {
+	background: url(background/TabDashboard.gif) repeat-x left -66px;
+	line-height: 22px;
+}
+
 .UITabPaneDashboard .UIHorizontalTabs .GrayTabStyle .SelectedTab .LeftTab {
 	background: url(background/TabDashboard.gif) no-repeat left top;
 }
@@ -147,6 +163,21 @@
 	background: url(background/TabDashboard.gif) repeat-x left -22px;
 	line-height: 22px;
 }
+
+.UITabPaneDashboard .UIHorizontalTabs .GrayTabStyle .EditnewTab .LeftTab {
+	background: url(background/TabDashboard.gif) no-repeat left top;
+}
+
+.UITabPaneDashboard .UIHorizontalTabs .GrayTabStyle .EditnewTab .RightTab {
+	background: url(background/TabDashboard.gif) no-repeat right top;
+	padding-right: 4px;
+}
+
+.UITabPaneDashboard .UIHorizontalTabs .GrayTabStyle .EditnewTab .MiddleTab {
+	background: url(background/TabDashboard.gif) repeat-x left -22px;
+	line-height: 22px;
+}
+
 /*----------------------UIGadgetsSelectorForm-------------------*/
 
 .UIDashboardSelectContainer {
@@ -182,6 +213,7 @@
 
 .UIDashboardSelectContainer .DashboardItemContainer .InputContainer {
 	padding: 4px 0px 4px 10px;
+	_padding: 0px 10px;
 	background: #ececec;
 }
 

@@ -20,13 +20,14 @@
 	
 	JavascriptManager jsManager = pcontext.getJavascriptManager();
 	jsManager.importJavascript("eXo.webui.UITabbedDashboard");
+	jsManager.addOnLoadJavascript("eXo.webui.UITabbedDashboard.buildTab");
 %>
 
 <div id="$uicomponent.id" class="UITabPaneDashboard">
 	<div class="LtTabDashboard">
 		<div class="RtTabDashboard">
 			<div class="CtTabDashboard">
-				<div class="UIHorizontalTabs ClearFix">
+				<div class="UIHorizontalTabs">
 					<div class="TabsContainer ClearFix">
 						<% for(int i = 0;i < tabNbs;i++){ 
 							 		node = nodes.get(i);
@@ -56,7 +57,7 @@
 									<div class="NormalTab">
 										<div class="LeftTab">
 											<div class="RightTab">
-												<div class="MiddleTab ClearFix">
+												<div class="MiddleTab">
 													<a	href="<%= portalURI + node.getUri(); %>"><span>$tabLabel</span></a>
 													<a  href="<%= uicomponent.url("DeleteTab",param); %>">
 														<img class="CloseIcon" src="/eXoResources/skin/sharedImages/Blank.gif" alt="DEL" />
