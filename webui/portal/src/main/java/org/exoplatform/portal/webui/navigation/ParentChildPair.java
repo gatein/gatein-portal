@@ -21,7 +21,7 @@ package org.exoplatform.portal.webui.navigation;
 import org.exoplatform.portal.config.model.PageNode;
 
 /**
- * This class wrappes a pair of PageNode and ist parent.
+ * This class wrappes a pair of PageNode and its parent.
  * 
  * @author <a href="mailto:hoang281283@gmail.com">Minh Hoang TO</a>
  * @version $Id$
