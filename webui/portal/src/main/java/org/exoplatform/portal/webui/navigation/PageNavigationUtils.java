@@ -156,7 +156,10 @@ public class PageNavigationUtils
          ParentChildPair parentChildPair = searchParentChildPairUnderNode(node, uri);
          if(parentChildPair != null)
          {
-            parentChildPair.setParentNode(node);
+            if(parentChildPair.getParentNode() == null)
+            {
+               parentChildPair.setParentNode(rootNode);
+            }
             return parentChildPair;
          }
       }
