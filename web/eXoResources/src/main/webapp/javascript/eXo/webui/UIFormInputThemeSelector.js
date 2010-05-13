@@ -47,7 +47,10 @@ UIFormInputThemeSelector.prototype.setDefaultTheme = function(obj, param) {
 	detailList.className = "UIThemeSelector " + param ;
 	
 	var nameTheme = DOMUtil.findNextElementByTagName(detailList,'div') ;
-	nameTheme.innerHTML = "Default Theme"
+	
+	//get default theme name from a hidden field
+	var defaultNameTheme = DOMUtil.findNextElementByTagName(nameTheme,'input') ;
+	nameTheme.innerHTML = defaultNameTheme.value ;
 	
 	// get hide input
 	var itemListContainer = DOMUtil.findPreviousElementByTagName(itemDetailList,'div') ;
