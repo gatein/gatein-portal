@@ -164,8 +164,8 @@ public class TemplateService
 
    final public void invalidateTemplate(String name, ResourceResolver resolver) throws Exception
    {
-      String resourceId = resolver.createResourceId(name);
-      getTemplatesCache().remove(resourceId);
+      ResourceKey resourceKey = resolver.createResourceKey(name);
+      getTemplatesCache().remove(resourceKey);
    }
 
    public ExoCache<ResourceKey, GroovyTemplate> getTemplatesCache()
@@ -202,7 +202,7 @@ public class TemplateService
       {
          TemplateStatistic app = statisticService.apps.get(name);
          ResourceResolver resolver = app.getResolver();
-         templatesCache_.remove(resolver.createResourceId(name));
+         templatesCache_.remove(resolver.createResourceKey(name));
       }
       catch (Exception e)
       {
