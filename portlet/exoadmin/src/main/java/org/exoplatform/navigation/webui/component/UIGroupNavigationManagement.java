@@ -30,7 +30,7 @@ import org.exoplatform.portal.webui.navigation.UIAddGroupNavigation;
 import org.exoplatform.portal.webui.navigation.UINavigationManagement;
 import org.exoplatform.portal.webui.navigation.UINavigationNodeSelector;
 import org.exoplatform.portal.webui.navigation.UIPageNavigationForm;
-import org.exoplatform.portal.webui.page.UIPageNodeForm2;
+import org.exoplatform.portal.webui.page.UIPageNodeForm;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIMaskWorkspace;
@@ -70,13 +70,13 @@ import java.util.UUID;
       @EventConfig(listeners = UIGroupNavigationManagement.AddNavigationActionListener.class),
       @EventConfig(listeners = UIGroupNavigationManagement.DeleteNavigationActionListener.class, confirm = "UIGroupNavigationManagement.Delete.Confirm")}),
    @ComponentConfig(id = "UIGroupNavigationGrid", type = UIRepeater.class, template = "app:/groovy/navigation/webui/component/UINavigationGrid.gtmpl"),
-   @ComponentConfig(type = UIPageNodeForm2.class, lifecycle = UIFormLifecycle.class, template = "system:/groovy/webui/form/UIFormTabPane.gtmpl", events = {
-      @EventConfig(listeners = UIPageNodeForm2.SaveActionListener.class),
+   @ComponentConfig(type = UIPageNodeForm.class, lifecycle = UIFormLifecycle.class, template = "system:/groovy/webui/form/UIFormTabPane.gtmpl", events = {
+      @EventConfig(listeners = UIPageNodeForm.SaveActionListener.class),
       @EventConfig(listeners = UIGroupNavigationManagement.BackActionListener.class, phase = Phase.DECODE),
-      @EventConfig(listeners = UIPageNodeForm2.SwitchPublicationDateActionListener.class, phase = Phase.DECODE),
-      @EventConfig(listeners = UIPageNodeForm2.SwitchVisibleActionListener.class, phase = Phase.DECODE),
-      @EventConfig(listeners = UIPageNodeForm2.ClearPageActionListener.class, phase = Phase.DECODE),
-      @EventConfig(listeners = UIPageNodeForm2.CreatePageActionListener.class, phase = Phase.DECODE)})})
+      @EventConfig(listeners = UIPageNodeForm.SwitchPublicationDateActionListener.class, phase = Phase.DECODE),
+      @EventConfig(listeners = UIPageNodeForm.SwitchVisibleActionListener.class, phase = Phase.DECODE),
+      @EventConfig(listeners = UIPageNodeForm.ClearPageActionListener.class, phase = Phase.DECODE),
+      @EventConfig(listeners = UIPageNodeForm.CreatePageActionListener.class, phase = Phase.DECODE)})})
 public class UIGroupNavigationManagement extends UIContainer
 {
 
@@ -384,12 +384,12 @@ public class UIGroupNavigationManagement extends UIContainer
       }
    }
 
-   static public class BackActionListener extends EventListener<UIPageNodeForm2>
+   static public class BackActionListener extends EventListener<UIPageNodeForm>
    {
 
-      public void execute(Event<UIPageNodeForm2> event) throws Exception
+      public void execute(Event<UIPageNodeForm> event) throws Exception
       {
-         UIPageNodeForm2 uiPageNodeForm = event.getSource();
+         UIPageNodeForm uiPageNodeForm = event.getSource();
          PageNavigation contextNavigation = uiPageNodeForm.getContextPageNavigation();
          
          UIGroupNavigationManagement uiGroupNavigation =

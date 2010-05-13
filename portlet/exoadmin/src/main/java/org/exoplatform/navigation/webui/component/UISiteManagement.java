@@ -32,7 +32,7 @@ import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.webui.navigation.PageNavigationUtils;
 import org.exoplatform.portal.webui.navigation.UINavigationManagement;
 import org.exoplatform.portal.webui.navigation.UINavigationNodeSelector;
-import org.exoplatform.portal.webui.page.UIPageNodeForm2;
+import org.exoplatform.portal.webui.page.UIPageNodeForm;
 import org.exoplatform.portal.webui.page.UISiteBody;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.portal.UIPortalComposer;
@@ -69,13 +69,13 @@ import javax.servlet.http.HttpServletRequest;
       @EventConfig(name = "EditPortalLayout", listeners = UISiteManagement.EditPortalLayoutActionListener.class),
       @EventConfig(listeners = UISiteManagement.EditNavigationActionListener.class),
       @EventConfig(listeners = UISiteManagement.DeletePortalActionListener.class, confirm = "UIPortalBrowser.deletePortal")}),
-   @ComponentConfig(type = UIPageNodeForm2.class, lifecycle = UIFormLifecycle.class, template = "system:/groovy/webui/form/UIFormTabPane.gtmpl", events = {
-      @EventConfig(listeners = UIPageNodeForm2.SaveActionListener.class),
+   @ComponentConfig(type = UIPageNodeForm.class, lifecycle = UIFormLifecycle.class, template = "system:/groovy/webui/form/UIFormTabPane.gtmpl", events = {
+      @EventConfig(listeners = UIPageNodeForm.SaveActionListener.class),
       @EventConfig(listeners = UISiteManagement.BackActionListener.class, phase = Phase.DECODE),
-      @EventConfig(listeners = UIPageNodeForm2.SwitchPublicationDateActionListener.class, phase = Phase.DECODE),
-      @EventConfig(listeners = UIPageNodeForm2.SwitchVisibleActionListener.class, phase = Phase.DECODE),
-      @EventConfig(listeners = UIPageNodeForm2.ClearPageActionListener.class, phase = Phase.DECODE),
-      @EventConfig(listeners = UIPageNodeForm2.CreatePageActionListener.class, phase = Phase.DECODE)})})
+      @EventConfig(listeners = UIPageNodeForm.SwitchPublicationDateActionListener.class, phase = Phase.DECODE),
+      @EventConfig(listeners = UIPageNodeForm.SwitchVisibleActionListener.class, phase = Phase.DECODE),
+      @EventConfig(listeners = UIPageNodeForm.ClearPageActionListener.class, phase = Phase.DECODE),
+      @EventConfig(listeners = UIPageNodeForm.CreatePageActionListener.class, phase = Phase.DECODE)})})
 public class UISiteManagement extends UIContainer
 {
 
@@ -367,12 +367,12 @@ public class UISiteManagement extends UIContainer
       }
    }
 
-   static public class BackActionListener extends EventListener<UIPageNodeForm2>
+   static public class BackActionListener extends EventListener<UIPageNodeForm>
    {
 
-      public void execute(Event<UIPageNodeForm2> event) throws Exception
+      public void execute(Event<UIPageNodeForm> event) throws Exception
       {
-         UIPageNodeForm2 uiPageNodeForm = event.getSource();
+         UIPageNodeForm uiPageNodeForm = event.getSource();
          PageNavigation contextNavigation = uiPageNodeForm.getContextPageNavigation();
          UISiteManagement uiSiteManagement = uiPageNodeForm.getAncestorOfType(UISiteManagement.class);
          UIPopupWindow uiNavigationPopup = uiSiteManagement.getChild(UIPopupWindow.class);

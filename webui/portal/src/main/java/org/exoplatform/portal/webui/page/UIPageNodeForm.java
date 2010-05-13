@@ -61,7 +61,7 @@ import java.util.List;
 /**
  * Author : Dang Van Minh, Pham Tuan minhdv81@yahoo.com Jun 14, 2006
  */
-public class UIPageNodeForm2 extends UIFormTabPane
+public class UIPageNodeForm extends UIFormTabPane
 {
 
    private PageNode pageNode_;
@@ -82,7 +82,7 @@ public class UIPageNodeForm2 extends UIFormTabPane
    
    final private static String VISIBLE = "visible";
 
-   public UIPageNodeForm2() throws Exception
+   public UIPageNodeForm() throws Exception
    {
       super("UIPageNodeForm");
 
@@ -230,12 +230,12 @@ public class UIPageNodeForm2 extends UIFormTabPane
       return this.contextPageNavigation;
    }
 
-   static public class SaveActionListener extends EventListener<UIPageNodeForm2>
+   static public class SaveActionListener extends EventListener<UIPageNodeForm>
    {
-      public void execute(Event<UIPageNodeForm2> event) throws Exception
+      public void execute(Event<UIPageNodeForm> event) throws Exception
       {
          WebuiRequestContext ctx = event.getRequestContext();
-         UIPageNodeForm2 uiPageNodeForm = event.getSource();
+         UIPageNodeForm uiPageNodeForm = event.getSource();
          UIApplication uiPortalApp = ctx.getUIApplication();
          if (uiPageNodeForm.getUIFormCheckBoxInput(SHOW_PUBLICATION_DATE).isChecked())
          {
@@ -330,54 +330,54 @@ public class UIPageNodeForm2 extends UIFormTabPane
       }
    }
 
-   static public class BackActionListener extends EventListener<UIPageNodeForm2>
+   static public class BackActionListener extends EventListener<UIPageNodeForm>
    {
 
-      public void execute(Event<UIPageNodeForm2> event) throws Exception
+      public void execute(Event<UIPageNodeForm> event) throws Exception
       {
       }
 
    }
 
-   static public class SwitchPublicationDateActionListener extends EventListener<UIPageNodeForm2>
+   static public class SwitchPublicationDateActionListener extends EventListener<UIPageNodeForm>
    {
-      public void execute(Event<UIPageNodeForm2> event) throws Exception
+      public void execute(Event<UIPageNodeForm> event) throws Exception
       {
-         UIPageNodeForm2 uiForm = event.getSource();
+         UIPageNodeForm uiForm = event.getSource();
          boolean isCheck = uiForm.getUIFormCheckBoxInput(SHOW_PUBLICATION_DATE).isChecked();
          uiForm.setShowPublicationDate(isCheck);
          event.getRequestContext().addUIComponentToUpdateByAjax(uiForm);
       }
    }
    
-   static public class SwitchVisibleActionListener extends EventListener<UIPageNodeForm2>
+   static public class SwitchVisibleActionListener extends EventListener<UIPageNodeForm>
    {
 		@Override
-		public void execute(Event<UIPageNodeForm2> event) throws Exception
+		public void execute(Event<UIPageNodeForm> event) throws Exception
 		{
-			UIPageNodeForm2 uiForm = event.getSource();
+			UIPageNodeForm uiForm = event.getSource();
 			boolean isCheck = uiForm.getUIFormCheckBoxInput(VISIBLE).isChecked();
 			uiForm.setShowCheckPublicationDate(isCheck);
 			event.getRequestContext().addUIComponentToUpdateByAjax(uiForm);
 		}
    }
 
-   static public class ClearPageActionListener extends EventListener<UIPageNodeForm2>
+   static public class ClearPageActionListener extends EventListener<UIPageNodeForm>
    {
-      public void execute(Event<UIPageNodeForm2> event) throws Exception
+      public void execute(Event<UIPageNodeForm> event) throws Exception
       {
-         UIPageNodeForm2 uiForm = event.getSource();
+         UIPageNodeForm uiForm = event.getSource();
          UIPageSelector2 pageSelector = uiForm.findFirstComponentOfType(UIPageSelector2.class);
          pageSelector.setPage(null);
          event.getRequestContext().addUIComponentToUpdateByAjax(pageSelector);
       }
    }
 
-   static public class CreatePageActionListener extends EventListener<UIPageNodeForm2>
+   static public class CreatePageActionListener extends EventListener<UIPageNodeForm>
    {
-      public void execute(Event<UIPageNodeForm2> event) throws Exception
+      public void execute(Event<UIPageNodeForm> event) throws Exception
       {
-         UIPageNodeForm2 uiForm = event.getSource();
+         UIPageNodeForm uiForm = event.getSource();
          UIPageSelector2 pageSelector = uiForm.findFirstComponentOfType(UIPageSelector2.class);
 
          PortalRequestContext pcontext = Util.getPortalRequestContext();
