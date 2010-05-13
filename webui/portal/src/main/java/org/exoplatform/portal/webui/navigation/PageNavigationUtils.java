@@ -30,6 +30,8 @@ import org.exoplatform.services.resources.ResourceBundleManager;
 import org.exoplatform.webui.application.WebuiRequestContext;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -385,6 +387,44 @@ public class PageNavigationUtils
          }
       }
       return null;
+   }
+   
+   public static void sortPageNavigation(List<PageNavigation> navigations)
+   {
+      Collections.sort(navigations, new PageNavigationComparator());
+   }
+   
+   /**
+    * 
+    * @author <a href="mailto:hoang281283@gmail.com">Minh Hoang TO</a>
+    * @version $Id$
+    *
+    */
+   public static class PageNavigationComparator implements Comparator<PageNavigation>
+   {
+      public int compare(PageNavigation firstNav, PageNavigation secondNav)
+      {
+         int firstNavPriority = firstNav.getPriority();
+         int secondNavPriority = secondNav.getPriority();
+         
+         if(firstNavPriority == secondNavPriority)
+         {
+            String firstNavId = firstNav.getOwnerId();
+            String secondNavId = secondNav.getOwnerId();
+            return firstNavId.compareTo(secondNavId);
+         }
+         else
+         {
+            if(firstNavPriority < secondNavPriority)
+            {
+               return -1;
+            }
+            else
+            {
+               return 1;
+            }
+         }
+      }
    }
    
    /**
