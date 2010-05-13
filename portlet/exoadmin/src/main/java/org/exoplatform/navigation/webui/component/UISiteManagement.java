@@ -28,6 +28,7 @@ import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.UserPortalConfig;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.PageNavigation;
+import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.webui.navigation.PageNavigationUtils;
 import org.exoplatform.portal.webui.navigation.UINavigationManagement;
@@ -383,6 +384,12 @@ public class UISiteManagement extends UIContainer
          
          selector.setEdittedNavigation(uiPageNodeForm.getContextPageNavigation());
          selector.initTreeData();
+         
+         if (uiPageNodeForm.getSelectedParent() instanceof PageNode)
+         {
+            PageNode selectedParent = (PageNode)uiPageNodeForm.getSelectedParent();
+            selector.selectPageNodeByUri(selectedParent.getUri());
+         }
          
          uiNavigationPopup.setUIComponent(navigationManager);
          uiNavigationPopup.setWindowSize(400, 400);

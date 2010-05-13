@@ -28,6 +28,7 @@ import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.webui.navigation.PageNavigationUtils;
+import org.exoplatform.portal.webui.navigation.ParentChildPair;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
@@ -72,6 +73,14 @@ public class UIPageNodeForm extends UIFormTabPane
 
    private Object selectedParent;
 
+   /**
+    * Wrapper of editted PageNode and its parent
+    */
+   private ParentChildPair contextParentChildPair;
+   
+   /**
+    * PageNavigation to which editted PageNode belongs
+    */
    private PageNavigation contextPageNavigation;
    
    final private static String SHOW_PUBLICATION_DATE = "showPublicationDate";
@@ -197,6 +206,16 @@ public class UIPageNodeForm extends UIFormTabPane
       this.selectedParent = obj;
    }
 
+   public void setContextParentChildPair(ParentChildPair _contextParentChildPair)
+   {
+      this.contextParentChildPair = _contextParentChildPair;
+   }
+   
+   public ParentChildPair getContextParentChildPair()
+   {
+      return this.contextParentChildPair;
+   }
+   
    public void processRender(WebuiRequestContext context) throws Exception
    {
       super.processRender(context);
