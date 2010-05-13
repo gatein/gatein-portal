@@ -406,8 +406,8 @@ public class PageNavigationUtils
       {
          int firstNavPriority = firstNav.getPriority();
          int secondNavPriority = secondNav.getPriority();
-         
-         if(firstNavPriority == secondNavPriority)
+
+         if (firstNavPriority == secondNavPriority)
          {
             String firstNavId = firstNav.getOwnerId();
             String secondNavId = secondNav.getOwnerId();
@@ -415,7 +415,7 @@ public class PageNavigationUtils
          }
          else
          {
-            if(firstNavPriority < secondNavPriority)
+            if (firstNavPriority < secondNavPriority)
             {
                return -1;
             }
@@ -425,44 +425,5 @@ public class PageNavigationUtils
             }
          }
       }
-   }
-   
-   /**
-    * 
-    * @author <a href="mailto:hoang281283@gmail.com">Minh Hoang TO</a>
-    * @version $Id$
-    *
-    */
-   public static class ParentChildPair
-   {
-      private PageNode parentNode;
-      
-      private PageNode childNode;
-      
-      public ParentChildPair(PageNode _parentNode, PageNode _childNode)
-      {
-         this.parentNode = _parentNode;
-         this.childNode = _childNode;
-      }
-      
-      public PageNode getParentNode()
-      {
-         return parentNode;
-      }
-      
-      public PageNode getChildNode()
-      {
-         return childNode;
-      }
-      
-      public void setParentNode(PageNode _parentNode)
-      {
-         this.parentNode = _parentNode;
-      }
-      
-      public void setChildNode(PageNode _childNode)
-      {
-         this.childNode = _childNode;
-      }
-   }
+   }   
 }

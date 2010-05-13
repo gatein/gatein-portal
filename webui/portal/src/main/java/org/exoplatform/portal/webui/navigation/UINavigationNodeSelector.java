@@ -26,7 +26,7 @@ import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.Visibility;
-import org.exoplatform.portal.webui.navigation.PageNavigationUtils.ParentChildPair;
+import org.exoplatform.portal.webui.navigation.ParentChildPair;
 import org.exoplatform.portal.webui.page.UIPage;
 import org.exoplatform.portal.webui.page.UIPageNodeForm2;
 import org.exoplatform.portal.webui.portal.UIPortalComposer;
