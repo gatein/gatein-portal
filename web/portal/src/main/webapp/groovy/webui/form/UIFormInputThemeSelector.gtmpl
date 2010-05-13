@@ -9,7 +9,6 @@
 	def selectedCategory = uicomponent.getChild(UIItemThemeSelector.class).getSelectedCategory() ;
 	String selectedThemeName = uicomponent.getChild(UIItemThemeSelector.class).getSelectedTheme() ;
 	def uiParentComponent = uicomponent.getParent() ;
-	String defaultThemeName = _ctx.appRes(uicomponent.getId() + ".UIItemThemeSelector.item.DefaultTheme" ) ;
 %>
 <div class="UIItemSelector UIFormInputThemeSelector" id="$uicomponent.id">
 	<div class="LeftColumnStyle">
@@ -68,7 +67,6 @@
 					  
 					</div>
 					<div class="NameTheme"><%= _ctx.appRes(uicomponent.getId() + ".UIItemThemeSelector.item." + selectedThemeName ) %></div>
-					<input type="hidden" name="HiddenDefaultThemeName" value="$defaultThemeName">
 			
 			</div>
 		</div>

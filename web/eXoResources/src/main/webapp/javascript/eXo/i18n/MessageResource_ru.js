@@ -20,3 +20,4 @@
 eXo.i18n.I18NMessage.SessionTimeout = "Тайм-аут сессии, нажмите кнопку Обновить в браузере";
 eXo.i18n.I18NMessage.TargetBlockNotFound = "Целевой идентификатор блока для обновления не найден: {0}";
 eXo.i18n.I18NMessage.BlockUpdateNotFound = "Идентификатор блока для обновления не найден: {0}";
+eXo.i18n.I18NMessage.DefaultTheme = "По умолчанию";

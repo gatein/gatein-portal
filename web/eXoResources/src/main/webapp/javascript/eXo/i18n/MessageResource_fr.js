@@ -20,3 +20,4 @@
 eXo.i18n.I18NMessage.SessionTimeout = "La session a expir\u00e9 ! Veuillez recharger la page.";
 eXo.i18n.I18NMessage.TargetBlockNotFound = "The target blockId to update is not found : {0}";
 eXo.i18n.I18NMessage.BlockUpdateNotFound = "The blockId to update is not found : {0}";
+eXo.i18n.I18NMessage.DefaultTheme = "Style par Défaut";

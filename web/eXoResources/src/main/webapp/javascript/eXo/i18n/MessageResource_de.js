@@ -20,3 +20,4 @@
 eXo.i18n.I18NMessage.SessionTimeout = "Die Benutzer-Sitzung ist abgelaufen! Aktualisieren Sie Ihren Browser.";
 eXo.i18n.I18NMessage.TargetBlockNotFound = "Die zu aktualisierende Ziel-blockId wurde nicht gefunden: {0}";
 eXo.i18n.I18NMessage.BlockUpdateNotFound = "Die zu aktualisierende blockId wurde nicht gefunden: {0}";
+eXo.i18n.I18NMessage.DefaultTheme = "Standard-Thema";

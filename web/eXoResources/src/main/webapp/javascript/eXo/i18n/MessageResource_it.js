@@ -20,3 +20,4 @@
 eXo.i18n.I18NMessage.SessionTimeout = "La Sessione \u00E8 scaduta ! Aggiorna la pagina del browser.";
 eXo.i18n.I18NMessage.TargetBlockNotFound = "Il target blockId da aggiornare non \u00E8 stato trovato : {0}";
 eXo.i18n.I18NMessage.BlockUpdateNotFound = "Il blockId da aggiornare non \u00E8 stato trovato : {0}";
+eXo.i18n.I18NMessage.DefaultTheme = "Tema di Default";
