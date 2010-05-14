@@ -245,23 +245,27 @@ not sure if we need this one?.. */
   text-decoration: none;
 	font-size: 12px;
  	line-height: 18px;
+	background: #F5F9FA;
 }
 
 /* Selected menu item. */
 .portlet-menu-item-selected {
 	line-height: 18px;
+	background: #F5F9FA;
 }
 
 .portlet-menu-item-hover {
-  color: #5699B7;
+  color: #058ee6;
   text-decoration: none;
   font-size: 12px;
  	line-height: 18px;
+	background: #F5F9FA;
 }
 
 /* Selected menu item when the mouse hovers over it. */
 .portlet-menu-item-hover-selected {
 	line-height: 18px;
+	background: #F5F9FA;
 }
 
 /* Normal, unselected menu item that has sub-menus. */
@@ -280,6 +284,7 @@ not sure if we need this one?.. */
 
 .portlet-menu-cascade-item-hover {
 	line-height: 18px;
+  color: #058ee6;
 }
 
 .portlet-menu-cascade-item-hover-selected {
@@ -304,6 +309,7 @@ not sure if we need this one?.. */
 
 .portlet-menu-content-hover {
 	line-height: 18px;
+  color: #058ee6;
 }
 
 .portlet-menu-content-hover-selected {
@@ -320,6 +326,7 @@ not sure if we need this one?.. */
 
 .portlet-menu-indicator-hover {
 	line-height: 18px;
+  color: #058ee6;
 }
 
 .portlet-menu-indicator-hover-selected {
