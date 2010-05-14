@@ -26,6 +26,7 @@ import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.portlet.PortletExceptionHandleService;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.resolver.ApplicationResourceResolver;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
@@ -196,7 +197,9 @@ public class UIPortletLifecycle<S, C extends Serializable, I> extends Lifecycle<
             else
             {
                int portalMode = Util.getUIPortalApplication().getModeState();
-               if (portalMode % 2 == 0 || uicomponent.getCurrentPortletMode().equals(PortletMode.EDIT))
+               
+               //Check mode of portal, portlet and permission for viewable
+               if ((portalMode % 2 == 0 || uicomponent.getCurrentPortletMode().equals(PortletMode.EDIT)) && uicomponent.hasPermission())
                {
                   PortletInvocationResponse response = uicomponent.invoke(renderInvocation);
                   if (response instanceof FragmentResponse)
