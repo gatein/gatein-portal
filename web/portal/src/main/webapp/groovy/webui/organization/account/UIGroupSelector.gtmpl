@@ -8,13 +8,13 @@
 		<div class="SelectedGroupPath"><% uicomponent.renderChild(UIBreadcumbs.class); %></div>
 		<div class="GroupSelector">
 			<div class="ContentContainer">
-				<div class="MembershipTitle">Select Group</div>
+				<div class="MembershipTitle"><%=_ctx.appRes("UIGroupSelector.title.selectGroupMember")%></div>
 				<%uicomponent.renderChild(UITree.class);%>
 			</div>
 		</div>
 		<div class="MembershipSelector">
 			<div class="ContentContainer">
-				<div class="MembershipTitle">Select Child Group</div>
+				<div class="MembershipTitle"><%=_ctx.appRes("UIGroupSelector.title.selectChildGroup")%></div>
 				<div class="OverflowContainer">
 					<%								
 					boolean even = true; 
@@ -30,7 +30,7 @@
 						<%}%>
 					<% } else if( groups != null && groups.size() == 0 ) { %>
 						<div class="AddButton">
-							<a class="ItemIcon" href="<%= uicomponent.event("SelectGroup",uicomponent.getCurrentGroup().getId()) %>">select this group</a>
+							<a class="ItemIcon" href="<%= uicomponent.event("SelectGroup",uicomponent.getCurrentGroup().getId()) %>"><%=_ctx.appRes("UIGroupSelector.title.addGroupButton")%></a>
 						</div>
 					<% } %>	
 				</div>
