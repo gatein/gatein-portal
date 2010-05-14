@@ -18,6 +18,8 @@
  */
 package org.exoplatform.account.webui.component;
 
+import org.exoplatform.portal.webui.CaptchaValidator;
+import org.exoplatform.portal.webui.UICaptcha;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -30,6 +32,7 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
+import org.exoplatform.webui.form.validator.MandatoryValidator;
 
 import javax.portlet.PortletMode;
 import javax.portlet.PortletPreferences;
@@ -70,6 +73,28 @@ public class UIRegisterEditMode extends UIForm
          PortletPreferences pref = pcontext.getRequest().getPreferences();
          pref.setValue(USE_CAPTCHA, Boolean.toString(useCaptcha));
          pref.store();
+         
+         //Show/hide the captcha input in UIRegisterInputSet
+         UIRegisterPortlet registerPortlet = uiForm.getParent();
+         UIRegisterInputSet registerInputSet = registerPortlet.findFirstComponentOfType(UIRegisterInputSet.class);
+         
+         if(useCaptcha)
+         {
+            if(!registerInputSet.getCaptchaInputAvailability())
+            {
+               registerInputSet.addUIFormInput(new UICaptcha(UIRegisterInputSet.CAPTCHA, UIRegisterInputSet.CAPTCHA, null).addValidator(MandatoryValidator.class).addValidator(CaptchaValidator.class));
+               registerInputSet.setCaptchaInputAvailability(true);
+            }
+         }
+         else
+         {
+            if(registerInputSet.getCaptchaInputAvailability())
+            {
+               registerInputSet.removeChildById(UIRegisterInputSet.CAPTCHA);
+               registerInputSet.setCaptchaInputAvailability(false);
+            }
+         }
+         
          UIPortalApplication portalApp = Util.getUIPortalApplication();
          if (portalApp.getModeState() == UIPortalApplication.NORMAL_MODE)
             pcontext.setApplicationMode(PortletMode.VIEW);

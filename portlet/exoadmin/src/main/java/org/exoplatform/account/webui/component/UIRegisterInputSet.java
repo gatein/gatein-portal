@@ -60,6 +60,8 @@ public class UIRegisterInputSet extends UIFormInputWithActions
 
    protected static String CAPTCHA = "captcha";
 
+   private boolean captchaInputAvailability;
+   
    public UIRegisterInputSet(String name) throws Exception{
       super(name);
       
@@ -91,7 +93,18 @@ public class UIRegisterInputSet extends UIFormInputWithActions
       if (useCaptcha)
       {
          addUIFormInput(new UICaptcha(CAPTCHA, CAPTCHA, null).addValidator(MandatoryValidator.class).addValidator(CaptchaValidator.class));
+         this.captchaInputAvailability = true;
       }
+   }
+   
+   public void setCaptchaInputAvailability(boolean availability)
+   {
+      this.captchaInputAvailability = availability;
+   }
+   
+   public boolean getCaptchaInputAvailability()
+   {
+      return this.captchaInputAvailability;
    }
    
    private String getUserName(){
