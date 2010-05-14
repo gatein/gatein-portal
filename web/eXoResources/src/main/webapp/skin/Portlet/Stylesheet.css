@@ -26,58 +26,58 @@
 /* Font attributes for the normal  fragment font.
 Used for the display of non-accentuated information */
 .portlet-font {
-   color: #000000;
-   font-family: Verdana, Arial, Helvetica, sans-serif;
-   font-size: 11px;
+  color: #000000;
+  font-size: 11px;
+	line-height: 18px;
 }
 
 /* Font attributes similar to the portlet.font but the color is lighter */
 .portlet-font-dim {
    color: #777777;
-   font-family: Verdana, Arial, Helvetica, sans-serif;
    font-size: 11px;
+   line-height: 18px;
 }
 
 /** MESSAGES **/
 
 /* Status of the current operation. */
 .portlet-msg-status {
-   font-family: Verdana, Arial, Helvetica, Sans-Serif, sans-serif;
    font-size: 12px;
    font-style: normal;
    color: #336699;
+   line-height: 18px;
 }
 
 /* Help messages, general additional information, etc. */
 .portlet-msg-info {
-   font-family: Verdana, Arial, Helvetica, Sans-Serif, sans-serif;
    font-size: 12px;
    font-style: italic;
    color: #000;
+   line-height: 18px;
 }
 
 /* Error messages. */
 .portlet-msg-error {
    color: red;
-   font-family: Verdana, Arial, Helvetica, Sans-Serif, sans-serif;
    font-size: 12px;
    font-weight: bold;
+   line-height: 18px;
 }
 
 /* Warning messages. */
 .portlet-msg-alert {
-   font-family: Verdana, Arial, Helvetica, Sans-Serif, sans-serif;
    font-size: 12px;
    font-weight: bold;
    color: #821717;
+   line-height: 18px;
 }
 
 /* Verification of the successful completion of a task. */
 .portlet-msg-success {
-   font-family: Verdana, Arial, Helvetica, Sans-Serif, sans-serif;
    font-size: 12px;
    font-weight: bold;
    color: #359630;
+   line-height: 18px;
 }
 
 /** SECTIONS **/
@@ -85,27 +85,33 @@ Used for the display of non-accentuated information */
 /* Table or section header */
 .portlet-section-header {
    font-weight: bold;
+   line-height: 18px;
 }
 
 .portlet-section-body {
    color: #333333;
+   line-height: 18px;
 }
 
 .portlet-section-alternate {
    background-color: #F2F2F2;
+   line-height: 18px;
 }
 
 .portlet-section-selected {
    background-color: #CBD4E6;
+   line-height: 18px;
 }
 
 .portlet-section-subheader {
    font-weight: bold;
    font-size: 10px;
+   line-height: 18px;
 }
 
 .portlet-section-footer {
    font-size: 11px;
+   line-height: 18px;
 }
 
 /* Text that belongs to the table but does not fall in one of the other categories
@@ -113,6 +119,7 @@ Used for the display of non-accentuated information */
 .portlet-section-text {
    font-size: 12px;
    font-style: italic;
+   line-height: 18px;
 }
 
 /** TABLE **/
@@ -141,6 +148,7 @@ Used for the display of non-accentuated information */
 /* Text in every other row in the table */
 .portlet-table-alternate {
    background: #f5f5f5;
+   line-height: 18px;
 }
 
 /* Text in a selected cell range */
@@ -148,6 +156,7 @@ Used for the display of non-accentuated information */
    color: #000;
    font-size: 12px;
    background-color: #CBD4E6;
+   line-height: 18px;
 }
 
 /* Text of a subheading */
@@ -155,31 +164,35 @@ Used for the display of non-accentuated information */
    font-weight: bold;
    color: #000;
    font-size: 12px;
+   line-height: 18px;
 }
 
 /* Text that belongs to the table but does not fall in one of the other categories (e.g. explanatory or help text that is associated with the table). */
 .portlet-table-text {
    padding: 3px 5px;
    border-bottom: 1px solid #d5d5d5;
+   line-height: 18px;
 }
 
 /** FORMS **/
 .portlet-form-label {
    font-size: 10px;
    color: #333333;
+   line-height: 18px;
 }
 
 /* Text of the user-input in an input field. not sure if we need this guy? */
 .portlet-form-input-field {
    color: #000000;
    font-size: 10px;
+   line-height: 18px;
 }
 
 /* Form Button Style */
 .portlet-form-button {
-   line-height: 22px;
+   line-height: 18px;
    text-align: center;
-   background: url('/eXoResources/skin/DefaultSkin/webui/component/UIBarDecorator/UIAction/background/LightBlueStyle.gif') repeat-x bottom;
+   background: url('/eXoResources/skin/DefaultSkin/webui/component/UIBarDecorator/UIAction/background/LightBlueStyle.gif') repeat-x center -24px;
    white-space: nowrap;
    display: table-cell;
    padding: 0 12px;
@@ -193,109 +206,131 @@ Used for the display of non-accentuated information */
 
 /* Text that appears beside a context dependent action icon */
 .portlet-icon-label {
+	line-height: 18px;
 }
 
 /* Text that appears beside a "standard" icon (e.g Ok, or Cancel)
 not sure if we need this one?.. */
 .portlet-dlg-icon-label {
+	line-height: 18px;
 }
 
 /* Text for form field labels */
 .portlet-form-field-label {
-   font-family: Verdana, Arial, Helvetica, Sans-Serif, sans-serif;
-   color: #000;
-   white-space: nowrap;
-   text-align: left;
-   vertical-align: top;
-   font-weight: bold;
+  color: #000;
+  white-space: nowrap;
+  text-align: left;
+  vertical-align: top;
+  font-weight: bold;
+	line-height: 18px;
 }
 
 /* Text for a form field */
 .portlet-form-field {
-   font-family: Verdana, Arial, Helvetica, Sans-Serif, sans-serif;
-   font-size: 10px;
-   color: #000; /*margin-top: 10px;*/
+  font-size: 10px;
+	color: #000; /*margin-top: 10px;*/
+ 	line-height: 18px;
 }
 
 /** MENUS **/
 
 /*General menu settings such as background color, margins, etc. */
 .portlet-menu {
+	line-height: 18px;
 }
 
 /* Normal, unselected menu item. */
 .portlet-menu-item {
-   color: #242424;
-   text-decoration: none;
-   font-family: Verdana, Arial, Helvetica, sans-serif;
-   font-size: 12px;
+  color: #242424;
+  text-decoration: none;
+	font-size: 12px;
+ 	line-height: 18px;
 }
 
 /* Selected menu item. */
 .portlet-menu-item-selected {
+	line-height: 18px;
 }
 
 .portlet-menu-item-hover {
-   color: #5699B7;
-   text-decoration: none;
-   font-family: Verdana, Arial, Helvetica, sans-serif;
-   font-size: 12px;
+  color: #5699B7;
+  text-decoration: none;
+  font-size: 12px;
+ 	line-height: 18px;
 }
 
 /* Selected menu item when the mouse hovers over it. */
 .portlet-menu-item-hover-selected {
+	line-height: 18px;
 }
 
 /* Normal, unselected menu item that has sub-menus. */
 .portlet-menu-cascade-item {
+	line-height: 18px;
 }
 
 /* Selected sub-menu item that has sub-menus */
 .portlet-menu-cascade-item-selected {
+	line-height: 18px;
 }
 
 .porlet-menu-cascade {
+	line-height: 18px;
 }
 
 .portlet-menu-cascade-item-hover {
+	line-height: 18px;
 }
 
 .portlet-menu-cascade-item-hover-selected {
+	line-height: 18px;
 }
 
 .portlet-menu-separator {
+	line-height: 18px;
 }
 
 .portlet-menu-cascade-separator {
+	line-height: 18px;
 }
 
 .portlet-menu-content {
+	line-height: 18px;
 }
 
 .portlet-menu-content-selected {
+	line-height: 18px;
 }
 
 .portlet-menu-content-hover {
+	line-height: 18px;
 }
 
 .portlet-menu-content-hover-selected {
+	line-height: 18px;
 }
 
 .portlet-menu-indicator {
+	line-height: 18px;
 }
 
 .portlet-menu-indicator-selected {
+	line-height: 18px;
 }
 
 .portlet-menu-indicator-hover {
+	line-height: 18px;
 }
 
 .portlet-menu-indicator-hover-selected {
+	line-height: 18px;
 }
 
 .portlet-menu-description {
+	line-height: 18px;
 }
 
 .portlet-menu-caption {
+	line-height: 18px;
 }
 
