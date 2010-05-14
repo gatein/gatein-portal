@@ -4,16 +4,21 @@
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="selenium.base" href="" />
-<title>Test_POR_14_01_006_CreateNewNodeInTheFirstLevel</title>
+<title>Test_POR_14_06_001_ChangeOrderOfNode</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">Test_POR_14_01_006_CreateNewNodeInTheFirstLevel</td></tr>
+<tr><td rowspan="1" colspan="3">Test_POR_14_06_001_ChangeOrderOfNode</td></tr>
 </thead><tbody>
 <tr>
 	<td>open</td>
 	<td>/portal/public/classic</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>-MoveUp/DownNode-</td>
 	<td></td>
 </tr>
 <tr>
@@ -22,7 +27,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
+	<td>verifyElementPresent</td>
 	<td>username</td>
 	<td></td>
 </tr>
@@ -37,8 +42,13 @@
 	<td>gtn</td>
 </tr>
 <tr>
-	<td>clickAt</td>
-	<td>xpath=//div[@id='UIPortalLoginFormAction']/div/div/div/a</td>
+	<td>clickAndWait</td>
+	<td>//div[@id='UIPortalLoginFormAction']/div/div/div/a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>--Create node</td>
 	<td></td>
 </tr>
 <tr>
@@ -69,6 +79,11 @@
 <tr>
 	<td>clickAt</td>
 	<td>link=Add Node</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>--Page Node Setting--</td>
 	<td></td>
 </tr>
 <tr>
@@ -79,16 +94,16 @@
 <tr>
 	<td>type</td>
 	<td>name</td>
-	<td>POR_14_01_006</td>
+	<td>Test_POR_14_06_001</td>
 </tr>
 <tr>
 	<td>type</td>
 	<td>label</td>
-	<td>POR_14_01_006</td>
+	<td>Test_POR_14_06_001</td>
 </tr>
 <tr>
 	<td>echo</td>
-	<td>--Choose &quot;Page Selector&quot; tab</td>
+	<td>--Go to Page Selector--</td>
 	<td></td>
 </tr>
 <tr>
@@ -104,21 +119,16 @@
 <tr>
 	<td>clickAt</td>
 	<td>link=Search and Select Page</td>
-	<td>1,1</td>
-</tr>
-<tr>
-	<td>echo</td>
-	<td>--Select the first page from pages list</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>xpath=//div[@id='UIRepeater']//img[@class='SelectPageIcon']</td>
+	<td>xpath=//img[@title='Select Page']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAt</td>
-	<td>xpath=//div[@id='UIRepeater']//img[@class='SelectPageIcon']</td>
+	<td>xpath=//img[@title='Select Page']</td>
 	<td></td>
 </tr>
 <tr>
@@ -129,41 +139,26 @@
 <tr>
 	<td>clickAt</td>
 	<td>link=Save</td>
-	<td>1,1</td>
-</tr>
-<tr>
-	<td>waitForTextNotPresent</td>
-	<td>Page Selector</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>link=Save</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAt</td>
 	<td>link=Save</td>
-	<td>1,1</td>
-</tr>
-<tr>
-	<td>waitForTextNotPresent</td>
-	<td>Navigation Management</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>link=POR_14_01_006</td>
+	<td>link=Test_POR_14_06_001</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAt</td>
-	<td>link=POR_14_01_006</td>
+	<td>link=Test_POR_14_06_001</td>
 	<td></td>
 </tr>
 <tr>
 	<td>echo</td>
-	<td>--Delete new group navigation</td>
+	<td>--Change order of node--</td>
 	<td></td>
 </tr>
 <tr>
@@ -187,13 +182,78 @@
 	<td></td>
 </tr>
 <tr>
+	<td>echo</td>
+	<td>--Move node up</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>xpath=//a[@title='Test_POR_14_06_001']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeXpathCount</td>
+	<td>//div[@class='TreeContainer JSContainer']/div/div</td>
+	<td>nodeLvl</td>
+</tr>
+<tr>
 	<td>waitForElementPresent</td>
-	<td>xpath=//a[@title='POR_14_01_006']</td>
+	<td>link=Test_POR_14_06_001</td>
 	<td></td>
 </tr>
 <tr>
 	<td>componentExoContextMenu</td>
-	<td>xpath=//a[@title='POR_14_01_006']</td>
+	<td>xpath=//a[@title='Test_POR_14_06_001']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>xpath=//div[@id='UINavigationNodeSelector']//div[@id='NavigationNodePopupMenu']//a[@class='ItemIcon MoveUp16x16Icon']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>xpath=//div[@id='UINavigationNodeSelector']//div[@id='NavigationNodePopupMenu']//a[@class='ItemIcon MoveUp16x16Icon']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyElementNotPresent</td>
+	<td>xpath=//div[@class='TreeContainer JSContainer']/div/div[${nodeLvl}]/div/a[@title='test_grp_label_26']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>--Move node down</td>
+	<td></td>
+</tr>
+<tr>
+	<td>componentExoContextMenu</td>
+	<td>xpath=//a[@title='Test_POR_14_06_001']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>xpath=//div[@id='UINavigationNodeSelector']//div[@id='NavigationNodePopupMenu']//a[@class='ItemIcon MoveDown16x16Icon']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>xpath=//div[@id='UINavigationNodeSelector']//div[@id='NavigationNodePopupMenu']//a[@class='ItemIcon MoveDown16x16Icon']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>xpath=//a[@title='Test_POR_14_06_001']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>componentExoContextMenu</td>
+	<td>xpath=//a[@title='Test_POR_14_06_001']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>xpath=//div[@id='UINavigationNodeSelector']//div[@id='NavigationNodePopupMenu']//a[@class='ItemIcon DeleteNode16x16Icon']</td>
 	<td></td>
 </tr>
 <tr>
@@ -214,11 +274,6 @@
 <tr>
 	<td>clickAt</td>
 	<td>link=Save</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementNotPresent</td>
-	<td>link=POR_14_01_006</td>
 	<td></td>
 </tr>
 <tr>
