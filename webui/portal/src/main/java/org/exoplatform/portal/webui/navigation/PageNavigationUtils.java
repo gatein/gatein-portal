@@ -138,6 +138,7 @@ public class PageNavigationUtils
       return null;
    }
    
+   //TODO: Split the uri and use optimzed method <code>searchParentChildPairByPath</code>
    public static ParentChildPair searchParentChildPairUnderNode(PageNode rootNode, String uri)
    {
       if(uri.equals(rootNode.getUri()))
@@ -167,6 +168,51 @@ public class PageNavigationUtils
       return null;
    }
    
+   /**
+    * Search a pair of page node (specified by the path) and its parent
+    * 
+    * @param rootNode
+    * @param path
+    * @return
+    */
+   public static ParentChildPair searchParentChildPairByPath(PageNode rootNode, String[] path)
+   {
+      if(path.length == 0)
+      {
+         throw new IllegalArgumentException("The input path must have unzero length");
+      }
+      
+      if(!rootNode.getName().equals(path[0]))
+      {
+         return null;
+      }
+      else
+      {
+         if(path.length == 1)
+         {
+            return new ParentChildPair(null, rootNode);
+         }
+         
+         PageNode tempNode = rootNode;
+         
+         PageNode parentNode = null;
+         PageNode childNode = null;
+         for(int i = 1; i< path.length; i++)
+         {
+            childNode = tempNode.getChild(path[i]);
+            if(childNode == null)
+            {
+               return null;
+            }
+            else
+            {
+               parentNode = tempNode;
+            }
+         }
+         
+         return new ParentChildPair(parentNode, childNode);
+      }
+   }
    
    public static PageNode searchPageNodeByUri(PageNode node, String uri)
    {
