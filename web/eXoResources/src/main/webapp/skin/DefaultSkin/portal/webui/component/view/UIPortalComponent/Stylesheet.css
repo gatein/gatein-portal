@@ -133,8 +133,12 @@
 	padding: 0px 2px;
 }
 
-
 .UIContainer .LAYOUT-BLOCK .UIRowContainer {
+	min-height: 86px;
+	_height: 86px;
+}
+
+.UIContainer .VIEW-BLOCK .UIRowContainer {
 	min-height: 86px;
 	_height: 86px;
 }
@@ -240,11 +244,13 @@
 	border: 1px dashed #a2a2a2;
 }
 
-.EdittingContainer .NormalContainerBlock .LeftContainerBlock, .EdittingContainer .OverContainerBlock .NormalContainerBlock .LeftContainerBlock {
+.EdittingContainer .NormalContainerBlock .LeftContainerBlock, 
+.EdittingContainer .OverContainerBlock .NormalContainerBlock .LeftContainerBlock {
 	background: none;
 }
 
-.EdittingContainer .NormalContainerBlock .RightContainerBlock, .EdittingContainer .OverContainerBlock .NormalContainerBlock .RightContainerBlock {
+.EdittingContainer .NormalContainerBlock .RightContainerBlock, 
+.EdittingContainer .OverContainerBlock .NormalContainerBlock .RightContainerBlock {
 	padding: 2px;
 	background: none;
 }

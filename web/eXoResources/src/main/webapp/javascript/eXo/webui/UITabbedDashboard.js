@@ -91,6 +91,11 @@ eXo.webui.UITabbedDashboard = {
 		
 		prNode.replaceChild(inputElement, selectedElement);
 		inputElement.focus();
+		
+		 //find Middle tab of MiddleTab
+		var DOMUtil = eXo.core.DOMUtil;
+		var middleTab = DOMUtil.findAncestorByClass(inputElement, "MiddleTab");
+		middleTab.className = "MiddleTab EditTab";	
 	},
 	
 	createDashboardPage : function(e){
@@ -163,6 +168,10 @@ eXo.webui.UITabbedDashboard = {
 		spanElement.parentNode.replaceChild(inputElement, spanElement);
 		
 		DOMUtil.findNextElementByTagName(inputElement, "a").href = "#";
-		inputElement.focus();		
+		inputElement.focus();	
+		
+		  //find Middle tab of MiddleTab
+		  var middleTab = DOMUtil.findAncestorByClass(inputElement, "MiddleTab");
+		  middleTab.className = "MiddleTab EditTab";	
 	}
 }

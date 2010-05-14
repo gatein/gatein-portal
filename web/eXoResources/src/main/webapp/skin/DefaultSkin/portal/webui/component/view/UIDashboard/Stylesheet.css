@@ -85,7 +85,7 @@
 }
 
 .UITabPaneDashboard .UIHorizontalTabs {
-	padding: 1px 0 5px;
+	padding-top: 1px;
 }
 
 .UITabPaneDashboard .UIHorizontalTabs .TabsContainer {
@@ -93,16 +93,17 @@
 }
 
 .UITabPaneDashboard .UIHorizontalTabs .GrayTabStyle {
-	margin: 4px 2px 0 0;
+	margin: 3px 2px 0 0;
 }
 
 .UITabPaneDashboard .UIHorizontalTabs .GrayTabStyle .NormalTab .MiddleTab,
 .UITabPaneDashboard .UIHorizontalTabs .GrayTabStyle .HighlightNavigationTab .MiddleTab,
 .UITabPaneDashboard .UIHorizontalTabs .GrayTabStyle .SelectedTab .MiddleTab {
-	padding: 0px 10px;
-	_padding: 3px 10px;
+	padding: 0px 5px;
+	_padding: 4px 5px;
 	white-space:nowrap;
 	font-weight: normal;
+	line-height: 24px;
 }
 
 
@@ -115,39 +116,37 @@
 
 .UITabPaneDashboard .UIHorizontalTabs .AddDashboard {
 	background: url('background/AddDashboard.gif') no-repeat bottom;
-	width: 34px; height: 22px;
+	width: 34px; height: 24px;
 	float: left; /* orientation=lt */
 	float: right; /* orientation=rt */
 	cursor: pointer;
-	margin-top: 4px;
+	margin-top: 3px;
 }
 
 .UITabPaneDashboard .UIHorizontalTabs .GrayTabStyle .NormalTab .LeftTab {
-	background: url(background/TabDashboard.gif) no-repeat left -44px;
+	background: url(background/TabDashboard.gif) no-repeat left -48px;
 }
 
 .UITabPaneDashboard .UIHorizontalTabs .GrayTabStyle .NormalTab .RightTab {
-	background: url(background/TabDashboard.gif) no-repeat right -44px;
+	background: url(background/TabDashboard.gif) no-repeat right -48px;
 }
 
 .UITabPaneDashboard .UIHorizontalTabs .GrayTabStyle .NormalTab .MiddleTab {
-	background: url(background/TabDashboard.gif) repeat-x left -66px;
-	line-height: 22px;
+	background: url(background/TabDashboard.gif) repeat-x left -72px;
 }
 
 .UITabPaneDashboard .UIHorizontalTabs .GrayTabStyle .HighlightNavigationTab .LeftTab {
-	background: url(background/TabDashboard.gif) no-repeat left -44px;
+	background: url(background/TabDashboard.gif) no-repeat left -48px;
 	padding-left: 4px;
 }
 
 .UITabPaneDashboard .UIHorizontalTabs .GrayTabStyle .HighlightNavigationTab .RightTab {
-	background: url(background/TabDashboard.gif) no-repeat right -44px;
+	background: url(background/TabDashboard.gif) no-repeat right -48px;
 	padding-right: 4px;
 }
 
 .UITabPaneDashboard .UIHorizontalTabs .GrayTabStyle .HighlightNavigationTab .MiddleTab {
-	background: url(background/TabDashboard.gif) repeat-x left -66px;
-	line-height: 22px;
+	background: url(background/TabDashboard.gif) repeat-x left -72px;
 }
 
 .UITabPaneDashboard .UIHorizontalTabs .GrayTabStyle .SelectedTab .LeftTab {
@@ -160,8 +159,7 @@
 }
 
 .UITabPaneDashboard .UIHorizontalTabs .GrayTabStyle .SelectedTab .MiddleTab {
-	background: url(background/TabDashboard.gif) repeat-x left -22px;
-	line-height: 22px;
+	background: url(background/TabDashboard.gif) repeat-x left -24px;
 }
 
 .UITabPaneDashboard .UIHorizontalTabs .GrayTabStyle .EditnewTab .LeftTab {
@@ -174,10 +172,14 @@
 }
 
 .UITabPaneDashboard .UIHorizontalTabs .GrayTabStyle .EditnewTab .MiddleTab {
-	background: url(background/TabDashboard.gif) repeat-x left -22px;
+	background: url(background/TabDashboard.gif) repeat-x left -24px;
 	line-height: 22px;
 	vertical-align: middle;
 	padding-top: 0;
+}
+
+.UITabPaneDashboard .UIHorizontalTabs .GrayTabStyle .SelectedTab .EditTab {
+	_padding: 2px 5px;
 }
 
 .UITabPaneDashboard .UIHorizontalTabs .GrayTabStyle .MiddleTab span {
