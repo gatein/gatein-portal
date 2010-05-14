@@ -82,7 +82,7 @@ eXo.webui.UITabbedDashboard = {
 		inputElement.name = currentContent; // To store old value
 		inputElement.value = currentContent;
 		inputElement.style.border = "1px solid #b7b7b7";
-		inputElement.style.width = "95px";
+		inputElement.style.width = (selectedElement.offsetWidth - 2 ) + "px";
 		inputElement.onkeypress = eXo.webui.UITabbedDashboard.renameTabLabel;
 		inputElement.setAttribute('maxLength', 50);
 		inputElement.onblur = function() {

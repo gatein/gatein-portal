@@ -176,6 +176,24 @@
 .UITabPaneDashboard .UIHorizontalTabs .GrayTabStyle .EditnewTab .MiddleTab {
 	background: url(background/TabDashboard.gif) repeat-x left -22px;
 	line-height: 22px;
+	vertical-align: middle;
+	padding-top: 0;
+}
+
+.UITabPaneDashboard .UIHorizontalTabs .GrayTabStyle .MiddleTab span {
+	margin-top: 1px;
+}
+
+.UITabPaneDashboard .UIHorizontalTabs .GrayTabStyle input {
+	font-size: 11px;
+	background: white;
+	padding: 0 !important;
+	text-align: left !important;
+	font-family: Tahoma !important;
+	margin: 0;
+	!height: 16px;
+	!line-height: 14px;
+	vertical-align: middle;
 }
 
 /*----------------------UIGadgetsSelectorForm-------------------*/
