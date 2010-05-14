@@ -22,31 +22,6 @@
 @import url(view/Stylesheet.css);
 @import url(widget/Stylesheet.css);
 
-div {
-	padding: 0px; margin: 0px;
-	outline: none;
-}
-
-table {
-  width: 100%;
-	padding: 0px; margin: 0px;
-	border-spacing:	0px;
-	border-collapse: collapse;
-}
-
-th, td {
-	padding: 0px; margin: 0px;
-	vertical-align: top;
-}
-
-img {
-	padding: 0px; margin: 0px; border: none; vertical-align: middle;
-}
-
-form {
-	padding: 0px; margin: 0px;
-}
-
 html {
 	margin: 0px; padding: 0px;
 	*overflow-x: hidden;
@@ -58,6 +33,35 @@ body {
 	font-family: Tahoma,Verdana, Arial, Helvetica, sans-serif;
 	font-size: 11px;
 	overflow-x: hidden;
+}
+
+div, table, tr, td,img,form {
+	padding: 0px; margin: 0px;
+	font-size: 11px;
+	font-family: Tahoma, Verdana, Arial, Helvetica, sans-serif; 
+}
+
+p,h1,h2,h3,h4,h5,h6 {
+	margin: 10px 0;
+}
+
+table {
+  width: 100%;
+	border-spacing:	0px;
+	border-collapse: collapse;
+}
+
+th, td {
+	vertical-align: top;
+	font-family: Tahoma, Verdana, Arial, Helvetica, sans-serif; 
+}
+
+input, textarea {
+	font-family: Tahoma, Verdana, Arial, Helvetica, sans-serif; 
+}
+
+img {
+	border: none; vertical-align: middle;
 }
 
 a {
