@@ -199,7 +199,9 @@ public class UIPortletLifecycle<S, C extends Serializable, I> extends Lifecycle<
                int portalMode = Util.getUIPortalApplication().getModeState();
                
                //Check mode of portal, portlet and permission for viewable
-               if ((portalMode % 2 == 0 || uicomponent.getCurrentPortletMode().equals(PortletMode.EDIT)) && uicomponent.hasPermission())
+               if ((portalMode == UIPortalApplication.NORMAL_MODE || portalMode == UIPortalApplication.APP_VIEW_EDIT_MODE 
+            		   || portalMode == UIPortalApplication.CONTAINER_VIEW_EDIT_MODE || uicomponent.getCurrentPortletMode().equals(PortletMode.EDIT)) 
+            		   && uicomponent.hasPermission())
                {
                   PortletInvocationResponse response = uicomponent.invoke(renderInvocation);
                   if (response instanceof FragmentResponse)
