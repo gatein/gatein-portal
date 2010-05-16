@@ -20,7 +20,6 @@
 	
 	JavascriptManager jsManager = pcontext.getJavascriptManager();
 	jsManager.importJavascript("eXo.webui.UITabbedDashboard");
-	jsManager.addOnLoadJavascript("eXo.webui.UITabbedDashboard.buildTab");
 %>
 
 <div id="$uicomponent.id" class="UITabPaneDashboard">

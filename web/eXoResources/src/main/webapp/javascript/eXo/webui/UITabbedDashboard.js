@@ -21,12 +21,6 @@ eXo.webui.UITabbedDashboard = {
 	
 	init : function(){eXo.webui.UITabbedDashboard.isInRequest = false;},
 	
-	buildTab : function() {
-	  var uiWorkingWorkspace = document.getElementById("UIWorkingWorkspace");
-	  var uiTabbedDashboardPortlet = eXo.core.DOMUtil.findDescendantById(uiWorkingWorkspace, "UITabbedDashboardPortlet");
-	  eXo.portal.UIPortalNavigation.buildMenu(uiTabbedDashboardPortlet);
-	},
-	
 	renameTabLabel : function(e){
 		if(!e){
 			e = window.event;
@@ -156,9 +150,7 @@ eXo.webui.UITabbedDashboard = {
 		inputElement.type = "text";
 		inputElement.value = "Tab_" + tabElements.length;
 		inputElement.style.border = "1px solid #b7b7b7";
-		inputElement.style.width = "45px";
-//		inputElement.style.height = "14px";
-//		inputElement.style.fontSize = "15px";
+		inputElement.style.width = "80px";
 		inputElement.onkeypress = eXo.webui.UITabbedDashboard.createDashboardPage;
 		inputElement.onblur = eXo.webui.UITabbedDashboard.cancelTabDashboard;
 		inputElement.setAttribute('maxLength', 50);
