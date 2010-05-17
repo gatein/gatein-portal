@@ -383,7 +383,7 @@
                                 scalefit="1"/>
                   </imageobject>
                </mediaobject>
-               This screen presents all the configured producers associated with their status and possible actions on
+               This screen presents all the configured Consumers associated with their status and possible actions on
                them. A Consumer can be active or inactive. Activating a Consumer means that it is ready to act as a
                portlet provider. Note also that a Consumer can be marked as requiring refresh meaning that the
                information held about it might not be up to date and refreshing it from the remote Producer might be a
