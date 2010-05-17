@@ -69,23 +69,23 @@
 .UITabPaneDashboard .LtTabDashboard {
 	background: #ffcf01 url('background/NavUser.gif') no-repeat left top;
 	padding-left: 3px;
-	height: 32px;
+	_height: 32px;
 }
 
 .UITabPaneDashboard .RtTabDashboard {
 	background: #ffcf01 url('background/NavUser.gif') no-repeat right top;
 	padding-right: 3px;
-	height: 32px;
+	_height: 32px;
 }
 
 .UITabPaneDashboard .CtTabDashboard {
 	background: #ffcf01 url('background/NavUser.gif') repeat-x center -32px;
 	padding: 0px 6px; 
-	height: 32px;
+	_height: 32px;
 }
 
 .UITabPaneDashboard .UIHorizontalTabs {
-	padding-top: 1px;
+	padding: 1px 0px 4px 0px;
 }
 
 .UITabPaneDashboard .UIHorizontalTabs .TabsContainer {
