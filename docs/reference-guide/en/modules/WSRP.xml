@@ -32,7 +32,7 @@
       <para>More information on WSRP can be found on the
          <ulink url="http://www.oasis-open.org/committees/tc_home.php?wg_abbrev=wsrp">official website for WSRP</ulink>.
          We suggest reading the
-         <ulink url="http://www.oasis-open.org/committees/tc_home.php?wg_abbrev=wsrp">primer</ulink>
+         <ulink url="http://www.oasis-open.org/committees/download.php/10539/wsrp-primer-1.0.html">primer</ulink>
          for a good, albeit technical, overview of WSRP.
       </para>
    </sect1>
@@ -178,6 +178,12 @@
 
    <sect1>
       <title>Making a portlet remotable</title>
+      <note>
+         <para>
+            Only JSR-286 (Portlet 2.0) portlets can be made remotable as the mechanism to expose a portlet to WSRP
+            relies on a JSR-286-only functionality.
+         </para>
+      </note>
       <para>&PRODUCT_NAME; does
          <emphasis role="bold">NOT</emphasis>, by default, expose local portlets for consumption
          by remote WSRP consumers. In order to make a portlet remotely available, it must be made "remotable" by marking
@@ -332,6 +338,18 @@
             examine how to do so using the configuration portlet. We will then show how the same result can be
             accomplished with a producer descriptor, though it is far easier to do so via the configuration portlet.
          </para>
+
+         <note>
+            <para>
+               Some WSRP producers do not support chunked encoding that is activated by default by JBoss WS. If your
+               producer does not support chunked encoding, your consumer will not be able to properly connect to the
+               producer. This will manifest itself with the following error:
+               <code>Caused by: org.jboss.ws.WSException: Invalid HTTP server response [503] - Service Unavailable</code>.
+               Please see this GateIn's
+               <ulink url="http://community.jboss.org/wiki/Workaroundwhenchunkedencodingisnotsupported">wiki page</ulink>
+               for more details.
+            </para>
+         </note>
 
          <sect3 id="consumer_gui">
             <title>Using the configuration portlet</title>
