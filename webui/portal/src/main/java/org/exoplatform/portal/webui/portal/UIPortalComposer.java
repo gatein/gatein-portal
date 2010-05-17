@@ -200,6 +200,8 @@ public class UIPortalComposer extends UIContainer
          return;
       }
       
+      SkinService skinService = getApplicationComponent(SkinService.class);
+      skinService.invalidatePortalSkinCache(editPortal.getName(), editPortal.getSkin());
       try
       {
          dataStorage.save(portalConfig);
@@ -247,8 +249,6 @@ public class UIPortalComposer extends UIContainer
          uiPortalApp.setSkin(editPortal.getSkin());
       }
       prContext.refreshResourceBundle();
-      SkinService skinService = getApplicationComponent(SkinService.class);
-      skinService.invalidatePortalSkinCache(editPortal.getName(), editPortal.getSkin());
    }
 
    private void rebuildUIPortal(UIPortalApplication uiPortalApp, UIPortal uiPortal, DataStorage storage) throws Exception
