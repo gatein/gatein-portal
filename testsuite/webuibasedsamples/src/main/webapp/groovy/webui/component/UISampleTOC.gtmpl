@@ -1,0 +1,97 @@
+<% 
+	import org.exoplatform.web.application.JavascriptManager;
+	import org.exoplatform.sample.webui.component.UISampleContent;
+	
+	def rContext = _ctx.getRequestContext();
+	JavascriptManager jsmanager = rContext.getJavascriptManager();
+	jsmanager.importJavascript("eXo.portal.UIPortal");			
+ %>
+
+	
+	<%uicomponent.renderChildren(); %>
+
+<div class="SampleWebUI" style="width: 260px;">
+	<div class="CollapseIcon ClearFix" onclick="eXo.portal.UIPortal.collapseExpand(this);">
+		<a class='NodeIcon DefaultPageIcon' href='javascript:void(0);'>WebUI Demo</a>
+	</div>
+	<div class="ChildrenContainer">
+		<div class="Node ClearFix">
+			<div class="">
+				<div class="ClearFix">
+				    <div class="ClearFix">
+						<a class="NodeIcon DefaultPageIcon" href="<%=uicomponent.event("ClickNode", String.valueOf(UISampleContent.NODE_UIFORM))%>">UIForm</a><br>
+				    </div>
+					<div class="ChildrenContainer" style="display:block;">
+						<div class="Node ClearFix LastNode">
+							<div class="NullItem">
+								<div class="ClearFix">
+									<a class="NodeIcon DefaultPageIcon" href="<%=uicomponent.event("ClickNode", String.valueOf(UISampleContent.NODE_MULTIVALUE_INPUTSET))%>">UIFormMultiValueInputSet</a><br>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="Node ClearFix">
+			<div class="">
+				<div class="ClearFix">
+					<div class="CollapseIcon ClearFix" onclick="eXo.portal.UIPortal.collapseExpand(this);">
+						<a class="NodeIcon DefaultPageIcon" href=#>UIPopup</a><br>
+					</div>
+					<div class="ChildrenContainer" style="display:block;">
+						<div class="Node ClearFix">
+							<div class="NullItem">
+								<div class="ClearFix">
+									<a class="NodeIcon DefaultPageIcon" href="<%=uicomponent.event("ClickNode", String.valueOf(UISampleContent.NODE_UIPOPUPMESSAGE))%>">UIPopupMessage</a><br>
+								</div>
+							</div>
+						</div>
+						<div class="Node ClearFix LastNode">
+							<div class="NullItem">
+								<div class="ClearFix">
+									<a class="NodeIcon DefaultPageIcon" href="<%=uicomponent.event("ClickNode", String.valueOf(UISampleContent.NODE_UIPOPUPCONFIRM))%>">UIPopupConfirm</a><br>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="Node ClearFix">
+			<div class="NullItem">
+				<div class="ClearFix">
+					<a class="NodeIcon DefaultPageIcon" href="<%=uicomponent.event("ClickNode", String.valueOf(UISampleContent.NODE_LAZYTABPANE))%>">UILazyTabPane</a><br>
+				</div>
+			</div>
+		</div>
+		<div class="Node ClearFix">
+			<div class="NullItem">
+				<div class="ClearFix">
+					<a class="NodeIcon DefaultPageIcon" href="<%=uicomponent.event("ClickNode", String.valueOf(UISampleContent.NODE_REPEATER))%>">UIRepeater</a><br>
+				</div>
+			</div>
+		</div>
+		<div class="Node ClearFix">
+			<div class="NullItem">
+				<div class="ClearFix">
+					<a class="NodeIcon DefaultPageIcon" href="<%=uicomponent.event("ClickNode", String.valueOf(UISampleContent.NODE_VIRTUAL_LIST))%>">UIVirtualList</a><br>
+				</div>
+			</div>
+		</div>
+		<div class="Node ClearFix">
+			<div class="NullItem">
+				<div class="ClearFix">
+					<a class="NodeIcon DefaultPageIcon" href="<%=uicomponent.event("ClickNode", String.valueOf(UISampleContent.NODE_RIGHTCLICKPOPUP))%>">UIRightClickPopup</a><br>
+				</div>
+			</div>
+		</div>
+		<div class="Node ClearFix LastNode">
+			<div class="NullItem">
+				<div class="ClearFix">
+					<a class="NodeIcon DefaultPageIcon" href="<%=uicomponent.event("ClickNode", String.valueOf(UISampleContent.NODE_DOWNLOADUPLOAD))%>">Download_Upload</a><br>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,30 @@
+<div id="<%=uicomponent.id%>">
+	<table>
+		<tr>
+			<%
+						import org.exoplatform.sample.webui.component.UISampleTOC;
+						import org.exoplatform.sample.webui.component.UISampleContent;
+						import org.exoplatform.webui.core.UIPopupMessages;
+						
+					  	UISampleTOC uiSampleTOC = uicomponent.getChild(UISampleTOC.class);
+					   	if (uiSampleTOC.isRendered())
+					   	{
+					      print("<td style=\"width: 260px;\">");
+					      uiSampleTOC.processRender(_ctx.getRequestContext());
+					      print("</td>");
+					   	}
+			%>
+			<td width="8px" bgcolor="green" style="cursor: pointer;"
+				onclick="<%=uicomponent.event("ClickSplitBar")%>">&nbsp;</td>
+			<td valign="middle" align="center">
+			<%
+					uicomponent.renderChild(UISampleContent.class);
+		 	 %>
+			</td>
+		</tr>
+	</table>
+	<%
+	   UIPopupMessages uiPopupMessages = uicomponent.getUIPopupMessages();
+	   uiPopupMessages.processRender(_ctx.getRequestContext());
+	%>
+</div>

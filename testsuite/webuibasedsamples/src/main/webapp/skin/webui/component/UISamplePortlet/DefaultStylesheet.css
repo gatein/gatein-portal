@@ -1,0 +1,116 @@
+/**
+ * Copyright (C) 2009 eXo Platform SAS.
+ * 
+ * This is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2.1 of
+ * the License, or (at your option) any later version.
+ * 
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this software; if not, write to the Free
+ * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ */
+
+/**
+ * Cated by The eXo Platform SAS
+ * Modifile : Nguyen Duc Khoi
+ *            khoi.nguyen@exoplatform.com
+ * Apr 27, 2010
+ * version: $Id$
+ */
+
+.UIWindow .UISamplePortlet {
+	border: none;
+	margin: 0px;
+}
+
+.SampleWebUI {
+	background: #fff url('DefaultSkin/background/default_sitemap.gif') no-repeat 95% 90%;
+	padding: 10px 30px;
+	color: #4e4e4e;
+}
+
+.SampleWebUI .CollapseIcon {
+	background: url('DefaultSkin/background/CollapseIcon.gif') no-repeat left center; /* orientation=lt */
+	background: url('DefaultSkin/background/CollapseIcon-rt.gif') no-repeat right center; /* orientation=rt */
+	padding: 0px 5px 0px 35px; /* orientation=lt */
+	padding: 0px 35px 0px 5px; /* orientation=rt */
+	cursor: pointer;
+}
+
+.SampleWebUI .ExpandIcon {
+	background: url('DefaultSkin/background/ExpandIcon.gif') no-repeat left center; /* orientation=lt */
+	background: url('DefaultSkin/background/ExpandIcon-rt.gif') no-repeat right center; /* orientation=rt */
+	padding: 0px 5px 0px 35px; /* orientation=lt */
+	padding: 0px 35px 0px 5px; /* orientation=rt */
+	cursor: pointer;
+}
+
+.SampleWebUI .NullItem {
+	background: url('DefaultSkin/background/NullItem.gif') no-repeat left center; /* orientation=lt */
+	background: url('DefaultSkin/background/NullItem-rt.gif') no-repeat right center; /* orientation=rt */
+	padding: 0px 35px;
+}
+
+
+.SampleWebUI .DefaultPageIcon {
+	padding: 4px 0px 4px 20px; /* orientation=lt */
+	padding: 4px 20px 4px 0px; /* orientation=rt */
+	background-position: left center; /* orientation=lt */
+	background-position: right center; /* orientation=rt */
+	width: auto;
+}
+
+.SampleWebUI .ChildrenContainer {
+	padding-left: 31px; /* orientation=lt */
+	padding-right: 31px; /* orientation=rt */
+	float: none;
+}
+
+.SampleWebUI .Node {
+	line-height: 24px;
+	background: url('DefaultSkin/background/Dotted.gif') repeat-y 4px top; /* orientation=lt */
+	background: url('DefaultSkin/background/Dotted-rt.gif') repeat-y 99.6% top; /* orientation=rt */
+}
+
+.SampleWebUI .LastNode {
+	line-height: 24px;
+	background: url('DefaultSkin/background/LastNode.gif') no-repeat 4px top; /* orientation=lt */
+	background: url('DefaultSkin/background/LastNode-rt.gif') no-repeat 99.6% top; /* orientation=rt */
+}
+
+.SampleWebUI .ClearFix:after {
+  content: ".";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+
+.SampleWebUI .ClearFix {
+	!display: inline-block;
+  !zoom: 1;
+  !display: block; 
+}
+
+.SampleWebUI a {
+	font-weight: bold;
+	display: block;
+	float: left;
+}
+
+.SayHello16x16Icon {
+	width: 16px;	height: 16px;
+	background: url('/eXoResources/skin/DefaultSkin/skinIcons/16x16/icons/Lock.gif') no-repeat;
+}
+
+.SayGoodBye16x16Icon {
+	width: 16px;	height: 16px;
+	background: url('/eXoResources/skin/DefaultSkin/skinIcons/16x16/icons/PastePalate.gif') no-repeat;
+}

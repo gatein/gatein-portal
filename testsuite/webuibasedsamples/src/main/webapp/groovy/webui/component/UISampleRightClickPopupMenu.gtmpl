@@ -1,0 +1,25 @@
+<% 
+  import org.exoplatform.webui.core.UIRightClickPopupMenu ;
+  import org.exoplatform.web.application.JavascriptManager;
+
+  UIRightClickPopupMenu uiPopupMenu = uicomponent.getChild(UIRightClickPopupMenu.class);
+  String popupMenu = "";
+%>
+<div id="<%=uicomponent.getId() %>" style="margin-top: 100px;">
+<%
+  if(uiPopupMenu != null && uiPopupMenu.isRendered()) {
+    String id = uicomponent.getParent().getId();
+  	
+  	JavascriptManager jsmanager = _ctx.getRequestContext().getJavascriptManager();
+  	jsmanager.importJavascript('eXo.webui.UIRightClickPopupMenu') ;
+  	popupMenu = uiPopupMenu.getJSOnclickShowPopup("", "SayHello,SayGoodBye");
+  	jsmanager.addJavascript("eXo.webui.UIRightClickPopupMenu.disableContextMenu('"+id+"') ;");
+    uicomponent.renderUIComponent(uiPopupMenu) ;
+  }
+%>
+	<div class="UIForm $uicomponent.id">
+		<div class="HorizontalLayout">
+			<div class="FormContainer" style="text-align: center;font-size: 18px;" $popupMenu>Right Click On Me</div>
+		</div>
+	</div>
+</div>

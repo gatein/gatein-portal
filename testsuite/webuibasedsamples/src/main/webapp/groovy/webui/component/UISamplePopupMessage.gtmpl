@@ -1,0 +1,36 @@
+<%
+	import org.exoplatform.web.application.ApplicationMessage; 		
+%>
+<div class="UIToolbar" style="margin-top: 150px;">
+	<div class="LargeToolbar">
+		<div class="ToolbarContainer">
+			<div class="LeftToolbar">
+				<div class="RightToolbar">
+				  <div class="MiddleToolbar">				 
+					<div class="ManagementIconContainer">
+					 <%
+						 style = "SelectButtonLabel"; 
+					 %>
+						<a class="UserButton" href="<%=uicomponent.event("ShowPopupMessage", String.valueOf(ApplicationMessage.INFO))%>">
+							<div class="UserManagementIcon"><span></span></div>
+							<div class="$style" style="text-align: center;">Infomation</div>
+						</a>
+						<div class="HorizontalSeparator"><span></span></div>
+						<a class="GroupButton" href="<%=uicomponent.event("ShowPopupMessage", String.valueOf(ApplicationMessage.WARNING))%>">
+							<div class="GroupManagementIcon"><span></span></div>
+							<div class="$style" style="text-align: center;">Warning</div>
+						</a>
+						<div class="HorizontalSeparator"><span></span></div>
+						<a class="MembershipButton" href="<%=uicomponent.event("ShowPopupMessage", String.valueOf(ApplicationMessage.ERROR))%>" style="width: 120px;">
+							<div class="MembershipManagementIcon"><span></span></div>
+							<div class="$style" style="text-align: center;">Error</div>
+							</a>
+							<div class="HorizontalSeparator"><span></span></div>
+							<div class="ClearBoth"><span></span></div>
+						</div>			 
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
