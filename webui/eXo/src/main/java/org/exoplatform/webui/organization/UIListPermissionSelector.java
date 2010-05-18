@@ -302,7 +302,7 @@ public class UIListPermissionSelector extends UISelector<String[]>
          UIFormPageIterator uiInputIterator = uiInputContainer.findFirstComponentOfType(UIFormPageIterator.class);
          if (uiInputIterator.getAvailable() < 1)
          {
-            String[] args = {uiInputContainer.getBindingField()};
+            String[] args = {"UITabPane.title.UIListPermissionSelector"};
             throw new MessageException(new ApplicationMessage("EmptyIteratorValidator.msg.empty", args,
                ApplicationMessage.INFO));
          }

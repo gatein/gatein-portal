@@ -89,9 +89,9 @@
   ##org.exoplatform.applicationregistry.webui.component.UIApplicationRegistryEditMode
   -->
   <UIApplicationRegistryEditMode>
-  	<title>Import Applications</title>
+  	<title>Nhập ứng dụng</title>
   	<label>
-  		<showImport>Change Show Import</showImport>
+  		<showImport>Thay đổi cách nhập ứng dụng</showImport>
   	</label>
   </UIApplicationRegistryEditMode>
   
