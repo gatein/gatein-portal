@@ -336,8 +336,30 @@ public class UISiteManagement extends UIContainer
          DataStorage dataService = uicomp.getApplicationComponent(DataStorage.class);
          WebuiRequestContext context = event.getRequestContext();
          UIApplication uiApplication = context.getUIApplication();
-
+         
+         //Minh Hoang TO: User could edit navigation if he/she has edit permissions on PortalConfig. That is not
+         //at all logical and should be modified after release 3.1 GA
+         UserPortalConfigService configService = uicomp.getApplicationComponent(UserPortalConfigService.class);
+         UserPortalConfig userPortalConfig = configService.getUserPortalConfig(portalName, context.getRemoteUser());
+         if(userPortalConfig == null)
+         {
+            uiApplication.addMessage(new ApplicationMessage("UISiteManagement.msg.portal-not-exist",
+               new String[]{portalName}));
+            return;
+         }
+         
+         UserACL userACL = uicomp.getApplicationComponent(UserACL.class);
+         if (!userACL.hasEditPermission(userPortalConfig.getPortalConfig()))
+         {
+            uiApplication.addMessage(new ApplicationMessage("UISiteManagement.msg.Invalid-editPermission", null));;
+            return;
+         }
+         
          PageNavigation edittedNavigation = dataService.getPageNavigation(PortalConfig.PORTAL_TYPE, portalName);
+         
+         
+         //Minh Hoang TO: For release 3.1, Edit Permission check would be rollback to former checks on PortalConfig
+         /*
          if (edittedNavigation == null)
          {
             uiApplication.addMessage(new ApplicationMessage("UISiteManagement.msg.portal-not-exist",
@@ -351,7 +373,8 @@ public class UISiteManagement extends UIContainer
             uiApplication.addMessage(new ApplicationMessage("UISiteManagement.msg.Invalid-editPermission", null));;
             return;
          }
-
+         */
+         
          UIPopupWindow popUp = uicomp.getChild(UIPopupWindow.class);
          UINavigationManagement naviManager = popUp.createUIComponent(UINavigationManagement.class, null, null, popUp);
          naviManager.setOwner(portalName);
