@@ -138,8 +138,8 @@
 	_height: 86px;
 }
 
-.UIContainer .VIEW-BLOCK .UIRowContainer {
-	min-height: 20px;
+.UIContainer .VIEW-BLOCK .EmptyContainer {
+	height: 82px;
 }
 
 .UIContainer .NewLayer {
