@@ -23,12 +23,12 @@ Welcome on GateIn Tomcat packaging
  * On the Windows platform
    Open a DOS prompt command, go to tomcat/bin and type the command
       "gatein.bat run" for production
-      "gatein.bat run" for development 
+      "gatein-dev.bat run" for development 
 
  * On Unix/linux/cygwin/MacOSX
    Open a terminal, go to tomcat/bin and type the command:
       "./gatein.sh run" for production
-      "./gatein.sh run" for development 
+      "./gatein-dev.sh run" for development 
       
    You may need to change the permission of all *.sh files in the tomcat/bin dir by using: chmod +x *.sh
 
@@ -47,4 +47,4 @@ Welcome on GateIn Tomcat packaging
 For more documentation and latest updated news, please visit our website www.gatein.org.
 
 Thank your for using GateIn !
-JBoss & eXo Platform develoment teams
+JBoss & eXo Platform development teams
