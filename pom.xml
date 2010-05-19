@@ -491,12 +491,6 @@
             <version>2.0</version>
          </dependency>
          <dependency>
-            <groupId>javax.security</groupId>
-            <artifactId>jacc</artifactId>
-            <version>1.0</version>
-         </dependency>
-
-         <dependency>
             <groupId>org.jboss.jbossas</groupId>
             <artifactId>jboss-as-tomcat</artifactId>
             <version>5.1.0.GA</version>
@@ -908,36 +902,6 @@
         </snapshots>
       </repository>
       <repository>
-         <id>repository.jboss.org</id>
-         <url>http://repository.jboss.org/maven2</url>
-         <releases>
-            <enabled>true</enabled>
-         </releases>
-         <snapshots>
-            <enabled>false</enabled>
-         </snapshots>
-      </repository>
-      <repository>
-         <id>exo-int</id>
-         <url>http://maven2.exoplatform.org/rest/maven2</url>
-         <releases>
-            <enabled>true</enabled>
-         </releases>
-         <snapshots>
-            <enabled>false</enabled>
-         </snapshots>
-      </repository>
-      <repository>
-         <id>caja</id>
-         <url>http://google-caja.googlecode.com/svn/maven</url>
-         <releases>
-            <enabled>true</enabled>
-         </releases>
-         <snapshots>
-            <enabled>false</enabled>
-         </snapshots>
-      </repository>
-      <repository>
          <id>oauth</id>
          <url>http://oauth.googlecode.com/svn/code/maven</url>
          <releases>
@@ -948,10 +912,26 @@
          </snapshots>
       </repository>
    </repositories>
-   <pluginRepositories>
+
+
+      <pluginRepositories>
+        <pluginRepository>
+          <id>jboss-public-repository-group</id>
+          <name>JBoss Public Maven Repository Group</name>
+          <url>https://repository.jboss.org/nexus/content/groups/public/</url>
+          <layout>default</layout>
+          <releases>
+            <enabled>true</enabled>
+            <updatePolicy>never</updatePolicy>
+          </releases>
+          <snapshots>
+            <enabled>true</enabled>
+            <updatePolicy>never</updatePolicy>
+          </snapshots>
+        </pluginRepository>
       <pluginRepository>
-         <id>exo-int</id>
-         <url>http://maven2.exoplatform.org/rest/maven2</url>
+         <id>java.net</id>
+         <url>http://download.java.net/maven/2</url>
          <releases>
             <enabled>true</enabled>
          </releases>
@@ -959,6 +939,6 @@
             <enabled>false</enabled>
          </snapshots>
       </pluginRepository>
-   </pluginRepositories>
 
+   </pluginRepositories>
 </project>
