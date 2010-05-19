@@ -42,7 +42,7 @@
 				<div class="VIEW-CONTAINER VIEW-BLOCK">
 			<%} %> 
 					<%if(hasPermission) {%>
-						<div class="UIRowContainer">
+						<div class="UIRowContainer <%=uicomponent.getChildren().size() == 0 ? "EmptyContainer" : ""%>">
 							<div>
 								<%uicomponent.renderChildren();%>
 							</div>
