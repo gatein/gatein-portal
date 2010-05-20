@@ -21,6 +21,8 @@ import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
 import org.exoplatform.webui.form.UIFormUploadInput;
 import org.exoplatform.webui.form.ext.UIFormColorPicker;
+import org.exoplatform.webui.form.ext.UIFormColorPicker.Colors;
+import org.exoplatform.webui.form.ext.UIFormColorPicker.Colors.Color;
 
 @ComponentConfig(lifecycle = UIFormLifecycle.class, template = "system:/groovy/webui/form/UIFormWithTitle.gtmpl", events = {@EventConfig(listeners = UISampleMultiValueInputSet.SubmitActionListener.class)})
 public class UISampleMultiValueInputSet extends UIForm
@@ -40,14 +42,19 @@ public class UISampleMultiValueInputSet extends UIForm
 
    public UISampleMultiValueInputSet() throws Exception
    {
+      UIFormMultiValueInputSet uiFormMultiValueInputSet;
+      
       // UIFormUploadInput
-      addUIFormInput(makeMultiValueInputSet(MULTI_UPLOAD, UIFormUploadInput.class));
-
+      addUIFormInput(makeMultiValueInputSet(MULTI_UPLOAD, UIFormUploadInput.class, new Class[] {String.class, String.class, int.class}));
       // UIFormDateTimeInput
       addUIFormInput(makeMultiValueInputSet(MULTI_DATE, UIFormDateTimeInput.class));
 
       // UIFormColorPicker
-      addUIFormInput(makeMultiValueInputSet(MULTI_COLOR, UIFormColorPicker.class));
+      uiFormMultiValueInputSet = new UIFormMultiValueInputSet(MULTI_COLOR, MULTI_COLOR);
+      uiFormMultiValueInputSet.setType(UIFormColorPicker.class);
+      uiFormMultiValueInputSet.setConstructorParameterTypes(new Class[] {String.class, String.class, String.class});
+      uiFormMultiValueInputSet.setConstructorParameterValues(new Object[] {"ABC", "XYZ", null});
+      addUIFormInput(uiFormMultiValueInputSet);
 
       // UIFormStringInput
       addUIFormInput(makeMultiValueInputSet(MULTI_STRING, UIFormStringInput.class));
@@ -63,6 +70,23 @@ public class UISampleMultiValueInputSet extends UIForm
    {
       UIFormMultiValueInputSet multiInput = new UIFormMultiValueInputSet(name, null);
       multiInput.setType(type);
+      return multiInput;
+   }
+   
+   private UIFormInput makeMultiValueInputSetHasValue(String name, Class<? extends UIFormInputBase> type, Object[] parameterValues) throws Exception
+   {
+      UIFormMultiValueInputSet multiInput = new UIFormMultiValueInputSet(name, null);
+      multiInput.setType(type);
+      multiInput.setConstructorParameterTypes(new Class[] {String.class, String.class, String.class});
+      multiInput.setConstructorParameterValues(parameterValues);
+      return multiInput;
+   }
+   
+   private UIFormInput makeMultiValueInputSet(String name, Class<? extends UIFormInputBase> type, Class<?>... parameterTypes) throws Exception 
+   {
+      UIFormMultiValueInputSet multiInput = new UIFormMultiValueInputSet(name, null);
+      multiInput.setType(type);
+      multiInput.setConstructorParameterTypes(parameterTypes);
       return multiInput;
    }
 
