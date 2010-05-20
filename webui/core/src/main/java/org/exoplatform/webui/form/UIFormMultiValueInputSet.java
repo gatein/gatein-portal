@@ -271,9 +271,9 @@ public class UIFormMultiValueInputSet extends UIFormInputContainer<List>
          }
       } else {
          inputBase = (UIFormInputBase)constructor_.newInstance();
-         inputBase.setName(compName);
       }
       
+      inputBase.setName(compName);
       inputBase.setId(compName);
       List<Validator> validators = this.getValidators();
       if (validators != null)
