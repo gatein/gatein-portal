@@ -36,5 +36,10 @@
       <Save>Lưu</Save>
     </action>
   </UIGadgetEditMode>
+  <UIGadgetPortlet>
+  	<msg>
+  		<url-invalid>Url sai định dạng</url-invalid>
+  	</msg>
+  </UIGadgetPortlet>
 </bundle>
 
