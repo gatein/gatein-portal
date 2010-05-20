@@ -93,6 +93,9 @@
   	<label>
   		<showImport>Thay đổi cách nhập ứng dụng</showImport>
   	</label>
+  	<action>
+  		<Save>Lưu</Save>
+  	</action>
   </UIApplicationRegistryEditMode>
   
   <!--
