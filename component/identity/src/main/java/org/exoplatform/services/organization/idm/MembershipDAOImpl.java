@@ -102,9 +102,11 @@ public class MembershipDAOImpl implements MembershipHandler
             + " because membership type is null");
       }
 
+      String plGroupName = getPLIDMGroupName(g.getGroupName());
+
       String groupId =
             getIdentitySession().getPersistenceManager().
-               createGroupKey(g.getGroupName(), orgService.getConfiguration().getGroupType(g.getParentId()));
+               createGroupKey(plGroupName, orgService.getConfiguration().getGroupType(g.getParentId()));
 
 
       if (isCreateMembership(mt.getName()))
@@ -147,9 +149,12 @@ public class MembershipDAOImpl implements MembershipHandler
 
    public void saveMembership(Membership m, boolean broadcast) throws Exception
    {
+
+      String plGroupName = getPLIDMGroupName(getGroupNameFromId(m.getGroupId()));
+
       String groupId =
          getIdentitySession().getPersistenceManager().
-            createGroupKey(getGroupNameFromId(m.getGroupId()), getGroupTypeFromId(m.getGroupId()));
+            createGroupKey(plGroupName, getGroupTypeFromId(m.getGroupId()));
 
 
       boolean hasRole = false;
@@ -215,9 +220,11 @@ public class MembershipDAOImpl implements MembershipHandler
 
       Membership m = new MembershipImpl(id);
 
+      String plGroupName = getPLIDMGroupName(getGroupNameFromId(m.getGroupId()));
+
       String groupId =
          getIdentitySession().getPersistenceManager().
-            createGroupKey(getGroupNameFromId(m.getGroupId()), getGroupTypeFromId(m.getGroupId()));
+            createGroupKey(plGroupName, getGroupTypeFromId(m.getGroupId()));
 
       boolean hasRole = false;
 
@@ -376,9 +383,11 @@ public class MembershipDAOImpl implements MembershipHandler
 
    public Membership findMembershipByUserGroupAndType(String userName, String groupId, String type) throws Exception
    {
+      String plGroupName = getPLIDMGroupName(getGroupNameFromId(groupId));
+
       String gid =
          getIdentitySession().getPersistenceManager().
-            createGroupKey(getGroupNameFromId(groupId), getGroupTypeFromId(groupId));
+            createGroupKey(plGroupName, getGroupTypeFromId(groupId));
 
       boolean hasMembership = false;
 
@@ -445,9 +454,11 @@ public class MembershipDAOImpl implements MembershipHandler
          return Collections.emptyList();
       }
 
+      String plGroupName = getPLIDMGroupName(getGroupNameFromId(groupId));
+
       String gid =
          getIdentitySession().getPersistenceManager().
-            createGroupKey(getGroupNameFromId(groupId), getGroupTypeFromId(groupId));
+            createGroupKey(plGroupName, getGroupTypeFromId(groupId));
 
       Collection<RoleType> roleTypes = new HashSet();
 
@@ -571,8 +582,10 @@ public class MembershipDAOImpl implements MembershipHandler
 
    public Collection findMembershipsByGroupId(String groupId) throws Exception
    {
+      String plGroupName = getPLIDMGroupName(getGroupNameFromId(groupId));
+
       String gid =
-         getIdentitySession().getPersistenceManager().createGroupKey(getGroupNameFromId(groupId),
+         getIdentitySession().getPersistenceManager().createGroupKey(plGroupName,
             getGroupTypeFromId(groupId));
 
       Collection<Role> roles = new HashSet();
@@ -631,16 +644,24 @@ public class MembershipDAOImpl implements MembershipHandler
       }
 
       //TODO: Exo UI has harcoded casts to List
-      return new LinkedList(memberships);
+      List<MembershipImpl> results = new LinkedList<MembershipImpl>(memberships);
 
+      if (orgService.getConfiguration().isSortMemberships())
+      {
+         Collections.sort(results);
+      }
+
+      return results;
    }
 
    public Membership findMembership(String id) throws Exception
    {
       Membership m = new MembershipImpl(id);
 
+      String plGroupName = getPLIDMGroupName(getGroupNameFromId(m.getGroupId()));
+
       String groupId =
-         getIdentitySession().getPersistenceManager().createGroupKey(getGroupNameFromId(m.getGroupId()),
+         getIdentitySession().getPersistenceManager().createGroupKey(plGroupName,
             getGroupTypeFromId(m.getGroupId()));
 
 
@@ -764,5 +785,15 @@ public class MembershipDAOImpl implements MembershipHandler
          return false;
       }
       return true;
+   }
+
+   public String getPLIDMGroupName(String gtnGroupName)
+   {
+      return orgService.getConfiguration().getPLIDMGroupName(gtnGroupName);
+   }
+
+   public String getGtnGroupName(String plidmGroupName)
+   {
+      return orgService.getConfiguration().getGtnGroupName(plidmGroupName);
    }
 }

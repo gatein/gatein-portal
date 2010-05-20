@@ -44,6 +44,8 @@ public class Config
 
    private String pathSeparator = ".";
 
+   private String slashReplacement = "@_@_@";
+
    private boolean forceMembershipOfMappedTypes = false;
 
    private String associationMembershipType;
@@ -52,6 +54,9 @@ public class Config
 
    private boolean useJTA = false;
 
+   private boolean sortGroups = true;
+
+   private boolean sortMemberships = true;
 
    public Config()
    {
@@ -152,6 +157,16 @@ public class Config
       }
 
       return null;
+   }
+
+   public String getPLIDMGroupName(String gtnGroupName)
+   {
+      return gtnGroupName.replaceAll(getSlashReplacement(), "/");
+   }
+
+   public String getGtnGroupName(String plidmGroupName)
+   {
+      return plidmGroupName.replaceAll("/", getSlashReplacement());
    }
 
    Set<String> getTypes(String id)
@@ -282,5 +297,35 @@ public class Config
    public void setUseJTA(boolean useJTA)
    {
       this.useJTA = useJTA;
+   }
+
+   public String getSlashReplacement()
+   {
+      return slashReplacement;
+   }
+
+   public void setSlashReplacement(String slashReplacement)
+   {
+      this.slashReplacement = slashReplacement;
+   }
+
+   public boolean isSortGroups()
+   {
+      return sortGroups;
+   }
+
+   public void setSortGroups(boolean sortGroups)
+   {
+      this.sortGroups = sortGroups;
+   }
+
+   public boolean isSortMemberships()
+   {
+      return sortMemberships;
+   }
+
+   public void setSortMemberships(boolean sortMemberships)
+   {
+      this.sortMemberships = sortMemberships;
    }
 }

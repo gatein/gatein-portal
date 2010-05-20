@@ -210,6 +210,22 @@
           <field name="useJTA">
             <boolean>false</boolean>
           </field>
+
+          <!-- If PLIDM group will have name containing slash "/" char than it will be replace with following string.
+               Slashes are used in group paths and if present in names may cause unpredictable behaviour -->
+          <field name="slashReplacement">
+            <string>@_@_@</string>
+          </field>
+
+          <!-- If groups should be displayed in a sorted order in the management UI-->
+          <field name="sortGroups">
+            <boolean>true</boolean>
+          </field>
+
+          <!-- If memberships should be displayed in a sorted order in the management UI-->
+          <field name="sortMemberships">
+            <boolean>true</boolean>
+          </field>
         </object>
       </object-param>
     </init-params>

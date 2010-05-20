@@ -83,17 +83,21 @@ public class GroupDAOImpl implements GroupHandler
    {
       org.picketlink.idm.api.Group parentGroup = null;
 
+      String childPLGroupName = getPLIDMGroupName(child.getGroupName());
+
       if (parent != null)
       {
+
+         String parentPLGroupName = getPLIDMGroupName(parent.getGroupName());
          try
          {
             parentGroup =
                getIdentitySession().getPersistenceManager().
-                  findGroup(parent.getGroupName(), orgService.getConfiguration().getGroupType(parent.getParentId()));
+                  findGroup(parentPLGroupName, orgService.getConfiguration().getGroupType(parent.getParentId()));
          }
          catch (Exception e)
          {
-            log.info("Cannot obtain group: " + parent.getGroupName(), e);
+            log.info("Cannot obtain group: " + parentPLGroupName, e);
 
          }
 
@@ -162,15 +166,17 @@ public class GroupDAOImpl implements GroupHandler
 
       org.picketlink.idm.api.Group jbidGroup = null;
 
+      String plGroupName = getPLIDMGroupName(group.getGroupName());
+
       try
       {
          jbidGroup =
             getIdentitySession().getPersistenceManager().
-               findGroup(group.getGroupName(), orgService.getConfiguration().getGroupType(group.getParentId()));
+               findGroup(plGroupName, orgService.getConfiguration().getGroupType(group.getParentId()));
       }
       catch (Exception e)
       {
-         log.info("Cannot obtain group: " + group.getGroupName() + "; ", e);
+         log.info("Cannot obtain group: " + plGroupName + "; ", e);
       }
 
       if (jbidGroup == null)
@@ -198,7 +204,7 @@ public class GroupDAOImpl implements GroupHandler
       }
       catch (Exception e)
       {
-         log.info("Cannot clear group relationships: " + group.getGroupName() + "; ", e);
+         log.info("Cannot clear group relationships: " + plGroupName + "; ", e);
       }
 
       try
@@ -207,7 +213,7 @@ public class GroupDAOImpl implements GroupHandler
       }
       catch (Exception e)
       {
-         log.info("Cannot remove group: " + group.getGroupName() + "; ", e);
+         log.info("Cannot remove group: " + plGroupName + "; ", e);
       }
 
       if (broadcast)
@@ -292,9 +298,11 @@ public class GroupDAOImpl implements GroupHandler
       {
          try
          {
+            String plGroupName = getPLIDMGroupName(parent.getGroupName());
+
             jbidGroup =
                getIdentitySession().getPersistenceManager().
-                  findGroup(parent.getGroupName(), orgService.getConfiguration().getGroupType(parent.getParentId()));
+                  findGroup(plGroupName, orgService.getConfiguration().getGroupType(parent.getParentId()));
          }
          catch (Exception e)
          {
@@ -377,7 +385,14 @@ public class GroupDAOImpl implements GroupHandler
 
 
       // UI has hardcoded casts to List
-      return new LinkedList<Group>(exoGroups);
+      List results = new LinkedList<Group>(exoGroups);
+
+      if (orgService.getConfiguration().isSortGroups())
+      {
+         Collections.sort(results);
+      }
+
+      return results;
 
    }
 
@@ -522,7 +537,9 @@ public class GroupDAOImpl implements GroupHandler
          log.info("Identity operation error: ", e);
       }
 
-      ExtGroup exoGroup = new ExtGroup(jbidGroup.getName());
+      String gtnGroupName = getGtnGroupName(jbidGroup.getName());
+
+      ExtGroup exoGroup = new ExtGroup(gtnGroupName);
 
       if (attrs.containsKey(GROUP_DESCRIPTION) && attrs.get(GROUP_DESCRIPTION).getValue() != null)
       {
@@ -535,7 +552,7 @@ public class GroupDAOImpl implements GroupHandler
       // UI requires that group has label
       else
       {
-         exoGroup.setLabel(exoGroup.getGroupName());
+         exoGroup.setLabel(gtnGroupName);
       }
 
       // Resolve full ID
@@ -544,7 +561,7 @@ public class GroupDAOImpl implements GroupHandler
       exoGroup.setId(id);
 
       // child of root
-      if (id.length() == jbidGroup.getName().length() + 1)
+      if (id.length() == gtnGroupName.length() + 1)
       {
          exoGroup.setParentId(null);
       }
@@ -565,6 +582,8 @@ public class GroupDAOImpl implements GroupHandler
       }
 
       Collection<org.picketlink.idm.api.Group> parents = new HashSet();
+
+      String gtnGroupName = getGtnGroupName(jbidGroup.getName());
 
       try
       {
@@ -589,6 +608,8 @@ public class GroupDAOImpl implements GroupHandler
 
          String id = orgService.getConfiguration().getParentId(jbidGroup.getGroupType());
 
+
+
          if (id != null && orgService.getConfiguration().isForceMembershipOfMappedTypes())
          {
             if (id.endsWith("/*"))
@@ -596,12 +617,12 @@ public class GroupDAOImpl implements GroupHandler
                id = id.substring(0, id.length() - 2);
             }
 
-            return id + "/" + jbidGroup.getName();
+            return id + "/" + gtnGroupName;
          }
 
 
          // All groups not connected to the root should be just below the root
-         return "/" + jbidGroup.getName();
+         return "/" + gtnGroupName;
 
          //TODO: make it configurable
          // throw new IllegalStateException("Group present that is not connected to the root: " + jbidGroup.getName());
@@ -610,7 +631,7 @@ public class GroupDAOImpl implements GroupHandler
 
       String parentGroupId = getGroupId(((org.picketlink.idm.api.Group)parents.iterator().next()));
 
-      return parentGroupId + "/" + jbidGroup.getName();
+      return parentGroupId + "/" + gtnGroupName;
 
    }
 
@@ -619,10 +640,12 @@ public class GroupDAOImpl implements GroupHandler
 
       org.picketlink.idm.api.Group jbidGroup = null;
 
+      String plGroupName = getPLIDMGroupName(exoGroup.getGroupName());
+
       try
       {
          jbidGroup = getIdentitySession().getPersistenceManager().
-               findGroup(exoGroup.getGroupName(), orgService.getConfiguration().getGroupType(exoGroup.getParentId()));
+               findGroup(plGroupName, orgService.getConfiguration().getGroupType(exoGroup.getParentId()));
       }
       catch (Exception e)
       {
@@ -636,7 +659,7 @@ public class GroupDAOImpl implements GroupHandler
          {
             jbidGroup =
                getIdentitySession().getPersistenceManager().
-                  createGroup(exoGroup.getGroupName(), orgService.getConfiguration().getGroupType(exoGroup.getParentId()));
+                  createGroup(plGroupName, orgService.getConfiguration().getGroupType(exoGroup.getParentId()));
          }
          catch (Exception e)
          {
@@ -718,6 +741,17 @@ public class GroupDAOImpl implements GroupHandler
 
       return rootGroup;
    }
+
+   public String getPLIDMGroupName(String gtnGroupName)
+   {
+      return orgService.getConfiguration().getPLIDMGroupName(gtnGroupName);
+   }
+
+   public String getGtnGroupName(String plidmGroupName)
+   {
+      return orgService.getConfiguration().getGtnGroupName(plidmGroupName);
+   }
+
 
 
 }

@@ -24,7 +24,7 @@ import org.exoplatform.services.organization.Membership;
 /*
  * @author <a href="mailto:boleslaw.dawidowicz at redhat.com">Boleslaw Dawidowicz</a>
  */
-public class MembershipImpl implements Membership
+public class MembershipImpl implements Membership, Comparable
 {
    private String membershipType = "member";
 
@@ -144,5 +144,17 @@ public class MembershipImpl implements Membership
       result = 31 * result + (userName != null ? userName.hashCode() : 0);
       result = 31 * result + (groupId != null ? groupId.hashCode() : 0);
       return result;
+   }
+
+   public int compareTo(Object o)
+   {
+      if (!(o instanceof Membership) || userName == null)
+      {
+         return 0;
+      }
+
+      Membership m = (Membership)o;
+
+      return userName.compareTo(m.getUserName());  
    }
 }

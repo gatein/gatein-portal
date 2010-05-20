@@ -29,7 +29,7 @@ import java.io.Serializable;
 /*
  * @author <a href="mailto:boleslaw.dawidowicz at redhat.com">Boleslaw Dawidowicz</a>
  */
-public class ExtGroup implements Group, Serializable
+public class ExtGroup implements Group, Serializable, Comparable
 {
    private String id;
 
@@ -154,5 +154,18 @@ public class ExtGroup implements Group, Serializable
       result = 31 * result + (label != null ? label.hashCode() : 0);
       result = 31 * result + (desc != null ? desc.hashCode() : 0);
       return result;
+   }
+
+   public int compareTo(Object o)
+   {
+      if (!(o instanceof Group))
+      {
+         return 0;
+      }
+
+      Group group = (Group)o;
+
+      return groupName.compareTo(group.getGroupName());
+
    }
 }

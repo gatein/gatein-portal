@@ -85,8 +85,11 @@ public class PicketLinkIDMOrganizationServiceImpl extends BaseOrganizationServic
       {
          parentId = groupId.substring(0, groupId.lastIndexOf("/"));
       }
+
+      String plGroupName = configuration.getPLIDMGroupName(name);
+
       return idmService_.getIdentitySession().getPersistenceManager().
-         findGroup(name, getConfiguration().getGroupType(parentId));
+         findGroup(plGroupName, getConfiguration().getGroupType(parentId));
    }
 
    @Override
