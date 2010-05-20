@@ -31,6 +31,7 @@ import org.exoplatform.webui.form.validator.Validator;
 import java.io.Writer;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -56,6 +57,8 @@ public class UIFormMultiValueInputSet extends UIFormInputContainer<List>
    private Class<? extends UIFormInputBase> clazz_;
 
    private Constructor constructor_ = null;
+   
+   private Object[] constructorParams_;
 
    /**
     * Whether this field is enabled
@@ -83,6 +86,10 @@ public class UIFormMultiValueInputSet extends UIFormInputContainer<List>
       return List.class;
    }
 
+   /**
+    * 
+    * @param clazz
+    */
    public void setType(Class<? extends UIFormInputBase> clazz)
    {
       this.clazz_ = clazz;
@@ -91,6 +98,43 @@ public class UIFormMultiValueInputSet extends UIFormInputContainer<List>
          constructor_ = constructors[0];
    }
 
+   /**
+    * define a <code>Constructor</code> which's invoked
+    * 
+    * @param constructorParameterTypes list of parameter type which is defined in constructor
+    * @throws SecurityException
+    * @throws NoSuchMethodException
+    */
+   public void setConstructorParameterTypes(Class<?>... constructorParameterTypes) throws SecurityException, NoSuchMethodException
+   {
+      Constructor<?> constructor = this.clazz_.getConstructor(constructorParameterTypes);
+      if(constructor != null)
+      {
+         this.constructor_ = constructor;
+      }
+   }
+   
+   /**
+    * pass values to the <code>Constructor</code>
+    * You only set constructor parameter values after seted constructor by {@link #setConstructorParameterTypes(Class...)}
+    * @param values
+    * @throws SecurityException
+    * @throws NoSuchMethodException
+    */
+   public void setConstructorParameterValues(Object[] values) throws SecurityException, NoSuchMethodException
+   {
+      this.constructorParams_ = values;
+//      List<Class<?>> parameterTypes = new ArrayList<Class<?>>();
+//      
+//      for (Object clazz : values)
+//      {
+//         parameterTypes.add(clazz.getClass());
+//      }
+//      
+//      Class<?> [] arrParameterTypes = (Class[]) parameterTypes.toArray(new Class[parameterTypes.size()]);
+//      this.setConstructorParameterTypes(arrParameterTypes);
+   }
+   
    public Class<? extends UIFormInputBase> getUIFormInputBase()
    {
       return clazz_;
@@ -202,19 +246,35 @@ public class UIFormMultiValueInputSet extends UIFormInputContainer<List>
 	   
 	  if(constructor_  == null) return  null;
       Class[] classes = constructor_.getParameterTypes();
-      Object[] params = new Object[classes.length];
-      for (int i = 0; i < classes.length; i++)
-      {
-         if (classes[i].isPrimitive())
+      UIFormInputBase inputBase;      
+      String compName = getId() + String.valueOf(idx);
+      if (classes.length > 0) {
+         if (constructorParams_ == null)
          {
-            if (classes[i] == boolean.class)
-               params[i] = false;
-            else
-               params[i] = 0;
+            Object[] params = new Object[classes.length];
+            for (int i = 0; i < classes.length; i++)
+            {
+               if (classes[i].isPrimitive())
+               {
+                  if (classes[i] == boolean.class)
+                     params[i] = false;
+                  else
+                     params[i] = 0;
+               }
+            }
+            params[0] = compName;
+            inputBase = (UIFormInputBase) constructor_.newInstance(params);
          }
+         else
+         {
+            inputBase = (UIFormInputBase) constructor_.newInstance(constructorParams_);
+         }
+      } else {
+         inputBase = (UIFormInputBase)constructor_.newInstance();
+         inputBase.setName(compName);
       }
-      params[0] = getId() + String.valueOf(idx);
-      UIFormInputBase inputBase = (UIFormInputBase)constructor_.newInstance(params);
+      
+      inputBase.setId(compName);
       List<Validator> validators = this.getValidators();
       if (validators != null)
       {
