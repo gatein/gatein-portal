@@ -218,7 +218,7 @@ public class UIPortletForm extends UIFormTabPane
          if (portletResponse instanceof FragmentResponse)
          {
             FragmentResponse fragmentResponse = (FragmentResponse)portletResponse;
-            content = new String(fragmentResponse.getBytes(), Charset.forName("UTF-8"));
+            content = new String(fragmentResponse.getBytes(), "UTF-8");
          }
          else
          {
