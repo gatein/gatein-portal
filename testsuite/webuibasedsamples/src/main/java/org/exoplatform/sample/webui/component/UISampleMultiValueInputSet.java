@@ -126,7 +126,7 @@ public class UISampleMultiValueInputSet extends UIForm
             msgBuild.append("<br/>");
          }
 
-         return new ApplicationMessage(msgBuild.toString(), null);
+         return new ApplicationMessage(msgBuild.toString().replace(".", "*"), null);
       }
 
       private void makeDateInputMsg(UIFormMultiValueInputSet multiInput, StringBuilder msgBuild)
@@ -154,7 +154,7 @@ public class UISampleMultiValueInputSet extends UIForm
             UploadResource uploadResource = ((UIFormUploadInput)multiInputChild).getUploadResource();
             if (uploadResource != null)
             {
-               msgBuild.append(" " + uploadResource.getFileName().replace(".", "*"));
+               msgBuild.append(" " + uploadResource.getFileName());
             }
             else
             {
