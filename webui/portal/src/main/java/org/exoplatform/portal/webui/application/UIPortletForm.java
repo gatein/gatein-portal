@@ -77,6 +77,8 @@ import org.gatein.pc.portlet.impl.spi.AbstractWindowContext;
 
 import javax.portlet.PortletMode;
 import javax.servlet.http.Cookie;
+
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -216,7 +218,7 @@ public class UIPortletForm extends UIFormTabPane
          if (portletResponse instanceof FragmentResponse)
          {
             FragmentResponse fragmentResponse = (FragmentResponse)portletResponse;
-            content = fragmentResponse.getContent();
+            content = new String(fragmentResponse.getBytes(), Charset.forName("UTF-8"));
          }
          else
          {
@@ -252,6 +254,7 @@ public class UIPortletForm extends UIFormTabPane
          }
 
          portletContent.setLength(0);
+         
          portletContent.append(content);
       }
       catch (Throwable ex)
