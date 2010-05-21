@@ -292,7 +292,7 @@ public class UITabPaneDashboard extends UIContainer
          return false;
       }
       label = label.trim();
-      if (Character.isDigit(label.charAt(0)) || label.charAt(0) == '-')
+      if (label.length() < 1 || Character.isDigit(label.charAt(0)) || label.charAt(0) == '-')
       {
          return false;
       }
@@ -463,7 +463,7 @@ public class UITabPaneDashboard extends UIContainer
          String newTabLabel = context.getRequestParameter(RENAMED_TAB_LABEL_PARAMETER);
          if (!tabPane.validateName(newTabLabel))
          {
-            context.getUIApplication().addMessage(new ApplicationMessage("UITabPaneDashboard.msg.wrongTabName", null));
+            context.getUIApplication().addMessage(new ApplicationMessage("UITabPaneDashboard.msg.wrongTabName", null, ApplicationMessage.ERROR));
             return;
          }
          String newUri = tabPane.renamePageNode(nodeIndex, newTabLabel);
