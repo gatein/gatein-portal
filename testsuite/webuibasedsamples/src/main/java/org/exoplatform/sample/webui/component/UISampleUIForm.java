@@ -44,6 +44,7 @@ import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
 import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
 import org.exoplatform.webui.form.ext.UIFormColorPicker;
+import org.exoplatform.webui.form.ext.UIFormComboBox;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
 
 /**
@@ -74,6 +75,8 @@ public class UISampleUIForm extends UIForm
    private static final String DATE_OF_BIRTH = "dateOfBirth";
 
    private static final String DESCRIPTION = "description";
+   
+   private static final String COMBOBOX = "ComboBox";
 
    private List<String> userNames = new ArrayList<String>();
 
@@ -107,6 +110,12 @@ public class UISampleUIForm extends UIForm
       List<SelectItemOption<String>> selectItemOptions = makeSelectItemOptions();
       inputSet.addUIFormInput(new UIFormSelectBox(POSITION, null, selectItemOptions));
       inputSet.addUIFormInput(new UIFormCheckBoxInput<String>(RECEIVE_EMAIL, null, "test"));
+      
+      List<SelectItemOption<String>> comboBoxItemOptions = new ArrayList<SelectItemOption<String>>();
+      comboBoxItemOptions.add(new SelectItemOption<String>(("VI")));
+      comboBoxItemOptions.add(new SelectItemOption<String>(("UK")));
+      comboBoxItemOptions.add(new SelectItemOption<String>(("FR")));
+      inputSet.addUIFormInput(new UIFormComboBox(COMBOBOX, COMBOBOX, comboBoxItemOptions));
    }
 
    private List<SelectItemOption<String>> makeRadioOptions()

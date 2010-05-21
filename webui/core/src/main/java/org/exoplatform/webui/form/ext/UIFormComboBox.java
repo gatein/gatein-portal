@@ -201,7 +201,13 @@ public class UIFormComboBox extends UIFormInputBase<String>
       text += " />";
       text +=
          "<input class='UIComboboxInput' options=\"" + options
-            + "\" onkeyup='eXo.webui.UICombobox.complete(this,event);' type='text' " + renderJsActions() + " /></div>";
+            + "\" onkeyup='eXo.webui.UICombobox.complete(this,event);' type='text' " + renderJsActions();
+      if(value_ != null && value_.trim().length() > 0)
+      {
+         text += "value='" + encodeValue(value_).toString() + "'";  
+      }
+      
+      text += " /></div>";
       w.write(text);
    }
 
