@@ -74,7 +74,7 @@ public class POMSessionManager implements Startable
 
    public void cachePut(Serializable key, Object value)
    {
-      GlobalKey globalKey = GlobalKey.wrap(repositoryService, key);
+      GlobalKey globalKey = GlobalKey.wrap(configurator.getRepositoryName(), key);
 
       //
       if (log.isTraceEnabled())
@@ -88,7 +88,7 @@ public class POMSessionManager implements Startable
 
    public Object cacheGet(Serializable key)
    {
-      GlobalKey globalKey = GlobalKey.wrap(repositoryService, key);
+      GlobalKey globalKey = GlobalKey.wrap(configurator.getRepositoryName(), key);
 
       //
       Object value = cache.get(globalKey);
@@ -105,7 +105,7 @@ public class POMSessionManager implements Startable
 
    public void cacheRemove(Serializable key)
    {
-      GlobalKey globalKey = GlobalKey.wrap(repositoryService, key);
+      GlobalKey globalKey = GlobalKey.wrap(configurator.getRepositoryName(), key);
 
       //
       if (log.isTraceEnabled())

@@ -20,6 +20,7 @@ package org.exoplatform.commons.chromattic;
 
 import org.chromattic.api.Chromattic;
 import org.chromattic.api.ChromatticBuilder;
+import org.chromattic.api.UndeclaredRepositoryException;
 import org.exoplatform.container.component.BaseComponentPlugin;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.container.xml.PropertiesParam;
@@ -121,6 +122,18 @@ public class ChromatticLifeCycle extends BaseComponentPlugin
    public String getDomainName()
    {
       return domainName;
+   }
+
+   public final String getRepositoryName()
+   {
+      try
+      {
+         return manager.repositoryService.getCurrentRepository().getConfiguration().getName();
+      }
+      catch (RepositoryException e)
+      {
+         throw new UndeclaredRepositoryException("JCR exceptions are really bad", e);
+      }
    }
 
    public final String getWorkspaceName()

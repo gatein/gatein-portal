@@ -19,12 +19,7 @@
 
 package org.exoplatform.portal.pom.config;
 
-import org.exoplatform.services.jcr.RepositoryService;
-import org.exoplatform.services.jcr.core.ManageableRepository;
-
-import javax.jcr.RepositoryException;
 import java.io.Serializable;
-import java.lang.reflect.UndeclaredThrowableException;
 
 /**
  * A global key wrapping a local key including the current repository id.
@@ -35,17 +30,9 @@ import java.lang.reflect.UndeclaredThrowableException;
 public class GlobalKey implements Serializable
 {
 
-   public static GlobalKey wrap(RepositoryService repoService, Serializable localKey)
+   public static GlobalKey wrap(String repositoryName, Serializable localKey)
    {
-      try
-      {
-         ManageableRepository repo = repoService.getCurrentRepository();
-         return new GlobalKey(repo.getConfiguration().getName(), localKey);
-      }
-      catch (RepositoryException e)
-      {
-         throw new UndeclaredThrowableException(e);
-      }
+      return new GlobalKey(repositoryName, localKey);
    }
 
    /** . */

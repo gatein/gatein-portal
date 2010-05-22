@@ -236,8 +236,9 @@ public class GadgetRegistryServiceImpl implements GadgetRegistryService
       {
          LocalGadgetData localData = (LocalGadgetData)data;
          url =
-            "jcr/repository/" + chromatticLifeCycle.getWorkspaceName() + "/production/app:gadgets/app:" + def.getName()
-               + "/app:data/app:resources/" + localData.getFileName();
+            "jcr/" + chromatticLifeCycle.getRepositoryName() + "/" +
+            chromatticLifeCycle.getWorkspaceName() + "/production/app:gadgets/app:" + def.getName() +
+            "/app:data/app:resources/" + localData.getFileName();
       }
       else
       {
