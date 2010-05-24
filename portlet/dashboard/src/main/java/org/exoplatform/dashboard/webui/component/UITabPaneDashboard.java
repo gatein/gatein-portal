@@ -463,7 +463,7 @@ public class UITabPaneDashboard extends UIContainer
          String newTabLabel = context.getRequestParameter(RENAMED_TAB_LABEL_PARAMETER);
          if (!tabPane.validateName(newTabLabel))
          {
-            context.getUIApplication().addMessage(new ApplicationMessage("UITabPaneDashboard.msg.wrongTabName", null, ApplicationMessage.ERROR));
+            context.getUIApplication().addMessage(new ApplicationMessage("UITabPaneDashboard.msg.wrongTabName", null));
             return;
          }
          String newUri = tabPane.renamePageNode(nodeIndex, newTabLabel);
