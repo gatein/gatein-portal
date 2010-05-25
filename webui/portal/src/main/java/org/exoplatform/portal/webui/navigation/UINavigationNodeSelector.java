@@ -558,7 +558,7 @@ public class UINavigationNodeSelector extends UIContainer
           
           for (PageNode pageNode : pageNodes) {
   			 if(pageNode != null && pageNode.isSystem()) {
-  				 uiApp.addMessage(new ApplicationMessage("UINavigationNodeSelector.msg.systemnode-move", null, ApplicationMessage.ERROR));
+  				 uiApp.addMessage(new ApplicationMessage("UINavigationNodeSelector.msg.systemnode-move", null));
   				 return;
   			 }
           }
@@ -815,7 +815,7 @@ public class UINavigationNodeSelector extends UIContainer
          PageNode childNode = parentChildPair.getChildNode();
          
          if(childNode.isSystem()) {
-        		uiApp.addMessage(new ApplicationMessage("UINavigationNodeSelector.msg.systemnode-delete", null, ApplicationMessage.ERROR));
+        		uiApp.addMessage(new ApplicationMessage("UINavigationNodeSelector.msg.systemnode-delete", null));
         		return;
         	}
         	
