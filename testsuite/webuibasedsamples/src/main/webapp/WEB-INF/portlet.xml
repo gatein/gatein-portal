@@ -4,9 +4,9 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd">
 	<portlet>
-		<description xml:lang="EN">Sample WebUI</description>
+		<description xml:lang="EN">WebUI Samples portlet</description>
 		<portlet-name>UISamplePortlet</portlet-name>
-		<display-name xml:lang="EN">Sample WebUI</display-name>
+		<display-name xml:lang="EN">WebUI Samples</display-name>
 		<portlet-class>org.exoplatform.webui.application.portlet.PortletApplicationController</portlet-class>
 
 		<init-param>
@@ -22,9 +22,9 @@
 		<supported-locale>en</supported-locale>
 		<resource-bundle>locale.portlet.web.UISamplePortlet</resource-bundle>
 		<portlet-info>
-			<title>Sample WebUI</title>
-			<short-title>Sample WebUI</short-title>
-			<keywords>Sample</keywords>
+			<title>WebUI Samples</title>
+			<short-title>WebUI Samples</short-title>
+			<keywords>Samples</keywords>
 		</portlet-info>
 	</portlet>
 </portlet-app>
