@@ -93,9 +93,10 @@ public class UIPermissionForm extends UIForm
          return;
       }
       service.update(application_);
-      
+      Application selectedApplication = getApplication();
       UIApplicationOrganizer uiApplicationOrganizer = getAncestorOfType(UIApplicationOrganizer.class);
       uiApplicationOrganizer.reload();
+      uiApplicationOrganizer.setSelectedApplication(selectedApplication);
    }
 
    static public class SelectMembershipActionListener extends EventListener<UIPermissionForm>

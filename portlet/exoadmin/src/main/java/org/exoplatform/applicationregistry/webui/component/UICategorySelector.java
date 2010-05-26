@@ -132,7 +132,9 @@ public class UICategorySelector extends UIForm
             chkInput = selector.getUIInput("category_" + category.getName());
             if (chkInput != null && chkInput.isChecked())
             {
-               appRegService.save(category, cloneApplication(selector.getApplication()));
+               Application newApp = cloneApplication(selector.getApplication());
+               UIApplicationRegistryPortlet.setPermissionToEveryone(newApp);
+               appRegService.save(category, newApp);
             }
          }
          UIGadgetInfo gadgetInfo = selector.getParent();

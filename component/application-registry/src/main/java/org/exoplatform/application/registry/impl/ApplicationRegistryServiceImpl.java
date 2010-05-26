@@ -454,6 +454,8 @@ public class ApplicationRegistryServiceImpl implements ApplicationRegistryServic
             }
          }
 
+         ArrayList<String> permissions = new ArrayList<String>();
+         permissions.add(UserACL.EVERYONE);
          // If no keywords, use the portlet application name
          if (categoryNames.isEmpty())
          {
@@ -487,6 +489,7 @@ public class ApplicationRegistryServiceImpl implements ApplicationRegistryServic
             {
                category = registry.createCategory(categoryName);
                category.setDisplayName(categoryName);
+               category.setAccessPermissions(permissions);
             }
 
             //
@@ -515,6 +518,7 @@ public class ApplicationRegistryServiceImpl implements ApplicationRegistryServic
                app = category.createContent(portletName, contentType, contentId);
                app.setDisplayName(displayName);
                app.setDescription(getLocalizedStringValue(descriptionLS, portletName));
+               app.setAccessPermissions(permissions);
             }
          }
       }

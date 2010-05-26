@@ -19,10 +19,14 @@
 
 package org.exoplatform.applicationregistry.webui.component;
 
+import java.util.ArrayList;
+
+import org.exoplatform.application.registry.Application;
+import org.exoplatform.commons.serialization.api.annotations.Serialized;
+import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.webui.portal.UIPortalComponentActionListener.ViewChildActionListener;
 import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
-import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIPortletApplication;
@@ -46,5 +50,13 @@ public class UIApplicationRegistryPortlet extends UIPortletApplication
    {
       // TODO Auto-generated method stub
       super.processRender(app, context);
+   }
+   
+   public static void setPermissionToEveryone(Application app)
+   {
+      ArrayList<String> defaultPermission = new ArrayList<String>();
+      defaultPermission.add(UserACL.EVERYONE);
+      
+      app.setAccessPermissions(defaultPermission);
    }
 }
