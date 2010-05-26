@@ -374,6 +374,11 @@
 	width: 480px;
 }
 
+.UIApplicationRegistryPortlet .UIFormWithTitle .HintMessage {
+  font-style:italic;
+  padding:10px;
+  text-align:center;
+}
 /*******************************UIAcessPermissions******************************/
 
 .UIApplicationRegistryPortlet .UIAcessPermissions {

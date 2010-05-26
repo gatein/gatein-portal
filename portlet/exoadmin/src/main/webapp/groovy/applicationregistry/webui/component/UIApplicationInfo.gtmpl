@@ -69,6 +69,7 @@ String applicationDescription = encoder.encode(application.getDescription());
 		<div class="TitleBar"><%=_ctx.appRes("UIApplicationInfo.label.accessPermissions")%></div>
 		<div class="HorizontalLayout">
 			<% uicomponent.renderChildren() %>
+		<div class="HintMessage"><%= _ctx.appRes("UIApplicationInfo.label.accessPermissionsDescription") %></div>
 		</div>
 	</div>
 </div>
