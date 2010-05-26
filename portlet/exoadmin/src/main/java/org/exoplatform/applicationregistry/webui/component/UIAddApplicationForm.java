@@ -110,6 +110,7 @@ public class UIAddApplicationForm extends UIForm
    {
       applications_.clear();
       applications_ = getApplicationByType(type);
+      Collections.sort(applications_, new Util.ApplicationComparator());
       setup();
    }
 
