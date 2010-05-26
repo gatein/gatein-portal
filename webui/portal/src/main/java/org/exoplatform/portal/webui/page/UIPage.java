@@ -33,31 +33,17 @@ public class UIPage extends UIContainer
 {
 
    /** . */
-   private String storageId;
-
    private String pageId;
 
    private String ownerId;
 
    private String ownerType;
 
-   private String[] accessPermissions;
-
    private String editPermission;
 
    private boolean showMaxWindow = false;
 
    private UIPortlet maximizedUIPortlet;
-
-   public String getStorageId()
-   {
-      return storageId;
-   }
-
-   public void setStorageId(String storageId)
-   {
-      this.storageId = storageId;
-   }
 
    public String getOwnerId()
    {
@@ -77,16 +63,6 @@ public class UIPage extends UIContainer
    public void setShowMaxWindow(Boolean showMaxWindow)
    {
       this.showMaxWindow = showMaxWindow;
-   }
-
-   public String[] getAccessPermissions()
-   {
-      return accessPermissions;
-   }
-
-   public void setAccessPermissions(String[] accessGroups)
-   {
-      this.accessPermissions = accessGroups;
    }
 
    public String getEditPermission()

@@ -17,7 +17,7 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.webui.application;
+package org.exoplatform.portal.webui.portal;
 
 import org.exoplatform.application.gadget.Gadget;
 import org.exoplatform.application.gadget.GadgetRegistryService;
@@ -54,7 +54,6 @@ public class UIApplicationList extends UIContainer
 
    private ApplicationCategory selectedCategory;
 
-   @SuppressWarnings("unchecked")
    public UIApplicationList() throws Exception
    {
       ApplicationRegistryService service = getApplicationComponent(ApplicationRegistryService.class);

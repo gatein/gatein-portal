@@ -83,16 +83,11 @@ import javax.servlet.http.HttpServletRequest;
 public class UIPortal extends UIContainer
 {
 
-   /** Storage id. */
-   private String storageId;
-
    private String owner;
 
    private String ownerType;
 
    private String locale;
-
-   private String[] accessPermissions;
 
    private String editPermission;
 
@@ -106,23 +101,11 @@ public class UIPortal extends UIContainer
 
    private PageNode selectedNode_;
    
-   private UIPage showedUIPage;
-   
    private Map<String, UIPage> all_UIPages;
    
    private Map<String, String[]> publicParameters_ = new HashMap<String, String[]>();
 
    private UIComponent maximizedUIComponent;
-
-   public String getStorageId()
-   {
-      return storageId;
-   }
-
-   public void setStorageId(String storageId)
-   {
-      this.storageId = storageId;
-   }
 
    public String getOwner()
    {
@@ -142,16 +125,6 @@ public class UIPortal extends UIContainer
    public void setLocale(String s)
    {
       locale = s;
-   }
-
-   public String[] getAccessPermissions()
-   {
-      return accessPermissions;
-   }
-
-   public void setAccessPermissions(String[] accessGroups)
-   {
-      this.accessPermissions = accessGroups;
    }
 
    public String getEditPermission()
@@ -516,32 +489,4 @@ public class UIPortal extends UIContainer
          }
       }
    }
-   
-   private static class UIPageKey
-   {
-      private String ownerType;
-      
-      private String ownerId;
-      
-      UIPageKey(String _ownerType, String _ownerId)
-      {
-         this.ownerType = _ownerType;
-         this.ownerId = _ownerId;
-      }
-      
-      @Override
-      public boolean equals(Object obj)
-      {
-         if(this == null || obj == null)
-         {
-            return this == null && obj == null;
-         }
-         if(!(obj instanceof UIPageKey))
-         {
-            return false;
-         }
-         return this.ownerType.equals(((UIPageKey)obj).ownerType) && this.ownerId.equals(((UIPageKey)obj).ownerId);
-      }
-   }
-
 }

@@ -17,7 +17,7 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.webui.container;
+package org.exoplatform.portal.webui.portal;
 
 import org.exoplatform.portal.config.model.Container;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -26,6 +26,7 @@ import org.exoplatform.webui.config.Param;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.config.annotation.ParamConfig;
+import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.model.SelectItemCategory;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
@@ -38,11 +39,10 @@ import java.io.ByteArrayInputStream;
 import java.util.List;
 
 /**
- * Created by The eXo Platform SAS
- * Author : Pham Thanh Tung
- *          thanhtungty@gmail.com
- * Jun 11, 2009  
+ * @author <a href="trongtt@gmail.com">Trong Tran</a>
+ * @version $Revision$
  */
+
 @ComponentConfig(template = "system:/groovy/portal/webui/container/UIContainerList.gtmpl", events = {@EventConfig(listeners = UIContainerList.SelectCategoryActionListener.class)}, initParams = @ParamConfig(name = "ContainerConfigOption", value = "system:/WEB-INF/conf/uiconf/portal/webui/container/ContainerConfigOption.groovy"))
 public class UIContainerList extends UIContainer
 {
