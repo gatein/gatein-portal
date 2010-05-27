@@ -9,7 +9,7 @@
 <div id="$uicomponent.id" class="FeedBox"> 
 	<% if (listGroupNames.size() == 0){ %>
 		<div class="WarningAddGroup">
-	 	<%=_ctx.appRes("UIAddGroupNavigation.Label.NoPermission")%>
+	 	<%=_ctx.appRes("UIAddGroupNavigation.Label.eachGroupHasAlreadyNavigation")%>
 	 	</div>
 	 <% } %>
 	<%   	 
