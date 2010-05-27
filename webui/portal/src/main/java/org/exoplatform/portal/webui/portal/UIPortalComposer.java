@@ -97,16 +97,6 @@ public class UIPortalComposer extends UIContainer
       uiTabPane.setSelectedTab(1);
    }
 
-   //TODO: this seems not to be used
-   public void setPortalMode(int mode)
-   {
-      if (mode < 0 || mode > 4)
-      {
-         return;
-      }
-      getAncestorOfType(UIPortalApplication.class).setModeState(mode);
-   }
-
    public int getPortalMode()
    {
       return getAncestorOfType(UIPortalApplication.class).getModeState();
@@ -308,13 +298,16 @@ public class UIPortalComposer extends UIContainer
       int portalMode = uiApp.getModeState();
       if (portalMode != UIPortalApplication.NORMAL_MODE)
       {
-         if (portalMode % 2 != 0)
+         switch(portalMode)
          {
-            Util.showComponentLayoutMode(UIPortlet.class);
-         }
-         else
-         {
-            Util.showComponentEditInViewMode(UIPortlet.class);
+            case UIPortalApplication.APP_BLOCK_EDIT_MODE:
+            case UIPortalApplication.CONTAINER_BLOCK_EDIT_MODE:
+               Util.showComponentLayoutMode(UIPortlet.class);
+               break;
+            case UIPortalApplication.APP_VIEW_EDIT_MODE:
+            case UIPortalApplication.CONTAINER_VIEW_EDIT_MODE:
+               Util.showComponentEditInViewMode(UIPortlet.class);
+               break;
          }
       }
       JavascriptManager jsManager = Util.getPortalRequestContext().getJavascriptManager();
