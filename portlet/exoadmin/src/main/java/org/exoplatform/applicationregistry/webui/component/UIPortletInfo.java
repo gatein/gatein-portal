@@ -19,10 +19,19 @@
 
 package org.exoplatform.applicationregistry.webui.component;
 
+import java.util.ArrayList;
+import java.util.List;
+import org.exoplatform.application.registry.Application;
+import org.exoplatform.application.registry.ApplicationCategory;
+import org.exoplatform.application.registry.ApplicationRegistryService;
 import org.exoplatform.applicationregistry.webui.component.UIPortletManagement.PortletExtra;
 import org.exoplatform.commons.serialization.api.annotations.Serialized;
+import org.exoplatform.portal.config.model.ApplicationType;
+import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
-import org.exoplatform.webui.core.UIComponent;
+import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.event.Event;
+import org.exoplatform.webui.event.EventListener;
 
 /**
  * Created by The eXo Platform SAS
@@ -30,13 +39,18 @@ import org.exoplatform.webui.core.UIComponent;
  *          thanhtungty@gmail.com
  * Sep 11, 2008  
  */
-@ComponentConfig(template = "app:/groovy/applicationregistry/webui/component/UIPortletInfo.gtmpl")
+@ComponentConfig(template = "app:/groovy/applicationregistry/webui/component/UIPortletInfo.gtmpl", events = {
+   @EventConfig(listeners = UIPortletInfo.ShowCategoriesActionListener.class)})
 @Serialized
-public class UIPortletInfo extends UIComponent
+public class UIPortletInfo extends UIContainer
 {
-
    private PortletExtra portlet_;
 
+   public UIPortletInfo() throws Exception
+   {
+      addChild(UICategorySelector.class, null, null);
+   }
+   
    public void setPortlet(PortletExtra portlet)
    {
       portlet_ = portlet;
@@ -47,4 +61,49 @@ public class UIPortletInfo extends UIComponent
       return portlet_;
    }
 
+   public static class ShowCategoriesActionListener extends EventListener<UIPortletInfo>
+   {
+      
+      @Override
+      public void execute(Event<UIPortletInfo> event) throws Exception
+      {
+         UIPortletInfo uiPortletInfo = event.getSource();
+         PortletExtra portlet = uiPortletInfo.getPortlet();
+         uiPortletInfo.removeChild(UICategorySelector.class);
+         UICategorySelector selector = uiPortletInfo.addChild(UICategorySelector.class, null, null);
+         Application app = new Application();
+         app.setApplicationName(portlet.getName());
+         app.setType(ApplicationType.PORTLET);
+         app.setDisplayName(portlet.getDisplayName());
+         app.setContentId(portlet.getId());
+         app.setAccessPermissions(new ArrayList<String>());
+         
+         selector.setApplication(app);
+         selector.setRendered(true);
+      }
+      
+   }
+   
+   private String getCategorieNames() throws Exception
+   {
+      ApplicationRegistryService appRegService = getApplicationComponent(ApplicationRegistryService.class);
+      List<ApplicationCategory> allCategories = appRegService.getApplicationCategories();
+      List<String> nameList = new ArrayList<String>();
+      
+      for (ApplicationCategory category : allCategories)
+      {
+         if (appRegService.getApplication(category.getName(), portlet_.getName()) != null)
+         {
+            nameList.add(category.getDisplayName());
+         }
+      }
+      StringBuffer names = new StringBuffer("");
+      for (String name : nameList)
+      {
+         names.append(name);
+         if (!name.equals(nameList.get(nameList.size() - 1)))
+            names.append(", ");
+      }
+      return names.toString();
+   }
 }

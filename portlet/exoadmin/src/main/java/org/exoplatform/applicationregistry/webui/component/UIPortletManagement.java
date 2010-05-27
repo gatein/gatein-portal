@@ -200,6 +200,7 @@ public class UIPortletManagement extends UIContainer
          uiPortletInfo = addChild(UIPortletInfo.class, null, null);
       }
       uiPortletInfo.setPortlet(selectedPorlet);
+      uiPortletInfo.getChild(UICategorySelector.class).setRendered(false);
    }
 
    public void setSelectedPortlet(String id) throws Exception

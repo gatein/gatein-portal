@@ -7,6 +7,7 @@ import org.exoplatform.commons.utils.SerializablePageList;
 import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -137,12 +138,12 @@ public class UICategorySelector extends UIForm
                appRegService.save(category, newApp);
             }
          }
-         UIGadgetInfo gadgetInfo = selector.getParent();
-         gadgetInfo.getChild(UICategorySelector.class).setRendered(false);
-         UIApplicationRegistryPortlet uiPortlet = gadgetInfo.getAncestorOfType(UIApplicationRegistryPortlet.class);
+         UIContainer appInfo = selector.getParent();
+         appInfo.getChild(UICategorySelector.class).setRendered(false);
+         UIApplicationRegistryPortlet uiPortlet = appInfo.getAncestorOfType(UIApplicationRegistryPortlet.class);
          UIApplicationOrganizer uiOrganizer = uiPortlet.getChild(UIApplicationOrganizer.class);
          uiOrganizer.reload();
-         event.getRequestContext().addUIComponentToUpdateByAjax(gadgetInfo);
+         event.getRequestContext().addUIComponentToUpdateByAjax(appInfo);
       }
 
       private Application cloneApplication(Application app)

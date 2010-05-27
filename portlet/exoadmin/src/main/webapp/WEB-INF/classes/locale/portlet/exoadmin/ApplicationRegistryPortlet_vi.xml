@@ -193,13 +193,18 @@
       <name>Tên Portlet:</name>
       <display>#{label.displayName}</display>
       <description>#{label.description}</description>
+	  <categories>Danh mục:</categories>
+	  <categories>
+	    <guide>Bạn phải thêm portlet này vào danh mục để có thể sử dụng trong trang web</guide>
+	    <clickHere>Click vào đây để thêm vào danh mục</clickHere>
+	  </categories>
     </label>
     <title>
       <portletPreferences>Portlet Preferences</portletPreferences>
     </title>
     <msg>
       <noPortletPreferences>No Portlet Preferences</noPortletPreferences>
-    </msg>
+    </msg>	
   </UIPortletInfo>
   <!--
   ##	org.exoplatform.portletregistry.webui.component.UIGadgetManagement
@@ -230,6 +235,11 @@
       <viewUrl>Xem mã nguồn tại:</viewUrl>
       <editUrl>Chỉnh sửa mã nguồn tại:</editUrl>
       <reference>Tham khảo:</reference>
+	  <categories>Danh mục:</categories>
+	  <categories>
+		<guide>Bạn phải thêm gadget này vào danh mục để có thể sử dụng trong Dashboard</guide>
+		<clickHere>Click vào đây để thêm vào danh mục</clickHere>
+	  </categories>
     </label>
     <title>
       <refresh>	Làm mới thông tin</refresh>
