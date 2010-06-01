@@ -53,6 +53,12 @@ public class UIPortalNavigation extends UIComponent
    private String cssClassName = "";
 
    private String template;
+   
+   private final static String PORTAL_NAV = "portal";
+   
+   private final static String GROUP_NAV = "group";
+   
+   private final static String USER_NAV = "user";
 
    @Override
    public String getTemplate()
@@ -125,7 +131,9 @@ public class UIPortalNavigation extends UIComponent
    {
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
       treeNode_ = new TreeNode(new PageNode(), new PageNavigation(), true);
-      for (PageNavigation nav : Util.getUIPortalApplication().getNavigations())
+      List<PageNavigation> listNavigations = Util.getUIPortalApplication().getNavigations();
+      
+      for (PageNavigation nav : rearrangeNavigations(listNavigations))
       {
          if (!showUserNavigation && nav.getOwnerType().equals("user"))
          {
@@ -134,6 +142,43 @@ public class UIPortalNavigation extends UIComponent
          PageNavigation filterNav = PageNavigationUtils.filter(nav, context.getRemoteUser());
          treeNode_.setChildren(filterNav.getNodes(), filterNav);
       }
+   }
+   
+   /**
+    * 
+    * @param listNavigation
+    * @return
+    */
+   private List<PageNavigation> rearrangeNavigations(List<PageNavigation> listNavigation)
+   {
+      List<PageNavigation> returnNavs = new ArrayList<PageNavigation>();
+
+      List<PageNavigation> portalNavs = new ArrayList<PageNavigation>();
+      List<PageNavigation> groupNavs = new ArrayList<PageNavigation>();
+      List<PageNavigation> userNavs = new ArrayList<PageNavigation>();
+
+      for (PageNavigation nav : listNavigation)
+      {
+         String ownerType = nav.getOwnerType();
+         if (PORTAL_NAV.equals(ownerType))
+         {
+            portalNavs.add(nav);
+         }
+         else if (GROUP_NAV.equals(ownerType))
+         {
+            groupNavs.add(nav);
+         }
+         else if (USER_NAV.equals(ownerType))
+         {
+            userNavs.add(nav);
+         }
+      }
+
+      returnNavs.addAll(portalNavs);
+      returnNavs.addAll(groupNavs);
+      returnNavs.addAll(userNavs);
+
+      return returnNavs;
    }
 
    public TreeNode getTreeNodes()
