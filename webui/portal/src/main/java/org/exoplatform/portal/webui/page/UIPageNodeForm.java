@@ -273,21 +273,21 @@ public class UIPageNodeForm extends UIFormTabPane
             if (currentDate.after(startDate))
             {
                Object[] args = {};
-               uiPortalApp.addMessage(new ApplicationMessage("UIPageNodeForm2.msg.currentDateBeforeStartDate", args, ApplicationMessage.WARNING));
+               uiPortalApp.addMessage(new ApplicationMessage("UIPageNodeForm.msg.currentDateBeforeStartDate", args, ApplicationMessage.WARNING));
                return;
             }
             // Case 2: start date after end date
             else if ((endCalendar != null) && (startCalendar != null) && (startDate.after(endDate)))
             {
                Object[] args = {};
-               uiPortalApp.addMessage(new ApplicationMessage("UIPageNodeForm2.msg.startDateBeforeEndDate", args, ApplicationMessage.WARNING));
+               uiPortalApp.addMessage(new ApplicationMessage("UIPageNodeForm.msg.startDateBeforeEndDate", args, ApplicationMessage.WARNING));
                return;
             }
             // Case 3: start date is null and current date after end date
             else if((endCalendar != null) && (currentDate.after(endDate)))
             {
                Object[] args = {};
-               uiPortalApp.addMessage(new ApplicationMessage("UIPageNodeForm2.msg.currentDateBeforeEndDate", args, ApplicationMessage.WARNING));
+               uiPortalApp.addMessage(new ApplicationMessage("UIPageNodeForm.msg.currentDateBeforeEndDate", args, ApplicationMessage.WARNING));
                return;
             }
             
@@ -319,7 +319,7 @@ public class UIPageNodeForm extends UIFormTabPane
             {
                if (PageNavigationUtils.searchPageNodeByUri(pageNav, pageNode.getUri()) != null)
                {
-                  uiPortalApp.addMessage(new ApplicationMessage("UIPageNodeForm2.msg.SameName", null));
+                  uiPortalApp.addMessage(new ApplicationMessage("UIPageNodeForm.msg.SameName", null));
                   return;
                }
                pageNav.addNode(pageNode);
@@ -339,7 +339,7 @@ public class UIPageNodeForm extends UIFormTabPane
             {
                if (PageNavigationUtils.searchPageNodeByUri(parentNode, pageNode.getUri()) != null)
                {
-                  uiPortalApp.addMessage(new ApplicationMessage("UIPageNodeForm2.msg.SameName", null));
+                  uiPortalApp.addMessage(new ApplicationMessage("UIPageNodeForm.msg.SameName", null));
                   return;
                }
                children.add(pageNode);

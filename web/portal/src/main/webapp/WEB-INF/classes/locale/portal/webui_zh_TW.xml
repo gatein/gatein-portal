@@ -883,7 +883,7 @@
          <GroupSelector>選擇群組</GroupSelector>
       </title>
    </UIPopupGroupSelector>
-   <UIPageNodeForm2>
+   <UIPageNodeForm>
       <msg>
          <SameName>該節點名已經存在。</SameName>
          <selectPage>您必須選擇一個頁面。</selectPage>
@@ -913,7 +913,7 @@
             <SetDefault>設定預設設定</SetDefault>
          </title>
       </Icon>
-   </UIPageNodeForm2>
+   </UIPageNodeForm>
    <UIPageNodeForm>
       <tab>
          <label>
@@ -2006,7 +2006,7 @@
    <UIPopupWindow>
       <Close>關閉窗口</Close>
       <title>
-         <UIPageNodeForm2>增加/編輯頁面節點</UIPageNodeForm2>
+         <UIPageNodeForm>增加/編輯頁面節點</UIPageNodeForm>
          <UINavigationManagement>導覽器管理</UINavigationManagement>
          <UIPageNavigationForm>頁面導覽器表</UIPageNavigationForm>
       </title>

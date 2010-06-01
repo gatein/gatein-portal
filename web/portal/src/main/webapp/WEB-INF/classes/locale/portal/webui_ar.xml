@@ -855,7 +855,7 @@
   #              org.exoplatform.portal.component.customization.UIPageNodeForm#
   #############################################################################
   -->
-  <UIPageNodeForm2>
+  <UIPageNodeForm>
     <title>إضافة / تحرير عقدة الصفحة</title>
     <msg>
       <SameName>!هذه العقدة في القائمة ، من فضلك ادخل واحدة آخرى</SameName>
@@ -886,7 +886,7 @@
         <SetDefault>احصل على الافتراضي</SetDefault>
       </title>
     </Icon>
-  </UIPageNodeForm2>
+  </UIPageNodeForm>
   
   <UIPageNodeForm>
     <tab>
@@ -2205,7 +2205,7 @@
   <UIPopupWindow>
     <Close>Close Window</Close>
     <title>
-    	<UIPageNodeForm2>ADD/EDIT PAGE NODE</UIPageNodeForm2>
+    	<UIPageNodeForm>ADD/EDIT PAGE NODE</UIPageNodeForm>
     	<UINavigationManagement>Navigation Management</UINavigationManagement>
     	<UIPageNavigationForm>Page Navigation Form</UIPageNavigationForm>
     </title>

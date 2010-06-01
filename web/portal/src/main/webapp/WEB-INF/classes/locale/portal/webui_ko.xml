@@ -782,7 +782,7 @@
          <GroupSelector>그룹 선택</GroupSelector>
       </title>
    </UIPopupGroupSelector>
-   <UIPageNodeForm2>
+   <UIPageNodeForm>
       <msg>
          <SameName>노드 이름이 이미 존재합니다.</SameName>
          <selectPage>페이지를 선택하셔야 합니다.</selectPage>
@@ -812,7 +812,7 @@
             <SetDefault>기본값</SetDefault>
          </title>
       </Icon>
-   </UIPageNodeForm2>
+   </UIPageNodeForm>
    <UIPageNodeForm>
       <tab>
          <label>
@@ -1922,7 +1922,7 @@
    <UIPopupWindow>
       <Close>창 닫기</Close>
       <title>
-         <UIPageNodeForm2>페이지 노드 추가/편집</UIPageNodeForm2>
+         <UIPageNodeForm>페이지 노드 추가/편집</UIPageNodeForm>
          <UINavigationManagement>내비게이션 관리</UINavigationManagement>
          <UIPageNavigationForm>페이지 내비게이션 폼</UIPageNavigationForm>
       </title>

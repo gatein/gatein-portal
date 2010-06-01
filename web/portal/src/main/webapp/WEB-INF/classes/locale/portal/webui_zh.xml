@@ -738,7 +738,7 @@
          <GroupSelector>选择组</GroupSelector>
       </title>
    </UIPopupGroupSelector>
-   <UIPageNodeForm2>
+   <UIPageNodeForm>
       <msg>
          <SameName>该节点名已经存在。</SameName>
          <selectPage>您必须选择一个页面。</selectPage>
@@ -768,7 +768,7 @@
             <SetDefault>获取默认设置</SetDefault>
          </title>
       </Icon>
-   </UIPageNodeForm2>
+   </UIPageNodeForm>
    <UIPageNodeForm>
       <tab>
          <label>
@@ -1832,7 +1832,7 @@
    <UIPopupWindow>
       <Close>关闭窗口</Close>
       <title>
-         <UIPageNodeForm2>增加/编辑页面节点</UIPageNodeForm2>
+         <UIPageNodeForm>增加/编辑页面节点</UIPageNodeForm>
          <UINavigationManagement>导航管理</UINavigationManagement>
          <UIPageNavigationForm>页面导航表</UIPageNavigationForm>
       </title>

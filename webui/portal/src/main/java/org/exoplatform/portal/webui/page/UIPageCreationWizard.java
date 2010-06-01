@@ -242,7 +242,7 @@ public class UIPageCreationWizard extends UIPageWizard
             if (currentDate.after(startDate))
             {
             	Object[] args = {};
-            	uiPortalApp.addMessage(new ApplicationMessage("UIPageNodeForm2.msg.currentDateBeforeStartDate", args, ApplicationMessage.WARNING));
+            	uiPortalApp.addMessage(new ApplicationMessage("UIPageNodeForm.msg.currentDateBeforeStartDate", args, ApplicationMessage.WARNING));
                uiWizard.viewStep(FIRST_STEP);
                return;
             }
@@ -250,7 +250,7 @@ public class UIPageCreationWizard extends UIPageWizard
             else if ((endCalendar != null) && (startCalendar != null) && (startDate.after(endDate)))
             {
             	Object[] args = {};
-               uiPortalApp.addMessage(new ApplicationMessage("UIPageNodeForm2.msg.startDateBeforeEndDate", args, ApplicationMessage.WARNING));
+               uiPortalApp.addMessage(new ApplicationMessage("UIPageNodeForm.msg.startDateBeforeEndDate", args, ApplicationMessage.WARNING));
                uiWizard.viewStep(FIRST_STEP);
                return;
             }
@@ -258,7 +258,7 @@ public class UIPageCreationWizard extends UIPageWizard
             else if((endCalendar != null) && (currentDate.after(endDate)))
             {
             	Object[] args = {};
-               uiPortalApp.addMessage(new ApplicationMessage("UIPageNodeForm2.msg.currentDateBeforeEndDate", args, ApplicationMessage.WARNING));
+               uiPortalApp.addMessage(new ApplicationMessage("UIPageNodeForm.msg.currentDateBeforeEndDate", args, ApplicationMessage.WARNING));
                uiWizard.viewStep(FIRST_STEP);
                return;
             }
