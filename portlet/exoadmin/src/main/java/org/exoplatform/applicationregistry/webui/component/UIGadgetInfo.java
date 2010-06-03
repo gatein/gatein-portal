@@ -54,12 +54,13 @@ import java.util.List;
 @Serialized
 public class UIGadgetInfo extends UIContainer
 {
+   private static String CATEGORY_ID = "GadgetCategory";
 
    private Gadget gadget_;
 
    public UIGadgetInfo() throws Exception
    {
-      addChild(UICategorySelector.class, null, null);
+      addChild(UICategorySelector.class, null, CATEGORY_ID);
    }
 
    public Gadget getGadget()
@@ -186,7 +187,7 @@ public class UIGadgetInfo extends UIContainer
          
          Gadget gadget = gadgetInfo.getGadget();
          gadgetInfo.removeChild(UICategorySelector.class);
-         UICategorySelector selector = gadgetInfo.addChild(UICategorySelector.class, null, null);
+         UICategorySelector selector = gadgetInfo.addChild(UICategorySelector.class, null, CATEGORY_ID);
          Application app = new Application();
          app.setApplicationName(gadget.getName());
          app.setType(ApplicationType.GADGET);

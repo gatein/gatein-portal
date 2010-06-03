@@ -164,9 +164,9 @@ public class UICategorySelector extends UIForm
       public void execute(Event<UICategorySelector> event) throws Exception
       {
          UICategorySelector selector = event.getSource();
-         UIGadgetInfo gadgetInfo = selector.getParent();
-         gadgetInfo.getChild(UICategorySelector.class).setRendered(false);
-         event.getRequestContext().addUIComponentToUpdateByAjax(gadgetInfo);
+         UIContainer appInfo = selector.getParent();
+         appInfo.getChild(UICategorySelector.class).setRendered(false);
+         event.getRequestContext().addUIComponentToUpdateByAjax(appInfo);
       }
 
    }

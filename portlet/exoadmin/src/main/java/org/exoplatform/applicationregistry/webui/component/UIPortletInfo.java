@@ -44,11 +44,12 @@ import org.exoplatform.webui.event.EventListener;
 @Serialized
 public class UIPortletInfo extends UIContainer
 {
+   private static String CATEGORY_ID = "PortletCategory";
    private PortletExtra portlet_;
 
    public UIPortletInfo() throws Exception
    {
-      addChild(UICategorySelector.class, null, null);
+      addChild(UICategorySelector.class, null, CATEGORY_ID);
    }
    
    public void setPortlet(PortletExtra portlet)
@@ -70,7 +71,7 @@ public class UIPortletInfo extends UIContainer
          UIPortletInfo uiPortletInfo = event.getSource();
          PortletExtra portlet = uiPortletInfo.getPortlet();
          uiPortletInfo.removeChild(UICategorySelector.class);
-         UICategorySelector selector = uiPortletInfo.addChild(UICategorySelector.class, null, null);
+         UICategorySelector selector = uiPortletInfo.addChild(UICategorySelector.class, null, CATEGORY_ID);
          Application app = new Application();
          app.setApplicationName(portlet.getName());
          app.setType(ApplicationType.PORTLET);
