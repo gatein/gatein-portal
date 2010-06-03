@@ -45,6 +45,11 @@
         <event-name>portal.application.lifecycle.event</event-name>
         <listener>org.exoplatform.webui.event.ConsoleEventMonitorListener</listener>
       </event>
+
+      <event>
+        <event-name>portal.execution.lifecycle.event</event-name>
+        <listener>org.exoplatform.webui.event.ConsoleEventMonitorListener</listener>
+      </event>
     </events>
   </application>
 </webui-configuration>
