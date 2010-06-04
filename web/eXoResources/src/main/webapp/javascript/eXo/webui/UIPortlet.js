@@ -20,7 +20,12 @@
 function UIPortlet() {
 	this.maxIndex = 0;
 } ;
-
+/**
+ * Event when mouse focuses to element, this function is called when user minimizes or
+ * maximized portlet window
+ * @param {Object} element focusing element
+ * @param {boolean} isOver know as mouse over or out
+ */
 UIPortlet.prototype.onControlOver = function(element, isOver) {
   var originalElementName = element.className ;
   if(isOver) {

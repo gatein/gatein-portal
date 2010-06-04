@@ -18,6 +18,17 @@
  */
 
 eXo.gadget.UIGadget = {
+    /**
+     * Create a new Gadget
+     * @param {String} url local or remote path that contain gadget .xml file
+     * @param {String} id id of object contains this gadget (parent id)
+     * @param {String} metadata contain information of gadget
+     * @param {Object} userPref
+     * @param {String} view type of view (home, canvas, ...)
+     * @param {boolean} isdev normal or development mode (0, 1)
+     * @param {boolean} debug normal or debug mode (0, 1)
+     * @param {String} nocache value indicate cache or nocache at shindig level (0, 1)
+     */
 	createGadget : function(url, id, metadata, userPref, view, hostName, isdev, debug, nocache) {
 		//eXo = eXo || {};
 		window.gadgets = window.gadgets || {};
@@ -74,7 +85,12 @@ eXo.gadget.UIGadget = {
         }
 
     },
-
+    /**
+     * Initialize data of gadget such as title, style, etc
+     * @param {Object} uiGadget object need to init data
+     * @param {boolean} inDesktop use to realize UIDesktopPage or no
+     * @param {String} metadata metadata of gadget
+     */
     init : function(uiGadget, inDesktop, metadata) {
         var portletFragment = eXo.core.DOMUtil.findAncestorByClass(uiGadget, "PORTLET-FRAGMENT");
         if (portletFragment == null) {
@@ -156,7 +172,10 @@ eXo.gadget.UIGadget = {
         }
 
     },
-
+    /**
+     * Show gadget control
+     * @param {Event} e
+     */
     showGadgetControl : function(e) {
         if (!e) e = window.event;
         e.cancelBubble = true;
@@ -171,7 +190,10 @@ eXo.gadget.UIGadget = {
         }
     },
 
-
+    /**
+     * Hide gadget control
+     *@param {Event} e
+     */
     hideGadgetControl : function(e) {
         if (!e) e = window.event;
         e.cancelBubble = true;
@@ -180,7 +202,10 @@ eXo.gadget.UIGadget = {
         gadgetControl.style.visibility = "hidden";
         uiGadget.style.border = "none";
     },
-
+    /**
+     * Use to edit some information of gadget such as nocache, debug, etc
+     * @param {String} id identifier of gadget
+     */
     editGadget : function(id) {
         var DOMUtil = eXo.core.DOMUtil ;
         var uiapp = document.getElementById(id) ;
@@ -188,7 +213,10 @@ eXo.gadget.UIGadget = {
         var tempId = id.id.split('_')[2] ;
         gadgets.container.getGadget(tempId).handleOpenUserPrefsDialog();
     },
-
+    /**
+     * Minimize a gadget
+     * @param {Object} selectedElement object to minimize
+     */
     minimizeGadget: function(selectedElement) {
         var DOMUtil = eXo.core.DOMUtil ;
         var uiGadget = DOMUtil.findAncestorByClass(selectedElement, "UIGadget") ;
@@ -219,7 +247,10 @@ eXo.gadget.UIGadget = {
         ajaxAsyncGetRequest(href);
         if (uiGadget.minimizeCallback) uiGadget.minimizeCallback(portletFrag.parentNode.id);
     },
-    
+    /**
+     * Maximize a gadget
+     * @param {Object} selectedElement object to maximize
+     */
     maximizeGadget: function(selectedElement) {
         var DOMUtil = eXo.core.DOMUtil ;
         var uiGadget = DOMUtil.findAncestorByClass(selectedElement, "UIGadget") ;
@@ -236,7 +267,10 @@ eXo.gadget.UIGadget = {
         href += "&objectId=" + uiGadget.id + "&ajaxRequest=true";
         ajaxGet(href,true);
     },
-
+    /**
+     * Delete a gadget from UI and database
+     * @param {Object} selectedElement object to delete
+     */
     deleteGadget : function(selectedElement) {
         var DOMUtil = eXo.core.DOMUtil ;
         var uiPage = DOMUtil.findAncestorByClass(selectedElement, "UIPage") ;
@@ -285,7 +319,10 @@ eXo.gadget.UIGadget = {
             }
         }
     },
-
+    /**
+     * Save Window information of gadget instance (x, y, z axis, etc)
+     * @param {Object} object Gadget object
+     */
     saveWindowProperties : function(object) {
         var DOMUtil = eXo.core.DOMUtil ;
         var uiPage = DOMUtil.findAncestorByClass(object, "UIPage") ;

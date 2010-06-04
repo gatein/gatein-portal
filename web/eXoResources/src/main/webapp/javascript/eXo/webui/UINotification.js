@@ -38,7 +38,10 @@ function UINotification(){
 		})
 	}
 }
-
+/**
+ * Display notification on sliding down
+ * @param {String} objectName identifier of notification object
+ */
 UINotification.prototype.slideDown = function(objectName){
   if(this.moving[objectName]) return;        
   if(document.getElementById(objectName).style.display != "none") return; 
@@ -46,20 +49,27 @@ UINotification.prototype.slideDown = function(objectName){
   this.dir[objectName] = "down";
   this.startSlide(objectName);      
 }
-
+/**
+ * Set sliding down and up
+ */
 UINotification.prototype.slideDownUp = function(objectName, endSlideUpCallback){
 	this.slideDown(objectName);
 	this.endSlideUpCallback[objectName] = endSlideUpCallback;
 	if(this.flagNoti[objectName]) setTimeout("eXo.webui.UINotification.slideUp('" + objectName + "')", 3000);	
 }
-
+/**
+ * Event when user click "x" close button on the notification
+ * If notify content is important, immediately it will not be close and uses closing timeout
+ */
 UINotification.prototype.closeNotification = function() {
 	for(var i = 0; i < this.importantNoti.length; i ++) {
 		this.flagNoti[this.importantNoti[i]] = true;
 		setTimeout("eXo.webui.UINotification.slideUp('" + this.importantNoti[i] + "')", 100);
 	}
 }
-
+/**
+ * Display (hide) notification as sliding up
+ */
 UINotification.prototype.slideUp = function(objectName){
   if(this.moving[objectName]) return;        
   if(document.getElementById(objectName).style.display == "none") return;   
@@ -67,7 +77,10 @@ UINotification.prototype.slideUp = function(objectName){
   this.dir[objectName] = "up";
   this.startSlide(objectName);
 }
-
+/**
+ * Start slide animation
+ * @param {String} objectName identifier of notification object
+ */
 UINotification.prototype.startSlide = function(objectName){
   this.object[objectName] = document.getElementById(objectName);
   this.endHeight[objectName] = parseInt(this.object[objectName].style.height);
@@ -78,7 +91,10 @@ UINotification.prototype.startSlide = function(objectName){
   this.object[objectName].style.display = "block";
   this.timerID[objectName] = setInterval('eXo.webui.UINotification.slideTick(\'' + objectName + '\');',this.timerlen);
 }
-
+/**
+ * Calculate height property every tick time
+ * @param {String} objectName name of object
+ */
 UINotification.prototype.slideTick = function(objectName){
   var elapsed = (new Date()).getTime() - this.startTime[objectName];		
   if (elapsed > this.slideAniLen)
@@ -91,12 +107,16 @@ UINotification.prototype.slideTick = function(objectName){
   }
   return;
 }
-
+/**
+ * Remove notification from page body
+ */
 UINotification.prototype.destroyUINotification = function(){	
 	var UINotification = document.getElementById("UINotification");		
 	document.getElementsByTagName("body")[0].removeChild(UINotification);	
 }
-
+/**
+ * End sliding, clean and destroy resource
+ */
 UINotification.prototype.endSlide = function(objectName){
   clearInterval(this.timerID[objectName]);
   if(this.dir[objectName] == "up") {
@@ -120,12 +140,18 @@ UINotification.prototype.endSlide = function(objectName){
   delete(this.flagNoti[objectName]);		
   return;
 }
-
+/**
+ * Remove object from document
+ * @param {String} objectName identifier of Object 
+ */
 UINotification.prototype.deleteBox = function(objectName) {
 	var el = document.getElementById(objectName);
 	el.parentNode.removeChild(el);
 }
-
+/**
+ * Create frame that contains whole notification content
+ * @return {String} htmlString html string
+ */
 UINotification.prototype.createFrameForMessages = function() {
 	var htmlString = "";		
 	htmlString += 	"<div class=\"UIPopupNotification\">";
@@ -154,7 +180,11 @@ UINotification.prototype.createFrameForMessages = function() {
 	htmlString += 	"</div>";
 	return htmlString;
 }
-
+/**
+ * Add message content to notification
+ * @param {String} messageContent content to notify
+ * @param {boolean} flag
+ */
 UINotification.prototype.addMessage = function(messageContent, flag) {
 	var currMessageBoxId = "UIMessageBox_" + this.numberMessageRecepted++;
 	var UIMessageContent = document.createElement('div');

@@ -18,12 +18,18 @@
  */
 
 function MouseEventManager () {} ;
-
+/**
+ * Add mouse down event handler
+ * @param method handler method
+ */
 MouseEventManager.prototype.addMouseDownHandler = function(method) {
 	document.onmousedown = this.docMouseDownEvt ;
 	this.onMouseDownHandlers = method ;
 } ;
-
+/**
+ * Document mouse down event, it will cancel default behavior of browser and process behavior in handler chain
+ * @param {Event} evt
+ */
 MouseEventManager.prototype.docMouseDownEvt = function(evt) {
 	if(!evt) evt = window.event ;
 	evt.cancelBubble = true ;
@@ -33,17 +39,26 @@ MouseEventManager.prototype.docMouseDownEvt = function(evt) {
 	else eXo.core.MouseEventManager.onMouseDownHandlers(evt) ;
 	document.onmousedown = null ;
 } ;
-
+/**
+ * Add Mouse up event handler
+ * @param method handler method
+ */
 MouseEventManager.prototype.addMouseUpHandler = function(method) {
 	document.onmouseup = this.docMouseUpEvt ;
 	this.onMouseUpHandlers = method ;
 } ;
-
+/**
+ * Document mouse up event, it will cancel default behavior of browser and process behavior in handler chain
+ * @param {Event} evt
+ */
 MouseEventManager.prototype.docMouseUpEvt = function() {
 	var mouseUpHandlers = eXo.core.MouseEventManager.onMouseUpHandlers ;
 	
 } ;
-
+/**
+ * Document mouse click event, it will cancel default behavior of browser and process behavior in handler chain
+ * @param {Event} evt
+ */
 MouseEventManager.prototype.docMouseClickEvt = function(evt) {
 	if(!evt) evt = window.event ;
 	evt.cancelBubble = true ;
@@ -52,7 +67,10 @@ MouseEventManager.prototype.docMouseClickEvt = function(evt) {
 	else eXo.core.MouseEventManager.onMouseClickHandlers(evt) ;
 	document.onclick = null ;
 } ;
-
+/**
+ * Add mouse click handler
+ * @param method handler method
+ */
 MouseEventManager.prototype.addMouseClickHandler = function(method) {
 	document.onclick = this.docMouseClickEvt ;
 	this.onMouseClickHandlers = method ;

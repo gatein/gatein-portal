@@ -27,16 +27,33 @@ function UIPopupMenu() {
 	this.currentVisibleContainers = new Array();
 	this.currentElement = null;
 } ;
-
+/**
+ * initialize UIPopupMenu
+ * @param {Object, String} popupMenu popup object
+ * @param {Object} container 
+ * @param {Number} x
+ * @param {Number} y
+ */
 UIPopupMenu.prototype.init = function(popupMenu, container, x, y) {
 	this.superClass = eXo.webui.UIPopup;
 	this.superClass.init(popupMenu, container.id) ;
 } ;
-
+/**
+ * Set position to a popup
+ * @param {Object} popupMenu
+ * @param {Number} x x axis
+ * @param {Number} y y axis
+ * @param {boolean} isRTL right to left flag
+ */
 UIPopupMenu.prototype.setPosition = function(popupMenu, x, y, isRTL) {
 	this.superClass.setPosition(popupMenu, x, y, isRTL) ;
 };
-
+/**
+ * Set size to a popup
+ * @param {Object} popupMenu
+ * @param {Number} w width
+ * @param {Number} h height
+ */
 UIPopupMenu.prototype.setSize = function(popup, w, h) {
 	this.superClass.setSize(popupMenu, w, h) ;
 } ;
@@ -115,13 +132,19 @@ UIPopupMenu.prototype.showMenuItemContainer = function(menuItemContainer, x, y) 
 	*/
 	this.superClass.setPosition(menuItemContainer, x, y) ;
 } ;
-
+/**
+ * Change object to hidden state
+ * @param {Object} object to hide
+ */
 UIPopupMenu.prototype.hide = function(object) {
 	if(typeof(object) == "string") object = document.getElementById(object);
 	object.style.display = "none" ;
 	object.style.visibility = "hidden";
 } ;
-
+/**
+ * Change object to visibility state
+ * @param {Object} object to hide
+ */
 UIPopupMenu.prototype.show = function(object) {
 	if(typeof(object) == "string") object = document.getElementById(object);
 	object.style.display = "block" ;

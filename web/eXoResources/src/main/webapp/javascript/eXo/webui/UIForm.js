@@ -22,7 +22,11 @@
  */
 function UIForm() {
 };
-
+/**
+ * Get form element with pattern condition
+ * @param {String} pattern
+ * The pattern can  be Id#Id, example: Account#UIAccountForm
+ */
 UIForm.prototype.getFormElemt = function(pattern) {
 	if(pattern.indexOf("#") == -1) return document.getElementById(pattern) ;
 	var strArr = pattern.split("#") ;
@@ -30,10 +34,10 @@ UIForm.prototype.getFormElemt = function(pattern) {
 	return eXo.core.DOMUtil.findDescendantById(portlet, strArr[1]) ;
 }
 
-/*ie bug  you cannot have more than one button tag*/
 /**
  * A function that submits the form identified by formId, with the specified action
  * If useAjax is true, calls the ajaxPost function from PortalHttpRequest, with the given callback function
+ * Note: ie bug  you cannot have more than one button tag
  */
 UIForm.prototype.submitForm = function(formId, action, useAjax, callback) {
  if (!callback) callback = null;
@@ -60,10 +64,10 @@ UIForm.prototype.submitForm = function(formId, action, useAjax, callback) {
   else  form.submit();
 } ;
 
-/*ie bug  you cannot have more than one button tag*/
 /**
  * Submits a form by Ajax, with the given action and the given parameters
  * Calls ajaxPost of PortalHttpRequest
+ * Note: ie bug  you cannot have more than one button tag
  */
 UIForm.prototype.submitEvent = function(formId, action, params) {
   var form = this.getFormElemt(formId) ;

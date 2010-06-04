@@ -293,7 +293,11 @@ DOMUtil.prototype.findPreviousElementByTagName = function(element, tagName) {
 	}
 	return null ;
 } ;
-
+/**
+ * Move an element
+ * @param {String} srcElemt element to move
+ * @param {String} destElemt destination element that will contains srcElemt
+ */
 DOMUtil.prototype.moveElemt = function(srcElemt, destElemt) {
 	if(typeof(srcElemt) == "string") srcElemt = document.getElementById(srcElemt) ;
 	if(typeof(destElemt) == "string") destElemt = document.getElementById(destElemt) ;
@@ -452,7 +456,10 @@ DOMUtil.prototype.get = function(el) {
 
   return el; // some other object, just pass it back
  }
-
+/**
+ * Disable onclick event
+ * @param {Event} el
+ */
 DOMUtil.prototype.disableOnClick = function(el) {
 	el.onclick = new Function("return false;");
 }

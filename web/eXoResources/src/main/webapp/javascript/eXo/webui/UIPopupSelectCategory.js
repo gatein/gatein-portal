@@ -19,6 +19,9 @@
 
 function UIPopupSelectCategory() {
 } ;
+/**
+ * Hide all hidden elements, it is used while showing UIPopupCategory
+ */
 UIPopupSelectCategory.prototype.hide = function() {
 	var ln = eXo.core.DOMUtil.hideElementList.length ;
 	if (ln > 0) {
@@ -27,7 +30,11 @@ UIPopupSelectCategory.prototype.hide = function() {
 		}
 	}
 } ;
-
+/**
+ * Show UIPopupCategory object
+ * @param {Object} obj document object contains UIPopupCategory
+ * @param {Event} evt
+ */
 UIPopupSelectCategory.prototype.show = function(obj, evt){
 	if(!evt) evt = window.event ;
 	evt.cancelBubble = true ;

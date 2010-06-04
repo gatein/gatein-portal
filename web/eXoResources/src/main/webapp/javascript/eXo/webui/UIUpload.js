@@ -22,7 +22,11 @@ function UIUpload() {
   this.isAutoUpload = false;
   //this.listLimitMB = new Array();
 };
-
+/**
+ * Initialize upload and create a upload request to server
+ * @param {String} uploadId identifier upload
+ * @param {boolean} isAutoUpload auto upload or none
+ */
 UIUpload.prototype.initUploadEntry = function(uploadId, isAutoUpload) {
 	var url = eXo.env.server.context + "/command?" ;
 	url += "type=org.exoplatform.web.command.handler.UploadHandler&action=progress&uploadId="+uploadId ;
@@ -74,7 +78,10 @@ UIUpload.prototype.createUploadEntry = function(uploadId, isAutoUpload) {
   idoc.close();
 };
 
-
+/**
+ * Refresh progress bar to update state of upload progress
+ * @param {String} elementId identifier of upload bar frame
+ */
 UIUpload.prototype.refeshProgress = function(elementId) {
   var list =  eXo.webui.UIUpload.listUpload;
   if(list.length < 1) return;
@@ -124,7 +131,11 @@ UIUpload.prototype.refeshProgress = function(elementId) {
                         "<span onclick='parent.eXo.webui.UIUpload.abortUpload("+id+")'>Abort</span>";
   }
 };
-
+/**
+ * Show uploaded state when upload has just finished a file
+ * @param {String} id uploaded identifier
+ * @param {String} fileName uploaded file name
+ */
 UIUpload.prototype.showUploaded = function(id, fileName) {
 	eXo.webui.UIUpload.listUpload.remove(id);
 	var container = parent.document.getElementById(id);
@@ -148,7 +159,10 @@ UIUpload.prototype.showUploaded = function(id, fileName) {
   var  input = parent.document.getElementById('input' + id);
 	input.value = "true" ;  
 };
-
+/**
+ * Abort upload process
+ * @param {String} id upload identifier
+ */
 UIUpload.prototype.abortUpload = function(id) {
   eXo.webui.UIUpload.listUpload.remove(id);
   var url = eXo.env.server.context + "/command?" ;
@@ -178,7 +192,10 @@ UIUpload.prototype.abortUpload = function(id) {
   var  input = parent.document.getElementById('input' + id);
   input.value = "false";
 };
-
+/**
+ * Delete uploaded file
+ * @param {String} id upload identifier
+ */
 UIUpload.prototype.deleteUpload = function(id) {
 	var url = eXo.env.server.context + "/command?";
 	url += "type=org.exoplatform.web.command.handler.UploadHandler&uploadId=" +id+"&action=delete" ;
@@ -206,7 +223,11 @@ UIUpload.prototype.deleteUpload = function(id) {
   input.value = "false";
 } ;
 
-
+/**
+ * Start upload file
+ * @param {Object} clickEle
+ * @param {String} id
+ */
 UIUpload.prototype.upload = function(clickEle, id) {
 	var DOMUtil = eXo.core.DOMUtil;  
   var container = parent.document.getElementById(id);  

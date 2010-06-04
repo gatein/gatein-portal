@@ -21,7 +21,11 @@ function UIItemSelector() {
   this.backupClass;
   this.backupItem;
 };
-
+/**
+ * Mouse over event, Set highlight to OverItem
+ * @param {Object} selectedElement focused element
+ * @param {boolean} mouseOver
+ */
 UIItemSelector.prototype.onOver = function(selectedElement, mouseOver) {
   if(selectedElement.className == "Item"){
     eXo.webui.UIItemSelector.beforeActionHappen(selectedElement);
@@ -36,7 +40,11 @@ UIItemSelector.prototype.onOver = function(selectedElement, mouseOver) {
 //    this.onChangeItemDetail(selectedElement, false);
   }
 };
-
+/**
+ * Mouse click event, highlight selected item and non-highlight other items
+ * There are 3 types of item: Item, OverItem, SeletedItem
+ * @param {Object} clickedElement
+ */
 UIItemSelector.prototype.onClick = function(clickedElement) {
   var itemListContainer = clickedElement.parentNode;
   var allItems =  eXo.core.DOMUtil.findDescendantsByClass(itemListContainer, "div", "Item");
@@ -53,7 +61,11 @@ UIItemSelector.prototype.onClick = function(clickedElement) {
     }
   }
 };
-
+/**
+ * Change UI of new selected item, selected item will be displayed and others will be hidden
+ * @param {Object} itemSelected selected item
+ * @param {boolean} mouseOver
+ */
 UIItemSelector.prototype.onChangeItemDetail = function(itemSelected, mouseOver) {
   if(!this.allItems || this.allItems.length <= 0 ) return;
   if(mouseOver) {

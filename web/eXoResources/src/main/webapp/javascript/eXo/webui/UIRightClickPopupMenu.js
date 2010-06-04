@@ -18,7 +18,10 @@
  */
 
 function UIRightClickPopupMenu() {};
-
+/**
+ * Initialize a UIRightClickPopupMenu object
+ * @param contextMenuId identifier of a document object
+ */
 UIRightClickPopupMenu.prototype.init = function(contextMenuId) {
 	var contextMenu = document.getElementById(contextMenuId) ;
 	// TODO: Fix temporary for the problem Minimize window in Page Mode
@@ -32,14 +35,20 @@ UIRightClickPopupMenu.prototype.init = function(contextMenuId) {
 	var parentNode = contextMenu.parentNode ;
 	this.disableContextMenu(parentNode) ;
 }
-
+/**
+ * Hide and disable mouse down event of context menu object
+ * @param contextId identifier of context menu
+ */
 UIRightClickPopupMenu.prototype.hideContextMenu = function(contextId) {
 	if (document.getElementById(contextId)) {
 		document.getElementById(contextId).style.display = 'none' ;
 		eXo.core.MouseEventManager.onMouseDownHandlers = null ;
 	}
 }
-
+/**
+ * Disable default context menu of browser
+ * @param comp identifier or document object
+ */
 UIRightClickPopupMenu.prototype.disableContextMenu = function(comp) {
 	if(typeof(comp) == "string") comp = document.getElementById(comp) ;
 	comp.onmouseover = function() {
@@ -49,7 +58,11 @@ UIRightClickPopupMenu.prototype.disableContextMenu = function(comp) {
 		document.oncontextmenu = function() {return true} ;
 	}
 };
-
+/**
+ * Prepare something for context menu
+ * @param {Object} evt event
+ * @param {Object} elemt document object that contains context menu
+ */
 UIRightClickPopupMenu.prototype.prepareObjectId = function(evt, elemt) {
 	var contextMenu = eXo.core.DOMUtil.findAncestorByClass(elemt, "UIRightClickPopupMenu") ;
 	contextMenu.style.display = "none" ;
@@ -62,7 +75,15 @@ UIRightClickPopupMenu.prototype.prepareObjectId = function(evt, elemt) {
 	elemt.setAttribute('href', href.replace('_objectid_', encodeURI(contextMenu.objId.replace(/'/g, "\\'")))) ;
 	return true;
 }
-
+/**
+ * Mouse click on element, If click is right-click, the context menu will be shown
+ * @param {Object} event
+ * @param {Object} elemt clicked element
+ * @param {String} menuId identifier of context menu will be shown
+ * @param {String} objId object identifier in tree
+ * @param {Array} params
+ * @param {Number} opt option
+ */
 UIRightClickPopupMenu.prototype.clickRightMouse = function(event, elemt, menuId, objId, params, opt) {
 	if (!event) event = window.event;
 	eXo.core.MouseEventManager.docMouseDownEvt(event) ;

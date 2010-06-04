@@ -18,7 +18,12 @@
  */
 
 function I18NMessage() {}
-
+/**
+ * Get message from resource bundle files, this function often is called from .js files
+ * @param {String} str know as key in Message Resource bundle file
+ * @param {Array} params parameter that can used to set value in message
+ * @return {String} message string
+ */
 I18NMessage.prototype.getMessage = function(str, params) {
 	var msg;
 	try {

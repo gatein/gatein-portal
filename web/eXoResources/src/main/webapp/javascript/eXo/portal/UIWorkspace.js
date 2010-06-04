@@ -28,7 +28,9 @@ eXo.portal.UIWorkspace = new UIWorkspace("UIWorkspace") ;
 if(eXo.portal.UIWorkingWorkspace == undefined) {
   eXo.portal.UIWorkingWorkspace = new UIWorkspace("UIWorkingWorkspace") ;
 };
-
+/**
+ * Resize UIControlWorkspace document object to fit on the screen
+ */
 eXo.portal.UIWorkingWorkspace.onResize = function() {
 	var uiWorkspace = document.getElementById(eXo.portal.UIWorkingWorkspace.id) ;
 	if(eXo.core.Browser.isIE6()) {

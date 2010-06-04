@@ -28,10 +28,9 @@ function HTMLUtil() {
 }
 
 /**
- * 
- * @param {String} str
- * 
- * @return {String}
+ * Encode string
+ * @param {String} str string to encode 
+ * @return {String} encoded string
  * 
  */
 HTMLUtil.prototype.entitiesEncode = function(str) {
@@ -51,10 +50,9 @@ HTMLUtil.prototype.entitiesEncode = function(str) {
 }
 
 /**
- * 
- * @param {String} str
- * 
- * @return {String}
+ * Decode string
+ * @param {String} str to decode
+ * @return {String} decoded string
  * 
  */
 HTMLUtil.prototype.entitiesDecode = function(str) {

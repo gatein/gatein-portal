@@ -31,7 +31,11 @@ UIDropDownControl.prototype.selectItem = function(method, id, selectedIndex) {
 /*.
  * minh.js.exo
  */
-
+/**
+ * show or hide drop down control
+ * @param {Object} obj document object to use as Anchor for drop down
+ * @param {Object} evet event object
+ */
 UIDropDownControl.prototype.show = function(obj, evt) {
 	if(!evt) evt = window.event ;
 	evt.cancelBubble = true ;
@@ -77,12 +81,20 @@ UIDropDownControl.prototype.show = function(obj, evt) {
 	}
 	
 } ;
-
+/**
+ * Hide an object
+ * @param {Object, String} obj object to hide
+ */
 UIDropDownControl.prototype.hide = function(obj) {
 	if (typeof(obj) == "string") obj = document.getElementById(obj) ;
 	obj.style.display = "none" ;		
 } ;
-
+/**
+ * Use as event when user selects a item in drop down list
+ * Display content of selected item and hide drop down control
+ * @param {Object} obj selected object
+ * @param {Object} evt event
+ */
 UIDropDownControl.prototype.onclickEvt = function(obj, evt) {
 	var DOMUtil = eXo.core.DOMUtil ;
 	var uiDropDownAnchor = DOMUtil.findAncestorByClass(obj, 'UIDropDownAnchor') ;

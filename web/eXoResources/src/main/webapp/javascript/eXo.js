@@ -16,7 +16,9 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-
+/**
+ * This class contains common js object that used in whole portal
+ */
 var eXo  = {
   animation : { },
   
@@ -57,7 +59,7 @@ var eXo  = {
   i18n : { }
 } ;
 
-/*
+/**
 * This method will : 
 *   1) dynamically load a javascript module from the server (if no root location is set 
 *      then use '/eXoResources/javascript/', aka files
@@ -95,7 +97,15 @@ eXo.loadJS = function(path) {
     alert(err + " : " + request.responseText) ;
   }
 } ;
-
+/**
+ * Make url portal request with parameters
+ * 
+ * @param targetComponentId identifier of component
+ * @param actionName name of action
+ * @param useAjax indicate Ajax request or none
+ * @param params array contains others parameters
+ * @return full url request
+ */
 eXo.env.server.createPortalURL = function(targetComponentId, actionName, useAjax, params) {
   var href = eXo.env.server.portalBaseURL + "?portal:componentId=" + targetComponentId + "&portal:action=" + actionName ;
 
@@ -108,7 +118,9 @@ eXo.env.server.createPortalURL = function(targetComponentId, actionName, useAjax
   if(useAjax) href += "&ajaxRequest=true" ;
   return  href ;
 } ;
-
+/**
+ * log out of user session
+ */
 eXo.portal.logout = function() {
 	window.location = eXo.env.server.createPortalURL("UIPortal", "Logout", false) ;
 } ;

@@ -64,7 +64,12 @@ UIVerticalSlideTabs.prototype.switchVTab = function(clickedElement) {
   	}
   }
 };
-
+/**
+ * Action when user clicks on item of vertical tab
+ * @param cleckedElement clicked element
+ * @param normalStyle a css class indicate normal state
+ * @param selectedStyle a css class indicate selected state
+ */
 UIVerticalSlideTabs.prototype.onTabClick = function(clickedElement, normalStyle, selectedStyle) {
   var uiClickedVTab = eXo.core.DOMUtil.findAncestorByClass(clickedElement, "UIVTab");
 	var uiClickedVTabContent = eXo.core.DOMUtil.findFirstChildByClass(uiClickedVTab, "div", "UIVTabContent");

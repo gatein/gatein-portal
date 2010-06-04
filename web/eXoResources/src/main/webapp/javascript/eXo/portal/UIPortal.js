@@ -112,7 +112,10 @@ UIPortal.prototype.blockOnMouseOver = function(event, portlet, isOver) {
 		controlPortlet.style.display = eXo.portal.portalMode == 4 ? "none" : "block";
 	}
 };
-
+/**
+ * Get all UIPortlets of current UIWorkingWorkspace
+ * @return {Array} Array of UIComponents
+ */
 UIPortal.prototype.getUIPortlets = function() {
   var uiWorkingWorkspace = document.getElementById("UIWorkingWorkspace") ;
   var founds =  eXo.core.DOMUtil.findDescendantsByClass(uiWorkingWorkspace, "div", "UIPortlet") ;
@@ -122,7 +125,10 @@ UIPortal.prototype.getUIPortlets = function() {
   }
   return components ;
 } ;
-
+/**
+ * Get all UIPortlets is children of UIWorkingWorkspace
+ * @return {Array} Array of UIComponents
+ */
 UIPortal.prototype.getUIPortletsInUIPortal = function() {
   var uiWorkingWorkspace = document.getElementById("UIWorkingWorkspace") ;
   var founds =  eXo.core.DOMUtil.findDescendantsByClass(uiWorkingWorkspace, "div", "UIPortlet") ;
@@ -134,7 +140,10 @@ UIPortal.prototype.getUIPortletsInUIPortal = function() {
   }
   return components ;
 } ;
-
+/**
+ * Get all UIPortlets in UIPage
+ * @return {Array} components array of UIComponent objects
+ */
 UIPortal.prototype.getUIPortletsInUIPage = function() {
   var uiPage = document.getElementById("UIPage") ;
   var founds =  eXo.core.DOMUtil.findDescendantsByClass(uiPage, "div", "UIPortlet");
@@ -144,7 +153,10 @@ UIPortal.prototype.getUIPortletsInUIPage = function() {
   }
   return components ;
 } ;
-
+/**
+ * Get All UIContainers in current UIWorkingWorkspace
+ * @return {Array} components array of UIComponent objects
+ */
 UIPortal.prototype.getUIContainers = function() {
   var uiWorkingWorkspace = document.getElementById("UIWorkingWorkspace") ;
   var  founds = eXo.core.DOMUtil.findDescendantsByClass(uiWorkingWorkspace, "div", "UIContainer");
@@ -154,18 +166,28 @@ UIPortal.prototype.getUIContainers = function() {
   }
   return components ;
 };
-
+/**
+ * Get current UIPageBody
+ * @return {Object} UIPageBody object of this document
+ */
 UIPortal.prototype.getUIPageBody = function() {
 //  var uiPortal = document.getElementById("UIPortal") ;
 //  return new UIComponent(eXo.core.DOMUtil.findFirstDescendantByClass(uiPortal, "div", "UIPage")) ;
 	return new UIComponent(document.getElementById("UIPageBody")) ;
 };
-
+/**
+ * Get current UIPortal
+ * @return {Object} UIComponent object that contains UIPortal object of this component
+ */
 UIPortal.prototype.getUIPortal = function() {
   var uiWorkingWorkspace = document.getElementById("UIWorkingWorkspace") ;
   return new UIComponent(eXo.core.DOMUtil.findFirstDescendantByClass(uiWorkingWorkspace, "div", "UIPortal"));
 };
-
+/**
+ * Change page mode from view mode to layout mode
+ * @param {Object} uicomponent component contains this view (layout)
+ * @param {boolean} swapContent indicate changing content or not
+ */
 UIPortal.prototype.switchViewModeToLayoutMode = function(uicomponent, swapContent) {
   var layoutBlock = uicomponent.getLayoutBlock() ;
   if(!layoutBlock || layoutBlock.style.display == 'block') return ;
@@ -182,7 +204,11 @@ UIPortal.prototype.switchViewModeToLayoutMode = function(uicomponent, swapConten
 	  viewBlock.style.display = "none" ;
   } catch (err) {}
 };
-
+/**
+ * Change page mode from layout mode to view mode
+ * @param {Object} uicomponent component contains this layout (view)
+ * @param {boolean} swapContent indicate changing content or not
+ */
 UIPortal.prototype.switchLayoutModeToViewMode = function(uicomponent, swapContent) {
   var viewBlock =  uicomponent.getViewBlock() ;
   if(!viewBlock || viewBlock.style.display == 'block') return ;
@@ -226,7 +252,10 @@ UIPortal.prototype.switchMode = function(elemtClicked) {
 //		this.showLayoutModeForPortal() ;
 //	}
 //};
-
+/**
+ * Switch mode of page
+ * @param {Object} elemtClicked clicked element
+ */
 UIPortal.prototype.switchModeForPage = function(elemtClicked) {
 	var layoutMode  = this.showViewLayoutModeForPage();
 	if(layoutMode == 1) {
@@ -237,7 +266,11 @@ UIPortal.prototype.switchModeForPage = function(elemtClicked) {
 		this.showMaskLayer() ;
 	}
 } ;
-
+/**
+ * Show area for dnd into this UIComponent
+ * @param {Object} uiComponent component contains control block
+ * @param {boolean} flag display (blocking) or hide control block
+ */
 UIPortal.prototype.showUIComponentControl = function(uicomponent, flag) {
   var controlBlock = uicomponent.getControlBlock() ;
   if(!controlBlock) return ;
@@ -250,7 +283,10 @@ UIPortal.prototype.showUIComponentControl = function(uicomponent, flag) {
 //    controlBlock.style.display = 'none' ;
 //  }
 };
-
+/**
+ * Change page to layout view
+ * @return layoutMode type of view mode (0, 1)
+ */
 UIPortal.prototype.showViewLayoutModeForPage = function() {
 	/*
 	 * minh.js.exo;
@@ -437,7 +473,9 @@ UIPortal.prototype.findUIComponentOf = function(element) {
   }
   return null ;
 };
-
+/**
+ * Display Mask layer infront of page's surface
+ */
 UIPortal.prototype.showMaskLayer = function() {
 	var uiPortalApplication = document.getElementById("UIPortalApplication") ;
 	var object = document.createElement("div") ;
@@ -463,7 +501,9 @@ UIPortal.prototype.showMaskLayer = function() {
 	this.maskLayer.style.zIndex = parseInt(object.style.zIndex) + 1 ;
 	eXo.core.Browser.addOnScrollCallback("3743892", eXo.core.UIMaskLayer.setPosition) ;
 } ;
-
+/**
+ * Hide (remove) mask layer from page's surface
+ */
 UIPortal.prototype.hideMaskLayer = function() {
 	if(this.maskLayer) {
 		var uiPortalApplication = document.getElementById("UIPortalApplication") ;
@@ -473,7 +513,10 @@ UIPortal.prototype.hideMaskLayer = function() {
 		uiPortalApplication.removeChild(maskObject) ;
 	}
 } ;
-
+/**
+ * Change skin of Portal
+ * @param url
+ */
 UIPortal.prototype.changeSkin = function(url) {
  var skin = '';
  if(eXo.webui.UIItemSelector.SelectedItem != undefined) {
@@ -483,7 +526,10 @@ UIPortal.prototype.changeSkin = function(url) {
   //ajaxAsyncGetRequest(url + '&skin='+skin, false);
   window.location = url + '&skin='+skin;
 } ;
-
+/**
+ * Change language of Portal
+ * @param url
+ */
 UIPortal.prototype.changeLanguage = function(url) {
 	var language = '';
 	if(eXo.webui.UIItemSelector.SelectedItem != undefined) {
@@ -493,7 +539,9 @@ UIPortal.prototype.changeLanguage = function(url) {
   //ajaxAsyncGetRequest(url + '&language='+language, false);
   window.location = url + '&language='+language;
 } ;
-
+/**
+ * Change current portal
+ */
 UIPortal.prototype.changePortal = function(accessPath, portal) {
   window.location = eXo.env.server.context + "/" + accessPath + "/" + portal+"/";
 } ;
@@ -503,7 +551,10 @@ UIPortal.prototype.popupButton = function(url, action) {
 	if(action == undefined) action = '';  
   window.location = url + '&action='+ action ;
 } ;
-
+/**
+ * Remove a component of portal
+ * @param {String} componentId identifier of component
+ */
 UIPortal.prototype.removeComponent = function(componentId) {
 		var comp = document.getElementById(componentId);
 		var viewPage = eXo.core.DOMUtil.findAncestorByClass(comp, "VIEW-PAGE");
@@ -521,7 +572,9 @@ UIPortal.prototype.removeComponent = function(componentId) {
 		}
 };
 
-
+/**
+ * Change Save button to editing state
+ */
 UIPortal.prototype.changeComposerSaveButton = function() {
 	if(eXo.portal.hasEditted == false) {
 		var uiWorkingWS = document.getElementById("UIWorkingWorkspace");
@@ -551,7 +604,10 @@ UIPortal.prototype.toggleComposer = function(clickedEle) {
 	var requestStr = eXo.env.server.createPortalURL(portalComposer.id, "Toggle", true);
 	ajaxAsyncGetRequest(requestStr);
 };
-
+/**
+ * Clollapse or expand an element (all its children) of tree
+ * @param {Object} element object to collapse or expand
+ */
 UIPortal.prototype.collapseExpand = function(element) {
 	var subGroup = eXo.core.DOMUtil.findFirstChildByClass(element.parentNode, "div", "ChildrenContainer") ;
 	var className = element.className;

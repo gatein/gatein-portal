@@ -18,7 +18,10 @@
  */
 
 function UIToolbar() {};
-
+/**
+ * Display clicked element on block state
+ * @param {Object} clickedEle clicked object
+ */
 UIToolbar.prototype.displayBlockContent = function(clickedEle) {
 	if(clickedEle == null) return;
   var uiToolbar = eXo.core.DOMUtil.findAncestorByClass(clickedEle, "UIToolbar");

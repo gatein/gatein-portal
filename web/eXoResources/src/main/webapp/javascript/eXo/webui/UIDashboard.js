@@ -395,7 +395,11 @@ function UIDashboard() {
 		var deltaY = Math.ceil((uiDashboard.offsetHeight - popup.offsetHeight) / 2);
 		popup.style.top = eXo.core.Browser.findPosY(uiDashboard) + deltaY + "px";
 	};
-	
+	/**
+	 * Build a UITarget element (div element) with properties in parameters
+	 * @param {Number} width
+	 * @param {Number} height
+	 */
 	UIDashboard.prototype.createTarget = function(width, height) {
 		var uiTarget = document.createElement("div");
 		uiTarget.id = "UITarget";
@@ -404,7 +408,10 @@ function UIDashboard() {
 		uiTarget.style.height = height + "px";
 		return uiTarget;
 	};
-	
+	 /**
+   * Build a UITarget element (div element) with properties equal to object's properties in parameter
+   * @param {Object} obj object
+   */
 	UIDashboard.prototype.createTargetOfAnObject = function(obj) {
 		var uiTarget = document.createElement("div");
 		uiTarget.id = "UITarget";
@@ -412,7 +419,10 @@ function UIDashboard() {
 		uiTarget.style.height = obj.offsetHeight + "px";
 		return uiTarget;
 	};
-	
+	 /**
+   * Show and hide gadget list for selecting gadget in dashboard
+   * @param {Object} comp indicate action show and hide, if it is close button, action is hide
+   */
 	UIDashboard.prototype.showHideSelectContainer = function(event) {
 		if(!event) event = window.event;
 		var DOMUtil = eXo.core.DOMUtil;
@@ -438,7 +448,12 @@ function UIDashboard() {
 			ajaxGet(url);
 		}
 	};
-	
+	 /**
+   * Using when click event happens on a dashboard tab
+   * @param {Object} clickElement
+   * @param {String} normalStyle a css style
+   * @param {String} selectedType a css style
+   */
 	UIDashboard.prototype.onTabClick = function(clickElement, normalStyle, selectedType) {
 		var DOMUtil = eXo.core.DOMUtil;
 		var category = DOMUtil.findAncestorByClass(clickElement, "GadgetCategory");
@@ -459,7 +474,10 @@ function UIDashboard() {
 			categoryContent.style.display = "none";
 		}
 	};
-	
+	/**
+	 * Change disabled object to enable state
+	 * @param {Object} elemt object to enable
+	 */
 	UIDashboard.prototype.enableContainer = function(elemt) {
 		var DOMUtil = eXo.core.DOMUtil;
 		if(DOMUtil.hasClass(elemt, "DisableContainer")) {
@@ -468,7 +486,10 @@ function UIDashboard() {
 		var arrow = DOMUtil.findFirstChildByClass(elemt, "div", "Arrow");
 		if(DOMUtil.hasClass(arrow, "DisableArrowIcon")) DOMUtil.replaceClass(arrow," DisableArrowIcon", "");
 	};
-	
+	 /**
+   * Change object to disable state
+   * @param {Object} elemt object to enable
+   */
 	UIDashboard.prototype.disableContainer = function(elemt) {
 		var DOMUtil = eXo.core.DOMUtil;
 		if(!DOMUtil.hasClass(elemt, "DisableContainer")) {

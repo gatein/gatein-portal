@@ -21,7 +21,11 @@ function UIPortalControl() {
   this.scrollManagers = new Array();
   this.t = 0;
 };
-
+/**
+ * Change state of window
+ * @param {String} id object identifier
+ * @param {String} state state will be displayed (maximized, minimized, normal)
+ */
 UIPortalControl.prototype.changeWindowState = function(id, state) {
   var params = [
     {name: "portletId", value: id},
@@ -29,8 +33,10 @@ UIPortalControl.prototype.changeWindowState = function(id, state) {
   ] ;
 	ajaxGet(eXo.env.server.createPortalURL("UIPortal", "ChangeWindowState", true, params));
 };
-
-/*For Navigation Tree*/
+/**
+ * Collapse tree, use for Navigation Tree
+ * @param {Object} selectedElement first object of tree
+ */
 UIPortalControl.prototype.collapseTree = function(selectedElement ) {
   var DOMUtil = eXo.core.DOMUtil ;
   
@@ -346,7 +352,9 @@ ScrollManager.prototype.scrollDown = function() {
 	if (this.scrollMgr) this.scrollMgr.scrollRight();
 };
 
-
+/**
+ * Get all visible elements
+ */
 ScrollManager.prototype.getVisibleElements = function() {
 	var availableSpace = this.getElementSpace(this.mainContainer) - this.getElementSpace(this.arrowsContainer);
 	var refereceIndex = 0;
