@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en-US" xml:lang="en-US" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>I18NMessage</title>
+	<script src="../../eXo.js" type="text/javascript"></script>
+	<script src="../../eXo/core/Util.js" type="text/javascript"></script>
+	<script src="../../eXo/core/Browser.js" type="text/javascript"></script>
+
+
+    <script src="../../eXo/core/MouseEventManager.js" type="text/javascript"></script>
+
+    <script src="../../eXo/core/UIMaskLayer.js" type="text/javascript"></script>
+
+    <script src="../../eXo/core/Skin.js" type="text/javascript"></script>
+
+    <script src="../../eXo/core/JSON.js" type="text/javascript"></script>
+
+    <script src="../../eXo/core/Cometd.js" type="text/javascript"></script>
+
+    <script src="../../eXo/core/I18n.js" type="text/javascript"></script>
+
+    <script src="../../eXo/webui/UIItemSelector.js" type="text/javascript"></script>
+
+    <script src="../../eXo/webui/UIForm.js" type="text/javascript"></script>
+
+    <script src="../../eXo/webui/UIDropDownControl.js" type="text/javascript"></script>
+
+    <script src="../../eXo/webui/UIRightClickPopupMenu.js" type="text/javascript"></script>
+
+    <script src="../../eXo/portal/PortalHttpRequest.js" type="text/javascript"></script>
+
+    <script src="../../eXo/portal/UIPortal.js" type="text/javascript"></script>
+	<script src="../../eXo/portal/UIExoStartMenu.js" type="text/javascript"></script>
+
+    <script src="../../eXo/portal/UIWorkspace.js" type="text/javascript"></script>
+
+    <script src="../../eXo/portal/UIPortalControl.js" type="text/javascript"></script>
+
+    <script src="../../eXo/portal/PortalDragDrop.js" type="text/javascript"></script>
+
+    <script src="../../eXo/portal/UIPortalNavigation.js" type="text/javascript"></script>
+
+    <script src="../../eXo/portal/UIMaskWorkspace.js" type="text/javascript"></script>
+    <script src="../../eXo/portal/UIBrowseContent.js" type="text/javascript"></script>
+    <script src="../../eXo/webui/UIPortlet.js" type="text/javascript"></script>
+    <script src="../../eXo/i18n/I18NMessage.js" type="text/javascript"></script>
+    <script src="../../eXo/i18n/MessageResource_en.js" type="text/javascript"></script>
+    <script src="../../eXo/core/DOMUtil.js" type="text/javascript"></script>   	
+	<script src="../../eXo/core/html/HTMLEntities.js" type="text/javascript"></script>
+	<script src="../../eXo/core/HTMLUtil.js" type="text/javascript"></script>
+
+	<script language="javascript" type="text/javascript">
+		function testEncoding() {
+			var msg = "Gatein & Portal";
+			var msg1 = eXo.core.HTMLUtil.entitiesEncode(msg);
+			var msg2 = eXo.core.HTMLUtil.entitiesDecode(msg1);
+			alert("original: " + msg + "===encoded: " + msg1 + "===decoded: " + msg2);
+		}
+	</script>
+</head>
+<body>
+	<button onclick="testEncoding();">test encoding</button>
+</body>
+</html>

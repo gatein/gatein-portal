@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>UIPortal</title>    
+	<script language="javascript" src="../eXo.js"></script>
+	<script language="javascript" src="../../eXo.js"></script>
+    <script language="javascript" src="../../eXo/webui/UIRightClickPopupMenu.js"></script>
+    <script language="javascript" src="../../eXo/core/DOMUtil.js"></script>
+    <script language="javascript" src="../../eXo/core/MouseEventManager.js"></script>
+    <script language="javascript" type="text/javascript">
+
+    function bodyOnload() {
+    	eXo.webui.UIRightClickPopupMenu.disableContextMenu("UITable1");
+    }
+    
+    </script>
+</head>
+<body style="height: 100%;" onload="bodyOnload();">
+	<div class="UIWorkingWorkspace" id="UIWorkingWorkspace">
+		<div id="UIPortal-UIPortal" class="UIPortal">
+		  <div class="VIEW-PORTAL">
+		    <div id="UIPortal">
+		    	<br/>Disable context menu, please right-click on this table
+				<table id="UITable1" border="1.0">
+					<tr>
+						<td>Name</td>
+						<td>Email</td>
+					</tr>
+					<tr>
+						<td>Kien Nguyen</td>
+						<td>nguyenanhkien2a@gmail.com</td>
+					</tr>
+				</table>
+				
+				<br/>Don't disable context menu
+				<table id="UITable2" border="1.0">
+					<tr>
+						<td>Name</td>
+						<td>Email</td>
+					</tr>
+					<tr>
+						<td>Trong Tran</td>
+						<td>trong.tran@exoplatform.com</td>
+					</tr>
+				</table>
+		    </div>
+		  </div>
+		</div>
+	</div>
+
+</body>
+</html>

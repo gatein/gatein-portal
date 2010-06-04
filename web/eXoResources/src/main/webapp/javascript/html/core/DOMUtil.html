@@ -1,0 +1,47 @@
+<html>
+  <head>
+    <script language="javascript" src="../../eXo.js"></script>
+    <script language="javascript" src="../../eXo/core/Util.js"></script>
+    <script language="javascript" src="../../eXo/core/DOMUtil.js"></script>
+    <script language="javascript" type="text/javascript">
+      var DOMUtil = eXo.core.DOMUtil ;
+      
+      function testGetChildren() {
+	    var root = document.getElementById('root');
+	  	var children = DOMUtil.getChildrenByTagName(root, "div") ;
+		alert("Root has " + children.length + " div children");
+      }
+
+      function testFinds() {
+        var uiPage = DOMUtil.findFirstDescendantByClass(document.body, "div", "UIPageBody") ;
+        if(uiPage != null)
+      	{
+	      	var uiPageContent = DOMUtil.findFirstChildByClass(uiPage, "div", "UIPageContent") ;
+			alert(uiPageContent.innerHTML);
+      	}      	
+      }
+
+      function testRemoveChild() {
+		var uiPage = DOMUtil.findFirstDescendantByClass(document.body, "div", "UIPageBody") ;
+		if(uiPage != null)
+		{
+			var uiPageContent1 = DOMUtil.findFirstDescendantByClass(uiPage, "div", "UIPageContent1");
+			DOMUtil.removeElement(uiPageContent1);
+		}
+      }
+	  </script>
+  </head>
+
+  <body>
+  	<div align="center">Test methods in DOMUtil.js file</div><br/>
+    <div id="root" align="center">
+      <div class="UIPageBody">
+      	<div class="UIPageContent">UIPage content</div>
+      	<div class="UIPageContent1">UIPage content 1</div>
+      </div>    
+      <input type="button" onclick="testFinds();" value="find content" /> 
+      <input type="button"  onclick="testGetChildren();" value="get children" />
+	  <input type="button" onclick="testRemoveChild();" value="remove child" /> 
+	</div>  
+  </body>
+</html>

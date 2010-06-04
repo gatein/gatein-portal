@@ -1,0 +1,135 @@
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" dir="ltr">
+<head>  
+    <title>UIPortal</title>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+    <link href="css/UIMaskWorkspace/Stylesheet.css" type="text/css" rel="stylesheet">
+    <link href="css/UIWorkspace/Stylesheet.css" type="text/css" rel="stylesheet">
+    
+ 	<script src="../../eXo.js" type="text/javascript"></script>
+
+    <script src="../../eXo/core/Util.js" type="text/javascript"></script>
+
+    <script src="../../eXo/core/DOMUtil.js" type="text/javascript"></script>
+
+    <script src="../../eXo/core/Browser.js" type="text/javascript"></script>
+
+    <script src="../../eXo/core/MouseEventManager.js" type="text/javascript"></script>
+
+    <script src="../../eXo/core/UIMaskLayer.js" type="text/javascript"></script>
+
+    <script src="../../eXo/core/Skin.js" type="text/javascript"></script>
+
+    <script src="../../eXo/core/JSON.js" type="text/javascript"></script>
+
+    <script src="../../eXo/core/Cometd.js" type="text/javascript"></script>
+
+    <script src="../../eXo/core/I18n.js" type="text/javascript"></script>
+
+    <script src="../../eXo/webui/UIItemSelector.js" type="text/javascript"></script>
+
+    <script src="../../eXo/webui/UIForm.js" type="text/javascript"></script>
+
+    <script src="../../eXo/webui/UIDropDownControl.js" type="text/javascript"></script>
+
+    <script src="../../eXo/webui/UIRightClickPopupMenu.js" type="text/javascript"></script>
+
+    <script src="../../eXo/portal/PortalHttpRequest.js" type="text/javascript"></script>
+
+    <script src="../../eXo/portal/UIPortal.js" type="text/javascript"></script>
+	<script src="../../eXo/portal/UIExoStartMenu.js" type="text/javascript"></script>
+
+    <script src="../../eXo/portal/UIWorkspace.js" type="text/javascript"></script>
+
+    <script src="../../eXo/portal/UIPortalControl.js" type="text/javascript"></script>
+
+    <script src="../../eXo/portal/PortalDragDrop.js" type="text/javascript"></script>
+
+    <script src="../../eXo/portal/UIPortalNavigation.js" type="text/javascript"></script>
+
+    <script src="../../eXo/portal/UIMaskWorkspace.js" type="text/javascript"></script>
+    <script src="../../eXo/portal/UIBrowseContent.js" type="text/javascript"></script>
+    <script src="../../eXo/webui/UIPortlet.js" type="text/javascript"></script>
+    <script src="../../eXo/i18n/I18NMessage.js" type="text/javascript"></script>
+    <script src="../../eXo/i18n/MessageResource_en.js" type="text/javascript"></script>
+ 	
+ 	<script language="javascript" type="text/javascript">
+ 		function testGetUIPortlets() {
+			var uiPortlets = eXo.portal.UIPortal.getUIPortlets();
+			alert(uiPortlets.length + " UIPortlets in this working workspace");
+ 		}
+
+ 		function test() {
+ 			eXo.portal.UIPortal.showLayoutModeForPage();
+ 		}
+ 	</script>
+ 	
+</head>
+<body style="height: 100%;">
+
+Test methods in UIPortal.js file<br/><br/>
+
+<div id="UIPortalApplication" class="default">
+	<div class="UIWorkingWorkspace" id="UIWorkingWorkspace">
+		<a href="#" onclick="eXo.portal.UIPortal.switchModeForPage(this)">switchModeForPage</a><br/>
+		<a href="#" onclick="eXo.portal.UIPortal.showLayoutModeForPage();">showLayoutModeForPage</a><br/>		
+		<a href="#" onclick="eXo.portal.UIPortal.showViewLayoutModeForPage();">showViewLayoutModeForPage</a><br/>
+		<a href="#" onclick="eXo.portal.UIPortal.showMaskLayer();">showMaskLayer</a><br/>
+		<a href="#" onclick="eXo.portal.UIPortal.showViewMode();">showViewMode</a><br/>
+		<a href="#" onclick="testGetUIPortlets();">Get UIPortlets</a><br/>
+	
+		<!-- Begin of UIPortal -->
+		<div class="UIPortal" id="UIPortal-$uicomponent.id">
+		  <div class="META-DATA-BLOCK" style="display: none">
+			  <div class="id">UIPortal</div>
+			  <div class="title">MyPortal</div>
+		    <div class="description">This is portal demo</div>
+		  </div>	
+			
+		  <div class="CONTROL-PORTAL CONTROL-BLOCK" style="display: none;"><span></span></div>
+			<div class="LAYOUT-PORTAL" style="display: none;"></div>
+		  <div class="VIEW-PORTAL">
+		    <div id="UIPortalId">
+		    
+		    <div id="UIPage-18428087" class="UIPage">
+			  <div style="display: none;" class="META-DATA-BLOCK">
+			    <div class="id">UIPageId</div>
+			    <div class="title">UIPage title</div>
+			    <div class="description">The page body of the portal</div>
+			  </div>
+			  <div class="VIEW-PAGE" style="border: medium none ; padding: 5px;">
+				<div id="UIPage">	    
+			    	<div class="UIRowContainer">
+			    
+			<!-- Portlet content area -->
+			    <div class="UIPortlet" id="UIPortlet-UIPortlet1Id">		 
+				<div class="UIComponentBlock">
+				  <div class="LAYOUT-BLOCK" style="display: none;">
+				    <div class="PortletLayoutDecorator">
+				    	Portlet1 LAYOUT       
+				    </div>
+				  </div>
+				  
+				  <div class="VIEW-BLOCK" id="VIEW-UIPortlet1Id" style="display: none;">
+				  		Portlet1 VIEW
+				  </div>
+
+				  <div class="EDITION-BLOCK" style="display: none">
+				    		Portlet1 EDITION
+				  </div>
+				<div>
+			     </div>
+			<!-- End Portlet content area -->
+				    
+			    	</div>
+			      </div>
+			    </div>
+			  </div>
+		  </div>
+		</div>
+		<!-- End of UIPortal -->
+		
+		</div>
+	</div>
+</div>
+
+</body></html>

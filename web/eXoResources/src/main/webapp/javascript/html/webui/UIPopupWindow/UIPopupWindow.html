@@ -1,0 +1,102 @@
+<html>
+<head>
+	    <link href="css/UIPopupWindow/Stylesheet.css" type="text/css" rel="stylesheet">
+	    <link href="css/UITabs/Stylesheet.css" type="text/css" rel="stylesheet">
+	    <script type="text/javascript" src="../../../eXo.js"></script>
+	    <script type="text/javascript"src="../../..eXo/core/Util.js"></script>
+	    <script type="text/javascript" src="../../../eXo/core/DOMUtil.js"></script>	
+            <script type="text/javascript" src="../../../eXo/core/Browser.js"></script>    
+	    <script type="text/javascript" src="../../../eXo/webui/UIPopupWindow.js"></script>	    
+	    <script type="text/javascript" src="../../../eXo/webui/UIPopup.js"></script>
+	    <script type="text/javascript" src="../../../eXo/webui/UIPopupMenu.js"></script>
+	    <script type="text/javascript" src="../../../eXo/dnd/DragDrop.js"></script>  
+    	    <script type="text/javascript" src="../../../eXo/core/MouseEventManager.js"></script>  
+
+	     <script language="javascript" type="text/javascript">
+ 			function showUIPopupWindow() {
+ 				eXo.webui.UIPopupWindow.init('UIPopupWindowId', false, false, true, false);
+ 				eXo.webui.UIPopupWindow.show('UIPopupWindowId', true, true);
+ 			}
+
+ 			function showUIPopupMenu() {
+ 	 			var container = document.getElementById("UIPopupContainer");
+ 				eXo.webui.UIPopupMenu.init('UIPopupWindowId', container, 200, 100);
+ 				eXo.webui.UIPopupMenu.show('UIPopupWindowId');
+ 			}
+
+ 			function changePosition() {
+				var popup = document.getElementById("UIPopupWindowId");
+				eXo.webui.UIPopupMenu.setPosition(popup, 300, 100, true);
+ 			}
+ 		</script>
+</head>
+<body>
+	<div>Test methods in UIPopup.js, UIPopupMenu.js, UIPopupWindow.js files</div><br/>
+		<a href="#" onclick="showUIPopupWindow();">UIPopupWindow.show</a><br/>
+		<a href="#" onclick="showUIPopupMenu();">UIPopupMenu.show</a><br/>
+		<a href="#" onclick="eXo.webui.UIPopupMenu.hide('UIPopupWindowId');">UIPopupMenu.hide</a><br/>
+		<a href="#" onclick="changePosition();">UIPopupMenu.setPosition</a><br/>
+		<a href="#" onclick="eXo.core.Resize.init(document.getElementById('UIPopupWindowId'), 800, 600);">Resize</a><br/>
+		
+<div id="UIPortalApplication" class="default">
+	<div style="display: none;" id="UIMaskWorkspace" class="UIMaskWorkspace">
+	  <div class="TopLeftDecorator">
+	    <div class="TopRightDecorator">
+	      <div class="TopCenterDecorator"><span></span></div>
+	    </div>
+	  </div>
+	  
+	  <div class="MiddleLeftDecorator">
+	    <div class="MiddleRightDecorator">
+	      <div class="MaskContainer">    
+	        
+	   		</div>
+	    </div>
+	  </div>
+	  
+	  <div class="BottomLeftDecorator">
+	    <div class="BottomRightDecorator">
+	      <div class="BottomCenterDecorator"><span></span></div>
+	    </div>
+	  </div>
+	</div>
+
+	<div id="UIPopupContainer">
+	<div class="UIPopupWindow UIDragObject" exo:minWidth="200" exo:minHeight="200" id="UIPopupWindowId" style="width:400; height:200; display: none;">
+	<div class="NormalStyle">
+	  <div class="TopLeftCornerDecorator">
+	    <div class="TopRightCornerDecorator">
+	      <div class="TopCenterDecorator">
+	        <div class="OverflowContainer">
+		        <div class="PopupTitleIcon"><span></span></div>
+		          <!-- <div class="CloseButton" title="Close Window" onclick="<%=uicomponent.event("ClosePopup")%>"><span></span></div> -->
+		          <div class="CloseButton" title="CloseButton" onclick=""><span></span></div>
+
+		        <div class="PopupTitle">PopupTitle</div>
+		      </div>
+	      </div>
+	    </div>
+	  </div>
+	  <div class="MiddleLeftSideDecorator">
+		  <div class="MiddleRightSideDecorator">
+		    <div class="MiddleCenterDecorator">
+	        <div class="UIWindowContent">
+	          <div style="width: 100%;"><div class="PopupContent" style="$heightStyle">Popup content</div></div>
+	        </div>
+		    </div>
+		  </div>
+	  </div>
+	  <div><span></span></div>
+	  <div class="BottomLeftCornerDecorator">
+		  <div class="BottomRightCornerDecorator">
+		    <div class="BottomCenterDecorator">
+					<div class="ResizeButton"><span></span></div>
+				</div>
+		  </div>
+	  </div>
+	</div>
+	</div>
+</div>
+</div>
+</body>
+</html>

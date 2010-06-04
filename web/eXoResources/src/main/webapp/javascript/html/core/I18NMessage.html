@@ -1,0 +1,18 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en-US" xml:lang="en-US" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>I18NMessage</title>
+<script language="javascript" src="../../eXo.js"></script>
+<script language="javascript" src="../../eXo/i18n/I18NMessage.js"></script>
+<script language="javascript" type="text/javascript">
+	function getMessage() {
+		var msg = eXo.i18n.I18NMessage.getMessage("SessionTimeout");
+		alert(msg);
+	}
+</script>
+</head>
+<body>
+	<button onclick="javascript:getMessage();">get message</button>
+</body>
+</html>
