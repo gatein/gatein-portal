@@ -216,12 +216,10 @@ public class UIPortalForm extends UIFormTabPane
       for (String skin : skinService.getAvailableSkinNames())
       {
          SelectItemOption<String> skinOption = new SelectItemOption<String>(skin, skin);
-         if (uiPortal.getSkin().equals(skin))
-         {
-            skinOption.setSelected(true);
-         }
          listSkin.add(skinOption);
       }
+      listSkin.get(0).setSelected(true);
+
       UIFormSelectBox uiSelectBox = new UIFormSelectBox(FIELD_SKIN, FIELD_SKIN, listSkin);
       uiSettingSet.addUIFormInput(uiSelectBox);
 
