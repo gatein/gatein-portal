@@ -38,7 +38,7 @@
       <email>Hộp thư:</email>
       <note><![CDATA[Các trường có đánh dấu<span style="color: red">*</span> là trường bắt buộc]]></note>
       <action>
-        <SearchUser>Tìm kiếm người dùng</SearchUser>
+        <SearchUser>Kiểm tra sự tồn tại</SearchUser>
       </action>
       <Membership>Thành viên</Membership>
       <option>
