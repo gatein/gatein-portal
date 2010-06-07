@@ -165,7 +165,10 @@ public class UIPortalApplication extends UIApplication
          }
       }
       localeConfig = localeConfigService.getLocaleConfig(portalLanguage);
-      if (portalLanguage == null || !portalLanguage.equals(localeConfig.getLanguage()))
+      String localeLanguage = (localeConfig.getLocale().getCountry().length() > 0) ? localeConfig.getLocale()
+            .getLanguage()
+            + "_" + localeConfig.getLocale().getCountry() : localeConfig.getLocale().getLanguage();
+      if (portalLanguage == null || !portalLanguage.equals(localeLanguage))
       {
          // if user language no support by portal -> get browser language if no
          // ->
