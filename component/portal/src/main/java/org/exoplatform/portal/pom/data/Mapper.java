@@ -798,18 +798,32 @@ public class Mapper
             String parentId = hierarchyRelationships.get(dstChildId);
             if (parentId != null)
             {
+               try{
                // Get the new parent
-               UIContainer parent = session.findObjectById(ObjectType.CONTAINER, parentId);
+                  UIContainer parent = session.findObjectById(ObjectType.CONTAINER, parentId);
 
-               // Perform the move
-               parent.getComponents().add(dstChild);
+                  // Perform the move
+                  parent.getComponents().add(dstChild);
 
-               //
-               changes.add(new ModelChange.Move(dst.getObjectId(), parentId, dstChildId));
+                  //
+                  changes.add(new ModelChange.Move(dst.getObjectId(), parentId, dstChildId));
 
-               // julien : we do not need to create an update operation
-               // as later the update operation will be created when the object
-               // will be processed
+                  // julien : we do not need to create an update operation
+                  // as later the update operation will be created when the
+                  // object
+                  // will be processed
+               }
+               catch (ClassCastException ex)
+               {
+                  // minhhoang : In case the parentId refers to the page, there
+                  // is exception in findObjectId. Hence,
+                  // we have a temporary try/catch to handle this exception
+                  Page parent = session.findObjectById(ObjectType.PAGE, parentId);
+
+                  parent.getRootComponent().getComponents().add(dstChild);
+
+                  changes.add(new ModelChange.Move(dst.getObjectId(), parentId, dstChildId));
+               }
             }
          }
       }
