@@ -1,3 +1,8 @@
+<%
+	//TODO: nguyenanhkien2a@gmail.com
+	String initialURI = _ctx.getRequestContext().getParentAppRequestContext().getRequestContextPath() + "/private/" + _ctx.getRequestContext().getParentAppRequestContext().getPortalOwner();
+%>
+
 <div class="UIHomePagePortlet" id="$uicomponent.id">
 	<div class="TRContainer">
 		<div class="PortletDecoration">					
@@ -28,7 +33,7 @@
 							<div class="AccountsContainerDeco">
 								<div class="AccountBlock AdministratorUser">
 									<div class="AccountInfos">
-										<div class="AccountTitle"><a href="${_ctx.getPortalContextPath()}/login?username=root&amp;password=gtn"><%=_ctx.appRes("UIHomePagePortlet.Label.Administrator")%></a></div>
+										<div class="AccountTitle"><a href="${_ctx.getPortalContextPath()}/login?username=root&amp;password=gtn&amp;initialURI=<%=initialURI%>"><%=_ctx.appRes("UIHomePagePortlet.Label.Administrator")%></a></div>
 										<div class="Username">
 											<div class="Lable"><%=_ctx.appRes("UIHomePagePortlet.Label.Username")%></div><span>root</span>
 											<div class="ClearBoth"><span></span></div>
@@ -42,7 +47,7 @@
 								<div class="SeparatorLine"><span></span></div>
 								<div class="AccountBlock ManagerUser">
 									<div class="AccountInfos">
-										<div class="AccountTitle"><a href="${_ctx.getPortalContextPath()}/login?username=john&amp;password=gtn"><%=_ctx.appRes("UIHomePagePortlet.Label.Manager")%></a></div>
+										<div class="AccountTitle"><a href="${_ctx.getPortalContextPath()}/login?username=john&amp;password=gtn&amp;initialURI=<%=initialURI%>"><%=_ctx.appRes("UIHomePagePortlet.Label.Manager")%></a></div>
 										<div class="Username">
 											<div class="Lable"><%=_ctx.appRes("UIHomePagePortlet.Label.Username")%></div><span>john</span>
 											<div class="ClearBoth"><span></span></div>
@@ -56,7 +61,7 @@
 								<div class="SeparatorLine"><span></span></div>
 								<div class="AccountBlock NormalUser">
 									<div class="AccountInfos">
-										<div class="AccountTitle"><a href="${_ctx.getPortalContextPath()}/login?username=mary&amp;password=gtn"><%=_ctx.appRes("UIHomePagePortlet.Label.User")%></a></div>
+										<div class="AccountTitle"><a href="${_ctx.getPortalContextPath()}/login?username=mary&amp;password=gtn&amp;initialURI=<%=initialURI%>"><%=_ctx.appRes("UIHomePagePortlet.Label.User")%></a></div>
 										<div class="Username">
 											<div class="Lable"><%=_ctx.appRes("UIHomePagePortlet.Label.Username")%></div><span>mary</span>
 											<div class="ClearBoth"><span></span></div>
@@ -70,7 +75,7 @@
 								<div class="SeparatorLine"><span></span></div>
 								<div class="AccountBlock DemoUser" style="margin-right: 0px;">
 									<div class="AccountInfos">
-										<div class="AccountTitle"><a href="${_ctx.getPortalContextPath()}/login?username=demo&amp;password=gtn"><%=_ctx.appRes("UIHomePagePortlet.Label.Demo")%></a></div>
+										<div class="AccountTitle"><a href="${_ctx.getPortalContextPath()}/login?username=demo&amp;password=gtn&amp;initialURI=<%=initialURI%>"><%=_ctx.appRes("UIHomePagePortlet.Label.Demo")%></a></div>
 										<div class="Username">
 											<div class="Lable"><%=_ctx.appRes("UIHomePagePortlet.Label.Username")%></div><span>demo</span>
 											<div class="ClearBoth"><span></span></div>
