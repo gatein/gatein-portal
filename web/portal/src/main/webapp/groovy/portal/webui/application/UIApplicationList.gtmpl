@@ -43,7 +43,7 @@ def selectedCategory = uicomponent.getSelectedCategory();
 									<div class="UIVTab VTabStyle3" id="<%=application.getId();%>" onmousedown="eXo.portal.PortalDragDrop.init.call(this, event);">
 										<div class="VTabContentBG">
 											<div class="OverflowContainer">
-												<img src="$srcBG" onError="src='$srcBGError'" alt=""/>
+												<img src="<%=(srcBG!=null && srcBG.length()>0)?srcBG:srcBGError%>" onError="src='$srcBGError'"  alt=""/>
 												<div class="ContentInfo" title="<%= application.getDisplayName() %>" style="cursor:move;">
 													<div class="LabelTab">$applicationLabel</div>
 													<div class="LableText"><%= application.getDescription() %></div>
