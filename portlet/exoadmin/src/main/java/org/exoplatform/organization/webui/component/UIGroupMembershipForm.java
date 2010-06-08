@@ -77,7 +77,7 @@ public class UIGroupMembershipForm extends UIForm
    public UIGroupMembershipForm() throws Exception
    {
       addUIFormInput(new UIFormStringInput(USER_NAME, USER_NAME, null).addValidator(MandatoryValidator.class)
-         .addValidator(ExpressionValidator.class, "^\\p{L}[\\p{L}\\d._\\-,]+$",
+         .addValidator(ExpressionValidator.class, "^\\p{L}[\\p{L}\\d._\\-\\s*,\\s*]+$",
             "UIGroupMembershipForm.msg.Invalid-char"));
       addUIFormInput(new UIFormSelectBox("membership", "membership", listOption).setSize(1));
       UIPopupWindow searchUserPopup = addChild(UIPopupWindow.class, "SearchUser", "SearchUser");
@@ -191,7 +191,7 @@ public class UIGroupMembershipForm extends UIForm
          OrganizationService service = uiForm.getApplicationComponent(OrganizationService.class);
          MembershipHandler memberShipHandler = service.getMembershipHandler();
          UIApplication uiApp = event.getRequestContext().getUIApplication();
-         List<String> userNames = Arrays.asList(uiForm.getUserName().split(","));
+         List<String> userNames = Arrays.asList(uiForm.getUserName().trim().split("\\s*,\\s*"));
          Group group = userInGroup.getSelectedGroup();
          MembershipType membershipType = service.getMembershipTypeHandler().findMembershipType(uiForm.getMembership());
          if (group == null)
