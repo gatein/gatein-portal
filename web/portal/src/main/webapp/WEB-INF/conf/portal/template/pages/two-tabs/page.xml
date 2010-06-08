@@ -27,11 +27,15 @@
   <name></name>
   <title></title>
 	<container template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+	  <access-permissions>Everyone</access-permissions>
   	<container template="system:/groovy/portal/webui/container/UITabContainer.gtmpl">
+  	  <access-permissions>Everyone</access-permissions>
     	<factory-id>TabContainer</factory-id>
       	<container template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+      	  <access-permissions>Everyone</access-permissions>
       	</container>
       	<container template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+      	  <access-permissions>Everyone</access-permissions>
       	</container>
     </container>
   </container>  
