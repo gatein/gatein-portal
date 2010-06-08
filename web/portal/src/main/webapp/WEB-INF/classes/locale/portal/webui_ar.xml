@@ -213,7 +213,7 @@
     <action>
       <Abort>Abort</Abort>
       <Finish>Finish</Finish>
-      <ViewProperties>Portal Properties</ViewProperties>
+      <ViewProperties>Site's Config</ViewProperties>
       <SwitchMode>Switch View Mode</SwitchMode>
     </action>
   </UIPortalComposer>
