@@ -90,6 +90,10 @@ public class UIListMembershipType extends UIContainer
 
          OrganizationService service = uiMembership.getApplicationComponent(OrganizationService.class);
          MembershipType mt = service.getMembershipTypeHandler().findMembershipType(name);
+         if(mt.getDescription()==null)
+         {
+            mt.setDescription("");
+         }
          UIMembershipManagement uiMembershipManager = uiMembership.getParent();
          UIMembershipTypeForm uiForm = uiMembershipManager.getChild(UIMembershipTypeForm.class);
          uiForm.setMembershipType(mt);
