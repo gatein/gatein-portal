@@ -29,6 +29,8 @@ import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.ModelObject;
 import org.exoplatform.portal.config.model.Page;
+import org.exoplatform.portal.config.model.PageNavigation;
+import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.webui.application.UIPortlet;
 import org.exoplatform.portal.webui.portal.PageNodeEvent;
@@ -302,8 +304,81 @@ public class UIPageBrowser extends UISearch
             datasource.getPage(currentPage);
             event.getRequestContext().addUIComponentToUpdateByAjax(uiPageBrowser);
          }
+         
+         //Update navigation and UserToolbarGroupPortlet if deleted page is dashboard page
+         if(page.getOwnerType().equals(PortalConfig.USER_TYPE)){
+            removePageNode(page, event);
+         }
+      }
+      
+      /**
+       * 
+       * This method remove User Page node that reference to page.
+       * If page is exist, remove User Page node.
+       * If page is not exist, do nothing.
+       * 
+       * @param page  the page is referenced by User Page node
+       * @param event
+       * @throws Exception any exception
+       */
+      private void removePageNode(Page page, Event<UIPageBrowser> event) throws Exception
+      {
+         UIPageBrowser uiPageBrowser = event.getSource();
+         DataStorage dataService = uiPageBrowser.getApplicationComponent(DataStorage.class);
+
+         PageNavigation pageNavigation = null;
+         UIPortalApplication portalApplication = Util.getUIPortalApplication();
+
+         List<PageNavigation> listPageNavigation = portalApplication.getNavigations();
+
+         for (PageNavigation pageNvg : listPageNavigation)
+         {
+            if (pageNvg.getOwnerType().equals(PortalConfig.USER_TYPE))
+            {
+               pageNavigation = pageNvg;
+               break;
+            }
+         }
+         UIPortal uiPortal = Util.getUIPortal();
+
+         PageNode tobeRemoved = null;
+         List<PageNode> nodes = pageNavigation.getNodes();
+         for (PageNode pageNode : nodes)
+         {
+            String pageReference = pageNode.getPageReference();
+            String pageId = page.getPageId();
+
+            if (pageReference != null && pageReference.equals(pageId))
+            {
+               tobeRemoved = pageNode;
+               break;
+            }
+         }
+
+         if (tobeRemoved != null)
+         {
+            // Remove pageNode
+            pageNavigation.getNodes().remove(tobeRemoved);
+
+            // Update navigation and UserToolbarGroupPortlet
+
+            String pageRef = tobeRemoved.getPageReference();
+            if (pageRef != null && pageRef.length() > 0)
+            {
+               // Remove from cache
+               uiPortal.clearUIPage(pageRef);
+            }
+
+            dataService.save(pageNavigation);
+
+            //Update UserToolbarGroupPortlet
+            UIWorkingWorkspace uiWorkingWS = portalApplication.getChild(UIWorkingWorkspace.class);
+            uiWorkingWS.updatePortletsByName("UserToolbarDashboardPortlet");
+
+         }
       }
    }
+   
 
    static public class EditInfoActionListener extends EventListener<UIPageBrowser>
    {
