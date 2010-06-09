@@ -27,8 +27,6 @@ import org.exoplatform.application.registry.ApplicationRegistryService;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.webui.util.Util;
-import org.exoplatform.services.security.Identity;
-import org.exoplatform.services.security.IdentityRegistry;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIContainer;
@@ -61,10 +59,6 @@ public class UIApplicationList extends UIContainer
       if (remoteUser == null || remoteUser.equals(""))
          return;
       UserACL userACL = Util.getUIPortalApplication().getApplicationComponent(UserACL.class);
-      IdentityRegistry identityRegistry = Util.getUIPortalApplication().getApplicationComponent(IdentityRegistry.class);
-      Identity identity = identityRegistry.getIdentity(remoteUser);
-      if (identity == null)
-         return;
 
       PortletComparator portletComparator = new PortletComparator();
       categories = service.getApplicationCategories(remoteUser);
@@ -86,7 +80,7 @@ public class UIApplicationList extends UIContainer
          }
          for (String permssion : accessPermission)
          {
-            hasPermission = userACL.hasPermission(identity, permssion);
+            hasPermission = userACL.hasPermission(permssion);
             if (hasPermission)
                break;
          }

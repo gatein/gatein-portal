@@ -43,8 +43,6 @@ public class UserACL
 {
    public final static String EVERYONE = "Everyone";
 
-   public final static String MANAGER = "manager";
-   
    protected static Log log = ExoLogger.getLogger("organization:UserACL");
 
    private final Collection<MembershipEntry> NO_MEMBERSHIP = Collections.emptyList();
@@ -74,27 +72,8 @@ public class UserACL
    @SuppressWarnings("unchecked")
    public UserACL(InitParams params)
    {
-      UserACLMetaData md = new UserACLMetaData();
-      ValueParam superUserParam = params.getValueParam("super.user");
-      if (superUserParam != null)
-      {
-         md.setSuperUser(superUserParam.getValue());
-      }
-      ValueParam guestGroupParam = params.getValueParam("guests.group");
-      if (guestGroupParam != null)
-      {
-         md.setGuestsGroups(guestGroupParam.getValue());
-      }
-      ValueParam navCretorParam = params.getValueParam("navigation.creator.membership.type");
-      if (navCretorParam != null)
-      {
-         md.setNavigationCreatorMembershipType(navCretorParam.getValue());
-      }
-      ValueParam portalCretorGroupsParam = params.getValueParam("portal.creator.groups");
-      if (portalCretorGroupsParam != null)
-      {
-         md.setPortalCreateGroups(portalCretorGroupsParam.getValue());
-      }
+      UserACLMetaData md = new UserACLMetaData(params);
+
       ValuesParam mandatoryGroupsParam = params.getValuesParam("mandatory.groups");
       if (mandatoryGroupsParam != null)
       {
@@ -244,12 +223,27 @@ public class UserACL
 
    public boolean hasPermission(PortalConfig pconfig)
    {
-      return hasPermission(getIdentity(), pconfig);
+      Identity identity = getIdentity();
+      if (hasPermission(identity, pconfig.getEditPermission()))
+      {
+         pconfig.setModifiable(true);
+         return true;
+      }
+      pconfig.setModifiable(false);
+      String[] accessPerms = (pconfig.getAccessPermissions());
+      for (String per : accessPerms)
+      {
+         if (hasPermission(identity, per))
+         {
+            return true;
+         }
+      }
+      return false;
    }
 
    public boolean hasEditPermission(PortalConfig pconfig)
    {
-      return hasEditPermission(getIdentity(), pconfig);
+      return hasPermission(getIdentity(), pconfig.getEditPermission());
    }
    
    /**
@@ -279,22 +273,119 @@ public class UserACL
 
    public boolean hasCreatePortalPermission()
    {
-      return hasCreatePortalPermission(getIdentity());
+      Identity identity = getIdentity();
+      if (superUser_.equals(identity.getUserId()))
+      {
+         return true;
+      }
+      if (portalCreatorGroups_ == null || portalCreatorGroups_.size() < 1)
+      {
+         return false;
+      }
+      for (String ele : portalCreatorGroups_)
+      {
+         if (hasPermission(identity, ele))
+         {
+            return true;
+         }
+      }
+      return false;
    }
 
    public boolean hasEditPermission(PageNavigation pageNav)
    {
-      return hasEditPermission(getIdentity(), pageNav);
+      Identity identity = getIdentity();
+      if (superUser_.equals(identity.getUserId()))
+      {
+         pageNav.setModifiable(true);
+         return true;
+      }
+      String ownerType = pageNav.getOwnerType();
+      
+      if (PortalConfig.GROUP_TYPE.equals(ownerType))
+      {
+         String temp = pageNav.getOwnerId().trim();
+         String expAdminGroup = getAdminGroups();
+         String expPerm = null;
+
+         // Check to see whether current user is member of admin group or not,
+         // if so grant
+         // edit permission for group navigation for that user.
+         if (expAdminGroup != null)
+         {
+            expAdminGroup = expAdminGroup.startsWith("/") ? expAdminGroup : "/" + expAdminGroup;
+            expPerm = temp.startsWith("/") ? temp : "/" + temp;
+            if (isUserInGroup(expPerm) && isUserInGroup(expAdminGroup))
+            {
+               return true;
+            }
+         }
+
+         expPerm = navigationCreatorMembershipType_ + (temp.startsWith("/") ? ":" + temp : ":/" + temp);
+         return hasPermission(identity, expPerm);
+      }
+      else if (PortalConfig.USER_TYPE.equals(ownerType))
+      {
+         return pageNav.getOwnerId().equals(identity.getUserId());
+      }
+      return false;
    }
 
    public boolean hasPermission(Page page)
    {
-      return hasPermission(getIdentity(), page);
+      Identity identity = getIdentity();
+      if (PortalConfig.USER_TYPE.equals(page.getOwnerType()))
+      {
+         if (page.getOwnerId().equals(identity.getUserId()))
+         {
+            page.setModifiable(true);
+            return true;
+         }
+      }
+      if (superUser_.equals(identity.getUserId()))
+      {
+         page.setModifiable(true);
+         return true;
+      }
+      if (hasEditPermission(page))
+      {
+         page.setModifiable(true);
+         return true;
+      }
+      page.setModifiable(false);
+      String[] accessPerms = page.getAccessPermissions();
+      if (accessPerms != null)
+      {
+         for (String per : accessPerms)
+         {
+            if (hasPermission(identity, per))
+            {
+               return true;
+            }
+         }
+      }
+      return false;
    }
 
    public boolean hasEditPermission(Page page)
    {
-      return hasEditPermission(getIdentity(), page);
+      Identity identity = getIdentity();
+      if (PortalConfig.USER_TYPE.equals(page.getOwnerType()))
+      {
+         if (page.getOwnerId().equals(identity.getUserId()))
+         {
+            page.setModifiable(true);
+            return true;
+         }
+         return false;
+      }
+      if (hasPermission(identity, page.getEditPermission()))
+      {
+         page.setModifiable(true);
+         return true;
+      }
+      page.setModifiable(false);
+      return false;
    }
 
    /**
@@ -357,156 +448,6 @@ public class UserACL
       return false;
    }
 
-   private boolean hasPermission(Identity identity, PortalConfig pconfig)
-   {
-      if (hasPermission(identity, pconfig.getEditPermission()))
-      {
-         pconfig.setModifiable(true);
-         return true;
-      }
-      pconfig.setModifiable(false);
-      String[] accessPerms = (pconfig.getAccessPermissions());
-      for (String per : accessPerms)
-      {
-         if (hasPermission(identity, per))
-         {
-            return true;
-         }
-      }
-      return false;
-   }
-
-   private boolean hasEditPermission(Identity identity, PortalConfig pconfig)
-   {
-      if (superUser_.equals(identity.getUserId()))
-      {
-         return true;
-      }
-      return hasPermission(identity, pconfig.getEditPermission());
-   }
-
-   private boolean hasCreatePortalPermission(Identity identity)
-   {
-      if (superUser_.equals(identity.getUserId()))
-      {
-         return true;
-      }
-      if (portalCreatorGroups_ == null || portalCreatorGroups_.size() < 1)
-      {
-         return false;
-      }
-      for (String ele : portalCreatorGroups_)
-      {
-         if (hasPermission(identity, ele))
-         {
-            return true;
-         }
-      }
-      return false;
-   }
-
-   private boolean hasEditPermission(Identity identity, PageNavigation pageNav)
-   {
-      if (superUser_.equals(identity.getUserId()))
-      {
-         pageNav.setModifiable(true);
-         return true;
-      }
-      String ownerType = pageNav.getOwnerType();
-      
-      if(PortalConfig.PORTAL_TYPE.equals(ownerType))
-      {
-         //For portal navigation, only manager of admin group has edit permission
-         String adminGroup = getAdminGroups();
-         if(adminGroup == null){
-            return false;
-         }
-         return identity.isMemberOf(adminGroup, UserACL.MANAGER);
-      }
-      else if (PortalConfig.GROUP_TYPE.equals(ownerType))
-      {
-         String temp = pageNav.getOwnerId().trim();
-         String expAdminGroup = getAdminGroups();
-         String expPerm = null;
-
-         // Check to see whether current user is member of admin group or not,
-         // if so grant
-         // edit permission for group navigation for that user.
-         if (expAdminGroup != null)
-         {
-            expAdminGroup = expAdminGroup.startsWith("/") ? expAdminGroup : "/" + expAdminGroup;
-            expPerm = temp.startsWith("/") ? temp : "/" + temp;
-            if (isUserInGroup(expPerm) && isUserInGroup(expAdminGroup))
-            {
-               return true;
-            }
-         }
-
-         expPerm = navigationCreatorMembershipType_ + (temp.startsWith("/") ? ":" + temp : ":/" + temp);
-         return hasPermission(identity, expPerm);
-      }
-      else if (PortalConfig.USER_TYPE.equals(ownerType))
-      {
-         return pageNav.getOwnerId().equals(identity.getUserId());
-      }
-      return false;
-   }
-   
-   private boolean hasPermission(Identity identity, Page page)
-   {
-      if (PortalConfig.USER_TYPE.equals(page.getOwnerType()))
-      {
-         if (page.getOwnerId().equals(identity.getUserId()))
-         {
-            page.setModifiable(true);
-            return true;
-         }
-      }
-      if (superUser_.equals(identity.getUserId()))
-      {
-         page.setModifiable(true);
-         return true;
-      }
-      if (hasEditPermission(identity, page))
-      {
-         page.setModifiable(true);
-         return true;
-      }
-      page.setModifiable(false);
-      String[] accessPerms = page.getAccessPermissions();
-      if (accessPerms != null)
-      {
-         for (String per : accessPerms)
-         {
-            if (hasPermission(identity, per))
-            {
-               return true;
-            }
-         }
-      }
-      return false;
-   }
-
-   private boolean hasEditPermission(Identity identity, Page page)
-   {
-      if (PortalConfig.USER_TYPE.equals(page.getOwnerType()))
-      {
-         if (page.getOwnerId().equals(identity.getUserId()))
-         {
-            page.setModifiable(true);
-            return true;
-         }
-         return false;
-      }
-      if (hasPermission(identity, page.getEditPermission()))
-      {
-         page.setModifiable(true);
-         return true;
-      }
-      page.setModifiable(false);
-      return false;
-   }
-
    private Identity getIdentity()
    {
       ConversationState conv = ConversationState.getCurrent();
@@ -545,10 +486,6 @@ public class UserACL
       if (currentUser == null && groupId.equals(guestGroup_))
       {
          return true;
-      }
-      if (identity == null)
-      {
-         return false;
       }
       String membership = permission.getMembership();
       return identity.isMemberOf(groupId, membership);

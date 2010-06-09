@@ -76,6 +76,10 @@ public class UIAdminToolbarPortlet extends UIPortletApplication
       }
       else
       {
+         if (PortalConfig.PORTAL_TYPE.equals(selectedNavigation.getOwnerType()))
+         {
+            return hasEditPermissionOnPortal();
+         }
          return userACL.hasEditPermission(selectedNavigation);
       }
    }

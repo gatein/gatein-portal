@@ -19,6 +19,9 @@
 
 package org.exoplatform.portal.config;
 
+import org.exoplatform.container.xml.InitParams;
+import org.exoplatform.container.xml.ValueParam;
+
 /**
  * A metadata class to describe security configuration.
  *
@@ -39,6 +42,40 @@ public class UserACLMetaData
 
    /** . */
    private String portalCreateGroups;
+
+   public UserACLMetaData()
+   {
+   }
+   
+   /**
+    * Initialize the metadata for UserACL service base on 
+    * the {@link InitParams} params passed to the constructor
+    * 
+    * @param params
+    */
+   public UserACLMetaData(InitParams params)
+   {
+      ValueParam superUserParam = params.getValueParam("super.user");
+      if (superUserParam != null)
+      {
+         setSuperUser(superUserParam.getValue());
+      }
+      ValueParam guestGroupParam = params.getValueParam("guests.group");
+      if (guestGroupParam != null)
+      {
+         setGuestsGroups(guestGroupParam.getValue());
+      }
+      ValueParam navCretorParam = params.getValueParam("navigation.creator.membership.type");
+      if (navCretorParam != null)
+      {
+         setNavigationCreatorMembershipType(navCretorParam.getValue());
+      }
+      ValueParam portalCretorGroupsParam = params.getValueParam("portal.creator.groups");
+      if (portalCretorGroupsParam != null)
+      {
+         setPortalCreateGroups(portalCretorGroupsParam.getValue());
+      }
+   }
 
    public String getSuperUser()
    {

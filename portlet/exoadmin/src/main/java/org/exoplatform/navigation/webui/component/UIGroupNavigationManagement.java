@@ -198,7 +198,7 @@ public class UIGroupNavigationManagement extends UIContainer
       OrganizationService orgService = this.getApplicationComponent(OrganizationService.class);
       try
       {
-         Collection<?> groups = orgService.getGroupHandler().findGroupByMembership(remoteUser, UserACL.MANAGER);
+         Collection<?> groups = orgService.getGroupHandler().findGroupByMembership(remoteUser, userACL.getMakableMT());
          if (groups != null && groups.size() > 0)
          {
             return true;
