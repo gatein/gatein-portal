@@ -19,6 +19,7 @@
 
 package org.exoplatform.portal.webui.portal;
 
+import org.exoplatform.portal.Constants;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.StaleModelException;
@@ -222,7 +223,7 @@ public class UIPortalComposer extends UIContainer
       String portalAppLanguage = uiPortalApp.getLocale().getLanguage();
       OrganizationService orgService = getApplicationComponent(OrganizationService.class);
       UserProfile userProfile = orgService.getUserProfileHandler().findUserProfileByName(remoteUser);
-      String userLanguage = userProfile.getUserInfoMap().get("user.language");
+      String userLanguage = userProfile.getUserInfoMap().get(Constants.USER_LANGUAGE);
       String browserLanguage = prContext.getRequest().getLocale().getLanguage();
 
       // in case: edit current portal, set skin and language for uiPortalApp

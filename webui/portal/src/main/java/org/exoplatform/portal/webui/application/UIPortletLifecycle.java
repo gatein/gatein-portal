@@ -92,7 +92,7 @@ public class UIPortletLifecycle<S, C extends Serializable, I> extends Lifecycle<
             return;
          }
 
-         String portletMode = context.getRequestParameter("portal:portletMode");
+         String portletMode = context.getRequestParameter(org.exoplatform.portal.Constants.PORTAL_PORTLET_MODE);
          if (portletMode != null)
          {
             Event<UIComponent> event = uicomponent.createEvent("ChangePortletMode", Event.Phase.PROCESS, context);
@@ -100,7 +100,7 @@ public class UIPortletLifecycle<S, C extends Serializable, I> extends Lifecycle<
                event.broadcast();
          }
 
-         String windowState = context.getRequestParameter("portal:windowState");
+         String windowState = context.getRequestParameter(org.exoplatform.portal.Constants.PORTAL_WINDOW_STATE);
          if (windowState != null)
          {
             Event<UIComponent> event = uicomponent.createEvent("ChangeWindowState", Event.Phase.PROCESS, context);

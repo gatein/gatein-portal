@@ -19,6 +19,7 @@
 
 package org.exoplatform.portal.webui.portal;
 
+import org.exoplatform.portal.Constants;
 import org.exoplatform.portal.resource.SkinService;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIMaskWorkspace;
@@ -117,7 +118,7 @@ public class UISkinSelector extends UIContainer
          if (remoteUser != null)
          {
             UserProfile userProfile = orgService.getUserProfileHandler().findUserProfileByName(remoteUser);
-            userProfile.getUserInfoMap().put("user.skin", skin);
+            userProfile.getUserInfoMap().put(Constants.USER_SKIN, skin);
             UserProfileHandler hanlder = orgService.getUserProfileHandler();
             hanlder.saveUserProfile(userProfile, true);
          }

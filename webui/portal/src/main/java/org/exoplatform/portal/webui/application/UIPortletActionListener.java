@@ -19,6 +19,7 @@
 
 package org.exoplatform.portal.webui.application;
 
+import org.exoplatform.portal.Constants;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.pom.spi.wsrp.WSRP;
 import org.exoplatform.portal.webui.page.UIPage;
@@ -709,8 +710,7 @@ public class UIPortletActionListener
          pcontext.addUIComponentToUpdateByAjax(uiWorkingWS);
          pcontext.setFullRender(true);
 
-         String windowState = event.getRequestContext().getRequestParameter("portal:windowState");
-         //TODO TrongTT: We should use only parameter for change WindowState
+         String windowState = event.getRequestContext().getRequestParameter(Constants.PORTAL_WINDOW_STATE);
          if (windowState == null)
          {
             windowState = event.getRequestContext().getRequestParameter(UIComponent.OBJECTID).trim();
@@ -773,8 +773,7 @@ public class UIPortletActionListener
       public void execute(Event<UIPortlet> event) throws Exception
       {
          UIPortlet uiPortlet = event.getSource();
-         String portletMode = event.getRequestContext().getRequestParameter("portal:portletMode");
-         //TODO TrongTT: We should use only parameter for change PortletMode
+         String portletMode = event.getRequestContext().getRequestParameter(Constants.PORTAL_PORTLET_MODE);
          if (portletMode == null)
          {
             portletMode = event.getRequestContext().getRequestParameter(UIComponent.OBJECTID);

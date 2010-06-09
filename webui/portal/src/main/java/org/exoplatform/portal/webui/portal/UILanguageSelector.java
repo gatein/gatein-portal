@@ -19,6 +19,7 @@
 
 package org.exoplatform.portal.webui.portal;
 
+import org.exoplatform.portal.Constants;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIMaskWorkspace;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
@@ -137,7 +138,7 @@ public class UILanguageSelector extends UIContainer
          if (remoteUser != null)
          {
             UserProfile userProfile = orgService.getUserProfileHandler().findUserProfileByName(remoteUser);
-            userProfile.getUserInfoMap().put("user.language", language);
+            userProfile.getUserInfoMap().put(Constants.USER_LANGUAGE, language);
             UserProfileHandler hanlder = orgService.getUserProfileHandler();
             hanlder.saveUserProfile(userProfile, true);
          }

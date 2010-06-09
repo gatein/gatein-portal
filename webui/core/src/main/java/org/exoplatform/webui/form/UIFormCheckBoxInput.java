@@ -137,8 +137,6 @@ public class UIFormCheckBoxInput<T> extends UIFormInputBase<T>
       if (onchange_ != null)
       {
          UIForm uiForm = getAncestorOfType(UIForm.class);
-         //TODO TrongTT: The onchange don't affect in IE. 
-         //      w.append(" onchange=\"").append(renderOnChangeEvent(uiForm)).append("\"");
          w.append(" onclick=\"").append(renderOnChangeEvent(uiForm)).append("\"");
       }
       if (checked)

@@ -20,6 +20,7 @@
 package org.exoplatform.organization.webui.component;
 
 import org.exoplatform.commons.serialization.api.annotations.Serialized;
+import org.exoplatform.portal.Constants;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.portal.webui.workspace.UIWorkingWorkspace;
@@ -123,7 +124,7 @@ public class UIUserInfo extends UIFormTabPane
          {
             UserProfileHandler hanlder = service.getUserProfileHandler();
             UserProfile userProfile = hanlder.findUserProfileByName(event.getRequestContext().getRemoteUser());
-            String language = userProfile.getAttribute("user.language");
+            String language = userProfile.getAttribute(Constants.USER_LANGUAGE);
 
             UIPortalApplication uiApp = Util.getUIPortalApplication();            
             if (language == null || language.trim().length() < 1)

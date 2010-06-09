@@ -20,6 +20,7 @@
 package org.exoplatform.portal.webui.workspace;
 
 import org.exoplatform.container.ExoContainer;
+import org.exoplatform.portal.Constants;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.NoSuchDataException;
@@ -155,8 +156,8 @@ public class UIPortalApplication extends UIApplication
          UserProfile userProfile = orgService.getUserProfileHandler().findUserProfileByName(user);
          if (userProfile != null)
          {
-            portalLanguage = userProfile.getUserInfoMap().get("user.language");
-            portalSkin = userProfile.getUserInfoMap().get("user.skin");
+            portalLanguage = userProfile.getUserInfoMap().get(Constants.USER_LANGUAGE);
+            portalSkin = userProfile.getUserInfoMap().get(Constants.USER_SKIN);
          }
          else
          {

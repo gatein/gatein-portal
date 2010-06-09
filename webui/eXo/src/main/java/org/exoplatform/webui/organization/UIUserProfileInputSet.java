@@ -20,6 +20,7 @@
 package org.exoplatform.webui.organization;
 
 import org.exoplatform.commons.serialization.api.annotations.Serialized;
+import org.exoplatform.portal.Constants;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.UserProfile;
 import org.exoplatform.services.organization.UserProfileHandler;
@@ -106,7 +107,7 @@ public class UIUserProfileInputSet extends UIFormInputSet
             set.addUIFormInput(genderSelectBox);
             continue;
          }
-         else if (key.equalsIgnoreCase("user.language"))
+         else if (key.equalsIgnoreCase(Constants.USER_LANGUAGE))
          {
             UIFormSelectBox langSelectBox = new UIFormSelectBox(key, key, null);
             set.addUIFormInput(langSelectBox);
@@ -123,7 +124,7 @@ public class UIUserProfileInputSet extends UIFormInputSet
    @Override
    public void processRender(WebuiRequestContext context) throws Exception
    {
-      UIFormSelectBox langSelectBox = this.findComponentById("user.language");
+      UIFormSelectBox langSelectBox = this.findComponentById(Constants.USER_LANGUAGE);
       initLanguageCombo(langSelectBox);
       super.processRender(context);
    }
