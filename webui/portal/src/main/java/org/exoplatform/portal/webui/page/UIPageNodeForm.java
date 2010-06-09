@@ -27,6 +27,7 @@ import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.webui.navigation.PageNavigationUtils;
 import org.exoplatform.portal.webui.navigation.ParentChildPair;
 import org.exoplatform.portal.webui.portal.UIPortal;
@@ -150,24 +151,36 @@ public class UIPageNodeForm extends UIFormTabPane
          icon = "Default";
       getChild(UIFormInputIconSelector.class).setSelectedIcon(icon);
       getUIStringInput("label").setValue(pageNode_.getLabel());
-      getUIFormCheckBoxInput(VISIBLE).setChecked(pageNode_.isVisible());
-      getUIFormCheckBoxInput(SHOW_PUBLICATION_DATE).setChecked(pageNode.isShowPublicationDate());
-      setShowCheckPublicationDate(pageNode_.isVisible());
-      Calendar cal = Calendar.getInstance();
-      if (pageNode.getStartPublicationDate() != null)
+      if(pageNode.getVisibility() == Visibility.SYSTEM)
       {
-         cal.setTime(pageNode.getStartPublicationDate());
-         getUIFormDateTimeInput(START_PUBLICATION_DATE).setCalendar(cal);
+         UIFormInputSet uiSettingSet = getChildById("PageNodeSetting");
+         uiSettingSet.removeChildById(VISIBLE);
+         uiSettingSet.removeChildById(SHOW_PUBLICATION_DATE);
+         uiSettingSet.removeChildById(START_PUBLICATION_DATE);
+         uiSettingSet.removeChildById(END_PUBLICATION_DATE);
       }
       else
-         getUIFormDateTimeInput(START_PUBLICATION_DATE).setValue(null);
-      if (pageNode.getEndPublicationDate() != null)
       {
-         cal.setTime(pageNode.getEndPublicationDate());
-         getUIFormDateTimeInput(END_PUBLICATION_DATE).setCalendar(cal);
+         getUIFormCheckBoxInput(VISIBLE).setChecked(pageNode_.isVisible());
+         getUIFormCheckBoxInput(SHOW_PUBLICATION_DATE).setChecked(pageNode.isShowPublicationDate());
+         setShowCheckPublicationDate(pageNode_.isVisible());
+         Calendar cal = Calendar.getInstance();
+         if (pageNode.getStartPublicationDate() != null)
+         {
+            cal.setTime(pageNode.getStartPublicationDate());
+            getUIFormDateTimeInput(START_PUBLICATION_DATE).setCalendar(cal);
+         }
+         else
+            getUIFormDateTimeInput(START_PUBLICATION_DATE).setValue(null);
+         if (pageNode.getEndPublicationDate() != null)
+         {
+            cal.setTime(pageNode.getEndPublicationDate());
+            getUIFormDateTimeInput(END_PUBLICATION_DATE).setCalendar(cal);
+         }
+         else
+            getUIFormDateTimeInput(END_PUBLICATION_DATE).setValue(null);
       }
-      else
-         getUIFormDateTimeInput(END_PUBLICATION_DATE).setValue(null);
+      
    }
 
    public void invokeSetBindingBean(Object bean) throws Exception
