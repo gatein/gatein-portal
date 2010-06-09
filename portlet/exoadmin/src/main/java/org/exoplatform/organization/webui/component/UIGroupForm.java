@@ -188,8 +188,11 @@ public class UIGroupForm extends UIForm
          User user = service.getUserHandler().findUserByName(username);
          MembershipType membershipType =
             service.getMembershipTypeHandler().findMembershipType(GroupManagement.getUserACL().getAdminMSType());
-         service.getMembershipHandler().linkMembership(user, newGroup, membershipType, true);
-
+         
+         if(membershipType !=null){
+            service.getMembershipHandler().linkMembership(user, newGroup, membershipType, true);
+         }
+         
          uiGroupExplorer.changeGroup(changeGroupId);
          uiGroupForm.reset();
          uiGroupForm.setGroup(null);
