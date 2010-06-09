@@ -86,7 +86,7 @@
     </init-params>
 
     <ui-component-root>org.exoplatform.portal.component.UIPortalApplication</ui-component-root>    
-    <state-manager>org.exoplatform.webui.application.mock.MockStateManager</state-manager>    
+    <state-manager>org.exoplatform.webui.test.MockStateManager</state-manager>    
     
     <application-lifecycle-listeners>       
       <listener>org.exoplatform.webui.application.MonitorApplicationLifecycle</listener>       

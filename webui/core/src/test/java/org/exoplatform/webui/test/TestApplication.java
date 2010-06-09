@@ -40,7 +40,7 @@ public class TestApplication extends AbstractGateInTest
       initParams.put("webui.configuration", "webui.configuration");
 
       String basedir = System.getProperty("basedir");
-      String webuiConfig = basedir + "/src/main/resources/webui-configuration.xml";
+      String webuiConfig = basedir + "/src/test/resources/webui-configuration.xml";
       Map<String, URL> resources = new HashMap<String, URL>();
       resources.put("webui.configuration", new File(webuiConfig).toURL());
       initParams.put("webui.configuration", new File(webuiConfig).toURL().toString());
