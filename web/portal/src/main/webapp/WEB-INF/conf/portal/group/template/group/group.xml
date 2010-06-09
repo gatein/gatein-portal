@@ -27,7 +27,7 @@
   <portal-name>@owner@</portal-name>
   <locale>en</locale>
   <access-permissions>Everyone</access-permissions>
-  <edit-permission>*:/platform/administrators</edit-permission>
+  <edit-permission>manager:@owner@</edit-permission>
   <properties>
     <entry key="sessionAlive">onDemand</entry>
   </properties>
