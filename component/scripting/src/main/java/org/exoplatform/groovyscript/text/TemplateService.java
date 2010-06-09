@@ -201,8 +201,11 @@ public class TemplateService
       try
       {
          TemplateStatistic app = statisticService.apps.get(name);
-         ResourceResolver resolver = app.getResolver();
-         templatesCache_.remove(resolver.createResourceKey(name));
+         if(app != null)
+         {
+            ResourceResolver resolver = app.getResolver();
+            templatesCache_.remove(resolver.createResourceKey(name));
+         }
       }
       catch (Exception e)
       {
