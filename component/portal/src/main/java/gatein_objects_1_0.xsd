@@ -165,6 +165,8 @@
       <xs:element name="show-info-bar" type="xs:boolean" minOccurs="1" maxOccurs="1"/>
       <xs:element name="show-application-state" type="xs:boolean" minOccurs="0" maxOccurs="1"/>
       <xs:element name="show-application-mode" type="xs:boolean" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="width" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="height" type="xs:string" minOccurs="0" maxOccurs="1"/>
     </xs:sequence>
   </xs:complexType>
 
