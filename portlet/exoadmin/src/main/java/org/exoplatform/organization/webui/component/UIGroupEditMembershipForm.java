@@ -98,30 +98,31 @@ public class UIGroupEditMembershipForm extends UIForm
          UIApplication uiApp = event.getRequestContext().getUIApplication();
          UIPopupWindow uiPopup = uiForm.getParent();
          OrganizationService service = uiForm.getApplicationComponent(OrganizationService.class);
+         
          Membership formMembership =  service.getMembershipHandler().findMembership(uiForm.membershipId);
+         if (formMembership == null)
+         {
+            uiApp.addMessage(new ApplicationMessage("UIGroupEditMembershipForm.msg.membership-delete", null));
+            uiPopup.setUIComponent(null);
+            uiPopup.setShow(false);
+            return;
+         }
          String userName = formMembership.getUserName();
          Group group = service.getGroupHandler().findGroupById(uiForm.groupId);
          User user = service.getUserHandler().findUserByName(userName);
          MembershipHandler memberShipHandler = service.getMembershipHandler();
-         String memberShipType = uiForm.getUIFormSelectBox(MEMBER_SHIP).getValue();
-         try
+         String memberShipTypeStr = uiForm.getUIFormSelectBox(MEMBER_SHIP).getValue();
+         MembershipType membershipType = service.getMembershipTypeHandler().findMembershipType(memberShipTypeStr);
+         Membership membership =
+            memberShipHandler.findMembershipByUserGroupAndType(userName, group.getId(), membershipType.getName());
+         if (membership != null)
          {
-            MembershipType membershipType = service.getMembershipTypeHandler().findMembershipType(memberShipType);
-            Membership membership =
-               memberShipHandler.findMembershipByUserGroupAndType(userName, group.getId(), membershipType.getName());
-            if (membership != null)
-            {
-               uiApp.addMessage(new ApplicationMessage("UIGroupEditMembershipForm.msg.membership-exist", null));
-               return;
-            }
-            memberShipHandler.removeMembership(uiForm.membershipId, true);
-            memberShipHandler.linkMembership(user, group, membershipType, true);
+            uiApp.addMessage(new ApplicationMessage("UIGroupEditMembershipForm.msg.membership-exist", null));
+            return;
          }
-         catch (Exception e)
-         {
-            // membership removed
-            uiApp.addMessage(new ApplicationMessage("UIGroupEditMembershipForm.msg.membership-delete", null));
-         }
+         memberShipHandler.removeMembership(uiForm.membershipId, true);
+         memberShipHandler.linkMembership(user, group, membershipType, true);
+
          uiPopup.setUIComponent(null);
          uiPopup.setShow(false);
       }
