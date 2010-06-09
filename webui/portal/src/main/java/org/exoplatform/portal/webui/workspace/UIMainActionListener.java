@@ -24,6 +24,7 @@ import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.UserPortalConfig;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Page;
+import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.webui.page.UIPage;
 import org.exoplatform.portal.webui.page.UIPageBody;
@@ -107,6 +108,16 @@ public class UIMainActionListener
          UIPortalApplication uiApp = Util.getUIPortalApplication();
          uiApp.setModeState(UIPortalApplication.APP_BLOCK_EDIT_MODE);
          UIWorkingWorkspace uiWorkingWS = uiApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
+         
+         UIPortal currentPortal = Util.getUIPortal();
+         PageNavigation selectedNavigation = currentPortal.getSelectedNavigation();
+         UserACL userACL = uiApp.getApplicationComponent(UserACL.class);
+         if (!userACL.hasEditPermission(selectedNavigation))
+         {
+            uiApp.addMessage(new ApplicationMessage("UIPortalManagement.msg.Invalid-CreatePage-Permission", null));
+            return;
+         }
+
          uiWorkingWS.setRenderedChild(UIEditInlineWorkspace.class);
 
          UIPortalComposer portalComposer = uiWorkingWS.findFirstComponentOfType(UIPortalComposer.class);
