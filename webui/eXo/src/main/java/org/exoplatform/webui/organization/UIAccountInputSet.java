@@ -67,12 +67,10 @@ public class UIAccountInputSet extends UIFormInputWithActions
          .addValidator(MandatoryValidator.class).addValidator(PasswordStringLengthValidator.class, 6, 30));
       addUIFormInput(new UIFormStringInput(PASSWORD2X, "password", null).setType(UIFormStringInput.PASSWORD_TYPE)
          .addValidator(MandatoryValidator.class).addValidator(PasswordStringLengthValidator.class, 6, 30));
-      addUIFormInput(new UIFormStringInput("firstName", "firstName", null).addValidator(StringLengthValidator.class, 3,
-         45).addValidator(MandatoryValidator.class).addValidator(ExpressionValidator.class,
-            Utils.FIRST_CHARACTER_NAME_VALIDATOR_REGEX, "FirstCharacterNameValidator.msg"));
-      addUIFormInput(new UIFormStringInput("lastName", "lastName", null).addValidator(StringLengthValidator.class, 3,
-         45).addValidator(MandatoryValidator.class).addValidator(ExpressionValidator.class,
-            Utils.FIRST_CHARACTER_NAME_VALIDATOR_REGEX, "FirstCharacterNameValidator.msg"));
+      addUIFormInput(new UIFormStringInput("firstName", "firstName", null).addValidator(StringLengthValidator.class, 1,
+         45).addValidator(MandatoryValidator.class));
+      addUIFormInput(new UIFormStringInput("lastName", "lastName", null).addValidator(StringLengthValidator.class, 1,
+         45).addValidator(MandatoryValidator.class));
       addUIFormInput(new UIFormStringInput("email", "email", null).addValidator(MandatoryValidator.class).addValidator(
          EmailAddressValidator.class));
    }

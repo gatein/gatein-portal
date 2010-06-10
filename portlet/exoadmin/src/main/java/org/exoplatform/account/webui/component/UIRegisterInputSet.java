@@ -75,13 +75,11 @@ public class UIRegisterInputSet extends UIFormInputWithActions
       addUIFormInput(new UIFormStringInput(CONFIRM_PASSWORD, CONFIRM_PASSWORD, null).setType(UIFormStringInput.PASSWORD_TYPE)
          .addValidator(MandatoryValidator.class).addValidator(PasswordStringLengthValidator.class, 6, 30));
       
-      addUIFormInput(new UIFormStringInput(FIRST_NAME, FIRST_NAME, null).addValidator(StringLengthValidator.class, 3,
-         45).addValidator(MandatoryValidator.class).addValidator(ExpressionValidator.class, Utils.FIRST_CHARACTER_NAME_VALIDATOR_REGEX,
-         "FirstCharacterNameValidator.msg"));
+      addUIFormInput(new UIFormStringInput(FIRST_NAME, FIRST_NAME, null).addValidator(StringLengthValidator.class, 1,
+         45).addValidator(MandatoryValidator.class));
       
-      addUIFormInput(new UIFormStringInput(LAST_NAME, LAST_NAME, null).addValidator(StringLengthValidator.class, 3,
-         45).addValidator(MandatoryValidator.class).addValidator(ExpressionValidator.class, Utils.FIRST_CHARACTER_NAME_VALIDATOR_REGEX,
-         "FirstCharacterNameValidator.msg"));
+      addUIFormInput(new UIFormStringInput(LAST_NAME, LAST_NAME, null).addValidator(StringLengthValidator.class, 1,
+         45).addValidator(MandatoryValidator.class));
       
       addUIFormInput(new UIFormStringInput(EMAIL_ADDRESS, EMAIL_ADDRESS, null).addValidator(MandatoryValidator.class).addValidator(
          EmailAddressValidator.class));
