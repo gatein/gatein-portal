@@ -428,7 +428,14 @@ public class UITabPaneDashboard extends UIContainer
          String newTabLabel = context.getRequestParameter(UIComponent.OBJECTID);
          if (!tabPane.validateName(newTabLabel))
          {
-            context.getUIApplication().addMessage(new ApplicationMessage("UITabPaneDashboard.msg.wrongTabName", null));
+            //TODO nguyenanhkien2a@gmail.com
+            //We should redirect to current node while adding new tab fails
+            PageNode currentNode = tabPane.uiPortal.getSelectedNode();
+            PortalRequestContext prContext = Util.getPortalRequestContext();
+            prContext.getResponse().sendRedirect(prContext.getPortalURI() + currentNode.getUri());
+            
+            Object[] args = {newTabLabel};
+            context.getUIApplication().addMessage(new ApplicationMessage("UITabPaneDashboard.msg.wrongTabName", args));
             return;
          }
          String uri = tabPane.createNewPageNode(newTabLabel);
@@ -463,7 +470,14 @@ public class UITabPaneDashboard extends UIContainer
          String newTabLabel = context.getRequestParameter(RENAMED_TAB_LABEL_PARAMETER);
          if (!tabPane.validateName(newTabLabel))
          {
-            context.getUIApplication().addMessage(new ApplicationMessage("UITabPaneDashboard.msg.wrongTabName", null));
+            //TODO nguyenanhkien2a@gmail.com
+            //We should redirect to current node while renaming fails
+            PageNode currentNode = tabPane.uiPortal.getSelectedNode();
+            PortalRequestContext prContext = Util.getPortalRequestContext();
+            prContext.getResponse().sendRedirect(prContext.getPortalURI() + currentNode.getUri());
+            
+            Object[] args = {newTabLabel};
+            context.getUIApplication().addMessage(new ApplicationMessage("UITabPaneDashboard.msg.wrongTabName", args));
             return;
          }
          String newUri = tabPane.renamePageNode(nodeIndex, newTabLabel);
