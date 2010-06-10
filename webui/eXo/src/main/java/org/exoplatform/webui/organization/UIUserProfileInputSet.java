@@ -156,6 +156,7 @@ public class UIUserProfileInputSet extends UIFormInputSet
          if (country != null && country.length() > 0)
          {
             displayLanguage = displayName + " (" + locale.getDisplayCountry(currentLocale) + ")";
+            language = language + "_" + country;
          }
          else
          {
