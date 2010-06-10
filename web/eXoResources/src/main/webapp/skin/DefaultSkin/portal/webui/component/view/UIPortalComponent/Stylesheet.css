@@ -241,6 +241,7 @@
 .EdittingContainer .NormalContainerBlock {
 	background: white;
 	border: 1px dashed #a2a2a2;
+	height: 100%;
 }
 
 .EdittingContainer .NormalContainerBlock .LeftContainerBlock, 
