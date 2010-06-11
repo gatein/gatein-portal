@@ -130,7 +130,6 @@
 }
 
 .UISitemap .ChildrenContainer {
-	padding-top: 30px;
 	padding-left: 31px; /* orientation=lt */
 	padding-right: 31px; /* orientation=rt */
 	float: none;
