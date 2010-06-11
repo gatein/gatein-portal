@@ -33,7 +33,9 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletContext;
 
@@ -49,13 +51,24 @@ public class SkinConfigParser
    public static final String GATEIN_RESOURCES_1_0_SYSTEM_ID = "http://www.gatein.org/xml/ns/gatein_resources_1_0";
 
    /** . */
+   public static final String GATEIN_RESOURCES_1_1_SYSTEM_ID = "http://www.gatein.org/xml/ns/gatein_resources_1_1";
+
+   /** . */
    private static final String GATEIN_RESOURCE_1_0_XSD_PATH = "gatein_resources_1_0.xsd";
 
    /** . */
-   private static final XMLValidator VALIDATOR = new XMLValidator(
-      SkinConfigParser.class,
-      GATEIN_RESOURCES_1_0_SYSTEM_ID,
-      GATEIN_RESOURCE_1_0_XSD_PATH);
+   private static final String GATEIN_RESOURCE_1_1_XSD_PATH = "gatein_resources_1_1.xsd";
+
+   /** . */
+   private static final XMLValidator VALIDATOR;
+
+   static
+   {
+      Map<String, String> systemIdToResourcePath = new HashMap<String, String>();
+      systemIdToResourcePath.put(GATEIN_RESOURCES_1_0_SYSTEM_ID, GATEIN_RESOURCE_1_0_XSD_PATH);
+      systemIdToResourcePath.put(GATEIN_RESOURCES_1_1_SYSTEM_ID, GATEIN_RESOURCE_1_1_XSD_PATH);
+      VALIDATOR = new XMLValidator(SkinConfigParser.class, systemIdToResourcePath);
+   }
 
    public static void processConfigResource(DocumentSource source, SkinService skinService, ServletContext scontext)
    {

@@ -12,9 +12,25 @@ import java.util.List;
 
 public class TestGateInResourceParser extends TestCase
 {   
-   public void testBinding() throws MalformedURLException {
-      URL url = this.getClass().getResource("/WEB-INF/gatein-resources.xml");
-      assertNotNull("the gatein-resources.xml can not be found", url);
+   public void testResources1_0() throws MalformedURLException
+   {
+      assertDescriptorCanBeLoaded("org/exoplatform/portal/resource/gatein-resources-1_0.xml");
+   }
+
+   public void testResources1_0WithSkinModule() throws MalformedURLException
+   {
+      assertDescriptorCanBeLoaded("org/exoplatform/portal/resource/gatein-resources-1_0-with-skin-module.xml");
+   }
+
+   public void testResources1_1() throws MalformedURLException
+   {
+      assertDescriptorCanBeLoaded("org/exoplatform/portal/resource/gatein-resources-1_1.xml");
+   }
+
+   private void assertDescriptorCanBeLoaded(String descriptorPath) throws MalformedURLException
+   {
+      URL url = Thread.currentThread().getContextClassLoader().getResource(descriptorPath);
+      assertNotNull("The " + descriptorPath + " can not be found", url);
       DocumentSource source = DocumentSource.create(url);
       List<SkinConfigTask> tasks = SkinConfigParser.fetchTasks(source);
       assertNotNull("There are no tasks", tasks);

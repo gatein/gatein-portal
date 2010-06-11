@@ -28,6 +28,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
+import java.util.Map;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -51,9 +52,10 @@ public class XMLValidator
       resolver = new ResourceEntityResolver(clazz, systemId, resourcePath);
    }
 
-   public String getSystemId()
+   public XMLValidator(Class clazz, Map<String, String> systemIdToResourcePath)
    {
-      return schemas[0];
+      schemas = systemIdToResourcePath.keySet().toArray(new String[0]);
+      resolver = new ResourceEntityResolver(clazz, systemIdToResourcePath);
    }
 
    /**
