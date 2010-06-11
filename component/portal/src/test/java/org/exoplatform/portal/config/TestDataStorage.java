@@ -35,10 +35,7 @@ import org.exoplatform.services.listener.Event;
 import org.exoplatform.services.listener.Listener;
 import org.exoplatform.services.listener.ListenerService;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by The eXo Platform SARL Author : Tung Pham thanhtungty@gmail.com Nov
@@ -658,6 +655,7 @@ public class TestDataStorage extends AbstractPortalTest
 
       // Configures the dashboard
       Dashboard dashboard = new Dashboard(dashboardId);
+      dashboard.setAccessPermissions(new String[]{"perm1","perm2"});
       TransientApplicationState<Portlet> state = new TransientApplicationState<Portlet>("foo/bar");
       Application<Portlet> app = Application.createPortletApplication();
       app.setState(state);
@@ -673,6 +671,7 @@ public class TestDataStorage extends AbstractPortalTest
 
       // Now check we have the state on the dashboard
       dashboard = storage_.loadDashboard(dashboardId);
+      assertEquals(Arrays.asList("perm1","perm2"), Arrays.asList(dashboard.getAccessPermissions()));
       assertEquals(1, dashboard.getChildren().size());
       app = (Application<Portlet>)dashboard.getChildren().get(0);
       assertEquals("foo/bar", storage_.getId(app.getState()));
@@ -704,6 +703,32 @@ public class TestDataStorage extends AbstractPortalTest
       //
       dashboard = storage_.loadDashboard(dashboardId);
       assertEquals(3, dashboard.getChildren().size());
+   }
+
+   public void testDashboardSecurity() throws Exception
+   {
+      Page page = new Page();
+      page.setPageId("portal::test::foo");
+      Application<Portlet> app = Application.createPortletApplication();
+      app.setAccessPermissions(new String[]{"perm1","perm2"});
+      app.setState(new TransientApplicationState<Portlet>("dashboard/DashboardPortlet"));
+      page.getChildren().add(app);
+      storage_.save(page);
+      page = storage_.getPage("portal::test::foo");
+      String id = page.getChildren().get(0).getStorageId();
+
+      // Load the dashboard itself
+      Dashboard dashboard = storage_.loadDashboard(id);
+      assertEquals(Arrays.asList("perm1","perm2"), Arrays.asList(dashboard.getAccessPermissions()));
+
+      // Modify the dashboard permission
+      dashboard.setAccessPermissions(new String[]{"perm3"});
+      storage_.saveDashboard(dashboard);
+
+      // Load application and check
+      page = storage_.getPage("portal::test::foo");
+      app = (Application<Portlet>)page.getChildren().get(0);
+      assertEquals(Arrays.asList("perm3"), Arrays.asList(app.getAccessPermissions()));
    }
 
    public void testDashboardMoveRight() throws Exception

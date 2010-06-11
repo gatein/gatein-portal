@@ -479,6 +479,13 @@ public class Mapper
                String theme = attrs.getValue(MappedAttributes.THEME, null);
 
                //
+               List<String> a = Collections.singletonList(UserACL.EVERYONE);
+               if (srcContainer.isAdapted(ProtectedResource.class)) {
+                  ProtectedResource pr = srcContainer.adapt(ProtectedResource.class);
+                  a = pr.getAccessPermissions();
+               }
+
+               //
                mo = new ApplicationData<Portlet>(
                   srcContainer.getObjectId(),
                   component.getName(),
@@ -495,10 +502,7 @@ public class Mapper
                   null,
                   null,
                   Collections.<String, String>emptyMap(),
-                  Collections.singletonList(UserACL.EVERYONE));
-               // Julien : the everyone is not great but having null permission
-               // means the same thing cf {@link UIPortalComponent} class
-               // we need to solve that somehow
+                  a);
             }
             else
             {
@@ -677,17 +681,21 @@ public class Mapper
          // citizen of the portal
          if (srcChild instanceof ApplicationData)
          {
-            ApplicationData app = (ApplicationData)srcChild;
+            ApplicationData<?> app = (ApplicationData)srcChild;
             if (app.getType() == ApplicationType.PORTLET && app.getState() instanceof TransientApplicationState)
             {
                TransientApplicationState<?> state = (TransientApplicationState<?>)app.getState();
                String contentId = state.getContentId();
                if ("dashboard/DashboardPortlet".equals(contentId))
                {
+                  DashboardData data;
                   if (app.getStorageId() != null)
                   {
                      UIContainer dstDashboard = session.findObjectById(ObjectType.CONTAINER, app.getStorageId());
-                     srcChild = loadDashboard(dstDashboard);
+                     data = loadDashboard(dstDashboard);
+
+                     // Update those attributes as we have to do it now, they don't exist in a container
+                     // but do exist in a dashboard container
                      Attributes attrs = dstDashboard.getAttributes();
                      attrs.setValue(MappedAttributes.SHOW_INFO_BAR, app.isShowInfoBar());
                      attrs.setValue(MappedAttributes.SHOW_MODE, app.isShowApplicationMode());
@@ -696,8 +704,27 @@ public class Mapper
                   }
                   else
                   {
-                     srcChild = DashboardData.INITIAL_DASHBOARD;
+                     data = DashboardData.INITIAL_DASHBOARD;
                   }
+
+                  //
+                  data = new DashboardData(
+                     data.getStorageId(),
+                     data.getId(),
+                     data.getName(),
+                     data.getIcon(),
+                     data.getTemplate(),
+                     data.getFactoryId(),
+                     data.getTitle(),
+                     data.getDescription(),
+                     data.getWidth(),
+                     data.getHeight(),
+                     app.getAccessPermissions(),
+                     data.getChildren()
+                  );
+
+                  //
+                  srcChild = data;
                }
             }
          }
