@@ -109,10 +109,7 @@ public class UIMainActionListener
          uiApp.setModeState(UIPortalApplication.APP_BLOCK_EDIT_MODE);
          UIWorkingWorkspace uiWorkingWS = uiApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
          
-         UIPortal currentPortal = Util.getUIPortal();
-         PageNavigation selectedNavigation = currentPortal.getSelectedNavigation();
-         UserACL userACL = uiApp.getApplicationComponent(UserACL.class);
-         if (!userACL.hasEditPermission(selectedNavigation))
+         if (!hasPageCreationPermission())
          {
             uiApp.addMessage(new ApplicationMessage("UIPortalManagement.msg.Invalid-CreatePage-Permission", null));
             return;
@@ -135,6 +132,19 @@ public class UIMainActionListener
          UIWizardPageSetInfo uiPageSetInfo = uiWizard.getChild(UIWizardPageSetInfo.class);
          uiPageSetInfo.setShowPublicationDate(false);
          event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingWS);
+      }
+      
+      private boolean hasPageCreationPermission() throws Exception
+      {
+         UIPortal currentPortal = Util.getUIPortal();
+         UserACL userACL = Util.getUIPortalApplication().getApplicationComponent(UserACL.class);
+         PageNavigation selectedNavigation = currentPortal.getSelectedNavigation();
+         if (PortalConfig.PORTAL_TYPE.equals(selectedNavigation.getOwnerType()))
+         {
+            return userACL.hasEditPermissionOnPortal(currentPortal.getOwnerType(), currentPortal.getOwner(), currentPortal.getEditPermission());
+         }
+         
+         return userACL.hasEditPermission(selectedNavigation);
       }
    }
 
