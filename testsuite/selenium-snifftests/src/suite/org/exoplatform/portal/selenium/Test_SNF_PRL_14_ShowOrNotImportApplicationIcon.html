@@ -4,12 +4,12 @@
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="selenium.base" href="" />
-<title>SNF_PRL_14</title>
+<title>Test_SNF_PRL_14_ShowOrNotImportApplicationIcon</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">SNF_PRL_14</td></tr>
+<tr><td rowspan="1" colspan="3">Test_SNF_PRL_14_ShowOrNotImportApplicationIcon</td></tr>
 </thead><tbody>
 <tr>
 	<td>open</td>
@@ -37,8 +37,13 @@
 	<td>gtn</td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
+	<td>clickAt</td>
 	<td>xpath=//div[@id='UIPortalLoginFormAction']/div/div/div</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Application Registry</td>
 	<td></td>
 </tr>
 <tr>
@@ -176,7 +181,7 @@
 	<td>link=Save</td>
 	<td></td>
 </tr>
-<<tr>
+<tr>
 	<td>waitForElementPresent</td>
 	<td>link=Close</td>
 	<td></td>
