@@ -95,36 +95,4 @@
     </container>
   </page>
 
-	<page>
-  	<page-id>portal::test::testMoveChild</page-id>
-    <owner-type>portal</owner-type>
-    <owner-id>test</owner-id>
-    <name>testMoveChild</name>
-    <title>testMoveChildTitle</title>
-    <factory-id>test_factory_id</factory-id>
-	 <access-permissions>test_access_permissions</access-permissions>
-	 <edit-permission>test_edit_permission</edit-permission>
-    <container>
-      <name>container_1</name>
-      <title>container_1_title</title>
-      <icon>container_1_icon</icon>
-      <description>container_1_description</description>
-    </container>
-    
-    <application>
-      <instance-id>portal#testMoveChild:/web/BannerPortlet/banner</instance-id>
-      <application-type>application_1_type</application-type>
-      <title>application_1_title</title>
-      <access-permissions>application_1_access_permissions</access-permissions>
-      <description>application_1_description</description>
-    </application>
-    
-    <container>
-    	<name>container_2</name>
-    	<title>container_2_title</title>
-    	<icon>container_2_icon</icon>
-    	<description>container_2_description</description>
-    </container>
-    
-  </page>
 </page-set>
