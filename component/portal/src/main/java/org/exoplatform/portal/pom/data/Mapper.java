@@ -358,9 +358,25 @@ public class Mapper
       ContainerData srcContainer = src.getPortalLayout();
       UIContainer dstContainer = template.getRootComponent();
 
+      // Workaround to have the real source container used as the model / UI layer lose this
+      // ID which lead to bugs
+      ContainerData realSrcContainer = new ContainerData(
+         dstContainer.getObjectId(),
+         srcContainer.getId(),
+         srcContainer.getName(),
+         srcContainer.getIcon(),
+         srcContainer.getTemplate(),
+         srcContainer.getFactoryId(),
+         srcContainer.getTitle(),
+         srcContainer.getDescription(),
+         srcContainer.getWidth(),
+         srcContainer.getHeight(),
+         srcContainer.getAccessPermissions(),
+         srcContainer.getChildren());
+
       //
-      save(srcContainer, dstContainer);
-      saveChildren(srcContainer, dstContainer);
+      save(realSrcContainer, dstContainer);
+      saveChildren(realSrcContainer, dstContainer);
 
       //
       Templatized templatized = dst.getRootNavigation().getTemplatized();
@@ -568,7 +584,31 @@ public class Mapper
 
       //
       UIContainer rootContainer = dst.getRootComponent();
-      LinkedList<ModelChange> childrenChanges = saveChildren(src, rootContainer);
+
+      // We are creating a new Page with the root container id as this one is lost
+      // in the model / ui layer. Not doing this cause a class cast exception later
+      // so it's likely the best fix we can do at the moment
+      PageData src2 = new PageData(
+         rootContainer.getObjectId(),
+         src.getId(),
+         src.getName(),
+         src.getIcon(),
+         src.getTemplate(),
+         src.getFactoryId(),
+         src.getTitle(),
+         src.getDescription(),
+         src.getWidth(),
+         src.getHeight(),
+         src.getAccessPermissions(),
+         src.getChildren(),
+         src.getOwnerType(),
+         src.getOwnerId(),
+         src.getEditPermission(),
+         src.isShowMaxWindow()
+      );
+
+      //
+      LinkedList<ModelChange> childrenChanges = saveChildren(src2, rootContainer);
 
       //
       changes.addAll(childrenChanges);
@@ -835,7 +875,8 @@ public class Mapper
                changes.add(new ModelChange.Move(dst.getObjectId(), parentId, dstChildId));
 
                // julien : we do not need to create an update operation
-               // as later the update operation will be created when the object
+               // as later the update operation will be created when the
+               // object
                // will be processed
             }
          }
