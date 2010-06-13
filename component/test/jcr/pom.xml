@@ -38,11 +38,6 @@
     </dependency>
 
     <dependency>
-      <groupId>org.jboss.cache</groupId>
-      <artifactId>jbosscache-core</artifactId>
-    </dependency>
-
-    <dependency>
        <groupId>commons-collections</groupId>
        <artifactId>commons-collections</artifactId>
     </dependency>

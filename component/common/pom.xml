@@ -56,10 +56,6 @@
       <artifactId>exo.jcr.component.core</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.jboss.cache</groupId>
-      <artifactId>jbosscache-core</artifactId>
-    </dependency>
-    <dependency>
       <groupId>org.exoplatform.jcr</groupId>
       <artifactId>exo.jcr.component.ext</artifactId>
     </dependency>
