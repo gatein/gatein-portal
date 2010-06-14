@@ -103,6 +103,7 @@ public class UIRegisterForm extends UIForm
          HttpServletRequest request = prContext.getRequest();
          HttpSession session = request.getSession();
          session.removeAttribute(Captcha.NAME);
+         context.addUIComponentToUpdateByAjax(getChild(UIRegisterInputSet.class));
       }
    }
    
@@ -124,11 +125,11 @@ public class UIRegisterForm extends UIForm
          {
             //TODO: Send email and add Account Activating feature
             UIApplication uiApp = context.getUIApplication();
-            uiApp.addMessage(new ApplicationMessage("UIRegisterForm.registerWithSuccess.message", null));
-            HttpServletRequest request = prContext.getRequest();
-            HttpSession session = request.getSession();
-            session.removeAttribute(Captcha.NAME);
+            uiApp.addMessage(new ApplicationMessage("UIRegisterForm.registerWithSuccess.message", null));           
          }
+         HttpServletRequest request = prContext.getRequest();
+         HttpSession session = request.getSession();
+         session.removeAttribute(Captcha.NAME);
       }
    }
 
