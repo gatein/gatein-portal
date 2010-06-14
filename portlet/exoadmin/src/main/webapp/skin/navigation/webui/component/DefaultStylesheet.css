@@ -50,6 +50,7 @@
 	width: 27%;
 	overflow: hidden;
 	white-space: normal;
+	word-wrap: break-word;
 }
 
 .UIPortalNavigationPortlet .UIManagement table.ManagementBlock td.Content {
