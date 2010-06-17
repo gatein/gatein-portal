@@ -65,12 +65,10 @@ public class UIAccountEditInputSet extends UIFormInputSet
          MandatoryValidator.class).addValidator(StringLengthValidator.class, 3, 30).addValidator(
          ResourceValidator.class).addValidator(ExpressionValidator.class, Utils.USER_NAME_VALIDATOR_REGEX,
          "ResourceValidator.msg.Invalid-char"));
-      addUIFormInput(new UIFormStringInput("firstName", "firstName", null).setMaxLength(45).addValidator(
-         StringLengthValidator.class, 3, 45).addValidator(MandatoryValidator.class).addValidator(
-         ExpressionValidator.class, Utils.FIRST_CHARACTER_NAME_VALIDATOR_REGEX, "FirstCharacterNameValidator.msg"));
-      addUIFormInput(new UIFormStringInput("lastName", "lastName", null).setMaxLength(45).addValidator(
-         StringLengthValidator.class, 3, 45).addValidator(MandatoryValidator.class).addValidator(
-         ExpressionValidator.class, Utils.FIRST_CHARACTER_NAME_VALIDATOR_REGEX, "FirstCharacterNameValidator.msg"));
+      addUIFormInput(new UIFormStringInput("firstName", "firstName", null).addValidator(
+         StringLengthValidator.class, 1, 45).addValidator(MandatoryValidator.class));
+      addUIFormInput(new UIFormStringInput("lastName", "lastName", null).addValidator(
+         StringLengthValidator.class, 1, 45).addValidator(MandatoryValidator.class));
       addUIFormInput(new UIFormStringInput("email", "email", null).addValidator(MandatoryValidator.class).addValidator(
          EmailAddressValidator.class));
       UIFormCheckBoxInput<Boolean> uiCheckbox = new UIFormCheckBoxInput<Boolean>(CHANGEPASS, null, false);
