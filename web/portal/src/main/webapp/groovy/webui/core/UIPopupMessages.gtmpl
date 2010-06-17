@@ -60,7 +60,7 @@
 			Object[] msgArguments = mess.getMessageAruments();
 			if(msgArguments != null && msgArguments.length > 0) {
 				for(i in 0..msgArguments.length-1){ 
-					msgValue = msgValue.replaceAll("\\{" + i + "\\}", _ctx.appRes(msgArguments [i]));
+					msgValue = msgValue.replace("{" + i + "}", _ctx.appRes(msgArguments [i]));
 				}
 			}
 			println msgValue;
