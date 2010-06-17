@@ -70,11 +70,9 @@ public class UIAccountProfiles extends UIForm
          .addValidator(ResourceValidator.class).addValidator(ExpressionValidator.class,
             Utils.USER_NAME_VALIDATOR_REGEX, "ResourceValidator.msg.Invalid-char"));
       addUIFormInput(new UIFormStringInput("firstName", "firstName", useraccount.getFirstName()).addValidator(
-         StringLengthValidator.class, 3, 45).addValidator(MandatoryValidator.class).addValidator(
-         ExpressionValidator.class, Utils.FIRST_CHARACTER_NAME_VALIDATOR_REGEX, "FirstCharacterNameValidator.msg"));
+         StringLengthValidator.class, 1, 45).addValidator(MandatoryValidator.class));
       addUIFormInput(new UIFormStringInput("lastName", "lastName", useraccount.getLastName()).addValidator(
-         StringLengthValidator.class, 3, 45).addValidator(MandatoryValidator.class).addValidator(
-         ExpressionValidator.class, Utils.FIRST_CHARACTER_NAME_VALIDATOR_REGEX, "FirstCharacterNameValidator.msg"));
+         StringLengthValidator.class, 1, 45).addValidator(MandatoryValidator.class));
       addUIFormInput(new UIFormStringInput("email", "email", useraccount.getEmail()).addValidator(
          MandatoryValidator.class).addValidator(EmailAddressValidator.class));
    }
