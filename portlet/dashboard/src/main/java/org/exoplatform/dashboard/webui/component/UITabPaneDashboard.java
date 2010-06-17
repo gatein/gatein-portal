@@ -352,6 +352,11 @@ public class UITabPaneDashboard extends UIContainer
 
          renamedNode.setUri(newUri);
 
+         Page page = configService.getPage(renamedNode.getPageReference());
+         page.setTitle(newNodeLabel);
+         if (page != null)
+            dataService.save(page);
+         
          dataService.save(pageNavigation);
          return newUri;
       }
