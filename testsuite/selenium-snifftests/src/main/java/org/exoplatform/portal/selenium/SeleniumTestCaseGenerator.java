@@ -162,6 +162,16 @@ public class SeleniumTestCaseGenerator {
 				sb.append("TestCase.assertTrue(selenium.getConfirmation().matches(\"^");
 				sb.append(param2);
 				sb.append("$\"));\n");
+			} else if (param1.equals("assertLocation")) {
+				sb.append("TestCase.assertTrue(selenium.getLocation().matches(\"^");
+				sb.append(param2);
+				sb.append("$\"));\n");
+			}else if (param1.equals("waitForValue")) {
+				sb.append("TestCase.assertTrue(selenium.getValue(\"");
+				sb.append(param2);
+				sb.append("\").matches(\"^");
+				sb.append(param3);
+				sb.append("$\"));\n");
 			} else if (param1.equals("assertElementPresent") || param1.equals("assertElementNotPresent")) {
 				if (param1.equals("assertElementPresent")) {
 					sb.append("TestCase.assertTrue");
@@ -386,6 +396,9 @@ public class SeleniumTestCaseGenerator {
 				sb.append("verifyFalse(selenium.isChecked(\"").append(param2).append("\"));\n");
 			} else if (param1.equals("deleteCookie")) {
 				sb.append("selenium.deleteCookie(\"").append(param2).append("\",\"").append(param3).append("\");\n");
+			} else if (param1.equals("windowMaximize")) {
+				sb.append("selenium.windowMaximize()").append(";\n");
+
 			} else if (param1.equals("waitForText")) {
 				sb.append("for (int second = 0;; second++) {\n");
 				sb.append(getTimeoutMessage(param1));
