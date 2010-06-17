@@ -314,8 +314,7 @@ public class POMSession
                   "jcr:path LIKE '" + workspaceChunk + "/" + ownerTypeChunk + "/" + ownerIdChunk
                      + "/mop:rootpage/mop:children/mop:pages/mop:children/%' AND " +
                      "(" +
-                     "LOWER(gtn:name) LIKE '%" + title + "%' OR CONTAINS(gtn:name,'" + title + "')" +
-                     ")";
+                     "LOWER(gtn:name) LIKE '%" + title.toLowerCase() + "%')";
             }
             else
             {
