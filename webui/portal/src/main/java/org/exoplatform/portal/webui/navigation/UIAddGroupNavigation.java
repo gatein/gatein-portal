@@ -23,6 +23,7 @@ import org.exoplatform.commons.utils.ObjectPageList;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserACL;
+import org.exoplatform.portal.config.UserPortalConfig;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PortalConfig;
@@ -156,10 +157,10 @@ public class UIAddGroupNavigation extends UIContainer
          // create navigation for group
          dataService.create(pageNav);
 
-         // add navigation to UIPortal 's navigations
-         UIPortal uiPortal = Util.getUIPortal();
-         uiPortal.getNavigations().add(pageNav); //TODO: Reorder the list in term of navigation priority
-
+         uiPortalApp.getUserPortalConfig().getNavigations().add(0, pageNav);
+         uiPortalApp.getNavigations().add(0, pageNav);
+         uiPortalApp.localizeNavigations();
+         
          //Update group navigation list
          ctx.addUIComponentToUpdateByAjax(uicomp);
 

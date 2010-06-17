@@ -335,15 +335,16 @@ public class UIGroupNavigationManagement extends UIContainer
          }
          uicomp.navigations.remove(navigation);
 
-         // remove navigation from UIPortal
-         UIPortal uiPortal = Util.getUIPortal();
-         removeNavigationByID(uiPortal.getNavigations(), navigation);
-
+         // remove navigation from UIPortalApplication
+         UIPortalApplication uiPortalApp = Util.getUIPortalApplication();
+         removeNavigationByID(uiPortalApp.getUserPortalConfig().getNavigations(), navigation);
+         removeNavigationByID(uiPortalApp.getNavigations(), navigation);
+         
+         
          service.remove(navigation);
          event.getRequestContext().addUIComponentToUpdateByAjax(uicomp);
 
          //Update UserToolbarGroupPortlet
-         UIPortalApplication uiPortalApp = Util.getUIPortalApplication();
          UIWorkingWorkspace uiWorkingWS = uiPortalApp.getChild(UIWorkingWorkspace.class);
          uiWorkingWS.updatePortletsByName("UserToolbarGroupPortlet");
       }
