@@ -111,6 +111,7 @@
 	background: url('DefaultSkin/background/NavDownArrow.gif') no-repeat right; /* orientation=lt */
 	background: url('DefaultSkin/background/NavDownArrow.gif') no-repeat left; /* orientation=rt */
 	cursor: pointer;
+	border-right: 1px solid #0a4da6;
 }
 
 /*###############-Hightlight Navigation Tab	-################*/
@@ -155,6 +156,7 @@
 	background: url('DefaultSkin/background/NavDownArrow.gif') no-repeat right; /* orientation=lt */
 	background: url('DefaultSkin/background/NavDownArrow.gif') no-repeat left; /* orientation=rt */
 	cursor: default;
+	border-right: 1px solid #6d94c8;
 }
 
 /*###############-Selected Navigation Tab-################*/
@@ -201,6 +203,7 @@
 	background: url('DefaultSkin/background/NavDownArrow.gif') no-repeat right center;	/* orientation=lt */
 	background: url('DefaultSkin/background/NavDownArrow.gif') no-repeat left center; /* orientation=rt */
 	cursor: pointer;
+	border-right: 1px solid white;
 }
 
 .UINavigationPortlet .MenuItemContainer {
@@ -354,6 +357,10 @@
 	background: url('DefaultSkin/background/NavGroup.gif') repeat-x center bottom;
 }
 
+.UINavigationPortlet .GroupNavigation .UITab .NormalNavigationTab .MiddleTab .DropDownArrowIcon {
+	border-right: 1px solid #ffa200;
+}
+
 .UINavigationPortlet .GroupNavigation .UITab .HighlightNavigationTab .LeftTab {
 	background: url('DefaultSkin/background/NavigationTab.gif') no-repeat left -152px;
 }
@@ -366,6 +373,10 @@
 	background: #ffcf01;
 }
 
+.UINavigationPortlet .GroupNavigation .UITab .HighlightNavigationTab .MiddleTab .DropDownArrowIcon {
+	border-right: 1px solid #ffcf01;
+}
+
 .UINavigationPortlet .GroupNavigation .UITab .SelectedNavigationTab .LeftTab {
 	background: #ffa200 url('DefaultSkin/background/NavigationTab.gif') no-repeat left -28px;
 }
@@ -376,4 +387,8 @@
 
 .UINavigationPortlet .GroupNavigation .UITab .SelectedNavigationTab .MiddleTab {
 	background: #ffa200 url('DefaultSkin/background/NavigationTab.gif') repeat-x;
+}
+
+.UINavigationPortlet .GroupNavigation .UITab .SelectedNavigationTab .MiddleTab .DropDownArrowIcon {
+	border-right: 1px solid white;
 }
