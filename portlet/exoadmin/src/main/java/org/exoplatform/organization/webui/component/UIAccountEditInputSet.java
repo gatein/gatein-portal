@@ -186,6 +186,12 @@ public class UIAccountEditInputSet extends UIFormInputSet
       ((UIFormStringInput)password1.setValue(null)).setRendered(isChange);
       ((UIFormStringInput)password2.setValue(null)).setRendered(isChange);
    }
-      
 
+   @Override
+   public void reset()
+   {
+      super.reset();
+      enableChangePassword(false);
+   }      
+   
 }
