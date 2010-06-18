@@ -22,12 +22,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
-	<td>link=Sign in</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>link=Sign in</td>
 	<td></td>
 </tr>
@@ -47,7 +42,7 @@
 	<td>gtn</td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>clickAndWait</td>
 	<td>xpath=//div[@id='UIPortalLoginFormAction']/div/div/div/a</td>
 	<td></td>
 </tr>
@@ -57,7 +52,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>link=Change Skin</td>
 	<td></td>
 </tr>
@@ -68,27 +63,22 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>xpath=//div[@id='UITabContent']//div[@class='ItemListContainer']//div[@class='ItemList']//div[@class='SelectedItem Item']</td>
+	<td>//div[@id='UITabContent']/div/div/div[1]/div[2]/div[1]/div/div/div</td>
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
-	<td>xpath=//div[@id='UITabContent']//div[@class='ItemListContainer']//div[@class='ItemList']//div[@class='SelectedItem Item']</td>
+	<td>click</td>
+	<td>//div[@id='UITabContent']/div/div/div[1]/div[2]/div[1]/div/div/div</td>
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
-	<td>//div[@id='UIMaskWorkspace']//div[@class='UIChangeSkinForm']//div[@class='UIAction']//div</td>
+	<td>clickAndWait</td>
+	<td>link=Apply</td>
 	<td></td>
 </tr>
 <tr>
 	<td>echo</td>
 	<td>--Verify</td>
-	<td></td>
-</tr>
-<tr>
-	<td>echo</td>
-	<td>---------</td>
 	<td></td>
 </tr>
 <tr>
@@ -113,22 +103,22 @@
 </tr>
 <tr>
 	<td>verifyText</td>
-	<td>//div[@id='UITabContent']//div[@class='ItemListContainer']//div[@class='ItemList']/div[@class='SelectedItem Item']</td>
+	<td>//div[@id='UITabContent']/div/div/div[1]/div[2]/div[1]/div/div/div</td>
 	<td>Default Style Skin</td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UITabContent']//div[@class='ItemListContainer']//div[@class='ItemList']/div[2]</td>
+	<td>//div[@id='UITabContent']/div/div/div[1]/div[2]/div[2]/div/div/div</td>
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
-	<td>//div[@id='UITabContent']//div[@class='ItemListContainer']//div[@class='ItemList']/div[2]</td>
+	<td>click</td>
+	<td>//div[@id='UITabContent']/div/div/div[1]/div[2]/div[2]/div/div/div</td>
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
-	<td>//div[@id='UIMaskWorkspace']//div[@class='UIChangeSkinForm']//div[@class='UIAction']//div</td>
+	<td>clickAndWait</td>
+	<td>link=Apply</td>
 	<td></td>
 </tr>
 <tr>
@@ -153,36 +143,31 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UITabContent']//div[@class='ItemListContainer']//div[@class='ItemList']//div[@class='Item']</td>
+	<td>//div[@id='UITabContent']/div/div/div[1]/div[2]/div[1]/div/div/div</td>
 	<td>Default Style Skin</td>
 </tr>
 <tr>
 	<td>verifyText</td>
-	<td>//div[@id='UITabContent']//div[@class='ItemListContainer']//div[@class='ItemList']//div[@class='Item']</td>
+	<td>//div[@id='UITabContent']/div/div/div[1]/div[2]/div[1]/div/div/div</td>
 	<td>Default Style Skin</td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UITabContent']//div[@class='ItemListContainer']//div[@class='ItemList']/div/div</td>
+	<td>//div[@id='UITabContent']/div/div/div[1]/div[2]/div[2]/div/div/div</td>
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
-	<td>//div[@id='UITabContent']//div[@class='ItemListContainer']//div[@class='ItemList']/div/div</td>
+	<td>click</td>
+	<td>//div[@id='UITabContent']/div/div/div[1]/div[2]/div[2]/div/div/div</td>
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
-	<td>//div[@id='UIMaskWorkspace']//div[@class='UIChangeSkinForm']//div[@class='UIAction']//div</td>
+	<td>clickAndWait</td>
+	<td>link=Apply</td>
 	<td></td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
-	<td>link=Sign out</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
+	<td>clickAndWait</td>
 	<td>link=Sign out</td>
 	<td></td>
 </tr>

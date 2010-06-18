@@ -4,12 +4,12 @@
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="selenium.base" href="" />
-<title>SNF_PRL_05</title>
+<title>Test_SNF_PRL_05_RememberMyLogin</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">SNF_PRL_05</td></tr>
+<tr><td rowspan="1" colspan="3">Test_SNF_PRL_05_RememberMyLogin</td></tr>
 </thead><tbody>
 <tr>
 	<td>open</td>
@@ -22,7 +22,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>link=Sign in</td>
 	<td></td>
 </tr>
@@ -47,14 +47,14 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>rememberme</td>
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>clickAndWait</td>
 	<td>//div[@id='UIPortalLoginFormAction']//div[@class='ButtonMiddle']/a</td>
-	<td>1,1</td>
+	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
@@ -68,7 +68,17 @@
 </tr>
 <tr>
 	<td>open</td>
-	<td>/</td>
+	<td>http://www.google.com</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>3000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTitle</td>
+	<td>Google</td>
 	<td></td>
 </tr>
 <tr>
@@ -97,12 +107,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
-	<td>link=Sign out</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
+	<td>clickAndWait</td>
 	<td>link=Sign out</td>
 	<td></td>
 </tr>

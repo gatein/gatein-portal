@@ -17,14 +17,24 @@
 	<td></td>
 </tr>
 <tr>
+	<td>windowMaximize</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
 	<td>echo</td>
 	<td>-CreateNewAccountInPrivateMode-</td>
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>link=Sign in</td>
 	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>username</td>
+	<td>root</td>
 </tr>
 <tr>
 	<td>type</td>
@@ -37,12 +47,12 @@
 	<td>gtn</td>
 </tr>
 <tr>
-	<td>clickAtAndWait</td>
+	<td>clickAndWait</td>
 	<td>xpath=//div[@id='UIPortalLoginFormAction']/div/div/div</td>
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>clickAndWait</td>
 	<td>link=New Staff</td>
 	<td></td>
 </tr>
@@ -87,7 +97,7 @@
 	<td>test_user_35@yahoo.com</td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>xpath=//div[@class='UIRowContainer']//div[@class='UIFormTabPane']//div[@class='TabsContainer']/div[2]/div/div/div/div</td>
 	<td></td>
 </tr>
@@ -102,12 +112,12 @@
 	<td>test_name_given_35</td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>xpath=//div[@class='UIRowContainer']//div[@class='UIFormTabPane']//div[@class='TabsContainer']/div/div/div/div/div</td>
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>link=Save</td>
 	<td></td>
 </tr>
@@ -127,7 +137,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>link=Users and groups management</td>
 	<td></td>
 </tr>
@@ -152,12 +162,12 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>xpath=//div[@class='UIListUsers']//tbody/tr[5]//img[@class='DeleteUserIcon']</td>
 	<td></td>
 </tr>
 <tr>
-	<td>assertConfirmation</td>
+	<td>waitForConfirmation</td>
 	<td>Are you sure you want to delete test_user_35 user?</td>
 	<td></td>
 </tr>
@@ -167,12 +177,12 @@
 	<td></td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
-	<td>link=Sign out</td>
+	<td>verifyTextNotPresent</td>
+	<td>test_user_35</td>
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>clickAndWait</td>
 	<td>link=Sign out</td>
 	<td></td>
 </tr>

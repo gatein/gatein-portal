@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<link rel="selenium.base" href="http://localhost:8080/portal" />
+<link rel="selenium.base" href="http://localhost:8080" />
 <title>Test_SNF_PRL_22_CreateAndEditPageAndEditSiteLayoutForPortal</title>
 </head>
 <body>
@@ -52,9 +52,14 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>waitForElementPresent</td>
 	<td>link=Edit Layout</td>
-	<td>1,1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Edit Layout</td>
+	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
@@ -132,24 +137,24 @@
 	<td></td>
 </tr>
 <tr>
-	<td>waitForText</td>
-	<td>xpath=//div[@id='UIPermissionSelector']/div/div[2]/div[1]/div[3]/div[2]</td>
-	<td>exact:*</td>
+	<td>waitForElementPresent</td>
+	<td>link=Save</td>
+	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>link=Save</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>xpath=//div[@id='UIPortalComposer']//a[@class='EdittedSaveButton']</td>
+	<td>//div[@id='UIPortalComposer']/div[1]/div/div/div/a[2]</td>
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
-	<td>xpath=//div[@id='UIPortalComposer']//a[@class='EdittedSaveButton']</td>
-	<td>1,1</td>
+	<td>click</td>
+	<td>//div[@id='UIPortalComposer']/div[1]/div/div/div/a[2]</td>
+	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
@@ -167,19 +172,19 @@
 	<td></td>
 </tr>
 <tr>
+	<td>clickAndWait</td>
+	<td>link=Site</td>
+	<td></td>
+</tr>
+<tr>
 	<td>waitForElementPresent</td>
-	<td>link=Site</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
-	<td>link=Site</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
 	<td>link=Edit Layout</td>
-	<td>1,1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Edit Layout</td>
+	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
@@ -194,11 +199,6 @@
 <tr>
 	<td>waitForElementPresent</td>
 	<td>locale</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>French</td>
 	<td></td>
 </tr>
 <tr>
@@ -207,19 +207,39 @@
 	<td>label=English</td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>verifyTextPresent</td>
+	<td>French</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>xpath=//div[@id='UIMaskWorkspace']//div[@class='TabsContainer']//div[3]//div[@class='MiddleTab']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
 	<td>xpath=//div[@id='UIMaskWorkspace']//div[@class='TabsContainer']//div[3]//div[@class='MiddleTab']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>publicMode</td>
+	<td>link=Save</td>
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
-	<td>xpath=//div[@id='UIPortalComposer']//a[@class='EdittedSaveButton']</td>
-	<td>1,1</td>
+	<td>click</td>
+	<td>link=Save</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='UIPortalComposer']/div[1]/div/div/div/a[1]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='UIPortalComposer']/div[1]/div/div/div/a[1]</td>
+	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
@@ -227,9 +247,9 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>link=classic</td>
-	<td>1,1</td>
+	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
@@ -237,9 +257,9 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>clickAndWait</td>
 	<td>link=Sign out</td>
-	<td>1,1</td>
+	<td></td>
 </tr>
 
 </tbody></table>

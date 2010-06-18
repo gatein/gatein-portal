@@ -27,6 +27,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>waitForElementPresent</td>
+	<td>username</td>
+	<td></td>
+</tr>
+<tr>
 	<td>type</td>
 	<td>username</td>
 	<td>root</td>
@@ -47,12 +52,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
-	<td>link=Users and groups management</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
+	<td>clickAndWait</td>
 	<td>link=Users and groups management</td>
 	<td></td>
 </tr>
@@ -62,12 +62,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
-	<td>xpath=//div[@id='UIOrganizationPortlet']//div[@class='ManagementIconContainer']/a[@class='MembershipButton']</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>xpath=//div[@id='UIOrganizationPortlet']//div[@class='ManagementIconContainer']/a[@class='MembershipButton']</td>
 	<td></td>
 </tr>
@@ -92,7 +87,7 @@
 	<td>test_description_08</td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>link=Save</td>
 	<td></td>
 </tr>
@@ -112,9 +107,9 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>xpath=//table[@class='UIGrid']//tbody/tr[2]/td[5]//img[@class='EditMembershipIcon']</td>
-	<td>1,1</td>
+	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
@@ -129,21 +124,11 @@
 <tr>
 	<td>waitForElementPresent</td>
 	<td>link=Save</td>
-	<td>1,1</td>
-</tr>
-<tr>
-	<td>clickAt</td>
-	<td>link=Save</td>
-	<td>1,1</td>
-</tr>
-<tr>
-	<td>waitForTextPresent</td>
-	<td>test_description_edit_08</td>
 	<td></td>
 </tr>
 <tr>
-	<td>verifyTextPresent</td>
-	<td>test_description_edit_08</td>
+	<td>click</td>
+	<td>link=Save</td>
 	<td></td>
 </tr>
 <tr>
@@ -152,27 +137,32 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>xpath=//table[@class='UIGrid']//tbody/tr[2]/td[5]//img[@class='DeleteMembershipIcon']</td>
 	<td></td>
 </tr>
 <tr>
-	<td>assertConfirmation</td>
+	<td>waitForConfirmation</td>
 	<td>Are you sure you want to delete this membership?</td>
 	<td></td>
 </tr>
 <tr>
+	<td>waitForTextNotPresent</td>
+	<td>test_name_08</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextNotPresent</td>
+	<td>test_name_08</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextNotPresent</td>
+	<td>test_description_08</td>
+	<td></td>
+</tr>
+<tr>
 	<td>clickAndWait</td>
-	<td>link=classic</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>link=Sign out</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
 	<td>link=Sign out</td>
 	<td></td>
 </tr>

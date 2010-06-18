@@ -4,12 +4,12 @@
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="selenium.base" href="" />
-<title>SNF_PRL_03</title>
+<title>Test_SNF_PRL_03_ChangeDisplayingLanguage</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">SNF_PRL_03</td></tr>
+<tr><td rowspan="1" colspan="3">Test_SNF_PRL_03_ChangeDisplayingLanguage</td></tr>
 </thead><tbody>
 <tr>
 	<td>open</td>
@@ -18,13 +18,18 @@
 </tr>
 <tr>
 	<td>echo</td>
-	<td>-Change Language-</td>
+	<td>-Change Language- English into Vietnamese</td>
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
-	<td>xpath=//a[@class='Language']</td>
-	<td>1,1</td>
+	<td>waitForElementPresent</td>
+	<td>//a[3]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//a[3]</td>
+	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
@@ -32,39 +37,49 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>link=Vietnamese</td>
-	<td>1,1</td>
+	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
-	<td>link=Apply</td>
-	<td>1,1</td>
-</tr>
-<tr>
-	<td>waitForElementNotPresent</td>
+	<td>clickAndWait</td>
 	<td>link=Apply</td>
 	<td></td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
-	<td>xpath=//a[@class='Language']</td>
-	<td>1,1</td>
-</tr>
-<tr>
-	<td>clickAt</td>
-	<td>xpath=//a[@class='Language']</td>
-	<td>1,1</td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>xpath=//div[@id='UITabContent']//div[2]/a</td>
+	<td>verifyTextPresent</td>
+	<td>Đăng ký</td>
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
-	<td>xpath=//div[@id='UITabContent']//div[2]/a</td>
-	<td>1,1</td>
+	<td>verifyTextPresent</td>
+	<td>Đăng nhập</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Thay đổi ngôn ngữ</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Để biết thêm thông tin xin hãy liên lạc với chúng tôi.</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Thay đổi ngôn ngữ</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Tiếng Anh</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Tiếng Anh</td>
+	<td></td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
@@ -72,8 +87,23 @@
 	<td></td>
 </tr>
 <tr>
+	<td>verifyTextPresent</td>
+	<td>Sign in</td>
+	<td></td>
+</tr>
+<tr>
 	<td>verifyElementPresent</td>
-	<td>link=Sign in</td>
+	<td>link=Register</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>link=Change Language</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>For more information, please contact us.</td>
 	<td></td>
 </tr>
 

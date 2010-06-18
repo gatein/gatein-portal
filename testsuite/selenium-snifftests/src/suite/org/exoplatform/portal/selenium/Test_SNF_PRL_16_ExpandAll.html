@@ -4,12 +4,12 @@
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="selenium.base" href="" />
-<title>SNF_PRL_16</title>
+<title>Test_SNF_PRL_16_ExpandAll</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">SNF_PRL_16</td></tr>
+<tr><td rowspan="1" colspan="3">Test_SNF_PRL_16_ExpandAll</td></tr>
 </thead><tbody>
 <tr>
 	<td>open</td>
@@ -24,6 +24,11 @@
 <tr>
 	<td>clickAt</td>
 	<td>link=Sign in</td>
+	<td>1,1</td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>username</td>
 	<td></td>
 </tr>
 <tr>
@@ -52,6 +57,16 @@
 	<td></td>
 </tr>
 <tr>
+	<td>waitForElementNotPresent</td>
+	<td>//div[3]/div[2]/div[1]/div/div/a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyElementNotPresent</td>
+	<td>//div[3]/div[2]/div[1]/div/div/a</td>
+	<td></td>
+</tr>
+<tr>
 	<td>clickAt</td>
 	<td>xpath=//div[@id='UISiteMap']//div[@class='ClearFix']/div[2]</td>
 	<td>1,1</td>
@@ -72,12 +87,27 @@
 	<td></td>
 </tr>
 <tr>
-	<td>verifyElementNotPresent</td>
-	<td>xpath=//div[@class='ExpandIcon FloatLeft']</td>
+	<td>verifyTextPresent</td>
+	<td>Users and groups management</td>
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>verifyTextPresent</td>
+	<td>Google</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Facebook</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Page Management</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
 	<td>link=Sign out</td>
 	<td></td>
 </tr>

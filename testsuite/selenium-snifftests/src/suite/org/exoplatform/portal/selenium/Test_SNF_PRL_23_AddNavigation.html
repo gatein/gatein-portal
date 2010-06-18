@@ -42,7 +42,7 @@
 	<td>gtn</td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>clickAndWait</td>
 	<td>//div[@id='UIPortalLoginFormAction']/div/div/div/a</td>
 	<td></td>
 </tr>
@@ -52,12 +52,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
-	<td>link=Group</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
+	<td>clickAndWait</td>
 	<td>link=Group</td>
 	<td></td>
 </tr>
@@ -87,7 +82,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>link=Cancel</td>
 	<td></td>
 </tr>
@@ -97,7 +92,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>//div[@id='UIGroupNavigationGrid']/table[2]/tbody/tr/td[3]/a[1]</td>
 	<td></td>
 </tr>
@@ -117,7 +112,12 @@
 	<td></td>
 </tr>
 <tr>
-	<td>waitForText</td>
+	<td>waitForElementPresent</td>
+	<td>//div[contains(@id,'UIPopupWindow')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
 	<td>name</td>
 	<td></td>
 </tr>
@@ -247,17 +247,12 @@
 	<td></td>
 </tr>
 <tr>
-	<td>waitForElementNotPresent</td>
-	<td>link=test_grp_label_23</td>
-	<td></td>
-</tr>
-<tr>
 	<td>waitForElementPresent</td>
 	<td>link=Sign out</td>
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>clickAndWait</td>
 	<td>link=Sign out</td>
 	<td></td>
 </tr>

@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<link rel="selenium.base" href="" />
+<link rel="selenium.base" href="http://localhost:8080" />
 <title>Test_SNF_PRL_18_CreateNewPortal</title>
 </head>
 <body>
@@ -48,7 +48,7 @@
 </tr>
 <tr>
 	<td>open</td>
-	<td>/portal/private/classic/portalnavigation</td>
+	<td>/portal/public/classic/portalnavigation</td>
 	<td></td>
 </tr>
 <tr>
@@ -82,19 +82,56 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>waitForElementPresent</td>
 	<td>//div[contains(@onclick, 'eXo.webui.UIHorizontalTabs.changeTabForUIFormTabpane') and contains(@onclick, 'PermissionSetting')]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAt</td>
-	<td>publicMode</td>
+	<td>//div[contains(@onclick, 'eXo.webui.UIHorizontalTabs.changeTabForUIFormTabpane') and contains(@onclick, 'PermissionSetting')]</td>
+	<td></td>
+</tr>
+<!--//------------->
+<tr>
+	<td>click</td>
+	<td>link=Add Permission</td>
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>waitForElementPresent</td>
+	<td>link=Customers</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Customers</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=exact:*</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=exact:*</td>
+	<td></td>
+</tr>
+<!-------------//-->
+<tr>
+	<td>waitForElementPresent</td>
 	<td>link=Edit Permission Setting</td>
-	<td>1,1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Edit Permission Setting</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Select Permission</td>
+	<td></td>
 </tr>
 <tr>
 	<td>clickAt</td>
@@ -102,53 +139,55 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
-	<td>link=Platform</td>
-	<td>1,1</td>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='PermissionSelector']/div/div[2]/div/div[2]/div/div/div[5]/div/a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='PermissionSelector']/div/div[2]/div/div[2]/div/div/div[5]/div/a</td>
+	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>xpath=//div[@id='PermissionSelector']//a[@title='Administrators']</td>
+	<td>link=Administrators</td>
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
-	<td>xpath=//div[@id='PermissionSelector']//a[@title='Administrators']</td>
-	<td>1,1</td>
+	<td>click</td>
+	<td>link=Administrators</td>
+	<td></td>
+</tr>
+<!---------------------->
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='PermissionSelector']/div/div[3]/div/div[2]/div[2]/a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='PermissionSelector']/div/div[3]/div/div[2]/div[2]/a</td>
+	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>xpath=//div[@id='PermissionSelector']//a[@title='manager']</td>
+	<td>link=Save</td>
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
-	<td>xpath=//div[@id='PermissionSelector']//a[@title='manager']</td>
+	<td>click</td>
+	<td>link=Save</td>
 	<td></td>
 </tr>
-<tr>
-	<td>waitForTextNotPresent</td>
-	<td>Permission Selector</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
-	<td>xpath=//form[@id='UIPortalForm']//div[@class='UIAction']//div[@class='ActionButton LightBlueStyle']//div[@class='ButtonMiddle']/a</td>
-	<td>1,1</td>
-</tr>
-<tr>
-	<td>waitForTextPresent</td>
-	<td>test_portal_18</td>
-	<td></td>
-</tr>
-<tr>
-	<td>pause</td>
-	<td>10000</td>
-	<td></td>
-</tr>
+<!-------->
 <tr>
 	<td>echo</td>
 	<td>--Verify portal creation</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=test_portal_18</td>
 	<td></td>
 </tr>
 <tr>
@@ -171,43 +210,35 @@
 	<td>link=Site</td>
 	<td></td>
 </tr>
-<tr>
-	<td>pause</td>
-	<td>10000</td>
-	<td></td>
-</tr>
+<!-------->
 <tr>
 	<td>waitForElementPresent</td>
 	<td>xpath=//div[@id='UISiteManagement']/table/tbody/tr/td[2]/div</td>
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
-	<td>xpath=//div[@id='UISiteManagement']/table[2]//a[@class='DeleteIcon']</td>
+	<td>clickAndWait</td>
+	<td>link=Delete</td>
 	<td></td>
 </tr>
 <tr>
-	<td>assertConfirmation</td>
+	<td>waitForConfirmation</td>
 	<td>Are you sure you want to delete this portal?</td>
 	<td></td>
 </tr>
-<tr>
-	<td>pause</td>
-	<td>5000</td>
-	<td></td>
-</tr>
+<!-------->
 <tr>
 	<td>waitForTextNotPresent</td>
 	<td>test_portal_18</td>
 	<td></td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
-	<td>link=Sign out</td>
+	<td>verifyTextNotPresent</td>
+	<td>test_portal_18</td>
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>clickAndWait</td>
 	<td>link=Sign out</td>
 	<td></td>
 </tr>

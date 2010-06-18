@@ -22,14 +22,14 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>link=Sign in</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
 	<td>username</td>
-	<td>root</td>
+	<td></td>
 </tr>
 <tr>
 	<td>type</td>
@@ -42,7 +42,7 @@
 	<td>gtn</td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>xpath=//div[@id='UIPortalLoginFormAction']/div/div/div</td>
 	<td></td>
 </tr>
@@ -57,9 +57,9 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>link=Application Registry</td>
-	<td>1,1</td>
+	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
@@ -67,7 +67,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>link=Gadget</td>
 	<td></td>
 </tr>
@@ -82,9 +82,9 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>xpath=//div[@class='IconControl AddNewIcon']</td>
-	<td>1,1</td>
+	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
@@ -102,9 +102,9 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>link=Add</td>
-	<td>1,1</td>
+	<td></td>
 </tr>
 <tr>
 	<td>waitForTextPresent</td>
@@ -127,13 +127,18 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>//div[@class='SelectedItem ItemContent']/a[2]</td>
 	<td></td>
 </tr>
 <tr>
-	<td>assertConfirmation</td>
+	<td>waitForConfirmation</td>
 	<td>Are you sure to delete this gadget?</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementNotPresent</td>
+	<td>//a[@title='Date &amp; Time']</td>
 	<td></td>
 </tr>
 <tr>
@@ -152,8 +157,13 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>//div[@id='UIApplicationRegistryPortlet']/div[2]/div[2]/div/div/div[2]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>name</td>
 	<td></td>
 </tr>
 <tr>
@@ -167,7 +177,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>link=Save</td>
 	<td></td>
 </tr>
@@ -182,22 +192,17 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>//div[@class='SelectedItem ItemContent']//a[2]</td>
 	<td></td>
 </tr>
 <tr>
-	<td>assertConfirmation</td>
+	<td>waitForConfirmation</td>
 	<td>Are you sure to delete this gadget?</td>
 	<td></td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
-	<td>link=Sign out</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
+	<td>clickAndWait</td>
 	<td>link=Sign out</td>
 	<td></td>
 </tr>
