@@ -27,7 +27,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>link=Sign in</td>
 	<td></td>
 </tr>
@@ -48,16 +48,11 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>xpath=//div[@id='UIPortalLoginFormAction']/div/div/div/a</td>
+	<td>//div[@id='UIPortalLoginFormAction']/div/div/div/a</td>
 	<td></td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
-	<td>link=Dashboard</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
+	<td>clickAndWait</td>
 	<td>link=Dashboard</td>
 	<td></td>
 </tr>
@@ -72,7 +67,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>link=Add New Page</td>
 	<td></td>
 </tr>
@@ -97,9 +92,9 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
-	<td>xpath=//div[@id='UIPageCreationWizard']//div[@class='UIAction']//div[2]</td>
-	<td>1,1</td>
+	<td>click</td>
+	<td>//td/div[2]/div/div/div</td>
+	<td></td>
 </tr>
 <tr>
 	<td>echo</td>
@@ -113,12 +108,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>xpath=//div[@id='UIPageCreationWizard']//div[@class='UIAction']//div[2]</td>
+	<td>//td/div[2]/div/div/div</td>
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
-	<td>xpath=//div[@id='UIPageCreationWizard']//div[@class='UIAction']//div[2]</td>
+	<td>click</td>
+	<td>//td/div[2]/div/div/div</td>
 	<td></td>
 </tr>
 <tr>
@@ -128,12 +123,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>xpath=//div[@onclick='eXo.portal.UIPortal.toggleComposer(this)']</td>
+	<td>//div[@onclick='eXo.portal.UIPortal.toggleComposer(this)']</td>
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
-	<td>xpath=//div[@onclick='eXo.portal.UIPortal.toggleComposer(this)']</td>
+	<td>click</td>
+	<td>//div[@onclick='eXo.portal.UIPortal.toggleComposer(this)']</td>
 	<td></td>
 </tr>
 <tr>
@@ -143,12 +138,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>xpath=//div[@id='UIPageEditor']/div[1]/div/div/div/a[2]</td>
+	<td>//a[@onclick='eXo.core.DOMUtil.disableOnClick(this);']</td>
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
-	<td>xpath=//div[@id='UIPageEditor']/div[1]/div/div/div/a[2]</td>
+	<td>clickAndWait</td>
+	<td>//a[@onclick='eXo.core.DOMUtil.disableOnClick(this);']</td>
 	<td></td>
 </tr>
 <tr>
@@ -172,8 +167,8 @@
 	<td></td>
 </tr>
 <tr>
-	<td>componentExoDoubleClick</td>
-	<td>xpath=//div[@class='TabsContainer ClearFix']//div[@class='SelectedTab']//span</td>
+	<td>doubleClick</td>
+	<td>//div[@id='UITabPaneDashboard']/div/div/div/div/div/div[2]/div/div/div/div/span</td>
 	<td></td>
 </tr>
 <tr>
@@ -192,7 +187,7 @@
 	<td>\13</td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>link=Site</td>
 	<td></td>
 </tr>
@@ -207,7 +202,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>link=test_dashboardpage_edit_29</td>
 	<td></td>
 </tr>
@@ -227,9 +222,9 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>link=Edit Layout</td>
-	<td>1,1</td>
+	<td></td>
 </tr>
 <tr>
 	<td>echo</td>
@@ -242,9 +237,9 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>link=Site's Config</td>
-	<td>1,1</td>
+	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
@@ -262,12 +257,17 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>xpath=//div[@onclick=&quot;eXo.webui.UIHorizontalTabs.changeTabForUIFormTabpane(this, 'UIPortalForm', 'Properties');javascript:eXo.webui.UIForm.submitEvent('UIPortalForm','SelectTab','&amp;objectId=Properties')&quot;]</td>
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>waitForElementPresent</td>
+	<td>link=Save</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
 	<td>link=Save</td>
 	<td></td>
 </tr>
@@ -277,9 +277,9 @@
 	<td>1,1</td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>xpath=//div[@id='UIPortalComposer']//a[@class='EdittedSaveButton']</td>
-	<td>1,1</td>
+	<td></td>
 </tr>
 <tr>
 	<td>echo</td>
@@ -292,12 +292,12 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>xpath=//div[@class='SelectedTab']//img[@class='CloseIcon']</td>
 	<td></td>
 </tr>
 <tr>
-	<td>assertConfirmation</td>
+	<td>waitForConfirmation</td>
 	<td>Really want to remove this dashboard?</td>
 	<td></td>
 </tr>
@@ -312,12 +312,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
-	<td>link=Sign out</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
+	<td>clickAndWait</td>
 	<td>link=Sign out</td>
 	<td></td>
 </tr>
