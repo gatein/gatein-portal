@@ -17,19 +17,24 @@
 	<td></td>
 </tr>
 <tr>
+	<td>windowMaximize</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
 	<td>echo</td>
 	<td>-ActionsDashboardpage-</td>
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>link=Sign in</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
 	<td>username</td>
-	<td>root</td>
+	<td></td>
 </tr>
 <tr>
 	<td>type</td>
@@ -42,24 +47,14 @@
 	<td>gtn</td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
+	<td>clickAndWait</td>
 	<td>xpath=//div[@id='UIPortalLoginFormAction']/div/div/div/a</td>
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
-	<td>xpath=//div[@id='UIPortalLoginFormAction']/div/div/div/a</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
+	<td>clickAndWait</td>
 	<td>link=Dashboard</td>
 	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
-	<td>link=Dashboard</td>
-	<td>1,1</td>
 </tr>
 <tr>
 	<td>echo</td>
@@ -72,7 +67,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>link=Add Gadgets</td>
 	<td></td>
 </tr>
@@ -87,18 +82,28 @@
 	<td></td>
 </tr>
 <tr>
+	<td>waitForElementPresent</td>
+	<td>//input[@id='url']</td>
+	<td></td>
+</tr>
+<tr>
 	<td>type</td>
-	<td>xpath=//input[@id='url']</td>
+	<td>//input[@id='url']</td>
 	<td>http://www.google.com/ig/modules/datetime.xml</td>
 </tr>
 <tr>
-	<td>clickAt</td>
-	<td>xpath=//img[@class='AddNewNodeIcon']</td>
-	<td>1,1</td>
+	<td>click</td>
+	<td>//img[@title='Add Gadget']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>new iteams display: &quot; Date and Time&quot;</td>
+	<td></td>
 </tr>
 <tr>
 	<td>verifyElementPresent</td>
-	<td>xpath=//div[@class='GadgetTitle']</td>
+	<td>//div[3]/div[1]/div/div[1]/div/div/div/div[6]</td>
 	<td></td>
 </tr>
 <tr>
@@ -107,13 +112,13 @@
 	<td></td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
-	<td>//div[@id='UIDashboard']/div/div/div/div/div/div/div/div[2]</td>
+	<td>verifyElementPresent</td>
+	<td>//div[3]/div/div/div[1]/div/div/div/div/div/div/div/div[1]/div/div[1]/div/div[1]/div/div/div/div[2]</td>
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
-	<td>//div[@id='UIDashboard']/div/div/div/div/div/div/div/div[2]</td>
+	<td>click</td>
+	<td>//div[3]/div/div/div[1]/div/div/div/div/div/div/div/div[1]/div/div[1]/div/div[1]/div/div/div/div[2]</td>
 	<td></td>
 </tr>
 <tr>
@@ -142,6 +147,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>waitForElementPresent</td>
+	<td>link=Add Gadgets</td>
+	<td></td>
+</tr>
+<tr>
 	<td>click</td>
 	<td>link=Add Gadgets</td>
 	<td></td>
@@ -157,8 +167,13 @@
 	<td>xpath=//div[@class='UIDashboardContainer']</td>
 </tr>
 <tr>
-	<td>clickAt</td>
-	<td>//div[@id='UIDashboard']/div/div/div/div/div/div/div/div[2]</td>
+	<td>waitForElementPresent</td>
+	<td>//div[3]/div/div/div[1]/div/div/div/div/div/div/div/div[1]/div/div[1]/div/div[1]/div/div/div/div[2]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[3]/div/div/div[1]/div/div/div/div/div/div/div/div[1]/div/div[1]/div/div[1]/div/div/div/div[2]</td>
 	<td></td>
 </tr>
 <tr>
@@ -177,7 +192,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>//div[@onclick='eXo.gadget.UIGadget.deleteGadget(this)']</td>
 	<td></td>
 </tr>
@@ -187,17 +202,17 @@
 	<td></td>
 </tr>
 <tr>
+	<td>waitForTextPresent</td>
+	<td>Drag your gadgets here.</td>
+	<td></td>
+</tr>
+<tr>
 	<td>verifyTextPresent</td>
 	<td>Drag your gadgets here.</td>
 	<td></td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
-	<td>link=Sign out</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
+	<td>clickAndWait</td>
 	<td>link=Sign out</td>
 	<td></td>
 </tr>
