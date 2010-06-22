@@ -22,7 +22,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>link=Sign in</td>
 	<td></td>
 </tr>
@@ -47,7 +47,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAtAndWait</td>
+	<td>clickAndWait</td>
 	<td>link=Dashboard</td>
 	<td></td>
 </tr>
@@ -57,12 +57,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
-	<td>link=Add New Page</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>link=Add New Page</td>
 	<td></td>
 </tr>
@@ -92,9 +87,9 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
-	<td>//div[@id='UIPageCreationWizard']//div[@class='UIAction']//div[2]</td>
-	<td>1,1</td>
+	<td>click</td>
+	<td>//div[@id='UIPageCreationWizard']/div/div[3]/div/div/div/div[2]/div/table/tbody/tr/td/div[2]/div/div/div</td>
+	<td></td>
 </tr>
 <tr>
 	<td>echo</td>
@@ -103,12 +98,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UIPageCreationWizard']//div[@class='UIAction']//div[2]</td>
+	<td>//td/div[2]/div/div/div</td>
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
-	<td>//div[@id='UIPageCreationWizard']//div[@class='UIAction']//div[2]</td>
+	<td>click</td>
+	<td>//td/div[2]/div/div/div</td>
 	<td></td>
 </tr>
 <tr>
@@ -118,17 +113,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UIPageEditor']/div[1]/div/div/div/a[2]</td>
+	<td>//a[@onclick='eXo.core.DOMUtil.disableOnClick(this);']</td>
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
-	<td>//div[@id='UIPageEditor']/div[1]/div/div/div/a[2]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>//div[@id='UITabPaneDashboard']/div/div/div/div/div/div[2]/div/div/div/div/span</td>
+	<td>click</td>
+	<td>//a[@onclick='eXo.core.DOMUtil.disableOnClick(this);']</td>
 	<td></td>
 </tr>
 <tr>
@@ -137,8 +127,8 @@
 	<td></td>
 </tr>
 <tr>
-	<td>verifyElementPresent</td>
-	<td>//div[@id='UITabPaneDashboard']/div/div/div/div/div/div[2]/div/div/div/div/span</td>
+	<td>waitForTextPresent</td>
+	<td>test_dashboardpage_name_30</td>
 	<td></td>
 </tr>
 <tr>
@@ -152,9 +142,14 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>waitForElementPresent</td>
 	<td>link=Edit Page</td>
-	<td>1,1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Edit Page</td>
+	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
@@ -162,9 +157,9 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>link=View Page properties</td>
-	<td>1,1</td>
+	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
@@ -177,12 +172,17 @@
 	<td>test_dashboardpage_edit_30</td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>waitForElementPresent</td>
 	<td>css=form#UIPageForm div.ActionButton</td>
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
+	<td>css=form#UIPageForm div.ActionButton</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
 	<td>css=a.EdittedSaveButton</td>
 	<td></td>
 </tr>
@@ -197,14 +197,19 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>link=Edit Page</td>
-	<td>1,1</td>
+	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>waitForElementPresent</td>
 	<td>link=View Page properties</td>
-	<td>1,1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=View Page properties</td>
+	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
@@ -217,12 +222,12 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>link=Cancel</td>
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>css=a.CloseButton</td>
 	<td></td>
 </tr>
@@ -237,8 +242,23 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>waitForElementPresent</td>
 	<td>link=test_dashboardpage_name_30</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=test_dashboardpage_name_30</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Dashboard Editor</td>
+	<td></td>
+</tr>
+<tr>
+	<td>mouseOver</td>
+	<td>link=Dashboard Editor</td>
 	<td></td>
 </tr>
 <tr>
@@ -247,14 +267,27 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>link=Edit Layout</td>
-	<td>1,1</td>
+	<td></td>
 </tr>
 <tr>
+	<td>waitForElementPresent</td>
+	<td>link=Site's Config</td>
+	<td></td>
 	<td>clickAt</td>
 	<td>link=Site's Config</td>
 	<td>1,1</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Site's Config</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForTextPresent</td>
+	<td>Locale</td>
+	<td></td>
 </tr>
 <tr>
 	<td>verifyTextPresent</td>
@@ -267,24 +300,24 @@
 	<td>label=English</td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>//div[@onclick=&quot;eXo.webui.UIHorizontalTabs.changeTabForUIFormTabpane(this, 'UIPortalForm', 'Properties');javascript:eXo.webui.UIForm.submitEvent('UIPortalForm','SelectTab','&amp;objectId=Properties')&quot;]</td>
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>link=Save</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UIPortalComposer']//a[@class='EdittedSaveButton']</td>
-	<td>1,1</td>
+	<td>//div[@id='UIPortalComposer']/div[1]/div/div/div/a[2]</td>
+	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
-	<td>//div[@id='UIPortalComposer']//a[@class='EdittedSaveButton']</td>
-	<td>1,1</td>
+	<td>click</td>
+	<td>//div[@id='UIPortalComposer']/div[1]/div/div/div/a[2]</td>
+	<td></td>
 </tr>
 <tr>
 	<td>echo</td>
@@ -293,17 +326,22 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@class='SelectedTab']//img[@class='CloseIcon']</td>
+	<td>//div[@id='UITabPaneDashboard']/div/div/div/div/div/div[2]/div/div/div/div/a/img</td>
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
-	<td>//div[@class='SelectedTab']//img[@class='CloseIcon']</td>
+	<td>clickAndWait</td>
+	<td>//div[@id='UITabPaneDashboard']/div/div/div/div/div/div[2]/div/div/div/div/a/img</td>
 	<td></td>
 </tr>
 <tr>
-	<td>assertConfirmation</td>
+	<td>waitForConfirmation</td>
 	<td>Really want to remove this dashboard?</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementNotPresent</td>
+	<td>test_dashboardpage_name_30</td>
 	<td></td>
 </tr>
 <tr>
@@ -312,7 +350,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>clickAndWait</td>
 	<td>link=Sign out</td>
 	<td></td>
 </tr>
