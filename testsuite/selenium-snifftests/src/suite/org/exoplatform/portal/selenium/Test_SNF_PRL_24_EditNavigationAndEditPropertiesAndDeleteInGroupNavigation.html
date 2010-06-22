@@ -22,6 +22,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>windowMaximize</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
 	<td>clickAt</td>
 	<td>link=Sign in</td>
 	<td></td>
@@ -47,12 +52,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
-	<td>link=Group</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
+	<td>clickAndWait</td>
 	<td>link=Group</td>
 	<td></td>
 </tr>
@@ -62,9 +62,9 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>link=Add Navigation</td>
-	<td>1,1</td>
+	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
@@ -72,7 +72,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>link=Cancel</td>
 	<td></td>
 </tr>
@@ -82,7 +82,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>link=Edit Navigation</td>
 	<td></td>
 </tr>
@@ -92,7 +92,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>link=Add Node</td>
 	<td></td>
 </tr>
@@ -117,7 +117,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>xpath=//div[@class='CenterHorizontalTabs']//div[@class='NormalTab']//div[@class='MiddleTab']</td>
 	<td></td>
 </tr>
@@ -127,9 +127,9 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>link=Search and Select Page</td>
-	<td>1,1</td>
+	<td></td>
 </tr>
 <tr>
 	<td>echo</td>
@@ -142,28 +142,28 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>xpath=//div[@id='UIRepeater']//img[@class='SelectPageIcon']</td>
 	<td></td>
 </tr>
 <tr>
-	<td>waitForTextNotPresent</td>
-	<td>Search:</td>
+	<td>waitForElementPresent</td>
+	<td>link=Save</td>
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>link=Save</td>
-	<td>1,1</td>
-</tr>
-<tr>
-	<td>waitForTextNotPresent</td>
-	<td>Page Selector</td>
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
-	<td>link=Save</td>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='UINavigationManagement']/div[3]/table/tbody/tr/td[2]/div/div/div/div</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='UINavigationManagement']/div[3]/table/tbody/tr/td[2]/div/div/div/div</td>
 	<td></td>
 </tr>
 <tr>
@@ -172,7 +172,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>link=test_grp_label_24</td>
 	<td></td>
 </tr>
@@ -182,12 +182,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
-	<td>link=Group</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
+	<td>clickAndWait</td>
 	<td>link=Group</td>
 	<td></td>
 </tr>
@@ -197,33 +192,28 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>xpath=//div[@id='UIGroupNavigationGrid']/table[1]//td[@class='ActionBlock']//a[@class='EditProIcon']</td>
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>waitForElementPresent</td>
+	<td>link=Save</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
 	<td>link=Save</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>xpath=//div[@ID='UIGroupNavigationGrid']//table[1]//a[@class='EditNavIcon']</td>
+	<td>//td[3]/a[1]</td>
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
-	<td>xpath=//div[@ID='UIGroupNavigationGrid']//table[1]//a[@class='EditNavIcon']</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>xpath=//a[@title='test_grp_label_24']</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyElementPresent</td>
-	<td>xpath=//a[@title='test_grp_label_24']</td>
+	<td>click</td>
+	<td>//td[3]/a[1]</td>
 	<td></td>
 </tr>
 <tr>
@@ -232,17 +222,22 @@
 	<td></td>
 </tr>
 <tr>
-	<td>componentExoContextMenu</td>
-	<td>xpath=//a[@title='test_grp_label_24']</td>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='UINavigationNodeSelector']/div/div/div/div[2]/div/div/div[2]/div[1]/a</td>
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>mouseDownRight</td>
+	<td>//div[@id='UINavigationNodeSelector']/div/div/div/div[2]/div/div/div[2]/div[1]/a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
 	<td>xpath=//div[@id='UINavigationNodeSelector']//div[@id='NavigationNodePopupMenu']//a[@class='ItemIcon DeleteNode16x16Icon']</td>
 	<td></td>
 </tr>
 <tr>
-	<td>assertConfirmation</td>
+	<td>waitForConfirmation</td>
 	<td>Are you sure you want to delete this node?</td>
 	<td></td>
 </tr>
@@ -257,17 +252,12 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>link=Save</td>
 	<td></td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
-	<td>link=Sign out</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
+	<td>clickAndWait</td>
 	<td>link=Sign out</td>
 	<td></td>
 </tr>
