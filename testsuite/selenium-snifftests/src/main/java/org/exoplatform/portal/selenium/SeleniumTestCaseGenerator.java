@@ -190,7 +190,7 @@ public class SeleniumTestCaseGenerator {
 				sb.append("(selenium.isTextPresent(\"");
 				sb.append(param2);
 				sb.append("\"));\n");
-			} else if (param1.equals("click") || param1.equals("mouseDown") || param1.equals("mouseUp")
+			} else if (param1.equals("click") || param1.equals("mouseDown") || param1.equals("doubleClick") || param1.equals("mouseDownRight")|| param1.equals("mouseUp")
 			      || param1.equals("open") || param1.equals("selectFrame") || param1.equals("selectWindow")) {
 				sb.append("selenium.");
 				sb.append(param1);
@@ -332,7 +332,7 @@ public class SeleniumTestCaseGenerator {
 				sb.append("\", selenium.getValue(\"");
 				sb.append(param2);
 				sb.append("\"));\n");
-			} else if (param1.equals("waitForAlert")) {
+                  }else if (param1.equals("waitForAlert")) {
 				sb.append("waitForAlert(\"");
 				sb.append(param2);
 				sb.append("\");\n");
@@ -373,8 +373,14 @@ public class SeleniumTestCaseGenerator {
 				sb.append(param2);
 				sb.append("\"));\n");
 			} else if (param1.equals("waitForNotSpeed")) {
-				sb.append("waitForNotSpeed();\n");
-			} else if (param1.equals("assertValue")) {
+				sb.append("selenium.waitForNotSpeed(\"");
+				sb.append(param2);
+				sb.append("\");\n");
+			}  else if (param1.equals("waitForSpeed")) {
+				sb.append("selenium.waitForSpeed(\"");
+				sb.append(param2);
+				sb.append("\");\n");			
+                  } else if (param1.equals("assertValue")) {
 				sb.append("TestCase.assertEquals(\"");
 				sb.append(param3);
 				sb.append("\", selenium.getValue(\"");
@@ -420,11 +426,16 @@ public class SeleniumTestCaseGenerator {
 			} else if (param1.equals("componentExoContextMenu")) {
 				sb.append("selenium.getEval(\"selenium.doComponentExoContextMenu(\\\"").append(param2)
 				      .append("\\\")\");\n");
+			}else if (param1.equals("componentExoContextMenuAndWait")) {
+				sb.append("selenium.doComponentExoContextMenu(\"");
+				sb.append(param2);
+				sb.append("\");\n");
+				sb.append("selenium.waitForPageToLoad(timeout);\n");
 			} else if (param1.equals("getExoExtensionVersion")) {
 				sb.append("selenium.getEval(\"selenium.doGetExoExtensionVersion(\\\"").append(param2).append("\\\")\");\n");
 			} else if (param1.equals("componentExoDoubleClick")) {
 				sb.append("selenium.getEval(\"selenium.doComponentExoDoubleClick(\\\"").append(param2).append("\\\")\");\n");
-			} else if (param1.equals("checkAndWait")) {
+			}else if (param1.equals("checkAndWait")) {
 				sb.append("selenium.check(\"");
 				sb.append(param2);
 				sb.append("\");\n");
