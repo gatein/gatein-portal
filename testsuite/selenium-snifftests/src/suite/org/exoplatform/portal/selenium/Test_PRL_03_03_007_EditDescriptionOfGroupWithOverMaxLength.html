@@ -62,6 +62,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>echo</td>
+	<td>-- Add new group--</td>
+	<td></td>
+</tr>
+<tr>
 	<td>waitForElementPresent</td>
 	<td>//div[@id='UIOrganizationPortlet']/div[2]/div[2]/div[1]/div[2]/div[1]/div[1]/a[3]</td>
 	<td></td>
@@ -102,6 +107,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>echo</td>
+	<td>-- Edit description of group--</td>
+	<td></td>
+</tr>
+<tr>
 	<td>waitForElementPresent</td>
 	<td>//div[@id='UIOrganizationPortlet']/div[2]/div[2]/div[1]/div[2]/div[1]/div[1]/a[2]</td>
 	<td></td>
@@ -112,14 +122,19 @@
 	<td></td>
 </tr>
 <tr>
-	<td>echo</td>
-	<td>-- Edit description of group--</td>
+	<td>waitForElementPresent</td>
+	<td>description</td>
 	<td></td>
 </tr>
 <tr>
 	<td>type</td>
 	<td>description</td>
 	<td>Test_PRL_03_03_007 Test_PRL_03_03_007 Test_PRL_03_03_007 Test_PRL_03_03_007 Test_PRL_03_03_007 Test_PRL_03_03_007 Test_PRL_03_03_007 Test_PRL_03_03_007 Test_PRL_03_03_007 Test_PRL_03_03_007 Test_PRL_03_03_007 Test_PRL_03_03_007 Test_PRL_03_03_007 Test_PRL_03_03_007 Test_PRL_03_03_007 Test_PRL_03_03_007 Test_PRL_03_03_007 Test_PRL_03_03_007</td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Save</td>
+	<td></td>
 </tr>
 <tr>
 	<td>click</td>
@@ -135,6 +150,11 @@
 	<td>verifyText</td>
 	<td>//div[2]/div[2]/div/div/div/div/div[2]</td>
 	<td>The length of the text in field &quot;Description&quot; must be between &quot;0&quot; and &quot;255&quot; characters.</td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[2]/div[2]/div/div[2]/div/div/div/div/div/div[3]/div/table/tbody/tr/td/div/div/div/div/a</td>
+	<td></td>
 </tr>
 <tr>
 	<td>click</td>
