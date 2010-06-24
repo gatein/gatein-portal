@@ -72,6 +72,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>echo</td>
+	<td>-- Add group navigation --</td>
+	<td></td>
+</tr>
+<tr>
 	<td>waitForElementPresent</td>
 	<td>//div[@id='UIAddGroupNavigationGrid']/table[1]/tbody/tr/td[2]/a</td>
 	<td></td>
@@ -92,6 +97,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>echo</td>
+	<td>-- Select group navigation which added --</td>
+	<td></td>
+</tr>
+<tr>
 	<td>waitForElementPresent</td>
 	<td>//div[@id='UIGroupNavigationGrid']/table[2]/tbody/tr/td[3]/a[1]</td>
 	<td></td>
@@ -99,6 +109,11 @@
 <tr>
 	<td>click</td>
 	<td>//div[@id='UIGroupNavigationGrid']/table[2]/tbody/tr/td[3]/a[1]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>-- Add new node for this group navigation --</td>
 	<td></td>
 </tr>
 <tr>
@@ -142,6 +157,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>echo</td>
+	<td>-- Search and Select page in list --</td>
+	<td></td>
+</tr>
+<tr>
 	<td>waitForElementPresent</td>
 	<td>link=Search and Select Page</td>
 	<td></td>
@@ -177,8 +197,8 @@
 	<td></td>
 </tr>
 <tr>
-	<td>waitForTextNotPresent</td>
-	<td>Page Selector</td>
+	<td>echo</td>
+	<td>-- Save to finish add new node--</td>
 	<td></td>
 </tr>
 <tr>
@@ -189,6 +209,11 @@
 <tr>
 	<td>click</td>
 	<td>link=Save</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>-- Edit navigation again --</td>
 	<td></td>
 </tr>
 <tr>
@@ -254,6 +279,26 @@
 <tr>
 	<td>waitForTextNotPresent</td>
 	<td>test_grp_label_23</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='UIGroupNavigationGrid']/table[2]/tbody/tr/td[3]/a[3]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='UIGroupNavigationGrid']/table[2]/tbody/tr/td[3]/a[3]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertConfirmation</td>
+	<td>Are you sure to delete this navigation?</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForTextNotPresent</td>
+	<td>//div[@id='UIGroupNavigationGrid']/table[2]/tbody/tr/td[3]/a[3]</td>
 	<td></td>
 </tr>
 <tr>
