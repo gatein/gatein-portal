@@ -22,6 +22,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>windowMaximize</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
 	<td>waitForElementPresent</td>
 	<td>link=Sign in</td>
 	<td></td>
@@ -29,6 +34,11 @@
 <tr>
 	<td>clickAt</td>
 	<td>link=Sign in</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>username</td>
 	<td></td>
 </tr>
 <tr>
@@ -42,7 +52,7 @@
 	<td>gtn</td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>clickAndWait</td>
 	<td>//div[@id='UIPortalLoginFormAction']/div/div/div/a</td>
 	<td></td>
 </tr>
@@ -78,12 +88,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//a[@title='Home']</td>
+	<td>//a[@class='NodeIcon DefaultPageIcon NodeSelected' and @title='Home']</td>
 	<td></td>
 </tr>
 <tr>
-	<td>componentExoContextMenu</td>
-	<td>xpath=//div[@id='UINavigationNodeSelector']//a[@class='NodeIcon DefaultPageIcon NodeSelected' and @title='Home']</td>
+	<td>mouseDownRight</td>
+	<td>//a[@class='NodeIcon DefaultPageIcon NodeSelected' and @title='Home']</td>
 	<td></td>
 </tr>
 <tr>
@@ -102,13 +112,13 @@
 	<td></td>
 </tr>
 <tr>
-	<td>componentExoContextMenu</td>
-	<td>//div[@id='UINavigationNodeSelector']/div/div/div/div[2]/div/div/div[1]</td>
+	<td>waitForElementPresent</td>
+	<td>//div[@class='UIContextMenuContainer']/div[2]/div/div/div[7]/a</td>
 	<td></td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
-	<td>//div[@class='UIContextMenuContainer']/div[2]/div/div/div[7]/a</td>
+	<td>mouseDownRight</td>
+	<td>//div[@id='UINavigationNodeSelector']/div/div/div/div[2]/div/div/div[1]</td>
 	<td></td>
 </tr>
 <tr>
@@ -122,9 +132,14 @@
 	<td></td>
 </tr>
 <tr>
-	<td>verifyTextPresent</td>
-	<td>This node name already exists.</td>
+	<td>waitForElementPresent</td>
+	<td>//div[2]/div[3]/div/div/div/div/div[2]</td>
 	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//div[2]/div[3]/div/div/div/div/div[2]</td>
+	<td>This node name already exists.</td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
@@ -152,12 +167,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
-	<td>link=Sign out</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
+	<td>clickAndWait</td>
 	<td>link=Sign out</td>
 	<td></td>
 </tr>
