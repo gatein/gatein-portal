@@ -22,6 +22,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>windowMaximize</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
 	<td>waitForElementPresent</td>
 	<td>link=Sign in</td>
 	<td></td>
@@ -29,6 +34,11 @@
 <tr>
 	<td>clickAt</td>
 	<td>link=Sign in</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>username</td>
 	<td></td>
 </tr>
 <tr>
@@ -78,12 +88,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//a[@title='Home']</td>
+	<td>//a[@class='NodeIcon DefaultPageIcon NodeSelected' and @title='Home']</td>
 	<td></td>
 </tr>
 <tr>
-	<td>componentExoContextMenu</td>
-	<td>xpath=//div[@id='UINavigationNodeSelector']//a[@class='NodeIcon DefaultPageIcon NodeSelected' and @title='Home']</td>
+	<td>mouseDownRight</td>
+	<td>//a[@class='NodeIcon DefaultPageIcon NodeSelected' and @title='Home']</td>
 	<td></td>
 </tr>
 <tr>
@@ -113,12 +123,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>xpath=//div[@id='UINavigationNodeSelector']//a[@class='NodeIcon DefaultPageIcon NodeSelected' and @title='SiteMap']</td>
+	<td>//a[@class='NodeIcon DefaultPageIcon NodeSelected' and @title='SiteMap']</td>
 	<td></td>
 </tr>
 <tr>
-	<td>componentExoContextMenu</td>
-	<td>xpath=//div[@id='UINavigationNodeSelector']//a[@class='NodeIcon DefaultPageIcon NodeSelected' and @title='SiteMap']</td>
+	<td>mouseDownRight</td>
+	<td>//a[@class='NodeIcon DefaultPageIcon NodeSelected' and @title='SiteMap']</td>
 	<td></td>
 </tr>
 <tr>
@@ -137,7 +147,12 @@
 	<td></td>
 </tr>
 <tr>
-	<td>componentExoContextMenu</td>
+	<td>waitForElementPresent</td>
+	<td>xpath=//div[@id='UINavigationNodeSelector']/div/div/div/div[2]/div/div/div[3]/div/div//a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>mouseDownRight</td>
 	<td>xpath=//div[@id='UINavigationNodeSelector']/div/div/div/div[2]/div/div/div[3]/div/div//a</td>
 	<td></td>
 </tr>
