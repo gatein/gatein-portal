@@ -62,6 +62,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>echo</td>
+	<td>-- Click Add Category</td>
+	<td></td>
+</tr>
+<tr>
 	<td>click</td>
 	<td>//div[@id='UIApplicationOrganizer']/div[1]/div[1]</td>
 	<td></td>
@@ -102,8 +107,18 @@
 	<td></td>
 </tr>
 <tr>
+	<td>waitForElementPresent</td>
+	<td>link=Add Permission</td>
+	<td></td>
+</tr>
+<tr>
 	<td>click</td>
 	<td>link=Add Permission</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Platform</td>
 	<td></td>
 </tr>
 <tr>
@@ -112,13 +127,28 @@
 	<td></td>
 </tr>
 <tr>
-	<td>click</td>
+	<td>waitForElementPresent</td>
 	<td>link=Administrators</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
+	<td>link=Administrators</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
 	<td>link=manager</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=manager</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Save</td>
 	<td></td>
 </tr>
 <tr>
@@ -142,6 +172,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>waitForElementPresent</td>
+	<td>link=Add</td>
+	<td></td>
+</tr>
+<tr>
 	<td>click</td>
 	<td>link=Add</td>
 	<td></td>
@@ -149,6 +184,11 @@
 <tr>
 	<td>echo</td>
 	<td>-- Add same name category--</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='UIApplicationOrganizer']/div[1]/div[1]</td>
 	<td></td>
 </tr>
 <tr>
@@ -187,8 +227,18 @@
 	<td></td>
 </tr>
 <tr>
+	<td>waitForElementPresent</td>
+	<td>link=Add Permission</td>
+	<td></td>
+</tr>
+<tr>
 	<td>click</td>
 	<td>link=Add Permission</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='ListPermissionSelector']/div/div[2]/div/div[2]/div/div/div[3]/div/a</td>
 	<td></td>
 </tr>
 <tr>
@@ -197,13 +247,28 @@
 	<td></td>
 </tr>
 <tr>
-	<td>click</td>
+	<td>waitForElementPresent</td>
 	<td>link=Management</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
+	<td>link=Management</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
 	<td>link=exact:*</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=exact:*</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Save</td>
 	<td></td>
 </tr>
 <tr>
@@ -214,7 +279,7 @@
 <tr>
 	<td>waitForElementPresent</td>
 	<td>//div[3]/div/div/div/div/div[2]</td>
-	<td>This category is existing, please enter another one!</td>
+	<td></td>
 </tr>
 <tr>
 	<td>verifyText</td>
@@ -247,7 +312,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>click</td>
+	<td>clickAndWait</td>
 	<td>link=Sign out</td>
 	<td></td>
 </tr>

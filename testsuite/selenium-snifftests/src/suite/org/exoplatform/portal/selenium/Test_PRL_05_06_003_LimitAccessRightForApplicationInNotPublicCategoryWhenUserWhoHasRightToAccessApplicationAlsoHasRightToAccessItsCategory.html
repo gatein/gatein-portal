@@ -272,7 +272,27 @@
 	<td>Test_PRL_05_06_003</td>
 </tr>
 <tr>
+	<td>echo</td>
+	<td>-- Go to Step 2--</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='UIPageCreationWizard']/div/div[3]/div/div/div/div[2]/div/table/tbody/tr/td/div[2]/div/div/div</td>
+	<td></td>
+</tr>
+<tr>
 	<td>click</td>
+	<td>//div[@id='UIPageCreationWizard']/div/div[3]/div/div/div/div[2]/div/table/tbody/tr/td/div[2]/div/div/div</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>-- Go to step 3--</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
 	<td>//div[@id='UIPageCreationWizard']/div/div[3]/div/div/div/div[2]/div/table/tbody/tr/td/div[2]/div/div/div</td>
 	<td></td>
 </tr>
@@ -297,13 +317,18 @@
 	<td></td>
 </tr>
 <tr>
-	<td>click</td>
+	<td>clickAndWait</td>
 	<td>link=Sign out</td>
 	<td></td>
 </tr>
 <tr>
 	<td>echo</td>
 	<td>--&nbsp;&nbsp;Login by user who is in group/membership assigned on added application in above category--</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Sign in</td>
 	<td></td>
 </tr>
 <tr>
@@ -327,28 +352,23 @@
 	<td>gtn</td>
 </tr>
 <tr>
-	<td>click</td>
+	<td>clickAndWait</td>
 	<td>//div[@id='UIPortalLoginFormAction']/div/div/div/a</td>
 	<td></td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
-	<td>link=Application Registry</td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
+	<td>clickAndWait</td>
 	<td>link=Application Registry</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//a[contains(text(),'Add New Page')]</td>
+	<td>link=Add New Page</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//a[contains(text(),'Add New Page')]</td>
+	<td>link=Add New Page</td>
 	<td></td>
 </tr>
 <tr>
@@ -397,6 +417,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>echo</td>
+	<td>-- Choose new category--</td>
+	<td></td>
+</tr>
+<tr>
 	<td>waitForElementPresent</td>
 	<td>link=Test_PRL_05_06_003</td>
 	<td></td>
@@ -422,6 +447,16 @@
 	<td></td>
 </tr>
 <tr>
+	<td>echo</td>
+	<td>-- View page created--</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Test_PRL_05_06_003</td>
+	<td></td>
+</tr>
+<tr>
 	<td>click</td>
 	<td>link=Test_PRL_05_06_003</td>
 	<td></td>
@@ -437,6 +472,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>echo</td>
+	<td>-- Delete cateogry--</td>
+	<td></td>
+</tr>
+<tr>
 	<td>waitForElementPresent</td>
 	<td>//div[@id='UIApplicationOrganizer']/div[2]/div[1]/div/div/div[2]/div/div[4]/div/div/div/div/a</td>
 	<td></td>
@@ -444,6 +484,11 @@
 <tr>
 	<td>click</td>
 	<td>//div[@id='UIApplicationOrganizer']/div[2]/div[1]/div/div/div[2]/div/div[4]/div/div/div/div/a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='UIApplicationOrganizer']/div[2]/div[1]/div/div/div[2]/div/div[4]/div[1]/div/div/div/a[2]</td>
 	<td></td>
 </tr>
 <tr>
@@ -479,6 +524,11 @@
 <tr>
 	<td>click</td>
 	<td>//div[@id='UINavigationNodeSelector']/div/div/div/div[2]/div/div/div[2]/div[2]/div[1]/div/a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//a[@class='NodeIcon DefaultPageIcon' and @title='Test_PRL_05_06_003']</td>
 	<td></td>
 </tr>
 <tr>
@@ -519,6 +569,11 @@
 <tr>
 	<td>click</td>
 	<td>//div[@id='UINavigationNodeSelector']/div/div/div/div[2]/div/div/div[2]/div[2]/div[1]/div/a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//a[@class='NodeIcon DefaultPageIcon' and @title='Test_PRL_05_06_003']</td>
 	<td></td>
 </tr>
 <tr>

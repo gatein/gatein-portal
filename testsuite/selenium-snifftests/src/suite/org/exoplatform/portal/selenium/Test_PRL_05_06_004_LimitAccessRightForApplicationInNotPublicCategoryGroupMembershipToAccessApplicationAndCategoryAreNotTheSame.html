@@ -32,6 +32,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>waitForElementPresent</td>
+	<td>username</td>
+	<td>root</td>
+</tr>
+<tr>
 	<td>type</td>
 	<td>username</td>
 	<td>root</td>
@@ -82,6 +87,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>waitForElementPresent</td>
+	<td>link=Add Permission</td>
+	<td></td>
+</tr>
+<tr>
 	<td>click</td>
 	<td>link=Add Permission</td>
 	<td></td>
@@ -92,8 +102,23 @@
 	<td></td>
 </tr>
 <tr>
+	<td>waitForElementPresent</td>
+	<td>link=Platform</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Administrators</td>
+	<td></td>
+</tr>
+<tr>
 	<td>click</td>
 	<td>link=Administrators</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=exact:*</td>
 	<td></td>
 </tr>
 <tr>
@@ -137,6 +162,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>waitForElementPresent</td>
+	<td>link=Add</td>
+	<td></td>
+</tr>
+<tr>
 	<td>click</td>
 	<td>link=Add</td>
 	<td></td>
@@ -162,13 +192,28 @@
 	<td></td>
 </tr>
 <tr>
-	<td>click</td>
+	<td>waitForElementPresent</td>
 	<td>link=Platform</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
+	<td>link=Platform</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
 	<td>link=Administrators</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Administrators</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=manager</td>
 	<td></td>
 </tr>
 <tr>
@@ -189,6 +234,11 @@
 <tr>
 	<td>click</td>
 	<td>link=Sign in</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>username</td>
 	<td></td>
 </tr>
 <tr>
@@ -232,6 +282,11 @@
 	<td>Test_PRL_05_06_004</td>
 </tr>
 <tr>
+	<td>echo</td>
+	<td>-- Go to Step 2--</td>
+	<td></td>
+</tr>
+<tr>
 	<td>waitForElementPresent</td>
 	<td>//div[@id='UIPageCreationWizard']/div/div[3]/div/div/div/div[2]/div/table/tbody/tr/td/div[2]/div/div/div</td>
 	<td></td>
@@ -242,8 +297,23 @@
 	<td></td>
 </tr>
 <tr>
+	<td>echo</td>
+	<td>-- Go to step 3--</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='UIPageCreationWizard']/div/div[3]/div/div/div/div[2]/div/table/tbody/tr/td/div[2]/div/div/div</td>
+	<td></td>
+</tr>
+<tr>
 	<td>click</td>
 	<td>//div[@id='UIPageCreationWizard']/div/div[3]/div/div/div/div[2]/div/table/tbody/tr/td/div[2]/div/div/div</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>-- Choose new catefory--</td>
 	<td></td>
 </tr>
 <tr>
@@ -272,7 +342,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>click</td>
+	<td>clickAndWait</td>
 	<td>link=Sign out</td>
 	<td></td>
 </tr>
@@ -307,17 +377,12 @@
 	<td>gtn</td>
 </tr>
 <tr>
-	<td>click</td>
+	<td>clickAndWait</td>
 	<td>//div[@id='UIPortalLoginFormAction']/div/div/div/a</td>
 	<td></td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
-	<td>link=Dashboard</td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
+	<td>clickAndWait</td>
 	<td>link=Dashboard</td>
 	<td></td>
 </tr>
@@ -347,13 +412,38 @@
 	<td>Test_PRL_05_06_004</td>
 </tr>
 <tr>
-	<td>click</td>
+	<td>echo</td>
+	<td>-- Go to step 2--</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
 	<td>//div[@id='UIPageCreationWizard']/div/div[3]/div/div/div/div[2]/div/table/tbody/tr/td/div[2]/div/div/div</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
 	<td>//div[@id='UIPageCreationWizard']/div/div[3]/div/div/div/div[2]/div/table/tbody/tr/td/div[2]/div/div/div</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>-- Go to step 3--</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='UIPageCreationWizard']/div/div[3]/div/div/div/div[2]/div/table/tbody/tr/td/div[2]/div/div/div</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='UIPageCreationWizard']/div/div[3]/div/div/div/div[2]/div/table/tbody/tr/td/div[2]/div/div/div</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='UIPageEditor']/div[1]/div/div/div/a[2]</td>
 	<td></td>
 </tr>
 <tr>
@@ -362,7 +452,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>click</td>
+	<td>clickAndWait</td>
 	<td>link=Sign out</td>
 	<td></td>
 </tr>
@@ -407,8 +497,18 @@
 	<td></td>
 </tr>
 <tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='UIApplicationOrganizer']/div[2]/div[1]/div/div/div[2]/div/div[4]/div/div/div/div/a</td>
+	<td></td>
+</tr>
+<tr>
 	<td>click</td>
 	<td>//div[@id='UIApplicationOrganizer']/div[2]/div[1]/div/div/div[2]/div/div[4]/div/div/div/div/a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='UIApplicationOrganizer']/div[2]/div[1]/div/div/div[2]/div/div[4]/div[1]/div/div/div/a[2]</td>
 	<td></td>
 </tr>
 <tr>
@@ -437,6 +537,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>waitForElementPresent</td>
+	<td>username</td>
+	<td></td>
+</tr>
+<tr>
 	<td>type</td>
 	<td>username</td>
 	<td>root</td>
@@ -447,17 +552,12 @@
 	<td>gtn</td>
 </tr>
 <tr>
-	<td>click</td>
+	<td>clickAndWait</td>
 	<td>//div[@id='UIPortalLoginFormAction']/div/div/div/a</td>
 	<td></td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
-	<td>link=Group</td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
+	<td>clickAndWait</td>
 	<td>link=Group</td>
 	<td></td>
 </tr>
@@ -479,6 +579,11 @@
 <tr>
 	<td>click</td>
 	<td>//div[@id='UINavigationNodeSelector']/div/div/div/div[2]/div/div/div[2]/div[2]/div[1]/div/a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//a[@class='NodeIcon DefaultPageIcon' and @title='Test_PRL_05_06_004']</td>
 	<td></td>
 </tr>
 <tr>
@@ -497,12 +602,17 @@
 	<td></td>
 </tr>
 <tr>
-	<td>click</td>
+	<td>waitForElementPresent</td>
 	<td>link=Save</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
+	<td>link=Save</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
 	<td>link=Sign out</td>
 	<td></td>
 </tr>
@@ -557,12 +667,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
-	<td>link=Sign out</td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
+	<td>clickAndWait</td>
 	<td>link=Sign out</td>
 	<td></td>
 </tr>
