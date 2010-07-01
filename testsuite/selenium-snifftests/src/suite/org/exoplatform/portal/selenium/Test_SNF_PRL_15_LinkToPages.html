@@ -52,6 +52,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>echo</td>
+	<td>-- Choose Sitemap page --</td>
+	<td></td>
+</tr>
+<tr>
 	<td>clickAndWait</td>
 	<td>//div[@id='PortalNavigationTopContainer']/div[2]/div/div/div/div/div/div/a</td>
 	<td></td>
@@ -63,13 +68,13 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>css=div#UISiteMap div.ExpandIcon</td>
-	<td>1,1</td>
+	<td>//div[@id='UISiteMap']/div[2]/div/div[5]/div[1]/a</td>
+	<td>Administration</td>
 </tr>
 <tr>
-	<td>clickAt</td>
-	<td>css=div#UISiteMap div.ExpandIcon</td>
-	<td>1,1</td>
+	<td>click</td>
+	<td>//div[@id='UISiteMap']/div[2]/div/div[5]/div[1]/a</td>
+	<td>Administration</td>
 </tr>
 <tr>
 	<td>echo</td>
@@ -78,13 +83,13 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>css=div#UISiteMap div.ChildrenContainer a</td>
+	<td>//div[@id='UISiteMap']/div[2]/div/div[5]/div[2]/div[1]/div/div/a</td>
 	<td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>//div[@id='UISiteMap']/div[2]/div/div[3]/div[2]/div[1]/div/div/a</td>
-	<td></td>
+	<td>verifyText</td>
+	<td>//div[@id='UISiteMap']/div[2]/div/div[5]/div[2]/div[1]/div/div/a</td>
+	<td>Application Registry</td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
