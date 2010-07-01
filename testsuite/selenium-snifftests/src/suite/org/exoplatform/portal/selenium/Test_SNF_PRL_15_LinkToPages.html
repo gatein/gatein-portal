@@ -68,13 +68,13 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UISiteMap']/div[2]/div/div[5]/div[1]/a</td>
-	<td>Administration</td>
+	<td>//div[@id='UISiteMap']/div[2]/div//a[contains(.,&quot;Administration&quot;)]</td>
+	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='UISiteMap']/div[2]/div/div[5]/div[1]/a</td>
-	<td>Administration</td>
+	<td>//div[@id='UISiteMap']/div[2]/div//a[contains(.,&quot;Administration&quot;)]</td>
+	<td></td>
 </tr>
 <tr>
 	<td>echo</td>
@@ -83,28 +83,18 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UISiteMap']/div[2]/div/div[5]/div[2]/div[1]/div/div/a</td>
+	<td>//div[@id='UISiteMap']/div[2]/div//a[contains(.,&quot;Application Registry&quot;)]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='UISiteMap']/div[2]/div/div[5]/div[2]/div[1]/div/div/a</td>
-	<td>Application Registry</td>
+	<td>//div[@id='UISiteMap']/div[2]/div//a[contains(.,&quot;Application Registry&quot;)]</td>
+	<td></td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
 	<td>//div[3]/a</td>
 	<td>1,1</td>
-</tr>
-<tr>
-	<td>pause</td>
-	<td>1000</td>
-	<td></td>
-</tr>
-<tr>
-	<td>assertLocation</td>
-	<td>http://localhost:8080/portal/public/classic/</td>
-	<td></td>
 </tr>
 
 </tbody></table>
