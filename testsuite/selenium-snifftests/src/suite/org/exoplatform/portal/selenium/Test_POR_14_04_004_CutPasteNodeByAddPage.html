@@ -57,7 +57,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>clickAndWait</td>
 	<td>link=Site</td>
 	<td></td>
 </tr>
@@ -67,7 +67,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>clickAndWait</td>
 	<td>link=Home</td>
 	<td></td>
 </tr>
@@ -82,7 +82,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>link=Add New Page</td>
 	<td></td>
 </tr>
@@ -112,7 +112,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>//div[@id='UIPageCreationWizard']/div/div[3]/div/div/div/div[2]/div/table/tbody/tr/td/div[2]/div/div/div</td>
 	<td></td>
 </tr>
@@ -127,7 +127,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>//div[@id='UIPageCreationWizard']/div/div[3]/div/div/div/div[2]/div/table/tbody/tr/td/div[2]/div/div/div</td>
 	<td></td>
 </tr>
@@ -137,7 +137,12 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='UIPageEditor']/div[1]/div/div/div/a[2]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
 	<td>//div[@id='UIPageEditor']/div[1]/div/div/div/a[2]</td>
 	<td></td>
 </tr>
@@ -152,7 +157,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>clickAndWait</td>
 	<td>link=Site</td>
 	<td></td>
 </tr>
@@ -162,7 +167,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>link=Edit Navigation</td>
 	<td></td>
 </tr>
@@ -177,12 +182,17 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>//div[@id='UINavigationNodeSelector']/div/div/div/div[2]/div/div/div[2]/div[2]/div[1]/div/a</td>
 	<td></td>
 </tr>
 <tr>
-	<td>componentExoContextMenu</td>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='UINavigationNodeSelector']//a[@class='NodeIcon DefaultPageIcon NodeSelected' and @title='Test_POR_14_04_004']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>mouseDownRight</td>
 	<td>//div[@id='UINavigationNodeSelector']//a[@class='NodeIcon DefaultPageIcon NodeSelected' and @title='Test_POR_14_04_004']</td>
 	<td></td>
 </tr>
@@ -192,7 +202,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>link=Cut Node</td>
 	<td></td>
 </tr>
@@ -202,7 +212,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>componentExoContextMenu</td>
+	<td>mouseDownRight</td>
 	<td>//div[@class='HomeNode']</td>
 	<td></td>
 </tr>
@@ -212,7 +222,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>//div[@class=&quot;UIContextMenuContainer&quot;]/div[2]/div/div/div[2]//a</td>
 	<td></td>
 </tr>
@@ -232,12 +242,17 @@
 	<td></td>
 </tr>
 <tr>
-	<td>componentExoContextMenu</td>
+	<td>waitForElementPresent</td>
 	<td>//div[@id='UINavigationNodeSelector']/div/div/div/div[2]/div/div/div[7]/div//a</td>
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>mouseDownRight</td>
+	<td>//div[@id='UINavigationNodeSelector']/div/div/div/div[2]/div/div/div[7]/div//a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
 	<td>link=Delete Node</td>
 	<td></td>
 </tr>
@@ -252,7 +267,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>link=Save</td>
 	<td></td>
 </tr>
@@ -267,7 +282,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>clickAndWait</td>
 	<td>link=Sign out</td>
 	<td></td>
 </tr>
