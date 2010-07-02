@@ -22,13 +22,18 @@
 	<td></td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
+	<td>windowMaximize</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
 	<td>link=Sign in</td>
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
-	<td>link=Sign in</td>
+	<td>waitForElementPresent</td>
+	<td>username</td>
 	<td></td>
 </tr>
 <tr>
@@ -42,7 +47,7 @@
 	<td>gtn</td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>clickAndWait</td>
 	<td>//div[@id='UIPortalLoginFormAction']/div/div/div/a</td>
 	<td></td>
 </tr>
@@ -57,7 +62,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>link=Site</td>
 	<td></td>
 </tr>
@@ -67,59 +72,200 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>link=Edit Navigation</td>
 	<td></td>
 </tr>
 <tr>
 	<td>echo</td>
-	<td>--Cut a node--</td>
+	<td>--Add a node--</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//a[@title='Home']</td>
+	<td>link=Add Node</td>
 	<td></td>
 </tr>
 <tr>
-	<td>componentExoContextMenu</td>
-	<td>//a[@title='Home']</td>
+	<td>click</td>
+	<td>link=Add Node</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>link=Cut Node</td>
+	<td>name</td>
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
-	<td>link=Cut Node</td>
+	<td>type</td>
+	<td>name</td>
+	<td>Test_POR_14_04_002</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>label</td>
+	<td>Test_POR_14_04_002</td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>-- Choose Page Selector--</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[2]/div/div/div/div/div/div[1]/div/div/div/div/div/div/div/div/div[2]/div/div/div/div</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[2]/div/div/div/div/div/div[1]/div/div/div/div/div/div/div/div/div[2]/div/div/div/div</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='UIPageSelector2']/div[3]/table/tbody/tr/td/div[3]/div/div/div/div</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='UIPageSelector2']/div[3]/table/tbody/tr/td/div[3]/div/div/div/div</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//img[@title='Select Page']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//img[@title='Select Page']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Save</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Save</td>
 	<td></td>
 </tr>
 <tr>
 	<td>echo</td>
-	<td>--Paste node into another node in the same navigation--</td>
+	<td>-- Copy node--</td>
 	<td></td>
 </tr>
 <tr>
-	<td>componentExoContextMenu</td>
-	<td>//div[@id='UINavigationNodeSelector']/div/div/div/div[2]/div/div/div[3]/div/a</td>
+	<td>waitForElementPresent</td>
+	<td>link=Test_POR_14_04_002</td>
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
-	<td>//div[3]/div/div/div/div/div/div/div/div[2]/div/div/div[7]/a </td>
+	<td>click</td>
+	<td>link=Test_POR_14_04_002</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//a[@class='NodeIcon DefaultPageIcon NodeSelected' and @title='Test_POR_14_04_002']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>mouseDownRight</td>
+	<td>//a[@class='NodeIcon DefaultPageIcon NodeSelected' and @title='Test_POR_14_04_002']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Copy Node</td>
 	<td></td>
 </tr>
 <tr>
 	<td>echo</td>
-	<td>--Delete node--</td>
+	<td>-- Paste node to same navigation--</td>
+	<td></td>
+</tr>
+<!--click at home in Naigation Management-->
+<tr>
+	<td>click</td>
+	<td>//div[@id='UINavigationNodeSelector']/div/div/div/div[2]/div/div/div[2]/div/a</td>
 	<td></td>
 </tr>
 <tr>
-	<td>componentExoContextMenu</td>
-	<td>//a[@title='Home']</td>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='UINavigationNodeSelector']/div/div/div/div[2]/div/div/div[2]/div/a</td>
 	<td></td>
+</tr>
+<tr>
+	<td>mouseDownRight</td>
+	<td>//div[@id='UINavigationNodeSelector']/div/div/div/div[2]/div/div/div[2]/div/a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='NavigationNodePopupMenu']/div/div[2]/div/div/div[7]/a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='NavigationNodePopupMenu']/div/div[2]/div/div/div[7]/a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Save</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Save</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='PortalNavigationTopContainer']/div[3]/div/div/div/div/div/div/a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='PortalNavigationTopContainer']/div[3]/div/div/div/div/div/div/a</td>
+	<td>Test_POR_14_04_002</td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>-- Delete node--</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Site</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Site</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Edit Navigation</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Edit Navigation</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[2]/div/div/div[2]/div[2]/div/div/a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>mouseDownRight</td>
+	<td>//div[@id='UINavigationNodeSelector']/div/div/div/div[2]/div/div/div[2]/div[2]/div/div/a</td>
+	<td>Test_POR_14_04_002</td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
@@ -127,7 +273,32 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
+	<td>link=Delete Node</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertConfirmation</td>
+	<td>Are you sure you want to delete this node?</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[8]/div/a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>mouseDownRight</td>
+	<td>//div[8]/div/a</td>
+	<td>Test_POR_14_04_002</td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Delete Node</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
 	<td>link=Delete Node</td>
 	<td></td>
 </tr>
@@ -142,22 +313,12 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>link=Save</td>
 	<td></td>
 </tr>
 <tr>
-	<td>echo</td>
-	<td>--Sign out --</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>link=Sign out</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
+	<td>clickAndWait</td>
 	<td>link=Sign out</td>
 	<td></td>
 </tr>
