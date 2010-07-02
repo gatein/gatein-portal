@@ -148,12 +148,29 @@ public class SkinService implements Startable
       removal = new GateInSkinConfigRemoval(portalContainerName, this);
    }
 
+   /**
+    * add category into portletThemes_ if portletThemes does not contain one
+    * @param categoryName: category's name that want to add into portletThemes_
+    */
    public void addCategoryTheme(String categoryName)
    {
       if (!portletThemes_.containsKey(categoryName))
          portletThemes_.put(categoryName, new HashSet<String>());
    }
 
+   /**
+    * Register the stylesheet for a portal Skin. Do not replace any previous skin 
+    * 
+    * @param module
+    *           skin module identifier
+    * @param skinName
+    *           skin name
+    * @param cssPath
+    *           path uri to the css file. This is relative to the root context,
+    *           use leading '/'
+    * @param scontext
+    *           the webapp's {@link javax.servlet.ServletContext}
+    */
    public void addPortalSkin(String module, String skinName, String cssPath, ServletContext scontext)
    {
       addPortalSkin(module, skinName, cssPath, scontext, false);
@@ -190,7 +207,20 @@ public class SkinService implements Startable
          }
       }
    }
-
+   
+   /**
+    * Register the stylesheet for a portal Skin.
+    * 
+    * @param module
+    *           skin module identifier
+    * @param skinName
+    *           skin name
+    * @param cssPath
+    *           path uri to the css file. This is relative to the root context,
+    *           use leading '/'
+    * @param cssData
+    *           the content of css
+    */
    public void addPortalSkin(String module, String skinName, String cssPath, String cssData)
    {
       SkinKey key = new SkinKey(module, skinName);
@@ -208,6 +238,7 @@ public class SkinService implements Startable
       rtCache.put(cssPath, new CachedStylesheet(cssData));
    }
 
+   
    public void addSkin(String module, String skinName, String cssPath, ServletContext scontext)
    {
       addSkin(module, skinName, cssPath, scontext, false);
@@ -236,6 +267,22 @@ public class SkinService implements Startable
       mainResolver.resolvers.addIfAbsent(resolver);
    }
 
+   /**
+    * 
+    * Register the Skin for available portal Skins.
+    * 
+    * @param module
+    *           skin module identifier
+    * @param skinName
+    *           skin name
+    * @param cssPath
+    *           path uri to the css file. This is relative to the root context,
+    *           use leading '/'
+    * @param scontext
+    *           the webapp's {@link javax.servlet.ServletContext}
+    * @param overwrite
+    *           if any previous skin should be replaced by that one
+    */
    public void addSkin(String module, String skinName, String cssPath, ServletContext scontext, boolean overwrite)
    {
       availableSkins_.add(skinName);
@@ -248,6 +295,22 @@ public class SkinService implements Startable
       }
    }
 
+   /**
+    * 
+    * Register the Skin for available portal Skins. Do not replace existed Skin
+    * 
+    * @param module
+    *           skin module identifier
+    * @param skinName
+    *           skin name
+    * @param cssPath
+    *           path uri to the css file. This is relative to the root context,
+    *           use leading '/'
+    * @param scontext
+    *           the webapp's {@link javax.servlet.ServletContext}
+    * @param overwrite
+    *           if any previous skin should be replaced by that one
+    */
    public void addSkin(String module, String skinName, String cssPath, String cssData)
    {
       availableSkins_.add(skinName);
@@ -261,6 +324,13 @@ public class SkinService implements Startable
       rtCache.put(cssPath, new CachedStylesheet(cssData));
    }
 
+   /**
+    * Registry theme category with its themes for portlet Theme
+    * @param categoryName
+    *             category name that will be registried
+    * @param themesName
+    *             list theme  name of categoryName
+    */
    public void addTheme(String categoryName, List<String> themesName)
    {
       if (!portletThemes_.containsKey(categoryName))
@@ -315,7 +385,15 @@ public class SkinService implements Startable
          return null;
       }
    }
-
+   /**
+    * Render css content of the file specified by the given URI
+    * @param renderer
+    *          the webapp's {@link org.exoplatform.portal.resource.ResourceRenderer}
+    * @param path
+    *          path uri to the css file
+    * @throws RenderingException
+    * @throws IOException
+    */
    public void renderCSS(ResourceRenderer renderer, String path) throws RenderingException, IOException
    {
       Orientation orientation = Orientation.LT;
@@ -363,12 +441,25 @@ public class SkinService implements Startable
       }
    }
 
+   /**
+    * get css content of URI file
+    * @param cssPath
+    *          path uri to the css file
+    * @return css content of URI file
+    */
    public String getMergedCSS(String cssPath)
    {
       CachedStylesheet stylesheet = ltCache.get(cssPath);
       return stylesheet != null ? stylesheet.getText() : null;
    }
 
+   /**
+    * Get all SkinConfig of Portal Skin
+    * @param skinName
+    *          name of Portal Skin
+    * @return 
+    *       all org.exoplatform.portal.resource.SkinConfig of Portal Skin
+    */
    public Collection<SkinConfig> getPortalSkins(String skinName)
    {
       Set<SkinKey> keys = portalSkins_.keySet();
@@ -386,6 +477,12 @@ public class SkinService implements Startable
       return portletThemes_;
    }
 
+   /**
+    * Get SkinConfig by module and skin name
+    * @param module
+    * @param skinName
+    * @return
+    */
    public SkinConfig getSkin(String module, String skinName)
    {
       SkinConfig config = skinConfigs_.get(new SkinKey(module, skinName));
@@ -400,6 +497,12 @@ public class SkinService implements Startable
       skinConfigs_.remove(key);
    }
 
+   /**
+    * Remove SkinConfig from Portal Skin Configs  by module and skin name
+    * @param module
+    * @param skinName
+    * @throws Exception
+    */
    public void remove(String module, String skinName) throws Exception
    {
       SkinKey key;
@@ -410,11 +513,23 @@ public class SkinService implements Startable
       skinConfigs_.remove(key);
    }
 
+   /**
+    * Remove Skin from Portal available Skin by skin name
+    * @param skinName
+    *          name of skin that will be removed
+    * @throws Exception
+    */
    public void removeSupportedSkin(String skinName) throws Exception
    {
       availableSkins_.remove(skinName);
    }
 
+   /**
+    * Remove SkinConfig from Portal Skin Config by SkinKey
+    * @param keys
+    *          SkinKey list these will be removed
+    * @throws Exception
+    */
    public void remove(List<SkinKey> keys) throws Exception
    {
       if (keys == null)
@@ -427,6 +542,10 @@ public class SkinService implements Startable
       }
    }
 
+   /**
+    * get quantity of Portal Skin Config
+    * @return
+    */
    public int size()
    {
       return skinConfigs_.size();
@@ -601,7 +720,12 @@ public class SkinService implements Startable
       }
       return suffixMap.get(orientation);
    }
-
+   
+   /**
+    * Get all available skin
+    * @return all available skin
+    *    
+    */
    @Managed
    @ManagedDescription("The list of registered skins identifiers")
    public String[] getSkinList()
@@ -623,6 +747,9 @@ public class SkinService implements Startable
       mainResolver.registerContext(sContext);
    }
 
+   /**
+    * Clean cache, reload all Skins
+    */
    @Managed
    @ManagedDescription("Reload all skins")
    @Impact(ImpactType.WRITE)
@@ -633,6 +760,11 @@ public class SkinService implements Startable
       rtCache.clear();
    }
 
+   /**
+    * reload skin by skin ID
+    * @param skinId
+    *          the skin ID that will be reloaded
+    */
    @Managed
    @ManagedDescription("Reload a specified skin")
    public void reloadSkin(@ManagedDescription("The skin id") @ManagedName("skinId") String skinId)
@@ -641,12 +773,20 @@ public class SkinService implements Startable
       rtCache.remove(skinId);
    }
 
+   /**
+    * Start service
+    * @see org.picocontainer.Startable#start()
+    */
    public void start()
    {
       DefaultServletContainerFactory.getInstance().getServletContainer().addWebAppListener(deployer);
       DefaultServletContainerFactory.getInstance().getServletContainer().addWebAppListener(removal);
    }
 
+   /**
+    * Stop service
+    * @see org.picocontainer.Startable#stop()
+    */
    public void stop()
    {
       DefaultServletContainerFactory.getInstance().getServletContainer().removeWebAppListener(deployer);

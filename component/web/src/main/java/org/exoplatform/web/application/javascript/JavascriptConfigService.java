@@ -69,7 +69,7 @@ public class JavascriptConfigService implements Startable
    }
 
    /**
-    * return a collection list This method should return the availables scripts
+    * Return a collection list This method should return the availables scripts
     * in the service
     * 
     * @return
@@ -79,11 +79,26 @@ public class JavascriptConfigService implements Startable
       return availableScripts_;
    }
 
+   /**
+    * return a collection list This method should return the availables script paths
+    * @return
+    */
    public Collection<String> getAvailableScriptsPaths()
    {
       return availableScriptsPaths_;
    }
 
+   /**
+    * Add extended JavaScript into available JavaScript
+    * @param module
+    *           module name
+    * @param scriptPath
+    *           URI path of JavaScript 
+    * @param scontext
+    *           the webapp's {@link javax.servlet.ServletContext}
+    * @param scriptData
+    *            Content of JavaScript that will be added into available JavaScript
+    */
    public synchronized void addExtendedJavascript(String module, String scriptPath, ServletContext scontext, String scriptData)
    {
       String servletContextName = scontext.getServletContextName();
@@ -93,6 +108,11 @@ public class JavascriptConfigService implements Startable
       extendedJavascripts.put(path, scriptData);
    }
 
+   /**
+    * Clear available JavaScript and add new JavaScripts
+    * @param jsKeys
+    *          new list of JavaScript will replace current available JavaScript
+    */
    @SuppressWarnings("unchecked")
    public synchronized void addJavascripts(List<Javascript> jsKeys)
    {
@@ -125,6 +145,11 @@ public class JavascriptConfigService implements Startable
       }
    }
 
+   /**
+    * Add an JavaScript into available JavaScript
+    * @param javascript
+    *          JavaScript will be added into available JavaScript
+    */
    private void addJavascript(Javascript javascript)
    {
       availableScripts_.add(javascript.getKey().getModule());
@@ -170,6 +195,12 @@ public class JavascriptConfigService implements Startable
       mergedJavascript = mergedJavascript.concat(sB.toString());
    }
 
+   /**
+    * Remove JavaScripts from availabe JavaScipts by ServletContext
+    * @param scontext
+    *           the webapp's {@link javax.servlet.ServletContext}
+    *          
+    */
    public synchronized void remove(ServletContext context)
    {
       // We clone to avoid concurrent modification exception
@@ -181,6 +212,11 @@ public class JavascriptConfigService implements Startable
       }
    }
 
+   /**
+    * Remove JavaScript from available JavaScripts
+    * @param script
+    *          JavaScript will be removed
+    */
    public synchronized void removeJavascript(Javascript script)
    {
       availableScripts_.remove(script.getKey().getModule());
@@ -198,7 +234,9 @@ public class JavascriptConfigService implements Startable
       }
    }
 
-   /** Refresh the mergedJavascript **/
+   /**
+    *  Refresh the mergedJavascript
+    */
    public void refreshMergedJavascript()
    {
       mergedJavascript = "";
@@ -263,11 +301,26 @@ public class JavascriptConfigService implements Startable
       out.write(jsBytes);
    }
 
+   /**
+    * Check the existence of module in Available Scripts
+    * @param module
+    * @return
+    */
    public boolean isModuleLoaded(CharSequence module)
    {
       return getAvailableScripts().contains(module);
    }
 
+   /**
+    * Remove JavaScript from available JavaScripts and extended JavaScripts
+    * @param module
+    *          module will be removed
+    * @param scriptPath
+    *          URI of script that will be removed
+    * @param scontext
+    *          the webapp's {@link javax.servlet.ServletContext}
+    *          
+    */
    public void removeExtendedJavascript(String module, String scriptPath, ServletContext scontext)
    {
       String servletContextName = scontext.getServletContextName();
@@ -278,12 +331,20 @@ public class JavascriptConfigService implements Startable
       jsBytes = null;
    }
 
+   /**
+    * Start service
+    * @see org.picocontainer.Startable#start()
+    */
    public void start()
    {
       DefaultServletContainerFactory.getInstance().getServletContainer().addWebAppListener(deployer);
       DefaultServletContainerFactory.getInstance().getServletContainer().addWebAppListener(removal);
    }
 
+   /**
+    * Stop service
+    * @see org.picocontainer.Startable#stop()
+    */
    public void stop()
    {
       DefaultServletContainerFactory.getInstance().getServletContainer().removeWebAppListener(deployer);
