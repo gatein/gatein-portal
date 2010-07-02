@@ -4,81 +4,26 @@
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="selenium.base" href="" />
-<title>Test_POR_14_043</title>
+<title>Test_POR_14_01_043_CheckShowSiteEditorMenu</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">Test_POR_14_043</td></tr>
+<tr><td rowspan="1" colspan="3">Test_POR_14_01_043_CheckShowSiteEditorMenu</td></tr>
 </thead><tbody>
 <tr>
 	<td>open</td>
-	<td>/portal/public/classic/register</td>
+	<td>/portal/public/classic/</td>
 	<td></td>
 </tr>
 <tr>
-	<td>echo</td>
-	<td>--Register New Account-</td>
+	<td>windowMaximize</td>
+	<td></td>
 	<td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=Register</td>
-	<td></td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>username</td>
-	<td>POR_14_043</td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>password</td>
-	<td>111111</td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>confirmPassword</td>
-	<td>111111</td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>firstName</td>
-	<td>POR_14_043</td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>lastName</td>
-	<td>POR_14_043</td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>emailAddress</td>
-	<td>por_14_043@yahoo.com</td>
-</tr>
-<tr>
-	<td>clickAt</td>
-	<td>link=Subscribe</td>
-	<td>1,1</td>
-</tr>
-<tr>
-	<td>echo</td>
-	<td>--Login in portal--</td>
-	<td></td>
-</tr>
-<tr>
-	<td>open</td>
-	<td>/portal/public/classic</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>link=Sign in</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>username</td>
 	<td></td>
 </tr>
 <tr>
@@ -92,13 +37,108 @@
 	<td>gtn</td>
 </tr>
 <tr>
-	<td>clickAt</td>
-	<td>xpath=//div[@id='UIPortalLoginFormAction']//a</td>
+	<td>clickAndWait</td>
+	<td>//div[@id='UIPortalLoginFormAction']/div/div/div/a</td>
 	<td></td>
 </tr>
 <tr>
 	<td>echo</td>
-	<td>--GroupManagement--</td>
+	<td>-- Go to New Staff--</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=New Staff</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>username</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>username</td>
+	<td>Test_POR_14_043</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>password</td>
+	<td>Test_POR_14_043</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>Confirmpassword</td>
+	<td>Test_POR_14_043</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>firstName</td>
+	<td>Test_POR_14_043</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>lastName</td>
+	<td>Test_POR_14_043</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>email</td>
+	<td>Test_POR_14_043@gmail.com</td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>-- Choose User Profile--</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='UIAccountPortlet']/div[1]/div/div/div/div/div/div/div/div/div[2]/div/div/div/div</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='UIAccountPortlet']/div[1]/div/div/div/div/div/div/div/div/div[2]/div/div/div/div</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>user.language</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>user.language</td>
+	<td>label=Vietnamese</td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Save</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Save</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[3]/div/div/div/div/div[2]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//div[3]/div/div/div/div/div[2]</td>
+	<td>You have registered a new account.</td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[3]/div/div/div[1]/div/div/div/div/div/div/div/div[2]/div/div[2]/div/div/div/div/div/div[3]/div/table/tbody/tr/td/div/div/div/div</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[3]/div/div/div[1]/div/div/div/div/div/div/div/div[2]/div/div[2]/div/div/div/div/div/div[3]/div/table/tbody/tr/td/div/div/div/div</td>
 	<td></td>
 </tr>
 <tr>
@@ -108,22 +148,17 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>link=Group</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
-	<td>link=Group</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
 	<td>link=Users and groups management</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAt</td>
 	<td>link=Users and groups management</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>-- Choose Group Management --</td>
 	<td></td>
 </tr>
 <tr>
@@ -137,22 +172,17 @@
 	<td>1,1</td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
-	<td>xpath=//div[@id='UIOrganizationPortlet']/div[2]/div[2]/div[1]/div[2]/div[1]/div[2]/div/div/div/div[3]/div/a</td>
-	<td></td>
-</tr>
-<tr>
 	<td>echo</td>
 	<td>-select group from the tree-</td>
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>waitForElementPresent</td>
 	<td>link=Platform</td>
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>link=Platform</td>
 	<td></td>
 </tr>
@@ -162,12 +192,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
-	<td>link=Administrators</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>link=Administrators</td>
 	<td></td>
 </tr>
@@ -183,12 +208,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>xpath=//form[@id='UIUserSelector']/div[2]/div[2]/table/tbody/tr/td/a[1]/div/div/div</td>
+	<td>Test_POR_14_043</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAt</td>
-	<td>POR_14_043</td>
+	<td>Test_POR_14_043</td>
 	<td></td>
 </tr>
 <tr>
@@ -207,12 +232,22 @@
 	<td></td>
 </tr>
 <tr>
+	<td>waitForElementPresent</td>
+	<td>membership</td>
+	<td></td>
+</tr>
+<tr>
 	<td>select</td>
 	<td>membership</td>
 	<td>label=manager</td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>waitForElementPresent</td>
+	<td>link=Save</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
 	<td>link=Save</td>
 	<td></td>
 </tr>
@@ -222,22 +257,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
-	<td>link=Group</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
-	<td>link=Group</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>link=Page Management</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
+	<td>clickAndWait</td>
 	<td>link=Page Management</td>
 	<td></td>
 </tr>
@@ -268,18 +288,23 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>xpath=//option[@value='portal']</td>
+	<td>name</td>
 	<td></td>
 </tr>
 <tr>
 	<td>type</td>
 	<td>name</td>
-	<td>por_14_043</td>
+	<td>Test_POR_14_043</td>
 </tr>
 <tr>
 	<td>type</td>
 	<td>title</td>
-	<td>por_14_043</td>
+	<td>Test_POR_14_043</td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>-- Page Layout--</td>
+	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
@@ -287,8 +312,13 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>xpath=//div[@id='UIPortalApplication']/div[@id='UIMaskWorkspace']/div[@class='MiddleLeftDecorator']//div[@class='TabsContainer']/div[2]//div[@class='MiddleTab']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>-- Permission Setting--</td>
 	<td></td>
 </tr>
 <tr>
@@ -297,7 +327,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>xpath=//div[@id='UIPortalApplication']/div[@id='UIMaskWorkspace']/div[@class='MiddleLeftDecorator']//div[@class='TabsContainer']/div[3]//div[@class='MiddleTab']</td>
 	<td></td>
 </tr>
@@ -349,12 +379,12 @@
 <tr>
 	<td>type</td>
 	<td>name</td>
-	<td>POR_14_043</td>
+	<td>Test_POR_14_043</td>
 </tr>
 <tr>
 	<td>type</td>
 	<td>label</td>
-	<td>POR_14_043</td>
+	<td>Test_POR_14_043</td>
 </tr>
 <tr>
 	<td>echo</td>
@@ -362,12 +392,22 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>waitForElementPresent</td>
 	<td>xpath=//div[@class='CenterHorizontalTabs']//div[@class='NormalTab']//div[@class='MiddleTab']</td>
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
+	<td>xpath=//div[@class='CenterHorizontalTabs']//div[@class='NormalTab']//div[@class='MiddleTab']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Search and Select Page</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
 	<td>link=Search and Select Page</td>
 	<td></td>
 </tr>
@@ -377,29 +417,44 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
-	<td>link=Search and Select Page</td>
+	<td>waitForElementPresent</td>
+	<td>//img[@title='Select Page']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//img[@title='Select Page']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>-- Save to finish add new node--</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>xpath=//img[contains(@onclick,'por_14_043')]</td>
+	<td>link=Save</td>
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
-	<td>xpath=//img[contains(@onclick,'por_14_043')]</td>
+	<td>click</td>
+	<td>link=Save</td>
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
-	<td>link=Save</td>
-	<td>1,1</td>
+	<td>echo</td>
+	<td>-- Save to close Navigation Management--</td>
+	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>waitForElementPresent</td>
 	<td>link=Save</td>
-	<td>1,1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Save</td>
+	<td></td>
 </tr>
 <tr>
 	<td>echo</td>
@@ -417,23 +472,48 @@
 	<td></td>
 </tr>
 <tr>
+	<td>open</td>
+	<td>/portal/public/classic/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Sign in</td>
+	<td></td>
+</tr>
+<tr>
 	<td>clickAt</td>
 	<td>link=Sign in</td>
 	<td></td>
 </tr>
 <tr>
+	<td>waitForElementPresent</td>
+	<td>username</td>
+	<td></td>
+</tr>
+<tr>
 	<td>type</td>
 	<td>username</td>
-	<td>POR_14_043</td>
+	<td>Test_POR_14_043</td>
 </tr>
 <tr>
 	<td>type</td>
 	<td>password</td>
-	<td>111111</td>
+	<td>Test_POR_14_043</td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>clickAndWait</td>
 	<td>xpath=//div[@id='UIPortalLoginFormAction']/div/div/div/a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//div[@id='PortalNavigationTopContainer']/div[1]/div/div/div/div/div/div/a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>mouseOver</td>
+	<td>link=Site Editor</td>
 	<td></td>
 </tr>
 <tr>
@@ -442,13 +522,8 @@
 	<td></td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
-	<td>link=Sign out</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
-	<td>link=Sign out</td>
+	<td>clickAndWait</td>
+	<td>link=Đăng xuất</td>
 	<td></td>
 </tr>
 <tr>
@@ -457,18 +532,8 @@
 	<td></td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
-	<td>link=Sign in</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
-	<td>link=Sign in</td>
-	<td></td>
-</tr>
-<tr>
 	<td>open</td>
-	<td>/portal/public/classic</td>
+	<td>/portal/public/classic/</td>
 	<td></td>
 </tr>
 <tr>
@@ -477,7 +542,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>link=Sign in</td>
 	<td></td>
 </tr>
@@ -497,28 +562,13 @@
 	<td>gtn</td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
-	<td>xpath=//div[@id='UIPortalLoginFormAction']//a</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
+	<td>clickAndWait</td>
 	<td>xpath=//div[@id='UIPortalLoginFormAction']//a</td>
 	<td></td>
 </tr>
 <tr>
 	<td>echo</td>
 	<td>- Go to Manage page again--</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>link=Group</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
-	<td>link=Group</td>
 	<td></td>
 </tr>
 <tr>
@@ -537,19 +587,14 @@
 	<td></td>
 </tr>
 <tr>
+	<td>waitForElementPresent</td>
+	<td>searchTerm</td>
+	<td></td>
+</tr>
+<tr>
 	<td>type</td>
 	<td>searchTerm</td>
-	<td>por_14_043</td>
-</tr>
-<tr>
-	<td>select</td>
-	<td>searchOption</td>
-	<td>label=Title</td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>xpath=//form[@id='UIPageSearch']/div[2]/a</td>
-	<td></td>
+	<td>Test_POR_14_043</td>
 </tr>
 <tr>
 	<td>select</td>
@@ -619,21 +664,16 @@
 <tr>
 	<td>type</td>
 	<td>searchTerm</td>
-	<td>POR_14_043</td>
+	<td>Test_POR_14_043</td>
 </tr>
 <tr>
-	<td>select</td>
-	<td>searchOption</td>
-	<td>label=User Name</td>
-</tr>
-<tr>
-	<td>click</td>
+	<td>waitForElementPresent</td>
 	<td>xpath=//form[@id='UISearchForm']/div[2]/a</td>
 	<td></td>
 </tr>
 <tr>
-	<td>pause</td>
-	<td>5000</td>
+	<td>click</td>
+	<td>xpath=//form[@id='UISearchForm']/div[2]/a</td>
 	<td></td>
 </tr>
 <tr>
@@ -652,22 +692,27 @@
 	<td></td>
 </tr>
 <tr>
-	<td>pause</td>
-	<td>5000</td>
+	<td>waitForElementPresent</td>
+	<td>//div[3]/div/div/div/div/div[2]</td>
 	<td></td>
 </tr>
 <tr>
-	<td>waitForTextNotPresent</td>
-	<td>POR_14_043</td>
-	<td></td>
+	<td>verifyText</td>
+	<td>//div[3]/div/div/div/div/div[2]</td>
+	<td>No result found.</td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>link=Sign out</td>
+	<td>//div[4]/div/div[2]/div/div/div/div/div/div[3]/div/table/tbody/tr/td/div/div/div/div/a</td>
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
+	<td>//div[4]/div/div[2]/div/div/div/div/div/div[3]/div/table/tbody/tr/td/div/div/div/div/a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
 	<td>link=Sign out</td>
 	<td></td>
 </tr>
