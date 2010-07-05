@@ -69,9 +69,7 @@ public class JavascriptConfigService implements Startable
    }
 
    /**
-    * Return a collection list This method should return the availables scripts
-    * in the service
-    * 
+    * Return a collection list This method should return the availables scripts in the service 
     * @return
     */
    public Collection<String> getAvailableScripts()
@@ -80,8 +78,8 @@ public class JavascriptConfigService implements Startable
    }
 
    /**
-    * return a collection list This method should return the availables script paths
-    * @return
+    * Get a available script paths
+    * @return a collection list. This method should return the available script paths
     */
    public Collection<String> getAvailableScriptsPaths()
    {
@@ -146,7 +144,7 @@ public class JavascriptConfigService implements Startable
    }
 
    /**
-    * Add an JavaScript into available JavaScript
+    * Add an JavaScript into available JavaScripts
     * @param javascript
     *          JavaScript will be added into available JavaScript
     */
@@ -304,7 +302,7 @@ public class JavascriptConfigService implements Startable
    /**
     * Check the existence of module in Available Scripts
     * @param module
-    * @return
+    * @return true if Available Scripts contain module, else return false
     */
    public boolean isModuleLoaded(CharSequence module)
    {
@@ -332,7 +330,9 @@ public class JavascriptConfigService implements Startable
    }
 
    /**
-    * Start service
+    * Start service.
+    * Registry org.exoplatform.web.application.javascript.JavascriptDeployer,
+    * org.exoplatform.web.application.javascript.JavascriptRemoval  into ServletContainer
     * @see org.picocontainer.Startable#start()
     */
    public void start()
@@ -342,7 +342,9 @@ public class JavascriptConfigService implements Startable
    }
 
    /**
-    * Stop service
+    * Stop service.
+    * Remove org.exoplatform.web.application.javascript.JavascriptDeployer,
+    * org.exoplatform.web.application.javascript.JavascriptRemoval  from ServletContainer
     * @see org.picocontainer.Startable#stop()
     */
    public void stop()

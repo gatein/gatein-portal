@@ -33,10 +33,10 @@ public interface GadgetRegistryService
 {
 
    /**
-    * Gets the gadget from database by name.
+    * Return Gadget object retrieved from database by its name.
     * 
     * @param name the name of gadget
-    * @return the gadget or null if not found
+    * @return Gadget object or null if not found
     * @throws Exception
     */
    public Gadget getGadget(String name) throws Exception;
@@ -64,21 +64,28 @@ public interface GadgetRegistryService
     * Adds the gadget to the database. If the gadget is existing, it will be
     * updated.
     * 
-    * @param app the gadget that is saved to database
+    * @param gadget - Gadget that is saved to database, must not be null
     * @throws Exception
     */
    public void saveGadget(Gadget gadget) throws Exception;
 
    /**
     * Removes the gadget from the database.
-    * 
-    * @param id the id of gadget
+    * If can't find Gadget with that name in database, this will throw Exception
+    * @param name the name of gadget
     * @throws Exception
     */
    public void removeGadget(String name) throws Exception;
 
+   /**
+    * Always return true
+    * @param username
+    */
    public boolean isGadgetDeveloper(String username);
 
+   /**
+    * Return Country name, it's set in xml config of GadgetRegistryService
+    */
    public String getCountry();
 
    public String getLanguage();

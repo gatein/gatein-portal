@@ -61,16 +61,45 @@ public interface DataStorage
 
    public final static String PORTAL_CONFIG_UPDATED = "org.exoplatform.portal.config.DataStorage.portalConfigUpdated".intern();
    
+   /**
+    * Create a PortalConfig in database <br/>
+    * Then broadcast PORTAL_CONFIG_CREATED event
+    * @param config
+    */
    public void create(PortalConfig config) throws Exception;
 
+   /**
+    * This method should update the PortalConfig  object <br/>
+    * Then broadcast PORTAL_CONFIG_UPDATED event
+    * @param config 
+    */
    public void save(PortalConfig config) throws Exception;
 
+   /**
+    * This method should load the PortalConfig object from db according to the portalName 
+    * @param portalName
+    */
    public PortalConfig getPortalConfig(String portalName) throws Exception;
 
+   /**
+    * This method should load the PortalConfig object from db according to the portalName and ownerType
+    * @param portalName
+    * @param ownerType
+    */
    public PortalConfig getPortalConfig(String ownerType, String portalName) throws Exception;
 
+   /**
+    * Remove the PortalConfig from the database <br/>
+    * Then broadcast PORTAL_CONFIG_REMOVED event 
+    * @param config
+    * @throws Exception
+    */
    public void remove(PortalConfig config) throws Exception;
 
+   /**
+    * This method  should load the Page object from the database according to the pageId
+    * @param pageId - String represent id of page, it must be valid pageId (3 parts saparate by :: )
+    */
    public Page getPage(String pageId) throws Exception;
 
    /**
@@ -86,16 +115,30 @@ public interface DataStorage
    public Page clonePage(String pageId, String clonedOwnerType, String clonedOwnerId, String clonedName)
       throws Exception;
 
+   /**
+    * Remove Page from database <br />
+    * Then broadcast PAGE_REMOVED event
+    * @param page
+    * @throws Exception
+    */
    public void remove(Page page) throws Exception;
 
+   /**
+    * This method should create  or  udate the given page object <br />
+    * Then broasdcast PAGE_CREATED event
+    * @param page
+    * @throws Exception
+    */
    public void create(Page page) throws Exception;
 
    /**
     * Saves a page. If a page with the same id already exists then a merge operation will occur, otherwise
-    * a new page will be created from the provided argument.
+    * a new page will be created from the provided argument. <br />
     *
     * The operation returns a list of the change object that describes the changes that occured during the
-    * save operation.
+    * save operation. <br/>
+    *
+    *Then broadcast PAGE_UPDATED event
     *
     * @param page the page to save
     * @return the list of model changes that occured during the save operation
@@ -103,38 +146,121 @@ public interface DataStorage
     */
    public List<ModelChange> save(Page page) throws Exception;
 
+   /**
+    * Return PageNavigation object from the database according to the fullId <br />
+    * If can't find, return null
+    * @param fullId - must be valid (2 parts, split by :: )
+    * @throws Exception
+    */
    public PageNavigation getPageNavigation(String fullId) throws Exception;
 
+   /**
+    * Return PageNavigation object from the database according to the onwnerType (portal, group or user) and id
+    * @param ownerType
+    * @param id
+    * @throws Exception
+    */
    public PageNavigation getPageNavigation(String ownerType, String id) throws Exception;
 
+   /**
+    * This method should update the navigation object in the database <br />
+    * Then broadcast NAVIGATION_UPDATED event
+    * @param navigation - PageNavigation object to update
+    * @throws Exception
+    */
    public void save(PageNavigation navigation) throws Exception;
 
+   /**
+    * This method should create the navigation object in the database <br />
+    * Then broadcast NAVIGATION_CREATED event
+    * @param navigation - PageNavigation object to create
+    * @throws Exception
+    */
    public void create(PageNavigation navigation) throws Exception;
 
+   /**
+    * Remove the navigation object from the database <br />
+    * If can't find it in database, ignore
+    * Then broadcast NAVIGATION_REMOVED event
+    * @param navigation - PageNavigation object to remove
+    * @throws Exception
+    */
    public void remove(PageNavigation navigation) throws Exception;
 
+   /**
+    * Save PortletPreferences config node
+    * @param portletPreferences - PortletPreferences object
+    */
    public void save(PortletPreferences portletPreferences) throws Exception;
 
+   /**
+    * Return contentId according to each state (transient, persitent, clone)
+    * @param state
+    */
    public <S> String getId(ApplicationState<S> state) throws Exception;
 
+   /**
+    * Return content state. If can't find, return null
+    * @see PreferencesTask
+    * @param state - ApplicationState object
+    * @param type - ApplicationType object
+    */
    public <S> S load(ApplicationState<S> state, ApplicationType<S> type) throws Exception;
 
+   /**
+    * Save content state <br />
+    * @param state - ApplicationState object. It must be CloneApplicationState or PersistentApplicationState object
+    * @param preferences - object to be saved
+    */
    public <S> ApplicationState<S> save(ApplicationState<S> state, S preferences) throws Exception;
 
+   /**
+    * Return PortletPreferences from database, if can't find it, return null
+    * @param windowID
+    */
    public PortletPreferences getPortletPreferences(String windowID) throws Exception;
 
+   /**
+    * Return LazyPageList of object (unsorted) which type and other info determined in Query object
+    * @param q - Query object
+    */
    public <T> LazyPageList<T> find(Query<T> q) throws Exception;
 
+   /**
+    * Return LazyPageList of object (sorted) which type and other info determined in Query object
+    * @param q - Query object
+    */
    public <T> LazyPageList<T> find(Query<T> q, Comparator<T> sortComparator) throws Exception;
 
+   /**
+    * Return ListAccess, we can retrieved array of object (unsorted) in database through this. 
+    * @param q - Query object
+    */
    public <T> ListAccess<T> find2(Query<T> q) throws Exception;
 
+   /**
+    * Return ListAccess, we can retrieved array of object (sorted) in database through this. 
+    * @param q - Query object
+    * @param sortComparator - Comparator object, used to sort the result list
+    */
    public <T> ListAccess<T> find2(Query<T> q, Comparator<T> sortComparator) throws Exception;
 
+   /**
+    * Return Container object - info that be used to build this Container is retrieved from /conf/portal/portal/sharedlayout.xml
+    */
    public Container getSharedLayout() throws Exception;
 
+   /**
+    * Return Dashboard object from database according to dashboard id
+    * If can't find out, return null
+    * @param dashboardId
+    */
    public Dashboard loadDashboard(String dashboardId) throws Exception;
 
+   /**
+    * Save Dashboard (its data : DashboadData) to database
+    * @param dashboard - Dashboard object to be saved
+    */
    public void saveDashboard(Dashboard dashboard) throws Exception;
 
    /**

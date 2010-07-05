@@ -26,11 +26,9 @@ import java.util.List;
 
 /**
  * todo julien : to fix
- *
- * Created by The eXo Platform SAS
- * Author : Pham Thanh Tung
- *          thanhtungty@gmail.com
- * Jul 11, 2008  
+ * 
+ * Created by The eXo Platform SAS Author : Pham Thanh Tung
+ * thanhtungty@gmail.com Jul 11, 2008
  */
 public abstract class TestGadgetRegistryService extends AbstractGateInTest
 {
@@ -53,43 +51,27 @@ public abstract class TestGadgetRegistryService extends AbstractGateInTest
       g2.setUrl("http://www.labpixies.com/campaigns/maps/maps.xml");
       service_.saveGadget(g1);
       service_.saveGadget(g2);
+   }
+
+   public void testGetAllGadgets() throws Exception
+   {
       assertEquals(2, service_.getAllGadgets().size());
-      Gadget g3 = service_.getGadget(g1.getName());
+   }
+   
+   public void testGetGadget() throws Exception
+   {
+      Gadget g3 = service_.getGadget("weather");
       assertNotNull(g3);
       assertEquals("weather", g3.getName());
       assertEquals("http://www.labpixies.com/campaigns/weather/weather.xml", g3.getUrl());
 
-      Gadget g4 = service_.getGadget(g2.getName());
+      Gadget g4 = service_.getGadget("map");
       assertNotNull(g4);
       assertEquals("map", g4.getName());
       assertEquals("http://www.labpixies.com/campaigns/maps/maps.xml", g4.getUrl());
-
    }
 
-   public void testGetGadget() throws Exception
-   {
-      Gadget gadget = new Gadget();
-      gadget.setName("weather");
-      gadget.setUrl("http://www.labpixies.com/campaigns/weather/weather.xml");
-      service_.saveGadget(gadget);
-      Gadget g = service_.getGadget(gadget.getName());
-      assertNotNull(g);
-      assertEquals(1, service_.getAllGadgets().size());
-      assertEquals("weather", g.getName());
-      assertEquals("http://www.labpixies.com/campaigns/weather/weather.xml", g.getUrl());
-   }
-
-   public void testGetAllGadgets()
-   {
-
-   }
-
-   public void testRemoveGadget()
-   {
-
-   }
-
-   public void tearDown() throws Exception
+   public void testRemoveGadget() throws Exception
    {
       List<Gadget> gadgets = service_.getAllGadgets();
       for (Gadget ele : gadgets)
@@ -97,5 +79,4 @@ public abstract class TestGadgetRegistryService extends AbstractGateInTest
          service_.removeGadget(ele.getName());
       }
    }
-
 }

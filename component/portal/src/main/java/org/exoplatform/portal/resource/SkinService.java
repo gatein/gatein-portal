@@ -150,7 +150,7 @@ public class SkinService implements Startable
 
    /**
     * add category into portletThemes_ if portletThemes does not contain one
-    * @param categoryName: category's name that want to add into portletThemes_
+    * @param categoryName: category's name that want to add into portletThemes
     */
    public void addCategoryTheme(String categoryName)
    {
@@ -239,6 +239,20 @@ public class SkinService implements Startable
    }
 
    
+   /**
+    * 
+    * Register the Skin for available portal Skins. Do not override previous skin 
+    * 
+    * @param module
+    *           skin module identifier
+    * @param skinName
+    *           skin name
+    * @param cssPath
+    *           path uri to the css file. This is relative to the root context,
+    *           use leading '/'
+    * @param scontext
+    *           the webapp's {@link javax.servlet.ServletContext}
+    */
    public void addSkin(String module, String skinName, String cssPath, ServletContext scontext)
    {
       addSkin(module, skinName, cssPath, scontext, false);
@@ -308,8 +322,6 @@ public class SkinService implements Startable
     *           use leading '/'
     * @param scontext
     *           the webapp's {@link javax.servlet.ServletContext}
-    * @param overwrite
-    *           if any previous skin should be replaced by that one
     */
    public void addSkin(String module, String skinName, String cssPath, String cssData)
    {
@@ -355,7 +367,7 @@ public class SkinService implements Startable
     * 
     * @param cssPath
     *           path of the css to find
-    * @return the css
+    * @return the css contet or null if not found.
     */
    public String getCSS(String cssPath)
    {
@@ -445,7 +457,7 @@ public class SkinService implements Startable
     * get css content of URI file
     * @param cssPath
     *          path uri to the css file
-    * @return css content of URI file
+    * @return css content of URI file or null if not found
     */
    public String getMergedCSS(String cssPath)
    {
@@ -472,6 +484,10 @@ public class SkinService implements Startable
       return portalSkins;
    }
 
+   /**
+    * Get all portlet's themes
+    * @return portlet's themes
+    */
    public Map<String, Set<String>> getPortletThemes()
    {
       return portletThemes_;
@@ -481,7 +497,7 @@ public class SkinService implements Startable
     * Get SkinConfig by module and skin name
     * @param module
     * @param skinName
-    * @return
+    * @return SkinConfig by SkinKey(module, skinName), or SkinConfig by SkinKey(module, "Default")
     */
    public SkinConfig getSkin(String module, String skinName)
    {
@@ -491,6 +507,11 @@ public class SkinService implements Startable
       return config;
    }
 
+   /**
+    * Remove SkinKey from SkinCache by portalName and skinName
+    * @param portalName
+    * @param skinName
+    */
    public void invalidatePortalSkinCache(String portalName, String skinName)
    {
       SkinKey key = new SkinKey(portalName, skinName);
@@ -599,6 +620,15 @@ public class SkinService implements Startable
       return resource;
    }
 
+   /**
+    * Apply CSS of skin
+    * @param appendable
+    * @param cssPath
+    * @param orientation
+    * @param merge
+    * @throws RenderingException
+    * @throws IOException
+    */
    private void processCSS(Appendable appendable, String cssPath, Orientation orientation, boolean merge)
       throws RenderingException, IOException
    {
@@ -606,6 +636,16 @@ public class SkinService implements Startable
       processCSSRecursively(appendable, merge, skin, orientation);
    }
 
+   /**
+    * Apply CSS for Skin <br/>
+    * If skin is null, do nothing
+    * @param appendable
+    * @param merge
+    * @param skin
+    * @param orientation
+    * @throws RenderingException
+    * @throws IOException
+    */
    private void processCSSRecursively(Appendable appendable, boolean merge, Resource skin, Orientation orientation)
       throws RenderingException, IOException
    {
@@ -696,6 +736,9 @@ public class SkinService implements Startable
       return !matcher2.find();
    }
 
+   /**
+    * Rewrite background url pattern
+    */
    private void append(String line, String basePath, Appendable appendable) throws IOException
    {
       // Rewrite background url pattern
@@ -712,6 +755,11 @@ public class SkinService implements Startable
       }
    }
 
+   /**
+    * Get Suffix of Orientation
+    * @param orientation
+    * @return Suffix of Orientation
+    */
    String getSuffix(Orientation orientation)
    {
       if (orientation == null)
@@ -742,6 +790,11 @@ public class SkinService implements Startable
       return availableSkin.toArray(new String[availableSkin.size()]);
    }
 
+   /**
+    * Registry ServletContext into MainResourceResolver of SkinService
+    * @param sContext
+    *          ServletContext will be registried
+    */
    public void registerContext(ServletContext sContext)
    {
       mainResolver.registerContext(sContext);
@@ -774,7 +827,8 @@ public class SkinService implements Startable
    }
 
    /**
-    * Start service
+    * Start service.
+    * Registry org.exoplatform.portal.resource.GateInSkinConfigDeployer and org.exoplatform.portal.resource.GateInSkinConfigRemoval into ServletContainer.
     * @see org.picocontainer.Startable#start()
     */
    public void start()
@@ -785,6 +839,7 @@ public class SkinService implements Startable
 
    /**
     * Stop service
+    * Remove org.exoplatform.portal.resource.GateInSkinConfigDeployer and org.exoplatform.portal.resource.GateInSkinConfigRemoval from ServletContainer.
     * @see org.picocontainer.Startable#stop()
     */
    public void stop()

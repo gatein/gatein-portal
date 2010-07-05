@@ -28,10 +28,10 @@ package org.exoplatform.application.gadget;
 public interface SourceStorage
 {
    /**
-    * This method will get source from a specify source's path in database
-    * @param sourcePath
-    * @return
-    * @throws Exception
+    * Return {@link Source} object of gadget that name provided in gadget object param <br/>
+    * If can't find gadget with that name, return null <br/>
+    * If gadget is remote, throw Exception <br/>
+    * @param gadget - Gadget object used to retrieved gadget's name
     */
    public Source getSource(Gadget gadget) throws Exception;
 
