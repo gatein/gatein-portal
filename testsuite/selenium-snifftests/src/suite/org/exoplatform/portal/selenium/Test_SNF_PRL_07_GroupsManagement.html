@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<link rel="selenium.base" href="" />
+<link rel="selenium.base" href="http://localhost:8080/" />
 <title>Test_SNF_PRL_07_GroupsManagement</title>
 </head>
 <body>
@@ -48,7 +48,7 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>xpath=//div[@id='UIPortalLoginFormAction']/div/div/div/a</td>
+	<td>//div[@id='UIPortalLoginFormAction']/div/div/div/a</td>
 	<td></td>
 </tr>
 <tr>
@@ -97,6 +97,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>waitForElementPresent</td>
+	<td>xpath=//div[@id='UIOrganizationPortlet']//div[3]//div[@class='ExpandIcon']/a</td>
+	<td></td>
+</tr>
+<tr>
 	<td>click</td>
 	<td>xpath=//div[@id='UIOrganizationPortlet']//div[3]//div[@class='ExpandIcon']/a</td>
 	<td></td>
@@ -113,12 +118,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>xpath=//div[2]/div[1]/div[1]/a[3]</td>
+	<td>//div[2]/div[1]/div[1]/a[3]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>xpath=//div[2]/div[1]/div[1]/a[3]</td>
+	<td>//div[2]/div[1]/div[1]/a[3]</td>
 	<td></td>
 </tr>
 <tr>
@@ -149,6 +154,11 @@
 <tr>
 	<td>echo</td>
 	<td>--Click &quot;Save&quot; to complete adding new group</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Save</td>
 	<td></td>
 </tr>
 <tr>
