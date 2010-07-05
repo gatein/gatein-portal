@@ -4,12 +4,12 @@
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="selenium.base" href="" />
-<title>Test_PRL_01_003_CreateNewAccountWithUserNameTheSameWithExistingButDifferentByLowerUpperCase</title>
+<title>Test_PRL_01_003_CreateNewAccountSameAsExistingButDifferentByLowerUpperCase</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">Test_PRL_01_003_CreateNewAccountWithUserNameTheSameWithExistingButDifferentByLowerUpperCase</td></tr>
+<tr><td rowspan="1" colspan="3">Test_PRL_01_003_CreateNewAccountSameAsExistingButDifferentByLowerUpperCase</td></tr>
 </thead><tbody>
 <tr>
 	<td>open</td>
@@ -49,6 +49,11 @@
 <tr>
 	<td>clickAndWait</td>
 	<td>//div[@id='UIPortalLoginFormAction']/div/div/div/a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>-- Go to new staff--</td>
 	<td></td>
 </tr>
 <tr>
@@ -92,6 +97,16 @@
 	<td>test_prl_01_003@gmail.com</td>
 </tr>
 <tr>
+	<td>echo</td>
+	<td>-- Choose User profile tab--</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='UIAccountPortlet']/div[1]/div/div/div/div/div/div/div/div/div[2]/div/div/div/div</td>
+	<td></td>
+</tr>
+<tr>
 	<td>click</td>
 	<td>//div[@id='UIAccountPortlet']/div[1]/div/div/div/div/div/div/div/div/div[2]/div/div/div/div</td>
 	<td></td>
@@ -107,9 +122,24 @@
 	<td>label=Vietnamese</td>
 </tr>
 <tr>
+	<td>waitForElementPresent</td>
+	<td>//form[@id='UIAccountForm']/div[3]/div[2]/table/tbody/tr/td/div[1]/div/div/div</td>
+	<td></td>
+</tr>
+<tr>
 	<td>click</td>
 	<td>//form[@id='UIAccountForm']/div[3]/div[2]/table/tbody/tr/td/div[1]/div/div/div</td>
 	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[3]/div/div/div/div/div[2]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForText</td>
+	<td>//div[3]/div/div/div/div/div[2]</td>
+	<td>You have registered a new account.</td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
@@ -124,6 +154,21 @@
 <tr>
 	<td>echo</td>
 	<td>--Create new user with upper case--</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>2000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='UIAccountPortlet']/div[1]/div/div/div/div/div/div/div/div/div[1]/div/div/div/div</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='UIAccountPortlet']/div[1]/div/div/div/div/div/div/div/div/div[1]/div/div/div/div</td>
 	<td></td>
 </tr>
 <tr>
@@ -162,6 +207,16 @@
 	<td>TEST_PRL_01_003@gmail.com</td>
 </tr>
 <tr>
+	<td>echo</td>
+	<td>-- Choose User Profile--</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='UIAccountPortlet']/div[1]/div/div/div/div/div/div/div/div/div[2]/div/div/div/div</td>
+	<td></td>
+</tr>
+<tr>
 	<td>click</td>
 	<td>//div[@id='UIAccountPortlet']/div[1]/div/div/div/div/div/div/div/div/div[2]/div/div/div/div</td>
 	<td></td>
@@ -177,9 +232,24 @@
 	<td>label=English</td>
 </tr>
 <tr>
+	<td>waitForElementPresent</td>
+	<td>link=Save</td>
+	<td></td>
+</tr>
+<tr>
 	<td>click</td>
 	<td>link=Save</td>
 	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[3]/div/div/div/div/div[2]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[3]/div/div/div/div/div[2]</td>
+	<td>You have registered a new account.</td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
@@ -199,6 +269,16 @@
 <tr>
 	<td>echo</td>
 	<td>--Login in with user is lower case--</td>
+	<td></td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>/portal/public/classic/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Sign in</td>
 	<td></td>
 </tr>
 <tr>
@@ -237,6 +317,16 @@
 	<td></td>
 </tr>
 <tr>
+	<td>open</td>
+	<td>/portal/public/classic/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Sign in</td>
+	<td></td>
+</tr>
+<tr>
 	<td>click</td>
 	<td>link=Sign in</td>
 	<td></td>
@@ -257,23 +347,23 @@
 	<td>TEST_PRL_01_003</td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
-	<td>//div[@id='UIPortalLoginFormAction']/div/div/div/a</td>
-	<td></td>
-</tr>
-<tr>
 	<td>clickAndWait</td>
 	<td>//div[@id='UIPortalLoginFormAction']/div/div/div/a</td>
 	<td></td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
+	<td>clickAndWait</td>
 	<td>link=Sign out</td>
 	<td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=Sign out</td>
+	<td>echo</td>
+	<td>-- Delete user--</td>
+	<td></td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>/portal/public/classic/</td>
 	<td></td>
 </tr>
 <tr>
@@ -284,11 +374,6 @@
 <tr>
 	<td>click</td>
 	<td>link=Sign in</td>
-	<td></td>
-</tr>
-<tr>
-	<td>echo</td>
-	<td>-- Delete user--</td>
 	<td></td>
 </tr>
 <tr>
@@ -317,6 +402,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>waitForElementPresent</td>
+	<td>link=Users and groups management</td>
+	<td></td>
+</tr>
+<tr>
 	<td>click</td>
 	<td>link=Users and groups management</td>
 	<td></td>
@@ -335,6 +425,11 @@
 	<td>type</td>
 	<td>searchTerm</td>
 	<td>TEST_PRL_01_003</td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//form[@id='UISearchForm']/div[2]/a</td>
+	<td></td>
 </tr>
 <tr>
 	<td>click</td>
@@ -392,6 +487,11 @@
 	<td>test_prl_01_003</td>
 </tr>
 <tr>
+	<td>waitForElementPresent</td>
+	<td>//form[@id='UISearchForm']/div[2]/a</td>
+	<td></td>
+</tr>
+<tr>
 	<td>click</td>
 	<td>//form[@id='UISearchForm']/div[2]/a</td>
 	<td></td>
@@ -432,12 +532,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
-	<td>link=Sign out</td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
+	<td>clickAndWait</td>
 	<td>link=Sign out</td>
 	<td></td>
 </tr>
