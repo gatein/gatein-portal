@@ -4,12 +4,12 @@
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="selenium.base" href="" />
-<title>Test_POR_07_003</title>
+<title>Test_POR_07_003_CheckDisplayLanguageOfPortalInPublicMode</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">Test_POR_07_003</td></tr>
+<tr><td rowspan="1" colspan="3">Test_POR_07_003_CheckDisplayLanguageOfPortalInPublicMode</td></tr>
 </thead><tbody>
 <tr>
 	<td>open</td>
@@ -22,9 +22,19 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
-	<td>xpath=//a[@class='Language']</td>
-	<td>1,1</td>
+	<td>windowMaximize</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Change Language</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Change Language</td>
+	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
@@ -32,43 +42,18 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>link=Vietnamese</td>
-	<td>1,1</td>
-</tr>
-<tr>
-	<td>clickAt</td>
-	<td>link=Apply</td>
-	<td>1,1</td>
-</tr>
-<tr>
-	<td>waitForElementNotPresent</td>
-	<td>link=Apply</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>xpath=//a[@class='Language']</td>
-	<td>1,1</td>
-</tr>
-<tr>
-	<td>clickAt</td>
-	<td>xpath=//a[@class='Language']</td>
-	<td>1,1</td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>xpath=//div[@id='UITabContent']//div[2]/a</td>
+	<td>link=Apply</td>
 	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
-	<td>xpath=//div[@id='UITabContent']//div[2]/a</td>
-	<td>1,1</td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>link=Áp dụng</td>
+	<td>link=Apply</td>
 	<td></td>
 </tr>
 <tr>
@@ -77,63 +62,28 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
-	<td>xpath=//a[@class='Language']</td>
-	<td>1,1</td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>link=English</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
-	<td>link=English</td>
-	<td>1,1</td>
-</tr>
-<tr>
-	<td>clickAt</td>
-	<td>link=Apply</td>
-	<td>1,1</td>
-</tr>
-<tr>
-	<td>waitForElementNotPresent</td>
-	<td>link=Apply</td>
+	<td>click</td>
+	<td>link=Thay đổi ngôn ngữ</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>xpath=//a[@class='Language']</td>
-	<td>1,1</td>
-</tr>
-<tr>
-	<td>clickAt</td>
-	<td>xpath=//a[@class='Language']</td>
-	<td>1,1</td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>xpath=//div[@id='UITabContent']//div[5]/a</td>
+	<td>link=Tiếng Anh</td>
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
-	<td>xpath=//div[@id='UITabContent']//div[5]/a</td>
-	<td>1,1</td>
-</tr>
-<tr>
-	<td>clickAt</td>
-	<td>link=Apply</td>
+	<td>click</td>
+	<td>link=Tiếng Anh</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>link=Sign in</td>
+	<td>link=Áp dụng</td>
 	<td></td>
 </tr>
 <tr>
-	<td>verifyElementPresent</td>
-	<td>link=Sign in</td>
+	<td>clickAndWait</td>
+	<td>link=Áp dụng</td>
 	<td></td>
 </tr>
 

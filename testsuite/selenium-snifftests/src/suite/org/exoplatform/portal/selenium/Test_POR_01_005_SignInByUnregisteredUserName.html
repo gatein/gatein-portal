@@ -37,7 +37,7 @@
 	<td>POR_01_005</td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>clickAndWait</td>
 	<td>//div[@id='UIPortalLoginFormAction']/div/div/div/</td>
 	<td></td>
 </tr>
@@ -52,7 +52,7 @@
 	<td>POR_01_005</td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>clickAndWait</td>
 	<td>link=Sign in</td>
 	<td></td>
 </tr>
@@ -60,6 +60,11 @@
 	<td>verifyTextPresent</td>
 	<td>Sign in failed. Wrong username or password.</td>
 	<td></td>
+</tr>
+<tr>
+	<td>waitForValue</td>
+	<td>username</td>
+	<td>POR_01_005</td>
 </tr>
 <tr>
 	<td>type</td>
@@ -72,8 +77,8 @@
 	<td>gtn</td>
 </tr>
 <tr>
-	<td>clickAt</td>
-	<td>//div[@id='UIPortalLoginFormAction']/table/tbody/tr//td</td>
+	<td>clickAndWait</td>
+	<td>link=Sign in</td>
 	<td></td>
 </tr>
 <tr>
@@ -82,13 +87,8 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>clickAndWait</td>
 	<td>link=Sign out</td>
-	<td></td>
-</tr>
-<tr>
-	<td></td>
-	<td></td>
 	<td></td>
 </tr>
 
