@@ -22,7 +22,12 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>windowMaximize</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
 	<td>link=Sign in</td>
 	<td></td>
 </tr>
@@ -42,8 +47,8 @@
 	<td>gtn</td>
 </tr>
 <tr>
-	<td>clickAt</td>
-	<td>xpath=//div[@id='UIPortalLoginFormAction']//a</td>
+	<td>clickAndWait</td>
+	<td>//div[@id='UIPortalLoginFormAction']//a</td>
 	<td></td>
 </tr>
 <tr>
@@ -57,7 +62,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>clickAndWait</td>
 	<td>link=Site</td>
 	<td></td>
 </tr>
@@ -67,7 +72,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>link=Add New Portal</td>
 	<td></td>
 </tr>
@@ -103,12 +108,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>xpath=//div[@id='UIMaskWorkspace']//div[@class='TabsContainer']/div[2]//div[@class='MiddleTab']</td>
+	<td>//div[@id='UIMaskWorkspace']//div[@class='TabsContainer']/div[2]//div[@class='MiddleTab']</td>
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
-	<td>xpath=//div[@id='UIMaskWorkspace']//div[@class='TabsContainer']/div[2]//div[@class='MiddleTab']</td>
+	<td>click</td>
+	<td>//div[@id='UIMaskWorkspace']//div[@class='TabsContainer']/div[2]//div[@class='MiddleTab']</td>
 	<td></td>
 </tr>
 <tr>
@@ -128,12 +133,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>xpath=//div[@id='UIMaskWorkspace']//div[@class='TabsContainer']/div[3]//div[@class='MiddleTab']</td>
+	<td>//div[@id='UIMaskWorkspace']//div[@class='TabsContainer']/div[3]//div[@class='MiddleTab']</td>
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
-	<td>xpath=//div[@id='UIMaskWorkspace']//div[@class='TabsContainer']/div[3]//div[@class='MiddleTab']</td>
+	<td>click</td>
+	<td>//div[@id='UIMaskWorkspace']//div[@class='TabsContainer']/div[3]//div[@class='MiddleTab']</td>
 	<td></td>
 </tr>
 <tr>
@@ -141,16 +146,48 @@
 	<td>--Choose Access Permission Setting--</td>
 	<td></td>
 </tr>
+<!--=============-->
 <tr>
 	<td>waitForElementPresent</td>
-	<td>publicMode</td>
+	<td>link=Add Permission</td>
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
-	<td>publicMode</td>
+	<td>click</td>
+	<td>link=Add Permission</td>
 	<td></td>
 </tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@onclick=&quot;javascript:eXo.webui.UIForm.submitEvent('UIPortalForm','ChangeNode','&amp;subComponentId=TreeListPermissionSelector&amp;objectId=/platform')&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@onclick=&quot;javascript:eXo.webui.UIForm.submitEvent('UIPortalForm','ChangeNode','&amp;subComponentId=TreeListPermissionSelector&amp;objectId=/platform')&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Administrators</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Administrators</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=exact:*</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=exact:*</td>
+	<td></td>
+</tr>
+<!--------------------------->
 <tr>
 	<td>echo</td>
 	<td>--Choose Edit Permission Setting--</td>
@@ -162,7 +199,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>link=Edit Permission Setting</td>
 	<td></td>
 </tr>
@@ -172,7 +209,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>link=Select Permission</td>
 	<td></td>
 </tr>
@@ -182,7 +219,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>link=Platform</td>
 	<td></td>
 </tr>
@@ -192,7 +229,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>link=Administrators</td>
 	<td></td>
 </tr>
@@ -202,17 +239,17 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>link=exact:*</td>
 	<td></td>
 </tr>
 <tr>
-	<td>waitForText</td>
-	<td>xpath=//div[@id='UIPermissionSelector']/div/div[2]/div[1]/div[3]/div[2]</td>
-	<td>exact:*</td>
+	<td>waitForElementPresent</td>
+	<td>link=Save</td>
+	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>link=Save</td>
 	<td></td>
 </tr>
@@ -237,7 +274,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>//div[@id='UIPortalApplication']/div[@class='UIPopupWindow UIDragObject']//div[@class='MiddleLeftSideDecorator']//div[@class='UIPopupMessages']/div[@class='MessageActionBar']//a</td>
 	<td></td>
 </tr>
@@ -247,7 +284,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>link=Cancel</td>
 	<td></td>
 </tr>
@@ -257,7 +294,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>clickAndWait</td>
 	<td>link=Sign out</td>
 	<td></td>
 </tr>
