@@ -183,6 +183,11 @@
 </tr>
 <!----------------->
 <tr>
+	<td>pause</td>
+	<td>1000</td>
+	<td></td>
+</tr>
+<tr>
 	<td>waitForElementPresent</td>
 	<td>xpath=//td[2]/a</td>
 	<td></td>
@@ -198,13 +203,23 @@
 	<td></td>
 </tr>
 <tr>
-	<td>check</td>
+	<td>click</td>
 	<td>//tr[3]/td[1]/div/input</td>
 	<td></td>
 </tr>
 <tr>
+	<td>waitForElementPresent</td>
+	<td>//tr[2]/td[1]/div/input</td>
+	<td></td>
+</tr>
+<tr>
 	<td>click</td>
 	<td>//tr[2]/td[1]/div/input</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//tr[4]/td[1]/div/input</td>
 	<td></td>
 </tr>
 <tr>
@@ -273,19 +288,33 @@
 	<td></td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
-	<td>xpath=//a[@class='TreeActionIcon RemoveGroupIcon']</td>
+	<td>echo</td>
+	<td>--delete group</td>
 	<td></td>
 </tr>
-<!------------------------->
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='UIOrganizationPortlet']/div[2]/div[2]/div[1]/div[2]/div[1]/div[1]/a[1]</td>
+	<td></td>
+</tr>
 <tr>
 	<td>click</td>
-	<td>xpath=//a[@class='TreeActionIcon RemoveGroupIcon']</td>
+	<td>//div[@id='UIOrganizationPortlet']/div[2]/div[2]/div[1]/div[2]/div[1]/div[1]/a[1]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForConfirmation</td>
 	<td>Are you sure you want to delete this group?</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementNotPresent</td>
+	<td>link=test_group_label_07</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyElementNotPresent</td>
+	<td>link=test_group_label_07</td>
 	<td></td>
 </tr>
 <tr>
