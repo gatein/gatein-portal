@@ -52,8 +52,8 @@
 	<td></td>
 </tr>
 <tr>
-	<td>open</td>
-	<td>/portal/private/classic/</td>
+	<td>waitForElementPresent</td>
+	<td>link=Group</td>
 	<td></td>
 </tr>
 <tr>
@@ -97,19 +97,24 @@
 	<td></td>
 </tr>
 <tr>
+	<td>refreshAndWait</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
 	<td>echo</td>
 	<td>-- Select group navigation which added --</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UIGroupNavigationGrid']/table[2]/tbody/tr/td[3]/a[1]</td>
+	<td>//table[2]/tbody/tr/td[3]/a[1]</td>
 	<td></td>
 </tr>
 <tr>
-	<td>click</td>
-	<td>//div[@id='UIGroupNavigationGrid']/table[2]/tbody/tr/td[3]/a[1]</td>
-	<td></td>
+	<td>clickAt</td>
+	<td>//table[2]/tbody/tr/td[3]/a[1]</td>
+	<td>1,1</td>
 </tr>
 <tr>
 	<td>echo</td>
@@ -217,6 +222,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>pause</td>
+	<td>2000</td>
+	<td></td>
+</tr>
+<tr>
 	<td>waitForElementPresent</td>
 	<td>//div[@id='UIGroupNavigationGrid']/table[2]/tbody/tr/td[3]/a[1]</td>
 	<td></td>
@@ -289,6 +299,11 @@
 <tr>
 	<td>click</td>
 	<td>//div[@id='UIGroupNavigationGrid']/table[2]/tbody/tr/td[3]/a[3]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>1000</td>
 	<td></td>
 </tr>
 <tr>
