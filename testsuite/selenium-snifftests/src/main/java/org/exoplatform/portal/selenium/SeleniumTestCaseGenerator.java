@@ -421,7 +421,9 @@ public class SeleniumTestCaseGenerator {
 			} else if (param1.equals("storeXpathCount")) {
 				sb.append("String ").append(param3).append(" = selenium.getXpathCount(\"").append(param2).append(
 				      "\").toString();\n");
-			} else if (param1.equals("dragAndDropToObject")) {
+			}else if (param1.equals("verifyOrdered")) {
+				sb.append("selenium.isOrdered(\"").append(param2).append("\",\"").append(param3).append("\");\n"); 
+			}else if (param1.equals("dragAndDropToObject")) {
 				sb.append("selenium.dragAndDropToObject(\"").append(param2).append("\",\"").append(param3).append("\");\n");
 			} else if (param1.equals("componentExoContextMenu")) {
 				sb.append("selenium.getEval(\"selenium.doComponentExoContextMenu(\\\"").append(param2)
