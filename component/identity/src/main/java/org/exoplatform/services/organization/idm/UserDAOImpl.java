@@ -554,8 +554,19 @@ public class UserDAOImpl implements UserHandler
          {
             try
             {
-               long date = Long.parseLong(attrs.get(USER_LAST_LOGIN_TIME).getValue().toString());
-               user.setLastLoginTime(new Date(date));
+               Long lastLoginMillis = null;
+               Attribute lastLoginAttr = attrs.get(USER_LAST_LOGIN_TIME);
+               if (lastLoginAttr != null)
+               {
+                  Object lastLoginValue = lastLoginAttr.getValue();
+                  if (lastLoginValue != null) {
+                     lastLoginMillis = Long.parseLong(lastLoginValue.toString());
+                  }
+               }
+               if (lastLoginMillis != null)
+               {
+                  user.setLastLoginTime(new Date(lastLoginMillis));
+               }
             }
             catch (NumberFormatException e)
             {

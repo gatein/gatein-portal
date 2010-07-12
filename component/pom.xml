@@ -38,7 +38,6 @@
       <module>test</module>
       <module>common</module>
       <module>pc</module>
-      <module>xml-parser</module>
       <module>wsrp</module>
       <module>resources</module>
       <module>application-registry</module>

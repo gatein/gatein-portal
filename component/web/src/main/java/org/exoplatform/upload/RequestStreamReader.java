@@ -19,7 +19,7 @@
 
 package org.exoplatform.upload;
 
-import org.exoplatform.services.html.refs.RefsDecoder;
+import org.exoplatform.upload.toremove.RefsDecoder;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

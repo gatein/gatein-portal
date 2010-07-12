@@ -89,14 +89,8 @@ function getModule(params)
       .addDependency(new Project("org.gatein.wsrp", "wsrp-consumer", "jar", wsrpVersion))
       .addDependency(new Project("org.gatein.wsrp", "wsrp-integration-api", "jar", wsrpVersion));
 
-   module.component.xmlParser =
-   new Project("org.exoplatform.portal", "exo.portal.component.xml-parser", "jar", module.version).
-      //addDependency(new Project("commons-httpclient", "commons-httpclient", "jar", "3.0")).
-      addDependency(new Project("commons-codec", "commons-codec", "jar", "1.3"));
-
    module.component.scripting =
    new Project("org.exoplatform.portal", "exo.portal.component.scripting", "jar", module.version).
-      addDependency(module.component.xmlParser).
       addDependency(new Project("rhino", "js", "jar", rhinoVersion)).
       addDependency(new Project("org.codehaus.groovy", "groovy-all", "jar", groovyVersion));
 
@@ -201,6 +195,7 @@ function getModule(params)
    module.eXoGadgetServer =
    new Project("org.exoplatform.portal", "exo.portal.gadgets-server", "war", module.version).
       addDependency(new Project("commons-io", "commons-io", "jar", "1.4")).
+      addDependency(new Project("commons-codec", "commons-codec", "jar", "1.3")).
       addDependency(new Project("net.oauth", "core", "jar", "20080621")).
       addDependency(new Project("com.google.collections", "google-collections", "jar", "1.0-rc2")).
       addDependency(new Project("com.google.code.guice", "guice", "jar", "2.0")).

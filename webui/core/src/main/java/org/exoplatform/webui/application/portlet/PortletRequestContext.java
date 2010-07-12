@@ -19,6 +19,7 @@
 
 package org.exoplatform.webui.application.portlet;
 
+import org.exoplatform.commons.utils.WriterPrinter;
 import org.exoplatform.services.resources.Orientation;
 import org.exoplatform.web.application.URLBuilder;
 import org.exoplatform.webui.application.WebuiApplication;
@@ -76,8 +77,7 @@ public class PortletRequestContext extends WebuiRequestContext
    {
       request_ = req;
       response_ = res;
-//      writer_ = HtmlValidator.DEBUG_MODE ? new WriterPrinter(new HtmlValidator(writer)) : new WriterPrinter(writer);
-      writer_ = writer;
+      writer_ = new WriterPrinter(writer);
       windowId_ = req.getWindowID();
    }
 

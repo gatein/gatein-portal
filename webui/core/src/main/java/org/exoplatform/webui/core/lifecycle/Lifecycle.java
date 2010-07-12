@@ -124,17 +124,7 @@ public class Lifecycle<E extends UIComponent>
 
       try
       {
-         if (bcontext.getWriter() instanceof HtmlValidator)
-         {
-            HtmlValidator validator = (HtmlValidator)bcontext.getWriter();
-            validator.startComponent();
-         }
          service.merge(template, bcontext);
-         if (bcontext.getWriter() instanceof HtmlValidator)
-         {
-            HtmlValidator validator = (HtmlValidator)bcontext.getWriter();
-            validator.endComponent();
-         }
       }
       catch (NullPointerException e)
       {

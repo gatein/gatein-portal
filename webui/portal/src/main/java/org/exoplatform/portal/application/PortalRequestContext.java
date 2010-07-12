@@ -21,7 +21,6 @@ package org.exoplatform.portal.application;
 
 import org.exoplatform.Constants;
 import org.exoplatform.commons.utils.PortalPrinter;
-import org.exoplatform.commons.utils.WriterPrinter;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Page;
@@ -37,7 +36,6 @@ import org.exoplatform.web.application.URLBuilder;
 import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIComponent;
-import org.exoplatform.webui.core.lifecycle.HtmlValidator;
 import org.gatein.common.http.QueryStringParser;
 import org.w3c.dom.Element;
 
@@ -356,17 +354,7 @@ public class PortalRequestContext extends WebuiRequestContext
    {
       if (writer_ == null)
       {
-         PortalPrinter printer = new PortalPrinter(response_.getOutputStream(), true, 30000);
-
-         //
-         if (HtmlValidator.DEBUG_MODE)
-         {
-            writer_ = new WriterPrinter(new HtmlValidator(printer));
-         }
-         else
-         {
-            writer_ = printer;
-         }
+         writer_ = new PortalPrinter(response_.getOutputStream(), true, 30000);
       }
       return writer_;
    }

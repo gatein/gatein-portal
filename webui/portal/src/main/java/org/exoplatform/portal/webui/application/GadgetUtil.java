@@ -106,6 +106,7 @@ public class GadgetUtil
       }
       catch (IOException ioexc)
       {
+         ioexc.printStackTrace();
          return "{}";
       }
       return result;
