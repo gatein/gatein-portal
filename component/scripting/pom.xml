@@ -43,11 +43,6 @@
     </dependency>
 
     <dependency>
-      <groupId>org.exoplatform.portal</groupId>
-      <artifactId>exo.portal.component.xml-parser</artifactId>
-    </dependency>
-
-    <dependency>
       <groupId>rhino</groupId>
       <artifactId>js</artifactId>
     </dependency>

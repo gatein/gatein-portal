@@ -58,6 +58,10 @@
       <artifactId>exo.portal.component.resources</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.exoplatform.portal</groupId>
+      <artifactId>exo.portal.component.xml-parser</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.gatein.wci</groupId>
       <artifactId>wci-wci</artifactId>
     </dependency>
