@@ -22,6 +22,7 @@ package org.exoplatform.webui.config;
 import org.exoplatform.webui.Util;
 import org.exoplatform.commons.serialization.api.annotations.Converted;
 import org.exoplatform.webui.config.metadata.ComponentMetaData;
+import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.lifecycle.Lifecycle;
 import org.exoplatform.webui.event.EventListener;
 
@@ -57,7 +58,7 @@ public class Component
 
    private Map<String, Event> eventMap;
 
-   private Lifecycle componentLifecycle;
+   private Lifecycle<UIComponent> componentLifecycle;
 
    public Component(ComponentMetaData metaData)
    {
@@ -233,7 +234,7 @@ public class Component
       event.setCachedEventListeners(cachedListeners);
    }
 
-   public Lifecycle getUIComponentLifecycle() throws Exception
+   public Lifecycle<UIComponent> getUIComponentLifecycle() throws Exception
    {
       if (componentLifecycle != null)
       {
@@ -241,11 +242,11 @@ public class Component
       }
       if (lifecycle != null)
       {
-         componentLifecycle = (Lifecycle)Util.createObject(lifecycle, null);
+         componentLifecycle = (Lifecycle<UIComponent>)Util.createObject(lifecycle, null);
       }
       else
       {
-         componentLifecycle = Util.createObject(Lifecycle.class, null);
+         componentLifecycle = (Lifecycle<UIComponent>)Util.createObject(Lifecycle.class, null);
       }
       return componentLifecycle;
    }

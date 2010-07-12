@@ -61,7 +61,8 @@ abstract public class UIComponent
    protected Component config;
 
    private transient ValueRendererRegistry rendererRegistry = new ValueRendererRegistry();
-   private static final Lifecycle DEFAULT_LIFECYCLE = new Lifecycle();
+
+   private static final Lifecycle<UIComponent> DEFAULT_LIFECYCLE = new Lifecycle<UIComponent>();
 
    public String getId()
    {
@@ -153,7 +154,7 @@ abstract public class UIComponent
       }
    }
 
-   private Lifecycle getLifecycle() throws Exception
+   private Lifecycle<UIComponent> getLifecycle() throws Exception
    {
       if (config == null)
       {
