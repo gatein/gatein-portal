@@ -24,10 +24,6 @@ import org.exoplatform.application.gadget.GadgetRegistryService;
 import org.exoplatform.portal.config.model.TransientApplicationState;
 import org.exoplatform.portal.webui.application.GadgetUtil;
 import org.exoplatform.portal.webui.application.UIGadget;
-import org.exoplatform.services.rss.parser.DefaultRSSChannel;
-import org.exoplatform.services.rss.parser.DefaultRSSItem;
-import org.exoplatform.services.rss.parser.RSSDocument;
-import org.exoplatform.services.rss.parser.RSSParser;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -96,20 +92,6 @@ public class UIAddGadgetForm extends UIForm
          }
          catch (Exception e)
          {
-            try
-            {
-               URI uri = URI.create(url);
-               RSSParser parser = new RSSParser();
-               RSSDocument<DefaultRSSChannel, DefaultRSSItem> doc = parser.createDocument(uri, "UTF-8");
-               if (doc == null)
-                  throw new Exception("Wrong url");
-            }
-            catch (Exception e1)
-            {
-               uiApplication.addMessage(new ApplicationMessage("UIDashboard.msg.notUrl", null));
-               return;
-            }
-
             String aggregatorId = uiDashboard.getAggregatorId();
             gadget = service.getGadget(aggregatorId);
             //TODO make sure it's an rss feed
