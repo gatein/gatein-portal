@@ -21,6 +21,8 @@ package org.exoplatform.services.html.refs;
 
 import org.exoplatform.services.chars.CharsUtil;
 
+import java.util.Comparator;
+
 /**
  * Author : Nhu Dinh Thuan
  *          nhudinhthuan@yahoo.com
@@ -28,6 +30,16 @@ import org.exoplatform.services.chars.CharsUtil;
  */
 public class RefsDecoder
 {
+
+   private static final CharRefs charRefs = new CharRefs();
+
+   static Comparator<CharRef> comparator = new Comparator<CharRef>()
+   {
+      public int compare(CharRef o1, CharRef o2)
+      {
+         return o1.getName().compareTo(o2.getName());
+      }
+   };
 
    public String decode(String text)
    {
@@ -41,9 +53,8 @@ public class RefsDecoder
 
    private char[] decodeChars(char[] chars)
    {
-      CharRefs charRefs = DecodeService.DECODE_CHARS_REF.getRef();
       if (!charRefs.isSorted())
-         charRefs.sort(DecodeService.comparator);
+         charRefs.sort(comparator);
       int index = CharsUtil.indexOf(chars, '&', 0);
       if (index < 0 || CharsUtil.indexOf(chars, ';', index) < 0)
          return chars;
@@ -79,7 +90,7 @@ public class RefsDecoder
          {
             if (Character.isLetter(ckey[0]))
             {
-               CharRef item = charRefs.searchByName(new String(ckey), DecodeService.comparator);
+               CharRef item = charRefs.searchByName(new String(ckey), comparator);
                if (item != null)
                {
                   decode.append((char)item.getValue());
