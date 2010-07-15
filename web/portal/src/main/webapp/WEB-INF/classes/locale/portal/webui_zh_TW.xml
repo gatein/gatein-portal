@@ -2068,4 +2068,9 @@
          <deleteGadget>刪除小工具</deleteGadget>
       </tooltip>
    </UIGadget>
+
+   <Locale>
+        <zh_CN>繁体字</zh_CN>
+        <zh_TW>繁體字</zh_TW>
+   </Locale>
 </bundle>

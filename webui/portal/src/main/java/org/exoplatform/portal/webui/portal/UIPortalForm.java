@@ -19,6 +19,8 @@
 
 package org.exoplatform.portal.webui.portal;
 
+import org.exoplatform.container.ExoContainer;
+import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserPortalConfig;
@@ -37,6 +39,7 @@ import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.resources.LocaleConfig;
 import org.exoplatform.services.resources.LocaleConfigService;
+import org.exoplatform.services.resources.ResourceBundleService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.InitParams;
@@ -71,6 +74,7 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.ResourceBundle;
 
 @ComponentConfigs({
    @ComponentConfig(lifecycle = UIFormLifecycle.class, template = "system:/groovy/webui/form/UIFormTabPane.gtmpl", events = {
@@ -187,13 +191,27 @@ public class UIPortalForm extends UIFormTabPane
       Collection<?> listLocaleConfig = localeConfigService.getLocalConfigs();
       LocaleConfig defaultLocale = localeConfigService.getDefaultLocaleConfig();
       String defaultLanguage = defaultLocale.getLanguage();
-      Locale currentLocate = Util.getPortalRequestContext().getLocale();
+      Locale currentLocale = Util.getPortalRequestContext().getLocale();
       Iterator<?> iterator = listLocaleConfig.iterator();
       while (iterator.hasNext())
       {
          LocaleConfig localeConfig = (LocaleConfig)iterator.next();
+         String displayName = capitalizeFirstLetter(localeConfig.getLocale().getDisplayName(currentLocale));
+         ResourceBundle localeResourceBundle = getResourceBundle(currentLocale);
+
+         String key = "Locale." + localeConfig.getLocale().getLanguage();
+         if (localeConfig.getLocale().getCountry() != null)
+         {
+            key += "_" + localeConfig.getLocale().getCountry();
+         }
+         
+         if (localeResourceBundle.containsKey(key))
+         {
+            displayName = localeResourceBundle.getString(key);
+         }
+         
          SelectItemOption<String> option =
-            new SelectItemOption<String>(localeConfig.getLocale().getDisplayName(currentLocate), localeConfig
+            new SelectItemOption<String>(displayName, localeConfig
                .getLanguage());
          if (defaultLanguage.equals(localeConfig.getLanguage()))
          {
@@ -370,4 +388,27 @@ public class UIPortalForm extends UIFormTabPane
       }
    }
 
+   private String capitalizeFirstLetter(String word)
+   {
+      if (word == null)
+      {
+         return null;
+      }
+      if (word.length() == 0)
+      {
+         return word;
+      }
+      StringBuilder result = new StringBuilder(word);
+      result.replace(0, 1, result.substring(0, 1).toUpperCase());
+      return result.toString();
+   }
+   
+   private ResourceBundle getResourceBundle(Locale locale) throws Exception
+   {
+      ExoContainer appContainer = ExoContainerContext.getCurrentContainer();
+      ResourceBundleService service =
+         (ResourceBundleService)appContainer.getComponentInstanceOfType(ResourceBundleService.class);
+      ResourceBundle res = service.getResourceBundle("locale.portal.webui", locale);
+      return res;
+   }
 }

@@ -1891,4 +1891,8 @@
          <deleteGadget>删除小工具</deleteGadget>
       </tooltip>
    </UIGadget>
+   <Locale>
+      <zh_CN>全体字</zh_CN>
+      <zh_TW>全體字</zh_TW>
+   </Locale>
 </bundle>

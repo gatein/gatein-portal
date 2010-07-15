@@ -313,6 +313,32 @@ organization.management=Management
 		</section>
 
 	</section>
+	<section>
+        <title>Translating the language selection form</title>	
+	    <mediaobject>
+           <imageobject>
+              <imagedata fileref="images/PortalDevelopment/InternationalizationConfiguration/LanguageChoice.png" format="PNG" align="center" valign="middle"
+                        scalefit="1"/>
+           </imageobject>
+        </mediaobject>
+        <para>When choosing a language as on the screenshot above, the user is presented with a list of languages on the left side in the current chosen language
+        and on the right side, the same language translated into its own language. 
+        Those texts are obtained from the JDK API <literal>java.util.Locale.getDisplayedLanguage()</literal> and <literal>java.util.Locale.getDisplayedCountry()</literal> (if needed) and all languages may not be translated and can also depend on the JVM currently used.
+        It is still possible to override those values by editing the <literal>locale.portal.webui</literal> resource bundle, to do so edit the file <filename>gatein.ear/02portal.war/WEB-INF/classes/locale/portal/webui_xx_yy.properties</filename> where <literal>xx_yy</literal>
+        represents the country code of the language in which you want to translate a particular language.
+        In that file, add or modify a key such as <literal>Locale.xx_yy</literal> with the value being the translated string.
+        </para>
+        <example>
+           <title>Changing the displayed text for Traditional Chinese in French</title>
+           <para>First edit <filename>gatein.ear/02portal.war/WEB-INF/classes/locale/portal/webui_fr.properties</filename> where <literal>ne</literal> is the country code for French, and add
+           the following key into it:
+           <programlisting>
+              Locale.zh_TW=Chinois traditionnel
+           </programlisting>
+           After a restart the language will be updated in the user interface when a user is trying to change the current language.
+           </para>
+        </example>
+	</section>
 
 </section>
 

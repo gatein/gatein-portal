@@ -20,12 +20,15 @@
 package org.exoplatform.webui.organization;
 
 import org.exoplatform.commons.serialization.api.annotations.Serialized;
+import org.exoplatform.container.ExoContainer;
+import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.Constants;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.UserProfile;
 import org.exoplatform.services.organization.UserProfileHandler;
 import org.exoplatform.services.resources.LocaleConfig;
 import org.exoplatform.services.resources.LocaleConfigService;
+import org.exoplatform.services.resources.ResourceBundleService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
@@ -42,6 +45,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.ResourceBundle;
 
 /**
  * Created by The eXo Platform SARL Author : Dang Van Minh minhdv81@yahoo.com
@@ -141,7 +145,6 @@ public class UIUserProfileInputSet extends UIFormInputSet
       LocaleConfigService localeService = getApplicationComponent(LocaleConfigService.class);
       Locale currentLocale = ((PortletRequestContext)WebuiRequestContext.getCurrentInstance()).getLocale();
       Iterator<LocaleConfig> i = localeService.getLocalConfigs().iterator();
-      String displayLanguage = null;
       String displayName = null;
       String language = null;
       String country = null;
@@ -150,19 +153,32 @@ public class UIUserProfileInputSet extends UIFormInputSet
       {
          LocaleConfig config = i.next();
          Locale locale = config.getLocale();
-         displayName = locale.getDisplayName(currentLocale);
+         displayName = capitalizeFirstLetter(locale.getDisplayName(currentLocale));
+         
          language = locale.getLanguage();
          country = locale.getCountry();
          if (country != null && country.length() > 0)
          {
-            displayLanguage = displayName + " (" + locale.getDisplayCountry(currentLocale) + ")";
             language = language + "_" + country;
          }
-         else
+
+         
+         ResourceBundle localeResourceBundle;
+         try
          {
-            displayLanguage = displayName;
+            localeResourceBundle = getResourceBundle(currentLocale);
+            String key = "Locale." + language;
+            if (localeResourceBundle.containsKey(key))
+            {
+               displayName = localeResourceBundle.getString(key);
+            }
          }
-         option = new SelectItemOption<String>(displayLanguage, language, displayName);
+         catch (Exception e)
+         {
+            // ignore, use default displayName
+         }
+         
+         option = new SelectItemOption<String>(displayName, language);
          if (language.equals(selectedLang))
          {
             option.setSelected(true);
@@ -242,5 +258,28 @@ public class UIUserProfileInputSet extends UIFormInputSet
       }
       uiApp.addMessage(new ApplicationMessage("UIUserProfileInputSet.msg.sucsesful.update.userprofile", args));
    }
+   
+   private String capitalizeFirstLetter(String word)
+   {
+      if (word == null)
+      {
+         return null;
+      }
+      if (word.length() == 0)
+      {
+         return word;
+      }
+      StringBuilder result = new StringBuilder(word);
+      result.replace(0, 1, result.substring(0, 1).toUpperCase());
+      return result.toString();
+   }
 
+   private ResourceBundle getResourceBundle(Locale locale) throws Exception
+   {
+      ExoContainer appContainer = ExoContainerContext.getCurrentContainer();
+      ResourceBundleService service =
+         (ResourceBundleService)appContainer.getComponentInstanceOfType(ResourceBundleService.class);
+      ResourceBundle res = service.getResourceBundle("locale.portal.webui", locale);
+      return res;
+   }
 }

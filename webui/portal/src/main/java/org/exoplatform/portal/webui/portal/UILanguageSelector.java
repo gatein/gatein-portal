@@ -19,7 +19,12 @@
 
 package org.exoplatform.portal.webui.portal;
 
+import org.exoplatform.container.ExoContainer;
+import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.Constants;
+import org.exoplatform.portal.config.model.PageNavigation;
+import org.exoplatform.portal.config.model.PageNode;
+import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIMaskWorkspace;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
@@ -28,6 +33,9 @@ import org.exoplatform.services.organization.UserProfile;
 import org.exoplatform.services.organization.UserProfileHandler;
 import org.exoplatform.services.resources.LocaleConfig;
 import org.exoplatform.services.resources.LocaleConfigService;
+import org.exoplatform.services.resources.ResourceBundleManager;
+import org.exoplatform.services.resources.ResourceBundleService;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIContainer;
@@ -42,6 +50,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
+import java.util.ResourceBundle;
 
 @ComponentConfig(template = "system:/groovy/portal/webui/portal/UILanguageSelector.gtmpl", events = {
    @EventConfig(listeners = UILanguageSelector.SaveActionListener.class),
@@ -63,16 +72,57 @@ public class UILanguageSelector extends UIContainer
       {
          LocaleConfig localeConfig = (LocaleConfig)object;
          Locale locale = localeConfig.getLocale();
-         String displayName = capitalizeFirstLetter(locale.getDisplayLanguage(currentLocale));
          String lang = locale.getLanguage();
          String country = locale.getCountry();
-         String localedName = capitalizeFirstLetter(locale.getDisplayLanguage(locale));;
 
+         ResourceBundle currentLocaleResourceBundle = getResourceBundle(currentLocale);
+         ResourceBundle localeResourceBundle = getResourceBundle(locale);
+                 
+         String key = "Locale." + lang;
+
+         String displayName = null;
+         if (currentLocaleResourceBundle.containsKey(key))
+         {
+            displayName = currentLocaleResourceBundle.getString(key);
+         }
+         else
+         {
+            displayName = capitalizeFirstLetter(locale.getDisplayLanguage(currentLocale));
+         }
+         
+         String localedName = null;
+         if (localeResourceBundle.containsKey(key))
+         {
+            localedName = localeResourceBundle.getString(key);
+         }
+         else
+         {
+            localedName = capitalizeFirstLetter(locale.getDisplayLanguage(locale));
+         }
+
+         
          if (country != null && country.length() > 0)
          {
-        	displayName = capitalizeFirstLetter(locale.getDisplayLanguage(currentLocale)) + " - " + capitalizeFirstLetter(locale.getDisplayCountry(currentLocale));
-            localedName = capitalizeFirstLetter(locale.getDisplayLanguage(locale)) + " - " + capitalizeFirstLetter(locale.getDisplayCountry(locale));
             lang = lang + "_" + country;
+            key = "Locale." + lang;
+            
+            if (currentLocaleResourceBundle.containsKey(key))
+            {
+               displayName = currentLocaleResourceBundle.getString(key);
+            }
+            else
+            {
+               displayName = capitalizeFirstLetter(locale.getDisplayLanguage(currentLocale)) + " - " + capitalizeFirstLetter(locale.getDisplayCountry(currentLocale));
+            }
+            
+            if (localeResourceBundle.containsKey(key))
+            {
+               localedName = localeResourceBundle.getString(key);
+            }
+            else
+            {
+               localedName = capitalizeFirstLetter(locale.getDisplayLanguage(locale)) + " - " + capitalizeFirstLetter(locale.getDisplayCountry(locale));
+            }
          }
 
          if (localedName == null || localedName.length() == 0)
@@ -159,4 +209,15 @@ public class UILanguageSelector extends UIContainer
       result.replace(0, 1, result.substring(0, 1).toUpperCase());
       return result.toString();
    }
+   
+   private ResourceBundle getResourceBundle(Locale locale) throws Exception
+   {
+      ExoContainer appContainer = ExoContainerContext.getCurrentContainer();
+      ResourceBundleService service =
+         (ResourceBundleService)appContainer.getComponentInstanceOfType(ResourceBundleService.class);
+      ResourceBundle res = service.getResourceBundle("locale.portal.webui", locale);
+      return res;
+   }
+
+  
 }
