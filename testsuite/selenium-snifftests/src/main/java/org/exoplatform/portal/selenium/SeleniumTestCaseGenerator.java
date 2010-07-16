@@ -213,7 +213,7 @@ public class SeleniumTestCaseGenerator {
 				sb.append(param2);
 				sb.append("\", \"1,1\");\n");
 				sb.append("selenium.waitForPageToLoad(timeout);\n");
-			} else if (param1.equals("close")) {
+			} else if (param1.equals("close") || param1.equals("chooseCancelOnNextConfirmation")) {
 				sb.append("selenium.");
 				sb.append(param1);
 				sb.append("();\n");
