@@ -1,0 +1,50 @@
+<assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0" 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0 http://maven.apache.org/xsd/assembly-1.1.0.xsd">
+  
+    <id>jboss-as</id>
+    <includeBaseDirectory>false</includeBaseDirectory>
+    <formats>
+        <format>dir</format>
+    </formats>
+    
+    <fileSets>
+        <!-- copy jboss as - without unix executables -->
+        <fileSet>
+            <directory>${exo.projects.directory.dependencies}/${exo.projects.app.jboss.version}</directory>
+            <outputDirectory>jboss-as</outputDirectory>
+            <excludes>
+                <exclude>bin/*.sh</exclude>
+            </excludes>
+        </fileSet>
+        <!-- copy jboss as - only unix executabls -->
+        <fileSet>
+            <directory>${exo.projects.directory.dependencies}/${exo.projects.app.jboss.version}/bin</directory>
+            <outputDirectory>jboss-as/bin</outputDirectory>
+            <includes>
+                <include>*.sh</include>
+            </includes>
+            <fileMode>0755</fileMode>
+        </fileSet>
+        
+        <!-- copy couple gatein.ear/META-INF/* descriptors -->
+        <fileSet>
+            <directory>${basedir}/../../../server/jboss/patch-ear/src/main/jboss/server/default/deploy/gatein.ear/META-INF</directory>
+            <outputDirectory>jboss-as/server/default/deploy/gatein.ear/META-INF</outputDirectory>
+        </fileSet>
+    </fileSets>
+    
+    <files>
+        <!-- copy gatein configuration file -->
+        <file>
+            <source>${basedir}/../../../server/jboss/patch-ear/src/main/jboss/server/default/conf/gatein/configuration.xml</source>
+            <outputDirectory>jboss-as/server/default/conf/gatein</outputDirectory>
+        </file>
+        <file>
+            <source>${basedir}/../../../component/common/src/main/java/conf/configuration-jboss.properties</source>
+            <outputDirectory>jboss-as/server/default/conf/gatein</outputDirectory>
+            <destName>configuration.properties</destName>
+        </file>
+    </files>
+
+</assembly>

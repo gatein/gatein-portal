@@ -1,0 +1,19 @@
+diff -uNr --exclude .svn jboss-as.orig/bin/run.conf.bat jboss-as/bin/run.conf.bat
+--- jboss-as.orig/bin/run.conf.bat	2010-07-12 11:09:54.000000000 +0200
++++ jboss-as/bin/run.conf.bat	2010-07-12 11:22:05.000000000 +0200
+@@ -40,7 +40,7 @@
+ rem #
+ 
+ rem # JVM memory allocation pool parameters - modify as appropriate.
+-set "JAVA_OPTS=-Xms128M -Xmx512M -XX:MaxPermSize=256M"
++set "JAVA_OPTS=-Xms512M -Xmx1024M -XX:MaxPermSize=256M"
+ 
+ rem # Reduce the RMI GCs to once per hour for Sun JVMs.
+ set "JAVA_OPTS=%JAVA_OPTS% -Dsun.rmi.dgc.client.gcInterval=3600000 -Dsun.rmi.dgc.server.gcInterval=3600000"
+@@ -55,3 +55,6 @@
+ rem set "JAVA_OPTS=%JAVA_OPTS% -Xrunjdwp:transport=dt_shmem,address=jboss,server=y,suspend=n"
+ 
+ :JAVA_OPTS_SET
++
++rem # GateIn configuration directory
++set "JAVA_OPTS=%JAVA_OPTS% -Dexo.conf.dir.name=gatein"

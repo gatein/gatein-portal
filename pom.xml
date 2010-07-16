@@ -131,6 +131,11 @@
          </dependency>
          <dependency>
             <groupId>org.exoplatform.kernel</groupId>
+            <artifactId>exo.kernel.component.remote</artifactId>
+            <version>${org.exoplatform.kernel.version}</version>
+         </dependency>
+         <dependency>
+            <groupId>org.exoplatform.kernel</groupId>
             <artifactId>exo.kernel.container</artifactId>
             <version>${org.exoplatform.kernel.version}</version>
             <exclusions>
@@ -147,6 +152,16 @@
          <dependency>
            <groupId>org.exoplatform.kernel</groupId>
            <artifactId>exo.kernel.component.ext.cache.impl.jboss.v3</artifactId>
+           <version>${org.exoplatform.kernel.version}</version>
+         </dependency>
+         <dependency>
+           <groupId>org.exoplatform.kernel</groupId>
+           <artifactId>exo.kernel.mc-int</artifactId>
+           <version>${org.exoplatform.kernel.version}</version>
+         </dependency>
+         <dependency>
+           <groupId>org.exoplatform.kernel</groupId>
+           <artifactId>exo.kernel.mc-kernel-extras</artifactId>
            <version>${org.exoplatform.kernel.version}</version>
          </dependency>
          <dependency>
@@ -171,6 +186,11 @@
          </dependency>
          <dependency>
             <groupId>org.exoplatform.core</groupId>
+            <artifactId>exo.core.component.ldap</artifactId>
+            <version>${org.exoplatform.core.version}</version>
+         </dependency>
+         <dependency>
+            <groupId>org.exoplatform.core</groupId>
             <artifactId>exo.core.component.organization.jdbc</artifactId>
             <version>${org.exoplatform.core.version}</version>
             <exclusions>
@@ -183,6 +203,11 @@
                  <artifactId>log4j</artifactId>
               </exclusion>
             </exclusions>
+         </dependency>
+         <dependency>
+            <groupId>org.exoplatform.core</groupId>
+            <artifactId>exo.core.component.organization.ldap</artifactId>
+            <version>${org.exoplatform.core.version}</version>
          </dependency>
          <dependency>
             <groupId>org.exoplatform.core</groupId>
@@ -215,6 +240,21 @@
             </exclusions>
          </dependency>
          <dependency>
+            <groupId>org.exoplatform.jcr</groupId>
+            <artifactId>exo.jcr.component.webdav</artifactId>
+            <version>${org.exoplatform.jcr.version}</version>
+         </dependency>
+         <dependency>
+            <groupId>org.exoplatform.jcr</groupId>
+            <artifactId>exo.jcr.framework.web</artifactId>
+            <version>${org.exoplatform.jcr.version}</version>
+         </dependency>
+         <dependency>
+            <groupId>org.exoplatform.jcr</groupId>
+            <artifactId>exo.jcr.component.ftp</artifactId>
+            <version>${org.exoplatform.jcr.version}</version>
+         </dependency>
+         <dependency>
             <groupId>org.exoplatform.ws</groupId>
             <artifactId>exo.ws.frameworks.servlet</artifactId>
             <version>${org.exoplatform.ws.version}</version>
@@ -242,6 +282,16 @@
             <version>${org.gatein.wci.version}</version>
          </dependency>
          <dependency>
+            <groupId>org.gatein.wci</groupId>
+            <artifactId>wci-exo</artifactId>
+            <version>${org.gatein.wci.version}</version>
+         </dependency>
+         <dependency>
+            <groupId>org.gatein.wci</groupId>
+            <artifactId>wci-tomcat</artifactId>
+            <version>${org.gatein.wci.version}</version>
+         </dependency>
+         <dependency>
             <groupId>org.gatein.pc</groupId>
             <artifactId>pc-bridge</artifactId>
             <version>${org.gatein.pc.version}</version>
@@ -264,6 +314,11 @@
          <dependency>
             <groupId>org.gatein.pc</groupId>
             <artifactId>pc-api</artifactId>
+            <version>${org.gatein.pc.version}</version>
+         </dependency>
+         <dependency>
+            <groupId>org.gatein.pc</groupId>
+            <artifactId>pc-controller</artifactId>
             <version>${org.gatein.pc.version}</version>
          </dependency>
          <dependency>
@@ -362,6 +417,11 @@
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
+          <artifactId>exo.portal.component.management</artifactId>
+          <version>3.2.0-Beta01-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+          <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.webui.portal</artifactId>
           <version>3.2.0-Beta01-SNAPSHOT</version>
         </dependency>
@@ -413,6 +473,16 @@
           <version>3.2.0-Beta01-SNAPSHOT</version>
           <type>test-jar</type>
         </dependency>
+        <dependency>
+          <groupId>org.exoplatform.portal</groupId>
+          <artifactId>gatein.portal.component.wsrp</artifactId>
+          <version>3.2.0-Beta01-SNAPSHOT</version>
+        </dependency>      
+        <dependency>
+          <groupId>org.exoplatform.portal</groupId>
+          <artifactId>exo.portal.server.jboss.plugin</artifactId>
+          <version>3.2.0-Beta01-SNAPSHOT</version>
+        </dependency>     
 
          <!-- Chromattic -->
          <dependency>

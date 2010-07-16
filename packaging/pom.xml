@@ -31,11 +31,27 @@
    <packaging>pom</packaging>
    <name>GateIn Portal Packaging</name>
 
-   <modules>
-    <module>module</module>
-    <module>product</module>
-    <module>pkg</module>
-    <module>reports</module>
-   </modules>
-
+    <profiles>
+        <profile>
+            <id>default</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <modules>
+                <module>module</module>
+                <module>product</module>
+                <module>pkg</module>
+                <module>reports</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>pkg-jbossas-beta</id>
+            <modules>
+                <module>module</module>
+                <module>product</module>
+                <module>jboss-as</module>
+                <module>reports</module>
+            </modules>
+        </profile>
+    </profiles>
 </project>
