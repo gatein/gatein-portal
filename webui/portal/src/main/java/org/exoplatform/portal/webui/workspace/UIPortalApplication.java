@@ -748,12 +748,23 @@ public class UIPortalApplication extends UIApplication
    
    private class UIPortalKey
    {
-      private String ownerType;
 
-      private String ownerId;
+      /** . */
+      private final String ownerType;
+
+      /** . */
+      private final String ownerId;
 
       UIPortalKey(String _ownerType, String _ownerId)
       {
+         if (_ownerType == null)
+         {
+            throw new NullPointerException();
+         }
+         if (_ownerId == null)
+         {
+            throw new NullPointerException();
+         }
          this.ownerType = _ownerType;
          this.ownerId = _ownerId;
       }
