@@ -265,7 +265,7 @@ abstract public class UIComponent
     */
    public String event(String name, String beanId, Parameter[] params) throws Exception
    {
-      return renderURL(true, name, beanId, params);
+      return renderEventURL(true, name, beanId, params);
    }
 
    public String url(String name) throws Exception
@@ -289,7 +289,7 @@ abstract public class UIComponent
     */
    public String url(String name, String beanId, Parameter[] params) throws Exception
    {
-      return renderURL(false, name, beanId, params);
+      return renderEventURL(false, name, beanId, params);
    }
 
    /**
@@ -302,7 +302,7 @@ abstract public class UIComponent
     * @return the rendered URL
     * @throws Exception any exception
     */
-   public String renderURL(boolean ajax, String name, String beanId, Parameter[] params) throws Exception
+   public String renderEventURL(boolean ajax, String name, String beanId, Parameter[] params) throws Exception
    {
       org.exoplatform.webui.config.Event event = config.getUIComponentEventConfig(name);
       if (event == null)
