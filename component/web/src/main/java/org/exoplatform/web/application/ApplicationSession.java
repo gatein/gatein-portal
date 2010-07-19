@@ -19,6 +19,9 @@
 
 package org.exoplatform.web.application;
 
+/**
+ * todo (julien) : remove that class that seem useless
+ */
 abstract public class ApplicationSession
 {
    abstract public Object getAttribute(String name) throws Exception;
