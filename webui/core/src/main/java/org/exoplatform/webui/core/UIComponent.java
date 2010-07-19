@@ -225,34 +225,6 @@ abstract public class UIComponent
       return null;
    }
 
-   public String event(String name) throws Exception
-   {
-      return event(name, null);
-   }
-
-   public String event(String name, String beanId) throws Exception
-   {
-      return event(name, beanId, (Parameter[])null);
-   }
-
-   @SuppressWarnings("unchecked")
-   public String event(String name, String beanId, Parameter[] params) throws Exception
-   {
-      org.exoplatform.webui.config.Event event = config.getUIComponentEventConfig(name);
-      if (event == null)
-      {
-         return "??config??";
-      }
-      WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
-      URLBuilder<UIComponent> urlBuilder = context.getURLBuilder();
-      if (urlBuilder == null)
-      {
-         return "??builder??";
-      }
-      String confirm = loadConfirmMesssage(event, context, beanId);
-      return urlBuilder.createAjaxURL(this, event.getName(), confirm, beanId, params);
-   }
-
    protected String loadConfirmMesssage(org.exoplatform.webui.config.Event event, WebuiRequestContext context,
                                         String beanId)
    {
@@ -272,6 +244,30 @@ abstract public class UIComponent
       return confirmKey;
    }
 
+   public String event(String name) throws Exception
+   {
+      return event(name, null);
+   }
+
+   public String event(String name, String beanId) throws Exception
+   {
+      return event(name, beanId, null);
+   }
+
+   /**
+    * Render an event ajax URL for a given bean.
+    *
+    * @param name the event name
+    * @param beanId the optional bean id
+    * @param params the optional event parameters
+    * @return the rendered URL
+    * @throws Exception any exception
+    */
+   public String event(String name, String beanId, Parameter[] params) throws Exception
+   {
+      return renderURL(true, name, beanId, params);
+   }
+
    public String url(String name) throws Exception
    {
       return url(name, null);
@@ -283,7 +279,7 @@ abstract public class UIComponent
    }
 
    /**
-    * Render an event URL of a given bean.
+    * Render an event URL for a given bean.
     *
     * @param name the event name
     * @param beanId the optional bean id
@@ -293,21 +289,54 @@ abstract public class UIComponent
     */
    public String url(String name, String beanId, Parameter[] params) throws Exception
    {
+      return renderURL(false, name, beanId, params);
+   }
+
+   /**
+    * Render an event URL of a given bean.
+    *
+    * @param ajax the url type, true for ajax, false otherwise
+    * @param name the event name
+    * @param beanId the optional bean id
+    * @param params the optional event parameters
+    * @return the rendered URL
+    * @throws Exception any exception
+    */
+   public String renderURL(boolean ajax, String name, String beanId, Parameter[] params) throws Exception
+   {
       org.exoplatform.webui.config.Event event = config.getUIComponentEventConfig(name);
       if (event == null)
       {
          return "??config??";
       }
+
+      //
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
-      String confirm = loadConfirmMesssage(event, context, beanId);
-      try
+      URLBuilder<UIComponent> urlBuilder = context.getURLBuilder();
+      if (urlBuilder == null)
       {
-         return context.getURLBuilder().createURL(this, event.getName(), confirm, beanId, params);
+         return "??builder??";
       }
-      catch (Exception e)
+
+      //
+      String confirm = loadConfirmMesssage(event, context, beanId);
+
+      //
+      if (ajax)
       {
-         log.error("Could not render component even URL for id=" + beanId + ", name=" + name, e);
-         return "";
+         return urlBuilder.createAjaxURL(this, event.getName(), confirm, beanId, params);
+      }
+      else
+      {
+         try
+         {
+            return urlBuilder.createURL(this, event.getName(), confirm, beanId, params);
+         }
+         catch (Exception e)
+         {
+            log.error("Could not render component even URL for id=" + beanId + ", name=" + name, e);
+            return "";
+         }
       }
    }
 
