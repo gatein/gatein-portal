@@ -340,32 +340,10 @@ abstract public class UIComponent
       }
    }
 
+   // julien : check if this is used effectively or not
    public String doAsync(String name, String beanId, Parameter[] params) throws Exception
    {
-      Parameter async_param = new Parameter(AJAX_ASYNC, "true");
-      if (params == null)
-      {
-         params = new Parameter[]{async_param};
-      }
-      else
-      {
-         ArrayList<Parameter> paramList = new ArrayList<Parameter>();
-         for (int i = 0; i < params.length; i++)
-         {
-            if (params[i].getName().equals(AJAX_ASYNC))
-            {
-               params[i] = async_param;
-            }
-            paramList.add(params[i]);
-         }
-         if (!paramList.contains(async_param))
-         {
-            paramList.add(async_param);
-         }
-         params = (Parameter[])paramList.toArray();
-      }
-
-      return event(name, beanId, new Parameter[]{async_param});
+      return event(name, beanId, new Parameter[]{new Parameter(AJAX_ASYNC, "true")});
    }
 
    public <T> void broadcast(Event<T> event, Phase phase) throws Exception
