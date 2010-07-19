@@ -23,6 +23,8 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 /**
+ * julien : remove me if we can
+ *
  * Created by The eXo Platform SAS
  * Jan 19, 2007  
  */
