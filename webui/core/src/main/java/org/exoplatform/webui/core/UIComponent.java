@@ -282,7 +282,15 @@ abstract public class UIComponent
       return url(name, beanId, null);
    }
 
-   @SuppressWarnings("unchecked")
+   /**
+    * Render an event URL of a given bean.
+    *
+    * @param name the event name
+    * @param beanId the optional bean id
+    * @param params the optional event parameters
+    * @return the rendered URL
+    * @throws Exception any exception
+    */
    public String url(String name, String beanId, Parameter[] params) throws Exception
    {
       org.exoplatform.webui.config.Event event = config.getUIComponentEventConfig(name);
@@ -294,11 +302,11 @@ abstract public class UIComponent
       String confirm = loadConfirmMesssage(event, context, beanId);
       try
       {
-         return context.getURLBuilder().createURL(this, event.getName(), confirm, beanId, params).toString();
+         return context.getURLBuilder().createURL(this, event.getName(), confirm, beanId, params);
       }
       catch (Exception e)
       {
-         e.printStackTrace();
+         log.error("Could not render component even URL for id=" + beanId + ", name=" + name, e);
          return "";
       }
    }
