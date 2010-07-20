@@ -80,13 +80,6 @@ public class UISkinSelector extends UIContainer
       addChild(selector);
    }
 
-   @Override
-   public String url(String name) throws Exception
-   {
-      // TODO Auto-generated method stub
-      return super.url(name);
-   }
-
    public String getName()
    {
       return name_;
