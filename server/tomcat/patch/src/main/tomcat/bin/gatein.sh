@@ -27,7 +27,7 @@ cd `dirname "$0"`
 # Sets some variables
 LOG_OPTS="-Dorg.apache.commons.logging.Log=org.apache.commons.logging.impl.SimpleLog"
 SECURITY_OPTS="-Djava.security.auth.login.config=../conf/jaas.conf"
-EXO_OPTS="-Dexo.product.developing=false -Dexo.conf.dir.name=gatein/conf"
+EXO_OPTS="-Dexo.product.developing=false -Dexo.conf.dir.name=gatein/conf -Djava.awt.headless=true"
 
 JAVA_OPTS="-Xms128m -Xmx384m -XX:MaxPermSize=192m $JAVA_OPTS $LOG_OPTS $SECURITY_OPTS $EXO_OPTS"
 export JAVA_OPTS
