@@ -3,6 +3,9 @@ package org.exoplatform.web.resource.config.xml;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
+/**
+ * todo : julien : is it still used ?
+ */
 public class FCKConfigListener implements ServletContextListener
 {
    public static String FCK_CONTEXT_PATH;
