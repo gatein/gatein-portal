@@ -47,9 +47,14 @@
         <profile>
             <id>pkg-jbossas-beta</id>
             <modules>
-                <module>module</module>
-                <module>product</module>
                 <module>jboss-as</module>
+                <module>reports</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>pkg-tomcat-beta</id>
+            <modules>
+                <module>tomcat</module>
                 <module>reports</module>
             </modules>
         </profile>

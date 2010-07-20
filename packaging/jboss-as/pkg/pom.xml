@@ -10,7 +10,13 @@
     </parent>
     <artifactId>exo.portal.packaging.jboss-as.pkg</artifactId>
     <packaging>pom</packaging>
-    <name>GateIn PKG</name>
+    <name>GateIn for JBoss AS packaging</name>
+    
+    <properties>
+        <download.dir.app-server>${basedir}/app-serv-downloads/</download.dir.app-server>
+        <download.url.jboss-as51>http://downloads.sourceforge.net/project/jboss/JBoss/JBoss-5.1.0.GA/jboss-5.1.0.GA.zip</download.url.jboss-as51>
+        <download.archive-dir.jboss-as51>jboss-5.1.0.GA</download.archive-dir.jboss-as51>
+    </properties>
 
     <dependencies>
         <dependency>
@@ -21,54 +27,77 @@
         </dependency>
     </dependencies>
 
+    <profiles>
+        <profile>
+            <!-- default profile - user did not specified a path to the jboss-as, downloading one from sourceforge -->
+            
+            <id>jboss-as-provided-by-packager</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            
+            <properties>
+                <jbossas.dir>${download.dir.app-server}/${download.archive-dir.jboss-as51}/${download.archive-dir.jboss-as51}</jbossas.dir>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.cargo</groupId>
+                        <artifactId>cargo-maven2-plugin</artifactId>
+                        <version>1.0.2</version>
+                        <configuration>
+                            <wait>false</wait>
+                            <container>
+                                <containerId>jboss5x</containerId>
+                                <zipUrlInstaller>
+                                    <url>${download.url.jboss-as51}</url>
+                                    <installDir>${download.dir.app-server}</installDir>
+                                </zipUrlInstaller>
+                            </container>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>download-jboss-as-51</id>
+                                <phase>generate-resources</phase>
+                                <goals>
+                                    <goal>install</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        
+        <profile>
+            <!-- packager will use the jboss-as provided by ${jbossas.dir} variable -->
+            
+            <id>jboss-as-user-defined</id>
+            <activation>
+                <property>
+                    <name>jbossas.dir</name>
+                </property>
+            </activation>
+        </profile>
+    </profiles>
+
     <build>
         <finalName>jboss-as-pkg</finalName>
         <plugins>
-            <!-- Ensure your environment is correctly setup -->
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-enforcer-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>jbossas-check-environment-ready</id>
-                        <goals>
-                            <goal>enforce</goal>
-                        </goals>
-                        <configuration>
-                            <rules>
-                                <requireProperty>
-                                    <property>exo.projects.directory.dependencies</property>
-                                    <message>"You must define the property exo.projects.directory.dependencies to give the path to the directory where you store your applications servers"</message>
-                                </requireProperty>
-                                <requireProperty>
-                                    <property>exo.projects.app.jboss.version</property>
-                                    <message>"You must define the property exo.projects.app.jboss.version to give the name of the directory where is stored JBossAS"</message>
-                                </requireProperty>
-                                <requireFilesExist>
-                                    <files>
-                                        <file>${exo.projects.directory.dependencies}/${exo.projects.app.jboss.version}/</file>
-                                    </files>
-                                    <message>"The following JBossAS directory doesn't exist: ${exo.projects.directory.dependencies}/${exo.projects.app.jboss.version}"</message>
-                                </requireFilesExist>
-                            </rules>
-                            <fail>true</fail>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-        
-            <plugin>
+                <!-- copy jboss-as to working directory etc... -->
+            	<groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
-                <version>2.2-beta-5</version>
                 <configuration>
                     <descriptors>
                         <descriptor>src/assembly/jboss-as-init.xml</descriptor>
                     </descriptors>
                 </configuration>
+                <version>2.2-beta-5</version>
                 <executions>
                     <execution>
                         <id>init-assembly</id>
-                        <phase>generate-resources</phase> 
+                        <phase>process-resources</phase> 
                         <goals>
                             <goal>single</goal>
                         </goals>
@@ -77,6 +106,7 @@
             </plugin>
             
             <plugin>
+                <!-- unpack/copy GateIn artifacts into the jboss-as deploy dir -->
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
                 <executions>
@@ -154,6 +184,7 @@
             </plugin>
 
             <plugin>
+                <!-- patch several files (log4j config etc...) -->
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-patch-plugin</artifactId>
                 <version>1.1.1</version>

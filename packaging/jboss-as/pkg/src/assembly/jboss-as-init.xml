@@ -11,7 +11,7 @@
     <fileSets>
         <!-- copy jboss as - without unix executables -->
         <fileSet>
-            <directory>${exo.projects.directory.dependencies}/${exo.projects.app.jboss.version}</directory>
+            <directory>${jbossas.dir}</directory>
             <outputDirectory>jboss-as</outputDirectory>
             <excludes>
                 <exclude>bin/*.sh</exclude>
@@ -19,7 +19,7 @@
         </fileSet>
         <!-- copy jboss as - only unix executabls -->
         <fileSet>
-            <directory>${exo.projects.directory.dependencies}/${exo.projects.app.jboss.version}/bin</directory>
+            <directory>${jbossas.dir}/bin</directory>
             <outputDirectory>jboss-as/bin</outputDirectory>
             <includes>
                 <include>*.sh</include>
