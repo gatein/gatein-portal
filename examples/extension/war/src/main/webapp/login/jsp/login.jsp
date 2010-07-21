@@ -53,7 +53,7 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
-    <title>Login</title>
+    <title><%=res.getString("UILoginForm.label.Signin")%></title>
     <link rel="shortcut icon" type="image/x-icon"  href="/<%=portalContainer.getName()%>/favicon.ico" />
     <link rel='stylesheet' type='text/css' href='/<%=portalContainer.getName()%>/login/skin/Stylesheet.css'/>
     <script type="text/javascript" src="/eXoResources/javascript/eXo.js"></script>
@@ -61,9 +61,9 @@
   </head>
   <body style="text-align: center; background: #f5f5f5; font-family: arial, tahoma, verdana">
     <div class="UILogin">
-      <div class="LoginHeader">Sign In</div>
+      <div class="LoginHeader"><%=res.getString("UILoginForm.label.Signin")%></div>
       <div class="LoginContent">
-        <div class="WelcomeText">Welcome to GateIn Portal</div>
+        <div class="WelcomeText"><%=res.getString("UILoginForm.label.welcome")%></div>
         <div class="CenterLoginContent">
           <%/*Begin form*/%>
           <%
@@ -71,7 +71,7 @@
                EntityEncoder encoder = EntityEncoder.FULL;
                username = encoder.encode(username);
           %>
-            <font color="red">Sign in failed. Wrong username or password.</font><%}%>
+            <font color="red"><%=res.getString("UILoginForm.label.SigninFail")%></font><%}%>
           <form name="loginForm" action="<%= contextPath + "/login"%>" method="post" style="margin: 0px;">    
                 <% if (uri != null) { %>
                 <input type="hidden" name="initialURI" value="<%=uri%>"/>
@@ -114,6 +114,6 @@
         </div>
       </div>
     </div>
-    <span style="margin: 10px 0px 0px 5px; font-size: 11px; color: #6f6f6f; text-align: center">Copyright &copy 2010. All rights Reserved, eXo Platform SAS and Red Hat, Inc.</span>
+    <span style="margin: 10px 0px 0px 5px; font-size: 11px; color: #6f6f6f; text-align: center"><%=res.getString("UILoginForm.label.Copyright")%></span>
   </body>
 </html>
