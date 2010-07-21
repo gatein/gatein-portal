@@ -62,8 +62,6 @@ abstract public class WebuiRequestContext extends RequestContext
 
    private boolean processRender_ = false;
 
-   private Throwable executionError_;
-
    private Set<UIComponent> uicomponentToUpdateByAjax;
 
    public WebuiRequestContext(Application app)
@@ -135,11 +133,6 @@ abstract public class WebuiRequestContext extends RequestContext
    abstract public <T> T getRequest() throws Exception;
 
    abstract public <T> T getResponse() throws Exception;
-
-   public Throwable getExecutionError()
-   {
-      return executionError_;
-   }
 
    public boolean isResponseComplete()
    {
