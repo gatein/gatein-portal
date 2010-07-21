@@ -63,9 +63,8 @@ public class EventsWrapper
 
    public void increaseCounter(UIPortlet portlet)
    {
-      for (Iterator iter = counters.iterator(); iter.hasNext();)
+      for (CounterWrapper counter : counters)
       {
-         CounterWrapper counter = (CounterWrapper)iter.next();
          if (portlet.getWindowId().equals(counter.portletId))
          {
             counter.counter++;
@@ -77,9 +76,8 @@ public class EventsWrapper
 
    public boolean isInvokedTooManyTimes(UIPortlet portlet)
    {
-      for (Iterator iter = counters.iterator(); iter.hasNext();)
+      for (CounterWrapper counter : counters)
       {
-         CounterWrapper counter = (CounterWrapper)iter.next();
          if (portlet.getWindowId().equals(counter.portletId))
          {
             if (counter.counter + 1 > THRESHOLD)
