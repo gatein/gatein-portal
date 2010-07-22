@@ -30,8 +30,6 @@ import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.webui.config.Component;
 import org.exoplatform.webui.core.lifecycle.Lifecycle;
-import org.exoplatform.webui.core.renderers.ValueRenderer;
-import org.exoplatform.webui.core.renderers.ValueRendererRegistry;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.event.EventListener;
@@ -59,8 +57,6 @@ abstract public class UIComponent
    protected UIComponent uiparent;
 
    protected Component config;
-
-   private transient ValueRendererRegistry rendererRegistry = new ValueRendererRegistry();
 
    private static final Lifecycle<UIComponent> DEFAULT_LIFECYCLE = new Lifecycle<UIComponent>();
 
@@ -494,15 +490,5 @@ abstract public class UIComponent
          return mevent;
       }
       return null;
-   }
-
-   public ValueRenderer<?> getRendererFor(Object value)
-   {
-      return rendererRegistry.getRendererFor(value);
-   }
-
-   public <V> void registerRendererFor(ValueRenderer<V> renderer, Class<? extends V> valueType)
-   {
-      rendererRegistry.registerRendererFor(renderer, valueType);
    }
 }
