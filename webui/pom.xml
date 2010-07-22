@@ -36,6 +36,7 @@
 
    <modules>
       <module>framework</module>
+      <module>portlet</module>
       <module>core</module>
       <module>eXo</module>
       <module>portal</module>
