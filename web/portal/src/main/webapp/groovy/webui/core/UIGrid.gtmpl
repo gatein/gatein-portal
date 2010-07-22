@@ -1,6 +1,8 @@
 <%
    import org.exoplatform.webui.core.UIComponent;
    import org.exoplatform.webui.form.UIForm;
+   import java.text.DateFormat;
+   import java.text.SimpleDateFormat;
 
    String[] beanFields = uicomponent.getBeanFields();
    String[] beanActions = uicomponent.getBeanActions();
@@ -64,9 +66,22 @@
          <%
                for (field in beanFields)
                {
-                  def fieldValue = uicomponent.getFieldValue(bean, field);
-                  def renderer = uicomponent.getRendererFor(fieldValue);
-                  println "<td><div class=\"" + renderer.getCSSClassFor(fieldValue) + "\" title='$fieldValue'>" + renderer.render(fieldValue, _ctx) + "</div></td>";
+			      def fieldValue = uicomponent.getFieldValue(bean, field);
+                  def cssClass = "";
+                  if(fieldValue != null) {
+                     def fieldClass = fieldValue.getClass();
+                     if(fieldClass == Integer.class)	cssClass = "number";
+                     else if(java.util.Date.class.isAssignableFrom(fieldClass)) {
+                        if(dateFormat == null) dateFormat = new SimpleDateFormat("HH:mm:ss yyyy-MM-dd");
+                        cssClass = "Datetime";
+                        fieldValue = dateFormat.format(fieldValue);
+                  }
+                  else cssClass = "Text";
+                  } else {
+                     fieldValue = "";
+                  }
+                  String value = fieldValue.toString();
+                  println "<td><div class=\""+cssClass+"\" title='$fieldValue'>"+fieldValue+"</div></td>";
                }
                if (beanActions != null && beanActions.length > 0)
                {
