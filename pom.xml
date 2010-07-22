@@ -412,11 +412,6 @@
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
-          <artifactId>exo.portal.component.dashboard</artifactId>
-          <version>3.2.0-Beta01-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-          <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.component.management</artifactId>
           <version>3.2.0-Beta01-SNAPSHOT</version>
         </dependency>
@@ -443,6 +438,11 @@
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.webui.core</artifactId>
+          <version>3.2.0-Beta01-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+          <groupId>org.exoplatform.portal</groupId>
+          <artifactId>exo.portal.webui.dashboard</artifactId>
           <version>3.2.0-Beta01-SNAPSHOT</version>
         </dependency>
         <dependency>

@@ -193,7 +193,7 @@ function getModule(params)
 
    module.portlet.dashboard =
    new Project("org.exoplatform.portal", "exo.portal.portlet.dashboard", "exo-portlet", module.version).
-      addDependency(new Project("org.exoplatform.portal", "exo.portal.component.dashboard", "jar", module.version));
+      addDependency(new Project("org.exoplatform.portal", "exo.portal.webui.dashboard", "jar", module.version));
 
    module.sample = {};
    module.sample.framework =
