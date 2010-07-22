@@ -21,7 +21,7 @@ package org.exoplatform.portal.resource.config.tasks;
 
 import org.exoplatform.portal.resource.SkinDependentManager;
 import org.exoplatform.portal.resource.SkinService;
-import org.exoplatform.web.resource.config.xml.GateinResource;
+import org.exoplatform.portal.resource.config.xml.SkinConfigParser;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
@@ -35,83 +35,59 @@ import javax.servlet.ServletContext;
  * 
  * Sep 16, 2009
  */
-public class PortletSkinTask extends AbstractSkinModule implements SkinConfigTask
+public class PortalSkinTask extends AbstractSkinModule implements SkinConfigTask
 {
 
-   private String applicationName;
+   private static final String DEFAULT_MODULE_NAME = "CoreSkin";
 
-   private String portletName;
+   private static final String DEFAULT_SKIN_NAME = "Default";
 
-   public PortletSkinTask()
+   private String moduleName;
+
+   public PortalSkinTask()
    {
-      super("Default");
+      super(DEFAULT_SKIN_NAME);
       this.overwrite = true;
+      this.moduleName = DEFAULT_MODULE_NAME;
    }
 
-   private void bindingApplicationName(Element element)
+   private void bindingModuleName(Element element)
    {
-      NodeList nodes = element.getElementsByTagName(GateinResource.APPLICATION_NAME_TAG);
+      NodeList nodes = element.getElementsByTagName(SkinConfigParser.SKIN_MODULE_TAG);
       if (nodes == null || nodes.getLength() < 1)
       {
          return;
       }
-      String applicationName = nodes.item(0).getFirstChild().getNodeValue();
-      setApplicationName(applicationName);
+      moduleName = nodes.item(0).getFirstChild().getNodeValue();
    }
-
-   private void bindingPortletName(Element element)
+   
+   public void binding(Element elemt)
    {
-      NodeList nodes = element.getElementsByTagName(GateinResource.PORTLET_NAME_TAG);
-      if (nodes == null || nodes.getLength() < 1)
-      {
-         return;
-      }
-      String portletName = nodes.item(0).getFirstChild().getNodeValue();
-      setPortletName(portletName);
+      bindingCSSPath(elemt);
+      bindingSkinName(elemt);
+      bindingModuleName(elemt);
+      bindingOverwrite(elemt);
    }
 
-   public void setApplicationName(String _applicationName)
-   {
-      this.applicationName = _applicationName;
-   }
-
-   public void setPortletName(String _portletName)
-   {
-      this.portletName = _portletName;
-   }
-
-   @Override
    public void execute(SkinService skinService, ServletContext scontext)
    {
-      if (portletName == null || skinName == null || cssPath == null)
+      if (moduleName == null || skinName == null || cssPath == null)
       {
          return;
       }
-      if (applicationName == null)
-      {
-         applicationName = scontext.getContextPath();
-      }
-      String moduleName = applicationName + "/" + portletName;
       String contextPath = scontext.getContextPath();
       String fullCSSPath = contextPath + cssPath;
-      skinService.addSkin(moduleName, skinName, fullCSSPath, scontext, overwrite);
+      skinService.addPortalSkin(moduleName, skinName, fullCSSPath, scontext, overwrite);
       updateSkinDependentManager(contextPath, moduleName, skinName);
    }
 
+   /** Update skinDependentManager as it is needed to undeploy skin at runtime */
    private void updateSkinDependentManager(String webApp, String moduleName, String skinName)
    {
-      SkinDependentManager.addPortletSkin(webApp, moduleName, skinName);
+      SkinDependentManager.addPortalSkin(webApp, moduleName, skinName);
       SkinDependentManager.addSkinDeployedInApp(webApp, skinName);
-   }
 
-   @Override
-   public void binding(Element elemt)
-   {
-      bindingApplicationName(elemt);
-      bindingPortletName(elemt);
-      bindingCSSPath(elemt);
-      bindingSkinName(elemt);
-      bindingOverwrite(elemt);      
+      // Remark: Invoked only in PortalSkinTask
+      SkinDependentManager.addDependentAppToSkinName(skinName, webApp);
    }
-
 }

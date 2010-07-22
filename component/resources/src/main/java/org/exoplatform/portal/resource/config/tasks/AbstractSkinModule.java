@@ -18,7 +18,7 @@
  */
 package org.exoplatform.portal.resource.config.tasks;
 
-import org.exoplatform.web.resource.config.xml.GateinResource;
+import org.exoplatform.portal.resource.config.xml.SkinConfigParser;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
@@ -27,8 +27,9 @@ import org.w3c.dom.NodeList;
  * @version $Revision$
  */
 
-public abstract class AbstractSkinModule implements GateinResource
+public abstract class AbstractSkinModule 
 {
+
    protected String skinName;
    protected String cssPath;
    protected boolean overwrite;
@@ -40,7 +41,7 @@ public abstract class AbstractSkinModule implements GateinResource
 
    protected void bindingSkinName(Element element)
    {
-      NodeList nodes = element.getElementsByTagName(GateinResource.SKIN_NAME_TAG);
+      NodeList nodes = element.getElementsByTagName(SkinConfigParser.SKIN_NAME_TAG);
       if (nodes == null || nodes.getLength() < 1)
       {
          return;
@@ -50,7 +51,7 @@ public abstract class AbstractSkinModule implements GateinResource
    
    protected void bindingCSSPath(Element element)
    {
-      NodeList nodes = element.getElementsByTagName(GateinResource.CSS_PATH_TAG);
+      NodeList nodes = element.getElementsByTagName(SkinConfigParser.CSS_PATH_TAG);
       if (nodes == null || nodes.getLength() < 1)
       {
          return;
@@ -60,7 +61,7 @@ public abstract class AbstractSkinModule implements GateinResource
 
    protected void bindingOverwrite(Element element)
    {
-      NodeList nodes = element.getElementsByTagName(GateinResource.OVERWRITE);
+      NodeList nodes = element.getElementsByTagName(SkinConfigParser.OVERWRITE);
       if (nodes == null || nodes.getLength() < 1)
       {
          return;

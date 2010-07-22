@@ -74,11 +74,6 @@
       <groupId>org.gatein.shindig</groupId>
       <artifactId>shindig-gadgets</artifactId>
     </dependency>
-    <dependency>
-      <groupId>commons-io</groupId>
-      <artifactId>commons-io</artifactId>
-      <type>jar</type>
-    </dependency>
 		<dependency>
     	<groupId>org.json</groupId>
     	<artifactId>json</artifactId>

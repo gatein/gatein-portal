@@ -31,27 +31,6 @@ import org.w3c.dom.Element;
  */
 public interface GateinResource
 {
-   final public static String SKIN_NAME_TAG = "skin-name";
-
-   final public static String SKIN_MODULE_TAG = "skin-module";
-
-   final public static String PORTAl_SKIN_TAG = "portal-skin";
-
-   final public static String PORTLET_SKIN_TAG = "portlet-skin";
-
-   final public static String PORTLET_NAME_TAG = "portlet-name";
-
-   final public static String APPLICATION_NAME_TAG = "application-name";
-
-   final public static String CSS_PATH_TAG = "css-path";
-
-   final public static String WINDOW_STYLE_TAG = "window-style";
-
-   final public static String STYLE_NAME_TAG = "style-name";
-
-   final public static String STYLE_THEME_TAG = "style-theme";
-
-   final public static String THEME_NAME_TAG = "theme-name";
 
    final public static String JAVA_SCRIPT_TAG = "javascript";
 
@@ -60,9 +39,7 @@ public interface GateinResource
    final public static String JAVA_SCRIPT_MODULE = "js-module";
 
    final public static String JAVA_SCRIPT_PATH = "js-path";
-   
-   final public static String OVERWRITE = "overwrite";
-   
+
    final public static String JAVA_SCRIPT_PRIORITY = "js-priority";
 
    public void binding(Element elemt);

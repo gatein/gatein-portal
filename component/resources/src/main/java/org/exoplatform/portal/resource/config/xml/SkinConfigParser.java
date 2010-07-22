@@ -26,8 +26,6 @@ import org.exoplatform.portal.resource.config.tasks.SkinConfigTask;
 import org.exoplatform.portal.resource.config.tasks.PortalSkinTask;
 import org.exoplatform.portal.resource.config.tasks.PortletSkinTask;
 import org.exoplatform.portal.resource.config.tasks.ThemeTask;
-import org.exoplatform.web.application.javascript.JavascriptTask;
-import org.exoplatform.web.resource.config.xml.GateinResource;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -62,6 +60,42 @@ public class SkinConfigParser
    /** . */
    private static final XMLValidator VALIDATOR;
 
+   /** . */
+   final public static String OVERWRITE = "overwrite";
+
+   /** . */
+   final public static String SKIN_NAME_TAG = "skin-name";
+
+   /** . */
+   final public static String SKIN_MODULE_TAG = "skin-module";
+
+   /** . */
+   final public static String PORTAl_SKIN_TAG = "portal-skin";
+
+   /** . */
+   final public static String PORTLET_SKIN_TAG = "portlet-skin";
+
+   /** . */
+   final public static String PORTLET_NAME_TAG = "portlet-name";
+
+   /** . */
+   final public static String APPLICATION_NAME_TAG = "application-name";
+
+   /** . */
+   final public static String CSS_PATH_TAG = "css-path";
+
+   /** . */
+   final public static String WINDOW_STYLE_TAG = "window-style";
+
+   /** . */
+   final public static String STYLE_NAME_TAG = "style-name";
+
+   /** . */
+   final public static String STYLE_THEME_TAG = "style-theme";
+
+   /** . */
+   final public static String THEME_NAME_TAG = "theme-name";
+
    static
    {
       Map<String, String> systemIdToResourcePath = new HashMap<String, String>();
@@ -91,9 +125,9 @@ public class SkinConfigParser
          List<SkinConfigTask> tasks = new ArrayList<SkinConfigTask>();
          Element docElement = document.getDocumentElement();
 
-         fetchTasksByTagName(GateinResource.PORTAl_SKIN_TAG, docElement, tasks);
-         fetchTasksByTagName(GateinResource.PORTLET_SKIN_TAG, docElement, tasks);
-         fetchTasksByTagName(GateinResource.WINDOW_STYLE_TAG, docElement, tasks);
+         fetchTasksByTagName(PORTAl_SKIN_TAG, docElement, tasks);
+         fetchTasksByTagName(PORTLET_SKIN_TAG, docElement, tasks);
+         fetchTasksByTagName(WINDOW_STYLE_TAG, docElement, tasks);
 
          return tasks;
       }
@@ -106,15 +140,15 @@ public class SkinConfigParser
    private static void fetchTasksByTagName(String tagName, Element rootElement, List<SkinConfigTask> tasks)
    {
       NodeList nodes = rootElement.getElementsByTagName(tagName);
-      GateinResource task;
+      SkinConfigTask task;
 
       for (int i = nodes.getLength() - 1; i >= 0; i--)
       {
-         task = elemtToTask(tagName);
+         task = (SkinConfigTask)elemtToTask(tagName);
          if (task != null)
          {
             task.binding((Element)nodes.item(i));
-            tasks.add((SkinConfigTask)task);
+            tasks.add(task);
          }
       }
    }
@@ -122,17 +156,17 @@ public class SkinConfigParser
    /**
     * Return a skin task associated to the <code>tagName</code> of an XML element
     */
-   private static GateinResource elemtToTask(String tagName)
+   private static SkinConfigTask elemtToTask(String tagName)
    {
-      if (tagName.equals(GateinResource.PORTAl_SKIN_TAG))
+      if (tagName.equals(PORTAl_SKIN_TAG))
       {
          return new PortalSkinTask();
       }
-      else if (tagName.equals(GateinResource.WINDOW_STYLE_TAG))
+      else if (tagName.equals(WINDOW_STYLE_TAG))
       {
          return new ThemeTask();
       }
-      else if (tagName.equals(GateinResource.PORTLET_SKIN_TAG))
+      else if (tagName.equals(PORTLET_SKIN_TAG))
       {
          return new PortletSkinTask();
       }

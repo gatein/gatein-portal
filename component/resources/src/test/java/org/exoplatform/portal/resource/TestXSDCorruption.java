@@ -17,7 +17,7 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal;
+package org.exoplatform.portal.resource;
 
 import junit.framework.TestCase;
 import org.gatein.common.io.IOTools;
@@ -57,7 +57,7 @@ public class TestXSDCorruption extends TestCase
 
    public void testGateInResources1_0() throws Exception
    {
-      assertHash("d0591b0a022a0c2929e1aed8979857cd", "gatein_objects_1_0.xsd");
-      assertHash("99ae24c9bbfe1b59e066756a29ab6c79", "gatein_objects_1_1.xsd");
+      assertHash("c68ea6831c3d24a242f63abd2db261a6", "gatein_resources_1_0.xsd");
+      assertHash("c55b7e0dc8ae23e2d34430b38260cd96", "gatein_resources_1_1.xsd");
    }
 }

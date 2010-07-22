@@ -140,9 +140,13 @@ function getModule(params)
    new Project("org.exoplatform.portal", "exo.portal.webui.framework", "jar", module.version).
       addDependency(module.component.web);
 
+   module.webui.portlet =
+   new Project("org.exoplatform.portal", "exo.portal.webui.portlet", "jar", module.version).
+      addDependency(module.webui.framework);
+
    module.webui.core =
    new Project("org.exoplatform.portal", "exo.portal.webui.core", "jar", module.version).
-      addDependency(module.webui.framework);
+      addDependency(module.webui.portlet);
 
    module.webui.eXo =
    new Project("org.exoplatform.portal", "exo.portal.webui.eXo", "jar", module.version).

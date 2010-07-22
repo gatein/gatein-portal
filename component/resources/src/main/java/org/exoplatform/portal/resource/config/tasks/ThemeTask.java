@@ -20,7 +20,7 @@
 package org.exoplatform.portal.resource.config.tasks;
 
 import org.exoplatform.portal.resource.SkinService;
-import org.exoplatform.web.resource.config.xml.GateinResource;
+import org.exoplatform.portal.resource.config.xml.SkinConfigParser;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
@@ -37,7 +37,7 @@ import javax.servlet.ServletContext;
  *
  *      Sep 16, 2009
  */
-public class ThemeTask implements GateinResource, SkinConfigTask
+public class ThemeTask implements SkinConfigTask
 {
 
    private String styleName;
@@ -51,7 +51,7 @@ public class ThemeTask implements GateinResource, SkinConfigTask
 
    private void bindingStyleName(Element element)
    {
-      NodeList nodes = element.getElementsByTagName(GateinResource.STYLE_NAME_TAG);
+      NodeList nodes = element.getElementsByTagName(SkinConfigParser.STYLE_NAME_TAG);
       if (nodes == null || nodes.getLength() < 1)
       {
          return;
@@ -62,7 +62,7 @@ public class ThemeTask implements GateinResource, SkinConfigTask
 
    private void bindingThemeNames(Element element)
    {
-      NodeList nodes = element.getElementsByTagName(GateinResource.THEME_NAME_TAG);
+      NodeList nodes = element.getElementsByTagName(SkinConfigParser.THEME_NAME_TAG);
       if (nodes == null)
       {
          return;
@@ -84,14 +84,12 @@ public class ThemeTask implements GateinResource, SkinConfigTask
       this.styleName = _styleName;
    }
    
-   @Override
    public void binding(Element elemt)
    {
       bindingStyleName(elemt);
       bindingThemeNames(elemt);
    }
 
-   @Override
    public void execute(SkinService skinService, ServletContext scontext)
    {
       if (styleName == null || themeNames.size() < 1)

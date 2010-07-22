@@ -20,6 +20,7 @@
 package org.exoplatform.portal.resource.config.tasks;
 
 import org.exoplatform.portal.resource.SkinService;
+import org.w3c.dom.Element;
 
 import javax.servlet.ServletContext;
 
@@ -31,4 +32,6 @@ import javax.servlet.ServletContext;
 public interface SkinConfigTask
 {
    public void execute(SkinService skinService, ServletContext scontext);
+
+   public void binding(Element elemt);
 }
