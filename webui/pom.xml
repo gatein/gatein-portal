@@ -35,6 +35,7 @@
    <name>GateIn Portal WebUI</name>
 
    <modules>
+      <module>framework</module>
       <module>core</module>
       <module>eXo</module>
       <module>portal</module>

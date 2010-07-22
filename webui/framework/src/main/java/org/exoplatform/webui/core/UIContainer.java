@@ -376,7 +376,7 @@ public class UIContainer extends UIComponent
       {
          WebuiRequestContext context = event.getRequestContext();
          UIContainer uiContainer = event.getSource();
-         String renderTab = context.getRequestParameter(UIComponent.OBJECTID);
+         String renderTab = context.getRequestParameter(OBJECTID);
          if (renderTab == null)
          {
             return;

@@ -61,7 +61,7 @@ public class ConfigurationManager
    private final Logger log;
 
    /** . */
-   private org.exoplatform.webui.config.Application application_;
+   private Application application_;
 
    /**
     * @param inputStream A stream that links the configuration file
@@ -196,7 +196,7 @@ public class ConfigurationManager
       return configs_.get(key);
    }
 
-   public org.exoplatform.webui.config.Application getApplication()
+   public Application getApplication()
    {
       return application_;
    }

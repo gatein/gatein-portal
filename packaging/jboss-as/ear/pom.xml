@@ -128,6 +128,10 @@
         </dependency>
         <dependency>
             <groupId>org.exoplatform.portal</groupId>
+            <artifactId>exo.portal.webui.framework</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.exoplatform.portal</groupId>
             <artifactId>exo.portal.webui.portal</artifactId>
         </dependency>
         <dependency>

@@ -21,6 +21,8 @@ package org.exoplatform.webui.config;
 
 import org.exoplatform.web.application.ApplicationLifecycle;
 import org.exoplatform.webui.Util;
+import org.exoplatform.webui.config.Event;
+import org.exoplatform.webui.config.InitParams;
 import org.exoplatform.webui.event.EventListener;
 
 import java.util.ArrayList;

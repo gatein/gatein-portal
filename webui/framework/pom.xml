@@ -27,27 +27,46 @@
   </parent>
   
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>exo.portal.webui.core</artifactId>
+  <artifactId>exo.portal.webui.framework</artifactId>
   <packaging>jar</packaging>
-  <name>GateIn Portal WebUI Core</name>
+  <name>GateIn Portal WebUI Framework</name>
   
   <dependencies>
     <dependency>
       <groupId>org.exoplatform.portal</groupId>
-      <artifactId>exo.portal.webui.framework</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.exoplatform.portal</groupId>
-      <artifactId>exo.portal.component.portal</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.gatein.common</groupId>
-      <artifactId>common-common</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.exoplatform.portal</groupId>
-      <artifactId>exo.portal.component.test.core</artifactId>
-      <scope>test</scope>
+      <artifactId>exo.portal.component.web</artifactId>
     </dependency>
   </dependencies>
+  
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.jibx</groupId>
+        <artifactId>maven-jibx-plugin</artifactId>
+        <version>${org.jibx.version}</version>
+        <configuration>
+          <directory>src/main/resources</directory>
+          <includes>
+            <includes>binding.xml</includes>
+          </includes>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>bind</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <compilerArgument>-proc:none</compilerArgument>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 </project>

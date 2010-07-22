@@ -136,9 +136,13 @@ function getModule(params)
       addDependency(new Project("com.sun.xml.stream", "sjsxp", "jar", "1.0"));
 
    module.webui = {};
+   module.webui.framework =
+   new Project("org.exoplatform.portal", "exo.portal.webui.framework", "jar", module.version).
+      addDependency(module.component.web);
+
    module.webui.core =
    new Project("org.exoplatform.portal", "exo.portal.webui.core", "jar", module.version).
-      addDependency(module.component.web);
+      addDependency(module.webui.framework);
 
    module.webui.eXo =
    new Project("org.exoplatform.portal", "exo.portal.webui.eXo", "jar", module.version).
