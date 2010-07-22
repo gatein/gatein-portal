@@ -28,10 +28,10 @@ import org.exoplatform.webui.core.UIPortletApplication;
  *          nhudinhthuan@yahoo.com
  * Jun 1, 2006
  */
-public class UIApplicationLifecycle extends Lifecycle<UIComponent>
+public class UIApplicationLifecycle extends Lifecycle<UIPortletApplication>
 {
 
-   public void processDecode(UIComponent uicomponent, WebuiRequestContext context) throws Exception
+   public void processDecode(UIPortletApplication uicomponent, WebuiRequestContext context) throws Exception
    {
       String componentId = context.getRequestParameter(context.getUIComponentIdParameterName());
       if (componentId == null || componentId.length() == 0)
@@ -46,7 +46,7 @@ public class UIApplicationLifecycle extends Lifecycle<UIComponent>
          uiTarget.processDecode(context);
    }
 
-   public void processAction(UIComponent uicomponent, WebuiRequestContext context) throws Exception
+   public void processAction(UIPortletApplication uicomponent, WebuiRequestContext context) throws Exception
    {
       String componentId = context.getRequestParameter(context.getUIComponentIdParameterName());
       if (componentId != null)
@@ -59,14 +59,14 @@ public class UIApplicationLifecycle extends Lifecycle<UIComponent>
       }
    }
 
-   public void processRender(UIComponent uicomponent, WebuiRequestContext context) throws Exception
+   public void processRender(UIPortletApplication uicomponent, WebuiRequestContext context) throws Exception
    {
       if (uicomponent.getTemplate() != null)
       {
          super.processRender(uicomponent, context);
          return;
       }
-      UIPortletApplication uiApp = (UIPortletApplication)uicomponent;
+      UIPortletApplication uiApp = uicomponent;
 
       context.getWriter().append("<div id=\"").append(uicomponent.getId()).append("\"").append("class=\"").append(uicomponent.getId()).append("\">");
       
