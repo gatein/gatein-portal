@@ -28,9 +28,7 @@ import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.config.model.Properties;
 import org.exoplatform.portal.pom.data.ModelDataStorage;
 import org.exoplatform.portal.webui.util.Util;
-import org.exoplatform.web.WebAppController;
 import org.exoplatform.web.application.ApplicationMessage;
-import org.exoplatform.web.application.gadget.GadgetApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -260,29 +258,17 @@ public class UIGadget extends UIComponent
     * @return Gadget Application
     * @throws Exception
     */
-   private GadgetApplication getApplication()
+   private Gadget getApplication()
    {
-      WebAppController webController = getApplicationComponent(WebAppController.class);
-      GadgetApplication application = webController.getApplication("eXoGadgets/" + gadgetId);
-      if (application == null)
+      try
       {
          GadgetRegistryService gadgetService = getApplicationComponent(GadgetRegistryService.class);
-         Gadget model;
-         try
-         {
-            model = gadgetService.getGadget(gadgetId);
-         }
-         catch (Exception ex)
-         {
-            return null;
-         }
-         if (model != null)
-         {
-            application = GadgetUtil.toGadgetApplication(model);
-            webController.addApplication(application);
-         }
+         return gadgetService.getGadget(gadgetId);
       }
-      return application;
+      catch (Exception ex)
+      {
+         return null;
+      }
    }
 
    /**
@@ -295,8 +281,8 @@ public class UIGadget extends UIComponent
    {
       if (url_ == null)
       {
-         GadgetApplication application = getApplication();
-         url_ = GadgetUtil.reproduceUrl(application.getUrl(), application.isLocal());
+         Gadget gadget = getApplication();
+         url_ = GadgetUtil.reproduceUrl(gadget.getUrl(), gadget.isLocal());
       }
       return url_;
    }

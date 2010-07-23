@@ -28,7 +28,6 @@ import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.gadget.core.SecurityTokenGenerator;
 import org.exoplatform.portal.webui.util.Util;
-import org.exoplatform.web.application.gadget.GadgetApplication;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -46,11 +45,6 @@ import java.util.Map;
  */
 public class GadgetUtil
 {
-   static public GadgetApplication toGadgetApplication(Gadget model)
-   {
-      return new GadgetApplication(model.getName(), model.getUrl(), model.isLocal());
-   }
-
    static public Gadget toGadget(String name, String path, boolean isLocal) throws Exception
    {
       Gadget gadget = new Gadget();

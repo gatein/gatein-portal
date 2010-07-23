@@ -34,7 +34,6 @@ import org.exoplatform.portal.pom.spi.portlet.PortletBuilder;
 import org.exoplatform.portal.pom.spi.portlet.Preference;
 import org.exoplatform.portal.pom.spi.wsrp.WSRP;
 import org.exoplatform.portal.pom.spi.wsrp.WSRPPortletStateType;
-import org.exoplatform.web.application.gadget.GadgetApplication;
 import org.gatein.pc.api.PortletContext;
 import org.gatein.pc.api.PortletInvoker;
 import org.gatein.pc.api.StatefulPortletContext;
@@ -171,8 +170,7 @@ public abstract class ModelAdapter<S, C extends Serializable>
          GadgetRegistryService gadgetService =
             (GadgetRegistryService)container.getComponentInstanceOfType(GadgetRegistryService.class);
          org.exoplatform.application.gadget.Gadget model = gadgetService.getGadget(applicationId);
-         GadgetApplication application = new GadgetApplication(model.getName(), model.getUrl(), model.isLocal());
-         String url = GadgetUtil.reproduceUrl(application.getUrl(), application.isLocal());
+         String url = GadgetUtil.reproduceUrl(model.getUrl(), model.isLocal());
          ExoPortletState prefs = new ExoPortletState(WRAPPER_ID);
          prefs.getState().put("url", Arrays.asList(url));
          return StatefulPortletContext.create("local._dumbvalue", ExoPortletStateType.getInstance(), prefs);

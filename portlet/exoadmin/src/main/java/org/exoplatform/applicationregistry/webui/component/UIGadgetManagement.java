@@ -29,7 +29,6 @@ import org.exoplatform.application.registry.ApplicationRegistryService;
 import org.exoplatform.applicationregistry.webui.Util;
 import org.exoplatform.web.WebAppController;
 import org.exoplatform.web.application.ApplicationMessage;
-import org.exoplatform.web.application.gadget.GadgetApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -56,6 +55,8 @@ import java.util.List;
 @Serialized
 public class UIGadgetManagement extends UIContainer
 {
+
+   public static final String EXO_GADGET_GROUP = "eXoGadgets";
 
    private List<Gadget> gadgets_;
 
@@ -175,7 +176,7 @@ public class UIGadgetManagement extends UIContainer
          }
          service.removeGadget(name);
          WebAppController webController = uiManagement.getApplicationComponent(WebAppController.class);
-         webController.removeApplication(GadgetApplication.EXO_GADGET_GROUP + "/" + name);
+         webController.removeApplication(EXO_GADGET_GROUP + "/" + name);
          Gadget gadget = uiManagement.getGadget(name);
          if (gadget.isLocal())
          {
