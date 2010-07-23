@@ -112,6 +112,9 @@ function getModule(params)
       addDependency(module.component.web.controller).
       addDependency(module.component.scripting);
 
+    module.component.web.resources =
+    new Project("org.exoplatform.portal", "exo.portal.component.web.resources", "jar", module.version);;
+
    module.component.web.api =
    new Project("org.exoplatform.portal", "exo.portal.component.web.api", "jar", module.version);
 
@@ -155,6 +158,7 @@ function getModule(params)
       addDependency(module.component.web.server).
       addDependency(module.component.web.security).
       addDependency(module.component.web.api).
+      addDependency(module.component.web.resources).
       addDependency(module.component.web.controller);
 
    module.webui.portlet =

@@ -35,6 +35,7 @@
      <module>controller</module>
      <module>security</module>
      <module>server</module>
+     <module>resources</module>
      <module>api</module>
   </modules>
 </project>
