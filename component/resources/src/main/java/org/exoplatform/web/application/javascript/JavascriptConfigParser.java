@@ -18,7 +18,6 @@
  */
 package org.exoplatform.web.application.javascript;
 
-import org.exoplatform.web.resource.config.xml.GateinResource;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -38,6 +37,16 @@ import javax.xml.parsers.DocumentBuilderFactory;
  */
 public class JavascriptConfigParser
 {
+
+   final public static String JAVA_SCRIPT_TAG = "javascript";
+
+   final public static String JAVA_SCRIPT_PARAM = "param";
+
+   final public static String JAVA_SCRIPT_MODULE = "js-module";
+
+   final public static String JAVA_SCRIPT_PATH = "js-path";
+
+   final public static String JAVA_SCRIPT_PRIORITY = "js-priority";
 
    /** . */
    private ServletContext context;
@@ -78,7 +87,7 @@ public class JavascriptConfigParser
    {
       List<JavascriptTask> tasks = new ArrayList<JavascriptTask>();
       Element element = document.getDocumentElement();
-      NodeList nodes = element.getElementsByTagName(GateinResource.JAVA_SCRIPT_TAG);
+      NodeList nodes = element.getElementsByTagName(JAVA_SCRIPT_TAG);
       int length = nodes.getLength();
       for (int i = 0; i < length; i++)
       {
@@ -93,27 +102,27 @@ public class JavascriptConfigParser
 
    private JavascriptTask xmlToTask(Element element)
    {
-      if (!GateinResource.JAVA_SCRIPT_TAG.equals(element.getTagName()))
+      if (!JAVA_SCRIPT_TAG.equals(element.getTagName()))
       {
          return null;
       }
       try
       {
          JavascriptTask task = new JavascriptTask();
-         NodeList nodes = element.getElementsByTagName(GateinResource.JAVA_SCRIPT_PARAM);
+         NodeList nodes = element.getElementsByTagName(JAVA_SCRIPT_PARAM);
          int length = nodes.getLength();
          for (int i = 0; i < length; i++)
          {
             Element param_ele = (Element)nodes.item(i);
             String js_module =
-               param_ele.getElementsByTagName(GateinResource.JAVA_SCRIPT_MODULE).item(0).getFirstChild().getNodeValue();
+               param_ele.getElementsByTagName(JAVA_SCRIPT_MODULE).item(0).getFirstChild().getNodeValue();
             String js_path =
-               param_ele.getElementsByTagName(GateinResource.JAVA_SCRIPT_PATH).item(0).getFirstChild().getNodeValue();
+               param_ele.getElementsByTagName(JAVA_SCRIPT_PATH).item(0).getFirstChild().getNodeValue();
             Integer js_priority = null;
             try
             {
                js_priority =
-                  Integer.valueOf(param_ele.getElementsByTagName(GateinResource.JAVA_SCRIPT_PRIORITY).item(0)
+                  Integer.valueOf(param_ele.getElementsByTagName(JAVA_SCRIPT_PRIORITY).item(0)
                      .getFirstChild().getNodeValue());
             }
             catch (Exception e)

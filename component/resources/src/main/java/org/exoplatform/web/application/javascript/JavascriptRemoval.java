@@ -24,8 +24,6 @@ import org.gatein.wci.WebAppListener;
 import org.gatein.wci.impl.DefaultServletContainerFactory;
 import org.picocontainer.Startable;
 
-import java.util.List;
-
 import javax.servlet.ServletContext;
 
 /**
