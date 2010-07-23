@@ -46,7 +46,7 @@
     </dependency>
     <dependency>
       <groupId>org.exoplatform.portal</groupId>
-      <artifactId>exo.portal.component.web</artifactId>
+      <artifactId>exo.portal.component.web.api</artifactId>
       <version>3.2.0-Beta01-SNAPSHOT</version>
       <scope>provided</scope>
     </dependency>

@@ -35,7 +35,6 @@ import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.MonitorEvent;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /** Created by The eXo Platform SAS May 7, 2006 */

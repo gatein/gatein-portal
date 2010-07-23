@@ -19,8 +19,6 @@
 
 package org.exoplatform.webui.form.wysiwyg;
 
-import com.sun.syndication.io.impl.PropertiesLoader;
-
 import org.exoplatform.web.resource.config.xml.FCKConfigListener;
 
 import java.util.regex.Matcher;

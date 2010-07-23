@@ -50,11 +50,6 @@
 
     <dependency>
       <groupId>org.exoplatform.portal</groupId>
-      <artifactId>exo.portal.component.web</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>org.exoplatform.portal</groupId>
       <artifactId>exo.portal.component.pc</artifactId>
     </dependency>
 
@@ -81,6 +76,11 @@
     <dependency>
        <groupId>org.picketlink.idm</groupId>
        <artifactId>picketlink-idm-core</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.json</groupId>
+      <artifactId>json</artifactId>
     </dependency>
 
     <dependency>

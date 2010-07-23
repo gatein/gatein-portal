@@ -48,6 +48,11 @@
     </dependency>
     
     <dependency>
+      <groupId>org.gatein.shindig</groupId>
+      <artifactId>shindig-gadgets</artifactId>
+    </dependency>
+
+    <dependency>
        <groupId>org.chromattic</groupId>
        <artifactId>chromattic.ext</artifactId>
     </dependency>

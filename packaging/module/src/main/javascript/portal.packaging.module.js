@@ -97,9 +97,23 @@ function getModule(params)
    module.component.management =
    new Project("org.exoplatform.portal", "exo.portal.component.management", "jar", module.version);
 
-   module.component.web =
-   new Project("org.exoplatform.portal", "exo.portal.component.web", "jar", module.version).
+   module.component.web = {}
+   module.component.web.controller =
+   new Project("org.exoplatform.portal", "exo.portal.component.web.controller", "jar", module.version).
+      addDependency(module.component.common);
+
+   module.component.web.security =
+   new Project("org.exoplatform.portal", "exo.portal.component.web.security", "jar", module.version).
+      addDependency(module.component.web.controller).
       addDependency(module.component.scripting);
+
+   module.component.web.server =
+   new Project("org.exoplatform.portal", "exo.portal.component.web.server", "jar", module.version).
+      addDependency(module.component.web.controller).
+      addDependency(module.component.scripting);
+
+   module.component.web.api =
+   new Project("org.exoplatform.portal", "exo.portal.component.web.api", "jar", module.version);
 
    module.component.portal =
    new Project("org.exoplatform.portal", "exo.portal.component.portal", "jar", module.version).
@@ -118,7 +132,7 @@ function getModule(params)
       addDependency(new Project("org.reflext", "reflext.spi", "jar", reflectVersion)).
       addDependency(new Project("org.reflext", "reflext.jlr", "jar", reflectVersion)).
       addDependency(new Project("org.reflext", "reflext.api", "jar", reflectVersion)).
-      addDependency(module.component.web);
+      addDependency(module.component.web.security);
 
    module.component.identity =
    new Project("org.exoplatform.portal", "exo.portal.component.identity", "jar", module.version).
@@ -138,7 +152,10 @@ function getModule(params)
    module.webui = {};
    module.webui.framework =
    new Project("org.exoplatform.portal", "exo.portal.webui.framework", "jar", module.version).
-      addDependency(module.component.web);
+      addDependency(module.component.web.server).
+      addDependency(module.component.web.security).
+      addDependency(module.component.web.api).
+      addDependency(module.component.web.controller);
 
    module.webui.portlet =
    new Project("org.exoplatform.portal", "exo.portal.webui.portlet", "jar", module.version).
