@@ -28,13 +28,10 @@
   <artifactId>exo.portal.component.web.controller</artifactId>
   <packaging>jar</packaging>
   <name>GateIn Portal Component Web Controller</name>
-
-  <properties>
-    <maven.test.skip>true</maven.test.skip>
-  </properties>
+  <description>The GateIn web controller takes care of managing portal requests and delegate the processing to
+    the appropriate subsystem.</description>
 
   <dependencies>
-
     <dependency>
         <groupId>org.exoplatform.kernel</groupId>
         <artifactId>exo.kernel.container</artifactId>

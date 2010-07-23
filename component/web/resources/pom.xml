@@ -28,12 +28,25 @@
   <artifactId>exo.portal.component.web.resources</artifactId>
   <packaging>jar</packaging>
   <name>GateIn Portal Component Web Resources</name>
+  <description>GateIn web resource serving services such as Javascript, skins and stylesheets</description>
 
   <dependencies>
 
     <dependency>
       <groupId>org.exoplatform.portal</groupId>
+      <artifactId>exo.portal.component.common</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.exoplatform.portal</groupId>
       <artifactId>exo.portal.component.resources</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.gatein.wci</groupId>
+      <artifactId>wci-wci</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
     </dependency>
 
   </dependencies>

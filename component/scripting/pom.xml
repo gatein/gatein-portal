@@ -30,6 +30,7 @@
   <artifactId>exo.portal.component.scripting</artifactId>
   <packaging>jar</packaging>
   <name>GateIn Portal Component Scripting</name>
+  <description>GateIn scripting and template engine</description>
 
   <dependencies>
     <dependency>
@@ -40,11 +41,6 @@
     <dependency>
       <groupId>org.exoplatform.portal</groupId>
       <artifactId>exo.portal.component.common</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>rhino</groupId>
-      <artifactId>js</artifactId>
     </dependency>
 
     <dependency>

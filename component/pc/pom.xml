@@ -30,7 +30,7 @@
   <artifactId>exo.portal.component.pc</artifactId>
   <packaging>jar</packaging>
   <name>GateIn Portal Component PC integration</name>
-  
+
   <dependencies>
 
     <dependency>

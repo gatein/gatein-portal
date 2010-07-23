@@ -28,10 +28,7 @@
   <artifactId>exo.portal.component.web.server</artifactId>
   <packaging>jar</packaging>
   <name>GateIn Portal Component Web Server</name>
-
-  <properties>
-    <maven.test.skip>true</maven.test.skip>
-  </properties>
+  <description>GateIn web server services</description>
 
   <dependencies>
     <dependency>

@@ -28,15 +28,16 @@
   <artifactId>exo.portal.component.web.api</artifactId>
   <packaging>jar</packaging>
   <name>GateIn Portal Component Web API</name>
+  <description>Various API supported by GateIn related to web serving</description>
 
   <dependencies>
     <dependency>
       <groupId>org.exoplatform.kernel</groupId>
-      <artifactId>exo.kernel.container</artifactId>
+      <artifactId>exo.kernel.component.common</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.exoplatform.portal</groupId>
-      <artifactId>exo.portal.component.common</artifactId>
+      <groupId>org.exoplatform.kernel</groupId>
+      <artifactId>exo.kernel.container</artifactId>
     </dependency>
     <dependency>
       <groupId>org.exoplatform.portal</groupId>
