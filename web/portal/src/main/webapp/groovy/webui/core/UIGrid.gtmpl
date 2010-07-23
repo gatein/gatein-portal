@@ -72,7 +72,7 @@
                      def fieldClass = fieldValue.getClass();
                      if(fieldClass == Integer.class)	cssClass = "number";
                      else if(java.util.Date.class.isAssignableFrom(fieldClass)) {
-                        if(dateFormat == null) dateFormat = new SimpleDateFormat("HH:mm:ss yyyy-MM-dd");
+                        def dateFormat = new SimpleDateFormat("HH:mm:ss yyyy-MM-dd");
                         cssClass = "Datetime";
                         fieldValue = dateFormat.format(fieldValue);
                   }
