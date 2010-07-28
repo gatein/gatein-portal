@@ -1,0 +1,12 @@
+diff -uNr --exclude .svn tomcat.orig/conf/catalina.properties tomcat/conf/catalina.properties
+--- tomcat.orig/conf/catalina.properties	2010-06-29 16:30:50.000000000 +0200
++++ tomcat/conf/catalina.properties	2010-07-28 11:01:37.000000000 +0200
+@@ -44,7 +44,7 @@
+ #     "foo/*.jar": Add all the JARs of the specified folder as class 
+ #                  repositories
+ #     "foo/bar.jar": Add bar.jar as a class repository
+-common.loader=${catalina.base}/lib,${catalina.base}/lib/*.jar,${catalina.home}/lib,${catalina.home}/lib/*.jar
++common.loader=${catalina.base}/lib,${catalina.base}/lib/*.jar,${catalina.home}/lib,${catalina.home}/lib/*.jar,${catalina.base}/gatein/lib/*.jar
+ 
+ #
+ # List of comma-separated paths defining the contents of the "server" 
