@@ -267,7 +267,11 @@
 	</servlet-mapping>
 	<servlet-mapping>
 	  <servlet-name>portal</servlet-name> 
-	  <url-pattern>/command/*</url-pattern> 
+	  <url-pattern>/upload/*</url-pattern> 
+	</servlet-mapping>
+	<servlet-mapping>
+	  <servlet-name>portal</servlet-name> 
+	  <url-pattern>/download/*</url-pattern> 
 	</servlet-mapping>
   <servlet-mapping>
     <servlet-name>RestServer</servlet-name>

@@ -19,29 +19,29 @@
 
 package org.exoplatform.upload;
 
+import java.io.File;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.ProgressListener;
+import org.apache.commons.fileupload.disk.DiskFileItem;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.container.xml.PortalContainerInfo;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.LinkedHashMap;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
-/**
- * Created by The eXo Platform SARL
- * Author : Tuan Nguyen
- *          tuan.nguyen@exoplatform.com
- * Dec 8, 2006  
- */
 public class UploadService
 {
-
    /** . */
    private static final Logger log = LoggerFactory.getLogger(UploadService.class);
 
@@ -52,6 +52,8 @@ public class UploadService
    private int defaultUploadLimitMB_;
 
    private Map<String, Integer> uploadLimitsMB_ = new LinkedHashMap<String, Integer>();
+
+   public static String UPLOAD_RESOURCES_STACK = "uploadResourcesStack";
 
    public UploadService(PortalContainerInfo pinfo, InitParams params) throws Exception
    {
@@ -67,167 +69,129 @@ public class UploadService
    }
 
    /**
-    * Create UploadResource for HttpServletRequest.
-    * If Upload size greater than limit upload size, do not create UploadResource
-    * @param request
-    *             the webapp's {@link javax.servlet.http.HttpServletRequest}
-    * @throws IOException 
-    *             any io exception
+    * Create UploadResource for HttpServletRequest
+    * 
+    * @param requestow
+    *           the webapp's {@link javax.servlet.http.HttpServletRequest}
+    * @throws FileUploadException
     */
-   public void createUploadResource(HttpServletRequest request) throws IOException
+   @SuppressWarnings("unchecked")
+   public void createUploadResource(HttpServletRequest request) throws FileUploadException
    {
       String uploadId = request.getParameter("uploadId");
-      // by default, use the limit set in the service
-      //int limitMB = defaultUploadLimitMB_;
-      // if the limit is set in the request (specific for this upload) then use this value instead of the default one
-      //if (uploadLimitsMB_.containsKey(uploadId)) limitMB = uploadLimitsMB_.get(uploadId).intValue() ;
-      int limitMB = uploadLimitsMB_.get(uploadId).intValue();
-
       UploadResource upResource = new UploadResource(uploadId);
-      RequestStreamReader reader = new RequestStreamReader(upResource);
-      int estimatedSizeMB = (request.getContentLength() / 1024) / 1024;
-      if (limitMB > 0 && estimatedSizeMB > limitMB)
-      { // a limit set to 0 means unlimited
+      upResource.setFileName("");// Avoid NPE in UploadHandler
+      uploadResources.put(upResource.getUploadId(), upResource);
+      
+      putToStackInSession(request.getSession(true), uploadId);
+
+      double contentLength = request.getContentLength();
+      upResource.setEstimatedSize(contentLength);
+      if (isLimited(upResource, contentLength))
+      {
          upResource.setStatus(UploadResource.FAILED_STATUS);
-         //upResource.setLimitMB(limitMB);
-         uploadResources.put(uploadId, upResource);
-         log.debug("Upload cancelled because file bigger than size limit : " + estimatedSizeMB + " MB > "
-            + limitMB + " MB");
-         //    	WebuiRequestContext ctx = WebuiRequestContext.getCurrentInstance();
-         //        UIApplication uiApp = ctx.getUIApplication();
-         //        uiApp.addMessage(new ApplicationMessage("The file must be < "+limitMB+" MB.", null, ApplicationMessage.WARNING));
          return;
       }
-      // TODO : display error message, terminate upload correctly
 
-      String headerEncoding = request.getCharacterEncoding();
-      Map<String, String> headers = reader.parseHeaders(request.getInputStream(), headerEncoding);
+      ServletFileUpload servletFileUpload = makeServletFileUpload(upResource);
+      // parse request
+      List<FileItem> itemList = servletFileUpload.parseRequest(request);
+      if (itemList == null || itemList.size() != 1 || itemList.get(0).isFormField())
+      {
+         log.debug("Please upload 1 file per request");
+         return;
+      }
 
-      String fileName = reader.getFileName(headers);
-      if (fileName == null)
-         fileName = uploadId;
-      fileName = fileName.substring(fileName.lastIndexOf('\\') + 1);
+      DiskFileItem fileItem = (DiskFileItem)itemList.get(0);
+      String fileName = fileItem.getName();
+      String storeLocation = uploadLocation_ + "/" + uploadId + "." + fileName;
+
+      // commons-fileupload will store the temp file with name *.tmp
+      // we need to rename it to our desired name
+      fileItem.getStoreLocation().renameTo(new File(storeLocation));
 
       upResource.setFileName(fileName);
-      upResource.setMimeType(headers.get(RequestStreamReader.CONTENT_TYPE));
-      upResource.setStoreLocation(uploadLocation_ + "/" + uploadId + "." + fileName);
-      upResource.setEstimatedSize(request.getContentLength());
-
-      uploadResources.put(upResource.getUploadId(), upResource);
-
-      File fileStore = new File(upResource.getStoreLocation());
-      if (!fileStore.exists())
-         fileStore.createNewFile();
-      FileOutputStream output = new FileOutputStream(fileStore);
-      reader.readBodyData(request, output);
-
-      if (upResource.getStatus() == UploadResource.UPLOADING_STATUS)
-      {
-         upResource.setStatus(UploadResource.UPLOADED_STATUS);
-         return;
-      }
-
-      uploadResources.remove(uploadId);
-      fileStore.delete();
+      upResource.setMimeType(fileItem.getContentType());
+      upResource.setStoreLocation(storeLocation);
+      upResource.setStatus(UploadResource.UPLOADED_STATUS);
    }
 
-   /**
-    * Create UploadResource for uploadId.
-    * If Upload size greater than limit upload size, do not create UploadResource.
-    * @param uploadId
-    *          the uploadId will be use to create UploadResource
-    * @param encoding
-    *           type of encode
-    * @param contentType
-    *          type of upload content
-    * @param contentLength
-    *          size of upload content
-    * @param inputStream
-    *          java.io.InputStream
-    * @throws Exception
-    */
-   public void createUploadResource(String uploadId, String encoding, String contentType, double contentLength,
-      InputStream inputStream) throws Exception
+   @SuppressWarnings("unchecked")
+   private void putToStackInSession(HttpSession session, String uploadId)
    {
-      UploadResource upResource = new UploadResource(uploadId);
-      RequestStreamReader reader = new RequestStreamReader(upResource);
-      int limitMB = uploadLimitsMB_.get(uploadId).intValue();
-      int estimatedSizeMB = (int)contentLength / 1024 / 1024;
-      if (limitMB > 0 && estimatedSizeMB > limitMB)
-      { // a limit set to 0 means unlimited
-         upResource.setStatus(UploadResource.FAILED_STATUS);
-         uploadResources.put(uploadId, upResource);
-         log.debug("Upload cancelled because file bigger than size limit : " + estimatedSizeMB + " MB > "
-            + limitMB + " MB");
-         return;
-      }
-      Map<String, String> headers = reader.parseHeaders(inputStream, encoding);
-
-      String fileName = reader.getFileName(headers);
-      if (fileName == null)
-         fileName = uploadId;
-      fileName = fileName.substring(fileName.lastIndexOf('\\') + 1);
-
-      upResource.setFileName(fileName);
-      upResource.setMimeType(headers.get(RequestStreamReader.CONTENT_TYPE));
-      upResource.setStoreLocation(uploadLocation_ + "/" + uploadId + "." + fileName);
-      upResource.setEstimatedSize(contentLength);
-      uploadResources.put(upResource.getUploadId(), upResource);
-      File fileStore = new File(upResource.getStoreLocation());
-      if (!fileStore.exists())
-         fileStore.createNewFile();
-      FileOutputStream output = new FileOutputStream(fileStore);
-      reader.readBodyData(inputStream, contentType, output);
-
-      if (upResource.getStatus() == UploadResource.UPLOADING_STATUS)
+      Set<String> uploadResouceIds = (Set<String>)session.getAttribute(UploadService.UPLOAD_RESOURCES_STACK);
+      if (uploadResouceIds == null)
       {
-         upResource.setStatus(UploadResource.UPLOADED_STATUS);
-         return;
+         uploadResouceIds = new HashSet();
       }
-
-      uploadResources.remove(uploadId);
-      fileStore.delete();
+      uploadResouceIds.add(uploadId);
+      session.setAttribute(UploadService.UPLOAD_RESOURCES_STACK, uploadResouceIds);
    }
 
    /**
     * Get UploadResource by uploadId
+    * 
     * @param uploadId
-    *          uploadId of UploadResource
+    *           uploadId of UploadResource
     * @return org.exoplatform.upload.UploadResource of uploadId
     */
    public UploadResource getUploadResource(String uploadId)
-   {//throws Exception 
-      UploadResource upResource = uploadResources.get(uploadId);
-      return upResource;
+   {
+      return uploadResources.get(uploadId);
    }
 
    /**
-    * Remove UploadResource by uploadId, Delete temp file of UploadResource.
-    * If uploadId is null or UploadResource is null or Store Location of UploadResource is null, do nothing
-    * @param uploadId
-    *          uploadId of UploadResource will be removed
+    * Clean up temporary files that are uploaded in the Session but not removed yet
+    * 
+    * @param session
     */
-   public void removeUpload(String uploadId)
+   public void cleanUp(HttpSession session)
+   {
+      log.debug("Cleaning up uploaded files for temporariness");
+      Set<String> uploadIds = (Set<String>)session.getAttribute(UploadService.UPLOAD_RESOURCES_STACK);
+      if (uploadIds != null)
+      {
+         for (String id : uploadIds)
+         {
+            removeUploadResource(id);
+            uploadLimitsMB_.remove(id);
+         }
+      }
+   }
+
+   /**
+    * Remove UploadResource by uploadId, Delete temp file of UploadResource. If
+    * uploadId is null or UploadResource is null, do nothing
+    * 
+    * @param uploadId
+    *           uploadId of UploadResource will be removed
+    */
+   public void removeUploadResource(String uploadId)
    {
       if (uploadId == null)
          return;
       UploadResource upResource = uploadResources.get(uploadId);
-      if (upResource == null)
-         return;
-      if (upResource.getStoreLocation() == null)
-         return;
-      File file = new File(upResource.getStoreLocation());
-      file.delete();
-      uploadResources.remove(uploadId);
-      //uploadLimitsMB_.remove(uploadId);
+      if (upResource != null)
+      {
+         uploadResources.remove(uploadId);
+
+         if (upResource.getStoreLocation() != null)
+         {
+            File file = new File(upResource.getStoreLocation());
+            file.delete();
+         }
+      }
+
+      // uploadLimitsMB_.remove(uploadId);
    }
 
    /**
-    * Registry upload limit size for uploadLimitsMB_.
-    * If limitMB is null, defaultUploadLimitMB_ will be registried
+    * Registry upload limit size for uploadLimitsMB_. If limitMB is null,
+    * defaultUploadLimitMB_ will be registried
+    * 
     * @param uploadId
     * @param limitMB
-    *          upload limit size
+    *           upload limit size
     */
    public void addUploadLimit(String uploadId, Integer limitMB)
    {
@@ -239,11 +203,63 @@ public class UploadService
 
    /**
     * Get all upload limit sizes
-    * @return 
-    *     all upload limit sizes
+    * 
+    * @return all upload limit sizes
     */
    public Map<String, Integer> getUploadLimitsMB()
    {
       return uploadLimitsMB_;
+   }
+
+   private ServletFileUpload makeServletFileUpload(UploadResource upResource)
+   {
+      // Create a factory for disk-based file items
+      DiskFileItemFactory factory = new DiskFileItemFactory();
+
+      // Set factory constraints
+      factory.setSizeThreshold(0);
+      factory.setRepository(new File(uploadLocation_));
+
+      // Create a new file upload handler
+      ServletFileUpload upload = new ServletFileUpload(factory);
+      upload.setProgressListener(makeProgressListener(upResource));
+      return upload;
+   }
+
+   private ProgressListener makeProgressListener(final UploadResource upResource)
+   {
+      return new ProgressListener()
+      {
+         public void update(long pBytesRead, long pContentLength, int pItems)
+         {
+            if (pBytesRead == upResource.getUploadedSize())
+               return;
+            upResource.addUploadedBytes(pBytesRead - upResource.getUploadedSize());
+         }
+      };
+   }
+
+   private boolean isLimited(UploadResource upResource, double contentLength)
+   {
+      // by default, use the limit set in the service
+      int limitMB = defaultUploadLimitMB_;
+      // if the limit is set in the request (specific for this upload) then use
+      // this value instead of the default one
+      if (uploadLimitsMB_.containsKey(upResource.getUploadId()))
+      {
+         limitMB = uploadLimitsMB_.get(upResource.getUploadId()).intValue();
+      }
+
+      int estimatedSizeMB = (int)((contentLength / 1024) / 1024);
+      if (limitMB > 0 && estimatedSizeMB > limitMB)
+      { // a limit set to 0 means unlimited         
+         if (log.isDebugEnabled())
+         {
+            log.debug("Upload cancelled because file bigger than size limit : " + estimatedSizeMB + " MB > " + limitMB
+               + " MB");
+         }
+         return true;
+      }
+      return false;
    }
 }

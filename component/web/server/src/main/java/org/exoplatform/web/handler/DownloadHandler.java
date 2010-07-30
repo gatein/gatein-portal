@@ -24,7 +24,7 @@ import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.download.DownloadResource;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.web.WebAppController;
-import org.exoplatform.web.command.Command;
+import org.exoplatform.web.WebRequestHandler;
 
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -39,14 +39,18 @@ import javax.servlet.http.HttpServletResponse;
  *          thuy.le@exoplatform.com
  * Dec 9, 2006  
  */
-public class DownloadHandler extends Command
+public class DownloadHandler extends WebRequestHandler
 {
 
-   private String resourceId;
+   @Override
+   public String[] getPath()
+   {
+      return new String[]{"/download"};
+   }
 
-   @SuppressWarnings("unused")
    public void execute(WebAppController controller, HttpServletRequest req, HttpServletResponse res) throws Exception
    {
+      String resourceId = req.getParameter("resourceId");
       res.setHeader("Cache-Control", "private max-age=600, s-maxage=120");
       ExoContainer container = ExoContainerContext.getCurrentContainer();
       DownloadService dservice = (DownloadService)container.getComponentInstanceOfType(DownloadService.class);
@@ -85,11 +89,6 @@ public class DownloadHandler extends Command
       {
          is.close();
       }
-   }
-
-   public String getResourceId()
-   {
-      return resourceId;
    }
 
    private static void optimalRead(InputStream is, OutputStream os) throws Exception

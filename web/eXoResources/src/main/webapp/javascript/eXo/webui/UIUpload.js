@@ -28,8 +28,8 @@ function UIUpload() {
  * @param {boolean} isAutoUpload auto upload or none
  */
 UIUpload.prototype.initUploadEntry = function(uploadId, isAutoUpload) {
-	var url = eXo.env.server.context + "/command?" ;
-	url += "type=org.exoplatform.web.command.handler.UploadHandler&action=progress&uploadId="+uploadId ;
+	var url = eXo.env.server.context + "/upload?" ;
+	url += "action=progress&uploadId="+uploadId ;
 	var responseText = ajaxAsyncGetRequest(url, false);
 	
 	var response;
@@ -51,9 +51,8 @@ UIUpload.prototype.initUploadEntry = function(uploadId, isAutoUpload) {
 UIUpload.prototype.createUploadEntry = function(uploadId, isAutoUpload) {
   var iframe = document.getElementById(uploadId+'uploadFrame');
   var idoc = iframe.contentWindow.document ;
-  var uploadAction = eXo.env.server.context + "/command?" ;
-  uploadAction += "type=org.exoplatform.web.command.handler.UploadHandler";
-  uploadAction += "&uploadId=" + uploadId+"&action=upload" ;
+  var uploadAction = eXo.env.server.context + "/upload?" ;
+  uploadAction += "uploadId=" + uploadId+"&action=upload" ;
   idoc.open();
 	idoc.write("<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Strict//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd'>");
   idoc.write("<html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en' lang='" +eXo.core.I18n.lang+ "' dir='" +eXo.core.I18n.dir+ "'>");
@@ -85,8 +84,8 @@ UIUpload.prototype.createUploadEntry = function(uploadId, isAutoUpload) {
 UIUpload.prototype.refeshProgress = function(elementId) {
   var list =  eXo.webui.UIUpload.listUpload;
   if(list.length < 1) return;
-  var url = eXo.env.server.context + "/command?" ;
-	url += "type=org.exoplatform.web.command.handler.UploadHandler&action=progress" ;
+  var url = eXo.env.server.context + "/upload?" ;
+	url += "action=progress" ;
 //  var url =  eXo.env.server.context + "/upload?action=progress";  
   for(var i = 0; i < list.length; i++){
     url = url + "&uploadId=" + list[i];
@@ -165,8 +164,8 @@ UIUpload.prototype.showUploaded = function(id, fileName) {
  */
 UIUpload.prototype.abortUpload = function(id) {
   eXo.webui.UIUpload.listUpload.remove(id);
-  var url = eXo.env.server.context + "/command?" ;
-	url += "type=org.exoplatform.web.command.handler.UploadHandler&uploadId=" +id+"&action=abort" ;
+  var url = eXo.env.server.context + "/upload?" ;
+	url += "uploadId=" +id+"&action=abort" ;
 //  var url = eXo.env.server.context + "/upload?uploadId=" +id+"&action=abort" ;
   var request =  eXo.core.Browser.createHttpRequest();
   request.open('GET', url, false);
@@ -197,8 +196,8 @@ UIUpload.prototype.abortUpload = function(id) {
  * @param {String} id upload identifier
  */
 UIUpload.prototype.deleteUpload = function(id) {
-	var url = eXo.env.server.context + "/command?";
-	url += "type=org.exoplatform.web.command.handler.UploadHandler&uploadId=" +id+"&action=delete" ;
+	var url = eXo.env.server.context + "/upload?";
+	url += "uploadId=" +id+"&action=delete" ;
 //  var url = eXo.env.server.context + "/upload?uploadId=" +id+"&action=delete" ;
   var request =  eXo.core.Browser.createHttpRequest();
   request.open('GET', url, false);

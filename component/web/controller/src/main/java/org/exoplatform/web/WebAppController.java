@@ -21,12 +21,10 @@ package org.exoplatform.web;
 
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
-import org.exoplatform.container.component.ComponentRequestLifecycle;
 import org.exoplatform.container.component.RequestLifeCycle;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.web.application.Application;
-import org.exoplatform.web.command.CommandHandler;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -67,10 +65,8 @@ public class WebAppController
       applications_ = new HashMap<String, Application>();
       attributes_ = new HashMap<String, Object>();
       handlers_ = new HashMap<String, WebRequestHandler>();
-      register(new CommandHandler());
    }
 
-   @SuppressWarnings("unused")
    public Object getAttribute(String name, Object value)
    {
       return attributes_.get(name);
@@ -108,7 +104,7 @@ public class WebAppController
       for (String path : handler.getPath())
          handlers_.put(path, handler);
    }
-
+   
    public void unregister(String[] paths)
    {
       for (String path : paths)

@@ -19,6 +19,8 @@
 
 package org.exoplatform.web;
 
+import org.exoplatform.container.component.BaseComponentPlugin;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -31,9 +33,9 @@ import javax.servlet.http.HttpServletResponse;
  * In case of portal the path is /portal but you could return your own from the getPath() method and hence the 
  * WebAppController would use your own handler
  * 
- * The execute method is to be overideen and the buisness logic should be handled here
+ * The execute method is to be overrided and the buisness logic should be handled here
  */
-abstract public class WebRequestHandler
+abstract public class WebRequestHandler extends BaseComponentPlugin
 {
 
    public void onInit(WebAppController controller) throws Exception

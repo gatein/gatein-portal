@@ -20,11 +20,12 @@
 package org.exoplatform.web.handler;
 
 import org.exoplatform.container.ExoContainer;
+
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.upload.UploadResource;
 import org.exoplatform.upload.UploadService;
 import org.exoplatform.web.WebAppController;
-import org.exoplatform.web.command.Command;
+import org.exoplatform.web.WebRequestHandler;
 
 import java.io.Writer;
 import java.net.URLEncoder;
@@ -38,30 +39,24 @@ import javax.servlet.http.HttpServletResponse;
  *          nhudinhthuan@exoplatform.com
  * Dec 9, 2006  
  */
-public class UploadHandler extends Command
+public class UploadHandler extends WebRequestHandler
 {
 
    static enum UploadServiceAction {
       PROGRESS, UPLOAD, DELETE, ABORT
    }
 
-   private String action;
-
-   private String[] uploadId;
-
-   public void setAction(String action)
+   @Override
+   public String[] getPath()
    {
-      this.action = action;
+      return new String[]{"/upload"};
    }
 
-   public void setUploadId(String[] uploadId)
-   {
-      this.uploadId = uploadId;
-   }
-
-   @SuppressWarnings("unused")
    public void execute(WebAppController controller, HttpServletRequest req, HttpServletResponse res) throws Exception
    {
+      String action = req.getParameter("action");
+      String[] uploadId = req.getParameterValues("uploadId");
+      
       res.setHeader("Cache-Control", "no-cache");
 
       ExoContainer container = ExoContainerContext.getCurrentContainer();
@@ -84,6 +79,7 @@ public class UploadHandler extends Command
                continue;
             if (upResource.getStatus() == UploadResource.FAILED_STATUS)
             {
+               
                int limitMB = service.getUploadLimitsMB().get(uploadId[i]).intValue();
                value.append("\n    \"").append(uploadId[i]).append("\": {");
                value.append("\n      \"status\":").append('\"').append("failed").append("\",");
@@ -113,14 +109,11 @@ public class UploadHandler extends Command
       }
       else if (uploadActionService == UploadServiceAction.DELETE)
       {
-         service.removeUpload(uploadId[0]);
+         service.removeUploadResource(uploadId[0]);
       }
       else if (uploadActionService == UploadServiceAction.ABORT)
       {
-         //TODO: dang.tung - we don't need 2 statements because it'll show error when we reload browser
-         //UploadResource upResource = service.getUploadResource(uploadId[0]);
-         //if(upResource != null) upResource.setStatus(UploadResource.UPLOADED_STATUS) ;
-         service.removeUpload(uploadId[0]);
+         service.removeUploadResource(uploadId[0]);
       }
    }
 

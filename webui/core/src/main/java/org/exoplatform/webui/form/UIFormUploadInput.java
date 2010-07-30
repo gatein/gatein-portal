@@ -54,11 +54,6 @@ public class UIFormUploadInput extends UIFormInputBase<String>
     */
    private boolean isAutoUpload = false;
 
-   /**
-    * The maximum size of the file to upload, in MB
-    */
-   //private int limitMB_;
-
    public UIFormUploadInput(String name, String bindingExpression)
    {
       super(name, bindingExpression, String.class);
@@ -127,9 +122,8 @@ public class UIFormUploadInput extends UIFormInputBase<String>
       WebuiRequestContext pcontext = (WebuiRequestContext)context.getParentAppRequestContext();
       if (pcontext == null)
          pcontext = context;
-      String uploadAction = pcontext.getRequestContextPath() + "/command?";
-      uploadAction += "type=org.exoplatform.web.command.handler.UploadHandler";
-      uploadAction += "&uploadId=" + uploadId_ + "&action=upload";
+      String uploadAction = pcontext.getRequestContextPath() + "/upload?";
+      uploadAction += "uploadId=" + uploadId_ + "&action=upload";
       return uploadAction;
    }
 
@@ -147,9 +141,4 @@ public class UIFormUploadInput extends UIFormInputBase<String>
    {
       this.isAutoUpload = isAutoUpload;
    }
-
-   //  public void setLimit(int size) { limitMB_ = size; }
-   //  
-   //  public int getLimit() { return limitMB_; }
-
 }

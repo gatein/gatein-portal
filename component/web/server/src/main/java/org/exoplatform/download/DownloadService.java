@@ -35,11 +35,13 @@ import java.util.Map;
 public class DownloadService
 {
 
-   private Cache downloadResources_;
+   private Cache downloadResources_;    
 
    private Map<String, DownloadResource> defaultResources_;
 
    private PortalContainerInfo pinfo_;
+   
+   public static final String DOWNLOAD_HANDLER_PATH = "download";
 
    public DownloadService(PortalContainerInfo pinfo, InitParams params) throws Exception
    {
@@ -82,8 +84,8 @@ public class DownloadService
 
    public String getDownloadLink(String id)
    {
-      return "/" + pinfo_.getContainerName() + "/command?"
-         + "type=org.exoplatform.web.command.handler.DownloadHandler&amp;resourceId=" + id;
+      return "/" + pinfo_.getContainerName() + "/" + DOWNLOAD_HANDLER_PATH + "?"
+         + "resourceId=" + id;
    }
 
    @SuppressWarnings("serial")
