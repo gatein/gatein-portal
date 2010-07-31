@@ -55,7 +55,7 @@ public class UploadHandler extends WebRequestHandler
    public void execute(WebAppController controller, HttpServletRequest req, HttpServletResponse res) throws Exception
    {
       String action = req.getParameter("action");
-      String[] uploadId = req.getParameterValues("uploadId");
+      String[] uploadIds = req.getParameterValues("uploadId");
       
       res.setHeader("Cache-Control", "no-cache");
 
@@ -68,20 +68,20 @@ public class UploadHandler extends WebRequestHandler
       if (uploadActionService == UploadServiceAction.PROGRESS)
       {
          Writer writer = res.getWriter();
-         if (uploadId == null)
+         if (uploadIds == null)
             return;
          StringBuilder value = new StringBuilder();
          value.append("{\n  upload : {");
-         for (int i = 0; i < uploadId.length; i++)
+         for (int i = 0; i < uploadIds.length; i++)
          {
-            UploadResource upResource = service.getUploadResource(uploadId[i]);
+            UploadResource upResource = service.getUploadResource(uploadIds[i]);
             if (upResource == null)
                continue;
             if (upResource.getStatus() == UploadResource.FAILED_STATUS)
             {
                
-               int limitMB = service.getUploadLimitsMB().get(uploadId[i]).intValue();
-               value.append("\n    \"").append(uploadId[i]).append("\": {");
+               int limitMB = service.getUploadLimitsMB().get(uploadIds[i]).intValue();
+               value.append("\n    \"").append(uploadIds[i]).append("\": {");
                value.append("\n      \"status\":").append('\"').append("failed").append("\",");
                value.append("\n      \"size\":").append('\"').append(limitMB).append("\"");
                value.append("\n    }");
@@ -92,12 +92,12 @@ public class UploadHandler extends WebRequestHandler
             {
                percent = (upResource.getUploadedSize() * 100) / upResource.getEstimatedSize();
             }
-            value.append("\n    \"").append(uploadId[i]).append("\": {");
+            value.append("\n    \"").append(uploadIds[i]).append("\": {");
             value.append("\n      \"percent\":").append('\"').append((int)percent).append("\",");
             value.append("\n      \"fileName\":").append('\"').append(encodeName(upResource.getFileName()))
                .append("\"");
             value.append("\n    }");
-            if (i < uploadId.length - 1)
+            if (i < uploadIds.length - 1)
                value.append(',');
          }
          value.append("\n  }\n}");
@@ -109,11 +109,11 @@ public class UploadHandler extends WebRequestHandler
       }
       else if (uploadActionService == UploadServiceAction.DELETE)
       {
-         service.removeUploadResource(uploadId[0]);
+         service.removeUploadResource(uploadIds[0]);
       }
       else if (uploadActionService == UploadServiceAction.ABORT)
       {
-         service.removeUploadResource(uploadId[0]);
+         service.removeUploadResource(uploadIds[0]);
       }
    }
 

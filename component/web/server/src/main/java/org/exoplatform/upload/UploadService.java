@@ -160,11 +160,21 @@ public class UploadService
    }
 
    /**
-    * Remove UploadResource by uploadId, Delete temp file of UploadResource. If
-    * uploadId is null or UploadResource is null, do nothing
+    * @deprecated use {@link #removeUploadResource(String)} instead
     * 
     * @param uploadId
-    *           uploadId of UploadResource will be removed
+    */
+   @Deprecated
+   public void removeUpload(String uploadId)
+   {
+      removeUploadResource(uploadId);
+   }
+   
+   /**
+    * Remove the UploadResource and its temporary file that associated with given <code>uploadId</code>.
+    * <br/>If <code>uploadId</code> is null or UploadResource is null, do nothing
+    * 
+    * @param uploadId uploadId of UploadResource will be removed
     */
    public void removeUploadResource(String uploadId)
    {
@@ -211,7 +221,7 @@ public class UploadService
       return uploadLimitsMB_;
    }
 
-   private ServletFileUpload makeServletFileUpload(UploadResource upResource)
+   private ServletFileUpload makeServletFileUpload(final UploadResource upResource)
    {
       // Create a factory for disk-based file items
       DiskFileItemFactory factory = new DiskFileItemFactory();
@@ -222,13 +232,7 @@ public class UploadService
 
       // Create a new file upload handler
       ServletFileUpload upload = new ServletFileUpload(factory);
-      upload.setProgressListener(makeProgressListener(upResource));
-      return upload;
-   }
-
-   private ProgressListener makeProgressListener(final UploadResource upResource)
-   {
-      return new ProgressListener()
+      ProgressListener listener = new ProgressListener()
       {
          public void update(long pBytesRead, long pContentLength, int pItems)
          {
@@ -237,6 +241,8 @@ public class UploadService
             upResource.addUploadedBytes(pBytesRead - upResource.getUploadedSize());
          }
       };
+      upload.setProgressListener(listener);
+      return upload;
    }
 
    private boolean isLimited(UploadResource upResource, double contentLength)

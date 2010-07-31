@@ -30,8 +30,8 @@ public class UISampleDownloadUpload extends UIForm
    public UISampleDownloadUpload() throws Exception
    {
       addUIFormInput(new UIFormUploadInput("name0", "value0"));
-      addUIFormInput(new UIFormUploadInput("name1", "value1"));
-      addUIFormInput(new UIFormUploadInput("name2", "value2"));
+      addUIFormInput(new UIFormUploadInput("name1", "value1", 100));
+      addUIFormInput(new UIFormUploadInput("name2", "value2", 200));
    }
 
    public void setDownloadLink(String[] downloadLink)
