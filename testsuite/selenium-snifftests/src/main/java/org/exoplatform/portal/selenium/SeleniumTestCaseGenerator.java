@@ -345,6 +345,14 @@ public class SeleniumTestCaseGenerator {
 				sb.append("\")) {\nbreak;\n}\n}\ncatch (Exception e) {\n}\n");
 				sb.append("Thread.sleep(1000);\n");
 				sb.append("}\n");
+			}else if (param1.equals("waitForConfirmationPresent")) {
+				sb.append("for (int second = 0;; second++) {\n");
+				sb.append(getTimeoutMessage(param1));
+				sb.append("try {\n");
+				sb.append("if (selenium.isConfirmationPresent()");
+				sb.append("){\nbreak;\n}\n}\ncatch (Exception e) {\n}\n");
+				sb.append("Thread.sleep(1000);\n");
+				sb.append("}\n");
 			} else if (param1.equals("verifyEval")) {
 				sb.append("TestCase.assertEquals(\"");
 				sb.append(param3);
