@@ -107,78 +107,8 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
-	<td>link=Save</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForTextPresent</td>
-	<td>hello world example</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>hello world example</td>
-	<td></td>
-</tr>
-<tr>
-	<td>echo</td>
-	<td>-- Edit gadget --</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>//div[@id='UIGadgetInfo']/div[1]/div[2]</td>
-	<td></td>
-</tr>
-<tr>
 	<td>click</td>
-	<td>//div[@id='UIGadgetInfo']/div[1]/div[2]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>source</td>
-	<td></td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>source</td>
-	<td>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;Module&gt;&lt;ModulePrefs title=&quot;Test_SNF_PRL_18_edit&quot; description=&quot;The hello world gadget.&quot;/&gt;&lt;Content type=&quot;html&quot;&gt;&lt;/Content&gt;&lt;/Module&gt;</td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
 	<td>link=Save</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
-	<td>link=Save</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForTextPresent</td>
-	<td>Test_SNF_PRL_18_edit</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>Test_SNF_PRL_18_edit</td>
-	<td></td>
-</tr>
-<tr>
-	<td>echo</td>
-	<td>-- Click Refresh --</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>//div[@id='UIGadgetInfo']//div[@title='Refresh information']</td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>//div[@id='UIGadgetInfo']//div[@title='Refresh information']</td>
 	<td></td>
 </tr>
 <tr>
@@ -218,12 +148,82 @@
 </tr>
 <tr>
 	<td>waitForTextPresent</td>
-	<td>Gadgets</td>
+	<td>hello world example</td>
 	<td></td>
 </tr>
 <tr>
 	<td>verifyTextPresent</td>
-	<td>Gadgets</td>
+	<td>hello world example</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>-- Edit gadget --</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=hello world example</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=hello world example</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='UIGadgetInfo']/div[1]/div[2]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='UIGadgetInfo']/div[1]/div[2]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>source</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>source</td>
+	<td>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;Module&gt;&lt;ModulePrefs title=&quot;Test_SNF_PRL_18_edit&quot; description=&quot;The hello world gadget.&quot;/&gt;&lt;Content type=&quot;html&quot;&gt;&lt;/Content&gt;&lt;/Module&gt;</td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Save</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Save</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForTextPresent</td>
+	<td>Test_SNF_PRL_18_edit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Test_SNF_PRL_18_edit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>-- Click Refresh --</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='UIGadgetInfo']//div[@title='Refresh information']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='UIGadgetInfo']//div[@title='Refresh information']</td>
 	<td></td>
 </tr>
 <tr>
@@ -239,6 +239,11 @@
 <tr>
 	<td>click</td>
 	<td>//div[@id='UIGadgetManagement']/div[2]/div[1]/div/div/div/div[5]/a[2]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForConfirmationPresent</td>
+	<td></td>
 	<td></td>
 </tr>
 <tr>
