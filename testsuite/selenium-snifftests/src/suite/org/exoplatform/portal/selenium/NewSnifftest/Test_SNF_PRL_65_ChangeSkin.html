@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<link rel="selenium.base" href="" />
+<link rel="selenium.base" href="http://localhost:8080/" />
 <title>Test_SNF_PRL_65_ChangeSkin</title>
 </head>
 <body>
@@ -87,8 +87,23 @@
 	<td></td>
 </tr>
 <tr>
+	<td>waitForTextPresent</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
 	<td>verifyTextPresent</td>
-	<td>SimpleSkin</td>
+	<td>Home</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>-- Change to Default skin--</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Change Skin</td>
 	<td></td>
 </tr>
 <tr>
@@ -97,8 +112,18 @@
 	<td></td>
 </tr>
 <tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='UITabContent']/div/div/div[1]/div[2]/div[1]/div/div/div</td>
+	<td></td>
+</tr>
+<tr>
 	<td>click</td>
 	<td>//div[@id='UITabContent']/div/div/div[1]/div[2]/div[1]/div/div/div</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Apply</td>
 	<td></td>
 </tr>
 <tr>
@@ -107,8 +132,18 @@
 	<td></td>
 </tr>
 <tr>
+	<td>waitForTextPresent</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
 	<td>verifyTextPresent</td>
-	<td>Default Style Skin</td>
+	<td>Home</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Sign out</td>
 	<td></td>
 </tr>
 <tr>
