@@ -83,16 +83,20 @@ RssAggregator.prototype.timeToPrettyString = function(B) {
     }
 }
 
-RssAggregator.prototype.renderFeed = function(feed) {
-    this.feed = feed;
-    gadgets.window.setTitle("RSS: " + feed.Title);
+RssAggregator.prototype.renderFeed = function(feedObj) {
+  if(feedObj.rc != 200 && feedObj.data == undefined) {
+    document.write("the url: " + feedurl + " is down or invalid");
+    return;
+  }
+    this.feed = feedObj.data;
+    gadgets.window.setTitle("RSS: " + this.feed.Title);
     var feedEl = _gel("feedContainer");
 	var bullet = "<img src='" + this.getFavicon(feedurl) + "' alt='' border=0 align='absmiddle' style='height:16;width:16;' onerror='this.style.visibility=\"hidden\";'>&nbsp;&nbsp;";
 
-    if (feed != null) {
+    if (this.feed != null) {
         // Access the data for a given entry
-        if (feed.Entry) {
-            for (var i = 0; i < feed.Entry.length; i++) {
+        if (this.feed.Entry) {
+            for (var i = 0; i < this.feed.Entry.length; i++) {
                 var itemEl = document.createElement('div');
                 var item_title = document.createElement('div');
                 var item_more = document.createElement('div');
@@ -116,10 +120,10 @@ RssAggregator.prototype.renderFeed = function(feed) {
                 item_date.className = 'date';
                 item_link.className = 'link';
 
-                item_title.innerHTML = bullet + "<a id='link_title_"+i+"' class='titlelink' href='" + feed.Entry[i].Link + "' onclick='rssAggregator.toggleDescription("+i+");return false;'>" + feed.Entry[i].Title + "</a>";
-				item_date.innerHTML = this.timeToPrettyString(feed.Entry[i].Date);
+                item_title.innerHTML = bullet + "<a id='link_title_"+i+"' class='titlelink' href='" + this.feed.Entry[i].Link + "' onclick='rssAggregator.toggleDescription("+i+");return false;'>" + this.feed.Entry[i].Title + "</a>";
+				item_date.innerHTML = this.timeToPrettyString(this.feed.Entry[i].Date);
 
-				item_desc.innerHTML = feed.Entry[i].Summary;
+				item_desc.innerHTML = this.feed.Entry[i].Summary;
 
                 item_link.innerHTML = this.generateLinkContent(i);
 
@@ -146,6 +150,10 @@ RssAggregator.prototype.generateLinkContent = function(i) {
 }
 
 RssAggregator.prototype.refreshFeed = function() {
-	_IG_FetchFeedAsJSON(prefs.getString("rssurl"), function(feed) {rssAggregator.renderFeed(feed);}, entries, true);
+  var params = {};  
+  params[gadgets.io.RequestParameters.CONTENT_TYPE] = gadgets.io.ContentType.FEED;  
+  params[gadgets.io.RequestParameters.NUM_ENTRIES] = entries;
+  params[gadgets.io.RequestParameters.GET_SUMMARIES] = true; 
+  gadgets.io.makeRequest(prefs.getString("rssurl"), function(feedObj) {rssAggregator.renderFeed(feedObj);}, params);
 }
 
