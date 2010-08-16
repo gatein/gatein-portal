@@ -26,6 +26,7 @@ import org.exoplatform.application.gadget.GadgetRegistryService;
 import org.exoplatform.application.registry.impl.ApplicationRegistryChromatticLifeCycle;
 import org.exoplatform.commons.chromattic.ChromatticLifeCycle;
 import org.exoplatform.commons.chromattic.ChromatticManager;
+import org.exoplatform.commons.utils.PropertyManager;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.container.xml.PropertiesParam;
 import org.exoplatform.container.xml.ValueParam;
@@ -260,7 +261,9 @@ public class GadgetRegistryServiceImpl implements GadgetRegistryService
 
    public boolean isGadgetDeveloper(String username)
    {
-      return true;
+      if(PropertyManager.isDevelopping())
+         return true;
+      return false;
    }
 
    public String getCountry()

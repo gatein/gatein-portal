@@ -30,5 +30,11 @@
 
   <component>
 		<type>org.exoplatform.portal.application.PortalStatisticService</type>
-  </component>  
+  </component>
+
+  <component>
+      <key>org.exoplatform.services.resources.LocalePolicy</key>
+      <!--type>org.exoplatform.portal.application.NoBrowserLocalePolicyService</type-->
+      <type>org.exoplatform.portal.application.localization.DefaultLocalePolicyService</type>
+  </component>
 </configuration>

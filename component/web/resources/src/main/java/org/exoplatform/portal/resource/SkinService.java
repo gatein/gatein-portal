@@ -799,6 +799,16 @@ public class SkinService implements Startable
    {
       mainResolver.registerContext(sContext);
    }
+   
+   /**
+    * unregister a {@link ServletContext} into {@link MainResourceResolver} of {@link SkinService} 
+    * 
+    * @param servletContext ServletContext will unregistered
+    */
+   public void unregisterServletContext(ServletContext servletContext)
+   {
+      mainResolver.removeServletContext(servletContext);
+   }
 
    /**
     * Clean cache, reload all Skins

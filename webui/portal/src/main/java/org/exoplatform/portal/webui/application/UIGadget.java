@@ -21,6 +21,7 @@ package org.exoplatform.portal.webui.application;
 
 import org.exoplatform.application.gadget.Gadget;
 import org.exoplatform.application.gadget.GadgetRegistryService;
+import org.exoplatform.commons.utils.PropertyManager;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.model.ApplicationState;
@@ -298,50 +299,24 @@ public class UIGadget extends UIComponent
 
    public boolean isNoCache()
    {
-      /*
-       * try { UserGadgetStorage userGadgetStorage = getGadgetStorage(); String
-       * username = Util.getPortalRequestContext().getRemoteUser(); if(username !=
-       * null) { String prefs = userGadgetStorage.get(username,
-       * getApplicationName(), getApplicationInstanceUniqueId(), PREF_NO_CACHE);
-       * return prefs.equals("1"); } } catch (Exception e) {} return false;
-       */
-      return true;
+      if(PropertyManager.isDevelopping())
+         return true;
+      return false;
    }
 
    public void setNoCache(boolean value)
    {
-      /*
-       * try { UserGadgetStorage userGadgetStorage = getGadgetStorage(); String
-       * username = Util.getPortalRequestContext().getRemoteUser(); if(username !=
-       * null && getGadgetRegistryService().isGadgetDeveloper(username)) {
-       * userGadgetStorage.save(username, getApplicationName(),
-       * getApplicationInstanceUniqueId(), PREF_NO_CACHE, value ? "1" : "0"); } }
-       * catch (Exception e) {}
-       */
    }
 
    public boolean isDebug()
    {
-      /*
-       * try { UserGadgetStorage userGadgetStorage = getGadgetStorage(); String
-       * username = Util.getPortalRequestContext().getRemoteUser(); if(username !=
-       * null) { String prefs = userGadgetStorage.get(username,
-       * getApplicationName(), getApplicationInstanceUniqueId(), PREF_DEBUG);
-       * return prefs.equals("1"); } } catch (Exception e) {} return false;
-       */
-      return true;
+      if(PropertyManager.isDevelopping())
+         return true;
+      return false;
    }
 
    public void setDebug(boolean value)
    {
-      /*
-       * try { UserGadgetStorage userGadgetStorage = getGadgetStorage(); String
-       * username = Util.getPortalRequestContext().getRemoteUser(); if(username !=
-       * null && getGadgetRegistryService().isGadgetDeveloper(username)) {
-       * userGadgetStorage.save(username, getApplicationName(),
-       * getApplicationInstanceUniqueId(), PREF_DEBUG, value ? "1" : "0"); } }
-       * catch (Exception e) {}
-       */
    }
 
    public boolean isGadgetDeveloper()
@@ -377,11 +352,7 @@ public class UIGadget extends UIComponent
    public void addUserPref(String addedUserPref) throws Exception
    {
       DataStorage service = getApplicationComponent(DataStorage.class);
-      org.exoplatform.portal.pom.spi.gadget.Gadget gadget = service.load(state, ApplicationType.GADGET);
-      if (gadget == null)
-      {
-         gadget = new org.exoplatform.portal.pom.spi.gadget.Gadget();
-      }
+      org.exoplatform.portal.pom.spi.gadget.Gadget gadget = new org.exoplatform.portal.pom.spi.gadget.Gadget();
 
       //
       gadget.addUserPref(addedUserPref);

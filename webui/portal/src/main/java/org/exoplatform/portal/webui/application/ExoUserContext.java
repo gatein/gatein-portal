@@ -19,8 +19,8 @@
 
 package org.exoplatform.portal.webui.application;
 
+import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.services.organization.UserProfile;
-import org.gatein.common.util.Tools;
 import org.gatein.pc.api.invocation.resolver.AttributeResolver;
 import org.gatein.pc.api.invocation.resolver.PrincipalAttributeResolver;
 import org.gatein.pc.api.spi.UserContext;
@@ -29,6 +29,7 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -119,23 +120,52 @@ class ExoUserContext implements UserContext
       return Collections.unmodifiableMap(filteredMap);
    }
 
-   /** Returns the client request locale or <code>Locale.ENGLISH</code> if no request was provided. */
+   /**
+    * Returns current PortalRequestContext's locale. It falls back to
+    * clientRequest locale ({@link HttpServletRequest#getLocale}), or <code>Locale.ENGLISH</code>
+    * if clientRequest object is not available.
+    */
    public Locale getLocale()
    {
+      PortalRequestContext context = PortalRequestContext.getCurrentInstance();
+
+      if(context != null) {
+         Locale loc = context.getLocale();
+         if (loc != null)
+            return loc;
+      }
+
       return clientRequest != null ? clientRequest.getLocale() : Locale.ENGLISH;
    }
 
-   /** Returns the client request locales or an empty list if no request was provided. */
+   /**
+    * Returns the list of client request locales, making sure the first one in the List
+    * is the same as what getLocale() method returns.
+    */ 
    @SuppressWarnings("unchecked")
    public List<Locale> getLocales()
    {
-      if (clientRequest == null)
+      Locale loc = getLocale();
+      if (loc == null)
       {
          return EMPTY_LOCALE_LIST;
       }
       else
       {
-         return Tools.toList((Enumeration<Locale>)clientRequest.getLocales());
+         LinkedList<Locale> locs = new LinkedList<Locale>();
+         locs.add(loc);
+         if (clientRequest != null)
+         {
+            Enumeration<Locale> clientLocs = (Enumeration<Locale>) clientRequest.getLocales();
+            while (clientLocs.hasMoreElements())
+            {
+               Locale current = clientLocs.nextElement();
+               if (current.getLanguage().equals(loc.getLanguage()) && current.getCountry().equals(loc.getCountry()))
+                  continue;
+               locs.add(current);
+            }
+         }
+         return Collections.unmodifiableList(locs);
       }
    }
 

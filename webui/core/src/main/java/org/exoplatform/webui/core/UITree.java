@@ -19,6 +19,7 @@
 
 package org.exoplatform.webui.core;
 
+import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.util.ReflectionUtil;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.commons.serialization.api.annotations.Serialized;
@@ -53,6 +54,11 @@ public class UITree extends UIComponent
     * The css class name to show the collapse icon
     */
    private String colapseIcon = "CollapseIcon";
+   
+   /**
+    * The css class name to show the null icon (item has no child)
+    */
+   private String nullItemIcon = "NullItemIcon";
 
    /**
     * The css class name to show the selected icon
@@ -265,6 +271,9 @@ public class UITree extends UIComponent
          iconGroup = selectedIcon;
          note = " NodeSelected";
       }
+      if(obj instanceof PageNode && ((PageNode)obj).getChildren().size() == 0) {
+         nodeIcon = nullItemIcon;
+      }
       if (beanIconField_ != null && beanIconField_.length() > 0)
       {
          if (getFieldValue(obj, beanIconField_) != null)
@@ -284,10 +293,13 @@ public class UITree extends UIComponent
       {
          builder.append(" <div class=\"").append(nodeIcon).append("\" onclick=\"").append(actionLink).append("\">");
       }
-      else
+      else if (nodeIcon.equals(colapseIcon))
       {
          builder.append(" <div class=\"").append(nodeIcon).append(
             "\" onclick=\"eXo.portal.UIPortalControl.collapseTree(this)").append("\">");
+      }
+      else {//Null item
+         builder.append(" <div class=\"").append(nodeIcon).append("\">");
       }
       if (uiPopupMenu_ == null)
       {

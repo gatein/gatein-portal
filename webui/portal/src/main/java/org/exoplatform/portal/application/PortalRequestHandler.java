@@ -26,6 +26,8 @@ import org.exoplatform.services.log.Log;
 import org.exoplatform.web.WebAppController;
 import org.exoplatform.web.WebRequestHandler;
 import org.exoplatform.web.application.ApplicationLifecycle;
+import org.exoplatform.web.application.ApplicationRequestPhaseLifecycle;
+import org.exoplatform.web.application.Phase;
 import org.exoplatform.web.application.RequestFailure;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIApplication;
@@ -104,11 +106,17 @@ public class PortalRequestHandler extends WebRequestHandler
 
          if (!context.isResponseComplete() && !context.getProcessRender())
          {
+            startRequestPhaseLifecycle(app, context, lifecycles, Phase.ACTION);
             uiApp.processAction(context);
+            endRequestPhaseLifecycle(app, context, lifecycles, Phase.ACTION);
          }
 
          if (!context.isResponseComplete())
+         {
+            startRequestPhaseLifecycle(app, context, lifecycles, Phase.RENDER);
             uiApp.processRender(context);
+            endRequestPhaseLifecycle(app, context, lifecycles, Phase.RENDER);
+         }
 
          if (uiApp != null)
             uiApp.setLastAccessApplication(System.currentTimeMillis());
@@ -149,4 +157,25 @@ public class PortalRequestHandler extends WebRequestHandler
          WebuiRequestContext.setCurrentInstance(null);
       }
    }
+
+   private void startRequestPhaseLifecycle(PortalApplication app, PortalRequestContext context,
+                                           List<ApplicationLifecycle> lifecycles, Phase phase)
+   {
+      for (ApplicationLifecycle lifecycle : lifecycles)
+      {
+         if (lifecycle instanceof ApplicationRequestPhaseLifecycle)
+            ((ApplicationRequestPhaseLifecycle) lifecycle).onStartRequestPhase(app, context, phase);
+      }
+   }
+
+   private void endRequestPhaseLifecycle(PortalApplication app, PortalRequestContext context,
+                                           List<ApplicationLifecycle> lifecycles, Phase phase)
+   {
+      for (ApplicationLifecycle lifecycle : lifecycles)
+      {
+         if (lifecycle instanceof ApplicationRequestPhaseLifecycle)
+            ((ApplicationRequestPhaseLifecycle) lifecycle).onEndRequestPhase(app, context, phase);
+      }
+   }
+
 }

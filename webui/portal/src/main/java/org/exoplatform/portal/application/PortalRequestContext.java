@@ -116,6 +116,8 @@ public class PortalRequestContext extends WebuiRequestContext
    
    private Map<String, String[]> parameterMap;
 
+   private Locale locale = Locale.ENGLISH;
+
    public JavascriptManager getJavascriptManager()
    {
       return jsmanager_;
@@ -169,12 +171,10 @@ public class PortalRequestContext extends WebuiRequestContext
       // Reconstructing the getPathInfo from the non server decoded values.
       String servletPath = URLDecoder.decode(req.getServletPath(), "UTF-8");
       String contextPath = URLDecoder.decode(req.getContextPath(), "UTF-8");
-      String pathInfo = requestURI_.substring((servletPath + contextPath).length());
+      String pathInfo = "/";
+      if (requestURI_.length() > servletPath.length() + contextPath.length())
+         pathInfo = requestURI_.substring(servletPath.length() + contextPath.length());
       
-      if (pathInfo == null || pathInfo.length() == 0)
-      {
-         pathInfo = "/";
-      }
       int colonIndex = pathInfo.indexOf("/", 1);
       if (colonIndex < 0)
       {
@@ -241,9 +241,14 @@ public class PortalRequestContext extends WebuiRequestContext
       return ((UIPortalApplication)uiApplication_).getOrientation();
    }
 
+   public void setLocale(Locale locale)
+   {
+      this.locale = locale;
+   }
+
    public Locale getLocale()
    {
-      return ((UIPortalApplication)uiApplication_).getLocale();
+      return locale;
    }
 
    @SuppressWarnings("unchecked")

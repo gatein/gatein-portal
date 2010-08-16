@@ -20,14 +20,10 @@
 package org.exoplatform.services.resources;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.List;
 import java.util.ListResourceBundle;
 import java.util.Map;
 import java.util.ResourceBundle;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * May 7, 2004
@@ -78,7 +74,7 @@ public class ExoResourceBundle extends ListResourceBundle implements Serializabl
          String key = keys.nextElement();
          if (key != null)
          {
-            map.put(key, getString(key));
+            map.put(key.trim(), getString(key));
          }
       }
    }

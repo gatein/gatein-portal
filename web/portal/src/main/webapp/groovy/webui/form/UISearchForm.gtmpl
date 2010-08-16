@@ -6,19 +6,21 @@
 					<div class="MiddleBar">
 						<div class="UISearchForm">
 							<%uiform.begin()%>
-							<div class="QuickSet">
+							 <%String quickSearchlink = uicomponent.event("QuickSearch") ;%>
+							    <script type="text/javascript">
+									var executeScript = "<%=quickSearchlink%>";
+								</script>
+						      <div class="QuickSet" onkeypress="eXo.portal.UIPortalControl.onEnterPress(event, executeScript)">
 								<div class="SearchTitle"><%=_ctx.appRes("UISearch.label.Search")%>:</div>
 								<% 
 									QuickSearchInputSet = uiform.getQuickSearchInputSet();
 									for(field in QuickSearchInputSet.getChildren()) {
 										uiform.renderField(field) 
 									}	 
-									String quickSearchlink = uicomponent.event("QuickSearch"); 
 								%>
 								<a class="SimpleSearchIcon" href="$quickSearchlink" title="<%= _ctx.appRes("UISearch.label.QuickSearch") %>">
 									<span></span>
 								</a>
-								 
 							</div>	
 							<%uiform.end()%>	 
 						</div>

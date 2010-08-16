@@ -313,17 +313,38 @@ public class UIPortletManagement extends UIContainer
 
       public String getDisplayName()
       {
-         return getMetaValue(MetaInfo.DISPLAY_NAME, name_);
+         try
+         {
+            return getMetaValue(MetaInfo.DISPLAY_NAME, name_);
+         }
+         catch (Exception ex)
+         {
+            return "COULD NOT GET DISPLAY NAME OF THE PORTLET";
+         }
       }
 
       public String getDescription()
       {
-         return getMetaValue(MetaInfo.DESCRIPTION, name_);
+         try
+         {
+            return getMetaValue(MetaInfo.DESCRIPTION, name_);
+         }
+         catch (Exception ex)
+         {
+            return "COULD NOT GET DESCRIPTION OF THE PORTLET";
+         }
       }
 
       public PreferencesInfo getPortletPreferences()
       {
-         return portletInfo_.getPreferences();
+         try
+         {
+            return portletInfo_.getPreferences();
+         }
+         catch (Exception ex)
+         {
+            return null;
+         }
       }
 
       private String getMetaValue(String metaKey, String defaultValue)

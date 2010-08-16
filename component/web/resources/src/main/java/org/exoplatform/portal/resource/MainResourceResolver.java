@@ -57,6 +57,13 @@ class MainResourceResolver implements ResourceResolver
       resolvers.add(new CompositeResourceResolver(portalContainerName, skins));
    }
 
+   /**
+    * Register a servlet request context 
+    * <p>Append a servlet context to the map of contexts if servlet context name is not existing
+    * 
+    * @param servletContext servlet context which want to append
+    * @return
+    */
    SimpleResourceContext registerContext(ServletContext servletContext)
    {
       String key = "/" + servletContext.getServletContextName();
@@ -67,6 +74,25 @@ class MainResourceResolver implements ResourceResolver
          contexts.put(ctx.getContextPath(), ctx);
       }
       return ctx;
+   }
+   
+   /**
+    * Remove a servlet context from map of contexts
+    * 
+    * @param servletContext
+    */
+   public void removeServletContext(ServletContext servletContext)
+   {
+      String key = "/" + servletContext.getServletContextName();
+      SimpleResourceContext ctx = contexts.get(key);
+      if (ctx != null)
+      {
+         contexts.remove(ctx.getContextPath());
+      }
+      else {
+         log.warn("Cannot find servlet context module");
+         return;
+      }
    }
 
    public Resource resolve(String path)

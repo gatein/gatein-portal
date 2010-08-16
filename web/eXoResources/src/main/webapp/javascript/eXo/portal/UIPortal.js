@@ -98,6 +98,56 @@ UIPortal.prototype.blockOnMouseOver = function(event, portlet, isOver) {
 		}
 		newLayer.parentNode.style.top = -height + "px";
 		editBlock.style.display = "block";		
+
+		//resize width of portlet/container control if IE + LTR align BEGIN
+
+		var uiInfoBar = DOMUtil.findFirstDescendantByClass(editBlock, "div", "UIInfoBar");
+
+		if( uiInfoBar && (eXo.core.Browser.isIE6() || (eXo.core.Browser.isIE7() && eXo.core.I18n.isRT()))){
+			//resize width of portlet/container only one time
+			if(uiInfoBar.style.width == ""){
+				var dragControlArea = DOMUtil.findFirstDescendantByClass(uiInfoBar, "div", "DragControlArea");
+				
+				var portletIcon = DOMUtil.findFirstDescendantByClass(uiInfoBar, "div", "PortletIcon");
+				var editPortletPropertiesIcon = DOMUtil.findFirstDescendantByClass(uiInfoBar, "a", "EditPortletPropertiesIcon");
+				var deletePortletIcon = DOMUtil.findFirstDescendantByClass(uiInfoBar, "a", "DeletePortletIcon");
+				
+				var contarnerIcon = DOMUtil.findFirstDescendantByClass(uiInfoBar, "div", "ContainerIcon");
+				var editContainerIcon = DOMUtil.findFirstDescendantByClass(uiInfoBar, "a", "EditContainerIcon");
+				var deleteContainerIcon = DOMUtil.findFirstDescendantByClass(uiInfoBar, "a", "DeleteContainerIcon");
+				
+				var uiInfoBarWidth =  dragControlArea.offsetWidth;
+				
+				if(DOMUtil.hasClass(portlet, "UIPortlet")){
+					uiInfoBarWidth += portletIcon.offsetWidth;
+					
+					if(editPortletPropertiesIcon){
+						uiInfoBarWidth += editPortletPropertiesIcon.offsetWidth;
+					}
+					
+					if(deletePortletIcon){
+						uiInfoBarWidth += deletePortletIcon.offsetWidth;
+					}
+				}
+				
+				if(DOMUtil.hasClass(portlet, "UIContainer")){
+					uiInfoBarWidth += contarnerIcon.offsetWidth
+					
+					if(editContainerIcon){
+						uiInfoBarWidth += editContainerIcon.offsetWidth;
+					}
+					
+					if(deleteContainerIcon){
+						uiInfoBarWidth += deleteContainerIcon.offsetWidth;
+					}
+				}
+	
+				uiInfoBar.style.width= uiInfoBarWidth + 35 + "px";
+			}
+
+		}
+		//resize width of portlet/container control if IE + LTR align END
+		
 	}	else {
 		editBlock.style.display = "none";
 		if(!DOMUtil.hasClass(portlet, "UIPortlet")) {

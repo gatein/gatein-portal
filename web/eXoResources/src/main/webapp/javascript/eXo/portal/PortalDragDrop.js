@@ -32,6 +32,10 @@ function PortalDragDrop() {
  */
 
 PortalDragDrop.prototype.init = function(e) {
+	if (eXo.core.DragDrop.dndEvent  && eXo.core.DragDrop.dndEvent.clickObject == this){
+		return;
+	}
+	
 	if (!e) e = window.event;
 	if(((e.which) && (e.which == 2 || e.which == 3)) || ((e.button) && (e.button == 2)))	return;
 	
@@ -194,7 +198,9 @@ PortalDragDrop.prototype.init = function(e) {
   	this.origDragObjectStyle.setProperties(dndEvent.dragObject.style, false) ;
 
     if(dndEvent.foundTargetObject != null || (dndEvent.backupMouseEvent && dndEvent.backupMouseEvent.keyCode != 27)) {
-      eXo.portal.PortalDragDrop.doDropCallback(dndEvent) ;
+    	if (dndEvent.foundTargetObject.foundIndex != null) {
+    		eXo.portal.PortalDragDrop.doDropCallback(dndEvent) ;
+    	}
     } else {
 			if(dndEvent.dragObject.parentNode.nodeName.toLowerCase() == "td") {
 				dndEvent.dragObject.parentNode.style.width = "auto";
@@ -218,12 +224,6 @@ PortalDragDrop.prototype.init = function(e) {
   	eXo.portal.UIPortal.changeComposerSaveButton();
 		// fix bug WEBOS-196	
 		dndEvent.dragObject.style.width = "auto" ; 
-  };
-  
-  DragDrop.cancelCallback = function(dndEvent) {
-  	if(Browser.browserType == "ie" && Browser.findMouseYInClient(dndEvent.backupMouseEvent) < 0) {
-  		DragDrop.onDrop(dndEvent.backupMouseEvent);
-  	}
   };
   
   var clickObject = this;
@@ -284,7 +284,7 @@ PortalDragDrop.prototype.doDropCallback = function(dndEvent) {
   ] ;
   
   try {
-    dndEvent.lastFoundTargetObject.foundIndex = -1;
+    dndEvent.lastFoundTargetObject.foundIndex = null;
   } catch(err) {
   	
   }

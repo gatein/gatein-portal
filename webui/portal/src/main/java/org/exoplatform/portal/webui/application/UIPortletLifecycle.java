@@ -186,92 +186,91 @@ public class UIPortletLifecycle<S, C extends Serializable, I> extends Lifecycle<
     	 
          RenderInvocation renderInvocation = uicomponent.create(RenderInvocation.class, prcontext);
 
-         if (uicomponent.getCurrentWindowState() != WindowState.MINIMIZED)
+         String appStatus = uicomponent.getProperties().get("appStatus");
+         if ("Window".equals(uicomponent.getPortletStyle()) && !("SHOW".equals(appStatus) || "HIDE".equals(appStatus)))
          {
-            String appStatus = uicomponent.getProperties().get("appStatus");
-            if ("Window".equals(uicomponent.getPortletStyle())
-               && !("SHOW".equals(appStatus) || "HIDE".equals(appStatus)))
+            markup = Text.create("<span></span>");
+         }
+         else
+         {
+            int portalMode = Util.getUIPortalApplication().getModeState();
+
+            //Check mode of portal, portlet and permission for viewable
+            if ((portalMode == UIPortalApplication.NORMAL_MODE || portalMode == UIPortalApplication.APP_VIEW_EDIT_MODE
+                  || portalMode == UIPortalApplication.CONTAINER_VIEW_EDIT_MODE || uicomponent.getCurrentPortletMode()
+                  .equals(PortletMode.EDIT))
+                  && uicomponent.hasPermission())
             {
-               markup = Text.create("<span></span>");
-            }
-            else
-            {
-               int portalMode = Util.getUIPortalApplication().getModeState();
-               
-               //Check mode of portal, portlet and permission for viewable
-               if ((portalMode == UIPortalApplication.NORMAL_MODE || portalMode == UIPortalApplication.APP_VIEW_EDIT_MODE 
-            		   || portalMode == UIPortalApplication.CONTAINER_VIEW_EDIT_MODE || uicomponent.getCurrentPortletMode().equals(PortletMode.EDIT)) 
-            		   && uicomponent.hasPermission())
+               PortletInvocationResponse response = uicomponent.invoke(renderInvocation);
+               if (response instanceof FragmentResponse)
                {
-                  PortletInvocationResponse response = uicomponent.invoke(renderInvocation);
-                  if (response instanceof FragmentResponse)
+                  FragmentResponse fragmentResponse = (FragmentResponse) response;
+                  switch (fragmentResponse.getType())
                   {
-                	  FragmentResponse fragmentResponse = (FragmentResponse)response;
-                	  switch (fragmentResponse.getType())
-                	  {
-                	  case FragmentResponse.TYPE_CHARS:
-                		  markup = Text.create(fragmentResponse.getContent());
-                		  break;
-                	  case FragmentResponse.TYPE_BYTES:
-                		  markup = Text.create(fragmentResponse.getBytes(), Charset.forName("UTF-8"));
-                		  break;
-                	  case FragmentResponse.TYPE_EMPTY:
-                		  markup = Text.create("");
-                		  break;
-                	  }
-                	  portletTitle = fragmentResponse.getTitle();
+                     case FragmentResponse.TYPE_CHARS :
+                        markup = Text.create(fragmentResponse.getContent());
+                        break;
+                     case FragmentResponse.TYPE_BYTES :
+                        markup = Text.create(fragmentResponse.getBytes(), Charset.forName("UTF-8"));
+                        break;
+                     case FragmentResponse.TYPE_EMPTY :
+                        markup = Text.create("");
+                        break;
+                  }
+                  portletTitle = fragmentResponse.getTitle();
 
-                	  // setup portlet properties
-                	  if (fragmentResponse.getProperties() != null)
-                	  {
-                		  //setup transport headers
-                		  if (fragmentResponse.getProperties().getTransportHeaders() != null)
-                		  {
-                			  MultiValuedPropertyMap<String> transportHeaders =
-                				  fragmentResponse.getProperties().getTransportHeaders();
-                			  for (String key : transportHeaders.keySet())
-                			  {
-                				  for (String value : transportHeaders.getValues(key))
-                				  {
-                					  prcontext.getResponse().setHeader(key, value);
-                				  }
-                			  }
-                		  }
-                		  
-                		  //setup up portlet cookies
-                		  if (fragmentResponse.getProperties().getCookies() != null)
-                		  {
-                		     List<Cookie> cookies = fragmentResponse.getProperties().getCookies();
-                		     for (Cookie cookie : cookies)
-                		     {
-                		        prcontext.getResponse().addCookie(cookie);
-                		     }
-                		  }
+                  // setup portlet properties
+                  if (fragmentResponse.getProperties() != null)
+                  {
+                     //setup transport headers
+                     if (fragmentResponse.getProperties().getTransportHeaders() != null)
+                     {
+                        MultiValuedPropertyMap<String> transportHeaders = fragmentResponse.getProperties()
+                              .getTransportHeaders();
+                        for (String key : transportHeaders.keySet())
+                        {
+                           for (String value : transportHeaders.getValues(key))
+                           {
+                              prcontext.getResponse().setHeader(key, value);
+                           }
+                        }
+                     }
 
-                		  //setup markup headers
-                		  if (fragmentResponse.getProperties().getMarkupHeaders() != null)
-                		  {
-                			  MultiValuedPropertyMap<Element> markupHeaders =
-                				  fragmentResponse.getProperties().getMarkupHeaders();
+                     //setup up portlet cookies
+                     if (fragmentResponse.getProperties().getCookies() != null)
+                     {
+                        List<Cookie> cookies = fragmentResponse.getProperties().getCookies();
+                        for (Cookie cookie : cookies)
+                        {
+                           prcontext.getResponse().addCookie(cookie);
+                        }
+                     }
 
-                			  List<Element> markupElements = markupHeaders.getValues(MimeResponse.MARKUP_HEAD_ELEMENT);
-                			  if (markupElements != null)
-                			  {
-                				  for (Element element : markupElements)
-                				  {
-                					  if ("title".equals(element.getNodeName().toLowerCase()) && element.getFirstChild() != null)
-                					  {
-                						  String title = element.getFirstChild().getTextContent();
-                						  prcontext.getRequest().setAttribute(PortalRequestContext.REQUEST_TITLE, title);
-                					  }
-                					  else
-                					  {
-                						  prcontext.addExtraMarkupHeader(element);
-                					  }
-                				  }
-                			  }
-                		  }
-                	  }
+                     //setup markup headers
+                     if (fragmentResponse.getProperties().getMarkupHeaders() != null)
+                     {
+                        MultiValuedPropertyMap<Element> markupHeaders = fragmentResponse.getProperties()
+                              .getMarkupHeaders();
+
+                        List<Element> markupElements = markupHeaders.getValues(MimeResponse.MARKUP_HEAD_ELEMENT);
+                        if (markupElements != null)
+                        {
+                           for (Element element : markupElements)
+                           {
+                              if ("title".equals(element.getNodeName().toLowerCase())
+                                    && element.getFirstChild() != null)
+                              {
+                                 String title = element.getFirstChild().getTextContent();
+                                 prcontext.getRequest().setAttribute(PortalRequestContext.REQUEST_TITLE, title);
+                              }
+                              else
+                              {
+                                 prcontext.addExtraMarkupHeader(element);
+                              }
+                           }
+                        }
+                     }
+                  }
 
                   }
                   else
@@ -306,8 +305,7 @@ public class UIPortletLifecycle<S, C extends Serializable, I> extends Lifecycle<
                   }
                }
             }
-         }
-      }
+       }
       catch (Exception e)
       {
          PortletContainerException pcException = new PortletContainerException(e);
@@ -322,12 +320,6 @@ public class UIPortletLifecycle<S, C extends Serializable, I> extends Lifecycle<
 
          //
          markup = Text.create(context.getApplicationResourceBundle().getString("UIPortlet.message.RuntimeError"));
-      }
-
-      //
-      if (portletTitle == null)
-      {
-         portletTitle = "Portlet";
       }
 
       //

@@ -46,6 +46,7 @@ import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.UserProfile;
 import org.exoplatform.services.resources.LocaleConfig;
 import org.exoplatform.services.resources.LocaleConfigService;
+import org.exoplatform.services.resources.LocaleContextInfo;
 import org.exoplatform.services.resources.Orientation;
 import org.exoplatform.services.resources.ResourceBundleManager;
 import org.exoplatform.web.application.javascript.JavascriptConfigService;
@@ -93,8 +94,6 @@ public class UIPortalApplication extends UIApplication
    private int modeState = NORMAL_MODE;
 
    private String nodePath_;
-
-   private Locale locale_ = Locale.ENGLISH;
 
    private Orientation orientation_ = Orientation.LT;
 
@@ -144,10 +143,9 @@ public class UIPortalApplication extends UIApplication
       // dang.tung - set portal language by user preference -> browser ->
       // default
       // ------------------------------------------------------------------------------
-      String portalLanguage = null;
       LocaleConfigService localeConfigService = getApplicationComponent(LocaleConfigService.class);
       OrganizationService orgService = getApplicationComponent(OrganizationService.class);
-      LocaleConfig localeConfig = localeConfigService.getLocaleConfig(userPortalConfig_.getPortalConfig().getLocale());
+
       String user = context.getRemoteUser();
       String portalSkin = null;
       
@@ -156,7 +154,6 @@ public class UIPortalApplication extends UIApplication
          UserProfile userProfile = orgService.getUserProfileHandler().findUserProfileByName(user);
          if (userProfile != null)
          {
-            portalLanguage = userProfile.getUserInfoMap().get(Constants.USER_LANGUAGE);
             portalSkin = userProfile.getUserInfoMap().get(Constants.USER_SKIN);
          }
          else
@@ -165,24 +162,25 @@ public class UIPortalApplication extends UIApplication
                log.warn("Could not load user profile for " + user + ". Using default portal locale.");
          }
       }
-      localeConfig = localeConfigService.getLocaleConfig(portalLanguage);
-      String localeLanguage = (localeConfig.getLocale().getCountry().length() > 0) ? localeConfig.getLocale()
-            .getLanguage()
-            + "_" + localeConfig.getLocale().getCountry() : localeConfig.getLocale().getLanguage();
-      if (portalLanguage == null || !portalLanguage.equals(localeLanguage))
+
+      Locale locale = context.getLocale();
+      if (locale == null)
       {
-         // if user language no support by portal -> get browser language if no
-         // ->
-         // get portal
-         portalLanguage = context.getRequest().getLocale().getLanguage();
-         localeConfig = localeConfigService.getLocaleConfig(portalLanguage);
-         if (!portalLanguage.equals(localeConfig.getLanguage()))
-         {
-            localeConfig = localeConfigService.getLocaleConfig(userPortalConfig_.getPortalConfig().getLocale());
-         }
+         if (log.isWarnEnabled())
+            log.warn("No locale set on PortalRequestContext! Falling back to 'en'.");
+         locale = Locale.ENGLISH;
       }
-      setLocale(localeConfig.getLocale());
+
+      String localeName = LocaleContextInfo.getLocaleAsString(locale);
+      LocaleConfig localeConfig = localeConfigService.getLocaleConfig(localeName);
+      if (localeConfig == null)
+      {
+         if (log.isWarnEnabled())
+            log.warn("Unsupported locale set on PortalRequestContext: " + localeName + "! Falling back to 'en'.");
+         localeConfig = localeConfigService.getLocaleConfig(Locale.ENGLISH.getLanguage());
+      }
       setOrientation(localeConfig.getOrientation());
+
       // -------------------------------------------------------------------------------
       context.setUIApplication(this);
 
@@ -305,12 +303,7 @@ public class UIPortalApplication extends UIApplication
 
    public Locale getLocale()
    {
-      return locale_;
-   }
-
-   public void setLocale(Locale locale)
-   {
-      locale_ = locale;
+      return Util.getPortalRequestContext().getLocale();
    }
 
    public void setModeState(int mode)

@@ -21,6 +21,8 @@ package org.exoplatform.portal.resource;
 import java.util.List;
 import java.util.Set;
 
+import javax.servlet.ServletContext;
+
 import org.gatein.wci.WebAppEvent;
 import org.gatein.wci.WebAppLifeCycleEvent;
 
@@ -56,6 +58,7 @@ public class GateInSkinConfigRemoval extends AbstractResourceHandler
          {
             String webApp = event.getWebApp().getServletContext().getContextPath();
             removeWebAppSkin(webApp);
+            removeContextAppSkin(event.getWebApp().getServletContext());
          }
       }
    }
@@ -75,6 +78,11 @@ public class GateInSkinConfigRemoval extends AbstractResourceHandler
       {
          ex.printStackTrace();
       }
+   }
+
+   private void removeContextAppSkin(ServletContext servletContext)
+   {
+      service.unregisterServletContext(servletContext);
    }
 
    private void removePortalSkins(String webApp) throws Exception

@@ -21,10 +21,13 @@ package org.exoplatform.webui.core;
 
 import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.commons.serialization.api.annotations.Serialized;
 
 import java.io.Writer;
 import java.util.Set;
+
+import javax.portlet.WindowState;
 
 @Serialized
 abstract public class UIPortletApplication extends UIApplication
@@ -70,7 +73,8 @@ abstract public class UIPortletApplication extends UIApplication
    }
 
    /**
-    * The default processRender for an UIPortletApplication handles two cases:
+    * The default processRender for an UIPortletApplication does nothing if the current WindowState in the 
+    * render request is MINIMIZED. Otherwise, it handles two cases:
     * 
     *   A. Ajax is used 
     *   ---------------
@@ -86,7 +90,15 @@ abstract public class UIPortletApplication extends UIApplication
     */
    public void processRender(WebuiApplication app, WebuiRequestContext context) throws Exception
    {
+      //Do nothing if WindowState in the render request is MINIMIZED
+      WindowState currentWindowState = ((PortletRequestContext)context).getRequest().getWindowState();
+      if(currentWindowState == WindowState.MINIMIZED)
+      {
+         return;
+      }
+      
       WebuiRequestContext pContext = (WebuiRequestContext)context.getParentAppRequestContext();
+      
       if (context.useAjax() && !pContext.getFullRender())
       {
          Writer w = context.getWriter();

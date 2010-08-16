@@ -141,7 +141,7 @@ public class PortalStateManager extends StateManager
       // For now do nothing....
    }
 
-   private UserPortalConfig getUserPortalConfig(PortalRequestContext context) throws Exception
+   public static UserPortalConfig getUserPortalConfig(PortalRequestContext context) throws Exception
    {
       ExoContainer appContainer = context.getApplication().getApplicationServiceContainer();
       UserPortalConfigService service_ = (UserPortalConfigService)appContainer.getComponentInstanceOfType(UserPortalConfigService.class);

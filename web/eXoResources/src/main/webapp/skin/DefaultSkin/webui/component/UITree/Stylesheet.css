@@ -52,7 +52,7 @@
 }
 
 .UITrees .Node {
-	line-height: 18px;
+	line-height: 19px;
 	padding-top: 7px;
 	margin-left: 15px; /* orientation=lt */
 	margin-right: 15px; /* orientation=rt */
@@ -97,6 +97,15 @@
 	font-weight: bold;
 	color: #058ee6;
 	cursor: pointer;
+}
+
+.UITrees .Node .NullItemIcon {
+	padding-left: 18px; /* orientation=lt */
+	padding-right: 18px; /* orientation=rt */
+	background: url('background/NullItemIcon.gif') no-repeat 6px top; /* orientation=lt */
+	background: url('background/NullItemIcon-rt.gif') no-repeat 98.5% top; /* orientation=rt */
+	-webkit-background: url('background/NullItemIcon-rt.gif') no-repeat 98.2% top; /* orientation=rt */
+	width: 100%; height: auto;
 }
 
 /** ################# Icons ###################*/

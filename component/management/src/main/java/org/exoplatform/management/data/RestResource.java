@@ -26,6 +26,8 @@ import org.exoplatform.management.spi.ManagedMethodMetaData;
 import org.exoplatform.management.spi.ManagedPropertyMetaData;
 import org.exoplatform.management.spi.ManagedResource;
 import org.exoplatform.management.spi.ManagedTypeMetaData;
+import org.exoplatform.services.rest.impl.ApplicationContextImpl;
+import org.exoplatform.services.rest.impl.MultivaluedMapImpl;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -38,6 +40,10 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.ext.MessageBodyReader;
+
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -126,6 +132,8 @@ public class RestResource
    @Produces(MediaType.APPLICATION_JSON)
    public Object get(@Context UriInfo info, @PathParam("name") String name)
    {
+      MultivaluedMap<String, String> parameters = info.getQueryParameters();
+      
       // Try first to get a property
       RestResourceProperty property = properties.get(name);
       if (property != null)
@@ -133,12 +141,12 @@ public class RestResource
          MethodInvoker getter = property.getGetterInvoker();
          if (getter != null)
          {
-            return safeInvoke(getter, info.getQueryParameters());
+            return safeInvoke(getter, parameters);
          }
       }
 
       //
-      return tryInvoke(name, info, ImpactType.READ);
+      return tryInvoke(name, parameters, ImpactType.READ);
    }
 
    @PUT
@@ -146,6 +154,7 @@ public class RestResource
    @Produces(MediaType.APPLICATION_JSON)
    public Object put(@Context UriInfo info, @PathParam("name") String name)
    {
+      MultivaluedMap<String, String> parameters = getParameters(info);
       // Try first to get a property
       RestResourceProperty property = properties.get(name);
       if (property != null)
@@ -153,12 +162,12 @@ public class RestResource
          MethodInvoker setter = property.getSetterInvoker();
          if (setter != null)
          {
-            return safeInvoke(setter, info.getQueryParameters());
+            return safeInvoke(setter, parameters);
          }
       }
 
       //
-      return tryInvoke(name, info, ImpactType.IDEMPOTENT_WRITE);
+      return tryInvoke(name, parameters, ImpactType.IDEMPOTENT_WRITE);
    }
 
    @POST
@@ -166,7 +175,7 @@ public class RestResource
    @Produces(MediaType.APPLICATION_JSON)
    public Object post(@Context UriInfo info, @PathParam("name") String name)
    {
-      return tryInvoke(name, info, ImpactType.WRITE);
+      return tryInvoke(name, getParameters(info), ImpactType.WRITE);
    }
 
    /**
@@ -177,10 +186,8 @@ public class RestResource
     * @param impact the expected impact
     * @return a suitable response
     */
-   private Object tryInvoke(String methodName, UriInfo info, ImpactType impact)
+   private Object tryInvoke(String methodName, MultivaluedMap<String, String> parameters, ImpactType impact)
    {
-      MultivaluedMap<String, String> parameters = info.getQueryParameters();
-
       //
       RestResourceMethod method = lookupMethod(methodName, parameters.keySet(), impact);
 
@@ -237,4 +244,32 @@ public class RestResource
          managedResource.afterInvoke(resource);
       }
    }
+   
+   @SuppressWarnings("unchecked")
+   private MultivaluedMap<String, String> getParameters(UriInfo info)
+   {
+      MultivaluedMap<String, String> parameters = info.getQueryParameters();
+      ApplicationContextImpl context = (ApplicationContextImpl)info;      
+      
+      Type formType = (ParameterizedType)MultivaluedMapImpl.class.getGenericInterfaces()[0];
+      MediaType contentType = context.getHttpHeaders().getMediaType();
+      if (contentType == null) {
+         contentType = MediaType.APPLICATION_FORM_URLENCODED_TYPE;
+      }      
+
+      MultivaluedMap<String, String> form = new MultivaluedMapImpl();      
+      try {
+         MessageBodyReader reader =
+            context.getProviders().getMessageBodyReader(MultivaluedMap.class, formType, null, contentType);
+         if (reader != null) {
+            form = (MultivaluedMap<String, String>)reader.readFrom(MultivaluedMap.class, formType, null, contentType, context
+               .getHttpHeaders().getRequestHeaders(), context.getContainerRequest().getEntityStream());
+         }
+      } catch (Exception e) {         
+      }
+      
+      parameters.putAll(form);
+      return parameters;
+   }
+   
 }

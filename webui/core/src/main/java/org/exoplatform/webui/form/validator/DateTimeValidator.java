@@ -73,17 +73,16 @@ public class DateTimeValidator implements Validator
       {
          // Specify whether or not date/time parsing is to be lenient. 
          sdf.setLenient(false);
-         Date stDate = sdf.parse(s);
-         s = stFormat.format(stDate);
+         sdf.parse(s);
       }
       catch (Exception e)
       {
-         throw new MessageException(new ApplicationMessage("DateTimeValidator.msg.Invalid-input", args));
+         throw new MessageException(new ApplicationMessage("DateTimeValidator.msg.Invalid-input", args, ApplicationMessage.WARNING));
       }
       if (s.matches(DATETIME_REGEX) && isValidDateTime(s))
          return;
 
-      throw new MessageException(new ApplicationMessage("DateTimeValidator.msg.Invalid-input", args));
+      throw new MessageException(new ApplicationMessage("DateTimeValidator.msg.Invalid-input", args, ApplicationMessage.WARNING));
    }
 
    private boolean isValidDateTime(String dateTime)

@@ -21,6 +21,7 @@ package org.exoplatform.organization.webui.component;
 
 import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.portal.Constants;
+import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.portal.webui.workspace.UIWorkingWorkspace;
@@ -134,7 +135,8 @@ public class UIUserInfo extends UIFormTabPane
             LocaleConfig localeConfig = localeConfigService.getLocaleConfig(language);
             if (localeConfig == null)
                localeConfig = localeConfigService.getDefaultLocaleConfig();
-            uiApp.setLocale(localeConfig.getLocale());
+            PortalRequestContext prqCtx = PortalRequestContext.getCurrentInstance();
+            prqCtx.setLocale(localeConfig.getLocale());
             uiApp.setOrientation(localeConfig.getOrientation());
             uiApp.localizeNavigations();
 

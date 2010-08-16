@@ -220,7 +220,7 @@ public class UIPortalComposer extends UIContainer
       // TODO dang.tung - change layout when portal get language from UIPortal
       // (user and browser not support)
       // ----------------------------------------------------------------------------------------------------
-      String portalAppLanguage = uiPortalApp.getLocale().getLanguage();
+      String portalAppLanguage = prContext.getLocale().getLanguage();
       OrganizationService orgService = getApplicationComponent(OrganizationService.class);
       UserProfile userProfile = orgService.getUserProfileHandler().findUserProfileByName(remoteUser);
       String userLanguage = userProfile.getUserInfoMap().get(Constants.USER_LANGUAGE);
@@ -231,7 +231,7 @@ public class UIPortalComposer extends UIContainer
       {
          if (!portalAppLanguage.equals(userLanguage) && !portalAppLanguage.equals(browserLanguage))
          {
-            uiPortalApp.setLocale(localeConfig.getLocale());
+            prContext.setLocale(localeConfig.getLocale());
             //editPortal.refreshNavigation(localeConfig.getLocale());
             uiPortalApp.localizeNavigations();
          }

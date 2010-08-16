@@ -31,7 +31,7 @@ public class UserProfileLifecycle implements ApplicationLifecycle<WebuiRequestCo
 {
    public static final String USER_PROFILE_ATTRIBUTE_NAME = "PortalUserProfile";
 	
-   private final ThreadLocal<UserProfile> currentUserProfile = new ThreadLocal<UserProfile>();
+   private final static ThreadLocal<UserProfile> currentUserProfile = new ThreadLocal<UserProfile>();
 
    @SuppressWarnings("unused")
    public void onInit(Application app)
@@ -55,15 +55,15 @@ public class UserProfileLifecycle implements ApplicationLifecycle<WebuiRequestCo
 		   }
 
 	   }
-	   
+
 	   currentUserProfile.set(userProfile);
 	   context.setAttribute(this.USER_PROFILE_ATTRIBUTE_NAME, userProfile);
    }
-   
+
    @SuppressWarnings("unused")
    public void onFailRequest(Application app, WebuiRequestContext context, RequestFailure failureType) throws Exception
    {
-      
+
    }
 
    @SuppressWarnings("unused")

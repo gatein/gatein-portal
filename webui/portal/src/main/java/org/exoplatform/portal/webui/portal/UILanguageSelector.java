@@ -21,21 +21,13 @@ package org.exoplatform.portal.webui.portal;
 
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
-import org.exoplatform.portal.Constants;
-import org.exoplatform.portal.config.model.PageNavigation;
-import org.exoplatform.portal.config.model.PageNode;
-import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIMaskWorkspace;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
-import org.exoplatform.services.organization.OrganizationService;
-import org.exoplatform.services.organization.UserProfile;
-import org.exoplatform.services.organization.UserProfileHandler;
 import org.exoplatform.services.resources.LocaleConfig;
 import org.exoplatform.services.resources.LocaleConfigService;
-import org.exoplatform.services.resources.ResourceBundleManager;
 import org.exoplatform.services.resources.ResourceBundleService;
-import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIContainer;
@@ -180,18 +172,10 @@ public class UILanguageSelector extends UIContainer
          LocaleConfig localeConfig = localeConfigService.getLocaleConfig(language);
          if (localeConfig == null)
             localeConfig = localeConfigService.getDefaultLocaleConfig();
-         uiApp.setLocale(localeConfig.getLocale());
+         PortalRequestContext prqCtx = PortalRequestContext.getCurrentInstance();
+         prqCtx.setLocale(localeConfig.getLocale());
          uiApp.setOrientation(localeConfig.getOrientation());
          uiApp.localizeNavigations();
-         OrganizationService orgService = event.getSource().getApplicationComponent(OrganizationService.class);
-         String remoteUser = event.getRequestContext().getRemoteUser();
-         if (remoteUser != null)
-         {
-            UserProfile userProfile = orgService.getUserProfileHandler().findUserProfileByName(remoteUser);
-            userProfile.getUserInfoMap().put(Constants.USER_LANGUAGE, language);
-            UserProfileHandler hanlder = orgService.getUserProfileHandler();
-            hanlder.saveUserProfile(userProfile, true);
-         }
       }
    }
 

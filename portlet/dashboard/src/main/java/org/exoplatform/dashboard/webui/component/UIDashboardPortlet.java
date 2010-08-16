@@ -98,12 +98,4 @@ public class UIDashboardPortlet extends UIPortletApplication implements Dashboar
       return false;
    }
 
-   /**
-    * For now returns null.  
-    */
-   public String getDashboardOwner()
-   {
-      return null;
-   }
-
 }

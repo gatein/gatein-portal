@@ -199,7 +199,7 @@ class ExoPortletInvocationContext extends AbstractPortletInvocationContext
          }
 
          Mode mode = renderURL.getMode();
-         if (mode != null && !mode.equals(Mode.VIEW))
+         if (mode != null)
          {
             appendParameter(baseURL, Constants.PORTLET_MODE_PARAMETER, mode.toString());
          }

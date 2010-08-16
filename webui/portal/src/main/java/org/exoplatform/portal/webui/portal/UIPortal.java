@@ -238,7 +238,7 @@ public class UIPortal extends UIContainer
       uiPageBody.setPageBody(selectedNode_, this);
       
       //Refresh locale
-      Locale locale = Util.getUIPortalApplication().getLocale();
+      Locale locale = Util.getPortalRequestContext().getLocale();
       localizePageNavigation(navigation, locale);
    }
    

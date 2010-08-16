@@ -38,6 +38,7 @@
       <listener>org.exoplatform.webui.application.MonitorApplicationLifecycle</listener>
       <listener>org.exoplatform.portal.application.UserProfileLifecycle</listener>
       <listener>org.exoplatform.portal.application.concurrent.PortalConcurrencyMonitorLifecycle</listener>
+      <listener>org.exoplatform.portal.application.localization.LocalizationLifecycle</listener>       
     </application-lifecycle-listeners>
 
     <events>

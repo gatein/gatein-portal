@@ -49,20 +49,13 @@ public class UIDashboardEditForm extends UIForm
 
    public UIDashboardEditForm() throws Exception
    {
-      PortletRequestContext pcontext = (PortletRequestContext)WebuiRequestContext.getCurrentInstance();
-      PortletPreferences pref = pcontext.getRequest().getPreferences();
       addUIFormInput(new UIFormStringInput(TOTAL_COLUMNS, TOTAL_COLUMNS, null));
-      addUIFormInput(new UIFormStringInput(DashboardParent.OWNER, DashboardParent.OWNER, pref.getValue(
-         DashboardParent.OWNER, null)));
-      addUIFormInput(new UIFormStringInput(DashboardParent.ISPRIVATE, DashboardParent.ISPRIVATE, pref.getValue(
-         DashboardParent.ISPRIVATE, null)));
    }
 
    public static class SaveActionListener extends EventListener<UIDashboardEditForm>
    {
       public final void execute(final Event<UIDashboardEditForm> event) throws Exception
       {
-
          UIDashboardEditForm uiForm = event.getSource();
          UIFormStringInput uiInput = uiForm.getUIStringInput(TOTAL_COLUMNS);
 
@@ -100,12 +93,6 @@ public class UIDashboardEditForm extends UIForm
             uiInput.setValue(lastValue);
             throw new MessageException(new ApplicationMessage("NumberFormatValidator.msg.Invalid-number", args));
          }
-
-         uiInput = uiForm.getUIStringInput(DashboardParent.ISPRIVATE);
-         pref.setValue(DashboardParent.ISPRIVATE, uiInput.getValue());
-
-         uiInput = uiForm.getUIStringInput(DashboardParent.OWNER);
-         pref.setValue(DashboardParent.OWNER, uiInput.getValue());
 
          UIDashboardContainer uiDashboardContainer =
             ((UIContainer)uiForm.getParent()).getChild(UIDashboard.class).getChild(UIDashboardContainer.class);
