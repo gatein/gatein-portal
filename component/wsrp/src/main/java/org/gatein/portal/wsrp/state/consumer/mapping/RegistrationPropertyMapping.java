@@ -65,7 +65,7 @@ public abstract class RegistrationPropertyMapping
    public void initFrom(RegistrationProperty property)
    {
       // set properties
-      setName(property.getName());
+      setName(property.getName().toString());
       setStatus(property.getStatus());
       setValue(property.getValue());
 

@@ -87,7 +87,7 @@ public abstract class RegistrationInfoMapping
       for (RegistrationProperty property : regInfo.getRegistrationProperties().values())
       {
          // create new RegistrationPropertyMapping for this RegistrationInfoMapping
-         RegistrationPropertyMapping rpm = createRegistrationProperty(property.getName());
+         RegistrationPropertyMapping rpm = createRegistrationProperty(property.getName().toString());
 
          // add newly created RegistrationPropertyMapping to parent then initialize for JCR
          rpms.add(rpm);
