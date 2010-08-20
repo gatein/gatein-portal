@@ -135,6 +135,12 @@
             </listitem>
             <listitem>
                <para>
+                  <filename>$GATEIN_HOME/lib/wsrp-wsrp2-ws-$WSRP_VERSION.jar</filename>, which contains the generated
+                  JAX-WS classes for WSRP version 2.
+               </para>
+            </listitem>
+            <listitem>
+               <para>
                   <filename>$GATEIN_HOME/lib/gatein.portal.component.wsrp-$PORTAL_VERSION.jar</filename>, which
                   contains the code to integrate the WSRP service into &PRODUCT_NAME;.
                </para>

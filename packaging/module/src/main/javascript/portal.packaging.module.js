@@ -86,6 +86,7 @@ function getModule(params)
       .addDependency(new Project("org.gatein.wsrp", "wsrp-producer-lib", "jar",wsrpVersion))
       .addDependency(new Project("org.gatein.wsrp", "wsrp-common", "jar", wsrpVersion))
       .addDependency(new Project("org.gatein.wsrp", "wsrp-wsrp1-ws", "jar", wsrpVersion))
+      .addDependency(new Project("org.gatein.wsrp", "wsrp-wsrp2-ws", "jar", wsrpVersion))
       .addDependency(new Project("org.gatein.wsrp", "wsrp-consumer", "jar", wsrpVersion))
       .addDependency(new Project("org.gatein.wsrp", "wsrp-integration-api", "jar", wsrpVersion));
 
