@@ -57,10 +57,13 @@ class ExoPortletInvocationContext extends AbstractPortletInvocationContext
    static final String INTERACTION_STATE_PARAM_NAME = "interactionstate";
    static final String NAVIGATIONAL_STATE_PARAM_NAME = "navigationalstate";
    static final String RESOURCE_STATE_PARAM_NAME = "resourcestate";
+   private static final String QMARK = "?";
+   private static final String EQ = "=";
+   private static final String AMP = "&";
 
    public ExoPortletInvocationContext(PortalRequestContext portalRequestContext, UIPortlet portlet)
    {
-      super(new MarkupInfo(MediaType.create("text/html"), "UTF-8"));
+      super(new MarkupInfo(MediaType.TEXT_HTML, "UTF-8"));
 
       this.request = portalRequestContext.getRequest();
       this.response = portalRequestContext.getResponse();
@@ -93,8 +96,8 @@ class ExoPortletInvocationContext extends AbstractPortletInvocationContext
    public String renderURL(ContainerURL containerURL, URLFormat format)
    {
       // todo: shouldn't we be using URLFormat to decide on the path to use at the beginning of the URL?
-      StringBuilder baseURL = new StringBuilder(this.portalRequestURI).append("?")
-         .append(PortalRequestContext.UI_COMPONENT_ID).append("=").append(this.portletId);
+      StringBuilder baseURL = new StringBuilder(this.portalRequestURI).append(QMARK)
+         .append(PortalRequestContext.UI_COMPONENT_ID).append(EQ).append(this.portletId);
 
       String type;
       if (containerURL instanceof RenderURL)
@@ -124,6 +127,24 @@ class ExoPortletInvocationContext extends AbstractPortletInvocationContext
          appendParameter(baseURL, Constants.SECURE_PARAMETER, format.getWantSecure().toString());
       }
 
+      StateString navigationalState = containerURL.getNavigationalState();
+      if (navigationalState != null && !navigationalState.getStringValue().equals(StateString.JBPNS_PREFIX))
+      {
+         appendParameter(baseURL, NAVIGATIONAL_STATE_PARAM_NAME, navigationalState.getStringValue());
+      }
+
+      WindowState windowState = containerURL.getWindowState();
+      if (windowState != null)
+      {
+         appendParameter(baseURL, Constants.WINDOW_STATE_PARAMETER, windowState.toString());
+      }
+
+      Mode mode = containerURL.getMode();
+      if (mode != null)
+      {
+         appendParameter(baseURL, Constants.PORTLET_MODE_PARAMETER, mode.toString());
+      }
+
       if (containerURL instanceof ActionURL)
       {
          ActionURL actionURL = (ActionURL)containerURL;
@@ -132,24 +153,6 @@ class ExoPortletInvocationContext extends AbstractPortletInvocationContext
          if (state != null && !state.getStringValue().equals(StateString.JBPNS_PREFIX))
          {
             appendParameter(baseURL, INTERACTION_STATE_PARAM_NAME, state.getStringValue());
-         }
-
-         state = actionURL.getNavigationalState();
-         if (state != null && !state.getStringValue().equals(StateString.JBPNS_PREFIX))
-         {
-            appendParameter(baseURL, NAVIGATIONAL_STATE_PARAM_NAME, state.getStringValue());
-         }
-
-         WindowState windowState = actionURL.getWindowState();
-         if (windowState != null)
-         {
-            appendParameter(baseURL, Constants.WINDOW_STATE_PARAMETER, windowState.toString());
-         }
-
-         Mode mode = actionURL.getMode();
-         if (mode != null)
-         {
-            appendParameter(baseURL, Constants.PORTLET_MODE_PARAMETER, mode.toString());
          }
       }
       else if (containerURL instanceof ResourceURL)
@@ -169,40 +172,10 @@ class ExoPortletInvocationContext extends AbstractPortletInvocationContext
          {
             appendParameter(baseURL, RESOURCE_STATE_PARAM_NAME, resourceState.getStringValue());
          }
-
-         resourceState = resourceURL.getNavigationalState();
-         if (resourceState != null && !resourceState.getStringValue().equals(StateString.JBPNS_PREFIX))
-         {
-            appendParameter(baseURL, NAVIGATIONAL_STATE_PARAM_NAME, resourceState.getStringValue());
-         }
-
-         WindowState windowState = resourceURL.getWindowState();
-         if (windowState != null)
-         {
-            appendParameter(baseURL, Constants.WINDOW_STATE_PARAMETER, windowState.toString());
-         }
-
-         Mode mode = resourceURL.getMode();
-         if (mode != null)
-         {
-            appendParameter(baseURL, Constants.PORTLET_MODE_PARAMETER, mode.toString());
-         }
       }
       else
       {
          RenderURL renderURL = (RenderURL)containerURL;
-
-         WindowState windowState = renderURL.getWindowState();
-         if (windowState != null)//&& !windowState.equals(WindowState.NORMAL))
-         {
-            appendParameter(baseURL, Constants.WINDOW_STATE_PARAMETER, windowState.toString());
-         }
-
-         Mode mode = renderURL.getMode();
-         if (mode != null)
-         {
-            appendParameter(baseURL, Constants.PORTLET_MODE_PARAMETER, mode.toString());
-         }
 
          Map<String, String[]> publicNSChanges = renderURL.getPublicNavigationalStateChanges();
          if (ParameterValidation.existsAndIsNotEmpty(publicNSChanges))
@@ -223,12 +196,6 @@ class ExoPortletInvocationContext extends AbstractPortletInvocationContext
                }
             }
          }
-
-         StateString state = renderURL.getNavigationalState();
-         if (state != null && !state.getStringValue().equals(StateString.JBPNS_PREFIX))
-         {
-            appendParameter(baseURL, NAVIGATIONAL_STATE_PARAM_NAME, state.getStringValue());
-         }
       }
 
       return baseURL.toString();
@@ -238,7 +205,7 @@ class ExoPortletInvocationContext extends AbstractPortletInvocationContext
    {
       if (value != null)
       {
-         builder.append("&").append(name).append("=").append(value);
+         builder.append(AMP).append(name).append(EQ).append(value);
       }
    }
 }
