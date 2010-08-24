@@ -2070,7 +2070,7 @@
    </UIGadget>
 
    <Locale>
-        <zh_CN>繁体字</zh_CN>
-        <zh_TW>繁體字</zh_TW>
+        <zh_CN>繁体中文</zh_CN>
+        <zh_TW>正體中文</zh_TW>
    </Locale>
 </bundle>

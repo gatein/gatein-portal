@@ -1892,7 +1892,7 @@
       </tooltip>
    </UIGadget>
    <Locale>
-      <zh_CN>全体字</zh_CN>
-      <zh_TW>全體字</zh_TW>
+      <zh_CN>简体中文</zh_CN>
+      <zh_TW>簡體中文</zh_TW>
    </Locale>
 </bundle>
