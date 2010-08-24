@@ -43,6 +43,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.MissingResourceException;
 
 @ComponentConfig(template = "system:/groovy/portal/webui/portal/UILanguageSelector.gtmpl", events = {
    @EventConfig(listeners = UILanguageSelector.SaveActionListener.class),
@@ -73,45 +74,48 @@ public class UILanguageSelector extends UIContainer
          String key = "Locale." + lang;
 
          String displayName = null;
-         if (currentLocaleResourceBundle.containsKey(key))
+         try
          {
-            displayName = currentLocaleResourceBundle.getString(key);
+            String translation = currentLocaleResourceBundle.getString(key);
+            displayName = translation;
          }
-         else
+         catch (MissingResourceException e)
          {
             displayName = capitalizeFirstLetter(locale.getDisplayLanguage(currentLocale));
          }
-         
+
          String localedName = null;
-         if (localeResourceBundle.containsKey(key))
+         try
          {
-            localedName = localeResourceBundle.getString(key);
+            String translation = localeResourceBundle.getString(key);
+            localedName = translation;
          }
-         else
+         catch (MissingResourceException e)
          {
             localedName = capitalizeFirstLetter(locale.getDisplayLanguage(locale));
          }
-
          
          if (country != null && country.length() > 0)
          {
             lang = lang + "_" + country;
             key = "Locale." + lang;
-            
-            if (currentLocaleResourceBundle.containsKey(key))
+         
+            try
             {
-               displayName = currentLocaleResourceBundle.getString(key);
+               String translation = currentLocaleResourceBundle.getString(key);
+               displayName = translation;
             }
-            else
+            catch (MissingResourceException e)
             {
                displayName = capitalizeFirstLetter(locale.getDisplayLanguage(currentLocale)) + " - " + capitalizeFirstLetter(locale.getDisplayCountry(currentLocale));
             }
-            
-            if (localeResourceBundle.containsKey(key))
-            {
-               localedName = localeResourceBundle.getString(key);
+
+            try
+            { 
+               String translation = localeResourceBundle.getString(key);
+               localedName = translation;
             }
-            else
+            catch (MissingResourceException e)
             {
                localedName = capitalizeFirstLetter(locale.getDisplayLanguage(locale)) + " - " + capitalizeFirstLetter(locale.getDisplayCountry(locale));
             }

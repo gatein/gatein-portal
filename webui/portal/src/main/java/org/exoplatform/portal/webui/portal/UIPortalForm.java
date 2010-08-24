@@ -75,6 +75,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.MissingResourceException;
 
 @ComponentConfigs({
    @ComponentConfig(lifecycle = UIFormLifecycle.class, template = "system:/groovy/webui/form/UIFormTabPane.gtmpl", events = {
@@ -196,7 +197,6 @@ public class UIPortalForm extends UIFormTabPane
       while (iterator.hasNext())
       {
          LocaleConfig localeConfig = (LocaleConfig)iterator.next();
-         String displayName = capitalizeFirstLetter(localeConfig.getLocale().getDisplayName(currentLocale));
          ResourceBundle localeResourceBundle = getResourceBundle(currentLocale);
 
          String key = "Locale." + localeConfig.getLocale().getLanguage();
@@ -205,9 +205,15 @@ public class UIPortalForm extends UIFormTabPane
             key += "_" + localeConfig.getLocale().getCountry();
          }
          
-         if (localeResourceBundle.containsKey(key))
+         String displayName = null;
+         try
          {
-            displayName = localeResourceBundle.getString(key);
+            String translation = localeResourceBundle.getString(key);
+            displayName = translation;
+         }
+         catch (MissingResourceException e)
+         {
+            displayName = capitalizeFirstLetter(localeConfig.getLocale().getDisplayName(currentLocale));;
          }
          
          SelectItemOption<String> option =

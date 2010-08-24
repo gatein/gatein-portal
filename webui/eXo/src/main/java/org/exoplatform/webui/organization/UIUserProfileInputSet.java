@@ -46,6 +46,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.MissingResourceException;
 
 /**
  * Created by The eXo Platform SARL Author : Dang Van Minh minhdv81@yahoo.com
@@ -153,7 +154,6 @@ public class UIUserProfileInputSet extends UIFormInputSet
       {
          LocaleConfig config = i.next();
          Locale locale = config.getLocale();
-         displayName = capitalizeFirstLetter(locale.getDisplayName(currentLocale));
          
          language = locale.getLanguage();
          country = locale.getCountry();
@@ -164,18 +164,22 @@ public class UIUserProfileInputSet extends UIFormInputSet
 
          
          ResourceBundle localeResourceBundle;
+
+         displayName = null;
          try
          {
             localeResourceBundle = getResourceBundle(currentLocale);
             String key = "Locale." + language;
-            if (localeResourceBundle.containsKey(key))
-            {
-               displayName = localeResourceBundle.getString(key);
-            }
+            String translation = localeResourceBundle.getString(key);
+            displayName = translation;
+         }
+         catch (MissingResourceException e)
+         {
+            displayName = capitalizeFirstLetter(locale.getDisplayName(currentLocale));
          }
          catch (Exception e)
          {
-            // ignore, use default displayName
+     
          }
          
          option = new SelectItemOption<String>(displayName, language);
@@ -282,4 +286,5 @@ public class UIUserProfileInputSet extends UIFormInputSet
       ResourceBundle res = service.getResourceBundle("locale.portal.webui", locale);
       return res;
    }
+
 }
