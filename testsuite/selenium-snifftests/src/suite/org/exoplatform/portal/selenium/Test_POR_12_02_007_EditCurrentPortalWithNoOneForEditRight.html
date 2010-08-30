@@ -18,7 +18,7 @@
 </tr>
 <tr>
 	<td>echo</td>
-	<td>-- Edit Current Portal With No one For Edit Right</td>
+	<td>-- Edit current portal with no one for edit right--</td>
 	<td></td>
 </tr>
 <tr>
@@ -48,17 +48,12 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>//div[@id='UIPortalLoginFormAction']/div/div/div</td>
+	<td>//div[@id='UIPortalLoginFormAction']/div/div/div/a</td>
 	<td></td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
-	<td>link=Site Editor</td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>link=Site Editor</td>
+	<td>echo</td>
+	<td>-- Click Edit layout --</td>
 	<td></td>
 </tr>
 <tr>
@@ -73,7 +68,7 @@
 </tr>
 <tr>
 	<td>echo</td>
-	<td>- Change Portal Properties -</td>
+	<td>Choose Site's Config on Edit inline composer --</td>
 	<td></td>
 </tr>
 <tr>
@@ -87,17 +82,27 @@
 	<td></td>
 </tr>
 <tr>
+	<td>echo</td>
+	<td>-- Choose Permission Setting --</td>
+	<td></td>
+</tr>
+<tr>
 	<td>waitForElementPresent</td>
-	<td>UIPortalForm</td>
+	<td>//div[2]/div/div/div/div/div/div/div/div/div/div/div/div[3]/div/div/div/div</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[contains(@onclick,&quot;submitEvent('UIPortalForm','SelectTab','&amp;objectId=PermissionSetting&quot;)]</td>
+	<td>//div[2]/div/div/div/div/div/div/div/div/div/div/div/div[3]/div/div/div/div</td>
 	<td></td>
 </tr>
 <tr>
-	<td>verifyElementPresent</td>
+	<td>echo</td>
+	<td>-- Choose Edit Permission--</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
 	<td>link=Edit Permission Setting</td>
 	<td></td>
 </tr>
@@ -107,47 +112,37 @@
 	<td></td>
 </tr>
 <tr>
-	<td>echo</td>
-	<td>- Delete all edit permissions -</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyElementPresent</td>
+	<td>waitForElementPresent</td>
 	<td>link=Delete Permission</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
 	<td>link=Delete Permission</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyElementPresent</td>
-	<td>link=Save</td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>link=Save</td>
-	<td></td>
-</tr>
-<tr>
-	<td>echo</td>
-	<td>- Verify Pop-up alert presence -</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@class='PopupMessage']</td>
-	<td>The &quot;editPermission&quot; list can not be empty.</td>
+	<td>link=Save</td>
+	<td></td>
 </tr>
 <tr>
-	<td>verifyElementPresent</td>
-	<td>//div[@class='PopupMessage']</td>
-	<td>The &quot;editPermission&quot; list can not be empty.</td>
+	<td>click</td>
+	<td>link=Save</td>
+	<td></td>
 </tr>
 <tr>
-	<td>verifyElementPresent</td>
+	<td>waitForTextPresent</td>
+	<td>The &quot;Edit Permission Setting&quot; list can not be empty.</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>The &quot;Edit Permission Setting&quot; list can not be empty.</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
 	<td>link=OK</td>
 	<td></td>
 </tr>
@@ -157,7 +152,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>verifyElementPresent</td>
+	<td>waitForElementPresent</td>
 	<td>link=Cancel</td>
 	<td></td>
 </tr>
@@ -168,17 +163,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>UIPortalComposer</td>
+	<td>//div[@id='UIPortalComposer']/div[1]/div/div/div/a[2]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='UIPortalComposer']/div[1]//a[1]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>echo</td>
-	<td>- Sign Out -</td>
+	<td>//div[@id='UIPortalComposer']/div[1]/div/div/div/a[2]</td>
 	<td></td>
 </tr>
 <tr>
