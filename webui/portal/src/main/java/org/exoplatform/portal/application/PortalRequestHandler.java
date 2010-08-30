@@ -177,5 +177,4 @@ public class PortalRequestHandler extends WebRequestHandler
             ((ApplicationRequestPhaseLifecycle) lifecycle).onEndRequestPhase(app, context, phase);
       }
    }
-
 }

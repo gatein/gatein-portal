@@ -233,7 +233,7 @@ public class UIPortalComposer extends UIContainer
          {
             prContext.setLocale(localeConfig.getLocale());
             //editPortal.refreshNavigation(localeConfig.getLocale());
-            uiPortalApp.localizeNavigations();
+            //uiPortalApp.localizeNavigations();
          }
          uiPortalApp.setSkin(editPortal.getSkin());
       }

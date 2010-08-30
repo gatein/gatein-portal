@@ -137,8 +137,6 @@ public class UIUserInfo extends UIFormTabPane
                localeConfig = localeConfigService.getDefaultLocaleConfig();
             PortalRequestContext prqCtx = PortalRequestContext.getCurrentInstance();
             prqCtx.setLocale(localeConfig.getLocale());
-            uiApp.setOrientation(localeConfig.getOrientation());
-            uiApp.localizeNavigations();
 
             Util.getPortalRequestContext().addUIComponentToUpdateByAjax(
                uiApp.findFirstComponentOfType(UIWorkingWorkspace.class));

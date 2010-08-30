@@ -24,6 +24,8 @@ package org.exoplatform.portal.application.localization;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.RootContainer;
+import org.exoplatform.container.component.ComponentRequestLifecycle;
+import org.exoplatform.container.component.RequestLifeCycle;
 import org.exoplatform.portal.Constants;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.services.log.ExoLogger;
@@ -51,14 +53,15 @@ import java.util.Set;
 
 /**
  * This filter provides {@link HttpServletRequest#getLocale()} and {@link HttpServletRequest#getLocales()}
- * override for extra-portlet requests (i.e. unbridged .jsp). Thanks to this dynamic resources can be localized
- * to keep in synch with the rest of the portal.
+ * override for extra-portlet requests (i.e. unbridged .jsp). Thanks to it dynamic resources can be localized
+ * to keep in sync with the rest of the portal. This filter is re-entrant, and can safely be installed for
+ * INCLUDE, FORWARD, and ERROR dispatch methods.
  *
- * A concrete example for this is login/jsp/login.jsp used when authentication fails at portal login.
+ * A concrete example of re-entrant use is login/jsp/login.jsp used when authentication fails at portal login.
  *
  * By default {@link HttpServletRequest#getLocale()} and {@link HttpServletRequest#getLocales()} reflect
  * browser language preference. When using this filter these two calls employ the same Locale determination algorithm
- * that LocalizationLifecycle uses.
+ * as LocalizationLifecycle does.
  *
  * This filter can be activated / deactivated via portal module's web.xml
  *
@@ -133,7 +136,8 @@ public class LocalizationFilter implements Filter
          localeCtx.setSupportedLocales(supportedLocales);
 
          localeCtx.setBrowserLocales(Collections.list(request.getLocales()));
-         localeCtx.setCookieLocales(LocalizationLifecycle.getCookieLocales(req));
+         //localeCtx.setCookieLocales(LocalizationLifecycle.getCookieLocales(req));
+         localeCtx.setSessionLocale(LocalizationLifecycle.getSessionLocale(req));
          localeCtx.setUserProfileLocale(getUserProfileLocale(container, req.getRemoteUser()));
          localeCtx.setRemoteUser(req.getRemoteUser());
 
@@ -169,19 +173,48 @@ public class LocalizationFilter implements Filter
       {
          try
          {
+            beginContext(svc);
             userProfile = svc.getUserProfileHandler().findUserProfileByName(user);
          }
          catch (Exception ignored)
          {
             log.error("IGNORED: Failed to load UserProfile for username: " + user, ignored);
          }
+         finally
+         {
+            try
+            {
+               endContext(svc);
+            }
+            catch(Exception ignored)
+            {
+               // we don't care
+            }
+         }
 
          if (userProfile == null && log.isWarnEnabled())
-            log.warn("Could not load user profile for " + user + ". Using default portal locale.");
+            log.warn("Could not load user profile for " + user);
       }
 
       String lang = userProfile == null ? null : userProfile.getUserInfoMap().get(Constants.USER_LANGUAGE);
       return (lang != null) ? new Locale(lang) : null;
+   }
+
+   public void beginContext(OrganizationService orgService) throws Exception
+   {
+      if (orgService instanceof ComponentRequestLifecycle)
+      {
+         RequestLifeCycle.begin((ComponentRequestLifecycle)orgService);
+      }
+   }
+
+   public void endContext(OrganizationService orgService) throws Exception
+   {
+      // do the same check as in beginContext to make it symmetric
+      if (orgService instanceof ComponentRequestLifecycle)
+      {
+         RequestLifeCycle.end();
+      }
    }
 
    public void destroy()

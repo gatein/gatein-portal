@@ -71,6 +71,8 @@ public class DefaultLocalePolicyService implements LocalePolicy, Startable
       if (locale == null)
          locale = getLocaleConfigFromCookie(context);
       if (locale == null)
+         locale = getLocaleConfigFromSession(context);
+      if (locale == null)
          locale = getLocaleConfigFromBrowser(context);
 
       return locale;
@@ -86,9 +88,11 @@ public class DefaultLocalePolicyService implements LocalePolicy, Startable
    protected Locale getLocaleConfigFromBrowser(LocaleContextInfo context)
    {
       List<Locale> locales = context.getBrowserLocales();
-      for (Locale loc: locales)
-         return context.getLocaleIfSupported(loc);
-
+      if (locales != null)
+      {
+         for (Locale loc: locales)
+            return context.getLocaleIfSupported(loc);
+      }
       return null;
    }
 
@@ -104,9 +108,24 @@ public class DefaultLocalePolicyService implements LocalePolicy, Startable
    {
       Locale locale = getLocaleConfigFromCookie(context);
       if (locale == null)
+         locale = getLocaleConfigFromSession(context);
+      if (locale == null)
          locale = getLocaleConfigFromBrowser(context);
 
       return locale;
+   }
+
+   /**
+    * Override this method to change the Locale determination based on session attribute.
+    * Note: this is mostly a backup for cookie, as either one usually has to be enabled for
+    * locale to remain synchronized between portal and non-portal pages.
+    *
+    * @param context locale context info available to implementations in order to determine appropriate Locale
+    * @return Locale representing a language to use, or null
+    */
+   protected Locale getLocaleConfigFromSession(LocaleContextInfo context)
+   {
+      return context.getSessionLocale();
    }
 
    /**
@@ -119,9 +138,11 @@ public class DefaultLocalePolicyService implements LocalePolicy, Startable
    protected Locale getLocaleConfigFromCookie(LocaleContextInfo context)
    {
       List<Locale> locales = context.getCookieLocales();
-      for (Locale locale: locales)
-         return context.getLocaleIfSupported(locale);
-
+      if (locales != null)
+      {
+         for (Locale locale: locales)
+            return context.getLocaleIfSupported(locale);
+      }
       return null;
    }
 

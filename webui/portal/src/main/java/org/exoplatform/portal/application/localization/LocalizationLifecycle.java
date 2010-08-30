@@ -27,6 +27,7 @@ import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.application.PortalStateManager;
 import org.exoplatform.portal.application.UserProfileLifecycle;
 import org.exoplatform.portal.config.UserPortalConfig;
+import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.organization.OrganizationService;
@@ -40,10 +41,12 @@ import org.exoplatform.web.application.ApplicationRequestPhaseLifecycle;
 import org.exoplatform.web.application.Phase;
 import org.exoplatform.web.application.RequestFailure;
 import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.core.UIApplication;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -75,7 +78,11 @@ import java.util.Set;
  */
 public class LocalizationLifecycle implements ApplicationRequestPhaseLifecycle<WebuiRequestContext>
 {
-   private static final String COOKIE_NAME = "LOCALE";
+   private static final String LOCALE_COOKIE = "LOCALE";
+
+   private static final String LOCALE_SESSION_ATTR = "org.gatein.LOCALE";
+
+   private static final String PREV_LOCALE_SESSION_ATTR = "org.gatein.LAST_LOCALE";
 
    private static final ThreadLocal<Locale> calculatedLocale = new ThreadLocal<Locale>();
 
@@ -116,8 +123,8 @@ public class LocalizationLifecycle implements ApplicationRequestPhaseLifecycle<W
 
       HttpServletRequest request = HttpServletRequest.class.cast(context.getRequest());
       localeCtx.setBrowserLocales(Collections.list(request.getLocales()));
-
-      localeCtx.setCookieLocales(getCookieLocales(request));
+      //localeCtx.setCookieLocales(getCookieLocales(request));
+      localeCtx.setSessionLocale(getSessionLocale(request));
       localeCtx.setUserProfileLocale(getUserProfileLocale(reqCtx));
       localeCtx.setRemoteUser(reqCtx.getRemoteUser());
 
@@ -173,8 +180,31 @@ public class LocalizationLifecycle implements ApplicationRequestPhaseLifecycle<W
          Locale loc = reqCtx.getLocale();
          Locale remembered = calculatedLocale.get();
          calculatedLocale.remove();
+
+         boolean refreshNeeded = false;
+
+         // if locale changed since previous request
+         Locale sessLocale = getPreviousLocale(reqCtx.getRequest());
+         if (loc != null && sessLocale != null && !loc.equals(sessLocale))
+         {
+            refreshNeeded = true;
+         }
+         // if locale changed during this request's processing
          if (loc != null && (remembered == null || !loc.equals(remembered)))
+         {
+            refreshNeeded = true;
             saveLocale(reqCtx, loc);
+         }
+
+         if (refreshNeeded)
+         {
+            UIApplication uiapp = context.getUIApplication();
+            // we presume PortalRequestContext, and UIPortalApplication
+            resetOrientation(reqCtx, loc);
+            ((UIPortalApplication) uiapp).localizeNavigations();
+         }
+
+         savePreviousLocale(reqCtx, loc);
       }
    }
 
@@ -249,7 +279,7 @@ public class LocalizationLifecycle implements ApplicationRequestPhaseLifecycle<W
       {
          for (Cookie cookie: cookies)
          {
-            if (COOKIE_NAME.equals(cookie.getName()))
+            if (LOCALE_COOKIE.equals(cookie.getName()))
             {
                List<Locale> locales = new ArrayList<Locale>();
                locales.add(LocaleContextInfo.getLocale(cookie.getValue()));
@@ -258,6 +288,25 @@ public class LocalizationLifecycle implements ApplicationRequestPhaseLifecycle<W
          }
       }
       return Collections.emptyList();
+   }
+
+   public static Locale getSessionLocale(HttpServletRequest request)
+   {
+      return getLocaleFromSession(request, LOCALE_SESSION_ATTR);
+   }
+
+   public static Locale getPreviousLocale(HttpServletRequest request)
+   {
+      return getLocaleFromSession(request, PREV_LOCALE_SESSION_ATTR);
+   }
+
+   private static Locale getLocaleFromSession(HttpServletRequest request, String attrName)
+   {
+      String lang = null;
+      HttpSession session = request.getSession(false);
+      if (session != null)
+         lang = (String) session.getAttribute(attrName);
+      return (lang != null) ? new Locale(lang) : null;
    }
 
    private void saveLocale(PortalRequestContext context, Locale loc)
@@ -269,14 +318,51 @@ public class LocalizationLifecycle implements ApplicationRequestPhaseLifecycle<W
       }
       else
       {
-         saveLocaleToCookie(context, loc);
+         // disabled for now
+         //saveLocaleToCookie(context, loc);
       }
+
+      saveSessionLocale(context, loc);
+   }
+
+   private void resetOrientation(PortalRequestContext context, Locale loc)
+   {
+      ExoContainer container = context.getApplication().getApplicationServiceContainer();
+      LocaleConfigService localeConfigService = (LocaleConfigService)
+            container.getComponentInstanceOfType(LocaleConfigService.class);
+      LocaleConfig localeConfig = localeConfigService.getLocaleConfig(LocaleContextInfo.getLocaleAsString(loc));
+      if (localeConfig == null)
+      {
+         if (log.isWarnEnabled())
+            log.warn("Locale changed to unsupported Locale during request processing: " + loc);
+         return;
+      }      
+      // we presume PortalRequestContext, and UIPortalApplication
+      ((UIPortalApplication) context.getUIApplication()).setOrientation(localeConfig.getOrientation());
+   }
+
+   private void saveSessionLocale(PortalRequestContext context, Locale loc)
+   {
+      saveLocaleToSession(context, LOCALE_SESSION_ATTR, loc);
+   }
+
+   private void savePreviousLocale(PortalRequestContext context, Locale loc)
+   {
+      saveLocaleToSession(context, PREV_LOCALE_SESSION_ATTR, loc);
+   }
+
+   private void saveLocaleToSession(PortalRequestContext context, String attrName, Locale loc)
+   {
+      HttpServletRequest res = context.getRequest();
+      HttpSession session = res.getSession(false);
+      if (session != null)
+         session.setAttribute(attrName, LocaleContextInfo.getLocaleAsString(loc));
    }
 
    private void saveLocaleToCookie(PortalRequestContext context, Locale loc)
    {
       HttpServletResponse res = context.getResponse();
-      Cookie cookie = new Cookie(COOKIE_NAME, LocaleContextInfo.getLocaleAsString(loc));
+      Cookie cookie = new Cookie(LOCALE_COOKIE, LocaleContextInfo.getLocaleAsString(loc));
       cookie.setMaxAge(Integer.MAX_VALUE);
       cookie.setPath("/");
       res.addCookie(cookie);

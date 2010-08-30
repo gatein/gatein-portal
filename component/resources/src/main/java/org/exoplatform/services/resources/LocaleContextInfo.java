@@ -38,6 +38,7 @@ public class LocaleContextInfo
    private Locale userProfileLocale;
    private String remoteUser;
    private Locale portalLocale;
+   private Locale sessionLocale;
 
    /**
     * Setter for supportedLocales
@@ -145,6 +146,24 @@ public class LocaleContextInfo
    public Locale getPortalLocale()
    {
       return portalLocale;
+   }
+
+   /**
+    * Setter for sessionLocale
+    * @param locale Locale stored in current session
+    */
+   public void setSessionLocale(Locale locale)
+   {
+      this.sessionLocale = locale;
+   }
+
+   /**
+    * Getter for sessionLocale
+    * @return sessionLocale
+    */
+   public Locale getSessionLocale()
+   {
+      return sessionLocale;
    }
 
    /**
