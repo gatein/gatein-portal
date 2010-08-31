@@ -28,6 +28,7 @@ import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.configuration.ConfigurationManager;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
+import org.exoplatform.services.listener.ListenerService;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 import org.gatein.pc.api.PortletInvoker;
@@ -53,9 +54,6 @@ import org.gatein.wci.WebAppLifeCycleEvent;
 import org.gatein.wci.WebAppListener;
 import org.gatein.wci.impl.DefaultServletContainerFactory;
 import org.gatein.wsrp.WSRPConstants;
-import org.gatein.wsrp.api.SessionEvent;
-import org.gatein.wsrp.api.SessionEventBroadcaster;
-import org.gatein.wsrp.api.SessionEventListener;
 import org.gatein.wsrp.consumer.registry.ActivatingNullInvokerHandler;
 import org.gatein.wsrp.consumer.registry.ConsumerRegistry;
 import org.gatein.wsrp.producer.ProducerHolder;
@@ -65,8 +63,6 @@ import org.picocontainer.Startable;
 
 import javax.servlet.ServletContext;
 import java.io.InputStream;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author <a href="mailto:chris.laprun@jboss.com">Chris Laprun</a>
@@ -218,11 +214,19 @@ public class WSRPServiceIntegration implements Startable, WebAppListener
       FederatingPortletInvoker federatingPortletInvoker =
          (FederatingPortletInvoker)container.getComponentInstanceOfType(PortletInvoker.class);
 
+      // add our Session event listener to the ListenerService for use in org.exoplatform.web.GenericHttpListener
+      ListenerService listenerService = (ListenerService)container.getComponentInstanceOfType(ListenerService.class);
+      SessionEventListenerAndBroadcaster sessionEventBroadcaster = new SessionEventListenerAndBroadcaster();
+      sessionEventBroadcaster.setName("org.exoplatform.web.GenericHttpListener.sessionCreated");
+      listenerService.addListener(sessionEventBroadcaster);
+      sessionEventBroadcaster.setName("org.exoplatform.web.GenericHttpListener.sessionDestroyed");
+      listenerService.addListener(sessionEventBroadcaster);
+
       try
       {
          consumerRegistry = new JCRConsumerRegistry(container);
          consumerRegistry.setFederatingPortletInvoker(federatingPortletInvoker);
-         consumerRegistry.setSessionEventBroadcaster(new SimpleSessionEventBroadcaster());
+         consumerRegistry.setSessionEventBroadcaster(sessionEventBroadcaster);
          consumerRegistry.start();
 
          // set up a NullInvokerHandler so that when a remote producer is queried, we can start it if needed
@@ -298,27 +302,4 @@ public class WSRPServiceIntegration implements Startable, WebAppListener
       }
    }
 
-   private static class SimpleSessionEventBroadcaster implements SessionEventBroadcaster
-   {
-      private Map<String, SessionEventListener> listeners = new ConcurrentHashMap<String, SessionEventListener>();
-
-      public void registerListener(String listenerId, SessionEventListener listener)
-      {
-         listeners.put(listenerId, listener);
-      }
-
-      public void unregisterListener(String listenerId)
-      {
-         listeners.remove(listenerId);
-      }
-
-      public void notifyListenersOf(SessionEvent event)
-      {
-         for (SessionEventListener listener : listeners.values())
-         {
-            listener.onSessionEvent(event);
-         }
-      }
-
-   }
 }
