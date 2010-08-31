@@ -149,7 +149,14 @@ public class LocalizationLifecycle implements ApplicationRequestPhaseLifecycle<W
       localeCtx.setPortalLocale(portalLocale);
 
       Locale locale = localePolicy.determineLocale(localeCtx);
-      if (!supportedLocales.contains(locale))
+      boolean supported = supportedLocales.contains(locale);
+
+      if (!supported && !"".equals(locale.getCountry()))
+      {
+         locale = new Locale(locale.getLanguage());
+         supported = supportedLocales.contains(locale);
+      }
+      if (!supported)
       {
          if (log.isWarnEnabled())
             log.warn("Unsupported locale returned by LocalePolicy: " + localePolicy + ". Falling back to 'en'.");

@@ -171,12 +171,40 @@ public class LocaleContextInfo
     * Otherwise it returns null.
     *
     * @param locale locale to check
-    * @return locale if supported, null otherwise
+    * @return original locale if supported, null otherwise
     */
    public Locale getLocaleIfSupported(Locale locale)
    {
+      if (locale == null)
+         return null;
       if (supportedLocales.contains(locale))
          return locale;
+      return null;
+   }
+
+   /**
+    * Helper method that returns the locale only if it's language is supported by portal.
+    * Otherwise it returns null.
+    *
+    * @param locale locale to check
+    * @return original locale if language is supported, null otherwise
+    */
+   public Locale getLocaleIfLangSupported(Locale locale)
+   {
+      if (locale == null)
+         return null;
+      if (supportedLocales.contains(locale))
+         return locale;
+
+      if ("".equals(locale.getCountry()) == false)
+      {
+         Locale loc = new Locale(locale.getLanguage());
+         if (supportedLocales.contains(loc))
+         {
+            // return original locale
+            return locale;
+         }
+      }
       return null;
    }
 

@@ -32,7 +32,13 @@ import java.util.Locale;
  * This service represents a default policy for determining LocaleConfig to be used for user's session.
  * This service is registered through portal services configuration file: conf/portal/configuration.xml
  * Custom locale determination policy can be implemented by overriding or completely replacing this class,
- * and registering an alternative implementation. Special care needs to be taken to assure Locale consistency
+ * and registering an alternative implementation.
+ *
+ * To gracefully fallback from more specific locales (lang_COUNTRY) to more generic (lang) without loss
+ * of information about user's language selection use {@link LocaleContextInfo#getLocaleIfLangSupported(java.util.Locale)}
+ * and return a more specific Locale. The Locale will be appropriately narrowed by LocalePolicy caller. 
+ *
+ * Special care needs to be taken to assure Locale consistency
  * between portal requests and non-portal requests - like login redirect upon failed authentication attempt.
  * To keep consistency at least one of {@link LocaleContextInfo#cookieLocales} and {@link LocaleContextInfo#sessionLocale}
  * needs to be enabled.
@@ -71,7 +77,7 @@ public class DefaultLocalePolicyService implements LocalePolicy, Startable
     */
    protected Locale getLocaleConfigForRegistered(LocaleContextInfo context)
    {
-      Locale locale = context.getLocaleIfSupported(context.getUserProfileLocale());
+      Locale locale = context.getLocaleIfLangSupported(context.getUserProfileLocale());
       if (locale == null)
          locale = getLocaleConfigFromCookie(context);
       if (locale == null)
@@ -95,7 +101,7 @@ public class DefaultLocalePolicyService implements LocalePolicy, Startable
       if (locales != null)
       {
          for (Locale loc: locales)
-            return context.getLocaleIfSupported(loc);
+            return context.getLocaleIfLangSupported(loc);
       }
       return null;
    }
@@ -145,7 +151,7 @@ public class DefaultLocalePolicyService implements LocalePolicy, Startable
       if (locales != null)
       {
          for (Locale locale: locales)
-            return context.getLocaleIfSupported(locale);
+            return context.getLocaleIfLangSupported(locale);
       }
       return null;
    }
