@@ -32,9 +32,13 @@ import java.util.Locale;
  * This service represents a default policy for determining LocaleConfig to be used for user's session.
  * This service is registered through portal services configuration file: conf/portal/configuration.xml
  * Custom locale determination policy can be implemented by overriding or completely replacing this class,
- * and registering an alternative implementation.
+ * and registering an alternative implementation. Special care needs to be taken to assure Locale consistency
+ * between portal requests and non-portal requests - like login redirect upon failed authentication attempt.
+ * To keep consistency at least one of {@link LocaleContextInfo#cookieLocales} and {@link LocaleContextInfo#sessionLocale}
+ * needs to be enabled.
  *
  * @see NoBrowserLocalePolicyService
+ * @see LocalizationFilter
  *
  * @author <a href="mailto:mstrukel@redhat.com">Marko Strukelj</a>
  */

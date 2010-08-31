@@ -240,7 +240,7 @@ public class LocalizationLifecycle implements ApplicationRequestPhaseLifecycle<W
 
       UserProfile userProfile = getLoadedProfile(context);
       lang = userProfile == null ? null : userProfile.getUserInfoMap().get(Constants.USER_LANGUAGE);
-      return (lang != null) ? new Locale(lang) : null;
+      return (lang != null) ? LocaleContextInfo.getLocale(lang) : null;
    }
 
    private UserProfile loadUserProfile(ExoContainer container, PortalRequestContext context)
@@ -306,7 +306,7 @@ public class LocalizationLifecycle implements ApplicationRequestPhaseLifecycle<W
       HttpSession session = request.getSession(false);
       if (session != null)
          lang = (String) session.getAttribute(attrName);
-      return (lang != null) ? new Locale(lang) : null;
+      return (lang != null) ? LocaleContextInfo.getLocale(lang) : null;
    }
 
    private void saveLocale(PortalRequestContext context, Locale loc)
@@ -336,7 +336,7 @@ public class LocalizationLifecycle implements ApplicationRequestPhaseLifecycle<W
          if (log.isWarnEnabled())
             log.warn("Locale changed to unsupported Locale during request processing: " + loc);
          return;
-      }      
+      }
       // we presume PortalRequestContext, and UIPortalApplication
       ((UIPortalApplication) context.getUIApplication()).setOrientation(localeConfig.getOrientation());
    }
@@ -379,7 +379,7 @@ public class LocalizationLifecycle implements ApplicationRequestPhaseLifecycle<W
       UserProfile userProfile = loadUserProfile(container, context);
       if (userProfile != null)
       {
-         userProfile.getUserInfoMap().put(Constants.USER_LANGUAGE, loc.getLanguage());
+         userProfile.getUserInfoMap().put(Constants.USER_LANGUAGE, LocaleContextInfo.getLocaleAsString(loc));
          try
          {
             svc.getUserProfileHandler().saveUserProfile(userProfile, false);

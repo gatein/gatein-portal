@@ -197,7 +197,7 @@ public class LocalizationFilter implements Filter
       }
 
       String lang = userProfile == null ? null : userProfile.getUserInfoMap().get(Constants.USER_LANGUAGE);
-      return (lang != null) ? new Locale(lang) : null;
+      return (lang != null) ? LocaleContextInfo.getLocale(lang) : null;
    }
 
    public void beginContext(OrganizationService orgService) throws Exception
