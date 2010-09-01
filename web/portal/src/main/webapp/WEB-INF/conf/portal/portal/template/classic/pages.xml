@@ -90,5 +90,20 @@
       <show-info-bar>false</show-info-bar>      
     </portlet-application>
   </page>
+  <page>
+    <name>sitemap</name>
+    <title>Site Map</title>
+	  <access-permissions>Everyone</access-permissions>
+	  <edit-permission>*:/platform/administrators</edit-permission>
+    <portlet-application>
+      <portlet>
+        <application-ref>web</application-ref>
+        <portlet-ref>SiteMapPortlet</portlet-ref>
+      </portlet>
+      <title>SiteMap</title>
+      <access-permissions>Everyone</access-permissions>
+      <show-info-bar>false</show-info-bar>      
+    </portlet-application>
+  </page>
   
 </page-set>

@@ -106,8 +106,8 @@ public class UIPortalForm extends UIFormTabPane
    {
       super("UIPortalForm");
       UIFormInputItemSelector uiTemplateInput = new UIFormInputItemSelector("PortalTemplate", null);
-//      addUIFormInput(uiTemplateInput);
-//      setSelectedTab(uiTemplateInput.getId());
+      addUIFormInput(uiTemplateInput);
+      setSelectedTab(uiTemplateInput.getId());
       createDefaultItem();
 
       UIFormInputSet uiPortalSetting = this.<UIFormInputSet> getChildById("PortalSetting");
@@ -298,6 +298,7 @@ public class UIPortalForm extends UIFormTabPane
          DataStorage dataService = uiForm.getApplicationComponent(DataStorage.class);
          UserPortalConfigService service = uiForm.getApplicationComponent(UserPortalConfigService.class);
          PortalRequestContext prContext = Util.getPortalRequestContext();
+         UIPortalApplication uiPortalApp = (UIPortalApplication)prContext.getUIApplication();
 
          UserPortalConfig userConfig = service.getUserPortalConfig(uiForm.getPortalOwner(), prContext.getRemoteUser());
          if (userConfig != null)
@@ -305,14 +306,14 @@ public class UIPortalForm extends UIFormTabPane
             UIPortal uiPortal = uiForm.createUIComponent(UIPortal.class, null, null);
             PortalDataMapper.toUIPortal(uiPortal, userConfig);
 
-            UIPortalApplication uiPortalApp = (UIPortalApplication)prContext.getUIApplication();
             uiForm.invokeSetBindingBean(uiPortal);
             //uiPortal.refreshNavigation(localeConfigService.getLocaleConfig(uiPortal.getLocale()).getLocale()) ;
             if (uiPortalApp.getModeState() == UIPortalApplication.NORMAL_MODE)
             {
                PortalConfig portalConfig = (PortalConfig)PortalDataMapper.buildModelObject(uiPortal);
-               UserPortalConfigService configService = uiForm.getApplicationComponent(UserPortalConfigService.class);
                dataService.save(portalConfig);
+               prContext.setAttribute(UserPortalConfig.class, service.getUserPortalConfig(uiForm.getPortalOwner(), prContext.getRemoteUser()));
+               uiPortalApp.reloadSkinPortal(prContext);
             }
             else
             {
@@ -326,7 +327,7 @@ public class UIPortalForm extends UIFormTabPane
          {
             UIApplication uiApp = Util.getPortalRequestContext().getUIApplication();
             uiApp.addMessage(new ApplicationMessage("UIPortalForm.msg.notExistAnymore", null));
-            UIPortalApplication uiPortalApp = (UIPortalApplication)prContext.getUIApplication();
+            
             UIWorkingWorkspace uiWorkingWS = uiPortalApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
             prContext.addUIComponentToUpdateByAjax(uiWorkingWS);
          }
@@ -343,8 +344,7 @@ public class UIPortalForm extends UIFormTabPane
       {
          UIPortalForm uiForm = event.getSource();
          PortalRequestContext pcontext = (PortalRequestContext)event.getRequestContext();
-	 String template = "classic";
-//         String template = uiForm.getChild(UIFormInputItemSelector.class).getSelectedItemOption().getValue().toString();
+         String template = uiForm.getChild(UIFormInputItemSelector.class).getSelectedItemOption().getValue().toString();
          String portalName = uiForm.getUIStringInput(FIELD_NAME).getValue();
          DataStorage dataService = uiForm.getApplicationComponent(DataStorage.class);
          PortalConfig config = dataService.getPortalConfig(portalName);

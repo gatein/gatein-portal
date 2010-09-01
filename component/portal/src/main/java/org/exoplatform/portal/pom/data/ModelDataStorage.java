@@ -109,4 +109,14 @@ public interface ModelDataStorage
    public void saveDashboard(DashboardData dashboard) throws Exception;
 
    public void save() throws Exception;
+   
+   /****************************************************************
+    * Proxy methods of public API to access/modify MOP mixins, 
+    * 
+    * temporarily put here
+    ***************************************************************/
+   public <A> A adapt(ModelData modelData, Class<A> type);
+   
+   public <A> A adapt(ModelData modelData, Class<A> type, boolean create);
+   
 }

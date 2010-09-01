@@ -204,7 +204,10 @@ public class Mapper
          //
          Described described = dst.adapt(Described.class);
          described.setName(node.getLabel());
-
+         if(!dst.getName().equals(((NavigationNodeData) src).getName()))
+         {
+            dst.setName(((NavigationNodeData) src).getName());
+         }
          //
          Visible visible = dst.adapt(Visible.class);
          visible.setVisibility(node.getVisibility());

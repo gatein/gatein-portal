@@ -32,7 +32,7 @@ function PortalDragDrop() {
  */
 
 PortalDragDrop.prototype.init = function(e) {
-	if (eXo.core.DragDrop.dndEvent  && eXo.core.DragDrop.dndEvent.clickObject == this){
+	if (eXo.core.DragDrop.dndEvent){
 		return;
 	}
 	
@@ -198,9 +198,7 @@ PortalDragDrop.prototype.init = function(e) {
   	this.origDragObjectStyle.setProperties(dndEvent.dragObject.style, false) ;
 
     if(dndEvent.foundTargetObject != null || (dndEvent.backupMouseEvent && dndEvent.backupMouseEvent.keyCode != 27)) {
-    	if (dndEvent.foundTargetObject.foundIndex != null) {
-    		eXo.portal.PortalDragDrop.doDropCallback(dndEvent) ;
-    	}
+    	eXo.portal.PortalDragDrop.doDropCallback(dndEvent) ;
     } else {
 			if(dndEvent.dragObject.parentNode.nodeName.toLowerCase() == "td") {
 				dndEvent.dragObject.parentNode.style.width = "auto";
@@ -255,7 +253,7 @@ PortalDragDrop.prototype.doDropCallback = function(dndEvent) {
 	var srcElement = dndEvent.dragObject ;
   var targetElement = dndEvent.foundTargetObject;
   
-  if(!targetElement) {
+  if(!targetElement || targetElement.foundIndex == null) {
   	if(dndEvent.dragObject.isAddingNewly) {
 	    dndEvent.dragObject.parentNode.removeChild(dndEvent.dragObject) ;
   	}

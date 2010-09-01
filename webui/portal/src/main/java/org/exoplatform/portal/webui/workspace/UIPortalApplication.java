@@ -140,29 +140,13 @@ public class UIPortalApplication extends UIApplication
       if (userPortalConfig_ == null)
          throw new Exception("Can't load user portal config");
       
+      // Get portal skin
+      this.reloadSkinPortal(context);
+      
       // dang.tung - set portal language by user preference -> browser ->
       // default
       // ------------------------------------------------------------------------------
       LocaleConfigService localeConfigService = getApplicationComponent(LocaleConfigService.class);
-      OrganizationService orgService = getApplicationComponent(OrganizationService.class);
-
-      String user = context.getRemoteUser();
-      String portalSkin = null;
-      
-      if (user != null)
-      {
-         UserProfile userProfile = orgService.getUserProfileHandler().findUserProfileByName(user);
-         if (userProfile != null)
-         {
-            portalSkin = userProfile.getUserInfoMap().get(Constants.USER_SKIN);
-         }
-         else
-         {
-            if (log.isWarnEnabled())
-               log.warn("Could not load user profile for " + user + ". Using default portal locale.");
-         }
-      }
-
       Locale locale = context.getLocale();
       if (locale == null)
       {
@@ -187,18 +171,6 @@ public class UIPortalApplication extends UIApplication
       this.all_UIPortals = new HashMap<UIPortalKey, UIPortal>(5);
       
       addWorkingWorkspace();
-
-      // use the skin from the user profile if available, otherwise use from the portal config
-      if (portalSkin != null && portalSkin.trim().length() > 0)
-      {
-         skin_ = portalSkin;
-      }
-      else
-      {
-         String userPortalConfigSkin = userPortalConfig_.getPortalConfig().getSkin();
-         if (userPortalConfigSkin != null && userPortalConfigSkin.trim().length() > 0)
-            skin_ = userPortalConfigSkin;
-      }
       
       setOwner(context.getPortalOwner());
       
@@ -726,6 +698,47 @@ public class UIPortalApplication extends UIApplication
       for(PageNavigation nav : this.getNavigations())
       {
          PageNavigationUtils.localizePageNavigation(nav, locale, i18nManager);
+      }
+   }
+   
+   /**
+    * Get portal skin from {@link UserProfile} or from {@link UserPortalConfig}
+    * 
+    * @param context PortalRequestContext
+    * @throws Exception 
+    * 
+    */
+   public void reloadSkinPortal(PortalRequestContext context) throws Exception
+   {
+      String user = context.getRemoteUser();
+      String portalSkin = null;
+      OrganizationService orgService = getApplicationComponent(OrganizationService.class);
+      
+      if (user != null)
+      {
+         UserProfile userProfile = orgService.getUserProfileHandler().findUserProfileByName(user);
+         if (userProfile != null)
+         {
+            portalSkin = userProfile.getUserInfoMap().get(Constants.USER_SKIN);
+         }
+         else
+         {
+            if (log.isWarnEnabled())
+               log.warn("Could not load user profile for " + user + ". Using default portal locale.");
+         }
+      }
+      
+      // use the skin from the user profile if available, otherwise use from the portal config
+      if (portalSkin != null && portalSkin.trim().length() > 0)
+      {
+         skin_ = portalSkin;
+      }
+      else
+      {
+         UserPortalConfig userPortalConfig = (UserPortalConfig)context.getAttribute(UserPortalConfig.class);
+         String userPortalConfigSkin = userPortalConfig .getPortalConfig().getSkin();
+         if (userPortalConfigSkin != null && userPortalConfigSkin.trim().length() > 0)
+            skin_ = userPortalConfigSkin;
       }
    }
    

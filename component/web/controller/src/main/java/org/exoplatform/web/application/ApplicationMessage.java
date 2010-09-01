@@ -36,6 +36,8 @@ public class ApplicationMessage implements Serializable
    private String messageKey_;
 
    private Object[] messageArgs_;
+   
+   private boolean argsLocalized = true;
 
    public ApplicationMessage(String key, Object[] args)
    {
@@ -67,6 +69,16 @@ public class ApplicationMessage implements Serializable
    public void setType(int type)
    {
       this.type_ = type;
+   }
+
+   public void setArgsLocalized(boolean argsLocalized)
+   {
+      this.argsLocalized = argsLocalized;
+   }
+
+   public boolean isArgsLocalized()
+   {
+      return argsLocalized;
    }
 
 }

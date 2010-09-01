@@ -299,7 +299,7 @@ public class UITree extends UIComponent
             "\" onclick=\"eXo.portal.UIPortalControl.collapseTree(this)").append("\">");
       }
       else {//Null item
-         builder.append(" <div class=\"").append(nodeIcon).append("\">");
+         builder.append(" <div class=\"").append(nodeIcon).append("\" onclick=\"").append(actionLink).append("\">");
       }
       if (uiPopupMenu_ == null)
       {

@@ -19,28 +19,29 @@
 
 package org.exoplatform.web.application.javascript;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.PushbackInputStream;
+import java.io.PrintWriter;
+import java.io.PushbackReader;
+import java.io.Reader;
+import java.io.Writer;
 
 public class JSMin
 {
    private static final int EOF = -1;
 
-   private PushbackInputStream in;
+   private PushbackReader in;
 
-   private OutputStream out;
+   private Writer out;
 
    private int theA;
 
    private int theB;
 
-   public JSMin(InputStream in, OutputStream out)
+   public JSMin(Reader in, Writer out)
    {
-      this.in = new PushbackInputStream(in);
+      this.in = new PushbackReader(in);
       this.out = out;
    }
 
@@ -133,9 +134,10 @@ public class JSMin
    }
 
    /**
-    * action -- do something! What you do is determined by the argument: 1 Output
-    * A. Copy B to A. Get the next B. 2 Copy B to A. Get the next B. (Delete A).
-    * 3 Get the next B. (Delete B). action treats a string as a single character.
+    * action -- do something! What you do is determined by the argument: <br/>
+    * 1. Output A. Copy B to A. Get the next B. <br/>
+    * 2. Copy B to A. Get the next B. (Delete A). <br/>
+    * 3. Get the next B. (Delete B). action treats a string as a single character. <br/>
     * Wow! action recognizes a regular expression if it is preceded by ( or , or =.
     */
 
@@ -310,7 +312,7 @@ public class JSMin
    {
       try
       {
-         JSMin jsmin = new JSMin(new FileInputStream(arg[0]), System.out);
+         JSMin jsmin = new JSMin(new FileReader(arg[0]), new PrintWriter(System.out));
          jsmin.jsmin();
       }
       catch (FileNotFoundException e)

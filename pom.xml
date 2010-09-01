@@ -792,15 +792,10 @@
       </resources>
       <testResources>
          <testResource>
-            <directory>src/test/java</directory>
-            <includes>
-               <include>**/*.properties</include>
-               <include>**/*.xml</include>
-               <include>**/*.jstmpl</include>
-            </includes>
-         </testResource>
-         <testResource>
             <directory>src/test/resources</directory>
+            <includes>
+               <include>**/*.*</include>
+            </includes>
          </testResource>
       </testResources>
       <pluginManagement>

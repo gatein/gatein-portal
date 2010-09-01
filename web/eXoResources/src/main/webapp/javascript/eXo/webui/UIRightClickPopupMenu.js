@@ -177,7 +177,7 @@ UIRightClickPopupMenu.prototype.clickRightMouse = function(event, elemt, menuId,
 		contextMenu.style.right = intLeft + "px" ;
 	}
 	ctxMenuContainer.style.width = ctxMenuContainer.offsetWidth + "px" ;
-	contextMenu.style.top = intTop + "px";
+	contextMenu.style.top = intTop + 1 + "px";
 };
 
 eXo.webui.UIRightClickPopupMenu = new UIRightClickPopupMenu() ;

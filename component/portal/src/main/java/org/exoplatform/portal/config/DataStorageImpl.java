@@ -18,6 +18,13 @@
  */
 package org.exoplatform.portal.config;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.List;
+
 import org.exoplatform.commons.utils.LazyPageList;
 import org.exoplatform.commons.utils.ListAccess;
 import org.exoplatform.portal.application.PortletPreferences;
@@ -40,9 +47,6 @@ import org.exoplatform.portal.pom.data.PageKey;
 import org.exoplatform.portal.pom.data.PortalData;
 import org.exoplatform.portal.pom.data.PortalKey;
 import org.exoplatform.services.listener.ListenerService;
-
-import java.lang.reflect.Array;
-import java.util.*;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -339,5 +343,17 @@ public class DataStorageImpl implements DataStorage
    public void saveDashboard(Dashboard dashboard) throws Exception
    {
       delegate.saveDashboard(dashboard.build());
+   }
+   
+   @Override
+   public <A> A adapt(ModelObject modelObject, Class<A> type)
+   {
+      return delegate.adapt(modelObject.build(), type);
+   }
+   
+   @Override
+   public <A> A adapt(ModelObject modelObject, Class<A> type, boolean create)
+   {
+      return delegate.adapt(modelObject.build(), type, create);
    }
 }

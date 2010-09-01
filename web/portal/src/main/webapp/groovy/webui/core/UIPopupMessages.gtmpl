@@ -59,9 +59,15 @@
 			String msgValue = _ctx.appRes(mess.messageKey);
 			Object[] msgArguments = mess.getMessageAruments();
 			if(msgArguments != null && msgArguments.length > 0) {
-				for(i in 0..msgArguments.length-1){ 
-					msgValue = msgValue.replace("{" + i + "}", _ctx.appRes(msgArguments [i]));
-				}
+			    if (mess.isArgsLocalized()) {
+					for(i in 0..msgArguments.length-1) { 				   
+						msgValue = msgValue.replace("{" + i + "}", _ctx.appRes(msgArguments [i]));
+					}
+			    } else {
+			        for(i in 0..msgArguments.length-1) { 				   
+						msgValue = msgValue.replace("{" + i + "}", msgArguments [i]);
+					}
+			    }
 			}
 			println msgValue;
 			println "						 </div>";

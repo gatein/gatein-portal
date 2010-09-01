@@ -54,6 +54,12 @@
 	margin-top: 9px;
 }
 
+.UIItemSelector .ItemDetailList .TemplateContainer .BasicPortalImage {
+	height: 222px;
+	background: url('background/TemplateContainer.jpg') no-repeat center -392px;
+	margin-top: 9px;
+}
+
 .UIItemSelector .TemplateContainer .DefaultImage {
 	height: 222px;
 	background: url('background/TemplateContainer.jpg') no-repeat center -392px;

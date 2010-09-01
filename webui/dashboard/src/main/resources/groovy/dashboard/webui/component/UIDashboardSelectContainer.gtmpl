@@ -36,6 +36,9 @@
 									<%
 									List lstGadgets = uicomponent.getGadgetsOfCategory(category);
 										if(lstGadgets != null){
+                                           if(lstGadgets.size() >= 20)
+                                              uiPopup.setWindowSize(-1, 600);
+                                        
 											for(gadget in lstGadgets){
 									%>
 													 	<div class="UIGadget SelectItem Item" id="${gadget.getId()}" style="top:0px; left:0px;">

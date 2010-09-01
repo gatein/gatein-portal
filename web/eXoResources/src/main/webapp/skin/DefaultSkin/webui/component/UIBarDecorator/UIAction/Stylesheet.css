@@ -52,52 +52,6 @@
 	background-repeat: no-repeat;
 }
 
-/*##############################-Normal ActionButton-################################*/
-
-.UIAction .NormalStyle {
-}
-
-.UIAction .NormalStyle .ButtonLeft {
-	background: url('background/NormalStyle.gif') no-repeat left top;
-	padding: 0px 0px 0px 3px;
-}
-
-.UIAction .NormalStyle .ButtonRight {
-	background: url('background/NormalStyle.gif') no-repeat right top;
-	padding: 0px 3px 0px 0px ;
-}
-
-.UIAction .NormalStyle .ButtonMiddle {
-	line-height: 22px;
-	background: url('background/NormalStyle.gif') repeat-x bottom;
-	padding: 0px 12px;	
-	display: table-cell;
-	white-space: nowrap;
-}
-
-/*##############################-Disabled ActionButton-################################*/
-
-.UIAction .DisabledStyle {
-}
-
-.UIAction .DisabledStyle .ButtonLeft {
-	background: url('background/DisabledStyle.gif') no-repeat left top;
-	padding: 0px 0px 0px 3px;
-}
-
-.UIAction .DisabledStyle .ButtonRight {
-	background: url('background/DisabledStyle.gif') no-repeat right top;
-	padding: 0px 3px 0px 0px ;
-}
-
-.UIAction .DisabledStyle .ButtonMiddle {
-	height: 22px; text-align: center; 
-	background: url('background/DisabledStyle.gif') repeat-x bottom;
-	padding: 0px 12px;
-	display: table-cell;
-}
-
-
 /*##############################-LightBlueStyle ActionButton-################################*/
 
 .UIAction .LightBlueStyle .ButtonLeft {
@@ -184,62 +138,4 @@
 	line-height: 20px;
 	padding-left: 22px; /* orientation=lt */
 	padding-right: 22px; /* orientation=rt */
-}
-
-/***************************** BlueButton ***************************/
-
-.UIAction .BlueButton .ButtonLeft {
-	background: url('background/BtnBg.gif') no-repeat left top;
-	padding-left: 8px;
-}
-
-.UIAction .BlueButton .ButtonRight {
-	background: url('background/BtnBg.gif') no-repeat right top;
-	padding-right: 9px;
-}
-
-.UIAction .BlueButton .ButtonMiddle {
-	background: url('background/BtnBg.gif') repeat-x left -32px;
-	line-height: 32px;
-	font-size: 12px;
-	display: block;
-	padding: 0px 15px 0px 15px;
-}
-
-.UIAction .BlueButton .ButtonMiddle a {
-	font-weight: bold;
-	color: #1d1d1d;
-}
-
-.UIAction .BlueButton .ButtonMiddle a:hover {
-	color: white;
-}
-
-/**********************DarkGrayButton***********************/
-
-.UIAction .DarkGrayButton .ButtonLeft {
-	background: url('background/BtnBg.gif') no-repeat left -64px;
-	padding-left: 7px;
-}
-
-.UIAction .DarkGrayButton .ButtonRight{
-	background: url('background/BtnBg.gif') no-repeat right -64px;
-	padding-right: 6px;
-}
-
-.UIAction .DarkGrayButton .ButtonMiddle {
-	background: url('background/BtnBg.gif') repeat-x left -96px;
-	line-height: 32px;
-	padding: 0px 15px 0px 15px;
-	font-size: 12px;
-	display: block;
-}
-
-.UIAction .DarkGrayButton .ButtonMiddle a {
-	font-weight: bold;
-	color: #1d1d1d;
-}
-
-.UIAction .DarkGrayButton .ButtonMiddle a:hover {
-	color: white;
 }

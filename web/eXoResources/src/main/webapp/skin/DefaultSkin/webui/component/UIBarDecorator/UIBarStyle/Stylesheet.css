@@ -17,52 +17,6 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-/*###########################-RoundedBarStyle-###########################*/
-	
-.UIBarStyle .RoundedBarStyle {
-	height: 25px;
-}
-
-.UIBarStyle .RoundedBarStyle .LeftBar {
-	background: url('background/RoundedBarStyle.gif') no-repeat top left;
-	padding: 0px 0px 0px 8px;
-}
-
-.UIBarStyle .RoundedBarStyle .RightBar {
-	background: url('background/RoundedBarStyle.gif') no-repeat top right;
-	padding: 0px 8px 0px 0px;
-}
-
-.UIBarStyle .RoundedBarStyle .MiddleBar {
-	height: 25px;
-	line-height: 25px;
-	background: url('background/RoundedBarStyle.gif') repeat-x bottom;	
-}
-
-/*###########################-WhiteRoundedBarStyle-###########################*/
-
-.UIBarStyle .WhiteRoundedBarStyle {
-	height: 25px;
-}
-
-.UIBarStyle .WhiteRoundedBarStyle .LeftBar {
-	background: url('background/WhiteRoundedBarStyle.gif') no-repeat left;
-	padding: 0px 0px 0px 12px;
-}
-
-.UIBarStyle .WhiteRoundedBarStyle .RightBar {
-	background: url('background/WhiteRoundedBarStyle.gif') no-repeat right;
-	padding: 0px 12px 0px 0px;
-}
-
-.UIBarStyle .WhiteRoundedBarStyle .MiddleBar {
-	height: 25px;
-	line-height: 25px;
-	background: white;
-	border-top: solid 1px #c0bfbf;
-	border-bottom: solid 1px #c0bfbf;	
-}
-
 /*###########################-BarStyle2-###########################*/
 
 .UIBarStyle .BarStyle2 {
@@ -86,50 +40,6 @@
 	line-height: 39px;
 	background: url('background/BarStyle2.gif') repeat-x bottom;
 }
-
-/*###########################-NavyBluePolygonBar32Style-###########################*/
-
-.UIBarStyle .NavyBluePolygonBar32Style {
-	height: 32px;
-}
-
-.UIBarStyle .NavyBluePolygonBar32Style .LeftBar {
-	background: url('background/NavyBluePolygonBar32Style.gif') no-repeat top left;
-	padding: 0px 0px 0px 3px;
-}
-
-.UIBarStyle .NavyBluePolygonBar32Style .RightBar {
-	background: url('background/NavyBluePolygonBar32Style.gif') no-repeat top right;
-	padding: 0px 3px 0px 0px;
-}
-
-.UIBarStyle .NavyBluePolygonBar32Style .MiddleBar {	
-	line-height: 32px;
-	background: url('background/NavyBluePolygonBar32Style.gif') repeat-x bottom;
-}
-
-/*###########################-Style3Bar-###########################*/
-
-.UIBarStyle .Style3 {
-	height: 26px;
-}
-
-.UIBarStyle .Style3 .LeftBar {
-	background: url('background/Style3.gif') no-repeat top left;
-	padding: 0px 0px 0px 3px;
-}
-
-.UIBarStyle .Style3 .RightBar {
-	background: url('background/Style3.gif') no-repeat top right;
-	padding: 0px 3px 0px 0px;
-}
-
-.UIBarStyle .Style3 .MiddleBar {
-	height: 26px;
-	line-height: 26px;
-	background: url('background/Style3.gif') repeat-x bottom;
-}
-
 /*###########################-SmoothNavy40Style-###########################*/
 
 .UIBarStyle .SmoothNavy40Style {
@@ -151,23 +61,6 @@
 	line-height: 40px;
 	vertical-align: middle;
 	background: url('background/SmoothNavy40Style.gif') repeat-x bottom;
-}
-
-/*###########################-ControlBar-###########################*/
-
-.UIBarStyle .ControlBar .LeftBar {
-	background: url('background/ControlBar.gif') no-repeat top left;
-	padding: 0px 0px 0px 12px;
-}
-
-.UIBarStyle .ControlBar .RightBar {
-	padding: 0px;
-}
-
-.UIBarStyle .ControlBar .MiddleBar {
-	background: url('background/ControlBar.gif') repeat-x bottom;
-	padding: 0px 5px 0px 0px;
-	height: 27px;
 }
 
 /*============================== Title Bar ========================================*/

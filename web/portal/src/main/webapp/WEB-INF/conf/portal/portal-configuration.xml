@@ -122,10 +122,13 @@
 	            </field>
 	            <field name="portalTemplates">
 	              <collection type="java.util.HashSet">
-									<value>
+	                <value>
+	                  <string>basic</string>
+	                </value>
+	                <value>
 	                  <string>classic</string>
 	                </value>
-								</collection>
+				  </collection>
 	            </field>
 	            <field name="groupTemplates">
 	              <collection type="java.util.HashSet">

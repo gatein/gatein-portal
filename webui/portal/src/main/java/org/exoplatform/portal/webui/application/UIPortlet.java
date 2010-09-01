@@ -23,6 +23,7 @@ import org.exoplatform.Constants;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.application.UserProfileLifecycle;
+import org.exoplatform.portal.application.state.ContextualPropertyManager;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.NoSuchDataException;
 import org.exoplatform.portal.config.model.ApplicationType;
@@ -615,11 +616,23 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
       Map<String, String[]> publicParams = uiPortal.getPublicParameters();
       Set<String> allPublicParamsNames = publicParams.keySet();
       List<String> supportedPublicParamNames = getPublicRenderParamNames();
+      
       for (String oneOfAllParams : allPublicParamsNames)
       {
          if (supportedPublicParamNames.contains(oneOfAllParams))
          {
             publicParamsMap.put(oneOfAllParams, publicParams.get(oneOfAllParams));
+         }
+      }
+      
+      //Handle exposed portal contextual properties
+      ContextualPropertyManager propertyManager = this.getApplicationComponent(ContextualPropertyManager.class);
+      Map<QName, String[]> exposedPortalState = propertyManager.getProperties(this);
+      for(QName qName : exposedPortalState.keySet())
+      {
+         if(supportsPublicParam(qName.getLocalPart()))
+         {
+            publicParamsMap.put(qName.toString(), exposedPortalState.get(qName));
          }
       }
       return publicParamsMap;

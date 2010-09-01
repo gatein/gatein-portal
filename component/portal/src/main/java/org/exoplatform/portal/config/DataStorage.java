@@ -26,6 +26,7 @@ import org.exoplatform.portal.config.model.ApplicationState;
 import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.config.model.Container;
 import org.exoplatform.portal.config.model.Dashboard;
+import org.exoplatform.portal.config.model.ModelObject;
 import org.exoplatform.portal.pom.data.ModelChange;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
@@ -270,4 +271,13 @@ public interface DataStorage
     * @throws Exception any exception
     */
    public List<String> getAllPortalNames() throws Exception;
+   
+   /*************************************************************
+     Public API to access/modify MOP mixin, temporarily put here
+   **************************************************************/
+   
+   public <A> A adapt(ModelObject modelObject, Class<A> type);
+   
+   public <A> A adapt(ModelObject modelObject, Class<A> type, boolean create);
+   
 }

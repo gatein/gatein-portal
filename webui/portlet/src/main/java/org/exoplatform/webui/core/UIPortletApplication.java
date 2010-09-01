@@ -19,15 +19,17 @@
 
 package org.exoplatform.webui.core;
 
-import org.exoplatform.webui.application.WebuiApplication;
-import org.exoplatform.webui.application.WebuiRequestContext;
-import org.exoplatform.webui.application.portlet.PortletRequestContext;
-import org.exoplatform.commons.serialization.api.annotations.Serialized;
-
 import java.io.Writer;
+import java.util.Map;
 import java.util.Set;
 
 import javax.portlet.WindowState;
+
+import org.apache.commons.collections.map.HashedMap;
+import org.exoplatform.commons.serialization.api.annotations.Serialized;
+import org.exoplatform.webui.application.WebuiApplication;
+import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.portlet.PortletRequestContext;
 
 @Serialized
 abstract public class UIPortletApplication extends UIApplication
@@ -35,6 +37,8 @@ abstract public class UIPortletApplication extends UIApplication
    private int minWidth = 300;
 
    private int minHeight = 300;
+   
+   private Map<String, UIPopupMessages> _uiPopupMessages;
 
    static public String VIEW_MODE = "ViewMode";
 
@@ -46,6 +50,29 @@ abstract public class UIPortletApplication extends UIApplication
 
    public UIPortletApplication() throws Exception
    {
+      _uiPopupMessages = new HashedMap();
+   }
+
+   @Override
+   public UIPopupMessages getUIPopupMessages()
+   {
+      PortletRequestContext pContext = (PortletRequestContext)WebuiRequestContext.getCurrentInstance();
+      String currMode = pContext.getApplicationMode().toString();
+      
+      if (!_uiPopupMessages.containsKey(currMode)) {
+         try
+         {
+            UIPopupMessages popMsg = createUIComponent(UIPopupMessages.class, null, null);
+            popMsg.setId("_" + popMsg.hashCode());
+            _uiPopupMessages.put(currMode, popMsg);
+         }
+         catch (Exception e)
+         {
+            return null;
+         }         
+      }
+      
+      return _uiPopupMessages.get(currMode);
    }
 
    @Deprecated

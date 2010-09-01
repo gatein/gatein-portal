@@ -20,6 +20,7 @@
 package org.exoplatform.applicationregistry.webui.component;
 
 import org.exoplatform.application.registry.Application;
+import org.exoplatform.application.registry.ApplicationCategory;
 import org.exoplatform.application.registry.ApplicationRegistryService;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.webui.portal.UIPortal;
@@ -112,8 +113,9 @@ public class UIApplicationForm extends UIForm
             application.setDisplayName(application.getApplicationName());
          }
          service.update(application);
-         //uiOrganizer.setSelectedApplication(uiOrganizer.getSelectedApplication());
+         ApplicationCategory selectedCat = uiOrganizer.getSelectedCategory();
          uiOrganizer.reload();
+         uiOrganizer.setSelectedCategory(selectedCat);
          uiOrganizer.setSelectedApplication(application);
          ctx.addUIComponentToUpdateByAjax(uiOrganizer);
       }

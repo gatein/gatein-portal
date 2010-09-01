@@ -19,6 +19,12 @@
 
 package org.exoplatform.portal.pom.config;
 
+import java.io.ByteArrayInputStream;
+import java.util.Comparator;
+import java.util.List;
+import java.util.UUID;
+
+import org.chromattic.api.ChromatticSession;
 import org.exoplatform.commons.utils.IOUtil;
 import org.exoplatform.commons.utils.LazyPageList;
 import org.exoplatform.container.configuration.ConfigurationManager;
@@ -41,6 +47,7 @@ import org.exoplatform.portal.pom.config.tasks.PreferencesTask;
 import org.exoplatform.portal.pom.config.tasks.SearchTask;
 import org.exoplatform.portal.pom.data.DashboardData;
 import org.exoplatform.portal.pom.data.ModelChange;
+import org.exoplatform.portal.pom.data.ModelData;
 import org.exoplatform.portal.pom.data.ModelDataStorage;
 import org.exoplatform.portal.pom.data.NavigationData;
 import org.exoplatform.portal.pom.data.NavigationKey;
@@ -50,13 +57,7 @@ import org.exoplatform.portal.pom.data.PortalData;
 import org.exoplatform.portal.pom.data.PortalKey;
 import org.jibx.runtime.BindingDirectory;
 import org.jibx.runtime.IBindingFactory;
-import org.jibx.runtime.IUnmarshallingContext;
 import org.jibx.runtime.impl.UnmarshallingContext;
-
-import java.io.ByteArrayInputStream;
-import java.util.Comparator;
-import java.util.List;
-import java.util.UUID;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -312,5 +313,39 @@ public class POMDataStorage implements ModelDataStorage
             return null;
          }
       });
+   }
+   
+   @Override
+   public <A> A adapt(ModelData modelData, Class<A> type)
+   {
+      return adapt(modelData, type, true);
+   }
+   
+   @Override
+   public <A> A adapt(ModelData modelData, Class<A> type, boolean create)
+   {
+      try
+      {
+         POMSession pomSession = pomMgr.getSession();
+         ChromatticSession chromSession = pomSession.getSession();
+         
+         //TODO: Deal with the case where modelData is not persisted before invocation to adapt
+         // Get the workspace object
+         Object o = pomSession.findObjectById(modelData.getStorageId());
+         
+         A a = chromSession.getEmbedded(o, type);
+         if(a == null && create)
+         {
+            a = chromSession.create(type);
+            chromSession.setEmbedded(o, type, a);
+         }
+         
+         return a;
+      }
+      catch (Exception ex)
+      {
+         ex.printStackTrace();
+         return null;
+      }
    }
 }

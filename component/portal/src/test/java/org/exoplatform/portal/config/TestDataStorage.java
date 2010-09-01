@@ -216,6 +216,56 @@ public class TestDataStorage extends AbstractPortalTest
       assertEquals(true, page2.isShowMaxWindow());
    }
    
+   public void testRenameNode() throws Exception
+   {
+      //Create node
+      PageNode pageNode = new PageNode();
+      String name = "MyPageNode";
+      pageNode.setName(name);
+      pageNode.setUri(name);
+      pageNode.setLabel(name);
+      
+      //add node to page navigation
+      String ownerId = "root";
+      String ownerType = "user";
+      PageNavigation nav = storage_.getPageNavigation(ownerType, ownerId);
+      assertNotNull(nav);
+      assertEquals(ownerId, nav.getOwnerId());
+      assertEquals(ownerType, nav.getOwnerType());
+      nav.addNode(pageNode);
+      storage_.save(nav);
+      
+      //Rename node
+      PageNavigation nav2 = storage_.getPageNavigation(ownerType, ownerId);
+      assertNotNull(nav2);
+      assertEquals(ownerId, nav2.getOwnerId());
+      assertEquals(ownerType, nav2.getOwnerType());
+      
+      PageNode pageNode2 = nav2.getNode(name);
+      assertNotNull(pageNode2);
+      assertEquals(name, pageNode2.getName());
+      assertEquals(name, pageNode2.getLabel());
+      assertEquals(name, pageNode2.getUri());
+
+      String newName = "NewMyPageNode";
+      pageNode2.setName(newName);
+      pageNode2.setUri(newName);
+      pageNode2.setLabel(newName);
+      storage_.save(nav2);
+      
+      //Get and compare
+      PageNavigation nav3 = storage_.getPageNavigation(ownerType, ownerId);
+      assertNotNull(nav3);
+      assertEquals(ownerId, nav3.getOwnerId());
+      assertEquals(ownerType, nav3.getOwnerType());
+      
+      PageNode pageNode3 = nav3.getNode(newName);
+      assertNotNull(pageNode3);
+      assertEquals(newName, pageNode3.getName());
+      assertEquals(newName, pageNode3.getLabel());
+      assertEquals(newName, pageNode3.getUri());
+   }
+   
    public void testChangingPortletThemeInPage() throws Exception {
       Page page;
       Application<?> app;

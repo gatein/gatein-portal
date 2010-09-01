@@ -92,6 +92,7 @@
 	font-weight: bold;
 	line-height: 14px;
 	max-width: 370px;
+	overflow: hidden;
 }
 
 .RemoveFile {

@@ -42,6 +42,8 @@ import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -194,6 +196,8 @@ public class UIUserProfileInputSet extends UIFormInputSet
          }
          lang.add(option);
       }
+      
+      Collections.sort(lang, new LanguagesComparator());
 
       langSelectBox.setOptions(lang);
    }
@@ -286,5 +290,12 @@ public class UIUserProfileInputSet extends UIFormInputSet
       ResourceBundle res = service.getResourceBundle("locale.portal.webui", locale);
       return res;
    }
-
+   
+   private class LanguagesComparator implements Comparator<SelectItemOption>
+   {
+      public int compare(SelectItemOption item0, SelectItemOption item1)
+      {
+         return item0.getLabel().compareToIgnoreCase(item1.getLabel());
+      }
+   }
 }

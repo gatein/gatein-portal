@@ -21,13 +21,29 @@ package org.exoplatform.web.application.javascript;
 
 import org.exoplatform.commons.utils.Safe;
 import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.portal.resource.compressor.ResourceCompressor;
+import org.exoplatform.portal.resource.compressor.ResourceType;
+import org.exoplatform.portal.resource.compressor.impl.ResourceCompressorService;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 import org.gatein.wci.impl.DefaultServletContainerFactory;
 import org.picocontainer.Startable;
 
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.Reader;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletContext;
 
@@ -53,12 +69,15 @@ public class JavascriptConfigService implements Startable
    private JavascriptDeployer deployer;
 
    private JavascriptRemoval removal;
+   
+   private ResourceCompressor compressor;
 
    /** Used to clear merged Javascript on undeploying an webapp */
    private Map<String, List<String>> object_view_of_merged_JS;
 
-   public JavascriptConfigService(ExoContainerContext context)
+   public JavascriptConfigService(ExoContainerContext context, ResourceCompressor compressor)
    {
+      this.compressor = compressor;
       availableScripts_ = new ArrayList<String>();
       availableScriptsPaths_ = new ArrayList<String>();
       availableScriptsKey_ = new ArrayList<Javascript>();
@@ -111,7 +130,6 @@ public class JavascriptConfigService implements Startable
     * @param jsKeys
     *          new list of JavaScript will replace current available JavaScript
     */
-   @SuppressWarnings("unchecked")
    public synchronized void addJavascripts(List<Javascript> jsKeys)
    {
       availableScriptsKey_.addAll(jsKeys);
@@ -282,11 +300,11 @@ public class JavascriptConfigService implements Startable
          // Minify
          try
          {
-            ByteArrayInputStream input = new ByteArrayInputStream(bytes);
-            ByteArrayOutputStream jsStream = new ByteArrayOutputStream();
-            JSMin jsMin = new JSMin(input, jsStream);
-            jsMin.jsmin();
-            jsBytes = jsStream.toByteArray();
+            Reader input = new StringReader(s);
+            StringWriter output = new StringWriter();
+            compressor.compress(input, output, ResourceType.JAVASCRIPT);
+            
+            jsBytes = output.toString().getBytes();
          }
          catch (Exception e)
          {

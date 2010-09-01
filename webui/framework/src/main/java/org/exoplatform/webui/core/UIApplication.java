@@ -61,6 +61,11 @@ abstract public class UIApplication extends UIContainer
       owner = s;
    }
 
+   /**
+    * Return the common UIPopupMessages
+    * UIPortletApplication will override this method an return difference UIPopupMessage for difference Portlet modes
+    * @return UIPopupMessages
+    */
    public UIPopupMessages getUIPopupMessages()
    {
       return uiPopupMessages_;
@@ -68,12 +73,12 @@ abstract public class UIApplication extends UIContainer
 
    public void addMessage(ApplicationMessage message)
    {
-      uiPopupMessages_.addMessage(message);
+      getUIPopupMessages().addMessage(message);
    }
 
    public void clearMessages()
    {
-      uiPopupMessages_.clearMessages();
+      getUIPopupMessages().clearMessages();
    }
 
    public long getLastAccessApplication()
@@ -94,18 +99,18 @@ abstract public class UIApplication extends UIContainer
    @SuppressWarnings("unchecked")
    public <T extends UIComponent> T findComponentById(String lookupId)
    {
-      if (uiPopupMessages_.getId().equals(lookupId))
-         return (T)uiPopupMessages_;
+      if (getUIPopupMessages().getId().equals(lookupId))
+         return (T)getUIPopupMessages();
       return (T)super.findComponentById(lookupId);
    }
 
    public void renderChildren() throws Exception
    {
       super.renderChildren();
-      if (uiPopupMessages_ == null)
+      if (getUIPopupMessages() == null)
          return;
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
-      uiPopupMessages_.processRender(context);
+      getUIPopupMessages().processRender(context);
    }
 
    public void processAction(WebuiRequestContext context) throws Exception
@@ -116,14 +121,14 @@ abstract public class UIApplication extends UIContainer
       }
       catch (MessageException ex)
       {
-         uiPopupMessages_.addMessage(ex.getDetailMessage());
+         getUIPopupMessages().addMessage(ex.getDetailMessage());
       }
       catch (Throwable t)
       {
          Object[] args = {t.getMessage()};
          ApplicationMessage msg =
             new ApplicationMessage("UIApplication.msg.unknown-error", args, ApplicationMessage.ERROR);
-         uiPopupMessages_.addMessage(msg);
+         getUIPopupMessages().addMessage(msg);
          log.error("Error during the processAction phase", t);
       }
    }

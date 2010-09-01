@@ -233,8 +233,10 @@ public class UIGroupMembershipForm extends UIForm
          }
          if (check)
          {
-            uiApp.addMessage(new ApplicationMessage("UIGroupMembershipForm.msg.user-not-exist",
-               new String[]{listNotExist}));
+            ApplicationMessage msg  = new ApplicationMessage("UIGroupMembershipForm.msg.user-not-exist",
+                              new String[]{listNotExist});
+            msg.setArgsLocalized(false);
+            uiApp.addMessage(msg);
             return;
          }
 

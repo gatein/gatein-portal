@@ -32,6 +32,8 @@ import org.exoplatform.management.annotations.ManagedName;
 import org.exoplatform.management.jmx.annotations.NameTemplate;
 import org.exoplatform.management.jmx.annotations.Property;
 import org.exoplatform.management.rest.annotations.RESTEndpoint;
+import org.exoplatform.portal.resource.compressor.ResourceCompressor;
+import org.exoplatform.portal.resource.compressor.ResourceType;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.resources.Orientation;
@@ -41,6 +43,8 @@ import org.picocontainer.Startable;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -83,17 +87,17 @@ public class SkinService implements Startable
 
    /** Immutable and therefore thread safe. */
    private static final Pattern IMPORT_PATTERN =
-      Pattern.compile("(@import\\s+" + "url" + LEFT_P + "['\"]?" + ")([^'\"]+.css)(" + "['\"]?" + RIGHT_P + "\\s*;)");
+      Pattern.compile("(@import\\s+" + "url" + LEFT_P + "['\"]?" + ")([^'\";]+.css)(" + "['\"]?" + RIGHT_P + "\\s*;)");
 
    /** Immutable and therefore thread safe. */
    private static final Pattern BACKGROUND_PATTERN =
-      Pattern.compile("(background.*:.*url" + LEFT_P + "['\"]?" + ")([^'\"]+)(" + "['\"]?" + RIGHT_P + ".*;)");
+      Pattern.compile("(background[^;]+url" + LEFT_P + "['\"]?" + ")([^'\";]+)(" + "['\"]?" + RIGHT_P + "[^;]*;)");  
 
    /** Immutable and therefore thread safe. */
-   private static final Pattern LT = Pattern.compile("/\\*\\s*orientation=lt\\s*\\*/");
+   private static final Pattern LT = Pattern.compile("[^{;]*;\\s*/\\*\\s*orientation=lt\\s*\\*/");
 
    /** Immutable and therefore thread safe. */
-   private static final Pattern RT = Pattern.compile("/\\*\\s*orientation=rt\\s*\\*/");
+   private static final Pattern RT = Pattern.compile("[^{;]*;\\s*/\\*\\s*orientation=rt\\s*\\*/");
 
    /** One month caching. */
    private static final int ONE_MONTH = 2592000;
@@ -134,8 +138,11 @@ public class SkinService implements Startable
     */
    final String id = Long.toString(System.currentTimeMillis());
 
-   public SkinService(ExoContainerContext context)
+   private ResourceCompressor compressor;
+
+   public SkinService(ExoContainerContext context, ResourceCompressor compressor)
    {
+      this.compressor = compressor;
       portalSkins_ = new LinkedHashMap<SkinKey, SkinConfig>();
       skinConfigs_ = new LinkedHashMap<SkinKey, SkinConfig>(20);
       availableSkins_ = new HashSet<String>(5);
@@ -233,6 +240,16 @@ public class SkinService implements Startable
          {
             log.debug("Adding Portal skin : Bind " + key + " to " + skinConfig);
          }
+      }
+      try
+      {
+         StringWriter output = new StringWriter();
+         compressor.compress(new StringReader(cssData), output, ResourceType.STYLESHEET);
+         cssData = output.toString();
+      }
+      catch (Exception e)
+      {
+         log.debug("Error when compressing CSS, will use normal CSS instead", e);
       }
       ltCache.put(cssPath, new CachedStylesheet(cssData));
       rtCache.put(cssPath, new CachedStylesheet(cssData));
@@ -434,15 +451,28 @@ public class SkinService implements Startable
 
          //
          Map<String, CachedStylesheet> cache = orientation == Orientation.LT ? ltCache : rtCache;
-         CachedStylesheet css = cache.get(path);
-         if (css == null)
+         CachedStylesheet cachedCss = cache.get(path);
+         if (cachedCss == null)
          {
-            StringBuilder sb = new StringBuilder();
+            StringBuffer sb = new StringBuffer();
             processCSS(sb, path, orientation, true);
-            css = new CachedStylesheet(sb.toString());
-            cache.put(path, css);
+            String css;
+            try
+            {
+               StringWriter output = new StringWriter();
+               compressor.compress(new StringReader(sb.toString()), output, ResourceType.STYLESHEET);
+               css = output.toString();
+            }
+            catch (Exception e)
+            {
+               log.debug("Error when compressing CSS, will use normal CSS instead", e);
+               css = sb.toString();
+            }
+            
+            cachedCss = new CachedStylesheet(css);
+            cache.put(path, cachedCss);
          }
-         css.writeTo(renderer.getOutput());
+         cachedCss.writeTo(renderer.getOutput());
       }
       else
       {
@@ -619,7 +649,7 @@ public class SkinService implements Startable
       }
       return resource;
    }
-
+   
    /**
     * Apply CSS of skin
     * @param appendable
@@ -632,7 +662,7 @@ public class SkinService implements Startable
    private void processCSS(Appendable appendable, String cssPath, Orientation orientation, boolean merge)
       throws RenderingException, IOException
    {
-      Resource skin = getCSSResource(cssPath, cssPath);
+      Resource skin = getCSSResource(cssPath, cssPath);      
       processCSSRecursively(appendable, merge, skin, orientation);
    }
 
@@ -649,7 +679,6 @@ public class SkinService implements Startable
    private void processCSSRecursively(Appendable appendable, boolean merge, Resource skin, Orientation orientation)
       throws RenderingException, IOException
    {
-
       if(skin == null)
       {
          return;
@@ -664,55 +693,43 @@ public class SkinService implements Startable
       {
          throw new RenderingException("No skin resolved for path " + skin.getResourcePath());
       }
-      BufferedReader reader = new BufferedReader(tmp);
+      BufferedReader reader = new BufferedReader(tmp);            
       try
       {
          while ((line = reader.readLine()) != null)
-         {
+         {            
+            line = proccessOrientation(line, orientation);            
+            line = proccessBackgroundUrl(line, basePath);                       
+            
             Matcher matcher = IMPORT_PATTERN.matcher(line);
-            if (matcher.find())
+            while (matcher.find()) 
             {
-               String includedPath = matcher.group(2);
-               if (includedPath.startsWith("/"))
+               String includedPath = matcher.group(2);               
+               if (!includedPath.startsWith("/")) 
                {
-                  if (merge)
-                  {
-                     Resource ssskin = getCSSResource(includedPath, basePath + skin.getFileName());
-                     processCSSRecursively(appendable, merge, ssskin, orientation);
-                  }
-                  else
-                  {
-                     appendable.append(matcher.group(1)).append(
-                        includedPath.substring(0, includedPath.length() - ".css".length())).append(
-                        getSuffix(orientation)).append(matcher.group(3)).append("\n");
-                  }
+                  includedPath = basePath + includedPath;
                }
-               else
-               {
-                  if (merge)
-                  {
-                     String path = skin.getContextPath() + skin.getParentPath() + includedPath;
-                     Resource ssskin = getCSSResource(path, basePath + skin.getFileName());
-                     processCSSRecursively(appendable, merge, ssskin, orientation);
-                  }
-                  else
-                  {
-                     appendable.append(matcher.group(1));
-                     appendable.append(basePath);
-                     appendable.append(includedPath.substring(0, includedPath.length() - ".css".length()));
-                     appendable.append(getSuffix(orientation));
-                     appendable.append(matcher.group(3));
-                  }
-               }
+               
+               String embeddedPath = includedPath.substring(0, includedPath.length() - ".css".length());
+               StringBuffer strReplace = new StringBuffer();
+               if (merge) 
+               {                  
+                  Resource ssskin = getCSSResource(includedPath, basePath + skin.getFileName());
+                  processCSSRecursively(strReplace, merge, ssskin, orientation);                                    
+               } 
+               else 
+               {                     
+                  strReplace.append(matcher.group(1));
+                  strReplace.append(embeddedPath);
+                  strReplace.append(getSuffix(orientation));
+                  strReplace.append(matcher.group(3));                                    
+               }               
+               String str = strReplace.toString().replaceAll("\\$", "\\\\\\$");
+               matcher.appendReplacement((StringBuffer)appendable, str);
             }
-            else
-            {
-               if (orientation == null || wantInclude(line, orientation))
-               {
-                  append(line, basePath, appendable);
-               }
-            }
-         }
+            matcher.appendTail((StringBuffer)appendable);
+            appendable.append("\n");
+         }         
       }
       finally
       {
@@ -720,39 +737,43 @@ public class SkinService implements Startable
       }
    }
 
-   /**
-    * Filter what if it's annotated with the alternative orientation.
-    * 
-    * @param line
-    *           the line to include
-    * @param orientation
-    *           the orientation
-    * @return true if the line is included
-    */
-   private boolean wantInclude(String line, Orientation orientation)
-   {
-      Pattern orientationPattern = orientation == Orientation.LT ? RT : LT;
-      Matcher matcher2 = orientationPattern.matcher(line);
-      return !matcher2.find();
-   }
-
-   /**
-    * Rewrite background url pattern
-    */
-   private void append(String line, String basePath, Appendable appendable) throws IOException
+   private String proccessBackgroundUrl(String line, String basePath)
    {
       // Rewrite background url pattern
       Matcher matcher = BACKGROUND_PATTERN.matcher(line);
-      if (matcher.find() && !matcher.group(2).startsWith("\"/") && !matcher.group(2).startsWith("'/")
-         && !matcher.group(2).startsWith("/"))
+      
+      StringBuffer tmpBuilder = new StringBuffer();
+      while (matcher.find()) 
       {
-         appendable.append(matcher.group(1)).append(basePath).append(matcher.group(2)).append(matcher.group(3)).append(
-            '\n');
+         if (!matcher.group(2).startsWith("\"/")) {
+            if (!matcher.group(2).startsWith("'/")) {
+               if (!matcher.group(2).startsWith("/")) {
+                  StringBuilder strReplace = new StringBuilder();
+                  strReplace.append(matcher.group(1));
+                  strReplace.append(basePath);
+                  strReplace.append(matcher.group(2));
+                  strReplace.append(matcher.group(3));
+                  
+                  matcher.appendReplacement(tmpBuilder, strReplace.toString());          
+               }             
+            }
+         }                  
       }
-      else
+      matcher.appendTail(tmpBuilder);
+      return tmpBuilder.toString();
+   }
+
+   private String proccessOrientation(String line, Orientation orientation)
+   {
+      Pattern orientationPattern = orientation == Orientation.LT ? RT : LT;
+      Matcher matcher = orientationPattern.matcher(line);
+      StringBuffer tmpBuilder = new StringBuffer();
+      while (matcher.find()) 
       {
-         appendable.append(line).append('\n');
+         matcher.appendReplacement(tmpBuilder, "");
       }
+      matcher.appendTail(tmpBuilder);
+      return tmpBuilder.toString();
    }
 
    /**

@@ -134,10 +134,6 @@
 }
 
 .UIAccountSettingForm .UIForm .HorizontalLayout {
-	border-top: 1px solid white;
-	border-right: none;
-	border-left: none;
-	border-bottom: none;
 	height: 165px;
 	padding: 25px 0px;
 }

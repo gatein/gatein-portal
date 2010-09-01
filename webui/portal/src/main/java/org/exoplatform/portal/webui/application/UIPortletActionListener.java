@@ -277,7 +277,7 @@ public class UIPortletActionListener
       if (state != null)
       {
          UIPage uiPage = uiPortlet.getAncestorOfType(UIPage.class);
-         if (state == WindowState.MAXIMIZED)
+         if (WindowState.MAXIMIZED.equals(state))
          {
             uiPortlet.setCurrentWindowState(WindowState.MAXIMIZED);
             if (uiPage != null)
@@ -285,7 +285,7 @@ public class UIPortletActionListener
                uiPage.setMaximizedUIPortlet(uiPortlet);
             }
          }
-         else if (state == WindowState.MINIMIZED)
+         else if (WindowState.MINIMIZED.equals(state))
          {
             uiPortlet.setCurrentWindowState(WindowState.MINIMIZED);
             if (uiPage != null)

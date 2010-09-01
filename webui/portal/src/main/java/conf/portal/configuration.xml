@@ -37,4 +37,28 @@
       <!--type>org.exoplatform.portal.application.NoBrowserLocalePolicyService</type-->
       <type>org.exoplatform.portal.application.localization.DefaultLocalePolicyService</type>
   </component>
+  
+  <component>
+      <key>org.exoplatform.portal.application.state.ContextualPropertyManager</key>
+      <type>org.exoplatform.portal.application.state.ContextualPropertyManagerImpl</type>
+      <component-plugins>
+         <component-plugin>
+           <name>NavigationalStateProviderPlugin</name>
+           <set-method>addPlugin</set-method>
+           <type>org.exoplatform.portal.application.state.NavigationalStateProviderPlugin</type>
+           <init-params>
+             <value-param>
+               <name>namespaceURI</name>
+               <description>Namespace URI</description>
+               <value>http://www.gatein.org</value>
+             </value-param>
+             <value-param>
+               <name>prefix</name>
+               <description>Prefix of QName</description>
+               <value>gtn</value>
+             </value-param>
+           </init-params>
+         </component-plugin>
+      </component-plugins>
+   </component>  
 </configuration>
