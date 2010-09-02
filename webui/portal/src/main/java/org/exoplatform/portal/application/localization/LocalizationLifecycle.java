@@ -123,7 +123,7 @@ public class LocalizationLifecycle implements ApplicationRequestPhaseLifecycle<W
 
       HttpServletRequest request = HttpServletRequest.class.cast(context.getRequest());
       localeCtx.setBrowserLocales(Collections.list(request.getLocales()));
-      //localeCtx.setCookieLocales(getCookieLocales(request));
+      localeCtx.setCookieLocales(getCookieLocales(request));
       localeCtx.setSessionLocale(getSessionLocale(request));
       localeCtx.setUserProfileLocale(getUserProfileLocale(reqCtx));
       localeCtx.setRemoteUser(reqCtx.getRemoteUser());
@@ -325,8 +325,7 @@ public class LocalizationLifecycle implements ApplicationRequestPhaseLifecycle<W
       }
       else
       {
-         // disabled for now
-         //saveLocaleToCookie(context, loc);
+         saveLocaleToCookie(context, loc);
       }
 
       saveSessionLocale(context, loc);

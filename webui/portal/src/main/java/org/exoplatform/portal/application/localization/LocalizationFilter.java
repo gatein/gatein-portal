@@ -136,7 +136,7 @@ public class LocalizationFilter implements Filter
          localeCtx.setSupportedLocales(supportedLocales);
 
          localeCtx.setBrowserLocales(Collections.list(request.getLocales()));
-         //localeCtx.setCookieLocales(LocalizationLifecycle.getCookieLocales(req));
+         localeCtx.setCookieLocales(LocalizationLifecycle.getCookieLocales(req));
          localeCtx.setSessionLocale(LocalizationLifecycle.getSessionLocale(req));
          localeCtx.setUserProfileLocale(getUserProfileLocale(container, req.getRemoteUser()));
          localeCtx.setRemoteUser(req.getRemoteUser());
