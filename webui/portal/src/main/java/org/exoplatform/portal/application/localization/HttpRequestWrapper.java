@@ -24,7 +24,6 @@ package org.exoplatform.portal.application.localization;
 import org.exoplatform.portal.application.PortalRequestContext;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletRequestWrapper;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.LinkedList;
@@ -34,7 +33,7 @@ import java.util.Locale;
 /**
  * @author <a href="mailto:mstrukel@redhat.com">Marko Strukelj</a>
  */
-public class HttpRequestWrapper extends HttpServletRequestWrapper
+public class HttpRequestWrapper extends BaseHttpRequestWrapper
 {
    private static final List<Locale> EMPTY_LOCALE_LIST = Collections.emptyList();
 
