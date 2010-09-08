@@ -17,6 +17,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>echo</td>
+	<td>-- Check show Site Editor menu --</td>
+	<td></td>
+</tr>
+<tr>
 	<td>windowMaximize</td>
 	<td></td>
 	<td></td>
@@ -172,9 +177,9 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>xpath=//div[@id='UIOrganizationPortlet']//div[@class='ManagementIconContainer']/a[@class='GroupButton']</td>
-	<td>1,1</td>
+	<td></td>
 </tr>
 <tr>
 	<td>echo</td>
@@ -212,7 +217,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>//form[@id='UIGroupMembershipForm']/div[2]/div/table/tbody/tr[1]/td[2]/a</td>
 	<td></td>
 </tr>
@@ -222,7 +227,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>Test_POR_14_043</td>
 	<td></td>
 </tr>
@@ -237,7 +242,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>xpath=//form[@id='UIUserSelector']//div[@class='UIAction']//a[@class='ActionButton LightBlueStyle']</td>
 	<td></td>
 </tr>
@@ -287,7 +292,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>xpath=//div[@id='UIPageBrowser']/div[2]/table/tbody/tr/td/div/div/div/div/a</td>
 	<td></td>
 </tr>
@@ -372,7 +377,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>link=Edit Navigation</td>
 	<td></td>
 </tr>
@@ -382,7 +387,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>link=Add Node</td>
 	<td></td>
 </tr>
@@ -592,7 +597,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>link=Page Management</td>
 	<td></td>
 </tr>
@@ -622,7 +627,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>xpath=//form[@id='UIPageSearch']/div[2]/a</td>
 	<td></td>
 </tr>
@@ -637,7 +642,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>xpath=//img[@title='Delete Page']</td>
 	<td></td>
 </tr>
@@ -652,7 +657,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>xpath=//div[@id='UIPortalApplication']/div[@class='UIPopupWindow UIDragObject']//div[@class='MiddleLeftSideDecorator']//div[@class='UIPopupMessages']/div[@class='MessageActionBar']//a</td>
 	<td></td>
 </tr>
@@ -667,7 +672,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>link=Users and groups management</td>
 	<td></td>
 </tr>
@@ -697,13 +702,13 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>xpath=//img[@alt='DeleteUser']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>assertConfirmation</td>
-	<td>Are you sure you want to delete POR_14_043 user?</td>
+	<td>Are you sure you want to delete Test_POR_14_043 user?</td>
 	<td></td>
 </tr>
 <tr>
@@ -757,14 +762,9 @@
 	<td></td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
-	<td>//div[@id='UINavigationNodeSelector']/div/div/div/div[2]/div/div/div[8]/div[1]/a</td>
-	<td></td>
-</tr>
-<tr>
 	<td>mouseDownRight</td>
-	<td>//div[@id='UINavigationNodeSelector']/div/div/div/div[2]/div/div/div[8]/div[1]/a</td>
-	<td>Test_POR_14_043</td>
+	<td>//a[@class='NodeIcon DefaultPageIcon NodeSelected' and @title='Test_POR_14_043']</td>
+	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
