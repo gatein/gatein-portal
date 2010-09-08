@@ -17,6 +17,16 @@
 	<td></td>
 </tr>
 <tr>
+	<td>echo</td>
+	<td>-- Check when user have right to edit layout of page --</td>
+	<td></td>
+</tr>
+<tr>
+	<td>windowMaximize</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
 	<td>click</td>
 	<td>link=Sign in</td>
 	<td></td>
@@ -59,32 +69,57 @@
 <tr>
 	<td>type</td>
 	<td>username</td>
-	<td>POR_TEST_14_01_045</td>
+	<td>TEST_POR_14_01_045</td>
 </tr>
 <tr>
 	<td>type</td>
 	<td>password</td>
-	<td>POR_TEST_14_01_045</td>
+	<td>TEST_POR_14_01_045</td>
 </tr>
 <tr>
 	<td>type</td>
 	<td>Confirmpassword</td>
-	<td>POR_TEST_14_01_045</td>
+	<td>TEST_POR_14_01_045</td>
 </tr>
 <tr>
 	<td>type</td>
 	<td>firstName</td>
-	<td>POR_TEST_14_01_045</td>
+	<td>TEST_POR_14_01_045</td>
 </tr>
 <tr>
 	<td>type</td>
 	<td>lastName</td>
-	<td>POR_TEST_14_01_045</td>
+	<td>TEST_POR_14_01_045</td>
 </tr>
 <tr>
 	<td>type</td>
 	<td>email</td>
-	<td>POR_TEST_14_01_045@gmail.com</td>
+	<td>TEST_POR_14_01_045@gmail.com</td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>-- Choose User Profile --</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[3]/div/div/div[1]/div/div/div/div/div/div/div/div[1]/div/div/div/div/div/div/div/div/div[2]/div/div/div/div</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[3]/div/div/div[1]/div/div/div/div/div/div/div/div[1]/div/div/div/div/div/div/div/div/div[2]/div/div/div/div</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>user.language</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>user.language</td>
+	<td>label=English</td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
@@ -94,6 +129,16 @@
 <tr>
 	<td>click</td>
 	<td>link=Save</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForTextPresent</td>
+	<td>You have registered a new account.</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>You have registered a new account.</td>
 	<td></td>
 </tr>
 <tr>
@@ -147,18 +192,18 @@
 	<td></td>
 </tr>
 <tr>
+	<td>waitForElementPresent</td>
+	<td>username</td>
+	<td></td>
+</tr>
+<tr>
 	<td>type</td>
 	<td>username</td>
-	<td>POR_TEST_14_01_045</td>
+	<td>TEST_POR_14_01_045</td>
 </tr>
 <tr>
 	<td>click</td>
 	<td>link=Save</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>link=Site</td>
 	<td></td>
 </tr>
 <tr>
@@ -169,6 +214,11 @@
 <tr>
 	<td>clickAndWait</td>
 	<td>link=Page Management</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='UIPageBrowser']/div[2]/table/tbody/tr/td/div/div/div/div/a</td>
 	<td></td>
 </tr>
 <tr>
@@ -187,19 +237,24 @@
 	<td>label=portal</td>
 </tr>
 <tr>
-	<td>click</td>
-	<td>//option[@value='portal']</td>
+	<td>waitForElementPresent</td>
+	<td>name</td>
 	<td></td>
 </tr>
 <tr>
 	<td>type</td>
 	<td>name</td>
-	<td>POR_TEST_14_01_045</td>
+	<td>TEST_POR_14_01_045</td>
 </tr>
 <tr>
 	<td>type</td>
 	<td>title</td>
-	<td>POR_TEST_14_01_045</td>
+	<td>TEST_POR_14_01_045</td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Save</td>
+	<td></td>
 </tr>
 <tr>
 	<td>click</td>
@@ -212,7 +267,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>click</td>
+	<td>clickAndWait</td>
 	<td>link=Site</td>
 	<td></td>
 </tr>
@@ -244,12 +299,22 @@
 <tr>
 	<td>type</td>
 	<td>name</td>
-	<td>POR_TEST_14_01_045</td>
+	<td>TEST_POR_14_01_045</td>
 </tr>
 <tr>
 	<td>type</td>
 	<td>label</td>
-	<td>POR_TEST_14_01_045</td>
+	<td>TEST_POR_14_01_045</td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>-- Choose Page selector --</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[2]/div/div/div/div/div/div[1]/div/div/div/div/div/div/div/div/div[2]/div/div/div/div</td>
+	<td></td>
 </tr>
 <tr>
 	<td>click</td>
@@ -257,8 +322,18 @@
 	<td></td>
 </tr>
 <tr>
+	<td>waitForElementPresent</td>
+	<td>link=Search and Select Page</td>
+	<td></td>
+</tr>
+<tr>
 	<td>click</td>
 	<td>link=Search and Select Page</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//img[@title='Select Page']</td>
 	<td></td>
 </tr>
 <tr>
@@ -297,9 +372,19 @@
 	<td></td>
 </tr>
 <tr>
+	<td>waitForElementPresent</td>
+	<td>searchTerm</td>
+	<td></td>
+</tr>
+<tr>
 	<td>type</td>
 	<td>searchTerm</td>
-	<td>POR_TEST_14_01_045</td>
+	<td>TEST_POR_14_01_045</td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>searchOption</td>
+	<td></td>
 </tr>
 <tr>
 	<td>select</td>
@@ -307,8 +392,23 @@
 	<td>label=Title</td>
 </tr>
 <tr>
+	<td>waitForElementPresent</td>
+	<td>//form[@id='UIPageSearch']/div[2]/a</td>
+	<td></td>
+</tr>
+<tr>
 	<td>click</td>
 	<td>//form[@id='UIPageSearch']/div[2]/a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>-- Edit page --</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//img[@title='Edit Page']</td>
 	<td></td>
 </tr>
 <tr>
@@ -327,6 +427,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>echo</td>
+	<td>-- Choose Page Template --</td>
+	<td></td>
+</tr>
+<tr>
 	<td>waitForElementPresent</td>
 	<td>//div[5]/div[2]/div/div/div/div/div/div/div/div/div/div/div/div[2]/div/div/div/div</td>
 	<td></td>
@@ -337,18 +442,38 @@
 	<td></td>
 </tr>
 <tr>
+	<td>echo</td>
+	<td>-- Choose Permision Setting --</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[2]/div/div/div/div/div/div/div/div/div/div/div/div[3]/div/div/div/div</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[2]/div/div/div/div/div/div/div/div/div/div/div/div[3]/div/div/div/div</td>
+	<td></td>
+</tr>
+<tr>
 	<td>click</td>
 	<td>link=Edit Permission Setting</td>
 	<td></td>
 </tr>
 <tr>
-	<td>click</td>
+	<td>waitForElementPresent</td>
 	<td>link=Select Permission</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
 	<td>link=Select Permission</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Platform</td>
 	<td></td>
 </tr>
 <tr>
@@ -367,8 +492,18 @@
 	<td></td>
 </tr>
 <tr>
+	<td>waitForElementPresent</td>
+	<td>link=manager</td>
+	<td></td>
+</tr>
+<tr>
 	<td>click</td>
 	<td>link=manager</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Save</td>
 	<td></td>
 </tr>
 <tr>
@@ -377,18 +512,23 @@
 	<td></td>
 </tr>
 <tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='UIPageEditor']/div[1]/div/div/div/a[2]</td>
+	<td></td>
+</tr>
+<tr>
 	<td>click</td>
 	<td>//div[@id='UIPageEditor']/div[1]/div/div/div/a[2]</td>
 	<td></td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
+	<td>clickAndWait</td>
 	<td>link=Sign out</td>
 	<td></td>
 </tr>
 <tr>
-	<td>click</td>
-	<td>link=Sign out</td>
+	<td>open</td>
+	<td>/portal/public/classic/</td>
 	<td></td>
 </tr>
 <tr>
@@ -414,21 +554,21 @@
 <tr>
 	<td>type</td>
 	<td>username</td>
-	<td>POR_TEST_14_01_045</td>
+	<td>TEST_POR_14_01_045</td>
 </tr>
 <tr>
 	<td>type</td>
 	<td>password</td>
-	<td>POR_TEST_14_01_045</td>
+	<td>TEST_POR_14_01_045</td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
+	<td>clickAndWait</td>
 	<td>//div[@id='UIPortalLoginFormAction']/div/div/div/a</td>
 	<td></td>
 </tr>
 <tr>
-	<td>click</td>
-	<td>//div[@id='UIPortalLoginFormAction']/div/div/div/a</td>
+	<td>echo</td>
+	<td>-- View page --</td>
 	<td></td>
 </tr>
 <tr>
@@ -437,8 +577,18 @@
 	<td></td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
+	<td>mouseOver</td>
 	<td>link=Site Editor</td>
+	<td>Site Editor</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>link=Add New Page</td>
+	<td>Add New Page</td>
+</tr>
+<tr>
+	<td>verifyTextNotPresent</td>
+	<td>Edit Page</td>
 	<td></td>
 </tr>
 <tr>
@@ -447,13 +597,33 @@
 	<td></td>
 </tr>
 <tr>
-	<td>click</td>
-	<td>link=Site Editor</td>
+	<td>open</td>
+	<td>/portal/public/classic/</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>link=Sign out</td>
+	<td>link=Sign in</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>username</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>username</td>
+	<td>root</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>password</td>
+	<td>gtn</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//div[@id='UIPortalLoginFormAction']/div/div/div/a</td>
 	<td></td>
 </tr>
 <tr>
@@ -463,11 +633,6 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>link=Administrator</td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
 	<td>link=Site</td>
 	<td></td>
 </tr>
@@ -477,8 +642,13 @@
 	<td></td>
 </tr>
 <tr>
-	<td>echo</td>
-	<td>//a[@class='NodeIcon DefaultPageIcon' and @title='POR_TEST_14_01_045']</td>
+	<td>mouseDownRight</td>
+	<td>//a[@class='NodeIcon DefaultPageIcon' and @title='TEST_POR_14_01_045']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Delete Node</td>
 	<td></td>
 </tr>
 <tr>
@@ -487,8 +657,18 @@
 	<td></td>
 </tr>
 <tr>
+	<td>waitForConfirmationPresent</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
 	<td>assertConfirmation</td>
 	<td>Are you sure you want to delete this node?</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Save</td>
 	<td></td>
 </tr>
 <tr>
@@ -502,18 +682,43 @@
 	<td></td>
 </tr>
 <tr>
-	<td>click</td>
+	<td>clickAndWait</td>
 	<td>link=Page Management</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>searchTerm</td>
 	<td></td>
 </tr>
 <tr>
 	<td>type</td>
 	<td>searchTerm</td>
-	<td>POR_TEST_14_01_045</td>
+	<td>TEST_POR_14_01_045</td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>searchOption</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>searchOption</td>
+	<td>label=Title</td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//form[@id='UIPageSearch']/div[2]/a</td>
+	<td></td>
 </tr>
 <tr>
 	<td>click</td>
 	<td>//form[@id='UIPageSearch']/div[2]/a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//img[@title='Delete Page']</td>
 	<td></td>
 </tr>
 <tr>
@@ -522,13 +727,13 @@
 	<td></td>
 </tr>
 <tr>
-	<td>assertConfirmation</td>
-	<td>Do you want to delete this page?</td>
+	<td>waitForConfirmationPresent</td>
+	<td></td>
 	<td></td>
 </tr>
 <tr>
-	<td>click</td>
-	<td>//div[4]/div/div[2]/div/div/div/div/div/div[3]/div/table/tbody/tr/td/div/div/div/div</td>
+	<td>assertConfirmation</td>
+	<td>Do you want to delete this page?</td>
 	<td></td>
 </tr>
 <tr>
@@ -542,17 +747,62 @@
 	<td></td>
 </tr>
 <tr>
+	<td>waitForElementPresent</td>
+	<td>searchTerm</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>searchTerm</td>
+	<td>TEST_POR_14_01_045</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//form[@id='UISearchForm']/div[2]/a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//img[@alt='DeleteUser']</td>
+	<td></td>
+</tr>
+<tr>
 	<td>click</td>
 	<td>//img[@alt='DeleteUser']</td>
 	<td></td>
 </tr>
 <tr>
+	<td>waitForConfirmationPresent</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
 	<td>assertConfirmation</td>
-	<td>Are you sure you want to delete POR_TEST_14_01_045 user?</td>
+	<td>Are you sure you want to delete TEST_POR_14_01_045 user?</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForTextPresent</td>
+	<td>No result found.</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>No result found.</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[4]/div/div[2]/div/div/div/div/div/div[3]/div/table/tbody/tr/td/div/div/div/div/a</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
+	<td>//div[4]/div/div[2]/div/div/div/div/div/div[3]/div/table/tbody/tr/td/div/div/div/div/a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
 	<td>link=Sign out</td>
 	<td></td>
 </tr>
