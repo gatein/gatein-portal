@@ -450,6 +450,10 @@ public class SeleniumTestCaseGenerator {
 				sb.append(param2);
 				sb.append("\");\n");
 				sb.append("selenium.waitForPageToLoad(timeout);\n");
+			} else if (param1.equals("storeAttribute")) {
+				sb.append("String ").append(param3).append(" = ").append("selenium.getAttribute(\"").append(param2).append("\");\n");
+			} else if (param1.equals("verifyElementPositionTop")) {
+				sb.append("verifyEquals(").append("\"").append(param3).append("\", ").append("selenium.getElementPositionTop(\"").append(param2).append("\"));\n");
 			} else if (param1.equals("echo")) {
 				sb.append("System.out.println(\"" + param2 + "\");\n");
 			} else if (param1.length() > 0) {
