@@ -162,7 +162,11 @@ public class SeleniumTestCaseGenerator {
 				sb.append("TestCase.assertTrue(selenium.getConfirmation().matches(\"^");
 				sb.append(param2);
 				sb.append("$\"));\n");
-			} else if (param1.equals("assertLocation")) {
+			} else if (param1.equals("assertAlert")) {
+				sb.append("TestCase.assertTrue(selenium.getAlert().matches(\"^");
+				sb.append(param2);
+				sb.append("$\"));\n");
+			}else if (param1.equals("assertLocation")) {
 				sb.append("TestCase.assertTrue(selenium.getLocation().matches(\"^");
 				sb.append(param2);
 				sb.append("$\"));\n");
