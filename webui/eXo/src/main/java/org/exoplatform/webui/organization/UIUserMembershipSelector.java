@@ -20,6 +20,7 @@
 package org.exoplatform.webui.organization;
 
 import org.exoplatform.commons.utils.LazyPageList;
+import org.exoplatform.commons.utils.SerializablePageList;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.GroupHandler;
 import org.exoplatform.services.organization.MembershipType;
@@ -119,7 +120,9 @@ public class UIUserMembershipSelector extends UISelector<String>
       }
 
       UIGrid uiGrid = getChild(UIGrid.class);
-      LazyPageList pageList = new LazyPageList(new MembershipListAccess(getMembership()), 10);
+
+      SerializablePageList pageList = new SerializablePageList(new MembershipListAccess(getMembership()), 10);
+
       uiGrid.getUIPageIterator().setPageList(pageList);
    }
 

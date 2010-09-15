@@ -22,6 +22,7 @@ package org.exoplatform.webui.organization;
 import org.exoplatform.commons.utils.ListAccess;
 import org.exoplatform.webui.organization.UIUserMembershipSelector.Membership;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +32,7 @@ import java.util.List;
  *          tamndrok@gmail.com
  * May 16, 2009  
  */
-public class MembershipListAccess implements ListAccess<Membership>
+public class MembershipListAccess implements ListAccess<Membership>, Serializable
 {
 
    private final List<Membership> list;
