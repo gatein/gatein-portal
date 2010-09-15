@@ -83,12 +83,7 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@onclick=&quot;eXo.webui.UIHorizontalTabs.changeTabForUIFormTabpane(this, 'UIPortalForm', 'PortalSetting');javascript:eXo.webui.UIForm.submitEvent('UIPortalForm','SelectTab','&amp;objectId=PortalSetting')&quot;]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>//div[@onclick=&quot;eXo.webui.UIHorizontalTabs.changeTabForUIFormTabpane(this, 'UIPortalForm', 'PortalSetting');javascript:eXo.webui.UIForm.submitEvent('UIPortalForm','SelectTab','&amp;objectId=PortalSetting')&quot;]</td>
+	<td>name</td>
 	<td></td>
 </tr>
 <tr>
@@ -108,17 +103,47 @@
 </tr>
 <tr>
 	<td>echo</td>
+	<td>-- Choose Portal Template --</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[5]/div[2]/div/div/div/div/div/div/div/div/div/div/div/div[1]/div/div/div/div</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[5]/div[2]/div/div/div/div/div/div/div/div/div/div/div/div[1]/div/div/div/div</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>-- Choose Properties --</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='UIMaskWorkspace']/div[2]/div/div/div/div/div/div/div/div/div/div/div/div[3]/div/div/div/div</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='UIMaskWorkspace']/div[2]/div/div/div/div/div/div/div/div/div/div/div/div[3]/div/div/div/div</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
 	<td>--Select Permission Setting--</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UIMaskWorkspace']//div[@class='TabsContainer']/div[3]//div[@class='LeftTab']</td>
+	<td>//div[@id='UIMaskWorkspace']//div[@class='TabsContainer']/div[4]//div[@class='LeftTab']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='UIMaskWorkspace']//div[@class='TabsContainer']/div[3]//div[@class='MiddleTab']</td>
+	<td>//div[@id='UIMaskWorkspace']//div[@class='TabsContainer']/div[4]//div[@class='MiddleTab']</td>
 	<td></td>
 </tr>
 <!--=============-->
@@ -134,12 +159,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@onclick=&quot;javascript:eXo.webui.UIForm.submitEvent('UIPortalForm','ChangeNode','&amp;subComponentId=TreeListPermissionSelector&amp;objectId=/platform')&quot;]</td>
+	<td>link=Platform</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@onclick=&quot;javascript:eXo.webui.UIForm.submitEvent('UIPortalForm','ChangeNode','&amp;subComponentId=TreeListPermissionSelector&amp;objectId=/platform')&quot;]</td>
+	<td>link=Platform</td>
 	<td></td>
 </tr>
 <tr>
