@@ -4,12 +4,12 @@
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="selenium.base" href="" />
-<title>POR_20_013</title>
+<title>Test_POR_20_013_CreateNewUserPageWithExistingPageNameForTheSameUser</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">POR_20_013</td></tr>
+<tr><td rowspan="1" colspan="3">Test_POR_20_013_CreateNewUserPageWithExistingPageNameForTheSameUser</td></tr>
 </thead><tbody>
 <tr>
 	<td>open</td>
@@ -22,6 +22,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>windowMaximize</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
 	<td>click</td>
 	<td>link=Sign in</td>
 	<td></td>
@@ -29,7 +34,7 @@
 <tr>
 	<td>waitForElementPresent</td>
 	<td>username</td>
-	<td>root</td>
+	<td></td>
 </tr>
 <tr>
 	<td>type</td>
@@ -57,7 +62,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>link=Page Management</td>
 	<td></td>
 </tr>
@@ -67,7 +72,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>xpath=//div[@id='UIPageBrowser']/div[2]/table/tbody/tr/td/div/div/div/div/a</td>
 	<td></td>
 </tr>
@@ -79,12 +84,12 @@
 <tr>
 	<td>type</td>
 	<td>name</td>
-	<td>POR_20_013</td>
+	<td>Test_POR_20_013</td>
 </tr>
 <tr>
 	<td>type</td>
 	<td>title</td>
-	<td>POR_20_013</td>
+	<td>Test_POR_20_013</td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
@@ -92,7 +97,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>xpath=//div[@onclick=&quot;eXo.webui.UIHorizontalTabs.changeTabForUIFormTabpane(this, 'UIPageForm', 'UIPageTemplateOptions');javascript:eXo.webui.UIForm.submitEvent('UIPageForm','SelectTab','&amp;objectId=UIPageTemplateOptions')&quot;]</td>
 	<td></td>
 </tr>
@@ -107,7 +112,12 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>waitForElementPresent</td>
+	<td>xpath=//div[@id='UIPageBrowser']/div[2]/table/tbody/tr/td/div/div/div/div/a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
 	<td>xpath=//div[@id='UIPageBrowser']/div[2]/table/tbody/tr/td/div/div/div/div/a</td>
 	<td></td>
 </tr>
@@ -119,15 +129,20 @@
 <tr>
 	<td>type</td>
 	<td>name</td>
-	<td>POR_20_013</td>
+	<td>Test_POR_20_013</td>
 </tr>
 <tr>
 	<td>type</td>
 	<td>title</td>
-	<td>POR_20_013</td>
+	<td>Test_POR_20_013</td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>waitForElementPresent</td>
+	<td>xpath=//div[@onclick=&quot;eXo.webui.UIHorizontalTabs.changeTabForUIFormTabpane(this, 'UIPageForm', 'UIPageTemplateOptions');javascript:eXo.webui.UIForm.submitEvent('UIPageForm','SelectTab','&amp;objectId=UIPageTemplateOptions')&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
 	<td>xpath=//div[@onclick=&quot;eXo.webui.UIHorizontalTabs.changeTabForUIFormTabpane(this, 'UIPageForm', 'UIPageTemplateOptions');javascript:eXo.webui.UIForm.submitEvent('UIPageForm','SelectTab','&amp;objectId=UIPageTemplateOptions')&quot;]</td>
 	<td></td>
 </tr>
@@ -137,7 +152,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>link=Save</td>
 	<td></td>
 </tr>
@@ -147,8 +162,13 @@
 	<td></td>
 </tr>
 <tr>
+	<td>waitForTextPresent</td>
+	<td>This page name already exists.</td>
+	<td></td>
+</tr>
+<tr>
 	<td>verifyTextPresent</td>
-	<td>This page name already exists. </td>
+	<td>This page name already exists.</td>
 	<td></td>
 </tr>
 <tr>
@@ -157,7 +177,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>xpath=//div[@id='UIPortalApplication']/div[@class='UIPopupWindow UIDragObject']//div[@class='MiddleLeftSideDecorator']//div[@class='UIPopupMessages']/div[@class='MessageActionBar']//a</td>
 	<td></td>
 </tr>
@@ -167,7 +187,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>link=Cancel</td>
 	<td></td>
 </tr>
@@ -179,7 +199,7 @@
 <tr>
 	<td>type</td>
 	<td>searchTerm</td>
-	<td>POR_20_013</td>
+	<td>Test_POR_20_013</td>
 </tr>
 <tr>
 	<td>select</td>
@@ -192,8 +212,13 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>xpath=//form[@id='UIPageSearch']/div[2]/a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>-- https://jira.jboss.org/browse/GTNPORTAL-1304 --</td>
 	<td></td>
 </tr>
 <tr>
@@ -207,7 +232,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>xpath=//img[@title='Delete Page']</td>
 	<td></td>
 </tr>
@@ -222,7 +247,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>xpath=//div[@id='UIPortalApplication']/div[@class='UIPopupWindow UIDragObject']//div[@class='MiddleLeftSideDecorator']//div[@class='UIPopupMessages']/div[@class='MessageActionBar']//a</td>
 	<td></td>
 </tr>
@@ -232,7 +257,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>clickAndWait</td>
 	<td>link=Sign out</td>
 	<td></td>
 </tr>

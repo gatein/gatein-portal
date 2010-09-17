@@ -4,12 +4,12 @@
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="selenium.base" href="" />
-<title>Test_POR_20_015_CreateNewUser'sPageWithExistingGroup'sPage</title>
+<title>Test_POR_20_015_CreateNewUsersPageWithExistingGroupsPage</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">Test_POR_20_015_CreateNewUser'sPageWithExistingGroup'sPage</td></tr>
+<tr><td rowspan="1" colspan="3">Test_POR_20_015_CreateNewUsersPageWithExistingGroupsPage</td></tr>
 </thead><tbody>
 <tr>
 	<td>open</td>
@@ -22,7 +22,12 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>windowMaximize</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
 	<td>link=Sign in</td>
 	<td></td>
 </tr>
@@ -57,7 +62,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>link=Page Management</td>
 	<td></td>
 </tr>
@@ -72,7 +77,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>xpath=//div[@id='UIPageBrowser']/div[2]/table/tbody/tr/td/div/div/div/div/a</td>
 	<td></td>
 </tr>
@@ -92,8 +97,13 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>xpath=//option[@value='group']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>ownerId</td>
 	<td></td>
 </tr>
 <tr>
@@ -107,7 +117,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>xpath=//option[@value='/organization/operations']</td>
 	<td></td>
 </tr>
@@ -119,36 +129,71 @@
 <tr>
 	<td>type</td>
 	<td>name</td>
-	<td>POR_20_015</td>
+	<td>Test_POR_20_015</td>
 </tr>
 <tr>
 	<td>type</td>
 	<td>title</td>
-	<td>POR_20_015</td>
+	<td>Test_POR_20_015</td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>-- choose Page Layout --</td>
+	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>xpath=//div[@onclick=&quot;eXo.webui.UIHorizontalTabs.changeTabForUIFormTabpane(this, 'UIPageForm', 'UIPageTemplateOptions');javascript:eXo.webui.UIForm.submitEvent('UIPageForm','SelectTab','&amp;objectId=UIPageTemplateOptions')&quot;]</td>
+	<td>//div[@id='UIMaskWorkspace']/div[2]/div/div/div/div/div/div/div/div/div/div/div/div[2]/div/div/div/div</td>
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
-	<td>xpath=//div[@onclick=&quot;eXo.webui.UIHorizontalTabs.changeTabForUIFormTabpane(this, 'UIPageForm', 'PermissionSetting');javascript:eXo.webui.UIForm.submitEvent('UIPageForm','SelectTab','&amp;objectId=PermissionSetting')&quot;]</td>
+	<td>click</td>
+	<td>//div[@id='UIMaskWorkspace']/div[2]/div/div/div/div/div/div/div/div/div/div/div/div[2]/div/div/div/div</td>
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
-	<td>link=Access Permission Setting</td>
+	<td>echo</td>
+	<td>-- Choose Permission Setting --</td>
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='UIMaskWorkspace']/div[2]/div/div/div/div/div/div/div/div/div/div/div/div[3]/div/div/div/div</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='UIMaskWorkspace']/div[2]/div/div/div/div/div/div/div/div/div/div/div/div[3]/div/div/div/div</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>-- Access Permisison Setting --</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForTextPresent</td>
+	<td>Access Permission Setting</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Access Permission Setting</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>-- Edit Permisison Setting --</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
 	<td>link=Edit Permission Setting</td>
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
-	<td>xpath=//div[@onclick=&quot;eXo.webui.UIHorizontalTabs.changeTabForUIFormTabpane(this, 'UIPageForm', 'UIPageTemplateOptions');javascript:eXo.webui.UIForm.submitEvent('UIPageForm','SelectTab','&amp;objectId=UIPageTemplateOptions')&quot;]</td>
+	<td>click</td>
+	<td>link=Edit Permission Setting</td>
 	<td></td>
 </tr>
 <tr>
@@ -157,18 +202,8 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>link=Save</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>link=Page Management</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
-	<td>link=Page Management</td>
 	<td></td>
 </tr>
 <tr>
@@ -182,7 +217,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>xpath=//div[@id='UIPageBrowser']/div[2]/table/tbody/tr/td/div/div/div/div/a</td>
 	<td></td>
 </tr>
@@ -194,21 +229,26 @@
 <tr>
 	<td>type</td>
 	<td>name</td>
-	<td>POR_20_015</td>
+	<td>Test_POR_20_015</td>
 </tr>
 <tr>
 	<td>type</td>
 	<td>title</td>
-	<td>POR_20_015</td>
+	<td>Test_POR_20_015</td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
-	<td>xpath=//div[@onclick=&quot;eXo.webui.UIHorizontalTabs.changeTabForUIFormTabpane(this, 'UIPageForm', 'UIPageTemplateOptions');javascript:eXo.webui.UIForm.submitEvent('UIPageForm','SelectTab','&amp;objectId=UIPageTemplateOptions')&quot;]</td>
+	<td>echo</td>
+	<td>-- Choose Page Layout --</td>
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
-	<td>xpath=//div[@onclick=&quot;eXo.webui.UIHorizontalTabs.changeTabForUIFormTabpane(this, 'UIPageForm', 'UIPageTemplateOptions');javascript:eXo.webui.UIForm.submitEvent('UIPageForm','SelectTab','&amp;objectId=UIPageTemplateOptions')&quot;]</td>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='UIMaskWorkspace']/div[2]/div/div/div/div/div/div/div/div/div/div/div/div[2]/div/div/div/div</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='UIMaskWorkspace']/div[2]/div/div/div/div/div/div/div/div/div/div/div/div[2]/div/div/div/div</td>
 	<td></td>
 </tr>
 <tr>
@@ -217,7 +257,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>link=Save</td>
 	<td></td>
 </tr>
@@ -227,9 +267,19 @@
 	<td></td>
 </tr>
 <tr>
+	<td>waitForElementPresent</td>
+	<td>searchTerm</td>
+	<td></td>
+</tr>
+<tr>
 	<td>type</td>
 	<td>searchTerm</td>
-	<td>POR_20_015</td>
+	<td>Test_POR_20_015</td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>searchOption</td>
+	<td></td>
 </tr>
 <tr>
 	<td>select</td>
@@ -242,8 +292,18 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>waitForElementPresent</td>
 	<td>xpath=//form[@id='UIPageSearch']/div[2]/a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>xpath=//form[@id='UIPageSearch']/div[2]/a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>-- https://jira.jboss.org/browse/GTNPORTAL-1304 --</td>
 	<td></td>
 </tr>
 <tr>
@@ -257,7 +317,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>xpath=//img[@title='Delete Page']</td>
 	<td></td>
 </tr>
@@ -272,7 +332,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>xpath=//div[@id='UIPortalApplication']/div[@class='UIPopupWindow UIDragObject']//div[@class='MiddleLeftSideDecorator']//div[@class='UIPopupMessages']/div[@class='MessageActionBar']//a</td>
 	<td></td>
 </tr>
@@ -287,7 +347,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>xpath=//img[@title='Delete Page']</td>
 	<td></td>
 </tr>
@@ -302,7 +362,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>xpath=//div[@id='UIPortalApplication']/div[@class='UIPopupWindow UIDragObject']//div[@class='MiddleLeftSideDecorator']//div[@class='UIPopupMessages']/div[@class='MessageActionBar']//a</td>
 	<td></td>
 </tr>
@@ -312,7 +372,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>clickAndWait</td>
 	<td>link=Sign out</td>
 	<td></td>
 </tr>
