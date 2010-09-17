@@ -78,17 +78,12 @@
 </tr>
 <tr>
 	<td>echo</td>
-	<td>--Choose Portal Setting--</td>
+	<td>--Portal Setting--</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UISiteManagement']//div[@class='UIAction']//div[@class='ActionButton BlueButton']</td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>//div[@id='UISiteManagement']//div[@class='UIAction']//div[@class='ActionButton BlueButton']</td>
+	<td>name</td>
 	<td></td>
 </tr>
 <tr>
@@ -108,17 +103,37 @@
 </tr>
 <tr>
 	<td>echo</td>
+	<td>-- Choose Portal Template --</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='UIMaskWorkspace']/div[2]/div/div/div/div/div/div/div/div/div/div/div/div[1]/div/div/div/div</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='UIMaskWorkspace']/div[2]/div/div/div/div/div/div/div/div/div/div/div/div[1]/div/div/div/div</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
 	<td>--Choose Properites--</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UIMaskWorkspace']//div[@class='TabsContainer']/div[2]//div[@class='MiddleTab']</td>
+	<td>//div[@id='UIMaskWorkspace']//div[@class='TabsContainer']/div[3]//div[@class='MiddleTab']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='UIMaskWorkspace']//div[@class='TabsContainer']/div[2]//div[@class='MiddleTab']</td>
+	<td>//div[@id='UIMaskWorkspace']//div[@class='TabsContainer']/div[3]//div[@class='MiddleTab']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>sessionAlive</td>
 	<td></td>
 </tr>
 <tr>
@@ -133,12 +148,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UIMaskWorkspace']//div[@class='TabsContainer']/div[3]//div[@class='MiddleTab']</td>
+	<td>//div[@id='UIMaskWorkspace']//div[@class='TabsContainer']/div[4]//div[@class='MiddleTab']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='UIMaskWorkspace']//div[@class='TabsContainer']/div[3]//div[@class='MiddleTab']</td>
+	<td>//div[@id='UIMaskWorkspace']//div[@class='TabsContainer']/div[4]//div[@class='MiddleTab']</td>
 	<td></td>
 </tr>
 <tr>
@@ -259,12 +274,12 @@
 	<td></td>
 </tr>
 <tr>
-	<td>waitForConfirmationPresent</td>
-	<td></td>
+	<td>waitForTextPresent</td>
+	<td>The field &quot;Portal Name :&quot; is required.</td>
 	<td></td>
 </tr>
 <tr>
-	<td>assertConfirmation</td>
+	<td>verifyTextPresent</td>
 	<td>The field &quot;Portal Name :&quot; is required.</td>
 	<td></td>
 </tr>
