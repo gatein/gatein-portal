@@ -40,13 +40,9 @@ public abstract class AbstractContextualPropertyProviderPlugin extends BaseCompo
    /** . */
    protected final String namespaceURI;
 
-   /** . */
-   protected final String prefix;
-
    protected AbstractContextualPropertyProviderPlugin(InitParams params)
    {
       this.namespaceURI = params.getValueParam("namespaceURI").getValue();
-      this.prefix = params.getValueParam("prefix").getValue();
    }
 
    public abstract void getProperties(UIPortlet portletWindow, Map<QName, String[]> properties);

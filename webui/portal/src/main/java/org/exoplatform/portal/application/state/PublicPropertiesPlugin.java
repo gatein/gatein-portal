@@ -64,13 +64,13 @@ public class PublicPropertiesPlugin extends AbstractContextualPropertyProviderPl
       super(params);
 
       //
-      this.navigationURIQName = new QName(namespaceURI, "navigation_uri", prefix);
-      this.pageNameQName = new QName(namespaceURI, "page_name", prefix);
-      this.siteTypeQName = new QName(namespaceURI, "site_type", prefix);
-      this.siteNameQName = new QName(namespaceURI, "site_name", prefix);
-      this.windowWidth = new QName(namespaceURI, "window_width", prefix);
-      this.windowHeight = new QName(namespaceURI, "window_height", prefix);
-      this.windowShowInfoBarQName = new QName(namespaceURI, "window_show_info_bar", prefix);
+      this.navigationURIQName = new QName(namespaceURI, "navigation_uri");
+      this.pageNameQName = new QName(namespaceURI, "page_name");
+      this.siteTypeQName = new QName(namespaceURI, "site_type");
+      this.siteNameQName = new QName(namespaceURI, "site_name");
+      this.windowWidth = new QName(namespaceURI, "window_width");
+      this.windowHeight = new QName(namespaceURI, "window_height");
+      this.windowShowInfoBarQName = new QName(namespaceURI, "window_show_info_bar");
    }
 
    @Override

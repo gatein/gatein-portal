@@ -52,11 +52,6 @@
                <description>Namespace URI</description>
                <value>http://www.gatein.org/xml/ns/prp_1_0</value>
              </value-param>
-             <value-param>
-               <name>prefix</name>
-               <description>Prefix of QName</description>
-               <value>prp</value>
-             </value-param>
            </init-params>
          </component-plugin>
         <component-plugin>
@@ -68,11 +63,6 @@
               <name>namespaceURI</name>
               <description>Namespace URI</description>
               <value>http://www.gatein.org/xml/ns/internal_prp_1_0</value>
-            </value-param>
-            <value-param>
-              <name>prefix</name>
-              <description>Prefix of QName</description>
-              <value>iprp</value>
             </value-param>
           </init-params>
         </component-plugin>

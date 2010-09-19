@@ -46,8 +46,8 @@ public class InternalPropertiesPlugin extends AbstractContextualPropertyProvider
       super(params);
 
       //
-      this.storageIdQName = new QName(namespaceURI, "storage_id", prefix);
-      this.storageNameQName = new QName(namespaceURI, "storage_name", prefix);
+      this.storageIdQName = new QName(namespaceURI, "storage_id");
+      this.storageNameQName = new QName(namespaceURI, "storage_name");
    }
 
    @Override
