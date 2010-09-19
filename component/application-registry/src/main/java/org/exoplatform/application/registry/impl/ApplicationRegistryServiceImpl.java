@@ -253,7 +253,17 @@ public class ApplicationRegistryServiceImpl implements ApplicationRegistryServic
       {
          throw new Exception("Invalid Application Id: [" + id + "]");
       }
-      return getApplication(fragments[0], fragments[1]);
+
+      String category = fragments[0];
+      String applicationName = fragments[1];
+
+      // If the application name contained a beginning slash (which can happen with WSRP), we need to hack around the
+      // hardcoding of portlet id expectations >_<
+      if(fragments.length == 3 && applicationName.length() == 0)
+      {
+         applicationName = "/" + fragments[2];
+      }
+      return getApplication(category, applicationName);
    }
 
    public Application getApplication(final String category, final String name) throws Exception
