@@ -27,41 +27,42 @@ import javax.xml.namespace.QName;
 
 import org.exoplatform.container.component.ComponentPlugin;
 import org.exoplatform.portal.webui.application.UIPortlet;
+import org.picocontainer.Startable;
 
 /**
  * @author <a href="mailto:hoang281283@gmail.com">Minh Hoang TO</a>
  * @date
  */
 
-public class ContextualPropertyManagerImpl implements ContextualPropertyManager
+public class ContextualPropertyManagerImpl implements ContextualPropertyManager, Startable
 {
 
-   private List<AbstractContextualPropertyProviderPlugin> propertyProviderPlugins;
+   private ArrayList<AbstractContextualPropertyProviderPlugin> propertyProviderPlugins;
    
    public ContextualPropertyManagerImpl() throws Exception
    {
       propertyProviderPlugins = new ArrayList<AbstractContextualPropertyProviderPlugin>();
    }
    
-   @Override
    public Map<QName, String[]> getProperties(UIPortlet portletWindow)
    {
       Map<QName, String[]> whatPortletWindowSee = new HashMap<QName, String[]>();
-      
-      for(AbstractContextualPropertyProviderPlugin plugin : propertyProviderPlugins)
+
+      // No need to use an iterator here
+      for (int i = 0;i < propertyProviderPlugins.size();i++)
       {
-         whatPortletWindowSee.putAll(plugin.getProperties(portletWindow));
+         AbstractContextualPropertyProviderPlugin plugin  = propertyProviderPlugins.get(i);
+         plugin.getProperties(portletWindow, whatPortletWindowSee);
       }
-      
+
+      //
       return whatPortletWindowSee;
    }
 
-   @Override
    public void start()
    {
    }
 
-   @Override
    public void stop()
    {
    }
@@ -73,5 +74,4 @@ public class ContextualPropertyManagerImpl implements ContextualPropertyManager
          propertyProviderPlugins.add((AbstractContextualPropertyProviderPlugin)plugin);
       }
    }
-
 }

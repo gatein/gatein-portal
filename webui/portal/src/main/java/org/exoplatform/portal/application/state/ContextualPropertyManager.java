@@ -23,16 +23,19 @@ import java.util.Map;
 import javax.xml.namespace.QName;
 
 import org.exoplatform.portal.webui.application.UIPortlet;
-import org.picocontainer.Startable;
 
 /**
  * @author <a href="mailto:hoang281283@gmail.com">Minh Hoang TO</a>
- * @date
  */
-
-public interface ContextualPropertyManager extends Startable
+public interface ContextualPropertyManager
 {
 
+   /**
+    * Returns a map of qualified names and string values for contextual properties of the portlet.
+    *
+    * @param portletWindow the portlet
+    * @return the contextual properties
+    */
    public Map<QName, String[]> getProperties(UIPortlet portletWindow);
 
 }

@@ -23,16 +23,39 @@ import java.util.Map;
 import javax.xml.namespace.QName;
 
 import org.exoplatform.container.component.BaseComponentPlugin;
+import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.portal.webui.application.UIPortlet;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 
 /**
  * @author <a href="mailto:hoang281283@gmail.com">Minh Hoang TO</a>
- * @date
  */
-
 public abstract class AbstractContextualPropertyProviderPlugin extends BaseComponentPlugin
 {
    
-   public abstract Map<QName, String[]> getProperties(UIPortlet portletWindow);
+   /** . */
+   protected final Logger log = LoggerFactory.getLogger(getClass());
 
+   /** . */
+   protected final String namespaceURI;
+
+   /** . */
+   protected final String prefix;
+
+   protected AbstractContextualPropertyProviderPlugin(InitParams params)
+   {
+      this.namespaceURI = params.getValueParam("namespaceURI").getValue();
+      this.prefix = params.getValueParam("prefix").getValue();
+   }
+
+   public abstract void getProperties(UIPortlet portletWindow, Map<QName, String[]> properties);
+
+   protected final void addProperty(Map<QName, String[]> map, QName qname, String value)
+   {
+      if (value != null)
+      {
+         map.put(qname, new String[]{value});
+      }
+   }
 }

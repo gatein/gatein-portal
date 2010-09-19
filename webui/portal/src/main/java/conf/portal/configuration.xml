@@ -43,22 +43,39 @@
       <type>org.exoplatform.portal.application.state.ContextualPropertyManagerImpl</type>
       <component-plugins>
          <component-plugin>
-           <name>NavigationalStateProviderPlugin</name>
+           <name>PublicPropertiesPlugin</name>
            <set-method>addPlugin</set-method>
-           <type>org.exoplatform.portal.application.state.NavigationalStateProviderPlugin</type>
+           <type>org.exoplatform.portal.application.state.PublicPropertiesPlugin</type>
            <init-params>
              <value-param>
                <name>namespaceURI</name>
                <description>Namespace URI</description>
-               <value>http://www.gatein.org</value>
+               <value>http://www.gatein.org/xml/ns/prp_1_0</value>
              </value-param>
              <value-param>
                <name>prefix</name>
                <description>Prefix of QName</description>
-               <value>gtn</value>
+               <value>prp</value>
              </value-param>
            </init-params>
          </component-plugin>
+        <component-plugin>
+          <name>InternalPropertiesPlugin</name>
+          <set-method>addPlugin</set-method>
+          <type>org.exoplatform.portal.application.state.InternalPropertiesPlugin</type>
+          <init-params>
+            <value-param>
+              <name>namespaceURI</name>
+              <description>Namespace URI</description>
+              <value>http://www.gatein.org/xml/ns/internal_prp_1_0</value>
+            </value-param>
+            <value-param>
+              <name>prefix</name>
+              <description>Prefix of QName</description>
+              <value>iprp</value>
+            </value-param>
+          </init-params>
+        </component-plugin>
       </component-plugins>
    </component>  
 </configuration>

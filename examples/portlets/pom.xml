@@ -14,6 +14,7 @@
    <name>GateIn Portal Examples - Portlets</name>
 
    <modules>
+      <module>api</module>
       <module>jsfhellouser</module>
       <module>jsphellouser</module>
       <module>simplesthelloworld</module>
