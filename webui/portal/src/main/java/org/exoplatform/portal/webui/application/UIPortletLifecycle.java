@@ -170,7 +170,6 @@ public class UIPortletLifecycle<S, C extends Serializable, I> extends Lifecycle<
 
       //
       Text markup = null;
-      String portletTitle = null;
 
       try
       {
@@ -217,8 +216,8 @@ public class UIPortletLifecycle<S, C extends Serializable, I> extends Lifecycle<
                         markup = Text.create("");
                         break;
                   }
-                  portletTitle = fragmentResponse.getTitle();
-
+                  uicomponent.setConfiguredTitle(fragmentResponse.getTitle());
+                  
                   // setup portlet properties
                   if (fragmentResponse.getProperties() != null)
                   {
@@ -337,7 +336,6 @@ public class UIPortletLifecycle<S, C extends Serializable, I> extends Lifecycle<
          WebuiBindingContext bcontext = new WebuiBindingContext(resolver, context.getWriter(), uicomponent, prcontext);
          bcontext.put(UIComponent.UICOMPONENT, uicomponent);
          bcontext.put("portletContent", markup);
-         bcontext.put("portletTitle", portletTitle);
          try
          {
             renderTemplate(uicomponent.getTemplate(), bcontext);

@@ -127,6 +127,31 @@ public class TestPortalConfig extends AbstractPortalTest
       group = groupHandler.findGroupById("/groupTest");
       assertNull(group);
    }
+   
+   public void testGroupNavigation() throws Exception
+   {
+      GroupHandler groupHandler = org.getGroupHandler();
+      Group group = groupHandler.createGroupInstance();
+      group.setGroupName("testGroupNavigation");
+      group.setLabel("testGroupNavigation");
+      
+      groupHandler.addChild(null, group, true);
+      
+      PageNavigation pageNavigation = new PageNavigation();
+      pageNavigation.setOwnerId(group.getId());
+      pageNavigation.setOwnerType(PortalConfig.GROUP_TYPE);
+      storage.create(pageNavigation);
+      
+      pageNavigation = storage.getPageNavigation(PortalConfig.GROUP_TYPE, group.getId());
+      assertNotNull(pageNavigation);
+      
+      // Remove group
+      groupHandler.removeGroup(group, true);
+      
+      // Group navigations is removed after remove group 
+      pageNavigation = storage.getPageNavigation(PortalConfig.GROUP_TYPE, group.getId());
+      assertNull(pageNavigation);
+   }
 
    public void testUserLayout() throws Exception
    {

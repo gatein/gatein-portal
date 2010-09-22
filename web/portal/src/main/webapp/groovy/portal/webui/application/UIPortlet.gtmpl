@@ -37,14 +37,7 @@
 										<div class="FixHeight">
 											<%
 											if(hasPermission) {
-												if(portletTitle == null || portletTitle.trim().length() < 1) {
-													try {
-														String portletName = uicomponent.getProducedOfferedPortlet().getInfo().getName();
-														print _ctx.getRequestContext().getApplicationResourceBundle().getString("UIPortlet.description." + portletName);
-													} catch(Exception e){
-														print uicomponent.getDisplayName();
-													}
-												} else print portletTitle;
+												print uicomponent.getDisplayTitle();
 											} else print "<div class='ProtectedContent'>"+_ctx.appRes("UIPortlet.label.protectedContent")+"</div>";
 											%>
 										</div>
@@ -62,11 +55,7 @@
 			
 		if(portalMode != uiPortalApp.CONTAINER_BLOCK_EDIT_MODE && portalMode != uiPortalApp.APP_BLOCK_EDIT_MODE) {
 			if(uicomponent.getShowInfoBar()) {
-				String title = portletTitle;
-				if(title == null || title.trim().length() < 1)
-					title = uicomponent.getTitle();
-				if(title == null || title.trim().length() < 1)
-					title = uicomponent.getDisplayName();
+				String title = uicomponent.getDisplayTitle();
 				if(title == null || title.trim().length() < 1)
 					title = portletId;
 				/*Begin Window Portlet Bar*/
@@ -292,9 +281,7 @@
 																String portletIcon = uicomponent.getIcon();
 																if(portletIcon == null) portletIcon = "PortletIcon";
 																
-																String title = portletTitle;
-																if(title == null || title.trim().length() < 1)
-																	title = uicomponent.getDisplayTitle();
+																String title = uicomponent.getDisplayTitle();
 																if(title.length() > 30) title = title.substring(0,27) + "...";
 															%>
 															<div class="PortletIcon $portletIcon"><%=hasPermission ? title : _ctx.appRes("UIPortlet.label.protectedContent")%></div>

@@ -107,6 +107,9 @@ public class PortletApplicationController extends GenericPortlet
    {
       try
       {
+      	 //Needed to localize title via predefined I18n key javax.portlet.title
+      	 res.setTitle(getTitle(req));
+      	 
          getPortletApplication().render(req, res);
       }
       catch (Exception ex)

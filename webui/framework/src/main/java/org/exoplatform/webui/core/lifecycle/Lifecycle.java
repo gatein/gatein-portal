@@ -101,9 +101,10 @@ public class Lifecycle<E extends UIComponent>
     * 
     */
    protected void renderTemplate(String template, WebuiBindingContext bcontext) throws Exception
-   {
-      bcontext.put("decorator", decorator_);
+   {      
       WebuiRequestContext context = bcontext.getRequestContext();
+      bcontext.put("decorator", decorator_);
+      bcontext.put("locale", context.getLocale());
       ExoContainer pcontainer = context.getApplication().getApplicationServiceContainer();
       TemplateService service = (TemplateService)pcontainer.getComponentInstanceOfType(TemplateService.class);
       ResourceResolver resolver = bcontext.getResourceResolver();

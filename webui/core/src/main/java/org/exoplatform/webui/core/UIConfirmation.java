@@ -24,7 +24,6 @@ import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
-import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
 
 /**
  * Created by The eXo Platform SAS
@@ -56,6 +55,7 @@ public class UIConfirmation extends UIPopupWindow
    {
       this.message_ = "";
       this.caller_ = new Object();
+      setShowMask(true);
       setShow(true);
    }
    
@@ -63,6 +63,7 @@ public class UIConfirmation extends UIPopupWindow
    {
       this.message_ = message;
       this.caller_ = caller;
+      setShowMask(true);
       setShow(true);
    }
    
@@ -116,19 +117,16 @@ public class UIConfirmation extends UIPopupWindow
       return (message_!=null) && (!message_.equals(""));
    }
    
-   private void hidePopup(WebuiRequestContext context)
+   private void hidePopup(Event<UIConfirmation> event) throws Exception
    {
+      WebuiRequestContext context = event.getRequestContext();
       this.clearMessage();
-      if(this.getParent() == null)
-      {
-         context.addUIComponentToUpdateByAjax(this);
-         return;
-      }
-      
-      if(!this.isShow())
-      {
-         return;
-      }
+      context.addUIComponentToUpdateByAjax(this);
+      UIComponent uiParent = getParent();      
+      Event<UIComponent> pEvent =
+         uiParent.createEvent("ClosePopup", event.getExecutionPhase(), event.getRequestContext());
+      if (pEvent != null)
+         pEvent.broadcast();
    }
 
    public static class CloseActionListener extends EventListener<UIConfirmation>
@@ -137,8 +135,7 @@ public class UIConfirmation extends UIPopupWindow
       public void execute(Event<UIConfirmation> event) throws Exception
       {
          UIConfirmation uiConfirmation = event.getSource();
-         WebuiRequestContext context = event.getRequestContext();
-         uiConfirmation.hidePopup(context);
+         uiConfirmation.hidePopup(event);
       }
    }
    
@@ -158,7 +155,7 @@ public class UIConfirmation extends UIPopupWindow
             xEvent.broadcast();
          }
          
-         uiConfirmation.hidePopup(context);
+         uiConfirmation.hidePopup(event);
       }
    }
    

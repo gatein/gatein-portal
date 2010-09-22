@@ -669,6 +669,19 @@ gadgets.IfrGadget.prototype.generateForm = function(gadget) {
             }
             attEl.appendChild(el);
         }
+        else if (type == "bool") {
+            var el = document.createElement("input");
+            el.type = "checkbox";
+            el.name = prefix + att;
+            el.id = elID;
+            if (userPrefs[att] && userPrefs[att] == "true") {
+                el.checked = userPrefs[att];
+            } else {
+            	if(prefs[att].default == "true")
+            		el.checked = true;
+            }
+            attEl.appendChild(el);
+        }
         formEl.appendChild(attEl);
         j++;
     }
@@ -745,6 +758,8 @@ gadgets.IfrGadget.prototype.handleSaveUserPrefs = function() {
       var userPrefNamePrefix = 'm_' + this.id + '_up_';
       var userPrefName = input.name.substring(userPrefNamePrefix.length);
       var userPrefValue = input.value;
+      if(input.type == 'checkbox')
+    	  userPrefValue = input.checked ? "true" : "false";
       prefs[userPrefName] = userPrefValue;
     }
   }

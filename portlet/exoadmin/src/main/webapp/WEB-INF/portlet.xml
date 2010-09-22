@@ -235,7 +235,7 @@
          <mime-type>text/html</mime-type>
          <portlet-mode>help</portlet-mode>
       </supports>
-      <supported-locale>en,fr,vi,ar</supported-locale>
+      <supported-locale>en</supported-locale>
       <resource-bundle>locale.portlet.exoadmin.AdminToolbarPortlet</resource-bundle>
       <portlet-info>
          <title>Administration Toolbar Portlet</title>

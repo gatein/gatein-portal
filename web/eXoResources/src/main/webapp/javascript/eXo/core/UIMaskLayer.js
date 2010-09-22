@@ -107,7 +107,8 @@ UIMaskLayer.prototype.removeMasks = function(maskLayer) {
 UIMaskLayer.prototype.createMask = function(blockContainerId, object, opacity, position) {
 	try {
 		var Browser = eXo.core.Browser ;
-		var blockContainer = document.getElementById(blockContainerId) ;
+		if(typeof(blockContainerId) == "string") blockContainerId = document.getElementById(blockContainerId) ;
+		var blockContainer = blockContainerId ;
 		var maskLayer = document.createElement("div") ;
 		
 		this.object = object ;
@@ -121,12 +122,11 @@ UIMaskLayer.prototype.createMask = function(blockContainerId, object, opacity, p
 			 * reference with method eXo.core.UIMaskLayer.doScroll()
 			 */
 			document.getElementById("MaskLayer").id = "subMaskLayer";
-		}
-		blockContainer.appendChild(maskLayer) ;
-		
+		} 
+		blockContainer.appendChild(maskLayer) ;		
 		maskLayer.className = "MaskLayer" ;
-		maskLayer.id = "MaskLayer" ;
-		maskLayer.maxZIndex = 4; //3 ;
+		maskLayer.id = "MaskLayer" ;		
+		maskLayer.maxZIndex = eXo.webui.UIPopup.zIndex + 1; //3 ;
 		maskLayer.style.width = Browser.getBrowserWidth() + "px";
 		maskLayer.style.height = Browser.getBrowserHeight() + "px";
 		maskLayer.style.top = "0px" ;
@@ -137,14 +137,14 @@ UIMaskLayer.prototype.createMask = function(blockContainerId, object, opacity, p
 	    	Browser.setOpacity(maskLayer, opacity) ;
 		}
 																		
-		if(object != null){
-			if(object.nextSibling) {
-			  maskLayer.nextSiblingOfObject = object.nextSibling ;
-			  maskLayer.parentOfObject = null ;
+		if(object != null) {
+			var tempNextSibling = document.createElement("span");
+			if(object.nextSibling) {				
+				object.parentNode.insertBefore(tempNextSibling, object.nextSibling);			  			
 			} else {
-			  maskLayer.nextSiblingOfObject = null ;
-			  maskLayer.parentOfObject = object.parentNode ;
+				object.parentNode.appendChild(tempNextSibling);
 			}
+			maskLayer.nextSiblingOfObject = tempNextSibling ;
 			
 			//object.style.zIndex = maskLayer.maxZIndex + 1 ;
 			object.style.zIndex = maskLayer.maxZIndex;			
@@ -185,27 +185,31 @@ UIMaskLayer.prototype.createMaskForFrame = function(blockContainerId, object, op
 		maskLayer.id = object.id + "MaskLayer" ;
 		maskLayer.maxZIndex = 3 ;
 		maskLayer.style.width = blockContainer.offsetWidth + "px"  ;
-		maskLayer.style.height =  blockContainer.offsetHeight + eXo.core.Browser.findPosY(blockContainer) + "px"  ;
-		maskLayer.style.top = "0px" ;
-		maskLayer.style.left = "0px" ;
+		maskLayer.style.height =  blockContainer.offsetHeight + "px"  ;
+		var parentOfBlockContainer = eXo.core.DOMUtil.findAncestorById(blockContainer, "UIMaskWorkspace");
+		if (!parentOfBlockContainer) {
+			parentOfBlockContainer = document.getElementById("UIWorkingWorkspace");
+		}
+		maskLayer.style.top = eXo.core.Browser.findPosYInContainer(blockContainer, parentOfBlockContainer) + "px" ;
+		maskLayer.style.left = eXo.core.Browser.findPosXInContainer(blockContainer, parentOfBlockContainer) + "px" ;		
 		maskLayer.style.zIndex = maskLayer.maxZIndex ;
 		if(opacity) {
 	    Browser.setOpacity(maskLayer, opacity) ;
 		}
 		
 		if(object != null){
-			if(object.nextSibling) {
-			  maskLayer.nextSiblingOfObject = object.nextSibling ;
-			  maskLayer.parentOfObject = null ;
-				} else {
-				  maskLayer.nextSiblingOfObject = null ;
-				  maskLayer.parentOfObject = object.parentNode ;
-				}
+			var tempNextSibling = document.createElement("span");
+			if(object.nextSibling) {				
+				object.parentNode.insertBefore(tempNextSibling, object.nextSibling);			  			
+			} else {
+				object.parentNode.appendChild(tempNextSibling);
+			}
+			maskLayer.nextSiblingOfObject = tempNextSibling ;
+			
+			object.style.zIndex = maskLayer.maxZIndex + 1 ;
+			object.style.display = "block" ;
 				
-				object.style.zIndex = maskLayer.maxZIndex + 1 ;
-				object.style.display = "block" ;
-				
-				blockContainer.appendChild(object) ;
+			blockContainer.appendChild(object) ;
 	  }
 		
 	}catch(err) {}
@@ -278,17 +282,12 @@ UIMaskLayer.prototype.removeMask = function(maskLayer) {
 	if (maskLayer) {
 	  var parentNode = maskLayer.parentNode ;
 	  maskLayer.nextSibling.style.display = "none" ;
-  
-	  if (maskLayer.nextSiblingOfObject) {
-	  	maskLayer.nextSiblingOfObject.parentNode.insertBefore(maskLayer.nextSibling, maskLayer.nextSiblingOfObject) ;
-	  	maskLayer.nextSiblingOfObject = null ;
-	  } else {
-	  	maskLayer.parentOfObject.appendChild(maskLayer.nextSibling) ;
-	  	maskLayer.parentOfObject = null ;
-	  }
-
-  	parentNode.removeChild(maskLayer) ;
+	  
+	  maskLayer.nextSiblingOfObject.parentNode.insertBefore(maskLayer.nextSibling, maskLayer.nextSiblingOfObject) ;
+  	maskLayer.nextSiblingOfObject.parentNode.removeChild(maskLayer.nextSiblingOfObject);
   	
+  	maskLayer.nextSiblingOfObject = null ;
+  	parentNode.removeChild(maskLayer) ;  	
 	}
 } ;
 

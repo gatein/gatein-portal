@@ -171,8 +171,13 @@ public class UIPortalForm extends UIFormTabPane
 
       LocaleConfigService localeConfigService = getApplicationComponent(LocaleConfigService.class);
       LocaleConfig localeConfig = localeConfigService.getLocaleConfig(editPortal.getLocale());
-      this.<UIFormInputSet> getChildById("PortalSetting").<UIFormSelectBox> getChildById(FIELD_LOCALE).setValue(
-         localeConfig.getLanguage());
+      String lang = localeConfig.getLanguage();
+      if (localeConfig.getLocale().getCountry() != null && localeConfig.getLocale().getCountry().length() > 0)
+      {
+         lang += "_" + localeConfig.getLocale().getCountry();
+      }
+      
+      this.<UIFormInputSet> getChildById("PortalSetting").<UIFormSelectBox> getChildById(FIELD_LOCALE).setValue(lang);
       setActions(new String[]{"Save", "Close"});
    }
 
@@ -187,7 +192,6 @@ public class UIPortalForm extends UIFormTabPane
 
    private void createDefaultItem() throws Exception
    {
-      UIPortal uiPortal = Util.getUIPortal();
       LocaleConfigService localeConfigService = getApplicationComponent(LocaleConfigService.class);
       Collection<?> listLocaleConfig = localeConfigService.getLocalConfigs();
       LocaleConfig defaultLocale = localeConfigService.getDefaultLocaleConfig();
@@ -198,28 +202,27 @@ public class UIPortalForm extends UIFormTabPane
       {
          LocaleConfig localeConfig = (LocaleConfig)iterator.next();
          ResourceBundle localeResourceBundle = getResourceBundle(currentLocale);
-
-         String key = "Locale." + localeConfig.getLocale().getLanguage();
-         if (localeConfig.getLocale().getCountry() != null)
+         Locale local = localeConfig.getLocale();
+         String lang = local.getLanguage();
+         if (local.getCountry() != null && local.getCountry().length() > 0)
          {
-            key += "_" + localeConfig.getLocale().getCountry();
+            lang += "_" + local.getCountry();
          }
          
          String displayName = null;
          try
          {
+            String key = "Locale." + lang;
             String translation = localeResourceBundle.getString(key);
             displayName = translation;
          }
          catch (MissingResourceException e)
          {
-            displayName = capitalizeFirstLetter(localeConfig.getLocale().getDisplayName(currentLocale));;
+            displayName = capitalizeFirstLetter(local.getDisplayName(currentLocale));;
          }
          
-         SelectItemOption<String> option =
-            new SelectItemOption<String>(displayName, localeConfig
-               .getLanguage());
-         if (defaultLanguage.equals(localeConfig.getLanguage()))
+         SelectItemOption<String> option = new SelectItemOption<String>(displayName, lang);
+         if (defaultLanguage.equals(lang))
          {
             option.setSelected(true);
          }

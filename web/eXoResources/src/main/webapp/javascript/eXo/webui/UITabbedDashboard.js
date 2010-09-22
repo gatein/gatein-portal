@@ -39,11 +39,6 @@ eXo.webui.UITabbedDashboard = {
 			var compId = portletFrag.parentNode.id;
 			var nodeIndex = inputElement.id;
 			
-			//Change the tab label
-			var spanElement = document.createElement("span");
-			spanElement.innerHTML = newTabLabel;
-			inputElement.parentNode.replaceChild(spanElement, inputElement);
-			
 			//Send request to server to change node name
 			var href = eXo.env.server.portalBaseURL + "?portal:componentId=" + compId;
 			href += "&portal:type=action";

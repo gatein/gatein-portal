@@ -151,8 +151,8 @@ public class SkinService implements Startable
       portletThemes_ = new HashMap<String, Set<String>>();
       portalContainerName = context.getPortalContainerName();
       mainResolver = new MainResourceResolver(portalContainerName, skinConfigs_);
-      deployer = new GateInSkinConfigDeployer(portalContainerName, this);
-      removal = new GateInSkinConfigRemoval(portalContainerName, this);
+      deployer = new GateInSkinConfigDeployer(this);
+      removal = new GateInSkinConfigRemoval(this);
    }
 
    /**

@@ -24,6 +24,7 @@ import org.exoplatform.commons.utils.OutputStreamPrinter;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -70,7 +71,19 @@ public class GroovyScript
       return scriptClass;
    }
 
-   public void render(Map context, Writer writer) throws IOException, TemplateRuntimeException
+   /**
+    * Renders the script with the provided context and locale to the specified writer.
+    *
+    * @param context the context
+    * @param writer the writer
+    * @param locale the locale
+    * @throws IOException
+    * @throws TemplateRuntimeException
+    */
+   public void render(
+      Map context,
+      Writer writer,
+      Locale locale) throws IOException, TemplateRuntimeException
    {
       Binding binding = context != null ? new Binding(context) : new Binding();
 
@@ -84,6 +97,9 @@ public class GroovyScript
       {
          printer = new WriterGroovyPrinter(writer);
       }
+
+      //
+      printer.setLocale(locale);
 
       //
       BaseScript script = (BaseScript)InvokerHelper.createScript(scriptClass, binding);

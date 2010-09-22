@@ -19,8 +19,7 @@
 
 package org.exoplatform.web.application.javascript;
 
-import org.exoplatform.container.PortalContainer;
-import org.exoplatform.container.RootContainer.PortalContainerPostInitTask;
+import org.exoplatform.commons.utils.Safe;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.gatein.wci.WebAppEvent;
@@ -29,7 +28,6 @@ import org.gatein.wci.WebAppListener;
 import org.gatein.wci.impl.DefaultServletContainerFactory;
 import org.picocontainer.Startable;
 
-import java.io.IOException;
 import java.io.InputStream;
 
 import javax.servlet.ServletContext;
@@ -52,15 +50,9 @@ public class JavascriptDeployer implements WebAppListener, Startable
    /** . */
    private final JavascriptConfigService javascriptService;
 
-   /**
-    * The name of the portal container
-    */
-   private final String portalContainerName;
-
-   public JavascriptDeployer(String portalContainerName, JavascriptConfigService javascriptService)
+   public JavascriptDeployer(JavascriptConfigService javascriptService)
    {
       this.javascriptService = javascriptService;
-      this.portalContainerName = portalContainerName;
    }
 
    public void start()
@@ -80,47 +72,33 @@ public class JavascriptDeployer implements WebAppListener, Startable
          WebAppLifeCycleEvent waEvent = (WebAppLifeCycleEvent)event;
          if (waEvent.getType() == WebAppLifeCycleEvent.ADDED)
          {
-            ServletContext scontext = null;
-            try
+            ServletContext scontext = event.getWebApp().getServletContext();
+            InputStream is = scontext.getResourceAsStream(GATEIN_CONFIG_RESOURCE);
+            if (is != null)
             {
-               scontext = event.getWebApp().getServletContext();
-
-               InputStream is = scontext.getResourceAsStream(GATEIN_CONFIG_RESOURCE);
-               if (is == null)
-                  return;
                try
                {
-                  is.close();
+                  register(scontext);
                }
                catch (Exception ex)
                {
-                  // ignore me
+                  LOG.error("An error occurs while registering 'Javascript in gatein-resources.xml' from the context '"
+                     + (scontext == null ? "unknown" : scontext.getServletContextName()) + "'", ex);
                }
-               final PortalContainerPostInitTask task = new PortalContainerPostInitTask()
+               finally
                {
-
-                  public void execute(ServletContext scontext, PortalContainer portalContainer)
-                  {
-                     register(scontext, portalContainer);
-                  }
-               };
-               PortalContainer.addInitTask(scontext, task, portalContainerName);
-            }
-            catch (Exception ex)
-            {
-               LOG.error("An error occurs while registering 'Javascript in gatein-resources.xml' from the context '"
-                  + (scontext == null ? "unknown" : scontext.getServletContextName()) + "'", ex);
+                  Safe.close(is);
+               }
             }
          }
       }
    }
 
-   private void register(ServletContext scontext, PortalContainer container)
+   private void register(ServletContext scontext)
    {
-      InputStream is = null;
+      InputStream is = scontext.getResourceAsStream(GATEIN_CONFIG_RESOURCE);
       try
       {
-         is = scontext.getResourceAsStream(GATEIN_CONFIG_RESOURCE);
          JavascriptConfigParser.processConfigResource(is, javascriptService, scontext);
       }
       catch (Exception ex)
@@ -130,17 +108,7 @@ public class JavascriptDeployer implements WebAppListener, Startable
       }
       finally
       {
-         if (is != null)
-         {
-            try
-            {
-               is.close();
-            }
-            catch (IOException e)
-            {
-               // ignore me
-            }
-         }
+         Safe.close(is);
       }
    }
 }

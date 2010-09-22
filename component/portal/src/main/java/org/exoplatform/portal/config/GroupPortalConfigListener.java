@@ -154,8 +154,11 @@ public class GroupPortalConfigListener extends GroupEventListener
    {
       GroupHandler groupHandler = orgService.getGroupHandler();
       Collection<String> descendantGroups = getDescendantGroups(group, groupHandler);
+      Collection<String> deletedNavigationGroups = new ArrayList<String>();
+      deletedNavigationGroups.addAll(descendantGroups);
+      deletedNavigationGroups.add(group.getId());
       PageNavigation navigation = null;
-      for (String childGroup : descendantGroups)
+      for (String childGroup : deletedNavigationGroups)
       {
          navigation = dataService.getPageNavigation(PortalConfig.GROUP_TYPE, childGroup);
          if (navigation != null)

@@ -41,7 +41,7 @@
 	
 	void printMessage(String message, String messageType)
 	{
-		println "<div class=\"UITabContent\"";
+		println "<div class=\"UITabContent\">";
 		println "	<div class=\"PopupMessageBox\">";
 		println "		<div class=\"$messageType\">";
 		println "			<div class=\"PopupMessageContainer\">";
@@ -76,7 +76,7 @@
 		}
 	}
 %>
-	<div class="UIPopupWindow" id="$popupId" style="width: 550px; display: none;">
+	<div class="UIPopupWindow UIDragObject" id="$popupId" style="width: 550px; display: none;">
 		<div class="ExoMessageDecorator">
 			<div class="TopLeftCornerDecorator">
 				<div class="TopRightCornerDecorator">
@@ -136,9 +136,9 @@
 	</div>
 	
 	<%
-		rcontext.getJavascriptManager().addJavascript("eXo.webui.UIPopupWindow.init('$popupId', false);");
+		rcontext.getJavascriptManager().addJavascript("eXo.webui.UIPopupWindow.init('$popupId', false, null, null, $uicomponent.showMask);");
 		if(uicomponent.hasMessage()){
-			rcontext.getJavascriptManager().addJavascript("eXo.webui.UIPopupWindow.show('$popupId');");
+			rcontext.getJavascriptManager().addJavascript("eXo.webui.UIPopupWindow.show('$popupId', $uicomponent.showMask);");
 			rcontext.getJavascriptManager().addJavascript("window.setTimeout(\"eXo.webui.UIPopupWindow.increasezIndex('$popupId')\", 100);");
 		}
 	%>

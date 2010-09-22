@@ -40,6 +40,7 @@ import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -419,7 +420,7 @@ public class UITabPaneDashboard extends UIContainer
 
             PortalRequestContext prContext = Util.getPortalRequestContext();
             prContext.setResponseComplete(true);
-            prContext.getResponse().sendRedirect(prContext.getPortalURI() + selectedNode.getUri());
+            prContext.getResponse().sendRedirect(prContext.getPortalURI() + URLEncoder.encode(selectedNode.getUri(), "UTF-8"));
          }
       }
    }
@@ -437,7 +438,7 @@ public class UITabPaneDashboard extends UIContainer
             //We should redirect to current node while adding new tab fails
             PageNode currentNode = tabPane.uiPortal.getSelectedNode();
             PortalRequestContext prContext = Util.getPortalRequestContext();
-            prContext.getResponse().sendRedirect(prContext.getPortalURI() + currentNode.getUri());
+            prContext.getResponse().sendRedirect(prContext.getPortalURI() + URLEncoder.encode(currentNode.getUri(), "UTF-8"));
             
             Object[] args = {newTabLabel};
             context.getUIApplication().addMessage(new ApplicationMessage("UITabPaneDashboard.msg.wrongTabName", args));
@@ -450,7 +451,7 @@ public class UITabPaneDashboard extends UIContainer
          {
             PortalRequestContext prContext = Util.getPortalRequestContext();
             prContext.setResponseComplete(true);
-            prContext.getResponse().sendRedirect(prContext.getPortalURI() + uri);
+            prContext.getResponse().sendRedirect(prContext.getPortalURI() + URLEncoder.encode(uri, "UTF-8"));
          }
       }
    }
@@ -475,11 +476,10 @@ public class UITabPaneDashboard extends UIContainer
          String newTabLabel = context.getRequestParameter(RENAMED_TAB_LABEL_PARAMETER);
          if (!tabPane.validateName(newTabLabel))
          {
-            //TODO nguyenanhkien2a@gmail.com
             //We should redirect to current node while renaming fails
             PageNode currentNode = tabPane.uiPortal.getSelectedNode();
             PortalRequestContext prContext = Util.getPortalRequestContext();
-            prContext.getResponse().sendRedirect(prContext.getPortalURI() + currentNode.getUri());
+            prContext.getResponse().sendRedirect(prContext.getPortalURI() + URLEncoder.encode(currentNode.getUri(), "UTF-8"));
             
             Object[] args = {newTabLabel};
             context.getUIApplication().addMessage(new ApplicationMessage("UITabPaneDashboard.msg.wrongTabName", args));
@@ -491,7 +491,7 @@ public class UITabPaneDashboard extends UIContainer
          if (newUri != null)
          {
             PortalRequestContext prContext = Util.getPortalRequestContext();
-            prContext.getResponse().sendRedirect(prContext.getPortalURI() + newUri);
+            prContext.getResponse().sendRedirect(prContext.getPortalURI() + URLEncoder.encode(newUri, "UTF-8"));
          }
       }
    }

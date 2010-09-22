@@ -49,32 +49,43 @@ UIUpload.prototype.initUploadEntry = function(uploadId, isAutoUpload) {
 
 
 UIUpload.prototype.createUploadEntry = function(uploadId, isAutoUpload) {
-  var iframe = document.getElementById(uploadId+'uploadFrame');
+	var iframe = document.getElementById(uploadId+'uploadFrame');
   var idoc = iframe.contentWindow.document ;
   var uploadAction = eXo.env.server.context + "/upload?" ;
-  uploadAction += "uploadId=" + uploadId+"&action=upload" ;
-  idoc.open();
-	idoc.write("<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Strict//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd'>");
-  idoc.write("<html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en' lang='" +eXo.core.I18n.lang+ "' dir='" +eXo.core.I18n.dir+ "'>");
-  idoc.write("<head>");
-  idoc.write("<style type='text/css'>");
-  idoc.write(".UploadButton {width: 20px; height: 20px; cursor: pointer; vertical-align: bottom;");
-  idoc.write(" background: url('/eXoResources/skin/DefaultSkin/webui/component/UIUpload/background/UpArrow16x16.gif') no-repeat left; }");
-  idoc.write("</style>");
-  idoc.write("<script type='text/javascript'>var eXo = parent.eXo</script>");
-  idoc.write("</head>");
-  idoc.write("<body style='margin: 0px; border: 0px;'>");
-  idoc.write("  <form id='"+uploadId+"' class='UIUploadForm' style='margin: 0px; padding: 0px' action='"+uploadAction+"' enctype='multipart/form-data' method='post'>");
+  uploadAction += "uploadId=" + uploadId+"&action=upload" ; 
+  
+  var uploadHTML = "";
+  uploadHTML += "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Strict//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd'>";
+  uploadHTML += "<html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en' lang='" +eXo.core.I18n.lang+ "' dir='" +eXo.core.I18n.dir+ "'>";
+  uploadHTML += "<head>";
+  uploadHTML += "<style type='text/css'>";
+  uploadHTML += ".UploadButton {width: 20px; height: 20px; cursor: pointer; vertical-align: bottom;";
+  uploadHTML += " background: url('/eXoResources/skin/DefaultSkin/webui/component/UIUpload/background/UpArrow16x16.gif') no-repeat left; }";
+  uploadHTML += "</style>";
+  uploadHTML += "</head>";
+  uploadHTML += "<body style='margin: 0px; border: 0px;'>";
+  uploadHTML += "  <form id='"+uploadId+"' class='UIUploadForm' style='margin: 0px; padding: 0px' action='"+uploadAction+"' enctype='multipart/form-data' method='post'>";
   if(isAutoUpload){
-  	idoc.write("    <input type='file' name='file' id='file' value='' onchange='eXo.webui.UIUpload.upload(this, "+uploadId+")' onkeypress='return false;' />");
+  	uploadHTML += "    <input type='file' name='file' id='file' value='' onchange='parent.eXo.webui.UIUpload.upload(this, "+uploadId+")' onkeypress='return false;' />";
   }else{
-		idoc.write("    <input type='file' name='file' id='file' value='' onkeypress='return false;' />");
-	  idoc.write("    <img class='UploadButton' onclick='eXo.webui.UIUpload.upload(this, "+uploadId+")' alt='' src='/eXoResources/skin/sharedImages/Blank.gif'/>");  	
+  	uploadHTML += "    <input type='file' name='file' id='file' value='' onkeypress='return false;' />";
+  	uploadHTML += "    <img class='UploadButton' style='width: 20px; height: 20px; cursor: pointer; vertical-align: bottom; background: url(\"/eXoResources/skin/DefaultSkin/webui/component/UIUpload/background/UpArrow16x16.gif\") no-repeat left;' onclick='parent.eXo.webui.UIUpload.upload(this, "+uploadId+")' alt='' src='/eXoResources/skin/sharedImages/Blank.gif'/>";  	
   }
-  idoc.write("  </form>");
-  idoc.write("</body>");
-  idoc.write("</html>");
-  idoc.close();
+  uploadHTML += "  </form>";
+  uploadHTML += "</body>";
+  uploadHTML += "</html>";  
+  
+  if (navigator.userAgent.toLowerCase().indexOf('chrome') > -1) {
+  	//workaround for Chrome
+  	//When submit in iframe with Chrome, the iframe.contentWindow.document seems not be reconstructed correctly
+  	idoc.open();
+  	idoc.close();
+  	idoc.documentElement.innerHTML = uploadHTML;    	
+  } else {
+  	idoc.open();
+  	idoc.write(uploadHTML);
+  	idoc.close();
+  }
 };
 
 /**

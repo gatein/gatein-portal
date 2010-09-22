@@ -63,6 +63,7 @@ public class UIPopupMessages extends UIPopupWindow
       errors_ = new ArrayList<ApplicationMessage>();
       warnings_ = new ArrayList<ApplicationMessage>();
       infos_ = new ArrayList<ApplicationMessage>();
+      setShowMask(true);
       setShow(true);
    }
 

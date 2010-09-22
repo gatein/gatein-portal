@@ -160,6 +160,9 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
 
    private StateString navigationalState;
 
+   /** A field storing localized value of javax.portlet.title **/
+   private String configuredTitle;
+   
    public UIPortlet()
    {
       // That value will be overriden when it is mapped onto a data storage
@@ -384,16 +387,6 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
    public void setSupportedPublicRenderParameters(Map<QName, String> supportedPublicRenderParameters)
    {
       supportedPublicParams_ = supportedPublicRenderParameters;
-   }
-
-   public String getDisplayTitle()
-   {
-      String title = getTitle();
-      if (title == null)
-      {
-         title = getDisplayName();
-      }
-      return title;
    }
 
    public String getDisplayName()
@@ -941,5 +934,38 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
    void setNavigationalState(StateString navigationalState)
    {
       this.navigationalState = navigationalState;
+   }
+      
+   protected void setConfiguredTitle(String _configuredTitle)
+   {
+  	 this.configuredTitle = _configuredTitle;
+   }
+   
+   /**
+    * Returns the title showed on the InfoBar. The title is computed in following manner.
+    * 
+    * 1. First, the method getTitle(), inherited from UIPortalComponent is called. The getTitle() returns
+    * what users set in the PortletSetting tab, the current method returns call result if it is not null.
+    * 
+    * 2. configuredTitle, which is the localized value of javax.portlet.title is returned if it is not null.
+    * 
+    * 3. If the method does not terminate at neither (1) nor (2), the configured display name is returned. 
+    * @return
+    */
+   public String getDisplayTitle()
+   {
+  	 String displayedTitle = getTitle();
+  	 if(displayedTitle != null && displayedTitle.trim().length() > 0)
+  	 {
+  		 return displayedTitle;
+  	 }
+  	 
+  	 if(configuredTitle != null)
+  	 {
+  		 return configuredTitle;
+  	 }
+  	 
+  	 return getDisplayName();
+  	 
    }
 }

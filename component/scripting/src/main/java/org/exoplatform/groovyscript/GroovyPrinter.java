@@ -18,12 +18,16 @@
  */
 package org.exoplatform.groovyscript;
 
+import groovy.lang.GString;
 import groovy.lang.GroovyInterceptable;
 import groovy.lang.GroovyObjectSupport;
 import org.exoplatform.commons.utils.Text;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.text.DateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -31,6 +35,19 @@ import java.io.Writer;
  */
 abstract class GroovyPrinter extends GroovyObjectSupport implements GroovyInterceptable
 {
+
+   /** An optional locale. */
+   private Locale locale;
+
+   public Locale getLocale()
+   {
+      return locale;
+   }
+
+   public void setLocale(Locale locale)
+   {
+      this.locale = locale;
+   }
 
    /**
     * Optimize the call to the various print methods.
@@ -82,21 +99,65 @@ abstract class GroovyPrinter extends GroovyObjectSupport implements GroovyInterc
       }
    }
 
+   /**
+    * We handle in this method a conversion of an object to another one for formatting purposes.
+    *
+    * @param o the object to format
+    * @return the formatted object
+    */
+   private Object format(Object o)
+   {
+      if (o instanceof Date)
+      {
+         if (locale != null)
+         {
+            DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM, locale);
+            o = dateFormat.format((Date)o);
+         }
+      }
+
+      //
+      return o;
+   }
+
+   private String toString(Object o)
+   {
+      Object f = format(o);
+      if (f == null)
+      {
+         return "null";
+      }
+      else if (f instanceof String)
+      {
+         return (String)f;
+      }
+      else
+      {
+         return o.toString();
+      }
+   }
+
    public final void print(Object o)
    {
       try
       {
-         if (o == null)
-         {
-            write("null");
-         }
-         else if (o instanceof Text)
+         if (o instanceof Text)
          {
             write((Text)o);
          }
+         else if (o instanceof GString)
+         {
+            GString gs = (GString)o;
+            Object[] values = gs.getValues();
+            for (int i = 0;i < values.length;i++)
+            {
+               values[i] = format(values[i]);
+            }
+            write(o.toString());
+         }
          else
          {
-            write(o.toString());
+            write(toString(o));
          }
       }
       catch (IOException ignore)

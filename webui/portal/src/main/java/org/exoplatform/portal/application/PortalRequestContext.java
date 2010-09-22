@@ -20,6 +20,7 @@
 package org.exoplatform.portal.application;
 
 import org.exoplatform.Constants;
+import org.exoplatform.commons.utils.ExpressionUtil;
 import org.exoplatform.commons.utils.PortalPrinter;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.portal.config.UserPortalConfigService;
@@ -224,6 +225,7 @@ public class PortalRequestContext extends WebuiRequestContext
             if (page != null)
             {
                title = page.getTitle();
+               return ExpressionUtil.getExpressionValue(this.getApplicationResourceBundle(), title);
             }
             else
             {

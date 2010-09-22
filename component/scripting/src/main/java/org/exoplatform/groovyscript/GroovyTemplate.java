@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -104,12 +105,22 @@ public class GroovyTemplate
 
    public void render(Writer writer) throws IOException, TemplateRuntimeException
    {
-      render(writer, null);
+      render(writer, (Map)null);
+   }
+
+   public void render(Writer writer, Locale locale) throws IOException, TemplateRuntimeException
+   {
+      render(writer, null, locale);
+   }
+
+   public void render(Writer writer, Map binding, Locale locale) throws IOException, TemplateRuntimeException
+   {
+      script.render(binding, writer, locale);
    }
 
    public void render(Writer writer, Map binding) throws IOException, TemplateRuntimeException
    {
-      script.render(binding, writer);
+      script.render(binding, writer, null);
    }
 
    public String render() throws IOException, TemplateRuntimeException
@@ -117,10 +128,20 @@ public class GroovyTemplate
       return render((Map)null);
    }
 
+   public String render(Locale locale) throws IOException, TemplateRuntimeException
+   {
+      return render((Map)null, locale);
+   }
+
    public String render(Map binding) throws IOException, TemplateRuntimeException
    {
+      return render(binding, null);
+   }
+
+   public String render(Map binding, Locale locale) throws IOException, TemplateRuntimeException
+   {
       StringWriter buffer = new StringWriter();
-      render(buffer, binding);
+      render(buffer, binding, locale);
       buffer.close();
       return buffer.toString();
    }

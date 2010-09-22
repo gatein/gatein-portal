@@ -19,7 +19,6 @@
 
 function UIPortalControl() {
   this.scrollManagers = new Array();
-  this.t = 0;
 };
 /**
  * Change state of window
@@ -70,18 +69,20 @@ UIPortalControl.prototype.onEnterPress = function(e, executeScript) {
  if(e.keyCode) code = e.keyCode;
  else if (e.which) code = e.which;
  if(code ==13) {
-   if(this.t != 13) {
-     var uiPortalLoginFormAction = document.getElementById("UIPortalLoginFormAction");
-     if(uiPortalLoginFormAction) {
-       uiPortalLoginFormAction.onclick() ;
-     }
-     else
-     {
-       if(executeScript)
-         eval(executeScript);
-     }
+	 if (window.event) {
+		 e.returnValue = false;
+	 } else {
+		 e.preventDefault();
+	 }
+	 var uiPortalLoginFormAction = document.getElementById("UIPortalLoginFormAction");
+   if(uiPortalLoginFormAction) {
+     uiPortalLoginFormAction.onclick() ;
    }
-   this.t = code;
+   else
+   {
+     if(executeScript)
+       eval(executeScript);
+   }
  }
 };
 

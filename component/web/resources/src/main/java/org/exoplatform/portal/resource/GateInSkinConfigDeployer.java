@@ -19,9 +19,8 @@
 
 package org.exoplatform.portal.resource;
 
+import org.exoplatform.commons.utils.Safe;
 import org.exoplatform.commons.xml.DocumentSource;
-import org.exoplatform.container.PortalContainer;
-import org.exoplatform.container.RootContainer.PortalContainerPostInitTask;
 import org.exoplatform.portal.resource.config.xml.SkinConfigParser;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
@@ -53,15 +52,9 @@ public class GateInSkinConfigDeployer extends AbstractResourceHandler
    /** . */
    private static final String GATEIN_CONFIG_RESOURCE = "/WEB-INF/gatein-resources.xml";
 
-   /**
-    * The name of the portal container
-    */
-   private final String portalContainerName;
-
-   public GateInSkinConfigDeployer(String portalContainerName, SkinService _skinService)
+   public GateInSkinConfigDeployer(SkinService _skinService)
    {
       this.skinService = _skinService;
-      this.portalContainerName = portalContainerName;
    }
 
    @Override
@@ -72,42 +65,29 @@ public class GateInSkinConfigDeployer extends AbstractResourceHandler
          WebAppLifeCycleEvent waEvent = (WebAppLifeCycleEvent)event;
          if (waEvent.getType() == WebAppLifeCycleEvent.ADDED)
          {
-            ServletContext scontext = null;
-            try
+            ServletContext scontext = event.getWebApp().getServletContext();
+            InputStream is = scontext.getResourceAsStream(GATEIN_CONFIG_RESOURCE);
+            if (is != null)
             {
-               scontext = event.getWebApp().getServletContext();
-               InputStream is = scontext.getResourceAsStream(GATEIN_CONFIG_RESOURCE);
-               if (is == null)
-                  return;
                try
                {
-                  is.close();
+                  register(scontext);
                }
                catch (Exception ex)
                {
-                  // ignore me
+                  log.error("An error occurs while registering '" + GATEIN_CONFIG_RESOURCE + "' from the context '"
+                     + (scontext == null ? "unknown" : scontext.getServletContextName()) + "'", ex);
                }
-               final PortalContainerPostInitTask task = new PortalContainerPostInitTask()
+               finally
                {
-
-                  public void execute(ServletContext scontext, PortalContainer portalContainer)
-                  {
-                     register(scontext, portalContainer);
-                     skinService.registerContext(scontext);
-                  }
-               };
-               PortalContainer.addInitTask(scontext, task, portalContainerName);
-            }
-            catch (Exception ex)
-            {
-               log.error("An error occurs while registering '" + GATEIN_CONFIG_RESOURCE + "' from the context '"
-                  + (scontext == null ? "unknown" : scontext.getServletContextName()) + "'", ex);
+                  Safe.close(is);
+               }
             }
          }
       }
    }
 
-   private void register(ServletContext scontext, PortalContainer container)
+   private void register(ServletContext scontext)
    {
       URL url;
       try
@@ -127,5 +107,8 @@ public class GateInSkinConfigDeployer extends AbstractResourceHandler
          log.error("An error occurs while registering '" + GATEIN_CONFIG_RESOURCE + "' from the context '"
             + (scontext == null ? "unknown" : scontext.getServletContextName()) + "'", ex);
       }
+
+      //
+      skinService.registerContext(scontext);
    }
 }

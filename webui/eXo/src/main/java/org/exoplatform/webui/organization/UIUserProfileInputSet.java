@@ -189,13 +189,11 @@ public class UIUserProfileInputSet extends UIFormInputSet
          {
             option.setSelected(true);
          }
-         if (config.getLanguage().equals("en"))
-         {
-            lang.add(0, option);
-            continue;
-         }
          lang.add(option);
       }
+      
+      // Set default language for new user is empty
+      lang.add(new SelectItemOption<String>("", ""));
       
       Collections.sort(lang, new LanguagesComparator());
 

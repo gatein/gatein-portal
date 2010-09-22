@@ -60,6 +60,7 @@ import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
 
 import java.util.List;
+import java.util.ResourceBundle;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -67,6 +68,7 @@ import javax.servlet.http.HttpServletRequest;
 @ComponentConfigs({
    @ComponentConfig(template = "app:/groovy/portal/webui/portal/UIPortalComposer.gtmpl", events = {
       @EventConfig(listeners = UIPortalComposer.ViewPropertiesActionListener.class),
+      @EventConfig(listeners = UIPortalComposer.CloseComposerActionListener.class),
       @EventConfig(listeners = UIPortalComposer.AbortActionListener.class),
       @EventConfig(listeners = UIPortalComposer.FinishActionListener.class),
       @EventConfig(listeners = UIPortalComposer.SwitchModeActionListener.class),
@@ -74,6 +76,7 @@ import javax.servlet.http.HttpServletRequest;
       @EventConfig(listeners = UIPortalComposer.ToggleActionListener.class)}),
    @ComponentConfig(id = "UIPageEditor", template = "app:/groovy/portal/webui/portal/UIPortalComposer.gtmpl", events = {
       @EventConfig(name = "ViewProperties", listeners = UIPortalComposer.ViewProperties2ActionListener.class),
+      @EventConfig(listeners = UIPortalComposer.CloseComposerActionListener.class),
       @EventConfig(name = "Abort", listeners = UIPortalComposer.Abort2ActionListener.class),
       @EventConfig(name = "Finish", listeners = UIPortalComposer.Finish2ActionListener.class),
       @EventConfig(name = "Back", listeners = UIPortalComposer.BackActionListener.class),
@@ -95,7 +98,7 @@ public class UIPortalComposer extends UIContainer
       UITabPane uiTabPane = addChild(UITabPane.class, "UIPortalComposerTab", null);
       uiTabPane.addChild(UIApplicationList.class, null, null).setRendered(true);
       uiTabPane.addChild(UIContainerList.class, null, null);
-      uiTabPane.setSelectedTab(1);
+      uiTabPane.setSelectedTab(1);     
    }
 
    public int getPortalMode()
@@ -617,6 +620,27 @@ public class UIPortalComposer extends UIContainer
          uiPageForm.setValues((UIPage)uiPage);
          uiMaskWS.setUIComponent(uiPageForm);
          event.getRequestContext().addUIComponentToUpdateByAjax(uiMaskWS);
+      }
+   }
+   
+   static public class CloseComposerActionListener extends EventListener<UIPortalComposer> 
+   {
+      public void execute(Event<UIPortalComposer> event) throws Exception
+      {
+         UIPortalComposer uiPortalComposer = event.getSource();
+         UIEditInlineWorkspace uiEditInlineWorkspace = uiPortalComposer.getAncestorOfType(UIEditInlineWorkspace.class);         
+         if (uiPortalComposer.isEditted()) 
+         {
+            ResourceBundle resourceBundle = event.getRequestContext().getApplicationResourceBundle();
+            String closeMessage = resourceBundle.getString("UIEditInlineWorkspace.confirm.close");
+            
+            uiEditInlineWorkspace.showConfirmWindow(closeMessage);
+         }
+         else 
+         {
+            Event<UIComponent> abortEvent = uiPortalComposer.createEvent("Abort", event.getExecutionPhase(), event.getRequestContext());
+            abortEvent.broadcast();
+         }
       }
    }
 

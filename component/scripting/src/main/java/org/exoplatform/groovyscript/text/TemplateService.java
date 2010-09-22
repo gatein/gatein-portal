@@ -44,6 +44,7 @@ import org.gatein.common.io.IOTools;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Locale;
 
 /**
  * Created by The eXo Platform SAS Dec 26, 2005
@@ -113,8 +114,7 @@ public class TemplateService
       GroovyTemplate template = getTemplate(name, context.getResourceResolver());
       context.put("_ctx", context);
       context.setGroovyTemplateService(this);
-      template.render(context.getWriter(), context);
-
+      template.render(context.getWriter(), context, (Locale)context.get("locale"));
       long endTime = System.currentTimeMillis();
 
       TemplateStatistic templateStatistic = statisticService.getTemplateStatistic(name);
@@ -137,7 +137,7 @@ public class TemplateService
          throw new Exception("Binding cannot be null");
       context.put("_ctx", context);
       GroovyTemplate template = getTemplate(name, context.getResourceResolver());
-      template.render(context.getWriter(), context);
+      template.render(context.getWriter(), context, (Locale)context.get("locale"));
    }
 
    final public GroovyTemplate getTemplate(String name, ResourceResolver resolver) throws Exception

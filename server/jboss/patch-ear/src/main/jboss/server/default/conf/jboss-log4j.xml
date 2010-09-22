@@ -211,8 +211,8 @@
       <priority value="INFO"/>
    </category>
    
-   <!-- Limit the JSR77 categories -->
-   <category name="jcr">
+   <!-- Limit the JSR170 categories -->
+   <category name="exo.jcr">
       <priority value="INFO"/>
    </category>
 

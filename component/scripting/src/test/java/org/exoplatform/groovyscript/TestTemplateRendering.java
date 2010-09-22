@@ -26,6 +26,7 @@ import java.awt.*;
 import java.io.*;
 import java.util.EmptyStackException;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -43,6 +44,32 @@ public class TestTemplateRendering extends AbstractGateInTest
       template.render(writer);
       writer.close();
       assertEquals("abcde", baos.toString("UTF-8"));
+   }
+
+   public void testDate1() throws Exception
+   {
+      GroovyTemplate template = new GroovyTemplate("<% print(new Date(0)); %>");
+      assertEquals("1 janv. 1970", template.render(Locale.FRENCH));
+      assertEquals("Jan 1, 1970", template.render(Locale.ENGLISH));
+      assertEquals("Thu Jan 01 07:00:00 ICT 1970", template.render());
+   }
+
+   public void testDate2() throws Exception
+   {
+      GroovyTemplate template = new GroovyTemplate("<% def date = new Date(0) %>$date");
+      System.out.println("template.getGroovy() = " + template.getGroovy());
+      assertEquals("1 janv. 1970", template.render(Locale.FRENCH));
+      assertEquals("Jan 1, 1970", template.render(Locale.ENGLISH));
+      assertEquals("Thu Jan 01 07:00:00 ICT 1970", template.render());
+   }
+
+   public void testDate3() throws Exception
+   {
+      GroovyTemplate template = new GroovyTemplate("<%= new Date(0) %>");
+      System.out.println("template.getGroovy() = " + template.getGroovy());
+      assertEquals("1 janv. 1970", template.render(Locale.FRENCH));
+      assertEquals("Jan 1, 1970", template.render(Locale.ENGLISH));
+      assertEquals("Thu Jan 01 07:00:00 ICT 1970", template.render());
    }
 
    public void testFoo() throws Exception
