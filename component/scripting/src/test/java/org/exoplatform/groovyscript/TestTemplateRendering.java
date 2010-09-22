@@ -24,6 +24,8 @@ import org.exoplatform.component.test.AbstractGateInTest;
 
 import java.awt.*;
 import java.io.*;
+import java.text.DateFormat;
+import java.util.Date;
 import java.util.EmptyStackException;
 import java.util.HashMap;
 import java.util.Locale;
@@ -35,6 +37,19 @@ import java.util.Map;
  */
 public class TestTemplateRendering extends AbstractGateInTest
 {
+
+   private DateFormat dateFormatFR;
+   private DateFormat dateFormatEN;
+   
+   @Override
+   protected void setUp() throws Exception
+   {
+      // TODO Auto-generated method stub
+      super.setUp();
+      
+      dateFormatFR = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.FRANCE);
+      dateFormatEN = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.ENGLISH);
+   }
 
    public void testOutputStreamWriter() throws Exception
    {
@@ -48,28 +63,31 @@ public class TestTemplateRendering extends AbstractGateInTest
 
    public void testDate1() throws Exception
    {
+      Date dateToTest = new Date(0);
       GroovyTemplate template = new GroovyTemplate("<% print(new Date(0)); %>");
-      assertEquals("1 janv. 1970", template.render(Locale.FRENCH));
-      assertEquals("Jan 1, 1970", template.render(Locale.ENGLISH));
-      assertEquals("Thu Jan 01 07:00:00 ICT 1970", template.render());
+      assertEquals(dateFormatFR.format(dateToTest), template.render(Locale.FRENCH));
+      assertEquals(dateFormatEN.format(dateToTest), template.render(Locale.ENGLISH));
+      assertEquals(dateToTest.toString(), template.render());
    }
 
    public void testDate2() throws Exception
    {
+      Date dateToTest = new Date(0);
       GroovyTemplate template = new GroovyTemplate("<% def date = new Date(0) %>$date");
       System.out.println("template.getGroovy() = " + template.getGroovy());
-      assertEquals("1 janv. 1970", template.render(Locale.FRENCH));
-      assertEquals("Jan 1, 1970", template.render(Locale.ENGLISH));
-      assertEquals("Thu Jan 01 07:00:00 ICT 1970", template.render());
+      assertEquals(dateFormatFR.format(dateToTest), template.render(Locale.FRENCH));
+      assertEquals(dateFormatEN.format(dateToTest), template.render(Locale.ENGLISH));
+      assertEquals(dateToTest.toString(), template.render());
    }
 
    public void testDate3() throws Exception
    {
+      Date dateToTest = new Date(0);
       GroovyTemplate template = new GroovyTemplate("<%= new Date(0) %>");
       System.out.println("template.getGroovy() = " + template.getGroovy());
-      assertEquals("1 janv. 1970", template.render(Locale.FRENCH));
-      assertEquals("Jan 1, 1970", template.render(Locale.ENGLISH));
-      assertEquals("Thu Jan 01 07:00:00 ICT 1970", template.render());
+      assertEquals(dateFormatFR.format(dateToTest), template.render(Locale.FRENCH));
+      assertEquals(dateFormatEN.format(dateToTest), template.render(Locale.ENGLISH));
+      assertEquals(dateToTest.toString(), template.render());
    }
 
    public void testFoo() throws Exception
