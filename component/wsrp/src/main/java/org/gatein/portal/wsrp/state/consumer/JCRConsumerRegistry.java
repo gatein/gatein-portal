@@ -26,6 +26,7 @@ package org.gatein.portal.wsrp.state.consumer;
 import org.chromattic.api.ChromatticSession;
 import org.exoplatform.container.ExoContainer;
 import org.gatein.portal.wsrp.state.JCRPersister;
+import org.gatein.portal.wsrp.state.StoresByPathManager;
 import org.gatein.portal.wsrp.state.consumer.mapping.EndpointInfoMapping;
 import org.gatein.portal.wsrp.state.consumer.mapping.ProducerInfoMapping;
 import org.gatein.portal.wsrp.state.consumer.mapping.ProducerInfosMapping;
@@ -46,7 +47,7 @@ import java.util.List;
  * @author <a href="mailto:chris.laprun@jboss.com">Chris Laprun</a>
  * @version $Revision$
  */
-public class JCRConsumerRegistry extends AbstractConsumerRegistry
+public class JCRConsumerRegistry extends AbstractConsumerRegistry implements StoresByPathManager<ProducerInfo>
 {
 //   private NewJCRPersister persister;
    private JCRPersister persister;
@@ -89,10 +90,7 @@ public class JCRConsumerRegistry extends AbstractConsumerRegistry
    @Override
    protected void delete(ProducerInfo info)
    {
-      ChromatticSession session = persister.getSession();
-      delete(session, getPathFor(info));
-
-      persister.closeSession(session, true);
+      persister.delete(info, this);
    }
 
    @Override
@@ -168,14 +166,9 @@ public class JCRConsumerRegistry extends AbstractConsumerRegistry
       return producerInfosMapping;
    }
 
-   private void delete(ChromatticSession session, String path)
+   public String getChildPath(ProducerInfo needsComputedPath)
    {
-      ProducerInfoMapping old = session.findByPath(ProducerInfoMapping.class, path);
-
-      if (old != null)
-      {
-         session.remove(old);
-      }
+      return getPathFor(needsComputedPath);
    }
 
    private static String getPathFor(ProducerInfo info)

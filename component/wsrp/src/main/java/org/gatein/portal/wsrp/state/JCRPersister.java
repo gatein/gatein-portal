@@ -100,6 +100,25 @@ public class JCRPersister
       session.save();
    }
 
+   public <T> boolean delete(T toDelete, StoresByPathManager<T> manager)
+   {
+      ChromatticSession session = getSession();
+
+      Object old = session.findByPath(toDelete.getClass(), manager.getChildPath(toDelete));
+
+      if (old != null)
+      {
+         session.remove(old);
+         closeSession(session, true);
+         return true;
+      }
+      else
+      {
+         closeSession(session, false);
+         return false;
+      }
+
+   }
 
    public static class WSRPSessionLifeCycle implements SessionLifeCycle
    {
@@ -234,12 +253,12 @@ public class JCRPersister
          return encode(s);
       }
 
-      private String decode(String s)
+      public static String decode(String s)
       {
          return s.replace(CLOSE_BRACE_REPLACEMENT, CLOSE_BRACE).replace(OPEN_BRACE_REPLACEMENT, OPEN_BRACE).replace(COLON_REPLACEMENT, COLON);
       }
 
-      private String encode(String s)
+      public static String encode(String s)
       {
          return s.replace(OPEN_BRACE, OPEN_BRACE_REPLACEMENT).replace(CLOSE_BRACE, CLOSE_BRACE_REPLACEMENT).replace(COLON, COLON_REPLACEMENT);
       }
@@ -251,6 +270,11 @@ public class JCRPersister
       private static final String SLASH = "/";
 
       public String decodeNodeName(FormatterContext formatterContext, String s)
+      {
+         return decode(s);
+      }
+
+      public static String decode(String s)
       {
          return s.replace(SLASH_REPLACEMENT, SLASH);
       }

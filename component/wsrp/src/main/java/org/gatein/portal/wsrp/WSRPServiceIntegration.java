@@ -40,6 +40,7 @@ import org.gatein.pc.portlet.state.StateConverter;
 import org.gatein.pc.portlet.state.producer.PortletStatePersistenceManager;
 import org.gatein.pc.portlet.state.producer.ProducerPortletInvoker;
 import org.gatein.portal.wsrp.state.consumer.JCRConsumerRegistry;
+import org.gatein.portal.wsrp.state.migration.JCRMigrationService;
 import org.gatein.portal.wsrp.state.producer.configuration.JCRProducerConfigurationService;
 import org.gatein.portal.wsrp.state.producer.registrations.JCRRegistrationPersistenceManager;
 import org.gatein.portal.wsrp.state.producer.state.JCRPortletStatePersistenceManager;
@@ -54,9 +55,11 @@ import org.gatein.wci.WebAppLifeCycleEvent;
 import org.gatein.wci.WebAppListener;
 import org.gatein.wci.impl.DefaultServletContainerFactory;
 import org.gatein.wsrp.WSRPConstants;
+import org.gatein.wsrp.consumer.migration.MigrationService;
 import org.gatein.wsrp.consumer.registry.ActivatingNullInvokerHandler;
 import org.gatein.wsrp.consumer.registry.ConsumerRegistry;
 import org.gatein.wsrp.producer.ProducerHolder;
+import org.gatein.wsrp.producer.WSRPPortletInvoker;
 import org.gatein.wsrp.producer.WSRPProducer;
 import org.gatein.wsrp.producer.config.ProducerConfigurationService;
 import org.picocontainer.Startable;
@@ -198,10 +201,15 @@ public class WSRPServiceIntegration implements Startable, WebAppListener
       producerPortletInvoker.setPersistenceManager(producerPersistenceManager);
       producerPortletInvoker.setStateManagementPolicy(producerStateManagementPolicy);
       producerPortletInvoker.setStateConverter(producerStateConverter);
+      
+      WSRPPortletInvoker wsrpPortletInvoker = new WSRPPortletInvoker();
+      wsrpPortletInvoker.setNext(producerPortletInvoker);
+      wsrpPortletInvoker.setRegistrationManager(registrationManager);
+      
 
       // create and wire WSRP producer
       producer = ProducerHolder.getProducer(true);
-      producer.setPortletInvoker(producerPortletInvoker);
+      producer.setPortletInvoker(wsrpPortletInvoker);
       producer.setRegistrationManager(registrationManager);
       producer.setConfigurationService(producerConfigurationService);
 
@@ -227,6 +235,12 @@ public class WSRPServiceIntegration implements Startable, WebAppListener
          consumerRegistry = new JCRConsumerRegistry(container);
          consumerRegistry.setFederatingPortletInvoker(federatingPortletInvoker);
          consumerRegistry.setSessionEventBroadcaster(sessionEventBroadcaster);
+
+         // migration service
+         MigrationService migrationService = new JCRMigrationService(container);
+         migrationService.setStructureProvider(new MOPPortalStructureProvider(container));
+         consumerRegistry.setMigrationService(migrationService);
+
          consumerRegistry.start();
 
          // set up a NullInvokerHandler so that when a remote producer is queried, we can start it if needed

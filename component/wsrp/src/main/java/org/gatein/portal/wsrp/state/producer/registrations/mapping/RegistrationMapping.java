@@ -40,6 +40,7 @@ import org.gatein.registration.spi.RegistrationSPI;
 
 import javax.xml.namespace.QName;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -63,6 +64,11 @@ public abstract class RegistrationMapping
    public abstract String getRegistrationHandle();
 
    public abstract void setRegistrationHandle(String handle);
+   
+   @Property(name="portletHandles")
+   public abstract List<String> getPortletHandles();
+   
+   public abstract void setPortletHandles(List<String> portletHandles);
 
    @OneToOne
    @Owner
@@ -83,7 +89,8 @@ public abstract class RegistrationMapping
    {
       setStatus(registration.getStatus());
       setRegistrationHandle(registration.getRegistrationHandle());
-
+      setPortletHandles(registration.getPortletHandles());
+      
       Map<QName, Object> properties = registration.getProperties();
       if (ParameterValidation.existsAndIsNotEmpty(properties))
       {
@@ -109,6 +116,7 @@ public abstract class RegistrationMapping
       RegistrationSPI reg = persistenceManager.newRegistrationSPI(consumer, props, getPersistentKey());
       reg.setStatus(getStatus());
       reg.setRegistrationHandle(getRegistrationHandle());
+      reg.getPortletHandles().addAll(getPortletHandles());
 
       return reg;
    }

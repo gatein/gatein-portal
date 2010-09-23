@@ -111,6 +111,9 @@
                              onParentVersion="COPY" protected="false" multiple="false">
             <valueConstraints/>
          </propertyDefinition>
+         <propertyDefinition name="portletHandles" requiredType="String" autoCreated="false" mandatory="false"
+                             onParentVersion="COPY" protected="false" multiple="true">
+         </propertyDefinition>
       </propertyDefinitions>
       <childNodeDefinitions>
          <childNodeDefinition name="properties" defaultPrimaryType="wsrp:registrationproperties" autoCreated="false"

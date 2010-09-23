@@ -185,6 +185,26 @@ public class JCRRegistrationPersistenceManager extends RegistrationPersistenceMa
 
       return consumerSPI;
    }
+   
+   protected RegistrationSPI internalSaveChangesTo(Registration registration)
+   {
+      RegistrationSPI registrationSPI = super.internalSaveChangesTo(registration);
+      
+      ChromatticSession session = persister.getSession();
+      try
+      {
+         RegistrationMapping cm = session.findById(RegistrationMapping.class, registration.getPersistentKey());
+         cm.initFrom(registration);
+         persister.closeSession(session, true);
+      }
+      catch (Exception e)
+      {
+         e.printStackTrace(); //todo: fix me
+         persister.closeSession(session, false);
+      }
+      
+      return registrationSPI;
+   }
 
    @Override
    protected ConsumerGroupSPI internalRemoveConsumerGroup(String name)

@@ -46,6 +46,10 @@
          <scope>provided</scope>
       </dependency>
       <dependency>
+         <groupId>org.gatein.mop</groupId>
+         <artifactId>mop-api</artifactId>
+      </dependency>
+      <dependency>
          <groupId>org.gatein.wsrp</groupId>
          <artifactId>wsrp-integration-api</artifactId>
          <scope>provided</scope>
@@ -73,6 +77,11 @@
       <dependency>
          <groupId>org.exoplatform.portal</groupId>
          <artifactId>exo.portal.component.common</artifactId>
+         <scope>provided</scope>
+      </dependency>
+      <dependency>
+         <groupId>org.exoplatform.portal</groupId>
+         <artifactId>exo.portal.component.portal</artifactId>
          <scope>provided</scope>
       </dependency>
 
