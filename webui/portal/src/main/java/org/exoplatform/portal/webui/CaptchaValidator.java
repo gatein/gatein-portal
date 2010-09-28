@@ -19,9 +19,8 @@
 
 package org.exoplatform.portal.webui;
 
-import org.exoplatform.portal.application.PortalRequestContext;
-import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.exception.MessageException;
 import org.exoplatform.webui.form.UIForm;
@@ -32,8 +31,8 @@ import nl.captcha.Captcha;
 
 import java.io.Serializable;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+import javax.portlet.PortletRequest;
+import javax.portlet.PortletSession;
 
 /**
  * @author <a href="mailto:theute@redhat.com">Thomas Heute</a>
@@ -46,9 +45,9 @@ public class CaptchaValidator implements Validator, Serializable
 
    public void validate(UIFormInput uiInput) throws Exception
    {
-      PortalRequestContext prContext = Util.getPortalRequestContext();
-      HttpServletRequest request = prContext.getRequest();
-      HttpSession session = request.getSession();
+      PortletRequestContext ctx = PortletRequestContext.getCurrentInstance();
+      PortletRequest req = ctx.getRequest();
+      PortletSession session = req.getPortletSession();
 
       Captcha captcha = (Captcha) session.getAttribute(Captcha.NAME);
 

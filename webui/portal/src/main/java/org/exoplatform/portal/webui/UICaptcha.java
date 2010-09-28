@@ -22,10 +22,11 @@
  ******************************************************************************/
 package org.exoplatform.portal.webui;
 
-import java.util.Calendar;
-
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.form.UIFormStringInput;
+
+import javax.portlet.RenderResponse;
+import javax.portlet.ResourceURL;
 
 /**
  * @author <a href="mailto:theute@redhat.com">Thomas Heute</a>
@@ -40,9 +41,18 @@ public class UICaptcha extends UIFormStringInput
    }
 
    public void processRender(WebuiRequestContext context) throws Exception
-   {      
-      context.getWriter().write("<div id='" + getId() + "'><img src=\"" + context.getPortalContextPath() + "/captcha?v=" + 
-         Calendar.getInstance().getTimeInMillis() + "\" /><br/>");      
+   {
+
+      RenderResponse resp =  context.getResponse();
+
+      //
+      ResourceURL url = resp.createResourceURL();
+
+      // context.getPortalContextPath() + "/captcha?v=" +  Calendar.getInstance().getTimeInMillis()
+
+
+
+      context.getWriter().write("<div id='" + getId() + "'><img src=\"" + url.toString()  + "\" /><br/>");
       super.processRender(context);
       context.getWriter().write("</div>");
    }

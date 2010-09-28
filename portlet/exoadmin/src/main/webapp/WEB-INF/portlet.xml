@@ -85,12 +85,20 @@
       <description xml:lang="EN">Register Portlet</description>
       <portlet-name>RegisterPortlet</portlet-name>
       <display-name xml:lang="EN">Register Portlet</display-name>
-      <portlet-class>org.exoplatform.webui.application.portlet.PortletApplicationController</portlet-class>
+      <portlet-class>org.exoplatform.account.webui.component.RegisterPortletApplicationController</portlet-class>
 
       <init-param>
          <name>webui.configuration</name>
          <value>/WEB-INF/conf/portlet/exoadmin/RegisterPortlet/webui/configuration.xml</value>
       </init-param>
+     <init-param>
+        <name>width</name>
+        <value>200</value>
+     </init-param>
+     <init-param>
+        <name>height</name>
+        <value>75</value>
+     </init-param>
 
       <expiration-cache>0</expiration-cache>
       <supports>
