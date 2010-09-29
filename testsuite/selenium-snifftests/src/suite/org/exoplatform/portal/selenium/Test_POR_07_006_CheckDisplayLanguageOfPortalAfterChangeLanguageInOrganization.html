@@ -92,11 +92,6 @@
 	<td></td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
-	<td>user.language</td>
-	<td></td>
-</tr>
-<tr>
 	<td>select</td>
 	<td>user.language</td>
 	<td>label=Vietnamese</td>
@@ -107,18 +102,28 @@
 	<td></td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
-	<td>//div[3]/div/div/div/div/div[2]</td>
+	<td>waitForTextPresent</td>
+	<td>The user profile has been updated.</td>
 	<td></td>
 </tr>
 <tr>
-	<td>verifyText</td>
-	<td>//div[3]/div/div/div/div/div[2]</td>
+	<td>verifyTextPresent</td>
 	<td>The user profile has been updated.</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[3]/div/div[2]/div/div/div/div/div/div[3]/div/table/tbody/tr/td/div/div/div/div/a</td>
+	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[2]/div[2]/div/div[2]/div/div/div/div/div/div[3]/div/table/tbody/tr/td/div/div/div/div/a</td>
+	<td>//div[3]/div/div[2]/div/div/div/div/div/div[3]/div/table/tbody/tr/td/div/div/div/div/a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Sign out</td>
 	<td></td>
 </tr>
 <tr>
@@ -218,12 +223,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UITabContent']/div/div/div/div/div/div[2]/div[2]</td>
+	<td>link=Tiếng Anh</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='UITabContent']/div/div/div/div/div/div[2]/div[2]</td>
+	<td>link=Tiếng Anh</td>
 	<td></td>
 </tr>
 <tr>
