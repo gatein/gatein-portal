@@ -19,6 +19,7 @@
 
 package org.exoplatform.applicationregistry.webui.component;
 
+import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIComponent;
@@ -31,6 +32,7 @@ import org.exoplatform.webui.core.UIComponent;
  */
 
 @ComponentConfig(template = "app:/groovy/applicationregistry/webui/component/UIMessageBoard.gtmpl")
+@Serialized
 public class UIMessageBoard extends UIComponent
 {
 

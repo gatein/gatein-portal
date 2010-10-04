@@ -19,10 +19,13 @@
 
 package org.exoplatform.portal.application.replication;
 
+import org.exoplatform.commons.utils.LazyList;
+import org.exoplatform.commons.utils.ObjectPageList;
 import org.exoplatform.services.organization.Query;
 import org.exoplatform.commons.serialization.SerializationContext;
 import org.exoplatform.commons.serialization.model.TypeDomain;
 import org.exoplatform.commons.serialization.model.metadata.DomainMetaData;
+import org.exoplatform.services.organization.impl.UserImpl;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -45,6 +48,11 @@ class SerializationContextSingleton
 
       // For now we need to mark the Query class as serialized
       domainMetaData.addClassType(Query.class, true);
+
+      // Some other that need to be serialized
+      domainMetaData.addClassType(ObjectPageList.class, true);
+      domainMetaData.addClassType(UserImpl.class, true);
+      domainMetaData.addClassType(LazyList.class, true);
 
       // Build domain
       TypeDomain domain = new TypeDomain(domainMetaData, true);

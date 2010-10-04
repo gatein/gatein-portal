@@ -47,7 +47,7 @@
       <org.gatein.common.version>2.0.3-GA</org.gatein.common.version>
       <org.gatein.wci.version>2.0.2-GA</org.gatein.wci.version>
       <org.gatein.pc.version>2.2.0-Beta04</org.gatein.pc.version>
-      <org.picketlink.idm>1.1.5.GA</org.picketlink.idm>
+      <org.picketlink.idm>1.1.6.GA</org.picketlink.idm>
       <org.gatein.wsrp.version>2.0.0-Alpha03</org.gatein.wsrp.version>
       <org.gatein.mop.version>1.0.3-GA</org.gatein.mop.version>
       <org.slf4j.version>1.5.6</org.slf4j.version>

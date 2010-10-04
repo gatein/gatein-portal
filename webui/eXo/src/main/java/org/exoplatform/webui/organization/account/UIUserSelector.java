@@ -19,8 +19,11 @@
 
 package org.exoplatform.webui.organization.account;
 
+import org.exoplatform.commons.serialization.api.annotations.Serialized;
+import org.exoplatform.commons.utils.ListAccessImpl;
 import org.exoplatform.commons.utils.ObjectPageList;
 import org.exoplatform.commons.utils.PageList;
+import org.exoplatform.commons.utils.SerializablePageList;
 import org.exoplatform.services.organization.MembershipHandler;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.Query;
@@ -70,6 +73,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
    @EventConfig(listeners = UIUserSelector.FindGroupActionListener.class, phase = Phase.DECODE),
    @EventConfig(listeners = UIUserSelector.ShowPageActionListener.class, phase = Phase.DECODE),
    @EventConfig(listeners = UIUserSelector.CloseActionListener.class, phase = Phase.DECODE)})
+@Serialized
 public class UIUserSelector extends UIForm implements UIPopupComponent
 {
    final public static String FIELD_KEYWORD = "Quick Search".intern();
@@ -290,7 +294,7 @@ public class UIUserSelector extends UIForm implements UIPopupComponent
             }
          }
       }
-      ObjectPageList objPageList = new ObjectPageList(results, 10);
+      PageList objPageList = new SerializablePageList(new ListAccessImpl(User.class, results), 10);
       uiIterator_.setPageList(objPageList);
    }
 

@@ -19,6 +19,7 @@
 
 package org.exoplatform.portal.webui.page;
 
+import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.model.ModelObject;
 import org.exoplatform.portal.config.model.Page;
@@ -62,6 +63,7 @@ import javax.portlet.WindowState;
    @EventConfig(listeners = UIDesktopPage.ShowAddNewApplicationActionListener.class),
    @EventConfig(listeners = UIDesktopPage.ChangePageActionListener.class),
    @EventConfig(listeners = UIDesktopPage.ShowPortletActionListener.class)})
+@Serialized
 public class UIDesktopPage extends UIPage
 {
 
