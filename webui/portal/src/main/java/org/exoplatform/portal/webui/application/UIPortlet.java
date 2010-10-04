@@ -356,31 +356,6 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
 
    public Map<QName, String> getSupportedPublicRenderParameters()
    {
-      if (supportedPublicParams_ == null)
-      {
-         if (producedOfferedPortlet == null)
-         {
-            log.info("Could not find portlet with ID : " + producerOfferedPortletContext.getId());
-            return Collections.emptyMap();
-         }
-
-         //
-         Collection<ParameterInfo> parameters = (Collection<ParameterInfo>)producedOfferedPortlet.getInfo().getNavigation().getPublicParameters();
-         Map<QName, String> supportedPublicParams = Collections.emptyMap();
-         for (ParameterInfo parameter : parameters)
-         {
-            if (supportedPublicParams.isEmpty())
-            {
-               supportedPublicParams = new HashMap<QName, String>();
-            }
-            supportedPublicParams.put(parameter.getName(), parameter.getId());
-         }
-
-         //
-         this.supportedPublicParams_ = supportedPublicParams;
-      }
-
-      //
       return supportedPublicParams_;
    }
 
@@ -568,27 +543,82 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
     */
    public String supportsPublicParam(QName supportedPublicParam)
    {
-      Map<QName, String> supportedPublicParams = getSupportedPublicRenderParameters();
-      return supportedPublicParams.get(supportedPublicParam);
+      if (supportedPublicParams_ == null)
+      {
+
+         //
+         if (producedOfferedPortlet == null)
+         {
+            log.info("Could not find portlet with ID : " + producerOfferedPortletContext.getId());
+            return null;
+         }
+
+         //
+         Collection<ParameterInfo> parameters = (Collection<ParameterInfo>)producedOfferedPortlet.getInfo().getNavigation().getPublicParameters();
+         supportedPublicParams_ = new HashMap<QName, String>();
+         for (ParameterInfo parameter : parameters)
+         {
+            supportedPublicParams_.put(parameter.getName(), parameter.getId());
+         }
+      }
+
+      //
+      String id = supportedPublicParams_.get(supportedPublicParam);
+      if (id != null)
+      {
+         if (log.isDebugEnabled())
+         {
+            log.debug("The Portlet " + producerOfferedPortletContext.getId()
+               + " supports the public render parameter : " + supportedPublicParam);
+         }
+         return id;
+      }
+
+      //
+      return null;
    }
 
    /**
     * Tells, according to the info located in portlet.xml, wether this portlet supports the public render parameter
-    * id given as a method argument.
-    *
-    * @param supportedPublicParamId the supported public parameter id
-    * @return true if the supported public parameter id is supported
+    * given as a method argument
     */
-   public boolean supportsPublicParam(String supportedPublicParamId)
+   public boolean supportsPublicParam(String supportedPublicParam)
    {
-      Map<QName, String> supportedPublicParams = getSupportedPublicRenderParameters();
-      boolean supported = supportedPublicParams.containsValue(supportedPublicParamId);
-      if (supported && log.isDebugEnabled())
+      if (supportedPublicParams_ == null)
       {
-         log.debug("The Portlet " + producerOfferedPortletContext.getId()
-            + " supports the public render parameter : " + supportedPublicParamId);
+
+         //
+         if (producedOfferedPortlet == null)
+         {
+            log.info("Could not find portlet with ID : " + producerOfferedPortletContext.getId());
+            return false;
+         }
+
+         //
+         Collection<ParameterInfo> parameters = (Collection<ParameterInfo>)producedOfferedPortlet.getInfo().getNavigation().getPublicParameters();
+         supportedPublicParams_ = new HashMap<QName, String>();
+         for (ParameterInfo parameter : parameters)
+         {
+            supportedPublicParams_.put(parameter.getName(), parameter.getId());
+         }
       }
-      return true;
+
+      //
+      for (String publicParam : supportedPublicParams_.values())
+      {
+         if (publicParam.equals(supportedPublicParam))
+         {
+            if (log.isDebugEnabled())
+            {
+               log.debug("The Portlet " + producerOfferedPortletContext.getId()
+                  + " supports the public render parameter : " + supportedPublicParam);
+            }
+            return true;
+         }
+      }
+
+      //
+      return false;
    }
 
    /**
