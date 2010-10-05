@@ -30,7 +30,9 @@
 	    <uri>home</uri>
 	    <name>home</name>
 	    <label>#{portal.classic.home}</label>
-	    <page-reference>portal::classic::homepage</page-reference>	    
+	    <page-reference>
+	       portal::classic::homepage 
+	    </page-reference>	    
 	  </node>    
 	  <node>
 	    <uri>webexplorer</uri>

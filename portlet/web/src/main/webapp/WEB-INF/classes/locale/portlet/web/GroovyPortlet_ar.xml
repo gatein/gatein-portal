@@ -21,23 +21,36 @@
 -->
 
 <bundle>
-
   <UIHomePagePortlet>
-    <label>
-      <title>حاول بوابة إكزو0.2 المتاحة مع حسابات المستخدمين التالية</title>
-      <intro>
-        <l1>اصدار جديد مع واجهة المستخدم ثورية</l1>
-        <l2> مخططات المكتب:  Classic و WebOS  </l2>
-        <l3> مخططات سحب واسقاط. معالج انشاء الصفحات.  </l3>
-        <l4> وكثير من المزيد...  </l4>
-      </intro>
-      <userName>اسم المستخدم</userName>
-      <password>كلمة السر</password>
-      <demo>تجربة</demo>
-      <user>مستخدم</user>
+    <Label>
+      <Title>حاول بوابة إكزو0.2 المتاحة مع حسابات المستخدمين التالية</Title>
+      <intro><l1>اصدار جديد مع واجهة المستخدم ثورية</l1><l2> مخططات المكتب:  Classic و WebOS  </l2><l3> مخططات سحب واسقاط. معالج انشاء الصفحات.  </l3><l4> وكثير من المزيد...  </l4></intro>
+      <Username>اسم المستخدم</Username>
+      <Password>كلمة السر</Password>
+      <Demo>تجربة</Demo>
+      <User>مستخدم</User>
       <manager>مدير</manager>
       <administrator>مخطط النظام</administrator>
-    </label>
+	  <Slogan> exo وJBOSS الأفضل ل </Slogan>
+	  <GuideText> لمزيد من المعلومات ، يرجى الاتصال بنا.</GuideText>
+	  <IntroText> GateIn هو الجيل الجديد من بوابة مفتوحة المصدر ، وبقيادة مشتركة من قبل Red hatومنهاج exo الذين شريك لجمع أفضل الخبراء والمجتمعات في أنحاء بوابة مدخل قوي وبديهي أن يجمع وظائف الادارة الغنية لأنظمة تكنولوجيا المعلومات.</IntroText>
+	  <Administrator>مدير</Administrator>
+	  <Manager> مدير</Manager>
+    </Label>
   </UIHomePagePortlet>
-
+  <UIGroovyPortlet><note><Text> هذه بوابات Groovy (بوابة بسيطة) يمكن أنتكون تطبيقاً في المستقبل </Text></note></UIGroovyPortlet>
+  <UIIFrameEditMode>
+	<title> تغير العنوان</title>
+	<label>
+		<iframeUrl>عنوان الموقع </iframeUrl>
+		<editmode> وضع تحرير</editmode>
+	</label>
+	<action><Save> حفظ</Save></action>
+  </UIIFrameEditMode>
+  <UIBannerPortlet>
+	<action>
+		<changeLanguage>تغيير اللغة </changeLanguage>
+		<register>تسجيل </register>
+	</action>
+  </UIBannerPortlet>
 </bundle>

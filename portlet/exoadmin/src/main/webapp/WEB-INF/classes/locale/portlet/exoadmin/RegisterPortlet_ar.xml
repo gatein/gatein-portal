@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+   <UIRegisterForm>
+      <registerWithSuccess>
+         <message>تم تسجيلك بنجاح </message>
+      </registerWithSuccess>
+      <title>سجل حساب جديد</title>
+      <label>
+         <action>
+            <CheckUsernameAvailability>بحث المستخدم</CheckUsernameAvailability>
+         </action>
+         <username>اسم المستخدم :</username>
+         <password>كلمة السر :</password>
+         <confirmPassword>تأكيد كلمة السر :</confirmPassword>
+         <firstName>الإسم: </firstName>
+         <lastName>اللقب:</lastName>
+         <emailAddress>عنوان البريد الإلكتروني </emailAddress>
+      </label>
+   </UIRegisterForm>
+</bundle>

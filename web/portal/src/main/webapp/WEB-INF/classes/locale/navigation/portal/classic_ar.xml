@@ -21,15 +21,15 @@
 -->
 
 <bundle>
-
   <portal>
     <classic>
-      <home>استقبال</home>
-      <sitemap>SiteMap</sitemap>
-      <webexplorer>مستكشف الإنترنت</webexplorer>
-      <groupnavigation>Group Navigation</groupnavigation>
-	  <portalnavigation>Portal Navigation</portalnavigation>
+      <home>ترحيب</home>
+      <sitemap>خريطة الموقع</sitemap>
+      <searchResult>نتائج البحث</searchResult>
+      <detail>التفاصيل</detail>
+      <newAccount>حساب جديد</newAccount>
+      <groupnavigation>مجموعة الملاحة</groupnavigation>
+      <portalnavigation>بوابة الملاحة</portalnavigation>
     </classic>
   </portal>
-
 </bundle>

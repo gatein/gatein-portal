@@ -41,12 +41,13 @@
       <description>الوصف</description>
     </label>
     <action>
-      <Save>#{word.save}</Save>
-      <Back>#{word.back}</Back>
+      <Save>حفظ</Save>
+      <Back>عودة</Back>
       <Reset>اعادة تعيين</Reset>
     </action>
     <msg>
       <SameName>هذه العضوية موجودة ، الرجاء إدخال واحدة أخرى</SameName>
+	  <MembershipNotExist> عضوية {0} ليست موجودة أو قد تم حذفه. </MembershipNotExist>
     </msg>
   </UIMembershipTypeForm>
   <!--
@@ -241,14 +242,14 @@
         </business-info>
       </user>
       <option>
-      	<male>Male</male>
-      	<female>Female</female>      	
-      	<en>English</en>
+      	<male>ذكر</male>
+      	<female>أنثى</female>      	
+      	<en>الإنجليزية</en>
 		<ma>Ma</ma>
 		<vi>Vietnamese</vi>
 		<ar>العربية</ar>
-		<fr>French</fr>
-		<ru>Russian</ru>
+		<fr>الفرنسية</fr>
+		<ru>الروسية</ru>
       </option>
       <BusinessInfo>معلومات العمل</BusinessInfo>
     </label>
@@ -307,7 +308,7 @@
       <createdDate>تاريخ الإنشاء</createdDate>
       <modifiedDate>تاريخ التعديل</modifiedDate>
       <action>#{word.action}</action>
-      <encodedDescription>#{word.description}</encodedDescription>
+      <description>#{word.description}</description>
     </header>
     <action>
       <title>

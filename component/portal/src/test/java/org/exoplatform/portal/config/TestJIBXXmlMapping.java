@@ -82,6 +82,9 @@ public class TestJIBXXmlMapping extends AbstractGateInTest
       Object obj =
          uctx.unmarshalDocument(new FileInputStream("src/test/resources/portal/portal/classic/navigation.xml"), null);
       assertEquals(PageNavigation.class, obj.getClass());
+      
+      PageNavigation pageNavigation = (PageNavigation)obj;
+      assertEquals("portal::classic::homepage", pageNavigation.getNode("home").getPageReference());
 
       IMarshallingContext mctx = bfact.createMarshallingContext();
       mctx.setIndent(2);

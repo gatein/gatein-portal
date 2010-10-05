@@ -22,6 +22,7 @@ package org.exoplatform.webui.form;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.commons.serialization.api.annotations.Serialized;
+import org.exoplatform.commons.utils.PropertyManager;
 import org.exoplatform.webui.bean.BeanDataMapping;
 import org.exoplatform.webui.bean.ReflectionDataMapping;
 import org.exoplatform.webui.config.Event;
@@ -289,7 +290,14 @@ public class UIForm extends UIContainer
       String confirm = event.getConfirm();
       if (confirm != null && confirm.trim().length() > 0)
       {
-         confirm = rcontext.getApplicationResourceBundle().getString(confirm);
+         try
+         {
+            confirm = rcontext.getApplicationResourceBundle().getString(confirm);
+         }
+         catch (MissingResourceException exp)
+         {
+            confirm = confirm.substring(confirm.lastIndexOf('.') + 1);
+         }
          b.append("if(confirm('").append(confirm.replaceAll("'", "\\\\'")).append("'))");
       }
       b.append("eXo.webui.UIForm.submitEvent('").append(getFormId()).append("','");

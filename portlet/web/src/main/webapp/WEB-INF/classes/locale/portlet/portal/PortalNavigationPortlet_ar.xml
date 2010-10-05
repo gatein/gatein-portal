@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+   <UISiteManagement>
+      <action>
+         <addNewPortal>إضافة مدخل جديد</addNewPortal>
+      </action>
+      <label>
+         <editLayout> تحرير التنسيق</editLayout>
+         <editNav>تحرير الملاحة</editNav>
+         <editPortalProp>تحرير بوابة لخصائص</editPortalProp>
+         <deletePortal>حذف</deletePortal>
+      </label>
+   </UISiteManagement>
+</bundle>

@@ -25,7 +25,7 @@
     <item>
       <ChangeLanguage>تغيير اللغة</ChangeLanguage>
       <ChangeSkin>تغيير المظهر</ChangeSkin>
-      <AccountSetting>Account Setting</AccountSetting>
+      <AccountSetting>إعداد حساب</AccountSetting>
       <Logout>تسجيل الخروج</Logout>
     </item>
   </UIStarToolbarPortlet>

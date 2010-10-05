@@ -47,6 +47,10 @@ public class Javascript
    }
 
    public String getPath() {
+      if(key.isExternalScript()) 
+      {
+         return key.getScriptPath();
+      }
       return key.getContextPath() + key.getScriptPath();
    }
 

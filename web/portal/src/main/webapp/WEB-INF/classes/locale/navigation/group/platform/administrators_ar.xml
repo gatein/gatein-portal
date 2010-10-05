@@ -25,9 +25,10 @@
     <title>ادارة</title>
     <application-registry>سجل الخدمات</application-registry>
     <newAccount>حساب جديد</newAccount>
+	<i18n> تدويل</i18n>
     <community-management>ادارة الاعضاء</community-management>
     <console>خزانة الانترنات</console>
-    <pageManagement>Page Management</pageManagement>
+    <pageManagement>إدارة الصفحة </pageManagement>
   </administration>
 </bundle>
 

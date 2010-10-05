@@ -63,7 +63,13 @@
 			
     <%} else {%>
         <script type="text/javascript" src="<%=docBase%>/javascript/merged.js"></script>
-    <%}%>
+    <%
+       for(path in scriptsPaths) {
+          if(path.startsWith("http") || path.startsWith("https")) {%>
+          <script type="text/javascript" src="<%=path%>"></script>
+       <%}
+       }
+    }%>
     <script type="text/javascript">
       eXo.env.portal.context = "<%=docBase%>" ;
       <%if(rcontext.getAccessPath() == 0) {%>eXo.env.portal.accessMode = "public" ;<%}

@@ -97,7 +97,8 @@
     <value name="start-publication-date" field="startPublicationDate" usage="optional"/>
     <value name="end-publication-date" field="endPublicationDate" usage="optional"/>
     <value name="visibility" field="visibility" usage="optional" default="DISPLAYED"/>
-    <value name="page-reference" field="pageReference" usage="optional"/>
+    <value name="page-reference" field="pageReference" usage="optional" 
+    	deserializer="org.exoplatform.portal.config.serialize.JibxStringSerialize.deserializeString"/>
     <collection field="children" usage="optional" item-type="org.exoplatform.portal.config.model.PageNode"/>
   </mapping>
   
@@ -146,6 +147,5 @@
     <collection field="preferences"
                 item-type="org.exoplatform.portal.application.Preference"/>    
     <structure name="preferences-validator" usage="optional"/>
-  </mapping>
-
+  </mapping>   
 </binding>

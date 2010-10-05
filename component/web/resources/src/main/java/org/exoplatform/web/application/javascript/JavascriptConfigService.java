@@ -178,37 +178,40 @@ public class JavascriptConfigService implements Startable
          object_view_of_merged_JS.put(javascript.getKey().getContextPath(), mergedJS_list);
       }
 
-      StringBuffer sB = new StringBuffer();
-      String line = "";
-      try
-      {
-         BufferedReader reader = javascript.getReader();
+      //Merge internal javascripts
+      if(!javascript.getKey().isExternalScript()) {
+         StringBuffer sB = new StringBuffer();
+         String line = "";
          try
          {
-            while ((line = reader.readLine()) != null)
+            BufferedReader reader = javascript.getReader();
+            try
             {
-               line = line + "\n";
-               sB.append(line);
-               mergedJS_list.add(line);
+               while ((line = reader.readLine()) != null)
+               {
+                  line = line + "\n";
+                  sB.append(line);
+                  mergedJS_list.add(line);
+               }
+            }
+            catch (Exception ex)
+            {
+               ex.printStackTrace();
+            }
+            finally
+            {
+               Safe.close(reader);
             }
          }
-         catch (Exception ex)
+         catch (Exception e)
          {
-            ex.printStackTrace();
+            e.printStackTrace();
          }
-         finally
-         {
-            Safe.close(reader);
-         }
+         sB.append("\n");
+         mergedJS_list.add("\n");
+   
+         mergedJavascript = mergedJavascript.concat(sB.toString());
       }
-      catch (Exception e)
-      {
-         e.printStackTrace();
-      }
-      sB.append("\n");
-      mergedJS_list.add("\n");
-
-      mergedJavascript = mergedJavascript.concat(sB.toString());
    }
 
    /**

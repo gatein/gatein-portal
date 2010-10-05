@@ -146,7 +146,7 @@
               <property name="jbosscache-configuration" value="${gatein.jcr.lock.cache.config}" />
               <property name="jgroups-configuration" value="${gatein.jcr.jgroups.config}" />
               <property name="jgroups-multiplexer-stack" value="true" />
-              <property name="jbosscache-cluster-name" value="jcrlock-${container.name.suffix}-system" />
+              <property name="jbosscache-cluster-name" value="jcrlock-${container.name.suffix}-portal-system" />
               <property name="jbosscache-cl-cache.jdbc.table.name" value="jcrlock_portal_system" />
               <property name="jbosscache-cl-cache.jdbc.table.create" value="true" />
               <property name="jbosscache-cl-cache.jdbc.table.drop" value="false" />
@@ -212,7 +212,7 @@
              <property name="jbosscache-configuration" value="${gatein.jcr.lock.cache.config}" />
              <property name="jgroups-configuration" value="${gatein.jcr.jgroups.config}" />
              <property name="jgroups-multiplexer-stack" value="true" />
-             <property name="jbosscache-cluster-name" value="jcrlock-${container.name.suffix}-system" />
+             <property name="jbosscache-cluster-name" value="jcrlock-${container.name.suffix}-portal-work" />
              <property name="jbosscache-cl-cache.jdbc.table.name" value="jcrlock_portal_work" />
              <property name="jbosscache-cl-cache.jdbc.table.create" value="true" />
              <property name="jbosscache-cl-cache.jdbc.table.drop" value="false" />
@@ -279,7 +279,7 @@
                <property name="jbosscache-configuration" value="${gatein.jcr.lock.cache.config}" />
                <property name="jgroups-configuration" value="${gatein.jcr.jgroups.config}" />
                <property name="jgroups-multiplexer-stack" value="true" />
-               <property name="jbosscache-cluster-name" value="jcrlock-${container.name.suffix}-system" />
+               <property name="jbosscache-cluster-name" value="jcrlock-${container.name.suffix}-wsrp-system" />
                <property name="jbosscache-cl-cache.jdbc.table.name" value="jcrlock_wsrp_system" />
                <property name="jbosscache-cl-cache.jdbc.table.create" value="true" />
                <property name="jbosscache-cl-cache.jdbc.table.drop" value="false" />
@@ -346,7 +346,7 @@
                   <property name="jbosscache-configuration" value="${gatein.jcr.lock.cache.config}"/>
                   <property name="jgroups-configuration" value="${gatein.jcr.jgroups.config}"/>
                   <property name="jgroups-multiplexer-stack" value="true"/>
-                  <property name="jbosscache-cluster-name" value="jcrlock-${container.name.suffix}-system"/>
+                  <property name="jbosscache-cluster-name" value="jcrlock-${container.name.suffix}-pc-system"/>
                   <property name="jbosscache-cl-cache.jdbc.table.name" value="jcrlock_portlet_state_system"/>
                   <property name="jbosscache-cl-cache.jdbc.table.create" value="true"/>
                   <property name="jbosscache-cl-cache.jdbc.table.drop" value="false"/>

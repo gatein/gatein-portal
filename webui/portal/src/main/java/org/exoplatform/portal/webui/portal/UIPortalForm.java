@@ -124,7 +124,7 @@ public class UIPortalForm extends UIFormTabPane
       }
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
       Param param = initParams.getParam("PortalTemplateConfigOption");
-      List<SelectItemCategory> portalTemplates = (List<SelectItemCategory>)param.getMapGroovyObject(context);
+      List<SelectItemCategory> portalTemplates = (List<SelectItemCategory>)param.getFreshObject(context);
       for (SelectItemCategory itemCategory : portalTemplates)
       {
          uiTemplateInput.getItemCategories().add(itemCategory);

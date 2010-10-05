@@ -175,11 +175,11 @@
             if(inputList[i].value != null && inputList[i].value != "") {
               var tmp = inputList[i].value;
 	            var numTask = tmp.substring(0, tmp.indexOf('.'));
-						  var contentTask = tmp.substring(tmp.indexOf('.'), tmp.length);
+						  var contentTask = tmp.substring(tmp.indexOf('.') + 1, tmp.length);
               if(parseInt(numTask) != parseInt(inputList[i].id)) {
 							  numTask = inputList[i].id;
 					  	}
-						  inputList[i].value = numTask+contentTask;
+						  inputList[i].value = numTask + "." + contentTask;
             }
           }
         }   

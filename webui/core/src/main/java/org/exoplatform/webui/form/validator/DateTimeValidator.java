@@ -19,18 +19,15 @@
 
 package org.exoplatform.webui.form.validator;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.exception.MessageException;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormDateTimeInput;
 import org.exoplatform.webui.form.UIFormInput;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 
 /**
  * Created by The eXo Platform SARL
@@ -79,24 +76,9 @@ public class DateTimeValidator implements Validator
       {
          throw new MessageException(new ApplicationMessage("DateTimeValidator.msg.Invalid-input", args, ApplicationMessage.WARNING));
       }
-      if (s.matches(DATETIME_REGEX) && isValidDateTime(s))
+      if (s.matches(DATETIME_REGEX))
          return;
 
       throw new MessageException(new ApplicationMessage("DateTimeValidator.msg.Invalid-input", args, ApplicationMessage.WARNING));
-   }
-
-   private boolean isValidDateTime(String dateTime)
-   {
-      String[] arr = dateTime.split(SPLIT_REGEX, 7);
-      int valid = Integer.parseInt(arr[0]);
-      if (valid < 1 || valid > 12)
-         return false;
-      Calendar date = new GregorianCalendar(Integer.parseInt(arr[2]), valid - 1, 1);
-      if (Integer.parseInt(arr[1]) > date.getActualMaximum(Calendar.DAY_OF_MONTH))
-         return false;
-      if (arr.length > 3
-         && (Integer.parseInt(arr[3]) > 23 || Integer.parseInt(arr[4]) > 59 || Integer.parseInt(arr[5]) > 59))
-         return false;
-      return true;
    }
 }

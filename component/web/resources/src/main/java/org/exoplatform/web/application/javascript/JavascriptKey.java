@@ -75,4 +75,9 @@ public class JavascriptKey
    {
       return contextPath;
    }
+   
+   public boolean isExternalScript()
+   {
+      return (scriptPath.startsWith("http") || scriptPath.startsWith("https")) ? true : false;
+   }
 }
