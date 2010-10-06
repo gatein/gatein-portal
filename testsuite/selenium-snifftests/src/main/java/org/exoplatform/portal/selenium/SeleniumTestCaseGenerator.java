@@ -385,9 +385,16 @@ public class SeleniumTestCaseGenerator {
 				sb.append(param2);
 				sb.append("\"));\n");
 				
-				
-					//-----------------add by linh_vu------------
-			} else if (param1.equals("waitForChecked")) {
+			//-----------------add by linh_vu------------
+			else if (param1.equals("waitForChecked")) {
+				sb.append("for (int second = 0;; second++) {\n");
+				sb.append(getTimeoutMessage(param1));
+				sb.append("try {\nif (selenium.isChecked(\"");
+				sb.append(param2);
+				sb.append("\"))\n break;\n }\n catch (Exception e) {}\n");
+				sb.append("Thread.sleep(1000);\n");
+				sb.append("}\n");
+			}else if (param1.equals("waitForNotChecked")) {
 				sb.append("for (int second = 0;; second++) {\n");
 				sb.append(getTimeoutMessage(param1));
 				sb.append("try {\nif (!selenium.isChecked(\"");
@@ -404,6 +411,18 @@ public class SeleniumTestCaseGenerator {
 				sb.append("\")) {\nbreak;\n}\n}\ncatch (Exception e) {\n}\n");
 				sb.append("Thread.sleep(1000);\n");
 				sb.append("}\n");
+			} else if (param1.equals("waitForSelectedValue")) {
+				sb.append("TestCase.assertTrue(selenium.getSelectedValue(\"");
+				sb.append(param2);
+				sb.append("\").matches(\"^");
+				sb.append(param3);
+				sb.append("$\"));\n");
+			} else if (param1.equals("waitForAttribute")) {
+				sb.append("TestCase.assertTrue(selenium.getAttribute(\"");
+				sb.append(param2);
+				sb.append("\").matches(\"^");
+				sb.append(param3);
+				sb.append("$\"));\n");
 			} else if (param1.equals("doubleClickAt")) {
 				sb.append("selenium.");
 				sb.append(param1);
@@ -417,7 +436,24 @@ public class SeleniumTestCaseGenerator {
 				sb.append("\").equals(\"");
 				sb.append(param3);
 				sb.append("\"));\n");
-			}
+			}else if (param1.equals("storeEval")) {
+				sb.append("String ").append(param3).append(" = selenium.getEval(\"").append(param2).append("\").toString();\n");
+			}else if (param1.equals("keyDown")) {
+				sb.append("selenium.");
+				sb.append(param1);
+				sb.append("(\"");
+				sb.append(param2);
+				sb.append("\", \"");
+				sb.append(param3);
+				sb.append("\");\n");
+			} else if (param1.equals("verifyAttribute")) {
+				sb.append("TestCase.assertTrue");
+				sb.append("(selenium.getAttribute(\"");
+				sb.append(param2);
+				sb.append("\").equals(\"");
+				sb.append(param3);
+				sb.append("\"));\n");
+			}	
 			//-----------------------------	
 			 else if (param1.equals("assertNotVisible")) {
 				sb.append("TestCase.assertFalse(selenium.isVisible");
