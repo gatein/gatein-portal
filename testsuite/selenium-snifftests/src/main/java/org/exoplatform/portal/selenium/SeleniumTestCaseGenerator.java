@@ -384,7 +384,7 @@ public class SeleniumTestCaseGenerator {
 				sb.append("(\"");
 				sb.append(param2);
 				sb.append("\"));\n");
-				
+			}	
 			//-----------------add by linh_vu------------
 			else if (param1.equals("waitForChecked")) {
 				sb.append("for (int second = 0;; second++) {\n");
