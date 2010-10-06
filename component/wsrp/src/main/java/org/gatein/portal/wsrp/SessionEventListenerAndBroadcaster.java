@@ -26,9 +26,9 @@ package org.gatein.portal.wsrp;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.services.listener.Event;
 import org.exoplatform.services.listener.Listener;
-import org.gatein.wsrp.api.SessionEvent;
-import org.gatein.wsrp.api.SessionEventBroadcaster;
-import org.gatein.wsrp.api.SessionEventListener;
+import org.gatein.wsrp.api.session.SessionEvent;
+import org.gatein.wsrp.api.session.SessionEventBroadcaster;
+import org.gatein.wsrp.api.session.SessionEventListener;
 
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionEvent;

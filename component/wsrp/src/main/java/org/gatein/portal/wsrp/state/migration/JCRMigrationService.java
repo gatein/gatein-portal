@@ -32,7 +32,7 @@ import org.gatein.portal.wsrp.state.migration.mapping.ExportErrorMapping;
 import org.gatein.portal.wsrp.state.migration.mapping.ExportInfoMapping;
 import org.gatein.portal.wsrp.state.migration.mapping.ExportInfosMapping;
 import org.gatein.portal.wsrp.state.migration.mapping.ExportedStateMapping;
-import org.gatein.wsrp.api.PortalStructureProvider;
+import org.gatein.wsrp.api.context.ConsumerStructureProvider;
 import org.gatein.wsrp.consumer.migration.ExportInfo;
 import org.gatein.wsrp.consumer.migration.MigrationService;
 
@@ -46,7 +46,7 @@ import java.util.List;
  */
 public class JCRMigrationService implements MigrationService, StoresByPathManager<ExportInfo>
 {
-   private PortalStructureProvider structureProvider;
+   private ConsumerStructureProvider structureProvider;
    private JCRPersister persister;
    private static final String EXPORT_INFOS_PATH = ExportInfosMapping.NODE_NAME;
    private int exportInfosCount = -1;
@@ -61,12 +61,12 @@ public class JCRMigrationService implements MigrationService, StoresByPathManage
       persister.initializeBuilderFor(mappingClasses);
    }
 
-   public PortalStructureProvider getStructureProvider()
+   public ConsumerStructureProvider getStructureProvider()
    {
       return structureProvider;
    }
 
-   public void setStructureProvider(PortalStructureProvider structureProvider)
+   public void setStructureProvider(ConsumerStructureProvider structureProvider)
    {
       ParameterValidation.throwIllegalArgExceptionIfNull(structureProvider, "PortalStructureProvider");
       this.structureProvider = structureProvider;
@@ -82,7 +82,7 @@ public class JCRMigrationService implements MigrationService, StoresByPathManage
       List<ExportInfo> exportInfos = new ArrayList<ExportInfo>(exportInfoMappings.size());
       for (ExportInfoMapping eim : exportInfoMappings)
       {
-         exportInfos.add(eim.toExportInfo());
+         exportInfos.add(eim.toModel(null));
       }
 
       persister.closeSession(session, false);
@@ -112,7 +112,7 @@ public class JCRMigrationService implements MigrationService, StoresByPathManage
 
       if(eim != null)
       {
-         return eim.toExportInfo();
+         return eim.toModel(null);
       }
       else
       {

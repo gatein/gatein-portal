@@ -24,6 +24,7 @@
 package org.gatein.portal.wsrp.state.consumer.mapping;
 
 import org.chromattic.api.annotations.*;
+import org.gatein.portal.wsrp.state.mapping.BaseMapping;
 import org.gatein.wsrp.consumer.EndpointConfigurationInfo;
 import org.gatein.wsrp.consumer.ProducerInfo;
 import org.gatein.wsrp.consumer.RegistrationInfo;
@@ -33,7 +34,7 @@ import org.gatein.wsrp.consumer.RegistrationInfo;
  * @version $Revision$
  */
 @PrimaryType(name = ProducerInfoMapping.NODE_NAME)
-public abstract class ProducerInfoMapping
+public abstract class ProducerInfoMapping implements BaseMapping<ProducerInfo>
 {
    public static final String NODE_NAME = "wsrp:producerinfo";
 
@@ -84,7 +85,7 @@ public abstract void setAvailable(boolean available);*/
       rim.initFrom(regInfo);
    }
 
-   public ProducerInfo toProducerInfo()
+   public ProducerInfo toModel(ProducerInfo initial)
    {
       // todo: should probably use a ProducerInfo implementation backed by mapping at some point
       ProducerInfo info = new ProducerInfo();

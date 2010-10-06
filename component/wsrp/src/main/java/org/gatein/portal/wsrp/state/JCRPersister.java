@@ -22,6 +22,7 @@
 
 package org.gatein.portal.wsrp.state;
 
+import EDU.oswego.cs.dl.util.concurrent.FJTask;
 import org.chromattic.api.Chromattic;
 import org.chromattic.api.ChromatticBuilder;
 import org.chromattic.api.ChromatticSession;
@@ -33,11 +34,17 @@ import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.gatein.common.util.ParameterValidation;
+import org.gatein.portal.wsrp.state.mapping.BaseMapping;
 
 import javax.jcr.Credentials;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author <a href="mailto:chris.laprun@jboss.com">Chris Laprun</a>
@@ -50,6 +57,7 @@ public class JCRPersister
    public static final String PORTLET_STATES_WORKSPACE_NAME = "pc-system";
    private static final String REPOSITORY_NAME = "repository";
    private String workspaceName;
+   private Map<Class, Class<? extends BaseMapping>> modelToMapping;
 
    public JCRPersister(ExoContainer container, String workspaceName)
    {
@@ -73,8 +81,18 @@ public class JCRPersister
          throw new IllegalArgumentException("Unknown workspace name: '" + workspaceName + "'");
       }
 
+      modelToMapping = new HashMap<Class, Class<? extends BaseMapping>>(mappingClasses.size());
       for (Class mappingClass : mappingClasses)
       {
+         if (BaseMapping.class.isAssignableFrom(mappingClass))
+         {
+            Type[] interfaces = mappingClass.getGenericInterfaces();
+            if(ParameterValidation.existsAndIsNotEmpty(interfaces))
+            {
+               Class type = (Class)((ParameterizedType)interfaces[0]).getActualTypeArguments()[0];
+               modelToMapping.put(type, mappingClass);
+            }
+         }
          builder.add(mappingClass);
       }
 
@@ -102,9 +120,16 @@ public class JCRPersister
 
    public <T> boolean delete(T toDelete, StoresByPathManager<T> manager)
    {
+      Class<? extends Object> modelClass = toDelete.getClass();
+      Class<? extends BaseMapping> baseMappingClass = modelToMapping.get(modelClass);
+      if(baseMappingClass == null)
+      {
+         throw new IllegalArgumentException("Cannot find a mapping class for " + modelClass.getName());
+      }
+
       ChromatticSession session = getSession();
 
-      Object old = session.findByPath(toDelete.getClass(), manager.getChildPath(toDelete));
+      Object old = session.findByPath(baseMappingClass, manager.getChildPath(toDelete));
 
       if (old != null)
       {

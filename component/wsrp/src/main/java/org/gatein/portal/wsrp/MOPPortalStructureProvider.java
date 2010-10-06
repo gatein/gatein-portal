@@ -41,7 +41,7 @@ import org.gatein.mop.api.workspace.ui.UIWindow;
 import org.gatein.pc.api.PortletContext;
 import org.gatein.pc.api.PortletStateType;
 import org.gatein.pc.api.StatefulPortletContext;
-import org.gatein.wsrp.api.PortalStructureProvider;
+import org.gatein.wsrp.api.context.ConsumerStructureProvider;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -54,7 +54,7 @@ import java.util.Map;
  * @author <a href="mailto:chris.laprun@jboss.com">Chris Laprun</a>
  * @version $Revision$
  */
-public class MOPPortalStructureProvider implements PortalStructureProvider
+public class MOPPortalStructureProvider implements ConsumerStructureProvider
 {
    private final POMSessionManager pomManager;
    private Map<String, PageInfo> pageInfos;

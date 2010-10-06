@@ -205,7 +205,7 @@ public class JCRConsumerRegistry extends AbstractConsumerRegistry implements Sto
 
       public ProducerInfo next()
       {
-         return mappings.next().toProducerInfo();
+         return mappings.next().toModel(null);
       }
 
       public void remove()

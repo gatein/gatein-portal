@@ -29,6 +29,7 @@ import org.chromattic.api.annotations.PrimaryType;
 import org.chromattic.api.annotations.Property;
 import org.exoplatform.commons.utils.Safe;
 import org.gatein.portal.wsrp.state.JCRPersister;
+import org.gatein.portal.wsrp.state.mapping.BaseMapping;
 import org.gatein.wsrp.consumer.migration.ExportInfo;
 
 import javax.xml.namespace.QName;
@@ -44,7 +45,7 @@ import java.util.TreeMap;
  * @version $Revision$
  */
 @PrimaryType(name = ExportInfoMapping.NODE_NAME)
-public abstract class ExportInfoMapping
+public abstract class ExportInfoMapping implements BaseMapping<ExportInfo>
 {
    public static final String NODE_NAME = "wsrp:exportinfo";
 
@@ -118,7 +119,7 @@ public abstract class ExportInfoMapping
       }
    }
 
-   public ExportInfo toExportInfo()
+   public ExportInfo toModel(ExportInfo initial)
    {
       List<ExportedStateMapping> exportedStates = getExportedStates();
       SortedMap<String, byte[]> states = new TreeMap<String,byte[]>();

@@ -76,6 +76,7 @@ import org.gatein.pc.portlet.impl.spi.AbstractPortalContext;
 import org.gatein.pc.portlet.impl.spi.AbstractRequestContext;
 import org.gatein.pc.portlet.impl.spi.AbstractSecurityContext;
 import org.gatein.pc.portlet.impl.spi.AbstractServerContext;
+import org.gatein.pc.portlet.impl.spi.AbstractWindowContext;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -812,7 +813,7 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
       invocation.setServerContext(new AbstractServerContext(servletRequest, prc.getResponse()));
       //TODO: ExoUserContext impl not tested
       invocation.setUserContext(new ExoUserContext(servletRequest, userProfile));
-      invocation.setWindowContext(new ExoWindowContext(storageName));
+      invocation.setWindowContext(new AbstractWindowContext(storageName));
       invocation.setPortalContext(new AbstractPortalContext(Collections.singletonMap(
          "javax.portlet.markup.head.element.support", "true")));
       invocation.setSecurityContext(new AbstractSecurityContext(servletRequest));
