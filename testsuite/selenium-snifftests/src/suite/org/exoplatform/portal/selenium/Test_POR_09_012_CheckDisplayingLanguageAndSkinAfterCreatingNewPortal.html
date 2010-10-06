@@ -34,6 +34,11 @@
 <tr>
 	<td>type</td>
 	<td>username</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>username</td>
 	<td>root</td>
 </tr>
 <tr>
@@ -64,6 +69,36 @@
 <tr>
 	<td>click</td>
 	<td>//div[@id='UISiteManagement']/div[1]/table/tbody/tr/td/div/div/div/div</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>-- Choose Portal Template --</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='UIMaskWorkspace']/div[2]/div/div/div/div/div/div/div/div/div/div/div/div[1]/div/div/div/div</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='UIMaskWorkspace']/div[2]/div/div/div/div/div/div/div/div/div/div/div/div[1]/div/div/div/div</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>-- Choose Portal Setting --</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='UIMaskWorkspace']/div[2]/div/div/div/div/div/div/div/div/div/div/div/div[2]/div/div/div/div</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='UIMaskWorkspace']/div[2]/div/div/div/div/div/div/div/div/div/div/div/div[2]/div/div/div/div</td>
 	<td></td>
 </tr>
 <tr>
@@ -103,12 +138,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[2]/div/div/div/div/div/div/div/div/div/div/div/div[2]/div/div/div/div</td>
+	<td>//div[@id='UIMaskWorkspace']/div[2]/div/div/div/div/div/div/div/div/div/div/div/div[3]/div/div/div/div</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[2]/div/div/div/div/div/div/div/div/div/div/div/div[2]/div/div/div/div</td>
+	<td>//div[@id='UIMaskWorkspace']/div[2]/div/div/div/div/div/div/div/div/div/div/div/div[3]/div/div/div/div</td>
 	<td></td>
 </tr>
 <tr>
@@ -118,12 +153,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[2]/div/div/div/div/div/div/div/div/div/div/div/div[3]/div/div/div/div</td>
+	<td>//div[@id='UIMaskWorkspace']/div[2]/div/div/div/div/div/div/div/div/div/div/div/div[4]/div/div/div/div</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[2]/div/div/div/div/div/div/div/div/div/div/div/div[3]/div/div/div/div</td>
+	<td>//div[@id='UIMaskWorkspace']/div[2]/div/div/div/div/div/div/div/div/div/div/div/div[4]/div/div/div/div</td>
 	<td></td>
 </tr>
 <tr>
@@ -247,13 +282,18 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
+	<td>click</td>
 	<td>link=Test_POR_09_012</td>
 	<td></td>
 </tr>
 <tr>
-	<td>assertLocation</td>
-	<td>http://localhost:8080/portal/private/Test_POR_09_012/</td>
+	<td>echo</td>
+	<td>-- Return to default portal --</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=classic</td>
 	<td></td>
 </tr>
 <tr>
