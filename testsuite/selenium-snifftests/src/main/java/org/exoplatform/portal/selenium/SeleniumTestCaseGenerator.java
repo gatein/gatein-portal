@@ -423,7 +423,7 @@ public class SeleniumTestCaseGenerator {
 				sb.append("\").matches(\"^");
 				sb.append(param3);
 				sb.append("$\"));\n");
-			} else if (param1.equals("doubleClickAt")) {
+			} else if (param1.equals("doubleClickAt")|| param1.equals("focus") ) {
 				sb.append("selenium.");
 				sb.append(param1);
 				sb.append("(\"");
