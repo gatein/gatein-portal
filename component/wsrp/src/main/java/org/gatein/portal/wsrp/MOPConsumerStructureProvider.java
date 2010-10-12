@@ -54,13 +54,13 @@ import java.util.Map;
  * @author <a href="mailto:chris.laprun@jboss.com">Chris Laprun</a>
  * @version $Revision$
  */
-public class MOPPortalStructureProvider implements ConsumerStructureProvider
+public class MOPConsumerStructureProvider implements ConsumerStructureProvider
 {
    private final POMSessionManager pomManager;
    private Map<String, PageInfo> pageInfos;
    private Map<String, String> windowIdToUUIDs;
 
-   public MOPPortalStructureProvider(ExoContainer container)
+   public MOPConsumerStructureProvider(ExoContainer container)
    {
       pomManager = (POMSessionManager)container.getComponentInstanceOfType(POMSessionManager.class);
       windowIdToUUIDs = new HashMap<String, String>();
