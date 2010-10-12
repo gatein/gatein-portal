@@ -159,4 +159,9 @@ public class ExoKernelIntegration implements Startable
          portletApplicationRegistry.stop();
       }
    }
+
+   public PortletApplicationDeployer getPortletApplicationRegistry()
+   {
+      return portletApplicationRegistry;
+   }
 }
