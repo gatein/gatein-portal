@@ -27,6 +27,7 @@ import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.configuration.ConfigurationManager;
 import org.exoplatform.container.xml.InitParams;
+import org.exoplatform.portal.pc.ExoKernelIntegration;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 import org.exoplatform.services.listener.ListenerService;
 import org.gatein.common.logging.Logger;
@@ -85,11 +86,12 @@ public class WSRPServiceIntegration implements Startable, WebAppListener
 
    private ConsumerRegistry consumerRegistry;
    private ExoContainer container;
+   private final ExoKernelIntegration exoKernelIntegration;
    private final boolean bypass;
    private static final String WSRP_ADMIN_GUI_CONTEXT_PATH = "/wsrp-admin-gui";
 
    public WSRPServiceIntegration(ExoContainerContext context, InitParams params, ConfigurationManager configurationManager,
-                                 org.exoplatform.portal.pc.ExoKernelIntegration pc, NodeHierarchyCreator nhc) throws Exception
+                                 ExoKernelIntegration pc, NodeHierarchyCreator nhc) throws Exception
    {
       // IMPORTANT: even though PC ExoKernelIntegration and NodeHierarchyCreator is not used anywhere in the code, it's still needed for pico
       // to properly make sure that this service is started after the PC one. Yes, Pico is crap. :/
@@ -114,6 +116,8 @@ public class WSRPServiceIntegration implements Startable, WebAppListener
 
          container = context.getContainer();
 
+         exoKernelIntegration = pc;
+
          bypass = false;
       }
       else
@@ -124,6 +128,7 @@ public class WSRPServiceIntegration implements Startable, WebAppListener
          producerConfigLocation = null;
          consumersConfigLocation = null;
          configurationIS = null;
+         exoKernelIntegration = null;
          bypass = true;
       }
    }
@@ -212,6 +217,7 @@ public class WSRPServiceIntegration implements Startable, WebAppListener
       producer.setPortletInvoker(wsrpPortletInvoker);
       producer.setRegistrationManager(registrationManager);
       producer.setConfigurationService(producerConfigurationService);
+      exoKernelIntegration.getPortletApplicationRegistry().addListener(producer);
 
       producer.start();
    }
@@ -238,7 +244,7 @@ public class WSRPServiceIntegration implements Startable, WebAppListener
 
          // migration service
          MigrationService migrationService = new JCRMigrationService(container);
-         migrationService.setStructureProvider(new MOPPortalStructureProvider(container));
+         migrationService.setStructureProvider(new MOPConsumerStructureProvider(container));
          consumerRegistry.setMigrationService(migrationService);
 
          consumerRegistry.start();
