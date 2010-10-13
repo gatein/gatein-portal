@@ -435,11 +435,9 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
       }
 
       Set<ModeInfo> modes = portlet.getInfo().getCapabilities().getModes(MediaType.create("text/html"));
-      Iterator<ModeInfo> modeIter = modes.iterator();
-      while (modeIter.hasNext())
+      for (ModeInfo mode : modes)
       {
-         ModeInfo info = modeIter.next();
-         supportModes.add(info.getModeName());
+         supportModes.add(mode.getModeName());
       }
 
       if (supportModes.size() > 0)
@@ -485,16 +483,21 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
          supportedProcessingEvents_ = new ArrayList<QName>(consumedEvents.keySet());
       }
 
-      for (Iterator<QName> iter = supportedProcessingEvents_.iterator(); iter.hasNext();)
+      for (QName eventName : supportedProcessingEvents_)
       {
-         QName eventName = iter.next();
          if (eventName.equals(name))
          {
-            log.info("The Portlet " + producerOfferedPortletContext + " supports comsuming the event : " + name);
+            if (log.isDebugEnabled())
+            {
+               log.debug("The Portlet " + producerOfferedPortletContext + " supports comsuming the event : " + name);
+            }
             return true;
          }
       }
-      log.info("The portlet " + producerOfferedPortletContext + " doesn't support consuming the event : " + name);
+      if (log.isDebugEnabled())
+      {
+         log.debug("The portlet " + producerOfferedPortletContext + " doesn't support consuming the event : " + name);
+      }
       return false;
    }
 
@@ -521,16 +524,21 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
          supportedPublishingEvents_ = new ArrayList<QName>(producedEvents.keySet());
       }
 
-      for (Iterator<QName> iter = supportedPublishingEvents_.iterator(); iter.hasNext();)
+      for (QName eventName : supportedPublishingEvents_)
       {
-         QName eventName = iter.next();
          if (eventName.equals(name))
          {
-            log.info("The Portlet " + producerOfferedPortletContext + " supports producing the event : " + name);
+            if (log.isDebugEnabled())
+            {
+               log.debug("The Portlet " + producerOfferedPortletContext + " supports producing the event : " + name);
+            }
             return true;
          }
       }
-      log.info("The portlet " + producerOfferedPortletContext + " doesn't support producing the event : " + name);
+      if (log.isDebugEnabled())
+      {
+         log.debug("The portlet " + producerOfferedPortletContext + " doesn't support producing the event : " + name);
+      }
       return false;
    }
 
