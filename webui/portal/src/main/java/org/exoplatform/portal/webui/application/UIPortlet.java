@@ -50,6 +50,7 @@ import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.event.Event.Phase;
 import org.gatein.common.i18n.LocalizedString;
 import org.gatein.common.net.media.MediaType;
+import org.gatein.common.util.ParameterValidation;
 import org.gatein.pc.api.Mode;
 import org.gatein.pc.api.NoSuchPortletException;
 import org.gatein.pc.api.PortletContext;
@@ -395,19 +396,17 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
       }
       else
       {
-         String value = null;
-         if (displayName != null)
-         {
-            RequestContext i = PortalRequestContext.getCurrentInstance();
-            Locale locale = i.getLocale();
-            value = displayName.getString(locale, true);
-         }
-         if (value == null || value.length() == 0)
+         RequestContext i = PortalRequestContext.getCurrentInstance();
+         Locale locale = i.getLocale();
+         String value = displayName.getString(locale, true);
+
+         if (ParameterValidation.isNullOrEmpty(value))
          {
             org.gatein.pc.api.Portlet portlet = getProducedOfferedPortlet();
             PortletInfo info = portlet.getInfo();
             value = info.getName();
          }
+
          return value;
       }
    }
