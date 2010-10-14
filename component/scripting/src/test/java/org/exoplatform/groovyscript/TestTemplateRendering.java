@@ -173,13 +173,58 @@ public class TestTemplateRendering extends AbstractGateInTest
       assertEquals("bar", s);
    }
 
-   public void testGString2() throws Exception
+   public void testQuoteAfterGString() throws Exception
    {
       GroovyTemplate template = new GroovyTemplate("$foo\"");
       Map<String, String> context = new HashMap<String, String>();
       context.put("foo", "bar");
       String s = template.render(context);
       assertEquals("bar\"", s);
+   }
+
+   public void testDollarInExpression() throws Exception
+   {
+      GroovyTemplate template = new GroovyTemplate("<%= \"$foo\" %>");
+      Map<String, String> context = new HashMap<String, String>();
+      context.put("foo", "bar");
+      String s = template.render(context);
+      assertEquals("bar", s);
+   }
+
+   public void testEscapeDollarInExpression() throws Exception
+   {
+      GroovyTemplate template = new GroovyTemplate("<%= \"\\$foo\" %>");
+      Map<String, String> context = new HashMap<String, String>();
+      context.put("foo", "bar");
+      String s = template.render(context);
+      assertEquals("$foo", s);
+   }
+
+   public void testEscapeDollarInText() throws Exception
+   {
+      GroovyTemplate template = new GroovyTemplate("\\$foo");
+      Map<String, String> context = new HashMap<String, String>();
+      context.put("foo", "bar");
+      String s = template.render(context);
+      assertEquals("$foo", s);
+   }
+
+   public void testDollarInScriplet() throws Exception
+   {
+      GroovyTemplate template = new GroovyTemplate("<% out.print(\"$foo\") %>");
+      Map<String, String> context = new HashMap<String, String>();
+      context.put("foo", "bar");
+      String s = template.render(context);
+      assertEquals("bar", s);
+   }
+
+   public void testEscapeDollarInScriplet() throws Exception
+   {
+      GroovyTemplate template = new GroovyTemplate("<% out.print(\"\\$foo\") %>");
+      Map<String, String> context = new HashMap<String, String>();
+      context.put("foo", "bar");
+      String s = template.render(context);
+      assertEquals("$foo", s);
    }
 
    public void testQuote() throws Exception

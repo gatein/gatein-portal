@@ -55,7 +55,9 @@ public class TemplateParser
 
       GSTRING_CURLY_EXPR,
 
-      GSTRING_EXPR
+      GSTRING_EXPR,
+
+      BACKSLASH
    }
 
    public List<TemplateSection> parse(String s)
@@ -126,6 +128,10 @@ public class TemplateParser
                if (c == '<')
                {
                   status = Status.START_ANGLE;
+               }
+               else if (c == '\\')
+               {
+                  status = Status.BACKSLASH;
                }
                else if (c == '$')
                {
@@ -285,6 +291,11 @@ public class TemplateParser
                   status = Status.TEXT;
                   accumulator.append(c);
                }
+               break;
+            case BACKSLASH:
+               accumulator.append('\\');
+               accumulator.append(c);
+               status = Status.TEXT;
                break;
             default:
                throw new AssertionError();
