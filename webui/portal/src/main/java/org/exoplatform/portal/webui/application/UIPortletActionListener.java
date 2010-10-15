@@ -97,6 +97,13 @@ public class UIPortletActionListener
          HttpServletRequest request = prcontext.getRequest();
          setupPublicRenderParams(uiPortlet, request.getParameterMap());
 
+         // set the navigational state
+         String navState =prcontext.getRequestParameter(ExoPortletInvocationContext.NAVIGATIONAL_STATE_PARAM_NAME);
+         if (navState != null)
+         {
+            uiPortlet.setNavigationalState(ParametersStateString.create(navState));
+         }
+         
          //
          ActionInvocation actionInvocation = uiPortlet.create(ActionInvocation.class, prcontext);
          if (actionInvocation == null)
@@ -187,7 +194,10 @@ public class UIPortletActionListener
 
          //
          StateString navigationalState = navStateResponse.getNavigationalState();
-         uiPortlet.setNavigationalState(navigationalState);
+         if (navigationalState != null)
+         {
+            uiPortlet.setNavigationalState(navigationalState);
+         }
 
          // update the public render parameters with the changes from the invocation
          setupPublicRenderParams(uiPortlet, navStateResponse.getPublicNavigationalStateUpdates());
@@ -349,6 +359,13 @@ public class UIPortletActionListener
             PortalRequestContext context = (PortalRequestContext)event.getRequestContext();
             HttpServletResponse response = context.getResponse();
 
+            //Set the NavigationalState
+            String navState = context.getRequestParameter(ExoPortletInvocationContext.NAVIGATIONAL_STATE_PARAM_NAME);
+            if (navState != null)
+            {
+               uiPortlet.setNavigationalState(ParametersStateString.create(navState));
+            }
+            
             //
             ResourceInvocation resourceInvocation = uiPortlet.create(ResourceInvocation.class, context);
 
@@ -568,7 +585,11 @@ public class UIPortletActionListener
          PortletMode mode = new PortletMode(getPortletModeOrDefault(navResponse));
          setNextMode(uiPortlet, mode);
          
-         uiPortlet.setNavigationalState(navResponse.getNavigationalState());
+         StateString navState = navResponse.getNavigationalState();
+         if (navState != null)
+         {
+            uiPortlet.setNavigationalState(navResponse.getNavigationalState());
+         }
          setupPublicRenderParams(uiPortlet, navResponse.getPublicNavigationalStateUpdates());
 
          //TODO: (mwringe) add this to the UpdateNavigationStateResponse.Event class instead of here
