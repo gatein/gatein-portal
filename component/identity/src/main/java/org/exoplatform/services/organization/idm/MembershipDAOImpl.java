@@ -102,6 +102,11 @@ public class MembershipDAOImpl implements MembershipHandler
             + " because membership type is null");
       }
 
+      if (orgService.getMembershipTypeHandler().findMembershipType(mt.getName()) == null)
+      {
+          throw new InvalidNameException("MembershipType doesn't exist: " + mt.getName());
+      }
+
       String plGroupName = getPLIDMGroupName(g.getGroupName());
 
       String groupId =

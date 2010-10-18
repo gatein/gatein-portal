@@ -340,6 +340,7 @@ public class TestOrganizationService extends AbstractGateInTest
 
       mt = mtHandler_.createMembershipTypeInstance();
       mt.setName("membershipType3");
+      mtHandler_.createMembershipType(mt, true);
       membershipHandler_.linkMembership(userBenj, group2, mt, true);
 
       /*
@@ -490,6 +491,37 @@ public class TestOrganizationService extends AbstractGateInTest
 //      assertFalse(l.preDelete && l.postDelete);
 //      userHandler_.removeUser(user.getUserName(), false);
 //   }
+
+    public void testLinkMembership() throws Exception {
+      String g1 = "grp1";
+      String usr1 = "usr1";
+      String mstype1 = "mstype1";
+
+      Group group1 = groupHandler_.createGroupInstance();
+      group1.setGroupName(g1);
+      groupHandler_.addChild(null, group1, true);
+
+      User user = createUser(usr1);
+
+      MembershipType mt = mtHandler_.createMembershipTypeInstance();
+      mt.setName(mstype1);
+
+      try {
+
+         membershipHandler_.linkMembership(user, group1, mt, true);
+         fail();
+      }
+      catch (Exception e)
+      {
+         //expected as membership type was not created first
+      }
+
+      assertNull(mtHandler_.findMembershipType(mstype1));
+
+      userHandler_.removeUser(usr1, true);
+      groupHandler_.removeGroup(group1, true);
+   }
+
 
    public void testFindUsersByGroupId() throws Exception
    {
