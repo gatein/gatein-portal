@@ -28,8 +28,21 @@ cd `dirname "$0"`
 LOG_OPTS="-Dorg.apache.commons.logging.Log=org.apache.commons.logging.impl.SimpleLog"
 SECURITY_OPTS="-Djava.security.auth.login.config=../conf/jaas.conf"
 EXO_OPTS="-Dexo.product.developing=false -Dexo.conf.dir.name=gatein/conf -Djava.awt.headless=true"
+GATEIN_OPTS=""
 
-JAVA_OPTS="-Xms128m -Xmx384m -XX:MaxPermSize=192m $JAVA_OPTS $LOG_OPTS $SECURITY_OPTS $EXO_OPTS"
+while getopts "D:" OPTION
+do
+     case $OPTION in
+         D)
+             GATEIN_OPTS="$GATEIN_OPTS -D$OPTARG"
+             ;;
+     esac
+done
+
+# skip getopt parms
+shift $((OPTIND-1))
+
+JAVA_OPTS="-Xms128m -Xmx384m -XX:MaxPermSize=192m $JAVA_OPTS $LOG_OPTS $SECURITY_OPTS $EXO_OPTS $GATEIN_OPTS"
 export JAVA_OPTS
 
 # Launches the server
