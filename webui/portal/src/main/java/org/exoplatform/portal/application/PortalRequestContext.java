@@ -22,6 +22,7 @@ package org.exoplatform.portal.application;
 import org.exoplatform.Constants;
 import org.exoplatform.commons.utils.ExpressionUtil;
 import org.exoplatform.commons.utils.PortalPrinter;
+import org.exoplatform.commons.xml.DOMSerializer;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Page;
@@ -40,19 +41,12 @@ import org.exoplatform.webui.core.UIComponent;
 import org.gatein.common.http.QueryStringParser;
 import org.w3c.dom.Element;
 
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.net.URLDecoder;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -432,35 +426,16 @@ public class PortalRequestContext extends WebuiRequestContext
    public List<String> getExtraMarkupHeadersAsStrings() throws Exception
    {
       List<String> markupHeaders = new ArrayList<String>();
-      
       if (extraMarkupHeaders != null && !extraMarkupHeaders.isEmpty())
       {
-         Transformer transformer = TransformerFactory.newInstance().newTransformer();
-         transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
-
+         StringWriter sw = new StringWriter();
          for (Element element : extraMarkupHeaders)
          {
-            DOMSource source = new DOMSource(element);
-            StreamResult result = new StreamResult(new StringWriter());
-
-            // we want to ouput xhtml text that will still work on html browsers.
-            // In order to do this we need to have the script tag be not self closing
-            // which it will try and do with the xml or xhtml method. If we just use
-            // the html method then the other tags will not be closed.
-            if (element.getNodeName().equalsIgnoreCase("script"))
-            {
-               transformer.setOutputProperty(OutputKeys.METHOD, "html");
-            }
-            else
-            {
-               transformer.setOutputProperty(OutputKeys.METHOD, "xml");
-            }
-            transformer.transform(source, result);
-            markupHeaders.add(result.getWriter().toString());
+            DOMSerializer.serialize(element, sw);
+            markupHeaders.add(sw.toString());
          }
       }
-      
-       return markupHeaders;
+      return markupHeaders;
    }
    
    /**
