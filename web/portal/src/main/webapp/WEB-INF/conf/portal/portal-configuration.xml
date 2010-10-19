@@ -293,6 +293,9 @@
             <field name="maxSize">
               <int>5000</int>
             </field>
+            <field name="liveTime">
+              <long>600</long>
+            </field>
           </object>
         </object-param>
       </init-params>
