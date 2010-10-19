@@ -61,12 +61,13 @@ public class DOMSerializer
       XMLOutputFactory tmp;
       try
       {
-         tmp = XMLOutputFactory.newFactory(DEFAULT_XML_OUTPUT_FACTORY, Thread.currentThread().getContextClassLoader());
+         Class<XMLOutputFactory> cl = (Class<XMLOutputFactory>)Thread.currentThread().getContextClassLoader().loadClass(DEFAULT_XML_OUTPUT_FACTORY);
+         tmp = cl.newInstance();
       }
-      catch (FactoryConfigurationError error)
+      catch (Exception e)
       {
-         tmp = XMLOutputFactory.newFactory();
-         log.warn("Could not use " + DEFAULT_XML_OUTPUT_FACTORY + " will use default provided by runtime instead " +
+         tmp = XMLOutputFactory.newInstance();
+         log.warn("Could not instantiate " + DEFAULT_XML_OUTPUT_FACTORY + " will use default provided by runtime instead " +
             tmp.getClass().getName());
       }
 
