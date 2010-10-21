@@ -28,12 +28,24 @@ import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.configuration.ConfigurationManager;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.portal.pc.ExoKernelIntegration;
+import org.exoplatform.portal.pc.ExoPortletApplicationDeployer;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 import org.exoplatform.services.listener.ListenerService;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 import org.gatein.pc.api.PortletInvoker;
+import org.gatein.pc.bridge.BridgeInterceptor;
 import org.gatein.pc.federation.FederatingPortletInvoker;
+import org.gatein.pc.portlet.PortletInvokerInterceptor;
+import org.gatein.pc.portlet.aspects.CCPPInterceptor;
+import org.gatein.pc.portlet.aspects.ContextDispatcherInterceptor;
+import org.gatein.pc.portlet.aspects.EventPayloadInterceptor;
+import org.gatein.pc.portlet.aspects.ProducerCacheInterceptor;
+import org.gatein.pc.portlet.aspects.RequestAttributeConversationInterceptor;
+import org.gatein.pc.portlet.aspects.SecureTransportInterceptor;
+import org.gatein.pc.portlet.aspects.SessionInvalidatorInterceptor;
+import org.gatein.pc.portlet.aspects.ValveInterceptor;
+import org.gatein.pc.portlet.container.ContainerPortletDispatcher;
 import org.gatein.pc.portlet.container.ContainerPortletInvoker;
 import org.gatein.pc.portlet.impl.state.StateConverterV0;
 import org.gatein.pc.portlet.impl.state.StateManagementPolicyService;
@@ -59,6 +71,7 @@ import org.gatein.wsrp.WSRPConstants;
 import org.gatein.wsrp.consumer.migration.MigrationService;
 import org.gatein.wsrp.consumer.registry.ActivatingNullInvokerHandler;
 import org.gatein.wsrp.consumer.registry.ConsumerRegistry;
+import org.gatein.wsrp.payload.WSRPEventPayloadInterceptor;
 import org.gatein.wsrp.producer.ProducerHolder;
 import org.gatein.wsrp.producer.WSRPPortletInvoker;
 import org.gatein.wsrp.producer.WSRPProducer;
@@ -178,9 +191,41 @@ public class WSRPServiceIntegration implements Startable, WebAppListener
       RegistrationManager registrationManager = new RegistrationManagerImpl();
       registrationManager.setPersistenceManager(registrationPersistenceManager);
 
-      // retrieve container portlet invoker from eXo kernel
-      ContainerPortletInvoker containerPortletInvoker =
-         (ContainerPortletInvoker)container.getComponentInstanceOfType(ContainerPortletInvoker.class);
+      // initialize container portlet invoker and its stack
+      // The portlet container invoker used by producer to dispatch to portlets
+      ContainerPortletInvoker containerPortletInvoker = new ContainerPortletInvoker();
+
+      //Container Stack
+      ContainerPortletDispatcher portletContainerDispatcher = new ContainerPortletDispatcher();
+
+      // use the WSRP-specific event payload interceptor
+      WSRPEventPayloadInterceptor eventPayloadInterceptor = new WSRPEventPayloadInterceptor();
+      eventPayloadInterceptor.setNext(portletContainerDispatcher);
+
+      // todo: not sure if WSRP ProducerPortletInvoker needs all these interceptors
+      RequestAttributeConversationInterceptor requestAttributeConversationInterceptor =
+         new RequestAttributeConversationInterceptor();
+      requestAttributeConversationInterceptor.setNext(eventPayloadInterceptor);
+      CCPPInterceptor ccppInterceptor = new CCPPInterceptor();
+      ccppInterceptor.setNext(requestAttributeConversationInterceptor);
+      BridgeInterceptor bridgepInterceptor = new BridgeInterceptor();
+      bridgepInterceptor.setNext(ccppInterceptor);
+      ProducerCacheInterceptor producerCacheInterceptor = new ProducerCacheInterceptor();
+      producerCacheInterceptor.setNext(bridgepInterceptor);
+      SessionInvalidatorInterceptor sessionInvalidatorInterceptor = new SessionInvalidatorInterceptor();
+      sessionInvalidatorInterceptor.setNext(producerCacheInterceptor);
+      ContextDispatcherInterceptor contextDispatcherInterceptor = new ContextDispatcherInterceptor();
+      contextDispatcherInterceptor.setNext(sessionInvalidatorInterceptor);
+      SecureTransportInterceptor secureTransportInterceptor = new SecureTransportInterceptor();
+      secureTransportInterceptor.setNext(contextDispatcherInterceptor);
+      ValveInterceptor valveInterceptor = new ValveInterceptor();
+      valveInterceptor.setPortletApplicationRegistry(exoKernelIntegration.getPortletApplicationRegistry());
+      valveInterceptor.setNext(secureTransportInterceptor);
+
+      contextDispatcherInterceptor.setServletContainerFactory(DefaultServletContainerFactory.getInstance());
+
+      // The portlet container invoker continued
+      containerPortletInvoker.setNext(valveInterceptor);
 
       // The producer persistence manager
       PortletStatePersistenceManager producerPersistenceManager;
@@ -206,11 +251,11 @@ public class WSRPServiceIntegration implements Startable, WebAppListener
       producerPortletInvoker.setPersistenceManager(producerPersistenceManager);
       producerPortletInvoker.setStateManagementPolicy(producerStateManagementPolicy);
       producerPortletInvoker.setStateConverter(producerStateConverter);
-      
+
       WSRPPortletInvoker wsrpPortletInvoker = new WSRPPortletInvoker();
       wsrpPortletInvoker.setNext(producerPortletInvoker);
       wsrpPortletInvoker.setRegistrationManager(registrationManager);
-      
+
 
       // create and wire WSRP producer
       producer = ProducerHolder.getProducer(true);
