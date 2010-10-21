@@ -28,24 +28,14 @@ import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.configuration.ConfigurationManager;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.portal.pc.ExoKernelIntegration;
-import org.exoplatform.portal.pc.ExoPortletApplicationDeployer;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 import org.exoplatform.services.listener.ListenerService;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 import org.gatein.pc.api.PortletInvoker;
-import org.gatein.pc.bridge.BridgeInterceptor;
 import org.gatein.pc.federation.FederatingPortletInvoker;
 import org.gatein.pc.portlet.PortletInvokerInterceptor;
-import org.gatein.pc.portlet.aspects.CCPPInterceptor;
-import org.gatein.pc.portlet.aspects.ContextDispatcherInterceptor;
 import org.gatein.pc.portlet.aspects.EventPayloadInterceptor;
-import org.gatein.pc.portlet.aspects.ProducerCacheInterceptor;
-import org.gatein.pc.portlet.aspects.RequestAttributeConversationInterceptor;
-import org.gatein.pc.portlet.aspects.SecureTransportInterceptor;
-import org.gatein.pc.portlet.aspects.SessionInvalidatorInterceptor;
-import org.gatein.pc.portlet.aspects.ValveInterceptor;
-import org.gatein.pc.portlet.container.ContainerPortletDispatcher;
 import org.gatein.pc.portlet.container.ContainerPortletInvoker;
 import org.gatein.pc.portlet.impl.state.StateConverterV0;
 import org.gatein.pc.portlet.impl.state.StateManagementPolicyService;
@@ -191,41 +181,42 @@ public class WSRPServiceIntegration implements Startable, WebAppListener
       RegistrationManager registrationManager = new RegistrationManagerImpl();
       registrationManager.setPersistenceManager(registrationPersistenceManager);
 
-      // initialize container portlet invoker and its stack
-      // The portlet container invoker used by producer to dispatch to portlets
-      ContainerPortletInvoker containerPortletInvoker = new ContainerPortletInvoker();
+      // retrieve container portlet invoker from eXo kernel
+      ContainerPortletInvoker containerPortletInvoker =
+         (ContainerPortletInvoker)container.getComponentInstanceOfType(ContainerPortletInvoker.class);
 
-      //Container Stack
-      ContainerPortletDispatcher portletContainerDispatcher = new ContainerPortletDispatcher();
+      // iterate over the container stack so that we can insert the WSRP-specific event payload interceptor
+      PortletInvokerInterceptor previous = containerPortletInvoker;
+      PortletInvokerInterceptor next = previous;
+      do
+      {
+         PortletInvoker invoker = previous.getNext();
+         if (invoker instanceof EventPayloadInterceptor)
+         {
+            // create a new WSRPEventPayloadInterceptor and make its next one the current event payload invoker
+            WSRPEventPayloadInterceptor eventPayloadInterceptor = new WSRPEventPayloadInterceptor();
+            eventPayloadInterceptor.setNext(invoker);
 
-      // use the WSRP-specific event payload interceptor
-      WSRPEventPayloadInterceptor eventPayloadInterceptor = new WSRPEventPayloadInterceptor();
-      eventPayloadInterceptor.setNext(portletContainerDispatcher);
+            // replace the current event payload interceptor by the WSRP-specific one
+            previous.setNext(eventPayloadInterceptor);
 
-      // todo: not sure if WSRP ProducerPortletInvoker needs all these interceptors
-      RequestAttributeConversationInterceptor requestAttributeConversationInterceptor =
-         new RequestAttributeConversationInterceptor();
-      requestAttributeConversationInterceptor.setNext(eventPayloadInterceptor);
-      CCPPInterceptor ccppInterceptor = new CCPPInterceptor();
-      ccppInterceptor.setNext(requestAttributeConversationInterceptor);
-      BridgeInterceptor bridgepInterceptor = new BridgeInterceptor();
-      bridgepInterceptor.setNext(ccppInterceptor);
-      ProducerCacheInterceptor producerCacheInterceptor = new ProducerCacheInterceptor();
-      producerCacheInterceptor.setNext(bridgepInterceptor);
-      SessionInvalidatorInterceptor sessionInvalidatorInterceptor = new SessionInvalidatorInterceptor();
-      sessionInvalidatorInterceptor.setNext(producerCacheInterceptor);
-      ContextDispatcherInterceptor contextDispatcherInterceptor = new ContextDispatcherInterceptor();
-      contextDispatcherInterceptor.setNext(sessionInvalidatorInterceptor);
-      SecureTransportInterceptor secureTransportInterceptor = new SecureTransportInterceptor();
-      secureTransportInterceptor.setNext(contextDispatcherInterceptor);
-      ValveInterceptor valveInterceptor = new ValveInterceptor();
-      valveInterceptor.setPortletApplicationRegistry(exoKernelIntegration.getPortletApplicationRegistry());
-      valveInterceptor.setNext(secureTransportInterceptor);
-
-      contextDispatcherInterceptor.setServletContainerFactory(DefaultServletContainerFactory.getInstance());
-
-      // The portlet container invoker continued
-      containerPortletInvoker.setNext(valveInterceptor);
+            // we're done
+            break;
+         }
+         else
+         {
+            previous = next;
+            if (invoker instanceof PortletInvokerInterceptor)
+            {
+               next = (PortletInvokerInterceptor)invoker;
+            }
+            else
+            {
+               next = null;
+            }
+         }
+      }
+      while (next != null);
 
       // The producer persistence manager
       PortletStatePersistenceManager producerPersistenceManager;
