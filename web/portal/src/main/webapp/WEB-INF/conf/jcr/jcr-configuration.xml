@@ -113,7 +113,6 @@
  		      <name>autoCreatedInNewRepository</name>
  		      <description>Node types configuration file</description>
  		      <value>jar:/conf/ext-nodetypes-config.xml</value>
- 		      <value>jar:/conf/organization-nodetypes.xml</value>
  		      <value>jar:/conf/gatein-nodetypes.xml</value>
  		      <value>jar:/conf/mop-nodetypes.xml</value>
  		      <value>jar:/conf/application-nodetypes.xml</value>

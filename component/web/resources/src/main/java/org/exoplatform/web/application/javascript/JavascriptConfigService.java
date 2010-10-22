@@ -82,7 +82,7 @@ public class JavascriptConfigService implements Startable
       availableScriptsPaths_ = new ArrayList<String>();
       availableScriptsKey_ = new ArrayList<Javascript>();
       extendedJavascripts = new HashMap<String, String>();
-      deployer = new JavascriptDeployer(this);
+      deployer = new JavascriptDeployer(context.getPortalContainerName(), this);
       removal = new JavascriptRemoval(this);
       object_view_of_merged_JS = new HashMap<String, List<String>>();
    }
