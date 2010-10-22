@@ -110,26 +110,23 @@ public class UIAccountEditInputSet extends UIFormInputSet
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
       UIApplication uiApp = context.getUIApplication();
       String username = getUIStringInput(USERNAME).getValue();
-      User user = service.getUserHandler().findUserByName(username);
-      String oldEmail = user.getEmail();
+      User user = service.getUserHandler().findUserByName(username);      
       if (user == null)
       {
          uiApp.addMessage(new ApplicationMessage("UIAccountInputSet.msg.user-is-deleted", null, ApplicationMessage.WARNING));
          UIUserInfo userInfo = getParent();
          if (userInfo != null)
          {
-            UIUserManagement userManagement = userInfo.getParent();
-            UIListUsers listUser = userManagement.getChild(UIListUsers.class);
             UIAccountEditInputSet accountInput = userInfo.getChild(UIAccountEditInputSet.class);
             UIUserProfileInputSet userProfile = userInfo.getChild(UIUserProfileInputSet.class);
             userInfo.setRenderSibling(UIListUsers.class);
-            listUser.search(new Query());
             accountInput.reset();
             userProfile.reset();
             context.setProcessRender(true);
          }
          return false;
       }
+      String oldEmail = user.getEmail();
       invokeSetBindingField(user);
       if (isChangePassword())
       {

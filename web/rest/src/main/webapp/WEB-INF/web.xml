@@ -56,7 +56,17 @@
     <filter-name>RestEncodingFilter</filter-name>
     <url-pattern>/*</url-pattern>
   </filter-mapping>
-      
+  
+  <!-- ================================================================== -->
+  <!--           LISTENER                                                 -->
+  <!-- ================================================================== -->
+  <listener>
+	<listener-class>org.exoplatform.web.GenericHttpListener</listener-class>
+  </listener>
+  <listener>
+    <listener-class>org.exoplatform.services.security.web.JAASConversationStateListener</listener-class>
+  </listener>    
+    
   <servlet>
     <servlet-name>RestServer</servlet-name>
     <description>eXo - Platform REST Server</description>
@@ -74,6 +84,10 @@
     <url-pattern>/*</url-pattern>
   </servlet-mapping>
 
+	<session-config>
+	  <session-timeout>30</session-timeout> 
+	</session-config>
+	
   <security-constraint>
     <web-resource-collection>
       <web-resource-name>rest</web-resource-name>

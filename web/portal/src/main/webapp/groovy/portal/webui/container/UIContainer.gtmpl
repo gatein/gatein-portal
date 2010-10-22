@@ -42,9 +42,9 @@
 				<div class="VIEW-CONTAINER VIEW-BLOCK">
 			<%} %> 
 					<%if(hasPermission) {%>
-						<div class="UIRowContainer <%=(portalMode != UIPortalApplication.NORMAL_MODE && uicomponent.getChildren().size() == 0) ? "EmptyContainer" : ""%>">
-							<div>
-								<%uicomponent.renderChildren();%>
+					    <div>
+							<div class="UIRowContainer <%=(portalMode != UIPortalApplication.NORMAL_MODE && uicomponent.getChildren().size() == 0) ? "EmptyContainer" : ""%>">							
+									<%uicomponent.renderChildren();%>							
 							</div>
 						</div>
 						<%} else out.print("<div class='ProtectedContent'>"+_ctx.appRes("UIPortlet.label.protectedContent")+"</div>");%>
@@ -72,7 +72,7 @@
 														%>
 														<div class="ContainerIcon"><%=hasPermission ? strTitle : _ctx.appRes("UIPortlet.label.protectedContent")%></div>
 														<%if(hasPermission) {%>
-															<a href="<%=uicomponent.event("EditContainer")%>;eXo.portal.UIPortal.changeComposerSaveButton()" class="EditContainerIcon" title="<%=_ctx.appRes("UIContainer.tooltip.editContainer")%>"><span></span></a>
+															<a href="<%=uicomponent.event("EditContainer")%>" class="EditContainerIcon" title="<%=_ctx.appRes("UIContainer.tooltip.editContainer")%>"><span></span></a>
 															<a href="<%=uicomponent.event("DeleteComponent")%>" class="DeleteContainerIcon" title="<%=_ctx.appRes("UIContainer.tooltip.closeContainer")%>"><span></span></a>
 														<%}%>
 													

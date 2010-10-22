@@ -17,7 +17,7 @@
 %>
 <div class="UITrees ScrollArea">
 	<div class="TreeContainer JSContainer">
-		<div style="padding-bottom: 12px">
+		<div style="padding-bottom: 12px; width: 99%">
 			<div class="HomeNode">
 				<a class="LevelUpArrowIcon" href="<%=uicomponent.getActionLink();%>" onmousedown="event.cancelBubble=true;" title="<%=_ctx.appRes("UITree.tooltip.UpLevel")%>" style="display: block;"><span></span></a>
 			</div>

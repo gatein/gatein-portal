@@ -233,7 +233,7 @@ function UIDashboard() {
 							{name: "objectId", value: dragObj.id}
 						];
 						var url = uiDashboardUtil.createRequest(compId, 'MoveGadget', params);
-						ajaxAsyncGetRequest(url);
+						ajaxGet(url);
 					}
 				}
 			}
@@ -255,7 +255,7 @@ function UIDashboard() {
 	};
 	
 	UIDashboard.prototype.onLoad = function(windowId, canEdit) {
-		var portletWindow = document.getElementById(windowId);
+		var portletWindow = document.getElementById(windowId) ? document.getElementById(windowId) : document.getElementById("UIPortlet-" + windowId);
 		if(!portletWindow) return;
 		
 		var DOMUtil = eXo.core.DOMUtil;

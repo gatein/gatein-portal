@@ -38,6 +38,7 @@ import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.exception.MessageException;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -88,6 +89,16 @@ public class UIGadget extends UIComponent
    public static final String HOME_VIEW = "home";
 
    public static final String CANVAS_VIEW = "canvas"; 
+   
+   public static final String METADATA_GADGETS = "gadgets";
+   
+   public static final String METADATA_USERPREFS = "userPrefs";
+   
+   public static final String METADATA_USERPREFS_TYPE = "type";
+   
+   public static final String METADATA_USERPREFS_TYPE_HIDDEN = "hidden";
+   
+   public static final String METADATA_USERPREFS_TYPE_LIST = "list";
 
    public String view = HOME_VIEW;
 
@@ -205,7 +216,7 @@ public class UIGadget extends UIComponent
             String strMetadata = GadgetUtil.fetchGagdetMetadata(getUrl());
             metadata_ = new JSONObject(strMetadata);
          }
-         JSONObject obj = metadata_.getJSONArray("gadgets").getJSONObject(0);
+         JSONObject obj = metadata_.getJSONArray(METADATA_GADGETS).getJSONObject(0);
          String token = GadgetUtil.createToken(this.getUrl(), new Random().nextLong());
          obj.put("secureToken", token);
          return metadata_.toString();
@@ -213,6 +224,39 @@ public class UIGadget extends UIComponent
       catch (JSONException e)
       {
          return null;
+      }
+   }
+   /**
+    * Check if content of gadget has <UserPref>? (Content is parsed from gadget specification in .xml file)
+    * @return boolean
+    */
+   public boolean isSettingUserPref()
+   {
+      try
+      {
+         if(metadata_ != null)
+         {
+            JSONObject obj = metadata_.getJSONArray(METADATA_GADGETS).getJSONObject(0);
+            JSONObject userPrefs = obj.getJSONObject(METADATA_USERPREFS);
+            JSONArray names = userPrefs.names();
+            int count = names.length();
+            if(count > 0)
+            {
+               for(int i = 0; i < count; i++)
+               {
+                  JSONObject o = (JSONObject) userPrefs.get(names.get(i).toString());
+                  if(!(o.get(METADATA_USERPREFS_TYPE).equals(METADATA_USERPREFS_TYPE_HIDDEN) || 
+                        o.get(METADATA_USERPREFS_TYPE).equals(METADATA_USERPREFS_TYPE_LIST)))
+                     return true;
+               }
+               return false;
+            }
+         }
+         return false;
+      }
+      catch (Exception e)
+      {
+         return false;
       }
    }
 
@@ -379,10 +423,13 @@ public class UIGadget extends UIComponent
          WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
          
          //
-         try{
+         try
+         {
             uiGadget.addUserPref(event.getRequestContext().getRequestParameter("userPref"));
-            Util.getPortalRequestContext().setFullRender(true);
-         } catch(Exception e){            
+            Util.getPortalRequestContext().setResponseComplete(true);
+         } 
+         catch(Exception e)
+         {                        
             UIPortletApplication uiPortlet = uiGadget.getAncestorOfType(UIPortletApplication.class);
             context.addUIComponentToUpdateByAjax(uiPortlet);
             throw new MessageException(new ApplicationMessage("UIDashboard.msg.ApplicationNotExisted", null, ApplicationMessage.ERROR));

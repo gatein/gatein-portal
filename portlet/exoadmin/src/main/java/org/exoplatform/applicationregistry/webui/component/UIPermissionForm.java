@@ -20,6 +20,7 @@
 package org.exoplatform.applicationregistry.webui.component;
 
 import org.exoplatform.application.registry.Application;
+import org.exoplatform.application.registry.ApplicationCategory;
 import org.exoplatform.application.registry.ApplicationRegistryService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -95,7 +96,9 @@ public class UIPermissionForm extends UIForm
       service.update(application_);
       Application selectedApplication = getApplication();
       UIApplicationOrganizer uiApplicationOrganizer = getAncestorOfType(UIApplicationOrganizer.class);
+      ApplicationCategory selectedCategory = uiApplicationOrganizer.getSelectedCategory();
       uiApplicationOrganizer.reload();
+      uiApplicationOrganizer.setSelectedCategory(selectedCategory);
       uiApplicationOrganizer.setSelectedApplication(selectedApplication);
    }
 

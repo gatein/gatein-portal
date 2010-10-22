@@ -143,6 +143,7 @@ public class UIContainerForm extends UIFormTabPane
 
          UIPortalApplication uiPortalApp = uiForm.getAncestorOfType(UIPortalApplication.class);
          UIWorkingWorkspace uiWorkingWS = uiPortalApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
+         pcontext.getJavascriptManager().addJavascript("eXo.portal.UIPortal.changeComposerSaveButton();");
          pcontext.addUIComponentToUpdateByAjax(uiWorkingWS);
          pcontext.setFullRender(true);
          Util.showComponentLayoutMode(UIContainer.class);

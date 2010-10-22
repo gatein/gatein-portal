@@ -31,7 +31,9 @@ import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.ComponentConfigs;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIContainer;
+import org.exoplatform.webui.core.UIPopupMessages;
 import org.exoplatform.webui.core.UIPopupWindow;
+import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
@@ -60,6 +62,26 @@ public class UIDashboard extends UIContainer
       UIPopupWindow popup = addChild(UIPopupWindow.class, null, GADGET_POPUP_ID + "-" + hashCode());
       popup.setUIComponent(createUIComponent(UIDashboardSelectContainer.class, null, null));
       addChild(UIDashboardContainer.class, null, null);
+   }
+
+   @Override
+   public void processRender(WebuiRequestContext context) throws Exception
+   {
+      UIGadget uiGadget = this.getMaximizedGadget();      
+      if (uiGadget != null) 
+      {         
+         UIPopupMessages uiPopupMessages = getAncestorOfType(UIPortletApplication.class).getUIPopupMessages();
+         for (ApplicationMessage msg : uiPopupMessages.getErrors())
+         {
+            if (msg.getMessageKey().equals("UIDashboard.msg.ApplicationNotExisted"))
+            {
+               this.setMaximizedGadget(null);
+               break;
+            }
+         }         
+      }
+      
+      super.processRender(context);
    }
 
    public void setColumns(int num) throws Exception
@@ -152,9 +174,13 @@ public class UIDashboard extends UIContainer
          else
          {
             uiGadget.getProperties().setProperty("minimized", minimized);
+            uiDashboardCont.save();
+            if (uiDashboard.getAncestorOfType(UIPortletApplication.class).getUIPopupMessages().hasMessage())
+            {
+               return;
+            }
+            Util.getPortalRequestContext().setResponseComplete(true);
          }
-         uiDashboardCont.save();
-         context.addUIComponentToUpdateByAjax(uiGadget);
       }
    }
 
@@ -178,13 +204,16 @@ public class UIDashboard extends UIContainer
             context.addUIComponentToUpdateByAjax(uiDashboard);
             return;
          }
-         
-         //TODO nguyenanhkien2a@gmail.com
-         //We need to expand unminimized state of uiGadget to view all body of gadget, not just a title with no content
+
+         // TODO nguyenanhkien2a@gmail.comá
+         // We need to expand unminimized state of uiGadget to view all body of
+         // gadget, not just a title with no content
          uiGadget.getProperties().setProperty("minimized", "false");
          uiDashboardCont.save();
-         
-         if (maximize.equals("maximize"))
+
+         UIPortletApplication uiDashboarPortlet = uiDashboard.getAncestorOfType(UIPortletApplication.class);
+         if (maximize.equals("maximize")
+            && !uiDashboarPortlet.getUIPopupMessages().hasMessage())
          {
             uiGadget.setView(UIGadget.CANVAS_VIEW);
             uiDashboard.setMaximizedGadget(uiGadget);

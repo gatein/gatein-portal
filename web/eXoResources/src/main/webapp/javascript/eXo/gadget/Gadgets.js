@@ -674,11 +674,9 @@ gadgets.IfrGadget.prototype.generateForm = function(gadget) {
             el.type = "checkbox";
             el.name = prefix + att;
             el.id = elID;
-            if (userPrefs[att] && userPrefs[att] == "true") {
-                el.checked = userPrefs[att];
-            } else {
-            	if(prefs[att].default == "true")
-            		el.checked = true;
+            if ((userPrefs[att] && userPrefs[att] == "true") ||
+            		prefs[att]["default"] == "true") {
+                el.checked = true;
             }
             attEl.appendChild(el);
         }

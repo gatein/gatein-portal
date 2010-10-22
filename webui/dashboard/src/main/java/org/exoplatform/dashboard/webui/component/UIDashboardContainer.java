@@ -22,6 +22,7 @@ package org.exoplatform.dashboard.webui.component;
 import org.exoplatform.application.registry.Application;
 import org.exoplatform.application.registry.ApplicationRegistryService;
 import org.exoplatform.portal.config.DataStorage;
+import org.exoplatform.portal.config.StaleModelException;
 import org.exoplatform.portal.config.model.Container;
 import org.exoplatform.portal.config.model.Dashboard;
 import org.exoplatform.portal.config.model.TransientApplicationState;
@@ -30,6 +31,7 @@ import org.exoplatform.portal.webui.application.UIGadget;
 import org.exoplatform.portal.webui.application.UIPortlet;
 import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.portal.webui.util.PortalDataMapper;
+import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.web.application.RequestContext;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -40,12 +42,16 @@ import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.ParamConfig;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIComponent;
+import org.exoplatform.webui.core.UIPopupMessages;
+import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.jibx.runtime.BindingDirectory;
 import org.jibx.runtime.IBindingFactory;
 import org.jibx.runtime.IUnmarshallingContext;
+
+import com.sun.mail.imap.protocol.UIDSet;
 
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
@@ -148,7 +154,7 @@ public class UIDashboardContainer extends org.exoplatform.webui.core.UIContainer
          uiRoot.getChildren().clear();
 
          // Assemble the dashboard
-         PortalDataMapper.toUIContainer(uiRoot, dashboard);
+         PortalDataMapper.toUIContainer(uiRoot, dashboard);         
       }
 
       //
@@ -478,7 +484,15 @@ public class UIDashboardContainer extends org.exoplatform.webui.core.UIContainer
          DataStorage service = getApplicationComponent(DataStorage.class);
 
          // Save
-         service.saveDashboard(dashboard);
+         try
+         {
+            service.saveDashboard(dashboard);
+         }
+         catch (StaleModelException e)
+         {
+            getAncestorOfType(UIPortletApplication.class).addMessage(
+               new ApplicationMessage("UIDashboard.msg.StaleData", null, ApplicationMessage.ERROR));            
+         }
       }
    }
 
@@ -532,7 +546,11 @@ public class UIDashboardContainer extends org.exoplatform.webui.core.UIContainer
 
          uiDashboardContainer.moveUIGadget(objectId, col, row);
          uiDashboardContainer.save();
-         event.getRequestContext().setResponseComplete(true);
+         if (uiDashboard.getAncestorOfType(UIPortletApplication.class).getUIPopupMessages().hasMessage()) 
+         {
+            return;
+         }
+         Util.getPortalRequestContext().setResponseComplete(true);
       }
    }
 
@@ -552,15 +570,18 @@ public class UIDashboardContainer extends org.exoplatform.webui.core.UIContainer
          UIDashboardContainer uiDashboardContainer = uiDashboard.getChild(UIDashboardContainer.class);
          uiDashboardContainer.removeUIGadget(objectId);
          boolean isMaximized = false;
-         if (uiDashboard.getMaximizedGadget() != null && uiDashboard.getMaximizedGadget().getId().equals(objectId))
+         if (uiDashboard.getMaximizedGadget() != null && 
+                  uiDashboard.getMaximizedGadget().getId().equals(objectId))
          {
             uiDashboard.setMaximizedGadget(null);
             isMaximized = true;
          }
          uiDashboardContainer.save();
-         if (!isMaximized)
+         UIPopupMessages uiPopupMessages = 
+            uiDashboard.getAncestorOfType(UIPortletApplication.class).getUIPopupMessages();
+         if (!isMaximized && !uiPopupMessages.hasMessage())
          {
-            context.setResponseComplete(true);
+            Util.getPortalRequestContext().setResponseComplete(true);
          }
       }
    }

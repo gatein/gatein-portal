@@ -244,7 +244,7 @@ eXo.gadget.UIGadget = {
         href += "&op=MinimizeGadget";
         href += "&minimized=" + minimized;
         href += "&objectId=" + uiGadget.id + "&ajaxRequest=true";
-        ajaxAsyncGetRequest(href);
+        ajaxGet(href);
         if (uiGadget.minimizeCallback) uiGadget.minimizeCallback(portletFrag.parentNode.id);
     },
     /**
@@ -294,7 +294,7 @@ eXo.gadget.UIGadget = {
                 
                 var uiDashboardCont = DOMUtil.findAncestorByClass(uiGadget, "UIDashboardContainer"); 
                 if(uiDashboardCont) {
-                	ajaxAsyncGetRequest(href);
+                	ajaxGet(href);
 	                DOMUtil.removeElement(uiGadget);
 	                if(!DOMUtil.findFirstDescendantByClass(uiDashboardCont, "div", "UIGadget")) {
 	                	DOMUtil.findFirstDescendantByClass(uiDashboardCont, "div", "NoGadget").style.display = "block";

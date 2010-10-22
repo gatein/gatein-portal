@@ -196,6 +196,38 @@ PortalDragDrop.prototype.init = function(e) {
 
   DragDrop.dropCallback = function(dndEvent) {
   	this.origDragObjectStyle.setProperties(dndEvent.dragObject.style, false) ;
+  	
+  	var hasChanged = true;
+  	//When press esc key, we want to cancel the dragdrop, but now it only works with FF
+  	if (dndEvent.backupMouseEvent && dndEvent.backupMouseEvent.keyCode == 27 && eXo.core.Browser.isFF()) {
+  		hasChanged = false;
+  	}
+  	//When dragObject is outside 
+		var targetElement = dndEvent.foundTargetObject;  
+		if(!targetElement || targetElement.foundIndex == null) {
+			hasChanged = false;
+		}
+		//When dragobject is next to preview object (position is not changed)
+  	if(!dndEvent.dragObject.isAddingNewly) {
+	  	var DOMUtil = eXo.core.DOMUtil;
+	  	var previewClass = "DragAndDropPreview";
+	  	var previewTagName = "div";
+	  	var previewSibling = dndEvent.dragObject;
+	  	if (dndEvent.dragObject.parentNode.tagName.toLowerCase() == "td") {
+	  		previewSibling = dndEvent.dragObject.parentNode; 		
+	  		previewClass = "PreviewTDBlock";
+	  		previewTagName = "td";
+	  	}
+	  	var tempObj = DOMUtil.findNextElementByTagName(previewSibling, previewTagName);
+	  	if (tempObj != null && tempObj.className == previewClass) {
+	    	hasChanged = false;
+	    } else {
+	    	tempObj = DOMUtil.findPreviousElementByTagName(previewSibling, previewTagName);
+		    if (tempObj != null && tempObj.className == previewClass) {
+		    	hasChanged = false;
+		    }
+	    }
+  	}
 
     if(dndEvent.foundTargetObject != null || (dndEvent.backupMouseEvent && dndEvent.backupMouseEvent.keyCode != 27)) {
     	eXo.portal.PortalDragDrop.doDropCallback(dndEvent) ;
@@ -219,7 +251,9 @@ PortalDragDrop.prototype.init = function(e) {
     previewBlock = previewTD = null;
     
     eXo.portal.isInDragging = false;
-  	eXo.portal.UIPortal.changeComposerSaveButton();
+    if (hasChanged) {
+    	eXo.portal.UIPortal.changeComposerSaveButton();
+    }
 		// fix bug WEBOS-196	
 		dndEvent.dragObject.style.width = "auto" ; 
   };

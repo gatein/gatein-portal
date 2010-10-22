@@ -223,8 +223,8 @@ UIPortalNavigation.prototype.toggleSubMenu = function(e, tab, menuItemContainer)
       eXo.portal.UIPortalNavigation.superClass.setPosition(menuItemContainer, x, y, eXo.core.I18n.isRT());
       eXo.portal.UIPortalNavigation.superClass.show(menuItemContainer);
       
-      menuItemContainer.style.width = menuItemContainer.offsetWidth - parseInt(DOMUtil.getStyle(menuItemContainer, "borderLeftWidth")) 
-          - parseInt(DOMUtil.getStyle(menuItemContainer, "borderRightWidth")) + "px";
+      menuItemContainer.style.width = menuItemContainer.offsetWidth - parseInt(DOMUtil.getStyle(menuItemContainer, "borderLeftWidth",true)) 
+          - parseInt(DOMUtil.getStyle(menuItemContainer, "borderRightWidth",true)) + "px";
 			var posXinBrowser = eXo.core.Browser.findPosX(menuItemContainer);
 			if(eXo.core.I18n.isLT()) {
 				if(posXinBrowser + menuItemContainer.offsetWidth >= eXo.core.Browser.getBrowserWidth()) {

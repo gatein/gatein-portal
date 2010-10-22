@@ -75,6 +75,14 @@ public class UIGadgetPortlet extends UIPortletApplication
             {
                return GadgetUtil.reproduceUrl(gadget.getUrl(), gadget.isLocal());
             }
+            else 
+            {
+            	if (log.isWarnEnabled())
+            	{
+            	   log.warn("The local gadget '" + gadgetName + "' was not found, nothing rendered");
+            	}
+            	return null;
+            }
          }
          catch (Exception e)
          {
@@ -94,6 +102,11 @@ public class UIGadgetPortlet extends UIPortletApplication
          uiApplication.addMessage(new ApplicationMessage("UIGadgetPortlet.msg.url-invalid", null));
       }
 
+      return getMetadata(url);
+   }
+   
+   public String getMetadata(String url)
+   {
       String metadata_ = GadgetUtil.fetchGagdetMetadata(url);
       try
       {

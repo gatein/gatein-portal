@@ -79,6 +79,9 @@
          <short-title>Account Portlet</short-title>
          <keywords>Administration</keywords>
       </portlet-info>
+      <supported-publishing-event>
+      	<name>NewAccountAdded</name>
+      </supported-publishing-event>
    </portlet>
 
    <portlet>

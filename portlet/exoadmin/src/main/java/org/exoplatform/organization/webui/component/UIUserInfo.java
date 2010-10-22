@@ -143,12 +143,9 @@ public class UIUserInfo extends UIFormTabPane
             Util.getPortalRequestContext().setFullRender(true);
          }
          
-         UIUserManagement userManagement = uiUserInfo.getParent();
-         UIListUsers listUser = userManagement.getChild(UIListUsers.class);
          UIAccountEditInputSet accountInput = uiUserInfo.getChild(UIAccountEditInputSet.class);
          UIUserProfileInputSet userProfile = uiUserInfo.getChild(UIUserProfileInputSet.class);
          uiUserInfo.setRenderSibling(UIListUsers.class);
-         listUser.search(new Query());
          accountInput.reset();
          userProfile.reset();
          event.getRequestContext().setProcessRender(true);
@@ -160,12 +157,9 @@ public class UIUserInfo extends UIFormTabPane
       public void execute(Event<UIUserInfo> event) throws Exception
       {
          UIUserInfo userInfo = event.getSource();
-         UIUserManagement userManagement = userInfo.getParent();
-         UIListUsers listUser = userManagement.getChild(UIListUsers.class);
          UIAccountEditInputSet accountInput = userInfo.getChild(UIAccountEditInputSet.class);
          UIUserProfileInputSet userProfile = userInfo.getChild(UIUserProfileInputSet.class);
          userInfo.setRenderSibling(UIListUsers.class);
-         listUser.search(new Query());
          accountInput.reset();
          userProfile.reset();
          event.getRequestContext().setProcessRender(true);

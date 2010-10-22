@@ -515,7 +515,7 @@ function HttpResponseHandler(){
 	      }
 	    }
 	  }
-	  if(response.blocksToUpdate == undefined) {
+	  if(response.blocksToUpdate == undefined && temp.innerHTML !== "") {
 	  	if(confirm(eXo.i18n.I18NMessage.getMessage("SessionTimeout"))) instance.ajaxTimeout(request) ;
 	  }
 	  //Handle the portal responses

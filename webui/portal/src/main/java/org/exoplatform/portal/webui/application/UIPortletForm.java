@@ -402,6 +402,7 @@ public class UIPortletForm extends UIFormTabPane
          }
 
          PortalRequestContext pcontext = (PortalRequestContext)event.getRequestContext();
+         pcontext.getJavascriptManager().addJavascript("eXo.portal.UIPortal.changeComposerSaveButton();");
          pcontext.addUIComponentToUpdateByAjax(uiMaskWorkspace);
          UIPortalApplication uiPortalApp = uiPortlet.getAncestorOfType(UIPortalApplication.class);
          UIWorkingWorkspace uiWorkingWS = uiPortalApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);

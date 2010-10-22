@@ -89,7 +89,7 @@ public class WebuiBindingContext extends BindingContext
 
    public String appRes(String mesgKey) throws Exception
    {
-      String value;
+      String value = "";
       try
       {
          ResourceBundle res = rcontext_.getApplicationResourceBundle();
@@ -99,7 +99,8 @@ public class WebuiBindingContext extends BindingContext
       {
          if (PropertyManager.isDevelopping())
             log.warn("Can not find resource bundle for key : " + mesgKey);
-         value = mesgKey.substring(mesgKey.lastIndexOf('.') + 1);
+         if(mesgKey != null)
+            value = mesgKey.substring(mesgKey.lastIndexOf('.') + 1);
       }
       return value;
    }

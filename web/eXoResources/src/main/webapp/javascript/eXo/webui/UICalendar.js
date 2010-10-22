@@ -68,7 +68,7 @@ UICalendar.prototype.create = function() {
 }
 
 UICalendar.prototype.show = function() {
-	document.onmousedown = new Function('eXo.webui.UICalendar.hide()') ;
+	document.onclick = new Function('eXo.webui.UICalendar.hide()') ;
 	var re = /^(\d{1,2}\/\d{1,2}\/\d{1,4})\s*(\s+\d{1,2}:\d{1,2}:\d{1,2})?$/i ;
   this.selectedDate = new Date() ;
 
@@ -150,35 +150,27 @@ UICalendar.prototype.show = function() {
     clndr.firstChild.style.top = -heightCal.offsetHeight + 'px';
   }
 	
-	var drag = document.getElementById("BlockCaledar");
-	var component =  eXo.core.DOMUtil.findAncestorByClass(drag, "UICalendarComponent");
-	var calendar = eXo.core.DOMUtil.findFirstChildByClass(drag, "div", "UICalendar");
-	var innerWidth = drag.offsetWidth;
-	drag.onmousedown = function(evt) {
-		var event = evt || window.event;
-		event.cancelBubble = true;
-		drag.style.position = "absolute";
-		if(eXo.core.Browser.isIE7()) drag.style.height = calendar.offsetHeight + "px";
-		drag.style.width = innerWidth + "px";
-		eXo.core.DragDrop.init(null, drag, component, event);
- 	}
-	
-	//
-	var primary = eXo.core.DOMUtil.findAncestorById(this.dateField, "UIECMSearch");
-	if (primary && eXo.core.Browser.isFF()) {
-			calendar = clndr.firstChild;
-			calendar.style.top = "0px";
-			calendar.style.left = this.dateField.offsetLeft - this.dateField.offsetWidth - 32 + "px";
-	}
+  eXo.webui.UICalendar.initDragDrop();
+  
+  var drag = document.getElementById("BlockCaledar");
+  var calendar = eXo.core.DOMUtil.findFirstChildByClass(drag, "div", "UICalendar");		
+  var primary = eXo.core.DOMUtil.findAncestorById(this.dateField, "UIECMSearch");
+  if (primary && eXo.core.Browser.isFF()) {
+	calendar = clndr.firstChild;
+	calendar.style.top = "0px";
+	calendar.style.left = this.dateField.offsetLeft - this.dateField.offsetWidth - 32 + "px";
+  }
 }
 
 UICalendar.prototype.hide = function() {
   if (this.dateField) {
     document.getElementById(this.calendarId).firstChild.style.display = 'none' ;
 //		this.dateField.parentNode.style.position = '' ;
+    this.dateField.blur();
     this.dateField = null ;
   }
- 	document.onmousedown = null ;
+  document.onclick = null ;
+  //document.onmousedown = null;
 }
 
 /* TODO: Move HTML code to a javascript template file (.jstmpl) */
@@ -188,7 +180,7 @@ UICalendar.prototype.renderCalendar = function() {
   var startDayOfWeek = this.getDayOfWeek(this.currentDate.getFullYear(), this.currentDate.getMonth() + 1, dayOfMonth) ;
   var daysInMonth = this.getDaysInMonth(this.currentDate.getFullYear(), this.currentDate.getMonth()) ;
   var clazz = null;
-	var table = '<div id="BlockCaledar" class="BlockCalendar">' ;
+	var table = '<div id="BlockCaledar" class="BlockCalendar" onclick="event.cancelBubble = true">' ;
 	table += 		'<div class="UICalendar" onmousedown="event.cancelBubble = true">' ;
 	table += 		'	<table class="MonthYearBox">' ;
 	table += 		'	  <tr>' ;
@@ -258,6 +250,32 @@ UICalendar.prototype.changeMonth = function(change) {
 	this.currentDate.setMonth(this.currentDate.getMonth() + change) ;
   var clndr = document.getElementById(this.calendarId) ;
   clndr.firstChild.lastChild.innerHTML = this.renderCalendar() ;
+  
+  eXo.webui.UICalendar.initDragDrop();
+}
+
+UICalendar.prototype.initDragDrop = function() {
+	  var drag = document.getElementById("BlockCaledar");
+	  var component =  eXo.core.DOMUtil.findAncestorByClass(drag, "UICalendarComponent");
+	  var calendar = eXo.core.DOMUtil.findFirstChildByClass(drag, "div", "UICalendar");
+	  var innerWidth = drag.offsetWidth;
+	  
+	  eXo.core.DragDrop2.init(drag, component);	  
+	  component.onDragStart = function() {
+		  if(eXo.core.Browser.isIE7()) drag.style.height = calendar.offsetHeight + "px";
+		  drag.style.width = innerWidth + "px";
+	  }
+	  
+//	  var calendar = eXo.core.DOMUtil.findFirstChildByClass(drag, "div", "UICalendar");
+//	  var innerWidth = drag.offsetWidth;
+//	  drag.onmousedown = function(evt) {
+//		  var event = evt || window.event;
+//		  event.cancelBubble = true;
+//		  drag.style.position = "absolute";
+//		  if(eXo.core.Browser.isIE7()) drag.style.height = calendar.offsetHeight + "px";
+//		  drag.style.width = innerWidth + "px";
+//		  eXo.core.DragDrop2.init(drag, component);		  
+//	  }
 }
 
 UICalendar.prototype.changeYear = function(change) {
@@ -265,6 +283,8 @@ UICalendar.prototype.changeYear = function(change) {
   this.currentDay = 0 ;
   var clndr = document.getElementById(this.calendarId) ;
   clndr.firstChild.lastChild.innerHTML = this.renderCalendar() ;
+  
+  eXo.webui.UICalendar.initDragDrop();
 }
 
 UICalendar.prototype.setDate = function(year, month, day) {	

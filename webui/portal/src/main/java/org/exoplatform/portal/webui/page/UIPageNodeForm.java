@@ -186,13 +186,16 @@ public class UIPageNodeForm extends UIFormTabPane
    public void invokeSetBindingBean(Object bean) throws Exception
    {
       super.invokeSetBindingBean(bean);
-      PageNode node = (PageNode)bean;
-      Calendar cal = getUIFormDateTimeInput(START_PUBLICATION_DATE).getCalendar();
-      Date date = (cal != null) ? cal.getTime() : null;
-      node.setStartPublicationDate(date);
-      cal = getUIFormDateTimeInput(END_PUBLICATION_DATE).getCalendar();
-      date = (cal != null) ? cal.getTime() : null;
-      node.setEndPublicationDate(date);
+      PageNode node = (PageNode) bean;
+      if (node.getVisibility() != Visibility.SYSTEM)
+      {
+         Calendar cal = getUIFormDateTimeInput(START_PUBLICATION_DATE).getCalendar();
+         Date date = (cal != null) ? cal.getTime() : null;
+         node.setStartPublicationDate(date);
+         cal = getUIFormDateTimeInput(END_PUBLICATION_DATE).getCalendar();
+         date = (cal != null) ? cal.getTime() : null;
+         node.setEndPublicationDate(date);
+      }
    }
 
    public void setShowCheckPublicationDate(boolean show)
@@ -269,7 +272,11 @@ public class UIPageNodeForm extends UIFormTabPane
          WebuiRequestContext ctx = event.getRequestContext();
          UIPageNodeForm uiPageNodeForm = event.getSource();
          UIApplication uiPortalApp = ctx.getUIApplication();
-         if (uiPageNodeForm.getUIFormCheckBoxInput(SHOW_PUBLICATION_DATE).isChecked())
+         PageNode pageNode = uiPageNodeForm.getPageNode();
+         if (pageNode == null)
+            pageNode = new PageNode();
+         
+         if (pageNode.getVisibility() != Visibility.SYSTEM && uiPageNodeForm.getUIFormCheckBoxInput(SHOW_PUBLICATION_DATE).isChecked())
          {
             Calendar currentCalendar = Calendar.getInstance();
             currentCalendar.set(currentCalendar.get(Calendar.YEAR), currentCalendar.get(Calendar.MONTH), currentCalendar.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
@@ -305,10 +312,7 @@ public class UIPageNodeForm extends UIFormTabPane
             }
             
          }
-
-         PageNode pageNode = uiPageNodeForm.getPageNode();
-         if (pageNode == null)
-            pageNode = new PageNode();
+         
          uiPageNodeForm.invokeSetBindingBean(pageNode);
          UIPageSelector2 pageSelector = uiPageNodeForm.getChild(UIPageSelector2.class);
          if (pageSelector.getPage() == null)

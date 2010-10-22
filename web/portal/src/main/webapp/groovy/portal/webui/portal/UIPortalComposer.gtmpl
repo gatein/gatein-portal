@@ -52,7 +52,7 @@
 						<tr>
 							<td>
 								
-								<div onclick="<%= uicomponent.event("ViewProperties") %>;eXo.portal.UIPortal.changeComposerSaveButton()" class="ActionButton SimpleStyle1">
+								<div onclick="<%= uicomponent.event("ViewProperties") %>;" class="ActionButton SimpleStyle1">
 									<div class="ButtonLeft">
 										<div class="ButtonRight">
 											<div class="ButtonMiddle">

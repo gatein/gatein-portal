@@ -280,7 +280,7 @@ public class UIPageForm extends UIFormTabPane
          PortalRequestContext pcontext = Util.getPortalRequestContext();
          UIMaskWorkspace uiMaskWS = uiPortalApp.getChildById(UIPortalApplication.UI_MASK_WS_ID);
          uiMaskWS.setUIComponent(null);
-         uiMaskWS.setShow(false);
+         uiMaskWS.setShow(false);         
          pcontext.addUIComponentToUpdateByAjax(uiMaskWS);
 
          UIPage uiPage = uiPageForm.getUIPage();
@@ -318,7 +318,7 @@ public class UIPageForm extends UIFormTabPane
             pcontext.setFullRender(true);
             UIWorkingWorkspace uiWorkingWS = uiPortalApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
             pcontext.addUIComponentToUpdateByAjax(uiWorkingWS);
-
+            pcontext.getJavascriptManager().addJavascript("eXo.portal.UIPortal.changeComposerSaveButton();");
             return;
          }
 
@@ -337,6 +337,7 @@ public class UIPageForm extends UIFormTabPane
             pcontext.setFullRender(true);
             UIWorkingWorkspace uiWorkingWS = uiPortalApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
             pcontext.addUIComponentToUpdateByAjax(uiWorkingWS);
+            pcontext.getJavascriptManager().addJavascript("eXo.portal.UIPortal.changeComposerSaveButton();");
             DataStorage dataService = uiPageForm.getApplicationComponent(DataStorage.class);
             dataService.save(page);
             return;
@@ -360,6 +361,7 @@ public class UIPageForm extends UIFormTabPane
 
          try{
             PortalDataMapper.toUIPage(uiPage, page);
+            pcontext.getJavascriptManager().addJavascript("eXo.portal.UIPortal.changeComposerSaveButton();");
          } catch(NoSuchDataException de){
             uiPortalApp.addMessage(new ApplicationMessage("UIPageForm.msg.notExistOrDeleted", null, ApplicationMessage.ERROR));
             UIPortalComposer uiPortalComposer = (UIPortalComposer)uiPortalApp.findComponentById("UIPageEditor");

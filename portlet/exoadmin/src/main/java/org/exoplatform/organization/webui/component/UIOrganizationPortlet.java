@@ -70,8 +70,10 @@ public class UIOrganizationPortlet extends UIPortletApplication
    {
       public void execute(Event<UIOrganizationPortlet> event) throws Exception
       {
-         UIListUsers uiListUsers = event.getSource().findFirstComponentOfType(UIListUsers.class);
-         uiListUsers.search(new Query());
+         //Actually we don't need to do anything here 
+         //UIListUsers will have the lasteast data in it's processRender method
+//         UIListUsers uiListUsers = event.getSource().findFirstComponentOfType(UIListUsers.class);
+//         uiListUsers.search(new Query());
       }
    }
 }

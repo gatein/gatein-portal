@@ -91,7 +91,6 @@ public class UIListUsers extends UISearch
       grid_.configure(USER_NAME, USER_BEAN_FIELD, USER_ACTION);
       grid_.getUIPageIterator().setId("UIListUsersIterator");
       grid_.getUIPageIterator().setParent(this);
-      search(new Query());
    }
 
    /**
@@ -117,18 +116,12 @@ public class UIListUsers extends UISearch
    public String getUserSelected()
    {
       return userSelected_;
-   }
+   }      
 
    public void search(Query query) throws Exception
    {
       lastQuery_ = query;
-      grid_.getUIPageIterator().setPageList(new FindUsersPageList(query, 10));
-      UIPageIterator pageIterator = grid_.getUIPageIterator();
-      if (pageIterator.getAvailable() == 0)
-      {
-         UIApplication uiApp = Util.getPortalRequestContext().getUIApplication();
-         uiApp.addMessage(new ApplicationMessage("UISearchForm.msg.empty", null));
-      }
+      grid_.getUIPageIterator().setPageList(new FindUsersPageList(query, 10));      
    }
 
    public void quickSearch(UIFormInputSet quickSearchInput) throws Exception
@@ -137,29 +130,33 @@ public class UIListUsers extends UISearch
       UIFormStringInput input = (UIFormStringInput)quickSearchInput.getChild(0);
       UIFormSelectBox select = (UIFormSelectBox)quickSearchInput.getChild(1);
       String name = input.getValue();
-      if (name == null || name.equals(""))
+      if (name != null && !name.equals(""))
       {
-         search(new Query());
-         return;
-      }
-      if (name.indexOf("*") < 0)
-      {
-         if (name.charAt(0) != '*')
-            name = "*" + name;
-         if (name.charAt(name.length() - 1) != '*')
-            name += "*";
-      }
-      name = name.replace('?', '_');
-      String selectBoxValue = select.getValue();
-      if (selectBoxValue.equals(USER_NAME))
-         query.setUserName(name);
-      if (selectBoxValue.equals(LAST_NAME))
-         query.setLastName(name);
-      if (selectBoxValue.equals(FIRST_NAME))
-         query.setFirstName(name);
-      if (selectBoxValue.equals(EMAIL))
-         query.setEmail(name);
+         if (name.indexOf("*") < 0)
+         {
+            if (name.charAt(0) != '*')
+               name = "*" + name;
+            if (name.charAt(name.length() - 1) != '*')
+               name += "*";
+         }
+         name = name.replace('?', '_');
+         String selectBoxValue = select.getValue();
+         if (selectBoxValue.equals(USER_NAME))
+            query.setUserName(name);
+         if (selectBoxValue.equals(LAST_NAME))
+            query.setLastName(name);
+         if (selectBoxValue.equals(FIRST_NAME))
+            query.setFirstName(name);
+         if (selectBoxValue.equals(EMAIL))
+            query.setEmail(name);                 
+      }      
       search(query);
+      
+      if (getChild(UIGrid.class).getUIPageIterator().getAvailable() == 0)
+      {
+         UIApplication uiApp = Util.getPortalRequestContext().getUIApplication();
+         uiApp.addMessage(new ApplicationMessage("UISearchForm.msg.empty", null));
+      }
    }
 
    @SuppressWarnings("unused")
@@ -176,7 +173,9 @@ public class UIListUsers extends UISearch
          OrganizationService service = uiListUsers.getApplicationComponent(OrganizationService.class);
          if (service.getUserHandler().findUserByName(username) == null)
          {
-            uiListUsers.search(new Query());
+            UIApplication uiApplication = event.getRequestContext().getUIApplication();
+            uiApplication.addMessage(new ApplicationMessage("UIListUsers.msg.user-is-deleted", 
+               null, ApplicationMessage.WARNING));
             return;
          }
          uiListUsers.setRendered(false);
