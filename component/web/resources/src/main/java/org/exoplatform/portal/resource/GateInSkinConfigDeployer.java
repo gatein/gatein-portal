@@ -19,6 +19,7 @@
 
 package org.exoplatform.portal.resource;
 
+import org.exoplatform.commons.utils.Safe;
 import org.exoplatform.commons.xml.DocumentSource;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.RootContainer.PortalContainerPostInitTask;
@@ -73,35 +74,33 @@ public class GateInSkinConfigDeployer extends AbstractResourceHandler
          if (waEvent.getType() == WebAppLifeCycleEvent.ADDED)
          {
             ServletContext scontext = null;
+            InputStream is = null;
             try
             {
                scontext = event.getWebApp().getServletContext();
-               InputStream is = scontext.getResourceAsStream(GATEIN_CONFIG_RESOURCE);
-               if (is == null)
-                  return;
-               try
+               is = scontext.getResourceAsStream(GATEIN_CONFIG_RESOURCE);
+               if (is != null)
                {
-                  is.close();
-               }
-               catch (Exception ex)
-               {
-                  // ignore me
-               }
-               final PortalContainerPostInitTask task = new PortalContainerPostInitTask()
-               {
-
-                  public void execute(ServletContext scontext, PortalContainer portalContainer)
+                  final PortalContainerPostInitTask task = new PortalContainerPostInitTask()
                   {
-                     register(scontext, portalContainer);
-                     skinService.registerContext(scontext);
-                  }
-               };
-               PortalContainer.addInitTask(scontext, task, portalContainerName);
+
+                     public void execute(ServletContext scontext, PortalContainer portalContainer)
+                     {
+                        register(scontext, portalContainer);
+                        skinService.registerContext(scontext);
+                     }
+                  };
+                  PortalContainer.addInitTask(scontext, task, portalContainerName);
+               }
             }
             catch (Exception ex)
             {
                log.error("An error occurs while registering '" + GATEIN_CONFIG_RESOURCE + "' from the context '"
                   + (scontext == null ? "unknown" : scontext.getServletContextName()) + "'", ex);
+            }
+            finally
+            {
+               Safe.close(is);
             }
          }
       }
