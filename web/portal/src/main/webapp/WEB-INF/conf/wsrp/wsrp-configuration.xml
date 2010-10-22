@@ -76,6 +76,79 @@
     </component-plugin>
   </external-component-plugins>
 
+  <external-component-plugins>
+    <target-component>org.exoplatform.application.registry.ApplicationRegistryService</target-component>
+    <component-plugin>
+       <name>new.portal.portlets.registry</name>
+       <set-method>initListener</set-method>
+       <type>org.exoplatform.application.registry.ApplicationCategoriesPlugins</type>
+       <description>this listener init the portlets are registered in PortletRegister</description>
+       <init-params>
+          <object-param>
+             <name>administration</name>
+             <description>description</description>
+             <object type="org.exoplatform.application.registry.ApplicationCategory">
+                <field name="name">
+                   <string>WSRP</string>
+                </field>
+                <field name="displayName">
+                   <string>WSRP</string>
+                </field>
+                <field name="description">
+                   <string>WSRP administration</string>
+                </field>
+                <field name="accessPermissions">
+                   <collection type="java.util.ArrayList" item-type="java.lang.String">
+                      <value>
+                         <string>*:/platform/administrators</string>
+                      </value>
+                      <value>
+                         <string>*:/organization/management/executive-board</string>
+                      </value>
+                   </collection>
+                </field>
+                <field name="applications">
+                   <collection type="java.util.ArrayList">
+                      <value>
+                         <object type="org.exoplatform.application.registry.Application">
+                            <field name="applicationName">
+                               <string>WSRPConfigurationPortlet</string>
+                            </field>
+                            <field name="categoryName">
+                               <string>WSRP</string>
+                            </field>
+                            <field name="displayName">
+                               <string>WSRP Configuration</string>
+                            </field>
+                            <field name="description">
+                               <string>WSRP Configuration</string>
+                            </field>
+                            <field name="type">
+                               <string>portlet</string>
+                            </field>
+                            <field name="contentId">
+                               <string>wsrp-admin-gui/WSRPConfigurationPortlet</string>
+                            </field>
+                            <field name="accessPermissions">
+                               <collection type="java.util.ArrayList" item-type="java.lang.String">
+                                  <value>
+                                     <string>*:/platform/administrators</string>
+                                  </value>
+                                  <value>
+                                     <string>*:/organization/management/executive-board</string>
+                                  </value>
+                               </collection>
+                            </field>
+                         </object>
+                      </value>
+                   </collection>
+                </field>
+             </object>
+          </object-param>
+       </init-params>
+    </component-plugin>
+  </external-component-plugins>
+
    <!--<external-component-plugins>
       <target-component>org.exoplatform.commons.chromattic.ChromatticManager</target-component>
       <component-plugin>
