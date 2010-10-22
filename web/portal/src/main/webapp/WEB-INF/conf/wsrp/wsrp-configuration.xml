@@ -44,6 +44,38 @@
       </init-params>
    </component>
 
+  <external-component-plugins>
+    <target-component>org.exoplatform.services.jcr.RepositoryService</target-component>
+    <component-plugin>
+      <name>add.namespaces</name>
+      <set-method>addPlugin</set-method>
+      <type>org.exoplatform.services.jcr.impl.AddNamespacesPlugin</type>
+      <init-params>
+        <properties-param>
+          <name>namespaces</name>
+          <property name="wsrp" value="http://www.gatein.org/jcr/wsrp/1.0/"/>
+          <property name="pc" value="http://www.gatein.org/jcr/pc/1.0/"/>
+        </properties-param>
+      </init-params>
+    </component-plugin>
+    <component-plugin>
+      <name>add.nodeType</name>
+      <set-method>addPlugin</set-method>
+      <type>org.exoplatform.services.jcr.impl.AddNodeTypePlugin</type>
+      <init-params>
+        <values-param>
+          <name>autoCreatedInNewRepository</name>
+          <description>Node types configuration file</description>
+          <value>war:/conf/wsrp/consumers-configuration-nodetypes.xml</value>
+          <value>war:/conf/wsrp/producer-configuration-nodetypes.xml</value>
+          <value>war:/conf/wsrp/producer-registrations-nodetypes.xml</value>
+          <value>war:/conf/wsrp/producer-pc-nodetypes.xml</value>
+          <value>war:/conf/wsrp/migration-nodetypes.xml</value>
+        </values-param>
+      </init-params>
+    </component-plugin>
+  </external-component-plugins>
+
    <!--<external-component-plugins>
       <target-component>org.exoplatform.commons.chromattic.ChromatticManager</target-component>
       <component-plugin>
