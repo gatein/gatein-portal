@@ -35,10 +35,35 @@
    <name>GateIn Portal Sample</name>
 
    <modules>
-      <module>extension</module>
-      <module>portal</module>
-      <module>portlets</module>
-      <module>skins</module>
+     <!--
+        This is not the default modules declaration, instead we use the "normal" profile that is activated when
+        the development property is not set (to any value). This declaration only keeps the necessary for building
+        in development mode, i.e it does not build the other samples.
+
+        It works only for the tomcat version as the JBoss version requires the "extension" and "portal"
+        modules to be built.
+
+        So in short by default it will build everything as usual but if you declare the development=true property
+        to the build, only the skins will be built.
+       -->
+     <module>skins</module>
    </modules>
+
+   <profiles>
+     <profile>
+       <id>normal</id>
+       <activation>
+         <property>
+           <name>!development</name>
+         </property>
+       </activation>
+       <modules>
+         <module>extension</module>
+         <module>portal</module>
+         <module>portlets</module>
+         <module>skins</module>
+       </modules>
+     </profile>
+   </profiles>
 
 </project>
