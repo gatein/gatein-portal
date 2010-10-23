@@ -55,7 +55,7 @@
       <org.codehaus.groovy.version>1.6.5</org.codehaus.groovy.version>
       <javax.servlet.version>2.5</javax.servlet.version>
       <version.chromattic>1.0.4</version.chromattic>
-      <version.reflect>1.0.0</version.reflect>
+      <version.reflext>1.0.0</version.reflext>
       <jcip.version>1.0</jcip.version>
 
       <!-- ************** -->
@@ -108,11 +108,31 @@
             <groupId>org.exoplatform.kernel</groupId>
             <artifactId>exo.kernel.component.cache</artifactId>
             <version>${org.exoplatform.kernel.version}</version>
+            <exclusions>
+               <exclusion>
+                  <groupId>org.slf4j</groupId>
+                  <artifactId>slf4j-log4j12</artifactId>
+               </exclusion>
+               <exclusion>
+                  <groupId>log4j</groupId>
+                  <artifactId>log4j</artifactId>
+               </exclusion>
+            </exclusions>
          </dependency>
          <dependency>
             <groupId>org.exoplatform.kernel</groupId>
             <artifactId>exo.kernel.component.command</artifactId>
             <version>${org.exoplatform.kernel.version}</version>
+            <exclusions>
+               <exclusion>
+                  <groupId>org.slf4j</groupId>
+                  <artifactId>slf4j-log4j12</artifactId>
+               </exclusion>
+               <exclusion>
+                  <groupId>log4j</groupId>
+                  <artifactId>log4j</artifactId>
+               </exclusion>
+            </exclusions>
          </dependency>
          <dependency>
             <groupId>org.exoplatform.kernel</groupId>
@@ -133,6 +153,16 @@
             <groupId>org.exoplatform.kernel</groupId>
             <artifactId>exo.kernel.component.remote</artifactId>
             <version>${org.exoplatform.kernel.version}</version>
+            <exclusions>
+               <exclusion>
+                  <groupId>org.slf4j</groupId>
+                  <artifactId>slf4j-log4j12</artifactId>
+               </exclusion>
+               <exclusion>
+                  <groupId>log4j</groupId>
+                  <artifactId>log4j</artifactId>
+               </exclusion>
+            </exclusions>
          </dependency>
          <dependency>
             <groupId>org.exoplatform.kernel</groupId>
@@ -153,21 +183,76 @@
            <groupId>org.exoplatform.kernel</groupId>
            <artifactId>exo.kernel.component.ext.cache.impl.jboss.v3</artifactId>
            <version>${org.exoplatform.kernel.version}</version>
+           <exclusions>
+              <exclusion>
+                 <groupId>org.slf4j</groupId>
+                 <artifactId>slf4j-log4j12</artifactId>
+              </exclusion>
+              <exclusion>
+                 <groupId>log4j</groupId>
+                 <artifactId>log4j</artifactId>
+              </exclusion>
+           </exclusions>
          </dependency>
          <dependency>
            <groupId>org.exoplatform.kernel</groupId>
            <artifactId>exo.kernel.mc-int</artifactId>
            <version>${org.exoplatform.kernel.version}</version>
+           <exclusions>
+              <exclusion>
+                 <groupId>org.slf4j</groupId>
+                 <artifactId>slf4j-log4j12</artifactId>
+              </exclusion>
+              <exclusion>
+                 <groupId>log4j</groupId>
+                 <artifactId>log4j</artifactId>
+              </exclusion>
+           </exclusions>
          </dependency>
          <dependency>
            <groupId>org.exoplatform.kernel</groupId>
            <artifactId>exo.kernel.mc-kernel-extras</artifactId>
            <version>${org.exoplatform.kernel.version}</version>
+           <exclusions>
+              <exclusion>
+                 <groupId>org.slf4j</groupId>
+                 <artifactId>slf4j-log4j12</artifactId>
+              </exclusion>
+              <exclusion>
+                 <groupId>log4j</groupId>
+                 <artifactId>log4j</artifactId>
+              </exclusion>
+           </exclusions>
          </dependency>
          <dependency>
-            <groupId>org.exoplatform.core</groupId>
-            <artifactId>exo.core.component.organization.api</artifactId>
-            <version>${org.exoplatform.core.version}</version>
+           <groupId>org.exoplatform.core</groupId>
+           <artifactId>exo.core.component.organization.api</artifactId>
+           <version>${org.exoplatform.core.version}</version>
+           <exclusions>
+              <exclusion>
+                 <groupId>org.slf4j</groupId>
+                 <artifactId>slf4j-log4j12</artifactId>
+              </exclusion>
+              <exclusion>
+                 <groupId>log4j</groupId>
+                 <artifactId>log4j</artifactId>
+              </exclusion>
+           </exclusions>
+         </dependency>
+         <dependency>
+           <groupId>org.exoplatform.core</groupId>
+           <artifactId>exo.core.component.xml-processing</artifactId>
+           <version>${org.exoplatform.core.version}</version>
+           <exclusions>
+              <exclusion>
+                 <groupId>org.slf4j</groupId>
+                 <artifactId>slf4j-log4j12</artifactId>
+              </exclusion>
+              <exclusion>
+                 <groupId>log4j</groupId>
+                 <artifactId>log4j</artifactId>
+              </exclusion>
+           </exclusions>
          </dependency>
          <dependency>
             <groupId>org.exoplatform.core</groupId>
@@ -185,9 +270,19 @@
             </exclusions>
          </dependency>
          <dependency>
-            <groupId>org.exoplatform.core</groupId>
-            <artifactId>exo.core.component.ldap</artifactId>
-            <version>${org.exoplatform.core.version}</version>
+           <groupId>org.exoplatform.core</groupId>
+           <artifactId>exo.core.component.ldap</artifactId>
+           <version>${org.exoplatform.core.version}</version>
+           <exclusions>
+              <exclusion>
+                 <groupId>org.slf4j</groupId>
+                 <artifactId>slf4j-log4j12</artifactId>
+              </exclusion>
+              <exclusion>
+                 <groupId>log4j</groupId>
+                 <artifactId>log4j</artifactId>
+              </exclusion>
+           </exclusions>
          </dependency>
          <dependency>
             <groupId>org.exoplatform.core</groupId>
@@ -205,24 +300,79 @@
             </exclusions>
          </dependency>
          <dependency>
-            <groupId>org.exoplatform.core</groupId>
-            <artifactId>exo.core.component.organization.ldap</artifactId>
-            <version>${org.exoplatform.core.version}</version>
+           <groupId>org.exoplatform.core</groupId>
+           <artifactId>exo.core.component.organization.ldap</artifactId>
+           <version>${org.exoplatform.core.version}</version>
+           <exclusions>
+              <exclusion>
+                 <groupId>org.slf4j</groupId>
+                 <artifactId>slf4j-log4j12</artifactId>
+              </exclusion>
+              <exclusion>
+                 <groupId>log4j</groupId>
+                 <artifactId>log4j</artifactId>
+              </exclusion>
+           </exclusions>
          </dependency>
          <dependency>
-            <groupId>org.exoplatform.core</groupId>
-            <artifactId>exo.core.component.security.core</artifactId>
-            <version>${org.exoplatform.core.version}</version>
+           <groupId>org.exoplatform.core</groupId>
+           <artifactId>exo.core.component.security.core</artifactId>
+           <version>${org.exoplatform.core.version}</version>
+           <exclusions>
+              <exclusion>
+                 <groupId>org.slf4j</groupId>
+                 <artifactId>slf4j-log4j12</artifactId>
+              </exclusion>
+              <exclusion>
+                 <groupId>log4j</groupId>
+                 <artifactId>log4j</artifactId>
+              </exclusion>
+           </exclusions>
          </dependency>
          <dependency>
-            <groupId>org.exoplatform.core</groupId>
-            <artifactId>exo.core.component.document</artifactId>
-            <version>${org.exoplatform.core.version}</version>
+           <groupId>org.exoplatform.core</groupId>
+           <artifactId>exo.core.component.document</artifactId>
+           <version>${org.exoplatform.core.version}</version>
+           <exclusions>
+              <exclusion>
+                 <groupId>org.slf4j</groupId>
+                 <artifactId>slf4j-log4j12</artifactId>
+              </exclusion>
+              <exclusion>
+                 <groupId>log4j</groupId>
+                 <artifactId>log4j</artifactId>
+              </exclusion>
+           </exclusions>
          </dependency>
          <dependency>
-            <groupId>org.exoplatform.jcr</groupId>
-            <artifactId>exo.jcr.component.core</artifactId>
-            <version>${org.exoplatform.jcr.version}</version>
+           <groupId>org.exoplatform.jcr</groupId>
+           <artifactId>exo.jcr.component.core</artifactId>
+           <version>${org.exoplatform.jcr.version}</version>
+           <exclusions>
+              <exclusion>
+                 <groupId>org.slf4j</groupId>
+                 <artifactId>slf4j-log4j12</artifactId>
+              </exclusion>
+              <exclusion>
+                 <groupId>log4j</groupId>
+                 <artifactId>log4j</artifactId>
+              </exclusion>
+           </exclusions>
+         </dependency>
+         <dependency>
+           <groupId>org.exoplatform.jcr</groupId>
+           <artifactId>exo.jcr.framework.command</artifactId>
+           <version>${org.exoplatform.jcr.version}</version>
+           <exclusions>
+              <exclusion>
+                 <groupId>org.slf4j</groupId>
+                 <artifactId>slf4j-log4j12</artifactId>
+              </exclusion>
+              <exclusion>
+                 <groupId>log4j</groupId>
+                 <artifactId>log4j</artifactId>
+              </exclusion>
+           </exclusions>
          </dependency>
          <dependency>
             <groupId>org.exoplatform.jcr</groupId>
@@ -240,29 +390,139 @@
             </exclusions>
          </dependency>
          <dependency>
-            <groupId>org.exoplatform.jcr</groupId>
-            <artifactId>exo.jcr.component.webdav</artifactId>
-            <version>${org.exoplatform.jcr.version}</version>
+           <groupId>org.exoplatform.jcr</groupId>
+           <artifactId>exo.jcr.component.webdav</artifactId>
+           <version>${org.exoplatform.jcr.version}</version>
+           <exclusions>
+              <exclusion>
+                 <groupId>org.slf4j</groupId>
+                 <artifactId>slf4j-log4j12</artifactId>
+              </exclusion>
+              <exclusion>
+                 <groupId>log4j</groupId>
+                 <artifactId>log4j</artifactId>
+              </exclusion>
+           </exclusions>
          </dependency>
          <dependency>
-            <groupId>org.exoplatform.jcr</groupId>
-            <artifactId>exo.jcr.framework.web</artifactId>
-            <version>${org.exoplatform.jcr.version}</version>
+           <groupId>org.exoplatform.jcr</groupId>
+           <artifactId>exo.jcr.framework.web</artifactId>
+           <version>${org.exoplatform.jcr.version}</version>
+           <exclusions>
+              <exclusion>
+                 <groupId>org.slf4j</groupId>
+                 <artifactId>slf4j-log4j12</artifactId>
+              </exclusion>
+              <exclusion>
+                 <groupId>log4j</groupId>
+                 <artifactId>log4j</artifactId>
+              </exclusion>
+           </exclusions>
          </dependency>
          <dependency>
-            <groupId>org.exoplatform.jcr</groupId>
-            <artifactId>exo.jcr.component.ftp</artifactId>
-            <version>${org.exoplatform.jcr.version}</version>
+           <groupId>org.exoplatform.jcr</groupId>
+           <artifactId>exo.jcr.framework.command</artifactId>
+           <version>${org.exoplatform.jcr.version}</version>
+           <exclusions>
+              <exclusion>
+                 <groupId>org.slf4j</groupId>
+                 <artifactId>slf4j-log4j12</artifactId>
+              </exclusion>
+              <exclusion>
+                 <groupId>log4j</groupId>
+                 <artifactId>log4j</artifactId>
+              </exclusion>
+           </exclusions>
          </dependency>
          <dependency>
-            <groupId>org.exoplatform.ws</groupId>
-            <artifactId>exo.ws.frameworks.servlet</artifactId>
-            <version>${org.exoplatform.ws.version}</version>
+           <groupId>org.exoplatform.jcr</groupId>
+           <artifactId>exo.jcr.component.ftp</artifactId>
+           <version>${org.exoplatform.jcr.version}</version>
+           <exclusions>
+              <exclusion>
+                 <groupId>org.slf4j</groupId>
+                 <artifactId>slf4j-log4j12</artifactId>
+              </exclusion>
+              <exclusion>
+                 <groupId>log4j</groupId>
+                 <artifactId>log4j</artifactId>
+              </exclusion>
+           </exclusions>
+         </dependency>
+        <dependency>
+           <groupId>org.exoplatform.ws</groupId>
+           <artifactId>exo.ws.commons</artifactId>
+           <version>${org.exoplatform.ws.version}</version>
+           <exclusions>
+              <exclusion>
+                 <groupId>org.slf4j</groupId>
+                 <artifactId>slf4j-log4j12</artifactId>
+              </exclusion>
+              <exclusion>
+                 <groupId>log4j</groupId>
+                 <artifactId>log4j</artifactId>
+              </exclusion>
+           </exclusions>
+         </dependency>
+         <dependency>
+           <groupId>org.exoplatform.ws</groupId>
+           <artifactId>exo.ws.frameworks.servlet</artifactId>
+           <version>${org.exoplatform.ws.version}</version>
+           <exclusions>
+              <exclusion>
+                 <groupId>org.slf4j</groupId>
+                 <artifactId>slf4j-log4j12</artifactId>
+              </exclusion>
+              <exclusion>
+                 <groupId>log4j</groupId>
+                 <artifactId>log4j</artifactId>
+              </exclusion>
+           </exclusions>
+         </dependency>
+         <dependency>
+           <groupId>org.exoplatform.ws</groupId>
+           <artifactId>exo.ws.rest.ext</artifactId>
+           <version>${org.exoplatform.ws.version}</version>
+           <exclusions>
+              <exclusion>
+                 <groupId>org.slf4j</groupId>
+                 <artifactId>slf4j-log4j12</artifactId>
+              </exclusion>
+              <exclusion>
+                 <groupId>log4j</groupId>
+                 <artifactId>log4j</artifactId>
+              </exclusion>
+           </exclusions>
          </dependency>
          <dependency>
            <groupId>org.exoplatform.ws</groupId>
            <artifactId>exo.ws.rest.core</artifactId>
            <version>${org.exoplatform.ws.version}</version>
+           <exclusions>
+              <exclusion>
+                 <groupId>org.slf4j</groupId>
+                 <artifactId>slf4j-log4j12</artifactId>
+              </exclusion>
+              <exclusion>
+                 <groupId>log4j</groupId>
+                 <artifactId>log4j</artifactId>
+              </exclusion>
+           </exclusions>
+         </dependency>
+         <dependency>
+           <groupId>org.exoplatform.ws</groupId>
+           <artifactId>exo.ws.frameworks.json</artifactId>
+           <version>${org.exoplatform.ws.version}</version>
+           <exclusions>
+              <exclusion>
+                 <groupId>org.slf4j</groupId>
+                 <artifactId>slf4j-log4j12</artifactId>
+              </exclusion>
+              <exclusion>
+                 <groupId>log4j</groupId>
+                 <artifactId>log4j</artifactId>
+              </exclusion>
+           </exclusions>
          </dependency>
 
          <!-- GateIn components -->
@@ -522,7 +782,29 @@
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.server.tomcat.plugin</artifactId>
           <version>3.2.0-Beta01-SNAPSHOT</version>
-        </dependency>  
+        </dependency>
+
+         <!-- Reflext -->
+         <dependency>
+            <groupId>org.reflext</groupId>
+            <artifactId>reflext.api</artifactId>
+            <version>${version.reflext}</version>
+         </dependency>
+         <dependency>
+            <groupId>org.reflext</groupId>
+            <artifactId>reflext.core</artifactId>
+            <version>${version.reflext}</version>
+         </dependency>
+         <dependency>
+            <groupId>org.reflext</groupId>
+            <artifactId>reflext.jlr</artifactId>
+            <version>${version.reflext}</version>
+         </dependency>
+         <dependency>
+            <groupId>org.reflext</groupId>
+            <artifactId>reflext.spi</artifactId>
+            <version>${version.reflext}</version>
+         </dependency>
 
          <!-- Chromattic -->
          <dependency>
@@ -551,8 +833,23 @@
             <artifactId>chromattic.ext</artifactId>
             <version>${version.chromattic}</version>
          </dependency>
+         <dependency>
+            <groupId>org.chromattic</groupId>
+            <artifactId>chromattic.common</artifactId>
+            <version>${version.chromattic}</version>
+         </dependency>
+         <dependency>
+            <groupId>org.chromattic</groupId>
+            <artifactId>chromattic.metamodel</artifactId>
+            <version>${version.chromattic}</version>
+         </dependency>
 
          <!-- Picketlink -->
+         <dependency>
+            <groupId>org.picketlink.idm</groupId>
+            <artifactId>picketlink-idm-api</artifactId>
+            <version>${org.picketlink.idm}</version>
+         </dependency>
          <dependency>
             <groupId>org.picketlink.idm</groupId>
             <artifactId>picketlink-idm-core</artifactId>
@@ -580,6 +877,11 @@
          </dependency>
          <dependency>
             <groupId>org.picketlink.idm</groupId>
+            <artifactId>picketlink-idm-common</artifactId>
+            <version>${org.picketlink.idm}</version>
+         </dependency>
+         <dependency>
+            <groupId>org.picketlink.idm</groupId>
             <artifactId>picketlink-idm-cache</artifactId>
             <version>${org.picketlink.idm}</version>
          </dependency>
@@ -596,6 +898,52 @@
          </dependency>
 
          <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${org.slf4j.version}</version>
+         </dependency>
+         <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-jdk14</artifactId>
+            <version>${org.slf4j.version}</version>
+         </dependency>
+         <dependency>
+           <groupId>commons-beanutils</groupId>
+           <artifactId>commons-beanutils</artifactId>
+           <version>1.8.0</version>
+         </dependency>
+         <dependency>
+           <groupId>commons-chain</groupId>
+           <artifactId>commons-chain</artifactId>
+           <version>1.0</version>
+         </dependency>
+         <dependency>
+           <groupId>commons-codec</groupId>
+           <artifactId>commons-codec</artifactId>
+           <version>1.3</version>
+         </dependency>
+         <dependency>
+           <groupId>commons-fileupload</groupId>
+           <artifactId>commons-fileupload</artifactId>
+           <version>1.2.1</version>
+         </dependency>
+         <dependency>
+           <groupId>commons-logging</groupId>
+           <artifactId>commons-logging</artifactId>
+           <version>1.0.4</version>
+         </dependency>
+         <dependency>
+           <groupId>commons-pool</groupId>
+           <artifactId>commons-pool</artifactId>
+           <version>1.2</version>
+           <exclusions>
+              <exclusion>
+                 <groupId>xerces</groupId>
+                 <artifactId>xerces</artifactId>
+              </exclusion>
+           </exclusions>
+         </dependency>
+         <dependency>
             <groupId>commons-dbcp</groupId>
             <artifactId>commons-dbcp</artifactId>
             <version>1.2.2</version>
@@ -611,6 +959,27 @@
             <artifactId>commons-io</artifactId>
             <version>1.4</version>
          </dependency>
+         <dependency>
+            <groupId>commons-collections</groupId>
+            <artifactId>commons-collections</artifactId>
+            <version>3.2.1</version>
+         </dependency>
+         <dependency>
+            <groupId>commons-httpclient</groupId>
+            <artifactId>commons-httpclient</artifactId>
+            <version>3.0</version>
+         </dependency>
+         <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.4</version>
+         </dependency>
+         <dependency>
+            <groupId>commons-digester</groupId>
+            <artifactId>commons-digester</artifactId>
+            <version>1.7</version>
+         </dependency>
+
          <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
@@ -646,16 +1015,6 @@
             <artifactId>junit</artifactId>
             <version>3.8.1</version>
          </dependency>
-         <dependency>
-            <groupId>commons-collections</groupId>
-            <artifactId>commons-collections</artifactId>
-            <version>3.2.1</version>
-         </dependency>
-         <dependency>
-            <groupId>commons-httpclient</groupId>
-            <artifactId>commons-httpclient</artifactId>
-            <version>3.0</version>
-         </dependency>
 
          <dependency>
             <groupId>caja</groupId>
@@ -683,9 +1042,9 @@
             <version>2.0</version>
          </dependency>
          <dependency>
-            <groupId>commons-lang</groupId>
-            <artifactId>commons-lang</artifactId>
-            <version>2.4</version>
+           <groupId>com.google.code.guice</groupId>
+           <artifactId>guice-jmx</artifactId>
+           <version>2.0</version>
          </dependency>
          <dependency>
             <groupId>rome</groupId>
@@ -716,11 +1075,6 @@
             <groupId>nu.validator.htmlparser</groupId>
             <artifactId>htmlparser</artifactId>
             <version>1.0.7</version>
-         </dependency>
-         <dependency>
-            <groupId>commons-digester</groupId>
-            <artifactId>commons-digester</artifactId>
-            <version>1.7</version>
          </dependency>
 
          <dependency>
@@ -774,7 +1128,6 @@
       <dependency>
          <groupId>org.slf4j</groupId>
          <artifactId>slf4j-jdk14</artifactId>
-         <version>${org.slf4j.version}</version>
          <scope>test</scope>
       </dependency>
    </dependencies>

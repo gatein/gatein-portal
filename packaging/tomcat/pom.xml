@@ -10,4 +10,9 @@
   <artifactId>exo.portal.packaging.tomcat</artifactId>
   <packaging>pom</packaging>
   <name>GateIn Tomcat package</name>
+
+  <modules>
+    <module>pkg</module>
+  </modules>
+
 </project>

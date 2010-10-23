@@ -1,66 +1,139 @@
-<assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0" 
+<assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0 http://maven.apache.org/xsd/assembly-1.1.0.xsd">
-  
-    <id>tomcat</id>
-    <includeBaseDirectory>false</includeBaseDirectory>
-    <formats>
-        <format>dir</format>
-    </formats>
-    
-    <fileSets>
-        <!-- copy tomcat - without unix executables -->
-        <fileSet>
-            <directory>${tomcat.dir}</directory>
-            <outputDirectory>tomcat</outputDirectory>
-            <excludes>
-                <exclude>bin/*.sh</exclude>
-                <exclude>bin/startup.*</exclude>
-                <exclude>bin/shutdown.*</exclude>
-            </excludes>
-            <fileMode>0644</fileMode>
-        </fileSet>
-        <!-- copy tomcat - only unix executabls -->
-        <fileSet>
-            <directory>${tomcat.dir}/bin</directory>
-            <outputDirectory>tomcat/bin</outputDirectory>
-            <includes>
-                <include>*.sh</include>
-            </includes>
-            <excludes>
-                <exclude>startup.*</exclude>
-                <exclude>shutdown.*</exclude>
-            </excludes>
-            
-            <fileMode>0755</fileMode>
-        </fileSet>
-        
-        <!--  configurations, etc.-->
-            <fileSet>
-            <directory>${basedir}/src/main/resources/tomcat</directory>
-            <outputDirectory>tomcat</outputDirectory>
-            <excludes>
-                <exclude>bin/*.sh</exclude>
-            </excludes>
-            <fileMode>0644</fileMode>
-        </fileSet>
-        <!--  startup scripts -->
-        <fileSet>
-            <directory>${basedir}/src/main/resources/tomcat/bin</directory>
-            <outputDirectory>tomcat/bin</outputDirectory>
-            <includes>
-                <include>*.sh</include>
-            </includes>
-            <fileMode>0755</fileMode>
-        </fileSet>
-    </fileSets>
-    
-    <files>
-        <!-- copy gatein configuration file -->
-        <file>
-            <source>${basedir}/../../../component/common/src/main/java/conf/configuration-tomcat.properties</source>
-            <outputDirectory>tomcat/gatein/conf</outputDirectory>
-            <destName>configuration.properties</destName>
-        </file>
-    </files>
+
+  <id>tomcat</id>
+  <includeBaseDirectory>false</includeBaseDirectory>
+  <formats>
+    <format>dir</format>
+  </formats>
+
+  <dependencySets>
+    <dependencySet>
+      <outputDirectory>tomcat/lib</outputDirectory>
+      <includes>
+        <include>org.slf4j:*</include>
+        <include>commons-*:*</include>
+        <include>org.jboss*:*</include>
+        <include>jboss.*:*</include>
+        <include>javassist:*</include>
+        <include>jgroups:*</include>
+        <include>org.exoplatform.kernel:*</include>
+        <include>org.exoplatform.core:*</include>
+        <include>org.exoplatform.jcr:*</include>
+        <include>org.exoplatform.ws:*</include>
+        <include>org.picketlink.idm:*</include>
+        <include>org.reflext:*</include>
+        <include>org.chromattic:*</include>
+        <include>org.gatein.common:*</include>
+        <include>org.gatein.wci:*</include>
+        <include>org.gatein.pc:*</include>
+        <include>org.gatein.mop:*</include>
+        <include>org.gatein.shindig:*</include>
+        <include>org.gatein.captcha:*</include>
+        <include>org.exoplatform.portal:*</include>
+        <include>javax.*:*</include>
+        <include>org.hibernate:*</include>
+        <include>com.google.code.guice:*</include>
+        <include>antlr:*</include>
+        <include>aopalliance:*</include>
+        <include>asm:*</include>
+        <include>bouncycastle:*</include>
+        <include>caja:*</include>
+        <include>cglib:*</include>
+        <include>oswego-concurrent:*</include>
+        <include>dom4j:*</include>
+        <include>net.sf.ehcache:*</include>
+        <include>com.jhlabs:*</include>
+        <include>com.googlecode.collections:*</include>
+        <include>org.groovy.codehaus:*</include>
+        <include>hsqldb:*</include>
+        <include>html-parser:*</include>
+        <include>com.ibm.icu:*</include>
+        <include>com.lowagie:*</include>
+        <include>net.jcip:*</include>
+        <include>jdom:*</include>
+        <include>org.jibx:*</include>
+        <include>joda-time:*</include>
+        <include>rhino:*</include>
+        <include>org.jsecurity:*</include>
+        <include>org.json:*</include>
+        <include>de.odysseus.juel:*</include>
+        <include>org.apache.lucene:*</include>
+        <include>net.sourceforge.nekohtml:*</include>
+        <include>org.apache.pdfbox:*</include>
+        <include>picocontainer:*</include>
+        <include>org.apache.poi:*</include>
+        <include>org.apache.portals.bridges:*</include>
+        <include>quartz:*</include>
+        <include>rome:*</include>
+        <include>org.apache.sanselan:*</include>
+        <include>org.apache.ws.commons:*</include>
+        <include>apache-xerces:*</include>
+        <include>org.apache.xmlbeans:*</include>
+        <include>xpp3:*</include>
+        <include>com.thoughtworks.xstream:*</include>
+        <include>net.oauth:*</include>
+      </includes>
+    </dependencySet>
+  </dependencySets>
+
+  <fileSets>
+
+    <!-- copy tomcat - without unix executables -->
+    <fileSet>
+      <directory>${tomcat.dir}</directory>
+      <outputDirectory>tomcat</outputDirectory>
+      <excludes>
+        <exclude>bin/*.sh</exclude>
+        <exclude>bin/startup.*</exclude>
+        <exclude>bin/shutdown.*</exclude>
+      </excludes>
+      <fileMode>0644</fileMode>
+    </fileSet>
+
+    <!-- copy tomcat - only unix executabls -->
+    <fileSet>
+      <directory>${tomcat.dir}/bin</directory>
+      <outputDirectory>tomcat/bin</outputDirectory>
+      <includes>
+        <include>*.sh</include>
+      </includes>
+      <excludes>
+        <exclude>startup.*</exclude>
+        <exclude>shutdown.*</exclude>
+      </excludes>
+      <fileMode>0755</fileMode>
+    </fileSet>
+
+    <!--  configurations, etc.-->
+    <fileSet>
+      <directory>${basedir}/src/main/resources/tomcat</directory>
+      <outputDirectory>tomcat</outputDirectory>
+      <excludes>
+        <exclude>bin/*.sh</exclude>
+      </excludes>
+      <fileMode>0644</fileMode>
+    </fileSet>
+
+    <!--  startup scripts -->
+    <fileSet>
+      <directory>${basedir}/src/main/resources/tomcat/bin</directory>
+      <outputDirectory>tomcat/bin</outputDirectory>
+      <includes>
+        <include>*.sh</include>
+      </includes>
+      <fileMode>0755</fileMode>
+    </fileSet>
+  </fileSets>
+
+  <files>
+    <!-- copy gatein configuration file -->
+    <file>
+    <source>${basedir}/../../../component/common/src/main/java/conf/configuration-tomcat.properties</source>
+    <outputDirectory>tomcat/gatein/conf</outputDirectory>
+    <destName>configuration.properties</destName>
+    </file>
+  </files>
+
 </assembly>

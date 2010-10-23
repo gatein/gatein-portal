@@ -36,7 +36,7 @@ function getModule(params)
    
    var mopVersion =  "${org.gatein.mop.version}";
    var chromatticVersion =  "${version.chromattic}";
-   var reflectVersion =  "${version.reflect}";
+   var reflectVersion =  "${version.reflext}";
    var idmVersion = "${org.picketlink.idm}";
    var pcVersion = "${org.gatein.pc.version}";
    var wciVersion = "${org.gatein.wci.version}";
