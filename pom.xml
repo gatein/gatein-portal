@@ -783,6 +783,54 @@
           <artifactId>exo.portal.server.tomcat.plugin</artifactId>
           <version>3.2.0-Beta01-SNAPSHOT</version>
         </dependency>
+        <dependency>
+          <groupId>org.exoplatform.portal</groupId>
+          <artifactId>exo.portal.web.portal</artifactId>
+          <version>3.2.0-Beta01-SNAPSHOT</version>
+          <type>war</type>
+        </dependency>
+        <dependency>
+          <groupId>org.exoplatform.portal</groupId>
+          <artifactId>exo.portal.gadgets-server</artifactId>
+          <version>3.2.0-Beta01-SNAPSHOT</version>
+          <type>war</type>
+        </dependency>
+        <dependency>
+          <groupId>org.exoplatform.portal</groupId>
+          <artifactId>exo.portal.eXoGadgets</artifactId>
+          <version>3.2.0-Beta01-SNAPSHOT</version>
+          <type>war</type>
+        </dependency>
+        <dependency>
+          <groupId>org.exoplatform.portal</groupId>
+          <artifactId>exo.portal.portlet.web</artifactId>
+          <version>3.2.0-Beta01-SNAPSHOT</version>
+          <type>war</type>
+        </dependency>
+        <dependency>
+          <groupId>org.exoplatform.portal</groupId>
+          <artifactId>exo.portal.web.rest</artifactId>
+          <version>3.2.0-Beta01-SNAPSHOT</version>
+          <type>war</type>
+        </dependency>
+        <dependency>
+          <groupId>org.exoplatform.portal</groupId>
+          <artifactId>exo.portal.portlet.exoadmin</artifactId>
+          <version>3.2.0-Beta01-SNAPSHOT</version>
+          <type>war</type>
+        </dependency>
+        <dependency>
+          <groupId>org.exoplatform.portal</groupId>
+          <artifactId>exo.portal.web.eXoResources</artifactId>
+          <version>3.2.0-Beta01-SNAPSHOT</version>
+          <type>war</type>
+        </dependency>
+        <dependency>
+          <groupId>org.exoplatform.portal</groupId>
+          <artifactId>exo.portal.portlet.dashboard</artifactId>
+          <version>3.2.0-Beta01-SNAPSHOT</version>
+          <type>war</type>
+        </dependency>
 
          <!-- Reflext -->
          <dependency>
@@ -885,6 +933,11 @@
             <artifactId>picketlink-idm-cache</artifactId>
             <version>${org.picketlink.idm}</version>
          </dependency>
+        <dependency>
+           <groupId>org.picketlink.idm</groupId>
+           <artifactId>picketlink-idm-spi</artifactId>
+           <version>${org.picketlink.idm}</version>
+        </dependency>
 
          <dependency>
             <groupId>javax.portlet</groupId>
@@ -1076,6 +1129,11 @@
             <artifactId>htmlparser</artifactId>
             <version>1.0.7</version>
          </dependency>
+        <dependency>
+           <groupId>log4J</groupId>
+           <artifactId>log4j</artifactId>
+           <version>1.2.14</version>
+        </dependency>
 
          <dependency>
             <groupId>org.gatein.shindig</groupId>

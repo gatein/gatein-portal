@@ -12,6 +12,7 @@
   <name>GateIn Tomcat package</name>
 
   <modules>
+    <module>integration</module>
     <module>pkg</module>
   </modules>
 

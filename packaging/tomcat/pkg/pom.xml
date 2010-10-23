@@ -12,6 +12,10 @@
   <packaging>pom</packaging>
   <name>GateIn for Tomcat packaging</name>
 
+  <properties>
+      <tomcat.dir>${exo.projects.directory.dependencies}/${exo.projects.app.tomcat.version}</tomcat.dir>
+  </properties>
+
   <!--
 
 Dependencies I am not certain they should be included, needs to be checked
@@ -35,7 +39,7 @@ Dependencies I am not certain they should be included, needs to be checked
 
   <dependencies>
 
-    <!-- SLF4J -->
+    <!-- Logging -->
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
@@ -43,6 +47,10 @@ Dependencies I am not certain they should be included, needs to be checked
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-jdk14</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>log4J</groupId>
+      <artifactId>log4j</artifactId>
     </dependency>
 
     <!-- Apache commons -->
@@ -294,6 +302,10 @@ Dependencies I am not certain they should be included, needs to be checked
     </dependency>
     <dependency>
        <groupId>org.picketlink.idm</groupId>
+       <artifactId>picketlink-idm-spi</artifactId>
+    </dependency>
+    <dependency>
+       <groupId>org.picketlink.idm</groupId>
        <artifactId>picketlink-idm-cache</artifactId>
     </dependency>
     <dependency>
@@ -477,6 +489,10 @@ Dependencies I am not certain they should be included, needs to be checked
     <dependency>
       <groupId>org.exoplatform.portal</groupId>
       <artifactId>exo.portal.webui.portlet</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.exoplatform.portal</groupId>
+      <artifactId>exo.portal.gadgets-core</artifactId>
     </dependency>
     <dependency>
       <groupId>org.exoplatform.portal</groupId>
@@ -760,7 +776,7 @@ Dependencies I am not certain they should be included, needs to be checked
       <version>1.0.1</version>
     </dependency>
     <dependency>
-      <groupId>apache-xerces</groupId>
+      <groupId>xerces</groupId>
       <artifactId>xercesImpl</artifactId>
     </dependency>
     <dependency>
@@ -783,6 +799,56 @@ Dependencies I am not certain they should be included, needs to be checked
       <artifactId>core</artifactId>
     </dependency>
 
+    <!-- War files -->
+    <dependency>
+      <groupId>org.exoplatform.portal</groupId>
+      <artifactId>exo.portal.web.portal</artifactId>
+      <type>war</type>
+    </dependency>
+    <dependency>
+      <groupId>org.exoplatform.portal</groupId>
+      <artifactId>exo.portal.gadgets-server</artifactId>
+      <type>war</type>
+    </dependency>
+    <dependency>
+      <groupId>org.exoplatform.portal</groupId>
+      <artifactId>exo.portal.eXoGadgets</artifactId>
+      <type>war</type>
+    </dependency>
+    <dependency>
+      <groupId>org.exoplatform.portal</groupId>
+      <artifactId>exo.portal.portlet.web</artifactId>
+      <type>war</type>
+    </dependency>
+    <dependency>
+      <groupId>org.exoplatform.portal</groupId>
+      <artifactId>exo.portal.web.rest</artifactId>
+      <type>war</type>
+    </dependency>
+    <dependency>
+      <groupId>org.exoplatform.portal</groupId>
+      <artifactId>exo.portal.portlet.exoadmin</artifactId>
+      <type>war</type>
+    </dependency>
+    <dependency>
+      <groupId>org.exoplatform.portal</groupId>
+      <artifactId>exo.portal.web.eXoResources</artifactId>
+      <type>war</type>
+    </dependency>
+    <dependency>
+      <groupId>org.exoplatform.portal</groupId>
+      <artifactId>exo.portal.portlet.dashboard</artifactId>
+      <type>war</type>
+    </dependency>
+
+    <!-- Integration war -->
+    <dependency>
+      <groupId>org.exoplatform.portal</groupId>
+      <artifactId>exo.portal.packaging.tomcat.integration</artifactId>
+      <version>3.2.0-Beta01-SNAPSHOT</version>
+      <type>war</type>
+    </dependency>
+
   </dependencies>
 
   <build>
@@ -795,6 +861,8 @@ Dependencies I am not certain they should be included, needs to be checked
           <descriptors>
             <descriptor>src/assembly/tomcat-init.xml</descriptor>
           </descriptors>
+          <finalName>tomcat</finalName>
+          <appendAssemblyId>false</appendAssemblyId>
         </configuration>
         <version>2.2-beta-5</version>
         <executions>
