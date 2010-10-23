@@ -864,7 +864,7 @@ Dependencies I am not certain they should be included, needs to be checked
           <finalName>tomcat</finalName>
           <appendAssemblyId>false</appendAssemblyId>
         </configuration>
-        <version>2.2-beta-5</version>
+        <version>2.2</version>
         <executions>
           <execution>
             <id>init-assembly</id>

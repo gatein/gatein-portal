@@ -161,10 +161,6 @@
 
   <fileSets>
 
-    <fileSet>
-
-    </fileSet>
-
     <!-- Copy tomcat: without unix executables -->
     <fileSet>
       <directory>${tomcat.dir}</directory>
@@ -193,7 +189,7 @@
 
     <!-- Configurations, etc.-->
     <fileSet>
-      <directory>${basedir}/src/main/resources/tomcat</directory>
+      <directory>${project.basedir}/src/main/resources/tomcat</directory>
       <outputDirectory>tomcat</outputDirectory>
       <excludes>
         <exclude>bin/*.sh</exclude>
@@ -203,7 +199,7 @@
 
     <!-- Startup scripts -->
     <fileSet>
-      <directory>${basedir}/src/main/resources/tomcat/bin</directory>
+      <directory>${project.basedir}/src/main/resources/tomcat/bin</directory>
       <outputDirectory>tomcat/bin</outputDirectory>
       <includes>
         <include>*.sh</include>
@@ -214,10 +210,11 @@
 
   <files>
     <!-- Copy gatein configuration file -->
+    <!-- Julien : try to improve that -->
     <file>
-    <source>${basedir}/../../../component/common/src/main/java/conf/configuration-tomcat.properties</source>
-    <outputDirectory>tomcat/gatein/conf</outputDirectory>
-    <destName>configuration.properties</destName>
+      <source>${project.basedir}/../../../component/common/src/main/java/conf/configuration-tomcat.properties</source>
+      <outputDirectory>tomcat/gatein/conf</outputDirectory>
+      <destName>configuration.properties</destName>
     </file>
   </files>
 
