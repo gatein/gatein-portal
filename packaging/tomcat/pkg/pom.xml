@@ -49,7 +49,7 @@ Dependencies I am not certain they should be included, needs to be checked
       <artifactId>slf4j-jdk14</artifactId>
     </dependency>
     <dependency>
-      <groupId>log4J</groupId>
+      <groupId>log4j</groupId>
       <artifactId>log4j</artifactId>
     </dependency>
 
