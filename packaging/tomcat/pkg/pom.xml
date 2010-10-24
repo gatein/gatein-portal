@@ -1,3 +1,4 @@
+<?xml version="1.0"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
@@ -796,48 +797,56 @@
 
     <!-- War files -->
     <dependency>
+      <!--portal.war-->
       <groupId>org.exoplatform.portal</groupId>
       <artifactId>exo.portal.web.portal</artifactId>
       <type>war</type>
     </dependency>
     <dependency>
+      <!--eXoGadgetServer.war-->
       <groupId>org.exoplatform.portal</groupId>
       <artifactId>exo.portal.gadgets-server</artifactId>
       <type>war</type>
     </dependency>
     <dependency>
+      <!--eXoGadgets.war-->
       <groupId>org.exoplatform.portal</groupId>
       <artifactId>exo.portal.eXoGadgets</artifactId>
       <type>war</type>
     </dependency>
     <dependency>
+      <!--web.war-->
       <groupId>org.exoplatform.portal</groupId>
       <artifactId>exo.portal.portlet.web</artifactId>
       <type>war</type>
     </dependency>
     <dependency>
+      <!--rest.war-->
       <groupId>org.exoplatform.portal</groupId>
       <artifactId>exo.portal.web.rest</artifactId>
       <type>war</type>
     </dependency>
     <dependency>
+      <!--exoadmin.war-->
       <groupId>org.exoplatform.portal</groupId>
       <artifactId>exo.portal.portlet.exoadmin</artifactId>
       <type>war</type>
     </dependency>
     <dependency>
+      <!--eXoResources.war-->
       <groupId>org.exoplatform.portal</groupId>
       <artifactId>exo.portal.web.eXoResources</artifactId>
       <type>war</type>
     </dependency>
     <dependency>
+      <!--dashboard.war-->
       <groupId>org.exoplatform.portal</groupId>
       <artifactId>exo.portal.portlet.dashboard</artifactId>
       <type>war</type>
     </dependency>
 
-    <!-- Integration war -->
     <dependency>
+      <!--integration.war-->
       <groupId>org.exoplatform.portal</groupId>
       <artifactId>exo.portal.packaging.tomcat.integration</artifactId>
       <version>3.2.0-Beta01-SNAPSHOT</version>
@@ -848,8 +857,55 @@
 
   <build>
     <plugins>
+
       <plugin>
-        <!-- copy jboss-as to working directory etc... -->
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <version>1.6</version>
+        <executions>
+          <execution>
+            <id>package</id>
+            <phase>package</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <target>
+
+                <!-- Copy tomcat -->
+                <copy todir="target/tomcat">
+                  <fileset dir="${tomcat.dir}"/>
+                </copy>
+<!--
+                <chmod perm="0644">
+                  <fileset dir="${tomcat.dir}"/>
+                </chmod>
+                <chmod perm="0755">
+                  <fileset dir="${tomcat.dir}">
+                    <include name="**/*.sh"/>
+                  </fileset>
+                </chmod>
+-->
+
+                <!-- Copy the dependencies -->
+                <dependencyfilesets/>
+                <xslt
+                    basedir="${project.basedir}"
+                    destdir="${project.basedir}/target"
+                    includes="pom.xml"
+                    extension=".xml"
+                    style="${project.basedir}/transform.xsl"/>
+                <ant antfile="${project.basedir}/target/pom.xml" inheritRefs="true">
+                  <target name="foo" />
+                </ant>
+              </target>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+<!--
+      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-assembly-plugin</artifactId>
         <configuration>
@@ -870,6 +926,7 @@
           </execution>
         </executions>
       </plugin>
+-->
     </plugins>
   </build>
 
