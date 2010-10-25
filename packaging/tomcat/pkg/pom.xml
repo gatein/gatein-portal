@@ -917,30 +917,6 @@
           </execution>
         </executions>
       </plugin>
-
-<!--
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-assembly-plugin</artifactId>
-        <configuration>
-          <descriptors>
-            <descriptor>src/assembly/tomcat-init.xml</descriptor>
-          </descriptors>
-          <finalName>tomcat</finalName>
-          <appendAssemblyId>false</appendAssemblyId>
-        </configuration>
-        <version>2.2</version>
-        <executions>
-          <execution>
-            <id>init-assembly</id>
-            <phase>process-resources</phase>
-            <goals>
-              <goal>single</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
--->
     </plugins>
   </build>
 
