@@ -1,4 +1,5 @@
 <?xml version="1.0"?>
+<?rename tofile="portal.war"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
@@ -797,48 +798,56 @@
 
     <!-- War files -->
     <dependency>
+      <?rename portal.war?>
       <!--portal.war-->
       <groupId>org.exoplatform.portal</groupId>
       <artifactId>exo.portal.web.portal</artifactId>
       <type>war</type>
     </dependency>
     <dependency>
+      <?rename eXoGadgetServer.war?>
       <!--eXoGadgetServer.war-->
       <groupId>org.exoplatform.portal</groupId>
       <artifactId>exo.portal.gadgets-server</artifactId>
       <type>war</type>
     </dependency>
     <dependency>
+      <?rename eXoGadgets.war?>
       <!--eXoGadgets.war-->
       <groupId>org.exoplatform.portal</groupId>
       <artifactId>exo.portal.eXoGadgets</artifactId>
       <type>war</type>
     </dependency>
     <dependency>
+      <?rename web.war?>
       <!--web.war-->
       <groupId>org.exoplatform.portal</groupId>
       <artifactId>exo.portal.portlet.web</artifactId>
       <type>war</type>
     </dependency>
     <dependency>
+      <?rename rest.war?>
       <!--rest.war-->
       <groupId>org.exoplatform.portal</groupId>
       <artifactId>exo.portal.web.rest</artifactId>
       <type>war</type>
     </dependency>
     <dependency>
+      <?rename exoadmin.war?>
       <!--exoadmin.war-->
       <groupId>org.exoplatform.portal</groupId>
       <artifactId>exo.portal.portlet.exoadmin</artifactId>
       <type>war</type>
     </dependency>
     <dependency>
+      <?rename eXoResources.war?>
       <!--eXoResources.war-->
       <groupId>org.exoplatform.portal</groupId>
       <artifactId>exo.portal.web.eXoResources</artifactId>
       <type>war</type>
     </dependency>
     <dependency>
+      <?rename dashboard.war?>
       <!--dashboard.war-->
       <groupId>org.exoplatform.portal</groupId>
       <artifactId>exo.portal.portlet.dashboard</artifactId>
@@ -846,7 +855,7 @@
     </dependency>
 
     <dependency>
-      <!--integration.war-->
+      <!--<?rename integration.war?>-->
       <groupId>org.exoplatform.portal</groupId>
       <artifactId>exo.portal.packaging.tomcat.integration</artifactId>
       <version>3.2.0-Beta01-SNAPSHOT</version>
@@ -876,16 +885,6 @@
                 <copy todir="target/tomcat">
                   <fileset dir="${tomcat.dir}"/>
                 </copy>
-<!--
-                <chmod perm="0644">
-                  <fileset dir="${tomcat.dir}"/>
-                </chmod>
-                <chmod perm="0755">
-                  <fileset dir="${tomcat.dir}">
-                    <include name="**/*.sh"/>
-                  </fileset>
-                </chmod>
--->
 
                 <!-- Copy the dependencies -->
                 <dependencyfilesets/>
@@ -898,6 +897,21 @@
                 <ant antfile="${project.basedir}/target/pom.xml" inheritRefs="true">
                   <target name="foo" />
                 </ant>
+
+                <!-- Copy configuration -->
+                <copy todir="target/tomcat">
+                  <fileset dir="${project.basedir}/src/main/resources/tomcat"/>
+                </copy>
+
+                <!-- Copy configuration -->
+                <copy tofile="target/tomcat/gatein/conf/configuration.properties">
+                  <fileset dir="${project.basedir}/../../../component/common/src/main/java/conf" includes="configuration-tomcat.properties"/>
+                </copy>
+
+                <!-- File permissions -->
+                <chmod perm="0644" type="file" dir="target/tomcat" excludes="**/*.sh"/>
+                <chmod perm="0755" type="file" dir="target/tomcat" includes="**/*.sh"/>
+
               </target>
             </configuration>
           </execution>
