@@ -898,8 +898,8 @@
         <version>1.6</version>
         <executions>
           <execution>
-            <id>package</id>
-            <phase>package</phase>
+            <id>prepare-package</id>
+            <phase>prepare-package</phase>
             <goals>
               <goal>run</goal>
             </goals>
@@ -908,18 +908,18 @@
 
                 <!-- Copy tomcat -->
                 <copy todir="target/tomcat">
-                  <fileset dir="${tomcat.dir}"/>
+                  <fileset dir="${tomcat.dir}" excludes="webapps/**"/>
                 </copy>
 
                 <!-- Copy the dependencies -->
                 <dependencyfilesets/>
                 <xslt
                     basedir="${project.basedir}"
-                    destdir="${project.basedir}/target"
+                    destdir="${project.build.directory}"
                     includes="pom.xml"
                     extension=".xml"
                     style="${project.basedir}/transform.xsl"/>
-                <ant antfile="${project.basedir}/target/pom.xml" inheritRefs="true">
+                <ant antfile="${project.build.directory}/pom.xml" inheritRefs="true">
                   <target name="foo" />
                 </ant>
 
@@ -929,13 +929,13 @@
                 </copy>
 
                 <!-- Copy configuration -->
-                <copy tofile="target/tomcat/gatein/conf/configuration.properties">
+                <copy tofile="${project.build.directory}/tomcat/gatein/conf/configuration.properties">
                   <fileset dir="${project.basedir}/../../../component/common/src/main/java/conf" includes="configuration-tomcat.properties"/>
                 </copy>
 
                 <!-- File permissions -->
-                <chmod perm="0644" type="file" dir="target/tomcat" excludes="**/*.sh"/>
-                <chmod perm="0755" type="file" dir="target/tomcat" includes="**/*.sh"/>
+                <chmod perm="0644" type="file" dir="${project.build.directory}/tomcat" excludes="**/*.sh"/>
+                <chmod perm="0755" type="file" dir="${project.build.directory}/tomcat" includes="**/*.sh"/>
 
               </target>
             </configuration>
@@ -945,4 +945,33 @@
     </plugins>
   </build>
 
+  <profiles>
+    <profile>
+      <id>bundle</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <version>1.6</version>
+            <executions>
+              <execution>
+                <id>package</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>run</goal>
+                </goals>
+                <configuration>
+                  <target>
+                    <zip destfile="${project.build.directory}/tomcat.zip" basedir="${project.build.directory}/tomcat"/>
+                    <attachartifact file="${project.build.directory}/tomcat.zip" classifier="bundle" type="zip"/>
+                  </target>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 </project>
