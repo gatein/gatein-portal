@@ -18,22 +18,6 @@
       <tomcat.dir>${exo.projects.directory.dependencies}/${exo.projects.app.tomcat.version}</tomcat.dir>
   </properties>
 
-  <!--
- 91815 Oct 23 13:38 xapool-1.5.0.jar
-334148 Oct 23 13:38 sjsxp-1.0.jar
- 19129 Oct 23 13:38 maven-jaxb2-plugin-0.1.jar
-854901 Oct 23 13:38 jaxb-impl-2.1.7.jar
-231114 Oct 23 13:38 xjavadoc-1.2.3.jar
-194354 Oct 23 13:38 xml-apis-1.3.04.jar
-148932 Oct 23 13:38 xdoclet-1.2.3.jar
- 57251 Oct 23 13:38 xdoclet-hibernate-module-1.2.3.jar
- 56047 Oct 23 13:38 xdoclet-xdoclet-module-1.2.3.jar
- 72741 Oct 23 13:38 howl-logger-0.1.11.jar
- 25863 Oct 23 13:38 stax-api-1.0.jar
-124316 Oct 23 13:38 jotm-2.0.10.jar
-  5798 Oct 23 13:38 jotm_jrmp_stubs-2.0.10.jar
-  -->
-
   <dependencies>
 
     <!-- Logging -->
