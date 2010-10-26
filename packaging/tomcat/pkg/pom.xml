@@ -891,7 +891,7 @@
               <target>
 
                 <!-- Copy tomcat -->
-                <copy todir="target/tomcat">
+                <copy todir="${project.build.directory}/tomcat">
                   <fileset dir="${tomcat.dir}" excludes="webapps/**"/>
                 </copy>
 
@@ -902,13 +902,17 @@
                     destdir="${project.build.directory}"
                     includes="pom.xml"
                     extension=".xml"
-                    style="${project.basedir}/transform.xsl"/>
-                <ant antfile="${project.build.directory}/pom.xml" inheritRefs="true">
-                  <target name="foo" />
+                    style="${project.basedir}/transform.xsl">
+                  <param name="lib.dir" expression="${project.build.directory}/tomcat/lib"/>
+                  <param name="webapps.dir" expression="${project.build.directory}/tomcat/webapps"/>
+                  <mapper type="glob" from="pom.xml" to="copy-dependencies.xml"/>
+                </xslt>
+                <ant antfile="${project.build.directory}/copy-dependencies.xml" inheritRefs="true">
+                  <target name="copy-dependencies" />
                 </ant>
 
                 <!-- Copy configuration -->
-                <copy todir="target/tomcat">
+                <copy todir="${project.build.directory}/tomcat">
                   <fileset dir="${project.basedir}/src/main/resources/tomcat"/>
                 </copy>
 
