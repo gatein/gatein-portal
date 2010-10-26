@@ -52,7 +52,7 @@
             </modules>
         </profile>
         <profile>
-            <id>pkg-tomcat-beta</id>
+            <id>pkg-tomcat</id>
             <modules>
                 <module>tomcat</module>
                 <module>reports</module>
