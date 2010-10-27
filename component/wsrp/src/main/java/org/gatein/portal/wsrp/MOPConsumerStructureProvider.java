@@ -24,11 +24,15 @@
 package org.gatein.portal.wsrp;
 
 import org.exoplatform.container.ExoContainer;
+import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.mop.Described;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.POMSessionManager;
+import org.exoplatform.portal.pom.data.Mapper;
 import org.exoplatform.portal.pom.data.PageKey;
 import org.exoplatform.portal.pom.spi.wsrp.WSRP;
+import org.exoplatform.services.listener.Event;
+import org.exoplatform.services.listener.Listener;
 import org.gatein.common.util.ParameterValidation;
 import org.gatein.mop.api.content.Customization;
 import org.gatein.mop.api.workspace.ObjectType;
@@ -54,35 +58,40 @@ import java.util.Map;
  * @author <a href="mailto:chris.laprun@jboss.com">Chris Laprun</a>
  * @version $Revision$
  */
-public class MOPConsumerStructureProvider implements ConsumerStructureProvider
+public class MOPConsumerStructureProvider extends Listener<DataStorage, org.exoplatform.portal.config.model.Page> implements ConsumerStructureProvider
 {
+   private static final String PAGES_CHILD_NAME = "pages";
    private final POMSessionManager pomManager;
    private Map<String, PageInfo> pageInfos;
    private Map<String, String> windowIdToUUIDs;
+   private boolean pagesHaveBeenInitialized;
 
    public MOPConsumerStructureProvider(ExoContainer container)
    {
       pomManager = (POMSessionManager)container.getComponentInstanceOfType(POMSessionManager.class);
       windowIdToUUIDs = new HashMap<String, String>();
+      pageInfos = new HashMap<String, PageInfo>();
    }
 
    public List<String> getPageIdentifiers()
    {
-      if (pageInfos == null)
+      if (!pagesHaveBeenInitialized)
       {
+         // initialize page information
          POMSession session = pomManager.getSession();
          Workspace workspace = session.getWorkspace();
          Collection<Site> sites = workspace.getSites(ObjectType.PORTAL_SITE);
 
-         pageInfos = new HashMap<String, PageInfo>();
          for (Site site : sites)
          {
-            Page page = site.getRootPage().getChild("pages");
+            Page page = getPagesFrom(site);
             if (page != null)
             {
-               processPage(page, true);
+               addPage(page, true);
             }
          }
+
+         pagesHaveBeenInitialized = true;
       }
 
       LinkedList<String> identifiers = new LinkedList<String>(pageInfos.keySet());
@@ -90,7 +99,15 @@ public class MOPConsumerStructureProvider implements ConsumerStructureProvider
       return identifiers;
    }
 
-   private void processPage(Page page, boolean ignoreCurrent)
+   private Page getPagesFrom(Site site)
+   {
+      // a site contains a root page with templates and pages
+      // more info at http://code.google.com/p/chromattic/wiki/MOPUseCases
+
+      return site.getRootPage().getChild(PAGES_CHILD_NAME);
+   }
+
+   private void addPage(Page page, boolean ignoreCurrent)
    {
       if (!ignoreCurrent)
       {
@@ -106,7 +123,7 @@ public class MOPConsumerStructureProvider implements ConsumerStructureProvider
       {
          for (Page child : children)
          {
-            processPage(child, false);
+            addPage(child, false);
          }
       }
    }
@@ -183,6 +200,55 @@ public class MOPConsumerStructureProvider implements ConsumerStructureProvider
 
       // save
       session.close(true);
+   }
+
+   @Override
+   public void onEvent(Event<DataStorage, org.exoplatform.portal.config.model.Page> event) throws Exception
+   {
+      String eventName = event.getEventName();
+
+      // get the MOP page from the event data
+      org.exoplatform.portal.config.model.Page portalPage = event.getData();
+      Site site = pomManager.getSession().getWorkspace().getSite(Mapper.parseSiteType(portalPage.getOwnerType()), portalPage.getOwnerId());
+      Page page = getPagesFrom(site).getChild(portalPage.getName());
+
+      if (page != null)
+      {
+         if (DataStorage.PAGE_CREATED.equals(eventName))
+         {
+            // add information for new page
+            addPage(page, false);
+         }
+         else if (DataStorage.PAGE_REMOVED.equals(eventName))
+         {
+            removePage(page);
+         }
+         else if (DataStorage.PAGE_UPDATED.equals(eventName))
+         {
+            removePage(page);
+            addPage(page, false);
+         }
+      }
+   }
+
+   private void removePage(Page page)
+   {
+      Described described = page.adapt(Described.class);
+      String name = described.getName();
+
+      PageInfo pageInfo = pageInfos.get(name);
+      if (pageInfo != null)
+      {
+         // remove window information associated to the page
+         List<String> windows = pageInfo.getChildrenWindows();
+         for (String window : windows)
+         {
+            windowIdToUUIDs.remove(window);
+         }
+
+         // remove page info
+         pageInfos.remove(name);
+      }
    }
 
    private static class PageInfo
