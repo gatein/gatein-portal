@@ -118,6 +118,8 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
    private static final String WSRP_PREFER_OPERATION = "wsrp-preferOperation";
    private static final String WSRP_REQUIRES_REWRITE = "wsrp-requiresRewrite";
    private static final String WSRP_NAVIGATIONAL_VALUES = "wsrp-navigationalValues";
+   private static final AbstractPortalContext PORTAL_CONTEXT = new AbstractPortalContext(Collections.singletonMap(
+      "javax.portlet.markup.head.element.support", "true"));
 
    /** . */
    private String storageId;
@@ -863,8 +865,7 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
       //TODO: ExoUserContext impl not tested
       invocation.setUserContext(new ExoUserContext(servletRequest, userProfile));
       invocation.setWindowContext(new AbstractWindowContext(storageName));
-      invocation.setPortalContext(new AbstractPortalContext(Collections.singletonMap(
-         "javax.portlet.markup.head.element.support", "true")));
+      invocation.setPortalContext(PORTAL_CONTEXT);
       invocation.setSecurityContext(new AbstractSecurityContext(servletRequest));
 
       //
