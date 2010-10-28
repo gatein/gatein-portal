@@ -160,7 +160,7 @@ public class MOPConsumerStructureProvider extends Listener<DataStorage, org.exop
       }
    }
 
-   public void assignPortletToWindow(PortletContext portletContext, String windowId, String pageId)
+   public void assignPortletToWindow(PortletContext portletContext, String windowId, String pageId, String exportedPortletHandle)
    {
       String uuid = windowIdToUUIDs.get(windowId);
       ParameterValidation.throwIllegalArgExceptionIfNull(uuid, "UUID for " + windowId);
@@ -192,6 +192,10 @@ public class MOPConsumerStructureProvider extends Listener<DataStorage, org.exop
 
       // and re-customize
       window.customize(WSRP.CONTENT_TYPE, portletId, wsrp);
+
+      // Change the window's name so that it's less confusing to users
+      Described described = window.adapt(Described.class);
+      described.setName(exportedPortletHandle + " (remote)"); // should be the same as ApplicationRegistryService.REMOTE_DISPLAY_NAME_SUFFIX
 
       // mark page for cache invalidation otherwise DataCache will use the previous customization id when trying to set
       // the portlet state in UIPortlet.setState and will not find it resulting in an error
