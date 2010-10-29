@@ -47,6 +47,7 @@ import org.gatein.pc.api.PortletStateType;
 import org.gatein.pc.api.StatefulPortletContext;
 import org.gatein.wsrp.api.context.ConsumerStructureProvider;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -63,13 +64,11 @@ public class MOPConsumerStructureProvider extends Listener<DataStorage, org.exop
    private static final String PAGES_CHILD_NAME = "pages";
    private final POMSessionManager pomManager;
    private Map<String, PageInfo> pageInfos;
-   private Map<String, String> windowIdToUUIDs;
    private boolean pagesHaveBeenInitialized;
 
    public MOPConsumerStructureProvider(ExoContainer container)
    {
       pomManager = (POMSessionManager)container.getComponentInstanceOfType(POMSessionManager.class);
-      windowIdToUUIDs = new HashMap<String, String>();
       pageInfos = new HashMap<String, PageInfo>();
    }
 
@@ -112,8 +111,8 @@ public class MOPConsumerStructureProvider extends Listener<DataStorage, org.exop
       if (!ignoreCurrent)
       {
          Described described = page.adapt(Described.class);
-         PageInfo pageInfo = new PageInfo(page.getObjectId());
-         pageInfos.put(described.getName(), pageInfo);
+         PageInfo pageInfo = new PageInfo(page.getObjectId(), described.getName());
+         pageInfos.put(pageInfo.getName(), pageInfo);
          UIContainer container = page.getRootComponent();
          processContainer(container, pageInfo);
       }
@@ -146,8 +145,8 @@ public class MOPConsumerStructureProvider extends Listener<DataStorage, org.exop
          {
             Described described = component.adapt(Described.class);
             String name = described.getName();
-            windowIdToUUIDs.put(name, component.getObjectId());
-            pageInfo.addWindow(name);
+
+            pageInfo.addWindow(name, component.getObjectId());
          }
          else if (ObjectType.CONTAINER.equals(type))
          {
@@ -162,7 +161,8 @@ public class MOPConsumerStructureProvider extends Listener<DataStorage, org.exop
 
    public void assignPortletToWindow(PortletContext portletContext, String windowId, String pageId, String exportedPortletHandle)
    {
-      String uuid = windowIdToUUIDs.get(windowId);
+      PageInfo pageInfo = pageInfos.get(pageId);
+      String uuid = pageInfo.getWindowUUID(windowId);
       ParameterValidation.throwIllegalArgExceptionIfNull(uuid, "UUID for " + windowId);
 
       // get the window
@@ -195,7 +195,11 @@ public class MOPConsumerStructureProvider extends Listener<DataStorage, org.exop
 
       // Change the window's name so that it's less confusing to users
       Described described = window.adapt(Described.class);
-      described.setName(exportedPortletHandle + " (remote)"); // should be the same as ApplicationRegistryService.REMOTE_DISPLAY_NAME_SUFFIX
+      String newName = exportedPortletHandle + " (remote)";
+      described.setName(newName); // should be the same as ApplicationRegistryService.REMOTE_DISPLAY_NAME_SUFFIX
+
+      // update window mappings
+      pageInfo.updateWindowName(windowId, newName);
 
       // mark page for cache invalidation otherwise DataCache will use the previous customization id when trying to set
       // the portlet state in UIPortlet.setState and will not find it resulting in an error
@@ -243,13 +247,6 @@ public class MOPConsumerStructureProvider extends Listener<DataStorage, org.exop
       PageInfo pageInfo = pageInfos.get(name);
       if (pageInfo != null)
       {
-         // remove window information associated to the page
-         List<String> windows = pageInfo.getChildrenWindows();
-         for (String window : windows)
-         {
-            windowIdToUUIDs.remove(window);
-         }
-
          // remove page info
          pageInfos.remove(name);
       }
@@ -257,13 +254,14 @@ public class MOPConsumerStructureProvider extends Listener<DataStorage, org.exop
 
    private static class PageInfo
    {
-      private String uuid;
-      private List<String> childrenWindows;
+      private final String uuid;
+      private final Map<String, String> childrenWindows = new HashMap<String, String>();
+      private final String name;
 
-      private PageInfo(String uuid)
+      private PageInfo(String uuid, String name)
       {
          this.uuid = uuid;
-         childrenWindows = new LinkedList<String>();
+         this.name = name;
       }
 
       public String getUUID()
@@ -273,12 +271,42 @@ public class MOPConsumerStructureProvider extends Listener<DataStorage, org.exop
 
       public List<String> getChildrenWindows()
       {
-         return childrenWindows;
+         return new ArrayList<String>(childrenWindows.keySet());
       }
 
-      public void addWindow(String windowName)
+      public void addWindow(String windowName, String uuid)
       {
-         childrenWindows.add(windowName);
+         // add suffix in case we have several windows with the same name in the page
+         if (childrenWindows.containsKey(windowName))
+         {
+            if (windowName.endsWith("|"))
+            {
+               windowName += "|";
+            }
+            else
+            {
+               windowName += windowName + " |";
+            }
+         }
+
+         childrenWindows.put(windowName, uuid);
+      }
+
+      public void updateWindowName(String oldWindowName, String newWindowName)
+      {
+         String windowUUID = getWindowUUID(oldWindowName);
+         childrenWindows.remove(oldWindowName);
+         childrenWindows.put(newWindowName, windowUUID);
+      }
+
+      public String getName()
+      {
+         return name;
+      }
+
+      public String getWindowUUID(String windowId)
+      {
+         return childrenWindows.get(windowId);
       }
    }
 }
