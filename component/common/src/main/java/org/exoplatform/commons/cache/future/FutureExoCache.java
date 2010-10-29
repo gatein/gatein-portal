@@ -41,6 +41,16 @@ public class FutureExoCache<K extends Serializable, V, C> extends FutureCache<K,
       this.cache = cache;
    }
 
+   public void clear()
+   {
+      cache.clearCache();
+   }
+
+   public void remove(K key)
+   {
+      cache.remove(key);
+   }
+
    @Override
    protected V get(K key)
    {

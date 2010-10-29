@@ -19,6 +19,8 @@
 
 package org.exoplatform.portal.resource;
 
+import org.exoplatform.commons.cache.future.FutureExoCache;
+import org.exoplatform.commons.cache.future.Loader;
 import org.exoplatform.commons.utils.BinaryOutput;
 import org.exoplatform.commons.utils.ByteArrayOutput;
 import org.exoplatform.commons.utils.PropertyManager;
@@ -34,6 +36,7 @@ import org.exoplatform.management.jmx.annotations.Property;
 import org.exoplatform.management.rest.annotations.RESTEndpoint;
 import org.exoplatform.portal.resource.compressor.ResourceCompressor;
 import org.exoplatform.portal.resource.compressor.ResourceType;
+import org.exoplatform.services.cache.concurrent.ConcurrentFIFOExoCache;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.resources.Orientation;
@@ -55,14 +58,15 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.servlet.ServletContext;
 
 @Managed
-@NameTemplate({@Property(key = "view", value = "portal"), @Property(key = "service", value = "management"),
+@NameTemplate({
+   @Property(key = "view", value = "portal"),
+   @Property(key = "service", value = "management"),
    @Property(key = "type", value = "skin")})
 @ManagedDescription("Skin service")
 @RESTEndpoint(path = "skinservice")
@@ -117,9 +121,9 @@ public class SkinService implements Startable
 
    private final HashSet<String> availableSkins_;
 
-   private final Map<String, CachedStylesheet> ltCache;
+   private final FutureExoCache<String, CachedStylesheet, Orientation> ltCache;
 
-   private final Map<String, CachedStylesheet> rtCache;
+   private final FutureExoCache<String, CachedStylesheet, Orientation> rtCache;
 
    private final Map<String, Set<String>> portletThemes_;
 
@@ -142,12 +146,41 @@ public class SkinService implements Startable
 
    public SkinService(ExoContainerContext context, ResourceCompressor compressor)
    {
+      Loader<String, CachedStylesheet, Orientation> loader = new Loader<String, CachedStylesheet, Orientation>()
+      {
+         public CachedStylesheet retrieve(Orientation context, String key) throws Exception
+         {
+            StringBuffer sb = new StringBuffer();
+            processCSS(sb, key, context, true);
+            String css;
+            try
+            {
+               StringWriter output = new StringWriter();
+               SkinService.this.compressor.compress(new StringReader(sb.toString()), output, ResourceType.STYLESHEET);
+               css = output.toString();
+            }
+            catch (Exception e)
+            {
+               log.warn("Error when compressing CSS " + key + " for orientation " + context + " will use normal CSS instead", e);
+               css = sb.toString();
+            }
+
+            return new CachedStylesheet(css);
+         }
+      };
+
+      //
+      FutureExoCache<String, CachedStylesheet, Orientation> ltCache = new FutureExoCache<String, CachedStylesheet, Orientation>(loader, new ConcurrentFIFOExoCache<String, CachedStylesheet>(200));
+      FutureExoCache<String, CachedStylesheet, Orientation> rtCache = new FutureExoCache<String, CachedStylesheet, Orientation>(loader, new ConcurrentFIFOExoCache<String, CachedStylesheet>(200));
+
+
+      //
       this.compressor = compressor;
       portalSkins_ = new LinkedHashMap<SkinKey, SkinConfig>();
       skinConfigs_ = new LinkedHashMap<SkinKey, SkinConfig>(20);
       availableSkins_ = new HashSet<String>(5);
-      ltCache = new ConcurrentHashMap<String, CachedStylesheet>();
-      rtCache = new ConcurrentHashMap<String, CachedStylesheet>();
+      this.ltCache = ltCache;
+      this.rtCache = rtCache;
       portletThemes_ = new HashMap<String, Set<String>>();
       portalContainerName = context.getPortalContainerName();
       mainResolver = new MainResourceResolver(portalContainerName, skinConfigs_);
@@ -241,18 +274,10 @@ public class SkinService implements Startable
             log.debug("Adding Portal skin : Bind " + key + " to " + skinConfig);
          }
       }
-      try
-      {
-         StringWriter output = new StringWriter();
-         compressor.compress(new StringReader(cssData), output, ResourceType.STYLESHEET);
-         cssData = output.toString();
-      }
-      catch (Exception e)
-      {
-         log.debug("Error when compressing CSS, will use normal CSS instead", e);
-      }
-      ltCache.put(cssPath, new CachedStylesheet(cssData));
-      rtCache.put(cssPath, new CachedStylesheet(cssData));
+
+      //
+      ltCache.remove(cssPath);
+      rtCache.remove(cssPath);
    }
 
    
@@ -328,17 +353,12 @@ public class SkinService implements Startable
 
    /**
     * 
-    * Register the Skin for available portal Skins. Do not replace existed Skin
+    * Register the Skin for available portal Skins. Do not replace existing skin.
     * 
-    * @param module
-    *           skin module identifier
-    * @param skinName
-    *           skin name
-    * @param cssPath
-    *           path uri to the css file. This is relative to the root context,
-    *           use leading '/'
-    * @param scontext
-    *           the webapp's {@link javax.servlet.ServletContext}
+    * @param module skin module identifier
+    * @param skinName skin name
+    * @param cssPath path uri to the css file. This is relative to the root context, use leading '/'
+    * @param cssData the data
     */
    public void addSkin(String module, String skinName, String cssPath, String cssData)
    {
@@ -349,8 +369,10 @@ public class SkinService implements Startable
       {
          skinConfigs_.put(key, new SimpleSkin(this, module, skinName, cssPath));
       }
-      ltCache.put(cssPath, new CachedStylesheet(cssData));
-      rtCache.put(cssPath, new CachedStylesheet(cssData));
+
+      // Evict
+      ltCache.remove(cssPath);
+      rtCache.remove(cssPath);
    }
 
    /**
@@ -450,28 +472,8 @@ public class SkinService implements Startable
          }
 
          //
-         Map<String, CachedStylesheet> cache = orientation == Orientation.LT ? ltCache : rtCache;
-         CachedStylesheet cachedCss = cache.get(path);
-         if (cachedCss == null)
-         {
-            StringBuffer sb = new StringBuffer();
-            processCSS(sb, path, orientation, true);
-            String css;
-            try
-            {
-               StringWriter output = new StringWriter();
-               compressor.compress(new StringReader(sb.toString()), output, ResourceType.STYLESHEET);
-               css = output.toString();
-            }
-            catch (Exception e)
-            {
-               log.debug("Error when compressing CSS, will use normal CSS instead", e);
-               css = sb.toString();
-            }
-            
-            cachedCss = new CachedStylesheet(css);
-            cache.put(path, cachedCss);
-         }
+         FutureExoCache<String, CachedStylesheet, Orientation> cache = orientation == Orientation.LT ? ltCache : rtCache;
+         CachedStylesheet cachedCss = cache.get(orientation, path);
          cachedCss.writeTo(renderer.getOutput());
       }
       else
@@ -491,7 +493,7 @@ public class SkinService implements Startable
     */
    public String getMergedCSS(String cssPath)
    {
-      CachedStylesheet stylesheet = ltCache.get(cssPath);
+      CachedStylesheet stylesheet = ltCache.get(null, cssPath);
       return stylesheet != null ? stylesheet.getText() : null;
    }
 
@@ -778,7 +780,7 @@ public class SkinService implements Startable
 
    /**
     * Get Suffix of Orientation
-    * @param orientation
+    * @param orientation the orientation
     * @return Suffix of Orientation
     */
    String getSuffix(Orientation orientation)
