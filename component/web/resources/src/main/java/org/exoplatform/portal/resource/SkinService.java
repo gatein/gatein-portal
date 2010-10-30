@@ -64,9 +64,7 @@ import java.util.regex.Pattern;
 import javax.servlet.ServletContext;
 
 @Managed
-@NameTemplate({
-   @Property(key = "view", value = "portal"),
-   @Property(key = "service", value = "management"),
+@NameTemplate({@Property(key = "view", value = "portal"), @Property(key = "service", value = "management"),
    @Property(key = "type", value = "skin")})
 @ManagedDescription("Skin service")
 @RESTEndpoint(path = "skinservice")
@@ -170,17 +168,12 @@ public class SkinService implements Startable
       };
 
       //
-      FutureExoCache<String, CachedStylesheet, Orientation> ltCache = new FutureExoCache<String, CachedStylesheet, Orientation>(loader, new ConcurrentFIFOExoCache<String, CachedStylesheet>(200));
-      FutureExoCache<String, CachedStylesheet, Orientation> rtCache = new FutureExoCache<String, CachedStylesheet, Orientation>(loader, new ConcurrentFIFOExoCache<String, CachedStylesheet>(200));
-
-
-      //
       this.compressor = compressor;
       portalSkins_ = new LinkedHashMap<SkinKey, SkinConfig>();
       skinConfigs_ = new LinkedHashMap<SkinKey, SkinConfig>(20);
       availableSkins_ = new HashSet<String>(5);
-      this.ltCache = ltCache;
-      this.rtCache = rtCache;
+      ltCache = new FutureExoCache<String, CachedStylesheet, Orientation>(loader, new ConcurrentFIFOExoCache<String, CachedStylesheet>(200));
+      rtCache = new FutureExoCache<String, CachedStylesheet, Orientation>(loader, new ConcurrentFIFOExoCache<String, CachedStylesheet>(200));
       portletThemes_ = new HashMap<String, Set<String>>();
       portalContainerName = context.getPortalContainerName();
       mainResolver = new MainResourceResolver(portalContainerName, skinConfigs_);
@@ -274,8 +267,6 @@ public class SkinService implements Startable
             log.debug("Adding Portal skin : Bind " + key + " to " + skinConfig);
          }
       }
-
-      //
       ltCache.remove(cssPath);
       rtCache.remove(cssPath);
    }
@@ -353,12 +344,17 @@ public class SkinService implements Startable
 
    /**
     * 
-    * Register the Skin for available portal Skins. Do not replace existing skin.
+    * Register the Skin for available portal Skins. Do not replace existed Skin
     * 
-    * @param module skin module identifier
-    * @param skinName skin name
-    * @param cssPath path uri to the css file. This is relative to the root context, use leading '/'
-    * @param cssData the data
+    * @param module
+    *           skin module identifier
+    * @param skinName
+    *           skin name
+    * @param cssPath
+    *           path uri to the css file. This is relative to the root context,
+    *           use leading '/'
+    * @param scontext
+    *           the webapp's {@link javax.servlet.ServletContext}
     */
    public void addSkin(String module, String skinName, String cssPath, String cssData)
    {
@@ -369,8 +365,6 @@ public class SkinService implements Startable
       {
          skinConfigs_.put(key, new SimpleSkin(this, module, skinName, cssPath));
       }
-
-      // Evict
       ltCache.remove(cssPath);
       rtCache.remove(cssPath);
    }
@@ -474,6 +468,7 @@ public class SkinService implements Startable
          //
          FutureExoCache<String, CachedStylesheet, Orientation> cache = orientation == Orientation.LT ? ltCache : rtCache;
          CachedStylesheet cachedCss = cache.get(orientation, path);
+
          cachedCss.writeTo(renderer.getOutput());
       }
       else
@@ -493,7 +488,7 @@ public class SkinService implements Startable
     */
    public String getMergedCSS(String cssPath)
    {
-      CachedStylesheet stylesheet = ltCache.get(null, cssPath);
+      CachedStylesheet stylesheet = ltCache.get(Orientation.LT, cssPath);
       return stylesheet != null ? stylesheet.getText() : null;
    }
 
@@ -780,7 +775,7 @@ public class SkinService implements Startable
 
    /**
     * Get Suffix of Orientation
-    * @param orientation the orientation
+    * @param orientation
     * @return Suffix of Orientation
     */
    String getSuffix(Orientation orientation)
