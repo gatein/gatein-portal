@@ -67,18 +67,18 @@ public class RegisterPortletApplicationController extends PortletApplicationCont
    {
       PortletSession session = req.getPortletSession();
       Captcha captcha;
-      if (session.getAttribute(NAME) == null)
+      if (session.getAttribute(NAME, PortletSession.APPLICATION_SCOPE) == null)
       {
          captcha = new Captcha.Builder(_width, _height).addText().gimp().addNoise().addBackground().build();
 
 
-         session.setAttribute(NAME, captcha);
+         session.setAttribute(NAME, captcha, PortletSession.APPLICATION_SCOPE);
          writeImage(resp, captcha.getImage());
 
          return;
       }
 
-      captcha = (Captcha)session.getAttribute(NAME);
+      captcha = (Captcha)session.getAttribute(NAME, PortletSession.APPLICATION_SCOPE);
       writeImage(resp, captcha.getImage());
 
    }
