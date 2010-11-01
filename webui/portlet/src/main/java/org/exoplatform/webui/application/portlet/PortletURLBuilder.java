@@ -58,7 +58,7 @@ public class PortletURLBuilder extends URLBuilder<UIComponent>
    protected void createURL(StringBuilder builder, UIComponent targetComponent, String action, String targetBeanId,
       Parameter[] params)
    {
-      String baseUrl = getBaseURL().replaceAll("&", AMP);
+      String baseUrl = getBaseURL();
       builder.append(baseUrl).append(AMP).append(UIComponent.UICOMPONENT).append(EQUALS).append(
          targetComponent.getId());
 
