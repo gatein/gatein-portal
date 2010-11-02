@@ -43,7 +43,7 @@ RssAggregator.prototype.timeToPrettyString = function(B) {
     if (isNaN(B)) {
         return "an indeterminate amount of time ago"
     }
-    time = new Date().getTime() / 1000 - B;
+    time = (new Date().getTime() 1000 - B) / 1000;
     if (time < 60) {
         return "less than a minute ago"
     } else {
