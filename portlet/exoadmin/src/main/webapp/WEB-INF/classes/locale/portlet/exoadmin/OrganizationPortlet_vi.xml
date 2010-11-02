@@ -307,7 +307,7 @@
       <createdDate>Ngày tạo</createdDate>
       <modifiedDate>Ngày sửa</modifiedDate>
       <action>#{word.action}</action>
-      <encodedDescription>#{word.description}</encodedDescription>
+      <description>#{word.description}</description>
     </header>
     <action>
       <title>

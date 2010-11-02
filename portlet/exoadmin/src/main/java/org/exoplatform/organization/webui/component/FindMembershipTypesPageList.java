@@ -19,6 +19,8 @@
 
 package org.exoplatform.organization.webui.component;
 
+import java.util.List;
+
 import org.exoplatform.commons.utils.ListAccess;
 import org.exoplatform.commons.utils.ListAccessImpl;
 import org.exoplatform.commons.utils.StatelessPageList;
@@ -26,18 +28,12 @@ import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.services.organization.MembershipType;
 import org.exoplatform.services.organization.OrganizationService;
-import org.gatein.common.text.EntityEncoder;
-
-import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
-import java.util.ArrayList;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class FindMembershipTypesPageList extends StatelessPageList<FindMembershipTypesPageList.UIMembershipType>
+public class FindMembershipTypesPageList extends StatelessPageList<MembershipType>
 {
 
    public FindMembershipTypesPageList(int pageSize)
@@ -46,65 +42,14 @@ public class FindMembershipTypesPageList extends StatelessPageList<FindMembershi
    }
 
    @Override
-   protected ListAccess<UIMembershipType> connect() throws Exception
+   protected ListAccess<MembershipType> connect() throws Exception
    {
       ExoContainer container = PortalContainer.getInstance();
       OrganizationService service = (OrganizationService)container.getComponentInstance(OrganizationService.class);
       List<MembershipType> memberships = (List<MembershipType>)service.getMembershipTypeHandler().findMembershipTypes();
       
-      return new ListAccessImpl<UIMembershipType>(UIMembershipType.class, convertMembershipTypes(memberships));
-   }
-   
-   private List<UIMembershipType> convertMembershipTypes(List<MembershipType> memberships)
-   {
-      List<UIMembershipType> types = new ArrayList<UIMembershipType>(memberships.size());
-      for (MembershipType type: memberships)
-      {
-         types.add(new UIMembershipType(type));
-      }
-      return types;
-   }
-   
-   public class UIMembershipType implements Serializable
-   {
-      private MembershipType mType;
-      
-      public UIMembershipType(MembershipType mType)
-      {
-         this.mType = mType;
-      }
-      
-      public String getName()
-      {
-         return mType.getName();
-      }
-      
-      public Date getCreatedDate()
-      {
-         return mType.getCreatedDate();
-      }
+      return new ListAccessImpl<MembershipType>(MembershipType.class, memberships);
 
-      public Date getModifiedDate()
-      {
-         return mType.getModifiedDate();
-      }
-
-      public String getDescription()
-      {
-         return (mType.getDescription() != null? mType.getDescription():"");
-      }
-      
-      public String getEncodedDescription()
-      {
-         if (getDescription() != null)
-         {
-            EntityEncoder encoder = EntityEncoder.FULL;
-            return encoder.encode(getDescription());
-         }
-         else
-         {
-            return null;
-         }
-      }
    }
+
 }
