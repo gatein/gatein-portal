@@ -91,7 +91,7 @@
 
 <% 
 	String defaultDashboardPage;				
-	if(currentUserNavigation.getNodes() ==null || currentUserNavigation.getNodes().size() < 1){ 
+	if(currentUserNavigation == null || currentUserNavigation.getNodes() == null || currentUserNavigation.getNodes().size() < 1){ 
 		defaultDashboardPage = org.exoplatform.toolbar.webui.component.UIUserToolBarDashboardPortlet.DEFAULT_TAB_NAME;
 %>
 	<div class="UIUserToolBarDashboardPortlet" id="$uicomponent.id">	
