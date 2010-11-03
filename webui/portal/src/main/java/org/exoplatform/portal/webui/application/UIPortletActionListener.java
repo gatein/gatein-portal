@@ -388,7 +388,19 @@ public class UIPortletActionListener
                if (portletResponse instanceof ErrorResponse)
                {
                   ErrorResponse errorResponse = (ErrorResponse)portletResponse;
-                  throw (Exception)errorResponse.getCause();
+                  if (errorResponse.getCause() != null)
+                  {
+                     throw (Exception)errorResponse.getCause();
+                  }
+                  else if (errorResponse.getMessage() != null)
+                  {
+                     throw new Exception("Received an error response with message : " + errorResponse.getMessage());
+                  }
+                  else
+                  {
+                     throw new Exception("Received an error response.");
+                  }
+                  
                }
                else
                {
