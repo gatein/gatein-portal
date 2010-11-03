@@ -29,6 +29,7 @@ import org.exoplatform.container.configuration.ConfigurationManager;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.pc.ExoKernelIntegration;
+import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 import org.exoplatform.services.listener.ListenerService;
 import org.gatein.common.logging.Logger;
@@ -48,6 +49,9 @@ import org.gatein.portal.wsrp.state.migration.JCRMigrationService;
 import org.gatein.portal.wsrp.state.producer.configuration.JCRProducerConfigurationService;
 import org.gatein.portal.wsrp.state.producer.registrations.JCRRegistrationPersistenceManager;
 import org.gatein.portal.wsrp.state.producer.state.JCRPortletStatePersistenceManager;
+import org.gatein.portal.wsrp.structure.MOPConsumerStructureProvider;
+import org.gatein.portal.wsrp.structure.MOPPortalStructureAccess;
+import org.gatein.portal.wsrp.structure.PortalStructureAccess;
 import org.gatein.registration.RegistrationManager;
 import org.gatein.registration.RegistrationPersistenceManager;
 import org.gatein.registration.impl.RegistrationManagerImpl;
@@ -280,7 +284,9 @@ public class WSRPServiceIntegration implements Startable, WebAppListener
          consumerRegistry.setSessionEventBroadcaster(sessionEventBroadcaster);
 
          // create ConsumerStructureProvider and register it to listen to page events
-         MOPConsumerStructureProvider structureprovider = new MOPConsumerStructureProvider(container);
+         POMSessionManager sessionManager = (POMSessionManager)container.getComponentInstanceOfType(POMSessionManager.class);
+         PortalStructureAccess structureAccess = new MOPPortalStructureAccess(sessionManager);
+         MOPConsumerStructureProvider structureprovider = new MOPConsumerStructureProvider(structureAccess);
          listenerService.addListener(DataStorage.PAGE_CREATED, structureprovider);
          listenerService.addListener(DataStorage.PAGE_REMOVED, structureprovider);
          listenerService.addListener(DataStorage.PAGE_UPDATED, structureprovider);

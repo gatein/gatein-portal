@@ -21,15 +21,10 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.gatein.portal.wsrp;
+package org.gatein.portal.wsrp.structure;
 
-import org.exoplatform.container.ExoContainer;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.mop.Described;
-import org.exoplatform.portal.pom.config.POMSession;
-import org.exoplatform.portal.pom.config.POMSessionManager;
-import org.exoplatform.portal.pom.data.Mapper;
-import org.exoplatform.portal.pom.data.PageKey;
 import org.exoplatform.portal.pom.spi.wsrp.WSRP;
 import org.exoplatform.services.listener.Event;
 import org.exoplatform.services.listener.Listener;
@@ -37,8 +32,6 @@ import org.gatein.common.util.ParameterValidation;
 import org.gatein.mop.api.content.Customization;
 import org.gatein.mop.api.workspace.ObjectType;
 import org.gatein.mop.api.workspace.Page;
-import org.gatein.mop.api.workspace.Site;
-import org.gatein.mop.api.workspace.Workspace;
 import org.gatein.mop.api.workspace.ui.UIComponent;
 import org.gatein.mop.api.workspace.ui.UIContainer;
 import org.gatein.mop.api.workspace.ui.UIWindow;
@@ -61,14 +54,15 @@ import java.util.Map;
  */
 public class MOPConsumerStructureProvider extends Listener<DataStorage, org.exoplatform.portal.config.model.Page> implements ConsumerStructureProvider
 {
-   private static final String PAGES_CHILD_NAME = "pages";
-   private final POMSessionManager pomManager;
+   private final PortalStructureAccess structureAccess;
    private Map<String, PageInfo> pageInfos;
    private boolean pagesHaveBeenInitialized;
 
-   public MOPConsumerStructureProvider(ExoContainer container)
+   public MOPConsumerStructureProvider(PortalStructureAccess structureAccess)
    {
-      pomManager = (POMSessionManager)container.getComponentInstanceOfType(POMSessionManager.class);
+      ParameterValidation.throwIllegalArgExceptionIfNull(structureAccess, "PortalStructureAccess");
+
+      this.structureAccess = structureAccess;
       pageInfos = new HashMap<String, PageInfo>();
    }
 
@@ -77,17 +71,10 @@ public class MOPConsumerStructureProvider extends Listener<DataStorage, org.exop
       if (!pagesHaveBeenInitialized)
       {
          // initialize page information
-         POMSession session = pomManager.getSession();
-         Workspace workspace = session.getWorkspace();
-         Collection<Site> sites = workspace.getSites(ObjectType.PORTAL_SITE);
-
-         for (Site site : sites)
+         Collection<Page> pages = structureAccess.getPages();
+         for (Page page : pages)
          {
-            Page page = getPagesFrom(site);
-            if (page != null)
-            {
-               addPage(page, true);
-            }
+            addPage(page);
          }
 
          pagesHaveBeenInitialized = true;
@@ -98,31 +85,20 @@ public class MOPConsumerStructureProvider extends Listener<DataStorage, org.exop
       return identifiers;
    }
 
-   private Page getPagesFrom(Site site)
+   private void addPage(Page page)
    {
-      // a site contains a root page with templates and pages
-      // more info at http://code.google.com/p/chromattic/wiki/MOPUseCases
-
-      return site.getRootPage().getChild(PAGES_CHILD_NAME);
-   }
-
-   private void addPage(Page page, boolean ignoreCurrent)
-   {
-      if (!ignoreCurrent)
-      {
-         Described described = page.adapt(Described.class);
-         PageInfo pageInfo = new PageInfo(page.getObjectId(), described.getName());
-         pageInfos.put(pageInfo.getName(), pageInfo);
-         UIContainer container = page.getRootComponent();
-         processContainer(container, pageInfo);
-      }
+      Described described = page.adapt(Described.class);
+      PageInfo pageInfo = new PageInfo(page.getObjectId(), described.getName());
+      pageInfos.put(pageInfo.getName(), pageInfo);
+      UIContainer container = page.getRootComponent();
+      processContainer(container, pageInfo);
 
       Collection<Page> children = page.getChildren();
       if (ParameterValidation.existsAndIsNotEmpty(children))
       {
          for (Page child : children)
          {
-            addPage(child, false);
+            addPage(child);
          }
       }
    }
@@ -137,24 +113,27 @@ public class MOPConsumerStructureProvider extends Listener<DataStorage, org.exop
 
    private void processContainer(UIContainer container, PageInfo pageInfo)
    {
-      List<UIComponent> components = container.getComponents();
-      for (UIComponent component : components)
+      if (container != null)
       {
-         ObjectType<? extends UIComponent> type = component.getObjectType();
-         if (ObjectType.WINDOW.equals(type))
+         List<UIComponent> components = container.getComponents();
+         for (UIComponent component : components)
          {
-            Described described = component.adapt(Described.class);
-            String name = described.getName();
+            ObjectType<? extends UIComponent> type = component.getObjectType();
+            if (ObjectType.WINDOW.equals(type))
+            {
+               Described described = component.adapt(Described.class);
+               String name = described.getName();
 
-            pageInfo.addWindow(name, component.getObjectId());
-         }
-         else if (ObjectType.CONTAINER.equals(type))
-         {
-            processContainer((UIContainer)component, pageInfo);
-         }
-         else
-         {
-            // ignore
+               pageInfo.addWindow(name, component.getObjectId());
+            }
+            else if (ObjectType.CONTAINER.equals(type))
+            {
+               processContainer((UIContainer)component, pageInfo);
+            }
+            else
+            {
+               // ignore
+            }
          }
       }
    }
@@ -166,8 +145,7 @@ public class MOPConsumerStructureProvider extends Listener<DataStorage, org.exop
       ParameterValidation.throwIllegalArgExceptionIfNull(uuid, "UUID for " + windowId);
 
       // get the window
-      POMSession session = pomManager.getSession();
-      UIWindow window = session.findObjectById(ObjectType.WINDOW, uuid);
+      UIWindow window = structureAccess.getWindowFrom(uuid);
 
       // construct the new customization state
       WSRP wsrp = new WSRP();
@@ -201,13 +179,7 @@ public class MOPConsumerStructureProvider extends Listener<DataStorage, org.exop
       // update window mappings
       pageInfo.updateWindowName(windowId, newName);
 
-      // mark page for cache invalidation otherwise DataCache will use the previous customization id when trying to set
-      // the portlet state in UIPortlet.setState and will not find it resulting in an error
-      Page page = window.getPage();
-      session.scheduleForEviction(new PageKey("portal", page.getSite().getName(), page.getName()));
-
-      // save
-      session.close(true);
+      structureAccess.saveChangesTo(window);
    }
 
    @Override
@@ -217,15 +189,14 @@ public class MOPConsumerStructureProvider extends Listener<DataStorage, org.exop
 
       // get the MOP page from the event data
       org.exoplatform.portal.config.model.Page portalPage = event.getData();
-      Site site = pomManager.getSession().getWorkspace().getSite(Mapper.parseSiteType(portalPage.getOwnerType()), portalPage.getOwnerId());
-      Page page = getPagesFrom(site).getChild(portalPage.getName());
+      Page page = structureAccess.getPageFrom(portalPage);
 
       if (page != null)
       {
          if (DataStorage.PAGE_CREATED.equals(eventName))
          {
             // add information for new page
-            addPage(page, false);
+            addPage(page);
          }
          else if (DataStorage.PAGE_REMOVED.equals(eventName))
          {
@@ -234,7 +205,7 @@ public class MOPConsumerStructureProvider extends Listener<DataStorage, org.exop
          else if (DataStorage.PAGE_UPDATED.equals(eventName))
          {
             removePage(page);
-            addPage(page, false);
+            addPage(page);
          }
       }
    }

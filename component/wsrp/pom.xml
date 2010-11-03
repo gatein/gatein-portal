@@ -104,6 +104,10 @@
          <groupId>org.chromattic</groupId>
          <artifactId>chromattic.spi</artifactId>
       </dependency>
+      <dependency>
+         <groupId>org.gatein.wci</groupId>
+         <artifactId>wci-wci</artifactId>
+      </dependency>
 
       <!-- Required to process Chromattic annotations -->
       <dependency>
@@ -119,8 +123,10 @@
          <scope>test</scope>
       </dependency>
       <dependency>
-         <groupId>org.gatein.wci</groupId>
-         <artifactId>wci-wci</artifactId>
+         <groupId>org.mockito</groupId>
+         <artifactId>mockito-core</artifactId>
+         <version>1.8.5</version>
+         <scope>test</scope>
       </dependency>
    </dependencies>
 
