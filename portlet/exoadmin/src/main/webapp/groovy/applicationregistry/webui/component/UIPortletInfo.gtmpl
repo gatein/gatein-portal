@@ -2,9 +2,11 @@
 	import java.util.Iterator;
 	import java.util.Map.Entry;
 	import org.exoplatform.applicationregistry.webui.component.UICategorySelector;
+        import org.gatein.common.text.EntityEncoder;
     
-  boolean selectorRender = uicomponent.getChild(UICategorySelector.class).isRendered();
-  String categoryNames = uicomponent.getCategorieNames();
+	boolean selectorRender = uicomponent.getChild(UICategorySelector.class).isRendered();
+	String categoryNames = uicomponent.getCategorieNames();
+        EntityEncoder encoder = EntityEncoder.FULL;
 	def portlet = uicomponent.getPortlet();
 	def portletPreferences = portlet.getPortletPreferences();
 	String srcBG = "/" + portlet.getPortletGroup() + "/skin/DefaultSkin/portletIcons/" + portlet.getName() + ".png";
@@ -64,7 +66,7 @@
 					</tr>
 					<tr>
 					  <td class="LeftLabel"><%= _ctx.appRes("UIPortletInfo.label.categories") %></td>
-					  <td class="RightLabel">$categoryNames
+					  <td class="RightLabel"><%= encoder.encode(categoryNames) %>
 					    <% if (categoryNames.equals("")) { %>
                 <%=_ctx.appRes("UIPortletInfo.label.categories.guide")%><br/>
                 <% if (!selectorRender) { %>
