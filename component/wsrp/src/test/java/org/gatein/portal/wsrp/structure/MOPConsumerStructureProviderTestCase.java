@@ -66,8 +66,15 @@ public class MOPConsumerStructureProviderTestCase extends TestCase
 
    public void testGetWindowIdentifiersForInexistingPage()
    {
-      List<String> windows = provider.getWindowIdentifiersFor("inexisting");
-      assertTrue(windows.isEmpty());
+      try
+      {
+         provider.getWindowIdentifiersFor("inexisting");
+         fail("Cannot retrieve windows for an inexistent page");
+      }
+      catch (IllegalArgumentException e)
+      {
+         // expected
+      }
    }
 
    public void testGetWindowIdentifiersFor()
@@ -133,16 +140,11 @@ public class MOPConsumerStructureProviderTestCase extends TestCase
       provider.onEvent(new Event<DataStorage, org.exoplatform.portal.config.model.Page>(DataStorage.PAGE_REMOVED, null, portalPage));
 
       List<String> identifiers = provider.getPageIdentifiers();
-      assertEquals(pageNumber - 3, identifiers.size());
+      assertEquals(pageNumber - 1, identifiers.size());
+      // deleting a page doesn't delete its children, see GTNPORTAL-1630
       assertFalse(identifiers.contains("page1"));
-      assertFalse(identifiers.contains("page11"));
-      assertFalse(identifiers.contains("page12"));
-
-      assertNull(structureAccess.getWindowFrom(getIdFor("window11")));
-      assertNull(structureAccess.getWindowFrom(getIdFor("window12")));
-      assertNull(structureAccess.getWindowFrom(getIdFor("window111")));
-      assertNull(structureAccess.getWindowFrom(getIdFor("window112")));
-      assertNull(structureAccess.getWindowFrom(getIdFor("window121")));
+      assertTrue(identifiers.contains("page11"));
+      assertTrue(identifiers.contains("page12"));
    }
 
    public void testPageUpdatedEvent() throws Exception

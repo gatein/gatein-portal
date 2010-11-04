@@ -106,7 +106,10 @@ public class MOPConsumerStructureProvider extends Listener<DataStorage, org.exop
    public List<String> getWindowIdentifiersFor(String pageId)
    {
       PageInfo pageInfo = pageInfos.get(pageId);
-      ParameterValidation.throwIllegalArgExceptionIfNull(pageInfo, "PageInfo for " + pageId);
+      if (pageInfo == null)
+      {
+         throw new IllegalArgumentException("Page '" + pageId + "' does not exist.");
+      }
 
       return pageInfo.getChildrenWindows();
    }
