@@ -35,7 +35,6 @@
    <name>GateIn Portal Server</name>
 
    <modules>
-      <module>tomcat</module>
       <module>jboss</module>
    </modules>
 
