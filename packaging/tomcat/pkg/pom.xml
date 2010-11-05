@@ -823,6 +823,14 @@
       <artifactId>exo.portal.web.eXoResources</artifactId>
       <type>war</type>
     </dependency>
+    
+    <dependency>
+      <?rename gatein-sample-skin.war?>
+      <groupId>org.gatein.portal.examples.skins</groupId>
+      <artifactId>gatein-sample-skin</artifactId>
+      <type>war</type>
+    </dependency>
+    
     <dependency>
       <?rename dashboard.war?>
       <groupId>org.exoplatform.portal</groupId>

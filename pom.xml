@@ -765,11 +765,6 @@
         </dependency>
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
-          <artifactId>exo.portal.server.tomcat.plugin</artifactId>
-          <version>3.2.0-Beta01-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-          <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.web.portal</artifactId>
           <version>3.2.0-Beta01-SNAPSHOT</version>
           <type>war</type>
@@ -807,6 +802,12 @@
         <dependency>
           <groupId>org.exoplatform.portal</groupId>
           <artifactId>exo.portal.web.eXoResources</artifactId>
+          <version>3.2.0-Beta01-SNAPSHOT</version>
+          <type>war</type>
+        </dependency>
+        <dependency>
+          <groupId>org.gatein.portal.examples.skins</groupId>
+          <artifactId>gatein-sample-skin</artifactId>
           <version>3.2.0-Beta01-SNAPSHOT</version>
           <type>war</type>
         </dependency>
