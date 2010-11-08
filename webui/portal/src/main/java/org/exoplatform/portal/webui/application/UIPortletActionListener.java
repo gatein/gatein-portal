@@ -183,13 +183,23 @@ public class UIPortletActionListener
           * If the current node is displaying a usual layout page, also tells the
           * page which portlet to render or not when the state is maximized
           */
-         WindowState state = new WindowState(getWindowStateOrDefault(navStateResponse));
-         setNextState(uiPortlet, state);
+         // Note: we should only update the WindowState if the UpdateNavigationalStateResponse.getWindowState is not null,
+         // otherwise it means the WindowState has not changed and we should use the current value.
+         if (navStateResponse.getWindowState() != null)
+         {
+            WindowState state = new WindowState(getWindowStateOrDefault(navStateResponse));
+            setNextState(uiPortlet, state);
+         }
 
          // update the portlet with the next mode to display
-         PortletMode mode = new PortletMode(getPortletModeOrDefault(navStateResponse));
-         setNextMode(uiPortlet, mode);
-
+         // Note: we should only update the Mode if the UpdateNavigationalStateResponse.getMode is not null,
+         // otherwise it means the mode has not changed and we should use the current value.
+         if (navStateResponse.getMode() != null)
+         {
+            PortletMode mode = new PortletMode(getPortletModeOrDefault(navStateResponse));
+            setNextMode(uiPortlet, mode);
+         }
+         
          /*
           * Cache the render parameters in the UI portlet component to handle the
           * navigational state. Each time a portlet is rendered (except using
