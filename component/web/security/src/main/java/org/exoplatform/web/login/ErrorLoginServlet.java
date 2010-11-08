@@ -65,6 +65,11 @@ public class ErrorLoginServlet extends AbstractHttpServlet
       unregisterTokenCookie(req);
       // Clear the token cookie
       clearTokenCookie(req, resp);
+      
+      //nguyenanhkien2a@gmail.com: We set content-type here for using RequestDispatcher.include() method below
+      //We can't use RequestDispatcher.forward() if we want to use some response information for output such as clearing cookies, etc
+      resp.setContentType("text/html; charset=UTF-8");
+      
       // This allows the customer to define another login page without changing the portal
       context.getRequestDispatcher("/login/jsp/login.jsp").include(req, resp);
    }

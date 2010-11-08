@@ -101,19 +101,20 @@ DragDrop.prototype.onMouseMove = function(evt) {
 } ;
 
 DragDrop.prototype.onDrop = function(evt) {
-  /* should not remove this or move this line to  destroy since the onMouseMove method keep calling */
-  if(eXo.core.DragDrop.dropCallback != null) {
-    var dndEvent = eXo.core.DragDrop.dndEvent ;
-    dndEvent.backupMouseEvent = evt ;
-    var dragObject = dndEvent.dragObject ;
+   if(!evt) evt = window.event ;
+   /* should not remove this or move this line to  destroy since the onMouseMove method keep calling */
+   if(eXo.core.DragDrop.dropCallback != null) {
+      var dndEvent = eXo.core.DragDrop.dndEvent ;
+      dndEvent.backupMouseEvent = evt ;
+      var dragObject = dndEvent.dragObject ;
 
-    var foundTarget = eXo.core.DragDrop.findDropableTarget(dndEvent, eXo.core.DragDrop.dropableTargets, evt) ;
-    var junkMove =  eXo.core.DragDrop.isJunkMove(dragObject, foundTarget) ;
+      var foundTarget = eXo.core.DragDrop.findDropableTarget(dndEvent, eXo.core.DragDrop.dropableTargets, evt) ;
+      var junkMove =  eXo.core.DragDrop.isJunkMove(dragObject, foundTarget) ;
 
-    dndEvent.update(foundTarget, junkMove) ;
-    eXo.core.DragDrop.dropCallback (dndEvent) ;
-  }
-  eXo.core.DragDrop.destroy() ;
+      dndEvent.update(foundTarget, junkMove) ;
+      eXo.core.DragDrop.dropCallback (dndEvent) ;
+   }
+   eXo.core.DragDrop.destroy() ;
 } ;
 
 DragDrop.prototype.onCancel = function(evt) {

@@ -22,22 +22,20 @@
 			<div class="MiddleRightLoginDecorator">
 				<div class="LoginDecoratorBackground">
 					<div class="LoginDetailBox">
-						<% uiform.begin(); %>
-						<!--<form class="UIForm" id="$uicomponent.id" name="loginForm" action="<%= rcontext.getRequestContextPath() + "/login"%>" method="post" style="margin: 0px;">
-							<input type="hidden" name="<%= uiform.ACTION %>" value=""/>-->
+						<form class="UIForm" id="$uicomponent.id" name="loginForm" action="<%= rcontext.getRequestContextPath() + "/login"%>" method="post" style="margin: 0px;">
 							<input type="hidden" name="initialURI" value="<%=session.getAttribute("initialURI"); %>"/>
 							<div class="VerticalLayout">
 								<table class="UIFormGrid">
 									<tr class="UserNameField">
 										<td class="FieldLabel"><%=_ctx.appRes("UILoginForm.label.UserName")%></td>
-										<td><% uiform.renderChild(0)%></td>
+										<td><input class="UserName" name="username"/></td>
 									</tr>
 									<tr class="PasswordField" id="UIPortalLoginFormControl" onkeypress="eXo.portal.UIPortalControl.onEnterPress(event)">
 										<td class="FieldLabel"><%=_ctx.appRes("UILoginForm.label.password")%></td>
-										<td><% uiform.renderChild(1)%></td>
+										<td><input class="Password" type="password" name="password"/></td>
 									</tr> 								
 									<tr class="RememberField" onkeypress="eXo.portal.UIPortalControl.onEnterPress(event)">
-										<td class="FieldLabel"><% uiform.renderChild(2)%></td>
+										<td class="FieldLabel"><input type="checkbox" class="checkbox" value="true" name="rememberme"/></td>
 										<td><%=_ctx.appRes("UILoginForm.label.RememberOnComputer")%></td>
 									</tr>
 								</table>
@@ -69,7 +67,7 @@
 								</table>
 							</div> 
 						</div>
-						<%uiform.end()%>						
+						</form>					
 					</div>
 				</div>
 			</div>
@@ -84,7 +82,6 @@
 <script>
 	function login(ele) {
 		var formEle = eXo.core.DOMUtil.findAncestorByTagName(ele,'form');
-		formEle.action = eXo.env.portal.context + "/login";
 		formEle.submit();
 	}
 </script>

@@ -176,21 +176,33 @@ public class Component
 
    public Event getUIComponentEventConfig(String eventName) throws Exception
    {
-      if (eventMap != null)
+      if(eventMap == null)
+      {
+         synchronized(this)
+         {
+            if(eventMap == null)
+            {
+               eventMap = new HashMap<String, Event>();
+
+               if (events == null)
+               {
+                  return null;
+               }
+
+               for (Event event : events)
+               {
+                  createCachedEventListeners(event);
+                  eventMap.put(event.getName(), event);
+               }
+            }
+            
+            return eventMap.get(eventName);
+         }
+      }
+      else
       {
          return eventMap.get(eventName);
       }
-      eventMap = new HashMap<String, Event>();
-      if (events == null)
-      {
-         return null;
-      }
-      for (Event event : events)
-      {
-         createCachedEventListeners(event);
-         eventMap.put(event.getName(), event);
-      }
-      return eventMap.get(eventName);
    }
 
    public List<EventListener> getUIComponentEventListeners(String eventName) throws Exception

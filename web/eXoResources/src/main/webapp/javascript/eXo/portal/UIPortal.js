@@ -513,14 +513,17 @@ UIPortal.prototype.showLayoutModeForPortal = function(control) {
  */
 UIPortal.prototype.findUIComponentOf = function(element) {
   var DOMUtil = eXo.core.DOMUtil;
-  var parent = element.parentNode ;
-  while(parent != null) {
-    if(DOMUtil.hasClass(parent,'UIPortlet') || DOMUtil.hasClass(parent,'UIContainer') ||  
-       DOMUtil.hasClass(parent,'UIPageBody') ||  DOMUtil.hasClass(parent,'UIPortal'))  {
-      return parent ;
-    }
-    parent = parent.parentNode ;
+  var parent;
+  if (parent = DOMUtil.findAncestorByClass(element, "UIPortlet")) {
+    return parent;
+  } else if (parent = DOMUtil.findAncestorByClass(element, "UIContainer")) {
+    return parent;
+  } else if (parent = DOMUtil.findAncestorByClass(element, "UIPageBody")) {
+    return parent;
+  } else if (parent = DOMUtil.findAncestorByClass(element, "UIPortal")) {
+    return parent;
   }
+  
   return null ;
 };
 /**

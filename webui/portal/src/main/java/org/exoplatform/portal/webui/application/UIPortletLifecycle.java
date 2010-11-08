@@ -256,7 +256,7 @@ public class UIPortletLifecycle<S, C extends Serializable, I> extends Lifecycle<
                         {
                            for (Element element : markupElements)
                            {
-                              if ("title".equals(element.getNodeName().toLowerCase())
+                              if (!context.useAjax() && "title".equals(element.getNodeName().toLowerCase())
                                     && element.getFirstChild() != null)
                               {
                                  String title = element.getFirstChild().getTextContent();
@@ -264,7 +264,7 @@ public class UIPortletLifecycle<S, C extends Serializable, I> extends Lifecycle<
                               }
                               else
                               {
-                                 prcontext.addExtraMarkupHeader(element);
+                                 prcontext.addExtraMarkupHeader(element, uicomponent.getId());
                               }
                            }
                         }

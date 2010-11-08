@@ -122,6 +122,7 @@
 	padding-right: 18px; /* orientation=rt */
 	height: 22px;
 	line-height: 22px;
+	overflow: hidden;
 	background: url('/eXoResources/skin/DefaultSkin/skinIcons/16x16/icons/GrayNextArrow.gif') no-repeat left center; /* orientation=lt */
 	background: url('/eXoResources/skin/DefaultSkin/skinIcons/16x16/icons/GrayNextArrow-rt.gif') no-repeat right center; /* orientation=rt */
 }

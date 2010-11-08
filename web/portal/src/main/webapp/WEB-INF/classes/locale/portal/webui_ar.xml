@@ -84,13 +84,13 @@
 		<UITestForm>
 			<label>وجهات إضافة التطبيقات  </label>
 		</UITestForm>
-		<StringLengthValidator>
-			<msg>
-				<length-invalid> "{2}" يجب أن يكون لحصل "{0}" طوله بين "{1}" و
-				</length-invalid>
-			</msg>
-		</StringLengthValidator>
 	</EmptyFieldValidator>
+   <StringLengthValidator>
+      <msg>
+	   <length-invalid> "{2}" يجب أن يكون لحصل "{0}" طوله بين "{1}" و
+		   </length-invalid>
+		</msg>
+	</StringLengthValidator>
 	<!--
 		#############################################################################
 		# Email Address Validator #

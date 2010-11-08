@@ -108,7 +108,7 @@
 					</div> 
 					<% } %>
 					
-					<div class="ActionButton SimpleStyle" onclick="javascript: eXo.webui.UIPopupWindow.show('<%=uicomponent.getChild(UIPopupWindow.class).getId();%>');">
+					<div class="ActionButton SimpleStyle" onclick="javascript: eXo.webui.UIPopupWindow.show('<%=uicomponent.getChild(UIPopupWindow.class).getId();%>', true);">
 						<div class="ButtonLeft">
 							<div class="ButtonRight">
 								<div class="ButtonMiddle">

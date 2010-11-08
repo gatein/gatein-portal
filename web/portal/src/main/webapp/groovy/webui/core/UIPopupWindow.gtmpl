@@ -39,7 +39,7 @@
 				<div class="TopCenterDecorator">
 					<div class="OverflowContainer">
 						<div class="PopupTitleIcon"><span></span></div>
-						<%if( true) {%>
+						<%if (showCloseButton) {%>
 							<!-- <div class="CloseButton" title="Close Window" onclick="<%=uicomponent.event("ClosePopup")%>"><span></span></div> -->
 							<div class="CloseButton" title="<%=_ctx.appRes("UIPopupWindow.Close")%>" onclick="<%=uicomponent.event(uicomponent.getCloseEvent())%>"><span></span></div>
 						<% } else { %>

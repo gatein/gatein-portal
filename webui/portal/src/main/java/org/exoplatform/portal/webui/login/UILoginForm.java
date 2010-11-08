@@ -20,17 +20,13 @@
 package org.exoplatform.portal.webui.login;
 
 import org.exoplatform.portal.webui.workspace.UIMaskWorkspace;
-import org.exoplatform.web.login.InitiateLoginServlet;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
+import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
-import org.exoplatform.webui.form.UIForm;
-import org.exoplatform.webui.form.UIFormCheckBoxInput;
-import org.exoplatform.webui.form.UIFormStringInput;
-import org.exoplatform.webui.form.validator.MandatoryValidator;
 
 /**
  * Created by The eXo Platform SARL
@@ -38,58 +34,16 @@ import org.exoplatform.webui.form.validator.MandatoryValidator;
  *          nhudinhthuan@exoplatform.com
  * Jul 11, 2006  
  */
-@ComponentConfig(lifecycle = UIFormLifecycle.class, template = "system:/groovy/portal/webui/UILoginForm.gtmpl", events = {
-   //    @EventConfig(listeners = UILoginForm.SigninActionListener.class),
+@ComponentConfig(template = "system:/groovy/portal/webui/UILoginForm.gtmpl", events = {
    @EventConfig(phase = Phase.DECODE, listeners = UIMaskWorkspace.CloseActionListener.class),
    @EventConfig(phase = Phase.DECODE, listeners = UILoginForm.ForgetPasswordActionListener.class)})
-public class UILoginForm extends UIForm
+public class UILoginForm extends UIComponent
 {
-   final static String USER_NAME = "username";
-
-   final static String PASSWORD = "password";
 
    public UILoginForm() throws Exception
    {
-      addUIFormInput(new UIFormStringInput(USER_NAME, USER_NAME, null).addValidator(MandatoryValidator.class))
-         .addUIFormInput(
-            new UIFormStringInput(PASSWORD, PASSWORD, null).setType(UIFormStringInput.PASSWORD_TYPE).addValidator(
-               MandatoryValidator.class));
-      addUIFormInput(new UIFormCheckBoxInput<String>(InitiateLoginServlet.COOKIE_NAME,
-         InitiateLoginServlet.COOKIE_NAME, Boolean.TRUE.toString()));
    }
 
-   static public class SigninActionListener extends EventListener<UILoginForm>
-   {
-
-      public void execute(Event<UILoginForm> event) throws Exception
-      {
-         //      UILoginForm uiForm = event.getSource();
-         //      String username = uiForm.getUIStringInput(USER_NAME).getValue();
-         //      String password = uiForm.getUIStringInput(PASSWORD).getValue();      
-         //      OrganizationService orgService = uiForm.getApplicationComponent(OrganizationService.class);      
-         //      boolean authentication = orgService.getUserHandler().authenticate(username, password);
-         //      if(!authentication){
-         //        throw new MessageException(new ApplicationMessage("UILoginForm.msg.Invalid-account", null));
-         //      }        
-         //      PortalRequestContext prContext = Util.getPortalRequestContext();
-         //      HttpServletRequest request = prContext.getRequest();
-         //      HttpSession session = request.getSession();
-         //      session.setAttribute("authentication.username", username);
-         //      session.setAttribute("authentication.password", password);
-         //      UIPortal uiPortal = Util.getUIPortal();
-         //      prContext.setResponseComplete(true);  
-         //      String portalName = uiPortal.getName() ;
-         //      HttpServletRequestWrapper wrapper = new HttpServletRequestWrapper(request) ;
-         //      wrapper.getParameterMap().put("username", username) ;
-         //      wrapper.getParameterMap().put("password", password) ;
-         //      portalName = URLEncoder.encode(portalName, "UTF-8") ;
-         //      String redirect = request.getContextPath() + "/private/" + portalName + "/";
-         //      prContext.getResponse().sendRedirect(redirect);      
-      }
-
-   }
-
-   //TODO: dang.tung - forget password
    static public class ForgetPasswordActionListener extends EventListener<UILoginForm>
    {
       public void execute(Event<UILoginForm> event) throws Exception
@@ -100,4 +54,18 @@ public class UILoginForm extends UIForm
          event.getRequestContext().addUIComponentToUpdateByAjax(uiLogin);
       }
    }
+
+   @Override
+   public void processDecode(WebuiRequestContext context) throws Exception
+   {
+      super.processDecode(context);
+      String action = context.getRequestParameter(context.getActionParameterName());
+      Event<UIComponent> event = createEvent(action, Event.Phase.DECODE, context);
+      if (event != null)
+      {
+         event.broadcast();
+      }
+   }
+   
+   
 }

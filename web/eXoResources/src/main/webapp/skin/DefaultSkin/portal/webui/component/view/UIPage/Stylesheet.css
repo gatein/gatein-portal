@@ -26,6 +26,7 @@
 .UIPageBody .PageLayoutDecorator	{
 	padding: 0px;
 	margin: 0px 2px auto 2px;
+	overflow: hidden;
 }
 
 .UIPageBody .PageLayoutDecorator .MiddlePageBG {

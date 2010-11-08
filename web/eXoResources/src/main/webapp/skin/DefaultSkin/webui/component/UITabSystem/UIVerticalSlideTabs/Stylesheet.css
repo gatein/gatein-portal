@@ -225,7 +225,7 @@
 }
 
 .UIVerticalSlideTabs .VTabStyle4 .SelectedTab {
-	background: transparent url(background/VTabStyle4.gif) repeat-x left top;
+	background: #dadada url(background/VTabStyle4.gif) repeat-x left top;
 	line-height: 21px;
 	padding: 0px 0px 0px 8px;
 	cursor: pointer;

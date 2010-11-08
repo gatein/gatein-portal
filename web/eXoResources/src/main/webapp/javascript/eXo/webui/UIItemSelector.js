@@ -114,7 +114,7 @@ UIItemSelector.prototype.onClickOption = function(clickedElement, form, componen
 
 /*TODO: Review This Function (Ha's comment)*/
 UIItemSelector.prototype.beforeActionHappen = function(selectedItem) {
-  DOMUtil = eXo.core.DOMUtil;
+  var DOMUtil = eXo.core.DOMUtil;
   this.uiItemSelector = DOMUtil.findAncestorByClass(selectedItem, "UIItemSelector");
   this.itemList = DOMUtil.findAncestorByClass(selectedItem, "ItemList");
   this.itemListContainer = DOMUtil.findAncestorByClass(selectedItem, "ItemListContainer") ;

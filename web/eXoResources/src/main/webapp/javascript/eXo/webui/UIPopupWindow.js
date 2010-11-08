@@ -69,17 +69,20 @@ UIPopupWindow.prototype.init = function(popupId, isShow, isResizable, showCloseB
 
 UIPopupWindow.prototype.showMask = function(popup, isShowPopup) {
 	var mask = popup.previousSibling;
+  //Make sure mask is not TextNode because of previousSibling property
+	if (mask && mask.className != "MaskLayer") {
+		mask = null;
+	}
 	if(isShowPopup) {
 		//Modal if popup is portal component
 		if (eXo.core.DOMUtil.findAncestorByClass(popup, "PORTLET-FRAGMENT") == null) {
-			eXo.core.UIMaskLayer.createMask(popup.parentNode, popup, 1) ;
+			if(!mask) eXo.core.UIMaskLayer.createMask(popup.parentNode, popup, 1) ;
 		} else {
-		//If popup is portlet's component, modal with just its parent
-			eXo.core.UIMaskLayer.createMaskForFrame(popup.parentNode, popup, 1) ;				
+			//If popup is portlet's component, modal with just its parent
+			if(!mask) eXo.core.UIMaskLayer.createMaskForFrame(popup.parentNode, popup, 1) ;				
 		}
-	} else {
-		//Make sure mask is not TextNode because of previousSibling property
-		if(mask != null && mask.className == "MaskLayer")	eXo.core.UIMaskLayer.removeMask(mask) ;			
+	} else {		
+		if(mask) eXo.core.UIMaskLayer.removeMask(mask) ;			
 	}
 } ;
 

@@ -102,7 +102,7 @@ UIVerticalSlideTabs.prototype.onResize = function(uiVerticalSlideTabs, width, he
     var controlArea = eXo.core.DOMUtil.findFirstDescendantByClass(uiVTab, "div", "ControlArea");
     var controlAreaHeight = 0 ;
     if(controlArea != null)  controlAreaHeight = controlArea.offsetHeight ;
-    scrollArea = eXo.core.DOMUtil.findFirstDescendantByClass(uiVTab, "div", "ScrollArea");
+    var scrollArea = eXo.core.DOMUtil.findFirstDescendantByClass(uiVTab, "div", "ScrollArea");
     if(scrollArea != null) {
       scrollArea.style.height = (height - controlAreaHeight - totalTabHeight - 35) + "px" ;
     }

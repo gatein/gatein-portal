@@ -19,15 +19,17 @@
 
 package org.exoplatform.webui.core;
 
+import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.commons.utils.EmptySerializablePageList;
 import org.exoplatform.commons.utils.PageList;
-import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * A component that allows pagination, with an iterator to change pages
@@ -42,6 +44,8 @@ public class UIPageIterator extends UIComponent
     */
    private PageList pageList_ = EmptySerializablePageList.get();
 
+   private Set<String> selectedItems = new HashSet<String>();
+   
    public UIPageIterator()
    {
    }
@@ -94,6 +98,28 @@ public class UIPageIterator extends UIComponent
    public void setCurrentPage(int page) throws Exception
    {
       pageList_.getPage(page);
+   }
+   
+   public void setSelectedItem(String key, boolean value)
+   {
+      if (value == false && this.selectedItems.contains(key))
+      {
+         selectedItems.remove(key);
+      }
+      else if (value)
+      {
+         selectedItems.add(key);
+      }
+   }
+   
+   public Set<String> getSelectedItems()
+   {
+      return selectedItems;
+   }
+   
+   public boolean isSelectedItem(String key)
+   {
+      return selectedItems.contains(key);
    }
 
    @SuppressWarnings("unused")

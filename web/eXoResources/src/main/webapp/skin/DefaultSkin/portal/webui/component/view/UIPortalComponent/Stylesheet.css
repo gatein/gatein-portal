@@ -189,8 +189,8 @@
 	float: right; /* orientation=rt */
 	width: 22px; height: 16px;
 	background: url('background/Pen.gif') no-repeat top;
-	margin: 4px 2px 0px 0px; /* orientation=lt */
-	margin: 4px 0px 0px 2px; /* orientation=rt */
+	margin: 4px 0px 0px 2px; /* orientation=lt */
+	margin: 4px 2px 0px 0px; /* orientation=rt */
 }
 
 .UIContainer .DeleteContainerIcon {
@@ -211,6 +211,29 @@
 	margin: 3px 0px 0px 5px; /* orientation=lt */
 	margin: 3px 5px 0px 0px; /* orientation=rt */
 	background: url('background/DefaultContainerIcon.png') no-repeat;
+}
+
+.UIColumnContainer .ControlIcon {
+  float: right;/* orientation=lt */
+  float: left;/* orientation=rt */
+  width: 28px; 
+  height: 20px;
+  cursor: pointer;
+  background: url('/eXoResources/skin/PortletThemes/background/DefaultTheme.png') no-repeat center;
+}
+
+.UIColumnContainer .EditContainerIcon {
+	margin-left: 0px; /* orientation=lt */
+	margin-right: 0px; /* orientation=rt */
+}
+
+.UIColumnContainer .ArrowDownIcon {
+	float: left; /* orientation=lt */
+	float: right; /* orientation=rt */
+	width: 22px; height: 16px; 
+	background: url('background/ArrowDown.gif') no-repeat center top;
+	margin: 4px 0px 0px 2px; /* orientation=lt */
+	margin: 4px 2px 0px 0px; /* orientation=rt */
 }
 
 .UIPortal .LAYOUT-PORTAL {

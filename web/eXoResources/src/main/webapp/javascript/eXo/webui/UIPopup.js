@@ -72,7 +72,7 @@ UIPopup.prototype.show = function(popup) {
 	
 	var uiMaskWS = document.getElementById("UIMaskWorkspace");
 	if(uiMaskWS) {
-		uiMaskWSzIndex = eXo.core.DOMUtil.getStyle(uiMaskWS, "zIndex");
+		var uiMaskWSzIndex = eXo.core.DOMUtil.getStyle(uiMaskWS, "zIndex");
 		if(uiMaskWSzIndex && (uiMaskWSzIndex > eXo.webui.UIPopup.zIndex))	{
 			eXo.webui.UIPopup.zIndex = uiMaskWSzIndex;
 		}

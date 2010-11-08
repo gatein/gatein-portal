@@ -411,8 +411,7 @@ DOMUtil.prototype.getElementsBy = function(method, tag, root, apply) {
     return [];
   }
 
-  var nodes = [],
-    elements = root.getElementsByTagName(tag);
+  var nodes = [], elements = root.getElementsByTagName(tag);
 
   for (var i = 0, len = elements.length; i < len; ++i) {
     if ( method(elements[i]) ) {

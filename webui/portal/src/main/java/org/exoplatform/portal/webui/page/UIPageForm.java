@@ -32,6 +32,7 @@ import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.webui.application.UIPortlet;
 import org.exoplatform.portal.webui.container.UIContainer;
+import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.portal.UIPortalComponent;
 import org.exoplatform.portal.webui.portal.UIPortalComposer;
 import org.exoplatform.portal.webui.util.PortalDataMapper;
@@ -90,6 +91,8 @@ public class UIPageForm extends UIFormTabPane
    protected UIFormInputSet uiPermissionSetting;
 
    protected UIFormSelectBox groupIdSelectBox = null;
+   
+   protected UIFormSelectBox portalIdSelectBox = null;
 
    protected UIFormStringInput ownerIdInput = null;
 
@@ -106,14 +109,6 @@ public class UIPageForm extends UIFormTabPane
       List<SelectItemOption<String>> ownerTypes = new ArrayList<SelectItemOption<String>>();
       ownerTypes.add(new SelectItemOption<String>(PortalConfig.USER_TYPE));
 
-      UserPortalConfig userPortalConfig =
-         configService.getUserPortalConfig(pcontext.getPortalOwner(), pcontext.getRemoteUser());
-      ExoContainer container = ExoContainerContext.getCurrentContainer();
-      UserACL acl = (UserACL)container.getComponentInstanceOfType(UserACL.class);
-      if (acl.hasEditPermission(userPortalConfig.getPortalConfig()))
-      {
-         ownerTypes.add(new SelectItemOption<String>(PortalConfig.PORTAL_TYPE));
-      }
       ownerIdInput = new UIFormStringInput(OWNER_ID, OWNER_ID, null);
       ownerIdInput.setEditable(false).setValue(pcontext.getRemoteUser());
 
@@ -153,6 +148,27 @@ public class UIPageForm extends UIFormTabPane
       //TODO: This following line is fixed for bug PORTAL-2127
       uiListPermissionSelector.getChild(UIFormPopupWindow.class).setId("UIPageFormPopupGroupMembershipSelector");
 
+      List<String> portals = configService.getAllPortalNames();
+      Collections.sort(portals);
+      List<SelectItemOption<String>> portalsItem = new ArrayList<SelectItemOption<String>>();
+      ExoContainer container = ExoContainerContext.getCurrentContainer();
+      UserACL acl = (UserACL)container.getComponentInstanceOfType(UserACL.class);
+      for (String p : portals)
+      {
+         UserPortalConfig userPortalConfig = configService.getUserPortalConfig(p, pcontext.getRemoteUser());
+         if (acl.hasEditPermission(userPortalConfig.getPortalConfig()))
+         {
+            portalsItem.add(new SelectItemOption<String>(p));
+         }
+      }
+      if(portalsItem.size() > 0)
+      {
+         ownerTypes.add(new SelectItemOption<String>(PortalConfig.PORTAL_TYPE));
+         portalIdSelectBox = new UIFormSelectBox(OWNER_ID, OWNER_ID, portalsItem);
+         portalIdSelectBox.setOnChange("ChangeOwnerId");
+         portalIdSelectBox.setParent(uiSettingSet);
+      }
+      
       List<String> groups = configService.getMakableNavigations(pcontext.getRemoteUser(), true);
       if (groups.size() > 0)
       {
@@ -167,6 +183,7 @@ public class UIPageForm extends UIFormTabPane
          groupIdSelectBox.setOnChange("ChangeOwnerId");
          groupIdSelectBox.setParent(uiSettingSet);
       }
+
       setActions(new String[]{"Save", "Close"});
    }
 
@@ -206,11 +223,6 @@ public class UIPageForm extends UIFormTabPane
          return;
       }
       uiTemplate.setValue(uiPage.getFactoryId());
-   }
-
-   public void setEditPermission(String per)
-   {
-
    }
 
    public void invokeSetBindingBean(Object bean) throws Exception
@@ -306,14 +318,8 @@ public class UIPageForm extends UIFormTabPane
             page.setChildren(applications);
 
             PortalDataMapper.toUIPage(uiPage, page);
-            //        if(page.getTemplate() == null) page.setTemplate(uiPage.getTemplate()) ;
             if (page.getChildren() == null)
                page.setChildren(new ArrayList<ModelObject>());
-
-            //        uiEditBar.setUIPage(uiPage);
-            //        Class<?> [] childrenToRender = {UIPageEditBar.class,
-            //            UIPageNodeSelector.class, UIPageNavigationControlBar.class};      
-            //        uiManagement.setRenderedChildrenOfTypes(childrenToRender);
 
             pcontext.setFullRender(true);
             UIWorkingWorkspace uiWorkingWS = uiPortalApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
@@ -328,7 +334,6 @@ public class UIPageForm extends UIFormTabPane
             page.setChildren(applications);
 
             PortalDataMapper.toUIPage(uiPage, page);
-            //        if(page.getTemplate() == null) page.setTemplate(uiPage.getTemplate()) ;
             if (page.getChildren() == null)
                page.setChildren(new ArrayList<ModelObject>());
 
@@ -372,7 +377,6 @@ public class UIPageForm extends UIFormTabPane
          }
          
          uiPage.setStorageId(storageId);
-         //      if(page.getTemplate() == null) page.setTemplate(uiPage.getTemplate()) ;
          if (page.getChildren() == null)
             page.setChildren(new ArrayList<ModelObject>());
       }
@@ -418,12 +422,28 @@ public class UIPageForm extends UIFormTabPane
             if (PortalConfig.PORTAL_TYPE.equals(ownerType))
             {
                list.remove(2);
-               list.add(2, uiForm.ownerIdInput);
-               uiForm.ownerIdInput.setValue(prContext.getPortalOwner());
-               uiForm.findFirstComponentOfType(UIListPermissionSelector.class).setValue(
-                  Util.getUIPortal().getAccessPermissions());
-               uiForm.findFirstComponentOfType(UIPermissionSelector.class).setValue(
-                  Util.getUIPortal().getEditPermission());
+               list.add(2, uiForm.portalIdSelectBox);
+               String portalIdSelected = uiForm.portalIdSelectBox.getValue();
+               String[] accessPermissions = {};
+               String editPermission = "";
+               
+               UserPortalConfigService service = uiForm.getApplicationComponent(UserPortalConfigService.class);
+               UserPortalConfig userConfig = service.getUserPortalConfig(portalIdSelected, prContext.getRemoteUser());
+               if (userConfig != null)
+               {
+                  PortalConfig config = userConfig.getPortalConfig();
+                  accessPermissions = config.getAccessPermissions();
+                  editPermission = config.getEditPermission();
+               }
+               else
+               {
+                  UIPortal uiPortal = Util.getUIPortalApplication().getCachedUIPortal(ownerType, portalIdSelected);
+                  accessPermissions = uiPortal.getAccessPermissions();
+                  editPermission = uiPortal.getEditPermission();
+               }
+               
+               uiForm.findFirstComponentOfType(UIListPermissionSelector.class).setValue(accessPermissions);
+               uiForm.findFirstComponentOfType(UIPermissionSelector.class).setValue(editPermission);
             }
             else
             {
@@ -447,13 +467,33 @@ public class UIPageForm extends UIFormTabPane
       public void execute(Event<UIPageForm> event) throws Exception
       {
          UIPageForm uiForm = event.getSource();
-         String groupIdSelected = uiForm.groupIdSelectBox.getValue();
-         groupIdSelected = groupIdSelected.startsWith("/") ? groupIdSelected : "/" + groupIdSelected;
-         String permission = "*:" + groupIdSelected;
-         uiForm.findFirstComponentOfType(UIListPermissionSelector.class).setValue(new String[]{permission});
-         UserACL userACL = uiForm.getApplicationComponent(UserACL.class);         
-         permission = userACL.getMakableMT() + ":" + groupIdSelected;
-         uiForm.findFirstComponentOfType(UIPermissionSelector.class).setValue(permission);
+         UIFormSelectBox uiSelectBox = uiForm.getUIFormSelectBox(OWNER_TYPE);
+         String ownerType = uiSelectBox.getValue();
+         if(PortalConfig.PORTAL_TYPE.equals(ownerType)) {
+            String[] accessPermissions = {};
+            String editPermission = "";
+            String portalIdSelected = uiForm.portalIdSelectBox.getValue();
+            UserPortalConfigService service = uiForm.getApplicationComponent(UserPortalConfigService.class);
+            UserPortalConfig userConfig = service.getUserPortalConfig(portalIdSelected, Util.getPortalRequestContext().getRemoteUser());
+            if (userConfig != null)
+            {
+               PortalConfig config = userConfig.getPortalConfig();
+               accessPermissions = config.getAccessPermissions();
+               editPermission = config.getEditPermission();
+               uiForm.findFirstComponentOfType(UIListPermissionSelector.class).setValue(accessPermissions);
+               uiForm.findFirstComponentOfType(UIPermissionSelector.class).setValue(editPermission);
+            }
+         }
+         else
+         {
+            String groupIdSelected = uiForm.groupIdSelectBox.getValue();
+            groupIdSelected = groupIdSelected.startsWith("/") ? groupIdSelected : "/" + groupIdSelected;
+            String permission = "*:" + groupIdSelected;
+            uiForm.findFirstComponentOfType(UIListPermissionSelector.class).setValue(new String[]{permission});
+            UserACL userACL = uiForm.getApplicationComponent(UserACL.class);         
+            permission = userACL.getMakableMT() + ":" + groupIdSelected;
+            uiForm.findFirstComponentOfType(UIPermissionSelector.class).setValue(permission);
+         }
          event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent());
       }
    }
@@ -463,13 +503,6 @@ public class UIPageForm extends UIFormTabPane
       public void execute(Event<UIGroupMembershipSelector> event) throws Exception
       {
          UIPageForm uiForm = event.getSource().getAncestorOfType(UIPageForm.class);
-         /*if (!uiForm.getUIStringInput(OWNER_TYPE).getValue().equals(PortalConfig.GROUP_TYPE))
-            return;
-         String editPer = uiForm.findFirstComponentOfType(UIPermissionSelector.class).getValue();
-         if (editPer == null || editPer.length() < 1)
-            return;
-         String group = editPer.substring(editPer.indexOf("/") + 1);
-         uiForm.ownerIdInput.setValue(group);*/
          event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent());
       }
    }

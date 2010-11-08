@@ -60,7 +60,8 @@ public class UIUserToolBarSitePortlet extends UIPortletApplication
 
    public String getPortalURI(String portalName)
    {
-      return Util.getPortalRequestContext().getPortalURI().replace(getCurrentPortal(), portalName);
+      String currentPortalURI = Util.getPortalRequestContext().getPortalURI();
+      return currentPortalURI.substring(0, currentPortalURI.lastIndexOf(getCurrentPortal())) + portalName + "/";
    }
 
    public PageNavigation getCurrentPortalNavigation() throws Exception

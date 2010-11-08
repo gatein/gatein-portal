@@ -355,6 +355,7 @@
 	color: black;
 	text-align: right; /* orientation=lt */
 	text-align: left;	/* orientation=rt */
+	word-wrap: break-word;
 }
 
 .UIApplicationRegistryPortlet .ApplicationContentLabel .RightLabel {
@@ -516,6 +517,14 @@
 	width: 90%;
 }
 
+.UIGadgetManagement .GadgetCategory .UIFormGrid {
+   width: 100%;
+}
+
 .UIGadgetManagement .UIGadgetEditor .HorizontalLayout input {
 	width: 97%;
+}
+
+.UIGadgetManagement .GadgetCategory .UIFormGrid {
+	width: 100%;
 }

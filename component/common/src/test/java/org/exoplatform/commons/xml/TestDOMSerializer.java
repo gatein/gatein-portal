@@ -58,6 +58,16 @@ public class TestDOMSerializer extends TestCase
    {
       assertSerialization("<meta http-equiv=\"Content-Type\"/>", "<meta http-equiv='Content-Type'></meta>");
    }
+   
+   public void testOrdinaryTextElement() throws Exception
+   {
+      assertSerialization("<div>Blah Blah</div>", "<div>Blah Blah</div>");
+   }
+   
+   public void testCDATaElement() throws Exception
+   {
+      assertSerialization("<div><![CDATA[Test Content]]></div>", "<div><![CDATA[Test Content]]></div>");
+   }
 
    private void assertSerialization(String expectedMarkup, String markup) throws Exception
    {

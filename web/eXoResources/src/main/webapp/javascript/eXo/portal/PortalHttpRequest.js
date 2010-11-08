@@ -133,12 +133,24 @@ function PortalResponse(responseDiv) {
         this.blocksToUpdate[j].scripts = eXo.core.DOMUtil.findDescendantsByTagName(dataBlocks[1], "script") ;
         
       }
+    } else if(div[i].className == "MarkupHeadElements") {
+      this.markupHeadElements = new MarkupHeadElements(div[i]);    
     } else if(div[i].className == "PortalResponseScript") {
       this.script = div[i].innerHTML ;
 			div[i].style.display = "none" ;
     }
   }
 };
+
+function MarkupHeadElements(fragment) {
+	var  DOMUtil = eXo.core.DOMUtil ;
+	this.titles = DOMUtil.findDescendantsByTagName(fragment, "title");
+	this.bases = DOMUtil.findDescendantsByTagName(fragment, "base") ;
+	this.links = DOMUtil.findDescendantsByTagName(fragment, "link") ;
+	this.metas = DOMUtil.findDescendantsByTagName(fragment, "meta") ;
+	this.scripts = DOMUtil.findDescendantsByTagName(fragment, "script") ;		
+	this.styles = DOMUtil.findDescendantsByTagName(fragment, "style") ;
+}
 
 /*
 * This function is used to dynamically append a script to the head tag
@@ -158,7 +170,7 @@ function appendScriptToHead(scriptId, scriptElement) {
   
   //check if contains source attribute
   if(scriptElement.src) {
-    script.src = scriptElement.src
+    script.src = scriptElement.src;
   } else {
   	script.text = scriptElement.innerHTML;
   }
@@ -409,6 +421,89 @@ function HttpResponseHandler(){
 		  }
 	  } 
 	} ;
+	
+	instance.updateHtmlHead = function(response) {
+		cleanHtmlHead(response);
+		
+		var DOMUtil = eXo.core.DOMUtil;
+		var head = document.getElementsByTagName("head")[0]; 								
+		var markupHeadElements = response.markupHeadElements;		
+		
+		if (markupHeadElements.titles.length != 0) {
+			var oldTitle = DOMUtil.getChildrenByTagName(head, "title")[0];
+			var newTitle = markupHeadElements.titles[markupHeadElements.titles.length - 1];
+			if (oldTitle) {
+				head.replaceChild(newTitle, oldTitle);
+			} else {
+				head.appendChild(newTitle);
+			}
+		}			
+		
+		appendElementsToHead(markupHeadElements.metas);
+    		appendElementsToHead(markupHeadElements.bases);
+		appendElementsToHead(markupHeadElements.links);				
+		appendElementsToHead(markupHeadElements.styles);
+		appendElementsToHead(markupHeadElements.scripts);
+	};
+	
+	function cleanHtmlHead(response) {
+		var DOMUtil = eXo.core.DOMUtil;
+		var head = document.getElementsByTagName("head")[0];		
+		
+		var portletResponses = response.portletResponses;
+		if (portletResponses != null) {
+			for (var i = 0; i < portletResponses.length; i++) {
+				removeExtraHead(portletResponses[i].portletId);
+			}
+		}
+		
+		var portletFragments = DOMUtil.findDescendantsByClass(response.data, "div", "PORTLET-FRAGMENT");
+		for (var i = 0; i < portletFragments.length; i++) {
+			removeExtraHead(portletFragments[i].parentNode.id);
+		}
+		
+		var uiWorkingWorkspace = document.getElementById("UIWorkingWorkspace") ;
+		var portletFragsInWS = DOMUtil.findDescendantsByClass(uiWorkingWorkspace, "div", "PORTLET-FRAGMENT");		
+		var exHeads = DOMUtil.getElementsBy(function(elem) {
+			return elem.tagName != "TITLE" && elem.className.indexOf("ExHead-") == 0;
+		}, "*", head);
+		
+		for (var i = 0; i < exHeads.length; i++) {
+			var portletId = exHeads[i].className.substring(7);
+			var del = true;
+			for (var j = 0; j < portletFragsInWS.length; j++) {
+				if (portletId == portletFragsInWS[j].parentNode.id) {
+					del = false;
+					break;
+				}
+			}
+			if (del) {
+				head.removeChild(exHeads[i]);
+			}
+		}
+	}
+	
+	function removeExtraHead(portletId) {
+		var DOMUtil = eXo.core.DOMUtil;
+		var head = document.getElementsByTagName("head")[0];
+		
+		var elemsToRemove = DOMUtil.getElementsBy(function(elem) {
+			return elem.tagName != "TITLE" && elem.className == "ExHead-" + portletId;
+		}, "*", head);
+		
+		for (var i = 0; i < elemsToRemove.length; i++) {
+			head.removeChild(elemsToRemove[i]);
+		}
+	}
+	
+	function appendElementsToHead(elements) {
+		var head = document.getElementsByTagName("head")[0]; 
+		
+		for (var i = 0; i < elements.length; i++) {
+			head.appendChild(elements[i]);
+		}
+	}
+	
 	/*
 	* This methods will replace some block content by new one. 
 	* This is the important concept in any AJAX call where JS is used to dynamically
@@ -460,7 +555,7 @@ function HttpResponseHandler(){
 	  eXo.portal.AjaxRequest.maskLayer = null ;
 	  eXo.portal.CurrentRequest = null ;
 	  window.location.reload() ;
-	}
+	};
 	
 	/*
 	* This method is called when the AJAX call is completed and that the request.responseText
@@ -520,6 +615,7 @@ function HttpResponseHandler(){
 	  }
 	  //Handle the portal responses
 	  instance.updateBlocks(response.blocksToUpdate) ;
+	  instance.updateHtmlHead(response);
 	  instance.executeScript(response.script) ;
 	  /**
        * Clears the instance.to timeout if the request takes less time than expected to get response
@@ -548,7 +644,6 @@ function HttpResponseHandler(){
 		 * Modified by Truong LE to avoid double click problem
 		 */		
 		 
-		Browser = eXo.core.Browser; 
 		if(eXo.portal.AjaxRequest.maskLayer == null ){
 			eXo.portal.AjaxRequest.maskLayer = eXo.core.UIMaskLayer.createTransparentMask();
 		}
@@ -557,7 +652,7 @@ function HttpResponseHandler(){
 				eXo.core.UIMaskLayer.showAjaxLoading(eXo.portal.AjaxRequest.maskLayer);			   
 			}
 		}, 2000);
-	}
+	};
 	
 	return instance ;
 } ;

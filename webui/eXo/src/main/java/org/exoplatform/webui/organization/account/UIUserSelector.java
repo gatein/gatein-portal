@@ -41,18 +41,20 @@ import org.exoplatform.webui.core.UITree;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
+import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -119,7 +121,7 @@ public class UIUserSelector extends UIForm implements UIPopupComponent
       uiIterator_ = new UIPageIterator();
       uiIterator_.setPageList(objPageList);
       uiIterator_.setId("UISelectUserPage");
-
+      
       // create group selector
       UIPopupWindow uiPopup = addChild(UIPopupWindow.class, null, "UIPopupGroupSelector");
       uiPopup.setWindowSize(540, 0);
@@ -138,8 +140,14 @@ public class UIUserSelector extends UIForm implements UIPopupComponent
          for (Object obj : uiIterator_.getCurrentPageData())
          {
             User user = (User)obj;
-            if (getUIFormCheckBoxInput(user.getUserName()) == null)
-               addUIFormInput(new UIFormCheckBoxInput<Boolean>(user.getUserName(), user.getUserName(), false));
+            UIFormCheckBoxInput<Boolean> uiFormCheckBoxInput = getUIFormCheckBoxInput(user.getUserName());
+            if (uiFormCheckBoxInput == null)
+            {
+               uiFormCheckBoxInput = new UIFormCheckBoxInput<Boolean>(user.getUserName(), user.getUserName(), false);
+               addUIFormInput(uiFormCheckBoxInput);
+            }
+            
+            uiFormCheckBoxInput.setChecked(uiIterator_.isSelectedItem(user.getUserName()));
          }
       }
       return new ArrayList<User>(uiIterator_.getCurrentPageData());
@@ -315,31 +323,32 @@ public class UIUserSelector extends UIForm implements UIPopupComponent
 
    static public class AddActionListener extends EventListener<UIUserSelector>
    {
-      @SuppressWarnings("unchecked")
       public void execute(Event<UIUserSelector> event) throws Exception
       {
          UIUserSelector uiForm = event.getSource();
          StringBuilder sb = new StringBuilder();
-         int count = 0;
-         for (Object o : uiForm.uiIterator_.getCurrentPageData())
-         {
-            User u = (User)o;
-            UIFormCheckBoxInput input = uiForm.getUIFormCheckBoxInput(u.getUserName());
-            if (input != null && input.isChecked())
-            {
-               count++;
-               if (sb.toString() != null && sb.toString().trim().length() != 0)
-                  sb.append(",");
-               sb.append(u.getUserName());
-            }
-         }
-         if (count == 0)
+         
+         uiForm.setSelectedItem();
+         
+         // get item from selected item map
+         Set<String> items = uiForm.uiIterator_.getSelectedItems();
+         if (items.size() == 0)
          {
             UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class);
             uiApp.addMessage(new ApplicationMessage("UIUserSelector.msg.user-required", null));
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
             return;
          }
+         String[] arrItems = items.toArray(new String[items.size()]);
+         Arrays.sort(arrItems);
+         
+         for (String key : arrItems)
+         {
+            if (sb.toString() != null && sb.toString().trim().length() != 0)
+               sb.append(",");
+            sb.append(key);
+         }
+         
          uiForm.setSelectedUsers(sb.toString());
          uiForm.<UIComponent> getParent().broadcast(event, event.getExecutionPhase());
       }
@@ -378,6 +387,19 @@ public class UIUserSelector extends UIForm implements UIPopupComponent
    public void setKeyword(String value)
    {
       getUIStringInput(FIELD_KEYWORD).setValue(value);
+   }
+   
+   private void setSelectedItem() throws Exception
+   {
+      for (Object o : this.uiIterator_.getCurrentPageData())
+      {
+         User u = (User) o;
+         UIFormCheckBoxInput input = this.getUIFormCheckBoxInput(u.getUserName());
+         if (input != null)
+         {
+            this.uiIterator_.setSelectedItem(u.getUserName(), input.isChecked());
+         }
+      }
    }
 
    static public class SelectGroupActionListener extends EventListener<UIGroupSelector>
@@ -457,6 +479,8 @@ public class UIUserSelector extends UIForm implements UIPopupComponent
       public void execute(Event<UIUserSelector> event) throws Exception
       {
          UIUserSelector uiSelectUserForm = event.getSource();
+         uiSelectUserForm.setSelectedItem();
+         
          int page = Integer.parseInt(event.getRequestContext().getRequestParameter(OBJECTID));
          uiSelectUserForm.updateCurrentPage(page);
          event.getRequestContext().addUIComponentToUpdateByAjax(uiSelectUserForm);

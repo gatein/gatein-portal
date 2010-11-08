@@ -40,6 +40,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * May 10, 2006
@@ -55,8 +56,16 @@ public class ConfigurationManager
     * <p/>
     * The components of which we manage the configuration
     */
-   private Map<String, Component> configs_ = new HashMap<String, Component>();
+   //private Map<String, Component> configs_ = new HashMap<String, Component>();
 
+   /**
+    * Minh Hoang TO: First attempt to synchronize the map, we simply replace HashMap with ConcurrentHashMap
+    * and default values for load factor, initial capacity and concurrentcyLevel
+    * 
+    * TODO: Need to examine the performance influence in the future for a better synchronizing 
+    */
+   private Map<String, Component> configs_ = new ConcurrentHashMap<String, Component>();
+   
    /** The logger. */
    private final Logger log;
 

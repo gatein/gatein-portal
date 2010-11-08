@@ -65,6 +65,7 @@ public class UIPageSelector2 extends UIFormInputContainer<String>
       super("UIPageSelector2", null);
       UIFormPopupWindow uiPopup = addChild(UIFormPopupWindow.class, null, "PopupPageSelector2");
       uiPopup.setWindowSize(900, 400);
+      uiPopup.setShowMask(true);
       uiPopup.setRendered(false);
       UIPageBrowser uiPageBrowser = createUIComponent(UIPageBrowser.class, "SelectPage", null);
       uiPopup.setUIComponent(uiPageBrowser);

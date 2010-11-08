@@ -19,6 +19,7 @@
 
 package org.exoplatform.web;
 
+import org.exoplatform.commons.utils.PropertyManager;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
@@ -140,7 +141,19 @@ public class GenericHttpListener extends AbstractHttpSessionListener implements 
             PortalContainer.setInstance(portalContainer);
             hasBeenSet = true;
          }
-         broadcast(portalContainer, CONTEXT_DESTROYED, event);
+         final String ctxName = event.getServletContext().getServletContextName();
+         if (!PortalContainer.isPortalContainerNameDisabled(ctxName) && portalContainer instanceof PortalContainer)
+         {
+            // The portal container corresponding to the current servlet context could be found
+            broadcast(portalContainer, CONTEXT_DESTROYED, event);
+         }
+         else if (PropertyManager.isDevelopping())
+         {
+            log.info("The portal environment could not be set for the webapp '" + ctxName
+                  + "' because this servlet context has not been defined as a "
+                  + "dependency of any portal container or it is a disabled portal"
+                  + " container, the contextDestroyed event will be ignored");
+         }
       }
       catch (Exception ex)
       {
