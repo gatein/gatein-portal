@@ -1,0 +1,480 @@
+<!--
+  ~ JBoss, Home of Professional Open Source.
+  ~ Copyright 2010, Red Hat Middleware LLC, and individual contributors
+  ~ as indicated by the @author tags. See the copyright.txt file in the
+  ~ distribution for a full listing of individual contributors.
+  ~
+  ~ This is free software; you can redistribute it and/or modify it
+  ~ under the terms of the GNU Lesser General Public License as
+  ~ published by the Free Software Foundation; either version 2.1 of
+  ~ the License, or (at your option) any later version.
+  ~
+  ~ This software is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+  ~ Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public
+  ~ License along with this software; if not, write to the Free
+  ~ Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+  ~ 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+  -->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+   <modelVersion>4.0.0</modelVersion>
+
+   <parent>
+      <groupId>org.exoplatform.portal</groupId>
+      <artifactId>exo.portal.testsuite</artifactId>
+      <version>3.2.0-Beta01-SNAPSHOT</version>
+   </parent>
+
+   <groupId>org.jboss.gatein</groupId>
+   <artifactId>gatein.ui.tests.selenium</artifactId>
+   <version>3.2.0-Beta01-SNAPSHOT</version>
+   <packaging>jar</packaging>
+   <name>Selenium UI Tests for GateIn</name>
+   <description>Selenium UI Tests for GateIn</description>
+
+   <properties>
+      <org.selenium.server.version>1.0.1</org.selenium.server.version>
+      <org.selenium.server.client.version>1.0.1</org.selenium.server.client.version>
+      <selenium.port>6666</selenium.port>
+      <selenium.browser>firefox</selenium.browser>
+      <selenium.timeout>20000</selenium.timeout>
+      <selenium.speed>300</selenium.speed>
+      <selenium.host>localhost</selenium.host>
+      <selenium.host.port>8080</selenium.host.port>
+      <selenium.host2>localhost</selenium.host2>
+      <selenium.host2.port>8080</selenium.host2.port>
+      <wsrp.version>v1</wsrp.version>
+      <org.selenium.maven-plugin.version>1.0.1</org.selenium.maven-plugin.version>
+      <cargo.timeout>240000</cargo.timeout>
+      <cargo.jvmargs.additional/>
+      <portal.path>/portal/public/classic</portal.path>
+      <testng.suite.file>testng.xml</testng.suite.file>
+      <method>*</method>
+      <screenshot>false</screenshot>
+      <html_src>false</html_src>
+      <selenium.test.skip>false</selenium.test.skip>
+      <selenium.server.skip>false</selenium.server.skip>
+
+      <!-- These are used by test specific ant projects to know where to deploy dependency artifacts -->
+      <container.home>../../packaging/pkg/target/jboss</container.home>
+      <container.config.home>${container.home}/server/default</container.config.home>
+      <container.config.deploy>${container.config.home}/deploy</container.config.deploy>
+
+      <!-- Change this to INFO or WARN to reduce ant build logging -->
+      <ant.logging.level>DEBUG</ant.logging.level>
+   </properties>
+
+
+   <repositories>
+      <repository>
+         <id>repository.jboss.org</id>
+         <url>http://repository.jboss.org/maven2</url>
+         <releases>
+            <enabled>true</enabled>
+         </releases>
+         <snapshots>
+            <enabled>false</enabled>
+         </snapshots>
+      </repository>
+      <repository>
+         <id>snapshots.jboss.org</id>
+         <url>http://snapshots.jboss.org/maven2</url>
+         <releases>
+            <enabled>false</enabled>
+         </releases>
+         <snapshots>
+            <enabled>true</enabled>
+         </snapshots>
+      </repository>
+      <repository>
+         <id>jboss-releases</id>
+         <url>https://repository.jboss.org/nexus/content/repositories/releases/</url>
+         <releases>
+            <enabled>true</enabled>
+         </releases>
+         <snapshots>
+            <enabled>false</enabled>
+         </snapshots>
+      </repository>
+      <repository>
+         <id>jboss-public</id>
+         <url>https://repository.jboss.org/nexus/content/groups/public/</url>
+         <releases>
+            <enabled>true</enabled>
+         </releases>
+         <snapshots>
+            <enabled>false</enabled>
+         </snapshots>
+      </repository>
+   </repositories>
+
+   <!-- no tests by default -->
+   <build>
+      <plugins>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <configuration>
+               <skip>true</skip>
+            </configuration>
+         </plugin>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <configuration>
+               <source>1.5</source>
+               <target>1.5</target>
+            </configuration>
+         </plugin>
+      </plugins>
+   </build>
+
+   <profiles>
+      <profile>
+         <id>sniff-tests</id>
+         <properties>
+            <testng.suite.file>testng-sniff.xml</testng.suite.file>
+         </properties>
+      </profile>
+      <profile>
+         <id>selenium</id>
+         <build>
+            <plugins>
+               <plugin>
+                  <groupId>org.apache.maven.plugins</groupId>
+                  <artifactId>maven-compiler-plugin</artifactId>
+                  <configuration>
+                     <source>1.5</source>
+                     <target>1.5</target>
+                  </configuration>
+               </plugin>
+
+               <plugin>
+                  <artifactId>maven-antrun-plugin</artifactId>
+                  <executions>
+                     <execution>
+                        <id>deploy</id>
+                        <phase>package</phase>
+                        <goals>
+                           <goal>run</goal>
+                        </goals>
+                        <configuration>
+                           <tasks>
+                              <copy file="${basedir}/src/test/java/org/jboss/gatein/selenium/messages.properties"
+                                    todir="${project.build.directory}/test-classes/org/jboss/gatein/selenium"/>
+                           </tasks>
+                        </configuration>
+                     </execution>
+                  </executions>
+               </plugin>
+
+               <plugin>
+                  <groupId>org.codehaus.mojo</groupId>
+                  <artifactId>selenium-maven-plugin</artifactId>
+                  <version>${org.selenium.maven-plugin.version}</version>
+                  <executions>
+                     <execution>
+                        <id>start-selenium-server</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                           <goal>start-server</goal>
+                        </goals>
+                        <configuration>
+                           <background>true</background>
+                           <logFile>${project.build.directory}/server.log</logFile>
+                           <logOutput>true</logOutput>
+                           <userExtensions>${pom.basedir}/src/suite/user-extensions.js</userExtensions>
+                           <port>${selenium.port}</port>
+                           <skip>${selenium.server.skip}</skip>
+                        </configuration>
+                     </execution>
+                     <execution>
+                        <id>stop-selenium-server</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                           <goal>stop-server</goal>
+                        </goals>
+                        <configuration>
+                           <background>true</background>
+                           <port>${selenium.port}</port>
+                           <skip>${selenium.server.skip}</skip>
+                        </configuration>
+                     </execution>
+                  </executions>
+               </plugin>
+
+               <plugin>
+                  <groupId>org.codehaus.mojo</groupId>
+                  <artifactId>properties-maven-plugin</artifactId>
+                  <version>1.0-alpha-2</version>
+                  <executions>
+                     <execution>
+                        <id>project-properties</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                           <goal>write-project-properties</goal>
+                        </goals>
+                        <configuration>
+                           <outputFile>
+                              ${project.build.directory}/project.properties
+                           </outputFile>
+                        </configuration>
+                     </execution>
+                     <execution>
+                        <id>active-profile-properties</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                           <goal>write-active-profile-properties</goal>
+                        </goals>
+                        <configuration>
+                           <outputFile>
+                              ${project.build.directory}/active-profile.properties
+                           </outputFile>
+                        </configuration>
+                     </execution>
+                  </executions>
+               </plugin>
+
+               <plugin>
+                  <groupId>org.apache.maven.plugins</groupId>
+                  <artifactId>maven-surefire-plugin</artifactId>
+                  <executions>
+                     <execution>
+                        <phase>integration-test</phase>
+                        <goals>
+                           <goal>test</goal>
+                        </goals>
+                        <configuration>
+                           <skip>${selenium.test.skip}</skip>
+                           <suiteXmlFiles>
+                              <suiteXmlFile>src/test/resources/${testng.suite.file}</suiteXmlFile>
+                           </suiteXmlFiles>
+                           <systemProperties>
+                              <property>
+                                 <name>selenium.port</name>
+                                 <value>${selenium.port}</value>
+                              </property>
+                              <property>
+                                 <name>selenium.browser</name>
+                                 <value>${selenium.browser}</value>
+                              </property>
+                              <property>
+                                 <name>selenium.speed</name>
+                                 <value>${selenium.speed}</value>
+                              </property>
+                              <property>
+                                 <name>selenium.timeout</name>
+                                 <value>${selenium.timeout}</value>
+                              </property>
+                              <property>
+                                 <name>selenium.host</name>
+                                 <value>${selenium.host}</value>
+                              </property>
+                              <property>
+                                 <name>selenium.host.port</name>
+                                 <value>${selenium.host.port}</value>
+                              </property>
+                              <property>
+                                 <name>selenium.host2</name>
+                                 <value>${selenium.host2}</value>
+                              </property>
+                              <property>
+                                 <name>selenium.host2.port</name>
+                                 <value>${selenium.host2.port}</value>
+                              </property>
+                              <property>
+                                 <name>portal.path</name>
+                                 <value>${portal.path}</value>
+                              </property>
+                              <property>
+                                 <name>wsrp.version</name>
+                                 <value>${wsrp.version}</value>
+                              </property>
+                              <property>
+                                 <name>method</name>
+                                 <value>${method}</value>
+                              </property>
+                              <property>
+                                 <name>screenshot</name>
+                                 <value>${screenshot}</value>
+                              </property>
+                              <property>
+                                 <name>html-src</name>
+                                 <value>${html_src}</value>
+                              </property>
+                              <property>
+                                 <name>output-dir</name>
+                                 <value>${project.build.directory}/screenshots</value>
+                              </property>
+                           </systemProperties>
+                           <properties>
+                              <property>
+                                 <name>listener</name>
+                                 <value>
+                                    org.jboss.test.selenium.listener.ConsoleStatusTestListener,org.jboss.gatein.selenium.TestMethodSelector,org.jboss.gatein.selenium.TestCaseFailListener
+                                 </value>
+                              </property>
+                           </properties>
+                        </configuration>
+                     </execution>
+                  </executions>
+               </plugin>
+            </plugins>
+         </build>
+      </profile>
+
+      <!--  Container Profile -->
+      <profile>
+         <id>container</id>
+         <activation>
+            <property>
+               <name>containerId</name>
+            </property>
+         </activation>
+         <build>
+            <plugins>
+               <plugin>
+                  <groupId>org.codehaus.cargo</groupId>
+                  <artifactId>cargo-maven2-plugin</artifactId>
+                  <version>1.0.2</version>
+                  <executions>
+                     <execution>
+                        <id>start-container</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                           <goal>start</goal>
+                        </goals>
+                     </execution>
+                     <!--
+                               Stop is done by jboss-maven-plugin <execution>
+                               <id>stop-container</id> <phase>post-integration-test</phase>
+                               <goals> <goal>stop</goal> </goals> </execution>
+                            -->
+                  </executions>
+                  <configuration>
+                     <wait>false</wait>
+                     <container>
+                        <containerId>${containerId}</containerId>
+                        <append>false</append>
+                        <home>${container.home}</home>
+                        <timeout>${cargo.timeout}</timeout>
+                     </container>
+                     <configuration>
+                        <properties>
+                           <cargo.hostname>${selenium.host}</cargo.hostname>
+                           <cargo.jvmargs>-Xms768m -Xmx1024m -XX:MaxPermSize=256m
+                              -Dorg.jboss.resolver.warning=true -Dsun.rmi.dgc.client.gcInterval=3600000
+                              -Dsun.rmi.dgc.server.gcInterval=3600000 -Dsun.lang.ClassLoader.allowArraySyntax=true
+                              -Dexo.conf.dir.name=gatein ${cargo.jvmargs.additional}
+                           </cargo.jvmargs>
+                        </properties>
+                     </configuration>
+                  </configuration>
+               </plugin>
+            </plugins>
+         </build>
+      </profile>
+
+      <!-- Container: JBoss AS 5.X -->
+      <profile>
+         <id>container-jboss5x</id>
+         <activation>
+            <property>
+               <name>containerId</name>
+               <value>jboss5x</value>
+            </property>
+         </activation>
+         <properties>
+            <container.home>../../packaging/pkg/target/jboss</container.home>
+            <container.config.home>${container.home}/server/default</container.config.home>
+            <container.config.deploy>${container.config.home}/deploy</container.config.deploy>
+         </properties>
+         <build>
+            <plugins>
+               <plugin>
+                  <groupId>org.codehaus.cargo</groupId>
+                  <artifactId>cargo-maven2-plugin</artifactId>
+                  <version>1.0.2</version>
+                  <configuration>
+                     <configuration>
+                        <type>existing</type>
+                        <home>${container.config.home}</home>
+                        <properties>
+                           <cargo.jboss.configuration>default</cargo.jboss.configuration>
+                           <cargo.rmi.port>1099</cargo.rmi.port>
+                        </properties>
+                     </configuration>
+                  </configuration>
+               </plugin>
+               <plugin>
+                  <groupId>org.codehaus.mojo</groupId>
+                  <artifactId>jboss-maven-plugin</artifactId>
+                  <version>1.4</version>
+                  <executions>
+                     <execution>
+                        <id>stop-container</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                           <goal>stop</goal>
+                        </goals>
+                     </execution>
+                  </executions>
+                  <configuration>
+                     <jbossHome>${container.home}</jbossHome>
+                     <serverName>default</serverName>
+                  </configuration>
+               </plugin>
+            </plugins>
+         </build>
+      </profile>
+   </profiles>
+   <dependencies>
+      <dependency>
+         <groupId>org.testng</groupId>
+         <artifactId>testng</artifactId>
+         <version>5.12.1</version>
+         <scope>test</scope>
+      </dependency>
+      <dependency>
+         <groupId>org.seleniumhq.selenium.client-drivers</groupId>
+         <artifactId>selenium-java-client-driver</artifactId>
+         <version>${org.selenium.server.client.version}</version>
+      </dependency>
+      <dependency>
+         <groupId>org.seleniumhq.selenium.server</groupId>
+         <artifactId>selenium-server</artifactId>
+         <version>${org.selenium.server.version}</version>
+         <classifier>standalone</classifier>
+      </dependency>
+      <dependency>
+         <groupId>commons-io</groupId>
+         <artifactId>commons-io</artifactId>
+         <version>1.4</version>
+      </dependency>
+      <dependency>
+         <groupId>commons-lang</groupId>
+         <artifactId>commons-lang</artifactId>
+         <version>2.4</version>
+      </dependency>
+      <dependency>
+         <groupId>org.jboss.test</groupId>
+         <artifactId>richfaces-selenium</artifactId>
+         <version>1.5.0.Alpha1</version>
+      </dependency>
+      <dependency>
+         <groupId>org.apache.maven</groupId>
+         <artifactId>maven-ant-tasks</artifactId>
+         <version>2.1.1</version>
+      </dependency>
+      <dependency>
+         <groupId>org.apache.ant</groupId>
+         <artifactId>ant</artifactId>
+         <version>1.7.1</version>
+      </dependency>
+   </dependencies>
+</project>
