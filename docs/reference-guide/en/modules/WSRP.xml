@@ -52,14 +52,13 @@
 
       <para>On the Consumer side, &PRODUCT_NAME; provides a Medium level of support for WSRP, except that we only handle
          HTML markup (as &PRODUCT_NAME; itself doesn't handle other markup types). We do support explicit portlet
-         cloning and
-         we fully support the PortletManagement interface.
+         cloning and we fully support the PortletManagement interface.
       </para>
 
       <para>As far as caching goes, we have Level 1 Producer and Consumer. We support Cookie handling properly on the
          Consumer and our Producer requires initialization of cookies (as we have found that it improved interoperabilty
-         with some consumers). We don't support custom window states or modes, as Portal doesn't either. We do, however,
-         support CSS on both the Producer (though it's more a function of the portlets than inherent Producer
+         with some consumers). We don't support custom window states or modes, as &PRODUCT_NAME; doesn't either. We do,
+         however, support CSS on both the Producer (though it's more a function of the portlets than inherent Producer
          capability) and Consumer.
       </para>
 
@@ -67,6 +66,11 @@
          <ulink url="http://www.oasis-open.org/committees/download.php/6018">Conformance statements</ulink>
          and perform more interoperability testing (an area that needs to be better supported by the WSRP Technical
          Committee and Community at large).
+      </para>
+
+      <para>New for &PRODUCT_VERSION; of &PRODUCT_NAME; is support of WSRP 2.0 with a complete implementation of
+         the non-optional features. The only thing that we have not implemented is support for lifetimes and leasing
+         support.
       </para>
 
       <note>
@@ -308,7 +312,9 @@
       <para>
          &PRODUCT_NAME;'s Producer is automatically set up when you deploy a portal instance with the WSRP service.
          You can access the WSDL file at
-         <filename>http://{hostname}:{port}/wsrp-producer/MarkupService?wsdl</filename>.
+         <filename>http://{hostname}:{port}/wsrp-producer/v2/MarkupService?wsdl</filename>. If you wish to use only the
+         WSRP 1 compliant version of the producer, please use the WSDL file found at
+         <filename>http://{hostname}:{port}/wsrp-producer/v1/MarkupService?wsdl</filename>.
          The default hostname is
          <literal>localhost</literal>
          and the default port is 8080.
@@ -328,12 +334,6 @@
             Once a remote producer has been configured, the portlets that it exposes are then available in the
             Application Registry to be added to categories and then to pages.
          </para>
-         <para>
-            As a way to test the WSRP producer service and to check that the portlets that you want to expose remotely
-            are correctly published via WSRP, a default consumer named
-            <literal>self</literal>, that consumes the portlets exposed by &PRODUCT_NAME;'s producer,
-            has been configured.
-         </para>
       </sect2>
 
       <sect2>
@@ -350,7 +350,8 @@
                Some WSRP producers do not support chunked encoding that is activated by default by JBoss WS. If your
                producer does not support chunked encoding, your consumer will not be able to properly connect to the
                producer. This will manifest itself with the following error:
-               <code>Caused by: org.jboss.ws.WSException: Invalid HTTP server response [503] - Service Unavailable</code>.
+               <code>Caused by: org.jboss.ws.WSException: Invalid HTTP server response [503] - Service
+                  Unavailable</code>.
                Please see this GateIn's
                <ulink url="http://community.jboss.org/wiki/Workaroundwhenchunkedencodingisnotsupported">wiki page</ulink>
                for more details.
@@ -361,28 +362,16 @@
             <title>Using the configuration portlet</title>
             <para>
                &PRODUCT_NAME; provides a portlet to configure access (among other functions) to remote WSRP Producers
-               grahically. It isn't, however, installed by default, so the first thing we will need to do is to install
-               the WSRP configuration portlet using the Application Registry.
+               grahically. Starting with &PRODUCT_VERSION;, the WSRP configuration portlet is installed by default. You
+               can find it at
+               <ulink
+                  url="http://localhost:8080/portal/login?initialURI=%2Fportal%2Fprivate%2Fclassic%2FwsrpConfiguration&amp;username=root&amp;password=gtn">
+                  http://localhost:8080/portal/login?initialURI=%2Fportal%2Fprivate%2Fclassic%2FwsrpConfigurationp&amp;username=root&amp;password=gtn
+               </ulink>
             </para>
 
             <para>
-               Use the usual procedure to log in as a Portal administrator and go to the Application Registry.
-               With the default install, you can just go to
-               <ulink
-                  url="http://localhost:8080/portal/login?initialURI=%2Fportal%2Fprivate%2Fclassic%2Fadministration%2Fregistry&amp;username=root&amp;password=gtn">
-                  http://localhost:8080/portal/login?initialURI=%2Fportal%2Fprivate%2Fclassic%2Fadministration%2Fregistry&amp;username=root&amp;password=gtn
-               </ulink>
-               Add the WSRP Configuration portlet to the Administration category. If you use the Import Applications
-               functionality, the WSRP Configuration portlet will be automatically added to the Administration category.
-            </para>
-            <para>
-               Now that the portlet is added to a category, it can be added to a page and used. We recommend adding it
-               to the same page as the Application Registry as operations relating to WSRP and adding portlets to
-               categories are somewhat related as we will see. Go ahead and add the WSRP Configuration portlet to the
-               page using the standard procedure.
-            </para>
-            <para>
-               If all went well, you should see something similar to this:
+               You should see a screen similar to:
                <mediaobject>
                   <imageobject>
                      <imagedata fileref="images/WSRP/config_init.png" format="PNG" align="center" valign="middle"
@@ -398,9 +387,34 @@
                that could potentially invalidate it, thus requiring re-validation of the information.
             </para>
 
+            <note>
+               <para>
+                  The WSRP configuration didn't use to be installed by default in previous versions of &PRODUCT_NAME;.
+                  We include here the legacy instructions on how to install this portlet in case you ever need to
+                  re-install it.
+               </para>
+               <para>
+                  Use the usual procedure to log in as a Portal administrator and go to the Application
+                  Registry. With the default install, you can just go to
+                  <ulink
+                     url="http://localhost:8080/portal/login?initialURI=%2Fportal%2Fprivate%2Fclassic%2Fadministration%2Fregistry&amp;username=root&amp;password=gtn">
+                     http://localhost:8080/portal/login?initialURI=%2Fportal%2Fprivate%2Fclassic%2Fadministration%2Fregistry&amp;username=root&amp;password=gtn
+                  </ulink>
+                  Add the WSRP Configuration portlet to the Administration category. If you use the Import Applications
+                  functionality, the WSRP Configuration portlet will be automatically added to the Administration
+                  category.
+               </para>
+               <para>
+                  Now that the portlet is added to a category, it can be added to a page and used. We recommend adding
+                  it to the same page as the Application Registry as operations relating to WSRP and adding portlets to
+                  categories are somewhat related as we will see. Go ahead and add the WSRP Configuration portlet to the
+                  page using the standard procedure.
+               </para>
+            </note>
+
             <para>
-               Next, we create a new Consumer which we will call<literal>oracle</literal>. Type "<literal>
-               oracle</literal>" in
+               Next, we create a new Consumer which we will call <literal>oracle</literal>. Type
+               "<literal>oracle</literal>" in
                the "Create a consumer named:" field then click on "Create consumer":
                <mediaobject>
                   <imageobject>
@@ -477,7 +491,7 @@
              xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_wsrp_consumer_1_0 http://www.jboss.org/portal/xsd/gatein_wsrp_consumer_1_0.xsd">
    <deployment>
       <wsrp-producer id="self" expiration-cache="300" ws-timeout="30000">
-         <endpoint-wsdl-url>http://localhost:8080/wsrp-producer/MarkupService?wsdl</endpoint-wsdl-url>
+         <endpoint-wsdl-url>http://localhost:8080/wsrp-producer/v2/MarkupService?wsdl</endpoint-wsdl-url>
          <registration-data>
             <property>
                <name>email</name>
@@ -507,7 +521,7 @@
          </sect3>
 
          <sect3>
-            <title>Configuring access to a remote portlet</title>
+            <title>Adding remote portlets to categories</title>
             <para>
                If we go back to the Application Registry and examine the available portlets by clicking on the
                Portlet link, you will now be able to see the remote portlets if you click on the REMOTE tab in the left
@@ -560,7 +574,7 @@
                <para>It is important to note how the XML consumers configuration file is processed. It is read the first
                   time the WSRP service starts and the associated information is then put under control of JCR (Java
                   Content Repository). Subsequent launches of the WSRP service will use the JCR-stored information for
-                  all producers are already known to &PRODUCT_NAME;. More specifically,
+                  all producers already known to &PRODUCT_NAME;. More specifically, the
                   <filename>wsrp-consumers-config.xml</filename>
                   file is scanned for producer identifiers.
                   Any identifier that is already known will be bypassed and the JCR information associated with this
@@ -671,10 +685,10 @@
 
          <para>
             Here is the configuration of the
-            <literal>self</literal>
-            producer as found in
-            <filename>default-wsrp.xml</filename>
-            with a cache expiring every five minutes and with a 30 second timeout for web service operations.
+            <literal>selfv1</literal> and <literal>selfv2</literal>
+            producers as found in
+            <filename>$GATEIN_HOME/lib/wsrp-consumer-$WSRP_VERSION.jar/conf/wsrp-consumers-config.xml</filename>
+            with a cache expiring every 500 seconds and with a 50 second timeout for web service operations.
          </para>
 
          <example>
@@ -685,8 +699,14 @@
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_wsrp_consumer_1_0 http://www.jboss.org/portal/xsd/gatein_wsrp_consumer_1_0.xsd">
    <deployment>
-      <wsrp-producer id="self" expiration-cache="300" ws-timeout="30000">
-         <endpoint-wsdl-url>http://localhost:8080/wsrp-producer/MarkupService?wsdl</endpoint-wsdl-url>
+      <wsrp-producer id="selfv1" expiration-cache="500" ws-timeout="50000">
+         <endpoint-wsdl-url>http://localhost:8080/wsrp-producer/v1/MarkupService?wsdl</endpoint-wsdl-url>
+         <registration-data/>
+      </wsrp-producer>
+   </deployment>
+   <deployment>
+      <wsrp-producer id="selfv2" expiration-cache="500" ws-timeout="50000">
+         <endpoint-wsdl-url>http://localhost:8080/wsrp-producer/v2/MarkupService?wsdl</endpoint-wsdl-url>
          <registration-data/>
       </wsrp-producer>
    </deployment>
@@ -840,7 +860,7 @@
                </mediaobject>
 
                <note>
-                  <para>As of WSRP 1, it is rather difficult to ascertain for sure what caused an
+                  <para>WSRP 1 makes it rather difficult to ascertain for sure what caused an
                      <exceptionname>OperationFailedFault</exceptionname>
                      as it is the generic exception returned by
                      producers if something didn't quite happen as expected during a method invocation. This means that
@@ -890,10 +910,38 @@
                   </para>
                </listitem>
                <listitem>
-                  <para>Delete: destroys the consumer, after deregisterting it if it was registered</para>
+                  <para>Delete: destroys the consumer, after deregistering it if it was registered</para>
+               </listitem>
+               <listitem>
+                  <para>Export: exports some or all of the consumer's portlets to be able to later import them in a
+                     different context
+                  </para>
+               </listitem>
+               <listitem>
+                  <para>Import: imports some or all of previously exported portlets</para>
                </listitem>
             </itemizedlist>
          </para>
+         <note>
+            <para>Import/Export functionalities are only available to WSRP 2 consumers. Import functionality is only
+               available if portlets had previously been exported.
+            </para>
+         </note>
+      </sect2>
+
+      <sect2>
+         <title>Importing and exporting portlets</title>
+         <para>Import and export are new functionalities added in WSRP 2. Exporting a portlet allows a consumer to get
+            an opaque representation of the portlet which can then be use by the corresponding import operation to
+            reconstitute it. This is mostly used in migration scenarios during batch operations. Since &PRODUCT_NAME;
+            does not currently support automated migration of portal data, the functionality that we provide as part of
+            WSRP 2 is necessarily less complete than it could be with full portal support.
+         </para>
+         <para>The import/export implementation in &PRODUCT; allows users to export portlets from a given consumer and
+            then import them back to replace existing portlets assigned to windows on pages by the previously exported
+            portlets. Let us walk through an example to make things clearer.
+         </para>
+         <para>***** TODO: walk-through exporting portlets and then importing them</para>
       </sect2>
 
       <sect2>
