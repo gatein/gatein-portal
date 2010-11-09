@@ -1,28 +1,28 @@
 /*
-* JBoss, a division of Red Hat
-* Copyright 2008, Red Hat Middleware, LLC, and individual contributors as indicated
-* by the @authors tag. See the copyright.txt in the distribution for a
-* full listing of individual contributors.
-*
-* This is free software; you can redistribute it and/or modify it
-* under the terms of the GNU Lesser General Public License as
-* published by the Free Software Foundation; either version 2.1 of
-* the License, or (at your option) any later version.
-*
-* This software is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-* Lesser General Public License for more details.
-*
-* You should have received a copy of the GNU Lesser General Public
-* License along with this software; if not, write to the Free
-* Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
-* 02110-1301 USA, or see the FSF site: http://www.fsf.org.
-*/
+ * JBoss, a division of Red Hat
+ * Copyright 2010, Red Hat Middleware, LLC, and individual
+ * contributors as indicated by the @authors tag. See the
+ * copyright.txt in the distribution for a full listing of
+ * individual contributors.
+ *
+ * This is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2.1 of
+ * the License, or (at your option) any later version.
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this software; if not, write to the Free
+ * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ */
 
 package org.gatein.portal.wsrp.state;
 
-import EDU.oswego.cs.dl.util.concurrent.FJTask;
 import org.chromattic.api.Chromattic;
 import org.chromattic.api.ChromatticBuilder;
 import org.chromattic.api.ChromatticSession;
@@ -59,6 +59,8 @@ public class JCRPersister
    private String workspaceName;
    private Map<Class, Class<? extends BaseMapping>> modelToMapping;
 
+   private ThreadLocal<ChromatticSession> sessionHolder = new ThreadLocal<ChromatticSession>();
+
    public JCRPersister(ExoContainer container, String workspaceName)
    {
       this.workspaceName = workspaceName;
@@ -87,7 +89,7 @@ public class JCRPersister
          if (BaseMapping.class.isAssignableFrom(mappingClass))
          {
             Type[] interfaces = mappingClass.getGenericInterfaces();
-            if(ParameterValidation.existsAndIsNotEmpty(interfaces))
+            if (ParameterValidation.existsAndIsNotEmpty(interfaces))
             {
                Class type = (Class)((ParameterizedType)interfaces[0]).getActualTypeArguments()[0];
                modelToMapping.put(type, mappingClass);
@@ -101,28 +103,41 @@ public class JCRPersister
 
    public ChromatticSession getSession()
    {
-      return chrome.openSession();
+      if (sessionHolder.get() == null)
+      {
+         ChromatticSession session = chrome.openSession();
+         sessionHolder.set(session);
+         return session;
+      }
+      else
+      {
+         return sessionHolder.get();
+      }
    }
 
-   public void closeSession(ChromatticSession session, boolean save)
+   public void closeSession(boolean save)
    {
+      ChromatticSession session = getSession();
       if (save)
       {
-         session.save();
+         synchronized (this)
+         {
+            session.save();
+         }
       }
       session.close();
    }
 
-   public void save(ChromatticSession session)
+   public synchronized void save()
    {
-      session.save();
+      getSession().save();
    }
 
    public <T> boolean delete(T toDelete, StoresByPathManager<T> manager)
    {
       Class<? extends Object> modelClass = toDelete.getClass();
       Class<? extends BaseMapping> baseMappingClass = modelToMapping.get(modelClass);
-      if(baseMappingClass == null)
+      if (baseMappingClass == null)
       {
          throw new IllegalArgumentException("Cannot find a mapping class for " + modelClass.getName());
       }
@@ -134,12 +149,12 @@ public class JCRPersister
       if (old != null)
       {
          session.remove(old);
-         closeSession(session, true);
+         closeSession(true);
          return true;
       }
       else
       {
-         closeSession(session, false);
+         closeSession(false);
          return false;
       }
 

@@ -1,24 +1,25 @@
 /*
-* JBoss, a division of Red Hat
-* Copyright 2008, Red Hat Middleware, LLC, and individual contributors as indicated
-* by the @authors tag. See the copyright.txt in the distribution for a
-* full listing of individual contributors.
-*
-* This is free software; you can redistribute it and/or modify it
-* under the terms of the GNU Lesser General Public License as
-* published by the Free Software Foundation; either version 2.1 of
-* the License, or (at your option) any later version.
-*
-* This software is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-* Lesser General Public License for more details.
-*
-* You should have received a copy of the GNU Lesser General Public
-* License along with this software; if not, write to the Free
-* Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
-* 02110-1301 USA, or see the FSF site: http://www.fsf.org.
-*/
+ * JBoss, a division of Red Hat
+ * Copyright 2010, Red Hat Middleware, LLC, and individual
+ * contributors as indicated by the @authors tag. See the
+ * copyright.txt in the distribution for a full listing of
+ * individual contributors.
+ *
+ * This is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2.1 of
+ * the License, or (at your option) any later version.
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this software; if not, write to the Free
+ * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ */
 
 package org.gatein.portal.wsrp.state.producer.registrations;
 
@@ -51,7 +52,7 @@ import java.util.Map;
  */
 public class JCRRegistrationPersistenceManager extends RegistrationPersistenceManagerImpl
 {
-//   private NewJCRPersister persister;
+   //   private NewJCRPersister persister;
    private JCRPersister persister;
    private ConsumersAndGroupsMapping mappings;
 
@@ -73,7 +74,7 @@ public class JCRRegistrationPersistenceManager extends RegistrationPersistenceMa
       {
          mappings = session.insert(ConsumersAndGroupsMapping.class, ConsumersAndGroupsMapping.NODE_NAME);
       }
-      persister.save(session); // needed right now as the session must still be open to iterate over nodes
+      persister.save(); // needed right now as the session must still be open to iterate over nodes
 
       for (ConsumerGroupMapping cgm : mappings.getConsumerGroups())
       {
@@ -92,7 +93,7 @@ public class JCRRegistrationPersistenceManager extends RegistrationPersistenceMa
          }
       }
 
-      persister.closeSession(session, false);
+      persister.closeSession(false);
    }
 
    @Override
@@ -115,12 +116,12 @@ public class JCRRegistrationPersistenceManager extends RegistrationPersistenceMa
          RegistrationMapping rm = cm.createAndAddRegistrationMappingFrom(null);
          registration = newRegistrationSPI(consumer, registrationProperties, rm.getPersistentKey());
          rm.initFrom(registration);
-         persister.closeSession(session, true);
+         persister.closeSession(true);
       }
       catch (Exception e)
       {
          e.printStackTrace(); // todo fix me
-         persister.closeSession(session, false);
+         persister.closeSession(false);
       }
 
       return registration;
@@ -138,7 +139,7 @@ public class JCRRegistrationPersistenceManager extends RegistrationPersistenceMa
    {
       ChromatticSession session = persister.getSession();
       session.remove(session.findById(clazz, id));
-      persister.closeSession(session, true);
+      persister.closeSession(true);
    }
 
    @Override
@@ -154,12 +155,12 @@ public class JCRRegistrationPersistenceManager extends RegistrationPersistenceMa
          mappings.getConsumers().add(cm);
          cm.initFrom(consumer);
          consumer.setPersistentKey(cm.getPersistentKey());
-         persister.closeSession(session, true);
+         persister.closeSession(true);
       }
       catch (Exception e)
       {
          e.printStackTrace(); // todo: fix me
-         persister.closeSession(session, false);
+         persister.closeSession(false);
       }
 
       return consumer;
@@ -175,34 +176,34 @@ public class JCRRegistrationPersistenceManager extends RegistrationPersistenceMa
       {
          ConsumerMapping cm = session.findById(ConsumerMapping.class, consumer.getPersistentKey());
          cm.initFrom(consumer);
-         persister.closeSession(session, true);
+         persister.closeSession(true);
       }
       catch (Exception e)
       {
          e.printStackTrace();  // todo: fix me
-         persister.closeSession(session, false);
+         persister.closeSession(false);
       }
 
       return consumerSPI;
    }
-   
+
    protected RegistrationSPI internalSaveChangesTo(Registration registration)
    {
       RegistrationSPI registrationSPI = super.internalSaveChangesTo(registration);
-      
+
       ChromatticSession session = persister.getSession();
       try
       {
          RegistrationMapping cm = session.findById(RegistrationMapping.class, registration.getPersistentKey());
          cm.initFrom(registration);
-         persister.closeSession(session, true);
+         persister.closeSession(true);
       }
       catch (Exception e)
       {
          e.printStackTrace(); //todo: fix me
-         persister.closeSession(session, false);
+         persister.closeSession(false);
       }
-      
+
       return registrationSPI;
    }
 
@@ -234,12 +235,12 @@ public class JCRRegistrationPersistenceManager extends RegistrationPersistenceMa
          mappings.getConsumerGroups().add(cgm);
          group.setPersistentKey(cgm.getPersistentKey());
          cgm.initFrom(group);
-         persister.closeSession(session, true);
+         persister.closeSession(true);
       }
       catch (Exception e)
       {
          e.printStackTrace();  // todo: fix me
-         persister.closeSession(session, false);
+         persister.closeSession(false);
       }
 
       return group;

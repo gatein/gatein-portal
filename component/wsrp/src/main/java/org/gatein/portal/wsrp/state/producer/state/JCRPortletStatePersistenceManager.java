@@ -83,7 +83,7 @@ public class JCRPortletStatePersistenceManager extends AbstractPortletStatePersi
       PortletStateMapping psm = pscm.getState();
       psm.setProperties(propertyMap);
 
-      persister.closeSession(session, true);
+      persister.closeSession(true);
    }
 
 
@@ -103,7 +103,7 @@ public class JCRPortletStatePersistenceManager extends AbstractPortletStatePersi
          context = pscm.toPortletStateContext();
       }
 
-      persister.closeSession(session, false);
+      persister.closeSession(false);
 
       return context;
    }
@@ -127,7 +127,7 @@ public class JCRPortletStatePersistenceManager extends AbstractPortletStatePersi
       psm.setPortletID(pscm.getPortletId());
       psm.setProperties(propertyMap);
 
-      persister.closeSession(session, true);
+      persister.closeSession(true);
 
       return pscm.getPersistentKey();
    }
@@ -150,7 +150,7 @@ public class JCRPortletStatePersistenceManager extends AbstractPortletStatePersi
          result = pscm.toPortletStateContext();
       }
 
-      persister.closeSession(session, true);
+      persister.closeSession(true);
       return result;
    }
 

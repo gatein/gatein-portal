@@ -1,6 +1,6 @@
 /*
  * JBoss, a division of Red Hat
- * Copyright 2009, Red Hat Middleware, LLC, and individual
+ * Copyright 2010, Red Hat Middleware, LLC, and individual
  * contributors as indicated by the @authors tag. See the
  * copyright.txt in the distribution for a full listing of
  * individual contributors.
@@ -47,7 +47,7 @@ public class JCRProducerConfigurationService extends AbstractProducerConfigurati
    private static String PRODUCER_CONFIGURATION_PATH = ProducerConfigurationMapping.NODE_NAME;
 
    private InputStream defaultConfigurationIS;
-//   private NewJCRPersister persister;
+   //   private NewJCRPersister persister;
    private JCRPersister persister;
 
    public JCRProducerConfigurationService(ExoContainer container) throws Exception
@@ -96,7 +96,7 @@ public class JCRProducerConfigurationService extends AbstractProducerConfigurati
       }
 
 
-      persister.closeSession(session, true);
+      persister.closeSession(true);
    }
 
    public void saveConfiguration() throws Exception
@@ -110,6 +110,6 @@ public class JCRProducerConfigurationService extends AbstractProducerConfigurati
       }
       pcm.initFrom(configuration);
 
-      persister.closeSession(session, true);
+      persister.closeSession(true);
    }
 }

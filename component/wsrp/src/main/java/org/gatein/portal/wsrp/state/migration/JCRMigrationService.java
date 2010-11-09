@@ -85,7 +85,7 @@ public class JCRMigrationService implements MigrationService, StoresByPathManage
          exportInfos.add(eim.toModel(null));
       }
 
-      persister.closeSession(session, false);
+      persister.closeSession(false);
 
       exportInfosCount = exportInfos.size();
 
@@ -95,7 +95,7 @@ public class JCRMigrationService implements MigrationService, StoresByPathManage
    private ExportInfosMapping getExportInfosMapping(ChromatticSession session)
    {
       ExportInfosMapping exportInfosMapping = session.findByPath(ExportInfosMapping.class, ExportInfosMapping.NODE_NAME);
-      if(exportInfosMapping == null)
+      if (exportInfosMapping == null)
       {
          exportInfosMapping = session.insert(ExportInfosMapping.class, ExportInfosMapping.NODE_NAME);
          exportInfosCount = 0;
@@ -110,7 +110,7 @@ public class JCRMigrationService implements MigrationService, StoresByPathManage
 
       ExportInfoMapping eim = session.findByPath(ExportInfoMapping.class, getPathFor(exportTime));
 
-      if(eim != null)
+      if (eim != null)
       {
          return eim.toModel(null);
       }
@@ -126,7 +126,7 @@ public class JCRMigrationService implements MigrationService, StoresByPathManage
 
       ExportInfoMapping eim = session.findByPath(ExportInfoMapping.class, getChildPath(info));
       long exportTime = info.getExportTime();
-      if(eim != null)
+      if (eim != null)
       {
          throw new IllegalArgumentException("An ExportInfo with export time "
             + exportTime + " already exists!");
@@ -139,7 +139,7 @@ public class JCRMigrationService implements MigrationService, StoresByPathManage
          session.persist(exportInfosMapping, exportInfo, exportTimeAsString);
          exportInfo.initFrom(info);
 
-         persister.closeSession(session, true);
+         persister.closeSession(true);
          exportInfosCount++;
       }
    }
@@ -159,7 +159,7 @@ public class JCRMigrationService implements MigrationService, StoresByPathManage
 
    public boolean isAvailableExportInfosEmpty()
    {
-      if(exportInfosCount == -1)
+      if (exportInfosCount == -1)
       {
          ChromatticSession session = persister.getSession();
          ExportInfosMapping mappings = getExportInfosMapping(session);

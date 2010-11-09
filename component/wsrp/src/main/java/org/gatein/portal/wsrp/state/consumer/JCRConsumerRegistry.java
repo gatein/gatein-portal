@@ -1,6 +1,6 @@
 /*
  * JBoss, a division of Red Hat
- * Copyright 2009, Red Hat Middleware, LLC, and individual
+ * Copyright 2010, Red Hat Middleware, LLC, and individual
  * contributors as indicated by the @authors tag. See the
  * copyright.txt in the distribution for a full listing of
  * individual contributors.
@@ -49,7 +49,7 @@ import java.util.List;
  */
 public class JCRConsumerRegistry extends AbstractConsumerRegistry implements StoresByPathManager<ProducerInfo>
 {
-//   private NewJCRPersister persister;
+   //   private NewJCRPersister persister;
    private JCRPersister persister;
    private static final String PRODUCER_INFOS_PATH = ProducerInfosMapping.NODE_NAME;
 
@@ -78,12 +78,12 @@ public class JCRConsumerRegistry extends AbstractConsumerRegistry implements Sto
          info.setKey(key);
          pim.initFrom(info);
 
-         persister.closeSession(session, true);
+         persister.closeSession(true);
       }
       catch (Exception e)
       {
          e.printStackTrace();  // todo: fix me
-         persister.closeSession(session, false);
+         persister.closeSession(false);
       }
    }
 
@@ -113,7 +113,7 @@ public class JCRConsumerRegistry extends AbstractConsumerRegistry implements Sto
       String newId = producerInfo.getId();
       pim.initFrom(producerInfo);
 
-      persister.closeSession(session, true);
+      persister.closeSession(true);
 
       // if the consumer's id has changed, return the old one so that state can be updated
       return (oldId.equals(newId)) ? null : oldId;
@@ -127,7 +127,7 @@ public class JCRConsumerRegistry extends AbstractConsumerRegistry implements Sto
 
       List<ProducerInfoMapping> mappings = producerInfosMapping.getProducerInfos();
 
-      persister.closeSession(session, true);
+      persister.closeSession(true);
 
       return new MappingToProducerInfoIterator(mappings.iterator());
    }
