@@ -108,7 +108,7 @@
          <arg value="-DconnectionUrl=${scm.url}"/>
          <arg value="-Dbasedir=${testRoot.dir}"/>
          <arg value="-DcheckoutDirectory=${checkout.dir}"/>
-         <arg value="-Dgoals=install"/>
+         <arg value="-Dgoals=install -Dmaven.repo.local=${localRepository}"/>
       </artifact:mvn>
    </target>
 
