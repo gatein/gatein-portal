@@ -132,8 +132,14 @@ public class MOPConsumerStructureProviderTestCase extends TestCase
 
    public void testPageDeletionEvent() throws Exception
    {
+      String pageToRemove = "page1";
+
       org.exoplatform.portal.config.model.Page portalPage = mock(org.exoplatform.portal.config.model.Page.class);
-      when(structureAccess.getPageFrom(portalPage)).thenReturn(page1);
+      when(portalPage.getName()).thenReturn(createInternalNameFrom(pageToRemove));
+      when(portalPage.getTitle()).thenReturn(pageToRemove);
+
+      // on delete, we actually get the event after the page has been removed from JCR so we don't have an actual page
+      when(structureAccess.getPageFrom(portalPage)).thenReturn(null);
 
       int pageNumber = provider.getPageIdentifiers().size();
 
@@ -142,7 +148,7 @@ public class MOPConsumerStructureProviderTestCase extends TestCase
       List<String> identifiers = provider.getPageIdentifiers();
       assertEquals(pageNumber - 1, identifiers.size());
       // deleting a page doesn't delete its children, see GTNPORTAL-1630
-      assertFalse(identifiers.contains("page1"));
+      assertFalse(identifiers.contains(pageToRemove));
       assertTrue(identifiers.contains("page11"));
       assertTrue(identifiers.contains("page12"));
    }
@@ -201,7 +207,7 @@ public class MOPConsumerStructureProviderTestCase extends TestCase
    {
       Page page = mock(Page.class);
 
-      when(page.getName()).thenThrow(new RuntimeException("Page.getName returns the internal name, not the human readable one"));
+      when(page.getName()).thenReturn(createInternalNameFrom(name));
 
       // mock call to adapt
       Described described = mock(Described.class);
@@ -225,6 +231,11 @@ public class MOPConsumerStructureProviderTestCase extends TestCase
       addWindows(page, windowNames);
 
       return page;
+   }
+
+   private String createInternalNameFrom(String name)
+   {
+      return name + "internal";
    }
 
    private void addWindows(Page page, String... windowNames)

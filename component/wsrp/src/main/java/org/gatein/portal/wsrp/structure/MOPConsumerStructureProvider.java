@@ -88,7 +88,7 @@ public class MOPConsumerStructureProvider extends Listener<DataStorage, org.exop
    private void addPage(Page page)
    {
       Described described = page.adapt(Described.class);
-      PageInfo pageInfo = new PageInfo(page.getObjectId(), described.getName());
+      PageInfo pageInfo = new PageInfo(page.getObjectId(), described.getName(), page.getName());
       pageInfos.put(pageInfo.getName(), pageInfo);
       UIContainer container = page.getRootComponent();
       processContainer(container, pageInfo);
@@ -194,16 +194,22 @@ public class MOPConsumerStructureProvider extends Listener<DataStorage, org.exop
       org.exoplatform.portal.config.model.Page portalPage = event.getData();
       Page page = structureAccess.getPageFrom(portalPage);
 
+      if (page == null && DataStorage.PAGE_REMOVED.equals(eventName))
+      {
+         // if we try to remove a page, when we get this event, the page has already been removed from JCR
+         // so we need to work around that fact by retrieving the corresponding PageInfo from the portal page title
+         // which should match the Described name and check that it matches the internal name before removing it
+         removePage(portalPage.getTitle(), portalPage.getName());
+
+         return;
+      }
+
       if (page != null)
       {
          if (DataStorage.PAGE_CREATED.equals(eventName))
          {
             // add information for new page
             addPage(page);
-         }
-         else if (DataStorage.PAGE_REMOVED.equals(eventName))
-         {
-            removePage(page);
          }
          else if (DataStorage.PAGE_UPDATED.equals(eventName))
          {
@@ -218,8 +224,13 @@ public class MOPConsumerStructureProvider extends Listener<DataStorage, org.exop
       Described described = page.adapt(Described.class);
       String name = described.getName();
 
+      removePage(name, page.getName());
+   }
+
+   private void removePage(String name, String internalName)
+   {
       PageInfo pageInfo = pageInfos.get(name);
-      if (pageInfo != null)
+      if (pageInfo != null && internalName.equals(pageInfo.getInternalName()))
       {
          // remove page info
          pageInfos.remove(name);
@@ -230,17 +241,28 @@ public class MOPConsumerStructureProvider extends Listener<DataStorage, org.exop
    {
       private final String uuid;
       private final Map<String, String> childrenWindows = new HashMap<String, String>();
+
+      /** Name as provided by Described */
       private final String name;
 
-      private PageInfo(String uuid, String name)
+      /** Name as automatically generated */
+      private final String internalName;
+
+      private PageInfo(String uuid, String name, String internalName)
       {
          this.uuid = uuid;
          this.name = name;
+         this.internalName = internalName;
       }
 
       public String getUUID()
       {
          return uuid;
+      }
+
+      public String getInternalName()
+      {
+         return internalName;
       }
 
       public List<String> getChildrenWindows()
