@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+"http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+<!ENTITY % BOOK_ENTITIES SYSTEM "../../Reference_Guide.ent">
+%BOOK_ENTITIES;
+]>
+<section id="sect-Reference_Guide-HTTPS_Configuration">
+  <title>HTTPS Configuration</title>
+
+  <section id="sect-Reference_Guide-HTTPS_Configuration-Overview">
+    <title>Overview</title>
+
+    <para>&PRODUCT; default run on HTTP mode. However, for security purpose, you can config GateIn to run on HTTPS mode. This section show you how to config GateIn with HTTPS mode.</para>
+
+  </section>
+  <section id="sect-Reference_Guide-HTTPS_Configuration-Generate_Key">
+    <title>Generate your key</title>
+
+    <para>If you haven't your own X.509 certificate, you can make a simple certificate using keytool command:
+    <programlisting>keytool -genkey -alias serverkeys -keyalg RSA -keystore server.keystore -storepass 123456 -keypass 123456 -dname "CN=localhost, 		OU=MYOU, O=MYORG, L=MYCITY, ST=MYSTATE, C=MY"</programlisting></para>
+
+    <para>Now, your key is stored in server.keystore</para>
+
+    <para>You need to import your key into the Sun JDK keystore (This is required to help running gadget features)
+    <programlisting>keytool -importkeystore -srckeystore server.keystore -destkeystore $JAVA_HOME/jre/lib/security/cacerts</programlisting></para>
+  </section>
+  <section id="sect-Reference_Guide-HTTPS_Configuration-Use_In_Jboss">
+    <title>Setup Jboss configuration to use your key</title>
+    <para>Edit server.xml from jboss/server/&lt;NAME&gt;/deploy/jbossweb.sar folder.
+    	Comment lines:
+	<programlisting>&lt;Connector protocol="HTTP/1.1" port="8080" address="${jboss.bind.address}" 
+		       connectionTimeout="20000" redirectPort="8443" /&gt;</programlisting>
+	Uncomment lines and change keystoreFile and keystorePass to values of your key:
+	<programlisting>&lt;Connector protocol="HTTP/1.1" SSLEnabled="true" 
+		   port="8443" address="${jboss.bind.address}"
+		   scheme="https" secure="true" clientAuth="false" 
+		   keystoreFile="$JAVA_HOME/jre/lib/security/cacerts"
+		   keystorePass="123456" sslProtocol = "TLS" /&gt;</programlisting>
+     </para>
+  </section>
+  <section id="sect-Reference_Guide-HTTPS_Configuration-Use_In_Tomcat">
+    <title>Setup Tomcat configuration to use your key</title>
+
+    <para>Edit server.xml from tomcat/conf folder. Comment lines:
+	<programlisting>&lt;Connector port="8080" protocol="HTTP/1.1" 
+		maxThreads="150" connectionTimeout="20000" 
+		redirectPort="8443" URIEncoding="UTF-8"
+		emptySessionPath="true"/&gt;</programlisting>
+	Uncomment lines and add keystoreFile and keystorePass values:
+    	<programlisting>&lt;Connector port="8443" protocol="HTTP/1.1" SSLEnabled="true"
+		maxThreads="150" scheme="https" secure="true"
+		clientAuth="false" sslProtocol="TLS" 
+		keystoreFile="$JAVA_HOME/jre/lib/security/cacerts"
+		keystorePass="123456" /&gt;</programlisting>
+   </para>
+
+   <para>Restart GateIn. If your configuration is correct, you can access to GateIn via address: <literal>https://&lt;ServerAddress&gt;:8443/portal</literal></para>
+  </section>
+</section>
