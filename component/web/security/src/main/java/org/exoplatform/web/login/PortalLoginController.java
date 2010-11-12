@@ -96,7 +96,7 @@ public class PortalLoginController extends AbstractHttpServlet
                "in the next response");
             Cookie cookie = new Cookie(InitiateLoginServlet.COOKIE_NAME, cookieToken);
             cookie.setPath(req.getContextPath());
-            cookie.setMaxAge((int)tokenService.getValidityTime() / 1000);
+            cookie.setMaxAge((int)tokenService.getValidityTime());
             resp.addCookie(cookie);
          }
       }
