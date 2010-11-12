@@ -71,7 +71,7 @@ public class UploadService
    /**
     * Create UploadResource for HttpServletRequest
     * 
-    * @param requestow
+    * @param request
     *           the webapp's {@link javax.servlet.http.HttpServletRequest}
     * @throws FileUploadException
     */
@@ -79,10 +79,15 @@ public class UploadService
    public void createUploadResource(HttpServletRequest request) throws FileUploadException
    {
       String uploadId = request.getParameter("uploadId");
+      createUploadResource(uploadId, request);
+   }
+
+   public void createUploadResource(String uploadId, HttpServletRequest request) throws FileUploadException
+   {
       UploadResource upResource = new UploadResource(uploadId);
       upResource.setFileName("");// Avoid NPE in UploadHandler
       uploadResources.put(upResource.getUploadId(), upResource);
-      
+
       putToStackInSession(request.getSession(true), uploadId);
 
       double contentLength = request.getContentLength();
