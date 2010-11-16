@@ -25,7 +25,6 @@ package org.exoplatform.portal.webui.application;
 
 import org.exoplatform.portal.Constants;
 import org.exoplatform.portal.application.PortalRequestContext;
-import org.exoplatform.portal.pom.spi.wsrp.WSRP;
 import org.exoplatform.portal.webui.page.UIPage;
 import org.exoplatform.portal.webui.page.UIPageBody;
 import org.exoplatform.portal.webui.portal.UIPortal;
@@ -121,7 +120,7 @@ public class UIPortletActionListener
          if (instanceCtx.getModifiedContext() != null)
          {
             StatefulPortletContext<C> updatedCtx = (StatefulPortletContext<C>)instanceCtx.getModifiedContext();
-            C portletState = updatedCtx.getState();
+            C portletState = uiPortlet.getModifiedState(updatedCtx);
             uiPortlet.update(portletState);
          }
          else
@@ -130,17 +129,8 @@ public class UIPortletActionListener
             PortletContext clonedContext = instanceCtx.getClonedContext();
             if (clonedContext != null)
             {
-               WSRP wsrp = new WSRP();
-               wsrp.setPortletId(clonedContext.getId());
-               wsrp.setCloned(true); // mark the state as cloned
-
-               // if we have an associated state, record it as well...
-               if (clonedContext instanceof StatefulPortletContext)
-               {
-                  StatefulPortletContext statefulPortletContext = (StatefulPortletContext)clonedContext;
-                  wsrp.setState((byte[])statefulPortletContext.getState());
-               }
-               uiPortlet.update((C)wsrp);
+               C state = uiPortlet.getClonedState(clonedContext);
+               uiPortlet.update(state);
             }
          }
 

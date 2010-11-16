@@ -56,6 +56,7 @@ import org.gatein.pc.api.NoSuchPortletException;
 import org.gatein.pc.api.PortletContext;
 import org.gatein.pc.api.PortletInvoker;
 import org.gatein.pc.api.PortletInvokerException;
+import org.gatein.pc.api.PortletStateType;
 import org.gatein.pc.api.StateString;
 import org.gatein.pc.api.StatefulPortletContext;
 import org.gatein.pc.api.cache.CacheLevel;
@@ -472,7 +473,14 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
 
          if (portlet == null)
          {
-            log.info("Could not find portlet with ID : " + producerOfferedPortletContext.getId());
+            if (producerOfferedPortletContext != null)
+            {
+               log.info("Could not find portlet with ID : " + producerOfferedPortletContext.getId());
+            }
+            else
+            {
+               log.info("Could not find portlet. The producerOfferedPortletContext is null");
+            }
             return false;
          }
 
@@ -843,10 +851,25 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
 
       // instance context
       ExoPortletInstanceContext instanceContext;
+      // TODO: we should not be having these wsrp specific conditions through the code like
+      // this, it should either work the same was as normal portlets or abstracted out to another class.
       if (ApplicationType.WSRP_PORTLET.equals(state.getApplicationType()))
       {
          WSRP wsrp = (WSRP)preferencesPortletContext.getState();
          AccessMode accessMode = AccessMode.CLONE_BEFORE_WRITE;
+         
+         if (wsrp.getState() != null)
+         {
+            StatefulPortletContext statefulPortletContext = StatefulPortletContext.create(preferencesPortletContext.getId(),
+                  PortletStateType.OPAQUE, wsrp.getState());
+            
+            invocation.setTarget(statefulPortletContext);
+         }
+         else
+         {
+            PortletContext portletContext = PortletContext.createPortletContext(preferencesPortletContext.getId());
+            invocation.setTarget(portletContext);
+         }
 
          // if the portlet is a cloned one already, we can modify it directly instead of requesting a clone
          if (wsrp.isCloned())
@@ -858,6 +881,7 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
       else
       {
          instanceContext = new ExoPortletInstanceContext(preferencesPortletContext.getId());
+         invocation.setTarget(preferencesPortletContext);
       }
       invocation.setInstanceContext(instanceContext);
 
@@ -867,9 +891,6 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
       invocation.setWindowContext(new AbstractWindowContext(storageName));
       invocation.setPortalContext(PORTAL_CONTEXT);
       invocation.setSecurityContext(new AbstractSecurityContext(servletRequest));
-
-      //
-      invocation.setTarget(preferencesPortletContext);
 
       //
       return invocation;
@@ -980,9 +1001,18 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
    public void update(C updateState) throws Exception
    {
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
-      ExoContainer container = context.getApplication().getApplicationServiceContainer();
-      state.setApplicationState(adapter.update(container, updateState, state.getApplicationState()));
+      ExoContainer container = context.getApplication().getApplicationServiceContainer();      state.setApplicationState(adapter.update(container, updateState, state.getApplicationState()));
       setState(state);
+   }
+   
+   public C getModifiedState(PortletContext modifiedContext) throws Exception
+   {
+      return adapter.getStateFromModifiedContext(this.getPortletContext(), modifiedContext);
+   }
+   
+   public C getClonedState(PortletContext clonedContext) throws Exception
+   {
+      return adapter.getstateFromClonedContext(this.getPortletContext(), clonedContext);
    }
 
    /** This is used by the dashboard portlet and should not be used else where. It will be removed some day. */
