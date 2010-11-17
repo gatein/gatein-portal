@@ -110,13 +110,20 @@ public class JCRMigrationService implements MigrationService, StoresByPathManage
 
       ExportInfoMapping eim = session.findByPath(ExportInfoMapping.class, getPathFor(exportTime));
 
-      if (eim != null)
+      try
       {
-         return eim.toModel(null);
+         if (eim != null)
+         {
+            return eim.toModel(null);
+         }
+         else
+         {
+            return null;
+         }
       }
-      else
+      finally
       {
-         return null;
+         persister.closeSession(false);
       }
    }
 
@@ -128,6 +135,7 @@ public class JCRMigrationService implements MigrationService, StoresByPathManage
       long exportTime = info.getExportTime();
       if (eim != null)
       {
+         persister.closeSession(false);
          throw new IllegalArgumentException("An ExportInfo with export time "
             + exportTime + " already exists!");
       }
@@ -164,6 +172,7 @@ public class JCRMigrationService implements MigrationService, StoresByPathManage
          ChromatticSession session = persister.getSession();
          ExportInfosMapping mappings = getExportInfosMapping(session);
          exportInfosCount = mappings.getExportInfos().size();
+         persister.closeSession(false);
       }
 
       return exportInfosCount == 0;

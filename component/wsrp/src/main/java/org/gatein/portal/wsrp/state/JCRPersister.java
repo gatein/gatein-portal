@@ -103,7 +103,8 @@ public class JCRPersister
 
    public ChromatticSession getSession()
    {
-      if (sessionHolder.get() == null)
+      ChromatticSession chromatticSession = sessionHolder.get();
+      if (chromatticSession == null)
       {
          ChromatticSession session = chrome.openSession();
          sessionHolder.set(session);
@@ -111,13 +112,13 @@ public class JCRPersister
       }
       else
       {
-         return sessionHolder.get();
+         return chromatticSession;
       }
    }
 
    public void closeSession(boolean save)
    {
-      ChromatticSession session = getSession();
+      ChromatticSession session = getOpenedSessionOrFail();
       if (save)
       {
          synchronized (this)
@@ -126,11 +127,22 @@ public class JCRPersister
          }
       }
       session.close();
+      sessionHolder.set(null);
+   }
+
+   private ChromatticSession getOpenedSessionOrFail()
+   {
+      ChromatticSession session = sessionHolder.get();
+      if(session == null)
+      {
+         throw new IllegalStateException("Cannot close the session as it hasn't been opened first!");
+      }
+      return session;
    }
 
    public synchronized void save()
    {
-      getSession().save();
+      getOpenedSessionOrFail().save();
    }
 
    public <T> boolean delete(T toDelete, StoresByPathManager<T> manager)
