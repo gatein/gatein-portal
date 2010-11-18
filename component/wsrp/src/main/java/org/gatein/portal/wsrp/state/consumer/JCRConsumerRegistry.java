@@ -68,10 +68,11 @@ public class JCRConsumerRegistry extends AbstractConsumerRegistry implements Sto
    @Override
    protected void save(ProducerInfo info, String messageOnError)
    {
-      ChromatticSession session = persister.getSession();
 
       try
       {
+         ChromatticSession session = persister.getSession();
+
          ProducerInfosMapping pims = getProducerInfosMapping(session);
          ProducerInfoMapping pim = pims.createProducerInfo(info.getId());
          String key = session.persist(pims, pim, info.getId());
@@ -103,17 +104,22 @@ public class JCRConsumerRegistry extends AbstractConsumerRegistry implements Sto
             + "' hasn't been persisted and thus cannot be updated.");
       }
 
-      ChromatticSession session = persister.getSession();
-      ProducerInfoMapping pim = session.findById(ProducerInfoMapping.class, key);
-      if (pim == null)
+      String oldId;
+      String newId;
+      synchronized (this)
       {
-         throw new IllegalArgumentException("Couldn't find ProducerInfoMapping associated with key " + key);
-      }
-      String oldId = pim.getId();
-      String newId = producerInfo.getId();
-      pim.initFrom(producerInfo);
+         ChromatticSession session = persister.getSession();
+         ProducerInfoMapping pim = session.findById(ProducerInfoMapping.class, key);
+         if (pim == null)
+         {
+            throw new IllegalArgumentException("Couldn't find ProducerInfoMapping associated with key " + key);
+         }
+         oldId = pim.getId();
+         newId = producerInfo.getId();
+         pim.initFrom(producerInfo);
 
-      persister.closeSession(true);
+         persister.closeSession(true);
+      }
 
       // if the consumer's id has changed, return the old one so that state can be updated
       return (oldId.equals(newId)) ? null : oldId;
