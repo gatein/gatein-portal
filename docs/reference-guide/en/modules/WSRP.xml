@@ -941,7 +941,106 @@
             then import them back to replace existing portlets assigned to windows on pages by the previously exported
             portlets. Let us walk through an example to make things clearer.
          </para>
-         <para>***** TODO: walk-through exporting portlets and then importing them</para>
+         <para>Clicking on the "Export" action for a given consumer will display the list of portlets currently made
+            available by this specific consumer, as shown below:
+         </para>
+         <mediaobject>
+            <imageobject>
+               <imagedata fileref="images/WSRP/export_portlet_list.png" format="PNG" align="center" valign="middle"/>
+            </imageobject>
+         </mediaobject>
+         <para>Once you have selected portlets to export, you can then click on the "Export" button to export the selected
+            portlets, which will then be made available for later import:
+         </para>
+         <mediaobject>
+            <imageobject>
+               <imagedata fileref="images/WSRP/export_done.png" format="PNG" align="center" valign="middle"/>
+            </imageobject>
+         </mediaobject>
+         <para>You can re-import the portlets directly by pressing the "Use for import" button or, on the Consumers list
+            page, using the "Import" action for a given consumer. Let's assume that you used that second option and that
+            you currently have several available sets of previously exported portlets to import from. After clicking the
+            action link, you should see a screen similar to the one below:</para>
+         <mediaobject>
+            <imageobject>
+               <imagedata fileref="images/WSRP/export_list.png" format="PNG" align="center" valign="middle"/>
+            </imageobject>
+         </mediaobject>
+         <para>As you can see this screen presents the list of available exports with available operations for each.
+            <itemizedlist>
+               <listitem>
+                  <para>View: displays the export details as previously seen when the export was first performed</para>
+               </listitem>
+               <listitem>
+                  <para>Delete: deletes the selected export, asking you for confirmation first</para>
+               </listitem>
+               <listitem>
+                  <para>Use for import: selects the export to import portlets from</para>
+               </listitem>
+            </itemizedlist>
+         </para>
+         <para>Once you've selected an export to import from, you will see a screen similar to the one below:</para>
+         <mediaobject>
+            <imageobject>
+               <imagedata fileref="images/WSRP/import_start.png" format="PNG" align="center" valign="middle"/>
+            </imageobject>
+         </mediaobject>
+         <para>The screen displays the list of available exported portlets for the previously selected export. You can
+            select which portlet you want to import by checking the checkbox next to its name. Next, you need to select
+            the content of which window the imported portlet will replace. This process is done in three steps. Let's
+            assume in this example that you have the following page called
+            <literal>page1</literal>
+            and containing two windows called
+            <literal>NetUnity WSRP 2 Interop - Cache Markup (remote)</literal>
+            and
+            <literal>/samples-remotecontroller-portlet.RemoteControl (remote)</literal>
+            as shown below:</para>
+         <mediaobject>
+            <imageobject>
+               <imagedata fileref="images/WSRP/import_original_page.png" format="PNG" align="center" valign="middle"/>
+            </imageobject>
+         </mediaobject>
+         <para>In this example, we want to replace the content of the
+            <literal>/samples-remotecontroller-portlet.RemoteControl (remote)</literal>
+            by the content of the
+            <literal>/ajaxPortlet.JSFAJAXPortlet</literal>
+            portlet that we previously exported. To do so, we will check the checkbox next to the
+            <literal>/ajaxPortlet.JSFAJAXPortlet</literal>
+            portlet name to indicate that we want to import its data and then select the
+            <literal>page1</literal>
+            in the list of available pages. The screen will then refresh to display the list of available windows on
+            that page, as seen below:
+         </para>
+         <mediaobject>
+            <imageobject>
+               <imagedata fileref="images/WSRP/import_selected_page.png" format="PNG" align="center" valign="middle"/>
+            </imageobject>
+         </mediaobject>
+         <para>Note that, at this point, we still need to select the window which content we want to replace before
+            being able to complete the import operation. Let's select the
+            <literal>/samples-remotecontroller-portlet.RemoteControl (remote)</literal>
+            window, at which point the "Import" button will become enabled, indicating that we now have all the
+            necessary data to perform the import. If all goes well, pressing that button should result in the following
+            screen:
+         </para>
+         <mediaobject>
+            <imageobject>
+               <imagedata fileref="images/WSRP/import_success.png" format="PNG" align="center" valign="middle"/>
+            </imageobject>
+         </mediaobject>
+         <para>If you now take a look at the
+            <literal>page1</literal>
+            page, you should now see that the content
+            <literal>/samples-remotecontroller-portlet.RemoteControl (remote)</literal>
+            window has been replaced by the content of the
+            <literal>/ajaxPortlet.JSFAJAXPortlet</literal>
+            imported portlet and the window renamed appropriately:
+         </para>
+         <mediaobject>
+            <imageobject>
+               <imagedata fileref="images/WSRP/import_modified_page.png" format="PNG" align="center" valign="middle"/>
+            </imageobject>
+         </mediaobject>
       </sect2>
 
       <sect2>
@@ -1105,9 +1204,9 @@
                Please refer to the
                <trademark class="trade">Javadoc</trademark>
                for
-               <classname>org.jboss.portal.registration.RegistrationPolicy</classname>
+               <classname>org.gatein.registration.RegistrationPolicy</classname>
                and
-               <classname>org.jboss.portal.Registration.policies.RegistrationPropertyValidator</classname>
+               <classname>org.gatein.registration.policies.RegistrationPropertyValidator</classname>
                for more
                details on what is expected of each method.
             </para>
