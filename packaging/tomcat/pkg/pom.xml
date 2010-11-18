@@ -900,7 +900,11 @@
 
                 <!-- Copy tomcat -->
                 <copy todir="${project.build.directory}/tomcat">
-                  <fileset dir="${tomcat.dir}" excludes="webapps/**"/>
+                  <fileset dir="${tomcat.dir}">
+                    <exclude name="webapps/ROOT/**"/>
+                    <exclude name="webapps/examples/**"/>
+                    <exclude name="webapps/docs/**"/>
+                  </fileset>
                 </copy>
 
                 <!-- Copy the dependencies -->
