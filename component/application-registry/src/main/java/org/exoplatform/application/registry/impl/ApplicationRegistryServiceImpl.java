@@ -428,7 +428,7 @@ public class ApplicationRegistryServiceImpl implements ApplicationRegistryServic
       {
          PortletInfo info = portlet.getInfo();
          String portletApplicationName = info.getApplicationName();
-         String portletName = info.getName();
+         String portletName = portlet.getContext().getId();
 
          // Need to sanitize portlet and application names in case they contain characters that would
          // cause an improper Application name
