@@ -87,6 +87,11 @@
 	<td>http://www.labpixies.com/campaigns/dates/dates.xml</td>
 </tr>
 <tr>
+	<td>pause</td>
+	<td>1000</td>
+	<td></td>
+</tr>
+<tr>
 	<td>waitForElementPresent</td>
 	<td>//img[@title='Add Gadget']</td>
 	<td></td>
@@ -94,11 +99,6 @@
 <tr>
 	<td>click</td>
 	<td>//img[@title='Add Gadget']</td>
-	<td></td>
-</tr>
-<tr>
-	<td>pause</td>
-	<td>1000</td>
 	<td></td>
 </tr>
 <tr>
@@ -114,6 +114,11 @@
 <tr>
 	<td>click</td>
 	<td>//div[contains(@id,'UIAddGadgetPopup')]/div/div[1]/div/div/div/div[2]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>1000</td>
 	<td></td>
 </tr>
 <tr>
@@ -134,6 +139,41 @@
 <tr>
 	<td>waitForConfirmationPresent</td>
 	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertConfirmation</td>
+	<td>Are you sure to delete this gadget?</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>-- Go to Application Registry to delete gadget --</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Application Registry</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Gadget</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Gadget</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='UIGadgetManagement']/div[2]/div[1]/div/div/div/div[1]/a[2]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='UIGadgetManagement']/div[2]/div[1]/div/div/div/div[1]/a[2]</td>
 	<td></td>
 </tr>
 <tr>
