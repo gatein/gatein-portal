@@ -86,6 +86,10 @@ public class ExoKernelIntegration implements Startable
 
       //Container Stack
       ContainerPortletDispatcher portletContainerDispatcher = new ContainerPortletDispatcher();
+      
+      // Federating portlet invoker
+      FederatingPortletInvoker federatingPortletInvoker = new FederatingPortletInvokerService();
+      
       EventPayloadInterceptor eventPayloadInterceptor = new EventPayloadInterceptor();
       eventPayloadInterceptor.setNext(portletContainerDispatcher);
       RequestAttributeConversationInterceptor requestAttributeConversationInterceptor =
@@ -129,25 +133,23 @@ public class ExoKernelIntegration implements Startable
       // The producer portlet invoker
       ProducerPortletInvoker producerPortletInvoker = new ProducerPortletInvoker();
       producerPortletInvoker.setNext(containerPortletInvoker);
+      federatingPortletInvoker.registerInvoker(PortletInvoker.LOCAL_PORTLET_INVOKER_ID, producerPortletInvoker);
+
       producerPortletInvoker.setPersistenceManager(producerPersistenceManager);
       producerPortletInvoker.setStateManagementPolicy(producerStateManagementPolicy);
       producerPortletInvoker.setStateConverter(producerStateConverter);
 
       // The consumer portlet invoker
       PortletCustomizationInterceptor portletCustomizationInterceptor = new PortletCustomizationInterceptor();
-      portletCustomizationInterceptor.setNext(producerPortletInvoker);
+      portletCustomizationInterceptor.setNext(federatingPortletInvoker);
       ConsumerCacheInterceptor consumerCacheInterceptor = new ConsumerCacheInterceptor();
       consumerCacheInterceptor.setNext(portletCustomizationInterceptor);
       PortletInvokerInterceptor consumerPortletInvoker = new PortletInvokerInterceptor();
       consumerPortletInvoker.setNext(consumerCacheInterceptor);
 
-      // Federating portlet invoker
-      FederatingPortletInvoker federatingPortletInvoker = new FederatingPortletInvokerService();
-
-      // register local portlet invoker with federating portlet invoker
-      federatingPortletInvoker.registerInvoker(PortletInvoker.LOCAL_PORTLET_INVOKER_ID, consumerPortletInvoker);
-      // register federating portlet invoker with container
-      container.registerComponentInstance(PortletInvoker.class, federatingPortletInvoker);
+      // register federating portlet and consumerPortletInvoker invoker with container
+      container.registerComponentInstance(PortletInvoker.class, consumerPortletInvoker);
+      container.registerComponentInstance(FederatingPortletInvoker.class, federatingPortletInvoker);
 
       portletApplicationRegistry.start();
    }

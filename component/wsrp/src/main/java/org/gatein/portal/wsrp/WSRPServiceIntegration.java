@@ -267,7 +267,7 @@ public class WSRPServiceIntegration implements Startable, WebAppListener
    {
       // retrieve federating portlet invoker from container
       FederatingPortletInvoker federatingPortletInvoker =
-         (FederatingPortletInvoker)container.getComponentInstanceOfType(PortletInvoker.class);
+         (FederatingPortletInvoker)container.getComponentInstanceOfType(FederatingPortletInvoker.class);
 
       // add our Session event listener to the ListenerService for use in org.exoplatform.web.GenericHttpListener
       ListenerService listenerService = (ListenerService)container.getComponentInstanceOfType(ListenerService.class);

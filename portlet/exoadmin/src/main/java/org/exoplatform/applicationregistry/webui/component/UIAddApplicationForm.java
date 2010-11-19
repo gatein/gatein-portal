@@ -186,7 +186,7 @@ public class UIAddApplicationForm extends UIForm
       ExoContainer manager = ExoContainerContext.getCurrentContainer();
 
       FederatingPortletInvoker portletInvoker =
-         (FederatingPortletInvoker)manager.getComponentInstance(PortletInvoker.class);
+         (FederatingPortletInvoker)manager.getComponentInstance(FederatingPortletInvoker.class);
       Set<Portlet> portlets = remote ? portletInvoker.getRemotePortlets() : portletInvoker.getLocalPortlets();
       List<Application> applications = new ArrayList<Application>(portlets.size());
       for (Portlet portlet : portlets)

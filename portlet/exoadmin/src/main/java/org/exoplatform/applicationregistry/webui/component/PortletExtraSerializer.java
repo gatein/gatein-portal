@@ -44,7 +44,7 @@ public class PortletExtraSerializer extends TypeConverter<UIPortletManagement.Po
    public UIPortletManagement.PortletExtra read(PortletContext output) throws Exception
    {
       ExoContainer manager = ExoContainerContext.getCurrentContainer();
-      FederatingPortletInvoker portletInvoker = (FederatingPortletInvoker)manager.getComponentInstance(PortletInvoker.class);
+      FederatingPortletInvoker portletInvoker = (FederatingPortletInvoker)manager.getComponentInstance(FederatingPortletInvoker.class);
       Portlet portlet = portletInvoker.getPortlet(output);
       return new UIPortletManagement.PortletExtra(portlet);
    }

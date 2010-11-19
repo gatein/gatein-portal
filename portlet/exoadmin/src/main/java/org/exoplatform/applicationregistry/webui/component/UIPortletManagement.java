@@ -100,7 +100,7 @@ public class UIPortletManagement extends UIContainer
       ExoContainer manager = ExoContainerContext.getCurrentContainer();
 
       FederatingPortletInvoker portletInvoker =
-         (FederatingPortletInvoker)manager.getComponentInstance(PortletInvoker.class);
+         (FederatingPortletInvoker)manager.getComponentInstance(FederatingPortletInvoker.class);
       boolean remote = REMOTE.equals(type);
 
       Set<Portlet> portlets;
