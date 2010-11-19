@@ -28,6 +28,7 @@ import org.chromattic.api.annotations.PrimaryType;
 import org.chromattic.api.annotations.OneToMany;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author <a href="mailto:chris.laprun@jboss.com">Chris Laprun</a>
@@ -40,6 +41,9 @@ public abstract class ProducerInfosMapping
 
    @OneToMany
    public abstract List<ProducerInfoMapping> getProducerInfos();
+
+   @OneToMany
+   public abstract Map<String, ProducerInfoMapping> getNameToProducerInfoMap();
 
    @Create
    public abstract ProducerInfoMapping createProducerInfo(String producerId);

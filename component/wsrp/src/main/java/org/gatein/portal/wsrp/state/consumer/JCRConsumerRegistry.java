@@ -34,6 +34,7 @@ import org.gatein.portal.wsrp.state.consumer.mapping.RegistrationInfoMapping;
 import org.gatein.portal.wsrp.state.consumer.mapping.RegistrationPropertyMapping;
 import org.gatein.portal.wsrp.state.mapping.RegistrationPropertyDescriptionMapping;
 import org.gatein.wsrp.WSRPConsumer;
+import org.gatein.wsrp.consumer.ConsumerException;
 import org.gatein.wsrp.consumer.ProducerInfo;
 import org.gatein.wsrp.consumer.registry.AbstractConsumerRegistry;
 import org.gatein.wsrp.consumer.registry.xml.XMLConsumerRegistry;
@@ -42,6 +43,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author <a href="mailto:chris.laprun@jboss.com">Chris Laprun</a>
@@ -83,15 +85,18 @@ public class JCRConsumerRegistry extends AbstractConsumerRegistry implements Sto
       }
       catch (Exception e)
       {
-         e.printStackTrace();  // todo: fix me
          persister.closeSession(false);
+         throw new ConsumerException(messageOnError, e);
       }
    }
 
    @Override
    protected void delete(ProducerInfo info)
    {
-      persister.delete(info, this);
+      if (!persister.delete(info, this))
+      {
+         throw new ConsumerException("Couldn't delete ProducerInfo " + info);
+      }
    }
 
    @Override
@@ -106,9 +111,12 @@ public class JCRConsumerRegistry extends AbstractConsumerRegistry implements Sto
 
       String oldId;
       String newId;
+      boolean idUnchanged;
+
+      ChromatticSession session = persister.getSession();
+
       synchronized (this)
       {
-         ChromatticSession session = persister.getSession();
          ProducerInfoMapping pim = session.findById(ProducerInfoMapping.class, key);
          if (pim == null)
          {
@@ -118,11 +126,20 @@ public class JCRConsumerRegistry extends AbstractConsumerRegistry implements Sto
          newId = producerInfo.getId();
          pim.initFrom(producerInfo);
 
+         idUnchanged = oldId.equals(newId);
+
+         if (!idUnchanged)
+         {
+            ProducerInfosMapping pims = getProducerInfosMapping(session);
+            Map<String,ProducerInfoMapping> nameToProducerInfoMap = pims.getNameToProducerInfoMap();
+            nameToProducerInfoMap.put(pim.getId(), pim);
+         }
+
          persister.closeSession(true);
       }
 
       // if the consumer's id has changed, return the old one so that state can be updated
-      return (oldId.equals(newId)) ? null : oldId;
+      return idUnchanged ? null : oldId;
    }
 
    @Override
