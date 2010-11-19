@@ -163,6 +163,23 @@
     <type>org.exoplatform.groovyscript.text.TemplateService</type>
   </component>
 
+  <component>
+  	<key>org.exoplatform.web.security.proxy.ProxyFilterService</key>
+  	<type>org.exoplatform.web.security.proxy.ProxyFilterService</type>
+    <init-params>
+      <values-param>
+        <!-- The white list -->
+        <name>white-list</name>
+        <!-- We accept anything not black listed -->
+        <value>*</value>
+      </values-param>
+      <values-param>
+        <name>black-list</name>
+        <value>*.evil.org</value>
+      </values-param>
+    </init-params>
+  </component>
+
   <external-component-plugins>
     <target-component>org.exoplatform.services.cache.ExoCacheFactory</target-component>
     <component-plugin>
