@@ -107,12 +107,12 @@
 	<td></td>
 </tr>
 <tr>
-	<td>verifyTextPresent</td>
+	<td>waitForTextPresent</td>
 	<td>You have registered a new account.</td>
 	<td></td>
 </tr>
 <tr>
-	<td>waitForTextPresent</td>
+	<td>verifyTextPresent</td>
 	<td>You have registered a new account.</td>
 	<td></td>
 </tr>
@@ -129,6 +129,11 @@
 <tr>
 	<td>echo</td>
 	<td>-- Go to Users and group Management--</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Users and groups management</td>
 	<td></td>
 </tr>
 <tr>
@@ -434,6 +439,11 @@
 <tr>
 	<td>echo</td>
 	<td>-- Click Finish icon --</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='UIPageEditor']/div[1]/div/div/div/a[2]</td>
 	<td></td>
 </tr>
 <tr>
@@ -772,8 +782,18 @@
 	<td></td>
 </tr>
 <tr>
+	<td>waitForTextNotPresent</td>
+	<td>Test_PLT_03_07_004_add</td>
+	<td></td>
+</tr>
+<tr>
 	<td>verifyTextNotPresent</td>
 	<td>Test_PLT_03_07_004_add</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Sign out</td>
 	<td></td>
 </tr>
 <tr>
@@ -819,6 +839,11 @@
 <tr>
 	<td>echo</td>
 	<td>-- Go to Users and group management --</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Users and groups management</td>
 	<td></td>
 </tr>
 <tr>
@@ -929,6 +954,11 @@
 <tr>
 	<td>click</td>
 	<td>//div[@id='UINavigationManagement']/div[3]/table/tbody/tr/td[2]/div/div/div/div</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Sign out</td>
 	<td></td>
 </tr>
 <tr>
