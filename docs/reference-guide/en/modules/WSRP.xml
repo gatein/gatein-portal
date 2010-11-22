@@ -933,24 +933,25 @@
          <title>Importing and exporting portlets</title>
          <para>Import and export are new functionalities added in WSRP 2. Exporting a portlet allows a consumer to get
             an opaque representation of the portlet which can then be use by the corresponding import operation to
-            reconstitute it. This is mostly used in migration scenarios during batch operations. Since &PRODUCT_NAME;
+            reconstitute it. It is mostly used in migration scenarios during batch operations. Since &PRODUCT_NAME;
             does not currently support automated migration of portal data, the functionality that we provide as part of
             WSRP 2 is necessarily less complete than it could be with full portal support.
          </para>
-         <para>The import/export implementation in &PRODUCT; allows users to export portlets from a given consumer and
-            then import them back to replace existing portlets assigned to windows on pages by the previously exported
-            portlets. Let us walk through an example to make things clearer.
+         <para>The import/export implementation in &PRODUCT; allows users to export portlets from a given consumer.
+            These portlets can then be used to replace existing content on pages. This is accomplished by assiging
+            previously exported portlets to replace the content displayed by windows on the portal's pages. Let us walk
+            through an example to make things clearer.
          </para>
          <para>Clicking on the "Export" action for a given consumer will display the list of portlets currently made
-            available by this specific consumer, as shown below:
+            available by this specific consumer. An example of such a list is shown below:
          </para>
          <mediaobject>
             <imageobject>
                <imagedata fileref="images/WSRP/export_portlet_list.png" format="PNG" align="center" valign="middle"/>
             </imageobject>
          </mediaobject>
-         <para>Once you have selected portlets to export, you can then click on the "Export" button to export the selected
-            portlets, which will then be made available for later import:
+         <para>Once portlets have been selected, they can be exported by clicking on the "Export" button thus making
+            them available for later import:
          </para>
          <mediaobject>
             <imageobject>
@@ -1009,7 +1010,7 @@
             portlet name to indicate that we want to import its data and then select the
             <literal>page1</literal>
             in the list of available pages. The screen will then refresh to display the list of available windows on
-            that page, as seen below:
+            that page, similar to the one seen below:
          </para>
          <mediaobject>
             <imageobject>
@@ -1020,8 +1021,8 @@
             being able to complete the import operation. Let's select the
             <literal>/samples-remotecontroller-portlet.RemoteControl (remote)</literal>
             window, at which point the "Import" button will become enabled, indicating that we now have all the
-            necessary data to perform the import. If all goes well, pressing that button should result in the following
-            screen:
+            necessary data to perform the import. If all goes well, pressing that button should result in a screen
+            similar to the one below:
          </para>
          <mediaobject>
             <imageobject>
@@ -1120,6 +1121,8 @@
             registration property description for which consumers must provide acceptable values to successfully
             register.
          </para>
+         <para>New in &PRODUCT;, we now display the WSDL URLs to access &PRODUCT_NAME;'s WSRP producer either in WSRP 1
+            or WSRP 2 mode.</para>
       </sect2>
 
       <sect2 id="registration-configuration">
