@@ -370,7 +370,8 @@ public class GroupDAOImpl implements GroupHandler
             {
                String id = g.getParentId();
                if ((parent == null && id == null)
-                   || (id != null && id.equals(parent.getId())))
+                  || (parent != null && id != null && id.equals(parent.getId()))
+                  || (parent == null && id != null && id.equals("/")))
                {
                   exoGroups.add(g);
                   continue;
