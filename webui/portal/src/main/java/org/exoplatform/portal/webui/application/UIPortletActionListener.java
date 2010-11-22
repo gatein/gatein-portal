@@ -437,7 +437,7 @@ public class UIPortletActionListener
 
             log.trace("Try to get a resource of type: " + contentType + " for the portlet: "
                + uiPortlet.getPortletContext());
-            if (contentType.startsWith("text"))
+            if (piResponse.getChars() != null || contentType.startsWith("text"))
             {
                context.getResponse().setContentType(contentType);
                context.getWriter().write(piResponse.getContent());
