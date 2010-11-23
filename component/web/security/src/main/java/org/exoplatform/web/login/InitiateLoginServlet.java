@@ -129,6 +129,11 @@ public class InitiateLoginServlet extends AbstractHttpServlet
       }
       try
       {
+         String queryString = (String)req.getAttribute("javax.servlet.forward.query_string");
+         if ((String)req.getAttribute("javax.servlet.forward.query_string") != null)
+         {
+            initialURI = initialURI + "?" + queryString;
+         }
          req.setAttribute("org.gatein.portal.login.initial_uri", initialURI);
          getServletContext().getRequestDispatcher("/login/jsp/login.jsp").include(req, resp);
       }
