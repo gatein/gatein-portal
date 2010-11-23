@@ -212,6 +212,7 @@ public class GroupDAOImpl implements GroupHandler
       try
       {
          getIdentitySession().getPersistenceManager().removeGroup(jbidGroup, true);
+
       }
       catch (Exception e)
       {
@@ -588,9 +589,26 @@ public class GroupDAOImpl implements GroupHandler
    private String getGroupId(org.picketlink.idm.api.Group jbidGroup,
                              List<org.picketlink.idm.api.Group> processed) throws Exception
    {
+      // Check in cache
+      if (getIntegrationCache() != null)
+      {
+         String cachedId = getIntegrationCache().getGtnGroupId(getCacheNS(), jbidGroup.getKey());
+         if (cachedId != null)
+         {
+            return cachedId;
+         }
+      }
+
       if (jbidGroup.equals(getRootGroup()))
       {
-         return "";
+         String calculatedId = "";
+
+         if (getIntegrationCache() != null)
+         {
+            getIntegrationCache().putGtnGroupId(getCacheNS(), jbidGroup.getKey(), calculatedId);
+         }
+
+         return calculatedId;
       }
 
       if (processed == null)
@@ -628,7 +646,15 @@ public class GroupDAOImpl implements GroupHandler
                "defined by type mappings or just place it under root /");
          }
 
-         return obtainMappedId(jbidGroup, gtnGroupName);
+         String calculatedId = obtainMappedId(jbidGroup, gtnGroupName);
+
+         if (getIntegrationCache() != null)
+         {
+            getIntegrationCache().putGtnGroupId(getCacheNS(), jbidGroup.getKey(), calculatedId);
+         }
+
+         return calculatedId;
+
 
       }
 
@@ -648,12 +674,26 @@ public class GroupDAOImpl implements GroupHandler
          // mappings or connect it to the root
          else
          {
-            return obtainMappedId(jbidGroup, gtnGroupName);
+            String calculatedId = obtainMappedId(jbidGroup, gtnGroupName);
+
+            if (getIntegrationCache() != null)
+            {
+               getIntegrationCache().putGtnGroupId(getCacheNS(), jbidGroup.getKey(), calculatedId);
+            }
+
+            return calculatedId;
          }
       }
 
 
-      return parentGroupId + "/" + gtnGroupName;
+      String calculatedId = parentGroupId + "/" + gtnGroupName;
+
+      if (getIntegrationCache() != null)
+      {
+         getIntegrationCache().putGtnGroupId(getCacheNS(), jbidGroup.getKey(), calculatedId);
+      }
+
+      return calculatedId;
 
    }
 
@@ -761,7 +801,60 @@ public class GroupDAOImpl implements GroupHandler
       return service_.getIdentitySession();
    }
 
-   private org.picketlink.idm.api.Group getRootGroup() throws Exception
+   private IntegrationCache getIntegrationCache()
+   {
+      // TODO: refactor to remove cast. For now to avoid adding new config option and share existing cache instannce
+      // TODO: it should be there.
+      return ((PicketLinkIDMServiceImpl)service_).getIntegrationCache();
+   }
+
+   /**
+    * Returns namespace to be used with integration cache
+    * @return
+    */
+   private String getCacheNS()
+   {
+      // TODO: refactor to remove cast. For now to avoid adding new config option and share existing cache instannce
+      // TODO: it should be there.
+      return ((PicketLinkIDMServiceImpl)service_).getRealmName();
+   }
+
+
+   /**
+    * Returns mock of PLIDM group representing "/" group. This method uses cache and delegates to obtainRootGroup().
+    *
+    * @return
+    * @throws Exception
+    */
+   protected org.picketlink.idm.api.Group getRootGroup() throws Exception
+   {
+      org.picketlink.idm.api.Group rootGroup = null;
+
+      if (getIntegrationCache() != null)
+      {
+         rootGroup = getIntegrationCache().getRootGroup(getCacheNS());
+      }
+
+      if (rootGroup == null)
+      {
+         rootGroup = obtainRootGroup();
+
+         if (getIntegrationCache() != null)
+         {
+            getIntegrationCache().putRootGroup(getCacheNS(), rootGroup);
+         }
+      }
+      
+      return rootGroup;
+
+   }
+
+   /**
+    * Obtains PLIDM group representing "/" group. If such group doens't exist it creates one.
+    * @return
+    * @throws Exception
+    */
+   protected org.picketlink.idm.api.Group obtainRootGroup() throws Exception
    {
       org.picketlink.idm.api.Group rootGroup =  null;
       try

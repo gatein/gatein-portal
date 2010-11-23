@@ -51,12 +51,24 @@ import org.picketlink.idm.spi.cache.IdentityStoreCacheProvider;
 public class PicketLinkIDMCacheService
 {
 
+   private final List<IntegrationCache> integrationCache = new LinkedList<IntegrationCache>();
+
    private final List<APICacheProvider> apiCacheProviders = new LinkedList<APICacheProvider>();
 
    private final List<IdentityStoreCacheProvider> storeCacheProviders = new LinkedList<IdentityStoreCacheProvider>();
 
    public PicketLinkIDMCacheService()
    {
+   }
+
+   public void register(IntegrationCache cacheProvider)
+   {
+
+      if (cacheProvider != null)
+      {
+         integrationCache.add(cacheProvider);
+      }
+
    }
 
    public void register(APICacheProvider cacheProvider)
@@ -101,6 +113,11 @@ public class PicketLinkIDMCacheService
    @Impact(ImpactType.WRITE)
    public void invalidateAll()
    {
+      for (IntegrationCache cacheProvider : integrationCache)
+      {
+         cacheProvider.invalidateAll();
+      }
+
       for (APICacheProvider cacheProvider : apiCacheProviders)
       {
          cacheProvider.invalidateAll();

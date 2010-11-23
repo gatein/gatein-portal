@@ -76,7 +76,7 @@ public class PicketLinkIDMOrganizationServiceImpl extends BaseOrganizationServic
 
    }                             
 
-   public final org.picketlink.idm.api.Group getJBIDMGroup(String groupId) throws Exception
+   public final org.picketlink.idm.api.Group  getJBIDMGroup(String groupId) throws Exception
    {
       String[] ids = groupId.split("/");
       String name = ids[ids.length - 1];

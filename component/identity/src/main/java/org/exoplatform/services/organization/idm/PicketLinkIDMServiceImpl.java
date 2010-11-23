@@ -26,6 +26,9 @@ import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.database.HibernateService;
 import org.exoplatform.services.naming.InitialContextInitializer;
+import org.jboss.cache.Cache;
+import org.jboss.cache.CacheFactory;
+import org.jboss.cache.DefaultCacheFactory;
 import org.picketlink.idm.api.IdentitySession;
 import org.picketlink.idm.api.IdentitySessionFactory;
 import org.picketlink.idm.api.cfg.IdentityConfiguration;
@@ -74,6 +77,8 @@ public class PicketLinkIDMServiceImpl implements PicketLinkIDMService, Startable
    private String realmName = "idm_realm";
 
    private IdentityConfiguration identityConfiguration;
+
+   private IntegrationCache integrationCache;
 
    private PicketLinkIDMServiceImpl()
    {
@@ -125,13 +130,31 @@ public class PicketLinkIDMServiceImpl implements PicketLinkIDMService, Startable
          {
             InputStream configStream = confManager.getInputStream(apiCacheConfig.getValue());
 
+            // Create common JBoss Cache instance
+            CacheFactory factory = new DefaultCacheFactory();
 
+            if (configStream == null)
+            {
+               throw new IllegalArgumentException("JBoss Cache configuration InputStream is null");
+            }
+
+            Cache cache = factory.createCache(configStream);
+
+            cache.create();
+            cache.start();
+
+            configStream.close();
+
+            // PLIDM API cache
             JBossCacheAPICacheProviderImpl apiCacheProvider = new JBossCacheAPICacheProviderImpl();
-            apiCacheProvider.initialize(configStream);
+            apiCacheProvider.initialize(cache);
             picketLinkIDMCache.register(apiCacheProvider);
             identityConfiguration.getIdentityConfigurationRegistry().register(apiCacheProvider, "apiCacheProvider");
 
-            configStream.close();
+            //Integration cache
+            integrationCache = new IntegrationCache();
+            integrationCache.initialize(cache);
+            picketLinkIDMCache.register(apiCacheProvider);
 
          }
          if (storeCacheConfig != null)
@@ -191,5 +214,15 @@ public class PicketLinkIDMServiceImpl implements PicketLinkIDMService, Startable
          throw new IllegalArgumentException("Realm name cannot be null");
       }
       return getIdentitySessionFactory().getCurrentIdentitySession(realm);
+   }
+
+   public IntegrationCache getIntegrationCache()
+   {
+      return integrationCache;
+   }
+
+   public String getRealmName()
+   {
+      return realmName;
    }
 }
