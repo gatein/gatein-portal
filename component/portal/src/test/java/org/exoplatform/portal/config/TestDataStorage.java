@@ -36,7 +36,6 @@ import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.TransientApplicationState;
-import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.portal.pom.data.ModelChange;
 import org.exoplatform.portal.pom.spi.gadget.Gadget;
 import org.exoplatform.portal.pom.spi.portlet.Portlet;
@@ -70,9 +69,6 @@ public class TestDataStorage extends AbstractPortalTest
    /** . */
    private DataStorage storage_;
 
-   /** . */
-   private POMSessionManager mgr;
-
    private LinkedList<Event> events;
 
    private ListenerService listenerService;
@@ -97,7 +93,6 @@ public class TestDataStorage extends AbstractPortalTest
       super.setUp();
       PortalContainer container = PortalContainer.getInstance();
       storage_ = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
-      mgr = (POMSessionManager)container.getComponentInstanceOfType(POMSessionManager.class);
       events = new LinkedList<Event>();
       listenerService = (ListenerService)container.getComponentInstanceOfType(ListenerService.class);
 
