@@ -34,6 +34,7 @@ import java.util.Map;
 public class GroovyTemplate
 {
 
+   // todo : move that to {@link org.gatein.common.io.IOTools}
    private static String read(Reader reader) throws IOException
    {
       StringBuilder builder = new StringBuilder();
