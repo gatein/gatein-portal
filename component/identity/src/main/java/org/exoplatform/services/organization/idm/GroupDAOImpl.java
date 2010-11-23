@@ -57,6 +57,8 @@ public class GroupDAOImpl implements GroupHandler
 
    private PicketLinkIDMOrganizationServiceImpl orgService;
 
+   private static final String CYCLIC_ID = "org.gatein.portal.identity.LOOPED_GROUP_ID";
+
    public GroupDAOImpl(PicketLinkIDMOrganizationServiceImpl orgService, PicketLinkIDMService service)
    {
       service_ = service;
@@ -557,7 +559,7 @@ public class GroupDAOImpl implements GroupHandler
       }
 
       // Resolve full ID
-      String id = getGroupId(jbidGroup);
+      String id = getGroupId(jbidGroup, null);
 
       exoGroup.setId(id);
 
@@ -575,11 +577,25 @@ public class GroupDAOImpl implements GroupHandler
       return exoGroup;
    }
 
-   private String getGroupId(org.picketlink.idm.api.Group jbidGroup) throws Exception
+   /**
+    * Calculates group id by checking all parents up to the root group or group type mapping from the configuration.
+    *
+    * @param jbidGroup
+    * @param processed
+    * @return
+    * @throws Exception
+    */
+   private String getGroupId(org.picketlink.idm.api.Group jbidGroup,
+                             List<org.picketlink.idm.api.Group> processed) throws Exception
    {
       if (jbidGroup.equals(getRootGroup()))
       {
          return "";
+      }
+
+      if (processed == null)
+      {
+         processed = new LinkedList<org.picketlink.idm.api.Group>();
       }
 
       Collection<org.picketlink.idm.api.Group> parents = new HashSet();
@@ -596,7 +612,13 @@ public class GroupDAOImpl implements GroupHandler
          log.info("Identity operation error: ", e);
       }
 
-
+      // Check if there is cross reference so we ended in a loop and break the process.
+      if (parents.size() > 0 && processed.contains(parents.iterator().next()))
+      {
+         processed.remove(processed.size() - 1);
+         return CYCLIC_ID;
+      }
+      // If there are no parents or more then one parent
       if (parents.size() == 0 || parents.size() > 1)
       {
 
@@ -606,34 +628,64 @@ public class GroupDAOImpl implements GroupHandler
                "defined by type mappings or just place it under root /");
          }
 
-
-         String id = orgService.getConfiguration().getParentId(jbidGroup.getGroupType());
-
-
-
-         if (id != null && orgService.getConfiguration().isForceMembershipOfMappedTypes())
-         {
-            if (id.endsWith("/*"))
-            {
-               id = id.substring(0, id.length() - 2);
-            }
-
-            return id + "/" + gtnGroupName;
-         }
-
-
-         // All groups not connected to the root should be just below the root
-         return "/" + gtnGroupName;
-
-         //TODO: make it configurable
-         // throw new IllegalStateException("Group present that is not connected to the root: " + jbidGroup.getName());
+         return obtainMappedId(jbidGroup, gtnGroupName);
 
       }
 
-      String parentGroupId = getGroupId(((org.picketlink.idm.api.Group)parents.iterator().next()));
+      processed.add(jbidGroup);
+      String parentGroupId = getGroupId(((org.picketlink.idm.api.Group)parents.iterator().next()),processed);
+
+      // Check if loop occured
+      if (parentGroupId.equals(CYCLIC_ID))
+      {
+         // if there are still processed groups in the list we are in nested call so remove last one and go back
+         if (processed.size() > 0)
+         {
+            processed.remove(processed.size() - 1);
+            return parentGroupId;
+         }
+         // if we finally reached the first group from the looped ones then just return id calculated from
+         // mappings or connect it to the root
+         else
+         {
+            return obtainMappedId(jbidGroup, gtnGroupName);
+         }
+      }
+
 
       return parentGroupId + "/" + gtnGroupName;
 
+   }
+
+   /**
+    * Obtain group id based on groupType mapping from configuration or if this fails just place it under root /
+    *
+    * @param jbidGroup
+    * @param gtnGroupName
+    * @return
+    */
+   private String obtainMappedId(org.picketlink.idm.api.Group jbidGroup, String gtnGroupName)
+   {
+      String id = orgService.getConfiguration().getParentId(jbidGroup.getGroupType());
+
+
+
+      if (id != null && orgService.getConfiguration().isForceMembershipOfMappedTypes())
+      {
+         if (id.endsWith("/*"))
+         {
+            id = id.substring(0, id.length() - 2);
+         }
+
+         return id + "/" + gtnGroupName;
+      }
+
+
+      // All groups not connected to the root should be just below the root
+      return "/" + gtnGroupName;
+
+      //TODO: make it configurable
+      // throw new IllegalStateException("Group present that is not connected to the root: " + jbidGroup.getName());
    }
 
    private org.picketlink.idm.api.Group persistGroup(Group exoGroup) throws Exception
