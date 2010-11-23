@@ -25,8 +25,17 @@ import junit.framework.AssertionFailedError;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.application.PortletPreferences;
 import org.exoplatform.portal.application.Preference;
-import org.exoplatform.portal.config.model.*;
-import org.exoplatform.portal.pom.config.POMSession;
+import org.exoplatform.portal.config.model.Application;
+import org.exoplatform.portal.config.model.ApplicationState;
+import org.exoplatform.portal.config.model.ApplicationType;
+import org.exoplatform.portal.config.model.Container;
+import org.exoplatform.portal.config.model.Dashboard;
+import org.exoplatform.portal.config.model.ModelObject;
+import org.exoplatform.portal.config.model.Page;
+import org.exoplatform.portal.config.model.PageNavigation;
+import org.exoplatform.portal.config.model.PageNode;
+import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.config.model.TransientApplicationState;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.portal.pom.data.ModelChange;
 import org.exoplatform.portal.pom.spi.gadget.Gadget;
@@ -36,7 +45,12 @@ import org.exoplatform.services.listener.Event;
 import org.exoplatform.services.listener.Listener;
 import org.exoplatform.services.listener.ListenerService;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -59,9 +73,6 @@ public class TestDataStorage extends AbstractPortalTest
    /** . */
    private POMSessionManager mgr;
 
-   /** . */
-   private POMSession session;
-
    private LinkedList<Event> events;
 
    private ListenerService listenerService;
@@ -81,17 +92,16 @@ public class TestDataStorage extends AbstractPortalTest
             events.add(event);
          }
       };
-      
+
+      //
       super.setUp();
-      begin();
       PortalContainer container = PortalContainer.getInstance();
       storage_ = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
       mgr = (POMSessionManager)container.getComponentInstanceOfType(POMSessionManager.class);
-      session = mgr.openSession();
-      
       events = new LinkedList<Event>();
       listenerService = (ListenerService)container.getComponentInstanceOfType(ListenerService.class);
-      
+
+      //
       listenerService.addListener(DataStorage.PAGE_CREATED, listener);
       listenerService.addListener(DataStorage.PAGE_REMOVED, listener);
       listenerService.addListener(DataStorage.PAGE_UPDATED, listener);
@@ -101,11 +111,13 @@ public class TestDataStorage extends AbstractPortalTest
       listenerService.addListener(DataStorage.PORTAL_CONFIG_CREATED, listener);
       listenerService.addListener(DataStorage.PORTAL_CONFIG_UPDATED, listener);
       listenerService.addListener(DataStorage.PORTAL_CONFIG_REMOVED, listener);
+
+      //
+      begin();
    }
 
    protected void tearDown() throws Exception
    {
-      session.close();
       end();
       super.tearDown();
    }
@@ -921,12 +933,10 @@ public class TestDataStorage extends AbstractPortalTest
       }
 
       // Now commit tx
-      session.close(true);
       end(true);
 
       // We test we observe the change
       begin();
-      session = mgr.openSession();
       List<String> afterNames = storage_.getAllPortalNames();
       assertTrue(afterNames.containsAll(names));
       afterNames.removeAll(names);
@@ -977,12 +987,10 @@ public class TestDataStorage extends AbstractPortalTest
       }
 
       //
-      session.close(true);
       end(true);
 
       // Now test it is still removed
       begin();
-      session = mgr.openSession();
       afterNames = storage_.getAllPortalNames();
       assertEquals(new HashSet<String>(names), new HashSet<String>(afterNames));
    }
