@@ -21,6 +21,7 @@ package org.exoplatform.portal.config;
 
 import static org.exoplatform.portal.pom.config.Utils.split;
 
+import junit.framework.AssertionFailedError;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.application.PortletPreferences;
 import org.exoplatform.portal.application.Preference;
@@ -36,6 +37,8 @@ import org.exoplatform.services.listener.Listener;
 import org.exoplatform.services.listener.ListenerService;
 
 import java.util.*;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Created by The eXo Platform SARL Author : Tung Pham thanhtungty@gmail.com Nov
@@ -867,6 +870,121 @@ public class TestDataStorage extends AbstractPortalTest
       assertEquals(1, row0.getChildren().size());
       gadgetApp = (Application<Gadget>)row0.getChildren().get(0);
       assertEquals("foo", storage_.getId(gadgetApp.getState()));
+   }
+
+   public void testGetAllPortalNames() throws Exception
+   {
+      final List<String> names = storage_.getAllPortalNames();
+
+      // Create new portal
+      storage_.create(new PortalConfig("portal", "testGetAllPortalNames"));
+
+      // Test during tx we see the good names
+      List<String> transientNames = storage_.getAllPortalNames();
+      assertTrue(transientNames.containsAll(names));
+      transientNames.removeAll(names);
+      assertEquals(Collections.singletonList("testGetAllPortalNames"), transientNames);
+
+      // Test we have not seen anything yet outside of tx
+      final CountDownLatch addSync = new CountDownLatch(1);
+      final AtomicReference<Throwable> error = new AtomicReference<Throwable>();
+      new Thread()
+      {
+         @Override
+         public void run()
+         {
+            begin();
+            try
+            {
+               List<String> isolatedNames = storage_.getAllPortalNames();
+               assertEquals(new HashSet<String>(names), new HashSet<String>(isolatedNames));
+            }
+            catch (Throwable t)
+            {
+               error.set(t);
+            }
+            finally
+            {
+               addSync.countDown();
+               end();
+            }
+         }
+      }.start();
+
+      //
+      addSync.await();
+      if (error.get() != null)
+      {
+         AssertionFailedError afe = new AssertionFailedError();
+         afe.initCause(error.get());
+         throw afe;
+      }
+
+      // Now commit tx
+      session.close(true);
+      end(true);
+
+      // We test we observe the change
+      begin();
+      session = mgr.openSession();
+      List<String> afterNames = storage_.getAllPortalNames();
+      assertTrue(afterNames.containsAll(names));
+      afterNames.removeAll(names);
+      assertEquals(Collections.singletonList("testGetAllPortalNames"), afterNames);
+
+      // Then we remove the newly created portal
+      storage_.remove(new PortalConfig("portal", "testGetAllPortalNames"));
+
+      // Test we are syeing the transient change
+      transientNames.clear();
+      transientNames = storage_.getAllPortalNames();
+      assertEquals(names, transientNames);
+
+      // Test we have not seen anything yet outside of tx
+      error.set(null);
+      final CountDownLatch removeSync = new CountDownLatch(1);
+      new Thread()
+      {
+         public void run()
+         {
+            begin();
+            try
+            {
+               List<String> isolatedNames = storage_.getAllPortalNames();
+               assertTrue(isolatedNames.containsAll(names));
+               isolatedNames.removeAll(names);
+               assertEquals(Collections.singletonList("testGetAllPortalNames"), isolatedNames);
+            }
+            catch (Throwable t)
+            {
+               error.set(t);
+            }
+            finally
+            {
+               removeSync.countDown();
+               end();
+            }
+         }
+      }.start();
+
+      //
+      removeSync.await();
+      if (error.get() != null)
+      {
+         AssertionFailedError afe = new AssertionFailedError();
+         afe.initCause(error.get());
+         throw afe;
+      }
+
+      //
+      session.close(true);
+      end(true);
+
+      // Now test it is still removed
+      begin();
+      session = mgr.openSession();
+      afterNames = storage_.getAllPortalNames();
+      assertEquals(new HashSet<String>(names), new HashSet<String>(afterNames));
    }
 
    private Application<Portlet> create(String instanceId)

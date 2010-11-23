@@ -67,6 +67,16 @@ public class PortalConfig extends ModelObject
       this(PORTAL_TYPE);
    }
 
+   public PortalConfig(String type)
+   {
+      this(type, null);
+   }
+
+   public PortalConfig(String type, String ownerId)
+   {
+      this(type, ownerId, null);
+   }
+
    public PortalConfig(String type, String ownerId, String storageId)
    {
       super(storageId);
@@ -74,14 +84,7 @@ public class PortalConfig extends ModelObject
       //
       this.type = type;
       this.name = ownerId;
-   }
-
-   public PortalConfig(String type)
-   {
-      this.type = type;
-
-      //
-      setPortalLayout(new Container());
+      this.portalLayout = new Container();
    }
 
    public PortalConfig(PortalData data)
@@ -97,14 +100,6 @@ public class PortalConfig extends ModelObject
       this.properties = new Properties(data.getProperties());
       this.skin = data.getSkin();
       this.portalLayout = new Container(data.getPortalLayout());
-   }
-
-   PortalConfig(String storageId, String type)
-   {
-      super(storageId);
-
-      //
-      this.type = type;
    }
 
    public String getType()
