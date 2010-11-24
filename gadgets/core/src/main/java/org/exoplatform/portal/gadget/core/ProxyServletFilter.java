@@ -57,6 +57,9 @@ public class ProxyServletFilter implements Filter
    /** . */
    private ServletContext ctx;
 
+   /** . */
+   private static final Logger log = LoggerFactory.getLogger(ProxyServletFilter.class);
+
    public void init(FilterConfig cfg) throws ServletException
    {
       this.ctx = cfg.getServletContext();
@@ -90,14 +93,23 @@ public class ProxyServletFilter implements Filter
             }
             else
             {
-               URI uri = URI.create(url);
-               if (!service.accept(hreq, container, uri))
+               try
                {
-                  hresp.sendError(HttpServletResponse.SC_FORBIDDEN, "Gadget " + url + " is blacklisted");
+                  URI uri = URI.create(url);
+                  if (!service.accept(hreq, container, uri))
+                  {
+                     hresp.sendError(HttpServletResponse.SC_FORBIDDEN, "Gadget " + url + " is blacklisted");
+                  }
+                  else
+                  {
+                     chain.doFilter(req, resp);
+                  }
+
                }
-               else
+               catch (java.lang.IllegalArgumentException e)
                {
-                  chain.doFilter(req, resp);
+                  // It happens that some URLs can be wrong, I've seen this with "http://" as URL in one of the Google Gadgets
+                  logger.debug("Invalid URL: " + url;
                }
             }
          }
