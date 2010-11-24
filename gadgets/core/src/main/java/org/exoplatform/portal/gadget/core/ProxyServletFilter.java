@@ -22,6 +22,9 @@ package org.exoplatform.portal.gadget.core;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.web.security.proxy.ProxyFilterService;
 
+import org.gatein.common.logging.LoggerFactory;
+import org.gatein.common.logging.Logger;
+
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -58,7 +61,7 @@ public class ProxyServletFilter implements Filter
    private ServletContext ctx;
 
    /** . */
-   private static final Logger log = LoggerFactory.getLogger(ProxyServletFilter.class);
+   private static final Logger logger = LoggerFactory.getLogger(ProxyServletFilter.class);
 
    public void init(FilterConfig cfg) throws ServletException
    {
@@ -109,7 +112,7 @@ public class ProxyServletFilter implements Filter
                catch (java.lang.IllegalArgumentException e)
                {
                   // It happens that some URLs can be wrong, I've seen this with "http://" as URL in one of the Google Gadgets
-                  logger.debug("Invalid URL: " + url;
+                  logger.debug("Invalid URL: " + url);
                }
             }
          }
