@@ -252,10 +252,6 @@
 		<url-pattern>/gateinservlet</url-pattern>
 	</servlet-mapping>
 
-	<session-config>
-		<session-timeout>30</session-timeout>
-	</session-config>
-
 	<!-- The Welcome File List for IBM WebSphere -->
 
 	<welcome-file-list>
