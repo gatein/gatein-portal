@@ -11,6 +11,7 @@
 	<xi:include href="PortalDevelopment/DefaultPortalPermissionConfiguration.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 	<xi:include href="PortalDevelopment/DefaultPortalNavigationConfiguration.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 	<xi:include href="PortalDevelopment/InternationalizationConfiguration.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+	<xi:include href="PortalDevelopment/LocalizationConfiguration.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 	<xi:include href="PortalDevelopment/RTLFramework.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 	<xi:include href="PortalDevelopment/XMLResourceBundles.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 	<xi:include href="PortalDevelopment/JavascriptInterApplicationCommunication.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
