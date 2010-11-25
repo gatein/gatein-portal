@@ -19,8 +19,6 @@
 package org.exoplatform.application.gadget;
 
 import org.exoplatform.application.gadget.impl.GadgetRegistryServiceImpl;
-import org.exoplatform.commons.chromattic.ChromatticLifeCycle;
-import org.exoplatform.commons.chromattic.SessionContext;
 import org.exoplatform.commons.xml.DocumentSource;
 import org.exoplatform.commons.xml.XMLValidator;
 import org.exoplatform.container.ExoContainerContext;
@@ -40,11 +38,10 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import javax.servlet.ServletContext;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -115,28 +112,27 @@ public class GadgetDeployer implements WebAppListener, Startable
 
    private void handle(ServletContext scontext, URL gadgetsURL)
    {
-      ChromatticLifeCycle lifeCycle = gadgetRegistryService.getChromatticLifeCycle();
-      lifeCycle.openContext();
       try
       {
+         List<GadgetImporter> importers = new ArrayList<GadgetImporter>();
          Document docXML = validator.validate(DocumentSource.create(gadgetsURL));
          NodeList nodeList = docXML.getElementsByTagName("gadget");
          for (int i = 0; i < nodeList.getLength(); i++)
          {
             Element gadgetElement = (Element)nodeList.item(i);
             String gadgetName = gadgetElement.getAttribute("name");
-            log.debug("About to import gadget " + gadgetName);
+
+            //
+            log.debug("About to parse gadget " + gadgetName);
             Element pathElt = XMLTools.getUniqueChild(gadgetElement, "path", false);
+            GadgetImporter importer = null;
             if (pathElt != null)
             {
                String path = XMLTools.asString(pathElt, true);
-               ServletLocalImporter importer = new ServletLocalImporter(
+               importer = new ServletLocalImporter(
                   gadgetName,
-                  gadgetRegistryService.getRegistry(),
                   path,
-                  scontext,
-                  true);
-               importer.doImport();
+                  scontext);
             }
             else
             {
@@ -144,24 +140,26 @@ public class GadgetDeployer implements WebAppListener, Startable
                if (urlElt != null)
                {
                   String url = XMLTools.asString(urlElt, true);
-                  ServletLocalImporter importer = new ServletLocalImporter(
+                  importer = new RemoteImporter(
                      gadgetName,
-                     gadgetRegistryService.getRegistry(),
-                     url, 
-                     scontext,
-                     false);
-                  importer.doImport();
+                     url);
                }
             }
+
+            //
+            if (importer != null)
+            {
+               importers.add(importer);
+               log.debug("Add gadget " + gadgetName + " to gadget imports");
+            }
          }
+
+         // Import everything
+         gadgetRegistryService.deploy(importers);
       }
       catch (Exception e)
       {
          log.error("Could not process gadget file " + gadgetsURL, e);
-      }
-      finally
-      {
-         lifeCycle.closeContext(true);
       }
    }
 }

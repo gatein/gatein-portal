@@ -33,6 +33,13 @@ public interface GadgetRegistryService
 {
 
    /**
+    * Deploy a set of gadgets.
+    *
+    * @param gadgets the gadgets to deploy
+    */
+   public void deploy(Iterable<GadgetImporter> gadgets);
+
+   /**
     * Return Gadget object retrieved from database by its name.
     * 
     * @param name the name of gadget

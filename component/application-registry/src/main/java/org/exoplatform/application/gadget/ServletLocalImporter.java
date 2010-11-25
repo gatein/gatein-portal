@@ -18,12 +18,16 @@
  */
 package org.exoplatform.application.gadget;
 
-import org.exoplatform.application.gadget.impl.GadgetRegistry;
+import org.chromattic.ext.ntdef.NTFolder;
+import org.chromattic.ext.ntdef.Resource;
+import org.exoplatform.application.gadget.impl.GadgetDefinition;
+import org.exoplatform.application.gadget.impl.LocalGadgetData;
 import org.gatein.common.io.IOTools;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 
 import javax.servlet.ServletContext;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Set;
@@ -32,7 +36,7 @@ import java.util.Set;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class ServletLocalImporter extends LocalImporter
+public class ServletLocalImporter extends GadgetImporter
 {
 
    /** . */
@@ -41,21 +45,102 @@ public class ServletLocalImporter extends LocalImporter
    /** . */
    private final ServletContext servletContext;
 
+   /** Used temporarily when importing resources. */
+   private NTFolder folder;
+
    public ServletLocalImporter(
       String name,
-      GadgetRegistry registry,
       String gadgetPath,
-      ServletContext servletContext,
-      boolean local)
+      ServletContext servletContext)
    {
-      super(name, registry, gadgetPath, local);
+      super(name, gadgetPath);
 
       //
       this.servletContext = servletContext;
    }
 
    @Override
-   public String getName(String resourcePath) throws IOException
+   protected byte[] getGadgetBytes(String gadgetURI) throws IOException
+   {
+      return getContent(gadgetURI);
+   }
+
+   @Override
+   protected String getGadgetURL(String gadgetURI) throws Exception
+   {
+      return gadgetURI;
+   }
+
+   @Override
+   protected void process(String gadgetURI, GadgetDefinition def) throws Exception
+   {
+      def.setLocal(true);
+
+      //
+      LocalGadgetData data = (LocalGadgetData)def.getData();
+
+      //
+      String fileName = getName(gadgetURI);
+      data.setFileName(fileName);
+
+      // Import resource
+      folder = data.getResources();
+      String folderPath = getParent(gadgetURI);
+      visitChildren(gadgetURI, folderPath);
+      folder = null;
+   }
+
+   private void visit(String uri, String resourcePath) throws Exception
+   {
+      String name = getName(resourcePath);
+      if (isFile(resourcePath))
+      {
+         byte[] content = getContent(resourcePath);
+
+         //
+         if (content != null)
+         {
+            String mimeType = getMimeType(name);
+
+            //
+            if (mimeType == null)
+            {
+               mimeType = "application/octet-stream";
+            }
+
+            // We can detect encoding for XML files
+            String encoding = null;
+            if ("application/xml".equals(mimeType))
+            {
+               encoding = EncodingDetector.detect(new ByteArrayInputStream(content));
+            }
+
+            // Correct mime type for gadgets
+            if (resourcePath.equals(uri)) {
+               mimeType = LocalGadgetData.GADGET_MIME_TYPE;
+            }
+
+            //
+            folder.createFile(name, new Resource(mimeType, encoding, content));
+         }
+      }
+      else
+      {
+         folder = folder.createFolder(name);
+         visitChildren(uri, resourcePath);
+         folder = folder.getParent();
+      }
+   }
+
+   private void visitChildren(String gadgetURI, String folderPath) throws Exception
+   {
+      for (String childPath : getChildren(folderPath))
+      {
+         visit(gadgetURI, childPath);
+      }
+   }
+
+   private String getName(String resourcePath) throws IOException
    {
       // It's a directory, remove the trailing '/'
       if (resourcePath.endsWith("/"))
@@ -70,8 +155,7 @@ public class ServletLocalImporter extends LocalImporter
       return resourcePath.substring(index + 1);
    }
 
-   @Override
-   public String getParent(String resourcePath) throws IOException
+   private String getParent(String resourcePath) throws IOException
    {
       // It's a directory, remove the trailing '/'
       if (resourcePath.endsWith("/"))
@@ -86,8 +170,7 @@ public class ServletLocalImporter extends LocalImporter
       return resourcePath.substring(0, index + 1);
    }
 
-   @Override
-   public byte[] getContent(String filePath) throws IOException
+   private byte[] getContent(String filePath) throws IOException
    {
       InputStream in = servletContext.getResourceAsStream(filePath);
       if (in == null)
@@ -101,21 +184,18 @@ public class ServletLocalImporter extends LocalImporter
       }
    }
 
-   @Override
-   public Iterable<String> getChildren(String folderPath) throws IOException
+   private Iterable<String> getChildren(String folderPath) throws IOException
    {
-      @SuppressWarnings("unchecked") Set resourcePaths = servletContext.getResourcePaths(folderPath);
+      @SuppressWarnings("unchecked") Set<String> resourcePaths = servletContext.getResourcePaths(folderPath);
       return resourcePaths;
    }
 
-   @Override
-   public boolean isFile(String resourcePath) throws IOException
+   private boolean isFile(String resourcePath) throws IOException
    {
       return !resourcePath.endsWith("/");
    }
 
-   @Override
-   public String getMimeType(String fileName)
+   private String getMimeType(String fileName)
    {
       return servletContext.getMimeType(fileName);
    }

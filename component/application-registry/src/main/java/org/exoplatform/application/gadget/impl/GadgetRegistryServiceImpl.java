@@ -23,6 +23,7 @@ import org.chromattic.api.ChromatticSession;
 import org.chromattic.ext.ntdef.Resource;
 import org.exoplatform.application.gadget.Gadget;
 import org.exoplatform.application.gadget.GadgetRegistryService;
+import org.exoplatform.application.gadget.GadgetImporter;
 import org.exoplatform.application.registry.impl.ApplicationRegistryChromatticLifeCycle;
 import org.exoplatform.commons.chromattic.ChromatticLifeCycle;
 import org.exoplatform.commons.chromattic.ChromatticManager;
@@ -30,11 +31,14 @@ import org.exoplatform.commons.utils.PropertyManager;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.container.xml.PropertiesParam;
 import org.exoplatform.container.xml.ValueParam;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -42,6 +46,9 @@ import java.util.List;
  */
 public class GadgetRegistryServiceImpl implements GadgetRegistryService
 {
+
+   /** . */
+   private final Logger log = LoggerFactory.getLogger(GadgetRegistryServiceImpl.class);
 
    /** . */
    private static final String DEFAULT_DEVELOPER_GROUP = "/platform/administrators";
@@ -120,12 +127,22 @@ public class GadgetRegistryServiceImpl implements GadgetRegistryService
       return registry;
    }
 
-   public ChromatticLifeCycle getChromatticLifeCycle()
-   {
-      return chromatticLifeCycle;
-   }
-
    // ***************
+
+   public void deploy(Iterable<GadgetImporter> gadgets)
+   {
+      for (GadgetImporter importer : gadgets)
+      {
+         try
+         {
+            new DeployTask(importer).call();
+         }
+         catch (Exception e)
+         {
+            log.error("Could not process gadget file " + importer, e);
+         }
+      }
+   }
 
    public Gadget getGadget(String name) throws Exception
    {
@@ -284,5 +301,41 @@ public class GadgetRegistryServiceImpl implements GadgetRegistryService
    public String getHostName()
    {
       return hostName;
+   }
+
+   private class DeployTask implements Callable<Boolean>
+   {
+
+      /** . */
+      private final GadgetImporter importer;
+
+      private DeployTask(GadgetImporter importer)
+      {
+         this.importer = importer;
+      }
+
+      public Boolean call() throws Exception
+      {
+         chromatticLifeCycle.openContext();
+         try
+         {
+            boolean done = false;
+            if (getRegistry().getGadget(importer.getGadgetName()) == null)
+            {
+               GadgetDefinition def = getRegistry().addGadget(importer.getGadgetName());
+               importer.doImport(def);
+               done = true;
+            }
+            else
+            {
+               log.debug("Will not import existing gagdet " + importer.getGadgetName());
+            }
+            return done;
+         }
+         finally
+         {
+            chromatticLifeCycle.closeContext(true);
+         }
+      }
    }
 }
