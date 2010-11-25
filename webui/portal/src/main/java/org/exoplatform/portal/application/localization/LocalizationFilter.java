@@ -56,15 +56,27 @@ import java.util.Set;
  * override for extra-portlet requests (i.e. unbridged .jsp). Thanks to it dynamic resources can be localized
  * to keep in sync with the rest of the portal. This filter is re-entrant, and can safely be installed for
  * INCLUDE, FORWARD, and ERROR dispatch methods.
- *
+ * <p>
  * A concrete example of re-entrant use is login/jsp/login.jsp used when authentication fails at portal login.
- *
+ * <p>
  * By default {@link HttpServletRequest#getLocale()} and {@link HttpServletRequest#getLocales()} reflect
  * browser language preference. When using this filter these two calls employ the same Locale determination algorithm
- * as LocalizationLifecycle does.
- *
+ * as {@link LocalizationLifecycle} does.
+ * <p>
  * This filter can be activated / deactivated via portal module's web.xml
- *
+ * <p>
+ * If default portal language is other than English, it can be configured for the filter by using PortalLocale init param:
+ * <p>
+ * <pre>&lt;filter&gt; 
+ *   &lt;filter-name&gt;LocalizationFilter&lt;/filter-name&gt;
+ *   &lt;filter-class&gt;org.exoplatform.portal.application.localization.LocalizationFilter&lt;/filter-class&gt;
+ *   &lt;init-param&gt;
+ *     &lt;param-name>PortalLocale&lt;/param-name&gt;
+ *     &lt;param-value>fr_FR&lt;/param-value&gt;
+ *   &lt;/init-param&gt;
+ * &lt;/filter&gt;
+ * </pre>
+ * 
  * @author <a href="mailto:mstrukel@redhat.com">Marko Strukelj</a>
  */
 public class LocalizationFilter implements Filter
@@ -73,8 +85,14 @@ public class LocalizationFilter implements Filter
 
    private static ThreadLocal<Locale> currentLocale = new ThreadLocal<Locale>();
 
+   private Locale portalLocale = Locale.ENGLISH;
+
    public void init(FilterConfig filterConfig) throws ServletException
    {
+      String locale = filterConfig.getInitParameter("PortalLocale");
+      locale = locale != null ? locale.trim() : null;
+      if (locale != null && locale.length() > 0)
+         portalLocale = LocaleContextInfo.getLocale(locale);
    }
 
    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException
@@ -141,7 +159,7 @@ public class LocalizationFilter implements Filter
          localeCtx.setUserProfileLocale(getUserProfileLocale(container, req.getRemoteUser()));
          localeCtx.setRemoteUser(req.getRemoteUser());
 
-         localeCtx.setPortalLocale(Locale.ENGLISH);
+         localeCtx.setPortalLocale(checkPortalLocaleSupported(portalLocale, supportedLocales));
          Locale locale = localePolicy.determineLocale(localeCtx);
          boolean supported = supportedLocales.contains(locale);
 
@@ -168,6 +186,27 @@ public class LocalizationFilter implements Filter
       {
          currentLocale.remove();
       }
+   }
+
+   private Locale checkPortalLocaleSupported(Locale portalLocale, Set<Locale> supportedLocales)
+   {
+      if (supportedLocales.contains(portalLocale))
+         return portalLocale;
+      if ("".equals(portalLocale.getCountry()) == false)
+      {
+         Locale loc = new Locale(portalLocale.getLanguage());
+         if (supportedLocales.contains(loc))
+         {
+            log.warn("portalLocale not supported: " + LocaleContextInfo.getLocaleAsString(portalLocale)
+                  + ". Falling back to '" + portalLocale.getLanguage()+ "'.");
+            this.portalLocale = loc;
+            return loc;
+         }
+      }
+
+      log.warn("portalLocale not supported: " + LocaleContextInfo.getLocaleAsString(portalLocale) + ". Falling back to Locale.ENGLISH.");
+      this.portalLocale = Locale.ENGLISH;
+      return portalLocale;
    }
 
    private Locale getUserProfileLocale(ExoContainer container, String user)
