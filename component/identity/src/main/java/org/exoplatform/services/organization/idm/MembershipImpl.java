@@ -157,4 +157,14 @@ public class MembershipImpl implements Membership, Comparable
 
       return userName.compareTo(m.getUserName());  
    }
+
+   @Override
+   public String toString()
+   {
+      return "MembershipImpl{" +
+         "membershipType='" + membershipType + '\'' +
+         ", userName='" + userName + '\'' +
+         ", groupId='" + groupId + '\'' +
+         '}';
+   }
 }

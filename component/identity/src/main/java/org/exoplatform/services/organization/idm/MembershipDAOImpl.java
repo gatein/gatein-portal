@@ -26,11 +26,13 @@ import org.exoplatform.services.organization.MembershipEventListener;
 import org.exoplatform.services.organization.MembershipHandler;
 import org.exoplatform.services.organization.MembershipType;
 import org.exoplatform.services.organization.User;
+import org.gatein.common.logging.LogLevel;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 import org.picketlink.idm.api.IdentitySession;
 import org.picketlink.idm.api.Role;
 import org.picketlink.idm.api.RoleType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 
 import java.util.Collection;
 import java.util.Collections;
@@ -74,6 +76,19 @@ public class MembershipDAOImpl implements MembershipHandler
    public void createMembership(Membership m, boolean broadcast) throws Exception
    {
 
+      if (log.isTraceEnabled())
+      {
+         Tools.logMethodIn(
+            log,
+            LogLevel.TRACE,
+            "createMembership",
+            new Object[]{
+               "membership", m,
+               "broadcast", broadcast,
+            }
+         );
+      }
+
       if (broadcast)
       {
          preSave(m, true);
@@ -90,6 +105,21 @@ public class MembershipDAOImpl implements MembershipHandler
 
    public void linkMembership(User user, Group g, MembershipType mt, boolean broadcast) throws Exception
    {
+      if (log.isTraceEnabled())
+      {
+         Tools.logMethodIn(
+            log,
+            LogLevel.TRACE,
+            "linkMembership",
+            new Object[]{
+               "user", user,
+               "group", g,
+               "membershipType", mt,
+               "broadcast", broadcast
+            }
+         );
+      }
+
       if (g == null)
       {
          throw new InvalidNameException("Can not create membership record for " + user.getUserName()
@@ -154,6 +184,19 @@ public class MembershipDAOImpl implements MembershipHandler
 
    public void saveMembership(Membership m, boolean broadcast) throws Exception
    {
+      if (log.isTraceEnabled())
+      {
+         Tools.logMethodIn(
+            log,
+            LogLevel.TRACE,
+            "saveMembership",
+            new Object[]{
+               "membership", m,
+               "broadcast", broadcast
+            }
+         );
+      }
+
 
       String plGroupName = getPLIDMGroupName(getGroupNameFromId(m.getGroupId()));
 
@@ -222,6 +265,19 @@ public class MembershipDAOImpl implements MembershipHandler
 
    public Membership removeMembership(String id, boolean broadcast) throws Exception
    {
+      if (log.isTraceEnabled())
+      {
+         Tools.logMethodIn(
+            log,
+            LogLevel.TRACE,
+            "removeMembership",
+            new Object[]{
+               "id", id,
+               "broadcast", broadcast
+            }
+         );
+      }
+
 
       Membership m = new MembershipImpl(id);
 
@@ -308,6 +364,20 @@ public class MembershipDAOImpl implements MembershipHandler
    public Collection removeMembershipByUser(String userName, boolean broadcast) throws Exception
    {
 
+      if (log.isTraceEnabled())
+      {
+         Tools.logMethodIn(
+            log,
+            LogLevel.TRACE,
+            "removeMembershipByUser",
+            new Object[]{
+               "userName", userName,
+               "broadcast", broadcast
+            }
+         );
+      }
+
+
       Collection<Role> roles = new HashSet();
 
       try
@@ -388,6 +458,22 @@ public class MembershipDAOImpl implements MembershipHandler
 
    public Membership findMembershipByUserGroupAndType(String userName, String groupId, String type) throws Exception
    {
+
+      if (log.isTraceEnabled())
+      {
+         Tools.logMethodIn(
+            log,
+            LogLevel.TRACE,
+            "findMembershipByUserAndType",
+            new Object[]{
+               "userName", userName,
+               "groupId", groupId,
+               "type", type,
+            }
+         );
+      }
+
+
       String plGroupName = getPLIDMGroupName(getGroupNameFromId(groupId));
 
       String gid =
@@ -437,6 +523,8 @@ public class MembershipDAOImpl implements MembershipHandler
          hasMembership = true;
       }
 
+      Membership result = null;
+
       if (hasMembership)
       {
 
@@ -446,16 +534,51 @@ public class MembershipDAOImpl implements MembershipHandler
          m.setUserName(userName);
          m.setMembershipType(type);
 
-         return m;
+         result = m;
       }
-      return null;
+
+      if (log.isTraceEnabled())
+      {
+        Tools.logMethodOut(
+            log,
+            LogLevel.TRACE,
+            "findMembershipByUserGroupAndType",
+            result
+         );
+      }
+
+      return result;
    }
 
    public Collection findMembershipsByUserAndGroup(String userName, String groupId) throws Exception
    {
+      if (log.isTraceEnabled())
+      {
+         Tools.logMethodIn(
+            log,
+            LogLevel.TRACE,
+            "findMembershipByUserAndGroup",
+            new Object[]{
+               "userName", userName,
+               "groupId", groupId,
+            }
+         );
+      }
+
       if (userName == null)
       {
          // julien fix : if user name is null, need to check if we do need to return a special group
+
+         if (log.isTraceEnabled())
+         {
+            Tools.logMethodOut(
+               log,
+               LogLevel.TRACE,
+               "findMembershipByUserAndGroup",
+               Collections.emptyList()
+            );
+      }
+
          return Collections.emptyList();
       }
 
@@ -515,11 +638,36 @@ public class MembershipDAOImpl implements MembershipHandler
       }
 
       //TODO: Exo UI has hardcoded casts to List
-      return new LinkedList(memberships);
+      Collection result = new LinkedList(memberships);
+
+      if (log.isTraceEnabled())
+      {
+        Tools.logMethodOut(
+            log,
+            LogLevel.TRACE,
+            "findMembershipByUserAndGroup",
+            result
+         );
+      }
+
+      return result;
    }
 
    public Collection findMembershipsByUser(String userName) throws Exception
    {
+      if (log.isTraceEnabled())
+      {
+         Tools.logMethodIn(
+            log,
+            LogLevel.TRACE,
+            "findMembershipsByUser",
+            new Object[]{
+               "userName", userName
+            }
+         );
+      }
+
+
       Collection<Role> roles = new HashSet();
 
       try
@@ -577,7 +725,19 @@ public class MembershipDAOImpl implements MembershipHandler
       }
 
 
-      return new LinkedList(memberships);
+      Collection result = new LinkedList(memberships);
+
+      if (log.isTraceEnabled())
+      {
+        Tools.logMethodOut(
+            log,
+            LogLevel.TRACE,
+            "findMembershipsByUser",
+            result
+         );
+      }
+
+      return result;
    }
 
    public Collection findMembershipsByGroup(Group group) throws Exception
@@ -587,6 +747,18 @@ public class MembershipDAOImpl implements MembershipHandler
 
    public Collection findMembershipsByGroupId(String groupId) throws Exception
    {
+      if (log.isTraceEnabled())
+      {
+         Tools.logMethodIn(
+            log,
+            LogLevel.TRACE,
+            "findMembershipsByGroup",
+            new Object[]{
+               "groupId", groupId
+            }
+         );
+      }
+
       String plGroupName = getPLIDMGroupName(getGroupNameFromId(groupId));
 
       String gid =
@@ -656,11 +828,34 @@ public class MembershipDAOImpl implements MembershipHandler
          Collections.sort(results);
       }
 
+
+      if (log.isTraceEnabled())
+      {
+        Tools.logMethodOut(
+            log,
+            LogLevel.TRACE,
+            "findMembershipsByGroupId",
+            results
+         );
+      }
+
       return results;
    }
 
    public Membership findMembership(String id) throws Exception
    {
+      if (log.isTraceEnabled())
+      {
+         Tools.logMethodIn(
+            log,
+            LogLevel.TRACE,
+            "findMembership",
+            new Object[]{
+               "id", id
+            }
+         );
+      }
+
       Membership m = new MembershipImpl(id);
 
       String plGroupName = getPLIDMGroupName(getGroupNameFromId(m.getGroupId()));
@@ -675,6 +870,15 @@ public class MembershipDAOImpl implements MembershipHandler
          if (isCreateMembership(m.getMembershipType()) &&
              getIdentitySession().getRoleManager().hasRole(m.getUserName(), groupId, m.getMembershipType()))
          {
+            if (log.isTraceEnabled())
+            {
+               Tools.logMethodOut(
+                  log,
+                  LogLevel.TRACE,
+                  "findMembership",
+                  m
+               );
+            }
             return m;
          }
       }
@@ -690,6 +894,16 @@ public class MembershipDAOImpl implements MembershipHandler
          if (isAssociationMapped() && getAssociationMapping().equals(m.getMembershipType()) &&
              getIdentitySession().getRelationshipManager().isAssociatedByKeys(groupId, m.getUserName()))
          {
+            if (log.isTraceEnabled())
+            {
+               Tools.logMethodOut(
+                  log,
+                  LogLevel.TRACE,
+                  "findMembership",
+                  m
+               );
+            }
+
             return m;
          }
       }
@@ -700,6 +914,15 @@ public class MembershipDAOImpl implements MembershipHandler
 
       }
 
+      if (log.isTraceEnabled())
+      {
+         Tools.logMethodOut(
+            log,
+            LogLevel.TRACE,
+            "findMembership",
+            null
+         );
+      }
 
       return null;
    }

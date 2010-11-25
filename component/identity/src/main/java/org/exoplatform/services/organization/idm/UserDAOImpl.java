@@ -28,6 +28,7 @@ import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.UserEventListener;
 import org.exoplatform.services.organization.UserHandler;
 import org.exoplatform.services.organization.impl.UserImpl;
+import org.gatein.common.logging.LogLevel;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 import org.picketlink.idm.api.Attribute;
@@ -122,6 +123,20 @@ public class UserDAOImpl implements UserHandler
 
    public void createUser(User user, boolean broadcast) throws Exception
    {
+      if (log.isTraceEnabled())
+      {
+         Tools.logMethodIn(
+            log,
+            LogLevel.TRACE,
+            "createUser",
+            new Object[]{
+               "user", user,
+               "broadcast", broadcast
+            }
+         );
+      }
+
+
       IdentitySession session = service_.getIdentitySession();
       if (broadcast)
       {
@@ -149,6 +164,20 @@ public class UserDAOImpl implements UserHandler
 
    public void saveUser(User user, boolean broadcast) throws Exception
    {
+
+      if (log.isTraceEnabled())
+      {
+         Tools.logMethodIn(
+            log,
+            LogLevel.TRACE,
+            "saveUser",
+            new Object[]{
+               "user", user,
+               "broadcast", broadcast
+            }
+         );
+      }
+
       IdentitySession session = service_.getIdentitySession();
       if (broadcast)
       {
@@ -165,6 +194,20 @@ public class UserDAOImpl implements UserHandler
 
    public User removeUser(String userName, boolean broadcast) throws Exception
    {
+      if (log.isTraceEnabled())
+      {
+         Tools.logMethodIn(
+            log,
+            LogLevel.TRACE,
+            "removeUser",
+            new Object[]{
+               "userName", userName,
+               "broadcast", broadcast
+            }
+         );
+      }
+
+
       IdentitySession session = service_.getIdentitySession();
 
       org.picketlink.idm.api.User foundUser = null;
@@ -223,15 +266,49 @@ public class UserDAOImpl implements UserHandler
    //
    public User findUserByName(String userName) throws Exception
    {
+      if (log.isTraceEnabled())
+      {
+         Tools.logMethodIn(
+            log,
+            LogLevel.TRACE,
+            "findUserByName",
+            new Object[]{
+               "userName", userName,
+            }
+         );
+      }
+
       IdentitySession session = service_.getIdentitySession();
 
       User user = getPopulatedUser(userName, session);
+
+      if (log.isTraceEnabled())
+      {
+        Tools.logMethodOut(
+            log,
+            LogLevel.TRACE,
+            "findUserByName",
+            user
+         );
+      }
 
       return user;
    }
 
    public LazyPageList getUserPageList(int pageSize) throws Exception
    {
+      if (log.isTraceEnabled())
+      {
+         Tools.logMethodIn(
+            log,
+            LogLevel.TRACE,
+            "getUserPagetList",
+            new Object[]{
+               "pageSize", pageSize
+            }
+         );
+      }
+
       UserQueryBuilder qb = service_.getIdentitySession().createUserQueryBuilder();
 
       return new LazyPageList(new IDMUserListAccess(this, service_, qb, pageSize, true), pageSize);
@@ -245,9 +322,32 @@ public class UserDAOImpl implements UserHandler
 //
    public boolean authenticate(String username, String password) throws Exception
    {
+      if (log.isTraceEnabled())
+      {
+         Tools.logMethodIn(
+            log,
+            LogLevel.TRACE,
+            "authenticate",
+            new Object[]{
+               "userName", username,
+               "password", "****"
+            }
+         );
+      }
+
       User user = findUserByName(username);
       if (user == null)
       {
+         if (log.isTraceEnabled())
+         {
+            Tools.logMethodOut(
+               log,
+               LogLevel.TRACE,
+               "authenticate",
+               false
+            );
+         }
+
          return false;
       }
 
@@ -279,11 +379,34 @@ public class UserDAOImpl implements UserHandler
          userImpl.setLastLoginTime(Calendar.getInstance().getTime());
          saveUser(userImpl, false);
       }
+
+      if (log.isTraceEnabled())
+      {
+         Tools.logMethodOut(
+            log,
+            LogLevel.TRACE,
+            "authenticate",
+            authenticated
+         );
+      }
+
       return authenticated;
    }
 
    public LazyPageList findUsers(Query q) throws Exception
    {
+      if (log.isTraceEnabled())
+      {
+         Tools.logMethodIn(
+            log,
+            LogLevel.TRACE,
+            "findUsers",
+            new Object[]{
+               "q", q
+            }
+         );
+      }
+
 
       UserQueryBuilder qb = service_.getIdentitySession().createUserQueryBuilder();
 
@@ -319,6 +442,19 @@ public class UserDAOImpl implements UserHandler
 
    public LazyPageList findUsersByGroup(String groupId) throws Exception
    {
+      if (log.isTraceEnabled())
+      {
+         Tools.logMethodIn(
+            log,
+            LogLevel.TRACE,
+            "findUsersByGroup",
+            new Object[]{
+               "groupId", groupId
+            }
+         );
+      }
+
+
       UserQueryBuilder qb = service_.getIdentitySession().createUserQueryBuilder();
 
       org.picketlink.idm.api.Group jbidGroup = null;
@@ -339,6 +475,18 @@ public class UserDAOImpl implements UserHandler
 
    public User findUserByEmail(String email) throws Exception
    {
+      if (log.isTraceEnabled())
+      {
+         Tools.logMethodIn(
+            log,
+            LogLevel.TRACE,
+            "findUserByEmail",
+            new Object[]{
+               "findUserByEmail", email
+            }
+         );
+      }
+
       IdentitySession session = service_.getIdentitySession();
 
 
@@ -361,6 +509,16 @@ public class UserDAOImpl implements UserHandler
          user = new UserImpl(plUser.getId());
          populateUser(user, session);
 
+      }
+
+      if (log.isTraceEnabled())
+      {
+        Tools.logMethodOut(
+            log,
+            LogLevel.TRACE,
+            "findUserByEmail",
+            user
+         );
       }
 
       return user;

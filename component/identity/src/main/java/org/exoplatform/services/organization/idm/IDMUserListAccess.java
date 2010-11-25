@@ -21,9 +21,13 @@ package org.exoplatform.services.organization.idm;
 
 import org.exoplatform.commons.utils.ListAccess;
 import org.exoplatform.services.organization.User;
+import org.gatein.common.logging.LogLevel;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 import org.picketlink.idm.api.SortOrder;
 import org.picketlink.idm.api.query.UserQuery;
 import org.picketlink.idm.api.query.UserQueryBuilder;
+
 
 import java.util.List;
 
@@ -32,6 +36,8 @@ import java.util.List;
  */
 public class IDMUserListAccess implements ListAccess<User>
 {
+   private static Logger log = LoggerFactory.getLogger(IDMUserListAccess.class);
+
    private final UserDAOImpl userDAO;
 
    private final PicketLinkIDMService idmService;
@@ -54,6 +60,19 @@ public class IDMUserListAccess implements ListAccess<User>
 
    public User[] load(int index, int length) throws Exception, IllegalArgumentException
    {
+      if (log.isTraceEnabled())
+      {
+         Tools.logMethodIn(
+            log,
+            LogLevel.TRACE,
+            "load",
+            new Object[]{
+               "index", index,
+               "length", length
+            }
+         );
+      }
+
       userQueryBuilder.page(index, length);
       UserQuery query = userQueryBuilder.sort(SortOrder.ASCENDING).createQuery();
       List<org.picketlink.idm.api.User> users = idmService.getIdentitySession().list(query);
@@ -67,21 +86,55 @@ public class IDMUserListAccess implements ListAccess<User>
          exoUsers[i] = UserDAOImpl.getPopulatedUser(user.getId(), idmService.getIdentitySession());
       }
 
+      if (log.isTraceEnabled())
+      {
+        Tools.logMethodOut(
+            log,
+            LogLevel.TRACE,
+            "load",
+            exoUsers
+         );
+      }
+
       return exoUsers;
    }
 
    public int getSize() throws Exception
    {
+      if (log.isTraceEnabled())
+      {
+         Tools.logMethodIn(
+            log,
+            LogLevel.TRACE,
+            "getSize",
+            null
+         );
+      }
+
+      int result;
+
       if (countAll)
       {
-         return idmService.getIdentitySession().getPersistenceManager().getUserCount();
+         result = idmService.getIdentitySession().getPersistenceManager().getUserCount();
       }
       else
       {
          userQueryBuilder.page(0, 0);
          UserQuery query = userQueryBuilder.sort(SortOrder.ASCENDING).createQuery();
-         return idmService.getIdentitySession().execute(query).size();
+         result = idmService.getIdentitySession().execute(query).size();
       }
+
+      if (log.isTraceEnabled())
+      {
+        Tools.logMethodOut(
+            log,
+            LogLevel.TRACE,
+            "getSize",
+            result
+         );
+      }
+
+      return result;
 
    }
 }

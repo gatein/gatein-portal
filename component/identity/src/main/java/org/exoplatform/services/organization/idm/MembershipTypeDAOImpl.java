@@ -22,6 +22,7 @@ package org.exoplatform.services.organization.idm;
 import org.exoplatform.services.organization.MembershipType;
 import org.exoplatform.services.organization.MembershipTypeHandler;
 import org.exoplatform.services.organization.impl.MembershipTypeImpl;
+import org.gatein.common.logging.LogLevel;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 import org.picketlink.idm.api.IdentitySession;
@@ -71,6 +72,20 @@ public class MembershipTypeDAOImpl implements MembershipTypeHandler
 
    public MembershipType createMembershipType(MembershipType mt, boolean broadcast) throws Exception
    {
+      if (log.isTraceEnabled())
+      {
+         Tools.logMethodIn(
+            log,
+            LogLevel.TRACE,
+            "createMembershipType",
+            new Object[]{
+               "membershipType", mt,
+               "broadcast", broadcast
+            }
+         );
+      }
+
+
       Date now = new Date();
       mt.setCreatedDate(now);
       mt.setModifiedDate(now);
@@ -83,6 +98,18 @@ public class MembershipTypeDAOImpl implements MembershipTypeHandler
 
    public MembershipType saveMembershipType(MembershipType mt, boolean broadcast) throws Exception
    {
+      if (log.isTraceEnabled())
+      {
+         Tools.logMethodIn(
+            log,
+            LogLevel.TRACE,
+            "saveMembershipType",
+            new Object[]{
+               "membershipType", mt,
+               "broadcast", broadcast
+            }
+         );
+      }
       Date now = new Date();
       mt.setModifiedDate(now);
       updateMembershipType(mt);
@@ -91,6 +118,18 @@ public class MembershipTypeDAOImpl implements MembershipTypeHandler
 
    public MembershipType findMembershipType(String name) throws Exception
    {
+      if (log.isTraceEnabled())
+      {
+         Tools.logMethodIn(
+            log,
+            LogLevel.TRACE,
+            "findMembershipType",
+            new Object[]{
+               "name", name
+            }
+         );
+      }
+
       RoleType rt = getIdentitySession().getRoleManager().getRoleType(name);
 
       MembershipType mt = null;
@@ -101,11 +140,35 @@ public class MembershipTypeDAOImpl implements MembershipTypeHandler
          populateMembershipType(mt);
       }
 
+      if (log.isTraceEnabled())
+      {
+        Tools.logMethodOut(
+            log,
+            LogLevel.TRACE,
+            "findMembershipType",
+            mt
+         );
+      }
+
       return mt;
    }
 
    public MembershipType removeMembershipType(String name, boolean broadcast) throws Exception
    {
+      if (log.isTraceEnabled())
+      {
+         Tools.logMethodIn(
+            log,
+            LogLevel.TRACE,
+            "removeMembershipType",
+            new Object[]{
+               "name", name,
+               "broadcast", broadcast
+            }
+         );
+      }
+
+
       MembershipType mt = findMembershipType(name);
 
       if (mt != null)
@@ -119,6 +182,15 @@ public class MembershipTypeDAOImpl implements MembershipTypeHandler
 
    public Collection findMembershipTypes() throws Exception
    {
+      if (log.isTraceEnabled())
+      {
+         Tools.logMethodIn(
+            log,
+            LogLevel.TRACE,
+            "findMembershipTypes",
+            null
+         );
+      }
 
       Collection<RoleType> rts = getIdentitySession().getRoleManager().findRoleTypes();
 
@@ -129,6 +201,16 @@ public class MembershipTypeDAOImpl implements MembershipTypeHandler
          MembershipType mt = new MembershipTypeImpl(rt.getName(), null, null);
          populateMembershipType(mt);
          mts.add(mt);
+      }
+
+      if (log.isTraceEnabled())
+      {
+        Tools.logMethodOut(
+            log,
+            LogLevel.TRACE,
+            "findMembershipTypes",
+            mts
+         );
       }
 
       return mts;

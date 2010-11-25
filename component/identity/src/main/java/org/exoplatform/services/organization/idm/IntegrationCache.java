@@ -149,15 +149,17 @@ public class IntegrationCache
 
       Node ioNode = getCache().getRoot().addChild(nodeFqn);
 
-      ioNode.put(NODE_OBJECT_KEY, id);
-
-      if (log.isLoggable(Level.FINER))
+      if (ioNode != null)
       {
+         ioNode.put(NODE_OBJECT_KEY, id);
 
-         log.finer(this.toString() + "GateIn group id cached. PLIDM group id: " + pLIDMId +
-            "GateIn group id: " + id + ";namespace=" + ns);
+         if (log.isLoggable(Level.FINER))
+         {
+
+            log.finer(this.toString() + "GateIn group id cached. PLIDM group id: " + pLIDMId +
+               "GateIn group id: " + id + ";namespace=" + ns);
+         }
       }
-
    }
 
    /**
@@ -201,14 +203,16 @@ public class IntegrationCache
 
       Node ioNode = getCache().getRoot().addChild(nodeFqn);
 
-      ioNode.put(NODE_OBJECT_KEY, rootGroup);
-
-      if (log.isLoggable(Level.FINER))
+      if (ioNode != null)
       {
+         ioNode.put(NODE_OBJECT_KEY, rootGroup);
 
-         log.finer(this.toString() + "GateIn root group stored in cache" + ";namespace=" + ns);
+         if (log.isLoggable(Level.FINER))
+         {
+
+            log.finer(this.toString() + "GateIn root group stored in cache" + ";namespace=" + ns);
+         }
       }
-
    }
 
    /**

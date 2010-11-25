@@ -22,6 +22,9 @@ package org.exoplatform.services.organization.idm;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.GroupEventListener;
 import org.exoplatform.services.organization.GroupHandler;
+import org.gatein.common.logging.LogLevel;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 import org.picketlink.idm.api.Attribute;
 import org.picketlink.idm.api.IdentitySession;
 import org.picketlink.idm.impl.api.SimpleAttribute;
@@ -35,8 +38,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+
 
 
 /*
@@ -73,16 +76,50 @@ public class GroupDAOImpl implements GroupHandler
 
    final public Group createGroupInstance()
    {
+      if (log.isTraceEnabled())
+      {
+         Tools.logMethodIn(
+            log,
+            LogLevel.TRACE,
+            "createGroupInstance",
+            null
+         );
+      }
       return new ExtGroup();
    }
 
    public void createGroup(Group group, boolean broadcast) throws Exception
    {
+      if (log.isTraceEnabled())
+      {
+         Tools.logMethodIn(
+            log,
+            LogLevel.TRACE,
+            "createGroup",
+            new Object[]{
+               "broadcast", broadcast
+            }
+         );
+      }
       addChild(null, group, broadcast);
    }
 
    public void addChild(Group parent, Group child, boolean broadcast) throws Exception
    {
+      if (log.isTraceEnabled())
+      {
+         Tools.logMethodIn(
+            log,
+            LogLevel.TRACE,
+            "addChild",
+            new Object[]{
+               "parent", parent,
+               "child", child,
+               "broadcast", broadcast
+            }
+         );
+      }
+
       org.picketlink.idm.api.Group parentGroup = null;
 
       String childPLGroupName = getPLIDMGroupName(child.getGroupName());
@@ -148,6 +185,19 @@ public class GroupDAOImpl implements GroupHandler
 
    public void saveGroup(Group group, boolean broadcast) throws Exception
    {
+      if (log.isTraceEnabled())
+      {
+         Tools.logMethodIn(
+            log,
+            LogLevel.TRACE,
+            "saveGroup",
+            new Object[]{
+               "group", group,
+               "broadcast", broadcast
+            }
+         );
+      }
+
       if (broadcast)
       {
          preSave(group, false);
@@ -161,6 +211,19 @@ public class GroupDAOImpl implements GroupHandler
 
    public Group removeGroup(Group group, boolean broadcast) throws Exception
    {
+      if (log.isTraceEnabled())
+      {
+         Tools.logMethodIn(
+            log,
+            LogLevel.TRACE,
+            "removeGroup",
+            new Object[]{
+               "group", group,
+               "broadcast", broadcast
+            }
+         );
+      }
+
       if (broadcast)
       {
          preDelete(group);
@@ -228,6 +291,19 @@ public class GroupDAOImpl implements GroupHandler
 
    public Collection findGroupByMembership(String userName, String membershipType) throws Exception
    {
+      if (log.isTraceEnabled())
+      {
+         Tools.logMethodIn(
+            log,
+            LogLevel.TRACE,
+            "findGroupsByMembership",
+            new Object[]{
+               "userName", membershipType
+            }
+         );
+      }
+
+
       Collection<org.picketlink.idm.api.Role> allRoles = new HashSet();
 
       try
@@ -272,25 +348,84 @@ public class GroupDAOImpl implements GroupHandler
       }
 
       // UI has hardcoded casts to List
-      return new LinkedList<Group>(exoGroups);
+      Collection result = new LinkedList<Group>(exoGroups);
+
+      if (log.isTraceEnabled())
+      {
+        Tools.logMethodOut(
+            log,
+            LogLevel.TRACE,
+            "findGroupByMembership",
+            result
+         );
+      }
+      
+      return result;
    }
 
    //
    public Group findGroupById(String groupId) throws Exception
    {
+      if (log.isTraceEnabled())
+      {
+         Tools.logMethodIn(
+            log,
+            LogLevel.TRACE,
+            "findGroupById",
+            new Object[]{
+               "groupId", groupId
+            }
+         );
+      }
+
 
       org.picketlink.idm.api.Group jbidGroup = orgService.getJBIDMGroup(groupId);
 
       if (jbidGroup == null)
       {
+         if (log.isTraceEnabled())
+         {
+            Tools.logMethodOut(
+               log,
+               LogLevel.TRACE,
+               "findGroupById",
+               null
+            );
+      }
+
          return null;
       }
 
-      return convertGroup(jbidGroup);
+      Group result = convertGroup(jbidGroup);
+
+      if (log.isTraceEnabled())
+      {
+        Tools.logMethodOut(
+            log,
+            LogLevel.TRACE,
+            "findGroupById",
+            result
+         );
+      }
+
+      return result;
+
    }
 
    public Collection findGroups(Group parent) throws Exception
    {
+      if (log.isTraceEnabled())
+      {
+         Tools.logMethodIn(
+            log,
+            LogLevel.TRACE,
+            "findGroups",
+            new Object[]{
+               "parent", parent
+            }
+         );
+      }
+
       org.picketlink.idm.api.Group jbidGroup = null;
 
       if (parent == null)
@@ -396,12 +531,35 @@ public class GroupDAOImpl implements GroupHandler
          Collections.sort(results);
       }
 
+      if (log.isTraceEnabled())
+      {
+        Tools.logMethodOut(
+            log,
+            LogLevel.TRACE,
+            "findGroups",
+            results
+         );
+      }
+
       return results;
 
    }
 
    public Collection findGroupsOfUser(String user) throws Exception
    {
+
+      if (log.isTraceEnabled())
+      {
+         Tools.logMethodIn(
+            log,
+            LogLevel.TRACE,
+            "findGroupsOfUser",
+            new Object[]{
+               "user", user
+            }
+         );
+      }
+
 
       if (user == null)
       {
@@ -415,6 +573,17 @@ public class GroupDAOImpl implements GroupHandler
          // at org.exoplatform.organization.webui.component.GroupManagement.isMemberOfGroup(GroupManagement.java:72)
          // at org.exoplatform.organization.webui.component.GroupManagement.isAdministrator(GroupManagement.java:125)
          // at org.exoplatform.organization.webui.component.UIGroupExplorer.<init>(UIGroupExplorer.java:57)
+
+         if (log.isTraceEnabled())
+         {
+            Tools.logMethodOut(
+               log,
+               LogLevel.TRACE,
+               "findGroupsOfUser",
+               Collections.emptyList()
+            );
+      }
+
          return Collections.emptyList();
       }
 
@@ -439,11 +608,31 @@ public class GroupDAOImpl implements GroupHandler
 
       }
 
+      if (log.isTraceEnabled())
+      {
+        Tools.logMethodOut(
+            log,
+            LogLevel.TRACE,
+            "findGroupsOfUser",
+            exoGroups
+         );
+      }
+
       return exoGroups;
    }
 
    public Collection getAllGroups() throws Exception
    {
+      if (log.isTraceEnabled())
+      {
+         Tools.logMethodIn(
+            log,
+            LogLevel.TRACE,
+            "getAllGroups",
+            null
+         );
+      }
+
 
       Set<org.picketlink.idm.api.Group> plGroups = new HashSet<org.picketlink.idm.api.Group>();
 
@@ -490,7 +679,19 @@ public class GroupDAOImpl implements GroupHandler
       }
 
       // UI has hardcoded casts to List
-      return new LinkedList<Group>(exoGroups);
+      Collection result = new LinkedList<Group>(exoGroups);
+
+      if (log.isTraceEnabled())
+      {
+        Tools.logMethodOut(
+            log,
+            LogLevel.TRACE,
+            "getAllGroups",
+            result
+         );
+      }
+
+      return result;
       
    }
 
@@ -529,6 +730,18 @@ public class GroupDAOImpl implements GroupHandler
 
    protected Group convertGroup(org.picketlink.idm.api.Group jbidGroup) throws Exception
    {
+      if (log.isTraceEnabled())
+      {
+         Tools.logMethodIn(
+            log,
+            LogLevel.TRACE,
+            "convertGroup",
+            new Object[]{
+               "jbidGroup", jbidGroup
+            }
+         );
+      }
+
       Map<String, Attribute> attrs = new HashMap();
 
       try
@@ -562,6 +775,16 @@ public class GroupDAOImpl implements GroupHandler
       // Resolve full ID
       String id = getGroupId(jbidGroup, null);
 
+      if (log.isTraceEnabled())
+      {
+        Tools.logMethodOut(
+            log,
+            LogLevel.TRACE,
+            "getGroupId",
+            id
+         );
+      }
+
       exoGroup.setId(id);
 
       // child of root
@@ -573,6 +796,16 @@ public class GroupDAOImpl implements GroupHandler
       {
 
          exoGroup.setParentId(id.substring(0, id.lastIndexOf("/")));
+      }
+
+      if (log.isTraceEnabled())
+      {
+        Tools.logMethodOut(
+            log,
+            LogLevel.TRACE,
+            "convertGroup",
+            exoGroup
+         );
       }
 
       return exoGroup;
@@ -589,6 +822,20 @@ public class GroupDAOImpl implements GroupHandler
    private String getGroupId(org.picketlink.idm.api.Group jbidGroup,
                              List<org.picketlink.idm.api.Group> processed) throws Exception
    {
+      if (log.isTraceEnabled())
+      {
+         Tools.logMethodIn(
+            log,
+            LogLevel.TRACE,
+            "getGroupId",
+            new Object[]{
+               "jbidGroup", jbidGroup,
+               "processed", processed
+            }
+         );
+      }
+
+
       // Check in cache
       if (getIntegrationCache() != null)
       {
@@ -633,6 +880,10 @@ public class GroupDAOImpl implements GroupHandler
       // Check if there is cross reference so we ended in a loop and break the process.
       if (parents.size() > 0 && processed.contains(parents.iterator().next()))
       {
+         if (log.isTraceEnabled())
+         {
+            log.trace("Detected looped relationship between groups!!!");
+         }
          processed.remove(processed.size() - 1);
          return CYCLIC_ID;
       }
