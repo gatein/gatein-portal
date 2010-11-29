@@ -36,6 +36,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URLDecoder;
 import java.nio.charset.Charset;
+import java.util.Date;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -64,6 +65,10 @@ public class ResourceRequestFilter extends AbstractFilter
 
    private ConcurrentMap<String, FutureTask<Image>> mirroredImageCache = new ConcurrentHashMap<String, FutureTask<Image>>();
 
+   public static final String IF_MODIFIED_SINCE     = "If-Modified-Since";
+ 
+   public static final String LAST_MODIFIED     = "Last-Modified";    
+   
    public void afterInit(FilterConfig filterConfig)
    {
       cfg = filterConfig;
@@ -77,11 +82,19 @@ public class ResourceRequestFilter extends AbstractFilter
       final String uri = URLDecoder.decode(httpRequest.getRequestURI(), "UTF-8");
       final HttpServletResponse httpResponse = (HttpServletResponse)response;
       ExoContainer portalContainer = getContainer();
-      SkinService skinService = (SkinService)portalContainer.getComponentInstanceOfType(SkinService.class);
+      final SkinService skinService = (SkinService) portalContainer.getComponentInstanceOfType(SkinService.class);
+      long ifModifiedSince = httpRequest.getDateHeader(IF_MODIFIED_SINCE);
 
       //
       if (uri.endsWith(".css"))
       {
+//     Check if cached resource has not been modifed, return 304 code      
+         long cssLastModified = skinService.getLastModified(uri);
+         if (isNotModified(ifModifiedSince, cssLastModified)) {
+            httpResponse.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
+            return;
+         }
+
          final OutputStream out = response.getOutputStream();
          final BinaryOutput output = new BinaryOutput()
          {
@@ -118,6 +131,9 @@ public class ResourceRequestFilter extends AbstractFilter
                {
                   httpResponse.setHeader("Cache-Control", "no-cache");
                }
+
+               long lastModified = skinService.getLastModified(uri);
+               processIfModified(lastModified, httpResponse);
             }
          };
 
@@ -192,8 +208,16 @@ public class ResourceRequestFilter extends AbstractFilter
                      Image img = futureImg.get();
                      if (img != null)
                      {
+                        //Check if cached resource has not been modifed, return 304 code      
+                        long imgLastModified = img.getLastModified();
+                        if (isNotModified(ifModifiedSince, imgLastModified)) {
+                           httpResponse.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
+                           return;
+                        }
                         httpResponse.setContentType(img.type.getMimeType());
                         httpResponse.setContentLength(img.bytes.length);
+                        processIfModified(imgLastModified, httpResponse);
+                        
                         OutputStream out = httpResponse.getOutputStream();
                         out.write(img.bytes);
                         out.close();
@@ -238,6 +262,30 @@ public class ResourceRequestFilter extends AbstractFilter
       }
    }
 
+   /**
+    * Add Last-Modified Http header to HttpServetResponse
+    */
+   public void processIfModified(long lastModified, HttpServletResponse httpResponse) {
+      httpResponse.setDateHeader(ResourceRequestFilter.LAST_MODIFIED, lastModified);
+   }
+
+   /**
+    * If cached resource has not changed since date in http header (If_Modified_Since), return true
+    * Else return false;
+    * @param ifModifedSince - String, and HttpHeader element
+    * @param lastModified
+    * @param httpResponse
+    * @return
+    */
+   public boolean isNotModified(long ifModifedSince, long lastModified) {
+      if (!PropertyManager.isDevelopping()) {
+         if (ifModifedSince >= lastModified) {
+            return true;
+         }
+      }
+      return false;
+   }
+   
    public void destroy()
    {
    }

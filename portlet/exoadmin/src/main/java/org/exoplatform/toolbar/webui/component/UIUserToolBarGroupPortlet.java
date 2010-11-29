@@ -55,7 +55,7 @@ public class UIUserToolBarGroupPortlet extends UIPortletApplication
       {
          if (navigation.getOwnerType().equals(PortalConfig.GROUP_TYPE))
          {
-            navigations.add(PageNavigationUtils.filter(navigation, remoteUser));
+            navigations.add(PageNavigationUtils.filterNavigation(navigation, remoteUser, false, true));
          }
       }
       return navigations;

@@ -26,7 +26,6 @@ import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.Visibility;
-import org.exoplatform.portal.webui.navigation.ParentChildPair;
 import org.exoplatform.portal.webui.page.UIPage;
 import org.exoplatform.portal.webui.page.UIPageNodeForm;
 import org.exoplatform.portal.webui.portal.UIPortalComposer;
@@ -447,7 +446,6 @@ public class UINavigationNodeSelector extends UIContainer
             uiToolPanel.setWorkingComponent(UIPage.class, null);
             UIPage uiPage = (UIPage)uiToolPanel.getUIComponent();
 
-            WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
             if(selectPage.getTitle() == null)
                selectPage.setTitle(selectedPageNode.getLabel());
 
@@ -535,46 +533,48 @@ public class UINavigationNodeSelector extends UIContainer
    {
       public void execute(Event<UIRightClickPopupMenu> event) throws Exception
       {
-    	  String uri = event.getRequestContext().getRequestParameter(UIComponent.OBJECTID);
-    	  WebuiRequestContext pcontext = event.getRequestContext();
-          UIApplication uiApp = pcontext.getUIApplication();
-          UINavigationNodeSelector uiNodeSelector = event.getSource().getAncestorOfType(UINavigationNodeSelector.class);
-          UINavigationManagement uiManagement = uiNodeSelector.getParent();
-          Class<?>[] childrenToRender = new Class<?>[]{UINavigationNodeSelector.class};
-          uiManagement.setRenderedChildrenOfTypes(childrenToRender);
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiManagement);
+         String uri = event.getRequestContext().getRequestParameter(UIComponent.OBJECTID);
+         WebuiRequestContext pcontext = event.getRequestContext();
+         UIApplication uiApp = pcontext.getUIApplication();
+         UINavigationNodeSelector uiNodeSelector = event.getSource().getAncestorOfType(UINavigationNodeSelector.class);
+         UINavigationManagement uiManagement = uiNodeSelector.getParent();
+         Class<?>[] childrenToRender = new Class<?>[]{UINavigationNodeSelector.class};
+         uiManagement.setRenderedChildrenOfTypes(childrenToRender);
+         event.getRequestContext().addUIComponentToUpdateByAjax(uiManagement);
 
-          PageNavigation nav = uiNodeSelector.getEdittedNavigation();
-          if (nav == null)
-          {
-             return;
-          }
-          
-          PageNode[] pageNodes = PageNavigationUtils.searchPageNodesByUri(nav, uri);
-          if (pageNodes == null)
-          {
-             return;
-          }
-          
-          for (PageNode pageNode : pageNodes) {
-  			 if(pageNode != null && pageNode.isSystem()) {
-  				 uiApp.addMessage(new ApplicationMessage("UINavigationNodeSelector.msg.systemnode-move", null));
-  				 return;
-  			 }
-          }
-          
-          TreeNodeData selectedNode = new TreeNodeData(nav, pageNodes[0], pageNodes[1]);
-          selectedNode.setDeleteNode(false);
-          uiNodeSelector.setCopyNode(selectedNode);
-          event.getSource().setActions(
-             new String[]{"AddNode", "EditPageNode", "EditSelectedNode", "CopyNode", "CloneNode", "CutNode",
-                "PasteNode", "DeleteNode", "MoveUp", "MoveDown"});         
+         PageNavigation nav = uiNodeSelector.getEdittedNavigation();
+         if (nav == null)
+         {
+            return;
+         }
 
-          if (uiNodeSelector.getCopyNode() == null)
-          {
-             return;
-          }
-          uiNodeSelector.getCopyNode().setDeleteNode(true);
+         ParentChildPair parentChildPair = PageNavigationUtils.searchParentChildPairByUri(nav, uri);
+         if (parentChildPair == null)
+         {
+            return;
+         }
+
+         PageNode parentNode = parentChildPair.getParentNode();
+         PageNode childNode = parentChildPair.getChildNode();
+
+         if (childNode != null && childNode.isSystem())
+         {
+            uiApp.addMessage(new ApplicationMessage("UINavigationNodeSelector.msg.systemnode-move", null));
+            return;
+         }
+
+         TreeNodeData selectedNode = new TreeNodeData(nav, parentNode, childNode);
+         selectedNode.setDeleteNode(false);
+         uiNodeSelector.setCopyNode(selectedNode);
+         event.getSource().setActions(
+            new String[]{"AddNode", "EditPageNode", "EditSelectedNode", "CopyNode", "CloneNode", "CutNode",
+               "PasteNode", "DeleteNode", "MoveUp", "MoveDown"});
+
+         if (uiNodeSelector.getCopyNode() == null)
+         {
+            return;
+         }
+         uiNodeSelector.getCopyNode().setDeleteNode(true);
       }
    }
 

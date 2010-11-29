@@ -854,8 +854,7 @@ public class UIPortletActionListener
    {
       public void execute(Event<UIPortlet> event) throws Exception
       {
-         UIPortal uiPortal = Util.getUIPortal();
-         UIPortalApplication uiApp = uiPortal.getAncestorOfType(UIPortalApplication.class);
+         UIPortalApplication uiApp = Util.getUIPortalApplication();
          UIMaskWorkspace uiMaskWS = uiApp.getChildById(UIPortalApplication.UI_MASK_WS_ID);
          uiMaskWS.setUpdated(true);
          UIPortlet uiPortlet = event.getSource();

@@ -55,7 +55,7 @@ import java.util.Set;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class POMSession
+public final class POMSession
 {
 
    /** . */
@@ -361,19 +361,39 @@ public class POMSession
       }
       public void afterSynchronization(SynchronizationStatus status)
       {
-         if (status == SynchronizationStatus.SAVED && staleKeys != null)
+         if (status == SynchronizationStatus.SAVED)
          {
-            if (log.isTraceEnabled())
-            {
-               log.trace("Session commit about to evict entries " + staleKeys);
-            }
-            for (Serializable key : staleKeys)
-            {
-               mgr.cacheRemove(key);
-            }
+            reset();
          }
       }
    };
+
+   /**
+    * Reset the session and set its state like it was a newly created session.
+    */
+   private void reset()
+   {
+      // Evict entries from the shared cache if any
+      if (staleKeys != null && staleKeys.size() > 0)
+      {
+         if (log.isTraceEnabled())
+         {
+            log.trace("About to evict entries " + staleKeys);
+         }
+         for (Serializable key : staleKeys)
+         {
+            mgr.cacheRemove(key);
+         }
+         staleKeys.clear();
+      }
+
+      // Reset modified flag
+      if (log.isTraceEnabled())
+      {
+         log.trace("Setting modified flag to false");
+      }
+      modified = false;
+   }
 
    public <V> V execute(POMTask<V> task) throws Exception
    {
@@ -404,7 +424,11 @@ public class POMSession
       {
          if (!markedForRollback)
          {
+            // Trigger persistent save
             model.save();
+
+            // Reset modified state
+            reset();
          }
          else
          {

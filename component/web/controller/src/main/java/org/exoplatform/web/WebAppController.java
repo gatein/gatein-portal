@@ -49,7 +49,7 @@ public class WebAppController
 
    private HashMap<String, Object> attributes_;
 
-   private HashMap<String, Application> applications_;
+   private volatile HashMap<String, Application> applications_;
 
    private HashMap<String, WebRequestHandler> handlers_;
 
@@ -89,16 +89,42 @@ public class WebAppController
       return applications;
    }
 
-   public void removeApplication(String appId)
+   public synchronized void removeApplication(String appId)
    {
       applications_.remove(appId);
    }
 
-   public void addApplication(Application app)
+   /**
+    *   Add application (portlet, gadget) to the global application map if and only if it has
+    * not been registered yet.
+    * 
+    * @param <T>
+    * @param app
+    * @return
+    */
+   public <T extends Application> T addApplication(T app)
    {
-      applications_.put(app.getApplicationId(), app);
+      Application result = getApplication(app.getApplicationId());
+      
+      //Double-check block
+      if(result == null)
+      {
+         synchronized(this)
+         {
+            result = getApplication(app.getApplicationId());
+            if(result == null)
+            {
+               HashMap<String, Application> temporalApplicationsMap = new HashMap<String, Application>(applications_);
+               temporalApplicationsMap.put(app.getApplicationId(), app);
+               this.applications_ = temporalApplicationsMap;
+               result = app;
+            }
+         }
+      }
+      
+      return (T)result;
    }
-
+   
    public void register(WebRequestHandler handler) throws Exception
    {
       for (String path : handler.getPath())

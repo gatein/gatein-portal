@@ -125,12 +125,12 @@ public class UIPageForm extends UIFormTabPane
       addUIFormInput(uiSettingSet);
       setSelectedTab(uiSettingSet.getId());
 
-      WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
-      Param param = initParams.getParam("PageTemplate");
-      List<SelectItemCategory> itemCategories = (List<SelectItemCategory>)param.getMapGroovyObject(context);
-      UIFormInputItemSelector uiTemplate = new UIFormInputItemSelector("Template", "template");
-      uiTemplate.setItemCategories(itemCategories);
-      addUIFormInput(uiTemplate);
+      //WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
+      //Param param = initParams.getParam("PageTemplate");
+      //List<SelectItemCategory> itemCategories = (List<SelectItemCategory>)param.getMapGroovyObject(context);
+      //UIFormInputItemSelector uiTemplate = new UIFormInputItemSelector("Template", "template");
+      //uiTemplate.setItemCategories(itemCategories);
+      //addUIFormInput(uiTemplate);
   
       uiPermissionSetting = createUIComponent(UIFormInputSet.class, "PermissionSetting", null);
       UIListPermissionSelector uiListPermissionSelector = createUIComponent(UIListPermissionSelector.class, null, null);

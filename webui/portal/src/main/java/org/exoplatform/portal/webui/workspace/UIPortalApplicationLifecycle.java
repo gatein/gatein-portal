@@ -44,7 +44,12 @@ public class UIPortalApplicationLifecycle extends Lifecycle<UIPortalApplication>
          return;
       UIComponent uiTarget = uicomponent.findComponentById(componentId);
       if (uiTarget == null)
+      {
+         context.addUIComponentToUpdateByAjax(uicomponent.<UIComponent>getChildById(UIPortalApplication.UI_WORKING_WS_ID));
+         context.addUIComponentToUpdateByAjax(uicomponent.getChild(UIMaskWorkspace.class));
+         ((PortalRequestContext)context).setFullRender(true);
          return;
+      }
       if (uiTarget == uicomponent)
          super.processDecode(uicomponent, context);
       uiTarget.processDecode(context);

@@ -20,9 +20,9 @@ package org.exoplatform.portal.config;
 
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.config.model.Page;
+import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.POMSessionManager;
-
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -127,5 +127,49 @@ public class TestCache extends AbstractPortalTest
 
       //
       end();
+   }
+
+   public void testGetPageFromRemovedPortal() throws Exception
+   {
+      // Create what we need for the test
+      begin();
+      session = mgr.openSession();
+      PortalConfig portalConfig = new PortalConfig("portal", "testGetPageFromRemovedPortal");
+      storage_.create(portalConfig);
+      storage_.create(new Page("portal", "testGetPageFromRemovedPortal", "home"));
+      end(true);
+
+      // Clear cache
+      mgr.clearCache();
+
+      // The first transaction
+      begin();
+      session = mgr.openSession();
+
+      // Get page from JCR and it should be stored in cache
+      Page page = storage_.getPage("portal::testGetPageFromRemovedPortal::home");
+      assertNotNull(page);
+
+      // Now remove the portal
+      PortalConfig portal = storage_.getPortalConfig("portal", "testGetPageFromRemovedPortal");
+      storage_.remove(portal);
+
+      // Terminate the first transaction
+      end(true);
+
+      // The second transaction
+      begin();
+      session = mgr.openSession();
+
+      // The portal should be null
+      portal = storage_.getPortalConfig("portal", "testGetPageFromRemovedPortal");
+      assertNull(portal);
+
+      // The portal home page should also be null
+      page = storage_.getPage("portal::testGetPageFromRemovedPortal::home");
+      assertNull(page);
+
+      // End second transaction
+      end(true);
    }
 }

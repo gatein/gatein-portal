@@ -109,6 +109,9 @@ public class UploadService
 
       DiskFileItem fileItem = (DiskFileItem)itemList.get(0);
       String fileName = fileItem.getName();
+      if (fileName == null)
+         fileName = uploadId;
+      fileName = fileName.substring(fileName.lastIndexOf('\\') + 1);
       String storeLocation = uploadLocation_ + "/" + uploadId + "." + fileName;
 
       // commons-fileupload will store the temp file with name *.tmp

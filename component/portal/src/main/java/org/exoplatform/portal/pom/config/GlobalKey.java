@@ -55,6 +55,16 @@ public class GlobalKey implements Serializable
       this.localKey = localKey;
    }
 
+   public String getRepositoryId()
+   {
+      return repositoryId;
+   }
+
+   public Serializable getLocalKey()
+   {
+      return localKey;
+   }
+
    @Override
    public int hashCode()
    {

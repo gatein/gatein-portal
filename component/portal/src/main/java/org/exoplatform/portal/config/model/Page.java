@@ -50,6 +50,13 @@ public class Page extends Container
    {
    }
 
+   public Page(String ownerType, String ownerId, String name)
+   {
+      this.ownerType = ownerType;
+      this.ownerId = ownerId;
+      this.name = name;
+   }
+
    public Page(PageData data)
    {
       super(data);

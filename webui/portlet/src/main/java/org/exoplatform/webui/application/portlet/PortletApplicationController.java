@@ -133,7 +133,7 @@ public class PortletApplicationController extends GenericPortlet
       {
          application = new PortletApplication(getPortletConfig());
          application.onInit();
-         controller.addApplication(application);
+         application = controller.addApplication(application);
       }
       return application;
    }

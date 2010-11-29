@@ -48,14 +48,22 @@ public class UIComponentDecorator extends UIComponent
       return uicomponent_;
    }
 
-   public void setUIComponent(UIComponent uicomponent)
+   public UIComponent setUIComponent(UIComponent uicomponent)
    {
+      UIComponent oldOne = uicomponent_;
       if (uicomponent_ != null)
-         uicomponent_.setRendered(false);
+         uicomponent_.setParent(null);
       uicomponent_ = uicomponent;
-      if (uicomponent_ == null)
-         return;
-      uicomponent_.setParent(this);
+      if (uicomponent_ != null)
+      {
+         UIComponent oldParent = uicomponent_.getParent();
+         if (oldParent != null && oldParent != this && oldParent instanceof UIComponentDecorator)
+         {
+            ((UIComponentDecorator)oldParent).setUIComponent(null);
+         }
+         uicomponent_.setParent(this);
+      }
+      return oldOne;
    }
 
    @SuppressWarnings("unchecked")

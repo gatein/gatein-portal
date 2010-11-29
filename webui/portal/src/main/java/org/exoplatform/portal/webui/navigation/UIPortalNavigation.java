@@ -113,7 +113,7 @@ public class UIPortalNavigation extends UIComponent
 
       if (context.getRemoteUser() != null)
       {
-         result.add(PageNavigationUtils.filter(getSelectedNavigation(), context.getRemoteUser()));
+         result.add(PageNavigationUtils.filterNavigation(getSelectedNavigation(), context.getRemoteUser(), false, true));
       }
       else
       {
@@ -121,7 +121,7 @@ public class UIPortalNavigation extends UIComponent
          {
             if (!showUserNavigation && nav.getOwnerType().equals("user"))
                continue;
-            result.add(PageNavigationUtils.filter(nav, null));
+            result.add(PageNavigationUtils.filterNavigation(nav, null, false, true));
          }
       }
       return result;

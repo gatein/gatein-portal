@@ -71,7 +71,31 @@ public class ErrorLoginServlet extends AbstractHttpServlet
       resp.setContentType("text/html; charset=UTF-8");
       
       // This allows the customer to define another login page without changing the portal
-      context.getRequestDispatcher("/login/jsp/login.jsp").include(req, resp);
+      showLoginForm(req, resp);
+   }
+
+   private void showLoginForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
+   {
+      String initialURI = (String)req.getAttribute("javax.servlet.forward.request_uri");
+      if (initialURI == null)
+      {
+         throw new IllegalStateException("request attribute javax.servlet.forward.request_uri should not be null here");
+      }
+      int jsecurityIndex = initialURI.lastIndexOf("/j_security_check");
+      if (jsecurityIndex != -1)
+      {
+         initialURI = initialURI.substring(0, jsecurityIndex);
+      }
+
+      try
+      {
+         req.setAttribute("org.gatein.portal.login.initial_uri", initialURI);
+         getServletContext().getRequestDispatcher("/login/jsp/login.jsp").include(req, resp);
+      }
+      finally
+      {
+         req.removeAttribute("org.gatein.portal.login.initial_uri");
+      }
    }
 
    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException

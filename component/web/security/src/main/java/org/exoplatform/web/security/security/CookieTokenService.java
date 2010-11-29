@@ -24,6 +24,7 @@ import org.exoplatform.commons.chromattic.ChromatticLifeCycle;
 import org.exoplatform.commons.chromattic.ChromatticManager;
 import org.exoplatform.commons.chromattic.ContextualTask;
 import org.exoplatform.commons.chromattic.SessionContext;
+import org.exoplatform.container.component.ComponentPlugin;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.web.security.Credentials;
 import org.exoplatform.web.security.GateInToken;
@@ -47,6 +48,9 @@ public class CookieTokenService extends AbstractTokenService<GateInToken, String
    /** . */
    private String lifecycleName="autologin";
 
+   //TODO: Introduce the concept of priority and store the plugins in a map structure
+   private AbstractCodec codec;
+   
    public CookieTokenService(InitParams initParams, ChromatticManager chromatticManager)
    {
       super(initParams);
@@ -56,8 +60,19 @@ public class CookieTokenService extends AbstractTokenService<GateInToken, String
     	  lifecycleName = (String)initParams.getValuesParam(SERVICE_CONFIG).getValues().get(3);
       }
       this.chromatticLifeCycle = chromatticManager.getLifeCycle(lifecycleName);
+      
+      //Set the default codec
+      this.codec = new ToThrowAwayCodec();
    }
 
+   public final void setupCodec(ComponentPlugin codecPlugin)
+   {
+      if(codecPlugin instanceof AbstractCodec)
+      {
+         this.codec = (AbstractCodec)codecPlugin;
+      }
+   }
+   
    public String createToken(final Credentials credentials)
    {
       if (validityMillis < 0)
@@ -76,7 +91,9 @@ public class CookieTokenService extends AbstractTokenService<GateInToken, String
             long expirationTimeMillis = System.currentTimeMillis() + validityMillis;
             GateInToken token = new GateInToken(expirationTimeMillis, credentials);
             TokenContainer container = getTokenContainer();
-            container.saveToken(tokenId, token.getPayload(), new Date(token.getExpirationTimeMillis()));
+            
+            //Save the token, password is encoded thanks to the codec
+            container.encodeAndSaveToken(tokenId, token.getPayload(), new Date(expirationTimeMillis), codec);
             return tokenId;
          }
       }.executeWith(chromatticLifeCycle);
@@ -89,7 +106,8 @@ public class CookieTokenService extends AbstractTokenService<GateInToken, String
          @Override
          protected GateInToken execute()
          {
-            return getTokenContainer().getToken((String)id);
+            //Get the token, encoded password is decoded thanks to codec
+            return getTokenContainer().getTokenAndDecode(id, codec);
          }
       }.executeWith(chromatticLifeCycle);
    }

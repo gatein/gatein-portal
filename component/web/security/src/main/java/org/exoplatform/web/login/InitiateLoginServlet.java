@@ -96,7 +96,7 @@ public class InitiateLoginServlet extends AbstractHttpServlet
                // Send authentication request
                log.debug("Login initiated with no credentials in session but found token " + token + " with existing credentials, " +
                   "performing authentication");
-               sendAuth(resp, credentials.getUsername(), token);
+               sendAuth(req, resp, credentials.getUsername(), token);
             }
          }
          else
@@ -116,17 +116,13 @@ public class InitiateLoginServlet extends AbstractHttpServlet
 
          // Send authentication request
          log.debug("Login initiated with credentials in session, performing authentication");
-         sendAuth(resp, credentials.getUsername(), token);
+         sendAuth(req, resp, credentials.getUsername(), token);
       }
    }
 
    private void showLoginForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
    {
-      String initialURI = (String)req.getAttribute("javax.servlet.forward.request_uri");
-      if (initialURI == null)
-      {
-         throw new IllegalStateException("request attribute javax.servlet.forward.request_uri should not be null here");
-      }
+      String initialURI = getInitialURI(req);
       try
       {
          String queryString = (String)req.getAttribute("javax.servlet.forward.query_string");
@@ -143,14 +139,29 @@ public class InitiateLoginServlet extends AbstractHttpServlet
       }
    }
 
+   private String getInitialURI(HttpServletRequest req)
+   {
+      String initialURI = (String)req.getAttribute("javax.servlet.forward.request_uri");
+      if (initialURI == null)
+      {
+         throw new IllegalStateException("request attribute javax.servlet.forward.request_uri should not be null here");
+      }
+      return initialURI;
+   }
+
    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
    {
       doGet(req, resp);
    }
 
-   private void sendAuth(HttpServletResponse resp, String jUsername, String jPassword) throws IOException
+   private void sendAuth(HttpServletRequest req, HttpServletResponse resp, String jUsername, String jPassword) throws IOException
    {
-      String url = "j_security_check?j_username=" + jUsername + "&j_password=" + jPassword;
+      String initialURI = getInitialURI(req);
+      if (!initialURI.endsWith("/"))
+      {
+         initialURI += "/";
+      }
+      String url = initialURI + "j_security_check?j_username=" + jUsername + "&j_password=" + jPassword;
       url = resp.encodeRedirectURL(url);
       resp.sendRedirect(url);
    }

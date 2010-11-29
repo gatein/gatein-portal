@@ -59,7 +59,7 @@ public class UIPageActionListener
       public void execute(Event<UIPortal> event) throws Exception
       {
          UIPortal showedUIPortal = event.getSource();
-         UIPortalApplication uiPortalApp = showedUIPortal.getAncestorOfType(UIPortalApplication.class);
+         UIPortalApplication uiPortalApp = Util.getUIPortalApplication();
          
          //This code snippet is to make sure that Javascript/Skin is fully loaded at the first request
          UIWorkingWorkspace uiWorkingWS = uiPortalApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);

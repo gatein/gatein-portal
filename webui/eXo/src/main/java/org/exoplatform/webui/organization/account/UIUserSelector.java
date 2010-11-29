@@ -412,7 +412,9 @@ public class UIUserSelector extends UIForm implements UIPopupComponent
          uiSelectUserForm.setSelectedGroup(groupId);
          OrganizationService service = uiSelectGroupForm.getApplicationComponent(OrganizationService.class);
          PageList users = uiSelectUserForm.removeDuplicate(service.getUserHandler().findUsersByGroup(groupId));
+         users.setPageSize(10);
          uiSelectUserForm.uiIterator_.setPageList(users);
+         uiSelectUserForm.setKeyword(null);
          event.getRequestContext().addUIComponentToUpdateByAjax(uiSelectUserForm);
       }
    }
@@ -423,17 +425,23 @@ public class UIUserSelector extends UIForm implements UIPopupComponent
       {
          UIUserSelector uiSelectUserForm = event.getSource();
          String groupId = uiSelectUserForm.getSelectedGroup();
-         uiSelectUserForm.setSelectedGroup(groupId);
          OrganizationService service = uiSelectUserForm.getApplicationComponent(OrganizationService.class);
+
+         PageList users = PageList.EMPTY_LIST;
          if (groupId != null && groupId.trim().length() != 0)
          {
-            PageList users = uiSelectUserForm.removeDuplicate(service.getUserHandler().findUsersByGroup(groupId));
-            uiSelectUserForm.uiIterator_.setPageList(users);
+            if (service.getGroupHandler().findGroupById(groupId) != null)
+            {
+               users = uiSelectUserForm.removeDuplicate(service.getUserHandler().findUsersByGroup(groupId));
+            }                                                            
          }
          else
          {
-            uiSelectUserForm.uiIterator_.setPageList(service.getUserHandler().findUsers(new Query()));
+            users = service.getUserHandler().findUsers(new Query());
          }
+         users.setPageSize(10);
+         uiSelectUserForm.uiIterator_.setPageList(users);
+         uiSelectUserForm.setKeyword(null);
          event.getRequestContext().addUIComponentToUpdateByAjax(uiSelectUserForm);
       }
    }

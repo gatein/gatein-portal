@@ -73,7 +73,7 @@ public class PortalLoginController extends AbstractHttpServlet
       // otherwise compute one
       if (uri == null || uri.length() == 0)
       {
-         uri = req.getContextPath() + "/private/classic";
+         uri = req.getContextPath();
          log.debug("No initial URI found, will use default " + uri + " instead ");
       }
       else
@@ -85,20 +85,16 @@ public class PortalLoginController extends AbstractHttpServlet
       String rememberme = req.getParameter("rememberme");
       if ("true".equals(rememberme))
       {
-         boolean isRemember = "true".equals(req.getParameter(InitiateLoginServlet.COOKIE_NAME));
-         if (isRemember)
-         {
             //Create token
-            AbstractTokenService tokenService = AbstractTokenService.getInstance(CookieTokenService.class);
-            String cookieToken = tokenService.createToken(credentials);
+         AbstractTokenService tokenService = AbstractTokenService.getInstance(CookieTokenService.class);
+         String cookieToken = tokenService.createToken(credentials);
 
-            log.debug("Found a remember me request parameter, created a persistent token " + cookieToken + " for it and set it up " +
-               "in the next response");
-            Cookie cookie = new Cookie(InitiateLoginServlet.COOKIE_NAME, cookieToken);
-            cookie.setPath(req.getContextPath());
-            cookie.setMaxAge((int)tokenService.getValidityTime());
-            resp.addCookie(cookie);
-         }
+         log.debug("Found a remember me request parameter, created a persistent token " + cookieToken
+               + " for it and set it up " + "in the next response");
+         Cookie cookie = new Cookie(InitiateLoginServlet.COOKIE_NAME, cookieToken);
+         cookie.setPath(req.getContextPath());
+         cookie.setMaxAge((int) tokenService.getValidityTime());
+         resp.addCookie(cookie);
       }
 
       //

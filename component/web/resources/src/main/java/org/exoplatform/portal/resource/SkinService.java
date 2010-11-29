@@ -51,6 +51,7 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -455,6 +456,9 @@ public class SkinService implements Startable
       // Try cache first
       if (!PropertyManager.isDevelopping())
       {
+         //
+         FutureExoCache<String, CachedStylesheet, Orientation> cache = orientation == Orientation.LT ? ltCache : rtCache;
+         CachedStylesheet cachedCss = cache.get(orientation, path);
 
          if (path.startsWith("/" + portalContainerName + "/resource"))
          {
@@ -464,11 +468,7 @@ public class SkinService implements Startable
          {
             renderer.setExpiration(ONE_HOUR);
          }
-
-         //
-         FutureExoCache<String, CachedStylesheet, Orientation> cache = orientation == Orientation.LT ? ltCache : rtCache;
-         CachedStylesheet cachedCss = cache.get(orientation, path);
-
+         
          cachedCss.writeTo(renderer.getOutput());
       }
       else
@@ -543,6 +543,41 @@ public class SkinService implements Startable
    {
       SkinKey key = new SkinKey(portalName, skinName);
       skinConfigs_.remove(key);
+   }
+
+   /**
+    * Return last modifed date of cached css
+    * Return null if cached css can not be found
+    * @param path - path must not be null
+    */
+   public long getLastModified(String path)
+   {
+      if (path == null)
+      {
+         throw new IllegalArgumentException("path must not be null");
+      }
+
+      FutureExoCache<String, CachedStylesheet, Orientation> cache = ltCache;
+      Orientation orientation = Orientation.LT;
+      if (path.endsWith("-lt.css"))
+      {
+         path = path.substring(0, path.length() - "-lt.css".length()) + ".css";
+      }
+      else if (path.endsWith("-rt.css"))
+      {
+         path = path.substring(0, path.length() - "-rt.css".length()) + ".css";
+         orientation = Orientation.RT;
+      }
+
+      CachedStylesheet cachedCSS = cache.get(orientation, path);
+      if (cachedCSS == null)
+      {
+         return Long.MAX_VALUE;
+      }
+      else
+      {
+         return cachedCSS.getLastModified();
+      }
    }
 
    /**

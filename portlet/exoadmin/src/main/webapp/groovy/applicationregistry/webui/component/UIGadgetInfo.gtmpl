@@ -11,6 +11,9 @@
 	if(gadgetThumbnail == null || gadgetThumbnail.length() == 0){
 		gadgetThumbnail = srcBGError ;
 	}
+        def viewURL = uicomponent.getViewUrl();
+        def editURL = uicomponent.getEditUrl();
+        def refURL = gadget.getReferenceUrl();
 %>
 <div class="UIGadgetInfo" id="$uicomponent.id">
 	<div class="UIBreadcumb">
@@ -21,7 +24,7 @@
 		<div class="Refresh16x16Icon ControlIcon" title="<%=_ctx.appRes("UIGadgetInfo.title.refresh")%>" onclick="<%= uicomponent.event("Refresh") %>"><span></span></div>
 		<div class="ClearBoth"><span></span></div>
 	</div>
- 	<div class="Application ClearFix">
+ 	<div class="Application">
  		<div class="PortletIcons">
 				<img src="$gadgetThumbnail" onError="src='$srcBGError'" alt=""/>
 		</div>
@@ -41,12 +44,12 @@
 				<table>
 					<tr>
 						<td class="LeftLabel"><%=_ctx.appRes("UIGadgetInfo.label.viewUrl")%></td>
-						<td class="RightLabel" title=" <%= uicomponent.getViewUrl() %> "><%= uicomponent.getViewUrl() %></td>
+						<td class="RightLabel" title=" <%=viewURL %> "><a href="<%=viewURL %>" target="_blank">$viewURL</a></td>
 					</tr>						
 					<% if(gadget.isLocal()) {%>
 					<tr>
 						<td class="LeftLabel"><%=_ctx.appRes("UIGadgetInfo.label.editUrl")%></td>
-						<td class="RightLabel"><%= uicomponent.getEditUrl() %></td>
+						<td class="RightLabel"><a href="<%=editURL %>" target="_blank">$editURL</a></td>
 					</tr>						
 					<% } %>
 				</table>
@@ -54,7 +57,7 @@
 					<tr>
 						<td class="LeftLabel"><%=_ctx.appRes("UIGadgetInfo.label.reference")%></td>
 						<td class="RightLabel">						
-							<%= gadget.getReferenceUrl() %>
+							<a href="<%=refURL %>" target="_blank">$refURL</a>
 						</td>
 					</tr>
 				</table>

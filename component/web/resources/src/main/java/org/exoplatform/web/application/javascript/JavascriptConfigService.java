@@ -40,6 +40,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -64,6 +65,8 @@ public class JavascriptConfigService implements Startable
    private HashMap<String, String> extendedJavascripts;
 
    private byte[] jsBytes = null;
+   
+   private long lastModified = Long.MAX_VALUE;
 
    /** . */
    private JavascriptDeployer deployer;
@@ -278,6 +281,18 @@ public class JavascriptConfigService implements Startable
     */
    public void writeMergedJavascript(OutputStream out) throws IOException
    {
+      jsBytes = getMergedJavascript();
+
+      //
+      out.write(jsBytes);
+   }
+   
+   /**
+    * Return merged javascript in byte array
+    * @return byte[]
+    */
+   public byte[] getMergedJavascript()
+   {
       if (jsBytes == null)
       {
          // Generate javascript in a buffer
@@ -314,10 +329,15 @@ public class JavascriptConfigService implements Startable
             log.error("Error when generating minified javascript, will use normal javascript instead", e);
             jsBytes = bytes;
          }
+//         Remove miliseconds because string of date retrieve from Http header doesn't have miliseconds
+         lastModified = (new Date().getTime() / 1000) * 1000;
       }
+      return jsBytes;
+   }
 
-      //
-      out.write(jsBytes);
+   public long getLastModified() 
+   {
+      return lastModified;
    }
 
    /**

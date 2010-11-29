@@ -309,6 +309,12 @@ public class UIPageBrowser extends UISearch
          if(page.getOwnerType().equals(PortalConfig.USER_TYPE)){
             removePageNode(page, event);
          }
+
+         UIWorkingWorkspace uiWorkingWorkspace = uiPortalApp.getChild(UIWorkingWorkspace.class);
+         uiWorkingWorkspace.updatePortletsByName("UserToolbarSitePortlet");
+         uiWorkingWorkspace.updatePortletsByName("UserToolbarGroupPortlet");
+         uiWorkingWorkspace.updatePortletsByName("UserToolbarDashboardPortlet");
+         uiWorkingWorkspace.updatePortletsByName("NavigationPortlet");
       }
       
       /**

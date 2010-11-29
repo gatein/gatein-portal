@@ -168,6 +168,7 @@
 	float: left; /* orientation=lt */
 	float: right; /* orientation=rt */
 	height: auto;
+	width: 100%;
 }
 
 .UIOrganizationPortlet .UISearch .UISearchForm .QuickSet {

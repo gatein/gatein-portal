@@ -22,8 +22,14 @@
 <%@ page import="org.exoplatform.container.PortalContainer"%>
 <%@ page import="org.exoplatform.portal.config.UserPortalConfigService"%>
 <%
-	PortalContainer manager = PortalContainer.getCurrentInstance(session.getServletContext()) ;
-  UserPortalConfigService userPortalConfigService = (UserPortalConfigService) manager.getComponentInstanceOfType(UserPortalConfigService.class) ;
-	response.sendRedirect(request.getContextPath() + "/public/"+userPortalConfigService.getDefaultPortal()+"/");
+   PortalContainer manager = PortalContainer.getCurrentInstance(session.getServletContext());
+   UserPortalConfigService userPortalConfigService = (UserPortalConfigService)manager.getComponentInstanceOfType(UserPortalConfigService.class);
+   String remoteUser = request.getRemoteUser();
+   String accessMode = "public";
+   if (remoteUser != null && remoteUser.trim().length() > 0)
+   {
+      accessMode = "private";
+   }
+   response.sendRedirect(request.getContextPath() + "/" + accessMode + "/" + userPortalConfigService.getDefaultPortal() + "/");
 %>
 

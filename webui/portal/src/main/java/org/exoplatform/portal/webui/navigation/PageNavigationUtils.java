@@ -367,6 +367,12 @@ public class PageNavigationUtils
       }
 
       PageNode cloneStartNode = startNode.clone();
+
+      // Check if page reference isn't existing, page reference value of node is setted null too.
+      if (pageReference != null && userService.getPage(pageReference) == null)
+      {
+         cloneStartNode.setPageReference(null);         
+      }
       ArrayList<PageNode> filteredChildren = new ArrayList<PageNode>();
 
       List<PageNode> children = startNode.getChildren();

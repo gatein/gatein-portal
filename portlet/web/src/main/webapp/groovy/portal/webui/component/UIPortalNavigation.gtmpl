@@ -95,7 +95,7 @@
 					<div class="MenuItem $tabStyleNavigation">
 						<div class="$arrowIcon" title="$title">
 							<div class="ItemIcon $icon">
-								<a href="$pageURI">$label</a>
+								<a href="#">$label</a>
 							</div>
 						</div>
 			""";

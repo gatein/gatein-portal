@@ -23,9 +23,12 @@ import org.exoplatform.commons.chromattic.ChromatticLifeCycle;
 import org.exoplatform.commons.chromattic.ChromatticManager;
 import org.exoplatform.commons.chromattic.SessionContext;
 import org.exoplatform.portal.pom.config.cache.DataCache;
-import org.exoplatform.portal.pom.config.cache.PortalNamesCache;
+import org.exoplatform.portal.pom.data.OwnerKey;
+import org.exoplatform.portal.pom.data.PortalKey;
 import org.exoplatform.services.cache.CacheService;
+import org.exoplatform.services.cache.CachedObjectSelector;
 import org.exoplatform.services.cache.ExoCache;
+import org.exoplatform.services.cache.ObjectCacheInfo;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
@@ -70,7 +73,7 @@ public class POMSessionManager implements Startable
       this.manager = manager;
       this.cache = cacheService.getCacheInstance("MOPSessionManager");
       this.pomService = null;
-      this.executor = new PortalNamesCache(new DataCache(new ExecutorDispatcher()));
+      this.executor = new DataCache(new ExecutorDispatcher());
    }
 
    public void cachePut(Serializable key, Object value)
@@ -106,7 +109,7 @@ public class POMSessionManager implements Startable
 
    public void cacheRemove(Serializable key)
    {
-      GlobalKey globalKey = GlobalKey.wrap(configurator.getRepositoryName(), key);
+      final GlobalKey globalKey = GlobalKey.wrap(configurator.getRepositoryName(), key);
 
       //
       if (log.isTraceEnabled())
@@ -115,7 +118,47 @@ public class POMSessionManager implements Startable
       }
 
       //
-      cache.remove(globalKey);
+      if (key instanceof PortalKey)
+      {
+         // This code seems complex but actually it tries to find all objects in cache that have the same
+         // owner key than the portal key, for instance if we remove (portal,classic) then all pages
+         // related to (portal,classic) are also evicted
+         final PortalKey portalKey = (PortalKey)key;
+         try
+         {
+            cache.select(new CachedObjectSelector<GlobalKey, Object>()
+            {
+               public boolean select(GlobalKey selectedGlobalKey, ObjectCacheInfo<?> ocinfo)
+               {
+                  if (globalKey.getRepositoryId().equals(selectedGlobalKey.getRepositoryId()))
+                  {
+                     Serializable selectedLocalKey = selectedGlobalKey.getLocalKey();
+                     if (selectedLocalKey instanceof OwnerKey)
+                     {
+                        OwnerKey selectedOwnerKey = (OwnerKey)selectedLocalKey;
+                        if (selectedOwnerKey.getType().equals(portalKey.getType()) && selectedOwnerKey.getId().equals(portalKey.getId()))
+                        {
+                           return true;
+                        }
+                     }
+                  }
+                  return false;
+               }
+               public void onSelect(ExoCache<? extends GlobalKey, ?> exoCache, GlobalKey key, ObjectCacheInfo<?> ocinfo) throws Exception
+               {
+                  cache.remove(key);
+               }
+            });
+         }
+         catch (Exception e)
+         {
+            log.error("Unexpected error when clearing pom cache", e);
+         }
+      }
+      else
+      {
+         cache.remove(globalKey);
+      }
    }
 
    public void start()

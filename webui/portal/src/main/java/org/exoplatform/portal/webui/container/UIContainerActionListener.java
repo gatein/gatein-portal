@@ -39,8 +39,7 @@ public class UIContainerActionListener
       {
 
          UIContainer uiContainer = event.getSource();
-         UIPortal uiPortal = Util.getUIPortal();
-         UIPortalApplication uiApp = uiPortal.getAncestorOfType(UIPortalApplication.class);
+         UIPortalApplication uiApp = Util.getUIPortalApplication();
          UIMaskWorkspace uiMaskWS = uiApp.getChildById(UIPortalApplication.UI_MASK_WS_ID);
          UIContainerForm containerForm = uiMaskWS.createUIComponent(UIContainerForm.class, null, null);
          containerForm.setValues(uiContainer);

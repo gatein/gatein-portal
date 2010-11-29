@@ -93,10 +93,11 @@ public class UIMaskWorkspace extends UIComponentDecorator
       return createUIComponent(clazz, null, null);
    }
 
-   public void setUIComponent(UIComponent uicomponent)
+   public UIComponent setUIComponent(UIComponent uicomponent)
    {
-      super.setUIComponent(uicomponent);
+      UIComponent oldOne = super.setUIComponent(uicomponent);
       setShow(uicomponent != null);
+      return oldOne;
    }
 
    static public class CloseActionListener extends EventListener<UIComponent>

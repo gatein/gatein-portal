@@ -68,7 +68,7 @@ public class UIUserToolBarSitePortlet extends UIPortletApplication
    {
       PageNavigation navi = getPageNavigation(PortalConfig.PORTAL_TYPE + "::" + getCurrentPortal());
       String remoteUser = Util.getPortalRequestContext().getRemoteUser();
-      return PageNavigationUtils.filter(navi, remoteUser);
+      return PageNavigationUtils.filterNavigation(navi, remoteUser, false, true);
    }
 
    private PageNavigation getPageNavigation(String owner) throws Exception

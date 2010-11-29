@@ -19,10 +19,14 @@
 
 package org.exoplatform.portal.webui.javascript;
 
+import org.exoplatform.commons.utils.PropertyManager;
 import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.portal.application.ResourceRequestFilter;
 import org.exoplatform.web.application.javascript.JavascriptConfigService;
 
 import java.io.IOException;
+import java.io.OutputStream;
+import java.util.Date;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -55,14 +59,23 @@ public class JavascriptServlet extends HttpServlet
    protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException,
       IOException
    {
-      JavascriptConfigService service =
+      final JavascriptConfigService service =
          (JavascriptConfigService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(
             JavascriptConfigService.class);
-
+      long lastModified = service.getLastModified();
+      long ifModifiedSince = request.getDateHeader(ResourceRequestFilter.IF_MODIFIED_SINCE);
+      
       // Julien: should we also set charset along with the content type ?
       response.setContentType("application/x-javascript");
-      ServletOutputStream stream = response.getOutputStream();
-      service.writeMergedJavascript(stream);
+      if (!PropertyManager.isDevelopping()) {
+         if (ifModifiedSince >= lastModified) {
+            response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
+            return;
+         }
+      }
+      
+      byte[] jsBytes = service.getMergedJavascript();
+      response.setDateHeader(ResourceRequestFilter.LAST_MODIFIED, lastModified);
+      response.getOutputStream().write(jsBytes);      
    }
-
 }
