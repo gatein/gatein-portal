@@ -23,6 +23,7 @@ import org.exoplatform.commons.chromattic.ChromatticLifeCycle;
 import org.exoplatform.commons.chromattic.ChromatticManager;
 import org.exoplatform.commons.chromattic.SessionContext;
 import org.exoplatform.portal.pom.config.cache.DataCache;
+import org.exoplatform.portal.pom.config.cache.PortalNamesCache;
 import org.exoplatform.portal.pom.data.OwnerKey;
 import org.exoplatform.portal.pom.data.PortalKey;
 import org.exoplatform.services.cache.CacheService;
@@ -73,7 +74,7 @@ public class POMSessionManager implements Startable
       this.manager = manager;
       this.cache = cacheService.getCacheInstance("MOPSessionManager");
       this.pomService = null;
-      this.executor = new DataCache(new ExecutorDispatcher());
+      this.executor = new PortalNamesCache(new DataCache(new ExecutorDispatcher()));
    }
 
    public void cachePut(Serializable key, Object value)
