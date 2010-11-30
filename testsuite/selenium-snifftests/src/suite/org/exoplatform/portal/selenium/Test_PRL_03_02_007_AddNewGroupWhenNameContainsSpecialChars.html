@@ -83,17 +83,17 @@
 </tr>
 <tr>
 	<td>echo</td>
-	<td>-- Click Add new group icon--</td>
+	<td>-- Click Add new group --</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UIOrganizationPortlet']/div[2]/div[2]/div[1]/div[2]/div[1]/div[1]/a[3]</td>
+	<td>//a[@title='Add New Group']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='UIOrganizationPortlet']/div[2]/div[2]/div[1]/div[2]/div[1]/div[1]/a[3]</td>
+	<td>//a[@title='Add New Group']</td>
 	<td></td>
 </tr>
 <tr>
@@ -127,14 +127,14 @@
 	<td></td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
-	<td>//div[2]/div[2]/div/div/div/div/div[2]</td>
+	<td>waitForTextPresent</td>
+	<td>Only alpha, digit, dash and underscore characters allowed for the field &quot;Group Name&quot;.</td>
 	<td></td>
 </tr>
 <tr>
-	<td>verifyText</td>
-	<td>//div[2]/div[2]/div/div/div/div/div[2]</td>
+	<td>verifyTextPresent</td>
 	<td>Only alpha, digit, dash and underscore characters allowed for the field &quot;Group Name&quot;.</td>
+	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
