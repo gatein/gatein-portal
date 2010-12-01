@@ -117,7 +117,7 @@
 
    <filter-mapping>
        <filter-name>LocalizationFilter</filter-name>
-       <url-pattern>/*</url-pattern>
+       <url-pattern>*.jsp</url-pattern>
        <dispatcher>INCLUDE</dispatcher>
        <dispatcher>FORWARD</dispatcher>
        <dispatcher>REQUEST</dispatcher>
