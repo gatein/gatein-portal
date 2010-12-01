@@ -243,7 +243,7 @@
 
 	<filter-mapping>
        <filter-name>LocalizationFilter</filter-name>
-       <url-pattern>/*</url-pattern>
+       <url-pattern>*.jsp</url-pattern>
        <dispatcher>INCLUDE</dispatcher>
        <dispatcher>FORWARD</dispatcher>
        <dispatcher>REQUEST</dispatcher>
@@ -263,12 +263,16 @@
 		</init-param>
 	</filter> ]]>
          </programlisting>
-         <para>By default, <literal>LocalizationFilter</literal> is applied very broadly to cover all the resources automatically.
-            &PRODUCT; uses some non-bridged .jsps that require <literal>LocalizationFilter</literal>, so narrowing
-            the mapping to *.jsp is enough for &PRODUCT; to still function correctly. Additionally deployed portlets,
-            and portal applications, however, may require broader mapping to cover their non-bridged resources.
+         <para>By default, <literal>LocalizationFilter</literal> is applied to *.jsp, which is considered the minimum
+            required by &PRODUCT; to properly keep its non-bridged resources in sync with the rest of the portal.
+            Additionally deployed portlets, and portal applications, may need broader mapping to cover their non-bridged
+            resources.
          </para>
-         <para>Narrowing the mapping might improve performance. This is something to consider, when optimizing for speed.
+         <para>Avoid using <literal>/*</literal>, <literal>/public/*</literal>, <literal>/private/*</literal>,
+            and similar broad mappings as <literal>LocalizationFilter</literal> sometimes adversely interacts with the
+            processing of portlet requests. Use multiple filter-mappings instead to specifically target non-bridged resources.
+         </para>
+         <para>Keeping the mapping limited to only non-bridged resources will minimize any impact on performance as well.
          </para>
       </section>
    </section>
