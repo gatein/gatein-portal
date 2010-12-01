@@ -102,13 +102,33 @@
 	<td></td>
 </tr>
 <tr>
-	<td>click</td>
+	<td>waitForElementPresent</td>
 	<td>link=Save</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[3]/div/div/div[1]/div/div/div/div/div/div/div/div[2]/div/div[2]/div/div/div/div/div/div[3]/div/table/tbody/tr/td/div/div/div/div/a</td>
+	<td>link=Save</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForTextPresent</td>
+	<td>You have registered a new account.</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>You have registered a new account.</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[3]/div/div[2]/div/div/div/div/div/div[3]/div/table/tbody/tr/td/div/div/div/div/a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[3]/div/div[2]/div/div/div/div/div/div[3]/div/table/tbody/tr/td/div/div/div/div/a</td>
 	<td></td>
 </tr>
 <tr>
@@ -124,6 +144,11 @@
 <tr>
 	<td>echo</td>
 	<td>-- Add new membership--</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='UIOrganizationPortlet']/div[2]/div[1]/div/div/div/div/div/div/a[3]/div[2]</td>
 	<td></td>
 </tr>
 <tr>
@@ -207,6 +232,11 @@
 	<td>label=test_plr_04_04_006</td>
 </tr>
 <tr>
+	<td>waitForElementPresent</td>
+	<td>link=Save</td>
+	<td></td>
+</tr>
+<tr>
 	<td>click</td>
 	<td>link=Save</td>
 	<td></td>
@@ -223,6 +253,11 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
+	<td>//div[@id='UIOrganizationPortlet']/div[2]/div[1]/div/div/div/div/div/div/a[1]/div[1]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
 	<td>searchTerm</td>
 	<td></td>
 </tr>
@@ -232,6 +267,11 @@
 	<td>Test_PRL_04_04_006</td>
 </tr>
 <tr>
+	<td>waitForElementPresent</td>
+	<td>//form[@id='UISearchForm']/div[2]/a</td>
+	<td></td>
+</tr>
+<tr>
 	<td>click</td>
 	<td>//form[@id='UISearchForm']/div[2]/a</td>
 	<td></td>
@@ -239,6 +279,11 @@
 <tr>
 	<td>echo</td>
 	<td>-- Click edit user icon --</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//img[@alt='ViewUserInfo']</td>
 	<td></td>
 </tr>
 <tr>
@@ -257,6 +302,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='UIUserManagement']/div[1]/div/div/div/div/div/div/div/div/div[2]/div/div/div/div</td>
+	<td></td>
+</tr>
+<tr>
 	<td>click</td>
 	<td>//div[@id='UIUserManagement']/div[1]/div/div/div/div/div/div/div/div/div[2]/div/div/div/div</td>
 	<td></td>
@@ -267,8 +317,18 @@
 	<td></td>
 </tr>
 <tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='UIUserManagement']/div[1]/div/div/div/div/div/div/div/div/div[3]/div/div/div/div</td>
+	<td></td>
+</tr>
+<tr>
 	<td>click</td>
 	<td>//div[@id='UIUserManagement']/div[1]/div/div/div/div/div/div/div/div/div[3]/div/div/div/div</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Cancel</td>
 	<td></td>
 </tr>
 <tr>
@@ -307,6 +367,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='UIOrganizationPortlet']/div[2]/div[1]/div/div/div/div/div/div/a[1]/div[1]</td>
+	<td></td>
+</tr>
+<tr>
 	<td>click</td>
 	<td>//div[@id='UIOrganizationPortlet']/div[2]/div[1]/div/div/div/div/div/div/a[1]/div[1]</td>
 	<td></td>
@@ -319,6 +384,11 @@
 <tr>
 	<td>click</td>
 	<td>//form[@id='UISearchForm']/div[2]/a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//img[@alt='ViewUserInfo']</td>
 	<td></td>
 </tr>
 <tr>
@@ -342,8 +412,18 @@
 	<td></td>
 </tr>
 <tr>
+	<td>waitForElementPresent</td>
+	<td>//form[@id='UISearchForm']/div[2]/a</td>
+	<td></td>
+</tr>
+<tr>
 	<td>click</td>
 	<td>//form[@id='UISearchForm']/div[2]/a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//img[@alt='DeleteUser']</td>
 	<td></td>
 </tr>
 <tr>
@@ -357,21 +437,10 @@
 	<td></td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
-	<td>//div[4]/div/div[2]/div/div/div/div/div/div[3]/div/table/tbody/tr/td/div/div/div/div</td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>//div[4]/div/div[2]/div/div/div/div/div/div[3]/div/table/tbody/tr/td/div/div/div/div</td>
-	<td></td>
-</tr>
-<tr>
 	<td>clickAndWait</td>
 	<td>link=Sign out</td>
 	<td></td>
 </tr>
-
 </tbody></table>
 </body>
 </html>
