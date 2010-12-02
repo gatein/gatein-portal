@@ -111,7 +111,7 @@
                              onParentVersion="COPY" protected="false" multiple="false">
             <valueConstraints/>
          </propertyDefinition>
-         <propertyDefinition name="portletHandles" requiredType="String" autoCreated="false" mandatory="false"
+         <propertyDefinition name="portlethandles" requiredType="String" autoCreated="false" mandatory="false"
                              onParentVersion="COPY" protected="false" multiple="true">
          </propertyDefinition>
       </propertyDefinitions>

@@ -65,7 +65,7 @@ public abstract class RegistrationMapping
 
    public abstract void setRegistrationHandle(String handle);
    
-   @Property(name="portletHandles")
+   @Property(name="portlethandles")
    public abstract List<String> getPortletHandles();
    
    public abstract void setPortletHandles(List<String> portletHandles);
