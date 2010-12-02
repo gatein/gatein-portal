@@ -52,8 +52,23 @@
 	<td></td>
 </tr>
 <tr>
+	<td>echo</td>
+	<td>-- Go to Application registry --</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Application Registry</td>
+	<td></td>
+</tr>
+<tr>
 	<td>clickAndWait</td>
 	<td>link=Application Registry</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='UIApplicationOrganizer']/div[1]/div[1]</td>
 	<td></td>
 </tr>
 <tr>
@@ -167,13 +182,28 @@
 	<td>label=Gadget</td>
 </tr>
 <tr>
-	<td>click</td>
+	<td>waitForElementPresent</td>
 	<td>//option[@value='gadget']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
+	<td>//option[@value='gadget']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
 	<td>//input[@name='application' and @value='1']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//input[@name='application' and @value='1']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Add</td>
 	<td></td>
 </tr>
 <tr>
@@ -232,6 +262,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>waitForElementPresent</td>
+	<td>link=Sign out</td>
+	<td></td>
+</tr>
+<tr>
 	<td>clickAndWait</td>
 	<td>link=Sign out</td>
 	<td></td>
@@ -239,6 +274,11 @@
 <tr>
 	<td>echo</td>
 	<td>-- Check accessing public category--</td>
+	<td></td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>/portal/public/classic/</td>
 	<td></td>
 </tr>
 <tr>
@@ -282,13 +322,18 @@
 	<td></td>
 </tr>
 <tr>
-	<td>click</td>
+	<td>clickAndWait</td>
 	<td>link=Sign out</td>
 	<td></td>
 </tr>
 <tr>
 	<td>echo</td>
 	<td>-- Delete category--</td>
+	<td></td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>/portal/public/classic/</td>
 	<td></td>
 </tr>
 <tr>
@@ -331,7 +376,6 @@
 	<td>link=Sign out</td>
 	<td></td>
 </tr>
-
 </tbody></table>
 </body>
 </html>
