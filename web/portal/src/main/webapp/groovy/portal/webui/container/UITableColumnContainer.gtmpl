@@ -42,7 +42,7 @@
 						<table class="UITableColumn" style="table-layout: fixed; margin: 0px auto; $style">
 							<tr class="TRContainer">
 								<% for(uiChild in uicomponent.getChildren()) {%>
-									<td class="${uiChild.id}TDContainer TDContainer" width="<%= uiChild.getWidth(); %>"><% uicomponent.renderUIComponent(uiChild) %></td>
+									<td class="${uiChild.id}TDContainer" <% if(uiChild.getWidth()) { %> width="<%= uiChild.getWidth(); %>" <% } %>><% uicomponent.renderUIComponent(uiChild) %></td>
 								<% } %>
 						 </tr>
 						</table>

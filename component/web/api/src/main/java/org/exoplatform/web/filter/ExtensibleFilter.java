@@ -29,7 +29,6 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * This class allows the rest of the platform to define new filters thanks to the external
@@ -40,7 +39,7 @@ import javax.servlet.http.HttpServletRequest;
  *          nicolas.filotto@exoplatform.com
  * 25 sept. 2009  
  */
-public class ExtensibleFilter implements Filter
+public class ExtensibleFilter
 {
 
    /**
@@ -74,32 +73,31 @@ public class ExtensibleFilter implements Filter
       }
    }
 
-   /**
-    * @see Filter#doFilter(javax.servlet.ServletRequest, javax.servlet.ServletResponse, javax.servlet.FilterChain)
-    */
-   public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException,
-      ServletException
+   public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain, String path)
+      throws IOException, ServletException
    {
-      ExtensibleFilterChain efChain = new ExtensibleFilterChain(chain, filters);
+      ExtensibleFilterChain efChain = new ExtensibleFilterChain(chain, filters, path);
       efChain.doFilter(request, response);
    }
-
+   
    private static class ExtensibleFilterChain implements FilterChain
    {
 
       private final FilterChain parentChain;
 
       private final Iterator<FilterDefinition> filters;
+      
+      private final String path;
 
-      private ExtensibleFilterChain(FilterChain parentChain, List<FilterDefinition> filters)
+      private ExtensibleFilterChain(FilterChain parentChain, List<FilterDefinition> filters, String path_)
       {
          this.parentChain = parentChain;
          this.filters = filters.iterator();
+         this.path = path_;
       }
 
       public void doFilter(ServletRequest request, ServletResponse response) throws IOException, ServletException
       {
-         String path = ((HttpServletRequest)request).getRequestURI();
          while (filters.hasNext())
          {
             FilterDefinition filterDef = filters.next();

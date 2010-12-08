@@ -56,7 +56,8 @@ public class Component
 
    private final List<EventInterceptor> eventInterceptors;
 
-   private Map<String, Event> eventMap;
+   /** Declare this map as volatile to make double-check work properly **/
+   private volatile Map<String, Event> eventMap;
 
    private Lifecycle<UIComponent> componentLifecycle;
 
@@ -182,18 +183,21 @@ public class Component
          {
             if(eventMap == null)
             {
-               eventMap = new HashMap<String, Event>();
+               Map<String, Event> temporaryMap = new HashMap<String, Event>();
 
                if (events == null)
                {
+                  eventMap = temporaryMap;
                   return null;
                }
 
                for (Event event : events)
                {
                   createCachedEventListeners(event);
-                  eventMap.put(event.getName(), event);
+                  temporaryMap.put(event.getName(), event);
                }
+               
+               eventMap = temporaryMap;
             }
             
             return eventMap.get(eventName);

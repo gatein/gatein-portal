@@ -58,7 +58,7 @@
 						<thead>
 							<tr>
 								<% if(isMulti) {%>
-								<th style="width: 30px;"><input type="checkbox" class="checkbox" value="4" /></th>
+								<th style="width: 30px;"><input type="checkbox" class="checkbox" name="selectall"/></th>
 								<% } %>
 								<th>
 									<%=uiform.getLabel('userName')%>

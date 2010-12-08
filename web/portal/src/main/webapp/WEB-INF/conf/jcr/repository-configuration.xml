@@ -237,7 +237,7 @@
                <property name="swap-directory" value="${gatein.jcr.data.dir}/swap/wsrp${container.name.suffix}"/>
              </properties>
              <value-storages>
-               <value-storage id="gadgets"
+               <value-storage id="wsrp-system"
                   class="org.exoplatform.services.jcr.impl.storage.value.fs.TreeFileValueStorage">
                  <properties>
                    <property name="path" value="${gatein.jcr.storage.data.dir}/wsrp${container.name.suffix}"/>
@@ -304,7 +304,7 @@
                   <property name="swap-directory" value="${gatein.jcr.data.dir}/swap/pc${container.name.suffix}"/>
                </properties>
                <value-storages>
-                  <value-storage id="gadgets" class="org.exoplatform.services.jcr.impl.storage.value.fs.TreeFileValueStorage">
+                  <value-storage id="pc-system" class="org.exoplatform.services.jcr.impl.storage.value.fs.TreeFileValueStorage">
                      <properties>
                         <property name="path" value="${gatein.jcr.storage.data.dir}/pc${container.name.suffix}"/>
                      </properties>

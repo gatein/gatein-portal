@@ -114,13 +114,16 @@ public class UIFormCheckBoxInput<T> extends UIFormInputBase<T>
    {
       if (!isEnable())
          return;
-      if (input == null)
-         checked = false;
-      else
-         checked = true;
-      if (typeValue_ == Boolean.class || typeValue_ == boolean.class)
-      {
-         value_ = typeValue_.cast(checked);
+      
+      if (input != null) {
+         if(input.equals("true"))
+            checked = true;
+         else
+            checked = false;
+         if (typeValue_ == Boolean.class || typeValue_ == boolean.class)
+         {
+            value_ = typeValue_.cast(checked);
+         }
       }
    }
 

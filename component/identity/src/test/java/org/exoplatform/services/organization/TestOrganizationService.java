@@ -117,12 +117,6 @@ public class TestOrganizationService extends AbstractGateInTest
       RequestLifeCycle.end();
    }
 
-   public void testSimle() throws Exception
-   {
-      assertTrue(true);
-
-   }
-
    public void testUserPageSize() throws Exception
    {
       for (String name : USERS)

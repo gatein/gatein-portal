@@ -23,11 +23,15 @@ import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.web.AbstractFilter;
 
 import java.io.IOException;
+import java.util.regex.Pattern;
 
 import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * This filter allows the rest of the platform to add their own filters without changing the web.xml
@@ -41,11 +45,19 @@ import javax.servlet.ServletResponse;
 public class GenericFilter extends AbstractFilter
 {
 
+   private Pattern contextPathPattern;
    /**
     * @see javax.servlet.Filter#destroy()
     */
    public void destroy()
    {
+   }
+   
+   @Override
+   protected void afterInit(FilterConfig config) throws ServletException
+   {
+      ServletContext servletContext = this.getServletContext();
+      contextPathPattern = Pattern.compile("[/]*" + servletContext.getContextPath() + "[/]*");
    }
 
    /**
@@ -63,7 +75,8 @@ public class GenericFilter extends AbstractFilter
       }
       else
       {
-         filter.doFilter(request, response, chain);
+         String path = contextPathPattern.matcher(((HttpServletRequest)request).getRequestURI()).replaceFirst("/");
+         filter.doFilter(request, response, chain, path);
       }
    }
 }

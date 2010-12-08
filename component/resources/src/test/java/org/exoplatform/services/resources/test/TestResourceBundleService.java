@@ -19,8 +19,13 @@
 
 package org.exoplatform.services.resources.test;
 
+import org.exoplatform.commons.utils.PropertyManager;
 import org.exoplatform.container.PortalContainer;
-import org.exoplatform.services.resources.*;
+import org.exoplatform.services.resources.AbstractResourceBundleTest;
+import org.exoplatform.services.resources.LocaleConfigService;
+import org.exoplatform.services.resources.Query;
+import org.exoplatform.services.resources.ResourceBundleData;
+import org.exoplatform.services.resources.ResourceBundleService;
 
 import java.util.List;
 import java.util.Locale;
@@ -177,5 +182,34 @@ public class TestResourceBundleService extends AbstractResourceBundleTest
    protected String getDescription()
    {
       return "Test Resource Bundle Service";
+   }
+   
+   public void testClasspathResourceCache()
+   {
+      String oldValue = PropertyManager.getProperty(PropertyManager.DEVELOPING);
+      try
+      {
+         PropertyManager.setProperty(PropertyManager.DEVELOPING, "false");
+         assertFalse(PropertyManager.isDevelopping());
+         MyClassLoader cl1 = new MyClassLoader();
+         ResourceBundle res = service_.getResourceBundle("locale.portlet", Locale.ENGLISH, cl1);
+         assertNotNull(res);
+         assertTrue(res == service_.getResourceBundle("locale.portlet", Locale.ENGLISH, cl1));
+         assertFalse(res == service_.getResourceBundle("locale.portlet", Locale.ENGLISH, new MyClassLoader()));
+      }
+      finally
+      {
+         PropertyManager.setProperty(PropertyManager.DEVELOPING, oldValue);
+      }
+   }
+   
+   private static class MyClassLoader extends ClassLoader
+   {
+
+      @Override
+      public String toString()
+      {
+         return "MyClassLoader";
+      }
    }
 }

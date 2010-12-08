@@ -34,7 +34,7 @@ import org.exoplatform.container.PortalContainer;
  * Sep 8, 2010
  */
 
-public class ResourceOverridingFilter implements Filter {
+public class RedefinableResourceFilter implements Filter {
 
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response,

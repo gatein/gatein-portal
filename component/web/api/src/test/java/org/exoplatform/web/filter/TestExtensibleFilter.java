@@ -52,13 +52,14 @@ public class TestExtensibleFilter extends AbstractGateInTest
 
    public void testDoFilter() throws IOException, ServletException
    {
+      String pathRequest = "/testPath";
       ExtensibleFilter exFilter = new ExtensibleFilter();
       MockFilterOKTF mockFilterOKTF = new MockFilterOKTF();
       MockFilterOKWTF mockFilterOKWTF = new MockFilterOKWTF();
       MockFilterChain chain = new MockFilterChain();
       exFilter.addFilterDefinitions(Arrays.asList(getFilterDefinition(mockFilterOKTF),
          getFilterDefinition(mockFilterOKWTF)));
-      exFilter.doFilter(new MockServletRequest(), null, chain);
+      exFilter.doFilter(new MockServletRequest(), null, chain, pathRequest);
       assertTrue(mockFilterOKTF.start);
       assertTrue(mockFilterOKTF.end);
       assertTrue(mockFilterOKWTF.start);
@@ -70,7 +71,7 @@ public class TestExtensibleFilter extends AbstractGateInTest
       chain = new MockFilterChain();
       exFilter.addFilterDefinitions(Arrays.asList(getFilterDefinition(mockFilterOKTF),
          getFilterDefinition(mockFilterOKWTF), getFilterDefinition(new MockFilterKO())));
-      exFilter.doFilter(new MockServletRequest(), null, chain);
+      exFilter.doFilter(new MockServletRequest(), null, chain, pathRequest);
       assertTrue(mockFilterOKTF.start);
       assertTrue(mockFilterOKTF.end);
       assertTrue(mockFilterOKWTF.start);
@@ -84,7 +85,7 @@ public class TestExtensibleFilter extends AbstractGateInTest
          getFilterDefinition(mockFilterOKWTF), getFilterDefinition(new MockFilterKOIO())));
       try
       {
-         exFilter.doFilter(new MockServletRequest(), null, chain);
+         exFilter.doFilter(new MockServletRequest(), null, chain, pathRequest);
          fail("IOException is expected");
       }
       catch (IOException e)
@@ -103,7 +104,7 @@ public class TestExtensibleFilter extends AbstractGateInTest
          getFilterDefinition(mockFilterOKWTF), getFilterDefinition(new MockFilterKOSE())));
       try
       {
-         exFilter.doFilter(new MockServletRequest(), null, chain);
+         exFilter.doFilter(new MockServletRequest(), null, chain, pathRequest);
          fail("ServletException is expected");
       }
       catch (ServletException e)
@@ -122,7 +123,7 @@ public class TestExtensibleFilter extends AbstractGateInTest
          getFilterDefinition(mockFilterOKWTF), getFilterDefinition(new MockFilterKORE())));
       try
       {
-         exFilter.doFilter(new MockServletRequest(), null, chain);
+         exFilter.doFilter(new MockServletRequest(), null, chain, pathRequest);
          fail("RuntimeException is expected");
       }
       catch (RuntimeException e)
@@ -141,7 +142,7 @@ public class TestExtensibleFilter extends AbstractGateInTest
          getFilterDefinition(mockFilterOKWTF), getFilterDefinition(new MockFilterKOER())));
       try
       {
-         exFilter.doFilter(new MockServletRequest(), null, chain);
+         exFilter.doFilter(new MockServletRequest(), null, chain, pathRequest);
          fail("Error is expected");
       }
       catch (Error e)
@@ -162,7 +163,7 @@ public class TestExtensibleFilter extends AbstractGateInTest
          getFilterDefinition(mockFilterOKTF2)));
       try
       {
-         exFilter.doFilter(new MockServletRequest(), null, chain);
+         exFilter.doFilter(new MockServletRequest(), null, chain, pathRequest);
          fail("IOException is expected");
       }
       catch (IOException e)

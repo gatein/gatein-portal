@@ -19,5 +19,19 @@
 
 -->
 
-<Context path="/eXoResources" docBase="../../../../../../web/eXoResources/src/main/webapp" 
-         debug="0" reloadable="true" />
+<webui-configuration>  
+  <application>     
+    <init-params>
+    </init-params>
+
+    <ui-component-root>org.exoplatform.portal.webui.workspace.UIPortalApplication</ui-component-root>    
+    <state-manager>org.exoplatform.portal.webui.test.MockStateManager</state-manager>
+
+    <application-lifecycle-listeners>       
+      <listener>org.exoplatform.webui.application.MonitorApplicationLifecycle</listener>      
+    </application-lifecycle-listeners>
+
+    <events>
+    </events>
+  </application>
+</webui-configuration>

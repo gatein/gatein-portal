@@ -22,6 +22,7 @@ package org.exoplatform.services.resources.impl;
 import org.exoplatform.commons.utils.IOUtil;
 import org.exoplatform.commons.utils.MapResourceBundle;
 import org.exoplatform.commons.utils.PageList;
+import org.exoplatform.commons.utils.PropertyManager;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.services.cache.ExoCache;
 import org.exoplatform.services.log.Log;
@@ -42,12 +43,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
-import java.util.Set;
 
 /**
  * Created by The eXo Platform SAS Mar 9, 2007
@@ -383,11 +382,6 @@ abstract public class BaseResourceBundleService implements ResourceBundleService
          return IdentityResourceBundle.getInstance();
       }
 
-      // Case 1: ResourceBundle of portlets, standard java API is used
-      if (isClasspathResource(name))
-         return ResourceBundleLoader.load(name, locale, cl);
-
-      // Case 2: ResourceBundle of portal
       String country = locale.getCountry();
       String id;
       if (country != null && country.length() > 0)
@@ -399,18 +393,39 @@ abstract public class BaseResourceBundleService implements ResourceBundleService
          id = name + "_" + locale.getLanguage();
       }
 
-      try
+      boolean isClasspathResource = isClasspathResource(name);
+      boolean isCacheable = !isClasspathResource || !PropertyManager.isDevelopping();
+      if (isCacheable)
       {
-         ResourceBundle rb = cache_.get(id);
-         if (rb != null)
+         if (isClasspathResource)
          {
-            return rb;
+            // Avoid naming collision
+            id += "_" + cl.getClass() + "_" + cl.hashCode();
          }
-      }
-      catch (Exception ex)
-      {
+         try
+         {
+            ResourceBundle rb = cache_.get(id);
+            if (rb != null)
+            {
+               return rb;
+            }
+         }
+         catch (Exception ex)
+         {
+         }         
       }
 
+      // Case 1: ResourceBundle of portlets, standard java API is used
+      if (isClasspathResource)
+      {
+         ResourceBundle res = ResourceBundleLoader.load(name, locale, cl);
+         //Cache classpath resource bundle while running portal in non-dev mode
+         if (isCacheable)
+            cache_.put(id, res);
+         return res;
+      }
+
+      // Case 2: ResourceBundle of portal
       try
       {
          ResourceBundle res = null;

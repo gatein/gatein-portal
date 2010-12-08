@@ -121,6 +121,7 @@ public class UIUserProfileInputSet extends UIFormInputSet
             initLanguageCombo(langSelectBox);
             continue;
          }
+         
          set.addUIFormInput(new UIFormStringInput(key, null, null));
       }
    }

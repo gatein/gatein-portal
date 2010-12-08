@@ -70,22 +70,22 @@ import org.exoplatform.webui.core.model.SelectItemOption ;
     autofitColumn.addSelectItemOption(new SelectItemOption("autofitOneColumns","" +
         "<container template=\"system:/groovy/portal/webui/container/UITableAutofitColumnContainer.gtmpl\">" +
         "  <factory-id>TableColumnContainer</factory-id>" +
-        "  <container template=\"system:/groovy/portal/webui/container/UIContainer.gtmpl\"></container>" +
+        "  <container template=\"system:/groovy/portal/webui/container/UIColumnContainer.gtmpl\"><factory-id>ColumnContainer</factory-id></container>" +
         "</container>", 
         "OneRowContainerLayout")) ;
     autofitColumn.addSelectItemOption(new SelectItemOption("autofitTwoColumns",
         "<container template=\"system:/groovy/portal/webui/container/UITableAutofitColumnContainer.gtmpl\">" +
         "  <factory-id>TableColumnContainer</factory-id>" +
-        "  <container template=\"system:/groovy/portal/webui/container/UIContainer.gtmpl\"></container>" +
-        "  <container template=\"system:/groovy/portal/webui/container/UIContainer.gtmpl\"></container>" +
+        "  <container template=\"system:/groovy/portal/webui/container/UIColumnContainer.gtmpl\"><factory-id>ColumnContainer</factory-id></container>" +
+        "  <container template=\"system:/groovy/portal/webui/container/UIColumnContainer.gtmpl\"><factory-id>ColumnContainer</factory-id></container>" +
         "</container>",
         "TwoColumnContainerLayout")) ;
     autofitColumn.addSelectItemOption(new SelectItemOption("autofitThreeColumns",
         "<container template=\"system:/groovy/portal/webui/container/UITableAutofitColumnContainer.gtmpl\">" +
         "  <factory-id>TableColumnContainer</factory-id>" +
-        "  <container template=\"system:/groovy/portal/webui/container/UIContainer.gtmpl\"></container>" +
-        "  <container template=\"system:/groovy/portal/webui/container/UIContainer.gtmpl\"></container>" +
-        "  <container template=\"system:/groovy/portal/webui/container/UIContainer.gtmpl\"></container>" +
+        "  <container template=\"system:/groovy/portal/webui/container/UIColumnContainer.gtmpl\"><factory-id>ColumnContainer</factory-id></container>" +
+        "  <container template=\"system:/groovy/portal/webui/container/UIColumnContainer.gtmpl\"><factory-id>ColumnContainer</factory-id></container>" +
+        "  <container template=\"system:/groovy/portal/webui/container/UIColumnContainer.gtmpl\"><factory-id>ColumnContainer</factory-id></container>" +
         "</container>",
         "ThreeColumnContainerLayout")) ;
   templates.add(autofitColumn);  

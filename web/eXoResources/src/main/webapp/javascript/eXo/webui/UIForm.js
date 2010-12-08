@@ -144,6 +144,11 @@ UIForm.prototype.serializeForm = function (formElement) {
         break; 
           
       case "checkbox":
+        if(element.checked) 
+            this.addField(element.name, "true");
+        else
+            this.addField(element.name, "false");
+        break;
       case "radio":
         if(element.checked) this.addField(element.name, element.value);  
         break;  
