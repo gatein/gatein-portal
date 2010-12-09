@@ -22,6 +22,8 @@
  ******************************************************************************/
 package org.exoplatform.portal.webui;
 
+import java.util.Calendar;
+
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.form.UIFormStringInput;
 
@@ -50,9 +52,9 @@ public class UICaptcha extends UIFormStringInput
 
       // context.getPortalContextPath() + "/captcha?v=" +  Calendar.getInstance().getTimeInMillis()
 
+      String random = "&v=" + Calendar.getInstance().getTimeInMillis();
 
-
-      context.getWriter().write("<div id='" + getId() + "'><img src=\"" + url.toString()  + "\" /><br/>");
+      context.getWriter().write("<div id='" + getId() + "'><img src=\"" + url.toString()  + random + "\" /><br/>");
       super.processRender(context);
       context.getWriter().write("</div>");
    }

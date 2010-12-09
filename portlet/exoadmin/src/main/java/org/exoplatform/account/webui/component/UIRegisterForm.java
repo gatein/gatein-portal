@@ -19,7 +19,6 @@
 
 package org.exoplatform.account.webui.component;
 
-import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.webui.CaptchaValidator;
 import org.exoplatform.portal.webui.UICaptcha;
 import org.exoplatform.portal.webui.util.Util;
@@ -27,6 +26,7 @@ import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.UserHandler;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -99,10 +99,11 @@ public class UIRegisterForm extends UIForm
       if(popupMessages.getWarnings().size() > 0 || popupMessages.getErrors().size() > 0)
       {
          //Invalidate the capcha
-         PortalRequestContext prContext = Util.getPortalRequestContext();
-         HttpServletRequest request = prContext.getRequest();
-         HttpSession session = request.getSession();
-         session.removeAttribute(Captcha.NAME);
+         if (context instanceof PortletRequestContext)
+         {
+            PortletRequestContext prc = (PortletRequestContext)context;
+            prc.getRequest().getPortletSession().removeAttribute(Captcha.NAME);
+         }
          context.addUIComponentToUpdateByAjax(getChild(UIRegisterInputSet.class));
       }
    }
@@ -112,9 +113,6 @@ public class UIRegisterForm extends UIForm
       @Override
       public void execute(Event<UIRegisterForm> event) throws Exception
       {
-         // Invalidate the captcha image
-         PortalRequestContext prContext = Util.getPortalRequestContext();
- 
          UIRegisterForm registerForm = event.getSource();
          OrganizationService orgService = registerForm.getApplicationComponent(OrganizationService.class);
          UserHandler userHandler = orgService.getUserHandler();
@@ -127,9 +125,13 @@ public class UIRegisterForm extends UIForm
             UIApplication uiApp = context.getUIApplication();
             uiApp.addMessage(new ApplicationMessage("UIRegisterForm.registerWithSuccess.message", null));           
          }
-         HttpServletRequest request = prContext.getRequest();
-         HttpSession session = request.getSession();
-         session.removeAttribute(Captcha.NAME);
+
+         //Invalidate the capcha
+         if (context instanceof PortletRequestContext)
+         {
+            PortletRequestContext prc = (PortletRequestContext)context;
+            prc.getRequest().getPortletSession().removeAttribute(Captcha.NAME);
+         }
       }
    }
 

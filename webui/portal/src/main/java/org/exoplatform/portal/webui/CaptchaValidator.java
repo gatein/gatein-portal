@@ -49,7 +49,7 @@ public class CaptchaValidator implements Validator, Serializable
       PortletRequest req = ctx.getRequest();
       PortletSession session = req.getPortletSession();
 
-      Captcha captcha = (Captcha) session.getAttribute(Captcha.NAME, PortletSession.APPLICATION_SCOPE);
+      Captcha captcha = (Captcha) session.getAttribute(Captcha.NAME);
 
       if ((captcha != null) && (captcha.isCorrect((String) uiInput.getValue())))
       {
