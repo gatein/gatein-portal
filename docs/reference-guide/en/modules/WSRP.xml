@@ -686,7 +686,7 @@
          <para>
             Here is the configuration of the
             <literal>selfv1</literal> and <literal>selfv2</literal>
-            producers as found in
+            consumers as found in
             <filename>$GATEIN_HOME/lib/wsrp-consumer-$WSRP_VERSION.jar/conf/wsrp-consumers-config.xml</filename>
             with a cache expiring every 500 seconds and with a 50 second timeout for web service operations.
          </para>
