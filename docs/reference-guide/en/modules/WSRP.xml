@@ -150,10 +150,10 @@
                </para>
             </listitem>
          </itemizedlist>
-         If you're not going to use WSRP in &PRODUCT_NAME;, you can remove
-         <filename>$GATEIN_HOME/lib/gatein.portal.component.wsrp-$PORTAL_VERSION.jar</filename>
-         from your &PRODUCT_NAME; distribution to easily deactivate WSRP support. Of course, if you want to trim your
-         installation, you can also remove all the files mentioned above.
+         If you're not going to use WSRP in &PRODUCT_NAME;, it won't adversely affect your installation to leave it
+         as-is. Please see the
+         <ulink url="http://community.jboss.org/wiki/WSRPserviceremovalprocedure">WSRP service removal procedure</ulink>
+         for a complete guide on how to remove the WSRP service.
       </para>
 
       <sect2 id="wsrp-ports">
