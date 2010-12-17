@@ -148,6 +148,8 @@ public class PortalRequestContext extends WebuiRequestContext
       String queryString = req.getQueryString();
       if (queryString != null)
       {
+         //The QueryStringParser currently only likes & and not &amp;
+         queryString = queryString.replace("&amp;", "&");
          Map<String, String[]> queryParams = QueryStringParser.getInstance().parseQueryString(queryString);
          parameterMap.putAll(queryParams);
       }
