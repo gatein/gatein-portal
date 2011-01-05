@@ -73,10 +73,8 @@ public class PortalController extends AbstractHttpServlet
          // Set the full classloader of the portal container
          Thread.currentThread().setContextClassLoader(portalContainer.getPortalClassLoader());
          hasChanged = true;
-         PortalApplication application = new PortalApplication(config);
-         application.onInit();
-         controller.addApplication(application);
-         controller.register(new PortalRequestHandler());
+         
+         controller.onHandlersInit(config);
          log.info("The WebAppController has been successfully initialized for the portal '" + portalContainer.getName()
             + "'");
       }

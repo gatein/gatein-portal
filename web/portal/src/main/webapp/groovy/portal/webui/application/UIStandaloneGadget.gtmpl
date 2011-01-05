@@ -1,0 +1,34 @@
+<%	
+   import org.exoplatform.web.application.JavascriptManager;
+   import org.exoplatform.portal.webui.application.GadgetUtil;
+	
+	def rcontext = _ctx.getRequestContext();
+   JavascriptManager jsmanager = rcontext.getJavascriptManager();
+   def hostName = GadgetUtil.getGadgetServerUrl();
+   def url = null;
+   def metadata = "";
+   def posX = uicomponent.getProperties().getIntValue("locationX") + "px";
+   def posY = uicomponent.getProperties().getIntValue("locationY") + "px";
+   def zIndex = uicomponent.getProperties().getIntValue("zIndex");
+   zIndex = zIndex >=0 ? zIndex : 0;
+   def id = uicomponent.getId() != null ? uicomponent.getId() : "UIGadget";
+   def view = uicomponent.getView();
+   def userPref = null;  			 				 				     									
+   
+   def isLossData = uicomponent.isLossData();
+   if(!isLossData) {
+       url = uicomponent.getUrl();
+       metadata = uicomponent.getRpcMetadata();
+       userPref = uicomponent.getUserPref();
+       def noCache = uicomponent.isNoCache();
+   	 def isDebug = uicomponent.isDebug();
+   	 jsmanager.require("SHARED/gadget", "gadget")
+   	 			 .addScripts("gadget.UIGadget.createGadget('$url','content-$id', $metadata, $userPref, '$view', '$hostName', " + (isDebug ? 1 : 0) + ", " + (noCache ? 1 : 0) + ");");      									
+   }																																						
+%>
+<div class="UIGadget" id="$id" style="left: $posX; top: $posY; z-Index: $zIndex; width: 100%" >
+	<div class="GadgetControl" style="display: none;">
+	</div>
+ 	<div id="content-$id"></div>
+	<div class="UIMask" style="display: none; border:solid 1px red"><span></span></div>
+</div>

@@ -31,6 +31,7 @@ import org.exoplatform.commons.utils.ListAccess;
 import org.exoplatform.container.configuration.ConfigurationManager;
 import org.exoplatform.portal.application.PortletPreferences;
 import org.exoplatform.portal.config.Query;
+import org.exoplatform.portal.config.NoSuchDataException;
 import org.exoplatform.portal.config.model.Application;
 import org.exoplatform.portal.config.model.ApplicationState;
 import org.exoplatform.portal.config.model.ApplicationType;
@@ -38,6 +39,7 @@ import org.exoplatform.portal.config.model.CloneApplicationState;
 import org.exoplatform.portal.config.model.Container;
 import org.exoplatform.portal.config.model.ModelObject;
 import org.exoplatform.portal.config.model.PersistentApplicationState;
+import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.TransientApplicationState;
 import org.exoplatform.portal.pom.config.tasks.DashboardTask;
 import org.exoplatform.portal.pom.config.tasks.MOPAccess;
@@ -46,7 +48,9 @@ import org.exoplatform.portal.pom.config.tasks.PortalConfigTask;
 import org.exoplatform.portal.pom.config.tasks.PortletPreferencesTask;
 import org.exoplatform.portal.pom.config.tasks.PreferencesTask;
 import org.exoplatform.portal.pom.config.tasks.SearchTask;
+import org.exoplatform.portal.pom.data.ApplicationData;
 import org.exoplatform.portal.pom.data.DashboardData;
+import org.exoplatform.portal.pom.data.Mapper;
 import org.exoplatform.portal.pom.data.ModelChange;
 import org.exoplatform.portal.pom.data.ModelData;
 import org.exoplatform.portal.pom.data.ModelDataStorage;
@@ -54,9 +58,15 @@ import org.exoplatform.portal.pom.data.PageData;
 import org.exoplatform.portal.pom.data.PageKey;
 import org.exoplatform.portal.pom.data.PortalData;
 import org.exoplatform.portal.pom.data.PortalKey;
+
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 import org.gatein.common.transaction.JTAUserTransactionLifecycleService;
+import org.gatein.mop.api.workspace.ObjectType;
+import org.gatein.mop.api.workspace.Site;
+import org.gatein.mop.api.workspace.WorkspaceObject;
+import org.gatein.mop.api.workspace.ui.UIComponent;
+import org.gatein.mop.api.workspace.ui.UIWindow;
 import org.jibx.runtime.BindingDirectory;
 import org.jibx.runtime.IBindingFactory;
 import org.jibx.runtime.impl.UnmarshallingContext;
@@ -331,13 +341,11 @@ public class POMDataStorage implements ModelDataStorage
       });
    }
    
-   @Override
    public <A> A adapt(ModelData modelData, Class<A> type)
    {
       return adapt(modelData, type, true);
    }
    
-   @Override
    public <A> A adapt(ModelData modelData, Class<A> type, boolean create)
    {
       try
@@ -395,5 +403,59 @@ public class POMDataStorage implements ModelDataStorage
       {
          log.warn("Error during sync of JTA transaction", e);
       }
+   }
+   
+   public String[] getSiteInfo(String workspaceObjectId) throws Exception
+   {
+	
+	   POMSession session = pomMgr.getSession();
+	   
+	   WorkspaceObject workspaceObject = session.findObjectById(workspaceObjectId);
+	   
+	   if(workspaceObject instanceof UIComponent)
+	   {
+		   Site site = ((UIComponent)workspaceObject).getPage().getSite();
+		   ObjectType<? extends Site> siteType = site.getObjectType();
+		   
+		   String[] siteInfo = new String[2];
+		   
+		   //Put the siteType on returned map
+		   if(siteType == ObjectType.PORTAL_SITE)
+		   {
+		      siteInfo[0] = PortalConfig.PORTAL_TYPE;
+		   }
+		   else if(siteType == ObjectType.GROUP_SITE)
+		   {
+		      siteInfo[0] = PortalConfig.GROUP_TYPE;
+		   }else if(siteType == ObjectType.USER_SITE)
+		   {
+		      siteInfo[0] = PortalConfig.USER_TYPE;
+		   }
+		   
+		   //Put the siteOwner on returned map
+		   siteInfo[1] = site.getName();
+		   
+		   return siteInfo;
+	   }
+	   
+	   throw new Exception("The provided ID is not associated with an application");
+	}
+   
+   public <S> ApplicationData<S> getApplicationData(String applicationStorageId) throws Exception
+   {
+		// TODO Auto-generated method stub
+	   
+	   POMSession session = pomMgr.getSession();
+	   WorkspaceObject workspaceObject = session.findObjectById(applicationStorageId);
+	   
+	   if(workspaceObject instanceof UIWindow)
+	   {
+		   UIWindow application = (UIWindow)workspaceObject;
+		   Mapper mapper = new Mapper(session);
+		   
+		   ApplicationData data = mapper.load(application);
+		   return data;
+	   }
+	   throw new NoSuchDataException("Could not load the application data specified by the ID: " + applicationStorageId);
    }
 }

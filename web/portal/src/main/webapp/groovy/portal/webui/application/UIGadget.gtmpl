@@ -1,6 +1,6 @@
-<%	
+<%
 	import org.exoplatform.web.application.JavascriptManager;
-	import org.exoplatform.portal.webui.application.GadgetUtil;
+	import org.exoplatform.portal.webui.application.GadgetUtil;	
 	
     def rcontext = _ctx.getRequestContext();
     JavascriptManager jsmanager = rcontext.getJavascriptManager();
@@ -34,8 +34,11 @@
 	String unminiTitle = _ctx.appRes("UIGadget.tooltip.Unminimize");
 	String maxiTitle = _ctx.appRes("UIGadget.tooltip.Maximize");
 	String unmaxiTitle = _ctx.appRes("UIGadget.tooltip.Unmaximize");
+
+	def standaloneURL = uicomponent.getStandaloneURL();
 %>
 <div class="UIGadget" id="$id" style="left: $posX; top: $posY; z-Index: $zIndex; width: 100%" >
+	<a style="display:none" href="$standaloneURL"></a>
 	<div class="GadgetControl ClearFix" style="visibility: visible;">		
 		<span class="CloseGadget IconControl" title="<%=_ctx.appRes("UIGadget.tooltip.deleteGadget")%>"></span>
 		<span class="<%=view.equals(uicomponent.HOME_VIEW) ? "MaximizeGadget" : "RestoreGadget";%> MaximizeAction IconControl"                     

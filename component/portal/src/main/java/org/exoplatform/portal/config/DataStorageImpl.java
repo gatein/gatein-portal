@@ -21,6 +21,7 @@ package org.exoplatform.portal.config;
 import org.exoplatform.commons.utils.LazyPageList;
 import org.exoplatform.commons.utils.ListAccess;
 import org.exoplatform.portal.application.PortletPreferences;
+import org.exoplatform.portal.config.model.Application;
 import org.exoplatform.portal.config.model.ApplicationState;
 import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.config.model.Container;
@@ -28,6 +29,7 @@ import org.exoplatform.portal.config.model.Dashboard;
 import org.exoplatform.portal.config.model.ModelObject;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.pom.data.ApplicationData;
 import org.exoplatform.portal.pom.data.DashboardData;
 import org.exoplatform.portal.pom.data.ModelChange;
 import org.exoplatform.portal.pom.data.ModelData;
@@ -53,7 +55,7 @@ public class DataStorageImpl implements DataStorage
 {
    /** . */
    private ModelDataStorage delegate;
-   
+
    private ListenerService listenerServ_ ;
 
    public DataStorageImpl(ModelDataStorage delegate, ListenerService listenerServ)
@@ -80,7 +82,7 @@ public class DataStorageImpl implements DataStorage
       delegate.save(config.build());
       listenerServ_.broadcast(PORTAL_CONFIG_UPDATED, this, config);
    }
-   
+
    public void remove(PortalConfig config) throws Exception
    {
       delegate.remove(config.build());
@@ -99,7 +101,7 @@ public class DataStorageImpl implements DataStorage
       listenerServ_.broadcast(PAGE_UPDATED, this, page);
       return changes;
    }
-   
+
    public void remove(Page page) throws Exception
    {
       delegate.remove(page.build());
@@ -144,7 +146,7 @@ public class DataStorageImpl implements DataStorage
       final Query<O> q;
 
       final Class<D> dataType;
-      
+
       final Comparator<O> cp;
 
       Bilto(Query<O> q, Class<D> dataType)
@@ -153,7 +155,7 @@ public class DataStorageImpl implements DataStorage
          this.dataType = dataType;
          this.cp = null;
       }
-      
+
       Bilto(Query<O> q, Class<D> dataType, Comparator<O> cp)
       {
          this.q = q;
@@ -187,8 +189,8 @@ public class DataStorageImpl implements DataStorage
                return pages;
             }
          };
-      }      
-      
+      }
+
 
       private List<D> sort(List<D> list, final Comparator<O> comparator) {
          if (comparator != null)
@@ -320,15 +322,34 @@ public class DataStorageImpl implements DataStorage
       delegate.saveDashboard(dashboard.build());
    }
    
-   @Override
    public <A> A adapt(ModelObject modelObject, Class<A> type)
    {
       return delegate.adapt(modelObject.build(), type);
    }
    
-   @Override
    public <A> A adapt(ModelObject modelObject, Class<A> type, boolean create)
    {
       return delegate.adapt(modelObject.build(), type, create);
+   }
+
+   public String[] getSiteInfo(String applicationStorageId) throws Exception
+   {
+      // TODO Auto-generated method stub
+      return delegate.getSiteInfo(applicationStorageId);
+   }
+
+   public <S> Application<S> getApplicationModel(String applicationStorageId) throws Exception
+   {
+      // TODO Auto-generated method stub
+      try 
+      {
+         ApplicationData<S> applicationData = delegate.getApplicationData(applicationStorageId);
+         return new Application<S>(applicationData);
+      }
+      catch (NoSuchDataException ex)
+      {
+          //TODO: Throw something else
+         throw ex;
+      }
    }
 }

@@ -457,7 +457,7 @@ function HttpResponseHandler() {
     else 
     {
     	//This code will be run after we've finished update html
-    	var portlets = gj("#UIWorkingWorkspace .PORTLET-FRAGMENT");
+    	var portlets = gj("body .PORTLET-FRAGMENT");
     	var exHeads = head.find("[class^='ExHead-']:not(title)");
     	exHeads.each(function()
 		{

@@ -102,7 +102,11 @@ public interface ModelDataStorage
    public void saveDashboard(DashboardData dashboard) throws Exception;
 
    public void save() throws Exception;
-   
+
+   public String[] getSiteInfo(String workspaceObjectId) throws Exception;
+
+   public <S> ApplicationData<S> getApplicationData(String applicationStorageId) throws Exception;
+
    /****************************************************************
     * Proxy methods of public API to access/modify MOP mixins, 
     * 

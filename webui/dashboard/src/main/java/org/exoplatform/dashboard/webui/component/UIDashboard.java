@@ -20,8 +20,6 @@
 package org.exoplatform.dashboard.webui.component;
 
 import org.exoplatform.portal.webui.application.UIGadget;
-import org.exoplatform.portal.webui.page.UIPage;
-import org.exoplatform.portal.webui.page.UIPageBody;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -36,8 +34,6 @@ import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
-
-import javax.portlet.WindowState;
 
 @ComponentConfigs({@ComponentConfig(template = "classpath:groovy/dashboard/webui/component/UIDashboard.gtmpl", events = {
    @EventConfig(listeners = UIDashboardContainer.MoveGadgetActionListener.class),

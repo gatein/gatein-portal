@@ -23,6 +23,15 @@
     xmlns="http://www.gatein.org/xml/ns/gatein_controller_1_1"
     separator-escape=":">
 
+  <route path="/standalone/{gtn:path}">
+    <route-param qname="gtn:handler">
+      <value>standalone</value>
+    </route-param>
+    <path-param qname="gtn:path" encoding="preserve-path">
+      <pattern>.*</pattern>
+    </path-param>
+  </route>
+  
   <route path="/upload">
     <route-param qname="gtn:handler">
       <value>upload</value>

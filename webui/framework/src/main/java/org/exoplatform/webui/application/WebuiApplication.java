@@ -20,7 +20,6 @@
 package org.exoplatform.webui.application;
 
 import org.exoplatform.web.application.Application;
-import org.exoplatform.web.application.ApplicationLifecycle;
 import org.exoplatform.webui.Util;
 import org.exoplatform.webui.config.Component;
 import org.exoplatform.webui.core.UIComponent;
@@ -68,11 +67,8 @@ abstract public class WebuiApplication extends Application
       String stateManagerClass = configManager_.getApplication().getStateManager();
       StateManager stManager = (StateManager)Util.createObject(stateManagerClass, null);
       setStateManager(stManager);
-      List<ApplicationLifecycle> lifecycleListeners =
-         configManager_.getApplication().getApplicationLifecycleListeners();
-      setApplicationLifecycle(lifecycleListeners);
-      for (ApplicationLifecycle lifecycle : lifecycleListeners)
-         lifecycle.onInit(this);
+      setApplicationLifecycle(configManager_.getApplication().getApplicationLifecycleListeners());
+      super.onInit();
    }
 
    public ConfigurationManager getConfigurationManager()

@@ -159,6 +159,17 @@
         </value-param>
       </init-params>
    </component-plugin>
+   <component-plugin>
+      <name>StandaloneAppRequestHandler</name>
+      <set-method>register</set-method>
+      <type>org.exoplatform.portal.application.StandaloneAppRequestHandler</type>
+      <init-params>
+         <value-param>
+            <name>webui.configuration</name>
+            <value>app:/WEB-INF/standalone-webui-configuration.xml</value>
+         </value-param>
+      </init-params>
+   </component-plugin>
   </external-component-plugins>
 
 </configuration>

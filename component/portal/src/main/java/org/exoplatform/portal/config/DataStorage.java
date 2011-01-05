@@ -19,9 +19,13 @@
 
 package org.exoplatform.portal.config;
 
+import java.util.Comparator;
+import java.util.List;
+
 import org.exoplatform.commons.utils.LazyPageList;
 import org.exoplatform.commons.utils.ListAccess;
 import org.exoplatform.portal.application.PortletPreferences;
+import org.exoplatform.portal.config.model.Application;
 import org.exoplatform.portal.config.model.ApplicationState;
 import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.config.model.Container;
@@ -31,9 +35,6 @@ import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.pom.config.tasks.PreferencesTask;
 import org.exoplatform.portal.pom.data.ModelChange;
-
-import java.util.Comparator;
-import java.util.List;
 
 /**
  * Created by The eXo Platform SAS
@@ -228,6 +229,17 @@ public interface DataStorage
    public List<String> getAllPortalNames() throws Exception;
    
    public List<String> getAllGroupNames() throws Exception;
+
+   /**
+    * Returns a String array that contains two elements. The first one is the site type and the second one is site name. <br/>
+    *
+    * @param applicationStorageId
+    * @return
+    * @throws Exception
+    */
+   public String[] getSiteInfo(String applicationStorageId) throws Exception;
+
+   public <S> Application<S> getApplicationModel(String applicationStorageId) throws Exception;
 
    /*************************************************************
      Public API to access/modify MOP mixin, temporarily put here

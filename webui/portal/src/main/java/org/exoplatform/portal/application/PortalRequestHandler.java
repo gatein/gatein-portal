@@ -28,6 +28,7 @@ import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.web.ControllerContext;
+import org.exoplatform.web.WebAppController;
 import org.exoplatform.web.WebRequestHandler;
 import org.exoplatform.web.application.ApplicationLifecycle;
 import org.exoplatform.web.application.ApplicationRequestPhaseLifecycle;
@@ -38,6 +39,8 @@ import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIApplication;
 import java.util.List;
 import java.util.Locale;
+
+import javax.servlet.ServletConfig;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -68,6 +71,14 @@ public class PortalRequestHandler extends WebRequestHandler
    public String getHandlerName()
    {
       return "portal";
+   }
+   
+   @Override
+   public void onInit(WebAppController controller, ServletConfig sConfig) throws Exception
+   {
+      PortalApplication application = new PortalApplication(sConfig);
+      application.onInit();
+      controller.addApplication(application);
    }
 
    /**

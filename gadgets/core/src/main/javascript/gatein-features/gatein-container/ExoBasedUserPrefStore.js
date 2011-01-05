@@ -31,7 +31,7 @@ gadgets.ExoBasedUserPrefStore.prototype.getPrefs = function(gadget) {
 gadgets.ExoBasedUserPrefStore.prototype.savePrefs = function(gadget, newPrefs)
 {
   var prefs = gadgets.json.stringify(newPrefs || gadget.userPrefs_);
-  prefs = encodeURIComponent(prefs);
+  var encodedPrefs = encodeURIComponent(prefs);
   var ggWindow = gj("#gadget_" + gadget.id);
   if (ggWindow.length > 0)
   {
@@ -49,7 +49,7 @@ gadgets.ExoBasedUserPrefStore.prototype.savePrefs = function(gadget, newPrefs)
       href += "&portal:type=action&uicomponent=" + compID;
       href += "&op=SaveUserPref";
       href += "&ajaxRequest=true";
-      href += "&userPref=" + prefs;
+      href += "&userPref=" + encodedPrefs;
       ajaxGet(href, true);
     }
     else

@@ -270,6 +270,7 @@
 			<web-resource-name>user authentication</web-resource-name>
 			<url-pattern>/dologin</url-pattern>
 			<url-pattern>/private/*</url-pattern>
+			<url-pattern>/standalone/*</url-pattern>
 			<url-pattern>/g/*</url-pattern>
 			<url-pattern>/u/*</url-pattern>
 			<http-method>POST</http-method>
