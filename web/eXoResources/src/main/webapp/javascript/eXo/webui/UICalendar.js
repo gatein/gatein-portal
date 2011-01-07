@@ -162,6 +162,14 @@ UICalendar.prototype.show = function() {
   }
 }
 
+UICalendar.prototype.onTabOut =function(event) {
+  var keyCode = event.keyCode;
+  //identify the tab key:
+  if (keyCode == 9) {
+    eXo.webui.UICalendar.hide();
+  }
+};
+
 UICalendar.prototype.hide = function() {
   if (this.dateField) {
     document.getElementById(this.calendarId).firstChild.style.display = 'none' ;

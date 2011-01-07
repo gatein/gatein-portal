@@ -461,7 +461,7 @@ public class UIPortal extends UIContainer
    {
       public void execute(Event<UIPortal> event) throws Exception
       {
-         UIPortal uiPortal = Util.getUIPortal();
+         UIPortal uiPortal = event.getSource();
          UIPortalApplication uiApp = uiPortal.getAncestorOfType(UIPortalApplication.class);
          UIMaskWorkspace uiMaskWS = uiApp.getChildById(UIPortalApplication.UI_MASK_WS_ID);
 

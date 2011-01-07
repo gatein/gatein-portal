@@ -403,10 +403,29 @@ public class PortalRequestContext extends WebuiRequestContext
     * 2) Portlets will be fully rendered if are inner of the portal ui components being updated
     * 
     * @param forceFullUpdate
+    * 
+    * This method is deprecated, ignoreAJAXUpdateOnPortlets should be used instead
     */
+   @Deprecated()
    final public void setFullRender(boolean forceFullUpdate)
    {
       this.forceFullUpdate = forceFullUpdate;
+   }
+   
+   /**
+    * Call to this method makes sense only in the scope of an AJAX request.
+    * 
+    *   Invoking ignoreAJAXUpdateOnPortlets(true) as there is need to update only UI components 
+    * of portal (ie: the components outside portlet windows) are updated by AJAX. In the request
+    * response, all the blocks <PortletRespond > are empty. The content displayed in portlet 
+    * windows are retrieved by non-AJAX render request to associated portlet object.  
+    * 
+    * 
+    * @param ignoreAJAXUpdateOnPortlets
+    */
+   final public void ignoreAJAXUpdateOnPortlets(boolean ignoreAJAXUpdateOnPortlets)
+   {
+      this.forceFullUpdate = ignoreAJAXUpdateOnPortlets;
    }
 
    final public void sendRedirect(String url) throws IOException

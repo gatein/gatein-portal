@@ -42,6 +42,8 @@ import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /*
@@ -158,60 +160,48 @@ public class UIPageNavigationForm extends UIForm
          }
 
          WebuiRequestContext pcontext = event.getRequestContext();
-
-         // if edit navigation
-         if (pageNav != null)
-         {
-            uiForm.invokeSetBindingBean(pageNav);
-            UIFormSelectBox uiSelectBox = uiForm.findComponentById("priority");
-            int priority = Integer.parseInt(uiSelectBox.getValue());
-            pageNav.setPriority(priority);
-
-            // update navigation
-            dataService.save(pageNav);
-
-            UIPopupWindow uiPopup = uiForm.getParent();
-            uiPopup.setShow(false);
-            UIComponent opener = uiPopup.getParent();
-            pcontext.addUIComponentToUpdateByAjax(opener);
-            return;
-         }
-
-         // if add navigation
-         pageNav = new PageNavigation();
-         // set properties for navigation
          uiForm.invokeSetBindingBean(pageNav);
-         UIFormStringInput uiOwnerId = uiForm.findComponentById("ownerId");
-         UIFormStringInput uiOwnerType = uiForm.findComponentById("ownerType");
          UIFormSelectBox uiSelectBox = uiForm.findComponentById("priority");
          int priority = Integer.parseInt(uiSelectBox.getValue());
          pageNav.setPriority(priority);
-         pageNav.setModifiable(true);
-         pageNav.setOwnerId(uiOwnerId.getValue());
-         pageNav.setOwnerType(uiOwnerType.getValue());
-         //UIPortalApplication uiPortalApp = uiForm.getAncestorOfType(UIPortalApplication.class);      
-         UIPortalApplication uiPortalApp = Util.getUIPortal().getAncestorOfType(UIPortalApplication.class);
 
-         // ensure this navigation is not exist
-         if (dataService.getPageNavigation(pageNav.getOwnerType(), pageNav.getOwnerId()) != null)
-         {
-            uiPortalApp.addMessage(new ApplicationMessage("UIPageNavigationForm.msg.existPageNavigation",
-               new String[]{pageNav.getOwnerId()}));;
-            return;
-         }
+         // update navigation
+         dataService.save(pageNav);
 
-         // create navigation for group
-         dataService.create(pageNav);
+         pageNav = dataService.getPageNavigation(pageNav.getOwnerType(), pageNav.getOwnerId());
 
-         // close popup window, update popup window
+         UIPortalApplication uiPortalApp = Util.getUIPortalApplication();
+         updateNavPriority(uiPortalApp.getNavigations(), pageNav);
+
+         uiPortalApp.localizeNavigations();
+
          UIPopupWindow uiPopup = uiForm.getParent();
          uiPopup.setShow(false);
          UIComponent opener = uiPopup.getParent();
+         UIWorkingWorkspace uiWorkingWS =
+            Util.getUIPortal().getAncestorOfType(UIPortalApplication.class).getChild(UIWorkingWorkspace.class);
+         uiWorkingWS.updatePortletsByName("UserToolbarGroupPortlet");
          pcontext.addUIComponentToUpdateByAjax(opener);
+      }
+      
+      private void updateNavPriority(List<PageNavigation> navs, PageNavigation nav)
+      {
+         for (int i = 0; i < navs.size(); i++)
+         {
+            if (navs.get(i).getId() == nav.getId())
+            {
+               navs.set(i, nav);
+               break;
+            }
+         }
 
-         UIWorkingWorkspace uiWorkingWS = uiPortalApp.getChild(UIWorkingWorkspace.class);
-         uiWorkingWS.updatePortletsByName("GroupNavigationPortlet");
-
+         Collections.sort(navs, new Comparator<PageNavigation>()
+         {
+            public int compare(PageNavigation nav1, PageNavigation nav2)
+            {
+               return nav1.getPriority() - nav2.getPriority();
+            }
+         });
       }
    }
 

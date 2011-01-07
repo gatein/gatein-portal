@@ -105,19 +105,16 @@ Used for the display of non-accentuated information */
 
 .portlet-section-subheader {
    font-weight: bold;
-   font-size: 10px;
    line-height: 18px;
 }
 
 .portlet-section-footer {
-   font-size: 11px;
    line-height: 18px;
 }
 
 /* Text that belongs to the table but does not fall in one of the other categories
 (e.g. explanatory or help text that is associated with the section. */
 .portlet-section-text {
-   font-size: 12px;
    font-style: italic;
    line-height: 18px;
 }
@@ -154,7 +151,6 @@ Used for the display of non-accentuated information */
 /* Text in a selected cell range */
 .portlet-table-selected {
    color: #000;
-   font-size: 12px;
    background-color: #CBD4E6;
    line-height: 18px;
 }
@@ -176,7 +172,6 @@ Used for the display of non-accentuated information */
 
 /** FORMS **/
 .portlet-form-label {
-   font-size: 10px;
    color: #333333;
    line-height: 18px;
 }
@@ -227,7 +222,6 @@ not sure if we need this one?.. */
 
 /* Text for a form field */
 .portlet-form-field {
-  font-size: 10px;
 	color: #000; /*margin-top: 10px;*/
  	line-height: 18px;
 }
@@ -243,52 +237,63 @@ not sure if we need this one?.. */
 .portlet-menu-item {
   color: #242424;
   text-decoration: none;
-	font-size: 12px;
- 	line-height: 18px;
 	background: #F5F9FA;
+	padding: 5px 10px;
+	border-bottom: 1px solid #cee0e4;
 }
 
 /* Selected menu item. */
 .portlet-menu-item-selected {
-	line-height: 18px;
+	padding: 5px 10px;
+	border-bottom: 1px solid #cee0e4;
 	background: #F5F9FA;
+	color: #058ee6;
 }
 
 .portlet-menu-item-hover {
-  color: #058ee6;
-  text-decoration: none;
-  font-size: 12px;
- 	line-height: 18px;
+	color: #058ee6;
+	text-decoration: none;
+	padding: 5px 10px;
+	border-bottom: 1px solid #cee0e4;
 	background: #F5F9FA;
 }
 
 /* Selected menu item when the mouse hovers over it. */
 .portlet-menu-item-hover-selected {
-	line-height: 18px;
+	padding: 5px 10px;
+	border-bottom: 1px solid #cee0e4;
 	background: #F5F9FA;
+	color: #058ee6;
 }
 
 /* Normal, unselected menu item that has sub-menus. */
 .portlet-menu-cascade-item {
 	line-height: 18px;
+	color: #585858;
 }
 
 /* Selected sub-menu item that has sub-menus */
 .portlet-menu-cascade-item-selected {
-	line-height: 18px;
+	border-bottom: 1px solid #d8e7ea;
+	padding: 5px 20px;
+	color: #058ee6;
 }
 
 .porlet-menu-cascade {
-	line-height: 18px;
+	border-bottom: 1px solid #d8e7ea;
+	padding: 5px 20px;
 }
 
 .portlet-menu-cascade-item-hover {
-	line-height: 18px;
+	border-bottom: 1px solid #d8e7ea;
+	padding: 5px 20px;
   color: #058ee6;
 }
 
 .portlet-menu-cascade-item-hover-selected {
-	line-height: 18px;
+	border-bottom: 1px solid #d8e7ea;
+	padding: 5px 20px;
+  color: #058ee6;
 }
 
 .portlet-menu-separator {
@@ -300,37 +305,51 @@ not sure if we need this one?.. */
 }
 
 .portlet-menu-content {
-	line-height: 18px;
+	border-bottom: 1px solid #e4eff2;
+	padding: 5px 30px;
+	color: #878787;
 }
 
 .portlet-menu-content-selected {
-	line-height: 18px;
+	border-bottom: 1px solid #e4eff2;
+	padding: 5px 30px;
+  color: #058ee6;
 }
 
 .portlet-menu-content-hover {
-	line-height: 18px;
+	border-bottom: 1px solid #e4eff2;
+	padding: 5px 30px;
   color: #058ee6;
 }
 
 .portlet-menu-content-hover-selected {
-	line-height: 18px;
-}
-
-.portlet-menu-indicator {
-	line-height: 18px;
-}
-
-.portlet-menu-indicator-selected {
-	line-height: 18px;
-}
-
-.portlet-menu-indicator-hover {
-	line-height: 18px;
+	border-bottom: 1px solid #e4eff2;
+	padding: 5px 30px;
   color: #058ee6;
 }
 
+.portlet-menu-indicator {
+	padding: 5px 40px;
+  color: #bebebe;
+	border-bottom: 1px solid #f4f8f9;
+}
+
+.portlet-menu-indicator-selected {
+	padding: 5px 40px;
+  color: #058ee6;
+	border-bottom: 1px solid #f4f8f9;
+}
+
+.portlet-menu-indicator-hover {
+	padding: 5px 40px;
+  color: #058ee6;
+	border-bottom: 1px solid #f4f8f9;
+}
+
 .portlet-menu-indicator-hover-selected {
-	line-height: 18px;
+	padding: 5px 40px;
+  color: #058ee6;
+	border-bottom: 1px solid #f4f8f9;
 }
 
 .portlet-menu-description {

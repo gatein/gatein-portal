@@ -321,7 +321,7 @@ public class UIPageForm extends UIFormTabPane
             if (page.getChildren() == null)
                page.setChildren(new ArrayList<ModelObject>());
 
-            pcontext.setFullRender(true);
+            pcontext.ignoreAJAXUpdateOnPortlets(true);
             UIWorkingWorkspace uiWorkingWS = uiPortalApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
             pcontext.addUIComponentToUpdateByAjax(uiWorkingWS);
             pcontext.getJavascriptManager().addJavascript("eXo.portal.UIPortal.changeComposerSaveButton();");
@@ -339,7 +339,7 @@ public class UIPageForm extends UIFormTabPane
 
             UIPortalToolPanel toolPanel = Util.getUIPortalToolPanel();
             toolPanel.setShowMaskLayer(true);
-            pcontext.setFullRender(true);
+            pcontext.ignoreAJAXUpdateOnPortlets(true);
             UIWorkingWorkspace uiWorkingWS = uiPortalApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
             pcontext.addUIComponentToUpdateByAjax(uiWorkingWS);
             pcontext.getJavascriptManager().addJavascript("eXo.portal.UIPortal.changeComposerSaveButton();");

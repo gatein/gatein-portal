@@ -324,7 +324,7 @@ public class UISiteManagement extends UIContainer
          uiWorkingWS.setRenderedChild(UIPortalApplication.UI_EDITTING_WS_ID);
 
          prContext.addUIComponentToUpdateByAjax(uiWorkingWS);
-         prContext.setFullRender(true);
+         prContext.ignoreAJAXUpdateOnPortlets(true);
       }
    }
 

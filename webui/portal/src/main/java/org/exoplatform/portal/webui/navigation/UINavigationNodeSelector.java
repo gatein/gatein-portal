@@ -452,7 +452,7 @@ public class UINavigationNodeSelector extends UIContainer
             // convert Page to UIPage
             PortalDataMapper.toUIPage(uiPage, selectPage);
             Util.getPortalRequestContext().addUIComponentToUpdateByAjax(uiWorkingWS);
-            Util.getPortalRequestContext().setFullRender(true);
+            Util.getPortalRequestContext().ignoreAJAXUpdateOnPortlets(true);
          }
          else
          {

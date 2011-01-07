@@ -140,7 +140,7 @@ public class UIUserInfo extends UIFormTabPane
 
             Util.getPortalRequestContext().addUIComponentToUpdateByAjax(
                uiApp.findFirstComponentOfType(UIWorkingWorkspace.class));
-            Util.getPortalRequestContext().setFullRender(true);
+            Util.getPortalRequestContext().ignoreAJAXUpdateOnPortlets(true);
          }
          
          UIAccountEditInputSet accountInput = uiUserInfo.getChild(UIAccountEditInputSet.class);

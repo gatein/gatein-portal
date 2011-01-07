@@ -231,7 +231,7 @@ public class UIPortalComponentActionListener
          if (newComponent)
          {
             portalComposer.updateWorkspaceComponent();
-            pcontext.setFullRender(true);
+            pcontext.ignoreAJAXUpdateOnPortlets(true);
          }
 
          UIWorkingWorkspace uiWorkingWS = uiApp.getChild(UIWorkingWorkspace.class);

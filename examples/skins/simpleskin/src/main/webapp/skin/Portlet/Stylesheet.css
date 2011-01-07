@@ -46,7 +46,7 @@ Used for the display of non-accentuated information */
    font-family: Verdana, Arial, Helvetica, Sans-Serif, sans-serif;
    font-size: 12px;
    font-style: normal;
-   color: #336699;
+   color: #058bb6;
 }
 
 /* Help messages, general additional information, etc. */
@@ -97,16 +97,17 @@ Used for the display of non-accentuated information */
 }
 
 .portlet-section-selected {
-   background-color: #CBD4E6;
+   background-color: #d9d8d9;
 }
 
 .portlet-section-subheader {
    font-weight: bold;
-   font-size: 10px;
+   padding: 5px 0px;
 }
 
 .portlet-section-footer {
    font-size: 11px;
+   border-top: 1px solid #F2F2F2;
 }
 
 /* Text that belongs to the table but does not fall in one of the other categories
@@ -121,40 +122,45 @@ Used for the display of non-accentuated information */
 
 /* Table header */
 .portlet-table-header {
-   background-color: #eef;
-   padding: 0 5px 5px 5px;
+   background-color: #e9e8ed;
+   padding: 0 0px 0px 5px;
    font-weight: bold;
    color: #333333;
    font-size: 12px;
    border-bottom: 1px solid #d5d5d5;
+   line-height: 20px;
 }
 
 /* Normal text in a table cell */
-.portlet-table-body {}
+.portlet-table-body {
+	padding: 10px;
+}
 
 /* Text in every other row in the table */
 .portlet-table-alternate {
-   background-color: #E6E8E5;
+   background-color: #e7e6eb;
    border-bottom: 1px solid #d5d5d5;
+   padding: 5px 10px;
 }
 
 /* Text in a selected cell range */
 .portlet-table-selected {
    color: #000;
-   font-size: 12px;
-   background-color: #CBD4E6;
+   background-color: #dddddd;
+   padding: 5px 10px;
 }
 
 /* Text of a subheading */
 .portlet-table-subheader {
    font-weight: bold;
-   color: #000;
+   color: #777777;
    font-size: 12px;
+   padding: 5px;
 }
 
 /* Table footer */
 .portlet-table-footer {
-   padding: 5px 5px 0 5px;
+   padding: 5px;
    font-weight: bold;
    color: #333333;
    font-size: 12px;
@@ -170,7 +176,6 @@ Used for the display of non-accentuated information */
 
 /** FORMS **/
 .portlet-form-label {
-   font-size: 10px;
    color: #333333;
 }
 
@@ -182,14 +187,15 @@ Used for the display of non-accentuated information */
 
 /* Form Button Style */
 .portlet-form-button {
-   font-size: 10px;
-   font-weight: bold;
-   color: #FFFFFF;
-   background-color: #5078aa;
-   border-top: 1px solid #97B7C6;
-   border-left: 1px solid #97B7C6;
-   border-bottom: 1px solid #254869;
-   border-right: 1px solid #254869;
+   font-size: 11px;
+   color: #5c5c5c;
+   background-color: #cfcfcf;
+   border-top: 1px solid #dadada;
+   border-left: 1px solid #dadada;
+   border-bottom: 1px solid #9a9a9a;
+   border-right: 1px solid #9a9a9a;
+   line-height: 22px;
+   padding: 0px 20px;
 }
 
 /* Text that appears beside a context dependent action icon */
@@ -231,60 +237,161 @@ not sure if we need this one?.. */
 /** MENUS **/
 
 /*General menu settings such as background color, margins, etc. */
-.portlet-menu {}
+.portlet-menu {
+}
 
 /* Normal, unselected menu item. */
 .portlet-menu-item {
-   color: #242424;
-   text-decoration: none;
-   font-family: Verdana, Arial, Helvetica, sans-serif;
-   font-size: 12px;
+	background: #dddddd;
+	color: #2e2e2e;
+	text-decoration: none;
+	margin-bottom: 1px;
+	line-height: 22px;
+	padding: 0px 5px;
 }
 
 /* Selected menu item. */
-.portlet-menu-item-selected {}
+.portlet-menu-item-selected {
+	background: #dddddd;
+	color: #058bb6;
+	margin-bottom: 1px;
+	line-height: 22px;
+	padding: 0px 5px;
+}
 
 .portlet-menu-item-hover {
-   color: #5699B7;
-   text-decoration: none;
-   font-family: Verdana, Arial, Helvetica, sans-serif;
-   font-size: 12px;
+	background: #dddddd;
+	color: #058bb6;
+	text-decoration: none;
+	margin-bottom: 1px;
+	line-height: 22px;
+	padding: 0px 5px;
 }
 
 /* Selected menu item when the mouse hovers over it. */
-.portlet-menu-item-hover-selected {}
+.portlet-menu-item-hover-selected {
+	background: #dddddd;
+	color: #058bb6;
+	line-height: 22px;
+	margin-bottom: 1px;
+	padding: 0px 5px;
+}
 
 /* Normal, unselected menu item that has sub-menus. */
-.portlet-menu-cascade-item {}
+.portlet-menu-cascade-item {
+	background: #e9e8ed;
+	color: #636363;
+	text-decoration: none;
+	line-height: 22px;
+	padding: 0px 20px;
+	border-bottom: 1px solid #dddddd;
+}
 
 /* Selected sub-menu item that has sub-menus */
-.portlet-menu-cascade-item-selected {}
+.portlet-menu-cascade-item-selected {
+	background: #e9e8ed;
+	color: #252525;
+	text-decoration: none;
+	line-height: 22px;
+	padding: 0px 20px;
+	border-bottom: 1px solid #dddddd;
+}
 
-.porlet-menu-cascade {}
+.porlet-menu-cascade {
+	background: #e9e8ed;
+	color: #636363;
+	text-decoration: none;
+	line-height: 22px;
+	padding: 0px 20px;
+	border-bottom: 1px solid #dddddd;
+}
 
-.portlet-menu-cascade-item-hover {}
+.portlet-menu-cascade-item-hover {
+	background: #e9e8ed;
+	color: #252525;
+	text-decoration: none;
+	line-height: 22px;
+	padding: 0px 20px;
+	border-bottom: 1px solid #dddddd;
+}
 
-.portlet-menu-cascade-item-hover-selected {}
+.portlet-menu-cascade-item-hover-selected {
+	background: #e9e8ed;
+	color: #252525;
+	text-decoration: none;
+	line-height: 22px;
+	padding: 0px 20px;
+	border-bottom: 1px solid #dddddd;
+}
 
-.portlet-menu-separator {}
+.portlet-menu-separator {
+}
 
 .portlet-menu-cascade-separator {}
 
-.portlet-menu-content {}
+.portlet-menu-content {
+	background: #f6f6f6;
+	color: #717171;
+	text-decoration: none;
+	line-height: 22px;
+	padding: 0px 30px;
+	border-bottom: 1px solid #e9e8ed;
+}
 
-.portlet-menu-content-selected {}
+.portlet-menu-content-selected {
+	background: #f6f6f6;
+	color: #272727;
+	text-decoration: none;
+	line-height: 22px;
+	padding: 0px 30px;
+	border-bottom: 1px solid #e9e8ed;
+}
 
-.portlet-menu-content-hover {}
+.portlet-menu-content-hover {
+	background: #f6f6f6;
+	color: #272727;
+	text-decoration: none;
+	line-height: 22px;
+	padding: 0px 30px;
+	border-bottom: 1px solid #e9e8ed;
+}
 
-.portlet-menu-content-hover-selected {}
+.portlet-menu-content-hover-selected {
+	background: #f6f6f6;
+	color: #272727;
+	text-decoration: none;
+	line-height: 22px;
+	padding: 0px 30px;
+	border-bottom: 1px solid #e9e8ed;
+}
 
-.portlet-menu-indicator {}
+.portlet-menu-indicator {
+	color: #8b8b8b;
+	line-height: 22px;
+	padding: 0px 40px;
+	border-bottom: 1px solid #e9e8ed;
+}
 
-.portlet-menu-indicator-selected {}
+.portlet-menu-indicator-selected {
+	color: #606060;
+	line-height: 22px;
+	padding: 0px 40px;
+	border-bottom: 1px solid #e9e8ed;
+}
 
-.portlet-menu-indicator-hover {}
+.portlet-menu-indicator-hover {
+	color: #606060;
+	line-height: 22px;
+	padding: 0px 40px;
+	border-bottom: 1px solid #e9e8ed;
+}
 
-.portlet-menu-indicator-hover-selected {}
+.portlet-menu-indicator-hover-selected {
+	color: #606060;
+	line-height: 22px;
+	padding: 0px 40px;
+	border-bottom: 1px solid #e9e8ed;
+}
 
 .portlet-menu-description {}
 

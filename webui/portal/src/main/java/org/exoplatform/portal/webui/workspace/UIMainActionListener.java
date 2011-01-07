@@ -54,7 +54,7 @@ public class UIMainActionListener
       public void execute(Event<UIWorkingWorkspace> event) throws Exception
       {
          UIPortalApplication uiApp = Util.getUIPortalApplication();
-         UIWorkingWorkspace uiWorkingWS = uiApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
+         UIWorkingWorkspace uiWorkingWS = event.getSource();
 
          // check edit permission for page
          UIPageBody pageBody = uiWorkingWS.findFirstComponentOfType(UIPageBody.class);
@@ -97,7 +97,7 @@ public class UIMainActionListener
          pageBody.setUIComponent(null);
 
          event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingWS);
-         Util.getPortalRequestContext().setFullRender(true);
+         Util.getPortalRequestContext().ignoreAJAXUpdateOnPortlets(true);
       }
    }
 
@@ -107,7 +107,7 @@ public class UIMainActionListener
       {
          UIPortalApplication uiApp = Util.getUIPortalApplication();
          uiApp.setModeState(UIPortalApplication.APP_BLOCK_EDIT_MODE);
-         UIWorkingWorkspace uiWorkingWS = uiApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
+         UIWorkingWorkspace uiWorkingWS = event.getSource();
          
          if (!hasPageCreationPermission())
          {
@@ -165,8 +165,7 @@ public class UIMainActionListener
          //Todo nguyenanhkien2a@gmail.com
          //Check editing permission
          UIPortalApplication portalApp = Util.getUIPortalApplication();
-         UIPortal currentUIPortal = portalApp.<UIWorkingWorkspace>findComponentById(
-            UIPortalApplication.UI_WORKING_WS_ID).findFirstComponentOfType(UIPortal.class);
+         UIPortal currentUIPortal = event.getSource().findFirstComponentOfType(UIPortal.class);
          UserACL userACL = portalApp.getApplicationComponent(UserACL.class);
          if(!userACL.hasEditPermissionOnPortal(currentUIPortal.getOwnerType(), currentUIPortal.getOwner(), 
                                                 currentUIPortal.getEditPermission()))
@@ -177,7 +176,7 @@ public class UIMainActionListener
          }
          
          PortalRequestContext pcontext = (PortalRequestContext)event.getRequestContext();
-         UIWorkingWorkspace uiWorkingWS = uiApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
+         UIWorkingWorkspace uiWorkingWS = event.getSource();
          uiWorkingWS.setBackupUIPortal(uiPortal);
          uiApp.setModeState(UIPortalApplication.APP_BLOCK_EDIT_MODE);
 
@@ -202,7 +201,7 @@ public class UIMainActionListener
 
          uiWorkingWS.setRenderedChild(UIEditInlineWorkspace.class);
          pcontext.addUIComponentToUpdateByAjax(uiWorkingWS);
-         pcontext.setFullRender(true);
+         pcontext.ignoreAJAXUpdateOnPortlets(true);
       }
    }
 

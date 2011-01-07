@@ -393,6 +393,9 @@ function UIDashboard() {
 		if(!popup || popup.style.display == "none") return;
 		var uiDashboard = eXo.core.DOMUtil.findAncestorByClass(popup, "UIDashboard");
 		var deltaY = Math.ceil((uiDashboard.offsetHeight - popup.offsetHeight) / 2);
+		if (deltaY < 0) {
+			deltaY = 0;
+		}
 		popup.style.top = eXo.core.Browser.findPosY(uiDashboard) + deltaY + "px";
 	};
 	/**

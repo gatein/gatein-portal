@@ -93,36 +93,36 @@
 
 .UISitemap .UISiteTree .Node {
 	line-height: 24px;
-	background: url('DefaultSkin/background/Dotted.gif') repeat-y 4px top; /* orientation=lt */
-	background: url('DefaultSkin/background/Dotted-rt.gif') repeat-y 99.6% top; /* orientation=rt */
+	background: url('DefaultSkin/background/Dotted.gif') repeat-y left top; /* orientation=lt */
+	background: url('DefaultSkin/background/Dotted.gif') repeat-y right top; /* orientation=rt */
 }
 
 .UISitemap .UISiteTree .LastNode {
 	line-height: 24px;
-	background: url('DefaultSkin/background/LastNode.gif') no-repeat 4px top; /* orientation=lt */
-	background: url('DefaultSkin/background/LastNode-rt.gif') no-repeat 99.6% top; /* orientation=rt */
+	background: url('DefaultSkin/background/LastNode.gif') no-repeat left top; /* orientation=lt */
+	background: url('DefaultSkin/background/LastNode.gif') no-repeat right top; /* orientation=rt */
 }
 
 .UISitemap .CollapseIcon {
 	background: url('DefaultSkin/background/CollapseIcon.gif') no-repeat left center; /* orientation=lt */
 	background: url('DefaultSkin/background/CollapseIcon-rt.gif') no-repeat right center; /* orientation=rt */
-	padding: 0px 5px 0px 35px; /* orientation=lt */
-	padding: 0px 35px 0px 5px; /* orientation=rt */
+	padding: 0px 5px 0px 30px; /* orientation=lt */
+	padding: 0px 30px 0px 5px; /* orientation=rt */
 	cursor: pointer;
 }
 
 .UISitemap .ExpandIcon {
 	background: url('DefaultSkin/background/ExpandIcon.gif') no-repeat left center; /* orientation=lt */
 	background: url('DefaultSkin/background/ExpandIcon-rt.gif') no-repeat right center; /* orientation=rt */
-	padding: 0px 5px 0px 35px; /* orientation=lt */
-	padding: 0px 35px 0px 5px; /* orientation=rt */
+	padding: 0px 5px 0px 30px; /* orientation=lt */
+	padding: 0px 30px 0px 5px; /* orientation=rt */
 	cursor: pointer;
 }
 
 .UISitemap .NullItem {
 	background: url('DefaultSkin/background/NullItem.gif') no-repeat left center; /* orientation=lt */
 	background: url('DefaultSkin/background/NullItem-rt.gif') no-repeat right center; /* orientation=rt */
-	padding: 0px 35px;
+	padding: 0px 30px;
 }
 
 .UISitemap .DefaultPageIcon {

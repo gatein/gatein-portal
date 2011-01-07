@@ -454,7 +454,7 @@ public class UIPageBrowser extends UISearch
          //uiWorkingWS.addChild(UIPortalComposer.class, "UIPageEditor", null);
          uiWorkingWS.setRenderedChild(UIPortalApplication.UI_EDITTING_WS_ID);
          pcontext.addUIComponentToUpdateByAjax(uiWorkingWS);
-         pcontext.setFullRender(true);
+         pcontext.ignoreAJAXUpdateOnPortlets(true);
       }
    }
 

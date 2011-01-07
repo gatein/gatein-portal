@@ -67,7 +67,7 @@ public class ToolbarUtils
       PortalRequestContext portalRequestContext = (PortalRequestContext)context.getParentAppRequestContext();
       UIWorkingWorkspace uiWorkingWS = portalApplication.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
       portalRequestContext.addUIComponentToUpdateByAjax(uiWorkingWS);
-      portalRequestContext.setFullRender(true);
+      portalRequestContext.ignoreAJAXUpdateOnPortlets(true);
    }
 
    /**

@@ -100,7 +100,7 @@ public abstract class UIPageWizard extends UIWizard
 
       UIPortal uiPortal = Util.getUIPortal();
       uiPortal.setRenderSibling(UIPortal.class);
-      pcontext.setFullRender(true);
+      pcontext.ignoreAJAXUpdateOnPortlets(true);
    }
 
    void updateWizardComponent()
@@ -111,7 +111,7 @@ public abstract class UIPageWizard extends UIWizard
       UIWorkingWorkspace uiWorkingWS = uiPortalApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
       pcontext.addUIComponentToUpdateByAjax(uiWorkingWS);
 
-      pcontext.setFullRender(true);
+      pcontext.ignoreAJAXUpdateOnPortlets(true);
    }
 
    static public class AbortActionListener extends EventListener<UIPageWizard>
@@ -124,7 +124,7 @@ public abstract class UIPageWizard extends UIWizard
 
          UIPortal uiPortal = Util.getUIPortal();
          uiPortal.setRenderSibling(UIPortal.class);
-         pcontext.setFullRender(true);
+         pcontext.ignoreAJAXUpdateOnPortlets(true);
 
          UIWorkingWorkspace uiWorkingWS = uiPortalApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
          uiWorkingWS.findFirstComponentOfType(UIPortalComposer.class).setRendered(false);

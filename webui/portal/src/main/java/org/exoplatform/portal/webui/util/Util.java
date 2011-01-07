@@ -315,7 +315,7 @@ public class Util
 
       UIWorkingWorkspace uiWorkingWS = uiPortalApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
       pcontext.addUIComponentToUpdateByAjax(uiWorkingWS);
-      pcontext.setFullRender(true);
+      pcontext.ignoreAJAXUpdateOnPortlets(true);
       return uiWorkingWS;
    }
 

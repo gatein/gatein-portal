@@ -72,7 +72,7 @@ public class UIPortalActionListener
       {
          PortalRequestContext pContext = (PortalRequestContext)event.getRequestContext();
          HttpServletRequest request = pContext.getRequest();
-         pContext.setFullRender(false);
+         pContext.ignoreAJAXUpdateOnPortlets(false);
          pContext.setResponseComplete(true);
          pContext.getWriter().write("" + request.getSession().getMaxInactiveInterval());
       }

@@ -34,7 +34,6 @@
 
   <component>
       <key>org.exoplatform.services.resources.LocalePolicy</key>
-      <!--type>org.exoplatform.portal.application.NoBrowserLocalePolicyService</type-->
       <type>org.exoplatform.portal.application.localization.DefaultLocalePolicyService</type>
   </component>
   

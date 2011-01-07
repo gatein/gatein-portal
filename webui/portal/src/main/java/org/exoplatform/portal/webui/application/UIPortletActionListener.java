@@ -526,7 +526,7 @@ public class UIPortletActionListener
                   {
                      log
                         .info("Events were generated outside the scope of an AJAX call, hence will make a full render of the page");
-                     context.setFullRender(true);
+                     context.ignoreAJAXUpdateOnPortlets(true);
                   }
                   if (newEvents != null && !newEvents.isEmpty())
                   {
@@ -751,7 +751,7 @@ public class UIPortletActionListener
          UIWorkingWorkspace uiWorkingWS = uiPortalApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
          PortalRequestContext pcontext = (PortalRequestContext)event.getRequestContext();
          pcontext.addUIComponentToUpdateByAjax(uiWorkingWS);
-         pcontext.setFullRender(true);
+         pcontext.ignoreAJAXUpdateOnPortlets(true);
 
          String windowState = event.getRequestContext().getRequestParameter(Constants.PORTAL_WINDOW_STATE);
          if (windowState == null)

@@ -64,7 +64,7 @@ public class UIPageActionListener
          //This code snippet is to make sure that Javascript/Skin is fully loaded at the first request
          UIWorkingWorkspace uiWorkingWS = uiPortalApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
          PortalRequestContext pcontext = Util.getPortalRequestContext();
-         pcontext.setFullRender(true);
+         pcontext.ignoreAJAXUpdateOnPortlets(true);
          pcontext.addUIComponentToUpdateByAjax(uiWorkingWS);
          
          PageNavigation currentNav = showedUIPortal.getSelectedNavigation();
@@ -422,7 +422,7 @@ public class UIPageActionListener
             }
          }
          PortalRequestContext pcontext = (PortalRequestContext)event.getRequestContext();
-         pcontext.setFullRender(false);
+         pcontext.ignoreAJAXUpdateOnPortlets(false);
          pcontext.setResponseComplete(true);
          pcontext.getWriter().write(EventListener.RESULT_OK);
       }
@@ -445,7 +445,7 @@ public class UIPageActionListener
             }
             DataStorage dataService = uiPage.getApplicationComponent(DataStorage.class);
             dataService.save(page);
-            pcontext.setFullRender(false);
+            pcontext.ignoreAJAXUpdateOnPortlets(false);
             pcontext.setResponseComplete(true);
             pcontext.getWriter().write(EventListener.RESULT_OK);
          }

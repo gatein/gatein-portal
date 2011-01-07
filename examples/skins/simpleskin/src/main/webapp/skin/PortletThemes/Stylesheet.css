@@ -34,43 +34,43 @@
 }
 
 .DefaultTheme .ArrowDownIcon {
-	background-position: center 20px;
+	background-position: center 18px;
 }
 
 .DefaultTheme .OverArrowDownIcon {
-	background-position: center 116px;
+	background-position: center 114px;
 }
 
 .DefaultTheme .MinimizedIcon {
-	background-position: center 44px;
+	background-position: center 42px;
 }
 
 .DefaultTheme .OverMinimizedIcon {
-	background-position: center 140px;
+	background-position: center 138px;
 }
 
 .DefaultTheme .MaximizedIcon {
-	background-position: center 68px;
+	background-position: center 66px;
 }
 
 .DefaultTheme .OverMaximizedIcon {
-	background-position: center 164px;
+	background-position: center 162px;
 }
 
 .DefaultTheme .RestoreIcon {
-	background-position: center 92px;
+	background-position: center 90px;
 }
 
 .DefaultTheme .OverRestoreIcon {
-	background-position: center 188px;
+	background-position: center 186px;
 }
 
 .DefaultTheme .NormalIcon {
-	background-position: center 92px;
+	background-position: center 90px;
 }
 
 .DefaultTheme .OverNormalIcon {
-	background-position: center 188px;
+	background-position: center 186px;
 }
 
 
@@ -84,7 +84,7 @@
 }
 
 .DefaultTheme .Information {
-	height: 18px; line-height: 18px;
+	height: 20px; line-height: 20px;
 	vertical-align: middle; font-size: 10px;
 	padding-left: 5px; /* orientation=lt */
 	padding-right: 5px; /* orientation=rt */
@@ -93,8 +93,8 @@
 }
 
 .DefaultTheme .WindowBarCenter .WindowPortletIcon {
-	background-position: left top; /* orientation=lt */
-	background-position: right top; /* orientation=rt */
+	background: url('background/IconWindowPortlet.gif') no-repeat left top; /* orientation=lt */
+	background: url('background/IconWindowPortlet-rt.gif') no-repeat right top; /* orientation=rt */
 	padding-left: 20px; /* orientation=lt */
 	padding-right: 20px; /* orientation=rt */
 	height: 16px;
@@ -110,14 +110,14 @@
 }
 
 .DefaultTheme .WindowBarLeft {
-	padding-left: 12px;
+	padding-left: 8px;
 	background-image: url('background/DefaultTheme.png');
 	background-repeat: no-repeat;
 	background-position: left -148px;
 }
 
 .DefaultTheme .WindowBarRight {
-	padding-right: 11px;
+	padding-right: 8px;
 	background-image: url('background/DefaultTheme.png');
 	background-repeat: no-repeat;
 	background-position: right -119px;
@@ -130,17 +130,17 @@
 }
 
 .DefaultTheme .WindowBarCenter .FixHeight {
-	height: 21px;
-	padding-top: 8px;
+	height: 20px;
+	padding-top: 7px;
 }
 
 .DefaultTheme .MiddleDecoratorLeft {
-	padding-left: 12px;
+	padding-left: 8px;
 	background: url('background/MDefaultTheme.png') repeat-y left;
 }
 
 .DefaultTheme .MiddleDecoratorRight {
-	padding-right: 11px;
+	padding-right: 8px;
 	background: url('background/MDefaultTheme.png') repeat-y right;
 }
 
@@ -149,14 +149,14 @@
 }
 
 .DefaultTheme .BottomDecoratorLeft {
-	padding-left: 12px;
+	padding-left: 8px;
 	background-image: url('background/DefaultTheme.png');
 	background-repeat: no-repeat;
 	background-position: left -60px;
 }
 
 .DefaultTheme .BottomDecoratorRight {
-	padding-right: 11px;
+	padding-right: 8px;
 	background-image: url('background/DefaultTheme.png');
 	background-repeat: no-repeat;
 	background-position: right -30px;
@@ -169,7 +169,7 @@
 }
 
 .DefaultTheme .BottomDecoratorCenter .FixHeight {
-	height: 30px;
+	height: 26px;
 }
 
 /*-------------------------- MacTheme ---------------------------*/

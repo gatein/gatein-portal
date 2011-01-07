@@ -64,15 +64,15 @@ public class DownloadHandler extends WebRequestHandler
       String userAgent = req.getHeader("User-Agent");
       if (dresource.getDownloadName() != null)
       {
-         if (userAgent != null && userAgent.contains("MSIE"))
-         {
-            res.setHeader("Content-Disposition", "attachment;filename=\""
-               + URLEncoder.encode(dresource.getDownloadName(), "UTF-8") + "\"");
-         }
-         else
+         if (userAgent != null && userAgent.contains("Firefox"))
          {
             res.setHeader("Content-Disposition", "attachment; filename*=utf-8''"
                + URLEncoder.encode(dresource.getDownloadName(), "UTF-8") + "");
+         }
+         else
+         {
+            res.setHeader("Content-Disposition", "attachment;filename=\""
+               + URLEncoder.encode(dresource.getDownloadName(), "UTF-8") + "\"");            
          }
       }
       res.setContentType(dresource.getResourceMimeType());

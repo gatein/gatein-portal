@@ -37,6 +37,9 @@ UIPopupWindow.prototype.init = function(popupId, isShow, isResizable, showCloseB
 	
 	//TODO Lambkin: this statement create a bug in select box component in Firefox
 	//this.superClass.init(popup) ;
+	if (isShow) {
+		popup.style.display = "block";
+	}
 	var contentBlock = DOMUtil.findFirstDescendantByClass(popup, 'div' ,'PopupContent');
 	if(contentBlock && (eXo.core.Browser.getBrowserHeight() - 100 < contentBlock.offsetHeight)) {
 		contentBlock.style.height = (eXo.core.Browser.getBrowserHeight() - 100) + "px";

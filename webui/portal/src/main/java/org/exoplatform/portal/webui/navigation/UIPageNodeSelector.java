@@ -254,7 +254,7 @@ public class UIPageNodeSelector extends UIContainer
          uiToolPanel.setShowMaskLayer(true);
          UIWorkingWorkspace uiWorkingWS = uiPortalApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
          pcontext.addUIComponentToUpdateByAjax(uiWorkingWS);
-         pcontext.setFullRender(true);
+         pcontext.ignoreAJAXUpdateOnPortlets(true);
 
          UIContainer uiParent = uiPageNodeSelector.getParent();
          PageNode node = null;

@@ -100,7 +100,7 @@ public class UISkinSelector extends UIContainer
          UIMaskWorkspace uiMaskWS = uiApp.getChildById(UIPortalApplication.UI_MASK_WS_ID);
          uiMaskWS.setUIComponent(null);
          //event.getRequestContext().addUIComponentToUpdateByAjax(uiApp) ;
-         Util.getPortalRequestContext().setFullRender(false);
+         Util.getPortalRequestContext().ignoreAJAXUpdateOnPortlets(false);
          if (skin == null || skin.trim().length() < 1)
             return;
          uiApp.setSkin(skin);

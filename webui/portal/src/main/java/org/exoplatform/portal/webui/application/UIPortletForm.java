@@ -170,7 +170,7 @@ public class UIPortletForm extends UIFormTabPane
       try
       {
          PortalRequestContext prcontext = (PortalRequestContext)WebuiRequestContext.getCurrentInstance();
-         prcontext.setFullRender(true);
+         prcontext.ignoreAJAXUpdateOnPortlets(true);
          StatefulPortletContext portletContext = uiPortlet_.getPortletContext();
 
          ExoPortletInvocationContext portletInvocationContext = new ExoPortletInvocationContext(prcontext, uiPortlet_);
@@ -407,7 +407,7 @@ public class UIPortletForm extends UIFormTabPane
          UIPortalApplication uiPortalApp = uiPortlet.getAncestorOfType(UIPortalApplication.class);
          UIWorkingWorkspace uiWorkingWS = uiPortalApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
          pcontext.addUIComponentToUpdateByAjax(uiWorkingWS);
-         pcontext.setFullRender(true);
+         pcontext.ignoreAJAXUpdateOnPortlets(true);
          Util.showComponentLayoutMode(UIPortlet.class);
       }
    }
@@ -429,7 +429,7 @@ public class UIPortletForm extends UIFormTabPane
          uiMaskWorkspace.setUIComponent(null);
          uiMaskWorkspace.setWindowSize(-1, -1);
          pcontext.addUIComponentToUpdateByAjax(uiMaskWorkspace);
-         pcontext.setFullRender(true);
+         pcontext.ignoreAJAXUpdateOnPortlets(true);
          Util.showComponentLayoutMode(UIPortlet.class);
       }
    }
