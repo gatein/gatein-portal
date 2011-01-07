@@ -91,15 +91,17 @@ public class SeleniumTestCaseGenerator {
 		sb.append("public String timeout = \"30000\";\n");
 		sb.append("public int timeoutSecInt = 30;\n");
 		sb.append("public String browser = \"firefox\";\n");
-		sb.append("public String host = \"localhost\";\n");		
+        sb.append("public String host = \"localhost\";\n");
+        sb.append("public String hostPort = \"8080\";\n");		
 		sb.append("public void setSpeed() {\n  selenium.setSpeed(speed);\n}\n\n");
 		sb.append("public void setUp() throws Exception {\n");
 		sb.append("  browser = System.getProperty(\"selenium.browser\", browser);\n");
 		sb.append("  timeout = System.getProperty(\"selenium.timeout\", timeout);\n");
 		sb.append("  timeoutSecInt = Integer.parseInt(timeout)/1000;\n");		
 		sb.append("  speed = System.getProperty(\"selenium.speed\", speed);\n");
-		sb.append("  host = System.getProperty(\"selenium.host\", host);\n");
-		sb.append("  super.setUp(\"http://\" + host + \":8080/portal/\", \"*\" + browser);\n");
+        sb.append("  host = System.getProperty(\"selenium.host\", host);\n");
+        sb.append("  hostPort = System.getProperty(\"selenium.host.port\", hostPort);\n");
+		sb.append("  super.setUp(\"http://\" + host + \":\" + hostPort + \"/portal/\", \"*\" + browser);\n");
 		sb.append("}\n\n");
 	}
 
@@ -336,7 +338,7 @@ public class SeleniumTestCaseGenerator {
 				sb.append("\", selenium.getValue(\"");
 				sb.append(param2);
 				sb.append("\"));\n");
-                  }else if (param1.equals("waitForAlert")) {
+            }else if (param1.equals("waitForAlert")) {
 				sb.append("waitForAlert(\"");
 				sb.append(param2);
 				sb.append("\");\n");
@@ -384,9 +386,28 @@ public class SeleniumTestCaseGenerator {
 				sb.append("(\"");
 				sb.append(param2);
 				sb.append("\"));\n");
-			}	
 			//-----------------add by linh_vu------------
-			else if (param1.equals("waitForChecked")) {
+             } else if (param1.equals("verifySelectedValue")) {
+				sb.append("TestCase.assertTrue");
+				sb.append("(selenium.getSelectedValue(\"");
+				sb.append(param2);
+				sb.append("\").equals(\"");
+				sb.append(param3);
+				sb.append("\"));\n");
+             } else if (param1.equals("verifyNotVisible")) {
+				sb.append("TestCase.assertFalse(selenium.isVisible");
+				sb.append("(\"");
+				sb.append(param2);
+				sb.append("\"));\n");
+             } else if (param1.equals("waitForVisible")) {
+				sb.append("for (int second = 0;; second++) {\n");
+				sb.append(getTimeoutMessage(param1));
+				sb.append("try {\nif (selenium.isVisible(\"");
+				sb.append(param2);
+				sb.append("\"))\n break;\n }\n catch (Exception e) {}\n");
+				sb.append("Thread.sleep(1000);\n");
+				sb.append("}\n");
+			} else if (param1.equals("waitForChecked")) {
 				sb.append("for (int second = 0;; second++) {\n");
 				sb.append(getTimeoutMessage(param1));
 				sb.append("try {\nif (selenium.isChecked(\"");
@@ -453,9 +474,8 @@ public class SeleniumTestCaseGenerator {
 				sb.append("\").equals(\"");
 				sb.append(param3);
 				sb.append("\"));\n");
-			}	
 			//-----------------------------	
-			 else if (param1.equals("assertNotVisible")) {
+			} else if (param1.equals("assertNotVisible")) {
 				sb.append("TestCase.assertFalse(selenium.isVisible");
 				sb.append("(\"");
 				sb.append(param2);
@@ -503,10 +523,42 @@ public class SeleniumTestCaseGenerator {
 				sb.append("}\n");
 			} else if (param1.equals("refresh")) {
 				sb.append("selenium.refresh();\n");
+			 
+			//-----------------add by linh_vu------------
+			} else if (param1.equals("keyDown")) {
+				sb.append("selenium.");
+				sb.append(param1);
+				sb.append("(\"");
+				sb.append(param2);
+				sb.append("\", \"");
+				sb.append(param3);
+				sb.append("\");\n");
+			} else if (param1.equals("keyUp")) {
+				sb.append("selenium.");
+				sb.append(param1);
+				sb.append("(\"");
+				sb.append(param2);
+				sb.append("\", \"");
+				sb.append(param3);
+				sb.append("\");\n");
+			} else if (param1.equals("storeValue")) {
+				sb.append("String ");
+				sb.append(param3);
+				sb.append(" = selenium.getValue(\"");
+				sb.append(param2);
+				sb.append("\");\n");
+				sb.append("RuntimeVariables.setValue(\"");
+				sb.append(param3);
+				sb.append("\", ");
+				sb.append(param3);
+				sb.append(");\n");
+
+			//-----------------------------	
+			
 			} else if (param1.equals("refreshAndWait")) {
 				sb.append("selenium.refresh();\n");
 				sb.append("selenium.waitForPageToLoad(timeout);\n");
-			} else if (param1.equals("storeXpathCount")) {
+			}else if (param1.equals("storeXpathCount")) {
 				sb.append("String ").append(param3).append(" = selenium.getXpathCount(\"").append(param2).append(
 				      "\").toString();\n");
 			}else if (param1.equals("verifyOrdered")) {
