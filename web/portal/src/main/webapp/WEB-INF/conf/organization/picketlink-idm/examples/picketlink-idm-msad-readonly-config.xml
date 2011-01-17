@@ -297,19 +297,15 @@
         <options>
           <option>
             <name>providerURL</name>
-            <value>ldap://192.168.0.12:389</value>
+            <value>[ldap|ldaps]://[msad-host]:[port]</value>
           </option>
-          <!--<option>-->
-            <!--<name>providerURL</name>-->
-            <!--<value>ldaps://msad-host:636</value>-->
-          <!--</option>-->
           <option>
             <name>adminDN</name>
             <value>TEST\Administrator</value>
           </option>
           <option>
             <name>adminPassword</name>
-            <value>!Q@W3e4r</value>
+            <value>[adminPasswordValue]</value>
           </option>
           <option>
             <name>authenticationMethod</name>
@@ -317,7 +313,7 @@
           </option>
           <!--<option>-->
           <!--<name>customSystemProperties</name>-->
-          <!--<value>javax.net.ssl.trustStore=/home/root/msad.truststore</value>-->
+          <!--<value>javax.net.ssl.trustStore=/path/to/msad.truststore</value>-->
           <!--<value>javax.net.ssl.trustStorePassword=password</value>-->
           <!--</option>-->
           <option>
