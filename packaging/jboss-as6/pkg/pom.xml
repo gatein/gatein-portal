@@ -955,7 +955,7 @@
       </profile>
 
       <profile>
-         <id>package</id>
+         <id>default</id>
          <activation>
             <activeByDefault>true</activeByDefault>
          </activation>

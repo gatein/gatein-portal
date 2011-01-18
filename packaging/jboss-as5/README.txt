@@ -25,12 +25,12 @@ mvn clean install -DskipTests
 
 Then go to packaging/jboss-as5 to perform packaging.
 
-There are three profiles that cover dependency download (-Pdownload), packaging as exploded (-Ppackage), and bundling as a zip (-Pbundle).
+There are three profiles that cover dependency download (-Pdownload), packaging as exploded (-Pdefault), and bundling as a zip (-Pbundle).
 
-For main build use either 'download' or 'package' profile, but not both, as 'download' also includes 'package' functionality.
+For main build use either 'download' or 'default' profile, but not both, as 'download' also includes 'default' functionality.
 
-Profile 'package' is the one active by default. When activating any other profile, the 'package' profile is automatically turned off, so
- it may have to be explicitly activated again if packaging is required (i.e. -Ppackage,bundle).
+Profile 'default' is the one active by default. When activating any other profile, the 'default' profile is automatically turned off, so
+ it may have to be explicitly activated again if packaging is required (i.e. -Pdefault,bundle).
 
 There are two system properties that control where the root directory for JBoss AS servers is located, and what specific JBoss AS directory to use.
 
@@ -58,7 +58,7 @@ mvn clean package
 
 This is equivalent to:
 
-mvn clean package -Ppackage -Dservers.dir=../../pkg/servers -Djbossas.name=jboss-5.1.0.GA
+mvn clean package -Pdefault -Dservers.dir=../../pkg/servers -Djbossas.name=jboss-5.1.0.GA
 
 
 2) If JBoss AS is located somewhere else adjust servers.dir and jbossas.name accordingly
@@ -83,7 +83,7 @@ mvn clean package -Pdownload,bundle
 
 or
 
-mvn clean package -Ppackage,bundle
+mvn clean package -Pdefault,bundle
 
 or just
 
