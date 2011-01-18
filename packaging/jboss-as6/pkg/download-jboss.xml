@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="download-jboss" xmlns:mvn="http://maven.apache.org/POM/4.0.0">
+
+   <target name="download-jboss">
+
+      <!-- Fetch jbossas .zip -->
+      <get dest="${dest}" skipexisting="true">
+         <url url="${url}/download"/>
+      </get>
+
+      <!-- Fetch .sha1 file -->
+      <get dest="${dest}.sha1" skipexisting="true">
+         <url url="${url}.sha1/download"/>
+      </get>
+
+      <!-- Validate checksum -->
+      <local name="checksum.matches"/>
+      <local name="checksum.matches.fail"/>
+      <checksum file="${dest}" algorithm="sha" fileext=".sha1"
+                verifyproperty="checksum.matches"/>
+      <condition property="checksum.matches.fail">
+         <equals arg1="${checksum.matches}" arg2="false"/>
+      </condition>
+      <fail if="checksum.matches.fail">Checksum validation failed! (for: ${dest})</fail>
+
+   </target>
+</project>

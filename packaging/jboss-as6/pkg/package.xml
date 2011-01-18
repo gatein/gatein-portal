@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="package" xmlns:mvn="http://maven.apache.org/POM/4.0.0">
+
+   <target name="package">
+
+      <echo>Using JBoss AS at: ${jbossas.dir}</echo>
+
+      <!-- Copy jboss -->
+      <copy todir="${jbossas.target.dir}" preservelastmodified="true">
+         <fileset dir="${jbossas.dir}"/>
+      </copy>
+
+      <!-- Copy the dependencies -->
+      <dependencyfilesets/>
+      <xslt
+            basedir="${maven.project.basedir}"
+            destdir="${maven.project.build.directory}"
+            includes="pom.xml"
+            extension=".xml"
+            style="${maven.project.basedir}/transform.xsl">
+         <param name="default.jar.context" expression="${jbossas.target.dir}/server/default/lib"/>
+         <param name="default.war.context" expression="${jbossas.target.dir}/server/default/deploy"/>
+         <param name="default.ear.context" expression="${jbossas.target.dir}/server/default/deploy"/>
+         <param name="lib.context" expression="${jbossas.target.dir}/server/default/lib"/>
+         <param name="deploy.context" expression="${jbossas.target.dir}/server/default/deploy"/>
+         <mapper type="glob" from="pom.xml" to="copy-dependencies.xml"/>
+      </xslt>
+      <ant antfile="${maven.project.build.directory}/copy-dependencies.xml" inheritRefs="true">
+         <target name="copy-dependencies"/>
+      </ant>
+
+      <!-- Copy configuration -->
+      <copy todir="${jbossas.target.dir}" preservelastmodified="true" overwrite="true">
+         <fileset dir="${maven.project.basedir}/src/main/resources/jboss"/>
+      </copy>
+
+      <!-- Copy configuration -->
+      <copy file="${maven.project.basedir}/../../../component/common/src/main/java/conf/configuration-jboss.properties"
+            tofile="${jbossas.target.dir}/server/default/conf/gatein/configuration.properties"
+            preservelastmodified="true" overwrite="true"/>
+
+      <!-- File permissions -->
+      <chmod perm="0644" type="file" dir="${jbossas.target.dir}" excludes="**/*.sh"/>
+      <chmod perm="0755" type="file" dir="${jbossas.target.dir}" includes="**/*.sh"/>
+
+   </target>
+</project>
