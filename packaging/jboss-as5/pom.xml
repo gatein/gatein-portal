@@ -13,6 +13,10 @@
 
    <name>GateIn JBoss AS 5.x.x packaging</name>
 
+   <build>
+      <defaultGoal>package</defaultGoal>
+   </build>
+   
    <modules>
       <module>pkg</module>
    </modules>

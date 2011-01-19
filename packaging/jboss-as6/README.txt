@@ -39,12 +39,7 @@ jbossas.name=jboss-6.0.0.Final
 
 Together they resolve into $GATEIN/portal/trunk/packaging/pkg/servers/jboss-6.0.0.Final as the location where JBoss AS is found.
 
-PKG build uses two equivalent properties:
-
-exo.projects.directory.dependencies
-exo.projects.app.jboss.version
-
-which can still be used instead of servers.dir and jbossas.name.
+The default goal is set to 'package' so there is no need to specify it.
 
 
 
@@ -54,7 +49,7 @@ which can still be used instead of servers.dir and jbossas.name.
 
 1) The simplest form uses default location for JBoss AS
 
-mvn package
+mvn
 
 This is equivalent to:
 
@@ -63,28 +58,28 @@ mvn clean package -Pdefault -Dservers.dir=$GATEIN/portal/trunk/packaging/pkg/ser
 
 2) If JBoss AS is located somewhere else adjust servers.dir and jbossas.name accordingly
 
-mvn package -Dservers.dir=SERVERS_DIR -Djbossas.name=JBOSSAS_NAME
+mvn -Dservers.dir=SERVERS_DIR -Djbossas.name=JBOSSAS_NAME
 
 
 3) If JBoss AS is not yet present on the system it can be automatically downloaded and extracted into SERVERS_DIR
 
-mvn package -Pdownload
+mvn -Pdownload
 
 If SERVERS_DIR is not at default location explicitly set it:
 
-mvn package -Pdownload -Dservers.dir=SERVERS_DIR
+mvn -Pdownload -Dservers.dir=SERVERS_DIR
 
 You shouldn't set jbossas.name property when using -Pdownload. 
 
 
 4) Zip bundle may be produced by activating 'bundle' profile
 
-mvn package -Pdownload,bundle
+mvn -Pdownload,bundle
 
 or
 
-mvn package -Pdefault,bundle
+mvn -Pdefault,bundle
 
 or just
 
-mvn package -Pbundle
+mvn -Pbundle
