@@ -19,11 +19,9 @@
    <properties>
       <jbossas.version>6.0.0.Final</jbossas.version>
       <jbossas.dist.version>${jbossas.version}</jbossas.dist.version>
-      <exo.projects.directory.dependencies>${project.basedir}/../../pkg/servers</exo.projects.directory.dependencies>
-      <exo.projects.app.jboss.version>jboss-${jbossas.version}</exo.projects.app.jboss.version>
-      <servers.dir>${exo.projects.directory.dependencies}</servers.dir>
+      <servers.dir>${project.basedir}/../../pkg/servers</servers.dir>
       <jbossas.path>${servers.dir}</jbossas.path>
-      <jbossas.name>${exo.projects.app.jboss.version}</jbossas.name>
+      <jbossas.name>jboss-${jbossas.version}</jbossas.name>
       <jbossas.dir>${jbossas.path}/${jbossas.name}</jbossas.dir>
       <jbossas.target.dir>${project.build.directory}/jboss</jbossas.target.dir>
       <wsrp.version>2.0.0-GA</wsrp.version>
@@ -909,6 +907,19 @@
          <build>
             <plugins>
                <plugin>
+                  <artifactId>maven-clean-plugin</artifactId>
+                  <version>2.4.1</version>
+                  <executions>
+                     <execution>
+                        <id>auto-clean</id>
+                        <phase>initialize</phase>
+                        <goals>
+                           <goal>clean</goal>
+                        </goals>
+                     </execution>
+                  </executions>
+               </plugin>
+               <plugin>
                   <groupId>org.apache.maven.plugins</groupId>
                   <artifactId>maven-antrun-plugin</artifactId>
                   <version>1.6</version>
@@ -999,7 +1010,19 @@
                      </execution>
                   </executions>
                </plugin>
-
+               <plugin>
+                  <artifactId>maven-clean-plugin</artifactId>
+                  <version>2.4.1</version>
+                  <executions>
+                     <execution>
+                        <id>auto-clean</id>
+                        <phase>initialize</phase>
+                        <goals>
+                           <goal>clean</goal>
+                        </goals>
+                     </execution>
+                  </executions>
+               </plugin>
                <plugin>
                   <groupId>org.apache.maven.plugins</groupId>
                   <artifactId>maven-antrun-plugin</artifactId>

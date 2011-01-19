@@ -41,7 +41,8 @@
             preservelastmodified="true" overwrite="true"/>
 
       <!-- File permissions -->
-      <chmod perm="0644" type="file" dir="${jbossas.target.dir}" excludes="**/*.sh"/>
+      <!-- Excluded due to ARG_MAX limitation on Mac OS X -->
+      <!--chmod perm="0644" type="file" dir="${jbossas.target.dir}" excludes="**/*.sh"/-->
       <chmod perm="0755" type="file" dir="${jbossas.target.dir}" includes="**/*.sh"/>
 
    </target>
