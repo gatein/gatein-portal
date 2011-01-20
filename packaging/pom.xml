@@ -66,9 +66,9 @@
             </modules>
         </profile>
         <profile>
-            <id>pkg-jbossas7</id>
+            <id>pkg-jbossas5</id>
             <modules>
-                <module>jboss-as7</module>
+                <module>jboss-as5</module>
                 <module>reports</module>
             </modules>
         </profile>
