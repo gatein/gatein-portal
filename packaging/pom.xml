@@ -58,5 +58,20 @@
                 <module>reports</module>
             </modules>
         </profile>
+        <profile>
+            <id>pkg-jbossas6</id>
+            <modules>
+                <module>jboss-as6</module>
+                <module>reports</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>pkg-jbossas7</id>
+            <modules>
+                <module>jboss-as7</module>
+                <module>reports</module>
+            </modules>
+        </profile>
+
     </profiles>
 </project>
