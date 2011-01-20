@@ -19,7 +19,7 @@
    <properties>
       <jbossas.version>5.1.0.GA</jbossas.version>
       <jbossas.dist.version>5.1.0.GA-jdk6</jbossas.dist.version>
-      <servers.dir>${project.basedir}/../../pkg/servers</servers.dir>
+      <servers.dir>${project.basedir}/../../servers</servers.dir>
       <jbossas.path>${servers.dir}</jbossas.path>
       <jbossas.name>jboss-${jbossas.version}</jbossas.name>
       <jbossas.dir>${jbossas.path}/${jbossas.name}</jbossas.dir>
@@ -941,6 +941,9 @@
                            <target>
                               <property name="jbossas.zip" value="${jbossas.path}/jboss-${jbossas.dist.version}.zip"/>
 
+                              <!-- Autocreate servers.dir if necessary -->
+                              <mkdir dir="${jbossas.path}"/>
+
                               <!-- Download JBossAS unless already downloaded -->
                               <ant antfile="${project.basedir}/download-jboss.xml">
                                  <target name="download-jboss"/>
@@ -972,7 +975,7 @@
       </profile>
 
       <profile>
-         <id>default</id>
+         <id>pack</id>
          <activation>
             <activeByDefault>true</activeByDefault>
          </activation>
@@ -1007,7 +1010,11 @@
                                     <file>${jbossas.path}/${jbossas.name}/</file>
                                  </files>
                                  <message>"The following JBoss AS directory doesn't exist :
-                                    ${jbossas.path}/${jbossas.name}"
+                                    ${jbossas.path}/${jbossas.name}
+
+Make JBoss AS instance available at that location, or use -Dservers.dir=PATH to point to the correct location.
+You can also use -Pdownload to automatically provide JBoss AS instance.
+"
                                  </message>
                               </requireFilesExist>
                            </rules>

@@ -19,7 +19,7 @@
    <properties>
       <jbossas.version>6.0.0.Final</jbossas.version>
       <jbossas.dist.version>${jbossas.version}</jbossas.dist.version>
-      <servers.dir>${project.basedir}/../../pkg/servers</servers.dir>
+      <servers.dir>${project.basedir}/../../servers</servers.dir>
       <jbossas.path>${servers.dir}</jbossas.path>
       <jbossas.name>jboss-${jbossas.version}</jbossas.name>
       <jbossas.dir>${jbossas.path}/${jbossas.name}</jbossas.dir>
@@ -935,6 +935,9 @@
                               <property name="jbossas.zip"
                                         value="${jbossas.path}/jboss-as-distribution-${jbossas.dist.version}.zip"/>
 
+                              <!-- Autocreate servers.dir if necessary -->
+                              <mkdir dir="${jbossas.path}"/>
+
                               <!-- Download JBossAS unless already downloaded -->
                               <ant antfile="${project.basedir}/download-jboss.xml">
                                  <target name="download-jboss"/>
@@ -945,8 +948,9 @@
 
                               <available property="jbossas.dir.exists" type="dir" file="${jbossas.dir}"/>
 
-                              <fail message="Destination JBossAS directory exists already: ${jbossas.dir} (Won't overwrite!)"
-                                    if="jbossas.dir.exists"/>
+                              <fail if="jbossas.dir.exists">Destination JBoss AS directory exists already: ${jbossas.dir} (Won't overwrite!)
+Delete the directory manually, or provide alternative JBoss AS location by using -Dserver.dir=PATH
+                              </fail>
 
                               <!-- Extract downloaded JBossAS to servers dir -->
                               <unzip src="${jbossas.zip}" dest="${jbossas.path}" overwrite="false"/>
@@ -966,7 +970,7 @@
       </profile>
 
       <profile>
-         <id>default</id>
+         <id>pack</id>
          <activation>
             <activeByDefault>true</activeByDefault>
          </activation>
@@ -1001,7 +1005,11 @@
                                     <file>${jbossas.path}/${jbossas.name}/</file>
                                  </files>
                                  <message>"The following JBoss AS directory doesn't exist :
-                                    ${jbossas.path}/${jbossas.name}"
+                                    ${jbossas.path}/${jbossas.name}
+
+Make JBoss AS instance available at that location, or use -Dservers.dir=PATH to point to the correct location.
+You can also use -Pdownload to automatically provide JBoss AS instance.
+"
                                  </message>
                               </requireFilesExist>
                            </rules>

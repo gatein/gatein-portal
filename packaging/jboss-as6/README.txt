@@ -23,21 +23,21 @@ mvn clean install -DskipTests
 
 Then go to packaging/jboss-as6 to perform packaging.
 
-There are three profiles that cover dependency download (-Pdownload), packaging as exploded (-Pdefault), and bundling as a zip (-Pbundle).
+There are three profiles that cover dependency download (-Pdownload), packaging as exploded (-Ppack), and bundling as a zip (-Pbundle).
 
-For main build use either 'download' or 'default' profile, but not both, as 'download' also includes 'default' functionality.
+For main build use either 'download' or 'pack' profile, but not both, as 'download' also includes 'pack' functionality.
 Both of these profiles also automatically perform 'clean' to assure consistent results.
 
-Profile 'default' is the one active by default. When activating any other profile, the 'default' profile is automatically turned off, so
- it may have to be explicitly activated again if packaging is required (i.e. -Pdefault,bundle).
+Profile 'pack' is the one active by default. When activating any other profile, the 'pack' profile is automatically turned off, so
+ it may have to be explicitly activated again if packaging is required (i.e. -Ppack,bundle).
 
 There are two system properties that control where the root directory for JBoss AS servers is located, and what specific JBoss AS directory to use.
 They are preset to default location:
 
-servers.dir=${project.basedir}/../../pkg/servers
+servers.dir=${project.basedir}/../../servers
 jbossas.name=jboss-6.0.0.Final
 
-Together they resolve into $GATEIN/portal/trunk/packaging/pkg/servers/jboss-6.0.0.Final as the location where JBoss AS is found.
+Together they resolve into $GATEIN/portal/trunk/packaging/servers/jboss-6.0.0.Final as the location where JBoss AS is found.
 
 The default goal is set to 'package' so there is no need to specify it.
 
@@ -53,7 +53,7 @@ mvn
 
 This is equivalent to:
 
-mvn clean package -Pdefault -Dservers.dir=$GATEIN/portal/trunk/packaging/pkg/servers -Djbossas.name=jboss-6.0.0.Final
+mvn clean package -Ppack -Dservers.dir=$GATEIN/portal/trunk/packaging/servers -Djbossas.name=jboss-6.0.0.Final
 
 
 2) If JBoss AS is located somewhere else adjust servers.dir and jbossas.name accordingly
@@ -78,7 +78,7 @@ mvn -Pdownload,bundle
 
 or
 
-mvn -Pdefault,bundle
+mvn -Ppack,bundle
 
 or just
 
