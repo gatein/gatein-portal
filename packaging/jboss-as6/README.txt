@@ -10,7 +10,7 @@ Differences are as follows:
  - hibernate-core-3.3.2.GA is not included as it already comes with JBossAS-6.0.0.Final
  - gatein-sample-portal.ear, gatein-sample-extension.ear, and gatein-sample-skin.war are not included (they will be once the deployment descriptors are fixed)
  - wsrp-* modules are commented out in gatein.ear/META-INF/application.xml
- - Resource file for patching JBoss AS are based on JBossAS-6.0.0.Final
+ - Resource files for patching JBoss AS are based on JBossAS-6.0.0.Final
 
 
 

@@ -24,7 +24,6 @@
       <jbossas.name>jboss-${jbossas.version}</jbossas.name>
       <jbossas.dir>${jbossas.path}/${jbossas.name}</jbossas.dir>
       <jbossas.target.dir>${project.build.directory}/jboss</jbossas.target.dir>
-      <wsrp.version>2.0.0-GA</wsrp.version>
    </properties>
 
    <dependencies>
@@ -771,29 +770,32 @@
       <dependency>
          <groupId>org.gatein.wsrp</groupId>
          <artifactId>wsrp-producer-lib</artifactId>
+         <version>${org.gatein.wsrp.version}</version>
       </dependency>
       <dependency>
          <groupId>org.gatein.wsrp</groupId>
          <artifactId>wsrp-common</artifactId>
-         <version>${wsrp.version}</version>
+         <version>${org.gatein.wsrp.version}</version>
       </dependency>
       <dependency>
          <groupId>org.gatein.wsrp</groupId>
          <artifactId>wsrp-wsrp1-ws</artifactId>
-         <version>${wsrp.version}</version>
+         <version>${org.gatein.wsrp.version}</version>
       </dependency>
       <dependency>
          <groupId>org.gatein.wsrp</groupId>
          <artifactId>wsrp-wsrp2-ws</artifactId>
-         <version>${wsrp.version}</version>
+         <version>${org.gatein.wsrp.version}</version>
       </dependency>
       <dependency>
          <groupId>org.gatein.wsrp</groupId>
          <artifactId>wsrp-consumer</artifactId>
+         <version>${org.gatein.wsrp.version}</version>
       </dependency>
       <dependency>
          <groupId>org.gatein.wsrp</groupId>
          <artifactId>wsrp-integration-api</artifactId>
+         <version>${org.gatein.wsrp.version}</version>
       </dependency>
 
       <dependency>
@@ -888,14 +890,14 @@
          <groupId>org.gatein.wsrp</groupId>
          <artifactId>wsrp-producer</artifactId>
          <type>war</type>
-         <version>${wsrp.version}</version>
+         <version>${org.gatein.wsrp.version}</version>
       </dependency>
       <dependency>
          <?move gatein.ear/wsrp-admin-gui.war?>
          <groupId>org.gatein.wsrp</groupId>
          <artifactId>wsrp-admin-gui</artifactId>
          <type>war</type>
-         <version>${wsrp.version}</version>
+         <version>${org.gatein.wsrp.version}</version>
       </dependency>
 
    </dependencies>
