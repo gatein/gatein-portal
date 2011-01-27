@@ -19,7 +19,7 @@
 
 package org.exoplatform.web.security.security;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import org.gatein.common.NotYetImplemented;
 
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.web.security.GateInToken;
@@ -42,35 +42,35 @@ public class TicketConfiguration extends AbstractTokenService<GateInToken, Strin
    @Override
    public GateInToken getToken(String id)
    {
-      throw new NotImplementedException();
+      throw new NotYetImplemented();
    }
 
    @Override
    public GateInToken deleteToken(String id)
    {
-      throw new NotImplementedException();
+      throw new NotYetImplemented();
    }
 
    @Override
    public String[] getAllTokens()
    {
-      throw new NotImplementedException();
+      throw new NotYetImplemented();
    }
 
    @Override
    protected String decodeKey(String stringKey)
    {
-      throw new NotImplementedException();
+      throw new NotYetImplemented();
    }
 
    @Override
    public long size() throws Exception
    {
-      throw new NotImplementedException();
+      throw new NotYetImplemented();
    }
 
    public String createToken(Credentials credentials) throws IllegalArgumentException, NullPointerException
    {
-      throw new NotImplementedException();
+      throw new NotYetImplemented();
    }
 }
