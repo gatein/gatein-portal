@@ -38,16 +38,6 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <modules>
-                <module>module</module>
-                <module>product</module>
-                <module>pkg</module>
-                <module>reports</module>
-            </modules>
-        </profile>
-        <profile>
-            <id>pkg-jbossas-beta</id>
-            <modules>
-                <module>jboss-as</module>
                 <module>reports</module>
             </modules>
         </profile>
@@ -73,6 +63,14 @@
             </modules>
         </profile>
         <profile>
+            <id>pkg-jbossas</id>
+            <modules>
+              <module>module</module>
+              <module>product</module>
+              <module>pkg</module>
+            </modules>
+        </profile>
+        <profile>
             <id>pkg-jbossas6</id>
             <modules>
                 <module>jboss-as6</module>
@@ -82,6 +80,9 @@
         <profile>
             <id>pkg-jbossas5</id>
             <modules>
+                <module>module</module>
+                <module>product</module>
+                <module>pkg</module>
                 <module>jboss-as5</module>
                 <module>reports</module>
             </modules>
