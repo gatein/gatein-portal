@@ -64,36 +64,41 @@ public class Param
 
    public Object getMapXMLObject(WebuiRequestContext context) throws Exception
    {
-      if (object != null)
-         return object;
-      ResourceResolver resolver = context.getResourceResolver(value);
-      InputStream is = resolver.getInputStream(value);
-      object = XMLObject.getObject(is);
-      is.close();
+      if(object == null)
+      {
+        synchronized (this)
+        {
+          if(object == null)
+          {
+            ResourceResolver resolver = context.getResourceResolver(value);
+            InputStream is = resolver.getInputStream(value);
+            object = XMLObject.getObject(is);
+            is.close();
+          }
+        }
+      }
       return object;
    }
 
    @SuppressWarnings("unchecked")
    public Object getMapGroovyObject(WebuiRequestContext context) throws Exception
    {
-      try
+      if(object == null)
       {
-         if (object != null)
-            return object;
-         ResourceResolver resolver = context.getResourceResolver(value);
-         InputStream is = resolver.getInputStream(value);
-         //TODO if is == null throw an exception saying the it's impossible to find the file
-         Binding binding = new Binding();
-         GroovyShell shell = new GroovyShell(Thread.currentThread().getContextClassLoader(), binding);
-         object = shell.evaluate(is);
-         is.close();
-         return object;
+        synchronized (this)
+        {
+          if(object == null)
+          {
+            ResourceResolver resolver = context.getResourceResolver(value);
+            InputStream is = resolver.getInputStream(value);
+            Binding binding = new Binding();
+            GroovyShell shell = new GroovyShell(Thread.currentThread().getContextClassLoader(), binding);
+            object = shell.evaluate(is);
+            is.close();
+          }
+        }
       }
-      catch (Exception e)
-      {
-         log.error("A  problem in the groovy script : " + value, e);
-         throw e;
-      }
+      return object;
    }
 
    public Object getFreshObject(WebuiRequestContext context) throws Exception

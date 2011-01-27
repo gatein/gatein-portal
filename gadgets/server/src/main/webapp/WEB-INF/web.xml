@@ -79,7 +79,8 @@
   </filter-mapping>
 
   <listener>
-    <listener-class>org.apache.shindig.common.servlet.GuiceServletContextListener</listener-class>
+    <!--<listener-class>org.apache.shindig.common.servlet.GuiceServletContextListener</listener-class>-->
+     <listener-class>org.exoplatform.portal.gadget.core.GateInGuiceServletContextListener</listener-class>
   </listener>
 
   <!-- Render a Gadget -->

@@ -141,9 +141,6 @@
 		<listener-class>org.exoplatform.web.GenericHttpListener</listener-class>
 	</listener>
 	<listener>
-		<listener-class>org.exoplatform.portal.application.PortalSessionListener</listener-class>
-	</listener>
-	<listener>
 		<listener-class>org.exoplatform.services.security.web.JAASConversationStateListener</listener-class>
 	</listener>
 	<!-- ================================================================== -->

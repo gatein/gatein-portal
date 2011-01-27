@@ -2,25 +2,32 @@
 	import org.exoplatform.web.application.JavascriptManager;
 	import org.exoplatform.portal.webui.application.GadgetUtil;
 	
-	def rcontext = _ctx.getRequestContext();
-	JavascriptManager jsmanager = rcontext.getJavascriptManager();
-	def hostName = GadgetUtil.getRelGadgetServerUrl();
-	def url = uicomponent.getUrl();
-	def metadata = uicomponent.getMetadata();
-	def posX = uicomponent.getProperties().getIntValue("locationX") + "px";
-	def posY = uicomponent.getProperties().getIntValue("locationY") + "px";
-	def zIndex = uicomponent.getProperties().getIntValue("zIndex");
-	def id = uicomponent.getId();
-	def isDev = uicomponent.isGadgetDeveloper();
-	def noCache = uicomponent.isNoCache();
-	def isDebug = uicomponent.isDebug();
-	def view = uicomponent.getView();
-	def userPref = uicomponent.getUserPref();
-	jsmanager.importJavascript("eXo.gadget.UIGadget");
-	rcontext.getJavascriptManager().addCustomizedOnLoadScript("eXo.gadget.UIGadget.confirmDeleteGadget = '" + _ctx.appRes("UIGadgetContainerManagement.confirm.DeleteGadget") + "';");
-	jsmanager.addCustomizedOnLoadScript("eXo.gadget.UIGadget.createGadget('$url','content-$id', $metadata, $userPref, '$view', '$hostName', " + (isDev ? 1 : 0)
-																																						+ ", " + (isDebug ? 1 : 0) + ", " + (noCache ? 1 : 0) + ");");
-																																						
+    def rcontext = _ctx.getRequestContext();
+    JavascriptManager jsmanager = rcontext.getJavascriptManager();
+    def hostName = GadgetUtil.getRelGadgetServerUrl();
+    def url = null;
+    def metadata = "";
+    def posX = uicomponent.getProperties().getIntValue("locationX") + "px";
+    def posY = uicomponent.getProperties().getIntValue("locationY") + "px";
+    def zIndex = uicomponent.getProperties().getIntValue("zIndex");
+    def id = uicomponent.getId() != null ? uicomponent.getId() : "UIGadget";
+    def isDev = uicomponent.isGadgetDeveloper();
+    def noCache = uicomponent.isNoCache();
+    def isDebug = uicomponent.isDebug();
+    def view = uicomponent.getView();
+    def userPref = null;
+   
+    def isLossData = uicomponent.isLossData();
+    if(!isLossData) {
+      	url = uicomponent.getUrl();
+      	metadata = uicomponent.getMetadata();
+      	userPref = uicomponent.getUserPref();
+      	jsmanager.importJavascript("eXo.gadget.UIGadget");
+      	rcontext.getJavascriptManager().addCustomizedOnLoadScript("eXo.gadget.UIGadget.confirmDeleteGadget = '" + _ctx.appRes("UIGadgetContainerManagement.confirm.DeleteGadget") + "';");
+      	jsmanager.addCustomizedOnLoadScript("eXo.gadget.UIGadget.createGadget('$url','content-$id', $metadata, $userPref, '$view', '$hostName', " + (isDev ? 1 : 0)
+      																																						+ ", " + (isDebug ? 1 : 0) + ", " + (noCache ? 1 : 0) + ");");      									
+    }
+                                                                                                               																													
 	boolean isMini = Boolean.parseBoolean(uicomponent.getProperties().get("minimized"));
 	String miniTitle = _ctx.appRes("UIGadget.tooltip.Minimize");
 	String unminiTitle = _ctx.appRes("UIGadget.tooltip.Unminimize");
@@ -43,7 +50,7 @@
                        <div class="EditGadget IconControl" onclick="eXo.gadget.UIGadget.editGadget('$id')" onmousedown="event.cancelBubble=true;" title="<%=_ctx.appRes("UIGadget.tooltip.editGadget")%>"><span></span></div>
 					<% } %>
                     <div class="GadgetDragHandleArea"><span></span></div>
-					<div class="GadgetTitle" style="display: none; float: none; width: auto; margin-right: 75px"><%= uicomponent.getApplicationName() %></div>
+					<div class="GadgetTitle" style="display: <%=isLossData ? "block" : "none"; %> ; float: none; width: auto; margin-right: 75px"><%= uicomponent.getApplicationName() %></div>
 				</div>
 			</div>
 		</div>
@@ -57,8 +64,12 @@
 		</div>
 		<div class="MLGadget">
 			<div class="MRGadget">
-				<div id="content-$id" class="MCGadget"></div>
-			</div>
+         <% if(isLossData) {%>
+				<div id="content-$id" class="MCGadget"><%=_ctx.appRes("UIGadget.message.isLossData")%></div>
+         <% } else {%>
+            <div id="content-$id" class="MCGadget"></div>
+         <% } %>
+            </div>
 		</div>
 		<div class="BLGadget">
 			<div class="BRGadget">

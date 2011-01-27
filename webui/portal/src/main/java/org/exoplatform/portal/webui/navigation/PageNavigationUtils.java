@@ -414,7 +414,7 @@ public class PageNavigationUtils
       if (nav.getOwnerType().equals(PortalConfig.USER_TYPE))
          return;
       ResourceBundle res =
-         i18nManager.getNavigationResourceBundle(locale.getLanguage(), nav.getOwnerType(), nav.getOwnerId());
+         i18nManager.getNavigationResourceBundle(locale.toString(), nav.getOwnerType(), nav.getOwnerId());
       for (PageNode node : nav.getNodes())
       {
          resolveLabel(res, node);

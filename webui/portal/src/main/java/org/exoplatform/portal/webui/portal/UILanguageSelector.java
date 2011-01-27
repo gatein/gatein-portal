@@ -21,12 +21,16 @@ package org.exoplatform.portal.webui.portal;
 
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.portal.Constants;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIMaskWorkspace;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
+import org.exoplatform.services.organization.OrganizationService;
+import org.exoplatform.services.organization.UserProfile;
 import org.exoplatform.services.resources.LocaleConfig;
 import org.exoplatform.services.resources.LocaleConfigService;
+import org.exoplatform.services.resources.LocaleContextInfo;
 import org.exoplatform.services.resources.ResourceBundleService;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -163,23 +167,53 @@ public class UILanguageSelector extends UIContainer
       public void execute(Event<UILanguageSelector> event) throws Exception
       {
          String language = event.getRequestContext().getRequestParameter("language");
+         PortalRequestContext prqCtx = PortalRequestContext.getCurrentInstance();
 
          UIPortalApplication uiApp = Util.getUIPortalApplication();
          UIMaskWorkspace uiMaskWS = uiApp.getChildById(UIPortalApplication.UI_MASK_WS_ID);
          uiMaskWS.setUIComponent(null);
          // event.getRequestContext().addUIComponentToUpdateByAjax(uiMaskWS) ;
-         Util.getPortalRequestContext().ignoreAJAXUpdateOnPortlets(false);
-         if (language == null || language.trim().length() < 1)
+         prqCtx.ignoreAJAXUpdateOnPortlets(false);
+
+         if (language == null || language.trim().equals(prqCtx.getLocale().getLanguage()))
+         {
+            //LocalizationLifecycle will save userProfile if locale is changed
+            //We need to handle case : locale is not changed, but user's locale setting has not been initialized
+            if (prqCtx.getRemoteUser() != null)
+            {
+               saveLocaleToUserProfile(prqCtx);
+            }
             return;
+         }
          // if(!uiPortal.isModifiable()) return;
          LocaleConfigService localeConfigService = event.getSource().getApplicationComponent(LocaleConfigService.class);
          LocaleConfig localeConfig = localeConfigService.getLocaleConfig(language);
          if (localeConfig == null)
             localeConfig = localeConfigService.getDefaultLocaleConfig();
-         PortalRequestContext prqCtx = PortalRequestContext.getCurrentInstance();
          prqCtx.setLocale(localeConfig.getLocale());
          //uiApp.setOrientation(localeConfig.getOrientation());
          //uiApp.localizeNavigations();
+      }
+
+      private void saveLocaleToUserProfile(PortalRequestContext context) throws Exception
+      {
+         ExoContainer container = context.getApplication().getApplicationServiceContainer();
+         OrganizationService svc = (OrganizationService)
+            container.getComponentInstanceOfType(OrganizationService.class);
+
+         // Don't rely on UserProfileLifecycle loaded UserProfile when doing
+         // an update to avoid a potential overwrite of other changes
+         UserProfile userProfile = svc.getUserProfileHandler().findUserProfileByName(context.getRemoteUser());
+         if (userProfile != null && userProfile.getUserInfoMap() != null)
+         {
+            //Only save if user's locale has not been set
+            String currLocale = userProfile.getUserInfoMap().get(Constants.USER_LANGUAGE);
+            if (currLocale == null || currLocale.trim().equals(""))
+            {
+               userProfile.getUserInfoMap().put(Constants.USER_LANGUAGE, LocaleContextInfo.getLocaleAsString(context.getLocale()));
+               svc.getUserProfileHandler().saveUserProfile(userProfile, false);
+            }
+         }
       }
    }
 

@@ -167,34 +167,34 @@ public class UIFormInputSet extends UIContainer
       UIForm uiForm = getAncestorOfType(UIForm.class);
       for (UIComponent inputEntry : getChildren())
       {
-         if (inputEntry.isRendered())
+         if (inputEntry instanceof UIFormInputBase)
          {
-            String label;
-            try
+            if (inputEntry.isRendered())
             {
-               label = uiForm.getLabel(res, inputEntry.getId());
-               if (inputEntry instanceof UIFormInputBase)
-                  ((UIFormInputBase)inputEntry).setLabel(label);
+               UIFormInputBase formInputBase = (UIFormInputBase) inputEntry;
+               String label;
+               if (formInputBase.getLabel() != null)
+               {
+                  label = uiForm.getLabel(res, formInputBase.getLabel());
+               }
+               else
+               {
+                  label = uiForm.getLabel(res, formInputBase.getId());
+               }
+               w.write("<tr>");
+               w.write("<td class=\"FieldLabel\">");
+
+               // if missing resource and the label hasn't been set before, don't print out the label.
+               if (formInputBase.getLabel() != null || (label != formInputBase.getId()))
+               {
+                  w.write(label);
+               }
+               w.write("</td>");
+               w.write("<td class=\"FieldComponent\">");
+               renderUIComponent(formInputBase);
+               w.write("</td>");
+               w.write("</tr>");
             }
-            catch (MissingResourceException ex)
-            {
-               //label = "&nbsp;" ;
-               label = inputEntry.getName();
-               System.err.println("\n " + uiForm.getId() + ".label." + inputEntry.getId() + " not found value");
-            }
-            w.write("<tr>");
-            w.write("<td class=\"FieldLabel\">");
-            
-            // if missing resource, don't print out the label.
-            if(!label.equals(inputEntry.getName()))
-            {
-               w.write(label);
-            }
-            w.write("</td>");
-            w.write("<td class=\"FieldComponent\">");
-            renderUIComponent(inputEntry);
-            w.write("</td>");
-            w.write("</tr>");
          }
       }
       w.write("</table>");

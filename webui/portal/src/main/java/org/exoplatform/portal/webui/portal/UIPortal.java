@@ -382,7 +382,7 @@ public class UIPortal extends UIContainer
       ResourceBundleManager mgr = getApplicationComponent(ResourceBundleManager.class);
       if (nav.getOwnerType().equals(PortalConfig.USER_TYPE))
          return;
-      ResourceBundle res = mgr.getNavigationResourceBundle(locale.getLanguage(), nav.getOwnerType(), nav.getOwnerId());
+      ResourceBundle res = mgr.getNavigationResourceBundle(locale.toString(), nav.getOwnerType(), nav.getOwnerId());
       for (PageNode node : nav.getNodes())
       {
          resolveLabel(res, node);

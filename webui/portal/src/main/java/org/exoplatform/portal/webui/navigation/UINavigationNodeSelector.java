@@ -150,8 +150,9 @@ public class UINavigationNodeSelector extends UIContainer
     */
    public void initTreeData() throws Exception
    {
-      WebuiRequestContext requestContext = WebuiRequestContext.getCurrentInstance();
-      localizeNavigation(requestContext.getLocale());
+//      Move this to processRender method because of GTNPORTAL-1739
+//      WebuiRequestContext requestContext = WebuiRequestContext.getCurrentInstance();
+//      localizeNavigation(requestContext.getLocale());
       
       initEdittedTreeNodeData();
    }
@@ -294,6 +295,8 @@ public class UINavigationNodeSelector extends UIContainer
 
    public void processRender(WebuiRequestContext context) throws Exception
    {
+      localizeNavigation(context.getLocale());
+      
       UIRightClickPopupMenu uiPopupMenu = getChild(UIRightClickPopupMenu.class);
       if (uiPopupMenu != null)
       {

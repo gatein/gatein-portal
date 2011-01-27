@@ -85,6 +85,8 @@ public class TestJIBXXmlMapping extends AbstractGateInTest
       
       PageNavigation pageNavigation = (PageNavigation)obj;
       assertEquals("portal::classic::homepage", pageNavigation.getNode("home").getPageReference());
+      assertEquals("portal", pageNavigation.getOwnerType());
+      assertEquals("classic", pageNavigation.getOwnerId());
 
       IMarshallingContext mctx = bfact.createMarshallingContext();
       mctx.setIndent(2);

@@ -27,7 +27,6 @@ import sun.misc.BASE64Encoder;
 
 import org.apache.shindig.auth.BlobCrypterSecurityTokenDecoder;
 import org.apache.shindig.config.ContainerConfigException;
-import org.apache.shindig.config.JsonContainerConfig;
 import org.apache.shindig.expressions.Expressions;
 import org.exoplatform.commons.utils.Safe;
 import org.exoplatform.container.monitor.jvm.J2EEServerInfo;
@@ -62,7 +61,7 @@ import java.security.SecureRandom;
 
 @Singleton
 public class
-   ExoContainerConfig extends JsonContainerConfig
+   ExoContainerConfig extends GateInJsonContainerConfig
 {
 
    /** . */

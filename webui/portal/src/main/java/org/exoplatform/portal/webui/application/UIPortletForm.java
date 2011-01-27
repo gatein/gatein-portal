@@ -22,8 +22,8 @@ package org.exoplatform.portal.webui.application;
 import org.exoplatform.commons.utils.ExceptionUtil;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.pc.ExoPortletState;
-import org.exoplatform.portal.pom.spi.portlet.Preference;
 import org.exoplatform.portal.pom.spi.portlet.Portlet;
+import org.exoplatform.portal.pom.spi.portlet.Preference;
 import org.exoplatform.portal.pom.spi.wsrp.WSRP;
 import org.exoplatform.portal.pom.spi.wsrp.WSRPPortletStateType;
 import org.exoplatform.portal.portlet.PortletExceptionHandleService;
@@ -45,22 +45,15 @@ import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.event.EventListener;
-import org.exoplatform.webui.form.UIFormCheckBoxInput;
-import org.exoplatform.webui.form.UIFormInputIconSelector;
-import org.exoplatform.webui.form.UIFormInputInfo;
-import org.exoplatform.webui.form.UIFormInputSet;
-import org.exoplatform.webui.form.UIFormStringInput;
-import org.exoplatform.webui.form.UIFormTabPane;
-import org.exoplatform.webui.form.UIFormTextAreaInput;
+import org.exoplatform.webui.form.*;
 import org.exoplatform.webui.form.validator.ExpressionValidator;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
 import org.exoplatform.webui.form.validator.StringLengthValidator;
 import org.exoplatform.webui.organization.UIListPermissionSelector;
 import org.exoplatform.webui.organization.UIListPermissionSelector.EmptyIteratorValidator;
 import org.gatein.pc.api.Mode;
-import org.gatein.pc.api.PortletContext;
-import org.gatein.pc.api.PortletInvoker;
 import org.gatein.pc.api.StatefulPortletContext;
+import org.gatein.pc.api.info.PreferenceInfo;
 import org.gatein.pc.api.invocation.RenderInvocation;
 import org.gatein.pc.api.invocation.response.ErrorResponse;
 import org.gatein.pc.api.invocation.response.FragmentResponse;
@@ -68,22 +61,11 @@ import org.gatein.pc.api.invocation.response.PortletInvocationResponse;
 import org.gatein.pc.api.spi.InstanceContext;
 import org.gatein.pc.api.state.AccessMode;
 import org.gatein.pc.api.state.PropertyChange;
-import org.gatein.pc.portlet.impl.spi.AbstractClientContext;
-import org.gatein.pc.portlet.impl.spi.AbstractPortalContext;
-import org.gatein.pc.portlet.impl.spi.AbstractSecurityContext;
-import org.gatein.pc.portlet.impl.spi.AbstractServerContext;
-import org.gatein.pc.portlet.impl.spi.AbstractUserContext;
-import org.gatein.pc.portlet.impl.spi.AbstractWindowContext;
+import org.gatein.pc.portlet.impl.spi.*;
 
 import javax.portlet.PortletMode;
 import javax.servlet.http.Cookie;
-
-import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 /** Author : Nhu Dinh Thuan nhudinhthuan@yahoo.com Jun 8, 2006 */
 @ComponentConfigs({
@@ -115,7 +97,7 @@ public class UIPortletForm extends UIFormTabPane
                      addValidator(MandatoryValidator.class).setEditable(false)).
       addUIFormInput(new UIFormStringInput("windowId", "windowId", null).setEditable(false)).*/
             addUIFormInput(new UIFormInputInfo("displayName", "displayName", null)).addUIFormInput(
-         new UIFormStringInput("title", "title", null).addValidator(StringLengthValidator.class, 3, 60).addValidator(ExpressionValidator.class, "[^\\<\\>]*", 
+         new UIFormStringInput("title", "title", null).addValidator(StringLengthValidator.class, 3, 60).addValidator(ExpressionValidator.class, "[^\\<\\>]*",
                "UIPortletForm.msg.InvalidPortletTitle"))
          .addUIFormInput(
             new UIFormStringInput("width", "width", null).addValidator(ExpressionValidator.class, "(^([1-9]\\d*)px$)?",
@@ -226,7 +208,7 @@ public class UIPortletForm extends UIFormTabPane
             {
                content = fragmentResponse.getContent();
             }
-               
+
          }
          else
          {
@@ -262,7 +244,7 @@ public class UIPortletForm extends UIFormTabPane
          }
 
          portletContent.setLength(0);
-         
+
          portletContent.append(content);
       }
       catch (Throwable ex)
@@ -288,40 +270,59 @@ public class UIPortletForm extends UIFormTabPane
       getChild(UIFormInputIconSelector.class).setSelectedIcon(icon);
       getChild(UIFormInputThemeSelector.class).getChild(UIItemThemeSelector.class).setSelectedTheme(
          uiPortlet.getSuitedTheme(null));
-      WebuiRequestContext contextres = WebuiRequestContext.getCurrentInstance();
-      ResourceBundle res = contextres.getApplicationResourceBundle();
       if (hasEditMode())
       {
          uiPortlet.setCurrentPortletMode(PortletMode.EDIT);
       }
       else
       {
+         Map<String, String> portletPreferenceMaps = new HashMap<String, String>();
+         org.gatein.pc.api.Portlet portlet = uiPortlet.getProducedOfferedPortlet();
+         Set<String> keySet = portlet.getInfo().getPreferences().getKeys();
 
-         //
+         for (String key : keySet)
+         {
+            PreferenceInfo preferenceInfo = portlet.getInfo().getPreferences().getPreference(key);
+            if (!preferenceInfo.isReadOnly())
+            {
+               String ppValue = (preferenceInfo.getDefaultValue().size() > 0) ? preferenceInfo.getDefaultValue().get
+                  (0) : "";
+               portletPreferenceMaps.put(key, ppValue);
+            }
+         }
+
          Portlet pp = uiPortlet.getPreferences();
          if (pp != null)
          {
-            UIFormInputSet uiPortletPrefSet = getChildById(FIELD_PORTLET_PREF);
-            uiPortletPrefSet.getChildren().clear();
             for (Preference pref : pp)
             {
                if (!pref.isReadOnly())
                {
-                  UIFormStringInput templateStringInput =
-                     new UIFormStringInput(pref.getName(), null, pref.getValues().get(0));
-                  templateStringInput.setLabel(res.getString("UIPortletForm.tab.label.Template"));
-                  templateStringInput.addValidator(MandatoryValidator.class);
-                  uiPortletPrefSet.addUIFormInput(templateStringInput);
+                  portletPreferenceMaps.put(pref.getName(), (pref.getValues().size() > 0) ? pref.getValues().get(0) :
+                  "");
                }
-
-            }
-            if (uiPortletPrefSet.getChildren().size() > 0)
-            {
-               uiPortletPrefSet.setRendered(true);
-               setSelectedTab(FIELD_PORTLET_PREF);
-               return;
             }
          }
+
+         if (portletPreferenceMaps.size() > 0)
+         {
+            Set<String> ppKeySet = portletPreferenceMaps.keySet();
+            UIFormInputSet uiPortletPrefSet = getChildById(FIELD_PORTLET_PREF);
+            uiPortletPrefSet.getChildren().clear();
+            for (String ppKey : ppKeySet)
+            {
+               String ppValue = portletPreferenceMaps.get(ppKey);
+               UIFormStringInput preferenceStringInput = new UIFormStringInput(ppKey, null, ppValue);
+               preferenceStringInput.setLabel(ppKey);
+               preferenceStringInput.addValidator(MandatoryValidator.class);
+               uiPortletPrefSet.addUIFormInput(preferenceStringInput);
+            }
+
+            uiPortletPrefSet.setRendered(true);
+            setSelectedTab(FIELD_PORTLET_PREF);
+            return;
+         }
+
          setSelectedTab("PortletSetting");
       }
    }
@@ -335,12 +336,6 @@ public class UIPortletForm extends UIFormTabPane
       {
          return;
       }
-
-      //
-      PortletInvoker portletInvoker = getApplicationComponent(PortletInvoker.class);
-      PortletContext portletContext = uiPortlet_.getPortletContext();
-
-      //
 
       PropertyChange[] propertyChanges = new PropertyChange[uiFormInputs.size()];
 

@@ -97,14 +97,12 @@ public class UIAddGadgetForm extends UIForm
             //TODO make sure it's an rss feed
             // TODO make sure that we did not add it already
             uiGadget = uiForm.createUIComponent(context, UIGadget.class, null, null);
-            uiGadget.setState(new TransientApplicationState<org.exoplatform.portal.pom.spi.gadget.Gadget>(gadget.getName()));
 
-            String params = "{'rssurl':'" + url + "'}";
+            org.exoplatform.portal.pom.spi.gadget.Gadget contentState = new org.exoplatform.portal.pom.spi.gadget.Gadget();
+            contentState.addUserPref("{'rssurl':'" + url + "'}");
+            TransientApplicationState<org.exoplatform.portal.pom.spi.gadget.Gadget> applicationState = new TransientApplicationState<org.exoplatform.portal.pom.spi.gadget.Gadget>(gadget.getName(), contentState);
 
-            // Julien : I commented those 2 lines
-            // we need to save the same way it is done in the UIGadget clas
-            // UserGadgetStorage userGadgetStorage = uiForm.getApplicationComponent(UserGadgetStorage.class);
-            // userGadgetStorage.save(Util.getPortalRequestContext().getRemoteUser(), gadget.getName(), "" + url.hashCode(), UIGadget.PREF_KEY, params);
+            uiGadget.setState(applicationState);
          }
 
          uiContainer.addUIGadget(uiGadget, 0, 0);

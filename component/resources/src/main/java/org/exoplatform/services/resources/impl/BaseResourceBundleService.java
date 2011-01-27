@@ -19,6 +19,9 @@
 
 package org.exoplatform.services.resources.impl;
 
+import org.exoplatform.commons.cache.future.FutureCache;
+import org.exoplatform.commons.cache.future.FutureExoCache;
+import org.exoplatform.commons.cache.future.Loader;
 import org.exoplatform.commons.utils.IOUtil;
 import org.exoplatform.commons.utils.MapResourceBundle;
 import org.exoplatform.commons.utils.PageList;
@@ -64,6 +67,19 @@ abstract public class BaseResourceBundleService implements ResourceBundleService
 
    protected ExoCache<String, ResourceBundle> cache_;
 
+   private volatile FutureCache<String, ResourceBundle, ResourceBundleContext> futureCache_;
+   
+   private final Loader<String, ResourceBundle, ResourceBundleContext> loader_ = new Loader<String, ResourceBundle, ResourceBundleContext>()
+   {
+      /**
+       * {@inheritDoc}
+       */
+      public ResourceBundle retrieve(ResourceBundleContext context, String key) throws Exception
+      {
+         return context.get(key);
+      }
+   };
+   
    private volatile List<String> initResources_;
 
    @SuppressWarnings("unchecked")
@@ -300,7 +316,7 @@ abstract public class BaseResourceBundleService implements ResourceBundleService
          candidateFiles.add(baseName + "_" + language + "_" + country + ".properties");
       }
 
-      if (language != null && language.length() > 0 )
+      if (language != null && language.length() > 0)
       {
          candidateFiles.add(baseName + "_" + language + ".properties");
       }
@@ -395,56 +411,35 @@ abstract public class BaseResourceBundleService implements ResourceBundleService
 
       boolean isClasspathResource = isClasspathResource(name);
       boolean isCacheable = !isClasspathResource || !PropertyManager.isDevelopping();
-      if (isCacheable)
+      if (isCacheable && isClasspathResource)
       {
-         if (isClasspathResource)
-         {
-            // Avoid naming collision
-            id += "_" + cl.getClass() + "_" + cl.hashCode();
-         }
-         try
-         {
-            ResourceBundle rb = cache_.get(id);
-            if (rb != null)
-            {
-               return rb;
-            }
-         }
-         catch (Exception ex)
-         {
-         }         
+         // Avoid naming collision
+         id += "_" + cl.getClass() + "_" + System.identityHashCode(cl);
       }
 
       // Case 1: ResourceBundle of portlets, standard java API is used
       if (isClasspathResource)
       {
-         ResourceBundle res = ResourceBundleLoader.load(name, locale, cl);
-         //Cache classpath resource bundle while running portal in non-dev mode
+         // Cache classpath resource bundle while running portal in non-dev mode
          if (isCacheable)
-            cache_.put(id, res);
-         return res;
+         {
+            ResourceBundleLoaderContext ctx = new ResourceBundleLoaderContext(name, locale, cl);
+            ResourceBundle result = getFutureCache().get(ctx, id);
+            if (ctx.e != null)
+            {
+               // Throw the RuntimeException if it occurs to remain compatible with the old behavior
+               throw ctx.e;
+            }
+            return result;
+         }
+         else
+         {
+            return ResourceBundleLoader.load(name, locale, cl);           
+         }
       }
 
       // Case 2: ResourceBundle of portal
-      try
-      {
-         ResourceBundle res = null;
-         String rootId = name + "_" + localeService_.getDefaultLocaleConfig().getLanguage();
-         ResourceBundle parent = getResourceBundleFromDb(rootId, null, locale);
-         if (parent != null)
-         {
-            res = getResourceBundleFromDb(id, parent, locale);
-            if (res == null)
-               res = parent;
-            cache_.put(id, res);
-            return res;
-         }
-      }
-      catch (Exception ex)
-      {
-         log_.error("Error: " + id, ex);
-      }
-      return null;
+      return getFutureCache().get(new GetResourceBundleFromDbContext(name, locale), id);
    }
 
    public ResourceBundle getResourceBundle(String[] name, Locale locale, ClassLoader cl)
@@ -458,34 +453,165 @@ abstract public class BaseResourceBundleService implements ResourceBundleService
          idBuf.append(n).append("_");
       idBuf.append(locale);
       String id = idBuf.toString();
-      try
-      {
-         ResourceBundle res = cache_.get(id);
-         if (res != null)
-            return res;
-         MapResourceBundle outputBundled = new MapResourceBundle(locale);
-         for (int i = 0; i < name.length; i++)
-         {
-            ResourceBundle temp = getResourceBundle(name[i], locale, cl);
-            if (temp != null)
-            {
-               outputBundled.merge(temp);
-               continue;
-            }
-            log_.warn("Cannot load and merge the bundle: " + name[i]);
-         }
-         outputBundled.resolveDependencies();
-         cache_.put(id, outputBundled);
-         return outputBundled;
-      }
-      catch (Exception ex)
-      {
-         log_.error("Cannot load and merge the bundle: " + id, ex);
-      }
-      return null;
+      return getFutureCache().get(new GetResourceBundleContext(name, locale, cl), id);
    }
 
+   protected FutureCache<String, ResourceBundle, ResourceBundleContext> getFutureCache()
+   {
+      if (futureCache_ == null)
+      {
+         synchronized(this)
+         {
+            if (futureCache_ == null)
+            {
+               futureCache_ = new FutureExoCache<String, ResourceBundle, ResourceBundleContext>(loader_, cache_);
+            }
+         }
+      }
+      return futureCache_;
+   }
+   
    abstract protected ResourceBundle getResourceBundleFromDb(String id, ResourceBundle parent, Locale locale)
       throws Exception;
 
+   /**
+    * Generic class defining a context needed to get a ResourceBundle
+    */
+   private static abstract class ResourceBundleContext
+   {
+      /**
+       * Get the resource bundle corresponding to the context
+       */
+      abstract ResourceBundle get(String id);
+   }
+
+   /**
+    * The class defining the context required to load a ResourceBundle thanks to the method 
+    * <code>ResourceBundleLoader.load(String name, Locale locale, ClassLoader cl)</code>
+    */
+   private static class ResourceBundleLoaderContext extends ResourceBundleContext
+   {
+      private final String name;
+
+      private final Locale locale;
+
+      private final ClassLoader cl;
+      
+      private RuntimeException e;
+
+      public ResourceBundleLoaderContext(String name, Locale locale, ClassLoader cl)
+      {
+         this.name = name;
+         this.locale = locale;
+         this.cl = cl;
+      }
+
+      /**
+       * {@inheritDoc}
+       */
+      @Override
+      ResourceBundle get(String id)
+      {
+         try
+         {
+            return ResourceBundleLoader.load(name, locale, cl);
+         }
+         catch (RuntimeException e)
+         {
+            this.e = e;
+         }
+         return null;
+      }
+   }
+
+   /**
+    * The class defining the context required to load a ResourceBundle thanks to the method 
+    * <code>getResourceBundleFromDb(String id, ResourceBundle parent, Locale locale)</code>
+    */
+   private class GetResourceBundleFromDbContext extends ResourceBundleContext
+   {
+      private final String name;
+
+      private final Locale locale;
+
+      public GetResourceBundleFromDbContext(String name, Locale locale)
+      {
+         this.name = name;
+         this.locale = locale;
+      }
+
+      /**
+       * {@inheritDoc}
+       */
+      @Override
+      ResourceBundle get(String id)
+      {
+         ResourceBundle res = null;
+         try
+         {
+            String rootId = name + "_" + localeService_.getDefaultLocaleConfig().getLanguage();
+            ResourceBundle parent = getResourceBundleFromDb(rootId, null, locale);
+            if (parent != null)
+            {
+               res = getResourceBundleFromDb(id, parent, locale);
+               if (res == null)
+                  res = parent;
+            }
+         }
+         catch (Exception ex)
+         {
+            log_.error("Error: " + id, ex);
+         }
+         return res;
+      }
+   }
+  
+   /**
+    * The class defining the context required to load a ResourceBundle thanks to the method 
+    * <code>getResourceBundle(String[] name, Locale locale, ClassLoader cl)</code>
+    */
+   private class GetResourceBundleContext extends ResourceBundleContext
+   {
+      private final String[] name;
+
+      private final Locale locale;
+
+      private final ClassLoader cl;
+
+      public GetResourceBundleContext(String[] name, Locale locale, ClassLoader cl)
+      {
+         this.name = name;
+         this.locale = locale;
+         this.cl = cl;
+      }
+
+      /**
+       * {@inheritDoc}
+       */
+      @Override
+      ResourceBundle get(String id)
+      {
+         MapResourceBundle outputBundled = null;
+         try
+         {
+            outputBundled = new MapResourceBundle(locale);
+            for (int i = 0; i < name.length; i++)
+            {
+               ResourceBundle temp = getResourceBundle(name[i], locale, cl);
+               if (temp != null)
+               {
+                  outputBundled.merge(temp);
+                  continue;
+               }
+               log_.warn("Cannot load and merge the bundle: " + name[i]);
+            }
+            outputBundled.resolveDependencies();
+         }
+         catch (Exception ex)
+         {
+            log_.error("Cannot load and merge the bundle: " + id, ex);
+         }
+         return outputBundled;
+      }
+   }
 }

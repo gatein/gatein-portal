@@ -260,25 +260,6 @@ public class UIGadget extends UIComponent
       }
    }
 
-   @Override
-   public boolean isRendered()
-   {
-      try
-      {
-         DataStorage service = getApplicationComponent(DataStorage.class);
-         service.load(state, ApplicationType.GADGET);
-         if (getApplication() == null)
-         {
-            throw new Exception();
-         }
-      }
-      catch (Exception e)
-      {
-         return false;
-      }
-      return super.isRendered();
-   }
-
    public boolean isLossData()
    {
       try

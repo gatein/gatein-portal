@@ -19,31 +19,36 @@
 
 package org.exoplatform.portal.application;
 
-import org.exoplatform.container.ExoContainer;
-import org.exoplatform.container.PortalContainer;
-import org.exoplatform.container.web.AbstractHttpSessionListener;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
-import org.exoplatform.web.WebAppController;
 
 import javax.servlet.http.HttpSessionEvent;
+import javax.servlet.http.HttpSessionListener;
 
 /**
+ * This session listener was created for purpose of expiring the portal session stored in the StateManager
+ * and removes the WindowInfos object from the WindowInfosContainer container
+ * <p>
  * Created by The eXo Platform SAS        
  * Date: Jan 25, 2003
  * Time: 5:25:52 PM
+ * 
+ * @deprecated Currently we do not store anything outside of the session,
+ * that's why we do not need to clean anything when a session is destroyed.
  */
-public class PortalSessionListener extends AbstractHttpSessionListener
+@Deprecated
+public class PortalSessionListener implements HttpSessionListener
 {
 
-   protected static Log log = ExoLogger.getLogger("portal:PortalSessionListener");
+   protected static Log log = ExoLogger.getLogger("portal.PortalSessionListener");
 
    public PortalSessionListener()
    {
+      log.debug("This session listener is not useful anymore and it is left empty for now to be compatible with older versions");
    }
 
    @Override
-   protected void onSessionDestroyed(ExoContainer container, HttpSessionEvent event)
+   public void sessionCreated(HttpSessionEvent se)
    {
    }
 
@@ -63,29 +68,7 @@ public class PortalSessionListener extends AbstractHttpSessionListener
     * 
     */
    @Override
-   protected void onSessionCreated(ExoContainer container, HttpSessionEvent event)
+   public void sessionDestroyed(HttpSessionEvent se)
    {
-      try
-      {
-         if (log.isInfoEnabled())
-            log.info("Destroy session from '" + container == null ? "unknown" : ((PortalContainer)container).getName()
-               + "' portal");
-         WebAppController controller = (WebAppController)container.getComponentInstanceOfType(WebAppController.class);
-         PortalApplication portalApp = controller.getApplication(PortalApplication.PORTAL_APPLICATION_ID);
-         portalApp.getStateManager().expire(event.getSession().getId(), portalApp);
-      }
-      catch (Exception ex)
-      {
-         log.error("Error while destroying a portal session", ex);
-      }
-   }
-
-   /**
-    * @see org.exoplatform.container.web.AbstractHttpSessionListener#requirePortalEnvironment()
-    */
-   @Override
-   protected boolean requirePortalEnvironment()
-   {
-      return true;
    }
 }

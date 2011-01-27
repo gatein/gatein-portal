@@ -211,5 +211,11 @@ public class TestResourceBundleService extends AbstractResourceBundleTest
       {
          return "MyClassLoader";
       }
+
+      @Override
+      public int hashCode()
+      {
+         return 0;
+      }
    }
 }
