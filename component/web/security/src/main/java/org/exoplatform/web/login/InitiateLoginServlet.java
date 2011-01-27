@@ -19,18 +19,20 @@
 
 package org.exoplatform.web.login;
 
-import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.web.AbstractHttpServlet;
-import org.exoplatform.web.security.Credentials;
 import org.exoplatform.web.security.security.AbstractTokenService;
 import org.exoplatform.web.security.security.CookieTokenService;
-import org.exoplatform.web.security.security.TransientTokenService;
+import org.exoplatform.web.security.security.TicketConfiguration;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
+import org.gatein.wci.authentication.AuthenticationResult;
+import org.gatein.wci.authentication.GenericAuthenticationResult;
+import org.gatein.wci.authentication.ProgrammaticAuthenticationResult;
+import org.gatein.wci.security.Credentials;
+import org.gatein.wci.impl.DefaultServletContainerFactory;
 
 import java.io.IOException;
 
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -53,7 +55,8 @@ public class InitiateLoginServlet extends AbstractHttpServlet
    public static final String COOKIE_NAME = "rememberme";
 
    /** . */
-   public static final String CREDENTIALS = "credentials";
+   public static final long LOGIN_VALIDITY =
+           1000 * TicketConfiguration.getInstance(TicketConfiguration.class).getValidityTime();
 
    @Override
    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
@@ -62,14 +65,11 @@ public class InitiateLoginServlet extends AbstractHttpServlet
       HttpSession session = req.getSession();
 
       // Looking for credentials stored in the session
-      Credentials credentials = (Credentials)session.getAttribute(InitiateLoginServlet.CREDENTIALS);
+      Credentials credentials = (Credentials)session.getAttribute(Credentials.CREDENTIALS);
 
       //
       if (credentials == null)
       {
-         PortalContainer pContainer = PortalContainer.getInstance();
-         ServletContext context = pContainer.getPortalContext();
-
          //
          String token = getRememberMeTokenCookie(req);
          if (token != null)
@@ -96,6 +96,7 @@ public class InitiateLoginServlet extends AbstractHttpServlet
                // Send authentication request
                log.debug("Login initiated with no credentials in session but found token " + token + " with existing credentials, " +
                   "performing authentication");
+               //sendAuth(resp, credentials.getUsername(), token);
                sendAuth(req, resp, credentials.getUsername(), token);
             }
          }
@@ -109,19 +110,29 @@ public class InitiateLoginServlet extends AbstractHttpServlet
       }
       else
       {
-         // We create a temporary token just for the login time
-         TransientTokenService tokenService = AbstractTokenService.getInstance(TransientTokenService.class);
-         String token = tokenService.createToken(credentials);
-         req.getSession().removeAttribute(InitiateLoginServlet.CREDENTIALS);
+         // WCI authentication
+         AuthenticationResult result = DefaultServletContainerFactory.getInstance().getServletContainer()
+            .login(req, resp, credentials.getUsername(), credentials.getPassword(), LOGIN_VALIDITY);
 
-         // Send authentication request
          log.debug("Login initiated with credentials in session, performing authentication");
-         sendAuth(req, resp, credentials.getUsername(), token);
+         if (result instanceof GenericAuthenticationResult)
+         {
+            ((GenericAuthenticationResult) result).perform(req, resp);
+         }
+         else if (result instanceof ProgrammaticAuthenticationResult)
+         {
+            resp.sendRedirect(resp.encodeRedirectURL((String)req.getAttribute("javax.servlet.forward.request_uri")));
+         }
       }
    }
 
    private void showLoginForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
    {
+      /*String initialURI = (String)req.getAttribute("javax.servlet.forward.request_uri");
+      if (initialURI == null)
+      {
+         throw new IllegalStateException("request attribute javax.servlet.forward.request_uri should not be null here");
+      }*/
       String initialURI = getInitialURI(req);
       try
       {
@@ -130,11 +141,15 @@ public class InitiateLoginServlet extends AbstractHttpServlet
          {
             initialURI = initialURI + "?" + queryString;
          }
+         //req.setAttribute("org.gatein.portal.login.initial_uri", initialURI);
+         //req.getSession(true).setAttribute("org.gatein.portal.login.initial_uri", initialURI);
          req.setAttribute("org.gatein.portal.login.initial_uri", initialURI);
          getServletContext().getRequestDispatcher("/login/jsp/login.jsp").include(req, resp);
       }
       finally
       {
+         //req.removeAttribute("org.gatein.portal.login.initial_uri");
+         //req.getSession(true).removeAttribute("org.gatein.portal.login.initial_uri");
          req.removeAttribute("org.gatein.portal.login.initial_uri");
       }
    }
@@ -149,13 +164,16 @@ public class InitiateLoginServlet extends AbstractHttpServlet
       return initialURI;
    }
 
+
    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
    {
       doGet(req, resp);
    }
 
+   //private void sendAuth(HttpServletResponse resp, String jUsername, String jPassword) throws IOException
    private void sendAuth(HttpServletRequest req, HttpServletResponse resp, String jUsername, String jPassword) throws IOException
    {
+      //String url = "j_security_check?j_username=" + jUsername + "&j_password=" + jPassword;
       String initialURI = getInitialURI(req);
       if (!initialURI.endsWith("/"))
       {

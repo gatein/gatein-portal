@@ -27,7 +27,6 @@ import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.Query;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.web.application.ApplicationMessage;
-import org.exoplatform.web.security.Credentials;
 import org.exoplatform.web.security.security.RemindPasswordTokenService;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -40,6 +39,7 @@ import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.validator.EmailAddressValidator;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
+import org.gatein.wci.security.Credentials;
 
 import java.net.URLEncoder;
 import java.util.MissingResourceException;

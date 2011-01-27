@@ -45,8 +45,8 @@
       <org.shindig.version>1.0-r790473-Patch04</org.shindig.version>
       <nl.captcha.simplecaptcha.version>1.1.1-GA-Patch01</nl.captcha.simplecaptcha.version>
       <org.gatein.common.version>2.0.3-GA</org.gatein.common.version>
-      <org.gatein.wci.version>2.0.2-GA</org.gatein.wci.version>
-      <org.gatein.pc.version>2.2.0-GA</org.gatein.pc.version>
+      <org.gatein.wci.version>2.1.0-Alpha02</org.gatein.wci.version>
+      <org.gatein.pc.version>2.3.0-Alpha01</org.gatein.pc.version>
       <org.picketlink.idm>1.1.8.CR01</org.picketlink.idm>
       <org.gatein.wsrp.version>2.0.0-GA</org.gatein.wsrp.version>
       <org.gatein.mop.version>1.0.3-GA</org.gatein.mop.version>
@@ -533,7 +533,17 @@
          </dependency>
          <dependency>
             <groupId>org.gatein.wci</groupId>
-            <artifactId>wci-tomcat</artifactId>
+            <artifactId>wci-tomcat6</artifactId>
+            <version>${org.gatein.wci.version}</version>
+         </dependency>
+         <dependency>
+            <groupId>org.gatein.wci</groupId>
+            <artifactId>wci-tomcat7</artifactId>
+            <version>${org.gatein.wci.version}</version>
+         </dependency>
+         <dependency>
+            <groupId>org.gatein.wci</groupId>
+            <artifactId>wci-jetty</artifactId>
             <version>${org.gatein.wci.version}</version>
          </dependency>
          <dependency>

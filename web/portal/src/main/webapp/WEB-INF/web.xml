@@ -216,7 +216,7 @@
 
   <servlet>
     <servlet-name>PortalLoginController</servlet-name>
-    <servlet-class>org.exoplatform.web.login.PortalLoginController</servlet-class>
+    <servlet-class>org.exoplatform.web.security.PortalLoginController</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>InitiateLoginServlet</servlet-name>

@@ -19,9 +19,9 @@
    <properties>
       <jbossas.version>6.0.0.Final</jbossas.version>
       <jbossas.dist.version>${jbossas.version}</jbossas.dist.version>
-      <servers.dir>${project.basedir}/../../servers</servers.dir>
+      <servers.dir>${exo.projects.directory.dependencies}</servers.dir>
       <jbossas.path>${servers.dir}</jbossas.path>
-      <jbossas.name>jboss-${jbossas.version}</jbossas.name>
+      <jbossas.name>${exo.projects.app.jboss6.version}</jbossas.name>
       <jbossas.dir>${jbossas.path}/${jbossas.name}</jbossas.dir>
       <jbossas.target.dir>${project.build.directory}/jboss</jbossas.target.dir>
    </properties>
@@ -308,7 +308,7 @@
       </dependency>
       <dependency>
          <groupId>org.gatein.wci</groupId>
-         <artifactId>wci-tomcat</artifactId>
+         <artifactId>wci-tomcat6</artifactId>
       </dependency>
       <dependency>
          <groupId>org.gatein.wci</groupId>

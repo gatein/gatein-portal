@@ -25,9 +25,9 @@ package org.exoplatform.web.login;
 
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.web.AbstractFilter;
-import org.exoplatform.web.security.Credentials;
 import org.exoplatform.web.security.PortalLoginModule;
 
+import org.gatein.wci.security.Credentials;
 import org.jboss.web.tomcat.security.login.WebAuthentication;
 
 import javax.servlet.FilterChain;

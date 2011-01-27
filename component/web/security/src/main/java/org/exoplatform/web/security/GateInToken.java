@@ -19,6 +19,8 @@
 
 package org.exoplatform.web.security;
 
+import org.gatein.wci.security.Credentials;
+
 
 /**
  * Created by The eXo Platform SAS

@@ -1,0 +1,144 @@
+<?xml version="1.0"?>
+<?rename tofile="portal.war"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.exoplatform.portal</groupId>
+    <artifactId>exo.portal.packaging.tomcat.pkg</artifactId>
+    <version>3.2.0-Beta01-SNAPSHOT</version>
+  </parent>
+  <artifactId>exo.portal.packaging.tomcat.pkg.tc6</artifactId>
+  <packaging>pom</packaging>
+  <name>GateIn for Tomcat 6 packaging</name>
+
+  <properties>
+      <tomcat.dir>${exo.projects.directory.dependencies}/${exo.projects.app.tomcat.version}</tomcat.dir>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.gatein.wci</groupId>
+      <artifactId>wci-tomcat6</artifactId>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+
+      <!-- Ensure your environment is correctly setup -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-enforcer-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>tomcat-check-environment-ready</id>
+            <goals>
+              <goal>enforce</goal>
+            </goals>
+            <configuration>
+              <rules>
+                <requireProperty>
+                  <property>exo.projects.app.tomcat.version</property>
+                  <message>"You must define the property exo.projects.app.tomcat.version to give the name of the directory where is stored tomcat"</message>
+                </requireProperty>
+                <requireFilesExist>
+                  <files>
+                    <file>${tomcat.dir}/</file>
+                  </files>
+                  <message>"The following Tomcat directory doesn't exist : ${tomcat.dir}"</message>
+                </requireFilesExist>
+              </rules>
+              <fail>true</fail>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <version>1.6</version>
+        <executions>
+          <execution>
+            <id>prepare-package</id>
+            <phase>prepare-package</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <target>
+                <!-- Copy tomcat 6 -->
+                <copy todir="${project.build.directory}/tomcat6">
+                  <fileset dir="${tomcat.dir}">
+                    <exclude name="webapps/ROOT/**"/>
+                    <exclude name="webapps/examples/**"/>
+                    <exclude name="webapps/docs/**"/>
+                  </fileset>
+                </copy>
+
+                <!-- Copy generic tomcat packaging -->
+                <copy todir="${project.build.directory}/tomcat6">
+                  <fileset dir="${project.build.directory}/../../target/tomcat"/>
+                </copy>
+
+                <!-- Copy specific tomcat configration -->
+                <copy todir="${project.build.directory}/tomcat6" overwrite="true">
+                  <fileset dir="${project.basedir}/src/main/resources/tomcat"/>
+                </copy>
+
+                <!-- Tomcat 6 specific dependencies -->
+                <copy
+                  file="${maven.dependency.org.gatein.wci.wci-tomcat6.jar.path}"
+                  todir="${project.build.directory}/tomcat6/lib"/>
+
+                <!-- Tomcat 6 specific configuration -->
+                <copy
+                  file="${project.basedir}/src/main/resources/conf/integration/web.xml"
+                  todir="${project.build.directory}/tomcat6/webapps/integration/WEB-INF"/>
+
+                <!-- File permissions -->
+                <chmod perm="0644" type="file" dir="${project.build.directory}/tomcat6" excludes="**/*.sh"/>
+                <chmod perm="0755" type="file" dir="${project.build.directory}/tomcat6" includes="**/*.sh"/>
+                
+              </target>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <profiles>
+    <profile>
+      <id>bundle</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <version>1.6</version>
+            <executions>
+              <execution>
+                <id>package</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>run</goal>
+                </goals>
+                <configuration>
+                  <target>
+                    <zip destfile="${project.build.directory}/tomcat6.zip" basedir="${project.build.directory}/tomcat6"/>
+                    <attachartifact file="${project.build.directory}/tomcat6.zip" classifier="bundle" type="zip"/>
+                  </target>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+  
+</project>

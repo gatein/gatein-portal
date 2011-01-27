@@ -52,6 +52,9 @@ into tomcat/lib and you have the related relam name "gatein-domain" defined in t
 7. Define the related realm in your file tomcat/conf/jaas.conf, as below:
 
 gatein-domain-sample-portal {
+  org.gatein.wci.security.WCILoginModule optional
+  	portalContainerName="sample-portal"
+  	realmName="gatein-domain-sample-portal";
   org.exoplatform.web.security.PortalLoginModule required 
   	portalContainerName="sample-portal" 
   	realmName="gatein-domain-sample-portal";

@@ -21,8 +21,8 @@ package org.exoplatform.web.security.security;
 import org.chromattic.api.annotations.Create;
 import org.chromattic.api.annotations.PrimaryType;
 import org.chromattic.api.annotations.OneToMany;
-import org.exoplatform.web.security.Credentials;
 import org.exoplatform.web.security.GateInToken;
+import org.gatein.wci.security.Credentials;
 
 import java.util.Collection;
 import java.util.Date;

@@ -26,8 +26,8 @@ import org.exoplatform.commons.chromattic.ContextualTask;
 import org.exoplatform.commons.chromattic.SessionContext;
 import org.exoplatform.container.component.ComponentPlugin;
 import org.exoplatform.container.xml.InitParams;
-import org.exoplatform.web.security.Credentials;
 import org.exoplatform.web.security.GateInToken;
+import org.gatein.wci.security.Credentials;
 
 import java.util.Collection;
 import java.util.Date;

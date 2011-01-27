@@ -40,12 +40,12 @@
   </component>
 
   <component>
-    <key>org.exoplatform.web.security.security.TransientTokenService</key>
-    <type>org.exoplatform.web.security.security.TransientTokenService</type>
+    <key>org.exoplatform.web.security.security.TicketConfiguration</key>
+    <type>org.exoplatform.web.security.security.TicketConfiguration</type>
     <init-params>
     		<values-param>
           <name>service.configuration</name>
-          <value>memory-token</value>
+          <value>wci-ticket</value>
           <value>1</value>
         	<value>MINUTE</value>
         </values-param>

@@ -18,6 +18,8 @@
  */
 package org.exoplatform.web.security;
 
+import org.gatein.wci.security.Credentials;
+
 /**
  * A token.
  */

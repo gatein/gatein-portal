@@ -1,0 +1,19 @@
+<?xml version="1.0"  encoding="ISO-8859-1"?>
+<!DOCTYPE Configure PUBLIC "-//Mort Bay Consulting//DTD Configure//EN" "http://jetty.mortbay.org/configure.dtd">
+
+<!-- ==================================================================
+Configure and deploy the test web application in $(jetty.home)/webapps/test
+
+Note. If this file did not exist or used a context path other that /test
+then the default configuration of jetty.xml would discover the test
+webapplication with a WebAppDeployer.  By specifying a context in this
+directory, additional configuration may be specified and hot deployments
+detected.
+===================================================================== -->
+
+<Configure class="org.mortbay.jetty.webapp.WebAppContext">
+
+  <Set name="contextPath">/portal</Set>
+  <Set name="war"><SystemProperty name="jetty.home" default="."/>/webapps/portal.war</Set>
+
+</Configure>

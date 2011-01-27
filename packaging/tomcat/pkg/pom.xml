@@ -14,10 +14,6 @@
   <packaging>pom</packaging>
   <name>GateIn for Tomcat packaging</name>
 
-  <properties>
-      <tomcat.dir>${exo.projects.directory.dependencies}/${exo.projects.app.tomcat.version}</tomcat.dir>
-  </properties>
-
   <dependencies>
 
     <!-- Logging -->
@@ -320,10 +316,6 @@
     <dependency>
       <groupId>org.gatein.wci</groupId>
       <artifactId>wci-wci</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.gatein.wci</groupId>
-      <artifactId>wci-tomcat</artifactId>
     </dependency>
     <dependency>
       <groupId>org.gatein.wci</groupId>
@@ -865,18 +857,8 @@
               <rules>
                 <requireProperty>
                   <property>exo.projects.directory.dependencies</property>
-                    <message>"You must define the property exo.projects.directory.dependencies to give the path to the directory where you store your applications servers"</message>
+                  <message>"You must define the property exo.projects.directory.dependencies to give the path to the directory where you store your applications servers"</message>
                   </requireProperty>
-                <requireProperty>
-                <property>exo.projects.app.tomcat.version</property>
-                  <message>"You must define the property exo.projects.app.tomcat.version to give the name of the directory where is stored tomcat"</message>
-                </requireProperty>
-                <requireFilesExist>
-                  <files>
-                    <file>${exo.projects.directory.dependencies}/${exo.projects.app.tomcat.version}/</file>
-                  </files>
-                  <message>"The following Tomcat directory doesn't exist : ${exo.projects.directory.dependencies}/${exo.projects.app.tomcat.version}"</message>
-                </requireFilesExist>
               </rules>
               <fail>true</fail>
             </configuration>
@@ -888,6 +870,7 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-antrun-plugin</artifactId>
         <version>1.6</version>
+        <inherited>false</inherited> 
         <executions>
           <execution>
             <id>prepare-package</id>
@@ -897,16 +880,6 @@
             </goals>
             <configuration>
               <target>
-
-                <!-- Copy tomcat -->
-                <copy todir="${project.build.directory}/tomcat">
-                  <fileset dir="${tomcat.dir}">
-                    <exclude name="webapps/ROOT/**"/>
-                    <exclude name="webapps/examples/**"/>
-                    <exclude name="webapps/docs/**"/>
-                  </fileset>
-                </copy>
-
                 <!-- Copy the dependencies -->
                 <dependencyfilesets/>
                 <xslt
@@ -933,10 +906,6 @@
                   <fileset dir="${project.basedir}/../../../component/common/src/main/java/conf" includes="configuration-tomcat.properties"/>
                 </copy>
 
-                <!-- File permissions -->
-                <chmod perm="0644" type="file" dir="${project.build.directory}/tomcat" excludes="**/*.sh"/>
-                <chmod perm="0755" type="file" dir="${project.build.directory}/tomcat" includes="**/*.sh"/>
-
               </target>
             </configuration>
           </execution>
@@ -947,31 +916,16 @@
 
   <profiles>
     <profile>
-      <id>bundle</id>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-antrun-plugin</artifactId>
-            <version>1.6</version>
-            <executions>
-              <execution>
-                <id>package</id>
-                <phase>package</phase>
-                <goals>
-                  <goal>run</goal>
-                </goals>
-                <configuration>
-                  <target>
-                    <zip destfile="${project.build.directory}/tomcat.zip" basedir="${project.build.directory}/tomcat"/>
-                    <attachartifact file="${project.build.directory}/tomcat.zip" classifier="bundle" type="zip"/>
-                  </target>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
+      <id>pkg-tomcat</id>
+      <modules>
+        <module>tc6</module>
+      </modules>
+    </profile>
+    <profile>
+      <id>pkg-tomcat7</id>
+      <modules>
+        <module>tc7</module>
+      </modules>
     </profile>
   </profiles>
 </project>

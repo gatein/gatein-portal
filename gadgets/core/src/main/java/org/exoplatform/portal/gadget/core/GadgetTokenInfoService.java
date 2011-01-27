@@ -27,8 +27,8 @@ import org.exoplatform.commons.chromattic.ChromatticManager;
 import org.exoplatform.commons.chromattic.ContextualTask;
 import org.exoplatform.commons.chromattic.SessionContext;
 import org.exoplatform.container.xml.InitParams;
-import org.exoplatform.web.security.Credentials;
 import org.exoplatform.web.security.security.AbstractTokenService;
+import org.gatein.wci.security.Credentials;
 
 import java.util.Collection;
 

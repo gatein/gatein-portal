@@ -63,5 +63,9 @@
         <artifactId>jboss-as-tomcat</artifactId>
         <scope>provided</scope>
      </dependency>
+    <dependency>
+      <groupId>org.gatein.wci</groupId>
+      <artifactId>wci-wci</artifactId>
+    </dependency>
   </dependencies>
 </project>

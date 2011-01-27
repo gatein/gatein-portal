@@ -20,8 +20,8 @@
 package org.exoplatform.web.security.security;
 
 import org.exoplatform.container.xml.InitParams;
-import org.exoplatform.web.security.Credentials;
 import org.exoplatform.web.security.GateInToken;
+import org.gatein.wci.security.Credentials;
 
 import java.util.concurrent.ConcurrentHashMap;
 

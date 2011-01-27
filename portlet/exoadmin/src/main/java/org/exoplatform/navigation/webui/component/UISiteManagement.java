@@ -44,6 +44,7 @@ import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.portal.webui.workspace.UIWorkingWorkspace;
 import org.exoplatform.util.ReflectionUtil;
 import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.web.login.LogoutControl;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.ComponentConfigs;
@@ -252,7 +253,7 @@ public class UISiteManagement extends UIContainer
          if (config == null || Util.getUIPortal().getName().equals(portalName))
          {
             HttpServletRequest request = prContext.getRequest();
-            request.getSession().invalidate();
+            LogoutControl.wantLogout();
             prContext.setResponseComplete(true);
             prContext.getResponse().sendRedirect(request.getContextPath());
             return;

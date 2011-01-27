@@ -34,7 +34,19 @@
    <properties>
         <exobuild.name>portal</exobuild.name>
         <exobuild.type>module</exobuild.type>
+        <wci.native.module>tomcat6</wci.native.module>
+        <patch.tomcat.version>tomcat</patch.tomcat.version>
    </properties>
+
+   <profiles>
+      <profile>
+         <id>pkg-tomcat7</id>
+         <properties>
+            <wci.native.module>tomcat7</wci.native.module>
+            <patch.tomcat.version>tomcat7</patch.tomcat.version>
+         </properties>
+      </profile>
+   </profiles>
 
    <build>
        <plugins>

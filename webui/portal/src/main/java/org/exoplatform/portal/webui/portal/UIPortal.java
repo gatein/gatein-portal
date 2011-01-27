@@ -45,6 +45,7 @@ import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.resources.ResourceBundleManager;
 import org.exoplatform.web.login.InitiateLoginServlet;
+import org.exoplatform.web.login.LogoutControl;
 import org.exoplatform.web.security.security.AbstractTokenService;
 import org.exoplatform.web.security.security.CookieTokenService;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -413,8 +414,8 @@ public class UIPortal extends UIContainer
             AbstractTokenService tokenService = AbstractTokenService.getInstance(CookieTokenService.class);
             tokenService.deleteToken(token);
          }
-         
-         req.getSession().invalidate();
+
+         LogoutControl.wantLogout();
          Cookie cookie = new Cookie(InitiateLoginServlet.COOKIE_NAME, "");
          cookie.setPath(req.getContextPath());
          cookie.setMaxAge(0);

@@ -22,8 +22,8 @@ import org.chromattic.api.annotations.Destroy;
 import org.chromattic.api.annotations.Name;
 import org.chromattic.api.annotations.PrimaryType;
 import org.chromattic.api.annotations.Property;
-import org.exoplatform.web.security.Credentials;
 import org.exoplatform.web.security.GateInToken;
+import org.gatein.wci.security.Credentials;
 
 import java.util.Date;
 

@@ -22,6 +22,7 @@ package org.exoplatform.portal.webui.portal;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.webui.application.UIPortlet;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.web.login.LogoutControl;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.event.Event;
@@ -45,7 +46,7 @@ public class UIPortalActionListener
       public void execute(Event<UIComponent> event) throws Exception
       {
          PortalRequestContext prContext = Util.getPortalRequestContext();
-         prContext.getRequest().getSession().invalidate();
+         LogoutControl.wantLogout();
          HttpServletRequest request = prContext.getRequest();
          String portalName = URLEncoder.encode(Util.getUIPortal().getName(), "UTF-8");
          String redirect = request.getContextPath() + "/public/" + portalName + "/";

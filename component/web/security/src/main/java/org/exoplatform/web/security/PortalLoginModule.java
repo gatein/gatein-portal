@@ -24,8 +24,7 @@ import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.security.jaas.AbstractLoginModule;
 import org.exoplatform.web.login.InitiateLoginServlet;
-import org.exoplatform.web.security.security.CookieTokenService;
-import org.exoplatform.web.security.security.TransientTokenService;
+import org.gatein.wci.security.Credentials;
 
 import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.NameCallback;
@@ -99,25 +98,23 @@ public class PortalLoginModule extends AbstractLoginModule
          callbackHandler.handle(callbacks);
          String password = new String(((PasswordCallback)callbacks[1]).getPassword());
 
-         ExoContainer container = getContainer();
-         Object o =
-            ((TransientTokenService)container.getComponentInstanceOfType(TransientTokenService.class)).validateToken(
-               password, true);
-         if (o == null)
-            o =
-               ((CookieTokenService)container.getComponentInstanceOfType(CookieTokenService.class)).validateToken(
-                  password, false);
+         Credentials c = null;
+         
          //
-
          // For clustered config check credentials stored and propagated in session. This won't work in tomcat because
          // of lack of JACC PolicyContext so the code must be a bit defensive
-         if (o == null && getContextMethod != null && password.startsWith(InitiateLoginServlet.COOKIE_NAME))
+         if (getContextMethod != null && password.startsWith(InitiateLoginServlet.COOKIE_NAME))
          {
             HttpServletRequest request;
             try
             {
                request = (HttpServletRequest)getContextMethod.invoke(null, "javax.servlet.http.HttpServletRequest");
-               o = request.getSession().getAttribute(AUTHENTICATED_CREDENTIALS);
+               Object o = request.getSession().getAttribute(AUTHENTICATED_CREDENTIALS);
+
+               if (o instanceof Credentials)
+               {
+                 c = (Credentials) o;
+               }
             }
             catch(Throwable e)
             {
@@ -125,16 +122,12 @@ public class PortalLoginModule extends AbstractLoginModule
                log.error("LoginModule error. Turn off session credentials checking with proper configuration option of " +
                   "LoginModule set to false");
             }
-
          }
 
-         if (o instanceof Credentials)
+         if (c != null)
          {
-            Credentials wc = (Credentials)o;
-
-            // Set shared state
-            sharedState.put("javax.security.auth.login.name", wc.getUsername());
-            sharedState.put("javax.security.auth.login.password", wc.getPassword());
+           sharedState.put("javax.security.auth.login.name", c.getUsername());
+           sharedState.put("javax.security.auth.login.password", c.getPassword());
          }
          return true;
       }

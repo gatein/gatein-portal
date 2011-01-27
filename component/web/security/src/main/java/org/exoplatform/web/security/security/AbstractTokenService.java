@@ -25,9 +25,9 @@ import org.exoplatform.management.annotations.*;
 import org.exoplatform.management.jmx.annotations.NameTemplate;
 import org.exoplatform.management.jmx.annotations.Property;
 import org.exoplatform.web.login.InitiateLoginServlet;
-import org.exoplatform.web.security.Credentials;
 import org.exoplatform.web.security.Token;
 import org.exoplatform.web.security.TokenStore;
+import org.gatein.wci.security.Credentials;
 import org.picocontainer.Startable;
 
 import java.util.List;

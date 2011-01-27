@@ -19,9 +19,13 @@
 
 package org.exoplatform.web.login;
 
+import org.exoplatform.container.ExoContainer;
+import org.exoplatform.container.web.AbstractFilter;
+import org.exoplatform.web.security.security.CookieTokenService;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 import org.gatein.common.text.FastURLEncoder;
+import org.gatein.wci.security.Credentials;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -36,18 +40,14 @@ import java.util.Enumeration;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class RememberMeFilter implements Filter
+public class RememberMeFilter extends AbstractFilter
 {
    /** . */
    private static final FastURLEncoder CONVERTER = FastURLEncoder.getUTF8Instance();
 
    /** . */
    private static final Logger log = LoggerFactory.getLogger(RememberMeFilter.class);
-
-   public void init(FilterConfig filterConfig) throws ServletException
-   {
-   }
-
+   
    public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException
    {
       doFilter((HttpServletRequest)req, (HttpServletResponse)resp, chain);
@@ -60,39 +60,67 @@ public class RememberMeFilter implements Filter
          String token = InitiateLoginServlet.getRememberMeTokenCookie(req);
          if (token != null)
          {
-            StringBuilder builder = new StringBuilder();
-            builder.append(req.getContextPath());
-            builder.append("/private");
-            String pathInfo = req.getPathInfo();
-            if (pathInfo != null)
+            
+            ExoContainer container = getContainer();
+            Object o =
+               ((CookieTokenService)container.getComponentInstanceOfType(CookieTokenService.class)).validateToken(
+               token, false);
+            if (o instanceof Credentials)
             {
-               builder.append(pathInfo);
+               req.getSession().setAttribute(Credentials.CREDENTIALS, o);
+               resp.sendRedirect(resp.encodeRedirectURL(
+                     loginUrl(
+                           req.getContextPath(),
+                           privateUri(req)
+                     )
+               ));
+               resp.flushBuffer();
             }
-            char sep = '?';
-            for (Enumeration<String> e = req.getParameterNames();e.hasMoreElements();)
-            {
-               String parameterName = e.nextElement();
-               for (String parameteValue : req.getParameterValues(parameterName))
-               {
-                  builder.append(sep);
-                  sep = '&';
-                  builder.append(CONVERTER.encode(parameterName));
-                  builder.append('=');
-                  builder.append(CONVERTER.encode(parameteValue));
-               }
-            }
-            String s = builder.toString();
-            log.debug("Redirecting unauthenticated request with token " + token + " to URL " + s);
-            resp.sendRedirect(s);
-            return;
          }
       }
 
       //
-      chain.doFilter(req, resp);
+      if (!resp.isCommitted())
+      {
+         chain.doFilter(req, resp);
+      }
    }
 
    public void destroy()
    {
+   }
+
+   private String privateUri(HttpServletRequest req)
+   {
+      StringBuilder builder = new StringBuilder();
+      builder.append(req.getContextPath());
+      builder.append("/private");
+      String pathInfo = req.getPathInfo();
+      if (pathInfo != null)
+      {
+         builder.append(pathInfo);
+      }
+      char sep = '?';
+      for (Enumeration<String> e = req.getParameterNames();e.hasMoreElements();)
+      {
+         String parameterName = e.nextElement();
+         for (String parameteValue : req.getParameterValues(parameterName))
+         {
+            builder.append(sep);
+            sep = '&';
+            builder.append(CONVERTER.encode(parameterName));
+            builder.append('=');
+            builder.append(CONVERTER.encode(parameteValue));
+         }
+      }
+      return builder.toString();
+   }
+
+   private String loginUrl(String context, String initUrl)
+   {
+      return String.format(
+            "%s/login?initialURI=%s",
+            context, initUrl
+      );
    }
 }

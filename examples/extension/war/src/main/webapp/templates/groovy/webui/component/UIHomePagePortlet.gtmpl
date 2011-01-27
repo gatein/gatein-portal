@@ -1,5 +1,5 @@
 <%
-	String initialURI = _ctx.getRequestContext().getParentAppRequestContext().getRequestContextPath() + "/private/" + _ctx.getRequestContext().getParentAppRequestContext().getPortalOwner();
+        String initialURI = _ctx.getRequestContext().getParentAppRequestContext().getRequestContextPath() + "/private/" + _ctx.getRequestContext().getParentAppRequestContext().getPortalOwner();
 %>
 <div class="UIHomePagePortlet" id="$uicomponent.id">
 	<div class="TRContainer">
