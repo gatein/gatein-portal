@@ -15,6 +15,13 @@
 
     <dependencies>
 
+      <!-- Logging -->
+      <dependency>
+         <groupId>org.slf4j</groupId>
+         <artifactId>jcl-over-slf4j</artifactId>
+         <version>${org.slf4j.version}</version>
+      </dependency>
+
       <!-- JBoss -->
       <dependency>
         <groupId>org.jboss</groupId>
