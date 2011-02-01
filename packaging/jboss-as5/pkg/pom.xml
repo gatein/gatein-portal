@@ -25,7 +25,8 @@
       <jbossas.path>${servers.dir}</jbossas.path>
       <jbossas.name>jboss-${jbossas.version}</jbossas.name>
       <jbossas.dir>${jbossas.path}/${jbossas.name}</jbossas.dir>
-      <jbossas.target.dir>${project.build.directory}/jboss</jbossas.target.dir>
+      <gatein.working.dir>${project.build.directory}/jboss</gatein.working.dir>
+      <jbossas.target.dir>${gatein.working.dir}</jbossas.target.dir>
    </properties>
 
    <dependencies>
