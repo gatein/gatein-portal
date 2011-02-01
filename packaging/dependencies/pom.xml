@@ -302,12 +302,4 @@
 
   </dependencyManagement>
 
-  <profiles>
-    <profile>
-      <id>pkg-tomcat</id>
-      <dependencies>
-      </dependencies>
-    </profile>
-  </profiles>
-
 </project>
