@@ -44,6 +44,7 @@
         <profile>
             <id>pkg-tomcat</id>
             <modules>
+                <module>dependencies</module>
                 <module>tomcat</module>
                 <module>reports</module>
             </modules>

@@ -18,6 +18,18 @@
       <jetty.dir>${exo.projects.directory.dependencies}/${exo.projects.app.jetty.version}</jetty.dir>
   </properties>
 
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.exoplatform.portal</groupId>
+        <artifactId>exo.portal.packaging.dependencies</artifactId>
+        <version>3.2.0-Beta01-SNAPSHOT</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
   <dependencies>
 
     <!-- Logging -->
@@ -88,42 +100,34 @@
     <dependency>
       <groupId>org.jboss</groupId>
       <artifactId>jboss-common-core</artifactId>
-      <version>2.2.9.GA</version>
     </dependency>
     <dependency>
       <groupId>org.jboss</groupId>
       <artifactId>jbossxb</artifactId>
-      <version>2.0.1.GA</version>
     </dependency>
     <dependency>
       <groupId>org.jboss.logging</groupId>
       <artifactId>jboss-logging-spi</artifactId>
-      <version>2.0.5.GA</version>
     </dependency>
     <dependency>
       <groupId>org.jboss.cache</groupId>
       <artifactId>jbosscache-core</artifactId>
-      <version>3.2.6.GA</version>
     </dependency>
     <dependency>
       <groupId>jboss.jbossts</groupId>
       <artifactId>jbossjts</artifactId>
-      <version>4.6.1.GA</version>
     </dependency>
     <dependency>
       <groupId>jboss.jbossts</groupId>
       <artifactId>jbossts-common</artifactId>
-      <version>4.6.1.GA</version>
     </dependency>
     <dependency>
       <groupId>javassist</groupId>
       <artifactId>javassist</artifactId>
-      <version>3.4.GA</version>
     </dependency>
     <dependency>
       <groupId>jgroups</groupId>
       <artifactId>jgroups</artifactId>
-      <version>2.6.13.GA</version>
     </dependency>
 
     <!-- JCR stack -->
@@ -484,12 +488,10 @@
     <dependency>
       <groupId>javax.activation</groupId>
       <artifactId>activation</artifactId>
-      <version>1.1</version>
     </dependency>
     <dependency>
       <groupId>javax.jcr</groupId>
       <artifactId>jcr</artifactId>
-      <version>1.0</version>
     </dependency>
     <dependency>
       <groupId>javax.portlet</groupId>
@@ -498,54 +500,44 @@
     <dependency>
       <groupId>javax.annotation</groupId>
       <artifactId>jsr250-api</artifactId>
-      <version>1.0</version>
     </dependency>
     <dependency>
       <groupId>javax.ws.rs</groupId>
       <artifactId>jsr311-api</artifactId>
-      <version>1.0</version>
     </dependency>
     <dependency>
       <groupId>javax.transaction</groupId>
       <artifactId>jta</artifactId>
-      <version>1.0.1B</version>
     </dependency>
     <dependency>
       <groupId>javax.mail</groupId>
       <artifactId>mail</artifactId>
-      <version>1.4.2</version>
     </dependency>
     <dependency>
       <groupId>javax.resource</groupId>
       <artifactId>connector-api</artifactId>
-      <version>1.5</version>
     </dependency>
     <dependency>
       <groupId>javax.ccpp</groupId>
       <artifactId>ccpp</artifactId>
-      <version>1.0</version>
     </dependency>
 
     <!-- Hibernate -->
     <dependency>
       <groupId>org.hibernate</groupId>
       <artifactId>ejb3-persistence</artifactId>
-      <version>1.0.2.GA</version>
     </dependency>
     <dependency>
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-commons-annotations</artifactId>
-      <version>3.1.0.GA</version>
     </dependency>
     <dependency>
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-core</artifactId>
-      <version>3.3.2.GA</version>
     </dependency>
     <dependency>
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-annotations</artifactId>
-      <version>3.4.0.GA</version>
     </dependency>
 
     <!-- Various -->
@@ -560,27 +552,22 @@
     <dependency>
       <groupId>antlr</groupId>
       <artifactId>antlr</artifactId>
-      <version>2.7.6rc1</version>
     </dependency>
     <dependency>
       <groupId>aopalliance</groupId>
       <artifactId>aopalliance</artifactId>
-      <version>1.0</version>
     </dependency>
     <dependency>
       <groupId>asm</groupId>
       <artifactId>asm</artifactId>
-      <version>1.5.3</version>
     </dependency>
     <dependency>
       <groupId>bouncycastle</groupId>
       <artifactId>bcmail-jdk14</artifactId>
-      <version>136</version>
     </dependency>
     <dependency>
       <groupId>bouncycastle</groupId>
       <artifactId>bcprov-jdk14</artifactId>
-      <version>136</version>
     </dependency>
     <dependency>
       <groupId>caja</groupId>
@@ -593,27 +580,22 @@
     <dependency>
       <groupId>cglib</groupId>
       <artifactId>cglib</artifactId>
-      <version>2.2</version>
     </dependency>
     <dependency>
       <groupId>oswego-concurrent</groupId>
       <artifactId>concurrent</artifactId>
-      <version>1.3.4</version>
     </dependency>
     <dependency>
       <groupId>dom4j</groupId>
       <artifactId>dom4j</artifactId>
-      <version>1.6.1</version>
     </dependency>
     <dependency>
       <groupId>net.sf.ehcache</groupId>
       <artifactId>ehcache</artifactId>
-      <version>1.6.0</version>
     </dependency>
     <dependency>
       <groupId>com.jhlabs</groupId>
       <artifactId>filters</artifactId>
-      <version>2.0.235</version>
     </dependency>
     <dependency>
       <groupId>com.google.collections</groupId>
@@ -630,7 +612,6 @@
     <dependency>
       <groupId>html-parser</groupId>
       <artifactId>html-parser</artifactId>
-      <version>1.6</version>
     </dependency>
     <dependency>
       <groupId>com.ibm.icu</groupId>
@@ -639,7 +620,6 @@
     <dependency>
       <groupId>com.lowagie</groupId>
       <artifactId>itext</artifactId>
-      <version>2.1.0</version>
     </dependency>
     <dependency>
       <groupId>net.jcip</groupId>
@@ -648,22 +628,18 @@
     <dependency>
       <groupId>jdom</groupId>
       <artifactId>jdom</artifactId>
-      <version>1.0</version>
     </dependency>
     <dependency>
       <groupId>org.jibx</groupId>
       <artifactId>jibx-bind</artifactId>
-      <version>${org.jibx.version}</version>
     </dependency>
     <dependency>
       <groupId>org.jibx</groupId>
       <artifactId>jibx-run</artifactId>
-      <version>${org.jibx.version}</version>
     </dependency>
     <dependency>
       <groupId>joda-time</groupId>
       <artifactId>joda-time</artifactId>
-      <version>1.6</version>
     </dependency>
     <dependency>
       <groupId>rhino</groupId>
@@ -672,7 +648,6 @@
     <dependency>
       <groupId>org.jsecurity</groupId>
       <artifactId>jsecurity</artifactId>
-      <version>0.9.0</version>
     </dependency>
     <dependency>
       <groupId>org.json</groupId>
@@ -681,27 +656,22 @@
     <dependency>
       <groupId>de.odysseus.juel</groupId>
       <artifactId>juel-api</artifactId>
-      <version>2.1.2</version>
     </dependency>
     <dependency>
       <groupId>de.odysseus.juel</groupId>
       <artifactId>juel-impl</artifactId>
-      <version>2.1.2</version>
     </dependency>
     <dependency>
       <groupId>org.apache.lucene</groupId>
       <artifactId>lucene-core</artifactId>
-      <version>2.4.1</version>
     </dependency>
     <dependency>
       <groupId>org.apache.lucene</groupId>
       <artifactId>lucene-memory</artifactId>
-      <version>2.4.1</version>
     </dependency>
     <dependency>
       <groupId>org.apache.lucene</groupId>
       <artifactId>lucene-spellchecker</artifactId>
-      <version>2.4.1</version>
     </dependency>
     <dependency>
       <groupId>net.sourceforge.nekohtml</groupId>
@@ -710,37 +680,30 @@
     <dependency>
       <groupId>org.apache.pdfbox</groupId>
       <artifactId>pdfbox</artifactId>
-      <version>1.1.0</version>
     </dependency>
     <dependency>
       <groupId>picocontainer</groupId>
       <artifactId>picocontainer</artifactId>
-      <version>1.1</version>
     </dependency>
     <dependency>
       <groupId>org.apache.poi</groupId>
       <artifactId>poi</artifactId>
-      <version>3.6</version>
     </dependency>
     <dependency>
       <groupId>org.apache.poi</groupId>
       <artifactId>poi-ooxml</artifactId>
-      <version>3.6</version>
     </dependency>
     <dependency>
       <groupId>org.apache.poi</groupId>
       <artifactId>poi-scratchpad</artifactId>
-      <version>3.6</version>
     </dependency>
     <dependency>
       <groupId>org.apache.portals.bridges</groupId>
       <artifactId>portals-bridges-common</artifactId>
-      <version>1.0.4</version>
     </dependency>
     <dependency>
       <groupId>quartz</groupId>
       <artifactId>quartz</artifactId>
-      <version>1.5.2</version>
     </dependency>
     <dependency>
       <groupId>rome</groupId>
@@ -749,12 +712,10 @@
     <dependency>
       <groupId>org.apache.sanselan</groupId>
       <artifactId>sanselan</artifactId>
-      <version>0.97-incubator</version>
     </dependency>
     <dependency>
       <groupId>org.apache.ws.commons</groupId>
       <artifactId>ws-commons-util</artifactId>
-      <version>1.0.1</version>
     </dependency>
     <dependency>
       <groupId>xerces</groupId>
@@ -763,17 +724,14 @@
     <dependency>
       <groupId>org.apache.xmlbeans</groupId>
       <artifactId>xmlbeans</artifactId>
-      <version>2.3.0</version>
     </dependency>
     <dependency>
       <groupId>xpp3</groupId>
       <artifactId>xpp3</artifactId>
-      <version>1.1.3.4.O</version>
     </dependency>
     <dependency>
       <groupId>com.thoughtworks.xstream</groupId>
       <artifactId>xstream</artifactId>
-      <version>1.3.1</version>
     </dependency>
     <dependency>
       <groupId>net.oauth</groupId>
