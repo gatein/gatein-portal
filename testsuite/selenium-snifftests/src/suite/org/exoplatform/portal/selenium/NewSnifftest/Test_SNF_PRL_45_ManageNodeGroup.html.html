@@ -52,6 +52,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>waitForElementPresent</td>
+	<td>link=Group</td>
+	<td></td>
+</tr>
+<tr>
 	<td>clickAndWait</td>
 	<td>link=Group</td>
 	<td></td>
@@ -108,12 +113,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[2]/div/div/div/div/div/div[1]/div/div/div/div/div/div/div/div/div[2]/div/div/div/div</td>
+	<td>//div[2]/div/div/div/div/div/div[1]//div[text()=&quot;Page Selector&quot;]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[2]/div/div/div/div/div/div[1]/div/div/div/div/div/div/div/div/div[2]/div/div/div/div</td>
+	<td>//div[2]/div/div/div/div/div/div[1]//div[text()=&quot;Page Selector&quot;]</td>
 	<td></td>
 </tr>
 <tr>
@@ -133,12 +138,42 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//tr[2]/td[5]/div/img</td>
+	<td>searchTerm</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>searchTerm</td>
+	<td>Community Management</td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>searchOption</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>searchOption</td>
+	<td>label=Title</td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//a[@title=&quot;Quick Search&quot;]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//tr[2]/td[5]/div/img</td>
+	<td>//a[@title=&quot;Quick Search&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//img[@title='Select Page']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//img[@title='Select Page']</td>
 	<td></td>
 </tr>
 <tr>
@@ -208,7 +243,7 @@
 </tr>
 <tr>
 	<td>pause</td>
-	<td>2000</td>
+	<td>20000</td>
 	<td></td>
 </tr>
 <tr>
@@ -263,12 +298,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[2]/div/div/div/div/div/div[1]/div/div/div/div/div/div/div/div/div[2]/div/div/div/div</td>
+	<td>//div[2]/div/div/div/div/div/div[1]//div[text()=&quot;Page Selector&quot;]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[2]/div/div/div/div/div/div[1]/div/div/div/div/div/div/div/div/div[2]/div/div/div/div</td>
+	<td>//div[2]/div/div/div/div/div/div[1]//div[text()=&quot;Page Selector&quot;]</td>
 	<td></td>
 </tr>
 <tr>
@@ -419,6 +454,16 @@
 <tr>
 	<td>click</td>
 	<td>link=Save</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForTextNotPresent</td>
+	<td>Test_SNF_PRL_45_edit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextNotPresent</td>
+	<td>Test_SNF_PRL_45_edit</td>
 	<td></td>
 </tr>
 <tr>

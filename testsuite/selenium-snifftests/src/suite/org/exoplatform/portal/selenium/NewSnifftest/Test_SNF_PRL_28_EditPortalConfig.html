@@ -63,12 +63,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UISiteManagement']/div[1]/table/tbody/tr/td/div/div/div/div</td>
+	<td>//div[@id='UISiteManagement']//a[text()=&quot;Add New Portal&quot;]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='UISiteManagement']/div[1]/table/tbody/tr/td/div/div/div/div</td>
+	<td>//div[@id='UISiteManagement']//a[text()=&quot;Add New Portal&quot;]</td>
 	<td></td>
 </tr>
 <tr>
@@ -84,7 +84,7 @@
 <tr>
 	<td>waitForElementPresent</td>
 	<td>locale</td>
-	<td>label=French</td>
+	<td></td>
 </tr>
 <tr>
 	<td>select</td>
@@ -94,7 +94,7 @@
 <tr>
 	<td>waitForElementPresent</td>
 	<td>skin</td>
-	<td>label=SimpleSkin</td>
+	<td></td>
 </tr>
 <tr>
 	<td>select</td>
@@ -108,12 +108,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[5]/div[2]/div/div/div/div/div/div/div/div/div/div/div/div[1]/div/div/div/div</td>
+	<td>//div[@id='UIMaskWorkspace']/div[2]/div/div/div/div/div/div/div/div/div/div/div/div[1]/div/div/div/div</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[5]/div[2]/div/div/div/div/div/div/div/div/div/div/div/div[1]/div/div/div/div</td>
+	<td>//div[@id='UIMaskWorkspace']/div[2]/div/div/div/div/div/div/div/div/div/div/div/div[1]/div/div/div/div</td>
 	<td></td>
 </tr>
 <tr>
@@ -412,6 +412,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>waitForElementPresent</td>
+	<td>link=Site</td>
+	<td></td>
+</tr>
+<tr>
 	<td>clickAndWait</td>
 	<td>link=Site</td>
 	<td></td>
@@ -437,6 +442,16 @@
 	<td></td>
 </tr>
 <tr>
+	<td>waitForTextNotPresent</td>
+	<td>Test_SNF_PRL_28</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextNotPresent</td>
+	<td>Test_SNF_PRL_28</td>
+	<td></td>
+</tr>
+<tr>
 	<td>waitForElementPresent</td>
 	<td>link=Sign out</td>
 	<td></td>
@@ -446,7 +461,6 @@
 	<td>link=Sign out</td>
 	<td></td>
 </tr>
-
 </tbody></table>
 </body>
 </html>
