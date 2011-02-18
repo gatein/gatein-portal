@@ -176,6 +176,10 @@ public class UIUserInGroup extends UIContainer
       }
 
       /** Reset the selected page index **/
+      if (backupPageIndex > pageIterator.getAvailablePage()) 
+      {
+         backupPageIndex = pageIterator.getAvailablePage();
+      }      
       pageIterator.setCurrentPage(backupPageIndex);
    }
 
@@ -197,15 +201,10 @@ public class UIUserInGroup extends UIContainer
       {
          UIUserInGroup uiUserInGroup = event.getSource();
          String id = event.getRequestContext().getRequestParameter(OBJECTID);
-         UIPageIterator pageIterator = uiUserInGroup.getChild(UIGridUser.class).getUIPageIterator();
-         int currentPage = pageIterator.getCurrentPage();
          OrganizationService service = uiUserInGroup.getApplicationComponent(OrganizationService.class);
          MembershipHandler handler = service.getMembershipHandler();
          handler.removeMembership(id, true);
          uiUserInGroup.refresh();
-         while (currentPage > pageIterator.getAvailablePage())
-            currentPage--;
-         pageIterator.setCurrentPage(currentPage);
          event.getRequestContext().addUIComponentToUpdateByAjax(uiUserInGroup.getChild(UIGridUser.class));
       }
    }
