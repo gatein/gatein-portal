@@ -148,12 +148,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[3]/div/div[2]/div/div/div/div/div/div[3]/div/table/tbody/tr/td/div/div/div/div/a</td>
+	<td>//div[@id=&quot;UIAccountPortlet&quot;]//a[text()=&quot;OK&quot;]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[3]/div/div[2]/div/div/div/div/div/div[3]/div/table/tbody/tr/td/div/div/div/div/a</td>
+	<td>//div[@id=&quot;UIAccountPortlet&quot;]//a[text()=&quot;OK&quot;]</td>
 	<td></td>
 </tr>
 <tr>
@@ -273,12 +273,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//form[@id='UISearchForm']/div[2]/a</td>
+	<td>//form[@id='UISearchForm']//a[@title=&quot;Quick Search&quot;]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//form[@id='UISearchForm']/div[2]/a</td>
+	<td>//form[@id='UISearchForm']//a[@title=&quot;Quick Search&quot;]</td>
 	<td></td>
 </tr>
 <tr>
@@ -299,6 +299,26 @@
 <tr>
 	<td>assertConfirmation</td>
 	<td>Are you sure you want to delete Test_SNF_PRL_06 user?</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForTextPresent</td>
+	<td>No result found.</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>No result found.</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[contains(@onclick,&quot;action=Close&quot;)]//a[text()=&quot;OK&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[contains(@onclick,&quot;action=Close&quot;)]//a[text()=&quot;OK&quot;]</td>
 	<td></td>
 </tr>
 <tr>
