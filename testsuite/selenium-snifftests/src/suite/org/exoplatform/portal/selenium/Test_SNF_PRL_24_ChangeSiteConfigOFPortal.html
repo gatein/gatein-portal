@@ -88,22 +88,22 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[5]/div[2]/div/div/div/div/div/div/div/div/div/div/div/div[1]/div/div/div/div</td>
+	<td>//div[text()='Portal Templates']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[5]/div[2]/div/div/div/div/div/div/div/div/div/div/div/div[1]/div/div/div/div</td>
+	<td>//div[text()='Portal Templates']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//form[@id='UIPortalForm']/div[3]/div[1]/div[1]/div/div/div[1]/div[2]/div[1]/div/div/div</td>
+	<td>//div[text()='Basic Portal']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//form[@id='UIPortalForm']/div[3]/div[1]/div[1]/div/div/div[1]/div[2]/div[1]/div/div/div</td>
+	<td>//div[text()='Basic Portal']</td>
 	<td></td>
 </tr>
 <tr>
@@ -113,12 +113,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UIMaskWorkspace']/div[2]/div/div/div/div/div/div/div/div/div/div/div/div[3]/div/div/div/div</td>
+	<td>//div[text()='Properties']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='UIMaskWorkspace']/div[2]/div/div/div/div/div/div/div/div/div/div/div/div[3]/div/div/div/div</td>
+	<td>//div[text()='Properties']</td>
 	<td></td>
 </tr>
 <tr>
@@ -128,12 +128,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UIMaskWorkspace']/div[2]/div/div/div/div/div/div/div/div/div/div/div/div[4]/div/div/div/div</td>
+	<td>//div[text()='Permission Setting']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='UIMaskWorkspace']/div[2]/div/div/div/div/div/div/div/div/div/div/div/div[4]/div/div/div/div</td>
+	<td>//div[text()='Permission Setting']</td>
 	<td></td>
 </tr>
 <tr>
@@ -143,12 +143,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UIListPermissionSelector']/div[4]/table/tbody/tr/td/div/div/div/div/div</td>
+	<td>link=Add Permission</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='UIListPermissionSelector']/div[4]/table/tbody/tr/td/div/div/div/div/div</td>
+	<td>link=Add Permission</td>
 	<td></td>
 </tr>
 <tr>
@@ -178,12 +178,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='PermissionSetting']/div[1]/div/div/div/div/div[3]/div/div/div/div/div[1]</td>
+	<td>link=Edit Permission Setting</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='PermissionSetting']/div[1]/div/div/div/div/div[3]/div/div/div/div/div[1]</td>
+	<td>link=Edit Permission Setting</td>
 	<td></td>
 </tr>
 <tr>
@@ -198,12 +198,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='PermissionSelector']/div/div[2]/div/div[2]/div/div/div[4]/div/a</td>
+	<td>//div[@id='PermissionSelector']//a[@title=&quot;Partners&quot;]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='PermissionSelector']/div/div[2]/div/div[2]/div/div/div[4]/div/a</td>
+	<td>//div[@id='PermissionSelector']//a[@title=&quot;Partners&quot;]</td>
 	<td></td>
 </tr>
 <tr>
@@ -297,8 +297,13 @@
 	<td></td>
 </tr>
 <tr>
+	<td>waitForElementPresent</td>
+	<td>//div[text()='Properties']</td>
+	<td></td>
+</tr>
+<tr>
 	<td>click</td>
-	<td>//div[@id='UIMaskWorkspace']/div[2]/div/div/div/div/div/div/div/div/div/div/div/div[2]/div/div/div/div</td>
+	<td>//div[text()='Properties']</td>
 	<td></td>
 </tr>
 <tr>
@@ -308,12 +313,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UIMaskWorkspace']/div[2]/div/div/div/div/div/div/div/div/div/div/div/div[3]/div/div/div/div</td>
+	<td>//div[text()='Permission Setting']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='UIMaskWorkspace']/div[2]/div/div/div/div/div/div/div/div/div/div/div/div[3]/div/div/div/div</td>
+	<td>//div[text()='Permission Setting']</td>
 	<td></td>
 </tr>
 <tr>
@@ -393,12 +398,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UIPortalComposer']/div[1]/div/div/div/a[2]</td>
+	<td>//div[@id='UIPortalComposer']//a[@title=&quot;Finish&quot;]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='UIPortalComposer']/div[1]/div/div/div/a[2]</td>
+	<td>//div[@id='UIPortalComposer']//a[@title=&quot;Finish&quot;]</td>
 	<td></td>
 </tr>
 <tr>
