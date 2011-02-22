@@ -55,6 +55,11 @@
         -->
         <exo.projects.app.jboss5.version>jboss-5.1.0.GA</exo.projects.app.jboss5.version>
         <!--
+             Deprecated, just here for -Ppkg-jboss to keep working, please use -Ppkg-jbossas5 instead
+        -->
+        <exo.projects.app.jboss.version>${exo.projects.app.jboss5.version}</exo.projects.app.jboss.version>
+
+        <!--
              Replace with the name of the directory containing JBoss AS 6
         -->
         <exo.projects.app.jboss6.version>jboss-6.0.0.Final</exo.projects.app.jboss6.version>
