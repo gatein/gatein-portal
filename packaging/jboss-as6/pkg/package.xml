@@ -24,15 +24,28 @@
          <param name="default.ear.context" expression="${jbossas.target.dir}/server/default/deploy"/>
          <param name="lib.context" expression="${jbossas.target.dir}/server/default/lib"/>
          <param name="deploy.context" expression="${jbossas.target.dir}/server/default/deploy"/>
+         <param name="profile" expression="${profile}"/>
          <mapper type="glob" from="pom.xml" to="copy-dependencies.xml"/>
       </xslt>
       <ant antfile="${maven.project.build.directory}/copy-dependencies.xml" inheritRefs="true">
          <target name="copy-dependencies"/>
       </ant>
 
-      <!-- Copy configuration -->
+      <!-- Copy configuration non-xml first -->
       <copy todir="${jbossas.target.dir}" preservelastmodified="true" overwrite="true">
-         <fileset dir="${maven.project.basedir}/src/main/resources/jboss"/>
+         <fileset dir="${maven.project.basedir}/src/main/resources/jboss">
+            <exclude name="**/*.xml" />
+         </fileset>
+      </copy>
+
+      <!-- Copy configuration xml files with filtering -->
+      <copy todir="${jbossas.target.dir}" preservelastmodified="true" overwrite="true">
+         <fileset dir="${maven.project.basedir}/src/main/resources/jboss">
+            <include name="**/*.xml" />
+         </fileset>
+         <filterset begintoken="@{" endtoken="}">
+            <filter token="org.gatein.pc.version" value="${org.gatein.pc.version}" />
+         </filterset>
       </copy>
 
       <!-- Copy configuration -->

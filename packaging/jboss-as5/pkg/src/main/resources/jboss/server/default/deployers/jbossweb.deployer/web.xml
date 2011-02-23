@@ -304,7 +304,7 @@
       <init-param>
          <description>Portlet standard tlds</description>
          <param-name>tagLibJar2</param-name>
-         <param-value>../../deploy/gatein.ear/lib/pc-portlet-2.2.0-GA.jar</param-value>
+         <param-value>../../deploy/gatein.ear/lib/pc-portlet-@{org.gatein.pc.version}.jar</param-value>
       </init-param>
 
 

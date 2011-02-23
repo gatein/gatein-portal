@@ -30,9 +30,21 @@
          <target name="copy-dependencies"/>
       </ant>
 
-      <!-- Copy configuration -->
+      <!-- Copy configuration non-xml first -->
       <copy todir="${jbossas.target.dir}" preservelastmodified="true" overwrite="true">
-         <fileset dir="${maven.project.basedir}/src/main/resources/jboss"/>
+         <fileset dir="${maven.project.basedir}/src/main/resources/jboss">
+            <exclude name="**/*.xml" />
+         </fileset>
+      </copy>
+
+      <!-- Copy configuration xml files with filtering -->
+      <copy todir="${jbossas.target.dir}" preservelastmodified="true" overwrite="true">
+         <fileset dir="${maven.project.basedir}/src/main/resources/jboss">
+            <include name="**/*.xml" />
+         </fileset>
+         <filterset begintoken="@{" endtoken="}">
+            <filter token="org.gatein.pc.version" value="${org.gatein.pc.version}" />
+         </filterset>
       </copy>
 
       <!-- Copy configuration -->
