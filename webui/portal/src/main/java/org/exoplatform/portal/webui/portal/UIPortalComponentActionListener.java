@@ -419,23 +419,29 @@ public class UIPortalComponentActionListener
          RemindPasswordTokenService tokenService = uiPortal.getApplicationComponent(RemindPasswordTokenService.class);
          String tokenId = event.getRequestContext().getRequestParameter("tokenId");
 
+         WebuiRequestContext requestContext = event.getRequestContext();
          GateInToken token = tokenService.getToken(tokenId);
          if (token == null)
          {
-            WebuiRequestContext requestContext = event.getRequestContext();
             requestContext.getUIApplication()
                .addMessage(new ApplicationMessage("UIForgetPassword.msg.expration", null));
             requestContext.addUIComponentToUpdateByAjax(uiPortal.getParent());
             return;
          }
 
-         UIPortalApplication uiApp = uiPortal.getAncestorOfType(UIPortalApplication.class);
-         UIMaskWorkspace uiMaskWS = uiApp.getChildById(UIPortalApplication.UI_MASK_WS_ID);
-
          OrganizationService orgSrc = uiPortal.getApplicationComponent(OrganizationService.class);
          // get user
          User user = orgSrc.getUserHandler().findUserByName(token.getPayload().getUsername());
+         if (user == null)
+         {
+            requestContext.getUIApplication()
+               .addMessage(new ApplicationMessage("UIForgetPassword.msg.user-delete", null));
+            return;
+         }
 
+         UIPortalApplication uiApp = uiPortal.getAncestorOfType(UIPortalApplication.class);
+         UIMaskWorkspace uiMaskWS = uiApp.getChildById(UIPortalApplication.UI_MASK_WS_ID);
+         
          UIResetPassword uiReset = uiMaskWS.createUIComponent(UIResetPassword.class, null, null);
          uiReset.setUser(user);
          uiReset.setTokenId(tokenId);

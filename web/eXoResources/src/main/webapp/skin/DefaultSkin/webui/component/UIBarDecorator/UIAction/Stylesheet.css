@@ -130,6 +130,7 @@
 	line-height: 20px;
 	padding-left: 22px; /* orientation=lt */
 	padding-right: 22px; /* orientation=rt */
+    white-space: nowrap;
 }
 
 .UIAction .SimpleStyle1 .ButtonMiddle .ViewAsBlockIcon {
@@ -138,4 +139,17 @@
 	line-height: 20px;
 	padding-left: 22px; /* orientation=lt */
 	padding-right: 22px; /* orientation=rt */
+    white-space: nowrap;
+}
+
+.UIAction .portlet-form-button {
+    -moz-border-radius: 0px;
+    background: none;
+    border: none;
+    display: block;
+    line-height: auto;
+    margin: 0px 3px;
+    padding: 0px;
+    text-align: center;
+    white-space: nowrap;
 }

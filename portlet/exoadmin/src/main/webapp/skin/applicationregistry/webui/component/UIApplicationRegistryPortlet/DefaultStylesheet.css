@@ -483,7 +483,7 @@
 
 /******************************** UIGadgetManagement ******************************/
 .UIApplicationRegistryPortlet .UIGadgetManagement .PortletIcons {
-	width: 150px; height: 120px;
+	width: 150px;
 	padding-top: 20px; text-align: center;
 }
 

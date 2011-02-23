@@ -99,7 +99,7 @@
 			<div class="TabsContainer">
 				<div class="UITab NormalToolbarTab">
 					<div class="">
-						<a class="DashboardIcon TBIcon" href="<%= uicomponent.url("AddDefaultDashboard", defaultDashboardPage); %>">Dashboard</a>
+						<a class="DashboardIcon TBIcon" href="<%= uicomponent.url("AddDefaultDashboard", defaultDashboardPage); %>"><%=_ctx.appRes("UIUserToolBarDashboardPortlet.header.dashboard")%></a>
 					</div>
 				</div>
 			</div>
@@ -114,7 +114,7 @@
 			<div class="TabsContainer" >
 				<div class="UITab NormalToolbarTab">
 						<div class="">
-								<a class="DashboardIcon TBIcon" href="<%= portalURI + defaultDashboardPage %>">Dashboard</a>
+								<a class="DashboardIcon TBIcon" href="<%= portalURI + defaultDashboardPage %>"><%=_ctx.appRes("UIUserToolBarDashboardPortlet.header.dashboard")%></a>
 						</div>
 						<% renderDashboards(); %>
 				</div>

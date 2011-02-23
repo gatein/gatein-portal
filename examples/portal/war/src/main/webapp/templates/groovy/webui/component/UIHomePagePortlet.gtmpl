@@ -4,7 +4,7 @@
 <div class="UIHomePagePortlet" id="$uicomponent.id">
 	<div class="TRContainer">
 		<div class="PortletDecoration">					
-			<div class="GuideText">This is the Home Page of the "sample-portal" contained in gatein-sample-extension.ear/war, as you can see the skin has changed, we added new pages, we use our customized resource bundles as you can see below:
+			<div class="GuideText"><%=_ctx.appRes("UIHomePagePortlet.Label.ExtendedHomePage")%>
 				<ul>
 					<li><b><%=_ctx.appRes("UIHomePagePortlet.Label.SampleKey")%></b></li>
 					<li><b><%=_ctx.appRes("UIHomePagePortlet.Label.SampleRB.SampleKey")%></b></li>

@@ -935,10 +935,12 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
             {
                producedOfferedPortlet = portletInvoker.getPortlet(producerOfferedPortletContext);
             }
-            catch (NoSuchPortletException nspe)
+            catch (Exception exp)
             {
+               // Whenever couldn't invoke the portlet object, set the request portlet to null for the error tobe
+               // properly handled and displayed when the portlet is rendered
                producedOfferedPortlet = null;
-               nspe.printStackTrace();
+               exp.printStackTrace();
             }
 
             this.adapter = adapter;

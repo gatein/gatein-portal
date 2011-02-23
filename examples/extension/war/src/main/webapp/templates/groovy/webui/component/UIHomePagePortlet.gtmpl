@@ -4,7 +4,7 @@
 <div class="UIHomePagePortlet" id="$uicomponent.id">
 	<div class="TRContainer">
 		<div class="PortletDecoration">					
-			<div class="GuideText">GateIn is the new generation of Open Source portal, jointly led by Red Hat and eXo Platform who partner to gather the best portal experts and communities around a robust and intuitive portal that brings rich administration functionalities to IT systems. <br /> This is the Home Page of the "sample-ext" (skin has changed, new pages, customized resource bundles) :</div>
+			<div class="GuideText"><%=_ctx.appRes("UIHomePagePortlet.Label.IntroText")%> <br /> <%=_ctx.appRes("UIHomePagePortlet.Label.ExtendedHomePage")%></div>
 			<a class="VersionIcon" href="http://www.jboss.org/gatein/" target="_blank"></a>
 			<div class="DotLine"><span></span></div>
 			<div class="GuideText"><%=_ctx.appRes("UIHomePagePortlet.Label.GuideText")%></div>

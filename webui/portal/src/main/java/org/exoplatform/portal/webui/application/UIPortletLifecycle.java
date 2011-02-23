@@ -303,6 +303,10 @@ public class UIPortletLifecycle<S, C extends Serializable, I> extends Lifecycle<
                      markup = Text.create(context.getApplicationResourceBundle().getString("UIPortlet.message.RuntimeError"));
                   }
                }
+               else
+               {
+                  uicomponent.setConfiguredTitle(null);
+               }
             }
        }
       catch (Exception e)

@@ -265,23 +265,24 @@ public class UIAddApplicationForm extends UIForm
             return;
          }
 
-         UIFormRadioBoxInput uiRadio = uiForm.getUIInput("application");
-         String displayName = uiForm.getUIStringInput(FIELD_NAME).getValue();
          if (uiForm.getApplications().size() == 0)
          {
             ctx.getUIApplication().addMessage(new ApplicationMessage("UIAddApplicationForm.msg.appNotExists", null));
             ctx.addUIComponentToUpdateByAjax(uiOrganizer);
             return;
          }
+         UIFormRadioBoxInput uiRadio = uiForm.getUIInput("application");
+         String displayName = uiForm.getUIStringInput(FIELD_NAME).getValue();
          Application tmp = uiForm.getApplications().get(Integer.parseInt(uiRadio.getValue()));
-
+         
          // check portet name is exist
-         if (appRegService.getApplication(selectedCate.getName(), tmp.getApplicationName()) != null)
+         for (Application application : appRegService.getApplications(selectedCate))
          {
-            WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
-            UIApplication uiApp = context.getUIApplication();
-            uiApp.addMessage(new ApplicationMessage("UIAddApplicationForm.msg.PortletExist", null));
-            return;
+            if (application.getContentId().equals(tmp.getContentId()))
+            {
+               ctx.getUIApplication().addMessage(new ApplicationMessage("UIAddApplicationForm.msg.PortletExist", null));
+               return;
+            }
          }
 
          Application app = cloneApplication(tmp);

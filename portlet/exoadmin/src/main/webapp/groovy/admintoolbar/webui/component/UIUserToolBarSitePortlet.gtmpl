@@ -130,7 +130,7 @@
 				<div class="UITab NormalToolbarTab">
 					<div class="">
 								<a class="SitesIcon TBIcon" href="<%= portalURI + "portalnavigation" %>">
-										Site
+									<%=_ctx.appRes("UIUserToolBarSitePortlet.header.site")%>
 								</a>
 					</div>
 					<% renderPortalNavigations() %>

@@ -87,7 +87,7 @@
 		<div class="TabsContainer">	
 			<div class="UITab NormalToolbarTab">
 				<div class="">
-							<a class="GroupIcon TBIcon" href="<%= portalURI + "groupnavigation" %>">Group</a>
+							<a class="GroupIcon TBIcon" href="<%= portalURI + "groupnavigation" %>"><%=_ctx.appRes("UIUserToolBarGroupPortlet.header.group")%></a>
 				</div>
 				<% if (!groupNavigations.isEmpty()) { %>
 				<div style="display:none" class="MenuItemContainer">

@@ -762,16 +762,7 @@ gadgets.IfrGadget.prototype.handleSaveUserPrefs = function() {
     }
   }
   this.setUserPrefs(prefs);
-};
-
-gadgets.IfrGadget.prototype.setUserPrefs = function(newUserPrefs) {	
-	gadgets.IfrGadget.superClass_.setUserPrefs.call(this, newUserPrefs);		
-	this.refresh();
-};
-
-gadgets.IfrGadget.prototype.setUserPref = function(name, value) {	
-	gadgets.IfrGadget.superClass_.setUserPref.call(this, name, value);	
-	this.refresh();
+  this.refresh();
 };
 
 gadgets.IfrGadget.prototype.handleCancelUserPrefs = function() {
@@ -780,8 +771,7 @@ gadgets.IfrGadget.prototype.handleCancelUserPrefs = function() {
 
 gadgets.IfrGadget.prototype.refresh = function() {
   var iframeId = this.getIframeId();
-  if (document.getElementById(iframeId)) 
-	  document.getElementById(iframeId).src = this.getIframeUrl();
+  document.getElementById(iframeId).src = this.getIframeUrl();
 };
 
 

@@ -524,11 +524,25 @@ public class ApplicationRegistryServiceImpl implements ApplicationRegistryServic
                   contentId = info.getApplicationName() + "/" + info.getName();
                }
 
-               //
-               app = category.createContent(portletName, contentType, contentId);
-               app.setDisplayName(displayName);
-               app.setDescription(getLocalizedStringValue(descriptionLS, portletName));
-               app.setAccessPermissions(permissions);
+               // Check if the portlet has already existed in this category
+               List<Application> applications = load(category).getApplications();
+               boolean isExist = false;
+               for (Application application : applications)
+               {
+                  if (application.getContentId().equals(contentId))
+                  {
+                     isExist = true;
+                     break;
+                  }
+               }
+               
+               if (!isExist)
+               {
+                  app = category.createContent(portletName, contentType, contentId);
+                  app.setDisplayName(displayName);
+                  app.setDescription(getLocalizedStringValue(descriptionLS, portletName));
+                  app.setAccessPermissions(permissions);
+               }
             }
          }
       }

@@ -450,9 +450,9 @@ public class PortalRequestContext extends WebuiRequestContext
       List<String> markupHeaders = new ArrayList<String>();
       if (extraMarkupHeaders != null && !extraMarkupHeaders.isEmpty())
       {
-         StringWriter sw = new StringWriter();
          for (Element element : extraMarkupHeaders)
          {
+            StringWriter sw = new StringWriter();
             DOMSerializer.serialize(element, sw);
             markupHeaders.add(sw.toString());
          }

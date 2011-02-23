@@ -93,9 +93,12 @@ public class UIPortletInfo extends UIContainer
       
       for (ApplicationCategory category : allCategories)
       {
-         if (appRegService.getApplication(category.getName(), portlet_.getName()) != null)
+         for (Application application : appRegService.getApplications(category))
          {
-            nameList.add(category.getDisplayName());
+            if (application.getContentId().equals(portlet_.getId()))
+            {
+               nameList.add(category.getDisplayName());
+            }
          }
       }
       StringBuffer names = new StringBuffer("");
