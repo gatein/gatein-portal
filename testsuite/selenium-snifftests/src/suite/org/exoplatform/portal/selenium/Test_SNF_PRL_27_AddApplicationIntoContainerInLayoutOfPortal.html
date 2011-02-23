@@ -63,12 +63,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UISiteManagement']/table/tbody/tr/td[3]/a[1]</td>
+	<td>//div[@id='UISiteManagement']//a[contains(@href,&quot;objectId=classic&quot;) and text()=&quot;Edit Layout&quot;]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='UISiteManagement']/table/tbody/tr/td[3]/a[1]</td>
+	<td>//div[@id='UISiteManagement']//a[contains(@href,&quot;objectId=classic&quot;) and text()=&quot;Edit Layout&quot;]</td>
 	<td></td>
 </tr>
 <tr>
@@ -92,6 +92,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>waitForElementPresent</td>
+	<td>link=Switch View Mode</td>
+	<td></td>
+</tr>
+<tr>
 	<td>click</td>
 	<td>link=Switch View Mode</td>
 	<td></td>
@@ -103,12 +108,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UIPortalComposerTab']/div[1]/div/div[2]/div/div/div/div</td>
+	<td>//div[@id='UIPortalComposerTab']//div[contains(text(),&quot;Containers&quot;)]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='UIPortalComposerTab']/div[1]/div/div[2]/div/div/div/div</td>
+	<td>//div[@id='UIPortalComposerTab']//div[contains(text(),&quot;Containers&quot;)]</td>
 	<td></td>
 </tr>
 <tr>
@@ -133,12 +138,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UIPortalComposerTab']/div[1]/div/div[1]/div/div/div/div</td>
+	<td>//div[@id='UIPortalComposerTab']//div[contains(text(),&quot;Applications&quot;)]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='UIPortalComposerTab']/div[1]/div/div[1]/div/div/div/div</td>
+	<td>//div[@id='UIPortalComposerTab']//div[contains(text(),&quot;Applications&quot;)]</td>
 	<td></td>
 </tr>
 <tr>
@@ -183,17 +188,17 @@
 </tr>
 <tr>
 	<td>mouseOver</td>
-	<td>//div/div/div[2]/div/div/div/div/div/div/div[2]</td>
+	<td>//div[@title=&quot;Hold this area to drag this portlet&quot;]</td>
 	<td>Calculator</td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div/div/div[2]/div/div/div/div/div/div/a[2]</td>
+	<td>//a[@title=&quot;Delete Portlet&quot;]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div/div/div[2]/div/div/div/div/div/div/a[2]</td>
+	<td>//a[@title=&quot;Delete Portlet&quot;]</td>
 	<td></td>
 </tr>
 <tr>
@@ -213,27 +218,27 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UIPortalComposerTab']/div[1]/div/div[2]/div/div/div/div</td>
+	<td>//div[@id='UIPortalComposerTab']//div[contains(text(),&quot;Containers&quot;)]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='UIPortalComposerTab']/div[1]/div/div[2]/div/div/div/div</td>
+	<td>//div[@id='UIPortalComposerTab']//div[contains(text(),&quot;Containers&quot;)]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>mouseOver</td>
-	<td>//div/div/div[2]/div/div/div/div/div/div/div[2]</td>
+	<td>//div[@title=&quot;Hold this area to drag this container&quot;]</td>
 	<td>Container</td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div/div/div[2]/div/div/div/div/div/div/a[2]</td>
+	<td>//a[@title=&quot;Delete Container&quot;]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div/div/div[2]/div/div/div/div/div/div/a[2]</td>
+	<td>//a[@title=&quot;Delete Container&quot;]</td>
 	<td></td>
 </tr>
 <tr>
@@ -253,12 +258,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UIPortalComposer']/div[1]/div/div/div/a[2]</td>
+	<td>//div[@id='UIPortalComposer']//a[@title=&quot;Finish&quot;]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='UIPortalComposer']/div[1]/div/div/div/a[2]</td>
+	<td>//div[@id='UIPortalComposer']//a[@title=&quot;Finish&quot;]</td>
 	<td></td>
 </tr>
 <tr>
