@@ -44,19 +44,20 @@ public class WebHelper
    private String host = "localhost";
 
    /** Port to use for web session */
-   private int port = 8888;
+   private int port = 8080;
 
    /** Portal container to use for web session */
    private String portalContainer = "portal";
 
-   /** Current page */
-   private HtmlPage page;
-
    /** Time to wait (in seconds) for element or text to appear in the page */
-   private int timeout = 20;
+   private int waitTimeout = 20;
 
    /** Short pause period (in seconds)*/
    private int shortPause = 3;
+
+   /** Current page */
+   private HtmlPage page;
+
 
    /** Get HTMLUnit WebClient instance representing the current session */
    public WebClient getWebClient()
@@ -66,8 +67,33 @@ public class WebHelper
          webClient = new WebClient();
          webClient.setThrowExceptionOnFailingStatusCode(false);
          webClient.setThrowExceptionOnScriptError(false);
+
+         initFromSystemProps();
       }
       return webClient;
+   }
+
+   private void initFromSystemProps()
+   {
+      String val = System.getProperty("test.host");
+      if (val != null)
+         host = val;
+
+      val = System.getProperty("test.port");
+      if (val != null)
+         port = Integer.parseInt(val);
+
+      val = System.getProperty("test.portalContainer");
+      if (val != null)
+         portalContainer = val;
+
+      val = System.getProperty("test.waitTimeout");
+      if (val != null)
+         waitTimeout = Integer.parseInt(val);
+
+      val = System.getProperty("test.shortPause");
+      if (val != null)
+         shortPause = Integer.parseInt(val);
    }
 
    /**
@@ -144,7 +170,7 @@ public class WebHelper
    {
       for (int second = 0; ; second++)
       {
-         if (second >= timeout)
+         if (second >= waitTimeout)
          {
             Assert.fail("Timeout at waitForElementPresent: " + el);
          }
@@ -190,7 +216,7 @@ public class WebHelper
    {
       for (int second = 0; ; second++)
       {
-         if (second >= timeout)
+         if (second >= waitTimeout)
          {
             //System.out.println("[DEBUG] " + page.asXml());
             Assert.fail("Timeout at waitForTextPresent: " + text);
@@ -207,7 +233,7 @@ public class WebHelper
    {
       for (int second = 0; ; second++)
       {
-         if (second >= timeout)
+         if (second >= waitTimeout)
          {
             Assert.fail("Timeout at waitForTextPresent: " + text);
          }

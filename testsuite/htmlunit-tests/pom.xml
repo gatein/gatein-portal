@@ -33,6 +33,11 @@
 
    <properties>
       <testng.suite.file>testng.xml</testng.suite.file>
+      <test.host>localhost</test.host>
+      <test.port>8080</test.port>
+      <test.portalContainer>portal</test.portalContainer>
+      <test.waitTimeout>20</test.waitTimeout>
+      <test.shortPause>3</test.shortPause>
    </properties>
 
    <!-- no tests by default -->
@@ -78,6 +83,28 @@
                            <!--suiteXmlFiles>
                               <suiteXmlFile>src/test/resources/${testng.suite.file}</suiteXmlFile>
                            </suiteXmlFiles-->
+                           <systemProperties>
+                              <property>
+                                 <name>test.host</name>
+                                 <value>${test.host}</value>
+                              </property>
+                              <property>
+                                 <name>test.port</name>
+                                 <value>${test.port}</value>
+                              </property>
+                              <property>
+                                 <name>test.portalContainer</name>
+                                 <value>${test.portalContainer}</value>
+                              </property>
+                              <property>
+                                 <name>test.waitTimeout</name>
+                                 <value>${test.waitTimeout}</value>
+                              </property>
+                              <property>
+                                 <name>test.shortPause</name>
+                                 <value>${test.shortPause}</value>
+                              </property>
+                           </systemProperties>
                         </configuration>
                      </execution>
                   </executions>
