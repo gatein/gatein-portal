@@ -183,8 +183,9 @@ public class UINavigationNodeSelector extends UIContainer
 
    private void localizeNavigation(Locale locale)
    {
+      String localeLanguage = (locale.getCountry().length() > 0) ? locale.getLanguage() + "_" + locale.getCountry() : locale.getLanguage();
       LocaleConfig localeConfig =
-         getApplicationComponent(LocaleConfigService.class).getLocaleConfig(locale.getLanguage());
+         getApplicationComponent(LocaleConfigService.class).getLocaleConfig(localeLanguage);
       String ownerType = edittedNavigation.getOwnerType();
       if (!PortalConfig.USER_TYPE.equals(ownerType))
       {
