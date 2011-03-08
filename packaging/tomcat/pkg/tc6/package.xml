@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="package" xmlns:mvn="http://maven.apache.org/POM/4.0.0">
+
+  <target name="package">
+
+    <echo>Using Tomcat at: ${tomcat.dir}</echo>
+
+    <!-- Copy tomcat 6 -->
+    <copy todir="${maven.project.build.directory}/tomcat6">
+      <fileset dir="${tomcat.dir}">
+        <exclude name="webapps/ROOT/**"/>
+        <exclude name="webapps/examples/**"/>
+        <exclude name="webapps/docs/**"/>
+      </fileset>
+    </copy>
+
+    <!-- Copy generic tomcat packaging -->
+    <copy todir="${maven.project.build.directory}/tomcat6">
+      <fileset dir="${maven.project.build.directory}/../../target/tomcat"/>
+    </copy>
+
+    <!-- Copy specific tomcat configration -->
+    <copy todir="${maven.project.build.directory}/tomcat6" overwrite="true">
+      <fileset dir="${maven.project.basedir}/src/main/resources/tomcat"/>
+    </copy>
+
+    <!-- Tomcat 6 specific dependencies -->
+    <copy
+        file="${maven.dependency.org.gatein.wci.wci-tomcat6.jar.path}"
+        todir="${maven.project.build.directory}/tomcat6/lib"/>
+
+    <!-- Tomcat 6 specific configuration -->
+    <copy
+        file="${maven.project.basedir}/src/main/resources/conf/integration/web.xml"
+        todir="${maven.project.build.directory}/tomcat6/webapps/integration/WEB-INF"/>
+
+    <!-- File permissions -->
+    <!-- Excluded due to ARG_MAX limitation on Mac OS X -->
+    <!--chmod perm="0644" type="file" dir="${project.build.directory}/tomcat6" excludes="**/*.sh"/-->
+    <chmod perm="0755" type="file" dir="${maven.project.build.directory}/tomcat6" includes="**/*.sh"/>
+
+  </target>
+</project>

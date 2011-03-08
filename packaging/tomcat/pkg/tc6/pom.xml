@@ -15,7 +15,9 @@
   <name>GateIn for Tomcat 6 packaging</name>
 
   <properties>
-      <tomcat.dir>${exo.projects.directory.dependencies}/${exo.projects.app.tomcat.version}</tomcat.dir>
+    <tomcat.dir>${exo.projects.directory.dependencies}/${exo.projects.app.tomcat.version}</tomcat.dir>
+    <servers.dir>${exo.projects.directory.dependencies}</servers.dir>
+    <tomcat.path>${servers.dir}</tomcat.path>
   </properties>
 
   <dependencies>
@@ -56,7 +58,19 @@
           </execution>
         </executions>
       </plugin>
-      
+      <plugin>
+        <artifactId>maven-clean-plugin</artifactId>
+        <version>2.4.1</version>
+        <executions>
+          <execution>
+            <id>auto-clean</id>
+            <phase>initialize</phase>
+            <goals>
+              <goal>clean</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-antrun-plugin</artifactId>
@@ -70,39 +84,11 @@
             </goals>
             <configuration>
               <target>
-                <!-- Copy tomcat 6 -->
-                <copy todir="${project.build.directory}/tomcat6">
-                  <fileset dir="${tomcat.dir}">
-                    <exclude name="webapps/ROOT/**"/>
-                    <exclude name="webapps/examples/**"/>
-                    <exclude name="webapps/docs/**"/>
-                  </fileset>
-                </copy>
-
-                <!-- Copy generic tomcat packaging -->
-                <copy todir="${project.build.directory}/tomcat6">
-                  <fileset dir="${project.build.directory}/../../target/tomcat"/>
-                </copy>
-
-                <!-- Copy specific tomcat configration -->
-                <copy todir="${project.build.directory}/tomcat6" overwrite="true">
-                  <fileset dir="${project.basedir}/src/main/resources/tomcat"/>
-                </copy>
-
-                <!-- Tomcat 6 specific dependencies -->
-                <copy
-                  file="${maven.dependency.org.gatein.wci.wci-tomcat6.jar.path}"
-                  todir="${project.build.directory}/tomcat6/lib"/>
-
-                <!-- Tomcat 6 specific configuration -->
-                <copy
-                  file="${project.basedir}/src/main/resources/conf/integration/web.xml"
-                  todir="${project.build.directory}/tomcat6/webapps/integration/WEB-INF"/>
-
-                <!-- File permissions -->
-                <chmod perm="0644" type="file" dir="${project.build.directory}/tomcat6" excludes="**/*.sh"/>
-                <chmod perm="0755" type="file" dir="${project.build.directory}/tomcat6" includes="**/*.sh"/>
-                
+                <ant antfile="${project.basedir}/package.xml" inheritRefs="true">
+                  <target name="package"/>
+                  <property name="maven.project.basedir" value="${project.basedir}"/>
+                  <property name="maven.project.build.directory" value="${project.build.directory}"/>
+                </ant>
               </target>
             </configuration>
           </execution>
@@ -112,6 +98,109 @@
   </build>
 
   <profiles>
+    <profile>
+      <id>download</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-enforcer-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>tomcat-check-environment-ready</id>
+                <phase>none</phase>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <version>1.6</version>
+            <executions>
+              <execution>
+                <id>prepare-package</id>
+                <phase>prepare-package</phase>
+                <goals>
+                  <goal>run</goal>
+                </goals>
+                <configuration>
+                  <target>
+                    <!-- Autocreate servers.dir if necessary -->
+                    <mkdir dir="${tomcat.path}"/>
+
+                    <!-- Fetch tomcat6 mirror url, then .zip -->
+                    <get dest="${project.build.directory}/mirror.xml" skipexisting="true">
+                      <url url="http://tomcat.apache.org/download-60.cgi"/>
+                    </get>
+
+                    <replaceregexp file="${project.build.directory}/mirror.xml"
+                                   match="&lt;!DOCTYPE(.*)&gt;"
+                                   replace=""
+                                   byline="true"/>
+
+                    <xslt
+                        basedir="${project.build.directory}"
+                        destdir="${project.build.directory}"
+                        includes="mirror.xml"
+                        extension=".xml"
+                        style="${project.basedir}/extract-download-urls.xsl">
+
+                      <mapper type="glob" from="mirror.xml" to="download-urls.xml"/>
+                    </xslt>
+
+                    <replaceregexp file="${project.build.directory}/download-urls.xml"
+                                   match="&lt;dir.name&gt;(.*)/apache-tomcat-(.*).zip&lt;/dir.name&gt;"
+                                   replace="&lt;dir.name&gt;apache-tomcat-\2&lt;/dir.name&gt;"
+                                   byline="true"/>
+
+                    <xmlproperty file="${project.build.directory}/download-urls.xml"/>
+
+                    <basename file="${tomcat.download.url}" property="tomcat.file.name"/>
+                    <property name="tomcat.zip"
+                              value="${tomcat.path}/${tomcat.file.name}"/>
+                    <property name="tomcat.dir.effective"
+                              value="${tomcat.path}/${tomcat.download.dir.name}"/>
+
+                    <available property="tomcat.dir.exists" type="dir" file="${tomcat.dir.effective}"/>
+
+                    <!-- echoproperties / -->
+
+                    <fail if="tomcat.dir.exists">
+"
+Destination Tomcat directory exists already:
+                      ${tomcat.dir.effective}
+
+Either rename it, delete it, or deactivate -Pdownload profile.
+"
+                    </fail>
+
+                    <!-- Download Tomcat unless already downloaded -->
+                    <ant antfile="${project.basedir}/download-tomcat.xml">
+                      <target name="download-tomcat"/>
+                      <property name="url" value="${tomcat.download.url}"/>
+                      <property name="md5.url" value="${tomcat.download.url.md5}"/>
+                      <property name="dest" value="${tomcat.zip}"/>
+                    </ant>
+
+                    <!-- Extract downloaded Tomcat to servers dir -->
+                    <unzip src="${tomcat.zip}" dest="${tomcat.path}" overwrite="false"/>
+
+                    <ant antfile="${project.basedir}/package.xml" inheritRefs="true">
+                      <target name="package"/>
+                      <property name="tomcat.dir" value="${tomcat.dir.effective}"/>
+                      <property name="maven.project.basedir" value="${project.basedir}"/>
+                      <property name="maven.project.build.directory" value="${project.build.directory}"/>
+                    </ant>
+
+                  </target>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
     <profile>
       <id>bundle</id>
       <build>
@@ -129,7 +218,8 @@
                 </goals>
                 <configuration>
                   <target>
-                    <zip destfile="${project.build.directory}/tomcat6.zip" basedir="${project.build.directory}/tomcat6"/>
+                    <zip destfile="${project.build.directory}/tomcat6.zip"
+                         basedir="${project.build.directory}/tomcat6"/>
                     <attachartifact file="${project.build.directory}/tomcat6.zip" classifier="bundle" type="zip"/>
                   </target>
                 </configuration>
@@ -140,5 +230,5 @@
       </build>
     </profile>
   </profiles>
-  
+
 </project>

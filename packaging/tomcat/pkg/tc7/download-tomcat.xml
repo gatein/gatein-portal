@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="download-tomcat" xmlns:mvn="http://maven.apache.org/POM/4.0.0">
+
+  <target name="download-tomcat">
+
+    <!-- Fetch tomcat .zip -->
+    <get dest="${dest}" skipexisting="true">
+      <url url="${url}"/>
+    </get>
+
+    <!-- Fetch .md5 file -->
+    <get dest="${dest}.md5" skipexisting="true">
+      <url url="${md5.url}"/>
+    </get>
+
+    <!-- Fix md5 file -->
+    <replaceregexp file="${dest}.md5"
+                   match="\s(.*)$"
+                   replace=""
+                   byline="true"/>
+
+    <!-- Validate checksum -->
+    <local name="checksum.matches"/>
+    <local name="checksum.matches.fail"/>
+    <checksum file="${dest}" algorithm="md5" fileext=".md5"
+              verifyproperty="checksum.matches"/>
+    <condition property="checksum.matches.fail">
+      <equals arg1="${checksum.matches}" arg2="false"/>
+    </condition>
+    <fail if="checksum.matches.fail">Checksum validation failed! (for: ${dest})</fail>
+
+  </target>
+</project>
