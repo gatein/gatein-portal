@@ -13,7 +13,7 @@
 %>
 <div id="$uicomponent.id" style="overflow:auto;" 
   onscroll="eXo.webui.UIVirtualList.scrollMove(this,'$url');">    
-  <div style="width: 99%;" >
+  <div>
   	<% uicomponent.renderChildren();%>
   </div>
   <% 

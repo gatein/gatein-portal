@@ -21,7 +21,7 @@
 }
 
 .UIHorizontalTabs .CenterHorizontalTabs {
-	overflow-y: hidden;
+	/*overflow-y: hidden;*/
 	background: url('background/NormalTabStyle.gif') repeat-x center top;
 	padding: 0px 6px;
 }

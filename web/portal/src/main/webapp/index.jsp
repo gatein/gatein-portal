@@ -19,17 +19,15 @@
 
 --%>
 
-<%@ page import="org.exoplatform.container.PortalContainer"%>
-<%@ page import="org.exoplatform.portal.config.UserPortalConfigService"%>
+<%@page import="org.exoplatform.commons.utils.PropertyManager" %>
 <%
-   PortalContainer manager = PortalContainer.getCurrentInstance(session.getServletContext());
-   UserPortalConfigService userPortalConfigService = (UserPortalConfigService)manager.getComponentInstanceOfType(UserPortalConfigService.class);
-   String remoteUser = request.getRemoteUser();
-   String accessMode = "public";
-   if (remoteUser != null && remoteUser.trim().length() > 0)
+   String welcomeJSP = PropertyManager.getProperty("gatein.portal.welcomePage");
+
+   if(welcomeJSP == null)
    {
-      accessMode = "private";
+     welcomeJSP = "welcome.jsp";
    }
-   response.sendRedirect(request.getContextPath() + "/" + accessMode + "/" + userPortalConfigService.getDefaultPortal() + "/");
+
+   response.sendRedirect(request.getContextPath() + "/" + welcomeJSP);
 %>
 

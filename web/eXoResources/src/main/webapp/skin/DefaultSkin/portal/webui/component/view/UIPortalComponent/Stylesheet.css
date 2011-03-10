@@ -123,7 +123,7 @@
 /*############### End Decorator ###################################################*/
 
 .LAYOUT-CONTAINER .UIContainer {
-	height: 100%;
+	_height: 100%;
 	/*
 	 fix bug dragdrop in IE6
 	*/

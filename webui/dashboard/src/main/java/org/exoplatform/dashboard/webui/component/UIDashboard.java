@@ -168,7 +168,6 @@ public class UIDashboard extends UIContainer
          {
             UIPortalApplication uiApp = Util.getUIPortalApplication();
             uiApp.addMessage(new ApplicationMessage("UIDashboard.msg.ApplicationNotExisted", null));
-            uiDashboardCont.removeUIGadget(uiGadget.getId());
             context.addUIComponentToUpdateByAjax(uiDashboard);
          }
          else
@@ -198,9 +197,6 @@ public class UIDashboard extends UIContainer
          {
             UIPortalApplication uiApp = Util.getUIPortalApplication();
             uiApp.addMessage(new ApplicationMessage("UIDashboard.msg.ApplicationNotExisted", null));
-            if (uiGadget != null)
-               uiDashboardCont.removeUIGadget(uiGadget.getId());
-            uiDashboardCont.save();
             context.addUIComponentToUpdateByAjax(uiDashboard);
             return;
          }

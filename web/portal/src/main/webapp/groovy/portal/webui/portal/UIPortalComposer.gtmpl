@@ -46,7 +46,7 @@
 
 	<div class="BLPortalComposer" style="display: <%=uicomponent.isCollapsed ? "none": "block"%>">
 		<div class="BRPortalComposer">
-			<div class="BCPortalComposer">
+			<div class="BCPortalComposer ClearFix">
 				<div class="UIAction"> 
 					<table class="ActionContainer">
 						<tr>

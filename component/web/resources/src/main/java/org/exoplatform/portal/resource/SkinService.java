@@ -418,7 +418,7 @@ public class SkinService implements Startable
             {
             }
          }, cssPath);
-         return output.toString();
+         return output.getString();
       }
       catch (IOException e)
       {

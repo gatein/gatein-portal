@@ -110,6 +110,8 @@
 	border-bottom: 1px #cdcdcd solid;
 	cursor: pointer;
 	display: block;
+	text-align: left;
+	width: auto;
 }
 
 .UIPopupCategory .CategoryItem:hover {

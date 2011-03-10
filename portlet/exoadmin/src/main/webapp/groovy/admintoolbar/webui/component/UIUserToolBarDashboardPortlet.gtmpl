@@ -52,10 +52,16 @@
 		String	href = Util.getPortalRequestContext().getPortalURI() + node.getUri();
 		String icon = node.getIcon();
 		if(icon == null) icon = "DefaultPageIcon";
-		boolean toolong = (node.resolvedLabel.length() > 60);
-		String label = ( toolong ? node.resolvedLabel.substring(0, 57) + "..." : node.resolvedLabel);
+		def resolvedLabel = node.getLabel();
+		if ("Tab_Default".equals(node.getName()))
+		{
+			resolvedLabel = _ctx.appRes("UIUserToolBarDashboard.page." + node.getLabel());
+	 	}
+
+		boolean toolong = (resolvedLabel.length() > 60);
+		String label = ( toolong ? resolvedLabel.substring(0, 57) + "..." : resolvedLabel);
 		String title = "";
-		if(toolong) title = "title='$node.resolvedLabel'";
+		if(toolong) title = "title='$resolvedLabel'";
 		else title = "";
 		print """
 			<div class="MenuItem $tabStyleNavigation">

@@ -4,7 +4,10 @@
 
 .UIWindow .UIHomePagePortlet {	
 	margin: 0px;
-	padding: 10px;
+}
+
+.UIWindow .UIHomePagePortlet .TRContainer {	
+	width: 210px;
 }
 
 .UIHomePagePortlet {	

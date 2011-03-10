@@ -30,7 +30,11 @@
 					<div class="TabsContainer ClearFix">
 						<% for(int i = 0;i < tabNbs;i++){ 
 							 		node = nodes.get(i);
-							 		String tabLabel = node.getResolvedLabel();
+									def tabLabel = node.getLabel();
+									if ("Tab_Default".equals(node.getName()))
+									{
+										tabLabel = _ctx.appRes("UIUserToolBarDashboard.page." + node.getLabel());
+									}
 									String param = "" + i;
 									if(node.getUri().equals(selectedNode.getUri())){ 
 		  						%>
@@ -40,7 +44,7 @@
 														<div class="RightTab">
 																<div class="MiddleTab">
 																		<% 
-																			String ondblclick = "eXo.webui.UITabbedDashboard.showEditLabelInput(this," + i + ",\"" + node.getResolvedLabel() + "\")"; 
+																			String ondblclick = "eXo.webui.UITabbedDashboard.showEditLabelInput(this," + i + ",\"" + tabLabel + "\")"; 
 																		%>
 																		<span ondblclick='$ondblclick'>$tabLabel</span>
 																		<a  href="<%= uicomponent.url("DeleteTab",param); %>">

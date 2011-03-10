@@ -167,12 +167,13 @@ public class UIFormInputSet extends UIContainer
       UIForm uiForm = getAncestorOfType(UIForm.class);
       for (UIComponent inputEntry : getChildren())
       {
-         if (inputEntry instanceof UIFormInputBase)
+         if (inputEntry.isRendered())
          {
-            if (inputEntry.isRendered())
+            String label = "";
+            boolean hasLabel = false;
+            if (inputEntry instanceof UIFormInputBase)
             {
                UIFormInputBase formInputBase = (UIFormInputBase) inputEntry;
-               String label;
                if (formInputBase.getLabel() != null)
                {
                   label = uiForm.getLabel(res, formInputBase.getLabel());
@@ -181,20 +182,24 @@ public class UIFormInputSet extends UIContainer
                {
                   label = uiForm.getLabel(res, formInputBase.getId());
                }
-               w.write("<tr>");
-               w.write("<td class=\"FieldLabel\">");
-
-               // if missing resource and the label hasn't been set before, don't print out the label.
                if (formInputBase.getLabel() != null || (label != formInputBase.getId()))
                {
-                  w.write(label);
+                  hasLabel = true;
                }
-               w.write("</td>");
-               w.write("<td class=\"FieldComponent\">");
-               renderUIComponent(formInputBase);
-               w.write("</td>");
-               w.write("</tr>");
             }
+            w.write("<tr>");
+            w.write("<td class=\"FieldLabel\">");
+
+            // if missing resource and the label hasn't been set before, don't print out the label.
+            if (hasLabel)
+            {
+               w.write(label);
+            }
+            w.write("</td>");
+            w.write("<td class=\"FieldComponent\">");
+            renderUIComponent(inputEntry);
+            w.write("</td>");
+            w.write("</tr>");
          }
       }
       w.write("</table>");

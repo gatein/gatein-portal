@@ -74,7 +74,22 @@
 		<css-path>/skin/webPortlet/webui/component/UIHomePagePortlet/Stylesheet.css</css-path>
 	</portlet-skin>
 	
-	
+	<!-- Skin for ApplicationRegistryPortlet -->
+	<portlet-skin>
+		<application-name>exoadmin</application-name>
+		<portlet-name>ApplicationRegistryPortlet</portlet-name>
+		<skin-name>SimpleSkin</skin-name>
+		<css-path>/skin/exoadmin/applicationregistry/webui/component/UIApplicationRegistryPortlet/SimpleStylesheet.css</css-path>
+	</portlet-skin>
+
+	<!-- Skin for OrganizationPortlet -->
+	<portlet-skin>
+		<application-name>exoadmin</application-name>
+		<portlet-name>OrganizationPortlet</portlet-name>
+		<skin-name>SimpleSkin</skin-name>
+		<css-path>/skin/exoadmin/organization/webui/component/UIOrganizationPortlet/SimpleStylesheet.css</css-path>
+	</portlet-skin>
+
 	<!-- Simple window style -->
 	<window-style>
 		<style-name>Simple</style-name>

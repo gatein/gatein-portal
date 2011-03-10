@@ -1,0 +1,50 @@
+/**
+ * Copyright (C) 2009 eXo Platform SAS.
+ * 
+ * This is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2.1 of
+ * the License, or (at your option) any later version.
+ * 
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this software; if not, write to the Free
+ * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ */
+
+.UITabPane {
+	height: 100%;
+}
+
+.UITabPane .TabPaneContent {
+	padding: 8px;
+}
+
+.UITabPane .UITabContentContainer {
+	border: solid 1px #cecece; 
+	border-top: none;
+	background: white;
+}
+
+.UITabPane .UITabContentContainer .UITabContent {
+	background: #f3f3f3;
+	border: solid 1px white; border-top: none;
+	padding: 10px;
+}
+
+.UITabPane .UIForm .HorizontalLayout {
+	border: none;
+	background: none;
+	padding: 0px;
+}
+
+.UITabPane .UIFormWithTitle .HorizontalLayout {
+	border: 1px solid #b7b7b7;
+	border-top: none;
+	padding: 10px;
+}

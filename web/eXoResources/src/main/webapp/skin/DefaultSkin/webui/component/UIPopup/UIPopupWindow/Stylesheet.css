@@ -115,10 +115,6 @@
   float: left; /* orientation=rt */
   cursor: nw-resize; /* orientation=lt */
   cursor: ne-resize; /* orientation=rt */
-  position: absolute;
-  bottom: 8px;
-  right: 8px; /* orientation=lt */
-  left: 8px; /* orientation=rt */
 }
 
 .UIPopupWindow .BottomLeftCornerDecorator {
@@ -272,11 +268,6 @@
 .UIPortalComposer .BCPortalComposer {
 	background: #ececec;
 	border: 1px solid #bbbcc2;
-	height: 50px;
-}
-
-.UIPortalComposer .BCPortalComposer {
-
 }
 
 .UIPortalComposer .Bottom {

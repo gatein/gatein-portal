@@ -81,6 +81,12 @@ public class NewPortalConfigListener extends BaseComponentPlugin
    /** . */
    private boolean isUseTryCatch;
 
+   /**
+    * If true the portal clear portal metadata from data storage and replace
+    * it with new data created from .xml files
+    */
+   private boolean overrideExistingData;
+
    /** . */
    private Logger log = LoggerFactory.getLogger(getClass());
 
@@ -125,11 +131,23 @@ public class NewPortalConfigListener extends BaseComponentPlugin
          isUseTryCatch = true;
       }
 
+      valueParam = params.getValueParam("override");
+      if(valueParam != null)
+      {
+         overrideExistingData = "true".equals(valueParam.getValue());
+      }
+      else
+      {
+         overrideExistingData = false;
+      }
+
    }
 
    public void run() throws Exception
    {
-      if (dataStorage_.getPortalConfig(defaultPortal) != null)
+      //DANGEROUS! If the user delete the defaultPortal (ie: classic), the next time he restarts
+      //the server. Data of predefined owners would be overriden
+      if (dataStorage_.getPortalConfig(defaultPortal) != null && !overrideExistingData)
          return;
 
       if (isUseTryCatch)
@@ -279,6 +297,10 @@ public class NewPortalConfigListener extends BaseComponentPlugin
          result.addAll(other.templateConfigs);
          this.templateConfigs = Collections.unmodifiableList(result);
       }
+
+      //The override is true if and only if one of the plugin NewPortalConfigListener configures its
+      //override param as true
+      overrideExistingData = overrideExistingData || other.overrideExistingData;
    }
 
    public void initPortalConfigDB(NewPortalConfig config) throws Exception
@@ -387,8 +409,16 @@ public class NewPortalConfigListener extends BaseComponentPlugin
       }
       else
       {
-         navigation.merge(currentNavigation);
-         dataStorage_.save(navigation);
+         if(overrideExistingData)
+         {
+            dataStorage_.remove(currentNavigation);
+            dataStorage_.create(navigation);
+         }
+         else
+         {
+            navigation.merge(currentNavigation);
+            dataStorage_.save(navigation);
+         }
       }
    }
 

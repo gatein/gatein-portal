@@ -17,6 +17,7 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-@import url(SimpleSkin/UIPortalApplicationSkin.css);
+@import url(SimpleSkin/portal/webui/component/UIPortalApplicationSkin.css);
+@import url(SimpleSkin/webui/component/Stylesheet.css);
 @import url(PortletThemes/Stylesheet.css);
 @import url(Portlet/Stylesheet.css);

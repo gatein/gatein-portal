@@ -66,6 +66,8 @@ public abstract class AbstractTokenService<T extends Token, K> implements Starta
 
    protected long validityMillis;
 
+   private ScheduledExecutorService executor;
+
    @SuppressWarnings("unchecked")
    public AbstractTokenService(InitParams initParams)
    {
@@ -79,7 +81,7 @@ public abstract class AbstractTokenService<T extends Token, K> implements Starta
    {
       // start a thread, garbage expired cookie token every [DELAY_TIME]
       final AbstractTokenService service = this;
-      ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+      executor = Executors.newSingleThreadScheduledExecutor();
       executor.scheduleWithFixedDelay(new Runnable()
       {
          public void run()
@@ -92,7 +94,7 @@ public abstract class AbstractTokenService<T extends Token, K> implements Starta
 
    public void stop()
    {
-      // do nothing
+      executor.shutdown();
    }
 
    public static <T extends AbstractTokenService> T getInstance(Class<T> classType)

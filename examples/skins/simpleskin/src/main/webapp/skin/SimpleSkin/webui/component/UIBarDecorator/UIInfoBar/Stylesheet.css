@@ -1,0 +1,124 @@
+/**
+ * Copyright (C) 2009 eXo Platform SAS.
+ * 
+ * This is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2.1 of
+ * the License, or (at your option) any later version.
+ * 
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this software; if not, write to the Free
+ * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ */
+
+.UIInfoBar {	
+}
+
+/*######################-Blue Rounded Style-######################*/
+
+.UIInfoBar .BlueRoundedStyle {
+	padding: 0px; margin: 0px;
+}
+
+.UIInfoBar .BlueRoundedStyle .LeftBar {
+	background: url('background/ViewBlockBar.png') no-repeat left top; /* orientation=lt */
+	background: url('background/ViewBlockBar-rt.png') no-repeat left -26px; /* orientation=rt */
+	padding-left: 5px; /* orientation=lt */
+	padding-left: 9px; /* orientation=rt */
+}
+
+.UIInfoBar .BlueRoundedStyle .RightBar {
+	background: url('background/ViewBlockBar.png') no-repeat right -26px; /* orientation=lt */
+	background: url('background/ViewBlockBar-rt.png') no-repeat right top; /* orientation=rt */
+	padding-right: 9px; /* orientation=lt */
+	padding-right: 5px; /* orientation=rt */
+}
+
+.UIInfoBar .BlueRoundedStyle .MiddleBar {
+	background: url('background/ViewBlockBar.png') repeat-x center -52px;
+}
+	
+.UIInfoBar .BlueRoundedStyle .FixHeight {
+	height: 26px;
+	white-space: nowrap;
+}
+
+.UIInfoBar .BlueRoundedStyle .PortletIcon {
+	background: url('background/Earth.gif') no-repeat left center; /* orientation=lt */
+	background: url('background/Earth.gif') no-repeat right center; /* orientation=rt */
+	float: left; /* orientation=lt */
+	float: right; /* orientation=rt */
+	text-overflow: ellipsis;
+	width: auto; 
+	line-height: 23px;
+	padding-left: 25px; /* orientation=lt */
+	padding-right: 25px; /* orientation=rt */
+	margin: 0px 0px 0px 6px; /* orientation=lt */
+	margin: 0px 6px 0px 0px; /* orientation=rt */
+	color: black;
+}
+
+.UIInfoBar .BlueRoundedStyle .ContainerIcon {
+	background: url('background/DefaultContainerIcon.gif') no-repeat left center; /* orientation=lt */
+	background: url('background/DefaultContainerIcon.gif') no-repeat right center; /* orientation=rt */
+	float: left; /* orientation=lt */
+	float: right; /* orientation=rt */
+	text-overflow: ellipsis;
+	width: auto; 
+	line-height: 23px;
+	padding-left: 25px; /* orientation=lt */
+	padding-right: 25px; /* orientation=rt */
+	margin: 0px 0px 0px 6px; /* orientation=lt */
+	margin: 0px 6px 0px 0px; /* orientation=rt */
+	height: auto;
+	color: black;
+}
+
+/*######################-Polygon Navyblue Style-######################*/
+
+.UIInfoBar .PolygonNavyBlueStyle {
+	height: 26px;	
+}
+
+.UIInfoBar .PolygonNavyBlueStyle .LeftBar {
+	background: url('background/PolygonNavyBlueStyle.gif') no-repeat left top;
+	padding: 0px 0px 0px 3px;
+}
+
+.UIInfoBar .PolygonNavyBlueStyle .RightBar {
+	background: url('background/PolygonNavyBlueStyle.gif') no-repeat right top;
+	padding: 0px 3px 0px 0px;
+}
+
+.UIInfoBar .PolygonNavyBlueStyle .MiddleBar {
+	height: 26px;
+	background: url('background/PolygonNavyBlueStyle.gif') repeat-x center bottom;
+	padding: 0px 0px 0px 2px;
+}
+
+/*######################-Smooth Style 26 -######################*/
+
+.UIInfoBar .SmoothStyle26 {
+	height: 26px;	
+}
+
+.UIInfoBar .SmoothStyle26 .LeftBar {
+	background: url('background/SmoothStyle26.gif') no-repeat left top;
+	padding: 0px 0px 0px 1px;
+}
+
+.UIInfoBar .SmoothStyle26 .RightBar {
+	background: url('background/SmoothStyle26.gif') no-repeat right top;
+	padding: 0px 1px 0px 0px;
+}
+
+.UIInfoBar .SmoothStyle26 .MiddleBar {
+	height: 26px;
+	background: url('background/SmoothStyle26.gif') repeat-x center bottom;
+}
