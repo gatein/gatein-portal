@@ -56,16 +56,4 @@
       <context-root>web</context-root>
     </web>
   </module>
-  <module>
-    <web>
-      <web-uri>wsrp-admin-gui.war</web-uri>
-      <context-root>wsrp-admin-gui</context-root>
-    </web>
-  </module>
-  <module>
-    <web>
-      <web-uri>wsrp-producer.war</web-uri>
-      <context-root>wsrp-producer</context-root>
-    </web>
-  </module>
 </application>

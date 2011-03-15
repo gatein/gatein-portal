@@ -41,7 +41,6 @@ function getModule(params)
    var pcVersion = "${org.gatein.pc.version}";
    var wciVersion = "${org.gatein.wci.version}";
    var commonVersion = "${org.gatein.common.version}";
-   var wsrpVersion = "${org.gatein.wsrp.version}";
    var shindigVersion = "${org.shindig.version}";
    var groovyVersion = "${org.codehaus.groovy.version}";
    var rhinoVersion = "${rhino.version}";
@@ -78,17 +77,6 @@ function getModule(params)
       addDependency(new Project("org.jboss.logging", "jboss-logging-spi", "jar", "2.0.5.GA")).
       addDependency(new Project("org.apache.portals.bridges", "portals-bridges-common", "jar", "1.0.4")).
       addDependency(new Project("org.jboss", "jboss-common-core", "jar", "2.2.9.GA"));
-
-
-   module.component.wsrp = new Project("org.exoplatform.portal", "gatein.portal.component.wsrp", "jar", module.version)
-      .addDependency(new Project("org.gatein.wsrp", "wsrp-producer", "war", wsrpVersion))
-      .addDependency(new Project("org.gatein.wsrp", "wsrp-admin-gui", "war", wsrpVersion))
-      .addDependency(new Project("org.gatein.wsrp", "wsrp-producer-lib", "jar",wsrpVersion))
-      .addDependency(new Project("org.gatein.wsrp", "wsrp-common", "jar", wsrpVersion))
-      .addDependency(new Project("org.gatein.wsrp", "wsrp-wsrp1-ws", "jar", wsrpVersion))
-      .addDependency(new Project("org.gatein.wsrp", "wsrp-wsrp2-ws", "jar", wsrpVersion))
-      .addDependency(new Project("org.gatein.wsrp", "wsrp-consumer", "jar", wsrpVersion))
-      .addDependency(new Project("org.gatein.wsrp", "wsrp-integration-api", "jar", wsrpVersion));
 
    module.component.scripting =
    new Project("org.exoplatform.portal", "exo.portal.component.scripting", "jar", module.version).
@@ -182,7 +170,6 @@ function getModule(params)
       addDependency(module.component.resources).
       addDependency(module.component.identity).
       addDependency(module.component.pc).
-      addDependency(module.component.wsrp).
       addDependency(module.webui.eXo).
 
       addDependency(kernel.container).

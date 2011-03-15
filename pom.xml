@@ -48,7 +48,7 @@
       <org.gatein.wci.version>2.1.0-Beta01</org.gatein.wci.version>
       <org.gatein.pc.version>2.3.0-Alpha01</org.gatein.pc.version>
       <org.picketlink.idm>1.1.8.CR01</org.picketlink.idm>
-      <org.gatein.wsrp.version>2.0.0-GA</org.gatein.wsrp.version>
+      <org.gatein.wsrp.version>2.1.0-Alpha01</org.gatein.wsrp.version>
       <org.gatein.mop.version>1.0.5-GA</org.gatein.mop.version>
       <org.slf4j.version>1.5.6</org.slf4j.version>
       <rhino.version>1.6R5</rhino.version>
@@ -83,6 +83,7 @@
       <module>starter</module>
       <module>packaging</module>
       <module>testsuite</module>
+      <module>wsrp-integration</module>
    </modules>
 
    <dependencyManagement>
@@ -297,27 +298,6 @@
             <version>${org.gatein.pc.version}</version>
          </dependency>
          <dependency>
-            <groupId>org.gatein.wsrp</groupId>
-            <artifactId>wsrp-producer-lib</artifactId>
-            <version>${org.gatein.wsrp.version}</version>
-         </dependency>
-         <dependency>
-            <groupId>org.gatein.wsrp</groupId>
-            <artifactId>wsrp-consumer</artifactId>
-            <version>${org.gatein.wsrp.version}</version>
-            <exclusions>
-              <exclusion>
-                <groupId>org.hibernate</groupId>
-                <artifactId>hibernate-core</artifactId>
-              </exclusion>
-            </exclusions>
-         </dependency>
-         <dependency>
-            <groupId>org.gatein.wsrp</groupId>
-            <artifactId>wsrp-integration-api</artifactId>
-            <version>${org.gatein.wsrp.version}</version>
-         </dependency>
-         <dependency>
             <groupId>org.gatein.mop</groupId>
             <artifactId>mop-api</artifactId>
             <version>${org.gatein.mop.version}</version>
@@ -331,6 +311,61 @@
             <groupId>org.gatein.mop</groupId>
             <artifactId>mop-core</artifactId>
             <version>${org.gatein.mop.version}</version>
+         </dependency>
+         <!-- WSRP -->
+         <dependency>
+            <groupId>org.gatein.wsrp</groupId>
+            <artifactId>wsrp-producer-lib</artifactId>
+            <scope>provided</scope>
+            <version>${org.gatein.wsrp.version}</version>
+         </dependency>
+         <dependency>
+            <groupId>org.gatein.wsrp</groupId>
+            <artifactId>wsrp-consumer</artifactId>
+            <scope>provided</scope>
+            <version>${org.gatein.wsrp.version}</version>
+         </dependency>
+         <dependency>
+            <groupId>org.gatein.wsrp</groupId>
+            <artifactId>wsrp-jcr-impl</artifactId>
+            <scope>provided</scope>
+            <version>${org.gatein.wsrp.version}</version>
+         </dependency>
+         <dependency>
+            <groupId>org.gatein.wsrp</groupId>
+            <artifactId>wsrp-integration-api</artifactId>
+            <scope>provided</scope>
+            <version>${org.gatein.wsrp.version}</version>
+         </dependency>
+         <dependency>
+            <groupId>org.gatein.wsrp</groupId>
+            <artifactId>wsrp-common</artifactId>
+            <scope>provided</scope>
+            <version>${org.gatein.wsrp.version}</version>
+         </dependency>
+         <dependency>
+            <groupId>org.gatein.wsrp</groupId>
+            <artifactId>wsrp-wsrp1-ws</artifactId>
+            <scope>provided</scope>
+            <version>${org.gatein.wsrp.version}</version>
+         </dependency>
+         <dependency>
+            <groupId>org.gatein.wsrp</groupId>
+            <artifactId>wsrp-wsrp2-ws</artifactId>
+            <scope>provided</scope>
+            <version>${org.gatein.wsrp.version}</version>
+         </dependency>
+         <dependency>
+            <groupId>org.gatein.wsrp</groupId>
+            <artifactId>wsrp-wss</artifactId>
+            <scope>provided</scope>
+            <version>${org.gatein.wsrp.version}</version>
+         </dependency>
+         <dependency>
+            <groupId>org.gatein.wsrp</groupId>
+            <artifactId>wsrp-wss-jboss5</artifactId>
+            <scope>provided</scope>
+            <version>${org.gatein.wsrp.version}</version>
          </dependency>
 
         <!-- GateIn -->

@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!--
+  ~ JBoss, a division of Red Hat
+  ~ Copyright 2011, Red Hat Middleware, LLC, and individual
+  ~ contributors as indicated by the @authors tag. See the
+  ~ copyright.txt in the distribution for a full listing of
+  ~ individual contributors.
+  ~
+  ~ This is free software; you can redistribute it and/or modify it
+  ~ under the terms of the GNU Lesser General Public License as
+  ~ published by the Free Software Foundation; either version 2.1 of
+  ~ the License, or (at your option) any later version.
+  ~
+  ~ This software is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+  ~ Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public
+  ~ License along with this software; if not, write to the Free
+  ~ Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+  ~ 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+  -->
+
+<nodeTypes xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0"
+           xmlns:jcr="http://www.jcp.org/jcr/1.0">
+
+   <nodeType name="wsrp:consumersandgroups" isMixin="false" hasOrderableChildNodes="true" primaryItemName="">
+      <supertypes>
+         <supertype>nt:base</supertype>
+         <supertype>mix:referenceable</supertype>
+      </supertypes>
+      <childNodeDefinitions>
+         <childNodeDefinition name="*" defaultPrimaryType="wsrp:consumer"
+                              autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false"
+                              sameNameSiblings="false">
+            <requiredPrimaryTypes>
+               <requiredPrimaryType>wsrp:consumer</requiredPrimaryType>
+            </requiredPrimaryTypes>
+         </childNodeDefinition>
+         <childNodeDefinition name="*" defaultPrimaryType="wsrp:consumergroup"
+                              autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false"
+                              sameNameSiblings="false">
+            <requiredPrimaryTypes>
+               <requiredPrimaryType>wsrp:consumergroup</requiredPrimaryType>
+            </requiredPrimaryTypes>
+         </childNodeDefinition>
+      </childNodeDefinitions>
+   </nodeType>
+
+   <nodeType name="wsrp:consumer" isMixin="false" hasOrderableChildNodes="true" primaryItemName="">
+      <supertypes>
+         <supertype>nt:base</supertype>
+         <supertype>mix:referenceable</supertype>
+      </supertypes>
+      <propertyDefinitions>
+         <propertyDefinition name="name" requiredType="String" autoCreated="false" mandatory="false"
+                             onParentVersion="COPY" protected="false" multiple="false">
+            <valueConstraints/>
+         </propertyDefinition>
+         <propertyDefinition name="id" requiredType="String" autoCreated="false"
+                             mandatory="false"
+                             onParentVersion="COPY" protected="false" multiple="false">
+            <valueConstraints/>
+         </propertyDefinition>
+         <propertyDefinition name="consumeragent" requiredType="String" autoCreated="false" mandatory="false"
+                             onParentVersion="COPY" protected="false" multiple="false">
+            <valueConstraints/>
+         </propertyDefinition>
+         <propertyDefinition name="status" requiredType="String"
+                             autoCreated="false" mandatory="false"
+                             onParentVersion="COPY" protected="false" multiple="false">
+            <valueConstraints/>
+         </propertyDefinition>
+         <propertyDefinition name="group" requiredType="Path" autoCreated="false" mandatory="false"
+                             onParentVersion="COPY"
+                             protected="false" multiple="false">
+            <valueConstraints/>
+         </propertyDefinition>
+      </propertyDefinitions>
+      <childNodeDefinitions>
+         <childNodeDefinition name="*" defaultPrimaryType="wsrp:registration" autoCreated="false"
+                              mandatory="false"
+                              onParentVersion="COPY" protected="false" sameNameSiblings="false">
+            <requiredPrimaryTypes>
+               <requiredPrimaryType>wsrp:registration</requiredPrimaryType>
+            </requiredPrimaryTypes>
+         </childNodeDefinition>
+         <childNodeDefinition name="capabilities" defaultPrimaryType="wsrp:consumercapabilities" autoCreated="true"
+                              mandatory="false"
+                              onParentVersion="COPY" protected="false" sameNameSiblings="false">
+            <requiredPrimaryTypes>
+               <requiredPrimaryType>wsrp:consumercapabilities</requiredPrimaryType>
+            </requiredPrimaryTypes>
+         </childNodeDefinition>
+      </childNodeDefinitions>
+   </nodeType>
+
+   <nodeType name="wsrp:registration" isMixin="false" hasOrderableChildNodes="true" primaryItemName="">
+      <supertypes>
+         <supertype>nt:base</supertype>
+         <supertype>mix:referenceable</supertype>
+      </supertypes>
+      <propertyDefinitions>
+         <propertyDefinition name="status" requiredType="String" autoCreated="false" mandatory="false"
+                             onParentVersion="COPY" protected="false" multiple="false">
+            <valueConstraints/>
+         </propertyDefinition>
+         <propertyDefinition name="registrationhandle" requiredType="String" autoCreated="false" mandatory="false"
+                             onParentVersion="COPY" protected="false" multiple="false">
+            <valueConstraints/>
+         </propertyDefinition>
+         <propertyDefinition name="portlethandles" requiredType="String" autoCreated="false" mandatory="false"
+                             onParentVersion="COPY" protected="false" multiple="true">
+         </propertyDefinition>
+      </propertyDefinitions>
+      <childNodeDefinitions>
+         <childNodeDefinition name="properties" defaultPrimaryType="wsrp:registrationproperties" autoCreated="false"
+                              mandatory="false" onParentVersion="COPY" protected="false" sameNameSiblings="false">
+            <requiredPrimaryTypes>
+               <requiredPrimaryType>wsrp:registrationproperties</requiredPrimaryType>
+            </requiredPrimaryTypes>
+         </childNodeDefinition>
+      </childNodeDefinitions>
+   </nodeType>
+
+   <nodeType name="wsrp:registrationproperties" isMixin="false" hasOrderableChildNodes="true" primaryItemName="">
+      <supertypes>
+         <supertype>nt:base</supertype>
+         <supertype>mix:referenceable</supertype>
+      </supertypes>
+      <!-- residual properties so that we can store an arbritrary number of registration properties -->
+      <propertyDefinitions>
+         <propertyDefinition name="*" requiredType="undefined" autoCreated="false" mandatory="false"
+                             onParentVersion="COPY" protected="false" multiple="false">
+            <valueConstraints/>
+         </propertyDefinition>
+      </propertyDefinitions>
+   </nodeType>
+
+   <nodeType name="wsrp:consumergroup" isMixin="false" hasOrderableChildNodes="true" primaryItemName="">
+      <supertypes>
+         <supertype>nt:base</supertype>
+         <supertype>mix:referenceable</supertype>
+      </supertypes>
+      <propertyDefinitions>
+         <propertyDefinition name="name" requiredType="String" autoCreated="false" mandatory="false"
+                             onParentVersion="COPY" protected="false" multiple="false">
+            <valueConstraints/>
+         </propertyDefinition>
+         <propertyDefinition name="status" requiredType="String"
+                             autoCreated="false" mandatory="false"
+                             onParentVersion="COPY" protected="false" multiple="false">
+            <valueConstraints/>
+         </propertyDefinition>
+      </propertyDefinitions>
+      <childNodeDefinitions>
+         <childNodeDefinition name="*" defaultPrimaryType="wsrp:consumer" autoCreated="false"
+                              mandatory="false"
+                              onParentVersion="COPY" protected="false" sameNameSiblings="false">
+            <requiredPrimaryTypes>
+               <requiredPrimaryType>wsrp:consumer</requiredPrimaryType>
+            </requiredPrimaryTypes>
+         </childNodeDefinition>
+      </childNodeDefinitions>
+   </nodeType>
+
+   <nodeType name="wsrp:consumercapabilities" isMixin="false" hasOrderableChildNodes="true" primaryItemName="">
+      <supertypes>
+         <supertype>nt:base</supertype>
+         <supertype>mix:referenceable</supertype>
+      </supertypes>
+      <propertyDefinitions>
+         <propertyDefinition name="modes" requiredType="String" autoCreated="false" mandatory="false"
+                             onParentVersion="COPY" protected="false" multiple="true">
+            <valueConstraints/>
+         </propertyDefinition>
+         <propertyDefinition name="windowstates" requiredType="String" autoCreated="false" mandatory="false"
+                             onParentVersion="COPY" protected="false" multiple="true">
+            <valueConstraints/>
+         </propertyDefinition>
+         <propertyDefinition name="userscopes" requiredType="String" autoCreated="false" mandatory="false"
+                             onParentVersion="COPY" protected="false" multiple="true">
+            <valueConstraints/>
+         </propertyDefinition>
+         <propertyDefinition name="userprofiledata" requiredType="String" autoCreated="false" mandatory="false"
+                             onParentVersion="COPY" protected="false" multiple="true">
+            <valueConstraints/>
+         </propertyDefinition>
+         <propertyDefinition name="supportsgetmethod" requiredType="boolean" autoCreated="false" mandatory="false"
+                             onParentVersion="COPY" protected="false" multiple="false">
+            <valueConstraints/>
+         </propertyDefinition>
+      </propertyDefinitions>
+   </nodeType>
+
+</nodeTypes>
