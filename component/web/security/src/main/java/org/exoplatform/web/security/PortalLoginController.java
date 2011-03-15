@@ -51,14 +51,12 @@ public class PortalLoginController extends WCILoginController {
       // otherwise compute one
       if (uri == null || uri.length() == 0)
       {
-         //uri = req.getContextPath() + "/private/classic";
          uri = req.getContextPath();
          log.debug("No initial URI found, will use default " + uri + " instead ");
       }
       else
       {
          log.debug("Found initial URI " + uri);
-         //req.getSession(true).setAttribute("org.gatein.portal.login.initial_uri", uri);
       }
 
       // if we do have a remember me
@@ -76,7 +74,6 @@ public class PortalLoginController extends WCILoginController {
                "in the next response");
             Cookie cookie = new Cookie(InitiateLoginServlet.COOKIE_NAME, cookieToken);
             cookie.setPath(req.getContextPath());
-            //cookie.setMaxAge((int)tokenService.getValidityTime() / 1000);
             cookie.setMaxAge((int)tokenService.getValidityTime());
             resp.addCookie(cookie);
          }
