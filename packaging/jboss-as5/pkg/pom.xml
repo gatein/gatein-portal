@@ -802,6 +802,15 @@
          <version>${project.version}</version>
       </dependency>
 
+      <!-- WSRP extension -->
+      <dependency>
+         <?move gatein-wsrp-integration.ear?>
+         <groupId>org.gatein.integration</groupId>
+         <artifactId>extension-ear</artifactId>
+         <type>ear</type>
+         <version>${project.version}</version>
+      </dependency>
+
       <!-- War files -->
       <dependency>
          <?expand ?>
