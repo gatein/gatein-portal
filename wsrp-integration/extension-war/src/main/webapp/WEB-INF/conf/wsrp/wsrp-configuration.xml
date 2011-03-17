@@ -46,7 +46,7 @@
 
    <!-- TODO: this should be removed to a JBoss5 specific configuration file -->
    <component>
-      <type>org.gatein.portal.wsrp.wss.JBoss5WSSServiceIntegration</type>
+      <type>org.gatein.integration.wsrp.wss.JBoss5WSSServiceIntegration</type>
    </component>
 
 
