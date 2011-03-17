@@ -69,6 +69,11 @@
          <scope>provided</scope>
       </dependency>
       <dependency>
+         <groupId>org.gatein.wsrp</groupId>
+         <artifactId>wsrp-wss</artifactId>
+         <scope>provided</scope>
+      </dependency>
+      <dependency>
          <groupId>org.gatein.pc</groupId>
          <artifactId>pc-api</artifactId>
          <scope>provided</scope>
