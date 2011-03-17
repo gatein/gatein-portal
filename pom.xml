@@ -44,11 +44,11 @@
       <org.jibx.version>1.2.1</org.jibx.version>
       <org.shindig.version>1.0-r790473-Patch05</org.shindig.version>
       <nl.captcha.simplecaptcha.version>1.1.1-GA-Patch01</nl.captcha.simplecaptcha.version>
-      <org.gatein.common.version>2.0.3-GA</org.gatein.common.version>
+      <org.gatein.common.version>2.0.4-Beta02-SNAPSHOT</org.gatein.common.version>
       <org.gatein.wci.version>2.1.0-Beta01</org.gatein.wci.version>
       <org.gatein.pc.version>2.3.0-Alpha01</org.gatein.pc.version>
       <org.picketlink.idm>1.1.8.CR01</org.picketlink.idm>
-      <org.gatein.wsrp.version>2.1.0-Alpha01</org.gatein.wsrp.version>
+      <org.gatein.wsrp.version>2.1.0-Alpha02-SNAPSHOT</org.gatein.wsrp.version>
       <org.gatein.mop.version>1.0.5-GA</org.gatein.mop.version>
       <org.slf4j.version>1.5.6</org.slf4j.version>
       <rhino.version>1.6R5</rhino.version>

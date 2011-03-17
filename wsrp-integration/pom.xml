@@ -40,10 +40,53 @@
    </parent>
 
    <description>GateIn WSRP Integration extension parent</description>
-   <modules>
-      <module>extension-config</module>
-      <module>extension-component</module>
-      <module>extension-war</module>
-      <module>extension-ear</module>
-   </modules>
+
+   <profiles>
+      <profile>
+         <id>default</id>
+         <activation>
+            <activeByDefault>true</activeByDefault>
+         </activation>
+         <modules/>
+      </profile>
+      <profile>
+         <id>pkg-tomcat</id>
+         <modules/>
+      </profile>
+      <profile>
+         <id>pkg-tomcat7</id>
+         <modules/>
+      </profile>
+      <profile>
+         <id>pkg-jetty</id>
+         <modules/>
+      </profile>
+      <profile>
+         <id>pkg-jbossas</id>
+         <modules>
+            <module>extension-config</module>
+            <module>extension-component</module>
+            <module>extension-war</module>
+            <module>extension-ear-as5</module>
+         </modules>
+      </profile>
+      <profile>
+         <id>pkg-jbossas6</id>
+         <modules>
+            <module>extension-config</module>
+            <module>extension-component</module>
+            <module>extension-war</module>
+            <module>extension-ear-as6</module>
+         </modules>
+      </profile>
+      <profile>
+         <id>pkg-jbossas5</id>
+         <modules>
+            <module>extension-config</module>
+            <module>extension-component</module>
+            <module>extension-war</module>
+            <module>extension-ear-as5</module>
+         </modules>
+      </profile>
+   </profiles>
 </project>

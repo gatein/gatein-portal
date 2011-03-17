@@ -806,7 +806,7 @@
       <dependency>
          <?move gatein-wsrp-integration.ear?>
          <groupId>org.gatein.integration</groupId>
-         <artifactId>extension-ear</artifactId>
+         <artifactId>extension-ear-as5</artifactId>
          <type>ear</type>
          <version>${project.version}</version>
       </dependency>

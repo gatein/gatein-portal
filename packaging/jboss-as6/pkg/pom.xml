@@ -798,6 +798,21 @@
          <artifactId>wsrp-integration-api</artifactId>
          <version>${org.gatein.wsrp.version}</version>
       </dependency>
+      <dependency>
+         <groupId>org.gatein.wsrp</groupId>
+         <artifactId>wsrp-jcr-impl</artifactId>
+         <version>${org.gatein.wsrp.version}</version>
+      </dependency>
+      <dependency>
+         <groupId>org.gatein.wsrp</groupId>
+         <artifactId>wsrp-wss</artifactId>
+         <version>${org.gatein.wsrp.version}</version>
+      </dependency>
+      <dependency>
+         <groupId>org.gatein.wsrp</groupId>
+         <artifactId>wsrp-wss-jboss5</artifactId>
+         <version>${org.gatein.wsrp.version}</version>
+      </dependency>
 
       <dependency>
          <?context LIB?>
@@ -833,7 +848,7 @@
       <dependency>
          <?move gatein-wsrp-integration.ear?>
          <groupId>org.gatein.integration</groupId>
-         <artifactId>extension-ear</artifactId>
+         <artifactId>extension-ear-as6</artifactId>
          <type>ear</type>
          <version>${project.version}</version>
       </dependency>
