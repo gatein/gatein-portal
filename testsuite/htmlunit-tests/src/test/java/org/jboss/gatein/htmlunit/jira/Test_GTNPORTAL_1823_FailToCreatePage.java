@@ -23,8 +23,11 @@
 package org.jboss.gatein.htmlunit.jira;
 
 import org.jboss.gatein.htmlunit.AbstractWebTest;
+import org.testng.Assert;
 import org.testng.annotations.Test;
+import org.testng.log4testng.Logger;
 
+import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -33,6 +36,9 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class Test_GTNPORTAL_1823_FailToCreatePage extends AbstractWebTest
 {
+   /** Logger */
+   private static final Logger log = Logger.getLogger(Test_GTNPORTAL_1823_FailToCreatePage.class);
+
    /** Number of concurrent threads for the test */
    private static final int TCOUNT = 2;
 
@@ -81,26 +87,127 @@ public class Test_GTNPORTAL_1823_FailToCreatePage extends AbstractWebTest
    private void test() throws Throwable
    {
       String id = nextId();
-
-      openPortal(true);
-
-      signInAsRoot();
-
-      // Add new page, but don't click Finish yet at the end
       String categoryTitle = "Gadgets";
       String portletName = "Calculator";
       String pageName = "TestPage" + id;
       String portletElementToDnD = "//div[@id='" + categoryTitle + "/" + portletName + "']";
 
+      openPortal(true);
+
+      // Check that testPage with this name does not yet exist
+      Assert.assertFalse(isElementPresent("link=" + pageName), "Page exists already: " + pageName);
+
+      signInAsRoot();
+
+      // Add new page, but don't click Finish yet at the end
       addNewPageUpToFinish(categoryTitle, portletName, pageName, portletElementToDnD);
 
       // Wait for the other thread ...
       sync.countDown();
       sync.await();
 
+
+      // Uncomment this to make the test pass
+      // TODO: even though everything looks ok, it's not - navigation only contains TestPage2 node when it should also contain TestPage1 node.
+      //if (id.equals("2"))
+      //   Thread.sleep(5000);
+
       // Now click Finish (both threads at the same time)
       finishPageEdit();
-      waitForTextPresent(portletName);
+
+      String failedText = "This node does not have any pages.";
+      String textPresent = waitForTextPresent(portletName, failedText);
+
+      Assert.assertNotSame(textPresent, failedText, "Concurrent Add Page issue reproduced!");
+      Assert.assertEquals(textPresent, portletName, "");
+
+      finished();
    }
 
+   /**
+    * Perform cleanup
+    * @throws IOException
+    */
+   private void test2() throws IOException
+   {
+      openPortal(true);
+
+      signInAsRoot();
+
+      cleanup();
+   }
+
+   /**
+    * TODO: Cleanup code doesn't yet work
+    *
+    * @throws IOException
+    */
+   private void cleanup() throws IOException
+   {
+      try
+      {
+         leavePageEdit();
+      }
+      catch (Exception ex)
+      {
+         log.warn("IGNORED: ", ex);
+      }
+
+      try
+      {
+         goToPageManagement();
+
+         try
+         {
+            searchAndDeletePage("TestPage1");
+         }
+         catch (Throwable ex)
+         {
+            log.warn("IGNORED: Failed to delete TestPage1: ", ex);
+         }
+
+         try
+         {
+            searchAndDeletePage("TestPage2");
+         }
+         catch (Throwable ex)
+         {
+            log.warn("IGNORED: Failed to delete TestPage2: ", ex);
+         }
+
+      }
+      catch (Throwable e)
+      {
+         log.warn("IGNORED: Failed to open PageManagement: ", e);
+      }
+
+      try
+      {
+         goToSiteManagement();
+
+         try
+         {
+            editNavigation("classic");
+            deleteNode("TestPage");
+         }
+         catch (Throwable ex)
+         {
+            log.warn("IGNORED: Failed to delete TestPage1: ", ex);
+         }
+
+         try
+         {
+            editNavigation("classic");
+            deleteNode("TestPage2");
+         }
+         catch (Throwable ex)
+         {
+            log.warn("IGNORED: Failed to delete TestPage2: ", ex);
+         }
+      }
+      catch (Throwable e)
+      {
+         log.warn("IGNORED: Failed to remove TestPage from navigation: ", e);
+      }
+   }
 }

@@ -133,11 +133,11 @@ public abstract class AbstractWebTest
    }
 
    /**
-    * @see WebHelper#waitForTextPresent(String)
+    * @see WebHelper#waitForTextPresent(String ...)
     */
-   protected void waitForTextPresent(String text)
+   protected String waitForTextPresent(String ... text)
    {
-      getWebHelper().waitForTextPresent(text);
+      return getWebHelper().waitForTextPresent(text);
    }
 
    /**
@@ -194,5 +194,41 @@ public abstract class AbstractWebTest
    protected void addNewPageUpToFinish(String categoryTitle, String portletName, String pageName, String portletElementToDnD)
    {
       getWebHelper().addNewPageUpToFinish(categoryTitle, portletName, pageName, portletElementToDnD);
+   }
+
+   protected void goToPageManagement()
+   {
+      getWebHelper().goToPageManagement();
+   }
+
+   protected void searchAndDeletePage(String testPage)
+   {
+      getWebHelper().searchAndDeletePage(testPage);
+   }
+
+   protected void goToSiteManagement()
+   {
+      getWebHelper().goToSiteManagement();
+   }
+
+   protected void editNavigation(String portalContainer)
+   {
+      getWebHelper().editNavigation(portalContainer);
+   }
+
+   protected void deleteNode(String nodeLabel)
+   {
+      getWebHelper().deleteNode(nodeLabel);
+   }
+
+   protected void leavePageEdit()
+   {
+      getWebHelper().leavePageEdit();
+   }
+
+   protected void finished()
+   {
+      if (getWebHelper().isDumpPageOnExit())
+         getWebHelper().dumpPage();
    }
 }
