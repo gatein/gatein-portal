@@ -40,13 +40,13 @@ public class Test_GTNPORTAL_1823_FailToCreatePage extends AbstractWebTest
    private static final Logger log = Logger.getLogger(Test_GTNPORTAL_1823_FailToCreatePage.class);
 
    /** Number of concurrent threads for the test */
-   private static final int TCOUNT = 2;
+   protected static final int TCOUNT = 2;
 
    /** Counter for id generation */
-   private static AtomicInteger idCounter = new AtomicInteger(1);
+   protected static AtomicInteger idCounter = new AtomicInteger(1);
 
    /** Down counter used to synchronize threads before clicking Finish */
-   private static CountDownLatch sync = new CountDownLatch(TCOUNT);
+   protected static CountDownLatch sync = new CountDownLatch(TCOUNT);
 
    /**
     * Id for inclusion in page title so that every thread uses unique name for the newly added page
@@ -65,11 +65,11 @@ public class Test_GTNPORTAL_1823_FailToCreatePage extends AbstractWebTest
     * @throws Throwable if test fails
     */
    @Test(invocationCount = TCOUNT, threadPoolSize = TCOUNT, groups = {"GateIn", "jira", "htmlunit"})
-   public void testGTNPORTAL_1823_FailToCreatePage() throws Throwable
+   public void testMain() throws Throwable
    {
       try
       {
-         test();
+         test(false);
       }
       finally
       {
@@ -84,7 +84,7 @@ public class Test_GTNPORTAL_1823_FailToCreatePage extends AbstractWebTest
     *
     * @throws Throwable
     */
-   private void test() throws Throwable
+   protected void test(boolean navNodeTest) throws Throwable
    {
       String id = nextId();
       String categoryTitle = "Gadgets";
@@ -107,10 +107,11 @@ public class Test_GTNPORTAL_1823_FailToCreatePage extends AbstractWebTest
       sync.await();
 
 
-      // Uncomment this to make the test pass
-      // TODO: even though everything looks ok, it's not - navigation only contains TestPage2 node when it should also contain TestPage1 node.
-      //if (id.equals("2"))
-      //   Thread.sleep(5000);
+      if (navNodeTest && id.equals("2"))
+      {
+         // Finish click concurrency is inappropriate for navNodeTest where we need predictable order
+         Thread.sleep(5000);
+      }
 
       // Now click Finish (both threads at the same time)
       finishPageEdit();
@@ -121,6 +122,12 @@ public class Test_GTNPORTAL_1823_FailToCreatePage extends AbstractWebTest
       Assert.assertNotSame(textPresent, failedText, "Concurrent Add Page issue reproduced!");
       Assert.assertEquals(textPresent, portletName, "");
 
+      if (navNodeTest && id.equals("2"))
+      {
+         // Check that both test pages' navigation nodes are present
+         Assert.assertTrue(isElementPresent("link=TestPage1"), "TestPage1 link presence");
+         Assert.assertTrue(isElementPresent("link=TestPage2"), "TestPage2 link presence");
+      }
       finished();
    }
 
