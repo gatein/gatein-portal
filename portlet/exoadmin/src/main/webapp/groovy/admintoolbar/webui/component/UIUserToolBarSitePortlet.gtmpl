@@ -16,7 +16,7 @@
 	void renderPortalNavigations() {
 			 
 			print """
-					<div style="position: absolute; display:none" class="MenuItemContainer">
+					<div style="position: absolute; display:none" class="MenuItemContainer portlet-menu-cascade">
 						<div class="SubBlock">
 			""";
 			boolean isCurrent = false;
@@ -38,7 +38,7 @@
                 EntityEncoder entityEncoder = EntityEncoder.FULL;
 				portal = entityEncoder.encode(portal);
 				print """
-					<div class="MenuItem">
+					<div class="MenuItem portlet-menu-cascade-item">
 						<div $clazz>
 							<a href="$href" class="ItemIcon SiteIcon">$portal</a>
 						</div>
@@ -60,7 +60,7 @@
 		navigation = uicomponent.getCurrentPortalNavigation();
 		nodes = navigation.getNodes();
 		print """
-			<div style="position: absolute; display:none" class="MenuItemContainer">
+			<div style="position: absolute; display:none" class="MenuItemContainer portlet-menu-cascade">
 				<div class="SubBlock">
 		""";
 		for(int i = 0; i < nodes.size(); i++) {
@@ -76,7 +76,7 @@
 		PageNode selectedNode = uicomponent.getSelectedPageNode();
 		String tabStyleNavigation = "";
 		if(selectedNode != null && node.getUri() == selectedNode.getUri()) {			 
-				tabStyleNavigation = "SelectedItem";
+				tabStyleNavigation = "SelectedItem portlet-menu-cascade-item-selected";
 		}
 		
 		boolean hasChild = (node.getChildren() != null && node.getChildren().size() > 0);
@@ -93,7 +93,7 @@
         EntityEncoder entityEncoder = EntityEncoder.FULL;
 		label = entityEncoder.encode(label);
 		print """
-			<div class="MenuItem $tabStyleNavigation">
+			<div class="MenuItem $tabStyleNavigation portlet-menu-cascade-item">
 				<div class="$clazz">
 		""";
 						if(node.pageReference != null) {
@@ -106,7 +106,7 @@
 		""" ;
 		if(hasChild) {
 			print """
-				<div class="MenuItemContainer" style="position: absolute; display:none">			
+				<div class="MenuItemContainer portlet-menu-indicator" style="position: absolute; display:none">			
 					<div class="SubBlock">
 			""" ;
 				for(int j = 0; j < node.getChildren().size(); j++) {
@@ -127,7 +127,7 @@
 <div class="UIUserToolBarSitePortlet" id="$uicomponent.id" >
 	<div class="UIHorizontalTabs">
 			<div class="TabsContainer">
-				<div class="UITab NormalToolbarTab">
+				<div class="UITab NormalToolbarTab portlet-menu-item">
 					<div class="">
 								<a class="SitesIcon TBIcon" href="<%= portalURI + "portalnavigation" %>">
 									<%=_ctx.appRes("UIUserToolBarSitePortlet.header.site")%>

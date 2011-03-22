@@ -33,26 +33,26 @@
 <div class="UIAdminToolbarPortlet" id="$uicomponent.id" >
 	<div class="UIHorizontalTabs">
 		<div class="TabsContainer" >
-			<div class="UITab NormalToolbarTab">
+			<div class="UITab NormalToolbarTab portlet-menu-item">
 				<div class="">
 					<a class="EditorIcon TBIcon" href="#">$editorLabel</a>
 				</div>
-				<div class="MenuItemContainer" style="display:none;">
+				<div class="MenuItemContainer portlet-menu-cascade" style="display:none;">
 					<div class="SubBlock">
 						<% if(userCouldEditNavigation){ %>
-							<div class="MenuItem">	
+							<div class="MenuItem portlet-menu-cascade-item">	
 								<a href="javascript:ajaxGet(eXo.env.server.createPortalURL('UIWorkingWorkspace', 'PageCreationWizard', true))" title="" class="ItemIcon AddPageIcon">$addPageLabel</a>
 							</div>
 						<% } %>
 						
 						<% if(userCouldEditPage){ %>
-							<div class="MenuItem">
+							<div class="MenuItem portlet-menu-cascade-item">
 								<a href="javascript:ajaxGet(eXo.env.server.createPortalURL('UIWorkingWorkspace', 'EditCurrentPage', true))" title="" class="ItemIcon EditPageIcon">$editPageLabel</a>
 							</div>
 						<% } %>
 						
 						<% if(userCouldEditPortal){ %>
-							<div class="MenuItem">	
+							<div class="MenuItem portlet-menu-cascade-item">	
 								<a href="javascript:ajaxGet(eXo.env.server.createPortalURL('UIWorkingWorkspace', 'EditInline', true))" title="" class="ItemIcon EditSiteIcon">$editSiteLayout</a>
 							</div>
 						<% } %>

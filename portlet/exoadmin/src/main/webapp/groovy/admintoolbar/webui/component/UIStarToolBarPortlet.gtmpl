@@ -13,16 +13,16 @@
 <div class="UIStarToolBarPortlet" id="$uicomponent.id" >
 	<div class="UIHorizontalTabs">
 		<div class="TabsContainer">
-			<div class="UITab" style="width: 62px">
+			<div class="UITab portlet-menu-item" style="width: 62px">
 				<div class=""></div>
-				<div class="MenuItemContainer" style="display:none;">
-					<div class="MenuItem" onclick="$changeLanguageAction">
+				<div class="MenuItemContainer portlet-menu-cascade" style="display:none;">
+					<div class="MenuItem portlet-menu-cascade-item" onclick="$changeLanguageAction">
 						<a href="#" class="ChangeLanguageIcon"><%=_ctx.appRes("UIStarToolbarPortlet.item.ChangeLanguage")%></a>
 					</div>
-					<div class="MenuItem" onclick="$changeSkinAction">
+					<div class="MenuItem portlet-menu-cascade-item" onclick="$changeSkinAction">
 						<a href="#" class="ChangeSkinIcon"><%=_ctx.appRes("UIStarToolbarPortlet.item.ChangeSkin")%></a>
 					</div>
-					<div class="MenuItem" onclick="eXo.portal.logout();">
+					<div class="MenuItem portlet-menu-cascade-item" onclick="eXo.portal.logout();">
 						<a href="#" class="SignOutIcon"><%=_ctx.appRes("UIStarToolbarPortlet.item.Logout")%></a>
 					</div>
 				</div>

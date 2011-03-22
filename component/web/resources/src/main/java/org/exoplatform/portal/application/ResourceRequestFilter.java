@@ -94,7 +94,8 @@ public class ResourceRequestFilter extends AbstractFilter
             httpResponse.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
             return;
          }
-
+         response.setContentType("text/css; charset=UTF-8");
+         
          final OutputStream out = response.getOutputStream();
          final BinaryOutput output = new BinaryOutput()
          {

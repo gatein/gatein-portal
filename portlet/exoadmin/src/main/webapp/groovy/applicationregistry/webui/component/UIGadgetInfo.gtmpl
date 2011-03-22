@@ -24,7 +24,7 @@
 		<div class="Refresh16x16Icon ControlIcon" title="<%=_ctx.appRes("UIGadgetInfo.title.refresh")%>" onclick="<%= uicomponent.event("Refresh") %>"><span></span></div>
 		<div class="ClearBoth"><span></span></div>
 	</div>
- 	<div class="Application">
+ 	<div class="Application ClearFix">
  		<div class="PortletIcons">
 				<img src="$gadgetThumbnail" onError="src='$srcBGError'" alt=""/>
 		</div>

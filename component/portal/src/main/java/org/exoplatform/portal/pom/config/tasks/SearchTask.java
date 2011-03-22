@@ -73,7 +73,7 @@ public abstract class SearchTask<T> implements POMTask<LazyPageList<T>>
             ObjectType<? extends Site> siteType = null;
             if (ownerType != null)
             {
-               siteType = Mapper.parseSiteType(ownerType);
+               siteType = Mapper.parseSiteType(ownerType.trim());
             }
             ite = findW(session, siteType, q.getOwnerId(), q.getTitle());
 

@@ -30,9 +30,9 @@
 										String label = _ctx.appRes(formName + ".label." + inputEntry.getId());
 										if(!label.equals(inputEntry.getId())) {
 									%>
-										<td class="FieldLabel"><%=label%></td>
+										<td class="FieldLabel portlet-form-label"><%=label%></td>
 									<%}%>
-									<td class="FieldComponent">
+									<td class="FieldComponent portlet-input-field">
 									<% 
 										if(inputEntry instanceof UIFormRadioBoxInput) {
 											println "<div class=\"MultiRadioInput\">";

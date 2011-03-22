@@ -110,8 +110,8 @@
 "gadgets.features" : {
   "core.io" : {
     // Note: /proxy is an open proxy. Be careful how you expose this!
-    "proxyUrl" : "http://%host%/eXoGadgetServer/gadgets/proxy?refresh=%refresh%&url=%url%",
-    "jsonProxyUrl" : "http://%host%/eXoGadgetServer/gadgets/makeRequest"
+    "proxyUrl" : "//%host%/eXoGadgetServer/gadgets/proxy?refresh=%refresh%&url=%url%",
+    "jsonProxyUrl" : "//%host%/eXoGadgetServer/gadgets/makeRequest"
   },
   "views" : {
     "home" : {

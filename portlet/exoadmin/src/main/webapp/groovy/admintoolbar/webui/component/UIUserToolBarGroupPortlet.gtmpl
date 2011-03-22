@@ -20,7 +20,7 @@
 			String navTitle = _ctx.appRes("UIPageNavigation.label.titleBar") ;
 			navTitle = navTitle.replace("{0}", OrganizationUtils.getGroupLabel(navigation.ownerId));
 			print """
-						<div class="TitleBar"><div style="width: 99%" title="$navigation.ownerId">$navTitle</div></div>
+						<div class="TitleBar portlet-menu-description"><div style="width: 99%" title="$navigation.ownerId">$navTitle</div></div>
 						<div class="SubBlock">
 							""" ;
 							for(int i = 0; i < nodes.size(); i++) {
@@ -35,7 +35,7 @@
 		PageNode selectedNode = uicomponent.getSelectedPageNode();
 		String tabStyleNavigation = "";
 		if(selectedNode != null && node.getUri() == selectedNode.getUri()) {			 
-				tabStyleNavigation = "SelectedItem";
+				tabStyleNavigation = "SelectedItem portlet-menu-item-selected";
 		}
 		
 		boolean hasChild = (node.getChildren() != null && node.getChildren().size() > 0);
@@ -52,7 +52,7 @@
         EntityEncoder entityEncoder = EntityEncoder.FULL;
 		label = entityEncoder.encode(label);
 		print """
-			<div class="MenuItem $tabStyleNavigation">
+			<div class="MenuItem $tabStyleNavigation portlet-menu-cascade-item">
 				<div class="$clazz">
 		""";
 						if(node.pageReference != null) {
@@ -65,7 +65,7 @@
 		""" ;
 		if(hasChild) {
 			print """
-				<div class="MenuItemContainer" style="position: absolute; display:none">			
+				<div class="MenuItemContainer portlet-menu-cascade-separator" style="position: absolute; display:none">			
 					<div class="SubBlock">
 			""" ;
 				for(int j = 0; j < node.getChildren().size(); j++) {
@@ -85,12 +85,12 @@
 <div class="UIUserToolBarGroupPortlet" id="$uicomponent.id" >
 	<div class="UIHorizontalTabs">
 		<div class="TabsContainer">	
-			<div class="UITab NormalToolbarTab">
+			<div class="UITab NormalToolbarTab portlet-menu-item">
 				<div class="">
 							<a class="GroupIcon TBIcon" href="<%= portalURI + "groupnavigation" %>"><%=_ctx.appRes("UIUserToolBarGroupPortlet.header.group")%></a>
 				</div>
 				<% if (!groupNavigations.isEmpty()) { %>
-				<div style="display:none" class="MenuItemContainer">
+				<div style="display:none" class="MenuItemContainer portlet-menu-cascade">
 				<% for(navigation in groupNavigations) {
 						renderGroupPageNavigation(navigation);
 				} %>

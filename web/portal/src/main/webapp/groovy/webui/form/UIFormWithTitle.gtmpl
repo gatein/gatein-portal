@@ -15,15 +15,15 @@
 							<tr>
 								<%fieldName = uicomponent.getLabel(field.getName());%>
 								<%if(field instanceof UIFormInputBase && !fieldName.equals(uicomponent.getId())) { %>												
-									<td class="FieldLabel">
+									<td class="FieldLabel portlet-form-label">
 										<%if(fieldName != null && fieldName.length() > 0) {%> 
 											<%=uicomponent.getLabel(field.getName()) %>
 										<%}%>
 									</td>
 									<% if(field instanceof UIFormInputBase && field.isEditable()) { %>
-										<td class="FieldComponent"><% uiform.renderField(field) %></td>
+										<td class="FieldComponent portlet-input-field"><% uiform.renderField(field) %></td>
 									<% }else { %>
-										<td class="NonEditableField"><% uiform.renderField(field) %></td>
+										<td class="NonEditableField portlet-input-field"><% uiform.renderField(field) %></td>
 									<% } %>	
 								<%} else {%>
 									<td class="FieldComponent" colspan="2"><% uiform.renderField(field) %></td>

@@ -244,7 +244,15 @@ public final class POMSession
    {
       this.save();
       //
-      String ownerIdChunk = ownerId != null ? new MOPFormatter().encodeNodeName(null, ownerId) : "%";
+      String ownerIdChunk = "%";
+      if (ownerId != null)
+      {
+         ownerId = ownerId.trim();
+         if (!ownerId.isEmpty())
+         {
+            ownerIdChunk = new MOPFormatter().encodeNodeName(null, ownerId);
+         }
+      }
 
       //
       String ownerTypeChunk;
@@ -314,7 +322,7 @@ public final class POMSession
                   "jcr:path LIKE '" + workspaceChunk + "/" + ownerTypeChunk + "/" + ownerIdChunk
                      + "/mop:rootpage/mop:children/mop:pages/mop:children/%' AND " +
                      "(" +
-                     "LOWER(gtn:name) LIKE '%" + title.toLowerCase() + "%' ESCAPE '\\')";
+                     "LOWER(gtn:name) LIKE '%" + title.trim().toLowerCase() + "%' ESCAPE '\\')";
             }
             else
             {

@@ -27,6 +27,7 @@ import org.exoplatform.services.log.Log;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.security.ConversationState;
+import org.exoplatform.services.security.web.SetCurrentIdentityFilter;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -44,7 +45,7 @@ public class CacheUserProfileFilter extends AbstractFilter
    /**
     * Logger.
     */
-   private static Log log = ExoLogger.getLogger("core.security.SetCurrentIdentityFilter");
+   private static Log log = ExoLogger.getLogger(SetCurrentIdentityFilter.class);
 
    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws ServletException
    {

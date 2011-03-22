@@ -13,11 +13,11 @@
 					String [] columns = uicomponent.getColumns();
 					for(col in columns){
 				%>
-						<th><%=_ctx.appRes(name + ".header."+col)%></th>
+						<th class="portlet-table-header"><%=_ctx.appRes(name + ".header."+col)%></th>
 				<%}%>
 			</tr>
 		</thead>
-		<tbody>
+		<tbody class="portlet-table-body">
 		<%
 			String rowClass = null;
 			boolean even = true;

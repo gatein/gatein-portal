@@ -238,14 +238,10 @@ not sure if we need this one?.. */
   color: #242424;
   text-decoration: none;
 	background: #F5F9FA;
-	padding: 5px 10px;
-	border-bottom: 1px solid #cee0e4;
 }
 
 /* Selected menu item. */
 .portlet-menu-item-selected {
-	padding: 5px 10px;
-	border-bottom: 1px solid #cee0e4;
 	background: #F5F9FA;
 	color: #058ee6;
 }
@@ -253,110 +249,77 @@ not sure if we need this one?.. */
 .portlet-menu-item-hover {
 	color: #058ee6;
 	text-decoration: none;
-	padding: 5px 10px;
-	border-bottom: 1px solid #cee0e4;
 	background: #F5F9FA;
 }
 
 /* Selected menu item when the mouse hovers over it. */
 .portlet-menu-item-hover-selected {
-	padding: 5px 10px;
-	border-bottom: 1px solid #cee0e4;
 	background: #F5F9FA;
 	color: #058ee6;
 }
 
 /* Normal, unselected menu item that has sub-menus. */
 .portlet-menu-cascade-item {
-	line-height: 18px;
 	color: #585858;
 }
 
 /* Selected sub-menu item that has sub-menus */
 .portlet-menu-cascade-item-selected {
-	border-bottom: 1px solid #d8e7ea;
-	padding: 5px 20px;
 	color: #058ee6;
 }
 
 .porlet-menu-cascade {
-	border-bottom: 1px solid #d8e7ea;
-	padding: 5px 20px;
 }
 
 .portlet-menu-cascade-item-hover {
-	border-bottom: 1px solid #d8e7ea;
-	padding: 5px 20px;
   color: #058ee6;
 }
 
 .portlet-menu-cascade-item-hover-selected {
-	border-bottom: 1px solid #d8e7ea;
-	padding: 5px 20px;
   color: #058ee6;
 }
 
 .portlet-menu-separator {
-	line-height: 18px;
 }
 
 .portlet-menu-cascade-separator {
-	line-height: 18px;
 }
 
 .portlet-menu-content {
-	border-bottom: 1px solid #e4eff2;
-	padding: 5px 30px;
 	color: #878787;
 }
 
 .portlet-menu-content-selected {
-	border-bottom: 1px solid #e4eff2;
-	padding: 5px 30px;
   color: #058ee6;
 }
 
 .portlet-menu-content-hover {
-	border-bottom: 1px solid #e4eff2;
-	padding: 5px 30px;
   color: #058ee6;
 }
 
 .portlet-menu-content-hover-selected {
-	border-bottom: 1px solid #e4eff2;
-	padding: 5px 30px;
   color: #058ee6;
 }
 
 .portlet-menu-indicator {
-	padding: 5px 40px;
   color: #bebebe;
-	border-bottom: 1px solid #f4f8f9;
 }
 
 .portlet-menu-indicator-selected {
-	padding: 5px 40px;
   color: #058ee6;
-	border-bottom: 1px solid #f4f8f9;
 }
 
 .portlet-menu-indicator-hover {
-	padding: 5px 40px;
   color: #058ee6;
-	border-bottom: 1px solid #f4f8f9;
 }
 
 .portlet-menu-indicator-hover-selected {
-	padding: 5px 40px;
   color: #058ee6;
-	border-bottom: 1px solid #f4f8f9;
 }
 
 .portlet-menu-description {
-	line-height: 18px;
 }
 
 .portlet-menu-caption {
-	line-height: 18px;
 }
 

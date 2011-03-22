@@ -245,36 +245,24 @@ not sure if we need this one?.. */
 	background: #dddddd;
 	color: #2e2e2e;
 	text-decoration: none;
-	margin-bottom: 1px;
-	line-height: 22px;
-	padding: 0px 5px;
 }
 
 /* Selected menu item. */
 .portlet-menu-item-selected {
 	background: #dddddd;
 	color: #058bb6;
-	margin-bottom: 1px;
-	line-height: 22px;
-	padding: 0px 5px;
 }
 
 .portlet-menu-item-hover {
 	background: #dddddd;
 	color: #058bb6;
 	text-decoration: none;
-	margin-bottom: 1px;
-	line-height: 22px;
-	padding: 0px 5px;
 }
 
 /* Selected menu item when the mouse hovers over it. */
 .portlet-menu-item-hover-selected {
 	background: #dddddd;
 	color: #058bb6;
-	line-height: 22px;
-	margin-bottom: 1px;
-	padding: 0px 5px;
 }
 
 /* Normal, unselected menu item that has sub-menus. */
@@ -282,9 +270,6 @@ not sure if we need this one?.. */
 	background: #e9e8ed;
 	color: #636363;
 	text-decoration: none;
-	line-height: 22px;
-	padding: 0px 20px;
-	border-bottom: 1px solid #dddddd;
 }
 
 /* Selected sub-menu item that has sub-menus */
@@ -292,36 +277,24 @@ not sure if we need this one?.. */
 	background: #e9e8ed;
 	color: #252525;
 	text-decoration: none;
-	line-height: 22px;
-	padding: 0px 20px;
-	border-bottom: 1px solid #dddddd;
 }
 
 .porlet-menu-cascade {
 	background: #e9e8ed;
 	color: #636363;
 	text-decoration: none;
-	line-height: 22px;
-	padding: 0px 20px;
-	border-bottom: 1px solid #dddddd;
 }
 
 .portlet-menu-cascade-item-hover {
 	background: #e9e8ed;
 	color: #252525;
 	text-decoration: none;
-	line-height: 22px;
-	padding: 0px 20px;
-	border-bottom: 1px solid #dddddd;
 }
 
 .portlet-menu-cascade-item-hover-selected {
 	background: #e9e8ed;
 	color: #252525;
 	text-decoration: none;
-	line-height: 22px;
-	padding: 0px 20px;
-	border-bottom: 1px solid #dddddd;
 }
 
 .portlet-menu-separator {
@@ -333,64 +306,40 @@ not sure if we need this one?.. */
 	background: #f6f6f6;
 	color: #717171;
 	text-decoration: none;
-	line-height: 22px;
-	padding: 0px 30px;
-	border-bottom: 1px solid #e9e8ed;
 }
 
 .portlet-menu-content-selected {
 	background: #f6f6f6;
 	color: #272727;
 	text-decoration: none;
-	line-height: 22px;
-	padding: 0px 30px;
-	border-bottom: 1px solid #e9e8ed;
 }
 
 .portlet-menu-content-hover {
 	background: #f6f6f6;
 	color: #272727;
 	text-decoration: none;
-	line-height: 22px;
-	padding: 0px 30px;
-	border-bottom: 1px solid #e9e8ed;
 }
 
 .portlet-menu-content-hover-selected {
 	background: #f6f6f6;
 	color: #272727;
 	text-decoration: none;
-	line-height: 22px;
-	padding: 0px 30px;
-	border-bottom: 1px solid #e9e8ed;
 }
 
 .portlet-menu-indicator {
 	color: #8b8b8b;
-	line-height: 22px;
-	padding: 0px 40px;
-	border-bottom: 1px solid #e9e8ed;
 }
 
 .portlet-menu-indicator-selected {
 	color: #606060;
-	line-height: 22px;
-	padding: 0px 40px;
-	border-bottom: 1px solid #e9e8ed;
 }
 
 .portlet-menu-indicator-hover {
 	color: #606060;
-	line-height: 22px;
-	padding: 0px 40px;
-	border-bottom: 1px solid #e9e8ed;
 }
 
 .portlet-menu-indicator-hover-selected {
 	color: #606060;
-	line-height: 22px;
-	padding: 0px 40px;
-	border-bottom: 1px solid #e9e8ed;
 }
 
 .portlet-menu-description {}

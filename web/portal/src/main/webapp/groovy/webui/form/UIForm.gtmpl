@@ -13,12 +13,12 @@
 								<%
 									if(fieldName != null && fieldName.length() > 0 && !fieldName.equals(uicomponent.getId()) && !fieldName.equals(field.getName())) {
 								%>												
-									<td class="FieldLabel">
+									<td class="FieldLabel portlet-form-label">
 										<%=uicomponent.getLabel(field.getName()) %>
 									</td>
-									<td class="FieldComponent"><% uiform.renderField(field) %></td>
+									<td class="FieldComponent portlet-input-field"><% uiform.renderField(field) %></td>
 								<%} else {%>
-									<td class="FieldComponent" colspan="2"><% uiform.renderField(field) %></td>
+									<td class="FieldComponent portlet-input-field" colspan="2"><% uiform.renderField(field) %></td>
 								<%}%>
 							</tr>
 				<%

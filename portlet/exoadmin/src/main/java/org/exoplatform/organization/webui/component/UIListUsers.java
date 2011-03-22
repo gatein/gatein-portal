@@ -130,7 +130,7 @@ public class UIListUsers extends UISearch
       UIFormStringInput input = (UIFormStringInput)quickSearchInput.getChild(0);
       UIFormSelectBox select = (UIFormSelectBox)quickSearchInput.getChild(1);
       String name = input.getValue();
-      if (name != null && !name.equals(""))
+      if (name != null && !(name = name.trim()).equals(""))
       {
          if (name.indexOf("*") < 0)
          {

@@ -260,7 +260,7 @@ public class UIUserSelector extends UIForm implements UIPopupComponent
    {
       OrganizationService service = getApplicationComponent(OrganizationService.class);
       Query q = new Query();
-      if (keyword != null && keyword.trim().length() != 0)
+      if (keyword != null && (keyword = keyword.trim()).length() != 0)
       {
          if (keyword.indexOf("*") < 0)
          {
@@ -292,7 +292,7 @@ public class UIUserSelector extends UIForm implements UIPopupComponent
       // remove if user doesn't exist in selected group
       MembershipHandler memberShipHandler = service.getMembershipHandler();
 
-      if (groupId != null && groupId.trim().length() != 0)
+      if (groupId != null && (groupId = groupId.trim()).length() != 0)
       {
          for (Object user : results)
          {

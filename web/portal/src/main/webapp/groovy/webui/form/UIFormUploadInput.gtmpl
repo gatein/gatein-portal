@@ -28,7 +28,7 @@
 	</div>
 	<div class="SelectFileFrame" style="display: none;">
 		<div class="FileName">
-			<div class="FileNameLabel"><span></span></div>
+			<div class="FileNameLabel portlet-form-label"><span></span></div>
 		</div>
 		<div class="RemoveFile" title="Remove Uploaded" onclick="eXo.webui.UIUpload.deleteUpload($uploadId);"></div>
 	</div>
