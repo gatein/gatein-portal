@@ -111,9 +111,6 @@
                              onParentVersion="COPY" protected="false" multiple="false">
             <valueConstraints/>
          </propertyDefinition>
-         <propertyDefinition name="portlethandles" requiredType="String" autoCreated="false" mandatory="false"
-                             onParentVersion="COPY" protected="false" multiple="true">
-         </propertyDefinition>
       </propertyDefinitions>
       <childNodeDefinitions>
          <childNodeDefinition name="properties" defaultPrimaryType="wsrp:registrationproperties" autoCreated="false"
@@ -122,7 +119,30 @@
                <requiredPrimaryType>wsrp:registrationproperties</requiredPrimaryType>
             </requiredPrimaryTypes>
          </childNodeDefinition>
+         <childNodeDefinition name="*" defaultPrimaryType="wsrp:portletcontext" autoCreated="false" mandatory="false"
+                              onParentVersion="COPY" protected="false" sameNameSiblings="false">
+            <requiredPrimaryTypes>
+               <requiredPrimaryType>wsrp:portletcontext</requiredPrimaryType>
+            </requiredPrimaryTypes>
+         </childNodeDefinition>
       </childNodeDefinitions>
+   </nodeType>
+
+   <nodeType name="wsrp:portletcontext" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
+      <supertypes>
+         <supertype>nt:base</supertype>
+         <supertype>mix:referenceable</supertype>
+      </supertypes>
+      <propertyDefinitions>
+         <propertyDefinition name="id" requiredType="String" autoCreated="false" mandatory="false"
+                             onParentVersion="COPY" protected="false" multiple="false">
+            <valueConstraints/>
+         </propertyDefinition>
+         <propertyDefinition name="state" requiredType="Binary" autoCreated="false" mandatory="false"
+                             onParentVersion="COPY" protected="false" multiple="false">
+            <valueConstraints/>
+         </propertyDefinition>
+      </propertyDefinitions>
    </nodeType>
 
    <nodeType name="wsrp:registrationproperties" isMixin="false" hasOrderableChildNodes="true" primaryItemName="">
