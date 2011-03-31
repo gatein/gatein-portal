@@ -52,6 +52,12 @@
       <groupId>org.gatein.shindig</groupId>
       <artifactId>shindig-common</artifactId>
       <scope>provided</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>com.google.code.guice</groupId>
+          <artifactId>guice-jmx</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     
   </dependencies>

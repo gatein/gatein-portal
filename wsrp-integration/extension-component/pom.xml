@@ -47,6 +47,12 @@
          <groupId>org.gatein.wsrp</groupId>
          <artifactId>wsrp-consumer</artifactId>
          <scope>provided</scope>
+         <exclusions>
+            <exclusion>
+               <groupId>apache-httpclient</groupId>
+               <artifactId>commons-httpclient</artifactId>
+            </exclusion>
+         </exclusions>
       </dependency>
       <dependency>
          <groupId>org.gatein.wsrp</groupId>
@@ -114,6 +120,12 @@
          <artifactId>jbossws-native-core</artifactId>
          <version>3.1.2.GA</version>
          <scope>provided</scope>
+         <exclusions>
+            <exclusion>
+               <groupId>wscommons-policy</groupId>
+               <artifactId>policy</artifactId>
+            </exclusion>
+         </exclusions>
       </dependency>
 
       <!-- tests -->

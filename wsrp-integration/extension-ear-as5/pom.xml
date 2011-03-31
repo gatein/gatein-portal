@@ -72,6 +72,12 @@
       <dependency>
          <groupId>org.gatein.wsrp</groupId>
          <artifactId>wsrp-consumer</artifactId>
+         <exclusions>
+            <exclusion>
+               <groupId>apache-httpclient</groupId>
+               <artifactId>commons-httpclient</artifactId>
+            </exclusion>
+         </exclusions>
       </dependency>
       <dependency>
          <groupId>org.gatein.wsrp</groupId>

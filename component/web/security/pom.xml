@@ -39,6 +39,12 @@
     <dependency>
       <groupId>org.exoplatform.core</groupId>
       <artifactId>exo.core.component.organization.api</artifactId>
+      <exclusions>
+         <exclusion>
+            <groupId>quartz</groupId>
+            <artifactId>quartz</artifactId>
+         </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.exoplatform.portal</groupId>
@@ -62,6 +68,40 @@
         <groupId>org.jboss.jbossas</groupId>
         <artifactId>jboss-as-tomcat</artifactId>
         <scope>provided</scope>
+        <exclusions>
+           <exclusion>
+             <groupId>jpl-pattern</groupId>
+             <artifactId>jpl-pattern</artifactId>
+           </exclusion>
+           <exclusion>
+             <groupId>jpl-util</groupId>
+             <artifactId>jpl-util</artifactId>
+           </exclusion>
+           <exclusion>
+             <groupId>cglib</groupId>
+             <artifactId>cglib</artifactId>
+           </exclusion>
+           <exclusion>
+             <groupId>javax.security</groupId>
+             <artifactId>jacc</artifactId>
+           </exclusion>
+           <exclusion>
+             <groupId>javax.security</groupId>
+             <artifactId>jaas</artifactId>
+           </exclusion>
+           <exclusion>
+             <groupId>sun-jaxws</groupId>
+             <artifactId>jsr181-api</artifactId>
+           </exclusion>
+           <exclusion>
+             <groupId>sun-jaxws</groupId>
+             <artifactId>jaxws-api</artifactId>
+           </exclusion>
+           <exclusion>
+             <groupId>trove</groupId>
+             <artifactId>trove</artifactId>
+           </exclusion>
+        </exclusions>
      </dependency>
     <dependency>
       <groupId>org.gatein.wci</groupId>

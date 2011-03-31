@@ -33,7 +33,7 @@ import java.util.List;
  * Created by The eXo Platform SAS
  * Author : Huu-Dung Kieu	
  *          kieuhdung@gmail.com
- * 22 déc. 08  
+ * 22 dec. 08  
  */
 public class GroupManagement
 {

@@ -85,6 +85,12 @@
       <dependency>
          <groupId>org.gatein.shindig</groupId>
          <artifactId>shindig-common</artifactId>
+         <exclusions>
+            <exclusion>
+               <groupId>com.google.code.guice</groupId>
+               <artifactId>guice-jmx</artifactId>
+            </exclusion>
+         </exclusions>
       </dependency>
       <dependency>
          <groupId>org.gatein.shindig</groupId>

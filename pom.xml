@@ -26,7 +26,7 @@
    <parent>
       <groupId>org.gatein</groupId>
       <artifactId>gatein-parent</artifactId>
-      <version>1.0.1-GA</version>
+      <version>1.1.0-Beta01</version>
    </parent>
 
    <groupId>org.exoplatform.portal</groupId>
@@ -46,10 +46,10 @@
       <nl.captcha.simplecaptcha.version>1.1.1-GA-Patch01</nl.captcha.simplecaptcha.version>
       <org.gatein.common.version>2.0.4-Beta02</org.gatein.common.version>
       <org.gatein.wci.version>2.1.0-Beta01</org.gatein.wci.version>
-      <org.gatein.pc.version>2.3.0-Alpha01</org.gatein.pc.version>
+      <org.gatein.pc.version>2.3.0-Beta01</org.gatein.pc.version>
       <org.picketlink.idm>1.1.8.CR01</org.picketlink.idm>
-      <org.gatein.wsrp.version>2.1.0-Alpha02</org.gatein.wsrp.version>
-      <org.gatein.mop.version>1.0.5-GA</org.gatein.mop.version>
+      <org.gatein.wsrp.version>2.1.0-Beta01</org.gatein.wsrp.version>
+      <org.gatein.mop.version>1.0.6-Beta01</org.gatein.mop.version>
       <org.slf4j.version>1.5.6</org.slf4j.version>
       <rhino.version>1.6R5</rhino.version>
       <org.codehaus.groovy.version>1.6.5</org.codehaus.groovy.version>
@@ -88,6 +88,16 @@
 
    <dependencyManagement>
       <dependencies>
+         <!-- Needed becuase of a Maven bug. Components depend on gatein-dep and for some
+              reasons with Maven 2.2.1 it can't find that dependency anymore
+         -->
+         <dependency>
+            <groupId>org.gatein</groupId>
+            <artifactId>gatein-dep</artifactId>
+            <version>1.0.3-Beta01</version>
+            <type>pom</type>
+            <scope>import</scope>
+         </dependency>
 
          <!-- eXo JCR stack -->
          <dependency>
@@ -836,12 +846,12 @@
             <version>1.0-rc2</version>
          </dependency>
          <dependency>
-            <groupId>com.google.code.guice</groupId>
+            <groupId>com.google.inject</groupId>
             <artifactId>guice</artifactId>
             <version>2.0</version>
          </dependency>
          <dependency>
-           <groupId>com.google.code.guice</groupId>
+           <groupId>com.google.inject.extensions</groupId>
            <artifactId>guice-jmx</artifactId>
            <version>2.0</version>
          </dependency>
@@ -885,6 +895,12 @@
             <groupId>org.gatein.shindig</groupId>
             <artifactId>shindig-gadgets</artifactId>
             <version>${org.shindig.version}</version>
+            <exclusions>
+               <exclusion>
+                  <groupId>com.google.code.guice</groupId>
+                  <artifactId>guice-jmx</artifactId>
+               </exclusion>
+            </exclusions>
          </dependency>
          <dependency>
             <groupId>org.gatein.shindig</groupId>
@@ -1158,64 +1174,21 @@
           <updatePolicy>never</updatePolicy>
         </snapshots>
       </repository>
-      <repository>
-         <id>oauth</id>
-         <url>http://oauth.googlecode.com/svn/code/maven</url>
-         <releases>
-            <enabled>true</enabled>
-         </releases>
-         <snapshots>
-            <enabled>false</enabled>
-         </snapshots>
-      </repository>
-      <repository>
-         <id>java.net</id>
-         <url>http://download.java.net/maven/2</url>
-         <releases>
-            <enabled>true</enabled>
-         </releases>
-         <snapshots>
-            <enabled>false</enabled>
-         </snapshots>
-      </repository>
-      <repository>
-         <id>exo-int</id>
-         <url>http://maven2.exoplatform.org/rest/maven2</url>
+   </repositories>
+   <pluginRepositories>
+      <pluginRepository>
+         <id>jboss-public-repository-group</id>
+         <name>JBoss Public Maven Repository Group</name>
+         <url>https://repository.jboss.org/nexus/content/groups/public/</url>
+         <layout>default</layout>
          <releases>
            <enabled>true</enabled>
+           <updatePolicy>never</updatePolicy>
          </releases>
          <snapshots>
-           <enabled>false</enabled>
-         </snapshots>
-      </repository>
-   </repositories>
-
-
-      <pluginRepositories>
-        <pluginRepository>
-          <id>jboss-public-repository-group</id>
-          <name>JBoss Public Maven Repository Group</name>
-          <url>https://repository.jboss.org/nexus/content/groups/public/</url>
-          <layout>default</layout>
-          <releases>
-            <enabled>true</enabled>
-            <updatePolicy>never</updatePolicy>
-          </releases>
-          <snapshots>
-            <enabled>true</enabled>
-            <updatePolicy>never</updatePolicy>
-          </snapshots>
-        </pluginRepository>
-      <pluginRepository>
-         <id>java.net</id>
-         <url>http://download.java.net/maven/2</url>
-         <releases>
-            <enabled>true</enabled>
-         </releases>
-         <snapshots>
-            <enabled>false</enabled>
-         </snapshots>
+           <enabled>true</enabled>
+          <updatePolicy>never</updatePolicy>
+        </snapshots>
       </pluginRepository>
-
    </pluginRepositories>
 </project>

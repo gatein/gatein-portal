@@ -471,10 +471,12 @@
       <groupId>org.exoplatform.portal</groupId>
       <artifactId>exo.portal.gadgets-core</artifactId>
     </dependency>
+    <!--
     <dependency>
       <groupId>org.exoplatform.portal</groupId>
       <artifactId>gatein.portal.component.wsrp</artifactId>
     </dependency>
+    -->
 
     <!-- Provided -->
     <dependency>
@@ -534,11 +536,11 @@
 
     <!-- Various -->
     <dependency>
-      <groupId>com.google.code.guice</groupId>
+      <groupId>com.google.inject</groupId>
       <artifactId>guice</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.google.code.guice</groupId>
+      <groupId>com.google.inject.extensions</groupId>
       <artifactId>guice-jmx</artifactId>
     </dependency>
     <dependency>
@@ -602,8 +604,8 @@
       <artifactId>hsqldb</artifactId>
     </dependency>
     <dependency>
-      <groupId>html-parser</groupId>
-      <artifactId>html-parser</artifactId>
+      <groupId>org.htmlparser</groupId>
+      <artifactId>htmlparser</artifactId>
     </dependency>
     <dependency>
       <groupId>com.ibm.icu</groupId>

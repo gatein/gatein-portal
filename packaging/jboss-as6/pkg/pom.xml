@@ -128,6 +128,12 @@
       <dependency>
          <groupId>org.exoplatform.kernel</groupId>
          <artifactId>exo.kernel.mc-int</artifactId>
+         <exclusions>
+            <exclusion>
+               <groupId>trove</groupId>
+               <artifactId>trove</artifactId>
+            </exclusion>
+         </exclusions>
       </dependency>
       <dependency>
          <groupId>org.exoplatform.kernel</groupId>
@@ -374,10 +380,30 @@
       <dependency>
          <groupId>org.gatein.shindig</groupId>
          <artifactId>shindig-common</artifactId>
+         <exclusions>
+            <exclusion>
+               <groupId>com.google.code.guice</groupId>
+               <artifactId>guice-jmx</artifactId>
+            </exclusion>
+         </exclusions>
       </dependency>
       <dependency>
          <groupId>org.gatein.shindig</groupId>
          <artifactId>shindig-social-api</artifactId>
+         <exclusions>
+            <exclusion>
+               <groupId>com.google.code.guice</groupId>
+               <artifactId>guice-jmx</artifactId>
+            </exclusion>
+            <exclusion>
+               <groupId>net.oauth.core</groupId>
+               <artifactId>oauth-provider</artifactId>
+            </exclusion>
+            <exclusion>
+               <groupId>net.oauth</groupId>
+               <artifactId>core</artifactId>
+            </exclusion>
+         </exclusions>
       </dependency>
 
       <!-- GateIn -->
@@ -529,11 +555,11 @@
 
       <!-- Various -->
       <dependency>
-         <groupId>com.google.code.guice</groupId>
+         <groupId>com.google.inject</groupId>
          <artifactId>guice</artifactId>
       </dependency>
       <dependency>
-         <groupId>com.google.code.guice</groupId>
+         <groupId>com.google.inject</groupId>
          <artifactId>guice-jmx</artifactId>
       </dependency>
       <dependency>
@@ -598,8 +624,8 @@
          <artifactId>groovy-all</artifactId>
       </dependency>
       <dependency>
-         <groupId>html-parser</groupId>
-         <artifactId>html-parser</artifactId>
+         <groupId>org.htmlparser</groupId>
+         <artifactId>htmlparser</artifactId>
          <version>1.6</version>
       </dependency>
       <dependency>
