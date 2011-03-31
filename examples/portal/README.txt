@@ -55,9 +55,6 @@ gatein-domain-sample-portal {
   org.gatein.wci.security.WCILoginModule optional
   	portalContainerName="sample-portal"
   	realmName="gatein-domain-sample-portal";
-  org.exoplatform.web.security.PortalLoginModule required 
-  	portalContainerName="sample-portal" 
-  	realmName="gatein-domain-sample-portal";
   org.exoplatform.services.security.jaas.SharedStateLoginModule required 
   	portalContainerName="sample-portal" 
   	realmName="gatein-domain-sample-portal";

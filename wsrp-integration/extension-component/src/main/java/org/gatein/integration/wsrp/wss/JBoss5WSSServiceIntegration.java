@@ -24,8 +24,8 @@ package org.gatein.integration.wsrp.wss;
 
 import org.gatein.wsrp.wss.WebServiceSecurityFactory;
 import org.picocontainer.Startable;
-import org.wsrp.wss.jboss5.handlers.consumer.WSSecurityCredentialHandler;
 import org.wsrp.wss.jboss5.handlers.consumer.JBWSSecurityHandlerWrapper;
+import org.wsrp.wss.jboss5.handlers.consumer.WSSecurityCredentialHandler;
 
 /**
  * @author <a href="mailto:mwringe@redhat.com">Matt Wringe</a>
