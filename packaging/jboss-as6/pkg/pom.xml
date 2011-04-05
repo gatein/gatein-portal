@@ -491,10 +491,6 @@
          <groupId>org.exoplatform.portal</groupId>
          <artifactId>exo.portal.gadgets-core</artifactId>
       </dependency>
-      <dependency>
-         <groupId>org.exoplatform.portal</groupId>
-         <artifactId>gatein.portal.component.wsrp</artifactId>
-      </dependency>
 
       <!-- Provided -->
       <dependency>
@@ -559,7 +555,7 @@
          <artifactId>guice</artifactId>
       </dependency>
       <dependency>
-         <groupId>com.google.inject</groupId>
+         <groupId>com.google.inject.extensions</groupId>
          <artifactId>guice-jmx</artifactId>
       </dependency>
       <dependency>
@@ -818,6 +814,12 @@
          <groupId>org.gatein.wsrp</groupId>
          <artifactId>wsrp-consumer</artifactId>
          <version>${org.gatein.wsrp.version}</version>
+         <exclusions>
+            <exclusion>
+               <groupId>apache-httpclient</groupId>
+               <artifactId>commons-httpclient</artifactId>
+            </exclusion>
+         </exclusions>
       </dependency>
       <dependency>
          <groupId>org.gatein.wsrp</groupId>
