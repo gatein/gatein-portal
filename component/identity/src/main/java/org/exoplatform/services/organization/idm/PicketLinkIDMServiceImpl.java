@@ -29,6 +29,8 @@ import org.exoplatform.services.naming.InitialContextInitializer;
 import org.jboss.cache.Cache;
 import org.jboss.cache.CacheFactory;
 import org.jboss.cache.DefaultCacheFactory;
+
+import org.jgroups.JChannelFactory;
 import org.picketlink.idm.api.IdentitySession;
 import org.picketlink.idm.api.IdentitySessionFactory;
 import org.picketlink.idm.api.cfg.IdentityConfiguration;
@@ -52,7 +54,7 @@ import javax.naming.InitialContext;
 public class PicketLinkIDMServiceImpl implements PicketLinkIDMService, Startable
 {
 
-   private static Log log_ = ExoLogger.getLogger(PicketLinkIDMServiceImpl.class);
+   private static Log log = ExoLogger.getLogger(PicketLinkIDMServiceImpl.class);
 
    public static final String PARAM_CONFIG_OPTION = "config";
 
@@ -70,6 +72,10 @@ public class PicketLinkIDMServiceImpl implements PicketLinkIDMService, Startable
 
    public static final String CACHE_CONFIG_STORE_OPTION = "storeCacheConfig";
 
+   public static final String JGROUPS_CONFIG = "jgroups-configuration";
+
+   public static final String JGROUPS_MUX_ENABLED = "jgroups-multiplexer-stack";
+
    private IdentitySessionFactory identitySessionFactory;
 
    private String config;
@@ -79,6 +85,8 @@ public class PicketLinkIDMServiceImpl implements PicketLinkIDMService, Startable
    private IdentityConfiguration identityConfiguration;
 
    private IntegrationCache integrationCache;
+
+   private static final JChannelFactory CHANNEL_FACTORY = new JChannelFactory();
 
    private PicketLinkIDMServiceImpl()
    {
@@ -96,6 +104,8 @@ public class PicketLinkIDMServiceImpl implements PicketLinkIDMService, Startable
       ValueParam realmName = initParams.getValueParam(REALM_NAME_OPTION);
       ValueParam apiCacheConfig = initParams.getValueParam(CACHE_CONFIG_API_OPTION);
       ValueParam storeCacheConfig = initParams.getValueParam(CACHE_CONFIG_STORE_OPTION);
+      ValueParam jgroupsStack = initParams.getValueParam(JGROUPS_MUX_ENABLED);
+      ValueParam jgroupsConfig = initParams.getValueParam(JGROUPS_CONFIG);
 
       if (config == null && jndiName == null)
       {
@@ -128,9 +138,9 @@ public class PicketLinkIDMServiceImpl implements PicketLinkIDMService, Startable
 
          if (apiCacheConfig != null)
          {
+
             InputStream configStream = confManager.getInputStream(apiCacheConfig.getValue());
 
-            // Create common JBoss Cache instance
             CacheFactory factory = new DefaultCacheFactory();
 
             if (configStream == null)
@@ -139,6 +149,8 @@ public class PicketLinkIDMServiceImpl implements PicketLinkIDMService, Startable
             }
 
             Cache cache = factory.createCache(configStream);
+
+            applyJGroupsConfig(cache, confManager, jgroupsStack, jgroupsConfig);
 
             cache.create();
             cache.start();
@@ -157,12 +169,30 @@ public class PicketLinkIDMServiceImpl implements PicketLinkIDMService, Startable
             picketLinkIDMCache.register(apiCacheProvider);
 
          }
+
+
          if (storeCacheConfig != null)
          {
             InputStream configStream = confManager.getInputStream(storeCacheConfig.getValue());
 
+            CacheFactory factory = new DefaultCacheFactory();
+
+            if (configStream == null)
+            {
+               throw new IllegalArgumentException("JBoss Cache configuration InputStream is null");
+            }
+
+            Cache cache = factory.createCache(configStream);
+
+            applyJGroupsConfig(cache, confManager, jgroupsStack, jgroupsConfig);
+
+            cache.create();
+            cache.start();
+
+            configStream.close();
+
             JBossCacheIdentityStoreCacheProviderImpl storeCacheProvider = new JBossCacheIdentityStoreCacheProviderImpl();
-            storeCacheProvider.initialize(configStream);
+            storeCacheProvider.initialize(cache);
             picketLinkIDMCache.register(storeCacheProvider);
             identityConfiguration.getIdentityConfigurationRegistry().register(storeCacheProvider, "storeCacheProvider");
 
@@ -224,5 +254,62 @@ public class PicketLinkIDMServiceImpl implements PicketLinkIDMService, Startable
    public String getRealmName()
    {
       return realmName;
+   }
+
+   /**
+    * Applying JGroups configuration for JBossCache.
+    * Code forked from org.exoplatform.services.jcr.jbosscacheExoJBossCacheFactory
+    *
+    * @param cache
+    * @param configurationManager
+    * @param jgroupsEnabledParam
+    * @param jgroupsConfigurationParam
+    */
+   private void applyJGroupsConfig(Cache cache,
+                                   ConfigurationManager configurationManager,
+                                   ValueParam jgroupsEnabledParam,
+                                   ValueParam jgroupsConfigurationParam)
+   {
+
+      String jgroupsEnabled = jgroupsEnabledParam != null ? jgroupsEnabledParam.getValue() : null;
+      String jgroupsConfiguration = jgroupsConfigurationParam != null ? jgroupsConfigurationParam.getValue() : null;
+
+      // JGroups multiplexer configuration if enabled
+      if (jgroupsEnabled != null && jgroupsEnabled.equalsIgnoreCase("true"))
+      {
+         try
+         {
+           if (jgroupsConfiguration != null)
+            {
+               // Create and inject multiplexer factory
+               CHANNEL_FACTORY.setMultiplexerConfig(configurationManager.getResource(jgroupsConfiguration));
+               cache.getConfiguration().getRuntimeConfig().setMuxChannelFactory(CHANNEL_FACTORY);
+               log.info("Multiplexer stack successfully enabled for the cache.");
+            }
+         }
+         catch (Exception e)
+         {
+            // exception occurred setting mux factory
+            throw new IllegalStateException("Error setting multiplexer configuration.", e);
+         }
+      }
+      else
+      {
+         // Multiplexer is not enabled. If jGroups configuration preset it is applied
+         if (jgroupsConfiguration != null)
+         {
+            try
+            {
+               cache.getConfiguration().setJgroupsConfigFile(
+                  configurationManager.getResource(jgroupsConfiguration));
+               log.info("Custom JGroups configuration set:"
+                  + configurationManager.getResource(jgroupsConfiguration));
+            }
+            catch (Exception e)
+            {
+               throw new IllegalStateException("Error setting JGroups configuration.", e);
+            }
+         }
+      }
    }
 }

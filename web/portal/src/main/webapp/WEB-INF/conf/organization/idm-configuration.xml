@@ -96,7 +96,7 @@
       
       <value-param profiles="cluster">
         <name>apiCacheConfig</name>
-        <value>war:/conf/organization/picketlink-idm/jboss-cache-cluster.xml</value>
+        <value>war:/conf/organization/picketlink-idm/jboss-cache-api-cluster.xml</value>
       </value-param>
 
       <value-param>
@@ -106,7 +106,17 @@
 
       <value-param profiles="cluster">
         <name>storeCacheConfig</name>
-        <value>war:/conf/organization/picketlink-idm/jboss-cache-cluster.xml</value>
+        <value>war:/conf/organization/picketlink-idm/jboss-cache-store-cluster.xml</value>
+      </value-param>
+
+      <value-param profiles="cluster">
+        <name>jgroups-configuration</name>
+        <value>${gatein.jcr.jgroups.config}</value>
+      </value-param>
+
+      <value-param profiles="cluster">
+        <name>jgroups-multiplexer-stack</name>
+        <value>true</value>
       </value-param>
 
     </init-params>
