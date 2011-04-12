@@ -326,7 +326,7 @@ public class JavascriptConfigService implements Startable
          }
          catch (Exception e)
          {
-            log.error("Error when generating minified javascript, will use normal javascript instead", e);
+            log.warn("Error when generating minified javascript, will use normal javascript instead", e);
             jsBytes = bytes;
          }
 //         Remove miliseconds because string of date retrieve from Http header doesn't have miliseconds
