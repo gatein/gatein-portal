@@ -1,14 +1,18 @@
 <%	
 	import org.exoplatform.services.organization.User;
-		
+	import org.gatein.common.text.EntityEncoder;
+	
 	def rcontext = _ctx.getRequestContext();
 	
 	String accountSetting = "javascript:if(document.getElementById('UIMaskWorkspace')) ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'AccountSettings', true));"
 %>
 <div class="UIUserInfoPortlet" id="$uicomponent.id">
 	<div class="Name">
-	<% if(rcontext.getRemoteUser() != null) { %>
-		<a href="$accountSetting"><%=uicomponent.getUser().getFullName()%></a>
+	<% if(rcontext.getRemoteUser() != null) { 
+		EntityEncoder encoder = EntityEncoder.FULL;
+                fullName = encoder.encode(uicomponent.getUser().getFullName());
+	%>
+		<a href="$accountSetting"><%=fullName%></a>
 	<%} else {%>
 		<span></span>
 	<%}%>
