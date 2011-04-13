@@ -19,7 +19,7 @@
             includes="pom.xml"
             extension=".xml"
             style="${maven.project.basedir}/transform.xsl">
-         <param name="default.jar.context" expression="${jbossas.target.dir}/server/default/lib"/>
+         <param name="default.jar.context" expression="${jbossas.target.dir}/server/default/deploy/gatein.ear/lib"/>
          <param name="default.war.context" expression="${jbossas.target.dir}/server/default/deploy"/>
          <param name="default.ear.context" expression="${jbossas.target.dir}/server/default/deploy"/>
          <param name="lib.context" expression="${jbossas.target.dir}/server/default/lib"/>
