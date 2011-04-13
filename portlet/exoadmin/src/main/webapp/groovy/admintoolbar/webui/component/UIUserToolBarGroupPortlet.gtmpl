@@ -49,7 +49,7 @@
 		String title = "";
 		if(toolong) title = "title='$node.resolvedLabel'";
 		else title = "";
-        EntityEncoder entityEncoder = EntityEncoder.FULL;
+		EntityEncoder entityEncoder = EntityEncoder.FULL;
 		label = entityEncoder.encode(label);
 		print """
 			<div class="MenuItem $tabStyleNavigation portlet-menu-cascade-item">

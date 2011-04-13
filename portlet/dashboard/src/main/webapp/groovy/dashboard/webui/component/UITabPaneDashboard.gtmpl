@@ -6,6 +6,7 @@
 	import org.exoplatform.portal.webui.portal.UIPortal;
 	import org.exoplatform.portal.application.PortalRequestContext;
 	import org.exoplatform.web.application.JavascriptManager;
+	import org.gatein.common.text.EntityEncoder;
 	
 	//PageNavigation pageNavigation = uicomponent.getPageNavigation();
 	//ArrayList<PageNode> nodes = pageNavigation.getNodes();
@@ -35,6 +36,8 @@
 									{
 										tabLabel = _ctx.appRes("UIUserToolBarDashboard.page." + node.getLabel());
 									}
+									EntityEncoder encoder = EntityEncoder.FULL;
+									tabLabel = encoder.encode(tabLabel);
 									String param = "" + i;
 									if(node.getUri().equals(selectedNode.getUri())){ 
 		  						%>
