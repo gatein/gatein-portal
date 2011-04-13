@@ -7,7 +7,8 @@
 	 * version: $Id$
 	 */  
 %>
-<%	
+<%
+        import org.gatein.common.text.EntityEncoder;	
 	String popupId = uicomponent.getId();
 	
 	def rcontext = _ctx.getRequestContext();
@@ -69,6 +70,8 @@
 					}
 			    }
 			}
+                        EntityEncoder encoder = EntityEncoder.FULL;
+			msgValue = encoder.encode(msgValue);
 			println msgValue;
 			println "						 </div>";
 			println "						 <div style=\"clear:left\"><span></span></div>";
