@@ -36,7 +36,6 @@ import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.portal.webui.workspace.UIPortalToolPanel;
 import org.exoplatform.portal.webui.workspace.UIWorkingWorkspace;
 import org.exoplatform.web.application.ApplicationMessage;
-import org.exoplatform.web.application.JavascriptManager;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.ComponentConfigs;
@@ -92,6 +91,22 @@ public class UIPageCreationWizard extends UIPageWizard
       UIPageNodeSelector uiNodeSelector = uiPageInfo.getChild(UIPageNodeSelector.class);
       PageNode selectedNode = uiNodeSelector.getSelectedPageNode();
       PageNavigation pageNav = uiNodeSelector.getSelectedNavigation();
+      
+      // reload page navigation
+      DataStorage dataService = getApplicationComponent(DataStorage.class);
+      pageNav = dataService.getPageNavigation(pageNav.getOwnerType(), pageNav.getOwnerId());
+      UIPortalApplication uiPortalApp = Util.getUIPortalApplication();
+      setNavigation(uiPortalApp.getNavigations(), pageNav);
+      uiPortalApp.localizeNavigations();
+      UIPortal uiPortal = Util.getUIPortal();
+      uiPortal.setNavigation(pageNav);
+      uiNodeSelector.selectNavigation(pageNav);
+      if (selectedNode != null)
+      {
+         uiNodeSelector.selectPageNodeByUri(selectedNode.getUri());
+         selectedNode = uiNodeSelector.getSelectedPageNode();
+      }
+      
       if (PortalConfig.USER_TYPE.equals(pageNav.getOwnerType()))
          selectedNode = null;
 
@@ -114,11 +129,8 @@ public class UIPageCreationWizard extends UIPageWizard
       }
       uiNodeSelector.selectPageNodeByUri(pageNode.getUri());
 
-      DataStorage dataService = getApplicationComponent(DataStorage.class); 
       dataService.create(page);
       dataService.save(pageNav);
-      UIPortal uiPortal = Util.getUIPortal();
-      setNavigation(uiPortal.getNavigations(), uiNodeSelector.getSelectedNavigation());
    }
 
    private void setNavigation(List<PageNavigation> navs, PageNavigation nav)
