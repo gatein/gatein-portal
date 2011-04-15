@@ -125,8 +125,12 @@ public class TestCache extends AbstractPortalTest
       page = storage_.getPage("portal::test::test4");
       assertEquals("foo", page.getTitle());
 
+      // Restore to orginal value
+      page.setTitle(null);
+      storage_.save(page);
+      
       //
-      end();
+      end(true);
    }
 
    public void testGetPageFromRemovedPortal() throws Exception
