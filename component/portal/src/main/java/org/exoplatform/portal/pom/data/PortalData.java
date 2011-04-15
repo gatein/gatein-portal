@@ -48,12 +48,18 @@ public class PortalData extends ModelData
 
    /** . */
    private final ContainerData portalLayout;
-
+   
+   private final String label;
+   
+   private final String description;
+   
    public PortalData(
       String storageId,
       String name,
       String type,
       String locale,
+      String label,
+      String description,
       List<String> accessPermissions,
       String editPermission,
       Map<String, String> properties,
@@ -65,6 +71,8 @@ public class PortalData extends ModelData
       //
       this.key = new PortalKey(type, name);
       this.locale = locale;
+      this.label = label;
+      this.description = description;
       this.accessPermissions = accessPermissions;
       this.editPermission = editPermission;
       this.properties = properties;
@@ -115,5 +123,15 @@ public class PortalData extends ModelData
    public ContainerData getPortalLayout()
    {
       return portalLayout;
+   }
+
+   public String getDescription()
+   {
+      return description;
+   }
+
+   public String getLabel()
+   {
+      return label;
    }
 }

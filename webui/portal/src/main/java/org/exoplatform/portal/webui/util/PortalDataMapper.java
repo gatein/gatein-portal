@@ -198,6 +198,8 @@ public class PortalDataMapper
       PortalConfig model = new PortalConfig(uiPortal.getOwnerType(), uiPortal.getName(), uiPortal.getStorageId());
       model.setAccessPermissions(uiPortal.getAccessPermissions());
       model.setEditPermission(uiPortal.getEditPermission());
+      model.setLabel(uiPortal.getLabel());
+      model.setDescription(uiPortal.getDescription());
       model.setLocale(uiPortal.getLocale());
       model.setSkin(uiPortal.getSkin());
       model.setModifiable(uiPortal.isModifiable());
@@ -347,6 +349,8 @@ public class PortalDataMapper
       uiPortal.setOwner(model.getName());
       uiPortal.setModifiable(model.isModifiable());
 
+      uiPortal.setLabel(model.getLabel());
+      uiPortal.setDescription(model.getDescription());
       uiPortal.setLocale(model.getLocale());
       uiPortal.setSkin(model.getSkin());
       uiPortal.setAccessPermissions(model.getAccessPermissions());

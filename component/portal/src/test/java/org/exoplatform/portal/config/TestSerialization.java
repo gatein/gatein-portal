@@ -159,6 +159,8 @@ public class TestSerialization extends AbstractGateInTest
          "foo02",
          "foo03",
          "foo04",
+         "foo10",
+         "foo11",
          Arrays.asList("foo05"),
          "foo06",
          Collections.singletonMap("foo07", "foo08"),

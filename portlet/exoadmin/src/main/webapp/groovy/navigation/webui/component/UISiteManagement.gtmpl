@@ -19,9 +19,20 @@
 		      		<tr>
 				      	<td class="Image"><img src="/exoadmin/skin/navigation/webui/component/background/PlImg.gif" alt=""/></td>
 				      	<td class="Content">
-					   			<div class="Label"><%=uicomponent.getFieldValue(portalConfig, 'name') %></div>
-					   			
-					   		</td>
+                           <div class="Label"><%=uicomponent.getFieldValue(portalConfig, 'name') %></div>
+                           <%
+                           def siteLabel = uicomponent.getFieldValue(portalConfig, 'label');
+                           def siteDescription = uicomponent.getFieldValue(portalConfig, 'description');
+                           if (siteLabel != null && siteLabel.trim().length() > 0)
+                           {
+                              print """<div>$siteLabel</div>""";
+                           }
+                           if (siteDescription != null && siteDescription.trim().length() > 0)
+                           {
+                              print """<div>$siteDescription</div>""";
+                           }
+                           %>
+					    </td>
 				        <td class="ActionBlock">
 					        	<a href="<%=uicomponent.event("EditPortalLayout", portalConfig.getName());%>" class="EditLayoutIcon"><%=_ctx.appRes("UISiteManagement.label.editLayout")%></a>
 					        	<a href="<%=uicomponent.event("EditNavigation", portalConfig.getName());%>" class="EditNavIcon"><%=_ctx.appRes("UISiteManagement.label.editNav")%></a>

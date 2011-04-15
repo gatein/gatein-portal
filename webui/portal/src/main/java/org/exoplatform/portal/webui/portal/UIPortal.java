@@ -89,6 +89,10 @@ public class UIPortal extends UIContainer
    private String ownerType;
 
    private String locale;
+   
+   private String label;
+   
+   private String description;
 
    private String editPermission;
 
@@ -378,6 +382,26 @@ public class UIPortal extends UIContainer
       setProperty(PortalProperties.SESSION_ALIVE, type);
    }
    
+   public String getLabel()
+   {
+      return label;
+   }
+
+   public void setLabel(String label)
+   {
+      this.label = label;
+   }
+
+   public String getDescription()
+   {
+      return description;
+   }
+
+   public void setDescription(String description)
+   {
+      this.description = description;
+   }
+
    private void localizePageNavigation(PageNavigation nav,Locale locale)
    {
       ResourceBundleManager mgr = getApplicationComponent(ResourceBundleManager.class);

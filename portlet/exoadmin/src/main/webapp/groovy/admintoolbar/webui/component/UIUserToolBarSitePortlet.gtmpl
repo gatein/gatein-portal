@@ -35,12 +35,13 @@
 				if(isCurrent && nodes.size() > 0) clazz = "class='ArrowIcon'";
 				else clazz = "";
 				href = uicomponent.getPortalURI(portal);
+                label = uicomponent.getPortalLabel(portal);
                 EntityEncoder entityEncoder = EntityEncoder.FULL;
 				portal = entityEncoder.encode(portal);
 				print """
 					<div class="MenuItem portlet-menu-cascade-item">
 						<div $clazz>
-							<a href="$href" class="ItemIcon SiteIcon">$portal</a>
+							<a href="$href" class="ItemIcon SiteIcon">$label</a>
 						</div>
 				""";
 						if(isCurrent) {

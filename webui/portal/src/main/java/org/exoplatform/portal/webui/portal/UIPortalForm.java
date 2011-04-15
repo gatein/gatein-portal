@@ -96,6 +96,10 @@ public class UIPortalForm extends UIFormTabPane
    private static final String FIELD_LOCALE = "locale";
 
    private static final String FIELD_SESSION_ALIVE = "sessionAlive";
+   
+   private static final String FIELD_LABEL = "label";
+   
+   private static final String FIELD_DESCRIPTION = "description";
 
    private String portalOwner_;
 
@@ -181,7 +185,6 @@ public class UIPortalForm extends UIFormTabPane
       setActions(new String[]{"Save", "Close"});
    }
 
-   @SuppressWarnings("unchecked")
    private class LanguagesComparator implements Comparator<SelectItemOption>
    {
       public int compare(SelectItemOption o1, SelectItemOption o2)
@@ -237,7 +240,10 @@ public class UIPortalForm extends UIFormTabPane
             StringLengthValidator.class, 3, 30).addValidator(IdentifierValidator.class).setEditable(false))
          .addUIFormInput(
             new UIFormSelectBox(FIELD_LOCALE, FIELD_LOCALE, languages).addValidator(MandatoryValidator.class));
-
+      
+      uiSettingSet.addUIFormInput(new UIFormStringInput(FIELD_LABEL, FIELD_LABEL, null));
+      uiSettingSet.addUIFormInput(new UIFormStringInput(FIELD_DESCRIPTION, FIELD_DESCRIPTION, null));
+      
       List<SelectItemOption<String>> listSkin = new ArrayList<SelectItemOption<String>>();
       SkinService skinService = getApplicationComponent(SkinService.class);
       for (String skin : skinService.getAvailableSkinNames())
@@ -317,6 +323,11 @@ public class UIPortalForm extends UIFormTabPane
                dataService.save(portalConfig);
                prContext.setAttribute(UserPortalConfig.class, service.getUserPortalConfig(uiForm.getPortalOwner(), prContext.getRemoteUser()));
                uiPortalApp.reloadSkinPortal(prContext);
+               
+               // We should use IPC to update some portlets in the future instead of
+               UIWorkingWorkspace uiWorkingWS = uiPortalApp.getChild(UIWorkingWorkspace.class);
+               uiWorkingWS.updatePortletsByName("PortalNavigationPortlet");
+               uiWorkingWS.updatePortletsByName("UserToolbarSitePortlet");
             }
             else
             {

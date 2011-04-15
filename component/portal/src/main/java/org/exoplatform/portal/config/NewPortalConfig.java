@@ -36,6 +36,10 @@ public final class NewPortalConfig
    private String templateName;
 
    private String location;
+   
+   private String label;
+   
+   private String description;
 
    /**
     * @deprecated use the location instead
@@ -52,10 +56,12 @@ public final class NewPortalConfig
       this.ownerType = cfg.ownerType;
       this.templateLocation = cfg.templateLocation;
       this.location = cfg.location;
+      this.label = cfg.label;
+      this.description = cfg.description;
       this.templateName = cfg.templateName;
       this.predefinedOwner = new HashSet<String>(cfg.predefinedOwner);
    }
-
+   
    public NewPortalConfig(String path)
    {
       this.location = path;
@@ -126,10 +132,30 @@ public final class NewPortalConfig
       this.ownerType = ownerType;
    }
 
+   public String getLabel()
+   {
+      return label;
+   }
+
+   public void setLabel(String label)
+   {
+      this.label = label;
+   }
+
+   public String getDescription()
+   {
+      return description;
+   }
+
+   public void setDescription(String description)
+   {
+      this.description = description;
+   }
+
    @Override
    public String toString()
    {
-      return "PortalConfig[predefinedOwner=" + predefinedOwner + ",ownerType=" + ownerType + ",templateName=" + templateName + 
-         "location=" + location + "]";
+      return "PortalConfig[predefinedOwner=" + predefinedOwner + ",ownerType=" + ownerType + ",templateName="
+         + templateName + ",label=" + label + ",description=" + description + ",location=" + location + "]";
    }
 }

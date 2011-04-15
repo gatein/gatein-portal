@@ -19,6 +19,8 @@
 
 package org.exoplatform.portal.pom.data;
 
+import javassist.runtime.Desc;
+
 import org.exoplatform.portal.config.NoSuchDataException;
 import org.exoplatform.portal.config.StaleModelException;
 import org.exoplatform.portal.config.UserACL;
@@ -312,6 +314,8 @@ public class Mapper
          accessPermissions = pr.getAccessPermissions();
          editPermission = pr.getEditPermission();
       }
+      
+      Described described = src.adapt(Described.class);
 
       //
       return new PortalData(
@@ -319,6 +323,8 @@ public class Mapper
          src.getName(),
          type,
          attrs.getValue(MappedAttributes.LOCALE),
+         described.getName(),
+         described.getDescription(),
          accessPermissions,
          editPermission,
          Collections.unmodifiableMap(properties),
@@ -348,6 +354,10 @@ public class Mapper
       ProtectedResource pr = dst.adapt(ProtectedResource.class);
       pr.setAccessPermissions(src.getAccessPermissions());
       pr.setEditPermission(src.getEditPermission());
+      
+      Described described = dst.adapt(Described.class);
+      described.setName(src.getLabel());
+      described.setDescription(src.getDescription());
 
       //
       org.gatein.mop.api.workspace.Page templates = dst.getRootPage().getChild("templates");

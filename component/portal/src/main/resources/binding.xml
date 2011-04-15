@@ -113,7 +113,9 @@
   
   <mapping name="portal-config" class="org.exoplatform.portal.config.model.PortalConfig" ordered="false">
     <value name="portal-name" field="name"/>
-    <value name="locale" field="locale"/>    
+    <value name="label" field="label" default="" />
+    <value name="description" field="description" default="" />
+    <value name="locale" field="locale" />
     <value name="access-permissions" field="accessPermissions" usage="optional"/>
     <value name="edit-permission" field="editPermission" usage="optional"/>
     <value name="skin" field="skin" usage="optional"/>

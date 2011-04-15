@@ -50,6 +50,10 @@ public class PortalConfig extends ModelObject
 
    private String locale;
 
+   private String label;
+   
+   private String description;
+   
    private String[] accessPermissions;
 
    private String editPermission;
@@ -95,6 +99,8 @@ public class PortalConfig extends ModelObject
       this.name = data.getName();
       this.type = data.getType();
       this.locale = data.getLocale();
+      this.label = data.getLabel();
+      this.description = data.getDescription();
       this.accessPermissions = data.getAccessPermissions().toArray(new String[data.getAccessPermissions().size()]);
       this.editPermission = data.getEditPermission();
       this.properties = new Properties(data.getProperties());
@@ -238,6 +244,26 @@ public class PortalConfig extends ModelObject
       setProperty(PortalProperties.SESSION_ALIVE, type);
    }
 
+   public void setDescription(String description)
+   {
+      this.description = description;
+   }
+
+   public String getDescription()
+   {
+      return description;
+   }
+
+   public void setLabel(String label)
+   {
+      this.label = label;
+   }
+
+   public String getLabel()
+   {
+      return label;
+   }
+
    static public class PortalConfigSet
    {
       private ArrayList<PortalConfig> portalConfigs;
@@ -281,6 +307,8 @@ public class PortalConfig extends ModelObject
          name,
          type,
          locale,
+         label,
+         description,
          accessPermissions,
          editPermission,
          properties,

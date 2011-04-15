@@ -19,6 +19,7 @@
 
 package org.exoplatform.toolbar.webui.component;
 
+import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
@@ -51,6 +52,19 @@ public class UIUserToolBarSitePortlet extends UIPortletApplication
    {
       UserPortalConfigService dataStorage = getApplicationComponent(UserPortalConfigService.class);
       return dataStorage.getAllPortalNames();
+   }
+   
+   public String getPortalLabel(String portalName) throws Exception
+   {
+      DataStorage storage_ = getApplicationComponent(DataStorage.class);
+      PortalConfig portalConfig = storage_.getPortalConfig(portalName);
+      String label = portalConfig.getLabel();
+      if (label != null && label.trim().length() > 0)
+      {
+         return label;
+      }
+      
+      return portalName;
    }
 
    public String getCurrentPortal()

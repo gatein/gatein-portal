@@ -25,6 +25,8 @@
   <locale>en</locale>
   <access-permissions>Everyone</access-permissions>
   <edit-permission>*:/platform/administrators</edit-permission>
+  <label>Classic</label>
+  <description>This is classic portal for testing</description>
     
  	<portal-layout> 		
 		<application>
