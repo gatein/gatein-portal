@@ -49,6 +49,7 @@ import java.util.Map;
  */
 public abstract class ModelAdapter<S, C extends Serializable>
 {
+   private static final String LOCAL_STATE_ID = PortletContext.LOCAL_CONSUMER_CLONE.getId();
 
    public static <S, C extends Serializable, I> ModelAdapter<S, C> getAdapter(ApplicationType<S> type)
    {
@@ -82,7 +83,7 @@ public abstract class ModelAdapter<S, C extends Serializable>
 
       @Override
       public StatefulPortletContext<ExoPortletState> getPortletContext(ExoContainer container, String applicationId,
-         ApplicationState<Portlet> applicationState) throws Exception
+                                                                       ApplicationState<Portlet> applicationState) throws Exception
       {
          DataStorage dataStorage = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
          Portlet preferences = dataStorage.load(applicationState, ApplicationType.PORTLET);
@@ -95,12 +96,12 @@ public abstract class ModelAdapter<S, C extends Serializable>
                map.getState().put(pref.getName(), pref.getValues());
             }
          }
-         return StatefulPortletContext.create("local._dumbvalue", ExoPortletStateType.getInstance(), map);
+         return StatefulPortletContext.create(LOCAL_STATE_ID, ExoPortletStateType.getInstance(), map);
       }
 
       @Override
       public ApplicationState<Portlet> update(ExoContainer container, ExoPortletState updateState,
-         ApplicationState<Portlet> applicationState) throws Exception
+                                              ApplicationState<Portlet> applicationState) throws Exception
       {
          // Compute new preferences
          PortletBuilder builder = new PortletBuilder();
@@ -128,8 +129,7 @@ public abstract class ModelAdapter<S, C extends Serializable>
          String[] chunks = Utils.split("/", applicationState);
          String appName = chunks[0];
          String portletName = chunks[1];
-         return PortletContext.createPortletContext(PortletInvoker.LOCAL_PORTLET_INVOKER_ID + "./" + appName + "."
-            + portletName);
+         return PortletContext.reference(PortletInvoker.LOCAL_PORTLET_INVOKER_ID, PortletContext.createPortletContext(appName, portletName));
       }
 
       @Override
@@ -140,7 +140,9 @@ public abstract class ModelAdapter<S, C extends Serializable>
             TransientApplicationState<Portlet> transientState = (TransientApplicationState<Portlet>)applicationState;
             Portlet pref = transientState.getContentState();
             if (pref == null)
+            {
                pref = new Portlet();
+            }
             return pref;
          }
          else
@@ -148,18 +150,20 @@ public abstract class ModelAdapter<S, C extends Serializable>
             DataStorage dataStorage = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
             Portlet pref = dataStorage.load(applicationState, ApplicationType.PORTLET);
             if (pref == null)
+            {
                pref = new Portlet();
+            }
             return pref;
          }
       }
 
       @Override
       public ExoPortletState getStateFromModifiedContext(PortletContext originalPortletContext,
-            PortletContext modifiedPortletContext)
+                                                         PortletContext modifiedPortletContext)
       {
          if (modifiedPortletContext != null && modifiedPortletContext instanceof StatefulPortletContext)
          {
-            StatefulPortletContext statefulContext = (StatefulPortletContext) modifiedPortletContext;
+            StatefulPortletContext statefulContext = (StatefulPortletContext)modifiedPortletContext;
             if (statefulContext.getState() instanceof ExoPortletState)
             {
                return (ExoPortletState)statefulContext.getState();
@@ -170,11 +174,11 @@ public abstract class ModelAdapter<S, C extends Serializable>
 
       @Override
       public ExoPortletState getstateFromClonedContext(PortletContext originalPortletContext,
-            PortletContext clonedPortletContext)
+                                                       PortletContext clonedPortletContext)
       {
          if (clonedPortletContext != null && clonedPortletContext instanceof StatefulPortletContext)
          {
-            StatefulPortletContext statefulContext = (StatefulPortletContext) clonedPortletContext;
+            StatefulPortletContext statefulContext = (StatefulPortletContext)clonedPortletContext;
             if (statefulContext.getState() instanceof ExoPortletState)
             {
                return (ExoPortletState)statefulContext.getState();
@@ -184,18 +188,15 @@ public abstract class ModelAdapter<S, C extends Serializable>
       }
    };
 
+   private static final String DASHBOARD = "dashboard";
+   private static final String GADGET_PORTLET = "GadgetPortlet";
+   private static final PortletContext WRAPPER_CONTEXT = PortletContext.reference(PortletInvoker.LOCAL_PORTLET_INVOKER_ID, PortletContext.createPortletContext(DASHBOARD, GADGET_PORTLET));
+   private static final String WRAPPER_ID = WRAPPER_CONTEXT.getId();
    private static final ModelAdapter<Gadget, ExoPortletState> GADGET = new ModelAdapter<Gadget, ExoPortletState>()
    {
-
-      /** . */
-      private final String WRAPPER_ID = "local./" + "dashboard" + "." + "GadgetPortlet";
-
-      /** . */
-      private final PortletContext WRAPPER_CONTEXT = PortletContext.createPortletContext(WRAPPER_ID);
-
       @Override
       public StatefulPortletContext<ExoPortletState> getPortletContext(ExoContainer container, String applicationId,
-         ApplicationState<Gadget> applicationState) throws Exception
+                                                                       ApplicationState<Gadget> applicationState) throws Exception
       {
          GadgetRegistryService gadgetService =
             (GadgetRegistryService)container.getComponentInstanceOfType(GadgetRegistryService.class);
@@ -203,12 +204,12 @@ public abstract class ModelAdapter<S, C extends Serializable>
          String url = GadgetUtil.reproduceUrl(model.getUrl(), model.isLocal());
          ExoPortletState prefs = new ExoPortletState(WRAPPER_ID);
          prefs.getState().put("url", Arrays.asList(url));
-         return StatefulPortletContext.create("local._dumbvalue", ExoPortletStateType.getInstance(), prefs);
+         return StatefulPortletContext.create(LOCAL_STATE_ID, ExoPortletStateType.getInstance(), prefs);
       }
 
       @Override
       public ApplicationState<Gadget> update(ExoContainer container, ExoPortletState updateState,
-         ApplicationState<Gadget> gadgetApplicationState) throws Exception
+                                             ApplicationState<Gadget> gadgetApplicationState) throws Exception
       {
          throw new UnsupportedOperationException("Cannot edit gadget preferences");
       }
@@ -228,11 +229,11 @@ public abstract class ModelAdapter<S, C extends Serializable>
 
       @Override
       public ExoPortletState getStateFromModifiedContext(PortletContext originalPortletContext,
-            PortletContext modifiedPortletContext)
+                                                         PortletContext modifiedPortletContext)
       {
          if (modifiedPortletContext != null && modifiedPortletContext instanceof StatefulPortletContext)
          {
-            StatefulPortletContext statefulContext = (StatefulPortletContext) modifiedPortletContext;
+            StatefulPortletContext statefulContext = (StatefulPortletContext)modifiedPortletContext;
             if (statefulContext.getState() instanceof ExoPortletState)
             {
                return (ExoPortletState)statefulContext.getState();
@@ -243,11 +244,11 @@ public abstract class ModelAdapter<S, C extends Serializable>
 
       @Override
       public ExoPortletState getstateFromClonedContext(PortletContext originalPortletContext,
-            PortletContext clonedPortletContext)
+                                                       PortletContext clonedPortletContext)
       {
          if (clonedPortletContext != null && clonedPortletContext instanceof StatefulPortletContext)
          {
-            StatefulPortletContext statefulContext = (StatefulPortletContext) clonedPortletContext;
+            StatefulPortletContext statefulContext = (StatefulPortletContext)clonedPortletContext;
             if (statefulContext.getState() instanceof ExoPortletState)
             {
                return (ExoPortletState)statefulContext.getState();
@@ -259,10 +260,9 @@ public abstract class ModelAdapter<S, C extends Serializable>
 
    /**
     * todo: this ModelAdapter is not quite good, what is really needed is a ModelAdapter<WSRP, byte[]> so that the
-    * StatefulPortletContext returned by getPortletContext is actually of type PortletStateType.OPAQUE so that it
-    * can be properly handled in WSRP...
-    * This model needs to be revisited if we want to properly support consumer-side state management.
-    * See GTNPORTAL-736.
+    * StatefulPortletContext returned by getPortletContext is actually of type PortletStateType.OPAQUE so that it can be
+    * properly handled in WSRP... This model needs to be revisited if we want to properly support consumer-side state
+    * management. See GTNPORTAL-736.
     */
    private static final ModelAdapter<WSRP, WSRP> WSRP = new ModelAdapter<WSRP, WSRP>()
    {
@@ -280,7 +280,7 @@ public abstract class ModelAdapter<S, C extends Serializable>
 
       @Override
       public StatefulPortletContext<WSRP> getPortletContext(ExoContainer container, String applicationId,
-         ApplicationState<WSRP> state) throws Exception
+                                                            ApplicationState<WSRP> state) throws Exception
       {
          DataStorage dataStorage = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
          WSRP wsrp = dataStorage.load(state, ApplicationType.WSRP_PORTLET);
@@ -319,11 +319,11 @@ public abstract class ModelAdapter<S, C extends Serializable>
 
       @Override
       public WSRP getStateFromModifiedContext(PortletContext originalPortletContext,
-            PortletContext modifiedPortletContext)
+                                              PortletContext modifiedPortletContext)
       {
          WSRP wsrp = new WSRP();
          wsrp.setPortletId(modifiedPortletContext.getId());
-         
+
          // from the originalPortletContext see if we are dealing with a cloned context or not.
          if (originalPortletContext instanceof StatefulPortletContext)
          {
@@ -333,7 +333,7 @@ public abstract class ModelAdapter<S, C extends Serializable>
                wsrp.setCloned(((WSRP)originalState).isCloned());
             }
          }
-               
+
          if (modifiedPortletContext instanceof StatefulPortletContext)
          {
             Object modifiedState = ((StatefulPortletContext)modifiedPortletContext).getState();
@@ -342,7 +342,7 @@ public abstract class ModelAdapter<S, C extends Serializable>
                wsrp.setState((byte[])modifiedState);
             }
          }
-         
+
          return wsrp;
       }
 
@@ -352,14 +352,14 @@ public abstract class ModelAdapter<S, C extends Serializable>
          WSRP wsrp = new WSRP();
          wsrp.setPortletId(clonedPortletContext.getId());
          wsrp.setCloned(true);
-         
+
          // if we have an associated state, record it as well...
          if (clonedPortletContext instanceof StatefulPortletContext)
          {
             StatefulPortletContext statefulPortletContext = (StatefulPortletContext)clonedPortletContext;
             wsrp.setState((byte[])statefulPortletContext.getState());
          }
-         
+
          return wsrp;
       }
    };
@@ -367,10 +367,10 @@ public abstract class ModelAdapter<S, C extends Serializable>
    public abstract PortletContext getProducerOfferedPortletContext(String applicationId);
 
    public abstract StatefulPortletContext<C> getPortletContext(ExoContainer container, String applicationId,
-      ApplicationState<S> applicationState) throws Exception;
+                                                               ApplicationState<S> applicationState) throws Exception;
 
    public abstract ApplicationState<S> update(ExoContainer container, C updateState,
-      ApplicationState<S> applicationState) throws Exception;
+                                              ApplicationState<S> applicationState) throws Exception;
 
    /**
     * Returns the state of the gadget as preferences or null if the preferences cannot be edited as such.
@@ -381,21 +381,21 @@ public abstract class ModelAdapter<S, C extends Serializable>
     * @throws Exception any exception
     */
    public abstract Portlet getState(ExoContainer container, ApplicationState<S> applicationState) throws Exception;
-   
+
    /**
     * Extracts the state based on what the current PortletContext is and the new modified PortletContext.
-    * 
+    *
     * @param originalPortletContext The current PortletContext for the Portlet
     * @param modifiedPortletContext The new modified PortletContext
     * @return
     */
    public abstract C getStateFromModifiedContext(PortletContext originalPortletContext, PortletContext modifiedPortletContext);
-   
+
    /**
     * Extracts the state based on what the current PortletContext is and the new cloned PortletContext
-    * 
+    *
     * @param originalPortletContext The current PortletContext for the Portlet
-    * @param clonedPortletContext The new cloned PortletContext
+    * @param clonedPortletContext   The new cloned PortletContext
     * @return
     */
    public abstract C getstateFromClonedContext(PortletContext originalPortletContext, PortletContext clonedPortletContext);
