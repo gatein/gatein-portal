@@ -355,7 +355,7 @@ public class ChromatticLifeCycle extends BaseComponentPlugin
             if (option != null)
             {
                log.debug("Setting Chromattic option " + optionEntry);
-               builder.setOptionStringValue(option, optionEntry.getValue());
+               setOption(builder, option, optionEntry.getValue());
             }
          }
 
@@ -375,6 +375,12 @@ public class ChromatticLifeCycle extends BaseComponentPlugin
       {
          PortalSessionLifeCycle.bootContext.set(null);
       }
+   }
+
+   private <D> void setOption(ChromatticBuilder builder, ChromatticBuilder.Option<D> option, String value)
+   {
+      log.debug("Setting Chromattic option " + option.getDisplayName());
+      builder.setOptionValue(option, option.getInstance(value).getValue());
    }
 
    public final void stop()

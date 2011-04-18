@@ -19,7 +19,6 @@
 
 package org.exoplatform.portal.resource;
 
-import org.apache.commons.io.input.CharSequenceReader;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 

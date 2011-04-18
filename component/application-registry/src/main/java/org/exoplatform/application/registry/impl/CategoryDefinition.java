@@ -21,10 +21,11 @@ package org.exoplatform.application.registry.impl;
 import org.chromattic.api.annotations.Create;
 import org.chromattic.api.annotations.FormattedBy;
 import org.chromattic.api.annotations.Name;
+import org.chromattic.api.annotations.NamingPrefix;
 import org.chromattic.api.annotations.PrimaryType;
 import org.chromattic.api.annotations.OneToMany;
 import org.chromattic.api.annotations.Property;
-import org.exoplatform.application.AppFormatter;
+import org.chromattic.ext.format.BaseEncodingObjectFormatter;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.gatein.mop.api.content.ContentType;
 import org.gatein.mop.api.content.Customization;
@@ -39,7 +40,8 @@ import java.util.Map;
  * @version $Revision$
  */
 @PrimaryType(name = "app:category")
-@FormattedBy(AppFormatter.class)
+@FormattedBy(BaseEncodingObjectFormatter.class)
+@NamingPrefix("app")
 public abstract class CategoryDefinition
 {
 

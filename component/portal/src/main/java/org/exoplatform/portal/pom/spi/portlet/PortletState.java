@@ -20,7 +20,7 @@
 package org.exoplatform.portal.pom.spi.portlet;
 
 import org.chromattic.api.annotations.*;
-import org.gatein.mop.core.api.MOPFormatter;
+import org.chromattic.ext.format.BaseEncodingObjectFormatter;
 import org.gatein.mop.core.api.workspace.content.AbstractCustomizationState;
 
 import java.util.ArrayList;
@@ -32,7 +32,8 @@ import java.util.Map;
  * @version $Revision$
  */
 @PrimaryType(name = "mop:portletpreferences")
-@FormattedBy(MOPFormatter.class)
+@FormattedBy(BaseEncodingObjectFormatter.class)
+@NamingPrefix("mop")
 public abstract class PortletState extends AbstractCustomizationState
 {
 

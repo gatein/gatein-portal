@@ -67,8 +67,10 @@ public class TestDataStorage extends AbstractPortalTest
    /** . */
    private POMSession session;
 
-   private LinkedList<Event> events;
+   /** . */
+   private EventQueue events;
 
+   /** . */
    private ListenerService listenerService;
 
    public TestDataStorage(String name)
@@ -78,34 +80,32 @@ public class TestDataStorage extends AbstractPortalTest
 
    public void setUp() throws Exception
    {
-      Listener listener = new Listener()
-      {
-         @Override
-         public void onEvent(Event event) throws Exception
-         {
-            events.add(event);
-         }
-      };
-      
       super.setUp();
       begin();
       PortalContainer container = PortalContainer.getInstance();
       storage_ = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
       mgr = (POMSessionManager)container.getComponentInstanceOfType(POMSessionManager.class);
       session = mgr.openSession();
-      
-      events = new LinkedList<Event>();
       listenerService = (ListenerService)container.getComponentInstanceOfType(ListenerService.class);
-      
-      listenerService.addListener(DataStorage.PAGE_CREATED, listener);
-      listenerService.addListener(DataStorage.PAGE_REMOVED, listener);
-      listenerService.addListener(DataStorage.PAGE_UPDATED, listener);
-      listenerService.addListener(DataStorage.NAVIGATION_CREATED, listener);
-      listenerService.addListener(DataStorage.NAVIGATION_REMOVED, listener);
-      listenerService.addListener(DataStorage.NAVIGATION_UPDATED, listener);
-      listenerService.addListener(DataStorage.PORTAL_CONFIG_CREATED, listener);
-      listenerService.addListener(DataStorage.PORTAL_CONFIG_UPDATED, listener);
-      listenerService.addListener(DataStorage.PORTAL_CONFIG_REMOVED, listener);
+
+      //
+      if (events == null)
+      {
+         events = new EventQueue();
+         listenerService.addListener(DataStorage.PAGE_CREATED, events);
+         listenerService.addListener(DataStorage.PAGE_REMOVED, events);
+         listenerService.addListener(DataStorage.PAGE_UPDATED, events);
+         listenerService.addListener(DataStorage.NAVIGATION_CREATED, events);
+         listenerService.addListener(DataStorage.NAVIGATION_REMOVED, events);
+         listenerService.addListener(DataStorage.NAVIGATION_UPDATED, events);
+         listenerService.addListener(DataStorage.PORTAL_CONFIG_CREATED, events);
+         listenerService.addListener(DataStorage.PORTAL_CONFIG_UPDATED, events);
+         listenerService.addListener(DataStorage.PORTAL_CONFIG_REMOVED, events);
+      }
+      else
+      {
+         events.clear();
+      }
    }
 
    protected void tearDown() throws Exception
@@ -128,8 +128,9 @@ public class TestDataStorage extends AbstractPortalTest
       portal.setAccessPermissions(new String[]{UserACL.EVERYONE});
 
       //
+      events.clear();
       storage_.create(portal);
-      assertEquals(1, events.size());
+      events.assertSize(1);
       portal = storage_.getPortalConfig(portal.getName());
       assertNotNull(portal);
       assertEquals("portal", portal.getType());
@@ -144,9 +145,11 @@ public class TestDataStorage extends AbstractPortalTest
       assertNotNull(portal);
 
       //
+      events.clear();
       portal.setLocale("vietnam");
       storage_.save(portal);
-      assertEquals(1, events.size());
+      events.assertSize(1);
+
       //
       portal = storage_.getPortalConfig("portal", "test");
       assertNotNull(portal);
@@ -158,8 +161,9 @@ public class TestDataStorage extends AbstractPortalTest
       PortalConfig portal = storage_.getPortalConfig("portal", "test");
       assertNotNull(portal);
 
+      events.clear();
       storage_.remove(portal);
-      assertEquals(1, events.size());
+      events.assertSize(1);
       assertNull(storage_.getPortalConfig("portal", "test"));
       
       try
@@ -183,8 +187,9 @@ public class TestDataStorage extends AbstractPortalTest
       page.setName("foo");
 
       //
+      events.clear();
       storage_.create(page);
-      assertEquals(1, events.size());
+      events.assertSize(1);
 
       //
       Page page2 = storage_.getPage(page.getPageId());
@@ -209,15 +214,17 @@ public class TestDataStorage extends AbstractPortalTest
       page.setShowMaxWindow(false);
 
       //
+      events.clear();
       storage_.create(page);
-      assertEquals(1, events.size());
+      events.assertSize(1);
 
       //
       Page page2 = storage_.getPage(page.getPageId());
       page2.setTitle("MyTitle2");
       page2.setShowMaxWindow(true);
+      events.clear();
       storage_.save(page2);
-      assertEquals(2, events.size());
+      events.assertSize(1);
 
       page2 = storage_.getPage(page.getPageId());
       assertNotNull(page2);
@@ -307,9 +314,10 @@ public class TestDataStorage extends AbstractPortalTest
       assertNotNull(page);
 
       //
+      events.clear();
       storage_.remove(page);
-      assertEquals(1, events.size());
-      
+      events.assertSize(1);
+
       //
       page = storage_.getPage(CLASSIC_TEST);
       assertNull(page);
@@ -386,15 +394,17 @@ public class TestDataStorage extends AbstractPortalTest
       portal.setName("foo");
       portal.setLocale("en");
       portal.setAccessPermissions(new String[]{UserACL.EVERYONE});
+      events.clear();
       storage_.create(portal);
-      assertEquals(1, events.size());
+      events.assertSize(1);
 
       //
       PageNavigation navigation = new PageNavigation();
       navigation.setOwnerId("foo");
       navigation.setOwnerType("portal");
+      events.clear();
       storage_.create(navigation);
-      assertEquals(2, events.size());
+      events.assertSize(1);
    }
 
    public void testSaveNavigation() throws Exception
@@ -403,8 +413,9 @@ public class TestDataStorage extends AbstractPortalTest
       assertNotNull(pageNavi);
 
       //
+      events.clear();
       storage_.save(pageNavi);
-      assertEquals(1, events.size());
+      events.assertSize(1);
 
       //
       PageNavigation newPageNavi = storage_.getPageNavigation(pageNavi.getOwnerType(), pageNavi.getOwnerId());
@@ -464,8 +475,9 @@ public class TestDataStorage extends AbstractPortalTest
       assertNotNull(navigation);
 
       //
+      events.clear();
       storage_.remove(navigation);
-      assertEquals(1, events.size());
+      events.assertSize(1);
 
       //
       navigation = storage_.getPageNavigation("portal", "test");

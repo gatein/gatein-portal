@@ -20,9 +20,10 @@ package org.exoplatform.application.gadget.impl;
 
 import org.chromattic.api.annotations.Create;
 import org.chromattic.api.annotations.FormattedBy;
+import org.chromattic.api.annotations.NamingPrefix;
 import org.chromattic.api.annotations.PrimaryType;
 import org.chromattic.api.annotations.OneToMany;
-import org.exoplatform.application.AppFormatter;
+import org.chromattic.ext.format.BaseEncodingObjectFormatter;
 
 import java.util.Collection;
 import java.util.Map;
@@ -32,7 +33,8 @@ import java.util.Map;
  * @version $Revision$
  */
 @PrimaryType(name = "app:gadgetregistry")
-@FormattedBy(AppFormatter.class)
+@FormattedBy(BaseEncodingObjectFormatter.class)
+@NamingPrefix("app")
 public abstract class GadgetRegistry
 {
 

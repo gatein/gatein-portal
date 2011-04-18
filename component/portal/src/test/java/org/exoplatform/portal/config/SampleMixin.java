@@ -18,6 +18,7 @@
  */
 package org.exoplatform.portal.config;
 
+import org.chromattic.api.annotations.DefaultValue;
 import org.chromattic.api.annotations.MixinType;
 import org.chromattic.api.annotations.Property;
 
@@ -30,7 +31,8 @@ import org.chromattic.api.annotations.Property;
 public abstract class SampleMixin
 {
 
-   @Property(name = "gtn:sampleProperty", defaultValue = {"SampleProperty"})
+   @Property(name = "gtn:sampleProperty")
+   @DefaultValue("SampleProperty")
    public abstract String getSampleProperty();
    
    public abstract void setSampleProperty(String sampleProperty);

@@ -122,11 +122,11 @@
       <artifactId>jbossts-common</artifactId>
     </dependency>
     <dependency>
-      <groupId>javassist</groupId>
+      <groupId>org.javassist</groupId>
       <artifactId>javassist</artifactId>
     </dependency>
     <dependency>
-      <groupId>jgroups</groupId>
+      <groupId>org.jgroups</groupId>
       <artifactId>jgroups</artifactId>
     </dependency>
 
@@ -146,10 +146,6 @@
     <dependency>
       <groupId>org.exoplatform.kernel</groupId>
       <artifactId>exo.kernel.component.common</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.exoplatform.kernel</groupId>
-      <artifactId>exo.kernel.component.remote</artifactId>
     </dependency>
     <dependency>
       <groupId>org.exoplatform.kernel</groupId>
@@ -482,6 +478,10 @@
 
     <!-- Provided -->
     <dependency>
+      <groupId>javax.inject</groupId>
+      <artifactId>javax.inject</artifactId>
+    </dependency>
+    <dependency>
       <groupId>javax.activation</groupId>
       <artifactId>activation</artifactId>
     </dependency>
@@ -542,7 +542,7 @@
       <artifactId>guice</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.google.inject</groupId>
+      <groupId>com.google.inject.extensions</groupId>
       <artifactId>guice-jmx</artifactId>
     </dependency>
     <dependency>
@@ -602,20 +602,16 @@
       <artifactId>groovy-all</artifactId>
     </dependency>
     <dependency>
-      <groupId>hsqldb</groupId>
+      <groupId>org.hsqldb</groupId>
       <artifactId>hsqldb</artifactId>
     </dependency>
     <dependency>
-      <groupId>html-parser</groupId>
-      <artifactId>html-parser</artifactId>
+      <groupId>org.htmlparser</groupId>
+      <artifactId>htmlparser</artifactId>
     </dependency>
     <dependency>
       <groupId>com.ibm.icu</groupId>
       <artifactId>icu4j</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.lowagie</groupId>
-      <artifactId>itext</artifactId>
     </dependency>
     <dependency>
       <groupId>net.jcip</groupId>
@@ -698,7 +694,7 @@
       <artifactId>portals-bridges-common</artifactId>
     </dependency>
     <dependency>
-      <groupId>quartz</groupId>
+      <groupId>org.quartz-scheduler</groupId>
       <artifactId>quartz</artifactId>
     </dependency>
     <dependency>
@@ -732,6 +728,14 @@
     <dependency>
       <groupId>net.oauth</groupId>
       <artifactId>core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.tika</groupId>
+      <artifactId>tika-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.tika</groupId>
+      <artifactId>tika-parsers</artifactId>
     </dependency>
 
     <!-- War files -->

@@ -55,23 +55,26 @@ public class TestConcurrencyDataStorage extends AbstractPortalTest
    public void testCreatePageConcurrently() throws Exception
    {
       CountDownLatch startSignal = new CountDownLatch(1);
-      
+      CountDownLatch stopSignal = new CountDownLatch(5);
+
       for (int i = 0; i < 5; i++)
       {
-         Thread thread = new Thread(new CreatePageTask(mgr, storage_, startSignal, "test" + i, "foo" + i)); 
+         Thread thread = new Thread(new CreatePageTask(mgr, storage_, startSignal, stopSignal, "test" + i, "foo" + i));
          thread.start();
       }
       
       startSignal.countDown();
+      stopSignal.await();
    }
    
    public void testCreatePageSequentially() throws Exception
    {
       for (int i = 5; i < 10; i++)
       {
-         Thread thread = new Thread(new CreatePageTask(mgr, storage_, null, "test" + i, "foo" + i)); 
+         CountDownLatch stopSignal = new CountDownLatch(1);
+         Thread thread = new Thread(new CreatePageTask(mgr, storage_, null, stopSignal, "test" + i, "foo" + i));
          thread.start();
-         thread.join();
+         stopSignal.await();
       }
    }
 
@@ -92,17 +95,19 @@ public class TestConcurrencyDataStorage extends AbstractPortalTest
       private String pageTitle;
       
       private CountDownLatch startSignal;
+
+      private final CountDownLatch stopSignal;
       
-      public CreatePageTask(POMSessionManager _sessionManager, DataStorage _dataStorage, CountDownLatch _startSignal, String _pageName, String _pageTitle)
+      public CreatePageTask(POMSessionManager _sessionManager, DataStorage _dataStorage, CountDownLatch _startSignal, CountDownLatch stopSignal, String _pageName, String _pageTitle)
       {
          dataStorage = _dataStorage;
          pageName = _pageName;
          pageTitle = _pageTitle;
          sessionManager = _sessionManager;
          startSignal = _startSignal;
+         this.stopSignal = stopSignal;
       }
       
-      @Override
       public void run()
       {
          try
@@ -131,6 +136,10 @@ public class TestConcurrencyDataStorage extends AbstractPortalTest
          {
             ex.printStackTrace();
             System.out.println("Could not create the page: " + pageName + " , " + pageTitle);
+         }
+         finally
+         {
+            stopSignal.countDown();
          }
       }
    }

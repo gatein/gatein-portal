@@ -19,16 +19,18 @@
 package org.exoplatform.application.gadget.impl;
 
 import org.chromattic.api.annotations.FormattedBy;
+import org.chromattic.api.annotations.NamingPrefix;
 import org.chromattic.api.annotations.PrimaryType;
 import org.chromattic.api.annotations.Property;
-import org.exoplatform.application.AppFormatter;
+import org.chromattic.ext.format.BaseEncodingObjectFormatter;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
 @PrimaryType(name = "app:remotegadgetdata")
-@FormattedBy(AppFormatter.class)
+@FormattedBy(BaseEncodingObjectFormatter.class)
+@NamingPrefix("app")
 public abstract class RemoteGadgetData extends GadgetData
 {
 

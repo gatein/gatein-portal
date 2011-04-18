@@ -49,7 +49,7 @@
       <dependency>
          <groupId>commons-dbcp</groupId>
          <artifactId>commons-dbcp</artifactId>
-         <version>1.2.1</version>
+         <version>1.4</version>
       </dependency>
       <dependency>
          <groupId>commons-digester</groupId>
@@ -85,9 +85,9 @@
          <version>3.2.6.GA</version>
       </dependency>
       <dependency>
-         <groupId>jgroups</groupId>
+         <groupId>org.jgroups</groupId>
          <artifactId>jgroups</artifactId>
-         <version>2.6.13.GA</version>
+         <version>2.11.1.Final</version>
       </dependency>
       <dependency>
          <groupId>org.jboss.mc-int</groupId>
@@ -116,10 +116,6 @@
       <dependency>
          <groupId>org.exoplatform.kernel</groupId>
          <artifactId>exo.kernel.component.common</artifactId>
-      </dependency>
-      <dependency>
-         <groupId>org.exoplatform.kernel</groupId>
-         <artifactId>exo.kernel.component.remote</artifactId>
       </dependency>
       <dependency>
          <groupId>org.exoplatform.kernel</groupId>
@@ -494,9 +490,14 @@
 
       <!-- Provided -->
       <dependency>
+        <groupId>javax.inject</groupId>
+        <artifactId>javax.inject</artifactId>
+        <version>1</version>
+      </dependency>
+      <dependency>
          <groupId>javax.activation</groupId>
          <artifactId>activation</artifactId>
-         <version>1.1</version>
+         <version>1.1.1</version>
       </dependency>
       <dependency>
          <groupId>javax.jcr</groupId>
@@ -541,12 +542,12 @@
       <dependency>
          <groupId>javax.xml.stream</groupId>
          <artifactId>stax-api</artifactId>
-         <version>1.0</version>
+         <version>1.0-2</version>
       </dependency>
       <dependency>
          <groupId>com.sun.xml.stream</groupId>
          <artifactId>sjsxp</artifactId>
-         <version>1.0</version>
+         <version>1.0.1</version>
       </dependency>
 
       <!-- Various -->
@@ -629,11 +630,6 @@
          <artifactId>icu4j</artifactId>
       </dependency>
       <dependency>
-         <groupId>com.lowagie</groupId>
-         <artifactId>itext</artifactId>
-         <version>2.1.0</version>
-      </dependency>
-      <dependency>
          <groupId>jdom</groupId>
          <artifactId>jdom</artifactId>
          <version>1.0</version>
@@ -679,17 +675,17 @@
       <dependency>
          <groupId>org.apache.lucene</groupId>
          <artifactId>lucene-core</artifactId>
-         <version>2.4.1</version>
+         <version>2.9.4</version>
       </dependency>
       <dependency>
          <groupId>org.apache.lucene</groupId>
          <artifactId>lucene-memory</artifactId>
-         <version>2.4.1</version>
+         <version>2.9.4</version>
       </dependency>
       <dependency>
          <groupId>org.apache.lucene</groupId>
          <artifactId>lucene-spellchecker</artifactId>
-         <version>2.4.1</version>
+         <version>2.9.4</version>
       </dependency>
       <dependency>
          <groupId>net.sourceforge.nekohtml</groupId>
@@ -698,7 +694,7 @@
       <dependency>
          <groupId>org.apache.pdfbox</groupId>
          <artifactId>pdfbox</artifactId>
-         <version>1.1.0</version>
+         <version>1.4.0</version>
       </dependency>
       <dependency>
          <groupId>picocontainer</groupId>
@@ -747,7 +743,7 @@
       <dependency>
          <groupId>xpp3</groupId>
          <artifactId>xpp3</artifactId>
-         <version>1.1.3.4.O</version>
+         <version>1.1.4c</version>
       </dependency>
       <dependency>
          <groupId>com.thoughtworks.xstream</groupId>
@@ -761,7 +757,7 @@
       <dependency>
          <groupId>org.jvnet.jaxb2.maven2</groupId>
          <artifactId>maven-jaxb2-plugin</artifactId>
-         <version>0.1</version>
+         <version>0.7.4</version>
       </dependency>
       <dependency>
          <groupId>com.experlog</groupId>
@@ -787,6 +783,16 @@
          <groupId>xdoclet</groupId>
          <artifactId>xjavadoc</artifactId>
          <version>1.2.3</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.tika</groupId>
+        <artifactId>tika-core</artifactId>
+        <version>0.7</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.tika</groupId>
+        <artifactId>tika-parsers</artifactId>
+        <version>0.7</version>
       </dependency>
 
       <!-- WSRP -->

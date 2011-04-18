@@ -20,15 +20,16 @@ package org.exoplatform.application.gadget.impl;
 
 import org.chromattic.api.annotations.*;
 import org.chromattic.api.annotations.PrimaryType;
+import org.chromattic.ext.format.BaseEncodingObjectFormatter;
 import org.chromattic.ext.ntdef.NTFolder;
-import org.exoplatform.application.AppFormatter;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
 @PrimaryType(name = "app:gadgetdefinition")
-@FormattedBy(AppFormatter.class)
+@FormattedBy(BaseEncodingObjectFormatter.class)
+@NamingPrefix("app")
 public abstract class GadgetDefinition
 {
 

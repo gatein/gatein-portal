@@ -19,7 +19,7 @@
 package org.exoplatform.application.registry.impl;
 
 import org.chromattic.api.annotations.*;
-import org.exoplatform.application.AppFormatter;
+import org.chromattic.ext.format.BaseEncodingObjectFormatter;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.gatein.mop.api.content.Customization;
 import org.gatein.mop.api.workspace.Workspace;
@@ -32,7 +32,8 @@ import java.util.List;
  * @version $Revision$
  */
 @PrimaryType(name = "app:application")
-@FormattedBy(AppFormatter.class)
+@FormattedBy(BaseEncodingObjectFormatter.class)
+@NamingPrefix("app")
 public abstract class ContentDefinition
 {
 

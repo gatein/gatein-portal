@@ -36,7 +36,7 @@ public class DaoConfig {
           conn.close();
         }
       }
-    } catch (Exception e) {
+    } catch (Throwable e) {
       throw new RuntimeException("Description.  Cause: " + e, e);
     }
 
