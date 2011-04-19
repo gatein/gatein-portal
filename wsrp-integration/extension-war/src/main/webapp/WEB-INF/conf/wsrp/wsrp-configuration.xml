@@ -44,12 +44,6 @@
       </init-params>
    </component>
 
-   <!-- TODO: this should be removed to a JBoss5 specific configuration file -->
-   <component>
-      <type>org.gatein.integration.wsrp.wss.JBoss5WSSServiceIntegration</type>
-   </component>
-
-
    <external-component-plugins>
       <target-component>org.exoplatform.services.jcr.RepositoryService</target-component>
       <component-plugin>

@@ -795,59 +795,6 @@
         <version>0.7</version>
       </dependency>
 
-      <!-- WSRP -->
-      <dependency>
-         <groupId>org.gatein.wsrp</groupId>
-         <artifactId>wsrp-producer-lib</artifactId>
-         <version>${org.gatein.wsrp.version}</version>
-      </dependency>
-      <dependency>
-         <groupId>org.gatein.wsrp</groupId>
-         <artifactId>wsrp-common</artifactId>
-         <version>${org.gatein.wsrp.version}</version>
-      </dependency>
-      <dependency>
-         <groupId>org.gatein.wsrp</groupId>
-         <artifactId>wsrp-wsrp1-ws</artifactId>
-         <version>${org.gatein.wsrp.version}</version>
-      </dependency>
-      <dependency>
-         <groupId>org.gatein.wsrp</groupId>
-         <artifactId>wsrp-wsrp2-ws</artifactId>
-         <version>${org.gatein.wsrp.version}</version>
-      </dependency>
-      <dependency>
-         <groupId>org.gatein.wsrp</groupId>
-         <artifactId>wsrp-consumer</artifactId>
-         <version>${org.gatein.wsrp.version}</version>
-         <exclusions>
-            <exclusion>
-               <groupId>apache-httpclient</groupId>
-               <artifactId>commons-httpclient</artifactId>
-            </exclusion>
-         </exclusions>
-      </dependency>
-      <dependency>
-         <groupId>org.gatein.wsrp</groupId>
-         <artifactId>wsrp-integration-api</artifactId>
-         <version>${org.gatein.wsrp.version}</version>
-      </dependency>
-      <dependency>
-         <groupId>org.gatein.wsrp</groupId>
-         <artifactId>wsrp-jcr-impl</artifactId>
-         <version>${org.gatein.wsrp.version}</version>
-      </dependency>
-      <dependency>
-         <groupId>org.gatein.wsrp</groupId>
-         <artifactId>wsrp-wss</artifactId>
-         <version>${org.gatein.wsrp.version}</version>
-      </dependency>
-      <dependency>
-         <groupId>org.gatein.wsrp</groupId>
-         <artifactId>wsrp-wss-jboss5</artifactId>
-         <version>${org.gatein.wsrp.version}</version>
-      </dependency>
-
       <dependency>
          <?context LIB?>
          <?move jcip-annotations.jar?>
@@ -944,21 +891,6 @@
          <artifactId>gatein-sample-skin</artifactId>
          <type>war</type>
       </dependency-->
-      <dependency>
-         <?move gatein.ear/wsrp-producer.war?>
-         <groupId>org.gatein.wsrp</groupId>
-         <artifactId>wsrp-producer</artifactId>
-         <type>war</type>
-         <version>${org.gatein.wsrp.version}</version>
-      </dependency>
-      <dependency>
-         <?move gatein.ear/wsrp-admin-gui.war?>
-         <groupId>org.gatein.wsrp</groupId>
-         <artifactId>wsrp-admin-gui</artifactId>
-         <type>war</type>
-         <version>${org.gatein.wsrp.version}</version>
-      </dependency>
-
    </dependencies>
 
    <build>

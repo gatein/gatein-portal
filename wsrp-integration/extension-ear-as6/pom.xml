@@ -34,11 +34,10 @@
       <version>3.2.0-Beta01-SNAPSHOT</version>
    </parent>
 
-   <groupId>org.gatein.integration</groupId>
    <artifactId>extension-ear-as6</artifactId>
+   <packaging>ear</packaging>
 
    <name>GateIn WSRP Integration extension EAR for JBoss AS 6</name>
-   <packaging>ear</packaging>
 
    <dependencies>
       <dependency>
@@ -69,6 +68,48 @@
          <version>${org.gatein.wsrp.version}</version>
          <type>war</type>
       </dependency>
+      <dependency>
+         <groupId>org.gatein.wsrp</groupId>
+         <artifactId>wsrp-producer-lib</artifactId>
+      </dependency>
+      <dependency>
+         <groupId>org.gatein.wsrp</groupId>
+         <artifactId>wsrp-consumer</artifactId>
+         <exclusions>
+            <exclusion>
+               <groupId>apache-httpclient</groupId>
+               <artifactId>commons-httpclient</artifactId>
+            </exclusion>
+         </exclusions>
+      </dependency>
+      <dependency>
+         <groupId>org.gatein.wsrp</groupId>
+         <artifactId>wsrp-jcr-impl</artifactId>
+      </dependency>
+      <dependency>
+         <groupId>org.gatein.wsrp</groupId>
+         <artifactId>wsrp-common</artifactId>
+      </dependency>
+      <dependency>
+         <groupId>org.gatein.wsrp</groupId>
+         <artifactId>wsrp-wsrp1-ws</artifactId>
+      </dependency>
+      <dependency>
+         <groupId>org.gatein.wsrp</groupId>
+         <artifactId>wsrp-wsrp2-ws</artifactId>
+      </dependency>
+      <dependency>
+         <groupId>org.gatein.wsrp</groupId>
+         <artifactId>wsrp-integration-api</artifactId>
+      </dependency>
+      <dependency>
+         <groupId>org.gatein.wsrp</groupId>
+         <artifactId>wsrp-wss-jboss5</artifactId>
+      </dependency>
+      <dependency>
+         <groupId>org.gatein.wsrp</groupId>
+         <artifactId>wsrp-wss</artifactId>
+      </dependency>
    </dependencies>
 
    <build>
@@ -86,7 +127,7 @@
             <artifactId>maven-ear-plugin</artifactId>
             <configuration>
                <displayName>gatein-wsrp-integration</displayName>
-               <!--<defaultLibBundleDir>lib</defaultLibBundleDir>-->
+               <defaultLibBundleDir>lib</defaultLibBundleDir>
                <modules>
                   <webModule>
                      <groupId>org.gatein.integration</groupId>
@@ -114,6 +155,42 @@
                      <artifactId>extension-component</artifactId>
                      <includeInApplicationXml>true</includeInApplicationXml>
                      <bundleDir>/</bundleDir>
+                  </jarModule>
+                  <jarModule>
+                     <groupId>org.gatein.wsrp</groupId>
+                     <artifactId>wsrp-producer-lib</artifactId>
+                  </jarModule>
+                  <jarModule>
+                     <groupId>org.gatein.wsrp</groupId>
+                     <artifactId>wsrp-consumer</artifactId>
+                  </jarModule>
+                  <jarModule>
+                     <groupId>org.gatein.wsrp</groupId>
+                     <artifactId>wsrp-jcr-impl</artifactId>
+                  </jarModule>
+                  <jarModule>
+                     <groupId>org.gatein.wsrp</groupId>
+                     <artifactId>wsrp-common</artifactId>
+                  </jarModule>
+                  <jarModule>
+                     <groupId>org.gatein.wsrp</groupId>
+                     <artifactId>wsrp-wsrp1-ws</artifactId>
+                  </jarModule>
+                  <jarModule>
+                     <groupId>org.gatein.wsrp</groupId>
+                     <artifactId>wsrp-wsrp2-ws</artifactId>
+                  </jarModule>
+                  <jarModule>
+                     <groupId>org.gatein.wsrp</groupId>
+                     <artifactId>wsrp-integration-api</artifactId>
+                  </jarModule>
+                  <jarModule>
+                     <groupId>org.gatein.wsrp</groupId>
+                     <artifactId>wsrp-wss-jboss5</artifactId>
+                  </jarModule>
+                  <jarModule>
+                     <groupId>org.gatein.wsrp</groupId>
+                     <artifactId>wsrp-wss</artifactId>
                   </jarModule>
                </modules>
             </configuration>

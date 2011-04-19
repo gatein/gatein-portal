@@ -26,8 +26,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
    <modelVersion>4.0.0</modelVersion>
    <parent>
-      <artifactId>gatein-wsrp-integration-parent</artifactId>
       <groupId>org.gatein.integration</groupId>
+      <artifactId>gatein-wsrp-integration-parent</artifactId>
       <version>3.2.0-Beta01-SNAPSHOT</version>
    </parent>
 
@@ -61,6 +61,7 @@
       </dependency>
       <dependency>
          <groupId>org.gatein.wsrp</groupId>
+         <!--<artifactId>wsrp-producer-jb5wss</artifactId>-->
          <artifactId>wsrp-producer</artifactId>
          <version>${org.gatein.wsrp.version}</version>
          <type>war</type>
@@ -134,6 +135,7 @@
                   <webModule>
                      <groupId>org.gatein.wsrp</groupId>
                      <artifactId>wsrp-producer</artifactId>
+                     <!--<artifactId>wsrp-producer-jb5wss</artifactId>-->
                      <contextRoot>wsrp-producer</contextRoot>
                   </webModule>
                   <webModule>
