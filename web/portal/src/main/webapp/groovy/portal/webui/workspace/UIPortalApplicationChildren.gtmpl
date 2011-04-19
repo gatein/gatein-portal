@@ -6,14 +6,6 @@
         import org.exoplatform.portal.config.model.PortalProperties ;
 
   def rcontext = _ctx.getRequestContext() ;
-  String docBase =  rcontext.getRequestContextPath() ;
-  String skin = uicomponent.getSkin();
-  def portalSkins = uicomponent.getPortalSkins() ;
-  def portletSkins = uicomponent.getPortletSkins() ;
-  def scriptsPaths = uicomponent.getJavascriptURLs();
-  def lang = uicomponent.getLocale().getLanguage();
-  def title = rcontext.getTitle();
-  def metaInformation = rcontext.getMetaInformation();
 %>
 
       <% 
