@@ -37,16 +37,22 @@
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
+        </profile>
+        <profile>
+            <id>pkg-all</id>
             <modules>
-                <module>reports</module>
-            </modules>
+                <module>dependencies</module>
+                <module>tomcat</module>
+                <module>jetty</module>
+                <module>jboss-as5</module>
+                <module>jboss-as6</module>
+          </modules>
         </profile>
         <profile>
             <id>pkg-tomcat</id>
             <modules>
                 <module>dependencies</module>
                 <module>tomcat</module>
-                <module>reports</module>
             </modules>
         </profile>
         <profile>
@@ -54,7 +60,6 @@
             <modules>
                 <module>dependencies</module>
                 <module>tomcat</module>
-                <module>reports</module>
             </modules>
         </profile>
         <profile>
@@ -62,32 +67,25 @@
             <modules>
                 <module>dependencies</module>
                 <module>jetty</module>
-                <module>reports</module>
             </modules>
         </profile>
         <profile>
             <id>pkg-jbossas</id>
             <modules>
-              <module>module</module>
-              <module>product</module>
-              <module>pkg</module>
+              <module>jboss-as5</module>
+              <module>jboss-as6</module>
             </modules>
         </profile>
         <profile>
             <id>pkg-jbossas6</id>
             <modules>
                 <module>jboss-as6</module>
-                <module>reports</module>
             </modules>
         </profile>
         <profile>
             <id>pkg-jbossas5</id>
             <modules>
-                <module>module</module>
-                <module>product</module>
-                <module>pkg</module>
                 <module>jboss-as5</module>
-                <module>reports</module>
             </modules>
         </profile>
     </profiles>
