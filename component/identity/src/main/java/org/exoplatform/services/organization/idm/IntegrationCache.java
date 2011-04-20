@@ -6,6 +6,9 @@ import org.jboss.cache.CacheStatus;
 import org.jboss.cache.DefaultCacheFactory;
 import org.jboss.cache.Fqn;
 import org.jboss.cache.Node;
+import org.jboss.cache.eviction.ExpirationAlgorithmConfig;
+import org.jboss.cache.eviction.ExpirationConfiguration;
+
 import org.picketlink.idm.api.Group;
 import org.picketlink.idm.api.User;
 
@@ -54,6 +57,8 @@ public class IntegrationCache
    public static final String MAIN_ROOT = "NODE_GTN_ORG_SERVICE_INT_CACHE_MAIN_ROOT";
 
    public static final String NODE_OBJECT_KEY = "object";
+
+   private int expiration = -1;
 
    private Fqn getRootNode()
    {
@@ -152,6 +157,7 @@ public class IntegrationCache
       if (ioNode != null)
       {
          ioNode.put(NODE_OBJECT_KEY, id);
+         setExpiration(ioNode);
 
          if (log.isLoggable(Level.FINER))
          {
@@ -205,6 +211,7 @@ public class IntegrationCache
 
       if (ioNode != null)
       {
+         setExpiration(ioNode);
          ioNode.put(NODE_OBJECT_KEY, rootGroup);
 
          if (log.isLoggable(Level.FINER))
@@ -242,4 +249,22 @@ public class IntegrationCache
 
    }
 
+   public void setExpiration(Node node)
+   {
+      if (expiration != -1 && expiration > 0)
+      {
+         Long future = new Long(System.currentTimeMillis() + expiration);
+         node.put(ExpirationAlgorithmConfig.EXPIRATION_KEY, future);
+      }
+   }
+
+   public int getExpiration()
+   {
+      return expiration;
+   }
+
+   public void setExpiration(int expiration)
+   {
+      this.expiration = expiration;
+   }
 }

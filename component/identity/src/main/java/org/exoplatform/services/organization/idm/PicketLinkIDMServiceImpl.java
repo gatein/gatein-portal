@@ -76,6 +76,8 @@ public class PicketLinkIDMServiceImpl implements PicketLinkIDMService, Startable
 
    public static final String JGROUPS_MUX_ENABLED = "jgroups-multiplexer-stack";
 
+   public static final String CACHE_EXPIRATION = "cacheExpiration";
+
    private IdentitySessionFactory identitySessionFactory;
 
    private String config;
@@ -106,6 +108,7 @@ public class PicketLinkIDMServiceImpl implements PicketLinkIDMService, Startable
       ValueParam storeCacheConfig = initParams.getValueParam(CACHE_CONFIG_STORE_OPTION);
       ValueParam jgroupsStack = initParams.getValueParam(JGROUPS_MUX_ENABLED);
       ValueParam jgroupsConfig = initParams.getValueParam(JGROUPS_CONFIG);
+      ValueParam cacheExpirationParam = initParams.getValueParam(CACHE_EXPIRATION);
 
       if (config == null && jndiName == null)
       {
@@ -136,6 +139,13 @@ public class PicketLinkIDMServiceImpl implements PicketLinkIDMService, Startable
 
          identityConfiguration.getIdentityConfigurationRegistry().register(hibernateService.getSessionFactory(), "hibernateSessionFactory");
 
+         int expiration = -1;
+
+         if (cacheExpirationParam.getValue() != null && cacheExpirationParam.getValue().length() > 0)
+         {
+            expiration = Integer.decode(cacheExpirationParam.getValue());
+         }
+
          if (apiCacheConfig != null)
          {
 
@@ -159,12 +169,14 @@ public class PicketLinkIDMServiceImpl implements PicketLinkIDMService, Startable
 
             // PLIDM API cache
             JBossCacheAPICacheProviderImpl apiCacheProvider = new JBossCacheAPICacheProviderImpl();
+            apiCacheProvider.setExpiration(expiration);
             apiCacheProvider.initialize(cache);
             picketLinkIDMCache.register(apiCacheProvider);
             identityConfiguration.getIdentityConfigurationRegistry().register(apiCacheProvider, "apiCacheProvider");
 
             //Integration cache
             integrationCache = new IntegrationCache();
+            integrationCache.setExpiration(expiration);
             integrationCache.initialize(cache);
             picketLinkIDMCache.register(apiCacheProvider);
 
@@ -192,6 +204,7 @@ public class PicketLinkIDMServiceImpl implements PicketLinkIDMService, Startable
             configStream.close();
 
             JBossCacheIdentityStoreCacheProviderImpl storeCacheProvider = new JBossCacheIdentityStoreCacheProviderImpl();
+            storeCacheProvider.setExpiration(expiration);
             storeCacheProvider.initialize(cache);
             picketLinkIDMCache.register(storeCacheProvider);
             identityConfiguration.getIdentityConfigurationRegistry().register(storeCacheProvider, "storeCacheProvider");
