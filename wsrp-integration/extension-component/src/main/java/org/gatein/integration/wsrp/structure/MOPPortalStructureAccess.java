@@ -91,7 +91,7 @@ public class MOPPortalStructureAccess implements PortalStructureAccess
       session.scheduleForEviction(new PageKey("portal", page.getSite().getName(), page.getName()));
 
       // save
-      session.close(true);
+      session.save();
    }
 
    public Page getPageFrom(org.exoplatform.portal.config.model.Page portalPage)
