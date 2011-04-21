@@ -31,11 +31,12 @@ import org.chromattic.api.format.ObjectFormatter;
 import org.chromattic.spi.jcr.SessionLifeCycle;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.container.component.ComponentRequestLifecycle;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.gatein.common.util.ParameterValidation;
-import org.gatein.wsrp.jcr.ChromatticPersister;
+import org.gatein.wsrp.jcr.BaseChromatticPersister;
 import org.gatein.wsrp.jcr.mapping.BaseMapping;
 
 import javax.jcr.Credentials;
@@ -51,26 +52,16 @@ import java.util.Map;
  * @author <a href="mailto:chris.laprun@jboss.com">Chris Laprun</a>
  * @version $Revision$
  */
-public class JCRPersister implements ChromatticPersister
+public class JCRPersister extends BaseChromatticPersister
 {
-   private Chromattic chrome;
-   public static final String WSRP_WORKSPACE_NAME = "wsrp-system";
-   public static final String PORTLET_STATES_WORKSPACE_NAME = "pc-system";
-   private static final String REPOSITORY_NAME = "repository";
-   private String workspaceName;
-   private Map<Class, Class<? extends BaseMapping>> modelToMapping;
-
-   private ThreadLocal<ChromatticSession> sessionHolder = new ThreadLocal<ChromatticSession>();
-
    public JCRPersister(ExoContainer container, String workspaceName)
    {
-      this.workspaceName = workspaceName;
+      super(workspaceName);
    }
 
-   public void initializeBuilderFor(List<Class> mappingClasses) throws Exception
+   @Override
+   protected void setBuilderOptions(ChromatticBuilder builder)
    {
-      ChromatticBuilder builder = ChromatticBuilder.create();
-      builder.setOptionValue(ChromatticBuilder.INSTRUMENTOR_CLASSNAME, "org.chromattic.apt.InstrumentorImpl");
       if (PORTLET_STATES_WORKSPACE_NAME.equals(workspaceName))
       {
          builder.setOptionValue(ChromatticBuilder.SESSION_LIFECYCLE_CLASSNAME, PortletStatesSessionLifeCycle.class.getName());
@@ -82,93 +73,6 @@ public class JCRPersister implements ChromatticPersister
       else
       {
          throw new IllegalArgumentException("Unknown workspace name: '" + workspaceName + "'");
-      }
-
-      modelToMapping = new HashMap<Class, Class<? extends BaseMapping>>(mappingClasses.size());
-      for (Class mappingClass : mappingClasses)
-      {
-         if (BaseMapping.class.isAssignableFrom(mappingClass))
-         {
-            Type[] interfaces = mappingClass.getGenericInterfaces();
-            if (ParameterValidation.existsAndIsNotEmpty(interfaces))
-            {
-               Class type = (Class)((ParameterizedType)interfaces[0]).getActualTypeArguments()[0];
-               modelToMapping.put(type, mappingClass);
-            }
-         }
-         builder.add(mappingClass);
-      }
-
-      chrome = builder.build();
-   }
-
-   public ChromatticSession getSession()
-   {
-      ChromatticSession chromatticSession = sessionHolder.get();
-      if (chromatticSession == null)
-      {
-         ChromatticSession session = chrome.openSession();
-         sessionHolder.set(session);
-         return session;
-      }
-      else
-      {
-         return chromatticSession;
-      }
-   }
-
-   public void closeSession(boolean save)
-   {
-      ChromatticSession session = getOpenedSessionOrFail();
-      if (save)
-      {
-         synchronized (this)
-         {
-            session.save();
-         }
-      }
-      session.close();
-      sessionHolder.set(null);
-   }
-
-   private ChromatticSession getOpenedSessionOrFail()
-   {
-      ChromatticSession session = sessionHolder.get();
-      if (session == null)
-      {
-         throw new IllegalStateException("Cannot close the session as it hasn't been opened first!");
-      }
-      return session;
-   }
-
-   public synchronized void save()
-   {
-      getOpenedSessionOrFail().save();
-   }
-
-   public <T> boolean delete(T toDelete, org.gatein.wsrp.jcr.StoresByPathManager<T> manager)
-   {
-      Class<? extends Object> modelClass = toDelete.getClass();
-      Class<? extends BaseMapping> baseMappingClass = modelToMapping.get(modelClass);
-      if (baseMappingClass == null)
-      {
-         throw new IllegalArgumentException("Cannot find a mapping class for " + modelClass.getName());
-      }
-
-      ChromatticSession session = getSession();
-
-      Object old = session.findByPath(baseMappingClass, manager.getChildPath(toDelete));
-
-      if (old != null)
-      {
-         session.remove(old);
-         closeSession(true);
-         return true;
-      }
-      else
-      {
-         closeSession(false);
-         return false;
       }
    }
 

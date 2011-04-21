@@ -66,11 +66,11 @@
             <values-param>
                <name>autoCreatedInNewRepository</name>
                <description>Node types configuration file</description>
-               <value>war:/conf/wsrp/consumers-configuration-nodetypes.xml</value>
-               <value>war:/conf/wsrp/producer-configuration-nodetypes.xml</value>
-               <value>war:/conf/wsrp/producer-registrations-nodetypes.xml</value>
-               <value>war:/conf/wsrp/producer-pc-nodetypes.xml</value>
-               <value>war:/conf/wsrp/migration-nodetypes.xml</value>
+               <value>jar:/conf/nodetypes/consumers-configuration-nodetypes.xml</value>
+               <value>jar:/conf/nodetypes/producer-configuration-nodetypes.xml</value>
+               <value>jar:/conf/nodetypes/producer-registrations-nodetypes.xml</value>
+               <value>jar:/conf/nodetypes/producer-pc-nodetypes.xml</value>
+               <value>jar:/conf/nodetypes/migration-nodetypes.xml</value>
             </values-param>
          </init-params>
       </component-plugin>
@@ -182,42 +182,5 @@
          </init-params>
       </component-plugin>
    </external-component-plugins>
-
-
-   <!--<external-component-plugins>
-      <target-component>org.exoplatform.commons.chromattic.ChromatticManager</target-component>
-      <component-plugin>
-         <name>chromattic</name>
-         <set-method>addLifeCycle</set-method>
-         <type>org.exoplatform.commons.chromattic.ChromatticLifeCycle</type>
-         <init-params>
-            <value-param>
-               <name>domain-name</name>
-               <value>wsrp</value>
-            </value-param>
-            <value-param>
-               <name>workspace-name</name>
-               <value>wsrp-system</value>
-            </value-param>
-            <values-param>
-               <name>entities</name>
-               <value>org.gatein.integration.wsrp.state.mapping.RegistrationPropertyDescriptionMapping</value>
-               <value>org.gatein.integration.wsrp.state.consumer.mapping.ProducerInfoMapping</value>
-               <value>org.gatein.integration.wsrp.state.consumer.mapping.ProducerInfosMapping</value>
-               <value>org.gatein.integration.wsrp.state.consumer.mapping.RegistrationInfoMapping</value>
-               <value>org.gatein.integration.wsrp.state.consumer.mapping.RegistrationPropertyMapping</value>
-               <value>org.gatein.integration.wsrp.state.consumer.mapping.EndpointInfoMapping</value>
-               <value>org.gatein.integration.wsrp.state.producer.configuration.mapping.ProducerConfigurationMapping</value>
-               <value>org.gatein.integration.wsrp.state.producer.configuration.mapping.RegistrationRequirementsMapping</value>
-               <value>org.gatein.integration.wsrp.state.producer.registrations.mapping.ConsumerCapabilitiesMapping</value>
-               <value>org.gatein.integration.wsrp.state.producer.registrations.mapping.ConsumerGroupMapping</value>
-               <value>org.gatein.integration.wsrp.state.producer.registrations.mapping.ConsumerMapping</value>
-               <value>org.gatein.integration.wsrp.state.producer.registrations.mapping.ConsumersAndGroupsMapping</value>
-               <value>org.gatein.integration.wsrp.state.producer.registrations.mapping.RegistrationMapping</value>
-               <value>org.gatein.integration.wsrp.state.producer.registrations.mapping.RegistrationPropertiesMapping</value>
-            </values-param>
-         </init-params>
-      </component-plugin>
-   </external-component-plugins>-->
 
 </configuration>
