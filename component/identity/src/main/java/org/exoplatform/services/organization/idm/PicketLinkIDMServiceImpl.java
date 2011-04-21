@@ -141,7 +141,9 @@ public class PicketLinkIDMServiceImpl implements PicketLinkIDMService, Startable
 
          int expiration = -1;
 
-         if (cacheExpirationParam.getValue() != null && cacheExpirationParam.getValue().length() > 0)
+         if (cacheExpirationParam != null &&
+             cacheExpirationParam.getValue() != null &&
+             cacheExpirationParam.getValue().length() > 0)
          {
             expiration = Integer.decode(cacheExpirationParam.getValue());
          }
