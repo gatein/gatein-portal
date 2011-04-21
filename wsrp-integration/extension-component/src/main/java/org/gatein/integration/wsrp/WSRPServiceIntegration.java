@@ -146,16 +146,23 @@ public class WSRPServiceIntegration implements Startable, WebAppListener
    {
       if (!bypass)
       {
-         startProducer();
-         startConsumers();
+         try
+         {
+            startProducer();
+            startConsumers();
 
-         // listen for web app events so that we can inject services into WSRP admin UI "cleanly"
-         // todo: this service injection should really be done using CDI... :/
-         ServletContainerFactory factory = DefaultServletContainerFactory.getInstance();
-         ServletContainer servletContainer = factory.getServletContainer();
-         servletContainer.addWebAppListener(this);
+            // listen for web app events so that we can inject services into WSRP admin UI "cleanly"
+            // todo: this service injection should really be done using CDI... :/
+            ServletContainerFactory factory = DefaultServletContainerFactory.getInstance();
+            ServletContainer servletContainer = factory.getServletContainer();
+            servletContainer.addWebAppListener(this);
 
-         log.info("WSRP Service version '" + WSRPConstants.WSRP_SERVICE_VERSION + "' started");
+            log.info("WSRP Service version '" + WSRPConstants.WSRP_SERVICE_VERSION + "' STARTED");
+         }
+         catch (Exception e)
+         {
+            log.error("WSRP Service version '" + WSRPConstants.WSRP_SERVICE_VERSION + "' FAILED to start", e);
+         }
       }
    }
 
