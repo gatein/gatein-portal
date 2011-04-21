@@ -61,8 +61,7 @@
       </dependency>
       <dependency>
          <groupId>org.gatein.wsrp</groupId>
-         <!--<artifactId>wsrp-producer-jb5wss</artifactId>-->
-         <artifactId>wsrp-producer</artifactId>
+         <artifactId>wsrp-producer-jb5wss</artifactId>
          <version>${org.gatein.wsrp.version}</version>
          <type>war</type>
       </dependency>
@@ -134,8 +133,7 @@
                   </webModule>
                   <webModule>
                      <groupId>org.gatein.wsrp</groupId>
-                     <artifactId>wsrp-producer</artifactId>
-                     <!--<artifactId>wsrp-producer-jb5wss</artifactId>-->
+                     <artifactId>wsrp-producer-jb5wss</artifactId>
                      <contextRoot>wsrp-producer</contextRoot>
                   </webModule>
                   <webModule>
