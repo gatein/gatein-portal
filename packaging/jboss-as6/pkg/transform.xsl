@@ -8,6 +8,7 @@
    <xsl:param name="default.ear.context"/>
    <xsl:param name="lib.context"/>
    <xsl:param name="deploy.context"/>
+   <xsl:param name="profile"/>
    <xsl:output method="xml" indent="yes"/>
    <xsl:template match="/">
       <xsl:comment>Generated file</xsl:comment>
@@ -18,6 +19,23 @@
                   <xsl:for-each select="processing-instruction()[name()='move']">
                      <xsl:value-of select="."/>
                   </xsl:for-each>
+               </xsl:variable>
+
+               <xsl:variable name="active.for.profile">
+                  <xsl:for-each select="processing-instruction()[name()='profile']">
+                     <xsl:value-of select="."/>
+                  </xsl:for-each>
+               </xsl:variable>
+               <xsl:variable name="isActive">
+                  <xsl:choose>
+                     <xsl:when test="$active.for.profile=''">true</xsl:when>
+                     <xsl:otherwise>
+                        <xsl:choose>
+                           <xsl:when test="$active.for.profile=$profile">true</xsl:when>
+                           <xsl:otherwise>false</xsl:otherwise>
+                        </xsl:choose>
+                     </xsl:otherwise>
+                  </xsl:choose>
                </xsl:variable>
 
                <xsl:variable name="a_ext">
@@ -73,60 +91,65 @@
                </xsl:variable>
 
                <xsl:choose>
-                  <xsl:when test="$expand=''">
+                  <xsl:when test="$isActive='true'">
                      <xsl:choose>
-                        <xsl:when test="$dest.name=''">
-                           <xsl:element name="copy">
-                              <xsl:attribute name="todir">
-                                 <xsl:value-of select="$context"/>
-                              </xsl:attribute>
-                              <xsl:element name="fileset">
-                                 <xsl:attribute name="refid"><xsl:value-of select="./mvn:groupId"/>:<xsl:value-of
-                                       select="./mvn:artifactId"/>:<xsl:value-of select="$ext"/>
-                                 </xsl:attribute>
-                              </xsl:element>
-                           </xsl:element>
+
+                        <xsl:when test="$expand=''">
+                           <xsl:choose>
+                              <xsl:when test="$dest.name=''">
+                                 <xsl:element name="copy">
+                                    <xsl:attribute name="todir">
+                                       <xsl:value-of select="$context"/>
+                                    </xsl:attribute>
+                                    <xsl:element name="fileset">
+                                       <xsl:attribute name="refid"><xsl:value-of select="./mvn:groupId"/>:<xsl:value-of
+                                             select="./mvn:artifactId"/>:<xsl:value-of select="$ext"/>
+                                       </xsl:attribute>
+                                    </xsl:element>
+                                 </xsl:element>
+                              </xsl:when>
+                              <xsl:otherwise>
+                                 <xsl:element name="copy">
+                                    <xsl:attribute name="tofile"><xsl:value-of select="$context"/>/<xsl:value-of select="$dest.name"/>
+                                    </xsl:attribute>
+                                    <xsl:element name="fileset">
+                                       <xsl:attribute name="refid"><xsl:value-of select="./mvn:groupId"/>:<xsl:value-of
+                                             select="./mvn:artifactId"/>:<xsl:value-of select="$ext"/>
+                                       </xsl:attribute>
+                                    </xsl:element>
+                                 </xsl:element>
+                              </xsl:otherwise>
+                           </xsl:choose>
                         </xsl:when>
                         <xsl:otherwise>
-                           <xsl:element name="copy">
-                              <xsl:attribute name="tofile"><xsl:value-of select="$context"/>/<xsl:value-of select="$dest.name"/>
-                              </xsl:attribute>
-                              <xsl:element name="fileset">
-                                 <xsl:attribute name="refid"><xsl:value-of select="./mvn:groupId"/>:<xsl:value-of
-                                       select="./mvn:artifactId"/>:<xsl:value-of select="$ext"/>
-                                 </xsl:attribute>
-                              </xsl:element>
-                           </xsl:element>
+                           <xsl:choose>
+                              <xsl:when test="$dest.name=''">
+                                 <xsl:element name="unjar">
+                                    <xsl:attribute name="dest"><xsl:value-of select="$context"/>/<xsl:value-of
+                                          select="./mvn:artifactId"/>.<xsl:value-of select="$ext"/>
+                                    </xsl:attribute>
+                                    <xsl:element name="fileset">
+                                       <xsl:attribute name="refid"><xsl:value-of select="./mvn:groupId"/>:<xsl:value-of
+                                             select="./mvn:artifactId"/>:<xsl:value-of select="$ext"/>
+                                       </xsl:attribute>
+                                    </xsl:element>
+                                 </xsl:element>
+                              </xsl:when>
+                              <xsl:otherwise>
+                                 <xsl:element name="unjar">
+                                    <xsl:attribute name="dest"><xsl:value-of select="$context"/>/<xsl:value-of select="$dest.name"/>
+                                    </xsl:attribute>
+                                    <xsl:element name="fileset">
+                                       <xsl:attribute name="refid"><xsl:value-of select="./mvn:groupId"/>:<xsl:value-of
+                                             select="./mvn:artifactId"/>:<xsl:value-of select="$ext"/>
+                                       </xsl:attribute>
+                                    </xsl:element>
+                                 </xsl:element>
+                              </xsl:otherwise>
+                           </xsl:choose>
                         </xsl:otherwise>
                      </xsl:choose>
                   </xsl:when>
-                  <xsl:otherwise>
-                     <xsl:choose>
-                        <xsl:when test="$dest.name=''">
-                           <xsl:element name="unjar">
-                              <xsl:attribute name="dest"><xsl:value-of select="$context"/>/<xsl:value-of
-                                    select="./mvn:artifactId"/>.<xsl:value-of select="$ext"/>
-                              </xsl:attribute>
-                              <xsl:element name="fileset">
-                                 <xsl:attribute name="refid"><xsl:value-of select="./mvn:groupId"/>:<xsl:value-of
-                                       select="./mvn:artifactId"/>:<xsl:value-of select="$ext"/>
-                                 </xsl:attribute>
-                              </xsl:element>
-                           </xsl:element>
-                        </xsl:when>
-                        <xsl:otherwise>
-                           <xsl:element name="unjar">
-                              <xsl:attribute name="dest"><xsl:value-of select="$context"/>/<xsl:value-of select="$dest.name"/>
-                              </xsl:attribute>
-                              <xsl:element name="fileset">
-                                 <xsl:attribute name="refid"><xsl:value-of select="./mvn:groupId"/>:<xsl:value-of
-                                       select="./mvn:artifactId"/>:<xsl:value-of select="$ext"/>
-                                 </xsl:attribute>
-                              </xsl:element>
-                           </xsl:element>
-                        </xsl:otherwise>
-                     </xsl:choose>
-                  </xsl:otherwise>
                </xsl:choose>
             </xsl:for-each>
          </target>
