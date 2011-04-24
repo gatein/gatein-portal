@@ -1204,7 +1204,7 @@ Either rename it, delete it, or deactivate -Pdownload profile.
                <?move gatein-cdi-example-portlet.war?>
                <groupId>org.gatein.cdi</groupId>
                <artifactId>gatein-cdi-example-portlet</artifactId>
-               <version>pong${org.gatein.cdi.version}</version>
+               <version>${org.gatein.cdi.version}</version>
                <type>war</type>
             </dependency>
          </dependencies>
