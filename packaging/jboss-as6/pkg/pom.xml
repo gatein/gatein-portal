@@ -987,7 +987,7 @@ You can also use -Pdownload to automatically provide JBoss AS instance.
          <id>pkg-jbossas6</id>
 
          <properties>
-            <exo.projects.app.jboss5.version>jboss-6.0.0.Final</exo.projects.app.jboss5.version>
+            <exo.projects.app.jboss6.version>jboss-6.0.0.Final</exo.projects.app.jboss6.version>
             <servers.dir>${exo.projects.directory.dependencies}</servers.dir>
             <jbossas.name>${exo.projects.app.jboss6.version}</jbossas.name>
          </properties>
