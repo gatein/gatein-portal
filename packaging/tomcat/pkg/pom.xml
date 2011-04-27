@@ -14,18 +14,6 @@
   <packaging>pom</packaging>
   <name>GateIn for Tomcat packaging</name>
 
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>org.exoplatform.portal</groupId>
-        <artifactId>exo.portal.packaging.dependencies</artifactId>
-        <version>3.2.0-Beta01-SNAPSHOT</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
-
   <dependencies>
 
     <!-- Logging -->

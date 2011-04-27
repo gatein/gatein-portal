@@ -646,12 +646,10 @@
       <dependency>
          <groupId>org.jibx</groupId>
          <artifactId>jibx-bind</artifactId>
-         <version>${org.jibx.version}</version>
       </dependency>
       <dependency>
          <groupId>org.jibx</groupId>
          <artifactId>jibx-run</artifactId>
-         <version>${org.jibx.version}</version>
       </dependency>
       <dependency>
          <groupId>joda-time</groupId>

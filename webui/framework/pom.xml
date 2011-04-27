@@ -51,7 +51,6 @@
       <plugin>
         <groupId>org.jibx</groupId>
         <artifactId>maven-jibx-plugin</artifactId>
-        <version>${org.jibx.version}</version>
         <configuration>
           <directory>src/main/resources</directory>
           <includes>

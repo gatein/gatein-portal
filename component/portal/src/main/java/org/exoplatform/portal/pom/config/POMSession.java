@@ -41,6 +41,7 @@ import org.gatein.mop.core.api.workspace.NavigationImpl;
 import org.gatein.mop.core.api.workspace.PageImpl;
 
 import javax.jcr.RepositoryException;
+import javax.jcr.Session;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.HashMap;
@@ -159,7 +160,9 @@ public final class POMSession
       }
       try
       {
-         modified = getSession().getJCRSession().hasPendingChanges();
+         ChromatticSession session = getSession();
+         Session jcrSession = session.getJCRSession();
+         modified = jcrSession.hasPendingChanges();
       }
       catch (RepositoryException e)
       {

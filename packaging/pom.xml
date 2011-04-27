@@ -41,7 +41,6 @@
         <profile>
             <id>pkg-all</id>
             <modules>
-                <module>dependencies</module>
                 <module>tomcat</module>
                 <module>jetty</module>
                 <module>jboss-as5</module>
@@ -51,21 +50,18 @@
         <profile>
             <id>pkg-tomcat</id>
             <modules>
-                <module>dependencies</module>
                 <module>tomcat</module>
             </modules>
         </profile>
         <profile>
             <id>pkg-tomcat7</id>
             <modules>
-                <module>dependencies</module>
                 <module>tomcat</module>
             </modules>
         </profile>
         <profile>
             <id>pkg-jetty</id>
             <modules>
-                <module>dependencies</module>
                 <module>jetty</module>
             </modules>
         </profile>
