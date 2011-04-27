@@ -61,9 +61,9 @@
                 </dependencies>
                 <configuration>
                     <sourceDocumentName>master.xml</sourceDocumentName>
-                    <sourceDirectory>${pom.basedir}/en</sourceDirectory>
+                    <sourceDirectory>${pom.basedir}</sourceDirectory>
                     <imageResource>
-                        <directory>${pom.basedir}/en/en-US</directory>
+                        <directory>${pom.basedir}/en-US</directory>
                         <includes>
                           <include>images/**/*</include>
                         </includes>
