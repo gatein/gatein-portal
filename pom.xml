@@ -686,6 +686,12 @@
          </dependency>
 
          <dependency>
+            <groupId>com.google.javascript</groupId>
+            <artifactId>closure-compiler</artifactId>
+            <version>r706</version>
+         </dependency>
+
+         <dependency>
             <groupId>org.gatein.shindig</groupId>
             <artifactId>shindig-gadgets</artifactId>
             <version>${org.shindig.version}</version>
@@ -746,7 +752,7 @@
          <scope>test</scope>
       </dependency>
    </dependencies>
-
+   
    <build>
       <resources>
          <resource>

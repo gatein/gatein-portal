@@ -18,19 +18,32 @@
  */
 package org.exoplatform.portal.resource.compressor;
 
+import com.google.javascript.jscomp.*;
+import com.google.javascript.jscomp.Compiler;
+import org.apache.commons.io.IOUtils;
+import org.exoplatform.commons.utils.IOUtil;
 import org.exoplatform.component.test.AbstractKernelTest;
 import org.exoplatform.component.test.ConfigurationUnit;
 import org.exoplatform.component.test.ConfiguredBy;
 import org.exoplatform.component.test.ContainerScope;
+import org.exoplatform.container.xml.InitParams;
+import org.exoplatform.container.xml.Parameter;
+import org.exoplatform.container.xml.ValueParam;
+import org.exoplatform.portal.resource.compressor.impl.ClosureCompressorPlugin;
 import org.exoplatform.portal.resource.compressor.impl.JSMinCompressorPlugin;
 import org.exoplatform.portal.resource.compressor.impl.ResourceCompressorService;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.Writer;
+import java.util.Scanner;
 
 /**
  * @author <a href="trong.tran@exoplatform.com">Trong Tran</a>
@@ -83,6 +96,66 @@ public class TestResourceCompressorService extends AbstractKernelTest
       assertTrue(jsFile.length() > jsCompressedFile.length());
       log.info("The original javascript (" + getFileSize(jsFile) + ") is compressed by JSMIN into "
          + jsCompressedFile.getAbsolutePath() + " (" + getFileSize(jsCompressedFile) + ")");
+   }
+
+   public void testClosureCompressing() throws Exception
+   {
+      File jsFile = new File("src/test/resources/javascript.js");
+      File jsCompressedFile = new File("target/closure-compressed-file.js");
+      Reader reader = new FileReader(jsFile);
+      Writer writer = new FileWriter(jsCompressedFile);
+
+      ResourceCompressorService compressor =
+         (ResourceCompressorService)getContainer().getComponentInstanceOfType(ResourceCompressor.class);
+
+      InitParams priorityParam = new InitParams();
+      ValueParam param = new ValueParam();
+      param.setName("plugin.priority");
+      param.setValue("10");
+      priorityParam.addParameter(param);
+      compressor.registerCompressorPlugin(new ClosureCompressorPlugin(priorityParam));
+      try
+      {
+         compressor.compress(reader, writer, ResourceType.JAVASCRIPT);
+      }
+      catch (Exception e)
+      {
+         fail(e.getLocalizedMessage());
+      }
+      finally
+      {
+         reader.close();
+         writer.close();
+      }
+
+      assertTrue(jsCompressedFile.length() > 0);
+      assertTrue(jsFile.length() > jsCompressedFile.length());
+      log.info("The original javascript (" + getFileSize(jsFile) + ") is compressed by CLOSURE COMPILER into "
+         + jsCompressedFile.getAbsolutePath() + " (" + getFileSize(jsCompressedFile) + ")");
+
+      String expectedJS = closureCompress(jsFile);
+      assertEquals(expectedJS.length(), jsCompressedFile.length());
+   }
+
+   private String closureCompress(File input) throws Exception
+   {
+      Compiler compiler = new Compiler();
+      CompilerOptions options = new CompilerOptions();
+      CompilationLevel.SIMPLE_OPTIMIZATIONS.setOptionsForCompilationLevel(options);
+      JSSourceFile extern = JSSourceFile.fromCode("", "");
+
+      JSSourceFile jsInput;
+      try
+      {
+         jsInput = JSSourceFile.fromFile(input);          
+      }
+      catch (Exception ex)
+      {
+         throw new ResourceCompressorException(ex);
+      }
+
+      compiler.compile(extern, jsInput, options);
+      return compiler.toSource();
    }
 
    public void testYUICSSCompressing() throws IOException
