@@ -27,7 +27,6 @@
       <key>org.exoplatform.portal.resource.compressor.ResourceCompressor</key>
       <type>org.exoplatform.portal.resource.compressor.impl.ResourceCompressorService</type>
       <component-plugins>
-         <!--
          <component-plugin>
             <name>JSMinCompressorPlugin</name>
             <set-method>registerCompressorPlugin</set-method>
@@ -39,7 +38,6 @@
                </value-param>
             </init-params>
          </component-plugin>
-         -->
          <component-plugin>
             <name>ClosureCompressorPlugin</name>
             <set-method>registerCompressorPlugin</set-method>
