@@ -89,7 +89,7 @@
          <dependency>
             <groupId>org.gatein</groupId>
             <artifactId>gatein-dep</artifactId>
-            <version>1.1.0-Beta02</version>
+            <version>1.1.0-Beta03</version>
             <type>pom</type>
             <scope>import</scope>
          </dependency>
@@ -683,12 +683,6 @@
             <groupId>org.picketlink.idm</groupId>
             <artifactId>picketlink-idm-spi</artifactId>
             <version>${org.picketlink.idm}</version>
-         </dependency>
-
-         <dependency>
-            <groupId>com.google.javascript</groupId>
-            <artifactId>closure-compiler</artifactId>
-            <version>r706</version>
          </dependency>
 
          <dependency>

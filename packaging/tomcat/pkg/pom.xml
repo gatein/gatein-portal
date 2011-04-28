@@ -723,6 +723,10 @@
       <groupId>org.apache.tika</groupId>
       <artifactId>tika-parsers</artifactId>
     </dependency>
+    <dependency>
+      <groupId>com.google.javascript</groupId>
+      <artifactId>closure-compiler</artifactId>
+    </dependency>
 
     <!-- War files -->
     <dependency>
