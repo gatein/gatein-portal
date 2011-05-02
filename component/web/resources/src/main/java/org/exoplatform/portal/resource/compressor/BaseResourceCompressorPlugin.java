@@ -21,15 +21,26 @@ package org.exoplatform.portal.resource.compressor;
 import org.exoplatform.container.component.BaseComponentPlugin;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.container.xml.ValueParam;
+import org.exoplatform.management.annotations.Managed;
+import org.exoplatform.management.annotations.ManagedDescription;
+import org.exoplatform.management.jmx.annotations.NameTemplate;
+import org.exoplatform.management.jmx.annotations.Property;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 
 /**
  * @author <a href="mailto:hoang281283@gmail.com">Minh Hoang TO</a>
  * Aug 19, 2010
  */
-
+@Managed
+@ManagedDescription("A resource compressor plugin")
+@NameTemplate({@Property(key = "service", value = "resource"), @Property(key = "compressor", value = "{Name}")})
 public abstract class BaseResourceCompressorPlugin extends BaseComponentPlugin implements ResourceCompressorPlugin
 {
+
    private int priority;
+  
+   protected final Logger log = LoggerFactory.getLogger(getClass());
 
    public BaseResourceCompressorPlugin(InitParams params)
    {
@@ -43,9 +54,18 @@ public abstract class BaseResourceCompressorPlugin extends BaseComponentPlugin i
          this.priority = -1;
       }
    }
-   
+
+   @Managed
+   @ManagedDescription("The plugin priority")
    public int getPriority()
    {
       return priority;
+   }
+
+   @Managed
+   @ManagedDescription("The plugin type")
+   public String getType()
+   {
+      return getResourceType().name();
    }
 }

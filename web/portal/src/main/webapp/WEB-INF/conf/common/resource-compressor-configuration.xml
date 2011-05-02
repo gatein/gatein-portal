@@ -47,6 +47,10 @@
                   <name>plugin.priority</name>
                   <value>2</value>
                </value-param>
+               <value-param>
+                  <name>level</name>
+                  <value>${gatein.web.compressor.js.level}</value>
+               </value-param>
             </init-params>
          </component-plugin>
          <component-plugin>

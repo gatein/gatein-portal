@@ -28,6 +28,12 @@ import java.util.Map;
 
 import org.exoplatform.container.component.ComponentPlugin;
 import org.exoplatform.container.xml.InitParams;
+import org.exoplatform.management.ManagementAware;
+import org.exoplatform.management.ManagementContext;
+import org.exoplatform.management.annotations.Managed;
+import org.exoplatform.management.annotations.ManagedDescription;
+import org.exoplatform.management.jmx.annotations.NameTemplate;
+import org.exoplatform.management.jmx.annotations.Property;
 import org.exoplatform.portal.resource.compressor.ResourceCompressor;
 import org.exoplatform.portal.resource.compressor.ResourceCompressorException;
 import org.exoplatform.portal.resource.compressor.ResourceCompressorPlugin;
@@ -39,13 +45,20 @@ import org.exoplatform.services.log.Log;
  * @author <a href="mailto:hoang281283@gmail.com">Minh Hoang TO</a>
  * Aug 19, 2010
  */
-
-public class ResourceCompressorService implements ResourceCompressor
+@Managed
+@ManagedDescription("The resource compressor service")
+@NameTemplate({@Property(key = "service", value = "resource")})
+public class ResourceCompressorService implements ResourceCompressor, ManagementAware
 {
 
+   /** . */
    private Log log = ExoLogger.getLogger(ResourceCompressorService.class);
 
+   /** . */
    private Map<ResourceType, List<ResourceCompressorPlugin>> plugins;
+
+   /** . */
+   private ManagementContext managementContext;
 
    public ResourceCompressorService(InitParams params) throws Exception
    {
@@ -132,5 +145,19 @@ public class ResourceCompressorService implements ResourceCompressor
       }
 
       return candidates.get(highestPriorityIndex);
+   }
+
+   public void setContext(ManagementContext context)
+   {
+      this.managementContext = context;
+
+      //
+      for (Map.Entry<ResourceType, List<ResourceCompressorPlugin>> entry : plugins.entrySet())
+      {
+         for (ResourceCompressorPlugin plugin : entry.getValue())
+         {
+            context.register(plugin);
+         }
+      }
    }
 }
