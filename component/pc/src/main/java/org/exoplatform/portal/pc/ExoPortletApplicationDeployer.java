@@ -53,7 +53,7 @@ public class ExoPortletApplicationDeployer extends PortletApplicationDeployer
       {
          md.setResourceBundleFactoryName(ExoResourceBundleFactory.class.getName());
 
-         String globalPortletLocation = PropertyManager.getProperty("gatein.portlet.metadata.global");
+         String globalPortletLocation = PropertyManager.getProperty("gatein.portlet.conf");
          if (globalPortletLocation != null)
          {
             try
