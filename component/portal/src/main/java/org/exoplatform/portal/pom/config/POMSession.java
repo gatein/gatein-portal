@@ -242,6 +242,11 @@ public final class POMSession
       return prefs;
    }
 
+   public POMSessionManager getManager()
+   {
+      return mgr;
+   }
+
    private static final BaseEncodingObjectFormatter formatter = new BaseEncodingObjectFormatter();
 
    public <O extends WorkspaceObject> Iterator<O> findObjects(ObjectType<O> type, ObjectType<? extends Site> siteType,
@@ -255,7 +260,7 @@ public final class POMSession
          ownerId = ownerId.trim();
          if (!ownerId.isEmpty())
          {
-            ownerIdChunk = formatter.encodeNodeName(null, ownerId);
+            ownerIdChunk = "mop:" + formatter.encodeNodeName(null, ownerId);
          }
       }
 

@@ -97,4 +97,26 @@ public class TestSearch extends AbstractPortalTest
       assertNotFound("foo");
       assertNotFound("foo bar");
    }
+   
+   public void testSearchPageByOwnerID() throws Exception
+   {
+      Query<Page> q = new Query<Page>(null, "foo", Page.class);
+      List<Page> res = storage.find(q).getAll();
+      assertEquals(0, res.size());
+      
+      q.setOwnerId("test");
+      res = storage.find(q).getAll();
+      int pageNum = res.size();
+      assertTrue(pageNum > 0);
+      
+      //Test trim ownerID
+      q.setOwnerId("   test   ");
+      res = storage.find(q).getAll();
+      assertEquals(pageNum, res.size());
+      
+      //This should returns all pages
+      q.setOwnerId(null);
+      res = storage.find(q).getAll();
+      assertTrue(res.size() > 0);
+   }
 }

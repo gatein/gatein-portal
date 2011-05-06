@@ -40,9 +40,6 @@ import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 @ComponentConfig(lifecycle = UIApplicationLifecycle.class, template = "app:/groovy/admintoolbar/webui/component/UIAdminToolbarPortlet.gtmpl")
 public class UIAdminToolbarPortlet extends UIPortletApplication
 {
-   // Minh Hoang TO
-   // TODO: Add a ThreadLocal cache to avoid double invocation of editPermission
-   // check ( one in processRender method, and one in Groovy template )
 
    public UIAdminToolbarPortlet() throws Exception
    {

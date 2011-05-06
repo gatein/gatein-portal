@@ -19,8 +19,6 @@
 
 package org.exoplatform.portal.webui.workspace;
 
-import org.exoplatform.portal.config.model.Page;
-import org.exoplatform.portal.webui.page.UIPage;
 import org.exoplatform.web.application.JavascriptManager;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -56,22 +54,6 @@ public class UIPortalToolPanel extends UIComponentDecorator
    public void processRender(WebuiRequestContext context) throws Exception
    {
       JavascriptManager jsmanager = context.getJavascriptManager();
-      UIComponent uiComponent = getUIComponent();
-      if (uiComponent instanceof UIPage)
-      {
-         UIPage uiPage = (UIPage)uiComponent;
-         //if(uiPage.isShowMaxWindow()){
-         if (Page.DESKTOP_PAGE.equals(uiPage.getFactoryId()))
-         {
-            uiComponent.processRender(context);
-            if (showMaskLayer)
-            {
-               jsmanager.importJavascript("eXo.core.UIMaskLayer");
-               jsmanager.addCustomizedOnLoadScript("eXo.core.UIMaskLayer.createMask('UIPage', null, 10) ;");
-            }
-            return;
-         }
-      }
 
       super.processRender(context);
       if (showMaskLayer)

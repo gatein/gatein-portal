@@ -22,6 +22,12 @@
 <portlet-app version="1.0" xmlns="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd"
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd">
+
+   <public-render-parameter>
+      <identifier>navigation_uri</identifier>
+      <qname xmlns:prp='http://www.gatein.org/xml/ns/prp_1_0'>prp:navigation_uri</qname>
+   </public-render-parameter>
+   
    <portlet>
       <description xml:lang="EN">Organization Portlet</description>
       <portlet-name>OrganizationPortlet</portlet-name>
@@ -194,6 +200,9 @@
          <short-title>Page Management Portlet</short-title>
          <keywords>Administration</keywords>
       </portlet-info>
+      <supported-publishing-event>
+         <name>UserPageNodeDeleted</name>
+      </supported-publishing-event>
    </portlet>
 
    <portlet>
@@ -253,6 +262,8 @@
          <short-title>Administration Toolbar</short-title>
          <keywords>gatein_internal</keywords>
       </portlet-info>
+      
+      <supported-public-render-parameter>navigation_uri</supported-public-render-parameter>
    </portlet>
 
    <portlet>
@@ -343,6 +354,9 @@
          <role-name>admin</role-name>
          <role-link>admin</role-link>
       </security-role-ref>
+      <supported-processing-event>
+         <name>UserPageNodeDeleted</name>
+      </supported-processing-event>
    </portlet>
 
    <portlet>
@@ -401,5 +415,8 @@
 
    <event-definition>
       <name>NewAccountAdded</name>
+   </event-definition>
+   <event-definition>
+      <name>UserPageNodeDeleted</name>
    </event-definition>
 </portlet-app>

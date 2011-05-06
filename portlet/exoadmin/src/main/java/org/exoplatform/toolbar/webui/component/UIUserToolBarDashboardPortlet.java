@@ -38,6 +38,7 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
 import java.util.List;
+import javax.portlet.EventRequest;
 
 /**
  * Created by The eXo Platform SAS
@@ -45,7 +46,9 @@ import java.util.List;
  *          thanhtungty@gmail.com
  * May 26, 2009  
  */
-@ComponentConfig(lifecycle = UIApplicationLifecycle.class, template = "app:/groovy/admintoolbar/webui/component/UIUserToolBarDashboardPortlet.gtmpl", events = {@EventConfig(name = "AddDefaultDashboard", listeners = UIUserToolBarDashboardPortlet.AddDashboardActionListener.class)})
+@ComponentConfig(lifecycle = UIApplicationLifecycle.class, template = "app:/groovy/admintoolbar/webui/component/UIUserToolBarDashboardPortlet.gtmpl",
+   events = {@EventConfig(name = "AddDefaultDashboard", listeners = UIUserToolBarDashboardPortlet.AddDashboardActionListener.class),
+      @EventConfig(listeners = UIUserToolBarDashboardPortlet.UserPageNodeDeletedActionListener.class)})
 public class UIUserToolBarDashboardPortlet extends UIPortletApplication
 {
 
@@ -76,6 +79,17 @@ public class UIUserToolBarDashboardPortlet extends UIPortletApplication
    public PageNode getSelectedPageNode() throws Exception
    {
       return Util.getUIPortal().getSelectedNode();
+   }
+
+   static public class UserPageNodeDeletedActionListener extends EventListener<UIUserToolBarDashboardPortlet>
+   {
+      private Log log = ExoLogger.getExoLogger(UserPageNodeDeletedActionListener.class);
+
+      @Override
+      public void execute(Event<UIUserToolBarDashboardPortlet> event) throws Exception
+      {
+         log.debug("PageNode : " + ((EventRequest)event.getRequestContext().getRequest()).getEvent().getValue() + " is deleted");
+      }
    }
 
    static public class AddDashboardActionListener extends EventListener<UIUserToolBarDashboardPortlet>

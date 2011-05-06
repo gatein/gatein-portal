@@ -71,6 +71,26 @@ public class UIFormUploadInput extends UIFormInputBase<String>
       service.addUploadLimit(uploadId_, Integer.valueOf(limit)); // Use the limit set by constructor.
       setComponentConfig(UIFormUploadInput.class, null);
    }
+   
+   public UIFormUploadInput(String name, String bindingExpression, boolean isAutoUpload)
+   {
+      super(name, bindingExpression, String.class);
+      uploadId_ = Integer.toString(Math.abs(hashCode()));
+      this.isAutoUpload = isAutoUpload;
+      UploadService service = getApplicationComponent(UploadService.class);
+      service.addUploadLimit(uploadId_, null);
+      setComponentConfig(UIFormUploadInput.class, null);
+   }
+   
+   public UIFormUploadInput(String name, String bindingExpression, int limit, boolean isAutoUpload)
+   {
+      super(name, bindingExpression, String.class);
+      uploadId_ = Integer.toString(Math.abs(hashCode()));
+      this.isAutoUpload = isAutoUpload;
+      UploadService service = getApplicationComponent(UploadService.class);
+      service.addUploadLimit(uploadId_, Integer.valueOf(limit)); // Use the limit set by constructor.
+      setComponentConfig(UIFormUploadInput.class, null);
+   }
 
    public void decode(Object input, WebuiRequestContext context) throws Exception
    {

@@ -73,16 +73,6 @@
 	background-position: center 188px;
 }
 
-
-.UIPageDesktop .DefaultTheme .ResizeArea {
-	float: right; /* orientation=lt */
-	float: left; /* orientation=rt */
-	width: 18px; height: 18px;
-	cursor: nw-resize;
-	background: url('background/ResizeArea18x18.gif') no-repeat left top; /* orientation=lt */
-	background: url('background/ResizeArea18x18-rt.gif') no-repeat right top; /* orientation=rt */
-}
-
 .DefaultTheme .Information {
 	height: 18px; line-height: 18px;
 	vertical-align: middle; font-size: 10px;
@@ -254,15 +244,6 @@
 	margin: 4px 2px 0px 2px;
 }
 
-.UIPageDesktop .MacTheme .ResizeArea {
-	float: right; /* orientation=lt */
-	float: left; /* orientation=rt */
-	width: 17px; height: 15px;
-	cursor: nw-resize;
-	background: url('background/ResizeArea17x15.png') no-repeat right top; /* orientation=lt */
-	background: url('background/ResizeArea17x15-rt.png') no-repeat left top; /* orientation=rt */
-}
-
 .MacTheme .Information {
 	height: 16px; line-height: 14px; vertical-align: middle;
 	font-size: 10px;
@@ -418,14 +399,6 @@
 	float: left; /* orientation=lt */
 	float: right; /* orientation=rt */
 	margin: 4px 2px 0px 2px;
-}
-
-.UIPageDesktop .MacGray .ResizeArea {
-	float: right; /* orientation=lt */
-	float: left; /* orientation=rt */
-	width: 17px; height: 15px;
-	cursor: nw-resize;
-	background: url('background/ResizeArea17x15.png') no-repeat;
 }
 
 .MacGray .Information {
@@ -586,14 +559,6 @@
 	margin: 4px 2px 0px 2px;
 }
 
-.UIPageDesktop .MacBlack .ResizeArea {
-	float: left; /* orientation=rt */
-	float: right; /* orientation=lt */
-	width: 17px; height: 15px;
-	cursor: nw-resize;
-	background: url('background/ResizeArea17x15.png') no-repeat;
-}
-
 .MacBlack .Information {
 	height: 16px; line-height: 14px; vertical-align: middle;
 	font-size: 10px;
@@ -750,14 +715,6 @@
 	float: left; /* orientation=lt */
 	float: right; /* orientation=rt */
 	margin: 4px 2px 0px 2px;
-}
-
-.UIPageDesktop .MacGreenSteel .ResizeArea {
-	float: left; /* orientation=rt */
-	float: right; /* orientation=lt */
-	width: 17px; height: 15px;
-	cursor: nw-resize;
-	background: url('background/ResizeArea17x15.png') no-repeat;
 }
 
 .MacGreenSteel .Information {
@@ -919,15 +876,6 @@
 .VistaTheme .MiddleDecoratorCenter {
 	background: #ffffff;
 	border: solid 1px #717171;
-}
-
-.UIPageDesktop .VistaTheme .ResizeArea {
-	float: right; /* orientation=lt */
-	float: left; /* orientation=rt */
-	width: 9px; height: 12px;
-	cursor: nw-resize;
-	background: url('/eXoSkinVista/skin/VistaSkin/skinIcons/16x16/icons/ResizeBG.gif') no-repeat bottom right; /* orientation=lt */
-	background: url('/eXoSkinVista/skin/VistaSkin/skinIcons/16x16/icons/ResizeBG-rt.gif') no-repeat bottom left; /* orientation=rt */
 }
 
 .VistaTheme .MiddleDecoratorLeft {
@@ -1095,14 +1043,6 @@
 	height: 100%;
 }
 
-.UIPageDesktop .VistaBlue .ResizeArea {
-	float: right; /* orientation=lt */
-	float: left; /* orientation=rt */
-	width: 9px; height: 12px;
-	cursor: nw-resize;
-	background: url('/eXoSkinVista/skin/VistaSkin/skinIcons/16x16/icons/ResizeBG.gif') no-repeat bottom right;
-}
-
 .VistaBlue .MiddleDecoratorLeft {
 	padding-left: 15px;
 	background: url('background/MVistaBlue.png') repeat-y left;
@@ -1199,14 +1139,6 @@
 	padding-left: 20px; /* orientation=lt */
 	padding-right: 20px; /* orientation=rt */
 	height: 16px;
-}
-
-.UIPageDesktop .RoundConerBlue .ResizeArea {
-	float: right; /* orientation=lt */
-	float: left; /* orientation=rt */
-	width: 17px; height: 19px;
-	cursor: nw-resize;
-	background: url('background/Resize17x19.png') no-repeat;
 }
 
 .RoundConerBlue .WindowBarCenter .PortletName {
@@ -1354,14 +1286,6 @@
 	padding-left: 20px; /* orientation=lt */
 	padding-right: 20px; /* orientation=rt */
 	height: 16px;
-}
-
-.UIPageDesktop .RoundConerViolet .ResizeArea {
-	float: right; /* orientation=lt */
-	float: left; /* orientation=rt */
-	width: 17px; height: 19px;
-	cursor: nw-resize;
-	background: url('background/Resize17x19.png') no-repeat;
 }
 
 .RoundConerViolet .WindowBarCenter .PortletName {
@@ -1516,14 +1440,6 @@
 	height: 16px;
 }
 
-.UIPageDesktop .RoundConerOrange .ResizeArea {
-	float: right; /* orientation=lt */
-	float: left; /* orientation=rt */
-	width: 17px; height: 19px;
-	cursor: nw-resize;
-	background: url('background/Resize17x19.png') no-repeat;
-}
-
 .RoundConerOrange .WindowBarCenter .PortletName {
 	font-weight: bold;
 	color: #333333;
@@ -1674,14 +1590,6 @@
 	padding-left: 20px; /* orientation=lt */
 	padding-right: 20px; /* orientation=rt */
 	height: 16px;
-}
-
-.UIPageDesktop .RoundConerPink .ResizeArea {
-	float: right; /* orientation=lt */
-	float: left; /* orientation=rt */
-	width: 17px; height: 19px;
-	cursor: nw-resize;
-	background: url('background/Resize17x19.png') no-repeat;
 }
 
 .RoundConerPink .WindowBarCenter .PortletName {
@@ -1836,14 +1744,6 @@
 	height: 16px;
 }
 
-.UIPageDesktop .RoundConerGreen .ResizeArea {
-	float: right; /* orientation=lt */
-	float: left; /* orientation=rt */
-	width: 17px; height: 19px;
-	cursor: nw-resize;
-	background: url('background/Resize17x19.png') no-repeat;
-}
-
 .RoundConerGreen .WindowBarCenter .PortletName {
 	font-weight: bold;
 	color: #333333;
@@ -1996,14 +1896,6 @@
 	height: 16px;
 }
 
-.UIPageDesktop .ShadowBlue .ResizeArea {
-	float: right; /* orientation=lt */
-	float: left; /* orientation=rt */
-	width: 17px; height: 19px;
-	cursor: nw-resize;
-	background: url('background/Resize17x19.png') no-repeat;
-}
-
 .ShadowBlue .WindowBarCenter .PortletName {
 	font-weight: bold;
 	color: #333333;
@@ -2154,14 +2046,6 @@
 	height: 16px;
 }
 
-.UIPageDesktop .ShadowViolet .ResizeArea {
-	float: right; /* orientation=lt */
-	float: left; /* orientation=rt */
-	width: 17px; height: 19px;
-	cursor: nw-resize;
-	background: url('background/Resize17x19.png') no-repeat;
-}
-
 .ShadowViolet .WindowBarCenter .PortletName {
 	font-weight: bold;
 	color: #333333;
@@ -2310,14 +2194,6 @@
 	padding-left: 20px; /* orientation=lt */
 	padding-right: 20px; /* orientation=rt */
 	height: 16px;
-}
-
-.UIPageDesktop .ShadowOrange .ResizeArea {
-	float: right; /* orientation=lt */
-	float: left; /* orientation=rt */
-	width: 17px; height: 19px;
-	cursor: nw-resize;
-	background: url('background/Resize17x19.png') no-repeat;
 }
 
 .ShadowOrange .WindowBarCenter .PortletName {
@@ -2471,14 +2347,6 @@
 	height: 16px;
 }
 
-.UIPageDesktop .ShadowPink .ResizeArea {
-	float: right; /* orientation=lt */
-	float: left; /* orientation=rt */
-	width: 17px; height: 19px;
-	cursor: nw-resize;
-	background: url('background/Resize17x19.png') no-repeat;
-}
-
 .ShadowPink .WindowBarCenter .PortletName {
 	font-weight: bold;
 	color: #333333;
@@ -2630,14 +2498,6 @@
 	height: 16px;
 }
 
-.UIPageDesktop .ShadowGreen .ResizeArea {
-	float: right; /* orientation=lt */
-	float: left; /* orientation=rt */
-	width: 17px; height: 19px;
-	cursor: nw-resize;
-	background: url('background/Resize17x19.png') no-repeat;
-}
-
 .ShadowGreen .WindowBarCenter .PortletName {
 	font-weight: bold;
 	color: #333333;
@@ -2787,14 +2647,6 @@
 	height: 16px;
 }
 
-.UIPageDesktop .SimpleBlue .ResizeArea {
-	float: right; /* orientation=lt */
-	float: left; /* orientation=rt */
-	width: 17px; height: 19px;
-	cursor: nw-resize;
-	background: url('background/Resize17x19.png') no-repeat;
-}
-
 .SimpleBlue .WindowBarCenter .PortletName {
 	font-weight: bold;
 	color: #333333;
@@ -2932,14 +2784,6 @@
 	padding-left: 20px; /* orientation=lt */
 	padding-right: 20px; /* orientation=rt */
 	height: 16px;
-}
-
-.UIPageDesktop .SimpleViolet .ResizeArea {
-	float: right; /* orientation=lt */
-	float: left; /* orientation=rt */
-	width: 17px; height: 19px;
-	cursor: nw-resize;
-	background: url('background/Resize17x19.png') no-repeat;
 }
 
 .SimpleViolet .WindowBarCenter .PortletName {
@@ -3083,14 +2927,6 @@
 	height: 16px;
 }
 
-.UIPageDesktop .SimpleOrange .ResizeArea {
-	float: right; /* orientation=lt */
-	float: left; /* orientation=rt */
-	width: 17px; height: 19px;
-	cursor: nw-resize;
-	background: url('background/Resize17x19.png') no-repeat;
-}
-
 .SimpleOrange .WindowBarCenter .PortletName {
 	font-weight: bold;
 	color: #333333;
@@ -3230,14 +3066,6 @@
 	padding-left: 20px; /* orientation=lt */
 	padding-right: 20px; /* orientation=rt */
 	height: 16px;
-}
-
-.UIPageDesktop .SimplePink .ResizeArea {
-	float: right; /* orientation=lt */
-	float: left; /* orientation=rt */
-	width: 17px; height: 19px;
-	cursor: nw-resize;
-	background: url('background/Resize17x19.png') no-repeat;
 }
 
 .SimplePink .WindowBarCenter .PortletName {
@@ -3380,14 +3208,6 @@
 	padding-left: 20px; /* orientation=lt */
 	padding-right: 20px; /* orientation=rt */
 	height: 16px;
-}
-
-.UIPageDesktop .SimpleGreen .ResizeArea {
-	float: right; /* orientation=lt */
-	float: left; /* orientation=rt */
-	width: 17px; height: 19px;
-	cursor: nw-resize;
-	background: url('background/Resize17x19.png') no-repeat;
 }
 
 .SimpleGreen .WindowBarCenter .PortletName {

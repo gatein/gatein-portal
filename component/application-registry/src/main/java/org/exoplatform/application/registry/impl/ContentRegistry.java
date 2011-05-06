@@ -21,8 +21,8 @@ package org.exoplatform.application.registry.impl;
 import org.chromattic.api.annotations.Create;
 import org.chromattic.api.annotations.FormattedBy;
 import org.chromattic.api.annotations.NamingPrefix;
-import org.chromattic.api.annotations.PrimaryType;
 import org.chromattic.api.annotations.OneToMany;
+import org.chromattic.api.annotations.PrimaryType;
 import org.chromattic.ext.format.BaseEncodingObjectFormatter;
 
 import java.util.List;
@@ -49,8 +49,8 @@ public abstract class ContentRegistry
 
    public CategoryDefinition getCategory(String categoryName)
    {
-      Map<String, CategoryDefinition> categoryMap = getCategoryMap();
-      return categoryMap.get(categoryName);
+     Map<String, CategoryDefinition> categories = getCategoryMap();
+     return categories.get(categoryName);
    }
 
    public CategoryDefinition createCategory(String categoryName)

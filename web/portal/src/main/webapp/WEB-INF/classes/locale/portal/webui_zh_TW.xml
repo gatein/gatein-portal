@@ -387,9 +387,6 @@
          <title>查看和選擇外觀</title>
       </left>
    </Template>
-   <Desktop>
-      <label>桌面佈局</label>
-   </Desktop>
    <AccountTemplate>
       <left>
          <title>帳戶模板預覽</title>
@@ -750,7 +747,6 @@
          <Invalid-editPermission>您不能編輯頁面{0}.</Invalid-editPermission>
          <Invalid-deletePermission>您不能刪除頁面{0}.
          </Invalid-deletePermission>
-         <Invalid-Preview>這是桌面網頁。您無法預覽這種類型的網頁。</Invalid-Preview>
          <NotViewPage>您無權查看此頁面。</NotViewPage>
          <edit>
             <NotEditPage>您無權編輯此頁面。</NotEditPage>
@@ -1152,7 +1148,6 @@
          <normalPage>
             <EmptyLayout>空佈局</EmptyLayout>
             <CurrentLayout>當前佈局</CurrentLayout>
-            <DesktopImage>桌面佈局</DesktopImage>
             <DashboardLayout>控制面板佈局</DashboardLayout>
          </normalPage>
          <columnPage>
@@ -1398,9 +1393,6 @@
    <ClassicPortal>
       <label>經典Portal</label>
    </ClassicPortal>
-   <WebOSPortal>
-      <label>WebOSPortal</label>
-   </WebOSPortal>
 
    <PopupPageSelector>
       <title>
@@ -1573,55 +1565,6 @@
          </EditPermission>
       </msg>
    </UIPage>
-   <UIPageDesktop>
-      <Default>
-         <img>
-            <location>/eXoResources/skin/DefaultSkin/portal/webui/component/view/UIPageDesktop/icons/80x80
-            </location>
-         </img>
-      </Default>
-      <Mac>
-         <img>
-            <location>/eXoResources/skin/DefaultSkin/portal/webui/component/view/UIPageDesktop/icons/80x80
-            </location>
-         </img>
-      </Mac>
-      <Vista>
-         <img>
-            <location>/eXoResources/skin/DefaultSkin/portal/webui/component/view/UIPageDesktop/icons/80x80
-            </location>
-         </img>
-      </Vista>
-      <label>
-         <pagebody>Portal頁面正文</pagebody>
-         <PageContent>頁面內容</PageContent>
-         <View>查看</View>
-         <Edit>編輯</Edit>
-         <Done>完成</Done>
-      </label>
-      <title>
-         <PortalPage>Portal頁面</PortalPage>
-         <SaveToDatabase>儲存到資料庫</SaveToDatabase>
-         <AddApplication>新增儲存程式</AddApplication>
-         <PageNavigation>頁面導覽器</PageNavigation>
-         <eXoBrowser>瀏覽器</eXoBrowser>
-         <ShowPortletDesktop>顯示/隱藏Portlets</ShowPortletDesktop>
-         <ShowWidgetDesktop>顯示/隱藏小工具</ShowWidgetDesktop>
-         <SignIn>登錄</SignIn>
-         <SignOut>退出</SignOut>
-         <pageNavigation>頁面導覽器</pageNavigation>
-      </title>
-      <msg>
-         <hasNotPermission>您無權編輯此頁。</hasNotPermission>
-      </msg>
-      <action>
-         <Close>從桌面導覽器刪除這個儲存</Close>
-         <Quit>退出</Quit>
-         <action>
-            <Open>打開</Open>
-         </action>
-      </action>
-   </UIPageDesktop>
 
    <UIPageBody>
       <msg>

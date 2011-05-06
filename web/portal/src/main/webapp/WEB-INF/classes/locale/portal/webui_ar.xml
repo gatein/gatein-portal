@@ -345,9 +345,6 @@
 		<left>
 			<title>عرض وحدد الجلد</title>
 		</left>
-		<Desktop>
-			<label> تخطيط سطح المكتب</label>
-		</Desktop>
 		<AccountTemplate>
 			<left>
 				<title>نموذج حساب قالب معاينة</title>
@@ -870,8 +867,6 @@
 			</Invalid-editPermission>
 			<Invalid-deletePermission> {0} لا يسمح لك لحذف صفحة .
 			</Invalid-deletePermission>
-			<Invalid-Preview>هذه هي صفحة سطح المكتب. يمكنك معاينة صفحات ليست من
-				هذا النوع. </Invalid-Preview>
 			<NotViewPage> لديك لا حقوق لعرض هذه الصفحة.</NotViewPage>
 			<edit>
 				<NotEditPage>لم تقم في ذلك الحق في تعديل هذه الصفحة. </NotEditPage>
@@ -1354,7 +1349,6 @@
 			<normalPage>
 				<EmptyLayout>تخطيط فارغ </EmptyLayout>
 				<CurrentLayout> تخطيط الحالي</CurrentLayout>
-				<DesktopImage>تخطيط سطح المكتب </DesktopImage>
 				<DashboardLayout> لوحة القيادة تخطيط</DashboardLayout>
 			</normalPage>
 			<columnPage>
@@ -1678,9 +1672,6 @@
 	<ClassicPortal>
 		<label> بوابة الكلاسيكية</label>
 	</ClassicPortal>
-	<WebOSPortal>
-		<label> نظام التشغيل ويب بوابة </label>
-	</WebOSPortal>
 	<!--
 		#############################################################################
 	-->
@@ -1904,61 +1895,6 @@
 			</EditPermission>
 		</msg>
 	</UIPage>
-	<!--
-		############################################################################
-		# org.exoplatform.portal.component.view.UIPageDesktop #
-		############################################################################
-	-->
-	<UIPageDesktop>
-		<Default>
-			<img>
-				<location>/eXoResources/skin/DefaultSkin/portal/webui/component/view/UIPageDesktop/icons/80x80
-				</location>
-			</img>
-		</Default>
-		<Mac>
-			<img>
-				<location>
-					/eXoResources/skin/DefaultSkin/portal/webui/component/view/UIPageDesktop/icons/80x80
-				</location>
-			</img>
-		</Mac>
-		<Vista>
-			<img>
-				<location>/eXoResources/skin/DefaultSkin/portal/webui/component/view/UIPageDesktop/icons/80x80
-				</location>
-			</img>
-		</Vista>
-		<label>
-			<pagebody> الهيئة صفحة من البوابة</pagebody>
-			<PageContent> محتويات الصفحة</PageContent>
-			<View>منظر </View>
-			<Edit> عدل</Edit>
-			<Done> عمله</Done>
-		</label>
-		<title>
-			<PortalPage>صفحة البوابة </PortalPage>
-			<SaveToDatabase>حفظ إلى قاعدة البيانات </SaveToDatabase>
-			<AddApplication>إضافة تطبيقات </AddApplication>
-			<PageNavigation> الصفحة الملاحة</PageNavigation>
-			<eXoBrowser> متصفح</eXoBrowser>
-			<ShowPortletDesktop> إظهار / إخفاء المداخل</ShowPortletDesktop>
-			<ShowWidgetDesktop>إظهار / إخفاء الأدوات </ShowWidgetDesktop>
-			<SignIn> تسجيل الدخول</SignIn>
-			<SignOut> تسجيل الخروج</SignOut>
-			<pageNavigation>الصفحة تنقلات </pageNavigation>
-		</title>
-		<msg>
-			<hasNotPermission> لديك إذن لا عدل في هذه الصفحة.</hasNotPermission>
-		</msg>
-		<action>
-			<Close>إزالة التطبيق من شريط العرض  </Close>
-			<Quit> ترك</Quit>
-			<action>
-				<Open>فتح</Open>
-			</action>
-		</action>
-	</UIPageDesktop>
 	<!--
 		############################################################################
 		# org.exoplatform.portal.component.view.UIPageBody #

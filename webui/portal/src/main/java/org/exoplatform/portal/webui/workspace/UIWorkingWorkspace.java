@@ -42,6 +42,7 @@ import java.util.List;
    @EventConfig(listeners = UIMainActionListener.CreatePortalActionListener.class),
    @EventConfig(listeners = UIMainActionListener.EditCurrentPageActionListener.class),
    @EventConfig(listeners = UIMainActionListener.PageCreationWizardActionListener.class),
+   @EventConfig(listeners = UIMainActionListener.EditBackgroundActionListener.class),
    @EventConfig(listeners = UIMainActionListener.EditInlineActionListener.class)})
 public class UIWorkingWorkspace extends UIContainer
 {

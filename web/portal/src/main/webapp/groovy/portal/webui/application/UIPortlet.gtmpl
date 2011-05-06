@@ -18,10 +18,9 @@
 	String onControlOver	= "eXo.webui.UIPortlet.onControlOver(this, true);";
 	String onControlOut		= "eXo.webui.UIPortlet.onControlOver(this, false);";
 
-	WindowState windowState = uicomponent.getCurrentWindowState();	
-	boolean isDesktop = "Window".equals(uicomponent.getPortletStyle());
+	WindowState windowState = uicomponent.getCurrentWindowState();
 	String portletId = uicomponent.getId();
-	if(!isDesktop && uiPortalApp.isEditing()) {
+	if(uiPortalApp.isEditing()) {
 %>
 	<div class="UIPortlet <%=hasPermission?"":"ProtectedPortlet"%>" id="UIPortlet-$portletId" onmouseover="eXo.portal.UIPortal.blockOnMouseOver(event, this, true);" onmouseout="eXo.portal.UIPortal.blockOnMouseOver(event, this, false);"
 		style="top: 0px; left:0px;">
@@ -66,20 +65,6 @@
 				if(windowWidth!= null && !windowWidth.contains("%") && !windowWidth.contains("px")) windowWidth += "px";
 				String windowHeight = uicomponent.getHeight();
 				if(windowHeight != null && !windowHeight.contains("%") && !windowHeight.contains("px")) windowHeight += "px";
-				if(isDesktop) {
-					appDisplay = "";
-					visibility = "hidden";
-					
-					/*###################################################################*/
-					String appStatus = uicomponent.getProperties().get("appStatus");
-					if("SHOW".equals(appStatus)) {
-						appDisplay = "block";
-						appZIndex = uicomponent.getProperties().get("zIndex");
-						windowWidth = (String)uicomponent.getProperties().getIntValue("windowWidth") + "px";
-						windowHeight = (String)uicomponent.getProperties().getIntValue("windowHeight") + "px";
-					}
-					/*###################################################################*/
-				}
 				String cssStyle = "style=\"";
 				cssStyle += "visibility: "+ visibility +";";
 				cssStyle += "display: "+ appDisplay +";";
@@ -107,15 +92,7 @@
 													} else if(windowState == WindowState.MINIMIZED) {
 														renderMini = restore;
 													}
-													if(isDesktop) {%>
-														<div class="ControlIcon MaximizedIcon" title="$renderMaxi" onmouseover="$onControlOver" onmouseout="$onControlOut"><span></span>
-																<div style="display:none">{"normalTitle":"$maxiTooltip","modeTitle":"$restoreDown"}</div>
-														</div> 
-														<div class="ControlIcon MinimizedIcon" title="$renderMini" onmouseover="$onControlOver" onmouseout="$onControlOut"><span></span>
-																<div style="display:none">{"normalTitle":"$miniTooltip","modeTitle":"$restore"}</div>
-														</div>
-												<%
-													} else if(uicomponent.getShowWindowState()) {											
+													if(uicomponent.getShowWindowState()) {
 														String maximizedAction = "eXo.portal.UIPortalControl.changeWindowState('"+portletId+"', 'maximized');";
 														String minimizedAction = "eXo.portal.UIPortalControl.changeWindowState('"+portletId+"', 'minimized');";
 														String maximizedMode = "Maximized";
@@ -255,7 +232,7 @@
 				} 
 			}
 		}
-			if(!isDesktop && uiPortalApp.isEditing()) {
+			if(uiPortalApp.isEditing()) {
 				if(portalMode != uiPortalApp.CONTAINER_BLOCK_EDIT_MODE && portalMode != uiPortalApp.APP_BLOCK_EDIT_MODE) {
 		%>
 						<div class="UIPortletMaskParent" style="height: 0px;position:relative;">

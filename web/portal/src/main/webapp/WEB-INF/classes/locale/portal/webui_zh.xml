@@ -289,9 +289,6 @@
          <title>查看和选择皮肤</title>
       </left>
    </Template>
-   <Desktop>
-      <label>桌面布局</label>
-   </Desktop>
    <AccountTemplate>
       <left>
          <title>示例帐户模板预览</title>
@@ -605,7 +602,6 @@
          <Invalid-viewPermission>您不能访问页面{0}</Invalid-viewPermission>
          <Invalid-editPermission>您不能编辑页面{0}.</Invalid-editPermission>
          <Invalid-deletePermission>您不能删除页面{0}.</Invalid-deletePermission>
-         <Invalid-Preview>这是桌面网页。您无法预览这种类型的网页。</Invalid-Preview>
          <NotViewPage>您无权查看此页面。</NotViewPage>
          <edit>
             <NotEditPage>您无权编辑此页面。</NotEditPage>
@@ -1004,7 +1000,6 @@
          <normalPage>
             <EmptyLayout>空布局</EmptyLayout>
             <CurrentLayout>当前布局</CurrentLayout>
-            <DesktopImage>桌面布局</DesktopImage>
             <DashboardLayout>控制面板布局</DashboardLayout>
          </normalPage>
          <columnPage>
@@ -1245,9 +1240,6 @@
    <ClassicPortal>
       <label>经典门户</label>
    </ClassicPortal>
-   <WebOSPortal>
-      <label>WebOS 门户</label>
-   </WebOSPortal>
   
    <PopupPageSelector>
       <title>
@@ -1404,52 +1396,6 @@
          </EditPermission>
       </msg>
    </UIPage>
-   <UIPageDesktop>
-      <Default>
-         <img>
-            <location>/eXoResources/skin/DefaultSkin/portal/webui/component/view/UIPageDesktop/icons/80x80</location>
-         </img>
-      </Default>
-      <Mac>
-         <img>
-            <location>/eXoResources/skin/DefaultSkin/portal/webui/component/view/UIPageDesktop/icons/80x80</location>
-         </img>
-      </Mac>
-      <Vista>
-         <img>
-            <location>/eXoResources/skin/DefaultSkin/portal/webui/component/view/UIPageDesktop/icons/80x80</location>
-         </img>
-      </Vista>
-      <label>
-         <pagebody>门户页面正文</pagebody>
-         <PageContent>页面内容</PageContent>
-         <View>查看</View>
-         <Edit>编辑</Edit>
-         <Done>完成</Done>
-      </label>
-      <title>
-         <PortalPage>门户页面</PortalPage>
-         <SaveToDatabase>保存到数据库</SaveToDatabase>
-         <AddApplication>增加应用</AddApplication>
-         <PageNavigation>页面导航</PageNavigation>
-         <eXoBrowser>浏览器</eXoBrowser>
-         <ShowPortletDesktop>显示/隐藏 Portlets</ShowPortletDesktop>
-         <ShowWidgetDesktop>显示/隐藏 小工具</ShowWidgetDesktop>
-         <SignIn>登录</SignIn>
-         <SignOut>退出</SignOut>
-         <pageNavigation>页面导航</pageNavigation>
-      </title>
-      <msg>
-         <hasNotPermission>您无权编辑此页。</hasNotPermission>
-      </msg>
-      <action>
-         <Close>从桌面导航删除这个应用</Close>
-         <Quit>退出</Quit>
-         <action>
-            <Open>打开</Open>
-         </action>
-      </action>
-   </UIPageDesktop>
   
    <UIPageBody>
       <msg>

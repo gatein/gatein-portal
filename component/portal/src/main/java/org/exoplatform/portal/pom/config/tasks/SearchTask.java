@@ -23,6 +23,7 @@ import org.exoplatform.commons.utils.LazyPageList;
 import org.exoplatform.commons.utils.ListAccess;
 import org.exoplatform.portal.application.PortletPreferences;
 import org.exoplatform.portal.config.Query;
+import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.portal.pom.config.POMTask;
 import org.exoplatform.portal.pom.data.Mapper;
 import org.exoplatform.portal.pom.data.NavigationData;
@@ -30,11 +31,7 @@ import org.exoplatform.portal.pom.data.PageData;
 import org.exoplatform.portal.pom.data.PortalData;
 import org.exoplatform.portal.pom.data.PortalKey;
 import org.exoplatform.portal.pom.config.POMSession;
-import org.gatein.mop.api.workspace.Navigation;
-import org.gatein.mop.api.workspace.ObjectType;
-import org.gatein.mop.api.workspace.Site;
-import org.gatein.mop.api.workspace.Workspace;
-import org.gatein.mop.api.workspace.WorkspaceObject;
+import org.gatein.mop.api.workspace.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -64,7 +61,7 @@ public abstract class SearchTask<T> implements POMTask<LazyPageList<T>>
          super(query);
       }
 
-      public LazyPageList<T> run(final POMSession session) throws Exception
+      public final LazyPageList<T> run(final POMSession session) throws Exception
       {
          Iterator<W> ite;
          try
@@ -80,22 +77,24 @@ public abstract class SearchTask<T> implements POMTask<LazyPageList<T>>
          }
          catch (IllegalArgumentException e)
          {
-            ite = Collections.<W> emptyList().iterator();
+            ite = Collections.<W>emptyList().iterator();
          }
 
          //
-         final ArrayList<W> array = new ArrayList<W>();
+         final ArrayList<String> array = new ArrayList<String>();
          while (ite.hasNext())
          {
-            array.add(ite.next());
+            array.add(ite.next().getObjectId());
          }
 
          //
-         final Iterator<W> it = array.iterator();
+         final POMSessionManager manager = session.getManager();
+         final Iterator<String> it = array.iterator();
          ListAccess<T> la = new ListAccess<T>()
          {
             public T[] load(int index, int length) throws Exception, IllegalArgumentException
             {
+               POMSession session = manager.getSession();
                T[] result = createT(length);
                for (int i = 0; i < length; i++)
                {
@@ -120,7 +119,7 @@ public abstract class SearchTask<T> implements POMTask<LazyPageList<T>>
 
       protected abstract T[] createT(int length);
 
-      protected abstract T loadT(POMSession session, W w);
+      protected abstract T loadT(POMSession session, String id);
 
    }
 
@@ -143,9 +142,10 @@ public abstract class SearchTask<T> implements POMTask<LazyPageList<T>>
          return new PageData[length];
       }
 
-      protected PageData loadT(POMSession session, org.gatein.mop.api.workspace.Page w)
+      protected PageData loadT(POMSession session, String id)
       {
-         return new Mapper(session).load(w);
+         Page page = session.getManager().getPOMService().getModel().findObjectById(ObjectType.PAGE, id);
+         return new Mapper(session).load(page);
       }
    }
 
@@ -168,9 +168,10 @@ public abstract class SearchTask<T> implements POMTask<LazyPageList<T>>
          return new NavigationData[length];
       }
 
-      protected NavigationData loadT(POMSession session, Navigation w)
+      protected NavigationData loadT(POMSession session, String id)
       {
-         return new Mapper(session).load(w);
+         Navigation nav = session.getManager().getPOMService().getModel().findObjectById(ObjectType.NAVIGATION, id);
+         return new Mapper(session).load(nav);
       }
    }
 

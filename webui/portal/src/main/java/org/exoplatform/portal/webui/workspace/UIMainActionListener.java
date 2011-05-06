@@ -19,6 +19,8 @@
 
 package org.exoplatform.portal.webui.workspace;
 
+import java.lang.reflect.Method;
+
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.UserPortalConfig;
@@ -29,6 +31,7 @@ import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.webui.page.UIPage;
 import org.exoplatform.portal.webui.page.UIPageBody;
 import org.exoplatform.portal.webui.page.UIPageCreationWizard;
+import org.exoplatform.portal.webui.page.UIPageFactory;
 import org.exoplatform.portal.webui.page.UISiteBody;
 import org.exoplatform.portal.webui.page.UIWizardPageSetInfo;
 import org.exoplatform.portal.webui.portal.UIPortal;
@@ -36,7 +39,10 @@ import org.exoplatform.portal.webui.portal.UIPortalComposer;
 import org.exoplatform.portal.webui.portal.UIPortalForm;
 import org.exoplatform.portal.webui.util.PortalDataMapper;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
@@ -88,8 +94,8 @@ public class UIMainActionListener
          uiApp.setModeState(UIPortalApplication.APP_BLOCK_EDIT_MODE);
 
          // We clone the edited UIPage object, that is required for Abort action
-         //UIPage newUIPage = new UIPage();
-         UIPage newUIPage = uiWorkingWS.createUIComponent(UIPage.class, null, null);
+         UIPageFactory clazz = UIPageFactory.getInstance(page.getFactoryId());
+         UIPage newUIPage = clazz.createUIPage(null);
          PortalDataMapper.toUIPage(newUIPage, page);
          uiToolPanel.setWorkingComponent(newUIPage);
 
@@ -222,6 +228,37 @@ public class UIMainActionListener
          uiMaskWS.setUIComponent(uiNewPortal);
          uiMaskWS.setShow(true);
          prContext.addUIComponentToUpdateByAjax(uiMaskWS);
+      }
+   }
+   
+   public static class EditBackgroundActionListener extends EventListener<UIWorkingWorkspace>
+   {
+      private Log log = ExoLogger.getExoLogger(this.getClass());
+      
+      @Override
+      public void execute(Event<UIWorkingWorkspace> event) throws Exception
+      {
+         
+         UIWorkingWorkspace workingWorkspace = event.getSource();
+         UIPage uiPage = workingWorkspace.findFirstComponentOfType(UIPage.class);
+         
+         Method showEditBackgroundPopupMethod = null;
+         try
+         {
+            if (uiPage == null)
+            {
+               return;
+            }
+            showEditBackgroundPopupMethod = uiPage.getClass().getDeclaredMethod("showEditBackgroundPopup", WebuiRequestContext.class);
+         }
+         catch (NoSuchMethodException ex)
+         {
+            log.warn(ex.getMessage(), ex);  
+         }
+         if(showEditBackgroundPopupMethod != null)
+         {
+            showEditBackgroundPopupMethod.invoke(uiPage, event.getRequestContext());
+         }
       }
    }
 

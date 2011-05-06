@@ -23,10 +23,6 @@
 	margin: 7px;
 	height: auto;
 }
-	
-.UIPageDesktop .UIIFramePortlet {
-	min-height: 0;
-}
 
 *html .UIFormTabPane .UIIFramePortlet {
 	height: auto;
@@ -35,10 +31,6 @@
 *html .UIIFramePortlet {
 	height: 400px;
 	width: 97.5%;
-}
-
-*html .UIPageDesktop .UIIFramePortlet {
-	height: auto;
 }
 
 .UIIFramePortlet iframe {

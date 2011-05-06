@@ -309,9 +309,6 @@
          <title>스킨 보기 및 선택</title>
       </left>
    </Template>
-   <Desktop>
-      <label>데스크탑 레이아웃</label>
-   </Desktop>
    <AccountTemplate>
       <left>
          <title>계정 템플릿 예제 미리보기</title>
@@ -644,7 +641,6 @@
          <Invalid-viewPermission>{0} 페이지 접근이 허용되지 않습니다.</Invalid-viewPermission>
          <Invalid-editPermission>{0} 페이지 수정이 허용되지 않습니다.</Invalid-editPermission>
          <Invalid-deletePermission>{0} 페이지 삭제가 허용되지 않습니다.</Invalid-deletePermission>
-         <Invalid-Preview>데스크탑 유형의 페이지는  미리보기 하실 수 없습니다.</Invalid-Preview>
          <NotViewPage>이 페이지를 볼 수 있는 권한이 없습니다.</NotViewPage>
          <edit>
             <NotEditPage>이 페이지를 수정할 수 있는 권한이 없습니다.</NotEditPage>
@@ -1050,7 +1046,6 @@
          <normalPage>
             <EmptyLayout>빈 레이아웃</EmptyLayout>
             <CurrentLayout>현재 레이아웃</CurrentLayout>
-            <DesktopImage>데스크탑 레이아웃</DesktopImage>
             <DashboardLayout>대시보드 레이아웃</DashboardLayout>
          </normalPage>
          <columnPage>
@@ -1300,9 +1295,6 @@
    <ClassicPortal>
       <label>기본 포탈</label>
    </ClassicPortal>
-   <WebOSPortal>
-      <label>WebOS 포탈</label>
-   </WebOSPortal>
 <!--  ############################################################################-->
 <!--  #   			org.exoplatform.webui.form.UIPopupWindow                    #-->
 <!--  ############################################################################-->
@@ -1469,52 +1461,6 @@
          </EditPermission>
       </msg>
    </UIPage>
-   <UIPageDesktop>
-      <Default>
-         <img>
-            <location>/eXoResources/skin/DefaultSkin/portal/webui/component/view/UIPageDesktop/icons/80x80</location>
-         </img>
-      </Default>
-      <Mac>
-         <img>
-            <location>/eXoResources/skin/DefaultSkin/portal/webui/component/view/UIPageDesktop/icons/80x80</location>
-         </img>
-      </Mac>
-      <Vista>
-         <img>
-            <location>/eXoResources/skin/DefaultSkin/portal/webui/component/view/UIPageDesktop/icons/80x80</location>
-         </img>
-      </Vista>
-      <label>
-         <pagebody>포탈 페이지 몸체</pagebody>
-         <PageContent>페이지 내용</PageContent>
-         <View>보기</View>
-         <Edit>편집</Edit>
-         <Done>완료</Done>
-      </label>
-      <title>
-         <PortalPage>포탈 페이지</PortalPage>
-         <SaveToDatabase>데이터베이스로 저장</SaveToDatabase>
-         <AddApplication>애플리케이션 추가</AddApplication>
-         <PageNavigation>페이지 내비게이션</PageNavigation>
-         <eXoBrowser>브라우저</eXoBrowser>
-         <ShowPortletDesktop>포틀릿 보이기/감추기</ShowPortletDesktop>
-         <ShowWidgetDesktop>가젯 보이기/감추기</ShowWidgetDesktop>
-         <SignIn>로그인</SignIn>
-         <SignOut>로그아웃</SignOut>
-         <pageNavigation>페이지 내비게이션</pageNavigation>
-      </title>
-      <msg>
-         <hasNotPermission>이 페이지를 수정할 수 있는 권한이 없습니다.</hasNotPermission>
-      </msg>
-      <action>
-         <Close>작업 표시줄에서 이 애플리케이션 삭제</Close>
-         <Quit>끝내기</Quit>
-         <action>
-            <Open>열기</Open>
-         </action>
-      </action>
-   </UIPageDesktop>
 <!--  ############################################################################-->
 <!--  #		          org.exoplatform.portal.component.view.UIPageBody             #-->
 <!--  ############################################################################-->

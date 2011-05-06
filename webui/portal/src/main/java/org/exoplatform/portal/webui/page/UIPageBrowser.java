@@ -19,13 +19,19 @@
 
 package org.exoplatform.portal.webui.page;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ResourceBundle;
+
+import javax.portlet.ActionResponse;
+import javax.xml.namespace.QName;
+
 import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.commons.utils.PageListAccess;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.Query;
-import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.ModelObject;
 import org.exoplatform.portal.config.model.Page;
@@ -35,10 +41,8 @@ import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.webui.application.UIPortlet;
 import org.exoplatform.portal.webui.portal.PageNodeEvent;
 import org.exoplatform.portal.webui.portal.UIPortal;
-import org.exoplatform.portal.webui.portal.UIPortalComposer;
 import org.exoplatform.portal.webui.util.PortalDataMapper;
 import org.exoplatform.portal.webui.util.Util;
-import org.exoplatform.portal.webui.workspace.UIEditInlineWorkspace;
 import org.exoplatform.portal.webui.workspace.UIMaskWorkspace;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.portal.webui.workspace.UIWorkingWorkspace;
@@ -57,18 +61,14 @@ import org.exoplatform.webui.core.UIVirtualList;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
+import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormInputItemSelector;
 import org.exoplatform.webui.form.UIFormInputSet;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UISearchForm;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
 
 @ComponentConfigs({
    @ComponentConfig(template = "system:/groovy/portal/webui/page/UIPageBrowser.gtmpl", events = {
@@ -266,13 +266,24 @@ public class UIPageBrowser extends UISearch
             return;
          }
          Page page = service.getPage(id, pcontext.getRemoteUser());
-         if (page == null || !page.isModifiable())
+
+         if (page == null || !page.isModifiable() ||
+            (page.getOwnerType().equals(PortalConfig.USER_TYPE) && !page.getOwnerId().equals(pcontext.getRemoteUser())))
          {
             uiPortalApp.addMessage(new ApplicationMessage("UIPageBrowser.msg.delete.NotDelete", new String[]{id}, 1));
             pcontext.addUIComponentToUpdateByAjax(uiPortalApp.getUIPopupMessages());
             return;
          }
-
+         
+         UIPortal uiPortal = Util.getUIPortal();
+         boolean isDeleteCurrentPage = uiPortal.getSelectedNode().getPageReference().equals(page.getPageId());
+         if (isDeleteCurrentPage && page.getOwnerType().equals(PortalConfig.USER_TYPE))
+         {
+            ApplicationMessage msg = new ApplicationMessage("UIPageBrowser.msg.delete.DeleteCurrentUserPage", null, ApplicationMessage.WARNING);
+            event.getRequestContext().getUIApplication().addMessage(msg);
+            return;
+         }
+         
          UIVirtualList virtualList = uiPageBrowser.getChild(UIVirtualList.class);
          UIRepeater repeater = (UIRepeater)virtualList.getDataFeed();
          PageListAccess datasource = (PageListAccess)repeater.getDataSource();
@@ -283,9 +294,8 @@ public class UIPageBrowser extends UISearch
          //As we have multiple UIPortal, which means multiple caches of UIPage. It 's unwise to garbage
          // all UIPage caches at once. Better solution is to clear UIPage on browsing to PageNode having Page
          //removed
-         
-         UIPortal uiPortal = Util.getUIPortal();
-         if (uiPortal.getSelectedNode().getPageReference().equals(page.getPageId()))
+
+         if (isDeleteCurrentPage)
          {
             PageNodeEvent<UIPortal> pnevent =
                new PageNodeEvent<UIPortal>(uiPortal, PageNodeEvent.CHANGE_PAGE_NODE, uiPortal.getSelectedNode()
@@ -377,10 +387,9 @@ public class UIPageBrowser extends UISearch
 
             dataService.save(pageNavigation);
 
-            //Update UserToolbarGroupPortlet
-            UIWorkingWorkspace uiWorkingWS = portalApplication.getChild(UIWorkingWorkspace.class);
-            uiWorkingWS.updatePortletsByName("UserToolbarDashboardPortlet");
-
+            //Update UserToolbarDashboardPortlet
+            ActionResponse actResponse = event.getRequestContext().getResponse();
+            actResponse.setEvent(new QName("UserPageNodeDeleted"), tobeRemoved.getName());
          }
       }
    }
@@ -391,70 +400,22 @@ public class UIPageBrowser extends UISearch
       public void execute(Event<UIPageBrowser> event) throws Exception
       {
          UIPageBrowser uiPageBrowser = event.getSource();
-         PortalRequestContext pcontext = Util.getPortalRequestContext();
-         UIPortalApplication uiPortalApp = (UIPortalApplication)pcontext.getUIApplication();
-         String id = pcontext.getRequestParameter(OBJECTID);
-         UserPortalConfigService service = uiPageBrowser.getApplicationComponent(UserPortalConfigService.class);
+         WebuiRequestContext context = event.getRequestContext();
+         String pageID = context.getRequestParameter(OBJECTID);
+         DataStorage service = uiPageBrowser.getApplicationComponent(DataStorage.class);
 
          //Check existence of the page
-         Page page = service.getPage(id);
+         Page page = service.getPage(pageID);
          if (page == null)
          {
-            uiPortalApp.addMessage(new ApplicationMessage("UIPageBrowser.msg.PageNotExist", new String[]{id}, 1));
-            pcontext.addUIComponentToUpdateByAjax(uiPortalApp.getUIPopupMessages());
+            context.getUIApplication().addMessage(new ApplicationMessage("UIPageBrowser.msg.PageNotExist", new String[]{pageID}, 1));
             return;
          }
-
-         //Check current user 's permissions on the page
-         UserACL userACL = uiPageBrowser.getApplicationComponent(UserACL.class);
-         if (!userACL.hasEditPermission(page))
-         {
-            uiPortalApp.addMessage(new ApplicationMessage("UIPageBrowser.msg.edit.NotEditPage", new String[]{id}, 1));
-            pcontext.addUIComponentToUpdateByAjax(uiPortalApp.getUIPopupMessages());
-            return;
-         }
-
-         //Switch portal application to edit mode
-         uiPortalApp.setModeState(UIPortalApplication.APP_BLOCK_EDIT_MODE);
-         UIWorkingWorkspace uiWorkingWS = uiPortalApp.findFirstComponentOfType(UIWorkingWorkspace.class);
-         UIEditInlineWorkspace editInlineWS = uiWorkingWS.getChild(UIEditInlineWorkspace.class);
          
-         //Clone a UIPage object, that is required for Abort action
-         UIPage uiPage = editInlineWS.createUIComponent(UIPage.class, null, null);
-         PortalDataMapper.toUIPage(uiPage, page);
-         
-         UIPageBody uiPageBody = uiPortalApp.findFirstComponentOfType(UIPageBody.class);
-         if (uiPageBody.getUIComponent() != null)
-            uiPageBody.setUIComponent(null);
-
-         if (Page.DESKTOP_PAGE.equals(page.getFactoryId()))
-         {
-            UIMaskWorkspace uiMaskWS = uiPortalApp.getChildById(UIPortalApplication.UI_MASK_WS_ID);
-            UIPageForm uiPageForm = uiMaskWS.createUIComponent(UIPageForm.class, "UIBrowserPageForm", "UIPageForm");
-            uiPageForm.setValues(uiPage);
-            uiMaskWS.setUIComponent(uiPageForm);
-            uiMaskWS.setShow(true);
-            pcontext.addUIComponentToUpdateByAjax(uiMaskWS);
-            return;
-         }
-
-         editInlineWS.setRendered(true);
-         editInlineWS.setUIComponent(uiPage);
-
-         UIPortalComposer portalComposer = editInlineWS.getChild(UIPortalComposer.class).setRendered(true);
-         portalComposer.setComponentConfig(UIPortalComposer.class, "UIPageEditor");
-         portalComposer.setShowControl(true);
-         portalComposer.setEditted(false);
-         portalComposer.setCollapse(false);
-         portalComposer.setId("UIPageEditor");
-
-         //toolPanel.setUIComponent(uiPage);
-         //toolPanel.setShowMaskLayer(false);
-         //uiWorkingWS.setRenderedChild(UIPortalToolPanel.class);
-         //uiWorkingWS.addChild(UIPortalComposer.class, "UIPageEditor", null);
-         uiWorkingWS.setRenderedChild(UIPortalApplication.UI_EDITTING_WS_ID);
-         pcontext.addUIComponentToUpdateByAjax(uiWorkingWS);
-         pcontext.ignoreAJAXUpdateOnPortlets(true);
+         //Need this code to override editpage action in extension project
+         UIPageFactory clazz = UIPageFactory.getInstance(page.getFactoryId());
+         UIPage uipage = clazz.createUIPage(null);
+         uipage.switchToEditMode(page);
       }
    }
 
@@ -525,27 +486,13 @@ public class UIPageBrowser extends UISearch
          }
 
          page.setOwnerType(uiPage.getOwnerType());
+
          List<UIPortlet> uiPortlets = new ArrayList<UIPortlet>();
          findAllPortlet(uiPortlets, uiPage);
          ArrayList<ModelObject> applications = new ArrayList<ModelObject>();
          for (UIPortlet uiPortlet : uiPortlets)
          {
             applications.add(PortalDataMapper.buildModelObject(uiPortlet));
-         }
-
-         if (Page.DESKTOP_PAGE.equals(uiPage.getFactoryId()) && !Page.DESKTOP_PAGE.equals(page.getFactoryId()))
-         {
-            page.setShowMaxWindow(false);
-            uiPage.getChildren().clear();
-            page.setChildren(applications);
-            PortalDataMapper.toUIPage(uiPage, page);
-            // if (page.getTemplate() == null)
-            // page.setTemplate(uiPage.getTemplate());
-            if (page.getChildren() == null)
-               page.setChildren(new ArrayList<ModelObject>());
-            dataService.save(page);
-            postSave(uiPortalApp, pcontext);
-            return;
          }
 
          List<UIComponent> uiChildren = uiPage.getChildren();
@@ -562,14 +509,10 @@ public class UIPageBrowser extends UISearch
          uiPage.getChildren().clear();
 
          PortalDataMapper.toUIPage(uiPage, page);
+
          // if (page.getTemplate() == null) page.setTemplate(uiPage.getTemplate());
          if (page.getChildren() == null)
             page.setChildren(new ArrayList<ModelObject>());
-         if (Page.DESKTOP_PAGE.equals(uiPage.getFactoryId()))
-         {
-            dataService.save(page);
-            postSave(uiPortalApp, pcontext);
-         }
       }
 
       private void postSave(UIPortalApplication uiPortalApp, WebuiRequestContext context) throws Exception

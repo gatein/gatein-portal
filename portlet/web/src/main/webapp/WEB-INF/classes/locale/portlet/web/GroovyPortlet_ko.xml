@@ -25,7 +25,6 @@
    <UIHomePagePortlet>
       <Label>
          <Title>사용자 계정들 중 하나와 함께 GateIn 3.1을 시도하십시오.</Title>
-         <Intro>새로운 버전에 혁신적인 사용자 인터페이스가 추가됩니다. <br/>표준 및 WebOS 데스크탑 레이아웃<br/> 드래그 앤 드롭 기능들. 페이지 생성 마법사<br/>기타 부가 기능.</Intro>
          <Slogan>최고의 eXo 및 JBoss Portal<div>GateIn 3.1</div></Slogan>
          <Username>사용자이름:</Username>
          <Password>비밀번호:</Password>

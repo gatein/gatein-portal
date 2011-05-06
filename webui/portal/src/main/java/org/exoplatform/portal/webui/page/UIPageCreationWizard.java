@@ -19,6 +19,11 @@
 
 package org.exoplatform.portal.webui.page;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserACL;
@@ -27,7 +32,6 @@ import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.webui.navigation.UIPageNodeSelector;
-import org.exoplatform.portal.webui.portal.PageNodeEvent;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.portal.UIPortalComposer;
 import org.exoplatform.portal.webui.util.PortalDataMapper;
@@ -42,11 +46,6 @@ import org.exoplatform.webui.config.annotation.ComponentConfigs;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
-
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
 
 /** Created by The eXo Platform SARL Author : Dang Van Minh minhdv81@yahoo.com Jun 23, 2006 */
 @ComponentConfigs(@ComponentConfig(template = "system:/groovy/webui/core/UIWizard.gtmpl", events = {
@@ -355,36 +354,13 @@ public class UIPageCreationWizard extends UIPageWizard
             page.setTitle(pageNode.getName());
          }
 
-         boolean isDesktopPage = Page.DESKTOP_PAGE.equals(page.getFactoryId());
-         if (isDesktopPage)
-         {
-            page.setShowMaxWindow(true);
-         }
-
          UIPagePreview uiPagePreview = uiWizard.getChild(UIPagePreview.class);
-         UIPage uiPage;
-         if (Page.DESKTOP_PAGE.equals(page.getFactoryId()))
-         {
-            uiPage = uiWizard.createUIComponent(context, UIDesktopPage.class, null, null);
-         }
-         else
-         {
-            uiPage = uiWizard.createUIComponent(context, UIPage.class, null, null);
-         }
-
+         
+         UIPageFactory clazz = UIPageFactory.getInstance(page.getFactoryId());
+         UIPage uiPage = clazz.createUIPage(context);
+         
          PortalDataMapper.toUIPage(uiPage, page);
          uiPagePreview.setUIComponent(uiPage);
-
-         if (isDesktopPage)
-         {
-            uiWizard.saveData();
-            PageNode selectedNode = uiNodeSelector.getSelectedPageNode();
-            UIPortal uiPortal = Util.getUIPortal();
-            PageNodeEvent<UIPortal> pnevent = new PageNodeEvent<UIPortal>(uiPortal, PageNodeEvent.CHANGE_PAGE_NODE, selectedNode.getUri());
-            uiPortal.broadcast(pnevent, Event.Phase.PROCESS);
-            uiWizard.updateUIPortal(event);
-            return;
-         }
 
          uiWizard.updateWizardComponent();
          uiPageTemplateOptions.setSelectedOption(null);

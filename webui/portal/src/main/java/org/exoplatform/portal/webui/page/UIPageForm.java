@@ -19,10 +19,13 @@
 
 package org.exoplatform.portal.webui.page;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.application.PortalRequestContext;
-import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.NoSuchDataException;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.UserPortalConfig;
@@ -33,29 +36,23 @@ import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.webui.application.UIPortlet;
 import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.portal.webui.portal.UIPortal;
-import org.exoplatform.portal.webui.portal.UIPortalComponent;
 import org.exoplatform.portal.webui.portal.UIPortalComposer;
 import org.exoplatform.portal.webui.util.PortalDataMapper;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIMaskWorkspace;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
-import org.exoplatform.portal.webui.workspace.UIPortalToolPanel;
-import org.exoplatform.portal.webui.workspace.UIWorkingWorkspace;
 import org.exoplatform.web.application.ApplicationMessage;
-import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.InitParams;
-import org.exoplatform.webui.config.Param;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.ComponentConfigs;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.config.annotation.ParamConfig;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
-import org.exoplatform.webui.core.model.SelectItemCategory;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
+import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormInputItemSelector;
 import org.exoplatform.webui.form.UIFormInputSet;
@@ -68,12 +65,8 @@ import org.exoplatform.webui.form.validator.MandatoryValidator;
 import org.exoplatform.webui.form.validator.StringLengthValidator;
 import org.exoplatform.webui.organization.UIGroupMembershipSelector;
 import org.exoplatform.webui.organization.UIListPermissionSelector;
-import org.exoplatform.webui.organization.UIPermissionSelector;
 import org.exoplatform.webui.organization.UIListPermissionSelector.EmptyIteratorValidator;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import org.exoplatform.webui.organization.UIPermissionSelector;
 
 @ComponentConfigs({
    @ComponentConfig(lifecycle = UIFormLifecycle.class, template = "system:/groovy/webui/form/UIFormTabPane.gtmpl", events = {
@@ -266,8 +259,6 @@ public class UIPageForm extends UIFormTabPane
          {
             page.setFactoryId(itemOption.getIcon());
             //        page.setTemplate((String)itemOption.getValue());
-            if (page.getFactoryId().equals(Page.DESKTOP_PAGE))
-               page.setShowMaxWindow(true);
          }
       }
       UIPageTemplateOptions uiConfigOptions = getChild(UIPageTemplateOptions.class);
@@ -278,9 +269,6 @@ public class UIPageForm extends UIFormTabPane
          return;
       page.setChildren(selectedPage.getChildren());
       page.setFactoryId(selectedPage.getFactoryId());
-      if (Page.DESKTOP_PAGE.equals(page.getFactoryId()))
-         page.setShowMaxWindow(true);
-
    }
 
    static public class SaveActionListener extends EventListener<UIPageForm>
@@ -309,43 +297,6 @@ public class UIPageForm extends UIFormTabPane
          for (UIPortlet uiPortlet : uiPortlets)
          {
             applications.add(PortalDataMapper.buildModelObject(uiPortlet));
-         }
-
-         if (Page.DESKTOP_PAGE.equals(uiPage.getFactoryId()) && !Page.DESKTOP_PAGE.equals(page.getFactoryId()))
-         {
-            page.setShowMaxWindow(false);
-            uiPage.getChildren().clear();
-            page.setChildren(applications);
-
-            PortalDataMapper.toUIPage(uiPage, page);
-            if (page.getChildren() == null)
-               page.setChildren(new ArrayList<ModelObject>());
-
-            pcontext.ignoreAJAXUpdateOnPortlets(true);
-            UIWorkingWorkspace uiWorkingWS = uiPortalApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
-            pcontext.addUIComponentToUpdateByAjax(uiWorkingWS);
-            pcontext.getJavascriptManager().addJavascript("eXo.portal.UIPortal.changeComposerSaveButton();");
-            return;
-         }
-
-         if (Page.DESKTOP_PAGE.equals(page.getFactoryId()))
-         {
-            uiPage.getChildren().clear();
-            page.setChildren(applications);
-
-            PortalDataMapper.toUIPage(uiPage, page);
-            if (page.getChildren() == null)
-               page.setChildren(new ArrayList<ModelObject>());
-
-            UIPortalToolPanel toolPanel = Util.getUIPortalToolPanel();
-            toolPanel.setShowMaskLayer(true);
-            pcontext.ignoreAJAXUpdateOnPortlets(true);
-            UIWorkingWorkspace uiWorkingWS = uiPortalApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
-            pcontext.addUIComponentToUpdateByAjax(uiWorkingWS);
-            pcontext.getJavascriptManager().addJavascript("eXo.portal.UIPortal.changeComposerSaveButton();");
-            DataStorage dataService = uiPageForm.getApplicationComponent(DataStorage.class);
-            dataService.save(page);
-            return;
          }
 
          List<UIComponent> uiChildren = uiPage.getChildren();

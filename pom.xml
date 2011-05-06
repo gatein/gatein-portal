@@ -757,6 +757,12 @@
                <include>**/*.xsd</include>
             </includes>
          </resource>
+         <resource>
+            <directory>src/main/resources</directory>
+            <includes>
+               <include>**/*.*</include>
+            </includes>
+         </resource>
       </resources>
       <testResources>
          <testResource>

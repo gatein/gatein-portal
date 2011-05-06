@@ -153,6 +153,7 @@
 	padding: 0px 10px 0px 25px; /* orientation=lt */
 	padding: 0px 25px 0px 10px; /* orientation=rt */
 	color: #fff;
+	line-height: 30px;
 }
 
 .UIToolbarContainer .Name a:hover {

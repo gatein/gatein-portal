@@ -31,9 +31,6 @@ import java.util.List;
  **/
 public class Page extends Container
 {
-
-   final static public String DESKTOP_PAGE = "Desktop";
-
    final static public String DEFAULT_PAGE = "Default";
 
    private String ownerType;
@@ -203,5 +200,5 @@ public class Page extends Container
    public String toString()
    {
       return "Page[ownerType=" + ownerType + ",ownerId=" + ownerId + ",name=" + name + "]";
-   }
+   }  
 }
