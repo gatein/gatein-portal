@@ -12,6 +12,7 @@
          <generator class="native"/>
       </id>
       <set name="attributes"
+           batch-size="20"
            inverse="true"
            cascade="all, delete-orphan"
            lazy="extra"

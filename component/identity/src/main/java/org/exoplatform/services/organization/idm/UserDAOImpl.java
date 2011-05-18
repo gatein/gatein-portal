@@ -21,8 +21,6 @@ package org.exoplatform.services.organization.idm;
 
 import org.exoplatform.commons.utils.LazyPageList;
 import org.exoplatform.commons.utils.ListAccess;
-import org.exoplatform.services.cache.CacheService;
-import org.exoplatform.services.cache.ExoCache;
 import org.exoplatform.services.organization.Query;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.UserEventListener;
@@ -37,6 +35,7 @@ import org.picketlink.idm.api.IdentitySession;
 import org.picketlink.idm.api.query.UserQueryBuilder;
 import org.picketlink.idm.common.exception.IdentityException;
 import org.picketlink.idm.impl.api.SimpleAttribute;
+import org.picketlink.idm.impl.api.model.SimpleUser;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -145,6 +144,8 @@ public class UserDAOImpl implements UserHandler
 
       try
       {
+         orgService.commitTransaction();
+
          session.getPersistenceManager().createUser(user.getUserName());
       }
       catch (IdentityException e)
@@ -214,6 +215,8 @@ public class UserDAOImpl implements UserHandler
 
       try
       {
+         orgService.commitTransaction();
+
          foundUser = session.getPersistenceManager().findUser(userName);
       }
       catch (IdentityException e)
@@ -361,6 +364,8 @@ public class UserDAOImpl implements UserHandler
       {
          try
          {
+            orgService.commitTransaction();
+
             IdentitySession session = service_.getIdentitySession();
             org.picketlink.idm.api.User idmUser = session.getPersistenceManager().findUser(user.getUserName());
 
@@ -407,6 +412,63 @@ public class UserDAOImpl implements UserHandler
          );
       }
 
+      // if only condition is email which is unique then delegate to other method as it will be more efficient
+      if (q.getUserName() == null &&
+         q.getEmail() != null &&
+         q.getFirstName() == null &&
+         q.getLastName() == null)
+      {
+         final User uniqueUser = findUserByEmail(q.getEmail());
+
+         if (uniqueUser != null)
+         {
+            return new LazyPageList<User>( new ListAccess<User>()
+            {
+               public User[] load(int index, int length) throws Exception, IllegalArgumentException
+               {
+                  return new User[]{uniqueUser};
+               }
+
+               public int getSize() throws Exception
+               {
+                  return 1;
+               }
+            }, 1);
+         }
+         else
+         {
+            return new LazyPageList<User>( new ListAccess<User>()
+            {
+               public User[] load(int index, int length) throws Exception, IllegalArgumentException
+               {
+                  return new User[0];
+               }
+
+               public int getSize() throws Exception
+               {
+                  return 0;
+               }
+            }, 1);
+         }
+      }
+
+
+      // otherwise use PLIDM queries
+
+      IDMUserListAccess list;
+
+      IntegrationCache cache = getIntegrationCache();
+
+      if (cache != null)
+      {
+         list = cache.getGtnUserLazyPageList(getCacheNS(), q);
+         if (list != null)
+         {
+            return new LazyPageList(list, 20);
+         }
+      }
+
+      orgService.commitTransaction();
 
       UserQueryBuilder qb = service_.getIdentitySession().createUserQueryBuilder();
 
@@ -430,7 +492,26 @@ public class UserDAOImpl implements UserHandler
          qb.attributeValuesFilter(UserDAOImpl.USER_LAST_NAME, new String[]{q.getLastName()});
       }
 
-      return new LazyPageList(new IDMUserListAccess(this, service_, qb, 20, false), 20);
+
+
+      if (q.getUserName() == null &&
+         q.getEmail() == null &&
+         q.getFirstName() == null &&
+         q.getLastName() == null)
+      {
+         list = new IDMUserListAccess(this, service_, qb, 20, true);
+      }
+      else
+      {
+         list = new IDMUserListAccess(this, service_, qb, 20, false);
+      }
+
+      if (cache != null)
+      {
+         cache.putGtnUserLazyPageList(getCacheNS(), q, list);
+      }
+
+      return new LazyPageList(list, 20);
    }
 
    //
@@ -494,6 +575,8 @@ public class UserDAOImpl implements UserHandler
 
       try
       {
+         orgService.commitTransaction();
+
          plUser = session.getAttributesManager().findUserByUniqueAttribute(USER_EMAIL, email);
       }
       catch (IdentityException e)
@@ -565,6 +648,7 @@ public class UserDAOImpl implements UserHandler
 
    public void persistUserInfo(User user, IdentitySession session) throws Exception
    {
+      orgService.commitTransaction();
 
       AttributesManager am = session.getAttributesManager();
 
@@ -629,9 +713,11 @@ public class UserDAOImpl implements UserHandler
 
    }
 
-   public static User getPopulatedUser(String userName, IdentitySession session) throws Exception
+   public User getPopulatedUser(String userName, IdentitySession session) throws Exception
    {
       Object u = null;
+
+      orgService.commitTransaction();
 
       try
       {
@@ -656,8 +742,9 @@ public class UserDAOImpl implements UserHandler
 
    }
 
-   public static void populateUser(User user, IdentitySession session) throws Exception
+   public void populateUser(User user, IdentitySession session) throws Exception
    {
+      orgService.commitTransaction();
 
       AttributesManager am = session.getAttributesManager();
 
@@ -665,7 +752,7 @@ public class UserDAOImpl implements UserHandler
 
       try
       {
-         attrs = am.getAttributes(user.getUserName());
+         attrs = am.getAttributes(new SimpleUser(user.getUserName()));
       }
       catch (IdentityException e)
       {
@@ -754,4 +841,26 @@ public class UserDAOImpl implements UserHandler
       }
    }
 
+   public PicketLinkIDMOrganizationServiceImpl getOrgService()
+   {
+      return orgService;
+   }
+
+   private IntegrationCache getIntegrationCache()
+   {
+      // TODO: refactor to remove cast. For now to avoid adding new config option and share existing cache instannce
+      // TODO: it should be there.
+      return ((PicketLinkIDMServiceImpl)service_).getIntegrationCache();
+   }
+
+   /**
+    * Returns namespace to be used with integration cache
+    * @return
+    */
+   private String getCacheNS()
+   {
+      // TODO: refactor to remove cast. For now to avoid adding new config option and share existing cache instannce
+      // TODO: it should be there.
+      return ((PicketLinkIDMServiceImpl)service_).getRealmName();
+   }
 }

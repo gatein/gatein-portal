@@ -133,7 +133,6 @@ public class UIUserInGroup extends UIContainer
       {
          OrganizationService service = getApplicationComponent(OrganizationService.class);
          MembershipHandler handler = service.getMembershipHandler();
-         List<?> memberships = (List<?>)handler.findMembershipsByGroup(group);
          pageList = new FindMembershipByGroupPageList(group.getId(), 10);
       }
       UIGridUser uiGrid = getChild(UIGridUser.class);

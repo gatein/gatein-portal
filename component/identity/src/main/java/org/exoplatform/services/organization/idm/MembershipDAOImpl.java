@@ -120,6 +120,8 @@ public class MembershipDAOImpl implements MembershipHandler
          );
       }
 
+      orgService.commitTransaction();
+
       if (g == null)
       {
          throw new InvalidNameException("Can not create membership record for " + user.getUserName()
@@ -197,6 +199,7 @@ public class MembershipDAOImpl implements MembershipHandler
          );
       }
 
+      orgService.commitTransaction();
 
       String plGroupName = getPLIDMGroupName(getGroupNameFromId(m.getGroupId()));
 
@@ -278,6 +281,7 @@ public class MembershipDAOImpl implements MembershipHandler
          );
       }
 
+      orgService.commitTransaction();
 
       Membership m = new MembershipImpl(id);
 
@@ -377,6 +381,7 @@ public class MembershipDAOImpl implements MembershipHandler
          );
       }
 
+      orgService.commitTransaction();
 
       Collection<Role> roles = new HashSet();
 
@@ -473,6 +478,7 @@ public class MembershipDAOImpl implements MembershipHandler
          );
       }
 
+      orgService.commitTransaction();
 
       String plGroupName = getPLIDMGroupName(getGroupNameFromId(groupId));
 
@@ -564,6 +570,8 @@ public class MembershipDAOImpl implements MembershipHandler
             }
          );
       }
+
+      orgService.commitTransaction();
 
       if (userName == null)
       {
@@ -667,6 +675,7 @@ public class MembershipDAOImpl implements MembershipHandler
          );
       }
 
+      orgService.commitTransaction();
 
       Collection<Role> roles = new HashSet();
 
@@ -759,6 +768,8 @@ public class MembershipDAOImpl implements MembershipHandler
          );
       }
 
+      orgService.commitTransaction();
+
       String plGroupName = getPLIDMGroupName(getGroupNameFromId(groupId));
 
       String gid =
@@ -780,12 +791,13 @@ public class MembershipDAOImpl implements MembershipHandler
 
       HashSet<MembershipImpl> memberships = new HashSet<MembershipImpl>();
 
+      Group g = orgService.getGroupHandler().findGroupById(groupId);
+
       for (Role role : roles)
       {
          if (isCreateMembership(role.getRoleType().getName()))
          {
             MembershipImpl m = new MembershipImpl();
-            Group g = ((GroupDAOImpl)orgService.getGroupHandler()).convertGroup(role.getGroup());
             m.setGroupId(g.getId());
             m.setUserName(role.getUser().getId());
             m.setMembershipType(role.getRoleType().getName());
@@ -855,6 +867,8 @@ public class MembershipDAOImpl implements MembershipHandler
             }
          );
       }
+
+      orgService.commitTransaction();
 
       Membership m = new MembershipImpl(id);
 

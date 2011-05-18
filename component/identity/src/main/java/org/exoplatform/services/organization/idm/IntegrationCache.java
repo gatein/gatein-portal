@@ -1,5 +1,8 @@
 package org.exoplatform.services.organization.idm;
 
+import org.exoplatform.commons.utils.LazyPageList;
+import org.exoplatform.services.organization.Query;
+
 import org.jboss.cache.Cache;
 import org.jboss.cache.CacheFactory;
 import org.jboss.cache.CacheStatus;
@@ -53,6 +56,8 @@ public class IntegrationCache
    public static final String NODE_PLIDM_ROOT_GROUP = "NODE_PLIDM_ROOT_GROUP";
 
    public static final String NULL_NS_NODE = "GTN_IC_COMMON_NS";
+
+   public static final String USER_QUERY_NODE = "GTN_USER_QUERY_LAZY_LIST";
 
    public static final String MAIN_ROOT = "NODE_GTN_ORG_SERVICE_INT_CACHE_MAIN_ROOT";
 
@@ -198,6 +203,60 @@ public class IntegrationCache
 
    }
 
+    /**
+    * Store IDMUserListAccess
+    * @param ns
+    * @param query
+    * @param list
+    */
+   void putGtnUserLazyPageList(String ns, Query query, IDMUserListAccess list)
+   {
+      Fqn nodeFqn = getFqn(ns, USER_QUERY_NODE, getQueryKey(query));
+
+      Node ioNode = getCache().getRoot().addChild(nodeFqn);
+
+      if (ioNode != null)
+      {
+         ioNode.put(NODE_OBJECT_KEY, list);
+         setExpiration(ioNode);
+
+         if (log.isLoggable(Level.FINER))
+         {
+
+            log.finer(this.toString() + "GateIn user query list cached. Query: " + getQueryKey(query) + ";namespace=" + ns);
+         }
+      }
+   }
+
+   /**
+    * Retrieve IDMUserListAccess
+    * @param ns
+    * @param query
+    * @return LazyPageList
+    */
+   IDMUserListAccess getGtnUserLazyPageList(String ns, Query query)
+   {
+
+      Fqn nodeFqn = getFqn(ns, USER_QUERY_NODE, getQueryKey(query));
+
+      Node node = getCache().getRoot().getChild(nodeFqn);
+
+      if (node != null)
+      {
+         IDMUserListAccess list = (IDMUserListAccess)node.get(NODE_OBJECT_KEY);
+
+         if (log.isLoggable(Level.FINER) && list != null)
+         {
+             log.finer(this.toString() + "GateIn user query list found in cache. Query: " + getQueryKey(query) + ";namespace=" + ns);
+         }
+
+         return list;
+      }
+
+      return null;
+
+   }
+
    /**
     * Store PLIDM root group
     * @param ns
@@ -266,5 +325,20 @@ public class IntegrationCache
    public void setExpiration(int expiration)
    {
       this.expiration = expiration;
+   }
+
+   String getQueryKey(Query query)
+   {
+      StringBuilder sb = new StringBuilder();
+      String SEP = ":::";
+
+      sb.append(query.getEmail()).append(SEP)
+         .append(query.getFirstName()).append(SEP)
+         .append(query.getLastName()).append(SEP)
+         .append(query.getUserName()).append(SEP)
+         .append(query.getFromLoginDate()).append(SEP)
+         .append(query.getToLoginDate()).append(SEP);
+
+      return sb.toString();
    }
 }

@@ -21,6 +21,8 @@ package org.exoplatform.services.organization.idm;
 
 import org.exoplatform.commons.utils.ListAccess;
 import org.exoplatform.services.organization.User;
+import org.exoplatform.services.organization.impl.UserImpl;
+
 import org.gatein.common.logging.LogLevel;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
@@ -29,12 +31,13 @@ import org.picketlink.idm.api.query.UserQuery;
 import org.picketlink.idm.api.query.UserQueryBuilder;
 
 
+import java.io.Serializable;
 import java.util.List;
 
 /*
  * @author <a href="mailto:boleslaw.dawidowicz at redhat.com">Boleslaw Dawidowicz</a>
  */
-public class IDMUserListAccess implements ListAccess<User>
+public class IDMUserListAccess implements ListAccess<User>, Serializable
 {
    private static Logger log = LoggerFactory.getLogger(IDMUserListAccess.class);
 
@@ -47,6 +50,10 @@ public class IDMUserListAccess implements ListAccess<User>
    private final int pageSize;
 
    private final boolean countAll;
+
+   private List<org.picketlink.idm.api.User> fullResults;
+
+   private int size = -1;
 
    public IDMUserListAccess(UserDAOImpl userDAO, PicketLinkIDMService idmService, UserQueryBuilder userQueryBuilder,
       int pageSize, boolean countAll)
@@ -73,9 +80,20 @@ public class IDMUserListAccess implements ListAccess<User>
          );
       }
 
-      userQueryBuilder.page(index, length);
-      UserQuery query = userQueryBuilder.sort(SortOrder.ASCENDING).createQuery();
-      List<org.picketlink.idm.api.User> users = idmService.getIdentitySession().list(query);
+      List<org.picketlink.idm.api.User> users = null;
+
+      if (fullResults == null)
+      {
+         userDAO.getOrgService().commitTransaction();
+
+         userQueryBuilder.page(index, length);
+         UserQuery query = userQueryBuilder.sort(SortOrder.ASCENDING).createQuery();
+         users = idmService.getIdentitySession().list(query);
+      }
+      else
+      {
+         users = fullResults.subList(index, index + length);
+      }
 
       User[] exoUsers = new User[users.size()];
 
@@ -83,7 +101,9 @@ public class IDMUserListAccess implements ListAccess<User>
       {
          org.picketlink.idm.api.User user = users.get(i);
 
-         exoUsers[i] = UserDAOImpl.getPopulatedUser(user.getId(), idmService.getIdentitySession());
+         User gtnUser = new UserImpl(user.getId());
+         userDAO.populateUser(gtnUser, idmService.getIdentitySession());
+         exoUsers[i] = gtnUser;
       }
 
       if (log.isTraceEnabled())
@@ -111,22 +131,39 @@ public class IDMUserListAccess implements ListAccess<User>
          );
       }
 
+      userDAO.getOrgService().commitTransaction();
+
       int result;
 
-      if (countAll)
+      if (size < 0)
       {
-         result = idmService.getIdentitySession().getPersistenceManager().getUserCount();
+
+         if (fullResults != null)
+         {
+            result = fullResults.size();
+         }
+         else if (countAll)
+         {
+            result = idmService.getIdentitySession().getPersistenceManager().getUserCount();
+         }
+         else
+         {
+            userQueryBuilder.page(0, 0);
+            UserQuery query = userQueryBuilder.sort(SortOrder.ASCENDING).createQuery();
+            fullResults = idmService.getIdentitySession().list(query);
+            result = fullResults.size();
+         }
+
+         size = result;
       }
       else
       {
-         userQueryBuilder.page(0, 0);
-         UserQuery query = userQueryBuilder.sort(SortOrder.ASCENDING).createQuery();
-         result = idmService.getIdentitySession().execute(query).size();
+         result = size;
       }
 
       if (log.isTraceEnabled())
       {
-        Tools.logMethodOut(
+         Tools.logMethodOut(
             log,
             LogLevel.TRACE,
             "getSize",

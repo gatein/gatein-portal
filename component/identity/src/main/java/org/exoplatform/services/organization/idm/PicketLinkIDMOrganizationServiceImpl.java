@@ -45,7 +45,7 @@ public class PicketLinkIDMOrganizationServiceImpl extends BaseOrganizationServic
 
    // We may have several portal containers thus we need one PicketLinkIDMService per portal container
    //   private static PicketLinkIDMService jbidmService_;
-   private PicketLinkIDMService idmService_;
+   private PicketLinkIDMServiceImpl idmService_;
 
    public static final String CONFIGURATION_OPTION = "configuration";
 
@@ -60,7 +60,7 @@ public class PicketLinkIDMOrganizationServiceImpl extends BaseOrganizationServic
       membershipDAO_ = new MembershipDAOImpl(this, idmService);
       membershipTypeDAO_ = new MembershipTypeDAOImpl(this, idmService);
 
-      idmService_ = idmService;
+      idmService_ = (PicketLinkIDMServiceImpl)idmService;
 
       if (params != null)
       {
@@ -152,6 +152,7 @@ public class PicketLinkIDMOrganizationServiceImpl extends BaseOrganizationServic
          }
          else
          {
+
             if (!idmService_.getIdentitySession().getTransaction().isActive())
             {
                idmService_.getIdentitySession().beginTransaction();
@@ -163,6 +164,50 @@ public class PicketLinkIDMOrganizationServiceImpl extends BaseOrganizationServic
          e.printStackTrace();
       }
    }
+
+
+   public void commitTransaction()
+   {
+      try
+      {
+
+
+         if (configuration.isUseJTA())
+         {
+            UserTransaction tx = (UserTransaction)new InitialContext().lookup("java:comp/UserTransaction");
+
+            if (tx.getStatus() != Status.STATUS_NO_TRANSACTION)
+            {
+               tx.commit();
+            }
+
+            if (tx.getStatus() == Status.STATUS_NO_TRANSACTION)
+            {
+               tx.begin();
+            }
+         }
+         else
+         {
+
+            if (idmService_.getIdentitySession().getTransaction().isActive())
+            {
+               idmService_.getIdentitySession().getTransaction().commit();
+            }
+
+            if (!idmService_.getIdentitySession().getTransaction().isActive())
+            {
+               idmService_.getIdentitySession().beginTransaction();
+            }
+         }
+
+      }
+      catch (Exception e)
+      {
+         e.printStackTrace();
+      }
+   }
+
+
 
    public void endRequest(ExoContainer container)
    {

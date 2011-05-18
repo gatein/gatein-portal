@@ -90,6 +90,8 @@ public class PicketLinkIDMServiceImpl implements PicketLinkIDMService, Startable
 
    private static final JChannelFactory CHANNEL_FACTORY = new JChannelFactory();
 
+   private HibernateService hibernateService;
+
    private PicketLinkIDMServiceImpl()
    {
    }
@@ -109,6 +111,8 @@ public class PicketLinkIDMServiceImpl implements PicketLinkIDMService, Startable
       ValueParam jgroupsStack = initParams.getValueParam(JGROUPS_MUX_ENABLED);
       ValueParam jgroupsConfig = initParams.getValueParam(JGROUPS_CONFIG);
       ValueParam cacheExpirationParam = initParams.getValueParam(CACHE_EXPIRATION);
+
+      this.hibernateService = hibernateService;
 
       if (config == null && jndiName == null)
       {
@@ -326,5 +330,10 @@ public class PicketLinkIDMServiceImpl implements PicketLinkIDMService, Startable
             }
          }
       }
+   }
+
+   public HibernateService getHibernateService()
+   {
+      return hibernateService;
    }
 }

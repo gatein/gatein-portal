@@ -35,8 +35,9 @@
            table="jbid_io_attr_text_values"
            cascade="all, delete-orphan"
            access="field"
-           lazy="extra"
-           fetch="subselect">
+           lazy="false"
+           fetch="join"
+           batch-size="20">
          <cache usage="read-write"/>
          <key column="TEXT_ATTR_VALUE_ID"/>
          <element type="string"
