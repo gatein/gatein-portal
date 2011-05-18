@@ -121,7 +121,7 @@
 
       <value-param>
         <name>cacheExpiration</name>
-        <value>360000</value>
+        <value>1800000</value>
       </value-param>
 
 

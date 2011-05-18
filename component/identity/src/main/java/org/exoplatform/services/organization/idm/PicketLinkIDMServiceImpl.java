@@ -184,7 +184,7 @@ public class PicketLinkIDMServiceImpl implements PicketLinkIDMService, Startable
             integrationCache = new IntegrationCache();
             integrationCache.setExpiration(expiration);
             integrationCache.initialize(cache);
-            picketLinkIDMCache.register(apiCacheProvider);
+            picketLinkIDMCache.register(integrationCache);
 
          }
 
