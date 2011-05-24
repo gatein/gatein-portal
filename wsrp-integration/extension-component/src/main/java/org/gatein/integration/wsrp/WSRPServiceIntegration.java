@@ -278,6 +278,8 @@ public class WSRPServiceIntegration implements Startable, WebAppListener
       exoKernelIntegration.getPortletApplicationRegistry().addListener(producer);
 
       producer.start();
+
+      log.info("WSRP Producer started");
    }
 
    private void startConsumers()
@@ -331,6 +333,8 @@ public class WSRPServiceIntegration implements Startable, WebAppListener
          throw new RuntimeException("Couldn't start WSRP consumers registry.", e);
       }
       container.registerComponentInstance(ConsumerRegistry.class, consumerRegistry);
+
+      log.info("WSRP Consumers started");
    }
 
    public void stop()
