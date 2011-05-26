@@ -48,6 +48,10 @@ public class Util
    static public PortalRequestContext getPortalRequestContext()
    {
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
+      if(context == null)
+      {
+         return null;
+      }
       if (!(context instanceof PortalRequestContext))
       {
          context = (WebuiRequestContext)context.getParentAppRequestContext();
