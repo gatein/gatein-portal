@@ -6,7 +6,8 @@
 <chapter id="chap-Reference_Guide-Portlet_development">
 	<title>Portlet development</title>
 
-	<xi:include href="PortletDevelopment/Standard.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="PortletDevelopment/Standard.xml" />
+	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="PortletDevelopment/Global_portlet.xml"/>
 
 </chapter>
 
