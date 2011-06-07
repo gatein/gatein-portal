@@ -34,14 +34,6 @@
 	cursor: pointer;
 }
 
-.UIAction a {
-}
-
-.UIAction a:hover {
-	color: #058ee6;
-}
-
-
 .UIAction .ActionButton .Icon {
 	padding-left: 20px; /* orientation=lt */
 	padding-right: 20px; /* orientation=rt */
@@ -67,7 +59,7 @@
 .UIAction .LightBlueStyle .ButtonMiddle {
 	background: url(background/SimpleStyle1.gif) repeat-x left -20px;
 	line-height: 20px;
-	padding: 0px 8px;
+	padding: 0px 12px;
 	color: #565656;
 }
 
@@ -97,7 +89,6 @@
 
 .UIAction a {
 	color: #565656;
-	margin: 0px 6px; 
 	white-space: nowrap;
 }
 

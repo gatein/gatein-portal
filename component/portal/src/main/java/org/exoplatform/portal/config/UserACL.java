@@ -29,6 +29,7 @@ import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.security.ConversationState;
 import org.exoplatform.services.security.Identity;
+import org.exoplatform.services.security.IdentityConstants;
 import org.exoplatform.services.security.MembershipEntry;
 
 import java.io.Serializable;
@@ -483,7 +484,7 @@ public class UserACL
       Permission permission = new Permission();
       permission.setPermissionExpression(expPerm);
       String groupId = permission.getGroupId();
-      if (currentUser == null && groupId.equals(guestGroup_))
+      if ((currentUser == null || currentUser.equals(IdentityConstants.ANONIM)) && groupId.equals(guestGroup_))
       {
          return true;
       }

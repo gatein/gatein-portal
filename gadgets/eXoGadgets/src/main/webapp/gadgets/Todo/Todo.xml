@@ -36,10 +36,10 @@
 		description="ToDo Gadget, easily manage and track your daily to-do list."
 		thumbnail="http://localhost:8080/eXoGadgets/skin/DefaultSkin/portletIcons/Todo.png"
 		height="235">
-		<Locale messages="http://localhost:8080/eXoGadgets/locale/Todo/ALL_ALL.xml" />
-		<Locale lang="ar" messages="http://localhost:8080/eXoGadgets/locale/Todo/ar_ALL.xml" language_direction="rtl"/>
-		<Locale lang="fr" messages="http://localhost:8080/eXoGadgets/locale/Todo/fr_ALL.xml" />
-		<Locale lang="vi" messages="http://localhost:8080/eXoGadgets/locale/Todo/vi_ALL.xml" />
+		<Locale messages="locale/ALL_ALL.xml" />
+		<Locale lang="ar" messages="locale/ar_ALL.xml" language_direction="rtl"/>
+		<Locale lang="fr" messages="locale/fr_ALL.xml" />
+		<Locale lang="vi" messages="locale/vi_ALL.xml" />
 		<Require feature="setprefs"/>
 	</ModulePrefs>
 	<UserPref name="todoList" datatype="list"/>

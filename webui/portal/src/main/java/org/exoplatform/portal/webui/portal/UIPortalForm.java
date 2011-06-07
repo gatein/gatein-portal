@@ -237,12 +237,11 @@ public class UIPortalForm extends UIFormTabPane
       UIFormInputSet uiPropertiesSet = new UIFormInputSet("Properties");
       uiSettingSet.addUIFormInput(
          new UIFormStringInput(FIELD_NAME, FIELD_NAME, null).addValidator(MandatoryValidator.class).addValidator(
-            StringLengthValidator.class, 3, 30).addValidator(IdentifierValidator.class).setEditable(false))
-         .addUIFormInput(
-            new UIFormSelectBox(FIELD_LOCALE, FIELD_LOCALE, languages).addValidator(MandatoryValidator.class));
+            StringLengthValidator.class, 3, 30).addValidator(IdentifierValidator.class).setEditable(false));
       
       uiSettingSet.addUIFormInput(new UIFormStringInput(FIELD_LABEL, FIELD_LABEL, null));
       uiSettingSet.addUIFormInput(new UIFormStringInput(FIELD_DESCRIPTION, FIELD_DESCRIPTION, null));
+      uiSettingSet.addUIFormInput(new UIFormSelectBox(FIELD_LOCALE, FIELD_LOCALE, languages).addValidator(MandatoryValidator.class));
       
       List<SelectItemOption<String>> listSkin = new ArrayList<SelectItemOption<String>>();
       SkinService skinService = getApplicationComponent(SkinService.class);

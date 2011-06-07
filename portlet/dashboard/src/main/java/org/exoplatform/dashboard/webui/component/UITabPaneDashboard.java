@@ -73,8 +73,6 @@ public class UITabPaneDashboard extends UIContainer
 
    private DataStorage dataService;
 
-   private PageNavigation pageNavigation;
-
    private UIPortal uiPortal;
 
    final private static int MAX_SHOWED_TAB_NUMBER = 6;
@@ -86,15 +84,6 @@ public class UITabPaneDashboard extends UIContainer
       configService = getApplicationComponent(UserPortalConfigService.class);
       dataService = getApplicationComponent(DataStorage.class);
       uiPortal = Util.getUIPortal();
-      initPageNavigation();
-   }
-
-   private void initPageNavigation() throws Exception
-   {
-      //String remoteUser = Util.getPortalRequestContext().getRemoteUser();
-      //pageNavigation = getPageNavigation(PortalConfig.USER_TYPE + "::" + remoteUser);
-      //TODO: Check this part carefully
-      this.pageNavigation = uiPortal.getSelectedNavigation();
    }
 
    /*
@@ -148,11 +137,7 @@ public class UITabPaneDashboard extends UIContainer
 
    public PageNavigation getPageNavigation() throws Exception
    {
-      if (pageNavigation == null)
-      {
-         initPageNavigation();
-      }
-      return pageNavigation;
+      return uiPortal.getSelectedNavigation();
    }
 
    /**
@@ -164,6 +149,7 @@ public class UITabPaneDashboard extends UIContainer
    {
       try
       {
+         PageNavigation pageNavigation = getPageNavigation();
          List<PageNode> nodes = pageNavigation.getNodes();
          PageNode tobeRemoved = nodes.get(nodeIndex);
          PageNode selectedNode = uiPortal.getSelectedNode();
@@ -236,6 +222,7 @@ public class UITabPaneDashboard extends UIContainer
          {
             nodeLabel = "Tab_" + getCurrentNumberOfTabs();
          }
+         PageNavigation pageNavigation = getPageNavigation();
          Page page =
             configService.createPageTemplate(UITabPaneDashboard.PAGE_TEMPLATE, pageNavigation.getOwnerType(),
                pageNavigation.getOwnerId());
@@ -309,9 +296,9 @@ public class UITabPaneDashboard extends UIContainer
       return true;
    }
 
-   private boolean nameExisted(String nodeName)
+   private boolean nameExisted(String nodeName) throws Exception
    {
-      for (PageNode node : pageNavigation.getNodes())
+      for (PageNode node : getPageNavigation().getNodes())
       {
          if (node.getName().equals(nodeName))
          {
@@ -325,6 +312,7 @@ public class UITabPaneDashboard extends UIContainer
    {
       try
       {
+         PageNavigation pageNavigation = getPageNavigation();
          List<PageNode> nodes = pageNavigation.getNodes();
          List<PageNode> selectedPath = uiPortal.getSelectedPath();
          PageNode parentNode = null;
@@ -383,6 +371,7 @@ public class UITabPaneDashboard extends UIContainer
 
       try
       {
+         PageNavigation pageNavigation = getPageNavigation();
          ArrayList<PageNode> nodes = pageNavigation.getNodes();
          PageNode firstNode = nodes.get(firstIndex);
          PageNode secondNode = nodes.get(secondIndex);

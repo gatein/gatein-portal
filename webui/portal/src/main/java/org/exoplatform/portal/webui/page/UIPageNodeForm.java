@@ -68,10 +68,6 @@ public class UIPageNodeForm extends UIFormTabPane
 
    private PageNode pageNode_;
 
-   private String owner_;
-
-   private String ownerType_;
-
    private Object selectedParent;
 
    /**
@@ -313,10 +309,23 @@ public class UIPageNodeForm extends UIFormTabPane
             
          }
          
-         uiPageNodeForm.invokeSetBindingBean(pageNode);
          UIPageSelector2 pageSelector = uiPageNodeForm.getChild(UIPageSelector2.class);
          if (pageSelector.getPage() == null)
-            pageNode.setPageReference(null);
+         {
+            pageSelector.setValue(null);
+         }
+         else
+         {
+            Page page = pageSelector.getPage();
+            DataStorage storage = uiPageNodeForm.getApplicationComponent(DataStorage.class);
+            if (storage.getPage(page.getPageId()) == null)
+            {
+               storage.create(page);
+               pageSelector.setValue(page.getPageId());
+            }
+         }
+         
+         uiPageNodeForm.invokeSetBindingBean(pageNode);
          UIFormInputIconSelector uiIconSelector = uiPageNodeForm.getChild(UIFormInputIconSelector.class);
          if (uiIconSelector.getSelectedIcon().equals("Default"))
             pageNode.setIcon(null);
@@ -499,9 +508,7 @@ public class UIPageNodeForm extends UIFormTabPane
             return;
          }
 
-         // save page to database
-         dataService.create(page);
-         pageSelector.setValue(page.getPageId());
+         pageSelector.setPage(page);
       }
    }
 }

@@ -15,7 +15,15 @@
 <div class="UILogoPortlet ClearFix" id="$uicomponent.id" >
 	<%if( _ctx.getRequestContext().getApplicationMode() == PortletMode.VIEW) {%>
 		<!-- LOGO IMAGE -->
-		<a href="#" class="Img"><image src="<%=uicomponent.getURL()%>" alt="" /></a>
+		<a href="#" class="Img">
+        <%
+            String imgURL = uicomponent.getURL();
+            if (imgURL != "")
+            {
+               print """<img src="$imgURL" />""";
+            }
+        %>
+        </a>
 		<div class="BannerTitle">$navTitle</div>	
 		<!-- ACTIONs -->	
 		<% if(prContext.getRemoteUser() == null) { %>

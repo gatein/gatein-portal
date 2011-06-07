@@ -71,8 +71,6 @@
 .UIToolbarContainer .UIHorizontalTabs .TabsContainer {
 	height: 30px; /* orientation=lt */
 	height: auto; /* orientation=rt */
-	float: left; /* orientation=lt */
-	float: right; /* orientation=rt */
 }
 
 .UIToolbarContainer .UIHorizontalTabs .UITab {
@@ -86,6 +84,7 @@
     float: none;
 	!float: left;/* orientation=rt */
 	_float: none;/* orientation=rt */
+	cursor: pointer;
 }
 
 .UserToolBarSitePortletTDContainer {

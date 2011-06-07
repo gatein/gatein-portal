@@ -43,6 +43,8 @@ import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormDateTimeInput;
+import org.exoplatform.webui.form.UIFormInput;
+import org.exoplatform.webui.form.UIFormInputBase;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.validator.DateTimeValidator;
 import org.exoplatform.webui.form.validator.IdentifierValidator;
@@ -96,8 +98,19 @@ public class UIWizardPageSetInfo extends UIForm
       		.setMaxLength(255).addValidator(StringLengthValidator.class, 3, 120));
       addUIFormInput(uiVisibleCheck.setChecked(true));
       addUIFormInput(uiDateInputCheck);
-      addUIFormInput(new UIFormDateTimeInput(START_PUBLICATION_DATE, null, null).addValidator(DateTimeValidator.class));
-      addUIFormInput(new UIFormDateTimeInput(END_PUBLICATION_DATE, null, null).addValidator(DateTimeValidator.class));
+      UIFormInputBase<String> startPubDateInput = new UIFormDateTimeInput(START_PUBLICATION_DATE, null, null).addValidator(DateTimeValidator.class);
+      UIFormInputBase<String> endPubDateInput = new UIFormDateTimeInput(END_PUBLICATION_DATE, null, null).addValidator(DateTimeValidator.class);
+      addUIFormInput(startPubDateInput);
+      addUIFormInput(endPubDateInput);
+      
+      boolean isUserNav = Util.getUIPortal().getSelectedNavigation().getOwnerType().equals(PortalConfig.USER_TYPE);
+      if (isUserNav)
+      {
+         uiVisibleCheck.setRendered(false);
+         uiDateInputCheck.setRendered(false);
+         startPubDateInput.setRendered(false);
+         endPubDateInput.setRendered(false);
+      }
    }
 
    public void setEditMode() throws Exception
