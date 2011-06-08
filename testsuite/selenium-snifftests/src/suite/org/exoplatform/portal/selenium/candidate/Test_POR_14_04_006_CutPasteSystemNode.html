@@ -47,8 +47,8 @@
 	<td>gtn</td>
 </tr>
 <tr>
-	<td>clickAt</td>
-	<td>//div[@id='UIPortalLoginFormAction']/div/div/div/a</td>
+	<td>clickAndWait</td>
+	<td>//div[@id='UIPortalLoginFormAction']//a[text()='Sign in']</td>
 	<td></td>
 </tr>
 <tr>
@@ -62,7 +62,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>click</td>
+	<td>clickAndWait</td>
 	<td>link=Site</td>
 	<td></td>
 </tr>
@@ -82,6 +82,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>waitForElementPresent</td>
+	<td>//a[@title='Register']</td>
+	<td></td>
+</tr>
+<tr>
 	<td>mouseDownRight</td>
 	<td>//a[@title='Register']</td>
 	<td></td>
@@ -92,7 +97,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>link=Cut Node</td>
 	<td></td>
 </tr>
@@ -142,11 +147,10 @@
 	<td></td>
 </tr>
 <tr>
-	<td>click</td>
+	<td>clickAndWait</td>
 	<td>link=Sign out</td>
 	<td></td>
 </tr>
-
 </tbody></table>
 </body>
 </html>

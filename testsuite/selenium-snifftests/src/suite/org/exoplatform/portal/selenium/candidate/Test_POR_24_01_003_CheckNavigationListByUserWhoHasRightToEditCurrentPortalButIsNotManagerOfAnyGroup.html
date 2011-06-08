@@ -48,12 +48,17 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>//div[@id='UIPortalLoginFormAction']/div/div/div/a</td>
+	<td>//div[@id='UIPortalLoginFormAction']//a[text()='Sign in']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>echo</td>
 	<td>-- Create new user --</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=New Staff</td>
 	<td></td>
 </tr>
 <tr>
@@ -103,12 +108,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[3]/div/div/div[1]/div/div/div/div/div/div/div/div[1]/div/div/div/div/div/div/div/div/div[2]/div/div/div/div</td>
+	<td>//div[text()='User Profile']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[3]/div/div/div[1]/div/div/div/div/div/div/div/div[1]/div/div/div/div/div/div/div/div/div[2]/div/div/div/div</td>
+	<td>//div[text()='User Profile']</td>
 	<td></td>
 </tr>
 <tr>
@@ -157,28 +162,33 @@
 	<td></td>
 </tr>
 <tr>
+	<td>waitForElementPresent</td>
+	<td>link=Users and groups management</td>
+	<td></td>
+</tr>
+<tr>
 	<td>clickAndWait</td>
 	<td>link=Users and groups management</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UIOrganizationPortlet']/div[2]/div[1]/div/div/div/div/div/div/a[2]/div[1]</td>
+	<td>//div[@id='UIOrganizationPortlet']//div[text()='Group Management']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='UIOrganizationPortlet']/div[2]/div[1]/div/div/div/div/div/div/a[2]/div[1]</td>
+	<td>//div[@id='UIOrganizationPortlet']//div[text()='Group Management']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UIOrganizationPortlet']/div[2]/div[2]/div[1]/div[2]/div[1]/div[2]/div/div/div/div[3]/div/a</td>
+	<td>//div[@id='UIOrganizationPortlet']//a[@title='Organization']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='UIOrganizationPortlet']/div[2]/div[2]/div[1]/div[2]/div[1]/div[2]/div/div/div/div[3]/div/a</td>
+	<td>//div[@id='UIOrganizationPortlet']//a[@title='Organization']</td>
 	<td></td>
 </tr>
 <tr>
@@ -218,12 +228,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UIOrganizationPortlet']/div[2]/div[2]/div[1]/div[2]/div[1]/div[2]/div/div/div/div[1]/a</td>
+	<td>//a[@title='Up Level']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='UIOrganizationPortlet']/div[2]/div[2]/div[1]/div[2]/div[1]/div[2]/div/div/div/div[1]/a</td>
+	<td>//a[@title='Up Level']</td>
 	<td></td>
 </tr>
 <tr>
@@ -267,13 +277,13 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
+	<td>waitForElementPresent</td>
 	<td>link=Sign out</td>
 	<td></td>
 </tr>
 <tr>
-	<td>open</td>
-	<td>/portal/public/classic/</td>
+	<td>clickAndWait</td>
+	<td>link=Sign out</td>
 	<td></td>
 </tr>
 <tr>
@@ -303,12 +313,17 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>//div[@id='UIPortalLoginFormAction']/div/div/div/a</td>
+	<td>//div[@id='UIPortalLoginFormAction']//a[text()='Sign in']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>echo</td>
 	<td>-- Show navigation list which user has right to edit&nbsp;&nbsp;--</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Group</td>
 	<td></td>
 </tr>
 <tr>
@@ -443,7 +458,7 @@
 </tr>
 <tr>
 	<td>assertConfirmation</td>
-	<td>Are you sure you want to delete Test_POR_24_01_002 user?</td>
+	<td>Are you sure you want to delete Test_POR_24_01_003 user?</td>
 	<td></td>
 </tr>
 <tr>
@@ -456,7 +471,6 @@
 	<td>link=Sign out</td>
 	<td></td>
 </tr>
-
 </tbody></table>
 </body>
 </html>

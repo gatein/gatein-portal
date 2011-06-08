@@ -48,12 +48,17 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>//div[@id='UIPortalLoginFormAction']/div/div/div/a</td>
+	<td>//div[@id='UIPortalLoginFormAction']//a[text()='Sign in']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>echo</td>
 	<td>-- Add new user--</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=New Staff</td>
 	<td></td>
 </tr>
 <tr>
@@ -103,12 +108,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[3]/div/div/div[1]/div/div/div/div/div/div/div/div[1]/div/div/div/div/div/div/div/div/div[2]/div/div/div/div</td>
+	<td>//div[@id='UIAccountPortlet']//div[text()='User Profile']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[3]/div/div/div[1]/div/div/div/div/div/div/div/div[1]/div/div/div/div/div/div/div/div/div[2]/div/div/div/div</td>
+	<td>//div[@id='UIAccountPortlet']//div[text()='User Profile']</td>
 	<td></td>
 </tr>
 <tr>
@@ -149,6 +154,21 @@
 <tr>
 	<td>echo</td>
 	<td>-- Add user into group with membership is member--</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='UIAccountPortlet']//div[text()='User Profile']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='UIAccountPortlet']//div[text()='User Profile']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Users and groups management</td>
 	<td></td>
 </tr>
 <tr>
@@ -567,11 +587,6 @@
 	<td></td>
 </tr>
 <tr>
-	<td>open</td>
-	<td>/portal/public/classic/</td>
-	<td></td>
-</tr>
-<tr>
 	<td>waitForElementPresent</td>
 	<td>link=Sign in</td>
 	<td></td>
@@ -612,6 +627,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>waitForElementPresent</td>
+	<td>link=Site Editor</td>
+	<td></td>
+</tr>
+<tr>
 	<td>mouseOver</td>
 	<td>link=Site Editor</td>
 	<td></td>
@@ -647,11 +667,6 @@
 	<td></td>
 </tr>
 <tr>
-	<td>open</td>
-	<td>/portal/public/classic/</td>
-	<td></td>
-</tr>
-<tr>
 	<td>waitForElementPresent</td>
 	<td>link=Sign in</td>
 	<td></td>
@@ -674,6 +689,11 @@
 <tr>
 	<td>clickAndWait</td>
 	<td>//div[@id='UIPortalLoginFormAction']/div/div/div/a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Site</td>
 	<td></td>
 </tr>
 <tr>
@@ -876,7 +896,6 @@
 	<td>link=Sign out</td>
 	<td></td>
 </tr>
-
 </tbody></table>
 </body>
 </html>

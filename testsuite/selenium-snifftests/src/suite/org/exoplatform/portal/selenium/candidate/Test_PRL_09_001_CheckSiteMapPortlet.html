@@ -48,7 +48,12 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>//div[@id='UIPortalLoginFormAction']/div/div/div/a</td>
+	<td>//div[@id='UIPortalLoginFormAction']//a[text()='Sign in']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=SiteMap</td>
 	<td></td>
 </tr>
 <tr>
@@ -57,18 +62,28 @@
 	<td></td>
 </tr>
 <tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='UISiteMap']//a[text()='Administration']</td>
+	<td></td>
+</tr>
+<tr>
 	<td>click</td>
-	<td>//div[@id='UISiteMap']/div[2]/div/div[3]/div[1]/a</td>
+	<td>//div[@id='UISiteMap']//a[text()='Administration']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UISiteMap']/div[2]/div/div[3]/div[2]/div[1]/div/div/a</td>
+	<td>//div[@id='UISiteMap']//a[text()='Application Registry']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>//div[@id='UISiteMap']/div[2]/div/div[3]/div[2]/div[1]/div/div/a</td>
+	<td>//div[@id='UISiteMap']//a[text()='Application Registry']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Sign out</td>
 	<td></td>
 </tr>
 <tr>
@@ -76,7 +91,6 @@
 	<td>link=Sign out</td>
 	<td></td>
 </tr>
-
 </tbody></table>
 </body>
 </html>

@@ -48,7 +48,7 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>xpath=//div[@id='UIPortalLoginFormAction']/div/div/div</td>
+	<td>//div[@id='UIPortalLoginFormAction']//a[text()='Sign in']</td>
 	<td></td>
 </tr>
 <tr>
@@ -73,12 +73,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>xpath=//div[@id='UIPageBrowser']/div[2]/table/tbody/tr/td/div/div/div/div/a</td>
+	<td>xpath=//div[@id='UIPageBrowser']//a[text()='Add New Page']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>xpath=//div[@id='UIPageBrowser']/div[2]/table/tbody/tr/td/div/div/div/div/a</td>
+	<td>xpath=//div[@id='UIPageBrowser']//a[text()='Add New Page']</td>
 	<td></td>
 </tr>
 <tr>
@@ -98,7 +98,7 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>xpath=//option[@value='portal']</td>
+	<td>name</td>
 	<td></td>
 </tr>
 <tr>
@@ -118,12 +118,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UIMaskWorkspace']/div[2]/div/div/div/div/div/div/div/div/div/div/div/div[2]/div/div/div/div</td>
+	<td>//div[@id='UIMaskWorkspace']//div[text()='Page Layout']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='UIMaskWorkspace']/div[2]/div/div/div/div/div/div/div/div/div/div/div/div[2]/div/div/div/div</td>
+	<td>//div[@id='UIMaskWorkspace']//div[text()='Page Layout']</td>
 	<td></td>
 </tr>
 <tr>
@@ -133,12 +133,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UIMaskWorkspace']/div[2]/div/div/div/div/div/div/div/div/div/div/div/div[3]/div/div/div/div</td>
+	<td>//div[@id='UIMaskWorkspace']//div[text()='Permission Setting']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='UIMaskWorkspace']/div[2]/div/div/div/div/div/div/div/div/div/div/div/div[3]/div/div/div/div</td>
+	<td>//div[@id='UIMaskWorkspace']//div[text()='Permission Setting']</td>
 	<td></td>
 </tr>
 <tr>
@@ -228,12 +228,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UIMaskWorkspace']/div[2]/div/div/div/div/div/div/div/div/div/div/div/div[1]/div/div/div/div</td>
+	<td>//div[@id='UIMaskWorkspace']//div[text()='Portal Templates']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='UIMaskWorkspace']/div[2]/div/div/div/div/div/div/div/div/div/div/div/div[1]/div/div/div/div</td>
+	<td>//div[@id='UIMaskWorkspace']//div[text()='Portal Templates']</td>
 	<td></td>
 </tr>
 <tr>
@@ -243,12 +243,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UIMaskWorkspace']/div[2]/div/div/div/div/div/div/div/div/div/div/div/div[3]/div/div/div/div</td>
+	<td>//div[@id='UIMaskWorkspace']//div[text()='Properties']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='UIMaskWorkspace']/div[2]/div/div/div/div/div/div/div/div/div/div/div/div[3]/div/div/div/div</td>
+	<td>//div[@id='UIMaskWorkspace']//div[text()='Properties']</td>
 	<td></td>
 </tr>
 <tr>
@@ -258,12 +258,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UIMaskWorkspace']/div[2]/div/div/div/div/div/div/div/div/div/div/div/div[4]/div/div/div/div</td>
+	<td>//div[@id='UIMaskWorkspace']//div[text()='Permission Setting']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='UIMaskWorkspace']/div[2]/div/div/div/div/div/div/div/div/div/div/div/div[4]/div/div/div/div</td>
+	<td>//div[@id='UIMaskWorkspace']//div[text()='Permission Setting']</td>
 	<td></td>
 </tr>
 <tr>
@@ -332,11 +332,6 @@
 	<td></td>
 </tr>
 <tr>
-	<td>waitForText</td>
-	<td>//div[@id='UIPermissionSelector']/div/div[2]/div[1]/div[3]/div[2]</td>
-	<td>exact:*</td>
-</tr>
-<tr>
 	<td>waitForElementPresent</td>
 	<td>link=Save</td>
 	<td></td>
@@ -383,7 +378,7 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//a[text()='Page Management' and contains(@href, 'Test_POR_20_026')]</td>
+	<td>link=Page Management</td>
 	<td></td>
 </tr>
 <tr>
@@ -398,12 +393,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>xpath=//div[@id='UIPageBrowser']/div[2]/table/tbody/tr/td/div/div/div/div/a</td>
+	<td>xpath=//div[@id='UIPageBrowser']//a[text()='Add New Page']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>xpath=//div[@id='UIPageBrowser']/div[2]/table/tbody/tr/td/div/div/div/div/a</td>
+	<td>xpath=//div[@id='UIPageBrowser']//a[text()='Add New Page']</td>
 	<td></td>
 </tr>
 <tr>
@@ -423,7 +418,7 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>xpath=//option[@value='portal']</td>
+	<td>name</td>
 	<td></td>
 </tr>
 <tr>
@@ -443,12 +438,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UIMaskWorkspace']/div[2]/div/div/div/div/div/div/div/div/div/div/div/div[2]/div/div/div/div</td>
+	<td>//div[@id='UIMaskWorkspace']//div[text()='Page Layout']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='UIMaskWorkspace']/div[2]/div/div/div/div/div/div/div/div/div/div/div/div[2]/div/div/div/div</td>
+	<td>//div[@id='UIMaskWorkspace']//div[text()='Page Layout']</td>
 	<td></td>
 </tr>
 <tr>
@@ -458,12 +453,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UIMaskWorkspace']/div[2]/div/div/div/div/div/div/div/div/div/div/div/div[3]/div/div/div/div</td>
+	<td>//div[@id='UIMaskWorkspace']//div[text()='Permission Setting']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='UIMaskWorkspace']/div[2]/div/div/div/div/div/div/div/div/div/div/div/div[3]/div/div/div/div</td>
+	<td>//div[@id='UIMaskWorkspace']//div[text()='Permission Setting']</td>
 	<td></td>
 </tr>
 <tr>
@@ -528,12 +523,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>xpath=//form[@id='UIPageSearch']/div[2]/a</td>
+	<td>//a[@title='Quick Search']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>xpath=//form[@id='UIPageSearch']/div[2]/a</td>
+	<td>//a[@title='Quick Search']</td>
 	<td></td>
 </tr>
 <tr>
@@ -602,17 +597,12 @@
 	<td></td>
 </tr>
 <tr>
-	<td>open</td>
-	<td>/portal/private/classic/</td>
-	<td></td>
-</tr>
-<tr>
 	<td>waitForElementPresent</td>
 	<td>link=Site</td>
 	<td></td>
 </tr>
 <tr>
-	<td>click</td>
+	<td>clickAndWait</td>
 	<td>link=Site</td>
 	<td></td>
 </tr>
@@ -651,17 +641,6 @@
 	<td>Test_POR_20_026</td>
 	<td></td>
 </tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>link=Sign out</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>link=Sign out</td>
-	<td></td>
-</tr>
-
 </tbody></table>
 </body>
 </html>

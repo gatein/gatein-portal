@@ -48,7 +48,12 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>//div[@id='UIPortalLoginFormAction']/div/div/div/a</td>
+	<td>//div[@id='UIPortalLoginFormAction']//a[text()='Sign in']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Site</td>
 	<td></td>
 </tr>
 <tr>
@@ -83,12 +88,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[2]/div/div/div/div/div/div/div/div/div/div/div/div[2]/div/div/div/div</td>
+	<td>//div[text()='Properties']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[2]/div/div/div/div/div/div/div/div/div/div/div/div[2]/div/div/div/div</td>
+	<td>//div[text()='Properties']</td>
 	<td></td>
 </tr>
 <tr>
@@ -98,12 +103,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[2]/div/div/div/div/div/div/div/div/div/div/div/div[3]/div/div/div/div</td>
+	<td>//div[text()='Permission Setting']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[2]/div/div/div/div/div/div/div/div/div/div/div/div[3]/div/div/div/div</td>
+	<td>//div[text()='Permission Setting']</td>
 	<td></td>
 </tr>
 <tr>
@@ -188,32 +193,32 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='PermissionSelector']/div/div[2]/div/div[2]/div/div/div[5]/div[2]/div[1]/div/a</td>
+	<td>//div[@id='PermissionSelector']//a[text()='Administrators']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='PermissionSelector']/div/div[2]/div/div[2]/div/div/div[5]/div[2]/div[1]/div/a</td>
+	<td>//div[@id='PermissionSelector']//a[text()='Administrators']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='PermissionSelector']/div/div[3]/div/div[2]/div[4]/a</td>
+	<td>//div[@id='PermissionSelector']//a[@title='validator']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='PermissionSelector']/div/div[3]/div/div[2]/div[4]/a</td>
+	<td>//div[@id='PermissionSelector']//a[@title='validator']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>link=Save</td>
+	<td>//form[@id='UIPortalForm']/div[3]/div[2]/table/tbody/tr/td/div[1]/div/div/div/a</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>link=Save</td>
+	<td>//form[@id='UIPortalForm']/div[3]/div[2]/table/tbody/tr/td/div[1]/div/div/div/a</td>
 	<td></td>
 </tr>
 <tr>
@@ -316,7 +321,6 @@
 	<td>link=Sign out</td>
 	<td></td>
 </tr>
-
 </tbody></table>
 </body>
 </html>
