@@ -83,6 +83,12 @@ public class UIPortletLifecycle<S, C extends Serializable, I> extends Lifecycle<
    {
       try
       {
+         //The PortletMode and WindowState can change during a portlet invocation, so we need
+         //to be able to compare the results before and after invoking the portlet to know if 
+         //we need to broadcast a change event or not.
+         PortletMode currentPortletMode = uicomponent.getCurrentPortletMode();
+         WindowState currentWindowState = uicomponent.getCurrentWindowState();
+         
          String action = context.getRequestParameter(PortalRequestContext.UI_COMPONENT_ACTION);
          if (action != null)
          {
@@ -139,7 +145,27 @@ public class UIPortletLifecycle<S, C extends Serializable, I> extends Lifecycle<
             if (event != null)
                event.broadcast();
          }
-
+         
+         //These two checks needs to go after the ProcessAction, ServeResource or Render broadcast events.
+         //The mode or state can change during the invocation and we need to be able to broadcast the change
+         //event if this occurs.
+         if (currentPortletMode != null && !currentPortletMode.equals(uicomponent.getCurrentPortletMode()))
+         {
+            context.setAttribute(UIPortletActionListener.CHANGE_PORTLET_MODE_EVENT, uicomponent.getCurrentPortletMode().toString());
+            Event<UIComponent> event = uicomponent.createEvent("ChangePortletMode", Event.Phase.PROCESS, context);
+            if (event != null)
+               event.broadcast();
+            context.setAttribute(UIPortletActionListener.CHANGE_PORTLET_MODE_EVENT, null);
+         }
+         if (currentWindowState != null && !currentWindowState.equals(uicomponent.getCurrentWindowState()))
+         {
+            context.setAttribute(UIPortletActionListener.CHANGE_WINDOW_STATE_EVENT, uicomponent.getCurrentWindowState().toString());
+            Event<UIComponent> event = uicomponent.createEvent("ChangeWindowState", Event.Phase.PROCESS, context);
+            if (event != null)
+               event.broadcast();
+            context.setAttribute(UIPortletActionListener.CHANGE_WINDOW_STATE_EVENT, null);
+         }
+         
          context.addUIComponentToUpdateByAjax(uicomponent);
       }
       catch (Exception e)

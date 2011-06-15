@@ -76,6 +76,9 @@ public class UIPortletActionListener
 {
 
    public static final String PORTLET_EVENTS = "PortletEvents";
+   
+   public static final String CHANGE_WINDOW_STATE_EVENT = "PortletChangeWindowStateEvent";
+   public static final String CHANGE_PORTLET_MODE_EVENT = "ChangePortletModeEvent";
 
    protected static Log log = ExoLogger.getLogger("portal:UIPortletActionListener");
 
@@ -753,11 +756,29 @@ public class UIPortletActionListener
          pcontext.addUIComponentToUpdateByAjax(uiWorkingWS);
          pcontext.ignoreAJAXUpdateOnPortlets(true);
 
-         String windowState = event.getRequestContext().getRequestParameter(Constants.PORTAL_WINDOW_STATE);
+         String windowState = null;
+         
+         Object changeWindowStateAttribute = event.getRequestContext().getAttribute(CHANGE_WINDOW_STATE_EVENT);
+         if (changeWindowStateAttribute != null && changeWindowStateAttribute instanceof String)
+         {
+            windowState = (String)changeWindowStateAttribute;
+         }
+         
+         if (windowState == null)
+         {
+            windowState = event.getRequestContext().getRequestParameter(Constants.PORTAL_WINDOW_STATE);
+         }
          if (windowState == null)
          {
             windowState = event.getRequestContext().getRequestParameter(UIComponent.OBJECTID).trim();
          }
+         
+         if (windowState == null)
+         {
+            windowState = uiPortlet.getCurrentWindowState().toString();
+         }
+         
+         
          UIPageBody uiPageBody = uiPortlet.getAncestorOfType(UIPageBody.class);
          UIPage uiPage = uiPortlet.getAncestorOfType(UIPage.class);
          if (windowState.equals(WindowState.MAXIMIZED.toString()))
@@ -816,10 +837,26 @@ public class UIPortletActionListener
       public void execute(Event<UIPortlet> event) throws Exception
       {
          UIPortlet uiPortlet = event.getSource();
-         String portletMode = event.getRequestContext().getRequestParameter(Constants.PORTAL_PORTLET_MODE);
+         
+         String portletMode = null;
+         
+         Object changePortletModeAttribute = event.getRequestContext().getAttribute(CHANGE_PORTLET_MODE_EVENT);
+         if (changePortletModeAttribute != null && changePortletModeAttribute instanceof String)
+         {
+            portletMode = (String)changePortletModeAttribute;
+         }
+         
+         if (portletMode == null)
+         {
+            portletMode = event.getRequestContext().getRequestParameter(Constants.PORTAL_PORTLET_MODE);
+         }
          if (portletMode == null)
          {
             portletMode = event.getRequestContext().getRequestParameter(UIComponent.OBJECTID);
+         }
+         if (portletMode == null)
+         {
+            portletMode = uiPortlet.getCurrentPortletMode().toString();
          }
 
          log.trace("Change portlet mode of " + uiPortlet.getPortletContext().getId() + " to " + portletMode);
