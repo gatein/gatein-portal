@@ -24,8 +24,8 @@
    
    <UIHomePagePortlet>
       <Label>
-         <Title>사용자 계정들 중 하나와 함께 GateIn 3.1을 시도하십시오.</Title>
-         <Slogan>최고의 eXo 및 JBoss Portal<div>GateIn 3.1</div></Slogan>
+         <Title>사용자 계정들 중 하나와 함께 GateIn 3.2을 시도하십시오.</Title>
+         <Slogan>최고의 eXo 및 JBoss Portal<div>GateIn 3.2</div></Slogan>
          <Username>사용자이름:</Username>
          <Password>비밀번호:</Password>
       </Label>
