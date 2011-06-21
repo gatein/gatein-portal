@@ -1,12 +1,14 @@
 <?xml version="1.0"?>
 <?rename tofile="portal.war"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.exoplatform.portal</groupId>
     <artifactId>exo.portal.parent</artifactId>
-    <version>3.2.0-M02-SNAPSHOT</version>
+    <version>3.2.0-M01-SNAPSHOT</version>
   </parent>
   <artifactId>exo.portal.packaging.jetty.pkg</artifactId>
   <packaging>pom</packaging>
@@ -833,11 +835,16 @@
               <target>
 
                 <!-- Copy the dependencies -->
-                <dependencyfilesets />
-                <xslt basedir="${project.basedir}" destdir="${project.build.directory}" includes="pom.xml" extension=".xml" style="${project.basedir}/transform.xsl">
-                  <param name="lib.dir" expression="${project.build.directory}/jetty/lib" />
-                  <param name="webapps.dir" expression="${project.build.directory}/jetty/webapps" />
-                  <mapper type="glob" from="pom.xml" to="copy-dependencies.xml" />
+                <dependencyfilesets/>
+                <xslt
+                    basedir="${project.basedir}"
+                    destdir="${project.build.directory}"
+                    includes="pom.xml"
+                    extension=".xml"
+                    style="${project.basedir}/transform.xsl">
+                  <param name="lib.dir" expression="${project.build.directory}/jetty/lib"/>
+                  <param name="webapps.dir" expression="${project.build.directory}/jetty/webapps"/>
+                  <mapper type="glob" from="pom.xml" to="copy-dependencies.xml"/>
                 </xslt>
                 <ant antfile="${project.build.directory}/copy-dependencies.xml" inheritRefs="true">
                   <target name="copy-dependencies" />
@@ -846,24 +853,24 @@
                 <!-- Copy jetty -->
                 <copy todir="${project.build.directory}/jetty">
                   <fileset dir="${jetty.dir}">
-                    <exclude name="webapps/**" />
-                    <exclude name="contexts/**" />
+                    <exclude name="webapps/**"/>
+                    <exclude name="contexts/**"/>
                   </fileset>
                 </copy>
 
                 <!-- Copy configuration -->
                 <copy todir="${project.build.directory}/jetty" overwrite="true">
-                  <fileset dir="${project.basedir}/src/main/resources/jetty" />
+                  <fileset dir="${project.basedir}/src/main/resources/jetty"/>
                 </copy>
 
                 <!-- Copy configuration -->
                 <copy tofile="${project.build.directory}/jetty/gatein/conf/configuration.properties">
-                  <fileset dir="${project.basedir}/../../../component/common/src/main/java/conf" includes="configuration-jetty.properties" />
+                  <fileset dir="${project.basedir}/../../../component/common/src/main/java/conf" includes="configuration-jetty.properties"/>
                 </copy>
 
                 <!-- File permissions -->
-                <chmod perm="0644" type="file" dir="${project.build.directory}/jetty/bin" excludes="**/*.sh" />
-                <chmod perm="0755" type="file" dir="${project.build.directory}/jetty/bin" includes="**/*.sh" />
+                <chmod perm="0644" type="file" dir="${project.build.directory}/jetty/bin" excludes="**/*.sh"/>
+                <chmod perm="0755" type="file" dir="${project.build.directory}/jetty/bin" includes="**/*.sh"/>
 
               </target>
             </configuration>
@@ -891,8 +898,8 @@
                 </goals>
                 <configuration>
                   <target>
-                    <zip destfile="${project.build.directory}/jetty.zip" basedir="${project.build.directory}/jetty" />
-                    <attachartifact file="${project.build.directory}/jetty.zip" classifier="bundle" type="zip" />
+                    <zip destfile="${project.build.directory}/jetty.zip" basedir="${project.build.directory}/jetty"/>
+                    <attachartifact file="${project.build.directory}/jetty.zip" classifier="bundle" type="zip"/>
                   </target>
                 </configuration>
               </execution>

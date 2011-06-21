@@ -21,21 +21,22 @@
   ~ 02110-1301 USA, or see the FSF site: http://www.fsf.org.
   -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
    <modelVersion>4.0.0</modelVersion>
 
    <name>GateIn WSRP Integration</name>
 
    <groupId>org.gatein.integration</groupId>
    <artifactId>gatein-wsrp-integration-parent</artifactId>
-   <version>3.2.0-M02-SNAPSHOT</version>
+   <version>3.2.0-M01-SNAPSHOT</version>
 
    <packaging>pom</packaging>
 
    <parent>
       <groupId>org.exoplatform.portal</groupId>
       <artifactId>exo.portal.parent</artifactId>
-      <version>3.2.0-M02-SNAPSHOT</version>
+      <version>3.2.0-M01-SNAPSHOT</version>
    </parent>
 
    <description>GateIn WSRP Integration extension parent</description>
@@ -56,15 +57,15 @@
       </profile>
       <profile>
          <id>pkg-tomcat</id>
-         <modules />
+         <modules/>
       </profile>
       <profile>
          <id>pkg-tomcat7</id>
-         <modules />
+         <modules/>
       </profile>
       <profile>
          <id>pkg-jetty</id>
-         <modules />
+         <modules/>
       </profile>
       <profile>
          <id>pkg-jbossas</id>
