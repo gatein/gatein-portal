@@ -1432,7 +1432,7 @@
 <!--  ############################################################################-->
    <UIPortalToolPanel>
       <label>
-         <copyrightText><![CDATA[Copyright &copy; 2010. All rights Reserved,]]></copyrightText>
+         <copyrightText><![CDATA[Copyright &copy; 2011. All rights reserved,]]></copyrightText>
          <companyTitleText> eXo Platform SAS and Red Hat, Inc..</companyTitleText>
       </label>
    </UIPortalToolPanel>
