@@ -883,5 +883,19 @@
         <module>tc7</module>
       </modules>
     </profile>
+    <profile>
+      <id>pkg-all</id>
+      <modules>
+        <module>tc6</module>
+        <module>tc7</module>
+      </modules>
+    </profile>
+    <profile>
+      <id>release</id>
+      <modules>
+        <module>tc6</module>
+        <module>tc7</module>
+      </modules>
+    </profile>
   </profiles>
 </project>
