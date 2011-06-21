@@ -1,12 +1,14 @@
 <?xml version="1.0"?>
 <?rename tofile="portal.war"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.exoplatform.portal</groupId>
     <artifactId>exo.portal.parent</artifactId>
-    <version>3.2.0-M01</version>
+    <version>3.2.0-M01-SNAPSHOT</version>
   </parent>
   <artifactId>exo.portal.packaging.tomcat.pkg</artifactId>
   <packaging>pom</packaging>
@@ -788,7 +790,7 @@
       <?rename integration.war?>
       <groupId>org.exoplatform.portal</groupId>
       <artifactId>exo.portal.packaging.tomcat.integration</artifactId>
-      <version>3.2.0-M01</version>
+      <version>3.2.0-M01-SNAPSHOT</version>
       <type>war</type>
     </dependency>
 
@@ -835,11 +837,16 @@
             <configuration>
               <target>
                 <!-- Copy the dependencies -->
-                <dependencyfilesets />
-                <xslt basedir="${project.basedir}" destdir="${project.build.directory}" includes="pom.xml" extension=".xml" style="${project.basedir}/transform.xsl">
-                  <param name="lib.dir" expression="${project.build.directory}/tomcat/lib" />
-                  <param name="webapps.dir" expression="${project.build.directory}/tomcat/webapps" />
-                  <mapper type="glob" from="pom.xml" to="copy-dependencies.xml" />
+                <dependencyfilesets/>
+                <xslt
+                    basedir="${project.basedir}"
+                    destdir="${project.build.directory}"
+                    includes="pom.xml"
+                    extension=".xml"
+                    style="${project.basedir}/transform.xsl">
+                  <param name="lib.dir" expression="${project.build.directory}/tomcat/lib"/>
+                  <param name="webapps.dir" expression="${project.build.directory}/tomcat/webapps"/>
+                  <mapper type="glob" from="pom.xml" to="copy-dependencies.xml"/>
                 </xslt>
                 <ant antfile="${project.build.directory}/copy-dependencies.xml" inheritRefs="true">
                   <target name="copy-dependencies" />
@@ -847,12 +854,12 @@
 
                 <!-- Copy configuration -->
                 <copy todir="${project.build.directory}/tomcat">
-                  <fileset dir="${project.basedir}/src/main/resources/tomcat" />
+                  <fileset dir="${project.basedir}/src/main/resources/tomcat"/>
                 </copy>
 
                 <!-- Copy configuration -->
                 <copy tofile="${project.build.directory}/tomcat/gatein/conf/configuration.properties">
-                  <fileset dir="${project.basedir}/../../../component/common/src/main/java/conf" includes="configuration-tomcat.properties" />
+                  <fileset dir="${project.basedir}/../../../component/common/src/main/java/conf" includes="configuration-tomcat.properties"/>
                 </copy>
 
               </target>
