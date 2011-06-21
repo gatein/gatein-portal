@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.exoplatform.portal</groupId>
     <artifactId>exo.portal.parent</artifactId>
-    <version>3.2.0-M01</version>
+    <version>3.2.0-M02-SNAPSHOT</version>
   </parent>
   <artifactId>exo.portal.packaging.tomcat.pkg</artifactId>
   <packaging>pom</packaging>
@@ -788,7 +788,7 @@
       <?rename integration.war?>
       <groupId>org.exoplatform.portal</groupId>
       <artifactId>exo.portal.packaging.tomcat.integration</artifactId>
-      <version>3.2.0-M01</version>
+      <version>3.2.0-M02-SNAPSHOT</version>
       <type>war</type>
     </dependency>
 
