@@ -1,14 +1,12 @@
 <?xml version="1.0"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
    <modelVersion>4.0.0</modelVersion>
 
    <parent>
       <groupId>org.exoplatform.portal</groupId>
       <artifactId>exo.portal.packaging.jboss6</artifactId>
-      <version>3.2.0-M01-SNAPSHOT</version>
+      <version>3.2.0-M01</version>
    </parent>
 
    <artifactId>exo.portal.packaging.jboss6.pkg</artifactId>
@@ -832,19 +830,19 @@
          <groupId>org.gatein.integration</groupId>
          <artifactId>extension-ear-as6</artifactId>
          <type>ear</type>
-         <version>${project.version}</version>
+         <version>3.2.0-M01</version>
       </dependency>
 
       <!-- War files -->
       <dependency>
-         <?expand ?>
+         <?expand?>
          <?move gatein.ear/01eXoResources.war?>
          <groupId>org.exoplatform.portal</groupId>
          <artifactId>exo.portal.web.eXoResources</artifactId>
          <type>war</type>
       </dependency>
       <dependency>
-         <?expand ?>
+         <?expand?>
          <?move gatein.ear/02portal.war?>
          <groupId>org.exoplatform.portal</groupId>
          <artifactId>exo.portal.web.portal</artifactId>
@@ -970,9 +968,9 @@ You can also use -Pdownload to automatically provide JBoss AS instance.
                   <configuration>
                      <target>
                         <ant antfile="${project.basedir}/package.xml" inheritRefs="true">
-                           <target name="package"/>
-                           <property name="maven.project.basedir" value="${project.basedir}"/>
-                           <property name="maven.project.build.directory" value="${project.build.directory}"/>
+                           <target name="package" />
+                           <property name="maven.project.basedir" value="${project.basedir}" />
+                           <property name="maven.project.build.directory" value="${project.build.directory}" />
                         </ant>
                      </target>
                   </configuration>
@@ -1110,7 +1108,7 @@ You can also use -Pdownload to automatically provide JBoss AS instance.
                         </goals>
                         <configuration>
                            <target>
-                              <available property="jbossas.dir.exists" type="dir" file="${jbossas.dir}"/>
+                              <available property="jbossas.dir.exists" type="dir" file="${jbossas.dir}" />
 
                               <fail if="jbossas.dir.exists">"
 Destination JBossAS directory exists already:
@@ -1120,27 +1118,25 @@ Either rename it, delete it, or deactivate -Pdownload profile.
 "
                               </fail>
 
-                              <property name="jbossas.zip"
-                                        value="${jbossas.path}/jboss-as-distribution-${jbossas.dist.version}.zip"/>
+                              <property name="jbossas.zip" value="${jbossas.path}/jboss-as-distribution-${jbossas.dist.version}.zip" />
 
                               <!-- Autocreate servers.dir if necessary -->
-                              <mkdir dir="${jbossas.path}"/>
+                              <mkdir dir="${jbossas.path}" />
 
                               <!-- Download JBossAS unless already downloaded -->
                               <ant antfile="${project.basedir}/download-jboss.xml">
-                                 <target name="download-jboss"/>
-                                 <property name="url"
-                                           value="http://sourceforge.net/projects/jboss/files/JBoss/JBoss-${jbossas.version}/jboss-as-distribution-${jbossas.dist.version}.zip"/>
-                                 <property name="dest" value="${jbossas.zip}"/>
+                                 <target name="download-jboss" />
+                                 <property name="url" value="http://sourceforge.net/projects/jboss/files/JBoss/JBoss-${jbossas.version}/jboss-as-distribution-${jbossas.dist.version}.zip" />
+                                 <property name="dest" value="${jbossas.zip}" />
                               </ant>
 
                               <!-- Extract downloaded JBossAS to servers dir -->
-                              <unzip src="${jbossas.zip}" dest="${jbossas.path}" overwrite="false"/>
+                              <unzip src="${jbossas.zip}" dest="${jbossas.path}" overwrite="false" />
 
                               <ant antfile="${project.basedir}/package.xml" inheritRefs="true">
-                                 <target name="package"/>
-                                 <property name="maven.project.basedir" value="${project.basedir}"/>
-                                 <property name="maven.project.build.directory" value="${project.build.directory}"/>
+                                 <target name="package" />
+                                 <property name="maven.project.basedir" value="${project.basedir}" />
+                                 <property name="maven.project.build.directory" value="${project.build.directory}" />
                               </ant>
                            </target>
                         </configuration>
@@ -1168,10 +1164,8 @@ Either rename it, delete it, or deactivate -Pdownload profile.
                         </goals>
                         <configuration>
                            <target>
-                              <zip destfile="${project.build.directory}/GateIn-${project.version}-jbossas6.zip"
-                                   basedir="${jbossas.target.dir}"/>
-                              <attachartifact file="${project.build.directory}/GateIn-${project.version}-jbossas6.zip"
-                                              classifier="bundle" type="zip"/>
+                              <zip destfile="${project.build.directory}/GateIn-${project.version}-jbossas6.zip" basedir="${jbossas.target.dir}" />
+                              <attachartifact file="${project.build.directory}/GateIn-${project.version}-jbossas6.zip" classifier="bundle" type="zip" />
                            </target>
                         </configuration>
                      </execution>

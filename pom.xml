@@ -19,8 +19,7 @@
 
 -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
    <modelVersion>4.0.0</modelVersion>
 
@@ -32,7 +31,7 @@
 
    <groupId>org.exoplatform.portal</groupId>
    <artifactId>exo.portal.parent</artifactId>
-   <version>3.2.0-M01-SNAPSHOT</version>
+   <version>3.2.0-M01</version>
    <packaging>pom</packaging>
 
    <name>GateIn - Portal</name>
@@ -63,9 +62,9 @@
    </properties>
 
    <scm>
-      <connection>scm:svn:http://anonsvn.jboss.org/repos/gatein/portal/trunk</connection>
-      <developerConnection>scm:svn:https://svn.jboss.org/repos/gatein/portal/trunk</developerConnection>
-      <url>http://fisheye.jboss.org/browse/gatein/portal/trunk</url>
+      <connection>scm:svn:http://anonsvn.jboss.org/repos/gatein/portal/tags/3.2.0-M01</connection>
+      <developerConnection>scm:svn:https://svn.jboss.org/repos/gatein/portal/tags/3.2.0-M01</developerConnection>
+      <url>http://fisheye.jboss.org/browse/gatein/portal/tags/3.2.0-M01</url>
    </scm>
 
    <modules>
@@ -377,145 +376,145 @@
          <dependency>
             <groupId>org.exoplatform.portal</groupId>
             <artifactId>exo.portal.component.common</artifactId>
-            <version>3.2.0-M01-SNAPSHOT</version>
+            <version>3.2.0-M01</version>
          </dependency>
          <dependency>
             <groupId>org.exoplatform.portal</groupId>
             <artifactId>exo.portal.component.web</artifactId>
-            <version>3.2.0-M01-SNAPSHOT</version>
+            <version>3.2.0-M01</version>
          </dependency>
          <dependency>
             <groupId>org.exoplatform.portal</groupId>
             <artifactId>exo.portal.component.web.controller</artifactId>
-            <version>3.2.0-M01-SNAPSHOT</version>
+            <version>3.2.0-M01</version>
          </dependency>
          <dependency>
             <groupId>org.exoplatform.portal</groupId>
             <artifactId>exo.portal.component.web.security</artifactId>
-            <version>3.2.0-M01-SNAPSHOT</version>
+            <version>3.2.0-M01</version>
          </dependency>
          <dependency>
             <groupId>org.exoplatform.portal</groupId>
             <artifactId>exo.portal.component.web.server</artifactId>
-            <version>3.2.0-M01-SNAPSHOT</version>
+            <version>3.2.0-M01</version>
          </dependency>
          <dependency>
             <groupId>org.exoplatform.portal</groupId>
             <artifactId>exo.portal.component.web.api</artifactId>
-            <version>3.2.0-M01-SNAPSHOT</version>
+            <version>3.2.0-M01</version>
          </dependency>
          <dependency>
             <groupId>org.exoplatform.portal</groupId>
             <artifactId>exo.portal.component.web.resources</artifactId>
-            <version>3.2.0-M01-SNAPSHOT</version>
+            <version>3.2.0-M01</version>
          </dependency>
          <dependency>
             <groupId>org.exoplatform.portal</groupId>
             <artifactId>exo.portal.component.portal</artifactId>
-            <version>3.2.0-M01-SNAPSHOT</version>
+            <version>3.2.0-M01</version>
          </dependency>
          <dependency>
             <groupId>org.exoplatform.portal</groupId>
             <artifactId>exo.portal.component.portal</artifactId>
-            <version>3.2.0-M01-SNAPSHOT</version>
+            <version>3.2.0-M01</version>
             <type>test-jar</type>
          </dependency>
          <dependency>
             <groupId>org.exoplatform.portal</groupId>
             <artifactId>exo.portal.component.pc</artifactId>
-            <version>3.2.0-M01-SNAPSHOT</version>
+            <version>3.2.0-M01</version>
          </dependency>
          <dependency>
             <groupId>org.exoplatform.portal</groupId>
             <artifactId>exo.portal.component.identity</artifactId>
-            <version>3.2.0-M01-SNAPSHOT</version>
+            <version>3.2.0-M01</version>
          </dependency>
          <dependency>
             <groupId>org.exoplatform.portal</groupId>
             <artifactId>exo.portal.component.resources</artifactId>
-            <version>3.2.0-M01-SNAPSHOT</version>
+            <version>3.2.0-M01</version>
          </dependency>
          <dependency>
             <groupId>org.exoplatform.portal</groupId>
             <artifactId>exo.portal.component.application-registry</artifactId>
-            <version>3.2.0-M01-SNAPSHOT</version>
+            <version>3.2.0-M01</version>
          </dependency>
          <dependency>
             <groupId>org.exoplatform.portal</groupId>
             <artifactId>exo.portal.component.scripting</artifactId>
-            <version>3.2.0-M01-SNAPSHOT</version>
+            <version>3.2.0-M01</version>
          </dependency>
          <dependency>
             <groupId>org.exoplatform.portal</groupId>
             <artifactId>exo.portal.component.management</artifactId>
-            <version>3.2.0-M01-SNAPSHOT</version>
+            <version>3.2.0-M01</version>
          </dependency>
          <dependency>
             <groupId>org.exoplatform.portal</groupId>
             <artifactId>exo.portal.webui.framework</artifactId>
-            <version>3.2.0-M01-SNAPSHOT</version>
+            <version>3.2.0-M01</version>
          </dependency>
          <dependency>
             <groupId>org.exoplatform.portal</groupId>
             <artifactId>exo.portal.webui.portlet</artifactId>
-            <version>3.2.0-M01-SNAPSHOT</version>
+            <version>3.2.0-M01</version>
          </dependency>
          <dependency>
             <groupId>org.exoplatform.portal</groupId>
             <artifactId>exo.portal.webui.portal</artifactId>
-            <version>3.2.0-M01-SNAPSHOT</version>
+            <version>3.2.0-M01</version>
          </dependency>
          <dependency>
             <groupId>org.exoplatform.portal</groupId>
             <artifactId>exo.portal.webui.eXo</artifactId>
-            <version>3.2.0-M01-SNAPSHOT</version>
+            <version>3.2.0-M01</version>
          </dependency>
          <dependency>
             <groupId>org.exoplatform.portal</groupId>
             <artifactId>exo.portal.webui.core</artifactId>
-            <version>3.2.0-M01-SNAPSHOT</version>
+            <version>3.2.0-M01</version>
          </dependency>
          <dependency>
             <groupId>org.exoplatform.portal</groupId>
             <artifactId>exo.portal.webui.dashboard</artifactId>
-            <version>3.2.0-M01-SNAPSHOT</version>
+            <version>3.2.0-M01</version>
          </dependency>
          <dependency>
             <groupId>org.exoplatform.portal</groupId>
             <artifactId>exo.portal.gadgets-core</artifactId>
-            <version>3.2.0-M01-SNAPSHOT</version>
+            <version>3.2.0-M01</version>
          </dependency>
          <dependency>
             <groupId>org.exoplatform.portal</groupId>
             <artifactId>exo.portal.component.test.core</artifactId>
-            <version>3.2.0-M01-SNAPSHOT</version>
+            <version>3.2.0-M01</version>
          </dependency>
          <dependency>
             <groupId>org.exoplatform.portal</groupId>
             <artifactId>exo.portal.component.test.core</artifactId>
-            <version>3.2.0-M01-SNAPSHOT</version>
+            <version>3.2.0-M01</version>
             <type>test-jar</type>
          </dependency>
          <dependency>
             <groupId>org.exoplatform.portal</groupId>
             <artifactId>exo.portal.component.test.jcr</artifactId>
-            <version>3.2.0-M01-SNAPSHOT</version>
+            <version>3.2.0-M01</version>
          </dependency>
          <dependency>
             <groupId>org.exoplatform.portal</groupId>
             <artifactId>exo.portal.component.test.jcr</artifactId>
-            <version>3.2.0-M01-SNAPSHOT</version>
+            <version>3.2.0-M01</version>
             <type>test-jar</type>
          </dependency>
          <dependency>
             <groupId>org.exoplatform.portal</groupId>
             <artifactId>exo.portal.component.test.organization</artifactId>
-            <version>3.2.0-M01-SNAPSHOT</version>
+            <version>3.2.0-M01</version>
          </dependency>
          <dependency>
             <groupId>org.exoplatform.portal</groupId>
             <artifactId>exo.portal.component.test.organization</artifactId>
-            <version>3.2.0-M01-SNAPSHOT</version>
+            <version>3.2.0-M01</version>
             <type>test-jar</type>
          </dependency>
          <dependency>
@@ -526,55 +525,55 @@
          <dependency>
             <groupId>org.exoplatform.portal</groupId>
             <artifactId>exo.portal.web.portal</artifactId>
-            <version>3.2.0-M01-SNAPSHOT</version>
+            <version>3.2.0-M01</version>
             <type>war</type>
          </dependency>
          <dependency>
             <groupId>org.exoplatform.portal</groupId>
             <artifactId>exo.portal.gadgets-server</artifactId>
-            <version>3.2.0-M01-SNAPSHOT</version>
+            <version>3.2.0-M01</version>
             <type>war</type>
          </dependency>
          <dependency>
             <groupId>org.exoplatform.portal</groupId>
             <artifactId>exo.portal.eXoGadgets</artifactId>
-            <version>3.2.0-M01-SNAPSHOT</version>
+            <version>3.2.0-M01</version>
             <type>war</type>
          </dependency>
          <dependency>
             <groupId>org.exoplatform.portal</groupId>
             <artifactId>exo.portal.portlet.web</artifactId>
-            <version>3.2.0-M01-SNAPSHOT</version>
+            <version>3.2.0-M01</version>
             <type>war</type>
          </dependency>
          <dependency>
             <groupId>org.exoplatform.portal</groupId>
             <artifactId>exo.portal.web.rest</artifactId>
-            <version>3.2.0-M01-SNAPSHOT</version>
+            <version>3.2.0-M01</version>
             <type>war</type>
          </dependency>
          <dependency>
             <groupId>org.exoplatform.portal</groupId>
             <artifactId>exo.portal.portlet.exoadmin</artifactId>
-            <version>3.2.0-M01-SNAPSHOT</version>
+            <version>3.2.0-M01</version>
             <type>war</type>
          </dependency>
          <dependency>
             <groupId>org.exoplatform.portal</groupId>
             <artifactId>exo.portal.web.eXoResources</artifactId>
-            <version>3.2.0-M01-SNAPSHOT</version>
+            <version>3.2.0-M01</version>
             <type>war</type>
          </dependency>
          <dependency>
             <groupId>org.gatein.portal.examples.skins</groupId>
             <artifactId>gatein-sample-skin</artifactId>
-            <version>3.2.0-M01-SNAPSHOT</version>
+            <version>3.2.0-M01</version>
             <type>war</type>
          </dependency>
          <dependency>
             <groupId>org.exoplatform.portal</groupId>
             <artifactId>exo.portal.portlet.dashboard</artifactId>
-            <version>3.2.0-M01-SNAPSHOT</version>
+            <version>3.2.0-M01</version>
             <type>war</type>
          </dependency>
 
@@ -842,12 +841,11 @@
                   <phase>compile</phase>
                   <configuration>
                      <tasks>
-                        <copy failonerror="false"
-                              todir="${project.build.directory}/${project.build.finalName}/WEB-INF/classes">
+                        <copy failonerror="false" todir="${project.build.directory}/${project.build.finalName}/WEB-INF/classes">
                            <fileset dir="${basedir}/src/main/webapp/WEB-INF/classes">
-                              <include name="**/*_en.properties"/>
+                              <include name="**/*_en.properties" />
                            </fileset>
-                           <globmapper from="*_en.properties" to="*.properties"/>
+                           <globmapper from="*_en.properties" to="*.properties" />
                         </copy>
                      </tasks>
                   </configuration>
@@ -902,7 +900,7 @@
                         </property>
                         <property>
                            <name>gatein.test.datasource.password</name>
-                           <value/>
+                           <value />
                         </property>
                      </systemProperties>
                   </configuration>
