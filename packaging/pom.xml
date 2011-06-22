@@ -47,7 +47,7 @@
                 <module>jboss-as6</module>
           </modules>
         </profile>
-        <!--<profile>
+        <profile>
             <id>release</id>
             <modules>
                 <module>tomcat</module>
@@ -55,7 +55,7 @@
                 <module>jboss-as5</module>
                 <module>jboss-as6</module>
           </modules>
-        </profile>-->
+        </profile>
         <profile>
             <id>pkg-tomcat</id>
             <modules>
