@@ -5,7 +5,7 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.exoplatform.portal</groupId>
-    <artifactId>exo.portal.parent</artifactId>
+    <artifactId>exo.portal.packaging.tomcat</artifactId>
     <version>3.2.0-M02-SNAPSHOT</version>
   </parent>
   <artifactId>exo.portal.packaging.tomcat.pkg</artifactId>
@@ -883,12 +883,12 @@
         <module>tc7</module>
       </modules>
     </profile>
-    <!--<profile>
+    <profile>
       <id>release</id>
       <modules>
         <module>tc6</module>
         <module>tc7</module>
       </modules>
-    </profile>-->
+    </profile>
   </profiles>
 </project>
