@@ -788,7 +788,7 @@
       <?rename integration.war?>
       <groupId>org.exoplatform.portal</groupId>
       <artifactId>exo.portal.packaging.tomcat.integration</artifactId>
-      <version>3.2.0-M02-SNAPSHOT</version>
+      <version>3.2.0-M01-SNAPSHOT</version>
       <type>war</type>
     </dependency>
 
@@ -847,12 +847,12 @@
 
                 <!-- Copy configuration -->
                 <copy todir="${project.build.directory}/tomcat">
-                  <fileset dir="${project.basedir}/src/main/resources/tomcat" />
+                  <fileset dir="${project.basedir}/src/main/resources/tomcat"/>
                 </copy>
 
                 <!-- Copy configuration -->
                 <copy tofile="${project.build.directory}/tomcat/gatein/conf/configuration.properties">
-                  <fileset dir="${project.basedir}/../../../component/common/src/main/java/conf" includes="configuration-tomcat.properties" />
+                  <fileset dir="${project.basedir}/../../../component/common/src/main/java/conf" includes="configuration-tomcat.properties"/>
                 </copy>
 
               </target>
@@ -883,12 +883,12 @@
         <module>tc7</module>
       </modules>
     </profile>
-    <profile>
+    <!--<profile>
       <id>release</id>
       <modules>
         <module>tc6</module>
         <module>tc7</module>
       </modules>
-    </profile>
+    </profile>-->
   </profiles>
 </project>
