@@ -18,6 +18,12 @@
   ~ 02110-1301 USA, or see the FSF site: http://www.fsf.org.
   -->
 
+<!--
+  DISCLAIMER :
+  - THIS FILE IS NOT YET FINAL AND IS SUBJECT TO CHANGES
+  - IT WILL BE CONSIDERED AS AN API (I.E FINAL) WHEN GATEIN 3.2 WILL BE RELEASED
+ -->
+
 <xs:schema
    targetNamespace="http://www.gatein.org/xml/ns/gatein_objects_1_2"
    xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_2"
@@ -160,8 +166,10 @@
 
    <xs:complexType name="portletApplicationType">
       <xs:sequence>
-         <xs:element name="portlet" type="portletType" minOccurs="1" maxOccurs="1"/>
-         <xs:element name="theme" type="xs:string" minOccurs="0" maxOccurs="1"/>
+       <xs:choice>
+          <xs:element name="portlet" type="portletType"/>
+          <xs:element name="wsrp" type="xs:string"/>
+       </xs:choice>
          <xs:element name="title" type="xs:string" minOccurs="0" maxOccurs="1"/>
          <xs:element name="access-permissions" type="xs:string" minOccurs="1" maxOccurs="1"/>
          <xs:element name="show-info-bar" type="xs:boolean" minOccurs="1" maxOccurs="1"/>
