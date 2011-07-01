@@ -97,7 +97,7 @@ public class TestSavedPOM extends AbstractPortalTest
       //
       Collection<? extends Navigation> childrenNavigations = defaultNav.getChildren();
       assertNotNull(childrenNavigations);
-      assertEquals(2, childrenNavigations.size());
+      assertEquals(5, childrenNavigations.size());
       Iterator<? extends Navigation> i = childrenNavigations.iterator();
 
       //
@@ -109,7 +109,6 @@ public class TestSavedPOM extends AbstractPortalTest
       Described nodeDescribed = nodeNavigation.adapt(Described.class);
       assertEquals("node_label", nodeDescribed.getName());
       Attributes nodeAttrs = nodeNavigation.getAttributes();
-      assertEquals("node_uri", nodeAttrs.getString("uri"));
       assertEquals("node_icon", nodeAttrs.getString("icon"));
 
       //

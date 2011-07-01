@@ -19,18 +19,20 @@
 
 package org.exoplatform.toolbar.webui.component;
 
+import java.util.List;
+
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserPortalConfigService;
-import org.exoplatform.portal.config.model.PageNavigation;
-import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
-import org.exoplatform.portal.webui.navigation.PageNavigationUtils;
+import org.exoplatform.portal.mop.SiteKey;
+import org.exoplatform.portal.mop.Visibility;
+import org.exoplatform.portal.mop.user.UserNavigation;
+import org.exoplatform.portal.mop.user.UserNode;
+import org.exoplatform.portal.mop.user.UserNodeFilterConfig;
+import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
-import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
-
-import java.util.List;
 
 /**
  * Created by The eXo Platform SAS
@@ -38,14 +40,16 @@ import java.util.List;
  *          thanhtungty@gmail.com
  * May 26, 2009  
  */
-@ComponentConfig(lifecycle = UIApplicationLifecycle.class, template = "app:/groovy/admintoolbar/webui/component/UIUserToolBarSitePortlet.gtmpl"
-
-)
-public class UIUserToolBarSitePortlet extends UIPortletApplication
+@ComponentConfig(lifecycle = UIApplicationLifecycle.class, template = "app:/groovy/admintoolbar/webui/component/UIUserToolBarSitePortlet.gtmpl")
+public class UIUserToolBarSitePortlet extends BasePartialUpdateToolbar
 {
 
    public UIUserToolBarSitePortlet() throws Exception
    {
+      UserNodeFilterConfig.Builder builder = UserNodeFilterConfig.builder();
+      builder.withAuthorizationCheck().withVisibility(Visibility.DISPLAYED, Visibility.TEMPORAL);
+      builder.withTemporalCheck();
+      toolbarFilterConfig = builder.build();
    }
 
    public List<String> getAllPortalNames() throws Exception
@@ -76,29 +80,30 @@ public class UIUserToolBarSitePortlet extends UIPortletApplication
    {
       String currentPortalURI = Util.getPortalRequestContext().getPortalURI();
       return currentPortalURI.substring(0, currentPortalURI.lastIndexOf(getCurrentPortal())) + portalName + "/";
-   }
+   } 
 
-   public PageNavigation getCurrentPortalNavigation() throws Exception
-   {
-      PageNavigation navi = getPageNavigation(PortalConfig.PORTAL_TYPE + "::" + getCurrentPortal());
-      String remoteUser = Util.getPortalRequestContext().getRemoteUser();
-      return PageNavigationUtils.filterNavigation(navi, remoteUser, false, true);
-   }
-
-   private PageNavigation getPageNavigation(String owner) throws Exception
-   {
-      //List<PageNavigation> allNavigations = Util.getUIPortal().getNavigations();
-      List<PageNavigation> allNavigations = Util.getUIPortalApplication().getUserPortalConfig().getNavigations();
-      for (PageNavigation nav : allNavigations)
+   @Override
+   protected UserNode getNodeFromResourceID(String resourceId) throws Exception
+   {      
+      UserNavigation currNav = getNavigation(SiteKey.portal(getCurrentPortal()));
+      if (currNav == null) return null;
+    
+      UserPortal userPortal = getUserPortal(); 
+      UserNode node = userPortal.resolvePath(currNav, toolbarFilterConfig, resourceId);
+      if (node != null && node.getURI().equals(resourceId))
       {
-         if (nav.getOwner().equals(owner))
-            return nav;
+         return node;
       }
       return null;
    }
 
-   public PageNode getSelectedPageNode() throws Exception
+   @Override
+   protected String getResourceIdFromNode(UserNode node, String navId) throws Exception
    {
-      return Util.getUIPortal().getSelectedNode();
+      if (node == null) 
+      {
+         throw new IllegalArgumentException("node can't be null");
+      }
+      return node.getURI();      
    }
 }

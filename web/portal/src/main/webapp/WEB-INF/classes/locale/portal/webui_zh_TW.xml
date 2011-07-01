@@ -719,7 +719,7 @@
          <done>完成</done>
       </action>
    </UIGroupSelector>
-   <UIPageSelector2>
+   <UIPageSelector>
       <header>
          <name>名稱</name>
          <id>頁面Id</id>
@@ -736,7 +736,7 @@
          <name>#{word.name}</name>
          <accessGroups>使用群組</accessGroups>
       </label>
-   </UIPageSelector2>
+   </UIPageSelector>
    <UIPageBrowser>
       <msg>
          <NoPermission>您無權使用這個頁面。</NoPermission>
@@ -915,7 +915,7 @@
          <label>
             <PageNodeSetting>頁面節點設定</PageNodeSetting>
             <Icon>#{word.icon}</Icon>
-            <UIPageSelector2>頁面選擇器</UIPageSelector2>
+            <UIPageSelector>頁面選擇器</UIPageSelector>
          </label>
       </tab>
    </UIPageNodeForm>

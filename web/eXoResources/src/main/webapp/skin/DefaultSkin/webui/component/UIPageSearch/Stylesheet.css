@@ -1,0 +1,85 @@
+/**
+ * Copyright (C) 2009 eXo Platform SAS.
+ * 
+ * This is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2.1 of
+ * the License, or (at your option) any later version.
+ * 
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this software; if not, write to the Free
+ * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ */
+
+.UIPageSearchForm {
+	height: 39px;
+	line-height: 39px;
+	padding-bottom: 2px;
+}
+
+.UIPageSearchForm .UISearchContainer {
+	height: 38px; line-height: 38px;
+}
+
+.UIPageSearchForm .UISearchContainer .QuickSet {
+	overflow: hidden;
+	width: 100%;
+	padding-top: 9px;
+}
+
+.UIPageSearchForm .UISearchContainer .QuickSet .SearchLabel {
+	float: left; /* orientation=lt */
+	float: right; /* orientation=rt */
+	font-weight: bold;
+	height: 20px;
+	line-height: 20px;
+	padding-left: 10px; /* orientation=lt */
+	padding-right: 10px; /* orientation=rt */
+}
+
+.UIPageSearchForm .UISearchContainer .QuickSet .SearchIcon {
+	margin-left: 10px; /* orientation=lt */
+	margin-right: 10px; /* orientation=rt */
+	width: 24px;	
+	height: 24px;
+	background: url('/eXoResources/skin/DefaultSkin/skinIcons/24x24/icons/QuickSearch.gif') no-repeat;		 /* orientation=lt */
+	background: url('/eXoResources/skin/DefaultSkin/skinIcons/24x24/icons/QuickSearch-rt.gif') no-repeat; /* orientation=rt */
+	float: left; /* orientation=lt */
+	float: right; /* orientation=rt */
+}
+
+.UIPageSearchForm .UISearchContainer .QuickSet a:hover{
+	color: blue;
+}
+
+.UIPageSearchForm .UISearchContainer .QuickSet .UIForm {
+	background-color: transparent;
+	border: none;
+}
+
+.UIPageSearchForm .UISearchContainer .QuickSet select {
+	float: left;	 /* orientation=lt */
+	float: right; /* orientation=rt */
+	width: 115px; 
+	padding: 1px;
+	border: solid 1px gray;
+	font-size: 12px;
+	margin: 0 5px 0 10px;
+}
+
+.UIPageSearchForm .UISearchContainer .QuickSet input {
+	float: left; /* orientation=lt */
+	float: right; /* orientation=rt */
+	margin: 0px 5px 0px 10px; /* orientation=lt */ 
+	margin: 0px 10px 0px 5px; /* orientation=rt */
+	padding-left: 4px; /* orientation=lt */
+	padding-right: 4px; /* orientation=rt */
+	border: 1px solid gray;
+	width: 160px; height: 16px;
+}

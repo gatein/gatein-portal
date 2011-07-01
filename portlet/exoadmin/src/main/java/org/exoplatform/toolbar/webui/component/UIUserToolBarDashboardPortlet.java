@@ -19,26 +19,31 @@
 
 package org.exoplatform.toolbar.webui.component;
 
+import java.util.Collection;
+
+import javax.portlet.EventRequest;
+
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Page;
-import org.exoplatform.portal.config.model.PageNavigation;
-import org.exoplatform.portal.config.model.PageNode;
-import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.mop.SiteKey;
+import org.exoplatform.portal.mop.Visibility;
+import org.exoplatform.portal.mop.navigation.Scope;
+import org.exoplatform.portal.mop.user.UserNavigation;
+import org.exoplatform.portal.mop.user.UserNode;
+import org.exoplatform.portal.mop.user.UserNodeFilterConfig;
+import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIComponent;
-import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
-
-import java.util.List;
-import javax.portlet.EventRequest;
 
 /**
  * Created by The eXo Platform SAS
@@ -48,42 +53,54 @@ import javax.portlet.EventRequest;
  */
 @ComponentConfig(lifecycle = UIApplicationLifecycle.class, template = "app:/groovy/admintoolbar/webui/component/UIUserToolBarDashboardPortlet.gtmpl",
    events = {@EventConfig(name = "AddDefaultDashboard", listeners = UIUserToolBarDashboardPortlet.AddDashboardActionListener.class),
-      @EventConfig(listeners = UIUserToolBarDashboardPortlet.UserPageNodeDeletedActionListener.class)})
-public class UIUserToolBarDashboardPortlet extends UIPortletApplication
+      @EventConfig(listeners = UIUserToolBarDashboardPortlet.NavigationChangeActionListener.class)})
+public class UIUserToolBarDashboardPortlet extends BasePartialUpdateToolbar
 {
 
    public static String DEFAULT_TAB_NAME = "Tab_Default";
 
    public UIUserToolBarDashboardPortlet() throws Exception
    {
+      UserNodeFilterConfig.Builder builder = UserNodeFilterConfig.builder();
+      builder.withAuthorizationCheck().withVisibility(Visibility.DISPLAYED, Visibility.TEMPORAL);
+      builder.withTemporalCheck();
+      toolbarFilterConfig = builder.build();      
    }
 
-   public PageNavigation getCurrentUserNavigation() throws Exception
+   public UserNavigation getCurrentUserNavigation() throws Exception
    {
-      String remoteUser = Util.getPortalRequestContext().getRemoteUser();
-      return getPageNavigation(PortalConfig.USER_TYPE + "::" + remoteUser);
-   }
-
-   private PageNavigation getPageNavigation(String owner) throws Exception
+      WebuiRequestContext rcontext = WebuiRequestContext.getCurrentInstance();
+      return getNavigation(SiteKey.user(rcontext.getRemoteUser()));
+   }  
+   
+   @Override
+   protected String getResourceIdFromNode(UserNode node, String navId) throws Exception
    {
-      //List<PageNavigation> allNavigations = Util.getUIPortal().getNavigations();
-      List<PageNavigation> allNavigations = Util.getUIPortalApplication().getNavigations();
-      for (PageNavigation nav : allNavigations)
+      if (node == null) 
       {
-         if (nav.getOwner().equals(owner))
-            return nav;
+         throw new IllegalArgumentException("node can't be null");
+      }
+      return node.getURI(); 
+   }
+
+   @Override
+   protected UserNode getNodeFromResourceID(String resourceId) throws Exception
+   {
+      UserNavigation currNav = getCurrentUserNavigation();
+      if (currNav == null) return null;
+    
+      UserPortal userPortal = getUserPortal(); 
+      UserNode node = userPortal.resolvePath(currNav, toolbarFilterConfig, resourceId);
+      if (node != null && node.getURI().equals(resourceId))
+      {
+         return node;
       }
       return null;
    }
-
-   public PageNode getSelectedPageNode() throws Exception
+   
+   static public class NavigationChangeActionListener extends EventListener<UIUserToolBarDashboardPortlet>
    {
-      return Util.getUIPortal().getSelectedNode();
-   }
-
-   static public class UserPageNodeDeletedActionListener extends EventListener<UIUserToolBarDashboardPortlet>
-   {
-      private Log log = ExoLogger.getExoLogger(UserPageNodeDeletedActionListener.class);
+      private Log log = ExoLogger.getExoLogger(NavigationChangeActionListener.class);
 
       @Override
       public void execute(Event<UIUserToolBarDashboardPortlet> event) throws Exception
@@ -91,7 +108,7 @@ public class UIUserToolBarDashboardPortlet extends UIPortletApplication
          log.debug("PageNode : " + ((EventRequest)event.getRequestContext().getRequest()).getEvent().getValue() + " is deleted");
       }
    }
-
+   
    static public class AddDashboardActionListener extends EventListener<UIUserToolBarDashboardPortlet>
    {
 
@@ -104,29 +121,20 @@ public class UIUserToolBarDashboardPortlet extends UIPortletApplication
          UIUserToolBarDashboardPortlet toolBarPortlet = event.getSource();
          String nodeName = event.getRequestContext().getRequestParameter(UIComponent.OBJECTID);
 
-         PageNavigation cachedNavigation = toolBarPortlet.getCurrentUserNavigation();
-         
-         // Update navigation for prevent create first node which already existed
-         DataStorage dataStorage = toolBarPortlet.getApplicationComponent(DataStorage.class);         
-         PageNavigation userNavigation =
-            dataStorage.getPageNavigation(cachedNavigation.getOwnerType(), cachedNavigation.getOwnerId());
-         cachedNavigation.merge(userNavigation);
-
-         UserPortalConfigService configService = toolBarPortlet.getApplicationComponent(UserPortalConfigService.class);
-         if (cachedNavigation != null && configService != null && cachedNavigation.getNodes().size() < 1)
+         Collection<UserNode> nodes = toolBarPortlet.getNavigationNodes(toolBarPortlet.getCurrentUserNavigation());
+         if (nodes.size() < 1)
          {
-            createDashboard(nodeName, cachedNavigation, configService);
+            createDashboard(nodeName, toolBarPortlet);
          }
          else
          {
             PortalRequestContext prContext = Util.getPortalRequestContext();
             prContext.getResponse().sendRedirect(
-               prContext.getPortalURI() + cachedNavigation.getNodes().get(0).getName());
+               prContext.getPortalURI() + nodes.iterator().next().getURI());
          }
       }
 
-      private static void createDashboard(String _nodeName, PageNavigation _pageNavigation,
-         UserPortalConfigService _configService)
+      private static void createDashboard(String _nodeName, UIUserToolBarDashboardPortlet toolBarPortlet)
       {
          try
          {
@@ -136,23 +144,29 @@ public class UIUserToolBarDashboardPortlet extends UIPortletApplication
                logger.debug("Parsed nodeName is null, hence use Tab_0 as default name");
                _nodeName = DEFAULT_TAB_NAME;
             }
+
+            UserPortal userPortal = toolBarPortlet.getUserPortal();
+            UserNavigation userNav = toolBarPortlet.getCurrentUserNavigation();
+            if (userNav == null)
+            {
+               return;
+            }
+            SiteKey siteKey = userNav.getKey();
+
+            UserPortalConfigService _configService = toolBarPortlet.getApplicationComponent(UserPortalConfigService.class);
             Page page =
-               _configService.createPageTemplate(PAGE_TEMPLATE, _pageNavigation.getOwnerType(), _pageNavigation
-                  .getOwnerId());
+               _configService.createPageTemplate(PAGE_TEMPLATE, siteKey.getTypeName(), siteKey.getName());
             page.setTitle(_nodeName);
             page.setName(_nodeName);
+            toolBarPortlet.getApplicationComponent(DataStorage.class).create(page);
 
-            PageNode pageNode = new PageNode();
-            pageNode.setName(_nodeName);
-            pageNode.setLabel(_nodeName);
-            pageNode.setUri(_nodeName);
-            pageNode.setPageReference(page.getPageId());
+            UserNode rootNode = userPortal.getNode(userNav, Scope.CHILDREN, toolBarPortlet.toolbarFilterConfig, null);
+            UserNode tabNode = rootNode.addChild(_nodeName);
+            tabNode.setLabel(_nodeName);            
+            tabNode.setPageRef(page.getPageId());
 
-            _pageNavigation.addNode(pageNode);
-            _configService.create(page);
-            _configService.update(_pageNavigation);
-
-            prContext.getResponse().sendRedirect(prContext.getPortalURI() + _nodeName);
+            userPortal.saveNode(rootNode, null);
+            prContext.getResponse().sendRedirect(prContext.getPortalURI() + tabNode.getURI());
          }
          catch (Exception ex)
          {

@@ -26,6 +26,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.UndeclaredThrowableException;
+import java.util.Collections;
+import java.util.Set;
 
 /**
  * A class that contains utility method that make the caller not worry much about the unexpectable expected such as
@@ -110,6 +112,26 @@ public class Safe
       finally
       {
          IOTools.safeClose(is);
+      }
+   }
+
+   /**
+    * Wrap the set so that it is unmodifiable when it is not null, otherwise returns null.
+    *
+    * @todo it would be nice to avoid to rewrap unmodifiable set (not sure it is non proprietary possible)
+    * @param set the set to wrap
+    * @param <E> the set generic element type
+    * @return the unmodifiable set
+    */
+   public static <E> Set<E> unmodifiableSet(Set<E> set)
+   {
+      if (set == null)
+      {
+         return null;
+      }
+      else
+      {
+         return Collections.unmodifiableSet(set);
       }
    }
 

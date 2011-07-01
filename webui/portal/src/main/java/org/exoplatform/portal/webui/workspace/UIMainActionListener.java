@@ -26,8 +26,12 @@ import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.UserPortalConfig;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Page;
-import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.mop.navigation.Scope;
+import org.exoplatform.portal.mop.user.UserNavigation;
+import org.exoplatform.portal.mop.user.UserNode;
+import org.exoplatform.portal.mop.user.UserNodeFilterConfig;
+import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.webui.page.UIPage;
 import org.exoplatform.portal.webui.page.UIPageBody;
 import org.exoplatform.portal.webui.page.UIPageCreationWizard;
@@ -110,17 +114,38 @@ public class UIMainActionListener
    static public class PageCreationWizardActionListener extends EventListener<UIWorkingWorkspace>
    {
       public void execute(Event<UIWorkingWorkspace> event) throws Exception
-      {
+      {         
          UIPortalApplication uiApp = Util.getUIPortalApplication();
-         uiApp.setModeState(UIPortalApplication.APP_BLOCK_EDIT_MODE);
-         UIWorkingWorkspace uiWorkingWS = event.getSource();
+         UIPortal uiPortal = Util.getUIPortal();
+         UIWorkingWorkspace uiWorkingWS = uiApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
          
-         if (!hasPageCreationPermission())
+         UserNavigation currNav = uiPortal.getUserNavigation();
+         if (currNav == null)
+         {
+            uiApp.addMessage(new ApplicationMessage("UIPortalManagement.msg.navigation.deleted", null));
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingWS);
+            return;
+         }                 
+         
+         if (!currNav.isModifiable())
          {
             uiApp.addMessage(new ApplicationMessage("UIPortalManagement.msg.Invalid-CreatePage-Permission", null));
             return;
          }
+         
+         //Should renew the selectedNode. Don't reuse the cached selectedNode
+         UserNode selectedNode = Util.getUIPortal().getSelectedUserNode();
+         UserNodeFilterConfig filterConfig = createFilterConfig();         
+         UserNode resolvedNode = resolveNode(selectedNode, filterConfig);                 
+         if (resolvedNode == null)
+         {
+            WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
+            context.getUIApplication().addMessage(new ApplicationMessage("UIPortalManagement.msg.node.deleted", null));         
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingWS);
+            return;
+         }
 
+         uiApp.setModeState(UIPortalApplication.APP_BLOCK_EDIT_MODE);
          uiWorkingWS.setRenderedChild(UIEditInlineWorkspace.class);
 
          UIPortalComposer portalComposer = uiWorkingWS.findFirstComponentOfType(UIPortalComposer.class);
@@ -135,22 +160,32 @@ public class UIMainActionListener
          uiToolPanel.setShowMaskLayer(false);
          uiToolPanel.setWorkingComponent(UIPageCreationWizard.class, null);
          UIPageCreationWizard uiWizard = (UIPageCreationWizard)uiToolPanel.getUIComponent();
+         uiWizard.configure(resolvedNode);
+         
          UIWizardPageSetInfo uiPageSetInfo = uiWizard.getChild(UIWizardPageSetInfo.class);
          uiPageSetInfo.setShowPublicationDate(false);
-         event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingWS);
+         event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingWS);                                             
       }
-      
-      private boolean hasPageCreationPermission() throws Exception
-      {
-         UIPortal currentPortal = Util.getUIPortal();
-         UserACL userACL = Util.getUIPortalApplication().getApplicationComponent(UserACL.class);
-         PageNavigation selectedNavigation = currentPortal.getSelectedNavigation();
-         if (PortalConfig.PORTAL_TYPE.equals(selectedNavigation.getOwnerType()))
-         {
-            return userACL.hasEditPermissionOnPortal(currentPortal.getOwnerType(), currentPortal.getOwner(), currentPortal.getEditPermission());
+
+      private UserNode resolveNode(UserNode selectedNode, UserNodeFilterConfig filterConfig) throws Exception
+      {         
+         UserNavigation currNav = selectedNode.getNavigation();
+         UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
+         if (currNav.getKey().getTypeName().equals(PortalConfig.USER_TYPE))
+         {            
+            return userPortal.getNode(currNav, Scope.CHILDREN, filterConfig, null);
          }
-         
-         return userACL.hasEditPermission(selectedNavigation);
+         else
+         {
+            return userPortal.resolvePath(currNav, filterConfig, selectedNode.getURI());
+         }
+      }
+
+      private UserNodeFilterConfig createFilterConfig()
+      {
+         UserNodeFilterConfig.Builder filterConfigBuilder = UserNodeFilterConfig.builder();
+         filterConfigBuilder.withAuthorizationCheck();
+         return filterConfigBuilder.build();
       }
    }
 
@@ -188,9 +223,10 @@ public class UIMainActionListener
 
          UIPortal newPortal = uiWorkingWS.createUIComponent(UIPortal.class, null, null);
          PortalDataMapper.toUIPortal(newPortal, userConfig);
-         newPortal.setSelectedNode(uiPortal.getSelectedNode());
-         newPortal.setSelectedNavigation(uiPortal.getSelectedNavigation());
-         newPortal.setSelectedPath(uiPortal.getSelectedPath());
+//         newPortal.setSelectedNode(uiPortal.getSelectedNode());
+//         newPortal.setNavigation(uiPortal.getNavigation());
+//         newPortal.setSelectedPath(uiPortal.getSelectedPath());
+         newPortal.setNavPath(uiPortal.getNavPath());
          newPortal.refreshUIPage();
 
          UIEditInlineWorkspace uiEditWS = uiWorkingWS.getChild(UIEditInlineWorkspace.class);

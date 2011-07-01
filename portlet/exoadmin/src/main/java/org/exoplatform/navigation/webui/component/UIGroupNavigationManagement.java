@@ -20,18 +20,17 @@
 package org.exoplatform.navigation.webui.component;
 
 import org.exoplatform.commons.utils.ObjectPageList;
+import org.exoplatform.navigation.webui.TreeNode;
 import org.exoplatform.portal.application.PortalRequestContext;
-import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserACL;
-import org.exoplatform.portal.config.UserPortalConfigService;
-import org.exoplatform.portal.config.model.PageNavigation;
-import org.exoplatform.portal.config.model.PageNode;
+import org.exoplatform.portal.mop.SiteKey;
+import org.exoplatform.portal.mop.SiteType;
+import org.exoplatform.portal.mop.navigation.NavigationContext;
+import org.exoplatform.portal.mop.navigation.NavigationService;
+import org.exoplatform.portal.mop.user.UserNavigation;
+import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.webui.navigation.UIAddGroupNavigation;
-import org.exoplatform.portal.webui.navigation.UINavigationManagement;
-import org.exoplatform.portal.webui.navigation.UINavigationNodeSelector;
 import org.exoplatform.portal.webui.navigation.UIPageNavigationForm;
-import org.exoplatform.portal.webui.page.UIPageNodeForm;
-import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIMaskWorkspace;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
@@ -49,9 +48,8 @@ import org.exoplatform.webui.core.UIRepeater;
 import org.exoplatform.webui.core.UIVirtualList;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
-
+import org.exoplatform.webui.event.EventListener;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -76,13 +74,13 @@ import java.util.UUID;
       @EventConfig(listeners = UIPageNodeForm.SwitchPublicationDateActionListener.class, phase = Phase.DECODE),
       @EventConfig(listeners = UIPageNodeForm.SwitchVisibleActionListener.class, phase = Phase.DECODE),
       @EventConfig(listeners = UIPageNodeForm.ClearPageActionListener.class, phase = Phase.DECODE),
-      @EventConfig(listeners = UIPageNodeForm.CreatePageActionListener.class, phase = Phase.DECODE)})})
+      @EventConfig(listeners = UIPageNodeForm.CreatePageActionListener.class, phase = Phase.DECODE)}),
+   @ComponentConfig(type = UIPopupWindow.class, template = "system:/groovy/webui/core/UIPopupWindow.gtmpl",
+      events = @EventConfig(listeners = UIGroupNavigationManagement.CloseActionListener.class, name = "ClosePopup"))})
 public class UIGroupNavigationManagement extends UIContainer
 {
 
-   private List<PageNavigation> navigations;
-
-   private PageNavigation selectedNavigation;
+   private UINavigationManagement naviManager;
 
    public UIGroupNavigationManagement() throws Exception
    {
@@ -96,78 +94,20 @@ public class UIGroupNavigationManagement extends UIContainer
 
    public void loadNavigations() throws Exception
    {
-      UserPortalConfigService userPortalConfigService = getApplicationComponent(UserPortalConfigService.class);
-      navigations = userPortalConfigService.loadEditableNavigations();
-      UIVirtualList virtualList = getChild(UIVirtualList.class);
-      virtualList.dataBind(new ObjectPageList<PageNavigation>(navigations, navigations.size()));
-   }
+      UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
 
-   public List<PageNavigation> getNavigations()
-   {
-      return navigations;
-   }
-
-   public void addPageNavigation(PageNavigation navigation)
-   {
-      if (navigations == null)
+      List<UserNavigation> allNavs = userPortal.getNavigations();
+      List<UserNavigation> groupNav = new ArrayList<UserNavigation>();
+      for (UserNavigation nav : allNavs)
       {
-         navigations = new ArrayList<PageNavigation>();
-      }
-      navigations.add(navigation);
-   }
-
-   public void deletePageNavigation(PageNavigation navigation)
-   {
-      if (navigations == null || navigations.size() < 1)
-      {
-         return;
-      }
-      navigations.remove(navigation);
-   }
-
-   public PageNavigation getPageNavigation(int id)
-   {
-      for (PageNavigation ele : getPageNavigations())
-      {
-         if (ele.getId() == id)
+         if (nav.getKey().getType().equals(SiteType.GROUP) && nav.isModifiable())
          {
-            return ele;
+            groupNav.add(nav);
          }
       }
-      return null;
-   }
 
-   public List<PageNavigation> getPageNavigations()
-   {
-      if (navigations == null)
-      {
-         navigations = new ArrayList<PageNavigation>();
-      }
-      return navigations;
-   }
-
-   public PageNavigation getNavigationById(Integer navId)
-   {
-      PageNavigation navigation = new PageNavigation();
-      for (PageNavigation nav : navigations)
-      {
-         if (nav.getId() == navId)
-         {
-            navigation = nav;
-            break;
-         }
-      }
-      return navigation;
-   }
-
-   public PageNavigation getSelectedNavigation()
-   {
-      return selectedNavigation;
-   }
-
-   public void setSelectedNavigation(PageNavigation navigation)
-   {
-      selectedNavigation = navigation;
+      UIVirtualList virtualList = getChild(UIVirtualList.class);                  
+      virtualList.dataBind(new ObjectPageList<UserNavigation>(groupNav, groupNav.size()));
    }
 
    /**
@@ -177,7 +117,7 @@ public class UIGroupNavigationManagement extends UIContainer
     * 
     * 2. He/She is manager of the group
     * 
-    * @param pcontext
+    * @param 
     * @return
     */
    private boolean userHasRightToAddNavigation()
@@ -199,172 +139,122 @@ public class UIGroupNavigationManagement extends UIContainer
       try
       {
          Collection<?> groups = orgService.getGroupHandler().findGroupByMembership(remoteUser, userACL.getMakableMT());
-         if (groups != null && groups.size() > 0)
-         {
-            return true;
-         }
-         else
-         {
-            return false;
-         }
+         return groups != null && groups.size() > 0;
       }
       catch (Exception ex)
       {
          return false;
       }
    }
-   
-   static public class EditNavigationActionListener extends EventListener<UIGroupNavigationManagement>
+
+   static public abstract class BaseEditAction extends EventListener<UIGroupNavigationManagement>
    {
       public void execute(Event<UIGroupNavigationManagement> event) throws Exception
       {
-
+         UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
          UIGroupNavigationManagement uicomp = event.getSource();
-
-         // get navigation id
-         String id = event.getRequestContext().getRequestParameter(OBJECTID);
-         Integer navId = Integer.parseInt(id);
-         // get PageNavigation by navigation id
-         PageNavigation navigation = uicomp.getNavigationById(navId);
-         uicomp.setSelectedNavigation(navigation);
          WebuiRequestContext context = event.getRequestContext();
          UIApplication uiApplication = context.getUIApplication();
 
+         // get navigation id
+         String groupName = event.getRequestContext().getRequestParameter(OBJECTID);
+         SiteKey siteKey = SiteKey.group(groupName);
+         
          // check edit permission, ensure that user has edit permission on that
          // navigation
          UserACL userACL = uicomp.getApplicationComponent(UserACL.class);
-
-         if (!userACL.hasEditPermission(navigation))
+         if (!userACL.hasEditPermissionOnNavigation(siteKey))
          {
             uiApplication.addMessage(new ApplicationMessage("UIGroupNavigationManagement.msg.Invalid-editPermission", null));
             return;
          }
 
-         // ensure this navigation is exist
-         DataStorage service = uicomp.getApplicationComponent(DataStorage.class);
-         if (service.getPageNavigation(navigation.getOwnerType(), navigation.getOwnerId()) == null)
+         UserNavigation navigation = userPortal.getNavigation(siteKey);
+         if (navigation == null)
          {
             uiApplication.addMessage(new ApplicationMessage("UIGroupNavigationManagement.msg.navigation-not-exist", null));
+            UIWorkingWorkspace uiWorkingWS = Util.getUIPortalApplication().getChild(UIWorkingWorkspace.class);
+            uiWorkingWS.updatePortletsByName("UserToolbarGroupPortlet");       
             return;
          }
 
+         doEdit(navigation, event);
+      }
+
+      protected abstract void doEdit(UserNavigation navigation, Event<UIGroupNavigationManagement> event) throws Exception;
+   }
+   
+   static public class EditNavigationActionListener extends BaseEditAction
+   {
+      @Override
+      protected void doEdit(UserNavigation nav, Event<UIGroupNavigationManagement> event) throws Exception
+      {         
+         UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
+         UIGroupNavigationManagement uicomp = event.getSource();
+         SiteKey siteKey = nav.getKey();
+
          UIPopupWindow popUp = uicomp.getChild(UIPopupWindow.class);
+         UINavigationManagement naviManager = popUp.createUIComponent(UINavigationManagement.class, null, null, popUp);
+         uicomp.naviManager = naviManager;
+         
+         naviManager.setOwner(siteKey.getName());
+         naviManager.setOwnerType(siteKey.getTypeName());
 
-         UINavigationManagement pageManager = popUp.createUIComponent(UINavigationManagement.class, null, null, popUp);
-         pageManager.setOwner(navigation.getOwnerId());
-         pageManager.setOwnerType(navigation.getOwnerType());
-
-         UINavigationNodeSelector selector = pageManager.getChild(UINavigationNodeSelector.class);
-       
-         selector.setEdittedNavigation(navigation);
+         UINavigationNodeSelector selector = naviManager.getChild(UINavigationNodeSelector.class);
+         selector.setEdittedNavigation(nav);
+         selector.setUserPortal(userPortal);
          selector.initTreeData();
-         popUp.setUIComponent(pageManager);
+
+         popUp.setUIComponent(naviManager);
          popUp.setWindowSize(400, 400);
          popUp.setShowMask(true);
          popUp.setShow(true);
       }
    }
 
-   static public class EditPropertiesActionListener extends EventListener<UIGroupNavigationManagement>
+   static public class EditPropertiesActionListener extends BaseEditAction
    {
-      public void execute(Event<UIGroupNavigationManagement> event) throws Exception
+      @Override
+      protected void doEdit(UserNavigation navigation, Event<UIGroupNavigationManagement> event) throws Exception
       {
-
          UIGroupNavigationManagement uicomp = event.getSource();
-
-         // get navigation id
-         String id = event.getRequestContext().getRequestParameter(OBJECTID);
-         Integer navId = Integer.parseInt(id);
-
-         // get PageNavigation by navigation id
-         PageNavigation navigation = uicomp.getNavigationById(navId);
+         SiteKey siteKey = navigation.getKey();
 
          // open a add navigation popup
          UIPopupWindow popUp = uicomp.getChild(UIPopupWindow.class);
          UIPageNavigationForm pageNavigation = popUp.createUIComponent(UIPageNavigationForm.class, null, null, popUp);
-         pageNavigation.setOwnerId(navigation.getOwnerId());
-         pageNavigation.setOwnerType(navigation.getOwnerType());
+         pageNavigation.setOwnerId(siteKey.getName());
+         pageNavigation.setOwnerType(siteKey.getTypeName());
          pageNavigation.setPriority(String.valueOf(navigation.getPriority()));
          pageNavigation.addFormInput();
-         pageNavigation.setPageNav(navigation);
+         pageNavigation.setUserNav(navigation);
          popUp.setUIComponent(pageNavigation);
          popUp.setWindowSize(600, 400);
          popUp.setShowMask(true);
-         popUp.setShow(true);
+         popUp.setShow(true);   
       }
    }
 
-   static public class DeleteNavigationActionListener extends EventListener<UIGroupNavigationManagement>
+   static public class DeleteNavigationActionListener extends BaseEditAction
    {
-      public void execute(Event<UIGroupNavigationManagement> event) throws Exception
+      @Override
+      protected void doEdit(UserNavigation navigation, Event<UIGroupNavigationManagement> event) throws Exception
       {
          UIGroupNavigationManagement uicomp = event.getSource();
+         NavigationService service = uicomp.getApplicationComponent(NavigationService.class);
 
-         WebuiRequestContext context = event.getRequestContext();
-         UIApplication uiApplication = context.getUIApplication();
-
-         // get navigation id
-         String id = event.getRequestContext().getRequestParameter(OBJECTID);
-         Integer navId = Integer.parseInt(id);
-
-         // get PageNavigation by navigation id
-         PageNavigation navigation = uicomp.getNavigationById(navId);
-
-         // check edit permission, ensure that user has edit permission on that
-         // navigation
-         UserACL userACL = uicomp.getApplicationComponent(UserACL.class);
-
-         if (!userACL.hasEditPermission(navigation))
+         NavigationContext ctx = service.loadNavigation(navigation.getKey());
+         if (ctx != null)
          {
-            uiApplication.addMessage(new ApplicationMessage("UIGroupNavigationManagement.msg.Invalid-editPermission", null));
-            return;
+            service.destroyNavigation(ctx);
          }
 
-         // TODO ensure this navigation is exist
-         DataStorage service = uicomp.getApplicationComponent(DataStorage.class);
-         if (service.getPageNavigation(navigation.getOwnerType(), navigation.getOwnerId()) == null)
-         {
-            uiApplication.addMessage(new ApplicationMessage("UIGroupNavigationManagement.msg.navigation-not-exist", null));
-            return;
-         }
-
-         // remove selected navigation
-         if (uicomp.navigations == null || uicomp.navigations.size() < 1)
-         {
-            return;
-         }
-         uicomp.navigations.remove(navigation);
-
-         // remove navigation from UIPortalApplication
-         UIPortalApplication uiPortalApp = Util.getUIPortalApplication();
-         removeNavigationByID(uiPortalApp.getUserPortalConfig().getNavigations(), navigation);
-         removeNavigationByID(uiPortalApp.getNavigations(), navigation);
-         
-         
-         service.remove(navigation);
+         //
          event.getRequestContext().addUIComponentToUpdateByAjax(uicomp);
-
          //Update UserToolbarGroupPortlet
-         UIWorkingWorkspace uiWorkingWS = uiPortalApp.getChild(UIWorkingWorkspace.class);
-         uiWorkingWS.updatePortletsByName("UserToolbarGroupPortlet");
+         UIWorkingWorkspace uiWorkingWS = Util.getUIPortalApplication().getChild(UIWorkingWorkspace.class);
+         uiWorkingWS.updatePortletsByName("UserToolbarGroupPortlet");         
       }
-
-      private void removeNavigationByID(List<PageNavigation> navs, PageNavigation target)
-      {
-         if (navs == null)
-         {
-            return;
-         }
-         for (PageNavigation nav : navs)
-         {
-            if (nav.getId() == target.getId())
-            {
-               navs.remove(nav);
-               return;
-            }
-         }
-      }
-
    }
 
    static public class AddNavigationActionListener extends EventListener<UIGroupNavigationManagement>
@@ -381,7 +271,10 @@ public class UIGroupNavigationManagement extends UIContainer
          uiMaskWS.setUIComponent(uiNewPortal);
          uiMaskWS.setShow(true);
          prContext.addUIComponentToUpdateByAjax(uiMaskWS);
-
+         
+         //If other users has add or remove group navigation, we need to refresh this portlet
+         UIWorkingWorkspace uiWorkingWS = Util.getUIPortalApplication().getChild(UIWorkingWorkspace.class);
+         uiWorkingWS.updatePortletsByName("UserToolbarGroupPortlet");  
       }
    }
 
@@ -391,32 +284,36 @@ public class UIGroupNavigationManagement extends UIContainer
       public void execute(Event<UIPageNodeForm> event) throws Exception
       {
          UIPageNodeForm uiPageNodeForm = event.getSource();
-         PageNavigation contextNavigation = uiPageNodeForm.getContextPageNavigation();
-         
          UIGroupNavigationManagement uiGroupNavigation =
             uiPageNodeForm.getAncestorOfType(UIGroupNavigationManagement.class);
-         PageNavigation selectedNavigation = uiGroupNavigation.getSelectedNavigation();
-         UIPopupWindow uiNavigationPopup = uiGroupNavigation.getChild(UIPopupWindow.class);
-         UINavigationManagement navigationManager =
-            uiPageNodeForm.createUIComponent(UINavigationManagement.class, null, null);
-         navigationManager.setOwner(contextNavigation.getOwnerId());
-         navigationManager.setOwnerType(contextNavigation.getOwnerType());
+         UINavigationManagement navigationManager = uiGroupNavigation.naviManager;
+         
          UINavigationNodeSelector selector = navigationManager.getChild(UINavigationNodeSelector.class);
-         selector.setEdittedNavigation(contextNavigation);
-         selector.initTreeData();
-         
-         if (uiPageNodeForm.getSelectedParent() instanceof PageNode)
-         {
-            PageNode selectedParent = (PageNode)uiPageNodeForm.getSelectedParent();
-            selector.selectPageNodeByUri(selectedParent.getUri());
-         }
-         
+         TreeNode selectedParent = (TreeNode)uiPageNodeForm.getSelectedParent();
+         selector.selectNode(selectedParent);                 
+
+         UIPopupWindow uiNavigationPopup = uiGroupNavigation.getChild(UIPopupWindow.class);
          uiNavigationPopup.setUIComponent(navigationManager);
          uiNavigationPopup.setWindowSize(400, 400);
          uiNavigationPopup.setRendered(true);
-
          event.getRequestContext().addUIComponentToUpdateByAjax(uiNavigationPopup.getParent());
+         
+         selector.createEvent("NodeModified", Phase.PROCESS, event.getRequestContext()).broadcast();
       }
 
+   }
+
+   static public class CloseActionListener extends UIPopupWindow.CloseActionListener
+   {
+      public void execute(Event<UIPopupWindow> event) throws Exception
+      {
+         UIPopupWindow popWindow = event.getSource();
+         popWindow.setUIComponent(null);
+         
+         UIGroupNavigationManagement grpMan = popWindow.getAncestorOfType(UIGroupNavigationManagement.class);
+         grpMan.naviManager = null;
+         
+         super.execute(event);
+      }
    }
 }

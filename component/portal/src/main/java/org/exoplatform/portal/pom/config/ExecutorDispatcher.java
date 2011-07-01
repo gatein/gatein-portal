@@ -36,20 +36,28 @@ public class ExecutorDispatcher implements TaskExecutor
 
    public <V> V execute(POMSession session, POMTask<V> task) throws Exception
    {
-      String s = task.toString();
-      long t0 = System.currentTimeMillis();
-      V v = session.execute(task);
-      long t1 = System.currentTimeMillis();
-      String t = "" + (t1 - t0);
-      if (t.length() < 4)
+      if (log.isDebugEnabled())
       {
-         t = padding[t.length()] + t;
-         log.debug("Executed [" + t + "] " + s + "");
+         String s = task.toString();
+         log.debug("Executing " + s + "");
+         long t0 = System.currentTimeMillis();
+         V v = session.execute(task);
+         long t1 = System.currentTimeMillis();
+         String t = "" + (t1 - t0);
+         if (t.length() < 4)
+         {
+            t = padding[t.length()] + t;
+            log.debug("Executed [" + t + "] " + s + "");
+         }
+         else
+         {
+            log.debug("Executed in " + t + " " + s + "");
+         }
+         return v;
       }
       else
       {
-         log.debug("Executed in " + t + " " + s + "");
+         return session.execute(task);
       }
-      return v;
    }
 }

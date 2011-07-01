@@ -19,10 +19,9 @@
 
 package org.exoplatform.webui.core;
 
-import org.exoplatform.portal.config.model.PageNode;
+import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.util.ReflectionUtil;
 import org.exoplatform.webui.application.WebuiRequestContext;
-import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.event.Event;
@@ -30,6 +29,7 @@ import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 
 import java.lang.reflect.Method;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -73,6 +73,12 @@ public class UITree extends UIComponent
    private String beanIdField_;
 
    /**
+    * The bean field that holds the count number of the children
+    * This help to express the node have childs or not
+    */
+   private String beanChildCountField_;
+
+   /**
     * The bean field that holds the label of the bean
     */
    private String beanLabelField_;
@@ -90,12 +96,12 @@ public class UITree extends UIComponent
    /**
     * A list of sibling nodes
     */
-   private List<?> sibbling;
+   private Collection<?> sibbling;
 
    /**
     * A list of children nodes
     */
-   private List<?> children;
+   private Collection<?> children;
 
    /**
     * The selected node
@@ -107,8 +113,6 @@ public class UITree extends UIComponent
     */
    private Object parentSelected;
 
-   private NodeMetaDataManager nodeMetadataManager;
-   
    /**
     * A right click popup menu
     */
@@ -133,6 +137,11 @@ public class UITree extends UIComponent
    public void setBeanLabelField(String beanLabelField_)
    {
       this.beanLabelField_ = beanLabelField_;
+   }
+
+   public void setBeanChildCountField(String beanChildCountField)
+   {
+      this.beanChildCountField_ = beanChildCountField;
    }
 
    public Object getId(Object object) throws Exception
@@ -197,12 +206,12 @@ public class UITree extends UIComponent
       this.selectedIcon = selectedIcon;
    }
 
-   public List<?> getChildren()
+   public Collection<?> getChildren()
    {
       return children;
    }
 
-   public void setChildren(List<?> children)
+   public void setChildren(Collection<?> children)
    {
       this.children = children;
    }
@@ -229,12 +238,12 @@ public class UITree extends UIComponent
       this.parentSelected = parentSelected;
    }
 
-   public List<?> getSibbling()
+   public Collection<?> getSibbling()
    {
       return sibbling;
    }
 
-   public void setSibbling(List<?> sibbling)
+   public void setSibbling(Collection<?> sibbling)
    {
       this.sibbling = sibbling;
    }
@@ -271,9 +280,16 @@ public class UITree extends UIComponent
          iconGroup = selectedIcon;
          note = " NodeSelected";
       }
-      if(obj instanceof PageNode && ((PageNode)obj).getChildren().size() == 0) {
-         nodeIcon = nullItemIcon;
+
+      if(getBeanChildCountField() != null) {
+         Object childCount = getFieldValue(obj, getBeanChildCountField());         
+         if (childCount != null && childCount.getClass().isAssignableFrom(Integer.class) &&
+            (Integer)childCount == 0)
+         {
+            nodeIcon = nullItemIcon;  
+         }
       }
+
       if (beanIconField_ != null && beanIconField_.length() > 0)
       {
          if (getFieldValue(obj, beanIconField_) != null)
@@ -363,6 +379,11 @@ public class UITree extends UIComponent
       return beanIdField_;
    }
 
+   public String getBeanChildCountField()
+   {
+      return beanChildCountField_;
+   }
+
    public String getBeanLabelField()
    {
       return beanLabelField_;
@@ -397,34 +418,4 @@ public class UITree extends UIComponent
    {
       this.colapseIcon = colapseIcon;
    }
-   
-   public String getNodeMetaData(Object nodeObject, WebuiRequestContext context)
-   {
-      if (nodeMetadataManager == null)
-      {
-         return null;
-      }
-      else
-      {
-         return nodeMetadataManager.getNodeMetaData(nodeObject, context);
-      }
-   }
-   
-   public void setNodeMetaDataManager(NodeMetaDataManager _nodeMetadataManager)
-   {
-      this.nodeMetadataManager = _nodeMetadataManager;
-   }
-   
-   /**
-    * A node metadata manager. Node 's metadata is used for action informing/warning.
-    * 
-    * @author <a href="mailto:hoang281283@gmail.com">Minh Hoang TO</a>
-    * @version $Id$
-    *
-    */
-   public static interface NodeMetaDataManager
-   {
-      public String getNodeMetaData(Object nodeObject, WebuiRequestContext context);
-   }
-
 }

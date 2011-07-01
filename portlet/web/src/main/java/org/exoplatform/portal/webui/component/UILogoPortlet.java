@@ -19,8 +19,9 @@
 
 package org.exoplatform.portal.webui.component;
 
-import org.exoplatform.portal.config.model.PageNavigation;
-import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.mop.SiteType;
+import org.exoplatform.portal.mop.user.UserNavigation;
+import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.security.ConversationState;
@@ -54,12 +55,13 @@ public class UILogoPortlet extends UIPortletApplication
 
    public String getNavigationTitle() throws Exception
    {
-      PageNavigation navigation = Util.getUIPortal().getSelectedNavigation();
-      if (navigation.getOwnerType().equals(PortalConfig.GROUP_TYPE))
+      UserNode navPath = Util.getUIPortal().getNavPath();
+      UserNavigation nav = navPath.getNavigation();
+      if (nav.getKey().getType().equals(SiteType.GROUP))
       {
-         return OrganizationUtils.getGroupLabel(navigation.getOwnerId());
+         return OrganizationUtils.getGroupLabel(nav.getKey().getName());
       }
-      else if (navigation.getOwnerType().equals(PortalConfig.USER_TYPE))
+      else if (nav.getKey().getType().equals(SiteType.USER))
       {
          ConversationState state = ConversationState.getCurrent();
          User user = (User)state.getAttribute(CacheUserProfileFilter.USER_PROFILE);

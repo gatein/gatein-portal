@@ -836,7 +836,7 @@
 		# org.exoplatform.portal.component.customization.UIPageSelector#
 		#############################################################################
 	-->
-	<UIPageSelector2>
+	<UIPageSelector>
 		<header>
 			<name> اسم</name>
 			<id> صفحة رقم</id>
@@ -853,7 +853,7 @@
 			<name> #{word.name}</name>
 			<accessGroups> مجموعات الوصول</accessGroups>
 		</label>
-	</UIPageSelector2>
+	</UIPageSelector>
 	<UIPageBrowser>
 		<msg>
 			<NoPermission> لا يوجد لديك إذن لدخول هذه الصفحة.</NoPermission>
@@ -1052,7 +1052,7 @@
 			<label>
 				<PageNodeSetting>عقدة إعداد الصفحة </PageNodeSetting>
 				<Icon>#{word.icon} </Icon>
-				<UIPageSelector2>تحديد الصفحة  </UIPageSelector2>
+				<UIPageSelector>تحديد الصفحة  </UIPageSelector>
 			</label>
 		</tab>
 		<action>

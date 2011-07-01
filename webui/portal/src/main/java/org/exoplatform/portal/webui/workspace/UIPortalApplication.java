@@ -28,14 +28,13 @@ import org.exoplatform.portal.config.UserPortalConfig;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Container;
 import org.exoplatform.portal.config.model.Page;
-import org.exoplatform.portal.config.model.PageNavigation;
-import org.exoplatform.portal.config.model.PageNode;
+import org.exoplatform.portal.mop.SiteKey;
+import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.resource.Skin;
 import org.exoplatform.portal.resource.SkinConfig;
 import org.exoplatform.portal.resource.SkinService;
 import org.exoplatform.portal.resource.SkinURL;
 import org.exoplatform.portal.webui.application.UIPortlet;
-import org.exoplatform.portal.webui.navigation.PageNavigationUtils;
 import org.exoplatform.portal.webui.page.UISiteBody;
 import org.exoplatform.portal.webui.portal.PageNodeEvent;
 import org.exoplatform.portal.webui.portal.UIPortal;
@@ -48,7 +47,6 @@ import org.exoplatform.services.resources.LocaleConfig;
 import org.exoplatform.services.resources.LocaleConfigService;
 import org.exoplatform.services.resources.LocaleContextInfo;
 import org.exoplatform.services.resources.Orientation;
-import org.exoplatform.services.resources.ResourceBundleManager;
 import org.exoplatform.web.application.javascript.JavascriptConfigService;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -111,9 +109,7 @@ public class UIPortalApplication extends UIApplication
 
    private boolean isSessionOpen = false;
    
-   private Map<UIPortalKey, UIPortal> all_UIPortals;
-   
-   private List<PageNavigation> all_Navigations;
+   private Map<SiteKey, UIPortal> all_UIPortals;
    
    private UIPortal showedUIPortal;
    
@@ -168,15 +164,13 @@ public class UIPortalApplication extends UIApplication
       // -------------------------------------------------------------------------------
       context.setUIApplication(this);
 
-      this.all_UIPortals = new HashMap<UIPortalKey, UIPortal>(5);
+      this.all_UIPortals = new HashMap<SiteKey, UIPortal>(5);
       
       addWorkingWorkspace();
       
       setOwner(context.getPortalOwner());
       
       //Minh Hoang TO: Localizes navigations, need to put this code snippet below 'setLocale' block
-      this.all_Navigations = userPortalConfig_.getNavigations();
-      localizeNavigations();
    }
 
    /**
@@ -219,7 +213,16 @@ public class UIPortalApplication extends UIApplication
       {
          return null;
       }
-      return this.all_UIPortals.get(new UIPortalKey(ownerType, ownerId));
+      return this.all_UIPortals.get(new SiteKey(ownerType, ownerId));
+   }
+   
+   public UIPortal getCachedUIPortal(SiteKey key)
+   {
+      if(key == null)
+      {
+         return null;
+      }
+      return this.all_UIPortals.get(key);
    }
    
    /**
@@ -234,7 +237,7 @@ public class UIPortalApplication extends UIApplication
       
       if(ownerType != null && ownerId != null)
       {
-         this.all_UIPortals.put(new UIPortalKey(ownerType, ownerId), uiPortal);
+         this.all_UIPortals.put(new SiteKey(ownerType, ownerId), uiPortal);
       }
    }
    
@@ -250,7 +253,7 @@ public class UIPortalApplication extends UIApplication
       {
          return;
       }
-      this.all_UIPortals.remove(new UIPortalKey(ownerType, ownerId));
+      this.all_UIPortals.remove(new SiteKey(ownerType, ownerId));
    }
    
    public boolean isSessionOpen()
@@ -678,14 +681,14 @@ public class UIPortalApplication extends UIApplication
       UserPortalConfigService userPortalConfigService =
          (UserPortalConfigService)appContainer.getComponentInstanceOfType(UserPortalConfigService.class);
       Page page = null;
-      PageNode pageNode = Util.getUIPortal().getSelectedNode();
+      UserNode pageNode = Util.getUIPortal().getSelectedUserNode();
       if (pageNode != null)
       {
          try
          {
-            if (pageNode.getPageReference() != null)
+            if (pageNode.getPageRef() != null)
             {
-               page = userPortalConfigService.getPage(pageNode.getPageReference(), context.getRemoteUser());
+               page = userPortalConfigService.getPage(pageNode.getPageRef(), context.getRemoteUser());
             }
          }
          catch (NoSuchDataException nsde)
@@ -696,17 +699,6 @@ public class UIPortalApplication extends UIApplication
       return (page != null);
    }
 
-   public void localizeNavigations()
-   {
-      ResourceBundleManager i18nManager = getApplicationComponent(ResourceBundleManager.class);
-      Locale locale = getLocale();
-      
-      for(PageNavigation nav : this.getNavigations())
-      {
-         PageNavigationUtils.localizePageNavigation(nav, locale, i18nManager);
-      }
-   }
-   
    /**
     * Get portal skin from {@link UserProfile} or from {@link UserPortalConfig}
     * 
@@ -747,65 +739,4 @@ public class UIPortalApplication extends UIApplication
             skin_ = userPortalConfigSkin;
       }
    }
-   
-   public void setNavigations(List<PageNavigation> navs)
-   {
-      this.all_Navigations = navs;
-   }
-   
-   public List<PageNavigation> getNavigations()
-   {
-      return this.all_Navigations;
-   }
-   
-   private class UIPortalKey
-   {
-
-      /** . */
-      private final String ownerType;
-
-      /** . */
-      private final String ownerId;
-
-      UIPortalKey(String _ownerType, String _ownerId)
-      {
-         if (_ownerType == null)
-         {
-            throw new NullPointerException();
-         }
-         if (_ownerId == null)
-         {
-            throw new NullPointerException();
-         }
-         this.ownerType = _ownerType;
-         this.ownerId = _ownerId;
-      }
-
-      @Override
-      public boolean equals(Object obj)
-      {
-         if (this == null || obj == null)
-         {
-            return this == null && obj == null;
-         }
-         if (!(obj instanceof UIPortalKey))
-         {
-            return false;
-         }
-         return this.ownerType.equals(((UIPortalKey)obj).ownerType) && this.ownerId.equals(((UIPortalKey)obj).ownerId);
-      }
-      
-      @Override
-      public int hashCode()
-      {
-         return this.ownerType.hashCode() * 2 + this.ownerId.hashCode();
-      }
-      
-      @Override
-      public String toString()
-      {
-        return "OWNERTYPE: " + ownerType + " OWNERID: " + ownerId;  
-      }
-   }
-
 }

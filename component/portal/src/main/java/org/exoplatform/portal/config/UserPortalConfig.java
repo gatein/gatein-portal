@@ -19,31 +19,59 @@
 
 package org.exoplatform.portal.config;
 
-import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PortalConfig;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.exoplatform.portal.mop.user.UserPortalContext;
+import org.exoplatform.portal.mop.user.UserPortal;
+import org.exoplatform.portal.mop.user.UserPortalImpl;
 
 public class UserPortalConfig
 {
 
-   private PortalConfig portal;
+   PortalConfig portal;
 
-   private List<PageNavigation> navigations;
-   
-   /** Added by Minh Hoang TO */
-   private PageNavigation selectedNavigation;
+   final UserPortalConfigService service;
+
+   final String portalName;
+
+   final String accessUser;
+
+   /** . */
+   private UserPortalImpl userPortal;
+
+   /** . */
+   private UserPortalContext bundleResolver;
 
    public UserPortalConfig()
    {
-
+      this.portal = null;
+      this.service = null;
+      this.portalName = null;
+      this.accessUser = null;
+      this.bundleResolver = null;
    }
 
-   public UserPortalConfig(PortalConfig portal, List<PageNavigation> navigations)
+   public UserPortalConfig(PortalConfig portal, UserPortalConfigService service, String portalName, String accessUser, UserPortalContext bundleResolver)
    {
       this.portal = portal;
-      this.navigations = navigations;
+      this.service = service;
+      this.portalName = portalName;
+      this.accessUser = accessUser;
+      this.bundleResolver = bundleResolver;
+   }
+
+   public UserPortal getUserPortal()
+   {
+         userPortal = new UserPortalImpl(
+            service,
+            service.navService,
+            service.orgService_,
+            service.userACL_,
+            portalName,
+            portal,
+            accessUser,
+            bundleResolver
+         );
+      return userPortal;
    }
 
    public PortalConfig getPortalConfig()
@@ -54,57 +82,5 @@ public class UserPortalConfig
    public void setPortal(PortalConfig portal)
    {
       this.portal = portal;
-   }
-   
-   public void setSelectedNavigation(PageNavigation _selectedNavigation)
-   {
-      this.selectedNavigation = _selectedNavigation;
-   }
-
-   /** Fetch navigation (specified by ownerType, ownerId) from the list of all navigations and set it as selected navigation **/
-   public void updateSelectedNavigation(String ownerType, String ownerId)
-   {
-      PageNavigation targetNavigation = null;
-      for (PageNavigation nav : navigations)
-      {
-         if (nav.getOwnerType().equals(ownerType) && nav.getOwnerId().equals(ownerId))
-         {
-            targetNavigation = nav;
-            break;
-         }
-      }
-
-      if (targetNavigation != null)
-      {
-         this.setSelectedNavigation(targetNavigation);
-      }
-   }
-   
-   public PageNavigation getSelectedNavigation()
-   {
-      if(this.selectedNavigation != null)
-      {
-         return this.selectedNavigation;
-      }
-      return navigations.get(0);
-   }
-   
-   public void setNavigations(List<PageNavigation> navs)
-   {
-      navigations = navs;
-   }
-
-   public List<PageNavigation> getNavigations()
-   {
-      return navigations;
-   }
-
-   public void addNavigation(PageNavigation nav)
-   {
-      if (navigations == null)
-         navigations = new ArrayList<PageNavigation>();
-      if (nav == null)
-         return;
-      navigations.add(nav);
    }
 }

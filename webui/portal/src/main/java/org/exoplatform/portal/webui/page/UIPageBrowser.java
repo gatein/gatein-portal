@@ -35,9 +35,12 @@ import org.exoplatform.portal.config.Query;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.ModelObject;
 import org.exoplatform.portal.config.model.Page;
-import org.exoplatform.portal.config.model.PageNavigation;
-import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.mop.SiteKey;
+import org.exoplatform.portal.mop.navigation.Scope;
+import org.exoplatform.portal.mop.user.UserNavigation;
+import org.exoplatform.portal.mop.user.UserNode;
+import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.webui.application.UIPortlet;
 import org.exoplatform.portal.webui.portal.PageNodeEvent;
 import org.exoplatform.portal.webui.portal.UIPortal;
@@ -54,6 +57,7 @@ import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.config.annotation.ParamConfig;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIComponent;
+import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.UIRepeater;
 import org.exoplatform.webui.core.UISearch;
@@ -66,6 +70,7 @@ import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormInputItemSelector;
 import org.exoplatform.webui.form.UIFormInputSet;
+import org.exoplatform.webui.form.UIFormRadioBoxInput;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UISearchForm;
@@ -75,7 +80,6 @@ import org.exoplatform.webui.form.UISearchForm;
       @EventConfig(listeners = UIPageBrowser.DeleteActionListener.class, confirm = "UIPageBrowse.deletePage"),
       @EventConfig(listeners = UIPageBrowser.EditInfoActionListener.class),
       @EventConfig(listeners = UIPageBrowser.AddNewActionListener.class)
-   //        @EventConfig(listeners = UIPageBrowser.BackActionListener.class)
    }),
    @ComponentConfig(id = "UIBrowserPageForm", type = UIPageForm.class, lifecycle = UIFormLifecycle.class, template = "system:/groovy/webui/form/UIFormTabPane.gtmpl", events = {
       @EventConfig(listeners = UIPageBrowser.SavePageActionListener.class, name = "Save"),
@@ -85,7 +89,7 @@ import org.exoplatform.webui.form.UISearchForm;
       @EventConfig(listeners = UIMaskWorkspace.CloseActionListener.class, phase = Phase.DECODE)}, initParams = @ParamConfig(name = "PageTemplate", value = "system:/WEB-INF/conf/uiconf/portal/webui/page/PageTemplate.groovy")),
    @ComponentConfig(type = UIFormInputSet.class, id = "PermissionSetting", template = "system:/groovy/webui/core/UITabSelector.gtmpl", events = {@EventConfig(listeners = UIFormInputSet.SelectComponentActionListener.class)})})
 @Serialized
-public class UIPageBrowser extends UISearch
+public class UIPageBrowser extends UIContainer
 {
 
    public static final String[] BEAN_FIELD = {"pageId", "title", "accessPermissions", "editPermission"};
@@ -96,27 +100,29 @@ public class UIPageBrowser extends UISearch
 
    protected String pageSelectedId_;
 
-   private static List<SelectItemOption<String>> OPTIONS = new ArrayList<SelectItemOption<String>>(3);
+   private static List<SelectItemOption<String>> OPTIONS = new ArrayList<SelectItemOption<String>>(2);
 
    static
    {
       WebuiRequestContext contextui = WebuiRequestContext.getCurrentInstance();
       ResourceBundle res = contextui.getApplicationResourceBundle();
-      OPTIONS.add(new SelectItemOption<String>(res.getString("UIPageSearch.label.option.ownerType"), "ownerType"));
-      OPTIONS.add(new SelectItemOption<String>(res.getString("UIPageSearch.label.option.ownerId"), "ownerId"));
-      OPTIONS.add(new SelectItemOption<String>(res.getString("UIPageSearch.label.option.title"), "title"));
+      OPTIONS.add(new SelectItemOption<String>(res.getString("UIPageSearchForm.label.option.portal"), "portal"));
+      OPTIONS.add(new SelectItemOption<String>(res.getString("UIPageSearchForm.label.option.group"), "group"));
    }
 
    private Query<Page> lastQuery_;
 
    public UIPageBrowser() throws Exception
    {
-      super(OPTIONS);
-
-      getChild(UISearchForm.class).setId("UIPageSearch");
+      UIPageSearchForm uiSearchForm = addChild(UIPageSearchForm.class, null, null);
+      uiSearchForm.setOptions(OPTIONS);
+      uiSearchForm.setId("UIPageSearchForm");
       UIRepeater uiRepeater = createUIComponent(UIRepeater.class, null, null);
       uiRepeater.configure("pageId", BEAN_FIELD, ACTIONS);
 
+      lastQuery_ = new Query<Page>(null, null, null, null, Page.class);
+      lastQuery_.setOwnerType(OPTIONS.get(0).getValue());
+      
       UIVirtualList virtualList = addChild(UIVirtualList.class, null, null);
       virtualList.setPageSize(10);
       virtualList.setUIComponent(uiRepeater);
@@ -127,6 +133,27 @@ public class UIPageBrowser extends UISearch
       return lastQuery_;
    }
 
+   public Query<Page> getQuery(UIFormInputSet searchInputs)
+   {
+      Query<Page> query = new Query<Page>(null, null, null, null, Page.class);
+      UIFormStringInput titleInput = (UIFormStringInput)searchInputs.getChild(0);
+      UIFormStringInput siteNameInput = (UIFormStringInput)searchInputs.getChild(1);
+      UIFormSelectBox select = (UIFormSelectBox)searchInputs.getChild(2);
+      
+      String siteName = siteNameInput.getValue();
+      String title = titleInput.getValue();
+      String ownerType = select.getValue();      
+      if (title != null && title != "")
+         query.setTitle(title);
+      if (siteName != null && siteName != "")
+         query.setOwnerId(siteName);
+
+      query.setOwnerType(ownerType);
+      query.setName(null);
+      
+      return query;
+   }
+   
    /**
     * Update data feed in UIRepeater with a given query.
     * Returns false if no result is found, true other wise
@@ -172,20 +199,7 @@ public class UIPageBrowser extends UISearch
 
    public void quickSearch(UIFormInputSet quickSearchInput) throws Exception
    {
-      UIFormStringInput input = (UIFormStringInput)quickSearchInput.getChild(0);
-      UIFormSelectBox select = (UIFormSelectBox)quickSearchInput.getChild(1);
-      String value = input.getValue();
-      String selectBoxValue = select.getValue();
-      Query<Page> query = new Query<Page>(null, null, null, null, Page.class);
-      if (selectBoxValue.equals("title"))
-         query.setTitle(value);
-      else if (selectBoxValue.equals("ownerType"))
-         query.setOwnerType(value);
-      else if (selectBoxValue.equals("ownerId"))
-         query.setOwnerId(value);
-      query.setName(null);
-
-      lastQuery_ = query;
+      lastQuery_ = this.getQuery(quickSearchInput);
       boolean dataAvailable = feedDataWithQuery(lastQuery_);
       if (!dataAvailable)
       {
@@ -233,21 +247,6 @@ public class UIPageBrowser extends UISearch
    {
    }
 
-   /*
-   public void reset() throws Exception
-   {
-      UIVirtualList virtualList = getChild(UIVirtualList.class);
-      UIRepeater repeater = (UIRepeater)virtualList.getDataFeed();
-      LazyPageList datasource = (LazyPageList)repeater.getDataSource();
-      int currentPage = datasource.getCurrentPage();
-      feedDataWithQuery(null);
-      if (currentPage > datasource.getAvailablePage())
-         currentPage = datasource.getAvailablePage();
-      if (currentPage > 0)
-         datasource.getPage(currentPage);
-   }
-   */
-
    static public class DeleteActionListener extends EventListener<UIPageBrowser>
    {
       public void execute(Event<UIPageBrowser> event) throws Exception
@@ -276,7 +275,8 @@ public class UIPageBrowser extends UISearch
          }
          
          UIPortal uiPortal = Util.getUIPortal();
-         boolean isDeleteCurrentPage = uiPortal.getSelectedNode().getPageReference().equals(page.getPageId());
+         UserNode userNode = uiPortal.getSelectedUserNode();
+         boolean isDeleteCurrentPage = userNode.getPageRef().equals(page.getPageId());
          if (isDeleteCurrentPage && page.getOwnerType().equals(PortalConfig.USER_TYPE))
          {
             ApplicationMessage msg = new ApplicationMessage("UIPageBrowser.msg.delete.DeleteCurrentUserPage", null, ApplicationMessage.WARNING);
@@ -289,6 +289,11 @@ public class UIPageBrowser extends UISearch
          PageListAccess datasource = (PageListAccess)repeater.getDataSource();
          int currentPage = datasource.getCurrentPage();
 
+         //Update navigation and UserToolbarGroupPortlet if deleted page is dashboard page
+         if(page.getOwnerType().equals(PortalConfig.USER_TYPE)){
+            removePageNode(page, event);
+         }
+
          dataService.remove(page);
          //Minh Hoang TO: The cached UIPage objects corresponding to removed Page should be removed here.
          //As we have multiple UIPortal, which means multiple caches of UIPage. It 's unwise to garbage
@@ -298,8 +303,7 @@ public class UIPageBrowser extends UISearch
          if (isDeleteCurrentPage)
          {
             PageNodeEvent<UIPortal> pnevent =
-               new PageNodeEvent<UIPortal>(uiPortal, PageNodeEvent.CHANGE_PAGE_NODE, uiPortal.getSelectedNode()
-                  .getUri());
+               new PageNodeEvent<UIPortal>(uiPortal, PageNodeEvent.CHANGE_PAGE_NODE, userNode.getURI());
             uiPortal.broadcast(pnevent, Phase.PROCESS);
          }
          else
@@ -314,17 +318,6 @@ public class UIPageBrowser extends UISearch
             datasource.getPage(currentPage);
             event.getRequestContext().addUIComponentToUpdateByAjax(uiPageBrowser);
          }
-         
-         //Update navigation and UserToolbarGroupPortlet if deleted page is dashboard page
-         if(page.getOwnerType().equals(PortalConfig.USER_TYPE)){
-            removePageNode(page, event);
-         }
-
-         UIWorkingWorkspace uiWorkingWorkspace = uiPortalApp.getChild(UIWorkingWorkspace.class);
-         uiWorkingWorkspace.updatePortletsByName("UserToolbarSitePortlet");
-         uiWorkingWorkspace.updatePortletsByName("UserToolbarGroupPortlet");
-         uiWorkingWorkspace.updatePortletsByName("UserToolbarDashboardPortlet");
-         uiWorkingWorkspace.updatePortletsByName("NavigationPortlet");
       }
       
       /**
@@ -339,57 +332,39 @@ public class UIPageBrowser extends UISearch
        */
       private void removePageNode(Page page, Event<UIPageBrowser> event) throws Exception
       {
-         UIPageBrowser uiPageBrowser = event.getSource();
-         DataStorage dataService = uiPageBrowser.getApplicationComponent(DataStorage.class);
-
-         PageNavigation pageNavigation = null;
          UIPortalApplication portalApplication = Util.getUIPortalApplication();
+         UserPortal userPortal = portalApplication.getUserPortalConfig().getUserPortal();
 
-         List<PageNavigation> listPageNavigation = portalApplication.getNavigations();
-
-         for (PageNavigation pageNvg : listPageNavigation)
+         UserNavigation userNav = userPortal.getNavigation(SiteKey.user(event.getRequestContext().getRemoteUser()));
+         UserNode rootNode = userPortal.getNode(userNav, Scope.CHILDREN, null, null);
+         if (rootNode == null)
          {
-            if (pageNvg.getOwnerType().equals(PortalConfig.USER_TYPE))
-            {
-               pageNavigation = pageNvg;
-               break;
-            }
-         }
-         UIPortal uiPortal = Util.getUIPortal();
-
-         PageNode tobeRemoved = null;
-         List<PageNode> nodes = pageNavigation.getNodes();
-         for (PageNode pageNode : nodes)
-         {
-            String pageReference = pageNode.getPageReference();
-            String pageId = page.getPageId();
-
-            if (pageReference != null && pageReference.equals(pageId))
-            {
-               tobeRemoved = pageNode;
-               break;
-            }
+            return;
          }
 
-         if (tobeRemoved != null)
+         for (UserNode userNode : rootNode.getChildren())
          {
-            // Remove pageNode
-            pageNavigation.getNodes().remove(tobeRemoved);
-
-            // Update navigation and UserToolbarGroupPortlet
-
-            String pageRef = tobeRemoved.getPageReference();
-            if (pageRef != null && pageRef.length() > 0)
+            if (page.getPageId().equals(userNode.getPageRef()))
             {
-               // Remove from cache
-               uiPortal.clearUIPage(pageRef);
+               // Remove pageNode
+               rootNode.removeChild(userNode.getName());
+               userPortal.saveNode(rootNode, null);
+
+               // Update navigation and UserToolbarGroupPortlet
+
+               String pageRef = page.getPageId();
+               if (pageRef != null && pageRef.length() > 0)
+               {
+                  // Remove from cache
+                  UIPortal uiPortal = Util.getUIPortal();
+                  uiPortal.clearUIPage(pageRef);
+               }
+
+               //Update UserToolbarDashboardPortlet
+               ActionResponse actResponse = event.getRequestContext().getResponse();
+               actResponse.setEvent(new QName("NavigationChange"), userNode.getName());
+               return;
             }
-
-            dataService.save(pageNavigation);
-
-            //Update UserToolbarDashboardPortlet
-            ActionResponse actResponse = event.getRequestContext().getResponse();
-            actResponse.setEvent(new QName("UserPageNodeDeleted"), tobeRemoved.getName());
          }
       }
    }
@@ -438,23 +413,6 @@ public class UIPageBrowser extends UISearch
          prContext.addUIComponentToUpdateByAjax(uiMaskWS);
       }
    }
-
-   //  TODO: Tan Pham Dinh: No need back action in portal 2.6
-   //  static public class BackActionListener extends EventListener<UIPageBrowser> {
-   //
-   //    public void execute(Event<UIPageBrowser> event) throws Exception {
-   //      UIPortalApplication uiPortalApp = Util.getUIPortalApplication();
-   //      uiPortalApp.setModeState(UIPortalApplication.NORMAL_MODE);
-   //      UIPortal uiPortal = Util.getUIPortal();
-   //      String uri = uiPortal.getSelectedNavigation().getId() + "::"
-   //          + uiPortal.getSelectedNode().getUri();
-   //      PageNodeEvent<UIPortal> pnevent = new PageNodeEvent<UIPortal>(uiPortal,
-   //                                                                    PageNodeEvent.CHANGE_PAGE_NODE,
-   //                                                                    uri);
-   //      uiPortal.broadcast(pnevent, Event.Phase.PROCESS);
-   //    }
-   //
-   //  }
 
    static public class SavePageActionListener extends UIPageForm.SaveActionListener
    {

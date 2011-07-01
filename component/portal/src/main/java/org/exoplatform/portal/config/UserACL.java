@@ -23,8 +23,8 @@ import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.container.xml.ValueParam;
 import org.exoplatform.container.xml.ValuesParam;
 import org.exoplatform.portal.config.model.Page;
-import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.security.ConversationState;
@@ -293,43 +293,46 @@ public class UserACL
       return false;
    }
 
-   public boolean hasEditPermission(PageNavigation pageNav)
+   // copied from @link{#hasEditPermission}
+   public boolean hasEditPermissionOnNavigation(SiteKey siteKey)
    {
       Identity identity = getIdentity();
       if (superUser_.equals(identity.getUserId()))
       {
-         pageNav.setModifiable(true);
          return true;
       }
-      String ownerType = pageNav.getOwnerType();
-      
-      if (PortalConfig.GROUP_TYPE.equals(ownerType))
-      {
-         String temp = pageNav.getOwnerId().trim();
-         String expAdminGroup = getAdminGroups();
-         String expPerm = null;
 
-         // Check to see whether current user is member of admin group or not,
-         // if so grant
-         // edit permission for group navigation for that user.
-         if (expAdminGroup != null)
-         {
-            expAdminGroup = expAdminGroup.startsWith("/") ? expAdminGroup : "/" + expAdminGroup;
-            expPerm = temp.startsWith("/") ? temp : "/" + temp;
-            if (isUserInGroup(expPerm) && isUserInGroup(expAdminGroup))
+      //
+      switch (siteKey.getType())
+      {
+         case PORTAL:
+            //TODO: We should also take care of Portal's navigation
+            return false;
+         case GROUP:
+            String temp = siteKey.getName().trim();
+            String expAdminGroup = getAdminGroups();
+            String expPerm = null;
+
+            // Check to see whether current user is member of admin group or not,
+            // if so grant
+            // edit permission for group navigation for that user.
+            if (expAdminGroup != null)
             {
-               return true;
+               expAdminGroup = expAdminGroup.startsWith("/") ? expAdminGroup : "/" + expAdminGroup;
+               expPerm = temp.startsWith("/") ? temp : "/" + temp;
+               if (isUserInGroup(expPerm) && isUserInGroup(expAdminGroup))
+               {
+                  return true;
+               }
             }
-         }
 
-         expPerm = navigationCreatorMembershipType_ + (temp.startsWith("/") ? ":" + temp : ":/" + temp);
-         return hasPermission(identity, expPerm);
+            expPerm = navigationCreatorMembershipType_ + (temp.startsWith("/") ? ":" + temp : ":/" + temp);
+            return hasPermission(identity, expPerm);
+         case USER:
+            return siteKey.getName().equals(identity.getUserId());
+         default:
+            return false;
       }
-      else if (PortalConfig.USER_TYPE.equals(ownerType))
-      {
-         return pageNav.getOwnerId().equals(identity.getUserId());
-      }
-      return false;
    }
 
    public boolean hasPermission(Page page)

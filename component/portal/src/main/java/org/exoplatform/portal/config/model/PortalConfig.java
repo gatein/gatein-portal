@@ -19,6 +19,7 @@
 
 package org.exoplatform.portal.config.model;
 
+import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.pom.config.Utils;
 import org.exoplatform.portal.pom.data.PortalData;
 
@@ -35,11 +36,11 @@ import java.util.Map;
 public class PortalConfig extends ModelObject
 {
 
-   final public static String USER_TYPE = "user";
+   final public static String USER_TYPE = SiteType.USER.getName();
 
-   final public static String GROUP_TYPE = "group";
+   final public static String GROUP_TYPE = SiteType.GROUP.getName();
 
-   final public static String PORTAL_TYPE = "portal";
+   final public static String PORTAL_TYPE = SiteType.PORTAL.getName();
 
    final public static Container DEFAULT_LAYOUT = initDefaultLayout();
 

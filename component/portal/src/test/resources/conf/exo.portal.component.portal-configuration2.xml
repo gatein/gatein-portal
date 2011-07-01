@@ -95,6 +95,9 @@
                 <value>
                   <string>system</string>
                 </value>
+                <value>
+                  <string>large</string>
+                </value>
               </collection>
             </field>
             <field name="ownerType">

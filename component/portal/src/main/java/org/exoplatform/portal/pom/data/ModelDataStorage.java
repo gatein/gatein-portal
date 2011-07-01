@@ -19,6 +19,9 @@
 
 package org.exoplatform.portal.pom.data;
 
+import java.util.Comparator;
+import java.util.List;
+
 import org.exoplatform.commons.utils.LazyPageList;
 import org.exoplatform.portal.application.PortletPreferences;
 import org.exoplatform.portal.config.Query;
@@ -28,9 +31,6 @@ import org.exoplatform.portal.config.model.Container;
 import org.exoplatform.portal.pom.data.ModelChange;
 import org.exoplatform.portal.pom.data.PageData;
 import org.exoplatform.portal.pom.data.PortalData;
-
-import java.util.Comparator;
-import java.util.List;
 
 /**
  * Created by The eXo Platform SAS
@@ -80,13 +80,6 @@ public interface ModelDataStorage
     */
    public List<ModelChange> save(PageData page) throws Exception;
 
-   public NavigationData getPageNavigation(NavigationKey key) throws Exception;
-
-   public void save(NavigationData navigation) throws Exception;
-
-   public void create(NavigationData navigation) throws Exception;
-
-   public void remove(NavigationData navigation) throws Exception;
 
    public void save(PortletPreferences portletPreferences) throws Exception;
 

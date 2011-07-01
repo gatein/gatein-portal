@@ -662,6 +662,7 @@ UIPortal.prototype.toggleComposer = function(clickedEle) {
 	var requestStr = eXo.env.server.createPortalURL(portalComposer.id, "Toggle", true);
 	ajaxAsyncGetRequest(requestStr);
 };
+
 /**
  * Clollapse or expand an element (all its children) of tree
  * @param {Object} element object to collapse or expand
@@ -669,17 +670,16 @@ UIPortal.prototype.toggleComposer = function(clickedEle) {
 UIPortal.prototype.collapseExpand = function(element) {
 	var subGroup = eXo.core.DOMUtil.findFirstChildByClass(element.parentNode, "div", "ChildrenContainer") ;
 	var className = element.className;
-	if(!subGroup) return false;
+	if(!subGroup) return;
 	if(subGroup.style.display == "none") {
-		if (className.indexOf("ExpandIcon") == 0) 	element.className = "CollapseIcon ClearFix" ;
+		if (className.indexOf("ExpandIcon") == 0) element.className = "CollapseIcon ClearFix" ;
 		subGroup.style.display = "block" ;
 	} else {
 		if (className.indexOf("CollapseIcon") == 0) element.className = "ExpandIcon ClearFix" ;
 		subGroup.style.display = "none" ;
 	}
-	return true;
 };
-	
+
 /*
 * This method will start the creation of a new javascript application such as a widget
 *

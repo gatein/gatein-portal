@@ -2,6 +2,7 @@
 	import org.exoplatform.portal.config.model.Page; 
 	import org.exoplatform.webui.core.UIPopupWindow;
 	import org.exoplatform.webui.form.UIForm; 
+	import org.exoplatform.webui.form.UIFormInputSet;
 
 
 	Page page	= uicomponent.getPage();		
@@ -23,8 +24,10 @@
 	
 	def rcontext = _ctx.getRequestContext(); 
 	rcontext.getJavascriptManager().importJavascript('eXo.webui.UIPopupWindow');
+	
+	UIFormInputSet uiform = uicomponent.getChild(UIFormInputSet.class); 
 %>
-<div class="UIPageSelector" id="<%=uicomponent.getId();%>" >
+<div class="UIPageSelector" id="<%=uicomponent.getId();%>">
 	<div class="PageSelectorTitle">
 		<div class="Icon BlueInfoBox16x16Icon"><span></span></div>
 		<div class="Title"><%=_ctx.appRes(uicomponent.getId()+".label.currentSelectedPage")%></div>
@@ -32,21 +35,37 @@
 	</div>
 	<div class="UIFormInfo">
 		<div class="FormInfoBG">
-			<div class="FormInfoIcon">
-				<div class="UIPropertyInfo">
-					<div class="OverflowContainer">
-						<div class="PropertyName"><%=_ctx.appRes(uicomponent.getId()+".header.id")%>:</div>
-						<div class="PropertyValue">$pageId</div>
-					</div>
-					<div class="OverflowContainer">
-						<div class="PropertyName"><%=_ctx.appRes(uicomponent.getId()+".label.name")%>:</div>
-						<div class="PropertyValue">$name</div>
-					</div>
-					<div class="OverflowContainer">
-						<div class="PropertyName"><%=_ctx.appRes(uicomponent.getId()+".label.title")%>:</div>
-						<div class="PropertyValue">$title</div>
-					</div>
-				</div>
+			<div class="FormInfoIcon UIForm">
+				<table class="UIPropertyInfo UIFormGrid">
+					<tr>
+						<td class="FieldLabel"><%=_ctx.appRes(uicomponent.getId()+".header.id")%>:</td>
+						<td class="FieldComponent">
+							<% if(page != null) { %>
+							$pageId
+							<% } %>
+						</td>
+					</tr>
+					<tr>
+						<td class="FieldLabel"><%=_ctx.appRes(uicomponent.getId()+".label.name")%>:</td>
+						<td class="FieldComponent">
+							<% if(page == null) { %>
+							<% uiform.renderChild("pageName");%>
+							<% } else { %>
+							$name
+							<% } %>
+						</td>
+					</tr>
+					<tr>
+						<td class="FieldLabel"><%=_ctx.appRes(uicomponent.getId()+".label.title")%>:</td>
+						<td class="FieldComponent">
+							<% if(page == null) { %>
+							<% uiform.renderChild("pageTitle");%>
+							<% } else { %>
+							$title
+							<% } %>
+						</td>
+					</tr>
+				</table>
 			</div>
 		</div>
 	</div>
@@ -55,9 +74,10 @@
 			<tr>
 				<td>
 				 <%
-					String clearPageEvent = "#"; 
+					String clearPageEvent = "javascript:void(0);"; 
 					String css = "FloatBlockHidden ActionButton SimpleStyle"; 
-					def uiForm = uicomponent.getAncestorOfType(UIForm.class); 
+					def uiForm = uicomponent.getAncestorOfType(UIForm.class);
+					createPageEvent = uiForm.event("CreatePage"); 
 					if(page != null) {
 						clearPageEvent = uiForm.event("ClearPage"); 
 						css = "ActionButton SimpleStyle"; 
@@ -73,8 +93,22 @@
 							 	</div>
 							</div>
 						</div>					
+					</div>
+					<% if(page == null) { %>		
+					<div onclick="<%=createPageEvent%>" class="ActionButton SimpleStyle">
+						<div class="ButtonLeft">
+							<div class="ButtonRight">
+								<div class="ButtonMiddle">
+									<div class="GreenPlusPage16x16Icon Icon" title="<%=_ctx.appRes(uicomponent.getId()+".label.createPage")%>">
+										<a href="javascript:void(0);"><%=_ctx.appRes(uicomponent.getId() + ".label.createPage")%></a>
+									</div>
+							 	</div>
+							</div>
+						</div>					
 					</div> 
-					<div class="ActionButton SimpleStyle" onclick="javascript: eXo.webui.UIPopupWindow.show('<%=uicomponent.getChild(UIPopupWindow.class).getId();%>');">
+					<% } %>
+					
+					<div class="ActionButton SimpleStyle" onclick="<%=uicomponent.event("OpenSelectPagePopUp")%>">
 						<div class="ButtonLeft">
 							<div class="ButtonRight">
 								<div class="ButtonMiddle">
@@ -85,6 +119,7 @@
 							</div>
 						</div>
 					</div>
+					
 				</td>
 			</tr>
 		</table>

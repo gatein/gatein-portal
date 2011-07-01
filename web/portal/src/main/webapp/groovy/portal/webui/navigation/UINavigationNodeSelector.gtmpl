@@ -14,10 +14,11 @@
   	
   	JavascriptManager jsmanager = _ctx.getRequestContext().getJavascriptManager();
   	jsmanager.importJavascript('eXo.webui.UIRightClickPopupMenu') ;
+  	def objId = uicomponent.getChild(UITree.class).getParentSelected().getId();
     if(uicomponent.getCopyNode()!= null) {
-      popupMenu = uiPopupMenu.getJSOnclickShowPopup("", "AddNode,PasteNode,EditNavigation,SaveNavigation,DeleteNavigation");
+      popupMenu = uiPopupMenu.getJSOnclickShowPopup(objId, "AddNode,PasteNode,EditNavigation,SaveNavigation,DeleteNavigation");
     } else {
-      popupMenu = uiPopupMenu.getJSOnclickShowPopup("", "AddNode,EditNavigation,SaveNavigation,DeleteNavigation");
+      popupMenu = uiPopupMenu.getJSOnclickShowPopup(objId, "AddNode,EditNavigation,SaveNavigation,DeleteNavigation");
     }
   	jsmanager.addJavascript("eXo.webui.UIRightClickPopupMenu.disableContextMenu('"+id+"') ;");
     uicomponent.renderUIComponent(uiPopupMenu) ;

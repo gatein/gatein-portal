@@ -1,22 +1,21 @@
 <%	
 	import org.exoplatform.portal.webui.navigation.UIPageNodeSelector;
-	import org.exoplatform.portal.config.model.PageNode;
 	import org.exoplatform.webui.core.UIComponent;
-%>
-<%	
-	PageNode pageNode = uicomponent.getSelectedPageNode();
-	String nodeName = ""; 	
-	if(pageNode!=null ) nodeName = "/"+pageNode.getResolvedLabel();
+
+	String nodeName = "/"; 	
 	boolean isNoSelecter = !uicomponent.getChild(UIPageNodeSelector.class).isRendered();
 %>
 <div class="UIWizardPageSetInfo">
 	<%uiform.begin()%>
 	<div class="<%=isNoSelecter ? "NoPageSelecter" : ""%>">
-		<%if(!isNoSelecter) {%>
+  <%if(!isNoSelecter) {
+   	def pageNode = uicomponent.getSelectedPageNode();
+   	if( pageNode!=null && pageNode.getResolvedLabel() != null ) nodeName += pageNode.getResolvedLabel();
+  %>
 		<div class="PageNodeContainer">
 			<% uicomponent.renderChild(UIPageNodeSelector.class); %>
 		</div>
-		<%}%>
+	<%}%>
 		<div class="SelectedPageInfo">
 			<div class="PageInfoContainer">
 				<div class="PageNodeInfo">

@@ -41,20 +41,8 @@ UIPortalControl.prototype.collapseTree = function(selectedElement ) {
   
   var parentNode = DOMUtil.findAncestorByClass(selectedElement, "Node");  
   var childrenContainer = DOMUtil.findFirstDescendantByClass(parentNode, "div", "ChildrenContainer");
-  
-  if (eXo.core.Browser.browserType != "ie") {
-  	var expandIcon = document.createElement('a');
-	  expandIcon.href = childrenContainer.getAttribute("actionLink") ;
-	  expandIcon.className = "ExpandIcon" ;
-	  expandIcon.innerHTML = selectedElement.innerHTML ;
-	  parentNode.removeChild(childrenContainer);
-	  parentNode.insertBefore(expandIcon, selectedElement);
-	  parentNode.removeChild(selectedElement);
-  } else {
-  	// Fix for GTNPORTAL-379 IE7: Can't hide sub-group  	
-  	var newHTML = "<div onclick=\"" + childrenContainer.getAttribute("actionLink") + "\" class=\"ExpandIcon\">" + selectedElement.innerHTML +  "</div>";  	
-  	parentNode.innerHTML = newHTML;
-  }  
+  var newHTML = "<div onclick=\"" + childrenContainer.getAttribute("actionLink") + "\" class=\"ExpandIcon\">" + selectedElement.innerHTML +  "</div>";  	
+  parentNode.innerHTML = newHTML;
 };
 
 /**

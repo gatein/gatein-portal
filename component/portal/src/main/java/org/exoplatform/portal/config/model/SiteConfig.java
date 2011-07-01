@@ -20,9 +20,7 @@ public class SiteConfig extends ModelObject
    private String ownerType;
    
    private String ownerId;
-   
-   private PageNavigation navigation;
-   
+
    /** Access permissions on UI */
    private String[] accessPermissions;
    

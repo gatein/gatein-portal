@@ -22,6 +22,7 @@ package org.exoplatform.portal.pom.config;
 import org.chromattic.api.ChromatticSession;
 import org.chromattic.api.UndeclaredRepositoryException;
 import org.chromattic.ext.format.BaseEncodingObjectFormatter;
+import org.chromattic.api.query.QueryResult;
 import org.exoplatform.commons.chromattic.SessionContext;
 import org.exoplatform.commons.chromattic.SynchronizationListener;
 import org.exoplatform.commons.chromattic.SynchronizationStatus;
@@ -43,7 +44,6 @@ import org.gatein.mop.core.api.workspace.PageImpl;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import java.io.Serializable;
-import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -249,8 +249,13 @@ public final class POMSession
 
    private static final BaseEncodingObjectFormatter formatter = new BaseEncodingObjectFormatter();
 
-   public <O extends WorkspaceObject> Iterator<O> findObjects(ObjectType<O> type, ObjectType<? extends Site> siteType,
-      String ownerId, String title)
+   public <O extends WorkspaceObject> QueryResult<O> findObjects(
+      ObjectType<O> type,
+      ObjectType<Site> siteType,
+      String ownerId,
+      String title,
+      int offset,
+      int limit)
    {
       this.save();
       //
@@ -292,36 +297,7 @@ public final class POMSession
 
       //
       String statement;
-      if (siteType != null)
-      {
-         try
-         {
-            if (type == ObjectType.PAGE)
-            {
-               statement =
-                  "jcr:path LIKE '" + workspaceChunk + "/" + ownerTypeChunk + "/" + ownerIdChunk
-                     + "/mop:rootpage/mop:children/mop:pages/mop:children/%'";
-            }
-            else
-            {
-               statement =
-                  "jcr:path LIKE '" + workspaceChunk + "/" + ownerTypeChunk + "/" + ownerIdChunk
-                     + "/mop:rootnavigation/mop:children/mop:default'";
-            }
-         }
-         catch (IllegalArgumentException e)
-         {
-            if (type == ObjectType.PAGE)
-            {
-               statement = "jcr:path LIKE ''";
-            }
-            else
-            {
-               statement = "jcr:path LIKE ''";
-            }
-         }
-      }
-      else
+      try
       {
          if (title != null)
          {
@@ -355,21 +331,22 @@ public final class POMSession
             }
          }
       }
+      catch (IllegalArgumentException e)
+      {
+         if (type == ObjectType.PAGE)
+         {
+            statement = "jcr:path LIKE ''";
+         }
+         else
+         {
+            statement = "jcr:path LIKE ''";
+         }
+      }
 
       // Temporary work around, to fix in MOP and then remove
-      ChromatticSession session;
-      try
-      {
-         Field f = ModelImpl.class.getDeclaredField("session");
-         f.setAccessible(true);
-         session = (ChromatticSession)f.get(model);
-      }
-      catch (Exception e)
-      {
-         throw new Error(e);
-      }
+      ChromatticSession session = context.getSession();
       Class<O> mappedClass = (Class<O>)mapping.get(type);
-      return session.createQueryBuilder(mappedClass).where(statement).get().objects();
+      return session.createQueryBuilder(mappedClass).where(statement).get().objects((long)offset, (long)limit);
    }
 
    private final SynchronizationListener listener = new SynchronizationListener()

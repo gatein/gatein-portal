@@ -57,8 +57,8 @@ import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.UITabPane;
 import org.exoplatform.webui.core.UIWizard;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
+import org.exoplatform.webui.event.EventListener;
 
 import java.util.List;
 import java.util.ResourceBundle;
@@ -415,7 +415,7 @@ public class UIPortalComposer extends UIContainer
          UIPortal uiPortal = uiWorkingWS.getBackupUIPortal();
          siteBody.setUIComponent(uiPortal);
 
-         String uri = uiPortal.getSelectedNode() != null ? uiPortal.getSelectedNode().getUri() : null;
+         String uri = uiPortal.getSelectedUserNode() != null ? uiPortal.getSelectedUserNode().getURI() : null;
          PageNodeEvent<UIPortal> pnevent = new PageNodeEvent<UIPortal>(uiPortal, PageNodeEvent.CHANGE_PAGE_NODE, uri);
          uiPortal.broadcast(pnevent, Event.Phase.PROCESS);
          prContext.addUIComponentToUpdateByAjax(uiWorkingWS);
@@ -462,14 +462,13 @@ public class UIPortalComposer extends UIContainer
          uiWorkingWS.setRenderedChild(UIPortalApplication.UI_VIEWING_WS_ID);
          prContext.ignoreAJAXUpdateOnPortlets(true);
 
-         String uri = (uiPortal.getSelectedNode() != null)? (uiPortal.getSelectedNode().getUri()) : null;
+         String uri = (uiPortal.getSelectedUserNode() != null)? (uiPortal.getSelectedUserNode().getURI()) : null;
         
          if (uiComposer.isPortalExist(editPortal))
          {
             DataStorage storage = uiPortalApp.getApplicationComponent(DataStorage.class);
             PortalConfig pConfig =
-               storage.getPortalConfig(uiPortal.getSelectedNavigation().getOwnerType(), uiPortal
-                  .getSelectedNavigation().getOwnerId());
+               storage.getPortalConfig(uiPortal.getSiteKey().getTypeName(), uiPortal.getSiteKey().getName());
             if (pConfig != null)
             {
                uiPortalApp.getUserPortalConfig().setPortal(pConfig);
@@ -656,7 +655,8 @@ public class UIPortalComposer extends UIContainer
          UIPortalApplication uiPortalApp = Util.getUIPortalApplication();
          uiPortalApp.setModeState(UIPortalApplication.NORMAL_MODE);
          uiWorkingWS.setRenderedChild(UIPortalApplication.UI_VIEWING_WS_ID);
-         Util.getPortalRequestContext().ignoreAJAXUpdateOnPortlets(true);
+         PortalRequestContext prContext = Util.getPortalRequestContext();
+         prContext.ignoreAJAXUpdateOnPortlets(true);
 
          UIPortal uiPortal = uiPortalApp.getShowedUIPortal();
          uiPortal.setRenderSibling(UIPortal.class);
@@ -666,9 +666,10 @@ public class UIPortalComposer extends UIContainer
          uiPortal.refreshUIPage();
          
          PageNodeEvent<UIPortal> pnevent =
-            new PageNodeEvent<UIPortal>(uiPortal, PageNodeEvent.CHANGE_PAGE_NODE, (uiPortal.getSelectedNode() != null
-               ? uiPortal.getSelectedNode().getUri() : null));
+            new PageNodeEvent<UIPortal>(uiPortal, PageNodeEvent.CHANGE_PAGE_NODE, (uiPortal.getSelectedUserNode() != null
+               ? uiPortal.getSelectedUserNode().getURI() : null));
          uiPortal.broadcast(pnevent, Event.Phase.PROCESS);
+         prContext.addUIComponentToUpdateByAjax(uiWorkingWS);
          JavascriptManager jsManager = event.getRequestContext().getJavascriptManager();
          jsManager.addJavascript("eXo.portal.portalMode=" + UIPortalApplication.NORMAL_MODE + ";");
       }
@@ -689,7 +690,8 @@ public class UIPortalComposer extends UIContainer
          UIEditInlineWorkspace editInlineWS = event.getSource().getParent();
          UIWorkingWorkspace uiWorkingWS = editInlineWS.getParent();
          UIPortalToolPanel uiToolPanel = uiWorkingWS.findFirstComponentOfType(UIPortalToolPanel.class);
-
+         Util.getPortalRequestContext().addUIComponentToUpdateByAjax(uiWorkingWS);
+         
          UIPage uiPage = uiToolPanel.findFirstComponentOfType(UIPage.class);
          Page page = (Page)PortalDataMapper.buildModelObject(uiPage);
          String pageId = page.getPageId();
@@ -708,7 +710,7 @@ public class UIPortalComposer extends UIContainer
             Util.getPortalRequestContext().ignoreAJAXUpdateOnPortlets(true);
             PageNodeEvent<UIPortal> pnevent =
                new PageNodeEvent<UIPortal>(uiPortal, PageNodeEvent.CHANGE_PAGE_NODE,
-                  (uiPortal.getSelectedNode() != null ? uiPortal.getSelectedNode().getUri() : null));
+                  (uiPortal.getSelectedUserNode() != null ? uiPortal.getSelectedUserNode().getURI() : null));
             uiPortal.broadcast(pnevent, Event.Phase.PROCESS);
             JavascriptManager jsManager = event.getRequestContext().getJavascriptManager();
             jsManager.addJavascript("eXo.portal.portalMode=" + UIPortalApplication.NORMAL_MODE + ";");
@@ -764,8 +766,8 @@ public class UIPortalComposer extends UIContainer
          uiWorkingWS.setRenderedChild(UIPortalApplication.UI_VIEWING_WS_ID);
          Util.getPortalRequestContext().ignoreAJAXUpdateOnPortlets(true);
          PageNodeEvent<UIPortal> pnevent =
-            new PageNodeEvent<UIPortal>(uiPortal, PageNodeEvent.CHANGE_PAGE_NODE, (uiPortal.getSelectedNode() != null
-               ? uiPortal.getSelectedNode().getUri() : null));
+            new PageNodeEvent<UIPortal>(uiPortal, PageNodeEvent.CHANGE_PAGE_NODE, (uiPortal.getSelectedUserNode() != null
+               ? uiPortal.getSelectedUserNode().getURI() : null));
          uiPortal.broadcast(pnevent, Event.Phase.PROCESS);
          JavascriptManager jsManager = event.getRequestContext().getJavascriptManager();
          jsManager.addJavascript("eXo.portal.portalMode=" + UIPortalApplication.NORMAL_MODE + ";");

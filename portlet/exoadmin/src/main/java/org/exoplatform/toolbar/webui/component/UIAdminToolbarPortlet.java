@@ -22,9 +22,8 @@ package org.exoplatform.toolbar.webui.component;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.model.Page;
-import org.exoplatform.portal.config.model.PageNavigation;
-import org.exoplatform.portal.config.model.PageNode;
-import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.mop.user.UserNavigation;
+import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.webui.page.UIPage;
 import org.exoplatform.portal.webui.page.UIPageBody;
 import org.exoplatform.portal.webui.portal.UIPortal;
@@ -45,9 +44,9 @@ public class UIAdminToolbarPortlet extends UIPortletApplication
    {
    }
 
-   public PageNavigation getSelectedNavigation() throws Exception
+   public UserNavigation getSelectedNavigation() throws Exception
    {
-      return Util.getUIPortal().getSelectedNavigation();
+      return Util.getUIPortal().getUserNavigation(); 
    }
 
    @Override
@@ -64,21 +63,12 @@ public class UIAdminToolbarPortlet extends UIPortletApplication
 
    private boolean hasEditPermissionOnNavigation() throws Exception
    {
-      PageNavigation selectedNavigation = getSelectedNavigation();
-      UIPortalApplication portalApp = Util.getUIPortalApplication();
-      UserACL userACL = portalApp.getApplicationComponent(UserACL.class);
-      if (selectedNavigation == null || userACL == null)
+      UserNavigation selectedNavigation = getSelectedNavigation();
+      if (selectedNavigation == null)
       {
          return false;
       }
-      else
-      {
-         if (PortalConfig.PORTAL_TYPE.equals(selectedNavigation.getOwnerType()))
-         {
-            return hasEditPermissionOnPortal();
-         }
-         return userACL.hasEditPermission(selectedNavigation);
-      }
+      return selectedNavigation.isModifiable();
    }
    
    private boolean hasEditPermissionOnPortal() throws Exception
@@ -104,8 +94,8 @@ public class UIAdminToolbarPortlet extends UIPortletApplication
       else
       {
          UIPortal currentUIPortal = portalApp.<UIWorkingWorkspace>findComponentById(UIPortalApplication.UI_WORKING_WS_ID).findFirstComponentOfType(UIPortal.class);
-         PageNode currentNode = currentUIPortal.getSelectedNode();
-         String pageReference = currentNode.getPageReference();
+         UserNode currentNode = currentUIPortal.getSelectedUserNode();
+         String pageReference = currentNode.getPageRef();
          if(pageReference == null)
          {
             return false;

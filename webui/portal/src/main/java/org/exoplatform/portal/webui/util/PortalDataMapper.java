@@ -366,7 +366,7 @@ public class PortalDataMapper
          }
       }
       //uiPortal.setNavigation(userPortalConfig.getNavigations());
-      uiPortal.setNavigation(userPortalConfig.getSelectedNavigation());
+//      uiPortal.setNavigation(userPortalConfig.getSelectedNavigation());
    }
 
    private static void buildUIContainer(UIContainer uiContainer, Object model, boolean dashboard) throws Exception

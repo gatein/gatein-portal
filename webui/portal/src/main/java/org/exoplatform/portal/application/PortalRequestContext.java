@@ -24,15 +24,19 @@ import org.exoplatform.commons.utils.ExpressionUtil;
 import org.exoplatform.commons.utils.PortalPrinter;
 import org.exoplatform.commons.xml.DOMSerializer;
 import org.exoplatform.container.ExoContainer;
+import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Page;
-import org.exoplatform.portal.config.model.PageNode;
+import org.exoplatform.portal.mop.user.UserNavigation;
+import org.exoplatform.portal.mop.user.UserNode;
+import org.exoplatform.portal.mop.user.UserPortalContext;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.resources.Orientation;
+import org.exoplatform.services.resources.ResourceBundleManager;
 import org.exoplatform.web.application.JavascriptManager;
 import org.exoplatform.web.application.URLBuilder;
 import org.exoplatform.webui.application.WebuiApplication;
@@ -52,6 +56,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -210,13 +215,13 @@ public class PortalRequestContext extends WebuiRequestContext
          UIPortal uiportal = Util.getUIPortal();
 
          //
-         PageNode node = uiportal.getSelectedNode();
+         UserNode node = uiportal.getSelectedUserNode();
          if (node != null)
          {
             ExoContainer container = getApplication().getApplicationServiceContainer();
             container.getComponentInstanceOfType(UserPortalConfigService.class);
             UserPortalConfigService configService = (UserPortalConfigService)container.getComponentInstanceOfType(UserPortalConfigService.class);
-            Page page = configService.getPage(node.getPageReference(), getRemoteUser());
+            Page page = configService.getPage(node.getPageRef(), getRemoteUser());
 
             //
             if (page != null)
@@ -483,6 +488,20 @@ public class PortalRequestContext extends WebuiRequestContext
 	  }
 	  this.extraMarkupHeaders.add(element);
    }
+
+   final public static UserPortalContext USER_PORTAL_CONTEXT = new UserPortalContext()
+   {
+      public ResourceBundle getBundle(UserNavigation navigation)
+      {
+         ExoContainer container = ExoContainerContext.getCurrentContainer();
+         ResourceBundleManager rbMgr = (ResourceBundleManager)container.getComponentInstanceOfType(ResourceBundleManager.class);
+         Locale locale = Util.getPortalRequestContext().getLocale();
+         return rbMgr.getNavigationResourceBundle(
+            locale.getLanguage(),
+            navigation.getKey().getTypeName(),
+            navigation.getKey().getName());
+      }
+   };
 
 
 }

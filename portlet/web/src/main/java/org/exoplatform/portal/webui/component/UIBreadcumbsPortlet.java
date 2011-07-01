@@ -19,7 +19,7 @@
 
 package org.exoplatform.portal.webui.component;
 
-import org.exoplatform.portal.config.model.PageNode;
+import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.webui.portal.PageNodeEvent;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
@@ -28,14 +28,14 @@ import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIBreadcumbs;
-import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.UIBreadcumbs.LocalPath;
-import org.exoplatform.webui.core.UIBreadcumbs.SelectPathActionListener;
+import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.portlet.PortletPreferences;
@@ -62,23 +62,27 @@ public class UIBreadcumbsPortlet extends UIPortletApplication
       uiBreadCumbs.setTemplate(template);
    }
 
-   public void loadSelectedPath()
+   private void loadSelectedPath() throws Exception
    {
-      List<PageNode> nodes = Util.getUIPortal().getSelectedPath();
+      UserNode node = Util.getUIPortal().getSelectedUserNode();
       List<LocalPath> paths = new ArrayList<LocalPath>();
-      for (PageNode node : nodes)
+      
+      do
       {
-         if (node == null)
-            continue;
-         if (node.getPageReference() == null)
+         if (node.getPageRef() == null)
          {
             paths.add(new LocalPath(null, node.getResolvedLabel()));
          }
          else
          {
-            paths.add(new LocalPath(node.getUri(), node.getResolvedLabel()));
+            paths.add(new LocalPath(node.getURI(), node.getResolvedLabel()));
          }
+         node = node.getParent();
       }
+      while (node != null && node.getParent() != null);
+      
+      Collections.reverse(paths);
+      
       UIBreadcumbs uiBreadCumbs = getChild(UIBreadcumbs.class);
       uiBreadCumbs.setPath(paths);
    }   

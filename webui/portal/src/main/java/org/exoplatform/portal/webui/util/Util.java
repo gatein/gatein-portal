@@ -217,10 +217,24 @@ public class Util
       }
    }
 
+   /**
+    * @deprecated use {@link #toUIPage(String, UIComponent)} instead
+    * 
+    * @param node
+    * @param uiParent
+    * @return
+    * @throws Exception
+    */
+   @Deprecated
    static public UIPage toUIPage(PageNode node, UIComponent uiParent) throws Exception
    {
+      return toUIPage(node.getPageReference(), uiParent);
+   }
+   
+   static public UIPage toUIPage(String pageRef, UIComponent uiParent) throws Exception
+   {
       UserPortalConfigService configService = uiParent.getApplicationComponent(UserPortalConfigService.class);
-      Page page = configService.getPage(node.getPageReference(), getPortalRequestContext().getRemoteUser());
+      Page page = configService.getPage(pageRef, getPortalRequestContext().getRemoteUser());
       return toUIPage(page, uiParent);
    }
 

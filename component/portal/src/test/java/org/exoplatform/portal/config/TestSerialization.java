@@ -22,15 +22,12 @@ package org.exoplatform.portal.config;
 import org.exoplatform.component.test.AbstractGateInTest;
 import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.config.model.PersistentApplicationState;
-import org.exoplatform.portal.config.model.TransientApplicationState;
-import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.pom.data.*;
 import org.exoplatform.portal.pom.spi.gadget.Gadget;
 import org.gatein.common.io.IOTools;
 
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -177,52 +174,6 @@ public class TestSerialization extends AbstractGateInTest
       assertEquals(obj.getEditPermission(), clone.getEditPermission());
       assertEquals(obj.getProperties(), clone.getProperties());
       assertEquals(obj.getSkin(), clone.getSkin());
-   }
-
-   public void testNavigationNode() throws Exception
-   {
-      Date a = new Date();
-      Date b = new Date();
-      NavigationNodeData obj = new NavigationNodeData(
-         "foo01",
-         "foo02",
-         "foo03",
-         "foo04",
-         "foo05",
-         a,
-         b,
-         Visibility.SYSTEM,
-         "foo06",
-         Collections.<NavigationNodeData>emptyList()
-      );
-      NavigationNodeData clone = IOTools.clone(obj);
-      assertEquals(obj.getStorageId(), clone.getStorageId());
-      assertEquals(obj.getStorageName(), clone.getStorageName());
-      assertEquals(obj.getURI(), clone.getURI());
-      assertEquals(obj.getLabel(), clone.getLabel());
-      assertEquals(obj.getIcon(), clone.getIcon());
-      assertEquals(obj.getName(), clone.getName());
-      assertEquals(obj.getStartPublicationDate(), clone.getStartPublicationDate());
-      assertEquals(obj.getEndPublicationDate(), clone.getEndPublicationDate());
-      assertEquals(obj.getVisibility(), clone.getVisibility());
-      assertEquals(obj.getPageReference(), clone.getPageReference());
-   }
-
-   public void testNavigationData() throws Exception
-   {
-      NavigationData obj = new NavigationData(
-         "foo01",
-         "foo02",
-         "foo03",
-         3,
-         Collections.<NavigationNodeData>emptyList()
-      );
-      NavigationData clone = IOTools.clone(obj);
-      assertEquals(obj.getStorageId(), clone.getStorageId());
-      assertEquals(obj.getStorageName(), clone.getStorageName());
-      assertEquals(obj.getOwnerType(), clone.getOwnerType());
-      assertEquals(obj.getOwnerId(), clone.getOwnerId());
-      assertEquals(obj.getPriority(), clone.getPriority());
    }
 
    public void testApplicationData() throws Exception

@@ -80,5 +80,12 @@
 		<skin-name>Default</skin-name>
 		<css-path>/skin/portal/webui/component/UIIFramePortlet/DefaultStylesheet.css</css-path>
 	</portlet-skin>
+	
+	<javascript>
+		<param>
+			<js-module>eXo.webui.UISiteMap</js-module>
+			<js-path>/javascript/eXo/webui/UISiteMap.js</js-path>
+		</param>
+	</javascript>
 </gatein-resources>
 

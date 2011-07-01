@@ -21,9 +21,10 @@ package org.exoplatform.portal.config;
 
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.component.RequestLifeCycle;
-import org.exoplatform.portal.config.model.Container;
-import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.mop.SiteKey;
+import org.exoplatform.portal.mop.navigation.NavigationContext;
+import org.exoplatform.portal.mop.navigation.NavigationService;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.GroupEventListener;
 import org.exoplatform.services.organization.GroupHandler;
@@ -44,16 +45,11 @@ public class GroupPortalConfigListener extends GroupEventListener
    private final UserPortalConfigService portalConfigService;
 
    /** . */
-   private final DataStorage dataStorage;
-
-   /** . */
    private final OrganizationService orgService;
 
-   public GroupPortalConfigListener(UserPortalConfigService portalConfigService, DataStorage dataStorage,
-      OrganizationService orgService)
+   public GroupPortalConfigListener(UserPortalConfigService portalConfigService, OrganizationService orgService)
    {
       this.portalConfigService = portalConfigService;
-      this.dataStorage = dataStorage;
       this.orgService = orgService;
    }
 
@@ -65,7 +61,7 @@ public class GroupPortalConfigListener extends GroupEventListener
          String groupId = group.getId().trim();
 
          // Remove all descendant navigations
-         removeGroupNavigation(group, dataStorage);
+         removeGroupNavigation(group);
 
          portalConfigService.removeUserPortalConfig(PortalConfig.GROUP_TYPE, groupId);
       }
@@ -150,19 +146,22 @@ public class GroupPortalConfigListener extends GroupEventListener
       }
    }
 
-   private void removeGroupNavigation(Group group, DataStorage dataService) throws Exception
+   private void removeGroupNavigation(Group group) throws Exception
    {
       GroupHandler groupHandler = orgService.getGroupHandler();
       Collection<String> descendantGroups = getDescendantGroups(group, groupHandler);
       Collection<String> deletedNavigationGroups = new ArrayList<String>();
       deletedNavigationGroups.addAll(descendantGroups);
       deletedNavigationGroups.add(group.getId());
-      PageNavigation navigation = null;
       for (String childGroup : deletedNavigationGroups)
       {
-         navigation = dataService.getPageNavigation(PortalConfig.GROUP_TYPE, childGroup);
-         if (navigation != null)
-            dataService.remove(navigation);
+         SiteKey key = SiteKey.group(childGroup);
+         NavigationService navService = portalConfigService.getNavigationService();
+         NavigationContext nav = navService.loadNavigation(key);
+         if (nav != null)
+         {
+            navService.destroyNavigation(nav);
+         }
       }
    }
 

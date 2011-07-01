@@ -23,7 +23,7 @@ import org.exoplatform.container.ExoContainer;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageBody;
-import org.exoplatform.portal.config.model.PageNode;
+import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.portal.UIPortalComponent;
 import org.exoplatform.portal.webui.util.PortalDataMapper;
@@ -69,7 +69,7 @@ public class UIPageBody extends UIComponentDecorator
       setId("UIPageBody");
    }
 
-   public void setPageBody(PageNode pageNode, UIPortal uiPortal) throws Exception
+   public void setPageBody(UserNode pageNode, UIPortal uiPortal) throws Exception
    {
       WebuiRequestContext context = Util.getPortalRequestContext();
       uiPortal.setMaximizedUIComponent(null);
@@ -110,7 +110,7 @@ public class UIPageBody extends UIComponentDecorator
     * @param uiPortal
     * @return
     */
-   private UIPage getUIPage(PageNode pageNode, UIPortal uiPortal, WebuiRequestContext context)
+   private UIPage getUIPage(UserNode pageNode, UIPortal uiPortal, WebuiRequestContext context)
       throws Exception
    {
       Page page = null;
@@ -118,7 +118,7 @@ public class UIPageBody extends UIComponentDecorator
       
       if (pageNode != null)
       {
-         pageReference = pageNode.getPageReference();
+         pageReference = pageNode.getPageRef();
          if (pageReference != null)
          {
             ExoContainer appContainer = context.getApplication().getApplicationServiceContainer();

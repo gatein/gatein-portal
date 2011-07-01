@@ -59,22 +59,20 @@ public class TestSearch extends AbstractPortalTest
       super.tearDown();
    }
 
-   private void assertFound(String searchTitle, String expectedPage) throws Exception
+   private void assertPageFound(Query<Page> q, String expectedPage) throws Exception
    {
-      Query<Page> q = new Query<Page>(null, null, null, searchTitle, Page.class);
       List<Page> res = storage.find(q).getAll();
       assertEquals(1, res.size());
       assertEquals(expectedPage, res.get(0).getPageId());
    }
 
-   private void assertNotFound(String searchTitle) throws Exception
+   private void assertPageNotFound(Query<Page> q) throws Exception
    {
-      Query<Page> q = new Query<Page>(null, null, null, searchTitle, Page.class);
       List<Page> res = storage.find(q).getAll();
       assertEquals(0, res.size());
    }
 
-   public void testFoo() throws Exception
+   public void testSearchPage() throws Exception
    {
       Page page = new Page();
       page.setPageId("portal::test::searchedpage");
@@ -83,19 +81,20 @@ public class TestSearch extends AbstractPortalTest
       session.save();
 
       //
-      assertFound("Juuu Ziii", "portal::test::searchedpage");
-      assertFound("Juuu", "portal::test::searchedpage");
-      assertFound("Ziii", "portal::test::searchedpage");
-      assertFound("juuu ziii", "portal::test::searchedpage");
-      assertFound("juuu", "portal::test::searchedpage");
-      assertFound("ziii", "portal::test::searchedpage");
-      assertFound("juu", "portal::test::searchedpage");
-      assertFound("zii", "portal::test::searchedpage");
-      assertFound("ju", "portal::test::searchedpage");
-      assertFound("zi", "portal::test::searchedpage");
+      assertPageFound(new Query<Page>(null, null, null, "Juuu Ziii", Page.class), "portal::test::searchedpage");
+      assertPageFound(new Query<Page>(null, null, null, "Juuu", Page.class), "portal::test::searchedpage");
+      assertPageFound(new Query<Page>(null, null, null, "Ziii", Page.class), "portal::test::searchedpage");
+      assertPageFound(new Query<Page>(null, null, null, "juuu ziii", Page.class), "portal::test::searchedpage");
+      assertPageFound(new Query<Page>(null, null, null, "juuu", Page.class), "portal::test::searchedpage");
+      assertPageFound(new Query<Page>(null, null, null, "ziii", Page.class), "portal::test::searchedpage");
+      assertPageFound(new Query<Page>(null, null, null, "juu", Page.class), "portal::test::searchedpage");
+      assertPageFound(new Query<Page>(null, null, null, "zii", Page.class), "portal::test::searchedpage");
+      assertPageFound(new Query<Page>(null, null, null, "ju", Page.class), "portal::test::searchedpage");
+      assertPageFound(new Query<Page>(null, null, null, "zi", Page.class), "portal::test::searchedpage");
 
-      assertNotFound("foo");
-      assertNotFound("foo bar");
+      assertPageNotFound(new Query<Page>(null, null, null, "foo", Page.class));
+      assertPageNotFound(new Query<Page>(null, null, null, "foo bar", Page.class));
+      assertPageNotFound(new Query<Page>("test", null, null, null, Page.class));
    }
    
    public void testSearchPageByOwnerID() throws Exception

@@ -50,6 +50,8 @@ import javax.portlet.PortletRequest;
 import javax.portlet.PortletResponse;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
+import javax.portlet.ResourceRequest;
+import javax.portlet.ResourceResponse;
 
 /**
  * May 26, 2006
@@ -214,6 +216,50 @@ public class PortletApplication extends WebuiApplication
          WebuiRequestContext.setCurrentInstance(parentAppRequestContext);
       }
    }
+   
+   /**
+    * This method is called when a JSR 286 serveResource lifecycle method is targeting the current portlet.
+    * 
+    * 1) The current instance of the WebuiRequestContext (stored in a ThreadLocal in the class) is referenced
+    * 2) A new request context of type PortletRequestContext (which extends the class WebuiRequestContext) is
+    *    created as a child of the current context instance
+    * 3) The new context is place inside the ThreadLocal and hence overides its parent one there, 
+    *    only for the portlet request lifecycle
+    * 4) The method onStartRequest() is called in all the ApplicationLifecycle objects referenced in the webui 
+    *    configuration XML file
+    * 5) The StateManager object (in case of portlet it is an object of type ParentAppStateManager) is used to get the RootComponent
+    *    also referenced in the XML configuration file
+    * 6) The method serveResource of UIPortletApplication is called
+    * 7) Finally, the method onEndRequest() is called on every ApplicationLifecycle referenced in the portlet
+    *    configuration XML file and the parent WebuiRequestContext is restored
+    */
+   public void serveResource(ResourceRequest req, ResourceResponse res) throws Exception
+   {
+      WebuiRequestContext parentAppRequestContext = WebuiRequestContext.getCurrentInstance();
+      PortletRequestContext context = createRequestContext(req, res, parentAppRequestContext);
+      WebuiRequestContext.setCurrentInstance(context);
+      try
+      {
+         for (ApplicationLifecycle<RequestContext> lifecycle : getApplicationLifecycle())
+         {
+            lifecycle.onStartRequest(this, context);
+         }
+         StateManager sm = getStateManager();
+         UIApplication uiApp = sm.restoreUIRootComponent(context);
+         context.setUIApplication(uiApp);
+         if (uiApp instanceof UIPortletApplication)
+         {
+            ((UIPortletApplication)uiApp).serveResource(context);           
+         }
+         
+         // Store ui root
+         sm.storeUIRootComponent(context);
+      }
+      finally
+      {
+         WebuiRequestContext.setCurrentInstance(parentAppRequestContext);
+      }
+   }
 
    /**
     * The render method business logic is quite similar to the processAction() one.
@@ -313,5 +359,4 @@ public class PortletApplication extends WebuiApplication
       context.setParentAppRequestContext(parentAppRequestContext);
       return context;
    }
-
 }

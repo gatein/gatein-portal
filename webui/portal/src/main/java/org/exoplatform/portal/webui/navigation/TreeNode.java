@@ -19,13 +19,14 @@
 
 package org.exoplatform.portal.webui.navigation;
 
-import org.exoplatform.portal.config.model.PageNavigation;
-import org.exoplatform.portal.config.model.PageNode;
-
-import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
-import javax.jcr.RepositoryException;
+import org.exoplatform.portal.mop.user.UserNode;
 
 /**
  * Created by The eXo Platform SARL
@@ -36,31 +37,28 @@ import javax.jcr.RepositoryException;
  */
 public class TreeNode
 {
-   //TODO Need use this class for BC TreeNode
    private boolean isExpanded_;
 
-   private boolean hasChild_;
+   private UserNode node_;
 
-   private String path_;
+   private List<TreeNode> children_ = Collections.emptyList();
 
-   private PageNode node_;
+   private Map<String, TreeNode> cachedTreeNodes_;
 
-   private PageNavigation navigation_;
+   private TreeNode rootNode;
 
-   private List<TreeNode> children_ = new ArrayList<TreeNode>();
-
-   public TreeNode(PageNode node, PageNavigation nav, boolean hasChild)
+   public TreeNode()
    {
-      this(node, node.getUri(), nav, hasChild);
+      cachedTreeNodes_ = new HashMap<String, TreeNode>();
+      rootNode = this;
    }
 
-   private TreeNode(PageNode node, String path, PageNavigation nav, boolean hasChild)
+   private TreeNode(UserNode node, TreeNode rootNode) throws Exception
    {
       node_ = node;
-      navigation_ = nav;
       isExpanded_ = false;
-      path_ = path;
-      hasChild_ = hasChild;
+      this.rootNode = rootNode; 
+      setChildren(node.getChildren());
    }
 
    public boolean isExpanded()
@@ -73,29 +71,9 @@ public class TreeNode
       isExpanded_ = isExpanded;
    }
 
-   public String getName() throws RepositoryException
-   {
-      return node_.getName();
-   }
-
-   public String getPath()
-   {
-      return path_;
-   }
-
-   public String getNodePath() throws RepositoryException
-   {
-      return node_.getUri();
-   }
-
-   public PageNode getNode()
-   {
+   public UserNode getNode()
+   {               
       return node_;
-   }
-
-   public void setNode(PageNode node)
-   {
-      node_ = node;
    }
 
    public List<TreeNode> getChildren()
@@ -108,61 +86,32 @@ public class TreeNode
       return children_.size();
    }
 
-   public TreeNode getChildByPath(String path, TreeNode treeNode)
+   public void setChildren(Collection<UserNode> children) throws Exception
    {
-      TreeNode returnVal = null;
-
-      for (TreeNode child : treeNode.getChildren())
+      if (children == null)
+         return;
+                                   
+      children_ = new LinkedList<TreeNode>();      
+      for (UserNode child : children)
       {
-
-         if (returnVal != null)
-            continue;
-
-         if (child.getPath().equals(path))
-         {
-            returnVal = child;
-         }
-         else if (child.getChildren() != null)
-         {
-            returnVal = child.getChildByPath(path, child);
-         }
-      }
-
-      return returnVal;
-   }
-
-   public void setChildren(List<PageNode> children, PageNavigation nav) throws Exception
-   {
-      setExpanded(true);
-      for (PageNode child : children)
-      {
-         boolean isHasChild = (child.getChildren().size() > 0);
-         children_.add(new TreeNode(child, nav.getId() + "::" + child.getUri(), nav, isHasChild));
+         TreeNode node = new TreeNode(child, rootNode);
+         children_.add(node);
+         rootNode.cachedTreeNodes_.put(child.getId(), node);         
       }
    }
 
-   public void addChildren(TreeNode treeNode)
+   public boolean hasChild()
    {
-      children_.add(treeNode);
+      return node_.getChildrenCount() > 0;
    }
 
-   public void setNavigation(PageNavigation navigation_)
+   /**
+    * Help to find nodes on the whole tree, not only in the childrens of this node
+     * @param nodeId - id of the UserNode
+    * @return null if not found
+    */
+   public TreeNode findNodes(String nodeId)
    {
-      this.navigation_ = navigation_;
-   }
-
-   public PageNavigation getNavigation()
-   {
-      return navigation_;
-   }
-
-   public void setHasChild(boolean hasChild)
-   {
-      this.hasChild_ = hasChild;
-   }
-
-   public boolean isHasChild()
-   {
-      return hasChild_;
+      return rootNode.cachedTreeNodes_.get(nodeId);
    }
 }

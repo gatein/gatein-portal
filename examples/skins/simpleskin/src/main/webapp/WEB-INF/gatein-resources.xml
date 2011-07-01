@@ -54,13 +54,6 @@
 	
 	<portlet-skin>
 		<application-name>web</application-name>
-		<portlet-name>PortalNavigationPortlet</portlet-name>
-		<skin-name>SimpleSkin</skin-name>
-		<css-path>/skin/webPortlet/webui/component/UIPortalNavigationPortlet/Stylesheet.css</css-path>
-	</portlet-skin>
-	
-	<portlet-skin>
-		<application-name>web</application-name>
 		<portlet-name>SiteMapPortlet</portlet-name>
 		<skin-name>SimpleSkin</skin-name>
 		<css-path>/skin/webPortlet/webui/component/UISiteMap/Stylesheet.css</css-path>

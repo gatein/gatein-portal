@@ -1,9 +1,10 @@
 <% 
-	import org.exoplatform.portal.config.model.PageNode;
-	import org.exoplatform.portal.config.model.PageNavigation;
+  	import org.exoplatform.portal.mop.user.UserNode;
 	import org.exoplatform.web.application.JavascriptManager;
 	import org.exoplatform.portal.webui.util.Util;
 	import org.gatein.common.text.EntityEncoder;
+	import javax.portlet.MimeResponse;
+	import javax.portlet.ResourceURL;
 	
 	def rcontext = _ctx.getRequestContext();
 	JavascriptManager jsmanager = rcontext.getJavascriptManager();
@@ -12,55 +13,58 @@
 	jsmanager.addOnLoadJavascript('eXo.portal.UIPortalNavigation.onLoad');
 	
 	jsmanager.addOnLoadJavascript('eXo.portal.UIPortalNavigation.loadScroll');
-	//jsmanager.addOnResizeJavascript('eXo.portal.UIPortalNavigation.initScroll');
+	//jsmanager.addOnResizeJavascript('eXo.portal.UIPortalNavigation.initScroll');	
 
-	navigations = uicomponent.getNavigations();
-
-	public void renderChildrenContainer(PageNavigation nav, PageNode node) {
-		print """
-			<div class="MenuItemContainer" style="display: none;">
-				<div class="MenuItemDecorator">
-					<div class="LeftTopMenuDecorator">
-						<div class="RightTopMenuDecorator">
-							<div class="CenterTopMenuDecorator"><span></span></div>
-						</div>
-					</div>					
-					<div class="LeftMiddleMenuDecorator">
-						<div class="RightMiddleMenuDecorator">
-							<div class="CenterMiddleMenuDecorator">
-		""";
-								for(child in node.getChildren()) {
-							 		renderChildNode(nav, child);
-								}
-		print """
-							</div>
-						</div>
-					</div>
-					<div class="LeftBottomMenuDecorator">
-						<div class="RightBottomMenuDecorator">
-							<div class="CenterBottomMenuDecorator"><span></span></div>
-						</div>
-					</div>					
-				</div>
-			</div>
-		""";
-	}	
-	public void renderChildNode(PageNavigation nav, PageNode node) {
-		PageNode selectedNode = uicomponent.getSelectedPageNode();
-		PageNavigation selectedNav = uicomponent.getSelectedNavigation();
+	public void renderChildrenContainer(UserNode node) {
+	   print """
+	   <div class="MenuItemContainer" style="display: none;">
+          <div class="MenuItemDecorator">
+                  <div class="LeftTopMenuDecorator">
+                          <div class="RightTopMenuDecorator">
+                                  <div class="CenterTopMenuDecorator"><span></span></div>
+                          </div>
+                  </div>                                  
+                  <div class="LeftMiddleMenuDecorator">
+                          <div class="RightMiddleMenuDecorator">
+                                  <div class="CenterMiddleMenuDecorator">
+        """;
+                                    for(child in node.getChildren()) {
+                                            renderChildNode(child);
+                                    }
+        print """
+                                   </div>
+                           </div>
+                   </div>
+                   <div class="LeftBottomMenuDecorator">
+                           <div class="RightBottomMenuDecorator">
+                                   <div class="CenterBottomMenuDecorator"><span></span></div>
+                           </div>
+                   </div>                                  
+           </div>
+        </div>
+        """;
+	}  
+	
+	public void renderChildNode(UserNode node) {
+		UserNode selectedNode = uicomponent.getSelectedNode();
 		String tabStyleNavigation = "NormalItem"; // OverItem
-		if(selectedNode != null &&	selectedNav != null &&
-			 selectedNav.getId () == nav.getId() &&
-			 node.getUri() == selectedNode.getUri()) {			 
+		if(selectedNode != null && node.getId() == selectedNode.getId()) {			 
 				tabStyleNavigation = "SelectedItem";
-		}
+		}				
 		
 		String icon = node.getIcon();
 		if(icon == null) icon = "DefaultPageIcon";
 		String arrowIcon = "";
-		if (node.getChildren() != null && node.getChildren().size() > 0) arrowIcon = "ArrowIcon";
+		String getNodeURL = "";
+		if (node.getChildrenCount() > 0) {
+		   arrowIcon = "ArrowIcon";
+		   MimeResponse res = _ctx.getRequestContext().getResponse();
+		   ResourceURL resourceURL = res.createResourceURL();
+		   resourceURL.setResourceID(res.encodeURL(node.getURI()));
+		   getNodeURL = "exo:getNodeURL='" + resourceURL.toString() + "'";
+		}
 
-		String label = node.resolvedLabel;
+		String label = node.getResolvedLabel();
 		String title = "";
 		if(label.length() > 40) {
 			title = label;
@@ -68,12 +72,12 @@
 		}
 		EntityEncoder entityEncoder = EntityEncoder.FULL;
 		label = entityEncoder.encode(label);
-		String pageURI = Util.getPortalRequestContext().getPortalURI() + node.getUri();
-		if(node.pageReference != null) {
+		String pageURI = Util.getPortalRequestContext().getPortalURI() + node.getURI();
+		if(node.getPageRef() != null) {
 			if(uicomponent.isUseAjax()) {
-				String onclickEvt = uicomponent.event("SelectNode",	nav.getId() + "::" + node.getUri()) + ";return false;" ;
+				String onclickEvt = uicomponent.event("SelectNode",	node.getId()) + ";return false;" ;
 				print """
-						<div class="MenuItem $tabStyleNavigation">
+						<div class="MenuItem $tabStyleNavigation" $getNodeURL>
 							<div class="$arrowIcon" title="$title">
 								<div class="ItemIcon $icon">
 									<a href="$pageURI" onclick="$onclickEvt">$label</a>
@@ -82,7 +86,7 @@
 				""";
 			} else {
 				print """
-						<div class="MenuItem $tabStyleNavigation">
+						<div class="MenuItem $tabStyleNavigation" $getNodeURL>
 							<div class="$arrowIcon" title="$title">
 								<div class="ItemIcon $icon">
 									<a href="$pageURI">$label</a>
@@ -92,7 +96,7 @@
 			}
 		} else {
 			print """
-					<div class="MenuItem $tabStyleNavigation">
+					<div class="MenuItem $tabStyleNavigation" $getNodeURL>
 						<div class="$arrowIcon" title="$title">
 							<div class="ItemIcon $icon">
 								<a href="#">$label</a>
@@ -101,13 +105,13 @@
 			""";
 		}
 		
-		if (node.getChildren() != null && node.getChildren().size() > 0) {
-			renderChildrenContainer(nav, node);
+		if (node.getChildren().size() > 0) {
+			renderChildrenContainer(node);
 		}		
 		print "</div>";					
 	}
 %>
-	
+
 <div class="UINavigationBar <%=uicomponent.getCssClassName()%>">
 	<div class="LeftNavigationBar">
 		<div class="RightNavigationBar">
@@ -115,24 +119,29 @@
 				<div class="UIHorizontalTabs">
 					<div class="TabsContainer">
 						<%
-							PageNavigation selectedNav = uicomponent.getSelectedNavigation();
-							PageNode selectedNode = uicomponent.getSelectedPageNode();
-							if(navigations != null) {
-								for(nav in navigations) {
+							MimeResponse res = _ctx.getRequestContext().getResponse();
+							
+							def rootNodes = uicomponent.getNavigations();
+							UserNode selectedNode = uicomponent.getSelectedNode();
+							if(rootNodes != null) {
+								for(nav in rootNodes) {
 									
-									def pageNodes = nav.getNodes();
-									for(PageNode node in pageNodes) {
+									def childs = nav.getChildren();
+                  
+									for(Node node in childs) {
 										String tabStyleNavigation = "NormalNavigationTab";
-										if(selectedNode != null && selectedNav != null &&
-											 selectedNav.getId() == nav.getId() &&
-											 node.getUri() == selectedNode.getUri()) {
+										if(selectedNode != null && node.getId() == selectedNode.getId()) {
 												tabStyleNavigation = "SelectedNavigationTab";
 										}
-										String icon = node.getIcon();
-										if(icon == null) icon = "DefaultPageIcon";
-						%>			
-						
+										
+										if (node.getChildrenCount() > 0) {
+										   	ResourceURL resourceURL = res.createResourceURL();
+											resourceURL.setResourceID(res.encodeURL(node.getURI()));										
+						%>									
+										<div class="UITab" exo:getNodeURL="<%=resourceURL.toString() %>">
+									<%	} else { %>
 										<div class="UITab">
+									<%  } %>																				
 											<div class="$tabStyleNavigation">
 												<div class="LeftTab">
 													<div class="RightTab">
@@ -140,7 +149,7 @@
 															<div class="TabIcon">
 																<%
 																	String arrowIcon = "";
-																	if (node.getChildren() != null && node.getChildren().size() > 0) {
+																	if (node.getChildrenCount() > 0) {
 																		arrowIcon = "DropDownArrowIcon";
 																	}
 																	String iconType = node.getIcon();
@@ -148,14 +157,14 @@
 																%>
 															 	<div class="$arrowIcon">
 															 		<%
-															 			String pageURI = Util.getPortalRequestContext().getPortalURI() + node.getUri();
-															 			String label = node.resolvedLabel;
+															 			String pageURI = Util.getPortalRequestContext().getPortalURI() + node.getURI();
+															 			String label = node.getResolvedLabel();
 															 			if(label.length() > 30) label = label.substring(0,29) + "...";
 																		EntityEncoder entityEncoder = EntityEncoder.FULL;
 																		label=entityEncoder.encode(label);
-															 			if(node.pageReference != null) {
+															 			if(node.getPageRef() != null) {
 															 				if(uicomponent.isUseAjax()) {
-															 					String onclickEvt = uicomponent.event("SelectNode",	nav.getId() + "::" + node.getUri()) + ";return false;";
+															 					String onclickEvt = uicomponent.event("SelectNode",	node.getId()) + ";return false;";
 															 		%>
 																	 			<a class="TabLabel ${iconType}" onclick="$onclickEvt" href="$pageURI">$label</a>
 																	<%
@@ -173,11 +182,11 @@
 												</div>											 
 											</div>
 											<%
-												/*Render Popup Menu*/
-												if (node.getChildren() != null && node.getChildren().size() > 0) {
-													renderChildrenContainer(nav, node);
-												}
-											%>
+                                               /*Render Popup Menu*/
+                                               if (node.getChildren().size() > 0) {
+                                                       renderChildrenContainer(node);
+                                               }
+                                             %>											
 										</div>									
 						<%
 									}

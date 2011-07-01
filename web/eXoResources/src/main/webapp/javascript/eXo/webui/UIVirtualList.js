@@ -29,7 +29,7 @@ UIVirtualList.prototype.init = function(componentId) {
   	childrenHeight += children[i].offsetHeight;  	
   }
   
-  if (!uiVirtualList.isFinished && childrenHeight <= uiVirtualList.offsetHeight) {
+  if (!uiVirtualList.isFinished && childrenHeight <= uiVirtualList.offsetHeight && childrenHeight != 0) {
 		uiVirtualList.onscroll();
   } else {  	
   	uiVirtualList.isInitiated = true;
@@ -50,7 +50,7 @@ UIVirtualList.prototype.getFeedBox = function(componentId) {
 UIVirtualList.prototype.scrollMove = function(uiVirtualList, url) {
 	if (uiVirtualList.isFinished || uiVirtualList.isLocked) return;
 	var DOMUtil = eXo.core.DOMUtil;	
-var componentHeight = uiVirtualList.offsetHeight;
+	var componentHeight = uiVirtualList.offsetHeight;
 	var scrollPosition = uiVirtualList.scrollTop;
 	var scrollerHeight = uiVirtualList.scrollHeight;	
 	var scrollable_gap = scrollerHeight - (scrollPosition + componentHeight);	

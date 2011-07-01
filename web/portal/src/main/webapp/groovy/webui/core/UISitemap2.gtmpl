@@ -1,7 +1,0 @@
-<%	
-		import org.exoplatform.portal.webui.navigation.UIPortalNavigation;
-					
-		def uiPortalNavigation = uicomponent.getChild(UIPortalNavigation.class); 
-		uiPortalNavigation.loadTreeNodes();
-		uicomponent.renderChildren();
-%>

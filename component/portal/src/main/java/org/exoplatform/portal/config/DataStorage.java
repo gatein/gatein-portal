@@ -27,10 +27,10 @@ import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.config.model.Container;
 import org.exoplatform.portal.config.model.Dashboard;
 import org.exoplatform.portal.config.model.ModelObject;
-import org.exoplatform.portal.pom.data.ModelChange;
 import org.exoplatform.portal.config.model.Page;
-import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.pom.config.tasks.PreferencesTask;
+import org.exoplatform.portal.pom.data.ModelChange;
 
 import java.util.Comparator;
 import java.util.List;
@@ -50,12 +50,6 @@ public interface DataStorage
 
    public final static String PAGE_UPDATED = "org.exoplatform.portal.config.DataStorage.pageUpdated".intern();
 
-   public final static String NAVIGATION_CREATED = "org.exoplatform.portal.config.DataStorage.navigationCreated".intern();
-
-   public final static String NAVIGATION_REMOVED = "org.exoplatform.portal.config.DataStorage.navigationRemoved".intern();
-
-   public final static String NAVIGATION_UPDATED = "org.exoplatform.portal.config.DataStorage.navigationUpdated".intern();
-   
    public final static String PORTAL_CONFIG_CREATED = "org.exoplatform.portal.config.DataStorage.portalConfigCreated".intern();
 
    public final static String PORTAL_CONFIG_REMOVED = "org.exoplatform.portal.config.DataStorage.portalConfigRemoved".intern();
@@ -146,47 +140,6 @@ public interface DataStorage
     * @throws Exception any exception
     */
    public List<ModelChange> save(Page page) throws Exception;
-
-   /**
-    * Return PageNavigation object from the database according to the fullId <br />
-    * If can't find, return null
-    * @param fullId - must be valid (2 parts, split by :: )
-    * @throws Exception
-    */
-   public PageNavigation getPageNavigation(String fullId) throws Exception;
-
-   /**
-    * Return PageNavigation object from the database according to the onwnerType (portal, group or user) and id
-    * @param ownerType
-    * @param id
-    * @throws Exception
-    */
-   public PageNavigation getPageNavigation(String ownerType, String id) throws Exception;
-
-   /**
-    * This method should update the navigation object in the database <br />
-    * Then broadcast NAVIGATION_UPDATED event
-    * @param navigation - PageNavigation object to update
-    * @throws Exception
-    */
-   public void save(PageNavigation navigation) throws Exception;
-
-   /**
-    * This method should create the navigation object in the database <br />
-    * Then broadcast NAVIGATION_CREATED event
-    * @param navigation - PageNavigation object to create
-    * @throws Exception
-    */
-   public void create(PageNavigation navigation) throws Exception;
-
-   /**
-    * Remove the navigation object from the database <br />
-    * If can't find it in database, ignore
-    * Then broadcast NAVIGATION_REMOVED event
-    * @param navigation - PageNavigation object to remove
-    * @throws Exception
-    */
-   public void remove(PageNavigation navigation) throws Exception;
 
    /**
     * Save PortletPreferences config node

@@ -38,6 +38,8 @@ import javax.portlet.PortletContext;
 import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
+import javax.portlet.ResourceRequest;
+import javax.portlet.ResourceResponse;
 
 /**
  * Created by The eXo Platform SAS
@@ -84,6 +86,7 @@ public class PortletApplicationController extends GenericPortlet
          log.error("Error while processing action in the porlet", ex);
       }
    }
+   
 
    /**
     * Delegate the action to the PortletApplication object
@@ -97,6 +100,21 @@ public class PortletApplicationController extends GenericPortlet
       catch (Exception ex)
       {
          log.error("Error while processing event in the porlet", ex);
+      }
+   }
+   
+   /**
+    * Delegate the action to the PortletApplication object
+    */
+   public void serveResource(ResourceRequest req, ResourceResponse res) throws PortletException, IOException
+   {
+      try
+      {
+         getPortletApplication().serveResource(req, res);
+      }
+      catch (Exception ex)
+      {
+         log.error("Error while serving resource in the porlet", ex);
       }
    }
 

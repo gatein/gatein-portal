@@ -19,16 +19,21 @@
 
 package org.exoplatform.toolbar.webui.component;
 
-import org.exoplatform.portal.config.model.PageNode;
-import org.exoplatform.portal.config.model.PageNavigation;
-import org.exoplatform.portal.config.model.PortalConfig;
-import org.exoplatform.portal.webui.navigation.PageNavigationUtils;
-import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.portal.mop.SiteKey;
+import org.exoplatform.portal.mop.SiteType;
+import org.exoplatform.portal.mop.Visibility;
+import org.exoplatform.portal.mop.user.UserNavigation;
+import org.exoplatform.portal.mop.user.UserNode;
+import org.exoplatform.portal.mop.user.UserNodeFilterConfig;
+import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
-import org.exoplatform.webui.core.UIPortletApplication;
+import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
+import org.exoplatform.webui.event.Event;
+import org.exoplatform.webui.event.EventListener;
+import org.gatein.common.util.ParameterValidation;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -37,32 +42,87 @@ import java.util.List;
  *          thanhtungty@gmail.com
  * May 26, 2009  
  */
-@ComponentConfig(lifecycle = UIApplicationLifecycle.class, template = "app:/groovy/admintoolbar/webui/component/UIUserToolBarGroupPortlet.gtmpl")
-public class UIUserToolBarGroupPortlet extends UIPortletApplication
+@ComponentConfig(lifecycle = UIApplicationLifecycle.class, template = "app:/groovy/admintoolbar/webui/component/UIUserToolBarGroupPortlet.gtmpl",
+   events = {
+      @EventConfig(listeners = UIUserToolBarGroupPortlet.NavigationChangeActionListener.class)
+   }
+)
+public class UIUserToolBarGroupPortlet extends BasePartialUpdateToolbar
 {
 
+   private static final String SPLITTER_STRING = "::";
+
    public UIUserToolBarGroupPortlet() throws Exception
-   {
+   {                  
+      UserNodeFilterConfig.Builder builder = UserNodeFilterConfig.builder();
+      builder.withAuthorizationCheck().withVisibility(Visibility.DISPLAYED, Visibility.TEMPORAL);
+      builder.withTemporalCheck();
+      toolbarFilterConfig = builder.build();
    }
 
-   public List<PageNavigation> getGroupNavigations() throws Exception
+   public List<UserNavigation> getGroupNavigations() throws Exception
    {
-      String remoteUser = Util.getPortalRequestContext().getRemoteUser();
-      //List<PageNavigation> allNavigations = Util.getUIPortal().getNavigations();
-      List<PageNavigation> allNavigations = Util.getUIPortalApplication().getNavigations();
-      List<PageNavigation> navigations = new ArrayList<PageNavigation>();
-      for (PageNavigation navigation : allNavigations)
+      UserPortal userPortal = getUserPortal();
+      List<UserNavigation> allNavs = userPortal.getNavigations();
+
+      List<UserNavigation> groupNav = new LinkedList<UserNavigation>();
+      for (UserNavigation nav : allNavs)
       {
-         if (navigation.getOwnerType().equals(PortalConfig.GROUP_TYPE))
+         if (nav.getKey().getType().equals(SiteType.GROUP))
          {
-            navigations.add(PageNavigationUtils.filterNavigation(navigation, remoteUser, false, true));
+            groupNav.add(nav);
          }
       }
-      return navigations;
+      return groupNav;
+   }   
+
+   @Override
+   protected String getResourceIdFromNode(UserNode node, String navId) throws Exception
+   {
+      return navId + SPLITTER_STRING + node.getURI();
    }
 
-   public PageNode getSelectedPageNode() throws Exception
+   @Override
+   protected UserNode getNodeFromResourceID(String resourceId) throws Exception
    {
-      return Util.getUIPortal().getSelectedNode();
+      String[] parsedId = parseResourceId(resourceId); 
+      if (parsedId == null)
+      {
+         throw new IllegalArgumentException("resourceId " + resourceId + " is invalid");
+      }
+      String groupId = parsedId[0];
+      String nodeURI = parsedId[1];
+                                   
+      UserNavigation grpNav = getNavigation(SiteKey.group(groupId));
+      if (grpNav == null) return null;
+      
+      UserNode node = getUserPortal().resolvePath(grpNav, toolbarFilterConfig, nodeURI);
+      if (node != null && node.getURI().equals(nodeURI))
+      {
+         return node;
+      }
+      return null;
+   }   
+   
+   private String[] parseResourceId(String resourceId)
+   {
+      if (!ParameterValidation.isNullOrEmpty(resourceId)) 
+      {
+         String[] parsedId = resourceId.split(SPLITTER_STRING);
+         if (parsedId.length == 2) 
+         {
+            return parsedId;
+         }
+      }
+      return null;
+   }
+
+   public static class NavigationChangeActionListener extends EventListener<UIUserToolBarGroupPortlet>
+   {
+      @Override
+      public void execute(Event<UIUserToolBarGroupPortlet> event) throws Exception
+      {
+         // This event is only a trick for updating the Toolbar group portlet
+      }
    }
 }

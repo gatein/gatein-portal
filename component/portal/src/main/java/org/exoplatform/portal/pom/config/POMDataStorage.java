@@ -27,6 +27,7 @@ import java.util.UUID;
 import org.chromattic.api.ChromatticSession;
 import org.exoplatform.commons.utils.IOUtil;
 import org.exoplatform.commons.utils.LazyPageList;
+import org.exoplatform.commons.utils.ListAccess;
 import org.exoplatform.container.configuration.ConfigurationManager;
 import org.exoplatform.portal.application.PortletPreferences;
 import org.exoplatform.portal.config.Query;
@@ -39,7 +40,7 @@ import org.exoplatform.portal.config.model.ModelObject;
 import org.exoplatform.portal.config.model.PersistentApplicationState;
 import org.exoplatform.portal.config.model.TransientApplicationState;
 import org.exoplatform.portal.pom.config.tasks.DashboardTask;
-import org.exoplatform.portal.pom.config.tasks.PageNavigationTask;
+import org.exoplatform.portal.pom.config.tasks.MOPAccess;
 import org.exoplatform.portal.pom.config.tasks.PageTask;
 import org.exoplatform.portal.pom.config.tasks.PortalConfigTask;
 import org.exoplatform.portal.pom.config.tasks.PortletPreferencesTask;
@@ -49,8 +50,6 @@ import org.exoplatform.portal.pom.data.DashboardData;
 import org.exoplatform.portal.pom.data.ModelChange;
 import org.exoplatform.portal.pom.data.ModelData;
 import org.exoplatform.portal.pom.data.ModelDataStorage;
-import org.exoplatform.portal.pom.data.NavigationData;
-import org.exoplatform.portal.pom.data.NavigationKey;
 import org.exoplatform.portal.pom.data.PageData;
 import org.exoplatform.portal.pom.data.PageKey;
 import org.exoplatform.portal.pom.data.PortalData;
@@ -123,26 +122,6 @@ public class POMDataStorage implements ModelDataStorage
       PageTask.Save task = new PageTask.Save(page);
       pomMgr.execute(task);
       return task.getChanges();
-   }
-
-   public NavigationData getPageNavigation(NavigationKey key) throws Exception
-   {
-      return pomMgr.execute(new PageNavigationTask.Load(key));
-   }
-
-   public void save(NavigationData navigation) throws Exception
-   {
-      pomMgr.execute(new PageNavigationTask.Save(navigation, true));
-   }
-
-   public void create(NavigationData navigation) throws Exception
-   {
-      pomMgr.execute(new PageNavigationTask.Save(navigation, false));
-   }
-
-   public void remove(NavigationData navigation) throws Exception
-   {
-      pomMgr.execute(new PageNavigationTask.Remove(navigation));
    }
 
    public void save(PortletPreferences portletPreferences) throws Exception
@@ -237,11 +216,30 @@ public class POMDataStorage implements ModelDataStorage
       Class<T> type = q.getClassType();
       if (PageData.class.equals(type))
       {
-         return (LazyPageList<T>)pomMgr.execute(new SearchTask.FindPage((Query<PageData>)q));
-      }
-      else if (NavigationData.class.equals(type))
-      {
-         return (LazyPageList<T>)pomMgr.execute(new SearchTask.FindNavigation((Query<NavigationData>)q));
+         ListAccess<PageData> pageAccess;
+         try
+         {
+            pageAccess = new MOPAccess.PageAccess(pomMgr, (Query<PageData>)q);
+         }
+         catch (IllegalArgumentException e)
+         {
+            pageAccess = new ListAccess<PageData>()
+            {
+               @Override
+               public PageData[] load(int index, int length) throws Exception, IllegalArgumentException
+               {
+                  return new PageData[0];
+               }
+
+               @Override
+               public int getSize() throws Exception
+               {
+                  return 0;
+               }
+               
+            };
+         }
+         return (LazyPageList<T>)new LazyPageList<PageData>(pageAccess, 10);
       }
       else if (PortletPreferences.class.equals(type))
       {

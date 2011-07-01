@@ -148,6 +148,9 @@
          <short-title>Group Navigation Portlet</short-title>
          <keywords>Administration</keywords>
       </portlet-info>
+      <supported-publishing-event>
+         <name>NavigationChange</name>
+      </supported-publishing-event>
    </portlet>
 
    <portlet>
@@ -201,7 +204,7 @@
          <keywords>Administration</keywords>
       </portlet-info>
       <supported-publishing-event>
-         <name>UserPageNodeDeleted</name>
+         <name>NavigationChange</name>
       </supported-publishing-event>
    </portlet>
 
@@ -318,8 +321,13 @@
          <title>User Toolbar Site Portlet</title>
          <short-title>UserToolbarSite</short-title>
          <keywords>gatein_internal</keywords>
-      </portlet-info>
-
+      </portlet-info>		      
+      <portlet-preferences>
+        <preference>
+	      <name>level</name>
+	      <value>2</value>
+        </preference>
+      </portlet-preferences>
       <security-role-ref>
          <role-name>admin</role-name>
          <role-link>admin</role-link>
@@ -349,14 +357,19 @@
          <short-title>UserToolbarDashboard</short-title>
          <keywords>gatein_internal</keywords>
       </portlet-info>
-
+      <portlet-preferences>
+        <preference>
+	      <name>level</name>
+	      <value>2</value>
+        </preference>
+      </portlet-preferences>
       <security-role-ref>
          <role-name>admin</role-name>
          <role-link>admin</role-link>
       </security-role-ref>
-      <supported-processing-event>
-         <name>UserPageNodeDeleted</name>
-      </supported-processing-event>
+      <supported-publishing-event>
+         <name>NavigationChange</name>
+      </supported-publishing-event>
    </portlet>
 
    <portlet>
@@ -382,11 +395,19 @@
          <short-title>UserToolbarGroup</short-title>
          <keywords>gatein_internal</keywords>
       </portlet-info>
-
+      <portlet-preferences>
+        <preference>
+	      <name>level</name>
+	      <value>2</value>
+        </preference>
+      </portlet-preferences>
       <security-role-ref>
          <role-name>admin</role-name>
          <role-link>admin</role-link>
       </security-role-ref>
+      <supported-processing-event>
+         <name>NavigationChange</name>
+      </supported-processing-event>
    </portlet>
    <portlet>
       <description xml:lang="EN">Star Toolbar Portlet</description>
@@ -417,6 +438,6 @@
       <name>NewAccountAdded</name>
    </event-definition>
    <event-definition>
-      <name>UserPageNodeDeleted</name>
+      <name>NavigationChange</name>
    </event-definition>
 </portlet-app>

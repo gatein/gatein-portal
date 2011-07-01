@@ -197,6 +197,10 @@
         <value>false</value>
         <read-only>false</read-only>
       </preference>
+      <preference>
+        <name>level</name>
+        <value>2</value>
+      </preference>
     </portlet-preferences>
   </portlet>
   
@@ -235,7 +239,11 @@
 	        <name>template</name>
 	        <value>system:/groovy/webui/core/UISitemapTree.gtmpl</value>
 	        <read-only>false</read-only>
-      </preference>
+        </preference>
+        <preference>
+          <name>level</name>
+          <value>2</value>
+        </preference>
     </portlet-preferences>
   </portlet>
 

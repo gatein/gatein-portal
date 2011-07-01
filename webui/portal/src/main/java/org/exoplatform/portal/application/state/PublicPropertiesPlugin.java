@@ -18,16 +18,16 @@
  */
 package org.exoplatform.portal.application.state;
 
-import java.util.Map;
-
-import javax.xml.namespace.QName;
-
 import org.exoplatform.container.xml.InitParams;
-import org.exoplatform.portal.config.model.PageNode;
+import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.webui.application.UIPortlet;
 import org.exoplatform.portal.webui.page.UIPage;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
+
+import java.util.Map;
+
+import javax.xml.namespace.QName;
 
 /**
  * This plugin setup properties that are publicly supported, hence this is part of a public API
@@ -79,13 +79,13 @@ public class PublicPropertiesPlugin extends AbstractContextualPropertyProviderPl
       try
       {
          UIPortal currentSite = Util.getUIPortalApplication().getShowedUIPortal();
-         PageNode currentNode = currentSite.getSelectedNode();
+         UserNode currentNode = currentSite.getSelectedUserNode();
          
          // Navigation related properties
-         addProperty(properties, navigationURIQName, currentNode.getUri());
+         addProperty(properties, navigationURIQName, currentNode.getURI());
 
          // Page related properties
-         UIPage currentPage = currentSite.getUIPage(currentNode.getPageReference());
+         UIPage currentPage = currentSite.getUIPage(currentNode.getPageRef());
          if(currentPage != null)
          {
             addProperty(properties, pageNameQName, currentPage.getTitle());

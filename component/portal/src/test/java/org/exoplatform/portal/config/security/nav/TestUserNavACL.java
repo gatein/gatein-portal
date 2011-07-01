@@ -19,8 +19,8 @@
 
 package org.exoplatform.portal.config.security.nav;
 
-import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.security.AbstractTestUserACL;
+import org.exoplatform.portal.mop.SiteKey;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -32,9 +32,7 @@ public class TestUserNavACL extends AbstractTestUserACL
    public void testNav()
    {
 
-      PageNavigation nav = new PageNavigation();
-      nav.setOwnerType("user");
-      nav.setOwnerId("user");
+      SiteKey nav = SiteKey.user("user");
 
       assertTrue(root.hasEditPermission(nav));
       assertFalse(administrator.hasEditPermission(nav));

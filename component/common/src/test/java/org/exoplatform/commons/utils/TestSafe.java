@@ -25,6 +25,9 @@ import org.exoplatform.component.test.AbstractGateInTest;
 import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -137,6 +140,23 @@ public class TestSafe extends AbstractGateInTest
       {
          assertSame(re, e);
       }
+   }
+
+   public void testSetUnmodifiable()
+   {
+      assertNull(Safe.unmodifiableSet(null));
+      Set<String> strings = new HashSet<String>();
+      strings.add("a");
+      strings = Safe.unmodifiableSet(strings);
+      try
+      {
+         strings.add("b");
+         fail();
+      }
+      catch (Exception e)
+      {
+      }
+      assertEquals(Collections.singleton("a"), strings);
    }
 
 }

@@ -32,6 +32,10 @@ import org.exoplatform.portal.config.model.PageBody;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.mop.EventType;
+import org.exoplatform.portal.mop.SiteKey;
+import org.exoplatform.portal.mop.user.UserNavigation;
+import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.pom.config.POMDataStorage;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.POMSessionManager;
@@ -131,23 +135,23 @@ public class TestUserPortalConfigService extends AbstractPortalTest
          listenerService.addListener(DataStorage.PAGE_CREATED, listener);
          listenerService.addListener(DataStorage.PAGE_REMOVED, listener);
          listenerService.addListener(DataStorage.PAGE_UPDATED, listener);
-         listenerService.addListener(DataStorage.NAVIGATION_CREATED, listener);
-         listenerService.addListener(DataStorage.NAVIGATION_REMOVED, listener);
-         listenerService.addListener(DataStorage.NAVIGATION_UPDATED, listener);
+         listenerService.addListener(EventType.NAVIGATION_CREATED, listener);
+         listenerService.addListener(EventType.NAVIGATION_DESTROYED, listener);
+         listenerService.addListener(EventType.NAVIGATION_UPDATED, listener);
       }
    }
 
-   private static Map<String, PageNavigation> toMap(UserPortalConfig cfg)
+   private static Map<String, UserNavigation> toMap(UserPortal cfg)
    {
       return toMap(cfg.getNavigations());
    }
 
-   private static Map<String, PageNavigation> toMap(List<PageNavigation> navigations)
+   private static Map<String, UserNavigation> toMap(List<UserNavigation> navigations)
    {
-      Map<String, PageNavigation> map = new HashMap<String, PageNavigation>();
-      for (PageNavigation nav : navigations)
+      Map<String, UserNavigation> map = new HashMap<String, UserNavigation>();
+      for (UserNavigation nav : navigations)
       {
-         map.put(nav.getOwnerType() + "::" + nav.getOwnerId(), nav);
+         map.put(nav.getKey().getType().getName() + "::" + nav.getKey().getName(), nav);
       }
       return map;
    }
@@ -188,8 +192,9 @@ public class TestUserPortalConfigService extends AbstractPortalTest
             assertNotNull(portalCfg);
             assertEquals(PortalConfig.PORTAL_TYPE, portalCfg.getType());
             assertEquals("classic", portalCfg.getName());
-            assertNotNull(userPortalCfg.getNavigations());
-            Map<String, PageNavigation> navigations = toMap(userPortalCfg);
+            UserPortal userPortal = userPortalCfg.getUserPortal();
+            assertNotNull(userPortal.getNavigations());
+            Map<String, UserNavigation> navigations = toMap(userPortal);
             assertEquals("expected to have 5 navigations instead of " + navigations, 5, navigations.size());
             assertTrue(navigations.containsKey("portal::classic"));
             assertTrue(navigations.containsKey("group::/platform/administrators"));
@@ -212,8 +217,9 @@ public class TestUserPortalConfigService extends AbstractPortalTest
             assertNotNull(portalCfg);
             assertEquals(PortalConfig.PORTAL_TYPE, portalCfg.getType());
             assertEquals("classic", portalCfg.getName());
-            assertNotNull(userPortalCfg.getNavigations());
-            Map<String, PageNavigation> navigations = toMap(userPortalCfg);
+            UserPortal userPortal = userPortalCfg.getUserPortal();
+            assertNotNull(userPortal.getNavigations());
+            Map<String, UserNavigation> navigations = toMap(userPortal);
             assertEquals("expected to have 5 navigations instead of " + navigations, 5, navigations.size());
             assertTrue(navigations.containsKey("portal::classic"));
             assertTrue(navigations.containsKey("group::/platform/administrators"));
@@ -236,8 +242,9 @@ public class TestUserPortalConfigService extends AbstractPortalTest
             assertNotNull(portalCfg);
             assertEquals(PortalConfig.PORTAL_TYPE, portalCfg.getType());
             assertEquals("classic", portalCfg.getName());
-            assertNotNull(userPortalCfg.getNavigations());
-            Map<String, PageNavigation> navigations = toMap(userPortalCfg);
+            UserPortal userPortal = userPortalCfg.getUserPortal();
+            assertNotNull(userPortal.getNavigations());
+            Map<String, UserNavigation> navigations = toMap(userPortal);
             assertEquals(3, navigations.size());
             assertTrue(navigations.containsKey("portal::classic"));
             assertTrue(navigations.containsKey("group::/platform/users"));
@@ -258,8 +265,9 @@ public class TestUserPortalConfigService extends AbstractPortalTest
             assertNotNull(portalCfg);
             assertEquals(PortalConfig.PORTAL_TYPE, portalCfg.getType());
             assertEquals("classic", portalCfg.getName());
-            assertNotNull(userPortalCfg.getNavigations());
-            Map<String, PageNavigation> navigations = toMap(userPortalCfg);
+            UserPortal userPortal = userPortalCfg.getUserPortal();
+            assertNotNull(userPortal.getNavigations());
+            Map<String, UserNavigation> navigations = toMap(userPortal);
             assertEquals("" + navigations, 1, navigations.size());
             assertTrue(navigations.containsKey("portal::classic"));
          }
@@ -273,13 +281,14 @@ public class TestUserPortalConfigService extends AbstractPortalTest
          public void execute() throws Exception
          {
             UserPortalConfig userPortalCfg = userPortalConfigSer_.getUserPortalConfig("classic", "root");
-            List<PageNavigation> navigations = userPortalCfg.getNavigations();
+            UserPortal userPortal = userPortalCfg.getUserPortal();
+            List<UserNavigation> navigations = userPortal.getNavigations();
             assertEquals("expected to have 5 navigations instead of " + navigations, 5, navigations.size());
-            assertEquals("classic", navigations.get(0).getOwnerId()); // 1
-            assertEquals("/platform/administrators", navigations.get(1).getOwnerId()); // 2
-            assertEquals("root", navigations.get(2).getOwnerId()); // 3
-            assertEquals("/organization/management/executive-board", navigations.get(3).getOwnerId()); // 5
-            assertEquals("/platform/users", navigations.get(4).getOwnerId()); // 8
+            assertEquals("classic", navigations.get(0).getKey().getName()); // 1
+            assertEquals("/platform/administrators", navigations.get(1).getKey().getName()); // 2
+            assertEquals("root", navigations.get(2).getKey().getName()); // 3
+            assertEquals("/organization/management/executive-board", navigations.get(3).getKey().getName()); // 5
+            assertEquals("/platform/users", navigations.get(4).getKey().getName()); // 8
          }
       }.execute("root");
    }
@@ -297,8 +306,9 @@ public class TestUserPortalConfigService extends AbstractPortalTest
             assertNotNull(portalCfg);
             assertEquals(PortalConfig.PORTAL_TYPE, portalCfg.getType());
             assertEquals("jazz", portalCfg.getName());
-            assertNotNull(userPortalCfg.getNavigations());
-            Map<String, PageNavigation> navigations = toMap(userPortalCfg);
+            UserPortal userPortal = userPortalCfg.getUserPortal();
+            assertNotNull(userPortal.getNavigations());
+            Map<String, UserNavigation> navigations = toMap(userPortal);
             assertEquals("expected to have 5 navigations instead of " + navigations, 5, navigations.size());
             assertTrue(navigations.containsKey("portal::jazz"));
             assertTrue(navigations.containsKey("group::/platform/administrators"));
@@ -569,142 +579,6 @@ public class TestUserPortalConfigService extends AbstractPortalTest
          }
       }.execute(null);
    }
-
-   public void testRemoveNavigation()
-   {
-      new UnitTest()
-      {
-         public void execute() throws Exception
-         {
-            PageNavigation navigation = new PageNavigation();
-            navigation.setOwnerType("group");
-            navigation.setOwnerId("/platform/administrators");
-            assertTrue(events.isEmpty());
-            storage_.remove(navigation);
-            assertEquals(1, events.size());
-            Event event = events.removeFirst();
-            assertEquals(DataStorage.NAVIGATION_REMOVED, event.getEventName());
-            PageNavigation n = ((PageNavigation)event.getData());
-            assertEquals("group", n.getOwnerType());
-            assertEquals("/platform/administrators", n.getOwnerId());
-            assertEquals(null, storage_.getPageNavigation("group", "/platform/administrators"));
-         }
-      }.execute(null);
-   }
-
-   public void testCreateNavigation()
-   {
-      new UnitTest()
-      {
-         public void execute() throws Exception
-         {
-            PageNavigation navigation = new PageNavigation();
-            navigation.setOwnerType("group");
-            navigation.setOwnerId("/platform/administrators");
-            storage_.remove(navigation);
-            assertNotNull(events.removeLast());
-            assertTrue(events.isEmpty());
-            storage_.create(navigation);
-            assertEquals(1, events.size());
-            Event event = events.removeFirst();
-            assertEquals(DataStorage.NAVIGATION_CREATED, event.getEventName());
-            PageNavigation n = ((PageNavigation)event.getData());
-            assertEquals("group", n.getOwnerType());
-            assertEquals("/platform/administrators", n.getOwnerId());
-            PageNavigation n2 = storage_.getPageNavigation("group", "/platform/administrators");
-            assertEquals("group", n2.getOwnerType());
-            assertEquals("/platform/administrators", n2.getOwnerId());
-         }
-      }.execute(null);
-   }
-
-   /*
-      public void testCreateMultipleNavigations(){
-         for(int i =0; i < 10; i++){
-            createNavigation(null, "group", "/platform/administrators" + i);
-         }
-      }
-      
-      private void createNavigation(final String user, final String ownerType, final String ownerId)
-      {
-         new UnitTest()
-         {
-
-            public void execute() throws Exception
-            {
-               createNavigationInSeperatedThread();
-            }
-
-            private void createNavigationInSeperatedThread()
-            {
-               Thread task = new Thread()
-               {
-                  public void run()
-                  {
-                     PageNavigation navigation = new PageNavigation();
-                     navigation.setOwnerType(ownerType);
-                     navigation.setOwnerId(ownerId);
-                     try
-                     {
-                        userPortalConfigSer_.create(navigation);
-                        Event event = events.removeFirst();
-                        assertEquals(DataStorage.CREATE_NAVIGATION_EVENT, event.getEventName());
-                        PageNavigation n1 = (PageNavigation)event.getSource();
-                        assertEquals(ownerType, n1.getOwnerType());
-                        assertEquals(ownerId, n1.getOwnerId());
-                        PageNavigation n2 = storage_.getPageNavigation(ownerType, ownerId);
-                        assertEquals(ownerType, n2.getOwnerType());
-                        assertEquals(ownerId, n2.getOwnerId());
-                     }
-                     catch (Exception ex)
-                     {
-                        assertTrue("Failed while create '" + ownerType + " ' navigation for owner: " + ownerId, false);
-                        ex.printStackTrace();
-                     }
-                  }
-               };
-
-               task.start();
-               try
-               {
-                  task.sleep(200);
-               }
-               catch (InterruptedException ex)
-               {
-                  ex.printStackTrace();
-               }
-            }
-         }.execute(user);
-      }
-   */
-
-   public void testUpdateNavigation()
-   {
-      new UnitTest()
-      {
-         public void execute() throws Exception
-         {
-            PageNavigation navigation = new PageNavigation();
-            navigation.setOwnerType("group");
-            navigation.setOwnerId("/platform/administrators");
-            navigation.setPriority(3);
-            assertTrue(events.isEmpty());
-            storage_.save(navigation);
-            assertEquals(1, events.size());
-            Event event = events.removeFirst();
-            assertEquals(DataStorage.NAVIGATION_UPDATED, event.getEventName());
-            PageNavigation n = ((PageNavigation)event.getData());
-            assertEquals("group", n.getOwnerType());
-            assertEquals("/platform/administrators", n.getOwnerId());
-            assertEquals(3, n.getPriority());
-            PageNavigation n2 = storage_.getPageNavigation("group", "/platform/administrators");
-            assertEquals("group", n2.getOwnerType());
-            assertEquals("/platform/administrators", n2.getOwnerId());
-            assertEquals(3, n2.getPriority());
-         }
-      }.execute(null);
-   }
-   
    public void testRenewPage()
    {
       new UnitTest()
@@ -881,25 +755,6 @@ public class TestUserPortalConfigService extends AbstractPortalTest
             long readCount1 = cache.getReadCount();
             assertTrue(readCount1 > readCount0);
             userPortalConfigSer_.getPage("portal::test::test1");
-            long readCount2 = cache.getReadCount();
-            assertEquals(readCount1, readCount2);
-         }
-      }.execute(null);
-   }
-
-   public void testCachePageNavigation()
-   {
-      new UnitTest()
-      {
-         public void execute() throws Exception
-         {
-            mgr.clearCache();
-            DataCache cache = mgr.getDecorator(DataCache.class);
-            long readCount0 = cache.getReadCount();
-            storage_.getPageNavigation("portal", "test");
-            long readCount1 = cache.getReadCount();
-            assertTrue(readCount1 > readCount0);
-            storage_.getPageNavigation("portal", "test");
             long readCount2 = cache.getReadCount();
             assertEquals(readCount1, readCount2);
          }

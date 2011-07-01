@@ -1,0 +1,35 @@
+<div class="UIPageSearchForm">	
+	<div class="UIBarStyle">
+		<div class="BarStyle2">
+			<div class="LeftBar">
+				<div class="RightBar">
+					<div class="MiddleBar">
+						<div class="UISearchContainer">
+							<%uiform.begin()%>
+							 <%String quickSearchlink = uicomponent.event("QuickSearch") ;%>
+							    <script type="text/javascript">
+									var executeScript = "<%=quickSearchlink%>";
+								</script>
+						      	<div class="QuickSet" onkeypress="eXo.portal.UIPortalControl.onEnterPress(event, executeScript)">
+								
+								<% 
+									QuickSearchInputSet = uiform.getQuickSearchInputSet();
+									for(field in QuickSearchInputSet.getChildren()) {
+								%>
+										<div class="SearchLabel"><%=uiform.getLabel(field.getId())%> </div>
+								<%
+										uiform.renderField(field)
+									}
+								%>
+								<a class="SearchIcon" href="$quickSearchlink" title="<%= _ctx.appRes("UIPageSearchForm.label.QuickSearch") %>">
+									<span></span>
+								</a>
+							  </div>	
+							<%uiform.end()%>	 
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>				
+</div>

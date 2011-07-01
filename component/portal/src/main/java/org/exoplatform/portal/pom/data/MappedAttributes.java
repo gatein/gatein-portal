@@ -30,7 +30,7 @@ import java.util.Date;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-class MappedAttributes
+public class MappedAttributes
 {
 
    private MappedAttributes()

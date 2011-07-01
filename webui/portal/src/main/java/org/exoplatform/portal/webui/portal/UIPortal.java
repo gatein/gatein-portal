@@ -21,16 +21,16 @@ package org.exoplatform.portal.webui.portal;
 
 import org.exoplatform.portal.account.UIAccountSetting;
 import org.exoplatform.portal.application.PortalRequestContext;
-import org.exoplatform.portal.config.model.PageNavigation;
-import org.exoplatform.portal.config.model.PageNode;
-import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.PortalProperties;
 import org.exoplatform.portal.config.model.Properties;
+import org.exoplatform.portal.mop.SiteKey;
+import org.exoplatform.portal.mop.user.UserNavigation;
+import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.webui.application.UIPortlet;
 import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.portal.webui.page.UIPage;
-import org.exoplatform.portal.webui.page.UIPageBody;
 import org.exoplatform.portal.webui.page.UIPageActionListener.ChangePageNodeActionListener;
+import org.exoplatform.portal.webui.page.UIPageBody;
 import org.exoplatform.portal.webui.portal.UIPortalComponentActionListener.ChangeApplicationListActionListener;
 import org.exoplatform.portal.webui.portal.UIPortalComponentActionListener.ChangeLanguageActionListener;
 import org.exoplatform.portal.webui.portal.UIPortalComponentActionListener.ChangeSkinActionListener;
@@ -43,7 +43,7 @@ import org.exoplatform.portal.webui.workspace.UIMaskWorkspace;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
-import org.exoplatform.services.resources.ResourceBundleManager;
+import org.exoplatform.web.application.JavascriptManager;
 import org.exoplatform.web.login.InitiateLoginServlet;
 import org.exoplatform.web.login.LogoutControl;
 import org.exoplatform.web.security.security.AbstractTokenService;
@@ -54,15 +54,10 @@ import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
-import org.exoplatform.web.application.JavascriptManager;
 
 import java.net.URLEncoder;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
 import java.util.Map;
-import java.util.ResourceBundle;
 
 import javax.portlet.WindowState;
 import javax.servlet.http.Cookie;
@@ -100,18 +95,19 @@ public class UIPortal extends UIContainer
 
    private Properties properties;
 
-   private PageNavigation navigation;
-   
-   private List<PageNode> selectedPath;
+   private UserNode navPath;
 
-   private PageNode selectedNode_;
-   
    private Map<String, UIPage> all_UIPages;
    
    private Map<String, String[]> publicParameters_ = new HashMap<String, String[]>();
 
    private UIComponent maximizedUIComponent;
 
+   public SiteKey getSiteKey()
+   {
+      return new SiteKey(ownerType, name_);
+   }
+   
    public String getOwner()
    {
       return owner;
@@ -171,13 +167,20 @@ public class UIPortal extends UIContainer
    {
       publicParameters_ = publicParams;
    }
-   
-   /** At the moment, this method ensure compatibility with legacy code */
-   public List<PageNavigation> getNavigations() throws Exception
+
+   public UserNode getNavPath() throws Exception
    {
-      List<PageNavigation> listNavs = new ArrayList<PageNavigation>();
-      listNavs.add(navigation);
-      return listNavs;
+      if (navPath == null)
+      {
+         UIPortalApplication uiApp = Util.getUIPortalApplication();
+         navPath = uiApp.getUserPortalConfig().getUserPortal().getDefaultPath(null);
+      }
+      return navPath;
+   }
+   
+   public void setNavPath(UserNode nav)
+   {
+      this.navPath = nav;
    }
    
    /**
@@ -211,9 +214,11 @@ public class UIPortal extends UIContainer
          this.all_UIPages.remove(pageReference);
    }
    
-   public void setNavigation(PageNavigation _navigation)
+   public UserNavigation getUserNavigation() throws Exception
    {
-      this.navigation = _navigation;
+      UIPortalApplication uiPortalApp = getAncestorOfType(UIPortalApplication.class);
+      SiteKey siteKey = new SiteKey(ownerType, owner);
+      return uiPortalApp.getUserPortalConfig().getUserPortal().getNavigation(siteKey);
    }
    
    /**
@@ -223,11 +228,6 @@ public class UIPortal extends UIContainer
     */
    public void refreshUIPage() throws Exception
    {
-      if(selectedNode_ == null)
-      {
-         selectedNode_ = navigation.getNodes().get(0);
-      }
-      
       UIPageBody uiPageBody = findFirstComponentOfType(UIPageBody.class);
       if(uiPageBody == null)
       {
@@ -240,84 +240,14 @@ public class UIPortal extends UIContainer
          currentPortlet.setCurrentWindowState(WindowState.NORMAL);
          uiPageBody.setMaximizedUIComponent(null);
       }
-      uiPageBody.setPageBody(selectedNode_, this);
-      
-      //Refresh locale
-      Locale locale = Util.getPortalRequestContext().getLocale();
-      localizePageNavigation(navigation, locale);
+      uiPageBody.setPageBody(getSelectedUserNode(), this);
    }
    
-   public synchronized void setSelectedNode(PageNode node)
+   public UserNode getSelectedUserNode() throws Exception
    {
-      selectedNode_ = node;
+      return getNavPath();
    }
 
-   /*
-   public PageNode getSelectedNode() throws Exception
-   {
-      if (selectedNode_ != null)
-         return selectedNode_;
-      if (getSelectedNavigation() == null || selectedNavigation_.getNodes() == null
-         || selectedNavigation_.getNodes().size() < 1)
-         return null;
-      selectedNode_ = selectedNavigation_.getNodes().get(0);
-      return selectedNode_;
-   }
-   */
-   
-   public PageNode getSelectedNode() throws Exception
-   {
-      if(selectedNode_ != null)
-      {
-         return selectedNode_;
-      }
-      if(navigation == null || navigation.getNodes() == null || navigation.getNodes().size() < 1)
-      {
-         return null;
-      }
-      return navigation.getNodes().get(0);
-   }
-
-   public List<PageNode> getSelectedPath()
-   {
-      return selectedPath;
-   }
-
-   public void setSelectedPath(List<PageNode> nodes)
-   {
-      selectedPath = nodes;
-   }
-   
-   public PageNavigation getSelectedNavigation() throws Exception
-   {
-      return navigation;
-   }
-   
-   public void setSelectedNavigation(PageNavigation _navigation)
-   {
-      this.navigation = _navigation;
-   }
-
-   /**
-   public PageNavigation getPageNavigation(int id)
-   {
-      for (PageNavigation nav : navigations)
-      {
-         if (nav.getId() == id)
-            return nav;
-      }
-      return null;
-   }
-
-*/
-   /*
-   public void setSelectedNavigation(PageNavigation selectedNavigation)
-   {
-      selectedNavigation_ = selectedNavigation;
-   }
-
-   */
-   
    public UIComponent getMaximizedUIComponent()
    {
       return maximizedUIComponent;
@@ -400,30 +330,6 @@ public class UIPortal extends UIContainer
    public void setDescription(String description)
    {
       this.description = description;
-   }
-
-   private void localizePageNavigation(PageNavigation nav,Locale locale)
-   {
-      ResourceBundleManager mgr = getApplicationComponent(ResourceBundleManager.class);
-      if (nav.getOwnerType().equals(PortalConfig.USER_TYPE))
-         return;
-      String localeLanguage = (locale.getCountry().length() > 0) ? locale.getLanguage() + "_" + locale.getCountry() : locale.getLanguage();
-      ResourceBundle res = mgr.getNavigationResourceBundle(localeLanguage, nav.getOwnerType(), nav.getOwnerId());
-      for (PageNode node : nav.getNodes())
-      {
-         resolveLabel(res, node);
-      }
-   }
-
-   private void resolveLabel(ResourceBundle res, PageNode node)
-   {
-      node.setResolvedLabel(res);
-      if (node.getChildren() == null)
-         return;
-      for (PageNode childNode : node.getChildren())
-      {
-         resolveLabel(res, childNode);
-      }
    }
 
    static public class LogoutActionListener extends EventListener<UIComponent>

@@ -4,8 +4,6 @@
 	import org.exoplatform.webui.core.UIRightClickPopupMenu;
 	import org.exoplatform.web.application.JavascriptManager;
 
-	def selectedNav =	uicomponent.getSelectedNavigation();
-	
 	UIRightClickPopupMenu uiPopupMenu = uicomponent.getChild(UIRightClickPopupMenu.class);
 	String popupMenu = "";
 %>
@@ -16,11 +14,7 @@
 		
 		JavascriptManager jsmanager = _ctx.getRequestContext().getJavascriptManager();
 		jsmanager.importJavascript('eXo.webui.UIRightClickPopupMenu');
-		if(uicomponent.getCopyNode()!= null) {
-			popupMenu = uiPopupMenu.getJSOnclickShowPopup("", "AddNode,PasteNode,EditNavigation,SaveNavigation,DeleteNavigation");
-		} else {
-			popupMenu = uiPopupMenu.getJSOnclickShowPopup("", "AddNode,EditNavigation,SaveNavigation,DeleteNavigation");
-		}
+    popupMenu = uiPopupMenu.getJSOnclickShowPopup("", "AddNode,EditNavigation,SaveNavigation,DeleteNavigation");
 		jsmanager.addJavascript("eXo.webui.UIRightClickPopupMenu.disableContextMenu('"+id+"');");
 		uicomponent.renderUIComponent(uiPopupMenu);
 	 

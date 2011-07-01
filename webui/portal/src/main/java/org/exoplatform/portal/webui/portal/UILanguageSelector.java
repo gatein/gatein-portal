@@ -191,8 +191,6 @@ public class UILanguageSelector extends UIContainer
          if (localeConfig == null)
             localeConfig = localeConfigService.getDefaultLocaleConfig();
          prqCtx.setLocale(localeConfig.getLocale());
-         //uiApp.setOrientation(localeConfig.getOrientation());
-         //uiApp.localizeNavigations();
       }
 
       private void saveLocaleToUserProfile(PortalRequestContext context) throws Exception

@@ -41,18 +41,18 @@ import org.exoplatform.web.application.ApplicationRequestPhaseLifecycle;
 import org.exoplatform.web.application.Phase;
 import org.exoplatform.web.application.RequestFailure;
 import org.exoplatform.webui.application.WebuiRequestContext;
-import org.exoplatform.webui.core.UIApplication;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  * This class takes care of loading / initializing / saving the current Locale.
@@ -205,10 +205,7 @@ public class LocalizationLifecycle implements ApplicationRequestPhaseLifecycle<W
 
          if (refreshNeeded)
          {
-            UIApplication uiapp = context.getUIApplication();
-            // we presume PortalRequestContext, and UIPortalApplication
             resetOrientation(reqCtx, loc);
-            ((UIPortalApplication) uiapp).localizeNavigations();
          }
 
          savePreviousLocale(reqCtx, loc);

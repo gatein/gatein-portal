@@ -18,13 +18,6 @@
  */
 package org.exoplatform.portal.config;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.List;
-
 import org.exoplatform.commons.utils.LazyPageList;
 import org.exoplatform.commons.utils.ListAccess;
 import org.exoplatform.portal.application.PortletPreferences;
@@ -34,19 +27,23 @@ import org.exoplatform.portal.config.model.Container;
 import org.exoplatform.portal.config.model.Dashboard;
 import org.exoplatform.portal.config.model.ModelObject;
 import org.exoplatform.portal.config.model.Page;
-import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.pom.data.DashboardData;
 import org.exoplatform.portal.pom.data.ModelChange;
 import org.exoplatform.portal.pom.data.ModelData;
 import org.exoplatform.portal.pom.data.ModelDataStorage;
-import org.exoplatform.portal.pom.data.NavigationData;
-import org.exoplatform.portal.pom.data.NavigationKey;
 import org.exoplatform.portal.pom.data.PageData;
 import org.exoplatform.portal.pom.data.PageKey;
 import org.exoplatform.portal.pom.data.PortalData;
 import org.exoplatform.portal.pom.data.PortalKey;
 import org.exoplatform.services.listener.ListenerService;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -70,12 +67,6 @@ public class DataStorageImpl implements DataStorage
       PageKey key = PageKey.create(pageId);
       PageKey cloneKey = new PageKey(clonedOwnerType, clonedOwnerId, clonedName);
       return new Page(delegate.clonePage(key, cloneKey));
-   }
-
-   public PageNavigation getPageNavigation(String ownerType, String id) throws Exception
-   {
-      NavigationData data = delegate.getPageNavigation(new NavigationKey(ownerType, id));
-      return data != null ? new PageNavigation(data) : null;
    }
 
    public void create(PortalConfig config) throws Exception
@@ -115,24 +106,6 @@ public class DataStorageImpl implements DataStorage
       listenerServ_.broadcast(PAGE_REMOVED, this, page);
    }
 
-   public void create(PageNavigation navigation) throws Exception
-   {
-      delegate.create(navigation.build());
-      listenerServ_.broadcast(NAVIGATION_CREATED, this, navigation);
-   }
-
-   public void save(PageNavigation navigation) throws Exception
-   {
-      delegate.save(navigation.build());
-      listenerServ_.broadcast(NAVIGATION_UPDATED, this, navigation);
-   }
-
-   public void remove(PageNavigation navigation) throws Exception
-   {
-      delegate.remove(navigation.build());
-      listenerServ_.broadcast(NAVIGATION_REMOVED, this, navigation);
-   }
-
    public <S> S load(ApplicationState<S> state, ApplicationType<S> type) throws Exception
    {
       return delegate.load(state, type);
@@ -156,13 +129,6 @@ public class DataStorageImpl implements DataStorage
    public PortalConfig getPortalConfig(String portalName) throws Exception
    {
       return getPortalConfig(PortalConfig.PORTAL_TYPE, portalName);
-   }
-
-   public PageNavigation getPageNavigation(String fullId) throws Exception
-   {
-      NavigationKey key = NavigationKey.create(fullId);
-      NavigationData data = delegate.getPageNavigation(key);
-      return data != null ? new PageNavigation(data) : null;
    }
 
    public Page getPage(String pageId) throws Exception
@@ -225,23 +191,27 @@ public class DataStorageImpl implements DataStorage
       
 
       private List<D> sort(List<D> list, final Comparator<O> comparator) {
-         List<D> tmpList = new ArrayList<D>();
-         for (int i=0; i<list.size();i++) {
-            tmpList.add(list.get(i));
-         }
-         Collections.sort(tmpList, new Comparator<D>() {
-            public int compare(D d1, D d2)
-            {
-               if (comparator == null) {
-                  return d1.getStorageId().compareTo(d2.getStorageId());
-               }
-               O o1 = create(d1);
-               O o2 = create(d2);
-               return comparator.compare(o1, o2);
+         if (comparator != null)
+         {
+            List<D> tmpList = new ArrayList<D>();
+            for (int i=0; i<list.size();i++) {
+               tmpList.add(list.get(i));
             }
-            
-         });
-         return tmpList;         
+            Collections.sort(tmpList, new Comparator<D>() {
+               public int compare(D d1, D d2)
+               {
+                  O o1 = create(d1);
+                  O o2 = create(d2);
+                  return comparator.compare(o1, o2);
+               }
+
+            });
+            return tmpList;
+         }
+         else
+         {
+            return list;
+         }
       }
    }
 
@@ -278,18 +248,6 @@ public class DataStorageImpl implements DataStorage
             protected Page create(PageData pageData)
             {
                return new Page(pageData);
-            }
-         };
-         return (ListAccess<T>)bilto.execute();
-      }
-      else if (type == PageNavigation.class)
-      {
-         Bilto<PageNavigation, NavigationData> bilto = new Bilto<PageNavigation, NavigationData>((Query<PageNavigation>)q, NavigationData.class, (Comparator<PageNavigation>)sortComparator)
-         {
-            @Override
-            protected PageNavigation create(NavigationData page)
-            {
-               return new PageNavigation(page);
             }
          };
          return (ListAccess<T>)bilto.execute();

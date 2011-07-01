@@ -23,10 +23,8 @@ import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.model.Page;
-import org.exoplatform.portal.config.model.PageNode;
+import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.webui.container.UIContainer;
-import org.exoplatform.portal.webui.page.UIPage;
-import org.exoplatform.portal.webui.page.UIPageBody;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -75,10 +73,10 @@ public class UIDashboardPortlet extends UIPortletApplication implements Dashboar
       //
       try
       {
-         PageNode node = portal.getSelectedNode();
+         UserNode node = portal.getSelectedUserNode();
          if (node != null)
          {
-            String pageRef = node.getPageReference();
+            String pageRef = node.getPageRef();
             DataStorage storage = portal.getApplicationComponent(DataStorage.class);
             Page page = storage.getPage(pageRef);
             if (page != null)

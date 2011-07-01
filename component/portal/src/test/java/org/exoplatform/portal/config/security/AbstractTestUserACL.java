@@ -25,6 +25,7 @@ import org.exoplatform.portal.config.UserACLMetaData;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.services.security.ConversationState;
 import org.exoplatform.services.security.Identity;
 import org.exoplatform.services.security.MembershipEntry;
@@ -139,12 +140,12 @@ public abstract class AbstractTestUserACL extends AbstractGateInTest
          }
       }
 
-      public boolean hasEditPermission(PageNavigation nav)
+      public boolean hasEditPermission(SiteKey nav)
       {
          ConversationState.setCurrent(new ConversationState(identity));
          try
          {
-            return ua.hasEditPermission(nav);
+            return ua.hasEditPermissionOnNavigation(nav);
          }
          finally
          {

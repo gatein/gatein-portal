@@ -22,6 +22,10 @@ package org.exoplatform.portal.config;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.mop.SiteKey;
+import org.exoplatform.portal.mop.navigation.NavigationContext;
+import org.exoplatform.portal.mop.navigation.NavigationService;
+import org.exoplatform.portal.mop.navigation.NavigationState;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.services.organization.Group;
@@ -48,6 +52,9 @@ public class TestPortalConfig extends AbstractPortalTest
    /** . */
    private POMSession session;
 
+   /** . */
+   private NavigationService navService;
+
    public TestPortalConfig(String name)
    {
       super(name);
@@ -61,6 +68,7 @@ public class TestPortalConfig extends AbstractPortalTest
       org = (OrganizationService)container.getComponentInstanceOfType(OrganizationService.class);
       storage = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
       mgr = (POMSessionManager)container.getComponentInstanceOfType(POMSessionManager.class);
+      navService = (NavigationService)container.getComponentInstanceOfType(NavigationService.class);
       session = mgr.openSession();
    }
 
@@ -127,30 +135,29 @@ public class TestPortalConfig extends AbstractPortalTest
       group = groupHandler.findGroupById("/groupTest");
       assertNull(group);
    }
-   
+
+
+
    public void testGroupNavigation() throws Exception
    {
+
+
       GroupHandler groupHandler = org.getGroupHandler();
       Group group = groupHandler.createGroupInstance();
       group.setGroupName("testGroupNavigation");
       group.setLabel("testGroupNavigation");
       
       groupHandler.addChild(null, group, true);
-      
-      PageNavigation pageNavigation = new PageNavigation();
-      pageNavigation.setOwnerId(group.getId());
-      pageNavigation.setOwnerType(PortalConfig.GROUP_TYPE);
-      storage.create(pageNavigation);
-      
-      pageNavigation = storage.getPageNavigation(PortalConfig.GROUP_TYPE, group.getId());
-      assertNotNull(pageNavigation);
-      
+
+      SiteKey key = SiteKey.group(group.getId());
+      navService.saveNavigation(new NavigationContext(key, new NavigationState(0)));
+      assertNotNull(navService.loadNavigation(key));
+
       // Remove group
       groupHandler.removeGroup(group, true);
       
       // Group navigations is removed after remove group 
-      pageNavigation = storage.getPageNavigation(PortalConfig.GROUP_TYPE, group.getId());
-      assertNull(pageNavigation);
+      assertNull(navService.loadNavigation(key));
    }
 
    public void testUserLayout() throws Exception
@@ -172,28 +179,5 @@ public class TestPortalConfig extends AbstractPortalTest
 
       PortalConfig pConfig = storage.getPortalConfig(PortalConfig.USER_TYPE, "testing");
       assertNotNull("the User's PortalConfig is not null", pConfig);
-   }
-
-   public void testGetAllOrder() throws Exception
-   {
-      // Query with comparator to make sure returned list is ordered
-      Query<PageNavigation> query = new Query<PageNavigation>(PortalConfig.GROUP_TYPE, null, PageNavigation.class);
-      Comparator<PageNavigation> sortComparator = new Comparator<PageNavigation>()
-      {
-         public int compare(PageNavigation pconfig1, PageNavigation pconfig2)
-         {
-            return pconfig1.getOwnerId().compareTo(pconfig2.getOwnerId());
-         }
-      };
-
-      // First query
-      List<PageNavigation> navis = storage.find(query, sortComparator).getAll();
-      storage.save(navis.get(0)); // Modify
-      // Second query
-      List<PageNavigation> navis2 = storage.find(query, sortComparator).getAll();
-      for (int i = 0; i < navis.size(); i++)
-      {
-         assertEquals(true, navis.get(i).getOwnerId().equals(navis2.get(i).getOwnerId()));
-      }
    }
 }

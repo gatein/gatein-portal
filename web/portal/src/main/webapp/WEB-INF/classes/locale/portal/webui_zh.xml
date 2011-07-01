@@ -575,7 +575,7 @@
          <done>完成</done>
       </action>
    </UIGroupSelector>
-   <UIPageSelector2>
+   <UIPageSelector>
       <header>
          <name>名称</name>
          <id>页面Id</id>
@@ -592,7 +592,7 @@
          <name>#{word.name}</name>
          <accessGroups>访问组</accessGroups>
       </label>
-   </UIPageSelector2>
+   </UIPageSelector>
    <UIPageBrowser>
       <msg>
          <NoPermission>您无权访问这个页面。</NoPermission>
@@ -770,7 +770,7 @@
          <label>
             <PageNodeSetting>页面节点设置</PageNodeSetting>
             <Icon>#{word.icon}</Icon>
-            <UIPageSelector2>页面选择器</UIPageSelector2>
+            <UIPageSelector>页面选择器</UIPageSelector>
          </label>
       </tab>
    </UIPageNodeForm>

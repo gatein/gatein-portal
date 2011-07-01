@@ -37,7 +37,7 @@ eXo.webui.UITabbedDashboard = {
 			var DOMUtil = eXo.core.DOMUtil;
 			var portletFrag = DOMUtil.findAncestorByClass(inputElement, "PORTLET-FRAGMENT");
 			var compId = portletFrag.parentNode.id;
-			var nodeIndex = inputElement.id;
+			var nodeName = inputElement.id;
 			
 			//Send request to server to change node name
 			var href = eXo.env.server.portalBaseURL + "?portal:componentId=" + compId;
@@ -45,7 +45,7 @@ eXo.webui.UITabbedDashboard = {
 			href += "&portal:isSecure=false";
 			href += "&uicomponent=UITabPaneDashboard";
 			href += "&op=RenameTabLabel";
-			href += "&objectId=" + nodeIndex;
+			href += "&objectId=" + nodeName;
 			href += "&newTabLabel=" + encodeURIComponent(newTabLabel);
 			window.location = href;
 		}
@@ -59,7 +59,7 @@ eXo.webui.UITabbedDashboard = {
 		}
 	},
 
-	showEditLabelInput : function(selectedElement, nodeIndex, currentContent){
+	showEditLabelInput : function(selectedElement, nodeName, currentContent){
 		eXo.webui.UITabbedDashboard.backupElement = selectedElement;
 		var prNode = selectedElement.parentNode;
 		var tabContainer = eXo.core.DOMUtil.findAncestorByClass(prNode, "TabsContainer");
@@ -67,7 +67,7 @@ eXo.webui.UITabbedDashboard = {
 		
 		var inputElement = document.createElement("input");
 		inputElement.type = "text";
-		inputElement.id = nodeIndex;
+		inputElement.id = nodeName;
 		inputElement.name = currentContent; // To store old value
 		inputElement.value = currentContent;
 		inputElement.style.border = "1px solid #b7b7b7";
