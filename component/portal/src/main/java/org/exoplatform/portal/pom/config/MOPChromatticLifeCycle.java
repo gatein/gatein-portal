@@ -21,6 +21,7 @@ package org.exoplatform.portal.pom.config;
 import org.exoplatform.commons.chromattic.ChromatticLifeCycle;
 import org.exoplatform.commons.chromattic.SessionContext;
 import org.exoplatform.container.xml.InitParams;
+import org.exoplatform.portal.mop.i18n.Injector;
 
 /**
  * Extends the chromattic life cycle to associate the mop session as an attachment of the chromattic session.
@@ -43,6 +44,7 @@ public class MOPChromatticLifeCycle extends ChromatticLifeCycle
    protected void onOpenSession(SessionContext context)
    {
       POMSession session = new POMSession(manager, this, context);
+      context.getSession().addEventListener(new Injector(context.getSession()));
       context.setAttachment("mopsession", session);
    }
 

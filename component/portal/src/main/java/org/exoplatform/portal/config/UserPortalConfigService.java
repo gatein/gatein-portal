@@ -28,9 +28,11 @@ import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.TransientApplicationState;
 import org.exoplatform.portal.mop.SiteKey;
+import org.exoplatform.portal.mop.description.DescriptionService;
 import org.exoplatform.portal.mop.navigation.NavigationContext;
 import org.exoplatform.portal.mop.navigation.NavigationService;
 import org.exoplatform.portal.mop.navigation.NavigationState;
+import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserPortalContext;
 import org.exoplatform.portal.pom.data.ModelChange;
 import org.exoplatform.services.log.ExoLogger;
@@ -58,17 +60,22 @@ public class UserPortalConfigService implements Startable
    /** . */
    final NavigationService navService;
    
+   /** . */
+   final DescriptionService descriptionService;
+
    private Log log = ExoLogger.getLogger("Portal:UserPortalConfigService");
 
    public UserPortalConfigService(
       UserACL userACL, DataStorage storage,
       OrganizationService orgService,
-      NavigationService navService) throws Exception
+      NavigationService navService,
+      DescriptionService descriptionService) throws Exception
    {
       this.storage_ = storage;
       this.orgService_ = orgService;
       this.userACL_ = userACL;
       this.navService = navService;
+      this.descriptionService = descriptionService;
    }
 
    /**
@@ -80,6 +87,34 @@ public class UserPortalConfigService implements Startable
    {
       return navService;
    }
+
+   public DescriptionService getDescriptionService()
+   {
+      return descriptionService;
+   }
+
+   public UserACL getUserACL()
+   {
+      return userACL_;
+   }
+
+   public OrganizationService getOrganizationService()
+   {
+      return orgService_;
+   }
+
+   /** Temporary until the {@link #getUserPortalConfig(String, String)} is removed. */
+   private static final UserPortalContext NULL_CONTEXT = new UserPortalContext()
+   {
+      public ResourceBundle getBundle(UserNavigation navigation)
+      {
+         return null;
+      }
+      public Locale getUserLocale()
+      {
+         return Locale.ENGLISH;
+      }
+   };
 
    /**
     * <p> Build and returns an instance of <tt>UserPortalConfig</tt>. </p>
@@ -105,13 +140,15 @@ public class UserPortalConfigService implements Startable
     * @param accessUser the user name
     * @return the config
     * @throws Exception any exception
+    * @deprecated the method {@link #getUserPortalConfig(String, String, org.exoplatform.portal.mop.user.UserPortalContext)} should be used instead
     */
+   @Deprecated
    public UserPortalConfig getUserPortalConfig(String portalName, String accessUser) throws Exception
    {
-      return getUserPortalConfig(portalName, accessUser, null);
+      return getUserPortalConfig(portalName, accessUser, NULL_CONTEXT);
    }
 
-   public UserPortalConfig getUserPortalConfig(String portalName, String accessUser, UserPortalContext bundleResolver) throws Exception
+   public UserPortalConfig getUserPortalConfig(String portalName, String accessUser, UserPortalContext userPortalContext) throws Exception
    {
       PortalConfig portal = storage_.getPortalConfig(portalName);
       if (portal == null || !userACL_.hasPermission(portal))
@@ -120,7 +157,7 @@ public class UserPortalConfigService implements Startable
       }
 
 
-      return new UserPortalConfig(portal, this, portalName, accessUser, bundleResolver);
+      return new UserPortalConfig(portal, this, portalName, accessUser, userPortalContext);
    }
 
    /**

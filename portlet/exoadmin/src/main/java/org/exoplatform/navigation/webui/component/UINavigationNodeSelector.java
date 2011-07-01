@@ -19,16 +19,16 @@
 
 package org.exoplatform.navigation.webui.component;
 
-import java.util.Collection;
-
 import org.exoplatform.navigation.webui.TreeNode;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Page;
+import org.exoplatform.portal.mop.Described.State;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.Visibility;
+import org.exoplatform.portal.mop.description.DescriptionService;
 import org.exoplatform.portal.mop.navigation.NavigationError;
 import org.exoplatform.portal.mop.navigation.NavigationServiceException;
 import org.exoplatform.portal.mop.navigation.Scope;
@@ -59,6 +59,11 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.event.EventListener;
 import org.gatein.common.util.ParameterValidation;
+
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 
 /** Copied by The eXo Platform SARL Author May 28, 2009 3:07:15 PM */
 @ComponentConfigs({
@@ -94,6 +99,8 @@ public class UINavigationNodeSelector extends UIContainer
    private UserPortal userPortal;
 
    private UserNodeFilterConfig filterConfig;
+   
+   private Map<String, Map<Locale, State>> userNodeLabels;
 
    private static final Scope NODE_SCOPE = Scope.GRANDCHILDREN;
 
@@ -116,8 +123,20 @@ public class UINavigationNodeSelector extends UIContainer
       uiPopupMenu.setActions(new String[]{"AddNode", "EditPageNode", "EditSelectedNode", "CopyNode", "CloneNode",
          "CutNode", "DeleteNode", "MoveUp", "MoveDown"});
       uiTree.setUIRightClickPopupMenu(uiPopupMenu);
+      
+      userNodeLabels = new HashMap<String, Map<Locale,State>>();
    }
 
+   public void setUserNodeLabels(Map<String, Map<Locale, State>> labels)
+   {
+      this.userNodeLabels = labels;
+   }
+   
+   public Map<String, Map<Locale, State>> getUserNodeLabels()
+   {
+      return this.userNodeLabels;
+   }
+   
    /**
     * Init the UITree wrapped in UINavigationNodeSelector
     * 
@@ -216,7 +235,23 @@ public class UINavigationNodeSelector extends UIContainer
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
       try 
       {
-         userPortal.saveNode(getRootNode().getNode(), null);
+         userPortal.saveNode(getRootNode().getNode(), getRootNode());
+         DescriptionService descriptionService = getApplicationComponent(DescriptionService.class);
+         Map<String, Map<Locale, State>> i18nizedLabels = this.userNodeLabels;
+         
+         for (String treeNodeId : i18nizedLabels.keySet())
+         {
+            TreeNode node = findNode(treeNodeId);
+            if (node != null)
+            {
+               Map<Locale, State> labels = i18nizedLabels.get(treeNodeId);
+               if (labels != null && labels.size() > 0)
+               {
+                  descriptionService.setDescriptions(node.getNode().getId(), labels);
+               }
+            }
+            
+         }
       }
       catch (NavigationServiceException ex)
       {           
@@ -269,6 +304,21 @@ public class UINavigationNodeSelector extends UIContainer
       }
       return getRootNode().findNode(nodeID);
    }
+   
+   private void invokeI18NizedLabels(TreeNode node)
+   {
+      DescriptionService descriptionService = this.getApplicationComponent(DescriptionService.class);
+      try
+      {
+         Map<Locale, State> labels = descriptionService.getDescriptions(node.getId());
+         node.setI18nizedLabels(labels);
+      }
+      catch(NullPointerException npe)
+      {
+         // set label list is null if Described mixin has been removed or not exists.
+         node.setI18nizedLabels(null);
+      }
+   }
 
    static public abstract class BaseActionListener<T> extends EventListener<T>
    {
@@ -283,6 +333,8 @@ public class UINavigationNodeSelector extends UIContainer
          TreeNode rebased = selector.rebaseNode(node, scope);
          if (rebased == null)
          {
+            selector.getUserNodeLabels().remove(node.getId());
+            
             context.getUIApplication().addMessage(new ApplicationMessage("UINavigationNodeSelector.msg.staleData", null,
                ApplicationMessage.WARNING));
             selector.selectNode(selector.getRootNode());
@@ -294,6 +346,7 @@ public class UINavigationNodeSelector extends UIContainer
       protected void handleError(NavigationError error, UINavigationNodeSelector selector) throws Exception
       {
          selector.initTreeData();
+         selector.getUserNodeLabels().clear();
          if (selector.getRootNode() != null)
          {
             WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
@@ -496,7 +549,12 @@ public class UINavigationNodeSelector extends UIContainer
                return;
             }
          }
-
+         
+         if (node.getI18nizedLabels() == null)
+         {
+            uiNodeSelector.invokeI18NizedLabels(node);
+         }
+         
          UIPopupWindow uiManagementPopup = uiNodeSelector.getAncestorOfType(UIPopupWindow.class);
          UIPageNodeForm uiNodeForm = uiApp.createUIComponent(UIPageNodeForm.class, null, null);
          uiManagementPopup.setUIComponent(uiNodeForm);
@@ -532,6 +590,10 @@ public class UINavigationNodeSelector extends UIContainer
          }
 
          node.setDeleteNode(false);
+         if (node.getI18nizedLabels() == null)
+         {
+            uiNodeSelector.invokeI18NizedLabels(node);
+         }
          uiNodeSelector.setCopyNode(node);
          event.getSource().setActions(
             new String[]{"AddNode", "EditPageNode", "EditSelectedNode", "CopyNode", "CloneNode", "CutNode",
@@ -585,6 +647,11 @@ public class UINavigationNodeSelector extends UIContainer
          String nodeID = event.getRequestContext().getRequestParameter(UIComponent.OBJECTID);
          if (currNode != null && currNode.getId().equals(nodeID))
             currNode.setCloneNode(true);
+         
+         if (currNode.getI18nizedLabels() == null)
+         {
+            uiNodeSelector.invokeI18NizedLabels(currNode);
+         }
       }
    }
 
@@ -684,7 +751,9 @@ public class UINavigationNodeSelector extends UIContainer
          {
             pasteNode(child, node, isClone);
          }
-
+         
+         node.setI18nizedLabels(sourceNode.getI18nizedLabels());
+         uiNodeSelector.getUserNodeLabels().put(node.getId(), node.getI18nizedLabels());
          return node;
       }
 
@@ -809,8 +878,8 @@ public class UINavigationNodeSelector extends UIContainer
             uiApp.addMessage(new ApplicationMessage("UINavigationNodeSelector.msg.systemnode-delete", null));
             return;
          }
-
-         parentNode.removeChild(childNode);
+         uiNodeSelector.getUserNodeLabels().remove(childNode.getId()); 
+         parentNode.removeChild(childNode); 
          uiNodeSelector.selectNode(parentNode);
       }
    }

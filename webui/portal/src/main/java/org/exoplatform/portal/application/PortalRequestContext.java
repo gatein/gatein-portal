@@ -501,7 +501,10 @@ public class PortalRequestContext extends WebuiRequestContext
             navigation.getKey().getTypeName(),
             navigation.getKey().getName());
       }
+
+      public Locale getUserLocale()
+      {
+         return Util.getPortalRequestContext().getLocale();
+      }
    };
-
-
 }

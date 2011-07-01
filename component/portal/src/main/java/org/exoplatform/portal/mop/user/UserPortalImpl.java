@@ -24,15 +24,13 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.ResourceBundle;
+import java.util.Locale;
 
-import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.navigation.NavigationContext;
-import org.exoplatform.portal.mop.navigation.NavigationService;
 import org.exoplatform.portal.mop.navigation.NavigationServiceException;
 import org.exoplatform.portal.mop.navigation.NodeChangeListener;
 import org.exoplatform.portal.mop.navigation.NodeContext;
@@ -41,7 +39,6 @@ import org.exoplatform.portal.mop.navigation.NodeState;
 import org.exoplatform.portal.mop.navigation.Scope;
 import org.exoplatform.portal.mop.navigation.VisitMode;
 import org.exoplatform.services.organization.Group;
-import org.exoplatform.services.organization.OrganizationService;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -50,29 +47,9 @@ import org.exoplatform.services.organization.OrganizationService;
 public class UserPortalImpl implements UserPortal
 {
 
-   /**
-    * A context that always return null.
-    */
-   private static final UserPortalContext NULL_CONTEXT = new UserPortalContext()
-   {
-      public ResourceBundle getBundle(UserNavigation navigation)
-      {
-         return null;
-      }
-   };
-
    /** . */
    final UserPortalConfigService service;
 
-   /** . */
-   final NavigationService navigationService;
-   
-   /** . */
-   private final OrganizationService organizationService;
-
-   /** . */
-   final UserACL acl;
-   
    /** . */
    private final PortalConfig portal;
 
@@ -88,33 +65,39 @@ public class UserPortalImpl implements UserPortal
    /** . */
    private final String portalName;
 
+   /** . */
+   private final Locale portalLocale;
+
    public UserPortalImpl(
       UserPortalConfigService service,
-      NavigationService navigationService,
-      OrganizationService organizationService,
-      UserACL acl,
       String portalName,
       PortalConfig portal,
       String userName,
       UserPortalContext context)
    {
-      // So we don't care about testing nullity
       if (context == null)
       {
-         context = NULL_CONTEXT;
+         throw new NullPointerException("No null context argument allowed");
       }
 
       //
+      String locale = portal.getLocale();
+
+      //
+      this.portalLocale = locale != null ? new Locale(locale) : null;
       this.service = service;
-      this.navigationService = navigationService;
-      this.organizationService = organizationService;
-      this.acl = acl;
       this.portalName = portalName;
       this.portal = portal;
       this.userName = userName;
       this.context = context;
       this.navigations = null;
    }
+
+   public Locale getLocale()
+   {
+      return portalLocale;
+   }
+
    /**
     * Returns an immutable sorted list of the valid navigations related to the user.
     *
@@ -126,16 +109,16 @@ public class UserPortalImpl implements UserPortal
       if (navigations == null)
       {
          List<UserNavigation> navigations = new ArrayList<UserNavigation>(userName == null ? 1 : 10);
-         NavigationContext portalNav = navigationService.loadNavigation(new SiteKey(SiteType.PORTAL, portalName));
+         NavigationContext portalNav = service.getNavigationService().loadNavigation(new SiteKey(SiteType.PORTAL, portalName));
          if (portalNav != null && portalNav.getState() != null)
          {
-            navigations.add(new UserNavigation(this, portalNav, acl.hasEditPermission(portal)));
+            navigations.add(new UserNavigation(this, portalNav, service.getUserACL().hasEditPermission(portal)));
          }
          //
          if (userName != null)
          {
             // Add user nav if any
-            NavigationContext userNavigation = navigationService.loadNavigation(SiteKey.user(userName));
+            NavigationContext userNavigation = service.getNavigationService().loadNavigation(SiteKey.user(userName));
             if (userNavigation != null && userNavigation.getState() != null)
             {
                navigations.add(new UserNavigation(this, userNavigation, true));
@@ -145,13 +128,13 @@ public class UserPortalImpl implements UserPortal
             Collection<?> groups;
             try
             {
-               if (acl.getSuperUser().equals(userName))
+               if (service.getUserACL().getSuperUser().equals(userName))
                {
-                  groups = organizationService.getGroupHandler().getAllGroups();
+                  groups = service.getOrganizationService().getGroupHandler().getAllGroups();
                }
                else
                {
-                  groups = organizationService.getGroupHandler().findGroupsOfUser(userName);
+                  groups = service.getOrganizationService().getGroupHandler().findGroupsOfUser(userName);
                }
             }
             catch (Exception e)
@@ -164,15 +147,15 @@ public class UserPortalImpl implements UserPortal
             {
                Group m = (Group)group;
                String groupId = m.getId().trim();
-               if (!groupId.equals(acl.getGuestsGroup()))
+               if (!groupId.equals(service.getUserACL().getGuestsGroup()))
                {
-                  NavigationContext groupNavigation = navigationService.loadNavigation(SiteKey.group(groupId));
+                  NavigationContext groupNavigation = service.getNavigationService().loadNavigation(SiteKey.group(groupId));
                   if (groupNavigation != null && groupNavigation.getState() != null)
                   {
                      navigations.add(new UserNavigation(
                         this,
                         groupNavigation,
-                        acl.hasEditPermissionOnNavigation(groupNavigation.getKey())));
+                        service.getUserACL().hasEditPermissionOnNavigation(groupNavigation.getKey())));
                   }
                }
             }
@@ -218,7 +201,7 @@ public class UserPortalImpl implements UserPortal
       NodeChangeListener<UserNode> listener) throws NullPointerException, UserPortalException, NavigationServiceException
    {
       UserNodeContext context = new UserNodeContext(userNavigation, filterConfig);
-      NodeContext<UserNode> nodeContext = navigationService.loadNode(context, userNavigation.navigation, scope, NodeContextChangeAdapter.safeWrap(listener));
+      NodeContext<UserNode> nodeContext = service.getNavigationService().loadNode(context, userNavigation.navigation, scope, NodeContextChangeAdapter.safeWrap(listener));
       if (nodeContext != null)
       {
          return nodeContext.getNode().filter();
@@ -236,7 +219,7 @@ public class UserPortalImpl implements UserPortal
       {
          throw new NullPointerException("No null node accepted");
       }
-      navigationService.updateNode(node.context, scope, NodeContextChangeAdapter.safeWrap(listener));
+      service.getNavigationService().updateNode(node.context, scope, NodeContextChangeAdapter.safeWrap(listener));
       node.filter();
    }
    
@@ -247,7 +230,7 @@ public class UserPortalImpl implements UserPortal
       {
          throw new NullPointerException("No null node accepted");
       }
-      navigationService.rebaseNode(node.context, scope, NodeContextChangeAdapter.safeWrap(listener));
+      service.getNavigationService().rebaseNode(node.context, scope, NodeContextChangeAdapter.safeWrap(listener));
       node.filter();
    }
 
@@ -257,7 +240,7 @@ public class UserPortalImpl implements UserPortal
       {
          throw new NullPointerException("No null node accepted");
       }
-      navigationService.saveNode(node.context, NodeContextChangeAdapter.safeWrap(listener));
+      service.getNavigationService().saveNode(node.context, NodeContextChangeAdapter.safeWrap(listener));
       node.filter();
    }
 
@@ -280,7 +263,7 @@ public class UserPortalImpl implements UserPortal
       void resolve() throws NavigationServiceException
       {
          UserNodeContext context = new UserNodeContext(userNavigation, filterConfig);
-         NodeContext<UserNode> nodeContext = navigationService.loadNode(context, userNavigation.navigation, this, null);
+         NodeContext<UserNode> nodeContext = service.getNavigationService().loadNode(context, userNavigation.navigation, this, null);
          if (context != null)
          {
             if (score > 0)
@@ -329,7 +312,7 @@ public class UserPortalImpl implements UserPortal
          if (navigation.getState() != null)
          {
             UserNodeContext context = new UserNodeContext(userNavigation, filterConfig);
-            NodeContext<UserNode> nodeContext = navigationService.loadNode(context, navigation, Scope.CHILDREN, null);
+            NodeContext<UserNode> nodeContext = service.getNavigationService().loadNode(context, navigation, Scope.CHILDREN, null);
             if (nodeContext != null)
             {
                UserNode root = nodeContext.getNode().filter();

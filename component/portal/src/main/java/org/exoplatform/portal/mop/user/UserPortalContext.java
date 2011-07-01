@@ -19,6 +19,7 @@
 
 package org.exoplatform.portal.mop.user;
 
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 /**
@@ -39,4 +40,10 @@ public interface UserPortalContext
     */
    ResourceBundle getBundle(UserNavigation navigation);
 
+   /**
+    * Returns the user locale.
+    *
+    * @return the user locale
+    */
+   Locale getUserLocale();
 }

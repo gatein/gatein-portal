@@ -31,24 +31,28 @@ import org.exoplatform.portal.application.PortletPreferences.PortletPreferencesS
 import org.exoplatform.portal.config.importer.ImportMode;
 import org.exoplatform.portal.config.importer.NavigationImporter;
 import org.exoplatform.portal.config.model.Container;
+import org.exoplatform.portal.config.model.ModelUnmarshaller;
 import org.exoplatform.portal.config.model.Page;
+import org.exoplatform.portal.config.model.Page.PageSet;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
-import org.exoplatform.portal.config.model.Page.PageSet;
+import org.exoplatform.portal.config.model.UnmarshalledObject;
+import org.exoplatform.portal.config.model.Version;
+import org.exoplatform.portal.mop.description.DescriptionService;
 import org.exoplatform.portal.mop.navigation.NavigationService;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
-import org.jibx.runtime.*;
-import org.jibx.runtime.impl.UnmarshallingContext;
+import org.jibx.runtime.JiBXException;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -102,12 +106,22 @@ public class NewPortalConfigListener extends BaseComponentPlugin
    /** . */
    private NavigationService navigationService_;
 
-   public NewPortalConfigListener(POMSessionManager pomMgr, DataStorage dataStorage, ConfigurationManager cmanager, InitParams params, NavigationService navigationService)
+   /** . */
+   private DescriptionService descriptionService_;
+
+   public NewPortalConfigListener(
+      POMSessionManager pomMgr,
+      DataStorage dataStorage,
+      ConfigurationManager cmanager,
+      InitParams params,
+      NavigationService navigationService,
+      DescriptionService descriptionService)
       throws Exception
    {
       cmanager_ = cmanager;
       dataStorage_ = dataStorage;
       navigationService_ = navigationService;
+      descriptionService_ = descriptionService;
 
       ValueParam valueParam = params.getValueParam("page.templates.location");
       if (valueParam != null)
@@ -396,9 +410,9 @@ public class NewPortalConfigListener extends BaseComponentPlugin
       try
       {
          String type = config.getOwnerType();
-         PortalConfig pconfig = getConfig(config, owner, type, PortalConfig.class);
+         UnmarshalledObject<PortalConfig> obj = getConfig(config, owner, type, PortalConfig.class);
 
-         if (pconfig == null)
+         if (obj == null)
          {
             // Ensure that the PortalConfig has been defined
             // The PortalConfig could be empty if the related PortalConfigListener
@@ -413,6 +427,9 @@ public class NewPortalConfigListener extends BaseComponentPlugin
             }
             return;
          }
+
+         //
+         PortalConfig pconfig = obj.getObject();
 
          // We use that owner value because it may have been fixed for group names
          owner = pconfig.getName();
@@ -436,12 +453,12 @@ public class NewPortalConfigListener extends BaseComponentPlugin
 
    public void createPage(NewPortalConfig config, String owner) throws Exception
    {
-      PageSet pageSet = getConfig(config, owner, "pages", PageSet.class);
+      UnmarshalledObject<PageSet> pageSet = getConfig(config, owner, "pages", PageSet.class);
       if (pageSet == null)
       {
          return;
       }
-      ArrayList<Page> list = pageSet.getPages();
+      ArrayList<Page> list = pageSet.getObject().getPages();
       for (Page page : list)
       {
          RequestLifeCycle.begin(PortalContainer.getInstance());
@@ -458,17 +475,31 @@ public class NewPortalConfigListener extends BaseComponentPlugin
 
    public void createPageNavigation(NewPortalConfig config, String owner) throws Exception
    {
-      PageNavigation navigation = getConfig(config, owner, "navigation", PageNavigation.class);
-      if (navigation == null)
+      UnmarshalledObject<PageNavigation> obj = getConfig(config, owner, "navigation", PageNavigation.class);
+      if (obj == null)
       {
          return;
       }
 
       //
+      PageNavigation navigation = obj.getObject();
       ImportMode importMode = overrideExistingData ? ImportMode.REIMPORT : ImportMode.MERGE;
+      boolean extendedNavigation = obj.getVersion() == Version.V_1_2;
 
       //
-      NavigationImporter merge =new NavigationImporter(importMode, navigation, navigationService_);
+      Locale locale;
+      PortalConfig portalConfig = dataStorage_.getPortalConfig(config.getOwnerType(), owner);
+      if (portalConfig != null && portalConfig.getLocale() != null)
+      {
+         locale = new Locale(portalConfig.getLocale());
+      }
+      else
+      {
+         locale = Locale.ENGLISH;
+      }
+
+      //
+      NavigationImporter merge = new NavigationImporter(locale, importMode, extendedNavigation, navigation, navigationService_, descriptionService_);
 
       //
       merge.perform();
@@ -476,11 +507,12 @@ public class NewPortalConfigListener extends BaseComponentPlugin
 
    public void createPortletPreferences(NewPortalConfig config, String owner) throws Exception
    {
-      PortletPreferencesSet portletSet = getConfig(config, owner, "portlet-preferences", PortletPreferencesSet.class);
-      if (portletSet == null)
+      UnmarshalledObject<PortletPreferencesSet> obj = getConfig(config, owner, "portlet-preferences", PortletPreferencesSet.class);
+      if (obj == null)
       {
          return;
       }
+      PortletPreferencesSet portletSet = obj.getObject();
       ArrayList<PortletPreferences> list = portletSet.getPortlets();
       for (PortletPreferences portlet : list)
       {
@@ -501,7 +533,7 @@ public class NewPortalConfigListener extends BaseComponentPlugin
     * @throws Exception any exception
     * @param <T> the generic type to unmarshall to
     */
-   private <T> T getConfig(NewPortalConfig config, String owner, String fileName, Class<T> type) throws Exception
+   private <T> UnmarshalledObject<T> getConfig(NewPortalConfig config, String owner, String fileName, Class<T> type) throws Exception
    {
       log.debug("About to load config=" + config + " owner=" + owner + " fileName=" + fileName);
 
@@ -533,9 +565,9 @@ public class NewPortalConfigListener extends BaseComponentPlugin
          boolean ok = false;
          try
          {
-            final T t = fromXML(config.getOwnerType(), owner, xml, type);
+            final UnmarshalledObject<T> o = fromXML(config.getOwnerType(), owner, xml, type);
             ok = true;
-            return t;
+            return o;
          }
          catch (JiBXException e)
          {
@@ -577,7 +609,7 @@ public class NewPortalConfigListener extends BaseComponentPlugin
       String path = pageTemplatesLocation_ + "/" + temp + "/page.xml";
       InputStream is = cmanager_.getInputStream(path);
       String xml = IOUtil.getStreamContentAsString(is);
-      return fromXML(ownerType, owner, xml, Page.class);
+      return fromXML(ownerType, owner, xml, Page.class).getObject();
    }
 
    public String getTemplateConfig(String type, String name)
@@ -590,16 +622,60 @@ public class NewPortalConfigListener extends BaseComponentPlugin
       }
       return null;
    }
+   
+   /**
+    * Get all template configurations
+    * @param siteType (portal, group, user)
+    * @return set of template name
+    */
+   public Set<String> getTemplateConfigs(String siteType)
+   {
+      Set<String> result = new HashSet<String>();      
+      for(SiteConfigTemplates tempConfig : templateConfigs)
+      {
+         Set<String> templates = tempConfig.getTemplates(siteType);
+         if(templates != null && templates.size() > 0)
+         {
+            result.addAll(templates);
+         }
+      }      
+      return result;
+   }
+   
+   /**
+    * Get detail configuration from a template file 
+    * @param siteType (portal, group, user)
+    * @param templateName name of template
+    * @return PortalConfig object
+    */
+   public PortalConfig getPortalConfigFromTemplate(String siteType, String templateName)
+   {
+      String templatePath = getTemplateConfig(siteType, templateName);
+      NewPortalConfig config = new NewPortalConfig(templatePath);
+      config.setTemplateName(templateName);
+      config.setOwnerType(siteType);
+      UnmarshalledObject<PortalConfig> result = null;
+      try
+      {
+         result = getConfig(config, templateName, siteType, PortalConfig.class);
+         if (result != null)
+         {
+            return result.getObject();
+         }
+      }
+      catch (Exception e)
+      {
+         log.warn("Cannot find configuration of template: " + templateName);
+      }
+      return null;
+   }
 
    // Deserializing code
 
-   private <T> T fromXML(String ownerType, String owner, String xml, Class<T> clazz) throws Exception
+   private <T> UnmarshalledObject<T> fromXML(String ownerType, String owner, String xml, Class<T> clazz) throws Exception
    {
-      ByteArrayInputStream is = new ByteArrayInputStream(xml.getBytes("UTF-8"));
-      IBindingFactory bfact = BindingDirectory.getFactory(clazz);
-      UnmarshallingContext uctx = (UnmarshallingContext)bfact.createUnmarshallingContext();
-      uctx.setDocument(is, null, "UTF-8", false);
-      T o = clazz.cast(uctx.unmarshalElement());
+      UnmarshalledObject<T> obj = ModelUnmarshaller.unmarshall(clazz, xml.getBytes("UTF-8"));
+      T o = obj.getObject();
       if (o instanceof PageNavigation)
       {
          PageNavigation nav = (PageNavigation)o;
@@ -632,7 +708,7 @@ public class NewPortalConfigListener extends BaseComponentPlugin
             //        pdcService_.create(page);
          }
       }
-      return o;
+      return obj;
    }
 
    private static String fixOwnerName(String type, String owner)

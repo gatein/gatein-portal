@@ -75,7 +75,7 @@ class UserNodeFilter implements NodeFilter
       {
          if (visibility == Visibility.SYSTEM)
          {
-            UserACL acl = userPortal.acl;
+            UserACL acl = userPortal.service.getUserACL();
             String userName = userPortal.userName;
             if (!acl.getSuperUser().equals(userName))
             {

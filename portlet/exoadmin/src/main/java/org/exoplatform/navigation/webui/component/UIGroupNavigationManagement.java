@@ -50,6 +50,7 @@ import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.event.EventListener;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -71,6 +72,8 @@ import java.util.UUID;
    @ComponentConfig(type = UIPageNodeForm.class, lifecycle = UIFormLifecycle.class, template = "system:/groovy/webui/form/UIFormTabPane.gtmpl", events = {
       @EventConfig(listeners = UIPageNodeForm.SaveActionListener.class),
       @EventConfig(listeners = UIGroupNavigationManagement.BackActionListener.class, phase = Phase.DECODE),
+      @EventConfig(listeners = UIPageNodeForm.ChangeLanguageActionListener.class, phase = Phase.DECODE),
+      @EventConfig(listeners = UIPageNodeForm.SwitchLabelModeActionListener.class, phase = Phase.DECODE),
       @EventConfig(listeners = UIPageNodeForm.SwitchPublicationDateActionListener.class, phase = Phase.DECODE),
       @EventConfig(listeners = UIPageNodeForm.SwitchVisibleActionListener.class, phase = Phase.DECODE),
       @EventConfig(listeners = UIPageNodeForm.ClearPageActionListener.class, phase = Phase.DECODE),
@@ -298,6 +301,7 @@ public class UIGroupNavigationManagement extends UIContainer
          uiNavigationPopup.setRendered(true);
          event.getRequestContext().addUIComponentToUpdateByAjax(uiNavigationPopup.getParent());
          
+         selector.getUserNodeLabels().put(uiPageNodeForm.getPageNode().getId(), uiPageNodeForm.getPageNode().getI18nizedLabels());
          selector.createEvent("NodeModified", Phase.PROCESS, event.getRequestContext()).broadcast();
       }
 

@@ -58,6 +58,18 @@ public abstract class AbstractPortalTest extends AbstractKernelTest
       super.end();
    }
 
+   protected final void sync()
+   {
+      end();
+      begin();
+   }
+
+   protected final void sync(boolean save)
+   {
+      end(save);
+      begin();
+   }
+
    @Override
    protected void setUp() throws Exception
    {

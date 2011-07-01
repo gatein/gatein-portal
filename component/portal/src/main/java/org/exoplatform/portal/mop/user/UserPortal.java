@@ -20,6 +20,7 @@
 package org.exoplatform.portal.mop.user;
 
 import java.util.List;
+import java.util.Locale;
 
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.navigation.NavigationServiceException;
@@ -34,6 +35,13 @@ import org.exoplatform.portal.mop.navigation.Scope;
  */
 public interface UserPortal
 {
+
+   /**
+    * Returns the portal locale.
+    *
+    * @return the portal locale
+    */
+   Locale getLocale();
 
    /**
     * Returns the sorted list of current user navigations.

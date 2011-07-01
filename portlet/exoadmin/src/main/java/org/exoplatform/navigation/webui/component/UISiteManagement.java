@@ -54,12 +54,14 @@ import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.event.EventListener;
+
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
+
 import javax.servlet.http.HttpServletRequest;
 
 @ComponentConfigs({
@@ -69,7 +71,9 @@ import javax.servlet.http.HttpServletRequest;
       @EventConfig(listeners = UISiteManagement.DeletePortalActionListener.class, confirm = "UIPortalBrowser.deletePortal")}),
    @ComponentConfig(type = UIPageNodeForm.class, lifecycle = UIFormLifecycle.class, template = "system:/groovy/webui/form/UIFormTabPane.gtmpl", events = {
       @EventConfig(listeners = UIPageNodeForm.SaveActionListener.class),
+      @EventConfig(listeners = UIPageNodeForm.ChangeLanguageActionListener.class, phase = Phase.DECODE),
       @EventConfig(listeners = UISiteManagement.BackActionListener.class, phase = Phase.DECODE),
+      @EventConfig(listeners = UIPageNodeForm.SwitchLabelModeActionListener.class, phase = Phase.DECODE),
       @EventConfig(listeners = UIPageNodeForm.SwitchPublicationDateActionListener.class, phase = Phase.DECODE),
       @EventConfig(listeners = UIPageNodeForm.SwitchVisibleActionListener.class, phase = Phase.DECODE),
       @EventConfig(listeners = UIPageNodeForm.ClearPageActionListener.class, phase = Phase.DECODE),
@@ -407,6 +411,7 @@ public class UISiteManagement extends UIContainer
          uiNavigationPopup.setWindowSize(400, 400);
          context.addUIComponentToUpdateByAjax(uiNavigationPopup.getParent());
          
+         selector.getUserNodeLabels().put(uiPageNodeForm.getPageNode().getId(), uiPageNodeForm.getPageNode().getI18nizedLabels());
          selector.createEvent("NodeModified", Phase.PROCESS, context).broadcast();
       }
 

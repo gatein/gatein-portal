@@ -98,6 +98,9 @@
                 <value>
                   <string>large</string>
                 </value>
+                <value>
+                  <string>extended</string>
+                </value>
               </collection>
             </field>
             <field name="ownerType">

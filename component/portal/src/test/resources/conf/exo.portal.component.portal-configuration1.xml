@@ -111,6 +111,11 @@
   </component>
 
   <component>
+    <key>org.exoplatform.portal.mop.description.DescriptionService</key>
+    <type>org.exoplatform.portal.mop.description.DescriptionServiceImpl</type>
+  </component>
+
+  <component>
     <key>org.exoplatform.portal.config.UserPortalConfigService</key>
     <type>org.exoplatform.portal.config.UserPortalConfigService</type>
   </component>
@@ -201,6 +206,9 @@
           <value>org.exoplatform.portal.mop.Described</value>
           <value>org.exoplatform.portal.mop.Visible</value>
           <value>org.exoplatform.portal.config.SampleMixin</value>
+          <value>org.exoplatform.portal.mop.i18n.I18Nized</value>
+          <value>org.exoplatform.portal.mop.i18n.LanguageSpace</value>
+          <value>org.exoplatform.portal.mop.i18n.Language</value>
         </values-param>
       </init-params>
     </component-plugin>

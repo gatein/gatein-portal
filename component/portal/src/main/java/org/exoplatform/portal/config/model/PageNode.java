@@ -22,8 +22,12 @@ package org.exoplatform.portal.config.model;
 import org.exoplatform.portal.mop.Visibility;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 public class PageNode extends PageNodeContainer
 {
@@ -35,7 +39,7 @@ public class PageNode extends PageNodeContainer
    private String uri;
 
    /** . */
-   private String label;
+   private ArrayList<LocalizedValue> labels;
 
    /** . */
    private String icon;
@@ -70,14 +74,75 @@ public class PageNode extends PageNodeContainer
       uri = s;
    }
 
+   public ArrayList<LocalizedValue> getLabels()
+   {
+      return labels;
+   }
+
+   public Map<Locale, String> getLocalizedLabel(Locale defaultLocale)
+   {
+      Map<Locale, String> map = Collections.emptyMap();
+      LocalizedValue portalLocaleLabel = null;
+      for (LocalizedValue label : labels)
+      {
+         if (label.getLang() != null)
+         {
+            if (map.isEmpty())
+            {
+               map = new HashMap<Locale, String>();
+            }
+            map.put(label.getLang(), label.getValue());
+         }
+         else
+         {
+            portalLocaleLabel = label;
+         }
+      }
+      if (map.isEmpty())
+      {
+         return null;
+      }
+      else
+      {
+         if (portalLocaleLabel != null && !map.containsKey(defaultLocale))
+         {
+            map.put(defaultLocale, portalLocaleLabel.getValue());
+         }
+         return map;
+      }
+   }
+
+   public void setLabels(ArrayList<LocalizedValue> labels)
+   {
+      this.labels = labels;
+   }
+
    public String getLabel()
    {
-      return label;
+      if (labels != null)
+      {
+         for (LocalizedValue label : labels)
+         {
+            if (label.getLang() == null)
+            {
+               return label.getValue();
+            }
+         }
+      }
+      return null;
    }
 
    public void setLabel(String s)
    {
-      label = s;
+      if (labels == null)
+      {
+         labels = new ArrayList<LocalizedValue>();
+      }
+      else
+      {
+         labels.clear();
+      }
+      labels.add(new LocalizedValue(s));
    }
 
    public String getIcon()

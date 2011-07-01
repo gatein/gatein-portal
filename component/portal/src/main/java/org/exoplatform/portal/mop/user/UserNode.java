@@ -20,15 +20,16 @@
 package org.exoplatform.portal.mop.user;
 
 import org.exoplatform.commons.utils.ExpressionUtil;
+import org.exoplatform.portal.mop.Described;
 import org.exoplatform.portal.mop.Visibility;
-import org.exoplatform.portal.mop.navigation.NavigationServiceException;
+import org.exoplatform.portal.mop.description.DescriptionService;
 import org.exoplatform.portal.mop.navigation.NodeContext;
-import org.exoplatform.portal.mop.navigation.NodeFilter;
 import org.exoplatform.portal.mop.navigation.NodeState;
 import org.gatein.common.text.EntityEncoder;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 /**
@@ -185,15 +186,27 @@ public class UserNode
    {
       if (resolvedLabel == null)
       {
-         String resolvedLabel;
+         String resolvedLabel = null;
+
+         //
+         String id = context.getId();
+
+         //
          if (context.getState().getLabel() != null)
          {
             ResourceBundle bundle = owner.navigation.getBundle();
             resolvedLabel = ExpressionUtil.getExpressionValue(bundle, context.getState().getLabel());
          }
-         else
+         else if (id != null)
          {
-            resolvedLabel = null;
+            Locale userLocale = owner.navigation.portal.context.getUserLocale();
+            Locale portalLocale = owner.navigation.portal.getLocale();
+            DescriptionService descriptionService = owner.navigation.portal.service.getDescriptionService();
+            Described.State description = descriptionService.resolveDescription(id, portalLocale, userLocale);
+            if (description != null)
+            {
+               resolvedLabel = description.getName();
+            }
          }
 
          //

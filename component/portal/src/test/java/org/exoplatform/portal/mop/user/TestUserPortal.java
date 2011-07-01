@@ -48,6 +48,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.TimeZone;
@@ -469,23 +470,12 @@ public class TestUserPortal extends AbstractPortalTest
       {
          public void execute() throws Exception
          {
-            UserPortalContext userPortalContext = new UserPortalContext()
-            {
-               final MapResourceBundle bundle;
-
-               {
-                  Map<String, Object> map = new HashMap<String, Object>();
-                  map.put("portal.classic.home", "foo");
-                  map.put("portal.classic.emoh", "bar");
-                  bundle = new MapResourceBundle(map);
-               }
-
-               public ResourceBundle getBundle(UserNavigation navigation)
-               {
-                  return bundle;
-               }
-            };
-            UserPortalConfig userPortalCfg = userPortalConfigSer_.getUserPortalConfig("classic", getUserId(), userPortalContext);
+            SimpleUserPortalContext ctx = new SimpleUserPortalContext(Locale.ENGLISH);
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("portal.classic.home", "foo");
+            map.put("portal.classic.emoh", "bar");
+            ctx.add(SiteKey.portal("classic"), new MapResourceBundle(map));
+            UserPortalConfig userPortalCfg = userPortalConfigSer_.getUserPortalConfig("classic", getUserId(), ctx);
             UserPortal userPortal = userPortalCfg.getUserPortal();
 
             //
@@ -497,6 +487,33 @@ public class TestUserPortal extends AbstractPortalTest
             // this is fine for this test I think
             path.setLabel("#{portal.classic.emoh}");
             assertEquals("bar", path.getResolvedLabel());
+         }
+      }.execute("root");
+   }
+
+   public void testExtendedLabel()
+   {
+      new UnitTest()
+      {
+         public void execute() throws Exception
+         {
+            UserPortalContext ctx = new SimpleUserPortalContext(Locale.ENGLISH);
+            UserPortal portal = userPortalConfigSer_.getUserPortalConfig("extended", getUserId(), ctx).getUserPortal();
+            UserNode path = portal.resolvePath(null, "/bar");
+            assertEquals(null, path.getLabel());
+            assertEquals("bar_label_en", path.getResolvedLabel());
+
+            // Now test transient node
+            UserNode juu = path.addChild("juu");
+            assertEquals(null, juu.getLabel());
+            assertEquals("juu", juu.getResolvedLabel());
+
+            //
+            ctx = new SimpleUserPortalContext(Locale.FRENCH);
+            portal = userPortalConfigSer_.getUserPortalConfig("extended", getUserId(), ctx).getUserPortal();
+            path = portal.resolvePath(null, "/bar");
+            assertEquals(null, path.getLabel());
+            assertEquals("bar_label_fr", path.getResolvedLabel());
          }
       }.execute("root");
    }

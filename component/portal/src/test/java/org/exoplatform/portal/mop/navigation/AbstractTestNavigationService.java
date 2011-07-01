@@ -23,6 +23,8 @@ import junit.framework.AssertionFailedError;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.config.AbstractPortalTest;
 import org.exoplatform.portal.config.DataStorage;
+import org.exoplatform.portal.mop.description.DescriptionService;
+import org.exoplatform.portal.mop.description.DescriptionServiceImpl;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 
 /**
@@ -40,6 +42,9 @@ public abstract class AbstractTestNavigationService extends AbstractPortalTest
    /** . */
    protected DataStorage dataStorage;
 
+   /** . */
+   protected DescriptionService descriptionService;
+
    @Override
    protected void setUp() throws Exception
    {
@@ -49,24 +54,13 @@ public abstract class AbstractTestNavigationService extends AbstractPortalTest
       PortalContainer container = PortalContainer.getInstance();
       mgr = (POMSessionManager)container.getComponentInstanceOfType(POMSessionManager.class);
       service = new NavigationServiceImpl(mgr);
+      descriptionService = new DescriptionServiceImpl(mgr);
       dataStorage = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
 
       // Clear the cache for each test
       service.clearCache();
 
       //
-      begin();
-   }
-
-   protected void sync()
-   {
-      end();
-      begin();
-   }
-
-   protected void sync(boolean save)
-   {
-      end(save);
       begin();
    }
 

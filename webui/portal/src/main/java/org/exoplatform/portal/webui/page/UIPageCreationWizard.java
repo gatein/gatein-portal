@@ -21,12 +21,17 @@ package org.exoplatform.portal.webui.page;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.mop.Described;
+import org.exoplatform.portal.mop.description.DescriptionService;
 import org.exoplatform.portal.mop.navigation.NavigationServiceException;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
@@ -47,6 +52,7 @@ import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIFormStringInput;
+import org.exoplatform.webui.form.UIFormCheckBoxInput;
 
 /** Created by The eXo Platform SARL Author : Dang Van Minh minhdv81@yahoo.com Jun 23, 2006 */
 @ComponentConfigs(@ComponentConfig(template = "system:/groovy/webui/core/UIWizard.gtmpl", events = {
@@ -103,9 +109,37 @@ public class UIPageCreationWizard extends UIPageWizard
       dataService.create(page);
 
       UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
-      userPortal.saveNode(selectedNode, null);      
+      userPortal.saveNode(selectedNode, null);
+      
+      DescriptionService descriptionService = getApplicationComponent(DescriptionService.class);
+      Map<Locale, Described.State> descriptions = new HashMap<Locale, Described.State>();
+      Map<String, String> cachedLabels = uiPageInfo.getCachedLabels();
+      
+      for (String strLocale : cachedLabels.keySet())
+      {
+         Locale locale;
+         if (strLocale.contains("_"))
+         {
+            String[] arr = strLocale.split("_");
+            if (arr.length > 2)
+            {
+               locale = new Locale(arr[0], arr[1], arr[2]);
+            }
+            else
+            {
+               locale = new Locale(arr[0], arr[1]);
+            }
+         }
+         else
+         {
+            locale = new Locale(strLocale);
+         }
+         
+         descriptions.put(locale, new Described.State(cachedLabels.get(strLocale), null));
+      }
+      
+      descriptionService.setDescriptions(createdNode.getId(), descriptions);
       return createdNode;
-
    }
 
    /**
@@ -182,7 +216,7 @@ public class UIPageCreationWizard extends UIPageWizard
             return;
          }
 
-         if (uiPageSetInfo.getUIFormCheckBoxInput(UIWizardPageSetInfo.SHOW_PUBLICATION_DATE).isChecked())
+         if (((UIFormCheckBoxInput)uiPageSetInfo.getUIInput(UIWizardPageSetInfo.SHOW_PUBLICATION_DATE)).isChecked())
          {
          	
          	Calendar currentCalendar = Calendar.getInstance();
@@ -221,6 +255,10 @@ public class UIPageCreationWizard extends UIPageWizard
                return;
             }
          }
+         
+         // Update the last value of selected locale to cached labels
+         UIFormStringInput label = uiPageSetInfo.getUIStringInput(UIWizardPageSetInfo.I18N_LABEL);
+         uiPageSetInfo.updateCachedLabels(uiPageSetInfo.getSelectedLocale(), label.getValue());
       }
       
    }

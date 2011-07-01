@@ -19,32 +19,49 @@
 
 package org.exoplatform.portal.webui.page;
 
+import org.exoplatform.container.ExoContainer;
+import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.config.model.PortalConfig;
-import java.util.Calendar;
-
 import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.mop.navigation.NavigationServiceException;
 import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.webui.navigation.UIPageNodeSelector;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.services.resources.LocaleConfig;
+import org.exoplatform.services.resources.LocaleConfigService;
+import org.exoplatform.services.resources.ResourceBundleService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIWizard;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
+import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
-import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormDateTimeInput;
 import org.exoplatform.webui.form.UIFormInputBase;
+import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
+import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.validator.DateTimeValidator;
 import org.exoplatform.webui.form.validator.IdentifierValidator;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
 import org.exoplatform.webui.form.validator.StringLengthValidator;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 
 /**
  * Created by The eXo Platform SARL
@@ -55,10 +72,14 @@ import org.exoplatform.webui.form.validator.StringLengthValidator;
 @ComponentConfig(lifecycle = UIFormLifecycle.class, template = "system:/groovy/portal/webui/page/UIWizardPageSetInfo.gtmpl", events = {
    @EventConfig(listeners = UIWizardPageSetInfo.ChangeNodeActionListener.class, phase = Phase.DECODE),
    @EventConfig(listeners = UIWizardPageSetInfo.SwitchVisibleActionListener.class, phase = Phase.DECODE),
-   @EventConfig(listeners = UIWizardPageSetInfo.SwitchPublicationDateActionListener.class, phase = Phase.DECODE)})
+   @EventConfig(listeners = UIWizardPageSetInfo.SwitchPublicationDateActionListener.class, phase = Phase.DECODE),
+   @EventConfig(listeners = UIWizardPageSetInfo.ChangeLanguageActionListener.class, phase = Phase.DECODE),
+   @EventConfig(listeners = UIWizardPageSetInfo.SwitchLabelModeActionListener.class, phase = Phase.DECODE)
+})
 public class UIWizardPageSetInfo extends UIForm
 {
 
+   
    final public static String PAGE_NAME = "pageName";
 
    final public static String PAGE_DISPLAY_NAME = "pageDisplayName";
@@ -70,24 +91,47 @@ public class UIWizardPageSetInfo extends UIForm
    final public static String START_PUBLICATION_DATE = "startPublicationDate";
 
    final public static String END_PUBLICATION_DATE = "endPublicationDate";
+   
+   public static final String I18N_LABEL = "i18nizedLabel";
+   
+   private static final String LANGUAGES = "languages";
+   
+   private static final String LANGUAGES_ONCHANGE = "ChangeLanguage";
+
+   private static final String SWITCH_MODE = "switchmode";
+
+   private static final String SWITCH_MODE_ONCHANGE = "SwitchLabelMode";
 
    private boolean isEditMode = false;
 
    private boolean firstTime = true;
+   
+   private String selectedLocale;
+
+   private Map<String, String> cachedLabels;
 
    public UIWizardPageSetInfo() throws Exception
    {
-      UIFormCheckBoxInput<Boolean> uiDateInputCheck =
-         new UIFormCheckBoxInput<Boolean>(SHOW_PUBLICATION_DATE, null, false);
-      UIFormCheckBoxInput<Boolean> uiVisibleCheck = new UIFormCheckBoxInput<Boolean>(VISIBLE, null, false);
+      UIFormCheckBoxInput uiDateInputCheck =
+         new UIFormCheckBoxInput(SHOW_PUBLICATION_DATE, null, false);
+      UIFormCheckBoxInput uiVisibleCheck = new UIFormCheckBoxInput(VISIBLE, null, false);
+      UIFormCheckBoxInput uiSwitchLabelMode = new UIFormCheckBoxInput(SWITCH_MODE, null, true);
       uiDateInputCheck.setOnChange("SwitchPublicationDate");
       uiVisibleCheck.setOnChange("SwitchVisible");
+      uiSwitchLabelMode.setOnChange(SWITCH_MODE_ONCHANGE);
+      
+      UIFormSelectBox uiFormLanguagesSelectBox = new UIFormSelectBox(LANGUAGES, null, null);
+      initLanguageSelectBox(uiFormLanguagesSelectBox);
+      uiFormLanguagesSelectBox.setOnChange(LANGUAGES_ONCHANGE);
 
       addChild(UIPageNodeSelector.class, null, null);
       addUIFormInput(new UIFormStringInput(PAGE_NAME, "name", null).addValidator(MandatoryValidator.class)
          .addValidator(StringLengthValidator.class, 3, 30).addValidator(IdentifierValidator.class));
+      addUIFormInput(uiSwitchLabelMode);
       addUIFormInput(new UIFormStringInput(PAGE_DISPLAY_NAME, "label", null).setMaxLength(255).addValidator(
          StringLengthValidator.class, 3, 120));
+      addUIFormInput(uiFormLanguagesSelectBox);
+      addUIFormInput(new UIFormStringInput(I18N_LABEL, null, null).setMaxLength(255).addValidator(StringLengthValidator.class, 3, 120));
       addUIFormInput(uiVisibleCheck.setChecked(true));
       addUIFormInput(uiDateInputCheck);
       UIFormInputBase<String> startPubDateInput = new UIFormDateTimeInput(START_PUBLICATION_DATE, null, null).addValidator(DateTimeValidator.class);
@@ -103,6 +147,10 @@ public class UIWizardPageSetInfo extends UIForm
          startPubDateInput.setRendered(false);
          endPubDateInput.setRendered(false);
       }
+      
+      this.selectedLocale = getUIFormSelectBox(LANGUAGES).getValue();
+      cachedLabels = new HashMap<String, String>();
+      switchLabelMode(true);
    }
 
    //TODO: it looks like this method is not used
@@ -117,6 +165,16 @@ public class UIWizardPageSetInfo extends UIForm
    {
       return isEditMode;
    }
+   
+   public Map<String, String> getCachedLabels()
+   {
+      return cachedLabels;
+   }
+   
+   public String getSelectedLocale()
+   {
+      return selectedLocale;
+   }
 
    public void invokeSetBindingBean(Object bean) throws Exception
    {
@@ -128,10 +186,19 @@ public class UIWizardPageSetInfo extends UIForm
 
       UserNode node = (UserNode)bean;
       
-      Visibility visibility;
-      if (getUIFormCheckBoxInput(VISIBLE).isChecked())
+      if (((UIFormCheckBoxInput)getUIInput(SWITCH_MODE)).isChecked())
       {
-         UIFormCheckBoxInput showPubDate = getUIFormCheckBoxInput(SHOW_PUBLICATION_DATE);
+         node.setLabel(null);
+      }
+      else if (node.getLabel() == null || node.getLabel().trim().length() == 0)
+      {
+         node.setLabel(node.getName());
+      }
+      
+      Visibility visibility;
+      if (((UIFormCheckBoxInput)getUIInput(VISIBLE)).isChecked())
+      {
+         UIFormCheckBoxInput showPubDate = getUIInput(SHOW_PUBLICATION_DATE);
          visibility = showPubDate.isChecked() ?  Visibility.TEMPORAL : Visibility.DISPLAYED;
       }
       else
@@ -155,17 +222,13 @@ public class UIWizardPageSetInfo extends UIForm
       
       UserNode child = parent.addChild(nodeName);
       invokeSetBindingBean(child);
-      if (child.getLabel() == null || child.getLabel().trim().length() == 0)
-      {
-         child.setLabel(child.getName());
-      }
       return child;
    }
 
    public void setShowCheckPublicationDate(boolean show)
    {
-      getUIFormCheckBoxInput(VISIBLE).setChecked(show);
-      UIFormCheckBoxInput<Boolean> uiForm = getUIFormCheckBoxInput(SHOW_PUBLICATION_DATE);
+      ((UIFormCheckBoxInput)getUIInput(VISIBLE)).setChecked(show);
+      UIFormCheckBoxInput uiForm = getUIInput(SHOW_PUBLICATION_DATE);
       uiForm.setRendered(show);
       setShowPublicationDate(show && uiForm.isChecked());
    }
@@ -198,7 +261,116 @@ public class UIWizardPageSetInfo extends UIForm
    {
       this.firstTime = firstTime;
    }
+   
+   private void initLanguageSelectBox(UIFormSelectBox langSelectBox)
+   {
+      List<SelectItemOption<String>> lang = new ArrayList<SelectItemOption<String>>();
+      LocaleConfigService localeService = getApplicationComponent(LocaleConfigService.class);
+      Locale currentLocale = WebuiRequestContext.getCurrentInstance().getLocale();
+      Iterator<LocaleConfig> i = localeService.getLocalConfigs().iterator();
+      String displayName = null;
+      String language = null;
+      String country = null;
+      String defaultValue = null;
+      SelectItemOption<String> option;
+      while (i.hasNext())
+      {
+         LocaleConfig config = i.next();
+         Locale locale = config.getLocale();
 
+         language = locale.getLanguage();
+         country = locale.getCountry();
+         if (country != null && country.length() > 0)
+         {
+            language = language + "_" + country;
+         }
+
+         ResourceBundle localeResourceBundle;
+
+         displayName = null;
+         try
+         {
+            localeResourceBundle = getResourceBundle(currentLocale);
+            String key = "Locale." + language;
+            String translation = localeResourceBundle.getString(key);
+            displayName = translation;
+         }
+         catch (MissingResourceException e)
+         {
+            displayName = capitalizeFirstLetter(locale.getDisplayName(currentLocale));
+         }
+         catch (Exception e)
+         {
+
+         }
+
+         option = new SelectItemOption<String>(displayName, language);
+         if (locale.getDisplayName().equals(currentLocale.getDisplayName()))
+         {
+            option.setSelected(true);
+            defaultValue = language;
+         }
+
+         lang.add(option);
+      }
+
+      Collections.sort(lang, new LanguagesComparator());
+      langSelectBox.setOptions(lang);
+      langSelectBox.setValue(defaultValue);
+   }
+
+   private ResourceBundle getResourceBundle(Locale locale) throws Exception
+   {
+      ExoContainer appContainer = ExoContainerContext.getCurrentContainer();
+      ResourceBundleService service = (ResourceBundleService) appContainer
+            .getComponentInstanceOfType(ResourceBundleService.class);
+      ResourceBundle res = service.getResourceBundle("locale.portal.webui", locale);
+      return res;
+   }
+
+   private String capitalizeFirstLetter(String word)
+   {
+      if (word == null)
+      {
+         return null;
+      }
+      if (word.length() == 0)
+      {
+         return word;
+      }
+      StringBuilder result = new StringBuilder(word);
+      result.replace(0, 1, result.substring(0, 1).toUpperCase());
+      return result.toString();
+   }
+
+   private class LanguagesComparator implements Comparator<SelectItemOption<String>>
+   {
+      public int compare(SelectItemOption<String> o1, SelectItemOption<String> o2)
+      {
+         return o1.getLabel().compareToIgnoreCase(o2.getLabel());
+      }
+   }
+   
+   private void switchLabelMode(boolean isExtendedMode)
+   {
+      getUIStringInput(PAGE_DISPLAY_NAME).setRendered(!isExtendedMode);
+      getUIStringInput(I18N_LABEL).setRendered(isExtendedMode);
+      getUIFormSelectBox(LANGUAGES).setRendered(isExtendedMode);
+   }
+   
+   private String getLabelOnLocale(String locale)
+   {
+      return cachedLabels.get(locale);
+   }
+   
+   public void updateCachedLabels(String locale, String label)
+   {
+      if (label != null)
+      {
+         cachedLabels.put(locale, label);
+      }
+   }
+   
    static public class ChangeNodeActionListener extends EventListener<UIWizardPageSetInfo>
    {
       public void execute(Event<UIWizardPageSetInfo> event) throws Exception
@@ -233,7 +405,7 @@ public class UIWizardPageSetInfo extends UIForm
       public void execute(Event<UIWizardPageSetInfo> event) throws Exception
       {
          UIWizardPageSetInfo uiForm = event.getSource();
-         boolean isCheck = uiForm.getUIFormCheckBoxInput(SHOW_PUBLICATION_DATE).isChecked();
+         boolean isCheck = ((UIFormCheckBoxInput)uiForm.getUIInput(SHOW_PUBLICATION_DATE)).isChecked();
          uiForm.getUIFormDateTimeInput(START_PUBLICATION_DATE).setRendered(isCheck);
          uiForm.getUIFormDateTimeInput(END_PUBLICATION_DATE).setRendered(isCheck);
          UIWizard uiWizard = uiForm.getAncestorOfType(UIWizard.class);
@@ -248,10 +420,43 @@ public class UIWizardPageSetInfo extends UIForm
       public void execute(Event<UIWizardPageSetInfo> event) throws Exception
       {
          UIWizardPageSetInfo uiForm = event.getSource();
-         boolean isCheck = uiForm.getUIFormCheckBoxInput(VISIBLE).isChecked();
+         boolean isCheck = ((UIFormCheckBoxInput)uiForm.getUIInput(VISIBLE)).isChecked();
          uiForm.setShowCheckPublicationDate(isCheck);
          event.getRequestContext().addUIComponentToUpdateByAjax(uiForm);
       }
    }
-
+   
+   /**
+    * Update the transient label from cache to I18N_LABEL field and add value in this field to the cached labels.
+    */
+   static public class ChangeLanguageActionListener extends EventListener<UIWizardPageSetInfo>
+   {
+      @Override
+      public void execute(Event<UIWizardPageSetInfo> event) throws Exception
+      {
+         UIWizardPageSetInfo uiForm = event.getSource();
+         UIFormSelectBox languageSelection = uiForm.getUIFormSelectBox(LANGUAGES);
+         UIFormStringInput label = uiForm.getUIStringInput(I18N_LABEL);
+         uiForm.updateCachedLabels(uiForm.selectedLocale, label.getValue());
+         
+         uiForm.selectedLocale = languageSelection.getValue();
+         label.setValue(uiForm.getLabelOnLocale(uiForm.selectedLocale));
+         event.getRequestContext().addUIComponentToUpdateByAjax(uiForm);
+      }
+   }
+   
+   /**
+    * Change between simple and extended mode of label.
+    */
+   static public class SwitchLabelModeActionListener extends EventListener<UIWizardPageSetInfo>
+   {
+      @Override
+      public void execute(Event<UIWizardPageSetInfo> event) throws Exception
+      {
+         UIWizardPageSetInfo uiForm = event.getSource();
+         boolean isExtendedMode = ((UIFormCheckBoxInput)uiForm.getUIInput(SWITCH_MODE)).isChecked();
+         uiForm.switchLabelMode(isExtendedMode);
+         event.getRequestContext().addUIComponentToUpdateByAjax(uiForm);
+      }
+   }
 }

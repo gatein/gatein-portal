@@ -22,15 +22,19 @@ package org.exoplatform.portal.config;
 import org.exoplatform.component.test.AbstractGateInTest;
 import org.exoplatform.portal.application.PortletPreferences.PortletPreferencesSet;
 import org.exoplatform.portal.config.model.Application;
-import org.exoplatform.portal.config.model.ApplicationType;
+import org.exoplatform.portal.config.model.LocalizedValue;
+import org.exoplatform.portal.config.model.ModelUnmarshaller;
 import org.exoplatform.portal.config.model.Page;
+import org.exoplatform.portal.config.model.Page.PageSet;
 import org.exoplatform.portal.config.model.PageNavigation;
+import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.TransientApplicationState;
-import org.exoplatform.portal.config.model.Page.PageSet;
-import org.exoplatform.portal.pom.spi.gadget.Gadget;
+import org.exoplatform.portal.config.model.UnmarshalledObject;
+import org.exoplatform.portal.config.model.Version;
 import org.exoplatform.portal.pom.spi.portlet.Portlet;
 import org.exoplatform.portal.pom.spi.portlet.PortletBuilder;
+import org.gatein.common.util.Tools;
 import org.jibx.runtime.BindingDirectory;
 import org.jibx.runtime.IBindingFactory;
 import org.jibx.runtime.IMarshallingContext;
@@ -38,6 +42,8 @@ import org.jibx.runtime.IUnmarshallingContext;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
+import java.util.Locale;
 
 /**
  * Thu, May 15, 2003 @   
@@ -90,12 +96,14 @@ public class TestJIBXXmlMapping extends AbstractGateInTest
       assertEquals("portal", pageNavigation.getOwnerType());
       assertEquals("classic", pageNavigation.getOwnerId());
 
+/*
       IMarshallingContext mctx = bfact.createMarshallingContext();
       mctx.setIndent(2);
       mctx.marshalDocument(obj, "UTF-8", null, new FileOutputStream("target/navigation.xml"));
 
       obj = uctx.unmarshalDocument(new FileInputStream("target/navigation.xml"), null);
       assertEquals(PageNavigation.class, obj.getClass());
+*/
    }
 
    public void testPortletPreferencesMapping() throws Exception
@@ -127,20 +135,65 @@ public class TestJIBXXmlMapping extends AbstractGateInTest
       assertEquals(new PortletBuilder().add("template", "template_value").build(), preferences);
    }
 
-   public void testGadgetApplicationMapping() throws Exception
+   public void testSimpleNavigationMapping() throws Exception
    {
-      IBindingFactory bfact = BindingDirectory.getFactory(PortalConfig.class);
-      IUnmarshallingContext uctx = bfact.createUnmarshallingContext();
-      @SuppressWarnings("unchecked")
-      Application<Gadget> app =
-         (Application<Gadget>)uctx.unmarshalDocument(new FileInputStream(
-            "src/test/resources/jibx/gadget-application.xml"), null);
+      UnmarshalledObject<PageNavigation> obj = ModelUnmarshaller.unmarshall(PageNavigation.class, new FileInputStream("src/test/resources/jibx/simple-navigation.xml"));;
+      PageNavigation nav = obj.getObject();
+      assertEquals(Version.V_1_1, obj.getVersion());
 
-      assertEquals(ApplicationType.GADGET, app.getType());
-         TransientApplicationState gadgetState = (TransientApplicationState) app.getState();
-      assertNotNull(gadgetState);
-      assertEquals("Calendar", gadgetState.getContentId());
-      assertNull(gadgetState.getContentState());
-      // Add test for user-prefs when supported...
+      //
+      PageNode bar = nav.getNode("bar");
+      assertEquals("bar_label", bar.getLabel());
+      ArrayList<LocalizedValue> barLabels =  bar.getLabels();
+      assertNotNull(barLabels);
+      assertEquals(1, barLabels.size());
+      assertEquals("bar_label", barLabels.get(0).getValue());
+      assertEquals(null, barLabels.get(0).getLang());
+      assertEquals(null, bar.getLocalizedLabel(Locale.ENGLISH));
+   }
+
+   public void testExtendedNavigationMapping() throws Exception
+   {
+      UnmarshalledObject<PageNavigation> obj = ModelUnmarshaller.unmarshall(PageNavigation.class, new FileInputStream("src/test/resources/jibx/extended-navigation.xml"));;
+      PageNavigation nav = obj.getObject();
+      assertEquals(Version.V_1_2, obj.getVersion());
+
+      //
+      PageNode foo = nav.getNode("foo");
+      assertEquals("foo_label", foo.getLabel());
+      ArrayList<LocalizedValue> fooLabels =  foo.getLabels();
+      assertNotNull(fooLabels);
+      assertEquals(3, fooLabels.size());
+      assertEquals("foo_label_en", fooLabels.get(0).getValue());
+      assertEquals(Locale.ENGLISH, fooLabels.get(0).getLang());
+      assertEquals("foo_label", fooLabels.get(1).getValue());
+      assertEquals(null, fooLabels.get(1).getLang());
+      assertEquals("foo_label_fr", fooLabels.get(2).getValue());
+      assertEquals(Locale.FRENCH, fooLabels.get(2).getLang());
+      assertEquals(Tools.toSet(Locale.ENGLISH, Locale.FRENCH), foo.getLocalizedLabel(Locale.ENGLISH).keySet());
+      assertEquals(Tools.toSet(Locale.ENGLISH, Locale.FRENCH, Locale.GERMAN), foo.getLocalizedLabel(Locale.GERMAN).keySet());
+
+      //
+      PageNode bar = nav.getNode("bar");
+      assertEquals("bar_label", bar.getLabel());
+      ArrayList<LocalizedValue> barLabels =  bar.getLabels();
+      assertNotNull(barLabels);
+      assertEquals(1, barLabels.size());
+      assertEquals("bar_label", barLabels.get(0).getValue());
+      assertEquals(null, barLabels.get(0).getLang());
+      assertEquals(null, bar.getLocalizedLabel(Locale.ENGLISH));
+
+      //
+      PageNode juu = nav.getNode("juu");
+      assertEquals(null, juu.getLabel());
+      ArrayList<LocalizedValue> juuLabels =  juu.getLabels();
+      assertNotNull(juuLabels);
+      assertEquals(3, juuLabels.size());
+      assertEquals("juu_label_en", juuLabels.get(0).getValue());
+      assertEquals(Locale.ENGLISH, juuLabels.get(0).getLang());
+      assertEquals("juu_label_fr", juuLabels.get(1).getValue());
+      assertEquals(Locale.FRENCH, juuLabels.get(1).getLang());
+      assertEquals("juu_label_fr_FR", juuLabels.get(2).getValue());
+      assertEquals(Locale.FRANCE, juuLabels.get(2).getLang());
    }
 }
