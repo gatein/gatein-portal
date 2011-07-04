@@ -1,84 +1,90 @@
-/**
- * Copyright (C) 2009 eXo Platform SAS.
- * 
+/*
+ * Copyright (C) 2011 eXo Platform SAS.
+ *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation; either version 2.1 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this software; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.webui.form;
+package org.exoplatform.webui.form.input;
 
 import java.io.Writer;
 
 import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.form.UIForm;
+import org.exoplatform.webui.form.UIFormInput;
+import org.exoplatform.webui.form.UIFormInputBase;
 
 /**
- * Represents a checkbox field.
- * @param <T> The type of value that is expected
- * @deprecated use {@link org.exoplatform.webui.form.input.UIFormCheckBoxInput} instead 
+ * @author <a href="mailto:phuong.vu@exoplatform.com">Vu Viet Phuong</a>
+ * @version $Id$
+ *
+ *  <p>Represent an html checkbox input <br/> 
+ * This class is a replacement for {@link org.exoplatform.webui.form.UIFormCheckBoxInput} <br/>
+ * Still support raising event when user click the checkbox, but now we only accept boolean value. </p> 
  */
-@SuppressWarnings("hiding")
 @Serialized
-@Deprecated
-public class UIFormCheckBoxInput<T> extends UIFormInputBase<T>
+public class UIFormCheckBoxInput extends UIFormInputBase<Boolean>
 {
    /**
-    * Whether this checkbox is checked
-    */
-   private boolean checked = false;
-
-   /**
-    * A javascript expression that will be fired when the value changes (JS onChange event)
+    * Name of {@link org.exoplatform.webui.event.EventListener} that will be fired when checkbox state is changed 
     */
    private String onchange_;
 
+   /**
+    * Id of {@link org.exoplatform.webui.core.UIComponent} that is configured with the fired event 
+    * This component must be in the same form with the checkbox
+    * If this field is null, event of the UIForm will be fire instead
+    */
    private String componentEvent_ = null;
 
    public UIFormCheckBoxInput()
    {
+      this(null, null, false);
    }
 
-   @SuppressWarnings("unchecked")
-   public UIFormCheckBoxInput(String name, String bindingExpression, T value)
+   public UIFormCheckBoxInput(String name, String bindingExpression, Boolean value)
    {
-      super(name, bindingExpression, null);
-      if (value != null)
-         typeValue_ = (Class<T>)value.getClass();
-      value_ = value;
-      setId(name);
+      super(name, bindingExpression, Boolean.class);
+      setValue(value);
    }
 
-   @SuppressWarnings("unchecked")
-   public UIFormInput setValue(T value)
+   public UIFormInput setValue(Boolean value)
    {
       if (value == null)
-         return super.setValue(value);
-      if (value instanceof Boolean)
       {
-         checked = ((Boolean)value).booleanValue();
+         value = false;
       }
-      else if (boolean.class.isInstance(value))
-      {
-         checked = boolean.class.cast(value);
-      }
-      else if (value instanceof String)
-      {
-         checked = Boolean.parseBoolean((String)value);
-      }
-      typeValue_ = (Class<T>)value.getClass();
+         
       return super.setValue(value);
+   }
+   
+   /**
+    * This method is used to make the action more meaning in the context of a checkbox
+    */
+   public boolean isChecked()
+   {
+      return getValue();
+   }
+
+   /**
+    * This method is used to make the action more meaning in the context of a checkbox
+    */
+   public UIFormCheckBoxInput setChecked(boolean check)
+   {
+      return (UIFormCheckBoxInput)setValue(check);
    }
 
    public void setOnChange(String onchange)
@@ -104,32 +110,18 @@ public class UIFormCheckBoxInput<T> extends UIFormInputBase<T>
       return uiForm.event(onchange_, componentEvent_, (String)null);
    }
 
-   final public boolean isChecked()
-   {
-      return checked;
-   }
-
-   final public UIFormCheckBoxInput setChecked(boolean check)
-   {
-      checked = check;
-      return this;
-   }
-
-   @SuppressWarnings("unused")
    public void decode(Object input, WebuiRequestContext context) throws Exception
    {
       if (!isEnable())
          return;
       
-      if (input != null) {
-         if(input.equals("true"))
-            checked = true;
-         else
-            checked = false;
-         if (typeValue_ == Boolean.class || typeValue_ == boolean.class)
-         {
-            value_ = typeValue_.cast(checked);
-         }
+      if (input == null || "false".equals(input.toString()))
+      {
+         setValue(false);
+      }
+      else 
+      {
+         setValue(true);
       }
    }
 
@@ -139,19 +131,15 @@ public class UIFormCheckBoxInput<T> extends UIFormInputBase<T>
       w.write("<input type='checkbox' name='");
       w.write(name);
       w.write("'");
-      w.write(" value='");
-      if (value_ != null)
-         w.write(String.valueOf(value_));
-      w.write("' ");
       if (onchange_ != null)
       {
          UIForm uiForm = getAncestorOfType(UIForm.class);
          w.append(" onclick=\"").append(renderOnChangeEvent(uiForm)).append("\"");
       }
-      if (checked)
-         w.write(" checked ");
+      if (isChecked())
+         w.write(" checked");
       if (!enable_)
-         w.write(" disabled ");
+         w.write(" disabled");
       w.write(" class='checkbox'/>");
       if (this.isMandatory())
          w.write(" *");

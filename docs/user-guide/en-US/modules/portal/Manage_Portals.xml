@@ -205,7 +205,7 @@
 	<section id="proc-User_Guide-Manage_Portals-Edit_Properties">
 		<title>Edit Properties</title>
 		<para>
-			Portal properties such as language, skin and permissions can be set by clicking on <emphasis role="bold">Site</emphasis> in the <emphasis role="bold">Toolbar</emphasis> and selecting the <emphasis>Edit Portal Properties</emphasis> link for the portal you wish to edit:
+			Portal properties such as language, description, label, skin and permissions can be set by clicking on <emphasis role="bold">Site</emphasis> in the <emphasis role="bold">Toolbar</emphasis> and selecting the <emphasis>Edit Portal Properties</emphasis> link for the portal you wish to edit:
 		</para>
 		<mediaobject>
 			<imageobject role="html">
@@ -330,7 +330,7 @@
 									</step>
 									<step>
 										<para>
-											Click <emphasis role="bold">Save</emphasis> then <emphasis role="bold">Finish</emphasis>.
+											Click <emphasis role="bold">Save</emphasis> to finish your change.
 										</para>
 									</step>
 								</procedure>

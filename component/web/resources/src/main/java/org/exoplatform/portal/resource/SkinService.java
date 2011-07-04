@@ -725,7 +725,7 @@ public class SkinService implements Startable
       {
          throw new RenderingException("No skin resolved for path " + skin.getResourcePath());
       }
-      BufferedReader reader = new BufferedReader(tmp);            
+      BufferedReader reader = new SkipCommentReader(tmp, new CommentBlockHandler.OrientationCommentBlockHandler());
       try
       {
          while ((line = reader.readLine()) != null)

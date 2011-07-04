@@ -58,7 +58,7 @@ public class UIResetPassword extends UIForm
 
    static User user_;
 
-   private static String tokenId;
+   private String tokenId;
 
    public UIResetPassword() throws Exception
    {
@@ -79,7 +79,12 @@ public class UIResetPassword extends UIForm
 
    public void setTokenId(String tokenId)
    {
-	  UIResetPassword.tokenId = tokenId;
+      this.tokenId = tokenId;
+   }
+
+   public String getTokenId()
+   {
+      return this.tokenId;
    }
 
    @Override
@@ -113,8 +118,7 @@ public class UIResetPassword extends UIForm
             setPassword = false;
          }
          
-         Token token = tokenService.getToken(tokenId);
-         // Making sure a token exist
+         Token token = tokenService.deleteToken(uiForm.getTokenId());
          if (token == null || token.isExpired())
          {
             uiApp.addMessage(new ApplicationMessage("UIForgetPassword.msg.expration", null));
@@ -128,8 +132,6 @@ public class UIResetPassword extends UIForm
             uiMaskWorkspace.setUIComponent(null);
             uiMaskWorkspace.setWindowSize(-1, -1);
             uiApp.addMessage(new ApplicationMessage("UIResetPassword.msg.change-password-successfully", null));
-
-            tokenService.deleteToken(tokenId);
          }
          event.getRequestContext().addUIComponentToUpdateByAjax(uiMaskWorkspace);
       }

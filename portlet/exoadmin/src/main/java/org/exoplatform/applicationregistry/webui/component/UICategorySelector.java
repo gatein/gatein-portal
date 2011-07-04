@@ -4,6 +4,7 @@ import org.apache.shindig.gadgets.Gadget;
 import org.exoplatform.application.registry.Application;
 import org.exoplatform.application.registry.ApplicationCategory;
 import org.exoplatform.application.registry.ApplicationRegistryService;
+import org.exoplatform.applicationregistry.webui.Util;
 import org.exoplatform.commons.utils.SerializablePageList;
 import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -51,7 +52,7 @@ public class UICategorySelector extends UIForm
       try
       {
          ApplicationRegistryService appRegService = getApplicationComponent(ApplicationRegistryService.class);
-         List<ApplicationCategory> categories = appRegService.getApplicationCategories();
+         List<ApplicationCategory> categories = appRegService.getApplicationCategories(new Util.CategoryComparator());
          categories = categories != null ? categories : new ArrayList<ApplicationCategory>();
          return categories;
       }

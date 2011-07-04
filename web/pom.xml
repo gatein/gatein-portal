@@ -32,7 +32,7 @@
    <artifactId>exo.portal.web</artifactId>
    <packaging>pom</packaging>
 
-   <name>GateIn Portal Portlet</name>
+   <name>GateIn Portal Web</name>
 
    <modules>
       <module>eXoResources</module>
