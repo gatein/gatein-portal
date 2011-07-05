@@ -41,7 +41,8 @@ import javax.servlet.ServletContext;
  */
 @ConfiguredBy(
    {
-      @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/skin-service-configuration.xml")
+      @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/skin-service-configuration.xml") ,
+      @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/resource-compressor-service-configuration.xml")
    }
 )
 public class TestSkinService extends AbstractKernelTest
