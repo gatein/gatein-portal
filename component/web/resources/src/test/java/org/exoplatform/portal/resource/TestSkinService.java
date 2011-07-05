@@ -39,13 +39,7 @@ import javax.servlet.ServletContext;
  * @author <a href="hoang281283@gmail.com">Minh Hoang TO</a>
  * @date 6/29/11
  */
-@ConfiguredBy(
-   {
-      @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/skin-service-configuration.xml") ,
-      @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/resource-compressor-service-configuration.xml")
-   }
-)
-public class TestSkinService extends AbstractKernelTest
+public class TestSkinService extends AbstractWebResourceTest
 {
    private PortalContainer portalContainer;
 

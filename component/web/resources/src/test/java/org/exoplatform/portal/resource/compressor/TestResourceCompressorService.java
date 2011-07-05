@@ -29,6 +29,7 @@ import org.exoplatform.component.test.ContainerScope;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.container.xml.Parameter;
 import org.exoplatform.container.xml.ValueParam;
+import org.exoplatform.portal.resource.AbstractWebResourceTest;
 import org.exoplatform.portal.resource.compressor.impl.ClosureCompressorPlugin;
 import org.exoplatform.portal.resource.compressor.impl.JSMinCompressorPlugin;
 import org.exoplatform.portal.resource.compressor.impl.ResourceCompressorService;
@@ -50,8 +51,7 @@ import java.util.Scanner;
  * @version $Revision$
  */
 
-@ConfiguredBy({@ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/resource-compressor-service-configuration.xml")})
-public class TestResourceCompressorService extends AbstractKernelTest
+public class TestResourceCompressorService extends AbstractWebResourceTest
 {
    public void testInitializing()
    {
