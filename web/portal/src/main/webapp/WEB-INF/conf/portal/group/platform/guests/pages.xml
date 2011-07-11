@@ -53,7 +53,7 @@
         <preferences>
           <preference>
             <name>url</name>
-            <value>http://blog.gatein.org</value>
+            <value>http://jboss.org/gatein</value>
             <read-only>false</read-only>
           </preference>
         </preferences>
