@@ -44,4 +44,8 @@
   <gadget name="Currency">
     <url>http://www.donalobrien.net/apps/google/currency.xml</url>
   </gadget>
+  
+  <gadget name="ServicesManagement">
+    <path>/gadgets/ServicesManagement/ServicesManagement.xml</path>
+  </gadget>
 </gadgets>

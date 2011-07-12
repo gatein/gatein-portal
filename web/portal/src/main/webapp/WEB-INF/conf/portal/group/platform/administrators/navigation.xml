@@ -45,6 +45,13 @@
 		    <label>#{administration.pageManagement}</label>
 		    <page-reference>group::/platform/administrators::pageManagement</page-reference>
 	    </node>
+       
+      <node>
+         <uri>administration/servicesManagement</uri>
+         <name>servicesManagement</name>
+         <label>Services Management</label>
+         <page-reference>group::/platform/administrators::servicesManagement</page-reference>
+      </node>
     </node>                        
   </page-nodes>
 </node-navigation>
