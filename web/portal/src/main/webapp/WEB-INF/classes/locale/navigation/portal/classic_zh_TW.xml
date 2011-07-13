@@ -10,9 +10,4 @@
          <webexplorer>網頁瀏覽器</webexplorer>
       </classic>
    </portal>
-   <UIAddNewApplication>
-      <label>
-         <AddApplication >新增應用程式</AddApplication >
-      </label>
-   </UIAddNewApplication>
 </bundle>

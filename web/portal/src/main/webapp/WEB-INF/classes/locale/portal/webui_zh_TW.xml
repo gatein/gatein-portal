@@ -1903,21 +1903,7 @@
          <empty>空資料</empty>
          <user-required>請至少檢查一個使用者。</user-required>
       </msg>
-   </UIUserSelector>
-   <UIAddNewApplication>
-      <label>
-         <AddApplication>新增儲存程式</AddApplication>
-         <Categories>分類</Categories>
-         <Select>選擇儲存</Select>
-         <NoneApp>此處不存在儲存。請到儲存註冊portlet處導入儲存。</NoneApp>
-         <Type>類型：</Type>
-         <Created>建立於：</Created>
-         <Description>描述：</Description>
-         <Close>關閉</Close>
-         <Add>增加並將此儲存儲存在頁面中。</Add>
-         <AddToStartup>增加並立即運行此儲存。</AddToStartup>
-      </label>
-   </UIAddNewApplication>
+   </UIUserSelector>   
    <UIPortalNavigation>
       <Label>
          <Next>下一步</Next>

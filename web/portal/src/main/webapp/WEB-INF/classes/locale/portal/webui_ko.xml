@@ -1821,20 +1821,6 @@
          <user-required>적어도 한 명의 사용자를 체크하십시오.</user-required>
       </msg>
    </UIUserSelector>
-   <UIAddNewApplication>
-      <label>
-         <AddApplication>애플리케이션 추가</AddApplication>
-         <Categories>카테고리</Categories>
-         <Select>애플리케이션 선택</Select>
-         <NoneApp>이 위치에 애플리케이션이 존재하지 않습니다. 애플리케이션 삽입을 하시려면 애플리케이션 등록 포틀릿으로 이동하십시오.</NoneApp>
-         <Type>유형:</Type>
-         <Created>생성자:</Created>
-         <Description>설명:</Description>
-         <Close>닫기</Close>
-         <Add>페이지에 이 애플리케이션을 추가하고 유지</Add>
-         <AddToStartup>이 애플리케이션을 즉시 추가하고 실행</AddToStartup>
-      </label>
-   </UIAddNewApplication>
    <UIPortalNavigation>
       <Label>
          <Next>다음</Next>

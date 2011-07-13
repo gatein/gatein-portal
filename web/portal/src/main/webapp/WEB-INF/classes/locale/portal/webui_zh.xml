@@ -1732,21 +1732,7 @@
          <empty>空数据</empty>
          <user-required>请至少检查一个用户。</user-required>
       </msg>
-   </UIUserSelector>
-   <UIAddNewApplication>
-      <label>
-         <AddApplication>增加应用</AddApplication>
-         <Categories>分类</Categories>
-         <Select>选择应用</Select>
-         <NoneApp>此处不存在应用。请到应用注册portlet处导入应用。</NoneApp>
-         <Type>类型：</Type>
-         <Created>创建于：</Created>
-         <Description>描述：</Description>
-         <Close>关闭</Close>
-         <Add>添加并将此应用保存在页面中。</Add>
-         <AddToStartup>添加并立即运行此应用。</AddToStartup>
-      </label>
-   </UIAddNewApplication>
+   </UIUserSelector>   
    <UIPortalNavigation>
       <Label>
          <Next>下一步</Next>

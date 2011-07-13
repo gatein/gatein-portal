@@ -10,9 +10,4 @@
          <webexplorer>웹 탐색기</webexplorer>
       </classic>
    </portal>
-   <UIAddNewApplication>
-      <label>
-         <AddApplication >애플리케이션 추가</AddApplication >
-      </label>
-   </UIAddNewApplication>
 </bundle>
