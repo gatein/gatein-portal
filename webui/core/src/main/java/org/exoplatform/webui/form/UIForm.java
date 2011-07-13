@@ -28,6 +28,7 @@ import org.exoplatform.webui.bean.ReflectionDataMapping;
 import org.exoplatform.webui.config.Event;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIContainer;
+import org.exoplatform.webui.form.input.UICheckBoxInput;
 
 import java.io.Writer;
 import java.util.List;
@@ -115,6 +116,11 @@ public class UIForm extends UIContainer
       return findComponentById(name);
    }
 
+   public UICheckBoxInput getUICheckBoxInput(String name)
+   {
+      return findComponentById(name);
+   }
+   
    public UIFormSelectBox getUIFormSelectBox(String name)
    {
       return findComponentById(name);

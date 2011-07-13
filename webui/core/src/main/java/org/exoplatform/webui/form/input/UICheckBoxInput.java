@@ -28,15 +28,15 @@ import org.exoplatform.webui.form.UIFormInput;
 import org.exoplatform.webui.form.UIFormInputBase;
 
 /**
- * @author <a href="mailto:phuong.vu@exoplatform.com">Vu Viet Phuong</a>
- * @version $Id$
- *
  *  <p>Represent an html checkbox input <br/> 
  * This class is a replacement for {@link org.exoplatform.webui.form.UIFormCheckBoxInput} <br/>
- * Still support raising event when user click the checkbox, but now we only accept boolean value. </p> 
+ * Still support raising event when user click the checkbox, but now we only accept boolean value. </p>
+ *  
+ * @author <a href="mailto:phuong.vu@exoplatform.com">Vu Viet Phuong</a>
+ * @version $Id$
  */
 @Serialized
-public class UIFormCheckBoxInput extends UIFormInputBase<Boolean>
+public class UICheckBoxInput extends UIFormInputBase<Boolean>
 {
    /**
     * Name of {@link org.exoplatform.webui.event.EventListener} that will be fired when checkbox state is changed 
@@ -50,18 +50,18 @@ public class UIFormCheckBoxInput extends UIFormInputBase<Boolean>
     */
    private String componentEvent_ = null;
 
-   public UIFormCheckBoxInput()
+   public UICheckBoxInput()
    {
       this(null, null, false);
    }
 
-   public UIFormCheckBoxInput(String name, String bindingExpression, Boolean value)
+   public UICheckBoxInput(String name, String bindingExpression, Boolean value)
    {
       super(name, bindingExpression, Boolean.class);
       setValue(value);
    }
 
-   public UIFormInput setValue(Boolean value)
+   public UIFormInput<Boolean> setValue(Boolean value)
    {
       if (value == null)
       {
@@ -82,9 +82,9 @@ public class UIFormCheckBoxInput extends UIFormInputBase<Boolean>
    /**
     * This method is used to make the action more meaning in the context of a checkbox
     */
-   public UIFormCheckBoxInput setChecked(boolean check)
+   public UICheckBoxInput setChecked(boolean check)
    {
-      return (UIFormCheckBoxInput)setValue(check);
+      return (UICheckBoxInput)setValue(check);
    }
 
    public void setOnChange(String onchange)

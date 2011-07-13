@@ -138,7 +138,7 @@ abstract public class UIFormInputBase<T> extends UIContainer implements UIFormIn
       return value_;
    }
 
-   public UIFormInput setValue(T value)
+   public UIFormInput<T> setValue(T value)
    {
       this.value_ = value;
       return this;

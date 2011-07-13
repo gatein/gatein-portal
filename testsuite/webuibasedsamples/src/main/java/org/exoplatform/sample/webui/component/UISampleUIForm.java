@@ -33,7 +33,7 @@ import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
-import org.exoplatform.webui.form.input.UIFormCheckBoxInput;
+import org.exoplatform.webui.form.input.UICheckBoxInput;
 import org.exoplatform.webui.form.UIFormDateTimeInput;
 import org.exoplatform.webui.form.UIFormInput;
 import org.exoplatform.webui.form.UIFormInputSet;
@@ -109,7 +109,7 @@ public class UISampleUIForm extends UIForm
 
       List<SelectItemOption<String>> selectItemOptions = makeSelectItemOptions();
       inputSet.addUIFormInput(new UIFormSelectBox(POSITION, null, selectItemOptions));
-      inputSet.addUIFormInput(new UIFormCheckBoxInput(RECEIVE_EMAIL, null, false));
+      inputSet.addUIFormInput(new UICheckBoxInput(RECEIVE_EMAIL, null, false));
       
       List<SelectItemOption<String>> comboBoxItemOptions = new ArrayList<SelectItemOption<String>>();
       comboBoxItemOptions.add(new SelectItemOption<String>(("VI")));
@@ -220,7 +220,7 @@ public class UISampleUIForm extends UIForm
          UISampleUIForm uiForm = event.getSource();
          String userName = uiForm.getUIStringInput(USERNAME).getValue();
          String password = uiForm.getUIStringInput(PASSWORD).getValue();
-         boolean receiveEmail = uiForm.<UIFormCheckBoxInput>getUIInput(RECEIVE_EMAIL).isChecked();
+         boolean receiveEmail = uiForm.getUICheckBoxInput(RECEIVE_EMAIL).isChecked();
          String favoriteColor = (String)uiForm.getUIInput(FAVORITE_COLOR).getValue();
          String position = (String)uiForm.getUIInput(POSITION).getValue();
          String gender = (String)uiForm.getUIInput(GENDER).getValue();

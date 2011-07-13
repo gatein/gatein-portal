@@ -27,7 +27,7 @@ import org.exoplatform.webui.application.WebuiRequestContext;
 /**
  * Represents a checkbox field.
  * @param <T> The type of value that is expected
- * @deprecated use {@link org.exoplatform.webui.form.input.UIFormCheckBoxInput} instead 
+ * @deprecated use {@link org.exoplatform.webui.form.input.UICheckBoxInput} instead 
  */
 @SuppressWarnings("hiding")
 @Serialized
