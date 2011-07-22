@@ -79,7 +79,7 @@ public abstract class BasePartialUpdateToolbar extends UIPortletApplication
       }
       else
       {
-         toolbarScope = new GenericScope(level);
+         toolbarScope = GenericScope.treeShape(level);
       }
    }
    

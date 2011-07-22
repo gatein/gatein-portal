@@ -27,8 +27,10 @@ import org.exoplatform.portal.config.model.ModelObject;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteKey;
+import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
+import org.exoplatform.portal.mop.user.UserNodeFilterConfig;
 import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.webui.application.UIGadget;
 import org.exoplatform.portal.webui.portal.PageNodeEvent;
@@ -62,7 +64,9 @@ public class UIPageActionListener
          UserPortal userPortal = uiPortalApp.getUserPortalConfig().getUserPortal();
          
          String uri = ((PageNodeEvent<UIPortal>)event).getTargetNodeUri();
-         UserNode naviPath = userPortal.resolvePath(null, uri);
+         UserNodeFilterConfig.Builder builder = UserNodeFilterConfig.builder();
+         builder.withAuthorizationCheck();
+         UserNode naviPath = userPortal.resolvePath(builder.build(), uri);
          UserNavigation targetNav = naviPath.getNavigation();
          
          UserNode currentNavPath = showedUIPortal.getNavPath();

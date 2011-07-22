@@ -90,7 +90,7 @@ public class UISitemapPortlet extends UIPortletApplication
       }
       else
       {
-         uiPortalNavigation.setScope(new GenericScope(level));
+         uiPortalNavigation.setScope(GenericScope.treeShape(level));
       }
    }
 

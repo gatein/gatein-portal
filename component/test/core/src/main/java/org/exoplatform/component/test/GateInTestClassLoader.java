@@ -42,7 +42,7 @@ import java.util.Vector;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public final class GateInTestClassLoader extends ClassLoader
+final class GateInTestClassLoader extends ClassLoader
 {
 
    /** . */

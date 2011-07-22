@@ -33,7 +33,6 @@
    <modules>
       <module>core</module>
       <module>jcr</module>
-      <module>organization</module>
    </modules>
 
 </project>

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 eXo Platform SAS.
+ * Copyright (C) 2011 eXo Platform SAS.
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -16,20 +16,49 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.exoplatform.application;
 
-import org.exoplatform.component.test.*;
+package org.exoplatform.component.test;
+
+import junit.framework.TestResult;
+import junit.framework.TestSuite;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
- * @version $Revision$
  */
-@ConfiguredBy({
-   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.test.jcr-configuration.xml"),
-   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.identity-configuration.xml"),
-   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.application-registry-configuration.xml"),
-   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.portal-configuration.xml")
-})
-public abstract class AbstractApplicationRegistryTest extends AbstractKernelTest
+final class KernelTestSuite extends TestSuite
 {
+
+   /** . */
+   private final Class<? extends AbstractKernelTest> testClass;
+
+   KernelTestSuite(Class<? extends AbstractKernelTest> testClass)
+   {
+      super(testClass);
+
+      //
+      this.testClass = testClass;
+   }
+
+   @Override
+   public void run(TestResult result)
+   {
+      KernelBootstrap bootstrap = new KernelBootstrap(Thread.currentThread().getContextClassLoader());
+
+      //
+      try
+      {
+         // Configure ourselves
+         bootstrap.addConfiguration(testClass);
+
+         //
+         bootstrap.boot();
+
+         //
+         super.run(result);
+      }
+      finally
+      {
+         bootstrap.dispose();
+      }
+   }
 }

@@ -21,9 +21,15 @@ package org.exoplatform.services.organization;
 
 import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.component.test.AbstractGateInTest;
+import org.exoplatform.component.test.AbstractKernelTest;
+import org.exoplatform.component.test.ConfigurationUnit;
+import org.exoplatform.component.test.ConfiguredBy;
+import org.exoplatform.component.test.ContainerScope;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.component.ComponentRequestLifecycle;
 import org.exoplatform.container.component.RequestLifeCycle;
+import org.exoplatform.services.organization.idm.Config;
+import org.exoplatform.services.organization.idm.PicketLinkIDMOrganizationServiceImpl;
 import org.exoplatform.services.organization.idm.UserDAOImpl;
 
 import java.util.ArrayList;
@@ -34,7 +40,11 @@ import java.util.List;
  * Oct 27, 2005
  */
 
-public class TestOrganizationService extends AbstractGateInTest
+@ConfiguredBy({
+   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.test.jcr-configuration.xml"),
+   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "org/exoplatform/services/organization/TestOrganizationService-configuration.xml")
+})
+public class TestOrganizationService extends AbstractKernelTest
 {
 
    static String Group1 = "Group1";
@@ -115,6 +125,36 @@ public class TestOrganizationService extends AbstractGateInTest
 
 //      ((ComponentRequestLifecycle)service_).endRequest(manager);
       RequestLifeCycle.end();
+   }
+
+   public void testSimple() throws Exception
+   {
+      assertTrue(true);
+      Config config = ((PicketLinkIDMOrganizationServiceImpl)service_).getConfiguration();
+
+      assertNotNull(config);
+      assertNotNull(config.getGroupTypeMappings());
+      assertNotNull(config.getGroupTypeMappings().keySet());
+
+      assertEquals(config.getGroupTypeMappings().keySet().size(), 5);
+      assertEquals(config.getGroupTypeMappings().get("/"), "root_type");
+
+      assertEquals(config.getGroupType("/"), "root_type");
+      assertEquals(config.getGroupType(null), "root_type");
+      assertEquals(config.getGroupType("/platform"), "platform_type");
+      assertEquals(config.getGroupType("/platform/administrators"), "platform_type");
+      assertEquals(config.getGroupType("/platform/guests"), "platform_type");
+      assertEquals(config.getGroupType("/platform/users"), "users_type");
+      assertEquals(config.getGroupType("/platform/users/john"), "platform_type");
+      assertEquals(config.getGroupType("/organization/acme/france/offices"), ".organization.acme.france.offices");
+      assertEquals(config.getGroupType("/organization/acme/france/offices/paris"), ".organization.acme.france.offices.paris");
+      assertEquals(config.getGroupType("/organization/acme/france"), "france_type");
+      assertEquals(config.getGroupType("/organization/acme"), ".organization.acme");
+      assertEquals(config.getGroupType("/foo/bar"), ".foo.bar");
+      assertEquals(config.getGroupType("/foo"), ".foo");
+      assertEquals(config.getGroupType("/toto"), "toto_type");
+      assertEquals(config.getGroupType("/toto/lolo"), "toto_type");
+      assertEquals(config.getGroupType("/toto/lolo/tutu"), "toto_type");
    }
 
    public void testUserPageSize() throws Exception

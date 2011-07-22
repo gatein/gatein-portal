@@ -32,10 +32,7 @@ import java.sql.DatabaseMetaData;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-@ConfiguredBy({
-   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/jcr/jcr-configuration.xml"),
-   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/test-configuration.xml")
-})
+@ConfiguredBy({@ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/test-configuration.xml")})
 public class BootstrapTestCase extends AbstractKernelTest
 {
 
@@ -100,6 +97,5 @@ public class BootstrapTestCase extends AbstractKernelTest
       assertTrue(f.exists());
       assertTrue(f.isDirectory());
       assertTrue(f.canWrite());
-      assertEquals(0, f.list().length);
    }
 }

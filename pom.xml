@@ -436,6 +436,12 @@
          </dependency>
          <dependency>
             <groupId>org.exoplatform.portal</groupId>
+            <artifactId>exo.portal.component.identity</artifactId>
+            <version>3.2.0-M02-SNAPSHOT</version>
+            <type>test-jar</type>
+         </dependency>
+         <dependency>
+            <groupId>org.exoplatform.portal</groupId>
             <artifactId>exo.portal.component.resources</artifactId>
             <version>3.2.0-M02-SNAPSHOT</version>
          </dependency>
@@ -508,17 +514,6 @@
          <dependency>
             <groupId>org.exoplatform.portal</groupId>
             <artifactId>exo.portal.component.test.jcr</artifactId>
-            <version>3.2.0-M02-SNAPSHOT</version>
-            <type>test-jar</type>
-         </dependency>
-         <dependency>
-            <groupId>org.exoplatform.portal</groupId>
-            <artifactId>exo.portal.component.test.organization</artifactId>
-            <version>3.2.0-M02-SNAPSHOT</version>
-         </dependency>
-         <dependency>
-            <groupId>org.exoplatform.portal</groupId>
-            <artifactId>exo.portal.component.test.organization</artifactId>
             <version>3.2.0-M02-SNAPSHOT</version>
             <type>test-jar</type>
          </dependency>
@@ -892,20 +887,8 @@
                            <value>${project.build.directory}</value>
                         </property>
                         <property>
-                           <name>gatein.test.datasource.driver</name>
-                           <value>org.hsqldb.jdbcDriver</value>
-                        </property>
-                        <property>
-                           <name>gatein.test.datasource.url</name>
-                           <value>jdbc:hsqldb:mem:gateindb</value>
-                        </property>
-                        <property>
-                           <name>gatein.test.datasource.username</name>
-                           <value>sa</value>
-                        </property>
-                        <property>
-                           <name>gatein.test.datasource.password</name>
-                           <value />
+                           <name>exo.profiles</name>
+                           <value>hsqldb</value>
                         </property>
                      </systemProperties>
                   </configuration>
@@ -945,20 +928,8 @@
                            <value>${project.build.directory}</value>
                         </property>
                         <property>
-                           <name>gatein.test.datasource.driver</name>
-                           <value>com.mysql.jdbc.Driver</value>
-                        </property>
-                        <property>
-                           <name>gatein.test.datasource.url</name>
-                           <value>jdbc:mysql://10.37.129.4/gatein?createDatabaseIfNotExist=true&amp;useUnicode=true&amp;characterEncoding=utf-8</value>
-                        </property>
-                        <property>
-                           <name>gatein.test.datasource.username</name>
-                           <value>root</value>
-                        </property>
-                        <property>
-                           <name>gatein.test.datasource.password</name>
-                           <value>a</value>
+                           <name>exo.profiles</name>
+                           <value>mysql</value>
                         </property>
                      </systemProperties>
                   </configuration>

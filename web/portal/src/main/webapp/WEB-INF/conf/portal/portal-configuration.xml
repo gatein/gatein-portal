@@ -180,6 +180,7 @@
 	            </field>
 	            <field name="ownerType"><string>portal</string></field>
 	            <field name="templateLocation"><string>war:/conf/portal/</string></field>
+              <field name="importMode"><string>conserve</string></field>
 	          </object>
 	        </object-param> 
 	        <object-param>
@@ -194,8 +195,9 @@
 	              	<value><string>/organization/management/executive-board</string></value>	              
 	              </collection>
 	            </field>
-	            <field  name="ownerType"><string>group</string></field>
-	            <field  name="templateLocation"><string>war:/conf/portal</string></field> 
+	            <field name="ownerType"><string>group</string></field>
+	            <field name="templateLocation"><string>war:/conf/portal</string></field>
+              <field name="importMode"><string>conserve</string></field>
 	          </object>
 	        </object-param>       
 	        <object-param>
@@ -211,8 +213,9 @@
 	                <value><string>user</string></value>
 	              </collection>
 	            </field>
-	            <field  name="ownerType"><string>user</string></field>
-	            <field  name="templateLocation"><string>war:/conf/portal</string></field> 
+	            <field name="ownerType"><string>user</string></field>
+	            <field name="templateLocation"><string>war:/conf/portal</string></field>
+              <field name="importMode"><string>conserve</string></field>
 	          </object>
 	        </object-param>
 	      </init-params>
@@ -251,6 +254,8 @@
         </value-param>
         <values-param>
           <name>entities</name>
+
+          <!-- The MOP node types -->
           <value>org.gatein.mop.core.api.workspace.WorkspaceImpl</value>
           <value>org.gatein.mop.core.api.workspace.UIContainerImpl</value>
           <value>org.gatein.mop.core.api.workspace.UIWindowImpl</value>
@@ -281,6 +286,8 @@
           <value>org.gatein.mop.core.api.workspace.content.ContextSpecialization</value>
           <value>org.gatein.mop.core.api.workspace.content.WorkspaceClone</value>
           <value>org.gatein.mop.core.api.workspace.content.WorkspaceSpecialization</value>
+
+          <!-- GateIn node types -->
           <value>org.exoplatform.portal.pom.spi.portlet.PortletState</value>
           <value>org.exoplatform.portal.pom.spi.portlet.PreferenceState</value>
           <value>org.exoplatform.portal.pom.spi.gadget.GadgetState</value>
@@ -291,6 +298,7 @@
           <value>org.exoplatform.portal.mop.i18n.I18Nized</value>
           <value>org.exoplatform.portal.mop.i18n.LanguageSpace</value>
           <value>org.exoplatform.portal.mop.i18n.Language</value>
+          <value>org.exoplatform.portal.mop.importer.Imported</value>
         </values-param>
         <properties-param>
           <name>options</name>

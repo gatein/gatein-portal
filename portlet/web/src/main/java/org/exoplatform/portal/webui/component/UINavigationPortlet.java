@@ -80,7 +80,7 @@ public class UINavigationPortlet extends UIPortletApplication
       }
       else
       {
-         portalNavigation.setScope(new GenericScope(level));
+         portalNavigation.setScope(GenericScope.treeShape(level));
       }
    }
 
