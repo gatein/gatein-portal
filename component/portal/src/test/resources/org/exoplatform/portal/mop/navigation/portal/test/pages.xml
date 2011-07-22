@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+  ~ Copyright (C) 2011 eXo Platform SAS.
+  ~
+  ~ This is free software; you can redistribute it and/or modify it
+  ~ under the terms of the GNU Lesser General Public License as
+  ~ published by the Free Software Foundation; either version 2.1 of
+  ~ the License, or (at your option) any later version.
+  ~
+  ~ This software is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+  ~ Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public
+  ~ License along with this software; if not, write to the Free
+  ~ Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+  ~ 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+  -->
+
+<page-set>  
+
+  <page>
+  	<page-id>portal::test::test1</page-id>
+    <owner-type>portal</owner-type>
+    <owner-id>test</owner-id>
+    <name>test1</name>
+    <title>test_title</title>
+    <factory-id>test_factory_id</factory-id>
+	  <access-permissions>test_access_permissions</access-permissions>
+	  <edit-permission>test_edit_permission</edit-permission>
+    <show-max-window>true</show-max-window>
+    <container
+        template="container_1_template"
+        decorator="container_1_decorator"
+        width="container_1_width"
+        height="container_1_height">
+      <name>container_1</name>
+      <title>container_1_title</title>
+      <icon>container_1_icon</icon>
+      <access-permissions>container_1_access_permissions</access-permissions>
+      <factory-id>container_1_factory_id</factory-id>
+      <description>container_1_description</description>
+    </container>
+    <application>
+      <instance-id>portal#test:/web/BannerPortlet/banner</instance-id>
+      <application-type>application_1_type</application-type>
+      <theme>application_1_theme</theme>
+      <title>application_1_title</title>
+      <access-permissions>application_1_access_permissions</access-permissions>
+      <show-info-bar>true</show-info-bar>
+      <show-application-state>true</show-application-state>
+      <show-application-mode>true</show-application-mode>
+      <description>application_1_description</description>
+      <icon>application_1_icon</icon>
+      <width>application_1_width</width>
+      <height>application_1_height</height>
+      <properties>
+        <entry key="prop_key">application_1_prop_value</entry>
+      </properties>
+    </application>
+  </page>
+    
+  <page>
+    <owner-type>portal</owner-type>
+    <owner-id>test</owner-id>
+    <name>test2</name>
+  </page>
+
+  <page>
+    <owner-type>portal</owner-type>
+    <owner-id>test</owner-id>
+    <name>test3</name>
+    <application>
+      <instance-id>portal#notexisting:/web/BannerPortlet/banner2</instance-id>
+    </application>
+  </page>
+
+  <page>
+    <owner-type>portal</owner-type>
+    <owner-id>test</owner-id>
+    <name>test4</name>
+    <application>
+      <instance-id>portal#test:/web/BannerPortlet/banner</instance-id>
+    </application>
+    <container>
+      <application>
+        <instance-id>portal#test:/web/BannerPortlet/banner</instance-id>
+      </application>
+      <application>
+        <instance-id>portal#test:/web/FooterPortlet/footer</instance-id>
+      </application>
+    </container>
+  </page>
+
+</page-set>

@@ -41,6 +41,8 @@ public final class NewPortalConfig
    
    private String description;
 
+   private String importMode;
+
    /**
     * @deprecated use the location instead
     */
@@ -60,6 +62,7 @@ public final class NewPortalConfig
       this.description = cfg.description;
       this.templateName = cfg.templateName;
       this.predefinedOwner = new HashSet<String>(cfg.predefinedOwner);
+      this.importMode = cfg.importMode;
    }
    
    public NewPortalConfig(String path)
@@ -150,6 +153,16 @@ public final class NewPortalConfig
    public void setDescription(String description)
    {
       this.description = description;
+   }
+
+   public String getImportMode()
+   {
+      return importMode;
+   }
+
+   public void setImportMode(String importMode)
+   {
+      this.importMode = importMode;
    }
 
    @Override

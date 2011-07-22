@@ -30,7 +30,7 @@ import org.exoplatform.portal.pom.config.POMSessionManager;
  * Nov 10, 2010
  */
 
-public class TestConcurrencyDataStorage extends AbstractPortalTest
+public class TestConcurrencyDataStorage extends AbstractConfigTest
 {
 
    private DataStorage storage_;

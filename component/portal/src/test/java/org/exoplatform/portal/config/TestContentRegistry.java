@@ -26,7 +26,7 @@ import org.exoplatform.portal.pom.config.POMSessionManager;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class TestContentRegistry extends AbstractPortalTest
+public class TestContentRegistry extends AbstractConfigTest
 {
 
    /** . */

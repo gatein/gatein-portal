@@ -49,7 +49,7 @@ import java.util.TimeZone;
  * Created by The eXo Platform SARL Author : Tung Pham thanhtungty@gmail.com Nov
  * 13, 2007
  */
-public class TestLoadedPOM extends AbstractPortalTest
+public class TestLoadedPOM extends AbstractConfigTest
 {
 
    /** . */
@@ -93,45 +93,45 @@ public class TestLoadedPOM extends AbstractPortalTest
 
    public void testLegacyGroupWithNormalizedName() throws Exception
    {
-      SiteKey key = SiteKey.group("/platform/test/legacy");
+      SiteKey key = SiteKey.group("/test/legacy");
       NavigationContext nav = navService.loadNavigation(key);
       assertNotNull(nav);
       NodeContext<?> root = navService.loadNode(NodeModel.SELF_MODEL, nav, Scope.ALL, null);
       NodeContext<?> node = root.get(0);
-      assertEquals("group::/platform/test/legacy::register", node.getState().getPageRef());
+      assertEquals("group::/test/legacy::register", node.getState().getPageRef());
 
-      Page page = storage.getPage("group::/platform/test/legacy::register");
+      Page page = storage.getPage("group::/test/legacy::register");
       assertNotNull(page);
-      assertEquals("group::/platform/test/legacy::register", page.getPageId());
-      assertEquals("/platform/test/legacy", page.getOwnerId());
+      assertEquals("group::/test/legacy::register", page.getPageId());
+      assertEquals("/test/legacy", page.getOwnerId());
       Application app = (Application)page.getChildren().get(0);
-      //    assertEquals("group#/platform/test/legacy:/web/IFramePortlet/blog", app.getInstanceState().getWeakReference());
+      //    assertEquals("group#/test/legacy:/web/IFramePortlet/blog", app.getInstanceState().getWeakReference());
 
-      PortletPreferences prefs = storage.getPortletPreferences("group#/platform/test/legacy:/web/IFramePortlet/blog");
+      PortletPreferences prefs = storage.getPortletPreferences("group#/test/legacy:/web/IFramePortlet/blog");
       assertNotNull(prefs);
-      assertEquals("group#/platform/test/legacy:/web/IFramePortlet/blog", prefs.getWindowId());
+      assertEquals("group#/test/legacy:/web/IFramePortlet/blog", prefs.getWindowId());
    }
 
    public void testGroupWithNormalizedName() throws Exception
    {
-      SiteKey key = SiteKey.group("/platform/test/normalized");
+      SiteKey key = SiteKey.group("/test/normalized");
       NavigationContext nav = navService.loadNavigation(key);
       assertNotNull(nav);
       NodeContext<?> root = navService.loadNode(NodeModel.SELF_MODEL, nav, Scope.ALL, null);
       NodeContext<?> node = root.get(0);
-      assertEquals("group::/platform/test/normalized::register", node.getState().getPageRef());
+      assertEquals("group::/test/normalized::register", node.getState().getPageRef());
 
-      Page page = storage.getPage("group::/platform/test/normalized::register");
+      Page page = storage.getPage("group::/test/normalized::register");
       assertNotNull(page);
-      assertEquals("group::/platform/test/normalized::register", page.getPageId());
-      assertEquals("/platform/test/normalized", page.getOwnerId());
+      assertEquals("group::/test/normalized::register", page.getPageId());
+      assertEquals("/test/normalized", page.getOwnerId());
       Application app = (Application)page.getChildren().get(0);
-      //    assertEquals("group#/platform/test/normalized:/exoadmin/AccountPortlet/Account", app.getInstanceState().getWeakReference());
+      //    assertEquals("group#/test/normalized:/exoadmin/AccountPortlet/Account", app.getInstanceState().getWeakReference());
 
       PortletPreferences prefs =
-         storage.getPortletPreferences("group#/platform/test/normalized:/exoadmin/AccountPortlet/Account");
+         storage.getPortletPreferences("group#/test/normalized:/exoadmin/AccountPortlet/Account");
       assertNotNull(prefs);
-      assertEquals("group#/platform/test/normalized:/exoadmin/AccountPortlet/Account", prefs.getWindowId());
+      assertEquals("group#/test/normalized:/exoadmin/AccountPortlet/Account", prefs.getWindowId());
    }
 
    public void testNavigation() throws Exception
@@ -237,8 +237,8 @@ public class TestLoadedPOM extends AbstractPortalTest
       assertEquals("Expected two result instead of " + list, 2, list.size());
       Set<String> ids = new HashSet<String>(Arrays.asList(list.get(0).getPageId(), list.get(1).getPageId()));
       HashSet<String> expectedIds =
-         new HashSet<String>(Arrays.asList("group::/platform/test/legacy::register",
-            "group::/platform/test/normalized::register"));
+         new HashSet<String>(Arrays.asList("group::/test/legacy::register",
+            "group::/test/normalized::register"));
       assertEquals(expectedIds, ids);
    }
 */

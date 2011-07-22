@@ -52,6 +52,7 @@ import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.UserHandler;
 import org.exoplatform.services.security.Authenticator;
 import org.exoplatform.services.security.ConversationState;
+import org.gatein.common.util.Tools;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -66,7 +67,7 @@ import java.util.Set;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class TestUserPortalConfigService extends AbstractPortalTest
+public class TestUserPortalConfigService extends AbstractConfigTest
 {
 
    /** . */
@@ -198,8 +199,8 @@ public class TestUserPortalConfigService extends AbstractPortalTest
             assertEquals("expected to have 5 navigations instead of " + navigations, 5, navigations.size());
             assertTrue(navigations.containsKey("portal::classic"));
             assertTrue(navigations.containsKey("group::/platform/administrators"));
-            assertTrue(navigations.containsKey("group::/organization/management/executive-board"));
             assertTrue(navigations.containsKey("group::/platform/users"));
+            assertTrue(navigations.containsKey("group::/organization/management/executive-board"));
             assertTrue(navigations.containsKey("user::root"));
          }
       }.execute("root");
@@ -223,7 +224,6 @@ public class TestUserPortalConfigService extends AbstractPortalTest
             assertEquals("expected to have 5 navigations instead of " + navigations, 5, navigations.size());
             assertTrue(navigations.containsKey("portal::classic"));
             assertTrue(navigations.containsKey("group::/platform/administrators"));
-            assertTrue(navigations.containsKey("group::/organization/management/executive-board"));
             assertTrue(navigations.containsKey("group::/platform/users"));
             assertTrue(navigations.containsKey("user::john"));
          }
@@ -359,13 +359,14 @@ public class TestUserPortalConfigService extends AbstractPortalTest
          public void execute() throws Exception
          {
             Set<String> navigations = new HashSet<String>(userPortalConfigSer_.getMakableNavigations("root", false));
-            Set<String> expectedNavigations =
-               new HashSet<String>(Arrays.asList("/platform/users", "/organization/management/human-resources",
-                  "/partners", "/customers", "/organization/communication", "/organization/management/executive-board",
-                  "/organization/management", "/organization/operations", "/organization", "/platform",
-                  "/organization/communication/marketing", "/platform/guests",
-                  "/organization/communication/press-and-media", "/platform/administrators",
-                  "/organization/operations/sales", "/organization/operations/finances"));
+            Set<String> expectedNavigations = Tools.toSet(
+               "/platform/users",
+               "/platform",
+               "/platform/guests",
+               "/platform/administrators",
+               "/organization",
+               "/organization/management",
+               "/organization/management/executive-board");
             assertEquals(expectedNavigations, navigations);
          }
       }.execute(null);
@@ -378,7 +379,7 @@ public class TestUserPortalConfigService extends AbstractPortalTest
          public void execute() throws Exception
          {
             Set<String> navigations = new HashSet<String>(userPortalConfigSer_.getMakableNavigations("john", false));
-            Set<String> expectedNavigations = Collections.singleton("/organization/management/executive-board");
+            Set<String> expectedNavigations = Tools.toSet("/organization/management/executive-board");
             assertEquals(expectedNavigations, navigations);
          }
       }.execute(null);

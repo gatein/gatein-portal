@@ -32,6 +32,7 @@ import org.exoplatform.portal.config.model.Container;
 import org.exoplatform.portal.config.model.Dashboard;
 import org.exoplatform.portal.config.model.ModelObject;
 import org.exoplatform.portal.config.model.Page;
+import org.exoplatform.portal.config.model.PersistentApplicationState;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.TransientApplicationState;
 import org.exoplatform.portal.mop.EventType;
@@ -47,9 +48,15 @@ import org.exoplatform.portal.pom.data.ModelChange;
 import org.exoplatform.portal.pom.spi.gadget.Gadget;
 import org.exoplatform.portal.pom.spi.portlet.Portlet;
 import org.exoplatform.portal.pom.spi.portlet.PortletBuilder;
+import org.exoplatform.portal.pom.spi.wsrp.WSRP;
 import org.exoplatform.services.listener.Event;
 import org.exoplatform.services.listener.Listener;
 import org.exoplatform.services.listener.ListenerService;
+import org.exoplatform.services.organization.Group;
+import org.exoplatform.services.organization.GroupHandler;
+import org.exoplatform.services.organization.OrganizationService;
+import org.exoplatform.services.organization.User;
+import org.exoplatform.services.organization.UserHandler;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -64,7 +71,7 @@ import java.util.concurrent.atomic.AtomicReference;
  * Created by The eXo Platform SARL Author : Tung Pham thanhtungty@gmail.com Nov
  * 13, 2007
  */
-public class TestDataStorage extends AbstractPortalTest
+public class TestDataStorage extends AbstractConfigTest
 {
 
    /** . */
@@ -82,9 +89,14 @@ public class TestDataStorage extends AbstractPortalTest
    /** . */
    private POMSessionManager mgr;
 
+   /** . */
    private LinkedList<Event> events;
 
+   /** . */
    private ListenerService listenerService;
+
+   /** . */
+   private OrganizationService org;
 
    public TestDataStorage(String name)
    {
@@ -110,6 +122,7 @@ public class TestDataStorage extends AbstractPortalTest
       navService = (NavigationService)container.getComponentInstanceOfType(NavigationService.class);
       events = new LinkedList<Event>();
       listenerService = (ListenerService)container.getComponentInstanceOfType(ListenerService.class);
+      org = (OrganizationService)container.getComponentInstanceOfType(OrganizationService.class);
 
       //
       listenerService.addListener(DataStorage.PAGE_CREATED, listener);
@@ -130,6 +143,19 @@ public class TestDataStorage extends AbstractPortalTest
    {
       end();
       super.tearDown();
+   }
+
+   private void assertPageFound(Query<Page> q, String expectedPage) throws Exception
+   {
+      List<Page> res = storage_.find(q).getAll();
+      assertEquals(1, res.size());
+      assertEquals(expectedPage, res.get(0).getPageId());
+   }
+
+   private void assertPageNotFound(Query<Page> q) throws Exception
+   {
+      List<Page> res = storage_.find(q).getAll();
+      assertEquals(0, res.size());
    }
 
    public void testCreatePortal() throws Exception
@@ -885,5 +911,264 @@ public class TestDataStorage extends AbstractPortalTest
       Application<Portlet> portletApp = Application.createPortletApplication();
       portletApp.setState(state);
       return portletApp;
+   }
+
+   public void testSearchPage() throws Exception
+   {
+      Page page = new Page();
+      page.setPageId("portal::test::searchedpage");
+      page.setTitle("Juuu Ziii");
+      storage_.create(page);
+
+      //
+      assertPageFound(new Query<Page>(null, null, null, "Juuu Ziii", Page.class), "portal::test::searchedpage");
+      assertPageFound(new Query<Page>(null, null, null, "Juuu", Page.class), "portal::test::searchedpage");
+      assertPageFound(new Query<Page>(null, null, null, "Ziii", Page.class), "portal::test::searchedpage");
+      assertPageFound(new Query<Page>(null, null, null, "juuu ziii", Page.class), "portal::test::searchedpage");
+      assertPageFound(new Query<Page>(null, null, null, "juuu", Page.class), "portal::test::searchedpage");
+      assertPageFound(new Query<Page>(null, null, null, "ziii", Page.class), "portal::test::searchedpage");
+      assertPageFound(new Query<Page>(null, null, null, "juu", Page.class), "portal::test::searchedpage");
+      assertPageFound(new Query<Page>(null, null, null, "zii", Page.class), "portal::test::searchedpage");
+      assertPageFound(new Query<Page>(null, null, null, "ju", Page.class), "portal::test::searchedpage");
+      assertPageFound(new Query<Page>(null, null, null, "zi", Page.class), "portal::test::searchedpage");
+
+      assertPageNotFound(new Query<Page>(null, null, null, "foo", Page.class));
+      assertPageNotFound(new Query<Page>(null, null, null, "foo bar", Page.class));
+      assertPageNotFound(new Query<Page>("test", null, null, null, Page.class));
+   }
+
+   public void testGadget() throws Exception
+   {
+      Gadget gadget = new Gadget();
+      gadget.setUserPref("user_pref");
+      TransientApplicationState<Gadget> state = new TransientApplicationState<Gadget>("bar", gadget);
+      Application<Gadget> gadgetApplication = Application.createGadgetApplication();
+      gadgetApplication.setState(state);
+
+      Page container = new Page();
+      container.setPageId("portal::test::gadget_page");
+      container.getChildren().add(gadgetApplication);
+
+      storage_.create(container);
+
+      container = storage_.getPage("portal::test::gadget_page");
+      gadgetApplication = (Application<Gadget>)container.getChildren().get(0);
+
+      gadget = storage_.load(gadgetApplication.getState(), ApplicationType.GADGET);
+      assertNotNull(gadget);
+      assertEquals("user_pref", gadget.getUserPref());
+   }
+
+   public void testSiteScopedPreferences() throws Exception
+   {
+      Page page = storage_.getPage("portal::test::test4");
+      Application<Portlet> app = (Application<Portlet>)page.getChildren().get(0);
+      PersistentApplicationState<Portlet> state = (PersistentApplicationState)app.getState();
+
+      //
+      Portlet prefs = storage_.load(state, ApplicationType.PORTLET);
+      assertEquals(new PortletBuilder().add("template", "par:/groovy/groovy/webui/component/UIBannerPortlet.gtmpl")
+         .build(), prefs);
+
+      //
+      prefs.setValue("template", "someanothervalue");
+      storage_.save(state, prefs);
+
+      //
+      prefs = storage_.load(state, ApplicationType.PORTLET);
+      assertNotNull(prefs);
+      assertEquals(new PortletBuilder().add("template", "someanothervalue").build(), prefs);
+   }
+
+   public void testNullPreferenceValue() throws Exception
+   {
+      Page page = storage_.getPage("portal::test::test4");
+      Application<Portlet> app = (Application<Portlet>)page.getChildren().get(0);
+      PersistentApplicationState<Portlet> state = (PersistentApplicationState)app.getState();
+
+      //
+      Portlet prefs = storage_.load(state, ApplicationType.PORTLET);
+
+      //
+      prefs.setValue("template", null);
+      storage_.save(state, prefs);
+
+      //
+      prefs = storage_.load(state, ApplicationType.PORTLET);
+      assertNotNull(prefs);
+      assertEquals(new PortletBuilder().add("template", "").build(), prefs);
+   }
+
+   public void testAccessMixin() throws Exception
+   {
+      Page page = new Page();
+      page.setTitle("MyTitle");
+      page.setOwnerType(PortalConfig.PORTAL_TYPE);
+      page.setOwnerId("test");
+      page.setName("foo");
+      storage_.save(page);
+
+      //
+      page = storage_.getPage("portal::test::foo");
+      assertNotNull(page);
+      assertEquals("MyTitle", page.getTitle());
+      assertEquals("test", page.getOwnerId());
+      assertEquals("foo", page.getName());
+
+      //
+      SampleMixin sampleMixin = storage_.adapt(page, SampleMixin.class);
+      //Check the default value of sampleProperty property
+      assertEquals("SampleProperty", sampleMixin.getSampleProperty());
+   }
+
+   public void testModifyMixin() throws Exception
+   {
+      Page page = new Page();
+      page.setTitle("MyTitle");
+      page.setOwnerType(PortalConfig.PORTAL_TYPE);
+      page.setOwnerId("test");
+      page.setName("foo");
+      storage_.save(page);
+
+      //
+      page = storage_.getPage("portal::test::foo");
+      assertNotNull(page);
+      assertEquals("MyTitle", page.getTitle());
+      assertEquals("test", page.getOwnerId());
+      assertEquals("foo", page.getName());
+
+      //
+      SampleMixin sampleMixin = storage_.adapt(page, SampleMixin.class);
+      sampleMixin.setSampleProperty("FYM!");
+
+      //
+      page = storage_.getPage("portal::test::foo");
+      assertNotNull(page);
+      SampleMixin sampleMixin2 = storage_.adapt(page, SampleMixin.class);
+      assertEquals("FYM!", sampleMixin2.getSampleProperty());
+   }
+
+   public void testSiteLayout() throws Exception
+   {
+      PortalConfig pConfig = storage_.getPortalConfig(PortalConfig.PORTAL_TYPE, "classic");
+      assertNotNull(pConfig);
+      assertNotNull("The Group layout of " + pConfig.getName() + " is null", pConfig.getPortalLayout());
+
+      pConfig = storage_.getPortalConfig(PortalConfig.GROUP_TYPE, "/platform/administrators");
+      assertNotNull(pConfig);
+      assertNotNull("The Group layout of " + pConfig.getName() + " is null", pConfig.getPortalLayout());
+      assertTrue(pConfig.getPortalLayout().getChildren() != null && pConfig.getPortalLayout().getChildren().size() > 1);
+      pConfig.getPortalLayout().getChildren().clear();
+      storage_.save(pConfig);
+
+      pConfig = storage_.getPortalConfig(PortalConfig.GROUP_TYPE, "/platform/administrators");
+      assertNotNull(pConfig);
+      assertNotNull("The Group layout of " + pConfig.getName() + " is null", pConfig.getPortalLayout());
+      assertTrue(pConfig.getPortalLayout().getChildren() != null && pConfig.getPortalLayout().getChildren().size() == 0);
+
+      pConfig = storage_.getPortalConfig(PortalConfig.USER_TYPE, "root");
+      assertNotNull(pConfig);
+      assertNotNull("The User layout of " + pConfig.getName() + " is null", pConfig.getPortalLayout());
+
+      pConfig = storage_.getPortalConfig(PortalConfig.USER_TYPE, "mary");
+      assertNotNull(pConfig);
+      assertNotNull("The User layout of " + pConfig.getName() + " is null", pConfig.getPortalLayout());
+   }
+
+   public void testGroupLayout() throws Exception
+   {
+      GroupHandler groupHandler = org.getGroupHandler();
+      Group group = groupHandler.findGroupById("groupTest");
+      assertNull(group);
+
+      group = groupHandler.createGroupInstance();
+      group.setGroupName("groupTest");
+      group.setLabel("group label");
+
+      groupHandler.addChild(null, group, true);
+
+      group = groupHandler.findGroupById("/groupTest");
+      assertNotNull(group);
+
+      PortalConfig pConfig = storage_.getPortalConfig(PortalConfig.GROUP_TYPE, "/groupTest");
+      assertNotNull("the Group's PortalConfig is not null", pConfig);
+      assertTrue(pConfig.getPortalLayout().getChildren() == null || pConfig.getPortalLayout().getChildren().size() == 4);
+
+      /**
+       * We need to remove the /groupTest from the groupHandler as the
+       * handler is shared between the tests and can cause other tests
+       * to fail.
+       * TODO: make the tests fully independent
+       */
+      groupHandler.removeGroup(group, false);
+      group = groupHandler.findGroupById("/groupTest");
+      assertNull(group);
+   }
+
+
+
+   public void testGroupNavigation() throws Exception
+   {
+      GroupHandler groupHandler = org.getGroupHandler();
+      Group group = groupHandler.createGroupInstance();
+      group.setGroupName("testGroupNavigation");
+      group.setLabel("testGroupNavigation");
+
+      groupHandler.addChild(null, group, true);
+
+      SiteKey key = SiteKey.group(group.getId());
+      navService.saveNavigation(new NavigationContext(key, new NavigationState(0)));
+      assertNotNull(navService.loadNavigation(key));
+
+      // Remove group
+      groupHandler.removeGroup(group, true);
+
+      // Group navigations is removed after remove group
+      assertNull(navService.loadNavigation(key));
+   }
+
+   public void testUserLayout() throws Exception
+   {
+      UserHandler userHandler = org.getUserHandler();
+      User user = userHandler.findUserByName("testing");
+      assertNull(user);
+
+      user = userHandler.createUserInstance("testing");
+      user.setEmail("testing@gmaild.com");
+      user.setFirstName("test firstname");
+      user.setLastName("test lastname");
+      user.setPassword("123456");
+
+      userHandler.createUser(user, true);
+
+      user = userHandler.findUserByName("testing");
+      assertNotNull(user);
+
+      PortalConfig pConfig = storage_.getPortalConfig(PortalConfig.USER_TYPE, "testing");
+      assertNotNull("the User's PortalConfig is not null", pConfig);
+   }
+
+   public void testWSRP() throws Exception
+   {
+      WSRP wsrp = new WSRP();
+      String id = "portlet id";
+      wsrp.setPortletId(id);
+      TransientApplicationState<WSRP> state = new TransientApplicationState<WSRP>("test", wsrp);
+      Application<WSRP> wsrpApplication = Application.createWSRPApplication();
+      wsrpApplication.setState(state);
+
+      Page container = new Page();
+      String pageId = "portal::test::wsrp_page";
+      container.setPageId(pageId);
+      container.getChildren().add(wsrpApplication);
+
+      storage_.create(container);
+
+      container = storage_.getPage(pageId);
+      wsrpApplication = (Application<WSRP>)container.getChildren().get(0);
+
+      wsrp = storage_.load(wsrpApplication.getState(), ApplicationType.WSRP_PORTLET);
+      assertNotNull(wsrp);
+      assertEquals(id, wsrp.getPortletId());
    }
 }

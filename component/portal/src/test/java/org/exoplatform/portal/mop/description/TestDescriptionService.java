@@ -19,8 +19,11 @@
 
 package org.exoplatform.portal.mop.description;
 
+import org.exoplatform.component.test.ConfigurationUnit;
+import org.exoplatform.component.test.ConfiguredBy;
+import org.exoplatform.component.test.ContainerScope;
 import org.exoplatform.container.PortalContainer;
-import org.exoplatform.portal.config.AbstractPortalTest;
+import org.exoplatform.portal.AbstractPortalTest;
 import org.exoplatform.portal.mop.Described;
 import org.exoplatform.portal.mop.i18n.I18Nized;
 import org.exoplatform.portal.mop.navigation.NavigationServiceImpl;
@@ -38,6 +41,11 @@ import java.util.Map;
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
+@ConfiguredBy({
+   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.test.jcr-configuration.xml"),
+   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.identity-configuration.xml"),
+   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.portal-configuration.xml")
+})
 public class TestDescriptionService extends AbstractPortalTest
 {
 

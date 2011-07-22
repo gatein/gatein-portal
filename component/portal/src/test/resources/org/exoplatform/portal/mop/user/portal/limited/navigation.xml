@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) 2011 eXo Platform SAS.
+    
+    This is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Lesser General Public License as
+    published by the Free Software Foundation; either version 2.1 of
+    the License, or (at your option) any later version.
+    
+    This software is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+    Lesser General Public License for more details.
+    
+    You should have received a copy of the GNU Lesser General Public
+    License along with this software; if not, write to the Free
+    Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+    02110-1301 USA, or see the FSF site: http://www.fsf.org.
+
+-->
+
+<node-navigation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_2 http://www.gatein.org/xml/ns/gatein_objects_1_2"
+   xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_2">
+   <priority>1</priority>
+   <page-nodes>
+
+      <!-- Node with /platform/administrator permission -->
+      <node>
+         <uri>foo</uri>
+         <name>foo</name>
+         <page-reference>portal::limited::foo</page-reference>
+      </node>
+
+      <!-- Node with /platform/user permission -->
+      <node>
+         <uri>bar</uri>
+         <name>bar</name>
+         <page-reference>portal::limited::bar</page-reference>
+      </node>
+
+      <!-- Node with everyone permission -->
+      <node>
+         <uri>bit</uri>
+         <name>bit</name>
+         <page-reference>portal::limited::bit</page-reference>
+      </node>
+   </page-nodes>
+</node-navigation>

@@ -30,11 +30,11 @@ import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.SiteType;
+import org.exoplatform.portal.mop.navigation.GenericScope;
 import org.exoplatform.portal.mop.navigation.NavigationContext;
 import org.exoplatform.portal.mop.navigation.NavigationServiceException;
 import org.exoplatform.portal.mop.navigation.NodeChangeListener;
 import org.exoplatform.portal.mop.navigation.NodeContext;
-import org.exoplatform.portal.mop.navigation.NodeContextChangeAdapter;
 import org.exoplatform.portal.mop.navigation.NodeState;
 import org.exoplatform.portal.mop.navigation.Scope;
 import org.exoplatform.portal.mop.navigation.VisitMode;
@@ -201,7 +201,7 @@ public class UserPortalImpl implements UserPortal
       NodeChangeListener<UserNode> listener) throws NullPointerException, UserPortalException, NavigationServiceException
    {
       UserNodeContext context = new UserNodeContext(userNavigation, filterConfig);
-      NodeContext<UserNode> nodeContext = service.getNavigationService().loadNode(context, userNavigation.navigation, scope, NodeContextChangeAdapter.safeWrap(listener));
+      NodeContext<UserNode> nodeContext = service.getNavigationService().loadNode(context, userNavigation.navigation, scope, new UserNodeListener(listener));
       if (nodeContext != null)
       {
          return nodeContext.getNode().filter();
@@ -219,7 +219,7 @@ public class UserPortalImpl implements UserPortal
       {
          throw new NullPointerException("No null node accepted");
       }
-      service.getNavigationService().updateNode(node.context, scope, NodeContextChangeAdapter.safeWrap(listener));
+      service.getNavigationService().updateNode(node.context, scope, new UserNodeListener(listener));
       node.filter();
    }
    
@@ -230,7 +230,7 @@ public class UserPortalImpl implements UserPortal
       {
          throw new NullPointerException("No null node accepted");
       }
-      service.getNavigationService().rebaseNode(node.context, scope, NodeContextChangeAdapter.safeWrap(listener));
+      service.getNavigationService().rebaseNode(node.context, scope, new UserNodeListener(listener));
       node.filter();
    }
 
@@ -240,11 +240,14 @@ public class UserPortalImpl implements UserPortal
       {
          throw new NullPointerException("No null node accepted");
       }
-      service.getNavigationService().saveNode(node.context, NodeContextChangeAdapter.safeWrap(listener));
+      service.getNavigationService().saveNode(node.context, new UserNodeListener(listener));
       node.filter();
    }
 
-   private class MatchingScope implements Scope
+   /**
+    * Note : the scope implementation is not stateless but we don't care in this case.
+    */
+   private class MatchingScope extends GenericScope.Branch.Visitor implements Scope
    {
       final UserNavigation userNavigation;
       final UserNodeFilterConfig filterConfig;
@@ -260,6 +263,29 @@ public class UserPortalImpl implements UserPortal
          this.match = match;
       }
 
+      public Visitor get()
+      {
+         return this;
+      }
+
+      @Override
+      protected int getSize()
+      {
+         return match.length;
+      }
+
+      @Override
+      protected String getName(int index)
+      {
+         return match[index];
+      }
+
+      @Override
+      protected Visitor getFederated()
+      {
+         return Scope.CHILDREN.get();
+      }
+
       void resolve() throws NavigationServiceException
       {
          UserNodeContext context = new UserNodeContext(userNavigation, filterConfig);
@@ -273,34 +299,23 @@ public class UserPortalImpl implements UserPortal
          }
       }
 
-      public Visitor get()
+      public VisitMode enter(int depth, String id, String name, NodeState state)
       {
-         return new Visitor()
+         VisitMode vm = super.enter(depth, id, name, state);
+         if (depth == 0)
          {
-            public VisitMode enter(int depth, String id, String name, NodeState state)
+            score = 0;
+            MatchingScope.this.id = null;
+         }
+         else
+         {
+            if (vm == VisitMode.ALL_CHILDREN)
             {
-               if (depth == 0 && "default".equals(name))
-               {
-                  score = 0;
-                  MatchingScope.this.id = null;
-                  return VisitMode.ALL_CHILDREN;
-               }
-               else if (depth <= match.length && name.equals(match[depth - 1]))
-               {
-                  score++;
-                  MatchingScope.this.id = id;
-                  return VisitMode.ALL_CHILDREN;
-               }
-               else
-               {
-                  return VisitMode.NO_CHILDREN;
-               }
+               MatchingScope.this.id = id;
+               score++;
             }
-
-            public void leave(int depth, String id, String name, NodeState state)
-            {
-            }
-         };
+         }
+         return vm;
       }
    }
 
@@ -342,7 +357,7 @@ public class UserPortalImpl implements UserPortal
       // Find the first navigation available or return null
       if (segments == null)
       {
-         return getDefaultPath(null);
+         return getDefaultPath(filterConfig);
       }
 
       // Get navigations

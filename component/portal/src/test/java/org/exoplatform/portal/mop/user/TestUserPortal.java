@@ -21,8 +21,11 @@ package org.exoplatform.portal.mop.user;
 
 import junit.framework.AssertionFailedError;
 
+import org.exoplatform.component.test.ConfigurationUnit;
+import org.exoplatform.component.test.ConfiguredBy;
+import org.exoplatform.component.test.ContainerScope;
 import org.exoplatform.container.PortalContainer;
-import org.exoplatform.portal.config.AbstractPortalTest;
+import org.exoplatform.portal.AbstractPortalTest;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserPortalConfig;
 import org.exoplatform.portal.config.UserPortalConfigService;
@@ -30,6 +33,7 @@ import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.mop.navigation.Scope;
+import org.exoplatform.portal.mop.user.UserNodeFilterConfig.Builder;
 import org.exoplatform.portal.pom.config.POMDataStorage;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.services.listener.Event;
@@ -50,13 +54,18 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.ResourceBundle;
 import java.util.TimeZone;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
+@ConfiguredBy({
+   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.test.jcr-configuration.xml"),
+   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.identity-configuration.xml"),
+   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.portal-configuration.xml"),
+   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "org/exoplatform/portal/mop/user/configuration.xml")
+})
 public class TestUserPortal extends AbstractPortalTest
 {
 
@@ -433,6 +442,44 @@ public class TestUserPortal extends AbstractPortalTest
       }.execute("root");
    }
 
+   public void testFindBestAvailablePath()
+   {
+      new UnitTest()
+      {
+         public void execute() throws Exception
+         {
+            UserPortalConfig userPortalCfg = userPortalConfigSer_.getUserPortalConfig("limited", getUserId());
+            UserPortal userPortal = userPortalCfg.getUserPortal();
+
+            // Without authentication
+            UserNode nav = userPortal.resolvePath(null, "/");
+            assertEquals(SiteKey.portal("limited"), nav.getNavigation().getKey());
+            assertEquals("foo", nav.getName());
+
+            nav = userPortal.resolvePath(null, "/foo");
+            assertEquals(SiteKey.portal("limited"), nav.getNavigation().getKey());
+            assertEquals("foo", nav.getName());
+
+            // With authentication
+            UserNodeFilterConfig.Builder builder = UserNodeFilterConfig.builder();
+            builder.withAuthorizationCheck();
+            UserNodeFilterConfig filterConfig = builder.build();
+
+            nav = userPortal.resolvePath(filterConfig, "/");
+            assertEquals(SiteKey.portal("limited"), nav.getNavigation().getKey());
+            assertEquals("bar", nav.getName());
+
+            nav = userPortal.resolvePath(filterConfig, "/foo");
+            assertEquals(SiteKey.portal("limited"), nav.getNavigation().getKey());
+            assertEquals("foo", nav.getName());
+
+            nav = userPortal.resolvePath(filterConfig, "/bit");
+            assertEquals(SiteKey.portal("limited"), nav.getNavigation().getKey());
+            assertEquals("bit", nav.getName());
+         }
+      }.execute("demo");
+   }
+
    public void testPathResolutionPerNavigation()
    {
       new UnitTest()
@@ -655,6 +702,67 @@ public class TestUserPortal extends AbstractPortalTest
             root = userPortal.getNode(navigation, Scope.ALL, null, null);
             foo = root.getChild("foo");
             assertNull(foo.getChild("juu"));
+         }
+      }.execute("root");
+   }
+   
+   public void testInvalidateState()
+   {
+      new UnitTest()
+      {
+         public void execute() throws Exception
+         {
+            storage_.create(new PortalConfig("portal", "usernode_invalidate_uri"));
+            end(true);
+
+            //
+            begin();
+            Site site = mgr.getPOMService().getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "usernode_invalidate_uri");
+            site.getRootNavigation().addChild("default");
+            end(true);
+
+            //
+            begin();
+            UserPortalConfig userPortalCfg = userPortalConfigSer_.getUserPortalConfig("usernode_invalidate_uri", getUserId());
+            UserPortal userPortal = userPortalCfg.getUserPortal();
+            UserNavigation navigation = userPortal.getNavigation(SiteKey.portal("usernode_invalidate_uri"));
+            UserNode root = userPortal.getNode(navigation, Scope.ALL, null, null);
+            UserNode foo = root.addChild("foo");
+            UserNode bar = root.addChild("bar");            
+            assertEquals("foo", foo.getURI());
+            assertEquals("bar", bar.getURI());
+            userPortal.saveNode(root, null);
+            end(true);
+            
+            begin();
+            //Move node --> change URI
+            foo.addChild(bar);
+            assertEquals("foo/bar", bar.getURI());
+            
+            //Rename node --> URI should be changed too
+            bar.setName("bar2");
+            assertEquals("foo/bar2", bar.getURI());
+            
+            userPortal.saveNode(bar, null);
+            end(true);
+            
+            begin();
+            UserNode root2 = userPortal.getNode(navigation, Scope.ALL, null, null);
+            UserNode foo2 = root2.getChild("foo");
+            foo2.setName("foo2");
+            
+            UserNode bar2 = foo2.getChild("bar2");           
+            root2.addChild(bar2);
+            
+            userPortal.saveNode(bar2, null);
+            end(true);
+            
+            begin();
+
+            //Changes from other session : foo has been renamed, and bar has been moved
+            userPortal.updateNode(root, Scope.ALL, null);
+            assertEquals("foo2", foo.getURI());
+            assertEquals("bar2", bar.getURI());
          }
       }.execute("root");
    }

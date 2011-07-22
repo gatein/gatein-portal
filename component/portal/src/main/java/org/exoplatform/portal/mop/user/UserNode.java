@@ -48,13 +48,13 @@ public class UserNode
    final NodeContext<UserNode> context;
 
    /** . */
-   private String resolvedLabel;
+   String resolvedLabel;
 
    /** . */
-   private String encodedResolvedLabel;
+   String encodedResolvedLabel;
 
    /** . */
-   private String uri;
+   String uri;
 
    UserNode(UserNodeContext owner, NodeContext<UserNode> context)
    {
@@ -89,6 +89,11 @@ public class UserNode
    public void setName(String name)
    {
       context.setName(name);
+
+      //
+      this.uri = null;
+      this.resolvedLabel = null;
+      this.encodedResolvedLabel = null;
    }
 
    public String getURI()
@@ -125,11 +130,11 @@ public class UserNode
 
    public void setLabel(String label)
    {
-      this.resolvedLabel = null;
-      this.encodedResolvedLabel = null;
+      context.setState(new NodeState.Builder(context.getState()).label(label).build());
 
       //
-      context.setState(new NodeState.Builder(context.getState()).label(label).build());
+      this.resolvedLabel = null;
+      this.encodedResolvedLabel = null;
    }
 
    public String getIcon()
@@ -306,11 +311,13 @@ public class UserNode
    public void addChild(UserNode child)
    {
       context.add(null, child.context);
+      child.uri = null;
    }
 
    public void addChild(int index, UserNode child)
    {
       context.add(index, child.context);
+      child.uri = null;
    }
 
    public UserNode addChild(String childName)

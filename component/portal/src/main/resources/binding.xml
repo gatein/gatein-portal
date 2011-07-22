@@ -29,7 +29,7 @@
            marshaller="org.exoplatform.portal.config.serialize.JibxPropertiesMapper" 
            unmarshaller="org.exoplatform.portal.config.serialize.JibxPropertiesMapper"/>
 
-  <mapping class="org.exoplatform.portal.config.model.LocalizedValue"
+  <mapping class="org.exoplatform.portal.config.model.LocalizedString"
            name="label"
            unmarshaller="org.exoplatform.portal.config.serialize.LocalizedValueMapper"
            marshaller="org.exoplatform.portal.config.serialize.LocalizedValueMapper">
@@ -105,10 +105,10 @@
   </mapping>
   
    <mapping name="node" label="node" class="org.exoplatform.portal.config.model.PageNode">
-    <value name="uri" field="uri" usage="optional"/>
+    <value name="uri" get-method="getUri" set-method="setUri" usage="optional"/>
     <value name="name" field="name"/>
-    <collection field="labels" ordered="false">
-      <structure map-as="org.exoplatform.portal.config.model.LocalizedValue" usage="optional"/>
+    <collection field="labels" ordered="false" factory="org.exoplatform.portal.config.model.I18NString.create">
+      <structure map-as="org.exoplatform.portal.config.model.LocalizedString" usage="optional"/>
     </collection>
     <value name="icon" field="icon" usage="optional"/>
     <value name="start-publication-date" field="startPublicationDate" usage="optional"/>
@@ -116,7 +116,7 @@
     <value name="visibility" field="visibility" usage="optional" default="DISPLAYED"/>
     <value name="page-reference" field="pageReference" usage="optional" 
     	deserializer="org.exoplatform.portal.config.serialize.JibxStringSerialize.deserializeString"/>
-    <collection field="children" usage="optional" item-type="org.exoplatform.portal.config.model.PageNode"/>
+    <collection get-method="getNodes" set-method="setNodes" usage="optional" item-type="org.exoplatform.portal.config.model.PageNode"/>
   </mapping>
   
   <mapping name="portal-config" class="org.exoplatform.portal.config.model.PortalConfig" ordered="false">
@@ -139,11 +139,18 @@
     <value name="owner-type" field="ownerType" usage="optional"/>
     <value name="owner-id" field="ownerId" usage="optional"/>
     <value name="priority" field="priority" usage="optional"/>
-    <collection name="page-nodes" field="pageNodes" usage="optional"
-                item-type="org.exoplatform.portal.config.model.PageNode"/>
+    <collection field="fragments" ordered="false">
+      <structure map-as="org.exoplatform.portal.config.model.NavigationFragment" usage="optional"/>
+    </collection>
   </mapping>
-  
-  
+
+  <mapping name="page-nodes" class="org.exoplatform.portal.config.model.NavigationFragment">
+    <value name="parent-uri" field="parentURI" usage="optional"/>
+    <collection get-method="getNodes" set-method="setNodes" ordered="false">
+      <structure map-as="org.exoplatform.portal.config.model.PageNode" usage="optional"/>
+    </collection>
+  </mapping>
+
   <mapping name="portlet-preferences-set"
           class="org.exoplatform.portal.application.PortletPreferences$PortletPreferencesSet">
     <collection field="portlets" 

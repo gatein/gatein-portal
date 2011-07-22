@@ -29,7 +29,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class TestCache extends AbstractPortalTest
+public class TestCache extends AbstractConfigTest
 {
 
    /** . */

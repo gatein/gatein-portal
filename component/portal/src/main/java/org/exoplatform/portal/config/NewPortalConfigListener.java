@@ -28,8 +28,10 @@ import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.container.xml.ValueParam;
 import org.exoplatform.portal.application.PortletPreferences;
 import org.exoplatform.portal.application.PortletPreferences.PortletPreferencesSet;
-import org.exoplatform.portal.config.importer.ImportMode;
-import org.exoplatform.portal.config.importer.NavigationImporter;
+import org.exoplatform.portal.config.model.NavigationFragment;
+import org.exoplatform.portal.mop.importer.ImportMode;
+import org.exoplatform.portal.mop.importer.Imported;
+import org.exoplatform.portal.mop.importer.NavigationImporter;
 import org.exoplatform.portal.config.model.Container;
 import org.exoplatform.portal.config.model.ModelUnmarshaller;
 import org.exoplatform.portal.config.model.Page;
@@ -41,15 +43,18 @@ import org.exoplatform.portal.config.model.UnmarshalledObject;
 import org.exoplatform.portal.config.model.Version;
 import org.exoplatform.portal.mop.description.DescriptionService;
 import org.exoplatform.portal.mop.navigation.NavigationService;
+import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
-import org.jibx.runtime.JiBXException;
+import org.gatein.mop.api.workspace.Workspace;
+import org.jibx.runtime.*;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
@@ -93,7 +98,7 @@ public class NewPortalConfigListener extends BaseComponentPlugin
 
    /**
     * If true the portal clear portal metadata from data storage and replace
-    * it with new data created from .xml files
+    * it with new data created from .xml files.
     */
    private boolean overrideExistingData;
 
@@ -171,21 +176,66 @@ public class NewPortalConfigListener extends BaseComponentPlugin
       this.pomMgr = pomMgr;
    }
 
-   public void run() throws Exception
+   private void touchImport()
    {
-      //DANGEROUS! If the user delete the defaultPortal (ie: classic), the next time he restarts
-      //the server. Data of predefined owners would be overriden      
       RequestLifeCycle.begin(PortalContainer.getInstance());
       try
       {
-         if (dataStorage_.getPortalConfig(defaultPortal) != null && !overrideExistingData)
-            return;
+         POMSession session = pomMgr.getSession();
+         Workspace workspace = session.getWorkspace();
+         Imported imported = workspace.adapt(Imported.class);
+         imported.setLastModificationDate(new Date());
+         session.save();
       }
       finally
       {
          RequestLifeCycle.end();
       }
+   }
 
+   private boolean performImport()
+   {
+      RequestLifeCycle.begin(PortalContainer.getInstance());
+      try
+      {
+         if (overrideExistingData)
+         {
+            return true;
+         }
+         else
+         {
+            POMSession session = pomMgr.getSession();
+
+            // Obtain the status
+            Workspace workspace = session.getWorkspace();
+            boolean perform = !workspace.isAdapted(Imported.class);
+
+            // We mark it
+            if (perform)
+            {
+               Imported imported = workspace.adapt(Imported.class);
+               imported.setCreationDate(new Date());
+               session.save();
+            }
+
+            //
+            return perform;
+         }
+      }
+      finally
+      {
+         RequestLifeCycle.end();
+      }
+   }
+
+   public void run() throws Exception
+   {
+      if (!performImport())
+      {
+         return;
+      }
+
+      //
       if (isUseTryCatch)
       {
          RequestLifeCycle.begin(PortalContainer.getInstance());
@@ -260,6 +310,8 @@ public class NewPortalConfigListener extends BaseComponentPlugin
             }
          }
 
+         //
+         touchImport();
       }
       else
       {
@@ -299,6 +351,9 @@ public class NewPortalConfigListener extends BaseComponentPlugin
          {
             ele.getPredefinedOwner().clear();
          }
+
+         //
+         touchImport();
       }
    }
 
@@ -483,8 +538,18 @@ public class NewPortalConfigListener extends BaseComponentPlugin
 
       //
       PageNavigation navigation = obj.getObject();
-      ImportMode importMode = overrideExistingData ? ImportMode.REIMPORT : ImportMode.MERGE;
       boolean extendedNavigation = obj.getVersion() == Version.V_1_2;
+
+      //
+      ImportMode importMode;
+      if (config.getImportMode() != null)
+      {
+         importMode = ImportMode.valueOf(config.getImportMode().trim().toUpperCase());
+      }
+      else
+      {
+         importMode = ImportMode.CONSERVE;
+      }
 
       //
       Locale locale;
@@ -499,7 +564,7 @@ public class NewPortalConfigListener extends BaseComponentPlugin
       }
 
       //
-      NavigationImporter merge = new NavigationImporter(locale, importMode, extendedNavigation, navigation, navigationService_, descriptionService_);
+      NavigationImporter merge = new NavigationImporter(locale, importMode, navigation, navigationService_, descriptionService_);
 
       //
       merge.perform();
@@ -761,9 +826,25 @@ public class NewPortalConfigListener extends BaseComponentPlugin
    private static void fixOwnerName(PageNavigation pageNav)
    {
       pageNav.setOwnerId(fixOwnerName(pageNav.getOwnerType(), pageNav.getOwnerId()));
-      for (PageNode pageNode : pageNav.getNodes())
+      ArrayList<NavigationFragment> fragments = pageNav.getFragments();
+      if (fragments != null)
       {
-         fixOwnerName(pageNode);
+         for (NavigationFragment fragment : fragments)
+         {
+            fixOwnerName(fragment);
+         }
+      }
+   }
+
+   private static void fixOwnerName(NavigationFragment fragment)
+   {
+      ArrayList<PageNode> nodes = fragment.getNodes();
+      if (nodes != null)
+      {
+         for (PageNode pageNode : nodes)
+         {
+            fixOwnerName(pageNode);
+         }
       }
    }
 

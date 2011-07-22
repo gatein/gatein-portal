@@ -19,9 +19,7 @@
 
 package org.exoplatform.portal.config.serialize;
 
-import org.exoplatform.portal.config.model.LocalizedValue;
-import org.gatein.common.i18n.LocaleFormat;
-import org.gatein.common.util.ConversionException;
+import org.exoplatform.portal.config.model.LocalizedString;
 import org.jibx.runtime.IAliasable;
 import org.jibx.runtime.IMarshaller;
 import org.jibx.runtime.IMarshallingContext;
@@ -110,7 +108,7 @@ public class LocalizedValueMapper implements IUnmarshaller, IAliasable, IMarshal
       ctx.parsePastStartTag(marshalURI, marshallName);
       String value = ctx.getText();
       ctx.parsePastEndTag(marshalURI, marshallName);
-      return new LocalizedValue(value, lang);
+      return new LocalizedString(value, lang);
    }
 
    //

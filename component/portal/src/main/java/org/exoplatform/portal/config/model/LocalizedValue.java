@@ -24,11 +24,11 @@ import java.util.Locale;
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class LocalizedValue
+public class LocalizedValue<V>
 {
 
    /** . */
-   private String value;
+   private V value;
 
    /** . */
    private Locale lang;
@@ -37,34 +37,40 @@ public class LocalizedValue
    {
    }
 
-   public LocalizedValue(String value)
+   public LocalizedValue(V value)
    {
       this.value = value;
    }
 
-   public LocalizedValue(String value, Locale lang)
+   public LocalizedValue(V value, Locale lang)
    {
       this.value = value;
       this.lang = lang;
    }
 
-   public String getValue()
+   public final V getValue()
    {
       return value;
    }
 
-   public void setValue(String value)
+   public final void setValue(V value)
    {
       this.value = value;
    }
 
-   public Locale getLang()
+   public final Locale getLang()
    {
       return lang;
    }
 
-   public void setLang(Locale lang)
+   public final void setLang(Locale lang)
    {
       this.lang = lang;
+   }
+
+   @Override
+   public String toString()
+   {
+      return getClass().getSimpleName() + "[value=" + value + ",lang=" + lang + "]";
    }
 }

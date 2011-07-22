@@ -23,24 +23,145 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
-* A flexible scope implementation.
+* Flexible scope implementations.
 */
-public class GenericScope implements Scope
+public class GenericScope
 {
 
-   public static Scope branchShape(String[] path)
+   public static abstract class Branch implements Scope
    {
-      return branchShape(Arrays.asList(path), Scope.CHILDREN);
-   }
 
-   public static Scope branchShape(List<String> path)
-   {
-      return branchShape(path, Scope.CHILDREN);
-   }
+      /** . */
+      private final Scope federated;
 
-   public static Scope branchShape(String[] path, Scope federated)
-   {
-      return branchShape(Arrays.asList(path), federated);
+      /**
+       * Create a new branch scope.
+       *
+       * @param federated the federated scope
+       * @throws NullPointerException if the federated scope is null
+       */
+      public Branch(Scope federated) throws NullPointerException
+      {
+         if (federated == null)
+         {
+            throw new NullPointerException("no null federated scope accepted");
+         }
+
+         //
+         this.federated = federated;
+      }
+
+      protected abstract int getSize();
+
+      protected abstract String getName(int index);
+
+      public Visitor get()
+      {
+         return new Visitor()
+         {
+            @Override
+            protected int getSize()
+            {
+               return GenericScope.Branch.this.getSize();
+            }
+
+            @Override
+            protected String getName(int index)
+            {
+               return GenericScope.Branch.this.getName(index);
+            }
+
+            @Override
+            protected Scope.Visitor getFederated()
+            {
+               return federated.get();
+            }
+         };
+      }
+
+      public static abstract class Visitor implements Scope.Visitor
+      {
+
+         /** . */
+         private Scope.Visitor visitor;
+
+         protected Visitor()
+         {
+            this.visitor = null;
+         }
+
+         protected abstract int getSize();
+
+         protected abstract String getName(int index);
+
+         protected abstract Scope.Visitor getFederated();
+
+         public VisitMode enter(int depth, String id, String name, NodeState state)
+         {
+            int size = getSize();
+
+            //
+            if (depth < size)
+            {
+               if (depth == 0 || name.equals(getName(depth - 1)))
+               {
+                  return VisitMode.ALL_CHILDREN;
+               }
+               else
+               {
+                  return VisitMode.NO_CHILDREN;
+               }
+            }
+            else if (depth == size)
+            {
+               if (depth == 0 || name.equals(getName(depth - 1)))
+               {
+                  Scope.Visitor visitor = getFederated();
+                  VisitMode mode = visitor.enter(0, id, name, state);
+                  if (mode == VisitMode.ALL_CHILDREN)
+                  {
+                     this.visitor = visitor;
+                  }
+                  return mode;
+               }
+               else
+               {
+                  return VisitMode.NO_CHILDREN;
+               }
+            }
+            else
+            {
+               return visitor.enter(depth - size, id, name, state);
+            }
+         }
+
+         public void leave(int depth, String id, String name, NodeState state)
+         {
+            int size = getSize();
+
+            //
+            if (depth < size)
+            {
+               // Do nothing
+            }
+            else if (depth == size)
+            {
+               if (depth == 0 || name.equals(getName(depth - 1)))
+               {
+                  visitor.leave(0, id, name, state);
+                  visitor = null;
+               }
+               else
+               {
+                  // Do nothing
+               }
+            }
+            else
+            {
+               visitor.leave(depth - size, id, name, state);
+            }
+         }
+      }
    }
 
    /**
@@ -61,102 +182,125 @@ public class GenericScope implements Scope
     * @return the branch shape scope
     * @throws NullPointerException if any argument is null
     */
-   public static Scope branchShape(final List<String> path, final Scope federated) throws NullPointerException
+   public static Scope branchShape(final List<String> path, Scope federated) throws NullPointerException
    {
       if (path == null)
       {
-         throw new NullPointerException("no null path accepted");
+         throw new NullPointerException("No null path accepted");
       }
-      if (federated == null)
+      return new Branch(federated)
       {
-         throw new NullPointerException("no null federated scope accepted");
-      }
-      return new Scope()
-      {
-         public Visitor get()
+         @Override
+         protected int getSize()
          {
-            return new Visitor()
-            {
-               public VisitMode enter(int depth, String id, String name, NodeState state)
-               {
-                  if (depth == 0)
-                  {
-                     return VisitMode.ALL_CHILDREN;
-                  }
-                  else if (depth > 0)
-                  {
-                     if (depth < path.size())
-                     {
-                        if ((name.equals(path.get(depth - 1))))
-                        {
-                           return VisitMode.ALL_CHILDREN;
-                        }
-                        else
-                        {
-                           return VisitMode.NO_CHILDREN;
-                        }
-                     }
-                     else if (depth == path.size())
-                     {
-                        if ((name.equals(path.get(path.size() - 1))))
-                        {
-                           return federated.get().enter(0, id, name, state);
-                        }
-                        else
-                        {
-                           return VisitMode.NO_CHILDREN;
-                        }
-                     }
-                     else
-                     {
-                        return federated.get().enter(depth - path.size(), id, name, state);
-                     }
-                  }
-                  throw new AssertionError();
-               }
+            return path.size();
+         }
 
-               public void leave(int depth, String id, String name, NodeState state)
-               {
-               }
-            };
+         @Override
+         protected String getName(int index)
+         {
+            return path.get(index);
          }
       };
    }
 
+   public static Scope branchShape(final String[] path, Scope federated)
+   {
+      return new Branch(federated)
+      {
+         @Override
+         protected int getSize()
+         {
+            return path.length;
+         }
+
+         @Override
+         protected String getName(int index)
+         {
+            return path[index];
+         }
+      };
+   }
+
+   public static Scope branchShape(List<String> path)
+   {
+      return branchShape(path, Scope.CHILDREN);
+   }
+
+   public static Scope branchShape(String[] path)
+   {
+      return branchShape(Arrays.asList(path), Scope.CHILDREN);
+   }
 
    /** . */
-   private final Visitor visitor;
+   private static final GenericScope.Tree ALL = new Tree(-1);
 
-   /**
-    * Creates a new navigation scope. When the height is positive or null, the tree will be pruned to the specified
-    * height, when the height is negative  no pruning will occur.
-    *
-    * @param height the max height of the pruned tree
-    */
-   public GenericScope(final int height)
+   /** . */
+   private static GenericScope.Tree[] PREDEFINED = {
+      new Tree(0),
+      new Tree(1),
+      new Tree(2),
+      new Tree(3),
+      new Tree(4),
+      new Tree(5),
+      new Tree(6),
+      new Tree(7),
+      new Tree(8),
+      new Tree(9) };
+
+   public static Scope treeShape(int height)
    {
-      this.visitor = new Visitor()
+      if (height < 0)
       {
-         public VisitMode enter(int depth, String id, String name, NodeState state)
-         {
-            if (height < 0 || depth < height)
-            {
-               return VisitMode.ALL_CHILDREN;
-            }
-            else
-            {
-               return VisitMode.NO_CHILDREN;
-            }
-         }
-
-         public void leave(int depth, String id, String name, NodeState state)
-         {
-         }
-      };
+         return ALL;
+      }
+      else if (height < PREDEFINED.length)
+      {
+         return PREDEFINED[height];
+      }
+      else
+      {
+         return new Tree(height);
+      }
    }
 
-   public Visitor get()
+   public static class Tree implements Scope
    {
-      return visitor;
+
+      /** . */
+      private final Visitor visitor;
+
+      /**
+       * Creates a new navigation scope. When the height is positive or zero, the tree will be pruned to the specified
+       * height, when the height is negative no pruning will occur.
+       *
+       * @param height the max height of the pruned tree
+       */
+      public Tree(final int height)
+      {
+         this.visitor = new Visitor()
+         {
+            public VisitMode enter(int depth, String id, String name, NodeState state)
+            {
+               if (height < 0 || depth < height)
+               {
+                  return VisitMode.ALL_CHILDREN;
+               }
+               else
+               {
+                  return VisitMode.NO_CHILDREN;
+               }
+            }
+
+            public void leave(int depth, String id, String name, NodeState state)
+            {
+            }
+         };
+      }
+
+      public Visitor get()
+      {
+         return visitor;
+      }
    }
 }

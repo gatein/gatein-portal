@@ -36,22 +36,22 @@ public interface Scope
    /**
     * The node without its children.
     */
-   Scope SINGLE = new GenericScope(0);
+   Scope SINGLE = GenericScope.treeShape(0);
 
    /**
     * A node and its chidren.
     */
-   Scope CHILDREN = new GenericScope(1);
+   Scope CHILDREN = GenericScope.treeShape(1);
 
    /**
     * A node, its chidren and grandchildren.
     */
-   Scope GRANDCHILDREN = new GenericScope(2);
+   Scope GRANDCHILDREN = GenericScope.treeShape(2);
 
    /**
     * The entire hierarchy, to use with care.
     */
-   Scope ALL = new GenericScope(-1);
+   Scope ALL = GenericScope.treeShape(-1);
 
    Visitor get();
 
@@ -61,7 +61,7 @@ public interface Scope
    public interface Visitor
    {
       /**
-       * Returns the visit mode for the specified node.
+       * Signals a node is ented and returns the visit mode for that node.
        *
        * @param depth the relative depth to the root of the loading
        * @param id the node persistent id
@@ -71,6 +71,14 @@ public interface Scope
        */
       VisitMode enter(int depth, String id, String name, NodeState state);
 
+      /**
+       * Signals a node is left.
+       *
+       * @param depth the relative depth to the root of the loading
+       * @param id the node persistent id
+       * @param name the node name
+       * @param state the node state
+       */
       void leave(int depth, String id, String name, NodeState state);
    }
 }

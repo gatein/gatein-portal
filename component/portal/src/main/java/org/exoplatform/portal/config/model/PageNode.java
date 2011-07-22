@@ -20,26 +20,17 @@
 package org.exoplatform.portal.config.model;
 
 import org.exoplatform.portal.mop.Visibility;
+import org.exoplatform.portal.mop.navigation.NodeState;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 
 public class PageNode extends PageNodeContainer
 {
 
    /** . */
-   private ArrayList<PageNode> children;
-
-   /** . */
-   private String uri;
-
-   /** . */
-   private ArrayList<LocalizedValue> labels;
+   private I18NString labels;
 
    /** . */
    private String icon;
@@ -61,58 +52,24 @@ public class PageNode extends PageNodeContainer
 
    public PageNode()
    {
-      this.children = new ArrayList<PageNode>();
    }
 
    public String getUri()
    {
-      return uri;
+      return null;
    }
 
    public void setUri(String s)
    {
-      uri = s;
+      // No op for back war compatibility during unmarshalling
    }
 
-   public ArrayList<LocalizedValue> getLabels()
+   public I18NString getLabels()
    {
       return labels;
    }
 
-   public Map<Locale, String> getLocalizedLabel(Locale defaultLocale)
-   {
-      Map<Locale, String> map = Collections.emptyMap();
-      LocalizedValue portalLocaleLabel = null;
-      for (LocalizedValue label : labels)
-      {
-         if (label.getLang() != null)
-         {
-            if (map.isEmpty())
-            {
-               map = new HashMap<Locale, String>();
-            }
-            map.put(label.getLang(), label.getValue());
-         }
-         else
-         {
-            portalLocaleLabel = label;
-         }
-      }
-      if (map.isEmpty())
-      {
-         return null;
-      }
-      else
-      {
-         if (portalLocaleLabel != null && !map.containsKey(defaultLocale))
-         {
-            map.put(defaultLocale, portalLocaleLabel.getValue());
-         }
-         return map;
-      }
-   }
-
-   public void setLabels(ArrayList<LocalizedValue> labels)
+   public void setLabels(I18NString labels)
    {
       this.labels = labels;
    }
@@ -121,7 +78,7 @@ public class PageNode extends PageNodeContainer
    {
       if (labels != null)
       {
-         for (LocalizedValue label : labels)
+         for (LocalizedString label : labels)
          {
             if (label.getLang() == null)
             {
@@ -136,13 +93,13 @@ public class PageNode extends PageNodeContainer
    {
       if (labels == null)
       {
-         labels = new ArrayList<LocalizedValue>();
+         labels = new I18NString();
       }
       else
       {
          labels.clear();
       }
-      labels.add(new LocalizedValue(s));
+      labels.add(new LocalizedString(s));
    }
 
    public String getIcon()
@@ -177,12 +134,12 @@ public class PageNode extends PageNodeContainer
 
    public List<PageNode> getChildren()
    {
-      return children;
+      return getNodes();
    }
 
-   public void setChildren(ArrayList<PageNode> list)
+   public void setChildren(ArrayList<PageNode> children)
    {
-      children = list;
+      setNodes(children);
    }
 
    public Date getStartPublicationDate()
@@ -217,19 +174,19 @@ public class PageNode extends PageNodeContainer
 
    public PageNode getChild(String name)
    {
-      if (children == null)
-         return null;
-      for (PageNode node : children)
-      {
-         if (node.getName().equals(name))
-            return node;
-      }
-      return null;
+      return getNode(name);
    }
 
-   public List<PageNode> getNodes()
+   public NodeState getState()
    {
-      return children;
+      return new NodeState(
+         labels.getSimple(),
+         icon,
+         startPublicationDate == null ? -1 : startPublicationDate.getTime(),
+         endPublicationDate == null ? -1 : endPublicationDate.getTime(),
+         visibility,
+         pageReference
+      );
    }
 
    @Override

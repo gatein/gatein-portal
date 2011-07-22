@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+
+    Copyright (C) 2009 eXo Platform SAS.
+    
+    This is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Lesser General Public License as
+    published by the Free Software Foundation; either version 2.1 of
+    the License, or (at your option) any later version.
+    
+    This software is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+    Lesser General Public License for more details.
+    
+    You should have received a copy of the GNU Lesser General Public
+    License along with this software; if not, write to the Free
+    Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+    02110-1301 USA, or see the FSF site: http://www.fsf.org.
+
+-->
+
+<node-navigation>
+  <owner-type>group</owner-type>  
+	<owner-id>/platform/users</owner-id>
+	<priority>8</priority>
+    
+  <page-nodes>
+    <node>
+	    <uri>dashboard</uri>
+	    <name>dashboard</name>
+	    <label>#{platform.users.dashboard}</label>
+	    <page-reference>group::/platform/users::dashboard</page-reference>
+    </node>	    	   
+
+	  <node>
+	    <uri>mylink</uri>
+	    <name>mylink</name>
+	    <label>#{platform.users.mylink}</label>	  
+	    
+		  <node>
+		    <uri>mylink/blog</uri>
+		    <name>blog</name>
+		    <label>#{platform.users.mylink-blog}</label>
+		    <page-reference>group::/platform/users::mylink-blog</page-reference>
+		  </node>
+	  	
+	  	<node>
+		    <uri>mylink/google</uri>
+		    <name>google</name>
+		    <label>#{platform.users.mylink-google}</label>
+		    <page-reference>group::/platform/users::mylink-google</page-reference>
+		  </node>
+		  
+		  <node>
+		    <uri>mylink/facebooks</uri>
+		    <name>facebooks</name>
+		    <label>#{platform.users.mylink-facebook}</label>
+		    <page-reference>group::/platform/users::mylink-facebook</page-reference>
+		  </node>
+	  </node>
+	  
+	  <node>
+	    <uri>sitemap</uri>
+	    <name>sitemap</name>
+	    <label>#{platform.users.sitemap}</label>
+	    <page-reference>group::/platform/users::sitemap</page-reference>
+	  </node>
+  </page-nodes>   
+</node-navigation>

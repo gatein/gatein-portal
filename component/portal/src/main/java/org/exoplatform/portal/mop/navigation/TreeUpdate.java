@@ -113,14 +113,18 @@ class TreeUpdate<N1, N2>
    private void perform(NodeContext<N1> parent)
    {
       // Compute visit
-      VisitMode visit = null;
-      N2 d = it.getDestination();
-      NodeData data = updateAdapter.getData(d);
+      final N2 d = it.getDestination();
+      final NodeData data = updateAdapter.getData(d);
 
       //
+      final VisitMode visit;
       if (data != null)
       {
          visit = visitor.enter(depth, data.id, data.name, data.state);
+      }
+      else
+      {
+         visit = null;
       }
 
       // Cut the recursion if necessary

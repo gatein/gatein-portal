@@ -20,7 +20,6 @@
 package org.exoplatform.portal.mop.navigation;
 
 import org.exoplatform.container.PortalContainer;
-import org.exoplatform.portal.config.AbstractPortalTest;
 import org.exoplatform.portal.mop.EventType;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.pom.config.POMSessionManager;
@@ -35,7 +34,7 @@ import java.util.LinkedList;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class TestNavigationServiceWrapper extends AbstractPortalTest
+public class TestNavigationServiceWrapper extends AbstractTestNavigationService
 {
 
    /** . */

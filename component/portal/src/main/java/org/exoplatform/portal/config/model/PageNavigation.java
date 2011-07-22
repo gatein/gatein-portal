@@ -21,7 +21,7 @@ package org.exoplatform.portal.config.model;
 
 import java.util.ArrayList;
 
-public class PageNavigation extends PageNodeContainer
+public class PageNavigation
 {
 
    /** . */
@@ -31,14 +31,21 @@ public class PageNavigation extends PageNodeContainer
    private String ownerId;
 
    /** . */
-   private ArrayList<PageNode> pageNodes;
+   private int priority = 1;
 
    /** . */
-   private int priority = 1;
+   private ArrayList<NavigationFragment> fragments;
 
    public PageNavigation()
    {
-      this.pageNodes = new ArrayList<PageNode>();
+      this(null, null);
+   }
+
+   public PageNavigation(String ownerType, String ownerId)
+   {
+      this.ownerType = ownerType;
+      this.ownerId = ownerId;
+      this.fragments = new ArrayList<NavigationFragment>();
    }
 
    public String getOwnerId()
@@ -71,14 +78,24 @@ public class PageNavigation extends PageNodeContainer
       priority = i;
    }
 
-   public ArrayList<PageNode> getNodes()
+   public ArrayList<NavigationFragment> getFragments()
    {
-      return pageNodes;
+      return fragments;
    }
 
-   public void setNodes(ArrayList<PageNode> nodes)
+   public NavigationFragment getFragment()
    {
-      pageNodes = nodes;
+      return fragments != null && fragments.size() > 0 ? fragments.get(0) : null;
+   }
+
+   public PageNavigation addFragment(NavigationFragment fragment)
+   {
+      if (fragments == null)
+      {
+         fragments = new ArrayList<NavigationFragment>();
+      }
+      fragments.add(fragment);
+      return this;
    }
 
    @Override

@@ -19,7 +19,7 @@
 
 package org.exoplatform.portal.config.model;
 
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -28,18 +28,35 @@ import java.util.List;
 public abstract class PageNodeContainer
 {
 
+   /** . */
+   private ArrayList<PageNode> nodes;
+
    public PageNodeContainer()
    {
+      this.nodes = new ArrayList<PageNode>();
    }
 
-   public abstract List<PageNode> getNodes();
+   public ArrayList<PageNode> getNodes()
+   {
+      return nodes;
+   }
+
+   public void setNodes(ArrayList<PageNode> nodes)
+   {
+      this.nodes = nodes;
+   }
 
    public PageNode getNode(String name)
    {
-      for (PageNode node : getNodes())
+      if (nodes != null)
       {
-         if (node.getName().equals(name))
-            return node;
+         for (PageNode node : getNodes())
+         {
+            if (node.getName().equals(name))
+            {
+               return node;
+            }
+         }
       }
       return null;
    }

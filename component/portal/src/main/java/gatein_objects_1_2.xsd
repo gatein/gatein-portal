@@ -60,9 +60,10 @@
    <xs:complexType name="nodeNavigationType">
       <xs:sequence>
          <xs:element name="priority" type="xs:positiveInteger"/>
-         <xs:element name="page-nodes" minOccurs="0" maxOccurs="1">
+         <xs:element name="page-nodes" minOccurs="0" maxOccurs="unbounded">
             <xs:complexType>
                <xs:sequence>
+                  <xs:element name="parent-uri" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
                   <xs:element name="node" type="nodeType" minOccurs="0" maxOccurs="unbounded"/>
                </xs:sequence>
             </xs:complexType>

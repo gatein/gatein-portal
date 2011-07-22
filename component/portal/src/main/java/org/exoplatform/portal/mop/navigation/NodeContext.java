@@ -135,6 +135,187 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
    }
 
    /**
+    * Returns the associated node with this context
+    *
+    * @return the node
+    */
+   public N getNode()
+   {
+      return node;
+   }
+
+   /**
+    * Returns the context id or null if the context is not associated with a persistent navigation node.
+    *
+    * @return the id
+    */
+   public String getId()
+   {
+      return data != null ? data.getId() : null;
+   }
+
+   /**
+    * Returns the context index among its parent.
+    *
+    * @return the index value
+    */
+   public int getIndex()
+   {
+      int count = 0;
+      for (NodeContext<N> node = getPrevious();node != null;node = node.getPrevious())
+      {
+         count++;
+      }
+      return count;
+   }
+
+   public boolean isExpanded()
+   {
+      return expanded;
+   }
+
+   void expand()
+   {
+      if (!expanded)
+      {
+         this.expanded = true;
+      }
+      else
+      {
+         throw new IllegalStateException("Context is already expanded");
+      }
+   }
+
+   /**
+    * Returns true if the context is currently hidden.
+    *
+    * @return the hidden value
+    */
+   public boolean isHidden()
+   {
+      return hidden;
+   }
+
+   /**
+    * Updates the hiddent value.
+    *
+    * @param hidden the hidden value
+    */
+   public void setHidden(boolean hidden)
+   {
+      if (this.hidden != hidden)
+      {
+         NodeContext<N> parent = getParent();
+         if (parent != null)
+         {
+            if (hidden)
+            {
+               parent.hiddenCount++;
+            }
+            else
+            {
+               parent.hiddenCount--;
+            }
+         }
+         this.hidden = hidden;
+      }
+   }
+
+   public NodeState getState()
+   {
+      if (state != null)
+      {
+         return state;
+      }
+      else
+      {
+         return data.getState();
+      }
+   }
+
+   /**
+    * Update the context state
+    *
+    * @param state the new state
+    * @throws NullPointerException if the state is null
+    */
+   public void setState(NodeState state) throws NullPointerException
+   {
+      if (state == null)
+      {
+         throw new NullPointerException("No null state accepted");
+      }
+
+      //
+      tree.addChange(new NodeChange.Updated<NodeContext<N>>(this, state));
+   }
+
+   public String getName()
+   {
+      return name != null ? name : data.name;
+   }
+
+   /**
+    * Rename this context.
+    *
+    * @param name the new name
+    * @throws NullPointerException if the name is null
+    * @throws IllegalStateException if the parent is null
+    * @throws IllegalArgumentException if the parent already have a child with the specified name
+    */
+   public void setName(String name) throws NullPointerException, IllegalStateException, IllegalArgumentException
+   {
+      NodeContext<N> parent = getParent();
+      if (parent == null)
+      {
+         throw new IllegalStateException("Cannot rename a node when its parent is not visible");
+      }
+      else
+      {
+         NodeContext<N> blah = parent.get(name);
+         if (blah != null)
+         {
+            if (blah == this)
+            {
+               // We do nothing
+            }
+            else
+            {
+               throw new IllegalArgumentException("the node " + name + " already exist");
+            }
+         }
+         else
+         {
+            tree.addChange(new NodeChange.Renamed<NodeContext<N>>(getParent(), this, name));
+         }
+      }
+   }
+
+   /**
+    * Applies a filter recursively, the filter will update the hiddent status of the
+    * fragment.
+    *
+    * @param filter the filter to apply
+    */
+   public void filter(NodeFilter filter)
+   {
+      doFilter(0, filter);
+   }
+
+   private void doFilter(int depth, NodeFilter filter)
+   {
+      boolean accept = filter.accept(depth, getId(), name, getState());
+      setHidden(!accept);
+      if (expanded)
+      {
+         for (NodeContext<N> node = getFirst();node != null;node = node.getNext())
+         {
+            node.doFilter(depth + 1, filter);
+         }
+      }
+   }
+
+   /**
     * Returns the relative depth of this node with respect to the ancestor argument.
     *
     * @param ancestor the ancestor
@@ -193,141 +374,6 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
       return found;
    }
 
-   /**
-    * Returns true if the context is currently hidden.
-    *
-    * @return the hidden value
-    */
-   public boolean isHidden()
-   {
-      return hidden;
-   }
-
-   /**
-    * Updates the hiddent value.
-    *
-    * @param hidden the hidden value
-    */
-   public void setHidden(boolean hidden)
-   {
-      if (this.hidden != hidden)
-      {
-         NodeContext<N> parent = getParent();
-         if (parent != null)
-         {
-            if (hidden)
-            {
-               parent.hiddenCount++;
-            }
-            else
-            {
-               parent.hiddenCount--;
-            }
-         }
-         this.hidden = hidden;
-      }
-   }
-
-   /**
-    * Applies a filter recursively, the filter will update the hiddent status of the
-    * fragment.
-    *
-    * @param filter the filter to apply
-    */
-   public void filter(NodeFilter filter)
-   {
-      doFilter(0, filter);
-   }
-
-   private void doFilter(int depth, NodeFilter filter)
-   {
-      boolean accept = filter.accept(depth, getId(), name, getState());
-      setHidden(!accept);
-      if (expanded)
-      {
-         for (NodeContext<N> node = getFirst();node != null;node = node.getNext())
-         {
-            node.doFilter(depth + 1, filter);
-         }
-      }
-   }
-
-   /**
-    * Returns the associated node with this context
-    *
-    * @return the node
-    */
-   public N getNode()
-   {
-      return node;
-   }
-
-   /**
-    * Reutrns the context id or null if the context is not associated with a persistent navigation node.
-    *
-    * @return the id
-    */
-   public String getId()
-   {
-      return data != null ? data.getId() : null;
-   }
-
-   /**
-    * Returns the context index among its parent.
-    *
-    * @return the index value
-    */
-   public int getIndex()
-   {
-      int count = 0;
-      for (NodeContext<N> node = getPrevious();node != null;node = node.getPrevious())
-      {
-         count++;
-      }
-      return count;
-   }
-
-   public String getName()
-   {
-      return name != null ? name : data.name;
-   }
-
-   /**
-    * Rename this context.
-    *
-    * @param name the new name
-    * @throws NullPointerException if the name is null
-    * @throws IllegalStateException if the parent is null
-    * @throws IllegalArgumentException if the parent already have a child with the specified name
-    */
-   public void setName(String name) throws NullPointerException, IllegalStateException, IllegalArgumentException
-   {
-      NodeContext<N> parent = getParent();
-      if (parent == null)
-      {
-         throw new IllegalStateException("Cannot rename a node when its parent is not visible");
-      }
-      else
-      {
-         NodeContext<N> blah = parent.get(name);
-         if (blah != null)
-         {
-            if (blah == this)
-            {
-               // We do nothing
-            }
-            else
-            {
-               throw new IllegalArgumentException("the node " + name + " already exist");
-            }
-         }
-         else
-         {
-            tree.addChange(new NodeChange.Renamed<NodeContext<N>>(getParent(), this, name));
-         }
-      }
-   }
-
    public NodeContext<N> get(String name) throws NullPointerException, IllegalStateException
    {
       if (name == null)
@@ -350,178 +396,6 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
 
       //
       return null;
-   }
-
-   /**
-    * Returns the total number of nodes.
-    *
-    * @return the total number of nodes
-    */
-   public int getNodeSize()
-   {
-      if (expanded)
-      {
-         return getSize();
-      }
-      else
-      {
-         return data.children.length;
-      }
-   }
-
-   /**
-    * Returns the node count defined by:
-    * <ul>
-    *    <li>when the node has a children relationship, the number of non hidden nodes</li>
-    *    <li>when the node has not a children relationship, the total number of nodes</li>
-    * </ul>
-    *
-    * @return the node count
-    */
-   public int getNodeCount()
-   {
-      if (expanded)
-      {
-         return getSize() - hiddenCount;
-      }
-      else
-      {
-         return data.children.length;
-      }
-   }
-
-   public NodeState getState()
-   {
-      if (state != null)
-      {
-         return state;
-      }
-      else
-      {
-         return data.getState();
-      }
-   }
-
-   /**
-    * Update the context state
-    *
-    * @param state the new state
-    * @throws NullPointerException if the state is null
-    */
-   public void setState(NodeState state) throws NullPointerException
-   {
-      if (state == null)
-      {
-         throw new NullPointerException("No null state accepted");
-      }
-
-      //
-      tree.addChange(new NodeChange.Updated<NodeContext<N>>(this, state));
-   }
-
-   public N getParentNode()
-   {
-      NodeContext<N> parent = getParent();
-      return parent != null ? parent.node : null;
-   }
-
-   public N getNode(String name) throws NullPointerException
-   {
-      NodeContext<N> child = get(name);
-      return child != null && !child.hidden ? child.node: null;
-   }
-
-   public N getNode(int index)
-   {
-      if (index < 0)
-      {
-         throw new IndexOutOfBoundsException("Index " + index + " cannot be negative");
-      }
-      if (!expanded)
-      {
-         throw new IllegalStateException("No children relationship");
-      }
-      NodeContext<N> context = getFirst();
-      while (context != null && (context.hidden || index-- > 0))
-      {
-         context = context.getNext();
-      }
-      if (context == null)
-      {
-         throw new IndexOutOfBoundsException("Index " + index + " is out of bounds");
-      }
-      else
-      {
-         return context.node;
-      }
-   }
-
-   public final Iterator<N> iterator()
-   {
-      return new Iterator<N>()
-      {
-         NodeContext<N> next = getFirst();
-         {
-            while (next != null && next.isHidden())
-            {
-               next = next.getNext();
-            }
-         }
-         public boolean hasNext()
-         {
-            return next != null;
-         }
-         public N next()
-         {
-            if (next != null)
-            {
-               NodeContext<N> tmp = next;
-               do
-               {
-                  next = next.getNext();
-               }
-               while (next != null && next.isHidden());
-               return tmp.getNode();
-            }
-            else
-            {
-               throw new NoSuchElementException();
-            }
-         }
-         public void remove()
-         {
-            throw new UnsupportedOperationException();
-         }
-      };
-   }
-
-   /** . */
-   private Collection<N> nodes;
-
-   public Collection<N> getNodes()
-   {
-      if (expanded)
-      {
-         if (nodes == null)
-         {
-            nodes = new AbstractCollection<N>()
-            {
-               public Iterator<N> iterator()
-               {
-                  return NodeContext.this.iterator();
-               }
-               public int size()
-               {
-                  return getNodeCount();
-               }
-            };
-         }
-         return nodes;
-      }
-      else
-      {
-         return null;
-      }
    }
 
    /**
@@ -670,8 +544,153 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
       }
    }
 
+   // Node related methods
+
    /**
-    * Remove a specified context.
+    * Returns the total number of nodes.
+    *
+    * @return the total number of nodes
+    */
+   public int getNodeSize()
+   {
+      if (expanded)
+      {
+         return getSize();
+      }
+      else
+      {
+         return data.children.length;
+      }
+   }
+
+   /**
+    * Returns the node count defined by:
+    * <ul>
+    *    <li>when the node has a children relationship, the number of non hidden nodes</li>
+    *    <li>when the node has not a children relationship, the total number of nodes</li>
+    * </ul>
+    *
+    * @return the node count
+    */
+   public int getNodeCount()
+   {
+      if (expanded)
+      {
+         return getSize() - hiddenCount;
+      }
+      else
+      {
+         return data.children.length;
+      }
+   }
+
+   public N getParentNode()
+   {
+      NodeContext<N> parent = getParent();
+      return parent != null ? parent.node : null;
+   }
+
+   public N getNode(String name) throws NullPointerException
+   {
+      NodeContext<N> child = get(name);
+      return child != null && !child.hidden ? child.node: null;
+   }
+
+   public N getNode(int index)
+   {
+      if (index < 0)
+      {
+         throw new IndexOutOfBoundsException("Index " + index + " cannot be negative");
+      }
+      if (!expanded)
+      {
+         throw new IllegalStateException("No children relationship");
+      }
+      NodeContext<N> context = getFirst();
+      while (context != null && (context.hidden || index-- > 0))
+      {
+         context = context.getNext();
+      }
+      if (context == null)
+      {
+         throw new IndexOutOfBoundsException("Index " + index + " is out of bounds");
+      }
+      else
+      {
+         return context.node;
+      }
+   }
+
+   public final Iterator<N> iterator()
+   {
+      return new Iterator<N>()
+      {
+         NodeContext<N> next = getFirst();
+         {
+            while (next != null && next.isHidden())
+            {
+               next = next.getNext();
+            }
+         }
+         public boolean hasNext()
+         {
+            return next != null;
+         }
+         public N next()
+         {
+            if (next != null)
+            {
+               NodeContext<N> tmp = next;
+               do
+               {
+                  next = next.getNext();
+               }
+               while (next != null && next.isHidden());
+               return tmp.getNode();
+            }
+            else
+            {
+               throw new NoSuchElementException();
+            }
+         }
+         public void remove()
+         {
+            throw new UnsupportedOperationException();
+         }
+      };
+   }
+
+   /** . */
+   private Collection<N> nodes;
+
+   public Collection<N> getNodes()
+   {
+      if (expanded)
+      {
+         if (nodes == null)
+         {
+            nodes = new AbstractCollection<N>()
+            {
+               public Iterator<N> iterator()
+               {
+                  return NodeContext.this.iterator();
+               }
+               public int size()
+               {
+                  return getNodeCount();
+               }
+            };
+         }
+         return nodes;
+      }
+      else
+      {
+         return null;
+      }
+   }
+
+   /**
+    * Remove a specified context when it is not hidden.
     *
     * @param name the name of the context to remove
     * @return true if the context was removed
@@ -688,53 +707,31 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
       }
 
       //
-      if (node.hidden)
+      return node.removeNode();
+   }
+
+   /**
+    * Removes this current context when it is not hidden.
+    *
+    * @return if the context was removed
+    * @throws IllegalStateException if the children relationship does not exist
+    */
+   public boolean removeNode() throws IllegalStateException
+   {
+      if (hidden)
       {
          return false;
       }
       else
       {
-         tree.addChange(new NodeChange.Destroyed<NodeContext<N>>(this, node));
+         tree.addChange(new NodeChange.Destroyed<NodeContext<N>>(getParent(), this));
 
          //
          return true;
       }
    }
 
-   public boolean isExpanded()
-   {
-      return expanded;
-   }
-
-   void expand()
-   {
-      if (!expanded)
-      {
-         this.expanded = true;
-      }
-      else
-      {
-         throw new IllegalStateException("Context is already expanded");
-      }
-   }
-
-   Iterable<NodeContext<N>> getContexts()
-   {
-      if (expanded)
-      {
-         return new Iterable<NodeContext<N>>()
-         {
-            public Iterator<NodeContext<N>> iterator()
-            {
-               return listIterator();
-            }
-         };
-      }
-      else
-      {
-         return null;
-      }
-   }
+   // Callbacks
 
    protected void beforeRemove(NodeContext<N> context)
    {
