@@ -133,13 +133,13 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//a[@title=&quot;Quick Search&quot;]</td>
+	<td>name=searchOption</td>
 	<td></td>
 </tr>
 <tr>
-	<td>click</td>
-	<td>//a[@title=&quot;Quick Search&quot;]</td>
-	<td></td>
+	<td>waitForElementPresent</td>
+	<td>name=searchOption</td>
+	<td>portal</td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
@@ -298,6 +298,51 @@
 </tr>
 <tr>
 	<td>echo</td>
+	<td>-- Clone node</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='UINavigationNodeSelector']/div/div/div/div[2]/div/div/div[3]/div[2]/div/div//a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>mouseDownRight</td>
+	<td>//div[@id='UINavigationNodeSelector']/div/div/div/div[2]/div/div/div[3]/div[2]/div/div//a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[6]/a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[6]/a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='UINavigationNodeSelector']/div/div/div/div[2]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>mouseDownRight</td>
+	<td>//div[@id='UINavigationNodeSelector']/div/div/div/div[2]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='UINavigationNodeSelector']/div/div/div[2]/div/div/div[2]//a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
 	<td>--Move node up</td>
 	<td></td>
 </tr>
@@ -413,22 +458,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//html/body/div/div[2]/div/div/div/div/div/div/div/div/div[2]/div/div/div/div/div/div/div/div[4]/div/div/div/div/div/div/div/div/div/div/div/div[3]/div/div[2]/div/div/div/div/div/div/div[2]/div[3]/div/div/div/div/div/div[2]/div/div/div[2]/div[2]/div/div</td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>//html/body/div/div[2]/div/div/div/div/div/div/div/div/div[2]/div/div/div/div/div/div/div/div[4]/div/div/div/div/div/div/div/div/div/div/div/div[3]/div/div[2]/div/div/div/div/div/div/div[2]/div[3]/div/div/div/div/div/div[2]/div/div/div[2]/div[2]/div/div</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>//a[@class='NodeIcon DefaultPageIcon NodeSelected' and @title='Test_SNF_PRL_32']</td>
+	<td>//div[@id='UINavigationNodeSelector']/div/div/div/div[2]/div/div/div[2]/div//a</td>
 	<td></td>
 </tr>
 <tr>
 	<td>mouseDownRight</td>
-	<td>//a[@class='NodeIcon DefaultPageIcon NodeSelected' and @title='Test_SNF_PRL_32']</td>
+	<td>//div[@id='UINavigationNodeSelector']/div/div/div/div[2]/div/div/div[2]/div//a</td>
 	<td></td>
 </tr>
 <tr>
