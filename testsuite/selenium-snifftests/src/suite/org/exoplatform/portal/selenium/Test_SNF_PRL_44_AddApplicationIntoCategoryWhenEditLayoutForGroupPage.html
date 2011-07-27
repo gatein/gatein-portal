@@ -53,7 +53,7 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>link=Application Registry</td>
+	<td>link=Applications Manager</td>
 	<td></td>
 </tr>
 <tr>
@@ -103,12 +103,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UIPageCreationWizard']/div/div[3]/div/div/div/div[2]/div/table/tbody/tr/td/div[2]/div/div/div</td>
+	<td>//div[@id='UIPageCreationWizard']/div/div[3]/div/div/div/div[2]/div/a[2]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='UIPageCreationWizard']/div/div[3]/div/div/div/div[2]/div/table/tbody/tr/td/div[2]/div/div/div</td>
+	<td>//div[@id='UIPageCreationWizard']/div/div[3]/div/div/div/div[2]/div/a[2]</td>
 	<td></td>
 </tr>
 <tr>
@@ -118,12 +118,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UIPageCreationWizard']/div/div[3]/div/div/div/div[2]/div/table/tbody/tr/td/div[2]/div/div/div</td>
+	<td>//div[@id='UIPageCreationWizard']/div/div[3]/div/div/div/div[2]/div/a[2]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='UIPageCreationWizard']/div/div[3]/div/div/div/div[2]/div/table/tbody/tr/td/div[2]/div/div/div</td>
+	<td>//div[@id='UIPageCreationWizard']/div/div[3]/div/div/div/div[2]/div/a[2]</td>
 	<td></td>
 </tr>
 <tr>
@@ -293,17 +293,22 @@
 </tr>
 <tr>
 	<td>mouseOver</td>
-	<td>//div/div/div[2]/div/div/div/div/div/div/div[2]</td>
+	<td>//div[2]/div/div[2]/div/div[2]</td>
 	<td>Calculator</td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div/div/div[2]/div/div/div/div/div/div/a[2]</td>
+	<td>//div[2]/div/a[2]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[2]/div/a[2]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div/div/div[2]/div/div/div/div/div/div/a[2]</td>
+	<td>//div[2]/div/a[2]</td>
 	<td></td>
 </tr>
 <tr>
@@ -338,12 +343,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div/div/div[2]/div/div/div/div/div/div/a[2]</td>
+	<td>//div[2]/div/a[2]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div/div/div[2]/div/div/div/div/div/div/a[2]</td>
+	<td>//div[2]/div/a[2]</td>
 	<td></td>
 </tr>
 <tr>
@@ -388,12 +393,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UIGroupNavigationGrid']/table[2]/tbody/tr/td[3]/a[1]</td>
+	<td>//div[@id='UIGroupNavigationGrid']/table/tbody/tr/td[3]/a</td>
 	<td>Edit Navigation</td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='UIGroupNavigationGrid']/table[2]/tbody/tr/td[3]/a[1]</td>
+	<td>//div[@id='UIGroupNavigationGrid']/table/tbody/tr/td[3]/a</td>
 	<td>Edit Navigation</td>
 </tr>
 <tr>
@@ -443,42 +448,42 @@
 </tr>
 <tr>
 	<td>echo</td>
-	<td>-- Go to Page Management --</td>
+	<td>-- Go to Pages Manager --</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>link=Page Management</td>
+	<td>link=Pages Manager</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>searchTerm</td>
+	<td>pageTitle</td>
 	<td></td>
 </tr>
 <tr>
 	<td>type</td>
-	<td>searchTerm</td>
+	<td>pageTitle</td>
 	<td>Test_SNF_PRL_44</td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>searchOption</td>
+	<td>name=searchOption</td>
 	<td></td>
 </tr>
 <tr>
 	<td>select</td>
-	<td>searchOption</td>
-	<td>label=Title</td>
+	<td>name=searchOption</td>
+	<td>label=group</td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//form[@id='UIPageSearch']/div[2]/a</td>
+	<td>//form[@id='UIPageSearchForm']/div[2]/a</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//form[@id='UIPageSearch']/div[2]/a</td>
+	<td>//form[@id='UIPageSearchForm']/div[2]/a</td>
 	<td></td>
 </tr>
 <tr>
@@ -513,12 +518,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[5]/div/div[2]/div/div/div/div/div/div[3]/div/table/tbody/tr/td/div/div/div/div/a</td>
+	<td>//div[5]/div/div[2]/div/div/div/div/div/div[3]/div/a</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[5]/div/div[2]/div/div/div/div/div/div[3]/div/table/tbody/tr/td/div/div/div/div/a</td>
+	<td>//div[5]/div/div[2]/div/div/div/div/div/div[3]/div/a</td>
 	<td></td>
 </tr>
 <tr>

@@ -73,12 +73,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[4]/div/div[1]/a[text()='Organization']</td>
+	<td>//a[contains(text(),'Organization')]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>verifyElementPresent</td>
-	<td>//div[4]/div/div[1]/a[text()='Organization']</td>
+	<td>//a[contains(text(),'Organization')]</td>
 	<td></td>
 </tr>
 <tr>
@@ -88,7 +88,7 @@
 </tr>
 <tr>
 	<td>mouseOver</td>
-	<td>link=Users and groups management</td>
+	<td>link=Users and Groups Manager</td>
 	<td></td>
 </tr>
 <tr>
@@ -114,16 +114,16 @@
 <tr>
 	<td>select</td>
 	<td>priority</td>
-	<td>label=1</td>
+	<td>label=6</td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//form[@id='UIPageNavigationForm']/div[2]/div/div/table/tbody/tr/td/div[1]/div/div/div</td>
+	<td>//form[@id='UIPageNavigationForm']/div[2]/div/div/a</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//form[@id='UIPageNavigationForm']/div[2]/div/div/table/tbody/tr/td/div[1]/div/div/div</td>
+	<td>//form[@id='UIPageNavigationForm']/div[2]/div/div/a</td>
 	<td></td>
 </tr>
 <tr>
@@ -137,13 +137,13 @@
 	<td></td>
 </tr>
 <tr>
-	<td>verifyElementNotPresent</td>
-	<td>//div[4]/div/div[1]/a[text()='Organization']</td>
+	<td>verifyElementPresent</td>
+	<td>//li[2]/ul/li/a</td>
 	<td></td>
 </tr>
 <tr>
 	<td>verifyElementPresent</td>
-	<td>//div[2]/div/div[1]/a[text()='Organization']</td>
+	<td>//li[2]/ul/li[2]/a</td>
 	<td></td>
 </tr>
 <tr>
@@ -158,27 +158,27 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>link=Edit Properties</td>
+	<td>//table[2]/tbody/tr/td[3]/a[2]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>link=Edit Properties</td>
+	<td>//table[2]/tbody/tr/td[3]/a[2]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>select</td>
 	<td>priority</td>
-	<td>label=5</td>
+	<td>label=2</td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//form[@id='UIPageNavigationForm']/div[2]/div/div/table/tbody/tr/td/div[1]/div/div/div</td>
+	<td>//form[@id='UIPageNavigationForm']/div[2]/div/div/a</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//form[@id='UIPageNavigationForm']/div[2]/div/div/table/tbody/tr/td/div[1]/div/div/div</td>
+	<td>//form[@id='UIPageNavigationForm']/div[2]/div/div/a</td>
 	<td></td>
 </tr>
 <tr>
@@ -187,18 +187,13 @@
 	<td></td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
-	<td>//div[4]/div/div[1]/a[text()='Organization']</td>
+	<td>verifyElementPresent</td>
+	<td>//li[4]/ul/li/a</td>
 	<td></td>
 </tr>
 <tr>
 	<td>verifyElementPresent</td>
-	<td>//div[4]/div/div[1]/a[text()='Organization']</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyElementNotPresent</td>
-	<td>//div[2]/div/div[1]/a[text()='Organization']</td>
+	<td>//li[4]/ul/li[2]/a</td>
 	<td></td>
 </tr>
 <tr>
