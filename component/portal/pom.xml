@@ -74,6 +74,11 @@
     </dependency>
 
     <dependency>
+      <groupId>org.gatein.management</groupId>
+      <artifactId>gatein-management-spi</artifactId>
+    </dependency>
+
+    <dependency>
        <groupId>org.picketlink.idm</groupId>
        <artifactId>picketlink-idm-core</artifactId>
     </dependency>
@@ -111,6 +116,13 @@
       <groupId>org.exoplatform.portal</groupId>
       <artifactId>exo.portal.component.identity</artifactId>
       <type>test-jar</type>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <version>1.8.5</version>
       <scope>test</scope>
     </dependency>
 

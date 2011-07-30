@@ -217,6 +217,8 @@ public interface DataStorage
     */
    public void saveDashboard(Dashboard dashboard) throws Exception;
 
+   public void save() throws Exception;
+
    /**
     * Returns the list of all portal names.
     *

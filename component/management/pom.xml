@@ -43,6 +43,13 @@
       <groupId>org.exoplatform.ws</groupId>
       <artifactId>exo.ws.rest.core</artifactId>
     </dependency>
-
+    <dependency>
+      <groupId>org.gatein.management</groupId>
+      <artifactId>gatein-management-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.gatein.management</groupId>
+      <artifactId>gatein-management-rest</artifactId>
+    </dependency>
   </dependencies>
 </project>

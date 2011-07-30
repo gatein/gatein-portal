@@ -285,6 +285,11 @@ public class DataStorageImpl implements DataStorage
       delegate.save(portletPreferences);
    }
 
+   public void save() throws Exception
+   {
+      delegate.save();
+   }
+
    public PortalConfig getPortalConfig(String ownerType, String portalName) throws Exception
    {
       PortalKey key = new PortalKey(ownerType, portalName);

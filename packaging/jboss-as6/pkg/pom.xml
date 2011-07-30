@@ -356,6 +356,30 @@
          <artifactId>mop-spi</artifactId>
       </dependency>
 
+      <!-- GateIn Management -->
+      <dependency>
+         <groupId>org.gatein.management</groupId>
+         <artifactId>gatein-management-api</artifactId>
+      </dependency>
+      <dependency>
+         <groupId>org.gatein.management</groupId>
+         <artifactId>gatein-management-spi</artifactId>
+      </dependency>
+      <dependency>
+         <groupId>org.gatein.management</groupId>
+         <artifactId>gatein-management-core</artifactId>
+      </dependency>
+      <dependency>
+         <groupId>org.gatein.management</groupId>
+         <artifactId>gatein-management-rest</artifactId>
+      </dependency>
+      
+      <!-- Staxnav -->
+      <dependency>
+         <groupId>org.staxnav</groupId>
+         <artifactId>staxnav.core</artifactId>
+      </dependency>
+
       <!-- GateIn Captcha -->
       <dependency>
          <groupId>org.gatein.captcha</groupId>

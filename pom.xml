@@ -49,6 +49,7 @@
       <org.picketlink.idm>1.3.0.Alpha03</org.picketlink.idm>
       <org.gatein.wsrp.version>2.1.0-Beta04</org.gatein.wsrp.version>
       <org.gatein.mop.version>1.1.0-Beta05</org.gatein.mop.version>
+      <org.gatein.mgmt.version>1.0.0-Beta01</org.gatein.mgmt.version>
       <org.slf4j.version>1.5.8</org.slf4j.version>
       <commons-pool.version>1.5.5</commons-pool.version>
       <rhino.version>1.6R5</rhino.version>
@@ -56,6 +57,7 @@
       <javax.servlet.version>2.5</javax.servlet.version>
       <version.chromattic>1.1.0-beta6</version.chromattic>
       <version.reflext>1.1.0-beta12</version.reflext>
+      <org.staxnav.version>0.9.4</org.staxnav.version>
       <jcip.version>1.0</jcip.version>
 
       <!-- ************** -->
@@ -320,6 +322,27 @@
             <groupId>org.gatein.mop</groupId>
             <artifactId>mop-core</artifactId>
             <version>${org.gatein.mop.version}</version>
+         </dependency>
+         <!-- Gatein Mgmt -->
+         <dependency>
+            <groupId>org.gatein.management</groupId>
+            <artifactId>gatein-management-api</artifactId>
+            <version>${org.gatein.mgmt.version}</version>
+         </dependency>
+         <dependency>
+            <groupId>org.gatein.management</groupId>
+            <artifactId>gatein-management-spi</artifactId>
+            <version>${org.gatein.mgmt.version}</version>
+         </dependency>
+         <dependency>
+            <groupId>org.gatein.management</groupId>
+            <artifactId>gatein-management-core</artifactId>
+            <version>${org.gatein.mgmt.version}</version>
+         </dependency>
+         <dependency>
+            <groupId>org.gatein.management</groupId>
+            <artifactId>gatein-management-rest</artifactId>
+            <version>${org.gatein.mgmt.version}</version>
          </dependency>
          <!-- WSRP -->
          <dependency>
@@ -635,6 +658,13 @@
             <groupId>org.chromattic</groupId>
             <artifactId>chromattic.metamodel</artifactId>
             <version>${version.chromattic}</version>
+         </dependency>
+
+         <!-- Staxnav -->
+         <dependency>
+            <groupId>org.staxnav</groupId>
+            <artifactId>staxnav.core</artifactId>
+            <version>${org.staxnav.version}</version>
          </dependency>
 
          <!-- Picketlink -->
