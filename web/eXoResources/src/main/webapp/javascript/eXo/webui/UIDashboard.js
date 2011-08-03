@@ -254,9 +254,12 @@ function UIDashboard() {
 		}
 	};
 	
-	UIDashboard.prototype.onLoad = function(windowId, canEdit) {
-		var portletWindow = document.getElementById(windowId) ? document.getElementById(windowId) : document.getElementById("UIPortlet-" + windowId);
-		if(!portletWindow) return;
+	UIDashboard.prototype.onLoad = function(windowId, canEdit) {		
+		var portletWindow = document.getElementById(windowId);
+		if(!portletWindow) {
+			windowId = "UIPortlet-" + windowId;
+			portletWindow = document.getElementById(windowId);
+		}		
 		
 		var DOMUtil = eXo.core.DOMUtil;
 		var uiDashboard = DOMUtil.findFirstDescendantByClass(portletWindow, "div", "UIDashboard");

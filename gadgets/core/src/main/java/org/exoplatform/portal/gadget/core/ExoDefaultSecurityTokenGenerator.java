@@ -27,70 +27,23 @@ import org.apache.shindig.common.crypto.BasicBlobCrypter;
 import org.apache.shindig.common.crypto.BlobCrypter;
 import org.apache.shindig.common.crypto.BlobCrypterException;
 import org.apache.shindig.common.util.TimeSource;
-import org.exoplatform.container.monitor.jvm.J2EEServerInfo;
 import org.exoplatform.web.application.RequestContext;
 
 public class ExoDefaultSecurityTokenGenerator implements SecurityTokenGenerator
 {
-   private String containerKey;
-
    private final TimeSource timeSource;
 
    public ExoDefaultSecurityTokenGenerator() throws Exception
    {
-      // TODO should be moved to config
-      // generateKeys("RSA", 1024);
-      this.containerKey =  getKeyFilePath();
       this.timeSource = new TimeSource();
    }
-
-   //  private static void generateKeys(String keyAlgorithm, int numBits) {
-   //    FileOutputStream keyFile = null;
-   //    try {
-   //      keyFile = new FileOutputStream("exokey.pem");
-   //
-   //      // RSA private key
-   //
-   //      CertAndKeyGen cakg = new CertAndKeyGen(keyAlgorithm, "SHA1WithRSA");
-   //      cakg.generate(1024);
-   //
-   //      PrivateKey privateKey = cakg.getPrivateKey();
-   //
-   //      keyFile.write("-----BEGIN RSA PRIVATE KEY-----\n".getBytes());
-   //      // wrap at 64
-   //      int wrapIndex = 64;
-   //      StringBuffer sb = new StringBuffer(new String(Base64.encode(privateKey.getEncoded())));
-   //      for (int i = wrapIndex; i < sb.length(); i = i + wrapIndex + 1) {
-   //        sb.insert(i, "\n");
-   //      }
-   //      keyFile.write((sb.toString()).getBytes());
-   //      keyFile.write("\n-----END RSA PRIVATE KEY-----\n".getBytes());
-   //
-   //      X500Name name = new X500Name("One", "Two", "Three", "Four", "Five", "Six");
-   //
-   //      X509Certificate certificate = cakg.getSelfCertificate(name, 2000000);
-   //      System.out.println("\n CN: " + certificate.getSubjectDN());
-   //      keyFile.write("-----BEGIN CERTIFICATE-----\n".getBytes());
-   //      // wrap at 64
-   //      wrapIndex = 64;
-   //      sb = new StringBuffer(new String(Base64.encode(certificate.getEncoded())));
-   //      for (int i = wrapIndex; i < sb.length(); i = i + wrapIndex + 1) {
-   //        sb.insert(i, "\n");
-   //      }
-   //      keyFile.write(sb.toString().getBytes());
-   //      keyFile.write("\n-----END CERTIFICATE-----".getBytes());
-   //    } catch (Exception e) {
-   //      e.printStackTrace();
-   //    } finally {
-   //      Safe.close(keyFile);
-   //    }
-   //  }
 
    protected String createToken(String gadgetURL, String owner, String viewer, Long moduleId, String container)
    {
       try
       {
-         BlobCrypterSecurityToken t = new BlobCrypterSecurityToken(getBlobCrypter(this.containerKey), container, null);
+         BlobCrypter blobCrypter = getBlobCrypter();
+         BlobCrypterSecurityToken t = new BlobCrypterSecurityToken(blobCrypter, container, null);
 
          t.setAppUrl(gadgetURL);
          t.setModuleId(moduleId);
@@ -102,13 +55,11 @@ public class ExoDefaultSecurityTokenGenerator implements SecurityTokenGenerator
       }
       catch (IOException e)
       {
-         e.printStackTrace(); // To change body of catch statement use File |
-         // Settings | File Templates.
+         e.printStackTrace();
       }
       catch (BlobCrypterException e)
       {
-         e.printStackTrace(); // To change body of catch statement use File |
-         // Settings | File Templates.
+         e.printStackTrace();
       }
       return null;
    }
@@ -123,8 +74,9 @@ public class ExoDefaultSecurityTokenGenerator implements SecurityTokenGenerator
       return createToken(gadgetURL, viewer, rUser, moduleId, "default");
    }
 
-   private BlobCrypter getBlobCrypter(String fileName) throws IOException
+   protected BlobCrypter getBlobCrypter() throws IOException
    {
+      String fileName = getKeyFilePath();
       BasicBlobCrypter c = new BasicBlobCrypter(new File(fileName));
       c.timeSource = timeSource;
       return c;
@@ -133,22 +85,19 @@ public class ExoDefaultSecurityTokenGenerator implements SecurityTokenGenerator
    /**
     * Method returns a path to the file containing the encryption key
     */
-   private String getKeyFilePath(){
-       J2EEServerInfo info = new J2EEServerInfo();
-       String confPath = info.getExoConfigurationDirectory();
-       File keyFile = null;
-       
-       if (confPath != null) {
-          File confDir = new File(confPath);
-          if (confDir != null && confDir.exists() && confDir.isDirectory()) {
-             keyFile = new File(confDir, "gadgets/key.txt");
-          }
-       }
+   protected String getKeyFilePath()
+   {
+      String keyPath = ExoContainerConfig.getTokenKeyPath();
+      File keyFile = null;
+      if (keyPath != null)
+      {
+         keyFile = new File(keyPath);
+      }
+      else
+      {
+         keyFile = new File("key.txt");
+      }
 
-       if (keyFile == null) {
-          keyFile = new File("key.txt");
-       }
-       
-       return keyFile.getAbsolutePath();
+      return keyFile.getAbsolutePath();
    }
 }

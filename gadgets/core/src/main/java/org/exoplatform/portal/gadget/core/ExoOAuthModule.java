@@ -19,6 +19,8 @@
 
 package org.exoplatform.portal.gadget.core;
 
+import com.google.inject.Singleton;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -28,7 +30,6 @@ import org.apache.shindig.auth.AnonymousAuthenticationHandler;
 import org.apache.shindig.common.crypto.BlobCrypter;
 import org.apache.shindig.common.util.ResourceLoader;
 import org.apache.shindig.config.ContainerConfig;
-import org.apache.shindig.gadgets.http.HttpFetcher;
 import org.apache.shindig.gadgets.oauth.BasicOAuthStore;
 import org.apache.shindig.gadgets.oauth.BasicOAuthStoreConsumerKeyAndSecret;
 import org.apache.shindig.gadgets.oauth.OAuthFetcherConfig;
@@ -50,17 +51,13 @@ import com.google.inject.name.Names;
  */
 public class ExoOAuthModule extends OAuthModule
 {
-   private static final String SIGNING_KEY_FILE = "gadgets.signingKeyFile";
+   public static final String SIGNING_KEY_FILE = "gadgets.signingKeyFile";
 
    private static final String SIGNING_KEY_NAME = "gadgets.signingKeyName";
 
    private static final String CALLBACK_URL = "gadgets.signing.global-callback-url";
    
    private static final String OAUTH_CONFIG = "config/oauth.json";
-   private static final String OAUTH_SIGNING_KEY_FILE = "shindig.signing.key-file";
-   private static final String OAUTH_SIGNING_KEY_NAME = "shindig.signing.key-name";
-   private static final String OAUTH_CALLBACK_URL = "shindig.signing.global-callback-url";
-   
    
    private static final Logger logger = Logger.getLogger(OAuthModule.class.getName());
 
@@ -80,6 +77,7 @@ public class ExoOAuthModule extends OAuthModule
          Boolean.TRUE);
    }
 
+   @Singleton
    public static class ExoOAuthStoreProvider implements Provider<OAuthStore>
    {
      
@@ -88,18 +86,13 @@ public class ExoOAuthModule extends OAuthModule
      @Inject
       public ExoOAuthStoreProvider(ContainerConfig config)
       {
-         //super(config.getString(ContainerConfig.DEFAULT_CONTAINER, SIGNING_KEY_FILE), config.getString(ContainerConfig.DEFAULT_CONTAINER, SIGNING_KEY_NAME));
-//         super(config.getString(ContainerConfig.DEFAULT_CONTAINER, SIGNING_KEY_FILE), config.getString(
-//            ContainerConfig.DEFAULT_CONTAINER, SIGNING_KEY_NAME), config.getString(ContainerConfig.DEFAULT_CONTAINER,
-//            CALLBACK_URL));
-         
          store = new ExoOAuthStore();
          
          String signingKeyFile = config.getString(ContainerConfig.DEFAULT_CONTAINER, SIGNING_KEY_FILE);
          String signingKeyName = config.getString(ContainerConfig.DEFAULT_CONTAINER, SIGNING_KEY_NAME);
-         String defaultCallbackUrl = config.getString(ContainerConfig.DEFAULT_CONTAINER,CALLBACK_URL);
-         
          loadDefaultKey(signingKeyFile, signingKeyName);
+         
+         String defaultCallbackUrl = config.getString(ContainerConfig.DEFAULT_CONTAINER,CALLBACK_URL);
          store.setDefaultCallbackUrl(defaultCallbackUrl);
          loadConsumers();
       }
@@ -128,8 +121,7 @@ public class ExoOAuthModule extends OAuthModule
               "  openssl pkcs8 -in testkey.pem -out oauthkey.pem -topk8 -nocrypt -outform PEM\n" +
               '\n' +
               "Then edit gadgets.properties and add these lines:\n" +
-              OAUTH_SIGNING_KEY_FILE + "=<path-to-oauthkey.pem>\n" +
-              OAUTH_SIGNING_KEY_NAME + "=mykey\n");
+              SIGNING_KEY_FILE + "=<path-to-oauthkey.pem>\n");
         }
       }
 
@@ -146,24 +138,4 @@ public class ExoOAuthModule extends OAuthModule
         return store;
       }
     }
-
-   public static class ExoOAuthRequestProvider extends OAuthRequestProvider
-   {
-      private final HttpFetcher fetcher;
-
-      private final OAuthFetcherConfig config;
-
-      @Inject
-      public ExoOAuthRequestProvider(HttpFetcher fetcher, OAuthFetcherConfig config)
-      {
-         super(fetcher, config);
-         this.fetcher = fetcher;
-         this.config = config;
-      }
-
-      public OAuthRequest get()
-      {
-         return new OAuthRequest(config, fetcher);
-      }
-   }
 }

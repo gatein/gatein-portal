@@ -8,7 +8,7 @@
 	<section id="sect-Reference_Guide-Portal_Navigation_Configuration-Overview">
 		<title>Overview</title>
 		<para>
-			There are three types of navigation available to portal users:
+			There are three navigation types available to portal users:
 		</para>
 		<itemizedlist>
 			<listitem>
@@ -28,134 +28,303 @@
 			</listitem>
 		</itemizedlist>
 		<para>
-			These navigations are configured using standard XML syntax in the file; &#34;<filename>02portal.war:/WEB-INF/conf/portal/portal-configuration.xml</filename>&#34;.
+			These navigations are configured using the standard XML syntax in the file; &#34;<filename>02portal.war:/WEB-INF/conf/portal/portal-configuration.xml</filename>&#34;.
 		</para>
 		
-<programlisting role="XML">&#60;component&#62;
-  &#60;key&#62;org.exoplatform.portal.config.UserPortalConfigService&#60;/key&#62;
-  &#60;type&#62;org.exoplatform.portal.config.UserPortalConfigService&#60;/type&#62;
-  &#60;component-plugins&#62;           
-   &#60;component-plugin&#62;
-     &#60;name&#62;new.portal.config.user.listener&#60;/name&#62;
-     &#60;set-method&#62;initListener&#60;/set-method&#62;
-     &#60;type&#62;org.exoplatform.portal.config.NewPortalConfigListener&#60;/type&#62;
-     &#60;description&#62;this listener init the portal configuration&#60;/description&#62;
-     &#60;init-params&#62;
-       &#60;value-param&#62;
-         &#60;name&#62;default.portal&#60;/name&#62;
-         &#60;description&#62;The default portal for checking db is empty or not&#60;/description&#62;
-         &#60;value&#62;classic&#60;/value&#62;
-       &#60;/value-param&#62; 
-       &#60;object-param&#62;
-         &#60;name&#62;portal.configuration&#60;/name&#62;
-         &#60;description&#62;description&#60;/description&#62;
-         &#60;object type=&#34;org.exoplatform.portal.config.NewPortalConfig&#34;&#62;
-           &#60;field  name=&#34;predefinedOwner&#34;&#62;
-             &#60;collection type=&#34;java.util.HashSet&#34;&#62;                
-               &#60;value&#62;&#60;string&#62;classic&#60;/string&#62;&#60;/value&#62;
-               &#60;value&#62;&#60;string&#62;webos&#60;/string&#62;&#60;/value&#62;
-             &#60;/collection&#62;
-           &#60;/field&#62;
-           &#60;field  name=&#34;ownerType&#34;&#62;&#60;string&#62;portal&#60;/string&#62;&#60;/field&#62;
-           &#60;field  name=&#34;templateLocation&#34;&#62;&#60;string&#62;war:/conf/portal&#60;/string&#62;&#60;/field&#62; 
-         &#60;/object&#62;
-       &#60;/object-param&#62; 
-       &#60;object-param&#62;
-         &#60;name&#62;group.configuration&#60;/name&#62;
-         &#60;description&#62;description&#60;/description&#62;
-         &#60;object type=&#34;org.exoplatform.portal.config.NewPortalConfig&#34;&#62;
-           &#60;field  name=&#34;predefinedOwner&#34;&#62;
-             &#60;collection type=&#34;java.util.HashSet&#34;&#62;            
-              &#60;value&#62;&#60;string&#62;platform/administrators&#60;/string&#62;&#60;/value&#62;    
-              &#60;value&#62;&#60;string&#62;platform/users&#60;/string&#62;&#60;/value&#62;
-              &#60;value&#62;&#60;string&#62;platform/guests&#60;/string&#62;&#60;/value&#62;
-              &#60;value&#62;&#60;string&#62;organization/management/executive-board&#60;/string&#62;&#60;/value&#62;               
-             &#60;/collection&#62;
-           &#60;/field&#62;
-           &#60;field  name=&#34;ownerType&#34;&#62;&#60;string&#62;group&#60;/string&#62;&#60;/field&#62;
-           &#60;field  name=&#34;templateLocation&#34;&#62;&#60;string&#62;war:/conf/portal&#60;/string&#62;&#60;/field&#62; 
-         &#60;/object&#62;
-       &#60;/object-param&#62;       
-       &#60;object-param&#62;
-         &#60;name&#62;user.configuration&#60;/name&#62;
-         &#60;description&#62;description&#60;/description&#62;
-         &#60;object type=&#34;org.exoplatform.portal.config.NewPortalConfig&#34;&#62;
-           &#60;field  name=&#34;predefinedOwner&#34;&#62;
-             &#60;collection type=&#34;java.util.HashSet&#34;&#62;                
-               &#60;value&#62;&#60;string&#62;root&#60;/string&#62;&#60;/value&#62;
-               &#60;value&#62;&#60;string&#62;john&#60;/string&#62;&#60;/value&#62;
-               &#60;value&#62;&#60;string&#62;mary&#60;/string&#62;&#60;/value&#62;
-               &#60;value&#62;&#60;string&#62;demo&#60;/string&#62;&#60;/value&#62;
-             &#60;/collection&#62;
-           &#60;/field&#62;
-           &#60;field  name=&#34;ownerType&#34;&#62;&#60;string&#62;user&#60;/string&#62;&#60;/field&#62;
-           &#60;field  name=&#34;templateLocation&#34;&#62;&#60;string&#62;war:/conf/portal&#60;/string&#62;&#60;/field&#62; 
-         &#60;/object&#62;
-       &#60;/object-param&#62;
-     &#60;/init-params&#62;
-   &#60;/component-plugin&#62;
-&#60;/component-plugins&#62;
+<programlisting role="XML"><![CDATA[<component>
+   <key>org.exoplatform.portal.config.UserPortalConfigService</key>
+   <type>org.exoplatform.portal.config.UserPortalConfigService</type>
+   <component-plugins>
+      <component-plugin>
+         <name>new.portal.config.user.listener</name>
+         <set-method>initListener</set-method>
+         <type>org.exoplatform.portal.config.NewPortalConfigListener
+      </type>
+         <description>this listener init the portal configuration
+      </description>
+         <init-params>
+            <value-param>
+               <name>default.portal</name>
+               <description>The default portal for checking db is empty or not</description>
+               <value>classic</value>
+            </value-param>
+            <value-param>
+               <name>page.templates.location</name>
+               <description>the path to the location that contains Page templates</description>
+               <value>war:/conf/portal/template/pages</value>
+            </value-param>
+            <value-param>
+               <name>override</name>
+               <description>The flag parameter to decide if portal metadata is overriden on restarting server
+            </description>
+               <value>false</value>
+            </value-param>
+            <object-param>
+               <name>site.templates.location</name>
+               <description>description</description>
+               <object type="org.exoplatform.portal.config.SiteConfigTemplates">
+                  <field name="location">
+                     <string>war:/conf/portal</string>
+                  </field>
+                  <field name="portalTemplates">
+                     <collection type="java.util.HashSet">
+                        <value><string>basic</string></value>
+                        <value><string>classic</string></value>
+                     </collection>
+                  </field>
+                  <field name="groupTemplates">
+                     <collection type="java.util.HashSet">
+                        <value><string>group</string></value>
+                     </collection>
+                  </field>
+                  <field name="userTemplates">
+                     <collection type="java.util.HashSet">
+                        <value><string>user</string></value>
+                     </collection>
+                  </field>
+               </object>
+            </object-param>
+            <object-param>
+               <name>portal.configuration</name>
+               <description>description</description>
+               <object type="org.exoplatform.portal.config.NewPortalConfig">
+                  <field name="predefinedOwner">
+                     <collection type="java.util.HashSet">
+                        <value><string>classic</string></value>
+                     </collection>
+                  </field>
+                  <field name="ownerType">
+                     <string>portal</string>
+                  </field>
+                  <field name="templateLocation">
+                     <string>war:/conf/portal/</string>
+                  </field>
+                  <field name="importMode">
+                     <string>conserve</string>
+                  </field>
+               </object>
+            </object-param>
+            <object-param>
+               <name>group.configuration</name>
+               <description>description</description>
+               <object type="org.exoplatform.portal.config.NewPortalConfig">
+                  <field name="predefinedOwner">
+                     <collection type="java.util.HashSet">
+                        <value><string>/platform/administrators</string></value>
+                        <value><string>/platform/users</string></value>
+                        <value><string>/platform/guests</string></value>
+                        <value><string>/organization/management/executive-board</string></value>
+                     </collection>
+                  </field>
+                  <field name="ownerType">
+                     <string>group</string>
+                  </field>
+                  <field name="templateLocation">
+                     <string>war:/conf/portal</string>
+                  </field>
+                  <field name="importMode">
+                     <string>conserve</string>
+                  </field>
+               </object>
+            </object-param>
+            <object-param>
+               <name>user.configuration</name>
+               <description>description</description>
+               <object type="org.exoplatform.portal.config.NewPortalConfig">
+                  <field name="predefinedOwner">
+                     <collection type="java.util.HashSet">
+                        <value><string>root</string></value>
+                        <value><string>john</string></value>
+                        <value><string>mary</string></value>
+                        <value><string>demo</string></value>
+                        <value><string>user</string></value>
+                     </collection>
+                  </field>
+                  <field name="ownerType">
+                     <string>user</string>
+                  </field>
+                  <field name="templateLocation">
+                     <string>war:/conf/portal</string>
+                  </field>
+                  <field name="importMode">
+                     <string>conserve</string>
+                  </field>
+               </object>
+            </object-param>
+         </init-params>
+      </component-plugin>
+   </component-plugins>
+</component>]]>
 </programlisting>
-		<para>
-			This XML configuration defines where in the portal's war to look for configuration, and what portals, groups, and user specific views
-         to include in portal/group/user navigation. Those files will be used to create an initial navigation, the first time the portal is launched.
-         That information will then be stored in JCR content repository, and can then be modified, and managed from the portal UI.
-      </para>
+<para>
+ This XML configuration defines where in the portal's war to look for configuration, and which portals, groups, and user specific views
+ to include in <literal>portal/group/user</literal> navigation. Those files will be used to create an initial navigation when the portal is launched in the first time.
+ That information will then be stored in the JCR content repository, and can then be modified and managed from the portal UI.
+ </para>
+		 
+<para>
+Each portal, groups and users navigation is indicated by a configuration paragraph, for example:
+
+<programlistingco>
+			<areaspec>
+			<area coords="5" id="area-Reference_Guide.Portalconf.predifinedOwner" />
+			<area coords="10" id="area-Reference_Guide.Portalconf.ownerType" />
+			<area coords="13" id="area-Reference_Guide.Portalconf.templateLocation" />
+			<area coords="16" id="area-Reference_Guide.Portalconf.importMode" />
+			</areaspec>
+<programlisting language="xml"><![CDATA[<object-param>
+   <name>portal.configuration</name>
+   <description>description</description>
+   <object type="org.exoplatform.portal.config.NewPortalConfig">
+      <field name="predefinedOwner">
+         <collection type="java.util.HashSet">
+            <value><string>classic</string></value>
+         </collection>
+      </field>
+      <field name="ownerType">
+         <string>portal</string>
+      </field>
+      <field name="templateLocation">
+         <string>war:/conf/portal/</string>
+      </field>
+      <field name="importMode">
+         <string>conserve</string>
+      </field>
+   </object>
+</object-param>]]>
+</programlisting>
+</programlistingco>
+
+<calloutlist>
+				<callout arearefs="area-Reference_Guide.Portalconf.predifinedOwner">
+					<para>
+						<emphasis> predefinedOwner</emphasis> define the navigation owner, portal will look for the configuration files in folder with this name, if there is no suiable folder, a default portal will be created with name is this value.
+					</para>
+				</callout>
+				<callout arearefs="area-Reference_Guide.Portalconf.ownerType">
+					<para>
+						<emphasis> ownerType</emphasis> define the type of portal navigation. It may be a portal, group or user
+					</para>
+				</callout>
+				<callout arearefs="area-Reference_Guide.Portalconf.templateLocation">
+					<para>
+						<emphasis> templateLocation</emphasis> the classpath where contains all portal configuration files
+					</para>
+				</callout>
+				<callout arearefs="area-Reference_Guide.Portalconf.importMode">
+					<para>
+						<emphasis> importMode</emphasis> The mode for navigation import. There are 4 types of import mode:
+					</para>
+					<itemizedlist>
+						<listitem>
+						<emphasis>conserve</emphasis>: Import data when it does not exist, otherwise do nothing.
+						</listitem>
+						<listitem>
+						<emphasis>insert</emphasis>: Import data when it does not exist, otherwise performs a strategy that adds new data only.
+						</listitem>
+						<listitem>
+						<emphasis>merge</emphasis>: Import data when it does not exist, update data when it exists.
+						</listitem>
+						<listitem>
+						<emphasis>rewrite</emphasis>: Overwrite data whatsoever.
+						</listitem>
+						</itemizedlist>
+				</callout>
+</calloutlist>
+		</para>
+	
+	<para>	
+Base on these parameters, portal will look for the configuration files and create a relevant portal navigation, pages and data import strategy. The portal configuration files will be stored in folders with path look like <literal>{templateLocation}/{ownerType}/{predefinedOwner}</literal>, all navigations are defined in the <literal>navigation.xml</literal> file, pages are defined in pages.xml and portal configuration is defined in <literal>{ownerType}.xml</literal>.
+For example, with the above configuration, prtal will look for all configuration files from <literal>war:/conf/portal/portal/classic path.</literal>
+	</para>
 	</section>
 	
 	<section id="sect-Reference_Guide-Portal_Navigation_Configuration-Portal_Navigation">
 		<title>Portal Navigation</title>
 		<para>
-			The portal navigation incorporates the pages that can be accessed even when a user is not logged in
-         (assuming the applicable permissions allow public access). For example; several portal navigations are used
-         when a company owns multiple trademarks, and sets up a web site for each of them.
+		The portal navigation incorporates the pages that can be accessed even when the user is not logged in assuming the applicable permissions allow the public access). For example, several portal navigations are used when a company owns multiple trademarks, and sets up a website for each of them.
 		</para>
 		<para>
-			The <emphasis role="bold">classic</emphasis> portal is configured by four XML files in <filename>02portal.war:/WEB-INF/conf/portal/portal/classic</filename> directory:
+			The <emphasis role="bold">classic</emphasis> portal is configured by four XML files in the <filename>02portal.war:/WEB-INF/conf/portal/portal/classic</filename> directory:
 		</para>
 		<variablelist>
 			<varlistentry>
 				<term>portal.xml</term>
 				<listitem>
 					<para>
-						This file describes the layout and portlets that will be shown on all pages. Usually the layout contains the banner, footer, menu and breadcrumbs portlets.
+						This file describes the layout and portlets that will be shown on all pages. The layout usually contains the banner, footer, menu and breadcrumbs portlets.
                   &PRODUCT; is extremely configurable as every view element (even the banner and footer) is a portlet.
 					</para>
 					
-<programlisting role="XML">&#60;?xml version=&#34;1.0&#34; encoding=&#34;ISO-8859-1&#34;?&#62;
-&#60;portal-config&#62;
-  &#60;portal-name&#62;classic&#60;/portal-name&#62;
-  &#60;locale&#62;en&#60;/locale&#62;
-  &#60;factory-id&#62;office&#60;/factory-id&#62;
-  &#60;access-permissions&#62;Everyone&#60;/access-permissions&#62;
-  &#60;edit-permission&#62;*:/platform/administrators&#60;/edit-permission&#62;
-  &#60;creator&#62;root&#60;/creator&#62;    
-    
-  &#60;portal-layout&#62;   
-  &#60;application&#62;
-     &#60;instance-id&#62;portal#classic:/web/BannerPortlet/banner&#60;/instance-id&#62;
-     &#60;show-info-bar&#62;false&#60;/show-info-bar&#62;
-   &#60;/application&#62;
-   &#60;application&#62;
-    &#60;instance-id&#62;portal#classic:/web/NavigationPortlet/toolbar&#60;/instance-id&#62;
-     &#60;show-info-bar&#62;false&#60;/show-info-bar&#62;
-   &#60;/application&#62;
-  
-   &#60;application&#62;
-     &#60;instance-id&#62;portal#classic:/web/BreadcumbsPortlet/breadcumbs&#60;/instance-id&#62;
-     &#60;show-info-bar&#62;false&#60;/show-info-bar&#62;
-   &#60;/application&#62;
+<programlisting role="XML"><![CDATA[<portal-config 
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_0 http://www.gatein.org/xml/ns/gatein_objects_1_0"
+   xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_0">
+   <portal-name>classic</portal-name>
+   <locale>en</locale>
+   <access-permissions>Everyone</access-permissions>
+   <edit-permission>*:/platform/administrators</edit-permission>
+   <properties>
+      <entry key="sessionAlive">onDemand</entry>
+      <entry key="showPortletInfo">1</entry>
+   </properties>
+
+   <portal-layout>
+      <portlet-application>
+         <portlet>
+            <application-ref>web</application-ref>
+            <portlet-ref>BannerPortlet</portlet-ref>
+            <preferences>
+               <preference>
+                  <name>template</name>
+                  <value>par:/groovy/groovy/webui/component/UIBannerPortlet.gtmpl</value>
+                  <read-only>false</read-only>
+               </preference>
+            </preferences>
+         </portlet>
+         <access-permissions>Everyone</access-permissions>
+         <show-info-bar>false</show-info-bar>
+      </portlet-application>
+
+      <portlet-application>
+         <portlet>
+            <application-ref>web</application-ref>
+            <portlet-ref>NavigationPortlet</portlet-ref>
+         </portlet>
+         <access-permissions>Everyone</access-permissions>
+         <show-info-bar>false</show-info-bar>
+      </portlet-application>
+
+      <portlet-application>
+         <portlet>
+            <application-ref>web</application-ref>
+            <portlet-ref>BreadcumbsPortlet</portlet-ref>
+         </portlet>
+         <access-permissions>Everyone</access-permissions>
+         <show-info-bar>false</show-info-bar>
+      </portlet-application>
+
+      <page-body> </page-body>
+
+      <portlet-application>
+         <portlet>
+            <application-ref>web</application-ref>
+            <portlet-ref>FooterPortlet</portlet-ref>
+            <preferences>
+               <preference>
+                  <name>template</name>
+                  <value>par:/groovy/groovy/webui/component/UIFooterPortlet.gtmpl</value>
+                  <read-only>false</read-only>
+               </preference>
+            </preferences>
+         </portlet>
+         <access-permissions>Everyone</access-permissions>
+         <show-info-bar>false</show-info-bar>
+      </portlet-application>
+
+   </portal-layout>
    
- 
-   &#60;page-body&#62; &#60;/page-body&#62;
-   
-   &#60;application&#62;
-     &#60;instance-id&#62;portal#classic:/web/FooterPortlet/footer&#60;/instance-id&#62;
-     &#60;show-info-bar&#62;false&#60;/show-info-bar&#62;
-   &#60;/application&#62;
-  &#60;/portal-layout&#62;
-  
-&#60;/portal-config&#62;
+</portal-config>]]>
 </programlisting>
 					<para>
 						It is also possible to apply a nested container that can also contain portlets. Row, column or tab containers are then responsible for the layout of their child portlets.
@@ -175,51 +344,43 @@
 				<term>navigation.xml</term>
 				<listitem>
 					<para>
-						This file defines all the navigation nodes the portal will have. The syntax is simple, using nested node tags. Each node references a page defined in pages.xml file (explained next).
+						This file defines all the navigation nodes of the portal. The syntax is simple using the nested node tags. Each node refers to a page defined in the <literal>pages.xml</literal> file (explained next).
 					</para>
 					<para>
-						When <literal>#{...}</literal> syntax is used, the enclosed property name serves as a key that is automatically passed to internationalization mechanism
-                  so the literal property name is replaced by a localized value taken from the associated properties file matching the current locale.
+						If the administrator want to create node labels for each language, they will have to use <literal>xml:lang</literal> attribute in the label tag with value of <literal>xml:lang</literal> is the relevant locale.
+					</para>
+					<para>
+						Otherwise, if they want the node label is localized by resource bundle files, the <literal>#{...}</literal> syntax will be used, the enclosed property name serves as a key that is automatically passed to the internationalization mechanism. Thus the literal property name is replaced by a localized value taken from the associated properties file matching the current locale. 
+					<para>	
+						For example:
+					</para>
 					</para>
 
-<programlisting role="XML">
- <![CDATA[
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<node-navigation
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_0 http://www.gatein.org/xml/ns/gatein_objects_1_0"
-    xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_0">
-  <priority>1</priority>
-  <page-nodes>
-     <node>
-     	<uri>home</uri>
-      	<name>home</name>
-      	<label>#{portal.classic.home}</label>
-      	<page-reference>portal::classic::homepage</page-reference>	    
-     </node>   
-     <node>
-      	<uri>sitemap</uri>
-      	<name>sitemap</name>
-      	<label>#{portal.classic.sitemap}</label>
-      	<visibility>DISPLAYED</visibility>
-      	<page-reference>portal::classic::sitemap</page-reference>
-    </node>	  
-  </page-nodes>
-</node-navigation>
-
- ]]>
+<programlisting role="XML"><![CDATA[<node-navigation 
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_2 http://www.gatein.org/xml/ns/gatein_objects_1_2"
+   xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_2">
+   <priority>1</priority>
+   <page-nodes>
+      <node>
+         <name>home</name>
+         <label xml:lang="en">Home</label>
+         <page-reference>portal::classic::homepage</page-reference>
+      </node>
+      <node>
+         <name>sitemap</name>
+         <label xml:lang="en">SiteMap</label>
+         <visibility>DISPLAYED</visibility>
+         <page-reference>portal::classic::sitemap</page-reference>
+      </node>
+      ..........
+   </page-nodes>
+</node-navigation>]]>
 </programlisting>
-
 					
 					<para>
 						This navigation tree can have multiple views inside portlets (such as the breadcrumbs portlet) that render the current view node, the site map or the menu portlets.
 					</para>
-					<warning>
-						<para>
-							For top nodes, the <emphasis role="bold">uri</emphasis> and the <emphasis role="bold">name</emphasis> of your navigation nodes must have the <emphasis>same</emphasis> value.
-                     For other nodes the <emphasis role="bold">uri</emphasis> is a relative path. For example, <emphasis><uri>contentmanagement/fileexplorer</uri></emphasis> where &#39;<literal>contentmanagement</literal> &#39; is the name of the parent node and &#39;<literal>fileexplorer</literal>&#39; is the name of the node ( <emphasis>&#60;name&#62;fileexplorer&#60;/name&#62; </emphasis> ).
-						</para>
-					</warning>
 				</listitem>
 			</varlistentry>
 			<varlistentry>
@@ -230,428 +391,82 @@
                   Each application can decide whether to render the portlet border, the window state, the icons or portlet's mode.
 					</para>
 
-<programlisting role="XML">
-  <![CDATA[
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<page-set
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_0 http://www.gatein.org/xml/ns/gatein_objects_1_0"
-    xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_0">
+<programlisting role="XML"><![CDATA[<page-set
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_0 http://www.gatein.org/xml/ns/gatein_objects_1_0" 
+   xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_0">
 
-  <page>
-    <name>homepage</name>
-    <title>Home Page</title>
-	  <access-permissions>Everyone</access-permissions>
-	  <edit-permission>*:/platform/administrators</edit-permission>
-    <portlet-application>
-      <portlet>
-        <application-ref>web</application-ref>
-        <portlet-ref>HomePagePortlet</portlet-ref>
-        <preferences>
-          <preference>
-            <name>template</name>
-            <value>system:/templates/groovy/webui/component/UIHomePagePortlet.gtmpl</value>
-            <read-only>false</read-only>
-          </preference>
-        </preferences>
-      </portlet>
-      <title>Home Page portlet</title>
+   <page>
+      <name>homepage</name>
+      <title>Home Page</title>
       <access-permissions>Everyone</access-permissions>
-      <show-info-bar>false</show-info-bar>
-      <show-application-state>false</show-application-state>
-      <show-application-mode>false</show-application-mode>
-    </portlet-application>
-  </page>    
-  <page>
-    <name>sitemap</name>
-    <title>Site Map</title>
-	  <access-permissions>Everyone</access-permissions>
-	  <edit-permission>*:/platform/administrators</edit-permission>
-    <portlet-application>
-      <portlet>
-        <application-ref>web</application-ref>
-        <portlet-ref>SiteMapPortlet</portlet-ref>
-      </portlet>
-      <title>SiteMap</title>
+      <edit-permission>*:/platform/administrators</edit-permission>
+      <portlet-application>
+         <portlet>
+            <application-ref>web</application-ref>
+            <portlet-ref>HomePagePortlet</portlet-ref>
+            <preferences>
+               <preference>
+                  <name>template</name>
+                  <value>system:/templates/groovy/webui/component/UIHomePagePortlet.gtmpl</value>
+                  <read-only>false</read-only>
+               </preference>
+            </preferences>
+         </portlet>
+         <title>Home Page portlet</title>
+         <access-permissions>Everyone</access-permissions>
+         <show-info-bar>false</show-info-bar>
+         <show-application-state>false</show-application-state>
+         <show-application-mode>false</show-application-mode>
+      </portlet-application>
+   </page>
+
+   <page>
+      <name>sitemap</name>
+      <title>Site Map</title>
       <access-permissions>Everyone</access-permissions>
-      <show-info-bar>false</show-info-bar>      
-    </portlet-application>
-  </page>
-</page-set>
-]]>
+      <edit-permission>*:/platform/administrators</edit-permission>
+      <portlet-application>
+         <portlet>
+            <application-ref>web</application-ref>
+            <portlet-ref>SiteMapPortlet</portlet-ref>
+         </portlet>
+         <title>SiteMap</title>
+         <access-permissions>Everyone</access-permissions>
+         <show-info-bar>false</show-info-bar>
+      </portlet-application>
+   </page>
+   .......
+</page-set>]]>
 </programlisting>
 					
-				</listitem>
-			</varlistentry>
-			<varlistentry>
-				<term>portlet-preferences.xml</term>
-				<listitem>
-					<para>
-						Porlet instances can be associated with <literal>portlet-preferences</literal> that override the ones defined in <filename>portlet.xml</filename> of the portlet application <literal>war</literal>  (TODO: clarify which file in which war).
-					</para>
-					
-<programlisting role="XML">&#60;?xml version=&#34;1.0&#34; encoding=&#34;ISO-8859-1&#34;?&#62;
-&#60;portlet-preferences-set&#62;
-  &#60;portlet-preferences&#62;
-    &#60;owner-type&#62;portal&#60;/owner-type&#62;
-    &#60;owner-id&#62;classic&#60;/owner-id&#62;
-    &#60;window-id&#62;portal#classic:/web/BannerPortlet/banner&#60;/window-id&#62;
-    &#60;preference&#62;
-      &#60;name&#62;template&#60;/name&#62;
-      &#60;value&#62;par:/groovy/groovy/webui/component/UIBannerPortlet.gtmpl&#60;/value&#62;
-      &#60;read-only&#62;false&#60;/read-only&#62;
-    &#60;/preference&#62;
-  &#60;/portlet-preferences&#62;
-  &#60;portlet-preferences&#62;
-    &#60;owner-type&#62;portal&#60;/owner-type&#62;
-    &#60;owner-id&#62;classic&#60;/owner-id&#62;
-    &#60;window-id&#62;portal#classic:/web/NavigationPortlet/toolbar&#60;/window-id&#62;
-    &#60;preference&#62;
-      &#60;name&#62;useAJAX&#60;/name&#62;
-      &#60;value&#62;true&#60;/value&#62;
-      &#60;read-only&#62;false&#60;/read-only&#62;
-    &#60;/preference&#62;
-  &#60;/portlet-preferences&#62;
-  &#60;portlet-preferences&#62;
-    &#60;owner-type&#62;portal&#60;/owner-type&#62;
-    &#60;owner-id&#62;classic&#60;/owner-id&#62;
-    &#60;window-id&#62;portal#classic:/web/FooterPortlet/footer&#60;/window-id&#62;
-    &#60;preference&#62;
-      &#60;name&#62;template&#60;/name&#62;
-      &#60;value&#62;par:/groovy/groovy/webui/component/UIFooterPortlet.gtmpl&#60;/value&#62;
-      &#60;read-only&#62;false&#60;/read-only&#62;
-    &#60;/preference&#62;
-  &#60;/portlet-preferences&#62;
-  
-  
-  &#60;portlet-preferences&#62;
-    &#60;owner-type&#62;portal&#60;/owner-type&#62;
-    &#60;owner-id&#62;classic&#60;/owner-id&#62;
-    &#60;window-id&#62;portal#classic:/web/GroovyPortlet/groovyportlet&#60;/window-id&#62;
-    &#60;preference&#62;
-      &#60;name&#62;template&#60;/name&#62;
-      &#60;value&#62;par:/groovy/groovy/webui/component/UIGroovyPortlet.gtmpl&#60;/value&#62;
-      &#60;read-only&#62;false&#60;/read-only&#62;
-    &#60;/preference&#62;
-  &#60;/portlet-preferences&#62;
-&#60;/portlet-preferences-set&#62;
-</programlisting>
 				</listitem>
 			</varlistentry>
 		</variablelist>
 	</section>
 	
-	<!-- 	<section id="sect-Reference_Guide-Portal_Navigation_Configuration-Portal.xml">
-		<title>Portal.xml</title>
-		<para>
-			That file describes the layout and portlets that will be shown for all pages. Usually the layout contains the banner, footer, menu, breadcrumbs portlets. Indeed, in GateIn, every area is a portlet even the banner and footer which makes the platform extremely configurable.
-		</para>
-		
-<programlisting role="XML">&lt;?xml version="1.0" encoding="ISO-8859-1"?&gt;
-&lt;portal-config&gt;
-  &lt;portal-name&gt;classic&lt;/portal-name&gt;
-  &lt;locale&gt;en&lt;/locale&gt;
-  &lt;factory-id&gt;office&lt;/factory-id&gt;
-  &lt;access-permissions&gt;Everyone&lt;/access-permissions&gt;
-  &lt;edit-permission&gt;*:/platform/administrators&lt;/edit-permission&gt;
-  &lt;creator&gt;root&lt;/creator&gt;    
-    
-  &lt;portal-layout&gt;   
-  &lt;application&gt;
-     &lt;instance-id&gt;portal#classic:/web/BannerPortlet/banner&lt;/instance-id&gt;
-     &lt;show-info-bar&gt;false&lt;/show-info-bar&gt;
-   &lt;/application&gt;
-   &lt;application&gt;
-    &lt;instance-id&gt;portal#classic:/web/NavigationPortlet/toolbar&lt;/instance-id&gt;
-     &lt;show-info-bar&gt;false&lt;/show-info-bar&gt;
-   &lt;/application&gt;
-  
-   &lt;application&gt;
-     &lt;instance-id&gt;portal#classic:/web/BreadcumbsPortlet/breadcumbs&lt;/instance-id&gt;
-     &lt;show-info-bar&gt;false&lt;/show-info-bar&gt;
-   &lt;/application&gt;
-   
- 
-   &lt;page-body&gt; &lt;/page-body&gt;
-   
-   &lt;application&gt;
-     &lt;instance-id&gt;portal#classic:/web/FooterPortlet/footer&lt;/instance-id&gt;
-     &lt;show-info-bar&gt;false&lt;/show-info-bar&gt;
-   &lt;/application&gt;
-  &lt;/portal-layout&gt;
-  
-&lt;/portal-config&gt;
-</programlisting>
-		<para>
-			Even if not shown in the previous XML file, it is also possible to apply a nested container that can also contain portlets. Containers are then responsible of the layout of their children (row, column or tabs containers exist).
-		</para>
-		<para>
-			Each application references a portlet using the id portal#{portalName}:/{portletWarName}/{portletName}/{uniqueId}
-		</para>
-		<para>
-			In order to define at which location GateIn Portal shall render the current page use the page-body tag.
-		</para>
-		<para>
-			The defined classic portal is accessible to "Everyone" (that means it can be accessed through the URL /portal/public/classic) but only members of the group /platform/administrators can edit it.
-		</para>
-	</section> 
-	
-	<section id="sect-Reference_Guide-Portal_Navigation_Configuration-Navigation.xml">
-		<title>Navigation.xml</title>
-		<para>
-			This file defines all the navigation nodes the portal will have. The syntax is simple as we get nested node tags. Each node references a page that is defined in the next XML file.
-		</para>
-		<para>
-			If the label #{} is used then it means the i18n mechanism is activated and that the real label to render is taken from an associated properties file for the current locale.
-		</para>
-		
-<programlisting role="XML">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
-&lt;node-navigation&gt;
-  &lt;owner-type&gt;portal&lt;/owner-type&gt;
-  &lt;owner-id&gt;classic&lt;/owner-id&gt;
-  &lt;priority&gt;1&lt;/priority&gt;
-  &lt;page-nodes&gt;
-   &lt;node&gt;
-     &lt;uri&gt;home&lt;/uri&gt;
-     &lt;name&gt;home&lt;/name&gt;
-     &lt;label&gt;#{portal.classic.home}&lt;/label&gt;
-     &lt;page-reference&gt;portal::classic::homepage&lt;/page-reference&gt;     
-   &lt;/node&gt;    
-   &lt;node&gt;
-     &lt;uri&gt;webexplorer&lt;/uri&gt;
-     &lt;name&gt;webexplorer&lt;/name&gt;
-     &lt;label&gt;#{portal.classic.webexplorer}&lt;/label&gt;
-     &lt;page-reference&gt;portal::classic::webexplorer&lt;/page-reference&gt;     
-   &lt;/node&gt;
-  &lt;/page-nodes&gt;
-&lt;/node-navigation&gt;
-</programlisting>
-		<para>
-			This navigation tree can have multiple views inside portlets such as the breadcrumbs that render the current view node, the site map or the menu portlets.
-		</para>
-		<warning>
-			<para>
-				For top nodes, the <emphasis role="bold">uri</emphasis> and the <emphasis role="bold">name</emphasis> of your navigation nodes must have the <emphasis role="bold">same</emphasis> value. For the other nodes the uri is composed like <emphasis><uri>contentmanagement/fileexplorer</uri></emphasis> where 'contentmanagement' is the name of the parent node and 'fileexplorer' the name of the node ( <emphasis>&lt;name&gt;fileexplorer&lt;/name&gt; </emphasis> ).
-			</para>
-		</warning>
-	</section> 
-	
-	<section id="sect-Reference_Guide-Portal_Navigation_Configuration-Pages.xml">
-		<title>Pages.xml</title>
-		<para>
-			This XML file structure is very similar to portal.xml and it can also contain container tags. Each application can decide if it wishes to render the portlet border, the window state icons or the mode.
-		</para>
-		
-<programlisting role="XML">&lt;?xml version="1.0" encoding="ISO-8859-1"?&gt;
-&lt;page-set&gt;  
-  &lt;page&gt;
-    &lt;page-id&gt;portal::classic::homepage&lt;/page-id&gt;
-    &lt;owner-type&gt;portal&lt;/owner-type&gt;
-    &lt;owner-id&gt;classic&lt;/owner-id&gt;
-    &lt;name&gt;homepage&lt;/name&gt;
-    &lt;title&gt;Home Page&lt;/title&gt;
-    &lt;access-permissions&gt;Everyone&lt;/access-permissions&gt;
-    &lt;edit-permission&gt;*:/platform/administrators&lt;/edit-permission&gt;
-    &lt;application&gt;
-      &lt;instance-id&gt;portal#classic:/web/HomePagePortlet/homepageportlet&lt;/instance-id&gt;
-      &lt;title&gt;Home Page portlet&lt;/title&gt;
-      &lt;show-info-bar&gt;false&lt;/show-info-bar&gt;
-      &lt;show-application-state&gt;false&lt;/show-application-state&gt;
-      &lt;show-application-mode&gt;false&lt;/show-application-mode&gt;
-    &lt;/application&gt;
-  &lt;/page&gt;    
-    
-  &lt;page&gt;
-    &lt;page-id&gt;portal::classic::webexplorer&lt;/page-id&gt;
-    &lt;owner-type&gt;portal&lt;/owner-type&gt;
-    &lt;owner-id&gt;classic&lt;/owner-id&gt;
-    &lt;name&gt;webexplorer&lt;/name&gt;
-    &lt;title&gt;Web Explorer&lt;/title&gt;
-    &lt;access-permissions&gt;*:/platform/users&lt;/access-permissions&gt;
-    &lt;edit-permission&gt;*:/platform/administrators&lt;/edit-permission&gt;    
-    &lt;application&gt;
-      &lt;instance-id&gt;group#platform/users:/web/BrowserPortlet/WebExplorer&lt;/instance-id&gt;
-      &lt;title&gt;Web Explorer&lt;/title&gt;
-      &lt;show-info-bar&gt;false&lt;/show-info-bar&gt;
-    &lt;/application&gt;  
-  &lt;/page&gt;  
-&lt;/page-set&gt;
-</programlisting>
-	</section>
-	
-	<section id="sect-Reference_Guide-Portal_Navigation_Configuration-Portlet_preferences.xml">
-		<title>Portlet-preferences.xml</title>
-		<para>
-			Porlet instances can be associated with portlet-preferences that override the one defined in the usual portlet.xml file of the portlet application WAR.
-		</para>
-		
-<programlisting role="XML">&lt;?xml version="1.0" encoding="ISO-8859-1"?&gt;
-&lt;portlet-preferences-set&gt;
-  &lt;portlet-preferences&gt;
-    &lt;owner-type&gt;portal&lt;/owner-type&gt;
-    &lt;owner-id&gt;classic&lt;/owner-id&gt;
-    &lt;window-id&gt;portal#classic:/web/BannerPortlet/banner&lt;/window-id&gt;
-    &lt;preference&gt;
-      &lt;name&gt;template&lt;/name&gt;
-      &lt;value&gt;par:/groovy/groovy/webui/component/UIBannerPortlet.gtmpl&lt;/value&gt;
-      &lt;read-only&gt;false&lt;/read-only&gt;
-    &lt;/preference&gt;
-  &lt;/portlet-preferences&gt;
-  &lt;portlet-preferences&gt;
-    &lt;owner-type&gt;portal&lt;/owner-type&gt;
-    &lt;owner-id&gt;classic&lt;/owner-id&gt;
-    &lt;window-id&gt;portal#classic:/web/NavigationPortlet/toolbar&lt;/window-id&gt;
-    &lt;preference&gt;
-      &lt;name&gt;useAJAX&lt;/name&gt;
-      &lt;value&gt;true&lt;/value&gt;
-      &lt;read-only&gt;false&lt;/read-only&gt;
-    &lt;/preference&gt;
-  &lt;/portlet-preferences&gt;
-  &lt;portlet-preferences&gt;
-    &lt;owner-type&gt;portal&lt;/owner-type&gt;
-    &lt;owner-id&gt;classic&lt;/owner-id&gt;
-    &lt;window-id&gt;portal#classic:/web/FooterPortlet/footer&lt;/window-id&gt;
-    &lt;preference&gt;
-      &lt;name&gt;template&lt;/name&gt;
-      &lt;value&gt;par:/groovy/groovy/webui/component/UIFooterPortlet.gtmpl&lt;/value&gt;
-      &lt;read-only&gt;false&lt;/read-only&gt;
-    &lt;/preference&gt;
-  &lt;/portlet-preferences&gt;
-  
-  
-  &lt;portlet-preferences&gt;
-    &lt;owner-type&gt;portal&lt;/owner-type&gt;
-    &lt;owner-id&gt;classic&lt;/owner-id&gt;
-    &lt;window-id&gt;portal#classic:/web/GroovyPortlet/groovyportlet&lt;/window-id&gt;
-    &lt;preference&gt;
-      &lt;name&gt;template&lt;/name&gt;
-      &lt;value&gt;par:/groovy/groovy/webui/component/UIGroovyPortlet.gtmpl&lt;/value&gt;
-      &lt;read-only&gt;false&lt;/read-only&gt;
-    &lt;/preference&gt;
-  &lt;/portlet-preferences&gt;
-&lt;/portlet-preferences-set&gt;
-</programlisting>
-	</section>  -->
 	<section id="sect-Reference_Guide-Portal_Navigation_Configuration-Group_Navigation">
 		<title>Group Navigation</title>
 		<para>
-			Group navigations are dynamically added to the user navigation at login. This allows users to see in the menu all the pages assigned to any groups they belong to.
+			Group navigations are dynamically added to the user navigation at login. This allows users to see the menu of all pages assigned to any groups they belong to.
 		</para>
 		<para>
 			The group navigation menu is configured by three XML files (<filename>navigation.xml</filename>, <filename>pages.xml</filename> and <filename>portlet-preferences.xml</filename>). The syntax used in these files is the same as those covered in <xref linkend="sect-Reference_Guide-Portal_Navigation_Configuration-Portal_Navigation" />.
 		</para>
 		<para>
-			They are located in <filename>portal.war/WEB-INF/conf/portal/group<replaceable>/group-name-path/</replaceable></filename> directory (For example; <filename>portal.war/WEB-INF/conf/portal/group/platform/administrators/</filename>).
+			They are also located in the <filename>{templateLocation}/{ownerType}/{predefinedOwner}</filename> directory with <literal>ownerType</literal> is <literal>group</literal> and <literal>predefinedOwner</literal> is the path to the group. For example, <filename>portal.war/WEB-INF/conf/portal/group/platform/administrators/</filename>.
 		</para>
 	</section>
 	
 	<section id="sect-Reference_Guide-Portal_Navigation_Configuration-User_Navigation">
 		<title>User Navigation</title>
 		<para>
-			User navigation is the set of nodes and pages that are owned by a user. They are part of the user's dashboard.
+			User navigation is the set of nodes and pages that are owned by the user. They are part of the user's dashboard.
 		</para>
 		<para>
-			Three files configure the user navigation (<filename>navigation.xml</filename>, <filename>pages.xml</filename> and <filename>portlet-preferences.xml</filename>). They are located in the directory &#34;<filename>portal.war/WEB-INF/conf/portal/users/{userName}</filename>&#34;.
+			Three files configure the user navigation (<filename>navigation.xml</filename>, <filename>pages.xml</filename> and <filename>portlet-preferences.xml</filename>). They are located in the <filename>{templateLocation}/{ownerType}/{predefinedOwner}</filename> directory with <literal>ownerType</literal> is <literal>user</literal> and <literal>predefinedOwner</literal> is username that want to create the navigation. For example, if administrator want to create navigation for user <literal>root</literal>, he has to locate the configuration files in <filename>portal.war/WEB-INF/conf/portal/user/root </filename>
 		</para>
-		<para>
-			This directory also contains a <filename>gadgets.xml</filename> file (formerly called <filename>widgets.xml</filename>). This file defines the gadgets located in the user's workspace.
-		</para>
-		<para>
-			The user's workspace is located at the left hand side of the page and access is restricted to some privileged users, see <xref linkend="sect-Reference_Guide-Predefined_User_Configuration" />
-		</para>
-		
-<programlisting role="XML">&#60;?xml version=&#34;1.0&#34; encoding=&#34;ISO-8859-1&#34;?&#62;
-&#60;widgets&#62;
-  &#60;owner-type&#62;user&#60;/owner-type&#62;
-  &#60;owner-id&#62;root&#60;/owner-id&#62;
- 
-  &#60;container id=&#34;Information&#34;&#62;
-    &#60;name&#62;Information&#60;/name&#62;
-    &#60;description&#62;Information&#39;s Description&#60;/description&#62;
-    &#60;application&#62;
-      &#60;instance-id&#62;user#root:/GateInWidgetWeb/WelcomeWidget/WelcomeWidget1&#60;/instance-id&#62;
-      &#60;application-type&#62;GateInWidget&#60;/application-type&#62;
-    &#60;/application&#62;
-      
-    &#60;application&#62;
-      &#60;instance-id&#62;user#root:/GateInWidgetWeb/StickerWidget/StickerWidget&#60;/instance-id&#62;
-      &#60;application-type&#62;GateInWidget&#60;/application-type&#62; 
-    &#60;/application&#62;
-    
-    &#60;application&#62;
-      &#60;instance-id&#62;user#root:/GateInWidgetWeb/InfoWidget/InfoWidget1&#60;/instance-id&#62;
-      &#60;application-type&#62;GateInWidget&#60;/application-type&#62;
-    &#60;/application&#62;
-  &#60;/container&#62;
-  
-  &#60;container id=&#34;Calendar&#34;&#62;
-    &#60;name&#62;Calendar&#60;/name&#62;
-    &#60;description&#62;Calendar&#39;s Description&#60;/description&#62;
-    &#60;application&#62;
-      &#60;instance-id&#62;user#root:/GateInWidgetWeb/CalendarWidget/CalendarWidget&#60;/instance-id&#62;
-      &#60;application-type&#62;GateInWidget&#60;/application-type&#62; 
-    &#60;/application&#62;
-  &#60;/container&#62; 
- 
-&#60;/widgets&#62;
-</programlisting>
-		<!-- 		<para>
-			Note that when you develop a portal, we advise you to use the XML instead of the User Interface as XML will allow you to provide a preconfigured package to your customer. But as each time you start the server the first time, the XML files are stored in the JCR, it will be necessary to remove the database (the jcr leverages a database). During the development phase using tomcat it simply means to delete the directory: exo-tomcat/temp
-		</para>  -->
 	</section>
-	
-	<section id="sect-Reference_Guide-Portal_Navigation_Configuration-Tips">
-		<title>Tips</title>
-		<section id="sect-Reference_Guide-Tips-Direct_External_Links">
-			<title>Direct External Links</title>
-			<para>
-				If you wish to add a link to a URL outside the portal you first have to define a &#34;page&#34; that will only serve as a navigation placeholder for external redirect - it will not be used for any portlets.
-            Then add the URL to the navigation. (TODO: check for correctness)
-			</para>
-			<variablelist>
-				<varlistentry>
-					<term>pages.xml</term>
-					<listitem>
-						<para>
-							
-<programlisting>&#60;page&#62;
-  &#60;owner-type&#62;portal&#60;/owner-type&#62;
-  &#60;owner-id&#62;website&#60;/owner-id&#62;
-  &#60;name&#62;documentation&#60;/name&#62;
-  &#60;title&#62;Documentation&#60;/title&#62;
-  &#60;access-permissions&#62;Everyone&#60;/access-permissions&#62;
-  &#60;edit-permission&#62;*:/platform/administrators&#60;/edit-permission&#62;
-&#60;/page&#62;
-</programlisting>
-						</para>
-					</listitem>
-				</varlistentry>
-				<varlistentry>
-					<term>navigation.xml</term>
-					<listitem>
-						<para>
-							
-<programlisting>&#60;node&#62;
-  &#60;uri&#62;http://wiki.exoplatform.com/xwiki/bin/view/Main/WebHome&#60;/uri&#62;
-  &#60;name&#62;documentation&#60;/name&#62;
-  &#60;label&#62;#{portal.classic.documentation}&#60;/label&#62;
-  &#60;page-reference&#62;portal::website::documentation&#60;/page-reference&#62;
-&#60;/node&#62;
-</programlisting>
-						</para>
-					</listitem>
-				</varlistentry>
-			</variablelist>
-			<warning>
-				<title>Direct external links were not a design goal</title>
-				<para>
-					Currently you cannot modify the URL using the portal interface, you must change it in the configuration files or modify the underlying database table.
-				</para>
-			</warning>
-		</section>
-
-	</section>
-
 </section>
 
 

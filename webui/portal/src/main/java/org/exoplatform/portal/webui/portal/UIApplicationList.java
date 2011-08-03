@@ -54,51 +54,11 @@ public class UIApplicationList extends UIContainer
 
    public UIApplicationList() throws Exception
    {
-      ApplicationRegistryService service = getApplicationComponent(ApplicationRegistryService.class);
-      String remoteUser = Util.getPortalRequestContext().getRemoteUser();
-      if (remoteUser == null || remoteUser.equals(""))
-         return;
-      UserACL userACL = Util.getUIPortalApplication().getApplicationComponent(UserACL.class);
-
-      PortletComparator portletComparator = new PortletComparator();
-      categories = service.getApplicationCategories(remoteUser);
-
-      Iterator<ApplicationCategory> cateItr = categories.iterator();
-      while (cateItr.hasNext())
-      {
-         ApplicationCategory cate = cateItr.next();
-         List<Application> applications = cate.getApplications();
-         boolean hasPermission = false;
-         List<String> accessPermission = cate.getAccessPermissions();
-         if (accessPermission == null)
-         {
-            accessPermission = new ArrayList<String>();
-         }
-         if (accessPermission.size() == 0)
-         {
-            accessPermission.add(null);
-         }
-         for (String permssion : accessPermission)
-         {
-            hasPermission = userACL.hasPermission(permssion);
-            if (hasPermission)
-               break;
-         }
-
-         if (!hasPermission || applications.size() < 1)
-            cateItr.remove();
-         else
-            Collections.sort(applications, portletComparator);
-      }
-      if (categories.size() > 0)
-         setSelectedCategory(categories.get(0).getName());
-
-      Collections.sort(categories, new PortletCategoryComparator());
    }
 
    public Application getApplication(String id) throws Exception
    {
-      for (ApplicationCategory category : categories)
+      for (ApplicationCategory category : getCategories())
       {
          List<Application> items = category.getApplications();
          for (Application item : items)
@@ -117,7 +77,7 @@ public class UIApplicationList extends UIContainer
 
    public void setSelectedCategory(String categoryName)
    {
-      for (ApplicationCategory category : categories)
+      for (ApplicationCategory category : getCategories())
       {
          if (category.getName().equals(categoryName))
          {
@@ -155,22 +115,76 @@ public class UIApplicationList extends UIContainer
 
    public List<ApplicationCategory> getCategories()
    {
-      return categories;
-   }
-
-   static class PortletCategoryComparator implements Comparator<ApplicationCategory>
-   {
-      public int compare(ApplicationCategory cat1, ApplicationCategory cat2)
+      try
       {
-         return cat1.getDisplayName().compareToIgnoreCase(cat2.getDisplayName());
+         //TODO: Handle concurrent requests associated with current session
+         if (categories == null)
+         {
+            initAllCategories();
+         }
+         return categories;
+      }
+      catch (Exception ex)
+      {
+         return null;
       }
    }
 
-   static class PortletComparator implements Comparator<Application>
+   private void initAllCategories() throws Exception
    {
-      public int compare(Application p1, Application p2)
+      String remoteUser = Util.getPortalRequestContext().getRemoteUser();
+      if (remoteUser == null || remoteUser.equals(""))
+      { return; }
+
+      ApplicationRegistryService service = getApplicationComponent(ApplicationRegistryService.class);
+      UserACL userACL = Util.getUIPortalApplication().getApplicationComponent(UserACL.class);
+
+      final Comparator<Application> appComparator = new Comparator<Application>()
       {
-         return p1.getDisplayName().compareToIgnoreCase(p2.getDisplayName());
+         public int compare(Application p_1, Application p_2)
+         {
+            return p_1.getDisplayName().compareToIgnoreCase(p_2.getDisplayName());
+         }
+      };
+      final Comparator<ApplicationCategory> cateComparator = new Comparator<ApplicationCategory>()
+      {
+         public int compare(ApplicationCategory p_1, ApplicationCategory p_2)
+         {
+            return p_1.getDisplayName().compareToIgnoreCase(p_2.getDisplayName());
+         }
+      };
+
+      List<ApplicationCategory> allCategories = service.getApplicationCategories(remoteUser);
+      categories = new ArrayList<ApplicationCategory>();
+
+      for (ApplicationCategory category : allCategories)
+      {
+         List<Application> apps = category.getApplications();
+         List<String> accessPermission = category.getAccessPermissions();
+         if(accessPermission == null)
+         {
+            continue;
+         }
+
+         accessCheck:
+         for (String p : accessPermission)
+         {
+            if (userACL.hasPermission(p))
+            {
+               if (apps.size() > 0)
+               {
+                  Collections.sort(apps, appComparator);
+               }
+               categories.add(category);
+            }
+            break accessCheck;
+         }
+      }
+
+      if (categories.size() > 0)
+      {
+         Collections.sort(categories, cateComparator);
+         selectedCategory = categories.get(0);
       }
    }
 
