@@ -50,6 +50,7 @@
       <org.gatein.wsrp.version>2.1.0-Beta04</org.gatein.wsrp.version>
       <org.gatein.mop.version>1.1.0-Beta05</org.gatein.mop.version>
       <org.gatein.mgmt.version>1.0.0-Beta01</org.gatein.mgmt.version>
+      <org.gatein.api.version>1.0.0-Beta01</org.gatein.api.version>
       <org.slf4j.version>1.5.8</org.slf4j.version>
       <commons-pool.version>1.5.5</commons-pool.version>
       <rhino.version>1.6R5</rhino.version>
@@ -398,6 +399,23 @@
             <artifactId>wsrp-wss-jboss5</artifactId>
             <scope>provided</scope>
             <version>${org.gatein.wsrp.version}</version>
+         </dependency>
+
+         <!-- API -->
+         <dependency>
+            <groupId>org.gatein.api</groupId>
+            <artifactId>gatein-java-api</artifactId>
+            <version>${org.gatein.api.version}</version>
+         </dependency>
+         <dependency>
+            <groupId>org.gatein.api</groupId>
+            <artifactId>generic-id-impl</artifactId>
+            <version>${org.gatein.api.version}</version>
+         </dependency>
+         <dependency>
+            <groupId>org.gatein.api</groupId>
+            <artifactId>java-api-impl</artifactId>
+            <version>${project.version}</version>
          </dependency>
 
          <!-- GateIn -->
@@ -854,11 +872,11 @@
                   <maxmem>1024m</maxmem>
                </configuration>
             </plugin>
-           <plugin>
-             <groupId>org.jibx</groupId>
-             <artifactId>maven-jibx-plugin</artifactId>
-             <version>1.2.2</version>
-           </plugin>
+            <plugin>
+               <groupId>org.jibx</groupId>
+               <artifactId>maven-jibx-plugin</artifactId>
+               <version>1.2.2</version>
+            </plugin>
          </plugins>
       </pluginManagement>
       <plugins>

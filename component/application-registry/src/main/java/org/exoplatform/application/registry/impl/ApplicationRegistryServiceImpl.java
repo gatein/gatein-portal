@@ -259,7 +259,7 @@ public class ApplicationRegistryServiceImpl implements ApplicationRegistryServic
 
       // If the application name contained a beginning slash (which can happen with WSRP), we need to hack around the
       // hardcoding of portlet id expectations >_<
-      if(fragments.length == 3 && applicationName.length() == 0)
+      if (fragments.length == 3 && applicationName.length() == 0)
       {
          applicationName = "/" + fragments[2];
       }
@@ -371,8 +371,6 @@ public class ApplicationRegistryServiceImpl implements ApplicationRegistryServic
 
    public void importExoGadgets() throws Exception
    {
-      ContentRegistry registry = getContentRegistry();
-
       //
       ExoContainer container = ExoContainerContext.getCurrentContainer();
       GadgetRegistryService gadgetService = (GadgetRegistryService)container.getComponentInstanceOfType(GadgetRegistryService.class);
@@ -386,22 +384,16 @@ public class ApplicationRegistryServiceImpl implements ApplicationRegistryServic
          String categoryName = "Gadgets";
 
          //
-         CategoryDefinition category = registry.getCategory(categoryName);
-         if (category == null)
-         {
-            category = registry.createCategory(categoryName);
-            category.setDisplayName(categoryName);
-            category.setDescription(categoryName);
-            category.setAccessPermissions(permissions);
-         }
+         CategoryDefinition category = getOrCreateCategoryDefinition(categoryName, permissions);
 
          //
          for (Gadget ele : eXoGadgets)
          {
-            ContentDefinition app = category.getContentMap().get(ele.getName());
+            String name = ele.getName();
+            ContentDefinition app = category.getContentMap().get(name);
             if (app == null)
             {
-               app = category.createContent(ele.getName(), org.exoplatform.portal.pom.spi.gadget.Gadget.CONTENT_TYPE, ele.getName());
+               app = category.createContent(name, org.exoplatform.portal.pom.spi.gadget.Gadget.CONTENT_TYPE, name);
                app.setDisplayName(ele.getTitle());
                app.setDescription(ele.getDescription());
                app.setAccessPermissions(permissions);
@@ -410,10 +402,53 @@ public class ApplicationRegistryServiceImpl implements ApplicationRegistryServic
       }
    }
 
-   public void importAllPortlets() throws Exception
+   public Application createOrUpdateApplication(String categoryName, String definitionName, ContentType<?> contentType, String contentId, String displayName, String description, List<String> permissions)
+   {
+      CategoryDefinition definition = getOrCreateCategoryDefinition(categoryName, permissions);
+      ContentDefinition content = definition.getContentMap().get(definitionName);
+      if (content == null)
+      {
+         content = createContent(definitionName, contentType, contentId, displayName, description, permissions, definition);
+      }
+      else
+      {
+         content.setAccessPermissions(permissions);
+         content.setDescription(description);
+         content.setDisplayName(displayName);
+      }
+      return load(content);
+   }
+
+   private ContentDefinition createContent(String definitionName, ContentType<?> contentType, String contentId, String displayName, String description, List<String> permissions, CategoryDefinition category)
+   {
+      ContentDefinition content = category.createContent(definitionName, contentType, contentId);
+      content.setDisplayName(displayName);
+      content.setDescription(description);
+      content.setAccessPermissions(permissions);
+      return content;
+   }
+
+   private ContentDefinition createContentFrom(Application application, CategoryDefinition category)
+   {
+      return createContent(application.getApplicationName(), application.getType().getContentType(), application.getContentId(), application.getDisplayName(), application.getDescription(), application.getAccessPermissions(), category);
+   }
+
+   private CategoryDefinition getOrCreateCategoryDefinition(String categoryName, List<String> permissions)
    {
       ContentRegistry registry = getContentRegistry();
+      CategoryDefinition category = registry.getCategory(categoryName);
+      if (category == null)
+      {
+         category = registry.createCategory(categoryName);
+         category.setDisplayName(categoryName);
+         category.setDescription(categoryName);
+         category.setAccessPermissions(permissions);
+      }
+      return category;
+   }
 
+   public void importAllPortlets() throws Exception
+   {
       //
       log.info("About to import portlets in application registry");
 
@@ -427,21 +462,17 @@ public class ApplicationRegistryServiceImpl implements ApplicationRegistryServic
       for (org.gatein.pc.api.Portlet portlet : portlets)
       {
          PortletInfo info = portlet.getInfo();
-         String portletApplicationName = info.getApplicationName();
-         String portletName = portlet.getContext().getId();
 
-         // Need to sanitize portlet and application names in case they contain characters that would
-         // cause an improper Application name
-         portletApplicationName = portletApplicationName.replace('/', '_');
-         portletName = portletName.replace('/', '_');
+         final Application application = createApplicationFrom(portlet);
+
+         String portletApplicationName = info.getApplicationName();
+         final String portletName = application.getApplicationName();
 
          MetaInfo metaInfo = portlet.getInfo().getMeta();
          LocalizedString keywordsLS = metaInfo.getMetaValue(MetaInfo.KEYWORDS);
 
-         //
-         Set<String> categoryNames = new HashSet<String>();
-
          // Process keywords
+         Set<String> categoryNames = new HashSet<String>();
          if (keywordsLS != null)
          {
             String keywords = keywordsLS.getDefaultString();
@@ -492,60 +523,87 @@ public class ApplicationRegistryServiceImpl implements ApplicationRegistryServic
          // Process category names
          for (String categoryName : categoryNames)
          {
-            CategoryDefinition category = registry.getCategory(categoryName);
-
-            //
-            if (category == null)
-            {
-               category = registry.createCategory(categoryName);
-               category.setDisplayName(categoryName);
-               category.setAccessPermissions(permissions);
-            }
+            CategoryDefinition category = getOrCreateCategoryDefinition(categoryName, permissions);
 
             //
             ContentDefinition app = category.getContentMap().get(portletName);
             if (app == null)
             {
-               LocalizedString descriptionLS = metaInfo.getMetaValue(MetaInfo.DESCRIPTION);
-               LocalizedString displayNameLS = metaInfo.getMetaValue(MetaInfo.DISPLAY_NAME);
-               String displayName = getLocalizedStringValue(displayNameLS, portletName);
-
-               ContentType<?> contentType;
-               String contentId;
-               if (remote)
-               {
-                  contentType = WSRP.CONTENT_TYPE;
-                  contentId = portlet.getContext().getId();
-                  displayName += REMOTE_DISPLAY_NAME_SUFFIX;  // add remote to display name to make it more obvious that the portlet is remote
-               }
-               else
-               {
-                  contentType = Portlet.CONTENT_TYPE;
-                  contentId = info.getApplicationName() + "/" + info.getName();
-               }
-
                // Check if the portlet has already existed in this category
                List<Application> applications = load(category).getApplications();
                boolean isExist = false;
-               for (Application application : applications)
+               for (Application categoryApp : applications)
                {
-                  if (application.getContentId().equals(contentId))
+                  if (categoryApp.getContentId().equals(application.getContentId()))
                   {
                      isExist = true;
                      break;
                   }
                }
-               
+
                if (!isExist)
                {
-                  app = category.createContent(portletName, contentType, contentId);
-                  app.setDisplayName(displayName);
-                  app.setDescription(getLocalizedStringValue(descriptionLS, portletName));
-                  app.setAccessPermissions(permissions);
+                  app = createContentFrom(application, category);
                }
             }
          }
       }
+   }
+
+   public Application createApplicationFrom(org.gatein.pc.api.Portlet portlet)
+   {
+      PortletInfo info = portlet.getInfo();
+
+      String portletName = portlet.getContext().getId();
+
+      portletName = sanitize(portletName);
+
+      MetaInfo metaInfo = portlet.getInfo().getMeta();
+
+      ArrayList<String> permissions = new ArrayList<String>();
+      permissions.add(UserACL.EVERYONE);
+
+      // Additionally categorise the portlet as remote
+      boolean remote = portlet.isRemote();
+
+      LocalizedString descriptionLS = metaInfo.getMetaValue(MetaInfo.DESCRIPTION);
+      LocalizedString displayNameLS = metaInfo.getMetaValue(MetaInfo.DISPLAY_NAME);
+      String displayName = getLocalizedStringValue(displayNameLS, portletName);
+
+      ApplicationType appType;
+      String contentId;
+      if (remote)
+      {
+         appType = ApplicationType.WSRP_PORTLET;
+         contentId = portlet.getContext().getId();
+         displayName += REMOTE_DISPLAY_NAME_SUFFIX;  // add remote to display name to make it more obvious that the portlet is remote
+      }
+      else
+      {
+         appType = ApplicationType.PORTLET;
+         contentId = info.getApplicationName() + "/" + info.getName();
+      }
+
+      Application app = new Application();
+      app.setApplicationName(portletName);
+      app.setType(appType);
+      app.setDisplayName(displayName);
+      app.setDescription(getLocalizedStringValue(descriptionLS, portletName));
+      app.setAccessPermissions(permissions);
+      app.setContentId(contentId);
+
+      return app;
+   }
+
+   /**
+    * Sanitizes the specified name in case it contains characters that would cause improper Application name.
+    *
+    * @param name
+    * @return
+    */
+   private String sanitize(String name)
+   {
+      return name.replace('/', '_');
    }
 
    private boolean isApplicationType(Application app, ApplicationType<?>... appTypes)

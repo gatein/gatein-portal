@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
    <modelVersion>4.0.0</modelVersion>
 
@@ -342,6 +343,20 @@
          <artifactId>pc-bridge</artifactId>
       </dependency>
 
+      <!-- GateIn API -->
+      <dependency>
+         <groupId>org.gatein.api</groupId>
+         <artifactId>java-api-impl</artifactId>
+      </dependency>
+      <dependency>
+         <groupId>org.gatein.api</groupId>
+         <artifactId>gatein-java-api</artifactId>
+      </dependency>
+      <dependency>
+         <groupId>org.gatein.api</groupId>
+         <artifactId>generic-id-impl</artifactId>
+      </dependency>
+
       <!-- GateIn MOP -->
       <dependency>
          <groupId>org.gatein.mop</groupId>
@@ -512,9 +527,9 @@
 
       <!-- Provided -->
       <dependency>
-        <groupId>javax.inject</groupId>
-        <artifactId>javax.inject</artifactId>
-        <version>1</version>
+         <groupId>javax.inject</groupId>
+         <artifactId>javax.inject</artifactId>
+         <version>1</version>
       </dependency>
       <dependency>
          <groupId>javax.activation</groupId>
@@ -635,8 +650,8 @@
          <version>2.0.235</version>
       </dependency>
       <dependency>
-        <groupId>com.google.guava</groupId>
-        <artifactId>guava</artifactId>
+         <groupId>com.google.guava</groupId>
+         <artifactId>guava</artifactId>
       </dependency>
       <dependency>
          <groupId>org.codehaus.groovy</groupId>
@@ -803,19 +818,19 @@
          <version>1.2.3</version>
       </dependency>
       <dependency>
-        <groupId>org.apache.tika</groupId>
-        <artifactId>tika-core</artifactId>
-        <version>0.7</version>
+         <groupId>org.apache.tika</groupId>
+         <artifactId>tika-core</artifactId>
+         <version>0.7</version>
       </dependency>
       <dependency>
-        <groupId>org.apache.tika</groupId>
-        <artifactId>tika-parsers</artifactId>
-        <version>0.7</version>
+         <groupId>org.apache.tika</groupId>
+         <artifactId>tika-parsers</artifactId>
+         <version>0.7</version>
       </dependency>
       <dependency>
-        <groupId>com.google.javascript</groupId>
-        <artifactId>closure-compiler</artifactId>
-        <version>r706</version>
+         <groupId>com.google.javascript</groupId>
+         <artifactId>closure-compiler</artifactId>
+         <version>r706</version>
       </dependency>
 
       <dependency>
@@ -932,17 +947,17 @@
                         <requireProperty>
                            <property>jbossas.path</property>
                            <message>"
-You must define the property 'jbossas.path'
-to give the path to the directory where you store your applications servers.
-"
+                              You must define the property 'jbossas.path'
+                              to give the path to the directory where you store your applications servers.
+                              "
                            </message>
                         </requireProperty>
                         <requireProperty>
                            <property>jbossas.name</property>
                            <message>"
-You must define the property 'jbossas.name'
-to give the name of the directory where JBoss AS is stored.
-"
+                              You must define the property 'jbossas.name'
+                              to give the name of the directory where JBoss AS is stored.
+                              "
                            </message>
                         </requireProperty>
                         <requireFilesExist>
@@ -950,13 +965,14 @@ to give the name of the directory where JBoss AS is stored.
                               <file>${jbossas.path}/${jbossas.name}/</file>
                            </files>
                            <message>"
-The following JBoss AS directory doesn't exist :
+                              The following JBoss AS directory doesn't exist :
                               ${jbossas.path}/${jbossas.name}
 
-Make JBoss AS instance available at that location, or use -Dservers.dir=PATH to point to the correct location of servers directory
-and/or -Djbossas.name=NAME to point to the correct directory under the servers directory.
-You can also use -Pdownload to automatically provide JBoss AS instance.
-"
+                              Make JBoss AS instance available at that location, or use -Dservers.dir=PATH to point to
+                              the correct location of servers directory
+                              and/or -Djbossas.name=NAME to point to the correct directory under the servers directory.
+                              You can also use -Pdownload to automatically provide JBoss AS instance.
+                              "
                            </message>
                         </requireFilesExist>
                      </rules>
@@ -992,9 +1008,9 @@ You can also use -Pdownload to automatically provide JBoss AS instance.
                   <configuration>
                      <target>
                         <ant antfile="${project.basedir}/package.xml" inheritRefs="true">
-                           <target name="package" />
-                           <property name="maven.project.basedir" value="${project.basedir}" />
-                           <property name="maven.project.build.directory" value="${project.build.directory}" />
+                           <target name="package"/>
+                           <property name="maven.project.basedir" value="${project.basedir}"/>
+                           <property name="maven.project.build.directory" value="${project.build.directory}"/>
                         </ant>
                      </target>
                   </configuration>
@@ -1031,9 +1047,9 @@ You can also use -Pdownload to automatically provide JBoss AS instance.
                               <requireProperty>
                                  <property>exo.projects.directory.dependencies</property>
                                  <message>"
-You must define the property 'exo.projects.directory.dependencies'
-to specify the path to the directory where you store your application servers.
-"
+                                    You must define the property 'exo.projects.directory.dependencies'
+                                    to specify the path to the directory where you store your application servers.
+                                    "
                                  </message>
                               </requireProperty>
                            </rules>
@@ -1050,9 +1066,9 @@ to specify the path to the directory where you store your application servers.
                               <requireProperty>
                                  <property>exo.projects.app.jboss6.version</property>
                                  <message>"
-You must define the property 'exo.projects.app.jboss6.version'
-to specify the name of the directory where JBoss AS is stored.
-"
+                                    You must define the property 'exo.projects.app.jboss6.version'
+                                    to specify the name of the directory where JBoss AS is stored.
+                                    "
                                  </message>
                               </requireProperty>
                            </rules>
@@ -1073,13 +1089,15 @@ to specify the name of the directory where JBoss AS is stored.
                                     </file>
                                  </files>
                                  <message>"
-The following JBoss AS directory doesn't exist :
+                                    The following JBoss AS directory doesn't exist :
                                     ${exo.projects.directory.dependencies}/${exo.projects.app.jboss6.version}
 
-Make JBoss AS instance available at that location, or use -Dexo.projects.directory.dependencies=PATH to point to the correct location
-of servers directory and/or -Dexo.projects.app.jboss6.version=NAME to point to the correct directory under the servers directory.
-You can also use -Pdownload to automatically provide JBoss AS instance.
-"
+                                    Make JBoss AS instance available at that location, or use
+                                    -Dexo.projects.directory.dependencies=PATH to point to the correct location
+                                    of servers directory and/or -Dexo.projects.app.jboss6.version=NAME to point to the
+                                    correct directory under the servers directory.
+                                    You can also use -Pdownload to automatically provide JBoss AS instance.
+                                    "
                                  </message>
                               </requireFilesExist>
                            </rules>
@@ -1132,35 +1150,37 @@ You can also use -Pdownload to automatically provide JBoss AS instance.
                         </goals>
                         <configuration>
                            <target>
-                              <available property="jbossas.dir.exists" type="dir" file="${jbossas.dir}" />
+                              <available property="jbossas.dir.exists" type="dir" file="${jbossas.dir}"/>
 
                               <fail if="jbossas.dir.exists">"
-Destination JBossAS directory exists already:
+                                 Destination JBossAS directory exists already:
                                  ${jbossas.dir}
 
-Either rename it, delete it, or deactivate -Pdownload profile.
-"
+                                 Either rename it, delete it, or deactivate -Pdownload profile.
+                                 "
                               </fail>
 
-                              <property name="jbossas.zip" value="${jbossas.path}/jboss-as-distribution-${jbossas.dist.version}.zip" />
+                              <property name="jbossas.zip"
+                                        value="${jbossas.path}/jboss-as-distribution-${jbossas.dist.version}.zip"/>
 
                               <!-- Autocreate servers.dir if necessary -->
-                              <mkdir dir="${jbossas.path}" />
+                              <mkdir dir="${jbossas.path}"/>
 
                               <!-- Download JBossAS unless already downloaded -->
                               <ant antfile="${project.basedir}/download-jboss.xml">
-                                 <target name="download-jboss" />
-                                 <property name="url" value="http://sourceforge.net/projects/jboss/files/JBoss/JBoss-${jbossas.version}/jboss-as-distribution-${jbossas.dist.version}.zip" />
-                                 <property name="dest" value="${jbossas.zip}" />
+                                 <target name="download-jboss"/>
+                                 <property name="url"
+                                           value="http://sourceforge.net/projects/jboss/files/JBoss/JBoss-${jbossas.version}/jboss-as-distribution-${jbossas.dist.version}.zip"/>
+                                 <property name="dest" value="${jbossas.zip}"/>
                               </ant>
 
                               <!-- Extract downloaded JBossAS to servers dir -->
-                              <unzip src="${jbossas.zip}" dest="${jbossas.path}" overwrite="false" />
+                              <unzip src="${jbossas.zip}" dest="${jbossas.path}" overwrite="false"/>
 
                               <ant antfile="${project.basedir}/package.xml" inheritRefs="true">
-                                 <target name="package" />
-                                 <property name="maven.project.basedir" value="${project.basedir}" />
-                                 <property name="maven.project.build.directory" value="${project.build.directory}" />
+                                 <target name="package"/>
+                                 <property name="maven.project.basedir" value="${project.basedir}"/>
+                                 <property name="maven.project.build.directory" value="${project.build.directory}"/>
                               </ant>
                            </target>
                         </configuration>
@@ -1188,8 +1208,10 @@ Either rename it, delete it, or deactivate -Pdownload profile.
                         </goals>
                         <configuration>
                            <target>
-                              <zip destfile="${project.build.directory}/GateIn-${project.version}-jbossas6.zip" basedir="${jbossas.target.dir}" />
-                              <attachartifact file="${project.build.directory}/GateIn-${project.version}-jbossas6.zip" classifier="bundle" type="zip" />
+                              <zip destfile="${project.build.directory}/GateIn-${project.version}-jbossas6.zip"
+                                   basedir="${jbossas.target.dir}"/>
+                              <attachartifact file="${project.build.directory}/GateIn-${project.version}-jbossas6.zip"
+                                              classifier="bundle" type="zip"/>
                            </target>
                         </configuration>
                      </execution>
@@ -1245,7 +1267,7 @@ Either rename it, delete it, or deactivate -Pdownload profile.
                               <!-- Copy CDI specific configuration -->
                               <copy todir="${jbossas.target.dir}" preservelastmodified="true" overwrite="true">
                                  <fileset dir="${project.basedir}/src/main/resources/cdi/jboss">
-                                    <include name="**/*.xml" />
+                                    <include name="**/*.xml"/>
                                  </fileset>
                               </copy>
                            </target>

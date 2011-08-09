@@ -45,6 +45,7 @@
       <module>scripting</module>
       <module>management</module>
       <module>identity</module>
+      <module>api-impl</module>
    </modules>
 
 </project>

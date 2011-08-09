@@ -342,6 +342,20 @@
       <artifactId>pc-bridge</artifactId>
     </dependency>
 
+     <!-- GateIn API -->
+      <dependency>
+         <groupId>org.gatein.api</groupId>
+         <artifactId>java-api-impl</artifactId>
+      </dependency>
+      <dependency>
+         <groupId>org.gatein.api</groupId>
+         <artifactId>gatein-java-api</artifactId>
+      </dependency>
+      <dependency>
+         <groupId>org.gatein.api</groupId>
+         <artifactId>generic-id-impl</artifactId>
+      </dependency>
+
     <!-- GateIn MOP -->
     <dependency>
       <groupId>org.gatein.mop</groupId>

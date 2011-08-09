@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+   <parent>
+      <artifactId>exo.portal.component</artifactId>
+      <groupId>org.exoplatform.portal</groupId>
+      <version>3.2.0-M02-SNAPSHOT</version>
+   </parent>
+   <modelVersion>4.0.0</modelVersion>
+
+   <groupId>org.gatein.api</groupId>
+   <artifactId>java-api-impl</artifactId>
+
+   <dependencies>
+      <dependency>
+         <groupId>org.gatein.api</groupId>
+         <artifactId>gatein-java-api</artifactId>
+      </dependency>
+      <dependency>
+         <groupId>org.gatein.api</groupId>
+         <artifactId>generic-id-impl</artifactId>
+      </dependency>
+      <dependency>
+         <groupId>org.exoplatform.kernel</groupId>
+         <artifactId>exo.kernel.container</artifactId>
+      </dependency>
+      <dependency>
+         <groupId>org.exoplatform.portal</groupId>
+         <artifactId>exo.portal.component.portal</artifactId>
+      </dependency>
+      <dependency>
+         <groupId>org.exoplatform.portal</groupId>
+         <artifactId>exo.portal.component.application-registry</artifactId>
+      </dependency>
+      <dependency>
+         <groupId>org.testng</groupId>
+         <artifactId>testng</artifactId>
+         <version>5.14.10</version>
+         <scope>test</scope>
+      </dependency>
+
+      <!-- To be able to access Util to generate Navigation URI -->
+      <dependency>
+         <groupId>org.exoplatform.portal</groupId>
+         <artifactId>exo.portal.webui.portal</artifactId>
+      </dependency>
+   </dependencies>
+
+   <build>
+      <finalName>gatein-java-api-impl-${project.version}</finalName>
+   </build>
+
+</project>

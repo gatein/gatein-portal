@@ -225,6 +225,11 @@ public class UserACL
    public boolean hasPermission(PortalConfig pconfig)
    {
       Identity identity = getIdentity();
+      return hasPermission(identity, pconfig);
+   }
+
+   public boolean hasPermission(Identity identity, PortalConfig pconfig)
+   {
       if (hasPermission(identity, pconfig.getEditPermission()))
       {
          pconfig.setModifiable(true);
