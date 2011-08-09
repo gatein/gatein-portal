@@ -74,7 +74,16 @@ public class UIPortletInfo extends UIContainer
          UICategorySelector selector = uiPortletInfo.addChild(UICategorySelector.class, null, CATEGORY_ID);
          Application app = new Application();
          app.setApplicationName(portlet.getName());
-         app.setType(ApplicationType.PORTLET);
+
+         // I really hate the fact that the code to create Applications is spread all over and doesn't properly deal with application types
+         if(portlet.isRemote())
+         {
+            app.setType(ApplicationType.WSRP_PORTLET);
+         }
+         else
+         {
+            app.setType(ApplicationType.PORTLET);
+         }
          app.setDisplayName(portlet.getDisplayName());
          app.setContentId(portlet.getId());
          app.setAccessPermissions(new ArrayList<String>());

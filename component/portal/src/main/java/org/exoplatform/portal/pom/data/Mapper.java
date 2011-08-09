@@ -540,6 +540,7 @@ public class Mapper
          if (srcChild instanceof ApplicationData)
          {
             ApplicationData<?> app = (ApplicationData)srcChild;
+            // todo julien: shouldn't we be checking for WSRP as well here?
             if (app.getType() == ApplicationType.PORTLET && app.getState() instanceof TransientApplicationState)
             {
                TransientApplicationState<?> state = (TransientApplicationState<?>)app.getState();

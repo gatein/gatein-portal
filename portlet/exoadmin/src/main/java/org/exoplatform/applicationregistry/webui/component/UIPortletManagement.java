@@ -1,16 +1,16 @@
 /**
  * Copyright (C) 2009 eXo Platform SAS.
- * 
+ *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation; either version 2.1 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this software; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
@@ -19,12 +19,12 @@
 
 package org.exoplatform.applicationregistry.webui.component;
 
+import org.exoplatform.commons.serialization.api.annotations.Converted;
+import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
-import org.exoplatform.commons.serialization.api.annotations.Converted;
-import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIContainer;
@@ -33,7 +33,6 @@ import org.exoplatform.webui.event.EventListener;
 import org.gatein.common.i18n.LocalizedString;
 import org.gatein.pc.api.Portlet;
 import org.gatein.pc.api.PortletContext;
-import org.gatein.pc.api.PortletInvoker;
 import org.gatein.pc.api.info.MetaInfo;
 import org.gatein.pc.api.info.PortletInfo;
 import org.gatein.pc.api.info.PreferencesInfo;
@@ -49,8 +48,8 @@ import java.util.Set;
 /**
  * Created by The eXo Platform SAS
  * Author : Pham Thanh Tung
- *          thanhtungty@gmail.com
- * Jun 24, 2008  
+ * thanhtungty@gmail.com
+ * Jun 24, 2008
  */
 
 @ComponentConfig(template = "app:/groovy/applicationregistry/webui/component/UIPortletManagement.gtmpl", events = {
@@ -59,6 +58,9 @@ import java.util.Set;
 @Serialized
 public class UIPortletManagement extends UIContainer
 {
+
+   /** Should match WSRPPortletInfo.PRODUCER_NAME_META_INFO_KEY */
+   private static final String PRODUCER_NAME_META_INFO_KEY = "producer-name";
 
    static final public String LOCAL = "local";
 
@@ -121,7 +123,25 @@ public class UIPortletManagement extends UIContainer
       for (Portlet portlet : portlets)
       {
          PortletInfo info = portlet.getInfo();
-         String appName = info.getApplicationName();
+
+         // in the remote case, the "application name" will be the name of the remote invoker
+         String appName;
+         if (remote)
+         {
+            LocalizedString producerNameLS = info.getMeta().getMetaValue(PRODUCER_NAME_META_INFO_KEY);
+            if (producerNameLS != null)
+            {
+               appName = producerNameLS.getDefaultString();
+            }
+            else
+            {
+               throw new IllegalStateException("Missing PortletInvoker id in remote portlet metadata");
+            }
+         }
+         else
+         {
+            appName = info.getApplicationName();
+         }
 
          WebApp webApp = getWebApp(appName);
          if (webApp == null)
@@ -144,7 +164,9 @@ public class UIPortletManagement extends UIContainer
       for (WebApp ele : webApps)
       {
          if (ele.getName().equals(name))
+         {
             return ele;
+         }
       }
       return null;
    }
@@ -167,10 +189,14 @@ public class UIPortletManagement extends UIContainer
       {
          List<PortletExtra> list = webApps.get(0).getPortlets();
          if (!list.isEmpty())
+         {
             setSelectedPortlet(list.get(0));
+         }
       }
       else
+      {
          setSelectedPortlet((PortletExtra)null);
+      }
    }
 
    public String[] getPortletTypes()
@@ -205,11 +231,26 @@ public class UIPortletManagement extends UIContainer
 
    public void setSelectedPortlet(String id) throws Exception
    {
-      String[] fragments = id.split("/");
-      WebApp webApp = getWebApp(fragments[0]);
+      String webAppName;
+      String portletName;
+      if (LOCAL.equals(selectedType))
+      {
+         String[] fragments = id.split("/");
+         webAppName = fragments[0];
+         portletName = fragments[1];
+      }
+      else
+      {
+         // extract PortletInvoker id to use as WebApp name
+         final int separatorIndex = id.indexOf('.');
+         webAppName = id.substring(0, separatorIndex);
+         portletName = id.substring(separatorIndex + 1);
+      }
+
+      WebApp webApp = getWebApp(webAppName);
       for (PortletExtra ele : webApp.getPortlets())
       {
-         if (ele.getName().equals(fragments[1]))
+         if (ele.getName().equals(portletName))
          {
             setSelectedPortlet(ele);
             break;
@@ -263,32 +304,35 @@ public class UIPortletManagement extends UIContainer
       private PortletInfo portletInfo_;
 
       final PortletContext context;
-      private static final String SEPARATOR = "/";
-      private static final int SEPARATOR_LENGTH = SEPARATOR.length();
 
       public PortletExtra(Portlet portlet)
       {
          PortletInfo info = portlet.getInfo();
-         String portletName = info.getName();
+
+         context = portlet.getContext();
+
          String appName = info.getApplicationName();
          boolean remote = portlet.isRemote();
 
-         // if the portlet is remote, we might have an extra '/' at the beginning of the portlet name
-         if(remote && portletName.startsWith(SEPARATOR))
+         String portletId;
+         if (remote)
          {
-            portletName = portletName.substring(SEPARATOR_LENGTH);
+            portletId = context.getId();
          }
-         
-         String portletId = appName + SEPARATOR + portletName;
+         else
+         {
+            portletId = info.getApplicationName() + "/" + info.getName();
+         }
+
          String type = remote ? REMOTE : LOCAL;
 
          //
          id_ = portletId;
          group_ = appName;
-         name_ = portletName;
+         name_ = info.getName();
          type_ = type;
          portletInfo_ = info;
-         context = portlet.getContext();
+
       }
 
       public String getId()
@@ -315,7 +359,8 @@ public class UIPortletManagement extends UIContainer
       {
          try
          {
-            return getMetaValue(MetaInfo.DISPLAY_NAME, name_);
+            final String displayName = getMetaValue(MetaInfo.DISPLAY_NAME, name_);
+            return isRemote() ? displayName + " (remote)" : displayName;
          }
          catch (Exception ex)
          {
@@ -351,8 +396,15 @@ public class UIPortletManagement extends UIContainer
       {
          LocalizedString metaValue = portletInfo_.getMeta().getMetaValue(metaKey);
          if (metaValue == null || metaValue.getDefaultString() == null)
+         {
             return defaultValue;
+         }
          return metaValue.getDefaultString();
+      }
+
+      public boolean isRemote()
+      {
+         return REMOTE.equals(type_);
       }
    }
 
@@ -402,7 +454,9 @@ public class UIPortletManagement extends UIContainer
       public void addPortlet(PortletExtra portlet)
       {
          if (portlets_ == null)
+         {
             portlets_ = new ArrayList<PortletExtra>();
+         }
          portlets_.add(portlet);
       }
 
