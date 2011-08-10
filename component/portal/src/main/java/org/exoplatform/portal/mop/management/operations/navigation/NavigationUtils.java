@@ -123,7 +123,7 @@ public class NavigationUtils
       children.add(createPageNode(service, node));
 
       NavigationFragment fragment = new NavigationFragment();
-      StringBuilder parentUri = new StringBuilder("/");
+      StringBuilder parentUri = new StringBuilder("");
       getPath(node.getParent(), parentUri);
       fragment.setParentURI(parentUri.toString());
       fragment.setNodes(children);
@@ -138,7 +138,7 @@ public class NavigationUtils
       if (node == null) return;
       if (node.getParent() == null) return; // since "default" is the root node, we ignore it
 
-      parentUri.insert(0, node.getName()).append("/");
+      parentUri.insert(0, node.getName()).insert(0, "/");
       getPath(node.getParent(), parentUri);
    }
 
