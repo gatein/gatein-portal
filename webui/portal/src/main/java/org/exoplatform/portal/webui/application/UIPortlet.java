@@ -52,7 +52,6 @@ import org.gatein.common.i18n.LocalizedString;
 import org.gatein.common.net.media.MediaType;
 import org.gatein.common.util.ParameterValidation;
 import org.gatein.pc.api.Mode;
-import org.gatein.pc.api.NoSuchPortletException;
 import org.gatein.pc.api.PortletContext;
 import org.gatein.pc.api.PortletInvoker;
 import org.gatein.pc.api.PortletInvokerException;
@@ -1003,7 +1002,8 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
    public void update(C updateState) throws Exception
    {
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
-      ExoContainer container = context.getApplication().getApplicationServiceContainer();      state.setApplicationState(adapter.update(container, updateState, state.getApplicationState()));
+      ExoContainer container = context.getApplication().getApplicationServiceContainer();
+      state.setApplicationState(adapter.update(container, updateState, state.getApplicationState()));
       setState(state);
    }
    

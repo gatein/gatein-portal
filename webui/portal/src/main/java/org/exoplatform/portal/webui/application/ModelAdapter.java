@@ -27,7 +27,6 @@ import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.config.model.TransientApplicationState;
 import org.exoplatform.portal.pc.ExoPortletState;
 import org.exoplatform.portal.pc.ExoPortletStateType;
-import org.exoplatform.portal.pom.config.Utils;
 import org.exoplatform.portal.pom.spi.gadget.Gadget;
 import org.exoplatform.portal.pom.spi.portlet.Portlet;
 import org.exoplatform.portal.pom.spi.portlet.PortletBuilder;
@@ -40,6 +39,7 @@ import org.gatein.pc.api.StatefulPortletContext;
 
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -204,6 +204,12 @@ public abstract class ModelAdapter<S, C extends Serializable>
          String url = GadgetUtil.reproduceUrl(model.getUrl(), model.isLocal());
          ExoPortletState prefs = new ExoPortletState(WRAPPER_ID);
          prefs.getState().put("url", Arrays.asList(url));
+         DataStorage dataStorage = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
+         Gadget gadget = dataStorage.load(applicationState, ApplicationType.GADGET);
+         if (gadget != null && gadget.getUserPref() != null)
+         {
+            prefs.getState().put("userPref", Collections.singletonList(gadget.getUserPref()));
+         }
          return StatefulPortletContext.create(LOCAL_STATE_ID, ExoPortletStateType.getInstance(), prefs);
       }
 
@@ -211,7 +217,33 @@ public abstract class ModelAdapter<S, C extends Serializable>
       public ApplicationState<Gadget> update(ExoContainer container, ExoPortletState updateState,
                                              ApplicationState<Gadget> gadgetApplicationState) throws Exception
       {
-         throw new UnsupportedOperationException("Cannot edit gadget preferences");
+         // Compute new preferences
+         String userPref = null;
+         for (Map.Entry<String, List<String>> entry : updateState.getState().entrySet())
+         {
+            if (entry.getKey().equals("userPref") && entry.getValue().size() > 0)
+            {
+               userPref = entry.getValue().get(0);
+            }
+         }
+
+         if (gadgetApplicationState instanceof TransientApplicationState<?>)
+         {
+            throw new UnsupportedOperationException("todo");
+         }
+         else
+         {
+            if (userPref != null)
+            {
+               Gadget gadget = new Gadget();
+               gadget.addUserPref(userPref);
+               DataStorage dataStorage = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
+               dataStorage.save(gadgetApplicationState, gadget);
+            }
+         }
+
+         //
+         return gadgetApplicationState;
       }
 
       @Override

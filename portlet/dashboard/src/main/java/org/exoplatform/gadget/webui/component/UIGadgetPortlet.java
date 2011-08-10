@@ -26,6 +26,7 @@ import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.webui.application.GadgetUtil;
 import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -38,6 +39,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import javax.portlet.PortletPreferences;
+import javax.portlet.PortletRequest;
 
 /**
  * Created by The eXo Platform SARL
@@ -52,9 +54,46 @@ public class UIGadgetPortlet extends UIPortletApplication
 
    private static final Logger log = LoggerFactory.getLogger(GadgetImporter.class);
 
+   /** User pref. */
+   private String userPref;
+   
    public UIGadgetPortlet() throws Exception
    {
       addChild(UIGadgetViewMode.class, null, null);
+   }
+   
+   public String getUserPref()
+   {
+      return userPref;
+   }
+
+   @Override
+   public void processAction(WebuiRequestContext context) throws Exception
+   {
+      super.processAction(context);
+
+      //
+      PortletRequest req = context.getRequest();
+
+      //
+      userPref = req.getParameter("userPref");
+      if (userPref != null && !userPref.isEmpty())
+      {
+         PortletPreferences prefs = req.getPreferences();
+         prefs.setValue("userPref", userPref);
+         prefs.store();
+      }
+   }
+
+   @Override
+   public void processRender(WebuiApplication app, WebuiRequestContext context) throws Exception
+   {
+      PortletRequest req = context.getRequest();
+      PortletPreferences prefs = req.getPreferences();
+      userPref = prefs.getValue("userPref", null);
+
+      //
+      super.processRender(app, context);
    }
 
    public String getUrl()

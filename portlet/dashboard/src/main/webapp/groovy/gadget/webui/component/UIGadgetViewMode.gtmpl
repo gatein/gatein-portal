@@ -12,7 +12,7 @@
 	
 	if(url != null) {
   	def metadata = uicomponent.getParent().getMetadata(url);
-  	def userPref = null;
+  	def userPref = uicomponent.getParent().getUserPref();
   	JavascriptManager jsmanager = rcontext.getJavascriptManager();
   	jsmanager.importJavascript("eXo.gadget.UIGadget") ;
   	jsmanager.addCustomizedOnLoadScript("eXo.gadget.UIGadget.createGadget('$url','$id', $metadata, $userPref, 'canvas', '$hostName');") ;
