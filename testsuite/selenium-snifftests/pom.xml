@@ -57,6 +57,13 @@
 			<id>selenium</id>
 			<build>
 				<plugins>
+				     <plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-compiler-plugin</artifactId>
+						<configuration>
+							 <encoding>ISO-8859-1</encoding>
+						</configuration>
+			        </plugin>
 					<plugin>
 						<groupId>org.codehaus.mojo</groupId>
 						<artifactId>build-helper-maven-plugin</artifactId>
@@ -172,6 +179,14 @@
 					<skip>true</skip>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					 <encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+
 		</plugins>
 	</build>
 
