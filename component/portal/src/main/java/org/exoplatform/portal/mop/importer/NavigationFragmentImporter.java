@@ -257,7 +257,7 @@ public class NavigationFragmentImporter
                //
                if (config.updatedSame)
                {
-                  dstChild.setState(srcChild.getState());
+                  update(srcChild, dstChild, labelMap);
                }
 
                //
@@ -280,7 +280,7 @@ public class NavigationFragmentImporter
                {
                   if (config.updatedSame)
                   {
-                     dstChild.setState(srcChild.getState());
+                     update(srcChild, dstChild, labelMap);
                   }
                   previousChild = dstChild;
                }
@@ -361,5 +361,40 @@ public class NavigationFragmentImporter
 
       //
       return child;
+   }
+
+   private void update(PageNode src, NodeContext<?> target,
+                       Map<NodeContext<?>, Map<Locale, Described.State>> labelMap)
+   {
+      target.setState(src.getState());
+
+      // Update extended labels if necessary
+      I18NString labels = src.getLabels();
+      Map<Locale, Described.State> description;
+      if (labels.isSimple())
+      {
+         description = null;
+      }
+      else if (labels.isEmpty())
+      {
+         description = null;
+      }
+      else
+      {
+         description = new HashMap<Locale, Described.State>();
+         for (Map.Entry<Locale, String> entry : labels.getExtended(portalLocale).entrySet())
+         {
+            description.put(entry.getKey(), new Described.State(entry.getValue(), null));
+         }
+      }
+
+      if (description != null)
+      {
+         labelMap.put(target, description);
+      }
+      else
+      {
+         labelMap.put(target, Collections.<Locale, Described.State>emptyMap());
+      }
    }
 }

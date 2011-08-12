@@ -187,10 +187,15 @@ public class DescriptionServiceImpl implements DescriptionService
       {
          cache.removeState(new CacheKey(locale, id));
       }
-      for (Map.Entry<Locale, Described.State> entry : descriptions.entrySet())
+
+      // Interface specifies it allows a null description map
+      if (descriptions != null)
       {
-         Described described = able.addI18NMixin(Described.class, entry.getKey());
-         described.setState(entry.getValue());
+         for (Map.Entry<Locale, Described.State> entry : descriptions.entrySet())
+         {
+            Described described = able.addI18NMixin(Described.class, entry.getKey());
+            described.setState(entry.getValue());
+         }
       }
    }
 }

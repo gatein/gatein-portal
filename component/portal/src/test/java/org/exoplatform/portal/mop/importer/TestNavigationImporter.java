@@ -338,6 +338,84 @@ public class TestNavigationImporter extends AbstractTestNavigationService
       Map<Locale, Described.State> cDesc = descriptionService.getDescriptions(c.getId());
       assertNull(cDesc);
       assertEquals("c_en", c.getState().getLabel());
+
+      //----------------- Now test extended labels merge -----------------//
+      src = new PageNavigation("portal", "extended_label").addFragment(fragment().add(node("a"), node("b"), node("c")).build());
+      fragment = src.getFragment();
+      fragment.getNode("a").setLabels(new I18NString(new LocalizedString("a_it", Locale.ITALIAN), new LocalizedString("a_de", Locale.GERMAN)));
+      fragment.getNode("b").setLabels(new I18NString(new LocalizedString("foo_b_en"), new LocalizedString("b_it", Locale.ITALIAN)));
+      fragment.getNode("c").setLabels(new I18NString(new LocalizedString("foo_c_en")));
+      src.setOwnerId("extended_label");
+
+      importer = new NavigationImporter(Locale.ENGLISH, ImportMode.MERGE, src, service, descriptionService);
+      importer.perform();
+
+      //
+      ctx = service.loadNavigation(SiteKey.portal("extended_label"));
+      node = service.loadNode(NodeModel.SELF_MODEL, ctx, Scope.ALL, null).getNode();
+
+      // The fully explicit case
+      a = (NodeContext<?>)node.getNode("a");
+      aDesc = descriptionService.getDescriptions(a.getId());
+      assertNotNull(aDesc);
+      assertEquals(Tools.toSet(Locale.ITALIAN, Locale.GERMAN), aDesc.keySet());
+      assertEquals(new Described.State("a_it", null), aDesc.get(Locale.ITALIAN));
+      assertEquals(new Described.State("a_de", null), aDesc.get(Locale.GERMAN));
+      assertNull(a.getState().getLabel());
+
+      // No explicit language means to use the portal locale
+      b = (NodeContext<?>)node.getNode("b");
+      bDesc = descriptionService.getDescriptions(b.getId());
+      assertNotNull(bDesc);
+      assertEquals(Tools.toSet(Locale.ENGLISH, Locale.ITALIAN), bDesc.keySet());
+      assertEquals(new Described.State("foo_b_en", null), bDesc.get(Locale.ENGLISH));
+      assertEquals(new Described.State("b_it", null), bDesc.get(Locale.ITALIAN));
+      assertNull(b.getState().getLabel());
+
+      // The simple use case : one single label without the xml:lang attribute
+      c = (NodeContext<?>)node.getNode("c");
+      cDesc = descriptionService.getDescriptions(c.getId());
+      assertNull(cDesc);
+      assertEquals("foo_c_en", c.getState().getLabel());
+
+      //----------------- Now test extended labels overwrite -----------------//
+      src = new PageNavigation("portal", "extended_label").addFragment(fragment().add(node("a"), node("b"), node("c")).build());
+      fragment = src.getFragment();
+      fragment.getNode("a").setLabels(new I18NString(new LocalizedString("bar_a_en", Locale.ENGLISH), new LocalizedString("bar_a_fr", Locale.FRENCH)));
+      fragment.getNode("b").setLabels(new I18NString(new LocalizedString("bar_b_en"), new LocalizedString("bar_b_fr", Locale.FRENCH)));
+      fragment.getNode("c").setLabels(new I18NString(new LocalizedString("bar_c_en")));
+      src.setOwnerId("extended_label");
+
+      importer = new NavigationImporter(Locale.ENGLISH, ImportMode.OVERWRITE, src, service, descriptionService);
+      importer.perform();
+
+      //
+      ctx = service.loadNavigation(SiteKey.portal("extended_label"));
+      node = service.loadNode(NodeModel.SELF_MODEL, ctx, Scope.ALL, null).getNode();
+
+      // The fully explicit case
+      a = (NodeContext<?>)node.getNode("a");
+      aDesc = descriptionService.getDescriptions(a.getId());
+      assertNotNull(aDesc);
+      assertEquals(Tools.toSet(Locale.ENGLISH, Locale.FRENCH), aDesc.keySet());
+      assertEquals(new Described.State("bar_a_en", null), aDesc.get(Locale.ENGLISH));
+      assertEquals(new Described.State("bar_a_fr", null), aDesc.get(Locale.FRENCH));
+      assertNull(a.getState().getLabel());
+
+      // No explicit language means to use the portal locale
+      b = (NodeContext<?>)node.getNode("b");
+      bDesc = descriptionService.getDescriptions(b.getId());
+      assertNotNull(bDesc);
+      assertEquals(Tools.toSet(Locale.ENGLISH, Locale.FRENCH), bDesc.keySet());
+      assertEquals(new Described.State("bar_b_en", null), bDesc.get(Locale.ENGLISH));
+      assertEquals(new Described.State("bar_b_fr", null), bDesc.get(Locale.FRENCH));
+      assertNull(b.getState().getLabel());
+
+      // The simple use case : one single label without the xml:lang attribute
+      c = (NodeContext<?>)node.getNode("c");
+      cDesc = descriptionService.getDescriptions(c.getId());
+      assertNull(cDesc);
+      assertEquals("bar_c_en", c.getState().getLabel());
    }
 
    public void testFullNavigation()
