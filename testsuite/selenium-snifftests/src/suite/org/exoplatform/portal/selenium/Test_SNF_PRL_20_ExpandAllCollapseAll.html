@@ -57,63 +57,18 @@
 	<td></td>
 </tr>
 <tr>
-	<td>echo</td>
-	<td>--Expand SiteMap tree</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>//div[@id='UISiteMap']/div[1]/div[2]</td>
+	<td>click</td>
+	<td>css=div.ExpandIcon.ClearFix &gt; a.NodeIcon.DefaultPageIcon</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='UISiteMap']/div[1]/div[2]</td>
+	<td>css=div.ExpandIcon.ClearFix &gt; a.NodeIcon.DefaultPageIcon</td>
 	<td></td>
 </tr>
 <tr>
-	<td>waitForTextPresent</td>
-	<td>Application Registry</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>Application Registry</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForTextPresent</td>
-	<td>Page Management</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>Page Management</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>New Staff</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>Users and groups management</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>Blog</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>Red Hat</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>Facebook</td>
+	<td>click</td>
+	<td>css=div.ExpandIcon.ClearFix &gt; a.NodeIcon.DefaultPageIcon</td>
 	<td></td>
 </tr>
 <tr>
@@ -133,32 +88,32 @@
 </tr>
 <tr>
 	<td>echo</td>
-	<td>-- verify Application Registry disappear</td>
+	<td>-- verify Application Manager disappear</td>
 	<td></td>
 </tr>
 <tr>
-	<td>verifyElementNotPresent</td>
-	<td>//div[@id='UISiteMap']/div[2]/div/div[3]/div[2]/div[1]/div/div/a</td>
-	<td></td>
-</tr>
-<tr>
-	<td>echo</td>
-	<td>-- verify&nbsp;&nbsp;Page Management disappear</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyElementNotPresent</td>
-	<td>//div[3]/div[2]/div[2]/div/div/a</td>
+	<td>verifyNotVisible</td>
+	<td>//div[@id='UISiteMap']//a[text()='Applications Manager']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>echo</td>
-	<td>-- verify&nbsp;&nbsp;New Staff disappear</td>
+	<td>-- verify Pages Manager disappear</td>
 	<td></td>
 </tr>
 <tr>
-	<td>verifyElementNotPresent</td>
-	<td>//div[4]/div[2]/div[1]/div/div/a</td>
+	<td>verifyNotVisible</td>
+	<td>//div[@id='UISiteMap']//a[text()='Pages Manager']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>-- verify New Staff disappear</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyNotVisible</td>
+	<td>//div[@id='UISiteMap']//a[text()='New Staff']</td>
 	<td></td>
 </tr>
 <tr>
@@ -168,27 +123,27 @@
 </tr>
 <tr>
 	<td>verifyElementNotPresent</td>
-	<td>//div[4]/div[2]/div[2]/div/div/a</td>
+	<td>//div[@id='UISiteMap']//a[text()='Users and Groups Manager']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>echo</td>
-	<td>-- verify&nbsp;&nbsp;Blog disappear</td>
+	<td>-- verify Blog disappear</td>
 	<td></td>
 </tr>
 <tr>
 	<td>verifyElementNotPresent</td>
-	<td>//div[5]/div[2]/div[1]/div/div/a</td>
+	<td>//div[@id='UISiteMap']//a[text()='Blog']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>echo</td>
-	<td>-- verify&nbsp;&nbsp;Google disappear</td>
+	<td>-- verify Red Hat disappear</td>
 	<td></td>
 </tr>
 <tr>
 	<td>verifyElementNotPresent</td>
-	<td>//div[5]/div[2]/div[2]/div/div/a</td>
+	<td>//div[@id='UISiteMap']//a[text()='Red Hat']</td>
 	<td></td>
 </tr>
 <tr>
@@ -198,7 +153,7 @@
 </tr>
 <tr>
 	<td>verifyElementNotPresent</td>
-	<td>//div[2]/div[3]/div/div/a</td>
+	<td>//div[@id='UISiteMap']//a[text()='Facebook']</td>
 	<td></td>
 </tr>
 <tr>
