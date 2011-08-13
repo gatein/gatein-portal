@@ -41,6 +41,6 @@ public class ExoHttpFetcher extends BasicHttpFetcher
    @Inject
    public ExoHttpFetcher()
    {
-      super(DEFAULT_MAX_OBJECT_SIZE, DEFAULT_CONNECT_TIMEOUT_MS);
+      super(DEFAULT_MAX_OBJECT_SIZE, DEFAULT_CONNECT_TIMEOUT_MS, DEFAULT_CONNECT_TIMEOUT_MS, null);
    }
 }

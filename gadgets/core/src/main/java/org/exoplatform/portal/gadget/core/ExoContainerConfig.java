@@ -25,7 +25,7 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import sun.misc.BASE64Encoder;
 
-import org.apache.shindig.auth.BlobCrypterSecurityTokenDecoder;
+import org.apache.shindig.auth.BlobCrypterSecurityTokenCodec;
 import org.apache.shindig.config.ContainerConfigException;
 import org.apache.shindig.expressions.Expressions;
 import org.exoplatform.commons.utils.PropertyManager;
@@ -195,7 +195,7 @@ public class
    @Override
    public Object getProperty(String container, String property)
    {
-      if (property.equals(BlobCrypterSecurityTokenDecoder.SECURITY_TOKEN_KEY_FILE) && tokenKey_ != null)
+      if (property.equals(BlobCrypterSecurityTokenCodec.SECURITY_TOKEN_KEY_FILE) && tokenKey_ != null)
       {
          return tokenKey_;
       }

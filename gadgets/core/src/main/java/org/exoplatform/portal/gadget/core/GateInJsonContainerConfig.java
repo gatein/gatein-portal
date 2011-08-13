@@ -239,12 +239,16 @@ public class GateInJsonContainerConfig extends AbstractContainerConfig {
     try {
       for (String entry : files) {
         LOG.info("Reading container config: " + entry);
-        //final ClassLoader contextCl = Thread.currentThread().getContextClassLoader();
-        //InputStream resourceInputStream = contextCl.getResourceAsStream(entry);
-        //String content = IOUtils.toString(resourceInputStream, "UTF-8");
-
         GateInContainerConfigLoader currentLoader = GateInGuiceServletContextListener.getCurrentLoader();
         String content = currentLoader.loadContentAsString(entry, "UTF-8");
+        
+        if(content == null) {
+           LOG.warning("There is no configuration file " + entry + " in Gadget Server context");
+           content = ResourceLoader.getContent(entry);
+           if (content == null || content.length() == 0) {
+             throw new IOException("The file " + entry + " is empty");
+           }
+        }
         loadFromString(content, all);
       }
     } catch (IOException e) {

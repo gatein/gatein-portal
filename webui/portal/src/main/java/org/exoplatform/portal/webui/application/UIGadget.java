@@ -94,7 +94,11 @@ public class UIGadget extends UIComponent
    
    public static final String METADATA_USERPREFS = "userPrefs";
    
-   public static final String METADATA_USERPREFS_TYPE = "type";
+   public static final String METADATA_MODULEPREFS = "modulePrefs";
+   
+   public static final String RPC_RESULT = "result";
+   
+   public static final String METADATA_USERPREFS_TYPE = "dataType";
    
    public static final String METADATA_USERPREFS_TYPE_HIDDEN = "hidden";
    
@@ -207,13 +211,14 @@ public class UIGadget extends UIComponent
       this.properties_ = properties;
    }
 
+   @Deprecated
    public String getMetadata()
    {
       try
       {
          if (metadata_ == null)
          {
-            String strMetadata = GadgetUtil.fetchGagdetMetadata(getUrl());
+            String strMetadata = GadgetUtil.fetchGagdetRpcMetadata(getUrl());
             metadata_ = new JSONObject(strMetadata);
          }
          JSONObject obj = metadata_.getJSONArray(METADATA_GADGETS).getJSONObject(0);
@@ -226,6 +231,27 @@ public class UIGadget extends UIComponent
          return null;
       }
    }
+   
+   public String getRpcMetadata()
+   {
+      try
+      {
+         if (metadata_ == null)
+         {
+        	String gadgetUrl = getUrl();
+            String strMetadata = GadgetUtil.fetchGagdetRpcMetadata(gadgetUrl);
+            metadata_ = new JSONArray(strMetadata).getJSONObject(0).getJSONObject(UIGadget.RPC_RESULT).getJSONObject(gadgetUrl);
+         }
+         String token = GadgetUtil.createToken(this.getUrl(), new Random().nextLong());
+         metadata_.put("secureToken", token);
+         return metadata_.toString();
+      }
+      catch (JSONException e)
+      {
+         return null;
+      }
+   }
+   
    /**
     * Check if content of gadget has <UserPref>? (Content is parsed from gadget specification in .xml file)
     * @return boolean
@@ -236,8 +262,7 @@ public class UIGadget extends UIComponent
       {
          if(metadata_ != null)
          {
-            JSONObject obj = metadata_.getJSONArray(METADATA_GADGETS).getJSONObject(0);
-            JSONObject userPrefs = obj.getJSONObject(METADATA_USERPREFS);
+            JSONObject userPrefs = metadata_.getJSONObject(METADATA_USERPREFS);
             JSONArray names = userPrefs.names();
             int count = names.length();
             if(count > 0)

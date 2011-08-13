@@ -41,7 +41,7 @@
       <org.exoplatform.core.version>2.4.0-CR2</org.exoplatform.core.version>
       <org.exoplatform.ws.version>2.2.0-CR2</org.exoplatform.ws.version>
       <org.exoplatform.jcr.version>1.14.0-CR2</org.exoplatform.jcr.version>
-      <org.shindig.version>1.0-r790473-Patch06</org.shindig.version>
+      <org.shindig.version>2.0.2-Beta02</org.shindig.version>
       <nl.captcha.simplecaptcha.version>1.1.1-GA-Patch01</nl.captcha.simplecaptcha.version>
       <org.gatein.common.version>2.0.4-Beta03</org.gatein.common.version>
       <org.gatein.wci.version>2.1.0-Beta04</org.gatein.wci.version>
@@ -96,7 +96,7 @@
          <dependency>
             <groupId>org.gatein</groupId>
             <artifactId>gatein-dep</artifactId>
-            <version>1.1.0-Beta04</version>
+            <version>1.1.0-Beta06</version>
             <type>pom</type>
             <scope>import</scope>
          </dependency>
@@ -736,12 +736,6 @@
             <groupId>org.gatein.shindig</groupId>
             <artifactId>shindig-gadgets</artifactId>
             <version>${org.shindig.version}</version>
-            <exclusions>
-               <exclusion>
-                  <groupId>com.google.code.guice</groupId>
-                  <artifactId>guice-jmx</artifactId>
-               </exclusion>
-            </exclusions>
          </dependency>
          <dependency>
             <groupId>org.gatein.shindig</groupId>
@@ -752,17 +746,6 @@
             <groupId>org.gatein.shindig</groupId>
             <artifactId>shindig-common</artifactId>
             <version>${org.shindig.version}</version>
-         </dependency>
-         <dependency>
-            <groupId>org.gatein.shindig</groupId>
-            <artifactId>shindig-server</artifactId>
-            <version>${org.shindig.version}</version>
-         </dependency>
-         <dependency>
-            <groupId>org.gatein.shindig</groupId>
-            <artifactId>shindig-server</artifactId>
-            <version>${org.shindig.version}</version>
-            <type>war</type>
          </dependency>
          <dependency>
             <groupId>org.gatein.shindig</groupId>

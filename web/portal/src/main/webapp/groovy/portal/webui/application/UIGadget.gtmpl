@@ -17,13 +17,13 @@
     def view = uicomponent.getView();
     def userPref = null;
 
-    rcontext.getJavascriptManager().addCustomizedOnLoadScript("eXo.gadget.UIGadget.confirmDeleteGadget = '" + _ctx.appRes("UIGadgetContainerManagement.confirm.DeleteGadget") + "';");
     def isLossData = uicomponent.isLossData();
     if(!isLossData) {
       	url = uicomponent.getUrl();
-      	metadata = uicomponent.getMetadata();
+      	metadata = uicomponent.getRpcMetadata();
       	userPref = uicomponent.getUserPref();
       	jsmanager.importJavascript("eXo.gadget.UIGadget");
+      	rcontext.getJavascriptManager().addCustomizedOnLoadScript("eXo.gadget.UIGadget.confirmDeleteGadget = '" + _ctx.appRes("UIGadgetContainerManagement.confirm.DeleteGadget") + "';");
       	jsmanager.addCustomizedOnLoadScript("eXo.gadget.UIGadget.createGadget('$url','content-$id', $metadata, $userPref, '$view', '$hostName', " + (isDev ? 1 : 0)
       																																						+ ", " + (isDebug ? 1 : 0) + ", " + (noCache ? 1 : 0) + ");");      									
     }

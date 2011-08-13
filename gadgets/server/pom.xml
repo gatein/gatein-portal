@@ -49,33 +49,8 @@
         <!-- project dependencies -->
         <dependency>
             <groupId>org.gatein.shindig</groupId>
-            <artifactId>shindig-server</artifactId>
-            <type>war</type>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.gatein.shindig</groupId>
             <artifactId>shindig-features</artifactId>
             <scope>provided</scope>
-        </dependency>
-	<dependency>
-            <groupId>org.gatein.shindig</groupId>
-            <artifactId>shindig-social-api</artifactId>
-            <scope>provided</scope>
-            <exclusions>
-               <exclusion>
-                  <groupId>net.oauth.core</groupId>
-                  <artifactId>oauth-provider</artifactId>
-               </exclusion>
-               <exclusion>
-                  <groupId>net.oauth</groupId>
-                  <artifactId>core</artifactId>
-               </exclusion>
-               <exclusion>
-                  <groupId>com.google.code.guice</groupId>
-                  <artifactId>guice-jmx</artifactId>
-               </exclusion>
-            </exclusions>
         </dependency>
         <!-- external dependencies -->
 
@@ -94,22 +69,10 @@
             <artifactId>json_simple</artifactId>
             <scope>provided</scope>
         </dependency>
-        <!--
         <dependency>
-            <groupId>net.oauth</groupId>
-            <artifactId>core</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        -->
-        <dependency>
-          <groupId>com.google.guava</groupId>
-          <artifactId>guava</artifactId>
-					<scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.google.inject</groupId>
-            <artifactId>guice</artifactId>
-            <scope>provided</scope>
+	   <groupId>com.google.guava</groupId>
+	   <artifactId>guava</artifactId>
+	   <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>commons-lang</groupId>
@@ -144,16 +107,16 @@
 	        <scope>provided</scope>
 	    </dependency>
 	
-	<dependency>
-        <groupId>nu.validator.htmlparser</groupId>
-        <artifactId>htmlparser</artifactId>
-        <scope>provided</scope>
-    </dependency>
+	    <dependency>
+          <groupId>nu.validator.htmlparser</groupId>
+          <artifactId>htmlparser</artifactId>
+          <scope>provided</scope>
+      </dependency>
 
-	<dependency>
-        <groupId>commons-digester</groupId>
-        <artifactId>commons-digester</artifactId>
-        <scope>provided</scope>
-    </dependency>
+	    <dependency>
+          <groupId>commons-digester</groupId>
+          <artifactId>commons-digester</artifactId>
+          <scope>provided</scope>
+      </dependency>
     </dependencies>
 </project>

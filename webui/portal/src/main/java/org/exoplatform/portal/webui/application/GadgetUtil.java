@@ -28,6 +28,7 @@ import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.gadget.core.SecurityTokenGenerator;
 import org.exoplatform.portal.webui.util.Util;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -73,6 +74,7 @@ public class GadgetUtil
     * 
     * @return the string represents metadata of gadget application
     */
+   @Deprecated
    public static String fetchGagdetMetadata(String urlStr)
    {
       String result = null;
@@ -86,10 +88,52 @@ public class GadgetUtil
             "{\"context\":{\"country\":\"" + gadgetService.getCountry() + "\",\"language\":\""
                + gadgetService.getLanguage() + "\"},\"gadgets\":[" + "{\"moduleId\":" + gadgetService.getModuleId()
                + ",\"url\":\"" + urlStr + "\",\"prefs\":[]}]}";
+
          // Send data
          String gadgetServer = getGadgetServerUrl();
          URL url = new URL(gadgetServer + (gadgetServer.endsWith("/") ? "" : "/") + "metadata");
          URLConnection conn = url.openConnection();
+         conn.setDoOutput(true);
+         OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
+         wr.write(data);
+         wr.flush();
+         // Get the response
+         result = IOUtils.toString(conn.getInputStream(), "UTF-8");
+         wr.close();
+      }
+      catch (IOException ioexc)
+      {
+         ioexc.printStackTrace();
+         return "{}";
+      }
+      return result;
+   }
+
+   /**
+    * Fetchs Metatada of gadget application, create the connection to shindig
+    * server to get the metadata TODO cache the informations for better
+    * performance
+    *
+    * @return the string represents metadata of gadget application
+    */
+   public static String fetchGagdetRpcMetadata(String urlStr)
+   {
+      String result = null;
+
+      ExoContainer container = ExoContainerContext.getCurrentContainer();
+      GadgetRegistryService gadgetService =
+         (GadgetRegistryService)container.getComponentInstanceOfType(GadgetRegistryService.class);
+      try
+      {
+         String data = "[{method:\"gadgets.metadata\", id:\"test\", params: {ids:[\""
+        	   + urlStr + "\"], container:\"default\", language:\""
+        	   + gadgetService.getLanguage() + "\", country:\"" + gadgetService.getCountry() + "\", view:\"home\"}}]";
+
+         // Send data
+         String gadgetServer = getGadgetServerUrl();
+         URL url = new URL(gadgetServer + (gadgetServer.endsWith("/") ? "" : "/") + "api/rpc");
+         URLConnection conn = url.openConnection();
+         conn.setRequestProperty("Content-Type", "application/json");
          conn.setDoOutput(true);
          OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
          wr.write(data);
@@ -125,9 +169,9 @@ public class GadgetUtil
    static public Map<String, String> getMapMetadata(String url) throws JSONException
    {
       Map<String, String> mapMetaData = new HashMap<String, String>();
-      String metadata = fetchGagdetMetadata(url);
+      String metadata = fetchGagdetRpcMetadata(url);
       metadata = metadata.substring(metadata.indexOf("[") + 1, metadata.lastIndexOf("]"));
-      JSONObject jsonObj = new JSONObject(metadata);
+      JSONObject jsonObj = new JSONObject(metadata).getJSONObject(UIGadget.RPC_RESULT).getJSONObject(url).getJSONObject(UIGadget.METADATA_MODULEPREFS);
       Iterator<String> iter = jsonObj.keys();
       while (iter.hasNext())
       {

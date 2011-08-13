@@ -41,12 +41,7 @@ public class GateInGuiceServletContextListener extends GuiceServletContextListen
         }
 
         InputStream is = scontext.getResourceAsStream(path);
-
-        if(is == null)
-        {
-          throw new NullPointerException("There is no file specified by path : " + path);
-        }
-        return IOUtils.toString(is, encoding);
+        return (is != null) ? IOUtils.toString(is, encoding) : null;
       }
     };
 

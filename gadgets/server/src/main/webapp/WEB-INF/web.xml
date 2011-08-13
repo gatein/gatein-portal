@@ -52,6 +52,21 @@
     <filter-name>ProxyServletFilter</filter-name>
     <filter-class>org.exoplatform.portal.gadget.core.ProxyServletFilter</filter-class>
   </filter>
+    
+  <filter>
+    <filter-name>hostFilter</filter-name>
+    <filter-class>org.apache.shindig.common.servlet.HostFilter</filter-class>
+  </filter>
+  
+  <filter-mapping>
+    <filter-name>hostFilter</filter-name>
+    <url-pattern>/gadgets/ifr</url-pattern>
+    <url-pattern>/gadgets/js/*</url-pattern>
+    <url-pattern>/gadgets/proxy/*</url-pattern>
+    <url-pattern>/gadgets/concat</url-pattern>
+    <url-pattern>/rpc/*</url-pattern>
+    <url-pattern>/rest/*</url-pattern>
+  </filter-mapping>
   
   <filter-mapping>
     <filter-name>authFilter</filter-name>
@@ -79,7 +94,6 @@
   </filter-mapping>
 
   <listener>
-    <!--<listener-class>org.apache.shindig.common.servlet.GuiceServletContextListener</listener-class>-->
      <listener-class>org.exoplatform.portal.gadget.core.GateInGuiceServletContextListener</listener-class>
   </listener>
 
@@ -139,7 +153,7 @@
     </servlet-class>
     <init-param>
       <param-name>handlers</param-name>
-      <param-value>org.apache.shindig.gadgets.handlers</param-value>
+      <param-value>org.apache.shindig.handlers</param-value>
     </init-param>
   </servlet>
 
@@ -150,7 +164,7 @@
     </servlet-class>
     <init-param>
       <param-name>handlers</param-name>
-      <param-value>org.apache.shindig.gadgets.handlers</param-value>
+      <param-value>org.apache.shindig.handlers</param-value>
     </init-param>
   </servlet>
 

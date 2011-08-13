@@ -52,11 +52,11 @@ eXo.gadget.UIGadget = {
         var gadget;
         if (metadata != null) {
         	// Check if gadget's height is not set and current view is canvas. By default, gadget's height is 800px
-        	if(metadata.gadgets[0].height == 0 && view == 'canvas') {
-        		metadata.gadgets[0].height = "800px";
+        	if(metadata.modulePrefs.height == 0 && view == 'canvas') {
+        		metadata.modulePrefs.height = "800px";
         	}
-            gadget = gadgets.container.createGadget({specUrl: url,height: metadata.gadgets[0].height, secureToken: metadata.gadgets[0].secureToken, view: view});
-            gadget.metadata = metadata.gadgets[0];
+            gadget = gadgets.container.createGadget({specUrl: url,height: metadata.modulePrefs.height, secureToken: metadata.secureToken, view: view});
+            gadget.metadata = metadata;
         } else {
             gadget = gadgets.container.createGadget({specUrl: url});
         }
@@ -101,7 +101,7 @@ eXo.gadget.UIGadget = {
             gadgetControl.style.display = "block";
             var gadgetTitle = eXo.core.DOMUtil.findFirstDescendantByClass(gadgetControl, "div", "GadgetTitle") ;
             gadgetTitle.style.display = "block";
-            if (metadata && metadata.title != null && metadata.title.length > 0) gadgetTitle.innerHTML = metadata.title;
+            if (metadata && metadata.modulePrefs.title != null && metadata.modulePrefs.title.length > 0) gadgetTitle.innerHTML = metadata.modulePrefs.title;
         }
 
         if (inDesktop) {

@@ -62,8 +62,8 @@
       <artifactId>commons-fileupload</artifactId>
     </dependency>
     <dependency>
-      <groupId>commons-httpclient</groupId>
-      <artifactId>commons-httpclient</artifactId>
+      <groupId>org.apache.httpcomponents</groupId>
+      <artifactId>httpclient</artifactId>
     </dependency>
     <dependency>
       <groupId>commons-io</groupId>
@@ -409,6 +409,14 @@
        <groupId>org.gatein.shindig</groupId>
        <artifactId>shindig-social-api</artifactId>
     </dependency>
+    <dependency>
+       <groupId>org.apache.httpcomponents</groupId>
+       <artifactId>httpclient</artifactId>
+    </dependency>
+    <dependency>
+       <groupId>org.apache.httpcomponents</groupId>
+       <artifactId>httpcore</artifactId>
+    </dependency>
 
     <!-- GateIn -->
     <dependency>
@@ -568,6 +576,10 @@
       <artifactId>guice-jmx</artifactId>
     </dependency>
     <dependency>
+      <groupId>com.google.inject.extensions</groupId>
+      <artifactId>guice-multibindings</artifactId>
+    </dependency>
+    <dependency>
       <groupId>antlr</groupId>
       <artifactId>antlr</artifactId>
     </dependency>
@@ -609,7 +621,7 @@
     </dependency>
     <dependency>
       <groupId>net.sf.ehcache</groupId>
-      <artifactId>ehcache</artifactId>
+      <artifactId>ehcache-core</artifactId>
     </dependency>
     <dependency>
       <groupId>com.jhlabs</groupId>
@@ -669,11 +681,13 @@
     </dependency>
     <dependency>
       <groupId>de.odysseus.juel</groupId>
-      <artifactId>juel-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>de.odysseus.juel</groupId>
       <artifactId>juel-impl</artifactId>
+        <exclusions>
+          <exclusion>
+            <groupId>de.odysseus.juel</groupId>
+            <artifactId>juel-api</artifactId>
+          </exclusion>
+        </exclusions>
     </dependency>
     <dependency>
       <groupId>org.apache.lucene</groupId>
@@ -748,8 +762,8 @@
       <artifactId>xstream</artifactId>
     </dependency>
     <dependency>
-      <groupId>net.oauth</groupId>
-      <artifactId>core</artifactId>
+      <groupId>net.oauth.core</groupId>
+      <artifactId>oauth</artifactId>
     </dependency>
     <dependency>
       <groupId>org.apache.tika</groupId>
