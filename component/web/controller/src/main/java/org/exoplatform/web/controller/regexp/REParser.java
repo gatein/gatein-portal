@@ -26,18 +26,18 @@ import java.util.regex.Pattern;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class RegExpParser
+public class REParser
 {
 
    /** . */
    private final Lexer lexer;
 
-   public RegExpParser(CharSequence seq)
+   public REParser(CharSequence seq)
    {
       this.lexer = new Lexer(seq);
    }
 
-   public RegExpParser(Lexer lexer)
+   public REParser(Lexer lexer)
    {
       this.lexer = lexer;
    }

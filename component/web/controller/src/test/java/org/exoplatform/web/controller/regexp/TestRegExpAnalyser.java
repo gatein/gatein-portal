@@ -29,13 +29,13 @@ public class TestRegExpAnalyser extends BaseGateInTest
 {
 
    /** . */
-   private RegExpRenderer renderer = new RegExpRenderer();
+   private RERenderer renderer = new RERenderer();
 
    private void assertAnalyse(String expectedPattern, String pattern)
    {
       try
       {
-         RENode.Disjunction disjunction = new RegExpParser(pattern).parseDisjunction();
+         RENode.Disjunction disjunction = new REParser(pattern).parseDisjunction();
          assertEquals(expectedPattern, renderer.render(disjunction, new StringBuilder()).toString());
       }
       catch (Exception e)

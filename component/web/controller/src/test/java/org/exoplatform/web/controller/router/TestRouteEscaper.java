@@ -20,9 +20,9 @@
 package org.exoplatform.web.controller.router;
 
 import org.exoplatform.component.test.BaseGateInTest;
-import org.exoplatform.web.controller.regexp.RegExpRenderer;
+import org.exoplatform.web.controller.regexp.RERenderer;
 import org.exoplatform.web.controller.regexp.RENode;
-import org.exoplatform.web.controller.regexp.RegExpParser;
+import org.exoplatform.web.controller.regexp.REParser;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -36,11 +36,11 @@ public class TestRouteEscaper extends BaseGateInTest
 
    private void match(String pattern, String test, String expectedValue) throws Exception
    {
-      RegExpParser parser = new RegExpParser(pattern);
+      REParser parser = new REParser(pattern);
       RouteEscaper escaper = new RouteEscaper('/', '_');
       RENode.Disjunction re = parser.parseDisjunction();
       escaper.visit(re);
-      Pattern p = Pattern.compile(new RegExpRenderer().render(re, new StringBuilder()).toString());
+      Pattern p = Pattern.compile(new RERenderer().render(re, new StringBuilder()).toString());
       Matcher matcher = p.matcher(test);
       assertTrue(matcher.find());
       assertEquals(expectedValue, matcher.group());

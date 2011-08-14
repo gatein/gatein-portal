@@ -22,8 +22,8 @@ package org.exoplatform.web.controller.router;
 import org.exoplatform.web.controller.QualifiedName;
 import org.exoplatform.web.controller.metadata.PathParamDescriptor;
 import org.exoplatform.web.controller.regexp.RENode;
-import org.exoplatform.web.controller.regexp.RegExpParser;
-import org.exoplatform.web.controller.regexp.RegExpRenderer;
+import org.exoplatform.web.controller.regexp.REParser;
+import org.exoplatform.web.controller.regexp.RERenderer;
 import org.exoplatform.web.controller.regexp.SyntaxException;
 
 import java.io.IOException;
@@ -75,7 +75,7 @@ class PathParam extends Param
       StringBuilder routingRegex = new StringBuilder();
       try
       {
-         RegExpParser parser = new RegExpParser(regex);
+         REParser parser = new REParser(regex);
 
          //
          RENode.Disjunction routingDisjunction = parser.parseDisjunction();
@@ -84,13 +84,13 @@ class PathParam extends Param
             RouteEscaper escaper = new RouteEscaper('/', '_');
             escaper.visit(routingDisjunction);
          }
-         new RegExpRenderer().render(routingDisjunction, routingRegex);
+         new RERenderer().render(routingDisjunction, routingRegex);
 
          //
          parser.reset();
          RENode.Disjunction renderingDisjunction = parser.parseDisjunction();
          renderingRegex.append("^");
-         new RegExpRenderer().render(renderingDisjunction, renderingRegex);
+         new RERenderer().render(renderingDisjunction, renderingRegex);
          renderingRegex.append("$");
       }
       catch (IOException e)

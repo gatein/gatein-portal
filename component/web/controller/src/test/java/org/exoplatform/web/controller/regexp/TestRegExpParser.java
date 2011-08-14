@@ -279,7 +279,7 @@ public class TestRegExpParser extends TestCase
       {
          Stream stream = new Stream(s);
          Lexer lexer = new Lexer(stream);
-         RegExpParser parser = new RegExpParser(lexer);
+         REParser parser = new REParser(lexer);
          parser.parse();
          assertEquals(s.length(), stream.getIndex());
          if (lexer.hasNext())

@@ -41,10 +41,10 @@ public class TestParser extends BaseGateInTest
 
    private static class ParserTester
    {
-      private final RegExpParser parser;
+      private final REParser parser;
       private ParserTester(CharSequence s)
       {
-         this.parser = new RegExpParser(s);
+         this.parser = new REParser(s);
       }
       ParserTester assertParseCharacterClass(String expectedValue)
       {

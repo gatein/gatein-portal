@@ -37,7 +37,7 @@ public class TestRegExpRenderer extends TestCase
          String rendered;
          if (re != null)
          {
-            RegExpRenderer renderer = new RegExpRenderer();
+            RERenderer renderer = new RERenderer();
             rendered = renderer.render(re, new StringBuilder()).toString();
          }
          else
@@ -58,7 +58,7 @@ public class TestRegExpRenderer extends TestCase
    {
       try
       {
-         RegExpParser parser = new RegExpParser(regexp);
+         REParser parser = new REParser(regexp);
          RENode.Disjunction re = parser.parseDisjunction();
          assertTrue(parser.isDone());
          return re;
@@ -75,7 +75,7 @@ public class TestRegExpRenderer extends TestCase
    {
       try
       {
-         RegExpParser parser = new RegExpParser(regexp);
+         REParser parser = new REParser(regexp);
          RENode.Alternative re = parser.parseAlternative();
          assertTrue(parser.isDone());
          return re;
@@ -92,7 +92,7 @@ public class TestRegExpRenderer extends TestCase
    {
       try
       {
-         RegExpParser parser = new RegExpParser(regexp);
+         REParser parser = new REParser(regexp);
          RENode.Expr re = parser.parseExpression();
          assertTrue(parser.isDone());
          return re;
@@ -109,7 +109,7 @@ public class TestRegExpRenderer extends TestCase
    {
       try
       {
-         RegExpParser parser = new RegExpParser(regexp);
+         REParser parser = new REParser(regexp);
          RENode.CharacterClass re = parser.parseCharacterClass();
          assertTrue(parser.isDone());
          return re;

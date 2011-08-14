@@ -27,7 +27,7 @@ import java.io.IOException;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class RegExpRenderer
+public class RERenderer
 {
 
    public final <A extends Appendable> A render(RENode re, A appendable) throws IOException, NullPointerException
