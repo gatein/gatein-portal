@@ -23,6 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import javassist.bytecode.analysis.Type;
+
 import javax.portlet.ActionResponse;
 import javax.xml.namespace.QName;
 
@@ -404,12 +406,25 @@ public class UIPageBrowser extends UIContainer
          UIPageForm uiPageForm = uiMaskWS.createUIComponent(UIPageForm.class, "UIBrowserPageForm", "UIPageForm");
          uiMaskWS.setUIComponent(uiPageForm);
          uiMaskWS.setShow(true);
-         uiPageForm.getUIStringInput("ownerType").setValue(PortalConfig.USER_TYPE);
-         uiPageForm.getUIStringInput("ownerId").setValue(prContext.getRemoteUser());
-         uiPageForm.removeChildById("PermissionSetting");
+         
          uiPageForm.removeChild(UIFormInputItemSelector.class);
          UIPageTemplateOptions uiTemplateConfig = uiPageForm.createUIComponent(UIPageTemplateOptions.class, null, null);
          uiPageForm.addUIFormInput(uiTemplateConfig);
+         
+         UIFormSelectBox slcOwnerType = uiPageForm.getUIFormSelectBox(UIPageForm.OWNER_TYPE);
+         List<SelectItemOption<String>> types = slcOwnerType.getOptions();         
+         for (int i = 0; i < types.size(); i++)
+         {
+            if (PortalConfig.USER_TYPE.equals(types.get(i).getValue()))
+            {
+               types.remove(types.get(i));
+               break;
+            }
+         }
+         slcOwnerType.setOptions(types);         
+         Event<UIComponent> slcEvent = uiPageForm.createEvent("ChangeOwnerType", Phase.DECODE, event.getRequestContext());
+         slcEvent.broadcast();
+                  
          prContext.addUIComponentToUpdateByAjax(uiMaskWS);
       }
    }
