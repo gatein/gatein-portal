@@ -146,7 +146,7 @@ public class UIPageBody extends UIComponentDecorator
       uiPage = clazz.createUIPage(context);
       
       PortalDataMapper.toUIPage(uiPage, page);
-      uiPortal.setUIPage(page.getId(), uiPage);
+      uiPortal.setUIPage(pageReference, uiPage);
 
       return uiPage;
    }
