@@ -52,6 +52,9 @@
 						<field name="templateLocation">
 							<string>war:/conf/sample-ext/portal</string>
 						</field>
+                  <field name="importMode">
+                     <string>merge</string>
+                  </field>
 					</object>
 				</object-param>
 				<object-param>
@@ -71,6 +74,9 @@
 						<field name="templateLocation">
 							<string>war:/conf/sample-ext/portal</string>
 						</field>
+                  <field name="importMode">
+                     <string>merge</string>
+                  </field>
 					</object>
 				</object-param>
 				<object-param>
@@ -90,6 +96,9 @@
 						<field name="templateLocation">
 							<string>war:/conf/sample-ext/portal</string>
 						</field>
+                  <field name="importMode">
+                     <string>merge</string>
+                  </field>
 					</object>
 				</object-param>
 			</init-params>
