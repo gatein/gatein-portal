@@ -67,6 +67,14 @@ public class UIPageActionListener
          UserNodeFilterConfig.Builder builder = UserNodeFilterConfig.builder();
          builder.withAuthorizationCheck();
          UserNode naviPath = userPortal.resolvePath(builder.build(), uri);
+
+         if (naviPath == null)
+         {
+            UIPageBody uiPageBody = showedUIPortal.findFirstComponentOfType(UIPageBody.class);
+            uiPageBody.setUIComponent(null);
+            return;
+         }
+         
          UserNavigation targetNav = naviPath.getNavigation();
          
          UserNode currentNavPath = showedUIPortal.getNavPath();
