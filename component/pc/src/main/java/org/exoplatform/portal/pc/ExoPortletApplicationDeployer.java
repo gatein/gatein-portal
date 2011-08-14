@@ -24,18 +24,17 @@ import org.exoplatform.commons.utils.Safe;
 import org.gatein.api.GateIn;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
-import org.gatein.pc.mc.PortletApplicationDeployer;
+import org.gatein.pc.portlet.impl.deployment.PortletApplicationDeployer;
+import org.gatein.pc.portlet.impl.deployment.staxnav.PortletApplicationMetaDataBuilder;
 import org.gatein.pc.portlet.impl.metadata.PortletApplication10MetaData;
 import org.gatein.wci.WebApp;
-import org.jboss.xb.binding.JBossXBException;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.InputStream;
 
 /**
- * Extends the {@link org.gatein.pc.mc.PortletApplicationDeployer} to inject configuration metadata
+ * Extends the {@link org.gatein.pc.portlet.impl.deployment.PortletApplicationDeployer} to inject configuration metadata
  * from global portlet.xml and to configure the resource bundle factory of deployed portlet
  * applications. The resource bundle factory used is {@link org.exoplatform.portal.pc.ExoResourceBundleFactory}.
  *
@@ -44,7 +43,11 @@ import java.io.InputStream;
  */
 public class ExoPortletApplicationDeployer extends PortletApplicationDeployer
 {
+
+   /** . */
    private final Logger log = LoggerFactory.getLogger(ExoPortletApplicationDeployer.class);
+
+   /** . */
    private GateIn gateIn;
 
    @Override
@@ -91,17 +94,16 @@ public class ExoPortletApplicationDeployer extends PortletApplicationDeployer
     * This method is invoked for each portlet application deployment. That is necessary for the moment
     * to ensure independence between portlet applications
     *
-    * @return
-    * @throws FileNotFoundException
-    * @throws JBossXBException
+    * @return the global meta data
+    * @throws Exception any exception
     */
-   private GlobalPortletMetaData loadGlobalMetadata(String globalPortletLocation) throws FileNotFoundException,
-      JBossXBException
+   private GlobalPortletMetaData loadGlobalMetadata(String globalPortletLocation) throws Exception
    {
       //TODO: Avoid using File
       InputStream in = new FileInputStream(new File(globalPortletLocation));
       try
       {
+         PortletApplicationMetaDataBuilder builder = new PortletApplicationMetaDataBuilder();
          return GlobalPortletMetaData.unmarshalling(in);
       }
       finally

@@ -88,10 +88,6 @@
       <artifactId>jboss-common-core</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.jboss</groupId>
-      <artifactId>jbossxb</artifactId>
-    </dependency>
-    <dependency>
       <groupId>org.jboss.logging</groupId>
       <artifactId>jboss-logging-spi</artifactId>
     </dependency>
@@ -332,10 +328,6 @@
     <dependency>
       <groupId>org.gatein.pc</groupId>
       <artifactId>pc-federation</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.gatein.pc</groupId>
-      <artifactId>pc-mc</artifactId>
     </dependency>
     <dependency>
       <groupId>org.gatein.pc</groupId>

@@ -352,10 +352,6 @@
       </dependency>
       <dependency>
          <groupId>org.gatein.pc</groupId>
-         <artifactId>pc-mc</artifactId>
-      </dependency>
-      <dependency>
-         <groupId>org.gatein.pc</groupId>
          <artifactId>pc-bridge</artifactId>
       </dependency>
 

@@ -18,15 +18,11 @@
  */
 package org.exoplatform.portal.pc;
 
-import org.gatein.pc.mc.metadata.factory.PortletApplicationModelFactory;
-import org.gatein.pc.mc.metadata.impl.ValueTrimmingFilter;
+import org.gatein.pc.portlet.impl.deployment.staxnav.PortletApplicationMetaDataBuilder;
 import org.gatein.pc.portlet.impl.metadata.PortletApplication10MetaData;
 import org.gatein.pc.portlet.impl.metadata.PortletApplication20MetaData;
 import org.gatein.pc.portlet.impl.metadata.filter.FilterMappingMetaData;
 import org.gatein.pc.portlet.impl.metadata.filter.FilterMetaData;
-import org.jboss.xb.binding.JBossXBException;
-import org.jboss.xb.binding.Unmarshaller;
-import org.jboss.xb.binding.UnmarshallerFactory;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -135,17 +131,12 @@ public class GlobalPortletMetaData
      //TODO: Wait for the spec of merging public render parameters
    }
 
-   public static GlobalPortletMetaData unmarshalling(InputStream in) throws JBossXBException
+   /** . */
+   private static final PortletApplicationMetaDataBuilder builder = new PortletApplicationMetaDataBuilder();
+
+   public static GlobalPortletMetaData unmarshalling(InputStream in) throws Exception
    {
-      Unmarshaller unmarshaller = UnmarshallerFactory.newInstance().newUnmarshaller();
-      unmarshaller.setNamespaceAware(true);
-      unmarshaller.setSchemaValidation(false);
-      unmarshaller.setValidation(false);
-
-      PortletApplicationModelFactory factory = new PortletApplicationModelFactory();
-
-      PortletApplication10MetaData application10MetaData = (PortletApplication10MetaData)unmarshaller.unmarshal(in, new ValueTrimmingFilter(factory), null);
-
+      PortletApplication10MetaData application10MetaData = builder.build(in);
       return new GlobalPortletMetaData(application10MetaData);
    }
 }

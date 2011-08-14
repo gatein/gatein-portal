@@ -52,10 +52,6 @@
       </dependency>
       <dependency>
          <groupId>org.gatein.pc</groupId>
-         <artifactId>pc-mc</artifactId>
-      </dependency>
-      <dependency>
-         <groupId>org.gatein.pc</groupId>
          <artifactId>pc-federation</artifactId>
       </dependency>
       <dependency>
