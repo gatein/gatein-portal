@@ -45,7 +45,7 @@ import org.exoplatform.webui.form.UIFormDateTimeInput;
 import org.exoplatform.webui.form.UIFormInputBase;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
-import org.exoplatform.webui.form.UIFormCheckBoxInput;
+import org.exoplatform.webui.form.input.UICheckBoxInput;
 import org.exoplatform.webui.form.validator.DateTimeValidator;
 import org.exoplatform.webui.form.validator.IdentifierValidator;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
@@ -112,10 +112,10 @@ public class UIWizardPageSetInfo extends UIForm
 
    public UIWizardPageSetInfo() throws Exception
    {
-      UIFormCheckBoxInput uiDateInputCheck =
-         new UIFormCheckBoxInput(SHOW_PUBLICATION_DATE, null, false);
-      UIFormCheckBoxInput uiVisibleCheck = new UIFormCheckBoxInput(VISIBLE, null, false);
-      UIFormCheckBoxInput uiSwitchLabelMode = new UIFormCheckBoxInput(SWITCH_MODE, null, true);
+      UICheckBoxInput uiDateInputCheck =
+         new UICheckBoxInput(SHOW_PUBLICATION_DATE, null, false);
+      UICheckBoxInput uiVisibleCheck = new UICheckBoxInput(VISIBLE, null, false);
+      UICheckBoxInput uiSwitchLabelMode = new UICheckBoxInput(SWITCH_MODE, null, true);
       uiDateInputCheck.setOnChange("SwitchPublicationDate");
       uiVisibleCheck.setOnChange("SwitchVisible");
       uiSwitchLabelMode.setOnChange(SWITCH_MODE_ONCHANGE);
@@ -186,7 +186,7 @@ public class UIWizardPageSetInfo extends UIForm
 
       UserNode node = (UserNode)bean;
       
-      if (((UIFormCheckBoxInput)getUIInput(SWITCH_MODE)).isChecked())
+      if (getUICheckBoxInput(SWITCH_MODE).isChecked())
       {
          node.setLabel(null);
       }
@@ -196,9 +196,9 @@ public class UIWizardPageSetInfo extends UIForm
       }
       
       Visibility visibility;
-      if (((UIFormCheckBoxInput)getUIInput(VISIBLE)).isChecked())
+      if (getUICheckBoxInput(VISIBLE).isChecked())
       {
-         UIFormCheckBoxInput showPubDate = getUIInput(SHOW_PUBLICATION_DATE);
+         UICheckBoxInput showPubDate = getUICheckBoxInput(SHOW_PUBLICATION_DATE);
          visibility = showPubDate.isChecked() ?  Visibility.TEMPORAL : Visibility.DISPLAYED;
       }
       else
@@ -227,8 +227,8 @@ public class UIWizardPageSetInfo extends UIForm
 
    public void setShowCheckPublicationDate(boolean show)
    {
-      ((UIFormCheckBoxInput)getUIInput(VISIBLE)).setChecked(show);
-      UIFormCheckBoxInput uiForm = getUIInput(SHOW_PUBLICATION_DATE);
+      getUICheckBoxInput(VISIBLE).setChecked(show);
+      UICheckBoxInput uiForm = getUICheckBoxInput(SHOW_PUBLICATION_DATE);
       uiForm.setRendered(show);
       setShowPublicationDate(show && uiForm.isChecked());
    }
@@ -405,7 +405,7 @@ public class UIWizardPageSetInfo extends UIForm
       public void execute(Event<UIWizardPageSetInfo> event) throws Exception
       {
          UIWizardPageSetInfo uiForm = event.getSource();
-         boolean isCheck = ((UIFormCheckBoxInput)uiForm.getUIInput(SHOW_PUBLICATION_DATE)).isChecked();
+         boolean isCheck = uiForm.getUICheckBoxInput(SHOW_PUBLICATION_DATE).isChecked();
          uiForm.getUIFormDateTimeInput(START_PUBLICATION_DATE).setRendered(isCheck);
          uiForm.getUIFormDateTimeInput(END_PUBLICATION_DATE).setRendered(isCheck);
          UIWizard uiWizard = uiForm.getAncestorOfType(UIWizard.class);
@@ -420,7 +420,7 @@ public class UIWizardPageSetInfo extends UIForm
       public void execute(Event<UIWizardPageSetInfo> event) throws Exception
       {
          UIWizardPageSetInfo uiForm = event.getSource();
-         boolean isCheck = ((UIFormCheckBoxInput)uiForm.getUIInput(VISIBLE)).isChecked();
+         boolean isCheck = uiForm.getUICheckBoxInput(VISIBLE).isChecked();
          uiForm.setShowCheckPublicationDate(isCheck);
          event.getRequestContext().addUIComponentToUpdateByAjax(uiForm);
       }
@@ -454,7 +454,7 @@ public class UIWizardPageSetInfo extends UIForm
       public void execute(Event<UIWizardPageSetInfo> event) throws Exception
       {
          UIWizardPageSetInfo uiForm = event.getSource();
-         boolean isExtendedMode = ((UIFormCheckBoxInput)uiForm.getUIInput(SWITCH_MODE)).isChecked();
+         boolean isExtendedMode = uiForm.getUICheckBoxInput(SWITCH_MODE).isChecked();
          uiForm.switchLabelMode(isExtendedMode);
          event.getRequestContext().addUIComponentToUpdateByAjax(uiForm);
       }

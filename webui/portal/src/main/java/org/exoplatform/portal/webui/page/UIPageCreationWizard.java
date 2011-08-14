@@ -216,7 +216,7 @@ public class UIPageCreationWizard extends UIPageWizard
             return;
          }
 
-         if (((UIFormCheckBoxInput)uiPageSetInfo.getUIInput(UIWizardPageSetInfo.SHOW_PUBLICATION_DATE)).isChecked())
+         if (uiPageSetInfo.getUICheckBoxInput(UIWizardPageSetInfo.SHOW_PUBLICATION_DATE).isChecked())
          {
          	
          	Calendar currentCalendar = Calendar.getInstance();
