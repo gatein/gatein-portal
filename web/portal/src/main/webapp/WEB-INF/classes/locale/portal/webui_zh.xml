@@ -747,7 +747,7 @@
       </action>
       <label>
          <name>节点名：</name>
-         <uri>#{word.uri}:</uri>
+         <URI>#{word.uri}:</URI>
          <pageReference>页面选项</pageReference>
          <description>#{word.description}</description>
          <type>页面类型</type>
