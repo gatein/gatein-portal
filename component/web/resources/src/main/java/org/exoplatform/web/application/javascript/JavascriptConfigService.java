@@ -23,7 +23,6 @@ import org.exoplatform.commons.utils.Safe;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.resource.compressor.ResourceCompressor;
 import org.exoplatform.portal.resource.compressor.ResourceType;
-import org.exoplatform.portal.resource.compressor.impl.ResourceCompressorService;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 import org.gatein.wci.impl.DefaultServletContainerFactory;
@@ -369,6 +368,8 @@ public class JavascriptConfigService implements Startable
       extendedJavascripts.remove(path);
       jsBytes = null;
    }
+   
+   
 
    /**
     * Start service.

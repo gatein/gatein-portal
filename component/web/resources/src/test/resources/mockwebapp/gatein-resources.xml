@@ -118,4 +118,31 @@
 		</style-theme>
 	</window-style>
 	
+	<javascript>
+		<param>
+			<js-module>js.test1</js-module>
+			<js-path>/js/test1.js</js-path>	
+			<js-priority>-1</js-priority>		
+		</param>
+	</javascript>	
+	<javascript>
+		<param>
+			<js-module>js.test2</js-module>
+			<js-path>/js/test2.js</js-path>
+			<js-priority>1</js-priority>
+		</param>
+	</javascript>	
+	<javascript>
+		<param>
+			<js-module>js.test3</js-module>
+			<js-path>/js/test3.js</js-path>
+		</param>
+	</javascript>	
+	<javascript>
+		<param>
+			<js-module>js.test4</js-module>
+			<js-path>/js/test4.js</js-path>
+			<js-priority>2</js-priority>
+		</param>
+	</javascript>
 </gatein-resources>
