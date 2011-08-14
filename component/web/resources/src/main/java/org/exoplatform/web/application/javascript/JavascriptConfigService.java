@@ -156,6 +156,7 @@ public class JavascriptConfigService implements Startable
       availableScripts_.clear();
       availableScriptsPaths_.clear();
       object_view_of_merged_JS.clear();
+      jsBytes = null;
 
       //
       for (Javascript script : availableScriptsKey_) {
@@ -261,6 +262,7 @@ public class JavascriptConfigService implements Startable
    public void refreshMergedJavascript()
    {
       mergedJavascript = "";
+      jsBytes = null;
       StringBuffer buffer = new StringBuffer();
       for (String webApp : object_view_of_merged_JS.keySet())
       {

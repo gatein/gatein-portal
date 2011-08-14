@@ -124,9 +124,8 @@ public class TestJavascriptConfigService extends AbstractWebResourceTest
       assertEquals(0, jsService.getAvailableScriptsPaths().size());      
       
       assertTrue(jsService.getMergedJavascript().length > 0);
-      jsService.refreshMergedJavascript();      
-      //bug of service
-//      assertTrue(jsService.getMergedJavascript().length == 0);
+      jsService.refreshMergedJavascript();
+      assertTrue(jsService.getMergedJavascript().length == 0);
    }
 
    @Override
