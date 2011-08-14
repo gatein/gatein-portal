@@ -19,6 +19,7 @@
 
 package org.exoplatform.webui.form;
 
+import org.exoplatform.web.application.JavascriptManager;
 import org.exoplatform.webui.application.WebuiRequestContext;
 
 import java.io.Writer;
@@ -211,7 +212,9 @@ public class UIFormDateTimeInput extends UIFormInputBase<String>
          value_ = "";
       }
 
-      context.getJavascriptManager().importJavascript("eXo.webui.UICalendar");
+      JavascriptManager jsManager = context.getJavascriptManager();
+      jsManager.importJavascript("eXo.webui.UICalendar");
+      jsManager.addJavascript("eXo.webui.UICalendar.setFirstDayOfWeek(" + Calendar.getInstance(context.getLocale()).getFirstDayOfWeek() + ");");
       Writer w = context.getWriter();
 
       w.write("<input type='text' onfocus='eXo.webui.UICalendar.init(this,");

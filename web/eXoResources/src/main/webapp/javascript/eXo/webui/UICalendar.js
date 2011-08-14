@@ -26,6 +26,9 @@ UICalendar = function(calendarId) {
   														// if selectedDate is invalid, currentDate deals with system time;
   this.selectedDate = null ; //Datetime value of input date&time field
   this.months ;
+  
+  this.firstDayOfWeek = 1;// Indecates what the first day of the week is; e.g., SUNDAY (1) in the U.S, MONDAY (2) in France, TUESDAY (3), etc
+  this.weekdays = null; 
 }
 
 UICalendar.prototype.init = function(field, isDisplayTime, datePattern, value, monthNames) {
@@ -41,6 +44,11 @@ UICalendar.prototype.init = function(field, isDisplayTime, datePattern, value, m
 	this.months = new Array();
 	this.months = monthNames.split(',');
 	this.months.pop();
+	
+	var weekdays = eXo.i18n.I18NMessage.getMessage("weekdays");
+	if(weekdays != null && typeof(weekdays) == "object") {
+		this.weekdays = weekdays; 
+	}
 	
 	if (!document.getElementById(this.calendarId)) this.create();
   this.show() ;
@@ -192,26 +200,36 @@ UICalendar.prototype.renderCalendar = function() {
 	table += 		'<div class="UICalendar" onmousedown="event.cancelBubble = true">' ;
 	table += 		'	<table class="MonthYearBox">' ;
 	table += 		'	  <tr>' ;
-	table += 		'			<td class="MonthButton"><a class="PreviousMonth" href="javascript:eXo.webui.UICalendar.changeMonth(-1);" title="Previous Month"></a></td>' ;
-	table += 		'			<td class="YearButton"><a class="PreviousYear" href="javascript:eXo.webui.UICalendar.changeYear(-1);" title="Previous Year"></a></td>' ;
+	table += 		'			<td class="MonthButton"><a class="PreviousMonth" href="javascript:eXo.webui.UICalendar.changeMonth(-1);" title="' + eXo.i18n.I18NMessage.getMessage("PreviousMonth") + '"></a></td>' ;
+	table += 		'			<td class="YearButton"><a class="PreviousYear" href="javascript:eXo.webui.UICalendar.changeYear(-1);" title="' + eXo.i18n.I18NMessage.getMessage("PreviousYear") + '"></a></td>' ;
 	table += 		'			<td><font color="#f89302">' + this.months[this.currentDate.getMonth()] + '</font> - ' + this.currentDate.getFullYear() + '</td>' ;
-	table += 		'			<td class="YearButton"><a class="NextYear" href="javascript:eXo.webui.UICalendar.changeYear(1);" title="Next Year"></a></td>' ;
-	table += 		'			<td class="MonthButton"><a class="NextMonth" href="javascript:eXo.webui.UICalendar.changeMonth(1);" title="Next Month"></a></td>' ;
+	table += 		'			<td class="YearButton"><a class="NextYear" href="javascript:eXo.webui.UICalendar.changeYear(1);" title="' + eXo.i18n.I18NMessage.getMessage("NextYear") + '"></a></td>' ;
+	table += 		'			<td class="MonthButton"><a class="NextMonth" href="javascript:eXo.webui.UICalendar.changeMonth(1);" title="' + eXo.i18n.I18NMessage.getMessage("NextMonth") + '"></a></td>' ;
 	table += 		'		</tr>' ;
 	table += 		'	</table>' ;
 	table += 		'	<div style="margin-top: 6px;padding: 0px 5px;">' ;
 	table += 		'		<table>' ;
 	table += 		'			<tr>' ;
-	table += 		'				<td><font color="red">S</font></td><td>M</td><td>T</td><td>W</td><td>T</td><td>F</td><td>S</td>' ;
+	if(this.weekdays == null) {
+		this.weekdays = new Array("S", "M", "T", "W", "T", "F", "S");
+	}
+	for (var i = 0; i < 7; i++) {
+		if(i == (8-this.firstDayOfWeek)%7) {
+			table += ' <td><font color="red">' + this.weekdays[(i + this.firstDayOfWeek - 1)%7] + '</font></td>';
+		} else {
+			table += ' <td>' + this.weekdays[(i + this.firstDayOfWeek - 1)%7] + '</td>';
+		}
+	}
 	table += 		'			</tr>' ;
 	table += 		'		</table>' ;
 	table += 		'	</div>' ;
 	table += 		'	<div class="CalendarGrid">' ;
 	table += 		'	<table>' ;
+
   for (var week=0; week < 6; week++) {
     table += "<tr>";
-    for (var dayOfWeek=0; dayOfWeek < 7; dayOfWeek++) {
-      if (week == 0 && startDayOfWeek == dayOfWeek) {
+    for (var dayOfWeek=0; dayOfWeek <= 6; dayOfWeek++) {
+      if (week == 0 && dayOfWeek == (startDayOfWeek + ((8-this.firstDayOfWeek)%7))%7) {
         validDay = 1;
       } else if (validDay == 1 && dayOfMonth > daysInMonth) {
         validDay = 0;
@@ -429,6 +447,14 @@ UICalendar.prototype.getDayOfWeek = function(year, month, day) {
 
 UICalendar.prototype.getDaysInMonth = function(year, month) {
 	return [31, ((!(year % 4 ) && ( (year % 100 ) || !( year % 400 ) ))? 29:28), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][month];
+}
+
+UICalendar.prototype.getFirstDayOfWeek = function() {
+	return this.firstDayOfWeek;
+}
+
+UICalendar.prototype.setFirstDayOfWeek = function(dayOfWeek) {
+	this.firstDayOfWeek = dayOfWeek;
 }
 
 eXo.webui.UICalendar = new UICalendar('UICalendarControl') ;
