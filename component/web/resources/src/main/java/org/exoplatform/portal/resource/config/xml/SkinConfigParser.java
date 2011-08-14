@@ -52,16 +52,10 @@ public class SkinConfigParser
    public static final String GATEIN_RESOURCES_1_1_SYSTEM_ID = "http://www.gatein.org/xml/ns/gatein_resources_1_1";
 
    /** . */
-   public static final String GATEIN_RESOURCES_1_2_SYSTEM_ID = "http://www.gatein.org/xml/ns/gatein_resources_1_2";
-   
-   /** . */
    private static final String GATEIN_RESOURCE_1_0_XSD_PATH = "gatein_resources_1_0.xsd";
 
    /** . */
    private static final String GATEIN_RESOURCE_1_1_XSD_PATH = "gatein_resources_1_1.xsd";
-   
-   /** . */
-   private static final String GATEIN_RESOURCE_1_2_XSD_PATH = "gatein_resources_1_2.xsd";
 
    /** . */
    private static final XMLValidator VALIDATOR;
@@ -89,9 +83,6 @@ public class SkinConfigParser
 
    /** . */
    final public static String CSS_PATH_TAG = "css-path";
-   
-   /** . */
-   final public static String CSS_PRIORITY_TAG = "css-priority";
 
    /** . */
    final public static String WINDOW_STYLE_TAG = "window-style";
@@ -110,7 +101,6 @@ public class SkinConfigParser
       Map<String, String> systemIdToResourcePath = new HashMap<String, String>();
       systemIdToResourcePath.put(GATEIN_RESOURCES_1_0_SYSTEM_ID, GATEIN_RESOURCE_1_0_XSD_PATH);
       systemIdToResourcePath.put(GATEIN_RESOURCES_1_1_SYSTEM_ID, GATEIN_RESOURCE_1_1_XSD_PATH);
-      systemIdToResourcePath.put(GATEIN_RESOURCES_1_2_SYSTEM_ID, GATEIN_RESOURCE_1_2_XSD_PATH);
       VALIDATOR = new XMLValidator(SkinConfigParser.class, systemIdToResourcePath);
    }
 

@@ -93,14 +93,7 @@ public class PortletSkinTask extends AbstractSkinModule implements SkinConfigTas
       String moduleName = applicationName + "/" + portletName;
       String contextPath = scontext.getContextPath();
       String fullCSSPath = contextPath + cssPath;
-      Integer iCSSPriority = null;
-      try
-      {
-    	  iCSSPriority = Integer.valueOf(cssPriority);
-      } catch (Exception e) {
-    	  //Don't set cssPriority when it is not a numerical
-      }
-      skinService.addSkin(moduleName, skinName, fullCSSPath, scontext, overwrite, iCSSPriority);
+      skinService.addSkin(moduleName, skinName, fullCSSPath, scontext, overwrite);
       updateSkinDependentManager(contextPath, moduleName, skinName);
    }
 
@@ -116,8 +109,7 @@ public class PortletSkinTask extends AbstractSkinModule implements SkinConfigTas
       bindingPortletName(elemt);
       bindingCSSPath(elemt);
       bindingSkinName(elemt);
-      bindingOverwrite(elemt);
-      bindingCSSPriority(elemt);
+      bindingOverwrite(elemt);      
    }
 
 }
