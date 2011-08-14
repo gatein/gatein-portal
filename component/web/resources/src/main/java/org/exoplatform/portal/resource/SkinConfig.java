@@ -48,5 +48,12 @@ public interface SkinConfig extends Skin
     * @return the css path
     */
    String getCSSPath();
+   
+   /**
+    * Returns the priority number
+    *
+    * @return the priority number
+    */
+   int getCSSPriority();
 
 }
