@@ -24,6 +24,7 @@ import org.exoplatform.container.ExoContainer;
 import org.exoplatform.portal.application.replication.ApplicationState;
 import org.exoplatform.portal.config.UserPortalConfig;
 import org.exoplatform.portal.config.UserPortalConfigService;
+import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.webui.application.ConfigurationManager;
 import org.exoplatform.webui.application.StateManager;
 import org.exoplatform.webui.application.WebuiApplication;
@@ -34,7 +35,6 @@ import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 public class PortalStateManager extends StateManager
@@ -63,41 +63,21 @@ public class PortalStateManager extends StateManager
          appState = (ApplicationState)session.getAttribute(APPLICATION_ATTRIBUTE_PREFIX + key);
       }
 
-      //
-
-      //
       UIApplication uiapp = null;
       if (appState != null)
       {
+         if (log.isDebugEnabled())
+         {
+            log.debug("Found application " + key + " :" + appState.getApplication());
+         }
          if (Safe.equals(context.getRemoteUser(), appState.getUserName()))
          {
             uiapp = appState.getApplication();
          }
       }
-
-      //
-      if (appState != null)
-      {
-         log.debug("Found application " + key + " :" + appState.getApplication());
-      }
       else
       {
          log.debug("Application " + key + " not found");
-      }
-
-      // Looks like some necessary hacking
-      if (context instanceof PortalRequestContext)
-      {
-         PortalRequestContext portalRC = (PortalRequestContext)context;
-         UserPortalConfig config = getUserPortalConfig(portalRC);
-         if (config == null)
-         {
-            HttpServletResponse response = portalRC.getResponse();
-            response.sendRedirect(portalRC.getRequest().getContextPath() + "/portal-unavailable.jsp");
-            portalRC.setResponseComplete(true);
-            return null;
-         }
-         portalRC.setAttribute(UserPortalConfig.class, config);
       }
 
       //
@@ -141,15 +121,6 @@ public class PortalStateManager extends StateManager
       // For now do nothing....
    }
 
-   public static UserPortalConfig getUserPortalConfig(PortalRequestContext context) throws Exception
-   {
-      ExoContainer appContainer = context.getApplication().getApplicationServiceContainer();
-      UserPortalConfigService service_ = (UserPortalConfigService)appContainer.getComponentInstanceOfType(UserPortalConfigService.class);
-      String remoteUser = context.getRemoteUser();
-      String ownerUser = context.getPortalOwner();
-      return service_.getUserPortalConfig(ownerUser, remoteUser, PortalRequestContext.USER_PORTAL_CONTEXT);
-   }
-
    private String getKey(WebuiRequestContext webuiRC)
    {
       if (webuiRC instanceof PortletRequestContext)
@@ -159,9 +130,7 @@ public class PortalStateManager extends StateManager
       }
       else
       {
-         PortalRequestContext portalRC = (PortalRequestContext)webuiRC;
-         String portalOwner = portalRC.getPortalOwner();
-         return "portal_" + portalOwner;
+         return PortalApplication.PORTAL_APPLICATION_ID;
       }
    }
 

@@ -285,7 +285,7 @@ public class UIPortletLifecycle<S, C extends Serializable, I> extends Lifecycle<
                               if (!context.useAjax() && "title".equals(element.getNodeName().toLowerCase())
                                     && element.getFirstChild() != null)
                               {
-                                 String title = element.getFirstChild().getTextContent();
+                                 String title = element.getFirstChild().getNodeValue();
                                  prcontext.getRequest().setAttribute(PortalRequestContext.REQUEST_TITLE, title);
                               }
                               else

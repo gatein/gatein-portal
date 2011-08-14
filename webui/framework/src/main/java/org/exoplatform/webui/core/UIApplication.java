@@ -51,11 +51,13 @@ abstract public class UIApplication extends UIContainer
       uiPopupMessages_.setId("_" + uiPopupMessages_.hashCode());
    }
 
+   //TODO this looks like not to be used anymore
    public String getOwner()
    {
       return owner;
    }
 
+   //TODO this looks like not to be used anymore
    public void setOwner(String s)
    {
       owner = s;
@@ -125,10 +127,9 @@ abstract public class UIApplication extends UIContainer
       }
       catch (Throwable t)
       {
-         Object[] args = {t.getMessage()};
          ApplicationMessage msg =
-            new ApplicationMessage("UIApplication.msg.unknown-error", args, ApplicationMessage.ERROR);
-         getUIPopupMessages().addMessage(msg);
+            new ApplicationMessage("UIApplication.msg.unknown-error", null, ApplicationMessage.ERROR);
+         uiPopupMessages_.addMessage(msg);
          log.error("Error during the processAction phase", t);
       }
    }

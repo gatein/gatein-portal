@@ -19,6 +19,7 @@
 
 package org.exoplatform.services.resources.impl;
 
+import org.exoplatform.commons.utils.I18N;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.services.resources.LocaleConfig;
 import org.exoplatform.services.resources.Orientation;
@@ -58,6 +59,8 @@ public class LocaleConfigImpl implements LocaleConfig
    private String description_;
 
    private String localeName_;
+
+   private String tagIdentifier_;
 
    private Orientation orientation;
 
@@ -117,10 +120,18 @@ public class LocaleConfigImpl implements LocaleConfig
          if (localeParams.length > 1)
          {
             locale_ = new Locale(localeParams[0], localeParams[1]);
-         }else{
+         }
+         else
+         {
             locale_ = new Locale(localeName);
          }
+         tagIdentifier_ = I18N.toTagIdentifier(locale_);
       }
+   }
+
+   public String getTagIdentifier()
+   {
+      return tagIdentifier_;
    }
 
    public final String getLanguage()

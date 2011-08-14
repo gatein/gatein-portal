@@ -11,7 +11,7 @@
 	      </div>
 	      <div class="MiddleLeftBar">
 	          <div class="MiddleCenterBar" style="background-image: none;">
-	          	<%= uicomponent.getOwner();%>
+	          	<%= uicomponent.getSiteKey().getName();%>
 	          </div>
 	      </div>
 	      <div class="BottomLeftBar">

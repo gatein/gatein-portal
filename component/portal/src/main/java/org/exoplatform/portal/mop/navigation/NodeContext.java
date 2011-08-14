@@ -621,6 +621,12 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
       }
    }
 
+   public N getDescendantNode(String handle) throws NullPointerException
+   {
+      NodeContext<N> descendant = getDescendant(handle);
+      return descendant != null && !descendant.hidden ? descendant.node: null;
+   }
+
    public final Iterator<N> iterator()
    {
       return new Iterator<N>()

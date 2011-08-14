@@ -57,6 +57,8 @@ public interface LocaleConfig
 
    public String getLocaleName();
 
+   public String getTagIdentifier();
+
    public ResourceBundle getResourceBundle(String name);
 
    public ResourceBundle getMergeResourceBundle(String[] names);

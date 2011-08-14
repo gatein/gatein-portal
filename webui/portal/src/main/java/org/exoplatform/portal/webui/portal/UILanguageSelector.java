@@ -32,6 +32,8 @@ import org.exoplatform.services.resources.LocaleConfig;
 import org.exoplatform.services.resources.LocaleConfigService;
 import org.exoplatform.services.resources.LocaleContextInfo;
 import org.exoplatform.services.resources.ResourceBundleService;
+import org.exoplatform.web.url.ResourceType;
+import org.exoplatform.web.url.navigation.NodeURL;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIContainer;
@@ -186,11 +188,19 @@ public class UILanguageSelector extends UIContainer
             return;
          }
          // if(!uiPortal.isModifiable()) return;
+
          LocaleConfigService localeConfigService = event.getSource().getApplicationComponent(LocaleConfigService.class);
          LocaleConfig localeConfig = localeConfigService.getLocaleConfig(language);
          if (localeConfig == null)
             localeConfig = localeConfigService.getDefaultLocaleConfig();
          prqCtx.setLocale(localeConfig.getLocale());
+
+         if (prqCtx.getRequestLocale() != null)
+         {
+            NodeURL url = prqCtx.createURL(NodeURL.TYPE).setNode(Util.getUIPortal().getNavPath());
+            url.setLocale(prqCtx.getLocale());
+            prqCtx.sendRedirect(url.toString());            
+         }
       }
 
       private void saveLocaleToUserProfile(PortalRequestContext context) throws Exception

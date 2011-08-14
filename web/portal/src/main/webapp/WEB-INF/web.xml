@@ -69,8 +69,6 @@
     <filter-class>org.exoplatform.services.security.web.SetCurrentIdentityFilter</filter-class>
   </filter>
 
-
-
   <filter>
     <filter-name>RestEncodingFilter</filter-name>
       <filter-class>org.exoplatform.services.rest.servlet.RestEncodingFilter</filter-class>
@@ -94,20 +92,20 @@
 		<filter-name>ClusteredSSOFilter</filter-name>
 		<filter-class>org.exoplatform.web.login.ClusteredSSOFilter</filter-class>
 	</filter>
-   
-   <filter>
-      <filter-name>PortalContainerFilter</filter-name>
-      <filter-class>org.exoplatform.container.web.PortalContainerFilter</filter-class>
-   </filter>
-   
-   <filter-mapping>
-      <filter-name>PortalContainerFilter</filter-name>
-      <url-pattern>/*</url-pattern>
-   </filter-mapping>
 
+  <filter>
+	     <filter-name>PortalContainerFilter</filter-name>
+	     <filter-class>org.exoplatform.container.web.PortalContainerFilter</filter-class>
+  </filter>  
+
+  <filter-mapping>
+    <filter-name>PortalContainerFilter</filter-name>
+	  <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  
    <filter-mapping>
      <filter-name>RememberMeFilter</filter-name>
-     <url-pattern>/public/*</url-pattern>
+     <servlet-name>portal</servlet-name>
    </filter-mapping>
 
    <filter-mapping>
@@ -170,11 +168,10 @@
   </filter-mapping>
   
   <filter-mapping>
-	<filter-name>GenericFilter</filter-name>
-	<url-pattern>/*</url-pattern>
+  	<filter-name>GenericFilter</filter-name>
+	  <url-pattern>/*</url-pattern>
   </filter-mapping>
   
-
   <!-- ================================================================== -->
   <!--           LISTENER                                                 -->
   <!-- ================================================================== -->
@@ -222,6 +219,10 @@
     <servlet-name>InitiateLoginServlet</servlet-name>
     <servlet-class>org.exoplatform.web.login.InitiateLoginServlet</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>DoLoginServlet</servlet-name>
+    <servlet-class>org.exoplatform.web.login.DoLoginServlet</servlet-class>
+  </servlet>
 	<servlet>
 		<servlet-name>ErrorLoginServlet</servlet-name>
 		<servlet-class>org.exoplatform.web.login.ErrorLoginServlet</servlet-class>
@@ -234,6 +235,7 @@
   </servlet>
 
 	<!--  =================================================================  -->
+
 	<servlet-mapping>
 	  <servlet-name>InitiateLoginServlet</servlet-name>
 	  <url-pattern>/initiatelogin</url-pattern>
@@ -246,34 +248,16 @@
 	  <servlet-name>PortalLoginController</servlet-name>
 	  <url-pattern>/login</url-pattern>
 	</servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>DoLoginServlet</servlet-name>
+    <url-pattern>/dologin</url-pattern>
+  </servlet-mapping>
+
 	<servlet-mapping>
 	  <servlet-name>javascript</servlet-name>
 	  <url-pattern>/javascript/*</url-pattern>
 	</servlet-mapping>
-	<servlet-mapping>
-	  <servlet-name>portal</servlet-name>
-	  <url-pattern>/private/*</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-	  <servlet-name>portal</servlet-name>
-	  <url-pattern>/public/*</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-	  <servlet-name>portal</servlet-name>
-	  <url-pattern>/admin/*</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-	  <servlet-name>portal</servlet-name>
-	  <url-pattern>/service</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-	  <servlet-name>portal</servlet-name>
-	  <url-pattern>/upload/*</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-	  <servlet-name>portal</servlet-name>
-	  <url-pattern>/download/*</url-pattern>
-	</servlet-mapping>
+
   <servlet-mapping>
     <servlet-name>RestServer</servlet-name>
     <url-pattern>/rest/*</url-pattern>
@@ -285,20 +269,44 @@
   </servlet-mapping>
 
   <servlet-mapping>
+    <servlet-name>portal</servlet-name>
+    <url-pattern>/</url-pattern>
+  </servlet-mapping>
+
+  <!-- Explicit mappings (due to portal servlet on '/') for UIHomePagePortlet, need to find out how to improve that -->
+  <servlet-mapping>
+    <servlet-name>default</servlet-name>
+    <url-pattern>*.jpg</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>default</servlet-name>
+    <url-pattern>*.png</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>default</servlet-name>
+    <url-pattern>*.gif</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>default</servlet-name>
+    <url-pattern>*.ico</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>default</servlet-name>
+    <url-pattern>*.css</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
     <servlet-name>GateInServlet</servlet-name>
     <url-pattern>/gateinservlet</url-pattern>
   </servlet-mapping>
 
-  <!-- The Welcome File List for IBM WebSphere -->
-
-	<welcome-file-list>
-	  <welcome-file>/index.jsp</welcome-file>
-	</welcome-file-list>
-
 	<security-constraint>
 		<web-resource-collection>
 	  	<web-resource-name>user authentication</web-resource-name>
+	  	<url-pattern>/dologin</url-pattern>
 	  	<url-pattern>/private/*</url-pattern>
+      	<url-pattern>/groups/*</url-pattern>
+      	<url-pattern>/users/*</url-pattern>
 	  	<http-method>POST</http-method>
 	  	<http-method>GET</http-method>
 	  </web-resource-collection>

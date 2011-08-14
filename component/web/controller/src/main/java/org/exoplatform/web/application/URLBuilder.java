@@ -21,6 +21,8 @@ package org.exoplatform.web.application;
 
 import java.net.URLEncoder;
 
+import java.util.Locale;
+
 /**
  * Created by The eXo Platform SAS
  * Mar 29, 2007  
@@ -28,102 +30,68 @@ import java.net.URLEncoder;
 abstract public class URLBuilder<T>
 {
 
-   protected String baseURL_;
+   /** . */
+   protected Locale locale = null;
 
-   public URLBuilder(String baseURL)
+   /** . */
+   protected boolean removeLocale = false;
+
+   public Locale getLocale()
    {
-      baseURL_ = baseURL;
+      return locale;
    }
 
-   public String getBaseURL()
+   public void setLocale(Locale locale)
    {
-      return baseURL_;
+      this.locale = locale;
    }
 
-   public void setBaseURL(String url)
+   public void setRemoveLocale(boolean removeLocale)
    {
-      baseURL_ = url;
+      this.removeLocale = removeLocale;
    }
 
-   public String createURL(String action)
+   public boolean getRemoveLocale()
    {
-      return createURL(action, (Parameter[])null);
+      return removeLocale;
    }
 
-   abstract public String createURL(String action, Parameter[] params);
-
-   public String createURL(String action, String objectId)
+   public final String createURL(String action)
    {
-      return createURL(action, objectId, (Parameter[])null);
+      throw new UnsupportedOperationException("don't use me");
    }
 
-   abstract public String createURL(String action, String objectId, Parameter[] params);
+   public final String createURL(String action, Parameter[] params)
+   {
+      throw new UnsupportedOperationException("don't use me");
+   }
 
-   public String createURL(T targetComponent, String action, String targetBeanId)
+   public final String createURL(String action, String objectId)
+   {
+      throw new UnsupportedOperationException("don't use me");
+   }
+
+   public final String createURL(String action, String objectId, Parameter[] params)
+   {
+      throw new UnsupportedOperationException("don't use me");
+   }
+
+   public final String createURL(T targetComponent, String action, String targetBeanId)
    {
       return createURL(targetComponent, action, null, targetBeanId, (Parameter[])null);
    }
 
-   public String createAjaxURL(T targetComponent, String action, String targetBeanId)
+   public final String createAjaxURL(T targetComponent, String action, String targetBeanId)
    {
       return createAjaxURL(targetComponent, action, null, targetBeanId, (Parameter[])null);
    }
 
-   public String createAjaxURL(T targetComponent, String action, String confirm, String targetBeanId)
+   public final String createAjaxURL(T targetComponent, String action, String confirm, String targetBeanId)
    {
       return createAjaxURL(targetComponent, action, confirm, targetBeanId, (Parameter[])null);
    }
 
-   public String createAjaxURL(T targetComponent, String action, String confirm, String targetBeanId, Parameter[] params)
-   {
-      StringBuilder builder = new StringBuilder("javascript:");
-      if (confirm != null && confirm.length() > 0)
-      {
-         builder.append("if(confirm('").append(confirm.replaceAll("'", "\\\\'")).append("'))");
-      }
-      builder.append("ajaxGet('");
-      if (targetBeanId != null)
-      {
-         try
-         {
-            targetBeanId = URLEncoder.encode(targetBeanId, "utf-8");
-         }
-         catch (Exception e)
-         {
-            System.err.println(e.toString());
-         }
-      }
-      createURL(builder, targetComponent, action, targetBeanId, params);
-      builder.append("&amp;ajaxRequest=true')");
-      return builder.toString();
-   }
+   public abstract String createAjaxURL(T targetComponent, String action, String confirm, String targetBeanId, Parameter[] params);
 
-   public String createURL(T targetComponent, String action, String confirm, String targetBeanId, Parameter[] params)
-   {
-      StringBuilder builder = new StringBuilder();
-      boolean hasConfirm = confirm != null && confirm.length() > 0;
-      if (hasConfirm)
-      {
-         builder.append("javascript:if(confirm('").append(confirm.replaceAll("'", "\\\\'")).append("'))");
-         builder.append("window.location=\'");
-      }
-      if (targetBeanId != null)
-      {
-         try
-         {
-            targetBeanId = URLEncoder.encode(targetBeanId, "utf-8");
-         }
-         catch (Exception e)
-         {
-            System.err.println(e.toString());
-         }
-      }
-      createURL(builder, targetComponent, action, targetBeanId, params);
-      if (hasConfirm)
-         builder.append("\';");
-      return builder.toString();
-   }
-
-   abstract protected void createURL(StringBuilder builder, T targetComponent, String action, String targetBeanId,
-      Parameter[] params);
+   public abstract String createURL(T targetComponent, String action, String confirm, String targetBeanId, Parameter[] params);
 }

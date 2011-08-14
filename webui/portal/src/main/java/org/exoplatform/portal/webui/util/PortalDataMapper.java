@@ -29,6 +29,7 @@ import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageBody;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.SiteBody;
+import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.pom.spi.gadget.Gadget;
 import org.exoplatform.portal.webui.application.PortletState;
 import org.exoplatform.portal.webui.application.UIGadget;
@@ -180,8 +181,8 @@ public class PortalDataMapper
    {
       Page model = new Page(uiPage.getStorageId());
       toContainer(model, uiPage);
-      model.setOwnerId(uiPage.getOwnerId());
-      model.setOwnerType(uiPage.getOwnerType());
+      model.setOwnerId(uiPage.getSiteKey().getName());
+      model.setOwnerType(uiPage.getSiteKey().getTypeName());
       model.setIcon(uiPage.getIcon());
       model.setPageId(uiPage.getPageId());
       model.setTitle(uiPage.getTitle());
@@ -195,7 +196,7 @@ public class PortalDataMapper
 
    static private PortalConfig toPortal(UIPortal uiPortal)
    {
-      PortalConfig model = new PortalConfig(uiPortal.getOwnerType(), uiPortal.getName(), uiPortal.getStorageId());
+      PortalConfig model = new PortalConfig(uiPortal.getSiteType().getName(), uiPortal.getName(), uiPortal.getStorageId());
       model.setAccessPermissions(uiPortal.getAccessPermissions());
       model.setEditPermission(uiPortal.getEditPermission());
       model.setLabel(uiPortal.getLabel());
@@ -318,8 +319,7 @@ public class PortalDataMapper
    static public void toUIPage(UIPage uiPage, Page model) throws Exception
    {
       toUIContainer(uiPage, model);
-      uiPage.setOwnerId(model.getOwnerId());
-      uiPage.setOwnerType(model.getOwnerType());
+      uiPage.setSiteKey(new SiteKey(model.getOwnerType(), model.getOwnerId()));
       uiPage.setIcon(model.getIcon());
       uiPage.setAccessPermissions(model.getAccessPermissions());
       uiPage.setEditPermission(model.getEditPermission());
@@ -337,16 +337,13 @@ public class PortalDataMapper
       }
    }
 
-   static public void toUIPortal(UIPortal uiPortal, UserPortalConfig userPortalConfig) throws Exception
+   static public void toUIPortal(UIPortal uiPortal, PortalConfig model) throws Exception
    {
-      PortalConfig model = userPortalConfig.getPortalConfig();
-
-      uiPortal.setOwnerType(model.getType());
+      uiPortal.setSiteKey(new SiteKey(model.getType(), model.getName()));
       uiPortal.setStorageId(model.getStorageId());
       uiPortal.setName(model.getName());
       uiPortal.setId("UIPortal");
       // uiPortal.setFactoryId(model.getFactoryId());
-      uiPortal.setOwner(model.getName());
       uiPortal.setModifiable(model.isModifiable());
 
       uiPortal.setLabel(model.getLabel());
@@ -365,8 +362,6 @@ public class PortalDataMapper
             buildUIContainer(uiPortal, child, false);
          }
       }
-      //uiPortal.setNavigation(userPortalConfig.getNavigations());
-//      uiPortal.setNavigation(userPortalConfig.getSelectedNavigation());
    }
 
    private static void buildUIContainer(UIContainer uiContainer, Object model, boolean dashboard) throws Exception

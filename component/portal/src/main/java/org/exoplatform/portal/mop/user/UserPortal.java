@@ -132,6 +132,18 @@ public interface UserPortal
       throws UserPortalException, NavigationServiceException;
 
    /**
+    * Returns the user node for the default path in specified navigation
+    *
+    * @param navigation the navigation
+    * @param filterConfig an optional filter
+    * @return the default navigation path
+    * @throws UserPortalException any user portal exception
+    * @throws NavigationServiceException any navigation service exception
+    */
+   UserNode getDefaultPath(UserNavigation navigation, UserNodeFilterConfig filterConfig)
+   throws UserPortalException, NavigationServiceException;
+   
+   /**
     * Resolves and returns a node among all user navigations for a specified path.
     *
     * @param filterConfig an optional filter
@@ -141,6 +153,7 @@ public interface UserPortal
     * @throws UserPortalException any user portal exception
     * @throws NavigationServiceException any navigation service exception
     */
+   @Deprecated
    UserNode resolvePath(UserNodeFilterConfig filterConfig, String path)
       throws NullPointerException, UserPortalException, NavigationServiceException;
 

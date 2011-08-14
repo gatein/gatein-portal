@@ -34,11 +34,13 @@ import org.exoplatform.commons.utils.PageListAccess;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.Query;
+import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.ModelObject;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteKey;
+import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.navigation.Scope;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
@@ -62,7 +64,6 @@ import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.UIRepeater;
-import org.exoplatform.webui.core.UISearch;
 import org.exoplatform.webui.core.UIVirtualList;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
@@ -72,10 +73,15 @@ import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormInputItemSelector;
 import org.exoplatform.webui.form.UIFormInputSet;
-import org.exoplatform.webui.form.UIFormRadioBoxInput;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
-import org.exoplatform.webui.form.UISearchForm;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ResourceBundle;
+
+import javax.portlet.ActionResponse;
+import javax.xml.namespace.QName;
 
 @ComponentConfigs({
    @ComponentConfig(template = "system:/groovy/portal/webui/page/UIPageBrowser.gtmpl", events = {
@@ -254,32 +260,32 @@ public class UIPageBrowser extends UIContainer
       public void execute(Event<UIPageBrowser> event) throws Exception
       {
          UIPageBrowser uiPageBrowser = event.getSource();
-         PortalRequestContext pcontext = Util.getPortalRequestContext();
-         String id = pcontext.getRequestParameter(OBJECTID);
+         WebuiRequestContext context = event.getRequestContext();
+         String id = context.getRequestParameter(OBJECTID);
          UserPortalConfigService service = uiPageBrowser.getApplicationComponent(UserPortalConfigService.class);
          DataStorage dataService = uiPageBrowser.getApplicationComponent(DataStorage.class);
 
-         UIPortalApplication uiPortalApp = (UIPortalApplication)pcontext.getUIApplication();
+         UIApplication uiApp = context.getUIApplication();
          if (service.getPage(id) == null)
          {
-            uiPortalApp.addMessage(new ApplicationMessage("UIPageBrowser.msg.PageNotExist", new String[]{id}, 1));
-            pcontext.addUIComponentToUpdateByAjax(uiPortalApp.getUIPopupMessages());
+            uiApp.addMessage(new ApplicationMessage("UIPageBrowser.msg.PageNotExist", new String[]{id}, 1));
+            context.addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
             return;
          }
-         Page page = service.getPage(id, pcontext.getRemoteUser());
+         Page page = service.getPage(id, context.getRemoteUser());
 
          if (page == null || !page.isModifiable() ||
-            (page.getOwnerType().equals(PortalConfig.USER_TYPE) && !page.getOwnerId().equals(pcontext.getRemoteUser())))
+            (page.getOwnerType().equals(SiteType.USER.getName()) && !page.getOwnerId().equals(context.getRemoteUser())))
          {
-            uiPortalApp.addMessage(new ApplicationMessage("UIPageBrowser.msg.delete.NotDelete", new String[]{id}, 1));
-            pcontext.addUIComponentToUpdateByAjax(uiPortalApp.getUIPopupMessages());
+            uiApp.addMessage(new ApplicationMessage("UIPageBrowser.msg.delete.NotDelete", new String[]{id}, 1));
+            context.addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
             return;
          }
          
          UIPortal uiPortal = Util.getUIPortal();
          UserNode userNode = uiPortal.getSelectedUserNode();
          boolean isDeleteCurrentPage = userNode.getPageRef().equals(page.getPageId());
-         if (isDeleteCurrentPage && page.getOwnerType().equals(PortalConfig.USER_TYPE))
+         if (isDeleteCurrentPage && page.getOwnerType().equals(SiteType.USER.getName()))
          {
             ApplicationMessage msg = new ApplicationMessage("UIPageBrowser.msg.delete.DeleteCurrentUserPage", null, ApplicationMessage.WARNING);
             event.getRequestContext().getUIApplication().addMessage(msg);
@@ -292,7 +298,7 @@ public class UIPageBrowser extends UIContainer
          int currentPage = datasource.getCurrentPage();
 
          //Update navigation and UserToolbarGroupPortlet if deleted page is dashboard page
-         if(page.getOwnerType().equals(PortalConfig.USER_TYPE)){
+         if(page.getOwnerType().equals(SiteType.USER.getName())){
             removePageNode(page, event);
          }
 
@@ -304,8 +310,9 @@ public class UIPageBrowser extends UIContainer
 
          if (isDeleteCurrentPage)
          {
-            PageNodeEvent<UIPortal> pnevent =
-               new PageNodeEvent<UIPortal>(uiPortal, PageNodeEvent.CHANGE_PAGE_NODE, userNode.getURI());
+            SiteKey siteKey = userNode.getNavigation().getKey();
+            PageNodeEvent<UIPortalApplication> pnevent =
+               new PageNodeEvent<UIPortalApplication>(Util.getUIPortalApplication(), PageNodeEvent.CHANGE_NODE, siteKey, userNode.getURI());
             uiPortal.broadcast(pnevent, Phase.PROCESS);
          }
          else
@@ -378,14 +385,26 @@ public class UIPageBrowser extends UIContainer
       {
          UIPageBrowser uiPageBrowser = event.getSource();
          WebuiRequestContext context = event.getRequestContext();
-         String pageID = context.getRequestParameter(OBJECTID);
-         DataStorage service = uiPageBrowser.getApplicationComponent(DataStorage.class);
+         PortalRequestContext pcontext = (PortalRequestContext)context.getParentAppRequestContext();
+         UIPortalApplication uiPortalApp = (UIPortalApplication)pcontext.getUIApplication();
+         String id = context.getRequestParameter(OBJECTID);
+         UserPortalConfigService service = uiPageBrowser.getApplicationComponent(UserPortalConfigService.class);
 
          //Check existence of the page
-         Page page = service.getPage(pageID);
+         Page page = service.getPage(id);
          if (page == null)
          {
-            context.getUIApplication().addMessage(new ApplicationMessage("UIPageBrowser.msg.PageNotExist", new String[]{pageID}, 1));
+            uiPortalApp.addMessage(new ApplicationMessage("UIPageBrowser.msg.PageNotExist", new String[]{id}, 1));
+            context.addUIComponentToUpdateByAjax(uiPortalApp.getUIPopupMessages());
+            return;
+         }
+
+         //Check current user 's permissions on the page
+         UserACL userACL = uiPageBrowser.getApplicationComponent(UserACL.class);
+         if (!userACL.hasEditPermission(page))
+         {
+            uiPortalApp.addMessage(new ApplicationMessage("UIPageBrowser.msg.edit.NotEditPage", new String[]{id}, 1));
+            context.addUIComponentToUpdateByAjax(uiPortalApp.getUIPopupMessages());
             return;
          }
          
@@ -458,7 +477,7 @@ public class UIPageBrowser extends UIContainer
             return;
          }
 
-         page.setOwnerType(uiPage.getOwnerType());
+         page.setOwnerType(uiPage.getSiteKey().getTypeName());
 
          List<UIPortlet> uiPortlets = new ArrayList<UIPortlet>();
          findAllPortlet(uiPortlets, uiPage);

@@ -23,33 +23,48 @@ import org.exoplatform.container.component.BaseComponentPlugin;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Map;
+import javax.servlet.ServletConfig;
 
 /**
- * Created by The eXo Platform SAS
- * Mar 21, 2007  
- * 
- * Abstract calss that one must implement if it want to provide a dedicated handler for a custom servlet path
- * 
- * In case of portal the path is /portal but you could return your own from the getPath() method and hence the 
- * WebAppController would use your own handler
- * 
- * The execute method is to be overrided and the buisness logic should be handled here
+ * Abstract calss that one must implement if it want to provide a dedicated handler for serving custom requests.
+ * The execute method must be impemented and the serving logic should be handled here.
  */
 abstract public class WebRequestHandler extends BaseComponentPlugin
 {
-
-   public void onInit(WebAppController controller) throws Exception
+   /**
+    * Init callback.
+    *
+    * @param controller the controller
+    * @param sConfig the servlet config
+    * @throws Exception any exception
+    */
+   public void onInit(WebAppController controller, ServletConfig sConfig) throws Exception
    {
-
    }
 
-   abstract public String[] getPath();
+   /**
+    * Returns the handler name.
+    *
+    * @return the handler name
+    */
+   public abstract String getHandlerName();
 
-   abstract public void execute(WebAppController app, HttpServletRequest req, HttpServletResponse res) throws Exception;
+   /**
+    * Execute a service.
+    *
+    * @param context the controller context
+    * @throws Exception any exception
+    */
+   abstract public void execute(ControllerContext context) throws Exception;
 
-   public void onDestroy(WebAppController controler) throws Exception
+   /**
+    * Destroy callback.
+    *
+    * @param controller the controller
+    * @throws Exception any exception
+    */
+   public void onDestroy(WebAppController controller) throws Exception
    {
-
-   }
-
+  }
 }

@@ -6,7 +6,7 @@
 	jsmanager.importJavascript('eXo.portal.UIPortalControl'); 
 	jsmanager.addCustomizedOnLoadScript('document.getElementById("UIPortalComponentLogin").username.focus();');
 	HttpSession session = rcontext.getRequest().getSession();
-	String requestPath = rcontext.getRequestContextPath() + "/private/" + rcontext.getPortalOwner();
+	String requestPath = rcontext.getInitialURI();
 	//session.setAttribute("initialURI", requestPath);
 %>
 <div class="UILoginForm">

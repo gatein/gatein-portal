@@ -21,6 +21,8 @@ package org.exoplatform.portal.config;
 
 import org.exoplatform.commons.utils.LazyPageList;
 import org.exoplatform.container.component.ComponentPlugin;
+import org.exoplatform.container.xml.InitParams;
+import org.exoplatform.container.xml.ValueParam;
 import org.exoplatform.portal.config.model.Application;
 import org.exoplatform.portal.config.model.Container;
 import org.exoplatform.portal.config.model.ModelObject;
@@ -63,19 +65,59 @@ public class UserPortalConfigService implements Startable
    /** . */
    final DescriptionService descriptionService;
 
+   /** . */
+   boolean createUserPortal;
+
+   /** . */
+   boolean destroyUserPortal;
+
    private Log log = ExoLogger.getLogger("Portal:UserPortalConfigService");
 
    public UserPortalConfigService(
-      UserACL userACL, DataStorage storage,
+      UserACL userACL,
+      DataStorage storage,
       OrganizationService orgService,
       NavigationService navService,
-      DescriptionService descriptionService) throws Exception
+      DescriptionService descriptionService,
+      InitParams params) throws Exception
    {
+
+      //
+      ValueParam createUserPortalParam = params == null ? null : params.getValueParam("create.user.portal");
+      boolean createUserPortal = createUserPortalParam == null || createUserPortalParam.getValue().toLowerCase().trim().equals("true");
+
+      //
+      ValueParam destroyUserPortalParam = params == null ? null : params.getValueParam("destroy.user.portal");
+      boolean destroyUserPortal = destroyUserPortalParam == null || destroyUserPortalParam.getValue().toLowerCase().trim().equals("true");
+
+      //
       this.storage_ = storage;
       this.orgService_ = orgService;
       this.userACL_ = userACL;
       this.navService = navService;
       this.descriptionService = descriptionService;
+      this.createUserPortal = createUserPortal;
+      this.destroyUserPortal = destroyUserPortal;
+   }
+
+   public boolean getCreateUserPortal()
+   {
+      return createUserPortal;
+   }
+
+   public void setCreateUserPortal(boolean createUserPortal)
+   {
+      this.createUserPortal = createUserPortal;
+   }
+
+   public boolean getDestroyUserPortal()
+   {
+      return destroyUserPortal;
+   }
+
+   public void setDestroyUserPortal(boolean destroyUserPortal)
+   {
+      this.destroyUserPortal = destroyUserPortal;
    }
 
    /**

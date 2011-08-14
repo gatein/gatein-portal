@@ -108,6 +108,8 @@ public class SkinService implements Startable
    /** One hour caching. */
    private static final int ONE_HOUR = 3600;
 
+   public static final String DEFAULT_SKIN = "Default";
+
    /** The deployer. */
    private final AbstractResourceHandler deployer;
 
@@ -524,13 +526,13 @@ public class SkinService implements Startable
     * Get SkinConfig by module and skin name
     * @param module
     * @param skinName
-    * @return SkinConfig by SkinKey(module, skinName), or SkinConfig by SkinKey(module, "Default")
+    * @return SkinConfig by SkinKey(module, skinName), or SkinConfig by SkinKey(module, SkinService.DEFAULT_SKIN)
     */
    public SkinConfig getSkin(String module, String skinName)
    {
       SkinConfig config = skinConfigs_.get(new SkinKey(module, skinName));
       if (config == null)
-         skinConfigs_.get(new SkinKey(module, "Default"));
+         skinConfigs_.get(new SkinKey(module, SkinService.DEFAULT_SKIN));
       return config;
    }
 
@@ -590,7 +592,7 @@ public class SkinService implements Startable
    {
       SkinKey key;
       if (skinName.length() == 0)
-         key = new SkinKey(module, "Default");
+         key = new SkinKey(module, DEFAULT_SKIN);
       else
          key = new SkinKey(module, skinName);
       skinConfigs_.remove(key);

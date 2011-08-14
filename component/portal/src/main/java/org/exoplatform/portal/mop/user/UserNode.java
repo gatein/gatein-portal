@@ -333,8 +333,7 @@ public class UserNode
    // Keep this internal for now
    UserNode find(String nodeId)
    {
-      NodeContext<UserNode> found = context.getDescendant(nodeId);
-      return found != null ? found.getNode() : null;
+      return context.getDescendantNode(nodeId);
    }
 
    public String toString()

@@ -33,10 +33,11 @@
          <page-reference>portal::limited::foo</page-reference>
       </node>
 
-      <!-- Node with /platform/user permission -->
+      <!-- Node SYSTEM with /platform/user permission -->
       <node>
          <uri>bar</uri>
          <name>bar</name>
+         <visibility>SYSTEM</visibility>
          <page-reference>portal::limited::bar</page-reference>
       </node>
 

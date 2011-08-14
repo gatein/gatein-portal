@@ -22,6 +22,7 @@ package org.exoplatform.toolbar.webui.component;
 import java.util.List;
 
 import org.exoplatform.portal.config.DataStorage;
+import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteKey;
@@ -31,6 +32,7 @@ import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.mop.user.UserNodeFilterConfig;
 import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 
@@ -47,7 +49,7 @@ public class UIUserToolBarSitePortlet extends BasePartialUpdateToolbar
    public UIUserToolBarSitePortlet() throws Exception
    {
       UserNodeFilterConfig.Builder builder = UserNodeFilterConfig.builder();
-      builder.withAuthorizationCheck().withVisibility(Visibility.DISPLAYED, Visibility.TEMPORAL);
+      builder.withReadWriteCheck().withVisibility(Visibility.DISPLAYED, Visibility.TEMPORAL);
       builder.withTemporalCheck();
       toolbarFilterConfig = builder.build();
    }
@@ -71,17 +73,6 @@ public class UIUserToolBarSitePortlet extends BasePartialUpdateToolbar
       return portalName;
    }
 
-   public String getCurrentPortal()
-   {
-      return Util.getPortalRequestContext().getPortalOwner();
-   }
-
-   public String getPortalURI(String portalName)
-   {
-      String currentPortalURI = Util.getPortalRequestContext().getPortalURI();
-      return currentPortalURI.substring(0, currentPortalURI.lastIndexOf(getCurrentPortal())) + portalName + "/";
-   } 
-
    @Override
    protected UserNode getNodeFromResourceID(String resourceId) throws Exception
    {      
@@ -95,6 +86,11 @@ public class UIUserToolBarSitePortlet extends BasePartialUpdateToolbar
          return node;
       }
       return null;
+   }
+
+   private String getCurrentPortal()
+   {
+      return Util.getPortalRequestContext().getPortalOwner();
    }
 
    @Override

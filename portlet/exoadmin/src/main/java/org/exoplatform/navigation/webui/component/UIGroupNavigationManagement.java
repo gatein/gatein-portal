@@ -200,8 +200,7 @@ public class UIGroupNavigationManagement extends UIContainer
          UINavigationManagement naviManager = popUp.createUIComponent(UINavigationManagement.class, null, null, popUp);
          uicomp.naviManager = naviManager;
          
-         naviManager.setOwner(siteKey.getName());
-         naviManager.setOwnerType(siteKey.getTypeName());
+         naviManager.setSiteKey(siteKey);
 
          UINavigationNodeSelector selector = naviManager.getChild(UINavigationNodeSelector.class);
          selector.setEdittedNavigation(nav);

@@ -20,7 +20,13 @@
 package org.exoplatform.portal.webui.application;
 
 import org.exoplatform.Constants;
+import org.exoplatform.commons.utils.I18N;
 import org.exoplatform.portal.application.PortalRequestContext;
+import org.exoplatform.web.url.PortalURL;
+import org.exoplatform.webui.core.UIComponent;
+import org.exoplatform.webui.url.ComponentURL;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 import org.gatein.common.net.media.MediaType;
 import org.gatein.common.util.MarkupInfo;
 import org.gatein.common.util.ParameterValidation;
@@ -35,9 +41,11 @@ import org.gatein.pc.api.WindowState;
 import org.gatein.pc.api.cache.CacheLevel;
 import org.gatein.pc.portlet.impl.spi.AbstractPortletInvocationContext;
 
+import java.util.Locale;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Map;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -46,30 +54,35 @@ import java.util.Map;
 class ExoPortletInvocationContext extends AbstractPortletInvocationContext
 {
 
-   private HttpServletResponse response;
-
-   private HttpServletRequest request;
-
-   private String portalRequestURI;
-
-   private String portletId;
-
    static final String INTERACTION_STATE_PARAM_NAME = "interactionstate";
    static final String NAVIGATIONAL_STATE_PARAM_NAME = "navigationalstate";
    static final String RESOURCE_STATE_PARAM_NAME = "resourcestate";
-   private static final String QMARK = "?";
-   private static final String EQ = "=";
-   private static final String AMP = "&";
-   private static final String XMLAMP = "&amp;";
+
+   /** . */
+   private static final Logger log = LoggerFactory.getLogger(ExoPortletInvocationContext.class);
+
+   /** . */
+   private final HttpServletResponse response;
+
+   /** . */
+   private final HttpServletRequest request;
+
+   /** . */
+   private final PortalURL<UIComponent, ComponentURL> url;
 
    public ExoPortletInvocationContext(PortalRequestContext portalRequestContext, UIPortlet portlet)
    {
       super(new MarkupInfo(MediaType.TEXT_HTML, "UTF-8"));
 
+      //
+      ComponentURL url = portalRequestContext.createURL(ComponentURL.TYPE, portlet);
+      String path = portalRequestContext.getNodePath();
+      url.setPath(path);
+
+      //
       this.request = portalRequestContext.getRequest();
       this.response = portalRequestContext.getResponse();
-      this.portalRequestURI = portalRequestContext.getRequestURI();
-      this.portletId = portlet.getId();
+      this.url = url;
    }
 
    @Override
@@ -96,15 +109,18 @@ class ExoPortletInvocationContext extends AbstractPortletInvocationContext
 
    public String renderURL(ContainerURL containerURL, URLFormat format)
    {
-      boolean wantEscapeXML = false;
-      if (format != null && format.getWantEscapeXML() != null)
-      {
-         wantEscapeXML = format.getWantEscapeXML();
-      }
-
+/*
       // todo: shouldn't we be using URLFormat to decide on the path to use at the beginning of the URL?
-      StringBuilder baseURL = new StringBuilder(this.portalRequestURI).append(QMARK)
-         .append(PortalRequestContext.UI_COMPONENT_ID).append(EQ).append(this.portletId);
+      StringBuilder baseURL = new StringBuilder(this.portalRequestURI).append("?")
+         .append(PortalRequestContext.UI_COMPONENT_ID).append("=").append(this.portletId);
+*/
+      
+      //Clear URL parameters
+      Map<String, String[]> queryParameters = url.getQueryParameters();
+      if (queryParameters != null)
+      {
+         queryParameters.clear();
+      }
 
       String type;
       if (containerURL instanceof RenderURL)
@@ -126,30 +142,12 @@ class ExoPortletInvocationContext extends AbstractPortletInvocationContext
 
       if (!type.equals(Constants.PORTAL_RENDER))
       {
-         appendParameter(baseURL, Constants.TYPE_PARAMETER, type, wantEscapeXML);
+         url.setQueryParameterValue(Constants.TYPE_PARAMETER, type);
       }
 
       if (format != null && format.getWantSecure() != null)
       {
-         appendParameter(baseURL, Constants.SECURE_PARAMETER, format.getWantSecure().toString(), wantEscapeXML);
-      }
-
-      StateString navigationalState = containerURL.getNavigationalState();
-      if (navigationalState != null && !navigationalState.getStringValue().equals(StateString.JBPNS_PREFIX))
-      {
-         appendParameter(baseURL, NAVIGATIONAL_STATE_PARAM_NAME, navigationalState.getStringValue(), wantEscapeXML);
-      }
-
-      WindowState windowState = containerURL.getWindowState();
-      if (windowState != null)
-      {
-         appendParameter(baseURL, Constants.WINDOW_STATE_PARAMETER, windowState.toString(), wantEscapeXML);
-      }
-
-      Mode mode = containerURL.getMode();
-      if (mode != null)
-      {
-         appendParameter(baseURL, Constants.PORTLET_MODE_PARAMETER, mode.toString(), wantEscapeXML);
+         url.setQueryParameterValue(Constants.SECURE_PARAMETER, format.getWantSecure().toString());
       }
 
       if (containerURL instanceof ActionURL)
@@ -159,30 +157,78 @@ class ExoPortletInvocationContext extends AbstractPortletInvocationContext
          StateString state = actionURL.getInteractionState();
          if (state != null && !state.getStringValue().equals(StateString.JBPNS_PREFIX))
          {
-            appendParameter(baseURL, INTERACTION_STATE_PARAM_NAME, state.getStringValue(), wantEscapeXML);
+            url.setQueryParameterValue(INTERACTION_STATE_PARAM_NAME, state.getStringValue());
+         }
+
+         state = actionURL.getNavigationalState();
+         if (state != null && !state.getStringValue().equals(StateString.JBPNS_PREFIX))
+         {
+            url.setQueryParameterValue(NAVIGATIONAL_STATE_PARAM_NAME, state.getStringValue());
+         }
+
+         WindowState windowState = actionURL.getWindowState();
+         if (windowState != null)
+         {
+            url.setQueryParameterValue(Constants.WINDOW_STATE_PARAMETER, windowState.toString());
+         }
+
+         Mode mode = actionURL.getMode();
+         if (mode != null)
+         {
+            url.setQueryParameterValue(Constants.PORTLET_MODE_PARAMETER, mode.toString());
          }
       }
       else if (containerURL instanceof ResourceURL)
       {
          ResourceURL resourceURL = (ResourceURL)containerURL;
 
-         appendParameter(baseURL, Constants.RESOURCE_ID_PARAMETER, resourceURL.getResourceId(), wantEscapeXML);
+         url.setQueryParameterValue(Constants.RESOURCE_ID_PARAMETER, resourceURL.getResourceId());
 
          CacheLevel cachability = resourceURL.getCacheability();
          if (cachability != null)
          {
-            appendParameter(baseURL, Constants.CACHELEVEL_PARAMETER, cachability.name(), wantEscapeXML);
+            url.setQueryParameterValue(Constants.CACHELEVEL_PARAMETER, cachability.name());
          }
 
          StateString resourceState = resourceURL.getResourceState();
          if (resourceState != null && !resourceState.getStringValue().equals(StateString.JBPNS_PREFIX))
          {
-            appendParameter(baseURL, RESOURCE_STATE_PARAM_NAME, resourceState.getStringValue(), wantEscapeXML);
+            url.setQueryParameterValue(RESOURCE_STATE_PARAM_NAME, resourceState.getStringValue());
+         }
+
+         resourceState = resourceURL.getNavigationalState();
+         if (resourceState != null && !resourceState.getStringValue().equals(StateString.JBPNS_PREFIX))
+         {
+            url.setQueryParameterValue(NAVIGATIONAL_STATE_PARAM_NAME, resourceState.getStringValue());
+         }
+
+         WindowState windowState = resourceURL.getWindowState();
+         if (windowState != null)
+         {
+            url.setQueryParameterValue(Constants.WINDOW_STATE_PARAMETER, windowState.toString());
+         }
+
+         Mode mode = resourceURL.getMode();
+         if (mode != null)
+         {
+            url.setQueryParameterValue(Constants.PORTLET_MODE_PARAMETER, mode.toString());
          }
       }
       else
       {
          RenderURL renderURL = (RenderURL)containerURL;
+
+         WindowState windowState = renderURL.getWindowState();
+         if (windowState != null)//&& !windowState.equals(WindowState.NORMAL))
+         {
+            url.setQueryParameterValue(Constants.WINDOW_STATE_PARAMETER, windowState.toString());
+         }
+
+         Mode mode = renderURL.getMode();
+         if (mode != null)
+         {
+            url.setQueryParameterValue(Constants.PORTLET_MODE_PARAMETER, mode.toString());
+         }
 
          Map<String, String[]> publicNSChanges = renderURL.getPublicNavigationalStateChanges();
          if (ParameterValidation.existsAndIsNotEmpty(publicNSChanges))
@@ -194,32 +240,53 @@ class ExoPortletInvocationContext extends AbstractPortletInvocationContext
                {
                   for (String value : values)
                   {
-                     appendParameter(baseURL, key, value, wantEscapeXML);
+                     url.setQueryParameterValue(key, value);
                   }
                }
                else
                {
-                  appendParameter(baseURL, "removePP", key, wantEscapeXML);
+                  url.setQueryParameterValue("removePP", key);
                }
+            }
+         }
+
+         StateString state = renderURL.getNavigationalState();
+         if (state != null && !state.getStringValue().equals(StateString.JBPNS_PREFIX))
+         {
+            url.setQueryParameterValue(NAVIGATIONAL_STATE_PARAM_NAME, state.getStringValue());
+         }
+      }
+
+      //
+      Map<String, String> props = containerURL.getProperties();
+      String lang = props.get("gtn:lang");
+      if (lang != null)
+      {
+         if (lang.length() == 0)
+         {
+            url.setLocale(null);
+         }
+         else
+         {
+            try
+            {
+               Locale locale = I18N.parseJavaIdentifier(lang);
+               url.setLocale(locale);
+            }
+            catch (IllegalArgumentException e)
+            {
+               log.debug("Unparsable locale string: " + lang, e);
             }
          }
       }
 
-      return baseURL.toString();
-   }
+      // Ajax support
+      url.setAjax("true".equals(props.get("gtn:ajax")));
 
-   private void appendParameter(StringBuilder builder, String name, String value, boolean wantEscapeXML)
-   {
-      if (value != null)
-      {
-         if (wantEscapeXML)
-         {
-            builder.append(XMLAMP).append(name).append(EQ).append(value);
-         }
-         else
-         {
-            builder.append(AMP).append(name).append(EQ).append(value);
-         }
-      }
+      // Confirm messsage
+      url.setConfirm(props.get("gtn:confirm"));
+
+      //
+      return url.toString();
    }
 }

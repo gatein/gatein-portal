@@ -18,5 +18,23 @@
   ~ 02110-1301 USA, or see the FSF site: http://www.fsf.org.
   -->
 
-<page-set>  
+<page-set
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_2 http://www.gatein.org/xml/ns/gatein_objects_1_2"
+    xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_2">
+  <page>
+    <name>everyone</name>
+    <access-permissions>Everyone</access-permissions>
+    <edit-permission>*:/platform/administrators</edit-permission>
+  </page>
+  <page>
+    <name>users</name>
+    <access-permissions>*:/platform/users</access-permissions>
+    <edit-permission>*:/platform/administrators</edit-permission>
+  </page>
+  <page>
+    <name>administrators</name>
+    <access-permissions>*:/platform/administrators</access-permissions>
+    <edit-permission>*:/platform/administrators</edit-permission>
+  </page>
 </page-set>

@@ -110,19 +110,22 @@ eXo.loadJS = function(path, module, callback, context, params) {
  * @return full url request
  */
 eXo.env.server.createPortalURL = function(targetComponentId, actionName, useAjax, params) {
-  var href = eXo.env.server.portalBaseURL + "?portal:componentId=" + targetComponentId + "&portal:action=" + actionName ;
-
+  var url = eXo.env.server.portalURLTemplate.replace("{portal:componentId}", targetComponentId);
+  url = url.replace("{portal:action}", actionName);
+  
   if(params != null) {
   	var len = params.length ;
     for(var i = 0 ; i < len ; i++) {
       var paramName = encodeURIComponent(params[i].name);
       var paramValue = encodeURIComponent(params[i].value);
-      href += "&" +  paramName + "=" + paramValue ;
+      url += "&" +  paramName + "=" + paramValue ;
     }
   }
-  if(useAjax) href += "&ajaxRequest=true" ;
-  return  href ;
+  if(useAjax) url += "&ajaxRequest=true" ;
+
+  return  url ;
 } ;
+
 /**
  * log out of user session
  */

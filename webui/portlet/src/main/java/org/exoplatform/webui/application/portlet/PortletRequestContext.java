@@ -19,6 +19,18 @@
 
 package org.exoplatform.webui.application.portlet;
 
+import org.exoplatform.commons.utils.WriterPrinter;
+import org.exoplatform.services.resources.Orientation;
+import org.exoplatform.web.application.RequestContext;
+import org.exoplatform.web.application.URLBuilder;
+import org.exoplatform.web.url.URLFactory;
+import org.exoplatform.web.url.ResourceType;
+import org.exoplatform.web.url.PortalURL;
+import org.exoplatform.webui.application.WebuiApplication;
+import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.core.UIApplication;
+import org.exoplatform.webui.core.UIComponent;
+
 import java.io.Writer;
 
 import javax.portlet.ActionResponse;
@@ -29,15 +41,10 @@ import javax.portlet.PortletRequest;
 import javax.portlet.PortletResponse;
 import javax.portlet.StateAwareResponse;
 
-import org.exoplatform.commons.utils.WriterPrinter;
-import org.exoplatform.services.resources.Orientation;
-import org.exoplatform.web.application.URLBuilder;
-import org.exoplatform.webui.application.WebuiApplication;
-import org.exoplatform.webui.application.WebuiRequestContext;
-import org.exoplatform.webui.core.UIApplication;
-import org.exoplatform.webui.core.UIComponent;
-
 /**
+ * todo (julien) : there is an issue here (small) as the PRC seems to be stored in http session
+ * and keep a pointer on request and response object.
+ *
  * The request context of a portlet
  *
  */
@@ -62,15 +69,20 @@ public class PortletRequestContext extends WebuiRequestContext
 
    private boolean hasProcessAction_ = false;
 
-   private final PortletURLBuilder urlBuilder;
+   /** . */
+   private PortletURLBuilder urlBuilder;
 
-   public PortletRequestContext(WebuiApplication app, Writer writer, PortletRequest req, PortletResponse res)
+   public PortletRequestContext(RequestContext parentAppRequestContext, WebuiApplication app, Writer writer, PortletRequest req, PortletResponse res)
    {
-      super(app);
+      super(parentAppRequestContext, app);
       init(writer, req, res);
       setSessionId(req.getPortletSession(true).getId());
+   }
 
-      urlBuilder = new PortletURLBuilder();
+   @Override
+   public <R, U extends PortalURL<R, U>> U newURL(ResourceType<R, U> resourceType, URLFactory urlFactory)
+   {
+      return parentAppRequestContext_.newURL(resourceType, urlFactory);
    }
 
    public void init(Writer writer, PortletRequest req, PortletResponse res)
@@ -79,6 +91,16 @@ public class PortletRequestContext extends WebuiRequestContext
       response_ = res;
       writer_ = new WriterPrinter(writer);
       windowId_ = req.getWindowID();
+
+      //
+      if (res instanceof MimeResponse)
+      {
+         this.urlBuilder = new PortletURLBuilder(((MimeResponse)res).createActionURL());
+      }
+      else
+      {
+         this.urlBuilder = null;
+      }
    }
 
    public void setUIApplication(UIApplication uiApplication) throws Exception
@@ -130,6 +152,12 @@ public class PortletRequestContext extends WebuiRequestContext
    public PortletResponse getResponse()
    {
       return response_;
+   }
+
+   @Override
+   public URLFactory getURLFactory()
+   {
+      return parentAppRequestContext_.getURLFactory();
    }
 
    public String getRemoteUser()
@@ -195,8 +223,10 @@ public class PortletRequestContext extends WebuiRequestContext
 
    public URLBuilder<UIComponent> getURLBuilder()
    {
-      MimeResponse renderRes = (MimeResponse)response_;
-      urlBuilder.setBaseURL(renderRes.createActionURL().toString());
+      if (urlBuilder == null)
+      {
+         throw new IllegalStateException("Cannot create portlet URL during action/event phase");
+      }
       return urlBuilder;
    }
 

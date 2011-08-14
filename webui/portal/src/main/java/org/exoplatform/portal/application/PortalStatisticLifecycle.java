@@ -52,9 +52,13 @@ public class PortalStatisticLifecycle implements ApplicationLifecycle<WebuiReque
    {
       PortalStatisticService service =
          (PortalStatisticService)PortalContainer.getInstance().getComponentInstanceOfType(PortalStatisticService.class);
-      PortalStatistic appStatistic = service.getPortalStatistic(((PortalRequestContext)rcontext).getPortalOwner());
-      long startTime = Long.valueOf(app.getAttribute(ATTRIBUTE_NAME).toString());
-      appStatistic.logTime(System.currentTimeMillis() - startTime);
+      String portalOwner = ((PortalRequestContext)rcontext).getPortalOwner();
+      if (portalOwner != null)
+      {
+         PortalStatistic appStatistic = service.getPortalStatistic(portalOwner);
+         long startTime = Long.valueOf(app.getAttribute(ATTRIBUTE_NAME).toString());
+         appStatistic.logTime(System.currentTimeMillis() - startTime);
+      }
    }
 
    @SuppressWarnings("unused")

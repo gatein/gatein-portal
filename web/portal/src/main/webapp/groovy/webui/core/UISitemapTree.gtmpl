@@ -2,19 +2,17 @@
 	import org.exoplatform.web.application.JavascriptManager;
 	import org.exoplatform.webui.core.UIPortletApplication;
 	import org.exoplatform.portal.mop.user.UserNode;
+	import javax.portlet.MimeResponse;
 	import org.exoplatform.portal.application.PortalRequestContext;
 	import org.exoplatform.portal.webui.util.Util;
 	import org.exoplatform.portal.webui.navigation.TreeNode;
-	import org.exoplatform.portal.mop.SiteKey;
-	import javax.portlet.MimeResponse;
+	import org.exoplatform.web.url.PortalURL;
+	import org.exoplatform.web.url.navigation.NavigationResource;
 	import javax.portlet.ResourceURL;
-%>
-<%
+
 	PortalRequestContext pcontext = Util.getPortalRequestContext();		
 	JavascriptManager jsmanager = pcontext.getJavascriptManager();
 	jsmanager.importJavascript('eXo.webui.UISiteMap') ;
-	
-	def portalURI = pcontext.getPortalURI();
 
 	UIPortletApplication siteMapPortlet = uicomponent.getParent();
 	def useAJAX = siteMapPortlet.isUseAjax();
@@ -22,24 +20,28 @@
 	def actionExpandAll = uicomponent.event("ExpandAllNode");
 	def actionCollapseAll = uicomponent.event("CollapseAllNode");
 
-	public void renderNodes(TreeNode rootTree, String portalUri, boolean useAjax) {
-		def childrenNodes=rootTree.getChildren();
-		int childrenSize = childrenNodes.size() ;
-		int size = 0;
-		for(treeNode in childrenNodes) {
-
+	PortalURL nodeURL = nodeurl();
+							
+	public void renderNodes(TreeNode rootTree, PortalURL nodeURL, boolean useAjax) {
+		List childrenNodes = rootTree.getChildren();
+		int childrenSize = childrenNodes.size() ;  
+		int size = 0;	
+		for(treeNode in childrenNodes) {	
+		
 			// count size;
 			size++;
-
+			
 			def node = treeNode.getNode();
-			def treePath = node.getId();			
-			String label = node.getEncodedResolvedLabel();											
-			if(useAjax){
-				actionLink = uicomponent.event("SelectNode", treePath);
-			}else{
-				actionLink = portalUri + node.getURI();
+			def treePath = node.getId();
+			String label = node.encodedResolvedLabel;		
+			
+			def actionLink = "#";
+			if(treeNode.getNode().getPageRef() != null) {
+			   nodeURL.setNode(node);
+			   nodeURL.setAjax(useAjax);
+			   actionLink = nodeURL.toString(); 
 			}
-
+			
 			lastNode = '';
 			if (size == childrenSize) {
 				lastNode = 'LastNode';
@@ -53,15 +55,14 @@
 						<div class="$lastNode Node">
 							<div class="CollapseIcon ClearFix" onclick="eXo.portal.UIPortal.collapseExpand(this); $actionCollapse">
 					""";
-					      if(treeNode.getNode().getPageRef() == null) println "<a class='NodeIcon DefaultPageIcon' href='javascript:void(0);'>$label</a>";
-					      else println "<a class='NodeIcon DefaultPageIcon' href='$actionLink'>$label</a>";
+					   println "<a class='NodeIcon DefaultPageIcon' href=\"$actionLink\">$label</a>";
 					println """
 							</div>
 							<div class="ChildrenContainer" style="display: block">
 					""";
-
-					renderNodes(treeNode, portalUri, useAjax);
-
+					
+					renderNodes(treeNode, nodeURL, useAjax);
+					
 				} else {
 				    MimeResponse res = _ctx.getRequestContext().getResponse();
 					ResourceURL resourceURL = res.createResourceURL();
@@ -73,14 +74,13 @@
 						<div class="$lastNode Node">
 							<div class="ExpandIcon ClearFix" onclick="eXo.portal.UIPortal.collapseExpand(this); $actionExpand">
 					""";
-					      if(treeNode.getNode().getPageRef() == null) println "<a class='NodeIcon DefaultPageIcon' href='javascript:void(0);'>$label</a>";
-					      else println "<a class='NodeIcon DefaultPageIcon' href='$actionLink'>$label</a>";
+					      println "<a class='NodeIcon DefaultPageIcon' href=\"$actionLink\">$label</a>";
 					println """
 							</div>
 							<div class="ChildrenContainer" style="display: none">
 					""";
 					
-				    renderNodes(treeNode, portalUri, useAjax);
+				    renderNodes(treeNode, nodeURL, useAjax);
 				}
 
 
@@ -103,11 +103,11 @@
 
 			}
 
-		}
-	  }
+		}		
+	}  
 %>
 
-<div id="UISiteMap" class="UISitemap" >
+<div id="$uicomponent.id" class="UISitemap" >
 	<div class="ClearFix">
 		<div class="CollapseAll FloatLeft" onclick="$actionCollapseAll">
 			<%=_ctx.appRes(siteMapPortlet.getName() + ".label.CollapseAll")%>
@@ -119,7 +119,7 @@
 	<div class="SitemapContent">
 		<div class="UISiteTree">
 			<% TreeNode treeNodeRoot = uicomponent.getTreeNodes() ;%>
-			<% renderNodes(treeNodeRoot,portalURI,useAJAX); %>
+			<% renderNodes(treeNodeRoot,nodeURL,useAJAX); %>
 		</div>
 	</div>
 </div>

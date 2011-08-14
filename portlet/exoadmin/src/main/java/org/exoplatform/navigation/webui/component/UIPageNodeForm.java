@@ -29,6 +29,7 @@ import org.exoplatform.portal.config.model.ModelObject;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.Described;
+import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.webui.page.UIPageSelector;
@@ -438,9 +439,9 @@ public class UIPageNodeForm extends UIFormTabPane
       return contextPageNavigation.getKey().getName();
    }
 
-   public String getOwnerType()
+   public SiteType getOwnerType()
    {
-      return contextPageNavigation.getKey().getTypeName();
+      return contextPageNavigation.getKey().getType();
    }
    
    public void setContextPageNavigation(UserNavigation _contextPageNav)
@@ -693,7 +694,7 @@ public class UIPageNodeForm extends UIFormTabPane
          accessPermission[0] = "*:" + ownerId;
          String editPermission = userACL.getMakableMT() + ":" + ownerId;
          
-         if (PortalConfig.PORTAL_TYPE.equals(uiForm.getOwnerType()))
+         if (SiteType.PORTAL.equals(uiForm.getOwnerType()))
          {
             UIPortal uiPortal = Util.getUIPortal();
             accessPermission = uiPortal.getAccessPermissions();
@@ -705,7 +706,7 @@ public class UIPageNodeForm extends UIFormTabPane
          UIFormStringInput uiPageTitle = uiInputSet.getChildById("pageTitle");
 
          Page page = new Page();
-         page.setOwnerType(uiForm.getOwnerType());
+         page.setOwnerType(uiForm.getOwnerType().getName());
          page.setOwnerId(ownerId);
          page.setName(uiPageName.getValue());
          String title = uiPageTitle.getValue();

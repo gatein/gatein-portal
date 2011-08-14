@@ -1,6 +1,9 @@
 <%
-	//TODO: nguyenanhkien2a@gmail.com
-	String initialURI = _ctx.getRequestContext().getParentAppRequestContext().getRequestContextPath() + "/private/" + _ctx.getRequestContext().getParentAppRequestContext().getPortalOwner();
+  import org.exoplatform.portal.webui.util.Util;
+  import org.exoplatform.portal.application.PortalRequestContext;
+
+	PortalRequestContext pcontext = Util.getPortalRequestContext();	
+	String initialURI = pcontext.getInitialURI();
 %>
 
 <div class="UIHomePagePortlet" id="$uicomponent.id">

@@ -69,6 +69,11 @@ abstract public class WebuiRequestContext extends RequestContext
       super(app);
    }
 
+   protected WebuiRequestContext(RequestContext parentAppRequestContext, Application app_)
+   {
+      super(parentAppRequestContext, app_);
+   }
+
    public String getSessionId()
    {
       return sessionId_;

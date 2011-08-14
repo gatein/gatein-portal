@@ -99,8 +99,9 @@ public interface DescriptionService
     * @param locale the locale
     * @param description the new description
     * @throws NullPointerException if the id or locale argument is null
+    * @throws IllegalArgumentException if the locale is not valid
     */
-   void setDescription(String id, Locale locale, Described.State description) throws NullPointerException;
+   void setDescription(String id, Locale locale, Described.State description) throws NullPointerException, IllegalArgumentException;
 
    /**
     * Returns a map containing all the descriptions of an object or null if the object is not internationalized.
@@ -118,7 +119,8 @@ public interface DescriptionService
     * @param id the object id
     * @param descriptions the new descriptions
     * @throws NullPointerException if the id is null
+    * @throws IllegalArgumentException if the map contains an invalid locale
     */
-   void setDescriptions(String id, Map<Locale, Described.State> descriptions) throws NullPointerException;
+   void setDescriptions(String id, Map<Locale, Described.State> descriptions) throws NullPointerException, IllegalArgumentException;
 
 }

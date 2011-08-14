@@ -1,0 +1,43 @@
+<%	
+	import java.util.List;
+	import org.exoplatform.portal.webui.util.Util;
+	import org.exoplatform.portal.application.PortalRequestContext;
+	import org.gatein.common.text.EntityEncoder;
+  import org.exoplatform.web.url.PortalURL;
+  import org.exoplatform.web.url.navigation.NavigationResource;
+ 
+	List list = uicomponent.getSelectedPath();
+	
+	PortalRequestContext pcontext = Util.getPortalRequestContext();	
+	PortalURL nodeURL = nodeurl();
+	nodeURL.setAjax(uicomponent.isUseAjax());
+%>
+<div class="UIBreadcumbsPortlet" id="$uicomponent.id">
+  <div class="UIBreadcumbs">
+  	<div class="LeftBreadcumbsBar">
+  		<div class="RightBreadcumbsBar">
+  			<div class="BreadcumbsInfoBar">
+  				<div class="HomeIcon LeftBlock BCHome16x16Icon"><span></span></div>
+  				<%if(list.size() > 0) {
+  						String note = "LeftBlock";
+  						for(i in 0 .. list.size()-1) { 
+  							def node = list.get(i);							
+  							String actionLink = nodeURL.setNode(node);
+  							if(i == list.size()-1) note = "Selected";
+  				%>
+  							<a href="<%=(node.getPageRef() == null) ? "#" : actionLink%>"	class="$note"><%=node.getEncodedResolvedLabel();%></a> 																
+  				<%			
+  							if(i != list.size()-1) {
+  				%>
+  				<div class="RightBlackGridArrowIcon LeftBlock RightBlackGridArrow16x16Icon"><span></span></div>									
+  				<%	 		 
+  							}					 
+  						}
+  					}
+  				%>
+  				<div class="ClearLeft"><span></span></div>
+  			</div>
+  		</div>
+  	</div>
+  </div>
+</div>

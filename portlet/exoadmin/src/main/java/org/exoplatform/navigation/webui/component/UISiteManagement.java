@@ -85,7 +85,7 @@ public class UISiteManagement extends UIContainer
 
    public static String[] ACTIONS = {"EditNavigation", "DeletePortal", "EditPortalLayout"};
 
-   private LazyPageList pageList;
+   private LazyPageList<PortalConfig> pageList;
 
    private UINavigationManagement naviManager;
 
@@ -145,7 +145,7 @@ public class UISiteManagement extends UIContainer
          }
       }
 
-      this.pageList = new LazyPageList(new ListAccess<PortalConfig>()
+      this.pageList = new LazyPageList<PortalConfig>(new ListAccess<PortalConfig>()
       {
 
          public int getSize() throws Exception
@@ -201,7 +201,7 @@ public class UISiteManagement extends UIContainer
          UISiteManagement uicomp = event.getSource();
          String portalName = event.getRequestContext().getRequestParameter(OBJECTID);
                   
-         UserPortalConfigService service = event.getSource().getApplicationComponent(UserPortalConfigService.class);
+         UserPortalConfigService service = uicomp.getApplicationComponent(UserPortalConfigService.class);
          String defaultPortalName = service.getDefaultPortal();
 
          PortalRequestContext prContext = Util.getPortalRequestContext();
@@ -214,16 +214,22 @@ public class UISiteManagement extends UIContainer
             return;
          }
 
-         UserPortalConfig config = service.getUserPortalConfig(portalName, prContext.getRemoteUser());
-         if (config != null && config.getPortalConfig().isModifiable())
+         DataStorage dataStorage = uicomp.getApplicationComponent(DataStorage.class);
+         UserACL acl = uicomp.getApplicationComponent(UserACL.class);
+         
+         PortalConfig pConfig = dataStorage.getPortalConfig(portalName);
+         if (pConfig != null)
          {
-            service.removeUserPortalConfig(portalName);
-         }
-         else if (config != null)
-         {
-            uiPortalApp.addMessage(new ApplicationMessage("UISiteManagement.msg.Invalid-deletePermission",
-               new String[]{config.getPortalConfig().getName()}));;
-            return;
+            if (acl.hasPermission(pConfig))
+            {
+               service.removeUserPortalConfig(portalName);
+            }
+            else
+            {
+               uiPortalApp.addMessage(new ApplicationMessage("UISiteManagement.msg.Invalid-deletePermission",
+                  new String[]{pConfig.getName()}));;
+                  return;
+            }
          }
          else
          {
@@ -235,14 +241,14 @@ public class UISiteManagement extends UIContainer
             return;
          }
 
-         if (config == null && !Util.getUIPortal().getName().equals(portalName))
+         if (pConfig == null && !Util.getUIPortal().getName().equals(portalName))
          {
             uiPortalApp.addMessage(new ApplicationMessage("UISiteManagement.msg.Invalid-deletePermission",
                new String[]{portalName}));
             return;
          }
 
-         if (config == null || Util.getUIPortal().getName().equals(portalName))
+         if (pConfig == null || Util.getUIPortal().getName().equals(portalName))
          {
             HttpServletRequest request = prContext.getRequest();
             LogoutControl.wantLogout();
@@ -264,26 +270,26 @@ public class UISiteManagement extends UIContainer
          UISiteManagement uicomp = event.getSource();
          String portalName = event.getRequestContext().getRequestParameter(OBJECTID);
          UserPortalConfigService service = uicomp.getApplicationComponent(UserPortalConfigService.class);
+         DataStorage dataStorage = uicomp.getApplicationComponent(DataStorage.class);
          PortalRequestContext prContext = Util.getPortalRequestContext();         
          UIPortalApplication portalApp = (UIPortalApplication)prContext.getUIApplication();
          UIWorkingWorkspace uiWorkingWS = portalApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
 
-         UserPortalConfig userConfig = service.getUserPortalConfig(portalName, prContext.getRemoteUser());
+         PortalConfig pConfig = dataStorage.getPortalConfig(portalName);
 
-         if (userConfig == null)
+         if (pConfig == null)
          {
             portalApp.addMessage(new ApplicationMessage("UISiteManagement.msg.portal-not-exist",
                new String[]{portalName}));
             uiWorkingWS.updatePortletsByName("UserToolbarSitePortlet");
             return;
          }
-         PortalConfig portalConfig = userConfig.getPortalConfig();
 
          UserACL userACL = portalApp.getApplicationComponent(UserACL.class);
-         if (!userACL.hasEditPermission(portalConfig))
+         if (!userACL.hasEditPermission(pConfig))
          {
             portalApp.addMessage(new ApplicationMessage("UISiteManagement.msg.Invalid-editPermission",
-               new String[]{portalConfig.getName()}));
+               new String[]{pConfig.getName()}));
             return;
          }
         
@@ -294,13 +300,13 @@ public class UISiteManagement extends UIContainer
          uiComposer.setCollapse(false);
          uiComposer.setShowControl(true);
          uiComposer.setComponentConfig(UIPortalComposer.class, null);
-         uiComposer.setId("UIPortalComposer");
+         uiComposer.setId(UIPortalComposer.UIPORTAL_COMPOSER);
          
          UIPortal uiPortal = Util.getUIPortal();
          uiWorkingWS.setBackupUIPortal(uiPortal);
 
          UIPortal editPortal = uiWorkingWS.createUIComponent(UIPortal.class, null, null);
-         PortalDataMapper.toUIPortal(editPortal, userConfig);
+         PortalDataMapper.toUIPortal(editPortal, pConfig);
          uiEditWS.setUIComponent(editPortal);
 
          // Check if edit current portal
@@ -375,8 +381,7 @@ public class UISiteManagement extends UIContainer
          UINavigationManagement naviManager = popUp.createUIComponent(UINavigationManagement.class, null, null, popUp);
          uicomp.naviManager = naviManager;
 
-         naviManager.setOwner(portalName);
-         naviManager.setOwnerType(PortalConfig.PORTAL_TYPE);
+         naviManager.setSiteKey(SiteKey.portal(portalName));
 
          UserPortal userPortal = userPortalConfig.getUserPortal();
          UserNavigation edittedNavigation = userPortal.getNavigation(SiteKey.portal(portalName));

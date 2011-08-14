@@ -21,8 +21,17 @@ package org.exoplatform.portal.application;
 
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.config.DataStorage;
+import org.exoplatform.portal.config.UserPortalConfig;
 import org.exoplatform.portal.config.UserPortalConfigService;
+import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.mop.SiteKey;
+import org.exoplatform.portal.mop.SiteType;
+import org.exoplatform.portal.mop.navigation.Scope;
+import org.exoplatform.portal.mop.user.UserNavigation;
+import org.exoplatform.portal.mop.user.UserNode;
+import org.exoplatform.portal.mop.user.UserNodeFilterConfig;
+import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.web.application.Application;
 import org.exoplatform.web.application.ApplicationLifecycle;
 import org.exoplatform.web.application.RequestFailure;
@@ -39,6 +48,10 @@ public class UserSiteLifeCycle implements ApplicationLifecycle<PortalRequestCont
    /** . */
    private final Logger log = LoggerFactory.getLogger(UserSiteLifeCycle.class);
 
+   private final static String DEFAULT_TAB_NAME = "Tab_Default";
+
+   private final static String PAGE_TEMPLATE = "dashboard";
+
    public void onInit(Application app) throws Exception
    {
    }
@@ -46,18 +59,47 @@ public class UserSiteLifeCycle implements ApplicationLifecycle<PortalRequestCont
    public void onStartRequest(Application app, PortalRequestContext context) throws Exception
    {
       String userName = context.getRemoteUser();
-      if (userName != null)
+      if (userName != null && SiteType.USER == context.getSiteType() && userName.equals(context.getSiteName()))
       {
          DataStorage storage = (DataStorage)PortalContainer.getComponent(DataStorage.class);
+         UserPortalConfigService configService = (UserPortalConfigService)PortalContainer.getComponent(UserPortalConfigService.class);
          PortalConfig portalConfig = storage.getPortalConfig("user", userName);
 
          //
          if (portalConfig == null)
          {
             log.debug("About to create user site for user " + userName);
-            UserPortalConfigService configService = (UserPortalConfigService)PortalContainer.getComponent(UserPortalConfigService.class);
             configService.createUserSite(userName);
          }
+
+         UserPortalConfig userPortalConfig = context.getUserPortalConfig();
+         UserPortal userPortal = userPortalConfig.getUserPortal();
+         SiteKey siteKey = context.getSiteKey();
+         UserNavigation nav = userPortal.getNavigation(siteKey);
+
+         try
+         {
+            UserNode rootNode = userPortal.getNode(nav, Scope.CHILDREN, UserNodeFilterConfig.builder().build(), null);
+            if (rootNode.getChildren().size() < 1)
+            {
+               //TODO: Retrieve tab name from request
+               Page page = configService.createPageTemplate(PAGE_TEMPLATE, siteKey.getTypeName(), siteKey.getName());
+               page.setName(DEFAULT_TAB_NAME);
+               page.setTitle(DEFAULT_TAB_NAME);
+               storage.save(page);
+
+               UserNode tabNode = rootNode.addChild(DEFAULT_TAB_NAME);
+               tabNode.setLabel(DEFAULT_TAB_NAME);
+               tabNode.setPageRef(page.getPageId());
+
+               userPortal.saveNode(tabNode, null);
+            }
+         }
+         catch (Exception ex)
+         {
+            log.warn("Navigation " + nav.getKey().getName() + " does not exist!", ex);
+         }
+
       }
    }
    

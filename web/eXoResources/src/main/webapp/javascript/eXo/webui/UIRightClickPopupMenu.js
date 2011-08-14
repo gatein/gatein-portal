@@ -58,23 +58,49 @@ UIRightClickPopupMenu.prototype.disableContextMenu = function(comp) {
 		document.oncontextmenu = function() {return true} ;
 	}
 };
+
 /**
- * Prepare something for context menu
- * @param {Object} evt event
- * @param {Object} elemt document object that contains context menu
- */
+* Prepare objectId for context menu
+* Make ajaxPost request if needed
+* @param {Object} evt event
+* @param {Object} elemt document object that contains context menu
+*/
 UIRightClickPopupMenu.prototype.prepareObjectId = function(evt, elemt) {
+	eXo.core.MouseEventManager.docMouseDownEvt(evt) ;
 	var contextMenu = eXo.core.DOMUtil.findAncestorByClass(elemt, "UIRightClickPopupMenu") ;
 	contextMenu.style.display = "none" ;
-	var href = elemt.getAttribute('href') ;
-	if(href.indexOf("javascript") == 0) {
-		eval(unescape(href).replace('_objectid_', encodeURI(contextMenu.objId.replace(/'/g, "\\'")))) ; 
-		eXo.core.MouseEventManager.docMouseDownEvt(evt) ;
-		return false;
+	var href = elemt.getAttribute('href') ;	
+	if (!href) {
+		return;
 	}
-	elemt.setAttribute('href', href.replace('_objectid_', encodeURI(contextMenu.objId.replace(/'/g, "\\'")))) ;
-	return true;
-}
+	if(href.indexOf("ajaxGet") != -1) {
+		href = href.replace("ajaxGet", "ajaxPost");
+		elemt.setAttribute('href', href) ;
+	}	
+	if (href.indexOf("objectId") != -1 || !contextMenu.objId) {
+		return;
+	}
+	var objId = encodeURI(contextMenu.objId.replace(/'/g, "\\'"));
+	
+	if (href.indexOf("javascript") == -1) {
+		elemt.setAttribute('href', href + "&objectId=" + objId) ;
+		return;
+	} else  if(href.indexOf("window.location") != -1) {
+		href =  href.substr(0, href.length - 1) + "&objectId=" + objId + "'" ;
+	} else if (href.indexOf("ajaxPost") != -1) {
+		href = href.substr(0, href.length - 2) + "', 'objectId=" + objId + "')";				
+	} else {
+		href = href.substr(0, href.length - 2) + "&objectId=" + objId + "')";
+	}
+	
+	eval(href);
+	if ( evt && evt.preventDefault )
+		evt.preventDefault();
+	else
+		window.event.returnValue = false;
+	return false;
+};
+
 /**
  * Mouse click on element, If click is right-click, the context menu will be shown
  * @param {Object} event

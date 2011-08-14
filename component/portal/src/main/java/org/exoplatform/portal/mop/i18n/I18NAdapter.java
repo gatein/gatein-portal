@@ -19,8 +19,6 @@
 
 package org.exoplatform.portal.mop.i18n;
 
-import org.gatein.common.i18n.LocaleFormat;
-import org.gatein.common.util.ConversionException;
 import org.gatein.mop.api.workspace.WorkspaceObject;
 import org.gatein.mop.spi.AdapterLifeCycle;
 
@@ -39,25 +37,12 @@ import java.util.Map;
 public class I18NAdapter
 {
 
-   /** The locale serialization format. */
-   private static final LocaleFormat format = LocaleFormat.DEFAULT;
-
    /** . */
    private final WorkspaceObject obj;
 
    private I18NAdapter(WorkspaceObject obj)
    {
       this.obj = obj;
-   }
-
-   static String toString(Locale locale)
-   {
-      return locale.toString();
-   }
-
-   static Locale parseLocale(String s) throws ConversionException
-   {
-      return format.getLocale(s);
    }
 
    public <M> M getMixin(Class<M> mixinType, boolean create) throws NullPointerException
@@ -88,6 +73,15 @@ public class I18NAdapter
       }
    }
 
+   /**
+    * Resolve the mixin for the specified locale.
+    *
+    * @param mixinType the expected mixin type
+    * @param locale the locale
+    * @param <M> the mixin generic type
+    * @return the resolution or null if it cannot be resolved
+    * @throws NullPointerException if any argument is null
+    */
    public <M> Resolution<M> resolveI18NMixin(Class<M> mixinType, Locale locale) throws NullPointerException
    {
       if (mixinType == null)
@@ -98,7 +92,7 @@ public class I18NAdapter
       {
          throw new NullPointerException("No null locale accepted");
       }
-      if (obj.isAdapted(I18Nized.class))
+      if (locale.getLanguage().length() > 0 && obj.isAdapted(I18Nized.class))
       {
          I18Nized ized = obj.adapt(I18Nized.class);
          return ized.resolveMixin(mixinType, locale);
@@ -109,7 +103,7 @@ public class I18NAdapter
       }
    }
 
-   public <M> M getI18NMixin(Class<M> mixinType, Locale locale, boolean create) throws NullPointerException
+   public <M> M getI18NMixin(Class<M> mixinType, Locale locale, boolean create) throws NullPointerException, IllegalArgumentException
    {
       if (mixinType == null)
       {
@@ -152,7 +146,7 @@ public class I18NAdapter
       }
    }
 
-   public <M> M addI18NMixin(Class<M> mixinType, Locale locale)
+   public <M> M addI18NMixin(Class<M> mixinType, Locale locale) throws NullPointerException, IllegalArgumentException
    {
       if (mixinType == null)
       {

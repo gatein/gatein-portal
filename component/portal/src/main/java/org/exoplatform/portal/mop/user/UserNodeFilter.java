@@ -20,7 +20,7 @@
 package org.exoplatform.portal.mop.user;
 
 import org.exoplatform.portal.config.UserACL;
-import org.exoplatform.portal.config.UserPortalConfigService;
+import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.mop.navigation.NodeFilter;
 import org.exoplatform.portal.mop.navigation.NodeState;
@@ -54,6 +54,46 @@ class UserNodeFilter implements NodeFilter
       this.config = config;
    }
 
+   private boolean canRead(NodeState state)
+   {
+      String pageRef = state.getPageRef();
+      if (pageRef != null)
+      {
+         try
+         {
+            Page page = userPortal.service.getPage(pageRef);
+            if (page != null)
+            {
+               return userPortal.service.getUserACL().hasPermission(page);
+            }
+         }
+         catch (Exception ignore)
+         {
+         }
+      }
+      return true;
+   }
+
+   private boolean canWrite(NodeState state)
+   {
+      String pageRef = state.getPageRef();
+      if (pageRef != null)
+      {
+         try
+         {
+            Page page = userPortal.service.getPage(pageRef);
+            if (page != null)
+            {
+               return userPortal.service.getUserACL().hasEditPermission(page);
+            }
+         }
+         catch (Exception ignore)
+         {
+         }
+      }
+      return false;
+   }
+
    public boolean accept(int depth, String id, String name, NodeState state)
    {
       Visibility visibility = state.getVisibility();
@@ -71,33 +111,46 @@ class UserNodeFilter implements NodeFilter
       }
 
       //
-      if (config.authorizationCheck)
+      UserACL acl = userPortal.service.getUserACL();
+
+      // Perform authorization check
+      if (config.authorizationMode == UserNodeFilterConfig.AUTH_NO_CHECK)
+      {
+         // Do nothing here
+      }
+      else
       {
          if (visibility == Visibility.SYSTEM)
          {
-            UserACL acl = userPortal.service.getUserACL();
-            String userName = userPortal.userName;
-            if (!acl.getSuperUser().equals(userName))
+            if (config.authorizationMode == UserNodeFilterConfig.AUTH_READ_WRITE)
             {
-               return false;
+               String userName = userPortal.userName;
+               if (!acl.getSuperUser().equals(userName))
+               {
+                  return false;
+               }
+            }
+            else
+            {
+               if (!canRead(state))
+               {
+                  return false;
+               }
             }
          }
          else
          {
-            String pageRef = state.getPageRef();
-            if (pageRef != null)
+            if (config.authorizationMode == UserNodeFilterConfig.AUTH_READ_WRITE)
             {
-               UserPortalConfigService upcs = userPortal.service;
-               try
+               if (!canRead(state))
                {
-                  if (upcs.getPage(pageRef, userPortal.userName) == null)
-                  {
-                     return false;
-                  }
+                  return false;
                }
-               catch (Exception e)
+            }
+            else
+            {
+               if (!canRead(state))
                {
-                  // Log me
                   return false;
                }
             }

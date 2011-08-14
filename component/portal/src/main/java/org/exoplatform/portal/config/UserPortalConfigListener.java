@@ -38,51 +38,52 @@ public class UserPortalConfigListener extends UserEventListener
    /** . */
    private final UserPortalConfigService portalConfigService;
 
-   /** . */
-   private final DataStorage dataStorage;
-
-   public UserPortalConfigListener(
-      UserPortalConfigService portalConfigService,
-      DataStorage dataStorage)
+   public UserPortalConfigListener(UserPortalConfigService portalConfigService)
    {
       this.portalConfigService = portalConfigService;
-      this.dataStorage = dataStorage;
    }
 
    public void preDelete(User user) throws Exception
    {
-      RequestLifeCycle.begin(PortalContainer.getInstance());
-      try
+      if (portalConfigService.getDestroyUserPortal())
       {
          String userName = user.getUserName();
-         portalConfigService.removeUserPortalConfig("user", userName);
-      }
-      finally
-      {
-         RequestLifeCycle.end();
+
+         //
+         log.debug("About to destroy user site for user " + userName);
+         RequestLifeCycle.begin(PortalContainer.getInstance());
+         try
+         {
+            portalConfigService.removeUserPortalConfig("user", userName);
+         }
+         finally
+         {
+            RequestLifeCycle.end();
+         }
       }
    }
 
    public void preSave(User user, boolean isNew)
    {
-      String userName = user.getUserName();
-
-      //
-      RequestLifeCycle.begin(PortalContainer.getInstance());
-      try
+      if (portalConfigService.getCreateUserPortal())
       {
-         log.debug("About to create user site for user " + userName);
+         String userName = user.getUserName();
 
          // Create the portal from the template
-         portalConfigService.createUserSite(userName);
-      }
-      catch (Exception e)
-      {
-         log.error("Could not create user site for user " + userName, e);
-      }
-      finally
-      {
-         RequestLifeCycle.end();
+         log.debug("About to create user site for user " + userName);
+         RequestLifeCycle.begin(PortalContainer.getInstance());
+         try
+         {
+            portalConfigService.createUserSite(userName);
+         }
+         catch (Exception e)
+         {
+            log.error("Could not create user site for user " + userName, e);
+         }
+         finally
+         {
+            RequestLifeCycle.end();
+         }
       }
    }
 }

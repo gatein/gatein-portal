@@ -323,23 +323,34 @@ public class UserPortalImpl implements UserPortal
    {
       for (UserNavigation userNavigation : getNavigations())
       {
-         NavigationContext navigation = userNavigation.navigation;
-         if (navigation.getState() != null)
+         UserNode node = getDefaultPath(userNavigation, filterConfig);
+         if (node != null)
          {
-            UserNodeContext context = new UserNodeContext(userNavigation, filterConfig);
-            NodeContext<UserNode> nodeContext = service.getNavigationService().loadNode(context, navigation, Scope.CHILDREN, null);
-            if (nodeContext != null)
-            {
-               UserNode root = nodeContext.getNode().filter();
-               for (UserNode node : root.getChildren())
-               {
-                  return node;
-               }
-            }
+            return node;
          }
       }
 
       //
+      return null;
+   }
+   
+   public UserNode getDefaultPath(UserNavigation userNavigation, UserNodeFilterConfig filterConfig) throws UserPortalException, NavigationServiceException
+   {
+      NavigationContext navigation = userNavigation.navigation;
+      if (navigation.getState() != null)
+      {
+         UserNodeContext context = new UserNodeContext(userNavigation, filterConfig);
+         NodeContext<UserNode> nodeContext = service.getNavigationService().loadNode(context, navigation, Scope.CHILDREN, null);
+         if (nodeContext != null)
+         {
+            UserNode root = nodeContext.getNode().filter();
+            for (UserNode node : root.getChildren())
+            {
+               return node;
+            }
+         }
+      }
+      
       return null;
    }
 

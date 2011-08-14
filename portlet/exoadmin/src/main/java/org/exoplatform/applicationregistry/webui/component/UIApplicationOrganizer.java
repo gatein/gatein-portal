@@ -98,6 +98,7 @@ public class UIApplicationOrganizer extends UIContainer
 
       PortalRequestContext portalContext = org.exoplatform.portal.webui.util.Util.getPortalRequestContext();
       UIPortal uiPortal = org.exoplatform.portal.webui.util.Util.getUIPortal();
+      //TODO why use MonitorEvent that not just Event
       MonitorEvent<UIPortal> pnevent = new MonitorEvent<UIPortal>(uiPortal, "ChangeApplicationList", portalContext);
       uiPortal.broadcast(pnevent, Event.Phase.PROCESS);
    }

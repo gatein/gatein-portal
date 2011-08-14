@@ -23,10 +23,11 @@ import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.DataStorage;
-import org.exoplatform.portal.config.UserPortalConfig;
+import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.PortalProperties;
+import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.resource.SkinService;
 import org.exoplatform.portal.webui.util.PortalDataMapper;
 import org.exoplatform.portal.webui.util.Util;
@@ -149,8 +150,7 @@ public class UIPortalForm extends UIFormTabPane
    public void setBindingBean() throws Exception
    {
 
-      UserPortalConfigService service = this.getApplicationComponent(UserPortalConfigService.class);
-      PortalRequestContext prContext = Util.getPortalRequestContext();
+      DataStorage dataStorage = this.getApplicationComponent(DataStorage.class);
 
       UIPortal editPortal = null;
       UIPortalApplication uiPortalApp = Util.getUIPortalApplication();
@@ -164,9 +164,9 @@ public class UIPortalForm extends UIFormTabPane
       }
       else
       {
-         UserPortalConfig userConfig = service.getUserPortalConfig(getPortalOwner(), prContext.getRemoteUser());
+         PortalConfig pConfig = dataStorage.getPortalConfig(getPortalOwner());
          editPortal = this.createUIComponent(UIPortal.class, null, null);
-         PortalDataMapper.toUIPortal(editPortal, userConfig);
+         PortalDataMapper.toUIPortal(editPortal, pConfig);
       }
 
       invokeGetBindingBean(editPortal);
@@ -303,15 +303,15 @@ public class UIPortalForm extends UIFormTabPane
          UIPortalForm uiForm = event.getSource();
 
          DataStorage dataService = uiForm.getApplicationComponent(DataStorage.class);
-         UserPortalConfigService service = uiForm.getApplicationComponent(UserPortalConfigService.class);
+         UserACL acl = uiForm.getApplicationComponent(UserACL.class);
          PortalRequestContext prContext = Util.getPortalRequestContext();
          UIPortalApplication uiPortalApp = (UIPortalApplication)prContext.getUIApplication();
 
-         UserPortalConfig userConfig = service.getUserPortalConfig(uiForm.getPortalOwner(), prContext.getRemoteUser());
-         if (userConfig != null)
+         PortalConfig pConfig = dataService.getPortalConfig(uiForm.getPortalOwner());
+         if (pConfig != null && acl.hasPermission(pConfig))
          {
             UIPortal uiPortal = uiForm.createUIComponent(UIPortal.class, null, null);
-            PortalDataMapper.toUIPortal(uiPortal, userConfig);
+            PortalDataMapper.toUIPortal(uiPortal, pConfig);
 
             uiForm.invokeSetBindingBean(uiPortal);
             //uiPortal.refreshNavigation(localeConfigService.getLocaleConfig(uiPortal.getLocale()).getLocale()) ;
@@ -319,11 +319,17 @@ public class UIPortalForm extends UIFormTabPane
             {
                PortalConfig portalConfig = (PortalConfig)PortalDataMapper.buildModelObject(uiPortal);
                dataService.save(portalConfig);
-               prContext.setAttribute(UserPortalConfig.class, service.getUserPortalConfig(uiForm.getPortalOwner(), prContext.getRemoteUser(), PortalRequestContext.USER_PORTAL_CONTEXT));
-               uiPortalApp.reloadSkinPortal(prContext);
+               UserPortalConfigService service = uiForm.getApplicationComponent(UserPortalConfigService.class);
+               if (prContext.getPortalOwner().equals(uiForm.getPortalOwner()))
+               {
+                  uiPortalApp.setUserPortalConfig(service.getUserPortalConfig(uiForm.getPortalOwner(), prContext.getRemoteUser(), PortalRequestContext.USER_PORTAL_CONTEXT));
+                  uiPortalApp.reloadPortalProperties();
+               }
                
                // We should use IPC to update some portlets in the future instead of
                UIWorkingWorkspace uiWorkingWS = uiPortalApp.getChild(UIWorkingWorkspace.class);
+               
+               // TODO: Raise Portlet Event instead
                uiWorkingWS.updatePortletsByName("PortalNavigationPortlet");
                uiWorkingWS.updatePortletsByName("UserToolbarSitePortlet");
             }
@@ -374,9 +380,9 @@ public class UIPortalForm extends UIFormTabPane
          }
 
          UserPortalConfigService service = uiForm.getApplicationComponent(UserPortalConfigService.class);
-         service.createUserPortalConfig(PortalConfig.PORTAL_TYPE, portalName, template);
-         UserPortalConfig userPortalConfig = service.getUserPortalConfig(portalName, pcontext.getRemoteUser());
-         PortalConfig pconfig = userPortalConfig.getPortalConfig();
+         service.createUserPortalConfig(SiteType.PORTAL.getName(), portalName, template);
+         
+         PortalConfig pconfig = dataService.getPortalConfig(portalName);
          uiForm.invokeSetBindingBean(pconfig);
          dataService.save(pconfig);
          UIPortalApplication uiPortalApp = event.getSource().getAncestorOfType(UIPortalApplication.class);

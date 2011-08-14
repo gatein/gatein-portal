@@ -20,6 +20,9 @@
 package org.exoplatform.web.application;
 
 import org.exoplatform.services.resources.Orientation;
+import org.exoplatform.web.url.URLFactory;
+import org.exoplatform.web.url.PortalURL;
+import org.exoplatform.web.url.ResourceType;
 
 import java.io.Writer;
 import java.util.HashMap;
@@ -49,13 +52,20 @@ abstract public class RequestContext
 
    private Application app_;
 
-   protected RequestContext parentAppRequestContext_;
+   protected final RequestContext parentAppRequestContext_;
 
    private Map<String, Object> attributes;
 
    public RequestContext(Application app)
    {
-      app_ = app;
+      this.app_ = app;
+      this.parentAppRequestContext_ = null;
+   }
+
+   protected RequestContext(RequestContext parentAppRequestContext, Application app_)
+   {
+      this.parentAppRequestContext_ = parentAppRequestContext;
+      this.app_ = app_;
    }
 
    public Application getApplication()
@@ -66,6 +76,35 @@ abstract public class RequestContext
    public Locale getLocale()
    {
       return parentAppRequestContext_.getLocale();
+   }
+
+   /**
+    * Returns the url factory associated with this context.
+    *
+    * @return the url factory
+    */
+   public abstract URLFactory getURLFactory();
+
+   public abstract <R, U extends PortalURL<R, U>> U newURL(ResourceType<R, U> resourceType, URLFactory urlFactory);
+
+   public final <R, U extends PortalURL<R, U>> U createURL(ResourceType<R, U> resourceType, R resource)
+   {
+      U url = createURL(resourceType);
+
+      // Set the resource on the URL
+      url.setResource(resource);
+
+      //
+      return url;
+   }
+
+   public final <R, L extends PortalURL<R, L>> L createURL(ResourceType<R, L> resourceType)
+   {
+      // Get the provider
+      URLFactory provider = getURLFactory();
+
+      // Create an URL from the factory
+      return newURL(resourceType, provider);
    }
 
    /**
@@ -150,11 +189,6 @@ abstract public class RequestContext
    public RequestContext getParentAppRequestContext()
    {
       return parentAppRequestContext_;
-   }
-
-   public void setParentAppRequestContext(RequestContext context)
-   {
-      parentAppRequestContext_ = context;
    }
 
    @SuppressWarnings("unchecked")

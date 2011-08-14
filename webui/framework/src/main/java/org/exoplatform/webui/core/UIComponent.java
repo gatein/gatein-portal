@@ -19,6 +19,7 @@
 
 package org.exoplatform.webui.core;
 
+import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.log.ExoLogger;
@@ -27,7 +28,6 @@ import org.exoplatform.web.application.Parameter;
 import org.exoplatform.web.application.URLBuilder;
 import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
-import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.webui.config.Component;
 import org.exoplatform.webui.core.lifecycle.Lifecycle;
 import org.exoplatform.webui.event.Event;

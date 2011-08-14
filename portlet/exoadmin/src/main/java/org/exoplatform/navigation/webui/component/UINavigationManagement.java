@@ -22,9 +22,8 @@ package org.exoplatform.navigation.webui.component;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.UserPortalConfig;
 import org.exoplatform.portal.config.UserPortalConfigService;
-import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteKey;
-import org.exoplatform.portal.mop.navigation.NavigationServiceException;
+import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
@@ -47,23 +46,21 @@ import org.exoplatform.webui.event.EventListener;
 public class UINavigationManagement extends UIContainer
 {
 
-   private String owner;
-
-   private String ownerType;
+   private SiteKey siteKey;
 
    public UINavigationManagement() throws Exception
    {
       addChild(UINavigationNodeSelector.class, null, null);
    }
 
-   public void setOwner(String owner)
+   public SiteKey getSiteKey()
    {
-      this.owner = owner;
+      return siteKey;
    }
-
-   public String getOwner()
+   
+   public void setSiteKey(SiteKey key)
    {
-      return this.owner;
+      siteKey = key;
    }
 
    public <T extends UIComponent> T setRendered(boolean b)
@@ -76,16 +73,6 @@ public class UINavigationManagement extends UIContainer
       UINavigationNodeSelector uiNodeSelector = getChild(UINavigationNodeSelector.class);
       UITree uiTree = uiNodeSelector.getChild(UITree.class);
       uiTree.createEvent("ChangeNode", event.getExecutionPhase(), event.getRequestContext()).broadcast();
-   }
-
-   public void setOwnerType(String ownerType)
-   {
-      this.ownerType = ownerType;
-   }
-
-   public String getOwnerType()
-   {
-      return this.ownerType;
    }
 
    static public class SaveActionListener extends EventListener<UINavigationManagement>
@@ -112,7 +99,7 @@ public class UINavigationManagement extends UIContainer
 
          // Check existed
          UserPortalConfig userPortalConfig;
-         if (PortalConfig.PORTAL_TYPE.equals(siteKey.getTypeName()))
+         if (SiteType.PORTAL.equals(siteKey.getType()))
          {
             userPortalConfig = portalConfigService.getUserPortalConfig(editedOwnerId, event.getRequestContext().getRemoteUser());
             if (userPortalConfig == null)

@@ -19,14 +19,12 @@
 
 package org.exoplatform.portal.webui.workspace;
 
-import java.lang.reflect.Method;
-
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.UserPortalConfig;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Page;
-import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.navigation.Scope;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
@@ -49,6 +47,8 @@ import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+
+import java.lang.reflect.Method;
 
 /**
  * Created by The eXo Platform SAS 
@@ -87,8 +87,8 @@ public class UIMainActionListener
 
          UIPortalComposer portalComposer =
             uiWorkingWS.findFirstComponentOfType(UIPortalComposer.class).setRendered(true);
-         portalComposer.setComponentConfig(UIPortalComposer.class, "UIPageEditor");
-         portalComposer.setId("UIPageEditor");
+         portalComposer.setComponentConfig(UIPortalComposer.class, UIPortalComposer.UIPAGE_EDITOR);
+         portalComposer.setId(UIPortalComposer.UIPAGE_EDITOR);
          portalComposer.setShowControl(true);
          portalComposer.setEditted(false);
          portalComposer.setCollapse(false);
@@ -150,8 +150,8 @@ public class UIMainActionListener
 
          UIPortalComposer portalComposer = uiWorkingWS.findFirstComponentOfType(UIPortalComposer.class);
          portalComposer.setRendered(false);
-         portalComposer.setComponentConfig(UIPortalComposer.class, "UIPageEditor");
-         portalComposer.setId("UIPageEditor");
+         portalComposer.setComponentConfig(UIPortalComposer.class, UIPortalComposer.UIPAGE_EDITOR);
+         portalComposer.setId(UIPortalComposer.UIPAGE_EDITOR);
          portalComposer.setShowControl(true);
          portalComposer.setEditted(true);
          portalComposer.setCollapse(false);
@@ -171,7 +171,7 @@ public class UIMainActionListener
       {         
          UserNavigation currNav = selectedNode.getNavigation();
          UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
-         if (currNav.getKey().getTypeName().equals(PortalConfig.USER_TYPE))
+         if (currNav.getKey().getType().equals(SiteType.USER))
          {            
             return userPortal.getNode(currNav, Scope.CHILDREN, filterConfig, null);
          }
@@ -184,7 +184,7 @@ public class UIMainActionListener
       private UserNodeFilterConfig createFilterConfig()
       {
          UserNodeFilterConfig.Builder filterConfigBuilder = UserNodeFilterConfig.builder();
-         filterConfigBuilder.withAuthorizationCheck();
+         filterConfigBuilder.withReadWriteCheck();
          return filterConfigBuilder.build();
       }
    }
@@ -195,7 +195,7 @@ public class UIMainActionListener
       {
          UIPortalApplication uiApp = Util.getUIPortalApplication();
 
-         UIPortal uiPortal = uiApp.getShowedUIPortal();
+         UIPortal uiPortal = uiApp.getCurrentSite();
 
          UserPortalConfigService service = uiApp.getApplicationComponent(UserPortalConfigService.class);
          UserPortalConfig userConfig =
@@ -208,7 +208,7 @@ public class UIMainActionListener
          UIPortalApplication portalApp = Util.getUIPortalApplication();
          UIPortal currentUIPortal = event.getSource().findFirstComponentOfType(UIPortal.class);
          UserACL userACL = portalApp.getApplicationComponent(UserACL.class);
-         if(!userACL.hasEditPermissionOnPortal(currentUIPortal.getOwnerType(), currentUIPortal.getOwner(), 
+         if(!userACL.hasEditPermissionOnPortal(currentUIPortal.getSiteType().getName(), currentUIPortal.getName(), 
                                                 currentUIPortal.getEditPermission()))
          {
             uiApp.addMessage(new ApplicationMessage("UIPortalManagement.msg.Invalid-EditLayout-Permission",
@@ -222,7 +222,7 @@ public class UIMainActionListener
          uiApp.setModeState(UIPortalApplication.APP_BLOCK_EDIT_MODE);
 
          UIPortal newPortal = uiWorkingWS.createUIComponent(UIPortal.class, null, null);
-         PortalDataMapper.toUIPortal(newPortal, userConfig);
+         PortalDataMapper.toUIPortal(newPortal, userConfig.getPortalConfig());
 //         newPortal.setSelectedNode(uiPortal.getSelectedNode());
 //         newPortal.setNavigation(uiPortal.getNavigation());
 //         newPortal.setSelectedPath(uiPortal.getSelectedPath());
@@ -239,7 +239,7 @@ public class UIMainActionListener
          uiComposer.setShowControl(true);
          uiComposer.setEditted(false);
          uiComposer.setCollapse(false);
-         uiComposer.setId("UIPortalComposer");
+         uiComposer.setId(UIPortalComposer.UIPORTAL_COMPOSER);
 
          uiWorkingWS.setRenderedChild(UIEditInlineWorkspace.class);
          pcontext.addUIComponentToUpdateByAjax(uiWorkingWS);

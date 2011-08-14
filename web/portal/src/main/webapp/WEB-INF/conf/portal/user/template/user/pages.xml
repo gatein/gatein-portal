@@ -24,5 +24,22 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_1 http://www.gatein.org/xml/ns/gatein_objects_1_1"
     xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_1">
+
+  <!-- The default dashboard page -->
+  <page>
+    <name>Tab_Default</name>
+    <title>Tab_Default</title>
+    <portlet-application>
+      <portlet>
+        <application-ref>dashboard</application-ref>
+        <portlet-ref>DashboardPortlet</portlet-ref>
+        <preferences/>
+      </portlet>
+      <access-permissions>Everyone</access-permissions>
+      <show-info-bar>false</show-info-bar>
+      <show-application-state>true</show-application-state>
+    </portlet-application>
+  </page>
+
 </page-set>
 

@@ -80,6 +80,7 @@
       eXo.env.portal.portalName = "<%=rcontext.getPortalOwner()%>" ;
       eXo.env.server.context = "<%=docBase%>" ;
       eXo.env.server.portalBaseURL = "<%=rcontext.getRequest().getRequestURI()%>" ;
+      eXo.env.server.portalURLTemplate = "<%=uicomponent.getPortalURLTemplate()%>" ;
       eXo.env.client.skin = "$skin" ;
       <% 
         UIPortal portal = uicomponent.findFirstComponentOfType(UIPortal.class);
@@ -95,17 +96,17 @@
     <script type="text/javascript" src="/eXoResources/javascript/eXo/i18n/I18NMessage.js"></script>
     <script type="text/javascript" src="/eXoResources/javascript/eXo/i18n/MessageResource_<%=lang%>.js"></script>
 
-    <% 
-     def headerElements = rcontext.getExtraMarkupHeadersAsStrings();
-     if (headerElements != null) 
-     {
-       for (element in headerElements)
-       { %>
-        <%=element%>  
-    <% }
-     }     
-    %>
-  </head>
+		<% 
+		 def headerElements = rcontext.getExtraMarkupHeadersAsStrings();
+		 if (headerElements != null) 
+		 {
+		    for (element in headerElements)
+		    {
+		    	print(element);  
+		    }
+		 }		 
+		%>
+	</head>
 
   <body style="height: 100%;">
     <% 

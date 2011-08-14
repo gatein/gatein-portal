@@ -19,13 +19,6 @@
 
 package org.exoplatform.dashboard.webui.component;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserPortalConfigService;
@@ -38,6 +31,7 @@ import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.mop.user.UserNodeFilterConfig;
 import org.exoplatform.portal.mop.user.UserPortal;
+import org.exoplatform.web.url.navigation.NodeURL;
 import org.exoplatform.portal.webui.page.UIPageBody;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
@@ -53,6 +47,11 @@ import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * 
@@ -101,7 +100,7 @@ public class UITabPaneDashboard extends UIContainer
       uiPortal = Util.getUIPortal();
 
       UserNodeFilterConfig.Builder scopeBuilder = UserNodeFilterConfig.builder();
-      scopeBuilder.withAuthorizationCheck().withVisibility(Visibility.DISPLAYED, Visibility.TEMPORAL);
+      scopeBuilder.withReadWriteCheck().withVisibility(Visibility.DISPLAYED, Visibility.TEMPORAL);
       scopeBuilder.withTemporalCheck();
       filterConfig = scopeBuilder.build();
    }
@@ -249,7 +248,7 @@ public class UITabPaneDashboard extends UIContainer
       }
    }
 
-   public String createNewPageNode(String nodeLabel)
+   public UserNode createNewPageNode(String nodeLabel)
    {
       try
       {
@@ -285,7 +284,7 @@ public class UITabPaneDashboard extends UIContainer
 
          getUserPortal().saveNode(parentNode, null);
 
-         return tabNode.getURI();
+         return tabNode;
       }
       catch (Exception ex)
       {
@@ -317,7 +316,7 @@ public class UITabPaneDashboard extends UIContainer
       return true;
    }
 
-   public String renamePageNode(String nodeName, String newNodeLabel)
+   public UserNode renamePageNode(String nodeName, String newNodeLabel)
    {
       try
       {
@@ -344,7 +343,7 @@ public class UITabPaneDashboard extends UIContainer
          }
 
          getUserPortal().saveNode(parentNode, null);
-         return renamedNode.getURI();
+         return renamedNode;
       }
       catch (Exception ex)
       {
@@ -381,25 +380,6 @@ public class UITabPaneDashboard extends UIContainer
       }
    }
 
-   private String encodeURI(String uri) throws UnsupportedEncodingException
-   {
-      if (uri == null || uri.isEmpty())
-      {
-         return "";
-      }
-      String[] path = uri.split("/");
-      StringBuilder uriBuilder = new StringBuilder();
-      for (String name : path)
-      {
-         uriBuilder.append("/").append(URLEncoder.encode(name, "UTF-8"));
-      }
-      if (uriBuilder.indexOf("/") == 0)
-      {
-         uriBuilder.deleteCharAt(0);
-      }
-      return uriBuilder.toString();
-   }
-
    static public class DeleteTabActionListener extends EventListener<UITabPaneDashboard>
    {
       public void execute(Event<UITabPaneDashboard> event) throws Exception
@@ -407,7 +387,7 @@ public class UITabPaneDashboard extends UIContainer
          UITabPaneDashboard source = event.getSource();
          WebuiRequestContext context = event.getRequestContext();
          String nodeName = context.getRequestParameter(UIComponent.OBJECTID);
-         String newUri = source.getFirstAvailableURI();
+         UserNode nextNode = source.getFirstAvailableNode();
          UserNode selectedNode = source.removePageNode(nodeName);
 
          //If the node is removed successfully, then redirect to the node specified by tab on the left
@@ -420,12 +400,13 @@ public class UITabPaneDashboard extends UIContainer
             {
                uiPageBody.setMaximizedUIComponent(null);
             }
-            newUri = selectedNode.getURI();
+            nextNode = selectedNode;
          }
 
          PortalRequestContext prContext = Util.getPortalRequestContext();
-         prContext.setResponseComplete(true);
-         prContext.getResponse().sendRedirect(prContext.getPortalURI() + source.encodeURI(newUri));
+         NodeURL nodeURL = prContext.createURL(NodeURL.TYPE).setNode(nextNode);
+
+         prContext.sendRedirect(nodeURL.toString());
       }
    }
 
@@ -436,7 +417,7 @@ public class UITabPaneDashboard extends UIContainer
          UITabPaneDashboard tabPane = event.getSource();
          WebuiRequestContext context = event.getRequestContext();
          String newTabLabel = context.getRequestParameter(UIComponent.OBJECTID);
-         String newUri = tabPane.getFirstAvailableURI();
+         UserNode node = tabPane.getFirstAvailableNode();
          if (!tabPane.validateName(newTabLabel))
          {            
             Object[] args = {newTabLabel};
@@ -444,16 +425,17 @@ public class UITabPaneDashboard extends UIContainer
          }
          else
          {
-            String uri = tabPane.createNewPageNode(newTabLabel);
-            if (uri != null)
+            UserNode createdNode = tabPane.createNewPageNode(newTabLabel);
+            if (createdNode != null)
             {
-               newUri = uri;
+               node = createdNode;
             }
          }
 
          PortalRequestContext prContext = Util.getPortalRequestContext();
-         prContext.setResponseComplete(true);
-         prContext.getResponse().sendRedirect(prContext.getPortalURI() + tabPane.encodeURI(newUri));
+         NodeURL nodeURL = prContext.createURL(NodeURL.TYPE).setNode(node);
+
+         prContext.sendRedirect(nodeURL.toString());
       }
    }
 
@@ -476,7 +458,7 @@ public class UITabPaneDashboard extends UIContainer
          UIApplication rootUI = context.getUIApplication();
                   
          String newTabLabel = context.getRequestParameter(RENAMED_TAB_LABEL_PARAMETER);
-         String newUri = tabPane.getFirstAvailableURI();
+         UserNode node = tabPane.getFirstAvailableNode();
          if (!tabPane.validateName(newTabLabel))
          {            
             Object[] args = {newTabLabel};
@@ -485,15 +467,16 @@ public class UITabPaneDashboard extends UIContainer
          else
          {
             String nodeName = context.getRequestParameter(UIComponent.OBJECTID);
-            String returnUri = tabPane.renamePageNode(nodeName, newTabLabel);            
-            if (returnUri != null)
+            UserNode renamedNode = tabPane.renamePageNode(nodeName, newTabLabel);            
+            if (renamedNode != null)
             {            
-               newUri = returnUri;               
+               node = renamedNode;               
             }
          }
          PortalRequestContext prContext = Util.getPortalRequestContext();
-         prContext.getResponse().sendRedirect(prContext.getPortalURI() + tabPane.encodeURI(newUri));
-         prContext.setResponseComplete(true);
+         NodeURL nodeURL = prContext.createURL(NodeURL.TYPE).setNode(node);
+
+         prContext.sendRedirect(nodeURL.toString());
       }
    }
 
@@ -522,7 +505,7 @@ public class UITabPaneDashboard extends UIContainer
     * if there is no node remain, return default path 
     * @throws Exception
     */
-   public String getFirstAvailableURI() throws Exception
+   public UserNode getFirstAvailableNode() throws Exception
    {           
       UserNode parentTab = getParentTab();      
       if (parentTab != null)
@@ -530,19 +513,19 @@ public class UITabPaneDashboard extends UIContainer
          UserNode currNode = Util.getUIPortal().getSelectedUserNode();
          if (parentTab.getChildren().size() == 0 && parentTab.getURI() != null)
          {
-            return parentTab.getURI();
+            return parentTab;
          } 
          
          if (parentTab.getChild(currNode.getName()) != null)
          {
-            return currNode.getURI();
+            return currNode;
          } 
          else 
          {
-            return parentTab.getChild(0).getURI(); 
+            return parentTab.getChild(0); 
          }
       }   
 
-      return getUserPortal().getDefaultPath(null).getURI();
+      return getUserPortal().getDefaultPath(null);
    }
 }

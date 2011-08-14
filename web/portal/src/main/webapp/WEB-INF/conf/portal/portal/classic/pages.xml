@@ -106,6 +106,13 @@
       <portlet>
         <application-ref>web</application-ref>
         <portlet-ref>SiteMapPortlet</portlet-ref>
+        <preferences>
+          <preference>
+            <name>useAJAX</name>
+            <value>false</value>
+            <read-only>false</read-only>
+          </preference>
+        </preferences>
       </portlet>
       <title>SiteMap</title>
       <access-permissions>Everyone</access-permissions>

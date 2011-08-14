@@ -1,24 +1,27 @@
 <%	
 	import org.exoplatform.web.application.JavascriptManager;
 	import org.exoplatform.portal.webui.util.Util ;
-	import org.exoplatform.webui.organization.OrganizationUtils;
 	import org.gatein.common.text.EntityEncoder;
 	import org.exoplatform.portal.mop.user.UserNode;
-	import java.util.Collection;
 	import javax.portlet.MimeResponse;
 	import javax.portlet.ResourceURL;
 	import org.exoplatform.portal.mop.SiteKey;
-	
+	import org.exoplatform.portal.mop.SiteType;
+	import org.exoplatform.portal.application.PortalRequestContext;
+	import org.exoplatform.web.url.PortalURL;
+	import org.exoplatform.web.url.navigation.NavigationResource;
+    import org.exoplatform.portal.config.model.PortalConfig;
+    
 	def rcontext = _ctx.getRequestContext() ;
 	JavascriptManager jsmanager = rcontext.getJavascriptManager();
 	jsmanager.importJavascript('eXo.portal.UIPortalNavigation') ;
 	jsmanager.importJavascript('eXo.portal.UIAdminToolbar') ;
 	jsmanager.addCustomizedOnLoadScript('eXo.portal.UIAdminToolbar.onLoad("' + uicomponent.id + '");');
-	def portalURI = Util.getPortalRequestContext().getPortalURI();	
-
-	void renderPortalNavigations() {
-	   		def currentPortal = uicomponent.getCurrentPortal()
-			def nodes = uicomponent.getNavigationNodes(uicomponent.getNavigation(SiteKey.portal(currentPortal)));
+	
+	PortalRequestContext pcontext = Util.getPortalRequestContext(); 
+	PortalURL nodeURL = nodeurl();
+  
+	void renderPortalNavigations(PortalURL nodeURL) {
 			print """
 					<div style="position: absolute; display:none" class="MenuItemContainer portlet-menu-cascade">
 						<div class="SubBlock">
@@ -28,25 +31,28 @@
 			String href = "#";
 				
 			for(int i = 0; i < uicomponent.getAllPortalNames().size(); i++) {
-				String portal = uicomponent.getAllPortalNames().get(i);
- 				if(portal.equals(currentPortal)) {
+				String portalName = uicomponent.getAllPortalNames().get(i);
+ 				if(portalName.equals(uicomponent.getCurrentPortal())) {
 					isCurrent = true;
-			 	} else isCurrent = false; 				 				
+			 	} else isCurrent = false; 	
  				
-				if(isCurrent && nodes.size() > 0) clazz = "class='ArrowIcon'";
+ 				nodeURL.setResource(new NavigationResource(SiteType.PORTAL, portalName, null));
+ 				
+				if(isCurrent) clazz = "ArrowIcon";
 				else clazz = "";
-				href = uicomponent.getPortalURI(portal);
-                label = uicomponent.getPortalLabel(portal);
+				
+				href = nodeURL.toString();
                 EntityEncoder entityEncoder = EntityEncoder.FULL;
-				portal = entityEncoder.encode(portal);
+                label = uicomponent.getPortalLabel(portalName);
+                label = entityEncoder.encode(label);
 				print """
 					<div class="MenuItem portlet-menu-cascade-item">
-						<div $clazz>
+						<div class="$clazz">
 							<a href="$href" class="ItemIcon SiteIcon">$label</a>
 						</div>
 				""";
 						if(isCurrent) {
-							renderCurrentPortal(nodes);
+							renderCurrentPortal(nodeURL);
 						}
 				print """
 					</div>
@@ -57,15 +63,15 @@
 				</div>
 			""";
 	}
-
-	void renderCurrentPortal(Collection nodes) {	    
+	
+	void renderCurrentPortal(PortalURL nodeURL) {
+	    def nodes = _ctx.getRequestContext().getAttribute("nodes");
 		print """
 			<div style="position: absolute; display:none" class="MenuItemContainer portlet-menu-cascade">
 				<div class="SubBlock">
 		""";
-		int idx = 0;
 		for(UserNode node : nodes) {
-			renderPageNode(node, idx++ % 2 == 0);
+			renderPageNode(nodeURL, node);
 		}
 		print """
 				</div>
@@ -73,26 +79,24 @@
 		""";
 	}
 	
-	void renderPageNode(UserNode node, boolean flag) {
-		UserNode selectedNode = uicomponent.getSelectedNode();
+	void renderPageNode(PortalURL nodeURL, UserNode node) {
+	    UserNode selectedNode = uicomponent.getSelectedNode();
 		String tabStyleNavigation = "";
-		if(selectedNode != null && node.getId() == selectedNode.getId()) {			 
+		if(selectedNode != null && node.getId().equals(selectedNode.getId())) {			 
 		   tabStyleNavigation = "SelectedItem portlet-menu-cascade-item-selected";
 		}
 		
 		boolean hasChild = node.getChildrenCount() > 0;
 		String clazz = "";
 		if(hasChild) clazz = "ArrowIcon";
-		String	href = Util.getPortalRequestContext().getPortalURI() + node.getURI();
+		String	href = nodeURL.setNode(node).toString();
 		String icon = node.getIcon();
 		if(icon == null) icon = "DefaultPageIcon";
-		boolean toolong = (node.resolvedLabel.length() > 60);
-		String label = ( toolong ? node.resolvedLabel.substring(0, 57) + "..." : node.resolvedLabel);
+		boolean toolong = (node.getEncodedResolvedLabel().length() > 60);
+		String label = ( toolong ? node.getEncodedResolvedLabel().substring(0, 57) + "..." : node.getEncodedResolvedLabel());
 		String title = "";
-		if(toolong) title = "title='$node.resolvedLabel'";
+		if(toolong) title = "title='$node.encodedResolvedLabel()'";
 		else title = "";
-        EntityEncoder entityEncoder = EntityEncoder.FULL;
-		label = entityEncoder.encode(label);
 		
 		def getNodeURL = "";
 		if (hasChild) {
@@ -119,9 +123,8 @@
 				<div class="MenuItemContainer portlet-menu-indicator" style="position: absolute; display:none">			
 					<div class="SubBlock">
 			""" ;
-				int idx = 0;
 				for(UserNode child : node.getChildren()) {
-					renderPageNode(child, idx++ % 2 == 0);
+					renderPageNode(nodeURL, child);
 				}
 			print """
 					</div>
@@ -133,6 +136,11 @@
 			</div>
 		""" ;			
 	}
+	
+	def currentPortal = uicomponent.getCurrentPortal();
+	def navigation = uicomponent.getNavigation(SiteKey.portal(currentPortal));
+	def nodes = uicomponent.getNavigationNodes(navigation);
+	_ctx.getRequestContext().setAttribute("nodes", nodes);
 %> 
 
 <div class="UIUserToolBarSitePortlet" id="$uicomponent.id" >
@@ -140,11 +148,11 @@
 			<div class="TabsContainer">
 				<div class="UITab NormalToolbarTab portlet-menu-item">
 					<div class="">
-								<a class="SitesIcon TBIcon" href="<%= portalURI + "portalnavigation" %>">
+								<a class="SitesIcon TBIcon" href="<%= nodeURL.setResource(new NavigationResource(SiteType.PORTAL, currentPortal, "portalnavigation")).toString() %>">
 									<%=_ctx.appRes("UIUserToolBarSitePortlet.header.site")%>
 								</a>
 					</div>
-					<% renderPortalNavigations() %>
+					<% renderPortalNavigations(nodeURL) %>
 				</div>
 			</div>
 	</div>		

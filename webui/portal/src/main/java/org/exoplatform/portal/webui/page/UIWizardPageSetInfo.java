@@ -22,6 +22,7 @@ package org.exoplatform.portal.webui.page;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.mop.navigation.NavigationServiceException;
 import org.exoplatform.portal.mop.user.UserNode;
@@ -139,7 +140,7 @@ public class UIWizardPageSetInfo extends UIForm
       addUIFormInput(startPubDateInput);
       addUIFormInput(endPubDateInput);
 
-      boolean isUserNav = Util.getUIPortal().getOwnerType().equals(PortalConfig.USER_TYPE);
+      boolean isUserNav = Util.getUIPortal().getSiteType().equals(SiteType.USER);
       if (isUserNav)
       {
          uiVisibleCheck.setRendered(false);

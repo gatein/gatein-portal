@@ -24,6 +24,7 @@ import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.upload.UploadResource;
 import org.exoplatform.upload.UploadService;
+import org.exoplatform.web.ControllerContext;
 import org.exoplatform.web.WebAppController;
 import org.exoplatform.web.WebRequestHandler;
 
@@ -46,10 +47,15 @@ public class UploadHandler extends WebRequestHandler
       PROGRESS, UPLOAD, DELETE, ABORT
    }
 
-   @Override
-   public String[] getPath()
+   public String getHandlerName()
    {
-      return new String[]{"/upload"};
+      return "upload";
+   }
+
+   @Override
+   public void execute(ControllerContext context) throws Exception
+   {
+      execute(context.getController(), context.getRequest(), context.getResponse());
    }
 
    public void execute(WebAppController controller, HttpServletRequest req, HttpServletResponse res) throws Exception

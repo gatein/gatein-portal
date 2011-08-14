@@ -66,14 +66,13 @@ public class GateinWCIController extends WCIController
 
    public void showErrorLoginForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
    {
-      String initialURI = getInitialURI(req);
-      
-      int jsecurityIndex = initialURI.lastIndexOf("/j_security_check");
-      if (jsecurityIndex != -1)
+      String initialURI = req.getHeader("referer");
+      if (initialURI == null || initialURI.length() == 0)
       {
-         initialURI = initialURI.substring(0, jsecurityIndex);
-      }
+         initialURI = req.getContextPath();
+      }      
 
+      //
       try
       {
          req.setAttribute("org.gatein.portal.login.initial_uri", initialURI);
@@ -82,7 +81,7 @@ public class GateinWCIController extends WCIController
       finally
       {
          req.removeAttribute("org.gatein.portal.login.initial_uri");
-      }
+      }      
    }
 
    @Override
@@ -93,7 +92,7 @@ public class GateinWCIController extends WCIController
 
    @Override
    public String getHomeURI(final HttpServletRequest req)
-   {
-      return "/portal/private/classic";
+   {      
+      return req.getContextPath();
    }
 }

@@ -23,7 +23,6 @@ import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNode;
-import org.exoplatform.portal.webui.application.UIPortlet;
 import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.portal.webui.page.UIPage;
 import org.exoplatform.portal.webui.page.UIPageFactory;
@@ -48,10 +47,6 @@ public class Util
    static public PortalRequestContext getPortalRequestContext()
    {
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
-      if(context == null)
-      {
-         return null;
-      }
       if (!(context instanceof PortalRequestContext))
       {
          context = (WebuiRequestContext)context.getParentAppRequestContext();
@@ -68,7 +63,7 @@ public class Util
    {
       //return getUIPortalApplication().<UIWorkingWorkspace> getChildById(UIPortalApplication.UI_WORKING_WS_ID)
       //   .findFirstComponentOfType(UIPortal.class);
-      return getUIPortalApplication().getShowedUIPortal();
+      return getUIPortalApplication().getCurrentSite();
    }
 
    static public UIPortalToolPanel getUIPortalToolPanel()
@@ -123,56 +118,6 @@ public class Util
       uiToolPanel.setUIComponent(uiWork);
       //uiWorkingWS.setRenderedChild(UIPortalToolPanel.class) ;
       return uiWork;
-   }
-
-   static public void showPortalComponentLayoutMode(UIPortalApplication uiPortalApp)
-   {
-      UIWorkingWorkspace uiWorkingWS = uiPortalApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
-      uiWorkingWS.setRenderedChild(UIPortal.class);
-      UIPortal uiPortal = uiWorkingWS.findFirstComponentOfType(UIPortal.class);
-
-      UIContainer uiContainer = Util.findUIComponent(uiPortal, UIContainer.class, UIPage.class);
-      UIPage uiPage = uiPortal.findFirstComponentOfType(UIPage.class);
-      UIPortlet uiPortlet = Util.findUIComponent(uiPortal, UIPortlet.class, UIPage.class);
-
-      String name = "";
-      if (uiContainer != null && uiContainer.isShowEditControl())
-         name = "'UIContainer'";
-      else if (uiPage != null && uiPage.isShowEditControl())
-         name = "'UIPage'";
-      else if (uiPortlet != null && uiPortlet.isShowEditControl())
-         name = "'UIPortlet'";
-
-      getPortalRequestContext().getJavascriptManager().addCustomizedOnLoadScript(
-         "eXo.portal.UIPortal.showLayoutModeForPortal(" + name + ");");
-   }
-
-   //  public UIPortlet getFirstUIPortlet(UIContainer uiContainer){
-   //    return 
-   //  }
-
-   //  public UIContainer getFirstUIContainer(){
-   //    return (UIContainer)Util.findUIComponent(UIContainer uiContainer, UIContainer.class, UIPage.class);
-   //  }
-
-   static public void showPageComponentLayoutMode(UIPortalApplication uiPortalApp)
-   {
-      UIWorkingWorkspace uiWorkingWS = uiPortalApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
-      uiWorkingWS.setRenderedChild(UIPortalToolPanel.class);
-      UIPortalToolPanel uiPortalToolPanel = uiWorkingWS.findFirstComponentOfType(UIPortalToolPanel.class);
-
-      UIPage uiPage = uiPortalToolPanel.findFirstComponentOfType(UIPage.class);
-      UIContainer uiContainer = uiPage.findFirstComponentOfType(UIContainer.class);
-      UIPortlet uiPortlet = uiPage.findFirstComponentOfType(UIPortlet.class);
-
-      String name = "";
-      if (uiContainer != null && uiContainer.isShowEditControl())
-         name = "UIContainer";
-      else if (uiPortlet != null && uiPortlet.isShowEditControl())
-         name = "UIPortlet";
-
-      getPortalRequestContext().getJavascriptManager().addCustomizedOnLoadScript(
-         "eXo.portal.UIPortal.showLayoutModeForPage('" + name + "');");
    }
 
    @SuppressWarnings("unchecked")

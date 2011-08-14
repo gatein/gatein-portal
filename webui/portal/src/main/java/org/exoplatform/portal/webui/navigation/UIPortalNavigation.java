@@ -36,6 +36,7 @@ import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.webui.portal.PageNodeEvent;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -68,7 +69,7 @@ public class UIPortalNavigation extends UIComponent
    public UIPortalNavigation()
    {
       UserNodeFilterConfig.Builder filterConfigBuilder = UserNodeFilterConfig.builder();
-      filterConfigBuilder.withAuthorizationCheck().withVisibility(Visibility.DISPLAYED, Visibility.TEMPORAL);
+      filterConfigBuilder.withReadWriteCheck().withVisibility(Visibility.DISPLAYED, Visibility.TEMPORAL);
       filterConfigBuilder.withTemporalCheck();
       NAVIGATION_FILTER_CONFIG = filterConfigBuilder.build();
    }
@@ -162,7 +163,7 @@ public class UIPortalNavigation extends UIComponent
       List<UserNode> childNodes = new LinkedList<UserNode>();
       for (UserNavigation nav : rearrangeNavigations(listNavigations))
       {
-         if (!showUserNavigation && nav.getKey().getTypeName().equals(PortalConfig.USER_TYPE))
+         if (!showUserNavigation && nav.getKey().getType().equals(SiteType.USER))
          {
             continue;
          }
@@ -260,18 +261,18 @@ public class UIPortalNavigation extends UIComponent
 
       for (UserNavigation nav : listNavigation)
       {
-         String ownerType = nav.getKey().getTypeName();
-         if (PortalConfig.PORTAL_TYPE.equals(ownerType))
+         SiteType siteType = nav.getKey().getType();
+         switch (siteType)
          {
-            portalNavs.add(nav);
-         }
-         else if (PortalConfig.GROUP_TYPE.equals(ownerType))
-         {
-            groupNavs.add(nav);
-         }
-         else if (PortalConfig.USER_TYPE.equals(ownerType))
-         {
-            userNavs.add(nav);
+            case PORTAL:
+               portalNavs.add(nav);
+               break;
+            case GROUP:
+               groupNavs.add(nav);
+               break;
+            case USER:
+               userNavs.add(nav);
+               break;
          }
       }
 
@@ -317,27 +318,6 @@ public class UIPortalNavigation extends UIComponent
    {
       this.navigationScope = scope;
    }   
-   
-   static public class SelectNodeActionListener extends EventListener<UIPortalNavigation>
-   {
-      public void execute(Event<UIPortalNavigation> event) throws Exception
-      {
-         UIPortal uiPortal = Util.getUIPortal();
-         String treePath = event.getRequestContext().getRequestParameter(OBJECTID);
-
-         TreeNode selectedNode = event.getSource().getTreeNodes().findNodes(treePath);
-         //There're may be interuption between browser and server
-         if (selectedNode == null)
-         {
-            event.getRequestContext().addUIComponentToUpdateByAjax(event.getSource());
-            return;
-         }
-         
-         PageNodeEvent<UIPortal> pnevent;
-         pnevent = new PageNodeEvent<UIPortal>(uiPortal, PageNodeEvent.CHANGE_PAGE_NODE, selectedNode.getNode().getURI());
-         uiPortal.broadcast(pnevent, Event.Phase.PROCESS);
-      }
-   }
 
    //Now we use serveSource method to expand a node
 /*   

@@ -24,61 +24,81 @@ import org.exoplatform.web.application.URLBuilder;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIComponent;
 
+import javax.portlet.PortletURL;
+
 /**
- * julien todo : use PortletURL parameter instead of appending them to the url returned by the PortletURL
- *
  * Created by The eXo Platform SAS
  * Apr 3, 2007  
  */
 public class PortletURLBuilder extends URLBuilder<UIComponent>
 {
-    private static final String AMP = "&amp;";
-    private static final char EQUALS = '=';
 
-    public PortletURLBuilder()
+   /** . */
+   private final PortletURL url;
+
+   public PortletURLBuilder(PortletURL url)
    {
-      super(null);
+      this.url = url;
    }
 
-   public PortletURLBuilder(String baseURL)
+   public String createAjaxURL(UIComponent targetComponent, String action, String confirm, String targetBeanId, Parameter[] params)
    {
-      super(baseURL);
+      return createURL(true, confirm, targetComponent, action, targetBeanId, params);
    }
 
-   public String createURL(String action, Parameter[] params)
+   public String createURL(UIComponent targetComponent, String action, String confirm, String targetBeanId, Parameter[] params)
    {
-      return null;
+      return createURL(false, confirm, targetComponent, action, targetBeanId, params);
    }
 
-   public String createURL(String action, String objectId, Parameter[] params)
-   {
-      return null;
-   }
-
-   protected void createURL(StringBuilder builder, UIComponent targetComponent, String action, String targetBeanId,
+   private String createURL(
+      boolean ajax,
+      String confirm,
+      UIComponent targetComponent, String action, String targetBeanId,
       Parameter[] params)
    {
-      String baseUrl = getBaseURL();
-      builder.append(baseUrl).append(AMP).append(UIComponent.UICOMPONENT).append(EQUALS).append(
-         targetComponent.getId());
+      // Clear URL
+      url.getParameterMap().clear();
 
+      //
+      url.setProperty("gtn:ajax", Boolean.toString(ajax));
+      url.setProperty("gtn:confirm", confirm);
+
+      //
+      url.setParameter(UIComponent.UICOMPONENT, targetComponent.getId());
+
+      //
       if (action != null && action.trim().length() > 0)
       {
-         builder.append(AMP).append(WebuiRequestContext.ACTION).append(EQUALS).append(action);
+         url.setParameter(WebuiRequestContext.ACTION, action);
       }
 
+      //
       if (targetBeanId != null && targetBeanId.trim().length() > 0)
       {
-         builder.append(AMP).append(UIComponent.OBJECTID).append(EQUALS).append(targetBeanId);
+         url.setParameter(UIComponent.OBJECTID, targetBeanId);
       }
 
-      if (params == null || params.length < 1)
-         return;
-      for (Parameter param : params)
+      //
+      if (params != null && params.length > 0)
       {
-         builder.append(AMP).append(param.getName()).append(EQUALS).append(param.getValue());
+         for (Parameter param : params)
+         {
+            url.setParameter(param.getName(), param.getValue());
+         }
       }
 
-   }
+      //
+      if (removeLocale)
+      {
+         url.setProperty("gtn:lang", "");
+      }
+      else if (locale != null)
+      {
+         url.setProperty("gtn:lang", locale.toString());
+      }
 
+      //
+      return url.toString();
+   }
 }

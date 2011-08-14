@@ -34,6 +34,7 @@ import org.gatein.mop.api.workspace.ObjectType;
 import org.gatein.mop.api.workspace.Site;
 import org.gatein.mop.core.api.MOPService;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -121,6 +122,7 @@ public class TestDescriptionService extends AbstractPortalTest
 
       //
       assertEquals(null, svc.resolveDescription(id, null, Locale.GERMAN));
+      assertEquals(null, svc.resolveDescription(id, null, new Locale("", "GB")));
       assertEquals(new Described.State("name_en", null), svc.resolveDescription(id, Locale.ENGLISH, Locale.GERMAN));
       assertEquals(new Described.State("name_en_GB", null), svc.resolveDescription(id, Locale.UK, Locale.GERMAN));
       assertEquals(new Described.State("name_en", null), svc.resolveDescription(id, Locale.US, Locale.GERMAN));
@@ -220,6 +222,34 @@ public class TestDescriptionService extends AbstractPortalTest
       assertEquals("foo_english", desc.getName());
    }
 
+   public void testSetInvalidLocaleDescription() throws Exception
+   {
+      DescriptionService svc = new DescriptionServiceImpl(mgr);
+      MOPService mop = mgr.getPOMService();
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "foo");
+      Navigation nav = portal.getRootNavigation().addChild("default");
+
+      //
+      try
+      {
+         svc.setDescription(nav.getObjectId(), new Locale("", "GB"), new Described.State("foo_invalid", null));
+         fail();
+      }
+      catch (IllegalArgumentException e)
+      {
+      }
+
+      //
+      try
+      {
+         svc.setDescription(nav.getObjectId(), new Locale("en", "GB", "variant"), new Described.State("foo_invalid", null));
+         fail();
+      }
+      catch (IllegalArgumentException e)
+      {
+      }
+   }
+
    public void testAddLocalizedDescription() throws Exception
    {
       DescriptionService svc = new DescriptionServiceImpl(mgr);
@@ -299,5 +329,31 @@ public class TestDescriptionService extends AbstractPortalTest
       description = svc.getDescriptions(nav.getObjectId());
       assertEquals(Tools.toSet(Locale.ENGLISH), description.keySet());
       assertEquals(new Described.State("bar_english_2", null), description.get(Locale.ENGLISH));
+   }
+
+   public void testSetInvalidLocaleDescriptions() throws Exception
+   {
+      DescriptionService svc = new DescriptionServiceImpl(mgr);
+      MOPService mop = mgr.getPOMService();
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "foo");
+      Navigation nav = portal.getRootNavigation().addChild("default");
+
+      //
+      try
+      {
+         svc.setDescriptions(nav.getObjectId(), Collections.singletonMap(new Locale("", "GB"), new Described.State("bar_invalid", null)));
+         fail();
+      }
+      catch (IllegalArgumentException e)
+      {
+      }
+      try
+      {
+         svc.setDescriptions(nav.getObjectId(), Collections.singletonMap(new Locale("en", "GB", "variant"), new Described.State("bar_invalid", null)));
+         fail();
+      }
+      catch (IllegalArgumentException e)
+      {
+      }
    }
 }

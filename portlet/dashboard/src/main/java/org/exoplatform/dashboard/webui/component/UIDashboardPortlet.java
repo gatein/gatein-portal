@@ -68,7 +68,7 @@ public class UIDashboardPortlet extends UIPortletApplication implements Dashboar
       PortletRequestContext context = (PortletRequestContext)WebuiRequestContext.getCurrentInstance();
       PortalRequestContext prc = (PortalRequestContext)context.getParentAppRequestContext();
       UIPortalApplication portalApp = (UIPortalApplication)prc.getUIApplication();
-      UIPortal portal = portalApp.getShowedUIPortal();
+      UIPortal portal = portalApp.getCurrentSite();
 
       //
       try

@@ -32,4 +32,6 @@ public class Constants
    public static final String PORTAL_WINDOW_STATE = "portal:windowState";
 
    public static final String PORTAL_PORTLET_MODE = "portal:portletMode";
+
+   public static final String QMARK = "?";
 }

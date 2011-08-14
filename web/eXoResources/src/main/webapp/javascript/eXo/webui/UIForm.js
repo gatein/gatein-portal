@@ -22,6 +22,20 @@
  */
 function UIForm() {
 };
+
+/**
+ * This method is called when a HTTP POST should be done but in an AJAX
+ * case some maniputalions are needed
+ * Once the content of the form is placed into a string object, the call
+ * is delegated to the doRequest() method 
+ */
+UIForm.prototype.ajaxPost = function(formElement, callback) {
+  if (!callback) callback = null ;
+  var queryString = eXo.webui.UIForm.serializeForm(formElement) ;
+  var url = formElement.action + "&ajaxRequest=true" ;
+  doRequest("POST", url, queryString, callback) ;
+} ;
+
 /**
  * Get form element with pattern condition
  * @param {String} pattern
@@ -36,7 +50,7 @@ UIForm.prototype.getFormElemt = function(pattern) {
 
 /**
  * A function that submits the form identified by formId, with the specified action
- * If useAjax is true, calls the ajaxPost function from PortalHttpRequest, with the given callback function
+ * If useAjax is true, calls the ajaxPost function, with the given callback function
  * Note: ie bug  you cannot have more than one button tag
  */
 UIForm.prototype.submitForm = function(formId, action, useAjax, callback) {
@@ -60,13 +74,13 @@ UIForm.prototype.submitForm = function(formId, action, useAjax, callback) {
  } catch(e) {}
 
   form.elements['formOp'].value = action ;
-  if(useAjax) ajaxPost(form, callback) ;
+  if(useAjax) this.ajaxPost(form, callback) ;
   else  form.submit();
 } ;
 
 /**
  * Submits a form by Ajax, with the given action and the given parameters
- * Calls ajaxPost of PortalHttpRequest
+ * Calls ajaxPost
  * Note: ie bug  you cannot have more than one button tag
  */
 UIForm.prototype.submitEvent = function(formId, action, params) {
@@ -84,7 +98,7 @@ UIForm.prototype.submitEvent = function(formId, action, params) {
   form.elements['formOp'].value = action ; 
   if(!form.originalAction) form.originalAction = form.action ; 
 	form.action =  form.originalAction +  encodeURI(params) ;
-  ajaxPost(form) ;
+  this.ajaxPost(form) ;
 } ;
 
 UIForm.prototype.selectBoxOnChange = function(formId, elemt) {

@@ -65,7 +65,7 @@ public class UISkinSelector extends UIContainer
       String currentSkin = uiPortalApp.getSkin();
 
       if (currentSkin == null)
-         currentSkin = "Default";
+         currentSkin = SkinService.DEFAULT_SKIN;
       for (SelectItemCategory ele : itemCategories)
       {
          if (ele.getName().equals(currentSkin))

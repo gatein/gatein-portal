@@ -31,11 +31,14 @@ import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.Described;
+import org.exoplatform.portal.mop.SiteKey;
+import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.description.DescriptionService;
 import org.exoplatform.portal.mop.navigation.NavigationServiceException;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.mop.user.UserPortal;
+import org.exoplatform.web.url.navigation.NodeURL;
 import org.exoplatform.portal.webui.navigation.UIPageNodeSelector;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.portal.UIPortalComposer;
@@ -86,7 +89,7 @@ public class UIPageCreationWizard extends UIPageWizard
    {            
       UIPageNodeSelector nodeSelector = findFirstComponentOfType(UIPageNodeSelector.class);
       nodeSelector.configure(node);      
-      if (node.getNavigation().getKey().getTypeName().equals(PortalConfig.USER_TYPE))
+      if (node.getNavigation().getKey().getType().equals(SiteType.USER))
       {
          nodeSelector.setRendered(false);         
       }
@@ -266,20 +269,20 @@ public class UIPageCreationWizard extends UIPageWizard
    static public class ViewStep3ActionListener extends EventListener<UIPageCreationWizard>
    {
 
-      private void setDefaultPermission(Page page, String ownerType, String ownerId)
+      private void setDefaultPermission(Page page, SiteKey siteKey)
       {
          UIPortal uiPortal = Util.getUIPortal();
-         if (PortalConfig.PORTAL_TYPE.equals(ownerType))
+         if (SiteType.PORTAL.equals(siteKey.getType()))
          {
             page.setAccessPermissions(uiPortal.getAccessPermissions());
             page.setEditPermission(uiPortal.getEditPermission());
          }
-         else if (PortalConfig.GROUP_TYPE.equals(ownerType))
+         else if (SiteType.GROUP.equals(siteKey.getType()))
          {
             UserACL acl = Util.getUIPortalApplication().getApplicationComponent(UserACL.class);
-            ownerId = ownerId.startsWith("/") ? ownerId : "/" + ownerId;
-            page.setAccessPermissions(new String[]{"*:" + ownerId});
-            page.setEditPermission(acl.getMakableMT() + ":" + ownerId);
+            String siteName = siteKey.getName().startsWith("/") ? siteKey.getName() : "/" + siteKey.getName();
+            page.setAccessPermissions(new String[]{"*:" + siteName});
+            page.setEditPermission(acl.getMakableMT() + ":" + siteName);
          }         
       }
 
@@ -332,7 +335,7 @@ public class UIPageCreationWizard extends UIPageWizard
          page.setModifiable(true);
 
          // Set default permissions on the page
-         setDefaultPermission(page, ownerType, ownerId);
+         setDefaultPermission(page, pageNavi.getKey());
 
          if (page.getTitle() == null || page.getTitle().trim().length() == 0)
          {
@@ -372,23 +375,21 @@ public class UIPageCreationWizard extends UIPageWizard
          uiWorkingWS.setRenderedChild(UIPortalApplication.UI_VIEWING_WS_ID);
          
          PortalRequestContext pcontext = Util.getPortalRequestContext();
-         String uri = pcontext.getPortalURI();
 
          try
          {
             UserNode newNode = uiWizard.saveData();
-            uri += newNode.getURI();
+            NodeURL nodeURL = pcontext.createURL(NodeURL.TYPE).setNode(newNode);
+            UIPortalToolPanel toolPanel = uiWorkingWS.findFirstComponentOfType(UIPortalToolPanel.class);
+            toolPanel.setUIComponent(null);
+            uiWizard.updateUIPortal(event);         
+            pcontext.sendRedirect(nodeURL.toString());
          }
          catch (NavigationServiceException ex)
          {
             pcontext.getUIApplication().addMessage(
                new ApplicationMessage("UIPageCreationWizard.msg." + ex.getError().name(), null));
          }
-         
-         UIPortalToolPanel toolPanel = uiWorkingWS.findFirstComponentOfType(UIPortalToolPanel.class);
-         toolPanel.setUIComponent(null);
-         uiWizard.updateUIPortal(event);         
-         pcontext.getResponse().sendRedirect(uri);
       }
    }
 

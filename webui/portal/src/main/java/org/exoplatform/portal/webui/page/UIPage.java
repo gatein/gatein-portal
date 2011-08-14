@@ -22,6 +22,7 @@ package org.exoplatform.portal.webui.page;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.model.Page;
+import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.webui.application.UIPortlet;
 import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.portal.webui.portal.UIPortalComponentActionListener.MoveChildActionListener;
@@ -49,9 +50,7 @@ public class UIPage extends UIContainer
    /** . */
    private String pageId;
 
-   private String ownerId;
-
-   private String ownerType;
+   private SiteKey siteKey;
 
    private String editPermission;
 
@@ -61,14 +60,36 @@ public class UIPage extends UIContainer
 
    public static String DEFAULT_FACTORY_ID = "Default";
 
-   public String getOwnerId()
+   public SiteKey getSiteKey()
    {
-      return ownerId;
+      return siteKey;
+   }
+   
+   public void setSiteKey(SiteKey key)
+   {
+      siteKey = key;
    }
 
-   public void setOwnerId(String s)
+   /**
+    * @deprecated use {@link #getSiteKey()} instead
+    * 
+    * @return
+    */
+   @Deprecated
+   public String getOwnerType()
    {
-      ownerId = s;
+      return getSiteKey().getTypeName();
+   }
+   
+   /**
+    * @deprecated use {@link #getSiteKey()} instead
+    * 
+    * @return
+    */
+   @Deprecated
+   public String getOwnerId()
+   {
+      return getSiteKey().getName();
    }
 
    public boolean isShowMaxWindow()
@@ -104,16 +125,6 @@ public class UIPage extends UIContainer
    public UIPortlet getMaximizedUIPortlet()
    {
       return maximizedUIPortlet;
-   }
-
-   public String getOwnerType()
-   {
-      return ownerType;
-   }
-
-   public void setOwnerType(String ownerType)
-   {
-      this.ownerType = ownerType;
    }
 
    public void setMaximizedUIPortlet(UIPortlet maximizedUIPortlet)

@@ -20,31 +20,9 @@
 
 -->
 
-<node-navigation>
+<node-navigation
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_2 http://www.gatein.org/xml/ns/gatein_objects_1_2"
+  xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_2">
 	<priority>3</priority>
-  
-  <page-nodes>
-  <!--
-		<node>
-	    <uri>sales</uri>
-	    <name>sales</name>
-	    <label>Sales BI</label>
-	    <page-reference>user::root::sales</page-reference>
-    </node>
-    
-    <node>
-	    <uri>scrum</uri>
-	    <name>scrum</name>
-	    <label>Scrum</label>
-	    <page-reference>user::root::scrum</page-reference>
-    </node>
-    
-    <node>
-	    <uri>development</uri>
-	    <name>development</name>
-	    <label>Development</label>
-	    <page-reference>user::root::development</page-reference>
-    </node>
-  -->
-  </page-nodes>
 </node-navigation>

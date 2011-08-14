@@ -24,13 +24,15 @@ import org.exoplatform.web.security.security.AbstractTokenService;
 import org.exoplatform.web.security.security.CookieTokenService;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
+import org.gatein.wci.security.Credentials;
 import org.gatein.wci.security.WCILoginController;
+
+import java.io.IOException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 /**
  * @author <a href="mailto:alain.defrance@exoplatform.com">Alain Defrance</a>
@@ -42,8 +44,37 @@ public class PortalLoginController extends WCILoginController {
    private static final Logger log = LoggerFactory.getLogger(PortalLoginController.class);
 
    @Override
-   protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+   protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException 
+   {
       super.doGet(req, resp);
+      
+      String username = req.getParameter("username");
+      String password = req.getParameter("password");
+      
+      //
+      if (username != null && password != null)
+      {
+         // if we do have a remember me
+         String rememberme = req.getParameter("rememberme");
+         if ("true".equals(rememberme))
+         {
+            boolean isRemember = "true".equals(req.getParameter(InitiateLoginServlet.COOKIE_NAME));
+            if (isRemember)
+            {
+               //Create token
+               AbstractTokenService tokenService = AbstractTokenService.getInstance(CookieTokenService.class);
+               Credentials credentials = (Credentials)req.getSession().getAttribute(Credentials.CREDENTIALS);
+               String cookieToken = tokenService.createToken(credentials);
+
+               log.debug("Found a remember me request parameter, created a persistent token " + cookieToken + " for it and set it up " +
+                  "in the next response");
+               Cookie cookie = new Cookie(InitiateLoginServlet.COOKIE_NAME, cookieToken);
+               cookie.setPath(req.getContextPath());
+               cookie.setMaxAge((int)tokenService.getValidityTime());
+               resp.addCookie(cookie);
+            }
+         }
+      }
 
       // Obtain initial URI
       String uri = req.getParameter("initialURI");
@@ -59,27 +90,8 @@ public class PortalLoginController extends WCILoginController {
          log.debug("Found initial URI " + uri);
       }
 
-      // if we do have a remember me
-      String rememberme = req.getParameter("rememberme");
-      if ("true".equals(rememberme))
-      {
-         boolean isRemember = "true".equals(req.getParameter(InitiateLoginServlet.COOKIE_NAME));
-         if (isRemember)
-         {
-            //Create token
-            AbstractTokenService tokenService = AbstractTokenService.getInstance(CookieTokenService.class);
-            String cookieToken = tokenService.createToken(credentials);
-
-            log.debug("Found a remember me request parameter, created a persistent token " + cookieToken + " for it and set it up " +
-               "in the next response");
-            Cookie cookie = new Cookie(InitiateLoginServlet.COOKIE_NAME, cookieToken);
-            cookie.setPath(req.getContextPath());
-            cookie.setMaxAge((int)tokenService.getValidityTime());
-            resp.addCookie(cookie);
-         }
-      }
-
       //
-      resp.sendRedirect(uri);
+      String redirectURI = req.getContextPath() + "/dologin?initialURI=" + uri;
+      resp.sendRedirect(resp.encodeRedirectURL(redirectURI));
    }
 }

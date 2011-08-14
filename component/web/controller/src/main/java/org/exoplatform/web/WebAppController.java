@@ -19,52 +19,108 @@
 
 package org.exoplatform.web;
 
+import org.exoplatform.commons.utils.Safe;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.component.RequestLifeCycle;
-import org.exoplatform.services.log.ExoLogger;
-import org.exoplatform.services.log.Log;
+import org.exoplatform.container.xml.InitParams;
+import org.exoplatform.container.xml.ValueParam;
+import org.exoplatform.management.annotations.Impact;
+import org.exoplatform.management.annotations.ImpactType;
+import org.exoplatform.management.annotations.Managed;
+import org.exoplatform.management.annotations.ManagedDescription;
+import org.exoplatform.management.annotations.ManagedName;
+import org.exoplatform.management.jmx.annotations.NameTemplate;
+import org.exoplatform.management.jmx.annotations.Property;
+import org.exoplatform.management.rest.annotations.RESTEndpoint;
 import org.exoplatform.web.application.Application;
+import org.exoplatform.web.controller.QualifiedName;
+import org.exoplatform.web.controller.metadata.DescriptorBuilder;
+import org.exoplatform.web.controller.metadata.ControllerDescriptor;
+import org.exoplatform.web.controller.router.RouterConfigException;
+import org.exoplatform.web.controller.router.Router;
+import org.gatein.common.http.QueryStringParser;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Created by The eXo Platform SAS
- * Mar 21, 2007  
- * 
- * The WebAppController is the entry point of the eXo web framework
- * 
- * It also stores WebRequestHandlers, Attributes and deployed Applications
- * 
+ * The WebAppController is the entry point of the GateIn service.
  */
+@Managed
+@ManagedDescription("The portal controller")
+@NameTemplate({
+   @Property(key = "view", value = "portal"),
+   @Property(key = "service", value = "controller")})
+@RESTEndpoint(path = "portalcontroller")
 public class WebAppController
 {
 
-   protected static Log log = ExoLogger.getLogger("portal:WebAppController");
+   /** . */
+   public static final QualifiedName HANDLER_PARAM = QualifiedName.create("gtn", "handler");
 
-   private HashMap<String, Object> attributes_;
+   /** . */
+   protected static Logger log = LoggerFactory.getLogger(WebAppController.class);
 
+   /** . */
+   private final HashMap<String, Object> attributes_;
+
+   /** . */
    private volatile HashMap<String, Application> applications_;
 
-   private HashMap<String, WebRequestHandler> handlers_;
+   /** . */
+   private final HashMap<String, WebRequestHandler> handlers;
+
+   /** . */
+   private final AtomicReference<Router> routerRef;
+
+   /** . */
+   private final AtomicReference<String> configurationPathRef;
 
    /**
     * The WebAppControler along with the PortalRequestHandler defined in the init() method of the
     * PortalController servlet (controller.register(new PortalRequestHandler())) also add the
-    * CommandHandler object that will listen for the incoming /command path in the URL
-    * 
-    * @throws Exception
+    * CommandHandler object that will listen for the incoming /command path in the URL.
+    *
+    * @param params the init params
+    * @throws Exception any exception
     */
-   public WebAppController() throws Exception
+   public WebAppController(InitParams params) throws Exception
    {
-      applications_ = new HashMap<String, Application>();
-      attributes_ = new HashMap<String, Object>();
-      handlers_ = new HashMap<String, WebRequestHandler>();
+      // Get router config
+      ValueParam routerConfig = params.getValueParam("controller.config");
+      if (routerConfig == null)
+      {
+         throw new IllegalArgumentException("No router param defined");
+      }
+      String configurationPath = routerConfig.getValue();
+
+      //
+      this.applications_ = new HashMap<String, Application>();
+      this.attributes_ = new HashMap<String, Object>();
+      this.handlers = new HashMap<String, WebRequestHandler>();
+      this.routerRef = new AtomicReference<Router>();
+      this.configurationPathRef = new AtomicReference<String>(configurationPath);
+
+      //
+      reloadConfiguration();
    }
 
    public Object getAttribute(String name, Object value)
@@ -92,6 +148,96 @@ public class WebAppController
    public synchronized void removeApplication(String appId)
    {
       applications_.remove(appId);
+   }
+
+   @Managed
+   @ManagedDescription("The configuration path")
+   public String getConfigurationPath()
+   {
+      return String.valueOf(configurationPathRef.get());
+   }
+
+   @Managed
+   @ManagedDescription("Load the controller configuration")
+   @Impact(ImpactType.WRITE)
+   public void loadConfiguration(@ManagedDescription("The configuration path") @ManagedName("path") String path) throws IOException, RouterConfigException
+   {
+      File f = new File(path);
+      if (!f.exists())
+      {
+         throw new MalformedURLException("Could not resolve path " + path);
+      }
+      if (!f.isFile())
+      {
+         throw new MalformedURLException("Could not resolve path " + path + " to a valid file");
+      }
+      loadConfiguration(f.toURI().toURL());
+      configurationPathRef.set(path);
+   }
+
+   private void loadConfiguration(URL url) throws RouterConfigException, IOException
+   {
+      log.info("Loading router configuration " + url);
+      InputStream in = url.openStream();
+      try
+      {
+         ControllerDescriptor routerDesc = new DescriptorBuilder().build(in);
+         Router router = new Router(routerDesc);
+         routerRef.set(router);
+      }
+      finally
+      {
+         Safe.close(in);
+      }
+   }
+
+   @Managed
+   @ManagedDescription("Reload the controller configuration")
+   @Impact(ImpactType.WRITE)
+   public void reloadConfiguration() throws RouterConfigException, IOException
+   {
+      log.info("Loading router configuration " + configurationPathRef.get());
+      loadConfiguration(configurationPathRef.get());
+   }
+
+   @Managed
+   @ManagedDescription("Enumerates the routes found for the specified request")
+   @Impact(ImpactType.READ)
+   public String findRoutes(@ManagedDescription("The request uri relative to the web application") @ManagedName("uri") String uri)
+   {
+      Router router = routerRef.get();
+      if (router != null)
+      {
+         Map<String, String[]> parameters;
+         String path;
+         int pos = uri.indexOf('?');
+         if (pos != -1)
+         {
+            parameters = QueryStringParser.getInstance().parseQueryString(uri.substring(pos + 1));
+            path = uri.substring(0, pos);
+         }
+         else
+         {
+            parameters = Collections.emptyMap();
+            path = uri;
+         }
+
+         //
+         List<Map<QualifiedName, String>> results = new ArrayList<Map<QualifiedName, String>>();
+         Iterator<Map<QualifiedName, String>> matcher = router.matcher(path, parameters);
+         while (matcher.hasNext())
+         {
+            Map<QualifiedName, String> match = matcher.next();
+            results.add(match);
+         }
+
+         //
+         return results.toString();
+      }
+      else
+      {
+         throw new IllegalStateException("No route currently configured");
+      }
    }
 
    /**
@@ -124,50 +270,106 @@ public class WebAppController
       
       return (T)result;
    }
-   
+
+   /**
+    * Register an handler as a component plugin, this method is invoked by the kernel with reflection.
+    *
+    * @param handler the handler
+    * @throws Exception any exception
+    */
    public void register(WebRequestHandler handler) throws Exception
    {
-      for (String path : handler.getPath())
-         handlers_.put(path, handler);
+      handlers.put(handler.getHandlerName(), handler);
    }
    
    public void unregister(String[] paths)
    {
       for (String path : paths)
-         handlers_.remove(path);
+         handlers.remove(path);
+   }
+
+   public void onHandlersInit(ServletConfig config) throws Exception
+   {
+      Collection<WebRequestHandler> hls = handlers.values();
+      for (WebRequestHandler handler : hls)
+      {
+         handler.onInit(this, config);
+      }
    }
 
    /**
-    * This is the first method - in the eXo web framework - reached by incoming HTTP request, it acts like a
-    * servlet service() method
-    * 
-    * According to the servlet path used the correct handler is selected and then executed.
-    * 
-    * The event "exo.application.portal.start-http-request" and "exo.application.portal.end-http-request" are also sent 
-    * through the ListenerService and several listeners may listen to it.
-    * 
-    * Finally a WindowsInfosContainer object using a ThreadLocal (from the portlet-container product) is created 
+    * <p>This is the first method - in the GateIn portal - reached by incoming HTTP request, it acts like a
+    * servlet service() method. According to the servlet path used the correct handler is selected and then executed.</p>
+    *
+    * <p>During a request the request life cycle is demarcated by calls to {@link RequestLifeCycle#begin(ExoContainer);}
+    * and {@link RequestLifeCycle#end()}.</p>
+    *
+    * @param req the http request
+    * @param res the http response
+    * @throws Exception any exception
     */
    public void service(HttpServletRequest req, HttpServletResponse res) throws Exception
    {
-      WebRequestHandler handler = handlers_.get(req.getServletPath());
-      if (log.isDebugEnabled())
+      boolean debug = log.isDebugEnabled();
+      String portalPath = req.getRequestURI().substring(req.getContextPath().length());
+      Router router = routerRef.get();
+
+      //
+      if (router != null)
       {
-         log.debug("Servlet Path: " + req.getServletPath());
-         log.debug("Handler used for this path: " + handler);
+         Iterator<Map<QualifiedName, String>> matcher = router.matcher(portalPath, req.getParameterMap());
+
+         //
+         Map<QualifiedName, String> parameters = null;
+         if (matcher.hasNext())
+         {
+            parameters = matcher.next();
+         }
+
+         //
+         if (parameters != null)
+         {
+            String handlerKey = parameters.get(HANDLER_PARAM);
+            if (handlerKey != null)
+            {
+               WebRequestHandler handler = handlers.get(handlerKey);
+               if (handler != null)
+               {
+                  if (debug)
+                  {
+                     log.debug("Serving request path=" + portalPath + ", parameters=" + parameters + " with handler " + handler);
+                  }
+
+                  //
+                  RequestLifeCycle.begin(ExoContainerContext.getCurrentContainer());
+
+                  //
+                  try
+                  {
+                     handler.execute(new ControllerContext(this, router, req, res, parameters));
+                  }
+                  finally
+                  {
+                     RequestLifeCycle.end();
+                  }
+               }
+               else
+               {
+                  log.error("Invalid handler " + handlerKey + " for request path=" + portalPath + ", parameters=" + parameters);
+                  res.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+               }
+            }
+         }
+         else
+         {
+            log.error("Could not associate the request path=" + portalPath + ", parameters=" + parameters + " with an handler");
+            res.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+         }
       }
-      if (handler != null)
+      else
       {
-         ExoContainer portalContainer = ExoContainerContext.getCurrentContainer();
-         RequestLifeCycle.begin(portalContainer);
-         try
-         {
-            handler.execute(this, req, res);
-         }
-         finally
-         {
-            RequestLifeCycle.end();
-         }
+         log.error("Missing valid router configuration " + configurationPathRef.get());
+         res.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
       }
    }
 }

@@ -91,6 +91,23 @@
       </portlet-info>
    </portlet>
 
+   <portlet>
+    <description xml:lang="EN">Locale URL Portlet</description>
+    <portlet-name>LocaleURLPortlet</portlet-name>
+    <display-name xml:lang="EN">A Portlet example demonstrating locale selection in URL</display-name>
+    <portlet-class>org.gatein.portal.samples.api.LocaleURLPortlet</portlet-class>
+
+    <supports>
+      <mime-type>text/html</mime-type>
+    </supports>
+
+    <portlet-info>
+      <title>Locale URL Portlet</title>
+      <short-title>Locale URL Portlet</short-title>
+      <keywords>Sample</keywords>
+    </portlet-info>
+   </portlet>
+
    <public-render-parameter>
       <identifier>navigation_uri</identifier>
       <qname xmlns:prp='http://www.gatein.org/xml/ns/prp_1_0'>prp:navigation_uri</qname>

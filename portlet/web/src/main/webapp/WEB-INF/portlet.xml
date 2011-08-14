@@ -157,7 +157,7 @@
       </preference>
        <preference>
         <name>template</name>
-        <value>system:/groovy/webui/core/UIBreadcumbs.gtmpl</value>
+        <value>app:/groovy/portal/webui/component/UIBreadcumbsPortlet.gtmpl</value>
         <read-only>false</read-only>
       </preference>
     </portlet-preferences>

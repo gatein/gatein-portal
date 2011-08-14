@@ -22,6 +22,7 @@ package org.exoplatform.web.login;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.web.AbstractFilter;
 import org.exoplatform.web.security.security.CookieTokenService;
+import org.exoplatform.web.controller.router.PercentEncoding;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 import org.gatein.common.text.FastURLEncoder;
@@ -92,14 +93,7 @@ public class RememberMeFilter extends AbstractFilter
 
    private String privateUri(HttpServletRequest req)
    {
-      StringBuilder builder = new StringBuilder();
-      builder.append(req.getContextPath());
-      builder.append("/private");
-      String pathInfo = req.getPathInfo();
-      if (pathInfo != null)
-      {
-         builder.append(pathInfo);
-      }
+      StringBuilder builder = new StringBuilder(req.getRequestURI());
       char sep = '?';
       for (Enumeration<String> e = req.getParameterNames();e.hasMoreElements();)
       {
@@ -113,7 +107,7 @@ public class RememberMeFilter extends AbstractFilter
             builder.append(CONVERTER.encode(parameteValue));
          }
       }
-      return builder.toString();
+      return PercentEncoding.QUERY_PARAM.encode(builder);
    }
 
    private String loginUrl(String context, String initUrl)

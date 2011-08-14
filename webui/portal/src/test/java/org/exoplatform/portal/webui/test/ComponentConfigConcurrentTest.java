@@ -22,18 +22,17 @@
  ******************************************************************************/
 package org.exoplatform.portal.webui.test;
 
+import org.exoplatform.component.test.AbstractGateInTest;
+import org.exoplatform.portal.webui.portal.UIPortal;
+import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.config.Event;
+
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.exoplatform.portal.webui.portal.PageNodeEvent;
-import org.exoplatform.portal.webui.portal.UIPortal;
-import org.exoplatform.webui.config.Event;
-
-import org.exoplatform.component.test.AbstractGateInTest;
 
 /**
  * Unit test for concurrent read of event from UI component configuration.
@@ -102,8 +101,8 @@ public class ComponentConfigConcurrentTest extends AbstractGateInTest
 		{			
 			try
 			{
-				UIPortal uiPortal = mockApplication.createUIComponent(UIPortal.class, null, null, null);
-				eventConfig = uiPortal.getComponentConfig().getUIComponentEventConfig(PageNodeEvent.CHANGE_PAGE_NODE);
+			   	UIPortal uiPortal = mockApplication.createUIComponent(UIPortal.class, null, null, null);
+			   	eventConfig = uiPortal.getComponentConfig().getUIComponentEventConfig("Ping");
 				
 				// log message now if eventConfig is null, so that we know about all failed workers. Test will be failed later.
 				if (eventConfig == null)
@@ -114,7 +113,8 @@ public class ComponentConfigConcurrentTest extends AbstractGateInTest
 			catch (Exception e)
 			{
 				log.error("Exception occured during concurrent test in worker " + getName(), e);				
-			}			
+			} 
+			
 		}		
 		
 	}

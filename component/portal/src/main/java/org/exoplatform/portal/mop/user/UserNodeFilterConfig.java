@@ -22,6 +22,7 @@ package org.exoplatform.portal.mop.user;
 import org.exoplatform.commons.utils.Safe;
 import org.exoplatform.portal.mop.Visibility;
 
+import java.util.Collections;
 import java.util.EnumSet;
 import java.util.Set;
 
@@ -33,10 +34,19 @@ public class UserNodeFilterConfig
 {
 
    /** . */
+   public static final int AUTH_NO_CHECK = 0;
+
+   /** . */
+   public static final int AUTH_READ = 1;
+
+   /** . */
+   public static final int AUTH_READ_WRITE = 2;
+
+   /** . */
    final Set<Visibility> visibility;
 
    /** . */
-   final boolean authorizationCheck;
+   final int authorizationMode;
 
    /** . */
    final boolean temporalCheck;
@@ -50,7 +60,7 @@ public class UserNodeFilterConfig
 
       //
       this.visibility = Safe.unmodifiableSet(builder.withVisibility);
-      this.authorizationCheck = builder.withAuthorizationCheck;
+      this.authorizationMode = builder.withAuthorizationMode;
       this.temporalCheck = builder.withTemporalCheck;
    }
 
@@ -59,9 +69,9 @@ public class UserNodeFilterConfig
       return visibility;
    }
 
-   public boolean getAuthorizationCheck()
+   public int getAuthorizationMode()
    {
-      return authorizationCheck;
+      return authorizationMode;
    }
 
    public boolean getTemporalCheck()
@@ -83,25 +93,25 @@ public class UserNodeFilterConfig
    {
 
       /** . */
-      private Set<Visibility> withVisibility = null;
+      private Set<Visibility> withVisibility;
 
       /** . */
-      private boolean withAuthorizationCheck = false;
+      private int withAuthorizationMode;
 
       /** . */
-      private boolean withTemporalCheck = false;
+      private boolean withTemporalCheck;
 
       private Builder()
       {
          this.withVisibility = null;
-         this.withAuthorizationCheck = false;
+         this.withAuthorizationMode = AUTH_NO_CHECK;
          this.withTemporalCheck = false;
       }
 
       private Builder(UserNodeFilterConfig predicate)
       {
          this.withVisibility = predicate.visibility;
-         this.withAuthorizationCheck = predicate.authorizationCheck;
+         this.withAuthorizationMode = predicate.authorizationMode;
          this.withTemporalCheck = predicate.temporalCheck;
       }
 
@@ -114,6 +124,25 @@ public class UserNodeFilterConfig
       public Builder withVisibility(Visibility first)
       {
          withVisibility = EnumSet.of(first);
+         return this;
+      }
+
+      public Builder withVisibility(Visibility[] all)
+      {
+         if (all.length == 0)
+         {
+            withVisibility = Collections.emptySet();
+         }
+         else if (all.length == 1)
+         {
+            withVisibility = EnumSet.of(all[0]);
+         }
+         else
+         {
+            Visibility[] rest = new Visibility[all.length - 1];
+            System.arraycopy(all, 1, rest, 0, rest.length);
+            withVisibility = EnumSet.of(all[0], rest);
+         }
          return this;
       }
 
@@ -135,15 +164,31 @@ public class UserNodeFilterConfig
          return this;
       }
 
-      public Builder withAuthorizationCheck()
+      public Builder withAuthMode(int withAuthorizationMode)
       {
-         this.withAuthorizationCheck = true;
+         if (withAuthorizationMode < 0 || withAuthorizationMode > 2)
+         {
+            throw new IllegalArgumentException("Wrong authorization mode value");
+         }
+         this.withAuthorizationMode = withAuthorizationMode;
          return this;
       }
 
-      public Builder withoutAuthorizationChek()
+      public Builder withReadWriteCheck()
       {
-         this.withAuthorizationCheck = false;
+         this.withAuthorizationMode = AUTH_READ_WRITE;
+         return this;
+      }
+
+      public Builder withReadCheck()
+      {
+         this.withAuthorizationMode = AUTH_READ;
+         return this;
+      }
+
+      public Builder withNoCheck()
+      {
+         this.withAuthorizationMode = AUTH_NO_CHECK;
          return this;
       }
 

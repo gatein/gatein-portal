@@ -55,6 +55,13 @@
       <portlet>
         <application-ref>web</application-ref>
         <portlet-ref>NavigationPortlet</portlet-ref>
+        <preferences>
+          <preference>
+            <name>useAJAX</name>
+            <value>false</value>
+            <read-only>false</read-only>
+          </preference>
+        </preferences>
       </portlet>
       <access-permissions>Everyone</access-permissions>
 	    <show-info-bar>false</show-info-bar>
@@ -64,6 +71,13 @@
       <portlet>
         <application-ref>web</application-ref>
         <portlet-ref>BreadcumbsPortlet</portlet-ref>
+         <preferences>
+            <preference>
+               <name>useAJAX</name>
+               <value>false</value>
+               <read-only>false</read-only>
+            </preference>
+         </preferences>
       </portlet>
       <access-permissions>Everyone</access-permissions>
 	    <show-info-bar>false</show-info-bar>

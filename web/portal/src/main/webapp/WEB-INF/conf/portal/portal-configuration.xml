@@ -22,8 +22,8 @@
 
 <configuration
    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_1.xsd http://www.exoplaform.org/xml/ns/kernel_1_1.xsd"
-   xmlns="http://www.exoplaform.org/xml/ns/kernel_1_1.xsd">
+   xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd http://www.exoplaform.org/xml/ns/kernel_1_2.xsd"
+   xmlns="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd">
 				  
   <component>
     <key>org.exoplatform.portal.pom.config.POMSessionManager</key>
@@ -114,7 +114,7 @@
   <component>
     <key>org.exoplatform.portal.config.UserPortalConfigService</key>
     <type>org.exoplatform.portal.config.UserPortalConfigService</type>
-    <component-plugins>           
+    <component-plugins>
 	    <component-plugin>
 	      <name>new.portal.config.user.listener</name>
 	      <set-method>initListener</set-method>
@@ -207,10 +207,6 @@
 	            <field  name="predefinedOwner">
 	              <collection type="java.util.HashSet">                
 	                <value><string>root</string></value>
-	                <value><string>john</string></value>
-	                <value><string>mary</string></value>
-	                <value><string>demo</string></value>
-	                <value><string>user</string></value>
 	              </collection>
 	            </field>
 	            <field name="ownerType"><string>user</string></field>
@@ -221,6 +217,16 @@
 	      </init-params>
 	    </component-plugin>
   	</component-plugins>  
+    <init-params>
+      <value-param>
+        <name>create.user.portal</name>
+        <value>${gatein.portal.idm.createuserportal}</value>
+      </value-param>
+      <value-param>
+        <name>destroy.user.portal</name>
+        <value>${gatein.portal.idm.destroyserportal}</value>
+      </value-param>
+    </init-params>
   </component>
   
   <external-component-plugins>

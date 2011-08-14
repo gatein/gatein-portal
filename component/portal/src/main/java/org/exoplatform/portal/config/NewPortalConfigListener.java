@@ -612,15 +612,12 @@ public class NewPortalConfigListener extends BaseComponentPlugin
       //
       if (xml == null)
       {
-         boolean isTemplate = (config.getTemplateName() != null && config.getTemplateName().trim().length() > 0);
-         if (isTemplate)
+         String templateName = config.getTemplateName() != null ? config.getTemplateName() :  fileName;
+         path = "/" + ownerType + "/template/" + templateName + "/" + fileName + ".xml";
+         xml = getDefaultConfig(config.getTemplateLocation(), path);
+         if (xml != null)
          {
-            path = "/" + ownerType + "/template/" + config.getTemplateName() + "/" + fileName + ".xml";
-            xml = getDefaultConfig(config.getTemplateLocation(), path);
-            if (xml != null)
-            {
-               xml = OWNER_PATTERN.matcher(xml).replaceAll(owner);
-            }
+            xml = OWNER_PATTERN.matcher(xml).replaceAll(owner);
          }
       }
 

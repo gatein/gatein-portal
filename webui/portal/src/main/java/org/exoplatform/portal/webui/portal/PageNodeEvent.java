@@ -19,6 +19,7 @@
 
 package org.exoplatform.portal.webui.portal;
 
+import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.event.Event;
 
@@ -26,20 +27,27 @@ import org.exoplatform.webui.event.Event;
  * Jun 5, 2006
  */
 public class PageNodeEvent<T extends UIComponent> extends Event<T>
-{
-
-   final static public String CHANGE_PAGE_NODE = "ChangePageNode";
+{  
+   final static public String CHANGE_NODE = "ChangeNode";
 
    private String targetNodeUri;
+   
+   private SiteKey siteKey;
 
-   public PageNodeEvent(T source, String name, String targetNodeUri)
+   public PageNodeEvent(T source, String name, SiteKey siteKey, String targetNodeUri)
    {
       super(source, name, null);
       this.targetNodeUri = targetNodeUri;
+      this.siteKey = siteKey;
    }
-
+   
    public String getTargetNodeUri()
    {
       return targetNodeUri;
+   }
+
+   public SiteKey getSiteKey()
+   {
+      return siteKey;
    }
 }

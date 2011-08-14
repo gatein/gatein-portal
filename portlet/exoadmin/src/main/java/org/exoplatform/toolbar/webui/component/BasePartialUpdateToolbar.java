@@ -37,6 +37,8 @@ import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.mop.user.UserNodeFilterConfig;
 import org.exoplatform.portal.mop.user.UserPortal;
+import org.exoplatform.web.url.navigation.NodeURL;
+import org.exoplatform.web.url.navigation.NavigationResource;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -170,12 +172,14 @@ public abstract class BasePartialUpdateToolbar extends UIPortletApplication
       
       ResourceURL rsURL = res.createResourceURL();
       rsURL.setResourceID(res.encodeURL(getResourceIdFromNode(node, navId)));
-      json.put("getNodeURL", rsURL.toString());                        
-      
+      json.put("getNodeURL", rsURL.toString());                  
+
       if (node.getPageRef() != null)
       {
-         json.put("actionLink", Util.getPortalRequestContext().getPortalURI() + node.getURI());
-      }   
+         NavigationResource resource = new NavigationResource(node);
+         NodeURL url = Util.getPortalRequestContext().createURL(NodeURL.TYPE, resource);
+         json.put("actionLink", url.setAjax(false).toString());
+      }                
       
       JSONArray childs = new JSONArray();
       for (UserNode child : node.getChildren())

@@ -24,9 +24,10 @@ package org.exoplatform.portal.application.localization;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.portal.Constants;
 import org.exoplatform.portal.application.PortalRequestContext;
-import org.exoplatform.portal.application.PortalStateManager;
 import org.exoplatform.portal.application.UserProfileLifecycle;
-import org.exoplatform.portal.config.UserPortalConfig;
+import org.exoplatform.portal.config.DataStorage;
+import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
@@ -114,7 +115,7 @@ public class LocalizationLifecycle implements ApplicationRequestPhaseLifecycle<W
 
       LocaleContextInfo localeCtx = new LocaleContextInfo();
 
-      Set<Locale> supportedLocales = new HashSet();
+      Set<Locale> supportedLocales = new HashSet<Locale>();
       for (LocaleConfig lc: localeConfigService.getLocalConfigs())
       {
          supportedLocales.add(lc.getLocale());
@@ -128,11 +129,12 @@ public class LocalizationLifecycle implements ApplicationRequestPhaseLifecycle<W
       localeCtx.setUserProfileLocale(getUserProfileLocale(reqCtx));
       localeCtx.setRemoteUser(reqCtx.getRemoteUser());
 
-      UserPortalConfig userPortalConfig = null;
+      DataStorage dataStorage = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
+      PortalConfig pConfig = null;
       try
       {
-         userPortalConfig = PortalStateManager.getUserPortalConfig(reqCtx);
-         if (userPortalConfig == null)
+         pConfig = dataStorage.getPortalConfig(SiteType.PORTAL.getName(), reqCtx.getPortalOwner());
+         if (pConfig == null)
             log.warn("No UserPortalConfig available! Portal locale set to 'en'");
       }
       catch(Exception ignored)
@@ -142,11 +144,13 @@ public class LocalizationLifecycle implements ApplicationRequestPhaseLifecycle<W
       }
 
       String portalLocaleName = "en";
-      if (userPortalConfig != null)
-         portalLocaleName = userPortalConfig.getPortalConfig().getLocale();
+      if (pConfig != null)
+         portalLocaleName = pConfig.getLocale();
 
       Locale portalLocale = LocaleContextInfo.getLocale(portalLocaleName);
       localeCtx.setPortalLocale(portalLocale);
+
+      localeCtx.setRequestLocale(reqCtx.getRequestLocale());
 
       Locale locale = localePolicy.determineLocale(localeCtx);
       boolean supported = supportedLocales.contains(locale);

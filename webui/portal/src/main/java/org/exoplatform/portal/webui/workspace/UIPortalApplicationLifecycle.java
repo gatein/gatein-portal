@@ -51,8 +51,13 @@ public class UIPortalApplicationLifecycle extends Lifecycle<UIPortalApplication>
          return;
       }
       if (uiTarget == uicomponent)
-         super.processDecode(uicomponent, context);
-      uiTarget.processDecode(context);
+      {
+         super.processDecode(uicomponent, context);         
+      }
+      else
+      {
+         uiTarget.processDecode(context);
+      }
    }
 
    /**

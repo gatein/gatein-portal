@@ -26,13 +26,15 @@ import java.util.List;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.application.PortalRequestContext;
+import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.NoSuchDataException;
 import org.exoplatform.portal.config.UserACL;
-import org.exoplatform.portal.config.UserPortalConfig;
 import org.exoplatform.portal.config.UserPortalConfigService;
+import org.exoplatform.portal.config.UserPortalConfig;
 import org.exoplatform.portal.config.model.ModelObject;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.webui.application.UIPortlet;
 import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.portal.webui.portal.UIPortal;
@@ -68,6 +70,10 @@ import org.exoplatform.webui.organization.UIListPermissionSelector;
 import org.exoplatform.webui.organization.UIListPermissionSelector.EmptyIteratorValidator;
 import org.exoplatform.webui.organization.UIPermissionSelector;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 @ComponentConfigs({
    @ComponentConfig(lifecycle = UIFormLifecycle.class, template = "system:/groovy/webui/form/UIFormTabPane.gtmpl", events = {
       @EventConfig(listeners = UIPageForm.SaveActionListener.class),
@@ -99,8 +105,9 @@ public class UIPageForm extends UIFormTabPane
       super("UIPageForm");
       PortalRequestContext pcontext = Util.getPortalRequestContext();
       UserPortalConfigService configService = getApplicationComponent(UserPortalConfigService.class);
+      DataStorage dataStorage = getApplicationComponent(DataStorage.class);
       List<SelectItemOption<String>> ownerTypes = new ArrayList<SelectItemOption<String>>();
-      ownerTypes.add(new SelectItemOption<String>(PortalConfig.USER_TYPE));
+      ownerTypes.add(new SelectItemOption<String>(SiteType.USER.getName()));
 
       ownerIdInput = new UIFormStringInput(OWNER_ID, OWNER_ID, null);
       ownerIdInput.setEditable(false).setValue(pcontext.getRemoteUser());
@@ -156,7 +163,7 @@ public class UIPageForm extends UIFormTabPane
       }
       if(portalsItem.size() > 0)
       {
-         ownerTypes.add(new SelectItemOption<String>(PortalConfig.PORTAL_TYPE));
+         ownerTypes.add(new SelectItemOption<String>(SiteType.PORTAL.getName()));
          portalIdSelectBox = new UIFormSelectBox(OWNER_ID, OWNER_ID, portalsItem);
          portalIdSelectBox.setOnChange("ChangeOwnerId");
          portalIdSelectBox.setParent(uiSettingSet);
@@ -166,7 +173,7 @@ public class UIPageForm extends UIFormTabPane
       if (groups.size() > 0)
       {
          Collections.sort(groups);
-         ownerTypes.add(new SelectItemOption<String>(PortalConfig.GROUP_TYPE));
+         ownerTypes.add(new SelectItemOption<String>(SiteType.GROUP.getName()));
          List<SelectItemOption<String>> groupsItem = new ArrayList<SelectItemOption<String>>();
          for (String group : groups)
          {
@@ -190,7 +197,7 @@ public class UIPageForm extends UIFormTabPane
    {
       uiPage_ = uiPage;
       Page page = (Page)PortalDataMapper.buildModelObject(uiPage);
-      if (uiPage.getOwnerType().equals(PortalConfig.USER_TYPE))
+      if (uiPage.getSiteKey().getType().equals(SiteType.USER))
       {
          removeChildById("PermissionSetting");
       }
@@ -204,7 +211,7 @@ public class UIPageForm extends UIFormTabPane
       getUIStringInput("pageId").setValue(uiPage.getPageId());
       getUIStringInput("title").setValue(uiPage.getTitle());
       getUIFormCheckBoxInput("showMaxWindow").setValue(uiPage.isShowMaxWindow());
-      getUIFormSelectBox(OWNER_TYPE).setEnable(false).setValue(uiPage.getOwnerType());
+      getUIFormSelectBox(OWNER_TYPE).setEnable(false).setValue(uiPage.getSiteKey().getTypeName());
       removeChild(UIPageTemplateOptions.class);
 
       UIFormInputItemSelector uiTemplate = getChild(UIFormInputItemSelector.class);
@@ -224,7 +231,7 @@ public class UIPageForm extends UIFormTabPane
       String ownerId = getUIStringInput("ownerId").getValue();
 
       //As ownerId is now normalized, we have to maker sure that owenerId of 'group' type starts with a '/'
-      if (PortalConfig.GROUP_TYPE.equals(ownerType) && ownerId.charAt(0) != '/')
+      if (SiteType.GROUP.getName().equals(ownerType) && ownerId.charAt(0) != '/')
       {
          ownerId = "/" + ownerId;
       }
@@ -243,7 +250,7 @@ public class UIPageForm extends UIFormTabPane
       {
          page.setShowMaxWindow((Boolean)getUIFormCheckBoxInput("showMaxWindow").getValue());
       }
-      if (!PortalConfig.USER_TYPE.equals(page.getOwnerType()))
+      if (!SiteType.USER.getName().equals(page.getOwnerType()))
       {
          page.setAccessPermissions(uiPermissionSetting.getChild(UIListPermissionSelector.class).getValue());
          page.setEditPermission(uiPermissionSetting.getChild(UIPermissionSelector.class).getValue());
@@ -290,7 +297,7 @@ public class UIPageForm extends UIFormTabPane
          Page page = new Page();
          page.setPageId(uiPage.getPageId());
          uiPageForm.invokeSetBindingBean(page);
-         page.setOwnerType(uiPage.getOwnerType());
+         page.setOwnerType(uiPage.getSiteKey().getTypeName());
          List<UIPortlet> uiPortlets = new ArrayList<UIPortlet>();
          findAllPortlet(uiPortlets, uiPage);
          ArrayList<ModelObject> applications = new ArrayList<ModelObject>();
@@ -320,7 +327,7 @@ public class UIPageForm extends UIFormTabPane
             pcontext.getJavascriptManager().addJavascript("eXo.portal.UIPortal.changeComposerSaveButton();");
          } catch(NoSuchDataException de){
             uiPortalApp.addMessage(new ApplicationMessage("UIPageForm.msg.notExistOrDeleted", null, ApplicationMessage.ERROR));
-            UIPortalComposer uiPortalComposer = (UIPortalComposer)uiPortalApp.findComponentById("UIPageEditor");
+            UIPortalComposer uiPortalComposer = (UIPortalComposer)uiPortalApp.findComponentById(UIPortalComposer.UIPAGE_EDITOR);
             if(uiPortalComposer != null){
                Event aboutEvent = new Event<UIPortalComposer>(uiPortalComposer, "Abort", event.getRequestContext());
                uiPortalComposer.broadcast(aboutEvent, event.getExecutionPhase());
@@ -356,7 +363,7 @@ public class UIPageForm extends UIFormTabPane
          UIFormInputSet uiSettingSet = uiForm.getChildById("PageSetting");
          uiForm.setSelectedTab("PageSetting");
          List<UIComponent> list = uiSettingSet.getChildren();
-         if (PortalConfig.USER_TYPE.equals(ownerType))
+         if (SiteType.USER.getName().equals(ownerType))
          {
             uiForm.removeChildById("PermissionSetting");
             list.remove(2);
@@ -370,7 +377,7 @@ public class UIPageForm extends UIFormTabPane
                uiForm.addUIComponentInput(uiForm.uiPermissionSetting);
 
             }
-            if (PortalConfig.PORTAL_TYPE.equals(ownerType))
+            if (SiteType.PORTAL.getName().equals(ownerType))
             {
                list.remove(2);
                list.add(2, uiForm.portalIdSelectBox);

@@ -353,10 +353,9 @@ public class PortletApplication extends WebuiApplication
       }
       else
       {
-         context = new PortletRequestContext(this, w, req, res);
+         context = new PortletRequestContext(parentAppRequestContext, this, w, req, res);
          parentAppRequestContext.setAttribute(attributeName, context);
       }
-      context.setParentAppRequestContext(parentAppRequestContext);
       return context;
    }
 }

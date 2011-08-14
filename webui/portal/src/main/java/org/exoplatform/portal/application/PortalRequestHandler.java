@@ -19,20 +19,24 @@
 
 package org.exoplatform.portal.application;
 
+import org.exoplatform.commons.utils.I18N;
 import org.exoplatform.commons.utils.Safe;
 import org.exoplatform.portal.config.StaleModelException;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
+import org.exoplatform.web.ControllerContext;
 import org.exoplatform.web.WebAppController;
 import org.exoplatform.web.WebRequestHandler;
 import org.exoplatform.web.application.ApplicationLifecycle;
 import org.exoplatform.web.application.ApplicationRequestPhaseLifecycle;
 import org.exoplatform.web.application.Phase;
 import org.exoplatform.web.application.RequestFailure;
+import org.exoplatform.web.controller.QualifiedName;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIApplication;
 
 import java.util.List;
+import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -49,11 +53,21 @@ public class PortalRequestHandler extends WebRequestHandler
 
    protected static Log log = ExoLogger.getLogger("portal:PortalRequestHandler");
 
-   private String[] PATHS = {"/public", "/private"};
+   /** . */
+   public static final QualifiedName REQUEST_PATH = QualifiedName.create("gtn", "path");
 
-   public String[] getPath()
+   /** . */
+   public static final QualifiedName REQUEST_SITE_TYPE = QualifiedName.create("gtn", "sitetype");
+
+   /** . */
+   public static final QualifiedName REQUEST_SITE_NAME = QualifiedName.create("gtn", "sitename");
+
+   /** . */
+   public static final QualifiedName LANG = QualifiedName.create("gtn", "lang");
+
+   public String getHandlerName()
    {
-      return PATHS;
+      return "portal";
    }
 
    /**
@@ -80,30 +94,69 @@ public class PortalRequestHandler extends WebRequestHandler
     * 
     */
    @SuppressWarnings("unchecked")
-   public void execute(WebAppController controller, HttpServletRequest req, HttpServletResponse res) throws Exception
+   @Override
+   public void execute(ControllerContext controllerContext) throws Exception
    {
+      HttpServletRequest req = controllerContext.getRequest();
+      HttpServletResponse res = controllerContext.getResponse();
+
+
       log.debug("Session ID = " + req.getSession().getId());
       res.setHeader("Cache-Control", "no-cache");
 
-      PortalApplication app = controller.getApplication(PortalApplication.PORTAL_APPLICATION_ID);
-      PortalRequestContext context = new PortalRequestContext(app, req, res);
-      if (context.getPortalOwner().length() == 0) {
+      //
+      String requestPath = controllerContext.getParameter(REQUEST_PATH);
+      String requestSiteType = controllerContext.getParameter(REQUEST_SITE_TYPE);
+      String requestSiteName = controllerContext.getParameter(REQUEST_SITE_NAME);
+
+      //
+      Locale requestLocale;
+      String lang = controllerContext.getParameter(LANG);
+      if (lang == null || lang.length() == 0)
+      {
+         requestLocale = null;
+      }
+      else
+      {
+         requestLocale = I18N.parseTagIdentifier(lang);
+      }
+
+      if (requestSiteName == null) {
          res.sendRedirect(req.getContextPath());
          return;
       }
+
+      PortalApplication app = controllerContext.getController().getApplication(PortalApplication.PORTAL_APPLICATION_ID);
+      PortalRequestContext context = new PortalRequestContext(app, controllerContext, requestSiteType, requestSiteName, requestPath, requestLocale);
+      if (context.getUserPortalConfig() == null)
+      {
+         context.sendError(HttpServletResponse.SC_NOT_FOUND);
+      }
+      else
+      {
+         processRequest(context, app);
+      }
+   }
+
+   @SuppressWarnings("unchecked")
+   protected void processRequest(PortalRequestContext context, PortalApplication app) throws Exception
+   {
       WebuiRequestContext.setCurrentInstance(context);
+      UIApplication uiApp = app.getStateManager().restoreUIRootComponent(context);
+      
       List<ApplicationLifecycle> lifecycles = app.getApplicationLifecycle();
       try
       {
          for (ApplicationLifecycle lifecycle : lifecycles)
             lifecycle.onStartRequest(app, context);
-         UIApplication uiApp = app.getStateManager().restoreUIRootComponent(context);
          if (context.getUIApplication() != uiApp)
             context.setUIApplication(uiApp);
-
+         
          if (uiApp != null)
+         {
             uiApp.processDecode(context);
-
+         }
+         
          if (!context.isResponseComplete() && !context.getProcessRender())
          {
             startRequestPhaseLifecycle(app, context, lifecycles, Phase.ACTION);

@@ -23,7 +23,9 @@ import org.chromattic.api.annotations.MappedBy;
 import org.chromattic.api.annotations.MixinType;
 import org.chromattic.api.annotations.OneToOne;
 import org.chromattic.api.annotations.Owner;
-import org.gatein.common.util.ConversionException;
+import org.exoplatform.commons.utils.I18N;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -44,6 +46,8 @@ import java.util.Map;
 @MixinType(name = "gtn:i18nized")
 public abstract class I18Nized
 {
+   /** . */
+   private static final Logger log = LoggerFactory.getLogger(I18Nized.class);
 
    private static Locale parent(Locale locale)
    {
@@ -62,14 +66,14 @@ public abstract class I18Nized
    }
 
    @Create
-   public abstract LanguageSpace createLanguageSpace();
+   protected abstract LanguageSpace createLanguageSpace();
    
    @OneToOne
    @Owner
    @MappedBy("gtn:languages")
-   public abstract LanguageSpace getLanguageSpace();
+   protected abstract LanguageSpace getLanguageSpace();
    
-   public abstract void setLanguageSpace(LanguageSpace languageSpace);
+   protected abstract void setLanguageSpace(LanguageSpace languageSpace);
 
    public <M> Resolution<M> resolveMixin(Class<M> mixinType, Locale wantedLocale)
    {
@@ -107,15 +111,15 @@ public abstract class I18Nized
             M mixin = entry.getValue().getMixin(mixinType, false);
             if (mixin != null)
             {
+               String lang = entry.getKey();
                try
                {
-                  Locale locale = I18NAdapter.parseLocale(entry.getKey());
+                  Locale locale = I18N.parseTagIdentifier(lang);
                   mixins.put(locale, mixin);
                }
-               catch (ConversionException e)
+               catch (IllegalArgumentException e)
                {
-                  // Handle me gracefully
-                  e.printStackTrace();
+                  log.debug("Skipping locale " + lang + " from retrieved locales for mixin " + mixinType.getName());
                }
             }
          }
@@ -123,7 +127,7 @@ public abstract class I18Nized
       return mixins;
    }
    
-   public <M> M getMixin(Class<M> mixinType, Locale locale, boolean createMixin) throws NullPointerException
+   public <M> M getMixin(Class<M> mixinType, Locale locale, boolean createMixin) throws NullPointerException, IllegalArgumentException
    {
       if (mixinType == null)
       {
@@ -133,6 +137,14 @@ public abstract class I18Nized
       {
          throw new NullPointerException("No null locale accepted");
       }
+      if (locale.getLanguage().length() == 0)
+      {
+         throw new IllegalArgumentException("No language set on locale");
+      }
+      if (locale.getVariant().length() > 0)
+      {
+         throw new IllegalArgumentException("No variant cab be set on locale");
+      }
       LanguageSpace languageSpace = getLanguageSpace();
       if (languageSpace == null && createMixin)
       {
@@ -141,7 +153,7 @@ public abstract class I18Nized
       }
       if (languageSpace != null)
       {
-         return languageSpace.getLanguage(mixinType, I18NAdapter.toString(locale), createMixin);
+         return languageSpace.getLanguage(mixinType, I18N.toTagIdentifier(locale), createMixin);
       }
       else
       {
@@ -163,20 +175,19 @@ public abstract class I18Nized
          {
             if (language.removeMixin(mixinType))
             {
+               String lang = language.getName();
                try
                {
-                  String lang = language.getName();
-                  Locale locale = I18NAdapter.parseLocale(lang);
+                  Locale locale = I18N.parseTagIdentifier(lang);
                   if (locales.isEmpty())
                   {
                      locales = new ArrayList<Locale>();
                   }
                   locales.add(locale);
                }
-               catch (ConversionException e)
+               catch (IllegalArgumentException e)
                {
-                  // Handle me gracefully
-                  e.printStackTrace();
+                  log.debug("Skipping locale " + lang + " from removed locales for mixin " + mixinType.getName());
                }
             }
          }

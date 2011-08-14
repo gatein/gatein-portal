@@ -22,8 +22,9 @@ package org.exoplatform.portal.application;
 import org.exoplatform.web.application.Parameter;
 import org.exoplatform.web.application.URLBuilder;
 import org.exoplatform.webui.core.UIComponent;
+import org.exoplatform.webui.url.ComponentURL;
 
-import java.net.URLEncoder;
+import java.util.Map;
 
 /**
  * Created by The eXo Platform SAS
@@ -32,53 +33,67 @@ import java.net.URLEncoder;
 public class PortalURLBuilder extends URLBuilder<UIComponent>
 {
 
-   public PortalURLBuilder(String baseURL)
+   /** . */
+   private final ComponentURL url;
+
+   public PortalURLBuilder(PortalRequestContext ctx, ComponentURL url)
    {
-      super(baseURL);
+      String path = ctx.getNodePath();
+      url.setPath(path);
+
+      //
+      this.url = url;
    }
 
-   @SuppressWarnings("unused")
-   public String createURL(String action, Parameter[] params)
+   @Override
+   public String createAjaxURL(UIComponent targetComponent, String action, String confirm, String targetBeanId, Parameter[] params)
    {
-      return null;
+      return createURL(true, targetComponent, action, confirm, targetBeanId, params);
    }
 
-   @SuppressWarnings("unused")
-   public String createURL(String action, String objectId, Parameter[] params)
+   @Override
+   public String createURL(UIComponent targetComponent, String action, String confirm, String targetBeanId, Parameter[] params)
    {
-      return null;
+      return createURL(false, targetComponent, action, confirm, targetBeanId, params);
    }
 
-   protected void createURL(StringBuilder builder, UIComponent targetComponent, String action, String targetBeanId,
-      Parameter[] params)
+   private String createURL(boolean ajax, UIComponent targetComponent, String action, String confirm, String targetBeanId, Parameter[] params)
    {
-      builder.append(getBaseURL()).append("?").append(PortalRequestContext.UI_COMPONENT_ID).append('=').append(
-         targetComponent.getId());
-      if (action != null && action.trim().length() > 0)
+      Map<String,String[]> queryParameters = url.getQueryParameters();
+      if (queryParameters != null)
       {
-         builder.append("&amp;").append(PortalRequestContext.UI_COMPONENT_ACTION).append('=').append(action);
+         queryParameters.clear();
       }
 
-      if (targetBeanId != null && targetBeanId.trim().length() > 0)
-      {
-         builder.append("&amp;").append(UIComponent.OBJECTID).append('=').append(targetBeanId);
-      }
+      //
+      url.setAjax(ajax);
+      url.setConfirm(confirm);
+      url.setResource(targetComponent);
 
-      if (params == null || params.length < 1)
-         return;
-      for (Parameter param : params)
+      //
+      url.setAction(action);
+      url.setTargetBeanId(targetBeanId);
+
+      //
+      if (params != null)
       {
-         try
+         for (Parameter param : params)
          {
-            param.setValue(URLEncoder.encode(param.getValue(), "utf-8"));
+            url.setQueryParameterValue(param.getName(), param.getValue());
          }
-         catch (Exception e)
-         {
-            System.err.println(e.toString());
-         }
-         builder.append("&amp;").append(param.getName()).append('=').append(param.getValue());
       }
 
-   }
+      //
+      if (removeLocale)
+      {
+         url.setLocale(null);
+      }
+      else if (locale != null)
+      {
+         url.setLocale(locale);
+      }
 
+      //
+      return url.toString();
+   }
 }

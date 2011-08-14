@@ -55,6 +55,12 @@ public class DefaultLocalePolicyService implements LocalePolicy, Startable
     */
    public Locale determineLocale(LocaleContextInfo context)
    {
+      if (context.getRequestLocale() != null)
+      {
+         return context.getRequestLocale();
+      }
+
+      //
       Locale locale = null;
       if (context.getRemoteUser() == null)
          locale = getLocaleConfigForAnonymous(context);

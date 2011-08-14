@@ -23,6 +23,7 @@ import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.download.DownloadResource;
 import org.exoplatform.download.DownloadService;
+import org.exoplatform.web.ControllerContext;
 import org.exoplatform.web.WebAppController;
 import org.exoplatform.web.WebRequestHandler;
 
@@ -42,10 +43,15 @@ import javax.servlet.http.HttpServletResponse;
 public class DownloadHandler extends WebRequestHandler
 {
 
-   @Override
-   public String[] getPath()
+   public String getHandlerName()
    {
-      return new String[]{"/download"};
+      return "download";
+   }
+
+   @Override
+   public void execute(ControllerContext context) throws Exception
+   {
+      execute(context.getController(), context.getRequest(), context.getResponse());
    }
 
    public void execute(WebAppController controller, HttpServletRequest req, HttpServletResponse res) throws Exception

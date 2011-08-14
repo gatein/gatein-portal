@@ -28,7 +28,6 @@ import org.exoplatform.web.security.security.CookieTokenService;
 import org.gatein.wci.security.WCIController;
 
 import java.io.IOException;
-import java.util.Enumeration;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -74,7 +73,7 @@ public class ErrorLoginServlet extends AbstractHttpServlet
       resp.setContentType("text/html; charset=UTF-8");
       
       // This allows the customer to define another login page without changing the portal
-      wciController.showLoginForm(req, resp);
+      wciController.showErrorLoginForm(req, resp);
    }
 
    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException

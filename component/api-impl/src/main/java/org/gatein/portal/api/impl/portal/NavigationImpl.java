@@ -27,6 +27,7 @@ import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.mop.Described;
+import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.description.DescriptionService;
 import org.exoplatform.portal.mop.navigation.NavigationService;
 import org.exoplatform.portal.mop.navigation.NodeContext;
@@ -35,6 +36,8 @@ import org.exoplatform.portal.mop.navigation.NodeState;
 import org.exoplatform.portal.mop.navigation.Scope;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.resources.ResourceBundleManager;
+import org.exoplatform.web.url.navigation.NavigationResource;
+import org.exoplatform.web.url.navigation.NodeURL;
 import org.gatein.api.GateIn;
 import org.gatein.api.id.Id;
 import org.gatein.api.id.Identifiable;
@@ -43,7 +46,6 @@ import org.gatein.api.portal.Page;
 import org.gatein.api.portal.Site;
 import org.gatein.api.util.IterableIdentifiableCollection;
 import org.gatein.common.NotYetImplemented;
-import org.gatein.common.net.URLTools;
 import org.gatein.common.text.EntityEncoder;
 import org.gatein.common.util.EmptyResourceBundle;
 import org.gatein.portal.api.impl.GateInImpl;
@@ -115,9 +117,14 @@ public class NavigationImpl implements Navigation, Identifiable<Navigation>
          try
          {
             PortalRequestContext requestContext = Util.getPortalRequestContext();
-            String host = URLTools.getServerAddressFrom(requestContext.getRequest());
-            String portalURI = host + requestContext.getPortalURI();
-            uri = new URI(portalURI + buildURI().toString());
+            SiteType siteType = SiteType.valueOf(site.getComponents()[0].toUpperCase());
+            String siteName = site.getComponents()[1];
+
+            NavigationResource navResource = new NavigationResource(siteType, siteName, buildURI().toString());            
+            NodeURL nodeURL = requestContext.createURL(NodeURL.TYPE, navResource);
+            nodeURL.setSchemeUse(true);
+
+            uri = new URI(nodeURL.toString());
          }
          catch (URISyntaxException e)
          {
