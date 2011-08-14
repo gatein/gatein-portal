@@ -170,8 +170,12 @@ public abstract class BasePartialUpdateToolbar extends UIPortletApplication
       
       ResourceURL rsURL = res.createResourceURL();
       rsURL.setResourceID(res.encodeURL(getResourceIdFromNode(node, navId)));
-      json.put("getNodeURL", rsURL.toString());                  
-      json.put("actionLink", Util.getPortalRequestContext().getPortalURI() + node.getURI());
+      json.put("getNodeURL", rsURL.toString());                        
+      
+      if (node.getPageRef() != null)
+      {
+         json.put("actionLink", Util.getPortalRequestContext().getPortalURI() + node.getURI());
+      }   
       
       JSONArray childs = new JSONArray();
       for (UserNode child : node.getChildren())
