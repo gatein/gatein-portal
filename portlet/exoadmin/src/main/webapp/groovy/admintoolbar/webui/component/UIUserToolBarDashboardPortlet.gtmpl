@@ -43,10 +43,10 @@
 		String	href = Util.getPortalRequestContext().getPortalURI() + node.getURI();
 		String icon = node.getIcon();
 		if(icon == null) icon = "DefaultPageIcon";
-		def resolvedLabel = node.getLabel();
+		def resolvedLabel = node.getResolvedLabel();
 		if ("Tab_Default".equals(node.getName()))
 		{
-				resolvedLabel = _ctx.appRes("UIUserToolBarDashboard.page." + node.getLabel());
+				resolvedLabel = _ctx.appRes("UIUserToolBarDashboard.page." + resolvedLabel);
 		}
 	
 		boolean toolong = (resolvedLabel.length() > 60);

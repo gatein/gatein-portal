@@ -27,10 +27,10 @@
 						<%
 									int 	i = 	0;
 									for(UserNode node : nodes){
-									   def tabLabel = node.getLabel();
+									    def tabLabel = node.getResolvedLabel();
 										if ("Tab_Default".equals(node.getName()))
 										{
-											tabLabel = _ctx.appRes("UIUserToolBarDashboard.page." + node.getLabel());
+											tabLabel = _ctx.appRes("UIUserToolBarDashboard.page." + tabLabel);
 										}
 										EntityEncoder encoder = EntityEncoder.FULL;
 										tabLabel = encoder.encode(tabLabel);
