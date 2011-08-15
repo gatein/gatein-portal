@@ -187,7 +187,7 @@ public class MopImportResource implements OperationHandler
       }
 
       // Perform import
-      Map<SiteKey, MopImport> completedImportMap = new HashMap<SiteKey, MopImport>();
+      Map<SiteKey, MopImport> importsRan = new HashMap<SiteKey, MopImport>();
       try
       {
          log.info("Performing import using strategy '" + strategy.getName() + "'");
@@ -195,13 +195,13 @@ public class MopImportResource implements OperationHandler
          {
             SiteKey siteKey = mopImportEntry.getKey();
             MopImport mopImport = mopImportEntry.getValue();
-            MopImport completed = new MopImport();
+            MopImport ran = new MopImport();
 
-            if (completedImportMap.containsKey(siteKey))
+            if (importsRan.containsKey(siteKey))
             {
                throw new IllegalStateException("Multiple site imports for same operation.");
             }
-            completedImportMap.put(siteKey, completed);
+            importsRan.put(siteKey, ran);
 
             log.debug("Importing data for site " + siteKey);
 
@@ -209,24 +209,24 @@ public class MopImportResource implements OperationHandler
             if (mopImport.siteTask != null)
             {
                log.debug("Importing site layout data.");
+               ran.siteTask = mopImport.siteTask;
                mopImport.siteTask.importData(strategy);
-               completed.siteTask = mopImport.siteTask;
             }
 
             // Page import
             if (mopImport.pageTask != null)
             {
                log.debug("Importing page data.");
+               ran.pageTask = mopImport.pageTask;
                mopImport.pageTask.importData(strategy);
-               completed.pageTask = mopImport.pageTask;
             }
 
             // Navigation import
             if (mopImport.navigationTask != null)
             {
                log.debug("Importing navigation data.");
+               ran.navigationTask = mopImport.navigationTask;
                mopImport.navigationTask.importData(strategy);
-               completed.navigationTask = mopImport.navigationTask;
             }
          }
          log.info("Import successful !");
@@ -236,7 +236,7 @@ public class MopImportResource implements OperationHandler
          boolean rollbackSuccess = true;
          log.error("Exception importing data.", t);
          log.info("Attempting to rollback data modified by import.");
-         for (Map.Entry<SiteKey, MopImport> mopImportEntry : completedImportMap.entrySet())
+         for (Map.Entry<SiteKey, MopImport> mopImportEntry : importsRan.entrySet())
          {
             SiteKey siteKey = mopImportEntry.getKey();
             MopImport mopImport = mopImportEntry.getValue();
@@ -292,7 +292,7 @@ public class MopImportResource implements OperationHandler
       finally
       {
          importMap.clear();
-         completedImportMap.clear();
+         importsRan.clear();
       }
    }
 
