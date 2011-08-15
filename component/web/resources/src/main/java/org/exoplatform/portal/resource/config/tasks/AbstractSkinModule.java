@@ -33,6 +33,7 @@ public abstract class AbstractSkinModule
    protected String skinName;
    protected String cssPath;
    protected boolean overwrite;
+   protected String cssPriority;
 
    public AbstractSkinModule(String name)
    {
@@ -70,6 +71,16 @@ public abstract class AbstractSkinModule
       setOverwrite("true".equals(overwrite));
    }
    
+   protected void bindingCSSPriority(Element element)
+   {
+      NodeList nodes = element.getElementsByTagName(SkinConfigParser.CSS_PRIORITY_TAG);
+      if (nodes == null || nodes.getLength() < 1)
+      {
+         return;
+      }
+      this.cssPriority = nodes.item(0).getFirstChild().getNodeValue();
+   }
+   
    public void setSkinName(String name)
    {
       this.skinName = name;
@@ -84,5 +95,10 @@ public abstract class AbstractSkinModule
    public void setOverwrite(boolean _overwrite)
    {
       this.overwrite = _overwrite;
+   }
+   
+   public void setCSSPriority(String _cssPriority)
+   {
+      this.cssPriority = _cssPriority;
    }
 }

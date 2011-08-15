@@ -62,6 +62,8 @@ import java.io.Writer;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -388,9 +390,6 @@ public class UIPortalApplication extends UIApplication
     */
    public Set<Skin> getPortletSkins()
    {
-      // Set to avoid repetition
-      Set<Skin> skins = new HashSet<Skin>();
-
       // Determine portlets visible on the page
       List<UIPortlet> uiportlets = new ArrayList<UIPortlet>();
       UIWorkingWorkspace uiWorkingWS = getChildById(UI_WORKING_WS_ID);
@@ -405,7 +404,8 @@ public class UIPortalApplication extends UIApplication
       // Get portal portlets to filter since they are already in the portal
       // skins
       Set<SkinConfig> portletConfigs = getPortalPortletSkins();
-
+      List<SkinConfig> portletSkins = new ArrayList<SkinConfig>();
+      
       //
       for (UIPortlet uiPortlet : uiportlets)
       {
@@ -416,12 +416,28 @@ public class UIPortalApplication extends UIApplication
          }
          if (skinConfig != null && !portletConfigs.contains(skinConfig))
          {
-            skins.add(skinConfig);
+        	 portletSkins.add(skinConfig);
          }
       }
 
+      //Sort skins by priority
+      Collections.sort(portletSkins, new Comparator<SkinConfig>()
+      {
+         public int compare(SkinConfig o1, SkinConfig o2)
+         {
+            if (o1.getCSSPriority() == o2.getCSSPriority())
+               return 1;//Can indicate others condition here
+            else if (o1.getCSSPriority() < 0)
+               return 1;
+            else if (o2.getCSSPriority() < 0)
+               return -1;
+            else
+               return o1.getCSSPriority() - o2.getCSSPriority();
+         }
+      });
+      
       //
-      return skins;
+      return (new HashSet<Skin>(portletSkins));
    }
 
    private SkinConfig getDefaultPortletSkinConfig(UIPortlet portlet)

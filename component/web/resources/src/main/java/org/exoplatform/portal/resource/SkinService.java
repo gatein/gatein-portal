@@ -51,6 +51,7 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.EnumMap;
 import java.util.HashMap;
@@ -186,7 +187,7 @@ public class SkinService implements Startable
 
    /**
     * add category into portletThemes_ if portletThemes does not contain one
-    * @param categoryName: category's name that want to add into portletThemes
+    * @param categoryName: category's name that wangt to add into portletThemes
     */
    public void addCategoryTheme(String categoryName)
    {
@@ -274,6 +275,99 @@ public class SkinService implements Startable
       rtCache.remove(cssPath);
    }
 
+   /**
+    * Register the stylesheet for a portal Skin. Do not replace any previous skin. Support priority
+    * 
+    * @param module
+    *           skin module identifier
+    * @param skinName
+    *           skin name
+    * @param cssPath
+    *           path uri to the css file. This is relative to the root context,
+    *           use leading '/'
+    * @param scontext
+    *           the webapp's {@link javax.servlet.ServletContext}
+    * @param cssPriority          
+    *           priority to support sorting in skin list
+    */
+   public void addPortalSkin(String module, String skinName, String cssPath, ServletContext scontext, Integer cssPriority)
+   {
+      addPortalSkin(module, skinName, cssPath, scontext, false, cssPriority);
+   }
+   
+   /**
+    * Register the stylesheet for a portal Skin. Support priority
+    * 
+    * @param module
+    *           skin module identifier
+    * @param skinName
+    *           skin name
+    * @param cssPath
+    *           path uri to the css file. This is relative to the root context,
+    *           use leading '/'
+    * @param scontext
+    *           the webapp's {@link javax.servlet.ServletContext}
+    * @param overwrite
+    *           if any previous skin should be replaced by that one
+    * @param cssPriority          
+    *           priority to support sorting in skin list
+    */
+   public void addPortalSkin(String module, String skinName, String cssPath, ServletContext scontext, boolean overwrite, Integer cssPrioriry)
+   {
+      availableSkins_.add(skinName);
+      SkinKey key = new SkinKey(module, skinName);
+      SkinConfig skinConfig = portalSkins_.get(key);
+      if (skinConfig == null || overwrite)
+      {
+         skinConfig = new SimpleSkin(this, module, skinName, cssPath, cssPrioriry);
+         portalSkins_.put(key, skinConfig);
+         
+         if (log.isDebugEnabled())
+         {
+            log.debug("Adding Portal skin : Bind " + key + " to " + skinConfig);
+         }
+      }
+   }
+   
+   /**
+    * Register the stylesheet for a portal Skin. Support priority
+    * 
+    * @param module
+    *           skin module identifier
+    * @param skinName
+    *           skin name
+    * @param cssPath
+    *           path uri to the css file. This is relative to the root context,
+    *           use leading '/'
+    * @param cssData
+    *           the content of css
+    * @param cssPriority          
+    *           priority to support sorting in skin list
+    */
+   public void addPortalSkin(String module, String skinName, String cssPath, String cssData, Integer cssPriority)
+   {
+      SkinKey key = new SkinKey(module, skinName);
+      SkinConfig skinConfig = portalSkins_.get(key);
+      if (skinConfig == null)
+      {
+         portalSkins_.put(key, new SimpleSkin(this, module, skinName, cssPath, cssPriority));
+
+         if (log.isDebugEnabled())
+         {
+            log.debug("Adding Portal skin : Bind " + key + " to " + skinConfig);
+         }
+      }
+      try
+      {
+         StringWriter output = new StringWriter();
+         compressor.compress(new StringReader(cssData), output, ResourceType.STYLESHEET);
+         cssData = output.toString();
+      }
+      catch (Exception e)
+      {
+         log.debug("Error when compressing CSS, will use normal CSS instead", e);
+      }
+   }
    
    /**
     * 
@@ -341,6 +435,36 @@ public class SkinService implements Startable
       if (skinConfig == null || overwrite)
       {
          skinConfig = new SimpleSkin(this, module, skinName, cssPath);
+         skinConfigs_.put(key, skinConfig);
+      }
+   }
+   
+   /**
+    * 
+    * Register the Skin for available portal Skins. Support priority
+    * 
+    * @param module
+    *           skin module identifier
+    * @param skinName
+    *           skin name
+    * @param cssPath
+    *           path uri to the css file. This is relative to the root context,
+    *           use leading '/'
+    * @param scontext
+    *           the webapp's {@link javax.servlet.ServletContext}
+    * @param overwrite
+    *           if any previous skin should be replaced by that one
+    * @param cssPriority
+    *           priority to support sorting in skin list
+    */
+   public void addSkin(String module, String skinName, String cssPath, ServletContext scontext, boolean overwrite, Integer cssPriority)
+   {
+      availableSkins_.add(skinName);
+      SkinKey key = new SkinKey(module, skinName);
+      SkinConfig skinConfig = skinConfigs_.get(key);
+      if (skinConfig == null || overwrite)
+      {
+         skinConfig = new SimpleSkin(this, module, skinName, cssPath, cssPriority);
          skinConfigs_.put(key, skinConfig);
       }
    }
@@ -504,12 +628,26 @@ public class SkinService implements Startable
    public Collection<SkinConfig> getPortalSkins(String skinName)
    {
       Set<SkinKey> keys = portalSkins_.keySet();
-      Collection<SkinConfig> portalSkins = new ArrayList<SkinConfig>();
+      List<SkinConfig> portalSkins = new ArrayList<SkinConfig>();
       for (SkinKey key : keys)
       {
          if (key.getName().equals(skinName))
             portalSkins.add(portalSkins_.get(key));
       }
+      Collections.sort(portalSkins, new Comparator<SkinConfig>()
+      {
+         public int compare(SkinConfig o1, SkinConfig o2)
+         {
+            if (o1.getCSSPriority() == o2.getCSSPriority())
+               return 1;//Can indicate others condition here
+            else if (o1.getCSSPriority() < 0)
+               return 1;
+            else if (o2.getCSSPriority() < 0)
+               return -1;
+            else
+               return o1.getCSSPriority() - o2.getCSSPriority();
+         }
+      });
       return portalSkins;
    }
 

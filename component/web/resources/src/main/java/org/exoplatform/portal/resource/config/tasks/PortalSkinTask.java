@@ -65,6 +65,7 @@ public class PortalSkinTask extends AbstractSkinModule implements SkinConfigTask
       bindingSkinName(elemt);
       bindingModuleName(elemt);
       bindingOverwrite(elemt);
+      bindingCSSPriority(elemt);
    }
 
    public void execute(SkinService skinService, ServletContext scontext)
@@ -75,7 +76,14 @@ public class PortalSkinTask extends AbstractSkinModule implements SkinConfigTask
       }
       String contextPath = scontext.getContextPath();
       String fullCSSPath = contextPath + cssPath;
-      skinService.addPortalSkin(moduleName, skinName, fullCSSPath, scontext, overwrite);
+      Integer iCssPriority = null;
+      try
+      {
+    	  iCssPriority = Integer.valueOf(cssPriority);
+      } catch (Exception e) {
+    	  //Don't set cssPriority when it is not a numarical
+      }
+      skinService.addPortalSkin(moduleName, skinName, fullCSSPath, scontext, overwrite, iCssPriority);
       updateSkinDependentManager(contextPath, moduleName, skinName);
    }
 

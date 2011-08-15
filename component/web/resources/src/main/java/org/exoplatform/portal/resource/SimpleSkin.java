@@ -39,6 +39,8 @@ class SimpleSkin implements SkinConfig
    private final String cssPath_;
 
    private final String id_;
+   
+   private final int cssPriority_;
 
    public SimpleSkin(SkinService service, String module, String name, String cssPath)
    {
@@ -47,8 +49,24 @@ class SimpleSkin implements SkinConfig
       name_ = name;
       cssPath_ = cssPath;
       id_ = module.replace('/', '_');
+      cssPriority_ = -1;
    }
 
+   public SimpleSkin(SkinService service, String module, String name, String cssPath, Integer cssPriority)
+   {
+      service_ = service;
+      module_ = module;
+      name_ = name;
+      cssPath_ = cssPath;
+      id_ = module.replace('/', '_');
+      cssPriority_ = cssPriority != null ? cssPriority : -1;
+   }
+   
+   public int getCSSPriority()
+   {
+      return cssPriority_;
+   }
+   
    public String getId()
    {
       return id_;
