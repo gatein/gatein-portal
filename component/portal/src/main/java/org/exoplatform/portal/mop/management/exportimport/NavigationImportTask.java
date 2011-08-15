@@ -174,7 +174,7 @@ public class NavigationImportTask extends AbstractImportTask<PageNavigation>
       void rollback() throws Exception;
    }
 
-   private class RollbackChangeListener implements NodeChangeListener<NodeContext<NodeContext<?>>>
+   private static class RollbackChangeListener implements NodeChangeListener<NodeContext<NodeContext<?>>>
    {
       private List<RollbackTask> tasks = new ArrayList<RollbackTask>();
       private boolean errors;
