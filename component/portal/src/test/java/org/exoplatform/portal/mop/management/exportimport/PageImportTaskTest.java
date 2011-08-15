@@ -220,7 +220,7 @@ public class PageImportTaskTest extends TestCase
       assertNullOrEmpty(task.getRollbackDeletes());
       Assert.assertNotNull(task.getRollbackSaves());
       Assert.assertEquals(3, task.getRollbackSaves().getPages().size());
-      Assert.assertEquals(existing.getPages(), task.getRollbackSaves().getPages());
+      comparePages(existing.getPages(), task.getRollbackSaves().getPages());
    }
 
    public void testMerge_NewPages() throws Exception
@@ -283,8 +283,8 @@ public class PageImportTaskTest extends TestCase
 
       Assert.assertNotNull(task.getRollbackSaves());
       Assert.assertEquals(2, task.getRollbackSaves().getPages().size());
-      Assert.assertEquals(existing.getPages().get(0), task.getRollbackSaves().getPages().get(0));
-      Assert.assertEquals(existing.getPages().get(2), task.getRollbackSaves().getPages().get(1));
+      comparePage(existing.getPages().get(0), task.getRollbackSaves().getPages().get(0));
+      comparePage(existing.getPages().get(2), task.getRollbackSaves().getPages().get(1));
    }
 
    public void testOverwrite_NoPages() throws Exception
@@ -347,7 +347,7 @@ public class PageImportTaskTest extends TestCase
       assertNullOrEmpty(task.getRollbackDeletes());
       Assert.assertNotNull(task.getRollbackSaves());
       Assert.assertEquals(3, task.getRollbackSaves().getPages().size());
-      Assert.assertEquals(existing.getPages(), task.getRollbackSaves().getPages());
+      comparePages(existing.getPages(), task.getRollbackSaves().getPages());
    }
 
    public void testOverwrite_NewPages() throws Exception
@@ -384,7 +384,7 @@ public class PageImportTaskTest extends TestCase
       Assert.assertEquals(importing.getPages(), task.getRollbackDeletes().getPages());
 
       Assert.assertNotNull(task.getRollbackSaves());
-      Assert.assertEquals(existing.getPages(), task.getRollbackSaves().getPages());
+      comparePages(existing.getPages(), task.getRollbackSaves().getPages());
    }
 
    public void testOverwrite_NewAndSamePages() throws Exception
@@ -423,7 +423,7 @@ public class PageImportTaskTest extends TestCase
       Assert.assertEquals(importing.getPages().get(3), task.getRollbackDeletes().getPages().get(1));
 
       Assert.assertNotNull(task.getRollbackSaves());
-      Assert.assertEquals(existing.getPages(), task.getRollbackSaves().getPages());
+      comparePages(existing.getPages(), task.getRollbackSaves().getPages());
    }
 
    private void assertNullOrEmpty(Page.PageSet pages)
@@ -432,6 +432,27 @@ public class PageImportTaskTest extends TestCase
       {
          Assert.assertTrue(pages.getPages().isEmpty());
       }
+   }
+
+   private void comparePages(ArrayList<Page> expected, ArrayList<Page> actual)
+   {
+      if (expected == null)
+      {
+         assertNull(actual);
+         return;
+      }
+
+      assertEquals(expected.size(), actual.size());
+
+      for (int i=0; i<expected.size(); i++)
+      {
+         comparePage(expected.get(i), actual.get(i));
+      }
+   }
+
+   private void comparePage(Page expected, Page actual)
+   {
+      assertEquals(expected.getName(), actual.getName());
    }
 
    private Query<Page> query(String ownerType, String ownerId)

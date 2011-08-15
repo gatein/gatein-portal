@@ -25,9 +25,7 @@ package org.exoplatform.portal.mop.management.exportimport;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteKey;
-import org.exoplatform.portal.pom.data.ModelDataStorage;
-import org.exoplatform.portal.pom.data.PortalData;
-import org.exoplatform.portal.pom.data.PortalKey;
+import org.exoplatform.portal.mop.management.operations.page.PageUtils;
 
 /**
  * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
@@ -72,7 +70,7 @@ public class SiteLayoutImportTask extends AbstractImportTask<PortalConfig>
             }
             else
             {
-               rollbackSave = dst;
+               rollbackSave = PageUtils.copy(dst);
             }
             dst = data;
             break;

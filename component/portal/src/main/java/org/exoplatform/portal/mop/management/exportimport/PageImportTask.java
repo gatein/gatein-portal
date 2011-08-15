@@ -27,6 +27,7 @@ import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.Query;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.mop.SiteKey;
+import org.exoplatform.portal.mop.management.operations.page.PageUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -109,7 +110,7 @@ public class PageImportTask extends AbstractImportTask<Page.PageSet>
                   }
                   else
                   {
-                     rollbackSaves.getPages().add(found);
+                     rollbackSaves.getPages().add(PageUtils.copy(found));
                   }
                }
             }
@@ -129,9 +130,10 @@ public class PageImportTask extends AbstractImportTask<Page.PageSet>
                rollbackDeletes.setPages(new ArrayList<Page>());
                for (Page page : existingPages)
                {
+                  Page copy = PageUtils.copy(page);
                   dataStorage.remove(page);
                   dataStorage.save();
-                  rollbackSaves.getPages().add(page);
+                  rollbackSaves.getPages().add(copy);
                }
                for (Page src : data.getPages())
                {
