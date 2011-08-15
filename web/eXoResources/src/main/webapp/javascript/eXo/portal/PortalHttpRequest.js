@@ -724,17 +724,28 @@ function ajaxAbort() {
 } ;
 
 /**
- * Create a ajax request
+ * Create a ajax GET request
  * @param {String} url - Url
  * @param {boolean} async - asynchronous or none
  * @return {String} response text if request is not async
  */
 function ajaxAsyncGetRequest(url, async) {
+	ajaxAsyncRequest("GET", url, async);
+}
+
+/**
+ * Create a ajax request
+ * @param {String} method - GET, POST, etc
+ * @param {String} url - Url
+ * @param {boolean} async - asynchronous or none
+ * @return {String} response text if request is not async
+ */
+function ajaxAsyncRequest(url, async, method, queryString) {
 	if(async == undefined) async = true ;
 	var request =  eXo.core.Browser.createHttpRequest() ;
-  request.open('GET', url, async) ;
+  request.open(method, url, async) ;
   request.setRequestHeader("Cache-Control", "max-age=86400") ;
-  request.send(null) ;
+  request.send((queryString != undefined && queryString != null) ? queryString : null) ;
   eXo.session.itvDestroy() ;
   if(eXo.session.canKeepState && eXo.session.isOpen && eXo.env.portal.accessMode == 'private') {
     eXo.session.itvInit() ;
