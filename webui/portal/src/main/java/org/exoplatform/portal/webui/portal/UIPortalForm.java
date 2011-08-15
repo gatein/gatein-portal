@@ -55,6 +55,7 @@ import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormInputItemSelector;
 import org.exoplatform.webui.form.UIFormInputSet;
 import org.exoplatform.webui.form.UIFormSelectBox;
@@ -80,7 +81,8 @@ import java.util.ResourceBundle;
 @ComponentConfigs({
    @ComponentConfig(lifecycle = UIFormLifecycle.class, template = "system:/groovy/webui/form/UIFormTabPane.gtmpl", events = {
       @EventConfig(listeners = UIPortalForm.SaveActionListener.class),
-      @EventConfig(listeners = UIMaskWorkspace.CloseActionListener.class, phase = Phase.DECODE)}),
+      @EventConfig(listeners = UIMaskWorkspace.CloseActionListener.class, phase = Phase.DECODE),
+      @EventConfig(listeners = UIPortalForm.CheckShowActionListener.class)}),
    @ComponentConfig(id = "CreatePortal", lifecycle = UIFormLifecycle.class, template = "system:/groovy/webui/form/UIFormTabPane.gtmpl", initParams = @ParamConfig(name = "PortalTemplateConfigOption", value = "system:/WEB-INF/conf/uiconf/portal/webui/portal/PortalTemplateConfigOption.groovy"), events = {
       @EventConfig(name = "Save", listeners = UIPortalForm.CreateActionListener.class),
       @EventConfig(listeners = UIPortalForm.SelectItemOptionActionListener.class, phase = Phase.DECODE),
@@ -96,6 +98,8 @@ public class UIPortalForm extends UIFormTabPane
    private static final String FIELD_LOCALE = "locale";
 
    private static final String FIELD_SESSION_ALIVE = "sessionAlive";
+   
+   private static final String FIELD_SHOW_INFOBAR = "showInfobar";
    
    private static final String FIELD_LABEL = "label";
    
@@ -268,6 +272,11 @@ public class UIPortalForm extends UIFormTabPane
          new UIFormSelectBox(FIELD_SESSION_ALIVE, FIELD_SESSION_ALIVE, listSessionAlive);
       uiSessionAliveBox.setValue(PortalProperties.SESSION_ON_DEMAND);
       uiPropertiesSet.addUIFormInput(uiSessionAliveBox);
+      
+      //TODO add more box for showPortletMode and showWindowState if needed
+      UIFormCheckBoxInput<Boolean> uiShowInfobarBox = new UIFormCheckBoxInput<Boolean>(FIELD_SHOW_INFOBAR, FIELD_SHOW_INFOBAR, true);
+      uiShowInfobarBox.setOnChange("CheckShowInfobar");
+      uiPropertiesSet.addChild(uiShowInfobarBox);
       addUIFormInput(uiPropertiesSet);
 
       UIFormInputSet uiPermissionSetting = createUIComponent(UIFormInputSet.class, "PermissionSetting", null);
@@ -416,6 +425,21 @@ public class UIPortalForm extends UIFormTabPane
       }
    }
 
+   static public class CheckShowActionListener extends EventListener<UIPortalForm>
+   {
+     public void execute(Event<UIPortalForm> event) throws Exception
+     {
+        UIPortalForm uiForm = event.getSource();
+        UIFormInputSet InfoForm = uiForm.getChildById("Properties");
+        UIFormCheckBoxInput<Boolean> showInfobarForm = InfoForm.getUIFormCheckBoxInput(UIPortalForm.FIELD_SHOW_INFOBAR);
+        
+        //TODO: When we need to implement for showPortletMode or showWindowState
+        // we can change how to get/set value for showInfobarForm (as well as of PortalConfig) 
+        showInfobarForm.setValue(showInfobarForm.isChecked());
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiForm);
+     }
+   }
+   
    private String capitalizeFirstLetter(String word)
    {
       if (word == null)

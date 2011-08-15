@@ -46,7 +46,7 @@ public class Application<S> extends ModelObject
 
    private String description;
 
-   private boolean showInfoBar = true;
+   private boolean showInfoBar;
 
    private boolean showApplicationState = true;
 

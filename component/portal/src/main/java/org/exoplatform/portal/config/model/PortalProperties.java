@@ -35,4 +35,6 @@ public class PortalProperties
    final public static String SESSION_NEVER = "never";
 
    final public static String GADGET_SERVER = "gadgetServer";
+   
+   final public static String SHOW_PORTLET_INFO = "showPortletInfo";
 }
