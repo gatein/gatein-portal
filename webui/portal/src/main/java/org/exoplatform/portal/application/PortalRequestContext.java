@@ -297,7 +297,10 @@ public class PortalRequestContext extends WebuiRequestContext
          {
             userPortalConfig =
                service_.getUserPortalConfig(portalName, remoteUser, PortalRequestContext.USER_PORTAL_CONTEXT);
-            session.setAttribute(LAST_PORTAL_NAME, portalName);
+            if (userPortalConfig != null)
+            {
+               session.setAttribute(LAST_PORTAL_NAME, portalName);
+            }
          }
          catch (Exception e)
          {
