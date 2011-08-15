@@ -26,9 +26,11 @@ import org.exoplatform.application.gadget.Gadget;
 import org.exoplatform.application.gadget.GadgetRegistryService;
 import org.exoplatform.application.gadget.Source;
 import org.exoplatform.application.gadget.SourceStorage;
+import org.exoplatform.commons.serialization.api.annotations.Serialized;
+import org.exoplatform.portal.gadget.core.ShindigClientEndpoint;
+import org.exoplatform.portal.webui.application.GadgetUtil;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
-import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.webui.config.InitParams;
 import org.exoplatform.webui.config.Param;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -37,20 +39,18 @@ import org.exoplatform.webui.config.annotation.ParamConfig;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
+import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.exception.MessageException;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormInput;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
 import org.exoplatform.webui.form.validator.ExpressionValidator;
-import org.exoplatform.webui.form.validator.IdentifierValidator;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
 import org.exoplatform.webui.form.validator.ResourceValidator;
 import org.exoplatform.webui.form.validator.StringLengthValidator;
 import org.exoplatform.webui.form.validator.Validator;
-
 import java.io.Serializable;
 import java.util.Calendar;
 
@@ -214,6 +214,13 @@ public class UIGadgetEditor extends UIForm
          source.setLastModified(Calendar.getInstance());
 
          sourceStorage.saveSource(gadget, source);
+
+         //Send request to invalidate the cache on Shindig
+         String requestData = "{\"context\":{\"ignoreCache\":\"true\"},\"gadgets\":[" + "{\"url\":\"" + GadgetUtil.reproduceUrl(gadget.getUrl(), gadget.isLocal()) + "\"}]}";
+         String gadgetServerURL = GadgetUtil.getGadgetServerUrl();
+         String gadgetShindigURL = gadgetServerURL + (gadgetServerURL.endsWith("/")?"" : "/") + "metadata";
+         ShindigClientEndpoint endPoint = uiForm.getApplicationComponent(ShindigClientEndpoint.class);
+         endPoint.sendRequest(requestData, gadgetShindigURL);
 
          uiManagement.removeChild(UIGadgetEditor.class);
          // This will update the source and also update the gadget related

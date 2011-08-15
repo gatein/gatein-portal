@@ -39,6 +39,10 @@
       </values-param>
     </init-params>
   </component>
+
+  <component>
+    <type>org.exoplatform.portal.gadget.core.ShindigClientEndpoint</type>
+  </component>
 		
   <external-component-plugins>
     <target-component>org.exoplatform.commons.chromattic.ChromatticManager</target-component>
