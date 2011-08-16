@@ -1,16 +1,16 @@
 /**
  * Copyright (C) 2009 eXo Platform SAS.
- *
+ * 
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation; either version 2.1 of
  * the License, or (at your option) any later version.
- *
+ * 
  * This software is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU Lesser General Public
  * License along with this software; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
@@ -21,7 +21,6 @@ package org.exoplatform.portal.pc;
 
 import org.exoplatform.commons.utils.PropertyManager;
 import org.exoplatform.commons.utils.Safe;
-import org.gatein.api.GateIn;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 import org.gatein.pc.portlet.impl.deployment.PortletApplicationDeployer;
@@ -46,9 +45,6 @@ public class ExoPortletApplicationDeployer extends PortletApplicationDeployer
 
    /** . */
    private final Logger log = LoggerFactory.getLogger(ExoPortletApplicationDeployer.class);
-
-   /** . */
-   private GateIn gateIn;
 
    @Override
    protected PortletApplication10MetaData buildPortletApplicationMetaData(WebApp webApp)
@@ -85,7 +81,6 @@ public class ExoPortletApplicationDeployer extends PortletApplicationDeployer
             log.warn("The global portlet metadata is not configured");
          }
 
-         webApp.getServletContext().setAttribute(GateIn.GATEIN_API, gateIn);
       }
       return md;
    }
@@ -110,10 +105,5 @@ public class ExoPortletApplicationDeployer extends PortletApplicationDeployer
       {
          Safe.close(in);
       }
-   }
-
-   public void setAPIInstance(GateIn gateIn)
-   {
-      this.gateIn = gateIn;
    }
 }

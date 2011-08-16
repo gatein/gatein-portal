@@ -22,7 +22,6 @@ package org.exoplatform.portal.pc;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.services.resources.ResourceBundleService;
-import org.gatein.api.GateIn;
 import org.gatein.pc.api.PortletInvoker;
 import org.gatein.pc.bridge.BridgeInterceptor;
 import org.gatein.pc.federation.FederatingPortletInvoker;
@@ -67,7 +66,7 @@ public class ExoKernelIntegration implements Startable
     * We enforce the dependency with the ResourceBundleService since it must be stared before the
     * <code>portletApplicationRegistry</code>
     *
-    * @param context               the exo container context
+    * @param context the exo container context
     * @param resourceBundleService the resource bundle service that is here for the sake of creating a dependency
     */
    public ExoKernelIntegration(ExoContainerContext context, ResourceBundleService resourceBundleService)
@@ -84,15 +83,13 @@ public class ExoKernelIntegration implements Startable
       // The portlet application deployer
       portletApplicationRegistry = new ExoPortletApplicationDeployer();
       portletApplicationRegistry.setContainerPortletInvoker(containerPortletInvoker);
-      GateIn gateIn = (GateIn)container.getComponentInstanceOfType(GateIn.class);
-      ((ExoPortletApplicationDeployer)portletApplicationRegistry).setAPIInstance(gateIn);
 
       //Container Stack
       ContainerPortletDispatcher portletContainerDispatcher = new ContainerPortletDispatcher();
-
+      
       // Federating portlet invoker
       FederatingPortletInvoker federatingPortletInvoker = new FederatingPortletInvokerService();
-
+      
       EventPayloadInterceptor eventPayloadInterceptor = new EventPayloadInterceptor();
       eventPayloadInterceptor.setNext(portletContainerDispatcher);
       RequestAttributeConversationInterceptor requestAttributeConversationInterceptor =

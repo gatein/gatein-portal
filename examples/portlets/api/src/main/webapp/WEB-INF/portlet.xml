@@ -26,70 +26,63 @@
              xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd">
  -->
 
-<portlet-app xmlns="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd"
-             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-             xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd"
-             version="1.0">
+ <portlet-app xmlns="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd" version="1.0">
 
    <portlet>
-      <description xml:lang="EN">Public Render Parameter API Portlet</description>
-      <portlet-name>PRPAPIPortlet</portlet-name>
-      <display-name xml:lang="EN">Public Render Parameter API Portlet</display-name>
-      <portlet-class>org.gatein.portal.samples.api.PRPPortlet</portlet-class>
+    <description xml:lang="EN">Public Render Parameter API Portlet</description>
+    <portlet-name>PRPAPIPortlet</portlet-name>
+    <display-name xml:lang="EN">Public Render Parameter API Portlet</display-name>
+    <portlet-class>org.gatein.portal.samples.api.PRPPortlet</portlet-class>
 
-      <supports>
-         <mime-type>text/html</mime-type>
-      </supports>
+    <supports>
+      <mime-type>text/html</mime-type>
+    </supports>
 
-      <portlet-info>
-         <title>PRP Portlet</title>
-         <short-title>PRP Portlet</short-title>
-         <keywords>Sample</keywords>
-      </portlet-info>
+    <portlet-info>
+      <title>PRP Portlet</title>
+      <short-title>PRP Portlet</short-title>
+      <keywords>Sample</keywords>
+    </portlet-info>
 
-      <supported-public-render-parameter>navigation_uri</supported-public-render-parameter>
-      <supported-public-render-parameter>page_name</supported-public-render-parameter>
-      <supported-public-render-parameter>site_type</supported-public-render-parameter>
-      <supported-public-render-parameter>site_name</supported-public-render-parameter>
-      <supported-public-render-parameter>window_width</supported-public-render-parameter>
-      <supported-public-render-parameter>window_height</supported-public-render-parameter>
-      <supported-public-render-parameter>window_show_info_bar</supported-public-render-parameter>
+     <supported-public-render-parameter>navigation_uri</supported-public-render-parameter>
+     <supported-public-render-parameter>page_name</supported-public-render-parameter>
+     <supported-public-render-parameter>site_type</supported-public-render-parameter>
+     <supported-public-render-parameter>site_name</supported-public-render-parameter>
+     <supported-public-render-parameter>window_width</supported-public-render-parameter>
+     <supported-public-render-parameter>window_height</supported-public-render-parameter>
+     <supported-public-render-parameter>window_show_info_bar</supported-public-render-parameter>
 
-   </portlet>
+  </portlet>
 
-   <portlet>
-      <description xml:lang="EN">Navigation Portlet Example using GateIn's public API</description>
-      <portlet-name>NavigationAPIPortlet</portlet-name>
-      <display-name xml:lang="EN">API Navigation Portlet</display-name>
-      <portlet-class>org.gatein.portal.samples.api.NavigationPortlet</portlet-class>
-
-      <supports>
-         <mime-type>text/html</mime-type>
-      </supports>
-
-      <portlet-info>
-         <title>API Navigation Portlet</title>
-         <short-title>Navigation Portlet</short-title>
-         <keywords>Sample</keywords>
-      </portlet-info>
-   </portlet>
-
-   <portlet>
-      <description xml:lang="EN">Content Registry Portlet Example using GateIn's public API</description>
-      <portlet-name>ContentRegistryAPIPortlet</portlet-name>
-      <display-name xml:lang="EN">API Content Registry Portlet</display-name>
-      <portlet-class>org.gatein.portal.samples.api.ContentRegistryPortlet</portlet-class>
-
-      <supports>
-         <mime-type>text/html</mime-type>
-      </supports>
-
-      <portlet-info>
-         <title>API Content Registry Portlet</title>
-         <short-title>Content Registry Portlet</short-title>
-         <keywords>Sample</keywords>
-      </portlet-info>
-   </portlet>
+  <public-render-parameter>
+     <identifier>navigation_uri</identifier>
+     <qname xmlns:prp='http://www.gatein.org/xml/ns/prp_1_0'>prp:navigation_uri</qname>
+  </public-render-parameter>
+  <public-render-parameter>
+     <identifier>page_name</identifier>
+     <qname xmlns:prp='http://www.gatein.org/xml/ns/prp_1_0'>prp:page_name</qname>
+  </public-render-parameter>
+  <public-render-parameter>
+     <identifier>site_type</identifier>
+     <qname xmlns:prp='http://www.gatein.org/xml/ns/prp_1_0'>prp:site_type</qname>
+  </public-render-parameter>
+  <public-render-parameter>
+     <identifier>site_name</identifier>
+     <qname xmlns:prp='http://www.gatein.org/xml/ns/prp_1_0'>prp:site_name</qname>
+  </public-render-parameter>
+  <public-render-parameter>
+     <identifier>window_width</identifier>
+     <qname xmlns:prp='http://www.gatein.org/xml/ns/prp_1_0'>prp:window_width</qname>
+  </public-render-parameter>
+  <public-render-parameter>
+     <identifier>window_height</identifier>
+     <qname xmlns:prp='http://www.gatein.org/xml/ns/prp_1_0'>prp:window_height</qname>
+  </public-render-parameter>
+  <public-render-parameter>
+     <identifier>window_show_info_bar</identifier>
+     <qname xmlns:prp='http://www.gatein.org/xml/ns/prp_1_0'>prp:window_show_info_bar</qname>
+  </public-render-parameter>
 
    <portlet>
     <description xml:lang="EN">Locale URL Portlet</description>

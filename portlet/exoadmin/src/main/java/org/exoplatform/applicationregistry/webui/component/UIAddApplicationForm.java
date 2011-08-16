@@ -185,17 +185,41 @@ public class UIAddApplicationForm extends UIForm
    {
       ExoContainer manager = ExoContainerContext.getCurrentContainer();
 
-      ApplicationRegistryService appRegistry =
-         (ApplicationRegistryService)manager.getComponentInstance(ApplicationRegistryService.class);
-
       FederatingPortletInvoker portletInvoker =
          (FederatingPortletInvoker)manager.getComponentInstance(FederatingPortletInvoker.class);
       Set<Portlet> portlets = remote ? portletInvoker.getRemotePortlets() : portletInvoker.getLocalPortlets();
-
       List<Application> applications = new ArrayList<Application>(portlets.size());
       for (Portlet portlet : portlets)
       {
-         applications.add(appRegistry.createApplicationFrom(portlet));
+         PortletInfo info = portlet.getInfo();
+
+         LocalizedString descriptionLS = info.getMeta().getMetaValue(MetaInfo.DESCRIPTION);
+         LocalizedString displayNameLS = info.getMeta().getMetaValue(MetaInfo.DISPLAY_NAME);
+
+         String portletName = info.getName();
+         Application app = new Application();
+         app.setApplicationName(portletName);
+         //         app.setApplicationGroup(info.getApplicationName());
+         ApplicationType appType;
+         String contentId;
+         String displayName = Util.getLocalizedStringValue(displayNameLS, portletName);
+         if (remote)
+         {
+            appType = ApplicationType.WSRP_PORTLET;
+            contentId = portlet.getContext().getId();
+            displayName += ApplicationRegistryService.REMOTE_DISPLAY_NAME_SUFFIX;  // add remote to display name to make it more obvious that the portlet is remote
+         }
+         else
+         {
+            appType = ApplicationType.PORTLET;
+            contentId = info.getApplicationName() + "/" + info.getName();
+         }
+         app.setType(appType);
+         app.setDisplayName(displayName);
+         app.setDescription(Util.getLocalizedStringValue(descriptionLS, portletName));
+         app.setAccessPermissions(new ArrayList<String>());
+         app.setContentId(contentId);
+         applications.add(app);
       }
 
       return applications;
