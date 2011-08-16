@@ -259,6 +259,11 @@ public class UserDAOImpl implements UserHandler
 
       }
 
+      if (getIntegrationCache() != null)
+      {
+         getIntegrationCache().invalidateAll();
+      }
+
       if (broadcast)
       {
          postDelete(exoUser);
