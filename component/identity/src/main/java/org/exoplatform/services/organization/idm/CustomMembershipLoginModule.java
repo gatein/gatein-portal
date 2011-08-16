@@ -146,21 +146,24 @@ public class CustomMembershipLoginModule extends AbstractLoginModule
     */
    private void addUserToPlatformUsers(String userId) throws Exception
    {
+      OrganizationService orgService = (OrganizationService)getContainer().getComponentInstanceOfType(OrganizationService.class);
       try
       {
-         OrganizationService orgService = (OrganizationService)getContainer().getComponentInstanceOfType(OrganizationService.class);
          begin(orgService);
          User user = orgService.getUserHandler().findUserByName(userId);
          MembershipType memberType = orgService.getMembershipTypeHandler().findMembershipType(membershipType);
          Group platformUsersGroup = orgService.getGroupHandler().findGroupById(groupId);
          orgService.getMembershipHandler().linkMembership(user, platformUsersGroup, memberType, true);
-         end(orgService);
       }
       catch (Exception e)
       {
          log.error("Failed to add user " + userId + " to group " + groupId + ".", e);
          // don't rethrow login exception in case of failure.
          // throw e;
+      }
+      finally
+      {
+         end(orgService);
       }
    }
    private void begin(OrganizationService orgService) throws Exception
