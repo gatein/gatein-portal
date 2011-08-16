@@ -33,6 +33,11 @@
   </component>
 
   <component>
+     <key>org.exoplatform.services.jdbc.DataSourceProvider</key>
+     <type>org.exoplatform.services.jdbc.impl.DataSourceProviderImpl</type>
+  </component>
+
+  <component>
      <key>org.exoplatform.services.document.DocumentReaderService</key>
      <type>org.exoplatform.services.document.impl.DocumentReaderServiceImpl</type>
      <component-plugins>

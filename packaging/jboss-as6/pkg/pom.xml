@@ -827,6 +827,11 @@
         <artifactId>closure-compiler</artifactId>
         <version>r706</version>
       </dependency>
+      <dependency>
+         <groupId>eu.medsea.mimeutil</groupId>
+         <artifactId>mime-util</artifactId>
+         <version>2.1.3</version>
+      </dependency>
 
       <dependency>
          <?context LIB?>
