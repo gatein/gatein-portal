@@ -28,6 +28,7 @@ import org.exoplatform.application.registry.impl.ApplicationRegistryChromatticLi
 import org.exoplatform.commons.chromattic.ChromatticLifeCycle;
 import org.exoplatform.commons.chromattic.ChromatticManager;
 import org.exoplatform.commons.utils.PropertyManager;
+import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.container.xml.PropertiesParam;
 import org.exoplatform.container.xml.ValueParam;
@@ -235,6 +236,34 @@ public class GadgetRegistryServiceImpl implements GadgetRegistryService
       //
       registry.removeGadget(name);
    }
+   
+   public String getGadgetURL(String gadgetName)
+   {
+      String url;
+      GadgetData data = this.getRegistry().getGadget(gadgetName).getData();
+      if (data instanceof LocalGadgetData)
+      {
+         LocalGadgetData localData = (LocalGadgetData) data;
+         url = "/" + PortalContainer.getCurrentRestContextName() + "/" + getJCRGadgetURL(localData);
+      }
+      else if (data instanceof RemoteGadgetData)
+      {
+         RemoteGadgetData remoteData = (RemoteGadgetData)data;
+         url = remoteData.getURL();
+      }
+      else
+      {
+         throw new IllegalStateException("Gadget has to be instance of LocalGadgetData or RemoteGadgetData");
+      }
+      
+      return url;
+   }
+   
+   private String getJCRGadgetURL(LocalGadgetData data)
+   {
+      return "jcr/" + chromatticLifeCycle.getRepositoryName() + "/" + chromatticLifeCycle.getWorkspaceName()
+            + data.getPath() + "/app:resources/" + data.getFileName();
+   }
 
    private void saveGadget(GadgetDefinition def, Gadget gadget)
    {
@@ -253,10 +282,7 @@ public class GadgetRegistryServiceImpl implements GadgetRegistryService
       if (data instanceof LocalGadgetData)
       {
          LocalGadgetData localData = (LocalGadgetData)data;
-         url =
-            "jcr/" + chromatticLifeCycle.getRepositoryName() + "/" +
-            chromatticLifeCycle.getWorkspaceName() + "/production/app:gadgets/app:" + def.getName() +
-            "/app:data/app:resources/" + localData.getFileName();
+         url = getJCRGadgetURL(localData);
       }
       else
       {
@@ -308,7 +334,7 @@ public class GadgetRegistryServiceImpl implements GadgetRegistryService
 
       /** . */
       private final GadgetImporter importer;
-
+      
       private DeployTask(GadgetImporter importer)
       {
          this.importer = importer;

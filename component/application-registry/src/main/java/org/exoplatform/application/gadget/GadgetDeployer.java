@@ -132,7 +132,8 @@ public class GadgetDeployer implements WebAppListener, Startable
                importer = new ServletLocalImporter(
                   gadgetName,
                   path,
-                  scontext);
+                  scontext,
+                  gadgetRegistryService);
             }
             else
             {

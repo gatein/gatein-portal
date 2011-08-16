@@ -19,6 +19,8 @@
 
 package org.exoplatform.application.gadget;
 
+import org.exoplatform.application.gadget.impl.GadgetDefinition;
+
 import java.util.Comparator;
 import java.util.List;
 
@@ -100,4 +102,17 @@ public interface GadgetRegistryService
    public String getModuleId();
 
    public String getHostName();
+   
+   /**
+    * Get the URL of gadget from gadget definition. There are 2 kind of gadget:
+    * <p>
+    * <ul>
+    * <li>Local gadget: Gadget definition and resource are stored in JCR workspace. This gadget content can be also accessed by WebDAV
+    * <li>Remote gadget: An absolute link to gadget definition
+    * </ul>
+    * 
+    * @param gadgetName
+    * @return link to local gadget definition stored in JCR or URL to remote gadget
+    */
+   public String getGadgetURL(String gadgetName);
 }

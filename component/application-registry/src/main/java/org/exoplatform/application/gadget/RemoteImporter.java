@@ -46,9 +46,9 @@ public class RemoteImporter extends GadgetImporter
    }
 
    @Override
-   protected String getGadgetURL(String gadgetURI) throws Exception
+   protected String getGadgetURL() throws Exception
    {
-      return "http://www.gatein.org";
+      return getGadgetURI();
    }
 
    @Override

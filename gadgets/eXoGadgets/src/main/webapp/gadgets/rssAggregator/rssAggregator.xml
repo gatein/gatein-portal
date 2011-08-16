@@ -23,7 +23,7 @@
 <Module>
 <ModulePrefs title="RSS Reader" title_url="http://www.exoplatform.com" directory_title="RSS Reader" 
 	description="RSS Reader"
-	thumbnail="/eXoGadgets/skin/DefaultSkin/portletIcons/rssAggregator.png">
+	thumbnail="images/rssAggregator.png">
 <Require feature="dynamic-height" />
 <Require feature="setprefs"/>
 <Require feature="settitle"/>

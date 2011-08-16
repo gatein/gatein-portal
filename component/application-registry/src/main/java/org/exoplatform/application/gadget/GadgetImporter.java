@@ -65,7 +65,7 @@ public abstract class GadgetImporter
 
    protected abstract byte[] getGadgetBytes(String gadgetURI) throws IOException;
 
-   protected abstract String getGadgetURL(String gadgetURI) throws Exception;
+   protected abstract String getGadgetURL() throws Exception;
 
    protected abstract void process(String gadgetURI, GadgetDefinition def) throws Exception;
 
@@ -92,6 +92,9 @@ public abstract class GadgetImporter
          log.error("Cannot import gadget " + gadgetURI + " because its data could not be found");
          return;
       }
+      
+      //
+      process(gadgetURI, def);
 
       // Get encoding
       String encoding = EncodingDetector.detect(new ByteArrayInputStream(bytes));
@@ -100,7 +103,7 @@ public abstract class GadgetImporter
       String gadget = new String(bytes, encoding);
 
       //
-      String gadgetURL = getGadgetURL(gadgetURI);
+      String gadgetURL = getGadgetURL();
       GadgetSpec spec = new GadgetSpec(Uri.parse(gadgetURL), gadget);
       ModulePrefs prefs = spec.getModulePrefs();
 
@@ -117,12 +120,9 @@ public abstract class GadgetImporter
 
       //
       def.setDescription(description);
-      def.setThumbnail(thumbnail); // Do something better than that
+      def.setThumbnail(thumbnail);
       def.setTitle(title);
       def.setReferenceURL(referenceURL);
-
-      //
-      process(gadgetURI, def);
    }
 
    @Override

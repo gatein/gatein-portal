@@ -62,6 +62,9 @@ public abstract class LocalGadgetData extends GadgetData
 
    protected abstract void setResources(NTFolder resources);
 
+   @Path
+   public abstract String getPath();
+
    private NTFile getGadgetContent() {
       String fileName = getFileName();
       NTFolder resources = getResources();

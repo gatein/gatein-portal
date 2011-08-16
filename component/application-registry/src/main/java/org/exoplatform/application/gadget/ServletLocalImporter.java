@@ -47,16 +47,20 @@ public class ServletLocalImporter extends GadgetImporter
 
    /** Used temporarily when importing resources. */
    private NTFolder folder;
+   
+   private GadgetRegistryService gadgetService;
 
    public ServletLocalImporter(
       String name,
       String gadgetPath,
-      ServletContext servletContext)
+      ServletContext servletContext,
+      GadgetRegistryService gadgetRegistryService)
    {
       super(name, gadgetPath);
 
       //
       this.servletContext = servletContext;
+      this.gadgetService = gadgetRegistryService;
    }
 
    @Override
@@ -66,13 +70,13 @@ public class ServletLocalImporter extends GadgetImporter
    }
 
    @Override
-   protected String getGadgetURL(String gadgetURI) throws Exception
+   protected String getGadgetURL() throws Exception
    {
-      return gadgetURI;
+      return gadgetService.getGadgetURL(getGadgetName());
    }
 
    @Override
-   protected void process(String gadgetURI, GadgetDefinition def) throws Exception
+   protected void process(String gadgetPath, GadgetDefinition def) throws Exception
    {
       def.setLocal(true);
 
@@ -80,13 +84,13 @@ public class ServletLocalImporter extends GadgetImporter
       LocalGadgetData data = (LocalGadgetData)def.getData();
 
       //
-      String fileName = getName(gadgetURI);
+      String fileName = getName(gadgetPath);
       data.setFileName(fileName);
 
       // Import resource
       folder = data.getResources();
-      String folderPath = getParent(gadgetURI);
-      visitChildren(gadgetURI, folderPath);
+      String folderPath = getParent(gadgetPath);
+      visitChildren(gadgetPath, folderPath);
       folder = null;
    }
 
